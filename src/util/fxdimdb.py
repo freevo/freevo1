@@ -11,6 +11,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.7.2.1  2005/01/09 10:29:17  dischi
+# make imdb work again
+#
 # Revision 1.7  2004/07/10 12:33:42  dischi
 # header cleanup
 #
@@ -148,7 +151,6 @@ class FxdImdb:
         m = re.match(regexp_get_imdb_id, response.geturl())
         if m:
             data = self.parsedata(response)
-            #print 'data[0]: ' + data[0]
             self.imdb_id_list = [ ( m.group('id'),
                                     data[0], 
                                     data[1]['year'],
@@ -163,15 +165,15 @@ class FxdImdb:
 
         regexp_imdb_list_entry = re.compile(r'''
         <A[ ]HREF="/(?:Title\?|title/tt)     # match both old and new style
-        (?P<id>      \d+)/">                  # imdb id
-        (?P<title>   .*?)\s*                  # imdb movie title
+        (?P<id>      \d+)/.*">               # imdb id
+        (?P<title>   .*?)</A>\s*             # imdb movie title
         \(
-        (?P<year>    \d{4}.*?)                # year and possibly /I, /II etc.
-        \)</A>
+        (?P<year>    \d{4}.*?)               # year and possibly /I, /II etc.
+        \)
         ''', re.VERBOSE | re.IGNORECASE)
 
         type = ''
-        for line in response.read().split("\n"):
+        for line in response.read().split("<li>"):
             m = regexp_type.match(line)
             if m:
                 type = m.group('type')
