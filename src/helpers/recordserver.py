@@ -7,6 +7,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.59.2.3  2004/10/29 18:22:05  dischi
+# removed unicode bug
+#
 # Revision 1.59.2.2  2004/10/20 18:41:09  dischi
 # add missing :
 #
@@ -245,7 +248,7 @@ class RecordServer(xmlrpc.XMLRPC):
     
         for chan in guide.chan_list:
             if prog.channel_id == chan.id:
-                _debug_('scheduleRecording: prog.channel_id="%s" chan.id="%s" chan.tunerid="%s"' % (prog.channel_id, chan.id, chan.tunerid))
+                _debug_('scheduleRecording: prog.channel_id="%s" chan.id="%s" chan.tunerid="%s"' % (String(prog.channel_id), String(chan.id), String(chan.tunerid)))
                 prog.tunerid = chan.tunerid
     
         scheduledRecordings = self.getScheduledRecordings()
