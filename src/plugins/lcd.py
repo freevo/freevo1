@@ -13,6 +13,9 @@
 #    3) Better (and more) LCD screens.
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.19.2.3  2005/01/23 11:36:56  dischi
+# add small tv patch
+#
 # Revision 1.19.2.2  2005/01/09 10:42:18  dischi
 # more unicode fixes
 #
@@ -58,6 +61,8 @@ import plugin
 from event import *
 import config
 import util
+from util.tv_util import get_chan_displayname
+
 try:
     import pylcd
 except:
@@ -284,7 +289,7 @@ layouts = { 4 : # 4 lines display
                                 None ),                
                   "chan_v"   : ( "scroller",
                                  "7 1 %d 1 m 3 \"%s%s\"",
-                                 "( self.width, tv.channel_id, self.get_sepstrmscroll(tv.channel_id) )" ),
+                                 "( self.width,  get_chan_displayname(tv.channel_id), self.get_sepstrmscroll( get_chan_displayname(tv.channel_id)) )" ),
                   "prog_v"   : ( "scroller",
                                  "7 2 %d 2 m 3 \"%s%s\"",
                                  "( self.width, tv.title, self.get_sepstrmscroll(tv.title) )" ),
@@ -377,7 +382,7 @@ layouts = { 4 : # 4 lines display
                 "tv"            :
                 { "chan_v"   : ( "scroller",
                                  "1 1 %d 1 m 3 \"%s%s\"",
-                                 "( self.width, tv.channel_id, self.get_sepstrmscroll(tv.channel_id) )" ),
+                                 "( self.width,  get_chan_displayname(tv.channel_id), self.get_sepstrmscroll( get_chan_displayname(tv.channel_id)) )" ),
                   "prog_v"   : ( "scroller",
                                  "1 2 %d 2 m 3 \"%s%s\"",
                                  "( self.width, tv.title, self.get_sepstrmscroll(tv.title) )" ),
@@ -446,7 +451,7 @@ layouts = { 4 : # 4 lines display
                  "tv"            :
                  { "chan_v"   : ( "scroller",
                                   "1 1 %d 1 m 3 \"%s%s\"",
-                                  "( self.width, tv.channel_id, self.get_sepstrmscroll(tv.channel_id) )" ),
+                                  "( self.width,  get_chan_displayname(tv.channel_id), self.get_sepstrmscroll( get_chan_displayname(tv.channel_id)) )" ),
                    "prog_v"   : ( "scroller",
                                   "1 2 %d 2 m 3 \"%s%s\"",
                                   "( self.width, tv.title, self.get_sepstrmscroll(tv.title) )" )
@@ -509,7 +514,7 @@ layouts = { 4 : # 4 lines display
                  "tv":
                  { "chan_v"   : ( "scroller",
                                   "1 1 %d 1 m 3 \"%s%s\"",
-                                  "( self.width, tv.channel_id, self.get_sepstrmscroll(tv.channel_id) )" ),
+                                  "( self.width,  get_chan_displayname(tv.channel_id), self.get_sepstrmscroll( get_chan_displayname(tv.channel_id)) )" ),
                    "prog_v"   : ( "scroller",
                                   "1 2 %d 2 m 3 \"%s%s\"",
                                   "( self.width, tv.title, self.get_sepstrmscroll(tv.title) )" )
@@ -603,7 +608,7 @@ layouts = { 4 : # 4 lines display
                                  None ),
                   "chan_v"   : ( "scroller",
                                  "7 1 %d 1 m 3 \"%s%s\"",
-                                 "( self.width, tv.channel_id, self.get_sepstrmscroll(tv.channel_id) )" ),
+                                 "( self.width,  get_chan_displayname(tv.channel_id), self.get_sepstrmscroll( get_chan_displayname(tv.channel_id)) )" ),
                   "prog_v"   : ( "scroller",
                                  "7 2 %d 2 m 3 \"%s%s\"",
                                  "( self.width, tv.title, self.get_sepstrmscroll(tv.title) )" ),
