@@ -1,144 +1,142 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech language file for Freevo
+# Copyright (C) 2005
+# This file is distributed under the same license as the Freevo package.
+# Jiri Kulhan <jiri@kulhan.cz>, 2004
+# Edited by Tonous <tonous@dkm.cz>, 2005
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: freevo 1.53\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-30 01:35+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Jiri Kulhan <jiri@kulhan.cz>\n"
+"POT-Creation-Date: 2005-01-22 15:19+0100\n"
+"PO-Revision-Date: 2005-01-22 18:45+0100\n"
+"Last-Translator: Tonous <tonous@dkm.cz>\n"
 "Language-Team: Jiri Kulhan <jiri@kulhan.cz>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO8859-2\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../freevo_config.py:765 ../freevo_config.py:770 tv/edit_favorite.py:145
-#: www/htdocs/manualrecord.rpy:222 www/htdocs/record.rpy:191
-#: www/htdocs/search.rpy:184
-#: share/skins/main/info.fxd:390
+#: ../freevo_config.py:778 ../freevo_config.py:783 tv/edit_favorite.py:118
+#: www/htdocs/manualrecord.rpy:222 www/htdocs/record.rpy:194
+#: www/htdocs/search.rpy:184 share/skins/main/info.fxd:390
 msgid "Title"
 msgstr "Název"
 
-#: ../freevo_config.py:766 plugins/lcd.py:150 plugins/lcd.py:152
-#: plugins/lcd.py:329
+#: ../freevo_config.py:779 plugins/lcd.py:104 plugins/lcd.py:106
+#: plugins/lcd.py:283
 msgid "Description"
 msgstr "Popis"
 
-#: ../freevo_config.py:767
+#: ../freevo_config.py:780
 msgid "Author"
 msgstr "Autor"
 
-#: ../freevo_config.py:771 plugins/lcd.py:149
-#: share/skins/main/info.fxd:331
+#: ../freevo_config.py:784 plugins/lcd.py:103 share/skins/main/info.fxd:331
 #: share/skins/main/noia.fxd:92
 msgid "Date"
 msgstr "Datum"
 
-#: ../freevo_config.py:774
+#: ../freevo_config.py:787
 msgid "Model"
 msgstr "Model"
 
-#: ../freevo_config.py:775
+#: ../freevo_config.py:788
 msgid "Software"
 msgstr "Software"
 
-#: childapp.py:291
+#: childapp.py:297
 #, python-format
 msgid "logging child to \"%s\""
 msgstr "zapisuji potomka do \"%s\""
 
-#: childapp.py:294 audio/plugins/cdbackup.py:266 audio/plugins/cdbackup.py:623
-#: audio/plugins/xine.py:88 audio/plugins/xine.py:107 plugins/lcd.py:110
-#: plugins/lcd.py:731 plugins/lcd.py:933 plugins/lcd.py:944 plugins/lcd.py:955
-#: skins/main/info_area.py:159 tv/channels.py:149 tv/channels.py:186
-#: tv/channels.py:189 tv/record_client.py:133 tv/plugins/xine.py:87
-#: tv/plugins/xine.py:111 video/plugins/xine.py:112 video/plugins/xine.py:136
-#: www/htdocs/edit_favorite.rpy:133 www/htdocs/edit_favorite.rpy:157
-#: www/htdocs/edit_favorite.rpy:181 www/htdocs/favorites.rpy:130
-#: www/htdocs/genre.rpy:118 www/htdocs/guide.rpy:201
-#: www/htdocs/library.rpy:263 www/htdocs/library.rpy:280
-#: www/htdocs/library.rpy:282 www/htdocs/manualrecord.rpy:70
-#: www/htdocs/record.rpy:139 www/htdocs/record.rpy:160
-#: www/htdocs/search.rpy:145 www/htdocs/help/doc.rpy:108
-#: www/htdocs/help/howto.rpy:132
+#: childapp.py:300 audio/plugins/cdbackup.py:203 audio/plugins/cdbackup.py:560
+#: audio/plugins/xine.py:61 audio/plugins/xine.py:80 plugins/lcd.py:64
+#: plugins/lcd.py:685 plugins/lcd.py:893 plugins/lcd.py:904 plugins/lcd.py:915
+#: skins/main/info_area.py:140 tv/plugins/xine.py:88 tv/plugins/xine.py:112
+#: tv/channels.py:122 tv/channels.py:160 tv/channels.py:166
+#: tv/record_client.py:104 video/plugins/xine.py:93 video/plugins/xine.py:117
+#: www/htdocs/help/howto.rpy:132 www/htdocs/help/doc.rpy:111
+#: www/htdocs/edit_favorite.rpy:137 www/htdocs/edit_favorite.rpy:161
+#: www/htdocs/edit_favorite.rpy:185 www/htdocs/favorites.rpy:130
+#: www/htdocs/genre.rpy:122 www/htdocs/guide.rpy:203
+#: www/htdocs/library.rpy:270 www/htdocs/library.rpy:287
+#: www/htdocs/library.rpy:289 www/htdocs/manualrecord.rpy:70
+#: www/htdocs/record.rpy:142 www/htdocs/record.rpy:163
+#: www/htdocs/search.rpy:145
 msgid "ERROR"
 msgstr "CHYBA"
 
-#: childapp.py:295
+#: childapp.py:301
 #, python-format
 msgid "Cannot open \"%s\" for logging!"
 msgstr "Nemohu otevøít \"%s\" pro zápis!"
 
-#: childapp.py:296
+#: childapp.py:302
 msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, "
 msgstr "Nastavte CHILDAPP_DEBUG=0 v souboru local_conf.py, "
 
-#: childapp.py:297
+#: childapp.py:303
 #, python-format
 msgid "or make %s writable!"
 msgstr "nebo uèiòte %s zapisovatelným!"
 
-#: directory.py:80
+#: directory.py:62
 msgid "Directory Sort By Date"
 msgstr "Tøídìní adresáøe podle data"
 
-#: directory.py:81
+#: directory.py:63
 msgid "Sort directory by date and not by name."
 msgstr "Tøídìní adresáøe podle data a nikoli podle jména"
 
-#: directory.py:83
+#: directory.py:65
 msgid "Directory Autoplay Single Item"
 msgstr "Automatické pøehrání jediné polo¾ky v adresáøi"
 
-#: directory.py:84
+#: directory.py:66
 msgid "Don't show directory if only one item exists and auto-select the item."
 msgstr "Neukazovat adresáø s jedinou polo¾kou a automaticky ji vybrat"
 
-#: directory.py:87
+#: directory.py:69
 msgid "Force Skin Layout"
 msgstr "Vynutit vzhled"
 
-#: directory.py:88
+#: directory.py:70
 msgid ""
 "Force skin to a specific layout. This option doesn't work with all skins and "
 "the result may differ based on the skin."
 msgstr ""
-"Vynutit nastavení specifického vzhledu pro skin. Tato volba nefunguje se v¹emi skiny"
-"a výsledky se mohou pro jednotlivé skiny li¹it."
+"Vynutit nastavení specifického vzhledu pro skin. Tato volba nefunguje pro "
+"v¹echny skiny a výsledky se mohou pro jednotlivé skiny li¹it."
 
-#: directory.py:91
+#: directory.py:73
 msgid "Directory Smart Sort"
 msgstr "Inteligentní tøídìní adresáøù"
 
-#: directory.py:92
+#: directory.py:74
 msgid "Use a smarter way to sort the items."
 msgstr "Pou¾ít chytøej¹í zpùsob tøídìní polo¾ek."
 
-#: directory.py:94
+#: directory.py:76
 msgid "Use MediaID Tag Names"
 msgstr "Pou¾ít jména MediaID tagù"
 
-#: directory.py:95
+#: directory.py:77
 msgid "Use the names from the media files tags as display name."
 msgstr "Pou¾ije jména tagù z multimediálních souborù pro zobrazení"
 
-#: directory.py:97
+#: directory.py:79
 msgid "Directory Reverse Sort"
-msgstr "Zpìtné tøídìní adresáøù"
+msgstr "Obrácené tøídìní adresáøù"
 
-#: directory.py:98
+#: directory.py:80
 msgid "Show the items in the list in reverse order."
 msgstr "Øadit polo¾ky v adresáøi v obráceném poøadí."
 
-#: directory.py:102
+#: directory.py:84
 msgid "Directory Create Playlist"
 msgstr "Vytvoøit playlist z adresáøe"
 
-#: directory.py:103
+#: directory.py:85
 msgid ""
 "Handle the directory as playlist. After one file is played, the next one "
 "will be started."
@@ -146,27 +144,27 @@ msgstr ""
 "Pou¾ije adresáø jako playlist. Po pøehrání jednoho souboru automaticky "
 "pokraèuje dal¹ím."
 
-#: directory.py:106
+#: directory.py:88
 msgid "Directory Add Playlist Files"
-msgstr ""
+msgstr "Pøidat playlisty do seznamu"
 
-#: directory.py:107
+#: directory.py:89
 msgid "Add playlist files to the list of items"
-msgstr "Pøidat obsah playlistu k seznamu polo¾ek ???"
+msgstr "Pøidat playlisty do seznamu polo¾ek"
 
-#: directory.py:109
+#: directory.py:91
 msgid "Directory Add Random Playlist"
 msgstr "Pøidat obsah adresáøe do seznamu pro náhodné pøehrávání"
 
-#: directory.py:110
+#: directory.py:92
 msgid "Add an item for a random playlist"
 msgstr "Pøidat polo¾ku k playlistu pro náhodné pøehrávání"
 
-#: directory.py:112
+#: directory.py:94
 msgid "Directory Autoplay Items"
 msgstr "Automaticky pøehrát obsah adresáøe"
 
-#: directory.py:113
+#: directory.py:95
 msgid ""
 "Autoplay the whole directory (as playlist) when it contains only files and "
 "no directories"
@@ -174,100 +172,100 @@ msgstr ""
 "Automaticky pøehraje celý adresáø (jako playlist), pokud obsahuje pouze "
 "soubory a ne dal¹í adresáøe"
 
-#: directory.py:305
+#: directory.py:287
 #, python-format
 msgid "Directory on disc [%s]"
 msgstr "Adresáø na disku [%s]"
 
-#: directory.py:306
+#: directory.py:288
 msgid "Directory"
 msgstr "Adresáø"
 
-#: directory.py:439 image/plugins/gphoto.py:142
+#: directory.py:421 image/plugins/gphoto.py:134
 msgid "Browse directory"
 msgstr "Procházet adresáø"
 
-#: directory.py:442
+#: directory.py:424
 msgid "Play all files in directory"
 msgstr "Pøehrát v¹e v adresáøi"
 
-#: directory.py:448 playlist.py:311
+#: directory.py:430 playlist.py:306
 msgid "Random play all items"
-msgstr "Náhodnì pøehrávat v¹echny polo¾ky"
+msgstr "Náhodnì v¹echny soubory"
 
-#: directory.py:450
+#: directory.py:432
 msgid "Recursive random play all items"
-msgstr "Náhodnì pøehrát v¹e ve v¹ech podadresáøích"
+msgstr "Náhodnì v¹echny podadresáøe"
 
-#: directory.py:451
+#: directory.py:433
 msgid "Recursive play all items"
 msgstr "Pøehrát v¹e v podadresáøích"
 
-#: directory.py:453
+#: directory.py:435
 msgid "Configure directory"
 msgstr "Nastavení adresáøe"
 
-#: directory.py:520
+#: directory.py:502
 msgid "Enter Password"
 msgstr "Zadejte heslo"
 
-#: directory.py:545
+#: directory.py:527
 msgid "Password incorrect"
 msgstr "Nesprávné heslo"
 
-#: directory.py:579
+#: directory.py:561
 msgid "Directory does not exist"
 msgstr "Adresáø neexistuje"
 
-#: directory.py:608
+#: directory.py:590
 msgid "Scanning disc, be patient..."
 msgstr "Prohledávám disky, èekejte prosím..."
 
-#: directory.py:610
+#: directory.py:592
 msgid "Scanning directory, be patient..."
 msgstr "Prohledávám adresáø, èekejte prosím..."
 
-#: directory.py:709 audio/audiodiskitem.py:138
+#: directory.py:691 audio/audiodiskitem.py:115
 msgid "Random playlist"
 msgstr "Náhodný playlist"
 
-#: directory.py:809 directory.py:899 directory.py:933
+#: directory.py:791 directory.py:881 directory.py:915
 msgid "on"
 msgstr "zapnuto"
 
-#: directory.py:811 directory.py:814 directory.py:903 directory.py:931
+#: directory.py:793 directory.py:796 directory.py:885 directory.py:913
 msgid "off"
 msgstr "vypnuto"
 
-#: directory.py:816
+#: directory.py:798
 msgid "auto"
-msgstr "automaticky"
+msgstr "auto"
 
-#: directory.py:935
+#: directory.py:917
 msgid "Show all kinds of items"
 msgstr "Ukázat v¹echny druhy polo¾ek"
 
-#: directory.py:937
+#: directory.py:919
 msgid "Show video, audio and image items in this directory"
 msgstr "Ukázat polo¾ky typu video, audio nebo obrázky v tomto adresáøi"
 
-#: directory.py:940
+#: directory.py:922
 msgid "Configure"
 msgstr "Nastavení"
 
-#: fxditem.py:248
+#: fxditem.py:212
 msgid "Browse list"
 msgstr "Procházet seznam"
 
-#: main.py:208
+#: main.py:195
 msgid "Freevo Main Menu"
-msgstr "Freevo - Hlavní menu"
+msgstr "Freevo Hlavní menu"
 
-#: main.py:224
+#: main.py:211
 msgid "Skin Selector"
 msgstr "Výbìr vzhledu"
 
-#: main.py:339
+#: main.py:326
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -288,119 +286,117 @@ msgstr ""
 "Soubor s dal¹ími informacemi: %s\n"
 "\n"
 
-
-#: main.py:348 plugins/shutdown.py:88
+#: main.py:335 plugins/shutdown.py:74
 msgid "shutting down..."
 msgstr "Ukonèuji..."
 
-#: main.py:349
-#: share/skins/main/basic.fxd:24
+#: main.py:336 share/skins/main/basic.fxd:24
 msgid "Shutdown"
 msgstr "Vypnout"
 
-#: main.py:351
+#: main.py:338
 msgid "Continue"
 msgstr "Pokraèovat"
 
-#: main.py:468
+#: main.py:455
 msgid "Starting Freevo, please wait ..."
 msgstr "Startuji Freevo, èekejte prosím..."
 
-#: main.py:477
+#: main.py:464
 msgid "Reading cache, please wait ..."
 msgstr "Naèítám vyrovnávací pamìt, èekejte prosím..."
 
-#: main.py:528
+#: main.py:515
 msgid "Freevo crashed!"
 msgstr "Freevo havarovalo!"
 
-#: main.py:529
+#: main.py:516
 #, python-format
 msgid "Filename: %s"
 msgstr "Jméno souboru: %s"
 
-#: main.py:530
+#: main.py:517
 #, python-format
 msgid "Lineno: %s"
 msgstr "Èíslo øádku: %s"
 
-#: main.py:531
+#: main.py:518
 #, python-format
 msgid "Function: %s"
 msgstr "Funkce: %s"
 
-#: main.py:532
+#: main.py:519
 #, python-format
 msgid "Text: %s"
 msgstr "Text: %s"
 
-#: main.py:534
+#: main.py:521
 msgid "Please see the logfiles for more info"
 msgstr "Prosím provìøte logovací soubory pro dal¹í informace"
 
-#: main.py:536
+#: main.py:523
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Konec za %s vteøin"
 
-#: menu.py:591
+#: menu.py:559
 msgid "No action defined for this choice!"
 msgstr "Pro tuto volbu není definována ¾ádná akce!"
 
-#: osd.py:393
+#: osd.py:403
 msgid "z = Toggle Fullscreen"
 msgstr "z = pøepnout celoobrazovkový re¾im"
 
-#: osd.py:394
+#: osd.py:404
 msgid "Arrow Keys = Move"
 msgstr "©ipky = pohyb"
 
-#: osd.py:395
+#: osd.py:405
 msgid "Spacebar = Select"
 msgstr "Mezerník = výbìr"
 
-#: osd.py:396
+#: osd.py:406
 msgid "Escape = Stop/Prev. Menu"
 msgstr "Escape = stop/pøedchozí menu "
 
-#: osd.py:397
+#: osd.py:407
 msgid "h = Help"
 msgstr "h = nápovìda"
 
-#: playlist.py:149 playlist.py:189
+#: playlist.py:143 playlist.py:183
 #, python-format
 msgid "Cannot open file \"%s\""
 msgstr "Nemohu otevøít soubor \"%s\""
 
-#: playlist.py:301
+#: playlist.py:296
 msgid "Browse Playlist"
 msgstr "Procházet playlist"
 
-#: playlist.py:303 video/configure.py:220 video/videoitem.py:304
+#: playlist.py:298 video/configure.py:222 video/videoitem.py:318
 msgid "Play"
 msgstr "Pøehrát"
 
-#: playlist.py:357
+#: playlist.py:352
 msgid "empty playlist"
 msgstr "vyprázdnit playlist"
 
-#: playlist.py:453
+#: playlist.py:450
 msgid "playlist repeat on"
 msgstr "opakování playlistu zapnuto"
 
-#: playlist.py:455
+#: playlist.py:452
 msgid "playlist repeat off"
 msgstr "opakování playlistu vypnuto"
 
-#: playlist.py:469
+#: playlist.py:466
 msgid "no next item in playlist"
 msgstr "v seznamu k pøehrání není ¾ádná dal¹í polo¾ka"
 
-#: playlist.py:496
+#: playlist.py:493
 msgid "no previous item in playlist"
 msgstr "v seznamu k pøehrání není ¾ádná pøedchozí polo¾ka"
 
-#: setup_freevo.py:123
+#: setup_freevo.py:88
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -411,7 +407,7 @@ msgid ""
 "\n"
 "   --display=DISP               set the display\n"
 "                                  DISP can be x11, fbdev, dxr3, mga, \n"
-"                                  dfbmga or dga\n"
+"                                  directfb, dfbmga or dga\n"
 "                                  \n"
 "   --tv=NORM                    set the TV standard\n"
 "                                  NORM can be ntsc, pal or secam\n"
@@ -433,78 +429,78 @@ msgid ""
 "Please report bugs to <freevo-users@lists.sourceforge.net>.\n"
 msgstr ""
 
-#: setup_freevo.py:227
+#: setup_freevo.py:192
 #, python-format
 msgid "checking for %-13s"
 msgstr "testuji %-13s"
 
-#: setup_freevo.py:240
+#: setup_freevo.py:205
 #, python-format
 msgid "ERROR: can't find %s"
 msgstr "CHYBA: nelze nalézt %s"
 
-#: setup_freevo.py:241
+#: setup_freevo.py:206
 msgid "Please install the application respectively put it in your path."
 msgstr "Prosím nainstalujte aplikaci, pøípadnì ji umístìte ve své cestì."
 
-#: setup_freevo.py:242
+#: setup_freevo.py:207
 msgid "Freevo won't work without it."
 msgstr "Bez toho nebude Freevo pracovat."
 
-#: setup_freevo.py:248
+#: setup_freevo.py:213
 msgid "not found (deactivated)"
 msgstr "nenalezen (deaktivován)"
 
-#: setup_freevo.py:311
+#: setup_freevo.py:276
 #, python-format
 msgid "System path first=%s"
 msgstr "Systémová cesta (první)=%s"
 
-#: setup_freevo.py:311
+#: setup_freevo.py:276
 msgid "No"
 msgstr "Ne"
 
-#: setup_freevo.py:311
+#: setup_freevo.py:276
 msgid "Yes"
 msgstr "Ano"
 
-#: setup_freevo.py:327
+#: setup_freevo.py:292
 msgid "Settings:"
 msgstr "Nastavení:"
 
-#: audio/audiodiskitem.py:83 audio/plugins/cdbackup.py:554
+#: audio/audiodiskitem.py:60 audio/plugins/cdbackup.py:491
 msgid "Unknown CD Album"
 msgstr "Neznámé CD album"
 
-#: audio/audiodiskitem.py:100
+#: audio/audiodiskitem.py:77
 msgid "Browse disc"
 msgstr "Procházet disk"
 
-#: audio/audiodiskitem.py:146
+#: audio/audiodiskitem.py:123
 msgid "Data files on disc"
 msgstr "Datové soubory na disku"
 
-#: audio/plugins/cdbackup.py:257
+#: audio/plugins/cdbackup.py:194
 msgid "Show CD ripping status"
 msgstr "Ukázat stav nahrávání z CD"
 
-#: audio/plugins/cdbackup.py:258
+#: audio/plugins/cdbackup.py:195
 msgid "Stop CD ripping"
 msgstr "Ukonèit nahrávání z CD"
 
-#: audio/plugins/cdbackup.py:263
+#: audio/plugins/cdbackup.py:200
 msgid "Rip the CD to the hard drive"
 msgstr "Nahrát CD na pevný disk"
 
-#: audio/plugins/cdbackup.py:264
+#: audio/plugins/cdbackup.py:201
 msgid "Get CDs available for ripping"
 msgstr "Najít CD dostupná k nahrání na disk"
 
-#: audio/plugins/cdbackup.py:266
+#: audio/plugins/cdbackup.py:203
 msgid "Item is not an Audio CD"
 msgstr "Toto není audio CD"
 
-#: audio/plugins/cdbackup.py:279
+#: audio/plugins/cdbackup.py:216
 #, python-format
 msgid ""
 "Ripping in progress\n"
@@ -513,67 +509,67 @@ msgstr ""
 "Nahrávání..\n"
 "Skladba %d z %d"
 
-#: audio/plugins/cdbackup.py:294
+#: audio/plugins/cdbackup.py:231
 msgid "Backup CD to hard drive in mp3 format"
-msgstr "Ulo¾it CD na pevný disk ve formátu MP3"
+msgstr "Ulo¾it CD na pevný disk ve formátu mp3"
 
-#: audio/plugins/cdbackup.py:297
+#: audio/plugins/cdbackup.py:234
 msgid "Backup CD to hard drive in Ogg format"
 msgstr "Ulo¾it CD na pevný disk ve formátu Ogg"
 
-#: audio/plugins/cdbackup.py:300
+#: audio/plugins/cdbackup.py:237
 msgid "Backup CD to hard drive in FLAC format"
 msgstr "Ulo¾it CD na pevný disk ve formátu FLAC"
 
-#: audio/plugins/cdbackup.py:302
+#: audio/plugins/cdbackup.py:239
 msgid "Backup CD to hard drive in wav format"
 msgstr "Ulo¾it CD na pevný disk ve formátu wav"
 
-#: audio/plugins/cdbackup.py:305
+#: audio/plugins/cdbackup.py:242
 msgid "CD Backup"
 msgstr "Zálohovat CD"
 
-#: audio/plugins/cdbackup.py:318
+#: audio/plugins/cdbackup.py:255
 msgid "Ripping started"
 msgstr "Nahrávání spu¹tìno"
 
-#: audio/plugins/cdbackup.py:385
+#: audio/plugins/cdbackup.py:322
 #, python-format
 msgid "Directory %s already exists"
 msgstr "Adresáø %s ji¾ existuje"
 
-#: audio/plugins/cdbackup.py:401 audio/plugins/cdbackup.py:454
-#: audio/plugins/cdbackup.py:524
+#: audio/plugins/cdbackup.py:338 audio/plugins/cdbackup.py:391
+#: audio/plugins/cdbackup.py:461
 msgid "Ripping aborted"
 msgstr "Nahrávání pøeru¹eno"
 
-#: audio/plugins/cdbackup.py:537
+#: audio/plugins/cdbackup.py:474
 msgid "Ripping complete"
 msgstr "Nahrávání dokonèeno"
 
-#: audio/plugins/cdbackup.py:550 audio/plugins/coversearch.py:200
-#: audio/plugins/coversearch.py:209 audio/plugins/coversearch.py:218
-#: plugins/lcd.py:930 plugins/lcd.py:941 plugins/lcd.py:954
+#: audio/plugins/cdbackup.py:487 audio/plugins/coversearch.py:149
+#: audio/plugins/coversearch.py:158 audio/plugins/coversearch.py:167
+#: plugins/lcd.py:890 plugins/lcd.py:901 plugins/lcd.py:914
 msgid "WARNING"
 msgstr "VAROVÁNÍ"
 
-#: audio/plugins/cdbackup.py:550
+#: audio/plugins/cdbackup.py:487
 msgid "No CDDB data available to mmpython"
 msgstr "mmpython nemá k dispozici ¾ádná CDDB data"
 
-#: audio/plugins/cdbackup.py:553
+#: audio/plugins/cdbackup.py:490
 msgid "Unknown Artist"
 msgstr "Neznámý umìlec"
 
-#: audio/plugins/cdbackup.py:553 audio/plugins/cdbackup.py:554
+#: audio/plugins/cdbackup.py:490 audio/plugins/cdbackup.py:491
 msgid "RENAME"
 msgstr "PØEJMENOVAT"
 
-#: audio/plugins/cdbackup.py:555
+#: audio/plugins/cdbackup.py:492
 msgid "Other"
 msgstr "Jiné"
 
-#: audio/plugins/cdbackup.py:558
+#: audio/plugins/cdbackup.py:495
 msgid ""
 "CD info not found!\n"
 "Must manually rename files\n"
@@ -583,11 +579,11 @@ msgstr ""
 "Po ukonèení nahrávání je tøeba\n"
 "ruène pøejmenovat vytvoøené soubory"
 
-#: audio/plugins/cdbackup.py:623
+#: audio/plugins/cdbackup.py:560
 msgid "Problem trying to call:"
 msgstr "Problém pøi volání:"
 
-#: audio/plugins/coversearch.py:160
+#: audio/plugins/coversearch.py:109
 msgid ""
 "To search for covers you need an Amazon.com Web Services\n"
 "license key. You can get yours from:\n"
@@ -595,11 +591,11 @@ msgstr ""
 "Pro vyhledávání obalù je tøeba licenèní klíè\n"
 "Amazon.com Web Services. Mù¾ete jej obrdr¾et na:\n"
 
-#: audio/plugins/coversearch.py:196
+#: audio/plugins/coversearch.py:145
 msgid "Find a cover for this music"
 msgstr "Najít obal pro tuto skladbu"
 
-#: audio/plugins/coversearch.py:201 audio/plugins/coversearch.py:210
+#: audio/plugins/coversearch.py:150 audio/plugins/coversearch.py:159
 #, python-format
 msgid ""
 "Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
@@ -609,47 +605,47 @@ msgid ""
 msgstr ""
 "Modul 'coversearch' není pro tuto polo¾ku dostupný! Pro pou¾ití této slu¾by "
 "je tøeba znát jméno umìlce a alba (pro formáty mp3 a ogg) nebo název skladby "
-"pro skladbu z CD. Pravdìpodobnì je tøeba upravit tagy v souboru %s." 
+"pro skladbu z CD. Pravdìpodobnì je tøeba upravit tagy v souboru %s."
 
-#: audio/plugins/coversearch.py:219
+#: audio/plugins/coversearch.py:168
 msgid "Unknown CD, cover searching is disabled"
 msgstr "Neznámé CD, vyhledávání obalu není dostupné"
 
-#: audio/plugins/coversearch.py:227
+#: audio/plugins/coversearch.py:176
 msgid "searching Amazon..."
 msgstr "prohledávám Amazon..."
 
-#: audio/plugins/coversearch.py:242
+#: audio/plugins/coversearch.py:191
 #, python-format
 msgid "No matches for %(artist)s - %(album)s"
 msgstr "®ádný záznam pro %(artist)s - %(album)s"
 
-#: audio/plugins/coversearch.py:250
+#: audio/plugins/coversearch.py:199
 msgid "Unknown error while searching."
 msgstr "Neznámá chyba pøi vyhledávání"
 
-#: audio/plugins/coversearch.py:287 audio/plugins/coversearch.py:299
+#: audio/plugins/coversearch.py:236 audio/plugins/coversearch.py:248
 msgid "small"
 msgstr "malý"
 
-#: audio/plugins/coversearch.py:310
+#: audio/plugins/coversearch.py:259
 msgid "Cover Search Results"
 msgstr "Výsledky hledání obalu"
 
-#: audio/plugins/coversearch.py:314
+#: audio/plugins/coversearch.py:263
 msgid "No covers available from Amazon"
 msgstr "Na Amazonu nejsou dostupné ¾ádné obaly"
 
-#: audio/plugins/coversearch.py:327 video/plugins/imdb.py:218
+#: audio/plugins/coversearch.py:276 video/plugins/imdb.py:203
 msgid "getting data..."
 msgstr "pøijímám data..."
 
-#: audio/plugins/detach.py:83
+#: audio/plugins/detach.py:56
 msgid "Show player"
 msgstr "Ukázat pøehrávaè"
 
-#: audio/plugins/fxmms.py:209 audio/plugins/mplayer.py:149
-#: audio/plugins/mplayervbr.py:125
+#: audio/plugins/fxmms.py:152 audio/plugins/mplayer.py:119
+#: audio/plugins/mplayervbr.py:138
 #, python-format
 msgid ""
 "%s\n"
@@ -658,121 +654,161 @@ msgstr ""
 "%s\n"
 "nenalezeno!"
 
-#: audio/plugins/playlist.py:88
+#: audio/plugins/playlist.py:85
 msgid "Playlists"
 msgstr "Seznamy k pøehrávání (playlisty)"
 
-#: audio/plugins/playlist.py:104
+#: audio/plugins/playlist.py:101
 msgid "Enqueue this Music in Playlist"
 msgstr "Zaøadit tuto hudbu do playlistu"
 
-#: audio/plugins/playlist.py:106
+#: audio/plugins/playlist.py:103
 msgid "Make a new Audio Playlist"
 msgstr "Vytvoøit nový audio playlist"
 
-#: audio/plugins/playlist.py:124
+#: audio/plugins/playlist.py:121
 msgid "Queued Directory"
 msgstr "Zaøazený adresáø"
 
-#: audio/plugins/playlist.py:126
+#: audio/plugins/playlist.py:123
 msgid "Queued Track"
 msgstr "Zaøazená skladba"
 
-#: audio/plugins/playlist.py:134
+#: audio/plugins/playlist.py:131
 msgid "Added New Playlist"
 msgstr "Pøidán nový playlist"
 
-#: audio/plugins/radio.py:84
+#: audio/plugins/radio.py:68
 msgid "Listen to Radio Station"
 msgstr "Poslouchat radiostanici"
 
-#: audio/plugins/radio.py:119
+#: audio/plugins/radio.py:103
 msgid "Radio"
 msgstr "Rádio"
 
-#: audio/plugins/radio.py:144
+#: audio/plugins/radio.py:128
 msgid "No Radio Stations found"
 msgstr "®ádna radiostanice nebyla nalezena"
 
-#: audio/plugins/radio.py:146
+#: audio/plugins/radio.py:130
 msgid "Radio Stations"
 msgstr "Radiostanice"
 
-#: audio/plugins/vux.py:90
+#: audio/plugins/vux.py:92
 msgid "[VUX] Start playing"
 msgstr "[VUX] Pøehrávat"
 
-#: audio/plugins/vux.py:91
+#: audio/plugins/vux.py:93
 msgid "[VUX] Stop playing"
 msgstr "[VUX] Zastavit"
 
-#: audio/plugins/vux.py:92
+#: audio/plugins/vux.py:94
 msgid "[VUX] Next (rating down)"
 msgstr "[VUX] Dal¹í (sní¾it hodnocení)"
 
-#: audio/plugins/vux.py:93
+#: audio/plugins/vux.py:95
 msgid "[VUX] Next (rating intact)"
 msgstr "[VUX] Dal¹í (ponechat hodnocení beze zmìny"
 
-#: audio/plugins/vux.py:94
+#: audio/plugins/vux.py:96
 msgid "[VUX] Next (rating up)"
 msgstr "[VUX] Dal¹í (zvý¹it hodnocení)"
 
-#: audio/plugins/vux.py:95
+#: audio/plugins/vux.py:97
 msgid "[VUX] Playing item rating up"
 msgstr "[VUX] Pøehrávám polo¾ku = rating up ????"
 
-#: audio/plugins/vux.py:96
+#: audio/plugins/vux.py:98
 msgid "[VUX] Playing item rating down"
 msgstr "[VUX] Pøehrávám polo¾ku = rating down ????"
 
-#: audio/plugins/vux.py:97
+#: audio/plugins/vux.py:99
 msgid "[VUX] a dir item do not select"
 msgstr "[VUX] nelze zvolit adresáø ???? "
 
-#: audio/plugins/vux.py:98
+#: audio/plugins/vux.py:100
 msgid "[VUX] an audio item, do not select"
 msgstr "[VUX] an audio item, do not select ????"
 
-#: audio/plugins/xine.py:89
+#: audio/plugins/xine.py:62
 msgid "'fbxine' not found, plugin 'xine' deactivated"
 msgstr "'fbxine' nenalezen, plugin 'xine' byl deaktivován"
 
-#: audio/plugins/xine.py:108
+#: audio/plugins/xine.py:81
 msgid "'fbxine' version too old, plugin 'xine' deactivated"
 msgstr "verze 'fbxine' je pøíli¹ stará, plugin 'xine' byl deaktivován"
 
-#: audio/plugins/xine.py:109 tv/plugins/xine.py:113 video/plugins/xine.py:138
+#: audio/plugins/xine.py:82 tv/plugins/xine.py:114 video/plugins/xine.py:119
 #, python-format
 msgid "You need software %s"
 msgstr "Potøebujete program %s"
 
-#: games/__init__.py:106
+#: games/__init__.py:82
 msgid "please update GAMES_ITEMS in local_conf.py"
 msgstr "Prosím upravte GAMES_ITEMS v souboru local%conf.py"
 
-#: games/game.py:111
+#: games/game.py:91
 #, python-format
 msgid "File \"%s\" not found!"
 msgstr "Soubor \"%s\" nenalezen!"
 
-#: games/mame_cache.py:179
+#: games/mame_cache.py:310
 msgid "Generating MAME cache, please wait."
 msgstr "Vytváøím MAME cache, èekejte prosím..."
 
-#: gui/AlertBox.py:87 gui/ConfirmBox.py:100 plugins/command.py:184
+#: gui/AlertBox.py:70 gui/ConfirmBox.py:79 plugins/command.py:167
 msgid "OK"
 msgstr "OK"
 
-#: gui/ConfirmBox.py:104 tv/edit_favorite.py:223
+#: gui/ConfirmBox.py:83 tv/edit_favorite.py:196
 msgid "CANCEL"
 msgstr "Zru¹it"
 
-#: image/imageitem.py:127 image/plugins/gphoto.py:115
+#: image/plugins/apod.py:58 image/plugins/apod.py:59
+msgid "APOD"
+msgstr "APOD"
+
+#: image/plugins/apod.py:69
+msgid "Current Picture"
+msgstr "Souèasný obrázek"
+
+#: image/plugins/apod.py:70
+msgid "Previous Pictures"
+msgstr "Pøedchozí obrázek"
+
+#: image/plugins/apod.py:71 image/plugins/apod.py:86
+msgid "Apod Pictures"
+msgstr "Obrázky Apod"
+
+#: image/plugins/apod.py:84
+msgid "No Images found"
+msgstr "®ádné obrázky nebyly nalezeny"
+
+#: image/plugins/apod.py:104 image/plugins/apod.py:117
+msgid "Unable to open URL"
+msgstr "Nemohu otevøít URL"
+
+#: image/plugins/apod.py:131
+msgid "Need a directory to store APOD pictures."
+msgstr "Potøebuji adresáø pro ukládání APOD obrázkù ????"
+
+#: image/plugins/apod.py:135
+#, python-format
+msgid "directory %s does not exist."
+msgstr "adresáø %s neexistuje"
+
+#: image/plugins/apod.py:139
+#, python-format
+msgid ""
+"directory %s must be able to be read, written to and executed by the user "
+"running freevo."
+msgstr "U¾ivatel musí mít právo ke ètení, zápisu a spou¹tìní pro adresáø %s"
+
+#: image/plugins/gphoto.py:107 image/imageitem.py:111
 msgid "View Image"
 msgstr "Prohlí¾et obrázky"
 
-#: image/viewer.py:152
+#: image/viewer.py:140
 #, python-format
 msgid ""
 "Can't Open Image\n"
@@ -781,118 +817,91 @@ msgstr ""
 "Nelze otevøít obrázek\n"
 "'%s'"
 
-
-#: image/viewer.py:353
+#: image/viewer.py:343
 msgid "pause"
 msgstr "pauza"
 
-#: image/viewer.py:357
+#: image/viewer.py:348
 msgid "play"
 msgstr "pøehrávat"
 
-#: image/viewer.py:447
+#: image/viewer.py:440
 msgid "No information available"
 msgstr "®ádné informace nejsou dostupné"
 
-#: image/plugins/apod.py:65 image/plugins/apod.py:66
-msgid "APOD"
-msgstr "APOD ????"
-
-#: image/plugins/apod.py:76
-msgid "Current Picture"
-msgstr "Souèasný obrázek"
-
-#: image/plugins/apod.py:77
-msgid "Previous Pictures"
-msgstr "Pøedchozí obrázek"
-
-#: image/plugins/apod.py:78 image/plugins/apod.py:93
-msgid "Apod Pictures"
-msgstr "Obrázky Apod ????"
-
-#: image/plugins/apod.py:91
-msgid "No Images found"
-msgstr "®ádné obrázky nebyly nalezeny"
-
-#: image/plugins/apod.py:111 image/plugins/apod.py:124
-msgid "Unable to open URL"
-msgstr "Nemohu otevøít URL"
-
-#: image/plugins/apod.py:138
-msgid "Need a directory to store APOD pictures."
-msgstr "Potøebuji adresáø pro ukládání APOD obrázkù ????"
-
-#: image/plugins/apod.py:142
+#: plugins/idlebar/system.py:116
 #, python-format
-msgid "directory %s does not exist."
-msgstr "adresáø %s neexistuje"
+msgid "%iM"
+msgstr "%iM"
 
-#: image/plugins/apod.py:146
+#: plugins/idlebar/system.py:141
 #, python-format
-msgid ""
-"directory %s must be able to be read, written to and executed by the user "
-"running freevo."
-msgstr ""
-"U¾ivatel musí mít právo ke ètení, zápisu a spou¹tìní pro adresáø %s"
+msgid "%s%%"
+msgstr "%s%%"
 
-#: plugins/command.py:170
+#: plugins/command.py:153
 msgid "Command finished"
 msgstr "Pøíkaz dokonèen"
 
-#: plugins/command.py:186
+#: plugins/command.py:169
 msgid "Show Stderr"
 msgstr "Ukázat chybový výstup"
 
-#: plugins/command.py:188
+#: plugins/command.py:171
 msgid "Show Stdout"
 msgstr "Ukázat standardní výstup"
 
-#: plugins/command.py:206
+#: plugins/command.py:189
 msgid "Stdout File"
 msgstr "Soubor pro standardní výstup"
 
-#: plugins/command.py:210
+#: plugins/command.py:193
 msgid "Stderr File"
 msgstr "Soubor pro chybový výstup"
 
-#: plugins/command.py:247
+#: plugins/command.py:230
 msgid "Run Command"
 msgstr "Spustit príkaz"
 
-#: plugins/command.py:258
+#: plugins/command.py:241
 msgid "Running Command..."
 msgstr "Spou¹tím pøíkaz"
 
-#: plugins/command.py:278
+#: plugins/command.py:261
 msgid "Command Failed"
 msgstr "Pøíkaz selhal"
 
-#: plugins/command.py:280
+#: plugins/command.py:263
 msgid "Command Completed"
 msgstr "Pøíkaz dokonèen"
 
-#: plugins/command.py:313 plugins/command.py:351
+#: plugins/command.py:296 plugins/command.py:334
 msgid "Commands"
 msgstr "Pøíkazy"
 
-#: plugins/df.py:73
+#: plugins/df.py:72
 #, python-format
-msgid "%i free of %i Mb total"
-msgstr "%i z %i Mb volných"
+msgid "%i free of %i Gb total (%i%% free)"
+msgstr "%i z %i GB volných (%i%%)"
 
-#: plugins/file_ops.py:84 www/htdocs/library.rpy:469
+#: plugins/df.py:76
+#, python-format
+msgid "%i free of %i Mb total (%i%% free)"
+msgstr "%i z %i MB volných (%i%%)"
+
+#: plugins/file_ops.py:71 www/htdocs/library.rpy:475
 msgid "Delete"
 msgstr "Smazat"
 
-#: plugins/file_ops.py:86
+#: plugins/file_ops.py:73
 msgid "Delete info"
 msgstr "Smazat info"
 
-#: plugins/file_ops.py:88
+#: plugins/file_ops.py:75
 msgid "Delete image"
 msgstr "Smazat obrázek"
 
-#: plugins/file_ops.py:94
+#: plugins/file_ops.py:81
 #, python-format
 msgid ""
 "Do you wish to delete\n"
@@ -901,11 +910,11 @@ msgstr ""
 "Pøejete si smazat\n"
 " '%s'?"
 
-#: plugins/file_ops.py:96
+#: plugins/file_ops.py:83
 msgid "Deleting..."
 msgstr "Ma¾u..."
 
-#: plugins/file_ops.py:100
+#: plugins/file_ops.py:87
 #, python-format
 msgid ""
 "Delete info about\n"
@@ -914,7 +923,7 @@ msgstr ""
 "Smazat informace o \n"
 " '%s'?"
 
-#: plugins/file_ops.py:105
+#: plugins/file_ops.py:92
 #, python-format
 msgid ""
 "Delete image about\n"
@@ -923,295 +932,280 @@ msgstr ""
 "Smazat obrázek o (????)\n"
 " '%s'?"
 
-#: plugins/headlines.py:188
+#: plugins/headlines.py:143
 msgid "Show Sites Headlines"
 msgstr "Ukázat titulky ze stránek (????)"
 
-#: plugins/headlines.py:210
+#: plugins/headlines.py:165
 msgid "Fetching headlines..."
 msgstr "Stahuji titulky"
 
-#: plugins/headlines.py:274
+#: plugins/headlines.py:229
 msgid "No Headlines found"
 msgstr "®ádné titulky nebyly nalezeny"
 
-#: plugins/headlines.py:276 plugins/headlines.py:289
+#: plugins/headlines.py:231 plugins/headlines.py:244
 msgid "Headlines"
 msgstr "Titulky"
 
-#: plugins/headlines.py:295 plugins/headlines.py:309
+#: plugins/headlines.py:250 plugins/headlines.py:264
 msgid "Headlines Sites"
 msgstr "Stránky s titulky"
 
-#: plugins/headlines.py:307
+#: plugins/headlines.py:262
 msgid "No Headlines Sites found"
 msgstr "®ádné stránky s titulky nebyly nalezeny"
 
-#: plugins/icecast.py:182
+#: plugins/icecast.py:165
 msgid "Set as icecast playlist"
 msgstr "Nastavit jako icecast seznam k pøehrání"
 
-#: plugins/lcd.py:110
+#: plugins/lcd.py:64
 msgid "You need pylcd to run \"lcd\" plugin."
 msgstr "Ke spu¹tìní \"lcd\" modulu potøebujete pylcd"
 
-#: plugins/lcd.py:133 plugins/lcd.py:141
-#: share/skins/main/basic.fxd:386
-#: share/skins/main/blurr.fxd:700
-#: share/skins/main/info.fxd:218
+#: plugins/lcd.py:87 plugins/lcd.py:95 share/skins/main/basic.fxd:391
+#: share/skins/main/blurr.fxd:700 share/skins/main/info.fxd:218
 msgid "Length"
 msgstr "Délka"
 
-#: plugins/lcd.py:134 plugins/lcd.py:138 plugins/lcd.py:249
-#: share/skins/main/info.fxd:201
-#: share/skins/main/info.fxd:356
+#: plugins/lcd.py:88 plugins/lcd.py:92 plugins/lcd.py:203
+#: share/skins/main/info.fxd:201 share/skins/main/info.fxd:356
 #: share/skins/main/info.fxd:396
 msgid "Artist"
 msgstr "Umìlec"
 
-#: plugins/lcd.py:135 plugins/lcd.py:139 plugins/lcd.py:246
-#: share/skins/main/basic.fxd:368
-#: share/skins/main/blurr.fxd:677
-#: share/skins/main/info.fxd:207
-#: share/skins/main/info.fxd:361
+#: plugins/lcd.py:89 plugins/lcd.py:93 plugins/lcd.py:200
+#: share/skins/main/basic.fxd:373 share/skins/main/blurr.fxd:677
+#: share/skins/main/info.fxd:207 share/skins/main/info.fxd:361
 msgid "Album"
 msgstr "Album"
 
-#: plugins/lcd.py:136 plugins/lcd.py:140
-#: share/skins/main/blurr.fxd:683
+#: plugins/lcd.py:90 plugins/lcd.py:94 share/skins/main/blurr.fxd:683
 #: share/skins/main/info.fxd:458
 msgid "Year"
 msgstr "Rok"
 
-#: plugins/lcd.py:137
-#: share/skins/main/blurr.fxd:338
+#: plugins/lcd.py:91 share/skins/main/blurr.fxd:338
 #: share/skins/main/info.fxd:401
 msgid "Tracks"
 msgstr "Stopy"
 
-#: plugins/lcd.py:142
-#: share/skins/main/info.fxd:287
+#: plugins/lcd.py:96 share/skins/main/info.fxd:287
 #: share/skins/main/info.fxd:493
 msgid "Resolution"
 msgstr "Rozli¹ení"
 
-#: plugins/lcd.py:143
+#: plugins/lcd.py:97
 msgid "Aspect"
 msgstr "Aspect - ???"
 
-#: plugins/lcd.py:144 plugins/lcd.py:147 plugins/lcd.py:284
+#: plugins/lcd.py:98 plugins/lcd.py:101 plugins/lcd.py:238
 msgid "Tagline"
 msgstr "Tagline - ???"
 
-#: plugins/lcd.py:145 plugins/lcd.py:146
+#: plugins/lcd.py:99 plugins/lcd.py:100
 msgid "Plot"
 msgstr "Plot - ???"
 
-#: plugins/lcd.py:148
+#: plugins/lcd.py:102
 msgid "Geometry"
 msgstr "Geometry - ???"
 
-#: plugins/lcd.py:151
+#: plugins/lcd.py:105
 #, python-format
 msgid "%s items"
 msgstr "%s polo¾ky"
 
-#: plugins/lcd.py:206 plugins/lcd.py:354
+#: plugins/lcd.py:160 plugins/lcd.py:308
 #, python-format
 msgid "Today is %s."
 msgstr "Dnes je %s"
 
-#: plugins/lcd.py:216 plugins/lcd.py:575
+#: plugins/lcd.py:170 plugins/lcd.py:529
 msgid "Menu"
 msgstr "Nabídka"
 
-#: plugins/lcd.py:219 plugins/lcd.py:578
+#: plugins/lcd.py:173 plugins/lcd.py:532
 msgid "Item"
 msgstr "Polo¾ka"
 
-#: plugins/lcd.py:222
-#: share/skins/main/info.fxd:282
+#: plugins/lcd.py:176 share/skins/main/info.fxd:282
 #: share/skins/main/info.fxd:487
 msgid "Type"
 msgstr "Typ"
 
-#: plugins/lcd.py:225
+#: plugins/lcd.py:179
 msgid "Information"
 msgstr "Informace"
 
-#: plugins/lcd.py:243 plugins/lcd.py:590 www/htdocs/library.rpy:330
+#: plugins/lcd.py:197 plugins/lcd.py:544 www/htdocs/library.rpy:337
 #: share/skins/main/basic.fxd:21
 msgid "Music"
 msgstr "Hudba"
 
-#: plugins/lcd.py:281 plugins/lcd.py:617
+#: plugins/lcd.py:235 plugins/lcd.py:571
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
-#: plugins/lcd.py:287
-#: share/skins/main/info.fxd:464
+#: plugins/lcd.py:241 share/skins/main/info.fxd:464
 msgid "Genre"
 msgstr "®ánr"
 
-#: plugins/lcd.py:320 plugins/lcd.py:645 tv/edit_favorite.py:147
-#: www/htdocs/edit_favorite.rpy:207 www/htdocs/favorites.rpy:177
-#: www/htdocs/manualrecord.rpy:219 www/htdocs/record.rpy:190
-#: www/htdocs/search.rpy:183
-#: share/skins/main/basic.fxd:547
-#: share/skins/main/basic.fxd:578
-#: share/skins/main/basic.fxd:609
+#: plugins/lcd.py:274 plugins/lcd.py:599 tv/edit_favorite.py:120
+#: www/htdocs/edit_favorite.rpy:212 www/htdocs/favorites.rpy:177
+#: www/htdocs/manualrecord.rpy:219 www/htdocs/record.rpy:193
+#: www/htdocs/search.rpy:183 share/skins/main/basic.fxd:552
+#: share/skins/main/basic.fxd:583 share/skins/main/basic.fxd:614
 msgid "Channel"
 msgstr "Kanál"
 
-#: plugins/lcd.py:323 plugins/lcd.py:648 www/htdocs/edit_favorite.rpy:206
-#: www/htdocs/favorites.rpy:176
-#: share/skins/main/basic.fxd:603
+#: plugins/lcd.py:277 plugins/lcd.py:602 www/htdocs/edit_favorite.rpy:211
+#: www/htdocs/favorites.rpy:176 share/skins/main/basic.fxd:608
 msgid "Program"
 msgstr ""
 
-#: plugins/lcd.py:326 www/htdocs/guide.rpy:209
-#: share/skins/main/basic.fxd:590
+#: plugins/lcd.py:280 www/htdocs/guide.rpy:210 share/skins/main/basic.fxd:595
 #: share/skins/main/noia.fxd:95
 msgid "Time"
 msgstr "Èas"
 
-#: plugins/lcd.py:731
+#: plugins/lcd.py:685
 msgid ""
 "LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
 msgstr ""
 "LCD modul nebude spu¹tìn! Ovìøte, zda byl spu¹tìn démon LCDd (lcdproc)."
 
-#: plugins/lcd.py:736
+#: plugins/lcd.py:690
 #, python-format
 msgid "Connecting to LCD: %s"
 msgstr "Pøipojuji LCD: %s"
 
-#: plugins/lcd.py:737
+#: plugins/lcd.py:691
 msgid "Info as know by the LCD module:"
 msgstr ""
 
-#: plugins/lcd.py:930
+#: plugins/lcd.py:890
 #, python-format
 msgid "Could not find screens for %d lines LCD!"
 msgstr ""
 
-#: plugins/lcd.py:933 plugins/lcd.py:944 plugins/lcd.py:955
+#: plugins/lcd.py:893 plugins/lcd.py:904 plugins/lcd.py:915
 #, python-format
 msgid "No screens found for this LCD (%dx%d)!"
 msgstr ""
 
-#: plugins/lcd.py:941 plugins/lcd.py:954
+#: plugins/lcd.py:901 plugins/lcd.py:914
 #, python-format
 msgid "Could not find screens for %d lines and %d columns LCD!"
 msgstr ""
 
-#: plugins/mediamenu.py:176
+#: plugins/mediamenu.py:132
 msgid "Media"
 msgstr "Média"
 
-#: plugins/mediamenu.py:181
+#: plugins/mediamenu.py:137
 msgid "Movie"
 msgstr "Filmy"
 
-#: plugins/mediamenu.py:183
+#: plugins/mediamenu.py:139
 msgid "Audio"
 msgstr "Audio"
 
-#: plugins/mediamenu.py:185
+#: plugins/mediamenu.py:141
 msgid "Image"
 msgstr "Obrázky"
 
-#: plugins/mediamenu.py:187
-#: share/skins/main/basic.fxd:23
+#: plugins/mediamenu.py:143 share/skins/main/basic.fxd:23
 #: share/skins/main/info.fxd:16
 msgid "Games"
 msgstr "Hry"
 
-#: plugins/mediamenu.py:189
+#: plugins/mediamenu.py:145
 #, python-format
 msgid "%s Main Menu"
 msgstr "%s hlavní menu"
 
-#: plugins/mixer.py:146 plugins/mixer.py:149 plugins/mixer.py:155
-#: plugins/mixer.py:158 plugins/mixer.py:163 plugins/ossmixer.py:136
-#: plugins/ossmixer.py:139 plugins/ossmixer.py:145 plugins/ossmixer.py:148
-#: plugins/ossmixer.py:153
+#: plugins/mixer.py:128 plugins/mixer.py:131 plugins/mixer.py:137
+#: plugins/mixer.py:140 plugins/mixer.py:145 plugins/ossmixer.py:123
+#: plugins/ossmixer.py:126 plugins/ossmixer.py:132 plugins/ossmixer.py:135
+#: plugins/ossmixer.py:140
 #, python-format
 msgid "Volume: %s%%"
 msgstr "Hlasitost: %s%%"
 
-#: plugins/mixer.py:166 plugins/ossmixer.py:156
+#: plugins/mixer.py:148 plugins/ossmixer.py:143
 msgid "Mute"
 msgstr "Ztlumit"
 
-#: plugins/rom_drives.py:282
+#: plugins/rom_drives.py:239
 #, python-format
 msgid "Drive %s (no disc)"
 msgstr "Jednotka %s (bez disku)"
 
-#: plugins/rom_drives.py:348
+#: plugins/rom_drives.py:305
 #, python-format
 msgid "Ejecting disc in drive %s"
 msgstr "Vysouvám disk z jednotky %s"
 
-#: plugins/rom_drives.py:381
+#: plugins/rom_drives.py:338
 #, python-format
 msgid "Reading disc in drive %s"
 msgstr "Ètení disku v jednotce %s"
 
-#: plugins/shoppingcart.py:84
+#: plugins/shoppingcart.py:71
 msgid "Moving files..."
 msgstr "Pøesouvání souborù"
 
-#: plugins/shoppingcart.py:94
+#: plugins/shoppingcart.py:81
 msgid "Copying files..."
 msgstr "Kopírování souborù"
 
-#: plugins/shoppingcart.py:108
+#: plugins/shoppingcart.py:95
 msgid "Added to Cart"
 msgstr "Pøidáno do vozíku"
 
-#: plugins/shoppingcart.py:130
+#: plugins/shoppingcart.py:117
 msgid "Cart: Move Files Here"
 msgstr "Vozík: pøesunout soubory sem"
 
-#: plugins/shoppingcart.py:131
+#: plugins/shoppingcart.py:118
 msgid "Cart: Copy Files Here"
 msgstr "Vozík: kopírovat soubory sem"
 
-#: plugins/shoppingcart.py:134
+#: plugins/shoppingcart.py:121
 msgid "Add Directory to Cart"
 msgstr "Pøidat adresáø do vozíku"
 
-#: plugins/shoppingcart.py:138
+#: plugins/shoppingcart.py:125
 msgid "Add File to Cart"
 msgstr "Pridat soubor do vozíku"
 
-#: plugins/shoppingcart.py:141
+#: plugins/shoppingcart.py:128
 msgid "Delete Cart"
 msgstr "Vyprázdnit vozík"
 
-#: plugins/shutdown.py:158 plugins/shutdown.py:162
+#: plugins/shutdown.py:144 plugins/shutdown.py:148
 msgid "Shutdown Freevo"
 msgstr "Ukonèit Freevo"
 
-#: plugins/shutdown.py:159 plugins/shutdown.py:163
+#: plugins/shutdown.py:145 plugins/shutdown.py:149
 msgid "Shutdown system"
 msgstr "Vypnout systém"
 
-#: plugins/shutdown.py:160 plugins/shutdown.py:164
+#: plugins/shutdown.py:146 plugins/shutdown.py:150
 msgid "Restart system"
 msgstr "Restartovat systém"
 
-#: plugins/shutdown.py:176
+#: plugins/shutdown.py:162
 msgid "Do you really want to shut down Freevo?"
 msgstr "Skuteènì chcete ukonèit Freevo?"
 
-#: plugins/shutdown.py:185
+#: plugins/shutdown.py:171
 msgid "Do you really want to shut down the system?"
 msgstr "Skuteènì chcete vypnout systém?"
 
-#: plugins/shutdown.py:193
+#: plugins/shutdown.py:179
 msgid "Do you really want to restart the system?"
 msgstr "Skuteènì chcete restartovat systém?"
 
@@ -1225,1168 +1219,843 @@ msgstr "Volání: %s"
 msgid "Message: %s"
 msgstr "Zpráva: %s"
 
-#: plugins/idlebar/system.py:137
-#, python-format
-msgid "%iM"
-msgstr ""
-
-#: plugins/idlebar/system.py:162
-#, python-format
-msgid "%s%%"
-msgstr ""
-
-#: skins/main/default_areas.py:128
+#: skins/main/default_areas.py:127
 msgid "TV GUIDE"
-msgstr ""
+msgstr "TV Prùvodce"
 
-#: skins/main/info_area.py:159
+#: skins/main/info_area.py:140
 msgid "missing 'src' attribute in skin tag!"
-msgstr ""
+msgstr "ve skinu chybí atribut 'src'"
 
-#: skins/main/listing_area.py:225
+#: skins/main/listing_area.py:221
 msgid "This directory is empty"
 msgstr "Tento adresáø je prázdný"
 
-#: skins/main/tvlisting_area.py:364 tv/tvguide.py:94 www/htdocs/guide.rpy:251
+#: skins/main/tvlisting_area.py:345 tv/tvguide.py:78 www/htdocs/guide.rpy:253
 msgid "This channel has no data loaded"
-msgstr ""
+msgstr "Pro tento kanál nejsou data"
 
-#: tv/channels.py:150
-#, python-format
-msgid "Cannot find tuner channel \"%s\" in the TV channel listing"
-msgstr ""
-
-#: tv/channels.py:186
-#, python-format
-msgid "Unable to get channel list for %s."
-msgstr ""
-
-#: tv/channels.py:189
-#, python-format
-msgid "Unable to get frequency for channel %s."
-msgstr ""
-
-#: tv/channels.py:219
-#, python-format
-msgid "Failed to set freq for channel %s."
-msgstr ""
-
-#: tv/edit_favorite.py:125 www/htdocs/edit_favorite.rpy:131
-#: www/htdocs/edit_favorite.rpy:192 www/htdocs/edit_favorite.rpy:197
-msgid "Edit Favorite"
-msgstr ""
-
-#: tv/edit_favorite.py:139
-#: share/skins/main/basic.fxd:572
-#: share/skins/main/info.fxd:269
-msgid "Name"
-msgstr ""
-
-#: tv/edit_favorite.py:151 www/htdocs/favorites.rpy:190
-#: www/htdocs/favorites.rpy:202 www/htdocs/favorites.rpy:208
-msgid "ANY"
-msgstr ""
-
-#: tv/edit_favorite.py:170
-msgid "Day of Week"
-msgstr ""
-
-#: tv/edit_favorite.py:174 tv/program_display.py:263
-#: www/htdocs/edit_favorite.rpy:238
-msgid "ANY DAY"
-msgstr ""
-
-#: tv/edit_favorite.py:178 tv/program_display.py:256
-#: www/htdocs/edit_favorite.rpy:239
-msgid "Mon"
-msgstr ""
-
-#: tv/edit_favorite.py:178 tv/program_display.py:256
-#: www/htdocs/edit_favorite.rpy:240
-msgid "Tue"
-msgstr ""
-
-#: tv/edit_favorite.py:178 tv/program_display.py:256
-#: www/htdocs/edit_favorite.rpy:241
-msgid "Wed"
-msgstr ""
-
-#: tv/edit_favorite.py:178 tv/program_display.py:256
-#: www/htdocs/edit_favorite.rpy:242
-msgid "Thu"
-msgstr ""
-
-#: tv/edit_favorite.py:178 tv/program_display.py:256
-#: www/htdocs/edit_favorite.rpy:243
-msgid "Fri"
-msgstr ""
-
-#: tv/edit_favorite.py:178 tv/program_display.py:256
-#: www/htdocs/edit_favorite.rpy:244
-msgid "Sat"
-msgstr ""
-
-#: tv/edit_favorite.py:178 tv/program_display.py:256
-#: www/htdocs/edit_favorite.rpy:245
-msgid "Sun"
-msgstr ""
-
-#: tv/edit_favorite.py:191
-msgid "Time of Day"
-msgstr ""
-
-#: tv/edit_favorite.py:194 tv/program_display.py:267
-#: www/htdocs/edit_favorite.rpy:251
-msgid "ANY TIME"
-msgstr ""
-
-#: tv/edit_favorite.py:216 tv/plugins/manual_record.py:130
-#: www/htdocs/edit_favorite.rpy:313
-msgid "Save"
-msgstr ""
-
-#: tv/edit_favorite.py:219 www/htdocs/favorites.rpy:214
-#: www/htdocs/record.rpy:235 www/htdocs/search.rpy:230
-msgid "Remove"
-msgstr ""
-
-#: tv/edit_favorite.py:243 tv/program_display.py:244 tv/program_display.py:443
-msgid "Remove Failed"
-msgstr ""
-
-#: tv/edit_favorite.py:353
-#, python-format
-msgid "Favorite %s has been saved"
-msgstr ""
-
-#: tv/edit_favorite.py:355
-#, python-format
-msgid "Failed: %s"
-msgstr ""
-
-#: tv/edit_favorite.py:375
-#, python-format
-msgid "Do you want to remove %s?"
-msgstr ""
-
-#: tv/epg_xmltv.py:100
-msgid "Time conversion error"
-msgstr ""
-
-#: tv/epg_xmltv.py:175
-msgid "Couldn't load the TV Guide, got an exception!"
-msgstr ""
-
-#: tv/epg_xmltv.py:266
-#, python-format
-msgid "REPLACE WITH TUNERID FOR %s"
-msgstr ""
-
-#: tv/program_display.py:131
-msgid "Display program"
-msgstr ""
-
-#: tv/program_display.py:145
-msgid "Remove from schedule"
-msgstr ""
-
-#: tv/program_display.py:148
-msgid "Schedule for recording"
-msgstr ""
-
-#: tv/program_display.py:152
-msgid "Search for more of this program"
-msgstr ""
-
-#: tv/program_display.py:162
-msgid "Remove from favorites"
-msgstr ""
-
-#: tv/program_display.py:165
-msgid "Add to favorites"
-msgstr ""
-
-#: tv/program_display.py:168
-msgid "Program Menu"
-msgstr ""
-
-#: tv/program_display.py:190 tv/program_search.py:129
-msgid "Searching, please wait..."
-msgstr ""
-
-#: tv/program_display.py:206
-#, python-format
-msgid "No matches found for %s"
-msgstr ""
-
-#: tv/program_display.py:208
-#, python-format
-msgid "findMatches failed: %s"
-msgstr ""
-
-#: tv/program_display.py:211 www/htdocs/search.rpy:144
-msgid "Search Results"
-msgstr ""
-
-#: tv/program_display.py:225
-#, python-format
-msgid "\"%s\" has been scheduled for recording"
-msgstr ""
-
-#: tv/program_display.py:228
-msgid "Scheduling Failed"
-msgstr ""
-
-#: tv/program_display.py:259 www/htdocs/edit_favorite.rpy:225
-msgid "ANY CHANNEL"
-msgstr ""
-
-#: tv/program_display.py:276
-msgid "Display favorite"
-msgstr ""
-
-#: tv/program_display.py:282 tv/plugins/manual_record.py:122
-msgid "Modify name"
-msgstr ""
-
-#: tv/program_display.py:283 tv/plugins/manual_record.py:123
-msgid "Modify channel"
-msgstr ""
-
-#: tv/program_display.py:284
-msgid "Modify day of week"
-msgstr ""
-
-#: tv/program_display.py:285
-msgid "Modify time of day"
-msgstr ""
-
-#: tv/program_display.py:291
-msgid "Modify priority"
-msgstr ""
-
-#: tv/program_display.py:294
-msgid "Save changes"
-msgstr ""
-
-#: tv/program_display.py:295
-msgid "Remove favorite"
-msgstr ""
-
-#: tv/program_display.py:297
-msgid "Favorite Menu"
-msgstr ""
-
-#: tv/program_display.py:306 tv/plugins/manual_record.py:141
-msgid "Alter Name"
-msgstr ""
-
-#: tv/program_display.py:328 tv/plugins/manual_record.py:151
-msgid "Modify Channel"
-msgstr ""
-
-#: tv/program_display.py:378 tv/plugins/manual_record.py:167
-#: tv/plugins/manual_record.py:183 tv/plugins/manual_record.py:216
-#: tv/plugins/manual_record.py:232
-msgid "Modify Day"
-msgstr ""
-
-#: tv/program_display.py:398 tv/plugins/manual_record.py:200
-#: tv/plugins/manual_record.py:249
-msgid "Modify Time"
-msgstr ""
-
-#: tv/program_display.py:419
-msgid "Save Failed, favorite was lost"
-msgstr ""
-
-#: tv/program_display.py:426
-msgid "Save Failed"
-msgstr ""
-
-#: tv/program_display.py:431
-msgid "Favorite not added yet."
-msgstr ""
-
-#: tv/program_search.py:92
-msgid "Program Search"
-msgstr ""
-
-#: tv/program_search.py:99 tv/plugins/scheduled_recordings.py:117
-#: tv/plugins/view_favorites.py:106 www/htdocs/edit_favorite.rpy:133
-#: www/htdocs/favorites.rpy:130 www/htdocs/genre.rpy:118
-#: www/htdocs/guide.rpy:201 www/htdocs/manualrecord.rpy:70
-#: www/htdocs/record.rpy:139
-msgid "Recording server is unavailable."
-msgstr ""
-
-#: tv/program_search.py:101
-msgid "Feel free to implement this function inside the main guide."
-msgstr ""
-
-#: tv/record_client.py:103 tv/record_client.py:112 tv/record_client.py:123
-#: tv/record_client.py:139 tv/record_client.py:151 tv/record_client.py:160
-#: tv/record_client.py:179 tv/record_client.py:188 tv/record_client.py:200
-#: tv/record_client.py:209 tv/record_client.py:222 tv/record_client.py:231
-#: tv/record_client.py:240 tv/record_client.py:249 tv/record_client.py:259
-#: tv/record_client.py:269 tv/record_client.py:278 tv/record_client.py:287
-#: tv/record_client.py:296 tv/record_client.py:305
-msgid "connection error"
-msgstr ""
-
-#: tv/record_client.py:130 tv/record_client.py:146
-msgid "no program"
-msgstr ""
-
-#: tv/record_client.py:133
-msgid "cannot record it if it is over"
-msgstr ""
-
-#: tv/record_client.py:168 tv/record_client.py:174
-msgid "program not scheduled"
-msgstr ""
-
-#: tv/record_client.py:172
-msgid "program is scheduled"
-msgstr ""
-
-#: tv/tvguide.py:103
-msgid "Preparing the program guide"
-msgstr ""
-
-#: tv/tvguide.py:106
-msgid "TV Guide is corrupt!"
-msgstr ""
-
-#: tv/tvguide.py:234
-msgid "Sorry, you cannot watch TV while recording. "
-msgstr ""
-
-#: tv/tvguide.py:235
-msgid "If this is not true then remove "
-msgstr ""
-
-#: tv/tvmenu.py:103 tv/tvmenu.py:111
-#, python-format
-msgid "Could not find TV channel %s"
-msgstr ""
-
-#: tv/tvmenu.py:135 www/web_types.py:179 www/htdocs/guide.rpy:196
-msgid "TV Guide"
-msgstr ""
-
-#: tv/tvmenu.py:137
-msgid "Recorded Shows"
-msgstr ""
-
-#: tv/tvmenu.py:147
-msgid "TV Main Menu"
-msgstr ""
-
-#: tv/tvmenu.py:173
-msgid "The list of TV channels is invalid!\n"
-msgstr ""
-
-#: tv/tvmenu.py:174
-msgid "Please check the config file."
-msgstr ""
-
-#: tv/plugins/manual_record.py:71 www/htdocs/manualrecord.rpy:68
+#: tv/plugins/manual_record.py:74 www/htdocs/manualrecord.rpy:68
 #: www/htdocs/manualrecord.rpy:202
 msgid "Manual Record"
-msgstr ""
+msgstr "Manuální zadání nahrávání"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Jan"
-msgstr ""
+msgstr "Led"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Feb"
-msgstr ""
+msgstr "Ún"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Mar"
-msgstr ""
+msgstr "Bøe"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Apr"
-msgstr ""
+msgstr "Dub"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "May"
-msgstr ""
+msgstr "Kvì"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Jun"
-msgstr ""
+msgstr "Èer"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Jul"
-msgstr ""
+msgstr "Èec"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Aug"
-msgstr ""
+msgstr "Srp"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Sep"
-msgstr ""
+msgstr "Záø"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Oct"
-msgstr ""
+msgstr "Øíj"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Nov"
-msgstr ""
+msgstr "Lis"
 
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
+#: tv/plugins/manual_record.py:84 www/htdocs/manualrecord.rpy:145
 msgid "Dec"
-msgstr ""
+msgstr "Pro"
 
-#: tv/plugins/manual_record.py:114
+#: tv/plugins/manual_record.py:122
 msgid "Display record item"
-msgstr ""
+msgstr "Pøehraj záznam"
 
-#: tv/plugins/manual_record.py:124
-msgid "Modify start month"
-msgstr ""
+#: tv/plugins/manual_record.py:130 tv/program_display.py:261
+msgid "Modify name"
+msgstr "Zmìna jména"
 
-#: tv/plugins/manual_record.py:125
-msgid "Modify start day"
-msgstr ""
-
-#: tv/plugins/manual_record.py:126
-msgid "Modify start time"
-msgstr ""
-
-#: tv/plugins/manual_record.py:127
-msgid "Modify stop month"
-msgstr ""
-
-#: tv/plugins/manual_record.py:128
-msgid "Modify stop day"
-msgstr ""
-
-#: tv/plugins/manual_record.py:129
-msgid "Modify stop time"
-msgstr ""
+#: tv/plugins/manual_record.py:131 tv/program_display.py:262
+msgid "Modify channel"
+msgstr "Zmìna programu"
 
 #: tv/plugins/manual_record.py:132
+msgid "Modify start month"
+msgstr "Zaèátek: zmìna mìsíce"
+
+#: tv/plugins/manual_record.py:133
+msgid "Modify start day"
+msgstr "Zaèátek: zmìna dne"
+
+#: tv/plugins/manual_record.py:134
+msgid "Modify start time"
+msgstr "Zaèátek: zmìna èasu"
+
+#: tv/plugins/manual_record.py:135
+msgid "Modify stop month"
+msgstr "Konec: zmìna mìsíce"
+
+#: tv/plugins/manual_record.py:136
+msgid "Modify stop day"
+msgstr "Konec: zmìna dne"
+
+#: tv/plugins/manual_record.py:137
+msgid "Modify stop time"
+msgstr "Konec: zmìna èasu"
+
+#: tv/plugins/manual_record.py:138 tv/edit_favorite.py:189
+#: www/htdocs/edit_favorite.rpy:318
+msgid "Save"
+msgstr "Ulo¾it"
+
+#: tv/plugins/manual_record.py:140
 msgid "Record Item Menu"
-msgstr ""
+msgstr "Menu nahrávání"
 
-#: tv/plugins/manual_record.py:306 tv/plugins/manual_record.py:335
-#: tv/plugins/manual_record.py:339 tv/plugins/manual_record.py:344
-#: tv/plugins/manual_record.py:348
+#: tv/plugins/manual_record.py:149 tv/program_display.py:285
+msgid "Alter Name"
+msgstr "Zmìna jména"
+
+#: tv/plugins/manual_record.py:159 tv/program_display.py:307
+msgid "Modify Channel"
+msgstr "Zmìna kanálu"
+
+#: tv/plugins/manual_record.py:175 tv/plugins/manual_record.py:197
+#: tv/plugins/manual_record.py:234 tv/plugins/manual_record.py:256
+#: tv/program_display.py:357
+msgid "Modify Day"
+msgstr "Zmìna dne"
+
+#: tv/plugins/manual_record.py:218 tv/plugins/manual_record.py:277
+#: tv/program_display.py:377
+msgid "Modify Time"
+msgstr "Zmìna èasu"
+
+#: tv/plugins/manual_record.py:334 tv/plugins/manual_record.py:363
+#: tv/plugins/manual_record.py:367 tv/plugins/manual_record.py:372
+#: tv/plugins/manual_record.py:376
 msgid "Save Failed, recording was lost"
-msgstr ""
+msgstr "Chyba pøi ulo¾ení souboru, nahrávka ztracena"
 
-#: tv/plugins/manual_record.py:334 www/htdocs/manualrecord.rpy:129
+#: tv/plugins/manual_record.py:362 www/htdocs/manualrecord.rpy:129
 #, python-format
 msgid "Program would record for more than %d days!"
-msgstr ""
+msgstr "Nahrávaní bude trvat víc %d dní!"
 
-#: tv/plugins/manual_record.py:338 www/htdocs/manualrecord.rpy:131
+#: tv/plugins/manual_record.py:366 www/htdocs/manualrecord.rpy:131
 msgid "Program would record for more than 1 day!"
-msgstr ""
+msgstr "Nahrávání bude trvat víc jak den!"
 
-#: tv/plugins/manual_record.py:343 www/htdocs/manualrecord.rpy:126
+#: tv/plugins/manual_record.py:371 www/htdocs/manualrecord.rpy:126
 msgid "start time is not before stop time."
-msgstr ""
+msgstr "Zaèátek nahrávání musí být pøed koncem"
 
-#: tv/plugins/manual_record.py:347
+#: tv/plugins/manual_record.py:375
 msgid ""
 "Sorry, the stop time does not give enough time for scheduler to pickup the "
 "change.  Please set it to record for a few minutes longer."
 msgstr ""
+"Konec pøedchozího nahrávání je moc blízko, odlo¾te o chvilku nahrávání "
 
-#: tv/plugins/scheduled_recordings.py:71 tv/plugins/scheduled_recordings.py:85
-#: www/web_types.py:180 www/htdocs/record.rpy:182
+#: tv/plugins/scheduled_recordings.py:56 tv/plugins/scheduled_recordings.py:70
+#: www/web_types.py:131 www/htdocs/record.rpy:185
 msgid "Scheduled Recordings"
-msgstr ""
+msgstr "Naplánované nahrávání"
 
-#: tv/plugins/scheduled_recordings.py:76
+#: tv/plugins/scheduled_recordings.py:61
 msgid "Display Scheduled Recordings"
-msgstr ""
+msgstr "Zobraz naplínované nahrávaní"
 
-#: tv/plugins/scheduled_recordings.py:82
+#: tv/plugins/scheduled_recordings.py:67
 msgid "Nothing scheduled."
-msgstr ""
+msgstr "Nic není naplánováno"
 
-#: tv/plugins/scheduled_recordings.py:130
+#: tv/plugins/scheduled_recordings.py:102 tv/plugins/view_favorites.py:101
+#: tv/program_search.py:93 www/htdocs/edit_favorite.rpy:137
+#: www/htdocs/favorites.rpy:130 www/htdocs/genre.rpy:122
+#: www/htdocs/guide.rpy:203 www/htdocs/manualrecord.rpy:70
+#: www/htdocs/record.rpy:142
+msgid "Recording server is unavailable."
+msgstr "Nelze se pøipojit k recordserver"
+
+#: tv/plugins/scheduled_recordings.py:115
 msgid "Get recordings failed"
-msgstr ""
+msgstr "Nelze získat seznam nahrávek"
 
-#: tv/plugins/view_favorites.py:60 tv/plugins/view_favorites.py:65
-#: tv/plugins/view_favorites.py:74 www/web_types.py:181
+#: tv/plugins/view_favorites.py:55 tv/plugins/view_favorites.py:60
+#: tv/plugins/view_favorites.py:69 www/web_types.py:132
 msgid "View Favorites"
-msgstr ""
+msgstr "Oblíbené poøady"
 
-#: tv/plugins/view_favorites.py:71
+#: tv/plugins/view_favorites.py:66
 msgid "No favorites."
-msgstr ""
+msgstr "®ádné oblíbené poøady nenalezeny"
 
-#: tv/plugins/view_favorites.py:118
+#: tv/plugins/view_favorites.py:113
 msgid "Get favorites failed"
-msgstr ""
+msgstr "Nelze získat seznam oblíbených poøadù"
 
-#: tv/plugins/view_line_in.py:55
+#: tv/plugins/view_line_in.py:57
 msgid "View VCR Input"
-msgstr ""
+msgstr "VideoIn"
 
-#: tv/plugins/xine.py:88 video/plugins/xine.py:113
+#: tv/plugins/xine.py:89 video/plugins/xine.py:94
 msgid ""
 "'XINE_COMMAND' not defined, plugin 'xine' deactivated.\n"
 "please check the xine section in freevo_config.py"
 msgstr ""
 
-#: tv/plugins/xine.py:112 video/plugins/xine.py:137
+#: tv/plugins/xine.py:113 video/plugins/xine.py:118
 msgid "'xine-ui' version too old, plugin 'xine' deactivated"
 msgstr ""
 
-#: util/misc.py:448
+#: tv/channels.py:123
+#, python-format
+msgid "Cannot find tuner channel \"%s\" in the TV channel listing"
+msgstr "Nemohu nalézt kanál \"%s\" v seznamu"
+
+#: tv/channels.py:161 tv/channels.py:167
+#, python-format
+msgid "Unable to get channel list for %s."
+msgstr "Nemohu získat seznam kanálù pro %s"
+
+#: tv/channels.py:198
+#, python-format
+msgid "Failed to set freq for channel %s."
+msgstr "Nemohu nastavit frekvenci pro kanál %s"
+
+#: tv/edit_favorite.py:98 www/htdocs/edit_favorite.rpy:135
+#: www/htdocs/edit_favorite.rpy:196
+msgid "Edit Favorite"
+msgstr "Uprav oblíbené"
+
+#: tv/edit_favorite.py:112 share/skins/main/basic.fxd:577
+#: share/skins/main/info.fxd:269
+msgid "Name"
+msgstr "Jméno"
+
+#: tv/edit_favorite.py:124 www/htdocs/favorites.rpy:190
+#: www/htdocs/favorites.rpy:202 www/htdocs/favorites.rpy:208
+msgid "ANY"
+msgstr "jakýkoli"
+
+#: tv/edit_favorite.py:143
+msgid "Day of Week"
+msgstr "Den týdne"
+
+#: tv/edit_favorite.py:147 tv/program_display.py:242
+#: www/htdocs/edit_favorite.rpy:243
+msgid "ANY DAY"
+msgstr "jakýkoli den"
+
+#: tv/edit_favorite.py:151 tv/program_display.py:235
+#: www/htdocs/edit_favorite.rpy:244
+msgid "Mon"
+msgstr "Po"
+
+#: tv/edit_favorite.py:151 tv/program_display.py:235
+#: www/htdocs/edit_favorite.rpy:245
+msgid "Tue"
+msgstr "Út"
+
+#: tv/edit_favorite.py:151 tv/program_display.py:235
+#: www/htdocs/edit_favorite.rpy:246
+msgid "Wed"
+msgstr "St"
+
+#: tv/edit_favorite.py:151 tv/program_display.py:235
+#: www/htdocs/edit_favorite.rpy:247
+msgid "Thu"
+msgstr "Èt"
+
+#: tv/edit_favorite.py:151 tv/program_display.py:235
+#: www/htdocs/edit_favorite.rpy:248
+msgid "Fri"
+msgstr "Pá"
+
+#: tv/edit_favorite.py:151 tv/program_display.py:235
+#: www/htdocs/edit_favorite.rpy:249
+msgid "Sat"
+msgstr "So"
+
+#: tv/edit_favorite.py:151 tv/program_display.py:235
+#: www/htdocs/edit_favorite.rpy:250
+msgid "Sun"
+msgstr "Ne"
+
+#: tv/edit_favorite.py:164
+msgid "Time of Day"
+msgstr "Èas"
+
+#: tv/edit_favorite.py:167 tv/program_display.py:246
+#: www/htdocs/edit_favorite.rpy:256
+msgid "ANY TIME"
+msgstr "Jakýkoli èas"
+
+#: tv/edit_favorite.py:192 www/htdocs/favorites.rpy:214
+#: www/htdocs/record.rpy:238 www/htdocs/search.rpy:230
+msgid "Remove"
+msgstr "Smazat"
+
+#: tv/edit_favorite.py:216 tv/program_display.py:223 tv/program_display.py:422
+msgid "Remove Failed"
+msgstr "Smazaní neúspì¹né"
+
+#: tv/edit_favorite.py:326
+#, python-format
+msgid "Favorite %s has been saved"
+msgstr "Oblíbený %s ulo¾en"
+
+#: tv/edit_favorite.py:328
+#, python-format
+msgid "Failed: %s"
+msgstr "Chyba: %s"
+
+#: tv/edit_favorite.py:348
+#, python-format
+msgid "Do you want to remove %s?"
+msgstr "Smazat %s?"
+
+#: tv/epg_xmltv.py:71
+msgid "Time conversion error"
+msgstr "Chyba konverze èasu"
+
+#: tv/epg_xmltv.py:146
+msgid "Couldn't load the TV Guide, got an exception!"
+msgstr "Nelze nahrát program"
+
+#: tv/epg_xmltv.py:237
+#, python-format
+msgid "REPLACE WITH TUNERID FOR %s"
+msgstr "Nahraï TUNEDIR pro %s"
+
+#: tv/program_display.py:110
+msgid "Display program"
+msgstr "Zobraz program"
+
+#: tv/program_display.py:124
+msgid "Remove from schedule"
+msgstr "Odstraò ze seznamu"
+
+#: tv/program_display.py:127
+msgid "Schedule for recording"
+msgstr "Nahrávací seznam"
+
+#: tv/program_display.py:131
+msgid "Search for more of this program"
+msgstr "Získej víc o poøadu"
+
+#: tv/program_display.py:141
+msgid "Remove from favorites"
+msgstr "Odeber z oblíbených"
+
+#: tv/program_display.py:144
+msgid "Add to favorites"
+msgstr "Pøidej k oblíbeným"
+
+#: tv/program_display.py:147
+msgid "Program Menu"
+msgstr "Programové menu"
+
+#: tv/program_display.py:169 tv/program_search.py:123
+msgid "Searching, please wait..."
+msgstr "Hledám, poèkejte prosím.."
+
+#: tv/program_display.py:185
+#, python-format
+msgid "No matches found for %s"
+msgstr "%s nenalezeno"
+
+#: tv/program_display.py:187
+#, python-format
+msgid "findMatches failed: %s"
+msgstr "%s nenalezeno"
+
+#: tv/program_display.py:190 www/htdocs/search.rpy:144
+msgid "Search Results"
+msgstr "Výsledek hledání"
+
+#: tv/program_display.py:204
+#, python-format
+msgid "\"%s\" has been scheduled for recording"
+msgstr "\"%s\" naplánován k nahrání"
+
+#: tv/program_display.py:207
+msgid "Scheduling Failed"
+msgstr "Chyba plánování"
+
+#: tv/program_display.py:238 www/htdocs/edit_favorite.rpy:230
+msgid "ANY CHANNEL"
+msgstr "Jakýkoli program"
+
+#: tv/program_display.py:255
+msgid "Display favorite"
+msgstr "Zobraz oblíbený"
+
+#: tv/program_display.py:263
+msgid "Modify day of week"
+msgstr "Zmìna dne"
+
+#: tv/program_display.py:264
+msgid "Modify time of day"
+msgstr "Zmìna èasu"
+
+#: tv/program_display.py:270
+msgid "Modify priority"
+msgstr "Zmìna priority"
+
+#: tv/program_display.py:273
+msgid "Save changes"
+msgstr "Ulo¾ení zmìn"
+
+#: tv/program_display.py:274
+msgid "Remove favorite"
+msgstr "Ostranìní oblíbeného"
+
+#: tv/program_display.py:276
+msgid "Favorite Menu"
+msgstr "Seznam oblíbených"
+
+#: tv/program_display.py:398
+msgid "Save Failed, favorite was lost"
+msgstr "Chyba pøi ulo¾ení"
+
+#: tv/program_display.py:405
+msgid "Save Failed"
+msgstr "Chyba pøi ulo¾ení"
+
+#: tv/program_display.py:410
+msgid "Favorite not added yet."
+msgstr "Je¹tì není pøidáno k oblíbeným"
+
+#: tv/program_search.py:86
+msgid "Program Search"
+msgstr "Hledání programu"
+
+#: tv/program_search.py:95
+msgid "Feel free to implement this function inside the main guide."
+msgstr "Zkus to doprogramovat!"
+
+#: tv/record_client.py:74 tv/record_client.py:83 tv/record_client.py:94
+#: tv/record_client.py:110 tv/record_client.py:122 tv/record_client.py:131
+#: tv/record_client.py:150 tv/record_client.py:159 tv/record_client.py:171
+#: tv/record_client.py:180 tv/record_client.py:193 tv/record_client.py:202
+#: tv/record_client.py:211 tv/record_client.py:220 tv/record_client.py:230
+#: tv/record_client.py:240 tv/record_client.py:249 tv/record_client.py:258
+#: tv/record_client.py:267 tv/record_client.py:276
+msgid "connection error"
+msgstr "chyba pøipojení"
+
+#: tv/record_client.py:101 tv/record_client.py:117
+msgid "no program"
+msgstr "¾ádný program"
+
+#: tv/record_client.py:104
+msgid "cannot record it if it is over"
+msgstr "Nelze nahrát pokud se pøekrývá"
+
+#: tv/record_client.py:139 tv/record_client.py:145
+msgid "program not scheduled"
+msgstr "program není naplánován"
+
+#: tv/record_client.py:143
+msgid "program is scheduled"
+msgstr "program naplánován"
+
+#: tv/tvguide.py:87
+msgid "Preparing the program guide"
+msgstr "Pøipravuji program"
+
+#: tv/tvguide.py:90
+msgid "TV Guide is corrupt!"
+msgstr "Chyba v programu!"
+
+#: tv/tvguide.py:226
+msgid "Sorry, you cannot watch TV while recording. "
+msgstr "Nelze sledovat TV pøi nahrávání"
+
+#: tv/tvguide.py:227
+msgid "If this is not true then remove "
+msgstr "Pokud neplatí sma¾te"
+
+#: tv/tvmenu.py:85 tv/tvmenu.py:93
+#, python-format
+msgid "Could not find TV channel %s"
+msgstr "Nelze najít program %s"
+
+#: tv/tvmenu.py:117 www/web_types.py:130 www/htdocs/guide.rpy:198
+msgid "TV Guide"
+msgstr "TV program"
+
+#: tv/tvmenu.py:119
+msgid "Recorded Shows"
+msgstr "Ulo¾ené poøady"
+
+#: tv/tvmenu.py:129
+msgid "TV Main Menu"
+msgstr "TV hlavní nabídka"
+
+#: tv/tvmenu.py:155
+msgid "The list of TV channels is invalid!\n"
+msgstr "Chyba v seznamu kanálù\n"
+
+#: tv/tvmenu.py:156
+msgid "Please check the config file."
+msgstr "Zkontrolujte nastavení "
+
+#: util/mediainfo.py:741
+msgid "Reloading cache files, be patient..."
+msgstr "Naèítám vyrovnávací pamìt, èekejte prosím..."
+
+#: util/misc.py:435
 msgid "The recordserver is down"
 msgstr "Nahrávací server je vypnut"
 
-#: util/misc.py:470
+#: util/misc.py:457
 msgid "Today"
 msgstr "Dnes"
 
-#: util/misc.py:480
+#: util/misc.py:467
 msgid "Tomorrow"
 msgstr "Zítra"
 
-#: util/misc.py:490
+#: util/misc.py:477
 msgid "This Week"
 msgstr "Tento týden"
 
-#: util/misc.py:500
+#: util/misc.py:487
 msgid "No recordings are scheduled"
 msgstr "Není nastaveno ¾ádné nahrávání"
 
-#: video/__init__.py:227
-msgid "Directory Autobuild Thumbnails "
-msgstr "Automaticky vytvoøit náhledy pro adresáø"
-
-#: video/__init__.py:228
-msgid "Build video thumbnails for all items (may take a while when entering)."
-msgstr "Vytvoøit náhledy pro v¹echny polo¾ky (toto mù¾e trvat nejaký èas)"
-
-#: video/configure.py:111
-#, python-format
-msgid "Stream %s"
-msgstr ""
-
-#: video/configure.py:119
-msgid "Audio Menu"
-msgstr ""
-
-#: video/configure.py:134
-msgid "no subtitles"
-msgstr "¾ádné titulky"
-
-#: video/configure.py:138
-msgid "Subtitle Menu"
-msgstr "Menu titulky"
-
-#: video/configure.py:155
-#, python-format
-msgid "Play chapter %s"
-msgstr "Pøehrát kapitolu %s"
-
-#: video/configure.py:162
-msgid "Chapter Menu"
-msgstr "Kapitoly"
-
-#: video/configure.py:191
-#, python-format
-msgid "Turn off %s"
-msgstr "Vypnout %s"
-
-#: video/configure.py:192
-#, python-format
-msgid "Turn on %s"
-msgstr "Zapnout %s"
-
-#: video/configure.py:205
-msgid "Audio selection"
-msgstr "Výbìr audio stopy"
-
-#: video/configure.py:207
-msgid "Subtitle selection"
-msgstr "Výbìr titulkù"
-
-#: video/configure.py:210
-msgid "Chapter selection"
-msgstr "Výbìr kapitoly"
-
-#: video/configure.py:215
-msgid "deinterlacing"
-msgstr ""
-
-#: video/configure.py:221
-msgid "Config Menu"
-msgstr "Konfigurace"
-
-#: video/videoitem.py:290
-msgid "Play DVD"
-msgstr "Pøehrát DVD"
-
-#: video/videoitem.py:291 video/videoitem.py:293
-msgid "DVD title list"
-msgstr "Seznam titulù DVD"
-
-#: video/videoitem.py:294 video/videoitem.py:302
-msgid "Play default track"
-msgstr "Pøehrát standardní stopu"
-
-#: video/videoitem.py:298
-msgid "Play VCD"
-msgstr "Pøehrát Video CD"
-
-#: video/videoitem.py:299 video/videoitem.py:301
-msgid "VCD title list"
-msgstr "Seznam titulù Video CD"
-
-#: video/videoitem.py:306
-msgid "Play with alternate player"
-msgstr "Pøehrát jiným pøehrávaèem"
-
-#: video/videoitem.py:309
-msgid "Play with maximum cache"
-msgstr "Pøehrát s maximální velikostí cache"
-
-#: video/videoitem.py:314
-msgid "Show variants"
-msgstr "Ukázat varianty"
-
-#: video/videoitem.py:317
-msgid "Create Thumbnail"
-msgstr "Vytvoøit náhledy"
-
-#: video/videoitem.py:338
-msgid "Please wait...."
-msgstr "Èekejte prosím..."
-
-#: video/videoitem.py:469 video/videoitem.py:483 video/videoitem.py:497
-#, python-format
-msgid "No media found for \"%s\".\n"
-msgstr "Nenalezeno médium \"%s\".\n"
-
-#: video/videoitem.py:470 video/videoitem.py:484 video/videoitem.py:498
-msgid "Please insert the media."
-msgstr "Prosím vlo¾te médium"
-
-#: video/videoitem.py:503
-msgid "No player for this item found"
-msgstr "Pro tuto polo¾ku nebyl nalezen ¾ádný pøehrávaè"
-
-#: video/videoitem.py:578
-#, python-format
-msgid "Play Title %s"
-msgstr "Pøehrát titul %s"
-
-#: video/plugins/bookmarker.py:79
+#: video/plugins/bookmarker.py:70
 msgid "Resume playback"
 msgstr "Pokraèovat v pøehrávání"
 
-#: video/plugins/bookmarker.py:84
+#: video/plugins/bookmarker.py:75
 msgid "Bookmarks"
 msgstr "Zálo¾ky"
 
-#: video/plugins/bookmarker.py:120
+#: video/plugins/bookmarker.py:111
 #, python-format
 msgid "Jump to %s"
 msgstr "Jdi na %s"
 
-#: video/plugins/details.py:64
+#: video/plugins/details.py:76
 msgid "Show details for this item"
 msgstr "Ukázat detaily pro tuto polo¾ku"
 
-#: video/plugins/details.py:94
+#: video/plugins/details.py:106
 msgid "Details"
 msgstr "Detaily"
 
-#: video/plugins/imdb.py:108
+#: video/plugins/imdb.py:93
 msgid "Search IMDB for this file"
 msgstr "Prohledat IMDB pro tento soubor"
 
-#: video/plugins/imdb.py:115 video/plugins/imdb.py:122
+#: video/plugins/imdb.py:100 video/plugins/imdb.py:107
 #, python-format
 msgid "Search IMDB for [%s]"
 msgstr "Prohledat IMDB pro [%s]"
 
-#: video/plugins/imdb.py:133
+#: video/plugins/imdb.py:118
 msgid "searching IMDB..."
 msgstr "Prohledávám IMDB"
 
-#: video/plugins/imdb.py:157
+#: video/plugins/imdb.py:142
 msgid "Unknown error while connecting to IMDB"
 msgstr "Neznámá chyba pøi pøipojování k IMDB"
 
-#: video/plugins/imdb.py:175
+#: video/plugins/imdb.py:160
 msgid "IMDB Query"
 msgstr "IMDB dotaz"
 
-#: video/plugins/imdb.py:179
+#: video/plugins/imdb.py:164
 msgid "No information available from IMDB"
 msgstr "Informace z IMDB nejsou dostupné"
 
-#: video/plugins/linkbrowser.py:90
+#: video/plugins/linkbrowser.py:77
 msgid "Browse links (autoplay)"
 msgstr "Procházet linky (automatické pøehrávání)"
 
-#: video/plugins/linkbrowser.py:91
+#: video/plugins/linkbrowser.py:78
 msgid "Browse links (autoplay, maximum caching)"
 msgstr "Procházet linky (automatické pøehrávání, maximální velikost cache)"
 
-#: video/plugins/linkbrowser.py:92
+#: video/plugins/linkbrowser.py:79
 msgid "Browse links"
 msgstr "Procházet linky"
 
-#: video/plugins/linkbrowser.py:161
+#: video/plugins/linkbrowser.py:148
 msgid "Downloading link list..."
 msgstr "Stahuji seznam linkù"
 
-#: video/plugins/linkbrowser.py:168
+#: video/plugins/linkbrowser.py:155
 #, python-format
 msgid "Failed to download %s"
 msgstr "Chyba pøi stahování %s"
 
-#: video/plugins/mover.py:123
+#: video/plugins/mover.py:104
 #, python-format
 msgid "Move to [%s]"
-msgstr ""
+msgstr "Pøesunout na []"
 
-#: video/plugins/mplayer.py:501
+#: video/plugins/mplayer.py:459
 msgid "Seeking not possible"
 msgstr "Vyhledávání není dostupné"
 
-#: www/web_types.py:178 www/htdocs/index.rpy:107
+#: video/__init__.py:203
+msgid "Directory Autobuild Thumbnails "
+msgstr "Automaticky vytvoøit náhledy pro adresáø"
+
+#: video/__init__.py:204
+msgid "Build video thumbnails for all items (may take a while when entering)."
+msgstr "Vytvoøit náhledy pro v¹echny polo¾ky (mù¾e chvilku trvat)"
+
+#: video/configure.py:85
+#, python-format
+msgid "Stream %s"
+msgstr "Proud %s"
+
+#: video/configure.py:93
+msgid "Audio Menu"
+msgstr "Menu zvuku"
+
+#: video/configure.py:108
+msgid "no subtitles"
+msgstr "¾ádné titulky"
+
+#: video/configure.py:112
+msgid "Subtitle Menu"
+msgstr "Menu titulky"
+
+#: video/configure.py:129 video/configure.py:156
+#, python-format
+msgid "Play chapter %s"
+msgstr "Pøehrát kapitolu %s"
+
+#: video/configure.py:136 video/configure.py:159
+msgid "Chapter Menu"
+msgstr "Kapitoly"
+
+#: video/configure.py:188
+#, python-format
+msgid "Turn off %s"
+msgstr "Vypnout %s"
+
+#: video/configure.py:189
+#, python-format
+msgid "Turn on %s"
+msgstr "Zapnout %s"
+
+#: video/configure.py:202
+msgid "Audio selection"
+msgstr "Výbìr audio stopy"
+
+#: video/configure.py:204
+msgid "Subtitle selection"
+msgstr "Výbìr titulkù"
+
+#: video/configure.py:207 video/configure.py:211
+msgid "Chapter selection"
+msgstr "Výbìr kapitoly"
+
+#: video/configure.py:217
+msgid "deinterlacing"
+msgstr "deinterlace"
+
+#: video/configure.py:223
+msgid "Config Menu"
+msgstr "Konfigurace"
+
+#: video/videoitem.py:304
+msgid "Play DVD"
+msgstr "Pøehrát DVD"
+
+#: video/videoitem.py:305 video/videoitem.py:307
+msgid "DVD title list"
+msgstr "Seznam titulù DVD"
+
+#: video/videoitem.py:308 video/videoitem.py:316
+msgid "Play default track"
+msgstr "Pøehrát standardní stopu"
+
+#: video/videoitem.py:312
+msgid "Play VCD"
+msgstr "Pøehrát Video CD"
+
+#: video/videoitem.py:313 video/videoitem.py:315
+msgid "VCD title list"
+msgstr "Seznam titulù Video CD"
+
+#: video/videoitem.py:320
+msgid "Play with alternate player"
+msgstr "Pøehrát jiným pøehrávaèem"
+
+#: video/videoitem.py:323
+msgid "Play with maximum cache"
+msgstr "Pøehrát s maximální velikostí cache"
+
+#: video/videoitem.py:328
+msgid "Show variants"
+msgstr "Ukázat varianty"
+
+#: video/videoitem.py:332
+msgid "Create Thumbnail"
+msgstr "Vytvoøit náhledy"
+
+#: video/videoitem.py:353
+msgid "Please wait...."
+msgstr "Èekejte prosím..."
+
+#: video/videoitem.py:495 video/videoitem.py:509 video/videoitem.py:523
+#, python-format
+msgid "No media found for \"%s\".\n"
+msgstr "Nenalezeno médium \"%s\".\n"
+
+#: video/videoitem.py:496 video/videoitem.py:510 video/videoitem.py:524
+msgid "Please insert the media."
+msgstr "Prosím vlo¾te médium"
+
+#: video/videoitem.py:529
+msgid "No player for this item found"
+msgstr "Pro tuto polo¾ku nebyl nalezen ¾ádný pøehrávaè"
+
+#: video/videoitem.py:605
+#, python-format
+msgid "Play Title %s"
+msgstr "Pøehrát titul %s"
+
+#: www/web_types.py:129 www/htdocs/index.rpy:107
 msgid "Home"
-msgstr ""
+msgstr "Domù"
 
-#: www/web_types.py:179
+#: www/web_types.py:130
 msgid "View TV Listings"
-msgstr ""
+msgstr "Seznam televizních poøadù na v¹ech programech"
 
-#: www/web_types.py:180
+#: www/web_types.py:131
 msgid "View Scheduled Recordings"
-msgstr ""
+msgstr "Zobrazí v¹echny naplánováné nahrávky poøadù"
 
-#: www/web_types.py:181 www/htdocs/favorites.rpy:128
+#: www/web_types.py:132 www/htdocs/favorites.rpy:128
 #: www/htdocs/favorites.rpy:171
 msgid "Favorites"
-msgstr ""
+msgstr "Oblíbené poøady"
 
-#: www/web_types.py:182 www/htdocs/library.rpy:290
+#: www/web_types.py:133 www/htdocs/library.rpy:297
 msgid "Media Library"
-msgstr ""
+msgstr "Seznam Souborù"
 
-#: www/web_types.py:182
+#: www/web_types.py:133
 msgid "View Media Library"
-msgstr ""
+msgstr "Seznam v¹ech podporovaných typù souborù"
 
-#: www/web_types.py:183 www/htdocs/manualrecord.rpy:202
+#: www/web_types.py:134 www/htdocs/manualrecord.rpy:202
 msgid "Manual Recording"
-msgstr ""
+msgstr "Manuální nahrávání"
 
-#: www/web_types.py:183
+#: www/web_types.py:134
 msgid "Schedule a Manual Recording"
-msgstr ""
+msgstr "Nastavit ruènì nahrávání poøadù"
 
-#: www/web_types.py:184 www/web_types.py:282 www/web_types.py:289
+#: www/web_types.py:135 www/web_types.py:233 www/web_types.py:240
 #: www/htdocs/search.rpy:144 www/htdocs/search.rpy:168
 msgid "Search"
-msgstr ""
+msgstr "Vyhledávání"
 
-#: www/web_types.py:184
+#: www/web_types.py:135
 msgid "Advanced Search Page"
-msgstr ""
+msgstr "Pokroèilé hledání"
 
-#: www/web_types.py:185
+#: www/web_types.py:136
 msgid "Help"
-msgstr ""
+msgstr "Nápovìda"
 
-#: www/web_types.py:185
+#: www/web_types.py:136
 msgid "View Online Help and Documentation"
-msgstr ""
+msgstr "Zobrazení nápovìdy"
 
-#: www/web_types.py:189
+#: www/web_types.py:140
 msgid "Icecast List"
 msgstr ""
 
-#: www/web_types.py:189
+#: www/web_types.py:140
 msgid "Change Icecast List"
 msgstr ""
 
-#: www/web_types.py:290
+#: www/web_types.py:241
 msgid "Movies only"
-msgstr ""
+msgstr "Pouze filmy"
 
-#: www/web_types.py:291
+#: www/web_types.py:242
 msgid "Go!"
-msgstr ""
+msgstr "Hledej!"
 
-#: www/web_types.py:297 www/htdocs/library.rpy:309
+#: www/web_types.py:248 www/htdocs/library.rpy:316
 msgid "Messages"
-msgstr ""
-
-#: www/htdocs/edit_favorite.rpy:158 www/htdocs/record.rpy:161
-#, python-format
-msgid "No program found on %s at %s."
-msgstr ""
-
-#: www/htdocs/edit_favorite.rpy:182
-#, python-format
-msgid "Favorite %s doesn't exists."
-msgstr ""
-
-#: www/htdocs/edit_favorite.rpy:205
-msgid "Name of favorite"
-msgstr ""
-
-#: www/htdocs/edit_favorite.rpy:208 www/htdocs/favorites.rpy:178
-msgid "Day of week"
-msgstr ""
-
-#: www/htdocs/edit_favorite.rpy:209 www/htdocs/favorites.rpy:179
-msgid "Time of day"
-msgstr ""
-
-#: www/htdocs/edit_favorite.rpy:210
-msgid "Action"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:162
-msgid "Monday"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:163
-msgid "Tuesday"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:164
-msgid "Wednesday"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:165
-msgid "Thursday"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:166
-msgid "Friday"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:167
-msgid "Saturday"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:168
-msgid "Sunday"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:175
-msgid "Favorite Name"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:180 www/htdocs/record.rpy:194
-#: www/htdocs/search.rpy:187
-msgid "Actions"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:181
-msgid "Priority"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:213
-msgid "Edit"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:221
-msgid "Higher"
-msgstr ""
-
-#: www/htdocs/favorites.rpy:228
-msgid "Lower"
-msgstr ""
-
-#: www/htdocs/genre.rpy:114
-#, python-format
-msgid "TV Genre for %s"
-msgstr ""
-
-#: www/htdocs/genre.rpy:144 www/htdocs/guide.rpy:212
-msgid "Show"
-msgstr ""
-
-#: www/htdocs/genre.rpy:144 www/htdocs/guide.rpy:212
-msgid "Category"
-msgstr ""
-
-#: www/htdocs/genre.rpy:144 www/htdocs/guide.rpy:212
-msgid "Change"
-msgstr ""
-
-#: www/htdocs/genre.rpy:194 www/htdocs/guide.rpy:290 www/htdocs/record.rpy:230
-#: www/htdocs/search.rpy:224
-#, python-format
-msgid "Sorry, the program description for %s is unavailable."
-msgstr ""
-
-#: www/htdocs/genre.rpy:219 www/htdocs/guide.rpy:325
-#: share/skins/main/basic.fxd:553
-#: share/skins/main/basic.fxd:615
-msgid "Start"
-msgstr ""
-
-#: www/htdocs/genre.rpy:220 www/htdocs/guide.rpy:326
-#: share/skins/main/basic.fxd:559
-#: share/skins/main/basic.fxd:621
-msgid "Stop"
-msgstr ""
-
-#: www/htdocs/genre.rpy:221 www/htdocs/guide.rpy:327
-#: share/skins/main/info.fxd:277
-#: share/skins/main/info.fxd:302
-#: share/skins/main/info.fxd:481
-msgid "Runtime"
-msgstr ""
-
-#: www/htdocs/genre.rpy:236 www/htdocs/guide.rpy:338 www/htdocs/search.rpy:232
-#: www/htdocs/search.rpy:234
-msgid "Record"
-msgstr ""
-
-#: www/htdocs/genre.rpy:239 www/htdocs/guide.rpy:341
-msgid "Add to Favorites"
-msgstr ""
-
-#: www/htdocs/genre.rpy:242 www/htdocs/guide.rpy:344
-msgid "Close Window"
-msgstr ""
-
-#: www/htdocs/genre.rpy:270
-msgid "NO SHOWS MATCHING CATEGORY"
-msgstr ""
-
-#: www/htdocs/guide.rpy:209
-msgid "View"
-msgstr ""
-
-#: www/htdocs/index.rpy:107
-msgid "Welcome"
-msgstr ""
-
-#: www/htdocs/index.rpy:110
-#, python-format
-msgid "Freevo Web Status as of %s"
-msgstr ""
-
-#: www/htdocs/index.rpy:115 www/htdocs/index.rpy:121 www/htdocs/index.rpy:123
-msgid "Notice"
-msgstr ""
-
-#: www/htdocs/index.rpy:115
-msgid "The recording server is down."
-msgstr ""
-
-#: www/htdocs/index.rpy:117
-msgid "The recording server is up and running."
-msgstr ""
-
-#: www/htdocs/index.rpy:121
-msgid "Your listings expire in 1 hour."
-msgstr ""
-
-#: www/htdocs/index.rpy:123
-#, python-format
-msgid "Your listings expire in %s hours."
-msgstr ""
-
-#: www/htdocs/index.rpy:125
-msgid "Your listings are up to date."
-msgstr ""
-
-#: www/htdocs/index.rpy:135
-#, python-format
-msgid "Now Recording %s."
-msgstr ""
-
-#: www/htdocs/index.rpy:141
-msgid "One program scheduled to record."
-msgstr ""
-
-#: www/htdocs/index.rpy:143
-#, python-format
-msgid "%i programs scheduled to record."
-msgstr ""
-
-#: www/htdocs/index.rpy:145 www/htdocs/index.rpy:147
-msgid "No programs scheduled to record."
-msgstr ""
-
-#: www/htdocs/index.rpy:149
-#, python-format
-msgid "%i of %i Mb free in %s"
-msgstr ""
-
-#: www/htdocs/library.rpy:258
-#, python-format
-msgid "%s already exists! File not renamed."
-msgstr ""
-
-#: www/htdocs/library.rpy:260
-#, python-format
-msgid "Rename %s to %s."
-msgstr ""
-
-#: www/htdocs/library.rpy:263
-msgid "No new file specified."
-msgstr ""
-
-#: www/htdocs/library.rpy:266 www/htdocs/library.rpy:271
-#, python-format
-msgid "Delete %s."
-msgstr ""
-
-#: www/htdocs/library.rpy:280
-#, python-format
-msgid "%s does not exist. No action taken."
-msgstr ""
-
-#: www/htdocs/library.rpy:282
-#, python-format
-msgid "I do not process names (%s) with slashes for security reasons."
-msgstr ""
-
-#: www/htdocs/library.rpy:322
-#: share/skins/main/basic.fxd:20
-msgid "Movies"
-msgstr ""
-
-#: www/htdocs/library.rpy:326
-msgid "Recorded TV"
-msgstr ""
-
-#: www/htdocs/library.rpy:334
-#: share/skins/main/basic.fxd:22
-msgid "Images"
-msgstr ""
-
-#: www/htdocs/library.rpy:346
-msgid "Choose a Directory"
-msgstr ""
-
-#: www/htdocs/library.rpy:349 www/htdocs/library.rpy:421
-#: www/htdocs/library.rpy:423 www/htdocs/library.rpy:426
-msgid "Back"
-msgstr ""
-
-#: www/htdocs/library.rpy:468
-msgid "Download"
-msgstr ""
-
-#: www/htdocs/library.rpy:470
-msgid "Rename"
-msgstr ""
-
-#: www/htdocs/manualrecord.rpy:117
-msgid "Manual Recorded"
-msgstr ""
-
-#: www/htdocs/manualrecord.rpy:208
-msgid "Error Message"
-msgstr ""
-
-#: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:188
-#: www/htdocs/search.rpy:181
-msgid "Start Time"
-msgstr ""
-
-#: www/htdocs/manualrecord.rpy:221 www/htdocs/record.rpy:189
-#: www/htdocs/search.rpy:182
-msgid "Stop Time"
-msgstr ""
-
-#: www/htdocs/manualrecord.rpy:223 www/htdocs/record.rpy:193
-#: www/htdocs/search.rpy:186
-msgid "Program Description"
-msgstr ""
-
-#: www/htdocs/manualrecord.rpy:234
-msgid "Add to Recording Schedule"
-msgstr ""
-
-#: www/htdocs/record.rpy:192 www/htdocs/search.rpy:185
-#: share/skins/main/info.fxd:263
-msgid "Episode"
-msgstr ""
-
-#: www/htdocs/record.rpy:218
-msgid "UNKNOWN"
-msgstr ""
-
-#: www/htdocs/search.rpy:145
-msgid "recording server is unavailable"
-msgstr ""
-
-#: www/htdocs/search.rpy:175
-msgid "No matches"
-msgstr ""
-
-#: www/htdocs/search.rpy:236
-msgid "New favorite"
-msgstr ""
-
-#: www/htdocs/help/doc.rpy:106 www/htdocs/help/doc.rpy:117
-msgid "Freevo Documentation"
-msgstr ""
-
-#: www/htdocs/help/doc.rpy:108
-#, python-format
-msgid "unable to load %s.html"
-msgstr ""
-
-#: www/htdocs/help/doc.rpy:109 www/htdocs/help/howto.rpy:133
-msgid "If you use a CVS version of Freevo, run <b>autogen.sh</b>."
-msgstr ""
-
-#: www/htdocs/help/doc.rpy:126
-#, python-format
-msgid ""
-"This page is generated from the Freevo WiKi. The current Version can be "
-"found <a href=\"%s\">here</a>."
-msgstr ""
+msgstr "Zprávy"
 
 #: www/htdocs/help/howto.rpy:93 www/htdocs/help/howto.rpy:94
 msgid "Freevo Installation HOWTO"
-msgstr ""
+msgstr "Jak instalovat Freevo (HOWTO)"
 
 #: www/htdocs/help/howto.rpy:94
 msgid "Build your own media box with Freevo and Linux"
-msgstr ""
+msgstr "Postavte si vlastní multimediální centrum pomocí Freevo a Linunxu"
 
 #: www/htdocs/help/howto.rpy:96 www/htdocs/help/howto.rpy:97
 msgid "Freevo Plugin Writing HOWTO"
-msgstr ""
+msgstr "Jak psát pluginy pro Freevo (HOWTO)"
 
 #: www/htdocs/help/howto.rpy:97
 msgid "Writing your own plugins for Freevo"
-msgstr ""
+msgstr "Psaní vlastních pluginù"
 
 #: www/htdocs/help/howto.rpy:132
 msgid "unable to load html files"
-msgstr ""
+msgstr "nelze nahrát html soubory"
+
+#: www/htdocs/help/howto.rpy:133 www/htdocs/help/doc.rpy:112
+msgid "If you use a CVS version of Freevo, run <b>autogen.sh</b>."
+msgstr "pokud pou¾íváte CVS, spus»te <b>autogen.sh</b>"
 
 #: www/htdocs/help/howto.rpy:134
 msgid "The files are searched in the following locations:"
-msgstr ""
+msgstr "Soubory jsou hledaný zde:"
+
+#: www/htdocs/help/doc.rpy:109 www/htdocs/help/doc.rpy:120
+msgid "Freevo Documentation"
+msgstr "Dokumentace"
+
+#: www/htdocs/help/doc.rpy:111
+#, python-format
+msgid "unable to load %s.html"
+msgstr "nemohu nahrát %s.html"
 
 #: www/htdocs/help/index.rpy:82
 msgid "Freevo Help"
-msgstr ""
+msgstr "Nápovìda"
 
 #: www/htdocs/help/index.rpy:85
 msgid ""
@@ -2398,7 +2067,12 @@ msgid ""
 "\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
 "them if someone deletes         informations), feel free to add informations "
 "there."
-msgstr ""
+msgstr "Tato dokumentace není zatím kompletní, pokud chcete pomoci, kontaktujte "
+"prosím vývojáøe. Více infromací najdete na stránkách "
+"<a href=\"http://freevo.sourceforge.net/cgi-bin/doc\">WiKi (online manuál)</a>"
+" a v mailových konferencích dostupných ze stránek projektu "
+"<a href=\"http://www.freevo.org\">Freevo</a>. "
+"Stránky Wiki mù¾e doplòovat ka¾dý zaregistrovaný u¾vatel, pokud máte chu» pomozte."
 
 #: www/htdocs/help/index.rpy:94
 msgid "Index"
@@ -2406,48 +2080,349 @@ msgstr ""
 
 #: www/htdocs/help/index.rpy:96
 msgid "Freevo Installation Howto"
-msgstr ""
+msgstr "Instalaèní manuál"
 
 #: www/htdocs/help/index.rpy:97
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Èasté dotazy FAQ"
 
 #: www/htdocs/help/index.rpy:98
 msgid "Recording Information"
-msgstr ""
+msgstr "Jak nastavit Freevo (nahrávání)"
 
 #: www/htdocs/help/index.rpy:99
 msgid "Plugin List"
-msgstr ""
+msgstr "Seznam pluginù"
 
 #: www/htdocs/help/index.rpy:100
 msgid "FXD files"
-msgstr ""
+msgstr "Co jsou FXD soubory"
 
 #: www/htdocs/help/index.rpy:101
 msgid "Skinning Informations"
-msgstr ""
+msgstr "Nastavení vzhledu (skiny)"
 
 #: www/htdocs/help/index.rpy:102
 msgid "Plugin Writing Howto"
-msgstr ""
+msgstr "Jak na psaní pluginù"
 
 #: www/htdocs/help/plugins.rpy:109 www/htdocs/help/plugins.rpy:128
 msgid "Freevo Plugin List"
-msgstr ""
+msgstr "Seznam pluginù"
 
 #: www/htdocs/help/plugins.rpy:138 www/htdocs/help/plugins.rpy:145
 msgid "top"
-msgstr ""
+msgstr "nahoru"
 
 #: www/htdocs/help/plugins.rpy:139 www/htdocs/help/plugins.rpy:146
 msgid "index"
 msgstr ""
 
-#: share/skins/main/blurr.fxd:186
-#: share/skins/main/info.fxd:542
+#: www/htdocs/edit_favorite.rpy:162 www/htdocs/record.rpy:164
+#, python-format
+msgid "No program found on %s at %s."
+msgstr "Program nenalezen na %s v %s "
+
+#: www/htdocs/edit_favorite.rpy:186
+#, python-format
+msgid "Favorite %s doesn't exists."
+msgstr "Oblíbený %s neexistuje"
+
+#: www/htdocs/edit_favorite.rpy:210
+msgid "Name of favorite"
+msgstr "Nazev oblíbeného"
+
+#: www/htdocs/edit_favorite.rpy:213 www/htdocs/favorites.rpy:178
+msgid "Day of week"
+msgstr "Den"
+
+#: www/htdocs/edit_favorite.rpy:214 www/htdocs/favorites.rpy:179
+msgid "Time of day"
+msgstr "Èas"
+
+#: www/htdocs/edit_favorite.rpy:215
+msgid "Action"
+msgstr "Akce"
+
+#: www/htdocs/favorites.rpy:162
+msgid "Monday"
+msgstr "Pondìlí"
+
+#: www/htdocs/favorites.rpy:163
+msgid "Tuesday"
+msgstr "Úterý"
+
+#: www/htdocs/favorites.rpy:164
+msgid "Wednesday"
+msgstr "Støeda"
+
+#: www/htdocs/favorites.rpy:165
+msgid "Thursday"
+msgstr "Ètvrtek"
+
+#: www/htdocs/favorites.rpy:166
+msgid "Friday"
+msgstr "Pátek"
+
+#: www/htdocs/favorites.rpy:167
+msgid "Saturday"
+msgstr "Sobota"
+
+#: www/htdocs/favorites.rpy:168
+msgid "Sunday"
+msgstr "Nedìle"
+
+#: www/htdocs/favorites.rpy:175
+msgid "Favorite Name"
+msgstr "Jméno"
+
+#: www/htdocs/favorites.rpy:180 www/htdocs/record.rpy:197
+#: www/htdocs/search.rpy:187
+msgid "Actions"
+msgstr "Akce"
+
+#: www/htdocs/favorites.rpy:181
+msgid "Priority"
+msgstr "Priorita"
+
+#: www/htdocs/favorites.rpy:213
+msgid "Edit"
+msgstr "Uprav"
+
+#: www/htdocs/favorites.rpy:221
+msgid "Higher"
+msgstr "Více"
+
+#: www/htdocs/favorites.rpy:228
+msgid "Lower"
+msgstr "Ménì"
+
+#: www/htdocs/genre.rpy:118
+#, python-format
+msgid "TV Genre for %s"
+msgstr "TV ¾ánr pro %s"
+
+#: www/htdocs/genre.rpy:148 www/htdocs/guide.rpy:213
+msgid "Show"
+msgstr "Ukázat"
+
+#: www/htdocs/genre.rpy:148 www/htdocs/guide.rpy:213
+msgid "Category"
+msgstr "Kategorie"
+
+#: www/htdocs/genre.rpy:148 www/htdocs/guide.rpy:213
+msgid "Change"
+msgstr "Zmìò"
+
+#: www/htdocs/genre.rpy:204
+msgid "NO SHOWS MATCHING CATEGORY"
+msgstr "Nic neodpovídá kategoii"
+
+#: www/htdocs/genre.rpy:229 www/htdocs/guide.rpy:325
+#: share/skins/main/basic.fxd:558 share/skins/main/basic.fxd:620
+msgid "Start"
+msgstr "Zaèátek"
+
+#: www/htdocs/genre.rpy:230 www/htdocs/guide.rpy:326
+#: share/skins/main/basic.fxd:564 share/skins/main/basic.fxd:626
+msgid "Stop"
+msgstr "Konec"
+
+#: www/htdocs/genre.rpy:231 www/htdocs/guide.rpy:327
+#: share/skins/main/info.fxd:277 share/skins/main/info.fxd:302
+#: share/skins/main/info.fxd:481
+msgid "Runtime"
+msgstr "délka"
+
+#: www/htdocs/genre.rpy:242 www/htdocs/guide.rpy:338 www/htdocs/search.rpy:232
+#: www/htdocs/search.rpy:234
+msgid "Record"
+msgstr "Nahrát"
+
+#: www/htdocs/genre.rpy:245 www/htdocs/guide.rpy:341
+msgid "Add to Favorites"
+msgstr "Pøidat k oblíbeným"
+
+#: www/htdocs/genre.rpy:248 www/htdocs/guide.rpy:344
+msgid "Close Window"
+msgstr "Zavøít okno"
+
+#: www/htdocs/guide.rpy:210
+msgid "View"
+msgstr "Zobraz"
+
+#: www/htdocs/index.rpy:107
+msgid "Welcome"
+msgstr "Vítej"
+
+#: www/htdocs/index.rpy:110
+#, python-format
+msgid "Freevo Web Status as of %s"
+msgstr "Freevo Web status k %s"
+
+#: www/htdocs/index.rpy:115 www/htdocs/index.rpy:121 www/htdocs/index.rpy:123
+msgid "Notice"
+msgstr "Poznámka"
+
+#: www/htdocs/index.rpy:115
+msgid "The recording server is down."
+msgstr "Nahrávací server není spu¹tený"
+
+#: www/htdocs/index.rpy:117
+msgid "The recording server is up and running."
+msgstr "Nahrávací server je spu¹tìn"
+
+#: www/htdocs/index.rpy:121
+msgid "Your listings expire in 1 hour."
+msgstr "Program vypr¹í bìhem hodiny"
+
+#: www/htdocs/index.rpy:123
+#, python-format
+msgid "Your listings expire in %s hours."
+msgstr "Program vypr¹í bìhem %s hodin"
+
+#: www/htdocs/index.rpy:125
+msgid "Your listings are up to date."
+msgstr "Televizní program je aktuální"
+
+#: www/htdocs/index.rpy:135
+#, python-format
+msgid "Now Recording %s."
+msgstr "Nahrávání %s"
+
+#: www/htdocs/index.rpy:141
+msgid "One program scheduled to record."
+msgstr "Naplánován jeden poøad"
+
+#: www/htdocs/index.rpy:143
+#, python-format
+msgid "%i programs scheduled to record."
+msgstr "%i naplánovaných poøadù"
+
+#: www/htdocs/index.rpy:145 www/htdocs/index.rpy:147
+msgid "No programs scheduled to record."
+msgstr "®ádné naplánováné nahrávání"
+
+#: www/htdocs/index.rpy:149
+#, python-format
+msgid "%i of %i Mb free in %s"
+msgstr "%i z %i MB volných v %s"
+
+#: www/htdocs/library.rpy:265
+#, python-format
+msgid "%s already exists! File not renamed."
+msgstr "%s ji¾ existuje, soubor nebyl pøejmenován"
+
+#: www/htdocs/library.rpy:267
+#, python-format
+msgid "Rename %s to %s."
+msgstr "Pøejmenovat  %s na %s"
+
+#: www/htdocs/library.rpy:270
+msgid "No new file specified."
+msgstr "Nové jméno nezadáno"
+
+#: www/htdocs/library.rpy:273 www/htdocs/library.rpy:278
+#, python-format
+msgid "Delete %s."
+msgstr "Smazat %s"
+
+#: www/htdocs/library.rpy:287
+#, python-format
+msgid "%s does not exist. No action taken."
+msgstr "%s neexistuje "
+
+#: www/htdocs/library.rpy:289
+#, python-format
+msgid "I do not process names (%s) with slashes for security reasons."
+msgstr "Z bezpeènostních dùvodù nelze ve jménech pou¾ívat lomítka (%s)"
+
+#: www/htdocs/library.rpy:329 share/skins/main/basic.fxd:20
+msgid "Movies"
+msgstr "Filmy"
+
+#: www/htdocs/library.rpy:333
+msgid "Recorded TV"
+msgstr "Nahrané TV poøady"
+
+#: www/htdocs/library.rpy:341 share/skins/main/basic.fxd:22
+msgid "Images"
+msgstr "Obrázky"
+
+#: www/htdocs/library.rpy:353
+msgid "Choose a Directory"
+msgstr "Vybrat adresáø"
+
+#: www/htdocs/library.rpy:356 www/htdocs/library.rpy:427
+#: www/htdocs/library.rpy:429 www/htdocs/library.rpy:432
+msgid "Back"
+msgstr "Zpìt"
+
+#: www/htdocs/library.rpy:474
+msgid "Download"
+msgstr "Ulo¾it"
+
+#: www/htdocs/library.rpy:476
+msgid "Rename"
+msgstr "Pøejmenovat"
+
+#: www/htdocs/manualrecord.rpy:117
+msgid "Manual Recorded"
+msgstr "Ruèní zadání nahrávaní"
+
+#: www/htdocs/manualrecord.rpy:208
+msgid "Error Message"
+msgstr "Chybová zpráva"
+
+#: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:191
+#: www/htdocs/search.rpy:181
+msgid "Start Time"
+msgstr "Zaèátek"
+
+#: www/htdocs/manualrecord.rpy:221 www/htdocs/record.rpy:192
+#: www/htdocs/search.rpy:182
+msgid "Stop Time"
+msgstr "Konec"
+
+#: www/htdocs/manualrecord.rpy:223 www/htdocs/record.rpy:196
+#: www/htdocs/search.rpy:186
+msgid "Program Description"
+msgstr "Popis poøadu"
+
+#: www/htdocs/manualrecord.rpy:234
+msgid "Add to Recording Schedule"
+msgstr "Pøidat poøad do nahrávacího seznamu"
+
+#: www/htdocs/proginfo.rpy:60 www/htdocs/record.rpy:233
+#: www/htdocs/search.rpy:224
+#, python-format
+msgid "Sorry, the program description for %s is unavailable."
+msgstr "Podrobnosti o poøadu %s nejsou k dispozici"
+
+#: www/htdocs/record.rpy:195 www/htdocs/search.rpy:185
+#: share/skins/main/info.fxd:263
+msgid "Episode"
+msgstr "Kapitola"
+
+#: www/htdocs/record.rpy:221
+msgid "UNKNOWN"
+msgstr "Neznámý"
+
+#: www/htdocs/search.rpy:145
+msgid "recording server is unavailable"
+msgstr "nahrávací server není dostupný"
+
+#: www/htdocs/search.rpy:175
+msgid "No matches"
+msgstr "Nic nenalezeno"
+
+#: www/htdocs/search.rpy:236
+msgid "New favorite"
+msgstr "Nový oblíbený"
+
+#: share/skins/main/blurr.fxd:186 share/skins/main/info.fxd:542
 msgid "Playlist"
-msgstr ""
+msgstr "Seznam skladeb"
 
 #: share/skins/main/info.fxd:505
 msgid "Copyright"
@@ -2455,10 +2430,9 @@ msgstr ""
 
 #: share/skins/main/info.fxd:405
 msgid "Disc ID"
-msgstr ""
+msgstr "ID disku"
 
-#: share/skins/main/blurr.fxd:212
-#: share/skins/main/info.fxd:309
+#: share/skins/main/blurr.fxd:212 share/skins/main/info.fxd:309
 msgid "Audio tracks"
 msgstr "Audio stopy"
 
@@ -2472,48 +2446,42 @@ msgstr "Hrát hru"
 
 #: share/skins/main/info.fxd:227
 msgid "kb/s"
-msgstr ""
+msgstr "kB/s"
 
 #: share/skins/main/basic.fxd:19
 msgid "TV"
 msgstr ""
 
-#: share/skins/main/blurr.fxd:190
-#: share/skins/main/info.fxd:418
-#: share/skins/main/info.fxd:423
-#: share/skins/main/info.fxd:546
+#: share/skins/main/blurr.fxd:190 share/skins/main/info.fxd:418
+#: share/skins/main/info.fxd:423 share/skins/main/info.fxd:546
 msgid "items in this playlist"
 msgstr "polo¾ek v tomto playlistu"
 
-#: share/skins/main/blurr.fxd:449
-#: share/skins/main/info.fxd:14
+#: share/skins/main/blurr.fxd:449 share/skins/main/info.fxd:14
 msgid "Listen to Music"
 msgstr "Poslouchat hudbu"
 
-#: share/skins/main/basic.fxd:392
-#: share/skins/main/blurr.fxd:706
+#: share/skins/main/basic.fxd:397 share/skins/main/blurr.fxd:706
 msgid "Elapsed"
 msgstr "uplynulo"
 
-#: share/skins/main/blurr.fxd:448
-#: share/skins/main/info.fxd:13
+#: share/skins/main/blurr.fxd:448 share/skins/main/info.fxd:13
 msgid "Watch a Movie"
 msgstr "Sledovat film"
 
 #: share/skins/main/info.fxd:231
 msgid "Link"
-msgstr ""
+msgstr "Odkaz"
 
 #: share/skins/main/info.fxd:224
 msgid "Bitrate"
 msgstr ""
 
-#: share/skins/main/basic.fxd:584
+#: share/skins/main/basic.fxd:589
 msgid "Day"
 msgstr "Den"
 
-#: share/skins/main/blurr.fxd:217
-#: share/skins/main/info.fxd:313
+#: share/skins/main/blurr.fxd:217 share/skins/main/info.fxd:313
 msgid "Subtitles"
 msgstr "Titulky"
 
@@ -2525,15 +2493,12 @@ msgstr "Kapitola"
 msgid "Language"
 msgstr "Jazyk"
 
-#: share/skins/main/blurr.fxd:180
-#: share/skins/main/blurr.fxd:284
-#: share/skins/main/blurr.fxd:401
-#: share/skins/main/blurr.fxd:409
+#: share/skins/main/blurr.fxd:180 share/skins/main/blurr.fxd:284
+#: share/skins/main/blurr.fxd:401 share/skins/main/blurr.fxd:409
 msgid "Items"
 msgstr "Polo¾ky"
 
-#: share/skins/main/blurr.fxd:194
-#: share/skins/main/info.fxd:427
+#: share/skins/main/blurr.fxd:194 share/skins/main/info.fxd:427
 #: share/skins/main/info.fxd:550
 msgid "This playlist is empty!"
 msgstr "Tento playlist je prázdný!"
@@ -2546,24 +2511,20 @@ msgstr ""
 msgid "Rating"
 msgstr "Hodnocení"
 
-#: share/skins/main/info.fxd:349
-#: share/skins/main/info.fxd:536
+#: share/skins/main/info.fxd:349 share/skins/main/info.fxd:536
 msgid "MB free"
 msgstr "MB volných"
 
-#: share/skins/main/blurr.fxd:447
-#: share/skins/main/info.fxd:12
+#: share/skins/main/blurr.fxd:447 share/skins/main/info.fxd:12
 msgid "Watch TV"
 msgstr "Sledovat televizi"
 
-#: share/skins/main/blurr.fxd:311
-#: share/skins/main/info.fxd:347
+#: share/skins/main/blurr.fxd:311 share/skins/main/info.fxd:347
 #: share/skins/main/info.fxd:534
 msgid "of"
 msgstr "z"
 
-#: share/skins/main/blurr.fxd:450
-#: share/skins/main/info.fxd:15
+#: share/skins/main/blurr.fxd:450 share/skins/main/info.fxd:15
 msgid "Look at Pictures"
 msgstr "Prohlí¾et obrázky"
 
@@ -2571,10 +2532,8 @@ msgstr "Prohlí¾et obrázky"
 msgid "Chapters"
 msgstr "Kapitoly"
 
-#: share/skins/main/basic.fxd:379
-#: share/skins/main/blurr.fxd:201
-#: share/skins/main/blurr.fxd:308
-#: share/skins/main/blurr.fxd:689
+#: share/skins/main/basic.fxd:384 share/skins/main/blurr.fxd:201
+#: share/skins/main/blurr.fxd:308 share/skins/main/blurr.fxd:689
 msgid "Track"
 msgstr "Stopa"
 
