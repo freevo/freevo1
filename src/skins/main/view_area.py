@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.7.2.1  2004/10/29 18:14:56  dischi
+# fix unicode bug
+#
 # Revision 1.7  2004/07/10 12:33:41  dischi
 # header cleanup
 #
@@ -60,7 +63,7 @@ class View_Area(Skin_Area):
         if hasattr(item, 'image') and item.image:
             image = item.image
 
-        return image != self.image
+        return Unicode(image) != Unicode(self.image)
     
 
     def update_content(self):
