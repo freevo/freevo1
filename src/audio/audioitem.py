@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.57.2.1  2004/07/21 17:12:23  outlyer
+# Bugfix.
+#
 # Revision 1.57  2004/07/17 08:18:55  dischi
 # unicode fixes
 #
@@ -139,7 +142,7 @@ class AudioItem(Item):
             # sort by track number
             try:
                 return '%0.3i-%s' % (int(self['trackno']), Unicode(self.url))
-            except ValuError:
+            except ValueError:
                 return '%s-%s' % (Unicode(self['trackno']), Unicode(self.url))
         return Unicode(self.url)
 
