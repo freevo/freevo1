@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.72.2.1  2004/08/28 17:08:08  dischi
+# add small debug
+#
 # Revision 1.72  2004/07/10 12:33:36  dischi
 # header cleanup
 #
@@ -273,6 +276,7 @@ class Playlist(Item):
         """
         resort the playlist by random
         """
+        _debug_('randomize playlist')
         old = self.playlist
         self.playlist = []
         while old:
