@@ -1,0 +1,507 @@
+#if 0 /*
+# -*- coding: iso-8859-1 -*-
+# -----------------------------------------------------------------------
+# util/misc.py - Some Misc Utilities
+# -----------------------------------------------------------------------
+# $Id$
+#
+# Notes:
+# Todo:        
+#
+# -----------------------------------------------------------------------
+# $Log$
+# Revision 1.3  2003/10/26 17:57:26  dischi
+# do not use tmp as default
+#
+# Revision 1.2  2003/10/14 17:03:38  dischi
+# add smartsort patch from Eirik Meland
+#
+# Revision 1.1  2003/10/11 11:20:11  dischi
+# move util.py into a directory and split it into two files
+#
+#
+# -----------------------------------------------------------------------
+# Freevo - A Home Theater PC framework
+# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Please see the file freevo/Docs/CREDITS for a complete list of authors.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+# CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# ----------------------------------------------------------------------- */
+#endif
+
+
+import glob
+import os, sys
+import string, re
+import Image # PIL
+import copy
+import htmlentitydefs
+from xml.utils import qp_xml
+import codecs
+
+# Configuration file. Determines where to look for AVI/MP3 files, etc
+import config
+
+# http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52560
+def unique(s):
+    """Return a list of the elements in s, but without duplicates.
+
+    For example, unique([1,2,3,1,2,3]) is some permutation of [1,2,3],
+    unique("abcabc") some permutation of ["a", "b", "c"], and
+    unique(([1, 2], [2, 3], [1, 2])) some permutation of
+    [[2, 3], [1, 2]].
+
+    For best speed, all sequence elements should be hashable.  Then
+    unique() will usually work in linear time.
+
+    If not possible, the sequence elements should enjoy a total
+    ordering, and if list(s).sort() doesn't raise TypeError it's
+    assumed that they do enjoy a total ordering.  Then unique() will
+    usually work in O(N*log2(N)) time.
+
+    If that's not possible either, the sequence elements must support
+    equality-testing.  Then unique() will usually work in quadratic
+    time.
+    """
+
+    n = len(s)
+    if n == 0:
+        return []
+
+    # Try using a dict first, as that's the fastest and will usually
+    # work.  If it doesn't work, it will usually fail quickly, so it
+    # usually doesn't cost much to *try* it.  It requires that all the
+    # sequence elements be hashable, and support equality comparison.
+    u = {}
+    try:
+        for x in s:
+            u[x] = 1
+    except TypeError:
+        del u  # move on to the next method
+    else:
+        return u.keys()
+
+    # We can't hash all the elements.  Second fastest is to sort,
+    # which brings the equal elements together; then duplicates are
+    # easy to weed out in a single pass.
+    # NOTE:  Python's list.sort() was designed to be efficient in the
+    # presence of many duplicate elements.  This isn't true of all
+    # sort functions in all languages or libraries, so this approach
+    # is more effective in Python than it may be elsewhere.
+    try:
+        t = list(s)
+        t.sort()
+    except TypeError:
+        del t  # move on to the next method
+    else:
+        assert n > 0
+        last = t[0]
+        lasti = i = 1
+        while i < n:
+            if t[i] != last:
+                t[lasti] = last = t[i]
+                lasti += 1
+            i += 1
+        return t[:lasti]
+
+    # Brute force is all that's left.
+    u = []
+    for x in s:
+        if x not in u:
+            u.append(x)
+    return u
+
+
+# Helper function for the md5 routine; we don't want to
+# write filenames that aren't in lower ascii so we uhm,
+# hexify them.
+def hexify(str):
+    """
+    return the string 'str' as hex string
+    """
+    hexStr = string.hexdigits
+    r = ''
+    for ch in str:
+        i = ord(ch)
+        r = r + hexStr[(i >> 4) & 0xF] + hexStr[i & 0xF]
+    return r
+
+
+def escape(sql):
+    """
+    Escape a SQL query in a manner suitable for sqlite
+    """
+    if sql:
+        sql = sql.replace('\'','\'\'')
+        return sql
+    else:
+        return 'null'
+    
+
+
+FILENAME_REGEXP = re.compile("^(.*?)_(.)(.*)$")
+
+def getimage(base, default=None):
+    """
+    return the image base+'.png' or base+'.jpg' if one of them exists.
+    If not return the default
+    """
+    if os.path.isfile(base+'.png'):
+        return base+'.png'
+    if os.path.isfile(base+'.jpg'):
+        return base+'.jpg'
+    return default
+
+
+def getname(file):
+    """
+    make a nicer display name from file
+    """
+    if not os.path.exists(file):
+        return file
+    name = os.path.splitext(os.path.basename(file))[0]
+
+    if not name:
+        # Bugfix for empty stem
+        return os.path.basename(file)
+    
+    name = name[0].upper() + name[1:]
+    while FILENAME_REGEXP.match(name):
+        m = FILENAME_REGEXP.match(name)
+        if m:
+            name = m.group(1) + ' ' + m.group(2).upper() + m.group(3)
+    if name[-1] == '_':
+        name = name[:-1]
+    return name
+
+
+def killall(appname, sig=9):
+    '''kills all applications with the string <appname> in their commandline.
+
+    The <sig> parameter indicates the signal to use.
+    This implementation uses the /proc filesystem, it might be Linux-dependent.
+    '''
+
+    unify_name = re.compile('[^A-Za-z0-9]').sub
+    appname = unify_name('', appname)
+    
+    cmdline_filenames = glob.glob('/proc/[0-9]*/cmdline')
+
+    for cmdline_filename in cmdline_filenames:
+
+        try:
+            fd = open(cmdline_filename)
+            cmdline = fd.read()
+            fd.close()
+        except IOError:
+            continue
+
+        if unify_name('', cmdline).find(appname) != -1:
+            # Found one, kill it
+            pid = int(cmdline_filename.split('/')[2])
+            if config.DEBUG:
+                a = sig, pid, ' '.join(cmdline.split('\x00'))
+                print 'killall: Sending signal %s to pid %s ("%s")' % a
+            try:
+                os.kill(pid, sig)
+            except:
+                pass
+    return
+
+
+def title_case(phrase):
+    """
+    Return a text string (i.e. from CDDB) with 
+    the case normalized into title case.
+    This is because people frequently put in ugly
+    information, and we can avoid it here'
+    """
+
+    s = ''
+    for letter in phrase:
+        if s and s[-1] == ' ' or s == '':
+            s += string.upper(letter)
+        elif letter == '_':
+                s += ' '
+        else:
+            s += string.lower(letter)
+    return s
+
+
+
+ 
+def get_bookmarkfile(filename):
+    myfile = os.path.basename(filename) 
+    myfile = config.FREEVO_CACHEDIR + "/" + str(myfile) + '.bookmark'
+    return myfile
+
+
+def format_text(text):
+    while len(text) and text[0] in (' ', '\t', '\n'):
+        text = text[1:]
+    text = re.sub('\n[\t *]', ' ', text)
+    while len(text) and text[-1] in (' ', '\t', '\n'):
+        text = text[:-1]
+    return text
+
+
+def list_usb_devices():
+    devices = []
+    fd = open('/proc/bus/usb/devices', 'r')
+    for line in fd.readlines():
+        if line[:2] == 'P:':
+            devices.append('%s:%s' % (line[11:15], line[23:27]))
+    fd.close()
+    return devices
+
+def smartsort(x,y): # A compare function for use in list.sort()
+    """
+    Compares strings after stripping off 'The' and 'A' to be 'smarter'
+    Also obviously ignores the full path when looking for 'The' and 'A' 
+    """
+    m = os.path.basename(x)
+    n = os.path.basename(y)
+    
+    for word in ('The', 'A'):
+        word += ' '
+        if m.find(word) == 0:
+            m = m.replace(word, '', 1)
+        if n.find(word) == 0:
+            n = n.replace(word, '', 1)
+
+    return cmp(m.upper(),n.upper()) # be case insensitive
+
+def tagmp3 (filename, title=None, artist=None, album=None, track=None, tracktotal=None, year=None):
+    """
+    use eyeD3 directly from inside mmpython to
+    set the tag. We default to 2.3 since even
+    though 2.4 is the accepted standard now, more
+    players support 2.3
+    """
+    import mmpython.audio.eyeD3 as eyeD3   # Until mmpython has an interface for this.
+
+    tag = eyeD3.Tag(filename)
+    tag.header.setVersion(eyeD3.ID3_V2_3)
+    if artist: tag.setArtist(artist)
+    if album:  tag.setAlbum(album)
+    if title:  tag.setTitle(title)
+    if track:  tag.setTrackNum((track,tracktotal))   # eyed3 accepts None for tracktotal
+    if year:   tag.setDate(year) 
+    tag.update()
+    return
+
+
+def getdatadir(item):
+    base = config.MOVIE_DATA_DIR
+    if not config.MOVIE_DATA_DIR:
+        base = '/tmp/freevo-movie-data-dir'
+    directory = item.dir
+    if item.media:
+        directory = directory[len(item.media.mountdir):]
+        if len(directory) and directory[0] == '/':
+            directory = directory[1:]
+        return os.path.join(base, 'disc', item.media.id, directory)
+    else:
+        if len(directory) and directory[0] == '/':
+            directory = directory[1:]
+        return os.path.join(base, directory)
+
+def encode(str, code):
+    try:
+        return str.encode(code)
+    except UnicodeError:
+        result = ''
+        for ch in str:
+            try:
+                result += ch.encode(code)
+            except UnicodeError:
+                pass
+        return result
+
+def htmlenties2txt(string):
+    e = copy.deepcopy(htmlentitydefs.entitydefs)
+    e['ndash'] = "-";
+    e['bull'] = "-";
+    e['rsquo'] = "'";
+    e['lsquo'] = "`";
+    e['hellip'] = '...'
+
+    string = string.encode(config.LOCALE, 'ignore').replace("&#039", "'").\
+             replace("&#146;", "'")
+
+    i = 0
+    while i < len(string):
+        amp = string.find("&", i) # find & as start of entity
+        if amp == -1: # not found
+            break
+        i = amp + 1
+
+        semicolon = string.find(";", amp) # find ; as end of entity
+        if string[amp + 1] == "#": # numerical entity like "&#039;"
+            entity = string[amp:semicolon+1]
+            replacement = str(chr(int(entity[2:-1])))
+        else:
+            entity = string[amp:semicolon + 1]
+            if semicolon - amp > 7:
+                continue
+            try:
+                # the array has mappings like "Uuml" -> "ü"
+                replacement = e[entity[1:-1]]
+            except KeyError:
+                continue
+        string = string.replace(entity, replacement)
+    #string = string.encode(config.LOCALE, 'ignore')
+    return string
+
+
+
+
+
+class XMLnode:
+    """
+    One node for the FXDtree
+    """
+    def __init__(self, name, attr = [], first_cdata=None, following_cdata=None):
+        self.name = name
+        self.attr_list = []
+        for name, val in attr:
+            self.attr_list.append(((None, name), val))
+        self.attrs = self
+        self.children = []
+        self.first_cdata = first_cdata
+        self.following_cdata = following_cdata
+        
+    def items(self):
+        return self.attr_list
+
+
+class FXDtree(qp_xml.Parser):
+    """
+    class to parse and write fxd files
+    """
+    def __init__(self, filename):
+        qp_xml.Parser.__init__(self)
+        self.filename = filename
+        if not os.path.isfile(filename):
+            self.tree = XMLnode('freevo')
+        else:
+            f = open(filename)
+            self.tree = self.parse(f)
+            f.close()
+        
+    def add(self, node, parent=None, pos=None):
+        if not parent:
+            parent = self.tree
+        if pos == None:
+            parent.children.append(node)
+        else:
+            parent.children.insert(pos, node)
+
+    def save(self, filename=None):
+        if not filename:
+            filename = self.filename
+        if os.path.isfile(filename):
+            os.unlink(filename)
+        f = codecs.open(filename , 'w', encoding='utf-8')
+        f.write('<?xml version="1.0" ?>\n')
+        self._dump_recurse(f, self.tree)
+        f.write('\n')
+        f.close()
+        
+    def _dump_recurse(self, f, elem, depth=0):
+        f.write('<' + elem.name)
+        for (ns, name), value in elem.attrs.items():
+            f.write(' %s="%s"' % (name, value))
+        if elem.children or elem.first_cdata:
+            if elem.first_cdata == None:
+                f.write('>\n  ')
+                for i in range(depth):
+                    f.write('  ')
+            else:
+                f.write('>' + elem.first_cdata)
+
+            for child in elem.children:
+                self._dump_recurse(f, child, depth=depth+1)
+                if child.following_cdata == None:
+                    if child == elem.children[-1]:
+                        f.write('\n')
+                    else:
+                        f.write('\n  ')
+                    for i in range(depth):
+                        f.write('  ')
+                else:
+                    f.write(child.following_cdata)
+            f.write('</%s>' % elem.name)
+        else:
+            f.write('/>')
+
+
+#
+# synchronized objects and methods.
+# By André Bjärby
+# From http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/65202
+# 
+from types import *
+def _get_method_names (obj):
+    if type(obj) == InstanceType:
+        return _get_method_names(obj.__class__)
+    
+    elif type(obj) == ClassType:
+        result = []
+        for name, func in obj.__dict__.items():
+            if type(func) == FunctionType:
+                result.append((name, func))
+
+        for base in obj.__bases__:
+            result.extend(_get_method_names(base))
+
+        return result
+
+
+class _SynchronizedMethod:
+
+    def __init__ (self, method, obj, lock):
+        self.__method = method
+        self.__obj = obj
+        self.__lock = lock
+
+    def __call__ (self, *args, **kwargs):
+        self.__lock.acquire()
+        try:
+            #print 'Calling method %s from obj %s' % (self.__method, self.__obj)
+            return self.__method(self.__obj, *args, **kwargs)
+        finally:
+            self.__lock.release()
+
+
+class SynchronizedObject:
+    
+    def __init__ (self, obj, ignore=[], lock=None):
+        import threading
+
+        self.__methods = {}
+        self.__obj = obj
+        lock = lock and lock or threading.RLock()
+        for name, method in _get_method_names(obj):
+            if not name in ignore:
+                self.__methods[name] = _SynchronizedMethod(method, obj, lock)
+
+    def __getattr__ (self, name):
+        try:
+            return self.__methods[name]
+        except KeyError:
+            return getattr(self.__obj, name)
+

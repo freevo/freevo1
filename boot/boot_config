@@ -1,0 +1,9 @@
+# $Id$
+
+FREEVO_HOME="/usr/local/freevo"
+FBSET="/usr/sbin/fbset"
+MATROXSET="/usr/local/bin/matroxset"
+FBSETDB="/usr/local/freevo/fbcon/fbset.db"
+FREEVO_LOG="/var/log/freevo/main.log"
+FREEVO_RES="main.py remote.py"
+VTRELEASE="/usr/local/freevo/fbcon/vtrelease"
