@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION  = 5.14
+LOCAL_CONF_VERSION  = 5.15
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -221,7 +221,10 @@ LOCAL_CONF_CHANGES = [
      '''Added TV_RECORD_SERVER_GID to set the gid for the recordserver. If you
      use TV_RECORD_SERVER_UID, the gui _must_ match one of the users gids''' ),
     (5.14,
-     '''Add IMAGEVIEWER_DURATION for auto slideshows''' )]
+     '''Add IMAGEVIEWER_DURATION for auto slideshows''' ),
+    (5.15,
+     '''Add two variables for mplayer psot processing: MPLAYER_VF_INTERLACED and
+     MPLAYER_VF_PROGRESSIVE''' ) ]
 
 
 # NOW check if freevo.conf is up-to-date. An older version may break the next
@@ -1081,7 +1084,7 @@ MPLAYER_ARGS = { 'dvd'    : '-cache 8192',
                  'cd'     : '-cache 1024 -cdda speed=2',
                  'tv'     : '-nocache',
                  'ivtv'   : '-cache 8192',
-                 'dvb'    : '-vf pp=de/fd -cache 1024',
+                 'dvb'    : '-cache 1024',
                  'avi'    : '-cache 5000 -idx',
                  'rm'     : '-cache 5000 -forceidx',
                  'rmvb'   : '-cache 5000 -forceidx',
@@ -1112,6 +1115,17 @@ MPLAYER_AUTOCROP = 0
 # WARNING: When seeking, the playback is out of sync for some seconds! 
 #
 MPLAYER_SET_AUDIO_DELAY = 0
+
+#
+# Mplayer video filter for interlaced or progressive videos. If you have
+# a slow pc, do not use post processing
+# MPLAYER_VF_INTERLACED  = ''
+# MPLAYER_VF_PROGRESSIVE = 'pp=fd'
+# For pal and dvb-t recordings, the following looks good
+# MPLAYER_VF_INTERLACED  = 'pp=md/de,phase=U'
+#
+MPLAYER_VF_INTERLACED  = 'pp=de/fd'
+MPLAYER_VF_PROGRESSIVE = 'pp=de'
 
 
 # ======================================================================

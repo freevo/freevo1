@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.73.2.4  2005/01/09 10:08:25  dischi
+# Port MPLAYER_VF_INTERLACED and MPLAYER_VF_INTERLACED for 2.0 to 1.5.3
+#
 # Revision 1.73.2.3  2004/09/11 16:25:34  dischi
 # fix subtitle activation
 #
@@ -255,11 +258,11 @@ class MPlayer:
             additional_args += [ '-aid', str(item.selected_audio) ]
 
         if self.version >= 1 and item['deinterlace']:
-            additional_args += [ '-vf',  'pp=de/fd' ]
+            additional_args += [ '-vf',  config.MPLAYER_VF_INTERLACED ]
         elif item['deinterlace']:
-            additional_args += [ '-vop', 'pp=fd' ]
+            additional_args += [ '-vop', config.MPLAYER_VF_INTERLACED ]
         elif self.version >= 1:
-            additional_args += [ '-vf',  'pp=de' ]
+            additional_args += [ '-vf',  config.MPLAYER_VF_PROGRESSIVE ]
                 
         mode = item.mimetype
         if not config.MPLAYER_ARGS.has_key(mode):
