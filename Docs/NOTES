@@ -1,0 +1,306 @@
+Freevo Notes
+============
+
+$Id$
+
+This file contains random notes that are useful when dealing with Freevo
+
+----------------------------------------------------------------------
+Python debuggers:
+
+Wing IDE: Seems pretty good. Free trial, free smaller version, free
+          for open-source developers.
+
+HAP: http://sourceforge.net/projects/hapdebugger
+
+----------------------------------------------------------------------
+Good icons and backgrounds:
+
+http://themes.freshmeat.net/projects/marblessolid/?topic_id=976%2C57
+
+www.kde-look.org
+----------------------------------------------------------------------
+Microsoft Core Truetype Fonts
+
+http://corefonts.sourceforge.net/
+----------------------------------------------------------------------
+Nice looking PVR:
+
+http://www.metrolink.com/products/media/index.html
+----------------------------------------------------------------------
+Dependencies (OUTDATED!):
+
+Freevo:
+  MPlayer
+    libdvdread (?)
+    libdvdcss
+    ffmpeg (copy into src tree)
+    libdvdnav
+  NVrec-20020510-freevo
+    ./configure --without-avifile --without-rte --without-divx4linux \
+      --without-quicktime --without-sdl --without-mad --without--ffmpeg
+      make NUVrec
+
+    (xvid_20020412 
+      ffmpeg
+        ./configure --enable-mp3lame
+      make install
+      cp xvid_20020412/xvidcore/src/divx4.h /usr/local/include/encore2.h 
+      cd /usr/local/lib ; cp libxvidcore.so libdivxencore.so
+      ldconfig
+      nasm-0.98)
+
+----------------------------------------------------------------------
+
+libdvdread, libdvdcss from dtek
+
+css:
+./configure --disable-gtk   --disable-x11   --disable-xvideo   
+
+----------------------------------------------------------------------
+MPlayer:
+
+cvs -d:pserver:anonymous@mplayerhq.hu:/cvsroot/mplayer login
+cvs -z3 -d:pserver:anonymous@mplayerhq.hu:/cvsroot/mplayer co main
+
+cvs -d:pserver:anonymous@cvs.ffmpeg.sourceforge.net:/cvsroot/ffmpeg login
+cvs -d:pserver:anonymous@cvs.ffmpeg.sourceforge.net:/cvsroot/ffmpeg co ffmpeg
+
+mv ffmpeg/libavcodec main
+rm -rf ffmpeg
+
+cp /usr/local/include/dvdnav/* /usr/local/include
+
+./configure --enable-tv-v4l --enable-mga --enable-xmga --enable-largefiles --disable-lirc 
+
+mga_vid driver:
+mknod /dev/mga_vid c 178 0
+
+To make it load/unload automatically when needed, insert the following 
+line at the end of /etc/modules.conf:
+
+    alias char-major-178 mga_vid
+
+Then run
+
+    depmod -a
+
+
+
+MPlayer TV viewing
+mplayer -vo xv -tv on:driver=v4l:input=0:norm=NTSC:channel=49:chanlist=us-cable:width=640:height=480:outfmt=yuy2 -nocache 
+
+Mencoder TV recording
+mencoder -tv on:driver=v4l:input=0:norm=NTSC:channel=49:chanlist=us-cable:width=320:height=240:outfmt=yuy2:adevice=/dev/dsp2:audiorate=32000 -ovc lavc -lavcopts vcodec=mpeg4:vbitrate=800:keyint=300:vhq -oac mp3lame -lameopts br=80:cbr -ffourcc divx -o tst.avi
+
+
+Options for bmovl:
+-vop bmovl=1:0:/tmp/bmovl-freevo.fifo
+1 = Hidden at startup (send SHOW/HIDE to change)
+0 = Opaque at startup = don't use alpha = copy whole buffer overwriting
+    background. Use OPAQUE/ALPHA to change.
+
+N.B.: You must use YV12 output (outfmt=yv12) from the TV with bmovl, 
+      otherwise it will have to use a slow SW conversion!
+
+----------------------------------------------------------------------
+
+NVREC:
+
+Requires very recent versions of autoconf and automake:
+
+ftp://ftp.gnu.org/gnu/autoconf/autoconf-2.53.tar.gz
+ftp://ftp.gnu.org/gnu/automake/automake-1.6.2.tar.gz
+
+Compile autoconf before automake.
+
+Build only nuvrec:
+
+cd ..
+./bootstrap
+./configure --without-avifile --without-rte --without-divx4linux \
+   --without-quicktime --without-sdl --without-mad --without--ffmpeg
+make
+
+Record sound using the btaudio device
+./nuvrec -F 300000 -norm NTSC -input Television -w 320 -h 240 -vq 100 \
+    -d /dev/dsp2 -mixsrc /dev/mixer2:line1 -o tst2.avi
+
+Speed on a Celeron 500 MHz:
+(32000 Hz, 16 bit mono PCM)
+640x480 framedrops heavily.
+nuvrec 640x240  -vq 100         75%               6.34 Mbit/s
+nuvrec 320x240  -vq 100         35%               4.35 Mbit/s  =  1.8 GB/h
+nuvrec 320x240  -vq  90         35%               3.95 Mbit/s  =  1.6 GB/h
+
+
+----------------------------------------------------------------------
+Video4Linux1 API docs:
+
+http://www.linuxhq.com/kernel/v2.4/doc/video4linux/API.html
+
+----------------------------------------------------------------------
+
+Aspect ratio resolutions:
+1.33  576x432
+1.78  688x384
+
+FFMPEG encoder for DVDs
+/usr/local/bin/mencoder -ovc lavc -lavcopts vcodec=mpeg4:vbitrate=900:vratetol=100000:keyint=100:vhq \
+  -oac mp3lame -lameopts br=80:cbr -sws 2 -vop scale=576:432 -o tst.avi -dvd 1 \
+  -ffourcc divx -alang en
+
+Add "-ofps 23.976" if there are a lot of "skip frame!!!" messages (inverse telecine).
+
+Scale and crop a 2.35:1 DVD
+usr/local/bin/mencoder -ovc divx4 -divx4opts br=800:key=300:q=5 \
+  -oac mp3lame -lameopts br=80:cbr -sws 2 -vop scale=848:336,crop=720:336:0:72 \
+   -o tst.avi -dvd 1 -alang en
+
+Record with NVrec:
+DIVX4rec -F 300000 -norm NTSC -input Composite1 -m -r 22050 -w 320 -h 240 \
+-ab 80 -vg 100 -vb 700 -mixsrc /dev/dsp:line -mixvol /dev/dsp:line:80 -o 
+
+----------------------------------------------------------------------
+
+btaudio notes:
+use the analog channel, /dev/dsp2,mixer1 for a system with 1 soundcard and 1 bttv card
+input levels seem high, set a low recgain
+the samplerate cannot be set to exactly 44100, it becomes 44800 instead. 32000 works
+NUVrec cannot do samplerates other than 44100, stereo, 16 bits.
+
+----------------------------------------------------------------------
+CVS and releases on Sourceforge:
+
+o Generate a public key using ssh-keygen and upload it to Sourceforge
+  using your account page. This allows you to use CVS without 
+  typing your password for each operation.
+
+o Checkout the entire module:
+  cvs -z3 -d:ext:SF_USERNAME@cvs.freevo.sourceforge.net:/cvsroot/freevo co freevo
+
+o Check for your local changes compared to the CVS server:
+  cvs -z3 -d:ext:SF_USERNAME@cvs.freevo.sourceforge.net:/cvsroot/freevo diff
+
+o Sync with CVS server:
+  cvs -z3 -d:ext:SF_USERNAME@cvs.freevo.sourceforge.net:/cvsroot/freevo update
+
+o Update Changelog, BUGS, README!
+
+o Commit changes to the CVS server:
+  cvs -z3 -d:ext:SF_USERNAME@cvs.freevo.sourceforge.net:/cvsroot/freevo \
+    commit -m "Comment... " [file...]
+
+  Try to commit as small changes as possible. If you fixed two different bugs,
+  make sure to commit them separately so that the change comment is correct for
+  each file.
+
+o Test CVS latest version using anonymous export
+  cvs -d:pserver:anonymous@cvs.freevo.sourceforge.net:/cvsroot/freevo login
+  cvs -z3 -d:pserver:anonymous@cvs.freevo.sourceforge.net:/cvsroot/freevo \
+    export -r HEAD freevo
+  cd freevo
+  make x11
+  ./freevo
+
+o Release checklist:
+  o Have you added testfiles for new functions. Try to keep them as small 
+    as possible, we don't want the testdata to be several megs since it 
+    will be included in the releases.
+  o Run PyChecker for static analysis of the source
+  o Test it!
+    o Functions
+    o Memory leaks
+    o Process management (no zombies, extra copies, etc)
+  o Update changelog, including the release date
+  o Update TODO
+
+o Tag a release/checkpoint:
+  cvs -z3 -d:ext:SF_USERNAME@cvs.freevo.sourceforge.net:/cvsroot/freevo tag REL-1_2_0
+
+o Make a .tar.gz file from the tagged version using anonymous export
+  cvs -d:pserver:anonymous@cvs.freevo.sourceforge.net:/cvsroot/freevo login
+  cvs -z3 -d:pserver:anonymous@cvs.freevo.sourceforge.net:/cvsroot/freevo export \
+    -r HEAD freevo
+  tar cvzf freevo-1.2.0.tar.gz freevo
+
+o Upload the tar file to Sourceforge
+  ftp upload.sourceforge.net
+  bin
+  cd /incoming
+  put freevo-1.2.0.tar.gz
+  quit
+
+  OR, using curl:
+
+  curl -T freevo-1.2.1.tar.gz \
+    ftp://anonymous:freevo_sf.net@upload.sourceforge.net/incoming/
+
+o Make a new release
+  o Goto http://sourceforge.net/project/admin/qrs.php?package_id=&group_id=46652 
+  o Select "Package ID" = Freevo
+  o Type in "Release Name", e.g. 1.2.0 for Freevo, and "Rev 2" for runtime/apps
+  o Select freevo-XXX.tar.gz in the "File Name" menu (it is the file uploaded using FTP)
+  o "File Type" = "Source .gz"
+  o "Processor Type" = "i386"
+  o Paste in the "File Release Notes" from below
+  o Paste in the "Changes" for this version from the Changelog file
+  o Select "Preserve preformatted text"
+
+
+CVS Admin:
+
+cvs -z3 -d:ext:krister@cvs.freevo.sourceforge.net:/cvsroot/freevo co CVSROOT
+
+----------------------------------------------------------------------
+Website maintenance:
+
+o Use CVS to check out the website module.
+cvs -z3 -d:ext:SF_USERNAME@cvs.freevo.sourceforge.net:/cvsroot/freevo co website
+
+o Use CVS as described above
+
+o Export to a temporary directory
+
+cvs -d:pserver:anonymous@cvs.freevo.sourceforge.net:/cvsroot/freevo login
+cvs -z3 -d:pserver:anonymous@cvs.freevo.sourceforge.net:/cvsroot/freevo \
+   export -kv -r HEAD website
+
+o Upload to the tentative directory
+scp *html *.gif *jpg *ico *css krister@freevo.sf.net:/home/groups/f/fr/freevo/htdocs/tentative
+
+o Test the webpage (http://freevo.sourceforge.net/tentative)!!!
+
+o Upload to the real path
+
+----------------------------------------------------------------------
+File release notes:
+
+
+Quick test (using only X11): tar xvzf freevo-XXX.tgz ; cd freevo-XXX ; python install.py make x11 ; freevo
+
+
+This release has the following features:
+
+* Works with Linux on a computer with a Matrox G400 
+graphics board in framebuffer mode, WinTV video capture 
+board, and a regular soundcard.
+
+* View TV using the tuner on a Video4Linux1 video capture 
+device. A TV program guide is automatically downloaded and 
+displayed when selecting channels.
+
+* View movies/DVDs using MPlayer (a separate application which is not included).
+
+* Play MP3 using mplayer (a separate application which is not included).
+
+
+There is _not_ any support as of now (but it is planned) for:
+
+* "Live pause" of TV recording.
+
+* DVD backups.
+
+* Scheduled recording.
+
+etc.
