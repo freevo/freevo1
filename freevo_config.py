@@ -1191,18 +1191,6 @@ TV_OPTS = ''
 
 TV_SETTINGS = '%s television %s %s' % (CONF.tv, CONF.chanlist, TV_DEVICE)
 
-#
-# Size (in MB) of the timeshift buffer. (ie: how long you can pause tv for.)  
-# This is set to a low default because the default buffer location is 
-# under FREEVO_CACHEDIR and we don't want to blow /var or /tmp.
-#
-TIMESHIFT_BUFFER_SIZE = 128
-
-TIMESHIFT_ENCODE_CMD = 'mp1e -m3 -c%s -p%s -r14,100' % \
-                       (TV_SETTINGS.split()[3], AUDIO_INPUT_DEVICE) 
-
-TIMESHIFT_BUFFER = '%s/timeshift.mpeg' % FREEVO_CACHEDIR
-
 TV_CHANNEL_PROG = './chchan %(channel)s %(norm)s %(freqtable)s'
 
 TV_DATEFORMAT = '%e-%b' # Day-Month: 11-Jun
