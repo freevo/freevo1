@@ -13,6 +13,9 @@
 #    3) Better (and more) LCD screens.
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.19.2.1  2005/01/09 10:13:44  dischi
+# unicode fixes
+#
 # Revision 1.19  2004/07/11 11:14:53  dischi
 # lcd detach fixes from Magnus Schmidt
 #
@@ -774,21 +777,21 @@ class PluginInterface( plugin.DaemonPlugin ):
 
             # specific things related with item type
             if menu.selected.type == 'audio':
-                title = menu.selected.getattr( 'title' )
+                title = String(menu.selected.getattr( 'title' ))
                 if not title:
-                    title = menu.selected.getattr( 'name' )
+                    title = String(menu.selected.getattr( 'name' ))
                 if menu.selected.getattr( 'trackno' ):
-                    title = "%s - %s" % ( menu.selected.getattr( 'trackno' ), title )
+                    title = "%s - %s" % ( String(menu.selected.getattr( 'trackno' )), title )
                     
         elif type == 'player':
             player = object
             title  = player.getattr( 'title' )
             if not title:
-                title = player.getattr( 'name' )
+                title = String(player.getattr( 'name' ))
                 
             if player.type == 'audio':
                 if player.getattr( 'trackno' ):
-                    title = "%s - %s" % ( player.getattr( 'trackno' ), title )
+                    title = "%s - %s" % ( String(player.getattr( 'trackno' )), title )
                     
             elif player.type == 'video':
                 length = player.getattr( 'length' )
