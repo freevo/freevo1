@@ -1,0 +1,72 @@
+#!/bin/sh
+#if 0 /*
+# -----------------------------------------------------------------------
+# configure - the main configure script
+# -----------------------------------------------------------------------
+# $Id$
+#
+# Notes:
+# Todo:        
+#
+# -----------------------------------------------------------------------
+# $Log$
+# Revision 1.15  2003/02/06 09:52:25  krister
+# Changed the runtime handling to use runapp to start programs with the supplied dlls
+#
+# Revision 1.14  2003/02/05 19:56:05  krister
+# Missed the commandline args
+#
+# Revision 1.13  2003/02/05 06:10:46  krister
+# Changed the start scripts and childapp.py to use startprog to start all programs.
+#
+#
+# -----------------------------------------------------------------------
+# Freevo - A Home Theater PC framework
+# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Please see the file freevo/Docs/CREDITS for a complete list of authors.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+# CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# ----------------------------------------------------------------------- */
+#endif
+
+# cd to the freevo directory if necessary
+if ! [ -e src/identifymedia.py ]; then
+    cd `dirname $0`
+fi
+
+# Is runapp present? If not, the user must have a good python installation
+if ! [ -e runapp ]; then
+    echo
+    echo
+    echo "WARNING: ./runapp not found."
+    echo
+    echo "Please make sure you have the most recent version of Freevo,"
+    echo "and *please* use the full binary version that includes all"
+    echo "dependencies including ./runapp unless you're an experienced user."
+    echo 
+    echo "Trying to start the configure program..."
+    echo
+    echo
+    
+    # XXX Check for python2 etc?
+    python setup_build.py $@
+    exit 0
+fi
+
+# ./runapp will figure out which python to use
+./runapp python setup_build.py $@
+
+exit 0
