@@ -324,7 +324,7 @@ MENU_ARROW_NAVIGATION = 0
 
 #
 # Keymap to map keyboard keys to event strings. You can also add new keys
-# here, e.g. KEYMAP[K_x] = 'SUBTITLE'. The K_-names are defined by pygame.
+# here, e.g. KEYMAP[key.K_x] = 'SUBTITLE'. The K_-names are defined by pygame.
 #
 KEYMAP = DEFAULT_KEYMAP
 
