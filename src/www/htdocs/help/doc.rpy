@@ -11,6 +11,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.6.2.1  2005/01/09 11:07:12  dischi
+# move needed part of old wiki in the cvs
+#
 # Revision 1.6  2004/02/19 04:57:59  gsbarbieri
 # Support Web Interface i18n.
 # To use this, I need to get the gettext() translations in unicode, so some changes are required to files that use "print _('string')", need to make them "print String(_('string'))".
@@ -123,8 +126,8 @@ class WikiResource(FreevoResource):
                     else:
                         source += 'DocumentationPage_2f%s' % file
 
-                    fv.res += '<p>'+(_('This page is generated from the Freevo WiKi. The current '\
-                              'Version can be found <a href="%s">here</a>.') % source ) +'</p>'
+#                     fv.res += '<p>'+(_('This page is generated from the Freevo WiKi. The current '\
+#                               'Version can be found <a href="%s">here</a>.') % source ) +'</p>'
                 if file == 'faq':
                     line = line.replace('<H1>', '<H3>').replace('</H1>', '</H3>')
                 line = line.replace('/wiki/img/', '/images/').\

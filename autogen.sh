@@ -29,36 +29,10 @@ howto() {
     docbook plugin_writing
 }
 
-wiki() {
-    wiki=src/www/htdocs/help/wiki
-
-    echo
-    echo getting some wiki pages
-    rm -rf $wiki
-    mkdir $wiki
-
-    for file in FxdFiles SkinInfo; do
-    wget http://freevo.sourceforge.net/cgi-bin/moin.cgi/DocumentationPage_2f$file \
-	-O $wiki/$file.html
-    done
-
-    wget http://freevo.sourceforge.net/cgi-bin/moin.cgi/FrequentlyAskedQuestions \
-    -O $wiki/faq.html
-
-    wget http://freevo.sourceforge.net/cgi-bin/moin.cgi/RecordingInfo \
-    -O $wiki/recording.html
-
-    exit 0
-}
-
 # Main
 case "$1" in
     nodocs)
         gen_i18n
-        ;;
-    nodocbook)
-        gen_i18n
-        wiki
         ;;
     howto)
         howto
@@ -68,13 +42,11 @@ case "$1" in
         echo $0
         echo "          nodocs     -  Just generate translations"
         echo "          howto      -  Just generate the docbook howto"
-        echo "          nodocbook  -  Fetch Wiki but do not make howto"
-        echo "          <default>  -  Generate translations, fetch wiki and generate Howto"
+        echo "          <default>  -  Generate translations and generate Howto"
         ;;
     *)
         gen_i18n
         howto
-        wiki
         ;;
 esac
 
