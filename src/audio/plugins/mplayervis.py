@@ -10,6 +10,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.6.2.1  2004/10/20 18:34:02  dischi
+# fix crash on broken images
+#
 # Revision 1.6  2004/07/10 12:33:38  dischi
 # header cleanup
 #
@@ -121,9 +124,13 @@ class mpv_Goom(BaseAnimation):
         pygoom.set_resolution(width, height, cinemascope)
 
         # change the cover if neceserry
+        s = None
         if self.coverfile:
-            s = image.load(self.coverfile)
-
+            try:
+                s = image.load(self.coverfile)
+            except:
+                pass
+        if s:
             # scale and fit to the rect
             w, h   = s.get_size()
             aspect = float(w)/float(h)
