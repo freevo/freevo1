@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.36.2.1  2004/10/20 18:31:46  dischi
+# remove one shot callback from list before calling it
+#
 # Revision 1.36  2004/07/10 12:33:36  dischi
 # header cleanup
 #
@@ -457,7 +460,6 @@ class EventHandler:
         for c in copy.copy(self.callbacks):
             if c[2] == c[3]:
                 # time is up, call it:
-                c[0](*c[4])
                 if not c[1]:
                     # remove if it is no repeat callback:
                     self.lock.acquire()
@@ -466,6 +468,7 @@ class EventHandler:
                 else:
                     # reset counter for next run
                     c[3] = 0
+                c[0](*c[4])
             else:
                 c[3] += 1
 
