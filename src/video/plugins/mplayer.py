@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.73.2.2  2004/09/06 16:38:22  dischi
+# add help for detection problems
+#
 # Revision 1.73.2.1  2004/08/09 14:38:22  dischi
 # fix mplayer version detection
 #
@@ -104,6 +107,11 @@ class PluginInterface(plugin.Plugin):
             child.wait()
 
         if not config.MPLAYER_VERSION:
+            print
+            print 'Failed to detect mplayer version. Please set MPLAYER_VERSION in your'
+            print 'local_conf.py to 0.9  (for 0.9.x series), 1.0 (for 1.0preX series)'
+            print 'or 9999 for cvs.'
+            print
             self.reason = 'failed to detect mplayer version'
             return
         
