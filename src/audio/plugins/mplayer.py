@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.38.2.1  2004/11/01 21:38:21  outlyer
+# AC3 support.
+#
 # Revision 1.38  2004/07/21 11:18:26  dischi
 # fix unicode error
 #
@@ -99,6 +102,8 @@ class MPlayer:
             return "-demuxer " + str(DEMUXER_MP3)
         if extension.lower() == '.ogg':
             return "-demuxer " + str(DEMUXER_OGG)
+        if extension.lower() == '.ac3':
+            return "-ac hwac3 -rawaudio on:format=0x2000"
         else:
             return ''
 
@@ -115,11 +120,13 @@ class MPlayer:
             
         if not filename:
             filename = item.url
-            
+           
         # Build the MPlayer command
         mpl = '--prio=%s %s -slave %s' % (config.MPLAYER_NICE,
                                           config.MPLAYER_CMD,
                                           config.MPLAYER_ARGS_DEF)
+
+
 
         if not item.network_play:
             demux = ' %s ' % self.get_demuxer(filename)

@@ -18,6 +18,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.3.2.1  2004/11/01 21:38:22  outlyer
+# AC3 support.
+#
 # Revision 1.3  2004/07/10 12:33:38  dischi
 # header cleanup
 #
@@ -118,6 +121,8 @@ class MPlayer:
             return "-hr-mp3-seek -demuxer " + str(DEMUXER_MP3)
         if extension.lower() == '.ogg':
             return "-demuxer " + str(DEMUXER_OGG)
+        if extension.lower() == '.ac3':
+            return "-ac hwac3 -rawaudio on:format=0x2000"
         else:
             return ''
 
