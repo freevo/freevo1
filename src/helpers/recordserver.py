@@ -7,6 +7,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.59.2.1  2004/10/20 18:35:34  dischi
+# fix favorite recording bug and set favorite priority below manual scheduled
+#
 # Revision 1.59  2004/07/16 19:39:57  dischi
 # store recording timestamp
 #
@@ -421,6 +424,14 @@ class RecordServer(xmlrpc.XMLRPC):
                     # Hey, something is already recording!
                     if prog.start - 10 <= now:
                         # our new recording should start no later than now!
+                        # check if the new prog is a favorite and the current running is
+                        # not. If so, the user manually added something, we guess it
+                        # has a higher priority.
+                        if self.isProgAFavorite(prog)[0] and \
+                           not self.isProgAFavorite(currently_recording)[0] and \
+                           prog.stop + config.TV_RECORD_PADDING > now
+                            _debug_('ignore %s' % String(prog))
+                            continue
                         sr.removeProgram(currently_recording, 
                                          tv_util.getKey(currently_recording))
                         plugin.getbyname('RECORD').Stop()
@@ -608,8 +619,9 @@ class RecordServer(xmlrpc.XMLRPC):
             if prog.title == fav.title:    
                 if fav.channel == tv_util.get_chan_displayname(prog.channel_id) \
                    or fav.channel == 'ANY':
-                    if fav.dow == dow or fav.dow == 'ANY':
-                        if fav.mod == min_of_day or fav.mod == 'ANY':
+                    if Unicode(fav.dow) == Unicode(dow) or Unicode(fav.dow) == u'ANY':
+                        if Unicode(fav.mod) == Unicode(min_of_day) or \
+                               Unicode(fav.mod) == u'ANY':
                             return (TRUE, fav.name)
                         elif abs(int(fav.mod) - int(min_of_day)) <= 8:
                             return (TRUE, fav.name)
