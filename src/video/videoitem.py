@@ -10,6 +10,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.144.2.2  2004/10/20 18:33:20  dischi
+# fix aspect ration crash when it is an int
+#
 # Revision 1.144.2.1  2004/08/28 17:12:23  dischi
 # fix multiple files in one video when replaying
 #
@@ -225,7 +228,7 @@ class VideoItem(Item):
             return '%sx%s' % (self.info['width'], self.info['height'])
 
         if key == 'aspect' and self.info['aspect']:
-            aspect = self.info['aspect']
+            aspect = str(self.info['aspect'])
             return aspect[:aspect.find(' ')].replace('/', ':')
             
         if key == 'runtime':
@@ -631,6 +634,9 @@ class VideoItem(Item):
         # PLAY_END: do we have to play another file?
         if self.subitems and not self.variants:
             if event == PLAY_END:
+                if not hasattr(self, 'error_in_subitem'):
+                    # I have no idea how this can happen, but it does
+                    self.error_in_subitem = 0
                 self.set_next_available_subitem()
                 # Loop until we find a subitem which plays without error
                 while self.current_subitem: 
