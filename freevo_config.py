@@ -1225,7 +1225,7 @@ TV_DATETIMEFORMAT = '%A %b %d %I:%M %p' # Thursday September 24 8:54 am
 # 
 # More can be found at: http://www.python.org/doc/current/lib/module-time.html
 
-TV_RECORDFILE_MASK = '%%m-%%d %%H:%%M %(progname)s - %(title)s'
+TV_RECORDFILE_MASK = '%%m-%%d %%H.%%M %(progname)s - %(title)s'
 TV_RECORDFILE_SUFFIX = '.avi'
 
 # if using the persitant recordserver
