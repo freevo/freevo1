@@ -1,0 +1,79 @@
+#! /bin/sh
+#
+# Enhanced boot script for freevo
+#
+# $Id$
+
+# Get startup config file
+test -f /etc/freevo/boot_config || exit 0
+. /etc/freevo/boot_config
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/games
+DAEMON=$FREEVO_HOME/freevo
+NAME=freevo
+DESC=freevo
+
+test -f $DAEMON || exit 0
+
+#set -e
+
+case "$1" in
+  start)
+  	echo -n "Setting startup resolution: "
+        # XXX Document the matroxset stuff (PAL/NTSC, cloning, etc)
+	$MATROXSET -f /dev/fb0 -m 0 > /dev/null 2> /dev/null
+	$MATROXSET -f /dev/fb1 -m 0 > /dev/null 2> /dev/null
+	$MATROXSET -f /dev/fb0 -m 2 > /dev/null 2> /dev/null
+	$MATROXSET -f /dev/fb1 -m 1 > /dev/null 2> /dev/null
+	$MATROXSET -f /dev/fb0 2 2 > /dev/null 2> /dev/null
+	$FBSET -db $FBSETDB -fb /dev/fb0 "ntsc-768x576" > /dev/null 2> /dev/null
+
+	# Define TVNORM in boot_config
+	if [ "$TVNORM" = "PAL" ]; then
+		$MATROXSET 1
+		echo -n "PAL "
+	else
+		echo -n "NTSC "
+	fi
+	echo "768x576."
+
+	echo -n "Starting $DESC: "
+	export SDL_NOKEYBOARD=true
+	export SDL_VIDEODRIVER=fbcon
+	(cd $FREEVO_HOME && $DAEMON >> $FREEVO_LOG 2>&1 &)
+	echo "$NAME."
+	;;
+  stop)
+	echo -n "Stopping $DESC: "
+        killall -9 freevo_rt &> /dev/null
+        killall -9 freevo_xwin &> /dev/null
+        killall -9 mplayer &> /dev/null
+        kill -9 `pgrep -f "python main.py" -d" "` &> /dev/null
+        kill -9 `pgrep -f "python rc_client" -d" "` &> /dev/null
+	echo "$NAME."
+	echo -n "Releasing the VT: "
+	$VTRELEASE
+	echo "vtrelease"
+	;;
+  #reload)
+  #;;
+  restart|force-reload)
+	#
+	#	If the "reload" option is implemented, move the "force-reload"
+	#	option to the "reload" entry above. If not, "force-reload" is
+	#	just the same as "restart".
+	#
+	echo "Restarting..."
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+  *)
+	N=/etc/init.d/$NAME
+	# echo "Usage: $N {start|stop|restart|reload|force-reload}" >&2
+	echo "Usage: $N {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
