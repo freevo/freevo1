@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.73.2.3  2004/09/11 16:25:34  dischi
+# fix subtitle activation
+#
 # Revision 1.73.2.2  2004/09/06 16:38:22  dischi
 # add help for detection problems
 #
@@ -240,8 +243,11 @@ class MPlayer:
             additional_args += [ '-noautosub' ]
 
         elif item.selected_subtitle and mode == 'file':
-            additional_args += [ '-vobsubid', str(item.selected_subtitle) ]
-
+            if os.path.isfile(os.path.splitext(item.filename)[0]+'.idx'):
+                additional_args += [ '-vobsubid', str(item.selected_subtitle) ]
+            else:
+                additional_args += [ '-sid', str(item.selected_subtitle) ]
+                
         elif item.selected_subtitle:
             additional_args += [ '-sid', str(item.selected_subtitle) ]
             
