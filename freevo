@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# freevo - the main entry point to the whole suite of applications
+#
+# $Id$
+#
+
+# XXX What is the notation for "all args"? Didn't have time to read the man-page...
+python startup.py $1 $2 $3 $4 $5 $6 $7
