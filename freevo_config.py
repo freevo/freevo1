@@ -223,7 +223,7 @@ LOCAL_CONF_CHANGES = [
     (5.14,
      '''Add IMAGEVIEWER_DURATION for auto slideshows''' ),
     (5.15,
-     '''Add two variables for mplayer psot processing: MPLAYER_VF_INTERLACED and
+     '''Add two variables for mplayer post processing: MPLAYER_VF_INTERLACED and
      MPLAYER_VF_PROGRESSIVE''' ) ]
 
 
