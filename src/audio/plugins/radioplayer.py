@@ -9,6 +9,10 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.10.2.1  2005/03/26 20:14:59  mikeruelle
+# Committing Georg Kunzel's radio player patch to make the elapsed time
+# actually work correctly.
+#
 # Revision 1.10  2004/07/10 12:33:38  dischi
 # header cleanup
 #
@@ -70,7 +74,7 @@ class RadioPlayer:
         self.name = 'radioplayer'
         self.app_mode = 'audio'
         self.app = None
-	self.starttime = 0
+        self.starttime = 0
 
     def rate(self, item):
         """
@@ -90,18 +94,21 @@ class RadioPlayer:
         """
         self.playerGUI = playerGUI
         self.item = item
-	self.item.elapsed = 0
-	self.starttime = time.time()
+        self.item.elapsed = 0
+        self.starttime = time.time()
 
         print 'RadioPlayer.play() %s' % self.item.station
             
         self.mode    = 'play'
         mixer = plugin.getbyname('MIXER')
-        mixer.setLineinVolume(config.TV_IN_VOLUME)
-        mixer.setIgainVolume(config.TV_IN_VOLUME)
-        mixer.setMicVolume(config.TV_IN_VOLUME)
+        if mixer:
+            mixer.setLineinVolume(config.TV_IN_VOLUME)
+            mixer.setIgainVolume(config.TV_IN_VOLUME)
+            mixer.setMicVolume(config.TV_IN_VOLUME)
+        else:
+            print 'Radio Player failed to find a mixer'
         os.system('%s -qf %s' % (config.RADIO_CMD, self.item.station))
-	thread.start_new_thread(self.__update_thread, ())
+        thread.start_new_thread(self.__update_thread, ())
         return None
     
 
@@ -112,9 +119,12 @@ class RadioPlayer:
         print 'Radio Player Stop'
         self.mode = 'stop'
         mixer = plugin.getbyname('MIXER')
-        mixer.setLineinVolume(0)
-        mixer.setIgainVolume(0)
-        mixer.setMicVolume(0)
+        if mixer:
+            mixer.setLineinVolume(0)
+            mixer.setIgainVolume(0)
+            mixer.setMicVolume(0)
+        else:
+            print 'Radio Player failed to find a mixer'
         os.system('%s -qm' % config.RADIO_CMD)
 
 
@@ -125,9 +135,22 @@ class RadioPlayer:
 
     def refresh(self):
         print 'Radio Player refresh'
-	self.item.elapsed = int(time.time() - self.starttime)
+        self.item.elapsed = self.formattime(int(time.time() - self.starttime))
         self.playerGUI.refresh()
-        
+
+    def formattime(self,seconds):
+        """
+        returns string formatted as mins:seconds
+        """
+        mins = 0
+        mins = seconds / 60
+        secs = seconds % 60
+
+        if secs<10:
+            secs = '0%s' % secs
+        else:
+            secs = '%s' % secs
+        return '%i:%s' % (mins,secs)
 
     def eventhandler(self, event, menuw=None):
         """
