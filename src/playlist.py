@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.72.2.2  2005/01/09 10:39:29  dischi
+# handle possible crash
+#
 # Revision 1.72.2.1  2004/08/28 17:08:08  dischi
 # add small debug
 #
@@ -399,11 +402,13 @@ class Playlist(Item):
         """
         cache next item, usefull for image playlists
         """
-        pos = self.playlist.index(self.current_item)
-        pos = (pos+1) % len(self.playlist)
-        if pos and hasattr(self.playlist[pos], 'cache'):
-            self.playlist[pos].cache()
-
+        try:
+            pos = self.playlist.index(self.current_item)
+            pos = (pos+1) % len(self.playlist)
+            if pos and hasattr(self.playlist[pos], 'cache'):
+                self.playlist[pos].cache()
+        except:
+            return
 
     def stop(self):
         """
