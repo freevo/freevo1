@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.63.2.2  2005/01/23 11:40:19  dischi
+# small patch when there are directories on a disc
+#
 # Revision 1.63.2.1  2004/08/28 17:09:34  dischi
 # force rechecking if it seems a dvd but is not detected as one
 #
@@ -669,7 +672,7 @@ class Identify_Thread(threading.Thread):
         # One video in the root dir. This sounds like a disc with one
         # movie on it. Save the information about it and autostart will
         # play this.
-        if len(video_files) == 1:
+        if len(video_files) == 1 and media.item['num_dir_items'] == 0:
             util.mount(media.mountdir)
             if movie_info:
                 media.videoitem = copy.deepcopy(movie_info)
