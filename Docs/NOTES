@@ -1,0 +1,198 @@
+Freevo Notes
+============
+
+$Id$
+
+This file contains random notes that are useful when dealing with Freevo
+
+
+grep "open(" log.txt | grep -v "/proc" | grep -v ENOENT | grep -v ENOTDIR | cut -c5- | cut -f1 -d "=" | sort -u
+----------------------------------------------------------------------
+Python debuggers:
+
+Wing IDE: Seems pretty good. Free trial, free smaller version, free
+          for open-source developers.
+
+HAP: http://sourceforge.net/projects/hapdebugger
+
+----------------------------------------------------------------------
+Microsoft Core Truetype Fonts
+
+http://corefonts.sourceforge.net/
+----------------------------------------------------------------------
+Nice looking PVR:
+
+http://www.metrolink.com/products/media/index.html
+----------------------------------------------------------------------
+
+libdvdread, libdvdcss from dtek
+
+css:
+./configure --disable-gtk   --disable-x11   --disable-xvideo   
+
+----------------------------------------------------------------------
+MPlayer:
+
+cvs -d:pserver:anonymous@mplayerhq.hu:/cvsroot/mplayer login
+cvs -z3 -d:pserver:anonymous@mplayerhq.hu:/cvsroot/mplayer co main
+
+cvs -d:pserver:anonymous@cvs.ffmpeg.sourceforge.net:/cvsroot/ffmpeg login
+cvs -d:pserver:anonymous@cvs.ffmpeg.sourceforge.net:/cvsroot/ffmpeg co ffmpeg
+
+mv ffmpeg/libavcodec main
+rm -rf ffmpeg
+
+cp /usr/local/include/dvdnav/* /usr/local/include
+
+./configure --enable-tv-v4l --enable-mga --enable-xmga --enable-largefiles --disable-lirc 
+
+mga_vid driver:
+mknod /dev/mga_vid c 178 0
+
+To make it load/unload automatically when needed, insert the following 
+line at the end of /etc/modules.conf:
+
+    alias char-major-178 mga_vid
+
+Then run
+
+    depmod -a
+
+
+
+MPlayer TV viewing
+mplayer -vo xv -tv on:driver=v4l:input=0:norm=NTSC:channel=49:chanlist=us-cable:width=640:height=480:outfmt=yuy2 -nocache 
+
+Mencoder TV recording
+=====================
+
+95% (YUY2)
+mencoder -tv on:driver=v4l:input=0:norm=NTSC:channel=49:chanlist=us-cable:width=320:height=240:outfmt=yuy2:adevice=/dev/dsp2:audiorate=32000:forceaudio:forcechan=2 -ovc lavc -lavcopts vcodec=mpeg4:vbitrate=800:keyint=30 -oac mp3lame -lameopts br=80:cbr -ffourcc divx -o tst.avi
+
+
+80% (YV12)
+mencoder -tv on:driver=v4l:input=0:norm=NTSC:channel=49:chanlist=us-cable:width=320:height=240:outfmt=yv12:adevice=/dev/dsp2:audiorate=32000:forceaudio:forcechan=2 -ovc lavc -lavcopts vcodec=mpeg4:vbitrate=800:keyint=30 -oac mp3lame -lameopts br=80:cbr -ffourcc divx -o tst.avi
+
+
+
+The btaudio module must be loaded, use modprobe "*btaudio*"
+
+
+Options for bmovl:
+-vop bmovl=1:0:/tmp/bmovl-freevo.fifo
+1 = Hidden at startup (send SHOW/HIDE to change)
+0 = Opaque at startup = don't use alpha = copy whole buffer overwriting
+    background. Use OPAQUE/ALPHA to change.
+
+N.B.: You must use YV12 output (outfmt=yv12) from the TV with bmovl, 
+      otherwise it will have to use a slow SW conversion!
+
+----------------------------------------------------------------------
+
+NVREC:
+
+Requires very recent versions of autoconf and automake:
+
+ftp://ftp.gnu.org/gnu/autoconf/autoconf-2.53.tar.gz
+ftp://ftp.gnu.org/gnu/automake/automake-1.6.2.tar.gz
+
+Compile autoconf before automake.
+
+Build only nuvrec:
+
+cd ..
+./bootstrap
+./configure --without-avifile --without-rte --without-divx4linux \
+   --without-quicktime --without-sdl --without-mad --without--ffmpeg
+make
+
+Record sound using the btaudio device
+./nuvrec -F 300000 -norm NTSC -input Television -w 320 -h 240 -vq 100 \
+    -d /dev/dsp2 -mixsrc /dev/mixer2:line1 -o tst2.avi
+
+Speed on a Celeron 500 MHz:
+(32000 Hz, 16 bit mono PCM)
+640x480 framedrops heavily.
+nuvrec 640x240  -vq 100         75%               6.34 Mbit/s
+nuvrec 320x240  -vq 100         35%               4.35 Mbit/s  =  1.8 GB/h
+nuvrec 320x240  -vq  90         35%               3.95 Mbit/s  =  1.6 GB/h
+
+
+----------------------------------------------------------------------
+Video4Linux1 API docs:
+
+http://www.linuxhq.com/kernel/v2.4/doc/video4linux/API.html
+
+----------------------------------------------------------------------
+
+Aspect ratio resolutions:
+1.33  576x432
+1.78  688x384
+
+FFMPEG encoder for DVDs
+MP3 constant bitrate, 112 kbps
+
+1) Check aspect ratio:
+/usr/local/bin/mplayer -dvd 1 -frames 0
+( mplayer -dvd 1 -vo null -ao null -frames 0 >& /dev/stdout ) | grep Movie-Aspect
+
+You should see something like:
+Movie-Aspect is 1.78:1 - prescaling to correct movie aspect.
+
+2) Scaling values
+1.33    576:432
+1.78    688:384
+
+
+2) Crop detect:
+/usr/local/bin/mencoder -ovc lavc -lavcopts vcodec=mpeg4:vbitrate=900:vratetol=100000:keyint=100:vhq -oac mp3lame -lameopts br=112:cbr -sws 2 -vop cropdetect -o tst.avi -dvd 1 -ffourcc divx -alang en -ss 0:14:00 -frames 100
+
+Example crop detect output value:
+-vop crop=716:364:2:56
+
+Start with the number of lines, and make it divisible by 16 for better encoding.
+Y: (364/16) * 16 = 352. 12 pixels less, add 6 to the y offset which was 56 = 62.
+
+X: (716 / 16) * 16 = 704. 12 pixels less, add 6 to the x offset which was 2 = 8
+
+Check new aspect ratio: 704/352=
+New values: -vop crop=704:352:8:62
+
+
+
+Add "-ofps 23.976" if there are a lot of "skip frame!!!" messages (inverse telecine).
+
+Record with NVrec:
+DIVX4rec -F 300000 -norm NTSC -input Composite1 -m -r 22050 -w 320 -h 240 \
+-ab 80 -vg 100 -vb 700 -mixsrc /dev/dsp:line -mixvol /dev/dsp:line:80 -o 
+
+----------------------------------------------------------------------
+
+btaudio notes:
+use the analog channel, /dev/dsp2,mixer1 for a system with 1 soundcard and 1 bttv card
+input levels seem high, set a low recgain
+the samplerate cannot be set to exactly 44100, it becomes 44800 instead. 32000 works
+NUVrec cannot do samplerates other than 44100, stereo, 16 bits.
+
+----------------------------------------------------------------------
+
+ISOLINUX:
+Use rootcd=1 to use the CD for root.
+rootfstype=iso9660
+
+Linux root:
+
+As root:
+
+cp -dpR /dev/fd[01]* dev
+cp -dpR /dev/tty[0-6] dev
+cp -dpR /dev/console dev
+cp -dpR /dev/kmem dev
+cp -dpR /dev/mem dev
+cp -dpR /dev/null dev
+cp -dpR /dev/ram0 dev
+cp -dpR /dev/hd* dev
+cp -dpR /dev/fd* dev
+
+
+test

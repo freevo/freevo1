@@ -1,0 +1,21 @@
+freevo (1.4rc2) unstable; urgency=medium
+
+  * New upstream release
+  * Now places configuration files in /etc/freevo if they aren't there
+  * Includes init scripts and Debian-specific boot_config
+  * Uses debconf to provide initial configuration. 
+
+ -- Aubin Paul <debian@outlyer.org>  Sun, 02 Nov 2003 08:38:58 -0500
+
+freevo (1.4rc1-freevo1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Aubin Paul <debian@outlyer.org>  Sun,  5 Oct 2003 10:50:49 -0400
+
+freevo (1.4cvs20030804-freevo1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Aubin Paul <debian@outlyer.org>  Thu,  4 Sep 2003 23:38:27 -0400
+
