@@ -28,6 +28,10 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.33.2.2  2004/08/13 02:23:48  outlyer
+# Bugfix for a crash; a fairly annoying place to have a problem since it's not
+# even functional code, just a debug with the wrong variable.
+#
 # Revision 1.33.2.1  2004/08/04 21:33:35  outlyer
 # Bugfix for Ogg ripping, reported by Nicolas Michaux
 #
@@ -439,7 +443,7 @@ class main_backup_thread(threading.Thread):
                     '"%s%s.flac"' % (artist, album, song_names[i], track,
                                      len(song_names), pathname, path_tail)
 
-                _debug_('flac_command: %s' % (flac_command))
+                _debug_('flac_command: %s' % (config.FLAC_CMD))
                 _debug_('metaflac    : %s' % (metaflac_command))
                 popen3.run(cmd, self, 9)
 
