@@ -1,0 +1,21 @@
+Release Notes for 1.5.3
+-----------------------
+
+This release is stable, but there are some plugins know to cause
+problems. For a crash-free usage, you shouldn't activate them.
+
+
+
+Plugins with problems:
+----------------------
+
+video.mplayer-vis:
+There seems to be a problem in pygoom resulting in a pygame segfault. 
+
+video.bmovl:
+This plugin is experimental, it may crash
+
+video.details:
+It won't crash Freevo, but maybe it doesn't work as expected
+
+
