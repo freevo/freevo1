@@ -15,6 +15,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.19.2.1  2004/09/11 16:41:25  dischi
+# ignore thumbnails from cvs freevo
+#
 # Revision 1.19  2004/07/10 12:33:42  dischi
 # header cleanup
 #
@@ -198,7 +201,7 @@ def listdir(directory, handle_exception=True, include_dot_files=False,
         if overlay and overlay != directory and os.path.isdir(overlay):
             for fname in os.listdir(overlay):
                 if fname.endswith('.raw') or fname.startswith('.') or \
-                       fname == 'folder.fxd':
+                       fname == 'folder.fxd' or fname.find('.thumb.') > 0:
                     continue
                 f = overlay + fname
                 if not os.path.isdir(f):
