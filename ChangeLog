@@ -3,6 +3,14 @@ Freevo Changelog
 
 $Id$
 
+Release 1.5.2 (2004-10-24):
+---------------------------
+ * Fix memory leak when running image viewer in slideshow mode
+ * Fix recordserver favorite handling for a specific day of week
+ * Fix video aspect handling in skin
+ * Smaller unicode fixes
+	
+	
 Release 1.5.1 (2004-09-11):
 ---------------------------
  * Better support for multi file videos
