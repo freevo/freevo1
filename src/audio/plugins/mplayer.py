@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.38.2.2  2005/01/23 14:13:39  dischi
+# bugfix to prevent a file being played again with xine
+#
 # Revision 1.38.2.1  2004/11/01 21:38:21  outlyer
 # AC3 support.
 #
@@ -303,7 +306,8 @@ class MPlayerApp(childapp.ChildApp2):
 
 
     def stderr_cb(self, line):
-        if line.startswith('Failed to open'):
-            self.stop_reason = 1
+        if line.startswith('Failed to open') and \
+               (not self.item or not self.item.elapsed):
+            self.stop_reason = line
         for p in self.stdout_plugins:
             p.stdout(line)
