@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.52.2.2  2004/10/20 18:32:50  dischi
+# prevent unicode crash
+#
 # Revision 1.52.2.1  2004/09/06 16:37:02  dischi
 # remove the buggy signal() code from the imageviewer and use rc.(un)register
 #
@@ -134,7 +137,7 @@ class ImageViewer(GUIObject):
 
         if not image:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
-            self.osd.drawstringframed(_('Can\'t Open Image\n\'%s\'') % (filename),
+            self.osd.drawstringframed(_('Can\'t Open Image\n\'%s\'') % Unicode(filename),
                                       config.OSD_OVERSCAN_X + 20,
                                       config.OSD_OVERSCAN_Y + 20,
                                       self.osd.width - 2 * config.OSD_OVERSCAN_X - 40,
