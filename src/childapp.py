@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.57.2.1  2004/10/30 11:01:34  dischi
+# wait longer for child to die
+#
 # Revision 1.57  2004/07/10 12:33:36  dischi
 # header cleanup
 #
@@ -218,7 +221,7 @@ class ChildApp:
                 pass
             
         _debug_('childapp: Before wait(%s)' % self.child.pid)
-        for i in range(20):
+        for i in range(60):
             if self.wait():
                 break
             time.sleep(0.1)
@@ -415,7 +418,7 @@ class ChildApp2(ChildApp):
             _debug_('sending exit command to app')
             self.write(cmd)
             # wait for the app to terminate itself
-            for i in range(20):
+            for i in range(60):
                 if not self.isAlive():
                     break
                 time.sleep(0.1)
