@@ -1,0 +1,75 @@
+Credits for Freevo
+==================
+
+$Id$
+
+
+
+Packages/external code snippets:
+--------------------------------
+
+o mplayer: http://www.mplayerhq.hu
+o NVrec: http://www.ee.up.ac.za/~justin/v4l2/
+o mp3_id.py: http://id3-py.sourceforge.net/
+o EXIF support from Thierry Bousch <bousch@topo.math.u-psud.fr>
+
+
+People:
+-------
+
+Please email one of the maintainers if your name happens to
+be missing here or the information is wrong!
+
+Maintainers:
+
+Krister Lagerstrom <krister-freevo@kmlager.com>:
+o Initial implementation
+o Core developer
+
+Aubin Paul <aubin@outlyer.org>:
+o Core developer
+
+Dirk Meyer <dmeyer@tzi.de>:
+o Core developer
+
+Gustavo Sverzut Barbieri <gsbarbieri@yahoo.com.br>
+o Core developer
+
+Jason Ball <jason.ball@ce.com.au>:
+o SDL support in the OSD
+
+Thomas Malt <thomas@malt.no>
+o Mplayer for Audio support
+o Ogg Vorbis Tag and Playback support
+
+
+
+Occasional contributors:
+
+Dan Eriksen <eriksen@canada.com>
+o 16-bit pixel support for the X11 OSD server
+o Joystick driver
+
+Jens Oberender <j.obi@troja.net>
+o DXR3 support
+
+Andrew Drummond <adrummond@candw.ky>
+o MAME support
+
+Alex Polite <m2@plusseven.com>
+o XMMS audio playback support
+o Music playlists support
+
+Per Wigren <wigren@home.se>
+o Various contribs and patches for TV listings
+
+Travis Shirk <travis@pobox.com>
+o ID3v2.x support
+
+Rob Shortt <rob@infointeractive.com>
+o Enhancements to Mame support
+o Freevo web interface for recording
+
+John M Cooper <john.cooper@yourcommunications.co.uk>
+o Bins support
+

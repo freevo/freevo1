@@ -1,0 +1,91 @@
+#!/bin/sh
+
+# freevo - the main entry point to the whole suite of applications
+#
+# $Id$
+#
+
+# Keep track of where we started. This env var is used inside Freevo.
+export FREEVO_STARTDIR=$PWD
+
+
+# cd to the freevo directory if necessary
+if ! [ -e src/identifymedia.py ]; then
+    cd `dirname $0`
+fi
+
+# Is runapp present? If not it needs to be compiled
+if ! [ -e runapp ]; then
+    echo
+    echo "*************************************************************"
+    echo "* Please note that there is a standalone binary release     *"
+    echo "* of Freevo with all dependencies included. Use that unless *"
+    echo "* you are really capable of installing Freevo from source   *"
+    echo "* without assistance from the mailing lists or irc!         *"
+    echo "*************************************************************"
+    echo
+    echo "Freevo not compiled (runapp executable not found)"
+    echo
+    exit 1
+fi
+
+# Create the config file.
+if [ "$1" = "setup" ] ; then
+    export PYTHONPATH=./src
+    shift 1
+    ./runapp python setup_freevo.py $@
+    exit 0
+fi
+
+# Is freevo.conf present? If not, ./configure is needed
+# Check the possible locations in prio order
+if ! [ -e $FREEVO_STARTDIR/freevo.conf ]; then
+    if ! [ -e $HOME/.freevo/freevo.conf ]; then
+        if ! [ -e /etc/freevo/freevo.conf ]; then
+            if ! [ -e ./freevo.conf ]; then
+                echo "Please run 'freevo setup' first (freevo.conf not found)"
+                exit 1
+            fi
+        fi
+    fi
+fi
+
+# Support for using just Python
+if [ "$1" = "prompt" ] ; then
+    export PYTHONPATH=./src
+    ./runapp python
+    exit 0
+fi
+    
+# Support executing a standalone Python application, e.g. epg_xmltv.py
+# Usage: freevo execute appname.py arg1 arg2...
+if [ "$1" = "execute" ] ; then
+    export PYTHONPATH=./src
+    shift 1
+    ./runapp python $@
+    exit 0
+fi
+
+# Start the lirc remote control app if the device is present
+if [ -S /dev/lircd ] ; then
+    echo Found a lirc device, starting the remote control daemon
+    ./runapp python rc_client/remote.py --remote=lirc > /dev/null 2>&1 &
+fi
+
+# XXX Uncomment the command below to enable joystick input. 
+# XXX It has not been tested much! Please send in testreports!
+# If JOY_DEV is 0 then joy.py just exits.
+# ./runapp python rc_client/joy.py > /dev/null 2>&1 &
+
+# Start the main freevo application
+./runapp python src/main.py $@
+
+# Freevo exited, make sure all children are killed
+sleep 1
+kill -9 `pgrep -f "python src/main.py" -d" "` > /dev/null 2>&1
+kill -9 `pgrep -f "python rc_client" -d" "` > /dev/null 2>&1
+kill -9 `pgrep -f freevo_python -d" "` > /dev/null 2>&1
+killall -9 freevo_loader > /dev/null 2>&1
+killall -9 freevo_xwin > /dev/null 2>&1
+
+exit 0
