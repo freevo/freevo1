@@ -1,3 +1,21 @@
+freevo (1.5.1-freevo1) unstable; urgency=low
+
+  * New upstream bugfix release
+
+ -- Aubin Paul <debian@outlyer.org>  Sun, 12 Sep 2004 12:44:07 -0400
+
+freevo (1.5.0-freevo2) unstable; urgency=low
+
+  * Fixed the broken locales files.
+
+ -- Aubin Paul <debian@outlyer.org>  Thu, 19 Aug 2004 16:11:06 -0400
+
+freevo (1.5.0-freevo1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Aubin Paul <debian@outlyer.org>  Wed, 21 Jul 2004 08:12:48 -0400
+
 freevo (1.5.0-0rc4) unstable; urgency=low
 
   * New upstream release
