@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.14.2.1  2004/10/21 12:31:52  dischi
+# fix variable type
+#
 # Revision 1.14  2004/07/10 12:33:40  dischi
 # header cleanup
 #
@@ -209,7 +212,7 @@ class PluginInterface(plugin.DaemonPlugin):
     def incPcmVolume(self, step=5):
         self.pcmVolume += step
         if self.pcmVolume > 100:
-            self.pcmvolume = 100
+            self.pcmVolume = 100
         self._setVolume( self.SOUND_MIXER_WRITE_PCM, self.pcmVolume )
 
     def decPcmVolume(self, step=5):

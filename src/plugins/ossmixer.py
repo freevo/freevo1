@@ -22,6 +22,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.8.2.1  2004/10/21 12:31:52  dischi
+# fix variable type
+#
 # Revision 1.8  2004/07/10 12:33:40  dischi
 # header cleanup
 #
@@ -198,7 +201,7 @@ class PluginInterface(plugin.DaemonPlugin):
     def incPcmVolume(self):
         self.pcmVolume += 5
         if self.pcmVolume > 100:
-            self.pcmvolume = 100
+            self.pcmVolume = 100
         self._setVolume( ossaudiodev.SOUND_MIXER_PCM, self.pcmVolume )
 
     def decPcmVolume(self):
