@@ -10,6 +10,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.165.2.1  2005/01/09 10:52:08  dischi
+# possible dxr3 fix
+#
 # Revision 1.165  2004/07/10 12:33:36  dischi
 # header cleanup
 #
@@ -538,6 +541,9 @@ class OSD:
         """
         stop the display to give other apps the right to use it
         """
+        if not pygame.display.get_init():
+            return None
+
         # stop all animations
         self.render.suspendall()
 
@@ -551,6 +557,9 @@ class OSD:
         """
         restores a stopped display
         """
+        if pygame.display.get_init():
+            return None
+
         pygame.display.init()
         self.width  = config.CONF.width
         self.height = config.CONF.height
