@@ -1,0 +1,484 @@
+#!/bin/sh
+
+#if 0 /*
+# -----------------------------------------------------------------------
+# freevo - the main entry point to the whole suite of applications
+# -----------------------------------------------------------------------
+# $Id$
+#
+# Notes:
+# Todo:
+#
+# -----------------------------------------------------------------------
+# $Log$
+# Revision 1.98  2003/11/20 18:06:10  dischi
+# check for stat
+#
+# Revision 1.97  2003/11/09 13:29:34  rshortt
+# Bugfix for the new runtime.
+#
+# Revision 1.96  2003/11/07 15:47:25  dischi
+# change dir for runtime (may not work for all helpers)
+#
+# Revision 1.95  2003/10/28 21:26:10  dischi
+# make install a helper to make it also work for non installed versions
+#
+# Revision 1.94  2003/10/28 19:44:25  dischi
+# add install command
+#
+# Revision 1.93  2003/10/27 20:39:47  dischi
+# kill helpers with -KILL until it works better with twisted
+#
+# Revision 1.92  2003/10/22 19:43:21  dischi
+# do not KILL the child
+#
+# Revision 1.91  2003/10/19 17:16:56  rshortt
+# DOn't start a helper is there is already one like it running.
+#
+# Revision 1.90  2003/10/17 19:17:08  dischi
+# typo
+#
+# Revision 1.89  2003/10/16 04:20:56  outlyer
+# Bash-ism fixes from Lars
+#
+# Revision 1.88  2003/10/12 09:54:27  dischi
+# BSD patches from Lars
+#
+# Revision 1.87  2003/10/11 12:49:25  dischi
+# check for valid parameter
+#
+# Revision 1.86  2003/10/05 10:36:37  dischi
+# search for correct python binary
+#
+# Revision 1.85  2003/09/23 13:31:23  outlyer
+# More FreeBSD patches from Lars
+#
+# Revision 1.84  2003/09/20 08:47:47  dischi
+# handle helper scripts killing by killing the script
+#
+# Revision 1.83  2003/09/14 01:38:58  outlyer
+# More FreeBSD support from Lars
+#
+# Revision 1.82  2003/09/13 10:08:20  dischi
+# i18n support
+#
+# Revision 1.81  2003/09/06 15:34:21  rshortt
+# Adding pid file support for the foreground way of starting helpers.  This
+# is usefull if you run something from inittab (or started from a different
+# shell) and would like to stop it using ./freevo <helpername> stop.
+#
+# Revision 1.80  2003/09/05 02:48:12  rshortt
+# Removing src/tv and src/www from PYTHONPATH in the freevo script.  Therefore any module that was imported from src/tv/ or src/www that didn't have a leading 'tv.' or 'www.' needed it added.  Also moved tv/tv.py to tv/tvmenu.py to avoid namespace conflicts.
+#
+# Revision 1.79  2003/09/02 19:40:10  dischi
+# fix link handling to helper
+#
+# Revision 1.78  2003/09/02 18:48:49  dischi
+# better save than sorry
+#
+# Revision 1.77  2003/08/31 15:50:18  dischi
+# add X11R6 to PATH
+#
+# Revision 1.76  2003/08/31 11:02:37  dischi
+# support "freevo start" to start in background
+#
+# Revision 1.75  2003/08/31 09:17:25  dischi
+# support for start-stop helper scripts
+#
+# Revision 1.74  2003/08/30 09:22:36  dischi
+# Removed -OO for Gentoo. Other distros may need this, too. I also had some
+# problems with Python using older version (pyo) and not the current (pyc).
+#
+# Revision 1.73  2003/08/24 01:35:59  outlyer
+# These two changes reduce the amount of stuff being emailed to people when they
+# use cron.
+#
+# (In both cases, outputting text to a command run from cron sends an email to
+# root, which is very annoying)
+#
+# Revision 1.72  2003/08/23 09:07:56  dischi
+# small fix when displaying the list of helpers
+#
+#
+# -----------------------------------------------------------------------
+# Freevo - A Home Theater PC framework
+# Copyright (C) 2003 Krister Lagerstrom, et al.
+# Please see the file freevo/Docs/CREDITS for a complete list of authors.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+# CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# ----------------------------------------------------------------------- */
+#endif
+
+
+# check for stat, we need it
+which stat >/dev/null 2>/dev/null || \
+    ( 
+    echo "'stat' not found"
+    echo Freevo needs it to start, please install it
+    exit 1
+    ) || exit 1
+
+
+# get information about freevo dir and the name we called with
+if stat $0 | head -n 1 | grep "' -> \`" > /dev/null ; then
+    export FREEVO_SCRIPT=`stat $0 | head -n 1 | sed "s/.*' -> .\\(.*\\)./\\1/"`
+else
+    export FREEVO_SCRIPT=`echo $0`
+fi
+
+export RUNAPP=""
+
+# search for the correct Python binary
+PYTHON=python
+for name in python python2 python2.3; do
+    for p in `echo $PATH | sed 's/:/ /g'`; do 
+	if [ -e "$p/$name" ]; then
+	    PYTHON="$p/$name"
+	    break
+	fi
+    done
+done
+
+# Check the environment we started in. There are three choices:
+# o installed into the system
+# o everything in one directory without the runtime
+# o everything in one directory using the runtime
+
+if [ -e "`dirname $FREEVO_SCRIPT`/src/plugins" ]; then
+    # starting from src
+    export FREEVO_PYTHON=`dirname $FREEVO_SCRIPT`/src
+    FREEVO_HELPERS=`dirname $FREEVO_SCRIPT`/src/helpers
+    export FREEVO_LOCALE=`dirname $FREEVO_SCRIPT`/i18n
+    export FREEVO_SHARE=`dirname $FREEVO_SCRIPT`/share
+    export FREEVO_CONTRIB=`dirname $FREEVO_SCRIPT`/contrib
+    export FREEVO_CONFIG=`dirname $FREEVO_SCRIPT`/freevo_config.py
+
+    if [ -e "`dirname $FREEVO_SCRIPT`/runtime/runapp" ]; then
+	# we also have a runtime
+	if [ -e "./runtime/runapp" ]; then
+	    # set runapp
+	    export RUNAPP="./runtime/runapp"
+            PYTHON="./runtime/apps/freevo_python"
+	else
+	    # runapp only works in the Freevo directory
+	    # restarting with new pwd
+	    cd `dirname $FREEVO_SCRIPT`
+	    exec ./freevo "$@"
+	fi
+    fi
+
+elif [ -e "`dirname $FREEVO_SCRIPT`/../share/freevo" ]; then
+    # we have an installed version
+    # find the freevo libs
+    $PYTHON -c 'import freevo' || exit 1
+    export FREEVO_PYTHON=`$PYTHON -c 'import freevo; print freevo.__path__' | \
+                   sed 's/..\(.*\)../\1/'`
+    FREEVO_HELPERS=$FREEVO_PYTHON/helpers
+    export FREEVO_SHARE=`dirname $FREEVO_SCRIPT`/../share/freevo
+    export FREEVO_LOCALE=`dirname $FREEVO_SCRIPT`/../share/locale
+    export FREEVO_CONTRIB=$FREEVO_SHARE/contrib
+    export FREEVO_CONFIG=$FREEVO_SHARE/freevo_config.py
+
+else
+    echo "can't find freevo data files"
+    exit 1
+fi
+
+if [ "$USER" = "" ]; then
+    USER=root
+fi
+
+# Set this globaly, everything here should have access to these modules.
+export PYTHONPATH=$FREEVO_PYTHON:$PYTHONPATH
+
+# expand PATH to stuff that should be in it
+export PATH=$PATH:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin
+
+# option -fs
+# This will start a new X session and start Freevo as windowmanager
+# to work around all the fullscreen bugs of the different wm
+if [ `basename $0` = "freevo" -a "$1" = "-fs" ]; then
+    servernum=0
+    while true; do
+	test -e /tmp/.X11-unix/X$servernum || break
+	let servernum+=1
+    done
+    exec xinit $0 --force-fs -- :$servernum
+fi
+
+
+# get the directory name where to store the pid of the running
+# Freevo process
+if [ -w /var/run ] ; then
+    PID_DIR=/var/run
+else
+    PID_DIR=/tmp
+fi
+
+# option to call a helper script
+# Either this script is called with the name of the helper (as $0) or
+# the first parameter is the helper name. In both cases start the helper
+# (with runapp if present)
+if [ `basename $0` = "freevo" ]; then
+    name=$1
+    script="$FREEVO_HELPERS/$1.py"
+    if [ -e "$script" ]; then
+	shift
+    fi
+else
+    name=`basename $0`
+    script="$FREEVO_HELPERS/$name.py"
+fi
+
+# help function to kill the current child from PID_FILE
+# needed to work around signal problems when starting
+# a helper
+kill_waiting_child() {
+    kill -KILL `cat $PID_FILE` > /dev/null 2>&1
+}
+
+if [ -e "$script" ]; then
+    PID_FILE="$PID_DIR/freevo-$name.pid"
+    if [ "$1" = "stop" ]; then
+	if [ -e $PIDFILE ]; then
+	    kill -KILL `cat $PID_FILE` > /dev/null 2>&1
+	    rm $PID_FILE > /dev/null 2>&1
+	else
+	    echo $name not running
+	fi
+    else
+        # Exit if there is one already running
+        if [ -f $PID_FILE ] ; then
+            PID=`cat $PID_FILE`
+            RUNNING=`ps -ef | grep " $PID " | grep $name`
+            if [ ! "$RUNNING" = "" ] ; then
+              echo "Freevo's $name is already running as process $PID."
+              exit 0
+            fi
+        fi
+        if [ "$1" = "start" ]; then
+	    $RUNAPP $PYTHON "$script" &
+	    echo $! > $PID_FILE
+	    if [ `uname -s` != "FreeBSD" ]; then
+	        disown
+	    fi
+        else
+	    $RUNAPP $PYTHON "$script" "$@" &
+	    echo $! > $PID_FILE
+	    trap kill_waiting_child SIGTERM
+	    trap kill_waiting_child SIGINT
+	    wait `cat $PID_FILE` >/dev/null 2>/dev/null </dev/null
+        fi
+    fi
+    exit 0
+fi
+
+help() {
+    echo "freevo [ script | options]"
+    echo "options:"
+    echo "  -fs            start freevo in a new x session in fullscreen"
+    echo "  setup          run freevo setup to scan your environment"
+    echo "  start          start freevo as daemon in background"
+    echo "  stop           stop the current freevo process"
+    echo
+    echo "freevo can start the following scripts, use --help on these"
+    echo "scripts to get more informations about options."
+    echo
+
+    for i in $FREEVO_HELPERS/*.py; do
+	s=`echo $i | sed "s|^$FREEVO_HELPERS.\\(.*\\).py|\\1|"`
+	if [ "$s" != "__init__" ]; then
+	    echo $s
+	fi
+    done
+    echo
+    echo "Example: freevo imdb --help"
+    echo "         freevo webserver start"
+    echo
+    echo "You can also create a symbolic link to freevo with the name of the"
+    echo "script you want to execute. E.g. put a link imdb pointing to freevo"
+    echo "in your path to access the imdb helper script"
+    echo 
+    echo "Example: ln -s path-to-freevo imdb"
+    echo "         imdb --help"
+    echo
+    echo "Before running freevo the first time, you need to run 'freevo setup'"
+    echo "After that, you can run freevo without parameter."
+    echo
+    exit 0
+}
+
+
+# Help
+if [ "$1" = "--help" -o "$1" = "-" ] ; then
+    help
+fi
+
+# option setup. 
+# This is more a helper script to create the config file.
+if [ "$1" = "setup" ] ; then
+    shift 1
+    $RUNAPP $PYTHON $FREEVO_PYTHON/setup_freevo.py $@
+    exit 0
+fi
+
+# Support starting something with runapp (or not if not available)
+if [ "$1" = "runapp" ] ; then
+    shift
+    if [ -e "runtime/apps/$1" ]; then
+	app=runtime/apps/$1
+    else
+	app=""
+	for p in `echo $PATH | sed 's/:/ /g'`; do 
+	    if [ -e "$p/$1" ]; then
+		app="$p/$1"
+		break
+	    fi
+	done
+	if [ "$app" = "" ]; then
+	    echo $1 not found
+	    exit 1
+	fi
+    fi
+    shift
+    $RUNAPP "$app" "$@"
+    exit 0
+fi
+    
+# Support for using just Python
+if [ "$1" = "prompt" ] ; then
+    $RUNAPP $PYTHON
+    exit 0
+fi
+    
+# Support executing a standalone Python application, e.g. epg_xmltv.py
+# Usage: freevo execute appname.py arg1 arg2...
+if [ "$1" = "execute" ] ; then
+    shift 1
+    APP=`basename $1`
+    PID_FILE=$PID_DIR/freevo-$APP.pid
+
+    # Exit if there is one already running
+    if [ -f $PID_FILE ] ; then
+        PID=`cat $PID_FILE`
+        RUNNING=`ps -ef | grep " $PID " | grep $APP`
+        if [ ! "$RUNNING" = "" ] ; then
+          echo "Freevo's $APP is already running as process $PID."
+          exit 0
+        fi
+    fi
+
+    trap './freevo stop $APP' 1 2 15
+    $RUNAPP $PYTHON $@ &
+    echo $! > $PID_FILE
+    wait `cat $PID_FILE` >/dev/null 2>/dev/null
+    rm $PID_FILE > /dev/null 2>&1
+    exit 0
+fi
+
+# Support for stopping something that was started with ./freevo execute
+# Usage: freevo stop appname.py 
+if [ "$1" = "stop" ] ; then
+    shift 1
+    if [ "$1" = "" ] ; then
+        PID_FILE=$PID_DIR/freevo-main.pid
+    else
+        PID_FILE=$PID_DIR/freevo-`basename $1`.pid
+    fi
+    if [ -e $PID_FILE ]; then
+	kill `cat $PID_FILE` > /dev/null 2>&1
+	rm $PID_FILE > /dev/null 2>&1
+    fi
+    exit 0
+fi
+
+# Exit if there is a Freevo still running
+PID_FILE=$PID_DIR/freevo-main.pid
+if [ -f $PID_FILE ] ; then
+    PID=`cat $PID_FILE`
+    RUNNING=`ps -ef | grep " $PID " | grep main`
+    if [ ! "$RUNNING" = "" ] ; then
+      echo "Freevo is already running as process $PID."
+      exit 0
+    fi
+fi
+
+trap './freevo stop' 1 2 15
+
+# don't use -OO for Gentoo, it's hard to remove the pyo files
+# later (and it's a source for bugs
+if [ -e /etc/gentoo-release ]; then
+    OPTIMZE=""
+    if [ -e $FREEVO_PYTHON/main.pyo ]; then
+	echo "WARNING: you have Python pyo files in your system. They may"
+	echo "cause some bugs by using older version of some files."
+	echo "Please run 'find $FREEVO_PYTHON/.. -name \\*.pyo | xargs rm'"
+	echo
+    fi
+else
+    OPTIMZE="-OO"
+fi
+
+if [ "$1" = "start" ]; then
+    shift
+
+    # Start the main freevo application
+    $RUNAPP $PYTHON $OPTIMZE $FREEVO_PYTHON/main.py $@ > /dev/null 2>&1 &
+    
+    echo $! > $PID_FILE
+    if [ `uname -s` != "FreeBSD" ]; then
+        disown
+    fi
+    exit 0
+fi
+
+valid_parameter=1
+if [ "$1" != "" ]; then
+    valid_parameter=0
+    for known_parameter in "--force-fs" "--trace" "--doc"; do
+	if [ "$1" = "$known_parameter" ]; then
+	    valid_parameter=1
+	    break
+	fi
+    done
+fi
+
+if [ "$valid_parameter" = 0 ]; then
+    echo "unknown parameter: $1"
+    echo
+    echo "usage:"
+    help
+fi
+
+# Start the main freevo application
+$RUNAPP $PYTHON $OPTIMZE $FREEVO_PYTHON/main.py $@ &
+
+echo $! > $PID_FILE
+PID=`cat $PID_FILE`
+wait `cat $PID_FILE` >/dev/null 2>/dev/null
+
+# they may be problem with the signal handler when pressing C-c
+RUNNING=`ps -ef | grep " $PID " | grep main`
+if [ ! "$RUNNING" = "" ] ; then
+    kill `cat $PID_FILE` > /dev/null 2>&1
+fi
+
+# Freevo exited, make sure all children are killed
+sleep 1
+
+rm $PID_FILE > /dev/null 2>&1
+
+exit 0
