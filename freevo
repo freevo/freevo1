@@ -1,0 +1,147 @@
+#!/bin/sh
+
+# freevo - the main entry point to the whole suite of applications
+#
+# $Id$
+#
+
+# Keep track of where we started. This env var is used inside Freevo.
+export FREEVO_STARTDIR=$PWD
+
+# Set this globaly, everything here should have access to these modules.
+export PYTHONPATH=./src:./src/www:./src/tv
+
+if [ -w /var/run ] ; then
+    PID_DIR=/var/run
+else
+    PID_DIR=/tmp
+fi
+
+# cd to the freevo directory if necessary
+if ! [ -e src/identifymedia.py ]; then
+    cd `dirname $0`
+fi
+
+if [ "$1" = "update" ] ; then
+    if [ "$2" = "" ]; then
+	echo "usage: freevo update path-of-freevo-binary-release"
+	echo
+	echo "warning: the update will delete all files in the src and"
+	echo "and the skin directory except the personal plugins."
+	exit 1
+    fi
+    echo "updating freevo binary release in $2"
+    find $2/src | grep -v /plugins/ | xargs rm -rf
+    rm -rf $2/src/skins $2/WIP
+    cp -r * $2
+    exit 0
+fi
+
+# Is runapp present? If not it needs to be compiled
+if ! [ -e runapp ]; then
+    echo
+    echo "*************************************************************"
+    echo "* Please note that there is a standalone binary release     *"
+    echo "* of Freevo with all dependencies included. Use that unless *"
+    echo "* you are really capable of installing Freevo from source   *"
+    echo "* without assistance from the mailing lists or irc!         *"
+    echo "*************************************************************"
+    echo
+    echo "Freevo not compiled (runapp executable not found)"
+    echo
+    exit 1
+fi
+
+# Create the config file.
+if [ "$1" = "setup" ] ; then
+    shift 1
+    ./runapp python setup_freevo.py $@
+    exit 0
+fi
+
+# Is freevo.conf present? If not, ./configure is needed
+# Check the possible locations in prio order
+if ! [ -e $FREEVO_STARTDIR/freevo.conf ]; then
+    if ! [ -e $HOME/.freevo/freevo.conf ]; then
+        if ! [ -e /etc/freevo/freevo.conf ]; then
+            if ! [ -e ./freevo.conf ]; then
+                echo "Please run 'freevo setup' first (freevo.conf not found)"
+                exit 1
+            fi
+        fi
+    fi
+fi
+
+# Support for using just Python
+if [ "$1" = "prompt" ] ; then
+    ./runapp python
+    exit 0
+fi
+    
+# Support executing a standalone Python application, e.g. epg_xmltv.py
+# Usage: freevo execute appname.py arg1 arg2...
+if [ "$1" = "execute" ] ; then
+    shift 1
+    APP=`basename $1`
+    PID_FILE=$PID_DIR/freevo-$APP.pid
+
+    # Exit if there is one already running
+    if [ -f $PID_FILE ] ; then
+        PID=`cat $PID_FILE`
+        RUNNING=`ps -ef | grep " $PID " | grep $APP`
+        if ! [ "$RUNNING" = "" ] ; then
+          echo "Freevo's $APP is already running as process $PID."
+          exit 0
+        fi
+    fi
+
+    trap './freevo stop $APP' 1 2 15
+    ./runapp python $@ &
+    echo PID is $!
+    echo $! > $PID_FILE
+    wait `cat $PID_FILE`
+    rm $PID_FILE
+    exit 0
+fi
+
+# Support for stopping something that was started with ./freevo execute
+# Usage: freevo stop appname.py 
+if [ "$1" = "stop" ] ; then
+    shift 1
+    if [ "$1" = "" ] ; then
+        PID_FILE=$PID_DIR/freevo-main.pid
+    else
+        PID_FILE=$PID_DIR/freevo-`basename $1`.pid
+    fi
+    kill -KILL `cat $PID_FILE`
+    rm $PID_FILE
+    exit 0
+fi
+
+# Exit if there is a Freevo still running
+PID_FILE=$PID_DIR/freevo-main.pid
+if [ -f $PID_FILE ] ; then
+    PID=`cat $PID_FILE`
+    RUNNING=`ps -ef | grep " $PID " | grep main`
+    if ! [ "$RUNNING" = "" ] ; then
+      echo "Freevo is already running as process $PID."
+      exit 0
+    fi
+fi
+
+trap './freevo stop' 1 2 15
+
+# Start the main freevo application
+./runapp python -OO src/main.py $@ &
+echo $! > $PID_FILE
+wait `cat $PID_FILE`
+
+# Freevo exited, make sure all children are killed
+sleep 1
+
+# For now I think we still need the kludge for freevo_xwin
+killall -9 freevo_xwin > /dev/null 2>&1
+
+rm $PID_FILE > /dev/null 2>&1
+
+exit 0
