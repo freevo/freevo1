@@ -13,6 +13,9 @@
 #    3) Better (and more) LCD screens.
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.19.2.2  2005/01/09 10:42:18  dischi
+# more unicode fixes
+#
 # Revision 1.19.2.1  2005/01/09 10:13:44  dischi
 # unicode fixes
 #
@@ -831,7 +834,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
             k = '%s %s' % ( sname, w )
             try:
-                if self.lsv[ k ] == param:
+                if String(self.lsv[ k ]) == String(param):
                     continue # nothing changed in this widget
             except KeyError:
                 pass
