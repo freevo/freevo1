@@ -7,6 +7,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.59.2.2  2004/10/20 18:41:09  dischi
+# add missing :
+#
 # Revision 1.59.2.1  2004/10/20 18:35:34  dischi
 # fix favorite recording bug and set favorite priority below manual scheduled
 #
@@ -429,7 +432,7 @@ class RecordServer(xmlrpc.XMLRPC):
                         # has a higher priority.
                         if self.isProgAFavorite(prog)[0] and \
                            not self.isProgAFavorite(currently_recording)[0] and \
-                           prog.stop + config.TV_RECORD_PADDING > now
+                           prog.stop + config.TV_RECORD_PADDING > now:
                             _debug_('ignore %s' % String(prog))
                             continue
                         sr.removeProgram(currently_recording, 
