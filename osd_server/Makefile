@@ -1,0 +1,40 @@
+#
+# Makefile - OSD stuff
+#
+# $Id$
+
+# The JPEG support will not be finished for a while.
+
+CFLAGS = -O2 -Wall `freetype-config --cflags`
+LIBS = -lm -lpng -lz `freetype-config --libs`
+
+# Uncomment the following line to enable fullscren/vidmode support
+# X11_FULLSCREEN = 1
+
+ifdef X11_FULLSCREEN
+	XLIBS = -L/usr/X11R6/lib -lX11 -lXext -lXxf86vm
+	DFLAGS = -DOSD_X11_FULLSCREEN -DOSD_X11
+else
+	XLIBS = -L/usr/X11R6/lib -lX11
+	DFLAGS = -DOSD_X11
+endif
+				
+all: osds_fb vtrelease
+
+osds_fb: main.c ft.c ft.h fb.c fb.h readpng.c readpng.h
+	gcc -DOSD_FB $(CFLAGS) -Wall main.c ft.c fb.c readpng.c -o osds_fb $(LIBS)
+
+osds_x11: main.c ft.c ft.h x11.c x11.h readpng.c readpng.h
+	gcc $(DFLAGS) $(CFLAGS) main.c ft.c x11.c -o osds_x11 readpng.c $(XLIBS) $(LIBS)
+
+x11test: x11.c x11.h readpng.c readpng.h
+	gcc $(CFLAGS) -DTEST x11.c readpng.c -o x11test $(XLIBS) $(LIBS)
+
+fttest: ft.c
+	gcc $(CFLAGS) -g  `freetype-config --cflags` -Wall ft.c -o fttest -DTEST 
+
+pngtest: readpng.c readpng.h
+	gcc -DPNGTEST $(CFLAGS) -Wall readpng.c -o pngtest $(LIBS)
+
+clean:
+	-rm -f *.o *.pyc osds_fb osds_x11 x11test pngtest fttest

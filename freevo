@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# freevo - the main entry point to the whole suite of applications
+#
+# $Id$
+#
+
+python startup.py $*

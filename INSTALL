@@ -1,0 +1,77 @@
+Installation instructions for Freevo
+------------------------------------
+
+$Id$
+
+
+WARNING: The framebuffer code can render the console unusuable if set up
+         incorrectly! Do not attempt if you cannot login from another
+         computer on the network!
+
+
+o Recompile the Linux kernel (>=2.4.13). It is assumed that all options 
+  are compiled in statically. If they're compiled as modules instead you
+  have to make sure that they're loaded before Freevo.
+
+o Test the video4linux driver using xawtv
+  o Freevo uses its' own tables for channels
+
+o Compile and install all the programs in apps/
+  o Install XviD
+  o Install MPlayer
+    o Test with the MGA graphics driver
+  o Install mpg321 (or alternately, mpg123)
+    o Test audio output with an mp3
+  o Install NVrec
+    o Test recording to a file
+  o Install lirc
+    o Test:
+      o Insert the serial driver module
+      o Start the daemon
+
+o Compile Freevo
+  o Requires freetype 2 (2.0.9 is preferred for now)
+    o http://prdownloads.sourceforge.net/freetype/freetype-2.0.9.tar.gz?download
+  o Requires libpng
+    o http://prdownloads.sourceforge.net/libpng/libpng-1.2.3.tar.gz?download
+  o Requires libz (already installed on most Linux distros)
+    o http://prdownloads.sourceforge.net/libpng/zlib-1.1.4.tar.gz?download
+  o Requires Python >= version 2.1 (We've had reports of problems with 1.5.x)
+    o http://www.python.org/ftp/python/2.2.1/Python-2.2.1.tgz
+  o Optionally install Python Imaging Library for cover art.
+  o Test the remote using the lirc application irw, and using the 
+    remote_control_lirc.py Freevo application
+  o Test the text OSD test driver
+  o Test the MGA G400 OSD framebuffer driver
+
+o Test matrox_g400/v4l1_to_mga  (Video4Linux1 -> Framebuffer)
+  o It _must_ be used with the matrox_g400/mga_vid.o module,
+    not the one from MPlayer.
+  o Check out the source for how to set the input, norm, channel
+
+o Update the settings in config.py!
+  o TV_SETTINGS, VCR_SETTINGS, TV_CHANNELS depending on where you live.
+  o DIR_MP3, DIR_MOVIES, DIR_RECORD for where your files are
+
+o Two TV Guide method are currently supported
+  o Define TV_GUIDE_METHOD to 'yahoo' or 'xmltv' 
+
+o XMLTV Method
+  o See Docs/XMLTV for usage instructions
+
+o Yahoo Method
+  o Set the EPG_URL and TV_CHANNELS variable to use Yahoo TV listings. (U.S. Only!)
+
+o Test Freevo using the simulated OSD and remote, just start "freevo"
+  in the main directory
+
+o Run Freevo using the real OSD framebuffer driver and the lirc remote
+
+o Create a boot-script that will start Freevo when Linux is booting.
+  boot/freevo is a good start.
+  o Make sure that X11 doesn't start up by changing the default 
+    runlevel in /etc/inittab to 3
+  o boot/freevo needs to have boot/boot_config placed in /etc/freevo
+  o boot/freevo_dep contains code to load lirc, mga_vid, etc. This must
+    be done before freevo is started, but can be done in other ways than
+    using the freevo_dep script.
