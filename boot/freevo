@@ -1,0 +1,55 @@
+#! /bin/sh
+# chkconfig: 234 99 00
+# description: A boot script for the Freevo package
+#
+# Enhanced boot script for freevo
+#
+# $Id$
+
+# Get startup config file
+test -f /etc/freevo/boot_config || exit 0
+. /etc/freevo/boot_config
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/games
+DAEMON=$FREEVO_HOME/freevo
+NAME=freevo
+DESC=freevo
+
+test -f $DAEMON || exit 0
+
+case "$1" in
+  start)
+        echo -n "Setting up RTC: "
+        sysctl -w dev.rtc.max-user-freq=1024 > /dev/null
+        echo "sysctl."
+	echo -n "Starting $DESC: "
+	export SDL_NOKEYBOARD=true
+        export SDL_NOMOUSE=true
+	export SDL_VIDEODRIVER=fbcon
+	(cd $FREEVO_STARTDIR && $DAEMON >> $FREEVO_LOG 2>&1 &)
+	echo "$NAME."
+	;;
+  stop)
+	echo -n "Stopping $DESC: "
+        (cd $FREEVO_STARTDIR && $DAEMON stop >> $FREEVO_LOG 2>&1 &)
+        kill `pgrep -f "python src/main.py" -d" "` &> /dev/null
+	kill `pgrep -f "python main.py" -d" "` &> /dev/null
+	echo "$NAME."
+        echo -n "Hard kill to be sure: "
+        ps aux | grep python | grep main.py | awk '{ print "kill -9 " $2 }' | sh
+        echo "kill."
+	;;
+  restart|force-reload)
+	echo "Restarting..."
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+  *)
+	N=/etc/init.d/$NAME
+	echo "Usage: $N {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
