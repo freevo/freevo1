@@ -22,6 +22,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.8.2.2  2005/01/20 16:32:11  dischi
+# fix crash
+#
 # Revision 1.8.2.1  2004/10/21 12:31:52  dischi
 # fix variable type
 #
@@ -72,19 +75,21 @@ class PluginInterface(plugin.DaemonPlugin):
     SOUND_MASK_LINE = 64
     
     def __init__(self):
-        plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'MIXER'
         self.mixfd = None
         self.muted = 0
         
-        # If you're using ALSA or something and you don't set the mixer, why are
-        # we trying to open it?
+        # If you're using ALSA or something and you don't set the mixer,
+        # why are we trying to open it?
         if config.DEV_MIXER:    
             try:
-                self.mixfd = ossaudiodev.openmixer() #open(config.DEV_MIXER, 'r')
+                self.mixfd = ossaudiodev.openmixer()
             except IOError:
                 print 'Couldn\'t open mixer %s' % config.DEV_MIXER
                 return
+
+        # init here
+        plugin.DaemonPlugin.__init__(self)
 
         if 0:
             self.mainVolume   = 0

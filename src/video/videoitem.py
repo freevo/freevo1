@@ -10,6 +10,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.144.2.3  2005/01/20 16:36:06  dischi
+# fix crash
+#
 # Revision 1.144.2.2  2004/10/20 18:33:20  dischi
 # fix aspect ration crash when it is an int
 #
@@ -121,6 +124,9 @@ class VideoItem(Item):
         self.elapsed           = 0
         
         self.possible_player   = []
+
+        self.player        = None
+        self.player_rating = 0
 
         # find image for tv show and build new title
         if config.VIDEO_SHOW_REGEXP_MATCH(self.name) and not self.network_play and \
