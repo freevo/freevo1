@@ -22,6 +22,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.110.2.1  2004/08/09 14:37:27  dischi
+# fix encoding detection
+#
 # Revision 1.110  2004/07/10 12:33:36  dischi
 # header cleanup
 #
@@ -882,9 +885,11 @@ if HELPER:
 encoding = None
 try:
     encoding = os.environ[ 'LANG' ].split( '.' )[ 1 ]
+    ''.encode(encoding)
 except:
     try:
         encoding = os.environ[ 'LC_ALL' ].split( '.' )[ 1 ]
+        ''.encode(encoding)
     except:
         encoding = LOCALE
 
