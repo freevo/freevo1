@@ -1,0 +1,77 @@
+Todo list for Freevo
+====================
+
+$Id$
+
+
+Short-term
+----------
+o Check that the applications exist in startup.py, now it will
+  just loop forever trying to start them
+o Finish the basic skin support
+o Make the layout fixed at 640x480
+o Add proper X11 support for mplayer and tv-watching
+o Add a freevo exit command
+o Add rcs id to all files!
+o Channel guide layout
+o A switch to turn off the EPG altogether if no listings are available.
+o Make the EPG handling more modular
+o Use btaudio for audio recording from the video card
+o Select packages for release (mplayer, xvid, nvrec, ffmpeg)
+o clean up Docs/Notes
+o Add basic DVD navigation (titles, chapters, languages, subtitles)
+o Add support for mjpeg recording of video for off-line compression
+  o Could also be used to watch the recorded piece in real-time as it 
+    is being recorded
+  o Look at MythTV (http://ijr.dnsalias.org/mc.html) for good TV
+    recording source code.
+o Play audio CD-roms
+o Add generic emulator support for ZSNES, scummvm and Boycott Advance
+o Add DVD backups
+  o mencoder works fine with XviD/FFMPEG, but it cannot be started from Freevo yet
+o Add a digital filter to remove 50/60 Hz line-noise from audio line input
+  o Is only a problem for connecting line in to a VCR?
+o Finish LICENSE
+o Website:
+  o Add an animated GIF of the system being used instead?
+  o New favicon
+ 
+
+Mid-term
+--------
+o Adjustment of saturation, contrast, etc for both TV-in and
+  TV-out.
+  o Have a menu choice to save the settings to a config file
+o Picture-In-Picture, channelscan
+  o Both using one or two WinTV boards
+  o Rewrite the TV app to use framegrabbing instead of overlay
+o Change channel during recording
+o Display error messages from mplayer when a movie/dvd cannot be played  
+o View photo galleries
+o Use getop for python argument parsing
+o MP3 playing:
+  o Have a play queue that files can be added to/removed from while the
+    MP3 player is playing from it. 
+  o Random playing
+  o Select several playlists and AND or OR them together.
+o Bugzilla
+
+
+Long-term
+---------
+o Radio in, record to MP3
+o email and ICQ notifs
+o ir out to control a cable box, satellite receiver, etc
+o recording schedule
+o text-to-speech for menus, notifications
+o MAME, other emulators
+o Mate blursk with FB and mpg123
+o Rate shows and get recommendations on other shows
+o Control and receive video data from a network TV tuner daemon
+
+
+Ideas
+-----
+o Voice recognition -> sub-titles, at least phonetic text
+o Chat with others watching the same show
+
