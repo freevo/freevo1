@@ -1,0 +1,123 @@
+Credits for Freevo
+==================
+
+$Id$
+
+
+
+Packages/external code snippets:
+--------------------------------
+
+o mplayer: http://www.mplayerhq.hu
+o NVrec: http://www.ee.up.ac.za/~justin/v4l2/
+o mp3_id.py: http://id3-py.sourceforge.net/
+o EXIF support from Thierry Bousch <bousch@topo.math.u-psud.fr>
+
+
+People:
+-------
+
+Please email one of the maintainers if your name happens to
+be missing here or the information is wrong!
+
+Maintainers:
+
+Krister Lagerstrom <krister-freevo@kmlager.com>:
+o Initial implementation
+o Core developer
+
+Aubin Paul <aubin@outlyer.org>:
+o Core developer
+o Pseudo Interface Designer
+
+Dirk Meyer <dmeyer@tzi.de>:
+o Core developer
+
+Gustavo Sverzut Barbieri <gsbarbieri@yahoo.com.br>
+o Core developer
+
+Rob Shortt <rob@infointeractive.com>
+o Core developer
+
+Michael Ruelle <mikeruelle@comcast.net>
+o Core developer
+
+Jason Ball <jason.ball@ce.com.au>:
+o SDL support in the OSD
+
+Thomas Malt <thomas@malt.no>
+o Mplayer for Audio support
+o Ogg Vorbis Tag and Playback support
+
+
+
+
+Occasional contributors:
+------------------------
+
+Dan Eriksen <eriksen@canada.com>
+o 16-bit pixel support for the X11 OSD server
+o Joystick driver
+
+Jens Oberender <j.obi@troja.net>
+o DXR3 support
+
+Andrew Drummond <adrummond@candw.ky>
+o MAME support
+
+Alex Polite <m2@plusseven.com>
+o XMMS audio playback support
+o Music playlists support
+
+Per Wigren <wigren@home.se>
+o Various contribs and patches for TV listings
+
+Travis Shirk <travis@pobox.com>
+o ID3v2.x support (now in mmpython)
+
+John M Cooper <john.cooper@yourcommunications.co.uk>
+o Bins support (now in mmpython)
+
+Matthieu Weber <mweber@mit.jyu.fi>
+o DTD and implementation of fxd movie informations
+
+Thomas Schueppel <stain@acm.org>
+o v4l2 python interface
+o video channel frequencies
+o timeshift plugin, pyshift modules and mplayer timefhifting patch
+
+Rob Vandermeulen (rdc@kokosnoot.com)
+o fxdimdb class + rewrite of the plugin & helper
+o the df plugin
+
+
+
+Special Copyright Notice:
+-------------------------
+
+BSD Daemon Copyright 1988 by Marshall Kirk McKusick.
+All Rights Reserved.
+
+Permission to use the daemon may be obtained from:
+	Marshall Kirk McKusick
+	1614 Oxford St
+	Berkeley, CA 94709-1608
+	USA
+or via email at mckusick@mckusick.com
+
+BSD Daemon spash screen artwork adapted from an SVG rendition by
+Sergey Akifyev (asa@gascom.ru), available at
+ftp://ftp.gascom.ru/pub/GNOME2/Bg/beastie.svg.
+
+--------------------------
+
+"GANT" icon set is Copyright 2003 by Paul Davey
+
+The icons are not under the GPL and are granted permission for
+use with Freevo. Redistribution outside of Freevo requires 
+specific permission from the designer. 
+
+Permission to use the icon set may be obtained from:
+http://mattahan.deviantart.com/
+
+---------------------------
