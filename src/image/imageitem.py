@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.25.2.1  2004/09/06 16:37:34  dischi
+# add default slideshow duration
+#
 # Revision 1.25  2004/07/17 08:18:56  dischi
 # unicode fixes
 #
@@ -56,7 +59,7 @@ from event import *
 
 
 class ImageItem(Item):
-    def __init__(self, url, parent, name = None, duration = 0):
+    def __init__(self, url, parent, name = None, duration = config.IMAGEVIEWER_DURATION):
         self.type = 'image'
         self.autovars = [ ( 'rotation', 0 ) ]
         Item.__init__(self, parent)
