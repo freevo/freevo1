@@ -3,7 +3,7 @@ Freevo Changelog
 
 $Id$
 
-Release 1.5.2 (2004-10-24):
+Release 1.5.2 (2004-10-31):
 ---------------------------
  * Fix memory leak when running image viewer in slideshow mode
  * Fix recordserver favorite handling for a specific day of week
