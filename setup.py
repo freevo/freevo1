@@ -110,7 +110,7 @@ if (not os.path.isdir('./Docs/installation/html')) and \
 
 data_files = []
 # add some files to Docs
-for f in ('BUGS', 'COPYING', 'ChangeLog', 'INSTALL', 'README'):
+for f in ('COPYING', 'ChangeLog', 'INSTALL', 'README'):
     data_files.append(('share/doc/freevo-%s' % version.__version__, ['%s' % f ]))
 data_files.append(('share/doc/freevo-%s' % version.__version__, ['Docs/CREDITS' ]))
 data_files.append(('share/fxd', ['share/fxd/webradio.fxd']))
