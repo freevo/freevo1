@@ -3,6 +3,14 @@ Freevo Changelog
 
 $Id$
 
+Release 1.5.3 (2005-01-16):
+---------------------------
+ * Update to new IMDb website
+ * Support for russian tv
+ * Xine and mplayer post processing updates
+ * Smaller enhancements, bugfixes and Unicode fixes
+
+
 Release 1.5.2 (2004-10-31):
 ---------------------------
  * Fix memory leak when running image viewer in slideshow mode
