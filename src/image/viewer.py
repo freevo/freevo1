@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.52.2.1  2004/09/06 16:37:02  dischi
+# remove the buggy signal() code from the imageviewer and use rc.(un)register
+#
 # Revision 1.52  2004/07/11 10:39:45  dischi
 # replaced AlertBox with normal warning on screen
 #
@@ -46,7 +49,6 @@
 # ----------------------------------------------------------------------- */
 
 
-import signal
 import os
 
 import config 
@@ -86,10 +88,12 @@ class ImageViewer(GUIObject):
                            str(IMAGE_ZOOM_GRID6):6, str(IMAGE_ZOOM_GRID7):7,
                            str(IMAGE_ZOOM_GRID8):8, str(IMAGE_ZOOM_GRID9):9 }
 
-        self.slideshow   = True  # currently in slideshow mode
+        self.slideshow   = True
         self.app_mode    = 'image'
         self.last_image  = (None, None)
         self.osd         = osd.get_singleton()
+
+        self.signal_registered = False
 
         self.free_cache()
 
@@ -289,9 +293,9 @@ class ImageViewer(GUIObject):
         self.osd.update()
 
         # start timer
-        if self.fileitem.duration:
-            signal.signal(signal.SIGALRM, self.signalhandler)
-            signal.alarm(self.fileitem.duration)
+        if self.fileitem.duration and self.slideshow and not self.signal_registered:
+            rc.register(self.signalhandler, False, self.fileitem.duration*100)
+            self.signal_registered = True
 
         self.last_image  = (item, (image, x, y, scale, bbx, bby, bbw, bbh,
                                    self.rotation))
@@ -325,10 +329,9 @@ class ImageViewer(GUIObject):
         self.osd.loadbitmap(fileitem.filename, cache=self.bitmapcache)
         
 
-    def signalhandler(self, signum, frame):
-        if rc.app() == self.eventhandler and self.slideshow:
-            rc.app(None)
-            self.eventhandler(PLAY_END)
+    def signalhandler(self):
+        self.signal_registered = False
+        self.eventhandler(PLAY_END)
 
 
     def eventhandler(self, event, menuw=None):
@@ -336,25 +339,28 @@ class ImageViewer(GUIObject):
             if self.slideshow:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('pause')))
                 self.slideshow = False
-                signal.alarm(0)
+                rc.unregister(self.signalhandler)
+                self.signal_registered = False
             else:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('play')))
                 self.slideshow = True
-                signal.alarm(1)
+                rc.register(self.signalhandler, False, 100)
+                self.signal_registered = True
             return True
         
         elif event == STOP:
             self.last_image  = None, None
+            self.signal_registered = False
+            rc.unregister(self.signalhandler)
             rc.app(None)
-            signal.alarm(0)
             self.fileitem.eventhandler(event)
             return True
 
         # up and down will stop the slideshow and pass the
         # event to the playlist
         elif event == PLAYLIST_NEXT or event == PLAYLIST_PREV:
-            self.slideshow = False
-            signal.alarm(0)
+            self.signal_registered = False
+            rc.unregister(self.signalhandler)
             self.fileitem.eventhandler(event)
             return True
             
