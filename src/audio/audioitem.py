@@ -9,6 +9,10 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.57.2.2  2004/09/10 19:48:17  outlyer
+# Fix sorting behaviour to respect rather than ignore TPOS tags. This is the
+# expected behaviour, but was missing. Requires latest mmpython to work properly.
+#
 # Revision 1.57.2.1  2004/07/21 17:12:23  outlyer
 # Bugfix.
 #
@@ -141,7 +145,7 @@ class AudioItem(Item):
         if mode == 'advanced':
             # sort by track number
             try:
-                return '%0.3i-%s' % (int(self['trackno']), Unicode(self.url))
+                return '%s %0.3i-%s' % (self['discs'],int(self['trackno']), Unicode(self.url))
             except ValueError:
                 return '%s-%s' % (Unicode(self['trackno']), Unicode(self.url))
         return Unicode(self.url)
