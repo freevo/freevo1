@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.3.2.1  2004/08/05 17:03:55  outlyer
+# Backport a bugfix.
+#
 # Revision 1.3  2004/07/10 12:33:38  dischi
 # header cleanup
 #
@@ -58,18 +61,20 @@ class PluginInterface(plugin.DaemonPlugin):
         self.db.commit()
 
     def log_track(self, filename):
-        query = 'UPDATE music SET play_count=play_count+1,last_play=%f WHERE \
-                 path = "%s" and filename = "%s"' % (time.time(),  
-                 util.escape(os.path.dirname(filename)), 
-                 util.escape(os.path.basename(filename)) )
-        self.runquery(query)
+        if filename:
+            query = 'UPDATE music SET play_count=play_count+1,last_play=%f WHERE \
+                     path = "%s" and filename = "%s"' % (time.time(),  
+                     util.escape(os.path.dirname(filename)), 
+                     util.escape(os.path.basename(filename)) )
+            self.runquery(query)
 
     def log_rating(self, filename, rating):
-        query = 'UPDATE music SET rating=%i WHERE \
-                 path = "%s" and filename = "%s"' % (int(rating),  
-                 util.escape(os.path.dirname(filename)), 
-                 util.escape(os.path.basename(filename)) )
-        self.runquery(query)
+        if filename:
+            query = 'UPDATE music SET rating=%i WHERE \
+                     path = "%s" and filename = "%s"' % (int(rating),  
+                     util.escape(os.path.dirname(filename)), 
+                     util.escape(os.path.basename(filename)) )
+            self.runquery(query)
 
     def eventhandler(self, event, menuw=None):
         if event == AUDIO_LOG:
