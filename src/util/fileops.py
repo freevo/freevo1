@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.25.2.1  2005/01/16 11:08:27  dischi
+# ignore bad subdirs
+#
 # Revision 1.25  2004/07/10 12:33:42  dischi
 # header cleanup
 #
@@ -246,6 +249,10 @@ def match_files_recursively_helper(result, dirname, names):
     """
     help function for match_files_recursively
     """
+    if dirname[dirname.rfind('/'):][1] == '.':
+        # ignore directories starting with a dot
+        # Note: subdirectories of that dir will still be searched
+        return result
     for name in names:
         fullpath = vfs.join(dirname, name)
         result.append(fullpath)
