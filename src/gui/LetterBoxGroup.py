@@ -10,6 +10,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.18.2.1  2004/09/06 19:49:30  dischi
+# fix max width
+#
 # Revision 1.18  2004/07/10 12:33:39  dischi
 # header cleanup
 #
@@ -89,7 +92,7 @@ class LetterBoxGroup(Container):
         self.set_layout(LetterBoxLayout(self))
 
         bw = 0
-        for c in ('M', 'A', 'm'):
+        for c in ('M', 'A', 'm', 'W'):
             bw = max(bw, self.content_layout.types['button'].font.stringsize(c),
                      self.content_layout.types['button selected'].font.stringsize(c))
 
