@@ -11,6 +11,10 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.17.2.1  2004/08/11 00:12:33  outlyer
+# Patch from Jason; major performance improvement in the web based program
+# guide.
+#
 # Revision 1.17  2004/05/20 15:45:07  outlyer
 # Fixes for favorites containing the '&' symbol... covert it from the HTML
 # "%26" into "&"
@@ -190,13 +194,14 @@ class EditFavoriteResource(FreevoResource):
         guide = tv.epg_xmltv.get_guide()
 
         fv.printHeader(_('Edit Favorite'), 'styles/main.css')
-
-        fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
-        fv.tableRowOpen('class="chanrow"')
-        fv.tableCell('<img src="images/logo_200x100.png" />', 'align="left"')
-        fv.tableCell(_('Edit Favorite'), 'class="heading" align="left"')
-        fv.tableRowClose()
-        fv.tableClose()
+        fv.res += '&nbsp;<br/>\n'
+        # This seems out of place.
+        #fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
+        #fv.tableRowOpen('class="chanrow"')
+        #fv.tableCell('<img src="images/logo_200x100.png" />', 'align="left"')
+        #fv.tableCell(_('Edit Favorite'), 'class="heading" align="left"')
+        #fv.tableRowClose()
+        #fv.tableClose()
 
         fv.res += '<br><form name="editfavorite" method="get" action="favorites.rpy">'
 
@@ -322,20 +327,20 @@ class EditFavoriteResource(FreevoResource):
         fv.res += '<script language="JavaScript">'
 
         if fav.channel == 'ANY':
-            fv.res += 'document.editfavorite.chan.options[0].selected=true'
+            fv.res += 'document.editfavorite.chan.options[0].selected=true\n'
         else:
-            fv.res += 'document.editfavorite.chan.options[%s].selected=true' % chan_index
+            fv.res += 'document.editfavorite.chan.options[%s].selected=true\n' % chan_index
 
         if fav.dow == 'ANY':
-            fv.res += 'document.editfavorite.dow.options[0].selected=true'
+            fv.res += 'document.editfavorite.dow.options[0].selected=true\n'
         else:
-            fv.res += 'document.editfavorite.dow.options[(1+%s)].selected=true' % fav.dow
+            fv.res += 'document.editfavorite.dow.options[(1+%s)].selected=true\n' % fav.dow
 
         if fav.mod == 'ANY':
-            fv.res += 'document.editfavorite.mod.options[0].selected=true'
+            fv.res += 'document.editfavorite.mod.options[0].selected=true\n'
         else:
             mod_index = int(fav.mod)/30 + 1
-            fv.res += 'document.editfavorite.mod.options[%s].selected=true' % mod_index
+            fv.res += 'document.editfavorite.mod.options[%s].selected=true\n' % mod_index
 
         fv.res += '</script>'
 

@@ -34,6 +34,7 @@ from twisted.web.woven import page
 import util.tv_util as tv_util
 import util
 import config 
+import tv.epg_xmltv 
 import tv.record_client as ri
 from twisted.web import static
 
@@ -48,7 +49,7 @@ class ProgInfoResource(FreevoResource):
         chanid = id[:id.find(":")]
         starttime = int( id[id.find(":")+1:] )
 
-        guide = tv_util.get_guide()
+        guide = tv.epg_xmltv.get_guide()
 
         chan = guide.chan_dict[chanid]
         for prog in chan.programs:
