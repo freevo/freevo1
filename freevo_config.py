@@ -1183,7 +1183,7 @@ TV_RECORD_DIR = None
 #
 # us-bcast, us-cable, us-cable-hrc, japan-bcast, japan-cable, europe-west,
 # europe-east, italy, newzealand, australia, ireland, france, china-bcast,
-# southafrica, argentina, canada-cable
+# southafrica, argentina, canada-cable, russia
 #
 # DEVICE: Usually /dev/video0, but might be /dev/video1 instead for multiple
 # boards.

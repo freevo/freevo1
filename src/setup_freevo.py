@@ -12,6 +12,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.18.2.1  2005/01/09 10:45:54  dischi
+# support for russian tv
+#
 # Revision 1.18  2004/07/10 12:33:36  dischi
 # header cleanup
 #
@@ -135,7 +138,7 @@ def check_config(conf):
                      'japan-bcast', 'japan-cable', 'europe-west',
                      'europe-east', 'italy', 'newzealand', 'australia',
                      'ireland', 'france', 'china-bcast', 'southafrica',
-                     'argentina', 'canada-cable']
+                     'argentina', 'canada-cable','russia']
 
     if not conf.geometry in vals_geometry:
         print 'geometry must be one of: %s' % ' '.join(vals_geometry)

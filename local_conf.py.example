@@ -716,7 +716,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # us-bcast, us-cable, us-cable-hrc, japan-bcast, japan-cable, europe-west,
 # europe-east, italy, newzealand, australia, ireland, france, china-bcast,
-# southafrica, argentina, canada-cable
+# southafrica, argentina, canada-cable, russia
 #
 # TV_SETTINGS  = 'NORM INPUT CHANLIST DEVICE'
 
