@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.27.2.1  2004/08/28 17:11:54  dischi
+# use chapter selection to select file for multi file videos
+#
 # Revision 1.27  2004/07/10 12:33:43  dischi
 # header cleanup
 #
@@ -135,6 +138,29 @@ def chapter_selection_menu(arg=None, menuw=None):
 
 
 #
+# Chapter selection
+#
+
+def subitem_selection(menuw=None, arg=None):
+    item, pos = arg
+    item.conf_select_this_item = item.subitems[pos]
+    menuw.delete_menu()
+    play_movie(menuw=menuw, arg=(item, None))
+    
+
+def subitem_selection_menu(arg=None, menuw=None):
+    item  = arg
+    menu_items = []
+
+    for pos in range(len(item.subitems)):
+        menu_items += [ menu.MenuItem(_('Play chapter %s') % (pos+1),
+                                      subitem_selection, (arg, pos)) ]
+        
+    moviemenu = menu.Menu(_('Chapter Menu'), menu_items, fxd_file=item.skin_fxd)
+    menuw.pushmenu(moviemenu)
+
+
+#
 # De-interlacer
 #
 
@@ -178,8 +204,13 @@ def get_items(item):
             items.append(menu.MenuItem(_('Subtitle selection'),
                                        subtitle_selection_menu, item))
         if item.info.has_key('chapters') and item.info['chapters'] > 1:
-            items.append(menu.MenuItem(_('Chapter selection'), chapter_selection_menu, item))
-
+            items.append(menu.MenuItem(_('Chapter selection'),
+                                       chapter_selection_menu, item))
+    if item.subitems:
+        # show subitems as chapter
+        items.append(menu.MenuItem(_('Chapter selection'),
+                                   subitem_selection_menu, item))
+        
     if item.mode in ('dvd', 'vcd') or \
            (item.filename and item.info.has_key('type') and \
             item.info['type'] and item.info['type'].lower().find('mpeg') != -1):
