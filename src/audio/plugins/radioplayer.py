@@ -9,6 +9,10 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.10.2.2  2005/06/08 21:56:46  mikeruelle
+# back out change's from Georg Kunzel. need to do this in a real radio
+# item to get it to format similar to AudioItem
+#
 # Revision 1.10.2.1  2005/03/26 20:14:59  mikeruelle
 # Committing Georg Kunzel's radio player patch to make the elapsed time
 # actually work correctly.
@@ -135,22 +139,8 @@ class RadioPlayer:
 
     def refresh(self):
         print 'Radio Player refresh'
-        self.item.elapsed = self.formattime(int(time.time() - self.starttime))
+        self.item.elapsed = int(time.time() - self.starttime)
         self.playerGUI.refresh()
-
-    def formattime(self,seconds):
-        """
-        returns string formatted as mins:seconds
-        """
-        mins = 0
-        mins = seconds / 60
-        secs = seconds % 60
-
-        if secs<10:
-            secs = '0%s' % secs
-        else:
-            secs = '%s' % secs
-        return '%i:%s' % (mins,secs)
 
     def eventhandler(self, event, menuw=None):
         """
