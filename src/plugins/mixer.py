@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.14.2.3  2005/06/10 16:05:54  tack
+# More OverflowError fixes for Python 2.4
+#
 # Revision 1.14.2.2  2005/01/20 16:32:11  dischi
 # fix crash
 #
@@ -55,6 +58,7 @@ import rc
 import plugin
 from event import *
 
+def i32(x): return (x&0x80000000L and -2*0x40000000 or 0) + int(x&0x7fffffff)
 
 class PluginInterface(plugin.DaemonPlugin):
     # These magic numbers were determined by writing a C-program using the
@@ -95,7 +99,7 @@ class PluginInterface(plugin.DaemonPlugin):
             if self.mixfd:
                 data = struct.pack( 'L', self.SOUND_MASK_LINE )
                 try:
-                    fcntl.ioctl( self.mixfd.fileno(), self.SOUND_MIXER_WRITE_RECSRC, data )
+                    fcntl.ioctl( self.mixfd.fileno(), i32(self.SOUND_MIXER_WRITE_RECSRC), data )
                 except IOError:
                     _debug_('IOError for ioctl')
                     pass
@@ -157,7 +161,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
 
-    def _setVolume(self, device, volume):
+    def _setVolume(self, request, volume):
         if self.mixfd:
             if volume < 0:
                 volume = 0
@@ -166,7 +170,7 @@ class PluginInterface(plugin.DaemonPlugin):
             vol = (volume << 8) | (volume)
             data = struct.pack('L', vol)
             try:
-                fcntl.ioctl(self.mixfd.fileno(), device, data)
+                fcntl.ioctl(self.mixfd.fileno(), i32(request), data)
             except IOError:
                 _debug_('IOError for ioctl')
                 pass
