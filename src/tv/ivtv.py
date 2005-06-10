@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.13.2.1  2005/06/10 14:25:15  tack
+# Fix OverflowError exceptions with Python 2.4 in the ioctl calls.
+#
 # Revision 1.13  2004/07/10 12:33:41  dischi
 # header cleanup
 #
@@ -42,6 +45,8 @@
 import string, struct, fcntl, time
 
 import tv.v4l2, config
+
+def i32(x): return (x&0x80000000L and -2*0x40000000 or 0) + int(x&0x7fffffff)
 
 # ioctls
 IVTV_IOC_G_CODEC = 0xFFEE7703
@@ -85,12 +90,12 @@ class IVTV(tv.v4l2.Videodev):
                            codec.gop_closure,
                            codec.pulldown,
                            codec.stream_type)
-        r = fcntl.ioctl(self.device, IVTV_IOC_S_CODEC, val)
+        r = fcntl.ioctl(self.device, i32(IVTV_IOC_S_CODEC), val)
 
 
     def getCodecInfo(self):
         val = struct.pack( CODEC_ST, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 )
-        r = fcntl.ioctl(self.device, IVTV_IOC_G_CODEC, val)
+        r = fcntl.ioctl(self.device, i32(IVTV_IOC_G_CODEC), val)
         codec_list = struct.unpack(CODEC_ST, r)
         return IVTVCodec(codec_list)
 
@@ -100,7 +105,7 @@ class IVTV(tv.v4l2.Videodev):
         if not output: output = 1
 
         val = struct.pack(MSP_MATRIX_ST, input, output)
-        r = fcntl.ioctl(self.device, MSP_SET_MATRIX, val)
+        r = fcntl.ioctl(self.device, i32(MSP_SET_MATRIX), val)
 
 
     def init_settings(self, opts=None):

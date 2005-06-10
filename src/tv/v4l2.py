@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.15.2.1  2005/06/10 14:25:15  tack
+# Fix OverflowError exceptions with Python 2.4 in the ioctl calls.
+#
 # Revision 1.15  2004/07/10 12:33:42  dischi
 # header cleanup
 #
@@ -48,6 +51,7 @@ import config
 
 DEBUG = config.DEBUG
 
+def i32(x): return (x&0x80000000L and -2*0x40000000 or 0) + int(x&0x7fffffff)
 
 _IOC_NRBITS = 8
 _IOC_TYPEBITS = 8
@@ -162,7 +166,7 @@ class Videodev:
 
     def getfreq(self):
         val = struct.pack( FREQUENCY_ST, 0,0,0 )
-        r = fcntl.ioctl(self.device, long(GETFREQ_NO), val)
+        r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
         (junk,junk, freq, ) = struct.unpack(FREQUENCY_ST, r)
         return freq
 
@@ -196,83 +200,83 @@ class Videodev:
 
     def setfreq_old(self, freq):
         val = struct.pack( "L", freq)
-        r = fcntl.ioctl(self.device, long(SETFREQ_NO_V4L), val)        
+        r = fcntl.ioctl(self.device, i32(SETFREQ_NO_V4L), val)        
 
 
     def setfreq(self, freq):
         val = struct.pack( FREQUENCY_ST, long(0), long(0), freq)
-        r = fcntl.ioctl(self.device, long(SETFREQ_NO), val)
+        r = fcntl.ioctl(self.device, i32(SETFREQ_NO), val)
 
 
     def getinput(self):
-        r = fcntl.ioctl(self.device, GETINPUT_NO, struct.pack(INPUT_ST,0))
+        r = fcntl.ioctl(self.device, i32(GETINPUT_NO), struct.pack(INPUT_ST,0))
         return struct.unpack(INPUT_ST,r)[0]
   
 
     def setinput(self,value):
-        r = fcntl.ioctl(self.device, SETINPUT_NO, struct.pack(INPUT_ST,value))
+        r = fcntl.ioctl(self.device, i32(SETINPUT_NO), struct.pack(INPUT_ST,value))
 
 
     def querycap(self):
         val = struct.pack( QUERYCAP_ST, "", "", "", 0, 0 )
-        r = fcntl.ioctl(self.device, long(QUERYCAP_NO), val)
+        r = fcntl.ioctl(self.device, i32(QUERYCAP_NO), val)
         return struct.unpack( QUERYCAP_ST, r )
 
 
     def enumstd(self, no):
         val = struct.pack( ENUMSTD_ST, no, 0, "", 0, 0, 0)
-        r = fcntl.ioctl(self.device,ENUMSTD_NO,val)
+        r = fcntl.ioctl(self.device, i32(ENUMSTD_NO),val)
         return struct.unpack( ENUMSTD_ST, r )
 
 
     def getstd(self):
         val = struct.pack( STANDARD_ST, 0 )
-        r = fcntl.ioctl(self.device,GETSTD_NO, val)
+        r = fcntl.ioctl(self.device, i32(GETSTD_NO), val)
         return struct.unpack( STANDARD_ST, r )[0]
 
 
     def setstd(self, value):
         val = struct.pack( STANDARD_ST, value )
-        r = fcntl.ioctl(self.device,SETSTD_NO, val)
+        r = fcntl.ioctl(self.device, i32(SETSTD_NO), val)
 
 
     def enuminput(self,index):
         val = struct.pack( ENUMINPUT_ST, index, "", 0,0,0,0,0)
-        r = fcntl.ioctl(self.device,ENUMINPUT_NO,val)
+        r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO),val)
         return struct.unpack( ENUMINPUT_ST, r )
 
 
     def getfmt(self):  
         val = struct.pack( FMT_ST, 0,0,0,0,0,0,0,0)
-        r = fcntl.ioctl(self.device,GET_FMT_NO,val)
+        r = fcntl.ioctl(self.device, i32(GET_FMT_NO),val)
         return struct.unpack( FMT_ST, r )
 
 
     def setfmt(self, width, height):
         val = struct.pack( FMT_ST, 1L, width, height, 0L, 4L, 0L, 131072L, 0L)
-        r = fcntl.ioctl(self.device,SET_FMT_NO,val)
+        r = fcntl.ioctl(self.device, i32(SET_FMT_NO),val)
 
 
     def gettuner(self,index):
         val = struct.pack( TUNER_ST, index, "", 0,0,0,0,0,0,0,0)
-        r = fcntl.ioctl(self.device,GET_TUNER_NO,val)
+        r = fcntl.ioctl(self.device, i32(GET_TUNER_NO),val)
         return struct.unpack( TUNER_ST, r )
 
 
     def settuner(self,index,audmode):
         val = struct.pack( TUNER_ST, index, "", 0,0,0,0,0,audmode,0,0)
-        r = fcntl.ioctl(self.device,SET_TUNER_NO,val)
+        r = fcntl.ioctl(self.device, i32(SET_TUNER_NO),val)
 
 
     def getaudio(self,index):
         val = struct.pack( AUDIO_ST, index, "", 0,0)
-        r = fcntl.ioctl(self.device,GET_AUDIO_NO,val)
+        r = fcntl.ioctl(self.device, i32(GET_AUDIO_NO),val)
         return struct.unpack( AUDIO_ST, r )
 
 
     def setaudio(self,index,mode):
         val = struct.pack( AUDIO_ST, index, "", mode, 0)
-        r = fcntl.ioctl(self.device,SET_AUDIO_NO,val)
+        r = fcntl.ioctl(self.device, i32(SET_AUDIO_NO),val)
 
 
     def init_settings(self):
