@@ -9,6 +9,9 @@
 #
 # -----------------------------------------------------------------------
 # $Log$
+# Revision 1.15.2.2  2005/09/12 16:14:08  rshortt
+# Fix GET_FMT ioctl, thanks to Duncan Webb.
+#
 # Revision 1.15.2.1  2005/06/10 14:25:15  tack
 # Fix OverflowError exceptions with Python 2.4 in the ioctl calls.
 #
@@ -247,7 +250,7 @@ class Videodev:
 
 
     def getfmt(self):  
-        val = struct.pack( FMT_ST, 0,0,0,0,0,0,0,0)
+        val = struct.pack( FMT_ST, 1L,0,0,0,0,0,0,0)
         r = fcntl.ioctl(self.device, i32(GET_FMT_NO),val)
         return struct.unpack( FMT_ST, r )
 
