@@ -99,7 +99,7 @@ SETFREQ_NO   = _IOW('V', 57, FREQUENCY_ST)
 
 SETFREQ_NO_V4L = _IOW('v', 15, "L")
 
-QUERYCAP_ST  = "16s32s32sLL16x"
+QUERYCAP_ST  = "16s32s32sII16x"
 QUERYCAP_NO  = _IOR('V',  0, QUERYCAP_ST)
 
 ENUMSTD_ST   = "LQ24s2LL16x"
@@ -112,11 +112,11 @@ SETSTD_NO    = _IOW('V', 24, STANDARD_ST)
 ENUMINPUT_ST = "L32sLLLQL16x"
 ENUMINPUT_NO = _IOWR('V', 26, ENUMINPUT_ST)
 
-INPUT_ST  = "L";
+INPUT_ST  = "I"
 GETINPUT_NO  = _IOR('V', 38, INPUT_ST)
 SETINPUT_NO  = _IOWR('V', 39, INPUT_ST)
 
-FMT_ST = "L7L4x168x"
+FMT_ST = "L7I4x168x"
 GET_FMT_NO = _IOWR ('V',  4, FMT_ST)
 SET_FMT_NO = _IOWR ('V',  5, FMT_ST)
 
@@ -250,7 +250,7 @@ class Videodev:
 
 
     def getfmt(self):  
-        val = struct.pack( FMT_ST, 1L,0,0,0,0,0,0,0)
+        val = struct.pack( FMT_ST, 0,0,0,0,0,0,0,0)
         r = fcntl.ioctl(self.device, i32(GET_FMT_NO),val)
         return struct.unpack( FMT_ST, r )
 
