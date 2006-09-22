@@ -568,6 +568,10 @@ class TVTime:
             os.system('tvtime-command display_message \'%s\'' % event.arg)
             return True
        
+        elif event == em.TV_SEND_TVTIME_CMD:
+            os.system('tvtime-command %s' % event.arg)
+            return True
+
         elif event in em.INPUT_ALL_NUMBERS:
             self.app.write('CHANNEL_%s\n' % event.arg)
         

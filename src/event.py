@@ -152,7 +152,8 @@ DIRECTORY_CHANGE_DISPLAY_TYPE = Event('DIRECTORY_CHANGE_DISPLAY_TYPE')
 TV_START_RECORDING     = Event('TV_START_RECORDING')
 TV_CHANNEL_UP          = Event('TV_CHANNEL_UP')
 TV_CHANNEL_DOWN        = Event('TV_CHANNEL_DOWN')
-                       
+TV_SEND_TVTIME_CMD     = Event('TV_SEND_TVTIME_CMD')
+
 #
 # Global playing events
 #
