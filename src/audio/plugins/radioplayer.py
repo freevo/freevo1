@@ -113,6 +113,8 @@ class RadioPlayer:
             print 'Radio Player failed to find a mixer'
         os.system('%s -qf %s' % (config.RADIO_CMD, self.item.station))
         thread.start_new_thread(self.__update_thread, ())
+        rc.app(self)
+        rc.post_event(PLAY_START)
         return None
     
 
@@ -130,6 +132,8 @@ class RadioPlayer:
         else:
             print 'Radio Player failed to find a mixer'
         os.system('%s -qm' % config.RADIO_CMD)
+        rc.post_event(PLAY_END)
+        rc.app(None)
 
 
     def is_playing(self):
