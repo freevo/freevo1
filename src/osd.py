@@ -215,9 +215,9 @@ class OSDFont:
 
         _debug_('Loading font "%s"' % filename, 2)
 
-    if config.OSD_FORCE_FONT:
-        filename = config.OSD_FORCE_FONT
-        ptsize *= 1.5
+        if hasattr(config, 'OSD_FORCE_FONT') and config.OSD_FORCE_FONT:
+            filename = config.OSD_FORCE_FONT
+            ptsize *= 1.5
 
         font   = self.__loadfont__(filename, ptsize)
         if not font:
