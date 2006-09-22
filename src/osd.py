@@ -214,6 +214,11 @@ class OSDFont:
         ptsize = int(ptsize / 0.7)  # XXX pygame multiplies by 0.7 for some reason
 
         _debug_('Loading font "%s"' % filename, 2)
+
+    if config.OSD_FORCE_FONT:
+        filename = config.OSD_FORCE_FONT
+        ptsize *= 1.5
+
         font   = self.__loadfont__(filename, ptsize)
         if not font:
             
@@ -382,8 +387,8 @@ class OSD:
         pygame.display.init()
         pygame.font.init()
 
-	self.depth = 32
-	self.hw    = 0
+        self.depth = 32
+        self.hw    = 0
 
         if config.CONF.display == 'dxr3':
             self.depth = 32
