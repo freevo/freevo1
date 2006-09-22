@@ -257,11 +257,13 @@ class MPlayer:
         if item.selected_audio != None:
             additional_args += [ '-aid', str(item.selected_audio) ]
 
-        if self.version >= 1 and item['deinterlace']:
-            additional_args += [ '-vf',  config.MPLAYER_VF_INTERLACED ]
-        elif item['deinterlace']:
-            additional_args += [ '-vop', config.MPLAYER_VF_INTERLACED ]
-        elif self.version >= 1:
+        if item['deinterlace']:
+            if config.MPLAYER_VF_INTERLACED:
+                if self.version >= 1:
+                    additional_args += [ '-vf',  config.MPLAYER_VF_INTERLACED ]
+                else:
+                    additional_args += [ '-vop', config.MPLAYER_VF_INTERLACED ]
+        elif self.version >= 1 and config.MPLAYER_VF_PROGRESSIVE:
             additional_args += [ '-vf',  config.MPLAYER_VF_PROGRESSIVE ]
                 
         mode = item.mimetype
