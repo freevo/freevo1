@@ -121,10 +121,10 @@ class ProgramItem(Item):
                 self.scheduled = True
 
         if self.scheduled:
-	    items.append(menu.MenuItem(_('Remove from schedule'), 
+            items.append(menu.MenuItem(_('Remove from schedule'), 
                                        action=self.remove_program))
         else:
-	    items.append(menu.MenuItem(_('Schedule for recording'), 
+            items.append(menu.MenuItem(_('Schedule for recording'), 
                                        action=self.schedule_program))
 
         if self.context != 'search':
@@ -163,7 +163,7 @@ class ProgramItem(Item):
 
     def find_more(self, arg=None, menuw=None):
         # XXX: The searching part of this function could probably be moved
-	#      into a util module or record_client itself.
+        #      into a util module or record_client itself.
         _debug_(String('searching for: %s' % self.prog.title))
 
         pop = AlertBox(text=_('Searching, please wait...'))
@@ -181,7 +181,7 @@ class ProgramItem(Item):
             for prog in matches:
                items.append(ProgramItem(self, prog, context='search'))
         else:
-	    if matches == 'no matches':
+            if matches == 'no matches':
                 AlertBox(text=_('No matches found for %s') % self.prog.title).show()
                 return
             AlertBox(text=_('findMatches failed: %s') % matches).show()
@@ -197,7 +197,7 @@ class ProgramItem(Item):
         (result, msg) = record_client.scheduleRecording(self.prog)
         if result:
             if menuw:
-	        if self.context=='search':
+                if self.context=='search':
                     menuw.delete_menu()
                     menuw.delete_menu()
                 menuw.back_one_menu(arg='reload')
@@ -206,7 +206,7 @@ class ProgramItem(Item):
         else:
             AlertBox(text=_('Scheduling Failed')+(': %s' % msg)).show()
         # then menu back one or refresh the menu with remove option
-	# instead of schedule
+        # instead of schedule
 
 
     def remove_program(self, arg=None, menuw=None):
@@ -215,7 +215,7 @@ class ProgramItem(Item):
             # then menu back one which should show an updated list if we
             # were viewing scheduled recordings or back to the guide and
             # update the colour of the program we selected.
-	    # or refresh the menu with remove option instead of schedule
+            # or refresh the menu with remove option instead of schedule
             if menuw:  
                 menuw.back_one_menu(arg='reload')
 
@@ -245,7 +245,10 @@ class FavoriteItem(Item):
         if fav.mod == 'ANY':
             self.mod = _('ANY TIME')
         else:
-            self.mod = strftime(config.TV_TIMEFORMAT, gmtime(float(fav.mod * 60)))
+            try:
+                self.mod = strftime(config.TV_TIMEFORMAT, gmtime(float(int(fav.mod) * 60)))
+            except:
+                print 'Cannot add "%s" to favorites' % fav.name
 
         # needed by the inputbox handler
         self.menuw = None
@@ -414,7 +417,7 @@ class FavoriteItem(Item):
         if result:
             # then menu back one which should show an updated list if we
             # were viewing favorites or back to the program display
-	    # or refresh the program menu with remove option instead of add
+            # or refresh the program menu with remove option instead of add
             if menuw:  
                 menuw.back_one_menu(arg='reload')
 
