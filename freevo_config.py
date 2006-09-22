@@ -1045,7 +1045,7 @@ if CONF.display == 'x11':
 else:
     MPLAYER_VO_DEV       = CONF.display  # e.g.: x11,mga,fbdev, see mplayer docs
 
-MPLAYER_VO_DEV_OPTS  = ''	         # e.g.: ':some_var=vcal'
+MPLAYER_VO_DEV_OPTS  = ''                # e.g.: ':some_var=vcal'
 
 DVD_LANG_PREF        = 'en,se,no'        # Order of preferred languages on DVD.
 DVD_SUBTITLE_PREF    = ''                # Order of preferred subtitles on DVD.
@@ -1149,6 +1149,10 @@ if CONF.display == 'x11' and CONF.xine:
     XINE_VO_DEV  = 'xv'
     XINE_COMMAND = '%s --hide-gui -pq -g -B --geometry %sx%s+0+0 --no-splash' % \
                    (CONF.xine, CONF.width, CONF.height)
+
+if CONF.display in ('dfbmga', 'directfb') and CONF.df_xine:
+    XINE_VO_DEV  = ''
+    XINE_COMMAND = CONF.df_xine
 
 XINE_ARGS_DEF = '--no-lirc --post=pp:quality=10;expand'
 

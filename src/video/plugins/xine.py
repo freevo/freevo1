@@ -97,6 +97,9 @@ class PluginInterface(plugin.Plugin):
 
         if config.XINE_COMMAND.find('fbxine') >= 0:
             type = 'fb'
+        elif config.XINE_COMMAND.find('df_xine') >= 0:
+            type = 'df'
+            config.XINE_VERSION = 923
         else:
             type = 'X'
 
