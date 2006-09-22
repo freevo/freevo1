@@ -63,7 +63,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def items(self, parent):
         if util.is_usb_storage_device() != -1:
-            d = DirItem(self.mountpoint, parent, self.name, display_type='image')
+            d = DirItem(self.mountpoint, parent, self.name, display_type=parent.display_type)
             d.mountpoint = self.mountpoint
             return [ d ]
         return []
