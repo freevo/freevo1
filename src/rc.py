@@ -463,7 +463,8 @@ class EventHandler:
                 if not c[1]:
                     # remove if it is no repeat callback:
                     self.lock.acquire()
-                    self.callbacks.remove(c)
+                    if c in self.callbacks: 
+                        self.callbacks.remove(c)
                     self.lock.release()
                 else:
                     # reset counter for next run
