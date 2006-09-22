@@ -120,7 +120,7 @@ class MPlayer:
 
         # Build the MPlayer command
         args = (config.MPLAYER_NICE, config.MPLAYER_CMD, config.MPLAYER_VO_DEV,
-                config.MPLAYER_VO_DEV_OPTS, config.MPLAYER_ARGS_DEF)
+                config.MPLAYER_VO_DEV_OPTS, config.MPLAYER_AO_DEV, config.MPLAYER_ARGS_DEF)
 
         if mode == 'tv':
             if vg.group_type == 'ivtv':
@@ -175,7 +175,7 @@ class MPlayer:
 
         args += (tvcmd,)
 
-        mpl = '--prio=%s %s -vo %s%s -fs %s -slave %s %s' % args
+        mpl = '--prio=%s %s -vo %s%s -ao %s -fs %s -slave %s %s' % args
 
         command = mpl
         self.mode = mode
