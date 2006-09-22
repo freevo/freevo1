@@ -73,7 +73,6 @@ class PluginInterface(plugin.DaemonPlugin):
     SOUND_MASK_LINE = 64
     
     def __init__(self):
-        self.plugin_name = 'MIXER'
         self.mixfd = None
         self.muted = 0
         
@@ -87,6 +86,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 return
         # init here
         plugin.DaemonPlugin.__init__(self)
+        self.plugin_name = 'MIXER'
 
         if 0:
             self.mainVolume   = 0

@@ -55,7 +55,6 @@ rc = rc.get_singleton()
 class PluginInterface(plugin.DaemonPlugin):
 
     def __init__(self):
-        self.plugin_name = 'JOY'
         self.device_name = ''
      
         if config.JOY_DEV == 0:
@@ -82,6 +81,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         # ok, joystick is working
         plugin.DaemonPlugin.__init__(self)
+        self.plugin_name = 'JOY'
         
         print 'using joystick', config.JOY_DEV
         
