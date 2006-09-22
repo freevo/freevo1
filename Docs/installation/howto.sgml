@@ -336,7 +336,7 @@ Once you have compiled MPlayer you will need to compile the mga_vid kernel modul
 
       <para> 
 Setting the RAM size is optional. I found that in order for the driver to work properly you have to set the RAM size for cards that only have 16MB of RAM, without setting it the driver assumed the card had 32MB of RAM. Make sure your kernel driver is working by running the test program included in the drivers directory.
-      <para> 
+      </para> 
 
     </sect2>
   </sect1>
@@ -358,6 +358,7 @@ It wouldn't be a PVR / Media box without Freevo! I downloaded the binary distrib
 
     <para>
 That's pretty much it. After you have done the above you will need to start configuring Freevo's config files. 
+    </para>
   </sect1>
   <sect1>
     <title>Configuring Freevo</title>
@@ -652,6 +653,7 @@ To navigate the menus use the arrow keys for navigation and the ENTER key to sel
         <para>
 To view the on screen help menu hit the "h" key.
         </para>
+      </sect2>
     </sect1>
     <sect1>
       <title>TV Guide</title>
