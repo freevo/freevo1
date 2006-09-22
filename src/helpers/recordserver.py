@@ -622,7 +622,7 @@ class RecordServer(xmlrpc.XMLRPC):
     
         for fav in favs.values():
     
-            if prog.title == fav.title:    
+            if prog.title.lower() == fav.title.lower():    
                 if fav.channel == tv_util.get_chan_displayname(prog.channel_id) \
                    or fav.channel == 'ANY':
                     if Unicode(fav.dow) == Unicode(dow) or Unicode(fav.dow) == u'ANY':
