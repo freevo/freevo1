@@ -7,12 +7,12 @@
 # Notes:
 #    To activate, put the following line in local_conf.py:
 #       plugin.activate('lcd')
-# Todo:        
+# Todo:
 #    1) Use Threads. PyLCD is too blocking!
 #    2) Have Movie Player, TV Player and Image viewer to use LCD
 #    3) Better (and more) LCD screens.
 # -----------------------------------------------------------------------
-# $Log$
+# $Log: lcd.py,v $
 # Revision 1.19.2.3  2005/01/23 11:36:56  dischi
 # add small tv patch
 #
@@ -34,7 +34,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -71,7 +71,7 @@ except:
 
 # Configuration: (Should move to freevo_conf.py?)
 sep_str = " | " # use as separator between two strings. Like: "Length: 123<sep_str>Plot: ..."
-sep_str_mscroll = "   " # if string > width of lcd add this 
+sep_str_mscroll = "   " # if string > width of lcd add this
 
 # Animaton-Sequence used in audio playback
 # Some displays (like the CrytstalFontz) do display the \ as a /
@@ -153,11 +153,11 @@ menu_strinfo = {
 #            tv: will be used in tv mode
 # Values should match the ones supported by LCDd (man LCDd)
 layouts = { 4 : # 4 lines display
-            
+
             { 40 : # 40 chars per line
-              
+
               # Welcome screen
-              { "welcome" : 
+              { "welcome" :
                 { "title"    : ( "title",
                                  "Freevo",
                                  None ),
@@ -169,7 +169,7 @@ layouts = { 4 : # 4 lines display
                                  "( ( self.width - len( time.strftime('%T') ) ) / 2 + 1 ," + \
                                  " time.strftime('%T') )" )
                   },
-                
+
                 "menu"    :
                 { "title_l"  : ( "string",
                                  "1 1 '" + rjust(_( "Menu" ),4) + ": '",
@@ -182,7 +182,7 @@ layouts = { 4 : # 4 lines display
                                  None ),
                   "info_l"   : ( "string",
                                  "1 4 '" + rjust(_( "Information" ),4) + ": '",
-                                 None ),                
+                                 None ),
                   "title_v"  : ( "scroller",
                                  "7 1 %d 1 m 3 \"%s%s\"",
                                  "( self.width, menu.heading, self.get_sepstrmscroll(menu.heading) )" ),
@@ -196,7 +196,7 @@ layouts = { 4 : # 4 lines display
                                  "7 4 %d 1 m 3 \"%s%s\"",
                                  "( self.width, info, self.get_sepstrmscroll(info) )" )
                   },
-                
+
                 "audio_player"  :
                 { "music_l"   : ( "string",
                                   "1 1 '" + rjust(_( "Music" ),5) + ": '",
@@ -273,7 +273,7 @@ layouts = { 4 : # 4 lines display
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
 
-                
+
                 "tv"            :
                 { "chan_l"   : ( "string",
                                  "1 1 '" + rjust(_( "Channel" ),4) + ": '",
@@ -286,7 +286,7 @@ layouts = { 4 : # 4 lines display
                                 None ),
                   "desc_l"  : ( "string",
                                 "1 4 '" + rjust(_( "Description" ),4) + ": '",
-                                None ),                
+                                None ),
                   "chan_v"   : ( "scroller",
                                  "7 1 %d 1 m 3 \"%s%s\"",
                                  "( self.width,  get_chan_displayname(tv.channel_id), self.get_sepstrmscroll( get_chan_displayname(tv.channel_id)) )" ),
@@ -300,12 +300,12 @@ layouts = { 4 : # 4 lines display
                                  "7 4 %d 4 m 3 \"%s%s\"",
                                  "( self.width, tv.desc, self.get_sepstrmscroll(tv.desc) )" )
                   }
-                },              
+                },
 
               20 : # 20 chars per line
-              
+
               # Welcome screen
-              { "welcome" : 
+              { "welcome" :
                 { "title"    : ( "title",
                                  "Freevo",
                                  None ),
@@ -317,7 +317,7 @@ layouts = { 4 : # 4 lines display
                                  "( ( self.width - len( time.strftime('%T') ) ) / 2 + 1 ," + \
                                  " time.strftime('%T') )" )
                   },
-                
+
                 "menu"    :
                 { "title_v"  : ( "scroller",
                                  "1 1 %d 1 m 3 \"%s%s\"",
@@ -332,7 +332,7 @@ layouts = { 4 : # 4 lines display
                                  "1 4 %d 1 m 3 \"%s%s\"",
                                  "( self.width, info, self.get_sepstrmscroll(info) )" )
                   },
-                
+
                 "audio_player"  :
                 { "music_v"   : ( "scroller",
                                   "1 1 %d 1 m 3 \"%s%s\"",
@@ -355,6 +355,8 @@ layouts = { 4 : # 4 lines display
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 4 '%s'",
                                    "animation_audioplayer_chars[player.elapsed % len(animation_audioplayer_chars)]")
+#                  "animation_v": ( "hbar",
+#                                  "1 4 '%d'","(int(player.elapsed *90 / player.length))")
                   },
 
                 "video_player"  :
@@ -378,7 +380,7 @@ layouts = { 4 : # 4 lines display
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
-                
+
                 "tv"            :
                 { "chan_v"   : ( "scroller",
                                  "1 1 %d 1 m 3 \"%s%s\"",
@@ -392,12 +394,12 @@ layouts = { 4 : # 4 lines display
                   "desc_v"   : ( "scroller",
                                  "1 4 %d 4 m 3 \"%s%s\"",
                                  "( self.width, tv.desc, self.get_sepstrmscroll(tv.desc) )" )
-                  }              
+                  }
                 } # screens
               }, # chars per line
 
 
-            2 : # 2 lines display            
+            2 : # 2 lines display
             { 16 : # 16 chars per line
               # Welcome screen
               { "welcome" :
@@ -445,7 +447,7 @@ layouts = { 4 : # 4 lines display
                   "animation_v": ( "string", "1 2 '%s'",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
-                  },                
+                  },
 
 
                  "tv"            :
@@ -457,7 +459,7 @@ layouts = { 4 : # 4 lines display
                                   "( self.width, tv.title, self.get_sepstrmscroll(tv.title) )" )
                    }
                 },
-              
+
               20 : # 20 chars per line
               # Welcome screen
               { "welcome":
@@ -520,7 +522,7 @@ layouts = { 4 : # 4 lines display
                                   "( self.width, tv.title, self.get_sepstrmscroll(tv.title) )" )
                    }
                  },
-              
+
               40 : # 40 chars per line
               # Welcome screen
               { "welcome":
@@ -597,7 +599,7 @@ layouts = { 4 : # 4 lines display
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
 
-                
+
 
                 "tv":
                 { "chan_l"   : ( "string",
@@ -619,17 +621,20 @@ layouts = { 4 : # 4 lines display
                 } # screens
               } # chars per line
             } # lines per display
-             
+
 # poll_widgets: widgets that should be refreshed during the pool
 # Structure:
 #
 # poll_widgets = { <#_OF_LINES_IN_DISPLAY> :
-#                  { <SCREEN_NAME> : ( <WIDGET_NAME>, ... ) },
-#                  ...
+#                  { <#_OF_COLUMNS_IN_DISPLAY> :
+#                     { <SCREEN_NAME> : ( <WIDGET_NAME>, ... ) },
+#                     ...,
+#                  ...}
+#                  }
 #                }
 poll_widgets = { 4 : {
     40 : { "welcome" : [ "clock" ] },
-    20 : { "welcome" : [ "clock" ] },    
+    20 : { "welcome" : [ "clock" ] },
     },
                  }
 
@@ -646,7 +651,7 @@ def get_info( item, list ):
 
     return info
 
-    
+
 class PluginInterface( plugin.DaemonPlugin ):
     """
     Display context info in LCD using lcdproc daemon.
@@ -664,20 +669,20 @@ class PluginInterface( plugin.DaemonPlugin ):
     yourself, just take a look in src/plugins/lcd.py, the variable is
     "layouts". If you add support for your dimensions, please send a patch to
     the list freevo-devel@lists.sourceforge.net, or if you weren't able, just
-    ask for it there.    
-    
+    ask for it there.
+
        To activate this plugin, just put the following line at the end of your
     local_conf.py file:
 
     plugin.activate( 'lcd' )
-       
+
     """
     __author__           = 'Gustavo Sverzut Barbieri'
-    __author_email__     = 'gustavo@linuxdicas.com.br'
+    __author_email__     = 'barbieri@gmail.com'
     __maintainer__       = __author__
     __maintainer_email__ = __author_email__
     __version__          = '$Revision$'
-    
+
     def __init__( self ):
         """
         init the lcd
@@ -687,16 +692,16 @@ class PluginInterface( plugin.DaemonPlugin ):
             self.lcd = pylcd.client()
             cm = self.lcd.connect()
         except:
-            print String(_( "ERROR" )) + ":" + String(_( "LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?" ))
+            log.error( String(_( "LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?" )) )
             self.disable = 1
             return
-        
+
         if config.DEBUG > 0:
             print String(_( "Connecting to LCD: %s" )) % cm
-            print String(_( "Info as know by the LCD module:" ))
+            print String(_( "Info as known by the LCD module:" ))
             self.lcd.getinfo()
             print ""
-            
+
         self.poll_interval = 10
         self.poll_menu_only = 0
         self.disable = 0
@@ -704,28 +709,40 @@ class PluginInterface( plugin.DaemonPlugin ):
         self.width  = self.lcd.d_width
         self.playitem = None
         self.generate_screens()
-        if self.disable:            
+        if self.disable:
             return
         else:
             self.event_listener = 1
-            
+        sversion = self.lcd.s_version
+        if sversion.startswith( "0.5" ):
+            self.prio_map = { "high": "foreground",
+                              "normal": "background",
+                              "low": "info" }
+        elif sversion.startswith( "0.4" ):
+            self.prio_map = { "high": "64",
+                              "normal": "128",
+                              "low": "192" }
+        else:
+            self.disable = 1
+            log.warning( "Unsupported LCDd version: %s" % ( sversion, ) )
+
         plugin.register( self, "lcd" )
 
 
-        
         # Show welcome screen:
         for w in self.screens[ "welcome" ]:
-            type, param, val = self.screens[ "welcome" ][ w ]            
+            type, param, val = self.screens[ "welcome" ][ w ]
             if val: param = param % eval( val )
 
             try:
                 self.lcd.widget_set( "welcome", w, param.encode( 'latin1' ) )
             except UnicodeError:
                 self.lcd.widget_set( "welcome", w, param )
-                
-        self.lcd.screen_set( "welcome", "-priority 192 -duration 2 -heartbeat off" )
+
+        self.lcd.screen_set( "welcome", "-priority %s -duration 2 -heartbeat off" % \
+                             ( self.prio_map[ "low" ] ) )
         self.last_screen = "welcome"
-        
+
         self.lsv = { } # will hold last screen value (lsv)
 
     def close( self ):
@@ -734,7 +751,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         It terminates the connection with the server
         """
         #self.lcd.send( "bye" )
-        
+
     def draw( self, ( type, object ), osd ):
         """
         'Draw' the information on the LCD display.
@@ -753,7 +770,7 @@ class PluginInterface( plugin.DaemonPlugin ):
             sname = type
 
         if not self.screens.has_key( sname ):
-	    sname = 'menu'
+            sname = 'menu'
 
         if sname != self.last_screen:
             # recreate screen
@@ -764,7 +781,7 @@ class PluginInterface( plugin.DaemonPlugin ):
             self.generate_screen( sname )
             self.lsv = { } # reset last changed values
 
-        if type == 'menu':   
+        if type == 'menu':
             menu  = object.menustack[ -1 ]
             title = menu.selected.name
             if isinstance( menu.selected, MenuItem ):
@@ -790,17 +807,17 @@ class PluginInterface( plugin.DaemonPlugin ):
                     title = String(menu.selected.getattr( 'name' ))
                 if menu.selected.getattr( 'trackno' ):
                     title = "%s - %s" % ( String(menu.selected.getattr( 'trackno' )), title )
-                    
+
         elif type == 'player':
             player = object
             title  = player.getattr( 'title' )
             if not title:
                 title = String(player.getattr( 'name' ))
-                
+
             if player.type == 'audio':
                 if player.getattr( 'trackno' ):
                     title = "%s - %s" % ( String(player.getattr( 'trackno' )), title )
-                    
+
             elif player.type == 'video':
                 length = player.getattr( 'length' )
                 elapsed = player.elapsed
@@ -814,7 +831,7 @@ class PluginInterface( plugin.DaemonPlugin ):
                 except:
                     percentage = None
 
-            
+
         elif type == 'tv':
             tv = copy.copy( object.selected )
 
@@ -824,11 +841,11 @@ class PluginInterface( plugin.DaemonPlugin ):
             else:
                 tv.start = time.localtime( tv.start )
                 tv.stop  = time.localtime( tv.stop )
-                
+
                 tv.start = "% 2d:%02d" % ( tv.start[ 3 ], tv.start[ 4 ] )
                 tv.stop  = "% 2d:%02d" % ( tv.stop[ 3 ], tv.stop[ 4 ] )
 
-            
+
         s = self.screens[ sname ]
         for w in s:
             t, param, val = s[ w ]
@@ -850,14 +867,16 @@ class PluginInterface( plugin.DaemonPlugin ):
                     self.lcd.widget_set( sname, w, param.encode( 'latin1' ) )
                 except UnicodeError:
                     self.lcd.widget_set( sname, w, param )
-                
-                                     
+
+
         if self.last_screen != sname:
-            self.lcd.screen_set( self.last_screen, "-priority 128" )
-            self.lcd.screen_set( sname, "-priority 64" )
+            self.lcd.screen_set( self.last_screen, "-priority %s" % \
+                             ( self.prio_map[ "normal" ] ) )
+            self.lcd.screen_set( sname, "-priority %s" % \
+                             ( self.prio_map[ "high" ] ) )
             self.last_screen = sname
 
-        
+
     def poll( self ):
         if self.disable: return
 
@@ -871,7 +890,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         for s in screens:
             widgets = screens[ s ]
-            
+
             for w in widgets:
                 type, param, val = self.screens[ s ][ w ]
 
@@ -880,7 +899,7 @@ class PluginInterface( plugin.DaemonPlugin ):
                     self.lcd.widget_set( s, w, param.encode( 'latin1' ) )
                 except UnicodeError:
                     self.lcd.widget_set( s, w, param )
-        
+
 
     def generate_screens( self ):
         screens = None
@@ -889,7 +908,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         # Find a screen
         # find a display with 'l' lines
         while not screens:
-            try:                
+            try:
                 screens = layouts[ l ]
             except KeyError:
                 _debug_( _( "WARNING" ) + ": " + _( "Could not find screens for %d lines LCD!" ) % l )
@@ -910,7 +929,7 @@ class PluginInterface( plugin.DaemonPlugin ):
                     self.disable = 1
                     return
 
-        
+
         self.lines = l
         self.columns = c
         try:
@@ -920,7 +939,7 @@ class PluginInterface( plugin.DaemonPlugin ):
             print String(_( "ERROR" )) + ": " + String(_( "No screens found for this LCD (%dx%d)!" )) % ( self.height, self.width )
             self.disable = 1
             return
-        
+
         for s in screens:
             self.generate_screen( s )
 
@@ -928,7 +947,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
     def generate_screen( self, s ):
         if not self.screens.has_key( s ):
-	    s = 'menu'
+            s = 'menu'
         self.lcd.screen_add( s )
         widgets = self.screens[ s ]
         self.lcd.screen_set( s, "-heartbeat off" )
@@ -937,7 +956,7 @@ class PluginInterface( plugin.DaemonPlugin ):
             type, param, val = self.screens[ s ][ w ]
             self.lcd.widget_add( s, w, type )
 
-        
+
     def eventhandler( self, event, menuw=None ):
         if event == PLAY_START:
             self.playitem = event.arg
