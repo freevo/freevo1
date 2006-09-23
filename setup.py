@@ -19,7 +19,8 @@ from distutils import core
 check_libs((('mmpython', 'http://www.sf.net/projects/mmpython' ),
             ('pygame', 'http://www.pygame.org'),
             ('Image', 'http://www.pythonware.com/products/pil/'),
-            ('twisted', 'http://www.twistedmatrix.com/')))
+            ('twisted', 'http://www.twistedmatrix.com/'),
+            ('twisted.web.microdom', 'http://www.twistedmatrix.com/')))
 
 
 class Runtime(core.Command):

@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# util/distutils.py - Freevo distutils for installing plugins
+# util/distribution.py - Freevo distribution for installing plugins
 # -----------------------------------------------------------------------
 # $Id$
 #
