@@ -269,7 +269,7 @@ def xmame_semimajor_version( mame_cmd ) :
         print 'Unable to get mame version.'
 	return FALSE
 
-    this_re = re.compile( ".*version\s+(\d+)\.(\d+)\.(\d+)\s+" )
+    this_re = re.compile( ".*version\s+(\d+)\.(\d+)\s+" )
 
     for line in verinfo.readlines() :
         if this_re.match( line ) :
