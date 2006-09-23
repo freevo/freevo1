@@ -213,11 +213,11 @@ class OSDFont:
     def __getfont__(self, filename, ptsize):
         ptsize = int(ptsize / 0.7)  # XXX pygame multiplies by 0.7 for some reason
 
-        _debug_('Loading font "%s"' % filename, 2)
-
         if hasattr(config, 'OSD_FORCE_FONT') and config.OSD_FORCE_FONT:
             filename = config.OSD_FORCE_FONT
-            ptsize *= 1.5
+            ptsize *= hasattr(config, 'OSD_FORCE_SIZE') and config.OSD_FORCE_SIZE or 1.5
+
+        _debug_('Loading font "%s"' % filename, 2)
 
         font   = self.__loadfont__(filename, ptsize)
         if not font:
