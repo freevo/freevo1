@@ -50,6 +50,7 @@ import string
 import re
 import thread
 
+import rc         # To post events
 import config     # Configuration handler. reads config file.
 import util       # Various utilities
 import plugin
@@ -104,15 +105,28 @@ class RadioPlayer:
         print 'RadioPlayer.play() %s' % self.item.station
             
         self.mode    = 'play'
+
         mixer = plugin.getbyname('MIXER')
         if mixer:
-            mixer.setLineinVolume(config.TV_IN_VOLUME)
-            mixer.setIgainVolume(config.TV_IN_VOLUME)
-            mixer.setMicVolume(config.TV_IN_VOLUME)
+            if hasattr(config, 'RADIO_IN_VOLUME'):
+                mixer_vol = config.RADIO_IN_VOLUME
+            else:
+                mixer_vol = config.TV_IN_VOLUME
+            mixer.setLineinVolume(mixer_vol)
+            mixer.setIgainVolume(mixer_vol)
+            mixer.setMicVolume(mixer_vol)
+        #print 'RadioPlayer mixer is %s' % mixer
+
+        if config.RADIO_CMD.find('ivtv-radio') >= 0:
+            # IVTV cards
+            print '%s -f %s &' % (config.RADIO_CMD, self.item.station)
+            os.system('%s -f %s &' % (config.RADIO_CMD, self.item.station))
         else:
-            print 'Radio Player failed to find a mixer'
-        os.system('%s -qf %s' % (config.RADIO_CMD, self.item.station))
+            # BTTV cards
+            print '%s -qf %s' % (config.RADIO_CMD, self.item.station)
+            os.system('%s -qf %s' % (config.RADIO_CMD, self.item.station))
         thread.start_new_thread(self.__update_thread, ())
+
         rc.app(self)
         rc.post_event(PLAY_START)
         return None
@@ -127,22 +141,28 @@ class RadioPlayer:
         mixer = plugin.getbyname('MIXER')
         if mixer:
             mixer.setLineinVolume(0)
-            mixer.setIgainVolume(0)
             mixer.setMicVolume(0)
+            mixer.setIgainVolume(0) # Input on emu10k cards.
+        #else:
+        #    print 'Radio Player failed to find a mixer'
+        if config.RADIO_CMD.find('ivtv-radio') >= 0:
+            # IVTV cards
+            os.system('killall -9 aplay')
         else:
-            print 'Radio Player failed to find a mixer'
-        os.system('%s -qm' % config.RADIO_CMD)
+            # BTTV cards
+            os.system('%s -qm' % config.RADIO_CMD)
+
         rc.post_event(PLAY_END)
         rc.app(None)
 
 
     def is_playing(self):
-        print 'Radio Player IS PLAYING?'
+        #print 'Radio Player IS PLAYING?'
         return self.mode == 'play'
 
 
     def refresh(self):
-        print 'Radio Player refresh'
+        #print 'Radio Player refresh'
         self.item.elapsed = int(time.time() - self.starttime)
         self.playerGUI.refresh()
 
@@ -155,7 +175,6 @@ class RadioPlayer:
         if event in ( STOP, PLAY_END, USER_END ):
             self.playerGUI.stop()
             return self.item.eventhandler(event)
-
         else:
             # everything else: give event to the items eventhandler
             return self.item.eventhandler(event)
