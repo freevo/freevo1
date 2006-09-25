@@ -250,7 +250,7 @@ class Videodev:
 
 
     def getfmt(self):  
-        val = struct.pack( FMT_ST, 0,0,0,0,0,0,0,0)
+        val = struct.pack( FMT_ST, 1L,0,0,0,0,0,0,0)
         r = fcntl.ioctl(self.device, i32(GET_FMT_NO),val)
         return struct.unpack( FMT_ST, r )
 
