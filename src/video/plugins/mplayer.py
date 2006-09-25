@@ -245,14 +245,16 @@ class MPlayer:
         if item.selected_subtitle == -1:
             additional_args += [ '-noautosub' ]
 
-        elif item.selected_subtitle and mode == 'file':
-            if os.path.isfile(os.path.splitext(item.filename)[0]+'.idx'):
+        elif item.selected_subtitle:
+            if mode == 'file':
+                if os.path.isfile(os.path.splitext(item.filename)[0]+'.idx'):
+                    additional_args += [ '-vobsubid', str(item.selected_subtitle) ]
+                else:
+                    additional_args += [ '-sid', str(item.selected_subtitle) ]
+            elif mode == 'dvd':
                 additional_args += [ '-vobsubid', str(item.selected_subtitle) ]
             else:
                 additional_args += [ '-sid', str(item.selected_subtitle) ]
-                
-        elif item.selected_subtitle:
-            additional_args += [ '-sid', str(item.selected_subtitle) ]
             
         if item.selected_audio != None:
             additional_args += [ '-aid', str(item.selected_audio) ]

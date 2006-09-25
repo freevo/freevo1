@@ -81,13 +81,18 @@ def audio_selection_menu(arg=None, menuw=None):
         if not a.has_key('id') or a['id'] in ('', None):
             a['id'] = item.info['audio'].index(a) + 1
         
-        if not a.has_key('language') or not a['language']:
+        if a.has_key('languagedesc') and a['languagedesc']:
+            a['language'] = a['languagedesc']
+        elif not a.has_key('language') or not a['language']:
             a['language'] = _('Stream %s') % a['id']
 
         if not a.has_key('channels') or not a['channels']:
             a['channels'] = 2 # wild guess :-)
 
-        txt = '%s (channels=%s)' % (a['language'], a['channels'])
+        if not a.has_key('codec') or not a['codec']:
+            a['codec'] = '???'
+
+        txt = '%s (channels=%s:%s)' % (a['language'], a['channels'], a['codec'])
         menu_items.append(menu.MenuItem(txt, audio_selection, (item, a['id'])))
 
     moviemenu = menu.Menu(_('Audio Menu'), menu_items, fxd_file=item.skin_fxd)
