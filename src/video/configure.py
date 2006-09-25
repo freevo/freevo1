@@ -111,9 +111,28 @@ def subtitle_selection_menu(arg=None, menuw=None):
     item       = arg
 
     menu_items = [ menu.MenuItem(_('no subtitles'), subtitle_selection, (item, -1)) ]
-    for s in range(len(item.info['subtitles'])):
-        menu_items.append(menu.MenuItem(item.info['subtitles'][s],
-                                        subtitle_selection, (item, s)))
+    try:
+        for s in item.info['subtitles']:
+            print 'languagedesc=%s language=%s content=%s' % (s['languagedesc'], s['language'], s['content'])
+            if s.has_key('languagedesc') and s['languagedesc']:
+                s['language'] = s['languagedesc']
+            elif not s.has_key('language') or not s['language']:
+                s['language'] = _('Stream %s') % s['id']
+
+            if not s.has_key('content') or not s['content']:
+                s['content'] = ''
+            if s['content'] == 'Undefined':
+                s['content'] = ''
+            if s['content'] != '':
+                s['content'] = format(' (%s)' % s['content'])
+
+            txt = '%s%s' % (s['language'], s['content'])
+            menu_items.append(menu.MenuItem(txt, subtitle_selection, (item, s['number'])))
+    except AttributeError:
+        for s in range(len(item.info['subtitles'])):
+            menu_items.append(menu.MenuItem(item.info['subtitles'][s],
+                                            subtitle_selection, (item, s)))
+
     moviemenu = menu.Menu(_('Subtitle Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
 
