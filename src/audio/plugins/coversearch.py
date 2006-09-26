@@ -187,7 +187,7 @@ class PluginInterface(plugin.ItemPlugin):
             cover = amazon.searchByKeyword(search_string , product_line="music")
         except amazon.AmazonError:
             box.destroy()
-            dict_tmp = { "artist": String(artist), "album": String(album) }
+            dict_tmp = { "artist": artist.encode('ascii','replace'), "album": album.encode('ascii','replace') }
             box = PopupBox(text=_( 'No matches for %(artist)s - %(album)s' ) % dict_tmp )
             box.show()
             time.sleep(2)
