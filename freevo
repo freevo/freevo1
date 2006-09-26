@@ -467,7 +467,4 @@ if getpid(name, python + proc)[1] and check:
         print 'freevo still running, run \'freevo stop\' to stop'
     sys.exit(0)
 
-if python[0].find('python') != -1:
-    python = [ python[0] , '-OO' ] + python[1:]
-
 start(name, python + proc , bg, check)
