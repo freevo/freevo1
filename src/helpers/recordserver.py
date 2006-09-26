@@ -705,14 +705,33 @@ class RecordServer(xmlrpc.XMLRPC):
             # if prog.start <= last and favorite:
             (isFav, favorite) = self.isProgAFavorite(prog, favs)
             if prog.start <= last and isFav:
-                self.removeScheduledRecording(prog)
+                # do not yet remove programs that are currently being recorded:
+                try:
+                    rec_now = prog.isRecording
+                except:
+                    rec_now = False
+
+                if rec_now:
+                    _debug_("not removing currently recorded favorite")
+                else:
+                    self.removeScheduledRecording(prog)
     
         for ch in guide.chan_list:
             for prog in ch.programs:
                 (isFav, favorite) = self.isProgAFavorite(prog, favs)
                 if isFav:
-                    prog.isFavorite = favorite
-                    self.scheduleRecording(prog)
+                    # do not schedule favorites that are currently being recorded:
+                    try:
+                        rec_now = prog.isRecording
+                    except:
+                        rec_now = False
+
+                    if rec_now:
+                        _debug_("not scheduling currently recorded favorite")
+                    else:
+                        prog.isFavorite = favorite
+                        self.scheduleRecording(prog)
+
 
         return (TRUE, 'favorites schedule updated')
     
