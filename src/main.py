@@ -125,6 +125,12 @@ except ImportError:
     print 'Please update mmpython to version 0.4.3 or higher'
     print
     sys.exit(0)
+
+if mmpython.version.CHANGED < 20060926:
+    print 'Warning: Installed mmpython version is old.'
+    print 'Please update mmpython to version 0.4.10 or higher, get it with subversion'
+    print 'svn export svn://svn.freevo.org/kaa/branches/mmpython-0-4/mmpython mmpython-0.4.10'
+    print
     
 import util    # Various utilities
 import osd     # The OSD class, used to communicate with the OSD daemon
