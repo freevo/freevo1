@@ -217,20 +217,20 @@ layouts = { 4 : # 4 lines display
                                   "9 3 %d 3 m 3 \"%s%s\"",
                                   "( self.width, player.getattr('artist'), self.get_sepstrmscroll(player.getattr('artist')) )" ),
                   "time_v1"   : ( "string",
-                                  "2 4 '% 2d:%02d/'",
+                                  "2 4 \"% 2d:%02d/\"",
                                   "( int(player.length / 60), int(player.length % 60) )" ),
                   "time_v2"   : ( "string",
-                                  "8 4 '% 2d:%02d'",
+                                  "8 4 \"% 2d:%02d\"",
                                   "( int(player.elapsed / 60), int(player.elapsed % 60) )" ),
                   "time_v3"   : ( "string",
-                                  "14 4 '( %2d%%)'",
+                                  "14 4 \"( %2d%%)\"",
                                   "( int(player.elapsed * 100 / player.length) )" ),
-                  "timebar1_v": ( "string", "21 4 '['", None),
-                  "timebar2_v": ( "string", "40 4 ']'", None),
+                  "timebar1_v": ( "string", "21 4 \"[\"", None),
+                  "timebar2_v": ( "string", "40 4 \"]\"", None),
                   "timebar3_v": ( "hbar",
-                                  "22 4 '%d'","(int(player.elapsed *90 / player.length))"),
+                                  "22 4 \"%d\"","(int(player.elapsed *90 / player.length))"),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 4 '%s'",
+                  "animation_v": ( "string", "1 4 \"%s\"",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
@@ -255,20 +255,20 @@ layouts = { 4 : # 4 lines display
                                   "9 3 %d 3 m 3 \"%s%s\"",
                                   "( self.width, player.getattr('genre'), self.get_sepstrmscroll(player.getattr('genre')) )" ),
                   "time_v1"   : ( "string",
-                                  "2 4 '%s/'",
+                                  "2 4 \"%s/\"",
                                   "( length )" ),
                   "time_v2"   : ( "string",
-                                  "10 4 '%s'",
+                                  "10 4 \"%s\"",
                                   "( elapsed )" ),
                   "time_v3"   : ( "string",
-                                   "18 4 '( %2d%%)'",
+                                   "18 4 \"( %2d%%)\"",
                                    "( int( percentage * 100 ) )" ),
-                  "timebar1_v": ( "string", "26 4 '['", None),
-                  "timebar2_v": ( "string", "40 4 ']'", None),
+                  "timebar1_v": ( "string", "26 4 \"[\"", None),
+                  "timebar2_v": ( "string", "40 4 \"]\"", None),
                   "timebar3_v": ( "hbar",
-                                  "27 4 '%d'","( int( percentage * 70 ) )"),
+                                  "27 4 \"%d\"","( int( percentage * 70 ) )"),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 4 '%s'",
+                  "animation_v": ( "string", "1 4 \"%s\"",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
@@ -344,19 +344,19 @@ layouts = { 4 : # 4 lines display
                                   "1 3 %d 3 m 3 \"%s%s\"",
                                   "( self.width, player.getattr('artist'), self.get_sepstrmscroll(player.getattr('artist')) )" ),
                   "time_v1"   : ( "string",
-                                  "2 4 '% 2d:%02d/'",
+                                  "2 4 \"% 2d:%02d/\"",
                                   "( int(player.length / 60), int(player.length % 60) )" ),
                   "time_v2"   : ( "string",
-                                  "8 4 '% 2d:%02d'",
+                                  "8 4 \"% 2d:%02d\"",
                                   "( int(player.elapsed / 60), int(player.elapsed % 60) )" ),
                   "time_v3"   : ( "string",
-                                  "14 4 '( %2d%%)'",
+                                  "14 4 \"( %2d%%)\"",
                                   "( int(player.elapsed * 100 / player.length) )" ),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 4 '%s'",
+                  "animation_v": ( "string", "1 4 \"%s\"",
                                    "animation_audioplayer_chars[player.elapsed % len(animation_audioplayer_chars)]")
 #                  "animation_v": ( "hbar",
-#                                  "1 4 '%d'","(int(player.elapsed *90 / player.length))")
+#                                  "1 4 \"%d\"","(int(player.elapsed *90 / player.length))")
                   },
 
                 "video_player"  :
@@ -370,13 +370,13 @@ layouts = { 4 : # 4 lines display
                                   "1 3 %d 3 m 3 \"%s%s\"",
                                   "( self.width, player.getattr('genre'), self.get_sepstrmscroll(player.getattr('genre')) )" ),
                   "time_v1"   : ( "string",
-                                  "3 4 '%s /'",
+                                  "3 4 \"%s /\"",
                                   "( length )" ),
                   "time_v2"   : ( "string",
-                                  "12 4 '%s'",
+                                  "12 4 \"%s\"",
                                   "( elapsed )" ),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 4 '%s'",
+                  "animation_v": ( "string", "1 4 \"%s\"",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
@@ -422,13 +422,13 @@ layouts = { 4 : # 4 lines display
                                    "1 1 %d 1 m 3 \"%s%s\"",
                                    "( self.width, title, self.get_sepstrmscroll(title) )" ),
                   "time_v1"   : ( "string",
-                                  "2 2 '% 2d:%02d/'",
+                                  "2 2 \"% 2d:%02d/\"",
                                   "( int(player.length / 60), int(player.length % 60) )" ),
                   "time_v2"   : ( "string",
-                                  "8 2 '% 2d:%02d'",
+                                  "8 2 \"% 2d:%02d\"",
                                   "( int(player.elapsed / 60), int(player.elapsed % 60) )" ),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 2 '%s'",
+                  "animation_v": ( "string", "1 2 \"%s\"",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                    },
@@ -438,13 +438,13 @@ layouts = { 4 : # 4 lines display
                                   "1 1 %d 1 m 3 \"%s%s\"" ,
                                   "( self.width, title, self.get_sepstrmscroll(title) )" ),
                   "time_v2"   : ( "string",
-                                  "2 2 '%s'",
+                                  "2 2 \"%s\"",
                                   "( elapsed )" ),
                   "time_v3"   : ( "string",
-                                   "11 2 '( %2d%%)'",
+                                   "11 2 \"( %2d%%)\"",
                                    "( int( percentage * 100 ) )" ),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 2 '%s'",
+                  "animation_v": ( "string", "1 2 \"%s\"",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
@@ -482,16 +482,16 @@ layouts = { 4 : # 4 lines display
                                    "1 1 %d 1 m 3 \"%s%s\"",
                                    "( self.width, title, self.get_sepstrmscroll(title) )" ),
                   "time_v1"   : ( "string",
-                                  "2 2 '% 2d:%02d/'",
+                                  "2 2 \"% 2d:%02d/\"",
                                   "( int(player.length / 60), int(player.length % 60) )" ),
                   "time_v2"   : ( "string",
-                                  "8 2 '% 2d:%02d'",
+                                  "8 2 \"% 2d:%02d\"",
                                   "( int(player.elapsed / 60), int(player.elapsed % 60) )" ),
                   "time_v3"   : ( "string",
-                                  "14 2 '( %2d%%)'",
+                                  "14 2 \"( %2d%%)\"",
                                   "( int(player.elapsed * 100 / player.length) )" ),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 2 '%s'",
+                  "animation_v": ( "string", "1 2 \"%s\"",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                    },
@@ -501,13 +501,13 @@ layouts = { 4 : # 4 lines display
                                   "1 1 %d 1 m 3 \"%s%s\"",
                                 "( self.width, title, self.get_sepstrmscroll(title) )" ),
                   "time_v1"   : ( "string",
-                                  "3 2 '%s /'",
+                                  "3 2 \"%s /\"",
                                   "( length )" ),
                   "time_v2"   : ( "string",
-                                  "12 2 '%s'",
+                                  "12 2 \"%s\"",
                                   "( elapsed )" ),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 2 '%s'",
+                  "animation_v": ( "string", "1 2 \"%s\"",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
@@ -554,20 +554,20 @@ layouts = { 4 : # 4 lines display
                                   "8 1 %d 1 m 3 \"%s%s\"",
                                 "( self.width, title, self.get_sepstrmscroll(title) )" ),
                   "time_v1"   : ( "string",
-                                  "2 2 '% 2d:%02d/'",
+                                  "2 2 \"% 2d:%02d/\"",
                                   "( int(player.length / 60), int(player.length % 60) )" ),
                   "time_v2"   : ( "string",
-                                  "8 2 '% 2d:%02d'",
+                                  "8 2 \"% 2d:%02d\"",
                                   "( int(player.elapsed / 60), int(player.elapsed % 60) )" ),
                   "time_v3"   : ( "string",
-                                  "14 2 '( %2d%%)'",
+                                  "14 2 \"( %2d%%)\"",
                                   "( int(player.elapsed * 100 / player.length) )" ),
-                  "timebar1_v": ( "string", "21 2 '['", None),
-                  "timebar2_v": ( "string", "40 2 ']'", None),
+                  "timebar1_v": ( "string", "21 2 \"[\"", None),
+                  "timebar2_v": ( "string", "40 2 \"]\"", None),
                   "timebar3_v": ( "hbar",
-                                  "22 2 '%d'","(int(player.elapsed * 90 / player.length))"),
+                                  "22 2 \"%d\"","(int(player.elapsed * 90 / player.length))"),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 2 '%s'",
+                  "animation_v": ( "string", "1 2 \"%s\"",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
@@ -581,20 +581,20 @@ layouts = { 4 : # 4 lines display
                                   "9 1 %d 1 m 3 \"%s%s\"",
                                 "( self.width, title, self.get_sepstrmscroll(title) )" ),
                   "time_v1"   : ( "string",
-                                  "2 2 '%s/'",
+                                  "2 2 \"%s/\"",
                                   "( length )" ),
                   "time_v2"   : ( "string",
-                                  "10 2 '%s'",
+                                  "10 2 \"%s\"",
                                   "( elapsed )" ),
                   "time_v3"   : ( "string",
-                                   "18 2 '( %2d%%)'",
+                                   "18 2 \"( %2d%%)\"",
                                    "( int( percentage * 100 ) )" ),
-                  "timebar1_v": ( "string", "26 2 '['", None),
-                  "timebar2_v": ( "string", "40 2 ']'", None),
+                  "timebar1_v": ( "string", "26 2 \"[\"", None),
+                  "timebar2_v": ( "string", "40 2 \"]\"", None),
                   "timebar3_v": ( "hbar",
-                                  "27 2 '%d'","( int( percentage * 70 ) )"),
+                                  "27 2 \"%d\"","( int( percentage * 70 ) )"),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "1 2 '%s'",
+                  "animation_v": ( "string", "1 2 \"%s\"",
                                    "animation_audioplayer_chars[" +
                                    " player.elapsed % len(animation_audioplayer_chars)]")
                   },
@@ -827,7 +827,7 @@ class PluginInterface( plugin.DaemonPlugin ):
                 else:
                     elapsed = '%d:%02d' % ( elapsed / 60, elapsed % 60)
                 try:
-                    percentage = float( player.elapsed / player.info.video[0].length )
+                    percentage = float( player.elapsed / player.length )
                 except:
                     percentage = None
 
