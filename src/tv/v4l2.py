@@ -346,3 +346,20 @@ class V4LGroup:
         self.inuse = FALSE
 
 
+'''
+To run this as standalone use the following before running python v4l2.py
+pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
+export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
+export FREEVO_SHARE=/usr/share/freevo
+export FREEVO_CONFIG=/usr/share/freevo/freevo_config.py
+export FREEVO_CONTRIB=/usr/share/freevo/contrib
+export RUNAPP=""
+'''
+
+if __name__ == '__main__':
+    print 'DEBUG=%s' % (config.DEBUG)
+    viddev=Videodev('/dev/video0')
+    inp = viddev.getinput()
+    print 'viddev.getinput=%s' % (inp)
+    viddev.setinput(inp)
+    print 'viddev.setinput okay'
