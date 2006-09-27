@@ -696,6 +696,35 @@ IMAGEVIEWER_BLEND_MODE = -1
 
 
 # ======================================================================
+# IVTV Xine TV settings:
+# ======================================================================
+
+# -- plugin configuration --
+
+#plugin.remove('tv.mplayer')
+#plugin.activate('tv.ivtv_xine_tv')
+
+# Note: TV_IVTV_OPTIONS must be configured properly
+# Note: FREQUENCY_TABLE must be configured properly
+# Note: XINE_COMMAND must be configured properly
+# Note: XINE_ARGS_DEF must be configured properly
+
+# -- TV/XINE configuration --
+
+# Video output device for TV. For Hauppage PVR x50,
+# use "xxmc" if you have hardware acceleration enabled.
+# Otherwise, see XINE_VO_DEV
+#XINE_TV_VO_DEV = "xxmc"
+
+# Audio output device to use for TV. See XINE_AO_DEV.
+#XINE_TV_AO_DEV = "alsa"
+
+# This specifies the path and filemask that
+# xine uses for timeshifting. File can get
+# quite big (several gigabytes)
+#XINE_TV_TIMESHIFT_FILEMASK = "/tmp/xine-buf-"
+
+# ======================================================================
 # Freevo TV settings:
 # ======================================================================
 
