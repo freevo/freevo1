@@ -54,6 +54,9 @@ import config
 
 DEBUG = config.DEBUG
 
+# Different formats depending on word size
+bit32 = struct.calcsize('L') == struct.calcsize('I')
+
 def i32(x): return (x&0x80000000L and -2*0x40000000 or 0) + int(x&0x7fffffff)
 
 _IOC_NRBITS = 8
@@ -83,8 +86,11 @@ def _IOC(dir,type,nr,size):
            ((size) << _IOC_SIZESHIFT))
 
 def _IO(type,nr): return _IOC(_IOC_NONE,(type),(nr),0)
+
 def _IOR(type,nr,size): return _IOC(_IOC_READ,(type),(nr),struct.calcsize(size))
+
 def _IOW(type,nr,size): return _IOC(_IOC_WRITE,(type),(nr),struct.calcsize(size))
+
 def _IOWR(type,nr,size): return _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),struct.calcsize(size))
 
 # used to decode ioctl numbers..
@@ -93,38 +99,38 @@ def _IOC_TYPE(nr): return (((nr) >> _IOC_TYPESHIFT) & _IOC_TYPEMASK)
 def _IOC_NR(nr): return (((nr) >> _IOC_NRSHIFT) & _IOC_NRMASK)
 def _IOC_SIZE(nr): return (((nr) >> _IOC_SIZESHIFT) & _IOC_SIZEMASK)
 
-FREQUENCY_ST = "III32x"
+FREQUENCY_ST = "<III32x"
 GETFREQ_NO   = _IOWR('V', 56, FREQUENCY_ST)
 SETFREQ_NO   = _IOW('V', 57, FREQUENCY_ST)
 
 SETFREQ_NO_V4L = _IOW('v', 15, "L")
 
-QUERYCAP_ST  = "16s32s32sII16x"
+QUERYCAP_ST  = "<16s32s32sII16x"
 QUERYCAP_NO  = _IOR('V',  0, QUERYCAP_ST)
 
-ENUMSTD_ST   = "LQ24s2LL16x"
+ENUMSTD_ST   = bit32 and "<IQ24s2II16x" or "<QQ24s2II20x"
 ENUMSTD_NO   = _IOWR('V', 25, ENUMSTD_ST)
 
-STANDARD_ST  = "Q"
+STANDARD_ST  = "<Q"
 GETSTD_NO    = _IOR('V', 23, STANDARD_ST)
 SETSTD_NO    = _IOW('V', 24, STANDARD_ST)
 
-ENUMINPUT_ST = "L32sLLLQL16x"
+ENUMINPUT_ST = bit32 and "<I32sIIIQI16x" or "<I32sIIIQI20x"
 ENUMINPUT_NO = _IOWR('V', 26, ENUMINPUT_ST)
 
-INPUT_ST  = "I"
+INPUT_ST     = "<I"
 GETINPUT_NO  = _IOR('V', 38, INPUT_ST)
 SETINPUT_NO  = _IOWR('V', 39, INPUT_ST)
 
-FMT_ST = "L7I4x168x"
-GET_FMT_NO = _IOWR ('V',  4, FMT_ST)
-SET_FMT_NO = _IOWR ('V',  5, FMT_ST)
+FMT_ST       = bit32 and "<I7I4x168x" or "<I7I4x172x"
+GET_FMT_NO   = _IOWR ('V',  4, FMT_ST)
+SET_FMT_NO   = _IOWR ('V',  5, FMT_ST)
 
-TUNER_ST = "L32sLLLLLLll16x"
+TUNER_ST     = "<L32sLLLLLLll16x"
 GET_TUNER_NO = _IOWR ('V', 29, TUNER_ST)
 SET_TUNER_NO = _IOW  ('V', 30, TUNER_ST)
 
-AUDIO_ST = "L32sLL8x"
+AUDIO_ST     = "<L32sLL8x"
 GET_AUDIO_NO = _IOWR ('V', 33, AUDIO_ST)
 SET_AUDIO_NO = _IOW  ('V', 34, AUDIO_ST)
 
@@ -174,6 +180,12 @@ class Videodev:
         return freq
 
 
+    def getfreq2(self):
+        val = struct.pack( FREQUENCY_ST, 0,0,0 )
+        r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
+        return struct.unpack(FREQUENCY_ST, r)
+
+
     def setchannel(self, channel):
         freq = config.FREQUENCY_TABLE.get(channel)
         if freq:
@@ -207,7 +219,7 @@ class Videodev:
 
 
     def setfreq(self, freq):
-        val = struct.pack( FREQUENCY_ST, long(0), long(0), freq)
+        val = struct.pack( FREQUENCY_ST, long(0), long(2), freq)
         r = fcntl.ioctl(self.device, i32(SETFREQ_NO), val)
 
 
@@ -216,8 +228,8 @@ class Videodev:
         return struct.unpack(INPUT_ST,r)[0]
   
 
-    def setinput(self,value):
-        r = fcntl.ioctl(self.device, i32(SETINPUT_NO), struct.pack(INPUT_ST,value))
+    def setinput(self, value):
+        r = fcntl.ioctl(self.device, i32(SETINPUT_NO), struct.pack(INPUT_ST, value))
 
 
     def querycap(self):
@@ -228,7 +240,7 @@ class Videodev:
 
     def enumstd(self, no):
         val = struct.pack( ENUMSTD_ST, no, 0, "", 0, 0, 0)
-        r = fcntl.ioctl(self.device, i32(ENUMSTD_NO),val)
+        r = fcntl.ioctl(self.device, i32(ENUMSTD_NO), val)
         return struct.unpack( ENUMSTD_ST, r )
 
 
@@ -245,41 +257,42 @@ class Videodev:
 
     def enuminput(self,index):
         val = struct.pack( ENUMINPUT_ST, index, "", 0,0,0,0,0)
-        r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO),val)
+        r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO), val)
         return struct.unpack( ENUMINPUT_ST, r )
 
 
     def getfmt(self):  
         val = struct.pack( FMT_ST, 1L,0,0,0,0,0,0,0)
-        r = fcntl.ioctl(self.device, i32(GET_FMT_NO),val)
+        val = struct.pack( FMT_ST, 1,0,0,0,0,0,0,0)
+        r = fcntl.ioctl(self.device, i32(GET_FMT_NO), val)
         return struct.unpack( FMT_ST, r )
 
 
     def setfmt(self, width, height):
         val = struct.pack( FMT_ST, 1L, width, height, 0L, 4L, 0L, 131072L, 0L)
-        r = fcntl.ioctl(self.device, i32(SET_FMT_NO),val)
+        r = fcntl.ioctl(self.device, i32(SET_FMT_NO), val)
 
 
     def gettuner(self,index):
         val = struct.pack( TUNER_ST, index, "", 0,0,0,0,0,0,0,0)
-        r = fcntl.ioctl(self.device, i32(GET_TUNER_NO),val)
+        r = fcntl.ioctl(self.device, i32(GET_TUNER_NO), val)
         return struct.unpack( TUNER_ST, r )
 
 
     def settuner(self,index,audmode):
         val = struct.pack( TUNER_ST, index, "", 0,0,0,0,0,audmode,0,0)
-        r = fcntl.ioctl(self.device, i32(SET_TUNER_NO),val)
+        r = fcntl.ioctl(self.device, i32(SET_TUNER_NO), val)
 
 
     def getaudio(self,index):
         val = struct.pack( AUDIO_ST, index, "", 0,0)
-        r = fcntl.ioctl(self.device, i32(GET_AUDIO_NO),val)
+        r = fcntl.ioctl(self.device, i32(GET_AUDIO_NO), val)
         return struct.unpack( AUDIO_ST, r )
 
 
     def setaudio(self,index,mode):
         val = struct.pack( AUDIO_ST, index, "", mode, 0)
-        r = fcntl.ioctl(self.device, i32(SET_AUDIO_NO),val)
+        r = fcntl.ioctl(self.device, i32(SET_AUDIO_NO), val)
 
 
     def init_settings(self):
@@ -299,7 +312,7 @@ class Videodev:
     def print_settings(self):
         print 'Driver: %s' % self.driver
         print 'Card: %s' % self.card
-        print 'Version: %s' % self.version
+        print 'Version: %x' % self.version
         print 'Capabilities: %s' % self.capabilities
 
         print "Enumerating supported Standards."
@@ -357,9 +370,38 @@ export RUNAPP=""
 '''
 
 if __name__ == '__main__':
-    print 'DEBUG=%s' % (config.DEBUG)
+
+    print 'QUERYCAP_ST=%s %s' % (QUERYCAP_ST, struct.calcsize(QUERYCAP_ST))
+    print 'FREQUENCY_ST=%s %s' % (FREQUENCY_ST, struct.calcsize(FREQUENCY_ST))
+    print 'ENUMSTD_ST=%s %s' % (ENUMSTD_ST, struct.calcsize(ENUMSTD_ST))
+    print 'STANDARD_ST=%s %s' % (STANDARD_ST, struct.calcsize(STANDARD_ST))
+    print 'ENUMINPUT_ST=%s %s' % (ENUMINPUT_ST, struct.calcsize(ENUMINPUT_ST))
+    print 'INPUT_ST=%s %s' % (INPUT_ST, struct.calcsize(INPUT_ST))
+    print 'FMT_ST=%s %s' % (FMT_ST, struct.calcsize(FMT_ST))
+    print 'TUNER_ST=%s %s' % (TUNER_ST, struct.calcsize(TUNER_ST))
+    print 'AUDIO_ST=%s %s' % (AUDIO_ST, struct.calcsize(AUDIO_ST))
+
     viddev=Videodev('/dev/video0')
+    viddev.print_settings()
+    print 
+    print viddev.querycap()
     inp = viddev.getinput()
     print 'viddev.getinput=%s' % (inp)
     viddev.setinput(inp)
     print 'viddev.setinput okay'
+    fmt = viddev.getfmt()
+    (buf_type, width, height, pixelformat, field, bytesperline,
+         sizeimage, colorspace) = fmt
+    print 'viddev.getfmt=%s' % (buf_type)
+    print viddev.enuminput(inp)
+    for i in range(0,99):
+        try:
+            print viddev.gettuner(i)
+        except IOError:
+            break
+    print viddev.getaudio(0)
+    print viddev.setfreq(2132)
+    print viddev.getfreq()
+    print viddev.setfreq(8948)
+    print viddev.getfreq()
+    print viddev.getfreq2()
