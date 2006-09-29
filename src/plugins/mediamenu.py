@@ -173,6 +173,9 @@ class MediaMenu(Item):
                                 reachable = 0
                         except:
                             traceback.print_exc()
+                elif not os.path.isdir(filename):
+                    print '\"%s\" is not a directory or doesn\'t exist' % (filename)
+                    reachable = 0
                        
                 if reachable:
                     if vfs.isdir(filename):
