@@ -247,6 +247,34 @@ class MenuWidget(GUIObject):
         self.refresh()
 
     
+    def goto_media_menu(self,media='audio'):
+        """
+        Go to a main menu item
+        media = 'audio' or 'video' or 'image'
+        used for events:
+            MENU_GOTO_AUDIOMENU
+            MENU_GOTO_VIDEOMENU
+            MENU_GOTO_IMAGEMENU
+        """        
+        #1:goto main menu.
+        #2:loop through main menu items.
+        #the arg of a media menu item is 'audio' or 'video' or 'image'
+        #select.
+        self.menustack = [self.menustack[0]]
+        menu = self.menustack[0]
+        self.init_page()
+        #self.goto_main_menu()
+        for menuitem in self.menustack[0].choices:
+            try:
+                if menuitem.arg[0] == media:
+                    menuitem.select(menuw=self)
+                    return
+            except AttributeError: # may have no .arg (no media menu)
+                pass
+            except TypeError: # .arg may be not indexable
+                pass
+
+    
     def goto_prev_page(self, arg=None, menuw=None):
         menu = self.menustack[-1]
 
@@ -372,6 +400,18 @@ class MenuWidget(GUIObject):
 
         if event == MENU_GOTO_MAINMENU:
             self.goto_main_menu()
+            return
+        
+        if event == MENU_GOTO_VIDEOS:
+            self.goto_media_menu("video")
+            return
+        
+        if event == MENU_GOTO_MUSIC:
+            self.goto_media_menu("audio")
+            return
+        
+        if event == MENU_GOTO_IMAGES:
+            self.goto_media_menu("image")
             return
         
         if event == MENU_BACK_ONE_MENU:

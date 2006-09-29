@@ -134,6 +134,9 @@ MENU_PAGEDOWN          = Event('MENU_PAGEDOWN')
 MENU_REBUILD           = Event('MENU_REBUILD')
                        
 MENU_GOTO_MAINMENU     = Event('MENU_GOTO_MAINMENU')
+MENU_GOTO_VIDEOS       = Event('MENU_GOTO_VIDEOS')
+MENU_GOTO_MUSIC        = Event('MENU_GOTO_MUSIC')
+MENU_GOTO_IMAGES       = Event('MENU_GOTO_IMAGES')
 MENU_BACK_ONE_MENU     = Event('MENU_BACK_ONE_MENU')
                        
 MENU_SELECT            = Event('MENU_SELECT')
@@ -464,10 +467,10 @@ IMAGE_ZOOM_EVENTS = {
     'EXIT'      : STOP,
     'PLAY'      : PLAY,
     'PAUSE'     : PAUSE,
-    'LEFT'      : Event(IMAGE_MOVE, arg=(-10,  0)),
-    'RIGHT'     : Event(IMAGE_MOVE, arg=( 10,  0)),
-    'UP'        : Event(IMAGE_MOVE, arg=(  0,-10)),
-    'DOWN'      : Event(IMAGE_MOVE, arg=(  0, 10)),
+    'LEFT'      : Event(IMAGE_MOVE, arg=(-60,  0)),
+    'RIGHT'     : Event(IMAGE_MOVE, arg=( 60,  0)),
+    'UP'        : Event(IMAGE_MOVE, arg=(  0,-60)),
+    'DOWN'      : Event(IMAGE_MOVE, arg=(  0, 60)),
     '1'         : IMAGE_ZOOM_GRID1,
     '2'         : IMAGE_ZOOM_GRID2,
     '3'         : IMAGE_ZOOM_GRID3,
