@@ -810,11 +810,24 @@ IMAGEVIEWER_BLEND_MODE = -1
 # TV_RECORD_SERVER_IP = 'localhost'
 # TV_RECORD_SERVER_PORT = 18001
 
-# start every recording X minutes before scheduled,
+# Start every recording X minutes before scheduled,
 # and stop X minutes after scheduled - default to zero minutes.
 # This must be a value in seconds although at the moment only has
 # the percision of one minute.
 # TV_RECORD_PADDING = 0 * 60
+
+# Warn before shutting down the system if the next recording is
+# scheduled for starting in less than this number of seconds:
+# WARN_SHUTDOWN = 15 * 60 # quarter hour
+# (This has no extra effect if CONFIRM_SHUTDOWN is set, since then
+#  the shutdown is already confirmed.)
+
+# On Freevo shutdown, use nvram-wakeup to program the computer to
+# wakeup / boot up right before the next recording:
+# USE_NVRAM_WAKEUP    = 1
+
+# If using nvram-wakeup, time in seconds to startup before recording:
+# BOOTTIME_PADDING    = 2 * 60
 
 # VCR_AUDIO = (':adevice=%s' % AUDIO_DEVICE +
 #              ':audiorate=32000' +         # 44100 for better sound

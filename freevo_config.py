@@ -303,6 +303,24 @@ RESTART_SYS_CMD  = 'shutdown -r now'  # like SHUTDOWN_SYS_CMD, only for reboot
 ENABLE_SHUTDOWN_SYS = 0  # Performs a whole system shutdown at SHUTDOWN!
                          # For standalone boxes.
 
+# Warn before shutting down the system if the next recording is
+# scheduled for starting in less than this number of seconds:
+WARN_SHUTDOWN = 15 * 60
+
+# On Freevo shutdown, use nvram-wakeup to program the computer to
+# wakeup / boot up right before the next recording:
+USE_NVRAM_WAKEUP = 0
+
+# See SHUTDOWN_SYS_CMD for sudo comment.
+# If you change this, note that an exitcode of 1 means "reboot needed"
+# and should get through to Freevo
+NVRAM_WAKEUP_CMD = 'nvram-wakeup -s %d'
+
+# If using nvram-wakeup, time in seconds to startup before recording:
+BOOTTIME_PADDING = 150
+
+# Location of the reboot-flag used if nvram-wakeup returns 1:
+NVRAM_REBOOT_FLAG = '%s/reboot_flag' % FREEVO_CACHEDIR
 
 #
 # You can add more keybindings by adding them to the correct hash. 
