@@ -187,10 +187,14 @@ def getpid(name, arg):
                   '/tmp/' + name + '-%s.pid' % os.getuid()):
         if os.path.isfile(fname):
             f = open(fname)
-            uid = int(f.readline()[:-1])
+            try:
+                pid = int(f.readline()[:-1])
+            except ValueError:
+                # file does not contain a number
+                return fname, 0
             f.close()
 
-            proc = '/proc/' + str(uid) + '/cmdline'
+            proc = '/proc/' + str(pid) + '/cmdline'
             # FIXME: BSD support missing here
             try:
                 if os.path.isfile(proc):
@@ -217,7 +221,7 @@ def getpid(name, arg):
                 except OSError:
                     pass
                 return fname, 0
-            return fname, uid
+            return fname, pid
     return fname, 0
 
 
@@ -225,15 +229,15 @@ def stop(name, arg):
     """
     stop running process 'name'
     """
-    fname, uid = getpid(name, arg)
-    if not uid:
+    fname, pid = getpid(name, arg)
+    if not pid:
         return 0
     try:
         try:
             os.unlink(fname)
         except OSError:
             pass
-        os.kill(uid, SIGTERM)
+        os.kill(pid, SIGTERM)
         return 1
     except OSError:
         return 0
@@ -244,24 +248,24 @@ def start(name, arg, bg, store=1):
     """
     start a process
     """
-    uid = os.fork()
-    if uid:
+    pid = os.fork()
+    if pid:
         if store:
             try:
                 f = open('/var/run/' + name + '-%s.pid' % os.getuid(), 'w')
             except (OSError, IOError):
                 f = open('/tmp/' + name + '-%s.pid' % os.getuid(), 'w')
 
-            f.write(str(uid)+'\n')
+            f.write(str(pid)+'\n')
             f.close()
 
         if not bg:
             try:
-                os.waitpid(uid, 0)
+                os.waitpid(pid, 0)
             except KeyboardInterrupt:
-                os.kill(uid, SIGTERM)
+                os.kill(pid, SIGTERM)
                 try:
-                    os.waitpid(uid, 0)
+                    os.waitpid(pid, 0)
                 except KeyboardInterrupt:
                     pass
                 if store and os.path.isfile(f.name):
