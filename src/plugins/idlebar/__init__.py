@@ -62,6 +62,7 @@ import plugin
 import skin
 import util.tv_util as tv_util
 import util.pymetar as pymetar
+import util.fileops as util
 
 from pygame import image,transform
 
@@ -481,3 +482,45 @@ class logo(IdleBarPlugin):
         else:
             image = os.path.join(config.IMAGE_DIR, self.image)
         return osd.drawimage(image, (x, osd.y + 5, -1, 75))[0]
+
+
+class diskfree(IdleBarPlugin):
+    """
+    Displays the amount of free disk space
+
+    Activate with:
+    plugin.activate('idlebar.diskfree', level=30)
+
+    This plugin displays the total amount of free disk space for recordings
+    """
+    def __init__(self):
+        IdleBarPlugin.__init__(self)
+        self.time = 0
+        self.diskfree = 0
+
+
+    def getDiskFree(self):
+        """
+        Determine amount of freedisk space
+        Update maximum every 30 seconds
+
+        """
+        if (time.time()-self.time)>30:
+            self.time = time.time()
+            freespace = util.freespace(config.TV_RECORD_DIR)
+            self.diskfree = _('%iGb') % (((freespace / 1024) / 1024) / 1024)
+
+    def draw(self, (type,object),x,osd):
+        """
+        Drawing to idlebar
+        """
+
+        self.getDiskFree()
+        font = osd.get_font('small0')
+        widthdf = 0
+        widthdf = font.stringsize(self.diskfree)
+        osd.draw_image(os.path.join(config.ICON_DIR, 'misc/chartpie.png' ),(x, osd.y + 7, -1, -1))
+        osd.write_text(self.diskfree, font, None, x + 15, osd.y + 55 - font.h, widthdf, font.h, 'left', 'top')
+
+        return widthdf + 15
+
