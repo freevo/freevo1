@@ -224,9 +224,10 @@ LOCAL_CONF_CHANGES = [
      '''Add IMAGEVIEWER_DURATION for auto slideshows''' ),
     (5.15,
      '''Add two variables for mplayer post processing: MPLAYER_VF_INTERLACED and
-     MPLAYER_VF_PROGRESSIVE''' ) ]
+     MPLAYER_VF_PROGRESSIVE''' ),
     (5.16,
-     '''Added TV_RECORDFILE_OKLETTERS so that the recorded file names are ok''' ) ]
+     '''Added TV_RECORDFILE_OKLETTERS so that the recorded file names are ok''' ),
+]
 
 
 # NOW check if freevo.conf is up-to-date. An older version may break the next
