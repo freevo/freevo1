@@ -316,7 +316,7 @@ class MixerControl:
         if (self.mixer != None):
 
             # XXX Hm.. This is hardcoded and very unflexible.
-            if mode == 'vcr':
+            if self.mode == 'vcr':
                 self.mixer.setMicVolume(config.VCR_IN_VOLUME)
 
             else:
