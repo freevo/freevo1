@@ -128,6 +128,7 @@ class MPlayer:
                 ivtv_dev.init_settings()
                 ivtv_dev.setinput(vg.input_num)
                 #ivtv_dev.print_settings()
+                ivtv_dev.close()
                 self.fc.chanSet(tuner_channel)
             
                 tvcmd = vg.vdev
