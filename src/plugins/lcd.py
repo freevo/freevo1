@@ -73,10 +73,6 @@ except:
 sep_str = " | " # use as separator between two strings. Like: "Length: 123<sep_str>Plot: ..."
 sep_str_mscroll = "   " # if string > width of lcd add this
 
-# Animaton-Sequence used in audio playback
-# Some displays (like the CrytstalFontz) do display the \ as a /
-animation_audioplayer_chars = ['-','\\','|','/']
-
 def rjust( s, n ):
     return s[ : n ].rjust( n )
 
@@ -231,8 +227,8 @@ layouts = { 4 : # 4 lines display
                                   "22 4 \"%d\"","(int(player.elapsed *90 / player.length))"),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 4 \"%s\"",
-                                   "animation_audioplayer_chars[" +
-                                   " player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
                   },
 
                 "video_player"  :
@@ -269,8 +265,8 @@ layouts = { 4 : # 4 lines display
                                   "27 4 \"%d\"","( int( percentage * 70 ) )"),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 4 \"%s\"",
-                                   "animation_audioplayer_chars[" +
-                                   " player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
                   },
 
 
@@ -354,7 +350,8 @@ layouts = { 4 : # 4 lines display
                                   "( int(player.elapsed * 100 / player.length) )" ),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 4 \"%s\"",
-                                   "animation_audioplayer_chars[player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
 #                  "animation_v": ( "hbar",
 #                                  "1 4 \"%d\"","(int(player.elapsed *90 / player.length))")
                   },
@@ -377,8 +374,8 @@ layouts = { 4 : # 4 lines display
                                   "( elapsed )" ),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 4 \"%s\"",
-                                   "animation_audioplayer_chars[" +
-                                   " player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
                   },
 
                 "tv"            :
@@ -429,8 +426,8 @@ layouts = { 4 : # 4 lines display
                                   "( int(player.elapsed / 60), int(player.elapsed % 60) )" ),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 2 \"%s\"",
-                                   "animation_audioplayer_chars[" +
-                                   " player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
                    },
 
                 "video_player"  :
@@ -445,8 +442,8 @@ layouts = { 4 : # 4 lines display
                                    "( int( percentage * 100 ) )" ),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 2 \"%s\"",
-                                   "animation_audioplayer_chars[" +
-                                   " player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
                   },
 
 
@@ -492,8 +489,8 @@ layouts = { 4 : # 4 lines display
                                   "( int(player.elapsed * 100 / player.length) )" ),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 2 \"%s\"",
-                                   "animation_audioplayer_chars[" +
-                                   " player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
                    },
 
                 "video_player"  :
@@ -508,8 +505,8 @@ layouts = { 4 : # 4 lines display
                                   "( elapsed )" ),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 2 \"%s\"",
-                                   "animation_audioplayer_chars[" +
-                                   " player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
                   },
 
 
@@ -568,8 +565,8 @@ layouts = { 4 : # 4 lines display
                                   "22 2 \"%d\"","(int(player.elapsed * 90 / player.length))"),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 2 \"%s\"",
-                                   "animation_audioplayer_chars[" +
-                                   " player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
                   },
 
 
@@ -595,8 +592,8 @@ layouts = { 4 : # 4 lines display
                                   "27 2 \"%d\"","( int( percentage * 70 ) )"),
                   # animation at the begining of the time line
                   "animation_v": ( "string", "1 2 \"%s\"",
-                                   "animation_audioplayer_chars[" +
-                                   " player.elapsed % len(animation_audioplayer_chars)]")
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
                   },
 
 
@@ -713,18 +710,26 @@ class PluginInterface( plugin.DaemonPlugin ):
             return
         else:
             self.event_listener = 1
-        sversion = self.lcd.s_version
-        if sversion.startswith( "0.5" ):
+        self.version = self.lcd.s_version
+        if self.version.startswith( "0.5" ):
             self.prio_map = { "high": "foreground",
                               "normal": "background",
                               "low": "info" }
-        elif sversion.startswith( "0.4" ):
+        elif self.version.startswith( "0.4" ):
             self.prio_map = { "high": "64",
                               "normal": "128",
                               "low": "192" }
+
+        # Animaton-Sequence used in audio playback
+        # Some displays (like the CrytstalFontz) do display the \ as a /
+        if self.version.startswith( "0.5" ):
+            self.animation_audioplayer_chars = ['-','\\','|','/']
+        else:
+            self.animation_audioplayer_chars = ['-','\\\\','|','/']
+
         else:
             self.disable = 1
-            log.warning( "Unsupported LCDd version: %s" % ( sversion, ) )
+            log.warning( "Unsupported LCDd version: %s" % ( self.version, ) )
 
         plugin.register( self, "lcd" )
 
