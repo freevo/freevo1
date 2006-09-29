@@ -1188,10 +1188,6 @@ if XINE_COMMAND:
 if CONF.fbxine:
     plugin.activate('audio.xine')
 
-# default to XINE_VO/AO_DEV:
-XINE_TV_VO_DEV = None
-XINE_TV_AO_DEV = None
-XINE_TV_TIMESHIFT_FILEMASK = "/you must set XINE_TV_TIMESHIFT_FILEMASK in your local_conf.py"
 
 # ======================================================================
 # Freevo TV settings:
@@ -1278,8 +1274,6 @@ TV_RECORD_SERVER_GID = 0
 # This must be a value in seconds although at the moment only has
 # the percision of one minute.
 TV_RECORD_PADDING = 0 * 60
-TV_REVORD_PADDING_PRE = None
-TV_REVORD_PADDING_POST = None
 
 if os.uname()[0] == 'FreeBSD':
   # FreeBSD's bsdbt848 TV driver doesn't support audio settings?

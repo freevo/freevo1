@@ -24,11 +24,6 @@ DEBUG = config.DEBUG
 TRUE = 1
 FALSE = 0
 
-if not config.XINE_TV_VO_DEV:
-	config.XINE_TV_VO_DEV = config.XINE_VO_DEV
-if not config.XINE_TV_AO_DEV:
-	config.XINE_TV_AO_DEV = config.XINE_AO_DEV
-
 class PluginInterface(plugin.Plugin):
     """
     Plugin to watch tv with xine.
@@ -69,7 +64,7 @@ class IVTV_XINE_TV:
 
         # Suppress annoying audio clicks
         time.sleep(0.4)
-        self.mixer.start(mode)
+        self.mixer.start()
 
         _debug_('%s: started %s app' % (time.time(), self.mode))
 
@@ -315,13 +310,13 @@ class MixerControl:
                 self.volume = self.mixer.getPcmVolume()
                 self.mixer.setPcmVolume(0)
 
-    def start(self, mode):
+    def start(self):
 
 
         if (self.mixer != None):
 
             # XXX Hm.. This is hardcoded and very unflexible.
-            if mode == 'vcr':
+            if self.mode == 'vcr':
                 self.mixer.setMicVolume(config.VCR_IN_VOLUME)
 
             else:
