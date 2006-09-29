@@ -88,7 +88,7 @@ class PluginInterface(plugin.Plugin):
         plugin.Plugin.__init__(self)
 
         # register mplayer as the object to play video
-        plugin.register(MPlayer(plugin.VIDEO_PLAYER, True)
+        plugin.register(MPlayer, plugin.VIDEO_PLAYER, True)
 
 
 class MPlayer:
