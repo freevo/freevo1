@@ -63,11 +63,11 @@ def grab():
 
     print 'Grabbing listings.'
     xmltvtmp = '/tmp/TV.xml.tmp'
-    os.system('%s --output %s --days %s' % ( config.XMLTV_GRABBER, 
+    ec = os.system('%s --output %s --days %s' % ( config.XMLTV_GRABBER, 
                                              xmltvtmp,
                                              config.XMLTV_DAYS ))
 
-    if os.path.exists(xmltvtmp):
+    if os.path.exists(xmltvtmp) and ec == 0:
         if os.path.isfile(config.XMLTV_SORT):
             print 'Sorting listings.'
             os.system('%s --output %s %s' % ( config.XMLTV_SORT,
@@ -84,7 +84,15 @@ def grab():
 
         import tv.epg_xmltv
         tv.epg_xmltv.get_guide(XMLTV_FILE=xmltvtmp)
-
+    else:
+        sys.stderr.write("ERROR: xmltv grabbing failed; "
+                         "%s returned exit code %d.\n" %
+                         (config.XMLTV_GRABBER, ec >> 8))
+        sys.stderr.write("  If you did not change your system, it's likely that "
+                         "the site being grabbed did.\n  You might want to try "
+                         "whether updating your xmltv helps in that case:\n"
+                         "    http://www.xmltv.org/\n")
+        sys.exit(1)
 
 if __name__ == '__main__':
 
