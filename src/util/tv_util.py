@@ -53,7 +53,7 @@ def progname2filename(progname):
     '''Translate a program name to something that can be used as a filename.'''
 
     # Letters that can be used in the filename
-    ok = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-:'
+    ok = config.TV_RECORDFILE_OKLETTERS
 
     s = ''
     for letter in progname:

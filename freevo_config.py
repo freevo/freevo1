@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION  = 5.15
+LOCAL_CONF_VERSION  = 5.16
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -225,6 +225,8 @@ LOCAL_CONF_CHANGES = [
     (5.15,
      '''Add two variables for mplayer post processing: MPLAYER_VF_INTERLACED and
      MPLAYER_VF_PROGRESSIVE''' ) ]
+    (5.16,
+     '''Added TV_RECORDFILE_OKLETTERS so that the recorded file names are ok''' ) ]
 
 
 # NOW check if freevo.conf is up-to-date. An older version may break the next
@@ -1231,6 +1233,7 @@ TV_DATETIMEFORMAT = '%A %b %d %I:%M %p' # Thursday September 24 8:54 am
 
 TV_RECORDFILE_MASK = '%%m-%%d %%H.%%M %(progname)s - %(title)s'
 TV_RECORDFILE_SUFFIX = '.avi'
+TV_RECORDFILE_OKLETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-:'
 
 # if using the persitant recordserver
 TV_RECORD_SCHEDULE = '%s/record_schedule.xml' % FREEVO_CACHEDIR
