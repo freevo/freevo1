@@ -18,6 +18,7 @@ from distutils import core
 
 check_libs((('mmpython', 'http://www.sf.net/projects/mmpython' ),
             ('pygame', 'http://www.pygame.org'),
+            ('xml.utils.qp_xml', 'http://pyxml.sourceforge.net/'),
             ('Image', 'http://www.pythonware.com/products/pil/'),
             ('elementtree', 'http://effbot.org/zone/elementtree.htm'),
             ('twisted', 'http://www.twistedmatrix.com/'),
