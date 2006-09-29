@@ -41,9 +41,9 @@ import config
 import sys
 import os
 
-if len(sys.argv)>1 and sys.argv[1] == '--help':
+if len(sys.argv)>1 and sys.argv[1] in ('-h', '--help'):
     print 'script to write the freevo lircrc file'
-    print 'usage: makelircrc [-w] [button=comand]'
+    print 'usage: makelircrc [-w] [section_index] [button=comand]'
     print
     print 'The -w will write the settings to %s' % config.LIRCRC
     print 'If this is not the file the informations should be written to, set'
@@ -65,12 +65,19 @@ mapping = []
 unused  = []
 
 alternatives = {
-    'QUIT': 'EXIT',
+    'QUIT'      : 'EXIT',
+    'BACK/EXIT' : 'EXIT',
     'OSD' : 'DISPLAY',
     'FF'  : 'FFWD',
+    'FORWARD': 'FFWD',
     'REV' : 'REW',
-    'PREV': 'CH-',
-    'NEXT': 'CH+'
+    'REWIND' : 'REW',
+    'PREV'   : 'CH-',
+    'NEXT'   : 'CH+',
+    'MENU/I' : 'MENU',
+    'OK'     : 'SELECT',
+    'GO'     : 'ENTER',
+    'RECORD' : 'REC',
     }
 
 for type in config.EVENTS:
@@ -79,21 +86,27 @@ for type in config.EVENTS:
             needed.append(button)
 
 write_option = False
+use_pos = None
 
 for arg in sys.argv:
     if arg == '-w':
         write_option = True
-    if arg.find('=') > 0:
+    elif arg.find('=') > 0:
         alternatives[arg[:arg.find('=')]] = arg[arg.find('=')+1:]
-        
+    else:
+        try:
+            use_pos = int(arg)
+        except ValueError:
+            sys.stderr.write("Unrecognized argument (%s)!\n" % arg)
+
 if os.path.exists('/etc/lircd.conf'): x = open('/etc/lircd.conf')
 elif os.path.exists('/etc/lirc/lircd.conf'): x = open ('/etc/lirc/lircd.conf')
 
 pos = 0
 for line in x.readlines():
     if line.find('begin codes') != -1:
-        pos = 1
-    if pos > 0:
+        pos += 1
+    if pos > 0 and (use_pos == None or use_pos == pos):
         if iscode(line):
             button = iscode(line).groups()[0]
             if button.upper() in needed:
@@ -149,4 +162,7 @@ if needed:
     for i in needed:
         print '  %s' % i
     print
-    
+if use_pos == None and pos > 1:    
+    print 'Your %s seems to contain %d sections starting with "begin codes".' % (x.name, pos)
+    print 'You should select the one best matching your remote by giving its number (1..%d)' % (pos, )
+    print 'on the commandline.'
