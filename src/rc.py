@@ -161,22 +161,22 @@ class Lirc:
     """
     def __init__(self):
         try:
+            global pylirc
             import pylirc
         except ImportError:
             print 'WARNING: PyLirc not found, lirc remote control disabled!'
-            raise Exception
+            raise
         try:
             if os.path.isfile(config.LIRCRC):
-                pylirc.init('freevo', config.LIRCRC)
-                pylirc.blocking(0)
+                self.resume()
             else:
                 raise IOError
         except RuntimeError:
             print 'WARNING: Could not initialize PyLirc!'
-            raise Exception
+            raise
         except IOError:
             print 'WARNING: %s not found!' % config.LIRCRC
-            raise Exception
+            raise
 
         self.nextcode = pylirc.nextcode
 
@@ -193,6 +193,21 @@ class Lirc:
         PYLIRC = True
 
         
+    def resume(self):
+        """
+        (re-)initialize pylirc, e.g. after calling close()
+        """
+        pylirc.init('freevo', config.LIRCRC)
+        pylirc.blocking(0)
+
+
+    def suspend(self):
+        """
+        cleanup pylirc, close devices
+        """
+        pylirc.exit()
+
+
     def get_last_code(self):
         """
         read the lirc interface
@@ -443,6 +458,18 @@ class EventHandler:
         self.lock.release()
 
         
+    def suspend(self):
+        for i in self.inputs:
+            if hasattr(i, 'suspend'):
+                i.suspend()
+
+
+    def resume(self):
+        for i in self.inputs:
+            if hasattr(i, 'resume'):
+                i.resume()
+
+
     def shutdown(self):
         """
         shutdown the rc
@@ -498,10 +525,15 @@ class EventHandler:
         # search for events in the queue
         if len(self.queue):
             self.lock.acquire()
-            ret = self.queue[0]
-            del self.queue[0]
-            self.lock.release()
-            return ret
+            try:
+                try:
+                    ret = self.queue[0]
+                    del self.queue[0]
+                    return ret
+                except IndexError:
+                    pass
+            finally:
+                self.lock.release()
 
         # search all input objects for new events
         for i in self.inputs:
