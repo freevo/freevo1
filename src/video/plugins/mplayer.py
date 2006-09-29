@@ -83,25 +83,66 @@ class PluginInterface(plugin.Plugin):
     VIDEO_MPLAYER_SUFFIX. This is the default video player for Freevo.
     """
     def __init__(self):
+        mplayer_version = 0
+
+        # Detect version of mplayer. Possible values are
+        # 0.9 (for 0.9.x series), 1.0 (for 1.0preX series) and 9999 for cvs
+        if not hasattr(config, 'MPLAYER_VERSION'):
+            child = popen2.Popen3( "%s -v" % config.MPLAYER_CMD, 1, 100)
+            data  = True
+            while data:
+                data = child.fromchild.readline()
+                if data:
+                    res = re.search( "^MPlayer (?P<version>\S+)", data )
+                    if res:
+                        data = res
+                        break
+
+            if data:                
+                _debug_("MPlayer version is: %s" % data.group( "version" ))
+                data = data.group( "version" )
+                if data[ 0 ] == "1":
+                    config.MPLAYER_VERSION = 1.0
+                elif data[ 0 ] == "0":
+                    config.MPLAYER_VERSION = 0.9
+                elif data[ 0 : 7 ] == "dev-CVS":
+                    config.MPLAYER_VERSION = 9999
+            else:
+                config.MPLAYER_VERSION = None
+            _debug_("MPlayer version set to: %s" % config.MPLAYER_VERSION)
+            child.wait()
+
+        if not config.MPLAYER_VERSION:
+            print
+            print 'Failed to detect mplayer version. Please set MPLAYER_VERSION in your'
+            print 'local_conf.py to 0.9  (for 0.9.x series), 1.0 (for 1.0preX series)'
+            print 'or 9999 for cvs.'
+            print
+            self.reason = 'failed to detect mplayer version'
+            return
         
         # create plugin structure
         plugin.Plugin.__init__(self)
 
         # register mplayer as the object to play video
-        plugin.register(MPlayer, plugin.VIDEO_PLAYER, True)
+        plugin.register(MPlayer(config.MPLAYER_VERSION), plugin.VIDEO_PLAYER, True)
+
+
+
 
 
 class MPlayer:
     """
     the main class to control mplayer
     """
-    def __init__(self):
+    def __init__(self, version):
         """
         init the mplayer object
         """
         self.name       = 'mplayer'
 
         self.app_mode   = 'video'
+        self.version    = version
         self.seek       = 0
         self.seek_timer = threading.Timer(0, self.reset_seek)
         self.app        = None
@@ -204,24 +245,23 @@ class MPlayer:
         if item.selected_subtitle == -1:
             additional_args += [ '-noautosub' ]
 
-        elif item.selected_subtitle:
-            if mode == 'file':
-                if os.path.isfile(os.path.splitext(item.filename)[0]+'.idx'):
-                    additional_args += [ '-vobsubid', str(item.selected_subtitle) ]
-                else:
-                    additional_args += [ '-sid', str(item.selected_subtitle) ]
-            elif mode == 'dvd':
+        elif item.selected_subtitle and mode == 'file':
+            if os.path.isfile(os.path.splitext(item.filename)[0]+'.idx'):
                 additional_args += [ '-vobsubid', str(item.selected_subtitle) ]
             else:
                 additional_args += [ '-sid', str(item.selected_subtitle) ]
+                
+        elif item.selected_subtitle:
+            additional_args += [ '-sid', str(item.selected_subtitle) ]
             
         if item.selected_audio != None:
             additional_args += [ '-aid', str(item.selected_audio) ]
 
-        if item['deinterlace']:
-            if config.MPLAYER_VF_INTERLACED:
-                additional_args += [ '-vf',  config.MPLAYER_VF_INTERLACED ]
-        elif config.MPLAYER_VF_PROGRESSIVE:
+        if self.version >= 1 and item['deinterlace']:
+            additional_args += [ '-vf',  config.MPLAYER_VF_INTERLACED ]
+        elif item['deinterlace']:
+            additional_args += [ '-vop', config.MPLAYER_VF_INTERLACED ]
+        elif self.version >= 1:
             additional_args += [ '-vf',  config.MPLAYER_VF_PROGRESSIVE ]
                 
         mode = item.mimetype
@@ -229,7 +269,8 @@ class MPlayer:
             mode = 'default'
 
         # Mplayer command and standard arguments
-        command += [ '-v', '-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS ]
+        command += [ '-v', '-vo', config.MPLAYER_VO_DEV +
+                     config.MPLAYER_VO_DEV_OPTS ]
 
         # mode specific args
         command += config.MPLAYER_ARGS[mode].split(' ')
@@ -342,6 +383,7 @@ class MPlayer:
         if event == VIDEO_MANUAL_SEEK:
             self.seek = 0
             rc.set_context('input')
+	    self.app.write('osd_show_text "input"\n')
             return True
         
         if event.context == 'input':
@@ -361,6 +403,7 @@ class MPlayer:
 
             elif event == INPUT_EXIT:
                 _debug_('seek stopped')
+                #self.app.write('seek stopped\n')
                 self.seek_timer.cancel()
                 self.seek = 0
                 rc.set_context('video')
@@ -461,7 +504,9 @@ class MPlayer:
                 ret += [ arg ]
 
         if vop:
-            return ret + [ '-vf', vop[1:] ]
+            if self.version >= 1:
+                return ret + [ '-vf', vop[1:] ]
+            return ret + [ '-vop', vop[1:] ]
         return ret
 
 
