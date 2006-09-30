@@ -8,38 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.73.2.4  2005/01/09 10:08:25  dischi
-# Port MPLAYER_VF_INTERLACED and MPLAYER_VF_INTERLACED for 2.0 to 1.5.3
-#
-# Revision 1.73.2.3  2004/09/11 16:25:34  dischi
-# fix subtitle activation
-#
-# Revision 1.73.2.2  2004/09/06 16:38:22  dischi
-# add help for detection problems
-#
-# Revision 1.73.2.1  2004/08/09 14:38:22  dischi
-# fix mplayer version detection
-#
-# Revision 1.73  2004/07/10 12:33:43  dischi
-# header cleanup
-#
-# Revision 1.72  2004/07/10 10:36:31  dischi
-# reset elapsed time on restart
-#
-# Revision 1.71  2004/07/08 19:29:43  dischi
-# make sure plugins are stopped
-#
-# Revision 1.70  2004/06/23 19:46:17  dischi
-# prevent mplayer from seeking after the end of a growing file
-#
-# Revision 1.69  2004/06/13 00:36:14  outlyer
-# Without this change, mplayer won't play files on a data DVD. I.e. I have
-# a burned DVD-R with some AVI files on it, but mplayer breaks if I try to play
-# something because the devicename is being passed and mplayer becomes
-# confused.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -83,51 +51,11 @@ class PluginInterface(plugin.Plugin):
     VIDEO_MPLAYER_SUFFIX. This is the default video player for Freevo.
     """
     def __init__(self):
-        mplayer_version = 0
-
-        # Detect version of mplayer. Possible values are
-        # 0.9 (for 0.9.x series), 1.0 (for 1.0preX series) and 9999 for cvs
-        if not hasattr(config, 'MPLAYER_VERSION'):
-            child = popen2.Popen3( "%s -v" % config.MPLAYER_CMD, 1, 100)
-            data  = True
-            while data:
-                data = child.fromchild.readline()
-                if data:
-                    res = re.search( "^MPlayer (?P<version>\S+)", data )
-                    if res:
-                        data = res
-                        break
-
-            if data:                
-                _debug_("MPlayer version is: %s" % data.group( "version" ))
-                data = data.group( "version" )
-                if data[ 0 ] == "1":
-                    config.MPLAYER_VERSION = 1.0
-                elif data[ 0 ] == "0":
-                    config.MPLAYER_VERSION = 0.9
-                elif data[ 0 : 7 ] == "dev-CVS":
-                    config.MPLAYER_VERSION = 9999
-            else:
-                config.MPLAYER_VERSION = None
-            _debug_("MPlayer version set to: %s" % config.MPLAYER_VERSION)
-            child.wait()
-
-        if not config.MPLAYER_VERSION:
-            print
-            print 'Failed to detect mplayer version. Please set MPLAYER_VERSION in your'
-            print 'local_conf.py to 0.9  (for 0.9.x series), 1.0 (for 1.0preX series)'
-            print 'or 9999 for cvs.'
-            print
-            self.reason = 'failed to detect mplayer version'
-            return
-        
         # create plugin structure
         plugin.Plugin.__init__(self)
 
         # register mplayer as the object to play video
-        plugin.register(MPlayer(config.MPLAYER_VERSION), plugin.VIDEO_PLAYER, True)
-
-
+        plugin.register(MPlayer(), plugin.VIDEO_PLAYER, True)
 
 
 
@@ -135,14 +63,13 @@ class MPlayer:
     """
     the main class to control mplayer
     """
-    def __init__(self, version):
+    def __init__(self):
         """
         init the mplayer object
         """
         self.name       = 'mplayer'
 
         self.app_mode   = 'video'
-        self.version    = version
         self.seek       = 0
         self.seek_timer = threading.Timer(0, self.reset_seek)
         self.app        = None
@@ -156,6 +83,7 @@ class MPlayer:
         1 = possible, but not good
         0 = unplayable
         """
+        # this seems strange that it is 'possible' for dvd:// and 'good' for dvd
         if item.url[:6] in ('dvd://', 'vcd://') and item.url.endswith('/'): 
             return 1
         if item.mode in ('dvd', 'vcd'):
@@ -257,11 +185,9 @@ class MPlayer:
         if item.selected_audio != None:
             additional_args += [ '-aid', str(item.selected_audio) ]
 
-        if self.version >= 1 and item['deinterlace']:
+        if item['deinterlace']:
             additional_args += [ '-vf',  config.MPLAYER_VF_INTERLACED ]
-        elif item['deinterlace']:
-            additional_args += [ '-vop', config.MPLAYER_VF_INTERLACED ]
-        elif self.version >= 1:
+        else:
             additional_args += [ '-vf',  config.MPLAYER_VF_PROGRESSIVE ]
                 
         mode = item.mimetype
@@ -308,9 +234,9 @@ class MPlayer:
             _debug_('starting autocrop')
             (x1, y1, x2, y2) = (1000, 1000, 0, 0)
             crop_cmd = command[1:] + ['-ao', 'null', '-vo', 'null', '-ss', '60',
-                                      '-frames', '20', '-vop', 'cropdetect' ]
+                                      '-frames', '20', '-vf', 'cropdetect' ]
             child = popen2.Popen3(self.sort_filter(crop_cmd), 1, 100)
-            exp = re.compile('^.*-vop crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*).*')
+            exp = re.compile('^.*-vf crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*).*')
             while(1):
                 data = child.fromchild.readline()
                 if not data:
@@ -323,7 +249,7 @@ class MPlayer:
                     y2 = max(y2, int(m.group(2)) + int(m.group(4)))
         
             if x1 < 1000 and x2 < 1000:
-                command = command + [ '-vop' , 'crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1) ]
+                command = command + [ '-vf' , 'crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1) ]
             
             child.wait()
 
@@ -349,6 +275,7 @@ class MPlayer:
 
         rc.app(self)
 
+        print 'DJW:play command=%s mode=%s url=%s' % (command, mode, url)
         self.app = MPlayerApp(command, self)
         return None
     
@@ -486,27 +413,25 @@ class MPlayer:
         
     def sort_filter(self, command):
         """
-        Change a mplayer command to support more than one -vop
-        parameter. This function will grep all -vop parameter from
-        the command and add it at the end as one vop argument
+        Change a mplayer command to support more than one -vf
+        parameter. This function will grep all -vf parameter from
+        the command and add it at the end as one vf argument
         """
         ret = []
-        vop = ''
-        next_is_vop = False
+        vf = ''
+        next_is_vf = False
     
         for arg in command:
-            if next_is_vop:
-                vop += ',%s' % arg
-                next_is_vop = False
-            elif (arg == '-vop' or arg == '-vf'):
-                next_is_vop=True
+            if next_is_vf:
+                vf += ',%s' % arg
+                next_is_vf = False
+            elif (arg == '-vf'):
+                next_is_vf=True
             else:
                 ret += [ arg ]
 
-        if vop:
-            if self.version >= 1:
-                return ret + [ '-vf', vop[1:] ]
-            return ret + [ '-vop', vop[1:] ]
+        if vf:
+            return ret + [ '-vf', vf[1:] ]
         return ret
 
 
