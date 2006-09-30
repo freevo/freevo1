@@ -226,7 +226,8 @@ LOCAL_CONF_CHANGES = [
      '''Add two variables for mplayer post processing: MPLAYER_VF_INTERLACED and
      MPLAYER_VF_PROGRESSIVE''' ),
     (5.16,
-     '''Added XINE_TV_VO_DEV, XINE_TV_AO_DEV, and XINE_TV_TIMESHIFT_FILEMASK for the
+     '''Changed default skin to mediaportal
+     Added XINE_TV_VO_DEV, XINE_TV_AO_DEV, and XINE_TV_TIMESHIFT_FILEMASK for the
   	 new tv.ivtv_xine_tv plugin (the latter should be e.g. "/tmp/xine-buf-" and point
   	 to a place with enough free diskspace (several gigabytes).
   	 Added TV_RECORD_PADDING_PRE/POST for separately setting TV_RECORD_PADDING
@@ -1029,7 +1030,7 @@ SKIN_MODULE = 'main'
 # used, otherwise the skin will rememeber the last choosen skin.
 #
 SKIN_XML_FILE         = ''
-SKIN_DEFAULT_XML_FILE = 'blurr'
+SKIN_DEFAULT_XML_FILE = 'mediaportal'
 
 #
 # Select a way when to switch to text view even if a image menu is there
