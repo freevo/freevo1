@@ -181,13 +181,17 @@ class PluginInterface(plugin.ItemPlugin):
             album = self.item.getattr('title')
 
         artist = self.item.getattr('artist')
-        search_string = '%s %s' % (String(artist), String(album))
+
+        # Maybe the search string need encoding to config.LOCALE
+        search_string = '%s %s' % (artist.encode('latin-1'), album.encode('latin-1'))
         search_string = re.sub('[\(\[].*[\)\]]', '', search_string)
+        if config.DEBUG > 1:
+            print "search_string=%r" % search_string
         try:
             cover = amazon.searchByKeyword(search_string , product_line="music")
         except amazon.AmazonError:
             box.destroy()
-            dict_tmp = { "artist": artist.encode('ascii','replace'), "album": album.encode('ascii','replace') }
+            dict_tmp = { "artist": artist, "album": album }
             box = PopupBox(text=_( 'No matches for %(artist)s - %(album)s' ) % dict_tmp )
             box.show()
             time.sleep(2)
