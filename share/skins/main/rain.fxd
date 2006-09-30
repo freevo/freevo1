@@ -1,0 +1,371 @@
+<?xml version="1.0" ?>
+<freevo>
+
+  <skin include="info" geometry="800x600">
+    <iconset theme="Rain"/>
+
+<main>
+      <item label="tv" name="Television" icon="tv_on.png" outicon="tv_off.png" image="watermarks/rain_tv.png"/>
+      <item label="video" name="Movies" icon="movie_on.png" outicon="movie_off.png" image="watermarks/rain_movie.png"/>
+      <item label="audio" name="Music" icon="music_on.png" outicon="music_off.png" image="watermarks/rain_music.png"/>
+      <item label="mail" name="Email" icon="email_on.png" outicon="email_off.png" image="watermarks/rain_email.png"/>
+      <item label="image" name="Images" icon="image_on.png" outicon="image_off.png" image="watermarks/rain_image.png"/>
+      <item label="weather" name="Weather Forecast" icon="weather_on.png" outicon="weather_off.png" image="watermarks/rain_weather.png"/>
+      <item label="games" name="Games" icon="games_on.png" outicon="games_off.png" image="watermarks/rain_games.png"/>
+      <item label="headlines" name="Headlines" icon="headlines_on.png" outicon="headlines_off.png" image="watermarks/rain_headlines.png"/>
+      <item label="commands" name="Commands" icon="commands_on.png" outicon="commands_off.png" image="watermarks/rain_commands.png"/>
+      <item label="shutdown" name="Shutdown" icon="shutdown_on.png" outicon="shutdown_off.png" image="watermarks/rain_shutdown.png"/>
+</main>
+
+    <image label="background" filename="rain_back"/>
+
+    <menuset label="main menu">
+      <screen layout="screen watermark"/>
+      <listing layout="main listing" x="110" y="160" width="360" height="400"/> 
+    </menuset>
+
+    <layout label="screen watermark">
+      <background>
+        <image image="background" x="0" y="0" label="background"/>
+        <image x="435" y="230" width="370" height="380" label="watermark"/>
+      </background>
+    </layout>
+    
+    <layout label="main listing">
+      <content type="text" spacing="10">
+	<item type="default" font="main" align="left"/>
+	<item type="selected" font="main selected" align="center">
+	  <rectangle bgcolor="0xaa000000" size="0" x="-3" y="-3" width="max+6" height="max+6" radius="10"/>
+	</item>
+      </content>
+    </layout>
+
+    <layout label="list0">
+      <content type="text" spacing="2">
+	<item type="default" font="item"/>
+	<item type="selected" font="selected">
+	  <rectangle bgcolor="selection" size="0" x="-5" y="-3" width="max+10" height="max+6" radius="10"/>
+	</item>
+      </content>
+    </layout>
+
+    <layout label="list_main">
+      <content type="text" spacing="10">
+	<item type="default" font="main"/>
+	<item type="selected" font="main selected">
+	  <rectangle bgcolor="selection" size="0" y="-5" x="-10" width="max+20" height="max+10" radius="10"/>
+	</item>
+      </content>
+    </layout>
+
+   <layout label="title">
+      <background>
+        <image visible="not idlebar" filename="logo.png" x="0" y="0"
+          width="157" height="80"/>
+      </background>
+      <content x="170" y="0" type="menu" font="title area" align="center"
+        valign="center"/>
+    </layout>
+
+    <font label="title" name="VeraBd" size="29" color="0xffffff">
+      <shadow visible="yes" color="0x80000000" x="3" y="3"/>
+    </font>
+
+    <font label="item" color="0xffffff"/>
+
+    <font label="main" name="VeraBd" size="20" color="0xdddddd">
+      <shadow x="1" y="1" color="0x000000" visible="yes"/>
+    </font>
+    <font label="main selected" name="VeraBd" size="20" color="0xffffff">
+      <shadow x="1" y="1" color="0x000000" visible="yes"/>
+    </font>
+
+    <font label="info value" color="0xffdc71">
+      <shadow x="1" y="1" color="0x000000" visible="yes"/>
+    </font>
+    
+    <font label="info label">
+      <shadow x="1" y="1" color="0x000000" visible="yes"/>
+    </font>
+    
+    <font label="info tagline" name="VeraBd" size="16" color="0xffffff">
+      <shadow x="1" y="1" color="0x000000" visible="yes"/>
+    </font>
+    
+    <font label="info plot" name="VeraBd" size="16" color="0xffffff">
+      <shadow x="1" y="1" color="0x000000" visible="yes"/>
+    </font>
+    
+    <color label="tv selection" value="0xa0000000"/>
+    <font label="tv selected" color="0xffdc71"/>
+    <font label="tv time" color="0xffdc71">
+      <shadow x="1" y="1" color="0x000000" visible="yes"/>
+    </font>
+
+    <color label="widget background" value="0xefb744"/>
+    <font label="widget" name="VeraBd" size="16" color="0x000000"/>
+    <color label="widget text" value="0x000000"/>
+    <color label="widget item background" value="0xefb744"/>
+    <color label="widget selected background" value="0xfffe8d"/>
+
+    <font label="default" name="Vera" size="18" color="0xffffff"/>
+
+
+    <!-- 
+    *******************************************************
+    ** MENU
+    ******************************************************* -->
+
+    <!-- default description: make listing area smaller, show info area -->
+    <menuset label="default description">
+      <listing height="340"/>
+      <info x="40" y="460" width="750" height="120" />
+    </menuset>
+
+    <!-- default description no image: mix between the two above -->
+    <menuset label="default description no image">
+      <listing height="340"/>
+      <info x="40" y="460" width="750" height="120" />
+    </menuset>
+    
+    <!-- special settings for audio. The default style is an image based style -->
+    <!-- with an info area. By pressing DISPLAY this can be toggled to the default view -->
+    <menu type="audio">
+      <style image="audio menu with info" text="default description"/>
+      <style text="default description"/>
+    </menu>
+
+    <menu type="video">
+      <style image="video menu with info" text="default description"/>
+      <style text="default description"/>
+      <style image="video details" text="default description"/>
+    </menu>
+
+    <menu type="image">
+      <style image="image menu with info" text="default description"/>
+      <style text="default description"/>
+    </menu>
+
+
+    <!-- The "video menu with info", it's like "default description" only with -->
+    <!-- different listing area and a subtitle -->
+    <menuset label="video menu with info" inherits="default description">
+      <screen layout="video screen" visible="yes"/>
+      <subtitle layout="subtitle" x="45" y="100" width="470" height="40"/>
+      <listing layout="video list" y="140" height="290">
+	<image label="uparrow" y="140"/>
+	<image label="downarrow" y="max-32"/>
+      </listing>
+    </menuset>
+
+
+    <!-- Now the "video details" (DISPLAY 3 for video)-->
+    <menuset label="video details" inherits="normal text style">
+      <subtitle layout="subtitle" x="10" y="100" width="780" height="60"/>
+
+      <listing layout="video list" x="500" y="450" width="290" height="140">
+	<image label="uparrow" filename=""/>
+	<image label="downarrow" filename=""/>
+      </listing>
+
+      <view x="545" y="150"/>
+      <info layout="video info" x="10" y="160" width="480" height="430"/>
+    </menuset>
+
+
+    <!-- Now the "audio menu with info" used by audio-->
+    <menuset label="audio menu with info" inherits="video menu with info">
+      <screen layout="audio screen" visible="yes"/>
+      <listing layout="audio list"/>
+      <view y="145"/>
+    </menuset>
+
+
+    <!-- Now the "image menu with info" used by image-->
+    <menuset label="image menu with info" inherits="video menu with info">
+      <listing width="745" layout="image list"/>
+      <screen layout="image screen" visible="yes"/>
+      <view visible="no"/>
+    </menuset>
+
+
+<!-- ################### END MENU ########################### -->
+
+    <layout label="audio screen">
+      <background>
+	<image image="background" x="0" y="0" label="background"/>
+	<image filename="watermarks/rain_music.png" x="435" y="230" width="370" height="380"/>
+      </background>
+    </layout>
+
+    <layout label="audio list">
+      <content type="image">
+	<item type="default">
+	  <rectangle bgcolor="0xd0000000" size="0" x="0" y="0" width="max" height="max" radius="10"/>
+	</item>
+      </content>
+    </layout>
+
+    <layout label="video screen">
+      <background>
+	<image image="background" x="0" y="0" label="background"/>
+	<image filename="watermarks/rain_movie.png" x="435" y="230" width="370" height="380"/>
+      </background>
+    </layout>
+
+    <layout label="video list">
+      <content type="image">
+	<item type="default">
+	  <rectangle bgcolor="0xd0000000" size="0" x="0" y="0" width="max" height="max" radius="10"/>
+	</item>
+      </content>
+    </layout>
+
+    <layout label="image screen">
+      <background>
+	<image image="background" x="0" y="0" label="background"/>
+	<image filename="watermarks/rain_image.png" x="435" y="230" width="370" height="380"/>
+      </background>
+    </layout>
+
+    <layout label="image list">
+      <content type="image">
+	<item type="default">
+	  <rectangle bgcolor="0xd0000000" size="0" x="0" y="0" width="max" height="max" radius="10"/>
+	</item>
+      </content>
+    </layout>
+
+    <menuset label="tv menu">
+      <subtitle layout="title" x="10" y="90" width="780" height="30"/>
+      <listing y="140">
+	<image y="140" label="uparrow"/>
+      </listing>
+      <info layout="tv info" y="440" height="150"/>
+    </menuset>
+
+    <layout label="tv screen">
+      <background>
+	<image image="background" x="0" y="0" label="background"/>
+	<image filename="watermarks/rain_tv.png" x="435" y="230" width="370" height="380"/>
+      </background>
+    </layout>
+
+    <menuset label="tv menu more info">
+      <screen layout="tv screen" visible="yes"/>
+      <subtitle layout="title" x="10" y="90" width="780" height="30"/>
+      <listing y="140">
+	<image y="140" label="uparrow"/>
+      </listing>
+      <info layout="tv info" y="290" height="290"/>
+    </menuset>
+
+    <!-- tv info area -->
+    <layout label="tv info">
+      <content>
+	<item type="default">
+          <text font="tv time" valign="center">Date: </text>
+          <text font="tv time" valign="center" expression="date"/>
+	  <goto_pos x="50" mode="relative"/>
+          <text font="tv time" valign="center">Time: </text>
+          <text font="tv time" valign="center" expression="start"/>
+          <text font="tv time" valign="center">-</text>
+          <text font="tv time" valign="center" expression="stop"/>
+	  <newline/>
+	  <goto_pos y="10" mode="relative"/>
+	  <if expression="sub_title">
+	    <text font="info tagline" expression="sub_title"/>
+	    <newline/>
+	  </if>
+	  <if expression="desc">
+	    <text font="info plot" height="max" mode="soft" expression="desc"/>
+	    <newline/>
+	  </if>
+	</item>
+      </content>
+    </layout>
+
+    <menu type="mail">
+      <style text="mail"/>
+    </menu>
+
+    <layout label="mail screen">
+      <background>
+	<image image="background" x="0" y="0" label="background"/>
+        <rectangle size="0" bgcolor="0x80000000" radius="10" x="10" y="90" width="750" height="150" radius="10"/>
+	<image filename="watermarks/rain_email.png" x="435" y="230" width="370" height="380"/>
+      </background>
+    </layout>
+
+    <menuset label="mail" inherits="normal text style">
+      <screen layout="mail screen" visible="yes"/>
+      <view layout="view" x="10" y="90" width="280" height="250" align="left"/>
+      <listing x="30" y="250" width="700" height="280">
+        <image filename="up.png" label="uparrow" x="730" y="250"/>
+        <image filename="down.png" label="downarrow" x="730" y="max-32"/>
+      </listing>
+      <info layout="mail info" x="40" y="100" width="520" height="140"/>
+    </menuset>
+  
+  <layout label="mail info">
+ <content x="0" y="0" type="text" spacing="25">
+  <item type="mailbox">
+   <if expression="newmails">
+    <text align="left" width="200" font="info label">Unread messages</text>
+     <goto_pos x="10" mode="relative"/>
+     <text font="info value" expression="newmails"/>
+     <newline/>
+   </if>
+   <if expression="mails">
+    <text align="left" width="200" font="info label">Total messages</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="mails"/>
+   </if>
+  </item>
+  <item type="default">
+   <if expression="subject">
+    <text font="info tagline" expression="subject"/>
+    <newline />
+   </if>
+   <if expression="fromname">
+    <goto_pos x="20" mode="relative"/>
+    <text font="info value" expression="fromname"/>
+   </if>
+   <if expression="fromaddr">
+    <text font="info value"> - </text>
+    <text font="info value" expression="fromaddr"/>
+   </if>
+   <newline/>
+   <if expression="date">
+    <goto_pos x="20" mode="relative"/>
+    <text font="info value" expression="date"/>
+   </if>
+  </item>
+  <item type="newemail">
+   <if expression="subject">
+    <text font="info tagline" expression="subject"/>
+    <newline />
+   </if>
+   <if expression="fromname">
+    <goto_pos x="20" mode="relative"/>
+    <text font="info value" expression="fromname"/>
+   </if>
+   <if expression="fromaddr">
+    <text font="info value"> - </text>
+    <text font="info value" expression="fromaddr"/>
+   </if>
+   <newline/>
+   <if expression="date">
+    <goto_pos x="20" mode="relative"/>
+    <text font="info value" expression="date"/>
+    <newline/>
+   </if>
+   <newline/>
+   <goto_pos y="30" x="20" mode="relative"/>
+   <text font="small1">Message has not been read</text>
+  </item>
+ </content>
+</layout>
+
+  </skin>
+</freevo>
