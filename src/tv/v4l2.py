@@ -229,7 +229,11 @@ class Videodev:
   
 
     def setinput(self, value):
-        r = fcntl.ioctl(self.device, i32(SETINPUT_NO), struct.pack(INPUT_ST, value))
+        try:
+            r = fcntl.ioctl(self.device, i32(SETINPUT_NO), struct.pack(INPUT_ST, value))
+        except IOError:
+            self.print_settings
+            raise
 
 
     def querycap(self):
