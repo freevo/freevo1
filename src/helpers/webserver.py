@@ -43,8 +43,19 @@
 
 
 import sys, os
-
 import config
+
+# change uid
+if __name__ == '__main__':
+    try:
+        if hasattr(config, 'WWW_SERVER_UID'):
+            if config.WWW_SERVER_UID and os.getuid() == 0:
+                os.setgid(config.WWW_SERVER_GID)
+                os.setuid(config.WWW_SERVER_UID)
+                os.environ['USER'] = pwd.getpwuid(os.getuid())[0]
+                os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
+    except Exception, e:
+        print e
 
 from twisted.internet import app
 from twisted.web import static, server, vhost, script
