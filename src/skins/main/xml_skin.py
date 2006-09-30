@@ -182,7 +182,7 @@ def attr_font(node, attr, default):
                 if font: break
 
         if not font:
-            print "skin error: can find font >%s<" % font
+            print "skin error: can find font \"%s\"" % font
             font = config.OSD_DEFAULT_FONTNAME
         return font
     return default
@@ -201,7 +201,7 @@ def search_file(file, search_dirs):
         if vfs.isfile("%s.jpg" % dfile):
             return vfs.abspath("%s.jpg" % dfile)
 
-    print 'skin error: can\'t find image %s' % file
+    print 'skin error: can\'t find image \"%s\"' % file
     if config.DEBUG:
         print 'image search path is:'
         for s in search_dirs:
@@ -574,7 +574,7 @@ class Content(XML_data):
             if font.has_key(self.font):
                 self.font = font[self.font]
             else:
-                print 'skin error: can\'t find font %s' % self.font
+                print 'skin error: can\'t find font \"%s\"' % self.font
                 print font
                 self.font = font['default']
         else:
@@ -638,7 +638,7 @@ class FormatText(XML_data):
             if font.has_key(self.font):
                 self.font = font[self.font]
             else:
-                print 'skin error: can\'t find font %s' % self.font
+                print 'skin error: can\'t find font \"%s\"' % self.font
                 self.font = font['default']
         else:
             self.font = font['default']
@@ -742,7 +742,7 @@ class Image(XML_data):
             if image_names.has_key(self.image):
                 self.filename = image_names[self.image]
             else:
-                print 'skin error: can\'t find image definition %s' % self.image
+                print 'skin error: can\'t find image definition \"%s\"' % self.image
 
         if self.filename:
             self.filename = search_file(self.filename, search_dirs)
