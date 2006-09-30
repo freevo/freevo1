@@ -180,8 +180,7 @@ class Lirc:
 
         self.nextcode = pylirc.nextcode
 
-        self.previous_returned_code   = None
-        self.previous_code            = None;
+        self.previous_code            = None
         self.repeat_count             = 0
         self.firstkeystroke           = 0.0
         self.lastkeystroke            = 0.0
@@ -224,13 +223,9 @@ class Lirc:
             list = self.nextcode()
 
         if list == []:
-            # It's a repeat, the flag is 0
-            list   = self.previous_returned_code
-            result = list
+            list = None
 
-        elif list != None:
-            # It's a new code (i.e. IR key was released), the flag is 1
-            self.previous_returned_code = list
+        if list != None:
             result = list
 
         self.previous_code = result
