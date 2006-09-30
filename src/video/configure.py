@@ -113,7 +113,6 @@ def subtitle_selection_menu(arg=None, menuw=None):
     menu_items = [ menu.MenuItem(_('no subtitles'), subtitle_selection, (item, -1)) ]
     try:
         for s in item.info['subtitles']:
-            print 'languagedesc=%s language=%s content=%s' % (s['languagedesc'], s['language'], s['content'])
             if s.has_key('languagedesc') and s['languagedesc']:
                 s['language'] = s['languagedesc']
             elif not s.has_key('language') or not s['language']:
