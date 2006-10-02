@@ -1030,7 +1030,7 @@ SKIN_MODULE = 'main'
 # used, otherwise the skin will rememeber the last choosen skin.
 #
 SKIN_XML_FILE         = ''
-SKIN_DEFAULT_XML_FILE = 'mediaportal'
+SKIN_DEFAULT_XML_FILE = 'blurr'
 
 #
 # Select a way when to switch to text view even if a image menu is there
