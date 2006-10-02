@@ -1315,7 +1315,7 @@ if CONF.display in ('dfbmga', 'directfb') and CONF.df_xine:
     XINE_VO_DEV  = ''
     XINE_COMMAND = CONF.df_xine
 
-XINE_ARGS_DEF = '--no-lirc --post=pp:quality=10;expand'
+XINE_ARGS_DEF = "--no-lirc --post='pp:quality=10;expand'"
 
 XINE_AO_DEV = 'oss'                     # alsa or oss
 
