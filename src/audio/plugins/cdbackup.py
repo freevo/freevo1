@@ -70,6 +70,7 @@ import sys
 import threading
 import re
 import shutil
+import errno
 
 import config
 import menu
@@ -207,6 +208,7 @@ class PluginInterface(plugin.ItemPlugin):
     def stop_ripping(self, arg=None, menuw=None):
         self.rip_thread.abort = True
         self.rip_thread.join()
+        self.rip_thread = None
         menuw.delete_submenu()
 
 
@@ -297,7 +299,7 @@ class main_backup_thread(threading.Thread):
         dir_audio = config.AUDIO_BACKUP_DIR
 
         user_rip_path_prefs = {  'artist': artist,
-       	                         'album': album,
+                                 'album': album,
                                  'genre': genre }
 
         path_list = re.split("\\/", config.CD_RIP_PN_PREF)
@@ -318,14 +320,18 @@ class main_backup_thread(threading.Thread):
 
         try:
             os.makedirs(pathname, 0777)
-        except:
-            _debug_(_( 'Directory %s already exists' ) % pathname)
+        except OSError, e:
+            if e.errno == errno.EEXIST:
+                _debug_(_( 'Directory %s already exists' ) % pathname)
+            else:
+                # FIXME: popup
+                _debug_(_( "Cannot rip to '%s'! (%s)") % (pathname, e.strerror))
 
         try:
-	    mycoverart = '%s/mmpython/disc/%s.jpg' % (config.FREEVO_CACHEDIR, discid)
-	    if os.path.isfile(mycoverart):
-	        shutil.copy(mycoverart, os.path.join(pathname,'cover.jpg'))
-	except:
+            mycoverart = '%s/mmpython/disc/%s.jpg' % (config.FREEVO_CACHEDIR, discid)
+            if os.path.isfile(mycoverart):
+                shutil.copy(mycoverart, os.path.join(pathname,'cover.jpg'))
+        except:
             _debug_('can not copy over cover art')
 
         self.output_directory = pathname
