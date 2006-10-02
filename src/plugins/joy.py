@@ -56,6 +56,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def __init__(self):
         self.device_name = ''
+        self.enabled = True
      
         if config.JOY_DEV == 0:
             self.reason = 'Joystick input module disabled'
@@ -90,6 +91,9 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def poll(self):
+        if not self.enabled:
+            return
+
         command = ''    
         _debug_('self.joyfd = %s' % self.joyfd, level=3)
         (r, w, e) = select.select([self.joyfd], [], [], 0)
@@ -124,4 +128,8 @@ class PluginInterface(plugin.DaemonPlugin):
             if command:
                 rc.post_event(command)
     
+    def enable(self, enable_joy=True):
+        self.enabled = enable_joy
+        return
+
 
