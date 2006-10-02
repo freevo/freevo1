@@ -16,13 +16,15 @@ from util.distribution import setup, Extension, check_libs, docbook_finder
 from distutils import core
 
 
-check_libs((('mmpython', 'http://www.sf.net/projects/mmpython' ),
-            ('pygame', 'http://www.pygame.org'),
+check_libs((
             ('xml.utils.qp_xml', 'http://pyxml.sourceforge.net/'),
+            ('mmpython', 'http://www.sf.net/projects/mmpython' ),
+            ('pygame', 'http://www.pygame.org'),
             ('Image', 'http://www.pythonware.com/products/pil/'),
             ('elementtree', 'http://effbot.org/zone/elementtree.htm'),
             ('twisted', 'http://www.twistedmatrix.com/'),
-            ('twisted.web.microdom', 'http://www.twistedmatrix.com/')))
+            ('twisted.web.microdom', 'http://www.twistedmatrix.com/')
+))
 
 
 class Runtime(core.Command):
