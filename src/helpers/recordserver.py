@@ -140,6 +140,10 @@ plugin.init_special_plugin(config.plugin_record)
 # XXX: In the future we should have one lock per VideoGroup.
 tv_lock_file = config.FREEVO_CACHEDIR + '/record'
 
+if config.TV_RECORD_PADDING_PRE == None:
+    config.TV_RECORD_PADDING_PRE = config.TV_RECORD_PADDING
+if config.TV_RECORD_PADDING_POST == None:
+    config.TV_RECORD_PADDING_POST = config.TV_RECORD_PADDING
 
 def print_plugin_warning():
     print '*************************************************'
@@ -391,7 +395,6 @@ class RecordServer(xmlrpc.XMLRPC):
         rec_prog = None
         cleaned = None
         delay_recording = FALSE
-        total_padding = 0
 
         sr = self.getScheduledRecordings()
         progs = sr.getProgramList()
@@ -415,14 +418,14 @@ class RecordServer(xmlrpc.XMLRPC):
             except:
                 recording = FALSE
 
-            if (prog.start - config.TV_RECORD_PADDING) <= now \
-                   and (prog.stop + config.TV_RECORD_PADDING) >= now \
+            if (prog.start - config.TV_RECORD_PADDING_PRE) <= now \
+                   and (prog.stop + config.TV_RECORD_PADDING_POST) >= now \
                    and recording == FALSE:
                 # just add to the 'we want to record this' list
                 # then end the loop, and figure out which has priority,
                 # remember to take into account the full length of the shows
                 # and how much they overlap, or chop one short
-                duration = int((prog.stop + config.TV_RECORD_PADDING ) - now - 10)
+                duration = int((prog.stop + config.TV_RECORD_PADDING_POST ) - now - 10)
                 if duration < 10:
                     return 
 
@@ -435,7 +438,7 @@ class RecordServer(xmlrpc.XMLRPC):
                         # has a higher priority.
                         if self.isProgAFavorite(prog)[0] and \
                            not self.isProgAFavorite(currently_recording)[0] and \
-                           prog.stop + config.TV_RECORD_PADDING > now:
+                           prog.stop + config.TV_RECORD_PADDING_POST > now:
                             _debug_('ignore %s' % String(prog))
                             continue
                         sr.removeProgram(currently_recording, 
@@ -451,9 +454,10 @@ class RecordServer(xmlrpc.XMLRPC):
                             # Therefore we have overlapping paddings but not
                             # real stop / start times.
                             overlap = (currently_recording.stop + \
-                                       config.TV_RECORD_PADDING) - \
-                                      (prog.start - config.TV_RECORD_PADDING)
-                            if overlap <= (config.TV_RECORD_PADDING/2):
+                                       config.TV_RECORD_PADDING_POST) - \
+                                      (prog.start - config.TV_RECORD_PADDING_PRE)
+                            if overlap <= ((config.TV_RECORD_PADDING_PRE +
+					    config.TV_RECORD_PADDING_POST)/4):
                                 sr.removeProgram(currently_recording, 
                                                  tv_util.getKey(currently_recording))
                                 plugin.getbyname('RECORD').Stop()
@@ -477,7 +481,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         for prog in progs.values():
             # If the program is over remove the entry.
-            if ( prog.stop + config.TV_RECORD_PADDING) < now:
+            if ( prog.stop + config.TV_RECORD_PADDING_POST) < now:
                 _debug_('found a program to clean')
                 cleaned = TRUE
                 del progs[tv_util.getKey(prog)]
@@ -622,7 +626,7 @@ class RecordServer(xmlrpc.XMLRPC):
     
         for fav in favs.values():
     
-            if prog.title.lower() == fav.title.lower():    
+            if prog.title.lower().find(fav.title.lower()) >= 0:
                 if fav.channel == tv_util.get_chan_displayname(prog.channel_id) \
                    or fav.channel == 'ANY':
                     if Unicode(fav.dow) == Unicode(dow) or Unicode(fav.dow) == u'ANY':
@@ -705,33 +709,18 @@ class RecordServer(xmlrpc.XMLRPC):
             # if prog.start <= last and favorite:
             (isFav, favorite) = self.isProgAFavorite(prog, favs)
             if prog.start <= last and isFav:
-                # do not yet remove programs that are currently being recorded:
-                try:
-                    rec_now = prog.isRecording
-                except:
-                    rec_now = False
-
-                if rec_now:
-                    _debug_("not removing currently recorded favorite")
-                else:
+                # do not yet remove programs currently being recorded:
+                isRec = hasattr(prog, "isRecording") and prog.isRecording
+                if not isRec:
                     self.removeScheduledRecording(prog)
     
         for ch in guide.chan_list:
             for prog in ch.programs:
                 (isFav, favorite) = self.isProgAFavorite(prog, favs)
-                if isFav:
-                    # do not schedule favorites that are currently being recorded:
-                    try:
-                        rec_now = prog.isRecording
-                    except:
-                        rec_now = False
-
-                    if rec_now:
-                        _debug_("not scheduling currently recorded favorite")
-                    else:
-                        prog.isFavorite = favorite
-                        self.scheduleRecording(prog)
-
+                isRec = hasattr(prog, "isRecording") and prog.isRecording
+                if isFav and not isRec:
+                    prog.isFavorite = favorite
+                    self.scheduleRecording(prog)
 
         return (TRUE, 'favorites schedule updated')
     
