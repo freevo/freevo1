@@ -60,8 +60,10 @@ class PluginInterface(plugin.ItemPlugin):
 
             self.files = []
             self.item  = item
-            fs         = item.files.get()
+            if not item.files:
+                return []
 
+            fs = item.files.get()
             for f in fs:
                 if f.endswith('.img') or f.endswith('.iso'):
                     self.files.append(f)
