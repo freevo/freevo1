@@ -6,66 +6,6 @@
 # $Id$
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.59.2.3  2004/10/29 18:22:05  dischi
-# removed unicode bug
-#
-# Revision 1.59.2.2  2004/10/20 18:41:09  dischi
-# add missing :
-#
-# Revision 1.59.2.1  2004/10/20 18:35:34  dischi
-# fix favorite recording bug and set favorite priority below manual scheduled
-#
-# Revision 1.59  2004/07/16 19:39:57  dischi
-# store recording timestamp
-#
-# Revision 1.58  2004/07/12 22:33:17  mikeruelle
-# need the sharp part of the shebang line
-#
-# Revision 1.57  2004/07/12 14:52:32  outlyer
-# More debug. If no one objects, I'll delete these completely rather than
-# commenting them out.
-#
-# Revision 1.56  2004/07/11 13:54:33  dischi
-# cache scheduledRecordings in memory
-#
-# Revision 1.55  2004/07/10 12:33:39  dischi
-# header cleanup
-#
-# Revision 1.54  2004/07/09 21:05:46  rshortt
-# Add warnings in case the recording plugin isn't there.
-#
-# Revision 1.53  2004/07/09 16:20:54  outlyer
-# Remove the request logging for 0-level debug. Exceptions will still be
-# logged, but standard requests will not.
-#
-# (i.e. this removes the Apache-style access logging for DEBUG = 0)
-#
-# Revision 1.52  2004/07/09 11:19:21  dischi
-# fix unicode crash
-#
-# Revision 1.51  2004/07/09 02:28:53  outlyer
-# If the automatic caching fails (as was happening for me) then just leave
-# the png file in place for Freevo's OSD to pickle on access (rather than
-# pre-pickled as before)
-#
-# If your system was caching the image properly before, then this shouldn't
-# make any difference and the code probably won't even be called.
-#
-# Revision 1.50  2004/07/01 19:10:45  dischi
-# add TV_RECORD_SERVER_GID
-#
-# Revision 1.49  2004/06/29 03:46:54  outlyer
-# Hide some print statements. If these were supposed to go into debug, I can
-# change that.
-#
-# Revision 1.48  2004/06/28 20:40:16  dischi
-# make it possible to switch uid
-#
-# Revision 1.47  2004/06/23 21:20:10  dischi
-# put snapshot in again with a try except
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -120,15 +60,18 @@ import tv.epg_xmltv
 import util.tv_util as tv_util
 import plugin
 import util.popen3
-from   util.videothumb import snapshot
-
-
+from util.videothumb import snapshot
 from event import *
 
-def _debug_(text):
-    if config.DEBUG:
-        log.debug(String(text))
-        
+dbglvl=1
+
+def _debug_(text, level=1):
+    if config.DEBUG >= level:
+        try:
+            log.debug(String(text))
+        except:
+            log.debug('Failed to log a message')
+
 _debug_('PLUGIN_RECORD: %s' % config.plugin_record)
 
 appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
@@ -160,6 +103,65 @@ if not plugin.getbyname('RECORD'):
 
 
 class RecordServer(xmlrpc.XMLRPC):
+
+    def progsTimeCompare(self, first, second):
+        t1 = first.split(':')[-1]
+        t2 = second.split(':')[-1]
+        try:
+            return int(t1) - int(t2)
+        except ArithmeticError:
+            pass
+        return 0
+
+    def findNextProgram(self):
+        _debug_('in findNextProgram', dbglvl+3)
+
+        progs = self.getScheduledRecordings().getProgramList()
+        now = time.time()
+
+        next_program = None
+        proglist = list(progs)
+        proglist.sort(self.progsTimeCompare)
+        for progitem in proglist:
+            prog = progs[progitem]
+            _debug_('%s:%s chan=%s %s->%s' % (prog.title, prog.sub_title, \
+                prog.channel_id, time.localtime(prog.start), time.localtime(prog.stop)), dbglvl+1)
+
+            try:
+                recording = prog.isRecording
+            except:
+                recording = False
+            _debug_('%s: recording=%s' % (prog.title, recording))
+
+            if now >= prog.stop + config.TV_RECORD_PADDING_POST:
+                _debug_('%s: prog.stop=%s, now=%s' % (prog.title, \
+                    time.localtime(prog.stop+config.TV_RECORD_PADDING_POST), now), dbglvl+1)
+                continue
+            _debug_('%s: prog.stop=%s' % (prog.title, time.localtime(prog.stop)), dbglvl)
+
+            if not recording:
+                next_program = prog
+                break
+
+        self.next_program = next_program
+        if next_program == None:
+            _debug_('No program scheduled to record', dbglvl)
+            return None
+
+        _debug_('\"%s\" %s %s->%s' % (next_program.title, next_program.channel_id, \
+            time.localtime(next_program.start), time.localtime(next_program.stop)), dbglvl)
+        return next_program
+
+
+    def isPlayerRunning(self):
+        '''
+        returns the state of a player, mplayer, xine, etc.
+        TODO:
+            real player running test, check /dev/videoX.
+            this could go into the upsoon client
+        '''
+        _debug_('in isPlayerRunning', dbglvl+3)
+        return (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
 
     # note: add locking and r/rw options to get/save funs
     def getScheduledRecordings(self):
@@ -411,7 +413,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         now = time.time()
         for prog in progs.values():
-            _debug_('checkToRecord: progloop = %s' % String(prog))
+            _debug_('checkToRecord: progloop=%s' % String(prog))
 
             try:
                 recording = prog.isRecording
@@ -728,6 +730,16 @@ class RecordServer(xmlrpc.XMLRPC):
     #################################################################
     #  Start XML-RPC published methods.                             #
     #################################################################
+
+    def xmlrpc_isPlayerRunning(self):
+        status = self.isPlayerRunning()
+        message = status and 'player is running' or 'player is not running'
+        return (status, message)
+
+    def xmlrpc_findNextProgram(self):
+        response = self.findNextProgram()
+        status = response != None
+        return (status, jellyToXML(response))
 
     def xmlrpc_getScheduledRecordings(self):
         return (TRUE, jellyToXML(self.getScheduledRecordings()))
