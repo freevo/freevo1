@@ -152,8 +152,8 @@ if __name__ == "__main__":
         except:
             # else arbitrary consider that file is 1Mbps and grab position at 10%
             position = os.stat(filename)[ST_SIZE]/1024/1024/10.0
-            if position < 10:
-                position = '10'
+            if position < 360:
+                position = '360'
             else:
                 position = str(int(position))
 
