@@ -54,13 +54,13 @@ class IVTV_TV:
         self.thread.start()
         self.tuner_chidx = 0    # Current channel, index into config.TV_CHANNELS
         self.app_mode = 'tv'
-	self.app       = None
+        self.app       = None
         self.videodev = None
-	self.fc = FreevoChannels() 
+        self.fc = FreevoChannels() 
         self.current_vg = None 
 
 
-	
+        
     def TunerSetChannel(self, tuner_channel):
         for pos in range(len(config.TV_CHANNELS)):
             channel = config.TV_CHANNELS[pos]
@@ -106,7 +106,7 @@ class IVTV_TV:
         
     def Play(self, mode, tuner_channel=None, channel_change=0):
 
-	print 'PLAY CHAN: %s' % tuner_channel
+        print 'PLAY CHAN: %s' % tuner_channel
 
         if tuner_channel != None:
             
@@ -115,15 +115,15 @@ class IVTV_TV:
             except ValueError:
                 pass
 
-	if not tuner_channel: 
+        if not tuner_channel: 
             tuner_channel = self.fc.getChannel()
-	    print 'PLAY CHAN: %s' % tuner_channel
+            print 'PLAY CHAN: %s' % tuner_channel
 
-	vg = self.current_vg = self.fc.getVideoGroup(tuner_channel) 
-	print 'PLAY GROUP: %s' % vg.desc
+        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel) 
+        print 'PLAY GROUP: %s' % vg.desc
 
-        if mode == 'tv':		
-	 if vg.group_type == 'ivtv':
+        if mode == 'tv':                
+         if vg.group_type == 'ivtv':
             ivtv_dev = ivtv.IVTV(vg.vdev)
             ivtv_dev.init_settings()
             ivtv_dev.setinput(vg.input_num)
@@ -190,8 +190,8 @@ class IVTV_TV:
         self.thread.mode_flag.set()
 
         rc.app(self.prev_app)
-	#JM +PLAY_END
-	rc.post_event(PLAY_END)
+        #JM +PLAY_END
+        rc.post_event(PLAY_END)
         if osd.focused_app():
            osd.focused_app().show() 
            
@@ -203,7 +203,7 @@ class IVTV_TV:
 
     def eventhandler(self, event, menuw=None):
         print '%s: %s app got %s event' % (time.time(), self.mode, event)
-	s_event = '%s' % event
+        s_event = '%s' % event
 
 # The following events need to be defined in events.py (check that) first
 
@@ -228,13 +228,13 @@ class IVTV_TV:
             rc.post_event(PLAY_END)
             return TRUE
         
-	if event == PAUSE or event == PLAY:
+        if event == PAUSE or event == PLAY:
             self.thread.app.write('pause\n')
             return True
 
 #        if event == UP:
 #            self.thread.app.write('EventUp\n')
-#	    return True
+#            return True
 
 #        if event == DOWN:
 #            self.thread.app.write('EventDown\n')
@@ -242,13 +242,13 @@ class IVTV_TV:
 
 
         if event == MENU_GOTO_MAINMENU:
-	    self.thread.app.write('TitleMenu\n')
+            self.thread.app.write('TitleMenu\n')
             return True
 
 # Add to events.py
 #        if event == SUBTITLE:
-#	    self.thread.app.write('SpuNext\n')
-#	    return True
+#            self.thread.app.write('SpuNext\n')
+#            return True
     
         if event == STOP:
             self.thread.app.write('Quit\n')
@@ -265,7 +265,7 @@ class IVTV_TV:
 #            self.stop()
 #            return self.item.eventhandler(event)
      
-	if event in [ TV_CHANNEL_UP, TV_CHANNEL_DOWN] or s_event.startswith('INPUT_'):
+        if event in [ TV_CHANNEL_UP, TV_CHANNEL_DOWN] or s_event.startswith('INPUT_'):
             if event == TV_CHANNEL_UP:
                 nextchan = self.fc.getNextChannel()
             elif event == TV_CHANNEL_DOWN:
@@ -275,12 +275,12 @@ class IVTV_TV:
                 nextchan = self.fc.getManChannel(chan)
                 
 
-	   # tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
+           # tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
            # now = time.strftime('%H:%M')
            # msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
            #cmd = 'osd_show_text "%s"\n' % msg 
-	    
-	    print 'NEXT CHAN: %s' % nextchan
+            
+            print 'NEXT CHAN: %s' % nextchan
             nextvg = self.fc.getVideoGroup(nextchan)
             print 'NEXT GROUP: %s' % nextvg.desc
 
@@ -292,24 +292,24 @@ class IVTV_TV:
             if self.mode == 'vcr':
                 return   
 
-	    elif self.current_vg.group_type == 'ivtv':
+            elif self.current_vg.group_type == 'ivtv':
                 self.fc.chanSet(nextchan)
                 self.thread.app.write('seek 999999 0\n')
-	    else:
-		freq_khz = self.fc.chanSet(nextchan, app=self.thread.app)
+            else:
+                freq_khz = self.fc.chanSet(nextchan, app=self.thread.app)
                 new_freq = '%1.3f' % (freq_khz / 1000.0)
                 self.thread.app.write('tv_set_freq %s\n' % new_freq)
-	
+        
             self.current_vg = self.fc.getVideoGroup(self.fc.getChannel())
-	    
-	    # Display a channel changed message  (mplayer ?  api osd xine ?) 
+            
+            # Display a channel changed message  (mplayer ?  api osd xine ?) 
             tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
             now = time.strftime('%H:%M')
             msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
             cmd = 'osd_show_text "%s"\n' % msg
             self.thread.app.write(cmd)
             return TRUE
-	    
+            
 
         if event == SEEK:
             pos = int(event.arg)
@@ -327,7 +327,7 @@ class IVTV_TV:
             self.thread.app.write('%s%s\n' % (action, pos))
             return TRUE 
         
-	if event == TOGGLE_OSD:
+        if event == TOGGLE_OSD:
             self.thread.app.write('OSDStreamInfos\n')
             return True
                    
@@ -348,7 +348,7 @@ class XineApp(childapp.ChildApp):
         # down properly and releases all resources before it gets
         # reaped by childapp.kill().wait()
         #childapp.ChildApp.kill(self, signal.SIGINT)
-	#JM change to SIGKILL to test resolution for freevo crash from df_xine crash
+        #JM change to SIGKILL to test resolution for freevo crash from df_xine crash
         childapp.ChildApp.kill(self, signal.SIGTERM)
 
 
