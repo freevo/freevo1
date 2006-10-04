@@ -122,7 +122,7 @@ INPUT_ST     = "<I"
 GETINPUT_NO  = _IOR('V', 38, INPUT_ST)
 SETINPUT_NO  = _IOWR('V', 39, INPUT_ST)
 
-FMT_ST       = bit32 and "<I7I4x168x" or "<I7I4x172x"
+FMT_ST       = bit32 and "<I7I4x168x" or "<Q7I4x168x"
 GET_FMT_NO   = _IOWR ('V',  4, FMT_ST)
 SET_FMT_NO   = _IOWR ('V',  5, FMT_ST)
 
@@ -266,7 +266,6 @@ class Videodev:
 
 
     def getfmt(self):  
-        val = struct.pack( FMT_ST, 1L,0,0,0,0,0,0,0)
         val = struct.pack( FMT_ST, 1,0,0,0,0,0,0,0)
         r = fcntl.ioctl(self.device, i32(GET_FMT_NO), val)
         return struct.unpack( FMT_ST, r )
@@ -375,6 +374,17 @@ export RUNAPP=""
 
 if __name__ == '__main__':
 
+    viddev=Videodev('/dev/video0')
+    print viddev.querycap()
+    fmt = viddev.getstd()
+    print fmt
+    std = viddev.getfmt()
+    print std
+    viddev.setfmt(720, 576)
+    std = viddev.getfmt()
+    print std
+    
+    '''
     print 'QUERYCAP_ST=%s %s' % (QUERYCAP_ST, struct.calcsize(QUERYCAP_ST))
     print 'FREQUENCY_ST=%s %s' % (FREQUENCY_ST, struct.calcsize(FREQUENCY_ST))
     print 'ENUMSTD_ST=%s %s' % (ENUMSTD_ST, struct.calcsize(ENUMSTD_ST))
@@ -409,3 +419,4 @@ if __name__ == '__main__':
     print viddev.setfreq(8948)
     print viddev.getfreq()
     print viddev.getfreq2()
+    '''
