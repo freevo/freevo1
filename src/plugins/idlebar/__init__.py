@@ -177,7 +177,7 @@ class clock(IdleBarPlugin):
         self.timeformat = format
 
     def draw(self, (type, object), x, osd):
-        clock = time.strftime(self.timeformat)
+        clock = Unicode(time.strftime(self.timeformat))
         font  = osd.get_font('clock')
         pad_x = 10
         idlebar_height = 60
