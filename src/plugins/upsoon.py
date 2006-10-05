@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# wakeup client
+# interrupt player
 # -----------------------------------------------------------------------
 # $Id: upsoon.py $
 #
@@ -34,10 +34,11 @@
 
 import plugin
 import config
-import time, sys, socket, traceback, string
+import time, sys, os, socket, traceback, string
 import xmlrpclib
 import rc
 import thread
+import tv.v4l2
 from event import *
 from util.marmalade import jellyToXML, unjellyFromXML
 
@@ -172,17 +173,43 @@ class PluginInterface( plugin.DaemonPlugin ):
         """
         Sends a poll message to the record server
         """
+        now=time.time()
         _debug_('poll(self)', dbglvl+1)
 
-        self.player_running = self.isPlayerRunning()
-        _debug_('player_running=%s' % self.player_running, dbglvl)
         self.next_program  = self.findNextProgram()
-        _debug_('next_program=%s' % self.next_program, dbglvl)
-        if self.next_program != None:
-            # may need to ensure message is not too long
-            start_time = time.strftime('%a %H:%M', time.localtime(self.next_program.start))
-            message = '%s %s' % (self.next_program.title, start_time)
-            rc.post_event(Event(OSD_MESSAGE, message))
+        _debug_('now=%s next_program=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), dbglvl)
+        if self.next_program == None:
+            return None
+
+        secs_to_next = self.next_program.start -  now
+        _debug_('next recording in %s secs' % (int(secs_to_next+0.5)), dbglvl)
+        # stop the player 60 seconds before recording is due to start
+        if (secs_to_next > config.TV_RECORD_PADDING_PRE+60):
+            return None
+
+        _debug_('recording in less that a minute (%s secs)' % (secs_to_next), dbglvl)
+        try:
+            # check the video
+            viddev = tv.v4l2.Videodev('/dev/video0')
+            try:
+                print os.read(viddev.getdevice(), 1)
+            except OSError:
+                rc.post_event(STOP)
+                print 'device %s in use' % ('/dev/video0')
+            viddev.close()
+        except:
+            pass
+        try:
+            # check the radio
+            viddev = tv.v4l2.Videodev('/dev/video24')
+            try:
+                print os.read(viddev.getdevice(), 1)
+            except OSError:
+                rc.post_event(STOP)
+                print 'device %s in use' % ('/dev/video24')
+            viddev.close()
+        except:
+            pass
 
 
     def eventhandler( self, event, menuw=None ):
@@ -191,18 +218,13 @@ class PluginInterface( plugin.DaemonPlugin ):
         TODO
             something useful
         """
+        self.lock.acquire()
+
         _debug_('eventhandler(self, %s, %s) name=%s arg=%s context=%s handler=%s' % \
             (event, menuw, event.name, event.arg, event.context, event.handler), dbglvl+2)
 
         _debug_('event name=%s arg=%s' % (event.name, event.arg), dbglvl)
 
-        self.lock.acquire()
-        if event == BUTTON:
-            if event.arg == 'POWER':
-                if self.isPlayerRunning():
-                    rc.post_event(Event(OSD_MESSAGE, arg=_('Playing')))
-                else:
-                    rc.post_event(Event(OSD_MESSAGE, arg=_('Not Playing')))
         self.lock.release()
 
         return 0
