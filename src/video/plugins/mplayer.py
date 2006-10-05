@@ -275,7 +275,6 @@ class MPlayer:
 
         rc.app(self)
 
-        print 'DJW:play command=%s mode=%s url=%s' % (command, mode, url)
         self.app = MPlayerApp(command, self)
         return None
     
