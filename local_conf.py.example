@@ -90,6 +90,11 @@ CONFIG_VERSION = 5.16
 # Perform a whole system shutdown at SHUTDOWN! Useful for standalone boxes.
 #
 # ENABLE_SHUTDOWN_SYS = 0
+#
+# Command to execute to shutdown the system
+#
+# SHUTDOWN_SYS_CMD = "sudo shutdown -h now"
+# RESTART_SYS_CMD = "sudo shutdown -r now"
 
 # ======================================================================
 # AUTOSHUTDOWN CONFIGURATION
@@ -1226,3 +1231,28 @@ IMAGEVIEWER_BLEND_MODE = -1
 # TV_LOGOS = OS_CACHEDIR + '/xmltv/logos'
 
 # LOCALE='latin-1'
+
+# Idlebar with clock and system info is nice
+#
+# plugin.activate('idlebar')
+
+# clock display
+# %A - Full weekday name.
+# %a - Abbreviated weekday name.
+# %B - Full month name
+# %b - Abbreviated month name
+# %I - Hour (12-hour clock) as a decimal number [01,12].
+# %H - Hour (24-hour clock) as a decimal number [00,23].
+# %M - Minute as a decimal number [00,59].
+# %m - Month as a decimal number [01,12].
+# %b - Name of Month
+# %d - Day of the month as a decimal number [01,31].
+# %p - Locale's equivalent of either AM or PM.
+# %y - Year without century as a decimal number [00,99].          
+# %Y - Year with century as a decimal number.
+# plugin.activate( 'idlebar.clock', level=50, args=('%a %H:%M'))
+#
+# display proc-stats, CPU and RAM usage
+# plugin.activate('idlebar.system.procstats',level=20)
+
+# plugin.activate( 'idlebar.diskfree', level=10)
