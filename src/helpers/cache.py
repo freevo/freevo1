@@ -287,6 +287,10 @@ def create_metadata():
         for d in getattr(config, '%s_ITEMS' % type.upper()):
             try:
                 d = d[1]
+                if d == '/':
+                    print 'ERROR: %s_ITEMS contains root directory, skipped.' % type
+                    continue
+
             except:
                 pass
             if not os.path.isdir(d):
@@ -325,48 +329,64 @@ def create_tv_pickle():
     import tv.epg_xmltv
     tv.epg_xmltv.get_guide(verbose=False)
     print 'done'
-    
+
+def print_help():
+    print 'freevo cache helper to delete unused cache entries and to'
+    print 'cache all files in your data directories.'
+    print
+    print 'usage "freevo cache [--rebuild]"'
+    print 'If the --rebuild option is given, Freevo will delete the cache first'
+    print 'to rebuild the cache from start. Caches from discs won\'t be affected'
+    print
+    print 'or "freevo cache --thumbnail [ --recursive ] dir"'
+    print 'This will create thumbnails of your _video_ files'
+    print
+    print 'WARNING:'
+    print 'Caching needs a lot free space in OVERLAY_DIR. The space is also'
+    print 'needed when Freevo generates the files during runtime. Image'
+    print 'caching is the worst. So make sure you have several hundred MB'
+    print 'free! OVERLAY_DIR is set to %s' % config.OVERLAY_DIR
+    print
+    print 'It may be possible to turn off image caching in future versions'
+    print 'of Freevo (but this will slow things down).'
+    print
+
+def print_error_and_exit():
+    print 'ERROR: A directory name is mandatory if --thumbnail switch is specified'
+    print
+    print_help()
+    sys.exit(1)
     
 if __name__ == "__main__":
     os.umask(config.UMASK)
     if len(sys.argv)>1 and sys.argv[1] == '--help':
-        print 'freevo cache helper to delete unused cache entries and to'
-        print 'cache all files in your data directories.'
-        print
-        print 'usage "freevo cache [--rebuild]"'
-        print 'If the --rebuild option is given, Freevo will delete the cache first'
-        print 'to rebuild the cache from start. Caches from discs won\'t be affected'
-        print
-        print 'or "freevo cache --thumbnail [ --recursive ] dir"'
-        print 'This will create thumbnails of your _video_ files'
-        print
-        print 'WARNING:'
-        print 'Caching needs a lot free space in OVERLAY_DIR. The space is also'
-        print 'needed when Freevo generates the files during runtime. Image'
-        print 'caching is the worst. So make sure you have several hundred MB'
-        print 'free! OVERLAY_DIR is set to %s' % config.OVERLAY_DIR
-        print
-        print 'It may be possible to turn off image caching in future versions'
-        print 'of Freevo (but this will slow things down).'
-        print
         sys.exit(0)
 
     if len(sys.argv)>1 and sys.argv[1] == '--thumbnail':
         import util.videothumb
-        if sys.argv[2] == '--recursive':
-            dirname = os.path.abspath(sys.argv[3])
-            files = util.match_files_recursively(dirname, config.VIDEO_SUFFIX)
-        elif os.path.isdir(sys.argv[2]):
-            dirname = os.path.abspath(sys.argv[2])
-            files = util.match_files(dirname, config.VIDEO_SUFFIX)
-        else:
-            files = [ os.path.abspath(sys.argv[2]) ]
-        print 'creating video thumbnails....'
-        for filename in files:
-            print '  %4d/%-4d %s' % (files.index(filename)+1, len(files),
+        if len(sys.argv)>2:
+          if sys.argv[2] == '--recursive':
+              if len(sys.argv)>3:
+                dirname = os.path.abspath(sys.argv[3])
+                files = util.match_files_recursively(dirname, config.VIDEO_SUFFIX)
+              else:
+                print_error_and_exit()
+ 
+          elif os.path.isdir(sys.argv[2]):
+              dirname = os.path.abspath(sys.argv[2])
+              files = util.match_files(dirname, config.VIDEO_SUFFIX)
+          else:
+              files = [ os.path.abspath(sys.argv[2]) ]
+
+          print 'creating video thumbnails....'
+          for filename in files:
+              print '  %4d/%-4d %s' % (files.index(filename)+1, len(files),
                                      os.path.basename(filename))
-            util.videothumb.snapshot(filename, update=False)
-        print
+              util.videothumb.snapshot(filename, update=False)
+          print
+        else:
+          print_error_and_exit()
+
         sys.exit(0)
 
 
