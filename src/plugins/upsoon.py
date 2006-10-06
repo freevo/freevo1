@@ -41,6 +41,7 @@ import thread
 import tv.v4l2
 from tv.channels import FreevoChannels
 from util.marmalade import jellyToXML, unjellyFromXML
+from gui import AlertBox
 from event import *
 
 # set the base debug level
@@ -184,19 +185,19 @@ class PluginInterface( plugin.DaemonPlugin ):
         if self.next_program == None:
             return None
 
-        secs_to_next = self.next_program.start -  now
-        _debug_('next recording in %s secs' % (int(secs_to_next+0.5)), dbglvl)
+        secs_to_next = int(self.next_program.start - now + 0.5)
+        _debug_('next recording in %s secs' % (secs_to_next), dbglvl)
         # stop the player 60 seconds before recording is due to start
         if (secs_to_next > config.TV_RECORD_PADDING_PRE+60):
             return None
 
         _debug_('recording in less that a minute (%s secs)' % (secs_to_next), dbglvl)
 
-        vdev=self.fc.getVideoGroup(rec_prog.channel_id).vdev
+        vdev=self.fc.getVideoGroup(self.next_program.channel_id).vdev
         try:
             # check the video
-            viddev = tv.v4l2.Videodev(vdev)
             try:
+                viddev = tv.v4l2.Videodev(vdev)
                 print os.read(viddev.getdevice(), 1)
             except OSError:
                 rc.post_event(STOP)
@@ -209,8 +210,8 @@ class PluginInterface( plugin.DaemonPlugin ):
         rdev=config.RADIO_DEVICE
         try:
             # check the radio
-            viddev = tv.v4l2.Videodev(rdev)
             try:
+                viddev = tv.v4l2.Videodev(rdev)
                 print os.read(viddev.getdevice(), 1)
             except OSError:
                 rc.post_event(STOP)
@@ -250,7 +251,7 @@ if __name__ == '__main__':
         (result, response) = isPlayerRunning()
         print response
 
-    vg=FreevoChannels().getVideoGroup(rec_prog.channel_id)
+    vg=FreevoChannels().getVideoGroup(self.next_program.channel_id)
     print "vg=%s" % vg
     print "dir(%s)" % dir(vg)
     for it in dir(vg):
