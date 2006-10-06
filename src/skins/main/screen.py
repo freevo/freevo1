@@ -165,10 +165,12 @@ class Screen:
                                          border_size=size, border_color=color,
                                          radius=radius, layer=self.s_alpha)
             # and than blit only the changed parts of the screen
-            for x0, y0, x1, y1 in update_area:
-                self.s_content.blit(self.s_bg, (x0, y0), (x0, y0, x1-x0, y1-y0))
-                self.s_content.blit(self.s_alpha, (x0, y0), (x0, y0, x1-x0, y1-y0))
-
+            try:
+                for x0, y0, x1, y1 in update_area:
+                    self.s_content.blit(self.s_bg, (x0, y0), (x0, y0, x1-x0, y1-y0))
+                    self.s_content.blit(self.s_alpha, (x0, y0), (x0, y0, x1-x0, y1-y0))
+            except:
+                pass
 
         update_area += self.update_content
 
