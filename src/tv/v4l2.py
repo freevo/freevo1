@@ -165,6 +165,10 @@ class Videodev:
         self.capabilities = results[4]
     
 
+    def getdevice(self):
+        return self.device
+
+
     def close(self):
         os.close(self.device)
 
