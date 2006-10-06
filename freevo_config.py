@@ -1363,10 +1363,12 @@ if os.uname()[0] == 'FreeBSD':
     TV_DRIVER = 'bsdbt848'
     TV_DEVICE = '/dev/bktr0'
     TV_INPUT = 1
+    RADIO_DEVICE = '/dev/radio0'
 else:
     TV_DRIVER = 'v4l'
     TV_DEVICE = '/dev/video0'
     TV_INPUT = 0
+    RADIO_DEVICE = '/dev/radio0'
 
 # Additional options to pass to mplayer in TV mode.
 # For example, TV_OPTS = '-vop pp=ci' would turn on deinterlacing.
@@ -1531,7 +1533,6 @@ VIDEO_GROUPS = [
                desc='Default Video Group',
                recordable=True),
 ]
-
 
 #
 # TV Channels. This list contains a mapping from the displayed channel name

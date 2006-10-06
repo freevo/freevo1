@@ -894,6 +894,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 # TV_DRIVER = 'v4l'
 # TV_DEVICE = '/dev/video0'
 # TV_INPUT = 0
+# RADIO_DEVICE = '/dev/radio0'
 
 #
 # Additional options to pass to mplayer in TV mode.

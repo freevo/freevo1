@@ -39,8 +39,9 @@ import xmlrpclib
 import rc
 import thread
 import tv.v4l2
-from event import *
+from tv.channels import FreevoChannels
 from util.marmalade import jellyToXML, unjellyFromXML
+from event import *
 
 # set the base debug level
 dbglvl=1
@@ -88,6 +89,8 @@ class PluginInterface( plugin.DaemonPlugin ):
         self.serverup = None
         self.next_program = self.findNextProgram()
         _debug_('up=%s %s' % (self.serverup, self.next_program), dbglvl)
+
+        self.fc = FreevoChannels()
 
 
     def findNextProgram(self):
@@ -188,28 +191,34 @@ class PluginInterface( plugin.DaemonPlugin ):
             return None
 
         _debug_('recording in less that a minute (%s secs)' % (secs_to_next), dbglvl)
+
+        vdev=self.fc.getVideoGroup(rec_prog.channel_id).vdev
         try:
             # check the video
-            viddev = tv.v4l2.Videodev('/dev/video0')
+            viddev = tv.v4l2.Videodev(vdev)
             try:
                 print os.read(viddev.getdevice(), 1)
             except OSError:
                 rc.post_event(STOP)
-                print 'device %s in use' % ('/dev/video0')
+                print 'device \"%s\" in use' % (vdev)
+                AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
             viddev.close()
         except:
-            pass
+            print 'cannot check video device \"%s\"' % (vdev)
+
+        rdev=config.RADIO_DEVICE
         try:
             # check the radio
-            viddev = tv.v4l2.Videodev('/dev/video24')
+            viddev = tv.v4l2.Videodev(rdev)
             try:
                 print os.read(viddev.getdevice(), 1)
             except OSError:
                 rc.post_event(STOP)
-                print 'device %s in use' % ('/dev/video24')
+                print 'device \"%s\" in use' % (rdev)
+                AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
             viddev.close()
         except:
-            pass
+            print 'cannot check radio device \"%s\"' % (rdev)
 
 
     def eventhandler( self, event, menuw=None ):
@@ -230,14 +239,21 @@ class PluginInterface( plugin.DaemonPlugin ):
         return 0
 
 
-# this won't work
 if __name__ == '__main__':
+    # this won't work, without some more imports
     if len(sys.argv) >= 2: 
         function = sys.argv[1]
     else:
         function = 'none'
 
-
     if function == "isplayerrunning":
         (result, response) = isPlayerRunning()
         print response
+
+    vg=FreevoChannels().getVideoGroup(rec_prog.channel_id)
+    print "vg=%s" % vg
+    print "dir(%s)" % dir(vg)
+    for it in dir(vg):
+        print "   %s:%s" % (it, eval('vg.'+it))
+    vdev=vg.vdev
+    print "vdev=%s" % vdev
