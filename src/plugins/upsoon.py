@@ -92,6 +92,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         _debug_('up=%s %s' % (self.serverup, self.next_program), dbglvl)
 
         self.fc = FreevoChannels()
+        self.seconds_before_start = 90
 
 
     def findNextProgram(self):
@@ -185,10 +186,10 @@ class PluginInterface( plugin.DaemonPlugin ):
         if self.next_program == None:
             return None
 
-        secs_to_next = int(self.next_program.start - now + 0.5)
+        secs_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
         _debug_('next recording in %s secs' % (secs_to_next), dbglvl)
-        # stop the player 60 seconds before recording is due to start
-        if (secs_to_next > config.TV_RECORD_PADDING_PRE+60):
+        # stop the player 90 seconds before recording is due to start
+        if (secs_to_next > self.seconds_before_start):
             return None
 
         _debug_('recording in less that a minute (%s secs)' % (secs_to_next), dbglvl)
