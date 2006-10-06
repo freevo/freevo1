@@ -201,8 +201,9 @@ class PluginInterface( plugin.DaemonPlugin ):
                 print os.read(viddev.getdevice(), 1)
             except OSError:
                 rc.post_event(STOP)
-                print 'device \"%s\" in use' % (vdev)
-                AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
+                _debug_('video device \"%s\" in use' % (vdev), dbglvl)
+                # Need to go back one menu
+                #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
             viddev.close()
         except:
             print 'cannot check video device \"%s\"' % (vdev)
@@ -215,8 +216,9 @@ class PluginInterface( plugin.DaemonPlugin ):
                 print os.read(viddev.getdevice(), 1)
             except OSError:
                 rc.post_event(STOP)
-                print 'device \"%s\" in use' % (rdev)
-                AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
+                _debug_('radio device \"%s\" in use' % (rdev), dbglvl)
+                # Need to go back one menu
+                #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
             viddev.close()
         except:
             print 'cannot check radio device \"%s\"' % (rdev)
