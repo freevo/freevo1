@@ -1,0 +1,23 @@
+# British English strings in freevo
+# Copyright (C) 2006
+# Duncan Webb <duncan-freevo@linuxowl.com>, 2006
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: freevo-1.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-10-06 14:20+0200\n"
+"PO-Revision-Date:  Fri Oct 05 14:20:00 2006\n"
+"Last-Translator: Duncan Webb <duncan-freevo@linuxowl.com>\n"
+"Language-Team: British English <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+#: skins/main/tvlisting_area.py:364 tv/tvguide.py:119 tv/tvguide.py:585
+#: tv/tvguide.py:587 www/htdocs/guide.rpy:251
+msgid "This channel has no data loaded"
+msgstr "This channel has no programme information"
+
+
