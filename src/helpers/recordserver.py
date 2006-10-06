@@ -60,6 +60,7 @@ import tv.epg_xmltv
 import util.tv_util as tv_util
 import plugin
 import util.popen3
+from tv.channels import FreevoChannels
 from util.videothumb import snapshot
 from event import *
 
@@ -79,9 +80,6 @@ logfile = '%s/%s-%s.log' % (config.LOGDIR, appname, os.getuid())
 log.startLogging(open(logfile, 'a'))
 
 plugin.init_special_plugin(config.plugin_record)
-
-# XXX: In the future we should have one lock per VideoGroup.
-tv_lock_file = config.FREEVO_CACHEDIR + '/record'
 
 if config.TV_RECORD_PADDING_PRE == None:
     config.TV_RECORD_PADDING_PRE = config.TV_RECORD_PADDING
@@ -103,6 +101,13 @@ if not plugin.getbyname('RECORD'):
 
 
 class RecordServer(xmlrpc.XMLRPC):
+
+    def __init__(self):
+        self.fc = FreevoChannels()
+        # XXX: In the future we should have one lock per VideoGroup.
+        self.tv_lock_file = None
+        self.vg = None
+
 
     def progsTimeCompare(self, first, second):
         t1 = first.split(':')[-1]
@@ -392,7 +397,6 @@ class RecordServer(xmlrpc.XMLRPC):
 
         
     def checkToRecord(self):
-        _debug_('in checkToRecord')
         rec_cmd = None
         rec_prog = None
         cleaned = None
@@ -502,6 +506,9 @@ class RecordServer(xmlrpc.XMLRPC):
                 self.removeScheduledRecording(rec_prog)
                 return
 
+            self.vg = self.fc.getVideoGroup(rec_prog.channel_id)
+            suffix=self.vg.vdev.split('/')[-1]
+            self.tv_lock_file = config.FREEVO_CACHEDIR + '/record.'+suffix
             self.record_app.Record(rec_prog)
 
 
@@ -998,14 +1005,14 @@ class RecordServer(xmlrpc.XMLRPC):
             elif event == RECORD_START:
                 #print 'Handling event RECORD_START'
                 prog = event.arg
-                open(tv_lock_file, 'w').close()
+                open(self.tv_lock_file, 'w').close()
                 self.create_fxd(prog)
                 if config.VCR_PRE_REC:
                     util.popen3.Popen3(config.VCR_PRE_REC)
 
             elif event == RECORD_STOP:
                 #print 'Handling event RECORD_STOP'
-                os.remove(tv_lock_file)
+                os.remove(self.tv_lock_file)
                 prog = event.arg
                 try:
                     snapshot(prog.filename)

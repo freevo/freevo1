@@ -8,29 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.37  2004/07/11 13:53:52  dischi
-# do not change menu start/stop times for CHAN_NO_DATA
-#
-# Revision 1.36  2004/07/11 11:46:03  dischi
-# decrease record server calling
-#
-# Revision 1.35  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.34  2004/06/28 15:56:42  dischi
-# fix off by one error on scrolling down
-#
-# Revision 1.33  2004/06/20 14:07:58  dischi
-# remove upsoon on changes
-#
-# Revision 1.32  2004/06/20 12:40:07  dischi
-# better handling of very long programs
-#
-# Revision 1.31  2004/06/13 00:28:19  outlyer
-# Fix a crash.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -70,6 +47,7 @@ import epg_xmltv, epg_types
 
 from item import Item
 from program_display import ProgramItem
+from tv.channels import FreevoChannels
 import record_client as ri
 
 skin = skin.get_singleton()
@@ -107,6 +85,7 @@ class TVGuide(Item):
         self.last_update = 0
         
         self.update_schedules(force=True)
+        self.fc = FreevoChannels()
 
         self.rebuild(start_time, stop_time, guide.chan_list[0].id, selected)
         self.event_context = 'tvmenu'
@@ -211,15 +190,15 @@ class TVGuide(Item):
             self.menuw.refresh()
  
         elif event == MENU_SELECT or event == PLAY:
-            tvlockfile = config.FREEVO_CACHEDIR + '/record'
 
-            # jlaska -- START
+            suffix = self.fc.getVideoGroup(self.selected.channel_id).vdev.split('/')[-1]
+            tvlockfile = config.FREEVO_CACHEDIR + '/record.'+suffix
+
             # Check if the selected program is >7 min in the future
             # if so, bring up the record dialog
             now = time.time() + (7*60)
             if self.selected.start > now:
                 self.event_RECORD()
-            # jlaska -- END
             elif os.path.exists(tvlockfile):
                 # XXX: In the future add the options to watch what we are
                 #      recording or cencel it and watch TV.

@@ -16,17 +16,6 @@
 #       idlebar.holidays
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.19  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.18  2004/06/24 08:37:20  dischi
-# add speed warning
-#
-# Revision 1.17  2004/05/31 10:43:20  dischi
-# redraw not only in main, redraw when skin is active
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -56,6 +45,7 @@ import types
 import mailbox
 import re
 import locale
+import glob
 
 import config
 import plugin
@@ -287,7 +277,7 @@ class tv(IdleBarPlugin):
         self.listings_threshold = listings_threshold
         self.next_guide_check = 0
         self.listings_expire = 0
-        self.tvlockfile = config.FREEVO_CACHEDIR + '/record'
+        self.tvlockfile = config.FREEVO_CACHEDIR + '/record*'
         icondir = os.path.join(config.ICON_DIR, 'status')
         self.TVLOCKED     = os.path.join(icondir, 'television_active.png')
         self.TVFREE       = os.path.join(icondir, 'television_inactive.png')
@@ -295,7 +285,7 @@ class tv(IdleBarPlugin):
         self.EXPIRED      = os.path.join(icondir, 'television_expired.png')
 
     def checktv(self):
-        if os.path.exists(self.tvlockfile):
+        if len(glob.glob(self.tvlockfile)) > 0:
             return 1
         return 0
 
