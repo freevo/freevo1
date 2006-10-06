@@ -43,6 +43,7 @@
 import config, plugin
 import tv.freq, tv.v4l2
 import epg_xmltv
+import threading
 import time
 
 DEBUG = config.DEBUG
@@ -72,6 +73,7 @@ class FreevoChannels:
 
     def __init__(self):
         self.chan_index = 0
+        self.lock = threading.Lock()
 
         if config.plugin_external_tuner: 
             plugin.init_special_plugin(config.plugin_external_tuner)
@@ -81,16 +83,20 @@ class FreevoChannels:
         """
         Gets the VideoGroup object used by this Freevo channel.
         """
-        group = 0
+        try:
+            self.lock.acquire()
+            group = 0
 
-        for i in range(len(config.TV_CHANNELS)):
-            chan_info = config.TV_CHANNELS[i]
-            if chan_info[2] == chan:
-                try:
-                    group = int(chan_info[4])
-                except:
-                    # XXX: put a better exception here
-                    group = 0
+            for i in range(len(config.TV_CHANNELS)):
+                chan_info = config.TV_CHANNELS[i]
+                if chan_info[2] == chan:
+                    try:
+                        group = int(chan_info[4])
+                    except:
+                        # XXX: put a better exception here
+                        group = 0
+        finally:
+            self.lock.release()
 
         return config.VIDEO_GROUPS[group]
 
