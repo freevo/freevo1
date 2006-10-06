@@ -8,23 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.48  2004/07/21 11:32:31  dischi
-# fix dvd events for language settings
-#
-# Revision 1.47  2004/07/10 12:33:36  dischi
-# header cleanup
-#
-# Revision 1.46  2004/06/28 15:55:10  dischi
-# angle switching
-#
-# Revision 1.45  2004/06/17 23:16:05  rshortt
-# Add events for RECORD_START/STOP. (forgot to check in this file earlier).
-#
-# Revision 1.44  2004/05/12 18:56:36  dischi
-# add keys to move inside a zoom image in image viewer
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -134,9 +117,12 @@ MENU_PAGEDOWN          = Event('MENU_PAGEDOWN')
 MENU_REBUILD           = Event('MENU_REBUILD')
                        
 MENU_GOTO_MAINMENU     = Event('MENU_GOTO_MAINMENU')
+MENU_GOTO_TV           = Event('MENU_GOTO_TV')
+MENU_GOTO_TVGUIDE      = Event('MENU_GOTO_TVGUIDE')
 MENU_GOTO_VIDEOS       = Event('MENU_GOTO_VIDEOS')
 MENU_GOTO_MUSIC        = Event('MENU_GOTO_MUSIC')
 MENU_GOTO_IMAGES       = Event('MENU_GOTO_IMAGES')
+MENU_GOTO_RADIO        = Event('MENU_GOTO_RADIO')
 MENU_BACK_ONE_MENU     = Event('MENU_BACK_ONE_MENU')
                        
 MENU_SELECT            = Event('MENU_SELECT')

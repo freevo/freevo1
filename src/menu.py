@@ -8,17 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.95  2004/07/10 12:33:36  dischi
-# header cleanup
-#
-# Revision 1.94  2004/06/02 21:38:02  dischi
-# fix crash
-#
-# Revision 1.93  2004/05/09 09:58:43  dischi
-# make it possible to force a page rebuild
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -252,9 +241,12 @@ class MenuWidget(GUIObject):
         Go to a main menu item
         media = 'audio' or 'video' or 'image'
         used for events:
-            MENU_GOTO_AUDIOMENU
+            MENU_GOTO_TVMENU
+            MENU_GOTO_TVGUIDEMENU
             MENU_GOTO_VIDEOMENU
+            MENU_GOTO_AUDIOMENU
             MENU_GOTO_IMAGEMENU
+            MENU_GOTO_RADIOMENU
         """        
         #1:goto main menu.
         #2:loop through main menu items.
@@ -402,6 +394,14 @@ class MenuWidget(GUIObject):
             self.goto_main_menu()
             return
         
+        if event == MENU_GOTO_TV:
+            self.goto_media_menu("tv")
+            return
+        
+        if event == MENU_GOTO_TVGUIDE:
+            self.goto_media_menu("tv")
+            return
+        
         if event == MENU_GOTO_VIDEOS:
             self.goto_media_menu("video")
             return
@@ -412,6 +412,10 @@ class MenuWidget(GUIObject):
         
         if event == MENU_GOTO_IMAGES:
             self.goto_media_menu("image")
+            return
+        
+        if event == MENU_GOTO_RADIO:
+            self.goto_media_menu("radio")
             return
         
         if event == MENU_BACK_ONE_MENU:
