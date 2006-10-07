@@ -277,7 +277,7 @@ class tv(IdleBarPlugin):
         self.listings_threshold = listings_threshold
         self.next_guide_check = 0
         self.listings_expire = 0
-        self.tvlockfile = config.FREEVO_CACHEDIR + '/record*'
+        self.tvlockfile = config.FREEVO_CACHEDIR + '/record.*'
         icondir = os.path.join(config.ICON_DIR, 'status')
         self.TVLOCKED     = os.path.join(icondir, 'television_active.png')
         self.TVFREE       = os.path.join(icondir, 'television_inactive.png')
