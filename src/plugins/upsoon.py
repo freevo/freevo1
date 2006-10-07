@@ -92,7 +92,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         _debug_('up=%s %s' % (self.serverup, self.next_program), dbglvl)
 
         self.fc = FreevoChannels()
-        self.seconds_before_start = 90
+        self.seconds_before_start = 60
 
 
     def findNextProgram(self):
@@ -188,7 +188,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         secs_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
         _debug_('next recording in %s secs' % (secs_to_next), dbglvl)
-        # stop the player 90 seconds before recording is due to start
+        # stop the player 60 seconds before recording is due to start
         if (secs_to_next > self.seconds_before_start):
             return None
 
@@ -203,7 +203,8 @@ class PluginInterface( plugin.DaemonPlugin ):
             except OSError:
                 rc.post_event(STOP)
                 _debug_('video device \"%s\" in use' % (vdev), dbglvl)
-                # Need to go back one menu
+                rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
+                # The alert box doesn't work
                 #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
             viddev.close()
         except:
@@ -218,7 +219,8 @@ class PluginInterface( plugin.DaemonPlugin ):
             except OSError:
                 rc.post_event(STOP)
                 _debug_('radio device \"%s\" in use' % (rdev), dbglvl)
-                # Need to go back one menu
+                rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
+                # Need to go back one menu, the alert box doesn't work
                 #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
             viddev.close()
         except:
