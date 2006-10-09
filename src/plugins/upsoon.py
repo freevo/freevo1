@@ -37,6 +37,7 @@ import config
 import time, sys, os, socket, traceback, string
 import xmlrpclib
 import rc
+import glob
 import thread
 import tv.v4l2
 from tv.channels import FreevoChannels
@@ -93,6 +94,8 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         self.fc = FreevoChannels()
         self.seconds_before_start = 60
+        self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.*'
+        self.pending_lockfile = config.FREEVO_CACHEDIR + '/recording_soon'
 
 
     def findNextProgram(self):
@@ -181,6 +184,12 @@ class PluginInterface( plugin.DaemonPlugin ):
         now=time.time()
         _debug_('poll(self)', dbglvl+1)
 
+        # a bit of magic to see if we are recording and remove the pending record lock
+        if os.path.exists(self.pending_lockfile):
+            if len(glob.glob(self.tv_lockfile)) >= 1:
+                os.remove(self.pending_lockfile)
+            return None
+
         self.next_program  = self.findNextProgram()
         _debug_('now=%s next_program=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), dbglvl)
         if self.next_program == None:
@@ -202,6 +211,7 @@ class PluginInterface( plugin.DaemonPlugin ):
                 print os.read(viddev.getdevice(), 1)
             except OSError:
                 rc.post_event(STOP)
+                open(self.pending_lockfile, 'w').close()
                 _debug_('video device \"%s\" in use' % (vdev), dbglvl)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
                 # The alert box doesn't work
@@ -218,6 +228,7 @@ class PluginInterface( plugin.DaemonPlugin ):
                 print os.read(viddev.getdevice(), 1)
             except OSError:
                 rc.post_event(STOP)
+                open(self.pending_lockfile, 'w').close()
                 _debug_('radio device \"%s\" in use' % (rdev), dbglvl)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
                 # Need to go back one menu, the alert box doesn't work
