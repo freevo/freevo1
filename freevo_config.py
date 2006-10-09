@@ -226,13 +226,15 @@ LOCAL_CONF_CHANGES = [
      '''Add two variables for mplayer post processing: MPLAYER_VF_INTERLACED and
      MPLAYER_VF_PROGRESSIVE''' ),
     (5.16,
-     '''Changed default skin to mediaportal
+     '''Added xmltv-1.2 this requires elementtree
      Added XINE_TV_VO_DEV, XINE_TV_AO_DEV, and XINE_TV_TIMESHIFT_FILEMASK for the
   	 new tv.ivtv_xine_tv plugin (the latter should be e.g. "/tmp/xine-buf-" and point
   	 to a place with enough free diskspace (several gigabytes).
   	 Added TV_RECORD_PADDING_PRE/POST for separately setting TV_RECORD_PADDING
   	 Added TV_RECORDFILE_OKLETTERS for characters allowed in recording filenames.
-     Added AUTOSHUTDOWN_ settings to turn off and on the machine automatically''' ),
+     Added AUTOSHUTDOWN_ settings to turn off and on the machine automatically
+     Added Multi-tuner support to allow recording and watching at the same time
+     Added plug-in "upsoon" to stop the player when a recording is about to start''' ),
 ]
 
 
