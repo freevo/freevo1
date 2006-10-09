@@ -105,7 +105,7 @@ Set up Freevo for your specific environment.
                                   japan-bcast, japan-cable, europe-west,
                                   europe-east, italy, newzealand, australia,
                                   ireland, france, china-bcast, southafrica,
-                                  argentina, canada-cable
+                                  argentina, canada-cable, switzerland
 
    --help                       display this help and exit
 
@@ -139,7 +139,7 @@ def check_config(conf):
                      'japan-bcast', 'japan-cable', 'europe-west',
                      'europe-east', 'italy', 'newzealand', 'australia',
                      'ireland', 'france', 'china-bcast', 'southafrica',
-                     'argentina', 'canada-cable','russia']
+                     'argentina', 'canada-cable', 'russia', 'switzerland']
 
     if not conf.geometry in vals_geometry:
         print 'geometry must be one of: %s' % ' '.join(vals_geometry)

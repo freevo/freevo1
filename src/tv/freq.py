@@ -1291,6 +1291,54 @@ RUSSIA= [
     ("69",    855250 ),
 ]
 
+PAL_SWITZERLAND = [
+    ("K32", 559250 ), # BBC Prime
+    ("S13", 246250 ), # CNN Int.
+    ("K34", 575250 ), # CNBC Europe
+    ("K21", 471250 ), # Arte
+    ("K05", 175500 ), # SF 1
+    ("K10", 211000 ), # SF 2
+    ("K35", 583250 ), # SFinfo
+    ("S23", 319250 ), # EuroNews
+    ("S17", 274500 ), # Eurosport (d + e)
+    ("S05", 133250 ), # ORF 1
+    ("S15", 260250 ), # ORF 2
+    ("S10", 168500 ), # 3sat
+    ("S27", 351250 ), # 3sat
+    ("S19", 288500 ), # SAT 1
+    ("K09", 203750 ), # ARD
+    ("S04", 126250 ), # kabel eins
+    ("K29", 535250 ), # BR
+    ("K27", 519250 ), # PRO 7
+    ("K30", 543250 ), # VOX
+    ("K06", 182750 ), # RTL
+    ("K22", 479250 ), # RTL 2
+    ("S26", 343250 ), # Super RTL
+    ("S31", 383250 ), # WDR
+    ("K11", 218000 ), # ZDF
+    ("K24", 495250 ), # DSF
+    ("K31", 551250 ), # TV5 Europe
+    ("K28", 527250 ), # n-tv
+    ("S09", 161500 ), # Tele Züri
+    ("S14", 253250 ), # Südwest Fernsehen BW
+    ("S07", 147250 ), # Star TV
+    ("S33", 399250 ), # U1 TV STATION
+    ("S20", 295750 ), # MTV
+    ("S24", 327250 ), # VIVA
+    ("S11", 232000 ), # HSE24
+    ("S12", 239250 ), # TF 1
+    ("S28", 359250 ), # France 2
+    ("K07", 189750 ), # TSR 1
+    ("K37", 599250 ), # TSR 2
+    ("K25", 503250 ), # Canale 5
+    ("S08", 154500 ), # RAI UNO
+    ("K08", 196750 ), # TSI 1
+    ("S18", 281500 ), # TSI 2
+    ("K12", 225000 ), # TVE Int.
+    ("S16", 267500 ), # cablecom infokanal 
+    ("S06", 140250 ), # Tele M1**
+]
+
 CHANLIST = {
      "us-bcast"         : dict(NTSC_BCAST),
      "us-cable"         : dict(NTSC_CABLE),
@@ -1309,4 +1357,5 @@ CHANLIST = {
      "southafrica"      : dict(PAL_BCAST_ZA),
      "argentina"        : dict(ARGENTINA),
      "russia"           : dict(RUSSIA),
+     "switzerland"      : dict(PAL_SWITZERLAND),
 }
