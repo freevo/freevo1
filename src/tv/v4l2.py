@@ -8,20 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.15.2.2  2005/09/12 16:14:08  rshortt
-# Fix GET_FMT ioctl, thanks to Duncan Webb.
-#
-# Revision 1.15.2.1  2005/06/10 14:25:15  tack
-# Fix OverflowError exceptions with Python 2.4 in the ioctl calls.
-#
-# Revision 1.15  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.14  2004/01/13 15:08:22  outlyer
-# Removed an extraneous 'print'
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -363,7 +349,7 @@ class V4LGroup:
         self.vinput = vinput
         self.adev = adev
         self.desc = desc
-        self.inuse = FALSE
+        self.inuse = False
 
 
 '''

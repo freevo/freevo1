@@ -149,13 +149,13 @@ class Record_Thread(threading.Thread):
                 v = tv.ivtv.IVTV(v_dev)
 
                 v.init_settings()
-                vg = fc.getVideoGroup(self.prog.tunerid)
+                vg = fc.getVideoGroup(self.prog.tunerid, False)
 
                 if DEBUG: print 'Setting Input to %s' % vg.input_num
                 v.setinput(vg.input_num)
 
                 if DEBUG: print 'Setting Channel to %s' % self.prog.tunerid
-                fc.chanSet(str(self.prog.tunerid))
+                fc.chanSet(str(self.prog.tunerid), False)
 
                 if DEBUG: v.print_settings()
 

@@ -119,7 +119,7 @@ class IVTV_TV:
             tuner_channel = self.fc.getChannel()
             print 'PLAY CHAN: %s' % tuner_channel
 
-        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel) 
+        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel, True) 
         print 'PLAY GROUP: %s' % vg.desc
 
         if mode == 'tv':                
@@ -127,10 +127,8 @@ class IVTV_TV:
             ivtv_dev = ivtv.IVTV(vg.vdev)
             ivtv_dev.init_settings()
             ivtv_dev.setinput(vg.input_num)
-# CO by JM           ivtv_dev.print_settings()
-            self.fc.chanSet(tuner_channel)
+            self.fc.chanSet(tuner_channel, True)
 
-#            command = '%s -V --no-splash --no-lirc --stdctl pvr://' % config.XINE_COMMAND
             command = '%s -V --no-splash --no-lirc --stdctl %s pvr:///home/livetv' % (config.XINE_COMMAND, config.XINE_ARGS_DEF)
         else:
             print 'Mode "%s" is not implemented' % mode  # XXX ui.message()
@@ -281,7 +279,7 @@ class IVTV_TV:
            #cmd = 'osd_show_text "%s"\n' % msg 
             
             print 'NEXT CHAN: %s' % nextchan
-            nextvg = self.fc.getVideoGroup(nextchan)
+            nextvg = self.fc.getVideoGroup(nextchan, True)
             print 'NEXT GROUP: %s' % nextvg.desc
 
             if self.current_vg != nextvg:
@@ -293,14 +291,14 @@ class IVTV_TV:
                 return   
 
             elif self.current_vg.group_type == 'ivtv':
-                self.fc.chanSet(nextchan)
+                self.fc.chanSet(nextchan, True)
                 self.thread.app.write('seek 999999 0\n')
             else:
-                freq_khz = self.fc.chanSet(nextchan, app=self.thread.app)
+                freq_khz = self.fc.chanSet(nextchan, True, app=self.thread.app)
                 new_freq = '%1.3f' % (freq_khz / 1000.0)
                 self.thread.app.write('tv_set_freq %s\n' % new_freq)
         
-            self.current_vg = self.fc.getVideoGroup(self.fc.getChannel())
+            self.current_vg = self.fc.getVideoGroup(self.fc.getChannel(), True)
             
             # Display a channel changed message  (mplayer ?  api osd xine ?) 
             tuner_id, chan_name, prog_info = self.fc.getChannelInfo()

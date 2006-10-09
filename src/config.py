@@ -21,30 +21,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.110.2.2  2004/08/28 17:07:42  dischi
-# support empty ITEM variables
-#
-# Revision 1.110.2.1  2004/08/09 14:37:27  dischi
-# fix encoding detection
-#
-# Revision 1.110  2004/07/10 12:33:36  dischi
-# header cleanup
-#
-# Revision 1.109  2004/06/28 20:39:27  dischi
-# make sure HOME and USER are set
-#
-# Revision 1.108  2004/06/20 18:19:53  rshortt
-# Bugfix: 'config' has no namespace here, we are config.  UMASK is a local from
-# freevo_config.py or local_conf.py.
-#
-# Revision 1.107  2004/06/20 15:52:14  dischi
-# set umask as early as possible
-#
-# Revision 1.106  2004/06/09 17:08:45  rshortt
-# Attempt to sort channels properly (numericly, if possible).
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -145,7 +121,7 @@ class Logger:
 
 class VideoGroup:
     """
-    vdev:        The video device, such as /dev/video.
+    vdev:        The video recording device, such as /dev/video0.
     adev:        The audio device, such as /dev/dsp.
     input_type:  tuner, composite, svideo, webcam
     input_num:   The number of this input according to V4L
@@ -154,7 +130,7 @@ class VideoGroup:
     tuner_chanlist:  us-cable, 
     tuner_chan:  If using input_type=tuner and tuner_type=external set this to
                  what channel it needs to be to get the signal, usually 3 or 4.
-    recordable:  True or False.  Can you record from this VideoGroup.
+    player:      VideoGroup that plays for this tuner, default is to use the same device for record and play
     desc:        A nice description for this VideoGroup.
     group_type:  Special variable to identify devices like dvb or ivtv.  This
                  can be left as default, 'normal', or set to 'ivtv' or 'dvb'.
@@ -163,7 +139,7 @@ class VideoGroup:
     def __init__(self, vdev='/dev/video', adev='/dev/dsp', input_type='tuner',
                  input_num=0, tuner_norm='NTSC', tuner_chanlist='us-cable', 
                  tuner_type='internal', tuner_chan=None,
-                 recordable=True, desc='Freevo default VideoGroup',
+                 player=None, desc='Freevo default VideoGroup',
                  group_type='normal'):
 
         # XXX: Put checks in here for supplied values.
@@ -175,7 +151,7 @@ class VideoGroup:
         self.tuner_norm = string.upper(tuner_norm)
         self.tuner_chanlist = tuner_chanlist
         self.tuner_chan = tuner_chan
-        self.recordable = recordable
+        self.player = player
         self.desc = desc
         self.group_type = group_type
         self.in_use = FALSE

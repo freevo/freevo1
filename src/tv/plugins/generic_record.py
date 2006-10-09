@@ -92,7 +92,7 @@ class Recorder:
         
 
     def Record(self, rec_prog):
-        frequency = self.fc.chanSet(str(rec_prog.tunerid), 'record plugin')
+        frequency = self.fc.chanSet(str(rec_prog.tunerid), False, 'record plugin')
 
         rec_prog.filename = tv_util.getProgFilename(rec_prog)
 

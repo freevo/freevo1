@@ -200,7 +200,7 @@ class Xine:
                 nextchan = self.fc.getManChannel(int(event.arg))
 
             self.stop(channel_change=1)
-            self.fc.chanSet(nextchan)
+            self.fc.chanSet(nextchan, True)
             self.Play('tv', nextchan)
             return True
 

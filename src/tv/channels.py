@@ -48,7 +48,8 @@ import time
 
 DEBUG = config.DEBUG
 
-# Sample from local_conf.py:
+# Sample for local_conf.py:
+# Three video cards and one web camera.
 #VIDEO_GROUPS = [
 #    VideoGroup(vdev='/dev/video0',
 #               adev=None,
@@ -56,17 +57,24 @@ DEBUG = config.DEBUG
 #               tuner_type='external',
 #               tuner_chan='3',
 #               desc='Bell ExpressVu',
-#               recordable=True),
+#               player=1),
 #    VideoGroup(vdev='/dev/video1',
+#               adev=None,
+#               input_type='tuner',
+#               tuner_type='external',
+#               tuner_chan='3',
+#               desc='Bell ExpressVu (second card)',
+#               player=None),
+#    VideoGroup(vdev='/dev/video2',
 #               adev='/dev/dsp1',
 #               input_type='tuner',
 #               desc='ATI TV-Wonder',
-#               recordable=True),
-#    VideoGroup(vdev='/dev/video2',
+#               player=None),
+#    VideoGroup(vdev='/dev/video3',
 #               adev=None,
 #               input_type='webcam',
 #               desc='Logitech Quickcam',
-#               recordable=False),
+#               player=None),
 #]
 
 class FreevoChannels:
@@ -79,7 +87,7 @@ class FreevoChannels:
             plugin.init_special_plugin(config.plugin_external_tuner)
 
 
-    def getVideoGroup(self, chan):
+    def getVideoGroup(self, chan, player):
         """
         Gets the VideoGroup object used by this Freevo channel.
         """
@@ -92,30 +100,36 @@ class FreevoChannels:
                 if chan_info[2] == chan:
                     try:
                         group = int(chan_info[4])
-                    except:
-                        # XXX: put a better exception here
+                    except: # XXX: put a better exception here
                         group = 0
+            if player:
+                play_group = config.VIDEO_GROUPS[group].player
+                if play_group:
+                    try:
+                        group = int(play_group)
+                    except:
+                        print 'VIDEO_GROUPS[%s].player=%s is invalid' % (group, play_group)
         finally:
             self.lock.release()
 
         return config.VIDEO_GROUPS[group]
 
 
-    def chanUp(self, app=None, app_cmd=None):
+    def chanUp(self, player, app=None, app_cmd=None):
         """
         Using this method will not support custom frequencies.
         """
-        return self.chanSet(self.getNextChannel(), app, app_cmd)
+        return self.chanSet(self.getNextChannel(), player, app, app_cmd)
 
 
-    def chanDown(self, app=None, app_cmd=None):
+    def chanDown(self, player, app=None, app_cmd=None):
         """
         Using this method will not support custom frequencies.
         """
-        return self.chanSet(self.getPrevChannel(), app, app_cmd)
+        return self.chanSet(self.getPrevChannel(), player, app, app_cmd)
 
 
-    def chanSet(self, chan, app=None, app_cmd=None):
+    def chanSet(self, chan, player, app=None, app_cmd=None):
         new_chan = None
 
         for pos in range(len(config.TV_CHANNELS)):
@@ -126,10 +140,10 @@ class FreevoChannels:
 
         if not new_chan:
             print String(_('ERROR')+': '+\
-                         (_('Cannot find tuner channel "%s" in the TV channel listing') % chan))
+                        (_('Cannot find tuner channel "%s" in the TV channel listing') % chan))
             return
 
-        vg = self.getVideoGroup(new_chan)
+        vg = self.getVideoGroup(new_chan, player)
 
         if vg.tuner_type == 'external':
             tuner = plugin.getbyname('EXTERNAL_TUNER')
@@ -143,14 +157,14 @@ class FreevoChannels:
             return 0
 
         else:
-            return self.tunerSetFreq(chan, app, app_cmd)
+            return self.tunerSetFreq(chan, player, app, app_cmd)
 
         return 0
 
 
-    def tunerSetFreq(self, chan, app=None, app_cmd=None):
+    def tunerSetFreq(self, chan, player, app=None, app_cmd=None):
         chan = str(chan)
-        vg = self.getVideoGroup(chan)
+        vg = self.getVideoGroup(chan, player)
 
         freq = config.FREQUENCY_TABLE.get(chan)
         if freq:
@@ -254,8 +268,10 @@ class FreevoChannels:
 
 
 
-
-# fc = FreevoChannels()
-# print 'CHAN: %s' % fc.getChannel()
-# fc.chanSet('780')
-# print 'CHAN: %s' % fc.getChannel()
+if __name__ == '__main__':
+    fc = FreevoChannels()
+    print 'CHAN: %s' % fc.getChannel()
+    fc.chanSet('K35', True)
+    print 'CHAN: %s' % fc.getChannel()
+    fc.chanSet('K35', False)
+    print 'CHAN: %s' % fc.getChannel()

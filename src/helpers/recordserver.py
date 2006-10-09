@@ -506,7 +506,7 @@ class RecordServer(xmlrpc.XMLRPC):
                 self.removeScheduledRecording(rec_prog)
                 return
 
-            self.vg = self.fc.getVideoGroup(rec_prog.channel_id)
+            self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False)
             suffix=self.vg.vdev.split('/')[-1]
             self.tv_lock_file = config.FREEVO_CACHEDIR + '/record.'+suffix
             self.record_app.Record(rec_prog)

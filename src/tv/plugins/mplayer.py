@@ -108,7 +108,7 @@ class MPlayer:
         if not tuner_channel:
             tuner_channel = self.fc.getChannel()
             
-        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel)
+        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel, True)
 
         # Convert to MPlayer TV setting strings
         norm = 'norm=%s' % vg.tuner_norm
@@ -129,7 +129,7 @@ class MPlayer:
                 ivtv_dev.setinput(vg.input_num)
                 #ivtv_dev.print_settings()
                 ivtv_dev.close()
-                self.fc.chanSet(tuner_channel)
+                self.fc.chanSet(tuner_channel, True)
             
                 tvcmd = vg.vdev
 
@@ -137,19 +137,19 @@ class MPlayer:
                     args += (config.MPLAYER_ARGS['ivtv'],)
 
             elif vg.group_type == 'webcam':
-                self.fc.chanSet(tuner_channel, app='mplayer')
+                self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tvcmd = ''
 
                 if config.MPLAYER_ARGS.has_key('webcam'):
                     args += (config.MPLAYER_ARGS['webcam'],)
 
             elif vg.group_type == 'dvb':
-                self.fc.chanSet(tuner_channel, app='mplayer')
+                self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tvcmd = ''
                 args += ('"dvb://%s" %s' % (tuner_channel, config.MPLAYER_ARGS['dvb']),)
 
             else:
-                freq_khz = self.fc.chanSet(tuner_channel, app='mplayer')
+                freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tuner_freq = '%1.3f' % (freq_khz / 1000.0)
 
                 tvcmd = ('tv:// -tv driver=%s:freq=%s:%s:%s:'
@@ -255,7 +255,7 @@ class MPlayer:
                 chan = int( s_event[6] )
                 nextchan = self.fc.getManChannel(chan)
 
-            nextvg = self.fc.getVideoGroup(nextchan)
+            nextvg = self.fc.getVideoGroup(nextchan, True)
 
             if self.current_vg != nextvg:
                 self.Stop(channel_change=1)
@@ -271,15 +271,15 @@ class MPlayer:
                 return TRUE
 
             elif self.current_vg.group_type == 'ivtv':
-                self.fc.chanSet(nextchan)
+                self.fc.chanSet(nextchan, True)
                 self.app.write('seek 999999 0\n')
 
             else:
-                freq_khz = self.fc.chanSet(nextchan, app=self.app)
+                freq_khz = self.fc.chanSet(nextchan, True, app=self.app)
                 new_freq = '%1.3f' % (freq_khz / 1000.0)
                 self.app.write('tv_set_freq %s\n' % new_freq)
 
-            self.current_vg = self.fc.getVideoGroup(self.fc.getChannel())
+            self.current_vg = self.fc.getVideoGroup(self.fc.getChannel(), True)
 
             # Display a channel changed message
             tuner_id, chan_name, prog_info = self.fc.getChannelInfo()

@@ -203,7 +203,7 @@ class PluginInterface(plugin.Plugin):
         configcmd = os.path.join(os.path.dirname(config.TVTIME_CMD), "tvtime-configure")
         #cf_norm, cf_input, cf_clist, cf_device = config.TV_SETTINGS.split()
         fc = FreevoChannels()
-        vg = fc.getVideoGroup(config.TV_CHANNELS[0][2])
+        vg = fc.getVideoGroup(config.TV_CHANNELS[0][2], True)
         cf_norm = vg.tuner_norm
         cf_input = vg.input_num
         cf_device = vg.vdev
@@ -411,7 +411,7 @@ class TVTime:
 
         if not tuner_channel:
             tuner_channel = self.fc.getChannel()
-        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel)
+        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel, True)
 
         if not vg.group_type == 'normal':
             print 'Tvtime only supports normal. "%s" is not implemented' % vg.group_type
@@ -534,7 +534,7 @@ class TVTime:
                 nextchan = self.fc.getNextChannel()
             elif event == em.TV_CHANNEL_DOWN:
                 nextchan = self.fc.getPrevChannel()
-            nextvg = self.fc.getVideoGroup(nextchan)
+            nextvg = self.fc.getVideoGroup(nextchan, True)
             _debug_("nextchan is %s" % nextchan)
 
             # XXX hazardous to your health. don't use tvtime with anything
@@ -546,8 +546,8 @@ class TVTime:
             #    self.Play('tv', nextchan)
             #    return TRUE
 
-            self.fc.chanSet(nextchan, app=self.app)
-            #self.current_vg = self.fc.getVideoGroup(self.fc.getChannel())
+            self.fc.chanSet(nextchan, True, app=self.app)
+            #self.current_vg = self.fc.getVideoGroup(self.fc.getChannel(), True)
 
             # Go to the prev/next channel in the list
             if event == em.TV_CHANNEL_UP:

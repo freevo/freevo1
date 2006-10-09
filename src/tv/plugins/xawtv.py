@@ -146,7 +146,7 @@ class Xawtv:
                 pass
         if not tuner_channel:
             tuner_channel = self.fc.getChannel()
-        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel)
+        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel, True)
 
         if not vg.group_type == 'normal':
             print 'Xawtv only supports normal. "%s" is not implemented' % vg.group_type

@@ -191,7 +191,7 @@ class TVGuide(Item):
  
         elif event == MENU_SELECT or event == PLAY:
 
-            suffix = self.fc.getVideoGroup(self.selected.channel_id).vdev.split('/')[-1]
+            suffix = self.fc.getVideoGroup(self.selected.channel_id, False).vdev.split('/')[-1]
             tvlockfile = config.FREEVO_CACHEDIR + '/record.'+suffix
 
             # Check if the selected program is >7 min in the future
