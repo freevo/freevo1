@@ -894,6 +894,8 @@ IMAGEVIEWER_BLEND_MODE = -1
 # TV_DRIVER = 'v4l'
 # TV_DEVICE = '/dev/video0'
 # TV_INPUT = 0
+# 
+# Radio device default is None, /dev/video24 for ivtv
 # RADIO_DEVICE = '/dev/radio0'
 
 #

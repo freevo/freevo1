@@ -94,8 +94,8 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         self.fc = FreevoChannels()
         self.seconds_before_start = 60
-        self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.*'
-        self.pending_lockfile = config.FREEVO_CACHEDIR + '/recording_soon'
+        self.pending_lockfile = config.FREEVO_CACHEDIR + '/record.soon'
+        self.tv_lockfile = None
 
 
     def findNextProgram(self):
@@ -184,15 +184,23 @@ class PluginInterface( plugin.DaemonPlugin ):
         now=time.time()
         _debug_('poll(self)', dbglvl+1)
 
-        # a bit of magic to see if we are recording and remove the pending record lock
-        if os.path.exists(self.pending_lockfile):
-            if len(glob.glob(self.tv_lockfile)) >= 1:
-                os.remove(self.pending_lockfile)
-            return None
-
         self.next_program  = self.findNextProgram()
         _debug_('now=%s next_program=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), dbglvl)
         if self.next_program == None:
+            return None
+
+        # Check that a recording is not in progress for this channel
+        vdev=self.fc.getVideoGroup(self.next_program.channel_id, False).vdev
+        self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.'+vdev.split('/')[-1]
+
+        # Remove the pending record lock file when a record lock file is written
+        if os.path.exists(self.pending_lockfile):
+            if os.path.exists(self.tv_lockfile):
+                os.remove(self.pending_lockfile)
+            return None
+
+        # Is a recording in progress
+        if os.path.exists(self.tv_lockfile):
             return None
 
         secs_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
@@ -202,40 +210,43 @@ class PluginInterface( plugin.DaemonPlugin ):
             return None
 
         _debug_('recording in less that a minute (%s secs)' % (secs_to_next), dbglvl)
+        open(self.pending_lockfile, 'w').close()
 
-        vdev=self.fc.getVideoGroup(self.next_program.channel_id).vdev
         try:
             # check the video
+            dev_fh = None
             try:
-                viddev = tv.v4l2.Videodev(vdev)
-                print os.read(viddev.getdevice(), 1)
+                dev_fh = os.open(vdev, os.O_TRUNC)
+                os.read(dev_fh, 1)
             except OSError:
                 rc.post_event(STOP)
-                open(self.pending_lockfile, 'w').close()
                 _debug_('video device \"%s\" in use' % (vdev), dbglvl)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
                 # The alert box doesn't work
                 #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
-            viddev.close()
+            if dev_fh:
+                os.close(dev_fh)
         except:
             print 'cannot check video device \"%s\"' % (vdev)
 
         rdev=config.RADIO_DEVICE
-        try:
-            # check the radio
+        if rdev:
             try:
-                viddev = tv.v4l2.Videodev(rdev)
-                print os.read(viddev.getdevice(), 1)
-            except OSError:
-                rc.post_event(STOP)
-                open(self.pending_lockfile, 'w').close()
-                _debug_('radio device \"%s\" in use' % (rdev), dbglvl)
-                rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
-                # Need to go back one menu, the alert box doesn't work
-                #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
-            viddev.close()
-        except:
-            print 'cannot check radio device \"%s\"' % (rdev)
+                # check the radio
+                dev_fh = None
+                try:
+                    dev_fh = os.open(rdev, os.O_TRUNC)
+                    os.read(dev_fh, 1)
+                except OSError:
+                    rc.post_event(STOP)
+                    _debug_('radio device \"%s\" in use' % (rdev), dbglvl)
+                    rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
+                    # Need to go back one menu, the alert box doesn't work
+                    #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
+                if dev_fh:
+                    os.close(dev_fh)
+            except:
+                print 'cannot check radio device \"%s\"' % (rdev)
 
 
     def eventhandler( self, event, menuw=None ):
@@ -267,7 +278,8 @@ if __name__ == '__main__':
         (result, response) = isPlayerRunning()
         print response
 
-    vg=FreevoChannels().getVideoGroup(self.next_program.channel_id)
+    fc = FreevoChannels()
+    vg=fc.getVideoGroup('K10', False)
     print "vg=%s" % vg
     print "dir(%s)" % dir(vg)
     for it in dir(vg):
