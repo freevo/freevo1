@@ -9,13 +9,6 @@
 #
 # Todo:
 #
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.16  2004/07/10 12:33:38  dischi
-# header cleanup
-#
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 

@@ -12,14 +12,6 @@
 #
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.2  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.1  2004/06/20 12:01:19  dischi
-# basic xine dvb plugin
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -95,27 +87,8 @@ class PluginInterface(plugin.Plugin):
         else:
             type = 'X'
 
-        if not hasattr(config, 'XINE_VERSION'):
-            config.XINE_VERSION = 0
-            for data in util.popen3.stdout('%s --version' % config.XINE_COMMAND):
-                m = re.match('^.* v?([0-9])\.([0-9]+)\.([0-9]*).*', data)
-                if m:
-                    config.XINE_VERSION = int('%02d%02d%02d' % (int(m.group(1)),
-                                                                  int(m.group(2)),
-                                                                  int(m.group(3))))
-                    if data.find('cvs') >= 0:
-                        config.XINE_VERSION += 1
-
-            _debug_('detect xine version %s' % config.XINE_VERSION)
-            
-        if config.XINE_VERSION < 922:
-            print String(_( 'ERROR' )) + ': ' + \
-                  String(_( "'xine-ui' version too old, plugin 'xine' deactivated" ))
-            print String(_( 'You need software %s' )) % 'xine-ui > 0.9.21'
-            return
-            
         # register xine as the object to play
-        plugin.register(Xine(type, config.XINE_VERSION), plugin.TV, False)
+        plugin.register(Xine(type), plugin.TV, False)
 
 
 
@@ -123,12 +96,11 @@ class Xine:
     """
     the main class to control xine
     """
-    def __init__(self, type, version):
+    def __init__(self, type):
         self.name      = 'xine'
 
         self.app_mode  = 'tv'
         self.xine_type = type
-        self.version   = version
         self.app       = None
 
         self.fc = FreevoChannels()
