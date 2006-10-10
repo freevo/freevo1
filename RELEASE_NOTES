@@ -1,3 +1,11 @@
+Release Notes for 1.6.0
+-----------------------
+
+The have been quite a number of changes, see ChangeLog for details.
+
+elementtree, include in Python-2.5+, is now a prerequisite for freevo,
+if can be downloaded from http://effbot.org/zone/elementtree.htm
+
 Release Notes for 1.5.3
 -----------------------
 
