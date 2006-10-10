@@ -53,6 +53,11 @@ DEBUG = config.DEBUG
 TRUE = 1
 FALSE = 0
 
+if not config.XINE_TV_VO_DEV:
+    config.XINE_TV_VO_DEV = config.XINE_VO_DEV
+if not config.XINE_TV_AO_DEV:
+    config.XINE_TV_AO_DEV = config.XINE_AO_DEV
+
 class PluginInterface(plugin.Plugin):
     """
     Plugin to watch tv with xine.
@@ -93,7 +98,7 @@ class IVTV_XINE_TV:
 
         # Suppress annoying audio clicks
         time.sleep(0.4)
-        self.mixer.start()
+        self.mixer.start(mode)
 
         _debug_('%s: started %s app' % (time.time(), self.mode))
 
@@ -339,13 +344,12 @@ class MixerControl:
                 self.volume = self.mixer.getPcmVolume()
                 self.mixer.setPcmVolume(0)
 
-    def start(self):
-
+    def start(self, mode):
 
         if (self.mixer != None):
 
             # XXX Hm.. This is hardcoded and very unflexible.
-            if self.mode == 'vcr':
+            if mode == 'vcr':
                 self.mixer.setMicVolume(config.VCR_IN_VOLUME)
 
             else:
@@ -406,7 +410,10 @@ class XineThread(threading.Thread):
         print 'DJW: config.XINE_TV_VO_DEV=%s' % (config.XINE_TV_VO_DEV)
         print 'DJW: config.XINE_TV_AO_DEV=%s' % (config.XINE_TV_AO_DEV)
         print 'DJW: config.XINE_TV_TIMESHIFT_FILEMASK=%s' % (config.XINE_TV_TIMESHIFT_FILEMASK)
-        self.command = '%s %s -V %s -A %s --stdctl pvr://%s' % (config.XINE_COMMAND, config.XINE_ARGS_DEF, config.XINE_TV_VO_DEV, config.XINE_TV_AO_DEV, config.XINE_TV_TIMESHIFT_FILEMASK)
+        self.command = '%s %s -V %s -A %s --stdctl pvr://%s' % \
+            (config.XINE_COMMAND, config.XINE_ARGS_DEF, config.XINE_TV_VO_DEV, \
+            config.XINE_TV_AO_DEV, config.XINE_TV_TIMESHIFT_FILEMASK)
+
 
     def play(self):
 
