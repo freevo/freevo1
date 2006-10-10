@@ -1,12 +1,12 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# ivtv_xine_tv.py - live tv pause feature
+# ivtv_xine_tv.py - Implementation of live tv timeshift for ivtv
 # -----------------------------------------------------------------------
-# $Id: xine.py 5860 2004-07-10 12:33:43Z dischi $
+# $Id: mplayer.py 8338 2006-10-09 21:47:47Z duncan $
 #
-# Notes: Use xine (or better fbxine) to play tv
-#
-# Todo:
+# Notes:
+# Author: thehog@t3i.nl
+# Todo:        
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -27,7 +27,8 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
+
 
 import config
 
@@ -36,33 +37,21 @@ import threading
 import signal
 import skin
 
-
-import util    # Various utilities
-from event import *
-import osd     # The OSD class, used to communicate with the OSD daemon
-import rc      # The RemoteControl class.
-import childapp # Handle child applications
-import tv.epg_xmltv as epg # The Electronic Program Guide
-import tv.ivtv as ivtv
+import rc
+import util
 import plugin
+import childapp
+import tv.ivtv as ivtv
+import tv.epg_xmltv as epg
 
-#import event as em 
+from event import *
+from gui.AlertBox import AlertBox
 from tv.channels import FreevoChannels
 
-
-from event import *
-
-import plugin
-
-# Set to 1 for debug output
 DEBUG = config.DEBUG
 
 TRUE = 1
 FALSE = 0
-
-
-# Create the OSD object
-osd = osd.get_singleton()
 
 class PluginInterface(plugin.Plugin):
     """
@@ -70,359 +59,402 @@ class PluginInterface(plugin.Plugin):
     """
     def __init__(self):
         plugin.Plugin.__init__(self)
+        plugin.register(IVTV_XINE_TV(), plugin.TV)
 
-        plugin.register(IVTV_TV(), plugin.TV)
 
+class IVTV_XINE_TV:
 
-class IVTV_TV:
-
-    __muted    = 0
-    __igainvol = 0
-    
     def __init__(self):
-        self.thread = Xine_Thread()
-        self.thread.setDaemon(1)
-        self.thread.start()
-        self.tuner_chidx = 0    # Current channel, index into config.TV_CHANNELS
+
+        self.xine = XineThread()
+        self.xine.setDaemon(1)
+        self.xine.start()
+
+        self.tuner = TunerControl()
+        self.mixer = MixerControl()
+
         self.app_mode = 'tv'
-        self.app       = None
+        self.app = None
         self.videodev = None
-        self.fc = FreevoChannels() 
-        self.current_vg = None 
 
 
-        
-    def TunerSetChannel(self, tuner_channel):
-        for pos in range(len(config.TV_CHANNELS)):
-            channel = config.TV_CHANNELS[pos]
-            if channel[2] == tuner_channel:
-                self.tuner_chidx = pos
-                return
-        print 'ERROR: Cannot find tuner channel "%s" in the TV channel listing' % tuner_channel
-        self.tuner_chidx = 0
+    def Play(self, mode, tuner_channel=None, channel_change=0):
+
+        _debug_('PLAY CHAN: %s' % tuner_channel)
+
+        self.mode = mode
+
+        self.prev_app = rc.app()
+        rc.app(self)
+
+        self.tuner.SetChannel(mode, tuner_channel)
+        self.mixer.prepare()
+        self.xine.play()
+
+        # Suppress annoying audio clicks
+        time.sleep(0.4)
+        self.mixer.start()
+
+        _debug_('%s: started %s app' % (time.time(), self.mode))
 
 
-    def TunerGetChannelInfo(self):
+    def Pause(self):
+
+        self.xine.pause()
+
+
+    def Stop(self):
+
+        self.mixer.stop()
+        self.xine.stop()
+        rc.app(self.prev_app)
+        rc.post_event(PLAY_END)
+
+        _debug_('stopped %s app' % self.mode)
+
+
+    def eventhandler(self, event, menuw=None):
+
+        _debug_('%s: %s app got %s event' % (time.time(), self.mode, event))
+        s_event = '%s' % event
+
+        if event == STOP or event == PLAY_END:
+            self.Stop()
+            return True
+
+        if event == PAUSE or event == PLAY:
+            self.Pause()
+            return True
+
+        if event in [ TV_CHANNEL_UP, TV_CHANNEL_DOWN] or s_event.startswith('INPUT_'):
+
+            if event == TV_CHANNEL_UP:
+                self.tuner.NextChannel()
+
+            elif event == TV_CHANNEL_DOWN:
+                self.tuner.PrevChannel()
+
+            else:
+                self.tuner.TuneChannel( int(s_event[6]) )
+
+            #cmd = 'osd_show_text "%s"\n' % "CHANNEL CHANGE!"
+            #self.xine.app.write(cmd)
+
+            return True
+
+
+        if event == SEEK:
+
+            pos = int(event.arg)
+
+            if pos < 0:
+                action='SeekRelative-'
+                pos = 0 - pos
+
+            else:
+                action='SeekRelative+'
+
+            if pos <= 15:
+                pos = 15
+
+            elif pos <= 30:
+                pos = 30
+
+            else:
+                pos = 30
+
+            self.xine.app.write('%s%s\n' % (action, pos))
+            return TRUE
+
+        if event == TOGGLE_OSD:
+            self.xine.app.write('OSDStreamInfos\n')
+            return True
+
+# ======================================================================
+
+class TunerControl:
+
+    def __init__(self):
+
+        self.current_vgrp = None
+        self.fc = FreevoChannels()
+        self.current_chan = 0 # Current channel, index into config.TV_CHANNELS
+
+
+    def SetChannel(self, mode, channel=None):
+
+        if (channel == None):
+            self.current_chan = self.fc.getChannel()
+
+        else:
+            self.current_chan = -1
+
+            try:
+                for pos in range(len(config.TV_CHANNELS)):
+                    entry = config.TV_CHANNELS[pos]
+                    if channel == entry[2]:
+                        channel_index = pos
+                        self.current_chan = channel
+                        break
+
+            except ValueError:
+                pass
+
+            if (self.current_chan == -1):
+                _debug_("ERROR: Cannot find tuner channel '%s' in the TV channel listing" % channel)
+                self.current_chan = 0
+                channel_index = 0
+
+        _debug_('PLAY CHAN: %s' % self.current_chan)
+
+        vg = self.current_vgrp = self.fc.getVideoGroup(self.current_chan, True)
+        _debug_('PLAY GROUP: %s' % vg.desc)
+
+        if (mode == 'tv') and (vg.group_type == 'ivtv'):
+            ivtv_dev = ivtv.IVTV(vg.vdev)
+            ivtv_dev.init_settings()
+            ivtv_dev.setinput(vg.input_num)
+            ivtv_dev.print_settings()
+            self.TuneChannel(channel_index + 1)
+
+        else:
+            _debug_('Mode "%s" is not implemented' % mode)
+            pop = AlertBox(text=_('This plugin only supports the ivtv video group in tv mode!'))
+            pop.show()
+            return
+
+
+    def NextChannel(self):
+        nextchan = self.fc.getNextChannel()
+        self.SetVideoGroup(nextchan)
+
+
+    def PrevChannel(self):
+        nextchan = self.fc.getPrevChannel()
+        self.SetVideoGroup(nextchan)
+
+
+    def TuneChannel(self, chan):
+        nextchan = self.fc.getManChannel(chan)
+        self.SetVideoGroup(nextchan)
+
+
+    def SetVideoGroup(self, chan):
+        _debug_('CHAN: %s' % chan)
+        vg = self.fc.getVideoGroup(chan)
+        _debug_('GROUP: %s' % vg.desc)
+
+        if self.current_vgrp != vg:
+            # XXX HANDLE THIS
+            self.Stop(channel_change=1)
+            self.Play('tv', nextchan)
+            return
+
+        #if self.mode == 'vcr':
+        #    # XXX HANDLE THIS
+        #    return
+
+        if self.current_vgrp.group_type == 'ivtv':
+            self.fc.chanSet(chan, True)
+            #self.xine.app.write('seek 999999 0\n')
+
+        else:
+            freq_khz = self.fc.chanSet(chan, True, app=self.xine.app)
+            new_freq = '%1.3f' % (freq_khz / 1000.0)
+            #self.xine.app.write('tv_set_freq %s\n' % new_freq)
+
+        self.current_vgrp = self.fc.getVideoGroup(self.fc.getChannel())
+
+        # Display a channel changed message (mplayer ? api osd xine ?)
+        tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
+        now = time.strftime('%H:%M')
+        msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
+        cmd = 'osd_show_text "%s"\n' % msg
+        #self.xine.app.write(cmd)
+
+
+    def GetChannelInfo(self):
+
         '''Get program info for the current channel'''
-        
-        tuner_id = config.TV_CHANNELS[self.tuner_chidx][2]
-        chan_name = config.TV_CHANNELS[self.tuner_chidx][1]
-        chan_id = config.TV_CHANNELS[self.tuner_chidx][0]
 
-        channels = epg.get_guide().GetPrograms(start=time.time(),
-                                               stop=time.time(), chanids=[chan_id])
+        tuner_id = config.TV_CHANNELS[self.current_chan][2]
+        chan_name = config.TV_CHANNELS[self.current_chan][1]
+        chan_id = config.TV_CHANNELS[self.current_chan][0]
+
+        channels = epg.get_guide().GetPrograms(
+            start=time.time(),
+            stop=time.time(), chanids=[chan_id]
+        )
 
         if channels and channels[0] and channels[0].programs:
             start_s = time.strftime('%H:%M', time.localtime(channels[0].programs[0].start))
             stop_s = time.strftime('%H:%M', time.localtime(channels[0].programs[0].stop))
             ts = '(%s-%s)' % (start_s, stop_s)
             prog_info = '%s %s' % (ts, channels[0].programs[0].title)
+
         else:
             prog_info = 'No info'
-            
+
         return tuner_id, chan_name, prog_info
 
 
-    def TunerGetChannel(self):
-        return config.TV_CHANNELS[self.tuner_chidx][2]
-        
+#    def GetChannel(self):
 
-    def TunerNextChannel(self):
-        self.tuner_chidx = (self.tuner_chidx+1) % len(config.TV_CHANNELS)
+#        return config.TV_CHANNELS[self.current_chan][2]
 
 
-    def TunerPrevChannel(self):
-        self.tuner_chidx = (self.tuner_chidx-1) % len(config.TV_CHANNELS)
+#    def NextChannel(self):
 
-        
-    def Play(self, mode, tuner_channel=None, channel_change=0):
-
-        print 'PLAY CHAN: %s' % tuner_channel
-
-        if tuner_channel != None:
-            
-            try:
-                self.TunerSetChannel(tuner_channel)
-            except ValueError:
-                pass
-
-        if not tuner_channel: 
-            tuner_channel = self.fc.getChannel()
-            print 'PLAY CHAN: %s' % tuner_channel
-
-        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel, True) 
-        print 'PLAY GROUP: %s' % vg.desc
-
-        if mode == 'tv':                
-         if vg.group_type == 'ivtv':
-            ivtv_dev = ivtv.IVTV(vg.vdev)
-            ivtv_dev.init_settings()
-            ivtv_dev.setinput(vg.input_num)
-            self.fc.chanSet(tuner_channel, True)
-
-            command = '%s -V --no-splash --no-lirc --stdctl %s pvr:///home/livetv' % (config.XINE_COMMAND, config.XINE_ARGS_DEF)
-        else:
-            print 'Mode "%s" is not implemented' % mode  # XXX ui.message()
-            return
+#        self.current_chan = (self.current_chan+1) % len(config.TV_CHANNELS)
 
 
-        self.mode = mode
+#    def PrevChannel(self):
 
-        # XXX Mixer manipulation code.
-        # TV is on line in
-        # VCR is mic in
-        # btaudio (different dsp device) will be added later
-        mixer = plugin.getbyname('MIXER')
-        
-        if mixer and config.MAJOR_AUDIO_CTRL == 'VOL':
-            mixer_vol = mixer.getMainVolume()
-            mixer.setMainVolume(0)
-        elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
-            mixer_vol = mixer.getPcmVolume()
-            mixer.setPcmVolume(0)
-
-        # Start up the TV task
-        self.thread.mode = 'play'
-        self.thread.command = command
-        self.thread.mode_flag.set()
-        
-        self.prev_app = rc.app()
-        rc.app(self)
-
-        if osd.focused_app():
-            osd.focused_app().hide()
-
-        # Suppress annoying audio clicks
-        time.sleep(0.4)
-        # XXX Hm.. This is hardcoded and very unflexible.
-        if mixer and mode == 'vcr':
-            mixer.setMicVolume(config.VCR_IN_VOLUME)
-        elif mixer:
-            mixer.setLineinVolume(config.TV_IN_VOLUME)
-            mixer.setIgainVolume(config.TV_IN_VOLUME)
-            
-        if mixer and config.MAJOR_AUDIO_CTRL == 'VOL':
-            mixer.setMainVolume(mixer_vol)
-        elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
-            mixer.setPcmVolume(mixer_vol)
-
-        if DEBUG: print '%s: started %s app' % (time.time(), self.mode)
-
-        
-    def Stop(self):
-        mixer = plugin.getbyname('MIXER')
-        mixer.setLineinVolume(0)
-        mixer.setMicVolume(0)
-        mixer.setIgainVolume(0) # Input on emu10k cards.
-
-        self.thread.mode = 'stop'
-        self.thread.mode_flag.set()
-
-        rc.app(self.prev_app)
-        #JM +PLAY_END
-        rc.post_event(PLAY_END)
-        if osd.focused_app():
-           osd.focused_app().show() 
-           
-        while self.thread.mode == 'stop':
-            time.sleep(0.05)
-        print 'stopped %s app' % self.mode
+#        self.current_chan = (self.current_chan-1) % len(config.TV_CHANNELS)
 
 
-
-    def eventhandler(self, event, menuw=None):
-        print '%s: %s app got %s event' % (time.time(), self.mode, event)
-        s_event = '%s' % event
-
-# The following events need to be defined in events.py (check that) first
-
-#        if event == FASTFORWARD:
-#            self.thread.app.write('SpeedFaster\n')
-#            return True
-
-#        if event == REWIND:
-#            self.thread.app.write('SpeedSlower\n')
-#            return True
-  
-        if event == MIXER_VOLUP:
-            self.thread.app.write('Volume+\n')
-            return True
-
-        if event == MIXER_VOLDOWN:
-            self.thread.app.write('Volume-\n')
-            return True
-    
-        if event == STOP or event == PLAY_END:
-            self.Stop()
-            rc.post_event(PLAY_END)
-            return TRUE
-        
-        if event == PAUSE or event == PLAY:
-            self.thread.app.write('pause\n')
-            return True
-
-#        if event == UP:
-#            self.thread.app.write('EventUp\n')
-#            return True
-
-#        if event == DOWN:
-#            self.thread.app.write('EventDown\n')
-#            return True
-
-
-        if event == MENU_GOTO_MAINMENU:
-            self.thread.app.write('TitleMenu\n')
-            return True
-
-# Add to events.py
-#        if event == SUBTITLE:
-#            self.thread.app.write('SpuNext\n')
-#            return True
-    
-        if event == STOP:
-            self.thread.app.write('Quit\n')
-            for i in range(10):
-                if self.thread.mode == 'idle':
-                    break
-                time.sleep(0.3)
-            else:
-                # sometimes xine refuses to die
-                self.Stop()
-            return TRUE
-
-#        if event == STOP:
-#            self.stop()
-#            return self.item.eventhandler(event)
-     
-        if event in [ TV_CHANNEL_UP, TV_CHANNEL_DOWN] or s_event.startswith('INPUT_'):
-            if event == TV_CHANNEL_UP:
-                nextchan = self.fc.getNextChannel()
-            elif event == TV_CHANNEL_DOWN:
-                nextchan = self.fc.getPrevChannel()
-            else:
-                chan = int( s_event[6] )
-                nextchan = self.fc.getManChannel(chan)
-                
-
-           # tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
-           # now = time.strftime('%H:%M')
-           # msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
-           #cmd = 'osd_show_text "%s"\n' % msg 
-            
-            print 'NEXT CHAN: %s' % nextchan
-            nextvg = self.fc.getVideoGroup(nextchan, True)
-            print 'NEXT GROUP: %s' % nextvg.desc
-
-            if self.current_vg != nextvg:
-                self.Stop(channel_change=1)
-                self.Play('tv', nextchan)
-                return TRUE
-
-            if self.mode == 'vcr':
-                return   
-
-            elif self.current_vg.group_type == 'ivtv':
-                self.fc.chanSet(nextchan, True)
-                self.thread.app.write('seek 999999 0\n')
-            else:
-                freq_khz = self.fc.chanSet(nextchan, True, app=self.thread.app)
-                new_freq = '%1.3f' % (freq_khz / 1000.0)
-                self.thread.app.write('tv_set_freq %s\n' % new_freq)
-        
-            self.current_vg = self.fc.getVideoGroup(self.fc.getChannel(), True)
-            
-            # Display a channel changed message  (mplayer ?  api osd xine ?) 
-            tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
-            now = time.strftime('%H:%M')
-            msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
-            cmd = 'osd_show_text "%s"\n' % msg
-            self.thread.app.write(cmd)
-            return TRUE
-            
-
-        if event == SEEK:
-            pos = int(event.arg)
-            if pos < 0:
-                action='SeekRelative-'
-                pos = 0 - pos
-            else:
-                action='SeekRelative+'
-            if pos <= 15:
-                pos = 15
-            elif pos <= 30:
-                pos = 30
-            else:
-                pos = 30
-            self.thread.app.write('%s%s\n' % (action, pos))
-            return TRUE 
-        
-        if event == TOGGLE_OSD:
-            self.thread.app.write('OSDStreamInfos\n')
-            return True
-                   
 # ======================================================================
 
-class XineApp(childapp.ChildApp):
+class MixerControl:
+
+    # XXX Mixer manipulation code.
+    # TV is on line in
+    # VCR is mic in
+    # btaudio (different dsp device) will be added later
+
+    def __init__(self):
+
+        self.mixer = plugin.getbyname('MIXER')
+        self.volume = 0
+
+    def prepare(self):
+
+        if (self.mixer != None):
+
+            if config.MAJOR_AUDIO_CTRL == 'VOL':
+                self.volume = self.mixer.getMainVolume()
+                self.mixer.setMainVolume(0)
+
+            elif config.MAJOR_AUDIO_CTRL == 'PCM':
+                self.volume = self.mixer.getPcmVolume()
+                self.mixer.setPcmVolume(0)
+
+    def start(self):
+
+
+        if (self.mixer != None):
+
+            # XXX Hm.. This is hardcoded and very unflexible.
+            if mode == 'vcr':
+                self.mixer.setMicVolume(config.VCR_IN_VOLUME)
+
+            else:
+                self.mixer.setLineinVolume(config.TV_IN_VOLUME)
+                self.mixer.setIgainVolume(config.TV_IN_VOLUME)
+
+            if config.MAJOR_AUDIO_CTRL == 'VOL':
+                self.mixer.setMainVolume(self.volume)
+
+            elif config.MAJOR_AUDIO_CTRL == 'PCM':
+                self.mixer.setPcmVolume(self.volume)
+
+
+    def stop(self):
+
+        if (self.mixer != None):
+            self.mixer.setLineinVolume(0)
+            self.mixer.setMicVolume(0)
+            self.mixer.setIgainVolume(0) # Input on emu10k cards.
+
+
+# ======================================================================
+
+
+class XineApp(childapp.ChildApp2):
     """
     class controlling the in and output from the xine process
     """
 
     def __init__(self, app, item):
+
         self.item = item
-        childapp.ChildApp.__init__(self, app)
-        self.exit_type = None
-        
-    def kill(self):
-        # Use SIGINT instead of SIGKILL to make sure Xine shuts
-        # down properly and releases all resources before it gets
-        # reaped by childapp.kill().wait()
-        #childapp.ChildApp.kill(self, signal.SIGINT)
-        #JM change to SIGKILL to test resolution for freevo crash from df_xine crash
-        childapp.ChildApp.kill(self, signal.SIGTERM)
+        childapp.ChildApp2.__init__(self, app)
+        _debug_('XineApp: Started, cmd=%s' % app)
+        # self.exit_type = None # ??
 
 
 # ======================================================================
 
-class Xine_Thread(threading.Thread):
+
+class XineThread(threading.Thread):
     """
     Thread to wait for a xine command to play
     """
 
     def __init__(self):
+
         threading.Thread.__init__(self)
-        
-        self.mode      = 'idle'
-        self.mode_flag = threading.Event()
-        self.command   = ''
-        self.app       = None
-        self.item  = None
 
-        
+        self.app = None
+        self.item = None
+        self.mode = 'idle'
+        self.start_flag = threading.Event()
+
+        print 'DJW: config.CONF.xine=%s' % (config.CONF.xine)
+        print 'DJW: config.XINE_COMMAND=%s' % (config.XINE_COMMAND)
+        print 'DJW: config.XINE_ARGS_DEF=%s' % (config.XINE_ARGS_DEF)
+        print 'DJW: config.XINE_TV_VO_DEV=%s' % (config.XINE_TV_VO_DEV)
+        print 'DJW: config.XINE_TV_AO_DEV=%s' % (config.XINE_TV_AO_DEV)
+        print 'DJW: config.XINE_TV_TIMESHIFT_FILEMASK=%s' % (config.XINE_TV_TIMESHIFT_FILEMASK)
+        self.command = '%s %s -V %s -A %s --stdctl pvr://%s' % (config.XINE_COMMAND, config.XINE_ARGS_DEF, config.XINE_TV_VO_DEV, config.XINE_TV_AO_DEV, config.XINE_TV_TIMESHIFT_FILEMASK)
+
+    def play(self):
+
+        if (self.mode == 'idle'):
+            self.start_flag.set()
+
+    def pause(self):
+
+        if (self.mode == 'busy') or (self.mode == 'pause'):
+            self.mode = 'pause'
+
+    def stop(self):
+
+        if (self.mode == 'busy') or (self.mode == 'pause'):
+            self.mode = 'stop'
+
+        while (self.mode == 'busy') or (self.mode == 'pause'):
+            sleep(0.1)
+
+
     def run(self):
+
         while 1:
+
             if self.mode == 'idle':
-                self.mode_flag.wait()
-                self.mode_flag.clear()
+                self.start_flag.wait()
+                self.start_flag.clear()
 
-            elif self.mode == 'play':
-                if DEBUG:
-                    print 'Xine_Thread.run(): Started, cmd=%s' % self.command
-                    
-                self.app = XineApp(self.command, self.item)
+            else:
+                _debug_("XineThread: Should be idle on thread entry!")
 
-                while self.mode == 'play' and self.app.isAlive():
+            self.app = XineApp(self.command, self.item)
+            self.mode = 'busy'
+
+            while self.app.isAlive():
+
+                if self.mode == 'busy':
                     time.sleep(0.1)
 
-                self.app.kill()
+                elif self.mode == 'pause':
+                    self.app.write('pause\n')
+                    self.mode = 'busy'
 
-                if self.mode == 'play':
-                    if DEBUG: print 'posting play_end'
-                    rc.post_event(PLAY_END)
-                        
-                if DEBUG:
-                    print 'Xine_Thread.run(): Stopped'
+                elif self.mode == 'stop':
+                    self.app.stop("quit\n")
 
-                self.mode = 'idle'
-                
-            else:
-                self.mode = 'idle'
+
+            self.mode = 'idle'
+
+            _debug_('XineThread: Stopped')
+            self.mode = 'idle'
