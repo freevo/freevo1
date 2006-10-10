@@ -241,7 +241,7 @@ class TunerControl:
 
     def SetVideoGroup(self, chan):
         _debug_('CHAN: %s' % chan)
-        vg = self.fc.getVideoGroup(chan)
+        vg = self.fc.getVideoGroup(chan, True)
         _debug_('GROUP: %s' % vg.desc)
 
         if self.current_vgrp != vg:
@@ -263,7 +263,7 @@ class TunerControl:
             new_freq = '%1.3f' % (freq_khz / 1000.0)
             #self.xine.app.write('tv_set_freq %s\n' % new_freq)
 
-        self.current_vgrp = self.fc.getVideoGroup(self.fc.getChannel())
+        self.current_vgrp = self.fc.getVideoGroup(self.fc.getChannel(), True)
 
         # Display a channel changed message (mplayer ? api osd xine ?)
         tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
@@ -345,7 +345,7 @@ class MixerControl:
         if (self.mixer != None):
 
             # XXX Hm.. This is hardcoded and very unflexible.
-            if mode == 'vcr':
+            if self.mode == 'vcr':
                 self.mixer.setMicVolume(config.VCR_IN_VOLUME)
 
             else:
