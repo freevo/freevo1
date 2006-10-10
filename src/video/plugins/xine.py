@@ -16,37 +16,6 @@
 #
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.45  2004/07/21 11:35:19  dischi
-# xine can play iso files
-#
-# Revision 1.44  2004/07/10 12:33:43  dischi
-# header cleanup
-#
-# Revision 1.43  2004/06/28 15:53:59  dischi
-# angle switching
-#
-# Revision 1.42  2004/06/19 17:21:52  dischi
-# only set app.mode to valid events
-#
-# Revision 1.41  2004/05/02 08:55:52  dischi
-# dvd as .iso support
-#
-# Revision 1.39  2004/02/06 19:29:06  dischi
-# fix/cleanup dvd on hd handling
-#
-# Revision 1.38  2004/02/03 20:51:12  dischi
-# fix/enhance dvd on disc
-#
-# Revision 1.37  2004/02/02 22:15:53  outlyer
-# Support for mirrors of DVDs...
-#
-# (1) Make one using vobcopy, run 'vobcopy -m'
-# (2) Put it in your movie directory and it'll look like a single file, and can
-#     be played with XINE with all of the features of the original DVD (chapters,
-#     audio tracks, etc) and works with dvdnav.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -103,27 +72,8 @@ class PluginInterface(plugin.Plugin):
         else:
             type = 'X'
 
-        if not hasattr(config, 'XINE_VERSION'):
-            config.XINE_VERSION = 0
-            for data in util.popen3.stdout('%s --version' % config.XINE_COMMAND):
-                m = re.match('^.* v?([0-9])\.([0-9]+)\.([0-9]*).*', data)
-                if m:
-                    config.XINE_VERSION = int('%02d%02d%02d' % (int(m.group(1)),
-                                                                  int(m.group(2)),
-                                                                  int(m.group(3))))
-                    if data.find('cvs') >= 0:
-                        config.XINE_VERSION += 1
-
-            _debug_('detect xine version %s' % config.XINE_VERSION)
-            
-        if config.XINE_VERSION < 922:
-            print String(_( 'ERROR' )) + ': ' + \
-                  String(_( "'xine-ui' version too old, plugin 'xine' deactivated" ))
-            print String(_( 'You need software %s' )) % 'xine-ui > 0.9.21'
-            return
-            
         # register xine as the object to play
-        plugin.register(Xine(type, config.XINE_VERSION), plugin.VIDEO_PLAYER, True)
+        plugin.register(Xine(type), plugin.VIDEO_PLAYER, True)
 
 
 
@@ -131,12 +81,11 @@ class Xine:
     """
     the main class to control xine
     """
-    def __init__(self, type, version):
+    def __init__(self, type):
         self.name      = 'xine'
 
         self.app_mode  = ''
         self.xine_type = type
-        self.version   = version
         self.app       = None
 
         self.command = [ '--prio=%s' % config.MPLAYER_NICE ] + \
@@ -156,7 +105,7 @@ class Xine:
         if item.url.startswith('dvd://'):
             return 2
         if item.url.startswith('vcd://'):
-            if self.version > 922 and item.url == 'vcd://':
+            if item.url == 'vcd://':
                 return 2
             return 0
 
@@ -182,18 +131,12 @@ class Xine:
 
         command = copy.copy(self.command)
 
-        if item['deinterlace'] and (self.xine_type == 'X' or self.version > 922):
+        if item['deinterlace']:
             command.append('-D')
 
         if not rc.PYLIRC and '--no-lirc' in command:
             command.remove('--no-lirc')
 
-        if self.version < 923:
-            for arg in command:
-                if arg.startswith('--post'):
-                    command.remove(arg)
-                    break
-                
         self.max_audio        = 0
         self.current_audio    = -1
         self.max_subtitle     = 0
