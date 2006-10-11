@@ -4,9 +4,9 @@
 # -----------------------------------------------------------------------
 # $Id: mplayer.py 8338 2006-10-09 21:47:47Z duncan $
 #
+# Author: thehog@t3i.nl (rvpaasen)
 # Notes:
-# Author: thehog@t3i.nl
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -92,7 +92,7 @@ class IVTV_XINE_TV:
         self.prev_app = rc.app()
         rc.app(self)
 
-        self.tuner.SetChannel(mode, tuner_channel)
+        self.tuner.SetChannel(self.mode, tuner_channel)
         self.mixer.prepare()
         self.xine.play()
 
@@ -348,8 +348,9 @@ class MixerControl:
 
         if (self.mixer != None):
 
-            # XXX Hm.. This is hardcoded and very unflexible.
-            if mode == 'vcr':
+            # to be fixed...            
+            # if self.mode == 'vcr':
+            if 0:
                 self.mixer.setMicVolume(config.VCR_IN_VOLUME)
 
             else:
@@ -384,8 +385,13 @@ class XineApp(childapp.ChildApp2):
         self.item = item
         childapp.ChildApp2.__init__(self, app)
         _debug_('XineApp: Started, cmd=%s' % app)
-        # self.exit_type = None # ??
+        self.exit_type = None
+        self.done = False
 
+    def _kill_(self):
+
+        childapp.ChildApp2.kill(self,signal.SIGKILL)
+        self.done = True
 
 # ======================================================================
 
@@ -404,12 +410,18 @@ class XineThread(threading.Thread):
         self.mode = 'idle'
         self.start_flag = threading.Event()
 
-        print 'DJW: config.CONF.xine=%s' % (config.CONF.xine)
-        print 'DJW: config.XINE_COMMAND=%s' % (config.XINE_COMMAND)
-        print 'DJW: config.XINE_ARGS_DEF=%s' % (config.XINE_ARGS_DEF)
-        print 'DJW: config.XINE_TV_VO_DEV=%s' % (config.XINE_TV_VO_DEV)
-        print 'DJW: config.XINE_TV_AO_DEV=%s' % (config.XINE_TV_AO_DEV)
-        print 'DJW: config.XINE_TV_TIMESHIFT_FILEMASK=%s' % (config.XINE_TV_TIMESHIFT_FILEMASK)
+        if config.CONF.display in ('dfbmga', 'directfb', 'fbdev'):
+            self.fbxine = True
+        else:
+            self.fbxine = False
+
+        _debug_( 'config.CONF.xine=%s' % (config.CONF.xine) )
+        _debug_( 'config.XINE_COMMAND=%s' % (config.XINE_COMMAND) )
+        _debug_( 'config.XINE_ARGS_DEF=%s' % (config.XINE_ARGS_DEF) )
+        _debug_( 'config.XINE_TV_VO_DEV=%s' % (config.XINE_TV_VO_DEV) )
+        _debug_( 'config.XINE_TV_AO_DEV=%s' % (config.XINE_TV_AO_DEV) )
+        _debug_( 'config.XINE_TV_TIMESHIFT_FILEMASK=%s' % (config.XINE_TV_TIMESHIFT_FILEMASK) )
+
         self.command = '%s %s -V %s -A %s --stdctl pvr://%s' % \
             (config.XINE_COMMAND, config.XINE_ARGS_DEF, config.XINE_TV_VO_DEV, \
             config.XINE_TV_AO_DEV, config.XINE_TV_TIMESHIFT_FILEMASK)
@@ -428,7 +440,13 @@ class XineThread(threading.Thread):
     def stop(self):
 
         if (self.mode == 'busy') or (self.mode == 'pause'):
+
             self.mode = 'stop'
+
+            if self.fbxine == True:
+                while self.app.done == False:
+                    _debug_('waiting for xine to end...\n')
+                    time.sleep(0.1)
 
         while (self.mode == 'busy') or (self.mode == 'pause'):
             sleep(0.1)
@@ -458,10 +476,24 @@ class XineThread(threading.Thread):
                     self.mode = 'busy'
 
                 elif self.mode == 'stop':
-                    self.app.stop("quit\n")
 
+                    if self.fbxine == True:
+                        # directfb needs xine to be killed
+                        # else the display is messed up
+                        # and freevo crashes
+                        _debug_('killing xine')
+                        self.app._kill_()
 
-            self.mode = 'idle'
+                    else:
+                        # cleanly stop xine otherwise and let it
+                        # delete the buffer files
+                        _debug_('stoppping xine')
+                        self.app.stop("quit\n")
+
+                    self.mode = 'idle'
+
+            #_debug_('posting play_end')
+            #rc.post_event(PLAY_END)
 
             _debug_('XineThread: Stopped')
             self.mode = 'idle'
