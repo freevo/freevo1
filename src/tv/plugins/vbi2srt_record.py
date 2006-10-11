@@ -104,6 +104,7 @@ class Recorder:
 
         if DEBUG: print 'ACTIVATING VBI2SRT RECORD PLUGIN'
 
+        self.vg = None
         self.fc = FreevoChannels()
         self.tuner_chidx = 0    # Current channel, index into config.TV_CHANNELS
         self.thread = Record_Thread()
@@ -127,8 +128,10 @@ class Recorder:
                        'seconds'  : rec_prog.rec_duration,
                        'start'  : rec_prog.start }
 
+        self.vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
         if DEBUG: print('Recorder::Record:cl_options %s' % cl_options)
         if DEBUG: print('Recorder::Record:chan_index %s' % self.fc.chan_index)
+        if DEBUG: print('Recorder::Record:vg.vdev %s' % self.vg.vdev)
         pagenum = None;
         try:
             pagenum = int(config.TV_CHANNELS[self.fc.chan_index][5])
