@@ -9,33 +9,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.165.2.1  2005/01/09 10:52:08  dischi
-# possible dxr3 fix
-#
-# Revision 1.165  2004/07/10 12:33:36  dischi
-# header cleanup
-#
-# Revision 1.164  2004/07/08 12:44:40  rshortt
-# Add directfb as a display option.
-#
-# Revision 1.163  2004/06/29 18:29:20  dischi
-# auto repair broken thumbnails
-#
-# Revision 1.162  2004/06/13 18:40:37  dischi
-# fix crash
-#
-# Revision 1.161  2004/06/10 10:01:31  dischi
-# cleanup
-#
-# Revision 1.160  2004/06/09 19:50:17  dischi
-# change thumbnail caching format to be much faster: do not use pickle and
-# also reduce the image size from max 300x300 to 255x255
-#
-# Revision 1.159  2004/06/06 16:13:27  dischi
-# handle missing surfarray (Python Numeric)
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -235,7 +208,7 @@ class OSDFont:
                 #     break
                 
         if not font:
-            _debug_('Couldnt load font "%s"' % os.path.basename(filename).lower())
+            _debug_('Couldnt load font "%s"' % os.path.basename(filename))
 
             # Ok, see if there is an alternate font to use
             if fontname.lower() in config.OSD_FONT_ALIASES:
