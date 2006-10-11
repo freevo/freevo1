@@ -8,22 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.10.2.2  2005/06/08 21:56:46  mikeruelle
-# back out change's from Georg Kunzel. need to do this in a real radio
-# item to get it to format similar to AudioItem
-#
-# Revision 1.10.2.1  2005/03/26 20:14:59  mikeruelle
-# Committing Georg Kunzel's radio player patch to make the elapsed time
-# actually work correctly.
-#
-# Revision 1.10  2004/07/10 12:33:38  dischi
-# header cleanup
-#
-# Revision 1.9  2004/01/20 00:24:20  mikeruelle
-# update elapsed time for radio in a thread
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -123,8 +107,8 @@ class RadioPlayer:
             os.system('%s -f %s &' % (config.RADIO_CMD, self.item.station))
         else:
             # BTTV cards
-            print '%s -qf %s' % (config.RADIO_CMD, self.item.station)
-            os.system('%s -qf %s' % (config.RADIO_CMD, self.item.station))
+            print '%s' % (config.RADIO_CMD_START, self.item.station)
+            os.system('%s' % (config.RADIO_CMD_START, self.item.station))
         thread.start_new_thread(self.__update_thread, ())
 
         rc.app(self)
@@ -150,7 +134,7 @@ class RadioPlayer:
             os.system('killall -9 aplay')
         else:
             # BTTV cards
-            os.system('%s -qm' % config.RADIO_CMD)
+            os.system('%s' % config.RADIO_CMD_STOP)
 
         rc.post_event(PLAY_END)
         rc.app(None)

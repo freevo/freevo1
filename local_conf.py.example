@@ -896,7 +896,24 @@ IMAGEVIEWER_BLEND_MODE = -1
 # TV_INPUT = 0
 # 
 # Radio device default is None, /dev/video24 for ivtv
-# RADIO_DEVICE = '/dev/radio0'
+# RADIO_DEVICE = '/dev/radio'
+
+# Radio commands:
+# plugin.activate('audio.radioplayer')
+# plugin.activate('audio.radio')
+#
+# for fmtools
+# RADIO_CMD = 'fm'
+# RADIO_CMD_START = ('%s -q %s 65535' % (RADIO_CMD, %(station)))
+# RADIO_CMD_STOP = ('%s -q off' % RADIO_CMD)
+#
+# for ivtv-radio
+# RADIO_CMD = '/usr/bin/ivtv-radio -d /dev/radio0 -i /dev/video24'
+# RADIO_STATIONS = [
+#     ('DRS 1', '94.80'),
+#     ('VIRUS', '104.30'),
+#     (u'Radio Zürisee', '90.20'),
+# ]
 
 #
 # Additional options to pass to mplayer in TV mode.
