@@ -1533,7 +1533,7 @@ VIDEO_GROUPS = [
                tuner_norm=CONF.tv,
                tuner_chanlist=CONF.chanlist,
                desc='Default Video Group',
-               player=None),
+               record_group=None),
 ]
 
 #

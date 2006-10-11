@@ -8,24 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.38.2.1  2004/12/13 00:05:32  mikeruelle
-# allow for new tvtime not using the -D option anymore
-#
-# Revision 1.38  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.37  2004/07/08 12:44:40  rshortt
-# Add directfb as a display option.
-#
-# Revision 1.36  2004/06/06 17:15:10  mikeruelle
-# removed some old bad code. mplayer debug has been superceded by childapp debug.
-# the kill method is just plain bad.
-#
-# Revision 1.35  2004/05/29 23:01:03  mikeruelle
-# make better use of freevo channels. getting better video group support slowly
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.

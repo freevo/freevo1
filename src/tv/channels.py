@@ -8,17 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.19  2004/07/11 12:33:29  dischi
-# no tuner id is ok for dvb
-#
-# Revision 1.18  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.17  2004/03/05 04:04:10  rshortt
-# Only call setChannel on an external tuner plugin if we really have one.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -56,25 +45,25 @@ DEBUG = config.DEBUG
 #               input_type='tuner',
 #               tuner_type='external',
 #               tuner_chan='3',
-#               desc='Bell ExpressVu',
-#               player=1),
+#               desc='Bell ExpressVu (for playing)',
+#               record_group=1),
 #    VideoGroup(vdev='/dev/video1',
 #               adev=None,
 #               input_type='tuner',
 #               tuner_type='external',
 #               tuner_chan='3',
-#               desc='Bell ExpressVu (second card)',
-#               player=None),
+#               desc='Bell ExpressVu (for recording)',
+#               record_group=None),
 #    VideoGroup(vdev='/dev/video2',
 #               adev='/dev/dsp1',
 #               input_type='tuner',
-#               desc='ATI TV-Wonder',
-#               player=None),
+#               desc='ATI TV-Wonder (both playing and recording)',
+#               record_group=None),
 #    VideoGroup(vdev='/dev/video3',
 #               adev=None,
 #               input_type='webcam',
 #               desc='Logitech Quickcam',
-#               player=None),
+#               record_group=None),
 #]
 
 class FreevoChannels:
@@ -87,7 +76,7 @@ class FreevoChannels:
             plugin.init_special_plugin(config.plugin_external_tuner)
 
 
-    def getVideoGroup(self, chan, player):
+    def getVideoGroup(self, chan, isplayer):
         """
         Gets the VideoGroup object used by this Freevo channel.
         """
@@ -102,34 +91,36 @@ class FreevoChannels:
                         group = int(chan_info[4])
                     except: # XXX: put a better exception here
                         group = 0
-            if player:
-                play_group = config.VIDEO_GROUPS[group].player
-                if play_group:
+            if not isplayer:
+                record_group = config.VIDEO_GROUPS[group].record_group
+                if record_group:
                     try:
-                        group = int(play_group)
+                        # some simple checks
+                        group = int(record_group)
+                        record_vg = config.VIDEO_GROUPS[group]
                     except:
-                        print 'VIDEO_GROUPS[%s].player=%s is invalid' % (group, play_group)
+                        print 'VIDEO_GROUPS[%s].record_group=%s is invalid' % (group, record_group)
         finally:
             self.lock.release()
 
         return config.VIDEO_GROUPS[group]
 
 
-    def chanUp(self, player, app=None, app_cmd=None):
+    def chanUp(self, isplayer, app=None, app_cmd=None):
         """
         Using this method will not support custom frequencies.
         """
-        return self.chanSet(self.getNextChannel(), player, app, app_cmd)
+        return self.chanSet(self.getNextChannel(), isplayer, app, app_cmd)
 
 
-    def chanDown(self, player, app=None, app_cmd=None):
+    def chanDown(self, isplayer, app=None, app_cmd=None):
         """
         Using this method will not support custom frequencies.
         """
-        return self.chanSet(self.getPrevChannel(), player, app, app_cmd)
+        return self.chanSet(self.getPrevChannel(), isplayer, app, app_cmd)
 
 
-    def chanSet(self, chan, player, app=None, app_cmd=None):
+    def chanSet(self, chan, isplayer, app=None, app_cmd=None):
         new_chan = None
 
         for pos in range(len(config.TV_CHANNELS)):
@@ -143,7 +134,7 @@ class FreevoChannels:
                         (_('Cannot find tuner channel "%s" in the TV channel listing') % chan))
             return
 
-        vg = self.getVideoGroup(new_chan, player)
+        vg = self.getVideoGroup(new_chan, isplayer)
 
         if vg.tuner_type == 'external':
             tuner = plugin.getbyname('EXTERNAL_TUNER')
@@ -157,14 +148,14 @@ class FreevoChannels:
             return 0
 
         else:
-            return self.tunerSetFreq(chan, player, app, app_cmd)
+            return self.tunerSetFreq(chan, isplayer, app, app_cmd)
 
         return 0
 
 
-    def tunerSetFreq(self, chan, player, app=None, app_cmd=None):
+    def tunerSetFreq(self, chan, isplayer, app=None, app_cmd=None):
         chan = str(chan)
-        vg = self.getVideoGroup(chan, player)
+        vg = self.getVideoGroup(chan, isplayer)
 
         freq = config.FREQUENCY_TABLE.get(chan)
         if freq:

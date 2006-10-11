@@ -8,32 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.38  2004/07/11 11:32:47  dischi
-# move mplayer dvb args to config
-#
-# Revision 1.37  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.36  2004/07/04 08:15:29  dischi
-# add config.MPLAYER_ARGS_DEF (why was that missing?)
-#
-# Revision 1.35  2004/06/28 17:12:22  dischi
-# reduce cache for dvb
-#
-# Revision 1.34  2004/06/25 20:03:33  dischi
-# basic dvb support
-#
-# Revision 1.33  2004/02/13 17:36:54  dischi
-# fixed crash on stop
-#
-# Revision 1.32  2004/02/05 14:23:50  outlyer
-# Patch from Viggo Fredriksen
-#
-# o Move to ChildApp2 for mplayer TV plugin
-# o Channel changing via the number pad on the remote
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.

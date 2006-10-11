@@ -5,22 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.5  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.4  2004/06/06 17:18:39  mikeruelle
-# removing unnecessary and bad kill method
-#
-# Revision 1.3  2004/03/21 23:03:23  mikeruelle
-# docs fro devels, this is not for newbs yet
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -75,8 +64,8 @@ class PluginInterface(plugin.Plugin):
     def __init__(self, app, remote):
         plugin.Plugin.__init__(self)
 
-	#XXX might want to check to see if .xawtv present.
-	# we really don't have much of a prayer if it isn't
+        #XXX might want to check to see if .xawtv present.
+        # we really don't have much of a prayer if it isn't
 
         # create the xawtv object and register it
         plugin.register(Xawtv(app, remote), plugin.TV)
@@ -85,14 +74,14 @@ class Xawtv:
 
     __muted    = 0
     __igainvol = 0
-    
+
     def __init__(self, app, remote):
         self.tuner_chidx = 0    # Current channel, index into config.TV_CHANNELS
         self.app_mode = 'tv'
-	self.fc = FreevoChannels()
+        self.fc = FreevoChannels()
         self.current_vg = None
-	self.xawtv_prog = app
-	self.remote_prog = remote
+        self.xawtv_prog = app
+        self.remote_prog = remote
 
     def TunerSetChannel(self, tuner_channel):
         for pos in range(len(config.TV_CHANNELS)):
@@ -106,7 +95,7 @@ class Xawtv:
 
     def TunerGetChannelInfo(self):
         '''Get program info for the current channel'''
-        
+
         tuner_id = config.TV_CHANNELS[self.tuner_chidx][2]
         chan_name = config.TV_CHANNELS[self.tuner_chidx][1]
         chan_id = config.TV_CHANNELS[self.tuner_chidx][0]
@@ -121,7 +110,7 @@ class Xawtv:
             prog_info = '%s %s' % (ts, channels[0].programs[0].title)
         else:
             prog_info = 'No info'
-            
+
         return tuner_id, chan_name, prog_info
 
 
@@ -136,7 +125,7 @@ class Xawtv:
     def TunerPrevChannel(self):
         self.tuner_chidx = (self.tuner_chidx-1) % len(config.TV_CHANNELS)
 
-        
+
     def Play(self, mode, tuner_channel=None, channel_change=0):
 
         if tuner_channel != None:
@@ -153,26 +142,26 @@ class Xawtv:
             return
 
         if mode == 'tv' or mode == 'vcr':
-            
+
             w, h = config.TV_VIEW_SIZE
-	    cf_norm = vg.tuner_norm
-	    cf_input = vg.input_num
-	    cf_device = vg.vdev
+            cf_norm = vg.tuner_norm
+            cf_input = vg.input_num
+            cf_device = vg.vdev
 
             s_norm = cf_norm.upper()
 
             if mode == 'vcr':
-	        cf_input = '1'
-		if hasattr(config, "TV_VCR_INPUT_NUM") and config.TV_VCR_INPUT_NUM:
-		    cf_input = config.TV_VCR_INPUT_NUM
+                cf_input = '1'
+                if hasattr(config, "TV_VCR_INPUT_NUM") and config.TV_VCR_INPUT_NUM:
+                    cf_input = config.TV_VCR_INPUT_NUM
 
             if hasattr(config, "TV_XAWTV_OPTS") and config.TV_XAWTV_OPTS:
-	        daoptions = config.TV_XAWTV_OPTS
+                daoptions = config.TV_XAWTV_OPTS
             else:
-	        daoptions = '-xv -f'
+                daoptions = '-xv -f'
 
             command = '%s %s -device %s ' % (self.xawtv_prog,
-	                                     daoptions,
+                                             daoptions,
                                              cf_device)
 
         else:
@@ -195,11 +184,11 @@ class Xawtv:
             mixer.setPcmVolume(0)
 
         # Start up the TV task
-        self.app=XawtvApp(command, self.remote_prog)        
+        self.app=XawtvApp(command, self.remote_prog)
 
-	if tuner_channel:
-	    time.sleep(0.5)
-	    self.app.sendcmd('setstation %s' % tuner_channel)
+        if tuner_channel:
+            time.sleep(0.5)
+            self.app.sendcmd('setstation %s' % tuner_channel)
         #XXX use remote to change the input we want
 
         self.prev_app = rc.app()
@@ -213,15 +202,15 @@ class Xawtv:
         elif mixer:
             mixer.setLineinVolume(config.TV_IN_VOLUME)
             mixer.setIgainVolume(config.TV_IN_VOLUME)
-            
+
         if mixer and config.MAJOR_AUDIO_CTRL == 'VOL':
             mixer.setMainVolume(mixer_vol)
         elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
             mixer.setPcmVolume(mixer_vol)
 
         if DEBUG: print '%s: started %s app' % (time.time(), self.mode)
-        
-        
+
+
     def Stop(self, channel_change=0):
         mixer = plugin.getbyname('MIXER')
         if mixer and not channel_change:
@@ -240,41 +229,41 @@ class Xawtv:
             self.Stop()
             rc.post_event(em.PLAY_END)
             return True
-        
+
         elif event == em.TV_CHANNEL_UP or event == em.TV_CHANNEL_DOWN:
             if self.mode == 'vcr':
                 return
-             
+
             if event == em.TV_CHANNEL_UP:
                 self.TunerPrevChannel()
                 self.app.sendcmd('setstation next')
             else:
                 self.TunerNextChannel()
                 self.app.sendcmd('setstation prev')
-	    
+
             return True
-            
+
         elif event == em.TOGGLE_OSD:
-	    #try to send channel name
+            #try to send channel name
             self.app.sendcmd('msg \'%s\'' % self.TunerGetChannel())
             return True
-        
+
         elif event == em.OSD_MESSAGE:
             self.app.sendcmd('msg \'%s\'' % event.arg)
             return True
-       
+
         elif event in em.INPUT_ALL_NUMBERS:
             self.app.sendcmd('keypad %s' % event.arg)
-	    
+
         elif event == em.BUTTON:
             if event.arg == 'PREV_CH':
                 self.app.sendcmd('setstation back')
                 return True
-	        
+
 
         return False
-        
-            
+
+
 
 # ======================================================================
 class XawtvApp(childapp.ChildApp2):

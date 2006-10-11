@@ -121,25 +121,25 @@ class Logger:
 
 class VideoGroup:
     """
-    vdev:        The video recording device, such as /dev/video0.
-    adev:        The audio device, such as /dev/dsp.
-    input_type:  tuner, composite, svideo, webcam
-    input_num:   The number of this input according to V4L
-    tuner_type:  internal (on a v4l device), or external (cable or sat box)
-    tuner_norm:  NTSC, PAL, SECAM
+    vdev:         The video recording device, such as /dev/video0.
+    adev:         The audio device, such as /dev/dsp.
+    input_type:   tuner, composite, svideo, webcam
+    input_num:    The number of this input according to V4L
+    tuner_type:   internal (on a v4l device), or external (cable or sat box)
+    tuner_norm:   NTSC, PAL, SECAM
     tuner_chanlist:  us-cable, 
-    tuner_chan:  If using input_type=tuner and tuner_type=external set this to
-                 what channel it needs to be to get the signal, usually 3 or 4.
-    player:      VideoGroup that plays for this tuner, default is to use the same device for record and play
-    desc:        A nice description for this VideoGroup.
-    group_type:  Special variable to identify devices like dvb or ivtv.  This
-                 can be left as default, 'normal', or set to 'ivtv' or 'dvb'.
+    tuner_chan:   If using input_type=tuner and tuner_type=external set this to
+                  what channel it needs to be to get the signal, usually 3 or 4.
+    record_group: VideoGroup that records for this tuner, default is to use the same device for record and play
+    desc:         A nice description for this VideoGroup.
+    group_type:   Special variable to identify devices like dvb or ivtv.  This
+                  can be left as default, 'normal', or set to 'ivtv' or 'dvb'.
     """
 
     def __init__(self, vdev='/dev/video', adev='/dev/dsp', input_type='tuner',
                  input_num=0, tuner_norm='NTSC', tuner_chanlist='us-cable', 
                  tuner_type='internal', tuner_chan=None,
-                 player=None, desc='Freevo default VideoGroup',
+                 record_group=None, desc='Freevo default VideoGroup',
                  group_type='normal'):
 
         # XXX: Put checks in here for supplied values.
@@ -151,7 +151,7 @@ class VideoGroup:
         self.tuner_norm = string.upper(tuner_norm)
         self.tuner_chanlist = tuner_chanlist
         self.tuner_chan = tuner_chan
-        self.player = player
+        self.record_group = record_group
         self.desc = desc
         self.group_type = group_type
         self.in_use = FALSE

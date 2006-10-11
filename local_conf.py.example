@@ -1064,13 +1064,22 @@ IMAGEVIEWER_BLEND_MODE = -1
 # channels use different Video Groups.
 
 # VIDEO_GROUPS = [
+#     # Use this group for watching tv
 #     VideoGroup(vdev=TV_DEVICE,
 #                adev=AUDIO_DEVICE,
 #                input_type='tuner',
 #                tuner_norm=CONF.tv,
 #                tuner_chanlist=CONF.chanlist,
-#                desc='Default Video Group',
-#                recordable=True),
+#                desc='Watching Video Group',
+#                record_group=1),
+#     # Use this group for recording tv
+#     VideoGroup(vdev='/dev/video1',
+#                adev=AUDIO_DEVICE,
+#                input_type='tuner',
+#                tuner_norm=CONF.tv,
+#                tuner_chanlist=CONF.chanlist,
+#                desc='Recording Video Group',
+#                record_group=None),
 # ]
 
 
