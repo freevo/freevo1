@@ -97,24 +97,21 @@ class IVTV_XINE_TV:
         self.xine.play()
 
         # Suppress annoying audio clicks
-        time.sleep(0.4)
+        time.sleep(0.6)
         self.mixer.start(mode)
 
         _debug_('%s: started %s app' % (time.time(), self.mode))
 
 
     def Pause(self):
-
         self.xine.pause()
 
 
     def Stop(self):
-
         self.mixer.stop()
         self.xine.stop()
         rc.app(self.prev_app)
         rc.post_event(PLAY_END)
-
         _debug_('stopped %s app' % self.mode)
 
 
@@ -135,10 +132,8 @@ class IVTV_XINE_TV:
 
             if event == TV_CHANNEL_UP:
                 self.tuner.NextChannel()
-
             elif event == TV_CHANNEL_DOWN:
                 self.tuner.PrevChannel()
-
             else:
                 self.tuner.TuneChannel( int(s_event[6]) )
 
@@ -155,16 +150,13 @@ class IVTV_XINE_TV:
             if pos < 0:
                 action='SeekRelative-'
                 pos = 0 - pos
-
             else:
                 action='SeekRelative+'
 
             if pos <= 15:
                 pos = 15
-
             elif pos <= 30:
                 pos = 30
-
             else:
                 pos = 30
 
@@ -180,20 +172,23 @@ class IVTV_XINE_TV:
 class TunerControl:
 
     def __init__(self):
-
         self.current_vgrp = None
         self.fc = FreevoChannels()
         self.current_chan = 0 # Current channel, index into config.TV_CHANNELS
+        self.embed = None
+
+
+    def _kill_(self):
+        if self.embed:
+            ivtv_dev.setvbiembed(self.embed)
 
 
     def SetChannel(self, mode, channel=None):
 
         if (channel == None):
             self.current_chan = self.fc.getChannel()
-
         else:
             self.current_chan = -1
-
             try:
                 for pos in range(len(config.TV_CHANNELS)):
                     entry = config.TV_CHANNELS[pos]
@@ -201,7 +196,6 @@ class TunerControl:
                         channel_index = pos
                         self.current_chan = channel
                         break
-
             except ValueError:
                 pass
 
@@ -221,6 +215,9 @@ class TunerControl:
             ivtv_dev.setinput(vg.input_num)
             ivtv_dev.print_settings()
             self.TuneChannel(channel_index + 1)
+            # disable embedded vbi data
+            self.embed = ivtv_dev.getvbiembed()
+            ivtv_dev.setvbiembed(0)
 
         else:
             _debug_('Mode "%s" is not implemented' % mode)
@@ -339,7 +336,6 @@ class MixerControl:
             if config.MAJOR_AUDIO_CTRL == 'VOL':
                 self.volume = self.mixer.getMainVolume()
                 self.mixer.setMainVolume(0)
-
             elif config.MAJOR_AUDIO_CTRL == 'PCM':
                 self.volume = self.mixer.getPcmVolume()
                 self.mixer.setPcmVolume(0)
@@ -352,14 +348,12 @@ class MixerControl:
             # if self.mode == 'vcr':
             if 0:
                 self.mixer.setMicVolume(config.VCR_IN_VOLUME)
-
             else:
                 self.mixer.setLineinVolume(config.TV_IN_VOLUME)
                 self.mixer.setIgainVolume(config.TV_IN_VOLUME)
 
             if config.MAJOR_AUDIO_CTRL == 'VOL':
                 self.mixer.setMainVolume(self.volume)
-
             elif config.MAJOR_AUDIO_CTRL == 'PCM':
                 self.mixer.setPcmVolume(self.volume)
 
@@ -389,8 +383,8 @@ class XineApp(childapp.ChildApp2):
         self.done = False
 
     def _kill_(self):
-
-        childapp.ChildApp2.kill(self,signal.SIGKILL)
+        _debug_('XineApp: killed')
+        childapp.ChildApp2.kill(self,signal.SIGTERM)
         self.done = True
 
 # ======================================================================
@@ -407,7 +401,7 @@ class XineThread(threading.Thread):
 
         self.app = None
         self.item = None
-        self.mode = 'idle'
+        self.state = 'idle'
         self.start_flag = threading.Event()
 
         try:
@@ -436,72 +430,65 @@ class XineThread(threading.Thread):
 
 
     def play(self):
-
-        if (self.mode == 'idle'):
+        if self.state == 'idle':
             self.start_flag.set()
 
-    def pause(self):
 
-        if (self.mode == 'busy') or (self.mode == 'pause'):
-            self.mode = 'pause'
+    def pause(self):
+        if self.state == 'busy':
+            self.state = 'pause'
+
 
     def stop(self):
-
-        if (self.mode == 'busy') or (self.mode == 'pause'):
-
-            self.mode = 'stop'
-
-            if self.fbxine == True:
-                while self.app.done == False:
-                    _debug_('waiting for xine to end...\n')
+        if self.state == 'busy':
+            self.state = 'stop'
+            if self.fbxine:
+                while not self.app.done:
+                    _debug_('waiting for xine to end...')
                     time.sleep(0.1)
-
-        while (self.mode == 'busy') or (self.mode == 'pause'):
-            sleep(0.1)
+                _debug_('xine ended')
 
 
     def run(self):
 
         while 1:
-
-            if self.mode == 'idle':
+            if self.state == 'idle':
                 self.start_flag.wait()
                 self.start_flag.clear()
-
             else:
                 _debug_("XineThread: Should be idle on thread entry!")
 
             self.app = XineApp(self.command, self.item)
-            self.mode = 'busy'
+            self.state = 'busy'
 
+            laststate = None
             while self.app.isAlive():
+                if laststate != self.state:
+                    _debug_("DJW:run %s->%s" % (laststate, self.state))
+                    laststate = self.state
 
-                if self.mode == 'busy':
+                if self.state == 'busy':
                     time.sleep(0.1)
 
-                elif self.mode == 'pause':
+                elif self.state == 'pause':
                     self.app.write('pause\n')
-                    self.mode = 'busy'
+                    self.state = 'busy'
 
-                elif self.mode == 'stop':
-
+                elif self.state == 'stop':
+                    _debug_('stoppping xine')
+                    self.app.stop("quit\n")
                     if self.fbxine:
                         # directfb needs xine to be killed
                         # else the display is messed up
                         # and freevo crashes
+                        time.sleep(1.0)
                         _debug_('killing xine')
                         self.app._kill_()
-
-                    else:
-                        # cleanly stop xine otherwise and let it
-                        # delete the buffer files
-                        _debug_('stoppping xine')
-                        self.app.stop("quit\n")
-
-                    self.mode = 'idle'
+                        #self.done = True
+                    self.state = 'busy'
 
             #_debug_('posting play_end')
             #rc.post_event(PLAY_END)
 
             _debug_('XineThread: Stopped')
-            self.mode = 'idle'
+            self.state = 'idle'
