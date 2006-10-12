@@ -464,7 +464,7 @@ class XineThread(threading.Thread):
             laststate = None
             while self.app.isAlive():
                 if laststate != self.state:
-                    _debug_("DJW:run %s->%s" % (laststate, self.state))
+                    _debug_("state %s->%s" % (laststate, self.state))
                     laststate = self.state
 
                 if self.state == 'busy':
