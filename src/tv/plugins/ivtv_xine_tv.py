@@ -410,9 +410,11 @@ class XineThread(threading.Thread):
         self.mode = 'idle'
         self.start_flag = threading.Event()
 
-        if config.CONF.display in ('dfbmga', 'directfb', 'fbdev'):
-            self.fbxine = True
-        else:
+        try:
+            xinecmd = config.XINE_COMMAND.split(' ')[0].split('/')[-1]
+            self.fbxine = xinecmd in ('fbxine', 'df_xine')
+        except:
+            xinecmd = ''
             self.fbxine = False
 
         _debug_( 'config.CONF.xine=%s' % (config.CONF.xine) )
@@ -421,10 +423,16 @@ class XineThread(threading.Thread):
         _debug_( 'config.XINE_TV_VO_DEV=%s' % (config.XINE_TV_VO_DEV) )
         _debug_( 'config.XINE_TV_AO_DEV=%s' % (config.XINE_TV_AO_DEV) )
         _debug_( 'config.XINE_TV_TIMESHIFT_FILEMASK=%s' % (config.XINE_TV_TIMESHIFT_FILEMASK) )
+        _debug_( 'xinecmd=%s' % (xinecmd) )
+        _debug_( 'self.fbxine=%s' % (self.fbxine) )
 
-        self.command = '%s %s -V %s -A %s --stdctl pvr://%s' % \
-            (config.XINE_COMMAND, config.XINE_ARGS_DEF, config.XINE_TV_VO_DEV, \
-            config.XINE_TV_AO_DEV, config.XINE_TV_TIMESHIFT_FILEMASK)
+        if self.fbxine:
+            self.command = '%s %s --stdctl pvr://%s' % \
+                (config.XINE_COMMAND, config.XINE_ARGS_DEF, config.XINE_TV_TIMESHIFT_FILEMASK)
+        else:
+            self.command = '%s %s -V %s -A %s --stdctl pvr://%s' % \
+                (config.XINE_COMMAND, config.XINE_ARGS_DEF, config.XINE_TV_VO_DEV, \
+                config.XINE_TV_AO_DEV, config.XINE_TV_TIMESHIFT_FILEMASK)
 
 
     def play(self):
@@ -477,7 +485,7 @@ class XineThread(threading.Thread):
 
                 elif self.mode == 'stop':
 
-                    if self.fbxine == True:
+                    if self.fbxine:
                         # directfb needs xine to be killed
                         # else the display is messed up
                         # and freevo crashes
