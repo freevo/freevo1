@@ -8,19 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.13.2.1  2005/06/10 14:25:15  tack
-# Fix OverflowError exceptions with Python 2.4 in the ioctl calls.
-#
-# Revision 1.13  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.12  2003/12/31 16:05:34  rshortt
-# No longer override setstd because the mspSetMatrix() call was only to work
-# around a (fixed) ivtv bug.  Also removed the setinput call because that is
-# now taken care of by the VideoGroup and channels.py.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -44,14 +31,69 @@
 
 import string, struct, fcntl, time
 
-import tv.v4l2, config
+#import tv.v4l2, config
+import config
+import tv.v4l2
+
+DEBUG = config.DEBUG
 
 def i32(x): return (x&0x80000000L and -2*0x40000000 or 0) + int(x&0x7fffffff)
+
+_IOC_NRBITS = 8
+_IOC_TYPEBITS = 8
+_IOC_SIZEBITS = 14
+_IOC_DIRBITS = 2
+
+_IOC_NRMASK = ((1 << _IOC_NRBITS)-1)
+_IOC_TYPEMASK = ((1 << _IOC_TYPEBITS)-1)
+_IOC_SIZEMASK = ((1 << _IOC_SIZEBITS)-1)
+_IOC_DIRMASK = ((1 << _IOC_DIRBITS)-1)
+
+_IOC_NRSHIFT = 0 
+_IOC_TYPESHIFT = (_IOC_NRSHIFT+_IOC_NRBITS)
+_IOC_SIZESHIFT = (_IOC_TYPESHIFT+_IOC_TYPEBITS)
+_IOC_DIRSHIFT = (_IOC_SIZESHIFT+_IOC_SIZEBITS)
+
+# Direction bits.
+_IOC_NONE = 0
+_IOC_WRITE = 1
+_IOC_READ = 2
+
+def _IOC(dir,type,nr,size):
+    return (((dir)  << _IOC_DIRSHIFT) | \
+           (ord(type) << _IOC_TYPESHIFT) | \
+           ((nr)   << _IOC_NRSHIFT) | \
+           ((size) << _IOC_SIZESHIFT))
+
+def _IO(type,nr): return _IOC(_IOC_NONE,(type),(nr),0)
+
+def _IOR(type,nr,size): return _IOC(_IOC_READ,(type),(nr),struct.calcsize(size))
+
+def _IOW(type,nr,size): return _IOC(_IOC_WRITE,(type),(nr),struct.calcsize(size))
+
+def _IOWR(type,nr,size): return _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),struct.calcsize(size))
+
+# used to decode ioctl numbers..
+def _IOC_DIR(nr): return (((nr) >> _IOC_DIRSHIFT) & _IOC_DIRMASK)
+def _IOC_TYPE(nr): return (((nr) >> _IOC_TYPESHIFT) & _IOC_TYPEMASK)
+def _IOC_NR(nr): return (((nr) >> _IOC_NRSHIFT) & _IOC_NRMASK)
+def _IOC_SIZE(nr): return (((nr) >> _IOC_SIZESHIFT) & _IOC_SIZEMASK)
+
+# structs
+CODEC_ST = '15I'
+MSP_MATRIX_ST = '2i'
+VBI_EMBED_ST = "I"
+GOP_END_ST = "I"
 
 # ioctls
 IVTV_IOC_G_CODEC = 0xFFEE7703
 IVTV_IOC_S_CODEC = 0xFFEE7704
 MSP_SET_MATRIX =   0x40086D11
+
+GETVBI_EMBED_NO  = _IOR('@', 55, VBI_EMBED_ST) #IVTV_IOC_G_VBI_EMBED
+SETVBI_EMBED_NO  = _IOW('@', 54, VBI_EMBED_ST) #IVTV_IOC_S_VBI_EMBED
+
+GOP_END_NO   = _IOWR('@', 50, GOP_END_ST) #IVTV_IOC_S_GOP_END used to wait for a GOP
 
 # Stream types 
 IVTV_STREAM_PS     = 0
@@ -61,10 +103,6 @@ IVTV_STREAM_PES_AV = 3
 IVTV_STREAM_PES_V  = 5
 IVTV_STREAM_PES_A  = 7
 IVTV_STREAM_DVD    = 10
-
-# structs
-CODEC_ST = '15I'
-MSP_MATRIX_ST = '2i'
 
 
 class IVTV(tv.v4l2.Videodev):
@@ -91,12 +129,14 @@ class IVTV(tv.v4l2.Videodev):
                            codec.pulldown,
                            codec.stream_type)
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_S_CODEC), val)
+        if DEBUG >= 3: print "setCodecInfo: val=%r, r=%r" % (val, r)
 
 
     def getCodecInfo(self):
         val = struct.pack( CODEC_ST, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 )
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_G_CODEC), val)
         codec_list = struct.unpack(CODEC_ST, r)
+        if DEBUG >= 3: print "getCodecInfo: val=%r, r=%r, res=%r" % (val, r, struct.unpack(CODEC_ST, r))
         return IVTVCodec(codec_list)
 
 
@@ -106,6 +146,24 @@ class IVTV(tv.v4l2.Videodev):
 
         val = struct.pack(MSP_MATRIX_ST, input, output)
         r = fcntl.ioctl(self.device, i32(MSP_SET_MATRIX), val)
+        if DEBUG >= 3: print "mspSetMatrix: val=%r, r=%r" % (val, r)
+
+
+    def getvbiembed(self):
+        r = fcntl.ioctl(self.device, i32(GETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST,0))
+        if DEBUG >= 3:
+            print "getvbiembed: val=%r, r=%r, res=%r" % (struct.pack(VBI_EMBED_ST,0), r, struct.unpack(VBI_EMBED_ST,r))
+        return struct.unpack(VBI_EMBED_ST,r)[0]
+  
+
+    def setvbiembed(self, value):
+        r = fcntl.ioctl(self.device, i32(SETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, value))
+        if DEBUG: print "setvbiembed: val=%r, res=%r" % (struct.pack(VBI_EMBED_ST, value), r)
+
+
+    def gopend(self, value):
+        r = fcntl.ioctl(self.device, i32(GOP_END_NO), struct.pack(GOP_END_ST, value))
+        if DEBUG: print "gopend: val=%r, res=%r" % (struct.pack(GOP_END_ST, value), r)
 
 
     def init_settings(self, opts=None):
@@ -181,3 +239,25 @@ class IVTVCodec:
         self.stream_type   = args[14]
 
 
+'''
+To run this as standalone use the following before running python v4l2.py
+pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
+export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
+export FREEVO_SHARE=/usr/share/freevo
+export FREEVO_CONFIG=/usr/share/freevo/freevo_config.py
+export FREEVO_CONTRIB=/usr/share/freevo/contrib
+export RUNAPP=""
+'''
+
+if __name__ == '__main__':
+
+    ivtv_dev = IVTV('/dev/video0')
+    print config.TV_IVTV_OPTIONS
+    print ivtv_dev.print_settings()
+    print ivtv_dev.init_settings()
+    embed = ivtv_dev.getvbiembed()
+    print "embed=%s" % embed
+    ivtv_dev.setvbiembed(1)
+    print "embed=%s (%s)" % (ivtv_dev.getvbiembed(), 1)
+    ivtv_dev.setvbiembed(embed)
+    print "embed=%s (%s)" % (ivtv_dev.getvbiembed(), embed)

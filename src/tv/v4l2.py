@@ -120,8 +120,6 @@ AUDIO_ST     = "<L32sLL8x"
 GET_AUDIO_NO = _IOWR ('V', 33, AUDIO_ST)
 SET_AUDIO_NO = _IOW  ('V', 34, AUDIO_ST)
 
-
-V4L2_TUNER_CAP_LOW    = 0x0001
 V4L2_TUNER_CAP_NORM   = 0x0002
 V4L2_TUNER_CAP_STEREO = 0x0010
 V4L2_TUNER_CAP_LANG2  = 0x0020
@@ -167,12 +165,14 @@ class Videodev:
         val = struct.pack( FREQUENCY_ST, 0,0,0 )
         r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
         (junk,junk, freq, ) = struct.unpack(FREQUENCY_ST, r)
+        if DEBUG >= 3: print "getfreq: val=%r, r=%s, res=%r" % (val, r, struct.unpack(FREQUENCY_ST, r))
         return freq
 
 
     def getfreq2(self):
         val = struct.pack( FREQUENCY_ST, 0,0,0 )
         r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
+        if DEBUG >= 3: print "getfreq2: val=%r, r=%s, res=%r" % (val, r, struct.unpack(FREQUENCY_ST, r))
         return struct.unpack(FREQUENCY_ST, r)
 
 
@@ -206,21 +206,25 @@ class Videodev:
     def setfreq_old(self, freq):
         val = struct.pack( "L", freq)
         r = fcntl.ioctl(self.device, i32(SETFREQ_NO_V4L), val)        
+        if DEBUG >= 3: print "setfreq_old: val=%r, r=%r" % (val, r)
 
 
     def setfreq(self, freq):
         val = struct.pack( FREQUENCY_ST, long(0), long(2), freq)
         r = fcntl.ioctl(self.device, i32(SETFREQ_NO), val)
+        if DEBUG >= 3: print "setfreq_old: val=%r, r=%r" % (val, r)
 
 
     def getinput(self):
         r = fcntl.ioctl(self.device, i32(GETINPUT_NO), struct.pack(INPUT_ST,0))
+        if DEBUG >= 3: print "getinput: val=%r, r=%r, res=%r" % (struct.pack(INPUT_ST,0), r, struct.unpack(INPUT_ST,r))
         return struct.unpack(INPUT_ST,r)[0]
   
 
     def setinput(self, value):
         try:
             r = fcntl.ioctl(self.device, i32(SETINPUT_NO), struct.pack(INPUT_ST, value))
+            if DEBUG: print "setinput: val=%r, res=%r" % (struct.pack(INPUT_ST, value), r)
         except IOError:
             self.print_settings
             raise
@@ -229,63 +233,74 @@ class Videodev:
     def querycap(self):
         val = struct.pack( QUERYCAP_ST, "", "", "", 0, 0 )
         r = fcntl.ioctl(self.device, i32(QUERYCAP_NO), val)
+        if DEBUG >= 3: print "querycap: val=%r, r=%r, res=%r" % (val, r, struct.unpack(QUERYCAP_ST,r))
         return struct.unpack( QUERYCAP_ST, r )
 
 
     def enumstd(self, no):
         val = struct.pack( ENUMSTD_ST, no, 0, "", 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMSTD_NO), val)
+        if DEBUG >= 3: print "enumstd: val=%r, r=%r, res=%r" % (val, r, struct.unpack(ENUMSTD_ST,r))
         return struct.unpack( ENUMSTD_ST, r )
 
 
     def getstd(self):
         val = struct.pack( STANDARD_ST, 0 )
         r = fcntl.ioctl(self.device, i32(GETSTD_NO), val)
+        if DEBUG >= 3: print "getstd: val=%r, r=%r, res=%r" % (val, r, struct.unpack(STANDARD_ST,r))
         return struct.unpack( STANDARD_ST, r )[0]
 
 
     def setstd(self, value):
         val = struct.pack( STANDARD_ST, value )
         r = fcntl.ioctl(self.device, i32(SETSTD_NO), val)
+        if DEBUG >= 3: print "setstd: val=%r, r=%r" % (val, r)
 
 
     def enuminput(self,index):
         val = struct.pack( ENUMINPUT_ST, index, "", 0,0,0,0,0)
         r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO), val)
+        if DEBUG >= 3: print "enuminput: val=%r, r=%r, res=%r" % (val, r, struct.unpack(ENUMINPUT_ST,r))
         return struct.unpack( ENUMINPUT_ST, r )
 
 
     def getfmt(self):  
         val = struct.pack( FMT_ST, 1,0,0,0,0,0,0,0)
         r = fcntl.ioctl(self.device, i32(GET_FMT_NO), val)
+        if DEBUG >= 3: print "getfmt: val=%r, r=%r, res=%r" % (val, r, struct.unpack(FMT_ST,r))
         return struct.unpack( FMT_ST, r )
 
 
     def setfmt(self, width, height):
         val = struct.pack( FMT_ST, 1L, width, height, 0L, 4L, 0L, 131072L, 0L)
         r = fcntl.ioctl(self.device, i32(SET_FMT_NO), val)
+        if DEBUG >= 3: print "setfmt: val=%r, r=%r" % (val, r)
 
 
     def gettuner(self,index):
         val = struct.pack( TUNER_ST, index, "", 0,0,0,0,0,0,0,0)
         r = fcntl.ioctl(self.device, i32(GET_TUNER_NO), val)
+        if DEBUG >= 3: print "getfmt: val=%r, r=%r, res=%r" % (val, r, struct.unpack(FMT_ST,r))
         return struct.unpack( TUNER_ST, r )
 
 
     def settuner(self,index,audmode):
         val = struct.pack( TUNER_ST, index, "", 0,0,0,0,0,audmode,0,0)
         r = fcntl.ioctl(self.device, i32(SET_TUNER_NO), val)
+        if DEBUG >= 3: print "settuner: val=%r, r=%r" % (val, r)
 
 
     def getaudio(self,index):
         val = struct.pack( AUDIO_ST, index, "", 0,0)
         r = fcntl.ioctl(self.device, i32(GET_AUDIO_NO), val)
+        if DEBUG >= 3: print "getaudio: val=%r, r=%r, res=%r" % (val, r, struct.unpack(AUDIO_ST,r))
         return struct.unpack( AUDIO_ST, r )
 
 
     def setaudio(self,index,mode):
         val = struct.pack( AUDIO_ST, index, "", mode, 0)
         r = fcntl.ioctl(self.device, i32(SET_AUDIO_NO), val)
+        if DEBUG >= 3: print "setaudio: val=%r, r=%r" % (val, r)
 
 
     def init_settings(self):
@@ -365,6 +380,10 @@ export RUNAPP=""
 if __name__ == '__main__':
 
     viddev=Videodev('/dev/video0')
+    #print viddev.querycap()
+    inp = viddev.getinput()
+    viddev.setinput(inp)
+    '''
     print viddev.querycap()
     fmt = viddev.getstd()
     print fmt
@@ -374,7 +393,6 @@ if __name__ == '__main__':
     std = viddev.getfmt()
     print std
     
-    '''
     print 'QUERYCAP_ST=%s %s' % (QUERYCAP_ST, struct.calcsize(QUERYCAP_ST))
     print 'FREQUENCY_ST=%s %s' % (FREQUENCY_ST, struct.calcsize(FREQUENCY_ST))
     print 'ENUMSTD_ST=%s %s' % (ENUMSTD_ST, struct.calcsize(ENUMSTD_ST))
@@ -410,3 +428,4 @@ if __name__ == '__main__':
     print viddev.getfreq()
     print viddev.getfreq2()
     '''
+    viddev.close()
