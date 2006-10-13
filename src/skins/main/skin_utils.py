@@ -8,14 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.17  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.16  2004/02/01 17:51:14  dischi
-# respect item.rotation of images
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -44,6 +36,7 @@ import ImageFile
 import osd
 import os
 import util
+from mmpython.image import EXIF as exif
 
 osd = osd.get_singleton()
 
@@ -86,6 +79,22 @@ def format_image(settings, item, width, height, force=0):
             if not image:
                 image = osd.loadbitmap('thumb://%s' % item.image)
                 load_imagecache['thumb://%s' % item.image] = image
+
+        if not item['rotation']:
+            try:
+                f=open(item.filename, 'rb')
+                tags=exif.process_file(f)
+                f.close()
+                if tags.has_key('Image Orientation'):
+                    orientation = tags['Image Orientation']
+                    if str(orientation) == "Rotated 90 CCW":
+                        item['rotation'] = 90
+                    elif str(orientation) == "Rotated 180":
+                        item['rotation'] = 180
+                    elif str(orientation) == "Rotated 90 CW":
+                        item['rotation'] = 270
+            except Exception, e:
+                pass
 
         if item['rotation']:
             image = pygame.transform.rotate(image, item['rotation'])
