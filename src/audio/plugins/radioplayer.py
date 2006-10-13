@@ -107,8 +107,8 @@ class RadioPlayer:
             os.system('%s -f %s &' % (config.RADIO_CMD, self.item.station))
         else:
             # BTTV cards
-            print '%s' % (config.RADIO_CMD_START, self.item.station)
-            os.system('%s' % (config.RADIO_CMD_START, self.item.station))
+ 
+            os.system('%s' % (config.RADIO_CMD_START % self.item.station))
         thread.start_new_thread(self.__update_thread, ())
 
         rc.app(self)
