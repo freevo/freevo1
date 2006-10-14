@@ -8,27 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.22  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.21  2004/06/22 01:05:52  rshortt
-# Get the filename from tv_util.getProgFilename().
-#
-# Revision 1.20  2004/06/21 07:21:22  dischi
-# o add autokill to stop recording when the app can't take care of that
-# o try to add suffix to the filename
-#
-# Revision 1.19  2004/06/10 02:32:17  rshortt
-# Add RECORD_START/STOP events along with VCR_PRE/POST_REC commands.
-#
-# Revision 1.18  2004/06/07 16:45:54  rshortt
-# Didn't mean to add partial support for multiple recording plugins yet.
-#
-# Revision 1.17  2004/06/07 16:10:51  rshortt
-# Change 'RECORD' to plugin.RECORD.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -47,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys, string

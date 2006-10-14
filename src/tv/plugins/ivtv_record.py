@@ -8,36 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.27  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.26  2004/06/28 18:23:34  rshortt
-# I guess this shouldn't be in here since its back in recordserver.
-#
-# Revision 1.25  2004/06/23 19:07:05  outlyer
-# The snapshot in the event doesn't work. I've tried it numerous times, and it
-# is being killed before completing.
-#
-# Did no one else actually try this change?
-#
-# Revision 1.24  2004/06/22 01:05:51  rshortt
-# Get the filename from tv_util.getProgFilename().
-#
-# Revision 1.23  2004/06/10 02:32:17  rshortt
-# Add RECORD_START/STOP events along with VCR_PRE/POST_REC commands.
-#
-# Revision 1.22  2004/06/07 16:46:00  rshortt
-# Didn't mean to add partial support for multiple recording plugins yet.
-#
-# Revision 1.21  2004/06/07 16:10:51  rshortt
-# Change 'RECORD' to plugin.RECORD.
-#
-# Revision 1.20  2004/05/28 01:48:22  outlyer
-# Florian Demmer's patch for consecutive recordings and a patch to move the
-# snapshot to after we set the flag to idle, just to be safe.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -56,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys, string
@@ -83,7 +53,6 @@ CHUNKSIZE = 65536
 class PluginInterface(plugin.Plugin):
     def __init__(self):
         plugin.Plugin.__init__(self)
-
         plugin.register(Recorder(), plugin.RECORD)
 
 
