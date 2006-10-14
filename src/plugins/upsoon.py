@@ -29,7 +29,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import plugin
@@ -90,7 +90,10 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         self.serverup = None
         self.next_program = self.findNextProgram()
-        _debug_('up=%s %s' % (self.serverup, self.next_program), dbglvl)
+        # strange, doesn't work with non-ascii characters
+        #_debug_('%s:%s chan=%s %s->%s' % (self.next_program.title.encode('utf-8'), \
+        #    self.next_program.sub_title.encode('utf-8'), self.next_program.channel_id, \
+        #    time.localtime(self.next_program.start), time.localtime(self.next_program.stop)), dbglvl+1)
 
         self.fc = FreevoChannels()
         self.seconds_before_start = 60
@@ -185,7 +188,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         _debug_('poll(self)', dbglvl+1)
 
         self.next_program  = self.findNextProgram()
-        _debug_('now=%s next_program=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), dbglvl)
+        #_debug_('now=%s next_program=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), dbglvl)
         if self.next_program == None:
             return None
 
