@@ -39,7 +39,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys, os, time, re, string, pwd
@@ -261,7 +261,7 @@ if not HELPER:
     sys.stderr = Logger(sys.argv[0] + ':stderr')
     ts = time.asctime(time.localtime(time.time()))
     sys.stdout.log('-' * 79 + '\n')
-    sys.stdout.log('Freevo start at %s\n' % ts)
+    sys.stdout.log('Freevo (%s) start at %s\n' % (VERSION, ts))
     sys.stdout.log('-' * 79 + '\n')
 
 def _debug_function_(s, level=1):
