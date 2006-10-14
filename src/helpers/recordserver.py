@@ -129,7 +129,7 @@ class RecordServer(xmlrpc.XMLRPC):
         proglist.sort(self.progsTimeCompare)
         for progitem in proglist:
             prog = progs[progitem]
-            _debug_('%s:%s chan=%s %s->%s' % (prog.title, prog.sub_title, \
+            _debug_('%s:%s chan=%s %s->%s' % (prog.title.encode('utf-8'), prog.sub_title.encode('utf-8'), \
                 prog.channel_id, time.localtime(prog.start), time.localtime(prog.stop)), dbglvl+1)
 
             try:
