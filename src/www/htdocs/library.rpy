@@ -10,128 +10,6 @@
 # Todo: -allow for an imdb popup
 #       -stream tv, video and music somehow
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.28  2004/07/17 00:26:59  mikeruelle
-# check to make sure we have tuples. before treating like media dirs
-#
-# Revision 1.27  2004/07/03 00:41:08  mikeruelle
-# fix recording highlighting to match new function output
-#
-# Revision 1.26  2004/06/09 01:53:09  rshortt
-# Small cleanup.
-#
-# Revision 1.25  2004/06/09 01:46:30  rshortt
-# Finally add confirm delete.
-#
-# Revision 1.24  2004/05/15 02:08:34  mikeruelle
-# yet another unicode fix
-#
-# Revision 1.23  2004/03/21 23:45:56  mikeruelle
-# remove non dir items from the list of dirs gets rid of webradio oddity
-#
-# Revision 1.22  2004/03/21 23:40:00  mikeruelle
-# unicode breaks several key test rework the interface to cope.
-#
-# Revision 1.21  2004/02/23 08:33:21  gsbarbieri
-# i18n: help translators job.
-#
-# Revision 1.20  2004/02/19 04:57:59  gsbarbieri
-# Support Web Interface i18n.
-# To use this, I need to get the gettext() translations in unicode, so some changes are required to files that use "print _('string')", need to make them "print String(_('string'))".
-#
-# Revision 1.19  2004/02/09 21:23:42  outlyer
-# New web interface...
-#
-# * Removed as much of the embedded design as possible, 99% is in CSS now
-# * Converted most tags to XHTML 1.0 standard
-# * Changed layout tables into CSS; content tables are still there
-# * Respect the user configuration on time display
-# * Added lots of "placeholder" tags so the design can be altered pretty
-#   substantially without touching the code. (This means using
-#   span/div/etc. where possible and using 'display: none' if it's not in
-#   _my_ design, but might be used by someone else.
-# * Converted graphical arrows into HTML arrows
-# * Many minor cosmetic changes
-#
-# Revision 1.18  2004/01/26 19:16:13  mikeruelle
-# this does not seem to work anymore with twisted 1.1.0
-#
-# Revision 1.17  2003/11/28 20:08:59  dischi
-# renamed some config variables
-#
-# Revision 1.16  2003/11/28 19:31:52  dischi
-# renamed some config variables
-#
-# Revision 1.15  2003/10/20 02:24:17  rshortt
-# more tv_util fixes
-#
-# Revision 1.14  2003/09/05 15:23:02  mikeruelle
-# fearless leader missed a import change
-#
-# Revision 1.13  2003/09/05 02:48:13  rshortt
-# Removing src/tv and src/www from PYTHONPATH in the freevo script.  Therefore any module that was imported from src/tv/ or src/www that didn't have a leading 'tv.' or 'www.' needed it added.  Also moved tv/tv.py to tv/tvmenu.py to avoid namespace conflicts.
-#
-# Revision 1.12  2003/08/23 19:21:29  mikeruelle
-# fixing an error that appends items to VIDEO_ITEMS when downloading an item
-#
-# Revision 1.11  2003/07/24 11:55:38  rshortt
-# Removed the menu images for now because they are missing and I am not even
-# sure they look all that great (when there).
-#
-# Revision 1.10  2003/07/24 00:09:02  rshortt
-# Bugfix.
-#
-# Revision 1.9  2003/07/14 19:30:37  rshortt
-# Library update from Mike Ruelle.  Now you can view other media types and
-# download as well.
-#
-# Revision 1.8  2003/07/07 03:20:22  rshortt
-# Make the favorites match use the newer file naming scheme (s/ /_/g).
-#
-# Revision 1.7  2003/07/01 21:47:35  outlyer
-# Made a check to see if file exists before unlinking.
-#
-# Revision 1.6  2003/05/22 21:33:23  outlyer
-# Lots of cosmetic changes:
-#
-# o Moved the header/logo into web_types
-# o Made the error messages all use <h4> instead of <h2> so they look the same
-# o Removed most <hr> tags since they don't really mesh well with the light blue
-# o Moved the title into the "status bar" under the logo
-#
-# Revision 1.5  2003/05/14 01:11:20  rshortt
-# More error handling and notice if the record server is down.
-#
-# Revision 1.4  2003/05/13 00:29:46  rshortt
-# Renaming works again.  It will choke on filenames with single quotes though.
-#
-# Revision 1.3  2003/05/13 00:18:07  rshortt
-# Bugfix, but rename still doesn't work!
-#
-# Revision 1.2  2003/05/12 23:02:41  rshortt
-# Adding HTTP BASIC Authentication.  In order to use you must override WWW_USERS
-# in local_conf.py.  This does not work for directories yet.
-#
-# Revision 1.1  2003/05/11 22:48:21  rshortt
-# Replacements for the cgi files to be used with the new webserver.  These
-# already use record_client / record_server.
-#
-# Revision 1.4  2003/02/27 02:04:34  rshortt
-# Committed some code by Michael Ruelle which adds highlighting and file
-# size descriptions to library.cgi.
-#
-# Revision 1.3  2003/02/20 22:36:04  rshortt
-# Fixed a crash where newfile was null.
-#
-# Revision 1.2  2003/02/20 22:12:26  rshortt
-# Added a check in case the user doesn't input anything or clicks cancel.
-#
-# Revision 1.1  2003/02/20 21:48:13  rshortt
-# New cgi contributed by Mike Ruelle.  This lets you view files inside
-# config.TV_RECORD_DIR and let you rename or delete them.
-#
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -150,7 +28,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 #endif
 
 import sys, os, string, urllib, re, types
@@ -264,8 +142,13 @@ class LibraryResource(FreevoResource):
                         if os.path.isfile(newfile_loc):
                             messages += [ _( '%s already exists! File not renamed.' ) % ('<b>'+newfile_loc+'</b>') ]
                         else:
-                            messages += [ _( 'Rename %s to %s.' ) % ('<b>'+file_loc+'</b>', '<b>'+newfile_loc+'</b>') ]
-                            os.rename(file_loc, newfile_loc)
+                            try:
+                                os.rename(file_loc, newfile_loc)
+                                messages += [ _( 'Rename %s to %s.' ) % \
+                                    ('<b>'+file_loc+'</b>', '<b>'+newfile_loc+'</b>') ]
+                            except OSError, e:
+                                messages += [ _( 'Rename %s to %s, failed. (%s)' ) % \
+                                    ('<b>'+file_loc+'</b>', '<b>'+newfile_loc+'</b>', '<b>'+e+'</b>') ]
                     else:
                         messages += [ '<b>'+_('ERROR') + '</b>: ' +_('No new file specified.') ]
 
