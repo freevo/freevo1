@@ -149,6 +149,14 @@ class Videodev:
         self.capabilities = results[4]
     
 
+    def getdriver(self):
+        return self.driver
+
+
+    def getversion(self):
+        return self.version
+
+
     def getdevice(self):
         return self.device
 
@@ -380,6 +388,8 @@ export RUNAPP=""
 if __name__ == '__main__':
 
     viddev=Videodev('/dev/video0')
+    print viddev.getdriver()
+    print viddev.getversion()
     #print viddev.querycap()
     inp = viddev.getinput()
     viddev.setinput(inp)
