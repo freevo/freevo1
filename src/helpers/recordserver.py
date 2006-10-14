@@ -24,7 +24,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys, string, random, time, os, re, pwd, stat
@@ -634,8 +634,7 @@ class RecordServer(xmlrpc.XMLRPC):
         min_of_day = '%s' % ((lt[3]*60)+lt[4])
     
         for fav in favs.values():
-    
-            if prog.title.lower().find(fav.title.lower()) >= 0:
+            if prog.title.encode('utf-8').lower().find(fav.title.encode('utf-8').lower()) >= 0:
                 if fav.channel == tv_util.get_chan_displayname(prog.channel_id) \
                    or fav.channel == 'ANY':
                     if Unicode(fav.dow) == Unicode(dow) or Unicode(fav.dow) == u'ANY':
@@ -1047,6 +1046,12 @@ def main():
 if __name__ == '__main__':
     import traceback
     import time
+    import glob
+
+    locks = glob.glob(config.FREEVO_CACHEDIR + '/record.*')
+    for f in locks:
+        print 'Removed old record lock \"%s\"' % f
+        os.remove(f)
 
     while 1:
         try:
