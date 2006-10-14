@@ -8,17 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.14  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.13  2004/07/01 19:06:41  dischi
-# fix unicode crash in debug
-#
-# Revision 1.12  2004/06/21 22:41:44  rshortt
-# Small cleanup, use config.DEBUG.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -37,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys, time, os, string
@@ -53,7 +42,7 @@ class ScheduledRecordings:
 
     def __init__(self):
         self.programList = {}
-	self.favorites = {}
+        self.favorites = {}
         self.TYPES_VERSION = TYPES_VERSION
         
 
@@ -141,7 +130,6 @@ class ScheduledRecordings:
 
 class Favorite:
 
-
     def __init__(self, name=None, prog=None, exactchan=FALSE, exactdow=FALSE, 
                  exacttod=FALSE, priority=0):
         self.TYPES_VERSION = TYPES_VERSION
@@ -171,19 +159,19 @@ class Favorite:
         if prog:
             self.title = prog.title
 
-	    if exactchan:
+            if exactchan:
                 self.channel = tv_util.get_chan_displayname(prog.channel_id)
             else:
                 self.channel = 'ANY'
           
-	    if exactdow:
-	        lt = time.localtime(prog.start)
+            if exactdow:
+                lt = time.localtime(prog.start)
                 self.dow = lt[6]
             else:
                 self.dow = 'ANY'
           
-	    if exacttod:
-	        lt = time.localtime(prog.start)
+            if exacttod:
+                lt = time.localtime(prog.start)
                 self.mod = (lt[3]*60)+lt[4]
             else:
                 self.mod = 'ANY'
