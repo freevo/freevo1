@@ -8,23 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.25.2.1  2004/09/06 16:37:34  dischi
-# add default slideshow duration
-#
-# Revision 1.25  2004/07/17 08:18:56  dischi
-# unicode fixes
-#
-# Revision 1.24  2004/07/10 12:33:39  dischi
-# header cleanup
-#
-# Revision 1.23  2004/02/13 20:27:30  dischi
-# fix attr geometry and add formated date
-#
-# Revision 1.22  2004/01/24 18:56:45  dischi
-# rotation is now stored in mediainfo
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -43,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import util
@@ -60,6 +43,7 @@ from event import *
 
 class ImageItem(Item):
     def __init__(self, url, parent, name = None, duration = config.IMAGEVIEWER_DURATION):
+        #print "__init__(self, url, parent, name=%s, duration=%s)" % (name, duration)
         self.type = 'image'
         self.autovars = [ ( 'rotation', 0 ) ]
         Item.__init__(self, parent)
@@ -75,6 +59,7 @@ class ImageItem(Item):
 
         
     def __getitem__(self, key):
+        #print "__getitem__(self=%s, key=%s)" % (self.filename, key)
         """
         return the specific attribute as string or an empty string
         """
@@ -96,6 +81,7 @@ class ImageItem(Item):
         
 
     def sort(self, mode=None):
+        #print "sort(self, mode=%s)" % (mode)
         """
         Returns the string how to sort this item
         """
@@ -105,6 +91,7 @@ class ImageItem(Item):
 
 
     def actions(self):
+        #print "actions(self)"
         """
         return a list of possible actions on this item.
         """
@@ -112,6 +99,7 @@ class ImageItem(Item):
 
 
     def cache(self):
+        #print "cache(self)"
         """
         caches (loads) the next image
         """
@@ -119,6 +107,7 @@ class ImageItem(Item):
 
 
     def view(self, arg=None, menuw=None):
+        #print "view(self, arg=%s, menuw=%s)" % (arg, menuw)
         """
         view the image
         """
