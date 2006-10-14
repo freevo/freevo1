@@ -26,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os
@@ -191,7 +191,7 @@ class TVGuide(Item):
  
         elif event == MENU_SELECT or event == PLAY:
 
-            suffix = self.fc.getVideoGroup(self.selected.channel_id, False).vdev.split('/')[-1]
+            suffix = self.fc.getVideoGroup(self.selected.channel_id, True).vdev.split('/')[-1]
             tvlockfile = config.FREEVO_CACHEDIR + '/record.'+suffix
 
             # Check if the selected program is >7 min in the future
