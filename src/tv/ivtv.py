@@ -26,12 +26,11 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import string, struct, fcntl, time
 
-#import tv.v4l2, config
 import config
 import tv.v4l2
 
@@ -86,6 +85,7 @@ VBI_EMBED_ST = "I"
 GOP_END_ST = "I"
 
 # ioctls
+# changed in ivtv-0.8.0 and higher
 IVTV_IOC_G_CODEC = 0xFFEE7703
 IVTV_IOC_S_CODEC = 0xFFEE7704
 MSP_SET_MATRIX =   0x40086D11
@@ -112,6 +112,8 @@ class IVTV(tv.v4l2.Videodev):
 
 
     def setCodecInfo(self, codec):
+        if self.version >= 0x800:
+            return
         val = struct.pack( CODEC_ST, 
                            codec.aspect,
                            codec.audio_bitmask,
@@ -133,6 +135,8 @@ class IVTV(tv.v4l2.Videodev):
 
 
     def getCodecInfo(self):
+        if self.version >= 0x800:
+            return
         val = struct.pack( CODEC_ST, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 )
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_G_CODEC), val)
         codec_list = struct.unpack(CODEC_ST, r)
@@ -150,6 +154,8 @@ class IVTV(tv.v4l2.Videodev):
 
 
     def getvbiembed(self):
+        if self.version >= 0x800:
+            return
         r = fcntl.ioctl(self.device, i32(GETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST,0))
         if DEBUG >= 3:
             print "getvbiembed: val=%r, r=%r, res=%r" % (struct.pack(VBI_EMBED_ST,0), r, struct.unpack(VBI_EMBED_ST,r))
@@ -157,6 +163,8 @@ class IVTV(tv.v4l2.Videodev):
   
 
     def setvbiembed(self, value):
+        if self.version >= 0x800:
+            return
         r = fcntl.ioctl(self.device, i32(SETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, value))
         if DEBUG: print "setvbiembed: val=%r, res=%r" % (struct.pack(VBI_EMBED_ST, value), r)
 
@@ -175,6 +183,8 @@ class IVTV(tv.v4l2.Videodev):
         (width, height) = string.split(opts['resolution'], 'x')
         self.setfmt(int(width), int(height))
 
+        if self.version >= 0x800:
+            return
         codec = self.getCodecInfo()
 
         codec.aspect        = opts['aspect']
@@ -200,6 +210,8 @@ class IVTV(tv.v4l2.Videodev):
 
     def print_settings(self):
         tv.v4l2.Videodev.print_settings(self)
+        if self.version >= 0x800:
+            return
 
         codec = self.getCodecInfo()
 
@@ -252,6 +264,8 @@ export RUNAPP=""
 if __name__ == '__main__':
 
     ivtv_dev = IVTV('/dev/video0')
+    print 'driver="%s"' % ivtv_dev.driver
+    print 'version=%x' % ivtv_dev.version
     print config.TV_IVTV_OPTIONS
     print ivtv_dev.print_settings()
     print ivtv_dev.init_settings()
