@@ -8,29 +8,6 @@
 # Todo:        Change the signal stuff for slideshows
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.52.2.2  2004/10/20 18:32:50  dischi
-# prevent unicode crash
-#
-# Revision 1.52.2.1  2004/09/06 16:37:02  dischi
-# remove the buggy signal() code from the imageviewer and use rc.(un)register
-#
-# Revision 1.52  2004/07/11 10:39:45  dischi
-# replaced AlertBox with normal warning on screen
-#
-# Revision 1.51  2004/07/10 12:33:39  dischi
-# header cleanup
-#
-# Revision 1.50  2004/06/03 18:23:31  dischi
-# put image viewer osd into config
-#
-# Revision 1.49  2004/05/31 10:45:27  dischi
-# update to new callback handling in rc
-#
-# Revision 1.48  2004/05/12 18:56:36  dischi
-# add keys to move inside a zoom image in image viewer
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -70,6 +47,7 @@ from animation import render, Transition
 _singleton = None
 
 def get_singleton():
+    #print 'get_singleton()'
     global _singleton
 
     # One-time init
@@ -82,6 +60,7 @@ def get_singleton():
 class ImageViewer(GUIObject):
 
     def __init__(self):
+        #print '__init__(self)'
         GUIObject.__init__(self)
         self.osd_mode = 0    # Draw file info on the image
         self.zoom = 0   # Image zoom
@@ -102,6 +81,7 @@ class ImageViewer(GUIObject):
 
 
     def free_cache(self):
+        #print 'free_cache(self)'
         """
         free the current cache to save memory
         """
@@ -111,6 +91,7 @@ class ImageViewer(GUIObject):
 
         
     def view(self, item, zoom=0, rotation=0):
+        #print 'view(self, item, zoom=%s, rotation=%s)' % (zoom, rotation)
         if zoom:
             self.app_mode    = 'image_zoom'
         else:
@@ -149,7 +130,7 @@ class ImageViewer(GUIObject):
             self.osd.update()
             return
         
-	width, height = image.get_size()
+        width, height = image.get_size()
             
         # Bounding box default values
         bbx = bby = bbw = bbh = 0
@@ -324,20 +305,24 @@ class ImageViewer(GUIObject):
 
 
     def redraw(self):
+        #print 'redraw(self)'
         self.view(self.fileitem, zoom=self.zoom, rotation=self.rotation)
 
         
     def cache(self, fileitem):
+        #print 'cache(self, fileitem.filename=%s)' % (fileitem.filename)
         # cache the next image (most likely we need this)
         self.osd.loadbitmap(fileitem.filename, cache=self.bitmapcache)
         
 
     def signalhandler(self):
+        #print 'signalhandler(self)'
         self.signal_registered = False
         self.eventhandler(PLAY_END)
 
 
     def eventhandler(self, event, menuw=None):
+        #print 'eventhandler(self, event=%s, menuw=%s)' % (event, menuw)
         if event == PAUSE or event == PLAY:
             if self.slideshow:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('pause')))
@@ -424,6 +409,7 @@ class ImageViewer(GUIObject):
 
             
     def drawosd(self, layer=None):
+        #print 'drawosd(self, layer=%s)' % (layer)
 
         if not self.osd_mode:
             return
@@ -435,16 +421,16 @@ class ImageViewer(GUIObject):
             if i:
                 osdstring.append('%s %s' % (strtag[0], i))
 
-	# If after all that there is nothing then tell the users that
-	if osdstring == []:
-	    osdstring = [_('No information available')]
-	
-	# Now sort the text into lines of length line_length
+        # If after all that there is nothing then tell the users that
+        if osdstring == []:
+            osdstring = [_('No information available')]
+        
+        # Now sort the text into lines of length line_length
         line = 0
-	if config.OSD_OVERSCAN_X:
-	    line_length = 35
-	else:
-	    line_length = 60
+        if config.OSD_OVERSCAN_X:
+            line_length = 35
+        else:
+            line_length = 60
         prt_line = ['']
 
         for textstr in osdstring:
@@ -471,7 +457,7 @@ class ImageViewer(GUIObject):
                          self.osd.width, self.osd.height, width=-1, 
                          color=((60 << 24) | self.osd.COL_BLACK), layer=layer)
 
-	# Now print the Text
+        # Now print the Text
         for line in range(len(prt_line)):
             h=self.osd.height - (40 + config.OSD_OVERSCAN_Y + \
                                  ((len(prt_line) - line - 1) * 30))
