@@ -38,6 +38,7 @@ Release 1.6.0 (2006-10-31):
  * Updated radio player to allow other other players (F#1575225)
  * Updated record server to allow separate pre- and post-padding times (B#1567502)
  * Updated record server to ignore case of the title when scheduling a favorite (B#1574292)
+ * Updated record server to correctly process non-ascii characters in a title (B#1574292)
  * Updated the audio player to allow control when detached, automatic detaching (B#1567939)
  * Updated tv ivtv so that it will allow 2.6.18 and higher kernels, uses ivtv-0.8+
  * Updated tvtime with new play events (B#1563005)
@@ -54,11 +55,13 @@ Release 1.6.0 (2006-10-31):
  * Fixed detection of xmame version for new versions (B#1298350)
  * Fixed favorite item not causing a problem it mod time (B#1563359)
  * Fixed get mixer by name calls (B#1563365)
+ * Fixed help for freevo cache (B#1577574)
  * Fixed idlebar clock display when using UTF-8 (B#1570917)
  * Fixed mplayer tv plug-in to close the ivtv device (B#1567494)
  * Fixed slide shows so that music does not crash between tracks (B#1563353)
  * Fixed usbstorage showing images in audio menu (B#1563010)
  * Fixed v4l2 ioctl calls for 64bit AMD machines (B#1563326)
+ * Fixed webserver not crashing when there is a permissions problem (B#1577266)
  * Removed MPlayer and Xine version checks (B#1566373,B#1574273)
  * Removed -OO option from install (B#1565076)
 
