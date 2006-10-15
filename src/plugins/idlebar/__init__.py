@@ -22,7 +22,7 @@
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 2 of the Licestringnse, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful, but
@@ -34,25 +34,19 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
-
+# python modules
 import time
 import os
-import sys
-import string
-import types
-import mailbox
-import re
 import locale
-import glob
 
+# freevo modules
 import config
 import plugin
 import skin
-import util.tv_util as tv_util
-import util.pymetar as pymetar
-import util.fileops as util
+
+
 
 from pygame import image,transform
 
@@ -184,280 +178,7 @@ class clock(IdleBarPlugin):
         return 0
 
 
-class cdstatus(IdleBarPlugin):
-    """
-    Show the status of all rom drives.
-
-    Activate with:
-    plugin.activate('idlebar.cdstatus')
-    """
-    def __init__(self):
-        IdleBarPlugin.__init__(self)
-        icondir = os.path.join(config.ICON_DIR, 'status')
-        self.cdimages ={}
-        self.cdimages ['audiocd']       = os.path.join(icondir, 'cd_audio.png')
-        self.cdimages ['empty_cdrom'] = os.path.join(icondir, 'cd_inactive.png')
-        self.cdimages ['images']      = os.path.join(icondir, 'cd_photo.png')
-        self.cdimages ['video']       = os.path.join(icondir, 'cd_video.png')
-        self.cdimages ['dvd']         = os.path.join(icondir, 'cd_video.png')
-        self.cdimages ['burn']        = os.path.join(icondir, 'cd_burn.png')
-        self.cdimages ['cdrip']       = os.path.join(icondir, 'cd_rip.png')
-        self.cdimages ['mixed']       = os.path.join(icondir, 'cd_mixed.png')
-
-    def draw(self, (type, object), x, osd):
-        image = self.cdimages['empty_cdrom']
-        width = 0
-        for media in config.REMOVABLE_MEDIA:
-            image = self.cdimages['empty_cdrom']
-            if media.type == 'empty_cdrom':
-                image = self.cdimages['empty_cdrom']
-            if media.type and self.cdimages.has_key(media.type):
-                image = self.cdimages[media.type]
-            else:
-                image = self.cdimages['mixed']
-
-            width += osd.draw_image(image, (x+width, osd.y + 10, -1, -1))[0] + 10
-        if width:
-            width -= 10
-        return width
-
-
-class mail(IdleBarPlugin):
-    """
-    Shows if new mail is in the mailbox.
-
-    Activate with:
-    plugin.activate('idlebar.mail',    level=10, args=('path to mailbox', ))
-
-    """
-    def __init__(self, mailbox):
-        IdleBarPlugin.__init__(self)
-        self.NO_MAILIMAGE = os.path.join(config.ICON_DIR, 'status/newmail_dimmed.png')
-        self.MAILIMAGE = os.path.join(config.ICON_DIR, 'status/newmail_active.png')
-        self.MAILBOX = mailbox
-
-    def checkmail(self):
-        if not self.MAILBOX:
-            return 0
-        if os.path.isfile(self.MAILBOX):
-            mb = mailbox.UnixMailbox (file(self.MAILBOX,'r'))
-            msg = mb.next()
-            count = 0
-            while msg is not None:
-                count = count + 1
-                msg = mb.next()
-            return count
-        else:
-            return 0
-
-    def draw(self, (type, object), x, osd):
-        if self.checkmail() > 0:
-            return osd.draw_image(self.MAILIMAGE, (x, osd.y + 10, -1, -1))[0]
-        else:
-            return osd.draw_image(self.NO_MAILIMAGE, (x, osd.y + 10, -1, -1))[0]
-
-
-
-
-class tv(IdleBarPlugin):
-    """
-    Informs you, when the xmltv-listings expires.
-
-    Activate with:
-    plugin.activate('idlebar.tv', level=20, args=(listings_threshold,))
-    listings_threshold must be a number in hours.  For example if you put
-    args=(12, ) then 12 hours befor your xmltv listings run out the tv icon
-    will present a warning.  Once your xmltv data is expired it will present
-    a more severe warning.  If no args are given then no warnings will be
-    given.
-    """
-    def __init__(self, listings_threshold=-1):
-        IdleBarPlugin.__init__(self)
-
-        self.listings_threshold = listings_threshold
-        self.next_guide_check = 0
-        self.listings_expire = 0
-        self.tvlockfile = config.FREEVO_CACHEDIR + '/record.*'
-        icondir = os.path.join(config.ICON_DIR, 'status')
-        self.TVLOCKED     = os.path.join(icondir, 'television_active.png')
-        self.TVFREE       = os.path.join(icondir, 'television_inactive.png')
-        self.NEAR_EXPIRED = os.path.join(icondir, 'television_near_expired.png')
-        self.EXPIRED      = os.path.join(icondir, 'television_expired.png')
-
-    def checktv(self):
-        if len(glob.glob(self.tvlockfile)) > 0:
-            return 1
-        return 0
-
-    def draw(self, (type, object), x, osd):
-
-        if self.checktv() == 1:
-            return osd.draw_image(self.TVLOCKED, (x, osd.y + 10, -1, -1))[0]
-
-        if self.listings_threshold != -1:
-            now = time.time()
-
-            if now > self.next_guide_check:
-                _debug_('TV: checking guide')
-                self.listings_expire = tv_util.when_listings_expire()
-                _debug_('TV: listings expire in %s hours' % self.listings_expire)
-                # check again in 10 minutes
-                self.next_guide_check = now + 10*60
-
-            if self.listings_expire == 0:
-                return osd.draw_image(self.EXPIRED, (x, osd.y + 10, -1, -1))[0]
-            elif self.listings_expire <= self.listings_threshold:
-                return osd.draw_image(self.NEAR_EXPIRED, (x, osd.y + 10, -1, -1))[0]
-
-        return osd.draw_image(self.TVFREE, (x, osd.y + 10, -1, -1))[0]
-
-
-
-class weather(IdleBarPlugin):
-    """
-    Shows the current weather.
-
-    Activate with:
-    plugin.activate('idlebar.weather', level=30, args=('4-letter code', ))
-
-    For weather station codes see: http://www.nws.noaa.gov/tg/siteloc.shtml
-    You can also set the unit as second parameter in args ('C', 'F', or 'K')
-    """
-    def __init__(self, zone='CYYZ', units='C'):
-        IdleBarPlugin.__init__(self)
-        self.TEMPUNITS = units
-        self.METARCODE = zone
-        self.WEATHERCACHE = config.FREEVO_CACHEDIR + '/weather'
-        print
-        print 'WARNING: the idlebar.weather plugin downloads new weather'
-        print 'information inside the main loop. This bug makes all menu'
-        print 'actions _very_ slow. Consider not using this plugin for higher'
-        print 'speed.'
-        print
-
-
-    def checkweather(self):
-        # We don't want to do this every 30 seconds, so we need
-        # to cache the date somewhere.
-        #
-        # First check the age of the cache.
-        #
-        if (os.path.isfile(self.WEATHERCACHE) == 0 or \
-            (abs(time.time() - os.path.getmtime(self.WEATHERCACHE)) > 3600)):
-            try:
-                rf=pymetar.ReportFetcher(self.METARCODE)
-                rep=rf.FetchReport()
-                rp=pymetar.ReportParser()
-                pr=rp.ParseReport(rep)
-                if (pr.getTemperatureCelsius()):
-                    if self.TEMPUNITS == 'F':
-                        temperature = '%2d' % pr.getTemperatureFahrenheit()
-                    elif self.TEMPUNITS == 'K':
-                        ktemp = pr.getTemperatureCelsius() + 273
-                        temperature = '%3d' % ktemp
-                    else:
-                        temperature = '%2d' % pr.getTemperatureCelsius()
-                else:
-                    temperature = '?'  # Make it a string to match above.
-                if pr.getPixmap():
-                    icon = pr.getPixmap() + '.png'
-                else:
-                    icon = 'sun.png'
-                cachefile = open(self.WEATHERCACHE,'w+')
-                cachefile.write(temperature + '\n')
-                cachefile.write(icon + '\n')
-                cachefile.close()
-            except:
-                try:
-                    # HTTP Problems, use cache. Wait till next try.
-                    cachefile = open(self.WEATHERCACHE,'r')
-                    newlist = map(string.rstrip, cachefile.readlines())
-                    temperature,icon = newlist
-                    cachefile.close()
-                except IOError:
-                    print 'WEATHER: error reading cache. Using fake weather.'
-                    try:
-                        cachefile = open(self.WEATHERCACHE,'w+')
-                        cachefile.write('?' + '\n')
-                        cachefile.write('sun.png' + '\n')
-                        cachefile.close()
-                    except IOError:
-                        print 'You have no permission to write %s' % self.WEATHERCACHE
-                    return '0', 'sun.png'
-
-
-        else:
-            cachefile = open(self.WEATHERCACHE,'r')
-            newlist = map(string.rstrip, cachefile.readlines())
-            temperature,icon = newlist
-            cachefile.close()
-        return temperature, icon
-
-    def draw(self, (type, object), x, osd):
-        temp,icon = self.checkweather()
-        font  = osd.get_font('small0')
-        osd.draw_image(os.path.join(config.ICON_DIR, 'weather/' + icon),
-                        (x, osd.y + 15, -1, -1))
-        temp = u'%s\xb0' % temp
-        width = font.stringsize(temp)
-        osd.write_text(temp, font, None, x + 15, osd.y + 55 - font.h, width, font.h,
-                       'left', 'top')
-        return width + 15
-
-
-class holidays(IdleBarPlugin):
-    """
-    Display some holidays in the idlebar
-
-    This plugin checks if the current date is a holiday and will
-    display a specified icon for that holiday. If no holiday is found,
-    nothing will be displayed. If you use the idlebar, you should activate
-    this plugin, most of the time you won't see it.
-
-    You can customize the list of holidays with the variable HOLIDAYS in
-    local_config.py. The default value is:
-
-    [ ('01-01',  'newyear.png'),
-      ('02-14',  'valentine.png'),
-      ('05-07',  'freevo_bday.png'),
-      ('07-03',  'usa_flag.png'),
-      ('07-04',  'usa_flag.png'),
-      ('10-30',  'ghost.png'),
-      ('10-31',  'pumpkin.png'),
-      ('12-21',  'snowman.png'),
-      ('12-25',  'christmas.png')]
-    """
-    def __init__(self):
-        IdleBarPlugin.__init__(self)
-
-    def config(self):
-        return [ ('HOLIDAYS', [ ('01-01',  'newyear.png'),
-                                ('02-14',  'valentine.png'),
-                                ('05-07',  'freevo_bday.png'),
-                                ('07-03',  'usa_flag.png'),
-                                ('07-04',  'usa_flag.png'),
-                                ('10-30',  'ghost.png'),
-                                ('10-31',  'pumpkin.png'),
-                                ('12-21',  'snowman.png'),
-                                ('12-25',  'christmas.png')],
-                  'list of holidays this plugin knows') ]
-
-    def get_holiday_icon(self):
-        # Creates a string which looks like "07-04" meaning July 04
-        todays_date = time.strftime('%m-%d')
-
-        for i in config.HOLIDAYS:
-            holiday, icon = i
-            if todays_date == holiday:
-                return os.path.join(config.ICON_DIR, 'holidays', icon)
-
-    def draw(self, (type, object), x, osd):
-        icon = self.get_holiday_icon()
-        if icon:
-            return osd.draw_image(icon, (x, osd.y + 10, -1, -1))[0]
-
-
-
+  
 class logo(IdleBarPlugin):
     """
     Display the freevo logo in the idlebar
@@ -474,43 +195,4 @@ class logo(IdleBarPlugin):
         return osd.drawimage(image, (x, osd.y + 5, -1, 75))[0]
 
 
-class diskfree(IdleBarPlugin):
-    """
-    Displays the amount of free disk space
-
-    Activate with:
-    plugin.activate('idlebar.diskfree', level=30)
-
-    This plugin displays the total amount of free disk space for recordings
-    """
-    def __init__(self):
-        IdleBarPlugin.__init__(self)
-        self.time = 0
-        self.diskfree = 0
-
-
-    def getDiskFree(self):
-        """
-        Determine amount of freedisk space
-        Update maximum every 30 seconds
-
-        """
-        if (time.time()-self.time)>30:
-            self.time = time.time()
-            freespace = util.freespace(config.TV_RECORD_DIR)
-            self.diskfree = _('%iGb') % (((freespace / 1024) / 1024) / 1024)
-
-    def draw(self, (type,object),x,osd):
-        """
-        Drawing to idlebar
-        """
-
-        self.getDiskFree()
-        font = osd.get_font('small0')
-        widthdf = 0
-        widthdf = font.stringsize(self.diskfree)
-        osd.draw_image(os.path.join(config.ICON_DIR, 'misc/chartpie.png' ),(x, osd.y + 7, -1, -1))
-        osd.write_text(self.diskfree, font, None, x + 15, osd.y + 55 - font.h, widthdf, font.h, 'left', 'top')
-
-        return widthdf + 15
 

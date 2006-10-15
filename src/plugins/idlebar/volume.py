@@ -1,14 +1,10 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # volume.py - IdleBarplugin for showing volume
-# Author: Viggo Fredriksen <viggo@katatonic.org>
 # -----------------------------------------------------------------------
 # $Id$
 #
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.2  2004/07/10 12:33:41  dischi
-# header cleanup
+# Author: Viggo Fredriksen <viggo@katatonic.org>
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -29,7 +25,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 # python modules

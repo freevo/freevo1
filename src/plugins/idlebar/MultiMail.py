@@ -2,14 +2,10 @@
 # -----------------------------------------------------------------------
 # idlebar/MultiMail - IdleBar plugins for checking email accounts
 # -----------------------------------------------------------------------
+# $Id$
 #
 # Author : Chris Griffiths (freevo@y-fronts.com)
 # Date   : Nov 8th 2003
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.4  2004/07/10 12:33:41  dischi
-# header cleanup
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -30,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 import os
 import config
