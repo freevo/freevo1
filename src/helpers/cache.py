@@ -360,6 +360,7 @@ def print_error_and_exit():
 if __name__ == "__main__":
     os.umask(config.UMASK)
     if len(sys.argv)>1 and sys.argv[1] == '--help':
+        print_help()
         sys.exit(0)
 
     if len(sys.argv)>1 and sys.argv[1] == '--thumbnail':
