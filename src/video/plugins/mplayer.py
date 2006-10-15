@@ -26,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os, re
@@ -230,7 +230,7 @@ class MPlayer:
             command.remove('')
 
         # autocrop
-        if config.MPLAYER_AUTOCROP and str(' ').join(command).find('crop=') == -1:
+        if config.MPLAYER_AUTOCROP and not item.network_play and str(' ').join(command).find('crop=') == -1:
             _debug_('starting autocrop')
             (x1, y1, x2, y2) = (1000, 1000, 0, 0)
             crop_cmd = command[1:] + ['-ao', 'null', '-vo', 'null', '-ss', '60',
