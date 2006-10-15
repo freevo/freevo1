@@ -8,15 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.37  2004/07/10 12:33:40  dischi
-# header cleanup
-#
-# Revision 1.36  2004/03/18 15:38:18  dischi
-# Automouter patch to check for hosts in mediamenu from Soenke Schwardt.
-# See doc of VIDEO_ITEMS for details
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -35,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os
@@ -173,8 +164,9 @@ class MediaMenu(Item):
                                 reachable = 0
                         except:
                             traceback.print_exc()
-                elif not os.path.isdir(filename):
-                    print '\"%s\" is not a directory or doesn\'t exist' % (filename)
+                # May need to change this filename.find('.fxd')
+                elif not os.path.exists(filename):
+                    print '\"%s\" doesn\'t exist' % (filename)
                     reachable = 0
                        
                 if reachable:
@@ -198,10 +190,8 @@ class MediaMenu(Item):
                                 for i in items:
                                     i.name = title
                             self.normal_items += items
-                            
             except:
                 traceback.print_exc()
-
 
         items = self.main_menu_generate()
 
