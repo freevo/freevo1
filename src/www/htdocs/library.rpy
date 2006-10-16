@@ -147,18 +147,24 @@ class LibraryResource(FreevoResource):
                                 messages += [ _( 'Rename %s to %s.' ) % \
                                     ('<b>'+file_loc+'</b>', '<b>'+newfile_loc+'</b>') ]
                             except OSError, e:
-                                messages += [ _( 'Rename %s to %s, failed. (%s)' ) % \
-                                    ('<b>'+file_loc+'</b>', '<b>'+newfile_loc+'</b>', '<b>'+e+'</b>') ]
+                                messages += [ _( '<h2>%s</h2>' ) % str(e) ]
+                                messages += [ _( 'Rename %s to %s, failed.' ) % \
+                                    ('<b>'+file_loc+'</b>', '<b>'+newfile_loc+'</b>') ]
                     else:
                         messages += [ '<b>'+_('ERROR') + '</b>: ' +_('No new file specified.') ]
 
                 elif action == 'delete':
-                    messages += [ _( 'Delete %s.' ) % ('<b>'+file_loc+'</b>') ]
-                    if os.path.exists(file_loc): os.unlink(file_loc)
-                    file_loc_fxd = os.path.splitext(file_loc)[0] + '.fxd'
-                    if os.path.exists(file_loc_fxd): 
-                        os.unlink(file_loc_fxd)
-                        messages += [ _('Delete %s.') % ('<b>'+file_loc_fxd+'</b>') ]
+                    try:
+                        if os.path.exists(file_loc):
+                            os.unlink(file_loc)
+                            messages += [ _( 'Delete %s.' ) % ('<b>'+file_loc+'</b>') ]
+                        file_loc_fxd = os.path.splitext(file_loc)[0] + '.fxd'
+                        if os.path.exists(file_loc_fxd): 
+                            os.unlink(file_loc_fxd)
+                            messages += [ _('Delete %s.') % ('<b>'+file_loc_fxd+'</b>') ]
+                    except OSError, e:
+                        messages += [ _( '<h2>%s</h2>' ) % str(e) ]
+                        messages += [ _( 'Delete %s, failed.' ) % ('<b>'+file_loc+'</b>') ]
 
                 elif action == 'download':
                     sys.stderr.write('download %s\n' % String(file_loc))

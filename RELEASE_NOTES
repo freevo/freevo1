@@ -2,9 +2,19 @@ Release Notes for 1.6.0
 -----------------------
 
 The have been quite a number of changes, see ChangeLog for details.
+The ChangeLog has a tracker reference for a discussion about the
+changes.
+
+*Important*
+The recordable setting has been from from VIDEO_GROUPS
+Delete this setting from your local_conf.py
+
+To use multi-tuner support the VIDEO_GROUPS needs setting up correctly
+see http://freevo.sourceforge.net/cgi-bin/doc/MultiTunerConfig
 
 elementtree, include in Python-2.5+, is now a prerequisite for freevo,
 if can be downloaded from http://effbot.org/zone/elementtree.htm
+
 
 Release Notes for 1.5.3
 -----------------------

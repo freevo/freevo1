@@ -226,7 +226,8 @@ LOCAL_CONF_CHANGES = [
      '''Add two variables for mplayer post processing: MPLAYER_VF_INTERLACED and
      MPLAYER_VF_PROGRESSIVE''' ),
     (5.16,
-     '''Added xmltv-1.2 this requires elementtree
+     '''Removed the recordable setting in VIDEO_GROUPS, please remove this setting.
+     Added xmltv-1.2 this requires elementtree
      Added XINE_TV_VO_DEV, XINE_TV_AO_DEV, and XINE_TV_TIMESHIFT_FILEMASK for the
   	 new tv.ivtv_xine_tv plugin (the latter should be e.g. "/tmp/xine-buf-" and point
   	 to a place with enough free diskspace (several gigabytes).
