@@ -241,8 +241,29 @@ CONFIG_VERSION = 5.16
 # MENU_ARROW_NAVIGATION = 0
 
 #
+# Process keyboard events from SDL. You want this unless you use only lirc
+# or event devices below.
+#
+# USE_SDL_KEYBOARD = 1
+
+#
 # Keymap to map keyboard keys to event strings. You can also add new keys
 # here, e.g. KEYMAP[key.K_x] = 'SUBTITLE'. The K_-names are defined by pygame.
+#
+
+#
+# List of /dev/input/event# devices to monitor. If you monitor your keyboard
+# both here and with USE_SDL_KEYBOARD, then you will get duplicate events.
+#
+#
+# EVENT_DEVS = []
+
+#
+# Keymap to map input events to event strings. You can change current mappings
+# and add new ones here, e.g. EVENTMAP['KEY_COFFEE'] = 'SUBTITLE'. Key names
+# are defined by the Linux input layer (input.h). An axis is described by a
+# pair, one for positive and one for negative movement, e.g.
+# EVENTMAP['REL_Z'] = ('LEFT', 'RIGHT')
 #
 
 #
@@ -965,24 +986,11 @@ IMAGEVIEWER_BLEND_MODE = -1
 # TV_RECORD_SERVER_IP = 'localhost'
 # TV_RECORD_SERVER_PORT = 18001
 
-# Start every recording X minutes before scheduled,
+# start every recording X minutes before scheduled,
 # and stop X minutes after scheduled - default to zero minutes.
 # This must be a value in seconds although at the moment only has
 # the percision of one minute.
 # TV_RECORD_PADDING = 0 * 60
-
-# Warn before shutting down the system if the next recording is
-# scheduled for starting in less than this number of seconds:
-# WARN_SHUTDOWN = 15 * 60 # quarter hour
-# (This has no extra effect if CONFIRM_SHUTDOWN is set, since then
-#  the shutdown is already confirmed.)
-
-# On Freevo shutdown, use nvram-wakeup to program the computer to
-# wakeup / boot up right before the next recording:
-# USE_NVRAM_WAKEUP    = 1
-
-# If using nvram-wakeup, time in seconds to startup before recording:
-# BOOTTIME_PADDING    = 2 * 60
 
 # VCR_AUDIO = (':adevice=%s' % AUDIO_DEVICE +
 #              ':audiorate=32000' +         # 44100 for better sound

@@ -129,8 +129,7 @@ class RecordServer(xmlrpc.XMLRPC):
         proglist.sort(self.progsTimeCompare)
         for progitem in proglist:
             prog = progs[progitem]
-            _debug_('%s:%s chan=%s %s->%s' % (prog.title.encode('utf-8'), prog.sub_title.encode('utf-8'), \
-                prog.channel_id, time.localtime(prog.start), time.localtime(prog.stop)), dbglvl+1)
+            _debug_('%s' % (prog), dbglvl+1)
 
             try:
                 recording = prog.isRecording
@@ -153,8 +152,7 @@ class RecordServer(xmlrpc.XMLRPC):
             _debug_('No program scheduled to record', dbglvl)
             return None
 
-        _debug_('\"%s\" %s %s->%s' % (next_program.title, next_program.channel_id, \
-            time.localtime(next_program.start), time.localtime(next_program.stop)), dbglvl)
+        _debug_('%s' % (next_program), dbglvl)
         return next_program
 
 

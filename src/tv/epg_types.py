@@ -9,26 +9,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.21  2004/07/19 16:24:47  rshortt
-# Attempt to solve scheduled recordings upgrade problem.
-#
-# Revision 1.20  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.19  2004/07/01 22:49:49  rshortt
-# Unicode fix.
-#
-# Revision 1.18  2004/06/22 01:07:49  rshortt
-# Move stuff into __init__() and fix a bug for twisted's serialization.
-#
-# Revision 1.17  2004/03/05 20:49:11  rshortt
-# Add support for searching by movies only.  This uses the date field in xmltv
-# which is what tv_imdb uses and is really acurate.  I added a date property
-# to TvProgram for this and updated findMatches in the record_client and
-# recordserver.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -47,7 +27,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys
@@ -104,10 +84,14 @@ class TvProgram:
     def __str__(self):
         bt = time.localtime(self.start)   # Beginning time tuple
         et = time.localtime(self.stop)   # End time tuple
-        begins = '%s-%02d-%02d %02d:%02d' % (bt[0], bt[1], bt[2], bt[3], bt[4])
-        ends = '%s-%02d-%02d %02d:%02d' % (et[0], et[1], et[2], et[3], et[4])
-
-        s = '%s to %s  %3s %s' % (begins, ends, self.channel_id, self.title)
+        begins = time.strftime('%Y-%m-%d %a %H:%M', bt)
+        ends = time.strftime('%H:%M', et)
+        try:
+            channel_id = self.channel_id.encode('utf-8')
+            title = self.title.encode('utf-8')
+            s = '%s->%s  %3s %s' % (begins, ends, channel_id, title)
+        except UnicodeEncodeError: #just in case
+            s = '%s->%s. %3s %s' % (begins, ends, self.channel_id, self.title)
         return s
 
 

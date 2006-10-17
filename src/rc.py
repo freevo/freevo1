@@ -8,30 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.36.2.1  2004/10/20 18:31:46  dischi
-# remove one shot callback from list before calling it
-#
-# Revision 1.36  2004/07/10 12:33:36  dischi
-# header cleanup
-#
-# Revision 1.35  2004/05/31 10:39:55  dischi
-# Again some interface changes. There is now only one function
-# handling all callbacks, including repeating calls with timer
-#
-# Revision 1.34  2004/05/30 18:27:53  dischi
-# More event / main loop cleanup. rc.py has a changed interface now
-#
-# Revision 1.33  2004/05/29 19:06:26  dischi
-# move some code from main to rc, create main class
-#
-# Revision 1.32  2004/05/20 18:26:27  dischi
-# patch from Viggo
-#
-# Revision 1.31  2004/05/09 14:16:16  dischi
-# let the child stdout handled by main
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -50,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os
@@ -60,6 +36,7 @@ import thread
 import types
 
 import config
+import evdev
 
 from event import Event, BUTTON
 
@@ -323,6 +300,45 @@ class Network:
             # No data available
             return None
 
+# --------------------------------------------------------------------------------
+
+class Evdev:
+    """
+    Class to handle evdev events
+    """
+    def __init__(self):
+        """
+        init all specified devices
+        """
+        self._devs = []
+
+        for dev in config.EVENT_DEVS:
+            try:
+                e = evdev.evdev(dev)
+                print "Added input device '%s': %s" % (dev, e.get_name())
+                self._devs.append(e)
+            except:
+                print "Problem opening event device '%s'" % dev
+
+    def poll(self, rc):
+        """
+        return next event
+        """
+        for dev in self._devs:
+            event = dev.read()
+            if event is None:
+                continue
+
+            if config.EVENTMAP.has_key(event[2]):
+                if event[1] == 'EV_KEY':
+                    # 0 = release, 1 = press, 2 = repeat
+                    if event[3] > 0:
+                        return config.EVENTMAP[event[2]]
+                elif event[1] == 'EV_REL':
+                    if event[3] < -10:
+                        return config.EVENTMAP[event[2]][0]
+                    elif event[3] > 10:
+                        return config.EVENTMAP[event[2]][1]
 
 # --------------------------------------------------------------------------------
     
@@ -340,8 +356,14 @@ class EventHandler:
             except:
                 pass
 
+        if config.USE_SDL_KEYBOARD:
+            try:
+                self.inputs.append(Keyboard())
+            except:
+                pass
+
         try:
-            self.inputs.append(Keyboard())
+            self.inputs.append(Evdev())
         except:
             pass
 

@@ -48,6 +48,18 @@ FALSE = 0
 
 class LibraryResource(FreevoResource):
     isLeaf=1
+    def is_access_allowed(self, dir_str):
+        allowed_dirs = []
+        allowed_dirs.extend(config.VIDEO_ITEMS)
+        allowed_dirs.extend(config.AUDIO_ITEMS)
+        allowed_dirs.extend( [ ('Recorded TV', config.TV_RECORD_DIR) ])
+        allowed_dirs.extend(config.IMAGE_ITEMS)
+        for i in range(len(allowed_dirs)):
+            val = allowed_dirs[i][1]
+            if dir_str.startswith(val):
+                return TRUE
+        return FALSE
+
     def get_suffixes (self, media):
         suffixes = []
         if media == 'music':
@@ -110,6 +122,10 @@ class LibraryResource(FreevoResource):
             action_newfile = Unicode( action_newfile, 'latin-1' )
             
         action_dir       = Unicode(fv.formValue(form, 'dir'))
+        dir_str = fv.formValue(form, 'dir')
+        if isinstance(dir_str, str):
+            if not self.is_access_allowed(dir_str):
+                action_dir = ""
         if isinstance( action_dir, str ):
             action_dir = Unicode( action_dir, 'latin-1' )
             

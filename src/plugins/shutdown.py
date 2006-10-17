@@ -50,9 +50,6 @@ from gui import ConfirmBox
 from item import Item
 from plugin import MainMenuPlugin
 
-if config.WARN_SHUTDOWN or config.USE_NVRAM_WAKEUP:
-    import tv.record_client as record_client
-
 
 def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     """
@@ -129,6 +126,7 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
         time.sleep(1)
         
 
+
 class ShutdownItem(Item):
     """
     Item for shutdown
@@ -148,7 +146,7 @@ class ShutdownItem(Item):
                           (self.confirm_system_restart, _('Restart system') ) ]
         else:
             items = [ (self.shutdown_freevo, _('Shutdown Freevo') ),
-                      (self.check_shutdown_system, _('Shutdown system') ),
+                          (self.shutdown_system, _('Shutdown system') ),
                           (self.shutdown_system_restart, _('Restart system') ) ]
         if config.ENABLE_SHUTDOWN_SYS:
             items = [ items[1], items[0], items[2] ]
@@ -156,46 +154,12 @@ class ShutdownItem(Item):
         return items
 
 
-    def next_scheduled_recording(self):
-        """
-        return starting time of next scheduled recording (or None)
-        """
-        (server_available, msg) = record_client.connectionTest()
-        if not server_available:
-            return None
-        (result, recordings) = record_client.getScheduledRecordings()
-        if result:
-            progs = recordings.getProgramList().values()
-            if len(progs):
-                progs.sort(lambda a, b: cmp(a.start, b.start))
-                return progs[0].start
-        return None
-
-
-    def next_recording_message(self, format, start_time = None):
-        if start_time == None:
-            start_time = self.next_scheduled_recording()
-        if start_time == None:
-            return ""
-        rec_distance = start_time - time.time() - config.TV_RECORD_PADDING
-        if rec_distance < 0:
-            result = _('A recording is in progress.')
-        elif rec_distance < 60*60:
-            result = _('The next scheduled recording begins in %d minutes.') % int(rec_distance/60)
-        elif rec_distance < 60*60*10:
-            result = _('The next scheduled recording begins at %s.') % time.strftime(config.TV_TIMEFORMAT, time.localtime(start_time))
-        else:
-            result = _('The next recording is scheduled for %s.') % time.strftime(config.TV_DATETIMEFORMAT, time.localtime(start_time))
-        return format % result
-
-
     def confirm_freevo(self, arg=None, menuw=None):
         """
         Pops up a ConfirmBox.
         """
         self.menuw = menuw
-        what = _('Do you really want to shut down Freevo?') \
-               + self.next_recording_message(" %s")
+        what = _('Do you really want to shut down Freevo?')
         ConfirmBox(text=what, handler=self.shutdown_freevo, default_choice=1).show()
         
         
@@ -204,95 +168,39 @@ class ShutdownItem(Item):
         Pops up a ConfirmBox.
         """
         self.menuw = menuw
-        what = _('Do you really want to shut down the system?') \
-               + self.next_recording_message(" %s")
+        what = _('Do you really want to shut down the system?')
         ConfirmBox(text=what, handler=self.shutdown_system, default_choice=1).show()
-
 
     def confirm_system_restart(self, arg=None, menuw=None):
         """
         Pops up a ConfirmBox.
         """
         self.menuw = menuw
-        what = _('Do you really want to restart the system?') \
-               + self.next_recording_message(" %s")
+        what = _('Do you really want to restart the system?')
         ConfirmBox(text=what, handler=self.shutdown_system_restart, default_choice=1).show()
-
-
-    def check_shutdown_system(self, arg=None, menuw=None):
-        """
-        Shutdown the complete system if the next recording is not too far away
-        """
-        if config.WARN_SHUTDOWN:
-            start_time = self.next_scheduled_recording()
-            if start_time != None:
-                if start_time - config.TV_RECORD_PADDING - time.time() \
-                       < config.WARN_SHUTDOWN:
-                    what = self.next_recording_message("%s ", start_time) + \
-                           _('Do you really want to shut down the system?')
-                    ConfirmBox(text=what, handler=self.shutdown_system, default_choice=1).show()
-                    return
-        self.shutdown_system(arg, menuw)
 
 
     def shutdown_freevo(self, arg=None, menuw=None):
         """
-        Shutdown freevo, don't shutdown the system
+        shutdown freevo, don't shutdown the system
         """
         shutdown(menuw=menuw, argshutdown=False, argrestart=False)
 
         
     def shutdown_system(self, arg=None, menuw=None):
         """
-        Shutdown the complete system, use nvram-wakeup to schedule
-        boot-up before next recording (if configured to do so).
-        nvram-wakup may signal that an additional reboot is needed
-        (with exitcode 1), in this case a flag file is created and the
-        system is rebooted.
-        """
-        doShutdown = True
-        if config.USE_NVRAM_WAKEUP:
-            start_time = self.next_scheduled_recording()
-            if start_time != None:
-                wakeupTime = start_time \
-                             - config.TV_RECORD_PADDING \
-                             - config.BOOTTIME_PADDING
-                _debug_("calling nvram-wakeup with %d" % wakeupTime)
-                ec = os.system(config.NVRAM_WAKEUP_CMD % (wakeupTime,))
-                _debug_(".. exitcode was %d" % ec)
-                if ec == 256:
-                    doShutdown = False
-                    file(config.NVRAM_REBOOT_FLAG, "w").close()
-                elif ec > 0:
-                    ConfirmBox(text=_('Could not program computer to boot up before next recording. Shutdown anyway?'),
-                               handler=self.shutdown_system_anyway, default_choice=1).show()
-                    return
-        shutdown(menuw=menuw, argshutdown=doShutdown, argrestart=not doShutdown)
-
-
-    def shutdown_system_anyway(self, arg=None, menuw=None):
-        """
-        Shutdown freevo, don't shutdown the system
+        shutdown the complete system
         """
         shutdown(menuw=menuw, argshutdown=True, argrestart=False)
 
-
     def shutdown_system_restart(self, arg=None, menuw=None):
         """
-        Restart the complete system
+        restart the complete system
         """
         shutdown(menuw=menuw, argshutdown=False, argrestart=True)
 
         
         
-# According to
-# http://mail.python.org/pipermail/python-list/2004-September/241553.html
-# a) Python has no uptime() implementation and
-# b) calling "uptime" is not more portable than parsing /proc/uptime.
-# Since the latter is much easier, I will do so.. ;-)
-def uptime():
-    uptime, idletime = [float(f) for f in file("/proc/uptime").read().split()]
-    return uptime
 
 
 #
@@ -304,8 +212,7 @@ class PluginInterface(MainMenuPlugin):
     Plugin to shutdown Freevo from the main menu
     """
 
-    def __init__(self, *args):
-        MainMenuPlugin.__init__(self, *args)
-
     def items(self, parent):
         return [ ShutdownItem(parent) ]
+
+

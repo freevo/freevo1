@@ -26,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 class Event:
@@ -535,6 +535,76 @@ DEFAULT_KEYMAP = {
     key.K_PERIOD      : 'EJECT',
     key.K_l           : 'SUBTITLE',
     key.K_a           : 'LANG'
+    }
+
+
+DEFAULT_EVENTMAP = {
+    'KEY_F1'          : 'SLEEP',
+    'KEY_HOME'        : 'MENU',
+    'KEY_G'           : 'GUIDE',
+    'KEY_ESC'         : 'EXIT',
+    'KEY_UP'          : 'UP',
+    'KEY_DOWN'        : 'DOWN',
+    'KEY_LEFT'        : 'LEFT',
+    'KEY_RIGHT'       : 'RIGHT',
+    'KEY_OK'          : 'SELECT',
+    'KEY_SPACE'       : 'SELECT',
+    'KEY_ENTER'       : 'SELECT',
+    'KEY_KPENTER'     : 'SELECT',
+    'KEY_POWER'       : 'POWER',
+    'KEY_F2'          : 'POWER',
+    'KEY_MUTE'        : 'MUTE',
+    'KEY_F3'          : 'MUTE',
+    'KEY_VOLUMEDOWN'  : 'VOL-',
+    'KEY_KPMINUS'     : 'VOL-',
+    'KEY_N'           : 'VOL-',
+    'KEY_VOLUMEUP'    : 'VOL+',
+    'KEY_KPPLUS'      : 'VOL+',
+    'KEY_M'           : 'VOL+',
+    'KEY_CHANNELUP'   : 'CH+',
+    'KEY_C'           : 'CH+',
+    'KEY_CHANNELDOWN' : 'CH-',
+    'KEY_V'           : 'CH-',
+    'KEY_1'           : '1',
+    'KEY_2'           : '2',
+    'KEY_3'           : '3',
+    'KEY_4'           : '4',
+    'KEY_5'           : '5',
+    'KEY_6'           : '6',
+    'KEY_7'           : '7',
+    'KEY_8'           : '8',
+    'KEY_9'           : '9',
+    'KEY_0'           : '0',
+    'KEY_VENDOR'      : 'DISPLAY',
+    'KEY_D'           : 'DISPLAY',
+    'KEY_MENU'        : 'ENTER',
+    'KEY_E'           : 'ENTER',
+    'KEY_MINUS'       : 'PREV_CH',
+    'KEY_O'           : 'PIP_ONOFF',
+    'KEY_W'           : 'PIP_SWAP',
+    'KEY_I'           : 'PIP_MOVE',
+    'KEY_F4'          : 'TV_VCR',
+    'KEY_REWIND'      : 'REW',
+    'KEY_R'           : 'REW',
+    'KEY_PLAY'        : 'PLAY',
+    'KEY_P'           : 'PLAY',
+    'KEY_FORWARD'     : 'FFWD',
+    'KEY_F'           : 'FFWD',
+    'KEY_PAUSE'       : 'PAUSE',
+    'KEY_U'           : 'PAUSE',
+    'KEY_STOP'        : 'STOP',
+    'KEY_S'           : 'STOP',
+    'KEY_RECORD'      : 'RECORD',
+    'KEY_F6'          : 'REC',
+    'KEY_PERIOD'      : 'EJECT',
+    'KEY_L'           : 'SUBTITLE',
+    'KEY_A'           : 'LANG',
+
+    'REL_X'           : ('LEFT', 'RIGHT'),
+    'REL_Y'           : ('UP', 'DOWN'),
+
+    'BTN_LEFT'        : 'SELECT',
+    'BTN_RIGHT'       : 'EXIT',
     }
 
 

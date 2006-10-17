@@ -49,13 +49,32 @@ Thomas Malt <thomas@malt.no>
 o Mplayer for Audio support
 o Ogg Vorbis Tag and Playback support
 
-Duncan Webb <duncan-freevo@linuxowl.com>:
+John Molohan <john.molohan@gcd.ie>
+o Web Site Maintainer
+
+Duncan Webb <duncan-freevo@linuxowl.com>
 o Maintainer of the stable branch 1.x
 
 
 
 Occasional contributors:
 ------------------------
+
+Hans Meine <hans_meine@gmx.net>
+o Various plug-ins and bug fixes
+
+Richard van Paasen <freevo@t3i.nl>
+o Automated shutdown and wakeup
+o ivtv live tv pause plug-in
+
+James Oakley <jfunk@funktronics.ca>
+o xmltv2 patches
+
+Pierre Ossman <drzeus@drzeus.cx>
+o Linux event device input handler
+
+Gorka Olaizola <gorka@escomposlinux.org>
+o Various bug fixes and patches
 
 Dan Eriksen <eriksen@canada.com>
 o 16-bit pixel support for the X11 OSD server

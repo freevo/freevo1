@@ -267,13 +267,16 @@ if not HELPER:
 def _debug_function_(s, level=1):
     if DEBUG < level:
         return
-    # add the current trace to the string
-    where =  traceback.extract_stack(limit = 2)[0]
-    if isinstance( s, unicode ):
-        s = s.encode(encoding, 'replace')
-    s = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
-    # print debug message
-    print s
+    try:
+        # add the current trace to the string
+        where =  traceback.extract_stack(limit = 2)[0]
+        if isinstance( s, unicode ):
+            s = s.encode(encoding, 'replace')
+        s = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
+        # print debug message
+        print s
+    except UnicodeEncodeError:
+        print "_debug_ failed."
 
             
 __builtin__.__dict__['_debug_']= _debug_function_

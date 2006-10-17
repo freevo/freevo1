@@ -86,7 +86,10 @@ class RadioPlayer:
         self.item.elapsed = 0
         self.starttime = time.time()
 
-        print 'RadioPlayer.play() %s' % self.item.station
+        try:
+            print 'RadioPlayer.play() %s' % self.item.station
+        except AttributeError:
+            pass
             
         self.mode    = 'play'
 
