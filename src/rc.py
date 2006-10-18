@@ -313,12 +313,34 @@ class Evdev:
         self._devs = []
 
         for dev in config.EVENT_DEVS:
-            try:
-                e = evdev.evdev(dev)
+            e = None
+
+            if os.path.exists(dev):
+                try:
+                    e = evdev.evdev(dev)
+                except:
+                    print "Problem opening event device '%s'" % dev
+            else:
+                name = dev
+                for dev in os.listdir('/dev/input'):
+                    if not dev.startswith('event'):
+                        continue
+
+                    try:
+                        dev = '/dev/input/' + dev
+                        e = evdev.evdev(dev)
+                    except:
+                        continue
+
+                    if e.get_name() == name:
+                        break
+                else:
+                    e = None
+                    print "Could not find any device named '%s'" % name
+
+            if e is not None:
                 print "Added input device '%s': %s" % (dev, e.get_name())
                 self._devs.append(e)
-            except:
-                print "Problem opening event device '%s'" % dev
 
     def poll(self, rc):
         """

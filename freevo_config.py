@@ -499,8 +499,10 @@ USE_SDL_KEYBOARD = 1
 KEYMAP = DEFAULT_KEYMAP
 
 #
-# List of /dev/input/event# devices to monitor. If you monitor your keyboard
-# both here and with USE_SDL_KEYBOARD, then you will get duplicate events.
+# List of /dev/input/event# devices to monitor. You can specify either the
+# device node (e.g. '/dev/input/event1') or the name of the device (e.g.
+# 'ATI Remote Wonder II'). If you monitor your keyboard both here and with
+# USE_SDL_KEYBOARD, then you will get duplicate events.
 #
 
 EVENT_DEVS = []
