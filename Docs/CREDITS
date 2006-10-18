@@ -76,6 +76,10 @@ o Linux event device input handler
 Gorka Olaizola <gorka@escomposlinux.org>
 o Various bug fixes and patches
 
+Justin Wetherell <phishman3579@gmail.com>
+o RSS feed server
+o audio plugin for XM online
+
 Dan Eriksen <eriksen@canada.com>
 o 16-bit pixel support for the X11 OSD server
 o Joystick driver
