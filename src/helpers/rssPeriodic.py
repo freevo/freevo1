@@ -1,0 +1,115 @@
+import re,os,glob,urllib,datetime,pickle
+import config
+import rssFeed
+
+def convertDate(string):
+    if not re.search("\d+\s+\S+\s+\d+",string):
+       return datetime.date.today()
+    itemDateList = re.split(" ", re.search("\d+\s+\S+\s+\d+",string).group())
+    day=int(itemDateList[0])
+    if itemDateList[1] == "Jan":
+        month=1
+    elif itemDateList[1] == "Feb":
+        month=2
+    elif itemDateList[1] == "Mar":
+        month=3
+    elif itemDateList[1] == "Apr":
+        month=4
+    elif itemDateList[1] == "May":
+        month=5
+    elif itemDateList[1] == "Jun":
+        month=6
+    elif itemDateList[1] == "Jul":
+        month=7
+    elif itemDateList[1] == "Aug":
+        month=8
+    elif itemDateList[1] == "Sep":
+        month=9
+    elif itemDateList[1] == "Oct":
+        month=10
+    elif itemDateList[1] == "Nov":
+        month=11
+    else:
+        month=12
+    year=int(itemDateList[2])
+    itemDate = datetime.date(year,month,day)
+    return itemDate
+
+def checkForDup(string):
+    cacheFile=config.FREEVO_CACHEDIR+"/rss.pickle"
+    try:
+       downloadedUrls=pickle.load(open(cacheFile,"r"))
+    except IOError:
+       return False
+    foundFile=False
+    for line in downloadedUrls:
+        if string in line:
+           foundFile=True
+    return foundFile
+
+def addFileToCache(string):
+    cacheFile=config.FREEVO_CACHEDIR+"/rss.pickle"
+    downloadedUrls=[]
+    try:
+       downloadedUrls = pickle.load(open(cacheFile,"r"))
+    except IOError:
+       pass
+    downloadedUrls.append(string)
+    pickle.dump(downloadedUrls, open(cacheFile,"w"))
+
+def createFxd(item,filename):
+    if "audio" in item.type:
+        fullFilename=config.RSS_AUDIO+filename
+    else:
+        fullFilename=config.RSS_VIDEO+filename
+    tempList=re.split("\.",filename)
+    ofile=tempList[0]
+    for line in tempList[1:-1]:
+        ofile=ofile+"."+line
+    ofile=ofile+".fxd"
+    try:
+       file = open(ofile, 'w')
+       file.write('<freevo>\n')
+       file.write('   <movie title="%s">\n'%item.title)
+       file.write('      <video>\n')
+       file.write('         <file id="f1">%s</file>\n'%fullFilename)
+       file.write('      </video>\n')
+       file.write('      <info>\n')
+       file.write('         <plot>%s</plot>\n'%item.description)
+       file.write('      </info>\n')
+       file.write('   </movie>\n')
+       file.write('</freevo>\n')
+       file.close()
+    except IOError:
+       print "ERROR: Could not open %s"%(ofile)
+
+def checkForUpdates():
+    try:
+       file = open(config.RSS_FEEDS,"r")
+       for line in file:
+           if not re.search("^#",line):
+              (url,numberOfDays)=re.split(",", line)
+              sock = urllib.urlopen(url)
+              feedSource = sock.read()
+              sock.close()
+              for item in rssFeed.Feed(feedSource).items:
+                  diff = datetime.date.today() - convertDate(item.date)
+                  if int(diff.days)<=int(numberOfDays) and not re.search("None",item.url):
+                     if "audio" in item.type:
+                        os.chdir(config.RSS_AUDIO)
+                     else:
+                        os.chdir(config.RSS_VIDEO)
+                     filename=re.split("/",item.url).pop()
+                     if (len(glob.glob(filename))==0) and not checkForDup(item.url):
+                        if re.search("torrent",item.url):
+                           exitStatus=os.popen("bittorrent-console %s"%(item.url)).close()
+                           filename=re.sub("\.torrent","",filename)
+                        else:
+                           exitStatus=os.popen("wget %s" %(item.url)).close()
+                        if not exitStatus:
+                           createFxd(item,filename)
+                           addFileToCache(item.url)
+                        else:
+                           os.popen("rm %s" %(filename))
+    except IOError:
+       print "ERROR: Could not open %s"%(config.RSS_FEEDS)
