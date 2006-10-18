@@ -28,6 +28,7 @@
 #
 # -----------------------------------------------------------------------
 
+import sys
 import os
 import re
 from fcntl import ioctl
@@ -322,7 +323,7 @@ else:
     from evfallback import _types, _events, _ids, _buses
 
 if __name__ == "__main__":
-    e = evdev("/dev/input/event1", True)
+    e = evdev(sys.argv[1], True)
     e.print_info()
     e.print_events()
 
