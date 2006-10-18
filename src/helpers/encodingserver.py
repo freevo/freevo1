@@ -31,9 +31,9 @@
 from twisted.web import xmlrpc, server
 from twisted.internet.app import Application
 from twisted.internet import reactor
-from twisted.persisted import marmalade
+from twisted.python import log
+from util.marmalade import jellyToXML, unjellyFromXML
 import logging
-
 import time, random, sys, os
 
 from encodingcore import EncodingJob, EncodingQueue
@@ -48,8 +48,8 @@ tmppath = '/tmp/encodingserver'
 
 DEBUG=False
 
-jam = marmalade.jellyToXML
-unjam = marmalade.unjellyFromXML
+jam = jellyToXML
+unjam = unjellyFromXML
 
 class EncodingServer(xmlrpc.XMLRPC):
 
