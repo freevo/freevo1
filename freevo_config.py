@@ -238,6 +238,20 @@ LOCAL_CONF_CHANGES = [
      Added plug-in "upsoon" to stop the player when a recording is about to start
      Added USE_SDL_KEYBOARD to specify if generic keyboard handler should be used
      Added EVENT_DEVS and EVENTMAP for the new Linux event device handler''' ),
+    (5.17,
+     '''Using the name of the helper in local_conf.py
+     Changed the TV_RECORD_SERVER_* to RECORDSERVER_*, 
+     Added optional RECORDSERVER_DEBUG, if not defined uses DEBUG
+     Changed the TV_RECORD_SERVER_* to WEBSERVER_*, 
+     Changed WWW_PORT to WEBSERVER_PORT = 80
+     Added WEBSERVER_UID and WEBSERVER_GID
+     Added optional WEBSERVER_DEBUG, if not defined uses DEBUG
+     Added ENCODINGSERVER_UID and ENCODINGSERVER_GID
+     Added optional ENCODINGSERVER_DEBUG, if not defined uses DEBUG
+     Added experimental plug-ins: Apple trailers, reencode
+     Added plug-ins: XM online
+     Added helpers: encodingserver, rssServer
+     ''' ),
 ]
 
 
@@ -1432,13 +1446,13 @@ TV_RECORDFILE_OKLETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0
 # if using the persitant recordserver
 TV_RECORD_SCHEDULE = '%s/record_schedule.xml' % FREEVO_CACHEDIR
 
-TV_RECORD_SERVER_IP = 'localhost'
-TV_RECORD_SERVER_PORT = 18001
+RECORDSERVER_IP = 'localhost'
+RECORDSERVER_PORT = 18001
 
 # If the recordserver runs as root, set the uid to the given one
 # after startup. The gui must also match one of the users group ids
-TV_RECORD_SERVER_UID = 0
-TV_RECORD_SERVER_GID = 0
+RECORDSERVER_UID = 0
+RECORDSERVER_UID = 0
 
 # start every recording X minutes before scheduled,
 # and stop X minutes after scheduled - default to zero minutes.
@@ -1656,14 +1670,18 @@ XMLTV_DAYS = 3
 # runs as root. Port 8080 is the default, change to 80 if
 # needed.
 #
-WWW_PORT = 8080
+WEBSERVER_PORT = 80
+WEBSERVER_UID = 0
+WEBSERVER_GID = 0
 
 #
 # Username / Password combinations to login to the web interface.
 # These should be overridden in local_conf.py
 # 
-# WWW_USERS = { "user1" : "changeme", 
-#            "optional" : "changeme2" }
+# WWW_USERS = {
+#     "user1" : "changeme", 
+#     "optional" : "changeme2"
+# }
 #
 WWW_USERS = { 0 : 0 }
 
@@ -1687,6 +1705,14 @@ WWW_STYLESHEET = 'styles/main.css'
 WWW_JAVASCRIPT = 'scripts/display_prog-head.js'
 
 
+# ======================================================================
+# Freevo builtin encoding server settings:
+# ======================================================================
+ENCODINGSERVER_UID = 0
+ENCODINGSERVER_GID = 0
+
+ENCODINGSERVER_IP   = 'localhost'
+ENCODINGSERVER_PORT = 6666
 
 
 

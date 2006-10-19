@@ -42,7 +42,7 @@
 
 
 
-CONFIG_VERSION = 5.16
+CONFIG_VERSION = 5.17
 
 # ======================================================================
 # General freevo settings:
@@ -984,8 +984,8 @@ IMAGEVIEWER_BLEND_MODE = -1
 # if using the persitant recordserver
 # TV_RECORD_SCHEDULE = '%s/record_schedule.xml' % FREEVO_CACHEDIR
 
-# TV_RECORD_SERVER_IP = 'localhost'
-# TV_RECORD_SERVER_PORT = 18001
+# RECORDSERVER_IP = 'localhost'
+# RECORDSERVER_PORT = 18001
 
 # start every recording X minutes before scheduled,
 # and stop X minutes after scheduled - default to zero minutes.
@@ -1203,7 +1203,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 # runs as root. Port 8080 is the default, change to 80 if
 # needed.
 #
-# WWW_PORT = 8080
+# WEBSERVER_PORT = 8080
 
 #
 # Username / Password combinations to login to the web interface.
