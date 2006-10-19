@@ -82,7 +82,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         self.event_listener = 1
         plugin.register( self, 'upsoon' )
 
-        server_string = 'http://%s:%s/' % (config.TV_RECORD_SERVER_IP, config.TV_RECORD_SERVER_PORT)
+        server_string = 'http://%s:%s/' % (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
 
         _debug_('%s' % server_string, dbglvl)
         self.server = xmlrpclib.Server(server_string, allow_none=1)
