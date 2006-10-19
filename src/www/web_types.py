@@ -8,21 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.25  2004/07/10 12:33:43  dischi
-# header cleanup
-#
-# Revision 1.24  2004/03/09 00:14:35  rshortt
-# Add advanced search and link to search page.  Next will probably add genre
-# options.
-#
-# Revision 1.23  2004/02/23 08:31:55  gsbarbieri
-# Helper functions.
-# Please use them to print messages to user.
-# printMessagesFinish() should be used to generate the page ending stuff (links,
-# foot, ...)
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -41,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os, sys, time
