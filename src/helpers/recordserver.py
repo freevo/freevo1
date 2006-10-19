@@ -31,12 +31,17 @@ import sys, string, random, time, os, re, pwd, stat
 import config
 from util import vfs
 
+appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+appconf = appname.upper()
+
 # change uid
 if __name__ == '__main__':
+    uid='config.'+appconf+'_UID'
+    gid='config.'+appconf+'_GID'
     try:
-        if config.TV_RECORD_SERVER_UID and os.getuid() == 0:
-            os.setgid(config.TV_RECORD_SERVER_GID)
-            os.setuid(config.TV_RECORD_SERVER_UID)
+        if eval(uid) and os.getuid() == 0:
+            os.setgid(eval(gid))
+            os.setuid(eval(uid))
             os.environ['USER'] = pwd.getpwuid(os.getuid())[0]
             os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
     except Exception, e:
@@ -46,7 +51,6 @@ from twisted.web import xmlrpc, server
 from twisted.internet.app import Application
 from twisted.internet import reactor
 from twisted.python import log
-
 from util.marmalade import jellyToXML, unjellyFromXML
 
 import rc
@@ -64,20 +68,19 @@ from tv.channels import FreevoChannels
 from util.videothumb import snapshot
 from event import *
 
-dbglvl=1
+DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
+
+logfile = '%s/%s-%s.log' % (config.LOGDIR, appname, os.getuid())
+log.startLogging(open(logfile, 'a'))
 
 def _debug_(text, level=1):
-    if config.DEBUG >= level:
+    if DEBUG >= level:
         try:
             log.debug(String(text))
         except:
-            log.debug('Failed to log a message')
+            print String(text)
 
 _debug_('PLUGIN_RECORD: %s' % config.plugin_record)
-
-appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-logfile = '%s/%s-%s.log' % (config.LOGDIR, appname, os.getuid())
-log.startLogging(open(logfile, 'a'))
 
 plugin.init_special_plugin(config.plugin_record)
 
@@ -118,8 +121,14 @@ class RecordServer(xmlrpc.XMLRPC):
             pass
         return 0
 
+
+    def isRecording(self):
+        _debug_('in isRecording', 4)
+        return glob.glob(config.FREEVO_CACHEDIR + '/record.*') and True or False
+
+
     def findNextProgram(self):
-        _debug_('in findNextProgram', dbglvl+3)
+        _debug_('in findNextProgram', 4)
 
         progs = self.getScheduledRecordings().getProgramList()
         now = time.time()
@@ -129,7 +138,7 @@ class RecordServer(xmlrpc.XMLRPC):
         proglist.sort(self.progsTimeCompare)
         for progitem in proglist:
             prog = progs[progitem]
-            _debug_('%s' % (prog), dbglvl+1)
+            _debug_('%s' % (prog), 2)
 
             try:
                 recording = prog.isRecording
@@ -139,9 +148,9 @@ class RecordServer(xmlrpc.XMLRPC):
 
             if now >= prog.stop + config.TV_RECORD_PADDING_POST:
                 _debug_('%s: prog.stop=%s, now=%s' % (prog.title, \
-                    time.localtime(prog.stop+config.TV_RECORD_PADDING_POST), now), dbglvl+1)
+                    time.localtime(prog.stop+config.TV_RECORD_PADDING_POST), now), 2)
                 continue
-            _debug_('%s: prog.stop=%s' % (prog.title, time.localtime(prog.stop)), dbglvl)
+            _debug_('%s: prog.stop=%s' % (prog.title, time.localtime(prog.stop)), 1)
 
             if not recording:
                 next_program = prog
@@ -149,10 +158,10 @@ class RecordServer(xmlrpc.XMLRPC):
 
         self.next_program = next_program
         if next_program == None:
-            _debug_('No program scheduled to record', dbglvl)
+            _debug_('No program scheduled to record', 1)
             return None
 
-        _debug_('%s' % (next_program), dbglvl)
+        _debug_('%s' % (next_program), 1)
         return next_program
 
 
@@ -163,7 +172,7 @@ class RecordServer(xmlrpc.XMLRPC):
             real player running test, check /dev/videoX.
             this could go into the upsoon client
         '''
-        _debug_('in isPlayerRunning', dbglvl+3)
+        _debug_('in isPlayerRunning', 4)
         return (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
 
     # note: add locking and r/rw options to get/save funs
@@ -740,6 +749,11 @@ class RecordServer(xmlrpc.XMLRPC):
         message = status and 'player is running' or 'player is not running'
         return (status, message)
 
+    def xmlrpc_isRecording(self):
+        status = self.isRecording()
+        message = status and 'is recording' or 'is not recording'
+        return (status, message)
+
     def xmlrpc_findNextProgram(self):
         response = self.findNextProgram()
         status = response != None
@@ -1033,9 +1047,9 @@ def main():
     app = Application("RecordServer")
     rs = RecordServer()
     if (config.DEBUG == 0):
-        app.listenTCP(config.TV_RECORD_SERVER_PORT, server.Site(rs, logPath='/dev/null'))
+        app.listenTCP(config.RECORDSERVER_PORT, server.Site(rs, logPath='/dev/null'))
     else:
-        app.listenTCP(config.TV_RECORD_SERVER_PORT, server.Site(rs))
+        app.listenTCP(config.RECORDSERVER_PORT, server.Site(rs))
     rs.startMinuteCheck()
     rc_object.subscribe(rs.eventNotice)
     app.run(save=0)

@@ -10,17 +10,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.11  2004/07/10 12:33:39  dischi
-# header cleanup
-#
-# Revision 1.10  2004/07/09 16:20:54  outlyer
-# Remove the request logging for 0-level debug. Exceptions will still be
-# logged, but standard requests will not.
-#
-# (i.e. this removes the Apache-style access logging for DEBUG = 0)
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -39,21 +28,25 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys, os
 import config
 
+appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+appconf = appname.upper()
+
 # change uid
 if __name__ == '__main__':
+    uid='config.'+appconf+'_UID'
+    gid='config.'+appconf+'_GID'
     try:
-        if hasattr(config, 'WWW_SERVER_UID'):
-            if config.WWW_SERVER_UID and os.getuid() == 0:
-                os.setgid(config.WWW_SERVER_GID)
-                os.setuid(config.WWW_SERVER_UID)
-                os.environ['USER'] = pwd.getpwuid(os.getuid())[0]
-                os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
+        if eval(uid) and os.getuid() == 0:
+            os.setgid(eval(gid))
+            os.setuid(eval(uid))
+            os.environ['USER'] = pwd.getpwuid(os.getuid())[0]
+            os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
     except Exception, e:
         print e
 
@@ -67,6 +60,16 @@ if len(sys.argv)>1 and sys.argv[1] == '--help':
     print 'start or stop the internal webserver'
     print 'usage freevo webserver [ start | stop ]'
     sys.exit(0)
+
+# No debugging in this module
+DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
+
+def _debug_(text, level=1):
+    if DEBUG >= level:
+        try:
+            log.debug(String(text))
+        except:
+            print String(text)
 
 def helpimagesrewrite(request):
     if request.postpath and request.postpath[0]=='help' and request.postpath[1]=='images':
@@ -98,7 +101,7 @@ def main():
         site = server.Site(rewriter)
     
     application = app.Application('web')
-    application.listenTCP(config.WWW_PORT, site)
+    application.listenTCP(config.WEBSERVER_PORT, site)
     application.run(save=0)
 
     

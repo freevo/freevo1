@@ -8,20 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.20  2004/07/19 16:24:47  rshortt
-# Attempt to solve scheduled recordings upgrade problem.
-#
-# Revision 1.19  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.18  2004/03/13 20:11:36  rshortt
-# Some quick debug for addEditedFavorite()
-#
-# Revision 1.17  2004/03/13 18:31:51  rshortt
-# Lets see traceback and exception.  We should clean this file up further.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -40,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import config
@@ -55,7 +41,7 @@ TRUE  = 1
 FALSE = 0
 
 server_string = 'http://%s:%s/' % \
-                (config.TV_RECORD_SERVER_IP, config.TV_RECORD_SERVER_PORT)
+                (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
 
 server = xmlrpclib.Server(server_string, allow_none=1)
 
