@@ -235,9 +235,7 @@ LOCAL_CONF_CHANGES = [
   	 Added TV_RECORDFILE_OKLETTERS for characters allowed in recording filenames.
      Added AUTOSHUTDOWN_ settings to turn off and on the machine automatically
      Added Multi-tuner support to allow recording and watching at the same time
-     Added plug-in "upsoon" to stop the player when a recording is about to start
-     Added USE_SDL_KEYBOARD to specify if generic keyboard handler should be used
-     Added EVENT_DEVS and EVENTMAP for the new Linux event device handler''' ),
+     Added plug-in "upsoon" to stop the player when a recording is about to start''' ),
     (5.17,
      '''Using the name of the helper in local_conf.py
      Changed the TV_RECORD_SERVER_* to RECORDSERVER_*, 
@@ -501,35 +499,10 @@ EVENTS = {
 MENU_ARROW_NAVIGATION = 0
 
 #
-# Process keyboard events from SDL. You want this unless you use only lirc
-# or event devices below.
-#
-USE_SDL_KEYBOARD = 1
-
-#
 # Keymap to map keyboard keys to event strings. You can also add new keys
 # here, e.g. KEYMAP[key.K_x] = 'SUBTITLE'. The K_-names are defined by pygame.
 #
 KEYMAP = DEFAULT_KEYMAP
-
-#
-# List of /dev/input/event# devices to monitor. You can specify either the
-# device node (e.g. '/dev/input/event1') or the name of the device (e.g.
-# 'ATI Remote Wonder II'). If you monitor your keyboard both here and with
-# USE_SDL_KEYBOARD, then you will get duplicate events.
-#
-
-EVENT_DEVS = []
-
-#
-# Keymap to map input events to event strings. You can change current mappings
-# and add new ones here, e.g. EVENTMAP['KEY_COFFEE'] = 'SUBTITLE'. Key names
-# are defined by the Linux input layer (input.h). An axis is described by a
-# pair, one for positive and one for negative movement, e.g.
-# EVENTMAP['REL_Z'] = ('LEFT', 'RIGHT')
-#
-
-EVENTMAP = DEFAULT_EVENTMAP
 
 #
 # Use Internet resources to fetch information?

@@ -36,7 +36,6 @@ import thread
 import types
 
 import config
-import evdev
 
 from event import Event, BUTTON
 
@@ -300,67 +299,6 @@ class Network:
             # No data available
             return None
 
-# --------------------------------------------------------------------------------
-
-class Evdev:
-    """
-    Class to handle evdev events
-    """
-    def __init__(self):
-        """
-        init all specified devices
-        """
-        self._devs = []
-
-        for dev in config.EVENT_DEVS:
-            e = None
-
-            if os.path.exists(dev):
-                try:
-                    e = evdev.evdev(dev)
-                except:
-                    print "Problem opening event device '%s'" % dev
-            else:
-                name = dev
-                for dev in os.listdir('/dev/input'):
-                    if not dev.startswith('event'):
-                        continue
-
-                    try:
-                        dev = '/dev/input/' + dev
-                        e = evdev.evdev(dev)
-                    except:
-                        continue
-
-                    if e.get_name() == name:
-                        break
-                else:
-                    e = None
-                    print "Could not find any device named '%s'" % name
-
-            if e is not None:
-                print "Added input device '%s': %s" % (dev, e.get_name())
-                self._devs.append(e)
-
-    def poll(self, rc):
-        """
-        return next event
-        """
-        for dev in self._devs:
-            event = dev.read()
-            if event is None:
-                continue
-
-            if config.EVENTMAP.has_key(event[2]):
-                if event[1] == 'EV_KEY':
-                    # 0 = release, 1 = press, 2 = repeat
-                    if event[3] > 0:
-                        return config.EVENTMAP[event[2]]
-                elif event[1] == 'EV_REL':
-                    if event[3] < -10:
-                        return config.EVENTMAP[event[2]][0]
-                    elif event[3] > 10:
-                        return config.EVENTMAP[event[2]][1]
 
 # --------------------------------------------------------------------------------
     
@@ -378,14 +316,8 @@ class EventHandler:
             except:
                 pass
 
-        if config.USE_SDL_KEYBOARD:
-            try:
-                self.inputs.append(Keyboard())
-            except:
-                pass
-
         try:
-            self.inputs.append(Evdev())
+            self.inputs.append(Keyboard())
         except:
             pass
 
