@@ -84,7 +84,7 @@ class TvProgram:
     def __str__(self):
         bt = time.localtime(self.start)   # Beginning time tuple
         et = time.localtime(self.stop)   # End time tuple
-        begins = time.strftime('%Y-%m-%d %a %H:%M', bt)
+        begins = time.strftime('%a %Y-%m-%d %H:%M', bt)
         ends = time.strftime('%H:%M', et)
         try:
             channel_id = self.channel_id.encode('utf-8')
