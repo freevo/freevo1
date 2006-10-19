@@ -29,19 +29,26 @@ change_map = {
     'TV_SHOW_REGEXP_MATCH': 'VIDEO_SHOW_REGEXP_MATCH',
     'TV_SHOW_REGEXP_SPLIT': 'VIDEO_SHOW_REGEXP_SPLIT',
     'STOP_OSD_WHEN_PLAYING': 'OSD_STOP_WHEN_PLAYING',
+    'TV_RECORD_SERVER_IP': 'RECORDSERVER_IP',
+    'TV_RECORD_SERVER_PORT': 'RECORDSERVER_PORT',
     'RECORD_SCHEDULE': 'TV_RECORD_SCHEDULE',
-    'RECORD_SERVER_IP': 'TV_RECORD_SERVER_IP',
-    'RECORD_SERVER_PORT': 'TV_RECORD_SERVER_PORT',
     'RECORD_PADDING': 'TV_RECORD_PADDING',
     'IVTV_OPTIONS': 'TV_IVTV_OPTIONS',
     'VCR_SETTINGS': 'TV_VCR_SETTINGS',
+    'WWW_SERVER_UID': 'WEBSERVER_UID',
+    'WWW_SERVER_GID': 'WEBSERVER_GID',
+    'WWW_PORT': 'WEBSERVER_PORT',
+    'recordable=True': 'record_group=None',
+    'recordable=False': 'record_group=None',
+    'recordable = True': 'record_group=None',
+    'recordable = False': 'record_group=None',
     }
 
 def help():
     print 'convert local_conf.py to use the new variable names'
     print 'usage: convert_config local_conf.py [ -w ]'
     print
-    print 'if -w is given the local_conf.py wil be rewritten, without the option'
+    print 'if -w is given the local_conf.py will be rewritten, without the option'
     print 'the script will only print the changes.'
     print
     print 'Developer may use the option -s (without local_conf) to scan for files'
