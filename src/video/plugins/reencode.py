@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# dvdbackup.py - Plugin for encoding DVD's with the EncodingServer
+# re-encode recorded TV programmes
 # -----------------------------------------------------------------------
-# $Id: rc.py 8278 2006-09-30 07:22:11Z duncan $
+# $Id: encode.py $
 #
-# Author: 
-# TODO:
-# niceness & pausing queue
+# Notes:
+#    To activate, put the following line in local_conf.py:
+#       plugin.activate('tv.encode')
+# ToDo:        
 #
 # -----------------------------------------------------------------------
-# Copyright (C) 2004 den_RDC (RVDM)
+# Freevo - A Home Theater PC framework
+# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Please see the file freevo/Docs/CREDITS for a complete list of authors.
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -22,50 +26,67 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
 
-#Import statements
+
 from os.path import join, split
-import plugin, config, menu
-#import config
+import plugin
+import menu
+import config
 from video.encodingclient import *
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
+DEBUG = config.DEBUG
+DEBUG = 9
+
+print "DJW: reencode DEBUG=%s" % DEBUG
+
 class PluginInterface(plugin.ItemPlugin):
     """
-    PLugin for making DVD backups (aka dvdrips) using EncodingServer
+    Plug-in to archive recorded TV programmes using EncodingServer
     
     This plugin NEEDS a running encodingserver to work properly.
     You can start an encodingserver with "freevo encodingserver start".
-    Don't forget that you need some free diskspace in order to use this plugin, 
-    and don't forget a dvdrip eats quite a bit of space :)
     """
+
+class PluginInterface(plugin.ItemPlugin):
+    def __init__(self):
+        _debug_('__init__')
+        plugin.ItemPlugin.__init__(self)
+
 
     def actions(self, item):
         #testing stuff
-##~         print item.mode
-##~         print item.name
-##~         print item.filename
-##~         print item.parentname
-##~         if hasattr(item, 'media') and hasattr(item.media, 'devicename'):
-##~             print item.media.devicename
+        for d in dir(item):
+            print '%s: %s' % (d, eval('item.%s' % d))
+        for d in dir(item.info):
+            print '%s: %s' % (d, eval('item.info.%s' % d))
+        print 'type:', item.type
+        print 'mode:', item.mode
+        print 'name:', type(item.name)
+        print 'name:', item.name.encode('utf-8')
+        print 'filename:', item.filename
+        if hasattr(item, 'parentname'):
+            print item.parentname
+        if hasattr(item, 'media'):
+            print 'media:', item.media
+            if hasattr(item.media, 'devicename'):
+                print item.media.devicename
             
-        if item.type == 'video' and item.mode == 'dvd' and hasattr(item, 'info_type'):
-            if item.info_type == "track": #and item.media and item.media.devicename: 
+        if item.type == 'video' and item.mode == 'file':
                 #for dvd on disc
                 self.dvdsource = item.filename
-                self.title = int(split(item.url)[-1])
                 
-                if hasattr(item, 'media') and hasattr(item.media, 'devicename'):
-                    #we have a "real" dvd disc
-                    self.dvdsource = item.media.devicename
-                    self.title = int(item.url[6:])
+                self.title = item.name
+                self.source = item.filename
+                self.filename = item.filename[0:item.filename.rfind('.')]+'.divx'
 
                 self.item = item
-                return [ (self.encoding_profile_menu, _('Backup this dvd title...')) ]
+                return [ (self.encoding_profile_menu, _('Re-encode this program...')) ]
         return []
         
     def encoding_profile_menu(self, menuw=None, arg=None):
@@ -84,13 +105,7 @@ class PluginInterface(plugin.ItemPlugin):
         menuw.pushmenu(encoding_menu)
         
     def create_job(self, menuw=None, arg=None):
-        '''
-        '''
-        #create a filename for the to-be-encoded dvd title
-        #title = int(self.item.url[6:])
-        fname = join(config.VIDEO_ITEMS[0][1], "%s_%s.avi" % (self.item.parent.name, self.title))
-        #print title, fname
-        print arg
+        print 'arg:', arg
         #unwrap settings tupple
         vcodecnr, tgtsize, mpass = arg
 
@@ -99,8 +114,8 @@ class PluginInterface(plugin.ItemPlugin):
         box = PopupBox(text=_('Please wait, analyzing video...'))
         box.show()
 
-        (status, resp) = initEncodeJob(self.dvdsource, fname, 
-                self.item.parent.name, self.title)
+        (status, resp) = initEncodeJob(self.source, self.filename, self.title)
+        print 'initEncodeJob:status:', status, ' resp:', resp
                 
         box.destroy()
         
@@ -112,6 +127,7 @@ class PluginInterface(plugin.ItemPlugin):
         
         #ask for possible containers and set the first one (should be avi), we will get a list
         (status, resp) = getContainerCAP(idnr)
+        print 'getContainerCAP:status:', status, ' resp:', resp
             
         if not status:
             self.error(resp)
@@ -120,6 +136,7 @@ class PluginInterface(plugin.ItemPlugin):
         container = resp[0]
         
         (status, resp) = setContainer(idnr, container)
+        print 'setContainer:status:', status, ' resp:', resp
         
         if not status:
             self.error(resp)
@@ -127,6 +144,7 @@ class PluginInterface(plugin.ItemPlugin):
             
         #ask for possible videocodec and set the first one (should be mpeg4), we will get a list
         (status, resp) = getVideoCodecCAP(idnr)
+        print 'getVideoCodecCAP:status:', status, ' resp:', resp
             
         if not status:
             self.error(resp)
@@ -135,6 +153,7 @@ class PluginInterface(plugin.ItemPlugin):
         vcodec = resp[vcodecnr]
         
         (status, resp) = setVideoCodec(idnr, vcodec, tgtsize, mpass)
+        print 'setVideoCodec:status:', status, ' resp:', resp
         
         if not status:
             self.error(resp)
@@ -144,6 +163,7 @@ class PluginInterface(plugin.ItemPlugin):
         #Audiocodec call isn't necessary atm, it defaults to 128 kbit mp3, but this might change in the future
         #so we play safe
         (status, resp) = getAudioCodecCAP(idnr)
+        print 'getAudioCodecCAP:status:', status, ' resp:', resp
             
         if not status:
             self.error(resp)
@@ -152,6 +172,7 @@ class PluginInterface(plugin.ItemPlugin):
         acodec = resp[0]
         
         (status, resp) = setAudioCodec(idnr, acodec, 128)
+        print 'setAudioCodec:status:', status, ' resp:', resp
         
         if not status:
             self.error(resp)
@@ -159,6 +180,7 @@ class PluginInterface(plugin.ItemPlugin):
         
         #And finally, qeue and start the job
         (status, resp) = queueIt(idnr, True)
+        print 'queueIt:status:', status, ' resp:', resp
             
         if not status:
             self.error(resp)

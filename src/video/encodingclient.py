@@ -27,17 +27,18 @@
 # -----------------------------------------------------------------------
 
 import xmlrpclib, sys
-from twisted.persisted import marmalade
+from util.marmalade import jellyToXML, unjellyFromXML
+import config
 
 
 server_string = 'http://%s:%s/' % \
-                ("localhost", 6666)
+                (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
 
-server = xmlrpclib.Server(server_string)
+server = xmlrpclib.Server(server_string, allow_none=1)
 #server = object() - uncomment this and comment the previous line to enable pychecker testing
 
-jam = marmalade.jellyToXML
-unjam = marmalade.unjellyFromXML
+jam = jellyToXML
+unjam = unjellyFromXML
 
 #some data
 __author__ = "den_RDC (rdc@kokosnoot.com)"
@@ -115,14 +116,15 @@ def initEncodeJob(source, output, friendlyname="", title=None):
     This call can take some time (10 seconds on average) before returning, because the
     encodingserver analyzes the video during this call."""
         
+    _debug_('initEncodeJob(%s, %s, %s, %s)' % (source, output, friendlyname, title), 0)
     if not (source or output):
         return (False, "EncodingClient: no source and/or output")
         
     try:
         (status, response) = server.initEncodeJob(source, output, friendlyname, title)
     except:
-##~         print "Unexpected eroor:", sys.exc_info()[0]
-##~         raise
+        print "Unexpected error:", sys.exc_info()[0]
+        raise
         return (False, 'EncodingClient: connection error')
     
     return (status, response)
