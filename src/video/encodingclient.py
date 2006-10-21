@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# EncodingClient.py - A client interface to the Freevo encoding server.
+# encodingclient.py - A client interface to the Freevo encoding server.
 # -----------------------------------------------------------------------
-# $Id: rc.py 8278 2006-09-30 07:22:11Z duncan $
+# $Id: encodingclient.py 8278 2006-09-30 07:22:11Z duncan $
 #
 # Author: den_RDC
 # Notes: parts taken from recordclient
-# TODO:
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Copyright (C) 2004 den_RDC (RVDM)

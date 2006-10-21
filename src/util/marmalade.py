@@ -1,5 +1,14 @@
+# -*- coding: iso-8859-1 -*-
 # -*- test-case-name: twisted.test.test_persisted -*-
-
+# -----------------------------------------------------------------------
+# marmalade.py - This is the Freevo module
+# -----------------------------------------------------------------------
+# $Id$
+#
+# Notes:
+# Todo:        
+#
+# -----------------------------------------------------------------------
 # Twisted, the Framework of Your Internet
 # Copyright (C) 2001 Matthew W. Lefkowitz
 #
@@ -15,6 +24,8 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# -----------------------------------------------------------------------
 
 # Note: this file is from twisted but with small modification in the
 # Unicode handling for freevo. These parts are marked with 'XXX Freevo changes:'

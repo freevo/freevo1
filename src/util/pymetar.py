@@ -1,11 +1,21 @@
-# -*- coding: iso-8859-15 -*-
-# Copyright (C) 2002  Tobias Klausmann
+# -*- coding: iso-8859-1 -*-
+# -----------------------------------------------------------------------
+# pymetar.py - This is the Freevo module
+# -----------------------------------------------------------------------
+# $Id$
+#
 # Modified by Jerome Alet
 # 
 # Code contributed by:
 # Jerome Alet 
 # Davide Di Blasi
 # Adrian Holovaty
+#
+# Notes:
+# Todo:        
+#
+# -----------------------------------------------------------------------
+# Copyright (C) 2002  Tobias Klausmann
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,9 +30,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+# -----------------------------------------------------------------------
 #
 # By reading this code you agree not to ridicule the author =)
-
+#
 # When reading this code you'll noctice that not everything is parsed
 # from the raw METAR info as supplied with the report. Before you start
 # flaming the authors, please read the FHM-1 spec and guess how hairy a

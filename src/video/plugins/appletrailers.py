@@ -3,8 +3,10 @@
 # appletrailers.py - Plugin for streaming trailers from apple.com
 # -----------------------------------------------------------------------
 #
-# Add "plugin.activate('video.appletrailers')" in local_conf.py
-# to activate
+# Notes: 
+#   Add "plugin.activate('video.appletrailers')" in local_conf.py
+#   to activate
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Copyright (C) 2006 Pierre Ossman

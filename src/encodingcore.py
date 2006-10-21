@@ -1,9 +1,8 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# EncodingCore.py, part of EncodingServer - for use with Freevo
+# encodingcore.py, part of EncodingServer - for use with Freevo
 # -----------------------------------------------------------------------
-# $Id: rc.py 8278 2006-09-30 07:22:11Z duncan $
+# $Id: encodingcore.py 8278 2006-09-30 07:22:11Z duncan $
 #
 # Author: den_RDC
 # some parts taken or inspired by Quickrip (by T. Chance, GPL,
