@@ -12,30 +12,6 @@
 #        You also need an Amazon developer key.
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.33  2004/07/10 12:33:37  dischi
-# header cleanup
-#
-# Revision 1.32  2004/07/09 11:09:56  dischi
-# use vfs.open to make sure we can write the image
-#
-# Revision 1.31  2004/05/15 18:01:13  outlyer
-# Trap a potential crash if the "guessed" filename doesn't exist.
-#
-# Revision 1.3  2003/06/12 16:47:04  outlyer
-# Tried to make the Amazon search more intelligent.
-#
-# Problem:
-#     If a cover is not available, Amazon returns an 807b GIF file instead
-#     of saying so
-#
-# Solution:
-#     What we do now is check the content length of the file
-#     before downloading and remove those entries from the list.
-#
-# I've also removed the example, since the plugin itself works better.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -54,7 +30,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os

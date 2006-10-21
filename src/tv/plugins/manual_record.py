@@ -8,17 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.7  2004/07/11 15:49:12  mikeruelle
-# great patch from tcwan to fix off by one and start the time menus sensibly
-#
-# Revision 1.6  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.5  2004/04/12 14:58:38  dischi
-# prevent crash for bad TV.xml
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -37,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import calendar

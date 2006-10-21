@@ -8,20 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.53  2004/07/11 12:25:44  dischi
-# fix bad German titles
-#
-# Revision 1.52  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.51  2004/06/23 20:22:19  dischi
-# fix popup crash
-#
-# Revision 1.50  2004/06/22 01:10:21  rshortt
-# Add ratings and advisories.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -40,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys

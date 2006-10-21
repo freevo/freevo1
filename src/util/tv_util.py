@@ -5,21 +5,6 @@
 # $Id$
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.6  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.5  2004/06/23 21:10:20  dischi
-# make nicer filename
-#
-# Revision 1.4  2004/06/22 01:03:25  rshortt
-# getProgFilename() now returns the entire filename (path) including
-# TV_RECORD_DIR and TV_RECORDFILE_SUFFIX.
-#
-# Revision 1.3  2004/06/20 13:56:54  dischi
-# remove -_ at the end of the filename
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -38,7 +23,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys, string, re

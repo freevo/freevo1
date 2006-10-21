@@ -10,17 +10,6 @@
 # Todo:
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.15  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.14  2004/02/23 08:22:10  gsbarbieri
-# i18n: help translators job.
-#
-# Revision 1.13  2004/02/21 19:33:56  dischi
-# use eventhandler from letter box
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -39,7 +28,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import time

@@ -8,23 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.14.2.3  2005/06/10 16:05:54  tack
-# More OverflowError fixes for Python 2.4
-#
-# Revision 1.14.2.2  2005/01/20 16:32:11  dischi
-# fix crash
-#
-# Revision 1.14.2.1  2004/10/21 12:31:52  dischi
-# fix variable type
-#
-# Revision 1.14  2004/07/10 12:33:40  dischi
-# header cleanup
-#
-# Revision 1.13  2004/01/02 14:03:32  dischi
-# use osd to display volume
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -43,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 """For manipulating the mixer.

@@ -6,14 +6,6 @@
 #
 # Todo: o Add move function 
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.39  2004/07/10 12:33:39  dischi
-# header cleanup
-#
-# Revision 1.38  2004/07/10 10:43:57  dischi
-# use screenblit
-#
-# -----------------------------------------------------------------------
 #
 # Freevo - A Home Theater PC framework
 #

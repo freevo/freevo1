@@ -8,23 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.23  2004/07/11 11:47:02  dischi
-# fix image file lookup
-#
-# Revision 1.22  2004/07/11 10:43:22  dischi
-# fix unicode error
-#
-# Revision 1.21  2004/07/10 12:33:43  dischi
-# header cleanup
-#
-# Revision 1.20  2004/05/13 12:50:21  dischi
-# fix duplicate removal for fxd files in vfs
-#
-# Revision 1.19  2004/03/02 20:56:59  dischi
-# fxd files are always right about the name
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -43,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 from videoitem import VideoItem

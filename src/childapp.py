@@ -8,29 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.57.2.1  2004/10/30 11:01:34  dischi
-# wait longer for child to die
-#
-# Revision 1.57  2004/07/10 12:33:36  dischi
-# header cleanup
-#
-# Revision 1.56  2004/06/06 06:51:55  dischi
-# fix prio handling
-#
-# Revision 1.55  2004/05/31 10:40:57  dischi
-# update to new callback handling in rc
-#
-# Revision 1.54  2004/05/30 18:27:53  dischi
-# More event / main loop cleanup. rc.py has a changed interface now
-#
-# Revision 1.53  2004/05/29 19:06:46  dischi
-# register poll function to rc
-#
-# Revision 1.52  2004/05/09 14:16:16  dischi
-# let the child stdout handled by main
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -49,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys

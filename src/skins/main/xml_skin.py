@@ -8,14 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.35  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.34  2004/03/14 17:22:47  dischi
-# seperate ellipses and dim in drawstringframed
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.

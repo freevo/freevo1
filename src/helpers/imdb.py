@@ -10,17 +10,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.7  2004/07/10 12:33:39  dischi
-# header cleanup
-#
-# Revision 1.6  2004/01/08 17:33:14  outlyer
-# Moved fxdimdb.py to util; it doesn't use the OSD, and having in video
-# makes it import video/__init__...
-#
-# There is a reason for this to follow shortly :)
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -39,7 +28,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys

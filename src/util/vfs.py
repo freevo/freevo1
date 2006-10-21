@@ -14,27 +14,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.19.2.1  2004/09/11 16:41:25  dischi
-# ignore thumbnails from cvs freevo
-#
-# Revision 1.19  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.18  2004/06/09 20:09:10  dischi
-# cleanup
-#
-# Revision 1.17  2004/02/14 15:45:26  dischi
-# do not include folder.fxd
-#
-# Revision 1.16  2004/02/05 19:26:42  dischi
-# fix unicode handling
-#
-# Revision 1.15  2004/02/05 05:44:26  gsbarbieri
-# Fixes some bugs related to handling unicode internally.
-# NOTE: Many of the bugs are related to using str() everywhere, so please stop doing that.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -53,7 +32,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
             
 
 import os

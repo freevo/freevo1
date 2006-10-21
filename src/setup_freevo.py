@@ -11,20 +11,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.18.2.1  2005/01/09 10:45:54  dischi
-# support for russian tv
-#
-# Revision 1.18  2004/07/10 12:33:36  dischi
-# header cleanup
-#
-# Revision 1.17  2004/07/08 12:44:40  rshortt
-# Add directfb as a display option.
-#
-# Revision 1.16  2004/04/20 17:33:59  dischi
-# lsdvd check
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -43,7 +29,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys

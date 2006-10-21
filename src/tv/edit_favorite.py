@@ -8,14 +8,6 @@
 # Notes: 
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.13  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.12  2004/06/06 07:23:16  dischi
-# do not import tv.xxx, use xxx, we are in tv
-#
-# -----------------------------------------------------------------------
 #
 # Freevo - A Home Theater PC framework
 #

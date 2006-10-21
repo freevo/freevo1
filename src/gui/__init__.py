@@ -23,14 +23,6 @@
 # Initial version: Thomas Malt <thomas@malt.no>
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.15  2004/07/10 12:33:39  dischi
-# header cleanup
-#
-# Revision 1.14  2004/02/23 19:15:46  dischi
-# remove import of debug
-#
-# -----------------------------------------------------------------------
 #
 # Freevo - A Home Theater PC framework
 #

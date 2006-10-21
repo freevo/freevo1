@@ -8,23 +8,6 @@
 # Todo:       
 # 
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.9  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.8  2004/06/23 20:05:16  dischi
-# fix bad bug in the object cache, much faster again
-#
-# Revision 1.7  2004/06/21 12:06:38  dischi
-# fix strange crash with try except
-#
-# Revision 1.6  2004/04/20 17:11:21  dischi
-# fix strange crash
-#
-# Revision 1.5  2004/02/04 17:20:24  dischi
-# fix crash when object is None
-# 
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -43,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import config

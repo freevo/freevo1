@@ -8,17 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.47  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.46  2004/07/09 11:20:12  dischi
-# do not load outdated skins
-#
-# Revision 1.45  2004/03/14 11:42:34  dischi
-# make idlebar have a background image
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.

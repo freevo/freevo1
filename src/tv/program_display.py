@@ -8,24 +8,6 @@
 # Notes: 
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.40  2004/07/11 14:02:01  dischi
-# prevent crash
-#
-# Revision 1.39  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.38  2004/06/23 12:18:54  outlyer
-# More crashe fixes for assumed variables that don't exist.
-#
-# Revision 1.37  2004/05/28 23:38:21  mikeruelle
-# better backoff so we do not see intermediate menu
-#
-# Revision 1.36  2004/05/27 01:04:37  mikeruelle
-# fix bug with search for more like this. need better stack pop but this
-# fixes things for now.
-#
-# -----------------------------------------------------------------------
 #
 # Freevo - A Home Theater PC framework
 #

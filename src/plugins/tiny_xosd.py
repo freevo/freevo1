@@ -8,15 +8,6 @@
 # Todo:
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.2  2004/07/10 12:33:40  dischi
-# header cleanup
-#
-# Revision 1.1  2004/01/07 02:03:10  rshortt
-# An osd plugin by Cyril Lacoux that uses pyosd and therefore libxosd.
-# This will display over Freevo and child applications while running in X.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -35,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 """

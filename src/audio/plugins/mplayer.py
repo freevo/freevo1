@@ -8,24 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.38.2.2  2005/01/23 14:13:39  dischi
-# bugfix to prevent a file being played again with xine
-#
-# Revision 1.38.2.1  2004/11/01 21:38:21  outlyer
-# AC3 support.
-#
-# Revision 1.38  2004/07/21 11:18:26  dischi
-# fix unicode error
-#
-# Revision 1.37  2004/07/10 12:33:38  dischi
-# header cleanup
-#
-# Revision 1.36  2004/07/09 04:08:50  outlyer
-# Fixed webradio support for shoutcast streams using the 'pls' extension. Most
-# use m3u, but some (including ones in the webradio.fxd file) use pls.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -44,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os

@@ -9,23 +9,6 @@
 # Todo:
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.18.2.1  2004/09/06 19:49:30  dischi
-# fix max width
-#
-# Revision 1.18  2004/07/10 12:33:39  dischi
-# header cleanup
-#
-# Revision 1.17  2004/04/25 18:19:10  mikeruelle
-# missing comma causes 8 to not show
-#
-# Revision 1.16  2004/03/13 22:32:44  dischi
-# Improve input handling:
-# o support upper and lower case
-# o variable box width up to a length of 60 chars
-# o keyboard input
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -44,7 +27,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import config

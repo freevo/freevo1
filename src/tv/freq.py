@@ -8,17 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.2.2.1  2005/01/09 10:45:54  dischi
-# support for russian tv
-#
-# Revision 1.2  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.1  2003/05/28 23:32:49  rshortt
-# V4L device control by Thomas Schueppel.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -37,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
  
 
 NTSC_BCAST = [

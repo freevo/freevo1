@@ -17,14 +17,6 @@
 # Todo: 
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.8  2004/07/10 12:33:38  dischi
-# header cleanup
-#
-# Revision 1.7  2004/01/14 21:08:27  mikeruelle
-# makes detach audio work.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -43,7 +35,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 #python modules

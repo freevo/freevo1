@@ -26,14 +26,6 @@
 # For more informations contact me (dmeyer@tzi.de)
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.41  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.40  2004/04/25 12:38:22  dischi
-# move idlebar image to background
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.

@@ -34,15 +34,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.2  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.1  2003/10/11 15:07:49  rshortt
-# Changed this into a plugin.  It is working well but I will be gixing it up
-# some more.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -61,7 +52,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os, sys, fcntl, struct, time, string, StringIO

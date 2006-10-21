@@ -8,30 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.34.2.2  2004/10/22 18:43:17  dischi
-# fix crash when item is no VideoItem
-#
-# Revision 1.34.2.1  2004/08/28 17:10:49  dischi
-# fix bug in auto join feature
-#
-# Revision 1.34  2004/07/11 10:26:49  dischi
-# sort items before checking because of auto-join
-#
-# Revision 1.33  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.32  2004/06/20 13:06:19  dischi
-# move freevo-rebuild-database to cache dir
-#
-# Revision 1.31  2004/06/02 21:36:49  dischi
-# auto detect movies with more than one file
-#
-# Revision 1.30  2004/03/27 00:46:23  outlyer
-# Fixed a crash. It occured when I used the "Configure Directory" option to
-# show "all types" in a music directory.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -50,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os

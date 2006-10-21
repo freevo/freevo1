@@ -8,17 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.7.2.1  2004/10/29 18:14:56  dischi
-# fix unicode bug
-#
-# Revision 1.7  2004/07/10 12:33:41  dischi
-# header cleanup
-#
-# Revision 1.6  2004/02/04 19:05:36  dischi
-# remove bad log message
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.

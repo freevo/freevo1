@@ -10,14 +10,6 @@
 # You will also need to have plugin.activate('joy') in your config as well.
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.12  2004/07/10 12:33:40  dischi
-# header cleanup
-#
-# Revision 1.11  2004/07/08 12:30:51  dischi
-# only activate plugin when joystick is working
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -36,7 +28,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys

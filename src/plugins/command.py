@@ -13,20 +13,6 @@
 # Todo: find a way to prompt for arguments. interactive display of output?
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.13.2.1  2004/08/28 17:08:55  dischi
-# doc fix
-#
-# Revision 1.13  2004/07/10 12:33:40  dischi
-# header cleanup
-#
-# Revision 1.12  2004/06/11 00:35:57  mikeruelle
-# move config method to where it can do some good
-#
-# Revision 1.11  2004/05/30 18:28:15  dischi
-# More event / main loop cleanup. rc.py has a changed interface now
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -45,7 +31,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 #python modules

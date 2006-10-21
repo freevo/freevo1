@@ -8,23 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.72.2.2  2005/01/09 10:39:29  dischi
-# handle possible crash
-#
-# Revision 1.72.2.1  2004/08/28 17:08:08  dischi
-# add small debug
-#
-# Revision 1.72  2004/07/10 12:33:36  dischi
-# header cleanup
-#
-# Revision 1.71  2004/06/28 15:51:21  dischi
-# catch IOError
-#
-# Revision 1.70  2004/05/09 16:44:13  dischi
-# fix crash in m3u parsing
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -43,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import random

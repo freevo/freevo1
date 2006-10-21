@@ -9,17 +9,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.7  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.6  2004/03/13 20:13:02  rshortt
-# Fix return.
-#
-# Revision 1.5  2004/03/13 18:33:17  rshortt
-# Handle an empty list better (still needs improving).
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -38,7 +27,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os
