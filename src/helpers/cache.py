@@ -10,26 +10,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.38  2004/07/21 11:33:34  dischi
-# support one file thumbnailing
-#
-# Revision 1.37  2004/07/10 12:33:39  dischi
-# header cleanup
-#
-# Revision 1.36  2004/06/06 08:31:37  dischi
-# fix crash
-#
-# Revision 1.35  2004/06/06 06:41:47  dischi
-# delete cache on mmpython update
-#
-# Revision 1.34  2004/05/12 20:07:01  dischi
-# do not delete raw files for discs
-#
-# Revision 1.33  2004/05/02 11:46:13  dischi
-# make it possible to turn off image caching
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -48,7 +28,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import sys
@@ -403,7 +383,7 @@ if __name__ == "__main__":
     else:
         rebuild = 0
     try:
-        import mmpython.version
+        import kaa.metadata.version
 
         info = None
         cachefile = os.path.join(config.FREEVO_CACHEDIR, 'mediainfo')
@@ -422,16 +402,16 @@ if __name__ == "__main__":
                 mmchanged, freevo_changed, part_update, complete_update = info
 
             # let's warn about some updates
-            if freevo_changed < VERSION or mmpython.version.CHANGED > mmchanged:
+            if freevo_changed < VERSION or kaa.metadata.version.CHANGED > mmchanged:
                 print 'Cache too old, forcing rebuild'
                 rebuild = 2
                 complete_update = int(time.time())
                 
     except ImportError:
         print
-        print 'Error: unable to read mmpython version information'
-        print 'Please update mmpython to the latest release or if you use'
-        print 'Freevo CVS versions, please also use mmpython CVS.'
+        print 'Error: unable to read kaa.metadata version information'
+        print 'Please update kaa.metadata to the latest release or if you use'
+        print 'Freevo SVN versions, please also use kaa.metadata SVN.'
         print
         print 'Some functions in Freevo may not work or even crash!'
         print
@@ -473,11 +453,11 @@ util.mediainfo.sync()
 
 # save cache info
 try:
-    import mmpython.version
-    util.save_pickle((mmpython.version.CHANGED, VERSION,
+    import kaa.metadata.version
+    util.save_pickle((kaa.metadata.version.CHANGED, VERSION,
                       int(time.time()), complete_update), cachefile)
 except ImportError:
-    print 'WARNING: please update mmpython'
+    print 'WARNING: please update kaa.metadata'
 
 print
 print 'caching complete after %s seconds' % (time.clock() - start)

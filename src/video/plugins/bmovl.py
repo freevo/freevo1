@@ -8,40 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.16  2004/07/17 08:56:12  dischi
-# fix typo in variable
-#
-# Revision 1.15  2004/07/16 19:39:00  dischi
-# smaller cleanups, still alpha
-#
-# Revision 1.14  2004/07/11 19:39:47  dischi
-# reflect mmpython changes
-#
-# Revision 1.13  2004/07/10 12:33:43  dischi
-# header cleanup
-#
-# Revision 1.12  2004/07/10 10:36:53  dischi
-# fix more crashes
-#
-# Revision 1.11  2004/07/10 08:44:20  dischi
-# fix crash
-#
-# Revision 1.10  2004/07/09 21:12:18  dischi
-# more bmovl fixes, still unstable
-#
-# Revision 1.9  2004/07/08 19:30:54  dischi
-# o make some changes to make it look better
-# o secure write with try except
-# o add warning that this plugin is not stable
-#
-# Revision 1.8  2004/01/11 20:23:31  dischi
-# move skin font handling to osd to avoid duplicate code
-#
-# Revision 1.7  2004/01/11 20:01:28  dischi
-# make bmovl work again
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -60,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os

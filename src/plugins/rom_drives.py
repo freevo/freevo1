@@ -8,23 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.63.2.2  2005/01/23 11:40:19  dischi
-# small patch when there are directories on a disc
-#
-# Revision 1.63.2.1  2004/08/28 17:09:34  dischi
-# force rechecking if it seems a dvd but is not detected as one
-#
-# Revision 1.63  2004/07/10 12:33:40  dischi
-# header cleanup
-#
-# Revision 1.62  2004/06/20 13:06:19  dischi
-# move freevo-rebuild-database to cache dir
-#
-# Revision 1.61  2004/05/25 17:35:29  dischi
-# make nicer title for discs
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -43,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import time, os

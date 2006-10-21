@@ -36,7 +36,7 @@ import ImageFile
 import osd
 import os
 import util
-from mmpython.image import EXIF as exif
+from kaa.metadata.image import EXIF as exif
 
 osd = osd.get_singleton()
 

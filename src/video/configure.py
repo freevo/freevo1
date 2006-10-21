@@ -8,24 +8,6 @@
 # Todo:  Fix some stuff, wait for the mplayer people what they are doing
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.27.2.1  2004/08/28 17:11:54  dischi
-# use chapter selection to select file for multi file videos
-#
-# Revision 1.27  2004/07/10 12:33:43  dischi
-# header cleanup
-#
-# Revision 1.26  2004/05/28 15:50:27  dischi
-# configure menu items cleanup
-# support chapters as ChapterInfo in mmpython (e.g. ogm files)
-#
-# Revision 1.25  2004/05/06 18:12:17  dischi
-# fix crash
-#
-# Revision 1.24  2004/03/13 23:44:02  dischi
-# audio stream selection fixes
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -44,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 # The menu widget class

@@ -8,29 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.55.2.1  2004/08/28 17:09:41  dischi
-# force rechecking if it seems a dvd but is not detected as one
-#
-# Revision 1.55  2004/07/11 10:05:14  dischi
-# fix crash for bad discs
-#
-# Revision 1.54  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.53  2004/07/09 14:34:52  dischi
-# inverse the rc.app() call. One line, two bugs :-(
-#
-# Revision 1.52  2004/07/09 14:33:05  dischi
-# bugfix: rc.app is always true, it is rc.app() we want
-#
-# Revision 1.51  2004/07/08 14:37:47  dischi
-# prevent crash for bad pickle results
-#
-# Revision 1.50  2004/06/29 18:07:03  dischi
-# reload cache if cache helper runs while running freevo
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -49,14 +26,14 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os, stat
 import sys
 import copy
 
-import mmpython
+import kaa.metadata as mmpython
 from mmpython.disc.discinfo import cdrom_disc_id
 
 import config

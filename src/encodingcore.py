@@ -33,7 +33,7 @@ import threading
 from time import sleep
 import sys, os, re, popen2 #, ConfigParser, copy
 import config
-import mmpython
+import kaa.metadata as mmpython
 from copy import copy
 from string import split, join
 

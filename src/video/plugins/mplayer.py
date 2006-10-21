@@ -32,7 +32,7 @@
 import os, re
 import threading
 import popen2
-import mmpython
+import kaa.metadata as mmpython
 
 import config     # Configuration handler. reads config file.
 import util       # Various utilities
@@ -89,6 +89,10 @@ class MPlayer:
         if item.mode in ('dvd', 'vcd'):
             return 2
         if item.mimetype in config.VIDEO_MPLAYER_SUFFIX:
+            for d in dir(item):
+                print '%s: %s' % (d, eval('item.%s' % d))
+            for d in dir(item.info):
+                print '%s: %s' % (d, eval('item.info.%s' % d))
             return 2
         if item.network_play:
             return 1
@@ -185,18 +189,17 @@ class MPlayer:
         if item.selected_audio != None:
             additional_args += [ '-aid', str(item.selected_audio) ]
 
-        if item['deinterlace']:
-            additional_args += [ '-vf',  config.MPLAYER_VF_INTERLACED ]
-        else:
-            additional_args += [ '-vf',  config.MPLAYER_VF_PROGRESSIVE ]
+        if item['deinterlace'] and config.MPLAYER_VF_INTERLACED:
+                additional_args += [ '-vf', config.MPLAYER_VF_INTERLACED ]
+        elif config.MPLAYER_VF_PROGRESSIVE:
+                additional_args += [ '-vf', config.MPLAYER_VF_PROGRESSIVE ]
                 
         mode = item.mimetype
         if not config.MPLAYER_ARGS.has_key(mode):
             mode = 'default'
 
         # Mplayer command and standard arguments
-        command += [ '-v', '-vo', config.MPLAYER_VO_DEV +
-                     config.MPLAYER_VO_DEV_OPTS ]
+        command += [ '-v', '-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS ]
 
         # mode specific args
         command += config.MPLAYER_ARGS[mode].split(' ')
@@ -220,7 +223,7 @@ class MPlayer:
         elif not '-framedrop' in command:
             command += config.MPLAYER_SOFTWARE_SCALER.split(' ')
 
-        # correct avi delay based on mmpython settings
+        # correct avi delay based on kaa.metadata settings
         if config.MPLAYER_SET_AUDIO_DELAY and item.info.has_key('delay') and \
                item.info['delay'] > 0:
             command += [ '-mc', str(int(item.info['delay'])+1), '-delay',

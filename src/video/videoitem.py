@@ -9,53 +9,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.144.2.3  2005/01/20 16:36:06  dischi
-# fix crash
-#
-# Revision 1.144.2.2  2004/10/20 18:33:20  dischi
-# fix aspect ration crash when it is an int
-#
-# Revision 1.144.2.1  2004/08/28 17:12:23  dischi
-# fix multiple files in one video when replaying
-#
-# Revision 1.144  2004/07/21 11:34:59  dischi
-# disable one track auto-play for dvd
-#
-# Revision 1.143  2004/07/17 08:18:56  dischi
-# unicode fixes
-#
-# Revision 1.142  2004/07/11 10:22:28  dischi
-# fix bug for auto joined files on disc
-#
-# Revision 1.141  2004/07/11 10:14:12  dischi
-# reset current_subitem on play start
-#
-# Revision 1.140  2004/07/10 12:33:43  dischi
-# header cleanup
-#
-# Revision 1.139  2004/07/04 08:05:13  dischi
-# auto deinterlace mpeg files
-#
-# Revision 1.138  2004/06/23 12:22:16  outlyer
-# Allow the user to create a thumbnail for a file even if a folder or file
-# image already exists. For example, I have a generic "cover.jpg" in my
-# movie folder, but I will occaisonally use the thumbnailing for a file in
-# that directory. This 'if' clause prevents that from being possible.
-#
-# Revision 1.137  2004/05/29 13:10:55  dischi
-# re-use string for better translation
-#
-# Revision 1.136  2004/05/28 15:50:28  dischi
-# configure menu items cleanup
-# support chapters as ChapterInfo in mmpython (e.g. ogm files)
-#
-# Revision 1.135  2004/05/13 13:49:24  outlyer
-# The much appreciated 'alternate player' patch from den_RDC. Allows you to
-# switch between your default player and an alternate without restarting
-# Freevo.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -74,7 +27,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os

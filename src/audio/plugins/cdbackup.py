@@ -27,21 +27,6 @@
 # very well.
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.33.2.3  2004/08/28 17:08:32  dischi
-# fix crash in debug
-#
-# Revision 1.33.2.1  2004/08/04 21:33:35  outlyer
-# Bugfix for Ogg ripping, reported by Nicolas Michaux
-#
-# Revision 1.33  2004/07/10 12:33:37  dischi
-# header cleanup
-#
-# Revision 1.32  2004/05/28 20:23:19  dischi
-# o Fix bug when AlertBox has no input focus
-# o Make it possible to abort a ripping session
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -60,7 +45,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os
@@ -84,7 +69,7 @@ from event import *
 from util import popen3
 
 # Included to be able to access the info for Audio CDs
-import mmpython
+import kaa.metadata as mmpython
 
 class PluginInterface(plugin.ItemPlugin):
     """

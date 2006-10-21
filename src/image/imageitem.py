@@ -32,7 +32,7 @@
 import util
 import os
 import time
-import mmpython
+import kaa.metadata as mmpython
 
 import config
 import viewer

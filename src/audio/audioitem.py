@@ -8,42 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.57.2.2  2004/09/10 19:48:17  outlyer
-# Fix sorting behaviour to respect rather than ignore TPOS tags. This is the
-# expected behaviour, but was missing. Requires latest mmpython to work properly.
-#
-# Revision 1.57.2.1  2004/07/21 17:12:23  outlyer
-# Bugfix.
-#
-# Revision 1.57  2004/07/17 08:18:55  dischi
-# unicode fixes
-#
-# Revision 1.56  2004/07/10 13:36:07  outlyer
-# Handle the situation where track number can't be converted into an int()
-#
-# Revision 1.55  2004/07/10 12:33:37  dischi
-# header cleanup
-#
-# Revision 1.54  2004/06/25 23:11:43  outlyer
-# Fix the advanced sort. Since 'trackno' is a number, but the sort is alphabetical,
-# we pad the numbers with 0's to make it sort properly. Fixed my problem with
-# '9' showing up at the end of the list.
-#
-# For some reason, it's still returning
-# 01
-# 02
-# 03
-# 04
-# 05
-# 06
-# 07
-# 08
-# 9
-# 10
-# 11
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -62,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os

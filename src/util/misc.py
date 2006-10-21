@@ -8,33 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.44.2.1  2004/08/28 17:10:16  dischi
-# prevent crash
-#
-# Revision 1.44  2004/07/11 19:33:35  dischi
-# make mass storage only storage to cover all forms
-#
-# Revision 1.43  2004/07/11 18:43:52  dischi
-# fix usb storage detection
-#
-# Revision 1.42  2004/07/11 11:46:03  dischi
-# decrease record server calling
-#
-# Revision 1.41  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.40  2004/07/04 08:10:50  dischi
-# make sure upsoon is written
-#
-# Revision 1.39  2004/06/23 20:29:42  dischi
-# fix typo in hasattr
-#
-# Revision 1.38  2004/06/23 12:11:59  outlyer
-# Apparently TvProgram instances without a sub_title no longer define that
-# property anymore, so make sure it exists before trying to access it.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -53,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import glob
@@ -350,12 +323,12 @@ def remove_start_string(string, start):
 def tagmp3 (filename, title=None, artist=None, album=None, track=None,
             tracktotal=None, year=None):
     """
-    use eyeD3 directly from inside mmpython to
+    use eyeD3 directly from inside mkka.metadata to
     set the tag. We default to 2.3 since even
     though 2.4 is the accepted standard now, more
     players support 2.3
     """
-    import mmpython.audio.eyeD3 as eyeD3   # Until mmpython has an interface for this.
+    import kaa.metadata.audio.eyeD3 as eyeD3
 
     tag = eyeD3.Tag(String(filename))
     tag.header.setVersion(eyeD3.ID3_V2_3)

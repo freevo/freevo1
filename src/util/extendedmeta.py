@@ -8,14 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.13  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.12  2004/05/29 12:32:23  dischi
-# try to find out if all items in a dir belong to one album
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -34,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 # The basics
@@ -51,7 +43,7 @@ try:
 except ImportError:
     pass
     
-from mmpython.audio import eyeD3
+from kaa.metadata.audio import eyeD3
 from util import recursefolders
 
 ##### Database

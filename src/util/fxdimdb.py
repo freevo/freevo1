@@ -10,17 +10,6 @@
 # - webradio support?
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.7.2.1  2005/01/09 10:29:17  dischi
-# make imdb work again
-#
-# Revision 1.7  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.6  2004/06/20 13:06:20  dischi
-# move freevo-rebuild-database to cache dir
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -39,7 +28,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 # python has no data hiding, but this is the intended use...
@@ -62,7 +51,7 @@ import os
 import config 
 import util
 
-from mmpython.disc.discinfo import cdrom_disc_id
+from kaa.metadata.disc.discinfo import cdrom_disc_id
 #Constants
 
 freevo_version = '1.3.4'

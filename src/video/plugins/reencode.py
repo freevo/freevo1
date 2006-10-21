@@ -1,13 +1,12 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # re-encode recorded TV programmes
 # -----------------------------------------------------------------------
-# $Id: encode.py $
+# $Id: reencode.py $
 #
 # Notes:
 #    To activate, put the following line in local_conf.py:
-#       plugin.activate('tv.encode')
+#       plugin.activate('video.reencode')
 # ToDo:        
 #
 # -----------------------------------------------------------------------

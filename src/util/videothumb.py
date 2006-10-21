@@ -12,23 +12,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.14  2004/07/21 11:34:31  dischi
-# only import config/vfs when needed
-#
-# Revision 1.13  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.12  2004/07/08 11:03:02  dischi
-# use .tmp filename and new freevo raw format
-#
-# Revision 1.11  2004/06/23 21:09:29  dischi
-# handle mplayer TS, PES problems
-#
-# Revision 1.10  2004/05/02 09:21:57  dischi
-# better python code
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -47,10 +30,11 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
-import sys, os, mmpython, glob, shutil
+import sys, os, glob, shutil
+import kaa.metadata as mmpython
 from stat import *
 
 def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):

@@ -8,26 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.25.2.1  2005/01/16 11:08:27  dischi
-# ignore bad subdirs
-#
-# Revision 1.25  2004/07/10 12:33:42  dischi
-# header cleanup
-#
-# Revision 1.24  2004/07/04 08:04:21  dischi
-# handle PIL exception
-#
-# Revision 1.23  2004/06/29 18:08:56  dischi
-# use vfs.open to make sure we can write
-#
-# Revision 1.22  2004/06/21 12:00:56  dischi
-# wrap exif call inside the try except
-#
-# Revision 1.21  2004/06/13 18:49:39  dischi
-# do not take care of install.py
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -46,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os
@@ -62,7 +42,7 @@ import traceback
 # image stuff
 import Image
 import cStringIO
-from mmpython.image import EXIF as exif
+from kaa.metadata.image import EXIF as exif
 
 
 if float(sys.version[0:3]) < 2.3:

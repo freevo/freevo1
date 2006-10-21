@@ -31,8 +31,8 @@
 
 import os
 
-# Add support for bins album files
-from mmpython.image import bins
+# Add support for bins album files (http://bins.sautret.org/)
+import kaa.metadata.misc.dirinfo as bins
 
 import config
 import util
@@ -78,19 +78,17 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         set informations for a diritem based on album.xml
         """
-        if vfs.isfile(diritem.dir + '/album.xml'):
-            info  = bins.get_bins_desc(diritem.dir)
-            if not info.has_key('desc'):
-                return
+        dirinfo  = bins.DirInfo(diritem.dir)
+        if dirinfo.has_key('desc'):
+            info = dirinfo['desc']
 
-            info = info['desc']
-            if info.has_key('sampleimage') and info['sampleimage']:
-                image = vfs.join(diritem.dir, info['sampleimage'])
-                if vfs.isfile(image):
-                    diritem.image       = image
+        if dirinfo.has_key('sampleimage') and dirinfo['sampleimage']:
+            image = vfs.join(diritem.dir, dirinfo['sampleimage'])
+            if vfs.isfile(image):
+                diritem.image = image
 
-            if info.has_key('title') and info['title']:
-                diritem.name = info['title']
+        if dirinfo.has_key('title') and dirinfo['title']:
+            diritem.name = dirinfo['title']
 
 
     def fxdhandler(self, fxd, node):

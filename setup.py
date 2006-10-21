@@ -18,7 +18,8 @@ from distutils import core
 
 check_libs((
             ('xml.utils.qp_xml', 'http://pyxml.sourceforge.net/'),
-            ('mmpython', 'http://www.sf.net/projects/mmpython' ),
+            ('kaa', 'http://sourceforge.net/projects/kaa' ),
+            ('kaa.metadata', 'http://sourceforge.net/projects/kaa' ),
             ('pygame', 'http://www.pygame.org'),
             ('Image', 'http://www.pythonware.com/products/pil/'),
             ('elementtree', 'http://effbot.org/zone/elementtree.htm'),

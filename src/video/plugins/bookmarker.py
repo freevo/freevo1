@@ -19,14 +19,6 @@
 #
 #
 # -----------------------------------------------------------------------
-# $Log$
-# Revision 1.12  2004/07/10 12:33:43  dischi
-# header cleanup
-#
-# Revision 1.11  2004/02/22 20:33:48  dischi
-# some unicode fixes
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -45,11 +37,11 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os, time, copy
-import mmpython
+import kaa.metadata as mmpython
 
 import plugin
 import config
