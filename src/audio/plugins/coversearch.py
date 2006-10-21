@@ -11,6 +11,16 @@
 #
 #        You also need an Amazon developer key.
 #
+# Problem:
+#     If a cover is not available, Amazon returns an 807b GIF file instead
+#     of saying so
+#
+# Solution:
+#     What we do now is check the content length of the file
+#     before downloading and remove those entries from the list.
+#
+# I've also removed the example, since the plugin itself works better.
+#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
