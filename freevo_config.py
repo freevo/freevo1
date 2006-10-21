@@ -351,7 +351,6 @@ NVRAM_REBOOT_FLAG = '%s/reboot_flag' % FREEVO_CACHEDIR
 # activate the timer
 #plugin.activate('autoshutdown.autoshutdowntimer')
 
-
 # -- autoshutdown menu item configuration --
 
 # CONFIRM_SHUTDOWN
@@ -419,6 +418,29 @@ AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP = True
 # variable is used by both the timer and the menu.
 AUTOSHUTDOWN_ALLOWED_IDLE_TIME = 45
 
+# -- Choice of wakeup method
+#
+# The wakeup can be done via acpi-alarm or nvram-wakeup.
+# AUTOSHUTDOWN_METHOD = 'acpi'
+AUTOSHUTDOWN_METHOD = 'nvram'
+
+# -- autoshutdown acpi-alarm configuration
+
+# This method uses the wakeup on alarm function that most BIOSs have.
+# The wakeup time is set by a simple 
+#
+# "echo 2004-08-02 20:15:00 >/proc/acpi/alarm"
+#
+# On most mainbords you will have to ENABLE "Wake on Timer", "Resume on Alarm", 
+# "RTC Alarm Resume" or similar things for the acpi wakeup method to work.
+# If you want to use acpi, you need to create a small script:
+#
+#    !/bin/sh
+#    echo "$1" >/proc/acpi/alarm   
+#    
+# You have to be root or use sudo for this to work.    
+#AUTOSHUTDOWN_WAKEUP_CMD = sudo /PATH/TO/set_acpi.sh    
+
 
 # -- autoshutdown nvram-wakeup configuration --
 
@@ -430,7 +452,7 @@ AUTOSHUTDOWN_ALLOWED_IDLE_TIME = 45
 # NVRAM_CMD / NVRAM_OPT
 # Path to nvram-wakeup and options. Options can
 # be used to specify a config file.
-AUTOSHUTDOWN_NVRAM_CMD = "/usr/bin/nvram-wakeup"
+AUTOSHUTDOWN_WAKEUP_CMD = "/usr/bin/nvram-wakeup"
 AUTOSHUTDOWN_NVRAM_OPT = "--syslog"
 
 # WAKEUP_NEEDS_REBOOT
