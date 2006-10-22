@@ -402,7 +402,7 @@ if __name__ == "__main__":
                 mmchanged, freevo_changed, part_update, complete_update = info
 
             # let's warn about some updates
-            if freevo_changed < VERSION or kaa.metadata.version.CHANGED > mmchanged:
+            if freevo_changed < VERSION or kaa.metadata.version.VERSION > mmchanged:
                 print 'Cache too old, forcing rebuild'
                 rebuild = 2
                 complete_update = int(time.time())
@@ -454,7 +454,7 @@ util.mediainfo.sync()
 # save cache info
 try:
     import kaa.metadata.version
-    util.save_pickle((kaa.metadata.version.CHANGED, VERSION,
+    util.save_pickle((kaa.metadata.version.VERSION, VERSION,
                       int(time.time()), complete_update), cachefile)
 except ImportError:
     print 'WARNING: please update kaa.metadata'
