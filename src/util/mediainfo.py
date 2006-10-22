@@ -673,7 +673,7 @@ def del_cache():
     for f in util.match_files(config.OVERLAY_DIR + '/disc/metadata', ['mmpython']):
         os.unlink(f)
     cachefile = os.path.join(config.FREEVO_CACHEDIR, 'mediainfo')
-    util.save_pickle((mmpython.version.CHANGED, 0, 0, 0), cachefile)
+    util.save_pickle((mmpython.version.VERSION, 0, 0, 0), cachefile)
 
 
 __last_status_check__ = 0
@@ -774,7 +774,7 @@ if __freevo_app__ == 'main':
                 print
                 del_cache()
                 
-            elif mmpython.version.CHANGED > mmchanged:
+            elif mmpython.version.VERSION > mmchanged:
                 print
                 print 'Warning: mmpython as changed.'
                 print 'Please rerun \'freevo cache\' to get the latest updates'

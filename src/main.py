@@ -98,7 +98,7 @@ except ImportError, i:
 # for already fixed bugs
 try:
     import mmpython.version
-    if mmpython.version.CHANGED < 20040629:
+    if mmpython.version.VERSION < 20040629:
         raise ImportError
 except ImportError:
     print 'Error: Installed mmpython version is too old.'
@@ -106,7 +106,7 @@ except ImportError:
     print
     sys.exit(0)
 
-if mmpython.version.CHANGED < 20060926:
+if mmpython.version.VERSION < 20060926:
     print 'Warning: Installed mmpython version is old.'
     print 'Please update mmpython to version 0.4.10 or higher, get it with subversion'
     print 'svn export svn://svn.freevo.org/kaa/branches/mmpython-0-4/mmpython mmpython-0.4.10'

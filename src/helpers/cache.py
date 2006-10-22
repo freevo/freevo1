@@ -218,7 +218,7 @@ def create_metadata():
             fxd += util.match_files_recursively(dir[1], fxditem.mimetype.suffix())
         elif isinstance(dir, list) or isinstance(dir, tuple):
             print
-            print 'bad path: %s   ' % dir[1] ,
+            print 'bad path: %s   ' % dir[1],
             sys.__stdout__.flush()
         elif util.match_suffix(dir, playlist.mimetype.suffix()):
             pl.append(dir)
