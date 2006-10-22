@@ -45,7 +45,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     def __init__(self):
         plugin.MainMenuPlugin.__init__(self)
-        config.EVENTS['audio']['EXIT'] = Event(FUNCTION_CALL, arg=self.detach)
+        config.EVENTS['audio']['DISPLAY'] = Event(FUNCTION_CALL, arg=self.detach)
+        #config.EVENTS['audio']['EXIT'] = Event(FUNCTION_CALL, arg=self.detach)
         self.show_item = menu.MenuItem(_('Show player'), action=self.show)
         self.show_item.type = 'detached_player'
 
