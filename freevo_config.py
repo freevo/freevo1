@@ -1414,8 +1414,6 @@ TV_OPTS = ''
 
 TV_SETTINGS = '%s television %s %s' % (CONF.tv, CONF.chanlist, TV_DEVICE)
 
-TV_CHANNEL_PROG = './chchan %(channel)s %(norm)s %(freqtable)s'
-
 TV_DATEFORMAT = '%e-%b' # Day-Month: 11-Jun
 TV_TIMEFORMAT = '%H:%M' # Hour-Minute 14:05
 TV_DATETIMEFORMAT = '%A %b %d %I:%M %p' # Thursday September 24 8:54 am
