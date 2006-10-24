@@ -197,13 +197,13 @@ class CommandItem(Item):
     """
     def __init__(self, command=None, directory=None):
         Item.__init__(self, skin_type='commands')
-	self.display_type = 'commands'
-	self.stoposd = False
-	self.use_wm  = False
-	self.spawnwm = config.COMMAND_SPAWN_WM
-	self.killwm  = config.COMMAND_KILL_WM
+        self.display_type = 'commands'
+        self.stoposd = False
+        self.use_wm  = False
+        self.spawnwm = config.COMMAND_SPAWN_WM
+        self.killwm  = config.COMMAND_KILL_WM
         self.stdout  = True
-	if command and directory:
+        if command and directory:
             self.name = command
             self.cmd  = os.path.join(directory, command)
             self.image = util.getimage(self.cmd)
@@ -221,30 +221,30 @@ class CommandItem(Item):
         start popup and execute command
         """
         if self.stoposd:
-	    if self.use_wm:
-	        os.system(self.spawnwm)
-	else:
+            if self.use_wm:
+                os.system(self.spawnwm)
+        else:
             popup_string=_("Running Command...")
             pop = PopupBox(text=popup_string)
             pop.show()
 
-	workapp = CommandChild(self.cmd, 'command', 1, self.stoposd)
-	while workapp.isAlive():
+        workapp = CommandChild(self.cmd, 'command', 1, self.stoposd)
+        while workapp.isAlive():
             # make sure all callbacks in rc are running
             rc.poll()
             # wait some time
-	    time.sleep(0.5)
+            time.sleep(0.5)
 
         if self.stoposd:
-	    if self.use_wm:
-	        os.system(self.killwm)
-	        time.sleep(0.5)
-	else:
+            if self.use_wm:
+                os.system(self.killwm)
+                time.sleep(0.5)
+        else:
             pop.destroy()
-	workapp.stop()
-	message = ''
-	if workapp.status:
-	    message = _('Command Failed')
+        workapp.stop()
+        message = ''
+        if workapp.status:
+            message = _('Command Failed')
         else:
             message = _('Command Completed')
 
@@ -299,7 +299,7 @@ class CommandMenuItem(Item):
             if os.path.splitext(command)[1] in ('.jpg', '.png'):
                 continue
             if os.path.splitext(command)[1] in ('.fxd', '.xml'):
-		fxd_file=os.path.join(config.COMMANDS_DIR, command)
+                fxd_file=os.path.join(config.COMMANDS_DIR, command)
 
                 # create a basic fxd parser
                 parser = util.fxdparser.FXD(fxd_file)
@@ -312,7 +312,7 @@ class CommandMenuItem(Item):
                 
                 # start the parsing
                 parser.parse()
-	    else:
+            else:
                 cmd_item = CommandItem(command, config.COMMANDS_DIR)
                 command_items.append(cmd_item)
 
@@ -355,7 +355,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         return [ ('COMMANDS_DIR', '/usr/local/bin', 'The directory to show commands from.'),
                  ('COMMAND_SPAWN_WM', '', 'command to start window manager.'),
                  ('COMMAND_KILL_WM', '', 'command to stop window manager.'),
-	]
+        ]
 
 
 class fxdhandler(plugin.Plugin):

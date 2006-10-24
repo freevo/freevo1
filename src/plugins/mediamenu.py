@@ -184,8 +184,14 @@ class MediaMenu(Item):
                                 filename = filename[1:]
                             filename = vfs.join(config.SHARE_DIR, filename)
                         # normal file
+                        # webradio is both a playlist and an fxditem
+                        dups = []
                         for p in plugin.mimetype(self.display_type):
                             items = p.get(self, [ String(filename) ])
+                            if filename in dups:
+                                continue
+                            else:
+                                dups.append(filename)
                             if title:
                                 for i in items:
                                     i.name = title

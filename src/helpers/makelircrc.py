@@ -83,19 +83,14 @@ for type in config.EVENTS:
 write_option = False
 use_pos = None
 
-for arg in sys.argv:
+for arg in sys.argv[1:]:
     if arg == '-w':
         write_option = True
-    elif arg.find('=') > 0:
-        alternatives[arg[:arg.find('=')]] = arg[arg.find('=')+1:]
-    else:
-        try:
-            use_pos = int(arg)
-        except ValueError:
-            sys.stderr.write("Unrecognized argument (%s)!\n" % arg)
 
-if os.path.exists('/etc/lircd.conf'): x = open('/etc/lircd.conf')
-elif os.path.exists('/etc/lirc/lircd.conf'): x = open ('/etc/lirc/lircd.conf')
+if os.path.exists('/etc/lircd.conf'): 
+    x = open('/etc/lircd.conf')
+elif os.path.exists('/etc/lirc/lircd.conf'): 
+    x = open ('/etc/lirc/lircd.conf')
 
 pos = 0
 for line in x.readlines():

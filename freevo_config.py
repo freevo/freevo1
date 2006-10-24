@@ -712,7 +712,17 @@ plugin.activate('tv.manual_record')
 # Enable this for joystick support:
 # plugin.activate('joy')
 
-
+# ======================================================================
+# Headlines
+# ======================================================================
+#plugin.activate('headlines', level=45)
+HEADLINES_LOCATIONS = [
+    ('Freevo news releases', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652'),
+    ('Freevo news releases (full)', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652&rss_fulltext=1'),
+    ('Freevo file releases', 'http://sourceforge.net/export/rss2_projfiles.php?group_id=46652'),
+    ('Freevo summary+stats', 'http://sourceforge.net/export/rss2_projsummary.php?group_id=46652'),
+    ('Freevo donors', 'http://sourceforge.net/export/rss2_projdonors.php?group_id=46652'),
+]
 
 # ======================================================================
 # Freevo directory settings:
