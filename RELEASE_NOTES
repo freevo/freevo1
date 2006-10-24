@@ -5,15 +5,34 @@ The have been quite a number of changes, see ChangeLog for details.
 The ChangeLog has a tracker reference for a discussion about the
 changes.
 
-*Important*
+IMPORTANT
+---------
+
 The recordable setting has been from from VIDEO_GROUPS
 Delete this setting from your local_conf.py
+
+This change can be mostly automated by running:
+freevo convert_config
 
 To use multi-tuner support the VIDEO_GROUPS needs setting up correctly
 see http://freevo.sourceforge.net/cgi-bin/doc/MultiTunerConfig
 
 elementtree, include in Python-2.5+, is now a prerequisite for freevo,
 if can be downloaded from http://effbot.org/zone/elementtree.htm
+
+Known Problems
+--------------
+
+If a directory is name with a media extension it will be treated as a
+media file, e.g. music.mp3 or record.avi.
+
+If webradio is activated it will appear twice in the music menu.
+
+If a mp3 file is incorrectly named the header search will scan the whole
+file, e.g. something.mp3 which is really a wave file.
+
+Sometime the headlines plug-in crashed when it receives incorrect data
+from the rss feed.
 
 
 Release Notes for 1.5.3

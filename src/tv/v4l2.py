@@ -288,7 +288,7 @@ class Videodev:
     def gettuner(self,index):
         val = struct.pack( TUNER_ST, index, "", 0,0,0,0,0,0,0,0)
         r = fcntl.ioctl(self.device, i32(GET_TUNER_NO), val)
-        if DEBUG >= 3: print "getfmt: val=%r, r=%r, res=%r" % (val, r, struct.unpack(FMT_ST,r))
+        if DEBUG >= 3: print "gettuner: val=%r, r=%r, res=%r" % (val, r, struct.unpack(TUNER_ST,r))
         return struct.unpack( TUNER_ST, r )
 
 
@@ -387,13 +387,13 @@ export RUNAPP=""
 
 if __name__ == '__main__':
 
+    DEBUG = 4
     viddev=Videodev('/dev/video0')
     print viddev.getdriver()
     print viddev.getversion()
     #print viddev.querycap()
     inp = viddev.getinput()
     viddev.setinput(inp)
-    '''
     print viddev.querycap()
     fmt = viddev.getstd()
     print fmt
@@ -437,5 +437,6 @@ if __name__ == '__main__':
     print viddev.setfreq(8948)
     print viddev.getfreq()
     print viddev.getfreq2()
+    '''
     '''
     viddev.close()

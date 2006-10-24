@@ -136,7 +136,7 @@ class VideoGroup:
                   can be left as default, 'normal', or set to 'ivtv' or 'dvb'.
     """
 
-    def __init__(self, vdev='/dev/video', adev='/dev/dsp', input_type='tuner',
+    def __init__(self, vdev='/dev/video', adev=None, input_type='tuner',
                  input_num=0, tuner_norm='NTSC', tuner_chanlist='us-cable', 
                  tuner_type='internal', tuner_chan=None,
                  record_group=None, desc='Freevo default VideoGroup',

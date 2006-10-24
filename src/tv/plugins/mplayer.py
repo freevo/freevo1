@@ -122,7 +122,19 @@ class MPlayer:
                 tvcmd = ''
                 args += ('"dvb://%s" %s' % (tuner_channel, config.MPLAYER_ARGS['dvb']),)
 
-            else:
+            elif vg.group_type == 'tvalsa':
+                freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
+                tuner_freq = '%1.3f' % (freq_khz / 1000.0)
+
+                tvcmd = ('tv:// -tv driver=%s:%s:freq=%s:%s:%s:'
+                         '%s:width=%s:height=%s:%s %s' %
+                         (config.TV_DRIVER, vg.adev, tuner_freq, device, input, norm, 
+                          w, h, outfmt, config.TV_OPTS))
+
+                if config.MPLAYER_ARGS.has_key('tv'):
+                    args += (config.MPLAYER_ARGS['tv'],)
+
+            else: # group_type == 'normal'
                 freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tuner_freq = '%1.3f' % (freq_khz / 1000.0)
 
@@ -133,7 +145,6 @@ class MPlayer:
 
                 if config.MPLAYER_ARGS.has_key('tv'):
                     args += (config.MPLAYER_ARGS['tv'],)
-
 
         elif mode == 'vcr':
             tvcmd = ('tv:// -tv driver=%s:%s:%s:'
