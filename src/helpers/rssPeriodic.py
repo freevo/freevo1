@@ -71,6 +71,8 @@ def checkForDup(string):
        downloadedUrls=pickle.load(open(cacheFile,"r"))
     except IOError:
        return False
+    except EOFError:
+       return False
     foundFile=False
     for line in downloadedUrls:
         if string in line:
