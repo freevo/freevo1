@@ -24,6 +24,7 @@ Release 1.6.0 (2006-10-31):
 ---------------------------
 
  * New events to allow jump directly to menus, tv, movies, music and pictures (B#1567501)
+ * New headlines and idlebar are enabled by default (F#1584197)
  * New multi-tuner support, to allow use of more than one tv card (F#1574282)
  * New plug-in for wakeup and shutdown (B#1567885)
  * New plug-in 'idlebar.diskfree' to show the available recording disk space (B#1567491)

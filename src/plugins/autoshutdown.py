@@ -89,7 +89,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     The wakeup methode can be either nvram or acpi.
         
     NVRAM:
-    If you want to use nvram-wakeup, you will need a working nvram configuration first.
+    If you want to use nvram-wakeup, 
+    you will need a working nvram configuration first.
     (This plugin can deal automatically with the often needed reboot).
     Put the path to nvram-wakeup in AUTOSHUTDOWN_WAKEUP_CMD. 
     
@@ -520,25 +521,8 @@ def __schedule_wakeup_and_shutdown():
         else:
             next_action = Shutdown.IGNORE
     else:
-        # we must take in consideration the TV_RECORD_PADDING_PRE here, 
-        # otherwise we are to late for the recording
-        
-        # try if the user configured some paddings
-        try:
-            pre_padding = config.TV_RECORD_PADDING_PRE
-        except:
-            pre_padding = 0    
-        try:
-            padding = config.TV_RECORD_PADDING
-        except:
-            padding = 0   
-        # take the longer padding    
-        if pre_padding < padding:
-            pre_padding = padding
-        # and substract it from the next wakeup time
-        wakeup_utc_s = wakeup_utc_s - pre_padding       
-        
-        # we should wake up even earlier because of the time the booting takes
+             
+        # wake up a little earlier because of the time the booting takes
         # 180 s = 3 min should be enough 
         wakeup_utc_s = wakeup_utc_s - 180
         
@@ -558,13 +542,14 @@ def __schedule_wakeup_and_shutdown():
                 if config.AUTOSHUTDOWN_BOOT_LOADER.upper() == "GRUB":
                     if config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD:
                         cmd = "%s %s" % (config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD, \
-                            config.AUTOSHUTDOWN_REMOUNT_BOOT_OPT)
+                                         config.AUTOSHUTDOWN_REMOUNT_BOOT_OPT)
                     cmd = config.AUTOSHUTDOWN_GRUB_CMD
                     __syscall(cmd)
                     _debug_("Wakeup set, reboot needed")
                     next_action = Shutdown.RESTART_SYSTEM
                 elif config.AUTOSHUTDOWN_BOOT_LOADER.upper() == "LILO":
-                    cmd = "%s %s" % (config.AUTOSHUTDOWN_LILO_CMD, config.AUTOSHUTDOWN_LILO_OPT)
+                    cmd = "%s %s" % (config.AUTOSHUTDOWN_LILO_CMD, \
+                                     config.AUTOSHUTDOWN_LILO_OPT)
                     __syscall(cmd)
                     _debug_("Wakeup set, reboot needed")
                     next_action = Shutdown.RESTART_SYSTEM
@@ -629,7 +614,7 @@ def __cleanup_freevo():
 # -----------------------------------------------------------
 def __get_scheduled_recording(index):
     try:
-        (result, response) = record_client.updateFavoritesSchedule()
+        #(result, response) = record_client.updateFavoritesSchedule()
         (result, schedule) = record_client.getScheduledRecordings()
     except:
         raise ExNoRecordServer
@@ -643,10 +628,28 @@ def __get_scheduled_recording(index):
                 f = lambda a, b: cmp(a.start, b.start)
                 proglist.sort(f)
                 wakeup = proglist[index].start
-                print wakeup
-                _debug_("Scheduled recording %d at %s is %s" % (index, time.ctime(wakeup), proglist[index]))
+                _debug_("Scheduled recording %d at %s is %s" % (index, \
+                        time.ctime(wakeup), proglist[index]))
         else:
             raise ExIndexNotAvailable
+    
+    # we must take in consideration the TV_RECORD_PADDING_PRE here, 
+    # otherwise we are to late for the recording
+        
+    # try if the user configured some paddings
+    try:
+        pre_padding = config.TV_RECORD_PADDING_PRE
+    except:
+        pre_padding = 0    
+    try:
+        padding = config.TV_RECORD_PADDING
+    except:
+        padding = 0   
+    # take the longer padding    
+    if pre_padding < padding:
+        pre_padding = padding
+    # and substract it from the next wakeup time
+    wakeup = wakeup - pre_padding       
     return wakeup
 
 
@@ -703,7 +706,7 @@ def __check_processes():
     else:
         delimiter='|'
         searchstring = delimiter.join(config.AUTOSHUTDOWN_PROCESS_LIST)
-        cmd = 'ps -ef | egrep -v "grep" | egrep ":?? (%s)"' % searchstring
+        cmd = 'ps -eo cmd | egrep -v "grep" | egrep "(/|[[:space:]]|^)(%s)($|[[:space:]])"' % searchstring
         result = __syscall(cmd)
         if (result == 0):
             _debug_('external process(es) running')

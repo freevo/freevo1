@@ -24,9 +24,8 @@ Known Problems
 --------------
 
 If a directory is name with a media extension it will be treated as a
-media file, e.g. music.mp3 or record.avi.
-
-If webradio is activated it will appear twice in the music menu.
+media file, e.g. music.mp3 or record.avi. Use music_mp3 and record_avi
+instead.
 
 If a mp3 file is incorrectly named the header search will scan the whole
 file, e.g. something.mp3 which is really a wave file.

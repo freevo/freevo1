@@ -713,12 +713,21 @@ plugin.activate('tv.manual_record')
 # plugin.activate('joy')
 
 # ======================================================================
+# Idlebar and plugins
+# ======================================================================
+plugin.activate('idlebar')
+plugin.activate('idlebar.tv', level = 20)
+plugin.activate('idlebar.cdstatus', level = 25)
+plugin.activate('idlebar.diskfree', level = 30)
+plugin.activate('idlebar.clock', level = 50, args='%a %d %H:%M')
+
+# ======================================================================
 # Headlines
 # ======================================================================
-#plugin.activate('headlines', level=45)
+plugin.activate('headlines', level=45)
 HEADLINES_LOCATIONS = [
     ('Freevo news releases', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652'),
-    ('Freevo news releases (full)', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652&rss_fulltext=1'),
+   #('Freevo news releases (full)', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652&rss_fulltext=1'),
     ('Freevo file releases', 'http://sourceforge.net/export/rss2_projfiles.php?group_id=46652'),
     ('Freevo summary+stats', 'http://sourceforge.net/export/rss2_projsummary.php?group_id=46652'),
     ('Freevo donors', 'http://sourceforge.net/export/rss2_projdonors.php?group_id=46652'),
