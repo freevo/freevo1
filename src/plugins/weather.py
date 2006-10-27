@@ -98,17 +98,26 @@ def wget(iUrl):
             pass
 
 def toCelcius(fTemp):
-    tTemp = float ( fTemp  )
+    try:
+        tTemp = float ( fTemp  )
+    except ValueError:
+        tTemp = 0.0
     nTemp = (5.0/9.0)*(tTemp - 32.0)
     return "%d" % (nTemp,)
 
 def toKilometers(miles):
-    tTemp = float( miles )
+    try:
+        tTemp = float( miles )
+    except ValueError:
+        tTemp = 0.0
     nTemp = tTemp*1.6
     return "%d" % ( int(nTemp),)
 
 def toBarometer( baro ):
-    tTemp = float( baro )
+    try:
+        tTemp = float( baro )
+    except ValueError:
+        tTemp = 0.0
     nTemp = tTemp*3.386
     return "%.1f" % (nTemp,)
 

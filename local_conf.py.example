@@ -314,7 +314,7 @@ CONFIG_VERSION = 5.17
 #
 # WARNING: you should not run 'freevo cache' when freevo is running.
 #
-# MEDIAINFO_USE_MEMORY   = 1
+# MEDIAINFO_USE_MEMORY = 1
 
 #
 # Cache images. This uses a lot of disc space but it's a huge speed
@@ -352,6 +352,23 @@ CACHE_IMAGES = 1
 #
 # Enable this for joystick support:
 # plugin.activate('joy')
+
+
+# ======================================================================
+# Headlines
+#
+# You are free to use any rss feeds in the HEADLINES_LOCATIONS below
+# These are just working examples for the Freevo feeds.
+# To turn off Headlines add plugin.remove('headlines')
+# ======================================================================
+#plugin.activate('headlines', level=45)
+#HEADLINES_LOCATIONS = [
+#    ('Freevo news releases', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652'),
+#    ('Freevo file releases', 'http://sourceforge.net/export/rss2_projfiles.php?group_id=46652'),
+#    ('Freevo summary+stats', 'http://sourceforge.net/export/rss2_projsummary.php?group_id=46652'),
+#    ('Freevo donors', 'http://sourceforge.net/export/rss2_projdonors.php?group_id=46652'),
+#]
+
 
 # ======================================================================
 # Freevo directory settings:
@@ -405,7 +422,7 @@ CACHE_IMAGES = 1
 # Format string for the audio item names. 
 #
 # Possible strings:
-# a = artist, n = tracknumber, t = title, y = year, f = filename
+# a=artist, n=tracknumber, t=title, y=year, f=filename
 #
 # Example:
 # This will show the title and the track number:
@@ -436,20 +453,20 @@ CACHE_IMAGES = 1
 # Make all items a playlist. So when one is finished, the next one will
 # start. It's also possible to browse through the list with UP and DOWN
 #
-# DIRECTORY_CREATE_PLAYLIST      = [ 'audio', 'image' ]
+# DIRECTORY_CREATE_PLAYLIST     = [ 'audio', 'image' ]
 
 # Add playlist files ('m3u') to the directory
 #
-# DIRECTORY_ADD_PLAYLIST_FILES   = [ 'audio', 'image' ]
+# DIRECTORY_ADD_PLAYLIST_FILES  = [ 'audio', 'image' ]
 
 # Add the item 'Random Playlist' to the directory
 #
-# DIRECTORY_ADD_RANDOM_PLAYLIST  = [ 'audio' ]
+# DIRECTORY_ADD_RANDOM_PLAYLIST = [ 'audio' ]
 
 # Make 'Play' not 'Browse' the default action when only items and not
 # subdirectories are in the directory
 #
-# DIRECTORY_AUTOPLAY_ITEMS       = [ ]
+# DIRECTORY_AUTOPLAY_ITEMS      = [ ]
 
 
 # ======================================================================
@@ -519,7 +536,7 @@ CACHE_IMAGES = 1
 # The list of filename suffixes that are used to match the files that
 # are played as audio.
 # 
-# AUDIO_SUFFIX     = [ 'mp3', 'ogg', 'wav','m4a', 'wma', 'aac', 'flac', 'mka' ]
+# AUDIO_SUFFIX = [ 'mp3', 'ogg', 'wav','m4a', 'wma', 'aac', 'flac', 'mka' ]
 
 #
 # Regular expression used to recognize filenames which are likely to be 
@@ -553,7 +570,7 @@ CACHE_IMAGES = 1
 # The list of filename suffixes that are used to match the files that
 # are used for the image viewer.
 # 
-# IMAGE_SUFFIX = [ 'jpg','gif','png', 'jpeg','bmp','tiff','psd' ]
+# IMAGE_SUFFIX = [ 'jpg','gif','png','jpeg','bmp','tiff','psd' ]
 
 #
 # The viewer now supports a new type of menu entry, a slideshow file.
@@ -603,15 +620,17 @@ IMAGEVIEWER_BLEND_MODE = -1
 #              - <FILE_SUFFIX_FOR_GENERIC> : If the folder use the GENERIC
 #                                            type, then you must specify here
 #                                        the file suffix used by the emulator
-# GAMES_ITEMS = [ ('MAME', '/home/media/games/xmame/roms',     
-#                ('MAME', '/usr/local/bin/xmame.SDL', '-fullscreen -modenumber 6', 
-#                 '/home/media/games/xmame/shots', None)),
-#               ('SUPER NINTENDO', '/home/media/games/snes/roms', 
-#                ('SNES', '/usr/local/bin/zsnes', '-m -r 3 -k 100 -cs -u', '', None )),
-#               ('Visual Boy Advance', '/home/media/games/vba/roms/',
-#                ('GENERIC', '/usr/local/vba/VisualBoyAdvance', ' ', '', [ 'gba' ] )),
-#               ('MEGADRIVE', '/home/media/games/megadrive/roms', 
-#                ('GENESIS', '/usr/local/bin/generator-svgalib', '', '', '' )) ]
+# GAMES_ITEMS = [
+#     ('MAME', '/home/media/games/xmame/roms',     
+#         ('MAME', '/usr/local/bin/xmame.SDL', '-fullscreen -modenumber 6', 
+#             '/home/media/games/xmame/shots', None)),
+#     ('SUPER NINTENDO', '/home/media/games/snes/roms', 
+#         ('SNES', '/usr/local/bin/zsnes', '-m -r 3 -k 100 -cs -u', '', None )),
+#     ('Visual Boy Advance', '/home/media/games/vba/roms/',
+#         ('GENERIC', '/usr/local/vba/VisualBoyAdvance', ' ', '', [ 'gba' ] )),
+#     ('MEGADRIVE', '/home/media/games/megadrive/roms', 
+#         ('GENESIS', '/usr/local/bin/generator-svgalib', '', '', '' ))
+# ]
 #
 # GAMES_ITEMS = None
 
@@ -666,7 +685,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # System Path to search for fonts not included in the Freevo distribution
 #
-# OSD_EXTRA_FONT_PATH  = [ '/usr/X11R6/lib/X11/fonts/truetype/' ]
+# OSD_EXTRA_FONT_PATH = [ '/usr/X11R6/lib/X11/fonts/truetype/' ]
 
 #
 # Font aliases 
@@ -768,16 +787,16 @@ IMAGEVIEWER_BLEND_MODE = -1
 # MPlayer settings:
 # ======================================================================
 
-# MPLAYER_AO_DEV       = 'oss:/dev/dsp'  # e.g.: oss,sdl,alsa, see mplayer docs
+# MPLAYER_AO_DEV      = 'oss:/dev/dsp'  # e.g.: oss,sdl,alsa, see mplayer docs
 
-# MPLAYER_VO_DEV_OPTS  = ''	         # e.g.: ':some_var=vcal'
+# MPLAYER_VO_DEV_OPTS = ''	         # e.g.: ':some_var=vcal'
 
-# DVD_LANG_PREF        = 'en,se,no'      # Order of preferred languages on DVD.
-# DVD_SUBTITLE_PREF    = ''              # Order of preferred subtitles on DVD.
+# DVD_LANG_PREF       = 'en,se,no'      # Order of preferred languages on DVD.
+# DVD_SUBTITLE_PREF   = ''              # Order of preferred subtitles on DVD.
 
 # Priority of mplayer process. 0 is unchanged, <0 is higher prio, >0 lower prio.
 # prio <0 has no effect unless run as root.
-# MPLAYER_NICE         = -20             
+# MPLAYER_NICE        = -20             
 
 #
 # Mplayer options to use the software scaler. If your CPU is fast enough, you
@@ -911,7 +930,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 # europe-east, italy, newzealand, australia, ireland, france, china-bcast,
 # southafrica, argentina, canada-cable, russia
 #
-# TV_SETTINGS  = 'NORM INPUT CHANLIST DEVICE'
+# TV_SETTINGS = 'NORM INPUT CHANLIST DEVICE'
 
 #
 # Video input device
@@ -1213,8 +1232,10 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # Username / Password combinations to login to the web interface.
 # 
-# WWW_USERS = { "user1" : "changeme", 
-#            "optional" : "changeme2" }
+# WWW_USERS = {
+#     "user1" : "changeme", 
+#     "optional" : "changeme2"
+# }
 #
 
 #
@@ -1275,10 +1296,13 @@ IMAGEVIEWER_BLEND_MODE = -1
 
 # LOCALE='latin-1'
 
-# Idlebar with clock and system info is nice
+# ======================================================================
+# Idlebar and plugins
 #
-# plugin.activate('idlebar')
-
+# These are the default idlebar settings, there are many more see:
+# freevo plugins -l for a complete list
+# To turn off use plugin.remove('idlebar.cdstatus')
+#
 # clock display
 # %A - Full weekday name.
 # %a - Abbreviated weekday name.
@@ -1293,9 +1317,12 @@ IMAGEVIEWER_BLEND_MODE = -1
 # %p - Locale's equivalent of either AM or PM.
 # %y - Year without century as a decimal number [00,99].          
 # %Y - Year with century as a decimal number.
-# plugin.activate( 'idlebar.clock', level=50, args=('%a %H:%M'))
+# ======================================================================
+# plugin.activate('idlebar')
+# plugin.activate('idlebar.tv', level = 20)
+# plugin.activate('idlebar.cdstatus', level = 25)
+# plugin.activate('idlebar.diskfree', level = 30)
+# plugin.activate('idlebar.clock', level = 50, args='%a %d %H:%M')
 #
 # display proc-stats, CPU and RAM usage
 # plugin.activate('idlebar.system.procstats',level=20)
-
-# plugin.activate( 'idlebar.diskfree', level=10)

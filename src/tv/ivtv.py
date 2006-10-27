@@ -156,17 +156,25 @@ class IVTV(tv.v4l2.Videodev):
     def getvbiembed(self):
         if self.version >= 0x800:
             return
-        r = fcntl.ioctl(self.device, i32(GETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST,0))
-        if DEBUG >= 3:
-            print "getvbiembed: val=%r, r=%r, res=%r" % (struct.pack(VBI_EMBED_ST,0), r, struct.unpack(VBI_EMBED_ST,r))
-        return struct.unpack(VBI_EMBED_ST,r)[0]
+        try:
+            r = fcntl.ioctl(self.device, i32(GETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST,0))
+            if DEBUG >= 3:
+                print "getvbiembed: val=%r, r=%r, res=%r" % (struct.pack(VBI_EMBED_ST,0), r,
+                    struct.unpack(VBI_EMBED_ST,r))
+            return struct.unpack(VBI_EMBED_ST,r)[0]
+        except IOError:
+            print 'getvbiembed: failed'
+            return 0
   
 
     def setvbiembed(self, value):
         if self.version >= 0x800:
             return
-        r = fcntl.ioctl(self.device, i32(SETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, value))
-        if DEBUG: print "setvbiembed: val=%r, res=%r" % (struct.pack(VBI_EMBED_ST, value), r)
+        try:
+            r = fcntl.ioctl(self.device, i32(SETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, value))
+            if DEBUG >= 3: print "setvbiembed: val=%r, res=%r" % (struct.pack(VBI_EMBED_ST, value), r)
+        except IOError:
+            print 'setvbiembed: failed'
 
 
     def gopend(self, value):
@@ -262,6 +270,8 @@ export RUNAPP=""
 '''
 
 if __name__ == '__main__':
+
+    DEBUG = 1
 
     ivtv_dev = IVTV('/dev/video0')
     print 'driver="%s"' % ivtv_dev.driver

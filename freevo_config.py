@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION  = 5.16
+LOCAL_CONF_VERSION = 5.16
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -276,20 +276,20 @@ if int(str(CONF.version).split('.')[1]) != \
 # General freevo settings:
 # ======================================================================
 
-AUDIO_DEVICE        = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
-AUDIO_INPUT_DEVICE  = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
-MAJOR_AUDIO_CTRL    = 'VOL'           # Freevo takes control over one audio ctrl
+AUDIO_DEVICE       = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
+AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
+MAJOR_AUDIO_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
                                       # 'VOL', 'PCM' 'OGAIN' etc.
-CONTROL_ALL_AUDIO   = 1               # Should Freevo take complete control of audio
-MAX_VOLUME          = 90              # Set what you want maximum volume level to be.
-DEFAULT_VOLUME      = 40              # Set default volume level.
-TV_IN_VOLUME        = 60              # Set this to your preferred level 0-100.
-VCR_IN_VOLUME       = 90              # If you use different input from TV
-DEV_MIXER           = '/dev/mixer'    # mixer device 
+CONTROL_ALL_AUDIO  = 1               # Should Freevo take complete control of audio
+MAX_VOLUME         = 90              # Set what you want maximum volume level to be.
+DEFAULT_VOLUME     = 40              # Set default volume level.
+TV_IN_VOLUME       = 60              # Set this to your preferred level 0-100.
+VCR_IN_VOLUME      = 90              # If you use different input from TV
+DEV_MIXER          = '/dev/mixer'    # mixer device 
 
-START_FULLSCREEN_X  = 0               # Start in fullscreen mode if using x11 or xv.
+START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 
-CONFIRM_SHUTDOWN    = 1               # ask before shutdown
+CONFIRM_SHUTDOWN   = 1               # ask before shutdown
 
 #
 # Physical ROM drives, multiple ones can be specified
@@ -356,7 +356,7 @@ NVRAM_REBOOT_FLAG = '%s/reboot_flag' % FREEVO_CACHEDIR
 # CONFIRM_SHUTDOWN
 # Set to True to popup dialog boxes for confirmation.
 # this applies to menu items only.
-AUTOSHUTDOWN_CONFIRM = True
+AUTOSHUTDOWN_CONFIRM=True
 
 
 # -- autoshutdown timer configuration --
@@ -374,7 +374,7 @@ AUTOSHUTDOWN_TIMER_TIMEOUT=30
 
 # PRETEND
 # Set to True to disable the actual shutdown command.
-AUTOSHUTDOWN_PRETEND = False
+AUTOSHUTDOWN_PRETEND=False
 
 # PROCESS_LIST
 # List the processes that will prevent an automatic
@@ -460,7 +460,7 @@ AUTOSHUTDOWN_NVRAM_OPT = "--syslog"
 # up with the rtc alarm that nvram-wakeup sets. The
 # boot loader options should be set too. Read the
 # nvram-wakeup documentation about this topic.
-AUTOSHUTDOWN_BIOS_NEEDS_REBOOT = True
+AUTOSHUTDOWN_BIOS_NEEDS_REBOOT=True
 
 # -- if the bios needs a reboot --
 
@@ -586,7 +586,7 @@ MMPYTHON_CREATE_MD5_ID = 0
 #
 # WARNING: you should not run 'freevo cache' when freevo is running.
 #
-MEDIAINFO_USE_MEMORY   = 1
+MEDIAINFO_USE_MEMORY = 1
 
 #
 # Cache images. This uses a lot of disc space but it's a huge speed
@@ -716,10 +716,10 @@ plugin.activate('tv.manual_record')
 # Idlebar and plugins
 # ======================================================================
 plugin.activate('idlebar')
-plugin.activate('idlebar.tv', level = 20)
-plugin.activate('idlebar.cdstatus', level = 25)
-plugin.activate('idlebar.diskfree', level = 30)
-plugin.activate('idlebar.clock', level = 50, args='%a %d %H:%M')
+plugin.activate('idlebar.tv', level=20)
+plugin.activate('idlebar.cdstatus', level=25)
+plugin.activate('idlebar.diskfree', level=30)
+plugin.activate('idlebar.clock', level=50, args='%a %d %H:%M')
 
 # ======================================================================
 # Headlines
@@ -785,7 +785,7 @@ DIRECTORY_FORCE_SKIN_LAYOUT = -1
 # Format string for the audio item names. 
 #
 # Possible strings:
-# a = artist, n = tracknumber, t = title, y = year, f = filename
+# a=artist, n=tracknumber, t=title, y=year, f=filename
 #
 # Example:
 # This will show the title and the track number:
@@ -817,23 +817,23 @@ DIRECTORY_USE_MEDIAID_TAG_NAMES = 1
 # Make all items a playlist. So when one is finished, the next one will
 # start. It's also possible to browse through the list with UP and DOWN
 #
-DIRECTORY_CREATE_PLAYLIST      = [ 'audio', 'image' ]
+DIRECTORY_CREATE_PLAYLIST     = [ 'audio', 'image' ]
 
 #
 # Add playlist files ('m3u') to the directory
 #
-DIRECTORY_ADD_PLAYLIST_FILES   = [ 'audio', 'image' ]
+DIRECTORY_ADD_PLAYLIST_FILES  = [ 'audio', 'image' ]
 
 #
 # Add the item 'Random Playlist' to the directory
 #
-DIRECTORY_ADD_RANDOM_PLAYLIST  = [ 'audio' ]
+DIRECTORY_ADD_RANDOM_PLAYLIST = [ 'audio' ]
 
 #
 # Make 'Play' not 'Browse' the default action when only items and not
 # subdirectories are in the directory
 #
-DIRECTORY_AUTOPLAY_ITEMS       = [ ]
+DIRECTORY_AUTOPLAY_ITEMS      = [ ]
 
 
 # ======================================================================
@@ -924,7 +924,7 @@ AUDIO_ITEMS = None
 # The list of filename suffixes that are used to match the files that
 # are played as audio.
 # 
-AUDIO_SUFFIX     = [ 'mp3', 'ogg', 'wav','m4a', 'wma', 'aac', 'flac', 'mka','ac3' ]
+AUDIO_SUFFIX = [ 'mp3', 'ogg', 'wav','m4a', 'wma', 'aac', 'flac', 'mka','ac3' ]
 
 #
 # Regular expression used to recognize filenames which are likely to be 
@@ -1033,8 +1033,7 @@ IMAGE_USE_EXIF_THUMBNAIL = 1
 # NEW GAMES SYSTEM :
 # =================
 # The GAMES_ITEMS structure is now build as follows :
-# <NAME>, <FOLDER>, (<TYPE>, <COMMAND_PATH>, <COMMAND_ARGS>, <IMAGE_PATH>, \
-# [<FILE_SUFFIX_FOR_GENERIC>])
+# <NAME>, <FOLDER>, (<TYPE>, <COMMAND_PATH>, <COMMAND_ARGS>, <IMAGE_PATH>, [<FILE_SUFFIX_FOR_GENERIC>])
 # where :
 #              - <TYPE> : Internal game types (MAME or SNES) or
 #                         generic one (GENERIC)
@@ -1043,16 +1042,18 @@ IMAGE_USE_EXIF_THUMBNAIL = 1
 #              - <IMAGE_PATH>   : Optionnal path to the picture
 #              - <FILE_SUFFIX_FOR_GENERIC> : If the folder use the GENERIC
 #                                            type, then you must specify here
-#                                        the file suffix used by the emulator
-# GAMES_ITEMS = [ ('MAME', '/home/media/games/xmame/roms',     
-#                ('MAME', '/usr/local/bin/xmame.SDL', '-fullscreen -modenumber 6', 
-#                 '/home/media/games/xmame/shots', None)),
-#               ('SUPER NINTENDO', '/home/media/games/snes/roms', 
-#                ('SNES', '/usr/local/bin/zsnes', '-m -r 3 -k 100 -cs -u', '', None )),
-#               ('Visual Boy Advance', '/home/media/games/vba/roms/',
-#                ('GENERIC', '/usr/local/vba/VisualBoyAdvance', ' ', '', [ 'gba' ] )),
-#               ('MEGADRIVE', '/home/media/games/megadrive/roms', 
-#                ('GENESIS', '/usr/local/bin/generator-svgalib', '', '', '' )) ]
+#                                            the file suffix used by the emulator
+# GAMES_ITEMS = [
+#     ('MAME', '/home/media/games/xmame/roms',     
+#         ('MAME', '/usr/local/bin/xmame.SDL', '-fullscreen -modenumber 6', 
+#             '/home/media/games/xmame/shots', None)),
+#     ('SUPER NINTENDO', '/home/media/games/snes/roms', 
+#         ('SNES', '/usr/local/bin/zsnes', '-m -r 3 -k 100 -cs -u', '', None )),
+#     ('Visual Boy Advance', '/home/media/games/vba/roms/',
+#         ('GENERIC', '/usr/local/vba/VisualBoyAdvance', ' ', '', [ 'gba' ] )),
+#     ('MEGADRIVE', '/home/media/games/megadrive/roms', 
+#         ('GENESIS', '/usr/local/bin/generator-svgalib', '', '', '' ))
+# ]
 
 GAMES_ITEMS = None
 
@@ -1065,7 +1066,7 @@ GAMES_ITEMS = None
 # >0 - Lower priority
 # <0 - Higher priority
 #
-GAMES_NICE        = -20
+GAMES_NICE = -20
  
 # 
 # MAME cache directory
@@ -1121,7 +1122,7 @@ OSD_DEFAULT_FONTSIZE = 18
 #
 # System Path to search for fonts not included in the Freevo distribution
 #
-OSD_EXTRA_FONT_PATH  = [ '/usr/X11R6/lib/X11/fonts/truetype/' ]
+OSD_EXTRA_FONT_PATH = [ '/usr/X11R6/lib/X11/fonts/truetype/' ]
 
 #
 # Font aliases 
@@ -1252,28 +1253,27 @@ TVTIME_CMD = CONF.tvtime
 
 MPLAYER_CMD = CONF.mplayer
     
-MPLAYER_AO_DEV       = 'oss:/dev/dsp'    # e.g.: oss,sdl,alsa, see mplayer docs
+MPLAYER_AO_DEV = 'oss:/dev/dsp'    # e.g.: oss,sdl,alsa, see mplayer docs
 
 if CONF.display == 'x11':
-    MPLAYER_VO_DEV       = 'xv,sdl,x11,' # X11 drivers in order of preference
+    MPLAYER_VO_DEV = 'xv,sdl,x11,' # X11 drivers in order of preference
 else:
-    MPLAYER_VO_DEV       = CONF.display  # e.g.: x11,mga,fbdev, see mplayer docs
+    MPLAYER_VO_DEV = CONF.display  # e.g.: x11,mga,fbdev, see mplayer docs
 
-MPLAYER_VO_DEV_OPTS  = ''                # e.g.: ':some_var=vcal'
+MPLAYER_VO_DEV_OPTS = ''           # e.g.: ':some_var=vcal'
 
-DVD_LANG_PREF        = 'en,se,no'        # Order of preferred languages on DVD.
-DVD_SUBTITLE_PREF    = ''                # Order of preferred subtitles on DVD.
+DVD_LANG_PREF = 'en,se,no'         # Order of preferred languages on DVD.
+DVD_SUBTITLE_PREF = ''             # Order of preferred subtitles on DVD.
 
 # Priority of mplayer process. 0 is unchanged, <0 is higher prio, >0 lower prio.
 # prio <0 has no effect unless run as root.
-MPLAYER_NICE         = -20             
+MPLAYER_NICE = -20             
 
 if CONF.display in ( 'directfb', 'dfbmga' ):
-    MPLAYER_ARGS_DEF     = ('-autosync 100 -nolirc ' +
-                            '-autoq 100 -fs ')
+    MPLAYER_ARGS_DEF = ('-autosync 100 -nolirc -autoq 100 -fs ')
 else:
-    MPLAYER_ARGS_DEF     = (('-autosync 100 -nolirc -autoq 100 -screenw %s '
-                             + '-screenh %s -fs') % (CONF.width, CONF.height))
+    MPLAYER_ARGS_DEF = (('-autosync 100 -nolirc -autoq 100 -screenw %s '
+                       + '-screenh %s -fs') % (CONF.width, CONF.height))
 
 
 #
@@ -1333,12 +1333,12 @@ MPLAYER_SET_AUDIO_DELAY = 0
 #
 # Mplayer video filter for interlaced or progressive videos. If you have
 # a slow pc, do not use post processing
-# MPLAYER_VF_INTERLACED  = ''
+# MPLAYER_VF_INTERLACED = ''
 # MPLAYER_VF_PROGRESSIVE = 'pp=fd'
 # For pal and dvb-t recordings, the following looks good
-# MPLAYER_VF_INTERLACED  = 'pp=md/de,phase=U'
+# MPLAYER_VF_INTERLACED = 'pp=md/de,phase=U'
 #
-MPLAYER_VF_INTERLACED  = 'pp=de/fd'
+MPLAYER_VF_INTERLACED = 'pp=de/fd'
 MPLAYER_VF_PROGRESSIVE = 'pp=de'
 
 # default to XINE_VO/AO_DEV:
@@ -1356,20 +1356,20 @@ XINE_TV_TIMESHIFT_FILEMASK = "you must set XINE_TV_TIMESHIFT_FILEMASK in your lo
 XINE_COMMAND = ''
 
 if CONF.display in ('mga', 'fbdev') and CONF.fbxine:
-    XINE_VO_DEV  = 'vidixfb'
+    XINE_VO_DEV = 'vidixfb'
     XINE_COMMAND = CONF.fbxine
     
 if CONF.display == 'dxr3' and CONF.fbxine:
-    XINE_VO_DEV  = 'dxr3'
+    XINE_VO_DEV = 'dxr3'
     XINE_COMMAND = CONF.fbxine
     
 if CONF.display == 'x11' and CONF.xine:
-    XINE_VO_DEV  = 'xv'
+    XINE_VO_DEV = 'xv'
     XINE_COMMAND = '%s --hide-gui -pq -g -B --geometry %sx%s+0+0 --no-splash' % \
                    (CONF.xine, CONF.width, CONF.height)
 
 if CONF.display in ('dfbmga', 'directfb') and CONF.df_xine:
-    XINE_VO_DEV  = ''
+    XINE_VO_DEV = ''
     XINE_COMMAND = CONF.df_xine
 
 XINE_ARGS_DEF = "--no-lirc --post='pp:quality=10;expand'"
@@ -1384,7 +1384,7 @@ if CONF.fbxine:
 # default to XINE_VO/AO_DEV:
 XINE_TV_VO_DEV = None
 XINE_TV_AO_DEV = None
-XINE_TV_TIMESHIFT_FILEMASK = "/you must set XINE_TV_TIMESHIFT_FILEMASK in your local_conf.py"
+XINE_TV_TIMESHIFT_FILEMASK = "you must set XINE_TV_TIMESHIFT_FILEMASK in your local_conf.py"
 
 # ======================================================================
 # Freevo TV settings:

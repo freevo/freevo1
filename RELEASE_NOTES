@@ -20,6 +20,20 @@ see http://freevo.sourceforge.net/cgi-bin/doc/MultiTunerConfig
 elementtree, include in Python-2.5+, is now a prerequisite for freevo,
 if can be downloaded from http://effbot.org/zone/elementtree.htm
 
+idlebar and headlines plug-ins are now enabled by default, you will need
+to remove the following plug-ins from local_conf.py:
+
+plugin.activate('headlines', level=XX)
+plugin.activate('idlebar')
+plugin.activate('idlebar.tv', level=20)
+plugin.activate('idlebar.cdstatus', level=25)
+plugin.activate('idlebar.diskfree', level=30)
+plugin.activate('idlebar.clock', level=50, args='%a %d %H:%M')
+
+If you don't like and of these plug-ins the can be deactivated by:
+plugin.remove('<plug-in name>')
+
+
 Known Problems
 --------------
 
