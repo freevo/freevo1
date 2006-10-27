@@ -27,7 +27,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, string, random, time, os, re, pwd, stat
+import sys, string, random, time, os, re, pwd, stat, threading
 import config
 from util import vfs
 
@@ -106,10 +106,16 @@ if not plugin.getbyname('RECORD'):
 class RecordServer(xmlrpc.XMLRPC):
 
     def __init__(self):
+        self.lock = threading.Lock()
         self.fc = FreevoChannels()
         # XXX: In the future we should have one lock per VideoGroup.
         self.tv_lock_file = None
         self.vg = None
+
+
+    def isRecording(self):
+        _debug_('in isRecording', 3)
+        return glob.glob(config.FREEVO_CACHEDIR + '/record.*') and TRUE or FALSE
 
 
     def progsTimeCompare(self, first, second):
@@ -122,20 +128,14 @@ class RecordServer(xmlrpc.XMLRPC):
         return 0
 
 
-    def isRecording(self):
-        _debug_('in isRecording', 4)
-        return glob.glob(config.FREEVO_CACHEDIR + '/record.*') and True or False
-
-
     def findNextProgram(self):
-        _debug_('in findNextProgram', 4)
-
-        progs = self.getScheduledRecordings().getProgramList()
-        now = time.time()
+        _debug_('in findNextProgram', 3)
 
         next_program = None
+        progs = self.getScheduledRecordings().getProgramList()
         proglist = list(progs)
         proglist.sort(self.progsTimeCompare)
+        now = time.time()
         for progitem in proglist:
             prog = progs[progitem]
             _debug_('%s' % (prog), 2)
@@ -143,14 +143,14 @@ class RecordServer(xmlrpc.XMLRPC):
             try:
                 recording = prog.isRecording
             except:
-                recording = False
+                recording = FALSE
             _debug_('%s: recording=%s' % (prog.title, recording))
 
             if now >= prog.stop + config.TV_RECORD_PADDING_POST:
                 _debug_('%s: prog.stop=%s, now=%s' % (prog.title, \
                     time.localtime(prog.stop+config.TV_RECORD_PADDING_POST), now), 2)
                 continue
-            _debug_('%s: prog.stop=%s' % (prog.title, time.localtime(prog.stop)), 1)
+            _debug_('%s: prog.stop=%s' % (prog.title, time.localtime(prog.stop)))
 
             if not recording:
                 next_program = prog
@@ -158,10 +158,10 @@ class RecordServer(xmlrpc.XMLRPC):
 
         self.next_program = next_program
         if next_program == None:
-            _debug_('No program scheduled to record', 1)
+            _debug_('No program scheduled to record')
             return None
 
-        _debug_('%s' % (next_program), 1)
+        _debug_('%s' % (next_program))
         return next_program
 
 
@@ -172,7 +172,7 @@ class RecordServer(xmlrpc.XMLRPC):
             real player running test, check /dev/videoX.
             this could go into the upsoon client
         '''
-        _debug_('in isPlayerRunning', 4)
+        _debug_('in isPlayerRunning', 3)
         return (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
 
     # note: add locking and r/rw options to get/save funs
@@ -181,12 +181,12 @@ class RecordServer(xmlrpc.XMLRPC):
         scheduledRecordings = None
 
         if os.path.isfile(config.TV_RECORD_SCHEDULE):
-            _debug_('GET: reading cached file (%s)' % config.TV_RECORD_SCHEDULE)
+            _debug_('GET: reading cached file (%s)' % config.TV_RECORD_SCHEDULE, 2)
             if hasattr(self, 'scheduledRecordings_cache'):
                 mod_time, scheduledRecordings = self.scheduledRecordings_cache
                 try:
                     if os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME] == mod_time:
-                        _debug_('Return cached data')
+                        _debug_('Return cached data', 2)
                         return scheduledRecordings
                 except OSError:
                     pass
@@ -266,7 +266,8 @@ class RecordServer(xmlrpc.XMLRPC):
     
         for chan in guide.chan_list:
             if prog.channel_id == chan.id:
-                _debug_('scheduleRecording: prog.channel_id="%s" chan.id="%s" chan.tunerid="%s"' % (String(prog.channel_id), String(chan.id), String(chan.tunerid)))
+                _debug_('scheduleRecording: prog.channel_id="%s" chan.id="%s" chan.tunerid="%s"' %
+                    (String(prog.channel_id), String(chan.id), String(chan.tunerid)))
                 prog.tunerid = chan.tunerid
     
         scheduledRecordings = self.getScheduledRecordings()
@@ -344,7 +345,8 @@ class RecordServer(xmlrpc.XMLRPC):
                 _debug_('CHANNEL MATCH: %s' % ch.id)
                 for prog in ch.programs:
                     if start == '%s' % prog.start:
-                        _debug_('PROGRAM MATCH: %s' % prog.decode().title)
+                        #_debug_('PROGRAM MATCH 1: %s' % prog.title.encode('ascii', 'replace'))
+                        _debug_('PROGRAM MATCH 1: %s' % prog.decode().title)
                         return (TRUE, prog.decode())
 
         return (FALSE, 'prog not found')
@@ -379,12 +381,14 @@ class RecordServer(xmlrpc.XMLRPC):
                         # rating.  Suggestions are welcome.
                         if 'MPAA' in prog.decode().getattr('ratings').keys():
                             matches.append(prog.decode())
-                            _debug_('PROGRAM MATCH: %s' % prog.decode())
+                            #_debug_('PROGRAM MATCH 2: %s' % prog.title.encode('ascii', 'replace'))
+                            _debug_('PROGRAM MATCH 2: %s' % prog.decode())
                     else:
                         # We should never get here if not find and not 
                         # movies_only.
                         matches.append(prog.decode())
-                        _debug_('PROGRAM MATCH: %s' % prog.decode())
+                        #_debug_('PROGRAM MATCH 3: %s' % prog.title.encode('ascii', 'replace'))
+                        _debug_('PROGRAM MATCH 3: %s' % prog.decode())
                 if len(matches) >= max_results:
                     break
 
@@ -424,7 +428,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         now = time.time()
         for prog in progs.values():
-            _debug_('checkToRecord: progloop=%s' % String(prog))
+            _debug_('checkToRecord: progloop=%s' % String(prog), 2)
 
             try:
                 recording = prog.isRecording
@@ -433,12 +437,12 @@ class RecordServer(xmlrpc.XMLRPC):
 
             if (prog.start - config.TV_RECORD_PADDING_PRE) <= now \
                    and (prog.stop + config.TV_RECORD_PADDING_POST) >= now \
-                   and recording == FALSE:
+                   and not recording:
                 # just add to the 'we want to record this' list
                 # then end the loop, and figure out which has priority,
                 # remember to take into account the full length of the shows
                 # and how much they overlap, or chop one short
-                duration = int((prog.stop + config.TV_RECORD_PADDING_POST ) - now - 10)
+                duration = int((prog.stop + config.TV_RECORD_PADDING_POST) - now - 10)
                 if duration < 10:
                     return 
 
@@ -449,6 +453,7 @@ class RecordServer(xmlrpc.XMLRPC):
                         # check if the new prog is a favorite and the current running is
                         # not. If so, the user manually added something, we guess it
                         # has a higher priority.
+
                         if self.isProgAFavorite(prog)[0] and \
                            not self.isProgAFavorite(currently_recording)[0] and \
                            prog.stop + config.TV_RECORD_PADDING_POST > now:
@@ -458,7 +463,7 @@ class RecordServer(xmlrpc.XMLRPC):
                                          tv_util.getKey(currently_recording))
                         plugin.getbyname('RECORD').Stop()
                         time.sleep(5)
-                        _debug_('CALLED RECORD STOP 1')
+                        _debug_('CALLED RECORD STOP 1: %s' % String(currently_recording))
                     else:
                         # at this moment we must be in the pre-record padding
                         if currently_recording.stop - 10 <= now:
@@ -470,12 +475,12 @@ class RecordServer(xmlrpc.XMLRPC):
                                        config.TV_RECORD_PADDING_POST) - \
                                       (prog.start - config.TV_RECORD_PADDING_PRE)
                             if overlap <= ((config.TV_RECORD_PADDING_PRE +
-					    config.TV_RECORD_PADDING_POST)/4):
+                                            config.TV_RECORD_PADDING_POST)/4):
                                 sr.removeProgram(currently_recording, 
                                                  tv_util.getKey(currently_recording))
                                 plugin.getbyname('RECORD').Stop()
                                 time.sleep(5)
-                                _debug_('CALLED RECORD STOP 2')
+                                _debug_('CALLED RECORD STOP 2: %s' % String(currently_recording))
                             else: 
                                 delay_recording = TRUE
                         else: 
@@ -495,7 +500,7 @@ class RecordServer(xmlrpc.XMLRPC):
         for prog in progs.values():
             # If the program is over remove the entry.
             if ( prog.stop + config.TV_RECORD_PADDING_POST) < now:
-                _debug_('found a program to clean')
+                _debug_('found a program to clean: %s' % String(prog))
                 cleaned = TRUE
                 del progs[tv_util.getKey(prog)]
 
@@ -504,16 +509,16 @@ class RecordServer(xmlrpc.XMLRPC):
             self.saveScheduledRecordings(sr)
 
         if rec_prog:
-            _debug_('start recording')
+            _debug_('start recording: %s' % String(rec_prog))
             self.record_app = plugin.getbyname('RECORD')
 
             if not self.record_app:
                 print_plugin_warning()
-                print 'ERROR:  Recording %s failed.' % String(rec_prog.title)
+                _debug_('ERROR:  Recording %s failed.' % String(rec_prog.title), 0)
                 self.removeScheduledRecording(rec_prog)
                 return
 
-            self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False)
+            self.vg = self.fc.getVideoGroup(rec_prog.channel_id, FALSE)
             suffix=self.vg.vdev.split('/')[-1]
             self.tv_lock_file = config.FREEVO_CACHEDIR + '/record.'+suffix
             self.record_app.Record(rec_prog)
@@ -595,34 +600,34 @@ class RecordServer(xmlrpc.XMLRPC):
         oldprio = int(me.priority)
         newprio = oldprio + mod
     
-        _debug_('ap: mod=%s\n' % mod)
+        _debug_('ap: mod=%s' % mod)
        
         sr = self.getScheduledRecordings()
         favs = sr.getFavorites().values()
     
-        sys.stderr.write('adjusting prio of '+favname+'\n')
+        _debug_('adjusting prio of '+favname)
         for fav in favs:
             fav.priority = int(fav.priority)
     
             if fav.name == me.name:
                 _debug_('MATCH')
                 fav.priority = newprio
-                _debug_('moved prio of %s: %s => %s\n' % (fav.name, oldprio, newprio))
+                _debug_('moved prio of %s: %s => %s' % (fav.name, oldprio, newprio))
                 continue
             if mod < 0:
                 if fav.priority < newprio or fav.priority > oldprio:
-                    _debug_('fp: %s, old: %s, new: %s\n' % (fav.priority, oldprio, newprio))
-                    _debug_('skipping: %s\n' % fav.name)
+                    _debug_('fp: %s, old: %s, new: %s' % (fav.priority, oldprio, newprio))
+                    _debug_('skipping: %s' % fav.name)
                     continue
                 fav.priority = fav.priority + 1
-                _debug_('moved prio of %s: %s => %s\n' % (fav.name, fav.priority-1, fav.priority))
+                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority-1, fav.priority))
                 
             if mod > 0:
                 if fav.priority > newprio or fav.priority < oldprio:
-                    _debug_('skipping: %s\n' % fav.name)
+                    _debug_('skipping: %s' % fav.name)
                     continue
                 fav.priority = fav.priority - 1
-                _debug_('moved prio of %s: %s => %s\n' % (fav.name, fav.priority+1, fav.priority))
+                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority+1, fav.priority))
     
         sr.setFavoritesList(favs)
         self.saveScheduledRecordings(sr)
@@ -765,12 +770,8 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def xmlrpc_saveScheduledRecordings(self, scheduledRecordings=None):
         status = self.saveScheduledRecordings(scheduledRecordings)
-
-        if status:
-            return (status, 'saveScheduledRecordings::success')
-        else:
-            return (status, 'saveScheduledRecordings::failure')
-
+        message = status and 'saveScheduledRecordings::success' or 'saveScheduledRecordings::failure'
+        return (status, message)
 
     def xmlrpc_scheduleRecording(self, prog=None):
         if not prog:
@@ -914,7 +915,7 @@ class RecordServer(xmlrpc.XMLRPC):
         fxd = FxdImdb()
 
         (filebase, fileext) = os.path.splitext(rec_prog.filename)
-        fxd.setFxdFile(filebase, overwrite = True)
+        fxd.setFxdFile(filebase, overwrite=TRUE)
 
         video = makeVideo('file', 'f1', os.path.basename(rec_prog.filename))
         fxd.setVideo(video)
@@ -937,7 +938,7 @@ class RecordServer(xmlrpc.XMLRPC):
         next_minute = (int(time.time()/60) * 60 + 60) - int(time.time())
         if next_minute != 60:
             # Compensate for timer drift 
-            if config.DEBUG:
+            if DEBUG:
                 log.debug('top of the minute in %s seconds' % next_minute)
             reactor.callLater(next_minute, self.minuteCheck)
         else:
@@ -1046,7 +1047,7 @@ class RecordServer(xmlrpc.XMLRPC):
 def main():
     app = Application("RecordServer")
     rs = RecordServer()
-    if (config.DEBUG == 0):
+    if (DEBUG == 0):
         app.listenTCP(config.RECORDSERVER_PORT, server.Site(rs, logPath='/dev/null'))
     else:
         app.listenTCP(config.RECORDSERVER_PORT, server.Site(rs))
