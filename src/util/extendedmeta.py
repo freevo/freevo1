@@ -213,7 +213,10 @@ class AudioParser:
     def extract_image(self, path):
         for i in util.match_files(path, ['mp3']):
             try:
-                id3 = eyeD3.Mp3AudioFile( i )
+                id3 = eyeD3.Mp3AudioFile(i)
+            except eyeD3.InvalidAudioFormatException:
+                print 'Cannot get tag for \"%s\"' % (String(i))
+                continue
             except:
                 continue
             myname = vfs.getoverlay(os.path.join(path, 'cover.jpg'))

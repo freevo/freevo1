@@ -323,21 +323,24 @@ def remove_start_string(string, start):
 def tagmp3 (filename, title=None, artist=None, album=None, track=None,
             tracktotal=None, year=None):
     """
-    use eyeD3 directly from inside mkka.metadata to
+    use eyeD3 directly from inside kaa.metadata to
     set the tag. We default to 2.3 since even
     though 2.4 is the accepted standard now, more
     players support 2.3
     """
     import kaa.metadata.audio.eyeD3 as eyeD3
 
-    tag = eyeD3.Tag(String(filename))
-    tag.header.setVersion(eyeD3.ID3_V2_3)
-    if artist: tag.setArtist(String(artist))
-    if album:  tag.setAlbum(String(album))
-    if title:  tag.setTitle(String(title))
-    if track:  tag.setTrackNum((track,tracktotal))   # eyed3 accepts None for tracktotal
-    if year:   tag.setDate(year) 
-    tag.update()
+    try:
+        tag = eyeD3.Tag(String(filename))
+        tag.header.setVersion(eyeD3.ID3_V2_3)
+        if artist: tag.setArtist(String(artist))
+        if album:  tag.setAlbum(String(album))
+        if title:  tag.setTitle(String(title))
+        if track:  tag.setTrackNum((track,tracktotal))   # eyed3 accepts None for tracktotal
+        if year:   tag.setDate(year) 
+        tag.update()
+    except:
+        print 'Cannot tag \"%s\"' % (String(filename))
     return
 
 
