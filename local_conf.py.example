@@ -1,4 +1,3 @@
-#if 0
 # -----------------------------------------------------------------------
 # freevo_config.py - System configuration
 # -----------------------------------------------------------------------
@@ -37,7 +36,6 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-#endif
 
 
 
@@ -48,20 +46,21 @@ CONFIG_VERSION = 5.17
 # General freevo settings:
 # ======================================================================
 
-# AUDIO_DEVICE        = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
-# AUDIO_INPUT_DEVICE  = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
-# MAJOR_AUDIO_CTRL    = 'VOL'           # Freevo takes control over one audio ctrl
-                                        # 'VOL', 'PCM' 'OGAIN' etc.
-# CONTROL_ALL_AUDIO   = 1               # Should Freevo take complete control of audio
-# MAX_VOLUME          = 90              # Set what you want maximum volume level to be.
-# DEFAULT_VOLUME      = 40              # Set default volume level.
-# TV_IN_VOLUME        = 60              # Set this to your preferred level 0-100.
-# VCR_IN_VOLUME       = 90              # If you use different input from TV
-# DEV_MIXER           = '/dev/mixer'    # mixer device 
+# AUDIO_DEVICE       = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
+# AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
+# MAJOR_AUDIO_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
+                                       # 'VOL', 'PCM' 'OGAIN' etc.
+# CONTROL_ALL_AUDIO  = 1               # Should Freevo take complete control of audio
+# MAX_VOLUME         = 90              # Set what you want maximum volume level to be.
+# DEFAULT_VOLUME     = 40              # Set default volume level.
+# TV_IN_VOLUME       = 60              # Set this to your preferred level 0-100.
+# VCR_IN_VOLUME      = 90              # If you use different input from TV
+# RADIO_IN_VOLUME    = 80              # Set this to your preferred level 0-100.
+# DEV_MIXER          = '/dev/mixer'    # mixer device 
 
-# START_FULLSCREEN_X  = 0               # Start in fullscreen mode if using x11 or xv.
+# START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 
-# CONFIRM_SHUTDOWN    = 1               # ask before shutdown
+# CONFIRM_SHUTDOWN   = 1               # ask before shutdown
 
 #
 # Physical ROM drives, multiple ones can be specified

@@ -91,14 +91,11 @@ class RadioPlayer:
         except AttributeError:
             pass
             
-        self.mode    = 'play'
+        self.mode = 'play'
 
         mixer = plugin.getbyname('MIXER')
         if mixer:
-            if hasattr(config, 'RADIO_IN_VOLUME'):
-                mixer_vol = config.RADIO_IN_VOLUME
-            else:
-                mixer_vol = config.TV_IN_VOLUME
+            mixer_vol = config.RADIO_IN_VOLUME
             mixer.setLineinVolume(mixer_vol)
             mixer.setIgainVolume(mixer_vol)
             mixer.setMicVolume(mixer_vol)

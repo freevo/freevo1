@@ -231,6 +231,7 @@ LOCAL_CONF_CHANGES = [
      Added XINE_TV_VO_DEV, XINE_TV_AO_DEV, and XINE_TV_TIMESHIFT_FILEMASK for the
   	 new tv.ivtv_xine_tv plugin (the latter should be e.g. "/tmp/xine-buf-" and point
   	 to a place with enough free diskspace (several gigabytes).
+  	 Added RADIO_IN_VOLUME for different volumes levels for TV and radio
   	 Added TV_RECORD_PADDING_PRE/POST for separately setting TV_RECORD_PADDING
   	 Added TV_RECORDFILE_OKLETTERS for characters allowed in recording filenames.
      Added AUTOSHUTDOWN_ settings to turn off and on the machine automatically
@@ -279,12 +280,13 @@ if int(str(CONF.version).split('.')[1]) != \
 AUDIO_DEVICE       = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 MAJOR_AUDIO_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
-                                      # 'VOL', 'PCM' 'OGAIN' etc.
+                                     # 'VOL', 'PCM' 'OGAIN' etc.
 CONTROL_ALL_AUDIO  = 1               # Should Freevo take complete control of audio
 MAX_VOLUME         = 90              # Set what you want maximum volume level to be.
 DEFAULT_VOLUME     = 40              # Set default volume level.
 TV_IN_VOLUME       = 60              # Set this to your preferred level 0-100.
 VCR_IN_VOLUME      = 90              # If you use different input from TV
+RADIO_IN_VOLUME    = 80              # Set this to your preferred level 0-100.
 DEV_MIXER          = '/dev/mixer'    # mixer device 
 
 START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.

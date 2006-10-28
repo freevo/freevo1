@@ -85,7 +85,7 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         set informations for a diritem based on the content, etc.
         """
-        if not diritem.image:
+        if not diritem.image and os.path.exists(diritem.dir):
             timestamp = os.stat(diritem.dir)[stat.ST_MTIME]
             if not diritem['coversearch_timestamp'] or \
                    timestamp > diritem['coversearch_timestamp']:
