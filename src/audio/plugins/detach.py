@@ -1,4 +1,3 @@
-#if 0 /*
 # -----------------------------------------------------------------------
 # detach.py - Detach plugin for the audio player
 # -----------------------------------------------------------------------
@@ -27,7 +26,6 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-#endif
 
 
 import config
@@ -55,6 +53,14 @@ class PluginInterface(plugin.MainMenuPlugin):
         gui  = audio.player.get()
 
         # hide the player and show the menu
+        mpav = plugin.getbyname( 'audio.mpav' )
+        if mpav:
+            mpav.stop_mpav()
+
+        mplvis = plugin.getbyname( 'audio.mplayervis' )
+        if mplvis:
+            mplvis.stop_visual()
+
         gui.hide()
         gui.menuw.show()
 
@@ -88,6 +94,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             if gui:
                 gui.player.eventhandler(Event('STOP'))
 
+
     def items(self, parent):
         gui = audio.player.get()
         if gui and gui.player.is_playing():
@@ -108,3 +115,11 @@ class PluginInterface(plugin.MainMenuPlugin):
         # hide the menu and show the player
         menuw.hide()
         gui.show()
+        mpav = plugin.getbyname( 'audio.mpav' )
+        if mpav:
+            mpav.start_mpav()
+
+        mplvis = plugin.getbyname( 'audio.mplayervis' )
+        if mplvis:
+            mplvis.stop_visual()
+            mplvis.start_visual()

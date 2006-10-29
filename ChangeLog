@@ -3,12 +3,13 @@ Freevo Changelog
 
 $Id$
 
-Note
-----
+Notes
+-----
 Items marked (X#nnnnnnn) have a tracker item see:
 X is the category and #nnnnnnn is the tracker number.
 (B)ugs             http://sourceforge.net/tracker/?group_id=46652&atid=446895
 (F)eature requests http://sourceforge.net/tracker/?group_id=46652&atid=446898
+
 
 Release 1.7.0 (2006-12-15):
 ---------------------------
@@ -19,6 +20,14 @@ Release 1.7.0 (2006-12-15):
  * New XM online plugin (F#1580412)
  * Updated DEBUGGING, IP, PORT, UID and GUI based on helper name (F#1580628)
  * Updated helper convert_config (F#1578183)
+
+
+Release 1.6.1 (2006-??-??):
+---------------------------
+
+ * Fixed detached music player when the plug-in mplayervis is enabled (B#1582048)
+ * Fixed IMDB parser, the title should not work (B#1586579)
+
 
 Release 1.6.0 (2006-10-31):
 ---------------------------
@@ -76,6 +85,7 @@ Release 1.6.0 (2006-10-31):
  * Fixed webserver not crashing when there is a permissions problem (B#1577266)
  * Removed MPlayer and Xine version checks (B#1566373,B#1574273)
  * Removed -OO option from install (B#1565076)
+
 
 Release 1.5.3 (2005-01-23):
 ---------------------------

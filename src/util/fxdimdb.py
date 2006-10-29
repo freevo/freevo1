@@ -51,7 +51,7 @@ import os
 import config 
 import util
 
-from kaa.metadata.disc.discinfo import cdrom_disc_id
+from mmpython.disc.discinfo import cdrom_disc_id
 #Constants
 
 freevo_version = '1.3.4'
@@ -604,8 +604,12 @@ class FxdImdb:
         Returns tuple of (title, info(dict), image_urls)"""
 
         dvd = 0
-        
-        regexp_title   = re.compile('.*STRONG CLASS="title">(.*?)<', re.I)
+
+        # This is split across two lines, as the code is regexp and should be an XML parser
+        # this has made it far more difficult to repair. using the page title _SHOULD_ work
+        #   - Karl Lattimer
+        #regexp_title   = re.compile('.*STRONG CLASS="title">(.*?)<', re.I)
+        regexp_title   = re.compile('<title>(.*?) \(.*\)</title>', re.I)
         regexp_year    = re.compile('.*<A HREF="/Sections/Years/.*?([0-9]*)<', re.I)
         regexp_genre   = re.compile('.*href="/Sections/Genres(.*)$', re.I)
         regexp_tagline = re.compile('.*<B CLASS="ch">Tagline.*?</B>(.*?)<', re.I)
