@@ -51,7 +51,7 @@ import os
 import config 
 import util
 
-from mmpython.disc.discinfo import cdrom_disc_id
+from kaa.metadata.disc.discinfo import cdrom_disc_id
 #Constants
 
 freevo_version = '1.3.4'
