@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.16
+LOCAL_CONF_VERSION = 5.17
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
