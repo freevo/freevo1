@@ -27,6 +27,7 @@ Release 1.6.1 (2006-??-??):
 
  * Fixed detached music player when the plug-in mplayervis is enabled (B#1582048)
  * Fixed IMDB parser, the title should not work (B#1586579)
+ * Fixed VIDEO_INTERLACING = False having no effect (B#1586721)
 
 
 Release 1.6.0 (2006-10-31):
