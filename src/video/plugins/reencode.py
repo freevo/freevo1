@@ -65,9 +65,9 @@ class PluginInterface(plugin.ItemPlugin):
         for d in dir(item.info):
             print '%s: %s' % (d, eval('item.info.%s' % d))
         print 'type:', item.type
-        print 'mode:', item.mode
-        print 'name:', type(item.name)
-        print 'name:', item.name.encode('utf-8')
+        if hasattr(item, 'mode'): print 'mode:', item.mode
+        if hasattr(item, 'name'): print 'name:', type(item.name)
+        if hasattr(item, 'name'): print 'name:', item.name.encode('utf-8')
         print 'filename:', item.filename
         if hasattr(item, 'parentname'):
             print item.parentname
