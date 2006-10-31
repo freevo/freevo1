@@ -1,9 +1,19 @@
 # $Id$
 
 FREEVO_HOME="/usr/bin"
+# Uncomment the following line to allow freevo to startup automatically without 
+# logging in
+#FREEVO="yes"
 FBSET="/usr/sbin/fbset"
 MATROXSET=""
 FBSETDB="/usr/share/freevo/contrib/fbcon/fbset.db"
 FREEVO_LOG="/var/log/freevo/main-0.log"
 FREEVO_RES="main.py remote.py"
 VTRELEASE=""
+# The following value should match the 'display' variable in 
+# /etc/freevo/freevo.conf (?)
+# I'm not sure why SDL won't start without this being defined here
+SDL_VIDEODRIVER=x11
+
+
+
