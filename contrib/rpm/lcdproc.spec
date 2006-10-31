@@ -1,13 +1,13 @@
 
 Summary: 	LCDproc displays real-time system information on a 20x4 backlit LCD.
 Name:   	lcdproc	
-Version:	0.4.5
-Release:	1_fc2
+Version:	0.5.1
+Release:	1.fc5
 License:	GPL
 Url:       	http://lcdproc.omnipotent.net
 Group:     	Monitoring	
 Source:    	http://lcdproc.omnipotent.net.net/%{name}-%{version}.tar.gz
-Source1:	LCDd.init
+#Source1:	LCDd.init
 BuildRoot: 	%{_tmppath}/%{name}-buildroot
 BuildRequires:	ncurses-devel 
 
@@ -31,7 +31,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %setup -q
 
-%configure --enable-stat-nfs --enable-stat-smbfs --enable-drivers=hd44780,lcdm001,mtxorb,cfontz,curses,text,lb216,bayrad,glk,joy,t6963
+##%%configure --enable-stat-nfs --enable-stat-smbfs --enable-drivers=hd44780,lcdm001,mtxorb,cfontz,curses,text,lb216,bayrad,glk,joy,t6963
+
+%configure
 
 %build
 %{__make} CFLAGS="$RPM_OPT_FLAGS"
@@ -43,14 +45,16 @@ rm -rf $RPM_BUILD_ROOT
 
 # init
 install -d 		$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d
-install %SOURCE1	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/LCDd
+#install %SOURCE1	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/LCDd
+install scripts/init-LCDd.rpm  $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/LCDd
+install scripts/init-lcdproc.rpm  $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/lcdproc
 
 # conf files
-install -d		$RPM_BUILD_ROOT%{_sysconfdir}/lcdproc
-install LCDd.conf 	$RPM_BUILD_ROOT%{_sysconfdir}/lcdproc/LCDd.conf
-touch scripts/lcdproc.conf  	$RPM_BUILD_ROOT%{_sysconfdir}/lcdproc/lcdproc.conf
-echo "-s localhost -p 13666 C M X U P S" > \
-			$RPM_BUILD_ROOT%{_sysconfdir}/lcdproc/lcdproc.conf
+#install -d		$RPM_BUILD_ROOT%{_sysconfdir}/lcdproc
+#install LCDd.conf 	$RPM_BUILD_ROOT%{_sysconfdir}/lcdproc/LCDd.conf
+#touch scripts/lcdproc.conf  	$RPM_BUILD_ROOT%{_sysconfdir}/lcdproc/lcdproc.conf
+#echo "-s localhost -p 13666 C M X U P S" > \
+#			$RPM_BUILD_ROOT%{_sysconfdir}/lcdproc/lcdproc.conf
 
 
 %if %{?_with_metar:0}%{!?_with_metar:1}
@@ -78,13 +82,16 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root, 0755)
 %{_bindir}/*
+%dir %{_libdir}/lcdproc
+%{_libdir}/lcdproc/*
 %{_sbindir}/*
 %{_mandir}/man?/*
-%dir 	%{_sysconfdir}/lcdproc
-%config(noreplace)	%{_sysconfdir}/lcdproc/*
+%dir 	%{_sysconfdir}/
+%config(noreplace)	%{_sysconfdir}/*.conf
 %doc README* INSTALL COPYING TODO ChangeLog 
 %defattr(-, root, root, 0700)
-%config(noreplace)	%{_sysconfdir}/rc.d/init.d/LCDd
+%{_sysconfdir}/rc.d/init.d/LCDd
+%{_sysconfdir}/rc.d/init.d/lcdproc
 
 
 %changelog
