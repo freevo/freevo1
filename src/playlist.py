@@ -109,8 +109,11 @@ class Playlist(Item):
         for line in playlist_lines:
             if line.endswith('\r\n'):
                 line = line.replace('\\', '/') # Fix MSDOS slashes
-            if os.path.exists(os.path.join(curdir,line)):
-                self.playlist.append(os.path.join(curdir,line))
+            try:
+                if os.path.exists(os.path.join(curdir,line)):
+                    self.playlist.append(os.path.join(curdir,line))
+            except TypeError:
+                print 'Bad m3u playlist line in "%s":%r' % (plsname, line)
             
 
     def read_pls(self, plsname):
