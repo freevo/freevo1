@@ -7,8 +7,9 @@
 # Author: den_RDC
 # some parts taken or inspired by Quickrip (by T. Chance, GPL,
 # http://quickrip.sf.net)
-# TODO:
+# Todo:
 # niceness & pausing queue
+# different containers (Matroska)
 #
 # -----------------------------------------------------------------------
 # Copyright (C) 2004 den_RDC (RVDM)
@@ -210,7 +211,8 @@ class EncodingJob:
         """Calculates the video bitrate"""
 
         self.vbrate = int((((int(self.tgtsize)*8) / int(self.length)) - int(self.abrate)) / 0.98)
-        if self.vbrate > 12000: #we got a very short file, very high bitrates are interpreted as bit/s instead of kbit/s, shitty qual
+        #we got a very short file, very high bitrates are interpreted as bit/s instead of kbit/s, shitty qual
+        if self.vbrate > 12000:
             self.vbrate = 6000
 
 
@@ -327,7 +329,8 @@ class EncodingJob:
         if self.crop != None:
             vf += [ "crop=%s" % self.crop ]
 
-        #in case of xvid and anamorphic dvd, add scaling to compensate AR.. if we didn't find cropping we have no res, so no tricks
+        #in case of xvid and anamorphic dvd, add scaling to compensate AR.. 
+        #if we didn't find cropping we have no res, so no tricks
         if self.vcodec == "XViD" and (self.crop != None):
             if self.ana:
                 #calculate a decent resized picturesize, res must still be a multiple of 16
@@ -511,8 +514,6 @@ class EncodingJob:
         self.thread = CommandThread(self, command, updatefunc, finalfunc,
                                     flushbuffer, data, None) #self.lock)
         self.thread.start()
-
-
 
 
 

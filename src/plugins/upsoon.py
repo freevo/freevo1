@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# interrupt player
+# Stop the playing and listening when something is upsoon
 # -----------------------------------------------------------------------
 # $Id: upsoon.py $
 #
@@ -45,9 +45,6 @@ from util.marmalade import jellyToXML, unjellyFromXML
 from gui import AlertBox
 from event import *
 
-# set the base debug level
-dbglvl=1
-
 
 class PluginInterface( plugin.DaemonPlugin ):
     """
@@ -74,7 +71,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         """
         init the upsoon plugin
         """
-        _debug_('__init__(self)', dbglvl+1)
+        _debug_('__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
         self.lock = thread.allocate_lock()
         self.poll_interval = 3000 #30 secs
@@ -84,16 +81,16 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         server_string = 'http://%s:%s/' % (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
 
-        _debug_('%s' % server_string, dbglvl)
+        _debug_('%s' % server_string)
         self.server = xmlrpclib.Server(server_string, allow_none=1)
-        _debug_('%s' % self.server, dbglvl)
+        _debug_('%s' % self.server)
 
         self.serverup = None
         self.next_program = self.findNextProgram()
         # strange, doesn't work with non-ascii characters
         #_debug_('%s:%s chan=%s %s->%s' % (self.next_program.title.encode('utf-8'), \
         #    self.next_program.sub_title.encode('utf-8'), self.next_program.channel_id, \
-        #    time.localtime(self.next_program.start), time.localtime(self.next_program.stop)), dbglvl+1)
+        #    time.localtime(self.next_program.start), time.localtime(self.next_program.stop)), 2)
 
         self.fc = FreevoChannels()
         self.seconds_before_start = 60
@@ -102,14 +99,12 @@ class PluginInterface( plugin.DaemonPlugin ):
 
 
     def findNextProgram(self):
-        """
-        returns the next program that will be recorded
-        """
-        _debug_('findNextProgram(self)', dbglvl+1)
+        """ returns the next program that will be recorded """
+        _debug_('findNextProgram(self)', 2)
         serverup = True
         try:
             (status, message) = self.server.findNextProgram()
-            _debug_('status=%s, message=%s' % (status, message), dbglvl+2)
+            _debug_('status=%s, message=%s' % (status, message), 3)
         except TypeError:
             _debug_('TypeError exception')
             status = False
@@ -139,11 +134,11 @@ class PluginInterface( plugin.DaemonPlugin ):
         """
         Check with the record server if suspended by user
         """
-        _debug_('isPlayerRunning(self)', dbglvl+1)
+        _debug_('isPlayerRunning(self)', 2)
         serverup = True
         try:
             (status, message) = self.server.isPlayerRunning()
-            _debug_('status=%s, message=%s' % (status, message), dbglvl+2)
+            _debug_('status=%s, message=%s' % (status, message), 3)
         except Exception, e:
             serverup = False
             message = None
@@ -168,7 +163,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         """
         Return is a player is running
         """
-        _debug_('getPlayerRunning(self)', dbglvl+1)
+        _debug_('getPlayerRunning(self)', 2)
         return self.is_player_running
 
 
@@ -185,10 +180,10 @@ class PluginInterface( plugin.DaemonPlugin ):
         Sends a poll message to the record server
         """
         now=time.time()
-        _debug_('poll(self)', dbglvl+1)
+        _debug_('poll(self)', 2)
 
         self.next_program  = self.findNextProgram()
-        _debug_('now=%s next_program=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), dbglvl)
+        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program))
         if self.next_program == None:
             return None
 
@@ -207,12 +202,12 @@ class PluginInterface( plugin.DaemonPlugin ):
             return None
 
         secs_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
-        _debug_('next recording in %s secs' % (secs_to_next), dbglvl)
+        _debug_('next recording in %s secs' % (secs_to_next))
         # stop the player 60 seconds before recording is due to start
         if (secs_to_next > self.seconds_before_start):
             return None
 
-        _debug_('recording in less that a minute (%s secs)' % (secs_to_next), dbglvl)
+        _debug_('recording in less that a minute (%s secs)' % (secs_to_next))
         open(self.pending_lockfile, 'w').close()
 
         try:
@@ -223,7 +218,7 @@ class PluginInterface( plugin.DaemonPlugin ):
                 os.read(dev_fh, 1)
             except OSError:
                 rc.post_event(STOP)
-                _debug_('video device \"%s\" in use' % (vdev), dbglvl)
+                _debug_('video device \"%s\" in use' % (vdev))
                 rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
                 # The alert box doesn't work
                 #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
@@ -242,7 +237,7 @@ class PluginInterface( plugin.DaemonPlugin ):
                     os.read(dev_fh, 1)
                 except OSError:
                     rc.post_event(STOP)
-                    _debug_('radio device \"%s\" in use' % (rdev), dbglvl)
+                    _debug_('radio device \"%s\" in use' % (rdev))
                     rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
                     # Need to go back one menu, the alert box doesn't work
                     #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
@@ -253,17 +248,15 @@ class PluginInterface( plugin.DaemonPlugin ):
 
 
     def eventhandler( self, event, menuw=None ):
-        """
-        Processes user events
+        """ Processes user events
         TODO
-            something useful
-        """
+            something useful """
         self.lock.acquire()
 
         _debug_('eventhandler(self, %s, %s) name=%s arg=%s context=%s handler=%s' % \
-            (event, menuw, event.name, event.arg, event.context, event.handler), dbglvl+2)
+            (event, menuw, event.name, event.arg, event.context, event.handler), 3)
 
-        _debug_('event name=%s arg=%s' % (event.name, event.arg), dbglvl)
+        _debug_('event name=%s arg=%s' % (event.name, event.arg))
 
         self.lock.release()
 

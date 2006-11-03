@@ -379,6 +379,3 @@ if __name__ == '__main__':
         print getProgress()
         sleep(5)
         print getProgress()
-
-  
-    
