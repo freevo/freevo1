@@ -442,7 +442,10 @@ class RecordServer(xmlrpc.XMLRPC):
                 # then end the loop, and figure out which has priority,
                 # remember to take into account the full length of the shows
                 # and how much they overlap, or chop one short
+                print 'DJW: prog.stop:', prog.stop
+                print 'int(prog.stop + config.TV_RECORD_PADDING_POST)', int(prog.stop + config.TV_RECORD_PADDING_POST)
                 duration = int((prog.stop + config.TV_RECORD_PADDING_POST) - now - 10)
+                print 'DJW: duration:', duration
                 if duration < 10:
                     return 
 
@@ -453,6 +456,12 @@ class RecordServer(xmlrpc.XMLRPC):
                         # check if the new prog is a favorite and the current running is
                         # not. If so, the user manually added something, we guess it
                         # has a higher priority.
+
+                        print 'DJW: prog:', prog
+                        print 'DJW: self.isProgAFavorite(prog)[0]', self.isProgAFavorite(prog)[0]
+                        print 'DJW: self.isProgAFavorite(currently_recording)[0]', self.isProgAFavorite(currently_recording)[0]
+                        print 'DJW: prog.stop+config.TV_RECORD_PADDING_POST', prog.stop+config.TV_RECORD_PADDING_POST
+                        print 'DJW: now:', now
 
                         if self.isProgAFavorite(prog)[0] and \
                            not self.isProgAFavorite(currently_recording)[0] and \
@@ -474,6 +483,7 @@ class RecordServer(xmlrpc.XMLRPC):
                             overlap = (currently_recording.stop + \
                                        config.TV_RECORD_PADDING_POST) - \
                                       (prog.start - config.TV_RECORD_PADDING_PRE)
+                            print 'DJW: overlap:', overlap
                             if overlap <= ((config.TV_RECORD_PADDING_PRE +
                                             config.TV_RECORD_PADDING_POST)/4):
                                 sr.removeProgram(currently_recording, 
@@ -750,159 +760,258 @@ class RecordServer(xmlrpc.XMLRPC):
     #################################################################
 
     def xmlrpc_isPlayerRunning(self):
-        status = self.isPlayerRunning()
-        message = status and 'player is running' or 'player is not running'
+        (status, message) = (FALSE, 'RecordServer::isPlayerRunning: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            status = self.isPlayerRunning()
+            message = status and 'player is running' or 'player is not running'
+        finally:
+            self.lock.release()
         return (status, message)
 
     def xmlrpc_isRecording(self):
-        status = self.isRecording()
-        message = status and 'is recording' or 'is not recording'
+        (status, message) = (FALSE, 'RecordServer::isRecording: cannot acquire lock')
+        try:
+            status = self.isRecording()
+            message = status and 'is recording' or 'is not recording'
+        finally:
+            self.lock.release()
         return (status, message)
 
     def xmlrpc_findNextProgram(self):
-        response = self.findNextProgram()
-        status = response != None
-        return (status, jellyToXML(response))
+        (status, message) = (FALSE, 'RecordServer::findNextProgram: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            response = self.findNextProgram()
+            status = response != None
+            return (status, jellyToXML(response))
+        finally:
+            self.lock.release()
+        return (status, message)
 
     def xmlrpc_getScheduledRecordings(self):
-        return (TRUE, jellyToXML(self.getScheduledRecordings()))
+        (status, message) = (FALSE, 'RecordServer::getScheduledRecordings: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            return (TRUE, jellyToXML(self.getScheduledRecordings()))
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_saveScheduledRecordings(self, scheduledRecordings=None):
-        status = self.saveScheduledRecordings(scheduledRecordings)
-        message = status and 'saveScheduledRecordings::success' or 'saveScheduledRecordings::failure'
+        (status, message) = (FALSE, 'RecordServer::saveScheduledRecordings: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            status = self.saveScheduledRecordings(scheduledRecordings)
+            message = status and 'saveScheduledRecordings::success' or 'saveScheduledRecordings::failure'
+        finally:
+            self.lock.release()
         return (status, message)
+
 
     def xmlrpc_scheduleRecording(self, prog=None):
         if not prog:
             return (FALSE, 'RecordServer::scheduleRecording:  no prog')
 
-        prog = unjellyFromXML(prog)
-
-        (status, response) = self.scheduleRecording(prog)
-
-        return (status, 'RecordServer::scheduleRecording: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::scheduleRecording: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            prog = unjellyFromXML(prog)
+            (status, response) = self.scheduleRecording(prog)
+            message = 'RecordServer::scheduleRecording: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_removeScheduledRecording(self, prog=None):
         if not prog:
             return (FALSE, 'RecordServer::removeScheduledRecording:  no prog')
 
-        prog = unjellyFromXML(prog)
-
-        (status, response) = self.removeScheduledRecording(prog)
-
-        return (status, 'RecordServer::removeScheduledRecording: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::removeScheduledRecording: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            prog = unjellyFromXML(prog)
+            (status, response) = self.removeScheduledRecording(prog)
+            message = 'RecordServer::removeScheduledRecording: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_isProgScheduled(self, prog=None, schedule=None):
         if not prog:
             return (FALSE, 'removeScheduledRecording::failure:  no prog')
 
-        prog = unjellyFromXML(prog)
-
-        if schedule:
-            schedule = unjellyFromXML(schedule)
-
-        (status, response) = self.isProgScheduled(prog, schedule)
-
-        return (status, 'RecordServer::isProgScheduled: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::removeScheduledRecording: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            prog = unjellyFromXML(prog)
+            if schedule:
+                schedule = unjellyFromXML(schedule)
+            (status, response) = self.isProgScheduled(prog, schedule)
+            message = 'RecordServer::isProgScheduled: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_findProg(self, chan, start):
-        (status, response) = self.findProg(chan, start)
-
-        if status:
-            return (status, jellyToXML(response))
-        else:
-            return (status, 'RecordServer::findProg: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::findProg: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.findProg(chan, start)
+            message = status and jellyToXML(response) or ('RecordServer::findProg: %s' % response)
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_findMatches(self, find, movies_only):
-        (status, response) = self.findMatches(find, movies_only)
-
-        if status:
-            return (status, jellyToXML(response))
-        else:
-            return (status, 'RecordServer::findMatches: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::findMatches: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.findMatches(find, movies_only)
+            message = status and jellyToXML(response) or ('RecordServer::findMatches: %s' % response)
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_echotest(self, blah):
-        return (TRUE, 'RecordServer::echotest: %s' % blah)
+        (status, message) = (FALSE, 'RecordServer::echotest: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, message) = (TRUE, 'RecordServer::echotest: %s' % blah)
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_addFavorite(self, name, prog, exactchan=FALSE, exactdow=FALSE, exacttod=FALSE):
-        prog = unjellyFromXML(prog)
-        (status, response) = self.addFavorite(name, prog, exactchan, exactdow, exacttod)
-
-        return (status, 'RecordServer::addFavorite: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::addFavorite: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            prog = unjellyFromXML(prog)
+            (status, response) = self.addFavorite(name, prog, exactchan, exactdow, exacttod)
+            message = 'RecordServer::addFavorite: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_addEditedFavorite(self, name, title, chan, dow, mod, priority):
-        (status, response) = \
-            self.addEditedFavorite(unjellyFromXML(name), \
+        (status, message) = (FALSE, 'RecordServer::addEditedFavorite: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.addEditedFavorite(unjellyFromXML(name), \
             unjellyFromXML(title), chan, dow, mod, priority)
-
-        return (status, 'RecordServer::addEditedFavorite: %s' % response)
+            message = 'RecordServer::addEditedFavorite: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_removeFavorite(self, name=None):
-        (status, response) = self.removeFavorite(name)
-
-        return (status, 'RecordServer::removeFavorite: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::removeFavorite: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.removeFavorite(name)
+            message = 'RecordServer::removeFavorite: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_clearFavorites(self):
-        (status, response) = self.clearFavorites()
-
-        return (status, 'RecordServer::clearFavorites: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::clearFavorites: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.clearFavorites()
+            message = 'RecordServer::clearFavorites: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_getFavorites(self):
-        return (TRUE, jellyToXML(self.getScheduledRecordings().getFavorites()))
+        (status, message) = (FALSE, 'RecordServer::getFavorites: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, message) = (TRUE, jellyToXML(self.getScheduledRecordings().getFavorites()))
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_getFavorite(self, name):
-        (status, response) = self.getFavorite(name)
-
-        if status:
-            return (status, jellyToXML(response))
-        else:
-            return (status, 'RecordServer::getFavorite: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::getFavorite: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.getFavorite(name)
+            message = status and jellyToXML(response) or 'RecordServer::getFavorite: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_adjustPriority(self, favname, mod=0):
-        (status, response) = self.adjustPriority(favname, mod)
-
-        return (status, 'RecordServer::adjustPriority: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::adjustPriority: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.adjustPriority(favname, mod)
+            message = 'RecordServer::adjustPriority: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_isProgAFavorite(self, prog, favs=None):
-        prog = unjellyFromXML(prog)
-        if favs:
-            favs = unjellyFromXML(favs)
-
-        (status, response) = self.isProgAFavorite(prog, favs)
-
-        return (status, 'RecordServer::adjustPriority: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::adjustPriority: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            prog = unjellyFromXML(prog)
+            if favs:
+                favs = unjellyFromXML(favs)
+            (status, response) = self.isProgAFavorite(prog, favs)
+            message = 'RecordServer::adjustPriority: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_removeFavoriteFromSchedule(self, fav):
-        (status, response) = self.removeFavoriteFromSchedule(fav)
-
-        return (status, 'RecordServer::removeFavoriteFromSchedule: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::removeFavoriteFromSchedule: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.removeFavoriteFromSchedule(fav)
+            message = 'RecordServer::removeFavoriteFromSchedule: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_addFavoriteToSchedule(self, fav):
-        (status, response) = self.addFavoriteToSchedule(fav)
-
-        return (status, 'RecordServer::addFavoriteToSchedule: %s' % response)
+        (status, message) = (FALSE, 'RecordServer::addFavoriteToSchedule: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.addFavoriteToSchedule(fav)
+            message = 'RecordServer::addFavoriteToSchedule: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     def xmlrpc_updateFavoritesSchedule(self):
-        (status, response) = self.updateFavoritesSchedule()
-
-        return (status, 'RecordServer::updateFavoritesSchedule: %s' % response)
+        (status, message) = (FALSE, 'updateFavoritesSchedule: cannot acquire lock')
+        try:
+            self.lock.acquire()
+            (status, response) = self.updateFavoritesSchedule()
+            message = 'RecordServer::updateFavoritesSchedule: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
 
 
     #################################################################
