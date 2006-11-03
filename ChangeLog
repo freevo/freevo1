@@ -18,6 +18,7 @@ Release 1.7.0 (2006-12-15):
  * New encoding server, allows re-encoding TV programs and ripping DVDs (F#1580642,F#1578402)
  * New RSS server (F#1580407)
  * New XM online plugin (F#1580412)
+ * Replaced mmpython with kaa.base and kaa.metadata (F#1580712)
  * Updated DEBUGGING, IP, PORT, UID and GUI based on helper name (F#1580628)
  * Updated helper convert_config (F#1578183)
 
@@ -25,9 +26,11 @@ Release 1.7.0 (2006-12-15):
 Release 1.6.1 (2006-??-??):
 ---------------------------
 
+ * Updated translations for new plug-ins and skins (F#1587980)
  * Fixed detached music player when the plug-in mplayervis is enabled (B#1582048)
  * Fixed IMDB parser, the title should not work (B#1586579)
  * Fixed VIDEO_INTERLACING = False having no effect (B#1586721)
+ * Fixed xine --no-lirc option when compiled without lirc support (B#1589722)
 
 
 Release 1.6.0 (2006-10-31):

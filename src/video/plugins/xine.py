@@ -134,7 +134,7 @@ class Xine:
         if item['deinterlace']:
             command.append('-D')
 
-        if not rc.PYLIRC and '--no-lirc' in command:
+        if not config.XINE_HAS_NO_LIRC and '--no-lirc' in command:
             command.remove('--no-lirc')
 
         self.max_audio        = 0

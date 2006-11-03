@@ -898,6 +898,9 @@ IMAGEVIEWER_BLEND_MODE = -1
 
 # XINE_AO_DEV = 'oss'                     # alsa or oss
 
+# Set to False if xine doesn't have '--no-lirc' option
+# XINE_HAS_NO_LIRC = True
+
 
 # ======================================================================
 # IVTV Xine TV settings:

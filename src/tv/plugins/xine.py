@@ -124,7 +124,7 @@ class Xine:
 
         command = copy.copy(self.command)
 
-        if not rc.PYLIRC and '--no-lirc' in command:
+        if not config.XINE_HAS_NO_LIRC and '--no-lirc' in command:
             command.remove('--no-lirc')
 
         command.append('dvb://' + tuner_channel)

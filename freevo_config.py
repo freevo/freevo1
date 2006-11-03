@@ -228,6 +228,7 @@ LOCAL_CONF_CHANGES = [
     (5.16,
      '''Removed the recordable setting in VIDEO_GROUPS, please remove this setting.
      Added xmltv-1.2 this requires elementtree
+     Added XINE_HAS_NO_LIRC to see if '--no-lirc' should be passed to xine
      Added XINE_TV_VO_DEV, XINE_TV_AO_DEV, and XINE_TV_TIMESHIFT_FILEMASK for the
   	 new tv.ivtv_xine_tv plugin (the latter should be e.g. "/tmp/xine-buf-" and point
   	 to a place with enough free diskspace (several gigabytes).
@@ -1370,10 +1371,6 @@ MPLAYER_SET_AUDIO_DELAY = 0
 MPLAYER_VF_INTERLACED = 'pp=de/fd'
 MPLAYER_VF_PROGRESSIVE = 'pp=de'
 
-# default to XINE_VO/AO_DEV:
-XINE_TV_VO_DEV = None
-XINE_TV_AO_DEV = None
-XINE_TV_TIMESHIFT_FILEMASK = "you must set XINE_TV_TIMESHIFT_FILEMASK in your local_conf.py (e.g.=/tmp/xine-buf-)"
 
 # ======================================================================
 # Xine settings:
@@ -1410,7 +1407,10 @@ if XINE_COMMAND:
 if CONF.fbxine:
     plugin.activate('audio.xine')
 
-# default to XINE_VO/AO_DEV:
+# Set to False if xine doesn't have '--no-lirc' option
+XINE_HAS_NO_LIRC = True
+
+# Defaults to XINE_VO/AO_DEV:
 XINE_TV_VO_DEV = None
 XINE_TV_AO_DEV = None
 XINE_TV_TIMESHIFT_FILEMASK = "you must set XINE_TV_TIMESHIFT_FILEMASK in your local_conf.py"

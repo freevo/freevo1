@@ -91,7 +91,7 @@ class Xine:
         self.app_mode     = 'audio'
         self.app          = None
         self.command = '%s -V none -A %s --stdctl' % (config.CONF.fbxine, config.XINE_AO_DEV)
-        if rc.PYLIRC:
+        if config.XINE_HAS_NO_LIRC:
             self.command = '%s --no-lirc' % self.command
 
         
