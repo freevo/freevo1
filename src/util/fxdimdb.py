@@ -47,6 +47,7 @@ import urllib, urllib2, urlparse
 import sys
 import codecs
 import os
+from BeautifulSoup import BeautifulSoup
 
 import config 
 import util
@@ -54,7 +55,7 @@ import util
 from kaa.metadata.disc.discinfo import cdrom_disc_id
 #Constants
 
-freevo_version = '1.3.4'
+freevo_version = '1.6.0'
 
 imdb_title_list = '/tmp/imdb-movies.list'
 imdb_title_list_url = 'ftp://ftp.funet.fi/pub/mirrors/ftp.imdb.com/pub/movies.list.gz'
@@ -302,21 +303,23 @@ class FxdImdb:
     
     def writeFxd(self):
         """Write fxd file"""
+        print 'in writeFxd'
         #if fxdfile is empty, set it yourself
         if not self.fxdfile:
             self.setFxdFile()
         
         try:
             #should we add to an existing file?
-            if self.append == True :
-                if self.isdiscset == True:
+            if self.append:
+                if self.isdiscset:
                     self.update_discset()
-                else: self.update_movie()
+                else:
+                    self.update_movie()
             else:
                 #fetch images
                 self.fetch_image()
                 #should we write a disc-set ?
-                if self.isdiscset == True:
+                if self.isdiscset:
                     self.write_discset()
                 else:
                     self.write_movie()
@@ -412,7 +415,7 @@ class FxdImdb:
                 "    The information in this file are from the Internet " +
                 "Movie Database (IMDb).\n" +
                 "    Please visit http://www.imdb.com for more informations.\n")
-        i.write("    <source url=\"http://www.imdb.com/Title?%s\"/>\n"  % self.imdb_id +
+        i.write("    <source url=\"http://www.imdb.com/tt%s\"/>\n"  % self.imdb_id +
                 "  </copyright>\n")
         #disc-set    
         i.write("  <disc-set title=\"%s\">\n" % self.str2XML(self.title))
@@ -597,114 +600,64 @@ class FxdImdb:
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
 
-
-    
     def parsedata(self, results, id=0):
         """results (imdb html page), imdb_id
         Returns tuple of (title, info(dict), image_urls)"""
 
         dvd = 0
 
-        # This is split across two lines, as the code is regexp and should be an XML parser
-        # this has made it far more difficult to repair. using the page title _SHOULD_ work
-        #   - Karl Lattimer
-        #regexp_title   = re.compile('.*STRONG CLASS="title">(.*?)<', re.I)
-        regexp_title   = re.compile('<title>(.*?) \(.*\)</title>', re.I)
-        regexp_year    = re.compile('.*<A HREF="/Sections/Years/.*?([0-9]*)<', re.I)
-        regexp_genre   = re.compile('.*href="/Sections/Genres(.*)$', re.I)
-        regexp_tagline = re.compile('.*<B CLASS="ch">Tagline.*?</B>(.*?)<', re.I)
-        regexp_plot1   = re.compile('.*<B CLASS="ch">Plot Outline.*?</B>(.*?)<', re.I)
-        regexp_plot2   = re.compile('.*<B CLASS="ch">Plot Summary.*?</B>(.*?)<', re.I)
-        regexp_rating  = re.compile('.*<B>([0-9\.]*)/10</B> (.[0-9,]* votes.?)', re.I)
-        regexp_image   = re.compile('.*ALT="cover".*src="(http://.*?)"', re.I)
-        regexp_runtime = re.compile('.*<b class="ch">Runtime', re.I)
-        regexp_dvd     = re.compile('.*<a href="/DVD\?', re.I)
+        soup = BeautifulSoup()
+        soup.feed(results.read())
     
-        regexp_dvd_image = re.compile('.*(http://images.amazon.com.*?ZZZZZ.*?)"')
-        regexp_url   = re.compile('.*href="(http.*?)"', re.I)
-    
-        next_line_is = None
-    
-        for line in results.read().split("\n"):
-            if next_line_is == 'runtime':
-                next_line_is = None
-                self.info['runtime'] = self.str2XML(line)
-    
-            if regexp_runtime.match(line):
-                next_line_is = 'runtime'
-                continue
-    
-            m = regexp_title.match(line)
-            if m: self.title = self.str2XML(m.group(1))
-    
-            m = regexp_year.match(line)
-            if m: self.info['year'] = m.group(1)
-    
-            m = regexp_genre.match(line)
-            if m:
-                for g in re.compile(' *</A>.*?> *', re.I).split(' </a>'+line+' > '):
-                    if self.info['genre'] == "": self.info['genre'] = g
-                    elif g != "" and g != "(more)": self.info['genre'] += " / "+ g
-    
-    
-            m = regexp_tagline.match('%s<' % line)
-            if m:
-                self.info['tagline'] = self.str2XML(re.compile('[\t ]+').sub(" ", ' ' + m.group(1))[1:])
-    
-            m = regexp_plot1.match('%s<' % line)
-            if m: self.info['plot'] = self.str2XML(re.compile('[\t ]+').sub(" ", ' ' + m.group(1))[1:])
-    
-            m = regexp_plot2.match('%s<' % line)
-            if m: self.info['plot'] = self.str2XML(re.compile('[\t ]+').sub(" ", ' ' + m.group(1))[1:])
-    
-            m = regexp_rating.match(line)
-            if m: self.info['rating'] = m.group(1) + '/10 ' + m.group(2)
-    
-            m = regexp_dvd.match(line)
-            if m: dvd = 1
-    
-            m = regexp_image.match(line)
-            if m: self.image_urls += [ m.group(1) ]
-    
-    
+        title = soup.find('strong', {'class':'title'})
+        image = soup.find('img', { 'title':title.next.strip() })
+
+        self.title = title.next.strip()
+        self.info['title'] = self.title
+        self.info['image'] = image['src']
+        self.info['year'] = title.find('a').string.strip()
+        self.info['plot'] = soup.find(text='Plot Outline:').next.strip()
+        self.info['tagline'] = soup.find(text='Tagline:').next.strip()
+        self.info['genre'] = ''
+        genre=soup.find(text='Genre:').parent
+        genres = []
+        while genre.findNextSibling('a').string != '(more)':
+            genres.append(genre.findNextSibling('a').string.strip())
+            genre=genre.findNextSibling('a')
+        self.info['genre'] = genres[0]
+        for i in genres[1:]:
+            self.info['genre'] += ' / ' + i
+        rating = soup.find(text='User Rating:').parent.findNextSibling('b')
+        votes = rating.next.next.strip()
+        self.info['rating'] = rating.string.strip() + ' ' + votes.strip()
+        self.info['runtime'] = soup.find(text='Runtime:').next.strip()
+        for (k,v) in self.info.items():
+            print k, ':', v
+
+        print 'id:', id, 'dvd:', dvd
+
         if not id:
             return (self.title, self.info, self.image_urls)
     
-    
-        if dvd:
-            url = 'http://us.imdb.com/DVD?%s' % id
+        if not dvd:
+            url = 'http://us.imdb.com/title/tt%s/dvd' % id
+            print 'url:', url
             req = urllib2.Request(url, txdata, txheaders)
             
             try:
                 r = urllib2.urlopen(req)
-                for line in r.read().split("\n"):
-                    m = regexp_dvd_image.match(line)
-                    if m: self.image_urls += [ m.group(1) ]
+                soup.feed(r.read())
                 r.close()
+                divs = soup.findAll('table', { 'class' : 'dvd_section' })
+                for div in divs:
+                    image = div.find('img')
+                    if image['src'].find('http') < 0:
+                        continue
+                    self.image_urls += [ image['src'] ]
             except urllib2.HTTPError, error:
                 pass
+        print self.image_urls
     
-        #oldcode
-        #if not self.image_url_handler:
-        #    return #(title, info, image_urls)
-    
-        url = 'http://us.imdb.com/title/tt%s/posters' % id
-        req = urllib2.Request(url, txdata, txheaders)
-        try:
-            r = urllib2.urlopen(req)
-        except urllib2.HTTPError, error:
-            print error
-            return (self.title, self.info, self.image_urls)
-
-        data = r.read().replace('</a>', '\n').replace('</A>', '\n')
-        for line in data.split('\n'):
-            m = regexp_url.match(line)
-            if m:
-                url = urlparse.urlsplit(m.group(1))
-                if url[0] == 'http' and self.image_url_handler.has_key(url[1]):
-                    self.image_urls += self.image_url_handler[url[1]](url[1], url[2])
-        
-        r.close()
         return (self.title, self.info, self.image_urls)
     
     
@@ -719,13 +672,15 @@ class FxdImdb:
     
     def fetch_image(self):
         """Fetch the best image"""
-        image_len = 0
+        print 'in fetch_image', self.image_urls
 
-        if (len(self.image_urls) == 0): # No images
+        image_len = 0
+        if len(self.image_urls) == 0: # No images
             return
 
         for image in self.image_urls:
             try:
+                print 'image:', image
                 # get sizes of images
                 req = urllib2.Request(image, txdata, txheaders)
                 r = urllib2.urlopen(req)

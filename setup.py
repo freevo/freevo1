@@ -20,6 +20,7 @@ check_libs((
             ('xml.utils.qp_xml', 'http://pyxml.sourceforge.net/'),
             ('kaa', 'http://sourceforge.net/projects/kaa' ),
             ('kaa.metadata', 'http://sourceforge.net/projects/kaa' ),
+            ('BeautifulSoup', 'http://www.crummy.com/software/BeautifulSoup/' ),
             ('pygame', 'http://www.pygame.org'),
             ('Image', 'http://www.pythonware.com/products/pil/'),
             ('elementtree', 'http://effbot.org/zone/elementtree.htm'),

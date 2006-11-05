@@ -21,12 +21,14 @@ Release 1.7.0 (2006-12-15):
  * Replaced mmpython with kaa.base and kaa.metadata (F#1580712)
  * Updated DEBUGGING, IP, PORT, UID and GUI based on helper name (F#1580628)
  * Updated helper convert_config (F#1578183)
+ * Updated imdb movie parsing to use BeautifulSoup (F#1590928)
 
 
 Release 1.6.1 (2006-??-??):
 ---------------------------
 
  * Updated translations for new plug-ins and skins (F#1587980)
+ * Fixed cache problem when a play list file is corrupt (B#1589913)
  * Fixed detached music player when the plug-in mplayervis is enabled (B#1582048)
  * Fixed IMDB parser, the title should not work (B#1586579)
  * Fixed VIDEO_INTERLACING = False having no effect (B#1586721)
