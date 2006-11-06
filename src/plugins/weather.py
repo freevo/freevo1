@@ -458,9 +458,11 @@ class WeatherItem(Item):
 
         self.uvIndex     = self.GetString("this.swUV")
         self.visibility  = self.GetString("this.swVis")
+        if not self.visibility:
+           self.visibility = 0.0
 
         # convert visibility
-        if self.convertData and self.visibility and float(self.visibility)  != 999.0:
+        if self.convertData and float(self.visibility) != 999.0:
             self.visibility = toKilometers( self.visibility )
 
         self.shortdesc = self.GetString("this.swConText")
@@ -476,16 +478,17 @@ class WeatherItem(Item):
         if dayNum != curDay:
             self.pastTime = 1
 
-	ltime = time.localtime()
-	ctr   = 0
-	for i in range(5,10):
-		(mons, days, years) = holdings[i].split("/")
-		mons  = int( mons )
-		days  = int( days )
-		years = int( years )
-		dnum  = (ltime[6] + ctr) % 7
-		self.date.append( time.strftime( "%A", (years, mons, days, ltime[3], ltime[4], ltime[5], dnum, ltime[7], ltime[8]) ) )
-		ctr += 1
+        ltime = time.localtime()
+        ctr   = 0
+        for i in range(5,10):
+            (mons, days, years) = holdings[i].split("/")
+            mons  = int( mons )
+            days  = int( days )
+            years = int( years )
+            dnum  = (ltime[6] + ctr) % 7
+            self.date.append( time.strftime( "%A", (years, mons, days, ltime[3], ltime[4], ltime[5], \
+                dnum, ltime[7], ltime[8]) ) )
+            ctr += 1
 
         # weather icon
         for i in (10,11,12,13):
