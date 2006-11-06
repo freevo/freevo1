@@ -41,6 +41,7 @@ from event import *
 from item import Item
 from gui import GUIObject, AlertBox
 
+DEBUG = config.DEBUG
 
 class MenuItem(Item):
     """
@@ -61,6 +62,21 @@ class MenuItem(Item):
         self.type     = type
 
             
+    def __str__(self):
+        """
+        return the event as string
+        """
+        result = '"'+self.name+'"'
+        if hasattr(self, 'action'): result += ' action=%s' % self.action
+        if hasattr(self, 'arg'):    result += ' arg=%s' % self.arg[0]
+        if hasattr(self, 'type'):   result += ' type=%s' % self.type
+        if hasattr(self, 'image'):  result += ' image=%s' % self.image
+        if hasattr(self, 'icon'):   result += ' icon=%s' % self.icon
+        #if hasattr(self, 'parent'):  result += ' parent=%s' % self.parent
+        if hasattr(self, 'skin_type'):  result += ' skin_type=%s' % self.skin_type
+        return result
+
+
     def actions(self):
         """
         return the default action
@@ -236,10 +252,10 @@ class MenuWidget(GUIObject):
         self.refresh()
 
     
-    def goto_media_menu(self,media='audio'):
+    def goto_media_menu(self, media='audio'):
         """
         Go to a main menu item
-        media = 'audio' or 'video' or 'image'
+        media = 'tv' or 'audio' or 'video' or 'image'
         used for events:
             MENU_GOTO_TVMENU
             MENU_GOTO_TVGUIDEMENU
@@ -248,15 +264,15 @@ class MenuWidget(GUIObject):
             MENU_GOTO_IMAGEMENU
             MENU_GOTO_RADIOMENU
         """        
-        #1:goto main menu.
-        #2:loop through main menu items.
-        #the arg of a media menu item is 'audio' or 'video' or 'image'
-        #select.
         self.menustack = [self.menustack[0]]
         menu = self.menustack[0]
         self.init_page()
-        #self.goto_main_menu()
         for menuitem in self.menustack[0].choices:
+            if DEBUG:
+                try:
+                    print 'menuitem=%s' % menuitem
+                except:
+                    pass
             try:
                 if menuitem.arg[0] == media:
                     menuitem.select(menuw=self)
@@ -399,7 +415,7 @@ class MenuWidget(GUIObject):
             return
         
         if event == MENU_GOTO_TVGUIDE:
-            self.goto_media_menu("tv")
+            self.goto_media_menu("tv.guide")
             return
         
         if event == MENU_GOTO_VIDEOS:
@@ -415,7 +431,7 @@ class MenuWidget(GUIObject):
             return
         
         if event == MENU_GOTO_RADIO:
-            self.goto_media_menu("radio")
+            self.goto_media_menu("audio.radio")
             return
         
         if event == MENU_BACK_ONE_MENU:

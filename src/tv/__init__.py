@@ -40,7 +40,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         import tvmenu
         import menu
         return [ menu.MenuItem('', action=tvmenu.TVMenu().main_menu,
-                               type='main', parent=parent, skin_type='tv') ]
+            arg=('tv', 0), type='main', parent=parent, skin_type='tv') ]
 
 
 
