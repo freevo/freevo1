@@ -1,8 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# rssPeriodic.py - This is the Freevo RSS feed module
+# rssperiodic.py - This is the Freevo RSS feed module
 # -----------------------------------------------------------------------
-# $Id: rssPeriodic.py 8441 2006-10-21 11:15:52Z duncan $
+# $Id: rssperiodic.py 8441 2006-10-21 11:15:52Z duncan $
 #
 # Notes:
 # Todo:        
@@ -30,7 +30,7 @@
 
 import re,os,glob,urllib,datetime,pickle
 import config
-import rssFeed
+import rssfeed
 
 def convertDate(string):
     if not re.search("\d+\s+\S+\s+\d+",string):
@@ -117,31 +117,37 @@ def createFxd(item,filename):
 
 def checkForUpdates():
     try:
-       file = open(config.RSS_FEEDS,"r")
-       for line in file:
-           if not re.search("^#",line):
-              (url,numberOfDays)=re.split(",", line)
-              sock = urllib.urlopen(url)
-              feedSource = sock.read()
-              sock.close()
-              for item in rssFeed.Feed(feedSource).items:
-                  diff = datetime.date.today() - convertDate(item.date)
-                  if int(diff.days)<=int(numberOfDays) and not re.search("None",item.url):
-                     if "audio" in item.type:
+        file = open(config.RSS_FEEDS,"r")
+        for line in file:
+            if line == '\n':
+                continue
+            if re.search("^#",line):
+                continue
+            try:
+                (url,numberOfDays)=re.split(",", line)
+            except ValueError:
+                continue
+            sock = urllib.urlopen(url)
+            feedSource = sock.read()
+            sock.close()
+            for item in rssfeed.Feed(feedSource).items:
+                diff = datetime.date.today() - convertDate(item.date)
+                if int(diff.days)<=int(numberOfDays) and not re.search("None",item.url):
+                    if "audio" in item.type:
                         os.chdir(config.RSS_AUDIO)
-                     else:
+                    else:
                         os.chdir(config.RSS_VIDEO)
-                     filename=re.split("/",item.url).pop()
-                     if (len(glob.glob(filename))==0) and not checkForDup(item.url):
+                    filename=re.split("/",item.url).pop()
+                    if (len(glob.glob(filename))==0) and not checkForDup(item.url):
                         if re.search("torrent",item.url):
-                           exitStatus=os.popen("bittorrent-console %s"%(item.url)).close()
-                           filename=re.sub("\.torrent","",filename)
+                            exitStatus=os.popen("bittorrent-console %s"%(item.url)).close()
+                            filename=re.sub("\.torrent","",filename)
                         else:
-                           exitStatus=os.popen("wget %s" %(item.url)).close()
+                            exitStatus=os.popen("wget %s" %(item.url)).close()
                         if not exitStatus:
-                           createFxd(item,filename)
-                           addFileToCache(item.url)
+                            createFxd(item,filename)
+                            addFileToCache(item.url)
                         else:
-                           os.popen("rm %s" %(filename))
+                            os.popen("rm %s" %(filename))
     except IOError:
        print "ERROR: Could not open %s"%(config.RSS_FEEDS)

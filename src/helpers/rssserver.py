@@ -28,11 +28,47 @@
 #
 # -----------------------------------------------------------------------
 
-import os,threading,time
-import rssPeriodic
+import os,sys,threading,time
+import rssperiodic
+import config
+from twisted.python import log
+
+appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+appconf = appname.upper()
+
+# change uid
+if __name__ == '__main__':
+    uid='config.'+appconf+'_UID'
+    gid='config.'+appconf+'_GID'
+    try:
+        if eval(uid) and os.getuid() == 0:
+            os.setgid(eval(gid))
+            os.setuid(eval(uid))
+            os.environ['USER'] = pwd.getpwuid(os.getuid())[0]
+            os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
+    except Exception, e:
+        print e
+
+if len(sys.argv)>1 and sys.argv[1] == '--help':
+    print 'start or stop the internal rssserver'
+    print 'usage freevo rssserver [ start | stop ]'
+    sys.exit(0)
+
+# No debugging in this module
+DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
+
+logfile = '%s/%s-%s.log' % (config.LOGDIR, appname, os.getuid())
+log.startLogging(open(logfile, 'a'))
+
+def _debug_(text, level=1):
+    if DEBUG >= level:
+        try:
+            log.debug(String(text))
+        except:
+            print String(text)
 
 while True:
-      t = threading.Thread(rssPeriodic.checkForUpdates())
+      t = threading.Thread(rssperiodic.checkForUpdates())
       t.start()
       t.join()
       time.sleep(60)

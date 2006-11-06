@@ -247,6 +247,7 @@ LOCAL_CONF_CHANGES = [
      Added WEBSERVER_UID and WEBSERVER_GID
      Added optional WEBSERVER_DEBUG, if not defined uses DEBUG
      Added ENCODINGSERVER_UID and ENCODINGSERVER_GID
+     Added RSSSERVER_UID and RSSSERVER_GID
      Added optional ENCODINGSERVER_DEBUG, if not defined uses DEBUG
      Added experimental plug-ins: Apple trailers, reencode
      Added plug-ins: XM online
@@ -1756,6 +1757,12 @@ ENCODINGSERVER_IP   = 'localhost'
 ENCODINGSERVER_PORT = 6666
 
 
+
+# ======================================================================
+# Freevo builtin rss server settings:
+# ======================================================================
+RSSSERVER_UID = 0
+RSSSERVER_GID = 0
 
 # ======================================================================
 # Internal stuff, you shouldn't change anything here unless you know

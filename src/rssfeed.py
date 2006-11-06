@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# rssFeed.py - This is the Freevo RSS Feed module
+# rssfeed.py - This is the Freevo RSS Feed module
 # -----------------------------------------------------------------------
 # $Id: playlist.py 8441 2006-10-21 11:15:52Z duncan $
 #
