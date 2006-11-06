@@ -236,7 +236,7 @@ class MPlayer:
         if config.MPLAYER_AUTOCROP and not item.network_play and str(' ').join(command).find('crop=') == -1:
             _debug_('starting autocrop')
             (x1, y1, x2, y2) = (1000, 1000, 0, 0)
-            crop_cmd = command[1:] + ['-ao', 'null', '-vo', 'null', '-ss', '60',
+            crop_cmd = command[1:] + ['-ao', 'null', '-vo', 'null', '-ss', '%s' % config.TV_RECORD_PADDING_PRE * 2,
                                       '-frames', '20', '-vf', 'cropdetect' ]
             child = popen2.Popen3(self.sort_filter(crop_cmd), 1, 100)
             exp = re.compile('^.*-vf crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*).*')
@@ -250,9 +250,11 @@ class MPlayer:
                     y1 = min(y1, int(m.group(4)))
                     x2 = max(x2, int(m.group(1)) + int(m.group(3)))
                     y2 = max(y2, int(m.group(2)) + int(m.group(4)))
+                    _debug_('x1=%s x2=%s y1=%s y2=%s' % (x1, x2, y1, y2))
         
             if x1 < 1000 and x2 < 1000:
                 command = command + [ '-vf' , 'crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1) ]
+                _debug_('crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1))
             
             child.wait()
 
