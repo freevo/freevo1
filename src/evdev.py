@@ -213,8 +213,6 @@ class evdev:
 
 if __name__ == "__main__":
 
-    from evfallback import _types, _events, _ids, _buses
-
     def _convert_value(s):
         if s.startswith("0x"):
             return int(s, 16)
@@ -332,3 +330,5 @@ if __name__ == "__main__":
             print e.read()
     except KeyboardInterrupt:
         pass
+
+    from evfallback import _types, _events, _ids, _buses
