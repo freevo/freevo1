@@ -68,7 +68,7 @@ class PluginInterface(plugin.ItemPlugin):
         if hasattr(item, 'mode'): print 'mode:', item.mode
         if hasattr(item, 'name'): print 'name:', type(item.name)
         if hasattr(item, 'name'): print 'name:', item.name.encode('utf-8')
-        print 'filename:', item.filename
+        if hasattr(item, 'filename'): print 'filename:', item.filename
         if hasattr(item, 'parentname'):
             print item.parentname
         if hasattr(item, 'media'):
