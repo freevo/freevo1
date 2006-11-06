@@ -82,7 +82,7 @@ def helpimagesrewrite(request):
 def main():
     # the start and stop stuff will be handled from the freevo script
 
-    logfile = '%s/webserver-%s.log' % (config.LOGDIR, os.getuid())
+    logfile = '%s/%s-%s.log' % (config.LOGDIR, appname, os.getuid())
     log.startLogging(open(logfile, 'a'))
 
     if os.path.isdir(os.path.join(os.environ['FREEVO_PYTHON'], 'www/htdocs')):
