@@ -1764,6 +1764,10 @@ ENCODINGSERVER_PORT = 6666
 RSSSERVER_UID = 0
 RSSSERVER_GID = 0
 
+RSS_FEEDS = '/etc/freevo/rss.feeds'
+RSS_VIDEO = "you must set RSS_VIDEO in your local_conf.py"
+RSS_AUDIO = "you must set RSS_AUDIO in your local_conf.py"
+
 # ======================================================================
 # Internal stuff, you shouldn't change anything here unless you know
 # what you are doing

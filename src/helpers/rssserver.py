@@ -28,6 +28,28 @@
 #
 # -----------------------------------------------------------------------
 
+'''
+In local_conf.py add the following:
+RSS_FEEDS='/etc/freevo/rss.feeds'
+RSS_VIDEO='/path/to/video/feeds/'
+RSS_AUDIO='/path/to/podcasts/'
+
+You will need to make a rss.feeds file: it contains the URL and the number of
+days it's been published
+
+# Begin /etc/freevo/rss.feeds
+
+http://twit.libsyn.com/rss,7
+http://leo.am/podcasts/twit,7
+http://leo.am/podcasts/itn,7
+http://feeds.feedburner.com/TechRenegades,7
+http://www.linuxactionshow.com/?feed=rss2&cat=3,30
+http://www.thelinuxlink.net/tllts/tllts.rss,30
+http://www.linux-games.ca/2006/redneck.xml,360
+
+# End /etc/freevo/rss.feeds
+'''
+
 import os,sys,threading,time
 import rssperiodic
 import config
