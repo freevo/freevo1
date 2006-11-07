@@ -11,22 +11,31 @@ X is the category and #nnnnnnn is the tracker number.
 (F)eature requests http://sourceforge.net/tracker/?group_id=46652&atid=446898
 
 
-Release 1.7.0 (2006-12-15):
----------------------------
+
+== Release 1.7.0 (2006-12-15) ==
+--------------------------------
+
+svn export svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
+
+The release date is only tentative at the moment. This release has all the changes in Release 1.6.1 plus
 
  * Replaced mmpython with kaa.base and kaa.metadata (F#1580712)
  * New apple trailers plugin (disabled by default) (F#1580418)
  * New encoding server, allows re-encoding TV programs and ripping DVDs (F#1580642,F#1578402)
- * New RSS server (F#1580407)
+ * New RSS server, for getting podcasts, etc. (F#1580407)
  * New XM online plugin (F#1580412)
  * Updated DEBUGGING, IP, PORT, UID and GUI based on helper name (F#1580628)
  * Updated helper convert_config (F#1578183)
  * Updated imdb movie parsing to use BeautifulSoup (F#1590928)
- * Updated mplayer crop detection to use TV_RECORD_PADDING_PRE (B#1591170)
 
 
-Release 1.6.1 (2006-??-??):
----------------------------
+== Release 1.6.1 (2006-??-??) ==
+--------------------------------
+
+svn export svn://svn.freevo.org/freevo/branches/rel-1-6/freevo freevo-1.6
+
+This release may never happen, just depends if there are any "show-stoppers" bugs found.
+Release 1.6.1 will only contain bug fixes.
 
  * Updated translations for new plug-ins and skins (F#1587980)
  * Fixed cache problem when a play list file is corrupt (B#1589913)
@@ -34,7 +43,7 @@ Release 1.6.1 (2006-??-??):
  * Fixed games when the zip is corrupt (B#1586106)
  * Fixed goto to tv menu, this was never in the original patch (B#1567501)
  * Fixed IMDB parser, the title should not work (B#1586579)
- * Fixed mplayer cropdetect, only skipping 60 secs (B#1591170)
+ * Fixed mplayer cropdetect, only skipping 60 secs using 2*TV_RECORD_PADDING_PRE (B#1591170)
  * Fixed weather download when visibility is empty (B#1591145)
  * Fixed VIDEO_INTERLACING = False having no effect (B#1586721)
  * Fixed xine --no-lirc option when compiled without lirc support (B#1589722)
