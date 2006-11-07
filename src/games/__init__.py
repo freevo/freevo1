@@ -77,26 +77,30 @@ class PluginInterface(plugin.MimetypePlugin):
             pop.destroy()
             return []
 
+        file = ''
         (gtype, cmd, args, imgpath, suffixlist) = parent.add_args[0]
-        if gtype == 'MAME':
-            mame_files = util.find_matches(files, [ 'zip' ] )
-            # This will only add real mame roms to the cache.
-            (rm_files, mame_list) = mame_cache.getMameItemInfoList(mame_files, cmd)
-            for rm_file in rm_files:
-                files.remove(rm_file)
-            for ml in mame_list:
-                items += [ MameItem(ml[0], ml[1], ml[2], cmd, args, imgpath, parent, ml[3]) ]
-        elif gtype == 'SNES':
-            for file in util.find_matches(files, snesromExtensions + [ 'zip' ]):
-                items += [ SnesItem(file, cmd, args, imgpath, parent) ]
-                files.remove(file)
-        elif gtype == 'GENESIS':
-            for file in util.find_matches(files, genesisromExtensions + ['zip']):
-                items += [ GenesisItem(file, cmd, args, imgpath, parent) ]
-                files.remove(file)
-        elif gtype == 'GENERIC':
-            for file in util.find_matches(files, suffixlist):
-                items += [ GenericItem(file, cmd, args, imgpath, parent) ]
-                files.remove(file)
+        try:
+            if gtype == 'MAME':
+                mame_files = util.find_matches(files, [ 'zip' ] )
+                # This will only add real mame roms to the cache.
+                (rm_files, mame_list) = mame_cache.getMameItemInfoList(mame_files, cmd)
+                for rm_file in rm_files:
+                    files.remove(rm_file)
+                for ml in mame_list:
+                    items += [ MameItem(ml[0], ml[1], ml[2], cmd, args, imgpath, parent, ml[3]) ]
+            elif gtype == 'SNES':
+                for file in util.find_matches(files, snesromExtensions + [ 'zip' ]):
+                    items += [ SnesItem(file, cmd, args, imgpath, parent) ]
+                    files.remove(file)
+            elif gtype == 'GENESIS':
+                for file in util.find_matches(files, genesisromExtensions + ['zip']):
+                    items += [ GenesisItem(file, cmd, args, imgpath, parent) ]
+                    files.remove(file)
+            elif gtype == 'GENERIC':
+                for file in util.find_matches(files, suffixlist):
+                    items += [ GenericItem(file, cmd, args, imgpath, parent) ]
+                    files.remove(file)
+        except UnboundLocalError:
+            print 'Zip file \"%s\" may be corrupt' % file
 
         return items
