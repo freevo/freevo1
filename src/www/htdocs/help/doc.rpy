@@ -1,6 +1,4 @@
 #!/usr/bin/python
-
-#if 0 /*
 # -----------------------------------------------------------------------
 # howto.rpy - Show the freevo_howto
 # -----------------------------------------------------------------------
@@ -8,53 +6,6 @@
 #
 # Notes:
 # Todo:        
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.6.2.1  2005/01/09 11:07:12  dischi
-# move needed part of old wiki in the cvs
-#
-# Revision 1.6  2004/02/19 04:57:59  gsbarbieri
-# Support Web Interface i18n.
-# To use this, I need to get the gettext() translations in unicode, so some changes are required to files that use "print _('string')", need to make them "print String(_('string'))".
-#
-# Revision 1.5  2004/02/12 14:04:37  outlyer
-# fixes for some issues Dischi pointed out:
-#
-# o Fix invisible link underlines
-# o Change background of "pre" to light gray and add padding
-# o Fix CSS so it validates with jigsaw.w3.org
-# o Replace #content with content as it should be
-#
-# Revision 1.4  2004/02/09 21:23:42  outlyer
-# New web interface...
-#
-# * Removed as much of the embedded design as possible, 99% is in CSS now
-# * Converted most tags to XHTML 1.0 standard
-# * Changed layout tables into CSS; content tables are still there
-# * Respect the user configuration on time display
-# * Added lots of "placeholder" tags so the design can be altered pretty
-#   substantially without touching the code. (This means using
-#   span/div/etc. where possible and using 'display: none' if it's not in
-#   _my_ design, but might be used by someone else.
-# * Converted graphical arrows into HTML arrows
-# * Many minor cosmetic changes
-#
-# Revision 1.3  2004/02/06 20:30:32  dischi
-# some layout updates
-#
-# Revision 1.2  2003/11/06 19:56:14  mikeruelle
-# remove hard links so we can run when proxied
-#
-# Revision 1.1  2003/09/23 18:24:07  dischi
-# moved help to a new directory and add more docs
-#
-# Revision 1.2  2003/09/20 14:11:11  dischi
-# find docs for an installed version
-#
-# Revision 1.1  2003/09/12 22:00:00  dischi
-# add more documentation
-#
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -75,8 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 import sys, os
 

@@ -1,6 +1,4 @@
 #!/usr/bin/python
-
-#if 0 /*
 # -----------------------------------------------------------------------
 # guide.rpy - Web interface to the Freevo EPG.
 # -----------------------------------------------------------------------
@@ -8,57 +6,6 @@
 #
 # Notes:
 # Todo:        
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.25.2.1  2004/08/11 00:12:33  outlyer
-# Patch from Jason; major performance improvement in the web based program
-# guide.
-#
-# Revision 1.25  2004/03/12 03:05:50  outlyer
-# Use the episode title where available.
-#
-# Revision 1.24  2004/02/23 08:33:21  gsbarbieri
-# i18n: help translators job.
-#
-# Revision 1.23  2004/02/22 06:25:15  gsbarbieri
-# Fix bugs introduced by i18n changes.
-#
-# Revision 1.22  2004/02/19 04:57:59  gsbarbieri
-# Support Web Interface i18n.
-# To use this, I need to get the gettext() translations in unicode, so some changes are required to files that use "print _('string')", need to make them "print String(_('string'))".
-#
-# Revision 1.21  2004/02/09 21:37:43  outlyer
-# Removed the rounded edges I was trying for the guide; they don't work
-# consistently and look very ugly in some browsers. I'll have to rethink
-# them.
-#
-# Revision 1.20  2004/02/09 21:23:42  outlyer
-# New web interface...
-#
-# * Removed as much of the embedded design as possible, 99% is in CSS now
-# * Converted most tags to XHTML 1.0 standard
-# * Changed layout tables into CSS; content tables are still there
-# * Respect the user configuration on time display
-# * Added lots of "placeholder" tags so the design can be altered pretty
-#   substantially without touching the code. (This means using
-#   span/div/etc. where possible and using 'display: none' if it's not in
-#   _my_ design, but might be used by someone else.
-# * Converted graphical arrows into HTML arrows
-# * Many minor cosmetic changes
-#
-# Revision 1.19  2003/10/20 02:24:17  rshortt
-# more tv_util fixes
-#
-# Revision 1.18  2003/09/07 18:50:56  dischi
-# make description shorter if it's too long
-#
-# Revision 1.17  2003/09/07 01:02:13  gsbarbieri
-# Fixed a bug in guide that appeared with the new PRECISION thing.
-#
-# Revision 1.16  2003/09/06 22:58:13  mikeruelle
-# fix something i don't think sould have a gap
-
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -79,8 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 import sys, string
 import time

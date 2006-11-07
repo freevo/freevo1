@@ -1,6 +1,4 @@
 #!/usr/bin/python
-
-#if 0 /*
 # -----------------------------------------------------------------------
 # genre.rpy - Show what is on for today for a particular category
 # -----------------------------------------------------------------------
@@ -8,35 +6,6 @@
 #
 # Notes:
 # Todo:        
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.9.2.1  2004/08/11 00:12:33  outlyer
-# Patch from Jason; major performance improvement in the web based program
-# guide.
-#
-# Revision 1.9  2004/03/05 02:37:05  rshortt
-# Lets add in prog.desc to fill up some of this area.
-#
-# Revision 1.8  2004/02/23 08:33:21  gsbarbieri
-# i18n: help translators job.
-#
-# Revision 1.7  2004/02/22 07:13:27  gsbarbieri
-# Fix bugs introduced by i18n changes.
-#
-# Revision 1.6  2004/02/19 04:57:59  gsbarbieri
-# Support Web Interface i18n.
-# To use this, I need to get the gettext() translations in unicode, so some changes are required to files that use "print _('string')", need to make them "print String(_('string'))".
-#
-# Revision 1.5  2003/09/07 13:34:10  mikeruelle
-# show info message if we don't find any matching categories
-#
-# Revision 1.2  2003/09/05 02:48:13  rshortt
-# Removing src/tv and src/www from PYTHONPATH in the freevo script.  Therefore any module that was imported from src/tv/ or src/www that didn't have a leading 'tv.' or 'www.' needed it added.  Also moved tv/tv.py to tv/tvmenu.py to avoid namespace conflicts.
-#
-# Revision 1.1  2003/08/24 21:41:44  mikeruelle
-# adding a new page to see shows of a certain category
-#
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -57,8 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 import sys, time, string
 

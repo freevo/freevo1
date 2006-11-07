@@ -1,4 +1,3 @@
-#if 0 /*
 # -----------------------------------------------------------------------
 # dvd_cropscale.py - Calculate crop and scale params for DVD backups
 # -----------------------------------------------------------------------
@@ -6,15 +5,6 @@
 #
 # Notes:
 # Todo:        
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.1  2003/08/23 09:50:59  dischi
-# *** empty log message ***
-#
-# Revision 1.1  2003/01/22 01:50:46  krister
-# This app runs mplayer on a DVD to calculate crop/scale params.
-#
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -35,8 +25,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 
 import os

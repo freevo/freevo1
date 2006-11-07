@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-#if 0 /*
 # -----------------------------------------------------------------------
 # rc_send.py - a small standalone program to send remote events to Freevo
 # -----------------------------------------------------------------------
@@ -8,12 +7,6 @@
 # Notes: need ENABLE_NETWORK_REMOTE = 1 in you local_conf.py
 #
 # Todo:
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.1  2003/11/01 05:09:00  krister
-# Standalone RC event sender app
-#
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -34,8 +27,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 import sys
 import socket

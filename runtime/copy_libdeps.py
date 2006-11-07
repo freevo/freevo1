@@ -1,4 +1,3 @@
-#if 0 /*
 # -----------------------------------------------------------------------
 # check_libdeps.py - Check dynamic lib dependencies
 # -----------------------------------------------------------------------
@@ -6,24 +5,6 @@
 #
 # Notes:
 # Todo:        
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.3  2003/02/25 04:53:21  krister
-# More network libs werer needed.
-#
-# Revision 1.2  2003/02/21 04:36:43  krister
-# Bugfix for missing network libs.
-#
-# Revision 1.1  2003/01/24 07:19:48  krister
-# New runtime
-#
-# Revision 1.2  2002/08/14 04:33:54  krister
-# Made more C-compatible.
-#
-# Revision 1.1  2002/08/03 07:59:15  krister
-# Proposal for new standard fileheader.
-#
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -44,8 +25,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 import os
 import sys

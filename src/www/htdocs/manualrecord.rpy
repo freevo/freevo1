@@ -1,6 +1,4 @@
 #!/usr/bin/python
-
-#if 0 /*
 # -----------------------------------------------------------------------
 # manualrecord.rpy - Web interface to manually schedule recordings.
 # -----------------------------------------------------------------------
@@ -27,8 +25,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 import sys, time
 

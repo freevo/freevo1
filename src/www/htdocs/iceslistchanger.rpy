@@ -1,6 +1,4 @@
 #!/usr/bin/python
-
-#if 0 /*
 # -----------------------------------------------------------------------
 # iceslistchanger.rpy - change ices playlist via web interface.
 # -----------------------------------------------------------------------
@@ -8,38 +6,6 @@
 #
 # Notes:
 # Todo:        
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.5  2004/02/19 04:57:59  gsbarbieri
-# Support Web Interface i18n.
-# To use this, I need to get the gettext() translations in unicode, so some changes are required to files that use "print _('string')", need to make them "print String(_('string'))".
-#
-# Revision 1.4  2004/02/09 21:23:42  outlyer
-# New web interface...
-#
-# * Removed as much of the embedded design as possible, 99% is in CSS now
-# * Converted most tags to XHTML 1.0 standard
-# * Changed layout tables into CSS; content tables are still there
-# * Respect the user configuration on time display
-# * Added lots of "placeholder" tags so the design can be altered pretty
-#   substantially without touching the code. (This means using
-#   span/div/etc. where possible and using 'display: none' if it's not in
-#   _my_ design, but might be used by someone else.
-# * Converted graphical arrows into HTML arrows
-# * Many minor cosmetic changes
-#
-# Revision 1.3  2003/11/28 19:31:52  dischi
-# renamed some config variables
-#
-# Revision 1.2  2003/09/05 02:48:13  rshortt
-# Removing src/tv and src/www from PYTHONPATH in the freevo script.  Therefore any module that was imported from src/tv/ or src/www that didn't have a leading 'tv.' or 'www.' needed it added.  Also moved tv/tv.py to tv/tvmenu.py to avoid namespace conflicts.
-#
-# Revision 1.1  2003/06/24 17:52:00  dischi
-# added iceslistchanger
-#
-# Revision 1.1  2003/05/12 23:27:11  mruelle
-# The start of an m3u list changer page.
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -60,8 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 import sys, time, os, urllib
 
