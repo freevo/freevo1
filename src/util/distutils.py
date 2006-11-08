@@ -117,7 +117,7 @@ def data_finder(result, dirname, names):
                                               name.find('update.py') == -1):
                 files.append(os.path.join(dirname, name))
             
-    if files and dirname.find('/CVS') == -1:
+    if files and dirname.find('/.svn') == -1:
         result.append((dirname.replace('./share', 'share/freevo').
                        replace('./src/www', 'share/freevo').\
                        replace('./i18n', 'share/locale').\
@@ -136,7 +136,7 @@ def docbook_finder(result, dirname, names):
         if os.path.splitext(name)[1] == '.html':
             files.append(os.path.join(dirname, name))
             
-    if files and dirname.find('/CVS') == -1:
+    if files and dirname.find('/.svn') == -1:
         result.append((dirname.replace('/html', ''). \
                        replace('./Docs', 'share/doc/freevo-%s' % version.__version__), files))
     return result
@@ -206,7 +206,7 @@ def i18n(application):
         # if arg 2 is not --no-merge to the merge
         if not (len(sys.argv) > 2 and sys.argv[2] == '--no-merge'):
             for file in ([ os.path.join('i18n', fname) for fname in os.listdir('i18n') ]):
-                if os.path.isdir(file) and file.find('CVS') == -1:
+                if os.path.isdir(file) and file.find('.svn') == -1:
                     print 'updating %s...' % file,
                     sys.stdout.flush()
                     file = os.path.join(file, 'LC_MESSAGES/%s.po' % application)
@@ -224,7 +224,7 @@ def i18n(application):
         # update the mo files
         print 'updating mo files'
         for file in ([ os.path.join('i18n', fname) for fname in os.listdir('i18n') ]):
-            if os.path.isdir(file) and file.find('CVS') == -1:
+            if os.path.isdir(file) and file.find('.svn') == -1:
                 file = os.path.join(file, 'LC_MESSAGES/%s.po' % application)
                 mo = os.path.splitext(file)[0] + '.mo'
                 os.system('msgfmt -o %s %s' % (mo, file))
