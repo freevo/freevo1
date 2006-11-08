@@ -122,6 +122,7 @@ class Logger:
 class VideoGroup:
     """
     vdev:         The video recording device, such as /dev/video0.
+    vvbi:         The video vbi device, such as /dev/vbi0.
     adev:         The audio device, such as /dev/dsp.
     input_type:   tuner, composite, svideo, webcam
     input_num:    The number of this input according to V4L
@@ -136,7 +137,7 @@ class VideoGroup:
                   can be left as default, 'normal', or set to 'ivtv' or 'dvb'.
     """
 
-    def __init__(self, vdev='/dev/video', adev=None, input_type='tuner',
+    def __init__(self, vdev='/dev/video', vvbi='/dev/vbi', adev=None, input_type='tuner',
                  input_num=0, tuner_norm='NTSC', tuner_chanlist='us-cable', 
                  tuner_type='internal', tuner_chan=None,
                  record_group=None, desc='Freevo default VideoGroup',
@@ -144,6 +145,7 @@ class VideoGroup:
 
         # XXX: Put checks in here for supplied values.
         self.vdev = vdev
+        self.vvbi = vvbi
         self.adev = adev
         self.input_type = input_type
         self.input_num  = int(input_num)

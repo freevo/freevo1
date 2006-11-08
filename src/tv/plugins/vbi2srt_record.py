@@ -132,6 +132,7 @@ class Recorder:
         if DEBUG: print('Recorder::Record:cl_options %s' % cl_options)
         if DEBUG: print('Recorder::Record:chan_index %s' % self.fc.chan_index)
         if DEBUG: print('Recorder::Record:vg.vdev %s' % self.vg.vdev)
+        if DEBUG: print('Recorder::Record:vg.vvbi %s' % self.vg.vvbi)
         pagenum = None;
         try:
             pagenum = int(config.TV_CHANNELS[self.fc.chan_index][5])
@@ -140,12 +141,12 @@ class Recorder:
         if DEBUG: print('Recorder::Record:pagenum "%s"' % pagenum)
         self.rec_command = config.VCR_CMD % cl_options
         if pagenum == None:
-            self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --seconds=%s --vps=%s' % \
-                (self.vg.vdev, rec_prog.filename, rec_prog.rec_duration, rec_prog.start)
+            self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s' % \
+                (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.start)
         else:
             # there is a bug in vbi2srt that causes out of sync subtitles when VPS is used
-            self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --seconds=%s --vps=%s --page=%s' % \
-                (self.vg.vdev, rec_prog.filename, rec_prog.rec_duration, rec_prog.start, pagenum)
+            self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s --page=%s' % \
+                (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.start, pagenum)
     
         self.thread.mode     = 'record'
         self.thread.prog     = rec_prog
