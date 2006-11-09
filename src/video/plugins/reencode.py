@@ -91,14 +91,14 @@ class PluginInterface(plugin.ItemPlugin):
     def encoding_profile_menu(self, menuw=None, arg=None):
         #create a menu with a few encoding options (1cd, 2cd, xvid, mpeg4)
         #args : tuple, (videocodec, size, multipass
-        menu_items = [ menu.MenuItem("XViD, 700mb", self.create_job, (1,700,False)) ]
-        menu_items.append( menu.MenuItem("XViD, 700mb, High Quality", self.create_job, (1,700,True)) )
-        menu_items.append( menu.MenuItem("XViD, 1400mb", self.create_job, (1,1400,False)) )
-        menu_items.append( menu.MenuItem("XViD, 1400mb, High Quality", self.create_job, (1,1400,True)) )
-        menu_items.append( menu.MenuItem("DivX, 700mb", self.create_job, (0,700,False)) )
-        menu_items.append( menu.MenuItem("DivX, 700mb, High Quality", self.create_job, (0,700,True)) )
-        menu_items.append( menu.MenuItem("DivX, 1400mb", self.create_job, (0,1400,False)) )
-        menu_items.append( menu.MenuItem("DivX, 1400mb, High Quality", self.create_job, (0,1400,True)) )
+        menu_items = [ menu.MenuItem("XViD, 800bps", self.create_job, (1,700,False,800)) ]
+        menu_items.append( menu.MenuItem("XViD, 800bps, High Quality", self.create_job, (1,700,True,800)) )
+        menu_items.append( menu.MenuItem("XViD, 1200bps", self.create_job, (1,1400,False,1200)) )
+        menu_items.append( menu.MenuItem("XViD, 1200bps, High Quality", self.create_job, (1,1400,True,1200)) )
+        menu_items.append( menu.MenuItem("DivX, 800bps", self.create_job, (0,700,False,800)) )
+        menu_items.append( menu.MenuItem("DivX, 800bps, High Quality", self.create_job, (0,700,True,800)) )
+        menu_items.append( menu.MenuItem("DivX, 1200bps", self.create_job, (0,1400,False,1200)) )
+        menu_items.append( menu.MenuItem("DivX, 1200bps, High Quality", self.create_job, (0,1400,True,1200)) )
         
         encoding_menu = menu.Menu(_('Choose your encoding profile'), menu_items)
         menuw.pushmenu(encoding_menu)
@@ -106,7 +106,7 @@ class PluginInterface(plugin.ItemPlugin):
     def create_job(self, menuw=None, arg=None):
         print 'arg:', arg
         #unwrap settings tupple
-        vcodecnr, tgtsize, mpass = arg
+        (vcodecnr, tgtsize, mpass, vbitrate) = arg
 
         #we are going to create a job and send it to the encoding server, this can take some time while analyzing
         
@@ -151,7 +151,7 @@ class PluginInterface(plugin.ItemPlugin):
         
         vcodec = resp[vcodecnr]
         
-        (status, resp) = setVideoCodec(idnr, vcodec, tgtsize, mpass)
+        (status, resp) = setVideoCodec(idnr, vcodec, tgtsize, mpass, vbitrate)
         print 'setVideoCodec:status:', status, ' resp:', resp
         
         if not status:

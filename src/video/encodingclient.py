@@ -180,7 +180,7 @@ def getVideoCodecCAP(idnr):
     
     return returnFromJelly(status, response)
     
-def setVideoCodec(idnr, vcodec, tgtsize, multipass=False):
+def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0):
     """Set a video codec
     
     vcodec is one of the possible video codecs. It should be one of the strings
@@ -189,13 +189,15 @@ def setVideoCodec(idnr, vcodec, tgtsize, multipass=False):
         audio data and container format overhead)
     multipass is a boolean. Set this to True if you want multipass encoding (1 audio 
         pass, 2 video passes). The default is no multipass (1 audio, 1 video)
+    vbitrate is the video bitrate, if it is not 0 then this value is used instead 
+        of using the tgtsize.
     """
     
-    if not (idnr or vcodec or tgtsize):
+    if not (idnr or vcodec or tgtsize or vbitrate):
         return (False, "EncodingClient: no idnr and/or videocodec and/or targetsize")
         
     try:
-        (status, response) = server.setVideoCodec(idnr, vcodec, tgtsize, multipass)
+        (status, response) = server.setVideoCodec(idnr, vcodec, tgtsize, multipass, vbitrate)
     except:
         return (False, 'EncodingClient: connection error')
     
@@ -369,7 +371,7 @@ if __name__ == '__main__':
         (status, codec) = getVideoCodecCAP(idnr)
         print codec[0]
         print codec[1]
-        print setVideoCodec(idnr, codec[1], 1400, True)
+        print setVideoCodec(idnr, codec[1], 1400, True, 0)
         #print setVideoFilters(idnr, {'Denoise' : 'HQ denoise'})
         #sleep(5)
         print queueIt(idnr, True)
@@ -379,3 +381,15 @@ if __name__ == '__main__':
         print getProgress()
         sleep(5)
         print getProgress()
+
+'''
+To run this as standalone use the following before running python v4l2.py
+pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
+export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
+export FREEVO_SHARE=/usr/share/freevo
+export FREEVO_CONFIG=/usr/share/freevo/freevo_config.py
+export FREEVO_CONTRIB=/usr/share/freevo/contrib
+export RUNAPP=""
+
+python encodingclient.py test
+'''

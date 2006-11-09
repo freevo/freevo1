@@ -141,13 +141,14 @@ class EncodingServer(xmlrpc.XMLRPC):
         _debug_("xmlrpc_getVideoCodecCAP(self, idnr)", 2)
         return (True, jam(self.jobs[idnr].getVideoCodecList()))
         
-    def xmlrpc_setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False):
-        _debug_("xmlrpc_setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False)", 2)
+    def xmlrpc_setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0):
+        _debug_("xmlrpc_setVideoCodec(self, %s, %s, %s, %s %s)" % \
+            (idnr, vcodec, tgtsize, multipass, vbitrate), 2)
         #safety checks
-        if not (vcodec or tgtsize):
+        if not (vcodec or (tgtsize and vbitrate)):
             return (False, 'EncodingServer::setVideoCodec:  no codec or target size given')
             
-        status = self.jobs[idnr].setVideoCodec(vcodec, tgtsize, multipass)
+        status = self.jobs[idnr].setVideoCodec(vcodec, tgtsize, multipass, vbitrate)
         
         if not status:
             return (True, "EncodingServer::setVideoCodec: OK")

@@ -58,9 +58,9 @@ def _debug_(text, level=1):
 #"hardcoded capabilities" .. these might change or become dynamic in the future, when more capabilities are supported
 #the "container format" will remain hardcoded
 
-ContainerCapList = [ 'Avi' ]
+ContainerCapList = [ 'Avi', 'Mkv' ]
 VideoCodecList = [ 'MPEG 4 (lavc)', 'XViD']
-AudioCodecList = [ 'MPEG 1 Layer 3 (mp3)' ]
+AudioCodecList = [ 'MPEG 1 Layer 3 (mp3)', 'Ogg' ]
 
 VFDict = {
     'Deinterlacing' : ['None','Linear blend','Lavc deinterlacer'],
@@ -167,15 +167,19 @@ class EncodingJob:
         """Return a possible video codec list"""
         return VideoCodecList
 
-    def setVideoCodec(self, vcodec, tgtsize, multipass=False):
-        """Set video codec and target filesize (in MB)"""
+    def setVideoCodec(self, vcodec, tgtsize, multipass=False, vbitrate=0):
+        """Set video codec and target filesize (in MB) or bit rate (in kbits/sec)"""
         #safety checks first
         if vcodec not in self.getVideoCodecList():
             return "Unknown video codec"
 
         self.vcodec = vcodec
-        self.tgtsize = (int(tgtsize) * 1024) #filesize is internally stored in kb
+        if vbitrate:
+            self.tgtsize = 0
+        else:
+            self.tgtsize = (int(tgtsize) * 1024) #filesize is internally stored in kb
         self.multipass = multipass
+        self.vbitrate = vbitrate
 
 
     def getAudioCodecList(self):
@@ -210,10 +214,15 @@ class EncodingJob:
     def _CalcVideoBR(self):
         """Calculates the video bitrate"""
 
-        self.vbrate = int((((int(self.tgtsize)*8) / int(self.length)) - int(self.abrate)) / 0.98)
+        _debug_('_CalcVideoBR: tgtsize=%s vbitrate=%s' % (self.tgtsize, self.vbrate), 2)
+        if self.vbitrate > 0:
+            self.vbrate = self.vbitrate
+        else:
+            self.vbrate = int((((int(self.tgtsize)*8) / int(self.length)) - int(self.abrate)) / 0.98)
         #we got a very short file, very high bitrates are interpreted as bit/s instead of kbit/s, shitty qual
         if self.vbrate > 12000:
             self.vbrate = 6000
+        _debug_('_CalcVideoBR: vbrate=%s' % (self.vbrate), 2)
 
 
     def _AnalyzeSource(self):
@@ -376,6 +385,7 @@ class EncodingJob:
 
         return args
 
+
     #from QuickRip, heavily adapted, new algo
     #TODO give this another name, it does more then crop detection only
     def _CropDetectParse(self, lines, data): #seek to remove data
@@ -506,7 +516,7 @@ class EncodingJob:
 
     #from QuickRip, adapted
     def _run(self, program, arguments, finalfunc, updatefunc=None,
-                flushbuffer=0, data=None, lock=None): # seek to remove data andor crop (not really used)
+                flushbuffer=0, data=None, lock=None): # seek to remove data and/or crop (not really used)
         """Runs a program; supply program name (string) and arguments (list)"""
         command = [program]
         command += arguments
@@ -529,6 +539,7 @@ class CommandThread(threading.Thread): # seek to remove data andor crop (not rea
         self.command = command
         self.data = data
         self.lock = lock
+        _debug_('command=\"%s\"' % command)
 
     def run(self):
         #self.lock.acquire()
@@ -719,14 +730,14 @@ class EncodingQueue:
 
 #FOR TESTING ONLY
 if __name__ == '__main__':
-    encjob = EncodingJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'test.avi','lala', 456789, 17)
+    encjob = EncodingJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'test.avi', 'lala', 456789, 17)
     #encjob._CropDetect()
-    print "THE KING RETURNED FROM INSPECTING THE CROPPING !"
+    print 'THE KING RETURNED FROM INSPECTING THE CROPPING !'
     sleep(5)
     print encjob.crop
-    encjob.setVideoCodec('MPEG 4 (lavc)',"700", False)
-    encjob.setAudioCodec("MPEG 1 Layer 3 (mp3)",'160')
-    encjob.setVideoFilters({"Deinterlacing": "Linear blend"})
+    encjob.setVideoCodec('MPEG 4 (lavc)','700', False, 0)
+    encjob.setAudioCodec('MPEG 1 Layer 3 (mp3)','160')
+    encjob.setVideoFilters({'Deinterlacing': 'Linear blend'})
     encjob._CalcVideoBR()
     print encjob.vbrate
 ##~     encjob._generateCL()
@@ -735,7 +746,7 @@ if __name__ == '__main__':
 ##~     print conc(cl[0])
 ##~     print conc(cl[1])
     import logging
-    log = logging.getLogger("EncodingCore")
+    log = logging.getLogger('EncodingCore')
     log.setLevel(logging.DEBUG)
 
     queue = encodingqueue(log, 2)
