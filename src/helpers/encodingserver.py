@@ -101,11 +101,11 @@ class EncodingServer(xmlrpc.XMLRPC):
         _debug_("EncodingServer started...", 0)
         
     def xmlrpc_echotest(self, blah):
-        _debug_("xmlrpc_echotest(self, blah)", 2)
+        _debug_("xmlrpc_echotest(self, blah)", 3)
         return (True, 'EncodingServer::echotest: %s' % blah)
 
     def xmlrpc_initEncodeJob(self, source, output, friendlyname="", chapter=None):
-        _debug_("xmlrpc_initEncodeJob(self, %s, %s, %s, %s)" % (source, output, friendlyname, chapter), 2)
+        _debug_("xmlrpc_initEncodeJob(self, %s, %s, %s, %s)" % (source, output, friendlyname, chapter), 3)
         #safety checks
         if not (source or output):
             return (False, 'EncodingServer::initEncodeJob:  no source or output given')
@@ -125,11 +125,11 @@ class EncodingServer(xmlrpc.XMLRPC):
         return (True, idnr)
         
     def xmlrpc_getContainerCAP(self, idnr):
-        _debug_("xmlrpc_getContainerCAP(self, idnr)", 2)
+        _debug_("xmlrpc_getContainerCAP(self, idnr)", 3)
         return (True, jam(self.jobs[idnr].getContainerList()))
        
     def xmlrpc_setContainer(self, idnr, container):
-        _debug_("xmlrpc_setContainer(self, idnr, container)", 2)
+        _debug_("xmlrpc_setContainer(self, idnr, container)", 3)
         status = self.jobs[idnr].setContainer(container)
         
         if not status:
@@ -138,12 +138,12 @@ class EncodingServer(xmlrpc.XMLRPC):
             return (False, "EncodingServer::setContainer: %s" % status)
             
     def xmlrpc_getVideoCodecCAP(self, idnr):
-        _debug_("xmlrpc_getVideoCodecCAP(self, idnr)", 2)
+        _debug_("xmlrpc_getVideoCodecCAP(self, idnr)", 3)
         return (True, jam(self.jobs[idnr].getVideoCodecList()))
         
     def xmlrpc_setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0):
         _debug_("xmlrpc_setVideoCodec(self, %s, %s, %s, %s %s)" % \
-            (idnr, vcodec, tgtsize, multipass, vbitrate), 2)
+            (idnr, vcodec, tgtsize, multipass, vbitrate), 3)
         #safety checks
         if not (vcodec or (tgtsize and vbitrate)):
             return (False, 'EncodingServer::setVideoCodec:  no codec or target size given')
@@ -156,11 +156,11 @@ class EncodingServer(xmlrpc.XMLRPC):
             return (False, "EncodingServer::setVideoCodec: %s" % status)   
            
     def xmlrpc_getAudioCodecCAP(self, idnr):
-        _debug_("xmlrpc_getAudioCodecCAP(self, idnr)", 2)
+        _debug_("xmlrpc_getAudioCodecCAP(self, idnr)", 3)
         return (True, jam(self.jobs[idnr].getAudioCodecList()))
         
     def xmlrpc_setAudioCodec(self, idnr, acodec, abrate):
-        _debug_("xmlrpc_setAudioCodec(self, idnr, acodec, abrate)", 2)
+        _debug_("xmlrpc_setAudioCodec(self, idnr, acodec, abrate)", 3)
         #safety checks
         if not (acodec or abrate):
             return (False, 'EncodingServer::setAudioCodec:  no codec or bitrate given')
@@ -173,12 +173,12 @@ class EncodingServer(xmlrpc.XMLRPC):
             return (False, "EncodingServer::setAudioCodec: %s" % status)
             
     def xmlrpc_getVideoFiltersCAP(self, idnr):
-        _debug_("xmlrpc_getVideoFiltersCAP(self, idnr)", 2)
+        _debug_("xmlrpc_getVideoFiltersCAP(self, idnr)", 3)
         return (True, jam(self.jobs[idnr].getVideoFiltersList()))
         
 
     def xmlrpc_setVideoFilters(self, idnr, filters):
-        _debug_("xmlrpc_setVideoFilters(self, idnr, filters)", 2)
+        _debug_("xmlrpc_setVideoFilters(self, idnr, filters)", 3)
         #safety checks
         if not filters:
             return (False, 'EncodingServer::setAudioCodec:  no codec or bitrate given')
@@ -191,7 +191,7 @@ class EncodingServer(xmlrpc.XMLRPC):
             return (False, "EncodingServer::setVideoFilters: %s" % status)
         
     def xmlrpc_queueIt(self, idnr, now=False):
-        _debug_("xmlrpc_queueIt(self, idnr, now=False)", 2)
+        _debug_("xmlrpc_queueIt(self, idnr, now=False)", 3)
         self.queue.addEncodingJob(self.jobs[idnr])
         del self.jobs[idnr]
         _debug_("Added job %s to the queue" % idnr, 0)
@@ -200,19 +200,19 @@ class EncodingServer(xmlrpc.XMLRPC):
         return (True, "EncodingServer::queueIt: OK")
         
     def xmlrpc_getProgress(self):
-        _debug_("xmlrpc_getProgress(self)", 2)
+        _debug_("xmlrpc_getProgress(self)", 3)
         prog = self.queue.getProgress()
         if type(prog) is str:
             return (False, "EncodingServer::getProgress: %s" % prog)
         return (True, jam(prog))
         
     def xmlrpc_startQueue(self):
-        _debug_("xmlrpc_startQueue(self)", 2)
+        _debug_("xmlrpc_startQueue(self)", 3)
         self.queue.startQueue()
         return (True, "EncodingServer::startqueue: OK")
         
     def xmlrpc_listJobs(self):
-        _debug_("xmlrpc_listJobs(self)", 2)
+        _debug_("xmlrpc_listJobs(self)", 3)
         jlist = self.queue.listJobs()
         return (True, jam(jlist))
 
