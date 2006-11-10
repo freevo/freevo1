@@ -55,7 +55,7 @@ class ScheduledRecordings:
             print 'addProgram: key is "%s"' % String(key)
         if not self.programList.has_key(key):
             if config.DEBUG:
-                print 'addProgram: actually adding "%s"' % String(prog)
+                print 'addProgram: actually adding "%s"' % prog
             self.programList[key] = prog
         else:
             if config.DEBUG:
@@ -72,7 +72,7 @@ class ScheduledRecordings:
         if self.programList.has_key(key):
             del self.programList[key]
             if config.DEBUG:
-                print 'removed recording: %s' % String(prog)
+                print 'removed recording: %s' % prog
         else:
             if config.DEBUG:
                 print 'We do not know about this recording.'

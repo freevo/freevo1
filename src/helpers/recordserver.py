@@ -267,7 +267,7 @@ class RecordServer(xmlrpc.XMLRPC):
         for chan in guide.chan_list:
             if prog.channel_id == chan.id:
                 _debug_('scheduleRecording: prog.channel_id="%s" chan.id="%s" chan.tunerid="%s"' %
-                    (String(prog.channel_id), String(chan.id), String(chan.tunerid)))
+                    (prog.channel_id, chan.id, chan.tunerid))
                 prog.tunerid = chan.tunerid
     
         scheduledRecordings = self.getScheduledRecordings()
@@ -428,7 +428,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         now = time.time()
         for prog in progs.values():
-            _debug_('checkToRecord: progloop=%s' % String(prog), 2)
+            _debug_('checkToRecord: progloop=%s' % prog, 2)
 
             try:
                 recording = prog.isRecording
@@ -466,13 +466,13 @@ class RecordServer(xmlrpc.XMLRPC):
                         if self.isProgAFavorite(prog)[0] and \
                            not self.isProgAFavorite(currently_recording)[0] and \
                            prog.stop + config.TV_RECORD_PADDING_POST > now:
-                            _debug_('ignore %s' % String(prog))
+                            _debug_('ignore %s' % prog)
                             continue
                         sr.removeProgram(currently_recording, 
                                          tv_util.getKey(currently_recording))
                         plugin.getbyname('RECORD').Stop()
                         time.sleep(5)
-                        _debug_('CALLED RECORD STOP 1: %s' % String(currently_recording))
+                        _debug_('CALLED RECORD STOP 1: %s' % currently_recording)
                     else:
                         # at this moment we must be in the pre-record padding
                         if currently_recording.stop - 10 <= now:
@@ -490,7 +490,7 @@ class RecordServer(xmlrpc.XMLRPC):
                                                  tv_util.getKey(currently_recording))
                                 plugin.getbyname('RECORD').Stop()
                                 time.sleep(5)
-                                _debug_('CALLED RECORD STOP 2: %s' % String(currently_recording))
+                                _debug_('CALLED RECORD STOP 2: %s' % currently_recording)
                             else: 
                                 delay_recording = TRUE
                         else: 
@@ -498,9 +498,9 @@ class RecordServer(xmlrpc.XMLRPC):
                              
                         
                 if delay_recording:
-                    _debug_('delaying: %s' % String(prog))
+                    _debug_('delaying: %s' % prog)
                 else:
-                    _debug_('going to record: %s' % String(prog))
+                    _debug_('going to record: %s' % prog)
                     prog.isRecording = TRUE
                     prog.rec_duration = duration
                     prog.filename = tv_util.getProgFilename(prog)
@@ -510,7 +510,7 @@ class RecordServer(xmlrpc.XMLRPC):
         for prog in progs.values():
             # If the program is over remove the entry.
             if ( prog.stop + config.TV_RECORD_PADDING_POST) < now:
-                _debug_('found a program to clean: %s' % String(prog))
+                _debug_('found a program to clean: %s' % prog)
                 cleaned = TRUE
                 del progs[tv_util.getKey(prog)]
 
@@ -519,12 +519,12 @@ class RecordServer(xmlrpc.XMLRPC):
             self.saveScheduledRecordings(sr)
 
         if rec_prog:
-            _debug_('start recording: %s' % String(rec_prog))
+            _debug_('start recording: %s' % rec_prog)
             self.record_app = plugin.getbyname('RECORD')
 
             if not self.record_app:
                 print_plugin_warning()
-                _debug_('ERROR:  Recording %s failed.' % String(rec_prog.title), 0)
+                _debug_('ERROR:  Recording %s failed.' % rec_prog.title, 0)
                 self.removeScheduledRecording(rec_prog)
                 return
 
