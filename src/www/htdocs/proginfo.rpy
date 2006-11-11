@@ -1,9 +1,11 @@
 #!/usr/bin/python
+
+#if 0 /*
 # -----------------------------------------------------------------------
 # proginfo.rpy - Dynamically update program info popup box.
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,7 +22,8 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# -----------------------------------------------------------------------
+# ----------------------------------------------------------------------- */
+#endif
 
 import sys, string
 import time
@@ -30,8 +33,8 @@ from twisted.web.woven import page
 
 import util.tv_util as tv_util
 import util
-import config 
-import tv.epg_xmltv 
+import config
+import tv.epg_xmltv
 import tv.record_client as ri
 from twisted.web import static
 
@@ -53,43 +56,46 @@ class ProgInfoResource(FreevoResource):
             if prog.start == starttime:
                 break
 
+        title = prog.title
+
         if prog.desc == '':
-            desc = (_('Sorry, the program description for ' \
-                      '%s is unavailable.')) % ('<b>'+prog.title+'</b>')
+            desc = (_('Sorry, the program description for %s is unavailable.')) \
+                % ('<b>'+prog.title+'</b>')
         else:
             desc = prog.desc
-                                                                                                                                   
+
         desc = desc.lstrip()
         if MAX_DESCRIPTION_CHAR and len(desc) > MAX_DESCRIPTION_CHAR:
             desc=desc[:desc[:MAX_DESCRIPTION_CHAR].rfind('.')] + '. [...]'
 
         if prog.sub_title:
             desc = '"%s"<br/>%s' % (prog.sub_title,desc)
+        desc = desc.replace("\n", "<br/>")
 
-        fv.res += (
-           u"<script>\n" \
-           u"var doc = parent.top.document;\n" \
-           u"doc.getElementById('program-title').innerHTML = '%s';\n"\
-           u"doc.getElementById('program-desc').innerHTML = '%s';\n"\
-           u"doc.getElementById('program-start').innerHTML = '%s';\n"
-           u"doc.getElementById('program-end').innerHTML = '%s';\n"\
-           u"doc.getElementById('program-runtime').innerHTML = '%s';\n"\
-           u"doc.getElementById('program-record-button').onclick = %s;\n"\
-           u"doc.getElementById('program-favorites-button').onclick = %s;\n"\
-           u"doc.getElementById('program-waiting').style.display = 'none';\n" \
-           u"doc.getElementById('program-info').style.visibility = 'visible';\n" \
-           u"</script>\n"
-        ) % ( prog.title.replace("'", "\\'") , desc.replace("'", "\\'"),
-              time.strftime(config.TV_TIMEFORMAT,
-                            time.localtime( prog.start ) ),
-              time.strftime(config.TV_TIMEFORMAT,
-                            time.localtime( prog.stop ) ),
-              int( ( prog.stop - prog.start ) / 60 ),
-              "function() { doc.location=\"record.rpy?chan=%s&start=%s&action=add\"; }" % (chanid, starttime),
-              "function() { doc.location=\"edit_favorite.rpy?chan=%s&start=%s&action=add\"; }" % (chanid, starttime),
+        print 'type(title)=%s, title=%r' % (type(title), title)
+        print "type(desc)=%s, desc=%r" % (type(desc), desc)
 
-        )
+        if config.LOCALE.lower() != 'utf8' and config.LOCALE.lower() != 'utf-8':
+            title = title.encode('ascii', 'ignore')
+            desc = desc.encode('ascii', 'ignore')
+        start = time.strftime(config.TV_TIMEFORMAT, time.localtime(prog.start))
+        stop = time.strftime(config.TV_TIMEFORMAT, time.localtime(prog.stop))
+        fv.res += u"<script>\n"
+        fv.res += u"var doc = parent.top.document;\n"
+        fv.res += u"doc.getElementById('program-title').innerHTML = '"+title.replace("'", "\\'")+"';\n"
+        fv.res += u"doc.getElementById('program-desc').innerHTML = '"+desc.replace("'", "\\'")+"';\n"
+        fv.res += u"doc.getElementById('program-start').innerHTML = '"+start+"';\n"
+        fv.res += u"doc.getElementById('program-end').innerHTML = '"+stop+"';\n"
+        fv.res += u"doc.getElementById('program-runtime').innerHTML = '%s';\n" % int((prog.stop - prog.start) / 60)
+        fv.res += u"doc.getElementById('program-record-button').onclick = %s;\n" % \
+            "function() { doc.location=\"record.rpy?chan=%s&start=%s&action=add\"; }" % (chanid, starttime)
+        fv.res += u"doc.getElementById('program-favorites-button').onclick = %s;\n" % \
+            "function() { doc.location=\"edit_favorite.rpy?chan=%s&start=%s&action=add\"; }" % (chanid, starttime)
+        fv.res += u"doc.getElementById('program-waiting').style.display = 'none';\n"
+        fv.res += u"doc.getElementById('program-info').style.visibility = 'visible';\n"
+        fv.res += u"</script>\n"
 
-        return String( fv.res )
+        return String(fv.res)
+
 
 resource = ProgInfoResource()

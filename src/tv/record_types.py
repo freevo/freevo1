@@ -51,6 +51,9 @@ class ScheduledRecordings:
             # key = rec_interface.getKey(prog)
             pass
 
+        print 'config.LOCALE=%s' % config.LOCALE
+        print 'type(prog)=%s prog=%s' % (type(prog), prog)
+
         if config.DEBUG:
             print 'addProgram: key is "%s"' % String(key)
         if not self.programList.has_key(key):
@@ -72,7 +75,7 @@ class ScheduledRecordings:
         if self.programList.has_key(key):
             del self.programList[key]
             if config.DEBUG:
-                print 'removed recording: %s' % prog
+                print 'removeProgram: removed "%s"' % prog
         else:
             if config.DEBUG:
                 print 'We do not know about this recording.'

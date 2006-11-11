@@ -124,7 +124,7 @@ class TvProgram:
         return ''
 
 
-    def decode(self):
+    def utf2str(self):
         """
         Decode all internal strings from Unicode to String
         """
@@ -135,7 +135,7 @@ class TvProgram:
         return ret
     
 
-    def encode(self):
+    def str2utf(self):
         """
         Encode all internal strings from String to Unicode
         """

@@ -345,9 +345,8 @@ class RecordServer(xmlrpc.XMLRPC):
                 _debug_('CHANNEL MATCH: %s' % ch.id)
                 for prog in ch.programs:
                     if start == '%s' % prog.start:
-                        #_debug_('PROGRAM MATCH 1: %s' % prog.title.encode('ascii', 'replace'))
-                        _debug_('PROGRAM MATCH 1: %s' % prog.decode().title)
-                        return (TRUE, prog.decode())
+                        _debug_('PROGRAM MATCH 1: %s' % prog)
+                        return (TRUE, prog.utf2str())
 
         return (FALSE, 'prog not found')
 
@@ -379,16 +378,14 @@ class RecordServer(xmlrpc.XMLRPC):
                     if movies_only:
                         # We can do better here than just look for the MPAA 
                         # rating.  Suggestions are welcome.
-                        if 'MPAA' in prog.decode().getattr('ratings').keys():
-                            matches.append(prog.decode())
-                            #_debug_('PROGRAM MATCH 2: %s' % prog.title.encode('ascii', 'replace'))
-                            _debug_('PROGRAM MATCH 2: %s' % prog.decode())
+                        if 'MPAA' in prog.utf2str().getattr('ratings').keys():
+                            matches.append(prog.utf2str())
+                            _debug_('PROGRAM MATCH 2: %s' % prog)
                     else:
                         # We should never get here if not find and not 
                         # movies_only.
-                        matches.append(prog.decode())
-                        #_debug_('PROGRAM MATCH 3: %s' % prog.title.encode('ascii', 'replace'))
-                        _debug_('PROGRAM MATCH 3: %s' % prog.decode())
+                        matches.append(prog.utf2str())
+                        _debug_('PROGRAM MATCH 3: %s' % prog)
                 if len(matches) >= max_results:
                     break
 

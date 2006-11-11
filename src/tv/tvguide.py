@@ -114,7 +114,7 @@ class TVGuide(Item):
         if got_schedule:
             l = schedule.getProgramList()
             for k in l:
-                self.scheduled_programs.append(l[k].encode())
+                self.scheduled_programs.append(l[k].str2utf())
 
         
     def eventhandler(self, event):
