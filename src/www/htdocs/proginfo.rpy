@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-#if 0 /*
 # -----------------------------------------------------------------------
 # proginfo.rpy - Dynamically update program info popup box.
 # -----------------------------------------------------------------------
@@ -22,8 +21,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 import sys, string
 import time
@@ -72,8 +70,8 @@ class ProgInfoResource(FreevoResource):
             desc = '"%s"<br/>%s' % (prog.sub_title,desc)
         desc = desc.replace("\n", "<br/>")
 
-        print 'type(title)=%s, title=%r' % (type(title), title)
-        print "type(desc)=%s, desc=%r" % (type(desc), desc)
+        #print 'type(title)=%s, title=%r' % (type(title), title)
+        #print "type(desc)=%s, desc=%r" % (type(desc), desc)
 
         if config.LOCALE.lower() != 'utf8' and config.LOCALE.lower() != 'utf-8':
             title = title.encode('ascii', 'ignore')

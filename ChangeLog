@@ -46,6 +46,7 @@ Release 1.6.1 will only contain bug fixes.
  * Fixed mplayer cropdetect, only skipping 60 secs using 2*TV_RECORD_PADDING_PRE (B#1591170)
  * Fixed recordserver in debug mode printing non-ascii characters (B#1594117)
  * Fixed weather download when visibility is empty (B#1591145)
+ * Fixed webserver displaying non-ascii characters and nxtvepg xmltv (B#1594642)
  * Fixed VIDEO_INTERLACING = False having no effect (B#1586721)
  * Fixed xine --no-lirc option when compiled without lirc support (B#1589722)
 
