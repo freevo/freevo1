@@ -5,7 +5,7 @@
 # $Id$
 #
 # Notes: see http://pintje.servebeer.com/fxdimdb.html for documentatio,
-# Todo: 
+# Todo:
 # - add support making fxds without imdb (or documenting it)
 # - webradio support?
 #
@@ -49,7 +49,7 @@ import codecs
 import os
 from BeautifulSoup import BeautifulSoup
 
-import config 
+import config
 import util
 
 from kaa.metadata.disc.discinfo import cdrom_disc_id
@@ -65,7 +65,7 @@ imdb_info_tags = ('year', 'genre', 'tagline', 'plot', 'rating', 'runtime');
 
 # headers for urllib2
 txdata = None
-txheaders = {   
+txheaders = {
     'User-Agent': 'freevo %s (%s)' % (freevo_version, sys.platform),
     'Accept-Language': 'en-us',
 }
@@ -74,24 +74,24 @@ txheaders = {
 
 class FxdImdb:
     """Class for creating fxd files and fetching imdb information"""
-    
+
     def __init__(self):
         """Initialise class instance"""
-    
+
         # these are considered as private variables - don't mess with them unless
         # no other choise is given
         # fyi, the other choice always exists : add a subroutine or ask :)
-        
+
         self.imdb_id_list = []
         self.imdb_id = None
         self.isdiscset = False
         self.title = ''
         self.info = {}
-        
+
         self.image = None # full path image filename
         self.image_urls = [] # possible image url list
-        self.image_url = None # final image url 
-        
+        self.image_url = None # final image url
+
         self.fxdfile = None # filename, full path, WITHOUT extension
 
         self.append = False
@@ -105,17 +105,17 @@ class FxdImdb:
         self.parts = []
         self.var_mplopt = []
         self.var_names = []
-        
-        #initialize self.info    
+
+        #initialize self.info
         for t in imdb_info_tags:
             self.info[t] = ""
-            
+
         #image_url_handler stuff
         self.image_url_handler = {}
         self.image_url_handler['www.impawards.com'] = self.impawards
-        
-    
-    
+
+
+
     def searchImdb(self, name):
         """name (string), returns id list
         Search for name and returns an id list with tuples:
@@ -125,13 +125,13 @@ class FxdImdb:
               urllib.quote(name)
         req = urllib2.Request(url, txdata, txheaders)
         searchstring = name
-        
+
         try:
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, error:
-            raise FxdImdb_Net_Error("IMDB unreachable : " + error) 
+            raise FxdImdb_Net_Error("IMDB unreachable : " + error)
             return None
-            
+
         regexp_get_imdb_id = re.compile(r'''
         http://.*imdb\.com/
         (?:Title\?|title/tt) # ( old style | new style )
@@ -142,11 +142,11 @@ class FxdImdb:
         if m:
             data = self.parsedata(response)
             self.imdb_id_list = [ ( m.group('id'),
-                                    data[0], 
+                                    data[0],
                                     data[1]['year'],
                                     "Movie/TV-Movie") ]
             return self.imdb_id_list
-        
+
         regexp_type  = re.compile(r'''
         <H2><A[ ]NAME=.*?>
         (?P<type>.*?)     # Most popular searches/Movies/TV-Movies/Video Games etc.
@@ -170,18 +170,18 @@ class FxdImdb:
                 # delete plural s
                 if type in ('Movies', 'TV-Movies'):
                     type = type[:-1]
-    
+
             m = regexp_imdb_list_entry.search(line)
 
             if m and not type == 'Video Games':
                 id   = m.group('id')
                 name = m.group('title')
                 year = m.group('year')
-    
+
                 # delete " before and after name
                 if name[0] == '"' and name [-1] == '"':
                     name=name[1:-1]
-    
+
                 # only add entries that hasn't been added before
                 for i in self.imdb_id_list:
                     if i[0] == id:
@@ -194,7 +194,7 @@ class FxdImdb:
             # too much results, check if there are stupid results in the
             # list
             words = []
-            
+
             # make a list of all words (no numbers) in the search string
             for p in re.split('[\._ -]', searchstring):
                 if p and not p[0] in '0123456789':
@@ -211,50 +211,50 @@ class FxdImdb:
                         appended = True
             self.imdb_id_list = new_list
         return self.imdb_id_list
-    
-    
+
+
     def setImdbId(self, id):
         """id (number)
         Set an imdb_id number for object, and fetch data"""
         self.imdb_id = id
-        
+
         url = 'http://us.imdb.com/Title?%s' % id
         req = urllib2.Request(url, txdata, txheaders)
-        
+
         try:
             idpage = urllib2.urlopen(req)
         except urllib2.HTTPError, error:
             raise FxdImdb_Net_Error("IMDB unreachable" + error)
             return None
-    
+
         self.parsedata(idpage, id)
         idpage.close()
 
-    
+
     def setFxdFile(self, fxdfilename = None, overwrite = False):
         """
         fxdfilename (string, full path)
         Set fxd file to write to, may be omitted, may be an existing file
         (data will be added) unless overwrite = True
         """
-        
-        if fxdfilename: 
+
+        if fxdfilename:
             if vfs.splitext(fxdfilename)[1] == '.fxd':
                 self.fxdfile = vfs.splitext(fxdfilename)[0]
             else: self.fxdfile = fxdfilename
-        
+
         else:
             if self.isdiscset == True:
                 self.fxdfile = vfs.join(config.OVERLAY_DIR, 'disc-set',
                                         self.getmedia_id(self.device))
             else:
                 self.fxdfile = vfs.splitext(file)[0]
-        
+
         if overwrite == False:
             try:
                 vfs.open(self.fxdfile + '.fxd')
                 self.append = True
-            except: 
+            except:
                 pass
         else:
             self.append = False
@@ -267,24 +267,24 @@ class FxdImdb:
         if not vfs.isdir(vfs.dirname(self.fxdfile)):
             if vfs.dirname(self.fxdfile):
                 os.makedirs(vfs.dirname(self.fxdfile))
-            
-    
+
+
     def setVideo(self, *videos, **mplayer_opt):
         """
-        videos (tuple (type, id-ref, device, mplayer-opts, file/param) (multiple allowed), 
+        videos (tuple (type, id-ref, device, mplayer-opts, file/param) (multiple allowed),
         global_mplayer_opts
         Set media file(s) for fxd
         """
         if self.isdiscset == True:
             raise FxdImdb_XML_Error("<disc-set> already used, can't use both "+
                                     "<movie> and <disc-set>")
-        
+
         if videos:
             for video in videos:
                 self.video += [ video ]
         if mplayer_opt and 'mplayer_opt' in mpl_global_opt:
             self.mpl_global_opt = mplayer_opt['mplayer_opt']
-        
+
     def setVariants(self, *parts, **mplayer_opt):
         """
         variants/parts (tuple (name, ref, mpl_opts, sub, s_dev, audio, a_dev)),
@@ -294,20 +294,20 @@ class FxdImdb:
         if self.isdiscset == True:
             raise FxdImdb_XML_Error("<disc-set> already used, can't use both "+
                                     "<movie> and <disc-set>")
- 
+
         if mplayer_opt and 'mplayer_opt' in mpl_global_opt:
             self.varmpl_opt = (mplayer_opt['mplayer_opt'])
         for part in parts:
             self.variant += [ part ]
-        
-    
+
+
     def writeFxd(self):
         """Write fxd file"""
         print 'in writeFxd'
         #if fxdfile is empty, set it yourself
         if not self.fxdfile:
             self.setFxdFile()
-        
+
         try:
             #should we add to an existing file?
             if self.append:
@@ -324,7 +324,7 @@ class FxdImdb:
                 else:
                     self.write_movie()
 
-            #check fxd 
+            #check fxd
             # XXX: add this back in without using parseMovieFile
             # if parseMovieFile(self.fxdfile + '.fxd', None, []) == []:
             #     raise FxdImdb_XML_Error("""FXD file generated is invalid, please "+
@@ -332,8 +332,8 @@ class FxdImdb:
 
         except (IOError, FxdImdb_IO_Error), error:
             raise FxdImdb_IO_Error('error saving the file: %s' % str(error))
-            
-    
+
+
     def setDiscset(self, device, regexp, *file_opts, **mpl_global_opt):
         """
         device (string), regexp (string), file_opts (tuple (mplayer-opts,file)),
@@ -343,21 +343,21 @@ class FxdImdb:
         if len(self.video) != 0 or len(self.variant) != 0:
             raise FxdImdb_XML_Error("<movie> already used, can't use both "+
                                     "<movie> and <disc-set>")
-        
+
         self.isdiscset = True
         if (not device and not regexp) or (device and regexp):
             raise FxdImdb_XML_Error("Can't use both media-id and regexp")
-            
+
         self.device = device
         self.regexp = regexp
-        
+
         for opts in file_opts:
             self.file_opts += [ opts ]
-            
-        if mpl_global_opt and 'mplayer_opt' in mpl_global_opt: 
+
+        if mpl_global_opt and 'mplayer_opt' in mpl_global_opt:
             self.mpl_global_opt = (mpl_global_opt['mplayer_opt'])
-            
-    
+
+
     def isDiscset(self):
         """Check if fxd file describes a disc-set, returns 1 for true, 0 for false
         None for invalid file"""
@@ -365,18 +365,18 @@ class FxdImdb:
             file = vfs.open(self.fxdfile + '.fxd')
         except IOError:
             return None
-            
+
         content = file.read()
         file.close()
         if content.find('</disc-set>') != -1: return 1
         return 0
 
-        
+
     def guessImdb(self, filename, label=False):
         """Guess possible imdb movies from filename. Same return as searchImdb"""
 
         name = filename
-        
+
         name  = vfs.basename(vfs.splitext(name)[0])
         name  = re.sub('([a-z])([A-Z])', point_maker, name)
         name  = re.sub('([a-zA-Z])([0-9])', point_maker, name)
@@ -386,7 +386,7 @@ class FxdImdb:
         if label == True:
             for r in config.IMDB_REMOVE_FROM_LABEL:
                 name  = re.sub(r, '', name)
-                
+
         parts = re.split('[\._ -]', name)
         name = ''
         for p in parts:
@@ -397,18 +397,18 @@ class FxdImdb:
                 name += '%s ' % p
         return self.searchImdb(name)
 
-        
+
 #------ private functions below .....
 
     def write_discset(self):
-        """Write a <disc-set> to a fresh file"""        
-    
+        """Write a <disc-set> to a fresh file"""
+
         try:
             i = vfs.codecs_open( (self.fxdfile + '.fxd') , 'wb', encoding='utf-8')
         except IOError, error:
             raise FxdImdb_IO_Error("Writing FXD file failed : " + str(error))
-            return 
-    
+            return
+
         #header
         i.write("<?xml version=\"1.0\" ?>\n<freevo>\n")
         i.write("  <copyright>\n" +
@@ -417,7 +417,7 @@ class FxdImdb:
                 "    Please visit http://www.imdb.com for more informations.\n")
         i.write("    <source url=\"http://www.imdb.com/tt%s\"/>\n"  % self.imdb_id +
                 "  </copyright>\n")
-        #disc-set    
+        #disc-set
         i.write("  <disc-set title=\"%s\">\n" % self.str2XML(self.title))
         #disc
         i.write("    <disc")
@@ -432,35 +432,35 @@ class FxdImdb:
         if self.file_opts:
             i.write("\n")
             for opts in self.file_opts:
-                mplopts, fname = opts 
+                mplopts, fname = opts
                 i.write("      <file-opt mplayer-options=\"%s\">" % self.str2XML(mplopts))
                 i.write("%s</file-opt>\n" % self.str2XML(fname))
             i.write("    </disc>\n")
         else: i.write("    </disc>\n")
-        
+
         #image
         if self.image:
             i.write("    <cover-img source=\"%s\">" % self.str2XML(self.image_url))
             i.write("%s</cover-img>\n" % self.str2XML(self.image))
         #print info
         i.write(self.print_info())
-        
-        #close tags     
-        i.write("  </disc-set>\n")    
+
+        #close tags
+        i.write("  </disc-set>\n")
         i.write("</freevo>\n")
-    
+
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
-        
+
     def write_movie(self):
         """Write <movie> to fxd file"""
-        
+
         try:
             i = vfs.codecs_open( (self.fxdfile + '.fxd') , 'w', encoding='utf-8')
         except IOError, error:
             raise FxdImdb_IO_Error("Writing FXD file failed : " + str(error))
-            return 
-        
+            return
+
         #header
         i.write("<?xml version=\"1.0\" ?>\n<freevo>\n")
         i.write("  <copyright>\n" +
@@ -488,17 +488,17 @@ class FxdImdb:
             i.write('    <variants>\n')
             i.write(self.print_variant())
             i.write('    </variants>\n')
-        
+
         #info
         i.write(self.print_info())
         #close tags
         i.write('  </movie>\n')
-        i.write('</freevo>\n')     
-        
+        i.write('</freevo>\n')
+
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
 
-        
+
     def update_movie(self):
         """Updates an existing file, adds exftra dvd|vcd|file and variant tags"""
         passedvid = False
@@ -508,19 +508,19 @@ class FxdImdb:
         except IOError, error:
             raise FxdImdb_IO_Error("Updating FXD file failed : " + str(error))
             return
-            
+
         content = file.read()
         file.close()
-        
+
         if content.find('</video>') == -1:
             raise FxdImdb_XML_Error("FXD cannot be updated, doesn't contain <video> tag")
 
         regexp_variant_start = re.compile('.*<variants>.*', re.I)
         regexp_variant_end = re.compile(' *</variants>', re.I)
         regexp_video_end  = re.compile(' *</video>', re.I)
-    
+
         file = vfs.open(self.fxdfile + '.fxd', 'w')
-    
+
 
         for line in content.split('\n'):
             if passedvid == True and content.find('<variants>') == -1:
@@ -531,47 +531,47 @@ class FxdImdb:
                     file.write('    </variants>\n')
                 file.write(line + '\n')
                 passedvid = False
-                
+
             elif regexp_video_end.match(line):
                 if len(self.video) != 0:
                     file.write(self.print_video())
                 file.write(line + '\n')
                 passedvid = True
-                
+
             elif regexp_variant_end.match(line):
                 if len(self.variant) != 0:
                     file.write(self.print_variant())
                 file.write(line + '\n')
-                
+
             else: file.write(line + '\n')
-            
+
         file.close()
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
 
-        
+
     def update_discset(self):
         """Updates an existing file, adds extra disc in discset"""
-        
+
         #read existing file in memory
         try:
             file = vfs.open(self.fxdfile + '.fxd')
         except IOError, error:
             raise FxdImdb_IO_Error("Updating FXD file failed : " + str(error))
             return
-            
+
         content = file.read()
         file.close()
-        
+
         if content.find('</disc-set>') == -1:
             raise FxdImdb_XML_Error("FXD file cannot be updated, doesn't contain <disc-set>")
-            
+
         regexp_discset_end  = re.compile(' *</disc-set>', re.I)
-    
+
         file = vfs.open(self.fxdfile + '.fxd', 'w')
-    
+
         for line in content.split('\n'):
-                
+
             if regexp_discset_end.match(line):
                 file.write("    <disc")
                 if self.device:
@@ -586,16 +586,16 @@ class FxdImdb:
                 if self.file_opts:
                     file.write("\n")
                     for opts in self.file_opts:
-                        mplopts, fname = opts 
+                        mplopts, fname = opts
                         file.write("      <file-opt mplayer-options=\"%s\">" % \
                                    self.str2XML(mplopts))
                         file.write("%s</file-opt>\n" % self.str2XML(fname))
                     file.write("    </disc>\n")
                 else: file.write("    </disc>\n")
                 file.write(line + '\n')
-                
+
             else: file.write(line + '\n')
-            
+
         file.close()
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
@@ -608,7 +608,7 @@ class FxdImdb:
 
         soup = BeautifulSoup()
         soup.feed(results.read())
-    
+
         title = soup.find('strong', {'class':'title'})
         image = soup.find('img', { 'title':title.next.strip() })
 
@@ -638,12 +638,12 @@ class FxdImdb:
 
         if not id:
             return (self.title, self.info, self.image_urls)
-    
+
         if not dvd:
             url = 'http://us.imdb.com/title/tt%s/dvd' % id
             print 'url:', url
             req = urllib2.Request(url, txdata, txheaders)
-            
+
             try:
                 r = urllib2.urlopen(req)
                 soup.feed(r.read())
@@ -657,19 +657,19 @@ class FxdImdb:
             except urllib2.HTTPError, error:
                 pass
         print self.image_urls
-    
+
         return (self.title, self.info, self.image_urls)
-    
-    
+
+
     def impawards(self, host, path):
         """parser for posters from www.impawards.com. TODO: check for licences
         of each poster and add all posters"""
-        
+
         path = '%s/posters/%s.jpg' % (path[:path.rfind('/')], \
                                       path[path.rfind('/')+1:path.rfind('.')])
         return [ 'http://%s%s' % (host, path) ]
-    
-    
+
+
     def fetch_image(self):
         """Fetch the best image"""
         print 'in fetch_image', self.image_urls
@@ -694,17 +694,17 @@ class FxdImdb:
         if not self.image_url:
             print "Image dowloading failed"
             return
-        
+
         self.image = (self.fxdfile + '.jpg')
-        
+
         req = urllib2.Request(self.image_url, txdata, txheaders)
         r = urllib2.urlopen(req)
         i = vfs.open(self.image, 'w')
         i.write(r.read())
         i.close()
         r.close()
-        
-        # try to crop the image to avoid borders by imdb 
+
+        # try to crop the image to avoid borders by imdb
         try:
             import Image
             image = Image.open(filename)
@@ -712,7 +712,7 @@ class FxdImdb:
             image.crop((2,2,width-4, height-4)).save(filename)
         except:
             pass
-        
+
         self.image = vfs.basename(self.image)
 
         print "Downloaded cover image from %s" % self.image_url
@@ -720,7 +720,7 @@ class FxdImdb:
         print "go to %s to check for more informations about private." % self.image_url
         print "use of this image"
 
-        
+
     def str2XML(self, line):
         """return a valid XML string"""
         try:
@@ -739,8 +739,8 @@ class FxdImdb:
             return s
         except:
             return Unicode(line)
-        
-    
+
+
     def getmedia_id(self, drive):
         """drive (device string)
         return a unique identifier for the disc"""
@@ -748,9 +748,9 @@ class FxdImdb:
         if not vfs.exists(drive): return drive
         return cdrom_disc_id(drive)[1]
 
-        
+
     def print_info(self):
-        """return info part for FXD writing""" 
+        """return info part for FXD writing"""
         ret = u''
         if self.info:
             ret = u'    <info>\n'
@@ -759,9 +759,9 @@ class FxdImdb:
             ret += u'    </info>\n'
         return ret
 
-        
+
     def print_video(self):
-        """return info part for FXD writing""" 
+        """return info part for FXD writing"""
         ret = ''
         for vid in self.video:
             type, idref, device, mpl_opts, fname = vid
@@ -774,13 +774,13 @@ class FxdImdb:
             ret += '</%s>\n' % self.str2XML(type)
         return ret
 
-        
+
     def print_variant(self):
-        """return info part for FXD writing""" 
+        """return info part for FXD writing"""
         ret = ''
         for x in range(len(self.variant)):
             name, idref, mpl_opts, sub, s_dev, audio, a_dev = self.variant[x]
-            
+
             ret += '      <variant name=\"%s\"' % self.str2XML(name)
             if self.varmpl_opt:
                 ret += ' mplayer-options=\"%s\">\n' % self.str2XML(self.varmpl_opt)
@@ -800,9 +800,9 @@ class FxdImdb:
                 ret += '%s</audio>\n' % self.str2XML(audio)
             ret += '        </part>\n'
             ret += '      </variant>\n'
-        
+
         return ret
-        
+
 
 #--------- Exception class
 
@@ -812,23 +812,23 @@ class Error(Exception):
         return self.message
     def __init__(self, message):
         self.message = message
-        
+
 class FxdImdb_Error(Error):
     """used to raise exceptions"""
     pass
-        
+
 class FxdImdb_XML_Error(Error):
     """used to raise exceptions"""
     pass
-        
+
 class FxdImdb_IO_Error(Error):
     """used to raise exceptions"""
     pass
-    
+
 class FxdImdb_Net_Error(Error):
     """used to raise exceptions"""
     pass
-            
+
 #------- Helper functions for creating tuples - these functions are classless
 
 def makeVideo(type, id_ref, file, **values):
@@ -840,23 +840,23 @@ def makeVideo(type, id_ref, file, **values):
 
     if type not in types:
         raise FxdImdb_XML_Error("Invalid type passed to makeVideo")
-        
+
     if values:
         #print values
         if 'device' in values: device = values['device']
         if 'mplayer_opt' in values: mplayer_opt = values['mplayer_opt']
-    
+
     file = relative_path(file)
     t = type, id_ref, device, mplayer_opt, file
     return t
-    
+
 def makePart(name, id_ref, **values):
     """Create a part tuple"""
     mplayer_opt = sub = s_dev = audio = a_dev = None
 
     if id_ref == None or name == None:
         raise FxdImdb_XML_Error("Required values missing for tuple creation")
-        
+
     if values:
         if 'mplayer_opt' in values: mplayer_opt = values['mplayer_opt']
         if 'sub' in values: sub = values['sub']
@@ -867,22 +867,22 @@ def makePart(name, id_ref, **values):
     if s_dev: sub = relative_path(sub)
     t = name, id_ref, mplayer_opt, sub, s_dev, audio, a_dev
     return t
-    
+
 def makeFile_opt(mplayer_opt, file):
     """Create a file_opt tuple"""
     if mplayer_opt == None or file == None:
         raise FxdImdb_XML_Error("Required values missing for tuple creation")
-    file = relative_path(file)        
+    file = relative_path(file)
     t = mplayer_opt, file
-    
+
     return t
 
 #--------- classless private functions
-    
+
 def relative_path(filename):
     """return the relative path to a mount point for a file on a removable disc"""
     from os.path import isabs, ismount, split, join
-    
+
     if not isabs(filename) and not ismount(filename): return filename
     drivepaths = []
     for item in config.REMOVABLE_MEDIA:
@@ -897,11 +897,11 @@ def relative_path(filename):
                 if x[0] == '/' and x[1] == '' : return filename
                 elif tail == '': tail = x[1]
                 else: tail = join(x[1], tail)
-                
+
             if head == path: return tail
-    
+
     return filename
-    
+
 def point_maker(matching):
     return '%s.%s' % (matching.groups()[0], matching.groups()[1])
-            
+
