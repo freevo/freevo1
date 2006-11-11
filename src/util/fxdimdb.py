@@ -132,64 +132,11 @@ class FxdImdb:
             raise FxdImdb_Net_Error("IMDB unreachable : " + error)
             return None
 
-        regexp_get_imdb_id = re.compile(r'''
-        http://.*imdb\.com/
-        (?:Title\?|title/tt) # ( old style | new style )
-        (?P<id>\d+)          # imdb id
-        ''', re.VERBOSE)
-
-        m = re.match(regexp_get_imdb_id, response.geturl())
-        if m:
-            data = self.parsedata(response)
-            self.imdb_id_list = [ ( m.group('id'),
-                                    data[0],
-                                    data[1]['year'],
-                                    "Movie/TV-Movie") ]
-            return self.imdb_id_list
-
-        regexp_type  = re.compile(r'''
-        <H2><A[ ]NAME=.*?>
-        (?P<type>.*?)     # Most popular searches/Movies/TV-Movies/Video Games etc.
-        </A></H2>
-        ''', re.VERBOSE)
-
-        regexp_imdb_list_entry = re.compile(r'''
-        <A[ ]HREF="/(?:Title\?|title/tt)     # match both old and new style
-        (?P<id>      \d+)/.*">               # imdb id
-        (?P<title>   .*?)</A>\s*             # imdb movie title
-        \(
-        (?P<year>    \d{4}.*?)               # year and possibly /I, /II etc.
-        \)
-        ''', re.VERBOSE | re.IGNORECASE)
-
-        type = ''
-        for line in response.read().split("<li>"):
-            m = regexp_type.match(line)
-            if m:
-                type = m.group('type')
-                # delete plural s
-                if type in ('Movies', 'TV-Movies'):
-                    type = type[:-1]
-
-            m = regexp_imdb_list_entry.search(line)
-
-            if m and not type == 'Video Games':
-                id   = m.group('id')
-                name = m.group('title')
-                year = m.group('year')
-
-                # delete " before and after name
-                if name[0] == '"' and name [-1] == '"':
-                    name=name[1:-1]
-
-                # only add entries that hasn't been added before
-                for i in self.imdb_id_list:
-                    if i[0] == id:
-                        break
-                else:
-                    self.imdb_id_list += [ ( id, name, year, type ) ]
+        print response.geturl()
+        data = self.parsesearchdata(response)
 
         response.close()
+
         if len(self.imdb_id_list) > 20:
             # too much results, check if there are stupid results in the
             # list
@@ -599,6 +546,33 @@ class FxdImdb:
         file.close()
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
+
+    def parsesearchdata(self, results, id=0):
+        """results (imdb html page), imdb_id
+        Returns tuple of (title, info(dict), image_urls)"""
+        self.imdb_id_list = []
+        m=re.compile('/title/tt([0-9]*)/')
+        y=re.compile('\(([^)]+)\)')
+        soup = BeautifulSoup()
+        soup.feed(results.read())
+        items = soup.findAll('a', href=re.compile('/title/tt'))
+        for item in items:
+            idm = m.search(item['href'])
+            if not idm:
+                continue
+            yrm = y.findall(item.next.next)
+            #print yrm
+    
+            id = idm.group(1)
+            name = item.string
+            year = len(yrm) > 0 and yrm[0] or '0000'
+            type = len(yrm) > 1 and yrm[1] or ''
+            #print 'url', item['href']
+            #print item.parent.findChildren(text=re.compile('[^ ]'))
+            self.imdb_id_list += [ ( id, name, year, type ) ]
+
+        print self.imdb_id_list
+        return self.imdb_id_list
 
     def parsedata(self, results, id=0):
         """results (imdb html page), imdb_id
