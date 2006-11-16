@@ -123,6 +123,23 @@ class PluginInterface(plugin.ItemPlugin):
             return []
         
         if item.type in ('audio', 'audiocd', 'dir'):
+            if config.DEBUG > 0:
+                print 'coversearch'
+                print 'type=\"%s\"' % item.type
+                print 'name=\"%s\"' % item['name']
+                try:
+                    print 'artist=\"%s\"' % item.getattr('artist')
+                except:
+                    print 'NO artist'
+                try:
+                    print 'album=\"%s\"' % item.getattr('album')
+                except:
+                    print 'NO album'
+                try:
+                    print 'title=\"%s\"' % item.getattr('title')
+                except:
+                    print 'NO title'
+
             try:
                 # use title for audicds and album for normal data
                 if self.item.getattr('artist') and \

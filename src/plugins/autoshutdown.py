@@ -560,7 +560,9 @@ def __schedule_wakeup_and_shutdown():
                 next_action =  Shutdown.SHUTDOWN_SYSTEM
         else:
             raise ExInternalError
-        return next_action
+            
+    return next_action
+
 
 # -----------------------------------------------------------
 # __cleanup_freevo

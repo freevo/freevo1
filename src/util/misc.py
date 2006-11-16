@@ -243,8 +243,12 @@ def get_bookmarkfile(filename):
 
 
 def format_text(text):
+    if not text:
+        return None
     while len(text) and text[0] in (u' ', u'\t', u'\n'):
         text = text[1:]
+    if not text:
+        return None
     text = re.sub(u'\n[\t *]', u' ', text)
     while len(text) and text[-1] in (u' ', u'\t', u'\n'):
         text = text[:-1]
