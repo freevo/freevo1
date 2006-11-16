@@ -648,19 +648,16 @@ class RecordServer(xmlrpc.XMLRPC):
     
         lt = time.localtime(prog.start)
         dow = '%s' % lt[6]
-        # tod = '%s:%s' % (lt[3], lt[4])
-        # mins_in_day = 1440
-        min_of_day = '%s' % ((lt[3]*60)+lt[4])
+        mod = '%s' % ((lt[3]*60)+(lt[4] / 30 * 30))
+        mod = '%s' % ((lt[3]*60)+lt[4])
     
         for fav in favs.values():
-            if prog.title.encode('utf-8').lower().find(fav.title.encode('utf-8').lower()) >= 0:
+            if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
                 if fav.channel == tv_util.get_chan_displayname(prog.channel_id) \
-                   or fav.channel == 'ANY':
+                or fav.channel == 'ANY':
                     if Unicode(fav.dow) == Unicode(dow) or Unicode(fav.dow) == u'ANY':
-                        if Unicode(fav.mod) == Unicode(min_of_day) or \
-                               Unicode(fav.mod) == u'ANY':
-                            return (TRUE, fav.name)
-                        elif abs(int(fav.mod) - int(min_of_day)) <= 8:
+                        if Unicode(fav.mod) == Unicode(mod) \
+                        or Unicode(fav.mod) == u'ANY':
                             return (TRUE, fav.name)
     
         # if we get this far prog is not a favorite
