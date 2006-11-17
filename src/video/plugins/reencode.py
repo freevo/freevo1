@@ -34,6 +34,7 @@
 from os.path import join, split
 import plugin
 import menu
+import os
 import config
 from video.encodingclient import *
 from gui.AlertBox import AlertBox
@@ -77,12 +78,16 @@ class PluginInterface(plugin.ItemPlugin):
                 print item.media.devicename
             
         if item.type == 'video' and item.mode == 'file':
+            # TODO: use a config variable
+            (filename, extn) = os.path.splitext(item.filename)
+            print '%s=%s' % (filename, extn)
+            if extn in ['.mpeg','.mpg']:
                 #for dvd on disc
                 self.dvdsource = item.filename
                 
                 self.title = item.name
                 self.source = item.filename
-                self.filename = item.filename[0:item.filename.rfind('.')]+'.divx'
+                self.filename = filename+'.avi'
 
                 self.item = item
                 return [ (self.encoding_profile_menu, _('Re-encode this program...')) ]
