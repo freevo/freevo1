@@ -335,7 +335,8 @@ def tagmp3 (filename, title=None, artist=None, album=None, track=None,
     import kaa.metadata.audio.eyeD3 as eyeD3
 
     try:
-        tag = eyeD3.Tag(String(filename))
+        tag = eyeD3.Tag()
+        tag.link(String(filename))
         tag.header.setVersion(eyeD3.ID3_V2_3)
         if artist: tag.setArtist(String(artist))
         if album:  tag.setAlbum(String(album))

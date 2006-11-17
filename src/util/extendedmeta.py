@@ -43,7 +43,7 @@ try:
 except ImportError:
     pass
     
-from kaa.metadata.audio import eyeD3
+import kaa.metadata.audio.eyeD3 as eyeD3
 from util import recursefolders
 
 ##### Database
@@ -108,6 +108,7 @@ class AudioParser:
         self.length  = 0
         self.changed = False
         self.force   = force
+        self.tag     = eyeD3.Tag()
 
         cachefile    = vfs.getoverlay(os.path.join(dirname, '..', 'freevo.cache'))
         subdirs      = util.getdirnames(dirname, softlinks=False)
@@ -213,34 +214,33 @@ class AudioParser:
     def extract_image(self, path):
         for i in util.match_files(path, ['mp3']):
             try:
-                id3 = eyeD3.Mp3AudioFile(i)
+                self.tag.link(i)
             except eyeD3.InvalidAudioFormatException:
                 print 'Cannot get tag for \"%s\"' % (String(i))
                 continue
             except:
                 continue
             myname = vfs.getoverlay(os.path.join(path, 'cover.jpg'))
-            if id3.tag:
-                images = id3.tag.getImages();
-                for img in images:
-                    if vfs.isfile(myname) and (self.get_md5(vfs.open(myname,'rb')) == \
-                                               self.get_md5(img.imageData)):
-                        # Image already there and has identical md5, skip
-                        pass 
-                    elif not vfs.isfile(myname):
-                        f = vfs.open(myname, "wb")
-                        f.write(img.imageData)
-                        f.flush()
-                        f.close()
-                    else:
-                        # image exists, but sums are different, write a unique cover
-                        iname = os.path.splitext(os.path.basename(i))[0]+'.jpg'
-                        myname = vfs.getoverlay(os.path.join(path, iname))
-                        f = vfs.open(myname, "wb")
-                        f.write(img.imageData)
-                        f.flush()
-                        f.close()
-     
+            images = self.tag.getImages();
+            for img in images:
+                if vfs.isfile(myname) and (self.get_md5(vfs.open(myname,'rb')) == \
+                                           self.get_md5(img.imageData)):
+                    # Image already there and has identical md5, skip
+                    pass 
+                elif not vfs.isfile(myname):
+                    f = vfs.open(myname, "wb")
+                    f.write(img.imageData)
+                    f.flush()
+                    f.close()
+                else:
+                    # image exists, but sums are different, write a unique cover
+                    iname = os.path.splitext(os.path.basename(i))[0]+'.jpg'
+                    myname = vfs.getoverlay(os.path.join(path, iname))
+                    f = vfs.open(myname, "wb")
+                    f.write(img.imageData)
+                    f.flush()
+                    f.close()
+
 
 class PlaylistParser(AudioParser):
     def __init__(self, item, rescan=False):
