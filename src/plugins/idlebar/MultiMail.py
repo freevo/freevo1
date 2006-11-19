@@ -47,6 +47,7 @@ class MultiMail(IdleBarPlugin):
     plugin.activate('idlebar.MultiMail.Imap',    level=10, args=('username', 'password', 'host', 'port', 'folder')) (port and folder are optional)
     plugin.activate('idlebar.MultiMail.Pop3',    level=10, args=('username', 'password', 'host', 'port')) (port is optional)
     plugin.activate('idlebar.MultiMail.Mbox',    level=10, args=('path to mailbox file')    
+    plugin.activate('idlebar.MultiMail.Maildir', level=10, args=('path to maildir')
     
     """
     def __init__(self):
@@ -117,6 +118,7 @@ class Pop3(MultiMail):
             pop.quit
             return unread
         except:
+	    _debug_('Error loading POP account')
             return 0
       
 class Mbox(MultiMail):
@@ -135,4 +137,25 @@ class Mbox(MultiMail):
             return count
         else:
             return 0
-        
+
+
+class Maildir(MultiMail):
+    def __init__(self, mailbox):
+        self.MAILBOX = mailbox
+        MultiMail.__init__(self)
+
+    def checkmail(self):
+        if os.path.isdir(self.MAILBOX):
+            md = mailbox.Maildir(self.MAILBOX)
+            msg = md.next()
+            #count the new emails
+            count = 0
+            while msg is not None:
+                #new emails don't have any tags to them, and filename ends in ,
+                if msg.fp.name[-1] == ',':
+                    count = count + 1
+                msg = md.next()
+            return count
+        else:
+            _debug_('Could not open maildir: %s, check settings.' % self.MAILBOX)
+            return 0
