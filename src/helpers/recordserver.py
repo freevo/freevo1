@@ -530,6 +530,25 @@ class RecordServer(xmlrpc.XMLRPC):
             self.tv_lock_file = config.FREEVO_CACHEDIR + '/record.'+suffix
             self.record_app.Record(rec_prog)
 
+            # Cleanup old recordings (if enabled)
+            if config.RECORDSERVER_CLEANUP_THRESHOLD > 0:
+               space_threshold = config.RECORDSERVER_CLEANUP_THRESHOLD * 1024 * 1024 * 1024
+               path = config.TV_RECORD_DIR
+               freespace = util.freespace(path)
+               if freespace < space_threshold:
+                  files = os.listdir(path)
+                  files = util.find_matches(files, config.VIDEO_SUFFIX)
+                  files = [(f, os.stat(os.path.join(path,f)).st_mtime) for f in files]
+                  files.sort(lambda x,y: cmp(x[1], y[1]))
+                  i = 0
+                  while freespace < space_threshold and i < len(files):
+                        oldestrec = files[i][0]
+                        oldestfxd = oldestrec[:oldestrec.rfind('.')] + '.fxd'
+                        print 'Low on disk space - delete oldest recording: %s' % oldestrec
+                        os.remove(os.path.join(path,oldestrec))
+                        os.remove(os.path.join(path,oldestfxd))
+                        freespace = util.freespace(path)
+                        i = i + 1
 
     def addFavorite(self, name, prog, exactchan=FALSE, exactdow=FALSE, exacttod=FALSE):
         if not name:

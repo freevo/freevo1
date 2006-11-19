@@ -1496,6 +1496,9 @@ RECORDSERVER_PORT = 18001
 RECORDSERVER_UID = 0
 RECORDSERVER_UID = 0
 
+# Remove old recordings if GB free is less than specified value
+RECORDSERVER_CLEANUP_THRESHOLD = 0
+
 # start every recording X minutes before scheduled,
 # and stop X minutes after scheduled - default to zero minutes.
 # This must be a value in seconds although at the moment only has
