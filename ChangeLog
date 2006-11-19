@@ -22,6 +22,7 @@ The release date is only tentative at the moment. This release has all the chang
  * Replaced mmpython with kaa.base and kaa.metadata (F#1580712)
  * New apple trailers plugin (disabled by default) (F#1580418)
  * New encoding server, allows re-encoding TV programs and ripping DVDs (F#1580642,F#1578402)
+ * New Linux event device support (F#1579124)
  * New RSS server, for getting podcasts, etc. (F#1580407)
  * New XM online plugin (F#1580412)
  * Updated DEBUGGING, IP, PORT, UID and GUI based on helper name (F#1580628)

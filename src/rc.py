@@ -342,6 +342,8 @@ class Evdev:
                 print "Added input device '%s': %s" % (dev, e.get_name())
                 self._devs.append(e)
 
+        self._movements = {}
+
     def poll(self, rc):
         """
         return next event
@@ -351,16 +353,28 @@ class Evdev:
             if event is None:
                 continue
 
-            if config.EVENTMAP.has_key(event[2]):
-                if event[1] == 'EV_KEY':
+            time, type, code, value = event
+
+            if type == 'EV_KEY':
+                self._movements = {}
+
+                if config.EVENTMAP.has_key(code):
                     # 0 = release, 1 = press, 2 = repeat
-                    if event[3] > 0:
-                        return config.EVENTMAP[event[2]]
-                elif event[1] == 'EV_REL':
-                    if event[3] < -10:
-                        return config.EVENTMAP[event[2]][0]
-                    elif event[3] > 10:
-                        return config.EVENTMAP[event[2]][1]
+                    if value > 0:
+                        return config.EVENTMAP[code]
+            elif type == 'EV_REL':
+                if config.EVENTMAP.has_key(code):
+                    if self._movements.has_key(code):
+                        self._movements[code] += value
+                    else:
+                        self._movements[code] = value
+
+                    if self._movements[code] < -10:
+                        self._movements = {}
+                        return config.EVENTMAP[code][0]
+                    elif self._movements[code] > 10:
+                        self._movements = {}
+                        return config.EVENTMAP[code][1]
 
 # --------------------------------------------------------------------------------
     

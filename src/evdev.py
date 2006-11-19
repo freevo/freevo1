@@ -331,4 +331,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         pass
 
-    from evfallback import _types, _events, _ids, _buses
+from evfallback import _types, _events, _ids, _buses
