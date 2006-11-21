@@ -245,7 +245,10 @@ class EncodingJob:
             self.sourcetype = data['type'].encode('latin1')
             for f in dir(data):
                 print '%s: %s' % (f, eval('data["%s"]' % f))
-            self.length = data.get_length()
+            try:
+                self.length = data.get_length()
+            except:
+                self.length = 600
             _debug_("Video length: %s" % self.length)
             self._CropDetect()
 
