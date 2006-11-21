@@ -684,7 +684,7 @@ class MenuWidget(GUIObject):
                 
 
         elif hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
-            if menu.selected.eventhandler(event = event, menuw=self):
+            if menu.selected.eventhandler(event=event, menuw=self):
                 return
             
         for p in self.eventhandler_plugins:
