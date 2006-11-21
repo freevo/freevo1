@@ -236,10 +236,11 @@ class Item:
         set the value of 'key' to 'val'
         """
         for var, val in self.autovars:
+            #_debug_(u'\"%s\"=\"%s\" \"%s\"=\"%s\"' % (key, var, value, val), 0)
             if key == var:
                 if val == value:
                     if not self.delete_info(key):
-                        _debug_(u'unable to store info for \'%s\'' % self.name, 0)
+                        _debug_(u'unable to store \"%s\":\"%s\" info for \'%s\'' % (key, value, self.name), 0)
                 else:
                     self.store_info(key, value)
                 return
