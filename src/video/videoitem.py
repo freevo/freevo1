@@ -162,10 +162,8 @@ class VideoItem(Item):
                and not self['deinterlace']:
             # force deinterlacing
             self['deinterlace'] = 1
-        else:
-            self['deinterlace'] = 0
-               
-        
+
+
     def id(self):
         """
         Return a unique id of the item. This id should be the same when the
