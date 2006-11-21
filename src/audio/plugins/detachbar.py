@@ -170,7 +170,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
             if not self.idlebar:
                 osd.drawroundbox(origin, self.y, width, osd.height,
-                                 (0xf0000000L, 1, 0xb0000000L, 10))
+                    (0xf0ffffffL, 5, 0xb0000000L, 10))
             
             if self.image:
                 osd.draw_image(self.image, (origin+5, self.y, 50, 50))

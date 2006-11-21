@@ -117,8 +117,8 @@ class PluginInterface(plugin.ItemPlugin):
             return []
 
         # do don't call this when we have an image
-        if item.type == 'audio' and item.filename and \
-           vfs.isfile(os.path.join(os.path.join(os.path.dirname(item.filename),
+        if item.type == 'audio' and item.filename \
+        and vfs.isfile(os.path.join(os.path.join(os.path.dirname(item.filename),
                                                 'cover.jpg'))):
             return []
         
@@ -194,7 +194,7 @@ class PluginInterface(plugin.ItemPlugin):
             cover = amazon.searchByKeyword(search_string , product_line="music")
         except amazon.AmazonError:
             box.destroy()
-            dict_tmp = { "artist": artist, "album": album }
+            dict_tmp = { 'artist': artist, 'album': album }
             box = PopupBox(text=_( 'No matches for %(artist)s - %(album)s' ) % dict_tmp )
             box.show()
             time.sleep(2)
