@@ -31,7 +31,7 @@
 
 import os, re
 import threading
-import subproces
+import subprocess
 import kaa.metadata as mmpython
 
 import config     # Configuration handler. reads config file.
@@ -238,7 +238,7 @@ class MPlayer:
             (x1, y1, x2, y2) = (1000, 1000, 0, 0)
 
             crop_cmd = command[1:] + ['-nosound', '-vo', 'null', '-benchmark',
-                                      '-vf', 'cropdetect', '-quiet' ]
+                                      '-vf', 'cropdetect', '-quiet', '-slave' ]
             exp = re.compile('^.*-vf crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*).*')
 
             child = subprocess.Popen(self.sort_filter(crop_cmd),
