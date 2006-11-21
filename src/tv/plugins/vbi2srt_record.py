@@ -126,7 +126,9 @@ class Recorder:
                        'title' : rec_prog.title,
                        'sub-title' : rec_prog.sub_title,
                        'seconds'  : rec_prog.rec_duration,
-                       'start'  : rec_prog.start }
+                       'start'  : rec_prog.start,
+                       'pdc-start'  : rec_prog.pdc_start,
+        }
 
         self.vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
         if DEBUG: print('Recorder::Record:cl_options %s' % cl_options)
@@ -142,11 +144,11 @@ class Recorder:
         self.rec_command = config.VCR_CMD % cl_options
         if pagenum == None:
             self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s' % \
-                (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.start)
+                (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.pdc_start)
         else:
             # there is a bug in vbi2srt that causes out of sync subtitles when VPS is used
             self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s --page=%s' % \
-                (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.start, pagenum)
+                (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.pdc_start, pagenum)
     
         self.thread.mode     = 'record'
         self.thread.prog     = rec_prog
