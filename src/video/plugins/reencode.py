@@ -40,10 +40,6 @@ from video.encodingclient import *
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
-DEBUG = config.DEBUG
-DEBUG = 9
-
-print "DJW: reencode DEBUG=%s" % DEBUG
 
 class PluginInterface(plugin.ItemPlugin):
     """
@@ -53,7 +49,6 @@ class PluginInterface(plugin.ItemPlugin):
     You can start an encodingserver with "freevo encodingserver start".
     """
 
-class PluginInterface(plugin.ItemPlugin):
     def __init__(self):
         _debug_('__init__')
         plugin.ItemPlugin.__init__(self)
