@@ -97,6 +97,10 @@ class Skin_Area:
         self.imagecache = util.objectcache.ObjectCache(imagecachesize,
                                                        desc='%s_image' % self.name)
 
+    def __str__(self):
+        return 'area_name=%s area_val=%s redraw=%s layout=%s name=%s' % \
+            ( self.area_name, self.area_val, self.redraw, self.layout, self.name)
+
 
     def update_content_needed(self):
         """
@@ -119,7 +123,6 @@ class Skin_Area:
         checks if redraws are needed and calls the two update functions
         for the different types of areas
         """
-
         self.display_style = display_style
         self.xml_settings  = settings
         self.widget_type   = widget_type

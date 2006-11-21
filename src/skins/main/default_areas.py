@@ -157,6 +157,10 @@ class Plugin_Area(Skin_Area):
         self.height  = osd.height - 2 * config.OSD_OVERSCAN_Y
 
         
+    def __str__(self):
+        return 'x=%s, y=%s, width=%s, height=%s' % (self.x, self.y, self.width, self.height)
+
+
     def get_font(self, name):
         try:
             return self.xml_settings.font[name]
