@@ -56,6 +56,7 @@ class TvProgram:
     desc       = None
     sub_title  = None
     start      = None
+    pdc_start  = None
     stop       = None
     ratings    = None
     advisories = None
@@ -70,6 +71,7 @@ class TvProgram:
         self.desc       = ''
         self.sub_title  = ''
         self.start      = 0.0
+        self.pdc_start  = 0.0
         self.stop       = 0.0
         self.ratings    = {}
         self.advisories = []
@@ -83,12 +85,12 @@ class TvProgram:
 
     def __str__(self):
         bt = time.localtime(self.start)   # Beginning time tuple
-        et = time.localtime(self.stop)   # End time tuple
+        et = time.localtime(self.stop)    # End time tuple
         begins = time.strftime('%a %Y-%m-%d %H:%M', bt)
         ends = time.strftime('%H:%M', et)
         try:
-            channel_id = self.channel_id.encode('utf-8')
-            title = self.title.encode('utf-8')
+            channel_id = String(self.channel_id)
+            title = String(self.title)
             s = '%s->%s  %3s %s' % (begins, ends, channel_id, title)
         except UnicodeEncodeError: #just in case
             s = '%s->%s. %3s %s' % (begins, ends, self.channel_id, self.title)
@@ -113,6 +115,8 @@ class TvProgram:
         """
         if attr == 'start':
             return Unicode(time.strftime(config.TV_TIMEFORMAT, time.localtime(self.start)))
+        if attr == 'pdc_start':
+            return Unicode(time.strftime(config.TV_TIMEFORMAT, time.localtime(self.pdc_start)))
         if attr == 'stop':
             return Unicode(time.strftime(config.TV_TIMEFORMAT, time.localtime(self.stop)))
         if attr == 'date':

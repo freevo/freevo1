@@ -125,9 +125,9 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
                 _debug_('XMLTV, trying to read raw file (%s)' % XMLTV_FILE)
             try:    
                 cached_guide = load_guide(verbose, XMLTV_FILE)
-	    except:
-	    	# Don't violently crash on a incomplete or empty TV.xml please.
-	    	cached_guide = None
+            except:
+                # Don't violently crash on a incomplete or empty TV.xml please.
+                cached_guide = None
                 print
                 print String(_("Couldn't load the TV Guide, got an exception!"))
                 print
@@ -227,7 +227,7 @@ def load_guide(verbose=True, XMLTV_FILE=None):
     xmltv_programs = None
     if gotfile:
         if verbose:
-            _debug_('reading xmltv data')
+            _debug_('reading \"%s\" xmltv data' % XMLTV_FILE)
         f = util.gzopen(XMLTV_FILE)
         xmltv_programs = xmltv.read_programmes(f)
         f.close()
@@ -267,6 +267,10 @@ def load_guide(verbose=True, XMLTV_FILE=None):
                 prog.sub_title = p['sub-title'][0][0]
             try:
                 prog.start = timestr2secs_utc(p['start'])
+                if p.has_key('pdc_start'):
+                    prog.pdc_start = timestr2secs_utc(p['pdc_start'])
+                else:
+                    prog.pdc_start = prog.start
                 try:
                     prog.stop = timestr2secs_utc(p['stop'])
                 except:
