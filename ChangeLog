@@ -11,7 +11,6 @@ X is the category and #nnnnnnn is the tracker number.
 (F)eature requests http://sourceforge.net/tracker/?group_id=46652&atid=446898
 
 
-
 == Release 1.7.0 (2006-12-15) ==
 --------------------------------
 
@@ -33,18 +32,16 @@ The release date is only tentative at the moment. This release has all the chang
  * Updated recordserver to allow automatic deleting of old recordings when low on disk space (F#1594630)
 
 
-== Release 1.6.1 (2006-??-??) ==
+== Release 1.6.1 (2006-11-25) ==
 --------------------------------
 
 svn export svn://svn.freevo.org/freevo/branches/rel-1-6/freevo freevo-1.6
-
-This release may never happen, just depends if there are any "show-stoppers" bugs found.
-Release 1.6.1 will only contain bug fixes.
 
  * Updated translations for new plug-ins and skins (F#1587980)
  * Fixed autoshutdown crashing when there are no scheduled recording (B#1597979)
  * Fixed cache problem when a play list file is corrupt (B#1589913)
  * Fixed detached music player when the plug-in mplayervis is enabled (B#1582048)
+ * Fixed games creating rom list, removed errors being added to xml (B#1601281)
  * Fixed games when the zip is corrupt (B#1586106)
  * Fixed goto to tv menu, this was never in the original patch (B#1567501)
  * Fixed IMDB parser, the title should not work (B#1586579)
