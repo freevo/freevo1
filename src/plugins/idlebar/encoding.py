@@ -38,6 +38,8 @@ import plugin, config
 from util.marmalade import jellyToXML, unjellyFromXML
 from gui import Progressbar
 
+DEBUG=config.DEBUG
+
 def returnFromJelly(status, response):
     """Un-serialize EncodingServer responses"""
     if status:
@@ -203,7 +205,8 @@ class PluginInterface(plugin.DaemonPlugin):
             self.font_h = font.font.height
             pad_internal = 5 # internal padding for box vs text
 
-            print 'osd.width:', osd.width, 'osd.height:', osd.height, 'osd.x:', osd.x, 'osd.y:', osd.y
+            if DEBUG >= 2:
+                print 'osd.width:', osd.width, 'osd.height:', osd.height, 'osd.x:', osd.x, 'osd.y:', osd.y
             screen_width = osd.width + 2*osd.x
             screen_height = osd.height + 2*osd.y
 
@@ -219,8 +222,9 @@ class PluginInterface(plugin.DaemonPlugin):
             bar_width = max(bar_width, 200)
             bar_width = min(bar_width, 400)
 
-            print 'screen_width:', screen_width, 'screen_height:', screen_height, \
-                'bar_width:', bar_width, 'bar_height:', bar_height, 'font_h:', self.font_h
+            if DEBUG >= 2:
+                print 'screen_width:', screen_width, 'screen_height:', screen_height, \
+                    'bar_width:', bar_width, 'bar_height:', bar_height, 'font_h:', self.font_h
             self.boxh = bar_height + (pad_internal * 2)
             self.boxw = bar_width + (pad_internal * 2)
             self.by = screen_height - osd.y - self.boxh
@@ -229,8 +233,9 @@ class PluginInterface(plugin.DaemonPlugin):
             self.tx = self.bx + pad_internal
             self.texth = bar_height
             self.textw = bar_width
-            print 'self.bx:', self.bx, 'self.by:', self.by, 'self.boxh:', self.boxh, 'self.boxw:', self.boxw 
-            print 'self.tx:', self.tx, 'self.ty:', self.ty, 'self.texth:', self.texth, 'self.textw:', self.textw
+            if DEBUG >= 2:
+                print 'self.bx:', self.bx, 'self.by:', self.by, 'self.boxh:', self.boxh, 'self.boxw:', self.boxw 
+                print 'self.tx:', self.tx, 'self.ty:', self.ty, 'self.texth:', self.texth, 'self.textw:', self.textw
 
         if self.idlebar:
             self.by = osd.y
@@ -283,7 +288,8 @@ class PluginInterface(plugin.DaemonPlugin):
     def poll(self):
         now = time.time()
         if self.now:
-            print "%.3f" % (now - self.now), self.poll_interval, self.state
+            if DEBUG >= 2:
+                print "%.3f" % (now - self.now), self.poll_interval, self.state
         self.now = now
         #self.draw()
 
