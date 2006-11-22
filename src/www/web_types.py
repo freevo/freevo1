@@ -253,3 +253,40 @@ class HTMLResource:
         #except AttributeError:
         #    pass
         return
+
+    def printBreadcrumb(self,media, mediadirs, dir):
+        breadcrumb='<a href="library.rpy">Home: </a><a href="library.rpy?media='+media+'&dir=">'+media+'</a>'
+        _url = ""
+        url = dir.split("/")
+        _mediadir = mediadirs[0][1].split("/")
+        for i in url:
+            _url += i + "/"
+            if i not in _mediadir or i == _mediadir[len(_mediadir)-1]:
+                breadcrumb += '/<a href="library.rpy?media='+media+'&dir='+_url+'">'+i+'</a>'
+
+        return breadcrumb
+    
+    def printPassword(self, password):
+        self.res += """<script language="JavaScript"> <!--
+
+        var password;
+
+        var pass1=""" + password + """;
+
+        password=prompt('Please enter your password to view this page!',' ');
+
+        if (password!=pass1){
+            alert('Password Incorrect, redirected...');
+            window.location="library.rpy";
+        }
+        //-->
+        </script>"""
+        
+    def printImagePopup(self):
+        self.res += """<script language="JavaScript" type="text/javascript" style="display:none;">
+        function openfoto(loc,width,height){
+            var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,top=0,left=0,width="+width+",height="+height;
+            foto = window.open("fileinfo.rpy?img="+loc,"Images",params);
+        }
+        </script> """
+

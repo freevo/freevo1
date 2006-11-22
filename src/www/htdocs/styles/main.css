@@ -39,7 +39,7 @@ table.library { margin-left: auto;
                 }
 
 table.library td { padding: 1em; }
-table.library img { float: right; }
+img.right { float: right; }
 
 td { padding: 4px; margin: 0px; border-style: none; }
 

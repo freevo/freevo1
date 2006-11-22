@@ -60,6 +60,9 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
+Wout Clymans <woutclymans@scarlet.be>
+o Webserver media player
+
 Tanja Kotthaus <owigera@web.de>
 o idlebar diskfree plug-in
 o Various bug fixes
@@ -75,6 +78,7 @@ James Oakley <jfunk@funktronics.ca>
 o xmltv2 patches
 
 Pierre Ossman <drzeus@drzeus.cx>
+o Linux event device support
 o Apple trailers plug-in
 o Various bug fixes
 

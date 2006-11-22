@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-#if 0 /*
 # -----------------------------------------------------------------------
 # library.rpy - a script to display and modify your video library
 # -----------------------------------------------------------------------
@@ -29,7 +28,6 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-#endif
 
 import sys, os, string, urllib, re, types
 
@@ -37,7 +35,10 @@ import sys, os, string, urllib, re, types
 # needed to put these here to suppress its output
 import config, util
 import util.tv_util as tv_util
+import util.fxdparser as fxdparser
+import util.mediainfo
 import tv.record_client as ri
+import Image
 
 from www.web_types import HTMLResource, FreevoResource
 from twisted.web import static
@@ -95,7 +96,7 @@ class LibraryResource(FreevoResource):
             if isinstance(d, types.TupleType):
                 (title, tdir) = d
                 if os.path.isdir(tdir):
-                    dirs.append(d)            
+                    dirs.append(d)
         return dirs
 
     def check_dir(self, media, dir):
@@ -199,7 +200,7 @@ class LibraryResource(FreevoResource):
 
 
         if action and action != "download":
-            fv.printHeader(_('Media Library'), 'styles/main.css', selected=_("Media Library"))
+            fv.printHeader(_('Media Library'), 'styles/main.css',script='scripts/display_info-head.js', selected=_("Media Library"))
             fv.res += '<script language="JavaScript"><!--' + "\n"
 
             fv.res += 'function deleteFile(basedir, file, mediatype) {' + "\n"
@@ -215,6 +216,15 @@ class LibraryResource(FreevoResource):
             fv.res += '}' + "\n"
 
             fv.res += '//--></script>' + "\n"
+
+            #check if the dir is password protected
+            if os.path.exists(String(action_dir) + "/.password"):
+                f = open(String(action_dir) + "/.password", "r")
+                password = f.read()
+                f.close()
+                fv.printPassword(password)
+            fv.printImagePopup()
+
             fv.res += '&nbsp;<br/>\n'
 
             if messages:
@@ -230,19 +240,19 @@ class LibraryResource(FreevoResource):
             movmuslink = '<a href="%s?media=%s&dir=">%s</a>' 
             rectvlink = '<a href="%s?media=%s&dir=%s">%s</a>' 
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/library-movies.jpg\">')
+            fv.tableCell('<img src=\"images/library/library-movies.jpg\" class=\"right\">')
             fv.tableCell(movmuslink % (action_script, "movies",_("Movies")), '')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/library-tv.jpg\">')
+            fv.tableCell('<img src=\"images/library/library-tv.jpg\" class=\"right\">')
             fv.tableCell(rectvlink % (action_script, "rectv", config.TV_RECORD_DIR, _("Recorded TV")), '')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/library-music.jpg\">')
+            fv.tableCell('<img src=\"images/library/library-music.jpg\" class=\"right\">')
             fv.tableCell(movmuslink % (action_script,"music",_("Music")), '')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/library-images.jpg\">')
+            fv.tableCell('<img src=\"images/library/library-images.jpg\" class=\"right\">')
             fv.tableCell(movmuslink % (action_script,"images",_("Images")), '')
             fv.tableRowClose()
             fv.tableClose()
@@ -255,7 +265,7 @@ class LibraryResource(FreevoResource):
             # now make the list unique
             fv.tableOpen('class="library"')
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell(_('Choose a Directory'), 'class="guidehead" colspan="1"')
+            fv.tableCell('<a href="library.rpy">Home</a>: <a href="library.rpy?media='+action_mediatype+'&dir=">'+action_mediatype+'</a>', 'class="guidehead" colspan="1"')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
             fv.tableCell('<a href="' + action_script + '">&laquo; '+_('Back')+'</a>', 'class="basic" colspan="1"')
@@ -276,9 +286,7 @@ class LibraryResource(FreevoResource):
 
             fv.tableOpen('class="library"')
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('Name', 'class="guidehead" colspan="1"')
-            fv.tableCell('Size', 'class="guidehead" colspan="1"')
-            fv.tableCell('Actions', 'class="guidehead" colspan="1"')
+            fv.tableCell(fv.printBreadcrumb(action_mediatype,self.get_dirlist(action_mediatype), action_dir), 'class="guidehead" colspan="3"')
             fv.tableRowClose()
 
             # find out if anything is recording
@@ -336,28 +344,65 @@ class LibraryResource(FreevoResource):
                 backdir = os.path.dirname(action_dir)
                 backlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(backdir)+'">&laquo; '+_('Back')+'</a>'
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell(backlink, 'class="basic" colspan="1"')
-            fv.tableCell('&nbsp;', 'class="basic" colspan="1"')
-            fv.tableCell('&nbsp;', 'class="basic" colspan="1"')
+            fv.tableCell(backlink, 'class="basic" colspan="3"')
             fv.tableRowClose()
 
             # get me the directories to output
             directorylist = util.getdirnames(String(action_dir))
+            i = 0
             for mydir in directorylist:
+                if i == 0:
+                    fv.tableRowOpen('class="chanrow"')
                 mydir = Unicode(mydir)
-                fv.tableRowOpen('class="chanrow"')
                 mydispdir = os.path.basename(mydir)
-                mydirlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'+mydispdir+'</a>'
+                mydirlink = ""
+                ### show music cover
+                if action_mediatype == "music":
+                    y = self.cover_filter(mydir)
+                    if y:
+                        image_link = self.get_images(mydir + str(y))
+                    else:
+                        image_link = "images/library/music.png"
+                    mydirlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'"><img src="' + image_link + '" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                ### show movie cover
+                elif action_mediatype == "movies":
+                    y = self.cover_filter(mydir)
+                    if y:
+                        image_link = self.get_images(mydir + str(y))
+                    else:
+                        image_link = "images/library/movies.png"
+                    mydirlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'"><img src="' + image_link + '" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                ### show image cover
+                elif action_mediatype == "images":
+                    image_link = "images/library/images.png"
+                    mydirlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'"><img src="' + image_link + '" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                
                 fv.tableCell(mydirlink, 'class="basic" colspan="1"')
+                if i == 2:
+                    fv.tableRowClose()
+                    i = 0
+                else:
+                    i += 1
+            while i < 3 and i !=0:
                 fv.tableCell('&nbsp;', 'class="basic" colspan="1"')
-                fv.tableCell('&nbsp;', 'class="basic" colspan="1"')
-                fv.tableRowClose()
+                if i == 2:
+                    fv.tableRowClose()
+                i +=1
 
             suffixes = self.get_suffixes(action_mediatype)
 
             # loop over directory here
             items = util.match_files(String(action_dir), suffixes)
+            i=0
+            image = ""
             for file in items:
+                #check for fxd file
+                fxd_file = file[:file.rindex('.')] + ".fxd"
+                if os.path.exists(fxd_file):
+                    image = self.get_fxd_cover(fxd_file)
+                    
+                if i == 0:
+                    fv.tableRowOpen('class="chanrow"')
                 status = 'basic'
                 suppressaction = FALSE
                 #find size
@@ -369,26 +414,121 @@ class LibraryResource(FreevoResource):
                     suppressaction = TRUE
                 elif favs and re.match(favre, file):
                     status = 'favorite'
-                fv.tableRowOpen('class="chanrow"')
-                fv.tableCell(Unicode(file), 'class="'+status+'" colspan="1"')
-                fv.tableCell(tv_util.descfsize(len_file), 'class="'+status+'" colspan="1"')
+                ### show image
+                if action_mediatype == "images":
+                    image_link = self.get_images(basedir + "/" + file)
+                    size = Image.open(basedir+"/"+file).size
+                    new_size = self.resize_image(image_link, size)
+                    fv.tableCell('<a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')"><img src="' + image_link + '" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" /><br />' + Unicode(file) + '</a>', 'class="'+status+'" colspan="1"')
+                ### show movie
+                elif action_mediatype == "movies":
+                    fv.tableCell('<a onclick="info_click(this, event)" id="'+basedir+'/'+file+'"><img src="'+image+'" height="200px" width="200px" /><br />' + Unicode(file) + '</a>' , 'class="'+status+'" colspan="1"')                   
+                ### show music
+                elif action_mediatype== "music":
+                    info =  util.mediainfo.get(basedir +"/"+ file)
+                    fv.tableCell('<a onclick="info_click(this, event)" id="'+basedir+'/'+file+'">'+Unicode(info['trackno'] + "-" + info['artist']+"-"+info['title'])+'</a>' , 'class="'+status+'" colspan="1"')                   
+                else:
+                    fv.tableCell(Unicode(file), 'class="'+status+'" colspan="1"')
                 if suppressaction == TRUE:
                     fv.tableCell('&nbsp;', 'class="'+status+'" colspan="1"')
                 else:
                     file_esc = urllib.quote(String(file))
                     dllink = ('<a href="'+action_script+'%s">'+_('Download')+'</a>') %  Unicode(os.path.join(basedir,file))
                     delete = ('<a href="javascript:deleteFile(\'%s\',\'%s\',\'%s\')">'+_("Delete")+'</a>') % (basedir, file_esc, action_mediatype)
-                    rename = ('<a href="javascript:renameFile(\'%s\',\'%s\',\'%s\')">'+_("Rename")+'</a>') % (basedir, file_esc, action_mediatype)
-                    fv.tableCell(rename + '&nbsp;&nbsp;' + delete + '&nbsp;&nbsp;' + dllink, 'class="'+status+'" colspan="1"')
-                fv.tableRowClose()
-
+                    rename = ('<a href="javascript:renameFile(\'%s\',\'%s\',\'%s\')">'+_("Rename")+'</a>') % (basedir, file_esc, action_mediatype)                
+                if i == 2:
+                    fv.tableRowClose()
+                    i = 0
+                else:
+                    i+=1
+            while i < 3 and i != 0:
+                fv.tableCell('&nbsp;', 'class="basic" colspan="1"')
+                if i == 2:
+                    fv.tableRowClose()
+                i +=1           
             fv.tableClose()
 
             fv.printSearchForm()
             fv.printLinks()
+            fv.res += (
+            u"<div id=\"popup\" class=\"proginfo\" style=\"display:none\">\n"\
+            u"<div id=\"program-waiting\" style=\"background-color: #0B1C52; position: absolute\">\n"\
+            u"  <br /><b>Fetching file information ...</b>\n"\
+            u"</div>\n"\
+            u"   <table id=\"program-info\" class=\"popup\">\n"\
+            u"      <thead>\n"\
+            u"         <tr>\n"\
+            u"            <td id=\"file-head\">\n"\
+            u"            </td>\n"\
+            u"         </tr>\n"\
+            u"      </thead>\n"\
+            u"      <tbody>\n"\
+            u"         <tr>\n"\
+            u"            <td class=\"progdesc\"><span id=\"file-info\"> </span>"\
+            u"            </td>"\
+            u"         </tr>"\
+            u"      </tbody>\n"\
+            u"      <tfoot>\n"\
+            u"         <tr>\n"\
+            u"            <td>\n"\
+            u"               <table class=\"popupbuttons\">\n"\
+            u"                  <tbody>\n"\
+            u"                     <tr>\n"\
+            u"                        <td id=\"file-play-button\">\n"\
+            u"                           "+_('Play file')+u"\n"\
+            u"                        </td>\n"\
+            u"                        <td id=\"program-favorites-button\">\n"\
+            u"                        "+_('Play file on host')+u"\n"\
+            u"                        </td>\n"\
+            u"                        <td onclick=\"program_popup_close();\">\n"\
+            u"                        "+_('Close Window')+u"\n"\
+            u"                        </td>\n"\
+            u"                     </tr>\n"\
+            u"                  </tbody>\n"\
+            u"               </table>\n"\
+            u"            </td>\n"\
+            u"         </tr>\n"\
+            u"      </tfoot>\n"\
+            u"   </table>\n"\
+            u"</div>\n" )
+            fv.res += "<iframe id='hidden' style='visibility: hidden; width: 1px; height: 1px'></iframe>\n"
             fv.printFooter()
 
         return String( fv.res )
+    
+    def get_images(self, myfile):
+        current_path = "%s/share/freevo/htdocs/" % sys.prefix
+        image_cache_link = "image_cache/" + myfile.replace("/", "_")
+        if not os.path.exists("%s/share/freevo/htdocs/" % sys.prefix + image_cache_link): 
+            os.symlink(myfile , current_path + image_cache_link)
+        return image_cache_link
+    
+    def cover_filter(self, x):
+        for i in os.listdir(x):
+            cover = re.search(config.AUDIO_COVER_REGEXP, i, re.IGNORECASE)
+            if cover:
+                return "/" + i
+    
+    def get_fxd_cover(self, fxd_file):
+        cover = ""
+        fxd_info = {}
+        parser = util.fxdparser.FXD(fxd_file)
+        parser.parse()
+        for a in parser.tree.tree.children:
+            for b in a.children:
+                if b.name == 'cover-img':
+                    cover = str(b.attrs.values()[0])
+        return cover
+    
+    def resize_image(self, image, size):
+        new_size = []
+        new_size.append(size[0])
+        new_size.append(size[1])
+        while new_size[0] > 200:
+            new_size[0] -= (new_size[0] * 10)/100
+            new_size[1] -= (new_size[1] * 10)/100
+        return new_size
+
     
 resource = LibraryResource()
 

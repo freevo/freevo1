@@ -24,6 +24,7 @@ The release date is only tentative at the moment. This release has all the chang
  * New Linux event device support (F#1579124)
  * New RSS server, for getting podcasts, etc. (F#1580407)
  * New XM online plugin (F#1580412)
+ * New webserver library, allows playing/viewing on local and host machines (F#1592806)
  * Updated autocrop to take more samples from different parts of the video (F#1591170)
  * Updated DEBUGGING, IP, PORT, UID and GUI based on helper name (F#1580628)
  * Updated helper convert_config (F#1578183)
