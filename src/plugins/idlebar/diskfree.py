@@ -110,6 +110,6 @@ class PluginInterface(IdleBarPlugin):
         widthdf = font.stringsize(self.diskfree)
         w = osd.drawimage(diskimg, (x, osd.y + 7, -1, -1) )[0]
         osd.write_text(self.diskfree, font, None, x, osd.y + 55 - font.h, widthdf, font.h, 'center', 'top')
-        print 'w=%s, widthdf=%s' % (w, widthdf+15)
+        #print 'w=%s, widthdf=%s' % (w, widthdf+15)
 
         return widthdf + 15
