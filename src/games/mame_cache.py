@@ -199,7 +199,8 @@ class romHandler( ContentHandler ):
 
 def mameRomListFromListxml( mame_cmd ) :
     try:
-        listinfo = os.popen( mame_cmd + ' --listxml', 'r' )
+        os.system(mame_cmd + ' -listxml -out /tmp/roms')
+        listinfo = os.popen('cat /tmp/roms', 'r')
     except:
         print 'Unable to get mame listinfo.'
         return FALSE
@@ -211,18 +212,22 @@ def mameRomListFromListxml( mame_cmd ) :
     parser.parse( listinfo )
     
     listinfo.close()
+    try:
+        os.remove('/tmp/roms')
+    except OSError:
+        pass
 
     mameRomList = mame_types.MameRomList()
     mameRomList.setMameRoms(handler.cache)
     return mameRomList
 
 def roms_equal( lhs, rhs ) :
-    return ( ( lhs.name == rhs.name ) and
-             ( lhs.description == rhs.description ) and
-             ( lhs.year == rhs.year ) and 
-             ( lhs.manufacturer == rhs.manufacturer ) and
-             (lhs.cloneof == rhs.cloneof ) and
-             (lhs.romof == rhs.romof ) )
+    return ( (lhs.name == rhs.name) and
+             (lhs.description == rhs.description) and
+             (lhs.year == rhs.year) and 
+             (lhs.manufacturer == rhs.manufacturer) and
+             (lhs.cloneof == rhs.cloneof) and
+             (lhs.romof == rhs.romof) )
 
 def roms_compare( lhs, rhs ) :
     if not roms_equal( lhs, rhs ) :

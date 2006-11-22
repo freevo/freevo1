@@ -341,11 +341,11 @@ class main_backup_thread(threading.Thread):
             # previously not set so had to wait until here to add it in.
 
             track = '%0.2d' % int(track)
-            user_rip_path_prefs = {  'artist': artist,
-                                                 'album': album,
-                                                 'genre': genre,
-                                                 'track': track,
-                                                 'song': song_names[i] }
+            user_rip_path_prefs = { 'artist': artist,
+                                    'album': album,
+                                    'genre': genre,
+                                    'track': track,
+                                    'song': song_names[i] }
 
             path_tail = path_tail_temp % user_rip_path_prefs
 
@@ -392,6 +392,9 @@ class main_backup_thread(threading.Thread):
             if string.upper(rip_format) == 'MP3':
                 output = '%s%s.mp3' % (pathname, path_tail)
                 cmd = str('%s --nohist -h %s' % (config.LAME_CMD, config.CD_RIP_LAME_OPTS))
+                cmd += ' --tt "%s" --ta "%s" --tl "%s" --tn %s,%s --id3v2-only' % \
+                          ( song_names[i], artist, album, track, len(song_names))
+
                 cmd = cmd.split(' ') + [ wav_file, output ]
 
                 _debug_('lame: %s' % cmd)
@@ -399,6 +402,8 @@ class main_backup_thread(threading.Thread):
 
                 try:
                     if not self.abort:
+                        _debug_('\"%s\" title=\"%s\" artist=\"%s\" album=\"%s\" track=\"%s\" tracktotal=\"%s\"' % \
+                            (pathname+path_tail+'.mp3', song_names[i], artist, album, track, len(song_names)))
                         util.tagmp3(pathname+path_tail+'.mp3', title=song_names[i],
                                     artist=artist, album=album, track=track,
                                     tracktotal=len(song_names))
@@ -433,14 +438,12 @@ class main_backup_thread(threading.Thread):
                     '"%s%s.flac"' % (artist, album, song_names[i], track,
                                      len(song_names), pathname, path_tail)
 
-                _debug_('flac_command: %s' % (flac_command))
+                _debug_('flac_command: %s' % (cmd))
                 _debug_('metaflac    : %s' % (metaflac_command))
                 popen3.run(cmd, self, 9)
 
                 if not self.abort:
                     os.system(metaflac_command)
-
-
 
 
             # Remove the .wav file.
@@ -488,11 +491,11 @@ class main_backup_thread(threading.Thread):
             pop = AlertBox(text=popup_string)
             time.sleep(7)
 
-        # If  valid data was returned from mmpython/CDDB
+        # If valid data was returned from mmpython/CDDB
         else:
-            album   = self.fix_case(self.replace_special_char(cd_info.title, '-'))
-            artist     = self.fix_case(self.replace_special_char(cd_info.artist, '-'))
-            genre    = self.replace_special_char(cd_info.tracks[0].genre, '-')
+            album  = self.fix_case(self.replace_special_char(cd_info.title, '-'))
+            artist = self.fix_case(self.replace_special_char(cd_info.artist, '-'))
+            genre  = self.replace_special_char(cd_info.tracks[0].genre, '-')
 
         song_names = []
         for track in cd_info.tracks:
