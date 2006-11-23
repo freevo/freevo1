@@ -433,8 +433,8 @@ class main_backup_thread(threading.Thread):
                 cmd = cmd.split(' ') + [ wav_file, '-o', output ]
 
                 metaflac_command = \
-                    'metaflac --set-vc-field=ARTIST="%s" --set-vc-field=ALBUM="%s" '\
-                    '--set-vc-field=TITLE="%s" --set-vc-field=TRACKNUMBER="%s/%s" '\
+                    'metaflac --set-tag=ARTIST="%s" --set-tag=ALBUM="%s" '\
+                    '--set-tag=TITLE="%s" --set-tag=TRACKNUMBER="%s/%s" '\
                     '"%s%s.flac"' % (artist, album, song_names[i], track,
                                      len(song_names), pathname, path_tail)
 
