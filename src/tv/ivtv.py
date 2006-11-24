@@ -259,16 +259,6 @@ class IVTVCodec:
         self.stream_type   = args[14]
 
 
-'''
-To run this as standalone use the following before running python v4l2.py
-pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
-export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
-export FREEVO_SHARE=/usr/share/freevo
-export FREEVO_CONFIG=/usr/share/freevo/freevo_config.py
-export FREEVO_CONTRIB=/usr/share/freevo/contrib
-export RUNAPP=""
-'''
-
 if __name__ == '__main__':
 
     DEBUG = 1
@@ -285,3 +275,14 @@ if __name__ == '__main__':
     print "embed=%s (%s)" % (ivtv_dev.getvbiembed(), 1)
     ivtv_dev.setvbiembed(embed)
     print "embed=%s (%s)" % (ivtv_dev.getvbiembed(), embed)
+
+'''
+To run this as standalone use the following before running python ivtv.py
+pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
+export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
+export FREEVO_SHARE=/usr/share/freevo
+export FREEVO_CONFIG=/usr/share/freevo/freevo_config.py
+export FREEVO_CONTRIB=/usr/share/freevo/contrib
+export RUNAPP=""
+python ivtv.py
+'''
