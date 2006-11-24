@@ -1,0 +1,11 @@
+--- libvo/sub.c.orig	2006-10-03 09:26:11.000000000 +0200
++++ libvo/sub.c	2006-10-03 09:25:53.000000000 +0200
+@@ -147,7 +147,7 @@
+ 	int font;
+ 
+         obj->bbox.x1=obj->x=x;
+-        obj->bbox.y1=obj->y=10;
++        obj->bbox.y1=obj->y=30;
+ 
+         while (*cp){
+           int c=*cp++;

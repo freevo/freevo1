@@ -1,0 +1,283 @@
+# British English strings in freevo
+# Copyright (C) 2006
+# Duncan Webb <duncan-freevo@linuxowl.com>, 2006
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: freevo-1.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-10-06 14:20+0200\n"
+"PO-Revision-Date:  Fri Oct 05 14:20:00 2006\n"
+"Last-Translator: Duncan Webb <duncan-freevo@linuxowl.com>\n"
+"Language-Team: British English <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+#: audio/audiodiskitem.py:138 directory.py:694
+msgid "Random playlist"
+msgstr "Random play list"
+
+#: audio/plugins/playlist.py:88
+msgid "Playlists"
+msgstr "Play lists"
+
+#: audio/plugins/playlist.py:104
+msgid "Enqueue this Music in Playlist"
+msgstr "Enqueue this Music in Play list"
+
+#: audio/plugins/playlist.py:106
+msgid "Make a new Audio Playlist"
+msgstr "Make a new Audio Play list"
+
+#: audio/plugins/playlist.py:134
+msgid "Added New Playlist"
+msgstr "Added New Play list"
+
+#: childapp.py:294
+#, python-format
+msgid "or make %s writable!"
+msgstr "or make %s writeable!"
+
+#: directory.py:97
+msgid "Directory Add Playlist Files"
+msgstr "Directory Add Play list Files"
+
+#: directory.py:98
+msgid "Add playlist files to the list of items"
+msgstr "Add play list files to the list of items"
+
+#: directory.py:100
+msgid "Directory Add Random Playlist"
+msgstr "Directory Add Random Play list"
+
+#: directory.py:101
+msgid "Add an item for a random playlist"
+msgstr "Add an item for a random play list"
+
+#: directory.py:104
+msgid ""
+"Autoplay the whole directory (as playlist) when it contains only files and "
+"no directories"
+msgstr ""
+"Autoplay the whole directory (as a play list) when it contains only files and "
+"no directories"
+
+#: playlist.py:298
+msgid "Browse Playlist"
+msgstr "Browse Play list"
+
+#: playlist.py:354
+msgid "empty playlist"
+msgstr "empty play list"
+
+#: playlist.py:450
+msgid "playlist repeat on"
+msgstr "play list repeat on"
+
+#: playlist.py:452
+msgid "playlist repeat off"
+msgstr "play list repeat off"
+
+#: playlist.py:466
+msgid "no next item in playlist"
+msgstr "no next item in play list"
+
+#: playlist.py:493
+msgid "no previous item in playlist"
+msgstr "no previous item in play list"
+
+#: plugins/icecast.py:182
+msgid "Set as icecast playlist"
+msgstr "Set as icecast play list"
+
+#: plugins/lcd.py:323 plugins/lcd.py:648 www/htdocs/edit_favorite.rpy:206
+#: www/htdocs/favorites.rpy:176
+#: share/skins/main/basic.fxd:603
+msgid "Program"
+msgstr "Programme"
+
+#: skins/main/tvlisting_area.py:364 tv/tvguide.py:119 tv/tvguide.py:585
+#: tv/tvguide.py:587 www/htdocs/guide.rpy:251
+msgid "This channel has no data loaded"
+msgstr "This channel has no programme information"
+
+#: tv/plugins/manual_record.py:334 www/htdocs/manualrecord.rpy:129
+#, python-format
+msgid "Program would record for more than %d days!"
+msgstr "Programme would record for more than %d days!"
+
+#: tv/plugins/manual_record.py:338 www/htdocs/manualrecord.rpy:131
+msgid "Program would record for more than 1 day!"
+msgstr "Programme would record for more than 1 day!"
+
+#: tv/plugins/view_favorites.py:60 tv/plugins/view_favorites.py:65
+#: tv/plugins/view_favorites.py:74 www/web_types.py:181
+msgid "View Favorites"
+msgstr "View Favourites"
+
+#: tv/plugins/view_favorites.py:71
+msgid "No favorites."
+msgstr "No favourites."
+
+#: tv/plugins/view_favorites.py:118
+msgid "Get favorites failed"
+msgstr "Get favourites failed"
+
+#: tv/edit_favorite.py:123 www/htdocs/edit_favorite.rpy:131
+#: www/htdocs/edit_favorite.rpy:192 www/htdocs/edit_favorite.rpy:197
+msgid "Edit Favorite"
+msgstr "Edit Favourite"
+
+#: tv/edit_favorite.py:351
+#, python-format
+msgid "Favorite %s has been saved"
+msgstr "Favourite %s has been saved"
+
+#: tv/program_display.py:125
+msgid "Display program"
+msgstr "Display programme"
+
+#: tv/program_display.py:146
+msgid "Search for more of this program"
+msgstr "Search for more of this programme"
+
+#: tv/program_display.py:156
+msgid "Remove from favorites"
+msgstr "Remove from favourites"
+
+#: tv/program_display.py:159
+msgid "Add to favorites"
+msgstr "Add to favourites"
+
+#: tv/program_display.py:162
+msgid "Program Menu"
+msgstr "Programme Menu"
+
+#: tv/program_display.py:270
+msgid "Display favorite"
+msgstr "Display favourite"
+
+#: tv/program_display.py:289
+msgid "Remove favorite"
+msgstr "Remove favourite"
+
+#: tv/program_display.py:291
+msgid "Favorite Menu"
+msgstr "Favourite Menu"
+
+#: tv/program_display.py:413
+msgid "Save Failed, favorite was lost"
+msgstr "Save Failed, favourite was lost"
+
+#: tv/program_display.py:425
+msgid "Favorite not added yet."
+msgstr "Favourite not added yet."
+
+#: tv/program_search.py:92
+msgid "Program Search"
+msgstr "Programme Search"
+
+#: tv/program_search.py:101
+msgid "Feel free to implement this function inside the main guide."
+msgstr "Feel free to implement this function inside the main guide."
+
+#: tv/record_client.py:130 tv/record_client.py:146
+msgid "no program"
+msgstr "no programme"
+
+#: tv/record_client.py:168 tv/record_client.py:174
+msgid "program not scheduled"
+msgstr "programme not scheduled"
+
+#: tv/record_client.py:172
+msgid "program is scheduled"
+msgstr "programme is scheduled"
+
+#: tv/tvguide.py:128
+msgid "Preparing the program guide"
+msgstr "Preparing the programme guide"
+
+#: www/web_types.py:181 www/htdocs/favorites.rpy:128
+#: www/htdocs/favorites.rpy:171
+msgid "Favorites"
+msgstr "Favourites"
+
+#: www/htdocs/edit_favorite.rpy:158 www/htdocs/record.rpy:161
+#, python-format
+msgid "No program found on %s at %s."
+msgstr "No programme found on %s at %s."
+
+#: www/htdocs/edit_favorite.rpy:182
+#, python-format
+msgid "Favorite %s doesn't exists."
+msgstr "Favourite %s doesn't exists."
+
+#: www/htdocs/edit_favorite.rpy:205
+msgid "Name of favorite"
+msgstr "Name of favourite"
+
+#: www/htdocs/favorites.rpy:175
+msgid "Favorite Name"
+msgstr "Favourite Name"
+
+#: www/htdocs/genre.rpy:239 www/htdocs/guide.rpy:341
+msgid "Add to Favorites"
+msgstr "Add to Favourites"
+
+#: www/htdocs/index.rpy:115
+msgid "The recording server is down."
+msgstr "The record server is down."
+
+#: www/htdocs/index.rpy:117
+msgid "The recording server is up and running."
+msgstr "The record server is up and running."
+
+#: www/htdocs/index.rpy:141
+msgid "One program scheduled to record."
+msgstr "One programme scheduled to record."
+
+#: www/htdocs/index.rpy:143
+#, python-format
+msgid "%i programs scheduled to record."
+msgstr "%i programmes scheduled to record."
+
+#: www/htdocs/index.rpy:145 www/htdocs/index.rpy:147
+msgid "No programs scheduled to record."
+msgstr "No programmes scheduled to record."
+
+#: www/htdocs/manualrecord.rpy:223 www/htdocs/record.rpy:193
+#: www/htdocs/search.rpy:186
+msgid "Program Description"
+msgstr "Programme Description"
+
+#: www/htdocs/manualrecord.rpy:234
+msgid "Add to Recording Schedule"
+msgstr "Add to Recording Schedule"
+
+#: www/htdocs/search.rpy:145
+msgid "recording server is unavailable"
+msgstr "record server is unavailable"
+
+#: www/htdocs/search.rpy:236
+msgid "New favorite"
+msgstr "New favourite"
+
+#: share/skins/main/blurr.fxd:186
+#: share/skins/main/info.fxd:542
+msgid "Playlist"
+msgstr "Play list"
+
+#: share/skins/main/blurr.fxd:190
+#: share/skins/main/info.fxd:418
+#: share/skins/main/info.fxd:423
+#: share/skins/main/info.fxd:546
+msgid "items in this playlist"
+msgstr "items in this play list"
+
+#: share/skins/main/blurr.fxd:194
+#: share/skins/main/info.fxd:427
+#: share/skins/main/info.fxd:550
+msgid "This playlist is empty!"
+msgstr "This play list is empty!"
