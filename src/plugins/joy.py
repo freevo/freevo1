@@ -117,11 +117,12 @@ class PluginInterface(plugin.DaemonPlugin):
         if command != '':
             _debug_('Translation: "%s" -> "%s"' % (button, command))
             command = rc.key_event_mapper(command)
-            if command and config.JOY_LOCKFILE and not os.path.exists(config.JOY_LOCKFILE):
-                rc.post_event(command)
+            if command:
+                if not config.JOY_LOCKFILE:
+                    rc.post_event(command)
+                elif not os.path.exists(config.JOY_LOCKFILE):
+                    rc.post_event(command)
     
     def enable(self, enable_joy=True):
         self.enabled = enable_joy
         return
-
-
