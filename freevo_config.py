@@ -1254,6 +1254,7 @@ LIRCRC = '/etc/freevo/lircrc'
 # FYI: new kernels use /dev/input/jsX, but joy.py will fall back on /dev/jsX
 #
 JOY_DEV = 0
+
 JOY_CMDS = {
     'up'             : 'UP',
     'down'           : 'DOWN',
@@ -1263,8 +1264,9 @@ JOY_CMDS = {
     'button 2'       : 'PAUSE',
     'button 3'       : 'STOP',
     'button 4'       : 'ENTER',
-    }
+}
 
+JOY_LOCKFILE = None
 
 
 # ======================================================================

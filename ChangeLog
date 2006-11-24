@@ -3,8 +3,8 @@ Freevo Changelog
 
 $Id$
 
-Notes
------
+Note
+----
 Items marked (X#nnnnnnn) have a tracker item see:
 X is the category and #nnnnnnn is the tracker number.
 (B)ugs             http://sourceforge.net/tracker/?group_id=46652&atid=446895
@@ -31,12 +31,8 @@ The release date is only tentative at the moment. This release has all the chang
  * Updated imdb movie parsing to use BeautifulSoup (F#1590928)
  * Update multimail plug-in for Maildir support (F#1594915)
  * Updated recordserver to allow automatic deleting of old recordings when low on disk space (F#1594630)
-
-
 == Release 1.6.1 (2006-11-25) ==
 --------------------------------
-
-svn export svn://svn.freevo.org/freevo/branches/rel-1-6/freevo freevo-1.6
 
  * Updated translations for new plug-ins and skins (F#1587980)
  * Fixed autoshutdown crashing when there are no scheduled recording (B#1597979)
@@ -46,16 +42,16 @@ svn export svn://svn.freevo.org/freevo/branches/rel-1-6/freevo freevo-1.6
  * Fixed games when the zip is corrupt (B#1586106)
  * Fixed goto to tv menu, this was never in the original patch (B#1567501)
  * Fixed IMDB parser, the title should not work (B#1586579)
- * Fixed mplayer cropdetect, only skipping 60 secs using 2*TV_RECORD_PADDING_PRE (B#1591170)
+ * Fixed joystick repeated events after exit (B#1601309)
+ * Fixed mplayer cropdetect, only skipping 60 secs (B#1591170)
  * Fixed recordserver in debug mode printing non-ascii characters (B#1594117)
  * Fixed weather download when visibility is empty (B#1591145)
  * Fixed webserver displaying non-ascii characters and nxtvepg xmltv (B#1594642)
  * Fixed VIDEO_INTERLACING = False having no effect (B#1586721)
  * Fixed xine --no-lirc option when compiled without lirc support (B#1589722)
 
-
-Release 1.6.0 (2006-10-31):
----------------------------
+== Release 1.6.0 (2006-10-31) ==
+--------------------------------
 
  * New events to allow jump directly to menus, tv, movies, music and pictures (B#1567501)
  * New headlines and idlebar are enabled by default (F#1584197)
@@ -67,10 +63,13 @@ Release 1.6.0 (2006-10-31):
  * Added Catalan translation (F#1512162)
  * Added checks for prerequisite packages that were missing (B#1392996,B#1566374)
  * Added forcing of font and its size to override skin definitions (B#1563296,B#1563299)
+ * Added Linux event device input handler (F#1579124)
+ * Added initial image orientation is now read from EXIF tag (F#1573072)
  * Added many more skins to the freevo core package
  * Added patch to disable installation of documentation for rpm builds (B#1565074)
  * Added PLAY_START and STOP events for radio player (B#1567995)
  * Added Teletext subtitle recording plug-in for IVTV cards (F#1575146)
+ * Updated audio player to allow control when detached, automatic detaching (B#1567939)
  * Updated df_xine is detected, use it for DVDs (B#1563026)
  * Updated freevo tv_grab to report a failure (B#1567705)
  * Updated generation of lircrc to allow more buttons to be detected (B#1567503)
@@ -80,15 +79,15 @@ Release 1.6.0 (2006-10-31):
  * Updated menu for DVDs audio and subtitle tracks to use language name instead of code (B#1402649)
  * Updated MPlayer tv plug-in to pass MPLAYER_AO_DEV (B#1563334)
  * Updated playing games to disable the joystick plug-in (B#1566590)
- * Updated radio player, no longer required the code to be changed (B#1563361,B#1563944)
+ * Updated radio player to no longer required the code to be changed (B#1563361,B#1563944)
  * Updated radio player to allow other other players (F#1575225)
  * Updated record server to allow separate pre- and post-padding times (B#1567502)
  * Updated record server to ignore case of the title when scheduling a favorite (B#1574292)
  * Updated record server to correctly process non-ascii characters in a title (B#1574292)
- * Updated the audio player to allow control when detached, automatic detaching (B#1567939)
  * Updated tv ivtv so that it will allow 2.6.18 and higher kernels, uses ivtv-0.8+
  * Updated tvtime with new play events (B#1563005)
  * Updated tv_util to use TV_RECORDFILE_OKLETTERS (B#1566067)
+ * Updated video autocropping not to autocrop network steams (B#1576832)
  * Updated webserver so that it can run as a non-privileged user (B#1567943)
  * Updated xmltv to version 1.2 giving a significant increase in speed (B#1565080)
  * Fixed a mediamedia crash on non existent directory (B#1566584)
@@ -107,51 +106,52 @@ Release 1.6.0 (2006-10-31):
  * Fixed slide shows so that music does not crash between tracks (B#1563353)
  * Fixed usbstorage showing images in audio menu (B#1563010)
  * Fixed v4l2 ioctl calls for 64bit AMD machines (B#1563326)
+ * Fixed recordserver missing favorites when the title has non-ascii characters (B#1574292)
+ * Fixed recordserver missing favorites when the title case has changed (B#1563370)
  * Fixed webserver not crashing when there is a permissions problem (B#1577266)
  * Removed MPlayer and Xine version checks (B#1566373,B#1574273)
  * Removed -OO option from install (B#1565076)
 
+== Release 1.5.3 (2005-01-23) ==
+--------------------------------
 
-Release 1.5.3 (2005-01-23):
----------------------------
  * Update to new IMDb website
  * Support for russian tv
  * Xine and mplayer post processing updates
  * Smaller enhancements, bugfixes and Unicode fixes
 
+== Release 1.5.2 (2004-10-31) ==
+--------------------------------
 
-Release 1.5.2 (2004-10-31):
----------------------------
  * Fix memory leak when running image viewer in slideshow mode
  * Fix recordserver favorite handling for a specific day of week
  * Fix video aspect handling in skin
  * Smaller unicode fixes
-	
-	
-Release 1.5.1 (2004-09-11):
----------------------------
+
+== Release 1.5.1 (2004-09-11) ==
+--------------------------------
+
  * Better support for multi file videos
  * Improved DVD detection
  * Faster web-server TV guide
  * Games snes header caching
  * Imageviewer slideshow enhancements
  * Bugfixes
- 
 
-Release 1.5.0 (2004-07-17):
----------------------------
+== Release 1.5.0 (2004-07-17) ==
+--------------------------------
+
  * Bugfixes
 
-	
-Release 1.5.0-rc4 (2004-06-29):
--------------------------------
+== Release 1.5.0-rc4 (2004-06-29) ==
+------------------------------------
  * Better DVB support
  * Runtime support
  * Bugfixes and cleanup
 
-	
-Release 1.5.0-rc3 (2004-06-06):
--------------------------------
+== Release 1.5.0-rc3 (2004-06-06) ==
+------------------------------------
+
  * Make it possible to move inside a zoom in image viewer
  * Main loop rewrite
  * Auto detect movies with more than one file
@@ -159,22 +159,22 @@ Release 1.5.0-rc3 (2004-06-06):
  * Improved pot file generation (i18n)
  * Bugfixes
 
+== Release 1.5.0-rc2 (2004-05-11) ==
+------------------------------------
 
-Release 1.5.0-rc2 (2004-05-11):
--------------------------------
  * Remove a race condition to fix mp3 playback
 
+== Release 1.5.0-rc1 (2004-05-07) ==
+------------------------------------
 
-Release 1.5.0-rc1 (2004-05-07):
--------------------------------
  * Add new animation classes
  * pygoom support (http://freevo.sf.net/pygoom)
  * Support for DVD images as .iso
  * Bugfixes
 
+== Release 1.5.0-pre1 (2004-03-21) ==
+-------------------------------------
 
-Release 1.5.0-pre1 (2004-03-21):
---------------------------------
  * Add MimetypePlugin
  * New fxd parser and better fxd item handling
  * Rename most config variables (!)
@@ -187,7 +187,7 @@ Release 1.5.0-pre1 (2004-03-21):
  * Freevoscreensaver plugin. loop your favorite movie or slideshow to be
    your screensaver. And it only will show when in menus so no annoying
    savers popup while watching movies.
- * Update command plugin to allow for X users to run X based apps (Mozilla etc) 
+ * Update command plugin to allow for X users to run X based apps (Mozilla etc)
    via a FXD file.
  * big speed enhancement:
     * better caching of files/attributes
@@ -202,36 +202,36 @@ Release 1.5.0-pre1 (2004-03-21):
  * Metadata generation during runtime and by cache helper
  * Unicode support
  * Better automounter support for network shares
- * many many other things 
-	
-	
-Release 1.4.0 (2003-11-20):
----------------------------
+ * many many other things
+
+== Release 1.4.0 (2003-11-20) ==
+--------------------------------
+
  * some small bugfixes
  * translation updates
-	
-	
-Release 1.4.0-rc4 (2003-11-10):
--------------------------------
+
+== Release 1.4.0-rc4 (2003-11-10) ==
+------------------------------------
+
  * Added testcode for viewing the Composite input on the TV card
   * Change src/tv/tvmenu.py:181 to enable it
  * Bugfix in the xine audio plugin
  * Support for mixed audio discs
  * more bugfixes
  * Translation updates for de
-	
 
-Release 1.4.0-rc3 (2003-11-03):
--------------------------------
+== Release 1.4.0-rc3 (2003-11-03) ==
+------------------------------------
+
  * Bugfix release:
      Fix crash for playlists
      Prevent crash when storing folder.fxd
  * Add image for command plugin
  * Translation updates for da and nl
 
-	
-Release 1.4.0-rc2 (2003-11-02):
--------------------------------
+== Release 1.4.0-rc2 (2003-11-02) ==
+------------------------------------
+
  * Added a playlist plugin
  * TvTime plugin redo:
      use new childthread
@@ -244,10 +244,10 @@ Release 1.4.0-rc2 (2003-11-02):
  * Changed the Shutdown function to ask for confirmation first
  * Support for external plugins and themes
  * And as usual: bugfixes
-	
-	
-Release 1.4.0-rc1 (2003-10-05):
--------------------------------
+
+== Release 1.4.0-rc1 (2003-10-05) ==
+------------------------------------
+
  * changes in the directory structure
  * setup.py for normal python installation
  * i18n support: es, fr, nl, no, pt_BR, sv
@@ -260,17 +260,17 @@ Release 1.4.0-rc1 (2003-10-05):
  * Many fixes for Python 2.3 warnings
  * bugfixes and better error handling
  * new games system (DIR_GAMES changed!)
-	
 
-Release 1.3.4 (2003-08-03) -- Bugfix release:
----------------------------------------------
+== Release 1.3.4 (2003-08-03) ==
+--------------------------------
+
  * Fixed bug that causes some helper scripts like webserver to crash
  * Webradio is working again
  * Added BlueTooth control program into contrib/
 
+== Release 1.3.3 (2003-08-02) ==
+--------------------------------
 
-Release 1.3.3 (2003-08-02):
----------------------------
  * Moved all metadata parsing into mmpython
  * Added CD->MP3 or CD->OGG Backup plugin from Rich C.
  * Initial database support for music via sqlite
@@ -287,9 +287,9 @@ Release 1.3.3 (2003-08-02):
  * Support for Python 2.3
  * Bugfixes and many other things
 
+== Release 1.3.2 (2003-06-29) ==
+--------------------------------
 
-Release 1.3.2 (2003-06-29):
----------------------------
  * Plugin interface
   * Converted some functions into plugins
   * detach plugin to listen to music in the background
@@ -299,9 +299,9 @@ Release 1.3.2 (2003-06-29):
  * New skin engine
  * Reactivated and fixed GUI code
  * Bugfixes
- * Added experimental support for tvtime (>= 0.9.8.3) for TV viewing. 
-   tvtime supports Xvideo, directfb, and mga_vid with good deinterlacing, 
-   smoother picture, better audio sync, OSD and reduced CPU usage when 
+ * Added experimental support for tvtime (>= 0.9.8.3) for TV viewing.
+   tvtime supports Xvideo, directfb, and mga_vid with good deinterlacing,
+   smoother picture, better audio sync, OSD and reduced CPU usage when
    compared to Mplayer for TV viewing.
  * Support for more formats in the Image Viewer
  * Daylight Saving Time fixes
@@ -313,38 +313,37 @@ Release 1.3.2 (2003-06-29):
   * Removed obsolete data
  * many other things :-)
 
-	
+== Release 1.3.2-pre2 ==
+------------------------
 
-Release 1.3.2-pre2
----------------------------
  * Bugfixes:
   * CD/DVD autodetection
   * Games handling (fixed hang)
   * XMLTV format (stop time not present)
   * Image errors (fixed crash, display message about load problem instead)
-  * MP3 time display	
-  * FreevoWeb channel selection when recording	
+  * MP3 time display
+  * FreevoWeb channel selection when recording
   * Identify media now return correct titles again
   * Network access when using the runtime
-  * TV recording bug	
- * CD Audio playing (w. CDDB) by Thomas Schüppel 
+  * TV recording bug
+ * CD Audio playing (w. CDDB) by Thomas Schüppel
  * Use "freevo setup" instead of "./configure" to set up Freevo
  * New display mode for the image browser, with nice thumbnails etc
  * New display mode for the video browser
- * Added Joakim Berglunds patches for audio random lists off, extra cover dir	
+ * Added Joakim Berglunds patches for audio random lists off, extra cover dir
  * Changed the movie xml files to the new format by Matthieu Weber
  * Updated Belgian XMLTV program by Bart Heremans
  * Updated MPlayer to CVS200302132232
  * Changed remote control to use regular lirc files instead of special
-   Freevo Python files.	
- * Some Windows playlists can now be used if they have relative paths. 
+   Freevo Python files.
+ * Some Windows playlists can now be used if they have relative paths.
  * Various updates and fixes for the web interface.
  * Added CVS update to the latest alpha in the Makefile (cvsup)
 
+== Release 1.3.1 (2003-02-12) ==
+--------------------------------
 
-Release 1.3.1 (2003-02-12):
----------------------------
- * The runtime and apps packages are now included in the binary release!	
+ * The runtime and apps packages are now included in the binary release!
  * Fixed lots of bugs
  * TV recording
  * Added cache for mp3/ogg id tags
@@ -366,16 +365,16 @@ Release 1.3.1 (2003-02-12):
  * Made the config file handling smarter
  * Changed the default PCM volume level from 100 to 90 to avoid distortion
 
+== Release 1.3.0 (2002-11-13) ==
+--------------------------------
 
-Release 1.3.0 (2002-11-13):
----------------------------
  * Added a font alias list in freevo_config to substitute missing non-free
     fonts in skins with free fonts.
  * Changed the TV guide to use Gustavo's new extended menus.
  * The XML skins can now include other skin files. This makes
   it easier to adapt skins to new screen sizes.
  * XML skins can now load a local_skin.xml for changes by the user.
- * Changed the "freevo" script so that it can be used to execute 
+ * Changed the "freevo" script so that it can be used to execute
   standalone python scripts, e.g. "freevo execute epg_xmltv.py"
  * Changed runapp to support priority settings of the new app,
   /usr/bin/nice is no longer needed.
@@ -385,14 +384,14 @@ Release 1.3.0 (2002-11-13):
  * The image viewer now supports browsing CD/DVDs.
  * Added support for choosing audio track, etc in DVDs.
  * Movies can be played from URLs (LAN or the Internet).
- * Music playlists can contain videos and URLs too now. 
-  Both .m3u and .pls playlists are supported.	
+ * Music playlists can contain videos and URLs too now.
+  Both .m3u and .pls playlists are supported.
  * Made the shell scripts sh-compatible.
- * Added Bob Pauwe's image slideshow patches.	
+ * Added Bob Pauwe's image slideshow patches.
 
+== Release 1.2.6 (2002-10-12) ==
+--------------------------------
 
-Release 1.2.6 (2002-10-12):
----------------------------
 Features, bugfixes:
  * Fixed a bug for configuring TV for other than NTSC.
  * Added new RPM building specs from Wan Tat Chee in the contrib/ dir.
@@ -400,7 +399,7 @@ Features, bugfixes:
  * Added joystick support code from Dan Eriksen. Not tested!
  * Fixed a bug in XML that could cause Freevo to crash.
  * Replaced all fonts with the free Larabie fonts.
- * Added a 640x480 mode. 
+ * Added a 640x480 mode.
  * Improved the handling of removable media (CDROM/DVD)
  * DVD/VCD/SVCD title selecting
  * MPlayer hwac3 support
@@ -411,21 +410,21 @@ Features, bugfixes:
  * Movie xml files can now contain skin informations as well.
  * Skin improvements
  * Configure now checks for external programs
- * Bugfix for 8-bit chars in bitmap filenames by Alex Polite 
+ * Bugfix for 8-bit chars in bitmap filenames by Alex Polite
  * Added Per Wigren's app for fetching Swedish and Norwegian TV listings
   in contrib/PerWigren. (The newer version of XMLTV also supports Swedish
-  and Norwegian listings now.)	
+  and Norwegian listings now.)
  * Added Per Wigren's patch for different TV stations on the same channel
   at different times of the week and/or day.
- * Added Alex Polite's patch for using XMMS for playing and visualizing 
+ * Added Alex Polite's patch for using XMMS for playing and visualizing
   music.
  * Added Alex Polite's patch for recursive playlists
 
-	
-Release 1.2.5 (2002-08-21):
----------------------------
+== Release 1.2.5 (2002-08-21) ==
+--------------------------------
+
 Features, bugfixes:
- * Added SDL as the graphics layer, which means that X11 and 
+ * Added SDL as the graphics layer, which means that X11 and
   all framebuffer devices are supported for the menu framework.
   Both X11 and FB supports both the keyboard and a remote control.
  * Added X11/Xv support for MPlayer, now most graphics cards can
@@ -436,22 +435,22 @@ Features, bugfixes:
  * Added much better XML skin support. The main menu background, text
   and icons can be easily be changed. There is also support for XML
   files with movie info etc. See Docs/Skin-HOWTO.txt for more details.
- * Added image display to main menu. JPEG/PNG are supported at 
+ * Added image display to main menu. JPEG/PNG are supported at
   the moment, more will be added later. Images can be rotated.
-  Exif files (jpg with digital camera info) are supported, including 
+  Exif files (jpg with digital camera info) are supported, including
   thumbnails which are displayed when using the file browser.
  * Changed the installation to use a "configure" script
  * Added autogenerated random playlist to the MP3 player
  * Moved the DVD and VCD start item to the movie menu. Pressing EJECT will
   eject/mount the medium in the drive.
  * CDROM_MOUNT_POINT is deprecated now, use ROM_DRIVES to define all your drives
- * Added support for shutdown of Freevo from the main menu. This can also 
+ * Added support for shutdown of Freevo from the main menu. This can also
   be configured to shutdown the entire system for standalone boxes, but it
   is disabled by default.
 
+== Release 1.2.4 (2002-07-10) ==
+--------------------------------
 
-Release 1.2.4 (2002-07-10):
----------------------------
  * Fixed a problem where zombie (defunct) processes were created
  * Changed the osd_server/Makefile to use /usr/X11R6 instead of /usr/X11,
   seems to work for more distros
@@ -473,15 +472,15 @@ Release 1.2.4 (2002-07-10):
  * Support for XML config files for each movie/album etc
  * Support for CD/DVD tray open/close and disk mounting
 
+== Release 1.2.3 (2002-06-01) ==
+--------------------------------
 
-Release 1.2.3 (2002-06-01):
----------------------------
  * Fixed a big memory leak in the OSD server
  * Made the mp3 progress info more efficient
 
+== Release 1.2.2 (2002-05-31) ==
+--------------------------------
 
-Release 1.2.2 (2002-05-31):
----------------------------
  * Added PNG bitmap support in the OSD
  * Added freetype font support in the OSD
  * Added transparency support in the OSD
@@ -493,17 +492,17 @@ Release 1.2.2 (2002-05-31):
  * Swapped MPlayer next/prev keys
  * Removed osd_server/osd_fb, moved files to osd_server
  * Cleaned up Makefiles, made x11 optional
- * Added loading a local_conf.py file where directory 
+ * Added loading a local_conf.py file where directory
   defs etc can be put so that it is easier to update
   freevo_config.py
  * Renamed osd_XXX servers osds_XXX
 
+== Release 1.2.1 (2002-05-17) ==
+--------------------------------
 
-Release 1.2.1 (2002-05-17):
----------------------------
  * Changed the config scripts to look for the file config_freevo.py
   in /etc/freevo, ~/freevo and the current dir. This makes it easier
-  to use a customized version that is not overwritten by new 
+  to use a customized version that is not overwritten by new
   releases.
  * Removed fixed paths so that it should be able to run on most Linux systems,
   independently of where the applications are (/usr/bin, /usr/local/bin, etc).
@@ -518,18 +517,18 @@ Release 1.2.1 (2002-05-17):
  * Changed remote control cursor left/right behavior in menus, making
   it easier to navigate.
 
+== Release 1.2.0 (2002-05-12) ==
+--------------------------------
 
-Release 1.2.0 (2002-05-12):
----------------------------
  * Watching TV is enabled again, the Matrox G400 BES bug seems to be fixed.
 
+== Release 1.1 (2002-05-10) ==
+------------------------------
 
-Release 1.1 (2002-05-10):
--------------------------
  * Moved mp3/movie suffix definitions to config.py
  * Watching TV is disabled at the moment, seems to be a bug in it.
 
 
-Release 1.0 (2002-05-08):
--------------------------
+== Release 1.0 (2002-05-08) ==
+------------------------------
  * Initial release

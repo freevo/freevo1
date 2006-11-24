@@ -790,7 +790,9 @@ IMAGEVIEWER_BLEND_MODE = -1
 #     'button 2'       : 'PAUSE',
 #     'button 3'       : 'STOP',
 #     'button 4'       : 'ENTER',
-#     }
+# }
+
+# JOY_LOCKFILE = /path/to/joystick/lockfile
 
 
 # ======================================================================
