@@ -1,0 +1,2913 @@
+# translation of freevo.po to Finnish
+# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# Petri Damsten <damu@iki.fi>, 2003-2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: freevo\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-10-31 16:21+0100\n"
+"PO-Revision-Date: 2004-08-10 16:44+0300\n"
+"Last-Translator: Petri Damsten <damu@iki.fi>\n"
+"Language-Team: Finnish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.3.1\n"
+
+#: ../freevo_config.py:980 ../freevo_config.py:985
+#: www/htdocs/manualrecord.rpy:222 www/htdocs/record.rpy:194
+#: www/htdocs/search.rpy:184 tv/edit_favorite.py:118
+#: share/skins/main/info.fxd:390
+msgid "Title"
+msgstr "Otsikko"
+
+#: ../freevo_config.py:981 plugins/lcd.py:105 plugins/lcd.py:107
+#: plugins/lcd.py:284
+msgid "Description"
+msgstr "Kuvaus"
+
+#: ../freevo_config.py:982
+msgid "Author"
+msgstr "Tekijä"
+
+#: ../freevo_config.py:986 plugins/lcd.py:104 share/skins/main/dark.fxd:590
+#: share/skins/main/dark.fxd:664 share/skins/main/dark.fxd:685
+#: share/skins/main/crystal.fxd:269 share/skins/main/bluestar.fxd:289
+#: share/skins/main/noia.fxd:92 share/skins/main/rain.fxd:266
+#: share/skins/main/info.fxd:331
+msgid "Date"
+msgstr "Päiväys"
+
+#: ../freevo_config.py:989
+msgid "Model"
+msgstr "Malli"
+
+#: ../freevo_config.py:990
+msgid "Software"
+msgstr "Sovellus"
+
+#: plugins/idlebar/diskfree.py:65
+#, python-format
+msgid "%iGb"
+msgstr ""
+
+#: plugins/idlebar/system.py:105
+#, python-format
+msgid "%iM"
+msgstr "%iM"
+
+#: plugins/idlebar/system.py:130
+#, python-format
+msgid "%s%%"
+msgstr "%s%%"
+
+#: plugins/df.py:72
+#, fuzzy, python-format
+msgid "%i free of %i Gb total (%i%% free)"
+msgstr "%i / %i MB vapaana"
+
+#: plugins/df.py:76
+#, fuzzy, python-format
+msgid "%i free of %i Mb total (%i%% free)"
+msgstr "%i / %i MB vapaana"
+
+#: plugins/headlines.py:143
+msgid "Show Sites Headlines"
+msgstr "Näytä sivuston otsikot"
+
+#: plugins/headlines.py:165
+msgid "Fetching headlines..."
+msgstr "Haetaan otsikoita..."
+
+#: plugins/headlines.py:229
+msgid "No Headlines found"
+msgstr "Otsikoita ei löytynyt"
+
+#: plugins/headlines.py:231 plugins/headlines.py:244
+#: share/skins/main/dark.fxd:21 share/skins/main/crystal.fxd:14
+#: share/skins/main/bluestar.fxd:14 share/skins/main/rain.fxd:14
+msgid "Headlines"
+msgstr "Uutisotsikot"
+
+#: plugins/headlines.py:250 plugins/headlines.py:264
+msgid "Headlines Sites"
+msgstr "Uutisotsikko sivustot"
+
+#: plugins/headlines.py:262
+msgid "No Headlines Sites found"
+msgstr "Uutisotsikko sivustoja ei löytynyt"
+
+#: plugins/weather.py:261
+msgid "Unlimited"
+msgstr ""
+
+#: plugins/weather.py:274
+#, fuzzy
+msgid "Show Weather Details"
+msgstr "Sääennuste"
+
+#: plugins/weather.py:352
+#, fuzzy, python-format
+msgid "Fetching Weather for %s..."
+msgstr "Haetaan otsikoita..."
+
+#: plugins/weather.py:513 plugins/weather.py:785
+#, fuzzy
+msgid "at"
+msgstr "Lauantai"
+
+#: plugins/weather.py:543
+#, fuzzy
+msgid "Unknown"
+msgstr "Tuntematon CD levy"
+
+#: plugins/weather.py:627 share/skins/main/bluestar.fxd:12
+#, fuzzy
+msgid "Weather"
+msgstr "Sääennuste"
+
+#: plugins/weather.py:633 plugins/weather.py:668
+#, fuzzy
+msgid "Locations"
+msgstr "Paikka"
+
+#: plugins/weather.py:660
+msgid "No locations specified"
+msgstr ""
+
+#: plugins/weather.py:685
+msgid "Current Conditions"
+msgstr ""
+
+#: plugins/weather.py:685
+#, fuzzy
+msgid "Today's Forecast"
+msgstr "Sääennuste"
+
+#: plugins/weather.py:686
+#, fuzzy
+msgid "Extended Forecast"
+msgstr "Sääennuste"
+
+#: plugins/weather.py:686
+msgid "Radar Map"
+msgstr ""
+
+#: plugins/weather.py:764
+msgid "Humidity"
+msgstr ""
+
+#: plugins/weather.py:777
+msgid "Pressure"
+msgstr ""
+
+#: plugins/weather.py:784
+msgid "Wind"
+msgstr ""
+
+#: plugins/weather.py:792
+msgid "Wind Chill"
+msgstr ""
+
+#: plugins/weather.py:800
+msgid "Visibility"
+msgstr ""
+
+#: plugins/weather.py:808
+msgid "UV Index"
+msgstr ""
+
+#: plugins/weather.py:851
+msgid "Today, a high of"
+msgstr ""
+
+#: plugins/weather.py:853
+msgid "and a low of"
+msgstr ""
+
+#: plugins/weather.py:856
+msgid "Currently, there is a a humidity of"
+msgstr ""
+
+#: plugins/weather.py:858
+#, fuzzy
+msgid "and"
+msgstr "Tam"
+
+#: plugins/weather.py:860
+msgid "the winds are "
+msgstr ""
+
+#: plugins/weather.py:862
+msgid "calm"
+msgstr ""
+
+#: plugins/weather.py:864
+msgid "coming in at"
+msgstr ""
+
+#: plugins/weather.py:864
+msgid "from the"
+msgstr ""
+
+#: plugins/weather.py:868
+msgid "Visibility will be unlimited today"
+msgstr ""
+
+#: plugins/weather.py:870
+msgid "There will be a visibility of"
+msgstr ""
+
+#: plugins/weather.py:905
+msgid "LO"
+msgstr ""
+
+#: plugins/weather.py:913
+msgid "HI"
+msgstr ""
+
+#: plugins/weather.py:927
+msgid "Error encountered while trying to download Radar map"
+msgstr ""
+
+#: plugins/file_ops.py:71 www/htdocs/library.rpy:380
+msgid "Delete"
+msgstr "Poista"
+
+#: plugins/file_ops.py:73
+msgid "Delete info"
+msgstr "Poista info tiedosto"
+
+#: plugins/file_ops.py:75
+msgid "Delete image"
+msgstr "Poista kuva"
+
+#: plugins/file_ops.py:81
+#, python-format
+msgid ""
+"Do you wish to delete\n"
+" '%s'?"
+msgstr ""
+"Haluatko poistaa\n"
+"'%s'?"
+
+#: plugins/file_ops.py:83
+msgid "Deleting..."
+msgstr "Poistetaan..."
+
+#: plugins/file_ops.py:87
+#, python-format
+msgid ""
+"Delete info about\n"
+" '%s'?"
+msgstr ""
+"Poistetaanko info tiedosto\n"
+"'%s'?"
+
+#: plugins/file_ops.py:92
+#, python-format
+msgid ""
+"Delete image about\n"
+" '%s'?"
+msgstr ""
+"Poistetaanko kuva\n"
+"'%s'?"
+
+#: plugins/shoppingcart.py:71
+msgid "Moving files..."
+msgstr "Siirretään tiedostoja..."
+
+#: plugins/shoppingcart.py:81
+msgid "Copying files..."
+msgstr "Kopioidaan tiedostoja..."
+
+#: plugins/shoppingcart.py:95
+msgid "Added to Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:117
+msgid "Cart: Move Files Here"
+msgstr ""
+
+#: plugins/shoppingcart.py:118
+msgid "Cart: Copy Files Here"
+msgstr ""
+
+#: plugins/shoppingcart.py:121
+msgid "Add Directory to Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:125
+msgid "Add File to Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:128
+msgid "Delete Cart"
+msgstr ""
+
+#: plugins/lcd.py:69 plugins/lcd.py:921 plugins/lcd.py:932 plugins/lcd.py:943
+#: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
+#: www/htdocs/manualrecord.rpy:70 www/htdocs/record.rpy:142
+#: www/htdocs/record.rpy:163 www/htdocs/edit_favorite.rpy:137
+#: www/htdocs/edit_favorite.rpy:161 www/htdocs/edit_favorite.rpy:185
+#: www/htdocs/guide.rpy:203 www/htdocs/genre.rpy:122
+#: www/htdocs/favorites.rpy:130 www/htdocs/library.rpy:170
+#: www/htdocs/library.rpy:192 www/htdocs/library.rpy:194
+#: www/htdocs/search.rpy:145 skins/main/info_area.py:140 tv/plugins/xine.py:80
+#: tv/channels.py:133 tv/channels.py:171 tv/channels.py:177
+#: tv/record_client.py:104 audio/plugins/cdbackup.py:204
+#: audio/plugins/cdbackup.py:566 audio/plugins/xine.py:54
+#: audio/plugins/xine.py:73 video/plugins/xine.py:62 childapp.py:300
+msgid "ERROR"
+msgstr "VIRHE"
+
+#: plugins/lcd.py:69
+msgid "You need pylcd to run \"lcd\" plugin."
+msgstr ""
+
+#: plugins/lcd.py:88 plugins/lcd.py:96 share/skins/main/mediaportal.fxd:690
+#: share/skins/main/dark.fxd:536 share/skins/main/dark.fxd:753
+#: share/skins/main/basic.fxd:391 share/skins/main/blurr.fxd:700
+#: share/skins/main/info.fxd:218
+msgid "Length"
+msgstr "Kesto"
+
+#: plugins/lcd.py:89 plugins/lcd.py:93 plugins/lcd.py:204
+#: share/skins/main/dark.fxd:520 share/skins/main/dark.fxd:733
+#: share/skins/main/info.fxd:201 share/skins/main/info.fxd:356
+#: share/skins/main/info.fxd:396
+msgid "Artist"
+msgstr "Artisti"
+
+#: plugins/lcd.py:90 plugins/lcd.py:94 plugins/lcd.py:201
+#: share/skins/main/mediaportal.fxd:671 share/skins/main/dark.fxd:526
+#: share/skins/main/dark.fxd:738 share/skins/main/basic.fxd:373
+#: share/skins/main/blurr.fxd:677 share/skins/main/info.fxd:207
+#: share/skins/main/info.fxd:361
+msgid "Album"
+msgstr "Albumi"
+
+#: plugins/lcd.py:91 plugins/lcd.py:95 share/skins/main/mediaportal.fxd:677
+#: share/skins/main/dark.fxd:446 share/skins/main/blurr.fxd:683
+#: share/skins/main/info.fxd:458
+msgid "Year"
+msgstr "Vuosi"
+
+#: plugins/lcd.py:92 share/skins/main/mediaportal.fxd:330
+#: share/skins/main/blurr.fxd:338 share/skins/main/info.fxd:401
+msgid "Tracks"
+msgstr "Kappaleita"
+
+#: plugins/lcd.py:97 share/skins/main/dark.fxd:476
+#: share/skins/main/info.fxd:287 share/skins/main/info.fxd:493
+msgid "Resolution"
+msgstr "Tarkkuus"
+
+#: plugins/lcd.py:98
+msgid "Aspect"
+msgstr "Näkymä"
+
+#: plugins/lcd.py:99 plugins/lcd.py:102 plugins/lcd.py:239
+msgid "Tagline"
+msgstr "Kuvaus"
+
+#: plugins/lcd.py:100 plugins/lcd.py:101
+msgid "Plot"
+msgstr "Juoni"
+
+#: plugins/lcd.py:103 share/skins/main/dark.fxd:581
+msgid "Geometry"
+msgstr "Geometria"
+
+#: plugins/lcd.py:106
+#, python-format
+msgid "%s items"
+msgstr "%s kappaletta"
+
+#: plugins/lcd.py:161 plugins/lcd.py:309
+#, python-format
+msgid "Today is %s."
+msgstr "Tänään on %s"
+
+#: plugins/lcd.py:171 plugins/lcd.py:533
+msgid "Menu"
+msgstr "Valikko"
+
+#: plugins/lcd.py:174 plugins/lcd.py:536
+msgid "Item"
+msgstr ""
+
+#: plugins/lcd.py:177 share/skins/main/dark.fxd:470
+#: share/skins/main/info.fxd:282 share/skins/main/info.fxd:487
+msgid "Type"
+msgstr "Laji"
+
+#: plugins/lcd.py:180
+msgid "Information"
+msgstr "Tietoa"
+
+#: plugins/lcd.py:198 plugins/lcd.py:548 www/htdocs/library.rpy:242
+#: share/skins/main/dark.fxd:18 share/skins/main/crystal.fxd:9
+#: share/skins/main/bluestar.fxd:9 share/skins/main/basic.fxd:21
+#: share/skins/main/rain.fxd:9
+msgid "Music"
+msgstr "Musiikki"
+
+#: plugins/lcd.py:236 plugins/lcd.py:575
+msgid "Video"
+msgstr "Video"
+
+#: plugins/lcd.py:242 share/skins/main/dark.fxd:452
+#: share/skins/main/info.fxd:464
+msgid "Genre"
+msgstr "Tyylilaji"
+
+#: plugins/lcd.py:275 plugins/lcd.py:603 www/htdocs/manualrecord.rpy:219
+#: www/htdocs/record.rpy:193 www/htdocs/edit_favorite.rpy:212
+#: www/htdocs/favorites.rpy:177 www/htdocs/search.rpy:183
+#: tv/edit_favorite.py:120 share/skins/main/basic.fxd:552
+#: share/skins/main/basic.fxd:583 share/skins/main/basic.fxd:614
+msgid "Channel"
+msgstr "Kanava"
+
+#: plugins/lcd.py:278 plugins/lcd.py:606 www/htdocs/edit_favorite.rpy:211
+#: www/htdocs/favorites.rpy:176 share/skins/main/basic.fxd:608
+msgid "Program"
+msgstr "Ohjelma"
+
+#: plugins/lcd.py:281 www/htdocs/guide.rpy:210
+#: share/skins/main/crystal.fxd:272 share/skins/main/bluestar.fxd:292
+#: share/skins/main/basic.fxd:595 share/skins/main/noia.fxd:95
+#: share/skins/main/rain.fxd:269
+msgid "Time"
+msgstr "Aika"
+
+#: plugins/lcd.py:692
+msgid ""
+"LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
+msgstr ""
+
+#: plugins/lcd.py:697
+#, python-format
+msgid "Connecting to LCD: %s"
+msgstr ""
+
+#: plugins/lcd.py:698
+msgid "Info as known by the LCD module:"
+msgstr ""
+
+#: plugins/lcd.py:918 plugins/lcd.py:929 plugins/lcd.py:942
+#: audio/plugins/cdbackup.py:493 audio/plugins/coversearch.py:149
+#: audio/plugins/coversearch.py:158 audio/plugins/coversearch.py:167
+msgid "WARNING"
+msgstr "VAROITUS"
+
+#: plugins/lcd.py:918
+#, python-format
+msgid "Could not find screens for %d lines LCD!"
+msgstr ""
+
+#: plugins/lcd.py:921 plugins/lcd.py:932 plugins/lcd.py:943
+#, python-format
+msgid "No screens found for this LCD (%dx%d)!"
+msgstr ""
+
+#: plugins/lcd.py:929 plugins/lcd.py:942
+#, python-format
+msgid "Could not find screens for %d lines and %d columns LCD!"
+msgstr ""
+
+#: plugins/mediamenu.py:123
+msgid "Media"
+msgstr "Media"
+
+#: plugins/mediamenu.py:128
+msgid "Movie"
+msgstr "Elokuva"
+
+#: plugins/mediamenu.py:130
+msgid "Audio"
+msgstr "Ääni"
+
+#: plugins/mediamenu.py:132
+msgid "Image"
+msgstr "Kuvat"
+
+#: plugins/mediamenu.py:134 share/skins/main/dark.fxd:20
+#: share/skins/main/crystal.fxd:13 share/skins/main/bluestar.fxd:13
+#: share/skins/main/basic.fxd:23 share/skins/main/rain.fxd:13
+#: share/skins/main/info.fxd:16
+msgid "Games"
+msgstr "Pelaa pelejä"
+
+#: plugins/mediamenu.py:136
+#, python-format
+msgid "%s Main Menu"
+msgstr "%s Päävalikko"
+
+#: plugins/autoshutdown.py:144
+msgid "A recording is in progress."
+msgstr ""
+
+#: plugins/autoshutdown.py:147
+#, python-format
+msgid "Would wakeup again within %d minutes."
+msgstr ""
+
+#: plugins/autoshutdown.py:151
+msgid "There are important processes running."
+msgstr ""
+
+#: plugins/autoshutdown.py:157
+#, fuzzy
+msgid "No wakeup scheduled."
+msgstr "Ei ajastettuja nauhoituksia"
+
+#: plugins/autoshutdown.py:161
+msgid "The next wakeup is scheduled at"
+msgstr ""
+
+#: plugins/autoshutdown.py:172 plugins/autoshutdown.py:256
+msgid "Resume automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:174 plugins/autoshutdown.py:253
+msgid "Pause automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:176
+msgid "Shutdown and wakeup"
+msgstr ""
+
+#: plugins/autoshutdown.py:178 plugins/shutdown.py:146 plugins/shutdown.py:150
+msgid "Restart system"
+msgstr "Uudelleen käynnistä"
+
+#: plugins/autoshutdown.py:179 plugins/shutdown.py:145 plugins/shutdown.py:149
+msgid "Shutdown system"
+msgstr "Sammuta tietokone"
+
+#: plugins/autoshutdown.py:180
+#, fuzzy
+msgid "Shutdown freevo"
+msgstr "Sulje Freevo"
+
+#: plugins/autoshutdown.py:190 plugins/autoshutdown.py:218
+msgid "SHUTDOWN SYSTEM?"
+msgstr ""
+
+#: plugins/autoshutdown.py:204
+msgid "RESTART SYSTEM?"
+msgstr ""
+
+#: plugins/autoshutdown.py:210 plugins/autoshutdown.py:224
+#: plugins/autoshutdown.py:238
+msgid "(wakeup disabled)"
+msgstr ""
+
+#: plugins/autoshutdown.py:232
+msgid "SHUTDOWN FREEVO?"
+msgstr ""
+
+#: plugins/autoshutdown.py:587 plugins/shutdown.py:74 main.py:341
+msgid "shutting down..."
+msgstr "Sammutetaan..."
+
+#: plugins/ossmixer.py:128 plugins/ossmixer.py:131 plugins/ossmixer.py:137
+#: plugins/ossmixer.py:140 plugins/ossmixer.py:145 plugins/mixer.py:119
+#: plugins/mixer.py:122 plugins/mixer.py:128 plugins/mixer.py:131
+#: plugins/mixer.py:136
+#, python-format
+msgid "Volume: %s%%"
+msgstr "Äänenvoimakkuus: %s%%"
+
+#: plugins/ossmixer.py:148 plugins/mixer.py:139
+msgid "Mute"
+msgstr "Hiljennä"
+
+#: plugins/rom_drives.py:242
+#, python-format
+msgid "Drive %s (no disc)"
+msgstr "%s Asema (ei levyä)"
+
+#: plugins/rom_drives.py:308
+#, python-format
+msgid "Ejecting disc in drive %s"
+msgstr "%s asemaa aukaistaan"
+
+#: plugins/rom_drives.py:341
+#, python-format
+msgid "Reading disc in drive %s"
+msgstr "Levyä %s asemassa luetaan"
+
+#: plugins/icecast.py:165
+msgid "Set as icecast playlist"
+msgstr ""
+
+#: plugins/shutdown.py:144 plugins/shutdown.py:148
+msgid "Shutdown Freevo"
+msgstr "Sulje Freevo"
+
+#: plugins/shutdown.py:162
+msgid "Do you really want to shut down Freevo?"
+msgstr "Haluatko todella sulkea Freevon?"
+
+#: plugins/shutdown.py:171
+msgid "Do you really want to shut down the system?"
+msgstr "Haluatko todella sammuttaa koneen?"
+
+#: plugins/shutdown.py:179
+msgid "Do you really want to restart the system?"
+msgstr "Haluatko todella käynnistää koneen uudelleen?"
+
+#: plugins/yac.py:70
+#, python-format
+msgid "Call: %s"
+msgstr ""
+
+#: plugins/yac.py:72
+#, python-format
+msgid "Message: %s"
+msgstr ""
+
+#: plugins/command.py:139
+msgid "Command finished"
+msgstr "Komento suoritettu"
+
+#: plugins/command.py:153 gui/ConfirmBox.py:79 gui/AlertBox.py:70
+msgid "OK"
+msgstr "OK"
+
+#: plugins/command.py:155
+msgid "Show Stderr"
+msgstr "Näytä virhe viesti jono"
+
+#: plugins/command.py:157
+msgid "Show Stdout"
+msgstr "Näytä standardi viesti jono"
+
+#: plugins/command.py:175
+msgid "Stdout File"
+msgstr "Standardi viesti tiedosto"
+
+#: plugins/command.py:179
+msgid "Stderr File"
+msgstr "Virhe viesti tiedosto"
+
+#: plugins/command.py:216
+msgid "Run Command"
+msgstr "Suorita komento"
+
+#: plugins/command.py:227
+msgid "Running Command..."
+msgstr "Suoritan komentoa..."
+
+#: plugins/command.py:247
+msgid "Command Failed"
+msgstr "Komento epäonnistui"
+
+#: plugins/command.py:249
+msgid "Command Completed"
+msgstr "Komento suoritettu"
+
+#: plugins/command.py:282 plugins/command.py:320 share/skins/main/dark.fxd:22
+#: share/skins/main/crystal.fxd:15 share/skins/main/rain.fxd:15
+msgid "Commands"
+msgstr "Komennot"
+
+#: plugins/upsoon.py:222 plugins/upsoon.py:241
+msgid "A recording will start in less than a minute"
+msgstr ""
+
+#: image/plugins/gphoto.py:107 image/imageitem.py:98
+msgid "View Image"
+msgstr "Näytä kuva"
+
+#: image/plugins/gphoto.py:134 directory.py:421
+msgid "Browse directory"
+msgstr "Selaa hakemistoa"
+
+#: image/plugins/apod.py:58 image/plugins/apod.py:59
+msgid "APOD"
+msgstr ""
+
+#: image/plugins/apod.py:69
+msgid "Current Picture"
+msgstr ""
+
+#: image/plugins/apod.py:70
+msgid "Previous Pictures"
+msgstr ""
+
+#: image/plugins/apod.py:71 image/plugins/apod.py:86
+msgid "Apod Pictures"
+msgstr ""
+
+#: image/plugins/apod.py:84
+msgid "No Images found"
+msgstr ""
+
+#: image/plugins/apod.py:104 image/plugins/apod.py:117
+msgid "Unable to open URL"
+msgstr ""
+
+#: image/plugins/apod.py:131
+msgid "Need a directory to store APOD pictures."
+msgstr ""
+
+#: image/plugins/apod.py:135
+#, python-format
+msgid "directory %s does not exist."
+msgstr ""
+
+#: image/plugins/apod.py:139
+#, python-format
+msgid ""
+"directory %s must be able to be read, written to and executed by the user "
+"running freevo."
+msgstr ""
+
+#: image/viewer.py:121
+#, python-format
+msgid ""
+"Can't Open Image\n"
+"'%s'"
+msgstr ""
+"Kuvaa ei voida avata\n"
+"'%s'"
+
+#: image/viewer.py:328
+msgid "pause"
+msgstr "tauko"
+
+#: image/viewer.py:333
+msgid "play"
+msgstr "soita"
+
+#: image/viewer.py:426
+msgid "No information available"
+msgstr "Tietoa ei saatavilla"
+
+#: gui/ConfirmBox.py:83 tv/edit_favorite.py:196
+msgid "CANCEL"
+msgstr "PERUUTA"
+
+#: www/htdocs/help/index.rpy:82
+msgid "Freevo Help"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:85
+msgid ""
+"This is the internal Freevo documentation. The documents         are in an "
+"early stage of development, if you like to help, please         contact the "
+"developers. You find more informations like         the <a href=\"http://"
+"freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online "
+"manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org"
+"\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
+"them if someone deletes         informations), feel free to add informations "
+"there."
+msgstr ""
+
+#: www/htdocs/help/index.rpy:94
+msgid "Index"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:96
+msgid "Freevo Installation Howto"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:97
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:98
+msgid "Recording Information"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:99
+msgid "Plugin List"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:100
+#, fuzzy
+msgid "FXD files"
+msgstr "Poista tiedosto"
+
+#: www/htdocs/help/index.rpy:101
+msgid "Skinning Informations"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:102
+msgid "Plugin Writing Howto"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:45 www/htdocs/help/howto.rpy:46
+msgid "Freevo Installation HOWTO"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:46
+msgid "Build your own media box with Freevo and Linux"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:48 www/htdocs/help/howto.rpy:49
+msgid "Freevo Plugin Writing HOWTO"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:49
+msgid "Writing your own plugins for Freevo"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:84
+msgid "unable to load html files"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
+msgid "If you use a SVN version of Freevo, run <b>autogen.sh</b>."
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:86
+msgid "The files are searched in the following locations:"
+msgstr ""
+
+#: www/htdocs/help/plugins.rpy:109 www/htdocs/help/plugins.rpy:128
+msgid "Freevo Plugin List"
+msgstr ""
+
+#: www/htdocs/help/plugins.rpy:138 www/htdocs/help/plugins.rpy:145
+msgid "top"
+msgstr ""
+
+#: www/htdocs/help/plugins.rpy:139 www/htdocs/help/plugins.rpy:146
+msgid "index"
+msgstr ""
+
+#: www/htdocs/help/doc.rpy:59 www/htdocs/help/doc.rpy:70
+msgid "Freevo Documentation"
+msgstr ""
+
+#: www/htdocs/help/doc.rpy:61
+#, fuzzy, python-format
+msgid "unable to load %s.html"
+msgstr "Kohteen %s lataus epäonnistui"
+
+#: www/htdocs/manualrecord.rpy:68 www/htdocs/manualrecord.rpy:202
+#: tv/plugins/manual_record.py:74
+msgid "Manual Record"
+msgstr "Manuaalinen ajastus"
+
+#: www/htdocs/manualrecord.rpy:70 www/htdocs/record.rpy:142
+#: www/htdocs/edit_favorite.rpy:137 www/htdocs/guide.rpy:203
+#: www/htdocs/genre.rpy:122 www/htdocs/favorites.rpy:130
+#: tv/plugins/scheduled_recordings.py:102 tv/plugins/view_favorites.py:101
+#: tv/program_search.py:93
+msgid "Recording server is unavailable."
+msgstr "Nauhoitus palvelin ei ole saatavilla"
+
+#: www/htdocs/manualrecord.rpy:117
+msgid "Manual Recorded"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:126 tv/plugins/manual_record.py:371
+msgid "start time is not before stop time."
+msgstr "Aloitus aika ei ole enne lopetus aikaa."
+
+#: www/htdocs/manualrecord.rpy:129 tv/plugins/manual_record.py:362
+#, python-format
+msgid "Program would record for more than %d days!"
+msgstr "Ohjelma nauhoittaisi enemmän kuin %d vuorokautta!"
+
+#: www/htdocs/manualrecord.rpy:131 tv/plugins/manual_record.py:366
+msgid "Program would record for more than 1 day!"
+msgstr "Ohjelma nauhoittaisi enemmän kuin yhden vuorokauden!"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Jan"
+msgstr "Tam"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Feb"
+msgstr "Hel"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Mar"
+msgstr "Maa"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Apr"
+msgstr "Huh"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "May"
+msgstr "Tou"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Jun"
+msgstr "Kes"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Jul"
+msgstr "Hei"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Aug"
+msgstr "Elo"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Sep"
+msgstr "Syy"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Oct"
+msgstr "Lok"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Nov"
+msgstr "Mar"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Dec"
+msgstr "Jou"
+
+#: www/htdocs/manualrecord.rpy:202 www/web_types.py:134
+#, fuzzy
+msgid "Manual Recording"
+msgstr "Ajastetut nauhoitukset"
+
+#: www/htdocs/manualrecord.rpy:208
+msgid "Error Message"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:191
+#: www/htdocs/search.rpy:181
+msgid "Start Time"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:221 www/htdocs/record.rpy:192
+#: www/htdocs/search.rpy:182
+#, fuzzy
+msgid "Stop Time"
+msgstr "Standardi viesti tiedosto"
+
+#: www/htdocs/manualrecord.rpy:223 www/htdocs/record.rpy:196
+#: www/htdocs/search.rpy:186
+#, fuzzy
+msgid "Program Description"
+msgstr "Kuvaus: "
+
+#: www/htdocs/manualrecord.rpy:234
+#, fuzzy
+msgid "Add to Recording Schedule"
+msgstr "Näytä nauhoitus aikataulu"
+
+#: www/htdocs/index.rpy:107
+msgid "Welcome"
+msgstr ""
+
+#: www/htdocs/index.rpy:107 www/web_types.py:129
+msgid "Home"
+msgstr ""
+
+#: www/htdocs/index.rpy:110
+#, python-format
+msgid "Freevo Web Status as of %s"
+msgstr ""
+
+#: www/htdocs/index.rpy:115 www/htdocs/index.rpy:121 www/htdocs/index.rpy:123
+msgid "Notice"
+msgstr ""
+
+#: www/htdocs/index.rpy:115
+msgid "The recording server is down."
+msgstr ""
+
+#: www/htdocs/index.rpy:117
+msgid "The recording server is up and running."
+msgstr ""
+
+#: www/htdocs/index.rpy:121
+msgid "Your listings expire in 1 hour."
+msgstr ""
+
+#: www/htdocs/index.rpy:123
+#, python-format
+msgid "Your listings expire in %s hours."
+msgstr ""
+
+#: www/htdocs/index.rpy:125
+msgid "Your listings are up to date."
+msgstr ""
+
+#: www/htdocs/index.rpy:135
+#, fuzzy, python-format
+msgid "Now Recording %s."
+msgstr "Näytä nauhoitus aikataulu"
+
+#: www/htdocs/index.rpy:141
+msgid "One program scheduled to record."
+msgstr ""
+
+#: www/htdocs/index.rpy:143
+#, python-format
+msgid "%i programs scheduled to record."
+msgstr ""
+
+#: www/htdocs/index.rpy:145 www/htdocs/index.rpy:147
+msgid "No programs scheduled to record."
+msgstr ""
+
+#: www/htdocs/index.rpy:149
+#, python-format
+msgid "%i of %i Mb free in %s"
+msgstr ""
+
+#: www/htdocs/record.rpy:164 www/htdocs/edit_favorite.rpy:162
+#, fuzzy, python-format
+msgid "No program found on %s at %s."
+msgstr "%s:n raidalle %s ei löytynyt mediaa."
+
+#: www/htdocs/record.rpy:185 www/web_types.py:131
+#: tv/plugins/scheduled_recordings.py:56 tv/plugins/scheduled_recordings.py:70
+msgid "Scheduled Recordings"
+msgstr "Ajastetut nauhoitukset"
+
+#: www/htdocs/record.rpy:195 www/htdocs/search.rpy:185
+#: share/skins/main/info.fxd:263
+msgid "Episode"
+msgstr ""
+
+#: www/htdocs/record.rpy:197 www/htdocs/favorites.rpy:180
+#: www/htdocs/search.rpy:187
+msgid "Actions"
+msgstr ""
+
+#: www/htdocs/record.rpy:221
+msgid "UNKNOWN"
+msgstr ""
+
+#: www/htdocs/record.rpy:233 www/htdocs/proginfo.rpy:60
+#: www/htdocs/search.rpy:224
+#, python-format
+msgid "Sorry, the program description for %s is unavailable."
+msgstr "%s-ohjelmalle ei ole saatavissa kuvausta."
+
+#: www/htdocs/record.rpy:238 www/htdocs/favorites.rpy:214
+#: www/htdocs/search.rpy:230 tv/edit_favorite.py:192
+msgid "Remove"
+msgstr "Poista"
+
+#: www/htdocs/edit_favorite.rpy:135 www/htdocs/edit_favorite.rpy:196
+#: tv/edit_favorite.py:98
+msgid "Edit Favorite"
+msgstr "Muokkaa suosikkia"
+
+#: www/htdocs/edit_favorite.rpy:186
+#, python-format
+msgid "Favorite %s doesn't exists."
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:210
+msgid "Name of favorite"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:213 www/htdocs/favorites.rpy:178
+msgid "Day of week"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:214 www/htdocs/favorites.rpy:179
+msgid "Time of day"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:215
+msgid "Action"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:230 tv/program_display.py:238
+msgid "ANY CHANNEL"
+msgstr "KAIKKI KANAVAT"
+
+#: www/htdocs/edit_favorite.rpy:243 tv/program_display.py:242
+#: tv/edit_favorite.py:147
+msgid "ANY DAY"
+msgstr "KAIKKI PÄIVÄT"
+
+#: www/htdocs/edit_favorite.rpy:244 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Mon"
+msgstr "Maanantai"
+
+#: www/htdocs/edit_favorite.rpy:245 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Tue"
+msgstr "Tiistai"
+
+#: www/htdocs/edit_favorite.rpy:246 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Wed"
+msgstr "Keskiviikko"
+
+#: www/htdocs/edit_favorite.rpy:247 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Thu"
+msgstr "Torstai"
+
+#: www/htdocs/edit_favorite.rpy:248 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Fri"
+msgstr "Perjantai"
+
+#: www/htdocs/edit_favorite.rpy:249 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Sat"
+msgstr "Lauantai"
+
+#: www/htdocs/edit_favorite.rpy:250 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Sun"
+msgstr "Sunnuntai"
+
+#: www/htdocs/edit_favorite.rpy:256 tv/program_display.py:246
+#: tv/edit_favorite.py:167
+msgid "ANY TIME"
+msgstr "AINA"
+
+#: www/htdocs/edit_favorite.rpy:318 tv/plugins/manual_record.py:138
+#: tv/edit_favorite.py:189
+msgid "Save"
+msgstr "Tallenna"
+
+#: www/htdocs/guide.rpy:198 www/web_types.py:130 tv/tvmenu.py:117
+msgid "TV Guide"
+msgstr "TV opas"
+
+#: www/htdocs/guide.rpy:210
+msgid "View"
+msgstr ""
+
+#: www/htdocs/guide.rpy:213 www/htdocs/genre.rpy:148
+msgid "Show"
+msgstr "Näytä"
+
+#: www/htdocs/guide.rpy:213 www/htdocs/genre.rpy:148
+#, fuzzy
+msgid "Category"
+msgstr " Kappale"
+
+#: www/htdocs/guide.rpy:213 www/htdocs/genre.rpy:148
+msgid "Change"
+msgstr ""
+
+#: www/htdocs/guide.rpy:253 skins/main/tvlisting_area.py:345 tv/tvguide.py:56
+msgid "This channel has no data loaded"
+msgstr "Tällä kanavalle ei ole ohjelma tietoja"
+
+#: www/htdocs/guide.rpy:325 www/htdocs/genre.rpy:229
+#: share/skins/main/basic.fxd:558 share/skins/main/basic.fxd:620
+msgid "Start"
+msgstr "Alku"
+
+#: www/htdocs/guide.rpy:326 www/htdocs/genre.rpy:230
+#: share/skins/main/basic.fxd:564 share/skins/main/basic.fxd:626
+msgid "Stop"
+msgstr "Loppu"
+
+#: www/htdocs/guide.rpy:327 www/htdocs/genre.rpy:231
+#: share/skins/main/dark.fxd:464 share/skins/main/info.fxd:277
+#: share/skins/main/info.fxd:302 share/skins/main/info.fxd:481
+#, fuzzy
+msgid "Runtime"
+msgstr "Kesto:"
+
+#: www/htdocs/guide.rpy:338 www/htdocs/genre.rpy:242 www/htdocs/search.rpy:232
+#: www/htdocs/search.rpy:234
+#, fuzzy
+msgid "Record"
+msgstr "Nauhoitetut ohjelmat"
+
+#: www/htdocs/guide.rpy:341 www/htdocs/genre.rpy:245
+msgid "Add to Favorites"
+msgstr ""
+
+#: www/htdocs/guide.rpy:344 www/htdocs/genre.rpy:248
+msgid "Close Window"
+msgstr ""
+
+#: www/htdocs/genre.rpy:118
+#, python-format
+msgid "TV Genre for %s"
+msgstr ""
+
+#: www/htdocs/genre.rpy:204
+msgid "NO SHOWS MATCHING CATEGORY"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:128 www/htdocs/favorites.rpy:171
+#: www/web_types.py:132
+msgid "Favorites"
+msgstr "Suosikit"
+
+#: www/htdocs/favorites.rpy:162
+msgid "Monday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:163
+msgid "Tuesday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:164
+msgid "Wednesday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:165
+msgid "Thursday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:166
+msgid "Friday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:167
+msgid "Saturday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:168
+msgid "Sunday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:175
+msgid "Favorite Name"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:181
+msgid "Priority"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:190 www/htdocs/favorites.rpy:202
+#: www/htdocs/favorites.rpy:208 tv/edit_favorite.py:124
+msgid "ANY"
+msgstr "MIKÄ TAHANSA"
+
+#: www/htdocs/favorites.rpy:213
+msgid "Edit"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:221
+msgid "Higher"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:228
+msgid "Lower"
+msgstr ""
+
+#: www/htdocs/library.rpy:159
+#, python-format
+msgid "%s already exists! File not renamed."
+msgstr ""
+
+#: www/htdocs/library.rpy:163
+#, python-format
+msgid "Rename %s to %s."
+msgstr ""
+
+#: www/htdocs/library.rpy:166 www/htdocs/library.rpy:182
+#, python-format
+msgid "<h2>%s</h2>"
+msgstr ""
+
+#: www/htdocs/library.rpy:167
+#, python-format
+msgid "Rename %s to %s, failed."
+msgstr ""
+
+#: www/htdocs/library.rpy:170
+msgid "No new file specified."
+msgstr ""
+
+#: www/htdocs/library.rpy:176 www/htdocs/library.rpy:180
+#, python-format
+msgid "Delete %s."
+msgstr "Poista %s"
+
+#: www/htdocs/library.rpy:183
+#, fuzzy, python-format
+msgid "Delete %s, failed."
+msgstr "Poista %s"
+
+#: www/htdocs/library.rpy:192
+#, python-format
+msgid "%s does not exist. No action taken."
+msgstr ""
+
+#: www/htdocs/library.rpy:194
+#, python-format
+msgid "I do not process names (%s) with slashes for security reasons."
+msgstr ""
+
+#: www/htdocs/library.rpy:202 www/web_types.py:133
+msgid "Media Library"
+msgstr ""
+
+#: www/htdocs/library.rpy:221 www/web_types.py:248
+msgid "Messages"
+msgstr ""
+
+#: www/htdocs/library.rpy:234 share/skins/main/dark.fxd:17
+#: share/skins/main/crystal.fxd:8 share/skins/main/bluestar.fxd:8
+#: share/skins/main/basic.fxd:20 share/skins/main/rain.fxd:8
+msgid "Movies"
+msgstr "Elokuvat"
+
+#: www/htdocs/library.rpy:238
+#, fuzzy
+msgid "Recorded TV"
+msgstr "Nauhoitetut ohjelmat"
+
+#: www/htdocs/library.rpy:246 share/skins/main/dark.fxd:19
+#: share/skins/main/crystal.fxd:11 share/skins/main/basic.fxd:22
+#: share/skins/main/rain.fxd:11
+msgid "Images"
+msgstr "Kuvat"
+
+#: www/htdocs/library.rpy:258
+#, fuzzy
+msgid "Choose a Directory"
+msgstr "Selaa hakemistoa"
+
+#: www/htdocs/library.rpy:261 www/htdocs/library.rpy:332
+#: www/htdocs/library.rpy:334 www/htdocs/library.rpy:337
+#, fuzzy
+msgid "Back"
+msgstr "Varmuuskopioi CD"
+
+#: www/htdocs/library.rpy:379
+msgid "Download"
+msgstr ""
+
+#: www/htdocs/library.rpy:381
+msgid "Rename"
+msgstr ""
+
+#: www/htdocs/search.rpy:144 tv/program_display.py:190
+msgid "Search Results"
+msgstr "Etsinnän tulokset"
+
+#: www/htdocs/search.rpy:144 www/htdocs/search.rpy:168 www/web_types.py:135
+#: www/web_types.py:233 www/web_types.py:240
+#, fuzzy
+msgid "Search"
+msgstr "Etsi oppaasta"
+
+#: www/htdocs/search.rpy:145
+msgid "recording server is unavailable"
+msgstr ""
+
+#: www/htdocs/search.rpy:175
+msgid "No matches"
+msgstr ""
+
+#: www/htdocs/search.rpy:236
+msgid "New favorite"
+msgstr "Uusi suosikki"
+
+#: www/web_types.py:130
+msgid "View TV Listings"
+msgstr ""
+
+#: www/web_types.py:131
+msgid "View Scheduled Recordings"
+msgstr ""
+
+#: www/web_types.py:132 tv/plugins/view_favorites.py:55
+#: tv/plugins/view_favorites.py:60 tv/plugins/view_favorites.py:69
+msgid "View Favorites"
+msgstr "Näytä suosikit"
+
+#: www/web_types.py:133
+msgid "View Media Library"
+msgstr ""
+
+#: www/web_types.py:134
+#, fuzzy
+msgid "Schedule a Manual Recording"
+msgstr "Ajastetut nauhoitukset"
+
+#: www/web_types.py:135
+msgid "Advanced Search Page"
+msgstr ""
+
+#: www/web_types.py:136
+#, fuzzy
+msgid "Help"
+msgstr "k = Ohje"
+
+#: www/web_types.py:136
+msgid "View Online Help and Documentation"
+msgstr ""
+
+#: www/web_types.py:140
+msgid "Icecast List"
+msgstr ""
+
+#: www/web_types.py:140
+msgid "Change Icecast List"
+msgstr ""
+
+#: www/web_types.py:241
+#, fuzzy
+msgid "Movies only"
+msgstr "Elokuvat"
+
+#: www/web_types.py:242
+msgid "Go!"
+msgstr ""
+
+#: skins/main/default_areas.py:127
+msgid "TV GUIDE"
+msgstr "TV OPAS"
+
+#: skins/main/listing_area.py:221
+msgid "This directory is empty"
+msgstr "Tämä hakemisto on tyhjä"
+
+#: skins/main/info_area.py:140
+msgid "missing 'src' attribute in skin tag!"
+msgstr ""
+
+#: tv/plugins/manual_record.py:122
+msgid "Display record item"
+msgstr "Näytä nauhoitus"
+
+#: tv/plugins/manual_record.py:130 tv/program_display.py:264
+msgid "Modify name"
+msgstr "Muuta nimeä"
+
+#: tv/plugins/manual_record.py:131 tv/program_display.py:265
+msgid "Modify channel"
+msgstr "Muuta kanavaa"
+
+#: tv/plugins/manual_record.py:132
+msgid "Modify start month"
+msgstr "Muuta aloitus kuukautta"
+
+#: tv/plugins/manual_record.py:133
+msgid "Modify start day"
+msgstr "Muuta aloitus päivää"
+
+#: tv/plugins/manual_record.py:134
+msgid "Modify start time"
+msgstr "Muuta aloitus aikaa"
+
+#: tv/plugins/manual_record.py:135
+msgid "Modify stop month"
+msgstr "Muuta lopetus kuukautta"
+
+#: tv/plugins/manual_record.py:136
+msgid "Modify stop day"
+msgstr "Muuta lopetus päivää"
+
+#: tv/plugins/manual_record.py:137
+msgid "Modify stop time"
+msgstr "Mutta lopetus aikaa"
+
+#: tv/plugins/manual_record.py:140
+msgid "Record Item Menu"
+msgstr "Nauhoitus valikko"
+
+#: tv/plugins/manual_record.py:149 tv/program_display.py:288
+msgid "Alter Name"
+msgstr "Muuta nimeä"
+
+#: tv/plugins/manual_record.py:159 tv/program_display.py:310
+msgid "Modify Channel"
+msgstr "Muuta kanavaa"
+
+#: tv/plugins/manual_record.py:175 tv/plugins/manual_record.py:197
+#: tv/plugins/manual_record.py:234 tv/plugins/manual_record.py:256
+#: tv/program_display.py:360
+msgid "Modify Day"
+msgstr "Muuta päivää"
+
+#: tv/plugins/manual_record.py:218 tv/plugins/manual_record.py:277
+#: tv/program_display.py:380
+msgid "Modify Time"
+msgstr "Muuta aikaa"
+
+#: tv/plugins/manual_record.py:334 tv/plugins/manual_record.py:363
+#: tv/plugins/manual_record.py:367 tv/plugins/manual_record.py:372
+#: tv/plugins/manual_record.py:376
+msgid "Save Failed, recording was lost"
+msgstr "Tallennus epäonnistui, ajastus ei voimassa"
+
+#: tv/plugins/manual_record.py:375
+msgid ""
+"Sorry, the stop time does not give enough time for scheduler to pickup the "
+"change.  Please set it to record for a few minutes longer."
+msgstr ""
+
+#: tv/plugins/xine.py:81 video/plugins/xine.py:63
+msgid ""
+"'XINE_COMMAND' not defined, plugin 'xine' deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+
+#: tv/plugins/scheduled_recordings.py:61
+msgid "Display Scheduled Recordings"
+msgstr "Näytä ajastetut nauhoitukset"
+
+#: tv/plugins/scheduled_recordings.py:67
+msgid "Nothing scheduled."
+msgstr "Ei ajastettuja nauhoituksia"
+
+#: tv/plugins/scheduled_recordings.py:115
+msgid "Get recordings failed"
+msgstr "Nauhoitusten haku epäonnistui"
+
+#: tv/plugins/view_favorites.py:66
+msgid "No favorites."
+msgstr "Ei suosikkeja"
+
+#: tv/plugins/view_favorites.py:113
+msgid "Get favorites failed"
+msgstr "Suosikkien haku epäonnistui"
+
+#: tv/plugins/ivtv_xine_tv.py:224
+msgid "This plugin only supports the ivtv video group in tv mode!"
+msgstr ""
+
+#: tv/plugins/view_line_in.py:57
+msgid "View VCR Input"
+msgstr "Näytä nauhurin syöte"
+
+#: tv/channels.py:134
+#, python-format
+msgid "Cannot find tuner channel \"%s\" in the TV channel listing"
+msgstr "Asemaa \"%s\" ei löydy TV asema listasta"
+
+#: tv/channels.py:172 tv/channels.py:178
+#, python-format
+msgid "Unable to get channel list for %s."
+msgstr "%s:lle ei löydy asema listaa"
+
+#: tv/channels.py:209
+#, python-format
+msgid "Failed to set freq for channel %s."
+msgstr "Taajuuden asettaminen %s-asemalle epäonnistui."
+
+#: tv/program_search.py:86
+msgid "Program Search"
+msgstr "Ohjelma haku"
+
+#: tv/program_search.py:95
+msgid "Feel free to implement this function inside the main guide."
+msgstr ""
+
+#: tv/program_search.py:123 tv/program_display.py:169
+msgid "Searching, please wait..."
+msgstr "Etsitään, odota..."
+
+#: tv/program_display.py:110
+msgid "Display program"
+msgstr "Näytä ohjelma"
+
+#: tv/program_display.py:124
+msgid "Remove from schedule"
+msgstr "Poista ajastuksista"
+
+#: tv/program_display.py:127
+msgid "Schedule for recording"
+msgstr "Nauhoita tämä ohjelma"
+
+#: tv/program_display.py:131
+msgid "Search for more of this program"
+msgstr "Etsi tätä ohjelmaa muualta"
+
+#: tv/program_display.py:141
+msgid "Remove from favorites"
+msgstr "Poista suosikeista"
+
+#: tv/program_display.py:144
+msgid "Add to favorites"
+msgstr "Lisää suosikkeihin"
+
+#: tv/program_display.py:147
+msgid "Program Menu"
+msgstr "Ohjelmat valikko"
+
+#: tv/program_display.py:185
+#, python-format
+msgid "No matches found for %s"
+msgstr "%s ei löytynyt vastaavuutta"
+
+#: tv/program_display.py:187
+#, python-format
+msgid "findMatches failed: %s"
+msgstr "Epäonnistui: %s"
+
+#: tv/program_display.py:204
+#, python-format
+msgid "\"%s\" has been scheduled for recording"
+msgstr "\"%s\" on ajastettu nauhoitettavaksi"
+
+#: tv/program_display.py:207
+msgid "Scheduling Failed"
+msgstr "Ajastus epäonnistui"
+
+#: tv/program_display.py:223 tv/program_display.py:425 tv/edit_favorite.py:216
+msgid "Remove Failed"
+msgstr "Poisto epäonnistui"
+
+#: tv/program_display.py:258
+msgid "Display favorite"
+msgstr "Näytä suosikki"
+
+#: tv/program_display.py:266
+msgid "Modify day of week"
+msgstr "Muuta viikon päivä"
+
+#: tv/program_display.py:267
+msgid "Modify time of day"
+msgstr "Muuta aika"
+
+#: tv/program_display.py:273
+msgid "Modify priority"
+msgstr "Muuta prioriteetti"
+
+#: tv/program_display.py:276
+msgid "Save changes"
+msgstr "Tallenna muutokset"
+
+#: tv/program_display.py:277
+msgid "Remove favorite"
+msgstr "Poista suosikki"
+
+#: tv/program_display.py:279
+msgid "Favorite Menu"
+msgstr "Suosikki valikko"
+
+#: tv/program_display.py:401
+msgid "Save Failed, favorite was lost"
+msgstr "Tallennus epäonnistui, suosikki poistettu"
+
+#: tv/program_display.py:408
+msgid "Save Failed"
+msgstr "Tallennus epäonnistui"
+
+#: tv/program_display.py:413
+msgid "Favorite not added yet."
+msgstr "Suosikkia ei ole vielä lisätty."
+
+#: tv/epg_xmltv.py:71
+msgid "Time conversion error"
+msgstr "Ajan muunnos virhe"
+
+#: tv/epg_xmltv.py:146
+msgid "Couldn't load the TV Guide, got an exception!"
+msgstr "TV oppaan lataus epäonnistui"
+
+#: tv/epg_xmltv.py:237
+#, python-format
+msgid "REPLACE WITH TUNERID FOR %s"
+msgstr ""
+
+#: tv/tvguide.py:65
+msgid "Preparing the program guide"
+msgstr "Ohjelma opasta valmistellaan"
+
+#: tv/tvguide.py:68
+msgid "TV Guide is corrupt!"
+msgstr "TV opas on viallinen!"
+
+#: tv/tvguide.py:205
+msgid "Sorry, you cannot watch TV while recording. "
+msgstr "Et voi katsoa TV nauhoituksen aikana."
+
+#: tv/tvguide.py:206
+msgid "If this is not true then remove "
+msgstr ""
+
+#: tv/record_client.py:74 tv/record_client.py:83 tv/record_client.py:94
+#: tv/record_client.py:110 tv/record_client.py:122 tv/record_client.py:131
+#: tv/record_client.py:150 tv/record_client.py:159 tv/record_client.py:171
+#: tv/record_client.py:180 tv/record_client.py:193 tv/record_client.py:202
+#: tv/record_client.py:211 tv/record_client.py:220 tv/record_client.py:230
+#: tv/record_client.py:240 tv/record_client.py:249 tv/record_client.py:258
+#: tv/record_client.py:267 tv/record_client.py:276
+msgid "connection error"
+msgstr "Yhteys virhe"
+
+#: tv/record_client.py:101 tv/record_client.py:117
+msgid "no program"
+msgstr "Ei ohjelmaa"
+
+#: tv/record_client.py:104
+msgid "cannot record it if it is over"
+msgstr "Ohjelmaa ei voi nauhoittaa sen loputtua"
+
+#: tv/record_client.py:139 tv/record_client.py:145
+msgid "program not scheduled"
+msgstr "Ohjemaa ei ajastettu"
+
+#: tv/record_client.py:143
+msgid "program is scheduled"
+msgstr "Ohjelma on ajastettu"
+
+#: tv/tvmenu.py:85 tv/tvmenu.py:93
+#, python-format
+msgid "Could not find TV channel %s"
+msgstr "%s -TV asemaa ei löytynyt"
+
+#: tv/tvmenu.py:119
+msgid "Recorded Shows"
+msgstr "Nauhoitetut ohjelmat"
+
+#: tv/tvmenu.py:129
+msgid "TV Main Menu"
+msgstr "TV päävalikko"
+
+#: tv/tvmenu.py:155
+msgid "The list of TV channels is invalid!\n"
+msgstr "TV kanavien lista on viallinen!\n"
+
+#: tv/tvmenu.py:156
+msgid "Please check the config file."
+msgstr "Tarkista asetus tiedosto."
+
+#: tv/edit_favorite.py:112 share/skins/main/basic.fxd:577
+#: share/skins/main/info.fxd:269
+msgid "Name"
+msgstr "Nimi"
+
+#: tv/edit_favorite.py:143
+msgid "Day of Week"
+msgstr "Viikonpäivä"
+
+#: tv/edit_favorite.py:164
+msgid "Time of Day"
+msgstr "Aika"
+
+#: tv/edit_favorite.py:326
+#, python-format
+msgid "Favorite %s has been saved"
+msgstr "Suosikki %s on tallennettu"
+
+#: tv/edit_favorite.py:328
+#, python-format
+msgid "Failed: %s"
+msgstr "Virhe: %s"
+
+#: tv/edit_favorite.py:348
+#, python-format
+msgid "Do you want to remove %s?"
+msgstr "Haluatko poistaa %s?"
+
+#: games/game.py:91
+#, python-format
+msgid "File \"%s\" not found!"
+msgstr "Tiedostoa \"%s\" ei löytynyt!"
+
+#: games/__init__.py:82
+msgid "please update GAMES_ITEMS in local_conf.py"
+msgstr ""
+
+#: games/mame_cache.py:310
+msgid "Generating MAME cache, please wait."
+msgstr "Luodaan MAME välimuistia, odota..."
+
+#: audio/plugins/detach.py:48
+msgid "Show player"
+msgstr "Näytä soitin"
+
+#: audio/plugins/mplayer.py:122 audio/plugins/fxmms.py:152
+#: audio/plugins/mplayervbr.py:113
+#, python-format
+msgid ""
+"%s\n"
+"not found!"
+msgstr ""
+"%s\n"
+"ei löytynyt!"
+
+#: audio/plugins/cdbackup.py:195
+msgid "Show CD ripping status"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:196
+msgid "Stop CD ripping"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:201
+msgid "Rip the CD to the hard drive"
+msgstr "Tallenna CD kovalevylle"
+
+#: audio/plugins/cdbackup.py:202
+msgid "Get CDs available for ripping"
+msgstr "Hae CD:t valmiina tallennukseen"
+
+#: audio/plugins/cdbackup.py:204
+msgid "Item is not an Audio CD"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:218
+#, python-format
+msgid ""
+"Ripping in progress\n"
+"Track %d of %d"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:233
+msgid "Backup CD to hard drive in mp3 format"
+msgstr "Varmuuskopioi CD kovalevylle mp3 muodossa"
+
+#: audio/plugins/cdbackup.py:236
+msgid "Backup CD to hard drive in Ogg format"
+msgstr "Varmuuskopioi CD kovalevylle Ogg muodossa"
+
+#: audio/plugins/cdbackup.py:239
+msgid "Backup CD to hard drive in FLAC format"
+msgstr "Varmuuskopioi CD kovalevylle FLAC muodossa"
+
+#: audio/plugins/cdbackup.py:241
+msgid "Backup CD to hard drive in wav format"
+msgstr "Varmuuskopioi CD kovalevylle wav muodossa"
+
+#: audio/plugins/cdbackup.py:244
+msgid "CD Backup"
+msgstr "Varmuuskopioi CD"
+
+#: audio/plugins/cdbackup.py:257
+msgid "Ripping started"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:325
+#, python-format
+msgid "Directory %s already exists"
+msgstr "Levyllä on jo %s hakemisto"
+
+#: audio/plugins/cdbackup.py:328
+#, python-format
+msgid "Cannot rip to '%s'! (%s)"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:344 audio/plugins/cdbackup.py:397
+#: audio/plugins/cdbackup.py:467
+msgid "Ripping aborted"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:480
+msgid "Ripping complete"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:493
+msgid "No CDDB data available to mmpython"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:496
+msgid "Unknown Artist"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:496 audio/plugins/cdbackup.py:497
+msgid "RENAME"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:497 audio/audiodiskitem.py:60
+msgid "Unknown CD Album"
+msgstr "Tuntematon CD levy"
+
+#: audio/plugins/cdbackup.py:498
+msgid "Other"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:501
+msgid ""
+"CD info not found!\n"
+"Must manually rename files\n"
+"when finished ripping"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:566
+msgid "Problem trying to call:"
+msgstr ""
+
+#: audio/plugins/radio.py:68
+msgid "Listen to Radio Station"
+msgstr "Kuuntele radio asemaa"
+
+#: audio/plugins/radio.py:103
+msgid "Radio"
+msgstr "Radio"
+
+#: audio/plugins/radio.py:128
+msgid "No Radio Stations found"
+msgstr "Radio asemia ei löytynyt"
+
+#: audio/plugins/radio.py:130
+msgid "Radio Stations"
+msgstr "Radio Asemat"
+
+#: audio/plugins/playlist.py:85
+msgid "Playlists"
+msgstr "Soittolistat"
+
+#: audio/plugins/playlist.py:101
+msgid "Enqueue this Music in Playlist"
+msgstr "Lisää tämä soittolistaan"
+
+#: audio/plugins/playlist.py:103
+msgid "Make a new Audio Playlist"
+msgstr "Lisää uusi soittolista"
+
+#: audio/plugins/playlist.py:121
+msgid "Queued Directory"
+msgstr "Jonossa oleva hakemisto"
+
+#: audio/plugins/playlist.py:123
+msgid "Queued Track"
+msgstr "Jonossa oleva kappale"
+
+#: audio/plugins/playlist.py:131
+msgid "Added New Playlist"
+msgstr "Uusi soittolista lisätty"
+
+#: audio/plugins/vux.py:92
+msgid "[VUX] Start playing"
+msgstr ""
+
+#: audio/plugins/vux.py:93
+msgid "[VUX] Stop playing"
+msgstr ""
+
+#: audio/plugins/vux.py:94
+msgid "[VUX] Next (rating down)"
+msgstr ""
+
+#: audio/plugins/vux.py:95
+msgid "[VUX] Next (rating intact)"
+msgstr ""
+
+#: audio/plugins/vux.py:96
+msgid "[VUX] Next (rating up)"
+msgstr ""
+
+#: audio/plugins/vux.py:97
+msgid "[VUX] Playing item rating up"
+msgstr ""
+
+#: audio/plugins/vux.py:98
+msgid "[VUX] Playing item rating down"
+msgstr ""
+
+#: audio/plugins/vux.py:99
+msgid "[VUX] a dir item do not select"
+msgstr ""
+
+#: audio/plugins/vux.py:100
+msgid "[VUX] an audio item, do not select"
+msgstr ""
+
+#: audio/plugins/xine.py:55
+msgid "'fbxine' not found, plugin 'xine' deactivated"
+msgstr ""
+
+#: audio/plugins/xine.py:74
+msgid "'fbxine' version too old, plugin 'xine' deactivated"
+msgstr ""
+
+#: audio/plugins/xine.py:75
+#, python-format
+msgid "You need software %s"
+msgstr "Tarvitset sovelluksen %s"
+
+#: audio/plugins/coversearch.py:109
+msgid ""
+"To search for covers you need an Amazon.com Web Services\n"
+"license key. You can get yours from:\n"
+msgstr ""
+
+#: audio/plugins/coversearch.py:145
+msgid "Find a cover for this music"
+msgstr ""
+
+#: audio/plugins/coversearch.py:150 audio/plugins/coversearch.py:159
+#, python-format
+msgid ""
+"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
+"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
+"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
+"Info. Maybe you must fix this file (%s) tag?"
+msgstr ""
+
+#: audio/plugins/coversearch.py:168
+msgid "Unknown CD, cover searching is disabled"
+msgstr ""
+
+#: audio/plugins/coversearch.py:176
+msgid "searching Amazon..."
+msgstr "haetaan Amazonista..."
+
+#: audio/plugins/coversearch.py:195
+#, python-format
+msgid "No matches for %(artist)s - %(album)s"
+msgstr ""
+
+#: audio/plugins/coversearch.py:203
+#, fuzzy
+msgid "Unknown error while searching."
+msgstr "Tuntematon virhe yhdistettäessä IMDB-palvelimeen"
+
+#: audio/plugins/coversearch.py:240 audio/plugins/coversearch.py:252
+msgid "small"
+msgstr ""
+
+#: audio/plugins/coversearch.py:263
+msgid "Cover Search Results"
+msgstr ""
+
+#: audio/plugins/coversearch.py:267
+#, fuzzy
+msgid "No covers available from Amazon"
+msgstr "IMDB palvelusta ei löytynyt tietoa"
+
+#: audio/plugins/coversearch.py:280 video/plugins/imdb.py:203
+msgid "getting data..."
+msgstr "haetaan tietoa..."
+
+#: audio/audiodiskitem.py:77
+msgid "Browse disc"
+msgstr "Selaa levyä"
+
+#: audio/audiodiskitem.py:115 directory.py:691
+msgid "Random playlist"
+msgstr "Satunnainen soittolista"
+
+#: audio/audiodiskitem.py:123
+msgid "Data files on disc"
+msgstr "%s Asema (ei levyä)"
+
+#: video/plugins/mplayer.py:387
+msgid "Seeking not possible"
+msgstr "Kelaaminen mahdotonta"
+
+#: video/plugins/mover.py:96
+#, python-format
+msgid "Move to [%s]"
+msgstr "Siirrä [%s]"
+
+#: video/plugins/imdb.py:93
+msgid "Search IMDB for this file"
+msgstr "Hae IMDB tietoja tälle tiedostolle"
+
+#: video/plugins/imdb.py:100 video/plugins/imdb.py:107
+#, python-format
+msgid "Search IMDB for [%s]"
+msgstr "Hae IMDB:sta [%s]"
+
+#: video/plugins/imdb.py:118
+msgid "searching IMDB..."
+msgstr "haetaan IMDB:sta..."
+
+#: video/plugins/imdb.py:142
+msgid "Unknown error while connecting to IMDB"
+msgstr "Tuntematon virhe yhdistettäessä IMDB-palvelimeen"
+
+#: video/plugins/imdb.py:160
+msgid "IMDB Query"
+msgstr "IMDB haku"
+
+#: video/plugins/imdb.py:164
+msgid "No information available from IMDB"
+msgstr "IMDB palvelusta ei löytynyt tietoa"
+
+#: video/plugins/bookmarker.py:70
+msgid "Resume playback"
+msgstr "Jatka soittoa"
+
+#: video/plugins/bookmarker.py:75
+msgid "Bookmarks"
+msgstr "Kirjanmerkit"
+
+#: video/plugins/bookmarker.py:111
+#, python-format
+msgid "Jump to %s"
+msgstr "Siirry %s"
+
+#: video/plugins/dvdimage.py:72
+#, fuzzy
+msgid "Play image as DVD"
+msgstr "Soita DVD"
+
+#: video/plugins/dvdimage.py:97
+msgid "Choose title to play. <1-9>"
+msgstr ""
+
+#: video/plugins/dvdimage.py:121
+#, python-format
+msgid "Choose disc (%i discs available)."
+msgstr ""
+
+#: video/plugins/linkbrowser.py:77
+msgid "Browse links (autoplay)"
+msgstr ""
+
+#: video/plugins/linkbrowser.py:78
+msgid "Browse links (autoplay, maximum caching)"
+msgstr ""
+
+#: video/plugins/linkbrowser.py:79
+msgid "Browse links"
+msgstr ""
+
+#: video/plugins/linkbrowser.py:148
+msgid "Downloading link list..."
+msgstr "Ladataan linkki listaa..."
+
+#: video/plugins/linkbrowser.py:155
+#, python-format
+msgid "Failed to download %s"
+msgstr "Kohteen %s lataus epäonnistui"
+
+#: video/plugins/details.py:76
+msgid "Show details for this item"
+msgstr "Näytä tämän tiedoston tiedot"
+
+#: video/plugins/details.py:106
+msgid "Details"
+msgstr "Tarkemmat tiedot"
+
+#: video/__init__.py:203
+msgid "Directory Autobuild Thumbnails "
+msgstr "Tee kuvakkeet automaattisesti"
+
+#: video/__init__.py:204
+msgid "Build video thumbnails for all items (may take a while when entering)."
+msgstr "Tee kuvakkeet videoista automaattisesti (Tämä voi kestää pitkän aikaa)"
+
+#: video/configure.py:87 video/configure.py:119
+#, python-format
+msgid "Stream %s"
+msgstr "Virta %s"
+
+#: video/configure.py:98
+msgid "Audio Menu"
+msgstr "Musiikki valikko"
+
+#: video/configure.py:113
+msgid "no subtitles"
+msgstr "ei tekstitystä"
+
+#: video/configure.py:135
+msgid "Subtitle Menu"
+msgstr "Tekstitys valikko"
+
+#: video/configure.py:152 video/configure.py:179
+#, python-format
+msgid "Play chapter %s"
+msgstr "Soita kappale %s"
+
+#: video/configure.py:159 video/configure.py:182
+msgid "Chapter Menu"
+msgstr "Kappale valikko"
+
+#: video/configure.py:211
+#, python-format
+msgid "Turn off %s"
+msgstr "Kytke %s pois päältä"
+
+#: video/configure.py:212
+#, python-format
+msgid "Turn on %s"
+msgstr "Kytke %s päälle"
+
+#: video/configure.py:225
+msgid "Audio selection"
+msgstr "Ääni valinnat"
+
+#: video/configure.py:227
+msgid "Subtitle selection"
+msgstr "Tekstitys valinnat"
+
+#: video/configure.py:230 video/configure.py:234
+msgid "Chapter selection"
+msgstr "Kappaleen valinta"
+
+#: video/configure.py:240
+msgid "deinterlacing"
+msgstr "lomituksen poisto"
+
+#: video/configure.py:245 video/videoitem.py:279 playlist.py:298
+msgid "Play"
+msgstr "Soita"
+
+#: video/configure.py:246
+msgid "Config Menu"
+msgstr "Asetukset valikko"
+
+#: video/videoitem.py:265
+msgid "Play DVD"
+msgstr "Soita DVD"
+
+#: video/videoitem.py:266 video/videoitem.py:268
+msgid "DVD title list"
+msgstr "DVD otsikko lista"
+
+#: video/videoitem.py:269 video/videoitem.py:277
+msgid "Play default track"
+msgstr "Soita oletus raita"
+
+#: video/videoitem.py:273
+msgid "Play VCD"
+msgstr "Soita VCD"
+
+#: video/videoitem.py:274 video/videoitem.py:276
+msgid "VCD title list"
+msgstr "VCD otsikko lista"
+
+#: video/videoitem.py:281
+msgid "Play with alternate player"
+msgstr "Soita toisella ohjelmalla"
+
+#: video/videoitem.py:284
+msgid "Play with maximum cache"
+msgstr "Soita maksimi välimuistilla"
+
+#: video/videoitem.py:289
+msgid "Show variants"
+msgstr "Näytä vaihtoehdot"
+
+#: video/videoitem.py:293
+msgid "Create Thumbnail"
+msgstr "Luo kuvake"
+
+#: video/videoitem.py:314
+msgid "Please wait...."
+msgstr "Odota..."
+
+#: video/videoitem.py:456 video/videoitem.py:470 video/videoitem.py:484
+#, python-format
+msgid "No media found for \"%s\".\n"
+msgstr "Tiedostossa \"%s\" olevaa mediaa ei löytynyt.\n"
+
+#: video/videoitem.py:457 video/videoitem.py:471 video/videoitem.py:485
+msgid "Please insert the media."
+msgstr "Aseta media asemaan."
+
+#: video/videoitem.py:490
+msgid "No player for this item found"
+msgstr "Tälle tiedostolle ei ole soitinta"
+
+#: video/videoitem.py:566
+#, python-format
+msgid "Play Title %s"
+msgstr "Soita kappale %s"
+
+#: util/mediainfo.py:719
+#, fuzzy
+msgid "Reloading cache files, be patient..."
+msgstr "Luodaan välimuistia, odota..."
+
+#: util/misc.py:435
+msgid "The recordserver is down"
+msgstr "Nauhoitus palvelin ei ole käynnissä"
+
+#: util/misc.py:457
+msgid "Today"
+msgstr "Tänään"
+
+#: util/misc.py:467
+msgid "Tomorrow"
+msgstr "Huomenna"
+
+#: util/misc.py:477
+msgid "This Week"
+msgstr "Tällä viikolla"
+
+#: util/misc.py:487
+msgid "No recordings are scheduled"
+msgstr "Ei ajastettuja ohjelmia"
+
+#: setup_freevo.py:89
+msgid ""
+"Usage: ./freevo setup [OPTION]...\n"
+"Set up Freevo for your specific environment.\n"
+"\n"
+"   --geometry=WIDTHxHEIGHT      set the display size\n"
+"                                  WIDTHxHEIGHT can be 800x600, 768x576 or "
+"640x480\n"
+"\n"
+"   --display=DISP               set the display\n"
+"                                  DISP can be x11, fbdev, dxr3, mga, \n"
+"                                  directfb, dfbmga or dga\n"
+"                                  \n"
+"   --tv=NORM                    set the TV standard\n"
+"                                  NORM can be ntsc, pal or secam\n"
+"\n"
+"   --chanlist=LIST              set the channel list\n"
+"                                  LIST can be us-bcast, us-cable, us-cable-"
+"hrc,\n"
+"                                  japan-bcast, japan-cable, europe-west,\n"
+"                                  europe-east, italy, newzealand, "
+"australia,\n"
+"                                  ireland, france, china-bcast, "
+"southafrica,\n"
+"                                  argentina, canada-cable, switzerland\n"
+"\n"
+"   --help                       display this help and exit\n"
+"\n"
+"The default is \"--geometry=800x600 --display=x11 --tv=ntsc --chanlist=us-"
+"cable\"\n"
+"Please report bugs to <freevo-users@lists.sourceforge.net>.\n"
+msgstr ""
+
+#: setup_freevo.py:193
+#, python-format
+msgid "checking for %-13s"
+msgstr ""
+
+#: setup_freevo.py:206
+#, python-format
+msgid "ERROR: can't find %s"
+msgstr ""
+
+#: setup_freevo.py:207
+msgid "Please install the application respectively put it in your path."
+msgstr ""
+
+#: setup_freevo.py:208
+msgid "Freevo won't work without it."
+msgstr ""
+
+#: setup_freevo.py:214
+msgid "not found (deactivated)"
+msgstr ""
+
+#: setup_freevo.py:277
+#, python-format
+msgid "System path first=%s"
+msgstr ""
+
+#: setup_freevo.py:277
+msgid "No"
+msgstr ""
+
+#: setup_freevo.py:277
+msgid "Yes"
+msgstr ""
+
+#: setup_freevo.py:293
+msgid "Settings:"
+msgstr ""
+
+#: fxditem.py:212
+msgid "Browse list"
+msgstr "Selaa listaa"
+
+#: playlist.py:143 playlist.py:183
+#, python-format
+msgid "Cannot open file \"%s\""
+msgstr "Tiedostoa \"%s\" ei voitu avata"
+
+#: playlist.py:296
+msgid "Browse Playlist"
+msgstr "Selaa soittolistaa"
+
+#: playlist.py:306 directory.py:430
+msgid "Random play all items"
+msgstr "Soita kaikki satunnaisesti"
+
+#: playlist.py:352
+msgid "empty playlist"
+msgstr "tyhjä soittolista"
+
+#: playlist.py:450
+msgid "playlist repeat on"
+msgstr "soittolistan toisto päällä"
+
+#: playlist.py:452
+msgid "playlist repeat off"
+msgstr "soittolista toisto ei päällä"
+
+#: playlist.py:466
+msgid "no next item in playlist"
+msgstr "soittolistassa ei seuraavaa kappaletta"
+
+#: playlist.py:493
+msgid "no previous item in playlist"
+msgstr "soittolistassa ei edellistä kappaletta"
+
+#: menu.py:603
+msgid "No action defined for this choice!"
+msgstr "Tälle valinnalle ei ole määritelty toimintoa!"
+
+#: directory.py:62
+msgid "Directory Sort By Date"
+msgstr "Järjestä hakemisto päivän mukaan"
+
+#: directory.py:63
+msgid "Sort directory by date and not by name."
+msgstr "Järjestä hakemisto päivän muttei nimen mukaan"
+
+#: directory.py:65
+msgid "Directory Autoplay Single Item"
+msgstr "Soita automaattisesti jos vain yksi kappale"
+
+#: directory.py:66
+msgid "Don't show directory if only one item exists and auto-select the item."
+msgstr "Älä näytä hakemistoa jos siellä on vain yksi kappale."
+
+#: directory.py:69
+msgid "Force Skin Layout"
+msgstr "Käytä määrättyä ulkoasua"
+
+#: directory.py:70
+msgid ""
+"Force skin to a specific layout. This option doesn't work with all skins and "
+"the result may differ based on the skin."
+msgstr "Ei toimi kaikilla ulkoasuilla"
+
+#: directory.py:73
+msgid "Directory Smart Sort"
+msgstr "Viisas järjestely"
+
+#: directory.py:74
+msgid "Use a smarter way to sort the items."
+msgstr "Käytä viisaampaa hakemiston järjestystä."
+
+#: directory.py:76
+msgid "Use MediaID Tag Names"
+msgstr "Käytä sisäisiä nimiä"
+
+#: directory.py:77
+msgid "Use the names from the media files tags as display name."
+msgstr "Käytä media tiedostoissa olevia nimiä"
+
+#: directory.py:79
+msgid "Directory Reverse Sort"
+msgstr "Käänteinen järjestys"
+
+#: directory.py:80
+msgid "Show the items in the list in reverse order."
+msgstr "Näytä hakemisto käänteisessä järjestyksessä."
+
+#: directory.py:84
+msgid "Directory Create Playlist"
+msgstr "Käsittele soittolistana"
+
+#: directory.py:85
+msgid ""
+"Handle the directory as playlist. After one file is played, the next one "
+"will be started."
+msgstr "Käsittele hakemistoa soittolistana. Kun kappale loppuu, aloita uusi."
+
+#: directory.py:88
+msgid "Directory Add Playlist Files"
+msgstr "Lisää soittolistat"
+
+#: directory.py:89
+msgid "Add playlist files to the list of items"
+msgstr "Lisää soittolista tiedostot listaan"
+
+#: directory.py:91
+msgid "Directory Add Random Playlist"
+msgstr "Lisää satunnainen soittolista"
+
+#: directory.py:92
+msgid "Add an item for a random playlist"
+msgstr "Lisää kappale satunnaiseen soittolistaan"
+
+#: directory.py:94
+msgid "Directory Autoplay Items"
+msgstr "Soita kappaleet automaattisesti"
+
+#: directory.py:95
+msgid ""
+"Autoplay the whole directory (as playlist) when it contains only files and "
+"no directories"
+msgstr ""
+"Soita kappaleet automaattisesti kun hakemisto ei sisällä muita hakemistoja"
+
+#: directory.py:287
+#, python-format
+msgid "Directory on disc [%s]"
+msgstr "Hakemisto levyllä [%s]"
+
+#: directory.py:288
+msgid "Directory"
+msgstr "Hakemisto"
+
+#: directory.py:424
+msgid "Play all files in directory"
+msgstr "Soita kaikki kappaleet"
+
+#: directory.py:432
+msgid "Recursive random play all items"
+msgstr "Satunnainen soitto kaikista alihakemistoista"
+
+#: directory.py:433
+msgid "Recursive play all items"
+msgstr "Soita kaikki"
+
+#: directory.py:435
+msgid "Configure directory"
+msgstr "Hakemiston asetukset"
+
+#: directory.py:502
+msgid "Enter Password"
+msgstr "Anna salasana"
+
+#: directory.py:527
+msgid "Password incorrect"
+msgstr "Väärä salasana"
+
+#: directory.py:561
+#, fuzzy
+msgid "Directory does not exist"
+msgstr "Levyllä on jo %s hakemisto"
+
+#: directory.py:590
+msgid "Scanning disc, be patient..."
+msgstr "Tutkitaan levyä, odota..."
+
+#: directory.py:592
+msgid "Scanning directory, be patient..."
+msgstr "Tutkitaan hakemistoa, odota..."
+
+#: directory.py:791 directory.py:881 directory.py:915
+msgid "on"
+msgstr "päällä"
+
+#: directory.py:793 directory.py:796 directory.py:885 directory.py:913
+msgid "off"
+msgstr "pois"
+
+#: directory.py:798
+msgid "auto"
+msgstr "auto"
+
+#: directory.py:917
+msgid "Show all kinds of items"
+msgstr "Näytä kaikki tiedostot"
+
+#: directory.py:919
+msgid "Show video, audio and image items in this directory"
+msgstr "Näytä kaikki video, ääni ja kuva tiedostot tässä hakemistossa"
+
+#: directory.py:922
+msgid "Configure"
+msgstr "Asetukset"
+
+#: childapp.py:297
+#, python-format
+msgid "logging child to \"%s\""
+msgstr "Kirjataan \"%s\" -tiedostoon"
+
+#: childapp.py:301
+#, python-format
+msgid "Cannot open \"%s\" for logging!"
+msgstr "\"%s\"-tiedostoa ei voi avata"
+
+#: childapp.py:302
+msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, "
+msgstr ""
+
+#: childapp.py:303
+#, python-format
+msgid "or make %s writable!"
+msgstr ""
+
+#: main.py:201
+msgid "Freevo Main Menu"
+msgstr "Freevo Päävalikko"
+
+#: main.py:217
+msgid "Skin Selector"
+msgstr "Ulkonäön valinta"
+
+#: main.py:332
+#, python-format
+msgid ""
+"Event '%s' crashed\n"
+"\n"
+"Please take a look at the logfile and report the bug to the Freevo mailing "
+"list. The state of Freevo may be corrupt now and this error could cause more "
+"errors until you restart Freevo.\n"
+"\n"
+"Logfile: %s\n"
+"\n"
+msgstr ""
+
+#: main.py:342 share/skins/main/mediaportal.fxd:446
+#: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:16
+#: share/skins/main/bluestar.fxd:15 share/skins/main/basic.fxd:24
+#: share/skins/main/rain.fxd:16
+msgid "Shutdown"
+msgstr "Sammuta"
+
+#: main.py:344
+#, fuzzy
+msgid "Continue"
+msgstr "Asetukset"
+
+#: main.py:461
+msgid "Starting Freevo, please wait ..."
+msgstr "Freevo käynnistyy, odota..."
+
+#: main.py:470
+msgid "Reading cache, please wait ..."
+msgstr "Luodaan välimuistia, odota..."
+
+#: main.py:521
+msgid "Freevo crashed!"
+msgstr "Freevo kaatui!"
+
+#: main.py:522
+#, python-format
+msgid "Filename: %s"
+msgstr "Tiedosto: %s"
+
+#: main.py:523
+#, python-format
+msgid "Lineno: %s"
+msgstr "Rivi nro: %s"
+
+#: main.py:524
+#, python-format
+msgid "Function: %s"
+msgstr "Toiminto: %s"
+
+#: main.py:525
+#, python-format
+msgid "Text: %s"
+msgstr "Teksti: %s"
+
+#: main.py:527
+msgid "Please see the logfiles for more info"
+msgstr "Katso logi tiedostoista lisätietoja"
+
+#: main.py:529
+#, python-format
+msgid "Exit in %s seconds"
+msgstr "Lopetetaan %s sekunnin kuluttua"
+
+#: osd.py:381
+msgid "z = Toggle Fullscreen"
+msgstr "z = Täysi näyttö päälle/pois"
+
+#: osd.py:382
+msgid "Arrow Keys = Move"
+msgstr "Nuolinäppäimet = Siirry"
+
+#: osd.py:383
+msgid "Spacebar = Select"
+msgstr "Välilyönti = Valitse"
+
+#: osd.py:384
+msgid "Escape = Stop/Prev. Menu"
+msgstr "Esc = Pysäytä/Edellinen menu"
+
+#: osd.py:385
+msgid "h = Help"
+msgstr "k = Ohje"
+
+#: share/skins/main/info.fxd:317
+msgid "Chapter"
+msgstr "Kappale"
+
+#: share/skins/main/mediaportal.fxd:188 share/skins/main/blurr.fxd:186
+#: share/skins/main/info.fxd:542
+msgid "Playlist"
+msgstr "Soittolista"
+
+#: share/skins/main/dark.fxd:639
+#, fuzzy
+msgid "New mails"
+msgstr "Tarkemmat tiedot"
+
+#: share/skins/main/dark.fxd:658 share/skins/main/dark.fxd:679
+msgid "From"
+msgstr ""
+
+#: share/skins/main/info.fxd:505
+msgid "Copyright"
+msgstr "Tekijänoikeus"
+
+#: share/skins/main/crystal.fxd:317 share/skins/main/bluestar.fxd:337
+#: share/skins/main/rain.fxd:313
+msgid "Unread messages"
+msgstr ""
+
+#: share/skins/main/bluestar.fxd:11
+#, fuzzy
+msgid "Pictures"
+msgstr "Katsele kuvia"
+
+#: share/skins/main/info.fxd:405
+msgid "Disc ID"
+msgstr "Levyn tunniste"
+
+#: share/skins/main/mediaportal.fxd:214 share/skins/main/blurr.fxd:212
+#: share/skins/main/info.fxd:309
+msgid "Audio tracks"
+msgstr "Ääniraidat"
+
+#: share/skins/main/crystal.fxd:368 share/skins/main/bluestar.fxd:388
+#: share/skins/main/rain.fxd:364
+msgid "Message has not been read"
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:445 share/skins/main/crystal.fxd:12
+#: share/skins/main/blurr.fxd:452 share/skins/main/rain.fxd:12
+msgid "Weather Forecast"
+msgstr "Sääennuste"
+
+#: share/skins/main/mediaportal.fxd:419 share/skins/main/blurr.fxd:427
+msgid "Location"
+msgstr "Paikka"
+
+#: share/skins/main/dark.fxd:670
+msgid "New mail"
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:444 share/skins/main/blurr.fxd:451
+msgid "Play a Game"
+msgstr "Pelaa peliä"
+
+#: share/skins/main/dark.fxd:23 share/skins/main/crystal.fxd:10
+#: share/skins/main/bluestar.fxd:10 share/skins/main/rain.fxd:10
+msgid "Email"
+msgstr ""
+
+#: share/skins/main/crystal.fxd:323 share/skins/main/bluestar.fxd:343
+#: share/skins/main/rain.fxd:319
+msgid "Total messages"
+msgstr ""
+
+#: share/skins/main/info.fxd:227
+msgid "kb/s"
+msgstr "kb/s"
+
+#: share/skins/main/mediaportal.fxd:203 share/skins/main/mediaportal.fxd:683
+#: share/skins/main/dark.fxd:748 share/skins/main/basic.fxd:384
+#: share/skins/main/blurr.fxd:201 share/skins/main/blurr.fxd:308
+#: share/skins/main/blurr.fxd:689
+msgid "Track"
+msgstr "Kappale"
+
+#: share/skins/main/dark.fxd:564
+#, fuzzy
+msgid "One song in playlist"
+msgstr "soittolistassa ei seuraavaa kappaletta"
+
+#: share/skins/main/info.fxd:224
+msgid "Bitrate"
+msgstr "Bittinopeus"
+
+#: share/skins/main/mediaportal.fxd:192 share/skins/main/blurr.fxd:190
+#: share/skins/main/info.fxd:418 share/skins/main/info.fxd:423
+#: share/skins/main/info.fxd:546
+msgid "items in this playlist"
+msgstr "kappaletta tässä soittolistassa"
+
+#: share/skins/main/mediaportal.fxd:442 share/skins/main/blurr.fxd:449
+#: share/skins/main/info.fxd:14
+msgid "Listen to Music"
+msgstr "Kuuntele musiikkia"
+
+#: share/skins/main/mediaportal.fxd:696 share/skins/main/dark.fxd:758
+#: share/skins/main/basic.fxd:397 share/skins/main/blurr.fxd:706
+msgid "Elapsed"
+msgstr "Aika"
+
+#: share/skins/main/dark.fxd:622
+msgid "Just one picture in this slideshow."
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:441 share/skins/main/blurr.fxd:448
+#: share/skins/main/info.fxd:13
+msgid "Watch a Movie"
+msgstr "Katsele elokuvia"
+
+#: share/skins/main/info.fxd:231
+msgid "Link"
+msgstr "Linkki"
+
+#: share/skins/main/basic.fxd:589
+msgid "Day"
+msgstr "Päivä"
+
+#: share/skins/main/mediaportal.fxd:219 share/skins/main/blurr.fxd:217
+#: share/skins/main/info.fxd:313
+msgid "Subtitles"
+msgstr "Tekstitykset"
+
+#: share/skins/main/dark.fxd:491
+#, fuzzy
+msgid "movies in this playlist."
+msgstr "kappaletta tässä soittolistassa"
+
+#: share/skins/main/dark.fxd:16 share/skins/main/crystal.fxd:7
+#: share/skins/main/bluestar.fxd:7 share/skins/main/rain.fxd:7
+msgid "Television"
+msgstr ""
+
+#: share/skins/main/dark.fxd:645
+msgid "Total mails"
+msgstr ""
+
+#: share/skins/main/info.fxd:237
+msgid "Language"
+msgstr "Kieli"
+
+#: share/skins/main/mediaportal.fxd:182 share/skins/main/mediaportal.fxd:286
+#: share/skins/main/mediaportal.fxd:393 share/skins/main/mediaportal.fxd:401
+#: share/skins/main/blurr.fxd:180 share/skins/main/blurr.fxd:284
+#: share/skins/main/blurr.fxd:401 share/skins/main/blurr.fxd:409
+msgid "Items"
+msgstr "kappaletta"
+
+#: share/skins/main/blurr.fxd:311 share/skins/main/info.fxd:347
+#: share/skins/main/info.fxd:534
+msgid "of"
+msgstr "pois"
+
+#: share/skins/main/dark.fxd:495
+#, fuzzy
+msgid "Just one movie in this playlist."
+msgstr "kappaletta tässä soittolistassa"
+
+#: share/skins/main/mediaportal.fxd:440 share/skins/main/blurr.fxd:447
+#: share/skins/main/info.fxd:12
+msgid "Watch TV"
+msgstr "Katsele televisiota"
+
+#: share/skins/main/mediaportal.fxd:196 share/skins/main/dark.fxd:500
+#: share/skins/main/blurr.fxd:194 share/skins/main/info.fxd:427
+#: share/skins/main/info.fxd:550
+msgid "This playlist is empty!"
+msgstr "Tämä soittolista on tyhjä!"
+
+#: share/skins/main/dark.fxd:627
+#, fuzzy
+msgid "This slideshow is empty!"
+msgstr "Tämä soittolista on tyhjä!"
+
+#: share/skins/main/info.fxd:305
+msgid "min."
+msgstr "min."
+
+#: share/skins/main/dark.fxd:617
+#, fuzzy
+msgid "pictures in this slideshow."
+msgstr "kappaletta tässä soittolistassa"
+
+#: share/skins/main/dark.fxd:458 share/skins/main/info.fxd:470
+msgid "Rating"
+msgstr "Arvostelu"
+
+#: share/skins/main/info.fxd:349 share/skins/main/info.fxd:536
+msgid "MB free"
+msgstr "MB vapaana"
+
+#: share/skins/main/mediaportal.fxd:439
+#, fuzzy
+msgid "Read Headlines"
+msgstr "Uutisotsikot"
+
+#: share/skins/main/dark.fxd:568
+#, fuzzy
+msgid "No songs in playlist"
+msgstr "soittolistassa ei seuraavaa kappaletta"
+
+#: share/skins/main/mediaportal.fxd:443 share/skins/main/blurr.fxd:450
+#: share/skins/main/info.fxd:15
+msgid "Look at Pictures"
+msgstr "Katsele kuvia"
+
+#: share/skins/main/mediaportal.fxd:224 share/skins/main/blurr.fxd:222
+msgid "Chapters"
+msgstr "Kappaleet"
+
+# Manualy added from fxd skin files
+#: share/skins/main/basic.fxd:19
+msgid "TV"
+msgstr "TV"
+
+#: share/skins/main/dark.fxd:560
+#, fuzzy
+msgid "songs in playlist"
+msgstr "soittolistassa ei seuraavaa kappaletta"
+
+#: share/skins/main/dark.fxd:721
+#, fuzzy
+msgid "Now playing"
+msgstr "Näytä soitin"
+
+#: share/skins/main/info.fxd:323
+msgid "Size"
+msgstr "Koko"
+
+#: share/skins/main/dark.fxd:652 share/skins/main/dark.fxd:673
+msgid "Subject"
+msgstr ""
+
+#~ msgid "Unable to get frequency for channel %s."
+#~ msgstr "%s-asemalle ei löydy taajuutta."
