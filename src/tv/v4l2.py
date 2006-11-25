@@ -216,6 +216,7 @@ class Videodev:
         self.bus_info     = results[2]
         self.version      = results[3]
         self.capabilities = results[4]
+        self.controls     = {}
     
 
     def getdriver(self):
@@ -453,14 +454,11 @@ class Videodev:
     def querymenu(self, id, index):
         val = struct.pack(QUERYMENU_ST, id, index, "", 0)
         try:
-            #print "querymenu: val=%r, %d" % (val, len(val))
             r = fcntl.ioctl(self.device, i32(QUERYMENU_NO), val)
             res = struct.unpack(QUERYMENU_ST, r)
             if DEBUG >= 3: print "querymenu: val=%r, %d, res=%r" % (val, len(val), res)
-            #print "querymenu: val=%r, %d, res=%r" % (val, len(val), res)
         except IOError, e:
             res = struct.unpack(QUERYMENU_ST, val)
-            #print 'querymenu:', e
         return res
 
 
@@ -469,23 +467,29 @@ class Videodev:
         r = fcntl.ioctl(self.device, i32(QUERYCTRL_NO), val)
         res = struct.unpack(QUERYCTRL_ST, r)
         if DEBUG >= 3: print "queryctrl: val=%r, %d, res=%r" % (val, len(val), res)
-        return res
+        (id, type, name, min, max, step, default, flags, res1, res2) = res
+        name = name.strip('\0')
+        if flags & 0x0001:
+            return (id, type, name, min, max, step, default, flags, 0)
+        if type == V4L2_CTRL_TYPE_CTRL_CLASS:
+            return (id, type, name, min, max, step, default, flags, 0)
+        if _ID2CLASS(id) != V4L2_CTRL_CLASS_USER and id < V4L2_CID_PRIVATE_BASE:
+            value = self.getextctrl(id)
+        else:
+            value = self.getcontrol(id)
+        return (id, type, name, min, max, step, default, flags, value)
 
 
     def printcontrol(self, res):
-        (id, type, name, min, max, step, default, flags, res1, res2) = res
+        (id, type, name, min, max, step, default, flags, value) = res
         if flags & 0x0001:
             return
         if type == V4L2_CTRL_TYPE_CTRL_CLASS:
             print
             print 'id=%08x, type=%s, name=\"%s\"' % (id, V4L2_CTRL_TYPES[type], name)
             return
-        if _ID2CLASS(id) != V4L2_CTRL_CLASS_USER and id < V4L2_CID_PRIVATE_BASE:
-            print 'id=%08x, type=%s, name=\"%s\", min=%d, max=%d, step=%d, default=%d, flags=%04x value=%d' % \
-                (id, V4L2_CTRL_TYPES[type], name, min, max, step, default, flags, self.getextctrl(id))
-        else:
-            print 'id=%08x, type=%s, name=\"%s\", min=%d, max=%d, step=%d, default=%d, flags=%04x value=%d' % \
-                (id, V4L2_CTRL_TYPES[type], name, min, max, step, default, flags, self.getcontrol(id))
+        print 'id=%08x, type=%s, name=\"%s\", min=%d, max=%d, step=%d, default=%d, flags=%04x value=%d' % \
+            (id, V4L2_CTRL_TYPES[type], name, min, max, step, default, flags, value)
         if type == V4L2_CTRL_TYPE_MENU:
             for i in range(min,max+1):
                 (id, index, name, res1) = self.querymenu(id, i)
@@ -512,6 +516,35 @@ class Videodev:
                 self.printcontrol(res)
             except IOError, e:
                 break
+
+
+    def getcontrols(self):
+        self.controls = {}
+        id = V4L2_CTRL_FLAG_NEXT_CTRL
+        while 1:
+            try:
+                res = self.queryctrl(id)
+                (id, type, name, min, max, step, default, flags, value) = res
+                if flags == V4L2_CTRL_FLAG_DISABLED:
+                    id = res[0] | V4L2_CTRL_FLAG_NEXT_CTRL
+                    continue
+                self.controls[name] = res
+                id = res[0] | V4L2_CTRL_FLAG_NEXT_CTRL
+            except IOError, e:
+                break
+        if id != V4L2_CTRL_FLAG_NEXT_CTRL:
+            return self.controls
+
+        id = V4L2_CID_USER_BASE
+        for id in range(V4L2_CID_FIRSTP1, V4L2_CID_LASTP1):
+            try:
+                res = self.queryctrl(id)
+                (id, type, name, min, max, step, default, flags, value) = res
+                if flags & V4L2_CTRL_FLAG_DISABLED:
+                    continue
+            except IOError, e:
+                break
+        return self.controls
 
 
     def init_settings(self):
@@ -582,20 +615,21 @@ class V4LGroup:
 if __name__ == '__main__':
 
     DEBUG = 4
+    DEBUG = 0
     viddev=Videodev('/dev/video0')
-    print viddev.getdriver()
-    print viddev.getversion()
+    print 'Driver = \"%s\"' % viddev.getdriver()
+    print 'Driver Version = %x' % viddev.getversion()
     #print viddev.querycap()
     inp = viddev.getinput()
     viddev.setinput(inp)
-    print viddev.querycap()
+    print 'querycap:', viddev.querycap()
     fmt = viddev.getstd()
-    print fmt
+    print 'fmt:', fmt
     std = viddev.getfmt()
-    print std
+    print 'std:', std
     viddev.setfmt(720, 576)
     std = viddev.getfmt()
-    print std
+    print 'std:', std
     
     print 'QUERYCAP_ST=%s %s' % (QUERYCAP_ST, struct.calcsize(QUERYCAP_ST))
     print 'FREQUENCY_ST=%s %s' % (FREQUENCY_ST, struct.calcsize(FREQUENCY_ST))
@@ -635,6 +669,11 @@ if __name__ == '__main__':
     '''
     DEBUG=0
     viddev.listcontrols()
+    print viddev.getcontrols()
+    viddev.setextctrl(0x009909c9, 2)
+    print viddev.getextctrl(0x009909c9)
+    viddev.setextctrl(0x009909cf, 7000000)
+    print viddev.getextctrl(0x009909cf)
     viddev.close()
 
 '''
