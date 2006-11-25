@@ -335,8 +335,13 @@ for dirname in cfgfilepath:
     if os.path.isfile(freevoconf):
         _debug_('Loading configure settings: %s' % freevoconf)
 
+        commentpat = re.compile('([^#]*)( *#.*)')
         c = open(freevoconf)
         for line in c.readlines():
+            if commentpat.search(line):
+                line = commentpat.search(line).groups()[0]
+            if len(line) == 0:
+                continue
             vals = line.strip().split()
             _debug_('Cfg file data: "%s"' % line.strip(), 2)
             try:
