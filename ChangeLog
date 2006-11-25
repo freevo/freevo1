@@ -31,6 +31,7 @@ The release date is only tentative at the moment. This release has all the chang
  * Updated imdb movie parsing to use BeautifulSoup (F#1590928)
  * Update multimail plug-in for Maildir support (F#1594915)
  * Updated recordserver to allow automatic deleting of old recordings when low on disk space (F#1594630)
+
 == Release 1.6.1 (2006-11-25) ==
 --------------------------------
 
