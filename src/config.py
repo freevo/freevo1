@@ -340,14 +340,15 @@ for dirname in cfgfilepath:
         for line in c.readlines():
             if commentpat.search(line):
                 line = commentpat.search(line).groups()[0]
+            line = line.strip()
             if len(line) == 0:
                 continue
-            vals = line.strip().split()
-            _debug_('Cfg file data: "%s"' % line.strip(), 2)
+            vals = line.split()
+            _debug_('Cfg file data: "%s"' % line, 2)
             try:
                 name, val = vals[0], vals[2]
             except:
-                print 'Error parsing config file data "%s"' % line.strip()
+                print 'Error parsing config file data "%s"' % line
                 continue
             CONF.__dict__[name] = val
 
