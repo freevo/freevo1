@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-02 23:58+0200\n"
+"POT-Creation-Date: 2006-11-26 10:54+0100\n"
 "PO-Revision-Date: 2004-06-03 17:30+0200\n"
 "Last-Translator: eborn <freevo@fambus.nl>\n"
 "Language-Team: Nederlands <none>\n"
@@ -16,343 +16,2326 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: childapp.py:288
-#, python-format
-msgid "logging child to \"%s\""
-msgstr "logging child to \"%s\""
+#: ../freevo_config.py:1031 ../freevo_config.py:1036
+#: www/htdocs/manualrecord.rpy:219 www/htdocs/record.rpy:112
+#: www/htdocs/search.rpy:90 tv/edit_favorite.py:110
+#: share/skins/main/info.fxd:390
+msgid "Title"
+msgstr "Titel"
 
-#: childapp.py:291 audio/plugins/cdbackup.py:266 audio/plugins/cdbackup.py:623
-#: audio/plugins/xine.py:88 audio/plugins/xine.py:107 plugins/lcd.py:110
-#: plugins/lcd.py:731 plugins/lcd.py:933 plugins/lcd.py:944 plugins/lcd.py:955
-#: skins/main/info_area.py:159 tv/channels.py:149 tv/channels.py:186
-#: tv/channels.py:189 tv/record_client.py:133 video/plugins/xine.py:110
-#: video/plugins/xine.py:134 www/htdocs/help/howto.rpy:132
-#: www/htdocs/help/doc.rpy:108 www/htdocs/edit_favorite.rpy:133
-#: www/htdocs/edit_favorite.rpy:157 www/htdocs/edit_favorite.rpy:181
-#: www/htdocs/favorites.rpy:130 www/htdocs/genre.rpy:118
-#: www/htdocs/guide.rpy:201 www/htdocs/library.rpy:257
-#: www/htdocs/library.rpy:267 www/htdocs/library.rpy:269
-#: www/htdocs/manualrecord.rpy:70 www/htdocs/record.rpy:139
-#: www/htdocs/record.rpy:160 www/htdocs/search.rpy:145
+#: ../freevo_config.py:1032 plugins/lcd.py:105 plugins/lcd.py:107
+#: plugins/lcd.py:284
+msgid "Description"
+msgstr "Beschrijving"
+
+#: ../freevo_config.py:1033
+msgid "Author"
+msgstr "Auteur"
+
+#: ../freevo_config.py:1037 plugins/lcd.py:104 share/skins/main/dark.fxd:590
+#: share/skins/main/dark.fxd:664 share/skins/main/dark.fxd:685
+#: share/skins/main/crystal.fxd:269 share/skins/main/bluestar.fxd:289
+#: share/skins/main/noia.fxd:92 share/skins/main/rain.fxd:266
+#: share/skins/main/info.fxd:331
+msgid "Date"
+msgstr "Datum"
+
+#: ../freevo_config.py:1040
+msgid "Model"
+msgstr "Model"
+
+#: ../freevo_config.py:1041
+msgid "Software"
+msgstr "Software"
+
+#: plugins/idlebar/diskfree.py:87
+#, python-format
+msgid "%iGB"
+msgstr ""
+
+#: plugins/idlebar/system.py:105
+#, python-format
+msgid "%iM"
+msgstr "%iM"
+
+#: plugins/idlebar/system.py:130
+#, python-format
+msgid "%s%%"
+msgstr "%s%%"
+
+#: plugins/df.py:61
+#, fuzzy, python-format
+msgid "%i free of %i Gb total (%i%% free)"
+msgstr "%i van de in totaal %i Mb"
+
+#: plugins/df.py:65
+#, fuzzy, python-format
+msgid "%i free of %i Mb total (%i%% free)"
+msgstr "%i van de in totaal %i Mb"
+
+#: plugins/headlines.py:132
+msgid "Show Sites Headlines"
+msgstr "Toon Website koppen"
+
+#: plugins/headlines.py:154
+msgid "Fetching headlines..."
+msgstr "Bezig met koppen binnen te halen..."
+
+#: plugins/headlines.py:218
+msgid "No Headlines found"
+msgstr "Geen koppen gevonden"
+
+#: plugins/headlines.py:220 plugins/headlines.py:233
+#: share/skins/main/dark.fxd:21 share/skins/main/crystal.fxd:14
+#: share/skins/main/bluestar.fxd:14 share/skins/main/rain.fxd:14
+msgid "Headlines"
+msgstr "Koppen"
+
+#: plugins/headlines.py:239 plugins/headlines.py:253
+msgid "Headlines Sites"
+msgstr "Koppen Websites"
+
+#: plugins/headlines.py:251
+msgid "No Headlines Sites found"
+msgstr "Geen koppen sites gevonden"
+
+#: plugins/weather.py:261
+msgid "Unlimited"
+msgstr "Ongelimiteerd"
+
+#: plugins/weather.py:274
+msgid "Show Weather Details"
+msgstr "Toon weer details"
+
+#: plugins/weather.py:352
+#, python-format
+msgid "Fetching Weather for %s..."
+msgstr "Het weer voor %s wordt opgehaald..."
+
+#: plugins/weather.py:516 plugins/weather.py:788
+msgid "at"
+msgstr "op"
+
+#: plugins/weather.py:546
+msgid "Unknown"
+msgstr "Onbekend"
+
+#: plugins/weather.py:630 share/skins/main/bluestar.fxd:12
+msgid "Weather"
+msgstr "Weer"
+
+#: plugins/weather.py:636 plugins/weather.py:671
+msgid "Locations"
+msgstr "Locaties"
+
+#: plugins/weather.py:663
+msgid "No locations specified"
+msgstr "Geen locaties opgegeven"
+
+#: plugins/weather.py:688
+msgid "Current Conditions"
+msgstr "Huidige condities"
+
+#: plugins/weather.py:688
+msgid "Today's Forecast"
+msgstr "Voorspelling voor vandaag"
+
+#: plugins/weather.py:689
+msgid "Extended Forecast"
+msgstr "Vooruitzichten"
+
+#: plugins/weather.py:689
+msgid "Radar Map"
+msgstr "Radarkaart"
+
+#: plugins/weather.py:767
+msgid "Humidity"
+msgstr "Vochtigheid"
+
+#: plugins/weather.py:780
+msgid "Pressure"
+msgstr "Druk"
+
+#: plugins/weather.py:787
+msgid "Wind"
+msgstr "Wind"
+
+#: plugins/weather.py:795
+msgid "Wind Chill"
+msgstr "Gevoelstemp."
+
+#: plugins/weather.py:803
+msgid "Visibility"
+msgstr "Zicht"
+
+#: plugins/weather.py:811
+msgid "UV Index"
+msgstr "UV Index"
+
+#: plugins/weather.py:854
+msgid "Today, a high of"
+msgstr "Vandaag een maximum van"
+
+#: plugins/weather.py:856
+msgid "and a low of"
+msgstr "en een minimum van"
+
+#: plugins/weather.py:859
+msgid "Currently, there is a a humidity of"
+msgstr "Momenteel is de luchtvochtigheid"
+
+#: plugins/weather.py:861
+msgid "and"
+msgstr "en"
+
+#: plugins/weather.py:863
+msgid "the winds are "
+msgstr "de wind heeft "
+
+#: plugins/weather.py:865
+msgid "calm"
+msgstr "kalm"
+
+#: plugins/weather.py:867
+msgid "coming in at"
+msgstr "een kracht van"
+
+#: plugins/weather.py:867
+msgid "from the"
+msgstr "en komt vanuit het"
+
+#: plugins/weather.py:871
+msgid "Visibility will be unlimited today"
+msgstr "Het zicht is vandaag ongelimiteerd"
+
+#: plugins/weather.py:873
+msgid "There will be a visibility of"
+msgstr "Het zicht is"
+
+#: plugins/weather.py:908
+msgid "LO"
+msgstr "MIN"
+
+#: plugins/weather.py:916
+msgid "HI"
+msgstr "MAX"
+
+#: plugins/weather.py:930
+msgid "Error encountered while trying to download Radar map"
+msgstr "Het ophalen van de radarmap is mislukt"
+
+#: plugins/file_ops.py:63 www/htdocs/library.rpy:437
+msgid "Delete"
+msgstr "Verwijder bestand"
+
+#: plugins/file_ops.py:65
+msgid "Delete info"
+msgstr "Wis extra informatie"
+
+#: plugins/file_ops.py:67
+msgid "Delete image"
+msgstr "Afbeelding verwijderen"
+
+#: plugins/file_ops.py:73
+#, python-format
+msgid ""
+"Do you wish to delete\n"
+" '%s'?"
+msgstr ""
+"Weetjeu zeker dat je dit bestand wilt verwijderen:\n"
+" '%s'?"
+
+#: plugins/file_ops.py:75
+msgid "Deleting..."
+msgstr "Bezig met verwijderen..."
+
+#: plugins/file_ops.py:79
+#, python-format
+msgid ""
+"Delete info about\n"
+" '%s'?"
+msgstr ""
+"Weet je zeker dat je de extra informatie wilt wissen:\n"
+" '%s'?"
+
+#: plugins/file_ops.py:84
+#, python-format
+msgid ""
+"Delete image about\n"
+" '%s'?"
+msgstr ""
+"Wis afbeelding over\n"
+" '%s'?"
+
+#: plugins/shoppingcart.py:63
+msgid "Moving files..."
+msgstr "Bezig met verplaatsen van bestanden..."
+
+#: plugins/shoppingcart.py:73
+msgid "Copying files..."
+msgstr "Bezig met kopieren van bestanden."
+
+#: plugins/shoppingcart.py:87
+msgid "Added to Cart"
+msgstr "Toegevoegd aan het karretje"
+
+#: plugins/shoppingcart.py:109
+msgid "Cart: Move Files Here"
+msgstr "Karretje: Verplaats bestanden naar hier"
+
+#: plugins/shoppingcart.py:110
+msgid "Cart: Copy Files Here"
+msgstr "Karretje: Kopier bestanden naar hier"
+
+#: plugins/shoppingcart.py:113
+msgid "Add Directory to Cart"
+msgstr "Voeg folder toe aan het karretje"
+
+#: plugins/shoppingcart.py:117
+msgid "Add File to Cart"
+msgstr "Voeg bestand toe aan het karretje"
+
+#: plugins/shoppingcart.py:120
+msgid "Delete Cart"
+msgstr "Wis  het karretje"
+
+#: plugins/lcd.py:69 plugins/lcd.py:921 plugins/lcd.py:932 plugins/lcd.py:943
+#: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
+#: www/htdocs/manualrecord.rpy:67 www/htdocs/record.rpy:60
+#: www/htdocs/record.rpy:81 www/htdocs/edit_favorite.rpy:53
+#: www/htdocs/edit_favorite.rpy:77 www/htdocs/edit_favorite.rpy:101
+#: www/htdocs/guide.rpy:149 www/htdocs/genre.rpy:90
+#: www/htdocs/favorites.rpy:53 www/htdocs/library.rpy:171
+#: www/htdocs/library.rpy:193 www/htdocs/library.rpy:195
+#: www/htdocs/search.rpy:51 skins/main/info_area.py:132 tv/plugins/xine.py:80
+#: tv/channels.py:133 tv/channels.py:171 tv/channels.py:177
+#: tv/record_client.py:90 audio/plugins/cdbackup.py:189
+#: audio/plugins/cdbackup.py:554 audio/plugins/xine.py:54
+#: audio/plugins/xine.py:73 video/plugins/xine.py:62 childapp.py:277
 msgid "ERROR"
 msgstr "FOUT"
 
-#: childapp.py:292
+#: plugins/lcd.py:69
+msgid "You need pylcd to run \"lcd\" plugin."
+msgstr "Voor de \"lcd\" plugin is pylcd benodigd"
+
+#: plugins/lcd.py:88 plugins/lcd.py:96 share/skins/main/mediaportal.fxd:690
+#: share/skins/main/dark.fxd:536 share/skins/main/dark.fxd:753
+#: share/skins/main/basic.fxd:391 share/skins/main/blurr.fxd:700
+#: share/skins/main/info.fxd:218
+msgid "Length"
+msgstr "Speelduur"
+
+#: plugins/lcd.py:89 plugins/lcd.py:93 plugins/lcd.py:204
+#: share/skins/main/dark.fxd:520 share/skins/main/dark.fxd:733
+#: share/skins/main/info.fxd:201 share/skins/main/info.fxd:356
+#: share/skins/main/info.fxd:396
+msgid "Artist"
+msgstr "Artiest"
+
+#: plugins/lcd.py:90 plugins/lcd.py:94 plugins/lcd.py:201
+#: share/skins/main/mediaportal.fxd:671 share/skins/main/dark.fxd:526
+#: share/skins/main/dark.fxd:738 share/skins/main/basic.fxd:373
+#: share/skins/main/blurr.fxd:677 share/skins/main/info.fxd:207
+#: share/skins/main/info.fxd:361
+msgid "Album"
+msgstr "Album"
+
+#: plugins/lcd.py:91 plugins/lcd.py:95 share/skins/main/mediaportal.fxd:677
+#: share/skins/main/dark.fxd:446 share/skins/main/blurr.fxd:683
+#: share/skins/main/info.fxd:458
+msgid "Year"
+msgstr "Jaar"
+
+#: plugins/lcd.py:92 share/skins/main/mediaportal.fxd:330
+#: share/skins/main/blurr.fxd:338 share/skins/main/info.fxd:401
+msgid "Tracks"
+msgstr "Nummer"
+
+#: plugins/lcd.py:97 share/skins/main/dark.fxd:476
+#: share/skins/main/info.fxd:287 share/skins/main/info.fxd:493
+msgid "Resolution"
+msgstr "Resolutie"
+
+#: plugins/lcd.py:98
+msgid "Aspect"
+msgstr "Beeldverhouding"
+
+#: plugins/lcd.py:99 plugins/lcd.py:102 plugins/lcd.py:239
+msgid "Tagline"
+msgstr "Onderschrift"
+
+#: plugins/lcd.py:100 plugins/lcd.py:101
+msgid "Plot"
+msgstr "Plot"
+
+#: plugins/lcd.py:103 share/skins/main/dark.fxd:581
+msgid "Geometry"
+msgstr "Verhouding"
+
+#: plugins/lcd.py:106
 #, python-format
-msgid "Cannot open \"%s\" for logging!"
-msgstr "Kan \"%s\" niet openen voor logging!"
+msgid "%s items"
+msgstr "%s items"
 
-#: childapp.py:293
-msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, "
-msgstr "Zet CHILDAPP_DEBUG=0 in local_conf.py."
-
-#: childapp.py:294
+#: plugins/lcd.py:161 plugins/lcd.py:309
 #, python-format
-msgid "or make %s writable!"
-msgstr "of maak %s beschrijfbaar!"
+msgid "Today is %s."
+msgstr "Vandaag is het %s."
 
-#: directory.py:71
-msgid "Directory Sort By Date"
-msgstr "Sorteer folders op datum"
+#: plugins/lcd.py:171 plugins/lcd.py:533
+msgid "Menu"
+msgstr "Menu"
 
-#: directory.py:72
-msgid "Sort directory by date and not by name."
-msgstr "Sorteer folders op datum en niet op naam"
+#: plugins/lcd.py:174 plugins/lcd.py:536
+msgid "Item"
+msgstr "Item"
 
-#: directory.py:74
-msgid "Directory Autoplay Single Item"
-msgstr "Speel folders met 1 item automatisch"
+#: plugins/lcd.py:177 share/skins/main/dark.fxd:470
+#: share/skins/main/info.fxd:282 share/skins/main/info.fxd:487
+msgid "Type"
+msgstr "Type"
 
-#: directory.py:75
-msgid "Don't show directory if only one item exists and auto-select the item."
-msgstr "Toon folders met 1 item niet en speel dat ene item af."
+#: plugins/lcd.py:180
+msgid "Information"
+msgstr "Opname informatie"
 
-#: directory.py:78
-msgid "Force Skin Layout"
-msgstr "Dwing een bepaalde skin layout af"
+#: plugins/lcd.py:198 plugins/lcd.py:548 www/htdocs/library.rpy:252
+#: share/skins/main/dark.fxd:18 share/skins/main/crystal.fxd:9
+#: share/skins/main/bluestar.fxd:9 share/skins/main/basic.fxd:21
+#: share/skins/main/rain.fxd:9
+msgid "Music"
+msgstr "Muziek"
 
-#: directory.py:79
+#: plugins/lcd.py:236 plugins/lcd.py:575
+msgid "Video"
+msgstr "Video"
+
+#: plugins/lcd.py:242 share/skins/main/dark.fxd:452
+#: share/skins/main/info.fxd:464
+msgid "Genre"
+msgstr "Genre"
+
+#: plugins/lcd.py:275 plugins/lcd.py:603 www/htdocs/manualrecord.rpy:216
+#: www/htdocs/record.rpy:111 www/htdocs/edit_favorite.rpy:128
+#: www/htdocs/favorites.rpy:100 www/htdocs/search.rpy:89
+#: tv/edit_favorite.py:112 share/skins/main/basic.fxd:552
+#: share/skins/main/basic.fxd:583 share/skins/main/basic.fxd:614
+msgid "Channel"
+msgstr "Kanaal"
+
+#: plugins/lcd.py:278 plugins/lcd.py:606 www/htdocs/edit_favorite.rpy:127
+#: www/htdocs/favorites.rpy:99 share/skins/main/basic.fxd:608
+msgid "Program"
+msgstr "Programma"
+
+#: plugins/lcd.py:281 www/htdocs/guide.rpy:156
+#: share/skins/main/crystal.fxd:272 share/skins/main/bluestar.fxd:292
+#: share/skins/main/basic.fxd:595 share/skins/main/noia.fxd:95
+#: share/skins/main/rain.fxd:269
+msgid "Time"
+msgstr "Tijd"
+
+#: plugins/lcd.py:692
 msgid ""
-"Force skin to a specific layout. This option doesn't work with all skins and "
-"the result may differ based on the skin."
+"LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
 msgstr ""
-"Dwing een bepaalde skin layout af. Deze optie werkt niet voor alle skins en "
-"het resultaat kan van skin tot skin varieren."
+"LCD plugin kan niet worden gestart! Misschien heb je LCDd (lcdproc daemon) "
+"niet draaien?"
 
-#: directory.py:82
-msgid "Directory Smart Sort"
-msgstr "Folder slim sorteren"
-
-#: directory.py:83
-msgid "Use a smarter way to sort the items."
-msgstr "Gebruik een intelligentere manier om items te sorteren."
-
-#: directory.py:85
-msgid "Use MediaID Tag Names"
-msgstr "Gebruik MediaID Tag namen"
-
-#: directory.py:86
-msgid "Use the names from the media files tags as display name."
-msgstr "Gebruik de namen van de media file tags op het scherm."
-
-#: directory.py:88
-msgid "Directory Reverse Sort"
-msgstr "Folder omgekeerd sorteren"
-
-#: directory.py:89
-msgid "Show the items in the list in reverse order."
-msgstr "Toon de items in de lijst in omgekeerde volgorde."
-
-#: directory.py:93
-msgid "Directory Create Playlist"
-msgstr "Folder Maak afspeellijst"
-
-#: directory.py:94
-msgid ""
-"Handle the directory as playlist. After one file is played, the next one "
-"will be started."
-msgstr ""
-"Behandel deze folder als een afspeellijst. Als een bestand is afgespeeld zal "
-"automatisch het volgende bestand starten."
-
-#: directory.py:97
-msgid "Directory Add Playlist Files"
-msgstr "Folder Voeg afspeelijst toe"
-
-#: directory.py:98
-msgid "Add playlist files to the list of items"
-msgstr "Voeg afspeellijsten toe aan de elementenlijst"
-
-#: directory.py:100
-msgid "Directory Add Random Playlist"
-msgstr "Folder Voeg willekeurige afspeellijst toe"
-
-#: directory.py:101
-msgid "Add an item for a random playlist"
-msgstr "Voeg een element toe voor een willekeurige afspeellijst"
-
-#: directory.py:103
-msgid "Directory Autoplay Items"
-msgstr "Folder Items automatisch afspelen"
-
-#: directory.py:104
-msgid ""
-"Autoplay the whole directory (as playlist) when it contains only files and "
-"no directories"
-msgstr ""
-"Automatisch de volledige folder (als een afspeellijst) afspelen indien de "
-"folder in kwestie slechts 1 bestand een geen subfolders bevat"
-
-#: directory.py:296
+#: plugins/lcd.py:697
 #, python-format
-msgid "Directory on disc [%s]"
-msgstr "Folder op schijf [%s]"
+msgid "Connecting to LCD: %s"
+msgstr "Connecteren met LCD: %s"
 
-#: directory.py:297
-msgid "Directory"
-msgstr "Folder"
+#: plugins/lcd.py:698
+#, fuzzy
+msgid "Info as known by the LCD module:"
+msgstr "Info van de LCD module:"
 
-#: directory.py:426 image/plugins/gphoto.py:142
+#: plugins/lcd.py:918 plugins/lcd.py:929 plugins/lcd.py:942
+#: audio/plugins/cdbackup.py:481 audio/plugins/coversearch.py:152
+#: audio/plugins/coversearch.py:161 audio/plugins/coversearch.py:170
+msgid "WARNING"
+msgstr "WAARSCHUWING"
+
+#: plugins/lcd.py:918
+#, python-format
+msgid "Could not find screens for %d lines LCD!"
+msgstr "Geen schermen gevonden voor %d lijnen LCD!"
+
+#: plugins/lcd.py:921 plugins/lcd.py:932 plugins/lcd.py:943
+#, python-format
+msgid "No screens found for this LCD (%dx%d)!"
+msgstr "Geen schermen gevonden voor deze LCD (%dx%d)!"
+
+#: plugins/lcd.py:929 plugins/lcd.py:942
+#, python-format
+msgid "Could not find screens for %d lines and %d columns LCD!"
+msgstr "Geen schermen gevonden voor %d lijnen en %d colommen LCD!"
+
+#: plugins/mediamenu.py:123
+msgid "Media"
+msgstr "Media"
+
+#: plugins/mediamenu.py:128
+msgid "Movie"
+msgstr "Film"
+
+#: plugins/mediamenu.py:130
+msgid "Audio"
+msgstr "Muziek"
+
+#: plugins/mediamenu.py:132
+msgid "Image"
+msgstr "Afbeelding"
+
+#: plugins/mediamenu.py:134 share/skins/main/dark.fxd:20
+#: share/skins/main/crystal.fxd:13 share/skins/main/bluestar.fxd:13
+#: share/skins/main/basic.fxd:23 share/skins/main/rain.fxd:13
+#: share/skins/main/info.fxd:16
+msgid "Games"
+msgstr "Spelletjes"
+
+#: plugins/mediamenu.py:136
+#, python-format
+msgid "%s Main Menu"
+msgstr "%s Hoofdmenu"
+
+#: plugins/autoshutdown.py:144
+#, fuzzy
+msgid "A recording is in progress."
+msgstr "De opnameserver is niet beschikbaar."
+
+#: plugins/autoshutdown.py:147
+#, python-format
+msgid "Would wakeup again within %d minutes."
+msgstr ""
+
+#: plugins/autoshutdown.py:151
+msgid "There are important processes running."
+msgstr ""
+
+#: plugins/autoshutdown.py:157
+#, fuzzy
+msgid "No wakeup scheduled."
+msgstr "Geen ingeplande opnames."
+
+#: plugins/autoshutdown.py:161
+msgid "The next wakeup is scheduled at"
+msgstr ""
+
+#: plugins/autoshutdown.py:172 plugins/autoshutdown.py:256
+msgid "Resume automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:174 plugins/autoshutdown.py:253
+msgid "Pause automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:176
+msgid "Shutdown and wakeup"
+msgstr ""
+
+#: plugins/autoshutdown.py:178 plugins/shutdown.py:135 plugins/shutdown.py:139
+msgid "Restart system"
+msgstr "Systeem herstarten"
+
+#: plugins/autoshutdown.py:179 plugins/shutdown.py:134 plugins/shutdown.py:138
+msgid "Shutdown system"
+msgstr "Systeem afsluiten"
+
+#: plugins/autoshutdown.py:180
+#, fuzzy
+msgid "Shutdown freevo"
+msgstr "Freevo afsluiten"
+
+#: plugins/autoshutdown.py:190 plugins/autoshutdown.py:218
+msgid "SHUTDOWN SYSTEM?"
+msgstr ""
+
+#: plugins/autoshutdown.py:204
+msgid "RESTART SYSTEM?"
+msgstr ""
+
+#: plugins/autoshutdown.py:210 plugins/autoshutdown.py:224
+#: plugins/autoshutdown.py:238
+msgid "(wakeup disabled)"
+msgstr ""
+
+#: plugins/autoshutdown.py:232
+msgid "SHUTDOWN FREEVO?"
+msgstr ""
+
+#: plugins/autoshutdown.py:589 plugins/shutdown.py:63 main.py:321
+msgid "shutting down..."
+msgstr "Bezig met afsluiten..."
+
+#: plugins/ossmixer.py:114 plugins/ossmixer.py:117 plugins/ossmixer.py:123
+#: plugins/ossmixer.py:126 plugins/ossmixer.py:131 plugins/mixer.py:119
+#: plugins/mixer.py:122 plugins/mixer.py:128 plugins/mixer.py:131
+#: plugins/mixer.py:136
+#, python-format
+msgid "Volume: %s%%"
+msgstr "Volume: %s%%"
+
+#: plugins/ossmixer.py:134 plugins/mixer.py:139
+msgid "Mute"
+msgstr "Stil"
+
+#: plugins/rom_drives.py:225
+#, python-format
+msgid "Drive %s (no disc)"
+msgstr "Station %s (geen schijf)"
+
+#: plugins/rom_drives.py:291
+#, python-format
+msgid "Ejecting disc in drive %s"
+msgstr "Schijf in %s wordt uitgeworpen "
+
+#: plugins/rom_drives.py:324
+#, python-format
+msgid "Reading disc in drive %s"
+msgstr "Bezig met de schijf in lezer %s te analyseren"
+
+#: plugins/icecast.py:157
+msgid "Set as icecast playlist"
+msgstr "Instellen als icecast afspeellijst"
+
+#: plugins/shutdown.py:133 plugins/shutdown.py:137
+msgid "Shutdown Freevo"
+msgstr "Freevo afsluiten"
+
+#: plugins/shutdown.py:151
+msgid "Do you really want to shut down Freevo?"
+msgstr "Weet je zeker dat je Freevo wilt afsluiten?"
+
+#: plugins/shutdown.py:160
+msgid "Do you really want to shut down the system?"
+msgstr "Weet je zeker dat je de machine wilt afsluiten?"
+
+#: plugins/shutdown.py:168
+msgid "Do you really want to restart the system?"
+msgstr "Weet je zeker dat je de machine wilt herstarten?"
+
+#: plugins/yac.py:70
+#, python-format
+msgid "Call: %s"
+msgstr "Bel: %s"
+
+#: plugins/yac.py:72
+#, python-format
+msgid "Message: %s"
+msgstr "Boodschap: %s"
+
+#: plugins/command.py:139
+msgid "Command finished"
+msgstr "Commando afgerond"
+
+#: plugins/command.py:153 gui/ConfirmBox.py:71 gui/AlertBox.py:62
+msgid "OK"
+msgstr "OK"
+
+#: plugins/command.py:155
+msgid "Show Stderr"
+msgstr "Toon Stderr"
+
+#: plugins/command.py:157
+msgid "Show Stdout"
+msgstr "Toon Stdout"
+
+#: plugins/command.py:175
+msgid "Stdout File"
+msgstr "Stdout bestand"
+
+#: plugins/command.py:179
+msgid "Stderr File"
+msgstr "Stderr bestand"
+
+#: plugins/command.py:216
+msgid "Run Command"
+msgstr "Commando uitvoeren"
+
+#: plugins/command.py:227
+msgid "Running Command..."
+msgstr "Bezig met commando te starten..."
+
+#: plugins/command.py:247
+msgid "Command Failed"
+msgstr "Commando mislukt"
+
+#: plugins/command.py:249
+msgid "Command Completed"
+msgstr "Commando Volbracht"
+
+#: plugins/command.py:282 plugins/command.py:320 share/skins/main/dark.fxd:22
+#: share/skins/main/crystal.fxd:15 share/skins/main/rain.fxd:15
+msgid "Commands"
+msgstr "Commandos"
+
+#: plugins/upsoon.py:222 plugins/upsoon.py:241
+msgid "A recording will start in less than a minute"
+msgstr ""
+
+#: image/plugins/gphoto.py:99 image/imageitem.py:98
+msgid "View Image"
+msgstr "Afbeelding tonen"
+
+#: image/plugins/gphoto.py:126 directory.py:413
 msgid "Browse directory"
 msgstr "Verken deze folder"
 
-#: directory.py:429
-msgid "Play all files in directory"
-msgstr "Alle bestanden in deze folder afspelen"
+#: image/plugins/apod.py:50 image/plugins/apod.py:51
+msgid "APOD"
+msgstr "APOD"
 
-#: directory.py:435 playlist.py:308
-msgid "Random play all items"
-msgstr "Speel alle bestanden af in willekeurige volgorde"
+#: image/plugins/apod.py:61
+msgid "Current Picture"
+msgstr "Huidige afbeelding"
 
-#: directory.py:437
-msgid "Recursive random play all items"
-msgstr "Speel alle bestanden non-stop af in willekeurige volgorde"
+#: image/plugins/apod.py:62
+msgid "Previous Pictures"
+msgstr "Vorige afbeelding"
 
-#: directory.py:438
-msgid "Recursive play all items"
-msgstr "Speel alle bestanden af non-stop"
+#: image/plugins/apod.py:63 image/plugins/apod.py:78
+msgid "Apod Pictures"
+msgstr "Apod afbeeldingen"
 
-#: directory.py:440
-msgid "Configure directory"
-msgstr "Configureer deze folder"
+#: image/plugins/apod.py:76
+msgid "No Images found"
+msgstr "Geen afbeeldingen gevonden"
 
-#: directory.py:507
-msgid "Enter Password"
-msgstr "Voer uw wachtwoord in"
+#: image/plugins/apod.py:96 image/plugins/apod.py:109
+msgid "Unable to open URL"
+msgstr ""
 
-#: directory.py:532
-msgid "Password incorrect"
-msgstr "Wachtwoord onjuist"
+#: image/plugins/apod.py:123
+msgid "Need a directory to store APOD pictures."
+msgstr "Een folder is vereist om APOD afbeeldingen op te slaan."
 
-#: directory.py:592
-msgid "Scanning disc, be patient..."
-msgstr "De schijf wordt geanalyseerd, een ogenblik geduld..."
+#: image/plugins/apod.py:127
+#, python-format
+msgid "directory %s does not exist."
+msgstr "Folder %s bestaat niet."
 
-#: directory.py:594
-msgid "Scanning directory, be patient..."
-msgstr "De folder wordt geanalyseerd, een ogenblik geduld..."
+#: image/plugins/apod.py:131
+#, python-format
+msgid ""
+"directory %s must be able to be read, written to and executed by the user "
+"running freevo."
+msgstr ""
 
-#: directory.py:694 audio/audiodiskitem.py:138
+#: image/viewer.py:121
+#, python-format
+msgid ""
+"Can't Open Image\n"
+"'%s'"
+msgstr ""
+"De afbeelding kan niet geladen worden: \n"
+"'%s'"
+
+#: image/viewer.py:328
+msgid "pause"
+msgstr "pauzeren"
+
+#: image/viewer.py:333
+msgid "play"
+msgstr "afspelen"
+
+#: image/viewer.py:426
+msgid "No information available"
+msgstr "Geen informatie beschikbaar"
+
+#: gui/ConfirmBox.py:75 tv/edit_favorite.py:188
+msgid "CANCEL"
+msgstr "Annuleren"
+
+#: www/htdocs/help/index.rpy:38
+msgid "Freevo Help"
+msgstr "Freevo Help"
+
+#: www/htdocs/help/index.rpy:41
+msgid ""
+"This is the internal Freevo documentation. The documents         are in an "
+"early stage of development, if you like to help, please         contact the "
+"developers. You find more informations like         the <a href=\"http://"
+"freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online "
+"manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org"
+"\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
+"them if someone deletes         informations), feel free to add informations "
+"there."
+msgstr ""
+"Dit is de interne Freevo documentatie. Deze documenten zijn ver van "
+"afgewerkt, maar als u wilt helpen kan u best de ontwerpers van Freevo "
+"contacteren. U kan nog meer informatie vindenin de <a href=\"http://freevo."
+"sourceforge.net/cgi-bin/moin.cgi/FrontPage\">Freevo Wiki (online)</a> en op "
+"de Freevo mail lijsten alsook op de <a href=\"http://www.freevo.org\">Freevo "
+"homepagina</a>. Als u wat extra informatie hebt of een tip hebt die andere "
+"Freevo gebruikers ook handig zouden kunnen vinden kan u deze gerust "
+"toevoegen aan de Freevo Wiki (iedereen kan er, vrij, zonder login, "
+"informatie aanpassen)."
+
+#: www/htdocs/help/index.rpy:50
+msgid "Index"
+msgstr "Index"
+
+#: www/htdocs/help/index.rpy:52
+msgid "Freevo Installation Howto"
+msgstr "Freevo Installatie Howto"
+
+#: www/htdocs/help/index.rpy:53
+msgid "Frequently Asked Questions"
+msgstr "Veelgestelde vragen"
+
+#: www/htdocs/help/index.rpy:54
+msgid "Recording Information"
+msgstr "Opname Informatie"
+
+#: www/htdocs/help/index.rpy:55
+msgid "Plugin List"
+msgstr "Plugin Lijst"
+
+#: www/htdocs/help/index.rpy:56
+msgid "FXD files"
+msgstr "FXD bestanden"
+
+#: www/htdocs/help/index.rpy:57
+msgid "Skinning Informations"
+msgstr "Uiterlijk informatie"
+
+#: www/htdocs/help/index.rpy:58
+msgid "Plugin Writing Howto"
+msgstr "Plugin Writing Howto"
+
+#: www/htdocs/help/howto.rpy:45 www/htdocs/help/howto.rpy:46
+msgid "Freevo Installation HOWTO"
+msgstr "Freevo Installatie HOWTO"
+
+#: www/htdocs/help/howto.rpy:46
+msgid "Build your own media box with Freevo and Linux"
+msgstr "Maak uw eigen multimedia computer met Freevo en Linux"
+
+#: www/htdocs/help/howto.rpy:48 www/htdocs/help/howto.rpy:49
+msgid "Freevo Plugin Writing HOWTO"
+msgstr "Freevo Plugin Writing HOWTO"
+
+#: www/htdocs/help/howto.rpy:49
+msgid "Writing your own plugins for Freevo"
+msgstr "Je eigen plugins schrijven met Freevo"
+
+#: www/htdocs/help/howto.rpy:84
+msgid "unable to load html files"
+msgstr "niet mogelijk om de html bestanden te laden"
+
+#: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
+msgid "If you use a CVS version of Freevo, run <b>autogen.sh</b>."
+msgstr "Als u een CVS versie van Freevo gebruikt, start dan <b>autogen.sh</b>."
+
+#: www/htdocs/help/howto.rpy:86
+msgid "The files are searched in the following locations:"
+msgstr "De bestanden worden gezocht in de volgende locaties:"
+
+#: www/htdocs/help/plugins.rpy:60 www/htdocs/help/plugins.rpy:79
+msgid "Freevo Plugin List"
+msgstr "Freevo Plugin Lijst"
+
+#: www/htdocs/help/plugins.rpy:89 www/htdocs/help/plugins.rpy:96
+msgid "top"
+msgstr "top"
+
+#: www/htdocs/help/plugins.rpy:90 www/htdocs/help/plugins.rpy:97
+msgid "index"
+msgstr "index"
+
+#: www/htdocs/help/doc.rpy:59 www/htdocs/help/doc.rpy:70
+msgid "Freevo Documentation"
+msgstr "Freevo Documentatie"
+
+#: www/htdocs/help/doc.rpy:61
+#, python-format
+msgid "unable to load %s.html"
+msgstr "%s kan niet worden geladen"
+
+#: www/htdocs/manualrecord.rpy:65 www/htdocs/manualrecord.rpy:199
+#: tv/plugins/manual_record.py:63
+msgid "Manual Record"
+msgstr "Handmatige opname"
+
+#: www/htdocs/manualrecord.rpy:67 www/htdocs/record.rpy:60
+#: www/htdocs/edit_favorite.rpy:53 www/htdocs/guide.rpy:149
+#: www/htdocs/genre.rpy:90 www/htdocs/favorites.rpy:53
+#: tv/plugins/scheduled_recordings.py:91 tv/plugins/view_favorites.py:90
+#: tv/program_search.py:82
+msgid "Recording server is unavailable."
+msgstr "De opnameserver is niet beschikbaar"
+
+#: www/htdocs/manualrecord.rpy:114
+msgid "Manual Recorded"
+msgstr "Handmatig opnemen"
+
+#: www/htdocs/manualrecord.rpy:123 tv/plugins/manual_record.py:360
+msgid "start time is not before stop time."
+msgstr "startijd ligt niet voor de stoptijd"
+
+#: www/htdocs/manualrecord.rpy:126 tv/plugins/manual_record.py:351
+#, python-format
+msgid "Program would record for more than %d days!"
+msgstr "Deze programmeren beslaat %d dagen!"
+
+#: www/htdocs/manualrecord.rpy:128 tv/plugins/manual_record.py:355
+msgid "Program would record for more than 1 day!"
+msgstr "Dit programma beslaat meer dan 1 dag!"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Jan"
+msgstr "jan"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Feb"
+msgstr "feb"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Mar"
+msgstr "maa"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Apr"
+msgstr "apr"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "May"
+msgstr "mei"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Jun"
+msgstr "jun"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Jul"
+msgstr "jul"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Aug"
+msgstr "aug"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Sep"
+msgstr "sep"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Oct"
+msgstr "okt"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Nov"
+msgstr "nov"
+
+#: www/htdocs/manualrecord.rpy:142 tv/plugins/manual_record.py:73
+msgid "Dec"
+msgstr "dec"
+
+#: www/htdocs/manualrecord.rpy:199 www/web_types.py:119
+msgid "Manual Recording"
+msgstr "Handmatig opnemen"
+
+#: www/htdocs/manualrecord.rpy:205
+msgid "Error Message"
+msgstr "Foutmelding"
+
+#: www/htdocs/manualrecord.rpy:217 www/htdocs/record.rpy:109
+#: www/htdocs/search.rpy:87
+msgid "Start Time"
+msgstr "Starttijd"
+
+#: www/htdocs/manualrecord.rpy:218 www/htdocs/record.rpy:110
+#: www/htdocs/search.rpy:88
+msgid "Stop Time"
+msgstr "Stoptijd"
+
+#: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:114
+#: www/htdocs/search.rpy:92
+msgid "Program Description"
+msgstr "Programmabeschrijving: "
+
+#: www/htdocs/manualrecord.rpy:231
+msgid "Add to Recording Schedule"
+msgstr "Toon opnamerooster"
+
+#: www/htdocs/index.rpy:46
+msgid "Welcome"
+msgstr "Welkom"
+
+#: www/htdocs/index.rpy:46 www/web_types.py:114
+msgid "Home"
+msgstr "Hoofdpagina"
+
+#: www/htdocs/index.rpy:49
+#, python-format
+msgid "Freevo Web Status as of %s"
+msgstr "Freevo Web Status op %s"
+
+#: www/htdocs/index.rpy:54 www/htdocs/index.rpy:60 www/htdocs/index.rpy:62
+msgid "Notice"
+msgstr "Melding"
+
+#: www/htdocs/index.rpy:54
+msgid "The recording server is down."
+msgstr "De opnameserver is niet beschikbaar."
+
+#: www/htdocs/index.rpy:56
+msgid "The recording server is up and running."
+msgstr "The opnameserver werkt en is bereikbaar."
+
+#: www/htdocs/index.rpy:60
+msgid "Your listings expire in 1 hour."
+msgstr "De programmagids vervalt binnen 1 uur."
+
+#: www/htdocs/index.rpy:62
+#, python-format
+msgid "Your listings expire in %s hours."
+msgstr "De programmagids vervalt binnen %s uur."
+
+#: www/htdocs/index.rpy:64
+msgid "Your listings are up to date."
+msgstr "De programmagids is up-to-date."
+
+#: www/htdocs/index.rpy:74
+#, python-format
+msgid "Now Recording %s."
+msgstr "%s wordt nu opgenomen."
+
+#: www/htdocs/index.rpy:80
+msgid "One program scheduled to record."
+msgstr "Er is 1 programma geregistreerd voor opname."
+
+#: www/htdocs/index.rpy:82
+#, python-format
+msgid "%i programs scheduled to record."
+msgstr "Er zijn %i programma's geregistreerd voor opname."
+
+#: www/htdocs/index.rpy:84 www/htdocs/index.rpy:86
+msgid "No programs scheduled to record."
+msgstr "Geen programma's geregistreerd voor opname."
+
+#: www/htdocs/index.rpy:88
+#, python-format
+msgid "%i of %i Mb free in %s"
+msgstr "%i van %i Mb beschikbaar in %s"
+
+#: www/htdocs/proginfo.rpy:60 www/htdocs/record.rpy:151
+#: www/htdocs/search.rpy:130
+#, python-format
+msgid "Sorry, the program description for %s is unavailable."
+msgstr "Sorry, de programmabeschrijving voor %s is niet beschikbaar."
+
+#: www/htdocs/record.rpy:82 www/htdocs/edit_favorite.rpy:78
+#, python-format
+msgid "No program found on %s at %s."
+msgstr "Geen programma gevonden op %s om %s."
+
+#: www/htdocs/record.rpy:103 www/web_types.py:116
+#: tv/plugins/scheduled_recordings.py:45 tv/plugins/scheduled_recordings.py:59
+msgid "Scheduled Recordings"
+msgstr "Ingeplande opnames"
+
+#: www/htdocs/record.rpy:113 www/htdocs/search.rpy:91
+#: share/skins/main/info.fxd:263
+msgid "Episode"
+msgstr "Aflevering"
+
+#: www/htdocs/record.rpy:115 www/htdocs/favorites.rpy:103
+#: www/htdocs/search.rpy:93
+msgid "Actions"
+msgstr "Acties"
+
+#: www/htdocs/record.rpy:139
+msgid "UNKNOWN"
+msgstr "ONBEKEND"
+
+#: www/htdocs/record.rpy:156 www/htdocs/favorites.rpy:137
+#: www/htdocs/search.rpy:136 tv/edit_favorite.py:184
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: www/htdocs/edit_favorite.rpy:51 www/htdocs/edit_favorite.rpy:112
+#: tv/edit_favorite.py:90
+msgid "Edit Favorite"
+msgstr "Favorieten bewerken"
+
+#: www/htdocs/edit_favorite.rpy:102
+#, python-format
+msgid "Favorite %s doesn't exists."
+msgstr "Favoriet %s bestaat niet."
+
+#: www/htdocs/edit_favorite.rpy:126
+msgid "Name of favorite"
+msgstr "Naam van de favoriet"
+
+#: www/htdocs/edit_favorite.rpy:129 www/htdocs/favorites.rpy:101
+msgid "Day of week"
+msgstr "Dag van de week"
+
+#: www/htdocs/edit_favorite.rpy:130 www/htdocs/favorites.rpy:102
+msgid "Time of day"
+msgstr "Tijd van de dag"
+
+#: www/htdocs/edit_favorite.rpy:131
+msgid "Action"
+msgstr "Actie"
+
+#: www/htdocs/edit_favorite.rpy:146 tv/program_display.py:220
+msgid "ANY CHANNEL"
+msgstr "ALLE KANALEN"
+
+#: www/htdocs/edit_favorite.rpy:159 tv/program_display.py:224
+#: tv/edit_favorite.py:139
+msgid "ANY DAY"
+msgstr "Alle dagen"
+
+#: www/htdocs/edit_favorite.rpy:160 tv/program_display.py:217
+#: tv/edit_favorite.py:143
+msgid "Mon"
+msgstr "ma"
+
+#: www/htdocs/edit_favorite.rpy:161 tv/program_display.py:217
+#: tv/edit_favorite.py:143
+msgid "Tue"
+msgstr "di"
+
+#: www/htdocs/edit_favorite.rpy:162 tv/program_display.py:217
+#: tv/edit_favorite.py:143
+msgid "Wed"
+msgstr "wo"
+
+#: www/htdocs/edit_favorite.rpy:163 tv/program_display.py:217
+#: tv/edit_favorite.py:143
+msgid "Thu"
+msgstr "do"
+
+#: www/htdocs/edit_favorite.rpy:164 tv/program_display.py:217
+#: tv/edit_favorite.py:143
+msgid "Fri"
+msgstr "vr"
+
+#: www/htdocs/edit_favorite.rpy:165 tv/program_display.py:217
+#: tv/edit_favorite.py:143
+msgid "Sat"
+msgstr "za"
+
+#: www/htdocs/edit_favorite.rpy:166 tv/program_display.py:217
+#: tv/edit_favorite.py:143
+msgid "Sun"
+msgstr "zo"
+
+#: www/htdocs/edit_favorite.rpy:172 tv/program_display.py:228
+#: tv/edit_favorite.py:159
+msgid "ANY TIME"
+msgstr "ALTIJD"
+
+#: www/htdocs/edit_favorite.rpy:234 tv/plugins/manual_record.py:127
+#: tv/edit_favorite.py:181
+msgid "Save"
+msgstr "Opslaan"
+
+#: www/htdocs/guide.rpy:144 www/web_types.py:115 tv/tvmenu.py:106
+msgid "TV Guide"
+msgstr "TV gids"
+
+#: www/htdocs/guide.rpy:156
+msgid "View"
+msgstr "Beeld"
+
+#: www/htdocs/guide.rpy:159 www/htdocs/genre.rpy:116
+msgid "Show"
+msgstr "Tonen"
+
+#: www/htdocs/guide.rpy:159 www/htdocs/genre.rpy:116
+msgid "Category"
+msgstr "Categorie"
+
+#: www/htdocs/guide.rpy:159 www/htdocs/genre.rpy:116
+msgid "Change"
+msgstr "Verander"
+
+#: www/htdocs/guide.rpy:199 skins/main/tvlisting_area.py:337 tv/tvguide.py:56
+msgid "This channel has no data loaded"
+msgstr "Geen gegevens over dit kanaal beschikbaar"
+
+#: www/htdocs/guide.rpy:271 www/htdocs/genre.rpy:197
+#: share/skins/main/basic.fxd:558 share/skins/main/basic.fxd:620
+msgid "Start"
+msgstr "Start"
+
+#: www/htdocs/guide.rpy:272 www/htdocs/genre.rpy:198
+#: share/skins/main/basic.fxd:564 share/skins/main/basic.fxd:626
+msgid "Stop"
+msgstr "Stop"
+
+#: www/htdocs/guide.rpy:273 www/htdocs/genre.rpy:199
+#: share/skins/main/dark.fxd:464 share/skins/main/info.fxd:277
+#: share/skins/main/info.fxd:302 share/skins/main/info.fxd:481
+msgid "Runtime"
+msgstr "Speelduur:"
+
+#: www/htdocs/guide.rpy:284 www/htdocs/genre.rpy:210 www/htdocs/search.rpy:138
+#: www/htdocs/search.rpy:140
+msgid "Record"
+msgstr "Opnemen"
+
+#: www/htdocs/guide.rpy:287 www/htdocs/genre.rpy:213
+msgid "Add to Favorites"
+msgstr "Toevoegen aan favorieten"
+
+#: www/htdocs/guide.rpy:290 www/htdocs/genre.rpy:216
+#: www/htdocs/library.rpy:484
+msgid "Close Window"
+msgstr "Venster sluiten"
+
+#: www/htdocs/genre.rpy:86
+#, python-format
+msgid "TV Genre for %s"
+msgstr "TV Genre voor %s"
+
+#: www/htdocs/genre.rpy:172
+msgid "NO SHOWS MATCHING CATEGORY"
+msgstr "GEEN PROGRAMMAS VOLDOEN AAN DIE CATEGORIE"
+
+#: www/htdocs/favorites.rpy:51 www/htdocs/favorites.rpy:94
+#: www/web_types.py:117
+msgid "Favorites"
+msgstr "Favorieten"
+
+#: www/htdocs/favorites.rpy:85
+msgid "Monday"
+msgstr "maandag"
+
+#: www/htdocs/favorites.rpy:86
+msgid "Tuesday"
+msgstr "dinsdag"
+
+#: www/htdocs/favorites.rpy:87
+msgid "Wednesday"
+msgstr "woensdag"
+
+#: www/htdocs/favorites.rpy:88
+msgid "Thursday"
+msgstr "donderdag"
+
+#: www/htdocs/favorites.rpy:89
+msgid "Friday"
+msgstr "vrijdag"
+
+#: www/htdocs/favorites.rpy:90
+msgid "Saturday"
+msgstr "zaterdag"
+
+#: www/htdocs/favorites.rpy:91
+msgid "Sunday"
+msgstr "zondag"
+
+#: www/htdocs/favorites.rpy:98
+msgid "Favorite Name"
+msgstr "Naam favoriet"
+
+#: www/htdocs/favorites.rpy:104
+msgid "Priority"
+msgstr "Prioriteit"
+
+#: www/htdocs/favorites.rpy:113 www/htdocs/favorites.rpy:125
+#: www/htdocs/favorites.rpy:131 tv/edit_favorite.py:116
+msgid "ANY"
+msgstr "ALLE"
+
+#: www/htdocs/favorites.rpy:136
+msgid "Edit"
+msgstr "Wijzigen"
+
+#: www/htdocs/favorites.rpy:144
+msgid "Higher"
+msgstr "Hoger"
+
+#: www/htdocs/favorites.rpy:151
+msgid "Lower"
+msgstr "Lager"
+
+#: www/htdocs/library.rpy:160
+#, python-format
+msgid "%s already exists! File not renamed."
+msgstr "%s bestaat reeds! Bestand niet hernoemd."
+
+#: www/htdocs/library.rpy:164
+#, python-format
+msgid "Rename %s to %s."
+msgstr "Hernoem %s naar %s."
+
+#: www/htdocs/library.rpy:167 www/htdocs/library.rpy:183
+#, python-format
+msgid "<h2>%s</h2>"
+msgstr ""
+
+#: www/htdocs/library.rpy:168
+#, fuzzy, python-format
+msgid "Rename %s to %s, failed."
+msgstr "Hernoem %s naar %s."
+
+#: www/htdocs/library.rpy:171
+msgid "No new file specified."
+msgstr "Geen nieuw bestand opgegeven."
+
+#: www/htdocs/library.rpy:177 www/htdocs/library.rpy:181
+#, python-format
+msgid "Delete %s."
+msgstr "Bestand wissen: %s"
+
+#: www/htdocs/library.rpy:184
+#, fuzzy, python-format
+msgid "Delete %s, failed."
+msgstr "Bestand wissen: %s"
+
+#: www/htdocs/library.rpy:193
+#, python-format
+msgid "%s does not exist. No action taken."
+msgstr "%s bestaat niet. Geen  actie ondernomen."
+
+#: www/htdocs/library.rpy:195
+#, python-format
+msgid "I do not process names (%s) with slashes for security reasons."
+msgstr "De naam (%s) bevat een slash (/) en wordt daardoor niet verwerkt."
+
+#: www/htdocs/library.rpy:203 www/web_types.py:118
+msgid "Media Library"
+msgstr "Mediabibliotheek"
+
+#: www/htdocs/library.rpy:231 www/web_types.py:233
+msgid "Messages"
+msgstr "Berichten"
+
+#: www/htdocs/library.rpy:244 share/skins/main/dark.fxd:17
+#: share/skins/main/crystal.fxd:8 share/skins/main/bluestar.fxd:8
+#: share/skins/main/basic.fxd:20 share/skins/main/rain.fxd:8
+msgid "Movies"
+msgstr "Films"
+
+#: www/htdocs/library.rpy:248
+msgid "Recorded TV"
+msgstr "Opgenomen programmas"
+
+#: www/htdocs/library.rpy:256 share/skins/main/dark.fxd:19
+#: share/skins/main/crystal.fxd:11 share/skins/main/basic.fxd:22
+#: share/skins/main/rain.fxd:11
+msgid "Images"
+msgstr "Afbeeldingen"
+
+#: www/htdocs/library.rpy:271 www/htdocs/library.rpy:340
+#: www/htdocs/library.rpy:342 www/htdocs/library.rpy:345
+msgid "Back"
+msgstr "Terug"
+
+#: www/htdocs/library.rpy:436
+msgid "Download"
+msgstr "Downloaden"
+
+#: www/htdocs/library.rpy:438
+msgid "Rename"
+msgstr "Hernoemen"
+
+#: www/htdocs/library.rpy:478
+#, fuzzy
+msgid "Play file"
+msgstr "Speel titel %s af"
+
+#: www/htdocs/library.rpy:481
+#, fuzzy
+msgid "Play file on host"
+msgstr "Speel titel %s af"
+
+#: www/htdocs/search.rpy:50 tv/program_display.py:172
+msgid "Search Results"
+msgstr "Zoekresultaten"
+
+#: www/htdocs/search.rpy:50 www/htdocs/search.rpy:74 www/web_types.py:120
+#: www/web_types.py:218 www/web_types.py:225
+msgid "Search"
+msgstr "Zoeken"
+
+#: www/htdocs/search.rpy:51
+msgid "recording server is unavailable"
+msgstr "opnameserver is niet beschikbaar"
+
+#: www/htdocs/search.rpy:81
+msgid "No matches"
+msgstr "Geen resultateb"
+
+#: www/htdocs/search.rpy:142
+msgid "New favorite"
+msgstr "Nieuwe favoriet"
+
+#: www/web_types.py:115
+msgid "View TV Listings"
+msgstr "Bekijk programmagids"
+
+#: www/web_types.py:116
+msgid "View Scheduled Recordings"
+msgstr "Bekijk programmas geregistreerd om op te nemen"
+
+#: www/web_types.py:117 tv/plugins/view_favorites.py:44
+#: tv/plugins/view_favorites.py:49 tv/plugins/view_favorites.py:58
+msgid "View Favorites"
+msgstr "Bekijk favorieten"
+
+#: www/web_types.py:118
+msgid "View Media Library"
+msgstr "Bekijk mediabibliotheek"
+
+#: www/web_types.py:119
+msgid "Schedule a Manual Recording"
+msgstr "Plan een handmatige opname"
+
+#: www/web_types.py:120
+msgid "Advanced Search Page"
+msgstr "Uitgebreide zoekpagina"
+
+#: www/web_types.py:121
+msgid "Help"
+msgstr "Help"
+
+#: www/web_types.py:121
+msgid "View Online Help and Documentation"
+msgstr "Bekijk online hulp en documentatie"
+
+#: www/web_types.py:125
+msgid "Icecast List"
+msgstr "Icecast Lijst"
+
+#: www/web_types.py:125
+msgid "Change Icecast List"
+msgstr "Verander Icecast Lijst"
+
+#: www/web_types.py:226
+msgid "Movies only"
+msgstr "Alleen films"
+
+#: www/web_types.py:227
+msgid "Go!"
+msgstr "Starten!"
+
+#: skins/main/default_areas.py:119
+msgid "TV GUIDE"
+msgstr "TV gids"
+
+#: skins/main/listing_area.py:213
+msgid "This directory is empty"
+msgstr "Deze folder is leeg"
+
+#: skins/main/info_area.py:132
+msgid "missing 'src' attribute in skin tag!"
+msgstr "Het 'src' attribuut in de skin-tag ontbreekt!"
+
+#: tv/plugins/manual_record.py:111
+msgid "Display record item"
+msgstr "Toon opnameitem"
+
+#: tv/plugins/manual_record.py:119 tv/program_display.py:246
+msgid "Modify name"
+msgstr "Naam wijzigen"
+
+#: tv/plugins/manual_record.py:120 tv/program_display.py:247
+msgid "Modify channel"
+msgstr "Kanaal wijzigen"
+
+#: tv/plugins/manual_record.py:121
+msgid "Modify start month"
+msgstr "Startmaand wijzigen"
+
+#: tv/plugins/manual_record.py:122
+msgid "Modify start day"
+msgstr "Startdag wijzigen"
+
+#: tv/plugins/manual_record.py:123
+msgid "Modify start time"
+msgstr "Starttijd wijzigen"
+
+#: tv/plugins/manual_record.py:124
+msgid "Modify stop month"
+msgstr "Eindmaand wijzigen"
+
+#: tv/plugins/manual_record.py:125
+msgid "Modify stop day"
+msgstr "Einddag wijzigen"
+
+#: tv/plugins/manual_record.py:126
+msgid "Modify stop time"
+msgstr "Eindtijd wijzigen"
+
+#: tv/plugins/manual_record.py:129
+msgid "Record Item Menu"
+msgstr "Opnameitem menu"
+
+#: tv/plugins/manual_record.py:138 tv/program_display.py:270
+msgid "Alter Name"
+msgstr "Naam wijzigen"
+
+#: tv/plugins/manual_record.py:148 tv/program_display.py:292
+msgid "Modify Channel"
+msgstr "Kanaal wijzigen"
+
+#: tv/plugins/manual_record.py:164 tv/plugins/manual_record.py:186
+#: tv/plugins/manual_record.py:223 tv/plugins/manual_record.py:245
+#: tv/program_display.py:342
+msgid "Modify Day"
+msgstr "Dag wijzigen"
+
+#: tv/plugins/manual_record.py:207 tv/plugins/manual_record.py:266
+#: tv/program_display.py:362
+msgid "Modify Time"
+msgstr "Laatst gewijzigd"
+
+#: tv/plugins/manual_record.py:323 tv/plugins/manual_record.py:352
+#: tv/plugins/manual_record.py:356 tv/plugins/manual_record.py:361
+#: tv/plugins/manual_record.py:365
+msgid "Save Failed, recording was lost"
+msgstr "Opslaan mislukt, de opname is verloren gegaan"
+
+#: tv/plugins/manual_record.py:364
+msgid ""
+"Sorry, the stop time does not give enough time for scheduler to pickup the "
+"change.  Please set it to record for a few minutes longer."
+msgstr ""
+"Sorry, de eindtijd geeft de planner te weinig tijd om de wijziging op te "
+"pakken. Verleng de opname alstublieft met enkele minuten."
+
+#: tv/plugins/xine.py:81 video/plugins/xine.py:63
+msgid ""
+"'XINE_COMMAND' not defined, plugin 'xine' deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+"'XINE_COMMAND' niet gedefineerd, 'xine' plugin uitgeschakeld.\n"
+"Controller de xine sectie in freevo_config.py"
+
+#: tv/plugins/scheduled_recordings.py:50
+msgid "Display Scheduled Recordings"
+msgstr "Toon ingeplande opnames"
+
+#: tv/plugins/scheduled_recordings.py:56
+msgid "Nothing scheduled."
+msgstr "Geen ingeplande opnames."
+
+#: tv/plugins/scheduled_recordings.py:104
+msgid "Get recordings failed"
+msgstr "Het ophalen van de opnames is mislukt."
+
+#: tv/plugins/view_favorites.py:55
+msgid "No favorites."
+msgstr "Geen favorieten."
+
+#: tv/plugins/view_favorites.py:102
+msgid "Get favorites failed"
+msgstr "Het ophalen van de favorieten is mislukt."
+
+#: tv/plugins/ivtv_xine_tv.py:224
+msgid "This plugin only supports the ivtv video group in tv mode!"
+msgstr ""
+
+#: tv/plugins/view_line_in.py:49
+msgid "View VCR Input"
+msgstr "Bekijk het videosignaal"
+
+#: tv/channels.py:134
+#, python-format
+msgid "Cannot find tuner channel \"%s\" in the TV channel listing"
+msgstr "Het kanaal \"%s\" komt niet voor in de lijst met TV kanalen."
+
+#: tv/channels.py:172 tv/channels.py:178
+#, python-format
+msgid "Unable to get channel list for %s."
+msgstr "Het ophalen van de lijst met kanalen voor %s is mislukt."
+
+#: tv/channels.py:209
+#, python-format
+msgid "Failed to set freq for channel %s."
+msgstr "Het instellen van de frequentie voor kanaal %s is mislukt."
+
+#: tv/program_search.py:75
+msgid "Program Search"
+msgstr "Programma zoeken"
+
+#: tv/program_search.py:84
+msgid "Feel free to implement this function inside the main guide."
+msgstr "Je bent vrij om deze functie in de hoofdgids te implementeren."
+
+#: tv/program_search.py:112 tv/program_display.py:151
+msgid "Searching, please wait..."
+msgstr "Bezig met zoeken, even geduld..."
+
+#: tv/program_display.py:92
+msgid "Display program"
+msgstr "Toon programma"
+
+#: tv/program_display.py:106
+msgid "Remove from schedule"
+msgstr "Verwijder uit planning"
+
+#: tv/program_display.py:109
+msgid "Schedule for recording"
+msgstr "Inplannen voor opname"
+
+#: tv/program_display.py:113
+msgid "Search for more of this program"
+msgstr "Zoek naar andere tijden voor dit programma"
+
+#: tv/program_display.py:123
+msgid "Remove from favorites"
+msgstr "Favoriet verwijderen"
+
+#: tv/program_display.py:126
+msgid "Add to favorites"
+msgstr "Toevoegen aan favorieten"
+
+#: tv/program_display.py:129
+msgid "Program Menu"
+msgstr "Programmamenu"
+
+#: tv/program_display.py:167
+#, python-format
+msgid "No matches found for %s"
+msgstr "Geen resultaten gevonden voor %s"
+
+#: tv/program_display.py:169
+#, python-format
+msgid "findMatches failed: %s"
+msgstr "findMatches mislukt: %s"
+
+#: tv/program_display.py:186
+#, python-format
+msgid "\"%s\" has been scheduled for recording"
+msgstr "\"%s\" is geregistreerd voor opname"
+
+#: tv/program_display.py:189
+msgid "Scheduling Failed"
+msgstr "Het inplannen is mislukt."
+
+#: tv/program_display.py:205 tv/program_display.py:407 tv/edit_favorite.py:208
+msgid "Remove Failed"
+msgstr "Het verwijderen is mislukt"
+
+#: tv/program_display.py:240
+msgid "Display favorite"
+msgstr "Toon favoriet"
+
+#: tv/program_display.py:248
+msgid "Modify day of week"
+msgstr "Wijzig dag van de week"
+
+#: tv/program_display.py:249
+msgid "Modify time of day"
+msgstr "Wijzig tijd"
+
+#: tv/program_display.py:255
+msgid "Modify priority"
+msgstr "Wijzig prioriteit"
+
+#: tv/program_display.py:258
+msgid "Save changes"
+msgstr "Wijzigingen opslaan"
+
+#: tv/program_display.py:259
+msgid "Remove favorite"
+msgstr "Verwijder favoriet"
+
+#: tv/program_display.py:261
+msgid "Favorite Menu"
+msgstr "Favorieten menu"
+
+#: tv/program_display.py:383
+msgid "Save Failed, favorite was lost"
+msgstr "Opslaan mislukt, de favoriet is verloren gegaan"
+
+#: tv/program_display.py:390
+msgid "Save Failed"
+msgstr "Het opslaan is mislukt"
+
+#: tv/program_display.py:395
+msgid "Favorite not added yet."
+msgstr "De favoriet is nog niet toegevoegd."
+
+#: tv/epg_xmltv.py:57
+msgid "Time conversion error"
+msgstr "Tijd omzettingsfout"
+
+#: tv/epg_xmltv.py:132
+msgid "Couldn't load the TV Guide, got an exception!"
+msgstr "Kan de Programmagids niet laden, er is een exceptie opgetreden!"
+
+#: tv/epg_xmltv.py:223
+#, python-format
+msgid "REPLACE WITH TUNERID FOR %s"
+msgstr "VERVANG MET TUNERID VOOR %s"
+
+#: tv/tvguide.py:65
+msgid "Preparing the program guide"
+msgstr "De programmagids wordt geladen..."
+
+#: tv/tvguide.py:68
+msgid "TV Guide is corrupt!"
+msgstr "De TV gids is corrupt!"
+
+#: tv/tvguide.py:205
+msgid "Sorry, you cannot watch TV while recording. "
+msgstr "Sorry, je kunt tijdens een opname geen TV kijken. "
+
+#: tv/tvguide.py:206
+msgid "If this is not true then remove "
+msgstr "Als dit niet klopt verwijder dan "
+
+#: tv/record_client.py:60 tv/record_client.py:69 tv/record_client.py:80
+#: tv/record_client.py:96 tv/record_client.py:108 tv/record_client.py:117
+#: tv/record_client.py:136 tv/record_client.py:145 tv/record_client.py:157
+#: tv/record_client.py:166 tv/record_client.py:179 tv/record_client.py:188
+#: tv/record_client.py:197 tv/record_client.py:206 tv/record_client.py:216
+#: tv/record_client.py:226 tv/record_client.py:235 tv/record_client.py:244
+#: tv/record_client.py:253 tv/record_client.py:262
+msgid "connection error"
+msgstr "verbindingsfout"
+
+#: tv/record_client.py:87 tv/record_client.py:103
+msgid "no program"
+msgstr "geen programma"
+
+#: tv/record_client.py:90
+msgid "cannot record it if it is over"
+msgstr "kan een verlopen programma niet opnemen"
+
+#: tv/record_client.py:125 tv/record_client.py:131
+msgid "program not scheduled"
+msgstr "het programma is niet ingepland"
+
+#: tv/record_client.py:129
+msgid "program is scheduled"
+msgstr "het programma is ingepland"
+
+#: tv/tvmenu.py:74 tv/tvmenu.py:82
+#, python-format
+msgid "Could not find TV channel %s"
+msgstr "Kan TV kanaal %s niet vinden"
+
+#: tv/tvmenu.py:108
+msgid "Recorded Shows"
+msgstr "Opgenomen programma's"
+
+#: tv/tvmenu.py:118
+msgid "TV Main Menu"
+msgstr "TV Hoofdmenu"
+
+#: tv/tvmenu.py:144
+msgid "The list of TV channels is invalid!\n"
+msgstr "De lijst met TV kanalen is ongeldig!\n"
+
+#: tv/tvmenu.py:145
+msgid "Please check the config file."
+msgstr "Controleer het configuratiebestand."
+
+#: tv/edit_favorite.py:104 share/skins/main/basic.fxd:577
+#: share/skins/main/info.fxd:269
+msgid "Name"
+msgstr "Naam"
+
+#: tv/edit_favorite.py:135
+msgid "Day of Week"
+msgstr "Dag van de week"
+
+#: tv/edit_favorite.py:156
+msgid "Time of Day"
+msgstr "Tijd"
+
+#: tv/edit_favorite.py:318
+#, python-format
+msgid "Favorite %s has been saved"
+msgstr "Favoriet %s is opgeslagen"
+
+#: tv/edit_favorite.py:320
+#, python-format
+msgid "Failed: %s"
+msgstr "Mislukt: %s"
+
+#: tv/edit_favorite.py:340
+#, python-format
+msgid "Do you want to remove %s?"
+msgstr "Wil je %s verwijderen?"
+
+#: games/game.py:83
+#, python-format
+msgid "File \"%s\" not found!"
+msgstr "Bestand \"%s\" niet gevonden"
+
+#: games/__init__.py:74
+msgid "please update GAMES_ITEMS in local_conf.py"
+msgstr "verander GAMES_ITEMS in local_conf.py aub"
+
+#: games/mame_cache.py:304
+msgid "Generating MAME cache, please wait."
+msgstr "Bezig met het opbouwen van MAME cache, een ogenblik geduld..."
+
+#: audio/plugins/detach.py:48
+msgid "Show player"
+msgstr "Toon de mediaspeler"
+
+#: audio/plugins/mplayer.py:104 audio/plugins/fxmms.py:144
+#: audio/plugins/mplayervbr.py:113
+#, python-format
+msgid ""
+"%s\n"
+"not found!"
+msgstr ""
+"%s\n"
+"niet gevonden!"
+
+#: audio/plugins/xmradio.py:62
+#, fuzzy
+msgid "Listen to XM Station"
+msgstr "Luister naar een radiostation"
+
+#: audio/plugins/xmradio.py:95
+#, fuzzy
+msgid "XM Radio"
+msgstr "Radio"
+
+#: audio/plugins/xmradio.py:137
+#, fuzzy
+msgid "No Xm Radio Stations found"
+msgstr "Geen radiostation gevonden"
+
+#: audio/plugins/xmradio.py:139 audio/plugins/radio.py:122
+msgid "Radio Stations"
+msgstr "Radiostations"
+
+#: audio/plugins/cdbackup.py:180
+msgid "Show CD ripping status"
+msgstr "Toon CD rip vooruitgang"
+
+#: audio/plugins/cdbackup.py:181
+msgid "Stop CD ripping"
+msgstr "Stop het CD rippen"
+
+#: audio/plugins/cdbackup.py:186
+msgid "Rip the CD to the hard drive"
+msgstr "Maak een backup naar harddisk"
+
+#: audio/plugins/cdbackup.py:187
+msgid "Get CDs available for ripping"
+msgstr "Toon CD's beschikbaar voor backup"
+
+#: audio/plugins/cdbackup.py:189
+msgid "Item is not an Audio CD"
+msgstr "Dit is geen Audio CD"
+
+#: audio/plugins/cdbackup.py:203
+#, python-format
+msgid ""
+"Ripping in progress\n"
+"Track %d of %d"
+msgstr ""
+"Bezig met het rippen van de Audio CDg\n"
+"Track %d van de %d"
+
+#: audio/plugins/cdbackup.py:218
+msgid "Backup CD to hard drive in mp3 format"
+msgstr "Maak een backup naar harddisk in MP3 formaat"
+
+#: audio/plugins/cdbackup.py:221
+msgid "Backup CD to hard drive in Ogg format"
+msgstr "Maak een backup naar harddisk in OGG formaat"
+
+#: audio/plugins/cdbackup.py:224
+msgid "Backup CD to hard drive in FLAC format"
+msgstr "Maak een backup naar harddisk in FLAC formaat"
+
+#: audio/plugins/cdbackup.py:226
+msgid "Backup CD to hard drive in wav format"
+msgstr "Maak een backup naar harddisk in WAV formaat"
+
+#: audio/plugins/cdbackup.py:229
+msgid "CD Backup"
+msgstr "CD Backup"
+
+#: audio/plugins/cdbackup.py:242
+msgid "Ripping started"
+msgstr "Het rippen is gestart"
+
+#: audio/plugins/cdbackup.py:310
+#, python-format
+msgid "Directory %s already exists"
+msgstr "Folder %s bestaat reeds"
+
+#: audio/plugins/cdbackup.py:313
+#, python-format
+msgid "Cannot rip to '%s'! (%s)"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:329 audio/plugins/cdbackup.py:382
+#: audio/plugins/cdbackup.py:455
+msgid "Ripping aborted"
+msgstr "Het rippen is afgebroken"
+
+#: audio/plugins/cdbackup.py:468
+msgid "Ripping complete"
+msgstr "Het rippen is voltooid"
+
+#: audio/plugins/cdbackup.py:481
+msgid "No CDDB data available to mmpython"
+msgstr "Geen CDDB informatie beschikbaar voor mmpython"
+
+#: audio/plugins/cdbackup.py:484
+msgid "Unknown Artist"
+msgstr "Onbekende artiest"
+
+#: audio/plugins/cdbackup.py:484 audio/plugins/cdbackup.py:485
+msgid "RENAME"
+msgstr "HERNOEMEN"
+
+#: audio/plugins/cdbackup.py:485 audio/audiodiskitem.py:52
+msgid "Unknown CD Album"
+msgstr "Onbekend CD Album"
+
+#: audio/plugins/cdbackup.py:486
+msgid "Other"
+msgstr "Andere"
+
+#: audio/plugins/cdbackup.py:489
+msgid ""
+"CD info not found!\n"
+"Must manually rename files\n"
+"when finished ripping"
+msgstr ""
+"CD info niet gevonden!\n"
+"U moet na het rippen zelf de bestandsnamen veranderen"
+
+#: audio/plugins/cdbackup.py:554
+msgid "Problem trying to call:"
+msgstr "Probleem tijdens aanroepen van:"
+
+#: audio/plugins/radio.py:60
+msgid "Listen to Radio Station"
+msgstr "Luister naar een radiostation"
+
+#: audio/plugins/radio.py:95
+msgid "Radio"
+msgstr "Radio"
+
+#: audio/plugins/radio.py:120
+msgid "No Radio Stations found"
+msgstr "Geen radiostation gevonden"
+
+#: audio/plugins/playlist.py:85
+msgid "Playlists"
+msgstr "Afspeellijsten"
+
+#: audio/plugins/playlist.py:101
+msgid "Enqueue this Music in Playlist"
+msgstr "Voeg dit nummer toe aan de afspeellijst"
+
+#: audio/plugins/playlist.py:103
+msgid "Make a new Audio Playlist"
+msgstr "Maak een nieuwe muziek afspeellijst"
+
+#: audio/plugins/playlist.py:121
+msgid "Queued Directory"
+msgstr "Folder in de wachtlijst"
+
+#: audio/plugins/playlist.py:123
+msgid "Queued Track"
+msgstr "Nummer in de wachtlijst"
+
+#: audio/plugins/playlist.py:131
+msgid "Added New Playlist"
+msgstr "Nieuwe afspeellijst toegevoegd"
+
+#: audio/plugins/vux.py:84
+msgid "[VUX] Start playing"
+msgstr "[VUX] Start het afspelen"
+
+#: audio/plugins/vux.py:85
+msgid "[VUX] Stop playing"
+msgstr "[VUX] Stop het afspelen"
+
+#: audio/plugins/vux.py:86
+msgid "[VUX] Next (rating down)"
+msgstr "[VUX] Volgende (minder waardering)"
+
+#: audio/plugins/vux.py:87
+msgid "[VUX] Next (rating intact)"
+msgstr "[VUX] Volgende (waardering intact)"
+
+#: audio/plugins/vux.py:88
+msgid "[VUX] Next (rating up)"
+msgstr "[VUX] Next (meer waardering)"
+
+#: audio/plugins/vux.py:89
+msgid "[VUX] Playing item rating up"
+msgstr "[VUX] Geef dit nummer meer waardering"
+
+#: audio/plugins/vux.py:90
+msgid "[VUX] Playing item rating down"
+msgstr "[VUX] Geef dit nummer minder waardering"
+
+#: audio/plugins/vux.py:91
+msgid "[VUX] a dir item do not select"
+msgstr "[VUX] een folder, niet selecteren"
+
+#: audio/plugins/vux.py:92
+msgid "[VUX] an audio item, do not select"
+msgstr "[VUX] een geluidsbestand, niet selecteren"
+
+#: audio/plugins/xine.py:55
+msgid "'fbxine' not found, plugin 'xine' deactivated"
+msgstr "'fbxine' niet gevonden, 'xine' plugin gedeactiveerd"
+
+#: audio/plugins/xine.py:74
+msgid "'fbxine' version too old, plugin 'xine' deactivated"
+msgstr "'fbxine' niet recent genoeg, 'xine' plugin gedeactiveerd"
+
+#: audio/plugins/xine.py:75
+#, python-format
+msgid "You need software %s"
+msgstr "Je hebt software %s nodig"
+
+#: audio/plugins/coversearch.py:95
+msgid ""
+"To search for covers you need an Amazon.com Web Services\n"
+"license key. You can get yours from:\n"
+msgstr ""
+"Om Audio CD hoezen te zoeken heb je een Amazon.com\n"
+"Web Services license key nodig. Je lan zo'n key verkrijgen op:\n"
+
+#: audio/plugins/coversearch.py:148
+msgid "Find a cover for this music"
+msgstr "Zoek een hoes voor deze muziek"
+
+#: audio/plugins/coversearch.py:153 audio/plugins/coversearch.py:162
+#, python-format
+msgid ""
+"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
+"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
+"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
+"Info. Maybe you must fix this file (%s) tag?"
+msgstr ""
+"De 'coversearch' plugin werkt niet voor dit bestand! De plugin heeft een "
+"item met ingevulde Artiest en Album nodig (voor MP3 en OGG) of een Titel "
+"(voor Audio CD's). Misschien is de tag van %s niet geheel correct worden?"
+
+#: audio/plugins/coversearch.py:171
+msgid "Unknown CD, cover searching is disabled"
+msgstr "Onbekende CD, het zoeken naar een hoes is uitgeschakeld"
+
+#: audio/plugins/coversearch.py:179
+msgid "searching Amazon..."
+msgstr "Bezig met zoeken op Amazon..."
+
+#: audio/plugins/coversearch.py:198
+#, python-format
+msgid "No matches for %(artist)s - %(album)s"
+msgstr "Geen resultaten voor %(artist)s - %(album)s"
+
+#: audio/plugins/coversearch.py:206
+msgid "Unknown error while searching."
+msgstr "Onbekende fout tijdens het zoeken."
+
+#: audio/plugins/coversearch.py:243 audio/plugins/coversearch.py:255
+msgid "small"
+msgstr "klein"
+
+#: audio/plugins/coversearch.py:266
+msgid "Cover Search Results"
+msgstr "Hoes zoekresultaten"
+
+#: audio/plugins/coversearch.py:270
+msgid "No covers available from Amazon"
+msgstr "Geen informatie beschikbaar op Amazon"
+
+#: audio/plugins/coversearch.py:283 video/plugins/imdb.py:195
+msgid "getting data..."
+msgstr "Gegevens worden binnengehaald..."
+
+#: audio/audiodiskitem.py:69
+msgid "Browse disc"
+msgstr "Schijf verkennen"
+
+#: audio/audiodiskitem.py:107 directory.py:683
 msgid "Random playlist"
 msgstr "Willekeurige afspeellijst"
 
-#: directory.py:794 directory.py:884 directory.py:918
-#: video/plugins/subtitles.py:54
-msgid "on"
-msgstr "aan"
+#: audio/audiodiskitem.py:115
+msgid "Data files on disc"
+msgstr "Bestanden op schijf"
 
-#: directory.py:796 directory.py:799 directory.py:888 directory.py:916
-msgid "off"
-msgstr "uit"
+#: video/plugins/mplayer.py:406
+msgid "Seeking not possible"
+msgstr "Zoeken niet mogelijk"
 
-#: directory.py:801
-msgid "auto"
-msgstr "automatisch"
-
-#: directory.py:920
-msgid "Show all kinds of items"
-msgstr "Toon alle soorten items"
-
-#: directory.py:922
-msgid "Show video, audio and image items in this directory"
-msgstr "Toon video, audio en afbeeldingen in deze directory"
-
-#: directory.py:925
-msgid "Configure"
-msgstr "Configureer"
-
-#: fxditem.py:248
-msgid "Browse list"
-msgstr "Lijst doorbladeren"
-
-#: main.py:177
-msgid "Freevo Main Menu"
-msgstr "Freevo Hoofdmenu"
-
-#: main.py:193
-msgid "Skin Selector"
-msgstr "Skin selectie"
-
-#: main.py:308
+#: video/plugins/mover.py:96
 #, python-format
-msgid ""
-"Event '%s' crashed\n"
-"\n"
-"Please take a look at the logfile and report the bug to the Freevo mailing "
-"list. The state of Freevo may be corrupt now and this error could cause more "
-"errors until you restart Freevo.\n"
-"\n"
-"Logfile: %s\n"
-"\n"
+msgid "Move to [%s]"
+msgstr "Verplaats naar [%s]"
+
+#: video/plugins/imdb.py:85
+msgid "Search IMDB for this file"
+msgstr "Zoek op IMDB naar dit bestand"
+
+#: video/plugins/imdb.py:92 video/plugins/imdb.py:99
+#, python-format
+msgid "Search IMDB for [%s]"
+msgstr "Zoek op IMDB naar [%s]"
+
+#: video/plugins/imdb.py:110
+msgid "searching IMDB..."
+msgstr "Bezig met zoeken op IMDB..."
+
+#: video/plugins/imdb.py:134
+msgid "Unknown error while connecting to IMDB"
+msgstr "Onbekende fout tijdens het verbinden met IMDB"
+
+#: video/plugins/imdb.py:152
+msgid "IMDB Query"
+msgstr "IMDB Zoekopdracht"
+
+#: video/plugins/imdb.py:156
+msgid "No information available from IMDB"
+msgstr "Geen informatie beschikbaar op IMDB"
+
+#: video/plugins/bookmarker.py:62
+msgid "Resume playback"
+msgstr "Verder met afspelen"
+
+#: video/plugins/bookmarker.py:67
+msgid "Bookmarks"
+msgstr "Bladwijzers"
+
+#: video/plugins/bookmarker.py:103
+#, python-format
+msgid "Jump to %s"
+msgstr "Spring naar %s"
+
+#: video/plugins/dvdimage.py:72
+#, fuzzy
+msgid "Play image as DVD"
+msgstr "DVD afspelen"
+
+#: video/plugins/dvdimage.py:97
+msgid "Choose title to play. <1-9>"
 msgstr ""
-"Event '%s' is gecrashed\n"
-"\n"
-"Bekijk de logfile en meld deze fout op de Freevo mailing list. Freevo kan nu "
-"mogelijk instabiel blijven en nog meer fouten veroorzaken tot je Freevo "
-"herstart.\n"
-"\n"
-"Logfile: %s\n"
-"\n"
 
-#: main.py:434
-msgid "Starting Freevo, please wait ..."
-msgstr "Freevo wordt gestart, een ogenblik geduld..."
-
-#: main.py:454
-msgid "Reading cache, please wait ..."
-msgstr "Bezig met inlezen van de cache, een ogenblik geduld..."
-
-#: main.py:492
-msgid "Freevo crashed!"
-msgstr "Freevo is gecrashed!"
-
-#: main.py:493
+#: video/plugins/dvdimage.py:121
 #, python-format
-msgid "Filename: %s"
-msgstr "Bestand: %s"
+msgid "Choose disc (%i discs available)."
+msgstr ""
 
-#: main.py:494
+#: video/plugins/linkbrowser.py:69
+msgid "Browse links (autoplay)"
+msgstr "Verken links (automatisch afspelen)"
+
+#: video/plugins/linkbrowser.py:70
+msgid "Browse links (autoplay, maximum caching)"
+msgstr "Verken links (automatisch afspelen, maximale cache)"
+
+#: video/plugins/linkbrowser.py:71
+msgid "Browse links"
+msgstr "Verken links"
+
+#: video/plugins/linkbrowser.py:140
+msgid "Downloading link list..."
+msgstr "De lijst met links wordt opgehaald..."
+
+#: video/plugins/linkbrowser.py:147
 #, python-format
-msgid "Lineno: %s"
-msgstr "Regelnummer: %s"
+msgid "Failed to download %s"
+msgstr "Downloaden van %s mislukt"
 
-#: main.py:495
+#: video/plugins/details.py:65
+msgid "Show details for this item"
+msgstr "Toon details voor dit bestand"
+
+#: video/plugins/details.py:95
+msgid "Details"
+msgstr "Details"
+
+#: video/plugins/dvdbackup.py:68
+msgid "Backup this dvd title..."
+msgstr ""
+
+#: video/plugins/dvdbackup.py:83 video/plugins/reencode.py:103
+#, fuzzy
+msgid "Choose your encoding profile"
+msgstr "Het ophalen van de opnames is mislukt."
+
+#: video/plugins/dvdbackup.py:99 video/plugins/reencode.py:113
+#, fuzzy
+msgid "Please wait, analyzing video..."
+msgstr "Een ogenblik geduld..."
+
+#: video/plugins/dvdbackup.py:168 video/plugins/reencode.py:189
+#, fuzzy
+msgid "Encoding started"
+msgstr "Het rippen is gestart"
+
+#: video/plugins/reencode.py:88
+#, fuzzy
+msgid "Re-encode this program..."
+msgstr "Zoek naar andere tijden voor dit programma"
+
+#: video/__init__.py:179
+msgid "Directory Autobuild Thumbnails "
+msgstr "Maak automatisch pictogrammen voor deze folder"
+
+#: video/__init__.py:180
+msgid "Build video thumbnails for all items (may take a while when entering)."
+msgstr ""
+"Maak pictogrammen aan voor alle video-elementen (dit kan enige tijd in "
+"beslag nemen)."
+
+#: video/configure.py:69 video/configure.py:101
 #, python-format
-msgid "Function: %s"
-msgstr "Functie: %s"
+msgid "Stream %s"
+msgstr "Stream %s"
 
-#: main.py:496
+#: video/configure.py:80
+msgid "Audio Menu"
+msgstr "Geluidsmenu"
+
+#: video/configure.py:95
+msgid "no subtitles"
+msgstr "geen ondertitels"
+
+#: video/configure.py:117
+msgid "Subtitle Menu"
+msgstr "Ondertitel menu"
+
+#: video/configure.py:134 video/configure.py:161
 #, python-format
-msgid "Text: %s"
-msgstr "Tekst: %s"
+msgid "Play chapter %s"
+msgstr "Speel hoofdstuk %s af"
 
-#: main.py:498
-msgid "Please see the logfiles for more info"
-msgstr "Bekijk de logfiles voor meer informatie"
+#: video/configure.py:141 video/configure.py:164
+msgid "Chapter Menu"
+msgstr "Hoofdstukken menu"
 
-#: main.py:500
+#: video/configure.py:193
 #, python-format
-msgid "Exit in %s seconds"
-msgstr "Programma wordt in %s seconden afgesloten"
+msgid "Turn off %s"
+msgstr "Zet %s af"
 
-#: menu.py:591
-msgid "No action defined for this choice!"
-msgstr "Er is voor deze keuze geen actie gedefinieerd!"
-
-#: osd.py:395
-msgid "z = Toggle Fullscreen"
-msgstr "z = Volledig scherm aan/uit"
-
-#: osd.py:396
-msgid "Arrow Keys = Move"
-msgstr "Cursortoetsen = Verplaatsen"
-
-#: osd.py:397
-msgid "Spacebar = Select"
-msgstr "Spatie = Selecteren"
-
-#: osd.py:398
-msgid "Escape = Stop/Prev. Menu"
-msgstr "Escape = Stop/Vorig menu"
-
-#: osd.py:399
-msgid "h = Help"
-msgstr "h = Help"
-
-#: playlist.py:146 playlist.py:186
+#: video/configure.py:194
 #, python-format
-msgid "Cannot open file \"%s\""
-msgstr "Bestand \"%s\" kan niet geopend worden"
+msgid "Turn on %s"
+msgstr "Zet %s aan"
 
-#: playlist.py:298
-msgid "Browse Playlist"
-msgstr "Blader door afspeellijst"
+#: video/configure.py:207
+msgid "Audio selection"
+msgstr "Audio selectie"
 
-#: playlist.py:300 video/configure.py:220 video/videoitem.py:298
+#: video/configure.py:209
+msgid "Subtitle selection"
+msgstr "Ondertitel selectie"
+
+#: video/configure.py:212 video/configure.py:216
+msgid "Chapter selection"
+msgstr "Hoofdstuk selectie"
+
+#: video/configure.py:222
+msgid "deinterlacing"
+msgstr "deinterlacing"
+
+#: video/configure.py:227 video/videoitem.py:277 playlist.py:284
 msgid "Play"
 msgstr "Afspelen"
 
-#: playlist.py:354
-msgid "empty playlist"
-msgstr "afspeellijst legenmaken"
+#: video/configure.py:228
+msgid "Config Menu"
+msgstr "Configuratiemenu"
 
-#: playlist.py:450
-msgid "playlist repeat on"
-msgstr "afspeellijst herhalen inschakelen"
+#: video/videoitem.py:263
+msgid "Play DVD"
+msgstr "DVD afspelen"
 
-#: playlist.py:452
-msgid "playlist repeat off"
-msgstr "afspeellijst herhalen uitschakelen"
+#: video/videoitem.py:264 video/videoitem.py:266
+msgid "DVD title list"
+msgstr "DVD Titellijst"
 
-#: playlist.py:466
-msgid "no next item in playlist"
-msgstr "geen volgend item in de afspeellijst"
+#: video/videoitem.py:267 video/videoitem.py:275
+msgid "Play default track"
+msgstr "Speel standaardnummer"
 
-#: playlist.py:493
-msgid "no previous item in playlist"
-msgstr "geen vorig item in de afspeellijst"
+#: video/videoitem.py:271
+msgid "Play VCD"
+msgstr "Speel VCD af"
 
-#: setup_freevo.py:123
+#: video/videoitem.py:272 video/videoitem.py:274
+msgid "VCD title list"
+msgstr "VCD titel lijst"
+
+#: video/videoitem.py:279
+msgid "Play with alternate player"
+msgstr "Speel af met andere speler"
+
+#: video/videoitem.py:282
+msgid "Play with maximum cache"
+msgstr "Afspelen met maximale buffer"
+
+#: video/videoitem.py:287
+msgid "Show variants"
+msgstr "Toon varianten"
+
+#: video/videoitem.py:291
+msgid "Create Thumbnail"
+msgstr "Maak pictogram"
+
+#: video/videoitem.py:312
+msgid "Please wait...."
+msgstr "Een ogenblik geduld..."
+
+#: video/videoitem.py:459 video/videoitem.py:473 video/videoitem.py:487
+#, python-format
+msgid "No media found for \"%s\".\n"
+msgstr "Media niet gevonden voor \"%s\".\n"
+
+#: video/videoitem.py:460 video/videoitem.py:474 video/videoitem.py:488
+msgid "Please insert the media."
+msgstr "Gelieve het medium in te voeren"
+
+#: video/videoitem.py:493
+msgid "No player for this item found"
+msgstr "Geen afspeler gevonden voor dit element"
+
+#: video/videoitem.py:575
+#, python-format
+msgid "Play Title %s"
+msgstr "Speel titel %s af"
+
+#: util/mediainfo.py:719
+#, fuzzy
+msgid "Reloading cache files, be patient..."
+msgstr "Bezig met inlezen van de cache, een ogenblik geduld..."
+
+#: util/misc.py:416
+msgid "The recordserver is down"
+msgstr "De opnameserver is niet beschikbaar"
+
+#: util/misc.py:438
+msgid "Today"
+msgstr "Vandaag"
+
+#: util/misc.py:448
+msgid "Tomorrow"
+msgstr "Morgen"
+
+#: util/misc.py:458
+msgid "This Week"
+msgstr "Deze week"
+
+#: util/misc.py:468
+msgid "No recordings are scheduled"
+msgstr "Geen programma's geregistreerd voor opname"
+
+#: setup_freevo.py:75
+#, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -363,7 +2346,7 @@ msgid ""
 "\n"
 "   --display=DISP               set the display\n"
 "                                  DISP can be x11, fbdev, dxr3, mga, \n"
-"                                  dfbmga or dga\n"
+"                                  directfb, dfbmga or dga\n"
 "                                  \n"
 "   --tv=NORM                    set the TV standard\n"
 "                                  NORM can be ntsc, pal or secam\n"
@@ -376,7 +2359,7 @@ msgid ""
 "australia,\n"
 "                                  ireland, france, china-bcast, "
 "southafrica,\n"
-"                                  argentina, canada-cable\n"
+"                                  argentina, canada-cable, switzerland\n"
 "\n"
 "   --help                       display this help and exit\n"
 "\n"
@@ -416,2488 +2399,486 @@ msgstr ""
 "indien je fouten in het programme vindt, gelieve die dan te melden aan  "
 "<freevo-users@lists.sourceforge.net>.\n"
 
-#: setup_freevo.py:227
+#: setup_freevo.py:179
 #, python-format
 msgid "checking for %-13s"
 msgstr "controleren op %-13s"
 
-#: setup_freevo.py:240
+#: setup_freevo.py:192
 #, python-format
 msgid "ERROR: can't find %s"
 msgstr "FOUT: kan %s niet vinden"
 
-#: setup_freevo.py:241
+#: setup_freevo.py:193
 msgid "Please install the application respectively put it in your path."
 msgstr "Installeer de toepassing en zet hem in het pad."
 
-#: setup_freevo.py:242
+#: setup_freevo.py:194
 msgid "Freevo won't work without it."
 msgstr "Freevo werkt zonder deze onderdelen niet."
 
-#: setup_freevo.py:248
+#: setup_freevo.py:200
 msgid "not found (deactivated)"
 msgstr "niet gevonden (gedeactiveerd)"
 
-#: setup_freevo.py:311
+#: setup_freevo.py:263
 #, python-format
 msgid "System path first=%s"
 msgstr "Systeempath eerst=%s"
 
-#: setup_freevo.py:311
+#: setup_freevo.py:263
 msgid "No"
 msgstr "Nee"
 
-#: setup_freevo.py:311
+#: setup_freevo.py:263
 msgid "Yes"
 msgstr "Ja"
 
-#: setup_freevo.py:327
+#: setup_freevo.py:279
 msgid "Settings:"
 msgstr "Instellingen:"
 
-#: audio/audiodiskitem.py:83 audio/plugins/cdbackup.py:554
-msgid "Unknown CD Album"
-msgstr "Onbekend CD Album"
+#: fxditem.py:204
+msgid "Browse list"
+msgstr "Lijst doorbladeren"
 
-#: audio/audiodiskitem.py:100
-msgid "Browse disc"
-msgstr "Schijf verkennen"
-
-#: audio/audiodiskitem.py:146
-msgid "Data files on disc"
-msgstr "Bestanden op schijf"
-
-#: audio/plugins/cdbackup.py:257
-msgid "Show CD ripping status"
-msgstr "Toon CD rip vooruitgang"
-
-#: audio/plugins/cdbackup.py:258
-msgid "Stop CD ripping"
-msgstr "Stop het CD rippen"
-
-#: audio/plugins/cdbackup.py:263
-msgid "Rip the CD to the hard drive"
-msgstr "Maak een backup naar harddisk"
-
-#: audio/plugins/cdbackup.py:264
-msgid "Get CDs available for ripping"
-msgstr "Toon CD's beschikbaar voor backup"
-
-#: audio/plugins/cdbackup.py:266
-msgid "Item is not an Audio CD"
-msgstr "Dit is geen Audio CD"
-
-#: audio/plugins/cdbackup.py:279
+#: playlist.py:129 playlist.py:169
 #, python-format
+msgid "Cannot open file \"%s\""
+msgstr "Bestand \"%s\" kan niet geopend worden"
+
+#: playlist.py:282
+msgid "Browse Playlist"
+msgstr "Blader door afspeellijst"
+
+#: playlist.py:292 directory.py:422
+msgid "Random play all items"
+msgstr "Speel alle bestanden af in willekeurige volgorde"
+
+#: playlist.py:338
+msgid "empty playlist"
+msgstr "afspeellijst legenmaken"
+
+#: playlist.py:436
+msgid "playlist repeat on"
+msgstr "afspeellijst herhalen inschakelen"
+
+#: playlist.py:438
+msgid "playlist repeat off"
+msgstr "afspeellijst herhalen uitschakelen"
+
+#: playlist.py:452
+msgid "no next item in playlist"
+msgstr "geen volgend item in de afspeellijst"
+
+#: playlist.py:479
+msgid "no previous item in playlist"
+msgstr "geen vorig item in de afspeellijst"
+
+#: menu.py:619
+msgid "No action defined for this choice!"
+msgstr "Er is voor deze keuze geen actie gedefinieerd!"
+
+#: directory.py:54
+msgid "Directory Sort By Date"
+msgstr "Sorteer folders op datum"
+
+#: directory.py:55
+msgid "Sort directory by date and not by name."
+msgstr "Sorteer folders op datum en niet op naam"
+
+#: directory.py:57
+msgid "Directory Autoplay Single Item"
+msgstr "Speel folders met 1 item automatisch"
+
+#: directory.py:58
+msgid "Don't show directory if only one item exists and auto-select the item."
+msgstr "Toon folders met 1 item niet en speel dat ene item af."
+
+#: directory.py:61
+msgid "Force Skin Layout"
+msgstr "Dwing een bepaalde skin layout af"
+
+#: directory.py:62
 msgid ""
-"Ripping in progress\n"
-"Track %d of %d"
+"Force skin to a specific layout. This option doesn't work with all skins and "
+"the result may differ based on the skin."
 msgstr ""
-"Bezig met het rippen van de Audio CDg\n"
-"Track %d van de %d"
+"Dwing een bepaalde skin layout af. Deze optie werkt niet voor alle skins en "
+"het resultaat kan van skin tot skin varieren."
 
-#: audio/plugins/cdbackup.py:294
-msgid "Backup CD to hard drive in mp3 format"
-msgstr "Maak een backup naar harddisk in MP3 formaat"
+#: directory.py:65
+msgid "Directory Smart Sort"
+msgstr "Folder slim sorteren"
 
-#: audio/plugins/cdbackup.py:297
-msgid "Backup CD to hard drive in Ogg format"
-msgstr "Maak een backup naar harddisk in OGG formaat"
+#: directory.py:66
+msgid "Use a smarter way to sort the items."
+msgstr "Gebruik een intelligentere manier om items te sorteren."
 
-#: audio/plugins/cdbackup.py:300
-msgid "Backup CD to hard drive in FLAC format"
-msgstr "Maak een backup naar harddisk in FLAC formaat"
+#: directory.py:68
+msgid "Use MediaID Tag Names"
+msgstr "Gebruik MediaID Tag namen"
 
-#: audio/plugins/cdbackup.py:302
-msgid "Backup CD to hard drive in wav format"
-msgstr "Maak een backup naar harddisk in WAV formaat"
+#: directory.py:69
+msgid "Use the names from the media files tags as display name."
+msgstr "Gebruik de namen van de media file tags op het scherm."
 
-#: audio/plugins/cdbackup.py:305
-msgid "CD Backup"
-msgstr "CD Backup"
+#: directory.py:71
+msgid "Directory Reverse Sort"
+msgstr "Folder omgekeerd sorteren"
 
-#: audio/plugins/cdbackup.py:318
-msgid "Ripping started"
-msgstr "Het rippen is gestart"
+#: directory.py:72
+msgid "Show the items in the list in reverse order."
+msgstr "Toon de items in de lijst in omgekeerde volgorde."
 
-#: audio/plugins/cdbackup.py:385
-#, python-format
-msgid "Directory %s already exists"
-msgstr "Folder %s bestaat reeds"
+#: directory.py:76
+msgid "Directory Create Playlist"
+msgstr "Folder Maak afspeellijst"
 
-#: audio/plugins/cdbackup.py:401 audio/plugins/cdbackup.py:454
-#: audio/plugins/cdbackup.py:524
-msgid "Ripping aborted"
-msgstr "Het rippen is afgebroken"
-
-#: audio/plugins/cdbackup.py:537
-msgid "Ripping complete"
-msgstr "Het rippen is voltooid"
-
-#: audio/plugins/cdbackup.py:550 audio/plugins/coversearch.py:200
-#: audio/plugins/coversearch.py:209 audio/plugins/coversearch.py:218
-#: plugins/lcd.py:930 plugins/lcd.py:941 plugins/lcd.py:954
-msgid "WARNING"
-msgstr "WAARSCHUWING"
-
-#: audio/plugins/cdbackup.py:550
-msgid "No CDDB data available to mmpython"
-msgstr "Geen CDDB informatie beschikbaar voor mmpython"
-
-#: audio/plugins/cdbackup.py:553
-msgid "Unknown Artist"
-msgstr "Onbekende artiest"
-
-#: audio/plugins/cdbackup.py:553 audio/plugins/cdbackup.py:554
-msgid "RENAME"
-msgstr "HERNOEMEN"
-
-#: audio/plugins/cdbackup.py:555
-msgid "Other"
-msgstr "Andere"
-
-#: audio/plugins/cdbackup.py:558
+#: directory.py:77
 msgid ""
-"CD info not found!\n"
-"Must manually rename files\n"
-"when finished ripping"
+"Handle the directory as playlist. After one file is played, the next one "
+"will be started."
 msgstr ""
-"CD info niet gevonden!\n"
-"U moet na het rippen zelf de bestandsnamen veranderen"
+"Behandel deze folder als een afspeellijst. Als een bestand is afgespeeld zal "
+"automatisch het volgende bestand starten."
 
-#: audio/plugins/cdbackup.py:623
-msgid "Problem trying to call:"
-msgstr "Probleem tijdens aanroepen van:"
+#: directory.py:80
+msgid "Directory Add Playlist Files"
+msgstr "Folder Voeg afspeelijst toe"
 
-#: audio/plugins/coversearch.py:160
+#: directory.py:81
+msgid "Add playlist files to the list of items"
+msgstr "Voeg afspeellijsten toe aan de elementenlijst"
+
+#: directory.py:83
+msgid "Directory Add Random Playlist"
+msgstr "Folder Voeg willekeurige afspeellijst toe"
+
+#: directory.py:84
+msgid "Add an item for a random playlist"
+msgstr "Voeg een element toe voor een willekeurige afspeellijst"
+
+#: directory.py:86
+msgid "Directory Autoplay Items"
+msgstr "Folder Items automatisch afspelen"
+
+#: directory.py:87
 msgid ""
-"To search for covers you need an Amazon.com Web Services\n"
-"license key. You can get yours from:\n"
+"Autoplay the whole directory (as playlist) when it contains only files and "
+"no directories"
 msgstr ""
-"Om Audio CD hoezen te zoeken heb je een Amazon.com\n"
-"Web Services license key nodig. Je lan zo'n key verkrijgen op:\n"
+"Automatisch de volledige folder (als een afspeellijst) afspelen indien de "
+"folder in kwestie slechts 1 bestand een geen subfolders bevat"
 
-#: audio/plugins/coversearch.py:196
-msgid "Find a cover for this music"
-msgstr "Zoek een hoes voor deze muziek"
-
-#: audio/plugins/coversearch.py:201 audio/plugins/coversearch.py:210
+#: directory.py:279
 #, python-format
-msgid ""
-"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
-"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
-"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
-"Info. Maybe you must fix this file (%s) tag?"
-msgstr ""
-"De 'coversearch' plugin werkt niet voor dit bestand! De plugin heeft een "
-"item met ingevulde Artiest en Album nodig (voor MP3 en OGG) of een Titel "
-"(voor Audio CD's). Misschien is de tag van %s niet geheel correct worden?"
+msgid "Directory on disc [%s]"
+msgstr "Folder op schijf [%s]"
 
-#: audio/plugins/coversearch.py:219
-msgid "Unknown CD, cover searching is disabled"
-msgstr "Onbekende CD, het zoeken naar een hoes is uitgeschakeld"
+#: directory.py:280
+msgid "Directory"
+msgstr "Folder"
 
-#: audio/plugins/coversearch.py:227
-msgid "searching Amazon..."
-msgstr "Bezig met zoeken op Amazon..."
+#: directory.py:416
+msgid "Play all files in directory"
+msgstr "Alle bestanden in deze folder afspelen"
 
-#: audio/plugins/coversearch.py:242
-#, python-format
-msgid "No matches for %(artist)s - %(album)s"
-msgstr "Geen resultaten voor %(artist)s - %(album)s"
+#: directory.py:424
+msgid "Recursive random play all items"
+msgstr "Speel alle bestanden non-stop af in willekeurige volgorde"
 
-#: audio/plugins/coversearch.py:250
-msgid "Unknown error while searching."
-msgstr "Onbekende fout tijdens het zoeken."
+#: directory.py:425
+msgid "Recursive play all items"
+msgstr "Speel alle bestanden af non-stop"
 
-#: audio/plugins/coversearch.py:287 audio/plugins/coversearch.py:299
-msgid "small"
-msgstr "klein"
+#: directory.py:427
+msgid "Configure directory"
+msgstr "Configureer deze folder"
 
-#: audio/plugins/coversearch.py:310
-msgid "Cover Search Results"
-msgstr "Hoes zoekresultaten"
+#: directory.py:494
+msgid "Enter Password"
+msgstr "Voer uw wachtwoord in"
 
-#: audio/plugins/coversearch.py:314
-msgid "No covers available from Amazon"
-msgstr "Geen informatie beschikbaar op Amazon"
+#: directory.py:519
+msgid "Password incorrect"
+msgstr "Wachtwoord onjuist"
 
-#: audio/plugins/coversearch.py:327 video/plugins/imdb.py:218
-msgid "getting data..."
-msgstr "Gegevens worden binnengehaald..."
-
-#: audio/plugins/detach.py:83
-msgid "Show player"
-msgstr "Toon de mediaspeler"
-
-#: audio/plugins/fxmms.py:209 audio/plugins/mplayer.py:149
-#, python-format
-msgid ""
-"%s\n"
-"not found!"
-msgstr ""
-"%s\n"
-"niet gevonden!"
-
-#: audio/plugins/playlist.py:88
-msgid "Playlists"
-msgstr "Afspeellijsten"
-
-#: audio/plugins/playlist.py:104
-msgid "Enqueue this Music in Playlist"
-msgstr "Voeg dit nummer toe aan de afspeellijst"
-
-#: audio/plugins/playlist.py:106
-msgid "Make a new Audio Playlist"
-msgstr "Maak een nieuwe muziek afspeellijst"
-
-#: audio/plugins/playlist.py:124
-msgid "Queued Directory"
-msgstr "Folder in de wachtlijst"
-
-#: audio/plugins/playlist.py:126
-msgid "Queued Track"
-msgstr "Nummer in de wachtlijst"
-
-#: audio/plugins/playlist.py:134
-msgid "Added New Playlist"
-msgstr "Nieuwe afspeellijst toegevoegd"
-
-#: audio/plugins/radio.py:84
-msgid "Listen to Radio Station"
-msgstr "Luister naar een radiostation"
-
-#: audio/plugins/radio.py:119
-msgid "Radio"
-msgstr "Radio"
-
-#: audio/plugins/radio.py:144
-msgid "No Radio Stations found"
-msgstr "Geen radiostation gevonden"
-
-#: audio/plugins/radio.py:146
-msgid "Radio Stations"
-msgstr "Radiostations"
-
-#: audio/plugins/vux.py:90
-msgid "[VUX] Start playing"
-msgstr "[VUX] Start het afspelen"
-
-#: audio/plugins/vux.py:91
-msgid "[VUX] Stop playing"
-msgstr "[VUX] Stop het afspelen"
-
-#: audio/plugins/vux.py:92
-msgid "[VUX] Next (rating down)"
-msgstr "[VUX] Volgende (minder waardering)"
-
-#: audio/plugins/vux.py:93
-msgid "[VUX] Next (rating intact)"
-msgstr "[VUX] Volgende (waardering intact)"
-
-#: audio/plugins/vux.py:94
-msgid "[VUX] Next (rating up)"
-msgstr "[VUX] Next (meer waardering)"
-
-#: audio/plugins/vux.py:95
-msgid "[VUX] Playing item rating up"
-msgstr "[VUX] Geef dit nummer meer waardering"
-
-#: audio/plugins/vux.py:96
-msgid "[VUX] Playing item rating down"
-msgstr "[VUX] Geef dit nummer minder waardering"
-
-#: audio/plugins/vux.py:97
-msgid "[VUX] a dir item do not select"
-msgstr "[VUX] een folder, niet selecteren"
-
-#: audio/plugins/vux.py:98
-msgid "[VUX] an audio item, do not select"
-msgstr "[VUX] een geluidsbestand, niet selecteren"
-
-#: audio/plugins/xine.py:89
-msgid "'fbxine' not found, plugin 'xine' deactivated"
-msgstr "'fbxine' niet gevonden, 'xine' plugin gedeactiveerd"
-
-#: audio/plugins/xine.py:108
-msgid "'fbxine' version too old, plugin 'xine' deactivated"
-msgstr "'fbxine' niet recent genoeg, 'xine' plugin gedeactiveerd"
-
-#: audio/plugins/xine.py:109 video/plugins/xine.py:136
-#, python-format
-msgid "You need software %s"
-msgstr "Je hebt software %s nodig"
-
-#: games/__init__.py:106
-msgid "please update GAMES_ITEMS in local_conf.py"
-msgstr "verander GAMES_ITEMS in local_conf.py aub"
-
-#: games/game.py:108
-#, python-format
-msgid "File \"%s\" not found!"
-msgstr "Bestand \"%s\" niet gevonden"
-
-#: games/mame_cache.py:179
-msgid "Generating MAME cache, please wait."
-msgstr "Bezig met het opbouwen van MAME cache, een ogenblik geduld..."
-
-#: gui/AlertBox.py:87 gui/ConfirmBox.py:100 plugins/command.py:181
-msgid "OK"
-msgstr "OK"
-
-#: gui/ConfirmBox.py:104 tv/edit_favorite.py:221
-msgid "CANCEL"
-msgstr "Annuleren"
-
-#: image/plugins/apod.py:61 image/plugins/apod.py:62
-msgid "APOD"
-msgstr "APOD"
-
-#: image/plugins/apod.py:72
-msgid "Current Picture"
-msgstr "Huidige afbeelding"
-
-#: image/plugins/apod.py:73
-msgid "Previous Pictures"
-msgstr "Vorige afbeelding"
-
-#: image/plugins/apod.py:74 image/plugins/apod.py:89
-msgid "Apod Pictures"
-msgstr "Apod afbeeldingen"
-
-#: image/plugins/apod.py:87
-msgid "No Images found"
-msgstr "Geen afbeeldingen gevonden"
-
-#: image/plugins/apod.py:117
-msgid "Need a directory to store APOD pictures."
-msgstr "Een folder is vereist om APOD afbeeldingen op te slaan."
-
-#: image/plugins/apod.py:121
-#, python-format
-msgid "directory %s does not exist."
+#: directory.py:553
+#, fuzzy
+msgid "Directory does not exist"
 msgstr "Folder %s bestaat niet."
 
-#: image/plugins/gphoto.py:115 image/imageitem.py:127
-msgid "View Image"
-msgstr "Afbeelding tonen"
+#: directory.py:582
+msgid "Scanning disc, be patient..."
+msgstr "De schijf wordt geanalyseerd, een ogenblik geduld..."
 
-#: image/viewer.py:149
+#: directory.py:584
+msgid "Scanning directory, be patient..."
+msgstr "De folder wordt geanalyseerd, een ogenblik geduld..."
+
+#: directory.py:783 directory.py:873 directory.py:907
+msgid "on"
+msgstr "aan"
+
+#: directory.py:785 directory.py:788 directory.py:877 directory.py:905
+msgid "off"
+msgstr "uit"
+
+#: directory.py:790
+msgid "auto"
+msgstr "automatisch"
+
+#: directory.py:909
+msgid "Show all kinds of items"
+msgstr "Toon alle soorten items"
+
+#: directory.py:911
+msgid "Show video, audio and image items in this directory"
+msgstr "Toon video, audio en afbeeldingen in deze directory"
+
+#: directory.py:914
+msgid "Configure"
+msgstr "Configureer"
+
+#: childapp.py:274
+#, python-format
+msgid "logging child to \"%s\""
+msgstr "logging child to \"%s\""
+
+#: childapp.py:278
+#, python-format
+msgid "Cannot open \"%s\" for logging!"
+msgstr "Kan \"%s\" niet openen voor logging!"
+
+#: childapp.py:279
+msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, "
+msgstr "Zet CHILDAPP_DEBUG=0 in local_conf.py."
+
+#: childapp.py:280
+#, python-format
+msgid "or make %s writable!"
+msgstr "of maak %s beschrijfbaar!"
+
+#: main.py:181
+msgid "Freevo Main Menu"
+msgstr "Freevo Hoofdmenu"
+
+#: main.py:197
+msgid "Skin Selector"
+msgstr "Skin selectie"
+
+#: main.py:312
 #, python-format
 msgid ""
-"Can't Open Image\n"
-"'%s'"
-msgstr ""
-"De afbeelding kan niet geladen worden: \n"
-"'%s'"
-
-#: image/viewer.py:350
-msgid "pause"
-msgstr "pauzeren"
-
-#: image/viewer.py:354
-msgid "play"
-msgstr "afspelen"
-
-#: image/viewer.py:441 image/viewer.py:452 tv/edit_favorite.py:143
-#: www/htdocs/manualrecord.rpy:222 www/htdocs/record.rpy:191
-#: www/htdocs/search.rpy:184 share/skins/main/info.fxd:390
-msgid "Title"
-msgstr "Titel"
-
-#: image/viewer.py:442 plugins/lcd.py:150 plugins/lcd.py:152
-#: plugins/lcd.py:329
-msgid "Description"
-msgstr "Beschrijving"
-
-#: image/viewer.py:443
-msgid "Author"
-msgstr "Auteur"
-
-#: image/viewer.py:453 plugins/lcd.py:149 share/skins/main/info.fxd:331
-#: share/skins/main/noia.fxd:92
-msgid "Date"
-msgstr "Datum"
-
-#: image/viewer.py:456
-msgid "Model"
-msgstr "Model"
-
-#: image/viewer.py:457
-msgid "Software"
-msgstr "Software"
-
-#: image/viewer.py:478
-msgid "No information available"
-msgstr "Geen informatie beschikbaar"
-
-#: plugins/idlebar/system.py:137
-#, python-format
-msgid "%iM"
-msgstr "%iM"
-
-#: plugins/idlebar/system.py:162
-#, python-format
-msgid "%s%%"
-msgstr "%s%%"
-
-#: plugins/command.py:167
-msgid "Command finished"
-msgstr "Commando afgerond"
-
-#: plugins/command.py:183
-msgid "Show Stderr"
-msgstr "Toon Stderr"
-
-#: plugins/command.py:185
-msgid "Show Stdout"
-msgstr "Toon Stdout"
-
-#: plugins/command.py:203
-msgid "Stdout File"
-msgstr "Stdout bestand"
-
-#: plugins/command.py:207
-msgid "Stderr File"
-msgstr "Stderr bestand"
-
-#: plugins/command.py:244
-msgid "Run Command"
-msgstr "Commando uitvoeren"
-
-#: plugins/command.py:255
-msgid "Running Command..."
-msgstr "Bezig met commando te starten..."
-
-#: plugins/command.py:275
-msgid "Command Failed"
-msgstr "Commando mislukt"
-
-#: plugins/command.py:277
-msgid "Command Completed"
-msgstr "Commando Volbracht"
-
-#: plugins/command.py:310 plugins/command.py:348
-msgid "Commands"
-msgstr "Commandos"
-
-#: plugins/df.py:73
-#, python-format
-msgid "%i free of %i Mb total"
-msgstr "%i van de in totaal %i Mb"
-
-#: plugins/file_ops.py:84 www/htdocs/library.rpy:449
-msgid "Delete"
-msgstr "Verwijder bestand"
-
-#: plugins/file_ops.py:86
-msgid "Delete info"
-msgstr "Wis extra informatie"
-
-#: plugins/file_ops.py:88
-msgid "Delete image"
-msgstr "Afbeelding verwijderen"
-
-#: plugins/file_ops.py:94
-#, python-format
-msgid ""
-"Do you wish to delete\n"
-" '%s'?"
-msgstr ""
-"Weetjeu zeker dat je dit bestand wilt verwijderen:\n"
-" '%s'?"
-
-#: plugins/file_ops.py:96 mail/__init__.py:103
-msgid "Deleting..."
-msgstr "Bezig met verwijderen..."
-
-#: plugins/file_ops.py:100
-#, python-format
-msgid ""
-"Delete info about\n"
-" '%s'?"
-msgstr ""
-"Weet je zeker dat je de extra informatie wilt wissen:\n"
-" '%s'?"
-
-#: plugins/file_ops.py:105
-#, python-format
-msgid ""
-"Delete image about\n"
-" '%s'?"
-msgstr ""
-"Wis afbeelding over\n"
-" '%s'?"
-
-#: plugins/headlines.py:182
-msgid "Show Sites Headlines"
-msgstr "Toon Website koppen"
-
-#: plugins/headlines.py:204
-msgid "Fetching headlines..."
-msgstr "Bezig met koppen binnen te halen..."
-
-#: plugins/headlines.py:267
-msgid "No Headlines found"
-msgstr "Geen koppen gevonden"
-
-#: plugins/headlines.py:269 plugins/headlines.py:282
-msgid "Headlines"
-msgstr "Koppen"
-
-#: plugins/headlines.py:288 plugins/headlines.py:302
-msgid "Headlines Sites"
-msgstr "Koppen Websites"
-
-#: plugins/headlines.py:300
-msgid "No Headlines Sites found"
-msgstr "Geen koppen sites gevonden"
-
-#: plugins/icecast.py:182
-msgid "Set as icecast playlist"
-msgstr "Instellen als icecast afspeellijst"
-
-#: plugins/lcd.py:110
-msgid "You need pylcd to run \"lcd\" plugin."
-msgstr "Voor de \"lcd\" plugin is pylcd benodigd"
-
-#: plugins/lcd.py:133 plugins/lcd.py:141 share/skins/main/basic.fxd:386
-#: share/skins/main/blurr.fxd:696 share/skins/main/info.fxd:218
-msgid "Length"
-msgstr "Speelduur"
-
-#: plugins/lcd.py:134 plugins/lcd.py:138 plugins/lcd.py:249
-#: share/skins/main/info.fxd:201 share/skins/main/info.fxd:356
-#: share/skins/main/info.fxd:396
-msgid "Artist"
-msgstr "Artiest"
-
-#: plugins/lcd.py:135 plugins/lcd.py:139 plugins/lcd.py:246
-#: share/skins/main/basic.fxd:368 share/skins/main/blurr.fxd:677
-#: share/skins/main/info.fxd:207 share/skins/main/info.fxd:361
-msgid "Album"
-msgstr "Album"
-
-#: plugins/lcd.py:136 plugins/lcd.py:140 share/skins/main/blurr.fxd:683
-#: share/skins/main/info.fxd:458
-msgid "Year"
-msgstr "Jaar"
-
-#: plugins/lcd.py:137 share/skins/main/blurr.fxd:338
-#: share/skins/main/info.fxd:401
-msgid "Tracks"
-msgstr "Nummer"
-
-#: plugins/lcd.py:142 share/skins/main/info.fxd:287
-#: share/skins/main/info.fxd:493
-msgid "Resolution"
-msgstr "Resolutie"
-
-#: plugins/lcd.py:143
-msgid "Aspect"
-msgstr "Beeldverhouding"
-
-#: plugins/lcd.py:144 plugins/lcd.py:147 plugins/lcd.py:284
-msgid "Tagline"
-msgstr "Onderschrift"
-
-#: plugins/lcd.py:145 plugins/lcd.py:146
-msgid "Plot"
-msgstr "Plot"
-
-#: plugins/lcd.py:148
-msgid "Geometry"
-msgstr "Verhouding"
-
-#: plugins/lcd.py:151
-#, python-format
-msgid "%s items"
-msgstr "%s items"
-
-#: plugins/lcd.py:206 plugins/lcd.py:354
-#, python-format
-msgid "Today is %s."
-msgstr "Vandaag is het %s."
-
-#: plugins/lcd.py:216 plugins/lcd.py:575
-msgid "Menu"
-msgstr "Menu"
-
-#: plugins/lcd.py:219 plugins/lcd.py:578
-msgid "Item"
-msgstr "Item"
-
-#: plugins/lcd.py:222 share/skins/main/info.fxd:282
-#: share/skins/main/info.fxd:487
-msgid "Type"
-msgstr "Type"
-
-#: plugins/lcd.py:225
-msgid "Information"
-msgstr "Opname informatie"
-
-#: plugins/lcd.py:243 plugins/lcd.py:590 www/htdocs/library.rpy:309
-#: share/skins/main/basic.fxd:21
-msgid "Music"
-msgstr "Muziek"
-
-#: plugins/lcd.py:281 plugins/lcd.py:617
-msgid "Video"
-msgstr "Video"
-
-#: plugins/lcd.py:287 share/skins/main/info.fxd:464
-msgid "Genre"
-msgstr "Genre"
-
-#: plugins/lcd.py:320 plugins/lcd.py:645 tv/edit_favorite.py:145
-#: www/htdocs/edit_favorite.rpy:207 www/htdocs/favorites.rpy:177
-#: www/htdocs/manualrecord.rpy:219 www/htdocs/record.rpy:190
-#: www/htdocs/search.rpy:183 share/skins/main/basic.fxd:547
-#: share/skins/main/basic.fxd:578 share/skins/main/basic.fxd:609
-msgid "Channel"
-msgstr "Kanaal"
-
-#: plugins/lcd.py:323 plugins/lcd.py:648 www/htdocs/edit_favorite.rpy:206
-#: www/htdocs/favorites.rpy:176 share/skins/main/basic.fxd:603
-msgid "Program"
-msgstr "Programma"
-
-#: plugins/lcd.py:326 www/htdocs/guide.rpy:209 share/skins/main/basic.fxd:590
-#: share/skins/main/noia.fxd:95
-msgid "Time"
-msgstr "Tijd"
-
-#: plugins/lcd.py:731
-msgid ""
-"LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
-msgstr ""
-"LCD plugin kan niet worden gestart! Misschien heb je LCDd (lcdproc daemon) "
-"niet draaien?"
-
-#: plugins/lcd.py:736
-#, python-format
-msgid "Connecting to LCD: %s"
-msgstr "Connecteren met LCD: %s"
-
-#: plugins/lcd.py:737
-msgid "Info as know by the LCD module:"
-msgstr "Info van de LCD module:"
-
-#: plugins/lcd.py:930
-#, python-format
-msgid "Could not find screens for %d lines LCD!"
-msgstr "Geen schermen gevonden voor %d lijnen LCD!"
-
-#: plugins/lcd.py:933 plugins/lcd.py:944 plugins/lcd.py:955
-#, python-format
-msgid "No screens found for this LCD (%dx%d)!"
-msgstr "Geen schermen gevonden voor deze LCD (%dx%d)!"
-
-#: plugins/lcd.py:941 plugins/lcd.py:954
-#, python-format
-msgid "Could not find screens for %d lines and %d columns LCD!"
-msgstr "Geen schermen gevonden voor %d lijnen en %d colommen LCD!"
-
-#: plugins/mediamenu.py:176
-msgid "Media"
-msgstr "Media"
-
-#: plugins/mediamenu.py:181
-msgid "Movie"
-msgstr "Film"
-
-#: plugins/mediamenu.py:183
-msgid "Audio"
-msgstr "Muziek"
-
-#: plugins/mediamenu.py:185
-msgid "Image"
-msgstr "Afbeelding"
-
-#: plugins/mediamenu.py:187 share/skins/main/basic.fxd:23
-#: share/skins/main/info.fxd:16
-msgid "Games"
-msgstr "Spelletjes"
-
-#: plugins/mediamenu.py:189
-#, python-format
-msgid "%s Main Menu"
-msgstr "%s Hoofdmenu"
-
-#: plugins/mixer.py:146 plugins/mixer.py:149 plugins/mixer.py:155
-#: plugins/mixer.py:158 plugins/mixer.py:163 plugins/ossmixer.py:136
-#: plugins/ossmixer.py:139 plugins/ossmixer.py:145 plugins/ossmixer.py:148
-#: plugins/ossmixer.py:153
-#, python-format
-msgid "Volume: %s%%"
-msgstr "Volume: %s%%"
-
-#: plugins/mixer.py:166 plugins/ossmixer.py:156
-msgid "Mute"
-msgstr "Stil"
-
-#: plugins/rom_drives.py:279
-#, python-format
-msgid "Drive %s (no disc)"
-msgstr "Station %s (geen schijf)"
-
-#: plugins/rom_drives.py:345
-#, python-format
-msgid "Ejecting disc in drive %s"
-msgstr "Schijf in %s wordt uitgeworpen "
-
-#: plugins/rom_drives.py:378
-#, python-format
-msgid "Reading disc in drive %s"
-msgstr "Bezig met de schijf in lezer %s te analyseren"
-
-#: plugins/shoppingcart.py:84
-msgid "Moving files..."
-msgstr "Bezig met verplaatsen van bestanden..."
-
-#: plugins/shoppingcart.py:94
-msgid "Copying files..."
-msgstr "Bezig met kopieren van bestanden."
-
-#: plugins/shoppingcart.py:108
-msgid "Added to Cart"
-msgstr "Toegevoegd aan het karretje"
-
-#: plugins/shoppingcart.py:130
-msgid "Cart: Move Files Here"
-msgstr "Karretje: Verplaats bestanden naar hier"
-
-#: plugins/shoppingcart.py:131
-msgid "Cart: Copy Files Here"
-msgstr "Karretje: Kopier bestanden naar hier"
-
-#: plugins/shoppingcart.py:134
-msgid "Add Directory to Cart"
-msgstr "Voeg folder toe aan het karretje"
-
-#: plugins/shoppingcart.py:138
-msgid "Add File to Cart"
-msgstr "Voeg bestand toe aan het karretje"
-
-#: plugins/shoppingcart.py:141
-msgid "Delete Cart"
-msgstr "Wis  het karretje"
-
-#: plugins/shutdown.py:82
-msgid "shutting down..."
-msgstr "Bezig met afsluiten..."
-
-#: plugins/shutdown.py:152 plugins/shutdown.py:156 plugins/shutdown.py:161
-msgid "Shutdown Freevo"
-msgstr "Freevo afsluiten"
-
-#: plugins/shutdown.py:153 plugins/shutdown.py:157 plugins/shutdown.py:160
-msgid "Shutdown system"
-msgstr "Systeem afsluiten"
-
-#: plugins/shutdown.py:154 plugins/shutdown.py:158 plugins/shutdown.py:162
-msgid "Restart system"
-msgstr "Systeem herstarten"
-
-#: plugins/shutdown.py:172
-msgid "Do you really want to shut down Freevo?"
-msgstr "Weet je zeker dat je Freevo wilt afsluiten?"
-
-#: plugins/shutdown.py:181
-msgid "Do you really want to shut down the system?"
-msgstr "Weet je zeker dat je de machine wilt afsluiten?"
-
-#: plugins/shutdown.py:189
-msgid "Do you really want to restart the system?"
-msgstr "Weet je zeker dat je de machine wilt herstarten?"
-
-#: plugins/yac.py:70
-#, python-format
-msgid "Call: %s"
-msgstr "Bel: %s"
-
-#: plugins/yac.py:72
-#, python-format
-msgid "Message: %s"
-msgstr "Boodschap: %s"
-
-#: plugins/weather.py:239 plugins/weather.py:242
-#, python-format
-msgid "Last updated: %s"
-msgstr "Laatste update: %s"
-
-#: plugins/weather.py:252
-msgid "Unlimited"
-msgstr "Ongelimiteerd"
-
-#: plugins/weather.py:265
-msgid "Show Weather Details"
-msgstr "Toon weer details"
-
-#: plugins/weather.py:343
-#, python-format
-msgid "Fetching Weather for %s..."
-msgstr "Het weer voor %s wordt opgehaald..."
-
-#: plugins/weather.py:504 plugins/weather.py:776
-msgid "at"
-msgstr "op"
-
-#: plugins/weather.py:534
-msgid "Unknown"
-msgstr "Onbekend"
-
-#: plugins/weather.py:618
-msgid "Weather"
-msgstr "Weer"
-
-#: plugins/weather.py:624 plugins/weather.py:659
-msgid "Locations"
-msgstr "Locaties"
-
-#: plugins/weather.py:651
-msgid "No locations specified"
-msgstr "Geen locaties opgegeven"
-
-#: plugins/weather.py:676
-msgid "Current Conditions"
-msgstr "Huidige condities"
-
-#: plugins/weather.py:676
-msgid "Today's Forecast"
-msgstr "Voorspelling voor vandaag"
-
-#: plugins/weather.py:677
-msgid "Extended Forecast"
-msgstr "Vooruitzichten"
-
-#: plugins/weather.py:677
-msgid "Radar Map"
-msgstr "Radarkaart"
-
-#: plugins/weather.py:755
-msgid "Humidity"
-msgstr "Vochtigheid"
-
-#: plugins/weather.py:768
-msgid "Pressure"
-msgstr "Druk"
-
-#: plugins/weather.py:775
-msgid "Wind"
-msgstr "Wind"
-
-#: plugins/weather.py:783
-msgid "Wind Chill"
-msgstr "Gevoelstemp."
-
-#: plugins/weather.py:791
-msgid "Visibility"
-msgstr "Zicht"
-
-#: plugins/weather.py:799
-msgid "UV Index"
-msgstr "UV Index"
-
-#: plugins/weather.py:842
-msgid "Today, a high of"
-msgstr "Vandaag een maximum van"
-
-#: plugins/weather.py:844
-msgid "and a low of"
-msgstr "en een minimum van"
-
-#: plugins/weather.py:847
-msgid "Currently, there is a a humidity of"
-msgstr "Momenteel is de luchtvochtigheid"
-
-#: plugins/weather.py:849
-msgid "and"
-msgstr "en"
-
-#: plugins/weather.py:851
-msgid "the winds are "
-msgstr "de wind heeft "
-
-#: plugins/weather.py:853
-msgid "calm"
-msgstr "kalm"
-
-#: plugins/weather.py:855
-msgid "coming in at"
-msgstr "een kracht van"
-
-#: plugins/weather.py:855
-msgid "from the"
-msgstr "en komt vanuit het"
-
-#: plugins/weather.py:859
-msgid "Visibility will be unlimited today"
-msgstr "Het zicht is vandaag ongelimiteerd"
-
-#: plugins/weather.py:861
-msgid "There will be a visibility of"
-msgstr "Het zicht is"
-
-#: plugins/weather.py:896
-msgid "LO"
-msgstr "MIN"
-
-#: plugins/weather.py:904
-msgid "HI"
-msgstr "MAX"
-
-#: plugins/weather.py:918
-msgid "Error encountered while trying to download Radar map"
-msgstr "Het ophalen van de radarmap is mislukt"
-
-#: skins/main/default_areas.py:128
-msgid "TV GUIDE"
-msgstr "TV gids"
-
-#: skins/main/info_area.py:159
-msgid "missing 'src' attribute in skin tag!"
-msgstr "Het 'src' attribuut in de skin-tag ontbreekt!"
-
-#: skins/main/listing_area.py:225
-msgid "This directory is empty"
-msgstr "Deze folder is leeg"
-
-#: skins/main/tvlisting_area.py:364 tv/tvguide.py:119 tv/tvguide.py:585
-#: tv/tvguide.py:587 www/htdocs/guide.rpy:251
-msgid "This channel has no data loaded"
-msgstr "Geen gegevens over dit kanaal beschikbaar"
-
-#: tv/plugins/manual_record.py:71 www/htdocs/manualrecord.rpy:68
-#: www/htdocs/manualrecord.rpy:202
-msgid "Manual Record"
-msgstr "Handmatige opname"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Jan"
-msgstr "jan"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Feb"
-msgstr "feb"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Mar"
-msgstr "maa"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Apr"
-msgstr "apr"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "May"
-msgstr "mei"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Jun"
-msgstr "jun"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Jul"
-msgstr "jul"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Aug"
-msgstr "aug"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Sep"
-msgstr "sep"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Oct"
-msgstr "okt"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Nov"
-msgstr "nov"
-
-#: tv/plugins/manual_record.py:81 www/htdocs/manualrecord.rpy:145
-msgid "Dec"
-msgstr "dec"
-
-#: tv/plugins/manual_record.py:114
-msgid "Display record item"
-msgstr "Toon opnameitem"
-
-#: tv/plugins/manual_record.py:122 tv/program_display.py:276
-msgid "Modify name"
-msgstr "Naam wijzigen"
-
-#: tv/plugins/manual_record.py:123 tv/program_display.py:277
-msgid "Modify channel"
-msgstr "Kanaal wijzigen"
-
-#: tv/plugins/manual_record.py:124
-msgid "Modify start month"
-msgstr "Startmaand wijzigen"
-
-#: tv/plugins/manual_record.py:125
-msgid "Modify start day"
-msgstr "Startdag wijzigen"
-
-#: tv/plugins/manual_record.py:126
-msgid "Modify start time"
-msgstr "Starttijd wijzigen"
-
-#: tv/plugins/manual_record.py:127
-msgid "Modify stop month"
-msgstr "Eindmaand wijzigen"
-
-#: tv/plugins/manual_record.py:128
-msgid "Modify stop day"
-msgstr "Einddag wijzigen"
-
-#: tv/plugins/manual_record.py:129
-msgid "Modify stop time"
-msgstr "Eindtijd wijzigen"
-
-#: tv/plugins/manual_record.py:130 tv/edit_favorite.py:214
-#: www/htdocs/edit_favorite.rpy:313
-msgid "Save"
-msgstr "Opslaan"
-
-#: tv/plugins/manual_record.py:132
-msgid "Record Item Menu"
-msgstr "Opnameitem menu"
-
-#: tv/plugins/manual_record.py:141 tv/program_display.py:300
-msgid "Alter Name"
-msgstr "Naam wijzigen"
-
-#: tv/plugins/manual_record.py:151 tv/program_display.py:322
-msgid "Modify Channel"
-msgstr "Kanaal wijzigen"
-
-#: tv/plugins/manual_record.py:167 tv/plugins/manual_record.py:183
-#: tv/plugins/manual_record.py:216 tv/plugins/manual_record.py:232
-#: tv/program_display.py:372
-msgid "Modify Day"
-msgstr "Dag wijzigen"
-
-#: tv/plugins/manual_record.py:200 tv/plugins/manual_record.py:249
-#: tv/program_display.py:392
-msgid "Modify Time"
-msgstr "Laatst gewijzigd"
-
-#: tv/plugins/manual_record.py:306 tv/plugins/manual_record.py:335
-#: tv/plugins/manual_record.py:339 tv/plugins/manual_record.py:344
-#: tv/plugins/manual_record.py:348
-msgid "Save Failed, recording was lost"
-msgstr "Opslaan mislukt, de opname is verloren gegaan"
-
-#: tv/plugins/manual_record.py:334 www/htdocs/manualrecord.rpy:129
-#, python-format
-msgid "Program would record for more than %d days!"
-msgstr "Deze programmeren beslaat %d dagen!"
-
-#: tv/plugins/manual_record.py:338 www/htdocs/manualrecord.rpy:131
-msgid "Program would record for more than 1 day!"
-msgstr "Dit programma beslaat meer dan 1 dag!"
-
-#: tv/plugins/manual_record.py:343 www/htdocs/manualrecord.rpy:126
-msgid "start time is not before stop time."
-msgstr "startijd ligt niet voor de stoptijd"
-
-#: tv/plugins/manual_record.py:347
-msgid ""
-"Sorry, the stop time does not give enough time for scheduler to pickup the "
-"change.  Please set it to record for a few minutes longer."
-msgstr ""
-"Sorry, de eindtijd geeft de planner te weinig tijd om de wijziging op te "
-"pakken. Verleng de opname alstublieft met enkele minuten."
-
-#: tv/plugins/scheduled_recordings.py:71 tv/plugins/scheduled_recordings.py:85
-#: www/web_types.py:180 www/htdocs/record.rpy:182
-msgid "Scheduled Recordings"
-msgstr "Ingeplande opnames"
-
-#: tv/plugins/scheduled_recordings.py:76
-msgid "Display Scheduled Recordings"
-msgstr "Toon ingeplande opnames"
-
-#: tv/plugins/scheduled_recordings.py:82
-msgid "Nothing scheduled."
-msgstr "Geen ingeplande opnames."
-
-#: tv/plugins/scheduled_recordings.py:117 tv/plugins/view_favorites.py:106
-#: tv/program_search.py:99 www/htdocs/edit_favorite.rpy:133
-#: www/htdocs/favorites.rpy:130 www/htdocs/genre.rpy:118
-#: www/htdocs/guide.rpy:201 www/htdocs/manualrecord.rpy:70
-#: www/htdocs/record.rpy:139
-msgid "Recording server is unavailable."
-msgstr "De opnameserver is niet beschikbaar"
-
-#: tv/plugins/scheduled_recordings.py:130
-msgid "Get recordings failed"
-msgstr "Het ophalen van de opnames is mislukt."
-
-#: tv/plugins/view_favorites.py:60 tv/plugins/view_favorites.py:65
-#: tv/plugins/view_favorites.py:74 www/web_types.py:181
-msgid "View Favorites"
-msgstr "Bekijk favorieten"
-
-#: tv/plugins/view_favorites.py:71
-msgid "No favorites."
-msgstr "Geen favorieten."
-
-#: tv/plugins/view_favorites.py:118
-msgid "Get favorites failed"
-msgstr "Het ophalen van de favorieten is mislukt."
-
-#: tv/plugins/view_line_in.py:55
-msgid "View VCR Input"
-msgstr "Bekijk het videosignaal"
-
-#: tv/channels.py:150
-#, python-format
-msgid "Cannot find tuner channel \"%s\" in the TV channel listing"
-msgstr "Het kanaal \"%s\" komt niet voor in de lijst met TV kanalen."
-
-#: tv/channels.py:186
-#, python-format
-msgid "Unable to get channel list for %s."
-msgstr "Het ophalen van de lijst met kanalen voor %s is mislukt."
-
-#: tv/channels.py:189
-#, python-format
-msgid "Unable to get frequency for channel %s."
-msgstr "Het ophalen van de frequentie voor kanaal %s is niet mogelijk."
-
-#: tv/channels.py:219
-#, python-format
-msgid "Failed to set freq for channel %s."
-msgstr "Het instellen van de frequentie voor kanaal %s is mislukt."
-
-#: tv/edit_favorite.py:123 www/htdocs/edit_favorite.rpy:131
-#: www/htdocs/edit_favorite.rpy:192 www/htdocs/edit_favorite.rpy:197
-msgid "Edit Favorite"
-msgstr "Favorieten bewerken"
-
-#: tv/edit_favorite.py:137 share/skins/main/basic.fxd:572
-#: share/skins/main/info.fxd:269
-msgid "Name"
-msgstr "Naam"
-
-#: tv/edit_favorite.py:149 www/htdocs/favorites.rpy:190
-#: www/htdocs/favorites.rpy:202 www/htdocs/favorites.rpy:208
-msgid "ANY"
-msgstr "ALLE"
-
-#: tv/edit_favorite.py:168
-msgid "Day of Week"
-msgstr "Dag van de week"
-
-#: tv/edit_favorite.py:172 tv/program_display.py:257
-#: www/htdocs/edit_favorite.rpy:238
-msgid "ANY DAY"
-msgstr "Alle dagen"
-
-#: tv/edit_favorite.py:176 tv/program_display.py:250
-#: www/htdocs/edit_favorite.rpy:239
-msgid "Mon"
-msgstr "ma"
-
-#: tv/edit_favorite.py:176 tv/program_display.py:250
-#: www/htdocs/edit_favorite.rpy:240
-msgid "Tue"
-msgstr "di"
-
-#: tv/edit_favorite.py:176 tv/program_display.py:250
-#: www/htdocs/edit_favorite.rpy:241
-msgid "Wed"
-msgstr "wo"
-
-#: tv/edit_favorite.py:176 tv/program_display.py:250
-#: www/htdocs/edit_favorite.rpy:242
-msgid "Thu"
-msgstr "do"
-
-#: tv/edit_favorite.py:176 tv/program_display.py:250
-#: www/htdocs/edit_favorite.rpy:243
-msgid "Fri"
-msgstr "vr"
-
-#: tv/edit_favorite.py:176 tv/program_display.py:250
-#: www/htdocs/edit_favorite.rpy:244
-msgid "Sat"
-msgstr "za"
-
-#: tv/edit_favorite.py:176 tv/program_display.py:250
-#: www/htdocs/edit_favorite.rpy:245
-msgid "Sun"
-msgstr "zo"
-
-#: tv/edit_favorite.py:189
-msgid "Time of Day"
-msgstr "Tijd"
-
-#: tv/edit_favorite.py:192 tv/program_display.py:261
-#: www/htdocs/edit_favorite.rpy:251
-msgid "ANY TIME"
-msgstr "ALTIJD"
-
-#: tv/edit_favorite.py:217 www/htdocs/favorites.rpy:214
-#: www/htdocs/record.rpy:235 www/htdocs/search.rpy:230
-msgid "Remove"
-msgstr "Verwijderen"
-
-#: tv/edit_favorite.py:241 tv/program_display.py:238 tv/program_display.py:437
-msgid "Remove Failed"
-msgstr "Het verwijderen is mislukt"
-
-#: tv/edit_favorite.py:351
-#, python-format
-msgid "Favorite %s has been saved"
-msgstr "Favoriet %s is opgeslagen"
-
-#: tv/edit_favorite.py:353
-#, python-format
-msgid "Failed: %s"
-msgstr "Mislukt: %s"
-
-#: tv/edit_favorite.py:373
-#, python-format
-msgid "Do you want to remove %s?"
-msgstr "Wil je %s verwijderen?"
-
-#: tv/epg_xmltv.py:94
-msgid "Time conversion error"
-msgstr "Tijd omzettingsfout"
-
-#: tv/epg_xmltv.py:172
-msgid "Couldn't load the TV Guide, got an exception!"
-msgstr "Kan de Programmagids niet laden, er is een exceptie opgetreden!"
-
-#: tv/epg_xmltv.py:263
-#, python-format
-msgid "REPLACE WITH TUNERID FOR %s"
-msgstr "VERVANG MET TUNERID VOOR %s"
-
-#: tv/program_display.py:125
-msgid "Display program"
-msgstr "Toon programma"
-
-#: tv/program_display.py:139
-msgid "Remove from schedule"
-msgstr "Verwijder uit planning"
-
-#: tv/program_display.py:142
-msgid "Schedule for recording"
-msgstr "Inplannen voor opname"
-
-#: tv/program_display.py:146
-msgid "Search for more of this program"
-msgstr "Zoek naar andere tijden voor dit programma"
-
-#: tv/program_display.py:156
-msgid "Remove from favorites"
-msgstr "Favoriet verwijderen"
-
-#: tv/program_display.py:159
-msgid "Add to favorites"
-msgstr "Toevoegen aan favorieten"
-
-#: tv/program_display.py:162
-msgid "Program Menu"
-msgstr "Programmamenu"
-
-#: tv/program_display.py:184 tv/program_search.py:129
-msgid "Searching, please wait..."
-msgstr "Bezig met zoeken, even geduld..."
-
-#: tv/program_display.py:200
-#, python-format
-msgid "No matches found for %s"
-msgstr "Geen resultaten gevonden voor %s"
-
-#: tv/program_display.py:202
-#, python-format
-msgid "findMatches failed: %s"
-msgstr "findMatches mislukt: %s"
-
-#: tv/program_display.py:205 www/htdocs/search.rpy:144
-msgid "Search Results"
-msgstr "Zoekresultaten"
-
-#: tv/program_display.py:219
-#, python-format
-msgid "\"%s\" has been scheduled for recording"
-msgstr "\"%s\" is geregistreerd voor opname"
-
-#: tv/program_display.py:222
-msgid "Scheduling Failed"
-msgstr "Het inplannen is mislukt."
-
-#: tv/program_display.py:253 www/htdocs/edit_favorite.rpy:225
-msgid "ANY CHANNEL"
-msgstr "ALLE KANALEN"
-
-#: tv/program_display.py:270
-msgid "Display favorite"
-msgstr "Toon favoriet"
-
-#: tv/program_display.py:278
-msgid "Modify day of week"
-msgstr "Wijzig dag van de week"
-
-#: tv/program_display.py:279
-msgid "Modify time of day"
-msgstr "Wijzig tijd"
-
-#: tv/program_display.py:285
-msgid "Modify priority"
-msgstr "Wijzig prioriteit"
-
-#: tv/program_display.py:288
-msgid "Save changes"
-msgstr "Wijzigingen opslaan"
-
-#: tv/program_display.py:289
-msgid "Remove favorite"
-msgstr "Verwijder favoriet"
-
-#: tv/program_display.py:291
-msgid "Favorite Menu"
-msgstr "Favorieten menu"
-
-#: tv/program_display.py:413
-msgid "Save Failed, favorite was lost"
-msgstr "Opslaan mislukt, de favoriet is verloren gegaan"
-
-#: tv/program_display.py:420
-msgid "Save Failed"
-msgstr "Het opslaan is mislukt"
-
-#: tv/program_display.py:425
-msgid "Favorite not added yet."
-msgstr "De favoriet is nog niet toegevoegd."
-
-#: tv/program_search.py:92
-msgid "Program Search"
-msgstr "Programma zoeken"
-
-#: tv/program_search.py:101
-msgid "Feel free to implement this function inside the main guide."
-msgstr "Je bent vrij om deze functie in de hoofdgids te implementeren."
-
-#: tv/record_client.py:103 tv/record_client.py:112 tv/record_client.py:123
-#: tv/record_client.py:139 tv/record_client.py:151 tv/record_client.py:160
-#: tv/record_client.py:179 tv/record_client.py:188 tv/record_client.py:200
-#: tv/record_client.py:209 tv/record_client.py:222 tv/record_client.py:231
-#: tv/record_client.py:240 tv/record_client.py:249 tv/record_client.py:259
-#: tv/record_client.py:269 tv/record_client.py:278 tv/record_client.py:287
-#: tv/record_client.py:296 tv/record_client.py:305
-msgid "connection error"
-msgstr "verbindingsfout"
-
-#: tv/record_client.py:130 tv/record_client.py:146
-msgid "no program"
-msgstr "geen programma"
-
-#: tv/record_client.py:133
-msgid "cannot record it if it is over"
-msgstr "kan een verlopen programma niet opnemen"
-
-#: tv/record_client.py:168 tv/record_client.py:174
-msgid "program not scheduled"
-msgstr "het programma is niet ingepland"
-
-#: tv/record_client.py:172
-msgid "program is scheduled"
-msgstr "het programma is ingepland"
-
-#: tv/tvguide.py:128
-msgid "Preparing the program guide"
-msgstr "De programmagids wordt geladen..."
-
-#: tv/tvguide.py:131
-msgid "TV Guide is corrupt!"
-msgstr "De TV gids is corrupt!"
-
-#: tv/tvguide.py:254
-msgid "Sorry, you cannot watch TV while recording. "
-msgstr "Sorry, je kunt tijdens een opname geen TV kijken. "
-
-#: tv/tvguide.py:255
-msgid "If this is not true then remove "
-msgstr "Als dit niet klopt verwijder dan "
-
-#: tv/tvmenu.py:103 tv/tvmenu.py:111
-#, python-format
-msgid "Could not find TV channel %s"
-msgstr "Kan TV kanaal %s niet vinden"
-
-#: tv/tvmenu.py:135 www/web_types.py:179 www/htdocs/guide.rpy:196
-msgid "TV Guide"
-msgstr "TV gids"
-
-#: tv/tvmenu.py:137
-msgid "Recorded Shows"
-msgstr "Opgenomen programma's"
-
-#: tv/tvmenu.py:147
-msgid "TV Main Menu"
-msgstr "TV Hoofdmenu"
-
-#: tv/tvmenu.py:173
-msgid "The list of TV channels is invalid!\n"
-msgstr "De lijst met TV kanalen is ongeldig!\n"
-
-#: tv/tvmenu.py:174
-msgid "Please check the config file."
-msgstr "Controleer het configuratiebestand."
-
-#: util/misc.py:441
-msgid "The recordserver is down"
-msgstr "De opnameserver is niet beschikbaar"
-
-#: util/misc.py:463
-msgid "Today"
-msgstr "Vandaag"
-
-#: util/misc.py:473
-msgid "Tomorrow"
-msgstr "Morgen"
-
-#: util/misc.py:483
-msgid "This Week"
-msgstr "Deze week"
-
-#: util/misc.py:493
-msgid "No recordings are scheduled"
-msgstr "Geen programma's geregistreerd voor opname"
-
-#: video/plugins/bookmarker.py:79
-msgid "Resume playback"
-msgstr "Verder met afspelen"
-
-#: video/plugins/bookmarker.py:84
-msgid "Bookmarks"
-msgstr "Bladwijzers"
-
-#: video/plugins/bookmarker.py:120
-#, python-format
-msgid "Jump to %s"
-msgstr "Spring naar %s"
-
-#: video/plugins/details.py:64
-msgid "Show details for this item"
-msgstr "Toon details voor dit bestand"
-
-#: video/plugins/details.py:94
-msgid "Details"
-msgstr "Details"
-
-#: video/plugins/imdb.py:108
-msgid "Search IMDB for this file"
-msgstr "Zoek op IMDB naar dit bestand"
-
-#: video/plugins/imdb.py:115 video/plugins/imdb.py:122
-#, python-format
-msgid "Search IMDB for [%s]"
-msgstr "Zoek op IMDB naar [%s]"
-
-#: video/plugins/imdb.py:133
-msgid "searching IMDB..."
-msgstr "Bezig met zoeken op IMDB..."
-
-#: video/plugins/imdb.py:157
-msgid "Unknown error while connecting to IMDB"
-msgstr "Onbekende fout tijdens het verbinden met IMDB"
-
-#: video/plugins/imdb.py:175
-msgid "IMDB Query"
-msgstr "IMDB Zoekopdracht"
-
-#: video/plugins/imdb.py:179
-msgid "No information available from IMDB"
-msgstr "Geen informatie beschikbaar op IMDB"
-
-#: video/plugins/linkbrowser.py:90
-msgid "Browse links (autoplay)"
-msgstr "Verken links (automatisch afspelen)"
-
-#: video/plugins/linkbrowser.py:91
-msgid "Browse links (autoplay, maximum caching)"
-msgstr "Verken links (automatisch afspelen, maximale cache)"
-
-#: video/plugins/linkbrowser.py:92
-msgid "Browse links"
-msgstr "Verken links"
-
-#: video/plugins/linkbrowser.py:161
-msgid "Downloading link list..."
-msgstr "De lijst met links wordt opgehaald..."
-
-#: video/plugins/linkbrowser.py:168
-#, python-format
-msgid "Failed to download %s"
-msgstr "Downloaden van %s mislukt"
-
-#: video/plugins/mover.py:123
-#, python-format
-msgid "Move to [%s]"
-msgstr "Verplaats naar [%s]"
-
-#: video/plugins/mplayer.py:476
-msgid "Seeking not possible"
-msgstr "Zoeken niet mogelijk"
-
-#: video/plugins/xine.py:111
-msgid ""
-"'XINE_COMMAND' not defined, plugin 'xine' deactivated.\n"
-"please check the xine section in freevo_config.py"
-msgstr ""
-"'XINE_COMMAND' niet gedefineerd, 'xine' plugin uitgeschakeld.\n"
-"Controller de xine sectie in freevo_config.py"
-
-#: video/plugins/xine.py:135
-msgid "'xine-ui' version too old, plugin 'xine' deactivated"
-msgstr "de versie van 'xine-ui' is te oud, 'xine' plugin uitgeschakeld"
-
-#: share/skins/main/blurr.fxd:217
-#: share/skins/main/info.fxd:313
-msgid "Subtitles"
-msgstr "Ondertitels"
-
-#: video/__init__.py:224
-msgid "Directory Autobuild Thumbnails "
-msgstr "Maak automatisch pictogrammen voor deze folder"
-
-#: video/__init__.py:225
-msgid "Build video thumbnails for all items (may take a while when entering)."
-msgstr ""
-"Maak pictogrammen aan voor alle video-elementen (dit kan enige tijd in "
-"beslag nemen)."
-
-#: video/configure.py:111
-#, python-format
-msgid "Stream %s"
-msgstr "Stream %s"
-
-#: video/configure.py:119
-msgid "Audio Menu"
-msgstr "Geluidsmenu"
-
-#: video/configure.py:134
-msgid "no subtitles"
-msgstr "geen ondertitels"
-
-#: video/configure.py:138
-msgid "Subtitle Menu"
-msgstr "Ondertitel menu"
-
-#: video/configure.py:155
-#, python-format
-msgid "Play chapter %s"
-msgstr "Speel hoofdstuk %s af"
-
-#: video/configure.py:162
-msgid "Chapter Menu"
-msgstr "Hoofdstukken menu"
-
-#: video/configure.py:191
-#, python-format
-msgid "Turn off %s"
-msgstr "Zet %s af"
-
-#: video/configure.py:192
-#, python-format
-msgid "Turn on %s"
-msgstr "Zet %s aan"
-
-#: video/configure.py:205
-msgid "Audio selection"
-msgstr "Audio selectie"
-
-#: video/configure.py:207
-msgid "Subtitle selection"
-msgstr "Ondertitel selectie"
-
-#: video/configure.py:210
-msgid "Chapter selection"
-msgstr "Hoofdstuk selectie"
-
-#: video/configure.py:215
-msgid "deinterlacing"
-msgstr "deinterlacing"
-
-#: video/configure.py:221
-msgid "Config Menu"
-msgstr "Configuratiemenu"
-
-#: video/videoitem.py:284
-msgid "Play DVD"
-msgstr "DVD afspelen"
-
-#: video/videoitem.py:285 video/videoitem.py:287
-msgid "DVD title list"
-msgstr "DVD Titellijst"
-
-#: video/videoitem.py:288 video/videoitem.py:296
-msgid "Play default track"
-msgstr "Speel standaardnummer"
-
-#: video/videoitem.py:292
-msgid "Play VCD"
-msgstr "Speel VCD af"
-
-#: video/videoitem.py:293 video/videoitem.py:295
-msgid "VCD title list"
-msgstr "VCD titel lijst"
-
-#: video/videoitem.py:300
-msgid "Play with alternate player"
-msgstr "Speel af met andere speler"
-
-#: video/videoitem.py:303
-msgid "Play with maximum cache"
-msgstr "Afspelen met maximale buffer"
-
-#: video/videoitem.py:308
-msgid "Show variants"
-msgstr "Toon varianten"
-
-#: video/videoitem.py:311
-msgid "Create Thumbnail"
-msgstr "Maak pictogram"
-
-#: video/videoitem.py:332
-msgid "Please wait...."
-msgstr "Een ogenblik geduld..."
-
-#: video/videoitem.py:463 video/videoitem.py:477 video/videoitem.py:491
-#, python-format
-msgid "No media found for \"%s\".\n"
-msgstr "Media niet gevonden voor \"%s\".\n"
-
-#: video/videoitem.py:464 video/videoitem.py:478 video/videoitem.py:492
-msgid "Please insert the media."
-msgstr "Gelieve het medium in te voeren"
-
-#: video/videoitem.py:497
-msgid "No player for this item found"
-msgstr "Geen afspeler gevonden voor dit element"
-
-#: video/videoitem.py:572
-#, python-format
-msgid "Play Title %s"
-msgstr "Speel titel %s af"
-
-#: www/web_types.py:178 www/htdocs/index.rpy:107
-msgid "Home"
-msgstr "Hoofdpagina"
-
-#: www/web_types.py:179
-msgid "View TV Listings"
-msgstr "Bekijk programmagids"
-
-#: www/web_types.py:180
-msgid "View Scheduled Recordings"
-msgstr "Bekijk programmas geregistreerd om op te nemen"
-
-#: www/web_types.py:181 www/htdocs/favorites.rpy:128
-#: www/htdocs/favorites.rpy:171
-msgid "Favorites"
-msgstr "Favorieten"
-
-#: www/web_types.py:182 www/htdocs/library.rpy:277
-msgid "Media Library"
-msgstr "Mediabibliotheek"
-
-#: www/web_types.py:182
-msgid "View Media Library"
-msgstr "Bekijk mediabibliotheek"
-
-#: www/web_types.py:183 www/htdocs/manualrecord.rpy:202
-msgid "Manual Recording"
-msgstr "Handmatig opnemen"
-
-#: www/web_types.py:183
-msgid "Schedule a Manual Recording"
-msgstr "Plan een handmatige opname"
-
-#: www/web_types.py:184 www/web_types.py:282 www/web_types.py:289
-#: www/htdocs/search.rpy:144 www/htdocs/search.rpy:168
-msgid "Search"
-msgstr "Zoeken"
-
-#: www/web_types.py:184
-msgid "Advanced Search Page"
-msgstr "Uitgebreide zoekpagina"
-
-#: www/web_types.py:185
-msgid "Help"
-msgstr "Help"
-
-#: www/web_types.py:185
-msgid "View Online Help and Documentation"
-msgstr "Bekijk online hulp en documentatie"
-
-#: www/web_types.py:189
-msgid "Icecast List"
-msgstr "Icecast Lijst"
-
-#: www/web_types.py:189
-msgid "Change Icecast List"
-msgstr "Verander Icecast Lijst"
-
-#: www/web_types.py:290
-msgid "Movies only"
-msgstr "Alleen films"
-
-#: www/web_types.py:291
-msgid "Go!"
-msgstr "Starten!"
-
-#: www/web_types.py:297 www/htdocs/library.rpy:288
-msgid "Messages"
-msgstr "Berichten"
-
-#: www/htdocs/help/howto.rpy:93 www/htdocs/help/howto.rpy:94
-msgid "Freevo Installation HOWTO"
-msgstr "Freevo Installatie HOWTO"
-
-#: www/htdocs/help/howto.rpy:94
-msgid "Build your own media box with Freevo and Linux"
-msgstr "Maak uw eigen multimedia computer met Freevo en Linux"
-
-#: www/htdocs/help/howto.rpy:96 www/htdocs/help/howto.rpy:97
-msgid "Freevo Plugin Writing HOWTO"
-msgstr "Freevo Plugin Writing HOWTO"
-
-#: www/htdocs/help/howto.rpy:97
-msgid "Writing your own plugins for Freevo"
-msgstr "Je eigen plugins schrijven met Freevo"
-
-#: www/htdocs/help/howto.rpy:132
-msgid "unable to load html files"
-msgstr "niet mogelijk om de html bestanden te laden"
-
-#: www/htdocs/help/howto.rpy:133 www/htdocs/help/doc.rpy:109
-msgid "If you use a CVS version of Freevo, run <b>autogen.sh</b>."
-msgstr "Als u een CVS versie van Freevo gebruikt, start dan <b>autogen.sh</b>."
-
-#: www/htdocs/help/howto.rpy:134
-msgid "The files are searched in the following locations:"
-msgstr "De bestanden worden gezocht in de volgende locaties:"
-
-#: www/htdocs/help/doc.rpy:106 www/htdocs/help/doc.rpy:117
-msgid "Freevo Documentation"
-msgstr "Freevo Documentatie"
-
-#: www/htdocs/help/doc.rpy:108
-#, python-format
-msgid "unable to load %s.html"
-msgstr "%s kan niet worden geladen"
-
-#: www/htdocs/help/doc.rpy:126
-#, python-format
-msgid ""
-"This page is generated from the Freevo WiKi. The current Version can be "
-"found <a href=\"%s\">here</a>."
-msgstr ""
-"Deze pagina werd gegenereerd door Freevo WiKi. De recentste versie kan u <a "
-"href=\"%s\">hier</a>vinden."
-
-#: www/htdocs/help/index.rpy:82
-msgid "Freevo Help"
-msgstr "Freevo Help"
-
-#: www/htdocs/help/index.rpy:85
-msgid ""
-"This is the internal Freevo documentation. The documents         are in an "
-"early stage of development, if you like to help, please         contact the "
-"developers. You find more informations like         the <a href=\"http://"
-"freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online "
-"manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org"
-"\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
-"them if someone deletes         informations), feel free to add informations "
-"there."
-msgstr ""
-"Dit is de interne Freevo documentatie. Deze documenten zijn ver van "
-"afgewerkt, maar als u wilt helpen kan u best de ontwerpers van Freevo "
-"contacteren. U kan nog meer informatie vindenin de <a href=\"http://freevo."
-"sourceforge.net/cgi-bin/moin.cgi/FrontPage\">Freevo Wiki (online)</a> en op "
-"de Freevo mail lijsten alsook op de <a href=\"http://www.freevo.org\">Freevo "
-"homepagina</a>. Als u wat extra informatie hebt of een tip hebt die andere "
-"Freevo gebruikers ook handig zouden kunnen vinden kan u deze gerust "
-"toevoegen aan de Freevo Wiki (iedereen kan er, vrij, zonder login, "
-"informatie aanpassen)."
-
-#: www/htdocs/help/index.rpy:94
-msgid "Index"
-msgstr "Index"
-
-#: www/htdocs/help/index.rpy:96
-msgid "Freevo Installation Howto"
-msgstr "Freevo Installatie Howto"
-
-#: www/htdocs/help/index.rpy:97
-msgid "Frequently Asked Questions"
-msgstr "Veelgestelde vragen"
-
-#: www/htdocs/help/index.rpy:98
-msgid "Recording Information"
-msgstr "Opname Informatie"
-
-#: www/htdocs/help/index.rpy:99
-msgid "Plugin List"
-msgstr "Plugin Lijst"
-
-#: www/htdocs/help/index.rpy:100
-msgid "FXD files"
-msgstr "FXD bestanden"
-
-#: www/htdocs/help/index.rpy:101
-msgid "Skinning Informations"
-msgstr "Uiterlijk informatie"
-
-#: www/htdocs/help/index.rpy:102
-msgid "Plugin Writing Howto"
-msgstr "Plugin Writing Howto"
-
-#: www/htdocs/help/plugins.rpy:109 www/htdocs/help/plugins.rpy:128
-msgid "Freevo Plugin List"
-msgstr "Freevo Plugin Lijst"
-
-#: www/htdocs/help/plugins.rpy:138 www/htdocs/help/plugins.rpy:145
-msgid "top"
-msgstr "top"
-
-#: www/htdocs/help/plugins.rpy:139 www/htdocs/help/plugins.rpy:146
-msgid "index"
-msgstr "index"
-
-#: www/htdocs/edit_favorite.rpy:158 www/htdocs/record.rpy:161
-#, python-format
-msgid "No program found on %s at %s."
-msgstr "Geen programma gevonden op %s om %s."
-
-#: www/htdocs/edit_favorite.rpy:182
-#, python-format
-msgid "Favorite %s doesn't exists."
-msgstr "Favoriet %s bestaat niet."
-
-#: www/htdocs/edit_favorite.rpy:205
-msgid "Name of favorite"
-msgstr "Naam van de favoriet"
-
-#: www/htdocs/edit_favorite.rpy:208 www/htdocs/favorites.rpy:178
-msgid "Day of week"
-msgstr "Dag van de week"
-
-#: www/htdocs/edit_favorite.rpy:209 www/htdocs/favorites.rpy:179
-msgid "Time of day"
-msgstr "Tijd van de dag"
-
-#: www/htdocs/edit_favorite.rpy:210
-msgid "Action"
-msgstr "Actie"
-
-#: www/htdocs/favorites.rpy:162
-msgid "Monday"
-msgstr "maandag"
-
-#: www/htdocs/favorites.rpy:163
-msgid "Tuesday"
-msgstr "dinsdag"
-
-#: www/htdocs/favorites.rpy:164
-msgid "Wednesday"
-msgstr "woensdag"
-
-#: www/htdocs/favorites.rpy:165
-msgid "Thursday"
-msgstr "donderdag"
-
-#: www/htdocs/favorites.rpy:166
-msgid "Friday"
-msgstr "vrijdag"
-
-#: www/htdocs/favorites.rpy:167
-msgid "Saturday"
-msgstr "zaterdag"
-
-#: www/htdocs/favorites.rpy:168
-msgid "Sunday"
-msgstr "zondag"
-
-#: www/htdocs/favorites.rpy:175
-msgid "Favorite Name"
-msgstr "Naam favoriet"
-
-#: www/htdocs/favorites.rpy:180 www/htdocs/record.rpy:194
-#: www/htdocs/search.rpy:187
-msgid "Actions"
-msgstr "Acties"
-
-#: www/htdocs/favorites.rpy:181
-msgid "Priority"
-msgstr "Prioriteit"
-
-#: www/htdocs/favorites.rpy:213
-msgid "Edit"
-msgstr "Wijzigen"
-
-#: www/htdocs/favorites.rpy:221
-msgid "Higher"
-msgstr "Hoger"
-
-#: www/htdocs/favorites.rpy:228
-msgid "Lower"
-msgstr "Lager"
-
-#: www/htdocs/genre.rpy:114
-#, python-format
-msgid "TV Genre for %s"
-msgstr "TV Genre voor %s"
-
-#: www/htdocs/genre.rpy:144 www/htdocs/guide.rpy:212
-msgid "Show"
-msgstr "Tonen"
-
-#: www/htdocs/genre.rpy:144 www/htdocs/guide.rpy:212
-msgid "Category"
-msgstr "Categorie"
-
-#: www/htdocs/genre.rpy:144 www/htdocs/guide.rpy:212
-msgid "Change"
-msgstr "Verander"
-
-#: www/htdocs/genre.rpy:194 www/htdocs/guide.rpy:290 www/htdocs/record.rpy:230
-#: www/htdocs/search.rpy:224
-#, python-format
-msgid "Sorry, the program description for %s is unavailable."
-msgstr "Sorry, de programmabeschrijving voor %s is niet beschikbaar."
-
-#: www/htdocs/genre.rpy:219 www/htdocs/guide.rpy:325
-#: share/skins/main/basic.fxd:553 share/skins/main/basic.fxd:615
-msgid "Start"
-msgstr "Start"
-
-#: www/htdocs/genre.rpy:220 www/htdocs/guide.rpy:326
-#: share/skins/main/basic.fxd:559 share/skins/main/basic.fxd:621
-msgid "Stop"
-msgstr "Stop"
-
-#: www/htdocs/genre.rpy:221 www/htdocs/guide.rpy:327
-#: share/skins/main/info.fxd:277 share/skins/main/info.fxd:302
-#: share/skins/main/info.fxd:481
-msgid "Runtime"
-msgstr "Speelduur:"
-
-#: www/htdocs/genre.rpy:236 www/htdocs/guide.rpy:338 www/htdocs/search.rpy:232
-#: www/htdocs/search.rpy:234
-msgid "Record"
-msgstr "Opnemen"
-
-#: www/htdocs/genre.rpy:239 www/htdocs/guide.rpy:341
-msgid "Add to Favorites"
-msgstr "Toevoegen aan favorieten"
-
-#: www/htdocs/genre.rpy:242 www/htdocs/guide.rpy:344
-msgid "Close Window"
-msgstr "Venster sluiten"
-
-#: www/htdocs/genre.rpy:270
-msgid "NO SHOWS MATCHING CATEGORY"
-msgstr "GEEN PROGRAMMAS VOLDOEN AAN DIE CATEGORIE"
-
-#: www/htdocs/guide.rpy:209
-msgid "View"
-msgstr "Beeld"
-
-#: www/htdocs/index.rpy:107
-msgid "Welcome"
-msgstr "Welkom"
-
-#: www/htdocs/index.rpy:110
-#, python-format
-msgid "Freevo Web Status as of %s"
-msgstr "Freevo Web Status op %s"
-
-#: www/htdocs/index.rpy:115 www/htdocs/index.rpy:121 www/htdocs/index.rpy:123
-msgid "Notice"
-msgstr "Melding"
-
-#: www/htdocs/index.rpy:115
-msgid "The recording server is down."
-msgstr "De opnameserver is niet beschikbaar."
-
-#: www/htdocs/index.rpy:117
-msgid "The recording server is up and running."
-msgstr "The opnameserver werkt en is bereikbaar."
-
-#: www/htdocs/index.rpy:121
-msgid "Your listings expire in 1 hour."
-msgstr "De programmagids vervalt binnen 1 uur."
-
-#: www/htdocs/index.rpy:123
-#, python-format
-msgid "Your listings expire in %s hours."
-msgstr "De programmagids vervalt binnen %s uur."
-
-#: www/htdocs/index.rpy:125
-msgid "Your listings are up to date."
-msgstr "De programmagids is up-to-date."
-
-#: www/htdocs/index.rpy:135
-#, python-format
-msgid "Now Recording %s."
-msgstr "%s wordt nu opgenomen."
-
-#: www/htdocs/index.rpy:141
-msgid "One program scheduled to record."
-msgstr "Er is 1 programma geregistreerd voor opname."
-
-#: www/htdocs/index.rpy:143
-#, python-format
-msgid "%i programs scheduled to record."
-msgstr "Er zijn %i programma's geregistreerd voor opname."
-
-#: www/htdocs/index.rpy:145 www/htdocs/index.rpy:147
-msgid "No programs scheduled to record."
-msgstr "Geen programma's geregistreerd voor opname."
-
-#: www/htdocs/index.rpy:149
-#, python-format
-msgid "%i of %i Mb free in %s"
-msgstr "%i van %i Mb beschikbaar in %s"
-
-#: www/htdocs/library.rpy:252
-#, python-format
-msgid "%s already exists! File not renamed."
-msgstr "%s bestaat reeds! Bestand niet hernoemd."
-
-#: www/htdocs/library.rpy:254
-#, python-format
-msgid "Rename %s to %s."
-msgstr "Hernoem %s naar %s."
-
-#: www/htdocs/library.rpy:257
-msgid "No new file specified."
-msgstr "Geen nieuw bestand opgegeven."
-
-#: www/htdocs/library.rpy:259
-#, python-format
-msgid "Delete %s."
-msgstr "Bestand wissen: %s"
-
-#: www/htdocs/library.rpy:267
-#, python-format
-msgid "%s does not exist. No action taken."
-msgstr "%s bestaat niet. Geen  actie ondernomen."
-
-#: www/htdocs/library.rpy:269
-#, python-format
-msgid "I do not process names (%s) with slashes for security reasons."
-msgstr "De naam (%s) bevat een slash (/) en wordt daardoor niet verwerkt."
-
-#: www/htdocs/library.rpy:301 share/skins/main/basic.fxd:20
-msgid "Movies"
-msgstr "Films"
-
-#: www/htdocs/library.rpy:305
-msgid "Recorded TV"
-msgstr "Opgenomen programmas"
-
-#: www/htdocs/library.rpy:313 share/skins/main/basic.fxd:22
-msgid "Images"
-msgstr "Afbeeldingen"
-
-#: www/htdocs/library.rpy:325
-msgid "Choose a Directory"
-msgstr "Kies een folder"
-
-#: www/htdocs/library.rpy:328 www/htdocs/library.rpy:400
-#: www/htdocs/library.rpy:402 www/htdocs/library.rpy:405
-msgid "Back"
-msgstr "Terug"
-
-#: www/htdocs/library.rpy:447
-msgid "Download"
-msgstr "Downloaden"
-
-#: www/htdocs/library.rpy:450
-msgid "Rename"
-msgstr "Hernoemen"
-
-#: www/htdocs/manualrecord.rpy:117
-msgid "Manual Recorded"
-msgstr "Handmatig opnemen"
-
-#: www/htdocs/manualrecord.rpy:208
-msgid "Error Message"
-msgstr "Foutmelding"
-
-#: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:188
-#: www/htdocs/search.rpy:181
-msgid "Start Time"
-msgstr "Starttijd"
-
-#: www/htdocs/manualrecord.rpy:221 www/htdocs/record.rpy:189
-#: www/htdocs/search.rpy:182
-msgid "Stop Time"
-msgstr "Stoptijd"
-
-#: www/htdocs/manualrecord.rpy:223 www/htdocs/record.rpy:193
-#: www/htdocs/search.rpy:186
-msgid "Program Description"
-msgstr "Programmabeschrijving: "
-
-#: www/htdocs/manualrecord.rpy:234
-msgid "Add to Recording Schedule"
-msgstr "Toon opnamerooster"
-
-#: www/htdocs/record.rpy:192 www/htdocs/search.rpy:185
-#: share/skins/main/info.fxd:263
-msgid "Episode"
-msgstr "Aflevering"
-
-#: www/htdocs/record.rpy:218
-msgid "UNKNOWN"
-msgstr "ONBEKEND"
-
-#: www/htdocs/search.rpy:145
-msgid "recording server is unavailable"
-msgstr "opnameserver is niet beschikbaar"
-
-#: www/htdocs/search.rpy:175
-msgid "No matches"
-msgstr "Geen resultateb"
-
-#: www/htdocs/search.rpy:236
-msgid "New favorite"
-msgstr "Nieuwe favoriet"
-
-#: mail/PhoneInput.py:53
-msgid " |+|&|@|/|\\"
-msgstr " |+|&|@|/|\\"
-
-#: mail/PhoneInput.py:54
-msgid "-|?|!|,|.|:|;|<|=|>|(|)|_|1"
-msgstr "-|?|!|,|.|:|;|<|=|>|(|)|_|1"
-
-#: mail/PhoneInput.py:55
-msgid "a|b|c|2"
-msgstr "a|b|c|2"
-
-#: mail/PhoneInput.py:56
-msgid "d|e|f|3"
-msgstr "d|e|f|3"
-
-#: mail/PhoneInput.py:57
-msgid "g|h|i|4"
-msgstr "g|h|i|4"
-
-#: mail/PhoneInput.py:58
-msgid "j|k|l|5"
-msgstr "j|k|l|5"
-
-#: mail/PhoneInput.py:59
-msgid "m|n|o|6"
-msgstr "m|n|o|6"
-
-#: mail/PhoneInput.py:60
-msgid "p|q|r|s|7"
-msgstr "p|q|r|s|7"
-
-#: mail/PhoneInput.py:61
-msgid "t|u|v|8"
-msgstr "t|u|v|8"
-
-#: mail/PhoneInput.py:62
-msgid "w|x|y|z|9"
-msgstr "w|x|y|z|9"
-
-#: mail/__init__.py:61
-msgid "Read email"
-msgstr "Mail lezen"
-
-#: mail/__init__.py:62
-msgid "Reply to sender"
-msgstr "Reageer naar afzender"
-
-#: mail/__init__.py:65
-msgid "Delete email"
-msgstr "Verwijder bericht"
-
-#: mail/__init__.py:68
-msgid "Mark as read"
-msgstr "Markeer als gelezen"
-
-#: mail/__init__.py:69
-msgid "Mark as unread"
-msgstr "Markeer als ongelezen"
-
-#: mail/__init__.py:101
-msgid "Are you sure you want to delete this email?"
-msgstr "Weet je zeker dat je dit bericht wilt verwijderen?"
-
-#: mail/__init__.py:142
-msgid "Open mailbox"
-msgstr "Mailbox openen"
-
-#: mail/__init__.py:145
-msgid "Mark all mails read"
-msgstr "Markeer alle berichten als gelezen"
-
-#: mail/__init__.py:148
-msgid "Unsubscribe from folder"
-msgstr "Abonnement op folder intrekken"
-
-#: mail/__init__.py:149
-msgid "Subscribe to new folder"
-msgstr "Abonneren op nieuwe folder"
-
-#: mail/__init__.py:164
-#, python-format
-msgid "Are you sure you want to unsubscribe from %s?"
-msgstr "Weet je zeker dat je het abonnement op de folder %s wilt intrekken?"
-
-#: mail/__init__.py:166
-msgid "Unsubscribing..."
-msgstr "Bezig met afmelden..."
-
-#: mail/__init__.py:284
-msgid "Open mailfolder"
-msgstr "Open folder"
-
-#: mail/__init__.py:290
-msgid "Mailfolders"
-msgstr "Folders"
-
-#: mail/__init__.py:343
-msgid "Subscribe to folder"
-msgstr "Abonneren op folder"
-
-#: mail/__init__.py:402
-msgid "test"
-msgstr "test"
-
-#: mail/mailreader.py:188
-msgid "no name found"
-msgstr "geen naam gevonden"
-
-#: mail/mailreader.py:282
-#, python-format
-msgid "Attachment %i/%i: %s"
-msgstr "Attachment %i/%i: %s"
-
-#: mail/mailreader.py:326
-msgid "Right: View image attachment(s). "
-msgstr "Rechts: Bekijk afbeelding attachment(s)."
-
-#: mail/mailreader.py:328
-msgid "Display: View image attachment(s). "
-msgstr "Display: Bekijk afbeelding attachment(s)."
-
-#: mail/mailreader.py:331
-msgid "Select: Reply to message."
-msgstr "Select: Reageer op bericht."
-
-#: mail/mailutil.py:108
-msgid "Error parsing mail"
-msgstr "Fout tijdens inlezen bericht"
-
-#: mail/mailutil.py:122
-msgid ""
+"Event '%s' crashed\n"
 "\n"
-" \n"
-"::: New text/plain part ::: \n"
-" \n"
-msgstr ""
+"Please take a look at the logfile and report the bug to the Freevo mailing "
+"list. The state of Freevo may be corrupt now and this error could cause more "
+"errors until you restart Freevo.\n"
 "\n"
-" \n"
-"::: New text/plain part ::: \n"
-" \n"
-
-#: mail/mailwriter.py:82
-msgid "Do you want to send this message?"
-msgstr "Wilt u dit bericht versturen?"
-
-#: mail/mailwriter.py:84
-msgid "Sending message..."
-msgstr "Bericht wordt verstuurd..."
-
-#: mail/mailwriter.py:140
-#, python-format
-msgid ""
-"%s \n"
+"Logfile: %s\n"
 "\n"
 msgstr ""
-"%s \n"
+"Event '%s' is gecrashed\n"
+"\n"
+"Bekijk de logfile en meld deze fout op de Freevo mailing list. Freevo kan nu "
+"mogelijk instabiel blijven en nog meer fouten veroorzaken tot je Freevo "
+"herstart.\n"
+"\n"
+"Logfile: %s\n"
 "\n"
 
-#: mail/mailwriter.py:141
+#: main.py:322 share/skins/main/mediaportal.fxd:446
+#: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:16
+#: share/skins/main/bluestar.fxd:15 share/skins/main/basic.fxd:24
+#: share/skins/main/rain.fxd:16
+msgid "Shutdown"
+msgstr "Afsluiten"
+
+#: main.py:324
+#, fuzzy
+msgid "Continue"
+msgstr "Configureer"
+
+#: main.py:441
+msgid "Starting Freevo, please wait ..."
+msgstr "Freevo wordt gestart, een ogenblik geduld..."
+
+#: main.py:450
+msgid "Reading cache, please wait ..."
+msgstr "Bezig met inlezen van de cache, een ogenblik geduld..."
+
+#: main.py:501
+msgid "Freevo crashed!"
+msgstr "Freevo is gecrashed!"
+
+#: main.py:502
 #, python-format
-msgid "On %s %s wrote:\n"
-msgstr "Op %s schreef %s:\n"
+msgid "Filename: %s"
+msgstr "Bestand: %s"
 
-#: mail/mailwriter.py:145
+#: main.py:503
 #, python-format
-msgid ">%s\n"
-msgstr ">%s\n"
+msgid "Lineno: %s"
+msgstr "Regelnummer: %s"
 
-#: mail/mailwriter.py:148
+#: main.py:504
 #, python-format
-msgid ""
-"\n"
-"\n"
-"%s"
-msgstr ""
-"\n"
-"\n"
-"%s"
+msgid "Function: %s"
+msgstr "Functie: %s"
 
-#: mail/mailwriter.py:178 mail/mailwriter.py:189 mail/mailwriter.py:192
-#: mail/mailwriter.py:296
-msgid "Caps"
-msgstr "Hoofdletters"
-
-#: mail/mailwriter.py:179
-msgid "No subject"
-msgstr "Geen onderwerp"
-
-#: mail/mailwriter.py:181
-msgid "Enter"
-msgstr "Enter"
-
-#: mail/mailwriter.py:181
-msgid "Send message"
-msgstr "Verzend bericht"
-
-#: mail/mailwriter.py:182
-msgid "Display"
-msgstr "Toon"
-
-#: mail/mailwriter.py:182
-msgid "Textmode"
-msgstr "Textmodus"
-
-#: mail/mailwriter.py:183
-msgid "Up"
-msgstr "Omhoog"
-
-#: mail/mailwriter.py:183
-msgid "Erase"
-msgstr "Verwijderen"
-
-#: mail/mailwriter.py:184
-msgid "Down"
-msgstr "Omlaag"
-
-#: mail/mailwriter.py:184
-msgid "Linebreak"
-msgstr "Scheidingslijn"
-
-#: mail/mailwriter.py:185
-msgid "Left/Right"
-msgstr "Links/Rechts"
-
-#: mail/mailwriter.py:185
-msgid "Move caret"
-msgstr "Verplaatst cursor"
-
-#: mail/mailwriter.py:190
-msgid "Small"
-msgstr "Klein"
-
-#: mail/watcher.py:64
+#: main.py:505
 #, python-format
-msgid "%i new mail(s) arrived"
-msgstr "%i nieuw(e) bericht(en) ontvangen"
+msgid "Text: %s"
+msgstr "Tekst: %s"
 
-#: mail/watcher.py:217
-msgid "Server unavailable. Try again later."
-msgstr "Server onbereikbaar. Probeer het later opnieuw."
+#: main.py:507
+msgid "Please see the logfiles for more info"
+msgstr "Bekijk de logfiles voor meer informatie"
 
-#: mail/watcher.py:218
-msgid "Server unavailable. Mail may not be up to date."
-msgstr "Server onbereikbaar. Je mail is mogelijk niet bijgewerkt."
+#: main.py:509
+#, python-format
+msgid "Exit in %s seconds"
+msgstr "Programma wordt in %s seconden afgesloten"
 
-#: mail/watcher.py:219
-msgid "Server offline. No cache was found."
-msgstr "Server offline. Geen cache beschikbaar."
+#: osd.py:381
+msgid "z = Toggle Fullscreen"
+msgstr "z = Volledig scherm aan/uit"
 
-#: mail/watcher.py:220
-msgid "Server offline. Command not available."
-msgstr "Server offline. Het commando is niet beschikbaar."
+#: osd.py:382
+msgid "Arrow Keys = Move"
+msgstr "Cursortoetsen = Verplaatsen"
 
-#: mail/watcher.py:221
-msgid "The requested command failed."
-msgstr "De gevraagde actie is mislukt."
+#: osd.py:383
+msgid "Spacebar = Select"
+msgstr "Spatie = Selecteren"
 
-#: mail/watcher.py:222
-msgid "Initializing folders. Try again later."
-msgstr "Bezig met initialiseren van folders. Probeer het later nogmaals."
+#: osd.py:384
+msgid "Escape = Stop/Prev. Menu"
+msgstr "Escape = Stop/Vorig menu"
 
-#: mail/watcher.py:226
-msgid "Undefined error occured"
-msgstr "Er is een onbekende fout opgetreden."
+#: osd.py:385
+msgid "h = Help"
+msgstr "h = Help"
 
-#: share/skins/main/blurr.fxd:186 share/skins/main/info.fxd:542
+#: share/skins/main/info.fxd:317
+msgid "Chapter"
+msgstr "Hoofdstuk"
+
+#: share/skins/main/mediaportal.fxd:188 share/skins/main/blurr.fxd:186
+#: share/skins/main/info.fxd:542
 msgid "Playlist"
 msgstr "Afspeellijst"
+
+#: share/skins/main/dark.fxd:639
+#, fuzzy
+msgid "New mails"
+msgstr "Mail lezen"
+
+#: share/skins/main/dark.fxd:658 share/skins/main/dark.fxd:679
+msgid "From"
+msgstr ""
 
 #: share/skins/main/info.fxd:505
 msgid "Copyright"
 msgstr "Copyright"
 
-#: share/skins/main/blurr2-email.fxd:31
+#: share/skins/main/crystal.fxd:317 share/skins/main/bluestar.fxd:337
+#: share/skins/main/rain.fxd:313
 msgid "Unread messages"
 msgstr "Ongelezen berichten"
+
+#: share/skins/main/bluestar.fxd:11
+#, fuzzy
+msgid "Pictures"
+msgstr "Apod afbeeldingen"
 
 #: share/skins/main/info.fxd:405
 msgid "Disc ID"
 msgstr "Disc ID"
 
-#: share/skins/main/blurr.fxd:212 share/skins/main/info.fxd:309
+#: share/skins/main/mediaportal.fxd:214 share/skins/main/blurr.fxd:212
+#: share/skins/main/info.fxd:309
 msgid "Audio tracks"
 msgstr "Geluidssporen"
 
-#: share/skins/main/blurr.fxd:427
+#: share/skins/main/crystal.fxd:368 share/skins/main/bluestar.fxd:388
+#: share/skins/main/rain.fxd:364
+msgid "Message has not been read"
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:445 share/skins/main/crystal.fxd:12
+#: share/skins/main/blurr.fxd:452 share/skins/main/rain.fxd:12
+msgid "Weather Forecast"
+msgstr "Vooruitzichten"
+
+#: share/skins/main/mediaportal.fxd:419 share/skins/main/blurr.fxd:427
 msgid "Location"
 msgstr "Locatie"
 
-#: share/skins/main/blurr.fxd:451
+#: share/skins/main/dark.fxd:670
+#, fuzzy
+msgid "New mail"
+msgstr "Mail lezen"
+
+#: share/skins/main/mediaportal.fxd:444 share/skins/main/blurr.fxd:451
 msgid "Play a Game"
 msgstr "Speel een spel"
+
+#: share/skins/main/dark.fxd:23 share/skins/main/crystal.fxd:10
+#: share/skins/main/bluestar.fxd:10 share/skins/main/rain.fxd:10
+#, fuzzy
+msgid "Email"
+msgstr "Klein"
+
+#: share/skins/main/crystal.fxd:323 share/skins/main/bluestar.fxd:343
+#: share/skins/main/rain.fxd:319
+msgid "Total messages"
+msgstr "Totaal aantal berichten"
 
 #: share/skins/main/info.fxd:227
 msgid "kb/s"
 msgstr "kb/s"
 
-# Manualy added from fxd skin files
-#: share/skins/main/basic.fxd:19
-msgid "TV"
-msgstr "TV"
+#: share/skins/main/mediaportal.fxd:203 share/skins/main/mediaportal.fxd:683
+#: share/skins/main/dark.fxd:748 share/skins/main/basic.fxd:384
+#: share/skins/main/blurr.fxd:201 share/skins/main/blurr.fxd:308
+#: share/skins/main/blurr.fxd:689
+msgid "Track"
+msgstr "Nummer"
 
-#: share/skins/main/blurr.fxd:190 share/skins/main/info.fxd:418
-#: share/skins/main/info.fxd:423 share/skins/main/info.fxd:546
+#: share/skins/main/dark.fxd:564
+#, fuzzy
+msgid "One song in playlist"
+msgstr "geen volgend item in de afspeellijst"
+
+#: share/skins/main/info.fxd:224
+msgid "Bitrate"
+msgstr "Bitrate"
+
+#: share/skins/main/mediaportal.fxd:192 share/skins/main/blurr.fxd:190
+#: share/skins/main/info.fxd:418 share/skins/main/info.fxd:423
+#: share/skins/main/info.fxd:546
 msgid "items in this playlist"
 msgstr "items in deze afspeellijst"
 
-#: share/skins/main/blurr.fxd:449 share/skins/main/info.fxd:14
+#: share/skins/main/mediaportal.fxd:442 share/skins/main/blurr.fxd:449
+#: share/skins/main/info.fxd:14
 msgid "Listen to Music"
 msgstr "Muziek luisteren"
 
-#: share/skins/main/basic.fxd:392 share/skins/main/blurr.fxd:702
+#: share/skins/main/mediaportal.fxd:696 share/skins/main/dark.fxd:758
+#: share/skins/main/basic.fxd:397 share/skins/main/blurr.fxd:706
 msgid "Elapsed"
 msgstr "Voorbij"
 
-#: share/skins/main/blurr2-email.fxd:37
-msgid "Total messages"
-msgstr "Totaal aantal berichten"
+#: share/skins/main/dark.fxd:622
+msgid "Just one picture in this slideshow."
+msgstr ""
 
-#: share/skins/main/blurr.fxd:448 share/skins/main/info.fxd:13
+#: share/skins/main/mediaportal.fxd:441 share/skins/main/blurr.fxd:448
+#: share/skins/main/info.fxd:13
 msgid "Watch a Movie"
 msgstr "Film kijken"
 
@@ -2905,37 +2886,77 @@ msgstr "Film kijken"
 msgid "Link"
 msgstr "Link"
 
-#: share/skins/main/info.fxd:224
-msgid "Bitrate"
-msgstr "Bitrate"
-
-#: share/skins/main/basic.fxd:584
+#: share/skins/main/basic.fxd:589
 msgid "Day"
 msgstr "Dag"
 
-#: share/skins/main/info.fxd:317
-msgid "Chapter"
-msgstr "Hoofdstuk"
+#: share/skins/main/mediaportal.fxd:219 share/skins/main/blurr.fxd:217
+#: share/skins/main/info.fxd:313
+msgid "Subtitles"
+msgstr "Ondertitels"
+
+#: share/skins/main/dark.fxd:491
+#, fuzzy
+msgid "movies in this playlist."
+msgstr "items in deze afspeellijst"
+
+#: share/skins/main/dark.fxd:16 share/skins/main/crystal.fxd:7
+#: share/skins/main/bluestar.fxd:7 share/skins/main/rain.fxd:7
+msgid "Television"
+msgstr ""
+
+#: share/skins/main/dark.fxd:645
+#, fuzzy
+msgid "Total mails"
+msgstr "Totaal aantal berichten"
 
 #: share/skins/main/info.fxd:237
 msgid "Language"
 msgstr "Taal"
 
+#: share/skins/main/mediaportal.fxd:182 share/skins/main/mediaportal.fxd:286
+#: share/skins/main/mediaportal.fxd:393 share/skins/main/mediaportal.fxd:401
 #: share/skins/main/blurr.fxd:180 share/skins/main/blurr.fxd:284
 #: share/skins/main/blurr.fxd:401 share/skins/main/blurr.fxd:409
 msgid "Items"
 msgstr "Items"
 
+#: share/skins/main/blurr.fxd:311 share/skins/main/info.fxd:347
+#: share/skins/main/info.fxd:534
+msgid "of"
+msgstr "van"
+
+#: share/skins/main/dark.fxd:495
+#, fuzzy
+msgid "Just one movie in this playlist."
+msgstr "items in deze afspeellijst"
+
+#: share/skins/main/mediaportal.fxd:440 share/skins/main/blurr.fxd:447
+#: share/skins/main/info.fxd:12
+msgid "Watch TV"
+msgstr "TV kijken"
+
+#: share/skins/main/mediaportal.fxd:196 share/skins/main/dark.fxd:500
 #: share/skins/main/blurr.fxd:194 share/skins/main/info.fxd:427
 #: share/skins/main/info.fxd:550
 msgid "This playlist is empty!"
+msgstr "Deze afspeellijst is leeg!"
+
+#: share/skins/main/dark.fxd:627
+#, fuzzy
+msgid "This slideshow is empty!"
 msgstr "Deze afspeellijst is leeg!"
 
 #: share/skins/main/info.fxd:305
 msgid "min."
 msgstr "min."
 
-#: share/skins/main/info.fxd:470
+#: share/skins/main/dark.fxd:617
+#, fuzzy
+msgid "pictures in this slideshow."
+msgstr "items in deze afspeellijst"
+
+#: share/skins/main/dark.fxd:458 share/skins/main/info.fxd:470
 msgid "Rating"
 msgstr "Waardering"
 
@@ -2943,40 +2964,256 @@ msgstr "Waardering"
 msgid "MB free"
 msgstr "MB vrij"
 
-#: share/skins/main/blurr.fxd:447 share/skins/main/info.fxd:12
-msgid "Watch TV"
-msgstr "TV kijken"
+#: share/skins/main/mediaportal.fxd:439
+#, fuzzy
+msgid "Read Headlines"
+msgstr "Koppen"
 
-#: share/skins/main/blurr.fxd:311 share/skins/main/info.fxd:347
-#: share/skins/main/info.fxd:534
-msgid "of"
-msgstr "van"
+#: share/skins/main/dark.fxd:568
+#, fuzzy
+msgid "No songs in playlist"
+msgstr "geen volgend item in de afspeellijst"
 
-#: share/skins/main/blurr.fxd:450 share/skins/main/info.fxd:15
+#: share/skins/main/mediaportal.fxd:443 share/skins/main/blurr.fxd:450
+#: share/skins/main/info.fxd:15
 msgid "Look at Pictures"
 msgstr "Foto's bekijken"
 
-#: share/skins/main/blurr.fxd:222
+#: share/skins/main/mediaportal.fxd:224 share/skins/main/blurr.fxd:222
 msgid "Chapters"
 msgstr "Hoofdstukken"
 
-#: share/skins/main/basic.fxd:379 share/skins/main/blurr.fxd:201
-#: share/skins/main/blurr.fxd:308 share/skins/main/blurr.fxd:689
-msgid "Track"
-msgstr "Nummer"
+# Manualy added from fxd skin files
+#: share/skins/main/basic.fxd:19
+msgid "TV"
+msgstr "TV"
 
-#: share/skins/main/blurr2-email.fxd:82
-msgid "Unread message"
-msgstr "Ongelezen bericht"
+#: share/skins/main/dark.fxd:560
+#, fuzzy
+msgid "songs in playlist"
+msgstr "geen volgend item in de afspeellijst"
 
-#: share/skins/main/blurr.fxd:452
-msgid "Weather Forecast"
-msgstr "Vooruitzichten"
-
-#: share/skins/main/basic.fxd:24
-msgid "Shutdown"
-msgstr "Afsluiten"
+#: share/skins/main/dark.fxd:721
+#, fuzzy
+msgid "Now playing"
+msgstr "Toon de mediaspeler"
 
 #: share/skins/main/info.fxd:323
 msgid "Size"
 msgstr "Grootte"
+
+#: share/skins/main/dark.fxd:652 share/skins/main/dark.fxd:673
+#, fuzzy
+msgid "Subject"
+msgstr "Geen onderwerp"
+
+#~ msgid "Last updated: %s"
+#~ msgstr "Laatste update: %s"
+
+#~ msgid "Unable to get frequency for channel %s."
+#~ msgstr "Het ophalen van de frequentie voor kanaal %s is niet mogelijk."
+
+#~ msgid "'xine-ui' version too old, plugin 'xine' deactivated"
+#~ msgstr "de versie van 'xine-ui' is te oud, 'xine' plugin uitgeschakeld"
+
+#~ msgid ""
+#~ "This page is generated from the Freevo WiKi. The current Version can be "
+#~ "found <a href=\"%s\">here</a>."
+#~ msgstr ""
+#~ "Deze pagina werd gegenereerd door Freevo WiKi. De recentste versie kan u "
+#~ "<a href=\"%s\">hier</a>vinden."
+
+#~ msgid "Choose a Directory"
+#~ msgstr "Kies een folder"
+
+#~ msgid " |+|&|@|/|\\"
+#~ msgstr " |+|&|@|/|\\"
+
+#~ msgid "-|?|!|,|.|:|;|<|=|>|(|)|_|1"
+#~ msgstr "-|?|!|,|.|:|;|<|=|>|(|)|_|1"
+
+#~ msgid "a|b|c|2"
+#~ msgstr "a|b|c|2"
+
+#~ msgid "d|e|f|3"
+#~ msgstr "d|e|f|3"
+
+#~ msgid "g|h|i|4"
+#~ msgstr "g|h|i|4"
+
+#~ msgid "j|k|l|5"
+#~ msgstr "j|k|l|5"
+
+#~ msgid "m|n|o|6"
+#~ msgstr "m|n|o|6"
+
+#~ msgid "p|q|r|s|7"
+#~ msgstr "p|q|r|s|7"
+
+#~ msgid "t|u|v|8"
+#~ msgstr "t|u|v|8"
+
+#~ msgid "w|x|y|z|9"
+#~ msgstr "w|x|y|z|9"
+
+#~ msgid "Reply to sender"
+#~ msgstr "Reageer naar afzender"
+
+#~ msgid "Delete email"
+#~ msgstr "Verwijder bericht"
+
+#~ msgid "Mark as read"
+#~ msgstr "Markeer als gelezen"
+
+#~ msgid "Mark as unread"
+#~ msgstr "Markeer als ongelezen"
+
+#~ msgid "Are you sure you want to delete this email?"
+#~ msgstr "Weet je zeker dat je dit bericht wilt verwijderen?"
+
+#~ msgid "Open mailbox"
+#~ msgstr "Mailbox openen"
+
+#~ msgid "Mark all mails read"
+#~ msgstr "Markeer alle berichten als gelezen"
+
+#~ msgid "Unsubscribe from folder"
+#~ msgstr "Abonnement op folder intrekken"
+
+#~ msgid "Subscribe to new folder"
+#~ msgstr "Abonneren op nieuwe folder"
+
+#~ msgid "Are you sure you want to unsubscribe from %s?"
+#~ msgstr "Weet je zeker dat je het abonnement op de folder %s wilt intrekken?"
+
+#~ msgid "Unsubscribing..."
+#~ msgstr "Bezig met afmelden..."
+
+#~ msgid "Open mailfolder"
+#~ msgstr "Open folder"
+
+#~ msgid "Mailfolders"
+#~ msgstr "Folders"
+
+#~ msgid "Subscribe to folder"
+#~ msgstr "Abonneren op folder"
+
+#~ msgid "test"
+#~ msgstr "test"
+
+#~ msgid "no name found"
+#~ msgstr "geen naam gevonden"
+
+#~ msgid "Attachment %i/%i: %s"
+#~ msgstr "Attachment %i/%i: %s"
+
+#~ msgid "Right: View image attachment(s). "
+#~ msgstr "Rechts: Bekijk afbeelding attachment(s)."
+
+#~ msgid "Display: View image attachment(s). "
+#~ msgstr "Display: Bekijk afbeelding attachment(s)."
+
+#~ msgid "Select: Reply to message."
+#~ msgstr "Select: Reageer op bericht."
+
+#~ msgid "Error parsing mail"
+#~ msgstr "Fout tijdens inlezen bericht"
+
+#~ msgid ""
+#~ "\n"
+#~ " \n"
+#~ "::: New text/plain part ::: \n"
+#~ " \n"
+#~ msgstr ""
+#~ "\n"
+#~ " \n"
+#~ "::: New text/plain part ::: \n"
+#~ " \n"
+
+#~ msgid "Do you want to send this message?"
+#~ msgstr "Wilt u dit bericht versturen?"
+
+#~ msgid "Sending message..."
+#~ msgstr "Bericht wordt verstuurd..."
+
+#~ msgid ""
+#~ "%s \n"
+#~ "\n"
+#~ msgstr ""
+#~ "%s \n"
+#~ "\n"
+
+#~ msgid "On %s %s wrote:\n"
+#~ msgstr "Op %s schreef %s:\n"
+
+#~ msgid ">%s\n"
+#~ msgstr ">%s\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Caps"
+#~ msgstr "Hoofdletters"
+
+#~ msgid "Enter"
+#~ msgstr "Enter"
+
+#~ msgid "Send message"
+#~ msgstr "Verzend bericht"
+
+#~ msgid "Display"
+#~ msgstr "Toon"
+
+#~ msgid "Textmode"
+#~ msgstr "Textmodus"
+
+#~ msgid "Up"
+#~ msgstr "Omhoog"
+
+#~ msgid "Erase"
+#~ msgstr "Verwijderen"
+
+#~ msgid "Down"
+#~ msgstr "Omlaag"
+
+#~ msgid "Linebreak"
+#~ msgstr "Scheidingslijn"
+
+#~ msgid "Left/Right"
+#~ msgstr "Links/Rechts"
+
+#~ msgid "Move caret"
+#~ msgstr "Verplaatst cursor"
+
+#~ msgid "%i new mail(s) arrived"
+#~ msgstr "%i nieuw(e) bericht(en) ontvangen"
+
+#~ msgid "Server unavailable. Try again later."
+#~ msgstr "Server onbereikbaar. Probeer het later opnieuw."
+
+#~ msgid "Server unavailable. Mail may not be up to date."
+#~ msgstr "Server onbereikbaar. Je mail is mogelijk niet bijgewerkt."
+
+#~ msgid "Server offline. No cache was found."
+#~ msgstr "Server offline. Geen cache beschikbaar."
+
+#~ msgid "Server offline. Command not available."
+#~ msgstr "Server offline. Het commando is niet beschikbaar."
+
+#~ msgid "The requested command failed."
+#~ msgstr "De gevraagde actie is mislukt."
+
+#~ msgid "Initializing folders. Try again later."
+#~ msgstr "Bezig met initialiseren van folders. Probeer het later nogmaals."
+
+#~ msgid "Undefined error occured"
+#~ msgstr "Er is een onbekende fout opgetreden."
+
+#~ msgid "Unread message"
+#~ msgstr "Ongelezen bericht"
