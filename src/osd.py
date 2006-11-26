@@ -986,7 +986,7 @@ class OSD:
         else:
             dim = False
             
-        while(num_lines_left):
+        while(num_lines_left > 0):
             # calc each line and put the rest into the next
             if num_lines_left == 1:
                 current_ellipses = ellipses
