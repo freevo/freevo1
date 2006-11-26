@@ -249,11 +249,13 @@ LOCAL_CONF_CHANGES = [
      Added ENCODINGSERVER_UID and ENCODINGSERVER_GID
      Added RSSSERVER_UID and RSSSERVER_GID
      Added optional ENCODINGSERVER_DEBUG, if not defined uses DEBUG
-     Added experimental plug-ins: Apple trailers, reencode
-     Added plug-ins: XM online
+     Added plug-in: Apple trailers in the contrib area
+     Added plug-in: reencode and idlebar encode to compress mpeg video
+     Added plug-in: XM online
      Added helpers: encodingserver, rssServer
      Added USE_SDL_KEYBOARD to specify if generic keyboard handler should be used
      Added EVENT_DEVS and EVENTMAP for the new Linux event device handler
+     Added VIDEO_PRE_PLAY and VIDEO_POST_PLAY to allow external commands to be run
      ''' ),
 ]
 
@@ -936,6 +938,12 @@ VIDEO_AUTOJOIN = 1
 # try to find out if deinterlacing is needed or not
 #
 VIDEO_INTERLACING = 1
+
+# PRE and POST playing commands.  Set these to a runnable command if
+# you wish to do something before and after playing a video, like
+# dimming the lights
+VIDEO_PRE_PLAY  = None
+VIDEO_POST_PLAY = None
 
 
 # ======================================================================

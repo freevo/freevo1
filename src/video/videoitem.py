@@ -388,6 +388,11 @@ class VideoItem(Item):
 
     def play(self, arg=None, menuw=None, alternateplayer=False):
         """
+        execute commands if defined
+        """
+        if config.VIDEO_PRE_PLAY:
+            os.system( config.VIDEO_PRE_PLAY )
+        """
         play the item.
         """
         if not self.possible_player:
@@ -408,7 +413,7 @@ class VideoItem(Item):
             return
 
         self.player_rating, self.player = self.possible_player[0]
-	if self.parent:
+        if self.parent:
             self.parent.current_item = self
 
         if not self.menuw:
@@ -521,6 +526,12 @@ class VideoItem(Item):
 
 
     def stop(self, arg=None, menuw=None):
+        """
+        execute commands if defined
+        """
+        if config.VIDEO_POST_PLAY:
+            os.system( config.VIDEO_POST_PLAY )
+
         """
         stop playing
         """

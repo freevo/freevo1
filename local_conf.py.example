@@ -538,6 +538,11 @@ CACHE_IMAGES = 1
 #
 # VIDEO_ONLY_SCAN_DATADIR = 1
 
+# PRE and POST playing commands.  Set these to a runnable command if
+# you wish to do something before and after playing a video, like
+# dimming the lights
+# VIDEO_PRE_PLAY  = None
+# VIDEO_POST_PLAY = None
 
 # ======================================================================
 # Freevo audio settings:
