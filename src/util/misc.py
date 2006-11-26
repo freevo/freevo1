@@ -440,9 +440,10 @@ def comingup(items=None, ScheduledRecordings=None):
             sub_title = ''
             if hasattr(m,'sub_title') and m.sub_title:
                 sub_title = u' "' + Unicode(m.sub_title) + u'" '
-            result = result + u"- %s%s at %s\n" % \
-                     ( Unicode(m.title), Unicode(sub_title),
-                       Unicode(time.strftime('%I:%M%p',time.localtime(m.start))) )
+            result = result + u"- %s%s " % \
+                     ( Unicode(m.title), Unicode(sub_title) ) \
+                     + _('at') + u" %s\n" % \
+                     Unicode(time.strftime(config.TV_TIMEFORMAT,time.localtime(m.start)))
 
     if len(tomorrow) > 0:
         result = result + _('Tomorrow') + u':\n'
@@ -450,9 +451,10 @@ def comingup(items=None, ScheduledRecordings=None):
             sub_title = ''
             if hasattr(m,'sub_title') and m.sub_title:
                 sub_title = ' "' + m.sub_title + '" '
-            result = result + u"- %s%s at %s\n" % \
-                     ( Unicode(m.title), Unicode(sub_title),
-                       Unicode(time.strftime('%I:%M%p',time.localtime(m.start))) )
+            result = result + u"- %s%s " % \
+                     ( Unicode(m.title), Unicode(sub_title) ) \
+                     + _('at') + u" %s\n" % \
+                     Unicode(time.strftime(config.TV_TIMEFORMAT,time.localtime(m.start)))
            
     if len(later) > 0:
         result = result + _('This Week') + u':\n'
@@ -460,9 +462,10 @@ def comingup(items=None, ScheduledRecordings=None):
             sub_title = ''
             if hasattr(m,'sub_title') and m.sub_title:
                 sub_title = ' "' + m.sub_title + '" '
-            result = result + u"- %s%s at %s\n" % \
-                     ( Unicode(m.title), Unicode(sub_title),
-                       Unicode(time.strftime('%I:%M%p',time.localtime(m.start))) )
+            result = result + u"- %s%s " % \
+                     ( Unicode(m.title), Unicode(sub_title) ) \
+                     + _('at') + u" %s\n" % \
+                     Unicode(time.strftime(config.TV_DATEFORMAT,time.localtime(m.start)))
 
     if not result:
         result = _('No recordings are scheduled')

@@ -226,7 +226,7 @@ class TVListing_Area(Skin_Area):
                            r.width+1, head_h+1, r )
 
         # use label padding for x; head padding for y
-        self.drawstring( time.strftime( dateformat, time.localtime( to_listing[ 0 ][ 1 ] ) ),
+        self.drawstring( Unicode(time.strftime( dateformat, time.localtime( to_listing[ 0 ][ 1 ] ) ) ),
                          head_val.font, content,
                          x=( x_contents  - r.width + pad_x ),
                          y=( y_contents - r.height + ig.y ),

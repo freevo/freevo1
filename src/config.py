@@ -47,6 +47,9 @@ import setup_freevo
 import traceback
 import __builtin__
 import version
+import locale
+
+locale.setlocale(locale.LC_TIME,'')
 
 if float(sys.version[0:3]) >= 2.3:
     import warnings
