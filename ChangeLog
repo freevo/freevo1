@@ -24,6 +24,7 @@ X is the category and #nnnnnnn is the tracker number.
  * Fixed IMDB parser, the title should not work (B#1586579)
  * Fixed joystick repeated events after exit (B#1601309)
  * Fixed mplayer cropdetect, only skipping 60 secs (B#1591170)
+ * Fixed osd when number of lines is less than zero (B#1601295)
  * Fixed recordserver in debug mode printing non-ascii characters (B#1594117)
  * Fixed weather download when visibility is empty (B#1591145)
  * Fixed webserver displaying non-ascii characters and nxtvepg xmltv (B#1594642)
