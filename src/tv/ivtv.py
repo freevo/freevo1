@@ -113,6 +113,83 @@ class IVTV(tv.v4l2.Videodev):
 
     def setCodecInfo(self, codec):
         if self.version >= 0x800:
+            '''
+            'audio_bitmask' : 0xE9,
+            0:1 'Audio Sampling Frequency':
+                '00' 44.1Khz
+                '01' 48Khz
+                '10' 32Khz
+                '11' reserved
+            2:3 'Audio Encoding Layer':
+                '01'=Layer I
+                '10'=Layer II
+            4:7 'Audio Layer II Bitrate':
+                     Index | Layer I     | Layer II
+                     ------+-------------+------------
+                    '0000' | free format | free format
+                    '0001' |  32 kbit/s  |  32 kbit/s
+                    '0010' |  64 kbit/s  |  48 kbit/s
+                    '0011' |  96 kbit/s  |  56 kbit/s
+                    '0100' | 128 kbit/s  |  64 kbit/s
+                    '0101' | 160 kbit/s  |  80 kbit/s
+                    '0110' | 192 kbit/s  |  96 kbit/s
+                    '0111' | 224 kbit/s  | 112 kbit/s
+                    '1000' | 256 kbit/s  | 128 kbit/s
+                    '1001' | 288 kbit/s  | 160 kbit/s
+                    '1010' | 320 kbit/s  | 192 kbit/s
+                    '1011' | 352 kbit/s  | 224 kbit/s
+                    '1100' | 384 kbit/s  | 256 kbit/s
+                    '1101' | 416 kbit/s  | 320 kbit/s
+                    '1110' | 448 kbit/s  | 384 kbit/s
+                Note: For Layer II, not all combinations of total bitrate
+                and mode are allowed. See ISO11172-3 3-Annex B, Table 3-B.2
+            8:9 'Audio Stereo Mode':
+                    '00'=Stereo
+                    '01'=JointStereo
+                    '10'=Dual
+                    '11'=Mono
+            10:11 'Audio Stereo Mode Extension' used in joint_stereo mode.
+                In Layer I and II they indicate which subbands are in
+                intensity_stereo. All other subbands are coded in stereo.
+                    '00' subbands 4-31 in intensity_stereo, bound==4
+                    '01' subbands 8-31 in intensity_stereo, bound==8
+                    '10' subbands 12-31 in intensity_stereo, bound==12
+                    '11' subbands 16-31 in intensity_stereo, bound==16
+            12:13 'Audio Emphasis':
+                    '00' None
+                    '01' 50/15uS
+                    '10' reserved
+                    '11' CCITT J.17
+            14 'Audio CRC':
+                    '0' off
+                    '1' on
+            15 Copyright:
+                    '0' off
+                    '1' on
+            16 Generation:
+                    '0' copy
+                    '1' original
+
+            VIDIOC_S_INPUT         'input'          : 4,
+            VIDIOC_S_FMT           'resolution'     : '720x576',
+            'Video Aspect'         'aspect'         : 2,
+            'Video B Frames'       'bframes'        : 3,
+            'Video Bitrate Mode'   'bitrate_mode'   : 0,
+            'Video Bitrate'        'bitrate'        : 8000000,
+            'Video Peak Bitrate'   'bitrate_peak'   : 9600000,
+            'Spatial Filter Mode'  'dnr_mode, bit 0': 3,
+            'Temporal Filter Mode' 'dnr_mode, bit 1': 3,
+            'Median Filter Type'   'dnr_type'       : 0,
+            'Spatial Filter'       'dnr_spatial     : 0,
+            'Temporal Filter'      'dnr_temporal    : 0,
+            VIDIOC_S_STD           'framerate'      : 0,
+            'Video GOP Size'       'framespergop'   : 12,
+            'Video GOP Closure'    'gop_closure'    : 1,
+            'Video Pulldown'       'pulldown'       : 0,
+            'Stream Type'          'stream_type'    : 14,
+            '''
+            #tv.v4l2.Videodev.updatectl(self, 'Video Bitrate', codec.bitrate)
+            tv.v4l2.Videodev.listcontrols(self)
             return
         val = struct.pack( CODEC_ST, 
                            codec.aspect,
@@ -192,6 +269,7 @@ class IVTV(tv.v4l2.Videodev):
         self.setfmt(int(width), int(height))
 
         if self.version >= 0x800:
+            tv.v4l2.Videodev.getcontrols(self)
             return
         codec = self.getCodecInfo()
 
@@ -275,6 +353,25 @@ if __name__ == '__main__':
     print "embed=%s (%s)" % (ivtv_dev.getvbiembed(), 1)
     ivtv_dev.setvbiembed(embed)
     print "embed=%s (%s)" % (ivtv_dev.getvbiembed(), embed)
+
+    codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 12, 1, 0, 14))
+    #codec.aspect        = opts['aspect']
+    #codec.audio_bitmask = opts['audio_bitmask']
+    #codec.bframes       = opts['bframes']
+    #codec.bitrate_mode  = opts['bitrate_mode']
+    #codec.bitrate       = opts['bitrate']
+    #codec.bitrate_peak  = opts['bitrate_peak']
+    #codec.dnr_mode      = opts['dnr_mode']
+    #codec.dnr_spatial   = opts['dnr_spatial']
+    #codec.dnr_temporal  = opts['dnr_temporal']
+    #codec.dnr_type      = opts['dnr_type']
+    ## codec.framerate     = opts['framerate']
+    ## codec.framespergop  = opts['framespergop']
+    #codec.gop_closure   = opts['gop_closure']
+    #codec.pulldown      = opts['pulldown']
+    #codec.stream_type   = opts['stream_type']
+
+    ivtv_dev.setCodecInfo(codec)
 
 '''
 To run this as standalone use the following before running python ivtv.py

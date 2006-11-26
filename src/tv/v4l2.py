@@ -669,7 +669,12 @@ if __name__ == '__main__':
     '''
     DEBUG=0
     viddev.listcontrols()
-    print viddev.getcontrols()
+    dict = viddev.getcontrols()
+    keys = list(dict)
+    keys.sort()
+    print keys
+    for ctrl in keys:
+        print dict[ctrl]
     viddev.setextctrl(0x009909c9, 2)
     print viddev.getextctrl(0x009909c9)
     viddev.setextctrl(0x009909cf, 7000000)
