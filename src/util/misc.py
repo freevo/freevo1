@@ -383,7 +383,8 @@ def htmlenties2txt(string):
                 replacement = e[entity[1:-1]]
             except KeyError:
                 continue
-        string = string.replace(entity, replacement)
+        #string = string.replace(entity, replacement)
+        string = string.replace(entity, replacement.decode("latin-1"))
     return string
 
 
