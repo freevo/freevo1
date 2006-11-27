@@ -50,9 +50,9 @@ def returnFromJelly(status, response):
 
 class PluginInterface(plugin.DaemonPlugin):
     """
-    This plugin shows the current encoding level on the idlebar.
+    This plugin shows the current encoding status
     Activate with:
-    plugin.activate('idlebar.encoding.Volume', level=0)
+    plugin.activate('idlebar.encoding', level=0)
     """
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
