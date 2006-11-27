@@ -31,7 +31,7 @@
 
 import os, re
 import threading
-import subprocess
+import popen2
 import kaa.metadata as mmpython
 
 import config     # Configuration handler. reads config file.
@@ -236,28 +236,14 @@ class MPlayer:
         if config.MPLAYER_AUTOCROP and not item.network_play and str(' ').join(command).find('crop=') == -1:
             _debug_('starting autocrop')
             (x1, y1, x2, y2) = (1000, 1000, 0, 0)
-
-            crop_cmd = command[1:] + ['-nosound', '-vo', 'null', '-benchmark',
-                                      '-vf', 'cropdetect', '-quiet', '-slave' ]
+            crop_cmd = command[1:] + ['-ao', 'null', '-vo', 'null', '-ss', '%s' % config.TV_RECORD_PADDING_PRE * 2,
+                                      '-frames', '20', '-vf', 'cropdetect' ]
+            child = popen2.Popen3(self.sort_filter(crop_cmd), 1, 100)
             exp = re.compile('^.*-vf crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*).*')
-
-            child = subprocess.Popen(self.sort_filter(crop_cmd),
-                                     stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-
-            child.stdin.write("pause\n");
-            for i in xrange(4):
-                child.stdin.write("pausing seek 60\n")
-                for i in xrange(10):
-                    child.stdin.write("frame_step\n")
-
-            child.stdin.write("quit\n")
-            child.stdin.write("quit\n")
-
             while(1):
-                data = child.stdout.readline()
+                data = child.fromchild.readline()
                 if not data:
                     break
-
                 m = exp.match(data)
                 if m:
                     x1 = min(x1, int(m.group(3)))
@@ -265,13 +251,13 @@ class MPlayer:
                     x2 = max(x2, int(m.group(1)) + int(m.group(3)))
                     y2 = max(y2, int(m.group(2)) + int(m.group(4)))
                     _debug_('x1=%s x2=%s y1=%s y2=%s' % (x1, x2, y1, y2))
-
-            child.wait()
-
+        
             if x1 < 1000 and x2 < 1000:
                 command = command + [ '-vf' , 'crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1) ]
                 _debug_('crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1))
             
+            child.wait()
+
         if item.subtitle_file:
             d, f = util.resolve_media_mountdir(item.subtitle_file)
             util.mount(d)
