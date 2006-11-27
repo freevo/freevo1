@@ -52,29 +52,9 @@ class PluginInterface(plugin.Plugin):
             config.CONF.fbxine
         except:
             print String(_( 'ERROR' )) + ': ' + \
-                  String(_( "'fbxine' not found, plugin 'xine' deactivated" ))
+                  String(_( "'fbxine' not found, 'xine' audio plugin deactivated" ))
             return
 
-        if not hasattr(config, 'FBXINE_VERSION'):
-            config.FBXINE_VERSION = 0
-            for data in util.popen3.stdout('%s --version' % config.CONF.fbxine):
-                m = re.match('^.* v?([0-9])\.([0-9]+)\.([0-9]*).*', data)
-                if m:
-                    config.FBXINE_VERSION = int('%02d%02d%02d' % (int(m.group(1)),
-                                                                  int(m.group(2)),
-                                                                  int(m.group(3))))
-                    if data.find('cvs') >= 0:
-                        config.FBXINE_VERSION += 1
-
-            _debug_('detect fbxine version %s' % config.FBXINE_VERSION)
-
-        
-        if config.FBXINE_VERSION < 923:
-            print String(_( 'ERROR' )) + ': ' + \
-                  String(_( "'fbxine' version too old, plugin 'xine' deactivated" ))
-            print String(_( 'You need software %s' )) % 'xine-ui > 0.9.22'
-            return
-            
         # register xine as the object to play
         plugin.register(Xine(), plugin.AUDIO_PLAYER, True)
 

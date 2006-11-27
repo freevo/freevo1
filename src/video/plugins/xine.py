@@ -60,7 +60,7 @@ class PluginInterface(plugin.Plugin):
             config.XINE_COMMAND
         except:
             print String(_( 'ERROR' )) + ': ' + \
-                  String(_("'XINE_COMMAND' not defined, plugin 'xine' deactivated.\n" \
+                  String(_("'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n" \
                            'please check the xine section in freevo_config.py' ))
             return
 
@@ -68,7 +68,6 @@ class PluginInterface(plugin.Plugin):
             type = 'fb'
         elif config.XINE_COMMAND.find('df_xine') >= 0:
             type = 'df'
-            config.XINE_VERSION = 923
         else:
             type = 'X'
 
