@@ -309,8 +309,7 @@ class MMCache(Cache):
             if name == name.upper() and info.has_key('type') and \
                    info['type'] in ('DVD', 'VCD'):
                 name = util.getname(filename.lower())
-            info['title'] = name
-            info['filename'] = name
+            info['title:filename'] = name
 
             if info.has_key('video'):
                 for video in info['video']:
