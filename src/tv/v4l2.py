@@ -709,8 +709,11 @@ if __name__ == '__main__':
     print viddev.getextctrl(0x009909c9)
     viddev.setextctrl(0x009909cf, 7000000)
     print viddev.getextctrl(0x009909cf)
-    viddev.updatecontrol('Video Bitrate', 5000000L)
-    print viddev.getextctrl(0x009909c9)
+    (id, type, name, min, max, step, default, flags, bitrate) = viddev.getcontrol('Video Bitrate')
+    print viddev.getcontrol('Video Bitrate')
+    viddev.updatecontrol('Video Bitrate', bitrate+1)
+    print viddev.getcontrol('Video Bitrate')
+    print viddev.getextctrl(0x009909cf)
     viddev.close()
 
 '''
