@@ -108,9 +108,9 @@ ENUMSTD_NO       = _IOWR('V', 25, ENUMSTD_ST)
 ENUMINPUT_ST     = bit32 and "<I32sIIIQI16x" or "<I32sIIIQI20x"
 ENUMINPUT_NO     = _IOWR('V', 26, ENUMINPUT_ST)
 
-CONTROL_ST       = "<Ll"
-G_CONTROL_NO     = _IOWR('V', 27, CONTROL_ST)
-S_CONTROL_NO     = _IOWR('V', 28, CONTROL_ST)
+CTRL_ST          = "<Ll"
+G_CTRL_NO        = _IOWR('V', 27, CTRL_ST)
+S_CTRL_NO        = _IOWR('V', 28, CTRL_ST)
 
 TUNER_ST         = "<L32sLLLLLLll16x"
 GET_TUNER_NO     = _IOWR('V', 29, TUNER_ST)
@@ -136,11 +136,11 @@ SETFREQ_NO       = _IOW ('V', 57, FREQUENCY_ST)
 
 LOG_STATUS       = _IO  ('V', 70)
 
-EXT_CONTROL_ST   = "@L2Lq"         # (id, res1, res2, s64)
-EXT_CONTROLS_ST  = "@LLL2LP"       # (class, count, error_idx, res1, res2, ptr)
-G_EXT_CTRLS_NO   = _IOWR('V', 71, EXT_CONTROLS_ST)
-S_EXT_CTRLS_NO   = _IOWR('V', 72, EXT_CONTROLS_ST)
-TRY_EXT_CTRLS_NO = _IOWR('V', 73, EXT_CONTROLS_ST)
+EXT_CTRL_ST      = "@L2Lq"         # (id, res1, res2, s64)
+EXT_CTRLS_ST     = "@LLL2LP"       # (class, count, error_idx, res1, res2, ptr)
+G_EXT_CTRLS_NO   = _IOWR('V', 71, EXT_CTRLS_ST)
+S_EXT_CTRLS_NO   = _IOWR('V', 72, EXT_CTRLS_ST)
+TRY_EXT_CTRLS_NO = _IOWR('V', 73, EXT_CTRLS_ST)
 
 V4L2_CTRL_FLAG_NEXT_CTRL = 0x80000000
 
@@ -392,59 +392,61 @@ class Videodev:
         if DEBUG >= 3: print "setaudio: val=%r, r=%r" % (val, r)
 
 
-    def getcontrol(self, id):
+    def getctrl(self, id):
         '''
+        Get the value of a control
         '''
-        val = struct.pack(CONTROL_ST, id, 0)
-        r = fcntl.ioctl(self.device, i32(G_CONTROL_NO), val)
-        res = struct.unpack(CONTROL_ST, r)
-        if DEBUG >= 3: print "getcontrol: val=%r, %d, res=%r" % (val, len(val), res)
+        val = struct.pack(CTRL_ST, id, 0)
+        r = fcntl.ioctl(self.device, i32(G_CTRL_NO), val)
+        res = struct.unpack(CTRL_ST, r)
+        if DEBUG >= 3: print "getctrl: val=%r, %d, res=%r" % (val, len(val), res)
         return res[1]
 
 
-    def setcontrol(self, id, value):
+    def setctrl(self, id, value):
         '''
+        Set the value of a control
         '''
-        val = struct.pack(CONTROL_ST, id, 0)
-        r = fcntl.ioctl(self.device, i32(G_CONTROL_NO), val)
-        res = struct.unpack(CONTROL_ST, r)
-        if DEBUG >= 3: print "setcontrol: val=%r, %d, res=%r" % (val, len(val), res)
+        val = struct.pack(CTRL_ST, id, value)
+        r = fcntl.ioctl(self.device, i32(S_CTRL_NO), val)
+        res = struct.unpack(CTRL_ST, r)
+        if DEBUG >= 3: print "setctrl: val=%r, %d, res=%r" % (val, len(val), res)
 
 
     def getextctrl(self, id):
         '''
-        Get an external control
-        EXT_CONTROL_type->id, res1, res2, value
-        EXT_CONTROLS_ST->class, count, error_idx, res1, res2, ptr
+        Get the value of an external control
+        EXT_CTRL_type->id, res1, res2, value
+        EXT_CTRLS_ST->class, count, error_idx, res1, res2, ptr
         '''
         extctrl = array.array('B')
-        extctrl.fromstring(struct.pack(EXT_CONTROL_ST, id, 0, 0, 0))
+        extctrl.fromstring(struct.pack(EXT_CTRL_ST, id, 0, 0, 0))
         extctrl_p = extctrl.buffer_info()[0]
-        val = struct.pack(EXT_CONTROLS_ST, _ID2CLASS(id), 1, 0, 0, 0, extctrl_p)
+        val = struct.pack(EXT_CTRLS_ST, _ID2CLASS(id), 1, 0, 0, 0, extctrl_p)
         try:
             r = fcntl.ioctl(self.device, i32(G_EXT_CTRLS_NO), val)
-            res = struct.unpack(EXT_CONTROLS_ST, r)
-            extres = struct.unpack(EXT_CONTROL_ST, extctrl.tostring())
+            res = struct.unpack(EXT_CTRLS_ST, r)
+            extres = struct.unpack(EXT_CTRL_ST, extctrl.tostring())
             if DEBUG >= 3: print "getextctrl: val=%r, %d, res=%r" % (val, len(val), res)
             if DEBUG >= 3: print "getextctrl: extctrl=%r, %d, extres=%s" % (extctrl.tostring(), len(extctrl), extres)
         except IOError, e:
-            extres = struct.unpack(EXT_CONTROL_ST, extctrl.tostring())
+            extres = struct.unpack(EXT_CTRL_ST, extctrl.tostring())
             print 'getextctrl:', e
         return extres[3]
 
 
     def setextctrl(self, id, value):
         '''
-        Set an external control
+        Set the value of an external control
         '''
         extctrl = array.array('B')
-        extctrl.fromstring(struct.pack(EXT_CONTROL_ST, id, 0, 0, value))
+        extctrl.fromstring(struct.pack(EXT_CTRL_ST, id, 0, 0, value))
         extctrl_p = extctrl.buffer_info()[0]
-        val = struct.pack(EXT_CONTROLS_ST, _ID2CLASS(id), 1, 0, 0, 0, extctrl_p)
+        val = struct.pack(EXT_CTRLS_ST, _ID2CLASS(id), 1, 0, 0, 0, extctrl_p)
         try:
             r = fcntl.ioctl(self.device, i32(S_EXT_CTRLS_NO), val)
-            res = struct.unpack(EXT_CONTROLS_ST, r)
-            extres = struct.unpack(EXT_CONTROL_ST, extctrl.tostring())
+            res = struct.unpack(EXT_CTRLS_ST, r)
+            extres = struct.unpack(EXT_CTRL_ST, extctrl.tostring())
             if DEBUG >= 3: print "setextctrl: val=%r, %d, res=%r" % (val, len(val), res)
             if DEBUG >= 3: print "setextctrl: extctrl=%r, %d, extres=%s" % (extctrl.tostring(), len(extctrl), extres)
         except IOError, e:
@@ -476,7 +478,7 @@ class Videodev:
         if _ID2CLASS(id) != V4L2_CTRL_CLASS_USER and id < V4L2_CID_PRIVATE_BASE:
             value = self.getextctrl(id)
         else:
-            value = self.getcontrol(id)
+            value = self.getctrl(id)
         return (id, type, name, min, max, step, default, flags, value)
 
 
@@ -547,12 +549,40 @@ class Videodev:
         return self.controls
 
 
+    def getcontrol(self, name):
+        '''
+        get the control record by name
+        '''
+        if not self.controls.has_key(name):
+            print 'control \"%s\" does not exists' % (name)
+            return None
+        return self.controls[name]
+
+
+    def updatecontrol(self, name, value):
+        '''
+        set the control record by name
+        '''
+        if not self.getcontrol(name):
+            return
+        (id, type, name, min, max, step, default, flags, oldvalue) = self.getcontrol(name)
+        if value == oldvalue:
+            return
+
+        self.controls[name] = (id, type, name, min, max, step, default, flags, value)
+        if _ID2CLASS(id) != V4L2_CTRL_CLASS_USER and id < V4L2_CID_PRIVATE_BASE:
+            self.setextctrl(id, value)
+        else:
+            self.setctrl(id, value)
+        return
+
+
     def init_settings(self):
         (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
         v_norm = string.upper(v_norm)
         self.setstd(NORMS.get(v_norm))
-
         self.setchanlist(v_clist)
+        self.getcontrols()
 
         # XXX TODO: make a good way of setting the input
         # self.setinput(....)
@@ -679,6 +709,8 @@ if __name__ == '__main__':
     print viddev.getextctrl(0x009909c9)
     viddev.setextctrl(0x009909cf, 7000000)
     print viddev.getextctrl(0x009909cf)
+    viddev.updatecontrol('Video Bitrate', 5000000L)
+    print viddev.getextctrl(0x009909c9)
     viddev.close()
 
 '''
