@@ -1387,8 +1387,8 @@ MPLAYER_VF_PROGRESSIVE = 'pp=de'
 # Xine settings:
 # ======================================================================
 
-# You need xine-ui version greater 0.9.21 to use the all the features
-# of the xine plugin
+# You need xine-ui version greater or equal to 0.9.23 to use the all the 
+# features of the xine plugin
 
 XINE_COMMAND = ''
 

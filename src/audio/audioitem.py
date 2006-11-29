@@ -54,7 +54,9 @@ class AudioItem(Item):
         self.set_url(url, info=scan)
 
         if name:
-            self.name   = name
+            self.name = name
+        else:
+            self.name = self.format_track()
 
         self.start      = 0
         self.elapsed    = 0
@@ -178,7 +180,7 @@ class AudioItem(Item):
 
 
     def format_track(self):
-        """ Return a formatted string for use in music.py """
+        """ Return a formatted string for use in item.py """
 	# Since we can't specify the length of the integer in the
 	# format string (Python doesn't seem to recognize it) we
 	# strip it out first, when we see the only thing that can be
@@ -187,20 +189,20 @@ class AudioItem(Item):
 
         # Before we begin, make sure track is an integer
     
-        if self.track:
+        if self['trackno']:
             try:
-    	        mytrack = ('%0.2d' % int(self.track))
+    	        mytrack = ('%0.2d' % int(self['trackno']))
             except ValueError:
-    	        mytrack = None
+     	        mytrack = None
         else:
-           mytrack = None
-    
-        song_info = {  'a'  : self.artist,
-       	               'l'  : self.album,
+            mytrack = None
+
+        song_info = {  'a'  : self['artist'],
+       	               'l'  : self['album'],
     	               'n'  : mytrack,
-    	               't'  : self.title,
-    	               'y'  : self.year,
-    	               'f'  : self.name }
+    	               't'  : self['title'],
+    	               'y'  : self['year'],
+    	               'f'  : self['name'] }
 
         if self.parent and hasattr(self.parent, 'AUDIO_FORMAT_STRING'):
             return self.parent.DIRECTORY_AUDIO_FORMAT_STRING % song_info

@@ -16,7 +16,8 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn export svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
-The release date is only tentative at the moment. This release has all the changes in Release 1.6.1 plus
+The release date is only tentative at the moment.
+This release has all the changes in Release 1.6.x plus
 
  * Replaced mmpython with kaa.base and kaa.metadata (F#1580712)
  * New apple trailers plugin (disabled by default) (F#1580418)
@@ -32,6 +33,11 @@ The release date is only tentative at the moment. This release has all the chang
  * Updated imdb movie parsing to use BeautifulSoup (F#1590928)
  * Updated multimail plug-in for Maildir support (F#1594915)
  * Updated recordserver to allow automatic deleting of old recordings when low on disk space (F#1594630)
+
+== Release 1.6.2 (2006-??-??) ==
+--------------------------------
+
+ * Fixed audio track name formatting (B#1605570,B#1605042)
 
 == Release 1.6.1 (2006-11-25) ==
 --------------------------------
