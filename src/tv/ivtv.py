@@ -109,6 +109,13 @@ class IVTV(tv.v4l2.Videodev):
 
     def __init__(self, device):
         tv.v4l2.Videodev.__init__(self, device)
+        self.stream_type_map_old2new = {
+             0 : 0,  1 : 3,  2 : 2,  3 : 3,  5 : 3,  7 : 3,
+            10 : 3, 11 : 4, 12 : 5, 13 : 3, 14 : 3
+        }
+        self.stream_type_map_new2old = {
+            0 : 0, 2 : 2, 3 : 10, 4 : 11, 5 : 12,
+        }
 
 
     def setCodecInfo(self, codec):
@@ -170,6 +177,19 @@ class IVTV(tv.v4l2.Videodev):
                     '0' copy
                     '1' original
 
+            IVTV_STREAM_PS      0 -> 0: MPEG-2 Program Stream
+            IVTV_STREAM_TS      1 -> 3:
+            IVTV_STREAM_MPEG1   2 -> 2: MPEG-1 System Stream
+            IVTV_STREAM_PES_AV  3 -> 3:
+            IVTV_STREAM_PES_V   5 -> 3:
+            IVTV_STREAM_PES_A   7 -> 3:
+            IVTV_STREAM_DVD    10 -> 3: MPEG-2 DVD-compatible Stream
+            IVTV_STREAM_VCD    11 -> 4: MPEG-1 VCD-compatible Stream
+            IVTV_STREAM_SVCD   12 -> 5: MPEG-2 SVCD-compatible Stream
+            IVTV_STREAM_DVD_S1 13 -> 3:
+            IVTV_STREAM_DVD_S2 14 -> 3:
+
+
             VIDIOC_S_INPUT         'input'          : 4,
             VIDIOC_S_FMT           'resolution'     : '720x576',
             'Video Aspect'         'aspect'         : 2,
@@ -210,7 +230,7 @@ class IVTV(tv.v4l2.Videodev):
             tv.v4l2.Videodev.updatecontrol(self, 'Video GOP Size', codec.framespergop)
             tv.v4l2.Videodev.updatecontrol(self, 'Video GOP Closure', codec.gop_closure)
             tv.v4l2.Videodev.updatecontrol(self, 'Video Pulldown', codec.pulldown)
-            tv.v4l2.Videodev.updatecontrol(self, 'Stream Type', codec.stream_type)
+            tv.v4l2.Videodev.updatecontrol(self, 'Stream Type', self.stream_type_map_old2new[codec.stream_type])
             tv.v4l2.Videodev.listcontrols(self)
             return
         val = struct.pack( CODEC_ST, 
@@ -260,7 +280,7 @@ class IVTV(tv.v4l2.Videodev):
             framespergop = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Size')
             gop_closure = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Closure')
             pulldown = tv.v4l2.Videodev.getcontrol(self, 'Video Pulldown')
-            stream_type = tv.v4l2.Videodev.getcontrol(self, 'Stream Type')
+            stream_type = self.stream_type_map_new2old[tv.v4l2.Videodev.getcontrol(self, 'Stream Type')]
             codec_list = (aspect, audio_bitmask, bframes, bitrate_mode, bitrate, bitrate_peak,
                 dnr_mode, dnr_spatial, dnr_temporal, dnr_type, framerate, framespergop, gop_closure,
                 pulldown, stream_type)
@@ -284,7 +304,7 @@ class IVTV(tv.v4l2.Videodev):
 
     def getvbiembed(self):
         if self.version >= 0x800:
-            return
+            return self.getcontrol('Stream VBI Format')
         try:
             r = fcntl.ioctl(self.device, i32(GETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST,0))
             if DEBUG >= 3:
@@ -298,6 +318,7 @@ class IVTV(tv.v4l2.Videodev):
 
     def setvbiembed(self, value):
         if self.version >= 0x800:
+            self.setcontrol('Stream VBI Format', value)
             return
         try:
             r = fcntl.ioctl(self.device, i32(SETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, value))
@@ -322,7 +343,7 @@ class IVTV(tv.v4l2.Videodev):
 
         if self.version >= 0x800:
             tv.v4l2.Videodev.getcontrols(self)
-            return
+
         codec = self.getCodecInfo()
 
         codec.aspect        = opts['aspect']
@@ -335,10 +356,9 @@ class IVTV(tv.v4l2.Videodev):
         codec.dnr_spatial   = opts['dnr_spatial']
         codec.dnr_temporal  = opts['dnr_temporal']
         codec.dnr_type      = opts['dnr_type']
-        # XXX: Ignore framerate for now, use the card's initialized default.
-        # codec.framerate     = opts['framerate']
-        # XXX: Ignore framespergop for now, use the card's initialized default.
-        # codec.framespergop  = opts['framespergop']
+        # framerate is set by the std
+        #codec.framerate     = opts['framerate']
+        codec.framespergop  = opts['framespergop']
         codec.gop_closure   = opts['gop_closure']
         codec.pulldown      = opts['pulldown']
         codec.stream_type   = opts['stream_type']
@@ -348,13 +368,11 @@ class IVTV(tv.v4l2.Videodev):
 
     def print_settings(self):
         tv.v4l2.Videodev.print_settings(self)
-        if self.version >= 0x800:
-            return
 
         codec = self.getCodecInfo()
 
         print 'CODEC::aspect: %s' % codec.aspect
-        print 'CODEC::audio_bitmask: %s' % codec.audio_bitmask
+        print 'CODEC::audio_bitmask: 0x%X' % codec.audio_bitmask
         print 'CODEC::bfrmes: %s' % codec.bframes
         print 'CODEC::bitrate_mode: %s' % codec.bitrate_mode
         print 'CODEC::bitrate: %s' % codec.bitrate
@@ -410,25 +428,28 @@ class IVTVCodec:
 
 if __name__ == '__main__':
 
-    DEBUG = 1
+    DEBUG = 0
 
     ivtv_dev = IVTV('/dev/video0')
+    ivtv_dev.init_settings()
+
     print 'driver="%s"' % ivtv_dev.driver
     print 'version=%x' % ivtv_dev.version
     print config.TV_IVTV_OPTIONS
-    print ivtv_dev.getCodecInfo()
-    print ivtv_dev.print_settings()
-    print ivtv_dev.init_settings()
-    embed = ivtv_dev.getvbiembed()
-    print "embed=%s" % embed
-    ivtv_dev.setvbiembed(1)
-    print "embed=%s (%s)" % (ivtv_dev.getvbiembed(), 1)
-    ivtv_dev.setvbiembed(embed)
-    print "embed=%s (%s)" % (ivtv_dev.getvbiembed(), embed)
 
-    #codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 12, 1, 0, 14))
-    codec = IVTVCodec((2, 0x2A76, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 12, 1, 0, 5))
-    ivtv_dev.setCodecInfo(codec)
+    print ivtv_dev.print_settings()
+    #embed = ivtv_dev.getvbiembed()
+    #print "current vbi embed=%s" % embed
+    #ivtv_dev.setvbiembed(1)
+    #print "set vbi embed=%s (%s)" % (ivtv_dev.getvbiembed(), 1)
+    #ivtv_dev.setvbiembed(embed)
+    #print "reset vbi embed=%s (%s)" % (ivtv_dev.getvbiembed(), embed)
+
+    #print ivtv_dev.getCodecInfo()
+    ##codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 12, 1, 0, 14))
+    #codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 12, 1, 0, 5))
+    #print ivtv_dev.getCodecInfo()
+    #ivtv_dev.setCodecInfo(codec)
 
 '''
 To run this as standalone use the following before running python ivtv.py

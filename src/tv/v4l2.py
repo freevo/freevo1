@@ -563,8 +563,6 @@ class Videodev:
         '''
         get the control record by name
         '''
-        if not self.controls:
-            self.getcontrols()
         if not self.controls.has_key(name):
             print 'control \"%s\" does not exists' % (name)
             return None
@@ -614,9 +612,6 @@ class Videodev:
 
         # XXX TODO: make a good way of setting the input
         # self.setinput(....)
-
-        # XXX TODO: make a good way of setting the capture resolution
-        # self.setfmt(int(width), int(height))
 
 
     def print_settings(self):
@@ -672,7 +667,6 @@ class V4LGroup:
 
 if __name__ == '__main__':
 
-    DEBUG = 4
     DEBUG = 0
     viddev=Videodev('/dev/video0')
     print 'Driver = \"%s\"' % viddev.getdriver()
