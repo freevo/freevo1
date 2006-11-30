@@ -1,8 +1,9 @@
-import os  
+import os
 import plugin
 import config
 
 from item import Item
+import config, menu, rc, plugin, skin, osd, util
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
