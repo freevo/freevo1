@@ -97,9 +97,9 @@ class PluginInterface(IdleBarPlugin):
         self.getDiskFree()
         diskimg = self.getimage(self.diskimg, osd)
         w,h = diskimg.get_size()
-        if self.freespace < 8:
+        if self.freespace < config.DISKFREE_VERY_LOW:
             diskbar = self.getimage(self.badimg, osd, True)
-        elif self.freespace < 20:
+        elif self.freespace < config.DISKFREE_LOW:
             diskbar = self.getimage(self.poorimg, osd, True)
         else:
             diskbar = self.getimage(self.goodimg, osd, True)

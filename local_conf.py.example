@@ -375,13 +375,13 @@ CACHE_IMAGES = 1
 # plugin.activate('joy')
 
 
-# ======================================================================
+# ----------------------------------------------------------------------
 # Headlines
 #
 # You are free to use any rss feeds in the HEADLINES_LOCATIONS below
 # These are just working examples for the Freevo feeds.
 # To turn off Headlines add plugin.remove('headlines')
-# ======================================================================
+# ----------------------------------------------------------------------
 #plugin.activate('headlines', level=45)
 #HEADLINES_LOCATIONS = [
 #    ('Freevo news releases', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652'),
@@ -389,6 +389,18 @@ CACHE_IMAGES = 1
 #    ('Freevo summary+stats', 'http://sourceforge.net/export/rss2_projsummary.php?group_id=46652'),
 #    ('Freevo donors', 'http://sourceforge.net/export/rss2_projdonors.php?group_id=46652'),
 #]
+
+
+# ----------------------------------------------------------------------
+# CD Burning
+# ----------------------------------------------------------------------
+# plugin.activate('cd_burn')
+# CDBURN_AUDIO_DAO = 1
+# CDBURN_MKISOFS_PATH = '/usr/bin/mkisofs'
+# CDBURN_CDRECORD_PATH = '/usr/bin/cdrecord'
+# CDBURN_TEMP_DIR='/tmp/'
+# CDBURN_DEV = '/dev/hdc'
+# CDBURN_SPEED = 32
 
 
 # ======================================================================
@@ -1366,7 +1378,12 @@ IMAGEVIEWER_BLEND_MODE = -1
 # plugin.activate('idlebar.tv', level = 20)
 # plugin.activate('idlebar.cdstatus', level = 25)
 # plugin.activate('idlebar.diskfree', level = 30)
-# plugin.activate('idlebar.clock', level = 50, args='%a %d %H:%M')
+# plugin.activate('idlebar.clock', level = 50)
+# CLOCK_FORMAT = '%a %d %H:%M'
+#
+# settings for the idlebar.diskfree plug-in, in Gigabytes
+# DISKFREE_VERY_LOW = 8 # less than this shows a red bar
+# DISKFREE_LOW = 20     # less than this shows an orange bar
 #
 # display proc-stats, CPU and RAM usage
 # plugin.activate('idlebar.system.procstats',level=20)

@@ -752,7 +752,10 @@ plugin.activate('idlebar')
 plugin.activate('idlebar.tv', level=20)
 plugin.activate('idlebar.cdstatus', level=25)
 plugin.activate('idlebar.diskfree', level=30)
-plugin.activate('idlebar.clock', level=50, args='%a %d %H:%M')
+DISKFREE_VERY_LOW = 8 # In Gigabytes
+DISKFREE_LOW = 20
+plugin.activate('idlebar.clock', level=50)
+CLOCK_FORMAT = '%a %d %H:%M'
 
 # ======================================================================
 # Headlines

@@ -153,8 +153,11 @@ class clock(IdleBarPlugin):
     """
     def __init__(self, format=''):
         IdleBarPlugin.__init__(self)
-	if format == '': # No overiding of the default value
-	    if time.strftime('%P') =='':
+        if config.CLOCK_FORMAT:
+            format = config.CLOCK_FORMAT
+        # No overiding of the default value
+        elif not format:
+            if time.strftime('%P') == '':
                 format ='%a %H:%M'
             else:
                 format ='%a %I:%M %P'
