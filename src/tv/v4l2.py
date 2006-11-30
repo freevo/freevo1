@@ -728,13 +728,21 @@ if __name__ == '__main__':
     for ctrl in keys:
         print dict[ctrl]
     viddev.setextctrl(0x009909c9, 2)
-    print viddev.getextctrl(0x009909c9)
+    print '0x009909c9 = %d' % viddev.getextctrl(0x009909c9)
     viddev.setextctrl(0x009909cf, 7000000)
-    print viddev.getextctrl(0x009909cf)
+    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
     bitrate = viddev.getcontrol('Video Bitrate')
     viddev.updatecontrol('Video Bitrate', bitrate+1)
-    print viddev.getcontrol('Video Bitrate')
-    print viddev.getextctrl(0x009909cf)
+    print 'Video Bitrate = %d' % viddev.getcontrol('Video Bitrate')
+    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+
+    stream_type = 4
+    viddev.updatecontrol('Stream Type', stream_type)
+    #viddev.setcontrol('Stream Type', stream_type)
+    #viddev.setextctrl(0x00990900, stream_type)
+    print 'Stream Type = %d' % viddev.getcontrol('Stream Type')
+    print '0x00990900 = %d' % viddev.getextctrl(0x00990900)
+
     viddev.close()
 
 '''

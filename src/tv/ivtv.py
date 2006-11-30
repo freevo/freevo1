@@ -109,19 +109,78 @@ class IVTV(tv.v4l2.Videodev):
 
     def __init__(self, device):
         tv.v4l2.Videodev.__init__(self, device)
-        self.stream_type_map_old2new = {
+
+
+    def streamTypeIvtvToV4l2(self, stream_type):
+        map_ivtv_to_v4l2 = {
              0 : 0,  1 : 3,  2 : 2,  3 : 3,  5 : 3,  7 : 3,
             10 : 3, 11 : 4, 12 : 5, 13 : 3, 14 : 3
         }
-        self.stream_type_map_new2old = {
+        try:
+            if DEBUG >= 1:
+                print 'streamTypeIvtvToV4l2 %s -> %s' % (stream_type, map_ivtv_to_v4l2[stream_type])
+            return map_ivtv_to_v4l2[stream_type]
+        except:
+            print 'streamTypeIvtvToV4l2 %s failed' % (stream_type)
+        return 0
+
+
+    def streamTypeV4l2ToIVTV(self, stream_type):
+        map_v4l2_to_ivtv = {
             0 : 0, 2 : 2, 3 : 10, 4 : 11, 5 : 12,
         }
+        try:
+            if DEBUG >= 1:
+                print 'streamTypeV4l2ToIVTV %s -> %s' % (stream_type, map_v4l2_to_ivtv[stream_type])
+            return map_v4l2_to_ivtv[stream_type]
+        except:
+            print 'streamTypeV4l2ToIVTV %s failed' % (stream_type)
+        return 0
+
+
+    def getCodecInfo(self):
+        if self.version >= 0x800:
+            aspect = tv.v4l2.Videodev.getcontrol(self, 'Video Aspect')
+            audio_bitmask = 0
+            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Sampling Frequency') << 0)
+            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Layer II Bitrate') << 2)
+            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Encoding Layer') << 6)
+            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Stereo Mode') << 8)
+            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Stereo Mode Extension') << 10)
+            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Emphasis') << 12)
+            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio CRC') << 14)
+            bframes = tv.v4l2.Videodev.getcontrol(self, 'Video B Frames')
+            bitrate_mode = tv.v4l2.Videodev.getcontrol(self, 'Video Bitrate Mode')
+            bitrate = tv.v4l2.Videodev.getcontrol(self, 'Video Bitrate')
+            bitrate_peak = tv.v4l2.Videodev.getcontrol(self, 'Video Peak Bitrate')
+            dnr_mode = 0
+            dnr_mode |= tv.v4l2.Videodev.getcontrol(self, 'Spatial Filter Mode') << 0
+            dnr_mode |= tv.v4l2.Videodev.getcontrol(self, 'Temporal Filter Mode') << 1
+            dnr_spatial = tv.v4l2.Videodev.getcontrol(self, 'Spatial Filter')
+            dnr_temporal = tv.v4l2.Videodev.getcontrol(self, 'Temporal Filter')
+            dnr_type = tv.v4l2.Videodev.getcontrol(self, 'Median Filter Type')
+            framerate = 0
+            framespergop = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Size')
+            gop_closure = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Closure')
+            pulldown = tv.v4l2.Videodev.getcontrol(self, 'Video Pulldown')
+            stream_type = self.streamTypeV4l2ToIVTV(tv.v4l2.Videodev.getcontrol(self, 'Stream Type'))
+            codec_list = (aspect, audio_bitmask, bframes, bitrate_mode, bitrate, bitrate_peak,
+                dnr_mode, dnr_spatial, dnr_temporal, dnr_type, framerate, framespergop, gop_closure,
+                pulldown, stream_type)
+            return IVTVCodec(codec_list)
+
+        val = struct.pack( CODEC_ST, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 )
+        r = fcntl.ioctl(self.device, i32(IVTV_IOC_G_CODEC), val)
+        codec_list = struct.unpack(CODEC_ST, r)
+        if DEBUG >= 3: print "getCodecInfo: val=%r, r=%r, res=%r" % (val, r, struct.unpack(CODEC_ST, r))
+        return IVTVCodec(codec_list)
 
 
     def setCodecInfo(self, codec):
         if self.version >= 0x800:
             '''
             'audio_bitmask' : 0xE9,
+            NOTE: doesn't quite map to firmware api
             0:1 'Audio Sampling Frequency':
                 '00' 44.1Khz
                 '01' 48Khz
@@ -216,8 +275,6 @@ class IVTV(tv.v4l2.Videodev):
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Stereo Mode Extension', (codec.audio_bitmask >> 10) & 0x03)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Emphasis', (codec.audio_bitmask >> 12) & 0x03)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio CRC', (codec.audio_bitmask >> 14) & 0x01)
-            #tv.v4l2.Videodev.updatecontrol(self, 'Audio Copyright', (codec.audio_bitmask >> 15) & 0x01)
-            #tv.v4l2.Videodev.updatecontrol(self, 'Audio Generation', (codec.audio_bitmask >> 16) & 0x01)
             tv.v4l2.Videodev.updatecontrol(self, 'Video B Frames', codec.bframes)
             tv.v4l2.Videodev.updatecontrol(self, 'Video Bitrate Mode', codec.bitrate_mode)
             tv.v4l2.Videodev.updatecontrol(self, 'Video Bitrate', codec.bitrate)
@@ -230,8 +287,7 @@ class IVTV(tv.v4l2.Videodev):
             tv.v4l2.Videodev.updatecontrol(self, 'Video GOP Size', codec.framespergop)
             tv.v4l2.Videodev.updatecontrol(self, 'Video GOP Closure', codec.gop_closure)
             tv.v4l2.Videodev.updatecontrol(self, 'Video Pulldown', codec.pulldown)
-            tv.v4l2.Videodev.updatecontrol(self, 'Stream Type', self.stream_type_map_old2new[codec.stream_type])
-            tv.v4l2.Videodev.listcontrols(self)
+            tv.v4l2.Videodev.updatecontrol(self, 'Stream Type', self.streamTypeIvtvToV4l2(codec.stream_type))
             return
         val = struct.pack( CODEC_ST, 
                            codec.aspect,
@@ -251,46 +307,6 @@ class IVTV(tv.v4l2.Videodev):
                            codec.stream_type)
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_S_CODEC), val)
         if DEBUG >= 3: print "setCodecInfo: val=%r, r=%r" % (val, r)
-
-
-    def getCodecInfo(self):
-        if self.version >= 0x800:
-            aspect = tv.v4l2.Videodev.getcontrol(self, 'Video Aspect')
-            audio_bitmask = 0
-            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Sampling Frequency') << 0)
-            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Layer II Bitrate') << 2)
-            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Encoding Layer') << 6)
-            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Stereo Mode') << 8)
-            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Stereo Mode Extension') << 10)
-            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Emphasis') << 12)
-            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio CRC') << 14)
-            #audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Copyright') << 15)
-            #audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Generation') << 16)
-            bframes = tv.v4l2.Videodev.getcontrol(self, 'Video B Frames')
-            bitrate_mode = tv.v4l2.Videodev.getcontrol(self, 'Video Bitrate Mode')
-            bitrate = tv.v4l2.Videodev.getcontrol(self, 'Video Bitrate')
-            bitrate_peak = tv.v4l2.Videodev.getcontrol(self, 'Video Peak Bitrate')
-            dnr_mode = 0
-            dnr_mode |= tv.v4l2.Videodev.getcontrol(self, 'Spatial Filter Mode') << 0
-            dnr_mode |= tv.v4l2.Videodev.getcontrol(self, 'Temporal Filter Mode') << 1
-            dnr_spatial = tv.v4l2.Videodev.getcontrol(self, 'Spatial Filter')
-            dnr_temporal = tv.v4l2.Videodev.getcontrol(self, 'Temporal Filter')
-            dnr_type = tv.v4l2.Videodev.getcontrol(self, 'Median Filter Type')
-            framerate = 0
-            framespergop = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Size')
-            gop_closure = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Closure')
-            pulldown = tv.v4l2.Videodev.getcontrol(self, 'Video Pulldown')
-            stream_type = self.stream_type_map_new2old[tv.v4l2.Videodev.getcontrol(self, 'Stream Type')]
-            codec_list = (aspect, audio_bitmask, bframes, bitrate_mode, bitrate, bitrate_peak,
-                dnr_mode, dnr_spatial, dnr_temporal, dnr_type, framerate, framespergop, gop_closure,
-                pulldown, stream_type)
-            return IVTVCodec(codec_list)
-
-        val = struct.pack( CODEC_ST, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 )
-        r = fcntl.ioctl(self.device, i32(IVTV_IOC_G_CODEC), val)
-        codec_list = struct.unpack(CODEC_ST, r)
-        if DEBUG >= 3: print "getCodecInfo: val=%r, r=%r, res=%r" % (val, r, struct.unpack(CODEC_ST, r))
-        return IVTVCodec(codec_list)
 
 
     def mspSetMatrix(self, input=None, output=None):
@@ -446,10 +462,10 @@ if __name__ == '__main__':
     #print "reset vbi embed=%s (%s)" % (ivtv_dev.getvbiembed(), embed)
 
     #print ivtv_dev.getCodecInfo()
-    ##codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 12, 1, 0, 14))
-    #codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 12, 1, 0, 5))
-    #print ivtv_dev.getCodecInfo()
-    #ivtv_dev.setCodecInfo(codec)
+    codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 12, 1, 0, 10))
+    print 'codec:', codec
+    ivtv_dev.setCodecInfo(codec)
+    print ivtv_dev.getCodecInfo()
 
 '''
 To run this as standalone use the following before running python ivtv.py
