@@ -1314,9 +1314,9 @@ DVD_SUBTITLE_PREF = ''             # Order of preferred subtitles on DVD.
 MPLAYER_NICE = -20             
 
 if CONF.display in ( 'directfb', 'dfbmga' ):
-    MPLAYER_ARGS_DEF = ('-autosync 100 -nolirc -autoq 100 -fs ')
+    MPLAYER_ARGS_DEF = ('-autosync 100 -nolirc -nojoystick -autoq 100 -fs ')
 else:
-    MPLAYER_ARGS_DEF = (('-autosync 100 -nolirc -autoq 100 -screenw %s '
+    MPLAYER_ARGS_DEF = (('-autosync 100 -nolirc -nojoystick -autoq 100 -screenw %s '
                        + '-screenh %s -fs') % (CONF.width, CONF.height))
 
 
