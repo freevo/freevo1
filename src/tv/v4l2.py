@@ -450,7 +450,7 @@ class Videodev:
             if DEBUG >= 3: print "setextctrl: val=%r, %d, res=%r" % (val, len(val), res)
             if DEBUG >= 3: print "setextctrl: extctrl=%r, %d, extres=%s" % (extctrl.tostring(), len(extctrl), extres)
         except IOError, e:
-            print 'setextctrl:', e
+            print 'setextctrl:', id, self.findcontrol(id), e
 
 
     def querymenu(self, id, index):
@@ -549,31 +549,59 @@ class Videodev:
         return self.controls
 
 
+    def findcontrol(self, id):
+        '''
+        find a control by id
+        '''
+        for ctrl in self.controls.keys():
+            if self.controls[ctrl][0] == id:
+                return ctrl
+        return None
+
+
     def getcontrol(self, name):
+        '''
+        get the control record by name
+        '''
+        if not self.controls:
+            self.getcontrols()
+        if not self.controls.has_key(name):
+            print 'control \"%s\" does not exists' % (name)
+            return None
+        (id, type, name, min, max, step, default, flags, value) = self.controls[name]
+        return value
+
+
+    def setcontrol(self, name, value):
         '''
         get the control record by name
         '''
         if not self.controls.has_key(name):
             print 'control \"%s\" does not exists' % (name)
             return None
-        return self.controls[name]
+        (id, type, name, min, max, step, default, flags, oldvalue) = self.controls[name]
+        self.controls[name] = (id, type, name, min, max, step, default, flags, value)
+
+        if _ID2CLASS(id) != V4L2_CTRL_CLASS_USER and id < V4L2_CID_PRIVATE_BASE:
+            self.setextctrl(id, value)
+        else:
+            self.setctrl(id, value)
+        return value
 
 
     def updatecontrol(self, name, value):
         '''
         set the control record by name
         '''
+        if DEBUG >= 1: print 'name=\"%s\", value=%d' % (name, value)
         if not self.getcontrol(name):
             return
-        (id, type, name, min, max, step, default, flags, oldvalue) = self.getcontrol(name)
+
+        oldvalue = self.getcontrol(name)
         if value == oldvalue:
             return
 
-        self.controls[name] = (id, type, name, min, max, step, default, flags, value)
-        if _ID2CLASS(id) != V4L2_CTRL_CLASS_USER and id < V4L2_CID_PRIVATE_BASE:
-            self.setextctrl(id, value)
-        else:
-            self.setctrl(id, value)
+        self.setcontrol(name, value)
         return
 
 
@@ -709,8 +737,7 @@ if __name__ == '__main__':
     print viddev.getextctrl(0x009909c9)
     viddev.setextctrl(0x009909cf, 7000000)
     print viddev.getextctrl(0x009909cf)
-    (id, type, name, min, max, step, default, flags, bitrate) = viddev.getcontrol('Video Bitrate')
-    print viddev.getcontrol('Video Bitrate')
+    bitrate = viddev.getcontrol('Video Bitrate')
     viddev.updatecontrol('Video Bitrate', bitrate+1)
     print viddev.getcontrol('Video Bitrate')
     print viddev.getextctrl(0x009909cf)
