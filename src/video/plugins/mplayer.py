@@ -53,7 +53,8 @@ class PluginInterface(plugin.Plugin):
     def __init__(self):
         # create plugin structure
         plugin.Plugin.__init__(self)
-
+        if not hasattr(config,'MPLAYER_HWACCEL_SUFFIX'):
+                 config.MPLAYER_HWACCEL_SUFFIX=[]
         # register mplayer as the object to play video
         plugin.register(MPlayer(), plugin.VIDEO_PLAYER, True)
 
@@ -113,6 +114,12 @@ class MPlayer:
         self.item_length  = -1
         self.item.elapsed = 0        
 
+        VODEV=config.MPLAYER_VO_DEV
+        VODEVOPTS=config.MPLAYER_VO_DEV_OPTS
+        if item.mimetype in config.MPLAYER_HWACCEL_SUFFIX:
+                VODEV=config.MPLAYER_VO_DEV_HWACCEL
+                VODEVOPTS=config.MPLAYER_VO_DEV_OPTS_HWACCEL
+
         if mode == 'file':
             url = item.url[6:]
             self.item_info = mmpython.parse(url)
@@ -149,6 +156,8 @@ class MPlayer:
         additional_args = []
 
         if mode == 'dvd':
+            VODEV=config.MPLAYER_VO_DEV_HWACCEL
+            VODEVOPTS=config.MPLAYER_VO_DEV_OPTS_HWACCEL
             if config.DVD_LANG_PREF:
                 # There are some bad mastered DVDs out there. E.g. the specials on
                 # the German Babylon 5 Season 2 disc claim they have more than one
@@ -199,7 +208,8 @@ class MPlayer:
             mode = 'default'
 
         # Mplayer command and standard arguments
-        command += [ '-v', '-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS ]
+        command += [ '-v', '-vo', VODEV]
+        command += VODEVOPTS.split(' ')
 
         # mode specific args
         command += config.MPLAYER_ARGS[mode].split(' ')
@@ -314,7 +324,7 @@ class MPlayer:
         if event == VIDEO_MANUAL_SEEK:
             self.seek = 0
             rc.set_context('input')
-	    self.app.write('osd_show_text "input"\n')
+            self.app.write('osd_show_text "input"\n')
             return True
         
         if event.context == 'input':
