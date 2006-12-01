@@ -65,10 +65,7 @@ def parse_movie(fxd, node):
         id         = fxd.getattr(node, 'id')
         options    = fxd.getattr(node, 'mplayer-options')
         player     = fxd.childcontent(node, 'player')
-        playlist   = False
-
-        if fxd.get_children(node, 'playlist'):
-            playlist = True
+        playlist   = fxd.get_children(node, 'playlist') and True or False
 
         if mode == 'file':
             if not media_id:
@@ -129,7 +126,7 @@ def parse_movie(fxd, node):
                 if is_playlist:
                     v.is_playlist  = True
 
-                audio    = fxd.get_children(parts[0], 'audio')
+                audio = fxd.get_children(parts[0], 'audio')
                 if audio:
                     audio = { 'media_id': fxd.getattr(audio[0], 'media-id'),
                               'file'    : fxd.gettext(audio[0]) }
@@ -137,7 +134,7 @@ def parse_movie(fxd, node):
                         audio['file'] = os.path.join(dirname, audio['file'])
                 else:
                     audio = {}
-                v.audio_file    = audio
+                v.audio_file = audio
 
                 subtitle = fxd.get_children(parts[0], 'subtitle')
                 if subtitle:
@@ -248,9 +245,6 @@ def parse_movie(fxd, node):
     if fxd.is_skin_fxd:
         item.skin_fxd = fxd.filename
     fxd.getattr(None, 'items', []).append(item)
-
-
-
 
 
 def parse_disc_set(fxd, node):
