@@ -252,7 +252,8 @@ LOCAL_CONF_CHANGES = [
      Added plug-in: Apple trailers in the contrib area
      Added plug-in: reencode and idlebar encode to compress mpeg video
      Added plug-in: XM online
-     Added helpers: encodingserver, rssServer
+     Added helpers: makevdev
+     Added servers: encodingserver, rssserver
      Added USE_SDL_KEYBOARD to specify if generic keyboard handler should be used
      Added EVENT_DEVS and EVENTMAP for the new Linux event device handler
      Added VIDEO_PRE_PLAY and VIDEO_POST_PLAY to allow external commands to be run
@@ -540,26 +541,21 @@ USE_SDL_KEYBOARD = 1
 #
 KEYMAP = DEFAULT_KEYMAP
 
-#
 # List of /dev/input/event# devices to monitor. You can specify either the
 # device node (e.g. '/dev/input/event1') or the name of the device (e.g.
 # 'ATI Remote Wonder II'). If you monitor your keyboard both here and with
 # USE_SDL_KEYBOARD, then you will get duplicate events.
 #
-
 EVENT_DEVS = []
 
-#
 # Keymap to map input events to event strings. You can change current mappings
 # and add new ones here, e.g. EVENTMAP['KEY_COFFEE'] = 'SUBTITLE'. Key names
 # are defined by the Linux input layer (input.h). An axis is described by a
 # pair, one for positive and one for negative movement, e.g.
 # EVENTMAP['REL_Z'] = ('LEFT', 'RIGHT')
 #
-
 EVENTMAP = DEFAULT_EVENTMAP
 
-#
 # Use Internet resources to fetch information?
 # For example, Freevo can use CDDB for album information,
 # the IMDB movie database for movie info, and Amazon for cover searches. 
@@ -567,7 +563,6 @@ EVENTMAP = DEFAULT_EVENTMAP
 #
 USE_NETWORK = 1
 
-#
 # HOST_ALIVE_CHECK tests if the given host is online.
 # Will be used to avoid extremely long automounter timeouts.
 #

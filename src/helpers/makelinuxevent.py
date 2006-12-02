@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
-# Please see the file freevo/Docs/CREDITS for a complete list of authors.
+# Please see the fout freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,6 +39,149 @@ _events = {}
 
 _ids = {}
 _buses = {}
+
+def _convert_value(s):
+    if s.startswith("0x"):
+        return int(s, 16)
+    return int(s, 10)
+
+def parse_input_h(path):
+    global _types, _events, _ids, _buses
+
+    f = file(path)
+
+    types = {}
+    events = {}
+
+    ids = {}
+    buses = {}
+
+    for line in f.readlines():
+        m = re.search("#define (?P<name>EV_[A-Za-z0-9_]+)\s+(?P<value>(0x)?[0-9A-Fa-f]+)", line)
+        if m:
+            if m.group("name") != "EV_VERSION":
+                types[_convert_value(m.group("value"))] = m.group("name")
+            continue
+
+        m = re.search("#define (?P<name>ID_[A-Za-z0-9_]+)\s+(?P<value>(0x)?[0-9A-Fa-f]+)", line)
+        if m:
+            ids[_convert_value(m.group("value"))] = m.group("name")
+            continue
+
+        m = re.search("#define (?P<name>BUS_[A-Za-z0-9_]+)\s+(?P<value>(0x)?[0-9A-Fa-f]+)", line)
+        if m:
+            buses[_convert_value(m.group("value"))] = m.group("name")
+            continue
+
+        m = re.search("#define (?P<name>(?P<type>[A-Za-z0-9]+)_[A-Za-z0-9_]+)\s+(?P<value>(0x)?[0-9A-Fa-f]+)", line)
+        if m:
+            t = m.group("type")
+
+            # The naming is a bit off in input.h
+            if t == "BTN":
+                t = "KEY"
+
+            for k in types.keys():
+                if types[k] == "EV_" + t:
+                    break
+            else:
+                raise Exception("Invalid type: %s" % m.group("type"))
+
+            if not events.has_key(k):
+                events[k] = {}
+
+            events[k][_convert_value(m.group("value"))] = m.group("name")
+
+    _types = types
+    _events = events
+
+    _ids = ids
+    _buses = buses
+
+import pickle
+
+def save_event(fout):
+    #fout = open('ev.dat', 'wb')
+    #pickle.dump(_types, fout)
+    #pickle.dump(_events, fout)
+    #pickle.dump(_ids, fout)
+    #pickle.dump(_buses, fout)
+
+    print >>fout, '_types = {'
+    for type in _types:
+        print >>fout, '    %2d : \'%s\',' % (type, _types[type])
+    print >>fout, '}'
+
+    print >>fout
+    print >>fout, '_events = {'
+    for event in _events:
+        print >>fout, '    %d : { # %s' % (event, _types[event])
+        for subevent in _events[event]:
+            print >>fout, '        %3d : \'%s\',' % (subevent, _events[event][subevent])
+        print >>fout, '    },'
+    print >>fout, '}'
+
+    print >>fout
+    print >>fout, '_ids = {'
+    for id in _ids:
+        print >>fout, '    %2d : \'%s\',' % (id, _ids[id])
+    print >>fout, '}'
+
+    print >>fout
+    print >>fout, '_buses = {'
+    for bus in _buses:
+        print >>fout, '    %2d : \'%s\',' % (bus, _buses[bus])
+    print >>fout, '}'
+
+
+def _print_tables():
+    print "_types = {"
+
+    keys = _types.keys()
+    keys.sort()
+    for key in keys:
+        print "    %2d:%s," % (key, repr(_types[key]))
+
+    print "    }"
+
+    print ""
+
+    print "_events = {"
+
+    keys = _events.keys()
+    keys.sort()
+    for key in keys:
+        print "    %2d:{ # %s" % (key, _types[key])
+
+        subkeys = _events[key].keys()
+        for subkey in subkeys:
+            print "        %3d:%s," % (subkey, repr(_events[key][subkey]))
+
+        print "        },"
+
+    print "    }"
+
+    print ""
+
+    print "_ids = {"
+
+    keys = _ids.keys()
+    keys.sort()
+    for key in keys:
+        print "    %2d:%s," % (key, repr(_ids[key]))
+
+    print "    }"
+
+    print ""
+
+    print "_buses = {"
+
+    keys = _buses.keys()
+    keys.sort()
+    for key in keys:
+        print "    %2d:%s," % (key, repr(_buses[key]))
+
+    print "    }"
 
 # Copied from asm-generic/ioctl.h
 
@@ -211,129 +354,53 @@ class evdev:
         return (float(sec) + float(usec)/1000000.0, _types[type], _events[type][code], value)
 
 
+def help():
+    print 'writes a linuxevent.py module'
+    print 'usage: freevo makelinuxevent [<device>] [<input.h>]'
+    print
+    print 'The linux/input.h will be parsed and the event data will be'
+    print 'written to stdout which can be redirected to the linuxevent.py'
+    print 'E.g.: freevo makelinuxevent > src/linuxevent.py'
+    print 
+    print 'if <device> is given then the device information will be also'
+    print 'written to stdout.'
+    print 'E.g.: freevo makelinuxevent /dev/input/event0'
+    print
+    print 'if <input.h> is given then this file will be parsed for the'
+    print 'event table'
+    print
+
+
 if __name__ == "__main__":
+    argc = len(sys.argv)
 
-    def _convert_value(s):
-        if s.startswith("0x"):
-            return int(s, 16)
-        return int(s, 10)
+    device = None
+    input_h = '/usr/include/linux/input.h'
+    for argv in sys.argv:
+        if argv in ('-h', '--help'):
+            help()
+            sys.exit(0)
+        if argv.find('/dev/') >= 0:
+            device = argv
+        if argv.find('input.h') >= 0:
+            input_h = argv
 
-    def parse_input_h(path):
-        global _types, _events, _ids, _buses
-
-        f = file(path)
-
-        types = {}
-        events = {}
-
-        ids = {}
-        buses = {}
-
-        for line in f.readlines():
-            m = re.search("#define (?P<name>EV_[A-Za-z0-9_]+)\s+(?P<value>(0x)?[0-9A-Fa-f]+)", line)
-            if m:
-                if m.group("name") != "EV_VERSION":
-                    types[_convert_value(m.group("value"))] = m.group("name")
-                continue
-
-            m = re.search("#define (?P<name>ID_[A-Za-z0-9_]+)\s+(?P<value>(0x)?[0-9A-Fa-f]+)", line)
-            if m:
-                ids[_convert_value(m.group("value"))] = m.group("name")
-                continue
-
-            m = re.search("#define (?P<name>BUS_[A-Za-z0-9_]+)\s+(?P<value>(0x)?[0-9A-Fa-f]+)", line)
-            if m:
-                buses[_convert_value(m.group("value"))] = m.group("name")
-                continue
-
-            m = re.search("#define (?P<name>(?P<type>[A-Za-z0-9]+)_[A-Za-z0-9_]+)\s+(?P<value>(0x)?[0-9A-Fa-f]+)", line)
-            if m:
-                t = m.group("type")
-
-                # The naming is a bit off in input.h
-                if t == "BTN":
-                    t = "KEY"
-
-                for k in types.keys():
-                    if types[k] == "EV_" + t:
-                        break
-                else:
-                    raise Exception("Invalid type: %s" % m.group("type"))
-
-                if not events.has_key(k):
-                    events[k] = {}
-
-                events[k][_convert_value(m.group("value"))] = m.group("name")
-
-        _types = types
-        _events = events
-
-        _ids = ids
-        _buses = buses
-
-    def _print_tables():
-        print "_types = {"
-
-        keys = _types.keys()
-        keys.sort()
-        for key in keys:
-            print "    %2d:%s," % (key, repr(_types[key]))
-
-        print "    }"
-
-        print ""
-
-        print "_events = {"
-
-        keys = _events.keys()
-        keys.sort()
-        for key in keys:
-            print "    %2d:{ # %s" % (key, _types[key])
-
-            subkeys = _events[key].keys()
-            for subkey in subkeys:
-                print "        %3d:%s," % (subkey, repr(_events[key][subkey]))
-
-            print "        },"
-
-        print "    }"
-
-        print ""
-
-        print "_ids = {"
-
-        keys = _ids.keys()
-        keys.sort()
-        for key in keys:
-            print "    %2d:%s," % (key, repr(_ids[key]))
-
-        print "    }"
-
-        print ""
-
-        print "_buses = {"
-
-        keys = _buses.keys()
-        keys.sort()
-        for key in keys:
-            print "    %2d:%s," % (key, repr(_buses[key]))
-
-        print "    }"
-
-    # Main starts here
-    e = evdev(sys.argv[1], True)
-    e.print_info()
-    e.print_events()
+    if not os.path.exists(input_h):
+        print '\"%s\" does not exist' % input_h
+        sys.exit(1)
 
     try:
-        while True:
-            print e.read()
-    except KeyboardInterrupt:
-        pass
+        parse_input_h(input_h)
+    except StandardError, e:
+        print 'Failed to parse \"%s\": %s' % (input_h, e)
+        sys.exit(1)
 
-try:
-    from linuxevent import _types, _events, _ids, _buses
-except ImportError:
-    from evfallback import _types, _events, _ids, _buses
-except StandardError, e:
-    print e
+    try:
+        save_event(sys.stdout)
+    except StandardError, e:
+        print 'Failed writing: %s' % (e)
+        sys.exit(1)
+
+    if device:
+        e = evdev(device, True)
+        e.print_info()
