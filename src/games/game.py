@@ -90,7 +90,10 @@ class Game:
             plugin.getbyname('MIXER').reset()
 
         if plugin.is_active('joy'):
-            plugin.getbyname('JOY').enable(FALSE)
+            try:
+                plugin.getbyname('JOY').enable(FALSE)
+            except Exception, e:
+                print 'getbyname(\'JOY\')', e
 
         if DEBUG:
             print 'Game.play(): Starting thread, cmd=%s' % self.command
@@ -104,7 +107,10 @@ class Game:
         self.app.stop()
         rc.app(None)
         if plugin.is_active('joy'):
-            plugin.getbyname('JOY').enable(TRUE)
+            try:
+                plugin.getbyname('JOY').enable(TRUE)
+            except Exception, e:
+                print 'getbyname(\'JOY\')', e
 
 
     def eventhandler(self, event, menuw=None):
