@@ -50,24 +50,14 @@ try:
     from xml.dom import minidom
     
     # now load other modules to check if all requirements are installed
-    import Image
     import pygame
     import twisted
     import Numeric
     
     import config
 
-    if not config.CONF.lsdvd:
-        print
-        print 'Can\'t find lsdvd. DVD support will be limited and maybe not'
-        print 'all discs are detected. Please install lsdvd, you can get it'
-        print 'from http://acidrip.thirtythreeandathird.net/lsdvd.html'
-        print
-        print 'After installing it, you should run \'freevo cache --rebuild\''
-    else:
-        os.environ['LSDVD'] = config.CONF.lsdvd
-        
     import kaa.metadata as mmpython
+    import kaa.imlib2 as Image
 
     
 except ImportError, i:
@@ -79,38 +69,34 @@ except ImportError, i:
     print 'Not all requirements of Freevo are installed on your system.'
     print 'Please check the INSTALL file for more informations.'
     print
-    #
-    # XXX: we need a new runtime :-)
-    #
-    # print 'A quick solution is to install the Freevo runtime. This contains'
-    # print 'all Python dependencies to run Freevo. Get the current runtime at'
-    # print 'http://sourceforge.net/project/showfiles.php?group_id=46652&release_id=194955'
-    # print 'After downloading, run \'./freevo install path-to-runtime.tgz\'.'
-    # print
-    # print 'The runtime doesn\'t contain external applications like mplayer, xine'
-    # print 'or tvtime. You need to download and install them, too (all except'
-    # print 'mplayer are optional).'
-    # print
     sys.exit(0)
 
 
-# check if mmpython is up to date to avoid bug reports
+# check if kaa.metadata is up to date to avoid bug reports
 # for already fixed bugs
 try:
-    import mmpython.version
-    if mmpython.version.VERSION < 20040629:
+    import kaa.metadata.version
+    if kaa.metadata.version.VERSION < 0.5:
         raise ImportError
 except ImportError:
-    print 'Error: Installed mmpython version is too old.'
-    print 'Please update mmpython to version 0.4.3 or higher'
+    print 'Error: Installed kaa.metadata version is too old.'
+    print 'Please update kaa.metadata to version 0.5 or higher or get it with subversion'
+    print 'svn export svn://svn.freevo.org/kaa/trunk/metadata kaa/metadata'
     print
     sys.exit(0)
-
-if mmpython.version.VERSION < 20060926:
-    print 'Warning: Installed mmpython version is old.'
-    print 'Please update mmpython to version 0.4.10 or higher, get it with subversion'
-    print 'svn export svn://svn.freevo.org/kaa/branches/mmpython-0-4/mmpython mmpython-0.4.10'
+    
+# check if kaa.imlib2 is up to date to avoid bug reports
+# for already fixed bugs
+try:
+    import kaa.imlib2.version
+    if kaa.imlib2.version.VERSION < 0.1:
+        raise ImportError
+except ImportError:
+    print 'Error: Installed kaa.imlib2 version is too old.'
+    print 'Please update kaa.imlib2 to version 0.1 or higher or get it with subversion'
+    print 'svn export svn://svn.freevo.org/kaa/trunk/imlib2 kaa/imlib2'
     print
+    sys.exit(0)
     
 import util    # Various utilities
 import osd     # The OSD class, used to communicate with the OSD daemon
@@ -202,7 +188,6 @@ class MainMenu(Item):
         
     
 
-
 class Splashscreen(skin.Area):
     """
     A simple splash screen for osd startup
@@ -241,7 +226,6 @@ class Splashscreen(skin.Area):
         """
         self.pos = pos
         skin.draw('splashscreen', None)
-
 
 
 
@@ -339,14 +323,12 @@ class MainTread:
 
 
 
-
 def signal_handler(sig, frame):
     """
     the signal handler to shut down freevo
     """
     if sig in (signal.SIGTERM, signal.SIGINT):
         shutdown(exit=True)
-
 
 
 def tracefunc(frame, event, arg, _indent=[0]):
@@ -372,7 +354,6 @@ def tracefunc(frame, event, arg, _indent=[0]):
         _indent[0] -= 1
 
     return tracefunc
-
 
 
 
@@ -419,7 +400,6 @@ if len(sys.argv) >= 2:
         print
         print 'wrote api doc to \'Docs/api\''
         shutdown(exit=True)
-
 
 
 try:
