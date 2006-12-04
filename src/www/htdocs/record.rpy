@@ -66,12 +66,14 @@ class RecordResource(FreevoResource):
             (status, recordings) = ri.getScheduledRecordings()
             progs = recordings.getProgramList()
     
+            prog = None
             for what in progs.values():
                 if start == '%s' % what.start and chan == '%s' % what.channel_id:
                     prog = what
 
-            print 'want to remove prog: %s' % String(prog)
-            ri.removeScheduledRecording(prog)
+            if prog:
+                print 'want to remove prog: %s' % String(prog)
+                ri.removeScheduledRecording(prog)
         elif action == 'add':
             (status, prog) = ri.findProg(chan, start)
 
