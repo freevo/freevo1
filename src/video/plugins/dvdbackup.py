@@ -29,10 +29,12 @@
 #Import statements
 from os.path import join, split
 import plugin, config, menu
-#import config
 from video.encodingclient import *
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
+import config
+
+DEBUG=config.DEBUG
 
 class PluginInterface(plugin.ItemPlugin):
     """
@@ -45,13 +47,18 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def actions(self, item):
-        #testing stuff
-##~         print item.mode
-##~         print item.name
-##~         print item.filename
-##~         print item.parentname
-##~         if hasattr(item, 'media') and hasattr(item.media, 'devicename'):
-##~             print item.media.devicename
+        if DEBUG >= 1:
+            #testing stuff
+            print 'item.type=\"%s\"' % (item.type)
+            print 'item.mode=\"%s\"' % (item.mode)
+            if hasattr(item, 'info_type'):
+                print 'item.info_type=\"%s\"' % (item.info_type)
+            print 'item.name=\"%s\"' % (item.name)
+            print 'item.filename=\"%s\"' % (item.filename)
+            if hasattr(item, 'parentname'):
+                print 'item.parentname=\"%s\"' % (item.parentname)
+            if hasattr(item, 'media') and hasattr(item.media, 'devicename'):
+                print 'item.media.devicename=\"%s\"' % (item.media.devicename)
             
         if item.type == 'video' and item.mode == 'dvd' and hasattr(item, 'info_type'):
             if item.info_type == "track": #and item.media and item.media.devicename: 
