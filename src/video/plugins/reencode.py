@@ -40,6 +40,7 @@ from video.encodingclient import *
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
+DEBUG = config.DEBUG
 
 class PluginInterface(plugin.ItemPlugin):
     """
@@ -55,27 +56,27 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def actions(self, item):
-        #testing stuff
-        for d in dir(item):
-            print '%s: %s' % (d, eval('item.%s' % d))
-        for d in dir(item.info):
-            print '%s: %s' % (d, eval('item.info.%s' % d))
-        print 'type:', item.type
-        if hasattr(item, 'mode'): print 'mode:', item.mode
-        if hasattr(item, 'name'): print 'name:', type(item.name)
-        if hasattr(item, 'name'): print 'name:', item.name.encode('utf-8')
-        if hasattr(item, 'filename'): print 'filename:', item.filename
-        if hasattr(item, 'parentname'):
-            print item.parentname
-        if hasattr(item, 'media'):
-            print 'media:', item.media
-            if hasattr(item.media, 'devicename'):
-                print item.media.devicename
+        if DEBUG >= 2:
+            #testing messages
+            for d in dir(item):
+                print '%s: %s' % (d, eval('item.%s' % d))
+            for d in dir(item.info):
+                print '%s: %s' % (d, eval('item.info.%s' % d))
+            print 'type:', item.type
+            if hasattr(item, 'mode'): print 'mode:', item.mode
+            if hasattr(item, 'name'): print 'name:', type(item.name)
+            if hasattr(item, 'name'): print 'name:', item.name.encode('utf-8')
+            if hasattr(item, 'filename'): print 'filename:', item.filename
+            if hasattr(item, 'parentname'):
+                print item.parentname
+            if hasattr(item, 'media'):
+                print 'media:', item.media
+                if hasattr(item.media, 'devicename'):
+                    print item.media.devicename
             
         if item.type == 'video' and item.mode == 'file':
             # TODO: use a config variable
             (filename, extn) = os.path.splitext(item.filename)
-            print '%s=%s' % (filename, extn)
             if extn in ['.mpeg','.mpg']:
                 #for dvd on disc
                 self.dvdsource = item.filename
