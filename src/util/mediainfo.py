@@ -34,7 +34,7 @@ import sys
 import copy
 
 import kaa.metadata as mmpython
-from mmpython.disc.discinfo import cdrom_disc_id
+from kaa.metadata.disc.discinfo import cdrom_disc_id
 
 import config
 import util
@@ -744,7 +744,7 @@ mmpython.disc.discinfo.CREATE_MD5_ID = config.MMPYTHON_CREATE_MD5_ID
 # some checking when starting Freevo
 if __freevo_app__ == 'main':
     try:
-        import mmpython.version
+        import kaa.metadata.version
         import time
         
         cachefile = os.path.join(config.FREEVO_CACHEDIR, 'mediainfo')
@@ -773,7 +773,7 @@ if __freevo_app__ == 'main':
                 print
                 del_cache()
                 
-            elif mmpython.version.VERSION > mmchanged:
+            elif kaa.metadata.version.VERSION > mmchanged:
                 print
                 print 'Warning: mmpython as changed.'
                 print 'Please rerun \'freevo cache\' to get the latest updates'
@@ -788,8 +788,8 @@ if __freevo_app__ == 'main':
     except:
         print
         print 'Error: unable to read mmpython version information'
-        print 'Please update mmpython to the latest release or if you use'
-        print 'Freevo CVS versions, please also use mmpython CVS.'
+        print 'Please update kaa.metadata to the latest release or if you use'
+        print 'Freevo CVS versions, please also use kaa.metadata CVS.'
         print
         print 'Some functions in Freevo may not work or even crash!'
         print
