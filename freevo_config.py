@@ -247,8 +247,9 @@ LOCAL_CONF_CHANGES = [
      Added WEBSERVER_UID and WEBSERVER_GID
      Added optional WEBSERVER_DEBUG, if not defined uses DEBUG
      Added ENCODINGSERVER_UID and ENCODINGSERVER_GID
-     Added RSSSERVER_UID and RSSSERVER_GID
      Added optional ENCODINGSERVER_DEBUG, if not defined uses DEBUG
+     Added RSSSERVER_UID and RSSSERVER_GID
+     Added MPLAYER_VO_DEV_HWACCEL and MPLAYER_VO_DEV_OPTS_HWACCEL
      Added plug-in: Apple trailers in the contrib area
      Added plug-in: reencode and idlebar encode to compress mpeg video
      Added plug-in: XM online
@@ -1300,6 +1301,9 @@ else:
     MPLAYER_VO_DEV = CONF.display  # e.g.: x11,mga,fbdev, see mplayer docs
 
 MPLAYER_VO_DEV_OPTS = ''           # e.g.: ':some_var=vcal'
+# Mainly used for Via EPIA video
+MPLAYER_VO_DEV_HWACCEL = None
+MPLAYER_VO_DEV_OPTS_HWACCEL = None
 
 DVD_LANG_PREF = 'en,se,no'         # Order of preferred languages on DVD.
 DVD_SUBTITLE_PREF = ''             # Order of preferred subtitles on DVD.

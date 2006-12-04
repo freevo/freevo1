@@ -156,8 +156,10 @@ class MPlayer:
         additional_args = []
 
         if mode == 'dvd':
-            VODEV=config.MPLAYER_VO_DEV_HWACCEL
-            VODEVOPTS=config.MPLAYER_VO_DEV_OPTS_HWACCEL
+            if config.MPLAYER_VO_DEV_HWACCEL:
+                VODEV=config.MPLAYER_VO_DEV_HWACCEL
+                VODEVOPTS=config.MPLAYER_VO_DEV_OPTS_HWACCEL
+
             if config.DVD_LANG_PREF:
                 # There are some bad mastered DVDs out there. E.g. the specials on
                 # the German Babylon 5 Season 2 disc claim they have more than one
