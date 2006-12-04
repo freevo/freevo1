@@ -31,7 +31,7 @@
 
 import pygame
 from pygame.locals import *
-import ImageFile
+import kaa.imlib2 as Image
 
 import osd
 import os
@@ -72,7 +72,7 @@ def format_image(settings, item, width, height, force=0):
     imagefile = None
     
     if item.image:
-        if isinstance(item.image, ImageFile.ImageFile):
+        if isinstance(item.image, Image.Image):
             image = osd.loadbitmap(item.image)
         else:
             image = load_imagecache['thumb://%s' % item.image]

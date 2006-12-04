@@ -680,7 +680,7 @@ class FxdImdb:
 
         # try to crop the image to avoid borders by imdb
         try:
-            import Image
+            import kaa.imlib2 as Image
             image = Image.open(filename)
             width, height = image.size
             image.crop((2,2,width-4, height-4)).save(filename)

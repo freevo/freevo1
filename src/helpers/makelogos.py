@@ -34,7 +34,7 @@ import os
 import sys
 import urllib2
 import cStringIO
-import Image
+import kaa.imlib2 as Image
 
 import config
 from tv import xmltv

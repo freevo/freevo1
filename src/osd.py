@@ -34,7 +34,7 @@
 import time
 import os
 import stat
-import Image
+import kaa.imlib2 as Image
 import re
 import traceback
 import threading, thread
@@ -472,6 +472,8 @@ class OSD:
                 return
             
             if event.type == KEYDOWN:
+                print 'type=%s key=%s' % (event.type, event.key)
+
                 if not map and event.key > 30:
                     try:
                         if event.unicode != u'':
@@ -584,6 +586,12 @@ class OSD:
         self.screen.fill(self._sdlcol(color))
         
     
+    def printdata(self, data):
+        print 'image=%s %d %r' % (type(data[0]), len(data[0]), data[0][:10])
+        print 'size=%s %s' % (type(data[1]), data[1])
+        print 'mode=%s %s' % (type(data[2]), data[2])
+
+
     def loadbitmap(self, url, cache=False):
         """
         Load a bitmap and return the pygame image object.
@@ -620,17 +628,20 @@ class OSD:
                 if isstring(filename) and filename.endswith('.raw'):
                     # load cache
                     data  = util.read_thumbnail(filename)
+                    #self.printdata(data)
                     # convert to pygame image
                     image = pygame.image.fromstring(data[0], data[1], data[2])
 
                 elif thumbnail:
                     # load cache or create it
                     data = util.cache_image(filename)
+                    #self.printdata(data)
                     # convert to pygame image
                     try:
                         image = pygame.image.fromstring(data[0], data[1], data[2])
                     except:
                         data = util.create_thumbnail(filename)
+                        #self.printdata(data)
                         image = pygame.image.fromstring(data[0], data[1], data[2])
                 else:
                     try:
@@ -641,7 +652,7 @@ class OSD:
                         image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
             
             except:
-                print 'Unknown Problem while loading image %s' % String(url)
+                print 'Problem while loading image %s' % String(url)
                 if config.DEBUG:
                     traceback.print_exc()
                 return None

@@ -40,7 +40,7 @@ import fnmatch
 import traceback
 
 # image stuff
-import Image
+import kaa.imlib2 as Image
 import cStringIO
 from kaa.metadata.image import EXIF as exif
 
@@ -490,7 +490,7 @@ def create_thumbnail(filename, thumbnail=None):
                 if config.DEBUG:
                     print e
 
-        if not image or image.size[0] < 100 or image.size[1] < 100:
+        if not image or image.width < 100 or image.height < 100:
             try:
                 image = Image.open(filename)
             except Exception, e:
@@ -500,23 +500,26 @@ def create_thumbnail(filename, thumbnail=None):
                 return None
         
     try:
-        if image.size[0] > 255 or image.size[1] > 255:
-            image.thumbnail((255,255), Image.ANTIALIAS)
+        if image.width > 255 or image.height > 255:
+            image.thumbnail((255,255))
+
+        #print 'thumb:', thumb
+        #print 'image.mode:', image.mode
 
         if image.mode == 'P':
-            image = image.convert('RGB')
+            image.mode = 'RGB'
+        if image.mode == 'BGRA':
+            image.mode = 'RGBA'
 
-        data = (image.tostring(), image.size, image.mode)
+        data = (str(image.get_raw_data(format=image.mode)), image.size, image.mode)
 
         f = vfs.open(thumb, 'w')
-        f.write('FRI%s%s%5s' % (chr(image.size[0]), chr(image.size[1]), image.mode))
+        f.write('FRI%s%s%5s' % (chr(image.width), chr(image.height), image.mode))
         f.write(data[0])
         f.close()
         return data
     except Exception, e:
-        print 'error caching image %s' % filename
-        if config.DEBUG:
-            print e
+        print 'error caching image %s: %s' % (filename, e)
         return None
         
 

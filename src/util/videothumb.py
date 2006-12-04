@@ -43,7 +43,7 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     """
     import config
     import popen3
-    import Image
+    import kaa.imlib2 as Image
     import util
     import vfs
     import gui.PopupBox
@@ -78,28 +78,31 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     if vfs.isfile(imagefile):
         try:
             image = Image.open(imagefile)
-            if image.size[0] > 255 or image.size[1] > 255:
-                image.thumbnail((255,255), Image.ANTIALIAS)
+            if image.width > 255 or image.height > 255:
+                image.thumbnail((255,255))
 
             if image.mode == 'P':
                 image = image.convert('RGB')
 
-            if image.size[0] * 3 > image.size[1] * 4:
+            if image.width * 3 > image.height * 4:
                 # fix image with blank bars to be 4:3
-                ni = Image.new('RGB', (image.size[0], (image.size[0]*3)/4))
-                ni.paste(image, (0,(((image.size[0]*3)/4)-image.size[1])/2))
+                nh = (image.width*3)/4
+                ni = Image.new((image.width, nh))
+                ni.draw_rectangle((0,0), (image.width, nh), (0,0,0,255), True)
+                ni.blend(image, dst_pos=(0,(nh- image.height) / 2))
                 image = ni
-            elif image.size[0] * 3 < image.size[1] * 4:
+            elif image.width * 3 < image.height * 4:
                 # strange aspect, let's guess it's 4:3
-                image = Image.open(imagefile).resize((image.size[0], (image.size[0]*3)/4),
-                                                     Image.ANTIALIAS)
+                new_size = (image.width, (image.width*3)/4)
+                image = image.scale((new_size))
 
-            # crob some pixels, looks better that way
-            image = image.crop((4, 3, image.size[0]-8, image.size[1]-6))
+            # crop some pixels, looks better that way
+            image = image.crop((4, 3), (image.width-8, image.height-6))
             if imagefile.endswith('.raw.tmp'):
                 f = vfs.open(imagefile[:-4], 'w')
-                f.write('FRI%s%s%5s' % (chr(image.size[0]), chr(image.size[1]), image.mode))
-                f.write(image.tostring())
+                #f.write('FRI%s%s%5s' % (chr(image.width), chr(image.height), image.mode))
+                f.write('FRI%s%s%5s' % (chr(image.width), chr(image.height), 'RGB'))
+                f.write(str(image.get_raw_data(format='RGB')))
                 f.close()
                 os.unlink(imagefile)
             else:
@@ -108,6 +111,7 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
             print e
     else:
         print 'no imagefile found'
+        print imagefile
         
     if popup:
         pop.destroy()

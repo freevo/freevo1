@@ -51,7 +51,7 @@ import re
 import urllib2
 import time
 import config
-import Image
+import kaa.imlib2 as Image
 import cStringIO
 from xml.dom import minidom # ParseError used by amazon module
 
@@ -300,7 +300,6 @@ class PluginInterface(plugin.ItemPlugin):
 
         # try to crop the image to avoid ugly borders
         try:
-            import Image
             image = Image.open(filename)
             width, height = image.size
             image.crop((2,2,width-4, height-4)).save(filename)
