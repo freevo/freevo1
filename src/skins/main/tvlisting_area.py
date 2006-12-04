@@ -239,16 +239,15 @@ class TVListing_Area(Skin_Area):
         x0 = x_contents
         ty0 = y_contents - r.height
         for i in range( n_cols ):
-            self.drawroundbox( math.floor(x0), ty0,
-                               math.floor( col_size + x0 ) - math.floor( x0 ) + 1,
-                               head_h + 1, r2 )
+            self.drawroundbox(math.floor(x0), ty0,
+                              math.floor( col_size + x0 ) - math.floor( x0 ) + 1,
+                              head_h + 1, r2)
 
-            self.drawstring( time.strftime( timeformat,
-                                            time.localtime( to_listing[ 0 ][ i + 1 ] ) ),
-                             head_val.font, content,
-                             x=( x0 + ig.x ), y=( ty0 + ig.y ),
-                             width=ig.width, height=-1,
-                             align_v='center', align_h=head_val.align)
+            self.drawstring(Unicode(time.strftime(timeformat, time.localtime(to_listing[0][i+1]))),
+                            head_val.font, content,
+                            x=( x0 + ig.x ), y=( ty0 + ig.y ),
+                            width=ig.width, height=-1,
+                            align_v='center', align_h=head_val.align)
             x0 += col_size
 
         # define start and stop time
