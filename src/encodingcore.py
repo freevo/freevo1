@@ -228,20 +228,24 @@ class EncodingJob:
     def _AnalyzeSource(self):
         """Find out some basic information about the source
 
-        ATM we will blindly assume it's a dvdrom device or a disk dvd image, if a chapter is given"""
+        ATM we will blindly assume it's a dvdrom device or a disk dvd image,
+        if a title (chapter) number is given.
+        """
         _debug_('_AnalyzeSource(self)', 2)
 
         if self.chapter:
             self.sourcetype = "dvd"
             #check some things, like length
-            mmpython.disc.ifoparser.open(self.source)
-            data = mmpython.disc.ifoparser.title(self.chapter)
-            self.length = data[2]
+            _debug_('source=\"%s\" chapter=%s' % (self.source, self.chapter))
+            dvddata = mmpython.parse(self.source)
+            dvdtitle = dvddata.tracks[self.chapter - 1]
+            self.length = dvdtitle['length']
             _debug_("Video length: %s" % self.length)
             #NI : maybe implement procedure to get resolution, handy for scaling/manual cropping
             self._CropDetect()
         else:
             data = mmpython.parse(self.source)
+            _debug_('source=\"%s\"' % (self.source))
             self.sourcetype = data['type'].encode('latin1')
             for f in dir(data):
                 print '%s: %s' % (f, eval('data["%s"]' % f))
