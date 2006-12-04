@@ -38,7 +38,7 @@ import util.tv_util as tv_util
 import util.fxdparser as fxdparser
 import util.mediainfo
 import tv.record_client as ri
-import Image
+import kaa.imlib2 as Image
 
 from www.web_types import HTMLResource, FreevoResource
 from twisted.web import static
