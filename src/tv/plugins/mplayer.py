@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -69,7 +69,7 @@ class MPlayer:
 
     __muted    = 0
     __igainvol = 0
-    
+
     def __init__(self):
         self.tuner_chidx = 0    # Current channel, index into config.TV_CHANNELS
         self.app_mode = 'tv'
@@ -81,14 +81,14 @@ class MPlayer:
 
         if not tuner_channel:
             tuner_channel = self.fc.getChannel()
-            
+
         vg = self.current_vg = self.fc.getVideoGroup(tuner_channel, True)
 
         # Convert to MPlayer TV setting strings
         norm = 'norm=%s' % vg.tuner_norm
         input = 'input=%s' % vg.input_num
         device= 'device=%s' % vg.vdev
-            
+
         w, h = config.TV_VIEW_SIZE
         outfmt = 'outfmt=%s' % config.TV_VIEW_OUTFMT
 
@@ -104,7 +104,7 @@ class MPlayer:
                 #ivtv_dev.print_settings()
                 ivtv_dev.close()
                 self.fc.chanSet(tuner_channel, True)
-            
+
                 tvcmd = vg.vdev
 
                 if config.MPLAYER_ARGS.has_key('ivtv'):
@@ -128,7 +128,7 @@ class MPlayer:
 
                 tvcmd = ('tv:// -tv driver=%s:%s:freq=%s:%s:%s:'
                          '%s:width=%s:height=%s:%s %s' %
-                         (config.TV_DRIVER, vg.adev, tuner_freq, device, input, norm, 
+                         (config.TV_DRIVER, vg.adev, tuner_freq, device, input, norm,
                           w, h, outfmt, config.TV_OPTS))
 
                 if config.MPLAYER_ARGS.has_key('tv'):
@@ -140,7 +140,7 @@ class MPlayer:
 
                 tvcmd = ('tv:// -tv driver=%s:freq=%s:%s:%s:'
                          '%s:width=%s:height=%s:%s %s' %
-                         (config.TV_DRIVER, tuner_freq, device, input, norm, 
+                         (config.TV_DRIVER, tuner_freq, device, input, norm,
                           w, h, outfmt, config.TV_OPTS))
 
                 if config.MPLAYER_ARGS.has_key('tv'):
@@ -149,7 +149,7 @@ class MPlayer:
         elif mode == 'vcr':
             tvcmd = ('tv:// -tv driver=%s:%s:%s:'
                      '%s:width=%s:height=%s:%s %s' %
-                     (config.TV_DRIVER, device, input, norm, 
+                     (config.TV_DRIVER, device, input, norm,
                       w, h, outfmt, config.TV_OPTS))
 
             if config.MPLAYER_ARGS.has_key('tv'):
@@ -172,7 +172,7 @@ class MPlayer:
         # VCR is mic in
         # btaudio (different dsp device) will be added later
         mixer = plugin.getbyname('MIXER')
-        
+
         if mixer and config.MAJOR_AUDIO_CTRL == 'VOL':
             mixer_vol = mixer.getMainVolume()
             mixer.setMainVolume(0)
@@ -182,7 +182,7 @@ class MPlayer:
 
         # Start up the TV task
         self.app = childapp.ChildApp2(command)
-        
+
         self.prev_app = rc.app()
         rc.app(self)
 
@@ -197,7 +197,7 @@ class MPlayer:
         elif mixer:
             mixer.setLineinVolume(config.TV_IN_VOLUME)
             mixer.setIgainVolume(config.TV_IN_VOLUME)
-            
+
         if mixer and config.MAJOR_AUDIO_CTRL == 'VOL':
             mixer.setMainVolume(mixer_vol)
         elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
@@ -231,6 +231,11 @@ class MPlayer:
             rc.post_event(em.PLAY_END)
             return TRUE
 
+        elif event == em.PAUSE or event == em.PLAY:
+            self.app.write('pause\n')
+            if DEBUG: print '%s: sending pause to mplayer' % (time.time())
+            return TRUE
+
         elif event in [ em.TV_CHANNEL_UP, em.TV_CHANNEL_DOWN] or s_event.startswith('INPUT_'):
             if event == em.TV_CHANNEL_UP:
                 nextchan = self.fc.getNextChannel()
@@ -249,10 +254,12 @@ class MPlayer:
 
             if self.mode == 'vcr':
                 return
-            
+
             elif self.current_vg.group_type == 'dvb':
-                self.Stop(channel_change=1)
-                self.Play('tv', nextchan)
+                if em.TV_CHANNEL_UP:
+                    self.app.write('dvb_set_channel nextchan 0\n')
+                elif em.TV_CHANNEL_DOWN:
+                    self.app.write('dvb_set_channel nextchan 0\n')
                 return TRUE
 
             elif self.current_vg.group_type == 'ivtv':
@@ -282,6 +289,6 @@ class MPlayer:
             cmd = 'osd_show_text "%s"\n' % msg
             self.app.write(cmd)
             return FALSE
-            
+
         return FALSE
-    
+
