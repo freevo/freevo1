@@ -94,6 +94,7 @@ class MPlayer:
 
         # Build the MPlayer command
         args = (config.MPLAYER_NICE, config.MPLAYER_CMD, config.MPLAYER_VO_DEV,
+                config.MPLAYER_VO_DEV_HWACCEL, ' '+config.MPLAYER_VO_DEV_OPTS_HWACCEL,
                 config.MPLAYER_VO_DEV_OPTS, config.MPLAYER_AO_DEV, config.MPLAYER_ARGS_DEF)
 
         if mode == 'tv':
@@ -257,9 +258,9 @@ class MPlayer:
 
             elif self.current_vg.group_type == 'dvb':
                 if em.TV_CHANNEL_UP:
-                    self.app.write('dvb_set_channel nextchan 0\n')
+                    self.app.write('dvb_set_channel %s %s\n' % (nextchan, 0))
                 elif em.TV_CHANNEL_DOWN:
-                    self.app.write('dvb_set_channel nextchan 0\n')
+                    self.app.write('dvb_set_channel %s %s\n' % (nextchan, 0))
                 return TRUE
 
             elif self.current_vg.group_type == 'ivtv':

@@ -1301,9 +1301,8 @@ else:
     MPLAYER_VO_DEV = CONF.display  # e.g.: x11,mga,fbdev, see mplayer docs
 
 MPLAYER_VO_DEV_OPTS = ''           # e.g.: ':some_var=vcal'
-# Mainly used for Via EPIA video
-MPLAYER_VO_DEV_HWACCEL = None
-MPLAYER_VO_DEV_OPTS_HWACCEL = None
+MPLAYER_VO_DEV_HWACCEL = ''        # Mainly used for Via EPIA video
+MPLAYER_VO_DEV_OPTS_HWACCEL = ''
 
 DVD_LANG_PREF = 'en,se,no'         # Order of preferred languages on DVD.
 DVD_SUBTITLE_PREF = ''             # Order of preferred subtitles on DVD.
