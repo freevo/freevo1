@@ -271,7 +271,7 @@ class MMCache(Cache):
         list of one of those above. This makes the caching much faster
         """
         ret = {}
-        for k in object._keys:
+        for k in object.keys():
             if not k in self.uncachable_keys and getattr(object,k) != None:
                 value = getattr(object,k)
                 if isstring(value):
