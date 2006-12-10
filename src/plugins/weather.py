@@ -349,7 +349,7 @@ class WeatherItem(Item):
         return self.weatherData[start:end] 
 
     def updateData(self):
-        popup = PopupBox(text=_('Fetching Weather for %s...' % self.location))
+        popup = PopupBox(text=_('Fetching Weather for %s...') % self.location)
         popup.show()
 
         # parse the document
@@ -890,7 +890,7 @@ class WeatherBaseScreen(skin.Area):
             x2_start = x_start + (x *self.xmult)
             y2_start = y_start
             
-            self.write_text(self.parent.weather.date[day],
+            self.write_text(Unicode(self.parent.weather.date[day]),
                 self.key_font,   self.content,  
                 x=x2_start,  y=y2_start,
                 width=150*self.xmult, height=-1, align_h='center')

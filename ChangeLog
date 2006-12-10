@@ -42,8 +42,10 @@ This release has all the changes in Release 1.6.x plus
 --------------------------------
 
  * Fixed audio track name formatting (B#1605570,B#1605042)
+ * Fixed weather unicode problem (B#1612617)
  * Updated autoshutdown to react to the return code and removed unused vars (B#1612257)
  * Updated osd forced fonts variables and freevo_config and local_conf (B#1608393)
+ * Updated Spanish translation (B#1612612)
  * Updated video plug-in mplayer for unichrome playback (B#1606699)
 
 == Release 1.6.1 (2006-11-25) ==
