@@ -162,6 +162,11 @@ class VideoGroup:
         self.in_use = FALSE
         self.tuner = None
 
+    def __str__(self):
+        s = '<%s: %s %s %s %s %s %s>' % (self.group_type, self.vdev, self.vvbi, self.adev,
+            self.input_type, self.tuner_chanlist, self.tuner_chan)
+        return s
+
 
 def print_config_changes(conf_version, file_version, changelist):
     """

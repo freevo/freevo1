@@ -94,7 +94,7 @@ class MPlayer:
 
         # Build the MPlayer command
         args = (config.MPLAYER_NICE, config.MPLAYER_CMD, config.MPLAYER_VO_DEV,
-                config.MPLAYER_VO_DEV_HWACCEL, ' '+config.MPLAYER_VO_DEV_OPTS_HWACCEL,
+                config.MPLAYER_VO_DEV_HWACCEL, config.MPLAYER_VO_DEV_OPTS_HWACCEL,
                 config.MPLAYER_VO_DEV_OPTS, config.MPLAYER_AO_DEV, config.MPLAYER_ARGS_DEF)
 
         if mode == 'tv':
@@ -162,9 +162,10 @@ class MPlayer:
 
         args += (tvcmd,)
 
-        mpl = '--prio=%s %s -vo %s%s -ao %s -fs %s -slave %s %s' % args
+        mpl = '--prio=%s %s -vo %s%s %s %s -ao %s -fs %s -slave %s %s' % args
 
         command = mpl
+        _debug_('command=\"%s\"', (command))
         self.mode = mode
 
 
@@ -240,13 +241,17 @@ class MPlayer:
         elif event in [ em.TV_CHANNEL_UP, em.TV_CHANNEL_DOWN] or s_event.startswith('INPUT_'):
             if event == em.TV_CHANNEL_UP:
                 nextchan = self.fc.getNextChannel()
+                nextchannum = self.fc.getNextChannelNum()
             elif event == em.TV_CHANNEL_DOWN:
                 nextchan = self.fc.getPrevChannel()
+                nextchannum = self.fc.getPrevChannelNum()
             else:
                 chan = int( s_event[6] )
                 nextchan = self.fc.getManChannel(chan)
+                nextchannum = self.fc.getManChannelNum(chan)
 
             nextvg = self.fc.getVideoGroup(nextchan, True)
+            _debug_('chan=%s, nextchannum=%s, nextchan=%s nextvg=%s' % (chan, nextchannum, nextchan, nextvg))
 
             if self.current_vg != nextvg:
                 self.Stop(channel_change=1)
@@ -257,10 +262,11 @@ class MPlayer:
                 return
 
             elif self.current_vg.group_type == 'dvb':
+                card = 0 # May be this should come from video groups or TV_CHANNELS
                 if em.TV_CHANNEL_UP:
-                    self.app.write('dvb_set_channel %s %s\n' % (nextchan, 0))
+                    self.app.write('dvb_set_channel %s %s\n' % (nextchannum, card))
                 elif em.TV_CHANNEL_DOWN:
-                    self.app.write('dvb_set_channel %s %s\n' % (nextchan, 0))
+                    self.app.write('dvb_set_channel %s %s\n' % (nextchannum, card))
                 return TRUE
 
             elif self.current_vg.group_type == 'ivtv':
