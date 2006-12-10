@@ -729,6 +729,12 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # OSD_FONT_ALIASES = { 'arial_bold.ttf' : 'VeraBd.ttf' }
 
+# For non-european character sets the OSD_FORCE_FONTNAME and 
+# OSD_FORCE_FONTSIZE can be set. The size is a scaling ratio, ie 1.2.
+# Setting OSD_FORCE_FONTNAME='batang.ttf' and OSD_FORCE_FONTSIZE=1.0
+# allows Korean characters.
+# OSD_FORCE_FONTNAME = None
+# OSD_FORCE_FONTSIZE = None
 #
 # Number of seconds to wait until the busy icon is shown in the menu.
 # Busy icon can also be shown right away when there is more than a certain

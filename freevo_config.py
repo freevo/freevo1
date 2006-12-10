@@ -237,7 +237,8 @@ LOCAL_CONF_CHANGES = [
      Added TV_RECORDFILE_OKLETTERS for characters allowed in recording filenames.
      Added AUTOSHUTDOWN_ settings to turn off and on the machine automatically
      Added Multi-tuner support to allow recording and watching at the same time
-     Added plug-in "upsoon" to stop the player when a recording is about to start''' ),
+     Added plug-in "upsoon" to stop the player when a recording is about to start
+     Added OSD_FORCE_FONTNAME and OSD_FORCE_FONTSIZE for asian fonts''' ),
     (5.17,
      '''Using the name of the helper in local_conf.py
      Changed the TV_RECORD_SERVER_* to RECORDSERVER_*, 
@@ -1147,6 +1148,8 @@ SKIN_MEDIAMENU_FORCE_TEXTVIEW = 0
 #
 OSD_DEFAULT_FONTNAME = 'Vera.ttf'
 OSD_DEFAULT_FONTSIZE = 18
+OSD_FORCE_FONTNAME = None
+OSD_FORCE_FONTSIZE = None
 
 #
 # System Path to search for fonts not included in the Freevo distribution
