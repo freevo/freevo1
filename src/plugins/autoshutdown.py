@@ -356,6 +356,14 @@ class autoshutdowntimer(plugin.DaemonPlugin):
             # calculate passed and remaining time
             tdif = (time.time() - self.idle_base)
             trem = (config.AUTOSHUTDOWN_TIMER_TIMEOUT + self.delay - (tdif/60))
+
+            if not config.AUTOSHUTDOWN_WHILE_USER_LOGGED:
+                if len(os.popen("/usr/bin/who").read()) > 4:
+                    _debug_("not shuttng down, someone is logged in")
+                    _debug_("retry in 1 minute")
+                    self.delay += 1
+                    return
+
             if (tdif > ((config.AUTOSHUTDOWN_TIMER_TIMEOUT + self.delay) * 60) ):
                 try:
                     is_shutdown_allowed()
@@ -536,8 +544,11 @@ def __schedule_wakeup_and_shutdown():
         elif config.AUTOSHUTDOWN_METHOD.upper() == 'NVRAM':
             cmd = "%s %s --settime %d" % (config.AUTOSHUTDOWN_WAKEUP_CMD, \
                 config.AUTOSHUTDOWN_NVRAM_OPT, int(wakeup_utc_s))
-            __syscall(cmd)
-            if config.AUTOSHUTDOWN_BIOS_NEEDS_REBOOT:
+            ec = __syscall(cmd)
+            if ec < 0 and ec > 1:
+                _debug_("Wakeup-command command '%s' failed!" % cmd,0)
+                raise ExInternalError
+            elif ec == 1 or config.AUTOSHUTDOWN_BIOS_NEEDS_REBOOT:
                 # needs a reboot
                 if config.AUTOSHUTDOWN_BOOT_LOADER.upper() == "GRUB":
                     if config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD:

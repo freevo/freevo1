@@ -230,11 +230,11 @@ LOCAL_CONF_CHANGES = [
      Added xmltv-1.2 this requires elementtree
      Added XINE_HAS_NO_LIRC to see if '--no-lirc' should be passed to xine
      Added XINE_TV_VO_DEV, XINE_TV_AO_DEV, and XINE_TV_TIMESHIFT_FILEMASK for the
-  	 new tv.ivtv_xine_tv plugin (the latter should be e.g. "/tmp/xine-buf-" and point
-  	 to a place with enough free diskspace (several gigabytes).
-  	 Added RADIO_IN_VOLUME for different volumes levels for TV and radio
-  	 Added TV_RECORD_PADDING_PRE/POST for separately setting TV_RECORD_PADDING
-  	 Added TV_RECORDFILE_OKLETTERS for characters allowed in recording filenames.
+     new tv.ivtv_xine_tv plugin (the latter should be e.g. "/tmp/xine-buf-" and point
+     to a place with enough free diskspace (several gigabytes).
+     Added RADIO_IN_VOLUME for different volumes levels for TV and radio
+     Added TV_RECORD_PADDING_PRE/POST for separately setting TV_RECORD_PADDING
+     Added TV_RECORDFILE_OKLETTERS for characters allowed in recording filenames.
      Added AUTOSHUTDOWN_ settings to turn off and on the machine automatically
      Added Multi-tuner support to allow recording and watching at the same time
      Added plug-in "upsoon" to stop the player when a recording is about to start''' ),
@@ -332,23 +332,6 @@ RESTART_SYS_CMD  = 'shutdown -r now'  # like SHUTDOWN_SYS_CMD, only for reboot
 ENABLE_SHUTDOWN_SYS = 0  # Performs a whole system shutdown at SHUTDOWN!
                          # For standalone boxes.
 
-# scheduled for starting in less than this number of seconds:
-WARN_SHUTDOWN = 15 * 60
-
-# On Freevo shutdown, use nvram-wakeup to program the computer to
-# wakeup / boot up right before the next recording:
-USE_NVRAM_WAKEUP = 0
-
-# See SHUTDOWN_SYS_CMD for sudo comment.
-# If you change this, note that an exitcode of 1 means "reboot needed"
-# and should get through to Freevo
-NVRAM_WAKEUP_CMD = 'nvram-wakeup -s %d'
-
-# If using nvram-wakeup, time in seconds to startup before recording:
-BOOTTIME_PADDING = 150
-
-# Location of the reboot-flag used if nvram-wakeup returns 1:
-NVRAM_REBOOT_FLAG = '%s/reboot_flag' % FREEVO_CACHEDIR
 
 # ======================================================================
 # AUTOSHUTDOWN CONFIGURATION
@@ -392,13 +375,21 @@ AUTOSHUTDOWN_PRETEND=False
 # should not be interrupted, then add them to this
 # list. Set to None if a shutdown is always allowed.
 AUTOSHUTDOWN_PROCESS_LIST = [
-	'emerge',
-	'tvgids',
-	'transcode',
-	'cdrecord',
-	'mplayer',
-	'top'
+    'emerge',
+    'tvgids',
+    'transcode',
+    'cdrecord',
+    'mplayer',
+    'mencoder',
+    'top'
 ]
+
+# WHILE_LOGGED
+# The system will automatically shutdown even if someone
+# is logged in  (as reported by 'who' ); set this to False
+# to avoid Freevo to shutdown on your face.
+AUTOSHUTDOWN_WHILE_USER_LOGGED=True
+
 
 # DEFAULT_WAKEUP_TIME
 # Set the default time at which to wakeup if there
