@@ -65,7 +65,7 @@ class PluginInterface(plugin.ItemPlugin):
             print 'type:', item.type
             if hasattr(item, 'mode'): print 'mode:', item.mode
             if hasattr(item, 'name'): print 'name:', type(item.name)
-            if hasattr(item, 'name'): print 'name:', item.name.encode('utf-8')
+            if hasattr(item, 'name'): print 'name-utf8:', item.name.encode('utf-8')
             if hasattr(item, 'filename'): print 'filename:', item.filename
             if hasattr(item, 'parentname'):
                 print item.parentname

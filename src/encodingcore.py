@@ -247,8 +247,9 @@ class EncodingJob:
             data = mmpython.parse(self.source)
             _debug_('source=\"%s\"' % (self.source))
             self.sourcetype = data['type'].encode('latin1')
-            for f in dir(data):
-                print '%s: %s' % (f, eval('data["%s"]' % f))
+            if config.DEBUG >= 2:
+                for f in dir(data):
+                    _debug_('%s: %s' % (f, eval('data["%s"]' % f)), 2)
             try:
                 self.length = data.get_length()
             except:

@@ -49,12 +49,16 @@ class PluginInterface(plugin.ItemPlugin):
     def actions(self, item):
         if DEBUG >= 1:
             #testing stuff
-            print 'item.type=\"%s\"' % (item.type)
-            print 'item.mode=\"%s\"' % (item.mode)
+            if hasattr(item, 'type'):
+                print 'item.type=\"%s\"' % (item.type)
+            if hasattr(item, 'mode'):
+                print 'item.mode=\"%s\"' % (item.mode)
             if hasattr(item, 'info_type'):
                 print 'item.info_type=\"%s\"' % (item.info_type)
-            print 'item.name=\"%s\"' % (item.name)
-            print 'item.filename=\"%s\"' % (item.filename)
+            if hasattr(item, 'name'):
+                print 'item.name=\"%s\"' % (item.name)
+            if hasattr(item, 'filename'):
+                print 'item.filename=\"%s\"' % (item.filename)
             if hasattr(item, 'parentname'):
                 print 'item.parentname=\"%s\"' % (item.parentname)
             if hasattr(item, 'media') and hasattr(item.media, 'devicename'):

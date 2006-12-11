@@ -90,10 +90,11 @@ class MPlayer:
         if item.mode in ('dvd', 'vcd'):
             return 2
         if item.mimetype in config.VIDEO_MPLAYER_SUFFIX:
-            for d in dir(item):
-                print '%s: %s' % (d, eval('item.%s' % d))
-            for d in dir(item.info):
-                print '%s: %s' % (d, eval('item.info.%s' % d))
+            if config.DEBUG >= 2:
+                for d in dir(item):
+                    print '%s: %s' % (d, eval('item.%s' % d))
+                for d in dir(item.info):
+                    print '%s: %s' % (d, eval('item.info.%s' % d))
             return 2
         if item.network_play:
             return 1

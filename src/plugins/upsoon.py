@@ -183,7 +183,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         _debug_('poll(self)', 2)
 
         self.next_program  = self.findNextProgram()
-        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program))
+        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), 2)
         if self.next_program == None:
             return None
 
