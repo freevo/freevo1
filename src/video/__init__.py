@@ -125,6 +125,7 @@ class PluginInterface(plugin.MimetypePlugin):
                         # create new name
                         name = file[:pos] + file[pos:].replace('1', '1-%s' % end, 1)
                         x = VideoItem(name, parent)
+                        x.set_url(file, False)
                         x.files = FileInformation()
                         for f in [ file ] + add_file:
                             x.files.append(f)
