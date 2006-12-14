@@ -439,10 +439,8 @@ class RecordServer(xmlrpc.XMLRPC):
                 # then end the loop, and figure out which has priority,
                 # remember to take into account the full length of the shows
                 # and how much they overlap, or chop one short
-                print 'DJW: prog.stop:', prog.stop
                 print 'int(prog.stop + config.TV_RECORD_PADDING_POST)', int(prog.stop + config.TV_RECORD_PADDING_POST)
                 duration = int((prog.stop + config.TV_RECORD_PADDING_POST) - now - 10)
-                print 'DJW: duration:', duration
                 if duration < 10:
                     return 
 
@@ -454,11 +452,6 @@ class RecordServer(xmlrpc.XMLRPC):
                         # not. If so, the user manually added something, we guess it
                         # has a higher priority.
 
-                        print 'DJW: prog:', prog
-                        print 'DJW: self.isProgAFavorite(prog)[0]', self.isProgAFavorite(prog)[0]
-                        print 'DJW: self.isProgAFavorite(currently_recording)[0]', self.isProgAFavorite(currently_recording)[0]
-                        print 'DJW: prog.stop+config.TV_RECORD_PADDING_POST', prog.stop+config.TV_RECORD_PADDING_POST
-                        print 'DJW: now:', now
 
                         if self.isProgAFavorite(prog)[0] and \
                            not self.isProgAFavorite(currently_recording)[0] and \
@@ -480,7 +473,6 @@ class RecordServer(xmlrpc.XMLRPC):
                             overlap = (currently_recording.stop + \
                                        config.TV_RECORD_PADDING_POST) - \
                                       (prog.start - config.TV_RECORD_PADDING_PRE)
-                            print 'DJW: overlap:', overlap
                             if overlap <= ((config.TV_RECORD_PADDING_PRE +
                                             config.TV_RECORD_PADDING_POST)/4):
                                 sr.removeProgram(currently_recording, 
