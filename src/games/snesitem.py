@@ -228,14 +228,16 @@ class SnesItem(Item):
             else:
                 snesFile = open(file, 'rb')
         
-            (self['romName'],self['romHL'],self['romMem'],self['romROM'],self['romSRAM'],self['romCountry'],self['romLic'],self['romVer'],self['romICHK'],self['romCHK']) = self._read_rom(snesFile)
+            (self['romName'],self['romHL'],self['romMem'],self['romROM'],self['romSRAM'],self['romCountry'],\
+                self['romLic'],self['romVer'],self['romICHK'],self['romCHK']) = self._read_rom(snesFile)
 
             snesFile.close()
             if unzipped:
                 os.unlink(unzipped)
 
             if DEBUG:
-                print 'SNES rom name : %s - %s -> %s' % (ord(self['romCountry']),os.path.basename(file), self['romName'])
+                print 'SNES rom name : %s - %s -> %s' % \
+                    (ord(self['romCountry']),os.path.basename(file), self['romName'])
 
             # Allocate the name according to the country by checking the rom name againts ASCII codes
             if snesromLicences.has_key(ord(self['romLic'])):
@@ -273,7 +275,8 @@ class SnesItem(Item):
             snesFile.seek(offset)
             romHeader = snesFile.read(32)
             try:
-                (romName,romHL,romMem,romROM,romSRAM,romCountry,romLic,romVer,romICHK,romCHK) = unpack('21scccccccHH', romHeader)
+                (romName,romHL,romMem,romROM,romSRAM,romCountry,romLic,romVer,romICHK,romCHK) = \
+                    unpack('21scccccccHH', romHeader)
             except:
                 romCountry = chr(255)
                 romLic = chr(51)
@@ -289,7 +292,8 @@ class SnesItem(Item):
                 snesFile.seek(offset)
                 romHeader = snesFile.read(32)
                 try:
-                    (romName,romHL,romMem,romROM,romSRAM,romCountry,romLic,romVer,romICHK,romCHK) = unpack('21scccccccHH', romHeader)
+                    (romName,romHL,romMem,romROM,romSRAM,romCountry,romLic,romVer,romICHK,romCHK) = \
+                        unpack('21scccccccHH', romHeader)
                 except:
                     romCountry = chr(255)
                     romLic = chr(51)
