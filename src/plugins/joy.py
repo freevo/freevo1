@@ -76,7 +76,7 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'JOY'
         
-        print 'using joystick', config.JOY_DEV
+        print 'Using joystick %s (%s)' % (config.JOY_DEV, self.device_name)
         
         self.poll_interval  = 1
         self.poll_menu_only = False
@@ -93,7 +93,7 @@ class PluginInterface(plugin.DaemonPlugin):
         
         if r:
             c = os.read(self.joyfd, 8)
-        else: 
+        else:
             return
 
         data = struct.unpack('IhBB', c)
