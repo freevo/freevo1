@@ -768,6 +768,8 @@ CD_RIP_PN_PREF = '%(artist)s/%(album)s/%(track)s - %(song)s'
 CD_RIP_LAME_OPTS = '--vbr-new -b 192 -h'
 CD_RIP_OGG_OPTS = '-m 128'
 CD_RIP_FLAC_OPTS = '-8'
+CD_RIP_CASE = None          # Can be title, upper, lower
+CD_RIP_REPLACE_SPACE = None # Can be '_', '-', etc.
 
 # ----------------------------------------------------------------------
 # CD Burning

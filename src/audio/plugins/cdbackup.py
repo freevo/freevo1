@@ -350,6 +350,16 @@ class main_backup_thread(threading.Thread):
 
             path_tail = path_tail_temp % user_rip_path_prefs
 
+            if config.CD_RIP_CASE.lower() == 'lower':
+                path_tail = path_tail.lower()
+            elif config.CD_RIP_CASE.lower() == 'upper':
+                path_tail = path_tail.upper()
+            elif config.CD_RIP_CASE.lower() == 'title':
+                path_tail = path_tail.title()
+
+            if config.CD_RIP_REPLACE_SPACE:
+                path_tail = path_tail.replace(' ', config.CD_RIP_REPLACE_SPACE)
+
             # If rip_format is mp3 or ogg, then copy the file to
             # /tmp/track_being_ripped.wav
             if (string.upper(rip_format) == 'MP3') or \

@@ -29,6 +29,7 @@ This release has all the changes in Release 1.6.x plus
  * New XM online plugin (F#1580412)
  * New webserver library, allows playing/viewing on local and host machines (F#1592806)
  * Updated autocrop to take more samples from different parts of the video (F#1591170)
+ * Updated cdbackup plug-in to accept CD_RIP_CASE and CD_RIP_REPLACE_SPACE (F#1616046)
  * Updated idlebar clock plug-in to allow CLOCK_FORMAT to be used (F#1605951)
  * Updated idlebar diskfree plug-in to allow the bar colours levels to be set (F#1605953)
  * Updated DEBUGGING, IP, PORT, UID and GUI based on helper name (F#1580628)
