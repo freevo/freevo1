@@ -381,25 +381,32 @@ CACHE_IMAGES = 1
 # To turn off Headlines add plugin.remove('headlines')
 # ----------------------------------------------------------------------
 #plugin.activate('headlines', level=45)
-#HEADLINES_LOCATIONS = [
+# HEADLINES_LOCATIONS = [
 #    ('Freevo news releases', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652'),
 #    ('Freevo file releases', 'http://sourceforge.net/export/rss2_projfiles.php?group_id=46652'),
 #    ('Freevo summary+stats', 'http://sourceforge.net/export/rss2_projsummary.php?group_id=46652'),
 #    ('Freevo donors', 'http://sourceforge.net/export/rss2_projdonors.php?group_id=46652'),
-#]
+# ]
 
+# ----------------------------------------------------------------------
+# CD Ripping
+# ----------------------------------------------------------------------
+# CD_RIP_TMP_DIR = '/tmp/'
+# CD_RIP_TMP_NAME = 'track_%(track)s_being_ripped'
+# CD_RIP_PN_PREF = '%(artist)s/%(album)s/%(track)s - %(song)s'
+# CD_RIP_LAME_OPTS = '--vbr-new -b 192 -h'
+# CD_RIP_OGG_OPTS = '-m 128'
+# CD_RIP_FLAC_OPTS = '-8'
 
 # ----------------------------------------------------------------------
 # CD Burning
 # ----------------------------------------------------------------------
-# plugin.activate('cd_burn')
 # CDBURN_AUDIO_DAO = 1
 # CDBURN_MKISOFS_PATH = '/usr/bin/mkisofs'
 # CDBURN_CDRECORD_PATH = '/usr/bin/cdrecord'
 # CDBURN_TEMP_DIR='/tmp/'
-# CDBURN_DEV = '/dev/hdc'
+# CDBURN_DEV = '/dev/cdrom'
 # CDBURN_SPEED = 32
-
 
 # ======================================================================
 # Freevo directory settings:

@@ -167,7 +167,7 @@ class PluginInterface(plugin.ItemPlugin):
                 ('CD_RIP_PN_PREF', '%(artist)s/%(album)s/%(song)s', ''),
                 ('CD_RIP_LAME_OPTS', '--preset standard', ''),
                 ('CD_RIP_OGG_OPTS', '-m 128', ''),
-                ('FLAC_OPTS', '-8', '8==Best, but slowest compression'),
+                ('CD_RIP_FLAC_OPTS', '-8', '8==Best, but slowest compression'),
                 ('RIP_TITLE_CASE','0',
                  'Autoconvert all track/album/artist names to title case'))
 
@@ -345,6 +345,7 @@ class main_backup_thread(threading.Thread):
                                     'album': album,
                                     'genre': genre,
                                     'track': track,
+                                    'tracks': len(song_names),
                                     'song': song_names[i] }
 
             path_tail = path_tail_temp % user_rip_path_prefs
@@ -354,8 +355,8 @@ class main_backup_thread(threading.Thread):
             if (string.upper(rip_format) == 'MP3') or \
                    (string.upper(rip_format) == 'OGG') or \
                    (string.upper(rip_format) == 'FLAC'):
-                pathname_cdparanoia = '/tmp'
-                path_tail_cdparanoia   = '/track_being_ripped'
+                pathname_cdparanoia = config.CD_RIP_TMP_DIR
+                path_tail_cdparanoia = config.CD_RIP_TMP_NAME % user_rip_path_prefs
                 keep_wav = False
 
             # Otherwise if it's going to be a .wav  just use the the users preferred
@@ -391,28 +392,14 @@ class main_backup_thread(threading.Thread):
             # Build the lame command to be run if mp3 format is selected
             if string.upper(rip_format) == 'MP3':
                 output = '%s%s.mp3' % (pathname, path_tail)
-                cmd = str('%s --nohist -h %s' % (config.LAME_CMD, config.CD_RIP_LAME_OPTS))
-                cmd += ' --tt "%s" --ta "%s" --tl "%s" --tn %s,%s --id3v2-only' % \
-                          ( song_names[i], artist, album, track, len(song_names))
-
-                cmd = cmd.split(' ') + [ wav_file, output ]
+                cmd = str('%s %s' % (config.LAME_CMD, config.CD_RIP_LAME_OPTS))
+                cmd = cmd.split(' ') + \
+                    [ '--tt', song_names[i], '--ta', artist, '--tl', album,
+                      '--tn', '%(track)s,%(tracks)s' % user_rip_path_prefs,
+                      '--tg', genre, '--id3v2-only', wav_file, output ]
 
                 _debug_('lame: %s' % cmd)
                 popen3.run(cmd, self, 9)
-
-                try:
-                    if not self.abort:
-                        _debug_('\"%s\" title=\"%s\" artist=\"%s\" album=\"%s\" track=\"%s\" tracktotal=\"%s\"' % \
-                            (pathname+path_tail+'.mp3', song_names[i], artist, album, track, len(song_names)))
-                        util.tagmp3(pathname+path_tail+'.mp3', title=song_names[i],
-                                    artist=artist, album=album, track=track,
-                                    tracktotal=len(song_names))
-                except IOError:
-                    # This sometimes fails if the CD has a data track
-                    # This is not a 100% fix, but temporary until I figure out why
-                    # it's trying to tag a data track
-                    pass
-
 
             # Build the oggenc command to be run if ogg format is selected
             elif string.upper(rip_format) == 'OGG':
@@ -429,7 +416,7 @@ class main_backup_thread(threading.Thread):
             # Build the flacenc command
             elif string.upper(rip_format) == 'FLAC':
                 output = '%s%s.flac' % (pathname, path_tail)
-                cmd = '%s %s' % ( config.FLAC_CMD, config.FLAC_OPTS )
+                cmd = '%s %s' % ( config.FLAC_CMD, config.CD_RIP_FLAC_OPTS )
                 cmd = cmd.split(' ') + [ wav_file, '-o', output ]
 
                 metaflac_command = \
