@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# evdev.py - Linux /dev/input/event# interface library
+# evdev.py - Linux /dev/input/event interface library
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -93,6 +93,8 @@ def EVIOCSABS(abs):   return _IOW('E', 0xc0 + abs, 20) # set abs value/limits
 
 class evdev:
     def __init__(self, dev, blocking = False):
+        '''
+        '''
         self._fd = None
         if blocking:
             self._fd = os.open(dev, os.O_RDONLY)
@@ -101,14 +103,20 @@ class evdev:
         self.get_events()
 
     def __del__(self):
+        '''
+        '''
         self.close()
 
     def close(self):
+        '''
+        '''
         if self._fd is not None:
             os.close(self._fd)
             self._fd = None
 
     def print_info(self):
+        '''
+        '''
         print "Input driver version %d.%d.%d" % self.get_version()
 
         devid = self.get_id()
@@ -119,6 +127,8 @@ class evdev:
         print 'Device location: "' + self.get_location() + '"'
 
     def print_events(self):
+        '''
+        '''
         print "Supported events:"
 
         keys = self._events.keys()
@@ -134,27 +144,37 @@ class evdev:
                     print "        Event ??? (%d)" % event
 
     def get_version(self):
+        '''
+        '''
         buf = ioctl(self._fd, EVIOCGVERSION, "    ")
         l, =  struct.unpack("L", buf)
         return (l >> 16, (l >> 8) & 0xff, l & 0xff)
 
     def get_id(self):
+        '''
+        '''
         buf = ioctl(self._fd, EVIOCGID, " " * 8)
         bus, vendor, product, version = struct.unpack("HHHH", buf)
         return { "bus":_buses[bus], "vendor":vendor,
             "product":product, "version":version }
 
     def get_name(self):
+        '''
+        '''
         buf = ioctl(self._fd, EVIOCGNAME(1024), " " * 1024)
         null = buf.find("\0")
         return buf[:null]
 
     def get_location(self):
+        '''
+        '''
         buf = ioctl(self._fd, EVIOCGPHYS(1024), " " * 1024)
         null = buf.find("\0")
         return buf[:null]
 
     def get_events(self):
+        '''
+        '''
         keys = _types.keys()
         keys.sort()
 
@@ -192,6 +212,8 @@ class evdev:
                 self._events[i].append(j)
 
     def has_event(self, test_event):
+        '''
+        '''
         for type in self._events.keys():
             for event in self._events[type]:
                 if _events[type][event] == test_event:
@@ -199,6 +221,8 @@ class evdev:
         return False
 
     def read(self):
+        '''
+        '''
         try:
             buf = os.read(self._fd, 16)
         except OSError, (errno, str):
