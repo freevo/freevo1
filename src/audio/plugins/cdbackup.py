@@ -287,18 +287,19 @@ class main_backup_thread(threading.Thread):
                                  'album': album,
                                  'genre': genre }
 
-        if config.CD_RIP_CASE.lower() == 'lower':
-            user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].lower()
-            user_rip_path_prefs['album'] = user_rip_path_prefs['album'].lower()
-            user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].lower()
-        elif config.CD_RIP_CASE.lower() == 'upper':
-            user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].upper()
-            user_rip_path_prefs['album'] = user_rip_path_prefs['album'].upper()
-            user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].upper()
-        elif config.CD_RIP_CASE.lower() == 'title':
-            user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].title()
-            user_rip_path_prefs['album'] = user_rip_path_prefs['album'].title()
-            user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].title()
+        if config.CD_RIP_CASE:
+            if config.CD_RIP_CASE.lower() == 'lower':
+                user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].lower()
+                user_rip_path_prefs['album'] = user_rip_path_prefs['album'].lower()
+                user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].lower()
+            elif config.CD_RIP_CASE.lower() == 'upper':
+                user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].upper()
+                user_rip_path_prefs['album'] = user_rip_path_prefs['album'].upper()
+                user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].upper()
+            elif config.CD_RIP_CASE.lower() == 'title':
+                user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].title()
+                user_rip_path_prefs['album'] = user_rip_path_prefs['album'].title()
+                user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].title()
 
         if config.CD_RIP_REPLACE_SPACE:
             user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].replace(' ', config.CD_RIP_REPLACE_SPACE)
@@ -368,12 +369,13 @@ class main_backup_thread(threading.Thread):
 
             path_tail = path_tail_temp % user_rip_path_prefs
 
-            if config.CD_RIP_CASE.lower() == 'lower':
-                path_tail = path_tail.lower()
-            elif config.CD_RIP_CASE.lower() == 'upper':
-                path_tail = path_tail.upper()
-            elif config.CD_RIP_CASE.lower() == 'title':
-                path_tail = path_tail.title()
+            if config.CD_RIP_CASE:
+                if config.CD_RIP_CASE.lower() == 'lower':
+                    path_tail = path_tail.lower()
+                elif config.CD_RIP_CASE.lower() == 'upper':
+                    path_tail = path_tail.upper()
+                elif config.CD_RIP_CASE.lower() == 'title':
+                    path_tail = path_tail.title()
 
             if config.CD_RIP_REPLACE_SPACE:
                 path_tail = path_tail.replace(' ', config.CD_RIP_REPLACE_SPACE)
