@@ -287,6 +287,24 @@ class main_backup_thread(threading.Thread):
                                  'album': album,
                                  'genre': genre }
 
+        if config.CD_RIP_CASE.lower() == 'lower':
+            user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].lower()
+            user_rip_path_prefs['album'] = user_rip_path_prefs['album'].lower()
+            user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].lower()
+        elif config.CD_RIP_CASE.lower() == 'upper':
+            user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].upper()
+            user_rip_path_prefs['album'] = user_rip_path_prefs['album'].upper()
+            user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].upper()
+        elif config.CD_RIP_CASE.lower() == 'title':
+            user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].title()
+            user_rip_path_prefs['album'] = user_rip_path_prefs['album'].title()
+            user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].title()
+
+        if config.CD_RIP_REPLACE_SPACE:
+            user_rip_path_prefs['artist'] = user_rip_path_prefs['artist'].replace(' ', config.CD_RIP_REPLACE_SPACE)
+            user_rip_path_prefs['album'] = user_rip_path_prefs['album'].replace(' ', config.CD_RIP_REPLACE_SPACE)
+            user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].replace(' ', config.CD_RIP_REPLACE_SPACE)
+
         path_list = re.split("\\/", config.CD_RIP_PN_PREF)
 
         # Get everything up to the last "/"
