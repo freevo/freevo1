@@ -41,7 +41,6 @@ import traceback
 
 # image stuff
 import kaa.imlib2 as Image
-import cStringIO
 from kaa.metadata.image import EXIF as exif
 
 
@@ -470,7 +469,7 @@ def create_thumbnail(filename, thumbnail=None):
 
     if thumbnail:
         try:
-            image = Image.open(cStringIO.StringIO(thumbnail))
+            image = Image.open_from_memory(thumbnail)
         except Exception, e:
             print 'Invalid thumbnail for %s' % filename
             if config.DEBUG:
@@ -484,7 +483,7 @@ def create_thumbnail(filename, thumbnail=None):
                 f.close()
                 
                 if tags.has_key('JPEGThumbnail'):
-                    image = Image.open(cStringIO.StringIO(tags['JPEGThumbnail']))
+                    image = Image.open_from_memory(tags['JPEGThumbnail'])
             except Exception, e:
                 print 'Error loading thumbnail %s' % filename
                 if config.DEBUG:

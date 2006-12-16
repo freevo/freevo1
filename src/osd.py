@@ -607,8 +607,11 @@ class OSD:
             return None
 
         try:
-            image = pygame.image.fromstring(url.tostring(), url.size, url.mode)
-        except:
+            if url.mode == 'BGRA':
+                url.mode = 'RGBA'
+            image = pygame.image.fromstring(str(url.get_raw_data(format=url.mode)), url.size, url.mode)
+        except Exception, e:
+            print e
 
             if url[:8] == 'thumb://':
                 filename = os.path.abspath(url[8:])

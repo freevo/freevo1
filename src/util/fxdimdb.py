@@ -52,7 +52,7 @@ from BeautifulSoup import BeautifulSoup
 import config
 import util
 
-from kaa.metadata.disc.discinfo import cdrom_disc_id
+import kaa.metadata as mmpython
 #Constants
 
 freevo_version = '1.6.0'
@@ -719,8 +719,10 @@ class FxdImdb:
         """drive (device string)
         return a unique identifier for the disc"""
 
-        if not vfs.exists(drive): return drive
-        return cdrom_disc_id(drive)[1]
+        if not vfs.exists(drive):
+            return drive
+        (type, id) = mmpython.cdrom.status(drive)
+        return id
 
 
     def print_info(self):

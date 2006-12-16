@@ -76,11 +76,11 @@ except ImportError, i:
 # for already fixed bugs
 try:
     import kaa.metadata.version
-    if kaa.metadata.version.VERSION < 0.5:
+    if kaa.metadata.version.VERSION < 0.6:
         raise ImportError
 except ImportError:
     print 'Error: Installed kaa.metadata version is too old.'
-    print 'Please update kaa.metadata to version 0.5 or higher or get it with subversion'
+    print 'Please update kaa.metadata to version 0.6 or higher or get it with subversion'
     print 'svn export svn://svn.freevo.org/kaa/trunk/metadata kaa/metadata'
     print
     sys.exit(0)

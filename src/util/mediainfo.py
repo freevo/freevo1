@@ -34,7 +34,7 @@ import sys
 import copy
 
 import kaa.metadata as mmpython
-from kaa.metadata.disc.discinfo import cdrom_disc_id
+#from kaa.metadata.disc.discinfo import cdrom_disc_id
 
 import config
 import util
@@ -576,7 +576,8 @@ def disc_info(media, force=False):
     """
     return mmpython disc information for the media
     """
-    type, id  = cdrom_disc_id(media.devicename)
+    print media.devicename
+    type, id = mmpython.cdrom.status(media.devicename)
     if not id:
         # bad disc, e.g. blank disc
         return {}
@@ -730,14 +731,12 @@ def check_cache_status():
 #
 
 if config.DEBUG > 2:
-    mmpython.mediainfo.DEBUG = config.DEBUG
-    mmpython.factory.DEBUG   = config.DEBUG
+    mmpython.factory.DEBUG = config.DEBUG
 else:
-    mmpython.mediainfo.DEBUG = 0
-    mmpython.factory.DEBUG   = 0
+    mmpython.factory.DEBUG = 0
 
 mmpython.USE_NETWORK = config.USE_NETWORK
-mmpython.disc.discinfo.CREATE_MD5_ID = config.MMPYTHON_CREATE_MD5_ID
+mmpython.cdrom.CREATE_MD5_ID = config.MMPYTHON_CREATE_MD5_ID
 
 
 
