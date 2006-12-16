@@ -52,7 +52,6 @@ import urllib2
 import time
 import config
 import kaa.imlib2 as Image
-import cStringIO
 from xml.dom import minidom # ParseError used by amazon module
 
 from gui.PopupBox import PopupBox
@@ -225,7 +224,7 @@ class PluginInterface(plugin.ItemPlugin):
                 # Amazon returned a 404
                 MissingFile = True
             if not MissingFile and not (m.info()['Content-Length'] == '807'):
-                image = Image.open(cStringIO.StringIO(m.read()))
+                image = Image.open_from_memory(m.read())
                 items += [ menu.MenuItem('%s' % cover[i].ProductName,
                                          self.cover_create, cover[i].ImageUrlLarge,
                                          image=image) ]
@@ -239,7 +238,7 @@ class PluginInterface(plugin.ItemPlugin):
                 except urllib2.HTTPError:
                     MissingFile = True
                 if not MissingFile and not (n.info()['Content-Length'] == '807'):
-                    image = Image.open(cStringIO.StringIO(n.read()))
+                    image = Image.open_from_memory(n.read())
                     items += [ menu.MenuItem( ('%s [' + _( 'small' ) + ']') % cover[i].ProductName,
                                     self.cover_create, cover[i].ImageUrlMedium) ]
                     n.close()
@@ -251,7 +250,7 @@ class PluginInterface(plugin.ItemPlugin):
                         n = urllib2.urlopen(cover[i].ImageUrlLarge)
 
                         if not (n.info()['Content-Length'] == '807'):
-                            image = Image.open(cStringIO.StringIO(n.read()))
+                            image = Image.open_from_memory(n.read())
                             items += [ menu.MenuItem( ('%s [' + _( 'small' ) + ']' ) % cover[i].ProductName,
                                                      self.cover_create, cover[i].ImageUrlLarge) ]
                         n.close()
