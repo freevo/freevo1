@@ -127,9 +127,13 @@ class PluginInterface(plugin.ItemPlugin):
                                 duplicates.append(i)
                 except:
                     pass
-                items.append(menu.MenuItem('%s (%s, %s)' % (htmlenties2txt(name), year, type),
-                                           self.imdb_create_fxd, (id, year)))
-        except:
+                try:
+                    items.append(menu.MenuItem('%s (%s, %s)' % (htmlenties2txt(name), year, type),
+                        self.imdb_create_fxd, (id, year)))
+                except UnicodeError, e:
+                    print e
+        except Exception, e:
+            print 'imdb_search:', e
             box.destroy()
             box = PopupBox(text=_('Unknown error while connecting to IMDB'))
             box.show()

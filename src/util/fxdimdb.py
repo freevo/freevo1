@@ -55,7 +55,7 @@ import util
 import kaa.metadata as mmpython
 #Constants
 
-freevo_version = '1.6.0'
+freevo_version = '1.7.0'
 
 imdb_title_list = '/tmp/imdb-movies.list'
 imdb_title_list_url = 'ftp://ftp.funet.fi/pub/mirrors/ftp.imdb.com/pub/movies.list.gz'
@@ -132,7 +132,8 @@ class FxdImdb:
             raise FxdImdb_Net_Error("IMDB unreachable : " + error)
             return None
 
-        print response.geturl()
+        if config.DEBUG:
+            print response.geturl()
         data = self.parsesearchdata(response)
 
         response.close()
@@ -250,7 +251,6 @@ class FxdImdb:
 
     def writeFxd(self):
         """Write fxd file"""
-        print 'in writeFxd'
         #if fxdfile is empty, set it yourself
         if not self.fxdfile:
             self.setFxdFile()
@@ -571,7 +571,8 @@ class FxdImdb:
             #print item.parent.findChildren(text=re.compile('[^ ]'))
             self.imdb_id_list += [ ( id, name, year, type ) ]
 
-        print self.imdb_id_list
+        if config.DEBUG:
+            print self.imdb_id_list
         return self.imdb_id_list
 
     def parsedata(self, results, id=0):
@@ -605,10 +606,10 @@ class FxdImdb:
         votes = rating.next.next.strip()
         self.info['rating'] = rating.string.strip() + ' ' + votes.strip()
         self.info['runtime'] = soup.find(text='Runtime:').next.strip()
-        for (k,v) in self.info.items():
-            print k, ':', v
-
-        print 'id:', id, 'dvd:', dvd
+        if config.DEBUG:
+            for (k,v) in self.info.items():
+                print 'items:', k, ':', v
+            print 'id:', id, 'dvd:', dvd
 
         if not id:
             return (self.title, self.info, self.image_urls)
@@ -630,7 +631,7 @@ class FxdImdb:
                     self.image_urls += [ image['src'] ]
             except urllib2.HTTPError, error:
                 pass
-        print self.image_urls
+        print 'image_urls:', self.image_urls
 
         return (self.title, self.info, self.image_urls)
 
@@ -646,7 +647,8 @@ class FxdImdb:
 
     def fetch_image(self):
         """Fetch the best image"""
-        print 'in fetch_image', self.image_urls
+        if config.DEBUG:
+            print 'fetch_image', self.image_urls
 
         image_len = 0
         if len(self.image_urls) == 0: # No images
