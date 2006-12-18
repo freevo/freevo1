@@ -373,7 +373,10 @@ def htmlenties2txt(string):
         semicolon = string.find(";", amp) # find ; as end of entity
         if string[amp + 1] == "#": # numerical entity like "&#039;"
             entity = string[amp:semicolon+1]
-            replacement = Unicode(unichr(int(entity[2:-1])))
+            try:
+                replacement = Unicode(unichr(int(entity[2:-1])))
+            except UnicodeError:
+                replacement = unichr(int(entity[2:-1]))
         else:
             entity = string[amp:semicolon + 1]
             if semicolon - amp > 7:
@@ -383,7 +386,10 @@ def htmlenties2txt(string):
                 replacement = e[entity[1:-1]]
             except KeyError:
                 continue
-        string = string.replace(entity, replacement.decode("latin-1"))
+        try:
+            string = string.replace(entity, replacement.decode("latin-1"))
+        except UnicodeError:
+            string = string.replace(entity, replacement)
     return string
 
 
