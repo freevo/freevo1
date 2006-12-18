@@ -115,14 +115,15 @@ class FxdImdb:
         self.image_url_handler['www.impawards.com'] = self.impawards
 
 
-
     def searchImdb(self, name):
         """name (string), returns id list
         Search for name and returns an id list with tuples:
             (id , name, year, type)"""
 
-        url = 'http://us.imdb.com/Tsearch?title=%s&restrict=Movies+and+TV' % \
-              urllib.quote(name)
+        url = 'http://us.imdb.com/Tsearch?title=%s&restrict=Movies+and+TV' % urllib.quote(name)
+        url = 'http://www.imdb.com/find?s=tt;site=aka;q=%s' % urllib.quote(name)
+        print 'url:', url
+
         req = urllib2.Request(url, txdata, txheaders)
         searchstring = name
 
@@ -133,9 +134,15 @@ class FxdImdb:
             return None
 
         if config.DEBUG:
-            print response.geturl()
-        data = self.parsesearchdata(response)
+            print 'response.url:', response.geturl()
 
+        m=re.compile('/title/tt([0-9]*)/')
+        idm = m.search(response.geturl())
+        if idm: # Direct Hit
+            response.close()
+            return [(idm.group(1), name.title(), u'', '' )]
+
+        data = self.parsesearchdata(response)
         response.close()
 
         if len(self.imdb_id_list) > 20:
@@ -550,6 +557,7 @@ class FxdImdb:
     def parsesearchdata(self, results, id=0):
         """results (imdb html page), imdb_id
         Returns tuple of (title, info(dict), image_urls)"""
+
         self.imdb_id_list = []
         m=re.compile('/title/tt([0-9]*)/')
         y=re.compile('\(([^)]+)\)')
