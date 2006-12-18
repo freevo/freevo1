@@ -28,7 +28,6 @@ This release has all the changes in Release 1.6.x plus
  * New RSS server, for getting podcasts, etc. (F#1580407)
  * New XM online plugin (F#1580412)
  * New webserver library, allows playing/viewing on local and host machines (F#1592806)
- * Updated autocrop to take more samples from different parts of the video (F#1591170)
  * Updated cdbackup plug-in to accept CD_RIP_CASE and CD_RIP_REPLACE_SPACE (F#1616046)
  * Updated idlebar clock plug-in to allow CLOCK_FORMAT to be used (F#1605951)
  * Updated idlebar diskfree plug-in to allow the bar colours levels to be set (F#1605953)
@@ -38,6 +37,7 @@ This release has all the changes in Release 1.6.x plus
  * Updated multimail plug-in for Maildir support (F#1594915)
  * Updated recordserver to allow automatic deleting of old recordings when low on disk space (F#1594630)
  * Updated tv mplayer plug-in to pause live tv and change channels without stopping for dvb (F#1610656)
+ * Removed video plug-in mplayer for unichrome playback (B#1606699)
 
 == Release 1.6.2 (2006-12-22) ==
 --------------------------------

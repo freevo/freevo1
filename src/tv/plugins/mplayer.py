@@ -94,7 +94,6 @@ class MPlayer:
 
         # Build the MPlayer command
         args = (config.MPLAYER_NICE, config.MPLAYER_CMD, config.MPLAYER_VO_DEV,
-                config.MPLAYER_VO_DEV_HWACCEL, config.MPLAYER_VO_DEV_OPTS_HWACCEL,
                 config.MPLAYER_VO_DEV_OPTS, config.MPLAYER_AO_DEV, config.MPLAYER_ARGS_DEF)
 
         if mode == 'tv':
@@ -162,7 +161,7 @@ class MPlayer:
 
         args += (tvcmd,)
 
-        mpl = '--prio=%s %s -vo %s%s %s %s -ao %s -fs %s -slave %s %s' % args
+        mpl = '--prio=%s %s -vo %s %s -ao %s -fs %s -slave %s %s' % args
 
         command = mpl
         _debug_('command=\"%s\"', (command))

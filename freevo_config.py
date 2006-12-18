@@ -250,7 +250,6 @@ LOCAL_CONF_CHANGES = [
      Added ENCODINGSERVER_UID and ENCODINGSERVER_GID
      Added optional ENCODINGSERVER_DEBUG, if not defined uses DEBUG
      Added RSSSERVER_UID and RSSSERVER_GID
-     Added MPLAYER_VO_DEV_HWACCEL and MPLAYER_VO_DEV_OPTS_HWACCEL
      Added plug-in: Apple trailers in the contrib area
      Added plug-in: reencode and idlebar encode to compress mpeg video
      Added plug-in: XM online
@@ -1319,8 +1318,6 @@ else:
     MPLAYER_VO_DEV = CONF.display  # e.g.: x11,mga,fbdev, see mplayer docs
 
 MPLAYER_VO_DEV_OPTS = ''           # e.g.: ':some_var=vcal'
-MPLAYER_VO_DEV_HWACCEL = ''        # Mainly used for Via EPIA video
-MPLAYER_VO_DEV_OPTS_HWACCEL = ''
 
 DVD_LANG_PREF = 'en,se,no'         # Order of preferred languages on DVD.
 DVD_SUBTITLE_PREF = ''             # Order of preferred subtitles on DVD.
@@ -1379,6 +1376,7 @@ MPLAYER_SEEK_TIMEOUT = 8
 # bars on a 16:9 tv
 #
 MPLAYER_AUTOCROP = 0
+MPLAYER_AUTOCROP_START = 60
 
 #
 # Try to set correct 'delay' and 'mc' values for mplayer based on the delay

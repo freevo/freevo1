@@ -53,8 +53,6 @@ class PluginInterface(plugin.Plugin):
     def __init__(self):
         # create plugin structure
         plugin.Plugin.__init__(self)
-        if not hasattr(config,'MPLAYER_HWACCEL_SUFFIX'):
-                 config.MPLAYER_HWACCEL_SUFFIX=[]
         # register mplayer as the object to play video
         plugin.register(MPlayer(), plugin.VIDEO_PLAYER, True)
 
@@ -117,9 +115,6 @@ class MPlayer:
 
         VODEV=config.MPLAYER_VO_DEV
         VODEVOPTS=config.MPLAYER_VO_DEV_OPTS
-        if item.mimetype in config.MPLAYER_HWACCEL_SUFFIX:
-                VODEV=config.MPLAYER_VO_DEV_HWACCEL
-                VODEVOPTS=config.MPLAYER_VO_DEV_OPTS_HWACCEL
 
         if mode == 'file':
             url = item.url[6:]
@@ -157,10 +152,6 @@ class MPlayer:
         additional_args = []
 
         if mode == 'dvd':
-            if config.MPLAYER_VO_DEV_HWACCEL:
-                VODEV=config.MPLAYER_VO_DEV_HWACCEL
-                VODEVOPTS=config.MPLAYER_VO_DEV_OPTS_HWACCEL
-
             if config.DVD_LANG_PREF:
                 # There are some bad mastered DVDs out there. E.g. the specials on
                 # the German Babylon 5 Season 2 disc claim they have more than one
@@ -249,8 +240,9 @@ class MPlayer:
         if config.MPLAYER_AUTOCROP and not item.network_play and str(' ').join(command).find('crop=') == -1:
             _debug_('starting autocrop')
             (x1, y1, x2, y2) = (1000, 1000, 0, 0)
-            crop_cmd = command[1:] + ['-ao', 'null', '-vo', 'null', '-ss', '%s' % config.TV_RECORD_PADDING_PRE * 2,
-                                      '-frames', '20', '-vf', 'cropdetect' ]
+            crop_cmd = [config.MPLAYER_CMD, '-ao', 'null', '-vo', 'null', '-slave', '-nolirc',
+                '-ss', '%s' % config.MPLAYER_AUTOCROP_START, '-frames', '20', '-vf', 'cropdetect' ]
+            crop_cmd.append(url)
             child = popen2.Popen3(self.sort_filter(crop_cmd), 1, 100)
             exp = re.compile('^.*-vf crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*).*')
             while(1):
