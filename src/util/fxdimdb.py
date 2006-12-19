@@ -590,17 +590,43 @@ class FxdImdb:
         dvd = 0
 
         soup = BeautifulSoup()
-        soup.feed(results.read())
+
+        try:
+            soup.feed(results.read())
+        except UnicodeDecodeError:
+            print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
+            pass
 
         title = soup.find('strong', {'class':'title'})
         image = soup.find('img', { 'title':title.next.strip() })
 
         self.title = title.next.strip()
         self.info['title'] = self.title
-        self.info['image'] = image['src']
+
+        if image:
+            self.info['image'] = image['src']
+
         self.info['year'] = title.find('a').string.strip()
-        self.info['plot'] = soup.find(text='Plot Outline:').next.strip()
-        self.info['tagline'] = soup.find(text='Tagline:').next.strip()
+
+        # Find Plot Outline/Summary:
+        # Normally the tag is named "Plot Outline:" - however sometimes
+        # the tag is "Plot Summary:". Search for both strings.
+        imdb_result = soup.find(text='Plot Outline:')
+        if not imdb_result:
+            imdb_result = soup.find(text='Plot Summary:')
+        if imdb_result:
+            self.info['plot'] = imdb_result.next.strip()
+        else:
+            self.info['plot'] = u''
+
+        # Find tagline - sometimes the tagline is missing.
+        # Use an empty string if no tagline could be found.
+        imdb_result = soup.find(text='Tagline:')
+        if imdb_result:
+            self.info['tagline'] = imdb_result.next.strip()
+        else:
+            self.info['tagline'] = u''
+
         self.info['genre'] = ''
         genre=soup.find(text='Genre:').parent
         genres = []
@@ -619,6 +645,11 @@ class FxdImdb:
                 print 'items:', k, ':', v
             print 'id:', id, 'dvd:', dvd
 
+        # Add impawards.com poster URLs.
+        self.impawardsimages(self.info['title'], self.info['year'])
+
+        # Add images from IMDB database. These images are much smaller than
+        # the impawards ones.
         if not id:
             return (self.title, self.info, self.image_urls)
 
@@ -639,9 +670,70 @@ class FxdImdb:
                     self.image_urls += [ image['src'] ]
             except urllib2.HTTPError, error:
                 pass
+            except UnicodeDecodeError:
+                # FIXME:
+                # This is a bad hack. Some character could not be converted to ascii.
+                # We ignore these errors as it does not really affect the FXD output.
+                pass
         print 'image_urls:', self.image_urls
 
         return (self.title, self.info, self.image_urls)
+
+
+    def impawardsimages(self, title, year):
+        """Generate URLs to the impawards movie posters and add them to the
+        global image_urls array."""
+
+        # Format of an impawards.com image URL:
+        #     http://www.impawards.com/<year>/posters/<title>.jpg
+        # 
+        # Some special characters like: blanks, ticks, ':', ','... have to be replaced
+        imp_image_name = title.lower()
+        imp_image_name = imp_image_name.replace(u' ', u'_')
+        imp_image_name = imp_image_name.replace(u"'", u'')
+        imp_image_name = imp_image_name.replace(u':', u'')
+        imp_image_name = imp_image_name.replace(u',', u'')
+        imp_image_name = imp_image_name.replace(u';', u'')
+        imp_image_name = imp_image_name.replace(u'.', u'')
+
+        # build up an array with all kind of image urls
+        imp_image_urls = [ ]
+        imp_base_url   = 'http://www.impawards.com/%s/posters' % year
+    
+        # add the normal poster URL to image_urls
+        imp_image_url   = '%s/%s.jpg' % (imp_base_url, imp_image_name)
+        imp_image_urls += [ imp_image_url ]
+        
+        # add the xxl poster URL to image_urls
+        imp_image_url   = '%s/%s_xlg.jpg' % (imp_base_url, imp_image_name)
+        imp_image_urls += [ imp_image_url ]
+
+        # add the ver1 poster URL in case no normal version exists
+        imp_image_url   = '%s/%s_ver1.jpg' % (imp_base_url, imp_image_name)
+        imp_image_urls += [ imp_image_url ]
+
+        # add the xxl ver1 poster URL
+        imp_image_url   = '%s/%s_ver1_xlg.jpg' % (imp_base_url, imp_image_name)
+        imp_image_urls += [ imp_image_url ]
+
+        # check for valid URLs and add them to self.image_urls
+        for imp_image_url in imp_image_urls:
+        
+            #print "IMPAWARDS: Checking image URL %s" % imp_image_url
+            try:
+                imp_req = urllib2.Request(imp_image_url, txdata, txheaders)
+
+                # an url is valid if the returned content-type is 'image/jpeg'
+                imp_r     = urllib2.urlopen(imp_req)
+                imp_ctype = imp_r.info()['Content-Type']
+                imp_r.close()
+
+                #print "IMPAWARDS: Found content-type %s for url %s" % (imp_ctype, imp_image_url)
+                if (imp_ctype == 'image/jpeg'):
+                    self.image_urls += [ imp_image_url ]
+
+            except:
+                pass
 
 
     def impawards(self, host, path):
