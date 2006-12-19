@@ -362,7 +362,6 @@ DVD_EVENTS = {
     'ENTER'     : DVDNAV_SELECT,
     'SELECT'    : DVDNAV_SELECT,
     'DISPLAY'   : TOGGLE_OSD,
-    'SUBTITLE'  : VIDEO_NEXT_SUBTITLE,
     'REW'       : Event(SEEK, arg=-10),
     'FFWD'      : Event(SEEK, arg=10),
     'GUIDE'     : DVDNAV_TITLEMENU,
@@ -534,7 +533,9 @@ DEFAULT_KEYMAP = {
     key.K_F6          : 'REC',
     key.K_PERIOD      : 'EJECT',
     key.K_l           : 'SUBTITLE',
-    key.K_a           : 'LANG'
+    key.K_a           : 'LANG',
+    key.K_RIGHTBRACKET: 'NEXT',
+    key.K_LEFTBRACKET : 'PREV',
     }
 
 
