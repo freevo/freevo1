@@ -189,8 +189,11 @@ class MPlayer:
         elif item.selected_subtitle:
             additional_args += [ '-sid', str(item.selected_subtitle) ]
             
-        if item.selected_audio != None:
-            additional_args += [ '-aid', str(item.selected_audio) ]
+        if item.selected_audio:
+            if item.mimetype == 'mkv':
+               additionnal_args += [ '-aid', str(item.selected_audio-1) ]
+            else:
+               additionnal_args += [ '-aid', str(item.selected_audio) ]
 
         if item['deinterlace'] and config.MPLAYER_VF_INTERLACED:
                 additional_args += [ '-vf', config.MPLAYER_VF_INTERLACED ]

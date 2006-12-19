@@ -43,7 +43,9 @@ This release has all the changes in Release 1.6.x plus
 --------------------------------
 
  * Fixed audio track name formatting (B#1605570,B#1605042)
+ * Fixed autoshutdown unicode error (B#1612257)
  * Fixed cdbackup plug-in to correctly execute lame (B#1615970)
+ * Fixed mplayer to correctly handle Matroska audio ids (B#1619058)
  * Fixed weather unicode problem (B#1612617)
  * Updated autoshutdown to react to the return code and removed unused vars (B#1612257)
  * Updated osd forced fonts variables and freevo_config and local_conf (B#1608393)
