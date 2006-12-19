@@ -111,7 +111,7 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
             else:
                 image.save(imagefile)
         except (OSError, IOError), e:
-            print e
+            print 'snapshot:', e
     else:
         print 'no imagefile found'
         print imagefile

@@ -32,7 +32,6 @@
 import os
 
 # Add support for bins album files (http://bins.sautret.org/)
-#import kaa.metadata.misc.dirinfo as bins
 
 import config
 import util
@@ -140,8 +139,7 @@ class PluginInterface(plugin.MimetypePlugin):
                 items += citems
                 
             except OSError, e:
-                print 'slideshow error:'
-                print e
+                print 'slideshow error:', e
 
         pl = Playlist('', items, fxd.getattr(None, 'parent', None),
                       random=fxd.getattr(node, 'random', 0),
@@ -176,8 +174,7 @@ class PluginInterface(plugin.MimetypePlugin):
                 elif child.name == 'file':
                     files.append(fname)
             except OSError, e:
-                print 'playlist error:'
-                print e
+                print 'playlist error:', e
 
         if files:
             pl.background_playlist = Playlist(playlist=files, random = random,

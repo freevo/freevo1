@@ -170,7 +170,7 @@ def rmrf(top=None):
             try:
                 os.rmdir(d)
             except (IOError, OSError), e:
-                print e
+                print 'rmrf:', e
 
 
 #
@@ -473,7 +473,7 @@ def create_thumbnail(filename, thumbnail=None):
         except Exception, e:
             print 'Invalid thumbnail for %s' % filename
             if config.DEBUG:
-                print e
+                print 'invalid thumbnail:', e
 
     if not image:
         if __freevo_app__ == 'main':
@@ -487,7 +487,7 @@ def create_thumbnail(filename, thumbnail=None):
             except Exception, e:
                 print 'Error loading thumbnail %s' % filename
                 if config.DEBUG:
-                    print e
+                    print 'create_thumbnail:', e
 
         if not image or image.width < 100 or image.height < 100:
             try:
@@ -495,7 +495,7 @@ def create_thumbnail(filename, thumbnail=None):
             except Exception, e:
                 print 'error caching image %s' % filename
                 if config.DEBUG:
-                    print e
+                    print 'caching image:', e
                 return None
         
     try:

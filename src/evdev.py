@@ -360,4 +360,4 @@ try:
 except ImportError:
     from evfallback import _types, _events, _ids, _buses
 except StandardError, e:
-    print e
+    print 'evfallback:', e

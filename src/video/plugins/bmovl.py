@@ -158,7 +158,7 @@ class OSDbmovl(OSD):
         try:
             update = self.screen.subsurface(rect)
         except Exception, e:
-            print e
+            print 'update:', e
             print rect, self.screen
             return
         

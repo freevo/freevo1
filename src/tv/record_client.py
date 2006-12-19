@@ -56,7 +56,7 @@ def getScheduledRecordings():
     try: 
         (status, message) = server.getScheduledRecordings()
     except Exception, e:
-        print e
+        print 'getScheduledRecordings:', e
         return (FALSE, 'record_client: '+_('connection error'))
 
     return returnFromJelly(status, message)
@@ -75,7 +75,7 @@ def connectionTest(teststr='testing'):
     try:
         (status, message) = server.echotest(teststr)
     except Exception, e:
-        print e
+        print 'connectionTest:', e
         traceback.print_exc()
         return (FALSE, 'record_client: '+_('connection error'))
 

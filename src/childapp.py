@@ -392,7 +392,7 @@ class ChildApp2(ChildApp):
         rc.unregister(self.stop)
 
         if cmd and self.isAlive():
-            _debug_('sending exit command to app')
+            _debug_('sending exit command to app \"%r\"' % cmd)
             self.write(cmd)
             # wait for the app to terminate itself
             for i in range(60):

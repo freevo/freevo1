@@ -297,7 +297,7 @@ class RecordServer(xmlrpc.XMLRPC):
         try:
             recording = prog.isRecording
         except Exception, e:
-            print e
+            print 'removeScheduledRecording:', e
             recording = FALSE
 
         scheduledRecordings = self.getScheduledRecordings()

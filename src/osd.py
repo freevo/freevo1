@@ -610,8 +610,8 @@ class OSD:
             if url.mode == 'BGRA':
                 url.mode = 'RGBA'
             image = pygame.image.fromstring(str(url.get_raw_data(format=url.mode)), url.size, url.mode)
-        except Exception, e:
-            print e
+        except AttributeError:
+            print 'url:', url
 
             if url[:8] == 'thumb://':
                 filename = os.path.abspath(url[8:])
@@ -659,6 +659,10 @@ class OSD:
                 if config.DEBUG:
                     traceback.print_exc()
                 return None
+
+        except Exception, e:
+            print 'image.fromstring:', e
+            return None
 
         # convert the surface to speed up blitting later
         if image and image.get_alpha():
@@ -906,7 +910,7 @@ class OSD:
                         alpha[x,y] = int(alpha[x,y][0]*opaque_mod)
                 opaque_mod -= opaque_stp
         except Exception, e:
-            print e
+            print '__draw_transparent_text__:', e
 
 
     def drawstringframed(self, string, x, y, width, height, font, fgcolor=None,

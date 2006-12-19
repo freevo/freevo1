@@ -291,7 +291,7 @@ def load_guide(verbose=True, XMLTV_FILE=None):
                         else:
                             prog.sub_title = u'Teil %s' % part
                     except Exception, e:
-                        print e
+                        print 'Teil:', e
 
             guide.AddProgram(prog)
         except:

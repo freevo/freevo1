@@ -826,7 +826,7 @@ class PluginInterface(plugin.ItemPlugin):
 	   if len(cur2.files)>0:
 	     to_return.append(( cur2.burn, 'Burn audio files (MP3, Wav and Ogg) as Audio CD'))
 	  except Exception, e:
-	     print e
+	     print 'fill_menu:', e
 	     pass
 
 	try:
