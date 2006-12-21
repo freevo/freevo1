@@ -80,7 +80,12 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def addToCart(self, arg=None, menuw=None):
-        self.cart.append(self.item)
+        if hasattr(self.item, 'subitems') and self.item.subitems:
+            for s in self.item.subitems:
+                self.cart.append(s)
+        else:
+            self.cart.append(self.item)
+
         if isinstance(menuw.menustack[-1].selected, menu.MenuItem):
             rc.post_event(em.MENU_BACK_ONE_MENU)
         else:
