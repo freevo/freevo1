@@ -40,6 +40,11 @@ This release has all the changes in Release 1.6.x plus
  * Updated tv mplayer plug-in to pause live tv and change channels without stopping for dvb (F#1610656)
  * Removed video plug-in mplayer for unichrome playback (B#1606699)
 
+== Release 1.6.3 (200?-??-??) ==
+--------------------------------
+
+ * Fixed shopping cart for items with two or more subitems (B#1620425)
+
 == Release 1.6.2 (2006-12-22) ==
 --------------------------------
 
