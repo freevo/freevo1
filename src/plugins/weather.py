@@ -1,4 +1,4 @@
-#if 0 /*
+# -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # weather.py - a plugin to obtain detailed weather forecast information
 # -----------------------------------------------------------------------
@@ -17,26 +17,6 @@
 #
 #    plugin.activate('weather', level=45)
 #    PLUGIN_WEATHER_LOCATIONS = [ ("USNC0559", 0, "Home sweet home") ]
-#
-# -----------------------------------------------------------------------
-#
-# $Log: weather.py,v $
-# Revision .5  2003/12/30 13:47:28  jlaska
-# initial version - adapted from headlines.py
-
-# Revision .6  2004/01/20 13:47:28  jlaska
-#  - modified screen drawing to support different resolutions and OSD_OVERSCAN values
-#  - added support to retry radar map and data downloads on http timeouts/errors
-#  - rolled the date calculations back to python2.2 time module (no longer datetime)
-#
-# Revision .7  2004/01/20 13:47:28  jlaska
-#  - bug in my date math for calculating the day name (oops)
-#
-# Revision .8  2004/02/28 09:19:43  jlaska
-#  - double check visibility string is not empty when passing to float()
-#  - increased console error verbosity when attempting to parse weather data 
-#  - added MENU_SELECT handler for weather detail screen to update forecast data on demand
-#  - added ability to specify custom name in PLUGIN_WEATHER_LOCATIONS
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -58,7 +38,6 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-#endif
 
 #python modules
 import os, stat, re, copy
