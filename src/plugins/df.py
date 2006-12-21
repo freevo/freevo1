@@ -56,15 +56,16 @@ class PluginInterface(plugin.ItemPlugin):
         if item.type == 'dir':
             freespace = util.freespace(item.dir)
             totalspace = util.totalspace(item.dir)
+            freespacemb = (freespace / 1024) / 1024
+            freespacegb = freespacemb / 1024
+            totalspacemb = (totalspace / 1024) / 1024
+            totalspacegb = totalspacemb / 1024
+            percentage = freespace * 100.0 / totalspace
 
             if (totalspace > 1073741824): # more than 1024 Mb
-                diskfree = _('%i free of %i Gb total (%i%% free)') % \
-                           ( (((freespace / 1024) / 1024) / 1024),
-                             (((totalspace / 1024) / 1024) / 1024), (freespace*100.0/totalspace) )
+                diskfree = _( '%i free of %i GB total (%i%% free)' ) % (freespacegb, totalspacegb, percentage)
             else:
-                diskfree = _('%i free of %i Mb total (%i%% free)') % \
-                           ( ((freespace / 1024) / 1024),
-                             ((totalspace / 1024) / 1024), (freespace*100.0/totalspace) )
+                diskfree = _( '%i free of %i MB total (%i%% free)' ) % (freespacemb, totalspacemb, percentage)
             return  [ ( self.dud, diskfree) ]
         else:
             return []
