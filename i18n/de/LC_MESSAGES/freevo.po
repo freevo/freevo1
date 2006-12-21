@@ -1,0 +1,2938 @@
+# German language file for freevo
+# Copyright (C) 2003
+# Daniel Schilling <dany@sps-edv.de>, 2003.
+# Edited by Manuel Borchers <manuel@matronix.de>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: freevo 1.4.0 cvs\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-11-26 10:38+0100\n"
+"PO-Revision-Date: 2003-11-10 00:58+0200\n"
+"Last-Translator: Dirk Meyer <dmeyer@tzi.de>\n"
+"Language-Team: German <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+#: ../freevo_config.py:981 ../freevo_config.py:986
+#: www/htdocs/manualrecord.rpy:222 www/htdocs/record.rpy:194
+#: www/htdocs/search.rpy:184 tv/edit_favorite.py:118
+#: share/skins/main/info.fxd:390
+msgid "Title"
+msgstr "Titel"
+
+#: ../freevo_config.py:982 plugins/lcd.py:105 plugins/lcd.py:107
+#: plugins/lcd.py:284
+msgid "Description"
+msgstr "Beschreibung"
+
+#: ../freevo_config.py:983
+msgid "Author"
+msgstr "Autor"
+
+#: ../freevo_config.py:987 plugins/lcd.py:104 share/skins/main/dark.fxd:590
+#: share/skins/main/dark.fxd:664 share/skins/main/dark.fxd:685
+#: share/skins/main/crystal.fxd:269 share/skins/main/bluestar.fxd:289
+#: share/skins/main/noia.fxd:92 share/skins/main/rain.fxd:266
+#: share/skins/main/info.fxd:331
+msgid "Date"
+msgstr "Datum"
+
+#: ../freevo_config.py:990
+msgid "Model"
+msgstr "Modell"
+
+#: ../freevo_config.py:991
+msgid "Software"
+msgstr ""
+
+#: plugins/idlebar/diskfree.py:65
+#, python-format
+msgid "%iGb"
+msgstr ""
+
+#: plugins/idlebar/system.py:105
+#, python-format
+msgid "%iM"
+msgstr "%iMB"
+
+#: plugins/idlebar/system.py:130
+#, python-format
+msgid "%s%%"
+msgstr "%s%%"
+
+#: plugins/df.py:72
+#, fuzzy, python-format
+msgid "%i free of %i Gb total (%i%% free)"
+msgstr "%i von %i MB frei"
+
+#: plugins/df.py:76
+#, fuzzy, python-format
+msgid "%i free of %i Mb total (%i%% free)"
+msgstr "%i von %i MB frei"
+
+#: plugins/headlines.py:143
+msgid "Show Sites Headlines"
+msgstr "Schlagzeilen anzeigen"
+
+#: plugins/headlines.py:165
+msgid "Fetching headlines..."
+msgstr "Hole Schlagzeilen..."
+
+#: plugins/headlines.py:229
+msgid "No Headlines found"
+msgstr "Keine Schlagzeilen gefunden"
+
+#: plugins/headlines.py:231 plugins/headlines.py:244
+#: share/skins/main/dark.fxd:21 share/skins/main/crystal.fxd:14
+#: share/skins/main/bluestar.fxd:14 share/skins/main/rain.fxd:14
+msgid "Headlines"
+msgstr "Schlagzeilen"
+
+#: plugins/headlines.py:250 plugins/headlines.py:264
+msgid "Headlines Sites"
+msgstr "Schlagzeilen-Sites"
+
+#: plugins/headlines.py:262
+msgid "No Headlines Sites found"
+msgstr "Keine Schlagzeilen-Site gefunden"
+
+#: plugins/weather.py:261
+msgid "Unlimited"
+msgstr ""
+
+#: plugins/weather.py:274
+#, fuzzy
+msgid "Show Weather Details"
+msgstr "Wettervorhersage"
+
+#: plugins/weather.py:352
+#, fuzzy, python-format
+msgid "Fetching Weather for %s..."
+msgstr "Hole Schlagzeilen..."
+
+#: plugins/weather.py:516 plugins/weather.py:788
+#, fuzzy
+msgid "at"
+msgstr "Sa"
+
+#: plugins/weather.py:546
+#, fuzzy
+msgid "Unknown"
+msgstr "Unbekannter Interpret"
+
+#: plugins/weather.py:630 share/skins/main/bluestar.fxd:12
+#, fuzzy
+msgid "Weather"
+msgstr "Andere"
+
+#: plugins/weather.py:636 plugins/weather.py:671
+#, fuzzy
+msgid "Locations"
+msgstr "Ort"
+
+#: plugins/weather.py:663
+#, fuzzy
+msgid "No locations specified"
+msgstr "Keine neue Datei angegeben."
+
+#: plugins/weather.py:688
+#, fuzzy
+msgid "Current Conditions"
+msgstr "Aktuelles Bild"
+
+#: plugins/weather.py:688
+#, fuzzy
+msgid "Today's Forecast"
+msgstr "Wettervorhersage"
+
+#: plugins/weather.py:689
+#, fuzzy
+msgid "Extended Forecast"
+msgstr "Wettervorhersage"
+
+#: plugins/weather.py:689
+msgid "Radar Map"
+msgstr ""
+
+#: plugins/weather.py:767
+msgid "Humidity"
+msgstr ""
+
+#: plugins/weather.py:780
+msgid "Pressure"
+msgstr ""
+
+#: plugins/weather.py:787
+msgid "Wind"
+msgstr ""
+
+#: plugins/weather.py:795
+msgid "Wind Chill"
+msgstr ""
+
+#: plugins/weather.py:803
+msgid "Visibility"
+msgstr ""
+
+#: plugins/weather.py:811
+msgid "UV Index"
+msgstr ""
+
+#: plugins/weather.py:854
+msgid "Today, a high of"
+msgstr ""
+
+#: plugins/weather.py:856
+msgid "and a low of"
+msgstr ""
+
+#: plugins/weather.py:859
+msgid "Currently, there is a a humidity of"
+msgstr ""
+
+#: plugins/weather.py:861
+msgid "and"
+msgstr ""
+
+#: plugins/weather.py:863
+msgid "the winds are "
+msgstr ""
+
+#: plugins/weather.py:865
+msgid "calm"
+msgstr ""
+
+#: plugins/weather.py:867
+msgid "coming in at"
+msgstr ""
+
+#: plugins/weather.py:867
+msgid "from the"
+msgstr ""
+
+#: plugins/weather.py:871
+msgid "Visibility will be unlimited today"
+msgstr ""
+
+#: plugins/weather.py:873
+msgid "There will be a visibility of"
+msgstr ""
+
+#: plugins/weather.py:908
+msgid "LO"
+msgstr ""
+
+#: plugins/weather.py:916
+msgid "HI"
+msgstr ""
+
+#: plugins/weather.py:930
+msgid "Error encountered while trying to download Radar map"
+msgstr ""
+
+#: plugins/file_ops.py:71 www/htdocs/library.rpy:380
+msgid "Delete"
+msgstr "Löschen"
+
+#: plugins/file_ops.py:73
+msgid "Delete info"
+msgstr "Information löschen"
+
+#: plugins/file_ops.py:75
+msgid "Delete image"
+msgstr "Bild löschen"
+
+#: plugins/file_ops.py:81
+#, python-format
+msgid ""
+"Do you wish to delete\n"
+" '%s'?"
+msgstr ""
+"Soll die Datei '%s'\n"
+"wirklich gelöscht werden?"
+
+#: plugins/file_ops.py:83
+msgid "Deleting..."
+msgstr "Lösche..."
+
+#: plugins/file_ops.py:87
+#, python-format
+msgid ""
+"Delete info about\n"
+" '%s'?"
+msgstr ""
+"Informationen über\n"
+" '%s' wirklich Löschen?"
+
+#: plugins/file_ops.py:92
+#, python-format
+msgid ""
+"Delete image about\n"
+" '%s'?"
+msgstr ""
+"Bild von\n"
+" '%s' wirklich löschen?"
+
+#: plugins/shoppingcart.py:71
+msgid "Moving files..."
+msgstr "Verschiebe Dateien..."
+
+#: plugins/shoppingcart.py:81
+msgid "Copying files..."
+msgstr "Kopiere Dateien..."
+
+#: plugins/shoppingcart.py:95
+msgid "Added to Cart"
+msgstr "Zum Korb hinzugefügt"
+
+#: plugins/shoppingcart.py:117
+msgid "Cart: Move Files Here"
+msgstr "Korb: Dateien hierher bewegen"
+
+#: plugins/shoppingcart.py:118
+msgid "Cart: Copy Files Here"
+msgstr "Korb: Dateien hierher kopieren"
+
+#: plugins/shoppingcart.py:121
+msgid "Add Directory to Cart"
+msgstr "Verzeichnis zum Korb hinzufügen"
+
+#: plugins/shoppingcart.py:125
+msgid "Add File to Cart"
+msgstr "Datei zum Korb hinzufügen"
+
+#: plugins/shoppingcart.py:128
+msgid "Delete Cart"
+msgstr "Korb löschen"
+
+#: plugins/lcd.py:69 plugins/lcd.py:921 plugins/lcd.py:932 plugins/lcd.py:943
+#: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
+#: www/htdocs/manualrecord.rpy:70 www/htdocs/record.rpy:142
+#: www/htdocs/record.rpy:163 www/htdocs/edit_favorite.rpy:137
+#: www/htdocs/edit_favorite.rpy:161 www/htdocs/edit_favorite.rpy:185
+#: www/htdocs/guide.rpy:150 www/htdocs/genre.rpy:122
+#: www/htdocs/favorites.rpy:54 www/htdocs/library.rpy:170
+#: www/htdocs/library.rpy:192 www/htdocs/library.rpy:194
+#: www/htdocs/search.rpy:145 skins/main/info_area.py:140 tv/plugins/xine.py:80
+#: tv/channels.py:133 tv/channels.py:171 tv/channels.py:177
+#: tv/record_client.py:104 audio/plugins/cdbackup.py:204
+#: audio/plugins/cdbackup.py:569 audio/plugins/xine.py:54
+#: audio/plugins/xine.py:73 video/plugins/xine.py:62 childapp.py:300
+msgid "ERROR"
+msgstr "FEHLER"
+
+#: plugins/lcd.py:69
+msgid "You need pylcd to run \"lcd\" plugin."
+msgstr "Sie benötigen pylcd für das LCD plugin"
+
+#: plugins/lcd.py:88 plugins/lcd.py:96 share/skins/main/mediaportal.fxd:690
+#: share/skins/main/dark.fxd:536 share/skins/main/dark.fxd:753
+#: share/skins/main/basic.fxd:391 share/skins/main/blurr.fxd:700
+#: share/skins/main/info.fxd:218
+msgid "Length"
+msgstr "Länge"
+
+#: plugins/lcd.py:89 plugins/lcd.py:93 plugins/lcd.py:204
+#: share/skins/main/dark.fxd:520 share/skins/main/dark.fxd:733
+#: share/skins/main/info.fxd:201 share/skins/main/info.fxd:356
+#: share/skins/main/info.fxd:396
+msgid "Artist"
+msgstr "Künstler"
+
+#: plugins/lcd.py:90 plugins/lcd.py:94 plugins/lcd.py:201
+#: share/skins/main/mediaportal.fxd:671 share/skins/main/dark.fxd:526
+#: share/skins/main/dark.fxd:738 share/skins/main/basic.fxd:373
+#: share/skins/main/blurr.fxd:677 share/skins/main/info.fxd:207
+#: share/skins/main/info.fxd:361
+msgid "Album"
+msgstr "Album"
+
+#: plugins/lcd.py:91 plugins/lcd.py:95 share/skins/main/mediaportal.fxd:677
+#: share/skins/main/dark.fxd:446 share/skins/main/blurr.fxd:683
+#: share/skins/main/info.fxd:458
+msgid "Year"
+msgstr "Jahr"
+
+#: plugins/lcd.py:92 share/skins/main/mediaportal.fxd:330
+#: share/skins/main/blurr.fxd:338 share/skins/main/info.fxd:401
+msgid "Tracks"
+msgstr "Titelnr."
+
+#: plugins/lcd.py:97 share/skins/main/dark.fxd:476
+#: share/skins/main/info.fxd:287 share/skins/main/info.fxd:493
+msgid "Resolution"
+msgstr "Auflösung"
+
+#: plugins/lcd.py:98
+msgid "Aspect"
+msgstr "Bildformat"
+
+#: plugins/lcd.py:99 plugins/lcd.py:102 plugins/lcd.py:239
+msgid "Tagline"
+msgstr "Inhalt"
+
+#: plugins/lcd.py:100 plugins/lcd.py:101
+msgid "Plot"
+msgstr "Handlung"
+
+#: plugins/lcd.py:103 share/skins/main/dark.fxd:581
+msgid "Geometry"
+msgstr "Seitenverhältnis"
+
+#: plugins/lcd.py:106
+#, python-format
+msgid "%s items"
+msgstr "%s Einträge"
+
+#: plugins/lcd.py:161 plugins/lcd.py:309
+#, python-format
+msgid "Today is %s."
+msgstr "Heute ist %s."
+
+#: plugins/lcd.py:171 plugins/lcd.py:533
+msgid "Menu"
+msgstr "Menü"
+
+#: plugins/lcd.py:174 plugins/lcd.py:536
+msgid "Item"
+msgstr "Eintrag"
+
+#: plugins/lcd.py:177 share/skins/main/dark.fxd:470
+#: share/skins/main/info.fxd:282 share/skins/main/info.fxd:487
+msgid "Type"
+msgstr "Typ"
+
+#: plugins/lcd.py:180
+msgid "Information"
+msgstr ""
+
+#: plugins/lcd.py:198 plugins/lcd.py:548 www/htdocs/library.rpy:242
+#: share/skins/main/dark.fxd:18 share/skins/main/crystal.fxd:9
+#: share/skins/main/bluestar.fxd:9 share/skins/main/basic.fxd:21
+#: share/skins/main/rain.fxd:9
+msgid "Music"
+msgstr "Musik"
+
+#: plugins/lcd.py:236 plugins/lcd.py:575
+msgid "Video"
+msgstr "Video"
+
+#: plugins/lcd.py:242 share/skins/main/dark.fxd:452
+#: share/skins/main/info.fxd:464
+msgid "Genre"
+msgstr "Genre"
+
+#: plugins/lcd.py:275 plugins/lcd.py:603 www/htdocs/manualrecord.rpy:219
+#: www/htdocs/record.rpy:193 www/htdocs/edit_favorite.rpy:212
+#: www/htdocs/favorites.rpy:101 www/htdocs/search.rpy:183
+#: tv/edit_favorite.py:120 share/skins/main/basic.fxd:552
+#: share/skins/main/basic.fxd:583 share/skins/main/basic.fxd:614
+msgid "Channel"
+msgstr "Kanal"
+
+#: plugins/lcd.py:278 plugins/lcd.py:606 www/htdocs/edit_favorite.rpy:211
+#: www/htdocs/favorites.rpy:100 share/skins/main/basic.fxd:608
+msgid "Program"
+msgstr "Programm"
+
+#: plugins/lcd.py:281 www/htdocs/guide.rpy:157
+#: share/skins/main/crystal.fxd:272 share/skins/main/bluestar.fxd:292
+#: share/skins/main/basic.fxd:595 share/skins/main/noia.fxd:95
+#: share/skins/main/rain.fxd:269
+msgid "Time"
+msgstr "Zeit"
+
+#: plugins/lcd.py:692
+msgid ""
+"LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
+msgstr ""
+"Das Plugin 'lcd' kann nicht geladen werden! Möglicherweise läuft lein LCDd "
+"(lcdproc daemon)?"
+
+#: plugins/lcd.py:697
+#, python-format
+msgid "Connecting to LCD: %s"
+msgstr "Verbinden mit LCD: %s"
+
+#: plugins/lcd.py:698
+#, fuzzy
+msgid "Info as known by the LCD module:"
+msgstr "Info des LCD-Moduls:"
+
+#: plugins/lcd.py:918 plugins/lcd.py:929 plugins/lcd.py:942
+#: audio/plugins/cdbackup.py:496 audio/plugins/coversearch.py:166
+#: audio/plugins/coversearch.py:175 audio/plugins/coversearch.py:184
+msgid "WARNING"
+msgstr "WARNUNG"
+
+#: plugins/lcd.py:918
+#, python-format
+msgid "Could not find screens for %d lines LCD!"
+msgstr "Keine Bildschirme für %s-zeilige LCDs gefunden!"
+
+#: plugins/lcd.py:921 plugins/lcd.py:932 plugins/lcd.py:943
+#, python-format
+msgid "No screens found for this LCD (%dx%d)!"
+msgstr "Kein Bildschirm für dieses LCD gefunden (%sx%s)!"
+
+#: plugins/lcd.py:929 plugins/lcd.py:942
+#, python-format
+msgid "Could not find screens for %d lines and %d columns LCD!"
+msgstr "Keine Bildschirme für %s-zeilige und %s-spaltige LCDs gefunden!"
+
+#: plugins/mediamenu.py:123
+msgid "Media"
+msgstr "Medien"
+
+#: plugins/mediamenu.py:128
+msgid "Movie"
+msgstr "Filme"
+
+#: plugins/mediamenu.py:130
+msgid "Audio"
+msgstr "Audio"
+
+#: plugins/mediamenu.py:132
+msgid "Image"
+msgstr "Bilder"
+
+#: plugins/mediamenu.py:134 share/skins/main/dark.fxd:20
+#: share/skins/main/crystal.fxd:13 share/skins/main/bluestar.fxd:13
+#: share/skins/main/basic.fxd:23 share/skins/main/rain.fxd:13
+#: share/skins/main/info.fxd:16
+msgid "Games"
+msgstr "Spiele"
+
+#: plugins/mediamenu.py:136
+#, python-format
+msgid "%s Main Menu"
+msgstr "%s Hauptmenü"
+
+#: plugins/autoshutdown.py:144
+#, fuzzy
+msgid "A recording is in progress."
+msgstr "Der Aufnahmeserver ist nicht aktiv."
+
+#: plugins/autoshutdown.py:147
+#, python-format
+msgid "Would wakeup again within %d minutes."
+msgstr ""
+
+#: plugins/autoshutdown.py:151
+msgid "There are important processes running."
+msgstr ""
+
+#: plugins/autoshutdown.py:157
+#, fuzzy
+msgid "No wakeup scheduled."
+msgstr "Keine geplanten Aufnahmen."
+
+#: plugins/autoshutdown.py:161
+msgid "The next wakeup is scheduled at"
+msgstr ""
+
+#: plugins/autoshutdown.py:172 plugins/autoshutdown.py:256
+msgid "Resume automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:174 plugins/autoshutdown.py:253
+msgid "Pause automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:176
+msgid "Shutdown and wakeup"
+msgstr ""
+
+#: plugins/autoshutdown.py:178 plugins/shutdown.py:146 plugins/shutdown.py:150
+msgid "Restart system"
+msgstr "Sytem neu starten"
+
+#: plugins/autoshutdown.py:179 plugins/shutdown.py:145 plugins/shutdown.py:149
+msgid "Shutdown system"
+msgstr "System herunterfahren"
+
+#: plugins/autoshutdown.py:180
+#, fuzzy
+msgid "Shutdown freevo"
+msgstr "Freevo beenden"
+
+#: plugins/autoshutdown.py:190 plugins/autoshutdown.py:218
+msgid "SHUTDOWN SYSTEM?"
+msgstr ""
+
+#: plugins/autoshutdown.py:204
+msgid "RESTART SYSTEM?"
+msgstr ""
+
+#: plugins/autoshutdown.py:210 plugins/autoshutdown.py:224
+#: plugins/autoshutdown.py:238
+msgid "(wakeup disabled)"
+msgstr ""
+
+#: plugins/autoshutdown.py:232
+msgid "SHUTDOWN FREEVO?"
+msgstr ""
+
+#: plugins/autoshutdown.py:589 plugins/shutdown.py:74 main.py:341
+msgid "shutting down..."
+msgstr "Freevo wird beendet..."
+
+#: plugins/ossmixer.py:128 plugins/ossmixer.py:131 plugins/ossmixer.py:137
+#: plugins/ossmixer.py:140 plugins/ossmixer.py:145 plugins/mixer.py:119
+#: plugins/mixer.py:122 plugins/mixer.py:128 plugins/mixer.py:131
+#: plugins/mixer.py:136
+#, python-format
+msgid "Volume: %s%%"
+msgstr "Lautstärke: %s%%"
+
+#: plugins/ossmixer.py:148 plugins/mixer.py:139
+msgid "Mute"
+msgstr "Still"
+
+#: plugins/rom_drives.py:242
+#, python-format
+msgid "Drive %s (no disc)"
+msgstr "Laufwerk %s (leer)"
+
+#: plugins/rom_drives.py:308
+#, python-format
+msgid "Ejecting disc in drive %s"
+msgstr "CD in Laufwerk %s auswerfen"
+
+#: plugins/rom_drives.py:341
+#, python-format
+msgid "Reading disc in drive %s"
+msgstr "Lese CD in Laufwerk %s"
+
+#: plugins/icecast.py:165
+msgid "Set as icecast playlist"
+msgstr "Als Icecast-Widergabeliste kennzeichnen"
+
+#: plugins/shutdown.py:144 plugins/shutdown.py:148
+msgid "Shutdown Freevo"
+msgstr "Freevo beenden"
+
+#: plugins/shutdown.py:162
+msgid "Do you really want to shut down Freevo?"
+msgstr "Soll Freevo wirklich beendet werden?"
+
+#: plugins/shutdown.py:171
+msgid "Do you really want to shut down the system?"
+msgstr "Soll das System wirklich heruntergefahren werden?"
+
+#: plugins/shutdown.py:179
+msgid "Do you really want to restart the system?"
+msgstr "Soll das System wirklich neu gestartet werden?"
+
+#: plugins/yac.py:70
+#, python-format
+msgid "Call: %s"
+msgstr "Anruf: %s"
+
+#: plugins/yac.py:72
+#, python-format
+msgid "Message: %s"
+msgstr "Nachricht: %s"
+
+#: plugins/command.py:139
+msgid "Command finished"
+msgstr "Befehl abgeschlossen"
+
+#: plugins/command.py:153 gui/ConfirmBox.py:79 gui/AlertBox.py:70
+msgid "OK"
+msgstr "OK"
+
+#: plugins/command.py:155
+msgid "Show Stderr"
+msgstr "Zeige Stderr"
+
+#: plugins/command.py:157
+msgid "Show Stdout"
+msgstr "Zeige Stdout"
+
+#: plugins/command.py:175
+msgid "Stdout File"
+msgstr "Stdout in Datei umleiten"
+
+#: plugins/command.py:179
+msgid "Stderr File"
+msgstr "Stderr in Datei umleiten"
+
+#: plugins/command.py:216
+msgid "Run Command"
+msgstr "Befehl ausführen"
+
+#: plugins/command.py:227
+msgid "Running Command..."
+msgstr "Befehl wird ausgeführt..."
+
+#: plugins/command.py:247
+msgid "Command Failed"
+msgstr "Befehl fehlgeschlagen"
+
+#: plugins/command.py:249
+msgid "Command Completed"
+msgstr "Befehl ausgeführt"
+
+#: plugins/command.py:282 plugins/command.py:320 share/skins/main/dark.fxd:22
+#: share/skins/main/crystal.fxd:15 share/skins/main/rain.fxd:15
+msgid "Commands"
+msgstr "Befehle"
+
+#: plugins/upsoon.py:222 plugins/upsoon.py:241
+msgid "A recording will start in less than a minute"
+msgstr ""
+
+#: image/plugins/gphoto.py:107 image/imageitem.py:98
+msgid "View Image"
+msgstr "Bild ansehen"
+
+#: image/plugins/gphoto.py:134 directory.py:421
+msgid "Browse directory"
+msgstr "Verzeichnis aufrufen"
+
+#: image/plugins/apod.py:58 image/plugins/apod.py:59
+msgid "APOD"
+msgstr ""
+
+#: image/plugins/apod.py:69
+msgid "Current Picture"
+msgstr "Aktuelles Bild"
+
+#: image/plugins/apod.py:70
+msgid "Previous Pictures"
+msgstr "Vorherige Bilder"
+
+#: image/plugins/apod.py:71 image/plugins/apod.py:86
+msgid "Apod Pictures"
+msgstr "Apod Bilder"
+
+#: image/plugins/apod.py:84
+msgid "No Images found"
+msgstr "Keine Bilder gefunden"
+
+#: image/plugins/apod.py:104 image/plugins/apod.py:117
+msgid "Unable to open URL"
+msgstr ""
+
+#: image/plugins/apod.py:131
+msgid "Need a directory to store APOD pictures."
+msgstr "Benötige Verzeichnis um APOD Bild zu speichern."
+
+#: image/plugins/apod.py:135
+#, python-format
+msgid "directory %s does not exist."
+msgstr "Verzeichniss '%s' existiert nicht"
+
+#: image/plugins/apod.py:139
+#, python-format
+msgid ""
+"directory %s must be able to be read, written to and executed by the user "
+"running freevo."
+msgstr ""
+
+#: image/viewer.py:121
+#, python-format
+msgid ""
+"Can't Open Image\n"
+"'%s'"
+msgstr ""
+"Bild konnte nicht geöffnet werden:\n"
+"'%s'"
+
+#: image/viewer.py:328
+msgid "pause"
+msgstr "Pause"
+
+#: image/viewer.py:333
+msgid "play"
+msgstr "Abspielen"
+
+#: image/viewer.py:426
+msgid "No information available"
+msgstr "Keine Informationen verfügbar"
+
+#: gui/ConfirmBox.py:83 tv/edit_favorite.py:196
+msgid "CANCEL"
+msgstr "ABBRECHEN"
+
+#: www/htdocs/help/index.rpy:82
+msgid "Freevo Help"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:85
+msgid ""
+"This is the internal Freevo documentation. The documents         are in an "
+"early stage of development, if you like to help, please         contact the "
+"developers. You find more informations like         the <a href=\"http://"
+"freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online "
+"manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org"
+"\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
+"them if someone deletes         informations), feel free to add informations "
+"there."
+msgstr ""
+
+#: www/htdocs/help/index.rpy:94
+msgid "Index"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:96
+msgid "Freevo Installation Howto"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:97
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:98
+msgid "Recording Information"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:99
+msgid "Plugin List"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:100
+msgid "FXD files"
+msgstr "FXD Dateien"
+
+#: www/htdocs/help/index.rpy:101
+msgid "Skinning Informations"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:102
+msgid "Plugin Writing Howto"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:45 www/htdocs/help/howto.rpy:46
+msgid "Freevo Installation HOWTO"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:46
+msgid "Build your own media box with Freevo and Linux"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:48 www/htdocs/help/howto.rpy:49
+msgid "Freevo Plugin Writing HOWTO"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:49
+msgid "Writing your own plugins for Freevo"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:84
+msgid "unable to load html files"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
+msgid "If you use a SVN version of Freevo, run <b>autogen.sh</b>."
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:86
+msgid "The files are searched in the following locations:"
+msgstr ""
+
+#: www/htdocs/help/plugins.rpy:109 www/htdocs/help/plugins.rpy:128
+msgid "Freevo Plugin List"
+msgstr ""
+
+#: www/htdocs/help/plugins.rpy:138 www/htdocs/help/plugins.rpy:145
+msgid "top"
+msgstr ""
+
+#: www/htdocs/help/plugins.rpy:139 www/htdocs/help/plugins.rpy:146
+msgid "index"
+msgstr ""
+
+#: www/htdocs/help/doc.rpy:59 www/htdocs/help/doc.rpy:70
+msgid "Freevo Documentation"
+msgstr ""
+
+#: www/htdocs/help/doc.rpy:61
+#, python-format
+msgid "unable to load %s.html"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:68 www/htdocs/manualrecord.rpy:202
+#: tv/plugins/manual_record.py:74
+msgid "Manual Record"
+msgstr "Manuell aufnehmen"
+
+#: www/htdocs/manualrecord.rpy:70 www/htdocs/record.rpy:142
+#: www/htdocs/edit_favorite.rpy:137 www/htdocs/guide.rpy:150
+#: www/htdocs/genre.rpy:122 www/htdocs/favorites.rpy:54
+#: tv/plugins/scheduled_recordings.py:102 tv/plugins/view_favorites.py:101
+#: tv/program_search.py:93
+msgid "Recording server is unavailable."
+msgstr "Aufnahmeserver ist nicht verfügbar"
+
+#: www/htdocs/manualrecord.rpy:117
+msgid "Manual Recorded"
+msgstr "Manuell aufgezeichnet"
+
+#: www/htdocs/manualrecord.rpy:126 tv/plugins/manual_record.py:371
+msgid "start time is not before stop time."
+msgstr "Anfangszeitpunkt liegt nach dem Endzeitpukt"
+
+#: www/htdocs/manualrecord.rpy:129 tv/plugins/manual_record.py:362
+#, python-format
+msgid "Program would record for more than %d days!"
+msgstr "Programm würde für mehr als %d Tage aufzeichnen"
+
+#: www/htdocs/manualrecord.rpy:131 tv/plugins/manual_record.py:366
+msgid "Program would record for more than 1 day!"
+msgstr "Programm würde über einen Tag aufzeichnen"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Jan"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Feb"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Mar"
+msgstr "Mär"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Apr"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "May"
+msgstr "Mai"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Jun"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Jul"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Aug"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Sep"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Oct"
+msgstr "Okt"
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Nov"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:145 tv/plugins/manual_record.py:84
+msgid "Dec"
+msgstr "Dez"
+
+#: www/htdocs/manualrecord.rpy:202 www/web_types.py:134
+msgid "Manual Recording"
+msgstr "Manuelle Aufnahme"
+
+#: www/htdocs/manualrecord.rpy:208
+msgid "Error Message"
+msgstr "Fehlermeldung"
+
+#: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:191
+#: www/htdocs/search.rpy:181
+msgid "Start Time"
+msgstr "Beginn"
+
+#: www/htdocs/manualrecord.rpy:221 www/htdocs/record.rpy:192
+#: www/htdocs/search.rpy:182
+msgid "Stop Time"
+msgstr "Ende"
+
+#: www/htdocs/manualrecord.rpy:223 www/htdocs/record.rpy:196
+#: www/htdocs/search.rpy:186
+msgid "Program Description"
+msgstr "Programm Beschreibung"
+
+#: www/htdocs/manualrecord.rpy:234
+msgid "Add to Recording Schedule"
+msgstr "Zum Aufnahmeplan hinzufügen"
+
+#: www/htdocs/index.rpy:107
+msgid "Welcome"
+msgstr "Willkommen"
+
+#: www/htdocs/index.rpy:107 www/web_types.py:129
+msgid "Home"
+msgstr ""
+
+#: www/htdocs/index.rpy:110
+#, python-format
+msgid "Freevo Web Status as of %s"
+msgstr "Freevo Web Status vom %s"
+
+#: www/htdocs/index.rpy:115 www/htdocs/index.rpy:121 www/htdocs/index.rpy:123
+msgid "Notice"
+msgstr "Meldung"
+
+#: www/htdocs/index.rpy:115
+msgid "The recording server is down."
+msgstr "Der Aufnahmeserver ist nicht aktiv."
+
+#: www/htdocs/index.rpy:117
+msgid "The recording server is up and running."
+msgstr "Der Aufnahmeserver ist aktiv."
+
+#: www/htdocs/index.rpy:121
+msgid "Your listings expire in 1 hour."
+msgstr "Die Programmdaten laufen in einer Stunde aus."
+
+#: www/htdocs/index.rpy:123
+#, python-format
+msgid "Your listings expire in %s hours."
+msgstr "Die Programmdaten laufen in %s Stunden aus."
+
+#: www/htdocs/index.rpy:125
+msgid "Your listings are up to date."
+msgstr "Die Programmdaten sind aktuell."
+
+#: www/htdocs/index.rpy:135
+#, python-format
+msgid "Now Recording %s."
+msgstr "$s wird momentan aufgezeichnet."
+
+#: www/htdocs/index.rpy:141
+msgid "One program scheduled to record."
+msgstr "Eine Aufnahme geplant."
+
+#: www/htdocs/index.rpy:143
+#, python-format
+msgid "%i programs scheduled to record."
+msgstr "%i Aufnahmen geplant"
+
+#: www/htdocs/index.rpy:145 www/htdocs/index.rpy:147
+msgid "No programs scheduled to record."
+msgstr "Keine Aufnahmen geplant."
+
+#: www/htdocs/index.rpy:149
+#, python-format
+msgid "%i of %i Mb free in %s"
+msgstr "%i von %i MB frei auf %s"
+
+#: www/htdocs/record.rpy:164 www/htdocs/edit_favorite.rpy:162
+#, python-format
+msgid "No program found on %s at %s."
+msgstr "Kein Programm auf %s um %s gefunden."
+
+#: www/htdocs/record.rpy:185 www/web_types.py:131
+#: tv/plugins/scheduled_recordings.py:56 tv/plugins/scheduled_recordings.py:70
+msgid "Scheduled Recordings"
+msgstr "Geplante Aufnahmen"
+
+#: www/htdocs/record.rpy:195 www/htdocs/search.rpy:185
+#: share/skins/main/info.fxd:263
+msgid "Episode"
+msgstr ""
+
+#: www/htdocs/record.rpy:197 www/htdocs/favorites.rpy:104
+#: www/htdocs/search.rpy:187
+msgid "Actions"
+msgstr "Aktionen"
+
+#: www/htdocs/record.rpy:221
+msgid "UNKNOWN"
+msgstr "UNBEKANNT"
+
+#: www/htdocs/record.rpy:233 www/htdocs/proginfo.rpy:60
+#: www/htdocs/search.rpy:224
+#, python-format
+msgid "Sorry, the program description for %s is unavailable."
+msgstr "Leider ist keine Beschgreibung für %s verfügbar"
+
+#: www/htdocs/record.rpy:238 www/htdocs/favorites.rpy:138
+#: www/htdocs/search.rpy:230 tv/edit_favorite.py:192
+msgid "Remove"
+msgstr "Entfernen"
+
+#: www/htdocs/edit_favorite.rpy:135 www/htdocs/edit_favorite.rpy:196
+#: tv/edit_favorite.py:98
+msgid "Edit Favorite"
+msgstr "Favorit bearbeiten"
+
+#: www/htdocs/edit_favorite.rpy:186
+#, python-format
+msgid "Favorite %s doesn't exists."
+msgstr "Favorit %s existiert nicht"
+
+#: www/htdocs/edit_favorite.rpy:210
+msgid "Name of favorite"
+msgstr "Bezeichnung"
+
+#: www/htdocs/edit_favorite.rpy:213 www/htdocs/favorites.rpy:102
+msgid "Day of week"
+msgstr "Wochentag"
+
+#: www/htdocs/edit_favorite.rpy:214 www/htdocs/favorites.rpy:103
+msgid "Time of day"
+msgstr "Uhrzeit"
+
+#: www/htdocs/edit_favorite.rpy:215
+msgid "Action"
+msgstr "Aktion"
+
+#: www/htdocs/edit_favorite.rpy:230 tv/program_display.py:238
+msgid "ANY CHANNEL"
+msgstr "BELIEBIG"
+
+#: www/htdocs/edit_favorite.rpy:243 tv/program_display.py:242
+#: tv/edit_favorite.py:147
+msgid "ANY DAY"
+msgstr "TÄGLICH"
+
+#: www/htdocs/edit_favorite.rpy:244 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Mon"
+msgstr "Mo"
+
+#: www/htdocs/edit_favorite.rpy:245 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Tue"
+msgstr "Di"
+
+#: www/htdocs/edit_favorite.rpy:246 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Wed"
+msgstr "Mi"
+
+#: www/htdocs/edit_favorite.rpy:247 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Thu"
+msgstr "Do"
+
+#: www/htdocs/edit_favorite.rpy:248 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Fri"
+msgstr "Fr"
+
+#: www/htdocs/edit_favorite.rpy:249 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Sat"
+msgstr "Sa"
+
+#: www/htdocs/edit_favorite.rpy:250 tv/program_display.py:235
+#: tv/edit_favorite.py:151
+msgid "Sun"
+msgstr "So"
+
+#: www/htdocs/edit_favorite.rpy:256 tv/program_display.py:246
+#: tv/edit_favorite.py:167
+msgid "ANY TIME"
+msgstr "IMMER"
+
+#: www/htdocs/edit_favorite.rpy:318 tv/plugins/manual_record.py:138
+#: tv/edit_favorite.py:189
+msgid "Save"
+msgstr "Sichern"
+
+#: www/htdocs/guide.rpy:145 www/web_types.py:130 tv/tvmenu.py:117
+msgid "TV Guide"
+msgstr "Programmführer"
+
+#: www/htdocs/guide.rpy:157
+msgid "View"
+msgstr "Zeigen"
+
+#: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:148
+msgid "Show"
+msgstr "Zeige"
+
+#: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:148
+msgid "Category"
+msgstr "Kategorie"
+
+#: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:148
+msgid "Change"
+msgstr "Wechsel"
+
+#: www/htdocs/guide.rpy:200 skins/main/tvlisting_area.py:345 tv/tvguide.py:56
+msgid "This channel has no data loaded"
+msgstr "Es wurden keine Daten für dieses Programm geladen"
+
+#: www/htdocs/guide.rpy:272 www/htdocs/genre.rpy:229
+#: share/skins/main/basic.fxd:558 share/skins/main/basic.fxd:620
+msgid "Start"
+msgstr ""
+
+#: www/htdocs/guide.rpy:273 www/htdocs/genre.rpy:230
+#: share/skins/main/basic.fxd:564 share/skins/main/basic.fxd:626
+msgid "Stop"
+msgstr ""
+
+#: www/htdocs/guide.rpy:274 www/htdocs/genre.rpy:231
+#: share/skins/main/dark.fxd:464 share/skins/main/info.fxd:277
+#: share/skins/main/info.fxd:302 share/skins/main/info.fxd:481
+msgid "Runtime"
+msgstr "Laufzeit"
+
+#: www/htdocs/guide.rpy:285 www/htdocs/genre.rpy:242 www/htdocs/search.rpy:232
+#: www/htdocs/search.rpy:234
+msgid "Record"
+msgstr "Aufzeichnen"
+
+#: www/htdocs/guide.rpy:288 www/htdocs/genre.rpy:245
+msgid "Add to Favorites"
+msgstr "Favorit hinzufügen"
+
+#: www/htdocs/guide.rpy:291 www/htdocs/genre.rpy:248
+msgid "Close Window"
+msgstr "Schließen"
+
+#: www/htdocs/genre.rpy:118
+#, python-format
+msgid "TV Genre for %s"
+msgstr ""
+
+#: www/htdocs/genre.rpy:204
+msgid "NO SHOWS MATCHING CATEGORY"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:52 www/htdocs/favorites.rpy:95
+#: www/web_types.py:132
+msgid "Favorites"
+msgstr "Favoriten"
+
+#: www/htdocs/favorites.rpy:86
+msgid "Monday"
+msgstr "Montag"
+
+#: www/htdocs/favorites.rpy:87
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: www/htdocs/favorites.rpy:88
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: www/htdocs/favorites.rpy:89
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: www/htdocs/favorites.rpy:90
+msgid "Friday"
+msgstr "Freitag"
+
+#: www/htdocs/favorites.rpy:91
+msgid "Saturday"
+msgstr "Samstag"
+
+#: www/htdocs/favorites.rpy:92
+msgid "Sunday"
+msgstr "Sonntag"
+
+#: www/htdocs/favorites.rpy:99
+msgid "Favorite Name"
+msgstr "Bezeichnung"
+
+#: www/htdocs/favorites.rpy:105
+msgid "Priority"
+msgstr "Priorität"
+
+#: www/htdocs/favorites.rpy:114 www/htdocs/favorites.rpy:126
+#: www/htdocs/favorites.rpy:132 tv/edit_favorite.py:124
+msgid "ANY"
+msgstr "ALLE"
+
+#: www/htdocs/favorites.rpy:137
+msgid "Edit"
+msgstr "Ändern"
+
+#: www/htdocs/favorites.rpy:145
+msgid "Higher"
+msgstr "Höher"
+
+#: www/htdocs/favorites.rpy:152
+msgid "Lower"
+msgstr "Niedriger"
+
+#: www/htdocs/library.rpy:159
+#, python-format
+msgid "%s already exists! File not renamed."
+msgstr "%s existiert bereits! Datei nicht umbenannt."
+
+#: www/htdocs/library.rpy:163
+#, python-format
+msgid "Rename %s to %s."
+msgstr "%s in %s umbenennen"
+
+#: www/htdocs/library.rpy:166 www/htdocs/library.rpy:182
+#, python-format
+msgid "<h2>%s</h2>"
+msgstr ""
+
+#: www/htdocs/library.rpy:167
+#, fuzzy, python-format
+msgid "Rename %s to %s, failed."
+msgstr "%s in %s umbenennen"
+
+#: www/htdocs/library.rpy:170
+msgid "No new file specified."
+msgstr "Keine neue Datei angegeben."
+
+#: www/htdocs/library.rpy:176 www/htdocs/library.rpy:180
+#, python-format
+msgid "Delete %s."
+msgstr "Lösche %s."
+
+#: www/htdocs/library.rpy:183
+#, fuzzy, python-format
+msgid "Delete %s, failed."
+msgstr "Lösche %s."
+
+#: www/htdocs/library.rpy:192
+#, python-format
+msgid "%s does not exist. No action taken."
+msgstr "%s existiert nicht."
+
+#: www/htdocs/library.rpy:194
+#, python-format
+msgid "I do not process names (%s) with slashes for security reasons."
+msgstr "Namen mit Querstrichen (%s) können nicht verwendet werden."
+
+#: www/htdocs/library.rpy:202 www/web_types.py:133
+msgid "Media Library"
+msgstr "Medienbibliothek"
+
+#: www/htdocs/library.rpy:221 www/web_types.py:248
+msgid "Messages"
+msgstr "Nachrichten"
+
+#: www/htdocs/library.rpy:234 share/skins/main/dark.fxd:17
+#: share/skins/main/crystal.fxd:8 share/skins/main/bluestar.fxd:8
+#: share/skins/main/basic.fxd:20 share/skins/main/rain.fxd:8
+msgid "Movies"
+msgstr "Filme"
+
+#: www/htdocs/library.rpy:238
+msgid "Recorded TV"
+msgstr "Aufnahmen"
+
+#: www/htdocs/library.rpy:246 share/skins/main/dark.fxd:19
+#: share/skins/main/crystal.fxd:11 share/skins/main/basic.fxd:22
+#: share/skins/main/rain.fxd:11
+msgid "Images"
+msgstr "Bilder"
+
+#: www/htdocs/library.rpy:258
+msgid "Choose a Directory"
+msgstr "Verzeichnis auswählen"
+
+#: www/htdocs/library.rpy:261 www/htdocs/library.rpy:332
+#: www/htdocs/library.rpy:334 www/htdocs/library.rpy:337
+msgid "Back"
+msgstr "Zurück"
+
+#: www/htdocs/library.rpy:379
+msgid "Download"
+msgstr ""
+
+#: www/htdocs/library.rpy:381
+msgid "Rename"
+msgstr "Umbenennen"
+
+#: www/htdocs/search.rpy:144 tv/program_display.py:190
+msgid "Search Results"
+msgstr "Suchergebnisse"
+
+#: www/htdocs/search.rpy:144 www/htdocs/search.rpy:168 www/web_types.py:135
+#: www/web_types.py:233 www/web_types.py:240
+msgid "Search"
+msgstr "Suche"
+
+#: www/htdocs/search.rpy:145
+msgid "recording server is unavailable"
+msgstr "Aufnahmeserver ist nicht verfügbar"
+
+#: www/htdocs/search.rpy:175
+msgid "No matches"
+msgstr "Keine Ergebnisse"
+
+#: www/htdocs/search.rpy:236
+msgid "New favorite"
+msgstr "Neuer Favorit"
+
+#: www/web_types.py:130
+msgid "View TV Listings"
+msgstr "Programmführer anzeigen"
+
+#: www/web_types.py:131
+msgid "View Scheduled Recordings"
+msgstr "Geplante Aufnahmen anzeigen"
+
+#: www/web_types.py:132 tv/plugins/view_favorites.py:55
+#: tv/plugins/view_favorites.py:60 tv/plugins/view_favorites.py:69
+msgid "View Favorites"
+msgstr "Favoriten"
+
+#: www/web_types.py:133
+msgid "View Media Library"
+msgstr "Medienbibliothek anzeigen"
+
+#: www/web_types.py:134
+msgid "Schedule a Manual Recording"
+msgstr "Manuelle Aufnahme vorbereiten"
+
+#: www/web_types.py:135
+msgid "Advanced Search Page"
+msgstr "Erweiterte Suchfunktion"
+
+#: www/web_types.py:136
+msgid "Help"
+msgstr "Hilfe"
+
+#: www/web_types.py:136
+msgid "View Online Help and Documentation"
+msgstr "Onlinehilfe und Dokumentation anzeigen"
+
+#: www/web_types.py:140
+msgid "Icecast List"
+msgstr "Icecast-Liste"
+
+#: www/web_types.py:140
+msgid "Change Icecast List"
+msgstr "Icecast-Liste wechseln"
+
+#: www/web_types.py:241
+msgid "Movies only"
+msgstr "Nur Filme"
+
+#: www/web_types.py:242
+msgid "Go!"
+msgstr "Los!"
+
+#: skins/main/default_areas.py:127
+msgid "TV GUIDE"
+msgstr "Programmführer"
+
+#: skins/main/listing_area.py:221
+msgid "This directory is empty"
+msgstr "Dieses Verzeichnis ist leer"
+
+#: skins/main/info_area.py:140
+msgid "missing 'src' attribute in skin tag!"
+msgstr "'src' Attribut fehlt in skin tag."
+
+#: tv/plugins/manual_record.py:122
+msgid "Display record item"
+msgstr "Aufnahme anzeigen"
+
+#: tv/plugins/manual_record.py:130 tv/program_display.py:264
+msgid "Modify name"
+msgstr "Titel bearbeiten"
+
+#: tv/plugins/manual_record.py:131 tv/program_display.py:265
+msgid "Modify channel"
+msgstr "Kanal wählen"
+
+#: tv/plugins/manual_record.py:132
+msgid "Modify start month"
+msgstr "Startmonat setzen"
+
+#: tv/plugins/manual_record.py:133
+msgid "Modify start day"
+msgstr "Starttag setzen"
+
+#: tv/plugins/manual_record.py:134
+msgid "Modify start time"
+msgstr "Startzeit setzen"
+
+#: tv/plugins/manual_record.py:135
+msgid "Modify stop month"
+msgstr "Endmonat setzen"
+
+#: tv/plugins/manual_record.py:136
+msgid "Modify stop day"
+msgstr "Endtag setzen"
+
+#: tv/plugins/manual_record.py:137
+msgid "Modify stop time"
+msgstr "Endzeit setzen"
+
+#: tv/plugins/manual_record.py:140
+msgid "Record Item Menu"
+msgstr "Aufnahmemenü"
+
+#: tv/plugins/manual_record.py:149 tv/program_display.py:288
+msgid "Alter Name"
+msgstr "Name Ändern"
+
+#: tv/plugins/manual_record.py:159 tv/program_display.py:310
+msgid "Modify Channel"
+msgstr "Kanal bearbeiten"
+
+#: tv/plugins/manual_record.py:175 tv/plugins/manual_record.py:197
+#: tv/plugins/manual_record.py:234 tv/plugins/manual_record.py:256
+#: tv/program_display.py:360
+msgid "Modify Day"
+msgstr "Tag bearbeiten"
+
+#: tv/plugins/manual_record.py:218 tv/plugins/manual_record.py:277
+#: tv/program_display.py:380
+msgid "Modify Time"
+msgstr "Zeit bearbeiten"
+
+#: tv/plugins/manual_record.py:334 tv/plugins/manual_record.py:363
+#: tv/plugins/manual_record.py:367 tv/plugins/manual_record.py:372
+#: tv/plugins/manual_record.py:376
+msgid "Save Failed, recording was lost"
+msgstr "Sichern fehlgeschlagen."
+
+#: tv/plugins/manual_record.py:375
+msgid ""
+"Sorry, the stop time does not give enough time for scheduler to pickup the "
+"change.  Please set it to record for a few minutes longer."
+msgstr ""
+"Der Endzeitpunkt räumt dem Scheduler nicht genug Zeit für die Änderung ein. "
+"Bitte zeichnen Sie einige Minuten länger auf."
+
+#: tv/plugins/xine.py:81 video/plugins/xine.py:63
+msgid ""
+"'XINE_COMMAND' not defined, plugin 'xine' deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+
+#: tv/plugins/scheduled_recordings.py:61
+msgid "Display Scheduled Recordings"
+msgstr "Zeige geplante Aufnahmen"
+
+#: tv/plugins/scheduled_recordings.py:67
+msgid "Nothing scheduled."
+msgstr "Keine geplanten Aufnahmen."
+
+#: tv/plugins/scheduled_recordings.py:115
+msgid "Get recordings failed"
+msgstr "Geplante Aufnahmen nicht verfügbar"
+
+#: tv/plugins/view_favorites.py:66
+msgid "No favorites."
+msgstr "Keine Favoriten"
+
+#: tv/plugins/view_favorites.py:113
+msgid "Get favorites failed"
+msgstr "Favoriten nicht verfügbar"
+
+#: tv/plugins/ivtv_xine_tv.py:224
+msgid "This plugin only supports the ivtv video group in tv mode!"
+msgstr ""
+
+#: tv/plugins/view_line_in.py:57
+msgid "View VCR Input"
+msgstr "Video-Eingang anzeigen"
+
+#: tv/channels.py:134
+#, python-format
+msgid "Cannot find tuner channel \"%s\" in the TV channel listing"
+msgstr "Kann Kanal \"%s\" nicht in der Liste finden"
+
+#: tv/channels.py:172 tv/channels.py:178
+#, python-format
+msgid "Unable to get channel list for %s."
+msgstr "Kanalliste für %s konnte nicht geholt werden"
+
+#: tv/channels.py:209
+#, python-format
+msgid "Failed to set freq for channel %s."
+msgstr "Frequenz für Kanal %s konnte nicht gesetzt werden"
+
+#: tv/program_search.py:86
+msgid "Program Search"
+msgstr "Programmsuche"
+
+#: tv/program_search.py:95
+msgid "Feel free to implement this function inside the main guide."
+msgstr "Diese Funktion muss im main gude implementiert werden"
+
+#: tv/program_search.py:123 tv/program_display.py:169
+msgid "Searching, please wait..."
+msgstr "Suche, bitte warten..."
+
+#: tv/program_display.py:110
+msgid "Display program"
+msgstr "Programm zeigen"
+
+#: tv/program_display.py:124
+msgid "Remove from schedule"
+msgstr "Aus Plan entfernen"
+
+#: tv/program_display.py:127
+msgid "Schedule for recording"
+msgstr "Aufnahme planen"
+
+#: tv/program_display.py:131
+msgid "Search for more of this program"
+msgstr "Weitere Ausstrahlungen suchen"
+
+#: tv/program_display.py:141
+msgid "Remove from favorites"
+msgstr "Aus Favoriten löschen"
+
+#: tv/program_display.py:144
+msgid "Add to favorites"
+msgstr "Zu Favoriten hinzufügen"
+
+#: tv/program_display.py:147
+msgid "Program Menu"
+msgstr "Programm-Menü"
+
+#: tv/program_display.py:185
+#, python-format
+msgid "No matches found for %s"
+msgstr "Keine Ergebnisse für %s"
+
+#: tv/program_display.py:187
+#, python-format
+msgid "findMatches failed: %s"
+msgstr "findMatches fehlgeschlagen: %s"
+
+#: tv/program_display.py:204
+#, python-format
+msgid "\"%s\" has been scheduled for recording"
+msgstr "\"%s\" wird aufgenommen"
+
+#: tv/program_display.py:207
+msgid "Scheduling Failed"
+msgstr "Planung fehlgeschlagen"
+
+#: tv/program_display.py:223 tv/program_display.py:425 tv/edit_favorite.py:216
+msgid "Remove Failed"
+msgstr "Entfernen fehlgeschlagen"
+
+#: tv/program_display.py:258
+msgid "Display favorite"
+msgstr "Favorit zeigen"
+
+#: tv/program_display.py:266
+msgid "Modify day of week"
+msgstr "Wochentag ändern"
+
+#: tv/program_display.py:267
+msgid "Modify time of day"
+msgstr "Tageszeit ändern"
+
+#: tv/program_display.py:273
+msgid "Modify priority"
+msgstr "Priorität ändern"
+
+#: tv/program_display.py:276
+msgid "Save changes"
+msgstr "Änderungen sichern"
+
+#: tv/program_display.py:277
+msgid "Remove favorite"
+msgstr "Favorit entfernen"
+
+#: tv/program_display.py:279
+msgid "Favorite Menu"
+msgstr "Favorienten-Menü"
+
+#: tv/program_display.py:401
+msgid "Save Failed, favorite was lost"
+msgstr "Sichern fehlgeschlagen"
+
+#: tv/program_display.py:408
+msgid "Save Failed"
+msgstr "Speichern fehlgeschlagen"
+
+#: tv/program_display.py:413
+msgid "Favorite not added yet."
+msgstr "Favorit noch nicht hinzugefügt"
+
+#: tv/epg_xmltv.py:57
+msgid "Time conversion error"
+msgstr "Fehler bei der Zeitkonvertierung"
+
+#: tv/epg_xmltv.py:132
+msgid "Couldn't load the TV Guide, got an exception!"
+msgstr "Programmführer nicht verfügbar"
+
+#: tv/epg_xmltv.py:223
+#, python-format
+msgid "REPLACE WITH TUNERID FOR %s"
+msgstr "DURCH TUNERID VON %s ERSETZEN!"
+
+#: tv/tvguide.py:65
+msgid "Preparing the program guide"
+msgstr "Der TV-Guide wird aufbereitet"
+
+#: tv/tvguide.py:68
+msgid "TV Guide is corrupt!"
+msgstr "Der TV-Guide ist fehlerhaft!"
+
+#: tv/tvguide.py:205
+msgid "Sorry, you cannot watch TV while recording. "
+msgstr "Während einer Aufnahme können sie nicht fernsehen."
+
+#: tv/tvguide.py:206
+msgid "If this is not true then remove "
+msgstr "Wenn dies nicht stimmt entferen"
+
+#: tv/record_client.py:74 tv/record_client.py:83 tv/record_client.py:94
+#: tv/record_client.py:110 tv/record_client.py:122 tv/record_client.py:131
+#: tv/record_client.py:150 tv/record_client.py:159 tv/record_client.py:171
+#: tv/record_client.py:180 tv/record_client.py:193 tv/record_client.py:202
+#: tv/record_client.py:211 tv/record_client.py:220 tv/record_client.py:230
+#: tv/record_client.py:240 tv/record_client.py:249 tv/record_client.py:258
+#: tv/record_client.py:267 tv/record_client.py:276
+msgid "connection error"
+msgstr "Verbindungsfehler"
+
+#: tv/record_client.py:101 tv/record_client.py:117
+msgid "no program"
+msgstr "Kein Programm"
+
+#: tv/record_client.py:104
+msgid "cannot record it if it is over"
+msgstr "Kann beendete Sendung nicht aufzeichnen"
+
+#: tv/record_client.py:139 tv/record_client.py:145
+msgid "program not scheduled"
+msgstr "Aufzeichnung nicht geplant"
+
+#: tv/record_client.py:143
+msgid "program is scheduled"
+msgstr "Aufzeichnung ist geplant"
+
+#: tv/tvmenu.py:85 tv/tvmenu.py:93
+#, python-format
+msgid "Could not find TV channel %s"
+msgstr "Kann TV-Programm %s nicht finden"
+
+#: tv/tvmenu.py:119
+msgid "Recorded Shows"
+msgstr "Aufgenommene Sendungen"
+
+#: tv/tvmenu.py:129
+msgid "TV Main Menu"
+msgstr "TV Hauptmenü"
+
+#: tv/tvmenu.py:155
+msgid "The list of TV channels is invalid!\n"
+msgstr "Die Liste der TV-Kanäle ist ungültig!\n"
+
+#: tv/tvmenu.py:156
+msgid "Please check the config file."
+msgstr "Bitte die Konfigurationsdatei überprüfen."
+
+#: tv/edit_favorite.py:112 share/skins/main/basic.fxd:577
+#: share/skins/main/info.fxd:269
+msgid "Name"
+msgstr "Name"
+
+#: tv/edit_favorite.py:143
+msgid "Day of Week"
+msgstr "Wochentag"
+
+#: tv/edit_favorite.py:164
+msgid "Time of Day"
+msgstr "Zeit"
+
+#: tv/edit_favorite.py:326
+#, python-format
+msgid "Favorite %s has been saved"
+msgstr "Favorit %s wurde gesichert"
+
+#: tv/edit_favorite.py:328
+#, python-format
+msgid "Failed: %s"
+msgstr "Fehlgeschlagen: %s"
+
+#: tv/edit_favorite.py:348
+#, python-format
+msgid "Do you want to remove %s?"
+msgstr "Soll die Datei '%s' wirklich gelöscht werden?"
+
+#: games/game.py:91
+#, python-format
+msgid "File \"%s\" not found!"
+msgstr "Datei \"%s\" nicht gefunden!"
+
+#: games/__init__.py:74
+msgid "please update GAMES_ITEMS in local_conf.py"
+msgstr "bitte aktualisieren Sie GAMES_ITEMS in local_conf.py"
+
+#: games/mame_cache.py:304
+msgid "Generating MAME cache, please wait."
+msgstr "Erstelle MAME-Cache, bitte warten."
+
+#: audio/plugins/detach.py:48
+msgid "Show player"
+msgstr "Player aufrufen"
+
+#: audio/plugins/mplayer.py:122 audio/plugins/fxmms.py:152
+#: audio/plugins/mplayervbr.py:113
+#, python-format
+msgid ""
+"%s\n"
+"not found!"
+msgstr ""
+"%s\n"
+"nicht gefunden!"
+
+#: audio/plugins/cdbackup.py:195
+msgid "Show CD ripping status"
+msgstr "Status des Kopiervorgangs zeigen"
+
+#: audio/plugins/cdbackup.py:196
+msgid "Stop CD ripping"
+msgstr "Kopiervorgang abbrechen"
+
+#: audio/plugins/cdbackup.py:201
+msgid "Rip the CD to the hard drive"
+msgstr "CD auf Festplatte kopieren"
+
+#: audio/plugins/cdbackup.py:202
+msgid "Get CDs available for ripping"
+msgstr "Verfügbare CDs suchen"
+
+#: audio/plugins/cdbackup.py:204
+msgid "Item is not an Audio CD"
+msgstr "Eintrag ist keine Audio-CD"
+
+#: audio/plugins/cdbackup.py:218
+#, python-format
+msgid ""
+"Ripping in progress\n"
+"Track %d of %d"
+msgstr ""
+"Die CD wird kopiert\n"
+"Track %d von %d wird bearbeitet"
+
+#: audio/plugins/cdbackup.py:233
+msgid "Backup CD to hard drive in mp3 format"
+msgstr "CD im MP3-Format auf Festplatte sichern"
+
+#: audio/plugins/cdbackup.py:236
+msgid "Backup CD to hard drive in Ogg format"
+msgstr "CD im OGG-Format auf Festplatte sichern"
+
+#: audio/plugins/cdbackup.py:239
+msgid "Backup CD to hard drive in FLAC format"
+msgstr "CD im FLAC-Format auf Festplatte sichern"
+
+#: audio/plugins/cdbackup.py:241
+msgid "Backup CD to hard drive in wav format"
+msgstr "CD im wav-Format auf Festplatte sichern"
+
+#: audio/plugins/cdbackup.py:244
+msgid "CD Backup"
+msgstr "CD auf Festplatte sichern"
+
+#: audio/plugins/cdbackup.py:257
+msgid "Ripping started"
+msgstr "Kopieren wurde gestartet"
+
+#: audio/plugins/cdbackup.py:325
+#, python-format
+msgid "Directory %s already exists"
+msgstr "Verzeichniss '%s' existiert bereits"
+
+#: audio/plugins/cdbackup.py:328
+#, python-format
+msgid "Cannot rip to '%s'! (%s)"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:344 audio/plugins/cdbackup.py:397
+#: audio/plugins/cdbackup.py:470
+msgid "Ripping aborted"
+msgstr "Kopieren wurde abgebrochen"
+
+#: audio/plugins/cdbackup.py:483
+msgid "Ripping complete"
+msgstr "Kopieren erfolgreich beended"
+
+#: audio/plugins/cdbackup.py:496
+msgid "No CDDB data available to mmpython"
+msgstr "Keine CDDB-Daten für mmpython vorhanden"
+
+#: audio/plugins/cdbackup.py:499
+msgid "Unknown Artist"
+msgstr "Unbekannter Interpret"
+
+#: audio/plugins/cdbackup.py:499 audio/plugins/cdbackup.py:500
+msgid "RENAME"
+msgstr "UMBENENNEN"
+
+#: audio/plugins/cdbackup.py:500 audio/audiodiskitem.py:60
+msgid "Unknown CD Album"
+msgstr "Unbekannte CD"
+
+#: audio/plugins/cdbackup.py:501
+msgid "Other"
+msgstr "Andere"
+
+#: audio/plugins/cdbackup.py:504
+msgid ""
+"CD info not found!\n"
+"Must manually rename files\n"
+"when finished ripping"
+msgstr ""
+"Es wurden keine CD-Informationen gefunden!\n"
+"Sie müssen die Dateien nach dem Kopieren\n"
+"manuell umbenennen."
+
+#: audio/plugins/cdbackup.py:569
+msgid "Problem trying to call:"
+msgstr "Problem beim Aufruf von:"
+
+#: audio/plugins/radio.py:68
+msgid "Listen to Radio Station"
+msgstr "Radio hören"
+
+#: audio/plugins/radio.py:103
+msgid "Radio"
+msgstr "Radio"
+
+#: audio/plugins/radio.py:128
+msgid "No Radio Stations found"
+msgstr "Kein Radiosender gefunden"
+
+#: audio/plugins/radio.py:130
+msgid "Radio Stations"
+msgstr "Radiosender"
+
+#: audio/plugins/playlist.py:85
+msgid "Playlists"
+msgstr "Widergabelisten"
+
+#: audio/plugins/playlist.py:101
+msgid "Enqueue this Music in Playlist"
+msgstr "Diesen Titel in die Widergabeliste aufnehmen"
+
+#: audio/plugins/playlist.py:103
+msgid "Make a new Audio Playlist"
+msgstr "Eine neue Audio-Widergabeliste erstellen"
+
+#: audio/plugins/playlist.py:121
+msgid "Queued Directory"
+msgstr "Verzeichnis hinzugefügt"
+
+#: audio/plugins/playlist.py:123
+msgid "Queued Track"
+msgstr "Titel hinzugefügt"
+
+#: audio/plugins/playlist.py:131
+msgid "Added New Playlist"
+msgstr "Neue Widergabeliste wurde hinzugefügt"
+
+#: audio/plugins/vux.py:92
+msgid "[VUX] Start playing"
+msgstr "[VUX] Abspielen starten"
+
+#: audio/plugins/vux.py:93
+msgid "[VUX] Stop playing"
+msgstr "[VUX] Abspielen stoppen"
+
+#: audio/plugins/vux.py:94
+msgid "[VUX] Next (rating down)"
+msgstr "[VUX] Weiter (Bewertung herunterstufen)"
+
+#: audio/plugins/vux.py:95
+msgid "[VUX] Next (rating intact)"
+msgstr "[VUX] Weiter (Bewertung erhalten)"
+
+#: audio/plugins/vux.py:96
+msgid "[VUX] Next (rating up)"
+msgstr "[VUX] Weiter (Bewertung heraufsetzen)"
+
+#: audio/plugins/vux.py:97
+msgid "[VUX] Playing item rating up"
+msgstr "[VUX] Eintrag wird gespielt und die Bewertung erhöht"
+
+#: audio/plugins/vux.py:98
+msgid "[VUX] Playing item rating down"
+msgstr "[VUX] Eintrag wird gespielt und die Bewertung erniedrigt"
+
+#: audio/plugins/vux.py:99
+msgid "[VUX] a dir item do not select"
+msgstr "[VUX] Verzeichnisse sind nicht auswählbar"
+
+#: audio/plugins/vux.py:100
+msgid "[VUX] an audio item, do not select"
+msgstr "[VUX] Ein Audio-Eintrag kann nicht ausgewählt werden"
+
+#: audio/plugins/xine.py:55
+msgid "'fbxine' not found, plugin 'xine' deactivated"
+msgstr "'fbxine' wurde nicht gefunden, das Plugin 'xine' wurde deaktiviert"
+
+#: audio/plugins/xine.py:74
+msgid "'fbxine' version too old, plugin 'xine' deactivated"
+msgstr ""
+"Die Version von 'fbxine' ist zu alt, das Plugin 'xine' wird deaktiviert"
+
+#: audio/plugins/xine.py:75
+#, python-format
+msgid "You need software %s"
+msgstr "Sie benötigen das Programm '%s'"
+
+#: audio/plugins/coversearch.py:109
+msgid ""
+"To search for covers you need an Amazon.com Web Services\n"
+"license key. You can get yours from:\n"
+msgstr ""
+"Um nach Covers suchen zu können, benötigen Sie einen 'Amazon.com\n"
+"Web Services' Lizenz-Schlüssel. Sie erhalten Ihren unter:\n"
+
+#: audio/plugins/coversearch.py:162
+msgid "Find a cover for this music"
+msgstr "Ein Cover suchen"
+
+#: audio/plugins/coversearch.py:167 audio/plugins/coversearch.py:176
+#, python-format
+msgid ""
+"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
+"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
+"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
+"Info. Maybe you must fix this file (%s) tag?"
+msgstr ""
+"Das Plugin 'coversearch' (Suche nach CD-Covern) wurde für diesen Eintrag "
+"deaktiviert!'coversearch' benötigt einen Eintrag mit Interpret und "
+"Albumtitel (sofern es ein mp3oder ogg ist) oder einen Titel (wenn es ein CD-"
+"Track ist). Sie benötigen für mp3 einID3-Tag oder für ogg-Info. Eventuell "
+"kann das %s-Tag dieser Datei bearbeitet werden?"
+
+#: audio/plugins/coversearch.py:185
+msgid "Unknown CD, cover searching is disabled"
+msgstr "Unbekannte CD, die Suche nach Covern wurde deaktiviert"
+
+#: audio/plugins/coversearch.py:193
+msgid "searching Amazon..."
+msgstr "Amazon wird durchsucht..."
+
+#: audio/plugins/coversearch.py:212
+#, python-format
+msgid "No matches for %(artist)s - %(album)s"
+msgstr "Es wurde kein Eintrag für %(artist)s - %(album)s gefunden"
+
+#: audio/plugins/coversearch.py:220
+msgid "Unknown error while searching."
+msgstr "Unbekannter Fehler beim Suchen"
+
+#: audio/plugins/coversearch.py:257 audio/plugins/coversearch.py:269
+msgid "small"
+msgstr "klein"
+
+#: audio/plugins/coversearch.py:280
+msgid "Cover Search Results"
+msgstr "Cover-Suchergebnisse"
+
+#: audio/plugins/coversearch.py:284
+msgid "No covers available from Amazon"
+msgstr "Bei Amazon wurden keine Covers gefunden"
+
+#: audio/plugins/coversearch.py:297 video/plugins/imdb.py:203
+msgid "getting data..."
+msgstr "Daten werden geholt..."
+
+#: audio/audiodiskitem.py:77
+msgid "Browse disc"
+msgstr "CD navigieren"
+
+#: audio/audiodiskitem.py:115 directory.py:691
+msgid "Random playlist"
+msgstr "Zufällige Abspielreihenfolge"
+
+#: audio/audiodiskitem.py:123
+msgid "Data files on disc"
+msgstr "Daten-Dateien auf CD"
+
+#: video/plugins/mplayer.py:387
+msgid "Seeking not possible"
+msgstr "Seek ist nicht möglich"
+
+#: video/plugins/mover.py:96
+#, python-format
+msgid "Move to [%s]"
+msgstr "Verschieben nach [%s]"
+
+#: video/plugins/imdb.py:93
+msgid "Search IMDB for this file"
+msgstr "IMDB nach dieser Datei durchsuchen"
+
+#: video/plugins/imdb.py:100 video/plugins/imdb.py:107
+#, python-format
+msgid "Search IMDB for [%s]"
+msgstr "IMDB nach [%s] durchsuchen"
+
+#: video/plugins/imdb.py:118
+msgid "searching IMDB..."
+msgstr "IMDB wird durchsucht..."
+
+#: video/plugins/imdb.py:142
+msgid "Unknown error while connecting to IMDB"
+msgstr "Unbekannter Fehler beim Verbinden zu IMDB"
+
+#: video/plugins/imdb.py:160
+msgid "IMDB Query"
+msgstr "IMDB-Abfrage"
+
+#: video/plugins/imdb.py:164
+msgid "No information available from IMDB"
+msgstr "Keine Informationen von IMDB verfügbar"
+
+#: video/plugins/bookmarker.py:70
+msgid "Resume playback"
+msgstr "Abspielen fortsetzen"
+
+#: video/plugins/bookmarker.py:75
+msgid "Bookmarks"
+msgstr "Lesezeichen"
+
+#: video/plugins/bookmarker.py:111
+#, python-format
+msgid "Jump to %s"
+msgstr "Zu '%s' springen"
+
+#: video/plugins/dvdimage.py:72
+#, fuzzy
+msgid "Play image as DVD"
+msgstr "DVD abspielen"
+
+#: video/plugins/dvdimage.py:97
+msgid "Choose title to play. <1-9>"
+msgstr ""
+
+#: video/plugins/dvdimage.py:121
+#, python-format
+msgid "Choose disc (%i discs available)."
+msgstr ""
+
+#: video/plugins/linkbrowser.py:77
+msgid "Browse links (autoplay)"
+msgstr "Links durchsuchen (autoplay)"
+
+#: video/plugins/linkbrowser.py:78
+msgid "Browse links (autoplay, maximum caching)"
+msgstr "Links durchsuchen (autoplay, maximum caching)"
+
+#: video/plugins/linkbrowser.py:79
+msgid "Browse links"
+msgstr "Links durchsuchen"
+
+#: video/plugins/linkbrowser.py:148
+msgid "Downloading link list..."
+msgstr "Link-Liste wird geladen..."
+
+#: video/plugins/linkbrowser.py:155
+#, python-format
+msgid "Failed to download %s"
+msgstr "Das Herunterladen von '%s' ist fehlgeschlagen"
+
+#: video/plugins/details.py:76
+msgid "Show details for this item"
+msgstr "Informationen über diesen Eintrag anzeigen"
+
+#: video/plugins/details.py:106
+msgid "Details"
+msgstr ""
+
+#: video/__init__.py:203
+msgid "Directory Autobuild Thumbnails "
+msgstr "Vorschaubild automatisch erzeugen"
+
+#: video/__init__.py:204
+msgid "Build video thumbnails for all items (may take a while when entering)."
+msgstr "Vorschaubild für alle Eintagäe erzeugen ( Zeitintensiv )"
+
+#: video/configure.py:87 video/configure.py:119
+#, python-format
+msgid "Stream %s"
+msgstr ""
+
+#: video/configure.py:98
+msgid "Audio Menu"
+msgstr "Audio-Menü"
+
+#: video/configure.py:113
+msgid "no subtitles"
+msgstr "Keine Untertitel"
+
+#: video/configure.py:135
+msgid "Subtitle Menu"
+msgstr "Untertitel-Menü"
+
+#: video/configure.py:152 video/configure.py:179
+#, python-format
+msgid "Play chapter %s"
+msgstr "Kapitel %s abspielen"
+
+#: video/configure.py:159 video/configure.py:182
+msgid "Chapter Menu"
+msgstr "Kapitel-Menü"
+
+#: video/configure.py:211
+#, python-format
+msgid "Turn off %s"
+msgstr "%s ausschalten"
+
+#: video/configure.py:212
+#, python-format
+msgid "Turn on %s"
+msgstr "%s einschalten"
+
+#: video/configure.py:225
+msgid "Audio selection"
+msgstr "Audio-Auswahl"
+
+#: video/configure.py:227
+msgid "Subtitle selection"
+msgstr "Untertitel-Auswahl"
+
+#: video/configure.py:230 video/configure.py:234
+msgid "Chapter selection"
+msgstr "Kapitel-Auswahl"
+
+#: video/configure.py:240
+msgid "deinterlacing"
+msgstr "Deinterlacing"
+
+#: video/configure.py:245 video/videoitem.py:279 playlist.py:301
+msgid "Play"
+msgstr "Abspielen"
+
+#: video/configure.py:246
+msgid "Config Menu"
+msgstr "Konfigurationsmenü"
+
+#: video/videoitem.py:265
+msgid "Play DVD"
+msgstr "DVD abspielen"
+
+#: video/videoitem.py:266 video/videoitem.py:268
+msgid "DVD title list"
+msgstr "DVD Titelliste"
+
+#: video/videoitem.py:269 video/videoitem.py:277
+msgid "Play default track"
+msgstr "Standard-Titel abspielen"
+
+#: video/videoitem.py:273
+msgid "Play VCD"
+msgstr "VCD abspielen"
+
+#: video/videoitem.py:274 video/videoitem.py:276
+msgid "VCD title list"
+msgstr "VCD Titelliste"
+
+#: video/videoitem.py:281
+msgid "Play with alternate player"
+msgstr "Mit alternativem Player abspielen"
+
+#: video/videoitem.py:284
+msgid "Play with maximum cache"
+msgstr "Mit größtmöglichem Cache abspielen"
+
+#: video/videoitem.py:289
+msgid "Show variants"
+msgstr "Alternativen anzeigen"
+
+#: video/videoitem.py:293
+msgid "Create Thumbnail"
+msgstr "Vorschaubild erzeugen"
+
+#: video/videoitem.py:314
+msgid "Please wait...."
+msgstr "Bitte warten..."
+
+#: video/videoitem.py:456 video/videoitem.py:470 video/videoitem.py:484
+#, python-format
+msgid "No media found for \"%s\".\n"
+msgstr "Kein Medium für \"%s\" gefunden.\n"
+
+#: video/videoitem.py:457 video/videoitem.py:471 video/videoitem.py:485
+msgid "Please insert the media."
+msgstr "Bitte das Medium einlegen."
+
+#: video/videoitem.py:490
+msgid "No player for this item found"
+msgstr "Kein Abspielprogramm für diesen Eintrag gefunden"
+
+#: video/videoitem.py:566
+#, python-format
+msgid "Play Title %s"
+msgstr "Titel %s abspielen"
+
+#: util/mediainfo.py:719
+#, fuzzy
+msgid "Reloading cache files, be patient..."
+msgstr "Erstelle Cache, bitte warten."
+
+#: util/misc.py:412
+msgid "The recordserver is down"
+msgstr "Der Aufnahmeserver ist inaktiv"
+
+#: util/misc.py:434
+msgid "Today"
+msgstr "Heute"
+
+#: util/misc.py:444
+msgid "Tomorrow"
+msgstr "Morgen"
+
+#: util/misc.py:454
+msgid "This Week"
+msgstr "Diese Woche"
+
+#: util/misc.py:464
+msgid "No recordings are scheduled"
+msgstr "Keine Aufnahmen geplant"
+
+#: setup_freevo.py:89
+msgid ""
+"Usage: ./freevo setup [OPTION]...\n"
+"Set up Freevo for your specific environment.\n"
+"\n"
+"   --geometry=WIDTHxHEIGHT      set the display size\n"
+"                                  WIDTHxHEIGHT can be 800x600, 768x576 or "
+"640x480\n"
+"\n"
+"   --display=DISP               set the display\n"
+"                                  DISP can be x11, fbdev, dxr3, mga, \n"
+"                                  directfb, dfbmga or dga\n"
+"                                  \n"
+"   --tv=NORM                    set the TV standard\n"
+"                                  NORM can be ntsc, pal or secam\n"
+"\n"
+"   --chanlist=LIST              set the channel list\n"
+"                                  LIST can be us-bcast, us-cable, us-cable-"
+"hrc,\n"
+"                                  japan-bcast, japan-cable, europe-west,\n"
+"                                  europe-east, italy, newzealand, "
+"australia,\n"
+"                                  ireland, france, china-bcast, "
+"southafrica,\n"
+"                                  argentina, canada-cable, switzerland\n"
+"\n"
+"   --help                       display this help and exit\n"
+"\n"
+"The default is \"--geometry=800x600 --display=x11 --tv=ntsc --chanlist=us-"
+"cable\"\n"
+"Please report bugs to <freevo-users@lists.sourceforge.net>.\n"
+msgstr ""
+
+#: setup_freevo.py:193
+#, python-format
+msgid "checking for %-13s"
+msgstr ""
+
+#: setup_freevo.py:206
+#, python-format
+msgid "ERROR: can't find %s"
+msgstr "FEHLER: kann %s nicht finden"
+
+#: setup_freevo.py:207
+msgid "Please install the application respectively put it in your path."
+msgstr "Bitte installieren Sie das Programm, oder legen Sie es in ihren PATH"
+
+#: setup_freevo.py:208
+msgid "Freevo won't work without it."
+msgstr "Freevo funktioniert nicht ohne es."
+
+#: setup_freevo.py:214
+msgid "not found (deactivated)"
+msgstr "nicht gefunden (deaktiviert)"
+
+#: setup_freevo.py:277
+#, python-format
+msgid "System path first=%s"
+msgstr ""
+
+#: setup_freevo.py:277
+msgid "No"
+msgstr "Nein"
+
+#: setup_freevo.py:277
+msgid "Yes"
+msgstr "Ja"
+
+#: setup_freevo.py:293
+msgid "Settings:"
+msgstr "Einstellungen:"
+
+#: fxditem.py:212
+msgid "Browse list"
+msgstr "Liste durchsuchen"
+
+#: playlist.py:146 playlist.py:186
+#, python-format
+msgid "Cannot open file \"%s\""
+msgstr "Datei \"%s\" konnte nicht geöffnet werden"
+
+#: playlist.py:299
+msgid "Browse Playlist"
+msgstr "Widergabeliste durchsuchen"
+
+#: playlist.py:309 directory.py:430
+msgid "Random play all items"
+msgstr "Alle Einträge in zufälliger Reihenfolge abspielen"
+
+#: playlist.py:355
+msgid "empty playlist"
+msgstr "Leere Widergabeliste"
+
+#: playlist.py:453
+msgid "playlist repeat on"
+msgstr "Widergabeliste widerholen"
+
+#: playlist.py:455
+msgid "playlist repeat off"
+msgstr "Widergabeliste nicht widerholen"
+
+#: playlist.py:469
+msgid "no next item in playlist"
+msgstr "Kein weiterer Eintrag in dieser Widergabeliste"
+
+#: playlist.py:496
+msgid "no previous item in playlist"
+msgstr "Kein vorheriger Eintrag in dieser Widergabeliste"
+
+#: menu.py:619
+msgid "No action defined for this choice!"
+msgstr "Es wurde keine Aktion für diese Auswahl festgelegt!"
+
+#: directory.py:62
+msgid "Directory Sort By Date"
+msgstr "Verzeichnis nach Datum sortieren"
+
+#: directory.py:63
+msgid "Sort directory by date and not by name."
+msgstr "Soertiere Verzeichnis nach Datum statt nach Name"
+
+#: directory.py:65
+msgid "Directory Autoplay Single Item"
+msgstr "Einen einzelnen Eintrag im Verzeichnis automatisch abspielen"
+
+#: directory.py:66
+msgid "Don't show directory if only one item exists and auto-select the item."
+msgstr ""
+"Verzeichnis mit nur einem Eintrag nicht anzeigen, diesen Eintrag aber "
+"automatisch auswählen"
+
+#: directory.py:69
+msgid "Force Skin Layout"
+msgstr "Layout der Darstellungsvorlage erzwingen"
+
+#: directory.py:70
+msgid ""
+"Force skin to a specific layout. This option doesn't work with all skins and "
+"the result may differ based on the skin."
+msgstr ""
+"Erzwingt ein spezielles Layout für die Darstellungsvorlage. Diese Option "
+"funktioniert nicht mit allen Darstellungsvorlagen und die Ergebnisse können "
+"voneinander abweichen."
+
+#: directory.py:73
+msgid "Directory Smart Sort"
+msgstr "Intelligente Verzeichnis-Sortierung"
+
+#: directory.py:74
+msgid "Use a smarter way to sort the items."
+msgstr "Benutzt eine elegantere Methode zum Sortieren der Einträge."
+
+#: directory.py:76
+msgid "Use MediaID Tag Names"
+msgstr "MediaID-Namens-Kennzeichen verwenden"
+
+#: directory.py:77
+msgid "Use the names from the media files tags as display name."
+msgstr "Bezeichnung der Medien-Datei-Kennzeichen zum Anzeigen verwenden."
+
+#: directory.py:79
+msgid "Directory Reverse Sort"
+msgstr "Umgekehrte Verzeichnis-Sortierung"
+
+#: directory.py:80
+msgid "Show the items in the list in reverse order."
+msgstr "Einträge der Liste in umgekehrter Sortierfolge darstellen"
+
+#: directory.py:84
+msgid "Directory Create Playlist"
+msgstr "Playliste vom Verzeichnis erstellen"
+
+#: directory.py:85
+msgid ""
+"Handle the directory as playlist. After one file is played, the next one "
+"will be started."
+msgstr ""
+"Verzeichnis als Widergabeliste bahandeln. Nach dem Abspielen eines Titels "
+"wird der Nächste gestartet."
+
+#: directory.py:88
+msgid "Directory Add Playlist Files"
+msgstr "Widergabeliste in's Verzeichnis"
+
+#: directory.py:89
+msgid "Add playlist files to the list of items"
+msgstr "Dateien aus der Widergabeliste im Verzeichnis auflisten"
+
+#: directory.py:91
+msgid "Directory Add Random Playlist"
+msgstr "Zufällige Widergabeliste in's Verzeichnis"
+
+#: directory.py:92
+msgid "Add an item for a random playlist"
+msgstr "Einen Eintrag für eine zufällige Widergabeliste hinzufügen"
+
+#: directory.py:94
+msgid "Directory Autoplay Items"
+msgstr "Verzeichnis automatisch widergeben"
+
+#: directory.py:95
+msgid ""
+"Autoplay the whole directory (as playlist) when it contains only files and "
+"no directories"
+msgstr ""
+"Das gesamte Verzeichnis automatisch widergeben (als Playliste) wenn es nur "
+"Dateien und keine Verzeichnisse enthält"
+
+#: directory.py:287
+#, python-format
+msgid "Directory on disc [%s]"
+msgstr "Verzeichnisse auf [%s]"
+
+#: directory.py:288
+msgid "Directory"
+msgstr "Verzeichnis"
+
+#: directory.py:424
+msgid "Play all files in directory"
+msgstr "Alles im Verzeichnis widergeben"
+
+#: directory.py:432
+msgid "Recursive random play all items"
+msgstr "Alle Einträge rekursiv in zufälliger Reihenfolge abspielen"
+
+#: directory.py:433
+msgid "Recursive play all items"
+msgstr "Alle Einträge rekursiv abspielen"
+
+#: directory.py:435
+msgid "Configure directory"
+msgstr "Verzeichnis konfigurieren"
+
+#: directory.py:502
+msgid "Enter Password"
+msgstr "Passwort eingeben"
+
+#: directory.py:527
+msgid "Password incorrect"
+msgstr "Falsches Passwort"
+
+#: directory.py:561
+#, fuzzy
+msgid "Directory does not exist"
+msgstr "Verzeichniss '%s' existiert nicht"
+
+#: directory.py:590
+msgid "Scanning disc, be patient..."
+msgstr "Untersuche CD/DVD, bitte warten..."
+
+#: directory.py:592
+msgid "Scanning directory, be patient..."
+msgstr "Untersuche Verzeichnis, bitte warten..."
+
+#: directory.py:791 directory.py:881 directory.py:915
+msgid "on"
+msgstr "an"
+
+#: directory.py:793 directory.py:796 directory.py:885 directory.py:913
+msgid "off"
+msgstr "aus"
+
+#: directory.py:798
+msgid "auto"
+msgstr "auto"
+
+#: directory.py:917
+msgid "Show all kinds of items"
+msgstr "Alle Dateitypen anzeigen"
+
+#: directory.py:919
+msgid "Show video, audio and image items in this directory"
+msgstr "Audio, Video und Bilddateien in diesem Verzeichnis anzeigen"
+
+#: directory.py:922
+msgid "Configure"
+msgstr "Konfigurieren"
+
+#: childapp.py:297
+#, python-format
+msgid "logging child to \"%s\""
+msgstr "protokolliert nach \"%s\""
+
+#: childapp.py:301
+#, python-format
+msgid "Cannot open \"%s\" for logging!"
+msgstr "\"%s\" kann nicht zum Protokollieren geöffnet werden!"
+
+#: childapp.py:302
+msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, "
+msgstr "Setzen Sie CHILDAPP_DEBUG=0 in local_conf.py, "
+
+#: childapp.py:303
+#, python-format
+msgid "or make %s writable!"
+msgstr "oder erlauben Sie das Beschreiben von %s!"
+
+#: main.py:201
+msgid "Freevo Main Menu"
+msgstr "Freevo Hauptmenü"
+
+#: main.py:217
+msgid "Skin Selector"
+msgstr "Darstellungsvorlage wählen"
+
+#: main.py:332
+#, python-format
+msgid ""
+"Event '%s' crashed\n"
+"\n"
+"Please take a look at the logfile and report the bug to the Freevo mailing "
+"list. The state of Freevo may be corrupt now and this error could cause more "
+"errors until you restart Freevo.\n"
+"\n"
+"Logfile: %s\n"
+"\n"
+msgstr ""
+"Das Ereignis '%s' ist abgestürzt!\n"
+"\n"
+"Bitte sehen Sie in die Protokolldatei und melden diesen Fehler an die Freevo-"
+"Mailingliste. Freevo befindet sich möglicherweise in einem instabilen "
+"Zustand,der noch mehr Fehler verursachen kann. Bitte starten Sie Freevo "
+"neu!\n"
+"\n"
+"Protokolldatei: %s\n"
+"\n"
+
+#: main.py:342 share/skins/main/mediaportal.fxd:446
+#: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:16
+#: share/skins/main/bluestar.fxd:15 share/skins/main/basic.fxd:24
+#: share/skins/main/rain.fxd:16
+msgid "Shutdown"
+msgstr "Ausschalten"
+
+#: main.py:344
+#, fuzzy
+msgid "Continue"
+msgstr "Konfigurieren"
+
+#: main.py:461
+msgid "Starting Freevo, please wait ..."
+msgstr "Freevo wird gestartet, bitte warten..."
+
+#: main.py:470
+msgid "Reading cache, please wait ..."
+msgstr "Erstelle Cache, bitte warten."
+
+#: main.py:521
+msgid "Freevo crashed!"
+msgstr "Freevo is abgestürzt!"
+
+#: main.py:522
+#, python-format
+msgid "Filename: %s"
+msgstr "Dateiname: %s"
+
+#: main.py:523
+#, python-format
+msgid "Lineno: %s"
+msgstr "Zeile: %s"
+
+#: main.py:524
+#, python-format
+msgid "Function: %s"
+msgstr "Funktion: %s"
+
+#: main.py:525
+#, python-format
+msgid "Text: %s"
+msgstr "Text: %s"
+
+#: main.py:527
+msgid "Please see the logfiles for more info"
+msgstr "Bitte beachten Sie die Logdatei für weitere Infos"
+
+#: main.py:529
+#, python-format
+msgid "Exit in %s seconds"
+msgstr "Beenden in %s Sekunden"
+
+#: osd.py:381
+msgid "z = Toggle Fullscreen"
+msgstr "z = Vollbild umschalten"
+
+#: osd.py:382
+msgid "Arrow Keys = Move"
+msgstr "Pfeiltasten = Bewegen"
+
+#: osd.py:383
+msgid "Spacebar = Select"
+msgstr "Leertaste = Auswählen"
+
+#: osd.py:384
+msgid "Escape = Stop/Prev. Menu"
+msgstr "ESC = Stop/Vorhergendes Menü"
+
+#: osd.py:385
+msgid "h = Help"
+msgstr "h = Hilfe"
+
+#: share/skins/main/info.fxd:317
+msgid "Chapter"
+msgstr "Kapitel"
+
+#: share/skins/main/mediaportal.fxd:188 share/skins/main/blurr.fxd:186
+#: share/skins/main/info.fxd:542
+msgid "Playlist"
+msgstr "Playliste"
+
+#: share/skins/main/dark.fxd:639
+msgid "New mails"
+msgstr ""
+
+#: share/skins/main/dark.fxd:658 share/skins/main/dark.fxd:679
+msgid "From"
+msgstr ""
+
+#: share/skins/main/info.fxd:505
+msgid "Copyright"
+msgstr "Copyright"
+
+#: share/skins/main/crystal.fxd:317 share/skins/main/bluestar.fxd:337
+#: share/skins/main/rain.fxd:313
+#, fuzzy
+msgid "Unread messages"
+msgstr "Nachrichten"
+
+#: share/skins/main/bluestar.fxd:11
+#, fuzzy
+msgid "Pictures"
+msgstr "Apod Bilder"
+
+#: share/skins/main/info.fxd:405
+msgid "Disc ID"
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:214 share/skins/main/blurr.fxd:212
+#: share/skins/main/info.fxd:309
+msgid "Audio tracks"
+msgstr "Audiotitel"
+
+#: share/skins/main/crystal.fxd:368 share/skins/main/bluestar.fxd:388
+#: share/skins/main/rain.fxd:364
+msgid "Message has not been read"
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:445 share/skins/main/crystal.fxd:12
+#: share/skins/main/blurr.fxd:452 share/skins/main/rain.fxd:12
+msgid "Weather Forecast"
+msgstr "Wettervorhersage"
+
+#: share/skins/main/mediaportal.fxd:419 share/skins/main/blurr.fxd:427
+msgid "Location"
+msgstr "Ort"
+
+#: share/skins/main/dark.fxd:670
+msgid "New mail"
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:444 share/skins/main/blurr.fxd:451
+msgid "Play a Game"
+msgstr "Videospiele"
+
+#: share/skins/main/dark.fxd:23 share/skins/main/crystal.fxd:10
+#: share/skins/main/bluestar.fxd:10 share/skins/main/rain.fxd:10
+msgid "Email"
+msgstr ""
+
+#: share/skins/main/crystal.fxd:323 share/skins/main/bluestar.fxd:343
+#: share/skins/main/rain.fxd:319
+#, fuzzy
+msgid "Total messages"
+msgstr "Nachrichten"
+
+#: share/skins/main/info.fxd:227
+msgid "kb/s"
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:203 share/skins/main/mediaportal.fxd:683
+#: share/skins/main/dark.fxd:748 share/skins/main/basic.fxd:384
+#: share/skins/main/blurr.fxd:201 share/skins/main/blurr.fxd:308
+#: share/skins/main/blurr.fxd:689
+msgid "Track"
+msgstr "Titelnr."
+
+#: share/skins/main/dark.fxd:564
+#, fuzzy
+msgid "One song in playlist"
+msgstr "Kein weiterer Eintrag in dieser Widergabeliste"
+
+#: share/skins/main/info.fxd:224
+msgid "Bitrate"
+msgstr "Bitrate"
+
+#: share/skins/main/mediaportal.fxd:192 share/skins/main/blurr.fxd:190
+#: share/skins/main/info.fxd:418 share/skins/main/info.fxd:423
+#: share/skins/main/info.fxd:546
+msgid "items in this playlist"
+msgstr "Einträge in dieser Playliste"
+
+#: share/skins/main/mediaportal.fxd:442 share/skins/main/blurr.fxd:449
+#: share/skins/main/info.fxd:14
+msgid "Listen to Music"
+msgstr "Musik hören"
+
+#: share/skins/main/mediaportal.fxd:696 share/skins/main/dark.fxd:758
+#: share/skins/main/basic.fxd:397 share/skins/main/blurr.fxd:706
+msgid "Elapsed"
+msgstr "Verstrichen"
+
+#: share/skins/main/dark.fxd:622
+msgid "Just one picture in this slideshow."
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:441 share/skins/main/blurr.fxd:448
+#: share/skins/main/info.fxd:13
+msgid "Watch a Movie"
+msgstr "Film ansehen"
+
+#: share/skins/main/info.fxd:231
+msgid "Link"
+msgstr ""
+
+#: share/skins/main/basic.fxd:589
+msgid "Day"
+msgstr "Datum"
+
+#: share/skins/main/mediaportal.fxd:219 share/skins/main/blurr.fxd:217
+#: share/skins/main/info.fxd:313
+msgid "Subtitles"
+msgstr "Untertitel"
+
+#: share/skins/main/dark.fxd:491
+#, fuzzy
+msgid "movies in this playlist."
+msgstr "Einträge in dieser Playliste"
+
+#: share/skins/main/dark.fxd:16 share/skins/main/crystal.fxd:7
+#: share/skins/main/bluestar.fxd:7 share/skins/main/rain.fxd:7
+msgid "Television"
+msgstr ""
+
+#: share/skins/main/dark.fxd:645
+msgid "Total mails"
+msgstr ""
+
+#: share/skins/main/info.fxd:237
+msgid "Language"
+msgstr "Sprache"
+
+#: share/skins/main/mediaportal.fxd:182 share/skins/main/mediaportal.fxd:286
+#: share/skins/main/mediaportal.fxd:393 share/skins/main/mediaportal.fxd:401
+#: share/skins/main/blurr.fxd:180 share/skins/main/blurr.fxd:284
+#: share/skins/main/blurr.fxd:401 share/skins/main/blurr.fxd:409
+msgid "Items"
+msgstr "Einträge"
+
+#: share/skins/main/blurr.fxd:311 share/skins/main/info.fxd:347
+#: share/skins/main/info.fxd:534
+msgid "of"
+msgstr "von"
+
+#: share/skins/main/dark.fxd:495
+#, fuzzy
+msgid "Just one movie in this playlist."
+msgstr "Einträge in dieser Playliste"
+
+#: share/skins/main/mediaportal.fxd:440 share/skins/main/blurr.fxd:447
+#: share/skins/main/info.fxd:12
+msgid "Watch TV"
+msgstr "Fernsehen"
+
+#: share/skins/main/mediaportal.fxd:196 share/skins/main/dark.fxd:500
+#: share/skins/main/blurr.fxd:194 share/skins/main/info.fxd:427
+#: share/skins/main/info.fxd:550
+msgid "This playlist is empty!"
+msgstr "Diese Playliste ist leer!"
+
+#: share/skins/main/dark.fxd:627
+#, fuzzy
+msgid "This slideshow is empty!"
+msgstr "Diese Playliste ist leer!"
+
+#: share/skins/main/info.fxd:305
+msgid "min."
+msgstr "min."
+
+#: share/skins/main/dark.fxd:617
+#, fuzzy
+msgid "pictures in this slideshow."
+msgstr "Einträge in dieser Playliste"
+
+#: share/skins/main/dark.fxd:458 share/skins/main/info.fxd:470
+msgid "Rating"
+msgstr "Bewertung"
+
+#: share/skins/main/info.fxd:349 share/skins/main/info.fxd:536
+msgid "MB free"
+msgstr "MB frei"
+
+#: share/skins/main/mediaportal.fxd:439
+#, fuzzy
+msgid "Read Headlines"
+msgstr "Schlagzeilen"
+
+#: share/skins/main/dark.fxd:568
+#, fuzzy
+msgid "No songs in playlist"
+msgstr "Kein weiterer Eintrag in dieser Widergabeliste"
+
+#: share/skins/main/mediaportal.fxd:443 share/skins/main/blurr.fxd:450
+#: share/skins/main/info.fxd:15
+msgid "Look at Pictures"
+msgstr "Bilder betrachten"
+
+#: share/skins/main/mediaportal.fxd:224 share/skins/main/blurr.fxd:222
+msgid "Chapters"
+msgstr "Kapitel"
+
+# Manualy added from fxd skin files
+#: share/skins/main/basic.fxd:19
+msgid "TV"
+msgstr "TV"
+
+#: share/skins/main/dark.fxd:560
+#, fuzzy
+msgid "songs in playlist"
+msgstr "Kein weiterer Eintrag in dieser Widergabeliste"
+
+#: share/skins/main/dark.fxd:721
+#, fuzzy
+msgid "Now playing"
+msgstr "Player aufrufen"
+
+#: share/skins/main/info.fxd:323
+msgid "Size"
+msgstr "Größe"
+
+#: share/skins/main/dark.fxd:652 share/skins/main/dark.fxd:673
+msgid "Subject"
+msgstr ""
+
+#~ msgid "'xine-ui' version too old, plugin 'xine' deactivated"
+#~ msgstr ""
+#~ "Die Version von 'xine-ui' ist zu alt, das Plugin 'xine' wird deaktiviert"
+
+#~ msgid "Unable to get frequency for channel %s."
+#~ msgstr "Frequenz von %s konnte nicht geholt werden"
