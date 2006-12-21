@@ -409,8 +409,8 @@ class main_backup_thread(threading.Thread):
                 output = '%s%s.mp3' % (pathname, path_tail)
                 cmd = str('%s %s' % (config.LAME_CMD, config.CD_RIP_LAME_OPTS))
                 cmd = cmd.split(' ') + \
-                    [ '--tt', song_names[i], '--ta', artist, '--tl', album,
-                      '--tn', '%(track)s,%(tracks)s' % user_rip_path_prefs,
+                    [ '--ignore-tag-errors', '--tt', song_names[i], '--ta', artist,
+                      '--tl', album, '--tn', '%(track)s,%(tracks)s' % user_rip_path_prefs,
                       '--tg', genre, '--id3v2-only', wav_file, output ]
 
                 _debug_('lame: %s' % cmd)
