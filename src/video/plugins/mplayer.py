@@ -191,9 +191,9 @@ class MPlayer:
             
         if item.selected_audio:
             if item.mimetype == 'mkv':
-               additionnal_args += [ '-aid', str(item.selected_audio-1) ]
+               additional_args += [ '-aid', str(item.selected_audio-1) ]
             else:
-               additionnal_args += [ '-aid', str(item.selected_audio) ]
+               additional_args += [ '-aid', str(item.selected_audio) ]
 
         if item['deinterlace'] and config.MPLAYER_VF_INTERLACED:
                 additional_args += [ '-vf', config.MPLAYER_VF_INTERLACED ]
