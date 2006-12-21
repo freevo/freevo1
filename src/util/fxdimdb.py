@@ -637,9 +637,16 @@ class FxdImdb:
         for i in genres[1:]:
             self.info['genre'] += ' / ' + i
         rating = soup.find(text='User Rating:').parent.findNextSibling('b')
-        votes = rating.next.next.strip()
-        self.info['rating'] = rating.string.strip() + ' ' + votes.strip()
-        self.info['runtime'] = soup.find(text='Runtime:').next.strip()
+        if rating:
+            votes = rating.next.next.strip()
+            self.info['rating'] = rating.string.strip() + ' ' + votes.strip()
+        else:
+            self.info['rating'] = ''
+        runtime = soup.find(text='Runtime:')
+        if runtime and runtime.next:
+            self.info['runtime'] = runtime.next.strip()
+        else:
+            self.info['runtime'] = ''
         if config.DEBUG:
             for (k,v) in self.info.items():
                 print 'items:', k, ':', v
