@@ -28,6 +28,7 @@ This release has all the changes in Release 1.6.x plus
  * New RSS server, for getting podcasts, etc. (F#1580407)
  * New Shuttle VFD plug-in (F#1619761)
  * New XM online plugin (F#1580412)
+ * New weather helper to grab the weather using cron (F#1603052)
  * New webserver library, allows playing/viewing on local and host machines (F#1592806)
  * Updated cdbackup plug-in to accept CD_RIP_CASE and CD_RIP_REPLACE_SPACE (F#1616046)
  * Updated idlebar clock plug-in to allow CLOCK_FORMAT to be used (F#1605951)
@@ -56,7 +57,7 @@ This release has all the changes in Release 1.6.x plus
  * Updated autoshutdown to react to the return code and removed unused vars (B#1612257)
  * Updated osd forced fonts variables and freevo_config and local_conf (B#1608393)
  * Updated Spanish translation (B#1612612)
- * Updated video plug-in mplayer for unichrome playback (B#1606699)
+ * Added the Russian translation (F#1602678)
 
 == Release 1.6.1 (2006-11-25) ==
 --------------------------------
