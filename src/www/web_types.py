@@ -92,6 +92,7 @@ class HTMLResource:
 
 
     def printHeader(self, title='unknown page', style=None, script=None, selected='Help',prefix=0):
+            (title, style, script, selected, prefix)
 
         strprefix = '../' * prefix
 
@@ -109,7 +110,8 @@ class HTMLResource:
         self.res += '\n\n\n\n<body>\n'
         # Header
         self.res += '<!-- Header Logo and Status Line -->\n'
-        self.res += '<div id="titlebar"><span class="name"><a href="http://freevo.sourceforge.net/" target="_blank">Freevo</a></span></div>\n'
+        self.res += '<div id="titlebar"><span class="name">'\
+            +'<a href="http://freevo.sourceforge.net/" target="_blank">Freevo</a></span></div>\n'
      
         items = [(_('Home'),_('Home'),'%sindex.rpy' % str(strprefix)),
                  (_('TV Guide'),_('View TV Listings'),'%sguide.rpy' % str(strprefix)),
@@ -135,21 +137,7 @@ class HTMLResource:
                 self.res += '<li>'
             self.res += "<a href=\"%s\" title=\"%s\">%s</a></li>\n" % (i[2], i[1],i[0])
         self.res += '</ul>\n</div>'
-        
-        #self.res += '<li id="current"><a href="#">Home</a></li>\n'
-        #self.res += '<li><a href="#">TV Guide</a></li>\n'
-        #self.res += '<li><a href="#">Scheduled Recordings</a></li>\n'
-        #self.res += '<li><a href="#">Media Library</a></li>\n'
-        #self.res += '<li><a href="#">Manual Record</a></li>\n'
-        #self.res += '<li><a href="#">Help</a></li>\n'
-        #self.res += '</ul>\n'
-        #self.res += '</div>\n<br/>'
- 
-        #self.res += '<div id="subtitle">\n'
-        #self.res += str(title) + '\n'
-        #self.res += '</div>\n'
         self.res += '\n<!-- Main Content -->\n';
-
 
 
     def tableOpen(self, opts=''):
@@ -167,6 +155,7 @@ class HTMLResource:
     def tableHeadClose(self, opts=''):
         self.res += "  </thead>\n"
 
+
     def tableBodyOpen(self, opts=''):
         self.res += "  <tbody "+opts+">\n"
 
@@ -181,7 +170,6 @@ class HTMLResource:
 
     def tableFootClose(self, opts=''):
         self.res += "  </tfoot>\n"
-
 
 
     def tableRowOpen(self, opts=''):
@@ -254,7 +242,7 @@ class HTMLResource:
         #    pass
         return
 
-    def printBreadcrumb(self,media, mediadirs, dir):
+    def printBreadcrumb(self, media, mediadirs, dir):
         breadcrumb='<a href="library.rpy">Home: </a><a href="library.rpy?media='+media+'&dir=">'+media+'</a>'
         _url = ""
         url = dir.split("/")
@@ -262,7 +250,7 @@ class HTMLResource:
         for i in url:
             _url += i + "/"
             if i not in _mediadir or i == _mediadir[len(_mediadir)-1]:
-                breadcrumb += '/<a href="library.rpy?media='+media+'&dir='+_url+'">'+i+'</a>'
+                breadcrumb += '/<a href="library.rpy?media='+media+'&dir='+_url+'">'+Unicode(i)+'</a>'
 
         return breadcrumb
     

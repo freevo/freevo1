@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-#if 0 /*
 # -----------------------------------------------------------------------
 # proginfo.rpy - Dynamically update program info popup box.
 # -----------------------------------------------------------------------
@@ -22,21 +21,26 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
-import sys,os, string
+import sys, os, stat, string
 import time
 
 from www.web_types import HTMLResource, FreevoResource
 from twisted.web.woven import page
 import util
 import config 
+import kaa.metadata as metadata 
 from twisted.web import static
 
 MAX_DESCRIPTION_CHAR = 1000
 
 class FileInfoResource(FreevoResource):
+
+    def __init__(self):
+        self.cache_dir = '%s/link_cache/' % (config.FREEVO_CACHEDIR)
+        if not os.path.isdir(self.cache_dir):
+            os.mkdir(self.cache_dir, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
 
     def _render(self, request):
         fv = HTMLResource()
@@ -45,6 +49,7 @@ class FileInfoResource(FreevoResource):
         img = fv.formValue(form, 'img')
         
         if file:
+            #medium = metadata.parse(file)
             title = ""
             info = "<table>"
             
@@ -63,25 +68,26 @@ class FileInfoResource(FreevoResource):
                 media_info = util.mediainfo.get(file)
                 title = media_info['title']
                 #audio info
-                if media_info['artist'] != "":
+                if media_info['artist']:
                     info+='<tr><td><b>Artist: </b></td><td>'+media_info['artist'] +'</td></tr>'
-                if media_info['album'] != "":
+                if media_info['album']:
                     info+='<tr><td><b>Album: </b></td><td>'+media_info['album']+'</td></tr>'
-                if media_info['genre'] != "":
+                if media_info['genre']:
                     info+='<tr><td><b>Genre: </b></td><td>'+media_info['genre']+'</td></tr>'
-                if media_info['length'] != "" and media_info['length'] != 0:
+                if media_info['length'] and media_info['length'] != 0:
                     length = str(int(media_info['length']) / 60) + " min."
                     info+='<tr><td><b>Length: </b></td><td>'+length+'</td></tr>'
                 #movie info
                 if media_info['height'] != "" and media_info['width'] != "":
-                    info+='<tr><td><b>Dimensions: </b></td><td>'+str(media_info['height'])+' x '+str(media_info['width'])+'</td></tr>' 
+                    info +='<tr><td><b>Dimensions: </b></td><td>'+str(media_info['height'])+' x '\
+                        +str(media_info['width'])+'</td></tr>' 
                 if media_info['type'] != "":
                    info+='<tr><td><b>Type: </b></td><td>'+media_info['type']+'</td></tr>' 
             #add size
             info+='<tr><td><b>Size: </b></td><td>'+str((os.stat(file)[6]/1024)/1024)+' MB</td></tr>'
             info+= "</table>"
             
-            file_link = Unicode(self.create_file_link(file))
+            file_link = self.create_file_link(file)
             
             fv.res += (
                u"<script>\n" \
@@ -109,14 +115,13 @@ class FileInfoResource(FreevoResource):
                u"</body></html>"
             ) % ( img_name, img )
             
-        return String( fv.res )
+        return String(fv.res)
     
     def create_file_link(self, file):
-        current_path = "%s/share/freevo/htdocs/" % sys.prefix
-        file_cache_link = "file_cache/" + file.replace("/", "_")
-        if not os.path.exists("%s/share/freevo/htdocs/" % sys.prefix + file_cache_link): 
-            os.symlink(file , current_path + file_cache_link)
-        return file_cache_link
+        cache_link = self.cache_dir + file.replace("/", "_")
+        if not os.path.exists(cache_link):
+            os.symlink(file, cache_link)
+        return cache_link
     
     def get_fxd_info(self, fxd_file):
         fxd_info = {}
