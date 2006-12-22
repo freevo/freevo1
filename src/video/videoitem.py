@@ -288,7 +288,7 @@ class VideoItem(Item):
         if self.variants and len(self.variants) > 1:
             items = [ (self.show_variants, _('Show variants')) ] + items
 
-        if self.mode == 'file' and not self.variants and not self.subitems and \
+        if self.mode == 'file' and not self.variants and \
                (not self.image or not self.image.endswith('raw')):
             items.append((self.create_thumbnail, _('Create Thumbnail'), 'create_thumbnail'))
             
