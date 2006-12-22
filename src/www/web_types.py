@@ -92,7 +92,6 @@ class HTMLResource:
 
 
     def printHeader(self, title='unknown page', style=None, script=None, selected='Help',prefix=0):
-            (title, style, script, selected, prefix)
 
         strprefix = '../' * prefix
 
