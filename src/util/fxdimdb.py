@@ -329,7 +329,13 @@ class FxdImdb:
     def guessImdb(self, filename, label=False):
         """Guess possible imdb movies from filename. Same return as searchImdb"""
 
-        name = filename
+        # Special name rule for the encoding server
+        m = re.compile('DVD \[([^]]*).*')
+        res = m.search(filename)
+        if res:
+            name = res.group(1)
+        else:
+            name = filename
 
         name  = vfs.basename(vfs.splitext(name)[0])
         name  = re.sub('([a-z])([A-Z])', point_maker, name)
@@ -337,7 +343,7 @@ class FxdImdb:
         name  = re.sub('([0-9])([a-zA-Z])', point_maker, name.lower())
         name  = re.sub(',', ' ', name)
 
-        if label == True:
+        if label:
             for r in config.IMDB_REMOVE_FROM_LABEL:
                 name  = re.sub(r, '', name)
 
