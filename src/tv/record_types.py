@@ -52,7 +52,7 @@ class ScheduledRecordings:
             pass
 
         print 'config.LOCALE=%s' % config.LOCALE
-        print 'type(prog)=%s prog=%s' % (type(prog), prog)
+        print 'prog=%s' % (prog)
 
         if config.DEBUG:
             print 'addProgram: key is "%s"' % String(key)

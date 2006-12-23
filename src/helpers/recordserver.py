@@ -136,6 +136,7 @@ class RecordServer(xmlrpc.XMLRPC):
         proglist = list(progs)
         proglist.sort(self.progsTimeCompare)
         now = time.time()
+        timenow = time.localtime(now)
         for progitem in proglist:
             prog = progs[progitem]
             _debug_('%s' % (prog), 2)
@@ -146,11 +147,11 @@ class RecordServer(xmlrpc.XMLRPC):
                 recording = FALSE
             _debug_('%s: recording=%s' % (prog.title, recording))
 
-            if now >= prog.stop + config.TV_RECORD_PADDING_POST:
-                _debug_('%s: prog.stop=%s, now=%s' % (prog.title, \
-                    time.localtime(prog.stop+config.TV_RECORD_PADDING_POST), now), 2)
+            endtime = time.localtime(prog.stop+config.TV_RECORD_PADDING_POST)
+            if now > prog.stop + config.TV_RECORD_PADDING_POST:
+                _debug_('%s: prog.stop=%s, now=%s' % (prog.title, endtime, timenow), 2)
                 continue
-            _debug_('%s: prog.stop=%s' % (prog.title, time.localtime(prog.stop)))
+            _debug_('%s: endtime=%s' % (prog.title, endtime))
 
             if not recording:
                 next_program = prog
@@ -259,15 +260,15 @@ class RecordServer(xmlrpc.XMLRPC):
         if not prog:
             return (FALSE, 'no prog')
     
-        if prog.stop < time.time():
+        now = time.time()
+        if now > prog.stop:
             return (FALSE, 'cannot record it if it is over')
             
         self.updateGuide()
     
         for chan in guide.chan_list:
             if prog.channel_id == chan.id:
-                _debug_('scheduleRecording: prog.channel_id="%s" chan.id="%s" chan.tunerid="%s"' %
-                    (prog.channel_id, chan.id, chan.tunerid))
+                _debug_('scheduleRecording: "%s"' % (prog))
                 prog.tunerid = chan.tunerid
     
         scheduledRecordings = self.getScheduledRecordings()
@@ -297,7 +298,7 @@ class RecordServer(xmlrpc.XMLRPC):
         try:
             recording = prog.isRecording
         except Exception, e:
-            print 'removeScheduledRecording:', e
+            print 'prog.isRecording:', e
             recording = FALSE
 
         scheduledRecordings = self.getScheduledRecordings()
@@ -305,9 +306,9 @@ class RecordServer(xmlrpc.XMLRPC):
         self.saveScheduledRecordings(scheduledRecordings)
         now = time.time()
 
-        # if prog.start <= now and prog.stop >= now and recording:
+        # if now >= prog.start and now <= prog.stop and recording:
         if recording:
-            #print 'stopping current recording'
+            print 'stopping current recording %s' % (prog)
             rec_plugin = plugin.getbyname('RECORD')
             if rec_plugin:
                 rec_plugin.Stop()
@@ -371,7 +372,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         for ch in guide.chan_list:
             for prog in ch.programs:
-                if prog.stop < now:
+                if now >= prog.stop:
                     continue
                 if not find or regex.match(prog.title) or regex.match(prog.desc) \
                    or regex.match(prog.sub_title):
@@ -393,14 +394,11 @@ class RecordServer(xmlrpc.XMLRPC):
 
         if matches:
             return (TRUE, matches)
-        else:
-            return (FALSE, 'no matches')
+        return (FALSE, 'no matches')
 
 
     def updateGuide(self):
         global guide
-
-        # XXX TODO: only do this if the guide has changed?
         guide = tv.epg_xmltv.get_guide()
 
         
@@ -432,15 +430,14 @@ class RecordServer(xmlrpc.XMLRPC):
             except:
                 recording = FALSE
 
-            if (prog.start - config.TV_RECORD_PADDING_PRE) <= now \
-                   and (prog.stop + config.TV_RECORD_PADDING_POST) >= now \
-                   and not recording:
+            if not recording \
+                and now >= (prog.start - config.TV_RECORD_PADDING_PRE) \
+                and now < (prog.stop + config.TV_RECORD_PADDING_POST):
                 # just add to the 'we want to record this' list
                 # then end the loop, and figure out which has priority,
                 # remember to take into account the full length of the shows
                 # and how much they overlap, or chop one short
-                print 'int(prog.stop + config.TV_RECORD_PADDING_POST)', int(prog.stop + config.TV_RECORD_PADDING_POST)
-                duration = int((prog.stop + config.TV_RECORD_PADDING_POST) - now - 10)
+                duration = int((prog.stop + config.TV_RECORD_PADDING_POST) - now)
                 if duration < 10:
                     return 
 
@@ -453,10 +450,10 @@ class RecordServer(xmlrpc.XMLRPC):
                         # has a higher priority.
 
 
-                        if self.isProgAFavorite(prog)[0] and \
-                           not self.isProgAFavorite(currently_recording)[0] and \
-                           prog.stop + config.TV_RECORD_PADDING_POST > now:
-                            _debug_('ignore %s' % prog)
+                        if self.isProgAFavorite(prog)[0] \
+                            and not self.isProgAFavorite(currently_recording)[0] \
+                            and now < (prog.stop + config.TV_RECORD_PADDING_POST):
+                            _debug_('Ignoring %s' % prog)
                             continue
                         sr.removeProgram(currently_recording, 
                                          tv_util.getKey(currently_recording))
@@ -498,7 +495,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         for prog in progs.values():
             # If the program is over remove the entry.
-            if ( prog.stop + config.TV_RECORD_PADDING_POST) < now:
+            if now > (prog.stop + config.TV_RECORD_PADDING_POST):
                 _debug_('found a program to clean: %s' % prog)
                 cleaned = TRUE
                 del progs[tv_util.getKey(prog)]
@@ -1069,7 +1066,6 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def handleEvents(self):
-        #print 'RECORDSERVER HANDLING EVENT'
         event = rc_object.get_event()
 
         if event:
@@ -1129,7 +1125,7 @@ class RecordServer(xmlrpc.XMLRPC):
                 print 'recorderver: After wait()'
 
             elif event == RECORD_START:
-                #print 'Handling event RECORD_START'
+                print 'received event RECORD_START'
                 prog = event.arg
                 open(self.tv_lock_file, 'w').close()
                 self.create_fxd(prog)
@@ -1137,7 +1133,7 @@ class RecordServer(xmlrpc.XMLRPC):
                     util.popen3.Popen3(config.VCR_PRE_REC)
 
             elif event == RECORD_STOP:
-                #print 'Handling event RECORD_STOP'
+                print 'received event RECORD_STOP'
                 os.remove(self.tv_lock_file)
                 prog = event.arg
                 try:

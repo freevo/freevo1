@@ -161,17 +161,15 @@ class Record_Thread(threading.Thread):
                             print 'autokill timeout, stopping recording'
                         self.mode = 'stop'
                         
-                if DEBUG: print('Record_Thread::run: past wait()!!')
-
-                rc.post_event(Event(OS_EVENT_KILL, (self.app.child.pid, 15)))
-                self.app.kill()
-
-                self.mode = 'idle'
+                if self.app.isAlive():
+                    if DEBUG: print('Record_Thread::run: past wait()!!')
+                    rc.post_event(Event(OS_EVENT_KILL, (self.app.child.pid, 15)))
+                    self.app.kill()
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))
                 if DEBUG: print('Record_Thread::run: finished recording')
-                
+
+                self.mode = 'idle'
             else:
                 self.mode = 'idle'
             time.sleep(0.5)
-

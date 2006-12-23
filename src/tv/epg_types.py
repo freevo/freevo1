@@ -84,16 +84,18 @@ class TvProgram:
 
 
     def __str__(self):
+        st = time.localtime(self.pdc_start) # PDC start time
         bt = time.localtime(self.start)   # Beginning time tuple
         et = time.localtime(self.stop)    # End time tuple
         begins = time.strftime('%a %Y-%m-%d %H:%M', bt)
+        starts = time.strftime('%H:%M', st)
         ends = time.strftime('%H:%M', et)
         try:
             channel_id = String(self.channel_id)
             title = String(self.title)
-            s = '%s->%s  %3s %s' % (begins, ends, channel_id, title)
+            s = '%s->%s (%s)  %3s %s' % (begins, ends, starts, channel_id, title)
         except UnicodeEncodeError: #just in case
-            s = '%s->%s. %3s %s' % (begins, ends, self.channel_id, self.title)
+            s = '%s->%s [%s] %3s %s' % (begins, ends, starts, self.channel_id, self.title)
         return s
 
 
