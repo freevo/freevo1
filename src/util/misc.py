@@ -507,6 +507,21 @@ def _get_method_names (obj):
 
         return result
 
+def human_aspect_ratio (width, height):
+    try:
+        ratio = str(round(float(width)/float(height), 2))
+        if ratio[:3] == '1.3':
+            ratio = '4:3'
+        elif ratio[:3] == '1.7':
+            ratio = '16:9'
+        elif ratio[:3] == '2.3':
+            ratio = _('Widescreen')
+    except ValueError:
+        ratio = None
+    
+    return ratio
+
+
 
 class _SynchronizedMethod:
 

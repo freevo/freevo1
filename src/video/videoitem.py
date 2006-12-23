@@ -188,9 +188,16 @@ class VideoItem(Item):
         if key == 'geometry' and self.info['width'] and self.info['height']:
             return '%sx%s' % (self.info['width'], self.info['height'])
 
-        if key == 'aspect' and self.info['aspect']:
-            aspect = str(self.info['aspect'])
-            return aspect[:aspect.find(' ')].replace('/', ':')
+        if key == 'aspect':
+            if self.info['aspect']:
+                aspect = str(self.info['aspect'])
+                aspect[:aspect.find(' ')].replace('/', ':')
+            else:
+                if self.info['width'] and self.info['height']:
+                    aspect = util.misc.human_aspect_ratio(self.info['width'], self.info['height'])
+
+            if aspect:
+                return aspect
             
         if key == 'runtime':
             length = None
@@ -204,9 +211,29 @@ class VideoItem(Item):
             if not length:
                 return ''
 
-            if isinstance(length, int) or isinstance(length, float) or \
-                   isinstance(length, long):
-                length = str(int(round(length) / 60))
+            try:
+                total = int(length)
+            except ValueError:
+                length = 0
+                total = 0
+
+            if self.subitems:
+                for s in self.subitems:
+                    if s.info['runtime']:
+                        length = s.info['runtime']
+                    elif s.info['length']:
+                        length = s.info['length']
+                    if not length and hasattr(s, 'length'):
+                        length = s.length
+                    if not length:
+                        continue
+                    try:
+                        total += length
+                    except ValueError:
+                        pass
+
+            length = str(total / 60)
+
             if length.find('min') == -1:
                 length = '%s min' % length
             if length.find('/') > 0:
