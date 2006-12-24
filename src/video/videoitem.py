@@ -189,6 +189,7 @@ class VideoItem(Item):
             return '%sx%s' % (self.info['width'], self.info['height'])
 
         if key == 'aspect':
+            aspect = None
             if self.info['aspect']:
                 aspect = str(self.info['aspect'])
                 aspect[:aspect.find(' ')].replace('/', ':')
