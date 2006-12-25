@@ -222,7 +222,14 @@ class VideoItem(Item):
                 for s in self.subitems:
                     if s.info['runtime']:
                         length = s.info['runtime']
-                    elif s.info['length']:
+                        try:
+                            minpos = length.find('min') - 1
+                            if minpos >= 0:
+                                total = int(length[:minpos]) * 60
+                        except TypeError:
+                            pass
+                        break
+                    if s.info['length']:
                         length = s.info['length']
                     if not length and hasattr(s, 'length'):
                         length = s.length
@@ -230,7 +237,7 @@ class VideoItem(Item):
                         continue
                     try:
                         total += length
-                    except ValueError:
+                    except ValueError, TypeError:
                         pass
 
             length = str(total / 60)
