@@ -472,7 +472,7 @@ class OSD:
                 return
             
             if event.type == KEYDOWN:
-                print 'type=%s key=%s' % (event.type, event.key)
+                _debug_('KEYDOWN: type=%s key=%s' % (event.type, event.key), 2)
 
                 if not map and event.key > 30:
                     try:
