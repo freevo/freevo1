@@ -39,6 +39,7 @@ This release has all the changes in Release 1.6.x plus
  * Updated multimail plug-in for Maildir support (F#1594915)
  * Updated recordserver to allow automatic deleting of old recordings when low on disk space (F#1594630)
  * Updated tv mplayer plug-in to pause live tv and change channels without stopping for dvb (F#1610656)
+ * Updated video player to allow commands before and after playback (F#1602956)
  * Removed video plug-in mplayer for unichrome playback (B#1606699)
 
 == Release 1.6.3 (200?-??-??) ==
