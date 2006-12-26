@@ -386,12 +386,18 @@ for program, valname, needed in setup_freevo.EXTERNAL_PROGRAMS:
 #
 # Under Linux, use /var/cache. Under FreeBSD, use /var/db.
 #
-if os.uname()[0] == 'FreeBSD':
+if os.environ.has_key('OS_CACHEDIR'):
+    OS_CACHEDIR = os.environ['OS_CACHEDIR']
+elif os.uname()[0] == 'FreeBSD':
     OS_CACHEDIR = '/var/db'
 else:
     OS_CACHEDIR = '/var/cache'
 
-FREEVO_CACHEDIR = OS_CACHEDIR + '/freevo'
+if os.environ.has_key('FREEVO_CACHEDIR'):
+    FREEVO_CACHEDIR = os.environ['FREEVO_CACHEDIR']
+else:
+    FREEVO_CACHEDIR = OS_CACHEDIR + '/freevo'
+
 if not os.path.isdir(FREEVO_CACHEDIR):
     try:
         os.makedirs(FREEVO_CACHEDIR)
