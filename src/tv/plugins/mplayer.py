@@ -238,6 +238,7 @@ class MPlayer:
             return TRUE
 
         elif event in [ em.TV_CHANNEL_UP, em.TV_CHANNEL_DOWN] or s_event.startswith('INPUT_'):
+            chan = None
             if event == em.TV_CHANNEL_UP:
                 nextchan = self.fc.getNextChannel()
                 nextchannum = self.fc.getNextChannelNum()
