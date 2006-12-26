@@ -46,9 +46,12 @@ if sys.argv[0].find('setup.py') == -1:
                 try:
                     return unicode(string, config.LOCALE)
                 except Exception, e:
-                    print 'Error: Could not convert %s to unicode' % repr(string)
-                    print 'tried encoding %s and %s' % (encoding, config.LOCALE)
-                    print e
+                    try:
+                        return unicode(string, "iso-8859-15")
+                    except Exception, e:
+                        print 'Error: Could not convert %s to unicode' % repr(string)
+                        print 'tried encoding %s and %s' % (encoding, config.LOCALE)
+                        print e
         elif string.__class__ != unicode:
             return unicode(str(string), config.LOCALE)
         
