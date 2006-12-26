@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------
-# freevo_config.py - System configuration
+# local_conf.py - System configuration
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -409,6 +409,38 @@ CACHE_IMAGES = 1
 # CDBURN_TEMP_DIR='/tmp/'
 # CDBURN_DEV = '/dev/cdrom'
 # CDBURN_SPEED = 32
+
+# ----------------------------------------------------------------------
+# Freevo Bluetooth Phone Settings
+# ----------------------------------------------------------------------
+# This plugin uses The Python bindings for Bluez bluetooth stack.
+#
+# It can be downloaded from http://org.csail.mit.edu/pybluez/download.html
+# or installed with the package manager of your operating system.
+#
+# To this plugin to work you need the j2me midlet installed in a compatible
+# phone.
+#
+# plugin.activate('freevused')
+
+# if RFCOMM port is already binded wait this seconds to retry binding
+# FVUSED_BIND_TIMEOUT = 30
+
+# Translation of commands from j2me client to events of Freevo
+# FVUSED_CMDS = {
+#       'PREV': 'UP',                # 1st row left
+#       'STRT': 'SELECT',            # 1nd row center
+#       'NEXT': 'DOWN',              # 1st row right
+#       'RWND': 'LEFT',              # 2nd row left
+#       'PAUS': 'PAUSE',             # 2nd row center
+#       'FFWD': 'RIGHT',             # 2nd row right
+#       'VOL-': 'MIXER_VOLDOWN',     # 3rd row left
+#       'STOP': 'EXIT',              # 3rd row center
+#       'VOL+': 'MIXER_VOLUP',       # 3rd row right
+#       'VOLM': 'MIXER_VOLMUTE',     # 4th row left
+#       'SLCT': 'ENTER',             # 4th row center
+#       'MAIN': 'MENU'               # 4th row right
+# }
 
 # ======================================================================
 # Freevo directory settings:
