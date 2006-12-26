@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-#if 0 /*
 # -----------------------------------------------------------------------
 # freevo - the main entry point to the whole suite of applications
 # -----------------------------------------------------------------------
@@ -8,52 +7,6 @@
 #
 # Notes: This is a rewrite of the old shell script in Python
 # Todo:
-#
-# -----------------------------------------------------------------------
-# $Log$
-# Revision 1.113  2004/06/08 19:34:12  dischi
-# fix bad freevo_script for installed version
-#
-# Revision 1.112  2004/06/08 19:11:56  dischi
-# support direct start without execute
-#
-# Revision 1.111  2004/04/12 05:34:14  dischi
-# extend PATH and set HOME and USER
-#
-# Revision 1.110  2004/02/10 00:17:52  rshortt
-# Use env from /usr/bin rather than /bin.  I beleive it is standard in /usr/bin,
-# looking in /bin breaks Debian and others while it is available in both places
-# (so I have been told) in RedHat and Gentoo.
-#
-# Also standardize the naming of pid files.
-#
-# Revision 1.109  2004/02/06 18:01:21  dischi
-# fix bug with helper softlinks
-#
-# Revision 1.108  2004/01/26 19:33:17  dischi
-# python 2.2 has no True/False
-#
-# Revision 1.107  2004/01/10 20:45:50  mikeruelle
-# can not start freevo -fs without this change
-#
-# Revision 1.106  2004/01/10 18:24:17  dischi
-# fix uid storage for execute and runapp calls
-#
-# Revision 1.105  2004/01/10 16:53:48  dischi
-# better shutdown
-#
-# Revision 1.104  2004/01/10 14:56:19  dischi
-# better KeyboardInterrupt handling
-#
-# Revision 1.103  2004/01/09 20:18:31  dischi
-# check if programm is still running
-#
-# Revision 1.102  2004/01/09 18:55:53  dischi
-# helper stop fixes
-#
-# Revision 1.101  2004/01/07 21:59:10  dischi
-# replace the shell script with a nice python version
-#
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -74,9 +27,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
-
+# -----------------------------------------------------------------------
 
 import os
 import sys
@@ -123,7 +74,6 @@ Before running freevo the first time, you need to run \'freevo setup\'
 After that, you can run freevo without parameter.
     ''' % helper_list
     sys.exit(0)
-
 
 
 def get_python(check_freevo):
@@ -176,7 +126,6 @@ def get_python(check_freevo):
     if check_freevo:
         return None, None
     return None
-
 
                 
 def getpid(name, arg):
@@ -243,7 +192,6 @@ def stop(name, arg):
         return 0
 
 
-
 def start(name, arg, bg, store=1):
     """
     start a process
@@ -273,7 +221,9 @@ def start(name, arg, bg, store=1):
     else:
         os.execvp(arg[0], arg)
 
-
+#--------------------------------------------------------------------------------
+# Main block
+#--------------------------------------------------------------------------------
 freevo_script = os.path.abspath(sys.argv[0])
 if os.path.islink(freevo_script):
     freevo_script = os.readlink(freevo_script)
@@ -311,7 +261,7 @@ if os.path.isdir(os.path.join(os.path.dirname(freevo_script), 'src/plugins')):
         #
         python = get_python(0)
         if not python:
-            print 'can\'t find python >= 2.2'
+            print 'Can\'t find python >= 2.3'
             sys.exit(0)
         python = [ python ]
         runapp = ''
@@ -335,8 +285,6 @@ else:
     freevo_config  = os.path.join(freevo_share, 'freevo_config.py')
     runapp         = ''
     python = [ python ]
-
-
 
 # add the variables from above into environ so Freevo can use them, too
 for var in ('freevo_script', 'runapp', 'freevo_python', 'freevo_locale',
@@ -370,14 +318,11 @@ if len(sys.argv) > 1:
 else:
     arg = ''
 
-
 # check the arg
-
 if arg in ('--help', '-h'):
     # show help
     show_help()
 
-    
 if arg == 'stop':
     # stop running freevo
     if not stop(name, python + proc):
@@ -389,7 +334,6 @@ elif arg == 'start':
     sys.argv = [ sys.argv[0] ]
     bg = 1
 
-
 elif arg == '-fs':
     # start X server and run freevo, ignore everything else for now
     server_num = 0
@@ -400,7 +344,6 @@ elif arg == '-fs':
     sys.stdin.close()
     os.execvp('xinit', [ 'xinit', freevo_script, '-force-fs',  '--', ':'+str(server_num) ])
 
-    
 elif arg == 'execute':
     # execute a python script
     proc  = sys.argv[2:]
@@ -410,11 +353,9 @@ elif arg == 'setup':
     # run setup
     proc = [ os.path.join(freevo_python, 'setup_freevo.py') ] + sys.argv[2:]
 
-
 elif arg == 'prompt':
     # only run python inside the freevo env
     proc = []
-
 
 elif arg == 'runapp':
     # Oops, runapp. We don't start python, we start sys.argv[1]
@@ -439,14 +380,12 @@ elif arg and name == 'freevo' and not arg.startswith('-'):
         else:
             sys.argv = [ sys.argv[0] ] + sys.argv[2:]
 
-
 elif arg and name == 'freevo' and not (arg in ['-force-fs', '-trace', '-doc']):
     # ok, don't know about that arg, freevo should be started, but
     # it's also no freevo arg
     print 'unknown command line option: %s' % sys.argv[1:]
     print
     show_help()
-
 
 else:
     # arg for freevo
