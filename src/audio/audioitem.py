@@ -196,6 +196,7 @@ class AudioItem(Item):
      	        mytrack = None
         else:
             mytrack = None
+            return os.path.split(self.filename)[1]
 
         song_info = {  'a'  : self['artist'],
        	               'l'  : self['album'],
