@@ -5,7 +5,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -49,7 +49,7 @@ class GenreResource(FreevoResource):
             cat = Unicode( cat )
             retval += u'<option value="%s" ' % cat
             if cat == category:
-                retval += u'SELECTED '
+                retval += u'SELECTED'
             retval += u'>%s</option>\n' % cat
         retval += u'</select>\n'
         return retval
@@ -83,12 +83,11 @@ class GenreResource(FreevoResource):
         if got_schedule:
             schedule = schedule.getProgramList()
 
-        fv.printHeader(_('TV Genre for %s') % time.strftime('%a %b %d', time.localtime(mfrguidestart)), config.WWW_STYLESHEET, config.WWW_JAVASCRIPT)
+        fv.printHeader(_('TV Genre for %s') % time.strftime('%a %b %d', time.localtime(mfrguidestart)), \
+            config.WWW_STYLESHEET, config.WWW_JAVASCRIPT)
 
         if not got_schedule:
-            fv.printMessages(
-                [ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ]
-                )
+            fv.printMessages(['<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.')])
 
         allcategories = []
         for chan in guide.chan_list:
@@ -107,16 +106,20 @@ class GenreResource(FreevoResource):
             keepcat = '&category=%s' % category
         bforcell=''
         acelltime=mfrnextguide + 60
-        aftercell='&nbsp;&nbsp;&nbsp;<a href="genre.rpy?stime=%i%s"><img src="images/RightArrow.png" border="0"></a>' % (acelltime, keepcat)
+        aftercell='&nbsp;&nbsp;&nbsp;<a href="genre.rpy?stime=%i%s"><img src="images/RightArrow.png" border="0"></img>'\
+            +'</a>' % (acelltime, keepcat)
         if mfrprevguide > 0:
-            bforcell='<a href="genre.rpy?stime=%i%s"><img src="images/LeftArrow.png" border="0"></a>&nbsp;&nbsp;&nbsp;' % (mfrprevguide, keepcat)
-        
+            bforcell='<a href="genre.rpy?stime=%i%s"><img src="images/LeftArrow.png" border="0"></a>&nbsp;&nbsp;&nbsp;'\
+            % (mfrprevguide, keepcat)
+
         fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
         fv.tableRowOpen('class="chanrow"')
-        fv.tableCell('<form>'+bforcell+_('Show')+'&nbsp;'+_('Category')+':&nbsp;' + self.makecategorybox(allcategories, category)+stime+'<input type=submit value="'+_('Change')+'">'+aftercell+'</form>', 'class="guidehead"')
+        fv.tableCell('<form>'+bforcell+_('Show')+'&nbsp;'+_('Category')+':&nbsp;'\
+            +self.makecategorybox(allcategories, category)+stime+'<input type=submit value="'+_('Change')+'">'\
+            +aftercell+'</form>', 'class="guidehead"')
         fv.tableRowClose()
         fv.tableClose()
- 
+
         if not category:
             fv.printSearchForm()
             fv.printLinks()
@@ -154,15 +157,16 @@ class GenreResource(FreevoResource):
                             status = 'scheduled'
                             really_now = time.time()
                             if prog.start <= really_now and prog.stop >= really_now:
-                                # in the future we should REALLY see if it is 
+                                # in the future we should REALLY see if it is
                                 # recording instead of just guessing
                                 status = 'recording'
 
                     fv.tableRowOpen('class="chanrow"')
                     fv.tableCell(chan.displayname, 'class="channel"')
                     popid = '%s:%s' % (prog.channel_id, prog.start)
-                        
-                    fv.tableCell(prog.title + '&nbsp;&nbsp;-&nbsp;&nbsp;' + prog.desc, 'class="'+status+'" onclick="guide_click(this, event)" id="%s"  width="80%%"' % popid )
+
+                    fv.tableCell(prog.title+'&nbsp;&nbsp;-&nbsp;&nbsp;'+prog.desc, 'class="'+status+'" \
+                        onclick="guide_click(this, event)" id="%s" width="80%%" action=""' % popid)
                     fv.tableCell(time.strftime('%H:%M', time.localtime(prog.start)), 'class="channel"')
                     fv.tableCell(time.strftime('%H:%M', time.localtime(prog.stop)), 'class="channel"')
                     fv.tableRowClose()
@@ -227,6 +231,6 @@ class GenreResource(FreevoResource):
         fv.printFooter()
 
         return String( fv.res )
-    
+
 
 resource = GenreResource()
