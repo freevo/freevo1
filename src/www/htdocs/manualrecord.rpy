@@ -152,7 +152,7 @@ class ManualRecordResource(FreevoResource):
             #day
             dayselect = '<select name="%s" %s >'
             iter=1
-            while iter < 31:
+            while iter <= 31:
                 if curtime[2] == iter:
                     dayselect = dayselect + '<option selected value="'+str(iter)+'">'+str(iter)+"\n"
                 else:
