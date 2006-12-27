@@ -57,6 +57,7 @@ class LibraryResource(FreevoResource):
             os.mkdir(self.cache_dir, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
 
     def is_access_allowed(self, dir_str):
+        print 'is_access_allowed(self, dir_str=%r)' % (dir_str)
         allowed_dirs = []
         allowed_dirs.extend(config.VIDEO_ITEMS)
         allowed_dirs.extend(config.AUDIO_ITEMS)
@@ -69,6 +70,7 @@ class LibraryResource(FreevoResource):
         return FALSE
 
     def get_suffixes (self, media):
+        print 'get_suffixes (self, media=\"%s\")' % (media)
         suffixes = []
         if media == 'music':
             suffixes.extend(config.AUDIO_SUFFIX)
@@ -82,6 +84,7 @@ class LibraryResource(FreevoResource):
         return suffixes
 
     def get_dirlist(self, media):
+        print 'get_dirlist(self, media=\"%s\")' % (media)
         dirs = []
         dirs2 = []
 
@@ -107,6 +110,7 @@ class LibraryResource(FreevoResource):
         return dirs
 
     def check_dir(self, media, dir):
+        print 'check_dir(self, media=\"%s\", dir=%r)' % (media, dir)
         dirs2 = []
         dirs2 = self.get_dirlist(media)
         for d in dirs2:
@@ -116,6 +120,7 @@ class LibraryResource(FreevoResource):
         return FALSE
 
     def _render(self, request):
+        print '_render(self, request=\"%s\")' % (request)
         fv = HTMLResource()
         messages = []
         form = request.args
@@ -128,6 +133,7 @@ class LibraryResource(FreevoResource):
         if isinstance(dir_str, str):
             if not self.is_access_allowed(dir_str):
                 action_dir = ""
+
         action_mediatype = fv.formValue(form, 'media')
         action_script = os.path.basename(request.path)
         #use request.postpath array to set action to download
@@ -197,7 +203,6 @@ class LibraryResource(FreevoResource):
         if action_mediatype:
             directories = self.get_dirlist(action_mediatype)
 
-
         if action and action != "download":
             fv.printHeader(_('Media Library'), 'styles/main.css', script='scripts/display_info-head.js',
                 selected=_("Media Library"))
@@ -225,6 +230,7 @@ class LibraryResource(FreevoResource):
                 password = f.read()
                 f.close()
                 fv.printPassword(password)
+
             fv.printImagePopup()
 
             fv.res += '&nbsp;<br/>\n'
@@ -361,7 +367,6 @@ class LibraryResource(FreevoResource):
             for mydir in directorylist:
                 if i == 0:
                     fv.tableRowOpen('class="chanrow"')
-                #mydir = Unicode(mydir)
                 mydispdir = Unicode(os.path.basename(mydir))
                 mydirlink = ""
                 ### show music cover
@@ -394,11 +399,11 @@ class LibraryResource(FreevoResource):
                     i = 0
                 else:
                     i += 1
-            while i < 3 and i !=0:
+            while i < 3 and i != 0:
                 fv.tableCell('&nbsp;', 'class="basic" colspan="1"')
                 if i == 2:
                     fv.tableRowClose()
-                i +=1
+                i += 1
 
             suffixes = self.get_suffixes(action_mediatype)
 
@@ -418,7 +423,6 @@ class LibraryResource(FreevoResource):
                 suppressaction = FALSE
                 #find size
                 info = metadata.parse(item)
-                print info
                 len_file = os.stat(item)[6]
                 #chop dir from in front of file
                 (basedir, file) = os.path.split(item)
@@ -430,8 +434,8 @@ class LibraryResource(FreevoResource):
                     status = 'favorite'
                 ### show image
                 if action_mediatype == "images":
-                    image_link = self.get_images(basedir + "/" + file)
-                    size = imlib2.open(basedir+"/"+file).size
+                    image_link = self.get_images(filepath)
+                    size = (info['width'], info['height'])
                     new_size = self.resize_image(image_link, size)
                     fv.tableCell('<a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
                         +'<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" />'\
@@ -525,18 +529,21 @@ class LibraryResource(FreevoResource):
         return String(fv.res)
 
     def get_images(self, file):
+        print 'get_images(self, file=%r)' % (file)
         cache_link = self.cache_dir + file.replace("/", "_")
         if not os.path.exists(cache_link):
             os.symlink(file, cache_link)
         return cache_link
 
     def cover_filter(self, x):
+        print 'cover_filter(self, x=%r)' % (x)
         for i in os.listdir(x):
             cover = re.search(config.AUDIO_COVER_REGEXP, i, re.IGNORECASE)
             if cover:
                 return "/" + i
 
     def get_fxd_cover(self, fxd_file):
+        print 'get_fxd_cover(self, fxd_file=\"%s\")' % (fxd_file)
         cover = ""
         fxd_info = {}
         parser = util.fxdparser.FXD(fxd_file)
@@ -548,13 +555,11 @@ class LibraryResource(FreevoResource):
         return cover
 
     def resize_image(self, image, size):
-        new_size = []
-        new_size.append(size[0])
-        new_size.append(size[1])
-        while new_size[0] > 200:
-            new_size[0] -= (new_size[0] * 10)/100
-            new_size[1] -= (new_size[1] * 10)/100
-        return new_size
+        print 'resize_image(self, image=%r, size=%s)' % (image, size)
+        (width, height) = size
+        new_width = 200
+        new_height = float(height) * (float(new_width) / float(width))
+        return [int(new_width), int(new_height + 0.5)]
 
 
 resource = LibraryResource()

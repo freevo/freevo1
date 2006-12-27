@@ -38,18 +38,21 @@ MAX_DESCRIPTION_CHAR = 1000
 class FileInfoResource(FreevoResource):
 
     def __init__(self):
+        print '__init__(self)'
         self.cache_dir = '%s/link_cache/' % (config.FREEVO_CACHEDIR)
         if not os.path.isdir(self.cache_dir):
             os.mkdir(self.cache_dir, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
 
     def _render(self, request):
+        print '_render(self, %s)' % (request)
         fv = HTMLResource()
         form = request.args
         file = fv.formValue(form, 'dir')
         img = fv.formValue(form, 'img')
         
         if file:
-            #medium = metadata.parse(file)
+            medium = metadata.parse(file)
+            print medium
             title = ""
             info = "<table>"
             
@@ -58,7 +61,7 @@ class FileInfoResource(FreevoResource):
                 fxd_info = self.get_fxd_info(fxd_file)
                 i = 0            
                 for z in fxd_info:
-                    if z != "" and z != "cover-img":
+                    if z and z != "cover-img":
                         info += "<tr><td><b>" + fxd_info.keys()[i] + ": </b></td><td>"+fxd_info.values()[i]+"</td></tr>"
                     i +=1
                 title=fxd_info['title']
@@ -74,14 +77,14 @@ class FileInfoResource(FreevoResource):
                     info+='<tr><td><b>Album: </b></td><td>'+media_info['album']+'</td></tr>'
                 if media_info['genre']:
                     info+='<tr><td><b>Genre: </b></td><td>'+media_info['genre']+'</td></tr>'
-                if media_info['length'] and media_info['length'] != 0:
+                if media_info['length']:
                     length = str(int(media_info['length']) / 60) + " min."
                     info+='<tr><td><b>Length: </b></td><td>'+length+'</td></tr>'
                 #movie info
-                if media_info['height'] != "" and media_info['width'] != "":
+                if media_info['height'] and media_info['width']:
                     info +='<tr><td><b>Dimensions: </b></td><td>'+str(media_info['height'])+' x '\
                         +str(media_info['width'])+'</td></tr>' 
-                if media_info['type'] != "":
+                if media_info['type']:
                    info+='<tr><td><b>Type: </b></td><td>'+media_info['type']+'</td></tr>' 
             #add size
             info+='<tr><td><b>Size: </b></td><td>'+str((os.stat(file)[6]/1024)/1024)+' MB</td></tr>'
@@ -118,12 +121,14 @@ class FileInfoResource(FreevoResource):
         return String(fv.res)
     
     def create_file_link(self, file):
+        print 'create_file_link(self, file=%r)' % (file)
         cache_link = self.cache_dir + file.replace("/", "_")
         if not os.path.exists(cache_link):
             os.symlink(file, cache_link)
         return cache_link
     
     def get_fxd_info(self, fxd_file):
+        print 'get_fxd_info(self, %s)' % (fxd_file)
         fxd_info = {}
         parser = util.fxdparser.FXD(fxd_file)
         parser.parse()
