@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # Stop the playing and listening when something is upsoon
 # -----------------------------------------------------------------------
-# $Id: upsoon.py $
+# $Id$
 #
 # Notes:
 #    To activate, put the following line in local_conf.py:
@@ -64,7 +64,7 @@ class PluginInterface( plugin.DaemonPlugin ):
     __author_email__     = 'duncan-freevo@linuxowl.com'
     __maintainer__       = __author__
     __maintainer_email__ = __author_email__
-    __version__          = '$Revision: 20061003 $'
+    __version__          = '$Revision$'
 
 
     def __init__( self ):

@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # ivtv_xine_tv.py - Implementation of live tv timeshift for ivtv
 # -----------------------------------------------------------------------
-# $Id: mplayer.py 8338 2006-10-09 21:47:47Z duncan $
+# $Id$
 #
 # Author: thehog@t3i.nl (rvpaasen)
 # Notes:

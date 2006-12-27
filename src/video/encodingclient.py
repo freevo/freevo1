@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------
 # encodingclient.py - A client interface to the Freevo encoding server.
 # -----------------------------------------------------------------------
-# $Id: encodingclient.py 8278 2006-09-30 07:22:11Z duncan $
+# $Id$
 #
 # Author: den_RDC
 # Notes: parts taken from recordclient
@@ -42,7 +42,7 @@ unjam = unjellyFromXML
 
 #some data
 __author__ = "den_RDC (rdc@kokosnoot.com)"
-__revision__ = "$Rev: 29 $"
+__revision__ = "$Rev$"
 __copyright__ = "Copyright (C) 2004 den_RDC"
 __license__ = "GPL"
 __doc__="""EncodingClient, an interface to EncodingServer

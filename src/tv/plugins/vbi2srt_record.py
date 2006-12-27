@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # vbi2srt_record.py - A plugin to record tv and extract the subtitles
 # -----------------------------------------------------------------------
-# $Id: vbi2srt_record.py 5860 2004-07-10 12:33:43Z dischi $
+# $Id$
 #
 # Author: duncan-freevo@linuxowl.com (Duncan Webb)
 # Notes: This module requires vbi2srt, see:

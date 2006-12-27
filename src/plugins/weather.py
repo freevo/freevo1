@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # weather.py - a plugin to obtain detailed weather forecast information
 # -----------------------------------------------------------------------
-# $Id: weather.py,v 1.15 2003/12/06 13:47:28 dischi Exp $
+# $Id$
 #
 # Notes: 
 #

@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # encoding.py - IdleBarplugin for showing encoding status
 # -----------------------------------------------------------------------
-# $Id: encoding.py 8377 2006-10-15 09:44:34Z duncan $
+# $Id$
 #
 # Author: Duncan Webb <duncan@freevo.org>
 #

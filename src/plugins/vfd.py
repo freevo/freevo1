@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # vfd.py - use PyVFD to display menus and players
 # -----------------------------------------------------------------------
-# $Id: vfd.py $
+# $Id$
 #
 # Notes:
 #    To activate, put the following line in local_conf.py:
@@ -287,7 +287,7 @@ class PluginInterface(plugin.DaemonPlugin):
     __author_email__     = 'duncan-ffs@linuxowl.com'
     __maintainer__       = __author__
     __maintainer_email__ = __author_email__
-    __version__          = '$Revision: 20060727 $'
+    __version__          = '$Revision$'
 
     def send(self, data):
         "Send a piece of data to specified VFD device, retrying if necessary"

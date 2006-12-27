@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # xmradioplayer.py - the Freevo XmRadioplayer plugin for radio
 # -----------------------------------------------------------------------
-# $Id: xmradioplayer.py 7274 2006-04-07 21:56:46Z phishman3579 $
+# $Id$
 #
 # Notes:
 # Todo:        

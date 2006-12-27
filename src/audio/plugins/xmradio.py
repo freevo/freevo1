@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # xmradio.py - a simple plugin to listen to xmradio online
 # -----------------------------------------------------------------------
-# $Id: xmradio.py 5860 2004-07-10 12:33:43Z phishman $
+# $Id$
 #
 # Notes: 
 # need to have an XM Radio account with a username and password

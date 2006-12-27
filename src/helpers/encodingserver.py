@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------
 # EncodingServer.py, part of EncodingServer - for use with Freevo
 # -----------------------------------------------------------------------
-# $Id: rc.py 8278 2006-09-30 07:22:11Z duncan $
+# $Id$
 #
 # Author: den_RDC
 # some parts taken or inspired by Freevo's recordserver (by rshortt)
@@ -60,7 +60,7 @@ from encodingcore import EncodingJob, EncodingQueue
 
 #some data
 __author__ = "den_RDC (rdc@kokosnoot.com)"
-__revision__ = "$Rev: 26 $"
+__revision__ = "$Rev$"
 __copyright__ = "Copyright (C) 2004 den_RDC"
 __license__ = "GPL"
 

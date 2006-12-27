@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # re-encode recorded TV programmes
 # -----------------------------------------------------------------------
-# $Id: reencode.py $
+# $Id$
 #
 # Notes:
 #    To activate, put the following line in local_conf.py:

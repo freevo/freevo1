@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # encodingcore.py, part of EncodingServer - for use with Freevo
 # -----------------------------------------------------------------------
-# $Id: encodingcore.py 8278 2006-09-30 07:22:11Z duncan $
+# $Id$
 #
 # Author: den_RDC
 # some parts taken or inspired by Quickrip (by T. Chance, GPL,
@@ -44,7 +44,7 @@ mplayer = "mplayer"
 
 #some data
 __author__ = "den_RDC (rdc@kokosnoot.com)"
-__revision__ = "$Rev: 30 $"
+__revision__ = "$Rev$"
 __copyright__ = "Copyright (C) 2004 den_RDC"
 __license__ = "GPL"
 
