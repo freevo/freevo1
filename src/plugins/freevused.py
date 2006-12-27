@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # freevused.py - Get events from a Bemused like client
 # -----------------------------------------------------------------------
-# $Id: $
+# $Id$
 #
 # Notes: This is a plugin to remote control Freevo with a bluetooth mobile
 #        phone using a j2me client running in the phone.
