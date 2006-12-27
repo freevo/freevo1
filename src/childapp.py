@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -58,7 +58,7 @@ class ChildApp:
 
         if isinstance(app, unicode):
             app = app.encode(config.LOCALE, 'ignore')
-            
+
         if isinstance(app, str):
             # app is a string to execute. It will be executed by 'sh -c '
             # inside the popen code
@@ -72,7 +72,7 @@ class ChildApp:
                 self.binary = app[app.find(' ')+1:].lstrip()
             else:
                 self.binary = app.lstrip()
-                
+
             start_str = '%s %s' % (config.RUNAPP, app)
             debug_name = app[:app.find(' ')]
 
@@ -94,30 +94,30 @@ class ChildApp:
                 start_str = [ config.RUNAPP ] + app
             else:
                 start_str = app
-            
+
             debug_name = app[0]
 
-        
+
         if debug_name.rfind('/') > 0:
             debug_name = debug_name[debug_name.rfind('/')+1:]
         else:
             debug_name = debug_name
 
         if debugname:
-	    debug_name = debugname
-	
-	if doeslogging or config.CHILDAPP_DEBUG:
-	    doeslogging = 1
-	
+            debug_name = debugname
+
+        if doeslogging or config.CHILDAPP_DEBUG:
+            doeslogging = 1
+
         self.child   = util.popen3.Popen3(start_str)
-        self.outfile = self.child.fromchild 
+        self.outfile = self.child.fromchild
         self.errfile = self.child.childerr
         self.infile  = self.child.tochild
-        
+
         self.t1 = Read_Thread('stdout', self.outfile, self.stdout_cb, debug_name, doeslogging)
         self.t1.setDaemon(1)
         self.t1.start()
-        
+
         self.t2 = Read_Thread('stderr', self.errfile, self.stderr_cb, debug_name, doeslogging)
         self.t2.setDaemon(1)
         self.t2.start()
@@ -125,7 +125,7 @@ class ChildApp:
         if prio and config.CONF.renice:
             os.system('%s %s -p %s 2>/dev/null >/dev/null' % \
                       (config.CONF.renice, prio, self.child.pid))
-            
+
         if config.DEBUG:
             print 'self.t1.isAlive()=%s, self.t2.isAlive()=%s' % (self.t1.isAlive(),
                                                                   self.t2.isAlive())
@@ -136,16 +136,16 @@ class ChildApp:
                   (self.child.pid, start_str, self.child.poll())
 
         self.ready = True
-        
 
-    # Write a string to the app. 
+
+    # Write a string to the app.
     def write(self, line):
         try:
             self.infile.write(line)
             self.infile.flush()
         except (IOError, ValueError):
             pass
-        
+
 
     # Override this method to receive stdout from the child app
     # The function receives complete lines
@@ -163,12 +163,12 @@ class ChildApp:
         if not self.ready: # return true if constructor has not finished yet
             return True
         return self.t1.isAlive() or self.t2.isAlive()
-        
+
 
     def wait(self):
         return util.popen3.waitpid(self.child.pid)
 
-        
+
     def kill(self, signal=15):
 
         # killed already
@@ -196,7 +196,7 @@ class ChildApp:
                 os.kill(self.child.pid, signal)
             except OSError:
                 pass
-            
+
         _debug_('childapp: Before wait(%s)' % self.child.pid)
         for i in range(60):
             if self.wait():
@@ -252,7 +252,7 @@ class ChildApp:
         self.lock.release()
 
 
-        
+
 class Read_Thread(threading.Thread):
     """
     Thread for reading stdout or stderr from the child
@@ -278,8 +278,8 @@ class Read_Thread(threading.Thread):
                       String(_( 'Cannot open "%s" for logging!')) % logger
                 print String(_('Set CHILDAPP_DEBUG=0 in local_conf.py, '+\
                                'or make %s writable!' )) % config.LOGDIR
-            
-        
+
+
     def run(self):
         try:
             self._handle_input()
@@ -288,7 +288,7 @@ class Read_Thread(threading.Thread):
 
 
     def _handle_input(self):
-        
+
         saved = ''
         while 1:
 
@@ -329,7 +329,7 @@ class Read_Thread(threading.Thread):
                             if self.logger:
                                 self.logger.write(line+'\n')
                             rc.register(self.callback, False, 0, line)
-                        
+
 
 
 
@@ -340,9 +340,9 @@ class ChildApp2(ChildApp):
     def __init__(self, app, debugname=None, doeslogging=0, stop_osd=2):
         rc.register(self.poll, True, 10)
         rc.register(self.stop, True, rc.SHUTDOWN)
-        
+
         self.is_video = 0                       # Be more explicit
-        if stop_osd == 2: 
+        if stop_osd == 2:
             self.is_video = 1
             rc.post_event(Event(VIDEO_START))
             stop_osd = config.OSD_STOP_WHEN_PLAYING
@@ -350,13 +350,13 @@ class ChildApp2(ChildApp):
         self.stop_osd = stop_osd
         if self.stop_osd:
            osd.stop()
-        
+
         if hasattr(self, 'item'):
             rc.post_event(Event(PLAY_START, arg=self.item))
 
         # return status of the child
         self.status = 0
-        
+
         # start the child
         ChildApp.__init__(self, app, debugname, doeslogging)
 
@@ -377,13 +377,13 @@ class ChildApp2(ChildApp):
         except OSError:
             # strange, no child? So it is finished
             return True
-        
+
         if pid == self.child.pid:
             self.status = status
             return True
         return False
-    
-        
+
+
     def stop(self, cmd=''):
         """
         stop the child
@@ -410,7 +410,7 @@ class ChildApp2(ChildApp):
         if self.is_video:
             rc.post_event(Event(VIDEO_END))
 
-        
+
     def poll(self):
         """
         stop everything when child is dead
@@ -418,4 +418,4 @@ class ChildApp2(ChildApp):
         if not self.isAlive():
             rc.post_event(self.stop_event())
             self.stop()
-            
+

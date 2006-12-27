@@ -70,8 +70,8 @@ class GenericItem(Item):
             self.image = os.path.splitext(file)[0] + ".png"
 
         command = ['--prio=%s' % config.GAMES_NICE, cmd]
-	command.extend(args.split())
-	command.append(file)
+        command.extend(args.split())
+        command.append(file)
 
         self.command = command
 

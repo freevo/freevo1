@@ -228,7 +228,7 @@ class MPlayerApp(childapp.ChildApp2):
         self.elapsed     = 0
         self.stop_reason = 0 # 0 = ok, 1 = error
         self.RE_TIME     = re.compile("^A: *([0-9]+)").match
-	self.RE_TIME_NEW = re.compile("^A: *([0-9]+):([0-9]+)").match
+        self.RE_TIME_NEW = re.compile("^A: *([0-9]+):([0-9]+)").match
 
         # check for mplayer plugins
         self.stdout_plugins  = []
@@ -250,23 +250,23 @@ class MPlayerApp(childapp.ChildApp2):
             m = self.RE_TIME_NEW(line)
             if m:
                 self.stop_reason = 0
-		timestrs = m.group().split(":")
-		if len(timestrs) == 5:
-		    # playing for days!
+                timestrs = m.group().split(":")
+                if len(timestrs) == 5:
+                    # playing for days!
                     self.item.elapsed = 86400*int(timestrs[1]) + \
-		                        3600*int(timestrs[2]) + \
-		                        60*int(timestrs[3]) + \
-					int(timestrs[4])
+                                        3600*int(timestrs[2]) + \
+                                        60*int(timestrs[3]) + \
+                                        int(timestrs[4])
                 elif len(timestrs) == 4:
-		    # playing for hours
+                    # playing for hours
                     self.item.elapsed = 3600*int(timestrs[1]) + \
-		                        60*int(timestrs[2]) + \
-					int(timestrs[3])
+                                        60*int(timestrs[2]) + \
+                                        int(timestrs[3])
                 elif len(timestrs) == 3:
-		    # playing for minutes
+                    # playing for minutes
                     self.item.elapsed = 60*int(timestrs[1]) + int(timestrs[2])
                 elif len(timestrs) == 2:
-		    # playing for only seconds
+                    # playing for only seconds
                     self.item.elapsed = int(timestrs[1])
             else:
                 m = self.RE_TIME(line) # Convert decimal 

@@ -39,14 +39,14 @@ def usage():
         print 'You need to set ENABLE_NETWORK_REMOTE = 1 in you local_conf.py'
         print
         print 'It takes two optional arguments:'
-	print '    - the first is host which defaults to localhost'
-	print '    - the second is port which defaults to 16310'
-	print 
-	print 'when run with no args it connects to the localhost on port 16310'
-	print 'freevo remote'
-	print 
-	print 'when run with one arg it connects to the given host on port 16310'
-	print 'freevo remote myfreevo.local'
+        print '    - the first is host which defaults to localhost'
+        print '    - the second is port which defaults to 16310'
+        print 
+        print 'when run with no args it connects to the localhost on port 16310'
+        print 'freevo remote'
+        print 
+        print 'when run with one arg it connects to the given host on port 16310'
+        print 'freevo remote myfreevo.local'
         print
         sys.exit(0)
 

@@ -78,94 +78,94 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'SCREENSAVER'
         self.event_listener = TRUE
-	self.poll_menu_only = TRUE
-	self.last_event = 0
+        self.poll_menu_only = TRUE
+        self.last_event = 0
         self.screensaver_showing = FALSE
-	self.vitem = None
-	self.pl = None
-	self.menuw = None
-	self.poll_interval = 10 * config.SSAVER_POLL
-	self.saver_delay = config.SSAVER_DELAY
-	self.saver_type = sstype
-	self.arg1 = ssarg1
+        self.vitem = None
+        self.pl = None
+        self.menuw = None
+        self.poll_interval = 10 * config.SSAVER_POLL
+        self.saver_delay = config.SSAVER_DELAY
+        self.saver_type = sstype
+        self.arg1 = ssarg1
         self.arg2 = ssarg2
 
     def config(self):
         return [ ('SSAVER_DELAY', 300, '# of seconds to wait to start saver.'),
-	         ('SSAVER_POLL', 600, '# of seconds to wait between polling.') ]
+                 ('SSAVER_POLL', 600, '# of seconds to wait between polling.') ]
 
     def eventhandler(self, event = None, menuw=None, arg=None):
         """
         eventhandler to handle the events. Always return false since we
-	are just a listener and really can't send back true.
+        are just a listener and really can't send back true.
         """
         _debug_("Saver saw %s" % event.name)
-	if menuw:
-	    self.menuw = menuw
+        if menuw:
+            self.menuw = menuw
 
         if event.name == 'SCREENSAVER_START':
-	    self.start_saver()
-	    return FALSE
+            self.start_saver()
+            return FALSE
 
         if event.name == 'SCREENSAVER_STOP' and self.screensaver_showing :
-	    self.stop_saver()
-	    return FALSE
+            self.stop_saver()
+            return FALSE
 
         # gotta ignore these or video screensavers shutoff before they begin
-	if event.name == 'VIDEO_START' or event.name == 'PLAY_START' or event.name == 'VIDEO_END' or event.name == 'PLAY_END':
-	    return FALSE
+        if event.name == 'VIDEO_START' or event.name == 'PLAY_START' or event.name == 'VIDEO_END' or event.name == 'PLAY_END':
+            return FALSE
 
         if self.screensaver_showing :
-	    self.stop_saver()
+            self.stop_saver()
 
-	if not event.name == 'IDENTIFY_MEDIA':
-	    self.last_event = time.time()
+        if not event.name == 'IDENTIFY_MEDIA':
+            self.last_event = time.time()
 
         return FALSE
 
     def poll(self):
         _debug_("Saver got polled %f" % time.time())
-	if not self.screensaver_showing and (time.time() - self.last_event) > self.saver_delay :
-	    rc.post_event(em.Event("SCREENSAVER_START"))
+        if not self.screensaver_showing and (time.time() - self.last_event) > self.saver_delay :
+            rc.post_event(em.Event("SCREENSAVER_START"))
 
     def start_saver (self):
-	 _debug_("start screensaver")
+         _debug_("start screensaver")
          self.screensaver_showing = TRUE
          if self.saver_type == 'xscreensaver':
-	     os.system('%s -no-splash &' % self.arg1)
-	     os.system('sleep 5 ; %s -activate' % self.arg2)
-	 elif self.saver_type == 'script':
-	     os.system('%s' % self.arg1)
-	 elif self.saver_type == 'ssr':
-	     self.pl = Playlist('ScreenSaver', playlist=self.arg1, display_type='image', repeat=True)
-	     self.pl.play(menuw=self.menuw)
-	 elif self.saver_type == 'fxd':
-	     mylist = fxditem.mimetype.parse(None, [self.arg1], display_type=self.arg2)
-	     if len(mylist) > 0:
-	         self.pl = mylist[0]
-		 arg = None
-		 if self.arg2 == 'image':
-	             self.pl.repeat = 1
-		 elif self.arg2 == 'video':
-		     arg = '-nosound -loop 0'
-	         self.pl.play(arg=arg, menuw=self.menuw)
+             os.system('%s -no-splash &' % self.arg1)
+             os.system('sleep 5 ; %s -activate' % self.arg2)
+         elif self.saver_type == 'script':
+             os.system('%s' % self.arg1)
+         elif self.saver_type == 'ssr':
+             self.pl = Playlist('ScreenSaver', playlist=self.arg1, display_type='image', repeat=True)
+             self.pl.play(menuw=self.menuw)
+         elif self.saver_type == 'fxd':
+             mylist = fxditem.mimetype.parse(None, [self.arg1], display_type=self.arg2)
+             if len(mylist) > 0:
+                 self.pl = mylist[0]
+                 arg = None
+                 if self.arg2 == 'image':
+                     self.pl.repeat = 1
+                 elif self.arg2 == 'video':
+                     arg = '-nosound -loop 0'
+                 self.pl.play(arg=arg, menuw=self.menuw)
              else:
-	         _debug_("saver thinks fxd blew up trying to parse?")
-	 else:
-	     _debug_("Unknown saver type to start.")
+                 _debug_("saver thinks fxd blew up trying to parse?")
+         else:
+             _debug_("Unknown saver type to start.")
 
     
     def stop_saver (self):
-	 _debug_("stop screensaver")
+         _debug_("stop screensaver")
          self.screensaver_showing = FALSE
          if self.saver_type == 'xscreensaver':
-	     os.system('%s -exit' % self.arg2)
-	 elif self.saver_type == 'script':
-	     os.system('%s' % self.arg2)
-	 elif self.saver_type == 'ssr':
-	     rc.post_event(em.STOP)
-	 elif self.saver_type == 'fxd':
-	     rc.post_event(em.STOP)
-	 else:
-	     _debug_("Unknown saver type to stop.")
+             os.system('%s -exit' % self.arg2)
+         elif self.saver_type == 'script':
+             os.system('%s' % self.arg2)
+         elif self.saver_type == 'ssr':
+             rc.post_event(em.STOP)
+         elif self.saver_type == 'fxd':
+             rc.post_event(em.STOP)
+         else:
+             _debug_("Unknown saver type to stop.")
 

@@ -43,7 +43,7 @@ class PluginInterface(plugin.ItemPlugin):
     def config(self):
         return [ ('FILE_OPS_ALLOW_DELETE_IMAGE', True,
                   'Add delete image to the menu.'),
-	         ('FILE_OPS_ALLOW_DELETE_INFO', True,
+                 ('FILE_OPS_ALLOW_DELETE_INFO', True,
                   'Add delete info to the menu.') ]
 
     def actions(self, item):

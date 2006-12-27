@@ -79,7 +79,7 @@ class MameItem(Item):
         # The arguments in the options file are added at the end of the
         # regular mame arguments.
         if os.path.isfile(file + '.mame'):
-	    addargs = open(filename + '.mame').read().strip()
+            addargs = open(filename + '.mame').read().strip()
             command.extend(addargs.split())
             if DEBUG: print 'Read additional options = "%s"' % addargs
 
@@ -88,10 +88,10 @@ class MameItem(Item):
         self.command = command
 
         self.game_player = game.get_singleton()
-	if info:
-	    self.info = { 'description' : '%s - %s - %s' % (info['description'],info['manufacturer'],info['year']) }
-	else:
-	    self.info = { 'description' : 'No ROM information' }
+        if info:
+            self.info = { 'description' : '%s - %s - %s' % (info['description'],info['manufacturer'],info['year']) }
+        else:
+            self.info = { 'description' : 'No ROM information' }
         
 
     def sort(self, mode=None):

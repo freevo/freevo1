@@ -71,15 +71,15 @@ class WapResource:
 
     def validate(self, request):
         session = request.getSession()
-	form = request.args
-	
+        form = request.args
+
         username = self.formValue(form, 'u')
         password = self.formValue(form, 'p')
 
         if not username :
-	    session.validated="no"
-	else:
-	    realpass = config.WWW_USERS.get(username)
+            session.validated="no"
+        else:
+            realpass = config.WWW_USERS.get(username)
             if password == realpass:
                 session.validated="yes"
             else:

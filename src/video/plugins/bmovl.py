@@ -421,7 +421,7 @@ class PluginInterface(plugin.Plugin):
                 self.bmovl.update()
 
             font = skin.get_singleton().get_font('bmovl clock')
-	    if time.strftime('%P') =='':
+            if time.strftime('%P') =='':
                 format ='%a %H:%M'
             else:
                 format ='%a %I:%M %P'

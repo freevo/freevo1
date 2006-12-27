@@ -197,15 +197,15 @@ class DirItem(Playlist):
         '''
         parse the xml file for directory settings
         
-	<?xml version="1.0" ?>
-	<freevo>
-	  <folder title="Incoming TV Shows" cover-img="foo.jpg">
-	    <setvar name="directory_autoplay_single_item" val="0"/>
-	    <info>
-	      <content>Episodes for current tv shows not seen yet</content>
-	    </info>
-	  </folder>
-	</freevo>
+        <?xml version="1.0" ?>
+        <freevo>
+          <folder title="Incoming TV Shows" cover-img="foo.jpg">
+            <setvar name="directory_autoplay_single_item" val="0"/>
+            <info>
+              <content>Episodes for current tv shows not seen yet</content>
+            </info>
+          </folder>
+        </freevo>
         '''
         if node.name == 'skin':
             self.skin_fxd = self.folder_fxd
@@ -487,15 +487,15 @@ class DirItem(Playlist):
                 util.mount(self.dir)
                 self.media = media
 
-	if vfs.isfile(self.dir + '/.password'):
-	    print 'password protected dir'
+        if vfs.isfile(self.dir + '/.password'):
+            print 'password protected dir'
             self.arg   = arg
             self.menuw = menuw
-	    pb = InputBox(text=_('Enter Password'), handler=self.pass_cmp_cb,
+            pb = InputBox(text=_('Enter Password'), handler=self.pass_cmp_cb,
                           type='password')
-	    pb.show()
-	else:
-	    self.build(arg=arg, menuw=menuw)
+            pb.show()
+        else:
+            self.build(arg=arg, menuw=menuw)
 
 
     def pass_cmp_cb(self, word=None):
@@ -503,21 +503,21 @@ class DirItem(Playlist):
         read the contents of self.dir/.passwd and compare to word
         callback for check_password_and_build
         """
-	try:
-	    pwfile = vfs.open(self.dir + '/.password')
-	    line = pwfile.readline()
-	except IOError, e:
-	    print 'error %d (%s) reading password file for %s' % \
-		  (e.errno, e.strerror, self.dir)
-	    return
+        try:
+            pwfile = vfs.open(self.dir + '/.password')
+            line = pwfile.readline()
+        except IOError, e:
+            print 'error %d (%s) reading password file for %s' % \
+                  (e.errno, e.strerror, self.dir)
+            return
 
-	pwfile.close()
-	password = line.strip()
-	if word == password:
-	    self.build(self.arg, self.menuw)
-	else:
-	    pb = AlertBox(text=_('Password incorrect'))
-	    pb.show()
+        pwfile.close()
+        password = line.strip()
+        if word == password:
+            self.build(self.arg, self.menuw)
+        else:
+            pb = AlertBox(text=_('Password incorrect'))
+            pb.show()
             return
 
 
@@ -550,7 +550,7 @@ class DirItem(Playlist):
             if hasattr(self.menu, 'skin_force_text_view'):
                 del self.menu.skin_force_text_view
         elif not os.path.exists(self.dir):
-	    AlertBox(text=_('Directory does not exist')).show()
+            AlertBox(text=_('Directory does not exist')).show()
             return
         
         display_type = self.display_type

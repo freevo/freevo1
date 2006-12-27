@@ -121,7 +121,7 @@ def mameRomListFromListinfo(mame_cmd):
         listinfo = os.popen(mame_cmd + ' --listinfo', 'r')
     except:
         print 'Unable to get mame listinfo.'
-	return FALSE
+        return FALSE
 
     newRom = mame_types.MameRom()
     cache = {}
@@ -261,7 +261,7 @@ def xmame_semimajor_version( mame_cmd ) :
         verinfo = os.popen(mame_cmd + ' --version', 'r')
     except:
         print 'Unable to get mame version.'
-	return FALSE
+        return FALSE
 
     this_re = re.compile( ".*version\s+(\d+)\.(\d+)\s+" )
 
@@ -302,9 +302,9 @@ def getMameItemInfoList(mame_files, mame_cmd):
     # Only build the cache if it doesn't exis.
     if not os.path.isfile(config.GAMES_MAME_CACHE):
         waitmsg = PopupBox(text=_('Generating MAME cache, please wait.'))
-	waitmsg.show()
+        waitmsg.show()
         mame_ok = updateMameRomList(mame_cmd)
-	waitmsg.destroy()
+        waitmsg.destroy()
 
         if not mame_ok:
             return (mame_files, [])
@@ -316,12 +316,12 @@ def getMameItemInfoList(mame_files, mame_cmd):
         key = os.path.splitext(os.path.basename(romfile))[0]
         if roms.has_key(key):
             rom = roms[key]
-	    info = { 'manufacturer': rom.manufacturer,
-	             'name': rom.name,
-	             'description': rom.description,
-	             'year': rom.year,
-	             'cloneof': rom.cloneof,
-	             'romof': rom.romof } 
+            info = { 'manufacturer': rom.manufacturer,
+                     'name': rom.name,
+                     'description': rom.description,
+                     'year': rom.year,
+                     'cloneof': rom.cloneof,
+                     'romof': rom.romof } 
             items += [(rom.description, romfile, None, info)]
             rm_files.append(romfile)
 

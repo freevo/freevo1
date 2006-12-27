@@ -83,7 +83,7 @@ class CameraFile( Item ):
         self.filename = None
         self.image_viewer = image.viewer.get_singleton()
         self.duration = duration
-	self.binsexif = {}
+        self.binsexif = {}
 
     def loadimage(self):
         cfile = pygphoto.gp_getfile( self.gCamera, self.path, self.name )
@@ -97,7 +97,7 @@ class CameraFile( Item ):
         Retrieve and Show the Image
         """
         items = [ ( self.view, _('View Image') ) ]
-	return items
+        return items
 
     def cache(self):
         """
@@ -120,7 +120,7 @@ class CameraFolder( Item ):
         self.gCamera = gcamera
         self.path = path
         self.name = name
-	self.type = 'folder'
+        self.type = 'folder'
 
     def actions(self):
         items = [ ( self.cwd, _('Browse directory') ) ]

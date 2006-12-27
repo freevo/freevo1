@@ -62,11 +62,11 @@ def escape(sql):
 def inti(a):
     ret = 0
     if a:
-	try: 
-	    ret = int(a)
-	except ValueError:
-	    traceback.print_exc()
-	    ret = 0
+        try: 
+            ret = int(a)
+        except ValueError:
+            traceback.print_exc()
+            ret = 0
 
     return ret
 
@@ -88,7 +88,7 @@ class MetaDatabase:
         self.cursor = self.db.cursor()
 
     def runQuery(self,query, close=False):
-	try:
+        try:
             self.cursor.execute(query)
         except TypeError:
             traceback.print_exc()

@@ -104,7 +104,7 @@ class GenesisItem(Item):
 
         command = ['--prio=%s' % config.GAMES_NICE, cmd] 
         command.extend(args.split())
-	command.append(file)
+        command.append(file)
 
         self.command = command
 

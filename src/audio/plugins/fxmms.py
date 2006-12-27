@@ -89,8 +89,8 @@ class PluginInterface(plugin.Plugin):
 
     def config(self):
         return [ ('FXMMS_CMD', '/usr/bin/xmms', 'location of xmms.'),
-	         ('FXMMS_NETRADIO', 1, 'Whether to use xmms for netradio'),
-		 ('FXMMS_SUFFIX', ['mp3','wav','ogg', 'mod'], 'xmms suffixes to play')]
+                 ('FXMMS_NETRADIO', 1, 'Whether to use xmms for netradio'),
+                 ('FXMMS_SUFFIX', ['mp3','wav','ogg', 'mod'], 'xmms suffixes to play')]
 
 
 class FXMMS:
@@ -119,12 +119,12 @@ class FXMMS:
             return 0
         if item.url and item.url.startswith('rtsp://'):
             return 0
-	if item.url and not config.FXMMS_NETRADIO and item.url.startswith('https://'):
+        if item.url and not config.FXMMS_NETRADIO and item.url.startswith('https://'):
             return 0
-	if item.url and not config.FXMMS_NETRADIO and item.url.startswith('http://'):
+        if item.url and not config.FXMMS_NETRADIO and item.url.startswith('http://'):
             return 0
-	if item.filename and not util.match_suffix(item.filename, config.FXMMS_SUFFIX):
-	    return 0
+        if item.filename and not util.match_suffix(item.filename, config.FXMMS_SUFFIX):
+            return 0
         return 2
 
     def play(self, item, playerGUI):
@@ -135,7 +135,7 @@ class FXMMS:
             filename = item.url
         else:
             filename = item.filename
-	    
+            
         self.playerGUI = playerGUI
         
         # Do we care if the file streamed over the network?
@@ -144,9 +144,9 @@ class FXMMS:
             return _('%s\nnot found!') % filename
 
         # need to convert filename for cds to /mnt/cdrom/Track??.cda
-	# the /mnt/cdrom is supposed to be where you mount your cd
+        # the /mnt/cdrom is supposed to be where you mount your cd
         if filename.startswith('cdda://'):
-	    filename = '%s/Track%.2d.cda' % (item.parent.media.mountdir, int(item.url[7:])) 
+            filename = '%s/Track%.2d.cda' % (item.parent.media.mountdir, int(item.url[7:])) 
             
         if plugin.getbyname('MIXER'):
             plugin.getbyname('MIXER').reset()
@@ -158,7 +158,7 @@ class FXMMS:
         if not xmms.is_running():
             xmms.enqueue_and_play_launch_if_session_not_started([(filename)],xmms_prg=config.FXMMS_CMD)
             time.sleep(0.2)
-	    self.hide_windows()
+            self.hide_windows()
             # turn off repeat mode
             if (xmms.is_repeat()):
                 xmms.toggle_repeat()
@@ -197,8 +197,8 @@ class FXMMS:
         self.idle = 0
         
         while self.is_alive:
-	    if xmms.is_main_win():
-	        self.hide_windows()
+            if xmms.is_main_win():
+                self.hide_windows()
         
             if self.is_playing():
                 

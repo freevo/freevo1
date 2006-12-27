@@ -42,9 +42,9 @@ from event import *
 
 
 # barstates
-BAR_HIDE=0 		# timedout, reset and change poll interval
-BAR_SHOW=1 		# show the bar
-BAR_IDLE=2 		# wait for new track
+BAR_HIDE=0              # timedout, reset and change poll interval
+BAR_SHOW=1              # show the bar
+BAR_IDLE=2              # wait for new track
 
 class PluginInterface(plugin.DaemonPlugin):
     """

@@ -670,17 +670,16 @@ if ROM_DRIVES == None:
                     dispname = 'CD-%s' % (len(ROM_DRIVES)+1)
                 elif devname.lower().find('dvd') != -1:
                     dispname = 'DVD-%s' % (len(ROM_DRIVES)+1)
-	    	elif devname.lower().find('hd') != -1:
+                elif devname.lower().find('hd') != -1:
 		    print 'Trying to autodetect type of %s' %devname
-		    if os.path.exists('/proc/ide/' + re.sub(r'^(/dev/)', '', devname) +\
-                                      '/media'):
-		     if open('/proc/ide/'+  re.sub(r'^(/dev/)', '', devname) +\
+                    if os.path.exists('/proc/ide/' + re.sub(r'^(/dev/)', '', devname) + '/media'):
+                        if open('/proc/ide/'+  re.sub(r'^(/dev/)', '', devname) +\
                              '/media','r').read().lower().find('cdrom') !=1:
-			    dispname = 'CD-%s' % (len(ROM_DRIVES)+1)
-			    print ("%s is a cdrom drive" %devname)
-		    else:
-			print ("%s doesn't seems to be a cdrom drive" %devname)
-                    	mntdir = devname = dispname = ''
+                            dispname = 'CD-%s' % (len(ROM_DRIVES)+1)
+                            print ("%s is a cdrom drive" %devname)
+                    else:
+                        print ("%s doesn't seems to be a cdrom drive" %devname)
+                        mntdir = devname = dispname = ''
                 else:
                     mntdir = devname = dispname = ''
 

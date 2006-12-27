@@ -77,7 +77,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
     
     def __init__(self):
-		
+
         plugin.ItemPlugin.__init__(self)
 
         # create actions and corresponding functions
