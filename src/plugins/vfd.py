@@ -11,8 +11,6 @@
 #    1) Use Threads. pyusb is too blocking!
 #    2) See if it's possible to scroll the display
 # -----------------------------------------------------------------------
-# $Log$
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -31,7 +29,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 from menu import MenuItem
@@ -78,38 +76,38 @@ Reverse =     0x00000400
 Repeat =      0x00000200
 Mute =        0x00000100
 
-def rjust( s, n ):
-    return s[ : n ].rjust( n )
+def rjust(s, n):
+    return s[ : n ].rjust(n)
 
 # menu_info: information to be shown when in menu
 # Structure:
 #
 # menu_info = {
-#     <TYPE> : [ ( <ATTRIBUTE>, <FORMAT_STRING> ), ... ],
+#     <TYPE> : [ (<ATTRIBUTE>, <FORMAT_STRING>), ... ],
 #    }
 # <ATTRIBUTE> is some valid attribute to item.getattr()
 menu_info = {
     "main" : [ ],
-    "audio" : [ ( "length", _( "Length" ) + ": %s" ),
-                ( "artist", _( "Artist" ) + ": %s" ),
-                ( "album", _( "Album" )   + ": %s" ),
-                ( "year", _( "Year" )     + ": %s" ) ],
-    "audiocd" : [ ( "len(tracks)", _( "Tracks" ) + ": %s" ),
-                  ( "artist", _( "Artist" ) + ": %s" ),
-                  ( "album", _( "Album" )   + ": %s" ),
-                  ( "year", _( "Year" )     + ": %s" ) ],
-    "video" : [ ( "length", _( "Length" )   + ": %s" ),
-                ( "geometry", _( "Resolution" ) + ": %s" ),
-                ( "aspect", _( "Aspect" ) + ": %s" ),
-                ( "tagline", _( "Tagline" ) + ": %s" ),
-                ( "plot", _( "Plot" ) + ": %s" ) ],
-    "dir" : [ ( "plot", _( "Plot" ) + ": %s" ),
-              ( "tagline", _( "Tagline" ) + ": %s" ) ],
-    "image" : [ ( "geometry", _( "Geometry" ) + ": %s" ),
-                ( "date", _( "Date" ) + ": %s" ),
-                ( "description", _( "Description" ) + ": %s" ) ],
-    "playlist" : [ ( "len(playlist)", _( "%s items" ) ) ],
-    "mame" : [ ( "description", _( "Description" ) + ": %s" ) ],
+    "audio" : [ ("length", _("Length") + ": %s"),
+                ("artist", _("Artist") + ": %s"),
+                ("album", _("Album")   + ": %s"),
+                ("year", _("Year")     + ": %s") ],
+    "audiocd" : [ ("len(tracks)", _("Tracks") + ": %s"),
+                  ("artist", _("Artist") + ": %s"),
+                  ("album", _("Album")   + ": %s"),
+                  ("year", _("Year")     + ": %s") ],
+    "video" : [ ("length", _("Length")   + ": %s"),
+                ("geometry", _("Resolution") + ": %s"),
+                ("aspect", _("Aspect") + ": %s"),
+                ("tagline", _("Tagline") + ": %s"),
+                ("plot", _("Plot") + ": %s") ],
+    "dir" : [ ("plot", _("Plot") + ": %s"),
+              ("tagline", _("Tagline") + ": %s") ],
+    "image" : [ ("geometry", _("Geometry") + ": %s"),
+                ("date", _("Date") + ": %s"),
+                ("description", _("Description") + ": %s") ],
+    "playlist" : [ ("len(playlist)", _("%s items")) ],
+    "mame" : [ ("description", _("Description") + ": %s") ],
     "unknow" : [ ]
     }
 # menu_strinfo: will be passed to time.strinfo() and added to the end of info (after menu_info)
@@ -132,9 +130,9 @@ menu_strinfo = {
 # layouts = { <#_OF_LINES_IN_DISPLAY> :
 #             { <#_OF_CHARS_IN_LINES> :
 #                { <SCREEN_NAME> :
-#                  <WIDGET_NAME> : ( <WIDGET_TYPE>,
+#                  <WIDGET_NAME> : (<WIDGET_TYPE>,
 #                                    <WIDGET_PARAMETERS>,
-#                                    <PARAMETERS_VALUES> ),
+#                                    <PARAMETERS_VALUES>),
 #                  ...
 #                  <MORE_WIDGETS>
 #                  ...
@@ -146,7 +144,7 @@ menu_strinfo = {
 #           }
 # Note:
 #    <PARAMETERS_VALUES>: will be used like this:
-#       <WIDGET_PARAMETERS> % eval( <PARAMETERS_VALUES> )
+#       <WIDGET_PARAMETERS> % eval(<PARAMETERS_VALUES>)
 #    There should be at least these screens:
 #       welcome: will be the shown during the startup
 #          menu: will be used in menu mode
@@ -157,85 +155,85 @@ layouts = { 1 : # 1 line display
             { 20 : # 20 chars per line
               # Welcome screen
               { "welcome":
-                { "title"    : ( "title",
+                { "title"    : ("title",
                                  "Freevo",
-                                 None ),
-                  "calendar" : ( "scroller",
-                                 "" + _( "Today is %s." ) + "%s",
-                                 "( time.strftime('%A, %d-%B'), self.get_sepstrmscroll(time.strftime('%A, %d-%B')) )" ),
-                  "clock"    : ( "string",
+                                 None),
+                  "calendar" : ("scroller",
+                                 "" + _("Today is %s.") + "%s",
+                                 "(time.strftime('%A, %d-%B'), self.get_sepstrmscroll(time.strftime('%A, %d-%B')))"),
+                  "clock"    : ("string",
                                  "%s",
-                                 "( time.strftime('%T') )" )
+                                 "(time.strftime('%T'))")
                   },
 
                  "menu"    :
-                 { "title_v"  : ( "scroller",
+                 { "title_v"  : ("scroller",
                                   "%s%s",
-                                  "( menu.heading, self.get_sepstrmscroll(menu.heading) )" ),
-                   "item_v"   : ( "scroller",
+                                  "(menu.heading, self.get_sepstrmscroll(menu.heading))"),
+                   "item_v"   : ("scroller",
                                   "%s%s",
-                                  "( title, self.get_sepstrmscroll(title) )" )
+                                  "(title, self.get_sepstrmscroll(title))")
                    },
 
                  "audio_player":
-                 { "music_v"   : ( "scroller",
+                 { "music_v"   : ("scroller",
                                    "%s%s",
-                                   "( title, self.get_sepstrmscroll(title) )" ),
-                  "time_v1"   : ( "string",
+                                   "(title, self.get_sepstrmscroll(title))"),
+                  "time_v1"   : ("string",
                                   "'% 2d:%02d/'",
-                                  "( int(player.length / 60), int(player.length % 60) )" ),
-                  "time_v2"   : ( "string",
+                                  "(int(player.length / 60), int(player.length % 60))"),
+                  "time_v2"   : ("string",
                                   "'% 2d:%02d'",
-                                  "( int(player.elapsed / 60), int(player.elapsed % 60) )" ),
-                  "time_v3"   : ( "string",
-                                  "'( %2d%%)'",
-                                  "( int(player.elapsed * 100 / player.length) )" ),
+                                  "(int(player.elapsed / 60), int(player.elapsed % 60))"),
+                  "time_v3"   : ("string",
+                                  "'(%2d%%)'",
+                                  "(int(player.elapsed * 100 / player.length))"),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "'%s'",
+                  "animation_v": ("string", "'%s'",
                                    "animation_audioplayer_chars[player.elapsed % len(animation_audioplayer_chars)]")
                    },
 
                  "radio_player":
-                 { "radio_v"   : ( "scroller",
+                 { "radio_v"   : ("scroller",
                                    "%s%s",
-                                   "( title, self.get_sepstrmscroll(title) )" ),
-                  "time_v1"   : ( "string",
+                                   "(title, self.get_sepstrmscroll(title))"),
+                  "time_v1"   : ("string",
                                   "'% 2d:%02d/'",
-                                  "( int(player.length / 60), int(player.length % 60) )" ),
-                  "time_v2"   : ( "string",
+                                  "(int(player.length / 60), int(player.length % 60))"),
+                  "time_v2"   : ("string",
                                   "'% 2d:%02d'",
-                                  "( int(player.elapsed / 60), int(player.elapsed % 60) )" ),
-                  "time_v3"   : ( "string",
-                                  "'( %2d%%)'",
-                                  "( int(player.elapsed * 100 / player.length) )" ),
+                                  "(int(player.elapsed / 60), int(player.elapsed % 60))"),
+                  "time_v3"   : ("string",
+                                  "'(%2d%%)'",
+                                  "(int(player.elapsed * 100 / player.length))"),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "'%s'",
+                  "animation_v": ("string", "'%s'",
                                    "animation_audioplayer_chars[player.elapsed % len(animation_audioplayer_chars)]")
                    },
 
                 "video_player"  :
-                { "video_v"   : ( "scroller",
+                { "video_v"   : ("scroller",
                                   "%s%s",
-                                "( title, self.get_sepstrmscroll(title) )" ),
-                  "time_v1"   : ( "string",
+                                "(title, self.get_sepstrmscroll(title))"),
+                  "time_v1"   : ("string",
                                   "'%s /'",
-                                  "( length )" ),
-                  "time_v2"   : ( "string",
+                                  "(length)"),
+                  "time_v2"   : ("string",
                                   "'%s'",
-                                  "( elapsed )" ),
+                                  "(elapsed)"),
                   # animation at the begining of the time line
-                  "animation_v": ( "string", "'%s'",
+                  "animation_v": ("string", "'%s'",
                                    "animation_audioplayer_chars[player.elapsed % len(animation_audioplayer_chars)]")
                   },
 
 
                  "tv":
-                 { "chan_v"   : ( "scroller",
+                 { "chan_v"   : ("scroller",
                                   "%s%s",
-                                  "( get_chan_displayname(tv.channel_id), self.get_sepstrmscroll( get_chan_displayname(tv.channel_id)) )" ),
-                   "prog_v"   : ( "scroller",
+                                  "(get_chan_displayname(tv.channel_id), self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))"),
+                   "prog_v"   : ("scroller",
                                   "%s%s",
-                                  "( tv.title, self.get_sepstrmscroll(tv.title) )" )
+                                  "(tv.title, self.get_sepstrmscroll(tv.title))")
                    }
                 } # screens
               } # chars per line
@@ -245,7 +243,7 @@ layouts = { 1 : # 1 line display
 # Structure:
 #
 # poll_widgets = { <#_OF_LINES_IN_DISPLAY> :
-#                  { <SCREEN_NAME> : ( <WIDGET_NAME>, ... ) },
+#                  { <SCREEN_NAME> : (<WIDGET_NAME>, ...) },
 #                  ...
 #                }
 poll_widgets = { 1 : {
@@ -253,12 +251,12 @@ poll_widgets = { 1 : {
     },
                  }
 
-def get_info( item, list ):
+def get_info(item, list):
     info = ""
 
     for l in list:
 
-        v = item.getattr( l[ 0 ] )
+        v = item.getattr(l[ 0 ])
         if v:
             if info:
                 info += sep_str
@@ -267,7 +265,7 @@ def get_info( item, list ):
     return info
 
 
-class PluginInterface( plugin.DaemonPlugin ):
+class PluginInterface(plugin.DaemonPlugin):
     """
     Display context info on Shuttle's VFD (Versatile Front-panel Display)
 
@@ -282,7 +280,7 @@ class PluginInterface( plugin.DaemonPlugin ):
     To activate this plugin, just put the following line at the end of your
     local_conf.py file:
 
-    plugin.activate( 'vfd' )
+    plugin.activate('vfd')
 
     """
     __author__           = 'Duncan Webb'
@@ -291,7 +289,7 @@ class PluginInterface( plugin.DaemonPlugin ):
     __maintainer_email__ = __author_email__
     __version__          = '$Revision: 20060727 $'
 
-    def send( self, data ):
+    def send(self, data):
         "Send a piece of data to specified VFD device, retrying if necessary"
         attempts = 3
         while attempts > 0:
@@ -306,11 +304,11 @@ class PluginInterface( plugin.DaemonPlugin ):
                 return
             except Exception,e:
                 attempts -= 1
-                _debug_( _( "WARNING" ) + ": " + _( "%r attempt=%d"%(data,4-attempts)), 1)
+                _debug_(_("WARNING") + ": " + _("%r attempt=%d"%(data,4-attempts)), 1)
 
         raise e
 
-    def msg( self, msgtype, *msgdata ):
+    def msg(self, msgtype, *msgdata):
         assert msgtype >= 0 and msgtype <= 0xf
         assert len(msgdata) <= 7
 
@@ -324,17 +322,20 @@ class PluginInterface( plugin.DaemonPlugin ):
             (retval, msgtype, len(msgdata), msgdata), dbglvl+1)
         return retval
 
-    def clear( self ):
+    def clear(self):
         "Clear the display"
         self.last_message = None
         self.last_bitmask = None
         self.send(self.msg(1,1))
 
-    def reset( self ):
+    def reset(self):
         "Reset the cursor position"
         self.send(self.msg(1,2))
 
-    def split( self, s, length, maxlength ):
+    def brightness(self, level=0):
+        pass
+
+    def split(self, s, length, maxlength):
         "Split a string into chunks, but no longer than maxlength"
         if len(s) > maxlength:
             _debug_('Truncating \"%s\" longer than %d characters' % (s,maxlength), dbglvl+1)
@@ -345,14 +346,17 @@ class PluginInterface( plugin.DaemonPlugin ):
             out.append(s[x:x+length])
         return out
 
-    def message( self, msgstring, cls=0 ):
+    def message(self, msgstring, cls=0):
         "Update the display with a string, specifying if it should be cleared first"
 
         try:
-            msgstring = msgstring.encode('latin1')
+            if msgstring.__class__ == unicode:
+                msgstring = msgstring.encode('iso-8859-15')
+            elif msgstring.__class__ == str:
+                msgstring = Unicode(msgstring).encode('iso-8859-15')
         except UnicodeError:
             # Strange for some reason the name changes on play
-            _debug_('%s' % [x for x in msgstring])
+            _debug_('UnicodeError: %s' % [x for x in msgstring])
             #_debug_('%d' % [x for x in msgstring])
             #_debug_('%s' % [type(x) for x in msgstring])
 
@@ -373,7 +377,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         for part in msgparts:
             self.send(self.msg(9,*part))
 
-    def icons( self ):
+    def icons(self):
         "Update icons to be shown"
         _debug_('device=%x media=%x recording=%x running=%x muted=%x volume=%x' % \
             (self.device, self.media, self.recording, self.running, self.muted, self.volume), dbglvl+1)
@@ -384,29 +388,29 @@ class PluginInterface( plugin.DaemonPlugin ):
         self.last_bitmask = self.bitmask
         self.send(self.msg(7,pack('I', self.bitmask)))
 
-    def set_device( self, device=None ):
+    def set_device(self, device=None):
         if device != None:
             self.device = device
         _debug_('device=%s, self.device=%s' % (device, self.device), dbglvl+1)
 
-    def set_media( self, media=None ):
+    def set_media(self, media=None):
         if media != None:
             self.media = media
         _debug_('media=%s, self.media=%s' % (media, self.media), dbglvl)
 
-    def set_running( self, running=None ):
+    def set_running(self, running=None):
         if running != None:
             self.running = running
         _debug_('running=%s, self.running=%s' % (running, self.running), dbglvl+1)
 
-    def set_recording( self, recording=None ):
+    def set_recording(self, recording=None):
         if recording != None:
             self.recording = recording
         else:
             self.recording = (os.path.exists(self.tvlockfile) and Record) or 0
         _debug_('recording=%s, self.recording=%s' % (recording, self.recording), dbglvl+1)
 
-    def set_mixer( self, muted=None, volume=None ):
+    def set_mixer(self, muted=None, volume=None):
         if self.mixer == None:
             return
 
@@ -420,10 +424,10 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         _debug_('muted=%s, self.muted=%s, volume=%s, self.volume=%s' % (muted, self.muted, volume, self.volume), dbglvl)
 
-    def widget_set( self, screen, widget, value ):
+    def widget_set(self, screen, widget, value):
         #if widget != 'clock' and widget != 'time_v1' and widget != 'time_v2' and widget != 'time_v3' and widget != 'animation_v':
         if widget != 'clock' and widget != 'time_v2' and widget != 'time_v3' and widget != 'animation_v':
-            _debug_('screen=%s, widget=%s, value=%s' % ( screen, widget, value ), dbglvl)
+            _debug_('screen=%s, widget=%s, value=%s' % (screen, widget, value), dbglvl)
         if screen == "welcome":
             pass
         elif screen == "menu":
@@ -454,7 +458,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         elif screen == "tv":
             self.set_device(Television)
         else:
-            _debug_('ERROR: unknown screen screen=%s, widget=%s, value=%s' % ( screen, widget, value ), 0)
+            _debug_('ERROR: unknown screen screen=%s, widget=%s, value=%s' % (screen, widget, value), 0)
 
         if widget == "title":
             pass
@@ -485,10 +489,10 @@ class PluginInterface( plugin.DaemonPlugin ):
         elif widget == "calendar":
             pass
         else:
-            _debug_('ERROR: unknown widget screen=%s, widget=%s, value=%s' % ( screen, widget, value ), 0)
+            _debug_('ERROR: unknown widget screen=%s, widget=%s, value=%s' % (screen, widget, value), 0)
         self.icons()
 
-    def __init__( self ):
+    def __init__(self):
         """
         init the vfd
         """
@@ -509,7 +513,7 @@ class PluginInterface( plugin.DaemonPlugin ):
                     _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), dbglvl)
 
         if self.vfd == None:
-            _debug_(String(_( "ERROR" )) + ":" + String(_( "Cannot find VFD device" )), 0)
+            _debug_(String(_("ERROR")) + ":" + String(_("Cannot find VFD device")), 0)
             self.disable = 1
             self.reason = "Cannot find VFD device"
             return
@@ -517,7 +521,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         self.mixer = plugin.getbyname('MIXER')
         if self.mixer == None:
-            _debug_(String(_( "ERROR" )) + ":" + String(_( "Cannot find MIXER" )), 0)
+            _debug_(String(_("ERROR")) + ":" + String(_("Cannot find MIXER")), 0)
             self.disable = 1
             self.reason = "Cannot find MIXER"
             return
@@ -539,27 +543,27 @@ class PluginInterface( plugin.DaemonPlugin ):
         self.last_bitmask = 0
         self.generate_screens()
 
-        plugin.register( self, "vfd" )
+        plugin.register(self, "vfd")
 
 
         # Show welcome screen:
         for w in self.screens[ "welcome" ]:
             type, param, val = self.screens[ "welcome" ][ w ]            
-            if val: param = param % eval( val )
+            if val: param = param % eval(val)
 
-            self.widget_set( "welcome", w, param )
+            self.widget_set("welcome", w, param)
 
         self.last_screen = "welcome"
 
         self.lsv = { } # will hold last screen value (lsv)
 
-    def close( self ):
+    def close(self):
         """
         to be called before the plugin exists.
         """
-        self.message( "bye" )
+        self.message("bye")
 
-    def draw( self, ( type, object ), osd ):
+    def draw(self, (type, object), osd):
         """
         'Draw' the information on the VFD display.
         """
@@ -574,11 +578,11 @@ class PluginInterface( plugin.DaemonPlugin ):
                 return
 
         if type == 'player':
-            sname = "%s_%s" % ( object.type, type )
+            sname = "%s_%s" % (object.type, type)
         else:
             sname = type
 
-        if not self.screens.has_key( sname ):
+        if not self.screens.has_key(sname):
             sname = 'menu'
 
         _debug_('sname=%s, last_screen=%s' % (sname, self.last_screen), dbglvl+1)
@@ -587,87 +591,87 @@ class PluginInterface( plugin.DaemonPlugin ):
             # This is used to handle cases where the previous screen was dirty
             # ie: played music with info and now play music without, the previous
             #     info will still be there
-            self.generate_screen( sname )
+            self.generate_screen(sname)
             self.lsv = { } # reset last changed values
 
         if type == 'menu':   
             menu  = object.menustack[ -1 ]
             title = menu.selected.name
-            if isinstance( menu.selected, MenuItem ):
-                title = _( title )
+            if isinstance(menu.selected, MenuItem):
+                title = _(title)
             typeinfo = menu.selected.type
             info = ""
 
-            if menu.selected.getattr( 'type' ):
-                typeinfo = menu.selected.getattr( 'type' )
+            if menu.selected.getattr('type'):
+                typeinfo = menu.selected.getattr('type')
 
             # get info:
-            if menu.selected.type and menu_info.has_key( menu.selected.type ):
-                info = get_info( menu.selected, menu_info[ menu.selected.type ] )
-                if menu_strinfo.has_key( menu.selected.type ) and menu_strinfo[ menu.selected.type ]:
+            if menu.selected.type and menu_info.has_key(menu.selected.type):
+                info = get_info(menu.selected, menu_info[ menu.selected.type ])
+                if menu_strinfo.has_key(menu.selected.type) and menu_strinfo[ menu.selected.type ]:
                     if info:
                         info += sep_str
-                    info += time.strftime( menu_strinfo[ menu.selected.type ] )
+                    info += time.strftime(menu_strinfo[ menu.selected.type ])
 
             # specific things related with item type
             if menu.selected.type == 'audio':
-                title = String(menu.selected.getattr( 'title' ))
+                title = String(menu.selected.getattr('title'))
                 if not title:
-                    title = String(menu.selected.getattr( 'name' ))
-                if menu.selected.getattr( 'trackno' ):
-                    title = "%s - %s" % ( String(menu.selected.getattr( 'trackno' )), title )
+                    title = String(menu.selected.getattr('name'))
+                if menu.selected.getattr('trackno'):
+                    title = "%s - %s" % (String(menu.selected.getattr('trackno')), title)
 
         elif type == 'player':
             player = object
-            title  = player.getattr( 'title' )
+            title  = player.getattr('title')
             if not title:
-                title = String(player.getattr( 'name' ))
+                title = String(player.getattr('name'))
 
             if player.type == 'radio':
-                if player.getattr( 'trackno' ):
-                    title = "%s - %s" % ( String(player.getattr( 'trackno' )), title )
+                if player.getattr('trackno'):
+                    title = "%s - %s" % (String(player.getattr('trackno')), title)
 
             elif player.type == 'audio':
-                if player.getattr( 'trackno' ):
-                    title = "%s - %s" % ( String(player.getattr( 'trackno' )), title )
+                if player.getattr('trackno'):
+                    title = "%s - %s" % (String(player.getattr('trackno')), title)
 
             elif player.type == 'video':
-                length = player.getattr( 'length' )
+                length = player.getattr('length')
                 elapsed = player.elapsed
                 if elapsed / 3600:
-                    elapsed ='%d:%02d:%02d' % ( elapsed / 3600, ( elapsed % 3600 ) / 60,
+                    elapsed ='%d:%02d:%02d' % (elapsed / 3600, (elapsed % 3600) / 60,
                                                 elapsed % 60)
                 else:
-                    elapsed = '%d:%02d' % ( elapsed / 60, elapsed % 60)
+                    elapsed = '%d:%02d' % (elapsed / 60, elapsed % 60)
                 try:
-                    percentage = float( player.elapsed / player.info.video[0].length )
+                    percentage = float(player.elapsed / player.info.video[0].length)
                 except:
                     percentage = None
 
 
         elif type == 'tv':
-            tv = copy.copy( object.selected )
+            tv = copy.copy(object.selected)
 
             if tv.start == 0:
                 tv.start = " 0:00"
                 tv.stop  = "23:59" # could also be: '????'
             else:
-                tv.start = time.localtime( tv.start )
-                tv.stop  = time.localtime( tv.stop )
+                tv.start = time.localtime(tv.start)
+                tv.stop  = time.localtime(tv.stop)
 
-                tv.start = "% 2d:%02d" % ( tv.start[ 3 ], tv.start[ 4 ] )
-                tv.stop  = "% 2d:%02d" % ( tv.stop[ 3 ], tv.stop[ 4 ] )
+                tv.start = "% 2d:%02d" % (tv.start[ 3 ], tv.start[ 4 ])
+                tv.stop  = "% 2d:%02d" % (tv.stop[ 3 ], tv.stop[ 4 ])
 
 
         s = self.screens[ sname ]
         for w in s:
             t, param, val = s[ w ]
             try:
-                if val: param = param % eval( val )
+                if val: param = param % eval(val)
             except:
                 param = None
 
-            k = '%s %s' % ( sname, w )
+            k = '%s %s' % (sname, w)
             try:
                 if String(self.lsv[ k ]) == String(param):
                     continue # nothing changed in this widget
@@ -676,17 +680,17 @@ class PluginInterface( plugin.DaemonPlugin ):
 
             self.lsv[ k ] = param
             if param:
-                self.widget_set( sname, w, param )
+                self.widget_set(sname, w, param)
 
         if self.last_screen != sname:
             self.last_screen = sname
 
 
-    def poll( self ):
+    def poll(self):
         if self.disable: return
 
         if self.playitem:
-            self.draw( ( 'player', self.playitem ), None )
+            self.draw(('player', self.playitem), None)
 
         try:
             screens = poll_widgets[ self.lines ][ self.columns ]
@@ -699,14 +703,14 @@ class PluginInterface( plugin.DaemonPlugin ):
             for w in widgets:
                 type, param, val = self.screens[ s ][ w ]
 
-                if val: param = param % eval( val )
-                self.widget_set( s, w, param )
+                if val: param = param % eval(val)
+                self.widget_set(s, w, param)
 
         self.set_recording()
         self.icons()
 
 
-    def generate_screens( self ):
+    def generate_screens(self):
         screens = None
         l = self.height
         c = self.width
@@ -716,11 +720,11 @@ class PluginInterface( plugin.DaemonPlugin ):
             try:                
                 screens = layouts[ l ]
             except KeyError:
-                _debug_( _( "WARNING" ) + ": " + _( "Could not find screens for %d lines VFD!" ) % l, dbglvl)
+                _debug_(_("WARNING") + ": " + _("Could not find screens for %d lines VFD!") % l, dbglvl)
                 l -= 1
                 if l < 1:
-                    _debug_(String(_( "ERROR" )) + ": " + String(_( "No screens found for this VFD (%dx%d)!" )) % \
-                        ( self.height, self.width ), 0)
+                    _debug_(String(_("ERROR")) + ": " + String(_("No screens found for this VFD (%dx%d)!")) % \
+                        (self.height, self.width), 0)
                     self.disable = 1
                     return
         # find a display with 'l' line and 'c' columns
@@ -728,12 +732,12 @@ class PluginInterface( plugin.DaemonPlugin ):
             try:
                 screens = layouts[ l ][ c ]
             except KeyError:
-                _debug_( _( "WARNING" ) + ": " + _( "Could not find screens for %d lines and %d columns VFD!" ) % \
-                    ( l, c ), 1)
+                _debug_(_("WARNING") + ": " + _("Could not find screens for %d lines and %d columns VFD!") % \
+                    (l, c), 1)
                 c -= 1
                 if c < 1:
-                    _debug_(String(_( "ERROR" )) + ": " + String(_( "No screens found for this VFD (%dx%d)!" )) % \
-                        ( self.height, self.width ), 0)
+                    _debug_(String(_("ERROR")) + ": " + String(_("No screens found for this VFD (%dx%d)!")) % \
+                        (self.height, self.width), 0)
                     self.disable = 1
                     return
 
@@ -743,17 +747,17 @@ class PluginInterface( plugin.DaemonPlugin ):
         try:
             self.screens = screens = layouts[ l ][ c ]
         except KeyError:
-            _debug_(String(_( "ERROR" )) + ": " + String(_( "No screens found for this VFD (%dx%d)!" )) % \
-                ( self.height, self.width ), 0)
+            _debug_(String(_("ERROR")) + ": " + String(_("No screens found for this VFD (%dx%d)!")) % \
+                (self.height, self.width), 0)
             self.disable = 1
             return
 
         for s in screens:
-            self.generate_screen( s )
+            self.generate_screen(s)
 
 
-    def generate_screen( self, s ):
-        if not self.screens.has_key( s ):
+    def generate_screen(self, s):
+        if not self.screens.has_key(s):
             s = 'menu'
         widgets = self.screens[ s ]
 
@@ -762,7 +766,7 @@ class PluginInterface( plugin.DaemonPlugin ):
             _debug_('self.screens[ %s ][ %s ]=%s' % (s,w,self.screens[ s ][ w ]), dbglvl+1)
 
 
-    def eventhandler( self, event, menuw=None ):
+    def eventhandler(self, event, menuw=None):
         update_bits = 0
         _debug_('eventhandler(self, %s, %s) %s arg=%s' % (event, menuw, self, event.arg), dbglvl)
 
@@ -798,13 +802,21 @@ class PluginInterface( plugin.DaemonPlugin ):
         elif event == 'VIDEO_END':
             self.set_running(Stop)
             update_bits = 1
-        elif event == 'BUTTON':
+        elif event == 'PLUGIN_EVENT USB':
             pass
-        elif event == 'VIDEO_SEND_MPLAYER_CMD':
+        elif event == 'FUNCTION_CALL':
+            pass
+        elif event == 'BUTTON':
             pass
         elif event == 'OSD_MESSAGE':
             pass
+        elif event == 'TOGGLE_OSD':
+            pass
         elif event == 'MENU_UP':
+            pass
+        elif event == 'MENU_DOWN':
+            pass
+        elif event == 'MENU_LEFT':
             pass
         elif event == 'MENU_DOWN':
             pass
@@ -814,11 +826,27 @@ class PluginInterface( plugin.DaemonPlugin ):
             pass
         elif event == 'MENU_SELECT':
             pass
+        elif event == 'MENU_PLAY_ITEM':
+            pass
         elif event == 'MENU_SUBMENU':
             pass
         elif event == 'MENU_BACK_ONE_MENU':
             pass
         elif event == 'MENU_GOTO_MAINMENU':
+            pass
+        elif event == 'MENU_CALL_ITEM_ACTION':
+            pass
+        elif event == 'MENU_CHANGE_STYLE':
+            pass
+        elif event == 'INPUT_ENTER':
+            pass
+        elif event == 'TV_START_RECORDING':
+            pass
+        elif event == 'VIDEO_SEND_MPLAYER_CMD':
+            pass
+        elif event == 'VIDEO_MANUAL_SEEK':
+            pass
+        elif event == 'AUDIO_LOG':
             pass
         else:
             #_debug_('eventhandler(self, %s, %s) %s arg=%s' % (event, menuw, self, event.arg), dbglvl)
@@ -829,7 +857,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         return 0
 
-    def get_sepstrmscroll( self, mscrolldata ):
+    def get_sepstrmscroll(self, mscrolldata):
         """
         used for marquee scroller; returns seperator if info is wider then lcd
         """
