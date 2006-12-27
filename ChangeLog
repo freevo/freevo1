@@ -49,6 +49,7 @@ This release has all the changes in Release 1.6.x plus
  * Fixed manual record when month is December (B#1621615)
  * Fixed shopping cart for items with two or more subitems (B#1620425)
  * Fixed video thumbnails not being shown with subitems (B#1620452)
+ * Fixed genre webserver module generated html (B#1622456)
 
 == Release 1.6.2 (2006-12-22) ==
 --------------------------------

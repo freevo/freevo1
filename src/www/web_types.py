@@ -44,6 +44,7 @@ FALSE = 0
 class FreevoPage(page.Page):
     
     def __init__(self, model=None, template=None):
+        print '__init__(self, model=\"%s\", template=\"%s\")' % (model, template)
 
         if not model:
             model = {'foo': 'bar'}
@@ -59,6 +60,7 @@ class FreevoPage(page.Page):
 class FreevoResource(Resource):
 
     def render(self, request):
+        print 'render(self, request=\"%s\")' % (request)
         username = request.getUser()
         password = request.getPassword()
 
@@ -74,6 +76,7 @@ class FreevoResource(Resource):
 
 
     def auth_user(self, username, password):
+        print 'auth_user(self, username=\"%s\", password=\"%s\")' % (username, password)
         realpass = config.WWW_USERS.get(username)
         if password == realpass:
             return TRUE
@@ -84,27 +87,33 @@ class FreevoResource(Resource):
 class HTMLResource:
 
     def __init__(self):
+        print '__init__(self)'
         self.res = ''
 
 
     def printContentType(self, content_type='text/html'):
+        print 'printContentType(self, content_type=\"%s\")' % (content_type)
         self.res += 'Content-type: %s\n\n' % content_type
 
 
-    def printHeader(self, title='unknown page', style=None, script=None, selected='Help',prefix=0):
+    def printHeader(self, title='unknown page', style=None, script=None, selected='Help', prefix=0):
+        print 'printHeader(self, title=\"%s\", style=\"%s\", script=\"%s\", selected=\"%s\", prefix=\"%s\")' % \
+            (title, style, script, selected, prefix)
 
         strprefix = '../' * prefix
 
         self.res += '<?xml version="1.0" encoding="'+ config.encoding +'"?>\n'
-        self.res += '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n'
-        self.res += '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
+        self.res += '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" '
+        self.res += '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n'
+        #self.res += '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n'
+        #self.res += '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
         self.res += '<html>\n\t<head>\n'
         self.res += '\t<title>Freevo | '+title+'</title>\n'
         self.res += '\t<meta http-equiv="Content-Type" content= "text/html; charset='+ config.encoding +'"/>\n'
         if style != None:
             self.res += '\t<link rel="stylesheet" href="styles/main.css" type="text/css" />\n'
         if script != None:
-            self.res += '\t<script language="JavaScript" src="'+script+'"></script>\n'
+            self.res += '\t<script language="JavaScript" type="text/JavaScript" src="'+script+'"></script>\n'
         self.res += '</head>\n'
         self.res += '\n\n\n\n<body>\n'
         # Header
@@ -140,50 +149,62 @@ class HTMLResource:
 
 
     def tableOpen(self, opts=''):
+        print 'tableOpen(self, opts=\"%s\")' % (opts)
         self.res += "<table "+opts+">\n"
 
 
     def tableClose(self):
+        print 'tableClose(self)'
         self.res += "</table>\n"
 
 
     def tableHeadOpen(self, opts=''):
+        print 'tableHeadOpen(self, opts=\"%s\")' % (opts)
         self.res += "  <thead "+opts+">\n"
 
 
     def tableHeadClose(self, opts=''):
+        print 'tableHeadClose(self, opts=\"%s\")' % (opts)
         self.res += "  </thead>\n"
 
 
     def tableBodyOpen(self, opts=''):
+        print 'tableBodyOpen(self, opts=\"%s\")' % (opts)
         self.res += "  <tbody "+opts+">\n"
 
 
     def tableBodyClose(self, opts=''):
+        print 'tableBodyClose(self, opts=\"%s\")' % (opts)
         self.res += "  </tbody>\n"
 
 
     def tableFootOpen(self, opts=''):
+        print 'tableFootOpen(self, opts=\"%s\")' % (opts)
         self.res += "  <tfoot "+opts+">\n"
 
 
     def tableFootClose(self, opts=''):
+        print 'tableFootClose(self, opts=\"%s\")' % (opts)
         self.res += "  </tfoot>\n"
 
 
     def tableRowOpen(self, opts=''):
+        print 'tableRowOpen(self, opts=\"%s\")' % (opts)
         self.res += "     <tr "+opts+">\n"
 
 
     def tableRowClose(self):
+        print 'tableRowClose(self)'
         self.res += "     </tr>\n"
 
 
     def tableCell(self, data='', opts=''):
+        print 'tableCell(self, data=\"%s\", opts=\"%s\")' % (data, opts)
         self.res += "       <td "+opts+">"+data+"</td>\n"
 
 
     def formValue(self, form=None, key=None):
+        print 'formValue(self, form=\"%s\", key=\"%s\")' % (form, key)
         if not form or not key:
             return None
 
@@ -196,10 +217,12 @@ class HTMLResource:
 
 
     def printFooter(self):
+        print 'printFooter(self)'
         self.res += '</body>\n</html>\n'
     
     
     def printSearchForm(self):
+        print 'printSearchForm(self)'
         self.res += """
     <form id="SearchForm" action="search.rpy" method="get">
     <div class="searchform"><b>"""+_('Search')+""":</b><input type="text" name="find" size="20" /></div>
@@ -207,6 +230,7 @@ class HTMLResource:
     """
 
     def printAdvancedSearchForm(self):
+        print 'printAdvancedSearchForm(self)'
         self.res += """
     <form id="SearchForm" action="search.rpy" method="get">
     <div class="searchform"><b>"""+_('Search')+""":</b><input type="text" name="find" size="20" />
@@ -216,23 +240,26 @@ class HTMLResource:
     </form>
     """
 
-    def printMessages( self, messages ):
+    def printMessages(self, messages):
+        print 'printMessages(self, messages=\"%s\")' % (messages)
         self.res += "<h4>"+_("Messages")+":</h4>\n"
         self.res += "<ul>\n"
         for m in messages:
             self.res += "   <li>%s</li>\n" % m
             self.res += "</ul>\n"
 
-    def printMessagesFinish( self, messages ):
+    def printMessagesFinish(self, messages):
         """
         Print messages and add the search form, links and footer.
         """
+        print 'printMessagesFinish(self, messages=\"%s\")' % (messages)
         self.printMessages( messages )
         self.printSearchForm()
         self.printLinks()
         self.printFooter()
         
     def printLinks(self, prefix=0):
+        print 'printLinks(self, prefix=\"%s\")' % (prefix)
         #   
         #try:
         #    if config.ICECAST_WWW_PAGE:
@@ -242,6 +269,7 @@ class HTMLResource:
         return
 
     def printBreadcrumb(self, media, mediadirs, dir):
+        print 'printBreadcrumb(self, media=\"%s\", mediadirs=\"%s\", dir=%r)' % (media, mediadirs, dir)
         breadcrumb='<a href="library.rpy">Home: </a><a href="library.rpy?media='+media+'&dir=">'+media+'</a>'
         _url = ""
         url = dir.split("/")
@@ -254,6 +282,7 @@ class HTMLResource:
         return breadcrumb
     
     def printPassword(self, password):
+        print 'printPassword(self, password=\"%s\")' % (password)
         self.res += """<script language="JavaScript"> <!--
 
         var password;
@@ -270,6 +299,7 @@ class HTMLResource:
         </script>"""
         
     def printImagePopup(self):
+        print 'printImagePopup(self)'
         self.res += """<script language="JavaScript" type="text/javascript" style="display:none;">
         function openfoto(loc,width,height){
             var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,top=0,left=0,width="+width+",height="+height;

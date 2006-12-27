@@ -100,22 +100,24 @@ class GenreResource(FreevoResource):
 
         stime=''
         if mfrguideinput:
-            stime='<input name="stime" type="hidden" value="%i">' % int(mfrguideinput)
+            stime='<input name="stime" type="hidden" value="%i"/>' % int(mfrguideinput)
         keepcat = ''
         if category:
             keepcat = '&category=%s' % category
         bforcell=''
         acelltime=mfrnextguide + 60
-        aftercell='&nbsp;&nbsp;&nbsp;<a href="genre.rpy?stime=%i%s"><img src="images/RightArrow.png" border="0"></img>'\
-            +'</a>' % (acelltime, keepcat)
+        aftercell='&nbsp;&nbsp;&nbsp;<a href="genre.rpy?stime=%i%s">'\
+            +'<img src="images/RightArrow.png" alt="right" border="0"/></a>'\
+            % (acelltime, keepcat)
         if mfrprevguide > 0:
-            bforcell='<a href="genre.rpy?stime=%i%s"><img src="images/LeftArrow.png" border="0"></a>&nbsp;&nbsp;&nbsp;'\
-            % (mfrprevguide, keepcat)
-
+            bforcell='<a href="genre.rpy?stime=%i%s">'\
+                +'<img src="images/LeftArrow.png" alt="left" border="0"/></a>&nbsp;&nbsp;&nbsp;'\
+                % (mfrprevguide, keepcat)
+        
         fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
         fv.tableRowOpen('class="chanrow"')
-        fv.tableCell('<form>'+bforcell+_('Show')+'&nbsp;'+_('Category')+':&nbsp;'\
-            +self.makecategorybox(allcategories, category)+stime+'<input type=submit value="'+_('Change')+'">'\
+        fv.tableCell('<form action="">'+bforcell+_('Show')+'&nbsp;'+_('Category')+':&nbsp;'\
+            +self.makecategorybox(allcategories, category)+stime+'<input type="submit" value="'+_('Change')+'"/>'\
             +aftercell+'</form>', 'class="guidehead"')
         fv.tableRowClose()
         fv.tableClose()
@@ -164,9 +166,9 @@ class GenreResource(FreevoResource):
                     fv.tableRowOpen('class="chanrow"')
                     fv.tableCell(chan.displayname, 'class="channel"')
                     popid = '%s:%s' % (prog.channel_id, prog.start)
-
+                        
                     fv.tableCell(prog.title+'&nbsp;&nbsp;-&nbsp;&nbsp;'+prog.desc, 'class="'+status+'" \
-                        onclick="guide_click(this, event)" id="%s" width="80%%" action=""' % popid)
+                        onclick="guide_click(this, event)" id="%s"  width="80%%"' % popid )
                     fv.tableCell(time.strftime('%H:%M', time.localtime(prog.start)), 'class="channel"')
                     fv.tableCell(time.strftime('%H:%M', time.localtime(prog.stop)), 'class="channel"')
                     fv.tableRowClose()
@@ -197,12 +199,12 @@ class GenreResource(FreevoResource):
             u"            </td>\n"\
             u"         </tr>\n"\
             u"         <tr>\n"\
-            u"         <td class=\"progtime\">\n"\
-            u"            <b>"+_('Start')+u":</b> <span id=\"program-start\"></span>, \n"\
-            u"            <b>"+_('Stop')+u":</b> <span id=\"program-end\"></span>, \n"\
-            u"            <b>"+_('Runtime')+u":</b> <span id=\"program-runtime\"></span> min\n"\
+            u"            <td class=\"progtime\">\n"\
+            u"               <b>"+_('Start')+u":</b> <span id=\"program-start\"></span>, \n"\
+            u"               <b>"+_('Stop')+u":</b> <span id=\"program-end\"></span>, \n"\
+            u"               <b>"+_('Runtime')+u":</b> <span id=\"program-runtime\"></span> min\n"\
             u"            </td>\n"\
-            u"         </td>\n"\
+            u"         </tr>\n"\
             u"      </tbody>\n"\
             u"      <tfoot>\n"\
             u"         <tr>\n"\
