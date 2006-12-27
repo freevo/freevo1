@@ -49,7 +49,7 @@ class GenreResource(FreevoResource):
             cat = Unicode( cat )
             retval += u'<option value="%s" ' % cat
             if cat == category:
-                retval += u'SELECTED'
+                retval += u'selected="selected"'
             retval += u'>%s</option>\n' % cat
         retval += u'</select>\n'
         return retval
@@ -103,16 +103,16 @@ class GenreResource(FreevoResource):
             stime='<input name="stime" type="hidden" value="%i"/>' % int(mfrguideinput)
         keepcat = ''
         if category:
-            keepcat = '&category=%s' % category
+            keepcat = '&amp;category=%s' % category
         bforcell=''
         acelltime=mfrnextguide + 60
-        aftercell='&nbsp;&nbsp;&nbsp;<a href="genre.rpy?stime=%i%s">'\
-            +'<img src="images/RightArrow.png" alt="right" border="0"/></a>'\
-            % (acelltime, keepcat)
+        aftercell=('&nbsp;&nbsp;&nbsp;<a href="genre.rpy?stime=%i%s">'
+                   +'<img src="images/RightArrow.png" alt="right" border="0"/></a>') \
+                   % (acelltime, keepcat)
         if mfrprevguide > 0:
-            bforcell='<a href="genre.rpy?stime=%i%s">'\
-                +'<img src="images/LeftArrow.png" alt="left" border="0"/></a>&nbsp;&nbsp;&nbsp;'\
-                % (mfrprevguide, keepcat)
+            bforcell=('<a href="genre.rpy?stime=%i%s">'
+                      +'<img src="images/LeftArrow.png" alt="left" border="0"/></a>&nbsp;&nbsp;&nbsp;') \
+                      % (mfrprevguide, keepcat)
         
         fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
         fv.tableRowOpen('class="chanrow"')
