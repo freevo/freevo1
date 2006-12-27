@@ -181,29 +181,29 @@ class AudioItem(Item):
 
     def format_track(self):
         """ Return a formatted string for use in item.py """
-	# Since we can't specify the length of the integer in the
-	# format string (Python doesn't seem to recognize it) we
-	# strip it out first, when we see the only thing that can be
-	# a number.
+        # Since we can't specify the length of the integer in the
+        # format string (Python doesn't seem to recognize it) we
+        # strip it out first, when we see the only thing that can be
+        # a number.
 
 
         # Before we begin, make sure track is an integer
     
         if self['trackno']:
             try:
-    	        mytrack = ('%0.2d' % int(self['trackno']))
+                mytrack = ('%0.2d' % int(self['trackno']))
             except ValueError:
-     	        mytrack = None
+                mytrack = None
         else:
             mytrack = None
             return os.path.split(self.filename)[1]
 
         song_info = {  'a'  : self['artist'],
-       	               'l'  : self['album'],
-    	               'n'  : mytrack,
-    	               't'  : self['title'],
-    	               'y'  : self['year'],
-    	               'f'  : self['name'] }
+                       'l'  : self['album'],
+                       'n'  : mytrack,
+                       't'  : self['title'],
+                       'y'  : self['year'],
+                       'f'  : self['name'] }
 
         if self.parent and hasattr(self.parent, 'AUDIO_FORMAT_STRING'):
             return self.parent.DIRECTORY_AUDIO_FORMAT_STRING % song_info
