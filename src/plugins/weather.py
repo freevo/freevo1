@@ -65,6 +65,125 @@ osd  = osd.get_singleton()
 WEATHER_AGE = 7200
 WEATHER_DIR = os.path.join(config.SHARE_DIR, 'images', 'weather')
 
+WEATHER_DATA = [
+	('1', _('Cloudy'), 'cloudy.png'),
+	('3', _('Mostly Cloudy'), 'mcloudy.png'),
+	('4', _('Partly Cloudy'), 'pcloudy.png'),
+	('13', _('Light Rain'), 'lshowers.png'),
+	('14', _('Showers'), 'showers.png'),
+	('16', _('Snow'), 'snowshow.png'),
+	('18', _('Rain'), 'showers.png'),
+	('19', _('AM Showers'), 'showers.png'),
+	('20', _('Fog'), 'fog.png'),
+	('21', _('Few Showers'), 'lshowers.png'),
+	('22', _('Mostly Sunny'), 'sunny.png'),
+	('24', _('Sunny'), 'sunny.png'),
+	('25', _('Scattered Flurries'), 'flurries.png'),
+	('26', _('AM Clouds/PM Sun'), 'pcloudy.png'),
+	('27', _('Isolated T-Storms'), 'thunshowers.png'),
+	('28', _('Scattered Thunderstorms'), 'thunshowers.png'),
+	('29', _('PM Showers'), 'showers.png'),
+	('30', _('PM Showers/Wind'), 'showers.png'),
+	('31', _('Rain/Snow Showers'), 'rainsnow.png'),
+	('32', _('Few Snow Showers'), 'flurries.png'),
+	('33', _('Cloudy/Wind'), 'cloudy.png'),
+	('34', _('Flurries/Wind'), 'flurries.png'),
+	('35', _('Mostly Cloudy/Windy'), 'mcloudy.png'),
+	('36', _('Rain/Thunder'), 'thunshowers.png'),
+	('37', _('Partly Cloudy/Windy'), 'pcloudy.png'),
+	('38', _('AM Rain/Snow Showers'), 'rainsnow.png'),
+	('40', _('Light Rain/Wind'), 'lshowers.png'),
+	('41', _('Showers/Wind'), 'showers.png'),
+	('42', _('Heavy Snow'), 'snowshow.png'),
+	('44', _('Mostly Sunny/Wind'), 'sunny.png'),
+	('45', _('Flurries'), 'flurries.png'),
+	('47', _('Rain/Wind'), 'showers.png'),
+	('49', _('Sct Flurries/Wind'), 'flurries.png'),
+	('50', _('Sct Strong Storms'), 'thunshowers.png'),
+	('51', _('PM T-Storms'), 'thunshowers.png'),
+	('53', _('Thunderstorms'), 'thunshowers.png'),
+	('55', _('Sunny/Windy'), 'sunny.png'),
+	('56', _('AM Thunderstorms'), 'thunshowers.png'),
+	('62', _('AM Rain'), 'showers.png'),
+	('64', _('Iso T-Storms/Wind'), 'thunshowers.png'),
+	('65', _('Rain/Snow'), 'rainsnow.png'),
+	('66', _('Sct T-Storms/Wind'), 'showers.png'),
+	('67', _('AM Showers/Wind'), 'showers.png'),
+	('70', _('Sct Snow Showers'), 'snowshow.png'),
+	('71', _('Snow to Ice/Wind'), 'snowshow.png'),
+	('76', _('AM Ice'), 'rainsnow.png'),
+	('77', _('Snow to Rain'), 'rainsnow.png'),
+	('80', _('AM Light Rain'), 'lshowers.png'),
+	('81', _('PM Light Rain'), 'lshowers.png'),
+	('82', _('PM Rain'), 'showers.png'),
+	('84', _('Snow Showers'), 'snowshow.png'),
+	('85', _('Rain to Snow'), 'rainsnow.png'),
+	('86', _('PM Rain/Snow'), 'snowshow.png'),
+	('88', _('Few Showers/Wind'), 'showers.png'),
+	('90', _('Snow/Wind'), 'snowshow.png'),
+	('91', _('PM Rain/Snow Showers'), 'rainsnow.png'),
+	('92', _('PM Rain/Snow/Wind'), 'rainsnow.png'),
+	('93', _('Rain/Snow Showers/Wind'), 'rainsnow.png'),
+	('94', _('Rain/Snow/Wind'), 'rainsnow.png'),
+	('98', _('Light Snow'), 'flurries.png'),
+	('100', _('PM Snow'), 'snowshow.png'),
+	('101', _('Few Snow Showers/Wind'), 'snowshow.png'),
+	('103', _('Light Snow/Wind'), 'flurries.png'),
+	('104', _('Wintry Mix'), 'flurries.png'),
+	('105', _('AM Wintry Mix'), 'rainsnow.png'),
+	('106', _('Hvy Rain/Freezing Rain'), 'rainsnow.png'),
+	('108', _('AM Light Snow'), 'flurries.png'),
+	('109', _('PM Rain/Snow/Wind'), 'rainsnow.png'),
+	('114', _('Rain/Freezing Rain'), 'showers.png'),
+	('118', _('T-Storms/Wind'), 'thunshowers.png'),
+	('123', _('Sprinkles'), 'lshowers.png'),
+	('125', _('AM Snow Showers'), 'snowshow.png'),
+	('126', _('AM Clouds/PM Sun/Wind'), 'pcloudy.png'),
+	('128', _('AM Rain/Snow/Wind'), 'rainsnow.png'),
+	('130', _('Rain to Snow/Wind'), 'rainsnow.png'),
+	('132', _('Snow to Wintry Mix'), 'snowshow.png'),
+	('133', _('PM Snow Showers/Wind'), 'snowshow.png'),
+	('135', _('Snow and Ice to Rain'), 'rainsnow.png'),
+	('137', _('Heavy Rain'), 'showers.png'),
+	('138', _('AM Rain/Ice'), 'showers.png'),
+	('145', _('AM Snow Showers/Wind'), 'snowshow.png'),
+	('146', _('AM Light Snow/Wind'), 'flurries.png'),
+	('150', _('PM Light Rain/Wind'), 'lshowers.png'),
+	('152', _('AM Light Wintry Mix'), 'rainsnow.png'),
+	('153', _('PM Light Snow/Wind'), 'flurries.png'),
+	('154', _('Heavy Rain/Wind'), 'showers.png'),
+	('155', _('PM Snow Shower'), 'snowshow.png'),
+	('158', _('Snow to Rain/Wind'), 'rainsnow.png'),
+	('164', _('PM Light Rain/Ice'), 'showers.png'),
+	('167', _('AM Snow'), 'snowshow.png'),
+	('171', _('Snow to Ice'), 'snowshow.png'),
+	('172', _('Wintry Mix/Wind'), 'rainsnow.png'),
+	('175', _('PM Light Snow'), 'flurries.png'),
+	('178', _('AM Drizzle'), 'lshowers.png'),
+	('189', _('Strong Storms/Wind'), 'thunshowers.png'),
+	('193', _('PM Drizzle'), 'lshowers.png'),
+	('194', _('Drizzle'), 'lshowers.png'),
+	('201', _('AM Light Rain/Wind'), 'lshowers.png'),
+	('204', _('AM Rain/Wind'), 'showers.png'),
+	('223', _('Wintry Mix to Snow'), 'rainsnow.png'),
+	('231', _('Rain'), 'showers.png'),
+	('240', _('AM Light Rain/Ice'), 'rainsnow.png'),
+	('259', _('Hvy Rain/Freezing Rain'), 'showers.png'),
+	('271', _('Snow Showers/Windy'), 'snowshow.png'),
+	('988', _('Partly Cloudy/Windy'), 'pcloudy.png'),
+	('989', _('Light Rain Shower'), 'lshowers.png'),
+	('990', _('Light Rain with Thunder'), 'thunshowers.png'),
+	('991', _('Light Drizzle'), 'lshowers.png'),
+	('992', _('Mist'), 'fog.png'),
+	('993', _('Smoke'), 'fog.png'),
+	('994', _('Haze'), 'fog.png'),
+	('995', _('Light Snow Shower'), 'flurries.png'),
+	('996', _('Light Snow Shower/ Windy'), 'flurries.png'),
+	('997', _('Clear'), 'fair.png'),
+	('998', _('A Few Clouds'), 'pcloudy.png'),
+	('999', _('Fair'), 'fair.png')
+ ]
+
 def wget(iUrl):
     for i in range(3):
         try:
@@ -169,6 +288,8 @@ class WeatherItem(Item):
         self.weatherType  = []
         self.wdata        = []
 
+        self.popupParam = None
+
         # were we asked to convert to SI units?
         if isinstance( iLocation, tuple ):
             self.location    = iLocation[0]
@@ -176,9 +297,13 @@ class WeatherItem(Item):
                 self.convertData = int(iLocation[1])
             if len( iLocation ) > 2:
                 self.name        = str(iLocation[2])
+
+            self.popupParam = Unicode(self.name)
+
         else:
             self.location    = iLocation
             self.convertData = 0
+            self.popupParam = self.location
 
         self.dataurl        = "http://www.msnbc.com/m/chnk/d/weather_d_src.asp?acid=%s" % (self.location,)
         self.mapurl         = "http://w3.weather.com/weather/map/%s?from=LAPmaps" % (self.location,)
@@ -224,10 +349,10 @@ class WeatherItem(Item):
     def getLastUpdated(self):
         if self.convertData:
             # day / month / year  24hour:min:sec
-            return "Last updated: %s" % (time.strftime( "%d/%m/%Y %H:%M:%S", time.localtime( self.last_update) ), )
+            return _("Last updated: %s") % (time.strftime( "%d/%m/%Y %H:%M:%S", time.localtime( self.last_update) ), )
         else:
             # month / day / year  12hour:min:sec [AM|PM]
-            return "Last updated: %s" % (time.strftime( "%m/%d/%Y %I:%M:%S %p", time.localtime( self.last_update) ), )
+            return _("Last updated: %s") % (time.strftime( "%m/%d/%Y %I:%M:%S %p", time.localtime( self.last_update) ), )
 
     def getFeel(self):
         if self.convertData:
@@ -328,7 +453,7 @@ class WeatherItem(Item):
         return self.weatherData[start:end] 
 
     def updateData(self):
-        popup = PopupBox(text=_('Fetching Weather for %s...') % self.location)
+        popup = PopupBox(text=_('Fetching Weather for %s...') % self.popupParam)
         popup.show()
 
         # parse the document
@@ -444,7 +569,7 @@ class WeatherItem(Item):
         if self.convertData and float(self.visibility) != 999.0:
             self.visibility = toKilometers( self.visibility )
 
-        self.shortdesc = self.GetString("this.swConText")
+        self.shortdesc = _(self.GetString("this.swConText"))
         if self.shortdesc is None or len( self.shortdesc ) == 0:
             self.shortdesc = self.curIcon
 
@@ -540,7 +665,7 @@ class WeatherType:
     def getNumber(self):
         return self.number
     def getName(self):
-        return self.name
+        return _(self.name)
     def getIcon(self):
         return self.icon
 
@@ -552,17 +677,13 @@ class WeatherTypesClass:
         self.icon_lookup = {} # reverse hash to quickly get a Weathertype w/ a icon
         self.loadWeatherTypes()
     def loadWeatherTypes(self):
-        '''load the weather icon mapping from the datafile'''
-        wtfile = os.path.join(WEATHER_DIR, 'weathertypes.dat')
-        wtdata = util.readfile( wtfile )
          
-        for line in wtdata:
+        for icdata in WEATHER_DATA:
             try:
-                icdata = line.split(",")
                 wtype = WeatherType()
                 wtype.setNumber ( icdata[0] )
                 wtype.setName   ( icdata[1] )
-                wtype.setIcon   ( (icdata[2])[0:-1] ) # strip newline
+                wtype.setIcon   ( icdata[2] )
 
                 # populate reverse dictionaries
                 self.num_lookup[ wtype.getNumber() ] = len( self.wtypes )
@@ -803,7 +924,7 @@ class WeatherBaseScreen(skin.Area):
               int(200*self.xmult), int(150*self.ymult) ) )
 
         y_start = self.content.y + (200*self.ymult)
-        self.write_text(self.parent.weather.shortdesc,  
+        self.write_text(self.parent.weather.shortdesc,
             self.key_font,   self.content,  
             x=x_start, y=y_start,
             width=200*self.xmult, height=-1, align_h='center')
@@ -918,6 +1039,7 @@ class WeatherBaseScreen(skin.Area):
         self.parent   = self.menu
         self.content  = self.calc_geometry(self.layout.content,  copy_object=True)
         self.update_functions[self.menu.curSkin]()
+
 
 # create one instance of the WeatherType class
 weatherTypes = WeatherTypesClass()
