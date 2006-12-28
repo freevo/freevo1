@@ -66,15 +66,15 @@ class MenuItem(Item):
         """
         return the event as string
         """
-        result = '"'+self.name+'"'
-        if hasattr(self, 'action')     result += ' action=%s' % self.action
-        if hasattr(self, 'arg') and self.arg: result += ' arg=%s' % self.arg[0]
-        if hasattr(self, 'type'):      result += ' type=%s' % self.type
-        if hasattr(self, 'image'):     result += ' image=%s' % self.image
-        if hasattr(self, 'icon'):      result += ' icon=%s' % self.icon
-        if hasattr(self, 'skin_type'): result += ' skin_type=%s' % self.skin_type
-        #if hasattr(self, 'parent'):    result += ' parent=%s' % self.parent
-        return result
+        s = '"'+self.name+'"'
+        if hasattr(self, 'action'):    s += ' action=%s' % self.action
+        if hasattr(self, 'arg') and self.arg: s += ' arg=%s' % self.arg[0]
+        if hasattr(self, 'type'):      s += ' type=%s' % self.type
+        if hasattr(self, 'image'):     s += ' image=%s' % self.image
+        if hasattr(self, 'icon'):      s += ' icon=%s' % self.icon
+        if hasattr(self, 'skin_type'): s += ' skin_type=%s' % self.skin_type
+        #if hasattr(self, 'parent'):    s += ' parent=%s' % self.parent
+        return s
 
 
     def actions(self):
@@ -101,7 +101,8 @@ class Menu:
                  reload_func = None, item_types = None, force_skin_layout = -1):
 
         self.heading = heading
-        self.choices = choices          # List of MenuItem:s
+        self.choices = choices          # List of MenuItems
+        print 'DJW:menu.Menu:choices:', choices
         if len(self.choices):
             self.selected = self.choices[0]
         else:
