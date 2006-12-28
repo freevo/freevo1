@@ -61,8 +61,8 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
         
     if popup:
         pop = gui.PopupBox(text='Creating thumbnail for \'%s\'...' % \
-                           os.path.basename(videofile),
-                           width=osd.get_singleton().width-config.OSD_OVERSCAN_X*2-80)
+            Unicode(os.path.basename(videofile)),
+            width=osd.get_singleton().width-config.OSD_OVERSCAN_X*2-80)
         pop.show()
         
     args = [ config.MPLAYER_CMD, videofile, imagefile ]
