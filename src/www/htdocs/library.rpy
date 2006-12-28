@@ -52,22 +52,31 @@ class LibraryResource(FreevoResource):
     isLeaf=1
 
     def __init__(self):
+        print '__init__(self)'
         self.cache_dir = '%s/image_cache/' % (config.FREEVO_CACHEDIR)
         if not os.path.isdir(self.cache_dir):
             os.mkdir(self.cache_dir, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
+        self.allowed_dirs = []
+        self.allowed_dirs.extend(config.VIDEO_ITEMS)
+        self.allowed_dirs.extend(config.AUDIO_ITEMS)
+        self.allowed_dirs.extend( [ ('Recorded TV', config.TV_RECORD_DIR) ])
+        self.allowed_dirs.extend(config.IMAGE_ITEMS)
 
     def is_access_allowed(self, dir_str):
         print 'is_access_allowed(self, dir_str=%r)' % (dir_str)
-        allowed_dirs = []
-        allowed_dirs.extend(config.VIDEO_ITEMS)
-        allowed_dirs.extend(config.AUDIO_ITEMS)
-        allowed_dirs.extend( [ ('Recorded TV', config.TV_RECORD_DIR) ])
-        allowed_dirs.extend(config.IMAGE_ITEMS)
-        for i in range(len(allowed_dirs)):
-            val = allowed_dirs[i][1]
+        for i in range(len(self.allowed_dirs)):
+            val = self.allowed_dirs[i][1]
             if dir_str.startswith(val):
                 return TRUE
         return FALSE
+
+    def convert_dir(self, dir_str):
+        print 'convert_dir(self, dir_str=%r)' % (dir_str)
+        for i in range(len(self.allowed_dirs)):
+            val = self.allowed_dirs[i][1]
+            if dir_str.startswith(val):
+                return val.replace("/", "_") + dir_str[len(val):]
+        return dir_str
 
     def get_suffixes (self, media):
         print 'get_suffixes (self, media=\"%s\")' % (media)
@@ -373,7 +382,7 @@ class LibraryResource(FreevoResource):
                 if action_mediatype == "music":
                     y = self.cover_filter(mydir)
                     if y:
-                        image_link = self.get_images(mydir + str(y))
+                        image_link = self.convert_dir(mydir + str(y))
                     else:
                         image_link = "images/library/music.png"
                     mydirlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
@@ -382,11 +391,11 @@ class LibraryResource(FreevoResource):
                 elif action_mediatype == "movies":
                     y = self.cover_filter(mydir)
                     if y:
-                        image_link = self.get_images(mydir + str(y))
+                        image_link = self.convert_dir(mydir + str(y))
                     else:
                         image_link = "images/library/movies.png"
                     mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
-                        +'"<img src="' + image_link + '" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                        +'<img src="' + image_link + '" height="200px" width="200px" /><br />'+mydispdir+'</a>'
                 ### show image cover
                 elif action_mediatype == "images":
                     image_link = "images/library/images.png"
@@ -414,8 +423,11 @@ class LibraryResource(FreevoResource):
             for item in items:
                 #check for fxd file
                 fxd_file = item[:item.rindex('.')] + ".fxd"
+                jpg_file = item[:item.rindex('.')] + ".jpg"
                 if os.path.exists(fxd_file):
                     image = self.get_fxd_cover(fxd_file)
+                elif os.path.exists(jpg_file):
+                    image = jpg_file
 
                 if i == 0:
                     fv.tableRowOpen('class="chanrow"')
@@ -434,7 +446,7 @@ class LibraryResource(FreevoResource):
                     status = 'favorite'
                 ### show image
                 if action_mediatype == "images":
-                    image_link = self.get_images(filepath)
+                    image_link = self.convert_dir(filepath)
                     size = (info['width'], info['height'])
                     new_size = self.resize_image(image_link, size)
                     fv.tableCell('<a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
@@ -442,8 +454,9 @@ class LibraryResource(FreevoResource):
                         +'<br />'+Unicode(file)+'</a>', 'class="'+status+'" colspan="1"')
                 ### show movie
                 elif action_mediatype == "movies":
+                    image_link = self.convert_dir(image)
                     fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
-                        +'<img src="'+image+'" height="200px" width="200px" /><br />'+Unicode(file)+'</a>',\
+                        +'<img src="'+image_link+'" height="200px" width="200px" /><br />'+Unicode(file)+'</a>',\
                         'class="'+status+'" colspan="1"')
                 ### show music
                 elif action_mediatype == "music":
@@ -454,8 +467,7 @@ class LibraryResource(FreevoResource):
                     if len(title) > 45:
                         title = "%s[...]%s" % (title[:20], title[len(title)-20:])
                     fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
-                        +title+'</a>' ,\
-                        'class="'+status+'" colspan="1"')
+                        +title+'</a>', 'class="'+status+'" colspan="1"')
                 else:
                     fv.tableCell(file, 'class="'+status+'" colspan="1"')
                 if suppressaction:
@@ -528,12 +540,6 @@ class LibraryResource(FreevoResource):
 
         return String(fv.res)
 
-    def get_images(self, file):
-        print 'get_images(self, file=%r)' % (file)
-        cache_link = self.cache_dir + file.replace("/", "_")
-        if not os.path.exists(cache_link):
-            os.symlink(file, cache_link)
-        return cache_link
 
     def cover_filter(self, x):
         print 'cover_filter(self, x=%r)' % (x)
@@ -541,25 +547,55 @@ class LibraryResource(FreevoResource):
             cover = re.search(config.AUDIO_COVER_REGEXP, i, re.IGNORECASE)
             if cover:
                 return "/" + i
+            else:
+                fname = x[x.rfind("/"):]
+                fxd_file = fname + ".fxd"
+                cover = self.get_fxd_cover(x + fxd_file)
+                if cover != '':
+                    return "/" + cover
+                else:
+                    jpg_file = fname + ".jpg"
+                    if os.path.exists(x + jpg_file):
+                        return jpg_file
+
 
     def get_fxd_cover(self, fxd_file):
         print 'get_fxd_cover(self, fxd_file=\"%s\")' % (fxd_file)
-        cover = ""
+        cover = ''
         fxd_info = {}
         parser = util.fxdparser.FXD(fxd_file)
         parser.parse()
         for a in parser.tree.tree.children:
-            for b in a.children:
-                if b.name == 'cover-img':
-                    cover = str(b.attrs.values()[0])
+            cover = parser.childcontent(a, "cover-img")
+            if cover:
+                break
         return cover
 
     def resize_image(self, image, size):
         print 'resize_image(self, image=%r, size=%s)' % (image, size)
         (width, height) = size
         new_width = 200
-        new_height = float(height) * (float(new_width) / float(width))
+        try:
+            new_height = float(height) * (float(new_width) / float(width))
+        except ZeroDivisionError:
+            new_height = 200
         return [int(new_width), int(new_height + 0.5)]
+
+    def resize_image_to_square(self, image, size):
+        print 'resize_image_to_square(self, image=%s, size=%s)' % (image, size)
+        ### if aspect ratio > 1 then scale width to 200
+        new_size = [200, 200]
+        try:
+            if size[0] > size[1]:
+                new_size[0] = 200
+                new_size[1] = new_size[0] * size[1] / size[0]
+            ### else scale height to 200
+            else:
+                new_size[1] = 200
+                new_size[0] = new_size[1] * size[0] / size[1]
+        except ZeroDivisionError:
+            pass
+        return new_size
 
 
 resource = LibraryResource()
