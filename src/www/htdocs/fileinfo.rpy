@@ -23,7 +23,7 @@
 #
 # -----------------------------------------------------------------------
 
-import sys, os, stat, string
+import sys, os, stat, string, urllib
 import time
 
 from www.web_types import HTMLResource, FreevoResource
@@ -106,8 +106,8 @@ class FileInfoResource(FreevoResource):
                u"doc.getElementById('program-waiting').style.display = 'none';\n" \
                u"doc.getElementById('program-info').style.visibility = 'visible';\n" \
                u"</script>\n"
-            ) % ( title.replace("'", "\\'"),
-                  info.replace("'", "\\'"),
+            ) % ( Unicode(title.replace("'", "\\'")),
+                  Unicode(info.replace("'", "\\'")),
                   "function() { window.open(\"%s\"); }" % (file_link),    
             )           
 
