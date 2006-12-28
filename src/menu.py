@@ -102,7 +102,6 @@ class Menu:
 
         self.heading = heading
         self.choices = choices          # List of MenuItems
-        print 'DJW:menu.Menu:choices:', choices
         if len(self.choices):
             self.selected = self.choices[0]
         else:
