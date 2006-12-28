@@ -12,27 +12,6 @@
 #    2) Have Movie Player, TV Player and Image viewer to use LCD
 #    3) Better (and more) LCD screens.
 # -----------------------------------------------------------------------
-# $Log: lcd.py,v $
-# Revision 1.19.2.3  2005/01/23 11:36:56  dischi
-# add small tv patch
-#
-# Revision 1.19.2.2  2005/01/09 10:42:18  dischi
-# more unicode fixes
-#
-# Revision 1.19.2.1  2005/01/09 10:13:44  dischi
-# unicode fixes
-#
-# Revision 1.19  2004/07/11 11:14:53  dischi
-# lcd detach fixes from Magnus Schmidt
-#
-# Revision 1.18  2004/07/10 12:33:40  dischi
-# header cleanup
-#
-# Revision 1.17  2004/02/23 05:30:28  gsbarbieri
-# Better i18n support. Changed a lot of strings to cooperate with translators
-# and made the menu items (not dirs, audio or video ones!) to use translations.
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.

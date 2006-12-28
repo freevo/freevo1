@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # yac.py - Support for YAC (Caller ID)
 # -----------------------------------------------------------------------
-# $Id: yac.py,v
+# $Id$
 #
 # Notes:
 #    To activate, put the following line in local_conf.py:
@@ -16,8 +16,6 @@
 # available: http://bah.org/tivo/ and clients for Windows and
 # Linux. 
 #
-# -----------------------------------------------------------------------
-# $Log: yac.py,v
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 

@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # playlist.py - Plugin for playlist support
 # -----------------------------------------------------------------------
-# $Id: 
+# $Id$
 #
 # Notes: This plugin will allow you to make playlists.
 #
@@ -14,8 +14,6 @@
 #         stuff
 #       Ability to add entire folders or even other playlists
 #
-# -----------------------------------------------------------------------
-# $Log: 
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
