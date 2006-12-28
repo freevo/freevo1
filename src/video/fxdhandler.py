@@ -186,8 +186,9 @@ def parse_movie(fxd, node):
             v.name = fxd.getattr(variant, 'name')
             item.variants.append(v)
 
-    elif len(video) == 1:
-        # only one file, this is directly for the item
+    else:
+        # one or more files, this is directly for the item
+
         id, url, item.media_id, item.mplayer_options, player, is_playlist = \
             parse_video_child(fxd, video[0], dirname)
         if url.startswith('file://') and os.path.isfile(url[7:]):
@@ -210,21 +211,23 @@ def parse_movie(fxd, node):
         # global <video> mplayer_options
         if mplayer_options:
             item.mplayer_options += mplayer_options
-    else:
-        # a list of files
-        for s in video:
-            video_child = parse_video_child(fxd, s, dirname)
-            v = VideoItem(video_child[1], parent=item, info=item.info, parse=False)
-            v.files = None
-            v.media_id, v.mplayer_options, player, is_playlist = video_child[2:]
-            if video_child[-2]:
-                v.force_player = video_child[-2]
-            if video_child[-1]:
-                item.is_playlist = True
-            # global <video> mplayer_options
-            if mplayer_options:
-                v.mplayer_options += mplayer_options
-            item.subitems.append(v)
+
+        # if there is more than one item add them to subitems
+        if len(video) > 1:
+            # a list of files
+            for s in video:
+                video_child = parse_video_child(fxd, s, dirname)
+                v = VideoItem(video_child[1], parent=item, info=item.info, parse=False)
+                v.files = None
+                v.media_id, v.mplayer_options, player, is_playlist = video_child[2:]
+                if video_child[-2]:
+                    v.force_player = video_child[-2]
+                if video_child[-1]:
+                    item.is_playlist = True
+                # global <video> mplayer_options
+                if mplayer_options:
+                    v.mplayer_options += mplayer_options
+                item.subitems.append(v)
 
     if not item.files:
         item.files = FileInformation()
