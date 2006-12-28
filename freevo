@@ -185,21 +185,12 @@ def stop(name, arg):
         try:
             os.unlink(fname)
         except OSError, e:
-            print 'os.unlink(fname=%s)=%s' % (fname, e)
+            pass
         os.kill(pid, SIGINT)
+        os.kill(pid, SIGTERM)
         return 1
     except OSError, e:
-        print 'os.kill(pid=%s, SIGINT)=%s' % (pid, e)
-        try:
-            os.kill(pid, SIGTERM)
-            return 1
-        except OSError, e:
-            print 'os.kill(pid=%s, SIGTERM)=%s' % (pid, e)
-            try:
-                os.kill(pid, SIGKILL)
-                return 1
-            except OSError, e:
-                print 'os.kill(pid=%s, SIGKILL)=%s' % (pid, e)
+        print e
     return 0
 
 
