@@ -162,8 +162,8 @@ def getpid(name, arg):
                 proc_arg.remove('-OO')
                 
             if proc_arg and ((arg[0].find('runapp') == -1 and \
-                              len(proc_arg)>2 and arg[1] != proc_arg[1]) or \
-                             len(proc_arg)>3 and arg[2] != proc_arg[2]):
+                len(proc_arg)>2 and arg[1] != proc_arg[1]) or \
+                len(proc_arg)>3 and arg[2] != proc_arg[2]):
                 # different proc I guess
                 try:
                     os.unlink(fname)
@@ -184,12 +184,23 @@ def stop(name, arg):
     try:
         try:
             os.unlink(fname)
-        except OSError:
-            pass
-        os.kill(pid, SIGTERM)
-        return 1
-    except OSError:
+        except OSError, e:
+            print 'os.unlink(fname=%s)=%s' % (fname, e)
+        os.kill(pid, SIGINT)
         return 0
+    except OSError, e:
+        print 'os.kill(pid=%s, SIGINT)=%s' % (pid, e)
+        try:
+            os.kill(pid, SIGTERM)
+            return 0
+        except OSError, e:
+            print 'os.kill(pid=%s, SIGTERM)=%s' % (pid, e)
+            try:
+                os.kill(pid, SIGKILL)
+                return 0
+            except OSError, e:
+                print 'os.kill(pid=%s, SIGKILL)=%s' % (pid, e)
+    return 1
 
 
 def start(name, arg, bg, store=1):
