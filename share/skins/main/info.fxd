@@ -313,9 +313,9 @@
 	    <text font="info value" expression="len(subtitles)"/>
 	    <text font="info value"> Subtitles, </text>
 	  </if>
-	  <if expression="chapters">
-	    <text font="info value" expression="chapters"/>
-	    <text font="info value"> Chapter</text>
+	  <if expression="len(chapters)">
+	    <text font="info value" expression="len(chapters)"/>
+	    <text font="info value"> Chapters</text>
 	  </if>
 	</item>
 
