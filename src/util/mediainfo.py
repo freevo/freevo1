@@ -414,7 +414,29 @@ class Info:
             self.metadata  = {}
         self.dicts     = ( self.mmdata, self.variables, self.metadata )
 
-        
+
+    def __str__(self):
+        s = '\nutil:mediainfo:Info:s:'
+        s += ' filename=%r' % self.filename
+        s += ' disc=%r' % self.disc
+        s += ' variables=%r' % self.variables
+        s += ' mmdata=%r' % self.mmdata
+        s += ' metadata=%r' % self.metadata
+        s += ' dir(self)=%r' % dir(self)
+        return s
+
+
+    def __repr__(self):
+        s = '\nutil:mediainfo:Info:r:'
+        s += ' filename=%r' % self.filename
+        s += ' disc=%r' % self.disc
+        s += ' variables=%r' % self.variables
+        s += ' mmdata=%r' % self.mmdata
+        s += ' metadata=%r' % self.metadata
+        #s += ' dir(self)=%r' % dir(self)
+        return s
+
+
     def __getitem__(self, key):
         """
         get the value of 'key'
@@ -576,7 +598,6 @@ def disc_info(media, force=False):
     """
     return mmpython disc information for the media
     """
-    print media.devicename
     type, id = mmpython.cdrom.status(media.devicename)
     if not id:
         # bad disc, e.g. blank disc

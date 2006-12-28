@@ -48,6 +48,7 @@ from item  import Item, FileInformation
 from event import *
 
 class VideoItem(Item):
+
     def __init__(self, url, parent, info=None, parse=True):
         self.autovars = [ ('deinterlace', 0) ]
         Item.__init__(self, parent)
@@ -122,6 +123,22 @@ class VideoItem(Item):
                 self.mplayer_options = discset_informations[fid]
 
         
+    def __str__(self):
+        s = '\nvideo:videoitem:VideoItem:Info:s:'
+        s += ' name=%r' % self.name
+        s += ' filename=%r' % self.filename
+        s += ' dir(self)=%r' % dir(self)
+        return s
+
+
+    def __repr__(self):
+        s = '\nvideo:videoitem:VideoItem:Info:r:'
+        s += ' name=%r' % self.name
+        s += ' filename=%r' % self.filename
+        #s += ' dir(self)=%r' % dir(self)
+        return s
+
+
     def set_url(self, url, info=True):
         """
         Sets a new url to the item. Always use this function and not set 'url'

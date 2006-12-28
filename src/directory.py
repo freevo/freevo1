@@ -174,6 +174,23 @@ class DirItem(Playlist):
             self.create_metainfo()
 
 
+    def __str__(self):
+        s = '\ndirectory:DirItem:s:'
+        s += ' name=%r' % self.name
+        s += ' dir=%r' % self.dir
+        s += ' info=%r' % self.info
+        #s += ' dir(self)=%r' % dir(self)
+        return s
+
+
+    def __repr__(self):
+        s = '\ndirectory:DirItem:r:'
+        s += ' name=%r' % self.name
+        s += ' dir=%r' % self.dir
+        s += ' info=%r' % self.info
+        #s += ' dir(self)=%r' % dir(self)
+        return s
+
 
     def set_fxd_file(self, file):
         """

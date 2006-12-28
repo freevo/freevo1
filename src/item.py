@@ -174,6 +174,22 @@ class Item:
                 self.image = util.getimage(os.path.join(imagedir, skin_type))
         
 
+    def __str__(self):
+        s = '\nitem:Item:s:'
+        s += ' name=%r' % self.name
+        s += ' info=%r' % self.info
+        s += ' dir(self)=%r' % dir(self)
+        return s
+
+
+    def __repr__(self):
+        s = '\nitem:Item:r:'
+        s += ' name=%r' % self.name
+        s += ' info=%r' % self.info
+        #s += ' dir(self)=%r' % dir(self)
+        return s
+
+
     def set_url(self, url, info=True, search_image=True):
         """
         Set a new url to the item and adjust all attributes depending

@@ -67,13 +67,13 @@ class MenuItem(Item):
         return the event as string
         """
         result = '"'+self.name+'"'
-        if hasattr(self, 'action'): result += ' action=%s' % self.action
-        if hasattr(self, 'arg'):    result += ' arg=%s' % self.arg[0]
-        if hasattr(self, 'type'):   result += ' type=%s' % self.type
-        if hasattr(self, 'image'):  result += ' image=%s' % self.image
-        if hasattr(self, 'icon'):   result += ' icon=%s' % self.icon
-        #if hasattr(self, 'parent'):  result += ' parent=%s' % self.parent
-        if hasattr(self, 'skin_type'):  result += ' skin_type=%s' % self.skin_type
+        if hasattr(self, 'action')     result += ' action=%s' % self.action
+        if hasattr(self, 'arg') and self.arg: result += ' arg=%s' % self.arg[0]
+        if hasattr(self, 'type'):      result += ' type=%s' % self.type
+        if hasattr(self, 'image'):     result += ' image=%s' % self.image
+        if hasattr(self, 'icon'):      result += ' icon=%s' % self.icon
+        if hasattr(self, 'skin_type'): result += ' skin_type=%s' % self.skin_type
+        #if hasattr(self, 'parent'):    result += ' parent=%s' % self.parent
         return result
 
 
