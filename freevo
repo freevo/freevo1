@@ -187,20 +187,20 @@ def stop(name, arg):
         except OSError, e:
             print 'os.unlink(fname=%s)=%s' % (fname, e)
         os.kill(pid, SIGINT)
-        return 0
+        return 1
     except OSError, e:
         print 'os.kill(pid=%s, SIGINT)=%s' % (pid, e)
         try:
             os.kill(pid, SIGTERM)
-            return 0
+            return 1
         except OSError, e:
             print 'os.kill(pid=%s, SIGTERM)=%s' % (pid, e)
             try:
                 os.kill(pid, SIGKILL)
-                return 0
+                return 1
             except OSError, e:
                 print 'os.kill(pid=%s, SIGKILL)=%s' % (pid, e)
-    return 1
+    return 0
 
 
 def start(name, arg, bg, store=1):
