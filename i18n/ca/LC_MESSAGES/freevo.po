@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-22 00:17+0100\n"
-"PO-Revision-Date: 2006-06-17 19:14+0100\n"
+"POT-Creation-Date: 2006-12-28 13:24+0100\n"
+"PO-Revision-Date: 2006-12-12 21:02+0100\n"
 "Last-Translator: Paco Rivière <friviere@palmcat.org>\n"
-"Language-Team: PacoRivière <friviere AT palmcat PUNT cat>\n"
+"Language-Team: PacoRivière <web AT pacoriviere POINT cat>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,8 +25,8 @@ msgstr ""
 msgid "Title"
 msgstr "Títol"
 
-#: ../freevo_config.py:1046 plugins/lcd.py:105 plugins/lcd.py:107
-#: plugins/lcd.py:284 plugins/vfd.py:110 plugins/vfd.py:112
+#: ../freevo_config.py:1046 plugins/lcd.py:84 plugins/lcd.py:86
+#: plugins/lcd.py:263 plugins/vfd.py:108 plugins/vfd.py:110
 msgid "Description"
 msgstr "Descripció"
 
@@ -34,7 +34,7 @@ msgstr "Descripció"
 msgid "Author"
 msgstr "Autor"
 
-#: ../freevo_config.py:1051 plugins/lcd.py:104 plugins/vfd.py:109
+#: ../freevo_config.py:1051 plugins/lcd.py:83 plugins/vfd.py:107
 #: share/skins/main/dark.fxd:590 share/skins/main/dark.fxd:664
 #: share/skins/main/dark.fxd:685 share/skins/main/crystal.fxd:269
 #: share/skins/main/bluestar.fxd:289 share/skins/main/noia.fxd:92
@@ -51,9 +51,9 @@ msgid "Software"
 msgstr "Programari"
 
 #: plugins/idlebar/diskfree.py:87
-#, python-format
+#, fuzzy, python-format
 msgid "%iGB"
-msgstr ""
+msgstr "%iGb"
 
 #: plugins/idlebar/system.py:105
 #, python-format
@@ -81,12 +81,13 @@ msgstr "Descripció"
 
 #: plugins/home_automation.py:115 plugins/command.py:216
 msgid "Run Command"
-msgstr "Executa una ordre"
+msgstr "Cumpleix una ordre"
 
 #: plugins/home_automation.py:129 plugins/home_automation.py:136
 #: plugins/home_automation.py:148
+#, fuzzy
 msgid "Home Automation"
-msgstr ""
+msgstr "Continua l'aturada automàtica"
 
 #: plugins/home_automation.py:147
 #, fuzzy
@@ -96,12 +97,12 @@ msgstr "No s'ha trobat cap Pàgina de Titulars"
 #: plugins/df.py:66
 #, fuzzy, python-format
 msgid "%i free of %i GB total (%i%% free)"
-msgstr "%i lliures dels %i Mb totals"
+msgstr "%i lliures dels %i Gb totals (%i%% lliures)"
 
 #: plugins/df.py:68
 #, fuzzy, python-format
 msgid "%i free of %i MB total (%i%% free)"
-msgstr "%i lliures dels %i Mb totals"
+msgstr "%i lliures dels %i Mb totals (%i%% lliures)"
 
 #: plugins/headlines.py:132
 msgid "Show Sites Headlines"
@@ -113,7 +114,7 @@ msgstr "S'estan obtenint els titulars"
 
 #: plugins/headlines.py:218
 msgid "No Headlines found"
-msgstr "No s'han trobat titulars"
+msgstr "No s'han trobat els titulars"
 
 #: plugins/headlines.py:220 plugins/headlines.py:233
 #: share/skins/main/dark.fxd:21 share/skins/main/crystal.fxd:14
@@ -131,143 +132,132 @@ msgstr "No s'ha trobat cap Pàgina de Titulars"
 
 #: plugins/weather.py:240
 msgid "Unlimited"
-msgstr ""
+msgstr "Sense límit"
 
 #: plugins/weather.py:253
-#, fuzzy
 msgid "Show Weather Details"
-msgstr "Informe Metereològic"
+msgstr "Amplia l'Informe Metereològic"
 
 #: plugins/weather.py:331
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Weather for %s..."
-msgstr "S'estan obtenint els titulars"
+msgstr "S'està obtenint l'informe meteorològic de %s..."
 
 #: plugins/weather.py:495 plugins/weather.py:767 util/misc.py:451
 #: util/misc.py:462 util/misc.py:473
-#, fuzzy
 msgid "at"
-msgstr "Dis"
+msgstr "a les"
 
 #: plugins/weather.py:525
-#, fuzzy
 msgid "Unknown"
-msgstr "Artista desconegut"
+msgstr "Desconegut"
 
 #: plugins/weather.py:609 share/skins/main/bluestar.fxd:12
-#, fuzzy
 msgid "Weather"
-msgstr "Altres"
+msgstr "Temps"
 
 #: plugins/weather.py:615 plugins/weather.py:650
-#, fuzzy
 msgid "Locations"
-msgstr "Ubicació"
+msgstr "Ubicacions"
 
 #: plugins/weather.py:642
-#, fuzzy
 msgid "No locations specified"
-msgstr "No s'ha indicat cap nou fitxer."
+msgstr "No s'ha indicat cap ubicació."
 
 #: plugins/weather.py:667
-#, fuzzy
 msgid "Current Conditions"
-msgstr "Imatge actual"
+msgstr "Condicions actuals"
 
 #: plugins/weather.py:667
-#, fuzzy
 msgid "Today's Forecast"
-msgstr "Informe Metereològic"
+msgstr "Informe Metereològic d'Avui"
 
 #: plugins/weather.py:668
-#, fuzzy
 msgid "Extended Forecast"
 msgstr "Informe Metereològic"
 
 #: plugins/weather.py:668
 msgid "Radar Map"
-msgstr ""
+msgstr "Mapa del radar"
 
 #: plugins/weather.py:746
 msgid "Humidity"
-msgstr ""
+msgstr "Humitat"
 
 #: plugins/weather.py:759
 msgid "Pressure"
-msgstr ""
+msgstr "Pressió"
 
 #: plugins/weather.py:766
-#, fuzzy
 msgid "Wind"
-msgstr "Índex"
+msgstr "Vent"
 
 #: plugins/weather.py:774
 msgid "Wind Chill"
-msgstr ""
+msgstr "Gebrada"
 
 #: plugins/weather.py:782
 msgid "Visibility"
-msgstr ""
+msgstr "Visibilitat"
 
 #: plugins/weather.py:790
-#, fuzzy
 msgid "UV Index"
-msgstr "Índex"
+msgstr "Índex de UV"
 
 #: plugins/weather.py:833
 msgid "Today, a high of"
-msgstr ""
+msgstr "Avui, una màxima de"
 
 #: plugins/weather.py:835
 msgid "and a low of"
-msgstr ""
+msgstr "i una mínima de"
 
 #: plugins/weather.py:838
 msgid "Currently, there is a a humidity of"
-msgstr ""
+msgstr "Ara, la humitat és de"
 
 #: plugins/weather.py:840
-#, fuzzy
 msgid "and"
-msgstr "Gen"
+msgstr "i"
 
 #: plugins/weather.py:842
 msgid "the winds are "
-msgstr ""
+msgstr "els vents són "
 
 #: plugins/weather.py:844
 msgid "calm"
-msgstr ""
+msgstr "calma"
 
 #: plugins/weather.py:846
 msgid "coming in at"
-msgstr ""
+msgstr "serà a les"
 
 #: plugins/weather.py:846
 msgid "from the"
-msgstr ""
+msgstr "des de"
 
 #: plugins/weather.py:850
 msgid "Visibility will be unlimited today"
-msgstr ""
+msgstr "Avui hi haurà bona visibilitat"
 
 #: plugins/weather.py:852
 msgid "There will be a visibility of"
-msgstr ""
+msgstr "Hi haurà una visibilitat de"
 
 #: plugins/weather.py:887
 msgid "LO"
-msgstr ""
+msgstr "BAIX"
 
 #: plugins/weather.py:895
 msgid "HI"
-msgstr ""
+msgstr "ALT"
 
 #: plugins/weather.py:909
 msgid "Error encountered while trying to download Radar map"
-msgstr ""
+msgstr "Hi ha hagut un error en baixar el Mapa del radar"
 
-#: plugins/file_ops.py:63 www/htdocs/library.rpy:447
+#: plugins/file_ops.py:63 www/htdocs/library.rpy:478
+#: www/htdocs/library-djw.rpy:549
 msgid "Delete"
 msgstr "Suprimeix"
 
@@ -342,16 +332,18 @@ msgstr "Afegeix el Fitxer al Carro"
 msgid "Delete Cart"
 msgstr "Suprimeix el Carro"
 
-#: plugins/lcd.py:69 plugins/lcd.py:921 plugins/lcd.py:932 plugins/lcd.py:943
-#: plugins/vfd.py:52 plugins/vfd.py:512 plugins/vfd.py:520 plugins/vfd.py:722
-#: plugins/vfd.py:735 plugins/vfd.py:746 www/htdocs/help/howto.rpy:84
-#: www/htdocs/help/doc.rpy:61 www/htdocs/manualrecord.rpy:67
-#: www/htdocs/record.rpy:60 www/htdocs/record.rpy:83
-#: www/htdocs/edit_favorite.rpy:53 www/htdocs/edit_favorite.rpy:77
-#: www/htdocs/edit_favorite.rpy:101 www/htdocs/guide.rpy:149
-#: www/htdocs/genre.rpy:90 www/htdocs/favorites.rpy:53
-#: www/htdocs/library.rpy:179 www/htdocs/library.rpy:201
-#: www/htdocs/library.rpy:203 www/htdocs/search.rpy:51
+#: plugins/lcd.py:48 plugins/lcd.py:900 plugins/lcd.py:911 plugins/lcd.py:922
+#: plugins/vfd.py:50 plugins/vfd.py:516 plugins/vfd.py:524 plugins/vfd.py:727
+#: plugins/vfd.py:740 plugins/vfd.py:751 plugins/freevused.py:122
+#: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
+#: www/htdocs/manualrecord.rpy:67 www/htdocs/record.rpy:60
+#: www/htdocs/record.rpy:83 www/htdocs/edit_favorite.rpy:53
+#: www/htdocs/edit_favorite.rpy:77 www/htdocs/edit_favorite.rpy:101
+#: www/htdocs/guide.rpy:149 www/htdocs/genre.rpy:90
+#: www/htdocs/favorites.rpy:53 www/htdocs/library.rpy:183
+#: www/htdocs/library.rpy:205 www/htdocs/library.rpy:208
+#: www/htdocs/search.rpy:51 www/htdocs/library-djw.rpy:243
+#: www/htdocs/library-djw.rpy:265 www/htdocs/library-djw.rpy:268
 #: skins/main/info_area.py:132 tv/plugins/xine.py:80 tv/channels.py:133
 #: tv/channels.py:171 tv/channels.py:177 tv/record_client.py:90
 #: audio/plugins/cdbackup.py:189 audio/plugins/cdbackup.py:571
@@ -359,109 +351,109 @@ msgstr "Suprimeix el Carro"
 msgid "ERROR"
 msgstr "ERROR"
 
-#: plugins/lcd.py:69
+#: plugins/lcd.py:48
 msgid "You need pylcd to run \"lcd\" plugin."
 msgstr "Heu d'executar el connector \"lcd\"."
 
-#: plugins/lcd.py:88 plugins/lcd.py:96 plugins/vfd.py:93 plugins/vfd.py:101
+#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/vfd.py:91 plugins/vfd.py:99
 #: share/skins/main/mediaportal.fxd:690 share/skins/main/dark.fxd:536
 #: share/skins/main/dark.fxd:753 share/skins/main/basic.fxd:391
 #: share/skins/main/blurr.fxd:700 share/skins/main/info.fxd:218
 msgid "Length"
 msgstr "Durada"
 
-#: plugins/lcd.py:89 plugins/lcd.py:93 plugins/lcd.py:204 plugins/vfd.py:94
-#: plugins/vfd.py:98 share/skins/main/dark.fxd:520
+#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183 plugins/vfd.py:92
+#: plugins/vfd.py:96 share/skins/main/dark.fxd:520
 #: share/skins/main/dark.fxd:733 share/skins/main/info.fxd:201
 #: share/skins/main/info.fxd:356 share/skins/main/info.fxd:396
 msgid "Artist"
 msgstr "Artista"
 
-#: plugins/lcd.py:90 plugins/lcd.py:94 plugins/lcd.py:201 plugins/vfd.py:95
-#: plugins/vfd.py:99 share/skins/main/mediaportal.fxd:671
+#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180 plugins/vfd.py:93
+#: plugins/vfd.py:97 share/skins/main/mediaportal.fxd:671
 #: share/skins/main/dark.fxd:526 share/skins/main/dark.fxd:738
 #: share/skins/main/basic.fxd:373 share/skins/main/blurr.fxd:677
 #: share/skins/main/info.fxd:207 share/skins/main/info.fxd:361
 msgid "Album"
 msgstr "Àlbum"
 
-#: plugins/lcd.py:91 plugins/lcd.py:95 plugins/vfd.py:96 plugins/vfd.py:100
+#: plugins/lcd.py:70 plugins/lcd.py:74 plugins/vfd.py:94 plugins/vfd.py:98
 #: share/skins/main/mediaportal.fxd:677 share/skins/main/dark.fxd:446
 #: share/skins/main/blurr.fxd:683 share/skins/main/info.fxd:458
 msgid "Year"
 msgstr "Any"
 
-#: plugins/lcd.py:92 plugins/vfd.py:97 share/skins/main/mediaportal.fxd:330
+#: plugins/lcd.py:71 plugins/vfd.py:95 share/skins/main/mediaportal.fxd:330
 #: share/skins/main/blurr.fxd:338 share/skins/main/info.fxd:401
 msgid "Tracks"
 msgstr "Pistes"
 
-#: plugins/lcd.py:97 plugins/vfd.py:102 share/skins/main/dark.fxd:476
+#: plugins/lcd.py:76 plugins/vfd.py:100 share/skins/main/dark.fxd:476
 #: share/skins/main/info.fxd:287 share/skins/main/info.fxd:493
 msgid "Resolution"
 msgstr "Resolució"
 
-#: plugins/lcd.py:98 plugins/vfd.py:103
+#: plugins/lcd.py:77 plugins/vfd.py:101
 msgid "Aspect"
 msgstr "Aspecte"
 
-#: plugins/lcd.py:99 plugins/lcd.py:102 plugins/lcd.py:239 plugins/vfd.py:104
-#: plugins/vfd.py:107
+#: plugins/lcd.py:78 plugins/lcd.py:81 plugins/lcd.py:218 plugins/vfd.py:102
+#: plugins/vfd.py:105
 msgid "Tagline"
 msgstr "Línia d'etiqueta"
 
-#: plugins/lcd.py:100 plugins/lcd.py:101 plugins/vfd.py:105 plugins/vfd.py:106
+#: plugins/lcd.py:79 plugins/lcd.py:80 plugins/vfd.py:103 plugins/vfd.py:104
 msgid "Plot"
 msgstr "Dibuixa"
 
-#: plugins/lcd.py:103 plugins/vfd.py:108 share/skins/main/dark.fxd:581
+#: plugins/lcd.py:82 plugins/vfd.py:106 share/skins/main/dark.fxd:581
 msgid "Geometry"
 msgstr "Geometria"
 
-#: plugins/lcd.py:106 plugins/vfd.py:111
+#: plugins/lcd.py:85 plugins/vfd.py:109
 #, python-format
 msgid "%s items"
 msgstr "%s elements"
 
-#: plugins/lcd.py:161 plugins/lcd.py:309 plugins/vfd.py:164
+#: plugins/lcd.py:140 plugins/lcd.py:288 plugins/vfd.py:162
 #, python-format
 msgid "Today is %s."
 msgstr "Avui és %s."
 
-#: plugins/lcd.py:171 plugins/lcd.py:533
+#: plugins/lcd.py:150 plugins/lcd.py:512
 msgid "Menu"
 msgstr "Menú"
 
-#: plugins/lcd.py:174 plugins/lcd.py:536
+#: plugins/lcd.py:153 plugins/lcd.py:515
 msgid "Item"
 msgstr "Element"
 
-#: plugins/lcd.py:177 share/skins/main/dark.fxd:470
+#: plugins/lcd.py:156 share/skins/main/dark.fxd:470
 #: share/skins/main/info.fxd:282 share/skins/main/info.fxd:487
 msgid "Type"
 msgstr "Tipus"
 
-#: plugins/lcd.py:180
+#: plugins/lcd.py:159
 msgid "Information"
 msgstr "Informació"
 
-#: plugins/lcd.py:198 plugins/lcd.py:548 www/htdocs/library.rpy:260
-#: share/skins/main/dark.fxd:18 share/skins/main/crystal.fxd:9
-#: share/skins/main/bluestar.fxd:9 share/skins/main/basic.fxd:21
-#: share/skins/main/rain.fxd:9
+#: plugins/lcd.py:177 plugins/lcd.py:527 www/htdocs/library.rpy:268
+#: www/htdocs/library-djw.rpy:330 share/skins/main/dark.fxd:18
+#: share/skins/main/crystal.fxd:9 share/skins/main/bluestar.fxd:9
+#: share/skins/main/basic.fxd:21 share/skins/main/rain.fxd:9
 msgid "Music"
 msgstr "Música"
 
-#: plugins/lcd.py:236 plugins/lcd.py:575
+#: plugins/lcd.py:215 plugins/lcd.py:554
 msgid "Video"
 msgstr "Vídeo"
 
-#: plugins/lcd.py:242 share/skins/main/dark.fxd:452
+#: plugins/lcd.py:221 share/skins/main/dark.fxd:452
 #: share/skins/main/info.fxd:464
 msgid "Genre"
 msgstr "Gènere"
 
-#: plugins/lcd.py:275 plugins/lcd.py:603 www/htdocs/manualrecord.rpy:216
+#: plugins/lcd.py:254 plugins/lcd.py:582 www/htdocs/manualrecord.rpy:216
 #: www/htdocs/record.rpy:113 www/htdocs/edit_favorite.rpy:128
 #: www/htdocs/favorites.rpy:100 www/htdocs/search.rpy:89
 #: tv/edit_favorite.py:112 share/skins/main/basic.fxd:552
@@ -469,119 +461,116 @@ msgstr "Gènere"
 msgid "Channel"
 msgstr "Canal"
 
-#: plugins/lcd.py:278 plugins/lcd.py:606 www/htdocs/edit_favorite.rpy:127
+#: plugins/lcd.py:257 plugins/lcd.py:585 www/htdocs/edit_favorite.rpy:127
 #: www/htdocs/favorites.rpy:99 share/skins/main/basic.fxd:608
 msgid "Program"
 msgstr "Programa"
 
-#: plugins/lcd.py:281 www/htdocs/guide.rpy:156
+#: plugins/lcd.py:260 www/htdocs/guide.rpy:156
 #: share/skins/main/crystal.fxd:272 share/skins/main/bluestar.fxd:292
 #: share/skins/main/basic.fxd:595 share/skins/main/noia.fxd:95
 #: share/skins/main/rain.fxd:269
 msgid "Time"
 msgstr "Hora"
 
-#: plugins/lcd.py:692
+#: plugins/lcd.py:671
 msgid ""
 "LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
 msgstr ""
 "El connector LCD no es carregarà! Potser no esteu executant LCDd (el dimoni "
 "lcdproc)?"
 
-#: plugins/lcd.py:697
+#: plugins/lcd.py:676
 #, python-format
 msgid "Connecting to LCD: %s"
 msgstr "Connectant a LCD: %s"
 
-#: plugins/lcd.py:698
-#, fuzzy
+#: plugins/lcd.py:677
 msgid "Info as known by the LCD module:"
-msgstr "Informació del mòdul LCD:"
+msgstr "Informació proporcionada pel mòdul LCD:"
 
-#: plugins/lcd.py:918 plugins/lcd.py:929 plugins/lcd.py:942 plugins/vfd.py:309
-#: plugins/vfd.py:719 plugins/vfd.py:731 audio/plugins/cdbackup.py:498
+#: plugins/lcd.py:897 plugins/lcd.py:908 plugins/lcd.py:921 plugins/vfd.py:307
+#: plugins/vfd.py:724 plugins/vfd.py:736 audio/plugins/cdbackup.py:498
 #: audio/plugins/coversearch.py:151 audio/plugins/coversearch.py:160
 #: audio/plugins/coversearch.py:169
 msgid "WARNING"
 msgstr "AVÍS"
 
-#: plugins/lcd.py:918
+#: plugins/lcd.py:897
 #, python-format
 msgid "Could not find screens for %d lines LCD!"
 msgstr "No s'ha trobat cap pantalla LCD de %d línies!"
 
-#: plugins/lcd.py:921 plugins/lcd.py:932 plugins/lcd.py:943
+#: plugins/lcd.py:900 plugins/lcd.py:911 plugins/lcd.py:922
 #, python-format
 msgid "No screens found for this LCD (%dx%d)!"
 msgstr "No es troben pantalles per aquesta LCD (%dx%d)!"
 
-#: plugins/lcd.py:929 plugins/lcd.py:942
+#: plugins/lcd.py:908 plugins/lcd.py:921
 #, python-format
 msgid "Could not find screens for %d lines and %d columns LCD!"
 msgstr "No s'han trobat pantalles LCD de %d línies i %d columnes!"
 
-#: plugins/mediamenu.py:123
+#: plugins/mediamenu.py:124
 msgid "Media"
 msgstr "Mitjà"
 
-#: plugins/mediamenu.py:128
+#: plugins/mediamenu.py:129
 msgid "Movie"
 msgstr "Pel·lícula"
 
-#: plugins/mediamenu.py:130
+#: plugins/mediamenu.py:131
 msgid "Audio"
 msgstr "Àudio"
 
-#: plugins/mediamenu.py:132
+#: plugins/mediamenu.py:133
 msgid "Image"
 msgstr "Imatge"
 
-#: plugins/mediamenu.py:134 share/skins/main/dark.fxd:20
+#: plugins/mediamenu.py:135 share/skins/main/dark.fxd:20
 #: share/skins/main/crystal.fxd:13 share/skins/main/bluestar.fxd:13
 #: share/skins/main/basic.fxd:23 share/skins/main/rain.fxd:13
 #: share/skins/main/info.fxd:16
 msgid "Games"
 msgstr "Jocs"
 
-#: plugins/mediamenu.py:136
+#: plugins/mediamenu.py:137
 #, python-format
 msgid "%s Main Menu"
 msgstr "%s Menú Principal"
 
 #: plugins/autoshutdown.py:144
-#, fuzzy
 msgid "A recording is in progress."
-msgstr "El servidor d'enregistrament està aturat."
+msgstr "S'està enregistrant d'enregistrament."
 
 #: plugins/autoshutdown.py:147
 #, python-format
 msgid "Would wakeup again within %d minutes."
-msgstr ""
+msgstr "Es tornarà a engegar en %d minuts."
 
 #: plugins/autoshutdown.py:151
 msgid "There are important processes running."
-msgstr ""
+msgstr "S'estan executant processos importants "
 
 #: plugins/autoshutdown.py:157
-#, fuzzy
 msgid "No wakeup scheduled."
-msgstr "No hi ha res planificat."
+msgstr "No hi ha cap engegada planificada."
 
 #: plugins/autoshutdown.py:161
 msgid "The next wakeup is scheduled at"
-msgstr ""
+msgstr "La propera engegada està planificada per les"
 
 #: plugins/autoshutdown.py:172 plugins/autoshutdown.py:256
 msgid "Resume automatic shutdown"
-msgstr ""
+msgstr "Continua l'aturada automàtica"
 
 #: plugins/autoshutdown.py:174 plugins/autoshutdown.py:253
 msgid "Pause automatic shutdown"
-msgstr ""
+msgstr "Anul·la l'aturada automàtica"
 
 #: plugins/autoshutdown.py:176
 msgid "Shutdown and wakeup"
-msgstr ""
+msgstr "Atura i engega."
 
 #: plugins/autoshutdown.py:178 plugins/shutdown.py:135 plugins/shutdown.py:139
 msgid "Restart system"
@@ -592,30 +581,29 @@ msgid "Shutdown system"
 msgstr "Apaga el sistema"
 
 #: plugins/autoshutdown.py:180
-#, fuzzy
 msgid "Shutdown freevo"
 msgstr "Tanca el Freevo"
 
 #: plugins/autoshutdown.py:190 plugins/autoshutdown.py:218
 msgid "SHUTDOWN SYSTEM?"
-msgstr ""
+msgstr "VOLEU ATURAR EL SISTEMA?"
 
 #: plugins/autoshutdown.py:204
 msgid "RESTART SYSTEM?"
-msgstr ""
+msgstr "VOLEU TORNAR A ARRENCAR EL SISTEMA?"
 
 #: plugins/autoshutdown.py:210 plugins/autoshutdown.py:224
 #: plugins/autoshutdown.py:238
 msgid "(wakeup disabled)"
-msgstr ""
+msgstr "("
 
 #: plugins/autoshutdown.py:232
 msgid "SHUTDOWN FREEVO?"
-msgstr ""
+msgstr "VOLEU TANCAR FREEVO?"
 
 #: plugins/autoshutdown.py:600 plugins/shutdown.py:63 main.py:305
 msgid "shutting down..."
-msgstr "tancant..."
+msgstr "S'està tancant..."
 
 #: plugins/ossmixer.py:114 plugins/ossmixer.py:117 plugins/ossmixer.py:123
 #: plugins/ossmixer.py:126 plugins/ossmixer.py:131 plugins/mixer.py:119
@@ -676,7 +664,7 @@ msgstr "Missatge: %s"
 
 #: plugins/command.py:139
 msgid "Command finished"
-msgstr "L'ordre ha acabat"
+msgstr "Ha acabat  l'ordre"
 
 #: plugins/command.py:153 plugins/cd_burn.py:93 gui/ConfirmBox.py:71
 #: gui/AlertBox.py:62
@@ -705,7 +693,7 @@ msgstr "S'està executant l'ordre..."
 
 #: plugins/command.py:247
 msgid "Command Failed"
-msgstr "No ha estat possible executar l'ordre"
+msgstr "No ha estat possible complir l'ordre"
 
 #: plugins/command.py:249
 msgid "Command Completed"
@@ -718,7 +706,7 @@ msgstr "Ordres"
 
 #: plugins/upsoon.py:222 plugins/upsoon.py:241
 msgid "A recording will start in less than a minute"
-msgstr ""
+msgstr "Abans d'un minut començara una gravació"
 
 #: plugins/cd_burn.py:153
 msgid "Not Yet implemented :)"
@@ -822,49 +810,60 @@ msgstr ""
 msgid "Copy %s, and related, file to CD"
 msgstr ""
 
-#: plugins/vfd.py:52
+#: plugins/vfd.py:50
 #, fuzzy
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
 msgstr "Heu d'executar el connector \"lcd\"."
 
-#: plugins/vfd.py:299
+#: plugins/vfd.py:297
 #, python-format
 msgid "Sending data %r attempt=%d"
 msgstr ""
 
-#: plugins/vfd.py:309
+#: plugins/vfd.py:307
 #, python-format
 msgid "%r attempt=%d"
 msgstr ""
 
-#: plugins/vfd.py:512
+#: plugins/vfd.py:516
 msgid "Cannot find VFD device"
 msgstr ""
 
-#: plugins/vfd.py:520
+#: plugins/vfd.py:524
 msgid "Cannot find MIXER"
 msgstr ""
 
-#: plugins/vfd.py:719
+#: plugins/vfd.py:724
 #, fuzzy, python-format
 msgid "Could not find screens for %d lines VFD!"
 msgstr "No s'ha trobat cap pantalla LCD de %d línies!"
 
-#: plugins/vfd.py:722 plugins/vfd.py:735 plugins/vfd.py:746
+#: plugins/vfd.py:727 plugins/vfd.py:740 plugins/vfd.py:751
 #, fuzzy, python-format
 msgid "No screens found for this VFD (%dx%d)!"
 msgstr "No es troben pantalles per aquesta LCD (%dx%d)!"
 
-#: plugins/vfd.py:731
+#: plugins/vfd.py:736
 #, fuzzy, python-format
 msgid "Could not find screens for %d lines and %d columns VFD!"
 msgstr "No s'han trobat pantalles LCD de %d línies i %d columnes!"
+
+#: plugins/freevused.py:122
+msgid ""
+"You need pybluez (http://http://org.csail.mit.edu/pybluez/) to run "
+"\"freevused\" plugin."
+msgstr ""
+
+#: plugins/freevused.py:323
+#, fuzzy, python-format
+msgid "BT event %s"
+msgstr "Text: %s"
 
 #: image/plugins/gphoto.py:99 image/imageitem.py:98
 msgid "View Image"
 msgstr "Mosta l'imatge"
 
-#: image/plugins/gphoto.py:126 directory.py:413
+#: image/plugins/gphoto.py:126 directory.py:431
 msgid "Browse directory"
 msgstr "Navega la carpeta"
 
@@ -890,7 +889,7 @@ msgstr "No s'han trobat imatges"
 
 #: image/plugins/apod.py:96 image/plugins/apod.py:109
 msgid "Unable to open URL"
-msgstr ""
+msgstr "No es pot obrir la URL"
 
 #: image/plugins/apod.py:123
 msgid "Need a directory to store APOD pictures."
@@ -907,6 +906,8 @@ msgid ""
 "directory %s must be able to be read, written to and executed by the user "
 "running freevo."
 msgstr ""
+"l'usuari que executa freevo ha de poder llegir, escriure i executar a la "
+"carpeta %s "
 
 #: image/viewer.py:121
 #, python-format
@@ -923,7 +924,7 @@ msgstr "pausa"
 
 #: image/viewer.py:333
 msgid "play"
-msgstr "reprodueix"
+msgstr "reproducció"
 
 #: image/viewer.py:426
 msgid "No information available"
@@ -991,7 +992,7 @@ msgstr "ComEsFa per Escriure un Connector"
 
 #: www/htdocs/help/howto.rpy:45 www/htdocs/help/howto.rpy:46
 msgid "Freevo Installation HOWTO"
-msgstr "COMESFA per instal·lar Freevo"
+msgstr "ComEsFa per instal·lar Freevo"
 
 #: www/htdocs/help/howto.rpy:46
 msgid "Build your own media box with Freevo and Linux"
@@ -999,7 +1000,7 @@ msgstr "Munta el teu centre multimèdia amb Freevo i Linux"
 
 #: www/htdocs/help/howto.rpy:48 www/htdocs/help/howto.rpy:49
 msgid "Freevo Plugin Writing HOWTO"
-msgstr "COMESFA per Escriure un Connector per Freevo"
+msgstr "ComEsFa per Escriure un Connector per Freevo"
 
 #: www/htdocs/help/howto.rpy:49
 msgid "Writing your own plugins for Freevo"
@@ -1010,6 +1011,7 @@ msgid "unable to load html files"
 msgstr "no és possible carregar els fitxers html"
 
 #: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
+#, fuzzy
 msgid "If you use a CVS version of Freevo, run <b>autogen.sh</b>."
 msgstr "Si feu servir la versió CVS de Freevo, executeu <b>autogen.sh</b>."
 
@@ -1055,16 +1057,16 @@ msgstr "El servidor d'enregistrament no està disponible."
 msgid "Manual Recorded"
 msgstr "Enregistrament Manual"
 
-#: www/htdocs/manualrecord.rpy:123 tv/plugins/manual_record.py:360
+#: www/htdocs/manualrecord.rpy:123 tv/plugins/manual_record.py:361
 msgid "start time is not before stop time."
 msgstr "l'hora d'engegada no és anterior a la d'aturada."
 
-#: www/htdocs/manualrecord.rpy:126 tv/plugins/manual_record.py:351
+#: www/htdocs/manualrecord.rpy:126 tv/plugins/manual_record.py:352
 #, python-format
 msgid "Program would record for more than %d days!"
 msgstr "El programa enregistrarà més de %d dies!"
 
-#: www/htdocs/manualrecord.rpy:128 tv/plugins/manual_record.py:355
+#: www/htdocs/manualrecord.rpy:128 tv/plugins/manual_record.py:356
 msgid "Program would record for more than 1 day!"
 msgstr "El programa enregistrarà més d'1 dia!"
 
@@ -1116,7 +1118,7 @@ msgstr "Nov"
 msgid "Dec"
 msgstr "Des"
 
-#: www/htdocs/manualrecord.rpy:199 www/web_types.py:126
+#: www/htdocs/manualrecord.rpy:199 www/web_types.py:129
 msgid "Manual Recording"
 msgstr "Enregistrament Manual"
 
@@ -1141,20 +1143,20 @@ msgstr "Descripció del Programa"
 
 #: www/htdocs/manualrecord.rpy:231
 msgid "Add to Recording Schedule"
-msgstr "Afegeix a l'a Planificació d'Enregistrament"
+msgstr "Afegeix a la Planificació d'Enregistrament"
 
 #: www/htdocs/index.rpy:46
 msgid "Welcome"
 msgstr "Benvingut"
 
-#: www/htdocs/index.rpy:46 www/web_types.py:121
+#: www/htdocs/index.rpy:46 www/web_types.py:124
 msgid "Home"
 msgstr "Inici"
 
 #: www/htdocs/index.rpy:49
 #, python-format
 msgid "Freevo Web Status as of %s"
-msgstr "Freevo Web es troba a l'estat %s"
+msgstr "Freevo Web està %s"
 
 #: www/htdocs/index.rpy:54 www/htdocs/index.rpy:60 www/htdocs/index.rpy:62
 msgid "Notice"
@@ -1215,7 +1217,7 @@ msgstr "La descripció del programa %s no està disponible."
 msgid "No program found on %s at %s."
 msgstr "No s'ha trobat cap programa a %s a les %s."
 
-#: www/htdocs/record.rpy:105 www/web_types.py:123
+#: www/htdocs/record.rpy:105 www/web_types.py:126
 #: tv/plugins/scheduled_recordings.py:45 tv/plugins/scheduled_recordings.py:59
 msgid "Scheduled Recordings"
 msgstr "Enregistraments Planificats"
@@ -1319,7 +1321,7 @@ msgstr "QUALSEVOL HORA"
 msgid "Save"
 msgstr "Desa"
 
-#: www/htdocs/guide.rpy:144 www/web_types.py:122 tv/tvmenu.py:106
+#: www/htdocs/guide.rpy:144 www/web_types.py:125 tv/tvmenu.py:106
 msgid "TV Guide"
 msgstr "Guia de TV"
 
@@ -1327,15 +1329,15 @@ msgstr "Guia de TV"
 msgid "View"
 msgstr "Mostra"
 
-#: www/htdocs/guide.rpy:159 www/htdocs/genre.rpy:116
+#: www/htdocs/guide.rpy:159 www/htdocs/genre.rpy:119
 msgid "Show"
 msgstr "Mostra"
 
-#: www/htdocs/guide.rpy:159 www/htdocs/genre.rpy:116
+#: www/htdocs/guide.rpy:159 www/htdocs/genre.rpy:119
 msgid "Category"
 msgstr "Categoria"
 
-#: www/htdocs/guide.rpy:159 www/htdocs/genre.rpy:116
+#: www/htdocs/guide.rpy:159 www/htdocs/genre.rpy:120
 msgid "Change"
 msgstr "Canvia"
 
@@ -1343,33 +1345,33 @@ msgstr "Canvia"
 msgid "This channel has no data loaded"
 msgstr "Aquest canal no té dades carregades"
 
-#: www/htdocs/guide.rpy:271 www/htdocs/genre.rpy:197
+#: www/htdocs/guide.rpy:271 www/htdocs/genre.rpy:203
 #: share/skins/main/basic.fxd:558 share/skins/main/basic.fxd:620
 msgid "Start"
 msgstr "Engega"
 
-#: www/htdocs/guide.rpy:272 www/htdocs/genre.rpy:198
+#: www/htdocs/guide.rpy:272 www/htdocs/genre.rpy:204
 #: share/skins/main/basic.fxd:564 share/skins/main/basic.fxd:626
 msgid "Stop"
-msgstr "Atura"
+msgstr "Surt"
 
-#: www/htdocs/guide.rpy:273 www/htdocs/genre.rpy:199
+#: www/htdocs/guide.rpy:273 www/htdocs/genre.rpy:205
 #: share/skins/main/dark.fxd:464 share/skins/main/info.fxd:277
 #: share/skins/main/info.fxd:302 share/skins/main/info.fxd:481
 msgid "Runtime"
 msgstr "Duració"
 
-#: www/htdocs/guide.rpy:284 www/htdocs/genre.rpy:210 www/htdocs/search.rpy:138
+#: www/htdocs/guide.rpy:284 www/htdocs/genre.rpy:216 www/htdocs/search.rpy:138
 #: www/htdocs/search.rpy:140
 msgid "Record"
 msgstr "Enregistrament"
 
-#: www/htdocs/guide.rpy:287 www/htdocs/genre.rpy:213
+#: www/htdocs/guide.rpy:287 www/htdocs/genre.rpy:219
 msgid "Add to Favorites"
 msgstr "Afegeix als Preferits"
 
-#: www/htdocs/guide.rpy:290 www/htdocs/genre.rpy:216
-#: www/htdocs/library.rpy:494
+#: www/htdocs/guide.rpy:290 www/htdocs/genre.rpy:222
+#: www/htdocs/library.rpy:528 www/htdocs/library-djw.rpy:599
 msgid "Close Window"
 msgstr "Tanca la finestra"
 
@@ -1378,12 +1380,12 @@ msgstr "Tanca la finestra"
 msgid "TV Genre for %s"
 msgstr "Gènere de TV per a %s"
 
-#: www/htdocs/genre.rpy:172
+#: www/htdocs/genre.rpy:178
 msgid "NO SHOWS MATCHING CATEGORY"
 msgstr "NO HI HA CAP CATEGORIA QUE COINCIDEIXI"
 
 #: www/htdocs/favorites.rpy:51 www/htdocs/favorites.rpy:94
-#: www/web_types.py:124
+#: www/web_types.py:127
 msgid "Favorites"
 msgstr "Preferits"
 
@@ -1440,103 +1442,106 @@ msgstr "Més amunt"
 msgid "Lower"
 msgstr "baixa"
 
-#: www/htdocs/library.rpy:168
+#: www/htdocs/library.rpy:172 www/htdocs/library-djw.rpy:232
 #, python-format
 msgid "%s already exists! File not renamed."
 msgstr "El fitxer %s ja existeix! No es canviarà el nom."
 
-#: www/htdocs/library.rpy:172
+#: www/htdocs/library.rpy:176 www/htdocs/library-djw.rpy:236
 #, python-format
 msgid "Rename %s to %s."
 msgstr "Canvia el nom de %s a %s."
 
-#: www/htdocs/library.rpy:175 www/htdocs/library.rpy:191
+#: www/htdocs/library.rpy:179 www/htdocs/library.rpy:195
+#: www/htdocs/library-djw.rpy:239 www/htdocs/library-djw.rpy:255
 #, python-format
 msgid "<h2>%s</h2>"
-msgstr ""
+msgstr "<h2>%s</h2>"
 
-#: www/htdocs/library.rpy:176
-#, fuzzy, python-format
+#: www/htdocs/library.rpy:180 www/htdocs/library-djw.rpy:240
+#, python-format
 msgid "Rename %s to %s, failed."
-msgstr "Canvia el nom de %s a %s."
+msgstr "No ha estat possible canviar el nom de %s a %s."
 
-#: www/htdocs/library.rpy:179
+#: www/htdocs/library.rpy:183 www/htdocs/library-djw.rpy:243
 msgid "No new file specified."
 msgstr "No s'ha indicat cap nou fitxer."
 
-#: www/htdocs/library.rpy:185 www/htdocs/library.rpy:189
+#: www/htdocs/library.rpy:189 www/htdocs/library.rpy:193
+#: www/htdocs/library-djw.rpy:249 www/htdocs/library-djw.rpy:253
 #, python-format
 msgid "Delete %s."
 msgstr "Suprimeix %s."
 
-#: www/htdocs/library.rpy:192
-#, fuzzy, python-format
+#: www/htdocs/library.rpy:196 www/htdocs/library-djw.rpy:256
+#, python-format
 msgid "Delete %s, failed."
-msgstr "Suprimeix %s."
+msgstr "Hi ha hagut un error en suprimir %s."
 
-#: www/htdocs/library.rpy:201
+#: www/htdocs/library.rpy:205 www/htdocs/library-djw.rpy:265
 #, python-format
 msgid "%s does not exist. No action taken."
 msgstr "%s no existeix. No s'ha fet res."
 
-#: www/htdocs/library.rpy:203
+#: www/htdocs/library.rpy:209 www/htdocs/library-djw.rpy:269
 #, python-format
 msgid "I do not process names (%s) with slashes for security reasons."
 msgstr "No executo noms de processos (%s) amb guions per raons de seguretat."
 
-#: www/htdocs/library.rpy:211 www/web_types.py:125
+#: www/htdocs/library.rpy:216 www/htdocs/library.rpy:217
+#: www/htdocs/library-djw.rpy:278 www/htdocs/library-djw.rpy:279
+#: www/web_types.py:128
 msgid "Media Library"
 msgstr "Biblioteca de Mitjans"
 
-#: www/htdocs/library.rpy:239 www/web_types.py:256
+#: www/htdocs/library.rpy:248 www/htdocs/library-djw.rpy:310
+#: www/web_types.py:245
 msgid "Messages"
 msgstr "Missatges"
 
-#: www/htdocs/library.rpy:252 share/skins/main/dark.fxd:17
-#: share/skins/main/crystal.fxd:8 share/skins/main/bluestar.fxd:8
-#: share/skins/main/basic.fxd:20 share/skins/main/rain.fxd:8
+#: www/htdocs/library.rpy:260 www/htdocs/library-djw.rpy:322
+#: share/skins/main/dark.fxd:17 share/skins/main/crystal.fxd:8
+#: share/skins/main/bluestar.fxd:8 share/skins/main/basic.fxd:20
+#: share/skins/main/rain.fxd:8
 msgid "Movies"
 msgstr "Pel·lícules"
 
-#: www/htdocs/library.rpy:256
+#: www/htdocs/library.rpy:264 www/htdocs/library-djw.rpy:326
 msgid "Recorded TV"
 msgstr "Enregistrament de TV"
 
-#: www/htdocs/library.rpy:264 share/skins/main/dark.fxd:19
-#: share/skins/main/crystal.fxd:11 share/skins/main/basic.fxd:22
-#: share/skins/main/rain.fxd:11
+#: www/htdocs/library.rpy:272 www/htdocs/library-djw.rpy:334
+#: share/skins/main/dark.fxd:19 share/skins/main/crystal.fxd:11
+#: share/skins/main/basic.fxd:22 share/skins/main/rain.fxd:11
 msgid "Images"
 msgstr "Imatges"
 
-#: www/htdocs/library.rpy:279 www/htdocs/library.rpy:348
-#: www/htdocs/library.rpy:350 www/htdocs/library.rpy:353
+#: www/htdocs/library.rpy:289 www/htdocs/library.rpy:362
+#: www/htdocs/library.rpy:364 www/htdocs/library.rpy:368
+#: www/htdocs/library-djw.rpy:351 www/htdocs/library-djw.rpy:424
+#: www/htdocs/library-djw.rpy:426 www/htdocs/library-djw.rpy:430
 msgid "Back"
 msgstr "Anterior"
 
-#: www/htdocs/library.rpy:446
+#: www/htdocs/library.rpy:477 www/htdocs/library-djw.rpy:548
 msgid "Download"
 msgstr "Descarrega"
 
-#: www/htdocs/library.rpy:448
+#: www/htdocs/library.rpy:480 www/htdocs/library-djw.rpy:551
 msgid "Rename"
 msgstr "Canvia el nom"
 
-#: www/htdocs/library.rpy:488
+#: www/htdocs/library.rpy:521 www/htdocs/library-djw.rpy:592
 #, fuzzy
 msgid "Play file"
-msgstr "Reprodueix el Títol %s"
-
-#: www/htdocs/library.rpy:491
-#, fuzzy
-msgid "Play file on host"
 msgstr "Reprodueix el Títol %s"
 
 #: www/htdocs/search.rpy:50 tv/program_display.py:172
 msgid "Search Results"
 msgstr "Resultats de la Cerca"
 
-#: www/htdocs/search.rpy:50 www/htdocs/search.rpy:74 www/web_types.py:127
-#: www/web_types.py:239 www/web_types.py:247
+#: www/htdocs/search.rpy:50 www/htdocs/search.rpy:74 www/web_types.py:130
+#: www/web_types.py:228 www/web_types.py:236
 msgid "Search"
 msgstr "Cerca"
 
@@ -1552,58 +1557,58 @@ msgstr "No s'ha trobat cap coincidència"
 msgid "New favorite"
 msgstr "Nou preferit"
 
-#: www/web_types.py:122
+#: www/web_types.py:125
 msgid "View TV Listings"
-msgstr "Mostra les Llistes de TV"
+msgstr "Mostra les Programacions de TV"
 
-#: www/web_types.py:123
+#: www/web_types.py:126
 msgid "View Scheduled Recordings"
 msgstr "Mostra els Enregistraments Planificats"
 
-#: www/web_types.py:124 tv/plugins/view_favorites.py:44
+#: www/web_types.py:127 tv/plugins/view_favorites.py:44
 #: tv/plugins/view_favorites.py:49 tv/plugins/view_favorites.py:58
 msgid "View Favorites"
 msgstr "Mostra els Preferits"
 
-#: www/web_types.py:125
+#: www/web_types.py:128
 msgid "View Media Library"
 msgstr "Mostra la Biblioteca de Mitjans"
 
-#: www/web_types.py:126
+#: www/web_types.py:129
 msgid "Schedule a Manual Recording"
 msgstr "Planifica un Enregistrament Manual"
 
-#: www/web_types.py:127
+#: www/web_types.py:130
 msgid "Advanced Search Page"
 msgstr "Pàgina de Cerca Avançada"
 
-#: www/web_types.py:128
+#: www/web_types.py:131
 msgid "Help"
 msgstr "Ajuda"
 
-#: www/web_types.py:128
+#: www/web_types.py:131
 msgid "View Online Help and Documentation"
-msgstr "Mostra l'Ajuda en línia i Documentació"
+msgstr "Mostra l'Ajuda en Línia i la Documentació"
 
-#: www/web_types.py:132
+#: www/web_types.py:135
 msgid "Icecast List"
 msgstr "Llista Icecast"
 
-#: www/web_types.py:132
+#: www/web_types.py:135
 msgid "Change Icecast List"
 msgstr "Canvia la llista Icecast"
 
-#: www/web_types.py:248
+#: www/web_types.py:237
 msgid "Movies only"
 msgstr "Només pel·lícules"
 
-#: www/web_types.py:249
+#: www/web_types.py:238
 msgid "Go!"
 msgstr "Vés-hi!"
 
 #: skins/main/default_areas.py:119
 msgid "TV GUIDE"
-msgstr "GUIA DE TV"
+msgstr "PROGRAMACIÓ DE TV"
 
 #: skins/main/listing_area.py:213
 msgid "This directory is empty"
@@ -1661,24 +1666,24 @@ msgstr "Canvia el Nom"
 msgid "Modify Channel"
 msgstr "Canvia el Canal"
 
-#: tv/plugins/manual_record.py:164 tv/plugins/manual_record.py:186
-#: tv/plugins/manual_record.py:223 tv/plugins/manual_record.py:245
+#: tv/plugins/manual_record.py:165 tv/plugins/manual_record.py:187
+#: tv/plugins/manual_record.py:224 tv/plugins/manual_record.py:246
 #: tv/program_display.py:342
 msgid "Modify Day"
 msgstr "Canvia el Dia"
 
-#: tv/plugins/manual_record.py:207 tv/plugins/manual_record.py:266
+#: tv/plugins/manual_record.py:208 tv/plugins/manual_record.py:267
 #: tv/program_display.py:362
 msgid "Modify Time"
 msgstr "Canvia l'Hora"
 
-#: tv/plugins/manual_record.py:323 tv/plugins/manual_record.py:352
-#: tv/plugins/manual_record.py:356 tv/plugins/manual_record.py:361
-#: tv/plugins/manual_record.py:365
+#: tv/plugins/manual_record.py:324 tv/plugins/manual_record.py:353
+#: tv/plugins/manual_record.py:357 tv/plugins/manual_record.py:362
+#: tv/plugins/manual_record.py:366
 msgid "Save Failed, recording was lost"
 msgstr "No ha estat possible desar, s'ha perdut l'enregistrament"
 
-#: tv/plugins/manual_record.py:364
+#: tv/plugins/manual_record.py:365
 msgid ""
 "Sorry, the stop time does not give enough time for scheduler to pickup the "
 "change.  Please set it to record for a few minutes longer."
@@ -1717,7 +1722,7 @@ msgstr "Ha fallat l'obtenció dels preferits"
 
 #: tv/plugins/ivtv_xine_tv.py:224
 msgid "This plugin only supports the ivtv video group in tv mode!"
-msgstr ""
+msgstr "El connector només permet el grup devídeo ivtv em mode tv!"
 
 #: tv/plugins/view_line_in.py:49
 msgid "View VCR Input"
@@ -2053,7 +2058,7 @@ msgstr "La carpeta %s ja existeix"
 #: audio/plugins/cdbackup.py:332
 #, python-format
 msgid "Cannot rip to '%s'! (%s)"
-msgstr ""
+msgstr "No es pot copiar a '%s'! (%s)"
 
 #: audio/plugins/cdbackup.py:348 audio/plugins/cdbackup.py:413
 #: audio/plugins/cdbackup.py:472
@@ -2238,7 +2243,7 @@ msgstr "obtenint dades..."
 msgid "Browse disc"
 msgstr "Navega pel disc"
 
-#: audio/audiodiskitem.py:107 directory.py:683
+#: audio/audiodiskitem.py:107 directory.py:701
 msgid "Random playlist"
 msgstr "Llista de reproducció aleatòria"
 
@@ -2303,18 +2308,17 @@ msgid "Jump to %s"
 msgstr "Salta a %s"
 
 #: video/plugins/dvdimage.py:72
-#, fuzzy
 msgid "Play image as DVD"
-msgstr "Reprodueix el DVD"
+msgstr "Reprodueix la imatge com un DVD"
 
 #: video/plugins/dvdimage.py:97
 msgid "Choose title to play. <1-9>"
-msgstr ""
+msgstr "Tria el títol que vols reproduir. <1-9>"
 
 #: video/plugins/dvdimage.py:121
 #, python-format
 msgid "Choose disc (%i discs available)."
-msgstr ""
+msgstr "Tria un disc (Hi ha %i discs disponibles)."
 
 #: video/plugins/linkbrowser.py:69
 msgid "Browse links (autoplay)"
@@ -2342,7 +2346,7 @@ msgstr "No s'ha pogut descarregar %s"
 msgid "Show details for this item"
 msgstr "Mostra els detalls d'aquest element"
 
-#: video/plugins/details.py:95
+#: video/plugins/details.py:96
 msgid "Details"
 msgstr "Detalls"
 
@@ -2380,126 +2384,125 @@ msgstr ""
 "Genera les miniatures del vídeo per a tots els elements (pot trigar una "
 "mica)."
 
-#: video/configure.py:69 video/configure.py:101
+#: video/configure.py:69 video/configure.py:102
 #, python-format
 msgid "Stream %s"
 msgstr "Flux %s"
 
-#: video/configure.py:80
+#: video/configure.py:81
 msgid "Audio Menu"
 msgstr "Menú d'àudio"
 
-#: video/configure.py:95
+#: video/configure.py:96
 msgid "no subtitles"
 msgstr "no hi ha subtítols"
 
-#: video/configure.py:117
+#: video/configure.py:119
 msgid "Subtitle Menu"
 msgstr "Menú de Subtítols"
 
-#: video/configure.py:134 video/configure.py:161
+#: video/configure.py:136 video/configure.py:164
 #, python-format
 msgid "Play chapter %s"
 msgstr "Reprodueix el capítol %s"
 
-#: video/configure.py:141 video/configure.py:164
+#: video/configure.py:144 video/configure.py:167
 msgid "Chapter Menu"
 msgstr "Menú de Capítols"
 
-#: video/configure.py:193
+#: video/configure.py:197
 #, python-format
 msgid "Turn off %s"
 msgstr "Atura %s"
 
-#: video/configure.py:194
+#: video/configure.py:198
 #, python-format
 msgid "Turn on %s"
 msgstr "Engega %s"
 
-#: video/configure.py:207
+#: video/configure.py:211
 msgid "Audio selection"
 msgstr "Selecció d'àudio"
 
-#: video/configure.py:209
+#: video/configure.py:213
 msgid "Subtitle selection"
 msgstr "Selecció de subtítols"
 
-#: video/configure.py:212 video/configure.py:216
+#: video/configure.py:216 video/configure.py:220
 msgid "Chapter selection"
 msgstr "Selecció de capítol"
 
-#: video/configure.py:222
+#: video/configure.py:226
 msgid "deinterlacing"
 msgstr "desentrellaçat"
 
-#: video/configure.py:227 video/videoitem.py:279 playlist.py:284
+#: video/configure.py:231 video/videoitem.py:331 playlist.py:284
 msgid "Play"
 msgstr "Reprodueix"
 
-#: video/configure.py:228
+#: video/configure.py:232
 msgid "Config Menu"
 msgstr "Menú de Configuració"
 
-#: video/videoitem.py:265
+#: video/videoitem.py:317
 msgid "Play DVD"
 msgstr "Reprodueix el DVD"
 
-#: video/videoitem.py:266 video/videoitem.py:268
+#: video/videoitem.py:318 video/videoitem.py:320
 msgid "DVD title list"
 msgstr "Llista de títols de DVD"
 
-#: video/videoitem.py:269 video/videoitem.py:277
+#: video/videoitem.py:321 video/videoitem.py:329
 msgid "Play default track"
 msgstr "Reprodueix la pista per omissió"
 
-#: video/videoitem.py:273
+#: video/videoitem.py:325
 msgid "Play VCD"
 msgstr "Reprodueix el VCD"
 
-#: video/videoitem.py:274 video/videoitem.py:276
+#: video/videoitem.py:326 video/videoitem.py:328
 msgid "VCD title list"
 msgstr "Llista de títols de VCD"
 
-#: video/videoitem.py:281
+#: video/videoitem.py:333
 msgid "Play with alternate player"
 msgstr "Reprodueix amb un altre reproductor"
 
-#: video/videoitem.py:284
+#: video/videoitem.py:336
 msgid "Play with maximum cache"
 msgstr "Reprodueix amb el màxim de memòria cau"
 
-#: video/videoitem.py:289
+#: video/videoitem.py:341
 msgid "Show variants"
 msgstr "Mostra les variants"
 
-#: video/videoitem.py:293
+#: video/videoitem.py:345
 msgid "Create Thumbnail"
 msgstr "Genera la Miniatura"
 
-#: video/videoitem.py:314
+#: video/videoitem.py:366
 msgid "Please wait...."
 msgstr "Espereu... "
 
-#: video/videoitem.py:461 video/videoitem.py:475 video/videoitem.py:489
+#: video/videoitem.py:513 video/videoitem.py:527 video/videoitem.py:541
 #, python-format
 msgid "No media found for \"%s\".\n"
 msgstr "No s'ha trobat cap mitjà per \"%s\".\n"
 
-#: video/videoitem.py:462 video/videoitem.py:476 video/videoitem.py:490
+#: video/videoitem.py:514 video/videoitem.py:528 video/videoitem.py:542
 msgid "Please insert the media."
 msgstr "Introduïu el mitjà."
 
-#: video/videoitem.py:495
+#: video/videoitem.py:547
 msgid "No player for this item found"
 msgstr "No hi ha cap reproductor per aquest element"
 
-#: video/videoitem.py:577
+#: video/videoitem.py:629
 #, python-format
 msgid "Play Title %s"
 msgstr "Reprodueix el Títol %s"
 
-#: util/mediainfo.py:719
-#, fuzzy
+#: util/mediainfo.py:741
 msgid "Reloading cache files, be patient..."
 msgstr "S'està llegint la memòria cau, espereu..."
 
@@ -2523,8 +2526,11 @@ msgstr "Aquesta Setmana"
 msgid "No recordings are scheduled"
 msgstr "No hi ha enregistraments planificats"
 
+#: util/misc.py:518
+msgid "Widescreen"
+msgstr ""
+
 #: setup_freevo.py:75
-#, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -2565,7 +2571,7 @@ msgstr ""
 "\n"
 "   --display=PANT               tria la pantalla\n"
 "                                  DISP pot ser x11, fbdev, dxr3, mga, \n"
-"                                  dfbmga o dga\n"
+"                                  directfb, dfbmga o dga\n"
 "                                  \n"
 "   --tv=NORM                    tria la norma de TV\n"
 "                                  NORM pot ser ntsc, pal o secam\n"
@@ -2611,7 +2617,7 @@ msgstr "no s'ha trobat (s'ha desactivat)"
 #: setup_freevo.py:263
 #, python-format
 msgid "System path first=%s"
-msgstr "Camí del sistema primer=%s"
+msgstr "Primer camí del sistema=%s"
 
 #: setup_freevo.py:263
 msgid "No"
@@ -2638,7 +2644,7 @@ msgstr "No es pot obrir el fitxer \"%s\""
 msgid "Browse Playlist"
 msgstr "Navega la llista de reproducció"
 
-#: playlist.py:292 directory.py:422
+#: playlist.py:292 directory.py:440
 msgid "Random play all items"
 msgstr "Reprodueix tots els elements de forma aleatòria"
 
@@ -2662,7 +2668,7 @@ msgstr "no hi ha cap element següent a la llista de reproducció"
 msgid "no previous item in playlist"
 msgstr "no hi ha cap element anterior a la llista de reproducció"
 
-#: menu.py:619
+#: menu.py:623
 msgid "No action defined for this choice!"
 msgstr "Aquesta opció no correspon a cap acció!"
 
@@ -2698,7 +2704,7 @@ msgstr ""
 
 #: directory.py:65
 msgid "Directory Smart Sort"
-msgstr "Ordenació Intel·ligent la Carpeta de forma "
+msgstr "Ordenació Intel·ligent la Carpeta"
 
 #: directory.py:66
 msgid "Use a smarter way to sort the items."
@@ -2761,75 +2767,74 @@ msgstr ""
 "Reprodueix automàticament la carpeta (com una llista de reproducció) si "
 "només conté fitxers"
 
-#: directory.py:279
+#: directory.py:297
 #, python-format
 msgid "Directory on disc [%s]"
 msgstr "Carpeta del disc [%s]"
 
-#: directory.py:280
+#: directory.py:298
 msgid "Directory"
 msgstr "Carpeta"
 
-#: directory.py:416
+#: directory.py:434
 msgid "Play all files in directory"
 msgstr "Reprodueix tots els fitxers de la carpeta"
 
-#: directory.py:424
+#: directory.py:442
 msgid "Recursive random play all items"
 msgstr "Reprodueix tots els elements recursivament de forma aleatòria"
 
-#: directory.py:425
+#: directory.py:443
 msgid "Recursive play all items"
 msgstr "Reprodueix tots els elements recursivament"
 
-#: directory.py:427
+#: directory.py:445
 msgid "Configure directory"
-msgstr "Configura la carpeta"
+msgstr "Preferències de la carpeta"
 
-#: directory.py:494
+#: directory.py:512
 msgid "Enter Password"
 msgstr "Introduïu la contrasenya"
 
-#: directory.py:519
+#: directory.py:537
 msgid "Password incorrect"
 msgstr "Contrasenya errònia"
 
-#: directory.py:553
-#, fuzzy
+#: directory.py:571
 msgid "Directory does not exist"
-msgstr "la carpeta %s no existeix."
+msgstr "La carpeta no existeix."
 
-#: directory.py:582
+#: directory.py:600
 msgid "Scanning disc, be patient..."
 msgstr "S'està analitzant el disc, sigueu pacient..."
 
-#: directory.py:584
+#: directory.py:602
 msgid "Scanning directory, be patient..."
 msgstr "S'està analitzant la carpeta, sigueu pacient..."
 
-#: directory.py:783 directory.py:873 directory.py:907
+#: directory.py:801 directory.py:891 directory.py:925
 msgid "on"
 msgstr "en marxa"
 
-#: directory.py:785 directory.py:788 directory.py:877 directory.py:905
+#: directory.py:803 directory.py:806 directory.py:895 directory.py:923
 msgid "off"
 msgstr "aturat"
 
-#: directory.py:790
+#: directory.py:808
 msgid "auto"
 msgstr "automàtic"
 
-#: directory.py:909
+#: directory.py:927
 msgid "Show all kinds of items"
 msgstr "Mostra tots els tipus d'elements"
 
-#: directory.py:911
+#: directory.py:929
 msgid "Show video, audio and image items in this directory"
 msgstr "Mostra els elements de vídeo, àudio i imatges d'aquesta carpeta"
 
-#: directory.py:914
+#: directory.py:932
 msgid "Configure"
-msgstr "Configura"
+msgstr "Preferències"
 
 #: childapp.py:274
 #, python-format
@@ -2882,9 +2887,8 @@ msgid "Shutdown"
 msgstr "Atura"
 
 #: main.py:308
-#, fuzzy
 msgid "Continue"
-msgstr "Configura"
+msgstr "Continua"
 
 #: main.py:421
 msgid "Starting Freevo, please wait ..."
@@ -2937,7 +2941,7 @@ msgstr "Tecles de fletxa = Mou"
 
 #: osd.py:383
 msgid "Spacebar = Select"
-msgstr "Barra espaiadora = Selecciona"
+msgstr "Barra espaiadora = Tria"
 
 #: osd.py:384
 msgid "Escape = Stop/Prev. Menu"
@@ -2957,13 +2961,12 @@ msgid "Playlist"
 msgstr "Llista de reproducció"
 
 #: share/skins/main/dark.fxd:639
-#, fuzzy
 msgid "New mails"
-msgstr "Detalls"
+msgstr "Nous correus"
 
 #: share/skins/main/dark.fxd:658 share/skins/main/dark.fxd:679
 msgid "From"
-msgstr ""
+msgstr "De"
 
 #: share/skins/main/info.fxd:505
 msgid "Copyright"
@@ -2971,14 +2974,12 @@ msgstr "Copyright"
 
 #: share/skins/main/crystal.fxd:317 share/skins/main/bluestar.fxd:337
 #: share/skins/main/rain.fxd:313
-#, fuzzy
 msgid "Unread messages"
-msgstr "Missatges"
+msgstr "Missatges no llegits"
 
 #: share/skins/main/bluestar.fxd:11
-#, fuzzy
 msgid "Pictures"
-msgstr "Imatges Apod"
+msgstr "Imatges"
 
 #: share/skins/main/info.fxd:405
 msgid "Disc ID"
@@ -2992,7 +2993,7 @@ msgstr "Pistes d'àudio"
 #: share/skins/main/crystal.fxd:368 share/skins/main/bluestar.fxd:388
 #: share/skins/main/rain.fxd:364
 msgid "Message has not been read"
-msgstr ""
+msgstr "Missatge no llegit"
 
 #: share/skins/main/mediaportal.fxd:445 share/skins/main/crystal.fxd:12
 #: share/skins/main/blurr.fxd:452 share/skins/main/rain.fxd:12
@@ -3004,9 +3005,8 @@ msgid "Location"
 msgstr "Ubicació"
 
 #: share/skins/main/dark.fxd:670
-#, fuzzy
 msgid "New mail"
-msgstr "Nou preferit"
+msgstr "Nou missatge"
 
 #: share/skins/main/mediaportal.fxd:444 share/skins/main/blurr.fxd:451
 msgid "Play a Game"
@@ -3014,15 +3014,13 @@ msgstr "Juga"
 
 #: share/skins/main/dark.fxd:23 share/skins/main/crystal.fxd:10
 #: share/skins/main/bluestar.fxd:10 share/skins/main/rain.fxd:10
-#, fuzzy
 msgid "Email"
-msgstr "petit"
+msgstr "Correu"
 
 #: share/skins/main/crystal.fxd:323 share/skins/main/bluestar.fxd:343
 #: share/skins/main/rain.fxd:319
-#, fuzzy
 msgid "Total messages"
-msgstr "Missatges"
+msgstr "Nombre de missatges"
 
 #: share/skins/main/info.fxd:227
 msgid "kb/s"
@@ -3036,9 +3034,8 @@ msgid "Track"
 msgstr "Pista"
 
 #: share/skins/main/dark.fxd:564
-#, fuzzy
 msgid "One song in playlist"
-msgstr "no hi ha cap element següent a la llista de reproducció"
+msgstr "Només hi ha un elemen a la llista"
 
 #: share/skins/main/info.fxd:224
 msgid "Bitrate"
@@ -3053,7 +3050,7 @@ msgstr "elements d'aquesta llista de reproducció"
 #: share/skins/main/mediaportal.fxd:442 share/skins/main/blurr.fxd:449
 #: share/skins/main/info.fxd:14
 msgid "Listen to Music"
-msgstr "Escolta Música"
+msgstr "Música i altres sons"
 
 #: share/skins/main/mediaportal.fxd:696 share/skins/main/dark.fxd:758
 #: share/skins/main/basic.fxd:397 share/skins/main/blurr.fxd:706
@@ -3062,12 +3059,12 @@ msgstr "Transcorregut"
 
 #: share/skins/main/dark.fxd:622
 msgid "Just one picture in this slideshow."
-msgstr ""
+msgstr "Només hi ha una imatge a la presentació"
 
 #: share/skins/main/mediaportal.fxd:441 share/skins/main/blurr.fxd:448
 #: share/skins/main/info.fxd:13
 msgid "Watch a Movie"
-msgstr "Mira una Pel··lícula"
+msgstr "Pel·lícula"
 
 #: share/skins/main/info.fxd:231
 msgid "Link"
@@ -3083,18 +3080,17 @@ msgid "Subtitles"
 msgstr "Subtítols"
 
 #: share/skins/main/dark.fxd:491
-#, fuzzy
 msgid "movies in this playlist."
-msgstr "elements d'aquesta llista de reproducció"
+msgstr "pel·lícules en la llista"
 
 #: share/skins/main/dark.fxd:16 share/skins/main/crystal.fxd:7
 #: share/skins/main/bluestar.fxd:7 share/skins/main/rain.fxd:7
 msgid "Television"
-msgstr ""
+msgstr "Televisió"
 
 #: share/skins/main/dark.fxd:645
 msgid "Total mails"
-msgstr ""
+msgstr "Nombre de missatges"
 
 #: share/skins/main/info.fxd:237
 msgid "Language"
@@ -3113,14 +3109,13 @@ msgid "of"
 msgstr "de"
 
 #: share/skins/main/dark.fxd:495
-#, fuzzy
 msgid "Just one movie in this playlist."
-msgstr "elements d'aquesta llista de reproducció"
+msgstr "Només hi ha una pel·lícula en aquesta llista"
 
 #: share/skins/main/mediaportal.fxd:440 share/skins/main/blurr.fxd:447
 #: share/skins/main/info.fxd:12
 msgid "Watch TV"
-msgstr "Mira la TV"
+msgstr "Televisió"
 
 #: share/skins/main/mediaportal.fxd:196 share/skins/main/dark.fxd:500
 #: share/skins/main/blurr.fxd:194 share/skins/main/info.fxd:427
@@ -3129,7 +3124,6 @@ msgid "This playlist is empty!"
 msgstr "La llista de reproducció està buida!"
 
 #: share/skins/main/dark.fxd:627
-#, fuzzy
 msgid "This slideshow is empty!"
 msgstr "La llista de reproducció està buida!"
 
@@ -3138,7 +3132,6 @@ msgid "min."
 msgstr "mín."
 
 #: share/skins/main/dark.fxd:617
-#, fuzzy
 msgid "pictures in this slideshow."
 msgstr "elements d'aquesta llista de reproducció"
 
@@ -3151,19 +3144,17 @@ msgid "MB free"
 msgstr "Espai lliure (MB)"
 
 #: share/skins/main/mediaportal.fxd:439
-#, fuzzy
 msgid "Read Headlines"
-msgstr "Titulars"
+msgstr "Llegeix els titulars"
 
 #: share/skins/main/dark.fxd:568
-#, fuzzy
 msgid "No songs in playlist"
-msgstr "no hi ha cap element següent a la llista de reproducció"
+msgstr "No hi ha cap cançó a la llista de reproducció"
 
 #: share/skins/main/mediaportal.fxd:443 share/skins/main/blurr.fxd:450
 #: share/skins/main/info.fxd:15
 msgid "Look at Pictures"
-msgstr "Mostra les Imatges"
+msgstr "Fotos i altres Imatges"
 
 #: share/skins/main/mediaportal.fxd:224 share/skins/main/blurr.fxd:222
 msgid "Chapters"
@@ -3174,14 +3165,12 @@ msgid "TV"
 msgstr "TV"
 
 #: share/skins/main/dark.fxd:560
-#, fuzzy
 msgid "songs in playlist"
-msgstr "no hi ha cap element següent a la llista de reproducció"
+msgstr "elements de la llista de reproducció"
 
 #: share/skins/main/dark.fxd:721
-#, fuzzy
 msgid "Now playing"
-msgstr "Mostra el reproductor"
+msgstr "Reproduïnt"
 
 #: share/skins/main/info.fxd:323
 msgid "Size"
@@ -3189,11 +3178,10 @@ msgstr "Mida"
 
 #: share/skins/main/dark.fxd:652 share/skins/main/dark.fxd:673
 msgid "Subject"
-msgstr ""
+msgstr "Tema"
 
-#, fuzzy
-#~ msgid " free of %s GB total (%s%% free)"
-#~ msgstr "%i lliures dels %i Mb totals"
+#~ msgid "Choose a Directory"
+#~ msgstr "Trieu una Carpeta"
 
 #~ msgid "'fbxine' version too old, plugin 'xine' deactivated"
 #~ msgstr ""
@@ -3218,6 +3206,3 @@ msgstr ""
 #~ msgstr ""
 #~ "Aquesta pàgina s'ha generat amb Freevo WiKi. La Versió actual es troba <a "
 #~ "href=\"%s\">aquí</a>."
-
-#~ msgid "Choose a Directory"
-#~ msgstr "Trieu una Carpeta"

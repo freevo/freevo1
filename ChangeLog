@@ -51,6 +51,7 @@ This release has all the changes in Release 1.6.x plus
  * Fixed video thumbnails not being shown with subitems (B#1620452)
  * Fixed webserver 'genre' module generated html (B#1622456)
  * Fixed webserver 'manual record' module not allowing day 31 (B#1622662)
+ * Updated Catalan translation (F#1623286)
 
 == Release 1.6.2 (2006-12-22) ==
 --------------------------------
