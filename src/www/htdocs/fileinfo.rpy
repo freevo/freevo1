@@ -42,6 +42,11 @@ class FileInfoResource(FreevoResource):
         self.cache_dir = '%s/link_cache/' % (config.FREEVO_CACHEDIR)
         if not os.path.isdir(self.cache_dir):
             os.mkdir(self.cache_dir, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
+        self.allowed_dirs = []
+        self.allowed_dirs.extend(config.VIDEO_ITEMS)
+        self.allowed_dirs.extend(config.AUDIO_ITEMS)
+        self.allowed_dirs.extend( [ ('Recorded TV', config.TV_RECORD_DIR) ])
+        self.allowed_dirs.extend(config.IMAGE_ITEMS)
 
     def _render(self, request):
         print '_render(self, %s)' % (request)
@@ -90,7 +95,7 @@ class FileInfoResource(FreevoResource):
             info+='<tr><td><b>Size: </b></td><td>'+str((os.stat(file)[6]/1024)/1024)+' MB</td></tr>'
             info+= "</table>"
             
-            file_link = self.create_file_link(file)
+            file_link = self.convert_dir(file)
             
             fv.res += (
                u"<script>\n" \
@@ -101,8 +106,8 @@ class FileInfoResource(FreevoResource):
                u"doc.getElementById('program-waiting').style.display = 'none';\n" \
                u"doc.getElementById('program-info').style.visibility = 'visible';\n" \
                u"</script>\n"
-            ) % ( title , 
-                  info,
+            ) % ( title.replace("'", "\\'"),
+                  info.replace("'", "\\'"),
                   "function() { window.open(\"%s\"); }" % (file_link),    
             )           
 
@@ -120,13 +125,6 @@ class FileInfoResource(FreevoResource):
             
         return String(fv.res)
     
-    def create_file_link(self, file):
-        print 'create_file_link(self, file=%r)' % (file)
-        cache_link = self.cache_dir + file.replace("/", "_")
-        if not os.path.exists(cache_link):
-            os.symlink(file, cache_link)
-        return cache_link
-    
     def get_fxd_info(self, fxd_file):
         print 'get_fxd_info(self, %s)' % (fxd_file)
         fxd_info = {}
@@ -135,12 +133,22 @@ class FileInfoResource(FreevoResource):
         for a in parser.tree.tree.children:
             if a.name == 'movie':
                 fxd_info.update({'title':str(a.attrs.values()[0])})
+            cover = parser.childcontent(a, "cover-img")
+            if cover:
+                fxd_info.update({'cover-img':cover})
             for b in a.children:
-                if b.name == 'cover-img':
-                    fxd_info.update({'cover-img':str(b.attrs.values()[0])})
                 if b.name == 'info':
                     for c in b.children:
                         fxd_info.update({str(c.name):str(c.first_cdata)})
         return fxd_info
+
+    def convert_dir(self, dir_str):
+        print 'convert_dir(self, dir_str=%s)' % (dir_str)
+        for i in range(len(self.allowed_dirs)):
+            val = self.allowed_dirs[i][1]
+            if dir_str.startswith(val):
+                return val.replace("/", "_") + dir_str[len(val):]
+        return dir_str
+
 
 resource = FileInfoResource()
