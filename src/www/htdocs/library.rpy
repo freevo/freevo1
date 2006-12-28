@@ -374,40 +374,42 @@ class LibraryResource(FreevoResource):
             i = 0
             directorylist = util.getdirnames(action_dir)
             for mydir in directorylist:
-                if i == 0:
-                    fv.tableRowOpen('class="chanrow"')
-                mydispdir = Unicode(os.path.basename(mydir))
-                mydirlink = ""
-                ### show music cover
-                if action_mediatype == "music":
-                    y = self.cover_filter(mydir)
-                    if y:
-                        image_link = self.convert_dir(mydir + str(y))
-                    else:
-                        image_link = "images/library/music.png"
-                    mydirlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
-                        +'<img src="' + image_link + '" height="200px" width="200px" /><br />'+mydispdir+'</a>'
-                ### show movie cover
-                elif action_mediatype == "movies":
-                    y = self.cover_filter(mydir)
-                    if y:
-                        image_link = self.convert_dir(mydir + str(y))
-                    else:
-                        image_link = "images/library/movies.png"
-                    mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
-                        +'<img src="' + image_link + '" height="200px" width="200px" /><br />'+mydispdir+'</a>'
-                ### show image cover
-                elif action_mediatype == "images":
-                    image_link = "images/library/images.png"
-                    mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
-                        +'<img src="'+image_link+'" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                #check for hidden dirs
+                if mydir[mydir.rindex('/')+1] != '.':
+                    if i == 0:
+                        fv.tableRowOpen('class="chanrow"')
+                    mydispdir = Unicode(os.path.basename(mydir))
+                    mydirlink = ""
+                    ### show music cover
+                    if action_mediatype == "music":
+                        y = self.cover_filter(mydir)
+                        if y:
+                            image_link = self.convert_dir(mydir + str(y))
+                        else:
+                            image_link = "images/library/music.png"
+                        mydirlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
+                            +'<img src="' + image_link + '" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                    ### show movie cover
+                    elif action_mediatype == "movies" or action_mediatype == "rectv":
+                        y = self.cover_filter(mydir)
+                        if y:
+                            image_link = self.convert_dir(mydir + str(y))
+                        else:
+                            image_link = "images/library/movies.png"
+                        mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
+                            +'<img src="' + image_link + '" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                    ### show image cover
+                    elif action_mediatype == "images":
+                        image_link = "images/library/images.png"
+                        mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
+                            +'<img src="'+image_link+'" height="200px" width="200px" /><br />'+mydispdir+'</a>'
 
-                fv.tableCell(mydirlink, 'class="basic" colspan="1"')
-                if i == 2:
-                    fv.tableRowClose()
-                    i = 0
-                else:
-                    i += 1
+                    fv.tableCell(mydirlink, 'class="basic" colspan="1"')
+                    if i == 2:
+                        fv.tableRowClose()
+                        i = 0
+                    else:
+                        i += 1
             while i < 3 and i != 0:
                 fv.tableCell('&nbsp;', 'class="basic" colspan="1"')
                 if i == 2:
@@ -421,69 +423,79 @@ class LibraryResource(FreevoResource):
             image = ""
             items = util.match_files(action_dir, suffixes)
             for item in items:
-                #check for fxd file
-                fxd_file = item[:item.rindex('.')] + ".fxd"
-                jpg_file = item[:item.rindex('.')] + ".jpg"
-                if os.path.exists(fxd_file):
-                    image = self.get_fxd_cover(fxd_file)
-                elif os.path.exists(jpg_file):
-                    image = jpg_file
-
-                if i == 0:
-                    fv.tableRowOpen('class="chanrow"')
-                status = 'basic'
-                suppressaction = FALSE
-                #find size
-                info = metadata.parse(item)
-                len_file = os.stat(item)[6]
-                #chop dir from in front of file
-                (basedir, file) = os.path.split(item)
-                filepath = urllib.quote(item)
-                if recordingprogram and re.match(recordingprogram, file):
-                    status = 'recording'
-                    suppressaction = TRUE
-                elif favs and re.match(favre, file):
-                    status = 'favorite'
-                ### show image
-                if action_mediatype == "images":
-                    image_link = self.convert_dir(filepath)
-                    size = (info['width'], info['height'])
-                    new_size = self.resize_image(image_link, size)
-                    fv.tableCell('<a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
-                        +'<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" />'\
-                        +'<br />'+Unicode(file)+'</a>', 'class="'+status+'" colspan="1"')
-                ### show movie
-                elif action_mediatype == "movies":
-                    image_link = self.convert_dir(image)
-                    fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
-                        +'<img src="'+image_link+'" height="200px" width="200px" /><br />'+Unicode(file)+'</a>',\
-                        'class="'+status+'" colspan="1"')
-                ### show music
-                elif action_mediatype == "music":
-                    try:
-                        title = Unicode(info['trackno']+"-"+info['artist']+"-"+info['title'])
-                    except:
-                        title = Unicode(file)
-                    if len(title) > 45:
-                        title = "%s[...]%s" % (title[:20], title[len(title)-20:])
-                    fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
-                        +title+'</a>', 'class="'+status+'" colspan="1"')
-                else:
-                    fv.tableCell(file, 'class="'+status+'" colspan="1"')
-                if suppressaction:
-                    fv.tableCell('&nbsp;', 'class="'+status+'" colspan="1"')
-                else:
-                    file_esc = urllib.quote(file)
-                    dllink = ('<a href="'+action_script+'%s">'+_('Download')+'</a>') %  os.path.join(basedir,file)
-                    delete = ('<a href="javascript:deleteFile(\'%s\',\'%s\',\'%s\')">'+_("Delete")+'</a>') %\
-                        (basedir, file_esc, action_mediatype)
-                    rename = ('<a href="javascript:renameFile(\'%s\',\'%s\',\'%s\')">'+_("Rename")+'</a>') %\
-                        (basedir, file_esc, action_mediatype)
-                if i == 2:
-                    fv.tableRowClose()
-                    i = 0
-                else:
-                    i+=1
+                #check for hidden files
+                if item[item.rindex('/')+1] != '.':
+                    #chop dir from in front of file
+                    (basedir, file) = os.path.split(item)
+                    filepath = urllib.quote(item)
+                    #find info and size
+                    info = metadata.parse(item)
+                    len_file = os.stat(item)[6]
+                    #check for fxd file and other info
+                    fxd_file = item[:item.rindex('.')] + ".fxd"
+                    jpg_file = item[:item.rindex('.')] + ".jpg"
+                    if os.path.exists(fxd_file):
+                        title = self.get_fxd_title(fxd_file)
+                    else:
+                        title = util.mediainfo.get(item)['title']
+                    if not title:
+                        title = file
+                        
+                    if i == 0:
+                        fv.tableRowOpen('class="chanrow"')
+                    status = 'basic'
+                    suppressaction = FALSE
+                    if recordingprogram and re.match(recordingprogram, file):
+                        status = 'recording'
+                        suppressaction = TRUE
+                    elif favs and re.match(favre, file):
+                        status = 'favorite'
+                    ### show image
+                    if action_mediatype == "images":
+                        image_link = self.convert_dir(filepath)
+                        size = (info['width'], info['height'])
+                        new_size = self.resize_image(image_link, size)
+                        fv.tableCell('<a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
+                            +'<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" />'\
+                            +'<br />'+Unicode(title)+'</a>', 'class="'+status+'" colspan="1"')
+                    ### show movie
+                    elif action_mediatype == "movies" or action_mediatype == "rectv":
+                        if os.path.exists(jpg_file):
+                            image = jpg_file
+                            image_link = self.convert_dir(image)
+                            image_info = metadata.parse(image)
+                            size = (image_info['width'], image_info['height'])
+                            new_size = self.resize_image(image_link, size)
+                            image = '<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" /><br />'
+                        fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
+                            +image+Unicode(title)+'</a>',\
+                            'class="'+status+'" colspan="1"')
+                    ### show music
+                    elif action_mediatype == "music":
+                        try:
+                            title = Unicode(info['trackno']+"-"+info['artist']+"-"+info['title'])
+                        except:
+                            title = Unicode(file)
+                        if len(title) > 45:
+                            title = "%s[...]%s" % (title[:20], title[len(title)-20:])
+                        fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
+                            +title+'</a>', 'class="'+status+'" colspan="1"')
+                    else:
+                        fv.tableCell(file, 'class="'+status+'" colspan="1"')
+                    if suppressaction:
+                        fv.tableCell('&nbsp;', 'class="'+status+'" colspan="1"')
+                    else:
+                        file_esc = urllib.quote(file)
+                        dllink = ('<a href="'+action_script+'%s">'+_('Download')+'</a>') %  os.path.join(basedir,file)
+                        delete = ('<a href="javascript:deleteFile(\'%s\',\'%s\',\'%s\')">'+_("Delete")+'</a>') %\
+                            (basedir, file_esc, action_mediatype)
+                        rename = ('<a href="javascript:renameFile(\'%s\',\'%s\',\'%s\')">'+_("Rename")+'</a>') %\
+                            (basedir, file_esc, action_mediatype)
+                    if i == 2:
+                        fv.tableRowClose()
+                        i = 0
+                    else:
+                        i+=1
             while i < 3 and i != 0:
                 fv.tableCell('&nbsp;', 'class="basic" colspan="1"')
                 if i == 2:
@@ -521,7 +533,7 @@ class LibraryResource(FreevoResource):
             u"                           "+_('Play file')+u"\n"\
             u"                        </td>\n"\
             u"                        <td id=\"program-favorites-button\">\n"\
-            #u"                        "+_('Play file on host')+u"\n"\
+            #u"                        "+_('Play file on Freevo')+u"\n"\
             u"                        "+''+u"\n"\
             u"                        </td>\n"\
             u"                        <td onclick=\"program_popup_close();\">\n"\
@@ -596,6 +608,15 @@ class LibraryResource(FreevoResource):
         except ZeroDivisionError:
             pass
         return new_size
+    
+    def get_fxd_title(self, fxd_file):
+        fxd_info = ""
+        parser = util.fxdparser.FXD(fxd_file)
+        parser.parse()
+        for a in parser.tree.tree.children:
+            if a.name == 'movie' or a.name == 'image' or a.name == 'audio':
+                fxd_info = str(a.attrs.values()[0])
+        return fxd_info
 
 
 resource = LibraryResource()
