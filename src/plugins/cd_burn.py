@@ -157,11 +157,13 @@ class BurnCDItem:
     def check_program (self, program=None, program_name=None) :
         _debug_('check_program ');
         if not ( os.path.exists(program) and os.path.isfile(program) and os.access(program, os.X_OK)  ) :
-          print "CDBURN : Progam Error"
-          AlertBox(text=_('Cannot find %s (%s). Please configure the right path in your config file and make sure it has the right permissions.' % (program_name,program)), handler=self.menu_back).show()
-          return 0
+            print "CDBURN : Progam Error"
+            AlertBox(text=_('Cannot find %s (%s). '+\
+                'Please configure the right path in your config file and make sure it has the right permissions.' \
+                % (program_name,program)), handler=self.menu_back).show()
+            return 0
         else:
-          return 1
+            return 1
 
     def burn_audio_cd(self):
         _debug_('burn_audio_cd');
@@ -175,7 +177,7 @@ class BurnCDItem:
             return
 
         ConfirmBox(text=_('Start burning %s audio files?' % len(self.files)),
-                     handler=self.start_burning, default_choice=0).show()
+            handler=self.start_burning, default_choice=0).show()
 
     def burn_dvd_video(self):
         _debug_('burn_dvd_video');
@@ -742,15 +744,16 @@ class PluginInterface(plugin.ItemPlugin):
         else:
             record_dev = 'ATAPI:0,0,0'
         
-        return [ ('CDBURN_CDRECORD_PATH', '/usr/bin/cdrecord', 'Path to cdrecord'),
-                 ('CDBURN_MKISOFS_PATH', '/usr/bin/mkisofs', 'Path to mkisofs'),
-             # bruno:
-             # in tao (track at once mode, empty value) cd record will leave 2 sec gaps between tracks
-             # in dao (disk at once) no gaps at all, but not all drives support it
-             ('CDBURN_AUDIO_DAO',0,'CDRecord canburn audio cds in DAO mode'),
-                 ('CDBURN_SPEED', '8', 'Speed to burn with cdrecord'),
-                 ('CDBURN_TEMP_DIR', '/tmp/', 'Temp file name used by cdrecord'),
-                 ('CDBURN_DEV', record_dev, 'Device for cdrecord to burn with (not auto detected)') ]
+        return [
+            ('CDBURN_CDRECORD_PATH', '/usr/bin/cdrecord', 'Path to cdrecord'),
+            ('CDBURN_MKISOFS_PATH', '/usr/bin/mkisofs', 'Path to mkisofs'),
+            # in tao (track at once mode, empty value) cd record will leave 2 sec gaps between tracks
+            # in dao (disk at once) no gaps at all, but not all drives support it
+            ('CDBURN_AUDIO_DAO',0,'CDRecord canburn audio cds in DAO mode'),
+            ('CDBURN_SPEED', '8', 'Speed to burn with cdrecord'),
+            ('CDBURN_TEMP_DIR', '/tmp/', 'Temp file name used by cdrecord'),
+            ('CDBURN_DEV', record_dev, 'Device for cdrecord to burn with (not auto detected)')
+        ]
 
     def stop_burning(self, arg,  menuw=None):
         _debug_('stop_burning');
@@ -788,81 +791,75 @@ class PluginInterface(plugin.ItemPlugin):
         
     def draw_menu(self,menuw=None,items=None):
         _debug_('draw_menu');
-    #draws the menu with the options on the screen
+        #draws the menu with the options on the screen
         menu_items = []
         if items:
- 
-         for a in items:
-           menu_items.append(menu.MenuItem(a[1],a[0]))
-
-         moviemenu = menu.Menu(_('CD Burn Menu'), menu_items)
-         menuw.pushmenu(moviemenu)
+            for a in items:
+                menu_items.append(menu.MenuItem(a[1],a[0]))
+            moviemenu = menu.Menu(_('CD Burn Menu'), menu_items)
+            menuw.pushmenu(moviemenu)
 
 
     def fill_menu(self,arg=None, menuw=None): 
         _debug_('fill_menu');
-    #chooses the options available for this type of item
+        #chooses the options available for this type of item
         to_return = []
         item = self.item
         print "CDBURN : Item type = %s" % item.type
         if self.thread_burn and self.thread_burn.running == 1:
-           to_return.append( (self.thread_burn.show_status, 'Show burning status' ));
-           to_return.append( (self.stop_burning, 'Stop the burn process' ));
-           return self.draw_menu(menuw=menuw,items=to_return)
-
+            to_return.append( (self.thread_burn.show_status, 'Show burning status' ));
+            to_return.append( (self.stop_burning, 'Stop the burn process' ));
+            return self.draw_menu(menuw=menuw,items=to_return)
 
         if item.type == 'dir':
-        #dirs
-          print 'CDBURN : Dir has media : %s ' % item.media
-          try:
-           cur = BurnCDItem(item=item, plugin=self,menu=menuw)
-           cur.findFromDir()
-
-           cur2 = BurnCDItem(item=item, plugin=self,menu=menuw,burn_mode="audio_cd")
-           cur2.findFromDirMatches(suffix=['mp3','flac','ogg','wav'])
-
-           if cur.files:
-             to_return.append(( cur.burn, 'Copy dir to CD') )
-           if len(cur2.files)>0:
-             to_return.append(( cur2.burn, 'Burn audio files (MP3, Wav and Ogg) as Audio CD'))
-          except Exception, e:
-             print 'fill_menu:', e
-             pass
+            #dirs
+            print 'CDBURN : Dir has media : %s ' % item.media
+            try:
+                cur = BurnCDItem(item=item, plugin=self,menu=menuw)
+                cur.findFromDir()
+                cur2 = BurnCDItem(item=item, plugin=self,menu=menuw,burn_mode="audio_cd")
+                cur2.findFromDirMatches(suffix=['mp3','flac','ogg','wav'])
+                if cur.files:
+                    to_return.append(( cur.burn, 'Copy dir to CD') )
+                if len(cur2.files)>0:
+                    to_return.append(( cur2.burn, 'Burn audio files (MP3, Wav and Ogg) as Audio CD'))
+            except Exception, e:
+                print 'fill_menu:', e
+                pass
 
         try:
-        #any item except dirs
+            #any item except dirs
             if (not item.subitems) and (not item.type == 'dir') :
-             cur = BurnCDItem(item=item, plugin=self,menu=menuw)
-             cur.findFileFromItem()
-             #cur.addFilesFromItem()
-             if cur.files:
-              to_return.append( ( cur.burn, _('Copy this file to CD')) ) 
-
-        #any joined item except dirs
-            elif not item.type == 'dir' and item.subitems:
-               for a in item.subitems:
-                cur = BurnCDItem(item=a, plugin=self,menu=menuw)
+                cur = BurnCDItem(item=item, plugin=self,menu=menuw)
                 cur.findFileFromItem()
+                #cur.addFilesFromItem()
                 if cur.files:
-                    to_return.append( ( cur.burn, _('Copy %s to CD' % a.name )) ) 
-             
+                    to_return.append( ( cur.burn, _('Copy this file to CD')) ) 
+
+            #any joined item except dirs
+            elif not item.type == 'dir' and item.subitems:
+                for a in item.subitems:
+                    cur = BurnCDItem(item=a, plugin=self,menu=menuw)
+                    cur.findFileFromItem()
+                    if cur.files:
+                        to_return.append( ( cur.burn, _('Copy %s to CD' % a.name )) ) 
         except:
             pass
 
 
         #single video file
         try:
-         if item.filename and item.type == 'video' and ( not item.subitems):
-           cur = BurnCDItem(item=item, plugin=self,menu=menuw)
-           cur.findRelated()
-           #cur2 = BurnCDItem(ite=item, plugin=self,menu=menuw)
-           #cur2.findRelated(mode=1)
+            if item.filename and item.type == 'video' and ( not item.subitems):
+                cur = BurnCDItem(item=item, plugin=self,menu=menuw)
+                cur.findRelated()
+                #cur2 = BurnCDItem(ite=item, plugin=self,menu=menuw)
+                #cur2.findRelated(mode=1)
 
-           if len(cur.files) > 1:
-             to_return.append(( cur.burn, _('Copy %s, and related, to CD' % item.name)) )
-             #to_return.append(( cur2.delete, _('Delete %s, and related' % item.name)) )
+            if len(cur.files) > 1:
+                to_return.append(( cur.burn, _('Copy %s, and related, to CD' % item.name)) )
+                #to_return.append(( cur2.delete, _('Delete %s, and related' % item.name)) )
         except:
-         pass
+            pass
 
         #joined video files
         try:
@@ -876,7 +873,7 @@ class PluginInterface(plugin.ItemPlugin):
                         if len(cur.files) > 1:
                             to_return.append(( cur.burn, _('Copy %s, and related, file to CD' % a.name)) )
         except:
-         pass
+            pass
 
         #DVD movie on file system (ir DIR containing VIDEO_TS and/or AUDIO_TS)
         #Not sure how freevo works this about but bellow if seems to be fairly
