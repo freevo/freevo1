@@ -411,6 +411,12 @@ CACHE_IMAGES = 1
 # CDBURN_SPEED = 32
 
 # ----------------------------------------------------------------------
+# Freevo Music Player Daemon
+# http://www.musicpd.org/
+# ----------------------------------------------------------------------
+# plugin.activate('mpd')
+
+# ----------------------------------------------------------------------
 # Freevo Bluetooth Phone Settings
 # ----------------------------------------------------------------------
 # This plugin uses The Python bindings for Bluez bluetooth stack.
