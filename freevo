@@ -358,6 +358,7 @@ elif arg == 'setup':
 elif arg == 'prompt':
     # only run python inside the freevo env
     proc = []
+    check = 0
 
 elif arg == 'runapp':
     # Oops, runapp. We don't start python, we start sys.argv[1]
@@ -405,7 +406,7 @@ if name != 'freevo':
             print 'can\'t find helper %s' % name
             sys.exit(1)
 
-if getpid(name, python + proc)[1] and check:
+if check and getpid(name, python + proc)[1]:
     if name != 'freevo':
         print '%s still running, run \'freevo %s stop\' to stop' % (name, name)
     else:
