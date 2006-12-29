@@ -1,12 +1,13 @@
-#if 0 /*
+# -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # mpd.py - a plugin control mpd from freevo.
 # -----------------------------------------------------------------------
-# $Id: mpd.py,v 0.1 2006/09/08 
+# $Id$
 #
-#    plugin.activate('mpd', level=45)
-#
-# -----------------------------------------------------------------------
+# Notes:
+#    To activate, put the following line in local_conf.py:
+#       plugin.activate('mpd', level=45)
+# Todo:        
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -27,8 +28,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
-#endif
+# -----------------------------------------------------------------------
 
 #python modules
 import os, stat, re, copy
