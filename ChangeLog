@@ -32,6 +32,7 @@ This release has all the changes in Release 1.6.x plus
  * New XM online plugin (F#1580412)
  * New weather helper to grab the weather using cron (F#1603052)
  * New webserver library, allows playing/viewing on local and host machines (F#1592806)
+ * New webserver remote, allows controlling freevo from a web page (F#1624110)
  * Updated cdbackup plug-in to accept CD_RIP_CASE and CD_RIP_REPLACE_SPACE (F#1616046)
  * Updated idlebar clock plug-in to allow CLOCK_FORMAT to be used (F#1605951)
  * Updated idlebar diskfree plug-in to allow the bar colours levels to be set (F#1605953)
