@@ -92,12 +92,18 @@ def main():
 
     root = static.File(docRoot)
     root.processors = { '.rpy': script.ResourceScript, }
-    for (item, dir_str) in config.VIDEO_ITEMS:
-        root.putChild(dir_str.replace("/", "_"), static.File(dir_str))
-    for (item, dir_str) in config.AUDIO_ITEMS:
-        root.putChild(dir_str.replace("/", "_"), static.File(dir_str))
-    for (item, dir_str) in config.IMAGE_ITEMS:
-        root.putChild(dir_str.replace("/", "_"), static.File(dir_str))
+    for item in config.VIDEO_ITEMS:
+        if isinstance(item, tuple) and len(item) == 2:
+            (title, path) = item
+            root.putChild(path.replace("/", "_"), static.File(path))
+    for item in config.AUDIO_ITEMS:
+        if isinstance(item, tuple) and len(item) == 2:
+            (title, path) = item
+            root.putChild(path.replace("/", "_"), static.File(path))
+    for item in config.IMAGE_ITEMS:
+        if isinstance(item, tuple) and len(item) == 2:
+            (title, path) = item
+            root.putChild(path.replace("/", "_"), static.File(path))
     root.putChild(config.TV_RECORD_DIR.replace("/", "_"), static.File(config.TV_RECORD_DIR))
     
     root.putChild('vhost', vhost.VHostMonsterResource())
