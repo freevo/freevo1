@@ -218,34 +218,26 @@ class VideoItem(Item):
                 return aspect
             
         if key == 'runtime':
-            length = None
+            total = ''
 
-            if self.info['runtime'] and self.info['runtime'] != 'None':
+            if self.info['runtime']:
+
                 length = self.info['runtime']
-            elif self.info['length'] and self.info['length'] != 'None':
-                length = self.info['length']
-            if not length and hasattr(self, 'length'):
-                length = self.length
-            if not length:
-                return ''
 
-            try:
-                total = int(length)
-            except ValueError:
-                length = 0
+                if length.find('min') == -1:
+                    length = '%s min' % length
+                if length.find('/') > 0:
+                    length = length[:length.find('/')].rstrip()
+                if length.find(':') > 0:
+                    length = length[length.find(':')+1:]
+                if length == '0 min':
+                    length = ''
+
+                total = length
+
+            elif self.subitems:
                 total = 0
-
-            if self.subitems:
                 for s in self.subitems:
-                    if s.info['runtime']:
-                        length = s.info['runtime']
-                        try:
-                            minpos = length.find('min') - 1
-                            if minpos >= 0:
-                                total = int(length[:minpos]) * 60
-                        except TypeError:
-                            pass
-                        break
                     if s.info['length']:
                         length = s.info['length']
                     if not length and hasattr(s, 'length'):
@@ -257,17 +249,19 @@ class VideoItem(Item):
                     except ValueError, TypeError:
                         pass
 
-            length = str(total / 60)
+                total = "%s min" % str(int(total / 60))
 
-            if length.find('min') == -1:
-                length = '%s min' % length
-            if length.find('/') > 0:
-                length = length[:length.find('/')].rstrip()
-            if length.find(':') > 0:
-                length = length[length.find(':')+1:]
-            if length == '0 min':
-                return ''
-            return length
+            else:
+
+                if self.info['length']:
+                    total = self.info['length']
+                elif hasattr(self, 'length'):
+                    total = self.length
+
+                total = "%s min" % str(int(total / 60))
+
+            return total
+
 
         return Item.__getitem__(self, key)
 
