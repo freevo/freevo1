@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -----------------------------------------------------------------------
-# webremote.rpy - The main index to the web interface.
+# webremote.rpy - Web Based Remote Control for Freevo.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -52,108 +52,138 @@ class WebRemoteResource(FreevoResource):
 
         code = fv.formValue(form, 'code')
         if code:
-           if code == 'OK':     code = 'SELECT'
-           if code == 'BACK':   code = 'EXIT'
-           if code == 'RIGHT>': code = 'RIGHT'
-           if code == '<LEFT':  code = 'LEFT'
-           if code == '<REW':   code = 'REW'
-           if code == 'FFWD>':  code = 'FFWD'
+           if code == 'VOLP': code = 'VOL+';
+           if code == 'VOLM': code = 'VOL-';
+           if code == 'CHP':  code = 'CH+';
+           if code == 'CHM':  code = 'CH-';
 
-           # fv.res += 'DEBUG: Send %s to freevo' % code
            host = config.REMOTE_CONTROL_HOST
            port = config.REMOTE_CONTROL_PORT
            buf  = 1024
-           addr = (host,port)
+           addr = (host, port)
 
            UDPSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
            UDPSock.sendto(code, addr)
            UDPSock.close()
+           return;
 
         fv.res += """
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
 <head>
    <title>Freevo | WebRemote</title>
    <meta http-equiv="Content-Type" content= "text/html; charset=UTF-8"/>
    <link rel="stylesheet" href="styles/main.css" type="text/css" />
-   <style>
+
+   <style type="text/css" media="screen">
     body  { background: #666699; }
     h3 { color: white; }
-    input { width:100% }
     table { width: auto; }
     td    { padding: 1px; }
-    input.remote { width: 65px; height: 20px; background: #eee; font-size: 12px; }
-    input.remote:hover { background: #fed; }
+    button.remote { width: 60px; height: 18px; background: #eee; font-size: 12px; text-align: center; padding: 0; }
+    button.remote:hover { background: #fed; }
    </style>
+
+   <script type="text/javascript">
+   <!--
+     // Resize window
+     function resizeWindow () {
+       window.resizeTo(230, 495)
+       window.toolbar.visible     = false
+       window.statusbar.visible   = false
+       window.scrollbars.visible  = false
+       window.personalbar.visible = false
+     }
+
+     // AJAX Functions
+     var xmlHttp = false;
+
+     function getXMLHttpObject () {
+       if (window.XMLHttpRequest) {
+         xmlHttp=new XMLHttpRequest()
+       }
+       else if (window.ActiveXObject) {
+         xmlHttp=new ActiveXObject("Microsoft.XMLHTTP")
+       }
+       return xmlHttp
+       try {
+         xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");      // Internet Explorer 1st try
+       } catch (e) {
+         try {
+           xmlHttp = new ActiveXObject("Microsoft.XMLHTTP"); // Internet Explorer 2nd try
+         } catch (e2) {
+           xmlHttp = false;
+         }
+       }
+       if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+         xmlHttp = new XMLHttpRequest();                     // Mozilla, Firefox, Opera
+       }
+     }
+
+     function send_code( code ) {
+       if (! xmlHttp)
+         getXMLHttpObject();
+       var url = 'webremote.rpy?code=' + code + '&sid=' + Math.random();
+       xmlHttp.open('GET', url, true);
+       xmlHttp.send(null);
+     }
+   -->
+   </script>
 </head>
 
-<body>
-
-<script language="JavaScript">
-<!--
-   window.resizeTo(240,500)
-   window.toolbar.visible     = false
-   window.statusbar.visible   = false
-   window.scrollbars.visible  = false
-   window.personalbar.visible = false
--->
-</script>
+<body onLoad="resizeWindow();">
 
 <center>
 <h3>Freevo WebRemote</h3>
 
-<form name="remote" action="webremote.rpy" method="post">
 <table border="0" cellspacing="1" cellpadding="0">
 
 <tr><td>&nbsp;</td>
-    <td><input class="remote" type=submit name="code" value="UP"></td>
+    <td><button class="remote" accesskey="8" onClick="send_code('UP');">UP</button></td>
     <td>&nbsp;</td>
 </tr>
-<tr><td><input class="remote" type=submit name="code" value="<LEFT"  class="remote"></td>
-    <td><input class="remote" type=submit name="code" value="OK"     class="remote"></td>
-    <td><input class="remote" type=submit name="code" value="RIGHT>" class="remote"></td>
+<tr><td><button class="remote" accesskey="6" onClick="send_code('LEFT');">&lt;LEFT</button></td>
+    <td><button class="remote" accesskey="5" onClick="send_code('SELECT');">OK</button></td>
+    <td><button class="remote" accesskey="4" onClick="send_code('RIGHT');">RIGHT&gt;</button></td>
 </tr>
 <tr><td>&nbsp;</td>
-    <td><input class="remote" type=submit name="code" value="DOWN"   class="remote"></td>
+    <td><button class="remote" accesskey="2" onClick="send_code('DOWN');">DOWN</button></td>
     <td>&nbsp;</td>
 </tr>
 
-<tr style="line-height: 8px;"><td colspan=3>&nbsp</td></tr>
+<tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
 
-<tr><td><input class="remote" type=submit name="code" value="BACK"></td>
-    <td><input class="remote" type=submit name="code" value="DISPLAY"></td>
-    <td><input class="remote" type=submit name="code" value="MENU"></td>
+<tr><td><button class="remote" accesskey="e" onClick="send_code('EXIT');">BACK</button></td>
+    <td><button class="remote" accesskey="d" onClick="send_code('DISPLAY');">DISPLAY</button></td>
+    <td><button class="remote" accesskey="m" onClick="send_code('MENU');">MENU</button></td>
 </tr>
 
-<tr style="line-height: 8px;"><td colspan=3>&nbsp</td></tr>
+<tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
 
-<tr><td>&nbsp;</td>
-    <td><input class="remote" type=submit name="code" value="PLAY"></td>
+<tr><td><button class="remote" accesskey="p" onClick="send_code('PLAY');">PLAY</button></td>
+    <td><button class="remote" accesskey="s" onClick="send_code('STOP');">STOP</button></td>
+    <td><button class="remote" accesskey="c" onClick="send_code('REC');" style="color:red">REC</button></td>
+</tr>
+<tr><td><button class="remote" accesskey="r" onClick="send_code('REW');">&lt;REW</button></td>
+    <td><button class="remote" accesskey="u" onClick="send_code('PAUSE');">PAUSE</button></td>
+    <td><button class="remote" accesskey="f" onClick="send_code('FFWD');">FFWD&gt;</button></td>
+</tr>
+
+<tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
+
+<tr><td><button class="remote" accesskey="+" onClick="send_code('VOLP');">VOL+</button></td>
+    <td><button class="remote" accesskey="m" onClick="send_code('MUTE');">MUTE</button></td>
+    <td><button class="remote" accesskey="c" onClick="send_code('CHP');">CH+</button></td>
+</tr>
+<tr><td><button class="remote" accesskey="-" onClick="send_code('VOLM');">VOL-</button></td>
     <td>&nbsp;</td>
-</tr>
-<tr><td><input class="remote" type=submit name="code" value="<REW"></td>
-    <td><input class="remote" type=submit name="code" value="PAUSE"></td>
-    <td><input class="remote" type=submit name="code" value="FFWD>"></td>
-</tr>
-<tr><td>&nbsp;</td>
-    <td><input class="remote" type=submit name="code" value="REC" style="color:red"></td>
-    <td>&nbsp;</td>
-</tr>
-
-<tr style="line-height: 8px;"><td colspan=3>&nbsp</td></tr>
-
-<tr><td><input class="remote" type=submit name="code" value="VOL+"></td>
-    <td><input class="remote" type=submit name="code" value="MUTE"></td>
-    <td><input class="remote" type=submit name="code" value="CH+"></td>
-</tr>
-<tr><td><input class="remote" type=submit name="code" value="VOL-"></td>
-    <td>&nbsp;</td>
-    <td><input class="remote" type=submit name="code" value="CH-"></td>
+    <td><button class="remote" accesskey="v" onClick="send_code('CHM');">CH-</button></td>
 </tr>
 
 </table>
-</form>
 </center>
+</body>
 </html>
         """
 
