@@ -66,6 +66,9 @@ all_variables = [('DIRECTORY_SORT_BY_DATE', _('Directory Sort By Date'),
                  ('DIRECTORY_SMART_SORT', _('Directory Smart Sort'),
                   _('Use a smarter way to sort the items.'), False),
 
+                 ('DIRECTORY_SMART_NAMES', _('Directory Smart Names'),
+                  _('Use a smarter way to abbreviate the name of the items.'), True),
+
                  ('DIRECTORY_USE_MEDIAID_TAG_NAMES', _('Use MediaID Tag Names'),
                   _('Use the names from the media files tags as display name.'), False),
 
@@ -642,19 +645,20 @@ class DirItem(Playlist):
                 self.dir_items.append(d)
 
         # remove same beginning from all play_items
-        substr = ''
-        if len(self.play_items) > 4 and len(self.play_items[0].name) > 5:
-            substr = self.play_items[0].name[:-5].lower()
-            for i in self.play_items[1:]:
-                if len(i.name) > 5:
-                    substr = util.find_start_string(i.name.lower(), substr)
-                    if not substr or len(substr) < 10:
+        if self.DIRECTORY_SMART_NAMES:
+            substr = ''
+            if len(self.play_items) > 4 and len(self.play_items[0].name) > 5:
+                substr = self.play_items[0].name[:-5].lower()
+                for i in self.play_items[1:]:
+                    if len(i.name) > 5:
+                        substr = util.find_start_string(i.name.lower(), substr)
+                        if not substr or len(substr) < 10:
+                            break
+                    else:
                         break
                 else:
-                    break
-            else:
-                for i in self.play_items:
-                    i.name = util.remove_start_string(i.name, substr)
+                    for i in self.play_items:
+                        i.name = util.remove_start_string(i.name, substr)
         
         #
         # sort all items

@@ -818,6 +818,12 @@ DIRECTORY_REVERSE_SORT = 0
 DIRECTORY_SMART_SORT = 0
 
 #
+# Should files in directories have smart names?
+# This removes the first part of the names when identical
+#
+DIRECTORY_SMART_NAMES = 1
+
+#
 # Should Freevo autoplay an item if only one item is in the directory?
 #
 DIRECTORY_AUTOPLAY_SINGLE_ITEM = 1
