@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -51,6 +51,26 @@ class FileInformation:
         self.read_only = False
 
 
+    def __str__(self):
+        s = '\nitem:FileInformation:s:'
+        s += ' files=%r' % self.files
+        s += ' fxd_file=%r' % self.fxd_file
+        s += ' image=%r' % self.image
+        s += ' read_only=%r' % self.read_only
+        s += ' dir(self)=%r' % dir(self)
+        return s
+
+
+    def __repr__(self):
+        s = '\nitem:FileInformation:r:'
+        s += ' files=%r' % self.files
+        s += ' fxd_file=%r' % self.fxd_file
+        s += ' image=%r' % self.image
+        s += ' read_only=%r' % self.read_only
+        #s += ' dir(self)=%r' % dir(self)
+        return s
+
+
     def append(self, filename):
         self.files.append(filename)
 
@@ -62,7 +82,7 @@ class FileInformation:
     def copy_possible(self):
         return self.files != []
 
-    
+
     def copy(self, destdir):
         for f in self.files + [ self.fxd_file, self.image ]:
             if f:
@@ -106,8 +126,8 @@ class FileInformation:
                     os.unlink(f)
                 except:
                     print 'can\'t delete %s' % f
-        
-                
+
+
 
 class Item:
     """
@@ -140,7 +160,7 @@ class Item:
         if info and parent and hasattr(parent, 'DIRECTORY_USE_MEDIAID_TAG_NAMES') and \
                parent.DIRECTORY_USE_MEDIAID_TAG_NAMES and self.info.has_key('title'):
             self.name = self.info['title']
-        
+
         if parent:
             self.image = parent.image
             if hasattr(parent, 'is_mainmenu_item'):
@@ -154,7 +174,7 @@ class Item:
             self.skin_fxd     = None            # skin informationes etc.
             self.media        = None
 
-                
+
         self.fxd_file = None
 
         if skin_type:
@@ -172,13 +192,13 @@ class Item:
                     self.outicon = os.path.join(settings.icon_dir, skin_info.outicon)
             if not self.image and imagedir:
                 self.image = util.getimage(os.path.join(imagedir, skin_type))
-        
+
 
     def __str__(self):
         s = '\nitem:Item:s:'
         s += ' name=%r' % self.name
         s += ' info=%r' % self.info
-        s += ' dir(self)=%r' % dir(self)
+        s += ' self.__dict__=%r' % self.__dict__
         return s
 
 
@@ -186,7 +206,6 @@ class Item:
         s = '\nitem:Item:r:'
         s += ' name=%r' % self.name
         s += ' info=%r' % self.info
-        #s += ' dir(self)=%r' % dir(self)
         return s
 
 
@@ -204,10 +223,10 @@ class Item:
             self.files        = None    # FileInformation
             self.mimetype     = ''      # extention or mode
             return
-        
+
         if url.find('://') == -1:
             self.url = 'file://' + url
-        
+
         self.files = FileInformation()
         if self.media:
             self.files.read_only = True
@@ -246,7 +265,7 @@ class Item:
             if not self.name:
                 self.name     = Unicode(self.url)
 
-            
+
     def __setitem__(self, key, value):
         """
         set the value of 'key' to 'val'
@@ -262,7 +281,7 @@ class Item:
                 return
         self.info[key] = value
 
-        
+
     def store_info(self, key, value):
         """
         store the key/value in metadata
@@ -283,7 +302,7 @@ class Item:
         else:
             print 'unable to delete info for that kind of item'
 
-        
+
     def id(self):
         """
         Return a unique id of the item. This id should be the same when the
@@ -293,14 +312,14 @@ class Item:
             return self.url
         return self.name
 
-    
+
     def sort(self, mode=None):
         """
         Returns the string how to sort this item
         """
         return u'0%s' % self.name
 
-    
+
     def translation(self, application):
         """
         Loads the gettext translation for this item (and all it's children).
@@ -329,20 +348,20 @@ class Item:
         """
         if self.actions():
             return self.actions()[0][0](arg=arg, menuw=menuw)
-        
+
 
     def eventhandler(self, event, menuw=None):
         """
         simple eventhandler for an item
         """
-        
+
         if not menuw:
             menuw = self.menuw
 
         for p in self.eventhandler_plugins:
             if p(event, self, menuw):
                 return True
-            
+
         # give the event to the next eventhandler in the list
         if self.parent:
             return self.parent.eventhandler(event, menuw)
@@ -371,7 +390,7 @@ class Item:
             if e(self, event, menuw):
                 return True
         return False
-    
+
 
     def __getitem__(self, attr):
         """
@@ -411,7 +430,7 @@ class Item:
 
         if attr[:7] == 'parent(' and attr[-1] == ')' and self.parent:
             return self.parent[attr[7:-1]]
-            
+
         if attr[:4] == 'len(' and attr[-1] == ')':
             r = None
             if self.info.has_key(attr[4:-1]):
