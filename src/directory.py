@@ -36,6 +36,7 @@ import stat
 import copy
 import rc
 import util.mediainfo as mediainfo
+import kaa.metadata as mmpython
 
 import config
 import util
@@ -108,13 +109,19 @@ class DirItem(Playlist):
         self.dir  = os.path.abspath(directory)
         self.info = mediainfo.get_dir(directory)
 
+        mminfo = mmpython.parse(directory)
+
         if name:
             self.name = Unicode(name)
         elif self.info['title:filename']:
             self.name = self.info['title:filename']
+        elif mminfo['title']:
+            self.name = mminfo['title']
         else:
             self.name = util.getname(directory, skip_ext=False)
             
+        self.comment = mminfo['comment']
+
         if add_args == None and hasattr(parent, 'add_args'): 
             add_args = parent.add_args
 
@@ -154,7 +161,10 @@ class DirItem(Playlist):
         self.modified_vars = []
 
         # Check for a cover in current dir
-        image = util.getimage(os.path.join(directory, 'cover'))
+        if mminfo['image']:
+            image = mminfo['image']
+        else:
+            image = util.getimage(os.path.join(directory, 'cover'))
         if image:
             self.image = image
             self.files.image = image
@@ -179,7 +189,7 @@ class DirItem(Playlist):
         s += ' name=%r' % self.name
         s += ' dir=%r' % self.dir
         s += ' info=%r' % self.info
-        #s += ' dir(self)=%r' % dir(self)
+        #s += ' __dict__=%r' % self.__dict__
         return s
 
 
@@ -188,7 +198,6 @@ class DirItem(Playlist):
         s += ' name=%r' % self.name
         s += ' dir=%r' % self.dir
         s += ' info=%r' % self.info
-        #s += ' dir(self)=%r' % dir(self)
         return s
 
 
@@ -390,7 +399,7 @@ class DirItem(Playlist):
 
             num_dir_items  = 0
             num_play_items = 0
-            files          = vfs.listdir(self.dir, include_overlay=True)
+            files = vfs.listdir(self.dir, include_overlay=True)
 
             # play items and playlists
             for p in plugin.mimetype(display_type):
