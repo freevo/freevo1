@@ -63,6 +63,7 @@ class TvProgram:
     categories = None
     date       = None
     scheduled  = None
+    overlap    = None
 
 
     def __init__(self):
@@ -81,6 +82,7 @@ class TvProgram:
         # Due to problems with Twisted's marmalade this should not be changed
         # to a boolean type. 
         self.scheduled  = 0
+        self.overlap    = 0
 
 
     def __str__(self):
@@ -126,7 +128,7 @@ class TvProgram:
         if attr == 'time':
             return self.getattr('start') + u' - ' + self.getattr('stop')
         if hasattr(self, attr):
-            return getattr(self,attr)
+            return getattr(self, attr)
         return ''
 
 
@@ -296,4 +298,3 @@ class TvGuide:
             s += String(chan)
 
         return s
-        
