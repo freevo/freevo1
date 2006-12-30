@@ -126,7 +126,7 @@ class FileInfoResource(FreevoResource):
         return String(fv.res)
     
     def get_fxd_info(self, fxd_file):
-        print 'get_fxd_info(self, %s)' % (fxd_file)
+        print 'get_fxd_info(self, %r)' % (fxd_file)
         fxd_info = {}
         parser = util.fxdparser.FXD(fxd_file)
         parser.parse()
