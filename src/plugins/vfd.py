@@ -1,12 +1,14 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# vfd.py - use PyVFD to display menus and players
+# vfd.py - use pyusb to display menus and items for Shuttles VFD
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:
 #    To activate, put the following line in local_conf.py:
 #       plugin.activate('vfd')
+#    You need a patched pyusb (http://pyusb.berlios.de/)
+#    The patch is in contrib/patches
 # Todo:        
 #    1) Use Threads. pyusb is too blocking!
 #    2) See if it's possible to scroll the display
