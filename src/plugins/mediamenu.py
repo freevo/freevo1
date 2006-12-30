@@ -74,6 +74,13 @@ class MediaMenu(Item):
         Item.__init__(self)
         self.type = 'mediamenu'
 
+    def __str__(self):
+        s = '\nplugins:mediamenu:MediaMenu:s'
+        return s
+
+    def __repr__(self):
+        s = '\nplugins:mediamenu:MediaMenu:r'
+        return s
 
     def main_menu_generate(self):
         """
