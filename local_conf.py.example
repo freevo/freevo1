@@ -258,6 +258,17 @@ CONFIG_VERSION = 5.17
 # See src/event.py for a list of all possible events.
 
 #
+# Some events to jump to menus
+#
+# EVENTS['menu']['GUIDE'] = Event(MENU_GOTO_TVGUIDE) # Not working
+# EVENTS['menu']['VIDEOS'] = Event(MENU_GOTO_VIDEOS)
+# EVENTS['menu']['MUSIC'] = Event(MENU_GOTO_MUSIC)
+# EVENTS['menu']['PICTURES'] = Event(MENU_GOTO_IMAGES)
+# EVENTS['menu']['GAMES'] = Event(MENU_GOTO_GAMES)
+# EVENTS['menu']['RADIO'] = Event(MENU_GOTO_RADIO) # Not working
+# EVENTS['menu']['POWER'] = Event(MENU_GOTO_SHUTDOWN)
+
+#
 # Use arrow keys for back and select (alternate way of navigating)
 #
 # MENU_ARROW_NAVIGATION = 0

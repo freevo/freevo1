@@ -20,6 +20,7 @@ The release date is only tentative at the moment.
 This release has all the changes in Release 1.6.x plus
 
  * Replaced mmpython with kaa.base and kaa.metadata (F#1580712)
+ * Replaced PIL with kaa.imlib2 (F#1580712)
  * New apple trailers plugin (disabled by default) (F#1580418)
  * New Bluetooth phone support to act as a remote control (F#1622143)
  * New CD/DVD burn plug-in added (F#1605919)
@@ -40,6 +41,7 @@ This release has all the changes in Release 1.6.x plus
  * Updated DEBUGGING, IP, PORT, UID and GUI based on helper name (F#1580628)
  * Updated helper convert_config (F#1578183)
  * Updated imdb movie parsing to use BeautifulSoup (F#1590928)
+ * Updated menu goto events to jump to the shutdown menu (F#1619725)
  * Updated multimail plug-in for Maildir support (F#1594915)
  * Updated recordserver to allow automatic deleting of old recordings when low on disk space (F#1594630)
  * Updated tv mplayer plug-in to pause live tv and change channels without stopping for dvb (F#1610656)

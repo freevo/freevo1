@@ -45,6 +45,7 @@ import os, popen2, fcntl, select, time
 import config, menu, rc, plugin, util
 from audio.player import PlayerGUI
 from item import Item
+from menu import MenuItem
 
 
 class RadioItem(Item):
@@ -85,13 +86,13 @@ class RadioItem(Item):
 
 
 
-class RadioMainMenuItem(Item):
+class RadioMainMenuItem(MenuItem):
     """
     this is the item for the main menu and creates the list
     of commands in a submenu.
     """
     def __init__(self, parent):
-        Item.__init__(self, parent, skin_type='radio')
+        MenuItem.__init__(self, parent, arg='radio', skin_type='radio')
         self.name = _( 'Radio' )
 
 

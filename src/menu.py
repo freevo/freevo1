@@ -255,32 +255,44 @@ class MenuWidget(GUIObject):
     def goto_media_menu(self, media='audio'):
         """
         Go to a main menu item
-        media = 'tv' or 'audio' or 'video' or 'image'
+        media = 'tv' or 'audio' or 'video' or 'image' or 'games'
         used for events:
             MENU_GOTO_TVMENU
-            MENU_GOTO_TVGUIDEMENU
+            MENU_GOTO_TVGUIDEMENU #doesn't yet work
             MENU_GOTO_VIDEOMENU
             MENU_GOTO_AUDIOMENU
             MENU_GOTO_IMAGEMENU
-            MENU_GOTO_RADIOMENU
+            MENU_GOTO_GAMESMENU
+            MENU_GOTO_RADIOMENU   #doesn't yet work
+            MENU_GOTO_SHUTDOWN
         """        
         self.menustack = [self.menustack[0]]
         menu = self.menustack[0]
         self.init_page()
-        for menuitem in self.menustack[0].choices:
-            if DEBUG:
+
+        if media == 'shutdown':
+            menu.selected = self.all_items[len(self.menustack[0].choices)-1]
+            action = menu.selected.actions()[0][0]
+            action(arg=None, menuw=self)
+            return
+
+        level = 0
+        for mediaitem in media.split('.'):
+            for menuitem in self.menustack[level].choices:
+                if DEBUG:
+                    try:
+                        print 'menuitem=%s' % menuitem
+                    except:
+                        pass
                 try:
-                    print 'menuitem=%s' % menuitem
-                except:
+                    if menuitem.arg[0] == mediaitem:
+                        menuitem.select(menuw=self)
+                        break
+                except AttributeError: # may have no .arg (no media menu)
                     pass
-            try:
-                if menuitem.arg[0] == media:
-                    menuitem.select(menuw=self)
-                    return
-            except AttributeError: # may have no .arg (no media menu)
-                pass
-            except TypeError: # .arg may be not indexable
-                pass
+                except TypeError: # .arg may be not indexable
+                    pass
+            level += 1
 
     
     def goto_prev_page(self, arg=None, menuw=None):
@@ -430,8 +442,16 @@ class MenuWidget(GUIObject):
             self.goto_media_menu("image")
             return
         
+        if event == MENU_GOTO_GAMES:
+            self.goto_media_menu("games")
+            return
+        
         if event == MENU_GOTO_RADIO:
             self.goto_media_menu("audio.radio")
+            return
+        
+        if event == MENU_GOTO_SHUTDOWN:
+            self.goto_media_menu("shutdown")
             return
         
         if event == MENU_BACK_ONE_MENU:

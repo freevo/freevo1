@@ -198,7 +198,9 @@ class Item:
         s = '\nitem:Item:s:'
         s += ' name=%r' % self.name
         s += ' info=%r' % self.info
-        s += ' self.__dict__=%r' % self.__dict__
+        if hasattr(self, 'image'): s += ' image=%r' % self.image
+        if hasattr(self, 'arg'):   s += ' arg=%r' % (self.arg,)
+        else: s += ' self.__dict__=%r' % self.__dict__
         return s
 
 
@@ -206,6 +208,9 @@ class Item:
         s = '\nitem:Item:r:'
         s += ' name=%r' % self.name
         s += ' info=%r' % self.info
+        if hasattr(self, 'image'): s += ' image=%r' % self.image
+        if hasattr(self, 'arg'):   s += ' arg=%r' % (self.arg,)
+        #else: s += ' self.__dict__=%r' % self.__dict__
         return s
 
 
