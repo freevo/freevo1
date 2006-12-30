@@ -218,13 +218,13 @@ class VideoItem(Item):
                 return aspect
             
         if key == 'runtime':
-            total = ''
+            total = 0
 
             if self.info['runtime']:
-
                 length = self.info['runtime']
-
-                if length.find('min') == -1:
+                if not length:
+                    length = ''
+                if length.find('min') > 0:
                     length = '%s min' % length
                 if length.find('/') > 0:
                     length = length[:length.find('/')].rstrip()
@@ -232,11 +232,9 @@ class VideoItem(Item):
                     length = length[length.find(':')+1:]
                 if length == '0 min':
                     length = ''
-
                 total = length
 
             elif self.subitems:
-                total = 0
                 for s in self.subitems:
                     if s.info['length']:
                         length = s.info['length']
@@ -248,16 +246,13 @@ class VideoItem(Item):
                         total += length
                     except ValueError, TypeError:
                         pass
-
                 total = "%s min" % str(int(total / 60))
 
             else:
-
                 if self.info['length']:
                     total = self.info['length']
                 elif hasattr(self, 'length'):
                     total = self.length
-
                 total = "%s min" % str(int(total / 60))
 
             return total
