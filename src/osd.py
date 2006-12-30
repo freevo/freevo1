@@ -611,7 +611,7 @@ class OSD:
                 url.mode = 'RGBA'
             image = pygame.image.fromstring(str(url.get_raw_data(format=url.mode)), url.size, url.mode)
         except AttributeError:
-            print 'url:', url
+            pass
 
             if url[:8] == 'thumb://':
                 filename = os.path.abspath(url[8:])
@@ -624,7 +624,7 @@ class OSD:
                 filename = os.path.join(config.IMAGE_DIR, url[8:])
 
             if not os.path.isfile(filename):
-                print 'osd.py: Bitmap file "%s" doesnt exist!' % filename
+                print 'osd.py: Bitmap file "%s" doesn\'t exist!' % filename
                 return None
             
             try:
