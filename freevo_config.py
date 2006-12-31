@@ -1753,6 +1753,12 @@ WEBSERVER_UID = 0
 WEBSERVER_GID = 0
 
 #
+# Some sizes for the images in the web library
+#
+WWW_IMAGE_THUMBNAIL_SIZE = (200, 200)
+WWW_IMAGE_THRESHOLD_SIZE = (800, 600)
+
+#
 # Username / Password combinations to login to the web interface.
 # These should be overridden in local_conf.py
 # 
