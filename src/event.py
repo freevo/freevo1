@@ -264,6 +264,7 @@ MENU_EVENTS = {
     'CH+'       : MENU_PAGEUP,
     'CH-'       : MENU_PAGEDOWN,
     'MENU'      : MENU_GOTO_MAINMENU,
+    'SHUTDOWN'  : MENU_GOTO_SHUTDOWN,
     'EXIT'      : MENU_BACK_ONE_MENU,
     'SELECT'    : MENU_SELECT,
     'PLAY'      : MENU_PLAY_ITEM,

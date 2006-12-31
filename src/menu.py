@@ -28,7 +28,7 @@
 #
 # -----------------------------------------------------------------------
 
-
+import string
 import copy
 
 import config
@@ -135,7 +135,6 @@ class Menu:
         return the number of items per page for this skin
         """
         return skin.items_per_page(('menu', self))
-    
 
 
 
@@ -272,10 +271,12 @@ class MenuWidget(GUIObject):
 
         if media == 'shutdown':
             menu.selected = self.all_items[len(self.menustack[0].choices)-1]
-            action = menu.selected.actions()[0][0]
-            action(arg=None, menuw=self)
-            return
-
+            for menuitem in self.menustack[0].choices:
+                if string.find(str(menuitem), 'shutdown.') > 0:
+                    menu.selected = menuitem
+                    self.refresh()
+                    self.eventhandler(MENU_SELECT)
+                    return
         level = 0
         for mediaitem in media.split('.'):
             for menuitem in self.menustack[level].choices:
