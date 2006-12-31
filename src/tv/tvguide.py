@@ -107,14 +107,18 @@ class TVGuide(Item):
         _debug_('update schedule')
         self.last_update = time.time()
         self.scheduled_programs = []
+        self.overlap_programs = []
         (got_schedule, schedule) = ri.getScheduledRecordings()
 
         util.misc.comingup(None, (got_schedule, schedule))
 
         if got_schedule:
-            l = schedule.getProgramList()
-            for k in l:
-                self.scheduled_programs.append(l[k].str2utf())
+            progs = schedule.getProgramList()
+            for k in progs:
+                prog = progs[k]
+                self.scheduled_programs.append(prog.str2utf())
+                if prog.overlap:
+                    self.overlap_programs.append(prog.str2utf())
 
         
     def eventhandler(self, event):
@@ -321,6 +325,10 @@ class TVGuide(Item):
                     else:
                         p.scheduled = FALSE # Same as above; leave as 'FALSE' until
                                             # Twisted includes Boolean
+                    if p in self.overlap_programs:
+                        p.overlap = TRUE
+                    else:
+                        p.overlap = FALSE
             except:
                 pass
 

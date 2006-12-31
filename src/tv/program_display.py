@@ -63,6 +63,9 @@ class ProgramItem(Item):
             self.scheduled = prog.scheduled
         else:
             self.scheduled = False
+
+        self.overlap = prog.overlap
+
         self.favorite = False
 
         self.start = time.strftime(config.TV_DATETIMEFORMAT,

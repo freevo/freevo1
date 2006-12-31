@@ -75,8 +75,9 @@ class TVListing_Area(Skin_Area):
         selected_val  = content.types['selected']
         default_val   = content.types['default']
         scheduled_val = content.types['scheduled']
+        overlap_val   = content.types['overlap']
 
-        self.all_vals = label_val, head_val, selected_val, default_val, scheduled_val
+        self.all_vals = label_val, head_val, selected_val, default_val, scheduled_val, overlap_val
         
         font_h = max(selected_val.font.h, default_val.font.h, label_val.font.h)
 
@@ -159,7 +160,7 @@ class TVListing_Area(Skin_Area):
         area      = self.area_val
         content   = self.calc_geometry(layout.content, copy_object=True)
 
-        to_listing     = menu.table
+        to_listing = menu.table
 
         n_cols   = len(to_listing[0])-1
         col_time = 30
@@ -167,7 +168,7 @@ class TVListing_Area(Skin_Area):
         font_h, label_width, label_txt_width, y0, num_rows, item_h, head_h = \
                 self.get_items_geometry(settings, menu)[:-1]
 
-        label_val, head_val, selected_val, default_val, scheduled_val = self.all_vals
+        label_val, head_val, selected_val, default_val, scheduled_val, overlap_val = self.all_vals
 
         leftarrow = None
         if area.images['leftarrow']:
@@ -215,25 +216,21 @@ class TVListing_Area(Skin_Area):
         prop_1sec = float(w_contents) / float(n_cols * col_time * 60)
         col_size = prop_1sec * 1800 # 30 minutes
 
-
         ig = Geometry( 0, 0, col_size, head_h )
         if head_val.rectangle:
             ig, r2 = self.fit_item_in_rectangle( head_val.rectangle, col_size,
                                                  head_h, head_h )
 
-
         self.drawroundbox( x_contents - r.width, y_contents - r.height,
                            r.width+1, head_h+1, r )
 
         # use label padding for x; head padding for y
-        self.drawstring( Unicode(time.strftime( dateformat, time.localtime( to_listing[ 0 ][ 1 ] ) ) ),
+        self.drawstring( Unicode(time.strftime(dateformat, time.localtime(to_listing[0][1]))),
                          head_val.font, content,
                          x=( x_contents  - r.width + pad_x ),
                          y=( y_contents - r.height + ig.y ),
                          width=( r.width - 2 * pad_x ), height=-1,
                          align_v='center', align_h=head_val.align )
-
-
 
         # Print the time at the table's top
         x0 = x_contents
@@ -286,11 +283,8 @@ class TVListing_Area(Skin_Area):
             else:
                 channel_logo = None
 
-
             if channel_logo:
                 self.drawimage(channel_logo, (logo_geo[0], logo_geo[1]))
-
-
             else:
                 self.drawstring(to_listing[i].displayname, label_val.font, content,
                                 x=tx0, y=ty0, width=r.width+2*r.x, height=item_h)
@@ -322,9 +316,9 @@ class TVListing_Area(Skin_Area):
                        prg.channel_id == selected_prog.channel_id and \
                        prg.start == selected_prog.start and \
                        prg.stop == selected_prog.stop:
-
                         val = selected_val
-
+                    elif prg.overlap:
+                        val = overlap_val
                     elif prg.scheduled:
                         val = scheduled_val
                     else:
