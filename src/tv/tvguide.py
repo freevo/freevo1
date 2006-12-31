@@ -182,7 +182,6 @@ class TVGuide(Item):
             self.menuw.refresh()
 
         elif event == MENU_SUBMENU:
-            
             pass
 
         elif event == TV_START_RECORDING:

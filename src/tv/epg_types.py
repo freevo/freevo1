@@ -92,12 +92,13 @@ class TvProgram:
         begins = time.strftime('%a %Y-%m-%d %H:%M', bt)
         starts = time.strftime('%H:%M', st)
         ends = time.strftime('%H:%M', et)
+        overlaps = self.overlap and '*' or ' '
         try:
             channel_id = String(self.channel_id)
             title = String(self.title)
-            s = '%s->%s (%s)  %3s %s' % (begins, ends, starts, channel_id, title)
+            s = '%s->%s (%s)%s %3s %s' % (begins, ends, starts, overlaps, channel_id, title)
         except UnicodeEncodeError: #just in case
-            s = '%s->%s [%s] %3s %s' % (begins, ends, starts, self.channel_id, self.title)
+            s = '%s->%s [%s]%s %3s %s' % (begins, ends, starts, overlaps, self.channel_id, self.title)
         return s
 
 

@@ -128,6 +128,22 @@ class RecordServer(xmlrpc.XMLRPC):
         return 0
 
 
+    def findOverlaps(self, scheduledRecordings):
+        _debug_('in findOverlaps', 3)
+        progs = scheduledRecordings.getProgramList()
+        proglist = list(progs)
+        proglist.sort(self.progsTimeCompare)
+        for progitem in proglist:
+            progs[progitem].overlap = 0
+        for i in range(0, len(proglist)-1):
+            thisprog = progs[proglist[i]]
+            nextprog = progs[proglist[i+1]]
+            if thisprog.stop > nextprog.start:
+                thisprog.overlap = 1
+                nextprog.overlap = 1
+                _debug_('Overlap:\n%s\n%s' % (thisprog, nextprog))
+
+
     def findNextProgram(self):
         _debug_('in findNextProgram', 3)
 
@@ -175,6 +191,7 @@ class RecordServer(xmlrpc.XMLRPC):
         '''
         _debug_('in isPlayerRunning', 3)
         return (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
+
 
     # note: add locking and r/rw options to get/save funs
     def getScheduledRecordings(self):
@@ -233,9 +250,9 @@ class RecordServer(xmlrpc.XMLRPC):
             _debug_('SAVE: making a new ScheduledRecordings')
             scheduledRecordings = ScheduledRecordings()
     
+        self.findOverlaps(scheduledRecordings)
         _debug_('SAVE: saving cached file (%s)' % config.TV_RECORD_SCHEDULE)
-        _debug_("SAVE: ScheduledRecordings has %s items." % \
-                len(scheduledRecordings.programList))
+        _debug_("SAVE: ScheduledRecordings has %s items." % len(scheduledRecordings.programList))
         try:
             f = open(config.TV_RECORD_SCHEDULE, 'w')
         except IOError:
