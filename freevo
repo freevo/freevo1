@@ -190,7 +190,8 @@ def stop(name, arg):
         os.kill(pid, SIGTERM)
         return 1
     except OSError, e:
-        print e
+        #print e
+        pass
     return 0
 
 

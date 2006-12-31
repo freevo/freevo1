@@ -60,6 +60,7 @@ class FileInfoResource(FreevoResource):
             print medium
             title = ""
             info = "<table>"
+            (basedir, item) = os.path.split(file)
             
             fxd_file = file[:file.rindex('.')] + ".fxd"
             if os.path.exists(fxd_file):
@@ -70,11 +71,15 @@ class FileInfoResource(FreevoResource):
                         info += "<tr><td><b>" + fxd_info.keys()[i] + ": </b></td><td>"+fxd_info.values()[i]+"</td></tr>"
                     i +=1
                 title=fxd_info['title']
-                if title == "":
-                    title = util.mediainfo.get(file)['title']
+                if not title:
+                    title = util.mediainfo.get(item)['title']
+                    if not title:
+                        title = item
             else:
                 media_info = util.mediainfo.get(file)
                 title = media_info['title']
+                if not title:
+                    title = item
                 #audio info
                 if media_info['artist']:
                     info+='<tr><td><b>Artist: </b></td><td>'+media_info['artist'] +'</td></tr>'
