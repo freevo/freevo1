@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -27,11 +27,13 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-
+import base64
+import md5
 
 import os, sys, time
 
 import config
+import socket
 
 from twisted.web.woven import page
 from twisted.web.resource import Resource
@@ -42,7 +44,7 @@ FALSE = 0
 
 
 class FreevoPage(page.Page):
-    
+
     def __init__(self, model=None, template=None):
         print '__init__(self, model=\"%s\", template=\"%s\")' % (model, template)
 
@@ -76,12 +78,18 @@ class FreevoResource(Resource):
 
 
     def auth_user(self, username, password):
-        print 'auth_user(self, username=\"%s\", password=\"%s\")' % (username, password)
+        print 'auth_user(self, username=\"%s\", password=\"%s\")' % (username, '******')
         realpass = config.WWW_USERS.get(username)
-        if password == realpass:
+        if not realpass:
+            md5user = md5.new(username + password)
+            realpass = config.WWW_USERS.get(base64.b32encode(md5user.digest()))
+            md5pass = md5.new(password + username)
+            password = base64.b32encode(md5pass.digest())
+        if realpass == password:
             return TRUE
         else:
             return FALSE
+
 
 
 class HTMLResource:
@@ -120,7 +128,7 @@ class HTMLResource:
         self.res += '<!-- Header Logo and Status Line -->\n'
         self.res += '<div id="titlebar"><span class="name">'\
             +'<a href="http://freevo.sourceforge.net/" target="_blank">Freevo</a></span></div>\n'
-     
+
         items = [(_('Home'),_('Home'),'%sindex.rpy' % str(strprefix)),
                  (_('TV Guide'),_('View TV Listings'),'%sguide.rpy' % str(strprefix)),
                  (_('Scheduled Recordings'),_('View Scheduled Recordings'),'%srecord.rpy' % str(strprefix)),
@@ -208,19 +216,19 @@ class HTMLResource:
         if not form or not key:
             return None
 
-        try: 
+        try:
             val = form[key][0]
-        except: 
+        except:
             val = None
-    
+
         return val
 
 
     def printFooter(self):
         print 'printFooter(self)'
         self.res += '</body>\n</html>\n'
-    
-    
+
+
     def printSearchForm(self):
         print 'printSearchForm(self)'
         self.res += """
@@ -257,10 +265,10 @@ class HTMLResource:
         self.printSearchForm()
         self.printLinks()
         self.printFooter()
-        
+
     def printLinks(self, prefix=0):
         print 'printLinks(self, prefix=\"%s\")' % (prefix)
-        #   
+        #
         #try:
         #    if config.ICECAST_WWW_PAGE:
         #        self.res += '<a href="%siceslistchanger.rpy">Change Icecast List</a>' % strprefix
@@ -280,7 +288,7 @@ class HTMLResource:
                 breadcrumb += '/<a href="library.rpy?media='+media+'&dir='+_url+'">'+Unicode(i)+'</a>'
 
         return breadcrumb
-    
+
     def printPassword(self, password):
         print 'printPassword(self, password=\"%s\")' % (password)
         self.res += """<script language="JavaScript"> <!--
@@ -297,7 +305,7 @@ class HTMLResource:
         }
         //-->
         </script>"""
-        
+
     def printImagePopup(self):
         print 'printImagePopup(self)'
         self.res += """<script language="JavaScript" type="text/javascript" style="display:none;">
@@ -307,3 +315,97 @@ class HTMLResource:
         }
         </script> """
 
+    def printWebRemote(self):
+        if not (config.ENABLE_NETWORK_REMOTE == 1 and config.REMOTE_CONTROL_PORT):
+           self.res += "no remote enabled"
+
+        self.res += u"""
+           <style type="text/css" media="screen">
+            table.remote { width: auto; }
+            td.remote    { padding: 0px; }
+            button.remote { width: 60px; height: 18px; background: #eee; font-size: 12px; text-align: center; padding: 0; }
+            button.remote:hover { background: #fed; }
+           </style>
+
+           <script type="text/javascript">
+           <!--
+             // AJAX Functions
+             var xmlHttp = false;
+
+             function getXMLHttpObject () {
+               if (window.XMLHttpRequest) {
+                 xmlHttp=new XMLHttpRequest()
+               }
+               else if (window.ActiveXObject) {
+                 xmlHttp=new ActiveXObject("Microsoft.XMLHTTP")
+               }
+               return xmlHttp
+               try {
+                 xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");      // Internet Explorer 1st try
+               } catch (e) {
+                 try {
+                   xmlHttp = new ActiveXObject("Microsoft.XMLHTTP"); // Internet Explorer 2nd try
+                 } catch (e2) {
+                   xmlHttp = false;
+                 }
+               }
+               if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+                 xmlHttp = new XMLHttpRequest();                     // Mozilla, Firefox, Opera
+               }
+             }
+
+             function send_code( code ) {
+               if (! xmlHttp)
+                 getXMLHttpObject();
+               var url = 'webremote.rpy?code=' + code + '&sid=' + Math.random();
+               xmlHttp.open('GET', url, true);
+               xmlHttp.send(null);
+             }
+           -->
+           </script>
+        <table border="0" cellspacing="0" cellpadding="0" class="remote">
+
+        <tr><td>&nbsp;</td>
+            <td class="remote"><button class="remote" accesskey="8" onClick="send_code('UP');">UP</button></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr><td class="remote"><button class="remote" accesskey="6" onClick="send_code('LEFT');">&lt;LEFT</button></td>
+            <td class="remote"><button class="remote" accesskey="5" onClick="send_code('SELECT');">OK</button></td>
+            <td class="remote"><button class="remote" accesskey="4" onClick="send_code('RIGHT');">RIGHT&gt;</button></td>
+        </tr>
+        <tr><td>&nbsp;</td>
+            <td class="remote"><button class="remote" accesskey="2" onClick="send_code('DOWN');">DOWN</button></td>
+            <td>&nbsp;</td>
+        </tr>
+
+        <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
+
+        <tr><td class="remote"><button class="remote" accesskey="e" onClick="send_code('EXIT');">BACK</button></td>
+            <td class="remote"><button class="remote" accesskey="d" onClick="send_code('DISPLAY');">DISPLAY</button></td>
+            <td class="remote"><button class="remote" accesskey="m" onClick="send_code('MENU');">MENU</button></td>
+        </tr>
+
+        <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
+
+        <tr><td class="remote"><button class="remote" accesskey="p" onClick="send_code('PLAY');">PLAY</button></td>
+            <td class="remote"><button class="remote" accesskey="s" onClick="send_code('STOP');">STOP</button></td>
+            <td class="remote"><button class="remote" accesskey="c" onClick="send_code('REC');" style="color:red">REC</button></td>
+        </tr>
+        <tr><td class="remote"><button class="remote" accesskey="r" onClick="send_code('REW');">&lt;REW</button></td>
+            <td class="remote"><button class="remote" accesskey="u" onClick="send_code('PAUSE');">PAUSE</button></td>
+            <td class="remote"><button class="remote" accesskey="f" onClick="send_code('FFWD');">FFWD&gt;</button></td>
+        </tr>
+
+        <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
+
+        <tr><td class="remote"><button class="remote" accesskey="+" onClick="send_code('VOLP');">VOL+</button></td>
+            <td class="remote"><button class="remote" accesskey="m" onClick="send_code('MUTE');">MUTE</button></td>
+            <td class="remote"><button class="remote" accesskey="c" onClick="send_code('CHP');">CH+</button></td>
+        </tr>
+        <tr><td class="remote"><button class="remote" accesskey="-" onClick="send_code('VOLM');">VOL-</button></td>
+            <td class="remote">&nbsp;</td>
+            <td class="remote"><button class="remote" accesskey="v" onClick="send_code('CHM');">CH-</button></td>
+        </tr>
+
+        </table>
+        """

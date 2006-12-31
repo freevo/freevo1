@@ -47,6 +47,7 @@ This release has all the changes in Release 1.6.x plus
  * Updated tv mplayer plug-in to pause live tv and change channels without stopping for dvb (F#1610656)
  * Updated video player to allow commands before and after playback (F#1602956)
  * Updated weather translations, with spanish weather translations (F#1621819)
+ * Updated webserver login to allow for a encrypted username and password (F#1623854)
  * Removed video plug-in mplayer for unichrome playback (B#1606699)
 
 == Release 1.6.3 (200?-??-??) ==
