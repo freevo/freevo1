@@ -71,26 +71,12 @@ class LibraryResource(FreevoResource):
         return FALSE
 
     def convert_dir(self, dir_str):
-        '''
-        Converts a direct file location to a link that twisted can display.
-        If the file exists in one of the child resources of twisted, then
-        this method converts the file to a proper child resource link that
-        twiseted knows about.
-        If above case fails, the original file link will be returned.
-        '''
         print 'convert_dir(self, dir_str=%r)' % (dir_str)
-        child_res = ""
-        ### if the file starts with FREEVO_CACHEDIR return converted file
-        if dir_str.startswith(config.FREEVO_CACHEDIR):
-            child_res = config.FREEVO_CACHEDIR
-        else:
-            for i in range(len(self.allowed_dirs)):
-                val = self.allowed_dirs[i][1]
-                if dir_str.startswith(val):
-                    child_res = val
-                    break
-
-        return child_res.replace("/", "_") + dir_str[len(child_res):]
+        for i in range(len(self.allowed_dirs)):
+            val = self.allowed_dirs[i][1]
+            if dir_str.startswith(val):
+                return val.replace("/", "_") + dir_str[len(val):]
+        return dir_str
 
     def get_suffixes (self, media):
         print 'get_suffixes (self, media=\"%s\")' % (media)
@@ -466,11 +452,11 @@ class LibraryResource(FreevoResource):
                         status = 'favorite'
                     ### show image
                     if action_mediatype == "images":
-                        size = (info['width'], info['height'])
-                        (scaled_image, new_size) = self.get_scaled_image_and_size(filepath, size)
                         image_link = self.convert_dir(filepath)
+                        size = (info['width'], info['height'])
+                        new_size = self.resize_image(image_link, size)
                         fv.tableCell('<a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
-                            +'<img src="'+scaled_image+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" />'\
+                            +'<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" />'\
                             +'<br />'+Unicode(title)+'</a>', 'class="'+status+'" colspan="1"')
                     ### show movie
                     elif action_mediatype == "movies" or action_mediatype == "rectv":
@@ -607,8 +593,8 @@ class LibraryResource(FreevoResource):
             new_height = 200
         return [int(new_width), int(new_height + 0.5)]
 
-    def get_fit_to_square_size(self, size):
-        print 'get_fit_to_square_size(self, size=%s)' % str(size)
+    def resize_image_to_square(self, image, size):
+        print 'resize_image_to_square(self, image=%s, size=%s)' % (image, size)
         ### if aspect ratio > 1 then scale width to 200
         new_size = [200, 200]
         try:
@@ -623,27 +609,6 @@ class LibraryResource(FreevoResource):
             pass
         return new_size
     
-    def get_scaled_image_and_size(self, filepath, size):
-        '''
-        Returns the location of a scaled image and size of the scaled image
-        as a 2-tuple. Eg. ("/var/cache/freevo/test.jpg", [200, 150]).
-        The image will be scaled only if it larger than a certain prefixed
-        size. May be in future the prefixed image size could be a config
-        variable.
-        '''
-        threshold_size = [800, 600]
-        new_size = self.get_fit_to_square_size(size)
-        scaled_image_path = self.cache_dir + filepath.replace("/", "_").replace(".", "_") + ".jpg"
-        if not os.path.exists(scaled_image_path):
-            if size[0] > threshold_size[0] or size[1] > threshold_size[1]:
-                image = imlib2.open(filepath)
-                new_image = image.scale(new_size)
-                new_image.save(scaled_image_path)
-            else:
-                scaled_image_path = filepath
-        scaled_image_path = self.convert_dir(scaled_image_path)
-        return (scaled_image_path, new_size)
-
     def get_fxd_title(self, fxd_file):
         fxd_info = ""
         parser = util.fxdparser.FXD(fxd_file)
