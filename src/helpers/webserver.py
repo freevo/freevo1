@@ -105,6 +105,7 @@ def main():
             (title, path) = item
             root.putChild(path.replace("/", "_"), static.File(path))
     root.putChild(config.TV_RECORD_DIR.replace("/", "_"), static.File(config.TV_RECORD_DIR))
+    root.putChild(config.FREEVO_CACHEDIR.replace("/", "_"), static.File(config.FREEVO_CACHEDIR))
     
     root.putChild('vhost', vhost.VHostMonsterResource())
     rewriter =  rewrite.RewriterResource(root, helpimagesrewrite)
