@@ -104,7 +104,7 @@ class View_Area(Skin_Area):
         addx = content.x + content.spacing
         addy = content.y + content.spacing
 
-        image, i_w, i_h = format_image(self.settings, item, width, height)
+        image, i_w, i_h = format_image(self.settings, item, width, height, 0, self.xml_settings.anamorphic)
 
         if not image:
             return

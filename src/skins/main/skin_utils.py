@@ -44,7 +44,7 @@ format_imagecache = util.objectcache.ObjectCache(30, desc='format_image')
 load_imagecache   = util.objectcache.ObjectCache(20, desc='load_image')
 
 
-def format_image(settings, item, width, height, force=0):
+def format_image(settings, item, width, height, force=0, anamorphic=0):
     try:
         type = item.display_type
     except:
@@ -151,6 +151,8 @@ def format_image(settings, item, width, height, force=0):
         type = type[:5]
         
     i_w, i_h = image.get_size()
+    if anamorphic:
+        i_w  = i_w * 0.75
     aspect   = float(i_h)/i_w
 
     if type == 'audio' and aspect < 1.3 and aspect > 0.8:

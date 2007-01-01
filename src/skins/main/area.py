@@ -677,6 +677,8 @@ class Skin_Area:
                 w = h  * cimage.get_width() / cimage.get_height()
             if h == -1:
                 h = w  * cimage.get_height() / cimage.get_width()
+            if self.xml_settings.anamorphic:
+                w = w * 0.75
             if w > 0 and h > 0:
                 cimage = pygame.transform.scale(cimage, (w, h))
             self.imagecache[cname] = cimage

@@ -30,6 +30,7 @@ This release has all the changes in Release 1.6.x plus
  * New Music Player Daemon (mpd) plug-in (F#1623023)
  * New RSS server, for getting podcasts, etc. (F#1580407)
  * New Shuttle VFD plug-in (F#1619761)
+ * New support for anamorphic skins (F#1625752)
  * New XM online plugin (F#1580412)
  * New weather helper to grab the weather using cron (F#1603052)
  * New webserver library, allows playing/viewing on your local machine (F#1592806)

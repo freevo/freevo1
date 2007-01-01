@@ -855,8 +855,9 @@ class XMLSkin:
         self.fxd_files        = []
 
         # variables set by set_var
-        self.all_variables    = ('box_under_icon', )
+        self.all_variables    = ('box_under_icon', 'anamorphic', )
         self.box_under_icon   = 0
+        self.anamorphic       = 0
 
         
     def parse(self, freevo_type, scale, c_dir):
