@@ -608,7 +608,7 @@ class LibraryResource(FreevoResource):
         return [int(new_width), int(new_height + 0.5)]
 
     def get_fit_to_square_size(self, size, new_size):
-        print 'get_fit_to_square_size(self, size=%s, new_size%s)' % (str(size), str(new_size))
+        print 'get_fit_to_square_size(self, size=%s, new_size=%s)' % (str(size), str(new_size))
         try:
             scaled_size = [new_size[0], new_size[1]]
             ### if aspect ratio > 1 then scale width
@@ -630,12 +630,8 @@ class LibraryResource(FreevoResource):
         variable.
         '''
         print 'get_scaled_image(self, filepath=%r, size=%s)' % (filepath, size)
-        threshold_size = [800, 600]
-        if hasattr(config, 'WWW_IMAGE_THRESHOLD'):
-            threshold_size = config.WWW_IMAGE_THRESHOLD
-        new_size = [200, 200]
-        if hasattr(config, 'WWW_IMAGE_SIZE'):
-            new_size = config.WWW_IMAGE_SIZE
+        threshold_size = config.WWW_IMAGE_THRESHOLD_SIZE
+        new_size = config.WWW_IMAGE_THUMBNAIL_SIZE
         new_size = self.get_fit_to_square_size(size, new_size)
         scaled_image_path = self.cache_dir + filepath.replace("/", "_").replace(".", "_") + ".jpg"
 
