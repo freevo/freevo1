@@ -545,9 +545,9 @@ def www_link_cachedir():
     '''returns the www link cache directory name
     if the directory does not exist it is created
     '''
-    cache_dir = '%s/link_cache/' % (config.WWW_CACHEDIR)
+    cache_dir = '%s/link_cache/' % (config.WEBSERVER_CACHEDIR)
     if not os.path.isdir(cache_dir):
-        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WWW_CACHEDIR)[stat.ST_MODE]))
+        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[stat.ST_MODE]))
     return cache_dir
 
 
@@ -555,9 +555,9 @@ def www_image_cachedir():
     '''returns the www image cache directory name
     if the directory does not exist it is created
     '''
-    cache_dir = '%s/image_cache/' % (config.WWW_CACHEDIR)
+    cache_dir = '%s/image_cache/' % (config.WEBSERVER_CACHEDIR)
     if not os.path.isdir(cache_dir):
-        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WWW_CACHEDIR)[stat.ST_MODE]))
+        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[stat.ST_MODE]))
     return cache_dir
 
 

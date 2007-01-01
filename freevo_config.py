@@ -1755,7 +1755,7 @@ WEBSERVER_GID = 0
 #
 # Webserver cache directory
 #
-WWW_CACHEDIR = FREEVO_CACHEDIR
+WEBSERVER_CACHEDIR = FREEVO_CACHEDIR
 
 #
 # Some sizes for the images in the web library

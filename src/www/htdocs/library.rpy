@@ -78,9 +78,9 @@ class LibraryResource(FreevoResource):
         '''
         print 'convert_dir(self, dir_str=%r)' % (dir_str)
         child_res = ""
-        ### if the file starts with WWW_CACHEDIR return converted file
-        if dir_str.startswith(config.WWW_CACHEDIR):
-            child_res = config.WWW_CACHEDIR
+        ### if the file starts with WEBSERVER_CACHEDIR return converted file
+        if dir_str.startswith(config.WEBSERVER_CACHEDIR):
+            child_res = config.WEBSERVER_CACHEDIR
         else:
             for i in range(len(self.allowed_dirs)):
                 val = self.allowed_dirs[i][1]
@@ -627,7 +627,7 @@ class LibraryResource(FreevoResource):
         size. May be in future the prefixed image size could be a config
         variable.
         '''
-        print 'get_scaled_image(self, filepath=%r, size=%s)' % (filepath, size)
+        print 'get_scaled_image_and_size(self, filepath=%r, size=%s)' % (filepath, str(size))
         threshold_size = config.WWW_IMAGE_THRESHOLD_SIZE
         new_size = config.WWW_IMAGE_THUMBNAIL_SIZE
         new_size = self.get_fit_to_square_size(size, new_size)
@@ -651,8 +651,6 @@ class LibraryResource(FreevoResource):
                 image = imlib2.open(filepath)
                 new_image = image.scale(new_size)
                 new_image.save(scaled_image_path)
-            else:
-                scaled_image_path = filepath
 
         scaled_image_path = self.convert_dir(scaled_image_path)
         return (scaled_image_path, new_size)

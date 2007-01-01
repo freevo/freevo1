@@ -206,7 +206,7 @@ def cache_www_thumbnails():
     import cStringIO
     import stat
 
-    print 'checking www thumbnails...............................',
+    print 'checking webserver thumbnails.........................',
     sys.__stdout__.flush()
 
     files = []

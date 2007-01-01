@@ -105,7 +105,7 @@ def main():
             (title, path) = item
             root.putChild(path.replace("/", "_"), static.File(path))
     root.putChild(config.TV_RECORD_DIR.replace("/", "_"), static.File(config.TV_RECORD_DIR))
-    root.putChild(config.WWW_CACHEDIR.replace("/", "_"), static.File(config.WWW_CACHEDIR))
+    root.putChild(config.WEBSERVER_CACHEDIR.replace("/", "_"), static.File(config.WEBSERVER_CACHEDIR))
     
     root.putChild('vhost', vhost.VHostMonsterResource())
     rewriter =  rewrite.RewriterResource(root, helpimagesrewrite)
