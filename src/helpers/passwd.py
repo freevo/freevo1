@@ -29,10 +29,28 @@
 # -----------------------------------------------------------------------
 
 import base64
-import md5
+import crypt
+import string
+import os
+import sys
 
-username_in = raw_input('Enter username:')
-password_in = raw_input('Enter password:')
-password = md5.new(password_in + username_in)
-username = md5.new(username_in + password_in)
-print("'%s' : '%s'" % (base64.b32encode(username.digest()), base64.b32encode(password.digest())))
+username = raw_input('Username: ')
+try:
+    os.system("stty -echo")
+    password1 = raw_input('Password: ')
+    password2 = raw_input('\nRetype Password: ')
+    os.system("stty echo")
+except KeyboardInterrupt, SystemExit:
+    print
+    os.system("stty echo")
+    sys.exit(0)
+
+if password1 != password2:
+    print "\nPasswords don't match; try again."
+    sys.exit(1)
+
+salt_chars = string.letters + string.digits + '/.'
+salt = [ salt_chars[ord(x) % len(salt_chars)] for x in os.urandom(8) ]
+cryptpass = crypt.crypt(password1, '$1$%s$' % "".join(salt))
+print "\n\nAdd this line to WWW_USERS in local_conf.py:"
+print "'%s' : '%s'" % (username, cryptpass)

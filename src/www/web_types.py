@@ -28,7 +28,8 @@
 #
 # -----------------------------------------------------------------------
 import base64
-import md5
+import crypt
+import re
 
 import os, sys, time
 
@@ -106,16 +107,15 @@ class FreevoResource(Resource):
         If authentication is successfull it returns True otherwise False.
         """
         print 'auth_user(self, username=\"%s\", password=\"%s\")' % (username, '******')
-        realpass = config.WWW_USERS.get(username)
-        if not realpass:
-            md5user = md5.new(username + password)
-            realpass = config.WWW_USERS.get(base64.b32encode(md5user.digest()))
-            md5pass = md5.new(password + username)
-            password = base64.b32encode(md5pass.digest())
-        if realpass == password:
-            return True
-        else:
+        cryptpass = config.WWW_USERS.get(username)
+        if not cryptpass:
             return False
+        m = re.match(r'^(\$1\$[a-zA-Z\d/.]{8}\$)', cryptpass)
+        if m:
+            # Password is in crypt()ed form.
+            return cryptpass == crypt.crypt(password, m.group(1))
+        # Assume password is stored as plaintext
+        return cryptpass == password
 
 
 
