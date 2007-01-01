@@ -452,7 +452,7 @@ class LibraryResource(FreevoResource):
                         title = util.mediainfo.get(item)['title']
                     if not title:
                         title = file
-                        
+
                     if i == 0:
                         fv.tableRowOpen('class="chanrow"')
                     status = 'basic'
@@ -603,29 +603,30 @@ class LibraryResource(FreevoResource):
             new_height = float(height) * (float(new_width) / float(width))
         except ZeroDivisionError:
             new_height = 200
-        return [int(new_width), int(new_height + 0.5)]
+        return (int(new_width), int(new_height + 0.5))
 
     def get_fit_to_square_size(self, size, new_size):
         print 'get_fit_to_square_size(self, size=%s, new_size=%s)' % (str(size), str(new_size))
         try:
-            scaled_size = [new_size[0], new_size[1]]
-            ### if aspect ratio > 1 then scale width
+            scaled_width = new_size[0]
+            scaled_height = new_size[1]
+            ### if aspect ratio > 1 then scale height
             if size[0] > size[1]:
-                scaled_size[1] = new_size[0] * size[1] / size[0]
-            ### else scale height to 200
+                scaled_height = scaled_width * size[1] / size[0]
+            ### else scale width
             else:
-                scaled_size[0] = new_size[1] * size[0] / size[1]
+                scaled_width = scaled_height * size[0] / size[1]
         except ZeroDivisionError:
             pass
-        return scaled_size
-    
+        return (scaled_width, scaled_height)
+
     def get_scaled_image_and_size(self, filepath, size):
         '''
         Returns the location of a scaled image and size of the scaled image
-        as a 2-tuple. Eg. ("/var/cache/freevo/test.jpg", [200, 150]).
-        The image will be scaled only if it larger than a certain prefixed
-        size. May be in future the prefixed image size could be a config
-        variable.
+        as a 2-tuple. Eg. ("/var/cache/freevo/test.jpg", (200, 150)).
+        The image will be scaled only if it larger than the threshold size
+        in config.WWW_IMAGE_THRESHOLD_SIZE. The scaled size will be limited
+        to the boundaries of config.WWW_IMAGE_THUMBNAIL_SIZE
         '''
         print 'get_scaled_image_and_size(self, filepath=%r, size=%s)' % (filepath, str(size))
         threshold_size = config.WWW_IMAGE_THRESHOLD_SIZE
