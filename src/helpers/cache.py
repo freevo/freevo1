@@ -7,11 +7,11 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -55,10 +55,12 @@ def delete_old_files_1():
     delete old files from previous versions of freevo which are not
     needed anymore
     """
+    #TODO Add WWW_LINK_CACHE and WWW_IMAGE_CACNE
     print 'deleting old cache files from older freevo version....',
     sys.__stdout__.flush()
     del_list = []
 
+    #for name in ('image-viewer-thumb.jpg', 'thumbnails', 'audio', 'mmpython', 'disc', 'image_cache', 'link_cache'):
     for name in ('image-viewer-thumb.jpg', 'thumbnails', 'audio', 'mmpython', 'disc'):
         if os.path.exists(os.path.join(config.FREEVO_CACHEDIR, name)):
             del_list.append(os.path.join(config.FREEVO_CACHEDIR, name))
@@ -75,13 +77,14 @@ def delete_old_files_1():
             util.rmrf(f)
         else:
             os.unlink(f)
-    print 'deleted %s file(s)' % len(del_list)
+    print 'deleted %s file%s' % (len(del_list), len(del_list) == 1 and '' or 's')
 
 
 def delete_old_files_2():
     """
     delete cachfiles/entries for files which don't exists anymore
     """
+    #TODO Add WWW_LINK_CACHE and WWW_IMAGE_CACNE
     print 'deleting old cachefiles...............................',
     sys.__stdout__.flush()
     num = 0
@@ -91,7 +94,7 @@ def delete_old_files_2():
         if not vfs.isfile(file[len(config.OVERLAY_DIR):-4]):
             os.unlink(file)
             num += 1
-    print 'deleted %s file(s)' % num
+    print 'deleted %s file%s' % (num, num == 1 and '' or 's')
 
     print 'deleting cache for directories not existing anymore...',
     subdirs = util.get_subdirs_recursively(config.OVERLAY_DIR)
@@ -119,7 +122,7 @@ def delete_old_files_2():
                 del data[key]
         util.save_pickle(data, filename)
     print 'done'
-    
+
 
 def cache_directories(rebuild):
     """
@@ -142,7 +145,7 @@ def cache_directories(rebuild):
         if os.path.isdir(d[1]):
             all_dirs.append(d[1])
     util.mediainfo.cache_recursive(all_dirs, verbose=True)
-    
+
 
 def cache_thumbnails():
     """
@@ -150,7 +153,7 @@ def cache_thumbnails():
     """
     import cStringIO
     import stat
-    
+
     print 'checking thumbnails...................................',
     sys.__stdout__.flush()
 
@@ -175,15 +178,15 @@ def cache_thumbnails():
         except OSError:
             pass
 
-        for bad_dir in ('.xvpics', '.thumbnails', '.pics'):
+        for bad_dir in ('.svn', '.xvpics', '.thumbnails', '.pics'):
             if filename.find('/' + bad_dir + '/') > 0:
                 try:
                     files.remove(filename)
                 except:
                     pass
-                
-    print '%s file(s)' % len(files)
-        
+
+    print '%s file%s' % (len(files), len(files) == 1 and '' or 's')
+
     for filename in files:
         fname = filename
         if len(fname) > 65:
@@ -195,7 +198,61 @@ def cache_thumbnails():
     if files:
         print
 
-    
+
+def cache_www_thumbnails():
+    """
+    cache all image files for web server by creating thumbnails
+    """
+    import cStringIO
+    import stat
+
+    print 'checking www thumbnails...............................',
+    sys.__stdout__.flush()
+
+    files = []
+    for d in config.VIDEO_ITEMS + config.AUDIO_ITEMS + config.IMAGE_ITEMS:
+        try:
+            d = d[1]
+        except:
+            pass
+        if not os.path.isdir(d):
+            continue
+        files += util.match_files_recursively(d, config.IMAGE_SUFFIX) + \
+                 util.match_files_recursively(vfs.getoverlay(d), config.IMAGE_SUFFIX)
+
+    cache_dir = util.fileops.www_image_cachedir()
+    files = util.misc.unique(files)
+    for filename in copy.copy(files):
+        sinfo = os.stat(filename)
+        filepath = filename.replace("/", "_").replace(".", "_") + ".jpg"
+        thumb = os.path.join(cache_dir, filepath)
+        try:
+            if os.stat(thumb)[stat.ST_MTIME] > sinfo[stat.ST_MTIME]:
+                files.remove(filename)
+        except OSError:
+            pass
+
+        for bad_dir in ('.svn', '.xvpics', '.thumbnails', '.pics'):
+            if filename.find('/' + bad_dir + '/') > 0:
+                try:
+                    files.remove(filename)
+                except:
+                    pass
+
+    print '%s file%s' % (len(files), len(files) == 1 and '' or 's')
+
+    for filename in files:
+        fname = filename
+        if len(fname) > 65:
+            fname = fname[:20] + ' [...] ' + fname[-40:]
+        print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), fname)
+
+        util.cache_www_image(filename)
+
+    if files:
+        print
+
+
 def create_metadata():
     """
     scan files and create metadata
@@ -229,7 +286,7 @@ def create_metadata():
         elif util.match_suffix(dir[1], fxditem.mimetype.suffix()):
             fxd.append(dir[1])
 
-    
+
     items = playlist.mimetype.get(None, util.misc.unique(pl))
 
     # ignore fxd files for now, they can't store metainfo
@@ -278,7 +335,7 @@ def create_metadata():
             rec = util.get_subdirs_recursively(d)
             subdirs['all'] += rec
             subdirs[type]  += rec
-                
+
     subdirs['all'] = util.misc.unique(subdirs['all'])
     subdirs['all'].sort(lambda l, o: cmp(l.upper(), o.upper()))
 
@@ -336,7 +393,7 @@ def print_error_and_exit():
     print
     print_help()
     sys.exit(1)
-    
+
 if __name__ == "__main__":
     os.umask(config.UMASK)
     if len(sys.argv)>1 and sys.argv[1] == '--help':
@@ -352,7 +409,7 @@ if __name__ == "__main__":
                 files = util.match_files_recursively(dirname, config.VIDEO_SUFFIX)
               else:
                 print_error_and_exit()
- 
+
           elif os.path.isdir(sys.argv[2]):
               dirname = os.path.abspath(sys.argv[2])
               files = util.match_files(dirname, config.VIDEO_SUFFIX)
@@ -406,7 +463,7 @@ if __name__ == "__main__":
                 print 'Cache too old, forcing rebuild'
                 rebuild = 2
                 complete_update = int(time.time())
-                
+
     except ImportError:
         print
         print 'Error: unable to read kaa.metadata version information'
@@ -418,14 +475,14 @@ if __name__ == "__main__":
         print
 
     start = time.clock()
-    
+
     activate_plugins = []
     for type in ('video', 'audio', 'image', 'games'):
         if plugin.is_active(type):
             # activate all mimetype plugins
             plugin.init_special_plugin(type)
             activate_plugins.append(type)
-            
+
     for type in 'VIDEO', 'AUDIO', 'IMAGE':
         for d in copy.copy(getattr(config, '%s_ITEMS' % type)):
             if not isstring(d):
@@ -441,13 +498,14 @@ if __name__ == "__main__":
 
     # we have time here, don't use exif thumbnails
     config.IMAGE_USE_EXIF_THUMBNAIL = 0
-    
+
     cache_directories(rebuild)
     if config.CACHE_IMAGES:
         cache_thumbnails()
+        cache_www_thumbnails()
     create_metadata()
     create_tv_pickle()
-    
+
 # close db
 util.mediainfo.sync()
 

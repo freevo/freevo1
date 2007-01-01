@@ -40,7 +40,7 @@ import fnmatch
 import traceback
 
 # image stuff
-import kaa.imlib2 as Image
+import kaa.imlib2 as imlib2
 from kaa.metadata.image import EXIF as exif
 
 
@@ -472,7 +472,7 @@ def create_thumbnail(filename, thumbnail=None):
 
     if thumbnail:
         try:
-            image = Image.open_from_memory(thumbnail)
+            image = imlib2.open_from_memory(thumbnail)
         except Exception, e:
             print 'Invalid thumbnail for %s' % filename
             if config.DEBUG:
@@ -486,7 +486,7 @@ def create_thumbnail(filename, thumbnail=None):
                 f.close()
                 
                 if tags.has_key('JPEGThumbnail'):
-                    image = Image.open_from_memory(tags['JPEGThumbnail'])
+                    image = imlib2.open_from_memory(tags['JPEGThumbnail'])
             except Exception, e:
                 print 'Error loading thumbnail %s' % filename
                 if config.DEBUG:
@@ -494,7 +494,7 @@ def create_thumbnail(filename, thumbnail=None):
 
         if not image or image.width < 100 or image.height < 100:
             try:
-                image = Image.open(filename)
+                image = imlib2.open(filename)
             except Exception, e:
                 print 'error caching image %s' % filename
                 if config.DEBUG:
@@ -540,3 +540,40 @@ def cache_image(filename, thumbnail=None, use_exif=False):
 
     return create_thumbnail(filename, thumbnail)
 
+
+def www_link_cachedir():
+    '''returns the www link cache directory name
+    if the directory does not exist it is created
+    '''
+    cache_dir = '%s/link_cache/' % (config.WWW_CACHEDIR)
+    if not os.path.isdir(cache_dir):
+        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WWW_CACHEDIR)[stat.ST_MODE]))
+    return cache_dir
+
+
+def www_image_cachedir():
+    '''returns the www image cache directory name
+    if the directory does not exist it is created
+    '''
+    cache_dir = '%s/image_cache/' % (config.WWW_CACHEDIR)
+    if not os.path.isdir(cache_dir):
+        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WWW_CACHEDIR)[stat.ST_MODE]))
+    return cache_dir
+
+
+def cache_www_image(filename):
+    '''cache an image for webservers
+    when the image is larger than WWW_IMAGE_THRESHOLD_SIZE then the image size
+    is returned. Otherwise the thumbnail size is returned
+    '''
+    threshold_size = config.WWW_IMAGE_THRESHOLD_SIZE
+    thumbnail_size = config.WWW_IMAGE_THUMBNAIL_SIZE
+    cache_dir = www_image_cache()
+    imagepath = filename.replace("/", "_").replace(".", "_") + ".jpg"
+    thumb_path = os.path.join(cache_dir, imagepath)
+    image = imlib2.open(filename)
+    thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
+    thumb.save(thumb_path)
+    if image.size[0] < threshold_image.size[0] and image.size[1] < threshold_image.size[1]:
+        return image.size
+    return thumb.size

@@ -53,9 +53,7 @@ class LibraryResource(FreevoResource):
 
     def __init__(self):
         print '__init__(self)'
-        self.cache_dir = '%s/image_cache/' % (config.FREEVO_CACHEDIR)
-        if not os.path.isdir(self.cache_dir):
-            os.mkdir(self.cache_dir, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
+        self.cache_dir = util.fileops.www_image_cachedir()
         self.allowed_dirs = []
         self.allowed_dirs.extend(config.VIDEO_ITEMS)
         self.allowed_dirs.extend(config.AUDIO_ITEMS)
@@ -80,9 +78,9 @@ class LibraryResource(FreevoResource):
         '''
         print 'convert_dir(self, dir_str=%r)' % (dir_str)
         child_res = ""
-        ### if the file starts with FREEVO_CACHEDIR return converted file
-        if dir_str.startswith(config.FREEVO_CACHEDIR):
-            child_res = config.FREEVO_CACHEDIR
+        ### if the file starts with WWW_CACHEDIR return converted file
+        if dir_str.startswith(config.WWW_CACHEDIR):
+            child_res = config.WWW_CACHEDIR
         else:
             for i in range(len(self.allowed_dirs)):
                 val = self.allowed_dirs[i][1]
