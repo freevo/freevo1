@@ -59,7 +59,7 @@ class WikiResource(FreevoResource):
             fv.printHeader(_('Freevo Documentation'), '/styles/main.css', prefix=request.path.count('/')-1)
             fv.res += '<div id="content">'
             fv.res += '<p class="alert">' + _('ERROR')+': '+(_('unable to load %s.html') % file)+'</p>\n'
-            fv.res += '<p class="normal">'+ _('If you use a CVS version of Freevo, run <b>autogen.sh</b>.')+'</p>\n'
+            fv.res += '<p class="normal">'+ _('If you use a svn version of Freevo, run <b>autogen.sh</b>.')+'</p>\n'
             fv.res += '</div>\n'
         else:
             pos = 0

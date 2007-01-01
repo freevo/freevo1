@@ -11,11 +11,11 @@
 # directory, but the user has no write access to it. It's meant to
 # store fxd and image files (covers).
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,7 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-            
+
 
 import os
 import copy
@@ -106,7 +106,7 @@ def mtime(name):
     except (OSError, IOError):
         return t
 
-    
+
 def open(name, mode='r'):
     """
     open the file
@@ -151,7 +151,7 @@ def codecs_open(name, mode, encoding):
         except IOError, e:
             print 'error opening file %s' % overlay
             raise IOError, e
-    
+
 
 def listdir(directory, handle_exception=True, include_dot_files=False,
             include_overlay=False):
@@ -161,16 +161,16 @@ def listdir(directory, handle_exception=True, include_dot_files=False,
     try:
         if not directory.endswith('/'):
             directory = directory + '/'
-            
+
         files = []
 
         if include_dot_files:
             for f in os.listdir(directory):
-                if not f in ('CVS', '.xvpics', '.thumbnails', '.pics', 'folder.fxd'):
+                if not f in ('.svn', '.xvpics', '.thumbnails', '.pics', 'folder.fxd'):
                     files.append(directory + f)
         else:
             for f in os.listdir(directory):
-                if not f.startswith('.') and not f in ('CVS', 'folder.fxd'):
+                if not f.startswith('.') and not f in ('folder.fxd'):
                     files.append(directory + f)
 
         if not include_overlay:
@@ -186,7 +186,7 @@ def listdir(directory, handle_exception=True, include_dot_files=False,
                 if not os.path.isdir(f):
                     files.append(f)
         return files
-    
+
     except OSError:
         _debug_('Error in dir %s' % directory)
         traceback.print_exc()
@@ -231,5 +231,3 @@ dirname  = os.path.dirname
 exists   = os.path.exists
 isdir    = os.path.isdir
 islink   = os.path.islink
-
-    

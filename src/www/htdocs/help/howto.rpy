@@ -82,7 +82,7 @@ class HowtoResource(FreevoResource):
             fv.printHeader(name, '/styles/main.css', prefix=request.path.count('/')-1)
             fv.res += '<div id="content">\n'
             fv.res += '<p class="alert">'+_('ERROR')+': '+_('unable to load html files')+'<br>'
-            fv.res += _('If you use a CVS version of Freevo, run <b>autogen.sh</b>.')+'</p>\n' + \
+            fv.res += _('If you use a svn version of Freevo, run <b>autogen.sh</b>.')+'</p>\n' + \
                       _('The files are searched in the following locations:')+'<ol>'
             for d in SEARCH_PATH:
                 fv.res += '<li>%s/%s</li>\n' % (d, TYPES[type][0])
