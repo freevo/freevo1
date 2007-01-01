@@ -454,6 +454,7 @@ class HTMLResource:
         then this displays a remote to control freevo 
         via the web browser
         """
+        print 'printWebRemote(self)'
         if not (config.ENABLE_NETWORK_REMOTE == 1 and config.REMOTE_CONTROL_PORT):
            self.res += "no remote enabled"
 
@@ -499,51 +500,19 @@ class HTMLResource:
                xmlHttp.open('GET', url, true);
                xmlHttp.send(null);
              }
+            
+            function openremote(){
+              var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,top=0,left=0";
+              remote = window.open("webremote.rpy","WebRemote",params);
+            }
            -->
            </script>
+        <br />
         <table border="0" cellspacing="0" cellpadding="0" class="remote">
-
-        <tr><td>&nbsp;</td>
-            <td class="remote"><button class="remote" accesskey="8" onClick="send_code('UP');">UP</button></td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr><td class="remote"><button class="remote" accesskey="6" onClick="send_code('LEFT');">&lt;LEFT</button></td>
-            <td class="remote"><button class="remote" accesskey="5" onClick="send_code('SELECT');">OK</button></td>
-            <td class="remote"><button class="remote" accesskey="4" onClick="send_code('RIGHT');">RIGHT&gt;</button></td>
-        </tr>
-        <tr><td>&nbsp;</td>
-            <td class="remote"><button class="remote" accesskey="2" onClick="send_code('DOWN');">DOWN</button></td>
-            <td>&nbsp;</td>
-        </tr>
-
-        <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
-
-        <tr><td class="remote"><button class="remote" accesskey="e" onClick="send_code('EXIT');">BACK</button></td>
-            <td class="remote"><button class="remote" accesskey="d" onClick="send_code('DISPLAY');">DISPLAY</button></td>
-            <td class="remote"><button class="remote" accesskey="m" onClick="send_code('MENU');">MENU</button></td>
-        </tr>
-
-        <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
-
         <tr><td class="remote"><button class="remote" accesskey="p" onClick="send_code('PLAY');">PLAY</button></td>
-            <td class="remote"><button class="remote" accesskey="s" onClick="send_code('STOP');">STOP</button></td>
-            <td class="remote"><button class="remote" accesskey="c" onClick="send_code('REC');" style="color:red">REC</button></td>
+          <td class="remote"><button class="remote" accesskey="u" onClick="send_code('PAUSE');">PAUSE</button></td> 
+          <td class="remote"><button class="remote" accesskey="s" onClick="send_code('STOP');">STOP</button></td>
         </tr>
-        <tr><td class="remote"><button class="remote" accesskey="r" onClick="send_code('REW');">&lt;REW</button></td>
-            <td class="remote"><button class="remote" accesskey="u" onClick="send_code('PAUSE');">PAUSE</button></td>
-            <td class="remote"><button class="remote" accesskey="f" onClick="send_code('FFWD');">FFWD&gt;</button></td>
-        </tr>
-
-        <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
-
-        <tr><td class="remote"><button class="remote" accesskey="+" onClick="send_code('VOLP');">VOL+</button></td>
-            <td class="remote"><button class="remote" accesskey="m" onClick="send_code('MUTE');">MUTE</button></td>
-            <td class="remote"><button class="remote" accesskey="c" onClick="send_code('CHP');">CH+</button></td>
-        </tr>
-        <tr><td class="remote"><button class="remote" accesskey="-" onClick="send_code('VOLM');">VOL-</button></td>
-            <td class="remote">&nbsp;</td>
-            <td class="remote"><button class="remote" accesskey="v" onClick="send_code('CHM');">CH-</button></td>
-        </tr>
-
+        <tr><td colspan="3" align="center"><a href="javascript:openremote()">Freevo WebRemote</a></td></tr>
         </table>
         """

@@ -88,6 +88,7 @@ class IndexResource(FreevoResource):
         diskfree = _('%i of %i Mb free in %s')  % ( (( util.freespace(config.TV_RECORD_DIR) / 1024) / 1024), ((util.totalspace(config.TV_RECORD_DIR) /1024) /1024), config.TV_RECORD_DIR)
         fv.res += '<p class="normal">' + diskfree + '</p>\n'
         fv.res += '</div>'
+        fv.printWebRemote()
         fv.printSearchForm()
         #fv.printLinks()
         fv.printFooter()
