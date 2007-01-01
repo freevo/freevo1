@@ -620,6 +620,7 @@
         <font label="tv selected" name="Arial_Bold" size="14" color="0x164668">
             <shadow visible="no" color="0x000000" border="yes"/>
         </font>
+        <font label="tv grey" name="Arial_Bold" size="14" color="0xa0bbbbbb"/>
         <font label="tv time" name="Arial_Bold" size="14" color="0xffffff"/>
         <font label="tv title" name="Arial_Bold" size="16" color="0xffffff"/>
 
