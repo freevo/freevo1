@@ -564,7 +564,7 @@ def cache_recursive(dirlist, verbose=False):
     for dir in dirlist:
         for dirname in util.get_subdirs_recursively(dir):
             if not dirname in all_dirs and \
-               not os.path.basename(dirname) in ('.xvpics', '.thumbnails', 'CVS'):
+               not os.path.basename(dirname) in ('.xvpics', '.thumbnails', '.svn'):
                 all_dirs.append(dirname)
         if not dir in all_dirs:
             all_dirs.append(dir)
@@ -807,7 +807,7 @@ if __freevo_app__ == 'main':
         print
         print 'Error: unable to read mmpython version information'
         print 'Please update kaa.metadata to the latest release or if you use'
-        print 'Freevo CVS versions, please also use kaa.metadata CVS.'
+        print 'Freevo svn versions, please also use kaa.metadata svn.'
         print
         print 'Some functions in Freevo may not work or even crash!'
         print
