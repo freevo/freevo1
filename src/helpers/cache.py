@@ -77,7 +77,7 @@ def delete_old_files_1():
             util.rmrf(f)
         else:
             os.unlink(f)
-    print 'deleted %s file%s' % (len(del_list), len(del_list) == 1 and '' or 's')
+    print 'deleted %s file%s' % (len(del_list), len(del_list) != 1 and 's' or '')
 
 
 def delete_old_files_2():
@@ -94,7 +94,7 @@ def delete_old_files_2():
         if not vfs.isfile(file[len(config.OVERLAY_DIR):-4]):
             os.unlink(file)
             num += 1
-    print 'deleted %s file%s' % (num, num == 1 and '' or 's')
+    print 'deleted %s file%s' % (num, num != 1 and 's' or '')
 
     print 'deleting cache for directories not existing anymore...',
     subdirs = util.get_subdirs_recursively(config.OVERLAY_DIR)
@@ -185,7 +185,7 @@ def cache_thumbnails():
                 except:
                     pass
 
-    print '%s file%s' % (len(files), len(files) == 1 and '' or 's')
+    print '%s file%s' % (len(files), len(files) != 1 and 's' or '')
 
     for filename in files:
         fname = filename
@@ -239,7 +239,7 @@ def cache_www_thumbnails():
                 except:
                     pass
 
-    print '%s file%s' % (len(files), len(files) == 1 and '' or 's')
+    print '%s file%s' % (len(files), len(files) != 1 and 's' or '')
 
     for filename in files:
         fname = filename

@@ -568,12 +568,9 @@ def cache_www_image(filename):
     '''
     threshold_size = config.WWW_IMAGE_THRESHOLD_SIZE
     thumbnail_size = config.WWW_IMAGE_THUMBNAIL_SIZE
-    cache_dir = www_image_cache()
     imagepath = filename.replace("/", "_").replace(".", "_") + ".jpg"
-    thumb_path = os.path.join(cache_dir, imagepath)
+    thumb_path = os.path.join(www_image_cachedir(), imagepath)
     image = imlib2.open(filename)
     thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
     thumb.save(thumb_path)
-    if image.size[0] < threshold_image.size[0] and image.size[1] < threshold_image.size[1]:
-        return image.size
     return thumb.size
