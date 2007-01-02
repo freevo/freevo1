@@ -5,7 +5,8 @@
 # $Id$
 #
 # Notes:
-# Todo:
+# Todo: Graphical design to resemble a real remote control
+#       Normal key presses to actviate the functions
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -143,9 +144,9 @@ class WebRemoteResource(FreevoResource):
     <td><button class="remote" accesskey="8" onClick="send_code('UP');">UP</button></td>
     <td>&nbsp;</td>
 </tr>
-<tr><td><button class="remote" accesskey="6" onClick="send_code('LEFT');">&lt;LEFT</button></td>
+<tr><td><button class="remote" accesskey="4" onClick="send_code('LEFT');">&lt;LEFT</button></td>
     <td><button class="remote" accesskey="5" onClick="send_code('SELECT');">OK</button></td>
-    <td><button class="remote" accesskey="4" onClick="send_code('RIGHT');">RIGHT&gt;</button></td>
+    <td><button class="remote" accesskey="6" onClick="send_code('RIGHT');">RIGHT&gt;</button></td>
 </tr>
 <tr><td>&nbsp;</td>
     <td><button class="remote" accesskey="2" onClick="send_code('DOWN');">DOWN</button></td>
@@ -154,20 +155,29 @@ class WebRemoteResource(FreevoResource):
 
 <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
 
-<tr><td><button class="remote" accesskey="e" onClick="send_code('EXIT');">BACK</button></td>
+<tr><td><button class="remote" accesskey="x" onClick="send_code('EXIT');">BACK</button></td>
+    <td><button class="remote" accesskey="e" onClick="send_code('ENTER');">ENTER</button></td>
     <td><button class="remote" accesskey="d" onClick="send_code('DISPLAY');">DISPLAY</button></td>
-    <td><button class="remote" accesskey="m" onClick="send_code('MENU');">MENU</button></td>
 </tr>
+<tr><td><button class="remote" accesskey="m" onClick="send_code('MENU');">MENU</button></td>
+    <td><button class="remote" accesskey="c" onClick="send_code('REC');" style="color:red">REC</button></td>
+    <td><button class="remote" accesskey="j" onClick="send_code('EJECT');">EJECT</button></td>
+</tr>
+
 
 <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
 
-<tr><td><button class="remote" accesskey="p" onClick="send_code('PLAY');">PLAY</button></td>
-    <td><button class="remote" accesskey="s" onClick="send_code('STOP');">STOP</button></td>
-    <td><button class="remote" accesskey="c" onClick="send_code('REC');" style="color:red">REC</button></td>
+<tr><td>&nbsp;</td>
+    <td><button class="remote" accesskey="p" onClick="send_code('PLAY');">PLAY</button></td>
+    <td>&nbsp;</td>
 </tr>
-<tr><td><button class="remote" accesskey="r" onClick="send_code('REW');">&lt;REW</button></td>
+<tr><td><button class="remote" accesskey="r" onClick="send_code('REW');">&lt;&lt;REW</button></td>
     <td><button class="remote" accesskey="u" onClick="send_code('PAUSE');">PAUSE</button></td>
-    <td><button class="remote" accesskey="f" onClick="send_code('FFWD');">FFWD&gt;</button></td>
+    <td><button class="remote" accesskey="f" onClick="send_code('FFWD');">FFWD&gt;&gt;</button></td>
+</tr>
+<tr><td>&nbsp;</td>
+    <td><button class="remote" accesskey="s" onClick="send_code('STOP');">STOP</button></td>
+    <td>&nbsp;</td>
 </tr>
 
 <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
