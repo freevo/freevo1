@@ -465,7 +465,7 @@ class LibraryResource(FreevoResource):
                     ### show image
                     if action_mediatype == "images":
                         size = (info['width'], info['height'])
-                        (scaled_image, new_size) = self.get_scaled_image_and_size(filepath, size)
+                        (scaled_image, new_size) = self.get_scaled_image_and_size(item, size)
                         image_link = self.convert_dir(filepath)
                         fv.tableCell('<div class="image"><a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
                             +'<img src="'+scaled_image+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" />'\
