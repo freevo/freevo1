@@ -277,6 +277,19 @@ class MenuWidget(GUIObject):
                     self.refresh()
                     self.eventhandler(MENU_SELECT)
                     return
+        elif media == 'tv.guide':
+            menu.selected = self.all_items[len(self.menustack[0].choices)-1]
+            for menuitem in self.menustack[0].choices:
+                try:
+                    if menuitem.arg == ('tv', 0):
+                        menu.selected = menuitem
+                        self.refresh()
+                        self.eventhandler(MENU_SELECT)
+                        self.refresh()
+                        self.eventhandler(MENU_SELECT)
+                        return
+                except:
+                    return
         level = 0
         for mediaitem in media.split('.'):
             for menuitem in self.menustack[level].choices:
