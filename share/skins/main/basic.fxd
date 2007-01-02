@@ -506,6 +506,10 @@
 			y="-5" width="max+10" height="max+10"/>
 		</item>
 
+                <item type="current" font="tv highlight">
+                    <rectangle bgcolor="0xff000000" color="0x000000" size="1" x="-5" y="-5" width="max+10" height="max+10"/>
+                </item>
+		
                 <item type="past" font="tv grey">
                     <rectangle bgcolor="0xff000000" color="0x000000" size="1" x="-5" y="-5" width="max+10" height="max+10"/>
                 </item>
@@ -647,6 +651,7 @@
 	    <shadow visible="yes" color="0x000000" x="1" y="1"/>
 	</font>
         <font label="tv grey" name="VeraBd.ttf" size="16" color="0xa0bbbbbb"/>
+        <font label="tv highlight" name="VeraBd.ttf" size="16" color="0xa0eeee00"/>
 	<font label="tv time" name="VeraBd.ttf" size="14" color="0xffffaa"/>
 	<font label="tv title" name="VeraBd.ttf" size="24" color="0xffffff">
 	    <shadow x="2" y="2" color="0x000000" visible="yes"/>

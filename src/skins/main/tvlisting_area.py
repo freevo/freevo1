@@ -77,8 +77,10 @@ class TVListing_Area(Skin_Area):
         scheduled_val = content.types['scheduled']
         overlap_val   = content.types['overlap']
         past_val      = content.types['past']
+        current_val   = content.types['current']
 
-        self.all_vals = label_val, head_val, selected_val, default_val, scheduled_val, overlap_val, past_val
+        self.all_vals = label_val, head_val, selected_val, default_val, scheduled_val, overlap_val,\
+                        past_val, current_val
         
         font_h = max(selected_val.font.h, default_val.font.h, label_val.font.h)
 
@@ -169,7 +171,8 @@ class TVListing_Area(Skin_Area):
         font_h, label_width, label_txt_width, y0, num_rows, item_h, head_h = \
                 self.get_items_geometry(settings, menu)[:-1]
 
-        label_val, head_val, selected_val, default_val, scheduled_val, overlap_val, past_val = self.all_vals
+        label_val, head_val, selected_val, default_val, scheduled_val, overlap_val,\
+        past_val, current_val = self.all_vals
 
         leftarrow = None
         if area.images['leftarrow']:
@@ -323,7 +326,9 @@ class TVListing_Area(Skin_Area):
                         val = overlap_val
                     elif prg.scheduled:
                         val = scheduled_val
-                    elif prg.start < now_time:
+                    elif now_time >= prg.start and now_time <= prg.stop:
+                        val = current_val
+                    elif now_time > prg.stop:
                         val = past_val
                     else:
                         val = default_val
