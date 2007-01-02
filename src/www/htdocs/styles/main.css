@@ -98,6 +98,16 @@ TD.heading {
 TD.basic { 
     background: #2A577E; 
     color: white; 
+    text-align: left; 
+    border: none;
+}
+
+img.folder {
+    border: none;
+}
+TD.back { 
+    background: #2A577E; 
+    color: white; 
     text-align: left 
 }
 
@@ -124,12 +134,48 @@ TD.tablelink a { text-decoration: none;
                  padding-right: 1em; 
                  }
 
+TD.item { 
+    background: #2A577E; 
+    color: white; 
+    text-align: left 
+    border: none;
+}
 
-td.favorite a, td.scheduled a, td.basic a { color: white;
+div.item a {
+    background: #0B1C52;
+    color: white;
+}
+
+div.image a:hover {
+    color:#cccccc;
+}
+
+div.image { 
+    background: #0B1C52; 
+    color: white; 
+    text-align: center;
+    float: left;
+    margin:             9px;
+    padding:            16px;
+    border:             3px outset #0B1C52;
+    -moz-border-radius: 9px;
+}
+
+td.favorite a, td.scheduled a, td.back a { color: white;
                  border: none; }
 
-td.favorite a:hover, td.scheduled a:hover, td.basic a:hover { color: white;
+
+td.favorite a, td.scheduled a, td.back a { color: white;
+                 border: none; }
+
+td.favorite a:hover, td.scheduled a:hover, td.back a:hover { color: white;
                  border-bottom: 1px solid #fff ; }
+
+td.basic a { color: white;
+                 border: none; }
+
+td.basic a:hover { color: #cccccc;
+                 border: none;}
 
 
 TD.favorite { 

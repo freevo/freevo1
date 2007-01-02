@@ -442,7 +442,10 @@ class HTMLResource:
         print 'printImagePopup(self)'
         self.res += """<script language="JavaScript" type="text/javascript" style="display:none;">
         function openfoto(loc,width,height){
-            var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,top=0,left=0,width="+width+",height="+height;
+            if (width >= screen.width || height >= screen.height) {
+                scrollbars = 'yes';
+            }
+            var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars="+scrollbars+",top=0,left=0,width="+width+",height="+height;
             foto = window.open("fileinfo.rpy?img="+loc,"Images",params);
         }
         </script> """
@@ -470,6 +473,7 @@ class HTMLResource:
            <!--
              // AJAX Functions
              var xmlHttp = false;
+             var remoteWin = 0;
 
              function getXMLHttpObject () {
                if (window.XMLHttpRequest) {
@@ -502,8 +506,11 @@ class HTMLResource:
              }
             
             function openremote(){
+              if(remoteWin) {
+                if(!remoteWin.closed) {remoteWin.focus();}
+                }
               var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,top=0,left=0";
-              remote = window.open("webremote.rpy","WebRemote",params);
+              remoteWin = window.open("webremote.rpy","WebRemote",params);
             }
            -->
            </script>
