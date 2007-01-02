@@ -359,6 +359,7 @@ msgstr "Heu d'executar el connector \"lcd\"."
 #: share/skins/main/mediaportal.fxd:690 share/skins/main/dark.fxd:536
 #: share/skins/main/dark.fxd:753 share/skins/main/basic.fxd:391
 #: share/skins/main/blurr.fxd:700 share/skins/main/info.fxd:218
+#: share/skins/main/blurr.fxd:702 share/skins/main/mediaportal.fxd:692
 msgid "Length"
 msgstr "Durada"
 
@@ -374,12 +375,14 @@ msgstr "Artista"
 #: share/skins/main/dark.fxd:526 share/skins/main/dark.fxd:738
 #: share/skins/main/basic.fxd:373 share/skins/main/blurr.fxd:677
 #: share/skins/main/info.fxd:207 share/skins/main/info.fxd:361
+#: share/skins/main/blurr.fxd:679 share/skins/main/mediaportal.fxd:673
 msgid "Album"
 msgstr "Àlbum"
 
 #: plugins/lcd.py:70 plugins/lcd.py:74 plugins/vfd.py:94 plugins/vfd.py:98
 #: share/skins/main/mediaportal.fxd:677 share/skins/main/dark.fxd:446
 #: share/skins/main/blurr.fxd:683 share/skins/main/info.fxd:458
+#: share/skins/main/blurr.fxd:685 share/skins/main/mediaportal.fxd:679
 msgid "Year"
 msgstr "Any"
 
@@ -458,18 +461,21 @@ msgstr "Gènere"
 #: www/htdocs/favorites.rpy:100 www/htdocs/search.rpy:89
 #: tv/edit_favorite.py:112 share/skins/main/basic.fxd:552
 #: share/skins/main/basic.fxd:583 share/skins/main/basic.fxd:614
+#: share/skins/main/basic.fxd:565 share/skins/main/basic.fxd:596
+#: share/skins/main/basic.fxd:627
 msgid "Channel"
 msgstr "Canal"
 
 #: plugins/lcd.py:257 plugins/lcd.py:585 www/htdocs/edit_favorite.rpy:127
 #: www/htdocs/favorites.rpy:99 share/skins/main/basic.fxd:608
+#: share/skins/main/basic.fxd:621
 msgid "Program"
 msgstr "Programa"
 
 #: plugins/lcd.py:260 www/htdocs/guide.rpy:156
 #: share/skins/main/crystal.fxd:272 share/skins/main/bluestar.fxd:292
 #: share/skins/main/basic.fxd:595 share/skins/main/noia.fxd:95
-#: share/skins/main/rain.fxd:269
+#: share/skins/main/rain.fxd:269 share/skins/main/basic.fxd:608
 msgid "Time"
 msgstr "Hora"
 
@@ -1347,11 +1353,13 @@ msgstr "Aquest canal no té dades carregades"
 
 #: www/htdocs/guide.rpy:271 www/htdocs/genre.rpy:203
 #: share/skins/main/basic.fxd:558 share/skins/main/basic.fxd:620
+#: share/skins/main/basic.fxd:571 share/skins/main/basic.fxd:633
 msgid "Start"
 msgstr "Engega"
 
 #: www/htdocs/guide.rpy:272 www/htdocs/genre.rpy:204
 #: share/skins/main/basic.fxd:564 share/skins/main/basic.fxd:626
+#: share/skins/main/basic.fxd:577 share/skins/main/basic.fxd:639
 msgid "Stop"
 msgstr "Surt"
 
@@ -1924,7 +1932,7 @@ msgid "Please check the config file."
 msgstr "Comproveu el fitxer de configuració."
 
 #: tv/edit_favorite.py:104 share/skins/main/basic.fxd:577
-#: share/skins/main/info.fxd:269
+#: share/skins/main/info.fxd:269 share/skins/main/basic.fxd:590
 msgid "Name"
 msgstr "Nom"
 
@@ -3029,7 +3037,8 @@ msgstr "kb/s"
 #: share/skins/main/mediaportal.fxd:203 share/skins/main/mediaportal.fxd:683
 #: share/skins/main/dark.fxd:748 share/skins/main/basic.fxd:384
 #: share/skins/main/blurr.fxd:201 share/skins/main/blurr.fxd:308
-#: share/skins/main/blurr.fxd:689
+#: share/skins/main/blurr.fxd:689 share/skins/main/blurr.fxd:691
+#: share/skins/main/mediaportal.fxd:685
 msgid "Track"
 msgstr "Pista"
 
@@ -3054,6 +3063,7 @@ msgstr "Música i altres sons"
 
 #: share/skins/main/mediaportal.fxd:696 share/skins/main/dark.fxd:758
 #: share/skins/main/basic.fxd:397 share/skins/main/blurr.fxd:706
+#: share/skins/main/blurr.fxd:708 share/skins/main/mediaportal.fxd:698
 msgid "Elapsed"
 msgstr "Transcorregut"
 
@@ -3070,7 +3080,7 @@ msgstr "Pel·lícula"
 msgid "Link"
 msgstr "Enllaç"
 
-#: share/skins/main/basic.fxd:589
+#: share/skins/main/basic.fxd:589 share/skins/main/basic.fxd:602
 msgid "Day"
 msgstr "Dia"
 
@@ -3157,6 +3167,7 @@ msgid "Look at Pictures"
 msgstr "Fotos i altres Imatges"
 
 #: share/skins/main/mediaportal.fxd:224 share/skins/main/blurr.fxd:222
+#: share/skins/main/info.fxd:317
 msgid "Chapters"
 msgstr "Capítols"
 

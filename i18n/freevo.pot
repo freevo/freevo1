@@ -20,6 +20,7 @@ msgstr ""
 #: www/htdocs/manualrecord.rpy:219 www/htdocs/record.rpy:114
 #: www/htdocs/search.rpy:90 tv/edit_favorite.py:110
 #: share/skins/main/info.fxd:390
+#: share/skins/main/info.fxd:390
 msgid "Title"
 msgstr ""
 
@@ -33,6 +34,14 @@ msgid "Author"
 msgstr ""
 
 #: ../freevo_config.py:1051 plugins/lcd.py:83 plugins/vfd.py:107
+#: share/skins/main/dark.fxd:590
+#: share/skins/main/dark.fxd:664
+#: share/skins/main/dark.fxd:685
+#: share/skins/main/crystal.fxd:269
+#: share/skins/main/bluestar.fxd:289
+#: share/skins/main/noia.fxd:92
+#: share/skins/main/rain.fxd:266
+#: share/skins/main/info.fxd:331
 #: share/skins/main/dark.fxd:590
 #: share/skins/main/dark.fxd:664
 #: share/skins/main/dark.fxd:685
@@ -119,6 +128,10 @@ msgstr ""
 #: share/skins/main/crystal.fxd:14
 #: share/skins/main/bluestar.fxd:14
 #: share/skins/main/rain.fxd:14
+#: share/skins/main/dark.fxd:21
+#: share/skins/main/crystal.fxd:14
+#: share/skins/main/bluestar.fxd:14
+#: share/skins/main/rain.fxd:14
 msgid "Headlines"
 msgstr ""
 
@@ -153,6 +166,7 @@ msgid "Unknown"
 msgstr ""
 
 #: plugins/weather.py:609
+#: share/skins/main/bluestar.fxd:12
 #: share/skins/main/bluestar.fxd:12
 msgid "Weather"
 msgstr ""
@@ -357,11 +371,22 @@ msgstr ""
 #: share/skins/main/basic.fxd:391
 #: share/skins/main/blurr.fxd:700
 #: share/skins/main/info.fxd:218
+#: share/skins/main/blurr.fxd:702
+#: share/skins/main/mediaportal.fxd:692
+#: share/skins/main/dark.fxd:536
+#: share/skins/main/dark.fxd:753
+#: share/skins/main/basic.fxd:391
+#: share/skins/main/info.fxd:218
 msgid "Length"
 msgstr ""
 
 #: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183 plugins/vfd.py:92
 #: plugins/vfd.py:96
+#: share/skins/main/dark.fxd:520
+#: share/skins/main/dark.fxd:733
+#: share/skins/main/info.fxd:201
+#: share/skins/main/info.fxd:356
+#: share/skins/main/info.fxd:396
 #: share/skins/main/dark.fxd:520
 #: share/skins/main/dark.fxd:733
 #: share/skins/main/info.fxd:201
@@ -379,6 +404,13 @@ msgstr ""
 #: share/skins/main/blurr.fxd:677
 #: share/skins/main/info.fxd:207
 #: share/skins/main/info.fxd:361
+#: share/skins/main/blurr.fxd:679
+#: share/skins/main/mediaportal.fxd:673
+#: share/skins/main/dark.fxd:526
+#: share/skins/main/dark.fxd:738
+#: share/skins/main/basic.fxd:373
+#: share/skins/main/info.fxd:207
+#: share/skins/main/info.fxd:361
 msgid "Album"
 msgstr ""
 
@@ -387,6 +419,10 @@ msgstr ""
 #: share/skins/main/dark.fxd:446
 #: share/skins/main/blurr.fxd:683
 #: share/skins/main/info.fxd:458
+#: share/skins/main/blurr.fxd:685
+#: share/skins/main/mediaportal.fxd:679
+#: share/skins/main/dark.fxd:446
+#: share/skins/main/info.fxd:458
 msgid "Year"
 msgstr ""
 
@@ -394,10 +430,16 @@ msgstr ""
 #: share/skins/main/mediaportal.fxd:330
 #: share/skins/main/blurr.fxd:338
 #: share/skins/main/info.fxd:401
+#: share/skins/main/blurr.fxd:338
+#: share/skins/main/mediaportal.fxd:330
+#: share/skins/main/info.fxd:401
 msgid "Tracks"
 msgstr ""
 
 #: plugins/lcd.py:76 plugins/vfd.py:100
+#: share/skins/main/dark.fxd:476
+#: share/skins/main/info.fxd:287
+#: share/skins/main/info.fxd:493
 #: share/skins/main/dark.fxd:476
 #: share/skins/main/info.fxd:287
 #: share/skins/main/info.fxd:493
@@ -418,6 +460,7 @@ msgid "Plot"
 msgstr ""
 
 #: plugins/lcd.py:82 plugins/vfd.py:106
+#: share/skins/main/dark.fxd:581
 #: share/skins/main/dark.fxd:581
 msgid "Geometry"
 msgstr ""
@@ -444,6 +487,9 @@ msgstr ""
 #: share/skins/main/dark.fxd:470
 #: share/skins/main/info.fxd:282
 #: share/skins/main/info.fxd:487
+#: share/skins/main/dark.fxd:470
+#: share/skins/main/info.fxd:282
+#: share/skins/main/info.fxd:487
 msgid "Type"
 msgstr ""
 
@@ -453,6 +499,11 @@ msgstr ""
 
 #: plugins/lcd.py:177 plugins/lcd.py:527 www/htdocs/library.rpy:268
 #: www/htdocs/library-djw.rpy:330
+#: share/skins/main/dark.fxd:18
+#: share/skins/main/crystal.fxd:9
+#: share/skins/main/bluestar.fxd:9
+#: share/skins/main/basic.fxd:21
+#: share/skins/main/rain.fxd:9
 #: share/skins/main/dark.fxd:18
 #: share/skins/main/crystal.fxd:9
 #: share/skins/main/bluestar.fxd:9
@@ -468,6 +519,8 @@ msgstr ""
 #: plugins/lcd.py:221
 #: share/skins/main/dark.fxd:452
 #: share/skins/main/info.fxd:464
+#: share/skins/main/dark.fxd:452
+#: share/skins/main/info.fxd:464
 msgid "Genre"
 msgstr ""
 
@@ -478,12 +531,16 @@ msgstr ""
 #: share/skins/main/basic.fxd:552
 #: share/skins/main/basic.fxd:583
 #: share/skins/main/basic.fxd:614
+#: share/skins/main/basic.fxd:565
+#: share/skins/main/basic.fxd:596
+#: share/skins/main/basic.fxd:627
 msgid "Channel"
 msgstr ""
 
 #: plugins/lcd.py:257 plugins/lcd.py:585 www/htdocs/edit_favorite.rpy:127
 #: www/htdocs/favorites.rpy:99
 #: share/skins/main/basic.fxd:608
+#: share/skins/main/basic.fxd:621
 msgid "Program"
 msgstr ""
 
@@ -491,6 +548,11 @@ msgstr ""
 #: share/skins/main/crystal.fxd:272
 #: share/skins/main/bluestar.fxd:292
 #: share/skins/main/basic.fxd:595
+#: share/skins/main/noia.fxd:95
+#: share/skins/main/rain.fxd:269
+#: share/skins/main/crystal.fxd:272
+#: share/skins/main/bluestar.fxd:292
+#: share/skins/main/basic.fxd:608
 #: share/skins/main/noia.fxd:95
 #: share/skins/main/rain.fxd:269
 msgid "Time"
@@ -549,6 +611,12 @@ msgid "Image"
 msgstr ""
 
 #: plugins/mediamenu.py:135
+#: share/skins/main/dark.fxd:20
+#: share/skins/main/crystal.fxd:13
+#: share/skins/main/bluestar.fxd:13
+#: share/skins/main/basic.fxd:23
+#: share/skins/main/rain.fxd:13
+#: share/skins/main/info.fxd:16
 #: share/skins/main/dark.fxd:20
 #: share/skins/main/crystal.fxd:13
 #: share/skins/main/bluestar.fxd:13
@@ -724,6 +792,9 @@ msgid "Command Completed"
 msgstr ""
 
 #: plugins/command.py:282 plugins/command.py:320
+#: share/skins/main/dark.fxd:22
+#: share/skins/main/crystal.fxd:15
+#: share/skins/main/rain.fxd:15
 #: share/skins/main/dark.fxd:22
 #: share/skins/main/crystal.fxd:15
 #: share/skins/main/rain.fxd:15
@@ -1235,6 +1306,7 @@ msgstr ""
 
 #: www/htdocs/record.rpy:115 www/htdocs/search.rpy:91
 #: share/skins/main/info.fxd:263
+#: share/skins/main/info.fxd:263
 msgid "Episode"
 msgstr ""
 
@@ -1359,16 +1431,24 @@ msgstr ""
 #: www/htdocs/guide.rpy:271 www/htdocs/genre.rpy:203
 #: share/skins/main/basic.fxd:558
 #: share/skins/main/basic.fxd:620
+#: share/skins/main/basic.fxd:571
+#: share/skins/main/basic.fxd:633
 msgid "Start"
 msgstr ""
 
 #: www/htdocs/guide.rpy:272 www/htdocs/genre.rpy:204
 #: share/skins/main/basic.fxd:564
 #: share/skins/main/basic.fxd:626
+#: share/skins/main/basic.fxd:577
+#: share/skins/main/basic.fxd:639
 msgid "Stop"
 msgstr ""
 
 #: www/htdocs/guide.rpy:273 www/htdocs/genre.rpy:205
+#: share/skins/main/dark.fxd:464
+#: share/skins/main/info.fxd:277
+#: share/skins/main/info.fxd:302
+#: share/skins/main/info.fxd:481
 #: share/skins/main/dark.fxd:464
 #: share/skins/main/info.fxd:277
 #: share/skins/main/info.fxd:302
@@ -1520,6 +1600,11 @@ msgstr ""
 #: share/skins/main/bluestar.fxd:8
 #: share/skins/main/basic.fxd:20
 #: share/skins/main/rain.fxd:8
+#: share/skins/main/dark.fxd:17
+#: share/skins/main/crystal.fxd:8
+#: share/skins/main/bluestar.fxd:8
+#: share/skins/main/basic.fxd:20
+#: share/skins/main/rain.fxd:8
 msgid "Movies"
 msgstr ""
 
@@ -1528,6 +1613,10 @@ msgid "Recorded TV"
 msgstr ""
 
 #: www/htdocs/library.rpy:272 www/htdocs/library-djw.rpy:334
+#: share/skins/main/dark.fxd:19
+#: share/skins/main/crystal.fxd:11
+#: share/skins/main/basic.fxd:22
+#: share/skins/main/rain.fxd:11
 #: share/skins/main/dark.fxd:19
 #: share/skins/main/crystal.fxd:11
 #: share/skins/main/basic.fxd:22
@@ -1937,6 +2026,8 @@ msgstr ""
 
 #: tv/edit_favorite.py:104
 #: share/skins/main/basic.fxd:577
+#: share/skins/main/info.fxd:269
+#: share/skins/main/basic.fxd:590
 #: share/skins/main/info.fxd:269
 msgid "Name"
 msgstr ""
@@ -2825,6 +2916,12 @@ msgstr ""
 #: share/skins/main/bluestar.fxd:15
 #: share/skins/main/basic.fxd:24
 #: share/skins/main/rain.fxd:16
+#: share/skins/main/mediaportal.fxd:446
+#: share/skins/main/dark.fxd:24
+#: share/skins/main/crystal.fxd:16
+#: share/skins/main/bluestar.fxd:15
+#: share/skins/main/basic.fxd:24
+#: share/skins/main/rain.fxd:16
 msgid "Shutdown"
 msgstr ""
 
@@ -2900,18 +2997,25 @@ msgstr ""
 #: share/skins/main/mediaportal.fxd:188
 #: share/skins/main/blurr.fxd:186
 #: share/skins/main/info.fxd:542
+#: share/skins/main/blurr.fxd:186
+#: share/skins/main/mediaportal.fxd:188
+#: share/skins/main/info.fxd:542
 msgid "Playlist"
 msgstr ""
 
+#: share/skins/main/dark.fxd:639
 #: share/skins/main/dark.fxd:639
 msgid "New mails"
 msgstr ""
 
 #: share/skins/main/dark.fxd:658
 #: share/skins/main/dark.fxd:679
+#: share/skins/main/dark.fxd:658
+#: share/skins/main/dark.fxd:679
 msgid "From"
 msgstr ""
 
+#: share/skins/main/info.fxd:505
 #: share/skins/main/info.fxd:505
 msgid "Copyright"
 msgstr ""
@@ -2919,13 +3023,18 @@ msgstr ""
 #: share/skins/main/crystal.fxd:317
 #: share/skins/main/bluestar.fxd:337
 #: share/skins/main/rain.fxd:313
+#: share/skins/main/crystal.fxd:317
+#: share/skins/main/bluestar.fxd:337
+#: share/skins/main/rain.fxd:313
 msgid "Unread messages"
 msgstr ""
 
 #: share/skins/main/bluestar.fxd:11
+#: share/skins/main/bluestar.fxd:11
 msgid "Pictures"
 msgstr ""
 
+#: share/skins/main/info.fxd:405
 #: share/skins/main/info.fxd:405
 msgid "Disc ID"
 msgstr ""
@@ -2933,9 +3042,15 @@ msgstr ""
 #: share/skins/main/mediaportal.fxd:214
 #: share/skins/main/blurr.fxd:212
 #: share/skins/main/info.fxd:309
+#: share/skins/main/blurr.fxd:212
+#: share/skins/main/mediaportal.fxd:214
+#: share/skins/main/info.fxd:309
 msgid "Audio tracks"
 msgstr ""
 
+#: share/skins/main/crystal.fxd:368
+#: share/skins/main/bluestar.fxd:388
+#: share/skins/main/rain.fxd:364
 #: share/skins/main/crystal.fxd:368
 #: share/skins/main/bluestar.fxd:388
 #: share/skins/main/rain.fxd:364
@@ -2946,23 +3061,36 @@ msgstr ""
 #: share/skins/main/crystal.fxd:12
 #: share/skins/main/blurr.fxd:452
 #: share/skins/main/rain.fxd:12
+#: share/skins/main/blurr.fxd:452
+#: share/skins/main/mediaportal.fxd:445
+#: share/skins/main/crystal.fxd:12
+#: share/skins/main/rain.fxd:12
 msgid "Weather Forecast"
 msgstr ""
 
 #: share/skins/main/mediaportal.fxd:419
 #: share/skins/main/blurr.fxd:427
+#: share/skins/main/blurr.fxd:427
+#: share/skins/main/mediaportal.fxd:419
 msgid "Location"
 msgstr ""
 
+#: share/skins/main/dark.fxd:670
 #: share/skins/main/dark.fxd:670
 msgid "New mail"
 msgstr ""
 
 #: share/skins/main/mediaportal.fxd:444
 #: share/skins/main/blurr.fxd:451
+#: share/skins/main/blurr.fxd:451
+#: share/skins/main/mediaportal.fxd:444
 msgid "Play a Game"
 msgstr ""
 
+#: share/skins/main/dark.fxd:23
+#: share/skins/main/crystal.fxd:10
+#: share/skins/main/bluestar.fxd:10
+#: share/skins/main/rain.fxd:10
 #: share/skins/main/dark.fxd:23
 #: share/skins/main/crystal.fxd:10
 #: share/skins/main/bluestar.fxd:10
@@ -2973,9 +3101,13 @@ msgstr ""
 #: share/skins/main/crystal.fxd:323
 #: share/skins/main/bluestar.fxd:343
 #: share/skins/main/rain.fxd:319
+#: share/skins/main/crystal.fxd:323
+#: share/skins/main/bluestar.fxd:343
+#: share/skins/main/rain.fxd:319
 msgid "Total messages"
 msgstr ""
 
+#: share/skins/main/info.fxd:227
 #: share/skins/main/info.fxd:227
 msgid "kb/s"
 msgstr ""
@@ -2987,13 +3119,22 @@ msgstr ""
 #: share/skins/main/blurr.fxd:201
 #: share/skins/main/blurr.fxd:308
 #: share/skins/main/blurr.fxd:689
+#: share/skins/main/blurr.fxd:201
+#: share/skins/main/blurr.fxd:308
+#: share/skins/main/blurr.fxd:691
+#: share/skins/main/mediaportal.fxd:203
+#: share/skins/main/mediaportal.fxd:685
+#: share/skins/main/dark.fxd:748
+#: share/skins/main/basic.fxd:384
 msgid "Track"
 msgstr ""
 
 #: share/skins/main/dark.fxd:564
+#: share/skins/main/dark.fxd:564
 msgid "One song in playlist"
 msgstr ""
 
+#: share/skins/main/info.fxd:224
 #: share/skins/main/info.fxd:224
 msgid "Bitrate"
 msgstr ""
@@ -3003,11 +3144,19 @@ msgstr ""
 #: share/skins/main/info.fxd:418
 #: share/skins/main/info.fxd:423
 #: share/skins/main/info.fxd:546
+#: share/skins/main/blurr.fxd:190
+#: share/skins/main/mediaportal.fxd:192
+#: share/skins/main/info.fxd:418
+#: share/skins/main/info.fxd:423
+#: share/skins/main/info.fxd:546
 msgid "items in this playlist"
 msgstr ""
 
 #: share/skins/main/mediaportal.fxd:442
 #: share/skins/main/blurr.fxd:449
+#: share/skins/main/info.fxd:14
+#: share/skins/main/blurr.fxd:449
+#: share/skins/main/mediaportal.fxd:442
 #: share/skins/main/info.fxd:14
 msgid "Listen to Music"
 msgstr ""
@@ -3016,9 +3165,14 @@ msgstr ""
 #: share/skins/main/dark.fxd:758
 #: share/skins/main/basic.fxd:397
 #: share/skins/main/blurr.fxd:706
+#: share/skins/main/blurr.fxd:708
+#: share/skins/main/mediaportal.fxd:698
+#: share/skins/main/dark.fxd:758
+#: share/skins/main/basic.fxd:397
 msgid "Elapsed"
 msgstr ""
 
+#: share/skins/main/dark.fxd:622
 #: share/skins/main/dark.fxd:622
 msgid "Just one picture in this slideshow."
 msgstr ""
@@ -3026,23 +3180,32 @@ msgstr ""
 #: share/skins/main/mediaportal.fxd:441
 #: share/skins/main/blurr.fxd:448
 #: share/skins/main/info.fxd:13
+#: share/skins/main/blurr.fxd:448
+#: share/skins/main/mediaportal.fxd:441
+#: share/skins/main/info.fxd:13
 msgid "Watch a Movie"
 msgstr ""
 
+#: share/skins/main/info.fxd:231
 #: share/skins/main/info.fxd:231
 msgid "Link"
 msgstr ""
 
 #: share/skins/main/basic.fxd:589
+#: share/skins/main/basic.fxd:602
 msgid "Day"
 msgstr ""
 
 #: share/skins/main/mediaportal.fxd:219
 #: share/skins/main/blurr.fxd:217
 #: share/skins/main/info.fxd:313
+#: share/skins/main/blurr.fxd:217
+#: share/skins/main/mediaportal.fxd:219
+#: share/skins/main/info.fxd:313
 msgid "Subtitles"
 msgstr ""
 
+#: share/skins/main/dark.fxd:491
 #: share/skins/main/dark.fxd:491
 msgid "movies in this playlist."
 msgstr ""
@@ -3051,13 +3214,19 @@ msgstr ""
 #: share/skins/main/crystal.fxd:7
 #: share/skins/main/bluestar.fxd:7
 #: share/skins/main/rain.fxd:7
+#: share/skins/main/dark.fxd:16
+#: share/skins/main/crystal.fxd:7
+#: share/skins/main/bluestar.fxd:7
+#: share/skins/main/rain.fxd:7
 msgid "Television"
 msgstr ""
 
 #: share/skins/main/dark.fxd:645
+#: share/skins/main/dark.fxd:645
 msgid "Total mails"
 msgstr ""
 
+#: share/skins/main/info.fxd:237
 #: share/skins/main/info.fxd:237
 msgid "Language"
 msgstr ""
@@ -3070,9 +3239,20 @@ msgstr ""
 #: share/skins/main/blurr.fxd:284
 #: share/skins/main/blurr.fxd:401
 #: share/skins/main/blurr.fxd:409
+#: share/skins/main/blurr.fxd:180
+#: share/skins/main/blurr.fxd:284
+#: share/skins/main/blurr.fxd:401
+#: share/skins/main/blurr.fxd:409
+#: share/skins/main/mediaportal.fxd:182
+#: share/skins/main/mediaportal.fxd:286
+#: share/skins/main/mediaportal.fxd:393
+#: share/skins/main/mediaportal.fxd:401
 msgid "Items"
 msgstr ""
 
+#: share/skins/main/blurr.fxd:311
+#: share/skins/main/info.fxd:347
+#: share/skins/main/info.fxd:534
 #: share/skins/main/blurr.fxd:311
 #: share/skins/main/info.fxd:347
 #: share/skins/main/info.fxd:534
@@ -3080,11 +3260,15 @@ msgid "of"
 msgstr ""
 
 #: share/skins/main/dark.fxd:495
+#: share/skins/main/dark.fxd:495
 msgid "Just one movie in this playlist."
 msgstr ""
 
 #: share/skins/main/mediaportal.fxd:440
 #: share/skins/main/blurr.fxd:447
+#: share/skins/main/info.fxd:12
+#: share/skins/main/blurr.fxd:447
+#: share/skins/main/mediaportal.fxd:440
 #: share/skins/main/info.fxd:12
 msgid "Watch TV"
 msgstr ""
@@ -3094,21 +3278,31 @@ msgstr ""
 #: share/skins/main/blurr.fxd:194
 #: share/skins/main/info.fxd:427
 #: share/skins/main/info.fxd:550
+#: share/skins/main/blurr.fxd:194
+#: share/skins/main/mediaportal.fxd:196
+#: share/skins/main/dark.fxd:500
+#: share/skins/main/info.fxd:427
+#: share/skins/main/info.fxd:550
 msgid "This playlist is empty!"
 msgstr ""
 
+#: share/skins/main/dark.fxd:627
 #: share/skins/main/dark.fxd:627
 msgid "This slideshow is empty!"
 msgstr ""
 
 #: share/skins/main/info.fxd:305
+#: share/skins/main/info.fxd:305
 msgid "min."
 msgstr ""
 
 #: share/skins/main/dark.fxd:617
+#: share/skins/main/dark.fxd:617
 msgid "pictures in this slideshow."
 msgstr ""
 
+#: share/skins/main/dark.fxd:458
+#: share/skins/main/info.fxd:470
 #: share/skins/main/dark.fxd:458
 #: share/skins/main/info.fxd:470
 msgid "Rating"
@@ -3116,13 +3310,17 @@ msgstr ""
 
 #: share/skins/main/info.fxd:349
 #: share/skins/main/info.fxd:536
+#: share/skins/main/info.fxd:349
+#: share/skins/main/info.fxd:536
 msgid "MB free"
 msgstr ""
 
 #: share/skins/main/mediaportal.fxd:439
+#: share/skins/main/mediaportal.fxd:439
 msgid "Read Headlines"
 msgstr ""
 
+#: share/skins/main/dark.fxd:568
 #: share/skins/main/dark.fxd:568
 msgid "No songs in playlist"
 msgstr ""
@@ -3130,30 +3328,42 @@ msgstr ""
 #: share/skins/main/mediaportal.fxd:443
 #: share/skins/main/blurr.fxd:450
 #: share/skins/main/info.fxd:15
+#: share/skins/main/blurr.fxd:450
+#: share/skins/main/mediaportal.fxd:443
+#: share/skins/main/info.fxd:15
 msgid "Look at Pictures"
 msgstr ""
 
 #: share/skins/main/mediaportal.fxd:224
 #: share/skins/main/blurr.fxd:222
+#: share/skins/main/blurr.fxd:222
+#: share/skins/main/mediaportal.fxd:224
+#: share/skins/main/info.fxd:317
 msgid "Chapters"
 msgstr ""
 
+#: share/skins/main/basic.fxd:19
 #: share/skins/main/basic.fxd:19
 msgid "TV"
 msgstr ""
 
 #: share/skins/main/dark.fxd:560
+#: share/skins/main/dark.fxd:560
 msgid "songs in playlist"
 msgstr ""
 
+#: share/skins/main/dark.fxd:721
 #: share/skins/main/dark.fxd:721
 msgid "Now playing"
 msgstr ""
 
 #: share/skins/main/info.fxd:323
+#: share/skins/main/info.fxd:323
 msgid "Size"
 msgstr ""
 
+#: share/skins/main/dark.fxd:652
+#: share/skins/main/dark.fxd:673
 #: share/skins/main/dark.fxd:652
 #: share/skins/main/dark.fxd:673
 msgid "Subject"
