@@ -252,7 +252,7 @@ def load_guide(verbose=True, XMLTV_FILE=None):
             prog.channel_id = p['channel']
             prog.title = Unicode(p['title'][0][0])
             if p.has_key('date'):
-                prog.date = Unicode(p['date'][0][0])
+                prog.date = Unicode(p['date'][0])
             if p.has_key('category'):
                 prog.categories = [ cat[0] for cat in p['category'] ]
             if p.has_key('rating'):
