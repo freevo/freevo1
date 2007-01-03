@@ -608,13 +608,13 @@ class LibraryResource(FreevoResource):
             new_height = 200
         return (int(new_width), int(new_height + 0.5))
 
-    def get_fit_to_square_size(self, size, new_size):
-        print 'get_fit_to_square_size(self, size=%s, new_size=%s)' % (str(size), str(new_size))
+    def get_fit_to_rectangle_size(self, size, new_size):
+        print 'get_fit_to_rectangle_size(self, size=%s, new_size=%s)' % (str(size), str(new_size))
         try:
             scaled_width = new_size[0]
             scaled_height = new_size[1]
-            ### if aspect ratio > 1 then scale height
-            if size[0] > size[1]:
+            ### if actual image aspect ratio > scaled image aspect ratio then scale height
+            if float(size[0]) / size[1] > float(scaled_width) / scaled_height:
                 scaled_height = scaled_width * size[1] / size[0]
             ### else scale width
             else:
@@ -634,8 +634,12 @@ class LibraryResource(FreevoResource):
         print 'get_scaled_image_and_size(self, filepath=%r, size=%s)' % (filepath, str(size))
         threshold_size = config.WWW_IMAGE_THRESHOLD_SIZE
         new_size = config.WWW_IMAGE_THUMBNAIL_SIZE
-        new_size = self.get_fit_to_square_size(size, new_size)
-        scaled_image_path = self.cache_dir + filepath.replace("/", "_").replace(".", "_") + ".jpg"
+        new_size = self.get_fit_to_rectangle_size(size, new_size)
+        file_ext_index = filepath.rindex(".")
+        file_ext = filepath[file_ext_index:].lower()
+        if file_ext.lower() == ".gif":
+            file_ext += ".jpg"
+        scaled_image_path = self.cache_dir + filepath[:file_ext_index].replace("/", "_") + file_ext
 
         # if the size of image falls below threshold size then use original image
         if size[0] < threshold_size[0] and size[1] < threshold_size[1]:
