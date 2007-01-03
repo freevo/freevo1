@@ -268,19 +268,19 @@ class LibraryResource(FreevoResource):
             movmuslink = '<a href="%s?media=%s&dir=">%s</a>'
             rectvlink = '<a href="%s?media=%s&dir=%s">%s</a>'
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/library-movies.jpg\" class=\"right\">')
+            fv.tableCell('<img src=\"images/library/movies_small.png\" class=\"right\" width=\"60\" height=\"60\">')
             fv.tableCell(movmuslink % (action_script, "movies",_("Movies")), '')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/library-tv.jpg\" class=\"right\">')
+            fv.tableCell('<img src=\"images/library/recorded_small.png\" class=\"right\" width=\"60\" height=\"60\">')
             fv.tableCell(rectvlink % (action_script, "rectv", config.TV_RECORD_DIR, _("Recorded TV")), '')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/library-music.jpg\" class=\"right\">')
+            fv.tableCell('<img src=\"images/library/music_small.png\" class=\"right\" width=\"60\" height=\"60\">')
             fv.tableCell(movmuslink % (action_script,"music",_("Music")), '')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/library-images.jpg\" class=\"right\">')
+            fv.tableCell('<img src=\"images/library/images_small.png\" class=\"right\" width=\"60\" height=\"60\">')
             fv.tableCell(movmuslink % (action_script,"images",_("Images")), '')
             fv.tableRowClose()
             fv.tableClose()
@@ -402,7 +402,7 @@ class LibraryResource(FreevoResource):
                         mydirlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
                             +'<img src="' + image_link + '" class="folder" height="200px" width="200px" /><br />'+mydispdir+'</a>'
                     ### show movie cover
-                    elif action_mediatype == "movies" or action_mediatype == "rectv":
+                    elif action_mediatype == "movies":
                         y = self.cover_filter(mydir)
                         if y:
                             image_link = self.convert_dir(mydir + str(y))
@@ -410,6 +410,15 @@ class LibraryResource(FreevoResource):
                             image_link = "images/library/www-mp-movies.png"
                         mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
                             +'<img src="' + image_link + '" class="folder" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                    ### show recorded shows cover
+                    elif action_mediatype == "rectv":
+                        y = self.cover_filter(mydir)
+                        if y:
+                            image_link = self.convert_dir(mydir + str(y))
+                        else:
+                            image_link = "images/library/www-mp-tv.png"
+                        mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
+                            +'<img src="' + image_link + '" class="folder" height="200px" width="200px" /><br />'+mydispdir+'</a>'                    
                     ### show image cover
                     elif action_mediatype == "images":
                         image_link = "images/library/www-mp-pictures.png"
@@ -429,6 +438,10 @@ class LibraryResource(FreevoResource):
                 i += 1
 
             suffixes = self.get_suffixes(action_mediatype)
+            try:
+                suffixes.remove("m3u")
+            except:
+                pass
 
             # loop over directory here
             i=0
@@ -471,7 +484,7 @@ class LibraryResource(FreevoResource):
                             +'<img src="'+scaled_image+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" />'\
                             +'<br />'+Unicode(title)+'</a></div>', 'class="'+status+'" colspan="1"')
                     ### show movie
-                    elif action_mediatype == "movies" or action_mediatype == "rectv":
+                    elif action_mediatype == "movies":
                         if os.path.exists(jpg_file):
                             image = jpg_file
                             image_link = self.convert_dir(image)
@@ -484,6 +497,20 @@ class LibraryResource(FreevoResource):
                         fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
                             +image+Unicode(title)+'</a>',\
                             'class="'+status+'" colspan="1"')
+                    ### show recorded shows
+                    elif action_mediatype == "rectv":
+                        if os.path.exists(jpg_file):
+                            image = jpg_file
+                            image_link = self.convert_dir(image)
+                            image_info = metadata.parse(image)
+                            size = (image_info['width'], image_info['height'])
+                            new_size = self.resize_image(image_link, size)
+                            image = '<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" /><br />'
+                        else:
+                            image = '<img src="images/library/recorded.png" height="200px" width="200px" /><br />'
+                        fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
+                            +image+Unicode(title)+'</a>',\
+                            'class="'+status+'" colspan="1"')                    
                     ### show music
                     elif action_mediatype == "music":
                         try:
