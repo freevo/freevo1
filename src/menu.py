@@ -269,14 +269,16 @@ class MenuWidget(GUIObject):
         menu = self.menustack[0]
         self.init_page()
 
-        if media == 'shutdown':
-            menu.selected = self.all_items[len(self.menustack[0].choices)-1]
+        if media == 'shutdown':  #bookmark
+            menu.selected = 0
             for menuitem in self.menustack[0].choices:
+                if self.all_items.index(menuitem) >= len(self.all_items)-1:
+                    self.goto_next_page()
                 if string.find(str(menuitem), 'shutdown.') > 0:
                     menu.selected = menuitem
-                    self.refresh()
                     self.eventhandler(MENU_SELECT)
                     return
+
         elif media == 'tv.guide':
             menu.selected = self.all_items[len(self.menustack[0].choices)-1]
             for menuitem in self.menustack[0].choices:
