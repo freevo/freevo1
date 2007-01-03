@@ -561,15 +561,22 @@ def www_image_cachedir():
     return cache_dir
 
 
-def cache_www_image(filename):
-    '''cache an image for webservers
-    when the image is larger than WWW_IMAGE_THRESHOLD_SIZE then the image size
-    is returned. Otherwise the thumbnail size is returned
+def cache_www_thumbnail_path(filename):
+    '''returns the path to the thumbnail image for a given filename
     '''
-    threshold_size = config.WWW_IMAGE_THRESHOLD_SIZE
-    thumbnail_size = config.WWW_IMAGE_THUMBNAIL_SIZE
-    imagepath = filename.replace("/", "_").replace(".", "_") + ".jpg"
+    file_ext_index = filename.rindex(".")
+    file_ext = filename[file_ext_index:].lower()
+    if file_ext == ".gif":
+        file_ext += ".jpg"
+    imagepath = filename[:file_ext_index].replace("/", "_") + file_ext
     thumb_path = os.path.join(www_image_cachedir(), imagepath)
+    return thumb_path
+
+
+def cache_www_image(filename):
+    '''creates a webserver thumbnail image and returns its size.
+    '''
+    thumb_path = cache_www_thumbnail_path(filename)
     image = imlib2.open(filename)
     thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
     thumb.save(thumb_path)

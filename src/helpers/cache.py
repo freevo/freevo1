@@ -224,8 +224,7 @@ def cache_www_thumbnails():
     files = util.misc.unique(files)
     for filename in copy.copy(files):
         sinfo = os.stat(filename)
-        filepath = filename.replace("/", "_").replace(".", "_") + ".jpg"
-        thumb = os.path.join(cache_dir, filepath)
+        thumb = util.cache_www_thumbnail_path(filename)
         try:
             if os.stat(thumb)[stat.ST_MTIME] > sinfo[stat.ST_MTIME]:
                 files.remove(filename)
