@@ -80,7 +80,7 @@ class FileInfoResource(FreevoResource):
                     title = item
                 #audio info
                 if media_info['artist']:
-                    info+='<tr><td><b>Artist: </b></td><td>'+media_info['artist'] +'</td></tr>'
+                    info+='<tr><td><b>Artist: </b></td><td>'+media_info['artist']+'</td></tr>'
                 if media_info['album']:
                     info+='<tr><td><b>Album: </b></td><td>'+media_info['album']+'</td></tr>'
                 if media_info['genre']:
@@ -142,7 +142,7 @@ class FileInfoResource(FreevoResource):
             for b in a.children:
                 if b.name == 'info':
                     for c in b.children:
-                        fxd_info.update({str(c.name):str(c.first_cdata)})
+                        fxd_info.update({str(c.name).replace('\r',''):str(c.first_cdata).replace('\r','')})
         return fxd_info
 
     def convert_dir(self, dir_str):
