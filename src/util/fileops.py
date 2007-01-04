@@ -581,3 +581,11 @@ def cache_www_image(filename):
     thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
     thumb.save(thumb_path)
     return thumb.size
+
+
+def cache_www_image_size(filename):
+    '''returns the size from a webserver cached image.
+    '''
+    thumb_path = cache_www_thumbnail_path(filename)
+    image = imlib2.open(filename)
+    return image.size
