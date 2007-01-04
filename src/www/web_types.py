@@ -441,12 +441,27 @@ class HTMLResource:
         """
         print 'printImagePopup(self)'
         self.res += """<script language="JavaScript" type="text/javascript" style="display:none;">
-        function openfoto(loc,width,height){
-            if (width >= screen.width || height >= screen.height) {
+        var width = 0;
+        var height = 0;
+        var max_width = screen.width - 100;
+        var max_height = screen.height;
+        
+        function openfoto(loc,width_img,height_img){
+            width = width_img;
+            height = height_img;
+            
+            if (width >= max_width || height >= max_height) {
                 scrollbars = 'yes';
+                getNewSize();
             }
-            var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars="+scrollbars+",top=0,left=0,width="+width+",height="+height;
-            foto = window.open("fileinfo.rpy?img="+loc,"Images",params);
+            var params="toolbar=no,location=no,status=no,menubar=yes,resizable=no,scrollbars="+scrollbars+",top=0,left=0,width="+width+",height="+height;
+            foto = window.open("fileinfo.rpy?img="+loc+"&w="+width+"&h="+height,"Images",params);
+        }
+        
+        function getNewSize(){
+        //this is not correct!
+            height = Math.round(height * (max_width / width));
+            width = Math.round(width * (max_height / height));
         }
         </script> """
 

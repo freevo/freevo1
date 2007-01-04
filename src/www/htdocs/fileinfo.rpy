@@ -55,7 +55,7 @@ class FileInfoResource(FreevoResource):
         
         if file:
             medium = metadata.parse(file)
-            print medium
+            #print medium
             title = ""
             info = "<table>"
             (basedir, item) = os.path.split(file)
@@ -106,25 +106,42 @@ class FileInfoResource(FreevoResource):
                u"doc.getElementById('file-head').innerHTML = '%s';\n"\
                u"doc.getElementById('file-info').innerHTML = '%s';\n"\
                u"doc.getElementById('file-play-button').onclick = %s;\n"\
+               u"doc.getElementById('file-play-using-vlc').onclick = %s;\n"\
                u"doc.getElementById('program-waiting').style.display = 'none';\n" \
                u"doc.getElementById('program-info').style.visibility = 'visible';\n" \
                u"</script>\n"
             ) % ( Unicode(title.replace("'", "\\'")),
                   Unicode(info.replace("'", "\\'")),
-                  "function() { window.open(\"%s\"); }" % (file_link),    
+                  "function() { window.open(\"%s\"); }" % (file_link),
+                  '\
+                  function() { \
+                      vlc_window = window.open(""); \
+                      vlc_window.document.write(\'<html><head><title>VLC Player</title></head><body>\'); \
+                      vlc_window.document.write(\'<embed type="application/x-vlc-plugin" name="video" autoplay="yes" \'); \
+                      vlc_window.document.write(\'width="640" height="480" target="http://\'); \
+                      vlc_window.document.write(location.hostname + \':\' + location.port + \'/' + urllib.quote(file_link) + '"/><br/>\'); \
+                      vlc_window.document.write(\'<a href="javascript:;" onclick="document.video.play()">Play</a>&nbsp\'); \
+                      vlc_window.document.write(\'<a href="javascript:;" onclick="document.video.pause()">Pause</a>&nbsp\'); \
+                      vlc_window.document.write(\'<a href="javascript:;" onclick="document.video.stop()">Stop</a>&nbsp\'); \
+                      vlc_window.document.write(\'<a href="javascript:;" onclick="document.video.fullscreen()">Fullscreen</a>\'); \
+                      vlc_window.document.write(\'</body></html>\'); \
+                  }\
+                  '
             )           
 
         elif img:
             _img = img.split("_")#
             img_name = _img[len(_img)-1]
+            height = fv.formValue(form, 'h')
+            width = fv.formValue(form, 'w')
             fv.res += (
                u"<html>" \
                u"<head><title>%s</title>" \
                u"<link href=\"styles/main.css\" rel=\"stylesheet\" type=\"text/css\" /></head>" \
                u"<body>"\
-               u"<img src=\"%s\" />"\
+               u"<img src=\"%s\" height=\"%s\" width=\"%s\" />"\
                u"</body></html>"
-            ) % ( img_name, img )
+            ) % ( img_name, img, height, width )
             
         return String(fv.res)
     
