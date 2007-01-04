@@ -1761,7 +1761,6 @@ WEBSERVER_CACHEDIR = FREEVO_CACHEDIR
 # Some sizes for the images in the web library
 #
 WWW_IMAGE_THUMBNAIL_SIZE = (200, 200)
-WWW_IMAGE_THRESHOLD_SIZE = (800, 600)
 
 #
 # Username / Password combinations to login to the web interface.

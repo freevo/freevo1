@@ -53,7 +53,7 @@ class LibraryResource(FreevoResource):
 
     def __init__(self):
         print '__init__(self)'
-        self.cache_dir = util.fileops.www_image_cachedir()
+        self.cache_dir = util.www_image_cachedir()
         self.allowed_dirs = []
         self.allowed_dirs.extend(config.VIDEO_ITEMS)
         self.allowed_dirs.extend(config.AUDIO_ITEMS)
@@ -477,12 +477,15 @@ class LibraryResource(FreevoResource):
                         status = 'favorite'
                     ### show image
                     if action_mediatype == "images":
-                        size = (info['width'], info['height'])
-                        (scaled_image, new_size) = self.get_scaled_image_and_size(item, size)
+                        scaled_image_path = util.cache_www_thumbnail_path(item)
+                        if not os.path.exists(scaled_image_path):
+                            size = util.cache_www_image(item)
+                        else:
+                            size = util.cache_www_image_size(item)
                         image_link = self.convert_dir(filepath)
+                        scaled_image_link = self.convert_dir(scaled_image_path)
                         fv.tableCell('<div class="image"><a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
-                            +'<img src="'+scaled_image+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" />'\
-                            +'<br />'+Unicode(title)+'</a></div>', 'class="'+status+'" colspan="1"')
+                            +'<img src="'+scaled_image_link+'" /><br />'+Unicode(title)+'</a></div>', 'class="'+status+'" colspan="1"')
                     ### show movie
                     elif action_mediatype == "movies":
                         if os.path.exists(jpg_file):
@@ -634,61 +637,6 @@ class LibraryResource(FreevoResource):
         except ZeroDivisionError:
             new_height = 200
         return (int(new_width), int(new_height + 0.5))
-
-    def get_fit_to_rectangle_size(self, size, new_size):
-        print 'get_fit_to_rectangle_size(self, size=%s, new_size=%s)' % (str(size), str(new_size))
-        try:
-            scaled_width = new_size[0]
-            scaled_height = new_size[1]
-            ### if actual image aspect ratio > scaled image aspect ratio then scale height
-            if float(size[0]) / size[1] > float(scaled_width) / scaled_height:
-                scaled_height = scaled_width * size[1] / size[0]
-            ### else scale width
-            else:
-                scaled_width = scaled_height * size[0] / size[1]
-        except ZeroDivisionError:
-            pass
-        return (scaled_width, scaled_height)
-
-    def get_scaled_image_and_size(self, filepath, size):
-        '''
-        Returns the location of a scaled image and size of the scaled image
-        as a 2-tuple. Eg. ("/var/cache/freevo/test.jpg", (200, 150)).
-        The image will be scaled only if it larger than the threshold size
-        in config.WWW_IMAGE_THRESHOLD_SIZE. The scaled size will be limited
-        to the boundaries of config.WWW_IMAGE_THUMBNAIL_SIZE
-        '''
-        print 'get_scaled_image_and_size(self, filepath=%r, size=%s)' % (filepath, str(size))
-        threshold_size = config.WWW_IMAGE_THRESHOLD_SIZE
-        new_size = config.WWW_IMAGE_THUMBNAIL_SIZE
-        new_size = self.get_fit_to_rectangle_size(size, new_size)
-        file_ext_index = filepath.rindex(".")
-        file_ext = filepath[file_ext_index:].lower()
-        if file_ext.lower() == ".gif":
-            file_ext += ".jpg"
-        scaled_image_path = self.cache_dir + filepath[:file_ext_index].replace("/", "_") + file_ext
-
-        # if the size of image falls below threshold size then use original image
-        if size[0] < threshold_size[0] and size[1] < threshold_size[1]:
-            scaled_image_path = filepath
-        else:
-            create_scaled_image = False
-            if os.path.exists(scaled_image_path):
-                # if the scaled image already exists then make sure it is scaled to the correct size
-                new_image = imlib2.open(scaled_image_path)
-                if new_image.width != new_size[0] or new_image.height != new_size[1]:
-                    os.remove(scaled_image_path)
-                    create_scaled_image = True
-            else:
-                create_scaled_image = True
-
-            if create_scaled_image:
-                image = imlib2.open(filepath)
-                new_image = image.scale(new_size)
-                new_image.save(scaled_image_path)
-
-        scaled_image_path = self.convert_dir(scaled_image_path)
-        return (scaled_image_path, new_size)
 
     def get_fxd_title(self, fxd_file):
         print 'get_fxd_title(self, fxd_file=%r)', (fxd_file)
