@@ -52,6 +52,7 @@ This release has all the changes in Release 1.6.x plus
  * Updated video player to allow commands before and after playback (F#1602956)
  * Updated weather translations, with spanish weather translations (F#1621819)
  * Updated webserver login to allow for a encrypted password (F#1623854)
+ * Updated webradio to show the stream information (F#1587694)
  * Removed video plug-in mplayer for unichrome playback (B#1606699)
 
 == Release 1.6.3 (2007-??-??) ==
