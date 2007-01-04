@@ -510,7 +510,7 @@ class LibraryResource(FreevoResource):
                             new_size = self.resize_image(image_link, size)
                             image = '<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" /><br />'
                         else:
-                            image = '<img src="images/library/recorded.png" height="200px" width="200px" /><br />'
+                            image = '<img src="images/library/recorded_small.png" height="30px" width="30px" />'
                         fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
                             +image+Unicode(title)+'</a>',\
                             'class="'+status+'" colspan="1"')                    
