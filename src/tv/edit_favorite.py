@@ -80,7 +80,7 @@ class EditFavorite(PopupBox):
             else:
                 self.priority = 1
 
-            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE, self.priority)
+            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE, self.priority, TRUE, FALSE)
         else:
             self.fav = subject
             self.oldname = self.fav.name
@@ -311,7 +311,9 @@ class EditFavorite(PopupBox):
                              self.chan_box.list.get_selected_item().value,
                              self.dow_box.list.get_selected_item().value, 
                              self.tod_box.list.get_selected_item().value, 
-                             self.fav.priority)
+                             self.fav.priority,
+                             self.fav.allowDuplicates,
+                             self.fav.onlyNew)
                 if result:
                     #tv.view_favorites.ViewFavorites(parent=self.parent, text='Favorites').show()
                     self.destroy()

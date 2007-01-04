@@ -64,6 +64,9 @@ class TvProgram:
     date       = None
     scheduled  = None
     overlap    = None
+    previouslyRecorded = None
+    allowDuplicates = None
+    onlyNew = None
 
 
     def __init__(self):
@@ -83,6 +86,9 @@ class TvProgram:
         # to a boolean type. 
         self.scheduled  = 0
         self.overlap    = 0
+        self.previouslyRecorded = 0
+        self.allowDuplicates = 1
+        self.onlyNew = 0
 
 
     def __str__(self):

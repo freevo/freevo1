@@ -33,6 +33,7 @@ import sys, time, string
 from tv.record_types import Favorite
 import tv.epg_xmltv
 import tv.record_client as ri
+import config
 
 from www.web_types import HTMLResource, FreevoResource
 
@@ -71,7 +72,7 @@ class EditFavoriteResource(FreevoResource):
         if action == 'add' and chan and start:
             (result, prog) = ri.findProg(chan, start)
 
-	    if not result:
+            if not result:
                 fv.printHeader('Edit Favorite', 'styles/main.css')
                 fv.printMessagesFinish(
                     [ '<b>'+_('ERROR') + '</b>: ' + \
@@ -89,7 +90,7 @@ class EditFavoriteResource(FreevoResource):
 
             priority = num_favorites + 1
 
-            fav = Favorite(prog.title, prog, TRUE, TRUE, TRUE, priority)
+            fav = Favorite(prog.title, prog, TRUE, TRUE, TRUE, priority, FALSE)
         elif action == 'edit' and name:
             (result, fav) = ri.getFavorite(name)
         else:
@@ -128,6 +129,10 @@ class EditFavoriteResource(FreevoResource):
         fv.tableCell(_('Channel'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Day of week'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Time of day'), 'class="guidehead" colspan="1"')
+        if config.DUPLICATE_DETECTION:
+           fv.tableCell(_('Duplicates'), 'class="guidehead" colspan="1"')
+        if config.ONLY_NEW_DETECTION:
+           fv.tableCell(_('Episodes'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Action'), 'class="guidehead" colspan="1"')
         fv.tableRowClose()
 
@@ -222,6 +227,28 @@ class EditFavoriteResource(FreevoResource):
         </select>
         """
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
+
+        if config.DUPLICATE_DETECTION:
+           if hasattr(fav, 'allowDuplicates'):
+              cell = '\n<select name="allowDuplicates" selected="%s">\n' % \
+              fav.allowDuplicates
+           else:
+              cell = '\n<select name="allowDuplicates">\n'
+           cell += '          <option value="1">'+_('ALLOW')+'</option>\n'
+           cell += '          <option value="0">'+_('PREVENT')+'</option>\n'
+           cell += '</select>\n'
+           fv.tableCell(cell, 'class="'+status+'" colspan="1"')
+
+        if config.ONLY_NEW_DETECTION:
+           if hasattr(fav, 'onlyNew'):
+              cell = '\n<select name="onlyNew" selected="%s">\n' % fav.onlyNew
+           else:
+              cell = '\n<select name="onlyNew">\n'
+           cell += '          <option value="0">'+_('ALL')+'</option>\n'
+           cell += '          <option value="1">'+_('ONLY NEW')+'</option>\n'
+           cell += '</select>\n'
+           fv.tableCell(cell, 'class="'+status+'" colspan="1"')
+
 
         # cell = '\n<select name="priority" selected="%s">\n' % fav.priority
         # for i in range(num_favorites+1):

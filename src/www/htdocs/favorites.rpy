@@ -30,6 +30,7 @@
 
 import sys, time, string
 import urllib
+import config
 
 import tv.record_client as ri
 import util.tv_util as tv_util
@@ -64,15 +65,20 @@ class FavoritesResource(FreevoResource):
         dow = fv.formValue(form, 'dow')
         mod = fv.formValue(form, 'mod')
         priority = fv.formValue(form, 'priority')
-
+        allowDuplicates = 1
+        onlyNew = 0
+        if config.DUPLICATE_DETECTION:
+           allowDuplicates = fv.formValue(form, 'allowDuplicates')
+        if config.ONLY_NEW_DETECTION:
+           onlyNew = fv.formValue(form, 'onlyNew')
 
         if action == 'remove':
             ri.removeFavorite(name)
         elif action == 'add':
-            ri.addEditedFavorite(name, title, chan, dow, mod, priority)
+            ri.addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
         elif action == 'edit':
             ri.removeFavorite(oldname)
-            ri.addEditedFavorite(name, title, chan, dow, mod, priority)
+            ri.addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
         elif action == 'bump':
             ri.adjustPriority(name, priority)
         else:
@@ -100,6 +106,10 @@ class FavoritesResource(FreevoResource):
         fv.tableCell(_('Channel'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Day of week'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Time of day'), 'class="guidehead" colspan="1"')
+        if config.DUPLICATE_DETECTION:
+           fv.tableCell(_('Duplicates'), 'class="guidehead" colspan="1"')
+        if config.ONLY_NEW_DETECTION:
+           fv.tableCell(_('Episodes'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Actions'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Priority'), 'class="guidehead" colspan="1"')
         fv.tableRowClose()
@@ -130,6 +140,26 @@ class FavoritesResource(FreevoResource):
             else:
                 cell = _('ANY')
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
+
+            if config.DUPLICATE_DETECTION:
+               (tempStatus, tempFav) = ri.getFavorite(fav.title)
+               if hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 1:
+                  cell = 'ALLOW'
+               elif hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 0:
+                  cell = 'PREVENT'
+               else:
+                  cell = 'NONE'
+               fv.tableCell(cell, 'class="'+status+'" colspan="1"')
+
+            if config.ONLY_NEW_DETECTION:
+               (tempStatus, tempFav) = ri.getFavorite(fav.title)
+               if hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 1:
+                  cell = 'ONLY NEW'
+               elif hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 0:
+                  cell = 'ALL'
+               else:
+                  cell = 'NONE'
+               fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             fname_esc = urllib.quote(String(fav.name.replace('&','%26')))
             # cell = '<input type="hidden" name="action" value="%s">' % action

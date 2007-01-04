@@ -27,7 +27,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, string, random, time, os, re, pwd, stat, threading
+import sys, string, random, time, os, re, pwd, stat, threading, pickle, md5, datetime
 import config
 from util import vfs
 
@@ -111,6 +111,7 @@ class RecordServer(xmlrpc.XMLRPC):
         # XXX: In the future we should have one lock per VideoGroup.
         self.tv_lock_file = None
         self.vg = None
+        self.previouslyRecordedShows = None
 
 
     def isRecording(self):
@@ -270,7 +271,141 @@ class RecordServer(xmlrpc.XMLRPC):
 
         return TRUE
 
- 
+    #
+    # Load the saved set of recorded shows
+    #
+    def loadPreviouslyRecordedShows(self):
+        if self.previouslyRecordedShows:
+            return
+
+        cacheFile = config.FREEVO_CACHEDIR + "/previouslyRecorded.pickle"
+        try:
+            self.previouslyRecordedShows = pickle.load(open(cacheFile, "r"))
+        except IOError:
+            self.previouslyRecordedShows = {}
+            pass
+
+    #
+    # Save the set of recorded shows
+    #
+    def savePreviouslyRecordedShows(self):
+        if not self.previouslyRecordedShows:
+            return
+
+        cacheFile=config.FREEVO_CACHEDIR+"/previouslyRecorded.pickle"
+        pickle.dump(self.previouslyRecordedShows, open(cacheFile,"w"))
+
+    #
+    # Return true if this is a new episode of 'prog'
+    #
+    def newEpisode(self, prog=None):
+        todayStr = datetime.date.today().strftime('%Y%m%d')
+        progStr = str(prog.date)
+        _debug_('Program Date: "%s"' % progStr)
+        _debug_('Todays Date : "%s"' % todayStr)
+        if (len(progStr)==8):
+           _debug_('Good date format')
+           #Year
+           todaysYear=(todayStr[0:4])
+           progYear=(progStr[0:4])
+           #Month
+           todaysMonth=(todayStr[4:2])
+           progMonth=(progStr[4:2])
+           #Day
+           todaysDay=(todayStr[6:2])
+           progDay=(progStr[6:2])
+           if todaysYear > progYear:
+              #program from a previous year
+              return FALSE
+           elif progYear > todaysYear:
+              #program in the future
+              return TRUE
+           else:
+              _debug_('Same year')
+              #program in the same year
+              if todaysMonth > progMonth:
+                 #program in a previous month
+                 return FALSE
+              elif progMonth > todaysMonth:
+                 #program in the future
+                 return TRUE
+              else:
+                 _debug_('Same month')
+                 #program in the same month
+                 if todaysDay > progDay:
+                    #program was previous aired this month
+                    return FALSE
+                 else:
+                    _debug_('Same day or in the upcoming month')
+                    #program is today or in the upcoming days
+                    return TRUE
+        else:
+           _debug_('No good date format, assuming new Episode to be on the safe side')
+           return TRUE
+
+    #
+    # Shrink a string by removing all spaces and making it
+    # lower case and then returning the MD5 digest of it.
+    #
+    def shrink(self, text):
+       if text:
+           text = md5.new(text.lower().replace(' ', '')).hexdigest()
+       else:
+           text = ''
+
+       return text
+
+    #
+    # Return the key to be used for a given prog in the
+    # previouslyRecordedShows hashtable.
+    #
+    def getPreviousRecordingKey(self, prog):
+        shrunkTitle = self.shrink(prog.title)
+        shrunkSub   = self.shrink(prog.sub_title)
+        shrunkDesc  = self.shrink(prog.desc);
+        return ('%s-%s-%s' % (shrunkTitle, shrunkSub, shrunkDesc), \
+                '%s-%s-'   % (shrunkTitle, shrunkSub),              \
+                '%s--%s'   % (shrunkTitle, shrunkDesc))
+
+    #
+    # Get a previous recording, or None if none.
+    #
+    def getPreviousRecording(self, prog):
+        try:
+            return self.previouslyRecordedShows[self.getPreviousRecordingKey(prog)]
+        except KeyError:
+            return None
+
+    #
+    # Remove a duplicate recording
+    #
+    def removeDuplicate(self, prog=None):
+        self.loadPreviouslyRecordedShows()
+        previous = self.getPreviousRecording(prog)
+        if previous:
+           _debug_('Found duplicate, removing')
+           del self.previouslyRecordedShows[self.getPreviousRecordingKey(previous)]
+           self.savePreviouslyRecordedShows()
+
+    #
+    # Identify if the given programme is a duplicate. If not,
+    # record it as previously recorded.
+    #
+    def duplicate(self, prog=None):
+        self.loadPreviouslyRecordedShows()
+        previous = self.getPreviousRecording(prog)
+        if previous:
+            _debug_('Found duplicate for "%s", "%s", "%s", not adding' % \
+            (prog.title, prog.sub_title, prog.desc))
+            return TRUE
+        _debug_('No previous recordings for "%s", "%s", "%s", adding to hash and saving' % \
+        (prog.title, prog.sub_title, prog.desc))
+        self.previouslyRecordedShows[self.getPreviousRecordingKey(prog)] = prog
+        for key in self.getPreviousRecordingKey(prog):
+            self.previouslyRecordedShows[key] = prog.start
+        self.savePreviouslyRecordedShows()
+        return FALSE
+
     def scheduleRecording(self, prog=None):
         global guide
 
@@ -288,9 +423,44 @@ class RecordServer(xmlrpc.XMLRPC):
                 _debug_('scheduleRecording: "%s"' % (prog))
                 prog.tunerid = chan.tunerid
     
-        scheduledRecordings = self.getScheduledRecordings()
-        scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
-        self.saveScheduledRecordings(scheduledRecordings)
+        if config.DUPLICATE_DETECTION and not self.doesFavoriteAllowDuplicates(prog):
+           _debug_('Duplicate Detection enabled 1')
+           if not self.duplicate(prog):
+              if config.ONLY_NEW_DETECTION and self.doesFavoriteRecordOnlyNewEpisodes(prog):
+                 _debug_('OnlyNew Episode Detection enabled 1')
+                 if self.newEpisode(prog):
+                    _debug_('New Episode')
+                    scheduledRecordings = self.getScheduledRecordings()
+                    scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
+                    self.saveScheduledRecordings(scheduledRecordings)
+                 else:
+                    _debug_('Old Episode')
+              else:
+                 _debug_('OnlyNew Episode Detection disabled or Favorite allows all Episodes 1')
+                 scheduledRecordings = self.getScheduledRecordings()
+                 scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
+                 self.saveScheduledRecordings(scheduledRecordings)
+                 _debug_('Added Episode')
+           else:
+              return (FALSE, 'duplicate recording')
+        else:
+           _debug_('Duplicate Detection is disabled or Favorite allows duplicates 2')
+           if config.ONLY_NEW_DETECTION and self.doesFavoriteRecordOnlyNewEpisodes(prog):
+              _debug_('OnlyNew Detection enabled 2')
+              if self.newEpisode(prog):
+                 _debug_('New Episode')
+                 scheduledRecordings = self.getScheduledRecordings()
+                 scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
+                 self.saveScheduledRecordings(scheduledRecordings)
+              else:
+                 _debug_('Old Episode')
+
+           else:
+              _debug_('OnlyNew Episode Detection disabled 2')
+              scheduledRecordings = self.getScheduledRecordings()
+              scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
+              self.saveScheduledRecordings(scheduledRecordings)
+              _debug_('Added Episode')
 
         # check, maybe we need to start right now
         self.checkToRecord()
@@ -318,6 +488,8 @@ class RecordServer(xmlrpc.XMLRPC):
             print 'prog.isRecording:', e
             recording = FALSE
 
+        if config.DUPLICATE_DETECTION:
+           self.removeDuplicate(prog)
         scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.removeProgram(prog, tv_util.getKey(prog))
         self.saveScheduledRecordings(scheduledRecordings)
@@ -562,7 +734,7 @@ class RecordServer(xmlrpc.XMLRPC):
     
         (status, favs) = self.getFavorites()
         priority = len(favs) + 1
-        fav = tv.record_types.Favorite(name, prog, exactchan, exactdow, exacttod, priority)
+        fav = tv.record_types.Favorite(name, prog, exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew)
     
         scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.addFavorite(fav)
@@ -572,7 +744,7 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'favorite added')
     
     
-    def addEditedFavorite(self, name, title, chan, dow, mod, priority):
+    def addEditedFavorite(self, name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
         fav = tv.record_types.Favorite()
     
         fav.name = name
@@ -581,6 +753,8 @@ class RecordServer(xmlrpc.XMLRPC):
         fav.dow = dow
         fav.mod = mod
         fav.priority = priority
+        fav.allowDuplicates = allowDuplicates
+        fav.onlyNew = onlyNew
     
         scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.addFavorite(fav)
@@ -687,7 +861,24 @@ class RecordServer(xmlrpc.XMLRPC):
     
         # if we get this far prog is not a favorite
         return (FALSE, 'not a favorite')
+
+    def doesFavoriteRecordOnlyNewEpisodes(self, prog, favs=None):
+        if not favs:
+           (status, favs) = self.getFavorites()
+        for fav in favs.values():
+            if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
+               _debug_('NEW: %s'%fav.onlyNew)
+               if fav.onlyNew == '1':
+                  return TRUE 
     
+    def doesFavoriteAllowDuplicates(self, prog, favs=None):
+        if not favs:
+           (status, favs) = self.getFavorites()
+        for fav in favs.values():
+            if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
+               _debug_('DUP: %s'%fav.allowDuplicates)
+               if fav.allowDuplicates == '1':
+                  return TRUE
     
     def removeFavoriteFromSchedule(self, fav):
         # TODO: make sure the program we remove is not
@@ -920,12 +1111,12 @@ class RecordServer(xmlrpc.XMLRPC):
         return (status, message)
 
 
-    def xmlrpc_addEditedFavorite(self, name, title, chan, dow, mod, priority):
+    def xmlrpc_addEditedFavorite(self, name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
         (status, message) = (FALSE, 'RecordServer::addEditedFavorite: cannot acquire lock')
         try:
             self.lock.acquire()
             (status, response) = self.addEditedFavorite(unjellyFromXML(name), \
-            unjellyFromXML(title), chan, dow, mod, priority)
+            unjellyFromXML(title), chan, dow, mod, priority, allowDuplicates, onlyNew)
             message = 'RecordServer::addEditedFavorite: %s' % response
         finally:
             self.lock.release()

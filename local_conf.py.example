@@ -138,12 +138,12 @@ CONFIG_VERSION = 5.17
 # should not be interrupted, then add them to this
 # list. Set to None if a shutdown is always allowed.
 #AUTOSHUTDOWN_PROCESS_LIST = [
-#	'emerge',
-#	'tvgids',
-#	'transcode',
-#	'cdrecord',
-#	'mplayer',
-#	'top'
+#    'emerge',
+#    'tvgids',
+#    'transcode',
+#    'cdrecord',
+#    'mplayer',
+#    'top'
 #]
 
 # DEFAULT_WAKEUP_TIME
@@ -897,7 +897,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 
 # MPLAYER_AO_DEV      = 'oss:/dev/dsp'  # e.g.: oss,sdl,alsa, see mplayer docs
 
-# MPLAYER_VO_DEV_OPTS = ''	        # e.g.: ':some_var=vcal'
+# MPLAYER_VO_DEV_OPTS = ''              # e.g.: ':some_var=vcal'
 
 # DVD_LANG_PREF       = 'en,se,no'      # Order of preferred languages on DVD.
 # DVD_SUBTITLE_PREF   = ''              # Order of preferred subtitles on DVD.
@@ -1027,6 +1027,12 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # XXX the path doesn't work from the www cgi scripts!
 # TV_RECORD_DIR = None
+
+# This will enable duplicate recording detection
+# DUPLICATE_DETECTION = True
+
+# This will enable only new episodes to be recorded
+# ONLY_NEW_DETECTION = True
 
 #
 # Watching TV

@@ -134,7 +134,7 @@ class ScheduledRecordings:
 class Favorite:
 
     def __init__(self, name=None, prog=None, exactchan=FALSE, exactdow=FALSE, 
-                 exacttod=FALSE, priority=0):
+                 exacttod=FALSE, priority=0, allowDuplicates=TRUE, onlyNew=FALSE):
         self.TYPES_VERSION = TYPES_VERSION
         translation_table = \
                             '                ' \
@@ -158,6 +158,8 @@ class Favorite:
         if name:
             self.name = string.translate(name,translation_table)
         self.priority = priority
+        self.allowDuplicates = allowDuplicates
+        self.onlyNew = onlyNew
 
         if prog:
             self.title = prog.title

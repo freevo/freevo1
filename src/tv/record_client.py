@@ -168,11 +168,11 @@ def addFavorite(name, prog, exactchan, exactdow, exacttod):
     return (status, message) 
 
 
-def addEditedFavorite(name, title, chan, dow, mod, priority):
+def addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
     try:
         (status, message) = \
             server.addEditedFavorite(jellyToXML(name), \
-            jellyToXML(title), chan, dow, mod, priority)
+            jellyToXML(title), chan, dow, mod, priority, allowDuplicates, onlyNew)
     except Exception, e:
         print e
         traceback.print_exc()

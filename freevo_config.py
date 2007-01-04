@@ -1459,6 +1459,12 @@ XINE_TV_TIMESHIFT_FILEMASK = "you must set XINE_TV_TIMESHIFT_FILEMASK in your lo
 # XXX the path doesn't work from the www cgi scripts!
 TV_RECORD_DIR = None
 
+# This will enable duplicate recording detection
+DUPLICATE_DETECTION = None
+
+# This will enable only new episodes to be recorded
+ONLY_NEW_DETECTION = None
+
 #
 # Watching TV
 #

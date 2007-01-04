@@ -64,6 +64,10 @@ class ProgramItem(Item):
         else:
             self.scheduled = False
 
+        self.allowDuplicates = prog.allowDuplicates
+
+        self.onlyNew = prog.onlyNew
+
         self.overlap = prog.overlap
 
         self.favorite = False
@@ -137,7 +141,7 @@ class ProgramItem(Item):
 
 
     def add_favorite(self, arg=None, menuw=None):
-        fav = Favorite(self.prog.title, self.prog, True, True, True, -1)
+        fav = Favorite(self.prog.title, self.prog, True, True, True, -1, True, False)
         fav_item = FavoriteItem(self, fav, fav_action='add')
         fav_item.display_favorite(menuw=menuw)
 
@@ -216,6 +220,14 @@ class FavoriteItem(Item):
         self.name  = self.origname = fav.name
         self.title = fav.title
         self.fav_action = fav_action
+        if hasattr(fav,'allowDuplicates'):
+           self.allowDuplicates = fav.allowDuplicates
+        else:
+           self.allowDuplicates = 1
+        if hasattr(fav,'onlyNew'):
+           self.onlyNew = fav.onlyNew
+        else:
+           self.onlyNew = 0
 
         self.week_days = (_('Mon'), _('Tue'), _('Wed'), _('Thu'), _('Fri'), _('Sat'), _('Sun'))
 
@@ -250,6 +262,10 @@ class FavoriteItem(Item):
         items.append(menu.MenuItem(_('Modify channel'), action=self.mod_channel))
         items.append(menu.MenuItem(_('Modify day of week'), action=self.mod_day))
         items.append(menu.MenuItem(_('Modify time of day'), action=self.mod_time))
+        if config.DUPLICATE_DETECTION:
+           items.append(menu.MenuItem(_('Modify duplicate flag'), action=self.mod_dup))
+        if config.ONLY_NEW_DETECTION:
+           items.append(menu.MenuItem(_('Modify episodes flag'), action=self.mod_new))
 
         # XXX: priorities aren't quite supported yet
         if 0:
@@ -281,6 +297,23 @@ class FavoriteItem(Item):
 
         self.menuw.refresh()
 
+    def mod_dup(self, arg=None, menuw=None):
+        items = []
+        items.append(menu.MenuItem('Allow Duplicates', action=self.alter_prop,arg=('dup', 'True')))
+        items.append(menu.MenuItem('Prevent Duplicates', action=self.alter_prop,arg=('dup', 'False')))
+        favorite_menu = menu.Menu(_('Modify Duplicate Flag'), items,item_types = 'tv favorite menu')
+        favorite_menu.infoitem = self
+        menuw.pushmenu(favorite_menu)
+        menuw.refresh()
+
+    def mod_new(self, arg=None, menuw=None):
+        items = []
+        items.append(menu.MenuItem('All Episodes', action=self.alter_prop,arg=('new', 'False')))
+        items.append(menu.MenuItem('Only New Episodes', action=self.alter_prop,arg=('new', 'True')))
+        favorite_menu = menu.Menu(_('Modify Only New Flag'), items,item_types = 'tv favorite menu')
+        favorite_menu.infoitem = self
+        menuw.pushmenu(favorite_menu)
+        menuw.refresh()
 
     def mod_channel(self, arg=None, menuw=None):
         items = []
@@ -327,6 +360,22 @@ class FavoriteItem(Item):
                 self.mod = strftime(config.TV_TIMEFORMAT, 
                                     gmtime(float(val * 60)))
                 self.fav.mod = val
+
+        elif prop == 'dup':
+             if val == 'True':
+                self.allowDuplicates=TRUE
+                self.fav.allowDuplicates=TRUE
+             else:
+                self.allowDuplicates=FALSE
+                self.fav.allowDuplicates=FALSE
+
+        elif prop == 'new':
+             if val == 'True':
+                self.onlyNew=TRUE
+                self.fav.onlyNew=TRUE
+             else:
+                self.onlyNew=FALSE
+                self.fav.onlyNew=FALSE
 
         if menuw:  
             menuw.back_one_menu(arg='reload')
@@ -376,15 +425,21 @@ class FavoriteItem(Item):
             result = True
 
         if result:
-            (result, msg) = record_client.addEditedFavorite(self.fav.name, 
+           if not config.DUPLICATE_DETECTION or not hasattr(self.fav,'allowDuplicates'):
+              self.fav.allowDuplicates = 1
+           if not config.ONLY_NEW_DETECTION or not hasattr(self.fav,'onlyNew'):
+              self.fav.onlyNew = 0
+           (result, msg) = record_client.addEditedFavorite(self.fav.name, 
                                                             self.fav.title, 
                                                             self.fav.channel, 
                                                             self.fav.dow, 
                                                             self.fav.mod, 
-                                                            self.fav.priority)
-            if not result:
+                                                            self.fav.priority,
+                                                            self.fav.allowDuplicates,
+                                                            self.fav.onlyNew)
+           if not result:
                 AlertBox(text=_('Save Failed, favorite was lost')+(': %s' % msg)).show()
-            else:
+           else:
                 self.fav_action = 'edit'
                 if menuw:  
                     menuw.back_one_menu(arg='reload')
