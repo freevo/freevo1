@@ -541,6 +541,25 @@ def cache_image(filename, thumbnail=None, use_exif=False):
     return create_thumbnail(filename, thumbnail)
 
 
+def scale_rectangle_to_max(size, max_size):
+    '''
+    returns a scaled rectangle size fitting the size to max_size
+    this can be used to scale images for viewing in a browser and
+    retaining the aspect ratio
+    '''
+    try:
+        scaled_width = max_size[0]
+        scaled_height = max_size[1]
+        # if actual image aspect ratio > scaled image aspect ratio then scale height
+        if float(size[0]) / size[1] > float(scaled_width) / scaled_height:
+            scaled_height = scaled_width * size[1] / size[0]
+        else: # else scale width
+            scaled_width = scaled_height * size[0] / size[1]
+    except ZeroDivisionError:
+        pass
+    return (scaled_width, scaled_height)
+
+
 def www_link_cachedir():
     '''returns the www link cache directory name
     if the directory does not exist it is created
