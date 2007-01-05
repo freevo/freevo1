@@ -612,6 +612,11 @@ CACHE_IMAGES = 1
 #
 # VIDEO_ONLY_SCAN_DATADIR = 1
 
+# PRE and POST recording commands.  Set these to a runnable command if
+# you wish to have special mixer settings or video post processing.
+# VCR_PRE_REC  = None
+# VCR_POST_REC = None
+
 # PRE and POST playing commands.  Set these to a runnable command if
 # you wish to do something before and after playing a video, like
 # dimming the lights
