@@ -45,10 +45,9 @@ import locale
 import config
 import plugin
 import skin
-
-
-
 from pygame import image,transform
+
+
 
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -66,6 +65,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.visible = True
         self.bar     = None
         self.barfile = ''
+        self.free_space = -1
 
         # Getting current LOCALE
         try:
@@ -124,7 +124,6 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
 
-
 class IdleBarPlugin(plugin.Plugin):
     """
     To activate the idle bar, put the following in your local_conf.py:
@@ -140,6 +139,7 @@ class IdleBarPlugin(plugin.Plugin):
 
     def draw(self, (type, object), x, osd):
         return
+
 
 
 class clock(IdleBarPlugin):
@@ -196,6 +196,3 @@ class logo(IdleBarPlugin):
         else:
             image = os.path.join(config.IMAGE_DIR, self.image)
         return osd.drawimage(image, (x, osd.y + 5, -1, 75))[0]
-
-
-
