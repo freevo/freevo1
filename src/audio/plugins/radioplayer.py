@@ -89,8 +89,8 @@ class RadioPlayer:
         try:
             print 'RadioPlayer.play() %s' % self.item.station
         except AttributeError:
-            pass
-            
+            return 'Cannot play with RadioPlayer - no station'
+
         self.mode = 'play'
 
         mixer = plugin.getbyname('MIXER')
