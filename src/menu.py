@@ -262,7 +262,7 @@ class MenuWidget(GUIObject):
             MENU_GOTO_AUDIOMENU
             MENU_GOTO_IMAGEMENU
             MENU_GOTO_GAMESMENU
-            MENU_GOTO_RADIOMENU   #doesn't yet work
+            MENU_GOTO_RADIOMENU
             MENU_GOTO_SHUTDOWN
         """        
         self.menustack = [self.menustack[0]]
@@ -270,7 +270,6 @@ class MenuWidget(GUIObject):
         self.init_page()
 
         if media == 'shutdown': 
-            menu.selected = 0
             for menuitem in self.menustack[0].choices:
                 if self.all_items.index(menuitem) >= self.rows - 1:
                     self.goto_next_page()
