@@ -167,7 +167,11 @@ class FileInfoResource(FreevoResource):
         for i in range(len(self.allowed_dirs)):
             val = self.allowed_dirs[i][1]
             if dir_str.startswith(val):
-                return val.replace("/", "_") + dir_str[len(val):]
+                child_res = val.replace("/", "_")
+                location = dir_str[len(val):]
+                if not location[0] == "/":
+                    child_res += "/"
+                return child_res + location
         return dir_str
 
 

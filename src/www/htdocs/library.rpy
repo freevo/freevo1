@@ -87,8 +87,11 @@ class LibraryResource(FreevoResource):
                 if dir_str.startswith(val):
                     child_res = val
                     break
-
-        return child_res.replace("/", "_") + dir_str[len(child_res):]
+        child_res = child_res.replace("/", "_")
+        location = dir_str[len(child_res):]
+        if not location[0] == "/":
+            child_res += "/"
+        return child_res + location
 
     def get_suffixes (self, media):
         print 'get_suffixes (self, media=\"%s\")' % (media)

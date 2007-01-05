@@ -92,20 +92,17 @@ def main():
 
     root = static.File(docRoot)
     root.processors = { '.rpy': script.ResourceScript, }
-    for item in config.VIDEO_ITEMS:
+
+    child_resources = []
+    child_resources.extend(config.VIDEO_ITEMS)
+    child_resources.extend(config.AUDIO_ITEMS)
+    child_resources.extend(config.IMAGE_ITEMS)
+    child_resources.extend([('Recorded TV', config.TV_RECORD_DIR)])
+    child_resources.extend([('Webserver Cache', config.WEBSERVER_CACHEDIR)])
+    for item in child_resources:
         if isinstance(item, tuple) and len(item) == 2:
             (title, path) = item
             root.putChild(path.replace("/", "_"), static.File(path))
-    for item in config.AUDIO_ITEMS:
-        if isinstance(item, tuple) and len(item) == 2:
-            (title, path) = item
-            root.putChild(path.replace("/", "_"), static.File(path))
-    for item in config.IMAGE_ITEMS:
-        if isinstance(item, tuple) and len(item) == 2:
-            (title, path) = item
-            root.putChild(path.replace("/", "_"), static.File(path))
-    root.putChild(config.TV_RECORD_DIR.replace("/", "_"), static.File(config.TV_RECORD_DIR))
-    root.putChild(config.WEBSERVER_CACHEDIR.replace("/", "_"), static.File(config.WEBSERVER_CACHEDIR))
     
     root.putChild('vhost', vhost.VHostMonsterResource())
     rewriter =  rewrite.RewriterResource(root, helpimagesrewrite)
