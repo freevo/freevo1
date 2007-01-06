@@ -7,12 +7,12 @@
 # Notes:
 #    To activate, put the following line in local_conf.py:
 #       plugin.activate('upsoon')
-# ToDo:        
+# ToDo:
 #
 # -----------------------------------------------------------------------
 #
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -32,8 +32,8 @@
 # -----------------------------------------------------------------------
 
 
-import plugin
 import config
+import plugin
 import time, sys, os, socket, traceback, string
 import xmlrpclib
 import rc
@@ -46,7 +46,7 @@ from gui import AlertBox
 from event import *
 
 
-class PluginInterface( plugin.DaemonPlugin ):
+class PluginInterface(plugin.DaemonPlugin):
     """
     plugin to monitor if a recording is about to start and shut down the
     player if the video device is in use
@@ -61,41 +61,40 @@ class PluginInterface( plugin.DaemonPlugin ):
 
     """
     __author__           = 'Duncan Webb'
-    __author_email__     = 'duncan-freevo@linuxowl.com'
+    __author_email__     = 'duncan@freevo.org'
     __maintainer__       = __author__
     __maintainer_email__ = __author_email__
     __version__          = '$Revision$'
 
 
-    def __init__( self ):
+    def __init__(self):
         """
         init the upsoon plugin
         """
         _debug_('__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
         self.lock = thread.allocate_lock()
-        self.poll_interval = 3000 #30 secs
+        self.poll_interval = 1500 #15 secs
         self.poll_menu_only = 0
         self.event_listener = 1
-        plugin.register( self, 'upsoon' )
+        plugin.register(self, 'upsoon')
 
         server_string = 'http://%s:%s/' % (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
-
         _debug_('%s' % server_string)
         self.server = xmlrpclib.Server(server_string, allow_none=1)
         _debug_('%s' % self.server)
 
         self.serverup = None
         self.next_program = self.findNextProgram()
-        # strange, doesn't work with non-ascii characters
-        #_debug_('%s:%s chan=%s %s->%s' % (self.next_program.title.encode('utf-8'), \
-        #    self.next_program.sub_title.encode('utf-8'), self.next_program.channel_id, \
-        #    time.localtime(self.next_program.start), time.localtime(self.next_program.stop)), 2)
+        _debug_('%s' % (self.next_program))
 
         self.fc = FreevoChannels()
+
+        self.seconds_before_announce = 120
         self.seconds_before_start = 60
         self.pending_lockfile = config.FREEVO_CACHEDIR + '/record.soon'
-        self.tv_lockfile = None
+        self.tv_lockfile = None # lockfile of recordserver
+        self.stopped = False    # flag that tells upsoon stopped the tv, not the user
 
 
     def findNextProgram(self):
@@ -104,9 +103,9 @@ class PluginInterface( plugin.DaemonPlugin ):
         serverup = True
         try:
             (status, message) = self.server.findNextProgram()
-            _debug_('status=%s, message=%s' % (status, message), 3)
-        except TypeError:
-            _debug_('TypeError exception')
+            _debug_('status=%s, message=%s' % (status, message), 2)
+        except TypeError, e:
+            _debug_('findNextProgram:%s' % e, 0)
             status = False
             pass
         except Exception, e:
@@ -114,7 +113,7 @@ class PluginInterface( plugin.DaemonPlugin ):
             status = False
             if sys.exc_type != socket.error:
                 traceback.print_exc()
-                _debug_(e, 0)
+                _debug_('findNextProgram:%s' % e, 0)
 
         if self.serverup != serverup:
             self.serverup = serverup
@@ -138,13 +137,13 @@ class PluginInterface( plugin.DaemonPlugin ):
         serverup = True
         try:
             (status, message) = self.server.isPlayerRunning()
-            _debug_('status=%s, message=%s' % (status, message), 3)
+            _debug_('status=%s, message=%s' % (status, message), 2)
         except Exception, e:
             serverup = False
             message = None
             if sys.exc_type != socket.error:
                 traceback.print_exc()
-                _debug_(e, 0)
+                _debug_('isPlayerRunning:%s' % e, 0)
 
         if self.serverup != serverup:
             self.serverup = serverup
@@ -167,7 +166,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         return self.is_player_running
 
 
-    def close( self ):
+    def close(self):
         """
         to be called before the plugin exists.
         It terminates the connection with the server
@@ -175,7 +174,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         _debug_('close(self)')
 
 
-    def poll( self ):
+    def poll(self):
         """
         Sends a poll message to the record server
         """
@@ -183,89 +182,101 @@ class PluginInterface( plugin.DaemonPlugin ):
         _debug_('poll(self)', 2)
 
         self.next_program  = self.findNextProgram()
-        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), 2)
+
+        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program))
+
         if self.next_program == None:
             return None
 
-        # Check that a recording is not in progress for this channel
         vdev=self.fc.getVideoGroup(self.next_program.channel_id, False).vdev
-        self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.'+vdev.split('/')[-1]
+        rdev=config.RADIO_DEVICE
 
         # Remove the pending record lock file when a record lock file is written
         if os.path.exists(self.pending_lockfile):
             if os.path.exists(self.tv_lockfile):
                 os.remove(self.pending_lockfile)
+                _debug_("record.soon lockfile removed")
             return None
 
-        # Is a recording in progress
+        # Check if a recording is in progress
+        self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.'+vdev.split('/')[-1]
         if os.path.exists(self.tv_lockfile):
             return None
 
         secs_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
         _debug_('next recording in %s secs' % (secs_to_next))
+
+        # announce 120 seconds before recording is due to start
         # stop the player 60 seconds before recording is due to start
-        if (secs_to_next > self.seconds_before_start):
+
+        if (secs_to_next > self.seconds_before_announce):
             return None
 
-        _debug_('recording in less that a minute (%s secs)' % (secs_to_next))
-        open(self.pending_lockfile, 'w').close()
-
-        try:
-            # check the video
-            dev_fh = None
+        # check the video
+        if vdev:
             try:
                 dev_fh = os.open(vdev, os.O_TRUNC)
-                os.read(dev_fh, 1)
-            except OSError:
-                rc.post_event(STOP)
-                _debug_('video device \"%s\" in use' % (vdev))
-                rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
-                # The alert box doesn't work
-                #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
-            if dev_fh:
+                try:
+                    os.read(dev_fh, 1)
+                except:
+                    if (secs_to_next > self.seconds_before_start):
+                        # just announce
+                        rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in a few minutes')))
+                    else:
+                        # stop the tv
+                        rc.post_event(STOP)
+                        self.stopped = True
+                        open(self.pending_lockfile, 'w').close()
                 os.close(dev_fh)
-        except:
-            print 'cannot check video device \"%s\"' % (vdev)
+            except:
+                _debug_('cannot check video device \"%s\"' % (vdev), 0)
 
-        rdev=config.RADIO_DEVICE
+        # check the radio
         if rdev:
             try:
-                # check the radio
-                dev_fh = None
+                dev_fh = os.open(rdev, os.O_TRUNC)
                 try:
-                    dev_fh = os.open(rdev, os.O_TRUNC)
                     os.read(dev_fh, 1)
-                except OSError:
-                    rc.post_event(STOP)
-                    _debug_('radio device \"%s\" in use' % (rdev))
-                    rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in less than a minute')))
-                    # Need to go back one menu, the alert box doesn't work
-                    #AlertBox(text=_('Sorry, a program is about to start recording. '), height=200).show()
-                if dev_fh:
-                    os.close(dev_fh)
+                except:
+                    if (secs_to_next > self.seconds_before_start):
+                        rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in a few minutes')))
+                    else:
+                        # stop the radio
+                        rc.post_event(STOP)
+                        self.stopped = True
+                        # write lockfile, not sure if this is needed
+                        open(self.pending_lockfile, 'w').close()
+                os.close(dev_fh)
             except:
-                print 'cannot check radio device \"%s\"' % (rdev)
+                _debug_('cannot check radio device \"%s\"' % (rdev), 0)
+
+        return None
 
 
-    def eventhandler( self, event, menuw=None ):
-        """ Processes user events
-        TODO
-            something useful """
+    def eventhandler(self, event, menuw=None):
+        """ Processes events
+        detect the video start and stop events so that the
+        alert box will work correctly """
         self.lock.acquire()
+        try:
+            _debug_('eventhandler(self, %s, %s) name=%s arg=%s context=%s handler=%s' % \
+                (event, menuw, event.name, event.arg, event.context, event.handler), 2)
+            _debug_('event name=%s arg=%s' % (event.name, event.arg))
+        finally:
+            self.lock.release()
 
-        _debug_('eventhandler(self, %s, %s) name=%s arg=%s context=%s handler=%s' % \
-            (event, menuw, event.name, event.arg, event.context, event.handler), 3)
-
-        _debug_('event name=%s arg=%s' % (event.name, event.arg))
-
-        self.lock.release()
-
+        if (event.name == 'VIDEO_START'):
+            self.stopped = False
+        if (event.name == 'VIDEO_END'):
+            if self.stopped:
+                # upsoon stopped the tv, now display a msgbox
+                AlertBox(text=_('TV stopped, a recording is about to start!'), height=200).show()
         return 0
 
 
 if __name__ == '__main__':
-    # this won't work, without some more imports
-    if len(sys.argv) >= 2: 
+    # test code, run with freevo execute /path/to/upsoon.py
+    if len(sys.argv) >= 2:
         function = sys.argv[1]
     else:
         function = 'none'
@@ -274,6 +285,7 @@ if __name__ == '__main__':
         (result, response) = isPlayerRunning()
         print response
 
+    # looks like devinfo...
     fc = FreevoChannels()
     vg=fc.getVideoGroup('K10', False)
     print "vg=%s" % vg
