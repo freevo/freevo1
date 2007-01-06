@@ -596,9 +596,13 @@ def cache_www_image(filename):
     '''creates a webserver thumbnail image and returns its size.
     '''
     thumb_path = cache_www_thumbnail_path(filename)
-    image = imlib2.open(filename)
-    thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
-    thumb.save(thumb_path)
+    try:
+        image = imlib2.open(filename)
+        thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
+        thumb.save(thumb_path)
+    except IOError, e:
+        print e
+        return (0, 0)
     return thumb.size
 
 
