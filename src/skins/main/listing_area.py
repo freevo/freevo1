@@ -419,7 +419,7 @@ class Listing_Area(Skin_Area):
                     self.drawroundbox(x0 + r.x, y0 + r.y, r.width, r.height, r)
 
                 image, i_w, i_h = format_image(settings, choice, val.width,
-                                               val.height, force=True)
+                                               val.height, True, self.xml_settings.anamorphic)
                 if image:
                     addx = 0
                     addy = 0
