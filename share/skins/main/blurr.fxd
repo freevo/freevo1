@@ -692,11 +692,32 @@
                         <text width="100" align="right" font="player info">Track:</text>
                         <goto_pos x="10" mode="relative"/>
                         <text font="player info" expression="trackno"/>
-                    </if>
-                    <if expression="trackof">
+                        <if expression="trackof">
                             <text font="info value">/</text>
                             <text font="info value" expression="trackof"/>
+                        </if>
+                        <newline/>
                     </if>
+		    <if expression="stream_name">
+			<text width="140" align="right" font="player info">Name:</text>
+			<goto_pos x="10" mode="relative"/>
+			<text font="player info" expression="stream_name"/>
+			<newline/>
+		    </if>
+		    <if expression="genre">
+			<text width="140" align="right" font="player info">Genre:</text>
+			<goto_pos x="10" mode="relative"/>
+			<text font="player info" expression="genre"/>
+			<newline/>
+		    </if>
+		    <if expression="bitrate">
+			<text width="140" align="right" font="player info">Bitrate:</text>
+			<goto_pos x="10" mode="relative"/>
+			<text font="player info" expression="bitrate"/>
+                        <text width="130" font="player info">kb/s</text>
+
+			<newline/>
+		    </if>
                     <newline/>
                     <goto_pos y="15" mode="relative"/>
                     <if expression="length">

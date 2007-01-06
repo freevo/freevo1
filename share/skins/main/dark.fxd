@@ -745,9 +745,29 @@ Images: defaults to video/audio
     </if>
     <newline/>
    </if>
+   <if expression="stream_name">
+    <text width="100" align="left" font="info label">Name</text>
+    <text font="info value" expression="stream_name"/>
+    <newline/>
+   </if>
+   <if expression="genre">
+    <text width="100" align="left" font="info label">Genre</text>
+    <text font="info value" expression="genre"/>
+    <newline/>
+   </if>
    <if expression="trackno">
     <text width="100" align="left" font="info label">Track</text>
     <text font="info value" expression="trackno"/>
+    <if expression="trackof">
+	<text font="info value">/</text>
+	<text font="info value" expression="trackof"/>
+    </if>
+    <newline/>
+   </if>
+   <if expression="bitrate">
+    <text width="100" align="left" font="info label">Bitrate</text>
+    <text font="info value" expression="bitrate"/>
+    <text font="info value">kb/s</text>
     <newline/>
    </if>
    <if expression="length">
