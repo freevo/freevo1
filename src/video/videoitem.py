@@ -224,7 +224,7 @@ class VideoItem(Item):
                 length = self.info['runtime']
                 if not length:
                     length = ''
-                if length.find('min') > 0:
+                if length.find('min') == -1:
                     length = '%s min' % length
                 if length.find('/') > 0:
                     length = length[:length.find('/')].rstrip()
