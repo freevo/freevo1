@@ -119,7 +119,7 @@ import plugin
 try:
     import bluetooth
 except:
-    print String(_("ERROR")+": "+_("You need pybluez (http://http://org.csail.mit.edu/pybluez/) to run \"freevused\" plugin."))
+    print String(_("ERROR")+": "+_("You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" plugin."))
 
 import thread
 
@@ -296,6 +296,7 @@ class PluginInterface(plugin.DaemonPlugin):
         
     def process_data(self):
         str_arg = ''
+        command = None
 
         _debug_("Data received: %s" % str(self.data))
         str_cmd = self.data[:4]
