@@ -58,14 +58,15 @@ def _debug_(text, level=1):
 #"hardcoded capabilities" .. these might change or become dynamic in the future, when more capabilities are supported
 #the "container format" will remain hardcoded
 
-ContainerCapList = [ 'Avi', 'Mkv' ]
-VideoCodecList = [ 'MPEG 4 (lavc)', 'XViD']
-AudioCodecList = [ 'MPEG 1 Layer 3 (mp3)', 'Ogg' ]
+ContainerCapList = [ 'Avi', 'Mkv', 'mp4' ]
+VideoCodecList = [ 'MPEG 4 (lavc)', 'XViD', 'iPodv' ]
+AudioCodecList = [ 'MPEG 1 Layer 3 (mp3)', 'Ogg', 'iPoda' ]
 
 VFDict = {
     'Deinterlacing' : ['None','Linear blend','Lavc deinterlacer'],
     'Inverse Telecine' : ['None','On (stateless filter)'],
-    'Denoise' : ['None','Normal denoise','HQ denoise']
+    'Denoise' : ['None','Normal denoise','HQ denoise'],
+    'iPod' : ['iPod']
     }
 
 MencoderFilters = {
@@ -73,15 +74,16 @@ MencoderFilters = {
     'Lavc deinterlacer' : "lavcdeint",
     'On (stateless filter)' : "ivtc=1",
     'Normal denoise' : "denoise3d",
-    'HQ denoise' : "hqdn3d"
+    'HQ denoise' : "hqdn3d",
+    'iPod' : "scale=320:240"
     }
 
 MencoderMapping = {
-    'MPEG 4 (lavc)' : ["lavc",["-lavcopts","vcodec=mpeg4:vhq:vqmin=2:v4mv:trell:autoaspect:vbitrate=%s%s"]],
-#to hard    'MPEG 4 (lavc)' : ["lavc",["-lavcopts","vcodec=mpeg4:vhq:vqmin=2:v4mv:vlelim=-4:vcelim=9:lumi_mask=0.05:dark_mask=0.01:autoaspect:vbitrate=%s%s"]],
-#old one    'MPEG 4 (lavc)' : ["lavc",["-lavcopts","vcodec=mpeg4:vhq:autoaspect:vbitrate=%s%s"]],
-    'XViD' : ["xvid",["-xvidencopts","bitrate=%s%s"]],
-    'MPEG 1 Layer 3 (mp3)' : ["mp3lame",["-lameopts", "cbr:br=%s"]]
+    'MPEG 4 (lavc)' : ["copy","lavc",["-lavcopts","vcodec=mpeg4:vhq:vqmin=2:v4mv:trell:autoaspect:vbitrate=%s%s"]],
+    'XViD' : ["copy","xvid",["-xvidencopts","bitrate=%s%s"]],
+    'MPEG 1 Layer 3 (mp3)' : ["frameno","mp3lame",["-lameopts", "cbr:br=%s"]],
+    'iPodv' : ["lavc","lavc",["-lavcopts","vcodec=mpeg4:vbitrate=%s%s:mbd=2:cmp=2:subcmp=2:trell=yes:v4mv=yes:vglobal=1:acodec=aac:abitrate=128:aic=2:aglobal=1"],["-of","lavf"],["-ffourcc","mp4v"],["-lavfopts","format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames"]],
+    'iPoda' : ["lavc","lavc",["-lavcopts","acodec=aac:abitrate=%s:aic=2:aglobal=1"],["-lavfopts","format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames"]]
     }
 
 
@@ -158,6 +160,7 @@ class EncodingJob:
             return "Unknown container format"
 
         self.container = container
+        self.output = ('%s.%s' % (self.output,self.container))
 
     def getContainerList(self):
         return ContainerCapList
@@ -207,7 +210,7 @@ class EncodingJob:
 
     def setVideoFilters(self, videofilters):
         """Set video filters"""
-        for vfilter, option in videofilters.items():
+        for vfilter, option in videofilters:
             if MencoderFilters.has_key(option):
                 self.vfilters += [ MencoderFilters[option] ]
 
@@ -322,9 +325,10 @@ class EncodingJob:
 
     def _GCLMAudiopass(self):
         """Returns audio pass specefic part of mencoder cl"""
-        return ["-ovc", "frameno", "-oac", MencoderMapping[self.acodec][0], MencoderMapping[self.acodec][1][0],
-                MencoderMapping[self.acodec][1][1] % self.abrate,
-                "-o", "frameno.avi"]
+        if self.acodec=='iPoda':
+       	   return ["-ovc", MencoderMapping[self.acodec][0], "-oac", MencoderMapping[self.acodec][1], MencoderMapping[self.acodec][2][0], MencoderMapping[self.acodec][2][1] % self.abrate, MencoderMapping[self.acodec][3][0], MencoderMapping[self.acodec][3][1], "-o", "frameno.avi"]
+        else:
+       	   return ["-ovc", MencoderMapping[self.acodec][0], "-oac", MencoderMapping[self.acodec][1], MencoderMapping[self.acodec][2][0], MencoderMapping[self.acodec][2][1] % self.abrate, "-o", "frameno.avi"]
 
     def _GCLMVideopass(self, passnr):
         """Returns video pass specefic part of mencoder cl"""
@@ -346,7 +350,7 @@ class EncodingJob:
         if self.crop != None:
             vf += [ "crop=%s" % self.crop ]
 
-        #in case of xvid and anamorphic dvd, add scaling to compensate AR.. 
+        #in case of xvid and anamorphic dvd, add scaling to compensate AR..
         #if we didn't find cropping we have no res, so no tricks
         if self.vcodec == "XViD" and (self.crop != None):
             if self.ana:
@@ -363,6 +367,8 @@ class EncodingJob:
             idealres = self._OptimalRes(self.cropres[0], int(yscaled))
             _debug_("Rescaled, rounded yres is %sx%s" % (idealres[0], idealres[1]))
             vf += [ "scale=%s:%s" % (idealres[0], idealres[1])]
+        elif self.vcodec == "iPodv":
+            vf += [ "scale=320:240" ]
 
         _debug_("Video filters: %s" % vf)
 
@@ -379,9 +385,10 @@ class EncodingJob:
         else:
             output=self.output
 
-        args = ["-oac", "copy", "-ovc",MencoderMapping[self.vcodec][0], MencoderMapping[self.vcodec][1][0],
-                MencoderMapping[self.vcodec][1][1] % (self.vbrate, vpass),
-                "-vf", vfilter, "-o", output]
+        if (self.vcodec=='iPodv'):
+        	args = ["-oac", MencoderMapping[self.vcodec][0], "-ovc", MencoderMapping[self.vcodec][1], MencoderMapping[self.vcodec][2][0], MencoderMapping[self.vcodec][2][1] % (self.vbrate, vpass), "-vf", vfilter, MencoderMapping[self.vcodec][3][0], MencoderMapping[self.vcodec][3][1], MencoderMapping[self.vcodec][4][0], MencoderMapping[self.vcodec][4][1], MencoderMapping[self.vcodec][5][0], MencoderMapping[self.vcodec][5][1], "-o", output]
+        else:
+        	args = ["-oac", MencoderMapping[self.vcodec][0], "-ovc", MencoderMapping[self.vcodec][1], MencoderMapping[self.vcodec][2][0], MencoderMapping[self.vcodec][2][1] % (self.vbrate, vpass), "-vf", vfilter, "-o", output]
 
         #if we have a progressive ntsc file, lock the output fps (do this with ivtc too)
         if ("ivtc=1" in vf) or self.ntscprog:
