@@ -159,7 +159,11 @@ class FileInfoResource(FreevoResource):
             for b in a.children:
                 if b.name == 'info':
                     for c in b.children:
-                        fxd_info.update({str(c.name).replace('\r',''):str(c.first_cdata).replace('\r','')})
+                        name = c.name.replace('\r', '').replace('\n', ' ')
+                        first_cdata = c.first_cdata.replace('\r', '').replace('\n', ' ')
+                        if first_cdata == '' or first_cdata == 'None':
+                            continue
+                        fxd_info.update({str(name):str(first_cdata)})
         return fxd_info
 
     def convert_dir(self, dir_str):
