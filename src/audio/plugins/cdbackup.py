@@ -101,6 +101,12 @@ class PluginInterface(plugin.ItemPlugin):
     will be executed is stored in CDPAR_CMD.
     CDPAR_CMD = 'cdparanoia'
 
+    For ripping the wav from the CD, we use cdparanoia. You can specify the options 
+    used. For error pertection, you the following:
+    CD_RIP_CDPAR_OPTS = '-s'
+    For a quick rip (about an eight of the time as the line above) use:
+    CD_RIP_CDPAR_OPTS = '-s -Z'
+
     Lame .mp3 encoding parameters:
     Lame is used for .mp3 encoding. The actual command that will be executed is
     stored in LAME_CMD
@@ -132,6 +138,7 @@ class PluginInterface(plugin.ItemPlugin):
 
     CD_RIP_PN_PREF= '%(genre)s/%(artist)s/%(album)s/%(song)s'
     CDPAR_CMD = 'cdparanoia'
+    CD_RIP_CDPAR_OPTS = '-s'
 
     LAME_CMD = 'lame'
     CD_RIP_LAME_OPTS  = '--vbr-new'
@@ -164,6 +171,7 @@ class PluginInterface(plugin.ItemPlugin):
                 ('CDPAR_CMD', config.CONF.cdparanoia, ''),
                 ('OGGENC_CMD', config.CONF.oggenc, ''),
                 ('FLAC_CMD', config.CONF.flac, ''),
+                ('CD_RIP_CDPAR_OPTS', '-s', ''),
                 ('CD_RIP_PN_PREF', '%(artist)s/%(album)s/%(song)s', ''),
                 ('CD_RIP_LAME_OPTS', '--preset standard', ''),
                 ('CD_RIP_OGG_OPTS', '-m 128', ''),
@@ -402,7 +410,8 @@ class main_backup_thread(threading.Thread):
             output   = ''
 
             # Build the cdparanoia command to be run
-            cdparanoia_command = str('%s -s %s' % (config.CDPAR_CMD, str(i+1))).split(' ')+\
+            cdparanoia_command = str('%s %s %s' % (config.CDPAR_CMD, config.CD_RIP_CDPAR_OPTS, \
+                                 str(i+1))).split(' ')+\
                                  [ wav_file ]
 
             _debug_('cdparanoia:  %s' % cdparanoia_command)

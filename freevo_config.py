@@ -764,6 +764,7 @@ HEADLINES_LOCATIONS = [
 CD_RIP_TMP_DIR = '/tmp/'
 CD_RIP_TMP_NAME = 'track_%(track)s_being_ripped'
 CD_RIP_PN_PREF = '%(artist)s/%(album)s/%(track)s - %(song)s'
+CD_RIP_CDPAR_OPTS = '-s'
 CD_RIP_LAME_OPTS = '--vbr-new -b 192 -h'
 CD_RIP_OGG_OPTS = '-m 128'
 CD_RIP_FLAC_OPTS = '-8'
