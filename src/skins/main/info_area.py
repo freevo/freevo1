@@ -57,6 +57,7 @@ class Info_Area(Skin_Area):
         self.updated = 0
         self.sellist = None
         self.i18n_re = re.compile('^( ?)(.*?)([:,]?)( ?)$')
+        self.do_i18n_re = re.compile('\w{2}')
 
     def update_content_needed( self ):
         """
@@ -274,9 +275,10 @@ class Info_Area(Skin_Area):
                     if list[ i ].expression_analized == 0:
                         # not translated yet
                         list[ i ].expression_analized = 1
-                        m = self.i18n_re.match(list[i].text).groups()
-                        # translate
-                        list[i].text = m[0] + _(m[1]) + m[2] + m[3]
+                        # translate if contains some alphanumerics
+                        if self.do_i18n_re.match(list[i].text):
+                            m = self.i18n_re.match(list[i].text).groups()
+                            list[i].text = m[0] + _(m[1]) + m[2] + m[3]
                 # I add a tuple here to be able to compare lists and know if we need to
                 # update, this is useful in the mp3 player
                 ret_list += [ index + [ ( i, list[ i ].text ) ] ]
