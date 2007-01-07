@@ -196,6 +196,9 @@ class Info_Area(Skin_Area):
         create the python expression
         """
         exp = ''
+        if expression.startswith('python:'):
+            return expression.replace('python:', '', 1)
+
         for b in expression.split( ' ' ):
             if b in ( 'and', 'or', 'not', '==', '!=' ):
                 # valid operator
