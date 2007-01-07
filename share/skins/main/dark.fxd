@@ -178,7 +178,7 @@ Images: defaults to video/audio
 
 <headlines>
  <screen layout="default screen" x="0" y="0" width="800" height="600"/>
-  <title visible="not idlebar" layout="title0" x="10" y="10" width="780" height="60"/>
+  <!--<title visible="not idlebar" layout="title0" x="10" y="10" width="780" height="60"/>-->
   <info layout="info" x="10" y="110" width="780" height="480"/>
 </headlines>
 
