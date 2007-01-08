@@ -318,22 +318,34 @@ class EncodingJob:
     def _GCLMSource(self):
         """Returns source part of mencoder"""
         if self.sourcetype == "dvd":
-            #return [ "-endpos", "10","-dvd-device", self.source , "dvd://%s" % self.chapter]
-            return [ "-dvd-device", self.source , "dvd://%s" % self.chapter]
+            if hasattr(config, "DVD_LANG_PREF") and config.DVD_LANG_PREF:
+                audio = ["-alang", config.DVD_LANG_PREF]
+            else:
+                audio = [] 
+            return audio+[ "-dvd-device", self.source , "dvd://%s" % self.chapter]
         else:
             return [ self.source ]
 
     def _GCLMAudiopass(self):
         """Returns audio pass specefic part of mencoder cl"""
         if self.acodec=='iPoda':
-       	   return ["-ovc", MencoderMapping[self.acodec][0], "-oac", MencoderMapping[self.acodec][1], MencoderMapping[self.acodec][2][0], MencoderMapping[self.acodec][2][1] % self.abrate, MencoderMapping[self.acodec][3][0], MencoderMapping[self.acodec][3][1], "-o", "frameno.avi"]
+            return [
+                "-ovc", MencoderMapping[self.acodec][0],
+                "-oac", MencoderMapping[self.acodec][1],
+                    MencoderMapping[self.acodec][2][0], MencoderMapping[self.acodec][2][1] % self.abrate,
+                    MencoderMapping[self.acodec][3][0], MencoderMapping[self.acodec][3][1],
+                "-o", "frameno.avi"]
         else:
-       	   return ["-ovc", MencoderMapping[self.acodec][0], "-oac", MencoderMapping[self.acodec][1], MencoderMapping[self.acodec][2][0], MencoderMapping[self.acodec][2][1] % self.abrate, "-o", "frameno.avi"]
+            return [
+                "-ovc", MencoderMapping[self.acodec][0],
+                "-oac", MencoderMapping[self.acodec][1],
+                        MencoderMapping[self.acodec][2][0], MencoderMapping[self.acodec][2][1] % self.abrate,
+                "-o", "frameno.avi"]
 
     def _GCLMVideopass(self, passnr):
         """Returns video pass specefic part of mencoder cl"""
         vf = copy(self.vfilters)
-        vfilter=""
+        vfilter = ""
         vpass = ""
         yscaled = None
         #deinterlacer test vf += ["pp=lb"]
@@ -352,7 +364,7 @@ class EncodingJob:
 
         #in case of xvid and anamorphic dvd, add scaling to compensate AR..
         #if we didn't find cropping we have no res, so no tricks
-        if self.vcodec == "XViD" and (self.crop != None):
+        if self.vcodec == "XViD" and self.crop:
             if self.ana:
                 #calculate a decent resized picturesize, res must still be a multiple of 16
                 yscaled = (self.cropres[1] * 0.703125)
@@ -386,9 +398,21 @@ class EncodingJob:
             output=self.output
 
         if (self.vcodec=='iPodv'):
-        	args = ["-oac", MencoderMapping[self.vcodec][0], "-ovc", MencoderMapping[self.vcodec][1], MencoderMapping[self.vcodec][2][0], MencoderMapping[self.vcodec][2][1] % (self.vbrate, vpass), "-vf", vfilter, MencoderMapping[self.vcodec][3][0], MencoderMapping[self.vcodec][3][1], MencoderMapping[self.vcodec][4][0], MencoderMapping[self.vcodec][4][1], MencoderMapping[self.vcodec][5][0], MencoderMapping[self.vcodec][5][1], "-o", output]
+            args = [
+                "-oac", MencoderMapping[self.vcodec][0],
+                "-ovc", MencoderMapping[self.vcodec][1],
+                        MencoderMapping[self.vcodec][2][0], MencoderMapping[self.vcodec][2][1] % (self.vbrate, vpass),
+                "-vf", vfilter, MencoderMapping[self.vcodec][3][0], MencoderMapping[self.vcodec][3][1],
+                        MencoderMapping[self.vcodec][4][0], MencoderMapping[self.vcodec][4][1],
+                        MencoderMapping[self.vcodec][5][0], MencoderMapping[self.vcodec][5][1],
+                "-o", output]
         else:
-        	args = ["-oac", MencoderMapping[self.vcodec][0], "-ovc", MencoderMapping[self.vcodec][1], MencoderMapping[self.vcodec][2][0], MencoderMapping[self.vcodec][2][1] % (self.vbrate, vpass), "-vf", vfilter, "-o", output]
+            args = [
+                "-oac", MencoderMapping[self.vcodec][0],
+                "-ovc", MencoderMapping[self.vcodec][1],
+                    MencoderMapping[self.vcodec][2][0], MencoderMapping[self.vcodec][2][1] % (self.vbrate, vpass),
+                "-vf", vfilter,
+                "-o", output]
 
         #if we have a progressive ntsc file, lock the output fps (do this with ivtc too)
         if ("ivtc=1" in vf) or self.ntscprog:
@@ -412,8 +436,8 @@ class EncodingJob:
         re_ana = re.compile('(aspect 3)')
 
         crop_options = {}
-##~         common_crop = ""
-##~         cc_hits = 2
+        #common_crop = ""
+        #cc_hits = 2
 
         foundtype = False
 
@@ -422,8 +446,8 @@ class EncodingJob:
                 crop = re_crop.search(line).group(1)
                 try:
                     crop_options[crop] = crop_options[crop] + 1
-##~                     if crop_options[crop] > cc_hits:
-##~                         common_crop = crop
+                    #if crop_options[crop] > cc_hits:
+                    #    common_crop = crop
                 except:
                     crop_options[crop] = 1
 
@@ -737,11 +761,11 @@ class EncodingQueue:
 # -----DEBUGGING STUFF BELOW---USE ONLY WHEN WEARING A BULLETPROOF VEST ;)
 
 
-##~ def conc(list):
-##~     str = ""
-##~     for el in list:
-##~         str = str + el + " "
-##~     return str
+#def conc(list):
+#str = ""
+#for el in list:
+#    str = str + el + " "
+#return str
 
 #FOR TESTING ONLY
 if __name__ == '__main__':
@@ -755,11 +779,11 @@ if __name__ == '__main__':
     encjob.setVideoFilters({'Deinterlacing': 'Linear blend'})
     encjob._CalcVideoBR()
     print encjob.vbrate
-##~     encjob._generateCL()
-##~     cl = encjob.cls
-##~     print cl
-##~     print conc(cl[0])
-##~     print conc(cl[1])
+    #encjob._generateCL()
+    #cl = encjob.cls
+    #print cl
+    #print conc(cl[0])
+    #print conc(cl[1])
     import logging
     log = logging.getLogger('EncodingCore')
     log.setLevel(logging.DEBUG)
