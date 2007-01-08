@@ -243,7 +243,6 @@ LOCAL_CONF_CHANGES = [
      '''Using the name of the helper in local_conf.py
      Changed the TV_RECORD_SERVER_* to RECORDSERVER_*, 
      Added optional RECORDSERVER_DEBUG, if not defined uses DEBUG
-     Changed the TV_RECORD_SERVER_* to WEBSERVER_*, 
      Changed WWW_PORT to WEBSERVER_PORT = 80
      Added WEBSERVER_UID and WEBSERVER_GID
      Added optional WEBSERVER_DEBUG, if not defined uses DEBUG
