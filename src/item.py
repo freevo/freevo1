@@ -471,4 +471,4 @@ class Item:
             return self.__getitem__(attr)
         else:
             r = self.__getitem__(attr)
-            return Unicode(str(r))
+            return Unicode(r)
