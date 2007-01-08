@@ -230,6 +230,21 @@ class MPlayerApp(childapp.ChildApp2):
         self.RE_TIME     = re.compile("^A: *([0-9]+)").match
         self.RE_TIME_NEW = re.compile("^A: *([0-9]+):([0-9]+)").match
 
+        # [0] -> start of line to check with mplayer output
+        # [1] -> keyword to store info in self.item.info
+        self.STREAM_KEYWORDS = [
+            ( "Genre  : ", "genre" ),
+            ( "Artist : ", "artist" ),
+            ( "Name   : ", "stream_name" ),
+            ( " Genre: ", "genre" ),
+            ( " Artist: ", "artist" ),
+            ( " Name: ", "stream_name" ),
+            ( "Demuxer info Name changed to ", "stream_name" ),
+            ( "Demuxer info Genre changed to ", "genre" ),
+            ( "Demuxer info Artist changed to ", "artist" )
+        ]
+
+
         # check for mplayer plugins
         self.stdout_plugins  = []
         self.elapsed_plugins = []
@@ -293,11 +308,18 @@ class MPlayerApp(childapp.ChildApp2):
                 if titleEnd > titleStart:
                     self.item.info['artist'] = line[titleStart:titleEnd]
 
-
+        else:
+            for keywords in self.STREAM_KEYWORDS:
+                if line.startswith(keywords[0]):
+                    _debug_("stream keyword found: %s %s" % (keywords[0], keywords[1] ))
+                    titleStart = len(keywords[0])
+                    self.item.info[ keywords[1] ] = line[titleStart:]
+                    break
 
     def stderr_cb(self, line):
         if line.startswith('Failed to open') and \
                (not self.item or not self.item.elapsed):
             self.stop_reason = line
+
         for p in self.stdout_plugins:
             p.stdout(line)
