@@ -443,25 +443,38 @@ class HTMLResource:
         self.res += """<script language="JavaScript" type="text/javascript" style="display:none;">
         var width = 0;
         var height = 0;
-        var max_width = screen.width - 100;
-        var max_height = screen.height;
+        var max_width = screen.width - 10;
+        var max_height = screen.height - 100;
         
         function openfoto(loc,width_img,height_img){
             width = width_img;
             height = height_img;
             
             if (width >= max_width || height >= max_height) {
-                scrollbars = 'yes';
                 getNewSize();
             }
-            var params="toolbar=no,location=no,status=no,menubar=yes,resizable=no,scrollbars="+scrollbars+",top=0,left=0,width="+width+",height="+height;
+            var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,top=0,left=0,width="+width+",height="+height;
             foto = window.open("fileinfo.rpy?img="+loc+"&w="+width+"&h="+height,"Images",params);
         }
         
-        function getNewSize(){
-        //this is not correct!
-            height = Math.round(height * (max_width / width));
-            width = Math.round(width * (max_height / height));
+        function getNewSize(){                
+            if (width > max_width || height > max_height){
+                //Determine what dimension is off by more
+                deltaWidth = width - max_width;
+                deltaHeight= height - max_height;
+        
+                if (deltaHeight > deltaWidth){
+                    //Scale by the height
+                    scaleFactor = max_height / height;
+                }
+                else{
+                    //Scale by the Width
+                    scaleFactor = max_width / width;
+                }
+        
+                width *= scaleFactor;
+                height *= scaleFactor;
+            }
         }
         </script> """
 
