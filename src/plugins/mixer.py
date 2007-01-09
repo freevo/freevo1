@@ -163,10 +163,16 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def setMuted(self, mute):
         self.muted = mute
-        if mute == 1:
-            self._setVolume(self.SOUND_MIXER_WRITE_VOLUME, 0)
-        else:
-            self._setVolume(self.SOUND_MIXER_WRITE_VOLUME, self.mainVolume)
+        if config.MAJOR_AUDIO_CTRL == 'VOL':
+            if mute == 1:
+                self._setVolume(self.SOUND_MIXER_WRITE_VOLUME, 0)
+            else:
+                self._setVolume(self.SOUND_MIXER_WRITE_VOLUME, self.mainVolume)
+        elif config.MAJOR_AUDIO_CTRL == 'PCM':
+            if mute == 1:
+                self._setVolume(self.SOUND_MIXER_WRITE_PCM, 0)
+            else:
+                self._setVolume(self.SOUND_MIXER_WRITE_PCM, self.pcmVolume)
 
     def getVolume(self):
         if config.MAJOR_AUDIO_CTRL == 'VOL':
