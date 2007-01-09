@@ -123,7 +123,7 @@ class RecordServer(xmlrpc.XMLRPC):
         t1 = first.split(':')[-1]
         t2 = second.split(':')[-1]
         try:
-            return int(t1) - int(t2)
+            return int(float(t1)) - int(float(t2))
         except ArithmeticError:
             pass
         return 0
