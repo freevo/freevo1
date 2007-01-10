@@ -219,6 +219,7 @@ class VideoItem(Item):
             
         if key == 'runtime':
             total = 0
+            length = 0
 
             if self.info['runtime']:
                 length = self.info['runtime']
