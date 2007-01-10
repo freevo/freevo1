@@ -31,7 +31,7 @@
 
 import pygame
 from pygame.locals import *
-import kaa.imlib2 as Image
+import kaa.imlib2 as imlib2
 
 import osd
 import os
@@ -43,6 +43,17 @@ osd = osd.get_singleton()
 format_imagecache = util.objectcache.ObjectCache(30, desc='format_image')
 load_imagecache   = util.objectcache.ObjectCache(20, desc='load_image')
 
+
+def pygamesurface_imlib2_scale(image, newsize):
+
+    buf = pygame.image.tostring(image, 'RGBA')
+    im2 = imlib2.new(image.get_size(), buf)
+    scaled_im2 = im2.scale(newsize)
+    
+    buf = str(scaled_im2.get_raw_data('BGRA'))
+
+    return pygame.image.frombuffer(buf, newsize, 'RGBA')
+    
 
 def format_image(settings, item, width, height, force=0, anamorphic=0):
     try:
@@ -72,7 +83,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     imagefile = None
     
     if item.image:
-        if isinstance(item.image, Image.Image):
+        if isinstance(item.image, imlib2.Image):
             image = osd.loadbitmap(item.image)
         else:
             image = load_imagecache['thumb://%s' % item.image]
@@ -96,7 +107,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
             except Exception, e:
                 pass
 
-        if item['rotation']:
+        if image and item['rotation']:
             image = pygame.transform.rotate(image, item['rotation'])
             
     if not image:
@@ -171,7 +182,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     else:
         height = int(float(width * i_h) / i_w)
 
-    cimage = pygame.transform.scale(image, (width, height))
+    cimage = pygamesurface_imlib2_scale(image, (width, height))
 
     format_imagecache[cname] = cimage, width, height
     return cimage, width, height
@@ -206,7 +217,7 @@ def text_or_icon(settings, string, x, width, font):
             else:
                 height = int(float(width * i_h) / i_w)
         
-            cimage = pygame.transform.scale(image, (width, height))
+            cimage = pygamesurface_imlib2_scale(image, (width, height))
             cimage.set_alpha(cimage.get_alpha(), RLEACCEL)
             x_mod = 0
             if l[1] == 'CENTER':

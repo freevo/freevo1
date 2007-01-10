@@ -576,7 +576,7 @@ class Skin_Area:
                     if not image:
                         image = osd.loadbitmap(imagefile)
                         if image:
-                            image = pygame.transform.scale(image,(bg.width,bg.height))
+                            image = pygamesurface_imlib2_scale(image, (bg.width,bg.height))
                             f = vfs.open(cache, 'w')
                             f.write(pygame.image.tostring(image, 'RGBA'))
                             f.close()
@@ -680,7 +680,7 @@ class Skin_Area:
             if self.xml_settings.anamorphic:
                 w = w * 0.75
             if w > 0 and h > 0:
-                cimage = pygame.transform.scale(cimage, (w, h))
+                cimage = pygamesurface_imlib2_scale(cimage, (w, h))
             self.imagecache[cname] = cimage
         return cimage
 
