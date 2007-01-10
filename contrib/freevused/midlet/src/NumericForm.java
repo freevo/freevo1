@@ -35,6 +35,7 @@ public class NumericForm extends Form implements CommandListener, ItemCommandLis
 	Command textCommand;
 	Command mainCommand;
 	Command moreCommand;
+	Command browseCommand;
 	
 	StringItem titleItem;
 	StringItem statusItem;
@@ -70,8 +71,12 @@ public class NumericForm extends Form implements CommandListener, ItemCommandLis
 		moreCommand = new Command("More", "More actions", Command.SCREEN, 2);
 		addCommand(moreCommand);
 
+		browseCommand = new Command("Browse", "Browse Menu", Command.SCREEN, 2);
+		addCommand(browseCommand);
+
 		textCommand = new Command("Text", "Send Text", Command.SCREEN, 2);
 		addCommand(textCommand);
+
 
 	}
 	
@@ -93,6 +98,9 @@ public class NumericForm extends Form implements CommandListener, ItemCommandLis
 		}
 		else if (cmd == textCommand) {
 			controller.showTextForm();
+		}
+		else if (cmd == browseCommand) {
+			controller.showBrowseForm();
 		}
 	}
 

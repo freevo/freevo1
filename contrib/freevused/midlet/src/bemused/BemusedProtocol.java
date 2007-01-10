@@ -297,15 +297,12 @@ public class BemusedProtocol implements MusicPlayer {
 		appendCommand(new Command(action));
 	}
 
-	public void readDir(String dir) {
-	    /*
-		int len = dir.length();
-		byte[] command = new byte[2];
+	public void sendMenuItemSelected(String idx) {
+		appendCommand(new Command("MITM", idx));
+	}
 
-		command[0] = (byte) (len / 256);
-		command[1] = (byte) (len % 256);
-		appendCommand(new Command("DLST", new String(command) + dir));
-		*/
+	public void requestMenu() {
+		appendCommand(new Command("MSND"));
 	}
 
 }

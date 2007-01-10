@@ -53,8 +53,8 @@ public class Browser {
 		return files;
 	}
 	
-	public void readDir() {
-		protocol.readDir(activeDir);
+	public void requestMenu() {
+		protocol.requestMenu();
 	}
 	
 	public int fetchIndex(String jumpTo) {
@@ -127,22 +127,6 @@ public class Browser {
 	}
 */	
 	
-	public void changeDir(String dir) {
-		activeDir = activeDir.equals("") ? dir : activeDir + "\\" + dir;
-		readDir();
-	}
-
-	public void moveDirUp() {
-		int lastSlash = 0, newLastSlash = 0;
-		while (newLastSlash > -1) {
-			lastSlash = newLastSlash;
-			newLastSlash = activeDir.indexOf("\\", lastSlash + 1);
-		}
-		activeDir = activeDir.substring(0, lastSlash);
-		if (activeDir.indexOf("\\", 0) == -1) activeDir = "";
-		readDir();
-	}
-	
 	private static void quicksort(String[] data) {
 		quicksort(data, 0, data.length-1);
 	}
@@ -172,12 +156,14 @@ public class Browser {
 		data[y] = tmp;
 	}
 
-	public void menuSelect() {
-		protocol.play();
+	public void sendMenuItemSelected(String idx) {
+		protocol.sendMenuItemSelected( idx );
+		requestMenu();
 	}
 
 	public void menuSubmenu() {
 		protocol.submenu();
+	    requestMenu();
 	}
 
 	public void menuMain() {
@@ -186,6 +172,7 @@ public class Browser {
 
 	public void menuBack() {
 		protocol.stop();
+		requestMenu();
 	}
 
 }

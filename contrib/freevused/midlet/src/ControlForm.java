@@ -80,10 +80,11 @@ public class ControlForm extends Form implements CommandListener, ItemCommandLis
 
 		textCommand = new Command("Text", "Send Text", Command.SCREEN, 2);
 		addCommand(textCommand);
-		
-		/*
-		browseCommand = new Command("Browse", "Browse Menu", Command.SCREEN, 1);
+
+		browseCommand = new Command("Browse", "Browse Menu", Command.SCREEN, 2);
 		addCommand(browseCommand); 
+
+		/*
 
 		shutdownCommand = new Command("Shutdown", "System shutdown", Command.SCREEN, 5);
 		addCommand(shutdownCommand);
@@ -163,10 +164,10 @@ public class ControlForm extends Form implements CommandListener, ItemCommandLis
 		else if (cmd == numericCommand) {
 			controller.showNumericForm();
 		}
-		/*
 		else if (cmd == browseCommand) {
-			controller.showBrowser();
+			controller.showBrowseForm();
 		}
+		/*
 		else if (cmd == playlistCommand) {
 			controller.showPlaylist();
 		}

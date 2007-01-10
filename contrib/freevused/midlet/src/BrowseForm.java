@@ -19,37 +19,47 @@ import javax.microedition.lcdui.Image;
 public class BrowseForm extends List implements CommandListener  {
 
 	Controller controller;
-	Command menuSelectCommand;
-	Command menuSubmenuCommand;
-	Command menuMainCommand;
+
+	Command moreCommand;
+	Command numericCommand;
+	Command textCommand;
+	Command mainCommand;
+
+	Command submenuCommand;
+	Command refreshCommand;
 	Command menuBackCommand;
-	Command menuQuitCommand;
+
 	Image folderImage;
 	Image fileImage;
 	
 	public BrowseForm(Controller controller) {
-		super("Browser", List.IMPLICIT);
+		super("Menu", List.IMPLICIT);
 		this.controller = controller;
 		setCommandListener(this);
-		
-		menuSelectCommand = new Command("Select", Command.ITEM, 1);
-		addCommand(menuSelectCommand);
-		
-		menuSubmenuCommand = new Command("Submenu", "Submenu", Command.ITEM, 2);
-		addCommand(menuSubmenuCommand);
 
-		menuMainCommand = new Command("Mainmenu", "Go to Main", Command.ITEM, 3);
-		addCommand(menuMainCommand);
-		
-		menuBackCommand = new Command("Back", Command.BACK, 1);
+		menuBackCommand = new Command("Back Menu", Command.CANCEL, 0);
 		addCommand(menuBackCommand);
 
-		menuQuitCommand = new Command("Quit", "Quit Browser", Command.SCREEN, 1);
-		addCommand(menuQuitCommand);
+		submenuCommand = new Command("Submenu", "Options submenu", Command.SCREEN, 2);
+		addCommand(submenuCommand);
+
+		refreshCommand = new Command("Refresh", "Refresh menu", Command.SCREEN, 2);
+		addCommand(refreshCommand);
 		
+		mainCommand = new Command("Main", "Main actions", Command.SCREEN, 2);
+		addCommand(mainCommand);
+
+		numericCommand = new Command("Numeric", "Numeric keys", Command.SCREEN, 2);
+		addCommand(numericCommand);
+		
+		moreCommand = new Command("More", "More actions", Command.SCREEN, 2);
+		addCommand(moreCommand);
+
+		textCommand = new Command("Text", "Send Text", Command.SCREEN, 2);
+		addCommand(textCommand);
 		
 		try {
-			folderImage = Image.createImage("/folder.png");
+			folderImage = Image.createImage("/entry.png");
 			fileImage = Image.createImage("/file.png");
 		} catch (IOException e) {
 			// no image found... hm
@@ -58,47 +68,48 @@ public class BrowseForm extends List implements CommandListener  {
 	
 	void updateDirList(String[] dirs, boolean dirChanged) {
 		
-		int n, i, index = 0;
-		
-		for (n=0; n < dirs.length; ++n) {
-			String name = dirs[n];
-			if (index < size()) {
-				set(index, name, folderImage);
-			}
-			else {
-				insert(index, name, folderImage);
-			}
-			setFont(index, Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_SMALL));
-			index++;
-		}
-		
-		// setTitle
-		// setTitle(controller.protocol.fileBrowser.activeDir());
+		int index = 0;
 
-		// if we just changed dir, set selected item to the first again		
-		/*
-		if (size() > 0 && dirChanged) {
-			setSelectedIndex(0, true);
+		index = size();
+		while ( index-- > 0 )
+		    delete(index);
+
+		for (index=0; index < dirs.length; index++) {
+			String name = dirs[index];
+			insert(index, name, folderImage);
+			setFont(index, Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_SMALL));
 		}
-		*/
+		
 	}
 	
 	public void commandAction(Command cmd, Displayable display) {
 		if (cmd == menuBackCommand) {
 			controller.protocol.fileBrowser.menuBack();
 		}
-		else if (cmd == menuSelectCommand) {
-			controller.protocol.fileBrowser.menuSelect();
+		else if (cmd == refreshCommand) {
+			controller.protocol.fileBrowser.requestMenu();
 		}
-		else if (cmd == menuSubmenuCommand) {
+		else if (cmd == submenuCommand) {
 			controller.protocol.fileBrowser.menuSubmenu();
 		}
-		else if (cmd == menuMainCommand) {
-			controller.protocol.fileBrowser.menuMain();
-		}
-		else if (cmd == menuQuitCommand) {
+		else if (cmd == mainCommand) {
 			controller.showController();
 		}
+		else if (cmd == numericCommand) {
+			controller.showNumericForm();
+		}
+		else if (cmd == moreCommand) {
+			controller.showMoreActions();
+		}
+		else if (cmd == textCommand) {
+			controller.showTextForm();
+		}
+		else if (cmd == List.SELECT_COMMAND) {
+            String str = Integer.toString(getSelectedIndex(), 10);
+		    controller.protocol.fileBrowser.sendMenuItemSelected(str);
+		}
+
+
 	}
 
 }

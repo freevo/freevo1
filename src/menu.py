@@ -785,6 +785,8 @@ class MenuWidget(GUIObject):
         if not menu.choices:
             menu.selected = self.all_items[0]
 
+        rc.post_event(MENU_PROCESS_END)
+ 
         # make sure we are in context 'menu'
         rc.set_context(self.event_context)
 

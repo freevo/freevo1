@@ -35,6 +35,7 @@ public class MoreActionsForm extends Form implements CommandListener, ItemComman
 	Command textCommand;
 	Command mainCommand;
 	Command numericCommand;
+	Command browseCommand;
 	
 	StringItem titleItem;
 	StringItem statusItem;
@@ -67,11 +68,14 @@ public class MoreActionsForm extends Form implements CommandListener, ItemComman
 		mainCommand = new Command("Main", "Main actions", Command.CANCEL, 0);
 		addCommand(mainCommand);
 		
-		numericCommand = new Command("Numeric", "Numeric keys", Command.SCREEN, 2);
-		addCommand(numericCommand);
+		browseCommand = new Command("Browse", "Browse Menu", Command.SCREEN, 2);
+		addCommand(browseCommand);
 
 		textCommand = new Command("Text", "Send Text", Command.SCREEN, 2);
 		addCommand(textCommand);
+
+		numericCommand = new Command("Numeric", "Numeric keys", Command.SCREEN, 2);
+		addCommand(numericCommand);
 
 	}
 	
@@ -93,6 +97,9 @@ public class MoreActionsForm extends Form implements CommandListener, ItemComman
 		}
 		else if (cmd == numericCommand) {
 			controller.showNumericForm();
+		}
+		else if (cmd == browseCommand) {
+			controller.showBrowseForm();
 		}
 	}
 

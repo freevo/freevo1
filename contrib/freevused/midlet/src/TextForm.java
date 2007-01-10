@@ -26,6 +26,7 @@ public class TextForm extends TextBox implements CommandListener  {
 	Command sendCommand;
 	Command moreCommand;
 	Command numericCommand;
+	Command browseCommand;
 
 	TextBox textBox;
 
@@ -37,11 +38,14 @@ public class TextForm extends TextBox implements CommandListener  {
 		sendCommand = new Command("Send", "Send text to Freevo", Command.SCREEN, 0);
 		addCommand(sendCommand);
 
+		numericCommand = new Command("Numeric", "Numeric keys", Command.SCREEN, 2);
+		addCommand(numericCommand);
+
 		moreCommand = new Command("More", "More actions", Command.SCREEN, 2);
 		addCommand(moreCommand);
 
-		numericCommand = new Command("Numeric", "Numeric keys", Command.SCREEN, 2);
-		addCommand(numericCommand);
+		browseCommand = new Command("Browse", "Browse Menu", Command.SCREEN, 2);
+		addCommand(browseCommand);
 		
 		mainCommand = new Command("Main", "Main actions", Command.CANCEL, 0);
 		addCommand(mainCommand);
@@ -64,6 +68,9 @@ public class TextForm extends TextBox implements CommandListener  {
 		}
 		else if (cmd == numericCommand) {
 			controller.showNumericForm();
+		}
+		else if (cmd == browseCommand) {
+			controller.showBrowseForm();
 		}
 	}
 

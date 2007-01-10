@@ -81,6 +81,10 @@ public class Command {
 				writeString(output, strArg);
 				output.flush();
 			}
+			else if (name.equals("MITM")) {
+				writeString(output, strArg);
+				output.flush();
+			}
 			else if (name.equals("MSND")) {
 				output.flush();
 				readMenu(input, target);
@@ -113,7 +117,7 @@ public class Command {
 				lastByte = input.readByte();
 			}
 			if ( curItemBufPos > 0 ) {
-				String curItemStr = new String(curItemBuf, 0, curItemBufPos - 1, "UTF-8");
+				String curItemStr = new String(curItemBuf, 0, curItemBufPos, "UTF-8");
 				dirList.addElement(curItemStr);
 			}
 			lastByte = input.readByte();

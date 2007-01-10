@@ -61,6 +61,10 @@
 #
 # Changelog
 #
+# 1.4
+#
+# - Added menu browsing in the phone screen
+#
 # 1.3
 #
 # - Cosmetic improvements
@@ -113,6 +117,7 @@ import config
 import plugin
 import rc
 import event as em
+import menu
 
 import plugin
 
@@ -121,7 +126,7 @@ try:
 except:
     print String(_("ERROR")+": "+_("You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" plugin."))
 
-import thread
+import thread, time
 
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -195,11 +200,16 @@ class PluginInterface(plugin.DaemonPlugin):
         self.port        = 0
         self.data        = ''
         self.osd_message_status = None
+        self.menuw       = None
+
+        self.menu_isfresh = False
+        self.menu_client_waiting = False
+        self.playing = False
 
         if hasattr(config, 'FVUSED_BIND_TIMEOUT'):
             self.bind_timeout = config.FVUSED_BIND_TIMEOUT
         else:
-            self.bind_timeoute = 30
+            self.bind_timeout = 30
 
         if hasattr(config, 'FVUSED_OSD_MESSAGE'):
             self.osd_message = config.FVUSED_OSD_MESSAGE
@@ -243,20 +253,55 @@ class PluginInterface(plugin.DaemonPlugin):
                   'NUM9': '9'
         }
 
-        self.poll_menu_only = True
+        self.poll_menu_only = False
 
         self.rc = rc.get_singleton()
 
 
         thread.start_new_thread(self.bluetoothListener, ())
 
+    def poll(self):
+        if self.menu_client_waiting:
+            if self.playing:
+                if self.menuw:
+                    menupage = self.menuw.menustack[-1]
+                    if hasattr(menupage, 'is_submenu') and menupage.is_submenu:
+                        menuitem = self.menuw.menustack[-2].selected
+                        self.sendMessage('Playing %s' % menuitem.name)
+                    else:
+                        menuitem = menupage.selected
+                        self.sendMessage('Playing %s' % menuitem.name)
+                            
+                    self.menu_client_waiting = False
+            else:
+                self.sendMenu()
+                self.menu_client_waiting = False
+            self.menu_isfresh = False
+
     def eventhandler(self, event, menuw=None):
         _debug_("Saw %s" % event)
+
         if event == em.VIDEO_START:
             self.osd_message_status = self.osd_message
             self.osd_message = False
+            self.playing = True
+            self.menu_isfresh = True
+
         elif event == em.VIDEO_END:
             self.osd_message = self.osd_message_status
+            self.playing = False
+
+        elif event == em.PLAY_START:
+            self.playing = True
+            self.menu_isfresh = True
+
+        elif event == em.STOP:
+            self.playing = False
+
+        elif event == em.MENU_PROCESS_END:
+            if isinstance(menuw, menu.MenuWidget):
+                self.menuw = menuw
+                self.menu_isfresh = True
 
         return False
 
@@ -306,13 +351,33 @@ class PluginInterface(plugin.DaemonPlugin):
                 _debug_('Event Translation: "%s" -> "%s"' % (str_cmd, command))
                 self.rc.post_event(em.Event(command))
 
-        if str_cmd == 'TEXT':
+        elif str_cmd == 'TEXT':
             str_arg = self.data[4:]
             for letter in str_arg:
                 command = self.rc.key_event_mapper(letter)
                 if command:
                     _debug_('Event with arg Translation: "%s" -> "%s %s"' % (self.data, command, letter))
                     self.rc.post_event(command)
+
+        elif str_cmd == 'MSND':
+            self.menu_client_waiting = True
+
+        elif str_cmd == 'MITM':
+            str_arg = self.data[4:]
+            try:
+                pos = int(str_arg)
+
+                menu = self.menuw.menustack[-1]
+                max  = len(menu.choices)
+                if pos < max:
+                    menu.selected = menu.choices[pos]
+                    self.rc.post_event(em.MENU_SELECT)
+                else:
+                    _debug_('Menu index too high!: %s (max=%s)' % (pos, max-1))
+
+            except ValueError:
+                _debug_('Menu index sent: %s' % str_arg)
+                pass
 
         else:
             command = self.rc.key_event_mapper(self.cmds.get(self.data, ''))
@@ -358,8 +423,19 @@ class PluginInterface(plugin.DaemonPlugin):
         try:
             if self.client_sock and data:
                 self.client_sock.send(data)
-                _debug_("Menu name sended: %s" % data)
+                _debug_("Data sent: %s" % data)
         except bluetooth.BluetoothError, e:
             self.isconnected = False
             _debug_("broken tooth: %s" % str(e))
 
+
+    def sendMenu(self):
+        if self.menuw:
+            menu = self.menuw.menustack[-1]
+            for item in menu.choices:
+                self.btSend(item.name + '\n')
+
+        self.btSend('\0')
+
+    def sendMessage(self, msg):
+        self.btSend(msg + '\n\0')

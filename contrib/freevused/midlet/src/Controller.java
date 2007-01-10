@@ -73,12 +73,12 @@ public class Controller implements StatusUpdateListener {
 		Display.getDisplay(owner).setCurrent(numericForm);
 	}
 
-	public void showBrowser() {
+	public void showBrowseForm() {
 		showBrowser(true);
 	}
 
 	public void showBrowser(boolean refresh) {
-		if (refresh) protocol.fileBrowser.readDir();
+		if (refresh) protocol.fileBrowser.requestMenu();
 		Display.getDisplay(owner).setCurrent(browseForm);
 	}
 
@@ -119,7 +119,7 @@ public class Controller implements StatusUpdateListener {
 			display.setCurrent(searchForm);
 		}
 		
-		//browseForm.updateDirList(protocol.fileBrowser.dirs(), protocol.fileBrowser.dirChanged());
+		browseForm.updateDirList(protocol.fileBrowser.dirs(), protocol.fileBrowser.dirChanged());
 	}
 
 	MusicPlayer getPlayer() {
