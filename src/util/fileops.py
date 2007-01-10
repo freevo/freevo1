@@ -560,43 +560,31 @@ def scale_rectangle_to_max(size, max_size):
     return (scaled_width, scaled_height)
 
 
-def www_link_cachedir():
-    '''returns the www link cache directory name
-    if the directory does not exist it is created
-    '''
-    cache_dir = '%s/link_cache/' % (config.WEBSERVER_CACHEDIR)
-    if not os.path.isdir(cache_dir):
-        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[stat.ST_MODE]))
-    return cache_dir
-
-
-def www_image_cachedir():
-    '''returns the www image cache directory name
-    if the directory does not exist it is created
-    '''
-    cache_dir = '%s/image_cache/' % (config.WEBSERVER_CACHEDIR)
-    if not os.path.isdir(cache_dir):
-        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[stat.ST_MODE]))
-    return cache_dir
-
-
-def cache_www_thumbnail_path(filename):
+def www_thumbnail_path(filename):
     '''returns the path to the thumbnail image for a given filename
     '''
     file_ext_index = filename.rindex(".")
     file_ext = filename[file_ext_index:].lower()
     if file_ext == ".gif":
         file_ext += ".jpg"
-    imagepath = filename[:file_ext_index].replace("/", "_") + file_ext
-    thumb_path = os.path.join(www_image_cachedir(), imagepath)
+    # the filename extension needs to be lowercase for imlib2 but we need to
+    # keep the original filename for cache to be able to clean the files
+    imagepath = filename + file_ext
+    thumb_path = vfs.getwwwoverlay(imagepath)
     return thumb_path
 
 
-def cache_www_image(filename):
+def create_www_thumbnail(filename):
     '''creates a webserver thumbnail image and returns its size.
     '''
-    thumb_path = cache_www_thumbnail_path(filename)
+    thumb_path = www_thumbnail_path(filename)
     try:
+        try:
+            if not os.path.isdir(os.path.dirname(thumb_path)):
+                os.makedirs(os.path.dirname(thumb_path), mode=04775)
+        except IOError:
+            print 'error creating dir %s' % os.path.dirname(thumb_path)
+            raise IOError
         image = imlib2.open(filename)
         thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
         thumb.save(thumb_path)
@@ -606,9 +594,9 @@ def cache_www_image(filename):
     return thumb.size
 
 
-def cache_www_image_size(filename):
+def get_www_thumbnail_size(filename):
     '''returns the size from a webserver cached image.
     '''
-    thumb_path = cache_www_thumbnail_path(filename)
+    thumb_path = www_thumbnail_path(filename)
     image = imlib2.open(filename)
     return image.size

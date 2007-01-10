@@ -84,7 +84,15 @@ def delete_old_files_2():
     """
     delete cachfiles/entries for files which don't exists anymore
     """
-    #TODO Add WWW_LINK_CACHE and WWW_IMAGE_CACNE
+    print 'deleting old webserver thumbnails.....................',
+    sys.__stdout__.flush()
+    num = 0
+    for file in util.match_files_recursively(vfs.www_image_cachedir(), config.IMAGE_SUFFIX):
+        if not vfs.isfile(file[len(vfs.www_image_cachedir()):file.rindex('.')]):
+            os.unlink(file)
+            num += 1
+    print 'deleted %s file%s' % (num, num != 1 and 's' or '')
+
     print 'deleting old cachefiles...............................',
     sys.__stdout__.flush()
     num = 0
@@ -170,9 +178,9 @@ def cache_thumbnails():
 
     files = util.misc.unique(files)
     for filename in copy.copy(files):
-        sinfo = os.stat(filename)
         thumb = vfs.getoverlay(filename + '.raw')
         try:
+            sinfo = os.stat(filename)
             if os.stat(thumb)[stat.ST_MTIME] > sinfo[stat.ST_MTIME]:
                 files.remove(filename)
         except OSError:
@@ -210,22 +218,20 @@ def cache_www_thumbnails():
     sys.__stdout__.flush()
 
     files = []
-    for d in config.VIDEO_ITEMS + config.AUDIO_ITEMS + config.IMAGE_ITEMS:
+    for d in config.IMAGE_ITEMS:
         try:
             d = d[1]
         except:
             pass
         if not os.path.isdir(d):
             continue
-        files += util.match_files_recursively(d, config.IMAGE_SUFFIX) + \
-                 util.match_files_recursively(vfs.getoverlay(d), config.IMAGE_SUFFIX)
+        files += util.match_files_recursively(d, config.IMAGE_SUFFIX)
 
-    cache_dir = util.fileops.www_image_cachedir()
     files = util.misc.unique(files)
     for filename in copy.copy(files):
-        sinfo = os.stat(filename)
-        thumb = util.cache_www_thumbnail_path(filename)
+        thumb = util.www_thumbnail_path(filename)
         try:
+            sinfo = os.stat(filename)
             if os.stat(thumb)[stat.ST_MTIME] > sinfo[stat.ST_MTIME]:
                 files.remove(filename)
         except OSError:
@@ -246,7 +252,7 @@ def cache_www_thumbnails():
             fname = fname[:20] + ' [...] ' + fname[-40:]
         print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), fname)
 
-        util.cache_www_image(filename)
+        util.create_www_thumbnail(filename)
 
     if files:
         print

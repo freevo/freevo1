@@ -34,15 +34,33 @@
 #
 # -----------------------------------------------------------------------
 
-
 import os
 import copy
 import traceback
 import codecs
 from stat import ST_MTIME
 
-
 import config
+
+def www_link_cachedir():
+    '''returns the www link cache directory name
+    if the directory does not exist it is created
+    '''
+    cache_dir = '%s/link_cache' % (config.WEBSERVER_CACHEDIR)
+    if not os.path.isdir(cache_dir):
+        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[stat.ST_MODE]))
+    return cache_dir
+
+
+def www_image_cachedir():
+    '''returns the www image cache directory name
+    if the directory does not exist it is created
+    '''
+    cache_dir = '%s/image_cache' % (config.WEBSERVER_CACHEDIR)
+    if not os.path.isdir(cache_dir):
+        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[stat.ST_MODE]))
+    return cache_dir
+
 
 def getoverlay(directory):
     if not directory.startswith('/'):
@@ -54,6 +72,14 @@ def getoverlay(directory):
             directory = directory[len(media.mountdir):]
             return '%s/disc/%s%s' % (config.OVERLAY_DIR, media.id, directory)
     return config.OVERLAY_DIR + directory
+
+
+def getwwwoverlay(directory):
+    if not directory.startswith('/'):
+        directory = os.path.abspath(directory)
+    if directory.startswith(www_image_cachedir()):
+        return directory
+    return www_image_cachedir() + directory
 
 
 def abspath(name):

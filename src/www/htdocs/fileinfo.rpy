@@ -39,7 +39,6 @@ class FileInfoResource(FreevoResource):
 
     def __init__(self):
         print '__init__(self)'
-        self.cache_dir = util.fileops.www_link_cachedir()
         self.allowed_dirs = []
         self.allowed_dirs.extend(config.VIDEO_ITEMS)
         self.allowed_dirs.extend(config.AUDIO_ITEMS)

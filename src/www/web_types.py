@@ -443,37 +443,61 @@ class HTMLResource:
         self.res += """<script language="JavaScript" type="text/javascript" style="display:none;">
         var width = 0;
         var height = 0;
-        var max_width = screen.width - 10;
-        var max_height = screen.height - 100;
-        
+        var max_width = screen.availWidth;
+        var max_height = screen.availHeight - 100;
+        var client_width = 0;
+        var client_height = 0;
+
         function openfoto(loc,width_img,height_img){
             width = width_img;
             height = height_img;
-            
+
             if (width >= max_width || height >= max_height) {
                 getNewSize();
             }
-            var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,top=0,left=0,width="+width+",height="+height;
+            var params="toolbar=no,location=no,status=no,menubar=yes,resizable=no,top=0,left=0,width="+width+",height="+height;
             foto = window.open("fileinfo.rpy?img="+loc+"&w="+width+"&h="+height,"Images",params);
-        }
-        
-        function getNewSize(){                
-            if (width > max_width || height > max_height){
-                //Determine what dimension is off by more
-                deltaWidth = width - max_width;
-                deltaHeight= height - max_height;
-        
-                if (deltaHeight > deltaWidth){
-                    //Scale by the height
-                    scaleFactor = max_height / height;
+
+            // Some funky code here
+            // 1. First we resize the window to the size we want
+            // 2. Calculate the client area of this resized window
+            // 3. Subtract the client area from the actual size
+            // 4. Add the difference to the window size
+
+            // Step 1. First we resize the window to the size we want
+            foto.resizeTo(width, height);
+
+            // Step 2. Calculate the client area of this resized window
+            if (parseInt(navigator.appVersion) > 3) {
+                if (navigator.appName=="Netscape") {
+                    client_width = foto.innerWidth;
+                    client_height = foto.innerHeight;
                 }
-                else{
-                    //Scale by the Width
-                    scaleFactor = max_width / width;
+                if (navigator.appName.indexOf("Microsoft") != -1) {
+                    client_width = foto.body.offsetWidth;
+                    client_height = foto.body.offsetHeight;
                 }
-        
-                width *= scaleFactor;
-                height *= scaleFactor;
+            }
+
+            // Step 3. Subtract the client area from the actual size
+            var diff_width = width - client_width;
+            var diff_height = height - client_height;
+
+            // Step 4. Add the difference to the window size
+            foto.resizeBy(diff_width, diff_height);
+
+            foto.focus();
+         }
+
+         function getNewSize(){
+            // recalculate width / height maintaining aspect
+            if (max_width / max_height > width / height) {
+                width = Math.round(max_height * width / height);
+                height = max_height;
+            }
+            else {
+                height = Math.round(max_width * height / width);
+                width = max_width;
             }
         }
         </script> """

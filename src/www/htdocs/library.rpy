@@ -53,7 +53,6 @@ class LibraryResource(FreevoResource):
 
     def __init__(self):
         print '__init__(self)'
-        self.cache_dir = util.www_image_cachedir()
         self.allowed_dirs = []
         self.allowed_dirs.extend(config.VIDEO_ITEMS)
         self.allowed_dirs.extend(config.AUDIO_ITEMS)
@@ -480,11 +479,11 @@ class LibraryResource(FreevoResource):
                         status = 'favorite'
                     ### show image
                     if action_mediatype == "images":
-                        scaled_image_path = util.cache_www_thumbnail_path(item)
+                        scaled_image_path = util.www_thumbnail_path(item)
                         if not os.path.exists(scaled_image_path):
-                            size = util.cache_www_image(item)
+                            size = util.create_www_thumbnail(item)
                         else:
-                            size = util.cache_www_image_size(item)
+                            size = util.get_www_thumbnail_size(item)
                         image_link = self.convert_dir(filepath)
                         scaled_image_link = self.convert_dir(scaled_image_path)
                         fv.tableCell('<div class="image"><a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
