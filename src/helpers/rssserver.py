@@ -30,15 +30,20 @@
 
 '''
 In local_conf.py add the following:
+
+# File defining RSS feeds to monitor (see format below).
 RSS_FEEDS='/etc/freevo/rss.feeds'
+# Frequency (in seconds) to check for new downloads. Default is 3600 or 1 hour.
+RSS_CHECK_INTERVAL=3600
+# Download directory for video files.
 RSS_VIDEO='/path/to/video/feeds/'
+# Download directory for audio files.
 RSS_AUDIO='/path/to/podcasts/'
 
 You will need to make a rss.feeds file: it contains the URL and the number of
-days it's been published
+days it's been published.
 
 # Begin /etc/freevo/rss.feeds
-
 http://twit.libsyn.com/rss,7
 http://leo.am/podcasts/twit,7
 http://leo.am/podcasts/itn,7
@@ -46,7 +51,6 @@ http://feeds.feedburner.com/TechRenegades,7
 http://www.linuxactionshow.com/?feed=rss2&cat=3,30
 http://www.thelinuxlink.net/tllts/tllts.rss,30
 http://www.linux-games.ca/2006/redneck.xml,360
-
 # End /etc/freevo/rss.feeds
 '''
 
@@ -90,7 +94,7 @@ def _debug_(text, level=1):
             print String(text)
 
 while True:
-      t = threading.Thread(rssperiodic.checkForUpdates())
-      t.start()
-      t.join()
-      time.sleep(60)
+    t = threading.Thread(rssperiodic.checkForUpdates())
+    t.start()
+    t.join()
+    time.sleep(config.RSS_CHECK_INTERVAL)

@@ -1344,6 +1344,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 # RSSSERVER_UID = 0
 # RSSSERVER_GID = 0
 
+# RSS_CHECK_INTERVAL = 3600
 # RSS_FEEDS = '/etc/freevo/rss.feeds'
 # RSS_VIDEO = '/media/video'
 # RSS_AUDIO = '/media/podcasts'

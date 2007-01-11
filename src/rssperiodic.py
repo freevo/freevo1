@@ -127,6 +127,7 @@ def checkForUpdates():
                 (url,numberOfDays)=re.split(",", line)
             except ValueError:
                 continue
+            print "Check %s for updates" % url
             sock = urllib.urlopen(url)
             feedSource = sock.read()
             sock.close()
@@ -140,14 +141,19 @@ def checkForUpdates():
                     filename=re.split("/",item.url).pop()
                     if (len(glob.glob(filename))==0) and not checkForDup(item.url):
                         if re.search("torrent",item.url):
+                            print "Start downloading %s" % item.url
                             exitStatus=os.popen("bittorrent-console %s"%(item.url)).close()
                             filename=re.sub("\.torrent","",filename)
                         else:
+                            print "Start downloading %s" % item.url
                             exitStatus=os.popen("wget %s" %(item.url)).close()
                         if not exitStatus:
                             createFxd(item,filename)
                             addFileToCache(item.url)
+                            print "Download completed (%s bytes)" % os.path.getsize(filename)
                         else:
+                            print "Download failed - exit status %s." % exitStatus
                             os.popen("rm %s" %(filename))
     except IOError:
        print "ERROR: Could not open %s"%(config.RSS_FEEDS)
+
