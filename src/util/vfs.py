@@ -38,7 +38,7 @@ import os
 import copy
 import traceback
 import codecs
-from stat import ST_MTIME
+from stat import *
 
 import config
 
@@ -47,8 +47,9 @@ def www_link_cachedir():
     if the directory does not exist it is created
     '''
     cache_dir = '%s/link_cache' % (config.WEBSERVER_CACHEDIR)
+    cache_dir_mode = S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[ST_MODE])
     if not os.path.isdir(cache_dir):
-        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[stat.ST_MODE]))
+        os.mkdirs(cache_dir, cache_dir_mode)
     return cache_dir
 
 
@@ -57,8 +58,9 @@ def www_image_cachedir():
     if the directory does not exist it is created
     '''
     cache_dir = '%s/image_cache' % (config.WEBSERVER_CACHEDIR)
+    cache_dir_mode = S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[ST_MODE])
     if not os.path.isdir(cache_dir):
-        os.mkdir(cache_dir, stat.S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[stat.ST_MODE]))
+        os.mkdirs(cache_dir, cache_dir_mode)
     return cache_dir
 
 

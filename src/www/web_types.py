@@ -563,6 +563,7 @@ class HTMLResource:
                 }
               var params="toolbar=no,location=no,status=no,menubar=no,resizable=no,scrollbars=no,top=0,left=0";
               remoteWin = window.open("webremote.rpy","WebRemote",params);
+              remoteWin.focus();
             }
            -->
            </script>

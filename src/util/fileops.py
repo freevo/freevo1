@@ -566,7 +566,7 @@ def www_thumbnail_path(filename):
     file_ext_index = filename.rindex(".")
     file_ext = filename[file_ext_index:].lower()
     if file_ext == ".gif":
-        file_ext += ".jpg"
+        file_ext = ".jpg"
     # the filename extension needs to be lowercase for imlib2 but we need to
     # keep the original filename for cache to be able to clean the files
     imagepath = filename + file_ext
@@ -591,12 +591,4 @@ def create_www_thumbnail(filename):
     except IOError, e:
         print e
         return (0, 0)
-    return thumb.size
-
-
-def get_www_thumbnail_size(filename):
-    '''returns the size from a webserver cached image.
-    '''
-    thumb_path = www_thumbnail_path(filename)
-    image = imlib2.open(filename)
     return image.size

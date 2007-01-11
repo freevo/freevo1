@@ -58,6 +58,7 @@ This release has all the changes in Release 1.6.x plus
 == Release 1.6.3 (2007-??-??) ==
 --------------------------------
 
+ * Fixed auto shutdown not calling the mount command (B#1632754)
  * Fixed manual record when month is December (B#1621615)
  * Fixed shopping cart for items with two or more subitems (B#1620425)
  * Fixed video thumbnails not being shown with subitems (B#1620452)
