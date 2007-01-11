@@ -56,14 +56,12 @@ import osd
 import config
 import util
 
+from skin_utils import *
 import xml_skin
 import screen
 
 SkinObjects = screen.SkinObjects
 
-
-# Create the OSD object
-osd = osd.get_singleton()
 
 
 class Geometry:
