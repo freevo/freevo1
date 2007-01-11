@@ -554,6 +554,7 @@ def __schedule_wakeup_and_shutdown():
                     if config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD:
                         cmd = "%s %s" % (config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD, \
                                          config.AUTOSHUTDOWN_REMOUNT_BOOT_OPT)
+                        __syscall(cmd)
                     cmd = config.AUTOSHUTDOWN_GRUB_CMD
                     __syscall(cmd)
                     _debug_("Wakeup set, reboot needed")
