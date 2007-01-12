@@ -23,6 +23,7 @@ This release has all the changes in Release 1.6.x plus
  * Replaced PIL with kaa.imlib2 (F#1580712)
  * New apple trailers plugin (disabled by default) (F#1580418)
  * New Bluetooth phone support to act as a remote control (F#1622143)
+ * New buttonbar plug-in that displays buttons on the bottom of the screen (F#1633140)
  * New CD/DVD burn plug-in added (F#1605919)
  * New encoding server, allows re-encoding TV programs and ripping DVDs (F#1580642,F#1578402)
  * New home automation plug-in, allows controlling device in the home! (F#1605293)

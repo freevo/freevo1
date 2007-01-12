@@ -460,6 +460,20 @@ CACHE_IMAGES = 1
 #       'MAIN': 'MENU'               # 4th row right
 # }
 
+# ----------------------------------------------------------------------
+# Freevo Button Bar Plug-in
+# ----------------------------------------------------------------------
+# plugin.activate('buttonbar')
+
+# You'll also need to map the 'RED', 'GREEN', 'YELLOW'
+# and 'BLUE' events to keys for example (don't use this
+# it overrides some default keys)
+# KEYMAP[key.K_F5] = 'RED'
+# KEYMAP[key.K_F6] = 'GREEN' #Already mapped to record
+# KEYMAP[key.K_F7] = 'YELLOW'
+# KEYMAP[key.K_F8] = 'BLUE'
+
+
 # ======================================================================
 # Freevo directory settings:
 # ======================================================================
