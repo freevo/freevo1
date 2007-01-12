@@ -671,7 +671,7 @@ if ROM_DRIVES == None:
                 elif devname.lower().find('dvd') != -1:
                     dispname = 'DVD-%s' % (len(ROM_DRIVES)+1)
                 elif devname.lower().find('hd') != -1:
-		    print 'Trying to autodetect type of %s' %devname
+                    print 'Trying to autodetect type of %s' %devname
                     if os.path.exists('/proc/ide/' + re.sub(r'^(/dev/)', '', devname) + '/media'):
                         if open('/proc/ide/'+  re.sub(r'^(/dev/)', '', devname) +\
                              '/media','r').read().lower().find('cdrom') !=1:

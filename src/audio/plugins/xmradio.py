@@ -106,32 +106,32 @@ class XmRadioMainMenuItem(Item):
         string="rm -f /tmp/xmonline.cookies"
         os.system(string)
 
-	string=('curl -s -c /tmp/xmonline.cookies -d "user_id=%s" -d "pword=%s" "http://xmro.xmradio.com/xstream/login_servlet.jsp" > /tmp/xmonlinelogin.out'%(config.XM_USER,config.XM_PASS))
+        string=('curl -s -c /tmp/xmonline.cookies -d "user_id=%s" -d "pword=%s" "http://xmro.xmradio.com/xstream/login_servlet.jsp" > /tmp/xmonlinelogin.out'%(config.XM_USER,config.XM_PASS))
         os.system(string)
 
         station_items = []
         for rstation in config.XM_STATIONS:
-	    string="rm -f /tmp/xmonlinechannel.out"
+            string="rm -f /tmp/xmonlinechannel.out"
             os.system(string)
 
-	    string=('curl -s -b /tmp/xmonline.cookies -d "" "http://player.xmradio.com/player/2ft/playMedia.jsp?ch=%s&speed=%s" > /tmp/xmonlinestream.out'%(rstation[1],config.XM_RATE))
+            string=('curl -s -b /tmp/xmonline.cookies -d "" "http://player.xmradio.com/player/2ft/playMedia.jsp?ch=%s&speed=%s" > /tmp/xmonlinestream.out'%(rstation[1],config.XM_RATE))
             os.system(string)
 
-	    string='egrep "<PARAM NAME=.FileName. VALUE=" /tmp/xmonlinestream.out > /tmp/xmurl.out'
-	    os.system(string)
+            string='egrep "<PARAM NAME=.FileName. VALUE=" /tmp/xmonlinestream.out > /tmp/xmurl.out'
+            os.system(string)
 
-	    string='sed "s/.*<PARAM NAME=.FileName. VALUE="// /tmp/xmurl.out > /tmp/xmurl2.out'
-	    os.system(string)
+            string='sed "s/.*<PARAM NAME=.FileName. VALUE="// /tmp/xmurl.out > /tmp/xmurl2.out'
+            os.system(string)
 
-	    string='sed "s/>.*//" /tmp/xmurl2.out > /tmp/xmurl3.out'
-	    os.system(string)
+            string='sed "s/>.*//" /tmp/xmurl2.out > /tmp/xmurl3.out'
+            os.system(string)
 
-	    file = open("/tmp/xmurl3.out","r")
-	    text = file.readlines()
-	    file.close()
-	    for line in text:
-            	radio_item = XmRadioItem(line,self,str(rstation[0]))
-		config.CONF.fbxine = '/usr/local/bin/xine'
+            file = open("/tmp/xmurl3.out","r")
+            text = file.readlines()
+            file.close()
+            for line in text:
+                radio_item = XmRadioItem(line,self,str(rstation[0]))
+            config.CONF.fbxine = '/usr/local/bin/xine'
             station_items += [ radio_item ]
         if (len(station_items) == 0):
             station_items += [menu.MenuItem( _( 'No Xm Radio Stations found' ),

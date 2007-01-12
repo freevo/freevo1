@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # buttonbar.py-ButtonBar plugin
 # -----------------------------------------------------------------------
-# $Id:$
+# $Id$
 #
 # -----------------------------------------------------------------------
 # Freevo-A Home Theater PC framework
@@ -186,7 +186,7 @@ class PluginInterface(plugin.DaemonPlugin):
         osd.drawstring(string, font, None, x = x+5+iw, y = y+5, width = w-iw, height = h-10, mode = 'soft', align_v='center')
 
     def eventhandler(self, event, menuw=None):
-        action = None	
+        action = None
         result = False
         if event == BUTTONBAR_RED:
             action = self.actions[0]

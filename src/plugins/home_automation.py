@@ -148,7 +148,3 @@ class HomeAutomationMainMenu(Item):
         automation_items_menu = menu.Menu(_('Home Automation'), automation_items)
         menuw.pushmenu(automation_items_menu)
         menuw.refresh()
-
-
-
- 	  	 

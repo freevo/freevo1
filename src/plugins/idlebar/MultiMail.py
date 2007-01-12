@@ -118,7 +118,7 @@ class Pop3(MultiMail):
             pop.quit
             return unread
         except:
-	    _debug_('Error loading POP account')
+            _debug_('Error loading POP account')
             return 0
       
 class Mbox(MultiMail):

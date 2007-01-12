@@ -94,9 +94,9 @@ class XmRadioPlayer:
             mixer.setMicVolume(config.TV_IN_VOLUME)
         else:
             print 'Xm Radio Player failed to find a mixer'
-	cmd=('%s -cache 100 -playlist %s' % (config.XM_CMD, self.item.url))
-	print(cmd)
-	self.app = MPlayerApp(cmd, self)
+        cmd=('%s -cache 100 -playlist %s' % (config.XM_CMD, self.item.url))
+        print(cmd)
+        self.app = MPlayerApp(cmd, self)
         return None
 
 

@@ -77,7 +77,7 @@ class RecordResource(FreevoResource):
         elif action == 'add':
             (status, prog) = ri.findProg(chan, start)
 
-	    if not status:
+            if not status:
                 fv.printHeader('Scheduled Recordings', 'styles/main.css')
                 fv.printMessagesFinish(
                     [ '<b>'+_('ERROR') + '</b>: ' + \

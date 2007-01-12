@@ -70,9 +70,9 @@ class IndexResource(FreevoResource):
             progl.sort(f)
             for prog in progl:
                 try:
-                    if prog.isRecording == TRUE:
+                    if prog.isRecording:
                         fv.res += '<p class="alert">'+_('Now Recording %s.')+'</p>\n' % prog.title
-	                break
+                        break
                 except:
                     pass
             num_sched_progs = len(progl)
