@@ -569,10 +569,6 @@ class HTMLResource:
            </script>
         <br />
         <table border="0" cellspacing="0" cellpadding="0" class="remote">
-        <tr><td class="remote"><button class="remote" accesskey="p" onClick="send_code('PLAY');">PLAY</button></td>
-          <td class="remote"><button class="remote" accesskey="u" onClick="send_code('PAUSE');">PAUSE</button></td> 
-          <td class="remote"><button class="remote" accesskey="s" onClick="send_code('STOP');">STOP</button></td>
-        </tr>
         <tr><td colspan="3" align="center"><a href="javascript:openremote()">Freevo WebRemote</a></td></tr>
         </table>
         """

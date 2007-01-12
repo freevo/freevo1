@@ -483,8 +483,7 @@ class LibraryResource(FreevoResource):
                         if not os.path.exists(scaled_image_path):
                             size = util.create_www_thumbnail(item)
                         else:
-                            size = imlib2.open(item).size
-                        print 'DJW:size:',size, 'w:', info['width'], 'h:',info['height']
+                            size = (info['width'], info['height'])
                         image_link = self.convert_dir(filepath)
                         scaled_image_link = self.convert_dir(scaled_image_path)
                         fv.tableCell('<div class="image"><a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
