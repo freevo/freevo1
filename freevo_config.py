@@ -1465,6 +1465,9 @@ DUPLICATE_DETECTION = None
 # This will enable only new episodes to be recorded
 ONLY_NEW_DETECTION = None
 
+# This will enable the commercial detection. It is quite process intensive.
+REMOVE_COMMERCIALS = None
+
 #
 # Watching TV
 #
@@ -1808,6 +1811,14 @@ ENCODINGSERVER_GID = 0
 ENCODINGSERVER_IP   = 'localhost'
 ENCODINGSERVER_PORT = 6666
 
+# ======================================================================
+# Freevo builtin commdetect server settings:
+# ======================================================================
+COMMDETECTSERVER_UID = 0
+COMMDETECTSERVER_GID = 0
+
+COMMDETECTSERVER_IP   = 'localhost'
+COMMDETECTSERVER_PORT = 6667
 
 
 # ======================================================================

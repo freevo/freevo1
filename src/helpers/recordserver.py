@@ -52,6 +52,9 @@ from twisted.internet.app import Application
 from twisted.internet import reactor
 from twisted.python import log
 from util.marmalade import jellyToXML, unjellyFromXML
+from video.commdetectclient import initCommDetectJob
+from video.commdetectclient import queueIt
+from video.commdetectclient import listJobs
 
 import rc
 rc_object = rc.get_singleton(use_pylirc=0, use_netremote=0)
@@ -67,6 +70,7 @@ import util.popen3
 from tv.channels import FreevoChannels
 from util.videothumb import snapshot
 from event import *
+
 
 DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
 
@@ -1354,7 +1358,12 @@ class RecordServer(xmlrpc.XMLRPC):
                     pass
                 if config.VCR_POST_REC:
                     util.popen3.Popen3(config.VCR_POST_REC)
-
+                if config.REMOVE_COMMERCIALS:
+                    (status, idnr) = initCommDetectJob(prog.filename)
+                    (status, output) = queueIt(idnr, True)
+                    print output
+                    (status, output) = listJobs()
+                    print output
             else:
                 print 'not handling event %s' % str(event)
                 return

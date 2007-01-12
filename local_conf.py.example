@@ -1339,6 +1339,16 @@ IMAGEVIEWER_BLEND_MODE = -1
 
 
 # ======================================================================
+# Freevo builtin commdetect server settings:
+# ======================================================================
+# COMMDETECTSERVER_UID = 0
+# COMMDETECTSERVER_GID = 0
+#
+# COMMDETECTSERVER_IP   = 'localhost'
+# COMMDETECTSERVER_PORT = 6667
+
+
+# ======================================================================
 # Freevo builtin rss server settings:
 # ======================================================================
 # RSSSERVER_UID = 0

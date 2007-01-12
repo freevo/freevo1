@@ -199,6 +199,9 @@ class MPlayer:
                 additional_args += [ '-vf', config.MPLAYER_VF_INTERLACED ]
         elif config.MPLAYER_VF_PROGRESSIVE:
                 additional_args += [ '-vf', config.MPLAYER_VF_PROGRESSIVE ]
+
+        if os.path.isfile(os.path.splitext(item.filename)[0]+'.edl'):
+           additional_args += [ '-edl', str(os.path.splitext(item.filename)[0]+'.edl') ]
                 
         mode = item.mimetype
         if not config.MPLAYER_ARGS.has_key(mode):
