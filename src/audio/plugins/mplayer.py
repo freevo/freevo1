@@ -128,6 +128,9 @@ class MPlayer:
         if item.network_play and ( str(filename).endswith('m3u') or str(filename).endswith('pls')):
             is_playlist = True
 
+        if str(filename).find(".jsp?"):
+            is_playlist = True
+
         if item.network_play:
             extra_opts += ' -cache 100'
 

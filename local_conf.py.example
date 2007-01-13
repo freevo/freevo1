@@ -1361,6 +1361,22 @@ IMAGEVIEWER_BLEND_MODE = -1
 # COMMDETECTSERVER_IP   = 'localhost'
 # COMMDETECTSERVER_PORT = 6667
 
+# ======================================================================
+# Freevo xmradio plug-in settings:
+# ======================================================================
+# plugin.activate('audio.xmradio')
+# XM_CMD='mplayer'
+# XM_USER='your email address'
+# XM_PASS='your password'
+# XM_RATE='high'
+# XM_STATIONS = [
+#     ('The 60s', '6'),
+#     ('The 70s', '7'),
+#     ('The 80s', '8'),
+#     ('The 90s', '9'),
+#     ...etc...
+#     ('High Voltage', '202')
+# ]
 
 # ======================================================================
 # Freevo builtin rss server settings:
