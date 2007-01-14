@@ -49,7 +49,7 @@ def www_link_cachedir():
     cache_dir = '%s/link_cache' % (config.WEBSERVER_CACHEDIR)
     cache_dir_mode = S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[ST_MODE])
     if not os.path.isdir(cache_dir):
-        os.mkdirs(cache_dir, cache_dir_mode)
+        os.makedirs(cache_dir, cache_dir_mode)
     return cache_dir
 
 
@@ -60,7 +60,7 @@ def www_image_cachedir():
     cache_dir = '%s/image_cache' % (config.WEBSERVER_CACHEDIR)
     cache_dir_mode = S_IMODE(os.stat(config.WEBSERVER_CACHEDIR)[ST_MODE])
     if not os.path.isdir(cache_dir):
-        os.mkdirs(cache_dir, cache_dir_mode)
+        os.makedirs(cache_dir, cache_dir_mode)
     return cache_dir
 
 
