@@ -223,7 +223,7 @@ class VideoItem(Item):
 
             if self.info['runtime']:
                 length = self.info['runtime']
-                if not length:
+                if not length or length == 'None':
                     length = ''
                 if length.find('min') == -1:
                     length = '%s min' % length
