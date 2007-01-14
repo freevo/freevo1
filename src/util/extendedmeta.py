@@ -220,22 +220,15 @@ class AudioParser:
                 continue
             except:
                 continue
-            myname = vfs.getoverlay(os.path.join(path, 'cover.jpg'))
+            iname = os.path.splitext(os.path.basename(i))[0]+'.jpg'
+            myname = vfs.getoverlay(os.path.join(path, iname))
             images = self.tag.getImages();
             for img in images:
                 if vfs.isfile(myname) and (self.get_md5(vfs.open(myname,'rb')) == \
                                            self.get_md5(img.imageData)):
                     # Image already there and has identical md5, skip
                     pass 
-                elif not vfs.isfile(myname):
-                    f = vfs.open(myname, "wb")
-                    f.write(img.imageData)
-                    f.flush()
-                    f.close()
                 else:
-                    # image exists, but sums are different, write a unique cover
-                    iname = os.path.splitext(os.path.basename(i))[0]+'.jpg'
-                    myname = vfs.getoverlay(os.path.join(path, iname))
                     f = vfs.open(myname, "wb")
                     f.write(img.imageData)
                     f.flush()
