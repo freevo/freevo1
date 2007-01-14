@@ -113,21 +113,26 @@ def createFxd(item,filename):
        file.write('</freevo>\n')
        file.close()
     except IOError:
-       print "ERROR: Could not open %s"%(ofile)
+       print "ERROR: Unable to write FXD file %s"%(ofile)
 
 def checkForUpdates():
     try:
         file = open(config.RSS_FEEDS,"r")
-        for line in file:
-            if line == '\n':
-                continue
-            if re.search("^#",line):
-                continue
-            try:
-                (url,numberOfDays)=re.split(",", line)
-            except ValueError:
-                continue
-            print "Check %s for updates" % url
+    except IOError:
+       print "ERROR: Could not open configuration file %s"%(config.RSS_FEEDS)
+       return
+
+    for line in file:
+        if line == '\n':
+            continue
+        if re.search("^#",line):
+            continue
+        try:
+            (url,numberOfDays)=re.split(",", line)
+        except ValueError:
+            continue
+        print "Check %s for updates" % url
+        try:
             sock = urllib.urlopen(url)
             feedSource = sock.read()
             sock.close()
@@ -154,6 +159,6 @@ def checkForUpdates():
                         else:
                             print "Download failed - exit status %s." % exitStatus
                             os.popen("rm %s" %(filename))
-    except IOError:
-       print "ERROR: Could not open %s"%(config.RSS_FEEDS)
+        except IOError:
+            print "ERROR: Unable to download %s. Connection may be down."%(url)
 
