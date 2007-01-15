@@ -55,6 +55,7 @@ from util.marmalade import jellyToXML, unjellyFromXML
 from video.commdetectclient import initCommDetectJob
 from video.commdetectclient import queueIt
 from video.commdetectclient import listJobs
+from video.commdetectclient import connectionTest
 
 import rc
 rc_object = rc.get_singleton(use_pylirc=0, use_netremote=0)
@@ -1359,11 +1360,15 @@ class RecordServer(xmlrpc.XMLRPC):
                 if config.VCR_POST_REC:
                     util.popen3.Popen3(config.VCR_POST_REC)
                 if config.REMOVE_COMMERCIALS:
-                    (status, idnr) = initCommDetectJob(prog.filename)
-                    (status, output) = queueIt(idnr, True)
-                    print output
-                    (status, output) = listJobs()
-                    print output
+                    (result, response) = connectionTest('connection test')
+                    if result:
+                       (status, idnr) = initCommDetectJob(prog.filename)
+                       (status, output) = queueIt(idnr, True)
+                       _debug_(output)
+                       (status, output) = listJobs()
+                       _debug_(output)
+                    else:
+                       _debug_('commdetect server not running')
             else:
                 print 'not handling event %s' % str(event)
                 return

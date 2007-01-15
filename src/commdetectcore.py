@@ -53,7 +53,7 @@ class CommDetectJob:
         self.edlList=[]
         videoCodec='-ovc lavc'
         nosound='-nosound'
-        videoFilter='-vf blackframe'
+        videoFilter='-vf blackframe=98:48'
         output='-o /dev/null'
         grep='| grep vf_blackframe'
         outfile='> /tmp/blackframes.txt'
