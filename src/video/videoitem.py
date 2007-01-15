@@ -223,17 +223,29 @@ class VideoItem(Item):
 
             if self.info['runtime']:
                 length = self.info['runtime']
-                if not length or length == 'None':
-                    length = ''
-                if length.find('min') == -1:
-                    length = '%s min' % length
-                if length.find('/') > 0:
-                    length = length[:length.find('/')].rstrip()
-                if length.find(':') > 0:
-                    length = length[length.find(':')+1:]
-                if length == '0 min':
-                    length = ''
-                total = length
+                # Assuming that runtime is always a string
+                # Assume that a time 1:40 is hours:minutes
+                # Not sure when a '/' is used
+                p=re.compile('([0-9]+)[:/]*([0-9]*)')
+                m=p.match(length)
+                if m:
+                    length = int(m.group(1))
+                    if m.group(2):
+                        length *= 60 + int(m.group(2))
+                else:
+                    length = 0
+                # leaving in the old code for reference
+                #if not length or length == 'None':
+                #    length = '0 min'
+                #if length.find('min') == -1:
+                #    length = '%s min' % length
+                #if length.find('/') > 0:
+                #    length = length[:length.find('/')].rstrip()
+                #if length.find(':') > 0:
+                #    length = length[length.find(':')+1:]
+                #if length == '0 min':
+                #    length = ''
+                total = "%s min" % str(int(length))
 
             elif self.subitems:
                 for s in self.subitems:
