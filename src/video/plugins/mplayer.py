@@ -195,10 +195,17 @@ class MPlayer:
             else:
                additional_args += [ '-aid', str(item.selected_audio) ]
 
+        # This comes from the bilingual language selection menu
+        if item.selected_language:
+            if item.selected_language == 'left':
+                additional_args += [ '-af', 'pan=2:1:1:0:0' ]
+            elif item.selected_language == 'right':
+                additional_args += [ '-af', 'pan=2:0:0:1:1' ]
+
         if item['deinterlace'] and config.MPLAYER_VF_INTERLACED:
-                additional_args += [ '-vf', config.MPLAYER_VF_INTERLACED ]
+            additional_args += [ '-vf', config.MPLAYER_VF_INTERLACED ]
         elif config.MPLAYER_VF_PROGRESSIVE:
-                additional_args += [ '-vf', config.MPLAYER_VF_PROGRESSIVE ]
+            additional_args += [ '-vf', config.MPLAYER_VF_PROGRESSIVE ]
 
         if os.path.isfile(os.path.splitext(item.filename)[0]+'.edl'):
            additional_args += [ '-edl', str(os.path.splitext(item.filename)[0]+'.edl') ]
