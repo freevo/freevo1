@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <freevo>
- <skin geometry="800x600" include="info (BB)">
+ <skin geometry="800x600" include="info_BB">
   <iconset theme="tuxntosh"/>
 <!-- 
 TODO:

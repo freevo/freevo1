@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <freevo>
 
-  <skin include="info (BB)" geometry="800x600">
+  <skin include="info_BB" geometry="800x600">
     <iconset theme="Noia"/>
 
     <image label="background" filename="blurr_naxos"/>

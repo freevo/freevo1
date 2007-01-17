@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <freevo>
 
-    <skin include="basic" geometry="800x600">
+    <skin include="basic_BB" geometry="800x600">
 
 		<!--
 	*******************************************************
