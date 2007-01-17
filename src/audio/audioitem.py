@@ -193,10 +193,9 @@ class AudioItem(Item):
             try:
                 mytrack = ('%0.2d' % int(self['trackno']))
             except ValueError:
-                mytrack = None
+                mytrack = '  '
         else:
-            mytrack = None
-            return os.path.split(self.filename)[1]
+            mytrack = '  '
 
         song_info = {  'a'  : self['artist'],
                        'l'  : self['album'],
@@ -208,4 +207,3 @@ class AudioItem(Item):
         if self.parent and hasattr(self.parent, 'AUDIO_FORMAT_STRING'):
             return self.parent.DIRECTORY_AUDIO_FORMAT_STRING % song_info
         return config.DIRECTORY_AUDIO_FORMAT_STRING % song_info
-        
