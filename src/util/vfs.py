@@ -198,7 +198,7 @@ def listdir(directory, handle_exception=True, include_dot_files=False,
                     files.append(directory + f)
         else:
             for f in os.listdir(directory):
-                if not f.startswith('.') and not f in ('folder.fxd'):
+                if not f.startswith('.') and not f in ('folder.fxd',):
                     files.append(directory + f)
 
         if not include_overlay:
