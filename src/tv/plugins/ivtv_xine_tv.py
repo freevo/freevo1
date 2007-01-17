@@ -261,7 +261,7 @@ class IVTV_XINE_TV:
                 self.lastinput_value = newinput_value
                 self.lastinput_time = newinput_time
 
-                self.tuner.TuneChannel(newinput_value)
+                self.tuner.TuneChannelByNumber(newinput_value)
 
                 if newinput_value > 9:
 
@@ -418,14 +418,14 @@ class TunerControl:
 
         if (next_channel == None):
 
-            _debug_("TunerControl: Cannot find tuner channel '%s' in the TV channel listing" % channel)
+           _debug_("TunerControl: Cannot find tuner channel '%s' in the TV channel listing" % channel)
 
         else:
 
-            self.TuneChannel(channel_index + 1)
+            self.TuneChannelByIndex(channel_index + 1)
 
 
-    def TuneChannel(self, channel):
+    def TuneChannelByIndex(self, channel):
 
         # tune channel by index
 
@@ -434,6 +434,13 @@ class TunerControl:
 
         self.PushChannel()
         self.SetVideoGroup(next_channel)
+
+    def TuneChannelByNumber(self, channel):
+
+        # tune channel by number
+
+        self.PushChannel()
+        self.SetVideoGroup(str(channel))
 
 
     def NextChannel(self):
