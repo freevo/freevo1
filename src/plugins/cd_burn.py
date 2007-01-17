@@ -97,11 +97,11 @@ class MyProgressBox(ProgressBox):
         self.progressbar.position = initial_progress
 
     def set_progress(self, progress):
-        _debug_('set_progress');
+        _debug_('set_progress(self, progress)')
         while self.progressbar.position < progress:
            self.tick()                                                                                                                           
     def eventhandler(self, event):
-        _debug_('eventhandler');
+        _debug_('eventhandler(self, event)')
         if event in (INPUT_ENTER, INPUT_EXIT):
             self.destroy()
             if self.handler:
@@ -111,17 +111,18 @@ class MyProgressBox(ProgressBox):
 
 class Logger:
     def __init__(self):
-        _debug_('__init__');
+        _debug_('__init__(self)')
         self.filename = '%s/%s-%s.log' % (config.LOGDIR, 'burn_cd-helpers', os.getuid())
         self.file     = file(self.filename,"a")
         
     def log (self,line=None):
+        _debug_('log (self,line=None)')
         self.file.write(line + "\n")
         self.file.flush()
 
 class BurnCDItem:
     def __init__(self,item,filename=None,plugin=None,menu=None,burn_mode="data_cd"):
-        _debug_('__init__');
+        _debug_('__init__(self,item,filename=None,plugin=None,menu=None,burn_mode="data_cd")')
         self.item          = item
         self.menuw         = menu 
         self.plugin        = plugin 
@@ -130,7 +131,7 @@ class BurnCDItem:
         self.burn_mode     = burn_mode 
 
     def menu_back (self):
-        _debug_('menu_back ');
+        _debug_('menu_back (self)')
         # go back in menustack
         #for i in range(2):
         for i in range(1):
@@ -141,7 +142,7 @@ class BurnCDItem:
 
     #starts de decision process of burning the CD
     def burn (self, arg=None, menuw=None):
-        _debug_('burn ');
+        _debug_('burn (self, arg=None, menuw=None)')
         if self.burn_mode == "data_cd":
             self.burn_data_cd()
         elif self.burn_mode == "dvd_video":
@@ -155,9 +156,9 @@ class BurnCDItem:
     #checks if the file "program" with the program name exists and is executable
     #if not displays a alert box and returns 0
     def check_program (self, program=None, program_name=None) :
-        _debug_('check_program ');
+        _debug_('check_program (self, program=None, program_name=None) ')
         if not (os.path.exists(program) and os.path.isfile(program) and os.access(program, os.X_OK)):
-            _debug_("CDBURN : Progam Error")
+            _debug_("Progam Error")
             AlertBox(text=_('Cannot find %s (%s). '+\
                 'Please configure the right path in your config file and make sure it has the right permissions.' \
                 % (program_name,program)), handler=self.menu_back).show()
@@ -166,7 +167,7 @@ class BurnCDItem:
             return 1
 
     def burn_audio_cd(self):
-        _debug_('burn_audio_cd');
+        _debug_('burn_audio_cd(self)')
         """
         Checks for burnlist cleanup, mplayer availability
         """
@@ -180,25 +181,25 @@ class BurnCDItem:
             handler=self.start_burning, default_choice=0).show()
 
     def burn_dvd_video(self):
-        _debug_('burn_dvd_video');
+        _debug_('burn_dvd_video(self)')
         """
         copy this DIR to DVD as DVD VIDEO, NB: MUST BE DVD VIDEO ALREADY!!!!!!! (ie ripped with dvdcopy.py)
         """
 
         name  = self.files[0].split("/")
         self.name  = name[len(name) -1]
-        _debug_('CDBURN : self.name = %s' % self.name)
+        _debug_('self.name = %s' % self.name)
         dir = self.files[0]
         self.dir = dir + "/"
-        _debug_('CDBURN : self.dir = %s ' % self.dir)
+        _debug_('self.dir = %s ' % self.dir)
         for f in os.listdir(self.dir):
             pathname = os.path.join(self.dir, f)
-            _debug_('CDBURN : %s ' % pathname[-3:])
+            _debug_('%s ' % pathname[-3:])
             if pathname[-3:].lower() == '_ts':
-                _debug_('CDBURN : would not delete %s' %pathname)
+                _debug_('would not delete %s' %pathname)
                 self.file_to_delete = None
             else:
-                _debug_('CDBURN : would delete %s' % pathname)
+                _debug_('would delete %s' % pathname)
                 #self.file_to_delete.append(pathname)
                 self.file_to_delete = pathname
 
@@ -212,7 +213,7 @@ class BurnCDItem:
         return
 
     def delete_now (self, arg=None, menuw=None):
-        _debug_('delete_now ');
+        _debug_('delete_now (self, arg=None, menuw=None)')
         """
         Called by burn_dvd_video to remove anything it sees fit.. I think
         freevo should have a file op for this but it doesn't (that i can find).
@@ -225,13 +226,13 @@ class BurnCDItem:
                         shutil.rmtree(a)
                     except:
                         rc.post_event(Event(OSD_MESSAGE, arg=_('Error, unable to delete dir %s' % a)))
-                        print "CDBURN : unable to delete tree %s" % a
+                        print "unable to delete tree %s" % a
                 elif S_ISREG(mode):
                     try:
                         os.unlink(a)
                     except:
                         rc.post_event(Event(OSD_MESSAGE, arg=_('Error, unable to delete file %s' % a)))
-                        print "CDBURN : unable to delete %s" % a
+                        print "unable to delete %s" % a
             except:
                 pass
         self.burn()
@@ -240,13 +241,13 @@ class BurnCDItem:
     #asks confirmation for the burning of a data CD
     #if confirmation given it calls start_burning
     def burn_data_cd (self) :
-        _debug_('burn_data_cd ');
+        _debug_('burn_data_cd (self) ')
         #lets check if we have all we need
         if not self.check_program(program=config.CDBURN_CDRECORD_PATH, program_name="cdrecord"):
-            _debug_("CDBURN : Unable to find %s" %config.CDBURN_CDRECORD_PATH)
+            _debug_("Unable to find %s" %config.CDBURN_CDRECORD_PATH)
             return
         if not self.check_program(program=config.CDBURN_MKISOFS_PATH,  program_name="mkisofs"): 
-            _debug_("CDBURN : Unable to find %s" %config.CDBURN_MKISOFS_PATH)
+            _debug_("Unable to find %s" %config.CDBURN_MKISOFS_PATH)
             return
         
         if not self.clean_up_burndir():
@@ -269,7 +270,7 @@ class BurnCDItem:
         
 
     def clean_up_burndir (self):
-        _debug_('clean_up_burndir ');
+        _debug_('clean_up_burndir (self)')
         """
         Tries to cleanup /tmp/burndir, if it not exists it try's to create it
         the final result of this function must a be a existing and empty
@@ -306,7 +307,7 @@ class BurnCDItem:
 
     # Starts the burning thread
     def start_burning (self, arg=None, menuw=None):
-        _debug_('start_burning ');
+        _debug_('start_burning (self, arg=None, menuw=None)')
         self.thread_burn = main_burn_thread(token=self)
         self.thread_burn.start()
         self.plugin.thread_burn = self.thread_burn
@@ -318,16 +319,15 @@ class BurnCDItem:
 
     #Finds the file of a single file item
     def findFileFromItem (self) :
-        _debug_('findFileFromItem ');
-        _debug_("CDBURN : findFileFromItem() ran")
+        _debug_('findFileFromItem (self) ')
         if self.item.filename:
-            _debug_('CDBURN : findFileFromItem() found item %s' %self.item.filename)
+            _debug_('findFileFromItem() found item %s' %self.item.filename)
             self.volume_name = self.item.name
             self.files.append(self.item.filename)
 
     #Finds all the files in a dir item
     def findFromDir (self) :
-        _debug_('findFromDir ');
+        _debug_('findFromDir (self) ')
         for f in os.listdir(self.item.dir) :
             self.files.append(self.item.dir+'/'+f)
 
@@ -335,7 +335,7 @@ class BurnCDItem:
     #related files have the same filename that
     #the item filename but diferent extensions
     def findRelated (self,mode=0):
-        _debug_('findRelated ');
+        _debug_('findRelated (self,mode=0)')
         self.files.append(self.item.filename)
         file = self.item.filename
         self.volume_name = self.item.name
@@ -344,24 +344,24 @@ class BurnCDItem:
         result = rexp.search(file)
         name = result.group(2)
         dir = result.group(1)
-        _debug_('CDBURN : File: %s, Name: %s, Dir: %s' % (file,name,dir))
+        _debug_('File: %s, Name: %s, Dir: %s' % (file,name,dir))
         files = glob.glob( dir + '/' + name + '.*' )
         for k in files:
-                if k == file:
-                        continue
-                result = rexp.search(k)
-                ext = result.group(3)
+            if k == file:
+                continue
+            result = rexp.search(k)
+            ext = result.group(3)
 
-                if mode==0 and (ext == 'fxd' or ext == 'jpg'):
-                        continue
+            if mode==0 and (ext == 'fxd' or ext == 'jpg'):
+                continue
 
-                _debug_('CDBURN :   related file: ' + k)
-                _debug_('CDBURN :     extension ' + ext)
-                self.files.append(k)
+            _debug_('related file: ' + k)
+            _debug_('extension ' + ext)
+            self.files.append(k)
 
     def findFromDirMatches(self,suffix=None):
-        _debug_('findFromDirMatches');
-    #finds all files in a dir matching suffix
+        _debug_('findFromDirMatches(self,suffix=None)')
+        #finds all files in a dir matching suffix
         if not suffix:
             return
         matches = util.match_files(dirname=self.item.dir, suffix_list=suffix)
@@ -372,7 +372,7 @@ class BurnCDItem:
 #
 class main_burn_thread(threading.Thread):
     def __init__(self, token=None):
-        _debug_('__init__');
+        _debug_('__init__(self, token=None)')
         threading.Thread.__init__(self)
         self.token  = token
         self.childs = []
@@ -389,7 +389,7 @@ class main_burn_thread(threading.Thread):
         self.widget = False
 
     def stop(self):
-        _debug_('stop');
+        _debug_('stop(self)')
         self.stopping = True
         starttime = time.time()
         
@@ -399,7 +399,7 @@ class main_burn_thread(threading.Thread):
 
 
     def cleanup(self):
-        _debug_('cleanup');
+        _debug_('cleanup(self)')
         for child in self.childs:
             if child.poll() == 0:
                 continue
@@ -444,7 +444,7 @@ class main_burn_thread(threading.Thread):
    
     #mick, all childs are spwaned using this method
     def run_child(self,cmd=None,cwd=None,wait=0,task_weight=False):
-        _debug_('run_child');
+        _debug_('run_child(self,cmd=None,cwd=None,wait=0,task_weight=False)')
         """
         Spwans a child using command cmd.
         If cwd is filled the os will change to that dir before the spwan
@@ -455,7 +455,7 @@ class main_burn_thread(threading.Thread):
          task_wight
         """
         if cwd:
-            _debug_("CDBURN : Changing working dir to %s" % cwd)
+            _debug_("Changing working dir to %s" % cwd)
             os.chdir(cwd)
 
         cmd = cmd + " 2>&1"
@@ -466,12 +466,12 @@ class main_burn_thread(threading.Thread):
         self.childs.append(child_app)
 
         if wait:
-            _debug_('CDBURN : Waiting for %s' % child_app.pid)
+            _debug_('Waiting for %s' % child_app.pid)
         
             self.makeNonBlocking(child_app.fromchild.fileno())
 
             while child_app.poll() < 0:
-                #_debug_("CDBURN : Polled %s (pid : %s), status is %s" % (cmd,child_app.pid,child_app.poll()))
+                #_debug_("Polled %s (pid : %s), status is %s" % (cmd,child_app.pid,child_app.poll()))
                 if self.stopping:
                     self.cleanup()
                     self.stopping = False
@@ -494,11 +494,11 @@ class main_burn_thread(threading.Thread):
                     #the fd was not ready to read
                     pass
 
-                #_debug_('CDBURN : string = %s' % last_string )
+                #_debug_('string = %s' % last_string )
 
                 time.sleep(1)
 
-            _debug_('CDBURN : %s exited with code %s' % (cmd,child_app.poll()))
+            _debug_('%s exited with code %s' % (cmd,child_app.poll()))
             if task_weight:
                 self.progress = self.progress + task_weight
                 self.update_progress(self.progress)
@@ -509,7 +509,7 @@ class main_burn_thread(threading.Thread):
         return child_app
 
     def makeNonBlocking(self,fd):
-        _debug_('makeNonBlocking');
+        _debug_('makeNonBlocking(self,fd)')
         fl = fcntl.fcntl(fd, fcntl.F_GETFL)
         try:
             fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NDELAY)
@@ -517,7 +517,7 @@ class main_burn_thread(threading.Thread):
             fcntl.fcntl(fd, fcntl.F_SETFL, fl | fcntl.FNDELAY)
 
     def show_status(self,arg=None, menuw=None):
-        _debug_('show_status');
+        _debug_('show_status(self,arg=None, menuw=None)')
         """
         The thread has is own status widget
         """
@@ -527,21 +527,21 @@ class main_burn_thread(threading.Thread):
         self.widget.show()
 
     def hide_status(self,arg=None, menuw=None):
-        _debug_('hide_status');
+        _debug_('hide_status(self,arg=None, menuw=None)')
         w = self.widget;
         self.widget = False;
         if w:
           w.destroy 
 
     def update_progress(self,progress=0):
-        _debug_('update_progress');
+        _debug_('update_progress(self,progress=0)')
         self.progress=progress
         if self.widget:
           self.widget.set_progress(progress)
           self.widget.draw(update=True)
 
     def update_status(self, status='running', description=None):
-        _debug_('update_status');
+        _debug_('update_status(self, status="running", description=None)')
         """
         Is used to change the status of the process.
         The status can be: running, error, done
@@ -572,12 +572,12 @@ class main_burn_thread(threading.Thread):
             self.widget.draw(update=True)
 
     def run(self, arg=None, menuw=None, token=None):
-        _debug_('run');
+        _debug_('run(self, arg=None, menuw=None, token=None)')
         """
         Starts the burning process and helpers
         """
 
-        _debug_('CDBURN : running burning thread with token.burn_mode = %s' % self.token.burn_mode)
+        _debug_('running burning thread with token.burn_mode = %s' % self.token.burn_mode)
 
         if self.token.burn_mode == "data_cd":
             self.update_status(status="running", description="Creating disc image")
@@ -589,7 +589,7 @@ class main_burn_thread(threading.Thread):
                 path = re.split("\\/", a)
                 os.symlink(a, "/tmp/burnlist/" + path[-1])   
 
-            _debug_("CDBURN : start burning")
+            _debug_("start burning")
         
             """
             copy files into a CD
@@ -610,7 +610,7 @@ class main_burn_thread(threading.Thread):
                 self.update_status(status="error",description="Could not create the image file")
                 return
 
-            _debug_('CDBURN : Mkisofs done')
+            _debug_('Mkisofs done')
             self.status = "Burning files to CD"
 
             cdrecord_cmd = '%s -eject -v -driveropts=burnfree speed=%s dev=%s %s' % \
@@ -641,7 +641,6 @@ class main_burn_thread(threading.Thread):
 
                 #rc.register(self.burn_status, False, 2000)
 
-
         elif self.token.burn_mode == "audio_cd":
             #All tracks are about 70% of the total process percentage
             track_percent = 70/len(self.token.files);
@@ -649,7 +648,7 @@ class main_burn_thread(threading.Thread):
                 status_line = "Converting %s" % os.path.basename(a)
                 self.update_status(status='running',description=status_line)
 
-                _debug_("CDBURN : Converting %s" % os.path.basename(a))
+                _debug_("Converting %s" % os.path.basename(a))
                 convert_cmd = 'mplayer -ao pcm:waveheader -vc null -vo null "%s"' % a
 
                 conv_child = self.run_child(cmd=convert_cmd,cwd='/tmp/burnlist',wait=1,task_weight=track_percent)
@@ -660,7 +659,7 @@ class main_burn_thread(threading.Thread):
                     self.update_status(status="error",description=_("Error : Could not convert %s" % os.path.basename(a)))
                     return
 
-                _debug_("CDBURN : Conversion done")
+                _debug_("Conversion done")
                 rename_wav = '%s.wav' % (config.os.path.basename(a))
                 os.rename('/tmp/burnlist/audiodump.wav', _('/tmp/burnlist/%s' % rename_wav))
         
@@ -672,7 +671,7 @@ class main_burn_thread(threading.Thread):
                 audio_mode = ""
             cdrec_cmd = '%s -audio -s -eject -v -driveropts=burnfree speed=%s dev=%s %s -pad -useinfo /tmp/burnlist/*' \
                 % (config.CDBURN_CDRECORD_PATH,config.CDBURN_SPEED,config.CDBURN_DEV,audio_mode) 
-            _debug_('CDBURN : %s' % cdrec_cmd)
+            _debug_('%s' % cdrec_cmd)
 
             rec_child = self.run_child(cmd=cdrec_cmd,wait=1) 
             if not rec_child:
@@ -686,7 +685,7 @@ class main_burn_thread(threading.Thread):
         for child in self.childs:
             while child.poll() < 0:
                 child.fromchild.readlines()
-                _debug_('CDBURN : Waiting for process %d...' % child.pid)
+                _debug_('Waiting for process %d...' % child.pid)
                 time.sleep(1)
 
         self.update_status(status='done');
@@ -707,7 +706,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
         
     def __init__(self):
-        _debug_('__init__');
+        _debug_('__init__(self)')
         plugin.ItemPlugin.__init__(self)
         self.device = ''
         self.item   = None
@@ -715,35 +714,39 @@ class PluginInterface(plugin.ItemPlugin):
         self.dev_list = []
 
     def config(self):
-        _debug_('config');
-        self.dev_list = []
         """
         time for some auto stuff...
         """
-        child = popen2.Popen4('cdrecord -scanbus')
-        while child.poll() < 0:
-            # _debug_(child.pid)
-            try:
-                while 1:
-                    line = child.fromchild.readline()
-                    #if line and ('RW' in line):
-                    if line and (line.find('RW') != -1):
-                        # _debug_(line)
-                        burn_dev = line.split()[0]
-                        # _debug_(burn_dev)
-                        self.dev_list.append(burn_dev)
-                    else:
-                        # this is needed to get out of while loop..
-                        break
-            except IOError:
-                _debug_("no line")
-            time.sleep(0.1)
+        _debug_('config(self)')
+        record_dev = 'ATAPI:0,0,0'
+        try:
+            self.dev_list = []
+            child = popen2.Popen4('cdrecord -scanbus')
+            while child.poll() < 0:
+                # _debug_(child.pid)
+                try:
+                    while 1:
+                        line = child.fromchild.readline()
+                        #if line and ('RW' in line):
+                        if line and (line.find('RW') != -1):
+                            # _debug_(line)
+                            burn_dev = line.split()[0]
+                            # _debug_(burn_dev)
+                            self.dev_list.append(burn_dev)
+                        else:
+                            # this is needed to get out of while loop..
+                            break
+                except IOError:
+                    _debug_("no line")
+                time.sleep(0.1)
 
-        if len(self.dev_list) and self.dev_list[0]:
-            record_dev = self.dev_list[0]
-        else:
-            record_dev = 'ATAPI:0,0,0'
-        
+            if len(self.dev_list) and self.dev_list[0]:
+                record_dev = self.dev_list[0]
+            else:
+                record_dev = 'ATAPI:0,0,0'
+        except Exception, e:
+            print e    
+
         return [
             ('CDBURN_CDRECORD_PATH', '/usr/bin/cdrecord', 'Path to cdrecord'),
             ('CDBURN_MKISOFS_PATH', '/usr/bin/mkisofs', 'Path to mkisofs'),
@@ -756,7 +759,7 @@ class PluginInterface(plugin.ItemPlugin):
         ]
 
     def stop_burning(self, arg,  menuw=None):
-        _debug_('stop_burning');
+        _debug_('stop_burning(self, arg,  menuw=None)')
         pop = PopupBox(text=_('Interrupting burning process...'))
         pop.show()
 
@@ -770,11 +773,11 @@ class PluginInterface(plugin.ItemPlugin):
         AlertBox(text=_('Backup interrupted')).show()
 
     def actions(self, item):
-        _debug_('actions');
+        _debug_('actions(self, item)')
         self.item = item
         show_burn_menu = 0;
 
-        _debug_(_('CDBURN : Item type is %s' % item.type))
+        _debug_(_('Item type is %s' % item.type))
 
         if self.thread_burn and self.thread_burn.running == 1:
             show_burn_menu = 1;
@@ -782,7 +785,7 @@ class PluginInterface(plugin.ItemPlugin):
         if ( item.type == 'audio' or item.type == 'image' or item.type == 'video' or item.type == 'dir' ):
             show_burn_menu = 1;
 
-        _debug_(_('CDBURN : Should show the menu? %i' % show_burn_menu))
+        _debug_(_('Should show the menu? %i' % show_burn_menu))
 
         if show_burn_menu:
             return [ (self.fill_menu, 'Burn CD') ]
@@ -790,7 +793,7 @@ class PluginInterface(plugin.ItemPlugin):
             return []
         
     def draw_menu(self,menuw=None,items=None):
-        _debug_('draw_menu');
+        _debug_('draw_menu(self,menuw=None,items=None)')
         #draws the menu with the options on the screen
         menu_items = []
         if items:
@@ -800,12 +803,11 @@ class PluginInterface(plugin.ItemPlugin):
             menuw.pushmenu(moviemenu)
 
 
-    def fill_menu(self,arg=None, menuw=None): 
-        _debug_('fill_menu');
+    def fill_menu(self,arg=None, menuw=None):
+        _debug_('fill_menu(self, arg=%r, menuw=%r)' % (arg, menuw)) 
         #chooses the options available for this type of item
         to_return = []
         item = self.item
-        _debug_("CDBURN : Item type = %s" % item.type)
         if self.thread_burn and self.thread_burn.running == 1:
             to_return.append( (self.thread_burn.show_status, 'Show burning status' ));
             to_return.append( (self.stop_burning, 'Stop the burn process' ));
@@ -813,7 +815,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         if item.type == 'dir':
             #dirs
-            _debug_('CDBURN : Dir has media : %s ' % item.media)
+            _debug_('Dir has media : %s ' % item.media)
             try:
                 cur = BurnCDItem(item=item, plugin=self,menu=menuw)
                 cur.findFromDir()
@@ -884,13 +886,13 @@ class PluginInterface(plugin.ItemPlugin):
                 cur.findFileFromItem()
 
                 if cur.files and len(cur.files) == 1:
-                    _debug_("CDBURN : Adding DVD-VIDEO Item to menu")
+                    _debug_("Adding DVD-VIDEO Item to menu")
                     to_return.append(( cur.burn, 'Burn as DVD-VIDEO disc') )
                 elif len(self.files) > 1:
-                    _debug_("CDBURN : To many objects to burn into a DVD Video")
+                    _debug_("To many objects to burn into a DVD Video")
 
         except:
-            _debug_("CDBURN : Not possible to findFileFromItem for DVD Movie")
+            _debug_("Not possible to findFileFromItem for DVD Movie")
 
         if self.thread_burn and self.thread_burn.running == 0:
            to_return.append( (self.thread_burn.show_status, 'Show last burn status/result' ));
