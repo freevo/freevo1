@@ -234,42 +234,31 @@ class VideoItem(Item):
                         length *= 60 + int(m.group(2))
                 else:
                     length = 0
-                # leaving in the old code for reference
-                #if not length or length == 'None':
-                #    length = '0 min'
-                #if length.find('min') == -1:
-                #    length = '%s min' % length
-                #if length.find('/') > 0:
-                #    length = length[:length.find('/')].rstrip()
-                #if length.find(':') > 0:
-                #    length = length[length.find(':')+1:]
-                #if length == '0 min':
-                #    length = ''
-                total = "%s min" % str(int(length))
+                total = '%s min' % str(int(length))
 
-            elif self.subitems:
-                for s in self.subitems:
-                    if s.info['length']:
-                        length = s.info['length']
-                    if not length and hasattr(s, 'length'):
-                        length = s.length
-                    if not length:
-                        continue
-                    try:
-                        total += length
-                    except ValueError, TypeError:
-                        pass
-                total = "%s min" % str(int(total / 60))
+            if length == 0:
+                if self.subitems:
+                    for s in self.subitems:
+                        if s.info['length']:
+                            length = s.info['length']
+                        if not length and hasattr(s, 'length'):
+                            length = s.length
+                        if not length:
+                            continue
+                        try:
+                            total += length
+                        except ValueError, TypeError:
+                            pass
+                    total = "%s min" % str(int(total / 60))
 
-            else:
-                if self.info['length']:
-                    total = self.info['length']
-                elif hasattr(self, 'length'):
-                    total = self.length
-                total = "%s min" % str(int(total / 60))
+                else:
+                    if self.info['length']:
+                        total = self.info['length']
+                    elif hasattr(self, 'length'):
+                        total = self.length
+                    total = "%s min" % str(int(total / 60))
 
             return total
-
 
         return Item.__getitem__(self, key)
 
