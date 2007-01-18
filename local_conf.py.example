@@ -1510,9 +1510,9 @@ IMAGEVIEWER_BLEND_MODE = -1
 # plugin.activate('idlebar.system.procstats',level=20)
 
 # Amazon coversearch seems to request the covers in one locale and get the data
-# in another encoding
+# in another encoding. Locale must be one of: de, jp, uk, us
 #
-# AMAZON_LOCALE = 'latin-1'
-# AMAZON_QUERY_ENCODING = AMAZON_LOCALE
+# AMAZON_LOCALE = 'us'
+# AMAZON_QUERY_ENCODING = 'latin-1'
 # plugin.activate('audio.coversearch')
 
