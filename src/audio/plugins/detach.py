@@ -22,7 +22,7 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
+# with this program; if not, write to the Free Software Foundation, Inc., 
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
@@ -42,6 +42,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     to music
     """
     def __init__(self):
+        _debug_('__init__(self)', 2)
         plugin.MainMenuPlugin.__init__(self)
         config.EVENTS['audio']['DISPLAY'] = Event(FUNCTION_CALL, arg=self.detach)
         #config.EVENTS['audio']['EXIT'] = Event(FUNCTION_CALL, arg=self.detach)
@@ -50,6 +51,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def detach(self):
+        _debug_('detach(self)', 2)
         gui  = audio.player.get()
 
         # hide the player and show the menu
@@ -72,23 +74,24 @@ class PluginInterface(plugin.MainMenuPlugin):
             gui.item.parent.menuw = None
         rc.post_event(plugin.event('DETACH'))
 
-    def eventhandler(self,event,menuw=None):
+    def eventhandler(self, event, menuw=None):
+        _debug_('eventhandler(self, event, menuw=None)', 2)
         if event == BUTTON:
             gui = audio.player.get()
             if gui:
                 p = gui.player
                 if event.arg=='FFWD':
-                    p.eventhandler(Event('SEEK',arg='10',context='audio'))
+                    p.eventhandler(Event('SEEK', arg='10', context='audio'))
                 elif event.arg=='REW':
-                    p.eventhandler(Event('SEEK',arg='-10', context='audio'))
+                    p.eventhandler(Event('SEEK', arg='-10', context='audio'))
                 elif event.arg=='PAUSE':
-                    p.eventhandler(Event('PLAY',context='audio'))
+                    p.eventhandler(Event('PLAY', context='audio'))
                 elif event.arg=='STOP':
                     p.eventhandler(Event('STOP'))
                 elif event.arg=='NEXT':
-                    p.eventhandler(Event('PLAYLIST_NEXT',context='audio'))
+                    p.eventhandler(Event('PLAYLIST_NEXT', context='audio'))
                 elif event.arg=='PREV':
-                    p.eventhandler(Event('PLAYLIST_PREV',context='audio'))
+                    p.eventhandler(Event('PLAYLIST_PREV', context='audio'))
         elif event == VIDEO_START:
             gui = audio.player.get()
             if gui:
@@ -96,6 +99,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
+        _debug_('items(self, parent)', 2)
         gui = audio.player.get()
         if gui and gui.player.is_playing():
             self.show_item.parent = parent
@@ -104,6 +108,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def show(self, arg=None, menuw=None):
+        _debug_('show(self, arg=None, menuw=None)', 2)
         gui = audio.player.get()
 
         # restore the menuw's
