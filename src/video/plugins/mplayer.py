@@ -196,7 +196,7 @@ class MPlayer:
                additional_args += [ '-aid', str(item.selected_audio) ]
 
         # This comes from the bilingual language selection menu
-        if item.selected_language:
+        if hasattr(item, 'selected_language') and item.selected_language:
             if item.selected_language == 'left':
                 additional_args += [ '-af', 'pan=2:1:1:0:0' ]
             elif item.selected_language == 'right':
