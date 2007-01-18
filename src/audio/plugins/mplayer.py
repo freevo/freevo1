@@ -128,7 +128,7 @@ class MPlayer:
         if item.network_play and ( str(filename).endswith('m3u') or str(filename).endswith('pls')):
             is_playlist = True
 
-        if str(filename).find(".jsp?"):
+        if str(filename).find(".jsp?") >= 0:
             is_playlist = True
 
         if item.network_play:
