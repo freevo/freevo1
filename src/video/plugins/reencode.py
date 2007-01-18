@@ -51,28 +51,15 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def __init__(self):
-        _debug_('__init__')
+        _debug_('__init__(self)')
         plugin.ItemPlugin.__init__(self)
 
 
     def actions(self, item):
+        _debug_('actions(self, item)')
+        print 'DJW:item.__class__:', item.__class__
         if DEBUG >= 2:
-            #testing messages
-            for d in dir(item):
-                print '%s: %s' % (d, eval('item.%s' % d))
-            for d in dir(item.info):
-                print '%s: %s' % (d, eval('item.info.%s' % d))
-            print 'type:', item.type
-            if hasattr(item, 'mode'): print 'mode:', item.mode
-            if hasattr(item, 'name'): print 'name:', type(item.name)
-            if hasattr(item, 'name'): print 'name-utf8:', item.name.encode('utf-8')
-            if hasattr(item, 'filename'): print 'filename:', item.filename
-            if hasattr(item, 'parentname'):
-                print item.parentname
-            if hasattr(item, 'media'):
-                print 'media:', item.media
-                if hasattr(item.media, 'devicename'):
-                    print item.media.devicename
+            print 'DJW:item.__dict__:', item.__dict__
 
         if item.type == 'video' and item.mode == 'file':
             # TODO: use a config variable
@@ -90,6 +77,7 @@ class PluginInterface(plugin.ItemPlugin):
         return []
 
     def encoding_profile_menu(self, menuw=None, arg=None):
+        _debug_('encoding_profile_menu(self, menuw=None, arg=None)')
         #create a menu with a few encoding options (1cd, 2cd, xvid, mpeg4)
         #args : tuple, (videocodec, size, multipass
         menu_items = [ menu.MenuItem("XViD, 800bps", self.create_job, (0,0,1,None,700,False,800)) ]
@@ -99,14 +87,13 @@ class PluginInterface(plugin.ItemPlugin):
         menu_items.append( menu.MenuItem("DivX, 800bps", self.create_job, (0,0,0,None,700,False,800)) )
         menu_items.append( menu.MenuItem("DivX, 800bps, High Quality", self.create_job, (0,0,0,None,700,True,800)) )
         menu_items.append( menu.MenuItem("DivX, 1200bps", self.create_job, (0,0,0,None,1400,False,1200)) )
-        menu_items.append( menu.MenuItem("DivX, 1200bps, High Quality", self.create_job, (0,0,0,None,1400,True,1200)) )
-
-        menu_items.append( menu.MenuItem("iPod", self.create_job,(2,2,2,None,None,False,1200)) )
-
+        menu_items.append( menu.MenuItem("DivX, 1200bps, High Quality", self.create_job, (0,0,0,None,1400,True,1200)) ) 
+        menu_items.append( menu.MenuItem("iPod", self.create_job,(2,2,2,None,None,False,1200)) ) 
         encoding_menu = menu.Menu(_('Choose your encoding profile'), menu_items)
         menuw.pushmenu(encoding_menu)
 
     def create_job(self, menuw=None, arg=None):
+        _debug_('create_job(self, menuw=None, arg=None)')
         print 'arg:', arg
         #unwrap settings tupple
         (contnr, audionr, vcodecnr, vfilter, tgtsize, mpass, vbitrate) = arg
@@ -208,9 +195,11 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def error(self, text=""):
+        _debug_('error(self, text="")')
         AlertBox(width=400, height=200, text="ERROR: %s" % text).show()
 
 
     def mopup(self):
+        _debug_('mopup(self)')
         self.menuw.delete_menu()
         self.menuw.back_one_menu()
