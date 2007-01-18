@@ -1508,3 +1508,11 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # display proc-stats, CPU and RAM usage
 # plugin.activate('idlebar.system.procstats',level=20)
+
+# Amazon coversearch seems to request the covers in one locale and get the data
+# in another encoding
+#
+# AMAZON_LOCALE = 'latin-1'
+# AMAZON_QUERY_ENCODING = AMAZON_LOCALE
+# plugin.activate('audio.coversearch')
+

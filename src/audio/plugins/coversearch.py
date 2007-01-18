@@ -59,6 +59,11 @@ from gui.AlertBox import AlertBox
 
 from util import amazon
 
+try:
+    amazon.setLocale(config.AMAZON_LOCALE)
+except AttributeError:
+    pass
+query_encoding = config.AMAZON_QUERY_ENCODING
 
 class PluginInterface(plugin.ItemPlugin):
     """
@@ -185,7 +190,7 @@ class PluginInterface(plugin.ItemPlugin):
         artist = self.item.getattr('artist')
 
         # Maybe the search string need encoding to config.LOCALE
-        search_string = '%s %s' % (artist.encode('latin-1'), album.encode('latin-1'))
+        search_string = '%s %s' % (artist.encode(query_encoding), album.encode(query_encoding))
         search_string = re.sub('[\(\[].*[\)\]]', '', search_string)
         if config.DEBUG > 1:
             print "search_string=%r" % search_string

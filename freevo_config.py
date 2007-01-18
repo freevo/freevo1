@@ -686,6 +686,12 @@ plugin.activate('audio.mplayer')
 plugin.activate('audio.detach', level=20)
 plugin.activate('audio.detachbar')
 
+# Amazon seems to request the covers in one locale and get the data
+# in another encoding
+#
+AMAZON_LOCALE = 'latin-1'
+AMAZON_QUERY_ENCODING = AMAZON_LOCALE
+
 # use mplayer for tv
 # to use tvtime, put the following two lines in your local_conf.py:
 # plugin.remove('tv.mplayer')
