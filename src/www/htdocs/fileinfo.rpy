@@ -166,7 +166,7 @@ class FileInfoResource(FreevoResource):
         return fxd_info
 
     def convert_dir(self, dir_str):
-        print 'convert_dir(self, dir_str=%s)' % (dir_str)
+        print 'convert_dir(self, dir_str=%r)' % (dir_str)
         for i in range(len(self.allowed_dirs)):
             val = self.allowed_dirs[i][1]
             if dir_str.startswith(val):

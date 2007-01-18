@@ -532,12 +532,14 @@ class LibraryResource(FreevoResource):
                     if suppressaction:
                         fv.tableCell('&nbsp;', 'class="'+status+'" colspan="1"')
                     else:
-                        file_esc = urllib.quote(file)
-                        dllink = ('<a href="'+action_script+'%s">'+_('Download')+'</a>') %  os.path.join(basedir,file)
+                        file_qu = urllib.quote(file)
+                        basedir_qu = urllib.quote(basedir)
+                        file_path_qu = urllib.quote(os.path.join(basedir, file))
+                        dllink = ('<a href="'+action_script+'%s">'+_('Download')+'</a>') % file_path_qu
                         delete = ('<a href="javascript:deleteFile(\'%s\',\'%s\',\'%s\')">'+_("Delete")+'</a>') %\
-                            (basedir, file_esc, action_mediatype)
+                            (basedir_qu, file_qu, action_mediatype)
                         rename = ('<a href="javascript:renameFile(\'%s\',\'%s\',\'%s\')">'+_("Rename")+'</a>') %\
-                            (basedir, file_esc, action_mediatype)
+                            (basedir_qu, file_qu, action_mediatype)
                     if i == 2:
                         fv.tableRowClose()
                         i = 0
