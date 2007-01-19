@@ -1000,6 +1000,14 @@ AUDIO_SUFFIX = [ 'mp3', 'ogg', 'wav','m4a', 'wma', 'aac', 'flac', 'mka','ac3' ]
 AUDIO_COVER_REGEXP = 'front|-f'
 
 #
+# Format strings used to seach for audio cover images.
+# Fist matching GIF, JPG or PNG image will be used as cover.
+#
+# Examples:
+# AUDIO_COVER_FORMAT_STRINGS = [ 'cover-%(artist)s-%(album)s', 'mycover' ]
+AUDIO_COVER_FORMAT_STRINGS = [ '%(album)s', '../covers/%(album)s', '../../covers/%(album)s', '../covers/nocover' ]
+
+#
 # Preferred audio player
 #
 AUDIO_PREFERED_PLAYER = 'mplayer'

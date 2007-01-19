@@ -260,9 +260,24 @@ class Item:
                     pass
                 if not self.name:
                     self.name = self.info['title:filename']
+
+            if self.type == 'audio' and info:
+                # Look for audio cover image by ID3 tags
+                filename_array = { 'album'  : self.info['album'],
+                                   'artist' : self.info['artist'] }
+                for format_string in config.AUDIO_COVER_FORMAT_STRINGS:
+                    filemask = format_string % filename_array
+                    if format_string.startswith('/'):
+                        audiocover = util.getimage(filemask)
+                    else:
+                        audiocover = util.getimage(os.path.dirname(self.filename)+'/'+filemask)
+                    if audiocover:
+                        self.image = audiocover
+                        self.files.image = audiocover
+                        break;
+
             if not self.name:
                 self.name = util.getname(self.filename)
-
         else:
             self.network_play = True
             self.filename     = ''
