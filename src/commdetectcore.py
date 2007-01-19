@@ -53,7 +53,7 @@ class CommDetectJob:
         self.edlList=[]
         videoCodec='-ovc lavc'
         nosound='-nosound'
-        videoFilter='-vf blackframe=98:48'
+        videoFilter='-vf blackframe'
         output='-o /dev/null'
         grep='| grep vf_blackframe'
         outfile='> /tmp/blackframes.txt'
@@ -115,30 +115,28 @@ class CommDetectJob:
         startFrameTime=0
         endFrame=None
         for bframe in self.blackframes:
-            if bframe.time!=0:
-               #Throw out first black frame
-               if (startFrameTime==0):
-                  #Commerical break
-                  startFrame=bframe
+            if (startFrameTime==0):
+               #Commerical break
+               startFrame=bframe
+               startFrameTime=bframe.time
+            else:
+               if ((bframe.time==startFrameTime)or(bframe.time==(startFrameTime-1))):
+                  #Same commercial break
                   startFrameTime=bframe.time
+                  endFrame=bframe
                else:
-                  if ((bframe.time==startFrameTime)or(bframe.time==(startFrameTime-1))):
-                     #Same commercial break
-                     startFrameTime=bframe.time
-                     endFrame=bframe
-                  else:
-                     #New commercial break
-                     if not endFrame:
-                        #Sometimes a blackframe is thrown in the beginning
-                        endFrame=startFrame
-                     if ((endFrame.seconds-startFrame.seconds)>0):
-                        newEdl = self.edl()
-                        newEdl.startSkipTime=startFrame.seconds
-                        newEdl.endSkipTime=endFrame.seconds
-                        self.edlList.append(newEdl)
-                     startFrame=None
-                     startFrameTime=0
-                     endFrame=None
+                  #New commercial break
+                  if not endFrame:
+                     #Sometimes a blackframe is thrown in the beginning
+                     endFrame=startFrame
+                  if ((endFrame.seconds-startFrame.seconds)>0):
+                     newEdl = self.edl()
+                     newEdl.startSkipTime=startFrame.seconds
+                     newEdl.endSkipTime=endFrame.seconds
+                     self.edlList.append(newEdl)
+                  startFrame=None
+                  startFrameTime=0
+                  endFrame=None
         if ((len(self.edlList)==0)and(startFrame and endFrame)):
            #Only one commercial
            newEdl = self.edl()
