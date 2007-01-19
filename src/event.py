@@ -285,7 +285,17 @@ TVMENU_EVENTS = {
     'EXIT'      : MENU_BACK_ONE_MENU,
     'SELECT'    : MENU_SELECT,
     'DISPLAY'   : MENU_CHANGE_STYLE,
-    'REC'       : TV_START_RECORDING
+    'REC'       : TV_START_RECORDING,
+    '1'         : INPUT_1,
+    '2'         : INPUT_2,
+    '3'         : INPUT_3,
+    '4'         : INPUT_4,
+    '5'         : INPUT_5,
+    '6'         : INPUT_6,
+    '7'         : INPUT_7,
+    '8'         : INPUT_8,
+    '9'         : INPUT_9,
+    '0'         : INPUT_0
     } 
 
 INPUT_EVENTS = {

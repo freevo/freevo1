@@ -83,6 +83,9 @@ class TVGuide(Item):
         self.visible = True
         self.select_time = start_time
         self.last_update = 0
+
+        self.lastinput_value = None
+        self.lastinput_time = None
         
         self.update_schedules(force=True)
         self.fc = FreevoChannels()
@@ -190,6 +193,27 @@ class TVGuide(Item):
 
         elif event == TV_START_RECORDING:
             self.event_RECORD()
+            self.menuw.refresh()
+
+        if str(event).startswith("INPUT_"):
+            # tune explicit channel
+            newinput_value = int(str(event)[6])
+            newinput_time = int(time.time())
+            if (self.lastinput_value != None):
+                # allow 2 seconds delay for multiple digit channels
+                if (newinput_time - self.lastinput_time < 2):
+                    # this enables multiple (max 3) digit channel selection
+                    if (self.lastinput_value >= 100):
+                        self.lastinput_value = (self.lastinput_value % 100)
+                    newinput_value = self.lastinput_value * 10 + newinput_value
+            self.lastinput_value = newinput_value
+            self.lastinput_time = newinput_time
+            for c in self.guide.chan_list:
+                if int(c.tunerid) == int(newinput_value):
+                    self.start_channel = c.id
+                    break
+            print ('%s %s %s %s'%(self.start_time, self.stop_time, self.start_channel, self.selected))
+            self.rebuild(self.start_time, self.stop_time, self.start_channel, self.selected)
             self.menuw.refresh()
  
         elif event == MENU_SELECT or event == PLAY:
