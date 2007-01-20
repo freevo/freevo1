@@ -58,6 +58,7 @@ DEBUG = config.DEBUG
 
 class ManualRecordItem(Item):
     def __init__(self, parent):
+        _debug_('__init__(self, parent)', 2)
         Item.__init__(self, parent, skin_type='video')
 
         self.name = _("Manual Record")
@@ -81,6 +82,7 @@ class ManualRecordItem(Item):
         self.stoptime = time.localtime(now)
 
     def make_newprog(self):
+        _debug_('make_newprog(self)', 2)
         self.prog = TvProgram()
 
         self.disp_title = self.prog.title = self.name
@@ -108,10 +110,12 @@ class ManualRecordItem(Item):
         self.disp_stoptime = '%s %s %s' % (self.disp_stop_month, self.stop_day, self.stop_time)
 
     def actions(self):
+        _debug_('actions(self)', 2)
         return [( self.display_recitem , _('Display record item') )]
 
 
     def display_recitem(self, arg=None, menuw=None):
+        _debug_('display_recitem(self, arg=None, menuw=None)', 2)
         self.make_newprog()
 
         items = []
@@ -126,19 +130,20 @@ class ManualRecordItem(Item):
         items.append(menu.MenuItem(_('Modify stop time'), action=self.mod_stop_time))
         items.append(menu.MenuItem(_('Save'), action=self.save_changes))
 
-        manualrecord_menu = menu.Menu(_('Record Item Menu'), items, 
-                                 item_types = 'tv manual record menu')
+        manualrecord_menu = menu.Menu(_('Record Item Menu'), items, item_types = 'tv manual record menu')
         manualrecord_menu.infoitem = self
         menuw.pushmenu(manualrecord_menu)
         menuw.refresh()
 
 
     def mod_name(self, arg=None, menuw=None):
+        _debug_('mod_name(self, arg=None, menuw=None)', 2)
         self.menuw = menuw
         InputBox(text=_('Alter Name'), handler=self.alter_name).show()
 
 
     def mod_channel(self, arg=None, menuw=None):
+        _debug_('mod_channel(self, arg=None, menuw=None)', 2)
         items = []
 
         for chanline in config.TV_CHANNELS:
@@ -153,6 +158,7 @@ class ManualRecordItem(Item):
 
 
     def mod_start_month(self, arg=None, menuw=None):
+        _debug_('mod_start_month(self, arg=None, menuw=None)', 2)
         items = []
 
         iter=1
@@ -170,6 +176,7 @@ class ManualRecordItem(Item):
 
 
     def mod_start_day(self, arg=None, menuw=None):
+        _debug_('mod_start_day(self, arg=None, menuw=None)', 2)
         items = []
 
         numdays = calendar.monthrange(self.starttime[0], self.start_month)[1]
@@ -192,6 +199,7 @@ class ManualRecordItem(Item):
 
 
     def mod_start_time(self, arg=None, menuw=None):
+        _debug_('mod_start_time(self, arg=None, menuw=None)', 2)
         items = []
 
         currminutes = self.starttime[3]*60 + self.starttime[4]
@@ -213,6 +221,7 @@ class ManualRecordItem(Item):
 
 
     def mod_stop_month(self, arg=None, menuw=None):
+        _debug_('mod_stop_month(self, arg=None, menuw=None)', 2)
         items = []
 
         iter=1
@@ -229,6 +238,7 @@ class ManualRecordItem(Item):
 
 
     def mod_stop_day(self, arg=None, menuw=None):
+        _debug_('mod_stop_day(self, arg=None, menuw=None)', 2)
         items = []
 
         numdays = calendar.monthrange(self.stoptime[0], self.stop_month)[1]
@@ -251,6 +261,7 @@ class ManualRecordItem(Item):
 
 
     def mod_stop_time(self, arg=None, menuw=None):
+        _debug_('mod_stop_time(self, arg=None, menuw=None)', 2)
         items = []
 
         currminutes = self.starttime[3]*60 + self.starttime[4]
@@ -272,6 +283,7 @@ class ManualRecordItem(Item):
 
 
     def alter_name(self, name):
+        _debug_('alter_name(self, name)', 2)
         if name:
             self.disp_title = self.prog.title = name
 
@@ -279,6 +291,7 @@ class ManualRecordItem(Item):
 
 
     def alter_prop(self, arg=(None,None), menuw=None):
+        _debug_('alter_prop(self, arg=(None,None), menuw=None)', 2)
         (prop, val) = arg
 
         if prop == 'channel':
@@ -316,6 +329,7 @@ class ManualRecordItem(Item):
 
 
     def save_changes(self, arg=None, menuw=None):
+        _debug_('save_changes(self, arg=None, menuw=None)', 2)
         result = self.check_prog()
         if result:
             (result, msg) = record_client.scheduleRecording(self.prog)
@@ -328,6 +342,7 @@ class ManualRecordItem(Item):
 
 
     def check_prog(self):
+        _debug_('check_prog(self)', 2)
         isgood = True
         curtime_epoch = time.time()
         curtime = time.localtime(curtime_epoch)
@@ -379,9 +394,11 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     """
     def __init__(self):
+        _debug_('__init__(self)', 2)
         plugin.MainMenuPlugin.__init__(self)
 
     def items(self, parent):
+        _debug_('items(self, parent)', 2)
         if config.TV_CHANNELS:
             return [ ManualRecordItem(parent) ]
         return []
