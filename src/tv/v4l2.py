@@ -667,7 +667,7 @@ class V4LGroup:
 
 if __name__ == '__main__':
 
-    DEBUG = 0
+    DEBUG = 4
     viddev=Videodev('/dev/video0')
     print 'Driver = \"%s\"' % viddev.getdriver()
     print 'Driver Version = %x' % viddev.getversion()
@@ -742,6 +742,7 @@ if __name__ == '__main__':
     #viddev.setextctrl(0x00990900, stream_type)
     print 'Stream Type = %d' % viddev.getcontrol('Stream Type')
     print '0x00990900 = %d' % viddev.getextctrl(0x00990900)
+    print 'getfreq:', viddev.getfreq()
 
     viddev.close()
 
@@ -754,4 +755,6 @@ export FREEVO_CONFIG=/usr/share/freevo/freevo_config.py
 export FREEVO_CONTRIB=/usr/share/freevo/contrib
 export RUNAPP=""
 python v4l2.py
+OR
+freevo execute v4l2.py
 '''
