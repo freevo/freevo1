@@ -4,16 +4,16 @@
     <skin include="basic" geometry="800x600">
         
         <!-- 
-	*******************************************************
-	** DEFAULT ANF GENERAL SETTINGS
-	******************************************************* -->
+        *******************************************************
+        ** DEFAULT AND GENERAL SETTINGS
+        ******************************************************* -->
 
         <iconset theme="blurr"/>
         
         <!-- Redefine of the type default -->
         <menuset label="normal text style">
             <view x="20" y="100" width="300" height="300"/>
-	    
+            
             <listing layout="listing" x="330" y="100" width="420" height="470">
                 <image filename="up.png" label="uparrow" x="760" y="110"/>
                 <image filename="down.png" label="downarrow" x="760" y="max-32"/>
@@ -43,7 +43,7 @@
             <content align="center" valign="center">
                 <item type="default">
                     <rectangle size="0" bgcolor="0x80000000" radius="8" x="-10" y="-10"
-			width="max+20" height="max+20"/>
+                        width="max+20" height="max+20"/>
                 </item>
             </content>
         </layout>
@@ -55,7 +55,7 @@
                 <item type="default" font="grey"/>
                 <item type="selected" font="white">
                     <rectangle bgcolor="0xaa000000" size="0" x="-10" y="-3" width="max+20"
-			height="max+6" radius="15"/>
+                        height="max+6" radius="15"/>
                 </item>
             </content>
         </layout>
@@ -66,14 +66,14 @@
                 <rectangle size="0" radius="10" bgcolor="0xaa000000"/>
             </background>
             <content x="10" y="10" type="text" height="max-20" width="max-20"
-		spacing="20" font="default">
+                spacing="20" font="default">
                 <item type="default">
                     <if expression="description">
                         <text font="info value" mode="soft" height="max" 
-			    expression="description"/>
+                            expression="description"/>
                     </if>
                 </item>
-		
+                
             </content>
         </layout>
 
@@ -82,9 +82,9 @@
         <image label="scheduledtv" filename="gant/scheduledtv.png"/> 
         
         <!-- 
-	*******************************************************
-	** VIDEO MENU
-	******************************************************* -->
+        *******************************************************
+        ** VIDEO MENU
+        ******************************************************* -->
 
         <menu type="video">
             <style text="text with info style"/>
@@ -109,9 +109,9 @@
             <background>
                 <image image="background" x="0" y="0" label="background"/>
                 <rectangle size="0" bgcolor="0x80000000" radius="10" x="10" y="90"
-		    width="780" height="250"/>
+                    width="780" height="250"/>
                 <image filename="gant/movie.png" x="435" y="230" width="370"
-		    height="380"/>
+                    height="380"/>
             </background>
         </layout>
         
@@ -134,14 +134,14 @@
                     <if expression="tagline">
                         <text font="info tagline">"</text>
                         <text font="info tagline" width="max" expression="tagline"
-			    dim="no"/>
+                            dim="no"/>
                         <text font="info tagline">"</text>
                         <newline/>
                     </if>
                     <if expression="plot">
                         <goto_pos x="20" mode="relative"/>
                         <text font="info plot" height="120" mode="soft" 
-			    align="justified" expression="plot"/>
+                            align="justified" expression="plot"/>
                         <newline/>
                     </if>
                     <goto_pos y="190" mode="absolute"/>
@@ -168,12 +168,12 @@
                     <if expression="plot">
                         <goto_pos x="10" mode="relative"/>
                         <text font="info plot" height="max" mode="soft" 
-			    align="justified" expression="plot"/>
+                            align="justified" expression="plot"/>
                         <newline/>
                     </if>
                     <if expression="content and not plot">
                         <text font="info plot" height="max" mode="soft" 
-			    align="justified" expression="content"/>
+                            align="justified" expression="content"/>
                         <newline/>
                     </if>
                     <if expression="not content and not plot">
@@ -229,9 +229,9 @@
         </layout>
         
         <!-- 
-	*******************************************************
-	** AUDIO MENU
-	******************************************************* -->
+        *******************************************************
+        ** AUDIO MENU
+        ******************************************************* -->
 
         <menu type="audio">
             <style text="audio"/>
@@ -247,9 +247,9 @@
             <background>
                 <image image="background" x="0" y="0" label="background"/>
                 <image filename="gant/music.png" x="435" y="230" width="370"
-		    height="380"/>
+                    height="380"/>
                 <rectangle size="0" bgcolor="0x80000000" radius="10" x="12" y="87"
-		    width="290" height="475"/>
+                    width="290" height="475"/>
             </background>
         </layout>
         
@@ -269,7 +269,7 @@
                         <text font="info tagline" expression="name" mode="soft" />
                         <newline/>
                     </if>
-		    
+                    
                     <if expression="display_type == 'audio' and year">
                         <if expression="album or artist">
                             <text font="info value" expression="year"/>
@@ -301,19 +301,19 @@
                         <newline/>
                         <if expression="description"> <!-- e.g. webradio -->
                             <text font="info value" expression="description" 
-				height="max" mode="soft"/>
+                                height="max" mode="soft"/>
                         </if>
                     </if>
-		    
-		    <if expression="parent(audio_advanced_sort)">
+                    
+                    <if expression="parent(audio_advanced_sort)">
                         <text font="info value">Track </text>
                         <text font="info value" expression="trackno"/>
-			<if expression="trackof">
-			    <text font="info value"> of </text>
-			    <text font="info value" expression="trackof"/>
-			</if>
+                        <if expression="trackof">
+                            <text font="info value"> of </text>
+                            <text font="info value" expression="trackof"/>
+                        </if>
                         <newline/>
-		    </if>
+                    </if>
 
                     <if expression="date">
                         <text font="info value" expression="date"/>
@@ -345,9 +345,9 @@
         
         
         <!-- 
-	*******************************************************
-	** IMAGE MENU
-	******************************************************* -->
+        *******************************************************
+        ** IMAGE MENU
+        ******************************************************* -->
 
         <menu type="image">
             <style image="image" text="normal text style (image)"/>
@@ -363,13 +363,13 @@
         
         <menuset label="normal text style (image)" inherits="normal text style">
             <screen layout="image screen" visible="yes"/>
-	</menuset>
+        </menuset>
 
         <layout label="image screen">
             <background>
                 <image image="background" x="0" y="0" label="background"/>
                 <image filename="gant/image.png" x="435" y="230" width="370"
-		    height="380"/>
+                    height="380"/>
             </background>
         </layout>
         
@@ -377,14 +377,14 @@
         <layout label="image list">
             <content type="image" spacing="0">
                 <item type="default" width="140" height="115" align="center"
-		    valign="center">
+                    valign="center">
                     <shadow x="5" y="5" color="0xaa000000" visible="yes"/>
                 </item>
                 <item type="selected" width="140" height="115"
-		    align="center" valign="center">
+                    align="center" valign="center">
                     <shadow x="5" y="5" color="0xaa000000" visible="yes"/>
                     <rectangle color="0x00ffffff" bgcolor="0xffffffffff" size="2" x="-8"
-			y="-8" width="max+16" height="max+16"/>
+                        y="-8" width="max+16" height="max+16"/>
                 </item>
             </content>
         </layout>
@@ -394,7 +394,7 @@
                 <rectangle size="0" radius="10" bgcolor="0xaa000000"/>
             </background>
             <content x="10" y="10" type="text" height="max-20" width="max-20"
-		spacing="20" font="default">
+                spacing="20" font="default">
                 <item type="dir">
                     <text font="info tagline" width="max" expression="name"/>
                     <newline/>
@@ -402,7 +402,7 @@
                     <text font="info value"> Items</text>
                     <!-- other values are num_play_items and num_dir_items -->
                 </item>
-		
+                
                 <item type="playlist">
                     <text font="info tagline" width="max" expression="name"/>
                     <newline/>
@@ -410,7 +410,7 @@
                     <text font="info value"> Items</text>
                     <!-- other values are num_play_items and num_dir_items -->
                 </item>
-		
+                
                 <item type="image">
                     <text font="info tagline" expression="name"/>
                     <goto_pos x="50" mode="relative"/>
@@ -420,7 +420,7 @@
                     <newline/>
                     <if expression="description">
                         <text font="info plot" height="max" mode="soft" 
-			    expression="description"/>
+                            expression="description"/>
                         <newline/>
                     </if>
                     <if expression="not description">
@@ -440,9 +440,9 @@
         
 
         <!-- 
-	*******************************************************
-	** MAIN MENU
-	******************************************************* -->
+        *******************************************************
+        ** MAIN MENU
+        ******************************************************* -->
 
         <main imagedir="gant">
             <item label="tv" name="Watch TV"/>
@@ -478,7 +478,7 @@
                 <item type="default" font="main"/>
                 <item type="selected" font="main selected">
                     <rectangle bgcolor="selection" size="0" y="-5" x="-10"
-			width="max+20" height="max+10" radius="15"/>
+                        width="max+20" height="max+10" radius="15"/>
                 </item>
             </content>
         </layout>
@@ -489,16 +489,16 @@
                 <item type="default" font="grey big" align="center"/>
                 <item type="selected" font="white big" align="center">
                     <rectangle bgcolor="0xaa000000" size="0" x="-3" y="-3"
-			width="max+6" height="max+6" radius="15"/>
+                        width="max+6" height="max+6" radius="15"/>
                 </item>
             </content>
         </layout>
         
 
         <!-- 
-	*******************************************************
-	** TV DEFINITIONS
-	******************************************************* -->
+        *******************************************************
+        ** TV DEFINITIONS
+        ******************************************************* -->
         
         <menu type="tv">
             <style text="text with tv info style"/>
@@ -509,15 +509,15 @@
         </menu>
         
         <menu type="tv program menu">
-	    <style text="text with program info style"/>
+            <style text="text with program info style"/>
         </menu>
 
         <menu type="tv favorite menu">
-	    <style text="text with favorite info style"/>
+            <style text="text with favorite info style"/>
         </menu>
 
         <menu type="tv manual record menu">
-	    <style text="text with manual record info style"/>
+            <style text="text with manual record info style"/>
         </menu>
 
         <menuset label="tv menu">
@@ -526,9 +526,9 @@
             <info layout="tv info" x="10" y="80" width="760" height="115"/>
             <listing layout="tv listing" x="10" y="220" width="750" height="350">
                 <image x="765" y="220" width="32" height="32" label="uparrow"
-	            filename="up.png"/>
+                    filename="up.png"/>
                 <image x="765" y="max-32" width="32" height="32" label="downarrow" 
-	            filename="down.png"/>
+                    filename="down.png"/>
                 <image width="16" height="16" label="leftarrow" filename="left.png"/>
                 <image width="16" height="16" label="rightarrow" filename="right.png"/>
             </listing>
@@ -554,17 +554,17 @@
         </menuset>
         
         <menuset label="text with program info style" 
-	    inherits="text with tv info style (main)">
+            inherits="text with tv info style (main)">
             <info layout="tv program info"/>
         </menuset>
 
         <menuset label="text with favorite info style"
-	    inherits="text with tv info style (main)">
+            inherits="text with tv info style (main)">
             <info layout="tv favorite info"/>
         </menuset>
 
         <menuset label="text with manual record info style"
-	    inherits="text with tv info style (main)">
+            inherits="text with tv info style (main)">
             <info layout="tv manual record info"/>
         </menuset>
 
@@ -572,9 +572,9 @@
             <background>
                 <image image="background" x="0" y="0" label="background"/>
                 <rectangle size="0" bgcolor="0x80000000" radius="10" x="10" y="90"
-		    width="780" height="250"/>
+                    width="780" height="250"/>
                 <image filename="gant/tv.png" x="435" y="230" width="370"
-		    height="380"/>
+                    height="380"/>
             </background>
         </layout>
         
@@ -582,7 +582,7 @@
             <content x="0" y="0" type="text" spacing="20" font="default">
                 <item type="default">
                     <text font="info tagline" width="max" height="max" 
-			expression="function:comingup" mode="soft"/>
+                        expression="function:comingup" mode="soft"/>
                 </item>
             </content>
         </layout>
@@ -590,10 +590,10 @@
         <layout label="tv program info">
             <background>
                 <image image="scheduledtv" x="-5" y="0" width="256" 
-		    height="256" label="top"/>
+                    height="256" label="top"/>
             </background>
             <content x="260"/>
-	</layout>
+        </layout>
 
         <!-- tv info area -->
         <layout label="tv info">
@@ -606,7 +606,7 @@
                     <if expression="title">
                         <text font="tv title" width="550" expression="title"/>
                     </if>
-	            <text font="tv time" width="max" align="right" expression="time"/>
+                    <text font="tv time" width="max" align="right" expression="time"/>
                     <newline/>
                     <if expression="sub_title">
                         <text font="info tagline">"</text>
@@ -632,9 +632,9 @@
         <font label="tv title" name="Arial_Bold" size="16" color="0xffffff"/>
 
         <!-- 
-	*******************************************************
-	** AUDIO PLAYER DEFINITIONS
-	******************************************************* -->
+        *******************************************************
+        ** AUDIO PLAYER DEFINITIONS
+        ******************************************************* -->
         
         <player>
             <screen layout="player screen" x="0" y="0" width="800" height="600"/>
@@ -647,7 +647,7 @@
             <background>
                 <image image="background" x="0" y="0" label="background"/>
                 <image filename="gant/music.png" x="435" y="230" width="370"
-		    height="380"/>
+                    height="380"/>
                 <image filename="frame.png" x="5" y="100" width="max-10" height="390"/>
             </background>
         </layout>
@@ -698,26 +698,26 @@
                         </if>
                         <newline/>
                     </if>
-		    <if expression="stream_name">
-			<text width="140" align="right" font="player info">Name:</text>
-			<goto_pos x="10" mode="relative"/>
-			<text font="player info" expression="stream_name"/>
-			<newline/>
-		    </if>
-		    <if expression="genre">
-			<text width="140" align="right" font="player info">Genre:</text>
-			<goto_pos x="10" mode="relative"/>
-			<text font="player info" expression="genre"/>
-			<newline/>
-		    </if>
-		    <if expression="bitrate">
-			<text width="140" align="right" font="player info">Bitrate:</text>
-			<goto_pos x="10" mode="relative"/>
-			<text font="player info" expression="bitrate"/>
+                    <if expression="stream_name">
+                        <text width="140" align="right" font="player info">Name:</text>
+                        <goto_pos x="10" mode="relative"/>
+                        <text font="player info" expression="stream_name"/>
+                        <newline/>
+                    </if>
+                    <if expression="genre">
+                        <text width="140" align="right" font="player info">Genre:</text>
+                        <goto_pos x="10" mode="relative"/>
+                        <text font="player info" expression="genre"/>
+                        <newline/>
+                    </if>
+                    <if expression="bitrate">
+                        <text width="140" align="right" font="player info">Bitrate:</text>
+                        <goto_pos x="10" mode="relative"/>
+                        <text font="player info" expression="bitrate"/>
                         <text width="130" font="player info">kb/s</text>
 
-			<newline/>
-		    </if>
+                        <newline/>
+                    </if>
                     <newline/>
                     <goto_pos y="15" mode="relative"/>
                     <if expression="length">
@@ -745,9 +745,28 @@
         
 
         <!-- 
-	*******************************************************
-	** Splashscreen
-	******************************************************* -->
+        *******************************************************
+        ** ENCODING 
+        *******************************************************
+        The main layout is in the basic skin, basic calls
+        'text with encoding info style' as shown here:
+
+        <menu type="video encoding menu">
+            <style text="text with encoding info style"/>
+        </menu>
+
+        so only this needs to be overridden for the blurr look
+        -->
+
+        <menuset label="text with encoding info style" inherits="text with tv info style (main)">
+            <info layout="video encoding info"/>
+        </menuset>
+
+
+        <!-- 
+        *******************************************************
+        ** Splashscreen
+        ******************************************************* -->
         
         <splashscreen>
             <screen layout="screen"/>
@@ -764,11 +783,11 @@
         <font label="splashscreen font" name="Arial_Bold" size="20" color="0xffffff"/>
         
         
-	
+        
         <!-- 
-	*******************************************************
-	** POPUP DEFINITIONS
-	******************************************************* -->
+        *******************************************************
+        ** POPUP DEFINITIONS
+        ******************************************************* -->
 
         <layout label="popup">
             <background>
@@ -776,20 +795,20 @@
                 <rectangle width="max-5" height="max-5" color="0x000000" size="2" 
                     bgcolor="0xffffff" radius="5"/>
                 <rectangle x="5" y="5" width="max-15" height="max-15" color="0x000000" 
-	            size="2" bgcolor="widget background" radius="5"/>
+                    size="2" bgcolor="widget background" radius="5"/>
             </background>
             <content x="8" y="8" width="max-21" height="max-21">
-	        <!-- special button settings -->
+                <!-- special button settings -->
                 <item type="button">
                     <rectangle color="0x000000" bgcolor="widget item background" 
                         size="2" radius="6"/>
                 </item>
-         	<!-- special settings for selected buttons -->
+                 <!-- special settings for selected buttons -->
                 <item type="button selected">
                     <rectangle color="0x000000" bgcolor="widget selected background" 
                         size="2" radius="6"/>
                 </item>
-	    </content>
+            </content>
         </layout>
         
         <font label="widget" name="Arial_Bold" size="14">
@@ -802,9 +821,9 @@
         
 
         <!-- 
-	*******************************************************
-	** FONT DEFINITIONS
-	******************************************************* -->
+        *******************************************************
+        ** FONT DEFINITIONS
+        ******************************************************* -->
         
         <font label="default" name="Arial_Bold" size="16" color="0xffffff">
             <shadow visible="yes" color="0x000000" border="yes"/>
@@ -814,7 +833,6 @@
         </font>
         <font label="title" name="Arial_Bold" size="18" color="0xffffff">
             <shadow visible="yes" color="0x000000" border="yes"/>
-	    
         </font>
         <font label="subtitle" name="Arial_Bold" size="18" color="0xffffff">
             <shadow visible="yes" color="0x000000" border="yes"/>

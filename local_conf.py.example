@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # local_conf.py - System configuration
 # -----------------------------------------------------------------------
@@ -421,6 +422,19 @@ CACHE_IMAGES = 1
 # CDBURN_TEMP_DIR='/tmp/'
 # CDBURN_DEV = '/dev/cdrom'
 # CDBURN_SPEED = 32
+
+# ----------------------------------------------------------------------
+# Re-encode
+# This plug-in transcodes a video to a different format
+# ----------------------------------------------------------------------
+# plugin.activate('video.reencode2')
+# REENCODE_CONTAINER = 'avi'
+# REENCODE_VIDEOCODEC = 'XViD'
+# REENCODE_VIDEOBITRATE = 1000
+# REENCODE_AUDIOCODEC = 'MPEG 1 Layer 3 (mp3)'
+# REENCODE_AUDIOBITRATE = 128
+# REENCODE_NUMPASSES = 1
+# REENCODE_VIDEOFILTER = None
 
 # ----------------------------------------------------------------------
 # Freevo Music Player Daemon

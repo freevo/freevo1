@@ -58,15 +58,16 @@ def _debug_(text, level=1):
 #"hardcoded capabilities" .. these might change or become dynamic in the future, when more capabilities are supported
 #the "container format" will remain hardcoded
 
-ContainerCapList = [ 'Avi', 'Mkv', 'mp4' ]
-VideoCodecList = [ 'MPEG 4 (lavc)', 'XViD', 'iPodv' ]
-AudioCodecList = [ 'MPEG 1 Layer 3 (mp3)', 'Ogg', 'iPoda' ]
+ContainerCapList = [ 'avi', 'mkv', 'mp4' ]
+VideoCodecList = [ 'MPEG 4 (lavc)', 'XViD', 'H.264', 'iPodv' ]
+AudioCodecList = [ 'MPEG 1 Layer 3 (mp3)', 'Ogg', 'AAC', 'iPoda' ]
 
 VFDict = {
-    'Deinterlacing' : ['None','Linear blend','Lavc deinterlacer'],
-    'Inverse Telecine' : ['None','On (stateless filter)'],
-    'Denoise' : ['None','Normal denoise','HQ denoise'],
-    'iPod' : ['iPod']
+    'None' : ['None'],
+    'Deinterlacing' : ['None', 'Linear blend', 'Lavc deinterlacer'],
+    'Inverse Telecine' : ['None', 'On (stateless filter)'],
+    'Denoise' : ['None', 'Normal denoise', 'HQ denoise'],
+    'iPod' : ['iPod'],
     }
 
 MencoderFilters = {
@@ -79,11 +80,11 @@ MencoderFilters = {
     }
 
 MencoderMapping = {
-    'MPEG 4 (lavc)' : ["copy","lavc",["-lavcopts","vcodec=mpeg4:vhq:vqmin=2:v4mv:trell:autoaspect:vbitrate=%s%s"]],
-    'XViD' : ["copy","xvid",["-xvidencopts","bitrate=%s%s"]],
-    'MPEG 1 Layer 3 (mp3)' : ["frameno","mp3lame",["-lameopts", "cbr:br=%s"]],
-    'iPodv' : ["lavc","lavc",["-lavcopts","vcodec=mpeg4:vbitrate=%s%s:mbd=2:cmp=2:subcmp=2:trell=yes:v4mv=yes:vglobal=1:acodec=aac:abitrate=128:aic=2:aglobal=1"],["-of","lavf"],["-ffourcc","mp4v"],["-lavfopts","format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames"]],
-    'iPoda' : ["lavc","lavc",["-lavcopts","acodec=aac:abitrate=%s:aic=2:aglobal=1"],["-lavfopts","format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames"]]
+    'MPEG 4 (lavc)' : ["copy", "lavc", ["-lavcopts", "vcodec=mpeg4:vhq:vqmin=2:v4mv:trell:autoaspect:vbitrate=%s%s"]],
+    'XViD' : ["copy", "xvid", ["-xvidencopts", "bitrate=%s%s"]],
+    'MPEG 1 Layer 3 (mp3)' : ["frameno", "mp3lame", ["-lameopts", "cbr:br=%s"]],
+    'iPodv' : ["lavc", "lavc", ["-lavcopts", "vcodec=mpeg4:vbitrate=%s%s:mbd=2:cmp=2:subcmp=2:trell=yes:v4mv=yes:vglobal=1:acodec=aac:abitrate=128:aic=2:aglobal=1"], ["-of", "lavf"], ["-ffourcc", "mp4v"], ["-lavfopts", "format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames"]],
+    'iPoda' : ["lavc", "lavc", ["-lavcopts", "acodec=aac:abitrate=%s:aic=2:aglobal=1"], ["-lavfopts", "format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames"]]
     }
 
 
@@ -100,7 +101,7 @@ class Enum(dict):
     # __init__()
 
 
-status = Enum(["notset","apass","vpass1","vpassfinal","postmerge"])
+status = Enum(["notset", "apass", "vpass1", "vpassfinal", "postmerge"])
 
 class EncodingJob:
     """Class for creation & configuration of EncodingJobs. This generates the mencoder commands"""
@@ -160,7 +161,7 @@ class EncodingJob:
             return "Unknown container format"
 
         self.container = container
-        self.output = ('%s.%s' % (self.output,self.container))
+        self.output = ('%s.%s' % (self.output, self.container))
 
     def getContainerList(self):
         return ContainerCapList
@@ -267,7 +268,7 @@ class EncodingJob:
         Function is always called because cropping is a good thing, and we can pass our ideal values
         back to the client wich can verify them visually if needed.""" #not true atm
         #build mplayer parameters
-        if hasattr(self,"length"):
+        if hasattr(self, "length"):
             sstep = int(self.length / 27)
         else:
             sstep = 60
@@ -321,14 +322,14 @@ class EncodingJob:
             if hasattr(config, "DVD_LANG_PREF") and config.DVD_LANG_PREF:
                 audio = ["-alang", config.DVD_LANG_PREF]
             else:
-                audio = [] 
+                audio = []
             return audio+[ "-dvd-device", self.source , "dvd://%s" % self.chapter]
         else:
             return [ self.source ]
 
     def _GCLMAudiopass(self):
         """Returns audio pass specefic part of mencoder cl"""
-        if self.acodec=='iPoda':
+        if self.acodec == 'iPoda':
             return [
                 "-ovc", MencoderMapping[self.acodec][0],
                 "-oac", MencoderMapping[self.acodec][1],
@@ -416,11 +417,11 @@ class EncodingJob:
 
         #if we have a progressive ntsc file, lock the output fps (do this with ivtc too)
         if ("ivtc=1" in vf) or self.ntscprog:
-            args = ["-ofps","23.976"].append(args)
+            args = ["-ofps", "23.976"].append(args)
 
         #if we scale, use the bilinear algorithm
         if yscaled:
-            args += ["-sws","1"]
+            args += ["-sws", "1"]
 
         return args
 
@@ -660,7 +661,7 @@ class EncodingQueue:
 
     def getProgress(self):
         """Gets progress on the current job"""
-        if hasattr(self,"currentjob"):
+        if hasattr(self, "currentjob"):
             return (self.currentjob.name, int(self.currentjob.status),
                     int(self.currentjob.percentage), self.currentjob.trem)
         else:
@@ -696,7 +697,7 @@ class EncodingQueue:
         if self.qlist == []:
             #empty queue, do nothing
             self.running = False
-            if hasattr(self,"currentjob"):
+            if hasattr(self, "currentjob"):
                 del self.currentjob
             _debug_("queue empty, stopping processing...", 0)
             return
@@ -738,7 +739,6 @@ class EncodingQueue:
             self.currentjob._run(mencoder, self.currentjob.cls[0], self._runQueue,
                             self.currentjob._MencoderParse, 1, None)
 
-
         if self.currentjob.status == status.notset:
             #generate cli's
             self.currentjob._generateCL()
@@ -774,8 +774,8 @@ if __name__ == '__main__':
     print 'THE KING RETURNED FROM INSPECTING THE CROPPING !'
     sleep(5)
     print encjob.crop
-    encjob.setVideoCodec('MPEG 4 (lavc)','700', False, 0)
-    encjob.setAudioCodec('MPEG 1 Layer 3 (mp3)','160')
+    encjob.setVideoCodec('MPEG 4 (lavc)', '700', False, 0)
+    encjob.setAudioCodec('MPEG 1 Layer 3 (mp3)', '160')
     encjob.setVideoFilters({'Deinterlacing': 'Linear blend'})
     encjob._CalcVideoBR()
     print encjob.vbrate
