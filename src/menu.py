@@ -130,6 +130,14 @@ class Menu:
         self.back_one_menu = 1
         
 
+    def __str__(self):
+        """
+        return the class as string
+        """
+        s = '"%s" choices=%d' % (self.heading, len(self.choices))
+        return s
+
+
     def items_per_page(self):
         """
         return the number of items per page for this skin
@@ -154,6 +162,15 @@ class MenuWidget(GUIObject):
         self.force_page_rebuild = False
         
         
+    def __str__(self):
+        """
+        return the class as string
+        """
+        s = '%s' % self.label
+        s += ', top=%s left=%s' % (self.top, self.left)
+        return s
+
+
     def get_event_context(self):
         """
         return the event context
