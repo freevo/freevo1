@@ -59,7 +59,7 @@ def _debug_(text, level=1):
 #the "container format" will remain hardcoded
 
 ContainerCapList = [ 'avi', 'mkv', 'mp4' ]
-VideoCodecList = [ 'MPEG 4 (lavc)', 'XViD', 'H.264', 'iPodv' ]
+VideoCodecList = [ 'MPEG 4 (lavc)', 'XviD', 'H.264', 'iPodv' ]
 AudioCodecList = [ 'MPEG 1 Layer 3 (mp3)', 'Ogg', 'AAC', 'iPoda' ]
 
 VFDict = {
@@ -81,7 +81,7 @@ MencoderFilters = {
 
 MencoderMapping = {
     'MPEG 4 (lavc)' : ["copy", "lavc", ["-lavcopts", "vcodec=mpeg4:vhq:vqmin=2:v4mv:trell:autoaspect:vbitrate=%s%s"]],
-    'XViD' : ["copy", "xvid", ["-xvidencopts", "bitrate=%s%s"]],
+    'XviD' : ["copy", "xvid", ["-xvidencopts", "bitrate=%s%s"]],
     'MPEG 1 Layer 3 (mp3)' : ["frameno", "mp3lame", ["-lameopts", "cbr:br=%s"]],
     'iPodv' : ["lavc", "lavc", ["-lavcopts", "vcodec=mpeg4:vbitrate=%s%s:mbd=2:cmp=2:subcmp=2:trell=yes:v4mv=yes:vglobal=1:acodec=aac:abitrate=128:aic=2:aglobal=1"], ["-of", "lavf"], ["-ffourcc", "mp4v"], ["-lavfopts", "format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames"]],
     'iPoda' : ["lavc", "lavc", ["-lavcopts", "acodec=aac:abitrate=%s:aic=2:aglobal=1"], ["-lavfopts", "format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames"]]
@@ -352,7 +352,7 @@ class EncodingJob:
         #deinterlacer test vf += ["pp=lb"]
         #set appropriate videopass , codec independant (lavc is vpass, xvid is pass)
         if passnr > 0 :
-            if self.vcodec == "XViD":
+            if self.vcodec == "XviD":
                 passname = ":pass=%s"
             else:
                 passname = ":vpass=%s"
@@ -365,7 +365,7 @@ class EncodingJob:
 
         #in case of xvid and anamorphic dvd, add scaling to compensate AR..
         #if we didn't find cropping we have no res, so no tricks
-        if self.vcodec == "XViD" and self.crop:
+        if self.vcodec == "XviD" and self.crop:
             if self.ana:
                 #calculate a decent resized picturesize, res must still be a multiple of 16
                 yscaled = (self.cropres[1] * 0.703125)

@@ -429,6 +429,7 @@ CACHE_IMAGES = 1
 # ----------------------------------------------------------------------
 # plugin.activate('video.reencode2')
 # REENCODE_CONTAINER = 'avi'
+# REENCODE_RESOLUTION = 'Optimal'
 # REENCODE_VIDEOCODEC = 'XViD'
 # REENCODE_VIDEOBITRATE = 1000
 # REENCODE_AUDIOCODEC = 'MPEG 1 Layer 3 (mp3)'

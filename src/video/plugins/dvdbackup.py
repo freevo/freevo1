@@ -82,10 +82,10 @@ class PluginInterface(plugin.ItemPlugin):
     def encoding_profile_menu(self, menuw=None, arg=None):
         #create a menu with a few encoding options (1cd, 2cd, xvid, mpeg4)
         #args : tuple, (videocodec, size, multipass
-        menu_items = [ menu.MenuItem("XViD, 700mb", self.create_job, (1,700,False,0)) ]
-        menu_items.append( menu.MenuItem("XViD, 700mb, High Quality", self.create_job, (1,700,True,0)) )
-        menu_items.append( menu.MenuItem("XViD, 1400mb", self.create_job, (1,1400,False,0)) )
-        menu_items.append( menu.MenuItem("XViD, 1400mb, High Quality", self.create_job, (1,1400,True,0)) )
+        menu_items = [ menu.MenuItem("XviD, 700mb", self.create_job, (1,700,False,0)) ]
+        menu_items.append( menu.MenuItem("XviD, 700mb, High Quality", self.create_job, (1,700,True,0)) )
+        menu_items.append( menu.MenuItem("XviD, 1400mb", self.create_job, (1,1400,False,0)) )
+        menu_items.append( menu.MenuItem("XviD, 1400mb, High Quality", self.create_job, (1,1400,True,0)) )
         menu_items.append( menu.MenuItem("DivX, 700mb", self.create_job, (0,700,False,0)) )
         menu_items.append( menu.MenuItem("DivX, 700mb, High Quality", self.create_job, (0,700,True,0)) )
         menu_items.append( menu.MenuItem("DivX, 1400mb", self.create_job, (0,1400,False,0)) )

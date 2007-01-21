@@ -80,10 +80,10 @@ class PluginInterface(plugin.ItemPlugin):
         _debug_('encoding_profile_menu(self, menuw=None, arg=None)')
         #create a menu with a few encoding options (1cd, 2cd, xvid, mpeg4)
         #args : tuple, (videocodec, size, multipass
-        menu_items = [ menu.MenuItem("XViD, 800bps", self.create_job, (0,0,1,None,700,False,800)) ]
-        menu_items.append( menu.MenuItem("XViD, 800bps, High Quality", self.create_job, (0,0,1,None,700,True,800)) )
-        menu_items.append( menu.MenuItem("XViD, 1200bps", self.create_job, (0,0,1,None,1400,False,1200)) )
-        menu_items.append( menu.MenuItem("XViD, 1200bps, High Quality", self.create_job, (0,0,1,None,1400,True,1200)) )
+        menu_items = [ menu.MenuItem("XviD, 800bps", self.create_job, (0,0,1,None,700,False,800)) ]
+        menu_items.append( menu.MenuItem("XviD, 800bps, High Quality", self.create_job, (0,0,1,None,700,True,800)) )
+        menu_items.append( menu.MenuItem("XviD, 1200bps", self.create_job, (0,0,1,None,1400,False,1200)) )
+        menu_items.append( menu.MenuItem("XviD, 1200bps, High Quality", self.create_job, (0,0,1,None,1400,True,1200)) )
         menu_items.append( menu.MenuItem("DivX, 800bps", self.create_job, (0,0,0,None,700,False,800)) )
         menu_items.append( menu.MenuItem("DivX, 800bps, High Quality", self.create_job, (0,0,0,None,700,True,800)) )
         menu_items.append( menu.MenuItem("DivX, 1200bps", self.create_job, (0,0,0,None,1400,False,1200)) )

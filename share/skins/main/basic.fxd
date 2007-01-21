@@ -713,8 +713,14 @@
         <layout label="video encoding info">
             <content x="0" y="0" type="text" spacing="20" font="default">
                 <item type="default">
+                    <if expression="disp_title">
+                        <text width="150" font="info value" mode="soft">Title: </text>
+                        <goto_pos x="10" mode="relative"/>
+                        <text font="info value" expression="disp_title" mode="soft" />
+                        <newline/>
+                    </if>
                     <if expression="disp_filename">
-                        <text width="150" font="info value" mode="soft">Program: </text>
+                        <text width="150" font="info value" mode="soft">File name: </text>
                         <goto_pos x="10" mode="relative"/>
                         <text font="info value" expression="disp_filename" mode="soft" />
                         <newline/>
@@ -723,6 +729,12 @@
                         <text width="150" font="info value" mode="soft">Container: </text>
                         <goto_pos x="10" mode="relative"/>
                         <text font="info value" expression="disp_container" mode="soft" />
+                        <newline/>
+                    </if>
+                    <if expression="disp_resolution">
+                        <text width="150" font="info value" mode="soft">Resolution: </text>
+                        <goto_pos x="10" mode="relative"/>
+                        <text font="info value" expression="disp_resolution" mode="soft" />
                         <newline/>
                     </if>
                     <if expression="disp_videocodec">
@@ -755,12 +767,14 @@
                         <text font="info value" expression="disp_numpasses" mode="soft" />
                         <newline/>
                     </if>
+                    <!-- Not implemented in server
                     <if expression="disp_videofilter">
                         <text width="150" font="info value" mode="soft">Filter: </text>
                         <goto_pos x="10" mode="relative"/>
                         <text font="info value" expression="disp_videofilter" mode="soft" />
                         <newline/>
                     </if>
+                    -->
                 </item>
             </content>
         </layout>

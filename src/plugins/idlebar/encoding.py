@@ -241,6 +241,9 @@ class PluginInterface(plugin.DaemonPlugin):
             screen_height = osd.height + 2*osd.y
 
             used_width = font.font.stringsize(self.jobs) - 1
+            # ensure that the box width is between min and max
+            used_width = max(used_width, 200)
+            used_width = min(used_width, 280)
             used_height = self.font_h
             if self.running:
                 w, h = self.getimage(self.boximg, osd).get_size()
@@ -249,9 +252,6 @@ class PluginInterface(plugin.DaemonPlugin):
                 for text in self.text:
                     used_width = max(used_width, font.font.stringsize(text))
                     used_height += self.font_h
-            # ensure that the box width is between min and max
-            used_width = max(used_width, 200)
-            used_width = min(used_width, 280)
 
             _debug_('screen_width=%s, screen_height=%s, used_width=%s, used_height=%s, font_h=%s' % \
                 (screen_width, screen_height, used_width, used_height, self.font_h), 2)
@@ -272,7 +272,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.by = osd.y
             self.tx = self.bx + self.boxborder + self.padding
             self.ty = self.by + self.boxborder + self.padding
-            #self.textw = min(self.textw, self.idlebar_max - self.bx - 30)
+            self.textw = min(self.textw, self.idlebar_max - self.bx - 30)
 
 
     def draw(self, (type, object), osd):
