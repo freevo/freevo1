@@ -120,7 +120,7 @@ class EncodingJob:
 
         self.sourcetype = None
 
-        self.container = "Avi"
+        self.container = "avi"
 
         self.tgtsize = None
         self.length = None

@@ -250,7 +250,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 used_width = max(used_width, w)
                 used_height += h
                 for text in self.text:
-                    used_width = max(used_width, font.font.stringsize(text))
+                    used_width = max(used_width, font.font.stringsize(text)) - 1
                     used_height += self.font_h
 
             _debug_('screen_width=%s, screen_height=%s, used_width=%s, used_height=%s, font_h=%s' % \

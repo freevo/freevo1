@@ -56,7 +56,7 @@ class PluginInterface(plugin.ItemPlugin):
         plugin.ItemPlugin.__init__(self)
         self.title = ''
         self.source = ''
-        self.filename = ''
+        self.output = ''
         self.profile = {}
         self.profile['container'] = config.REENCODE_CONTAINER
         self.profile['resolution'] = config.REENCODE_RESOLUTION
@@ -98,7 +98,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.title = item.name
             self.source = item.filename
             (filename, extn) = os.path.splitext(item.filename)
-            self.filename = filename+'.'+self.profile['container']
+            self.output = filename
             _debug_('item.__dict__:' % item.__dict__, 3)
             return [ (self.encoding_profile_menu, _('Transcode this program...')) ]
         return []
@@ -112,7 +112,7 @@ class PluginInterface(plugin.ItemPlugin):
         if attr == 'disp_title':
             return '%s' % (self.title)
         if attr == 'disp_filename':
-            return '%s' % (os.path.split(self.filename)[1])
+            return '%s' % (os.path.split(self.filename)[1])+'.'+self.profile['container']
         elif attr == 'disp_container':
             return '%s' % (self.profile['container'])
         elif attr == 'disp_resolution':
@@ -274,8 +274,6 @@ class PluginInterface(plugin.ItemPlugin):
             _debug_('Unknown Profile "%s"' % (arg), 0)
             self.error(_('Unknown Profile')+(' "%s"' % (arg)))
             return
-        (filename, extn) = os.path.splitext(self.filename)
-        self.filename = filename+'.'+self.profile['container']
 
         if menuw:
             menuw.back_one_menu(arg='reload')
@@ -283,12 +281,9 @@ class PluginInterface(plugin.ItemPlugin):
     def alter_prop(self, arg=(None,None), menuw=None):
         _debug_('alter_prop(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         (prop, val) = arg
-        _debug_('DJW:val:%s %s' % (type(val), val))
 
         if prop == 'container':
             self.profile['container'] = val
-            (filename, extn) = os.path.splitext(self.filename)
-            self.filename = filename+'.'+self.profile['container']
         elif prop == 'resolution':
             self.profile['resolution'] = val
         elif prop == 'videocodec':
@@ -327,8 +322,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         box = PopupBox(text=_('Please wait, analyzing video...'))
         box.show()
-        print 'DJW:filename:', self.filename
-        (status, resp) = initEncodeJob(self.source, self.filename, self.title)
+        (status, resp) = initEncodeJob(self.source, self.output, self.title)
         _debug_('initEncodeJob:status:%s resp:%s' % (status, resp))
         box.destroy()
         if not status:
