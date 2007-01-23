@@ -1482,6 +1482,9 @@ ONLY_NEW_DETECTION = None
 # This will enable the commercial detection. It is quite process intensive.
 REMOVE_COMMERCIALS = None
 
+# This will try to resolve scheduling conflicts and re-schedule when needed
+CONFLICT_RESOLUTION = None
+
 #
 # Watching TV
 #

@@ -27,7 +27,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, string, random, time, os, re, pwd, stat, threading, pickle, md5, datetime
+import sys, string, random, time, os, re, pwd, stat, threading, pickle, md5, datetime, copy
 import config
 from util import vfs
 
@@ -360,11 +360,10 @@ class RecordServer(xmlrpc.XMLRPC):
 
        return text
 
-    #
-    # Return the key to be used for a given prog in the
-    # previouslyRecordedShows hashtable.
-    #
+
     def getPreviousRecordingKey(self, prog):
+        '''Return the key to be used for a given prog in the
+        previouslyRecordedShows hashtable.'''
         shrunkTitle = self.shrink(prog.title)
         shrunkSub   = self.shrink(prog.sub_title)
         shrunkDesc  = self.shrink(prog.desc);
@@ -372,19 +371,17 @@ class RecordServer(xmlrpc.XMLRPC):
                 '%s-%s-'   % (shrunkTitle, shrunkSub),              \
                 '%s--%s'   % (shrunkTitle, shrunkDesc))
 
-    #
-    # Get a previous recording, or None if none.
-    #
+
     def getPreviousRecording(self, prog):
+        '''Get a previous recording, or None if none.'''
         try:
             return self.previouslyRecordedShows[self.getPreviousRecordingKey(prog)]
         except KeyError:
             return None
 
-    #
-    # Remove a duplicate recording
-    #
+
     def removeDuplicate(self, prog=None):
+        '''Remove a duplicate recording'''
         self.loadPreviouslyRecordedShows()
         previous = self.getPreviousRecording(prog)
         if previous:
@@ -392,11 +389,10 @@ class RecordServer(xmlrpc.XMLRPC):
            del self.previouslyRecordedShows[self.getPreviousRecordingKey(previous)]
            self.savePreviouslyRecordedShows()
 
-    #
-    # Identify if the given programme is a duplicate. If not,
-    # record it as previously recorded.
-    #
+
     def duplicate(self, prog=None):
+        '''Identify if the given programme is a duplicate. If not,
+        record it as previously recorded.'''
         self.loadPreviouslyRecordedShows()
         previous = self.getPreviousRecording(prog)
         if previous:
@@ -410,6 +406,199 @@ class RecordServer(xmlrpc.XMLRPC):
             self.previouslyRecordedShows[key] = prog.start
         self.savePreviouslyRecordedShows()
         return FALSE
+
+
+    def addRecording(self, prog=None):
+        scheduledRecordings = self.getScheduledRecordings()
+        scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
+        self.saveScheduledRecordings(scheduledRecordings)
+        _debug_('Added Episode')
+
+
+    def removeRecording(self, prog=None):
+        scheduledRecordings = self.getScheduledRecordings()
+        scheduledRecordings.removeProgram(prog, tv_util.getKey(prog))
+        self.saveScheduledRecordings(scheduledRecordings)
+        _debug_('Removed Episode')
+
+
+    def conflictResolution(self, prog=None):
+
+        def exactMatch(self, prog=None):
+            descResult=FALSE
+            descMatches=None
+            (descResult, descMatches)=self.findMatches(prog.desc)
+            if descResult:
+               _debug_('Exact Matches %s'%(len(descMatches)))
+               return descMatches
+            (sub_titleResult, sub_titleMatches)=self.findMatches(prog.sub_title)
+            descResult=FALSE
+            descMatches=None
+            if sub_titleResult:
+               _debug_('Exact Matches %s'%(len(sub_titleMatches)))
+               return sub_titleMatches
+            else:
+               titleResult=FALSE
+               titleMatches=None
+               (titleResult, titleMatches)=self.findMatches(prog.title)
+               _debug_('Exact Matches %s'%(len(titleMatches)))
+               return titleMatches
+
+        def getConflict(self, prog):
+            myScheduledRecordings = copy.deepcopy(self.getScheduledRecordings())
+            _debug_('Before mySched recordings; ignore all addProgram lines')
+            myScheduledRecordings.addProgram(prog, tv_util.getKey(prog))
+            progs = myScheduledRecordings.getProgramList()
+            proglist = list(progs)
+            proglist.sort(self.progsTimeCompare)
+            conflictRating=0
+            conflictedProg=None
+            for i in range(0, len(proglist)-1):
+                thisprog = progs[proglist[i]]
+                nextprog = progs[proglist[i+1]]
+                if thisprog.stop > nextprog.start:
+                   conflictRating=conflictRating+1
+                   if thisprog==prog:
+                      conflictedProg=nextprog
+                   elif nextprog==prog:
+                      conflictedProg=thisprog
+            myScheduledRecordings.removeProgram(prog)
+            _debug_('After mySched recordings; stop ignoring all addProgram lines')
+            return (conflictRating,conflictedProg)
+
+        def getRatedConflicts(self,prog):
+            occurances = exactMatch(self,prog)
+            ratedConflicts=[]
+            #Search through all occurances of looking for a non-conflicted occurance
+            for oneOccurance in occurances:
+                (rating, conflictedProg)=getConflict(self,oneOccurance)
+                if rating==0:
+                   _debug_('No Conflict')
+                   self.addRecording(oneOccurance)
+                   return(TRUE,None)
+                else:
+                   _debug_('Conflict Found')
+                   ratedConflicts.append((rating,conflictedProg,oneOccurance))
+            return(FALSE,ratedConflicts)
+
+        if config.CONFLICT_RESOLUTION:
+           _debug_('Conflict resolution enabled')
+           ratedConflicts=[]
+           (result, ratedConflicts)=getRatedConflicts(self,prog)
+           if result:
+              #No conflicts
+              return
+
+           _debug_('Going into conflict resolution via scheduled program re-scheduling')
+           # No viable time to schedule the program without a conflict
+           # Try and reschedule the already scheduled program
+           for (scheduledConflictRating,scheduledConflictProgram,conflictProgram) in ratedConflicts:
+               #Remove scheduled conflictinf program and add new prog
+               self.removeRecording(scheduledConflictProgram)
+               self.addRecording(conflictProgram)
+               (result, ratedConflicts)=getRatedConflicts(self,scheduledConflictProgram)
+               if result:
+                  #No conflicts
+                  return
+               #Return to original state
+               self.removeRecording(conflictProgram)
+               self.addRecording(scheduledConflictProgram)
+
+           _debug_('Going into conflict resolution via priority')
+           # No viable option to reschedule the original program
+           # Time to resolve the conflict via priority
+           tempRating=1000
+           tempConflicted=None
+           tempProg=None
+           #Find least conflicted
+           for (conflictedRating, conflictedProgram, tempProgram) in ratedConflicts:
+               _debug_('%s %s %s'%(conflictedRating, conflictedProgram.title, tempProgram.title))
+               if conflictedRating < tempRating:
+                  tempRating=conflictedRating
+                  tempConflicted=conflictedProgram
+                  tempProg=tempProgram
+           conflictedProgram=tempConflicted
+           prog=tempProgram
+
+           #Here is where it gets ugly
+           (isProgFav, progFav) = self.getFavoriteObject(prog)
+           (isConfFav, confFav) = self.getFavoriteObject(conflictedProgram)
+           if not isProgFav and isConfFav:
+              #Regular recording has higher priority then favorite
+              _debug_('new is regular and old is fav')
+              _debug_('resolved by removing old')
+              if config.DUPLICATE_DETECTION:
+                 #Already added to duplicates, need to remove
+                 self.removeDuplicate(conflictedProgram)
+              self.removeRecording(conflictedProgram)
+              self.addRecording(prog)
+           elif isProgFav and not isConfFav:
+              #Regular recording has higher priority then favorite
+              _debug_('old is regular and new is favorite')
+              _debug_('resolved by removing new')
+              if config.DUPLICATE_DETECTION:
+                 #Already added to duplicates, need to remove
+                 self.removeDuplicate(prog)
+              self.removeRecording(prog)
+              self.addRecording(conflictedProgram)
+           elif not isProgFav and not isConfFav:
+              _debug_('Both are regular; do not add new recording')
+           elif isProgFav and isConfFav:
+              #Both are favorites, go by priority (lower is better)
+              if progFav.priority < confFav.priority:
+                 _debug_('new prog has higher priority then old')
+                 if config.DUPLICATE_DETECTION:
+                    #Already added to duplicates, need to remove
+                    self.removeDuplicate(conflictedProgram)
+                 self.removeRecording(conflictedProgram)
+                 self.addRecording(prog)
+              elif confFav.priority < progFav.priority:
+                 _debug_('old prog has higher priority then new')
+                 if config.DUPLICATE_DETECTION:
+                    #Already added to duplicates, need to remove
+                    self.removeDuplicate(prog)
+                 self.removeRecording(prog)
+                 self.addRecording(conflictedProgram)
+              else:
+                 #Equal priority, not adding new program
+                 _debug_('Both are equal; do not add new recording')
+                 _debug_('%s %s' % (progFav.priority, confFav.priority))
+        else:
+           _debug_('Conflict resolution disabled')
+           self.addRecording(prog)
+
+
+    def checkOnlyNewDetection(self, prog=None):
+        if config.ONLY_NEW_DETECTION and self.doesFavoriteRecordOnlyNewEpisodes(prog):
+           _debug_('OnlyNew Episode Detection enabled 1')
+           if self.newEpisode(prog):
+              _debug_('New Episode')
+              self.conflictResolution(prog)
+           else:
+              _debug_('Old Episode')
+        else:
+           _debug_('OnlyNew Episode Detection disabled or Favorite allows all Episodes 1')
+           self.conflictResolution(prog)
+
+
+    def checkDuplicateDetection(self, prog=None):
+        (isFav, favorite) = self.isProgAFavorite(prog)
+        if isFav:
+           if config.DUPLICATE_DETECTION and not self.doesFavoriteAllowDuplicates(prog):
+              _debug_('Duplicate Detection enabled 1')
+              if not self.duplicate(prog):
+                 # This checks OnlyNew and then hands it off to conflict detection
+                 self.checkOnlyNewDetection(prog)
+              else:
+                 return (FALSE, 'duplicate recording')
+           else:
+              _debug_('Duplicate Detection is disabled or Favorite allows duplicates 2')
+              # This checks OnlyNew and then hands it off to conflict detection
+              self.checkOnlyNewDetection(prog)
+        else:
+           _debug_('Single recording')
+           self.conflictResolution(prog)
+
 
     def scheduleRecording(self, prog=None):
         global guide
@@ -427,51 +616,15 @@ class RecordServer(xmlrpc.XMLRPC):
             if prog.channel_id == chan.id:
                 _debug_('scheduleRecording: "%s"' % (prog))
                 prog.tunerid = chan.tunerid
+
+        # This check for Dups and then hands off to the OnlyNew func
+        self.checkDuplicateDetection(prog)
     
-        if config.DUPLICATE_DETECTION and not self.doesFavoriteAllowDuplicates(prog):
-           _debug_('Duplicate Detection enabled 1')
-           if not self.duplicate(prog):
-              if config.ONLY_NEW_DETECTION and self.doesFavoriteRecordOnlyNewEpisodes(prog):
-                 _debug_('OnlyNew Episode Detection enabled 1')
-                 if self.newEpisode(prog):
-                    _debug_('New Episode')
-                    scheduledRecordings = self.getScheduledRecordings()
-                    scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
-                    self.saveScheduledRecordings(scheduledRecordings)
-                 else:
-                    _debug_('Old Episode')
-              else:
-                 _debug_('OnlyNew Episode Detection disabled or Favorite allows all Episodes 1')
-                 scheduledRecordings = self.getScheduledRecordings()
-                 scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
-                 self.saveScheduledRecordings(scheduledRecordings)
-                 _debug_('Added Episode')
-           else:
-              return (FALSE, 'duplicate recording')
-        else:
-           _debug_('Duplicate Detection is disabled or Favorite allows duplicates 2')
-           if config.ONLY_NEW_DETECTION and self.doesFavoriteRecordOnlyNewEpisodes(prog):
-              _debug_('OnlyNew Detection enabled 2')
-              if self.newEpisode(prog):
-                 _debug_('New Episode')
-                 scheduledRecordings = self.getScheduledRecordings()
-                 scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
-                 self.saveScheduledRecordings(scheduledRecordings)
-              else:
-                 _debug_('Old Episode')
-
-           else:
-              _debug_('OnlyNew Episode Detection disabled 2')
-              scheduledRecordings = self.getScheduledRecordings()
-              scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
-              self.saveScheduledRecordings(scheduledRecordings)
-              _debug_('Added Episode')
-
         # check, maybe we need to start right now
         self.checkToRecord()
 
         return (TRUE, 'recording scheduled')
-    
+
 
     def removeScheduledRecording(self, prog=None):
         if not prog:
@@ -845,6 +998,15 @@ class RecordServer(xmlrpc.XMLRPC):
 
         return (TRUE, 'priorities adjusted')
     
+    def getFavoriteObject(self, prog, favs=None):
+        #more liberal favorite check that returns an object
+        if not favs:
+            (status, favs) = self.getFavorites()
+        for fav in favs.values():
+            if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
+               return (TRUE, fav)
+        # if we get this far prog is not a favorite
+        return (FALSE, 'not a favorite')
     
     def isProgAFavorite(self, prog, favs=None):
         if not favs:
