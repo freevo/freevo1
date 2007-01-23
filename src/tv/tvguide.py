@@ -124,7 +124,7 @@ class TVGuide(Item):
                     self.overlap_programs.append(prog.str2utf())
 
         
-    def eventhandler(self, event):
+    def eventhandler(self, event, menuw=None):
         _debug_('TVGUIDE EVENT is %s' % event, 2)
 
         if event == MENU_CHANGE_STYLE:
