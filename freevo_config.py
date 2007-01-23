@@ -1869,6 +1869,14 @@ ENABLE_NETWORK_REMOTE = 0
 REMOTE_CONTROL_HOST = '127.0.0.1'
 REMOTE_CONTROL_PORT = 16310
 
+#
+# Remote control daemon. Similar to the one above, but uses TCP instead 
+# of UDP. It is possible to send commands with a telnet client.
+#
+ENABLE_TCP_NETWORK_REMOTE = 0
+REMOTE_CONTROL_TCP_HOST = '127.0.0.1'
+REMOTE_CONTROL_TCP_PORT = 16311
+
 
 #
 # XMLTV File

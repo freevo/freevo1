@@ -274,6 +274,62 @@ class Keyboard:
 
 # --------------------------------------------------------------------------------
 
+class TcpNetwork:
+    """
+    Class to handle network control via TCP connection instead of UDP.
+    """
+    import socket
+    MAX_MESSAGE_SIZE = 255 # the maximum size of a message
+    def __init__(self):
+        """
+        init the network event handler
+        """
+        self.port = config.REMOTE_CONTROL_TCP_PORT
+        self.host = config.REMOTE_CONTROL_TCP_HOST
+        self.sock = self.socket.socket(self.socket.AF_INET, \
+                self.socket.SOCK_STREAM)
+        self.sock.setsockopt(self.socket.SOL_SOCKET, \
+                self.socket.SO_REUSEADDR, 1)
+        self.sock.setblocking(0)
+        self.sock.bind((self.host, self.port))
+        self.sock.listen(1)
+        self.connections = []
+
+    def poll(self, rc):
+        """
+        return next event
+        """
+        self._getNewConnections()
+
+        throwout = []
+        for conn in self.connections:
+            try:
+                buffer = conn.recv(self.MAX_MESSAGE_SIZE)
+                return buffer.strip()
+            except self.socket.error, oErr:
+                # if the error is not of typ 11 there is a problem with
+                # the connection, remove it from the list.
+                if oErr[0] != 11:
+                    throwout.append(self.connections.index(conn))
+
+        throwout.reverse()
+        for index in throwout:
+            self.connections.pop(index)
+
+    def _getNewConnections(self):
+        """
+        accept new connections from the socket
+        """
+        try:
+            conn, addr = self.sock.accept()
+            conn.setblocking(0)
+            self.connections.append(conn)
+        except:
+            # do nothing
+            pass
+
+
+
 class Network:
     """
     Class to handle network control
@@ -406,6 +462,11 @@ class EventHandler:
         if use_netremote and config.ENABLE_NETWORK_REMOTE and \
                config.REMOTE_CONTROL_PORT:
             self.inputs.append(Network())
+
+        if use_netremote and config.ENABLE_TCP_NETWORK_REMOTE and \
+               config.REMOTE_CONTROL_TCP_PORT and \
+               config.REMOTE_CONTROL_TCP_HOST:
+            self.inputs.append(TcpNetwork())
 
         self.app                = None
         self.context            = 'menu'
