@@ -115,9 +115,15 @@ class FavoritesResource(FreevoResource):
         fv.tableCell(_('Priority'), 'class="guidehead" colspan="1"')
         fv.tableRowClose()
 
-        f = lambda a, b: cmp(a.priority, b.priority)
+        def sortByPriority(a,b):
+            if (a.priority < b.priority):
+               return -1
+            elif (a.priority > b.priority):
+               return 1
+            else:
+               return 0
         favs = favorites.values()
-        favs.sort(f)
+        favs.sort(sortByPriority)
         for fav in favs:
             status = 'favorite'
             if fav.channel == 'ANY':
