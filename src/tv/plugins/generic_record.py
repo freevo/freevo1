@@ -77,6 +77,7 @@ class Recorder:
 
         cl_options = { 'channel'  : rec_prog.tunerid,
                        'frequency' : frequency,
+                       'frequencyMHz' : float(frequency) / 1000,
                        'filename' : rec_prog.filename,
                        'base_filename' : os.path.basename(rec_prog.filename),
                        'title' : rec_prog.title,
