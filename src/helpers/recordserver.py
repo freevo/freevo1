@@ -147,7 +147,7 @@ class RecordServer(xmlrpc.XMLRPC):
             if thisprog.stop > nextprog.start:
                 thisprog.overlap = 1
                 nextprog.overlap = 1
-                _debug_('Overlap:\n%s\n%s' % (thisprog, nextprog))
+                _debug_('Overlap:\n%s\n%s' % (thisprog, nextprog), 3)
 
 
     def findNextProgram(self):
@@ -167,13 +167,13 @@ class RecordServer(xmlrpc.XMLRPC):
                 recording = prog.isRecording
             except:
                 recording = FALSE
-            _debug_('%s: recording=%s' % (prog.title, recording))
+            _debug_('%s: recording=%s' % (prog.title, recording), 2)
 
             endtime = time.localtime(prog.stop+config.TV_RECORD_PADDING_POST)
             if now > prog.stop + config.TV_RECORD_PADDING_POST:
                 _debug_('%s: prog.stop=%s, now=%s' % (prog.title, endtime, timenow), 2)
                 continue
-            _debug_('%s: endtime=%s' % (prog.title, endtime))
+            _debug_('%s: endtime=%s' % (prog.title, endtime), 2)
 
             if not recording:
                 next_program = prog
@@ -181,10 +181,10 @@ class RecordServer(xmlrpc.XMLRPC):
 
         self.next_program = next_program
         if next_program == None:
-            _debug_('No program scheduled to record')
+            _debug_('No program scheduled to record', 3)
             return None
 
-        _debug_('%s' % (next_program))
+        _debug_('%s' % (next_program), 3)
         return next_program
 
 
@@ -205,12 +205,12 @@ class RecordServer(xmlrpc.XMLRPC):
         scheduledRecordings = None
 
         if os.path.isfile(config.TV_RECORD_SCHEDULE):
-            _debug_('GET: reading cached file (%s)' % config.TV_RECORD_SCHEDULE, 2)
+            _debug_('GET: reading cached file (%s)' % config.TV_RECORD_SCHEDULE, 5)
             if hasattr(self, 'scheduledRecordings_cache'):
                 mod_time, scheduledRecordings = self.scheduledRecordings_cache
                 try:
                     if os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME] == mod_time:
-                        _debug_('Return cached data', 2)
+                        _debug_('Return cached data', 5)
                         return scheduledRecordings
                 except OSError:
                     pass
@@ -222,22 +222,22 @@ class RecordServer(xmlrpc.XMLRPC):
             try:
                 file_ver = scheduledRecordings.TYPES_VERSION
             except AttributeError:
-                _debug_('The cache does not have a version and must be recreated.')
+                _debug_('The cache does not have a version and must be recreated.', 1)
     
             if file_ver != TYPES_VERSION:
                 _debug_(('ScheduledRecordings version number %s is stale (new is %s), must ' +
-                        'be reloaded') % (file_ver, TYPES_VERSION))
+                        'be reloaded') % (file_ver, TYPES_VERSION), 1)
                 scheduledRecordings = None
             else:
-                _debug_('Got ScheduledRecordings (version %s).' % file_ver)
+                _debug_('Got ScheduledRecordings (version %s).' % file_ver, 5)
     
         if not scheduledRecordings:
-            _debug_('GET: making a new ScheduledRecordings')
+            _debug_('GET: making a new ScheduledRecordings', 2)
             scheduledRecordings = ScheduledRecordings()
             self.saveScheduledRecordings(scheduledRecordings)
     
         _debug_('ScheduledRecordings has %s items.' % \
-                len(scheduledRecordings.programList))
+                len(scheduledRecordings.programList), 1)
     
         try:
             mod_time = os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME]
@@ -253,12 +253,12 @@ class RecordServer(xmlrpc.XMLRPC):
     def saveScheduledRecordings(self, scheduledRecordings=None):
     
         if not scheduledRecordings:
-            _debug_('SAVE: making a new ScheduledRecordings')
+            _debug_('SAVE: making a new ScheduledRecordings', 2)
             scheduledRecordings = ScheduledRecordings()
     
         self.findOverlaps(scheduledRecordings)
-        _debug_('SAVE: saving cached file (%s)' % config.TV_RECORD_SCHEDULE)
-        _debug_("SAVE: ScheduledRecordings has %s items." % len(scheduledRecordings.programList))
+        _debug_('SAVE: saving cached file (%s)' % config.TV_RECORD_SCHEDULE, 2)
+        _debug_("SAVE: ScheduledRecordings has %s items." % len(scheduledRecordings.programList), 2)
         try:
             f = open(config.TV_RECORD_SCHEDULE, 'w')
         except IOError:
@@ -306,10 +306,10 @@ class RecordServer(xmlrpc.XMLRPC):
     def newEpisode(self, prog=None):
         todayStr = datetime.date.today().strftime('%Y%m%d')
         progStr = str(prog.date)
-        _debug_('Program Date: "%s"' % progStr)
-        _debug_('Todays Date : "%s"' % todayStr)
+        _debug_('Program Date: "%s"' % progStr, 5)
+        _debug_('Todays Date : "%s"' % todayStr, 5)
         if (len(progStr)==8):
-           _debug_('Good date format')
+           _debug_('Good date format', 5)
            #Year
            todaysYear=(todayStr[0:4])
            progYear=(progStr[0:4])
@@ -326,7 +326,7 @@ class RecordServer(xmlrpc.XMLRPC):
               #program in the future
               return TRUE
            else:
-              _debug_('Same year')
+              _debug_('Same year', 5)
               #program in the same year
               if todaysMonth > progMonth:
                  #program in a previous month
@@ -335,17 +335,17 @@ class RecordServer(xmlrpc.XMLRPC):
                  #program in the future
                  return TRUE
               else:
-                 _debug_('Same month')
+                 _debug_('Same month', 5)
                  #program in the same month
                  if todaysDay > progDay:
                     #program was previous aired this month
                     return FALSE
                  else:
-                    _debug_('Same day or in the upcoming month')
+                    _debug_('Same day or in the upcoming month', 5)
                     #program is today or in the upcoming days
                     return TRUE
         else:
-           _debug_('No good date format, assuming new Episode to be on the safe side')
+           _debug_('No good date format, assuming new Episode to be on the safe side', 3)
            return TRUE
 
     #
@@ -385,9 +385,20 @@ class RecordServer(xmlrpc.XMLRPC):
         self.loadPreviouslyRecordedShows()
         previous = self.getPreviousRecording(prog)
         if previous:
-           _debug_('Found duplicate, removing')
+           _debug_('Found duplicate, removing', 5)
            del self.previouslyRecordedShows[self.getPreviousRecordingKey(previous)]
            self.savePreviouslyRecordedShows()
+
+
+    def addDuplicate(self, prog=None):
+        '''Add program to duplicates hash'''
+        _debug_('No previous recordings for "%s", "%s", "%s", adding to hash and saving' % \
+        (prog.title, prog.sub_title, prog.desc), 5)
+        self.loadPreviouslyRecordedShows()
+        self.previouslyRecordedShows[self.getPreviousRecordingKey(prog)] = prog
+        for key in self.getPreviousRecordingKey(prog):
+            self.previouslyRecordedShows[key] = prog.start
+        self.savePreviouslyRecordedShows()
 
 
     def duplicate(self, prog=None):
@@ -397,122 +408,140 @@ class RecordServer(xmlrpc.XMLRPC):
         previous = self.getPreviousRecording(prog)
         if previous:
             _debug_('Found duplicate for "%s", "%s", "%s", not adding' % \
-            (prog.title, prog.sub_title, prog.desc))
+            (prog.title, prog.sub_title, prog.desc), 5)
             return TRUE
-        _debug_('No previous recordings for "%s", "%s", "%s", adding to hash and saving' % \
-        (prog.title, prog.sub_title, prog.desc))
-        self.previouslyRecordedShows[self.getPreviousRecordingKey(prog)] = prog
-        for key in self.getPreviousRecordingKey(prog):
-            self.previouslyRecordedShows[key] = prog.start
-        self.savePreviouslyRecordedShows()
         return FALSE
 
 
-    def addRecording(self, prog=None):
-        scheduledRecordings = self.getScheduledRecordings()
+    def addRecordingToSchedule(self, prog=None, inputSchedule=None):
+        if inputSchedule:
+           scheduledRecordings=inputSchedule
+        else:
+           scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
-        self.saveScheduledRecordings(scheduledRecordings)
-        _debug_('Added Episode')
+        if not inputSchedule:
+           self.saveScheduledRecordings(scheduledRecordings)
 
 
-    def removeRecording(self, prog=None):
-        scheduledRecordings = self.getScheduledRecordings()
+    def removeRecordingFromSchedule(self, prog=None, inputSchedule=None):
+        if inputSchedule:
+           scheduledRecordings=inputSchedule
+        else:
+           scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.removeProgram(prog, tv_util.getKey(prog))
-        self.saveScheduledRecordings(scheduledRecordings)
-        _debug_('Removed Episode')
+        if not inputSchedule:
+           self.saveScheduledRecordings(scheduledRecordings)
 
 
-    def conflictResolution(self, prog=None):
-
-        def exactMatch(self, prog=None):
-            descResult=FALSE
-            descMatches=None
-            (descResult, descMatches)=self.findMatches(prog.desc)
-            if descResult:
-               _debug_('Exact Matches %s'%(len(descMatches)))
-               return descMatches
-            (sub_titleResult, sub_titleMatches)=self.findMatches(prog.sub_title)
-            descResult=FALSE
-            descMatches=None
-            if sub_titleResult:
-               _debug_('Exact Matches %s'%(len(sub_titleMatches)))
-               return sub_titleMatches
-            else:
-               titleResult=FALSE
-               titleMatches=None
-               (titleResult, titleMatches)=self.findMatches(prog.title)
-               _debug_('Exact Matches %s'%(len(titleMatches)))
-               return titleMatches
-
-        def getConflict(self, prog):
-            myScheduledRecordings = copy.deepcopy(self.getScheduledRecordings())
-            _debug_('Before mySched recordings; ignore all addProgram lines')
-            myScheduledRecordings.addProgram(prog, tv_util.getKey(prog))
+    def conflictResolution(self, prog):
+        def exactMatch(self, prog):
+            if prog.desc:
+               descResult=FALSE
+               descMatches=None
+               (descResult, descMatches)=self.findMatches(prog.desc)
+               if descResult:
+                  _debug_('Exact Matches %s'%(len(descMatches)), 5)
+                  return descMatches
+            if prog.sub_title:
+               (sub_titleResult, sub_titleMatches)=self.findMatches(prog.sub_title)
+               descResult=FALSE
+               descMatches=None
+               if sub_titleResult:
+                  _debug_('Exact Matches %s'%(len(sub_titleMatches)), 5)
+                  return sub_titleMatches
+            return 0
+        def getConflicts(self, prog, myScheduledRecordings):
+            _debug_('Before mySched recordings; ignore all addProgram lines', 5)
+            self.addRecordingToSchedule(prog, myScheduledRecordings)
             progs = myScheduledRecordings.getProgramList()
             proglist = list(progs)
             proglist.sort(self.progsTimeCompare)
             conflictRating=0
-            conflictedProg=None
+            conflicts=[]
             for i in range(0, len(proglist)-1):
                 thisprog = progs[proglist[i]]
                 nextprog = progs[proglist[i+1]]
                 if thisprog.stop > nextprog.start:
                    conflictRating=conflictRating+1
                    if thisprog==prog:
-                      conflictedProg=nextprog
+                      conflicts.append(nextprog)
                    elif nextprog==prog:
-                      conflictedProg=thisprog
-            myScheduledRecordings.removeProgram(prog)
-            _debug_('After mySched recordings; stop ignoring all addProgram lines')
-            return (conflictRating,conflictedProg)
+                      conflicts.append(thisprog)
+            self.removeRecordingFromSchedule(prog, myScheduledRecordings)
+            _debug_('After mySched recordings; stop ignoring all addProgram lines', 5)
+            return (conflictRating,conflicts)
 
-        def getRatedConflicts(self,prog):
-            occurances = exactMatch(self,prog)
+        def getRatedConflicts(self,prog,myScheduledRecordings):
             ratedConflicts=[]
+            occurances = exactMatch(self,prog)
             #Search through all occurances of looking for a non-conflicted occurance
             for oneOccurance in occurances:
-                (rating, conflictedProg)=getConflict(self,oneOccurance)
+                (rating, conflictedProgs)=getConflicts(self,oneOccurance,myScheduledRecordings)
                 if rating==0:
-                   _debug_('No Conflict')
-                   self.addRecording(oneOccurance)
-                   return(TRUE,None)
-                else:
-                   _debug_('Conflict Found')
-                   ratedConflicts.append((rating,conflictedProg,oneOccurance))
-            return(FALSE,ratedConflicts)
+                   _debug_('No Conflict', 5)
+                   programsToChange=[]
+                   programsToChange.append(('add',oneOccurance))
+                   return(TRUE,ratedConflicts,programsToChange)
+                _debug_('Conflict Found', 5)
+                ratedConflicts.append((rating,conflictedProgs,oneOccurance))
+            return (FALSE,ratedConflicts,None)
 
         if config.CONFLICT_RESOLUTION:
-           _debug_('Conflict resolution enabled')
+           _debug_('Conflict resolution enabled', 5)
            ratedConflicts=[]
-           (result, ratedConflicts)=getRatedConflicts(self,prog)
+           myScheduledRecordings = copy.deepcopy(self.getScheduledRecordings())
+
+           #Try to record it at its listed time
+           (rating, conflictedProg)=getConflicts(self,prog,myScheduledRecordings)
+           if rating==0:
+              #No need to do anything fancy; this will work at its defaul time
+              progsToChange=[]
+              progsToChange.append(('add',prog))
+              return (TRUE, 'No conflicts, using default time', progsToChange)
+
+           #Default time didn't work, let's try all times known
+           (result, ratedConflicts, progsToChange)=getRatedConflicts(self,prog,myScheduledRecordings)
            if result:
               #No conflicts
-              return
+              return (TRUE, 'No conflicts if new program is added', progsToChange)
 
-           _debug_('Going into conflict resolution via scheduled program re-scheduling')
+           _debug_('Going into conflict resolution via scheduled program re-scheduling', 5)
            # No viable time to schedule the program without a conflict
            # Try and reschedule the already scheduled program
-           for (scheduledConflictRating,scheduledConflictProgram,conflictProgram) in ratedConflicts:
-               #Remove scheduled conflictinf program and add new prog
-               self.removeRecording(scheduledConflictProgram)
-               self.addRecording(conflictProgram)
-               (result, ratedConflicts)=getRatedConflicts(self,scheduledConflictProgram)
-               if result:
-                  #No conflicts
-                  return
-               #Return to original state
-               self.removeRecording(conflictProgram)
-               self.addRecording(scheduledConflictProgram)
+           atleastOneSingleConflict=FALSE
+           for (scheduledConflictRating,scheduledConflictPrograms,conflictProgram) in ratedConflicts:
+               #Only handle one conflict at the moment
+               if scheduledConflictRating==1:
+                  atleastOneSingleConflict=TRUE
+                  scheduledConflictProgram=scheduledConflictPrograms[0]
+                  #remove already scheduled program and try to reschedule it with the new program
+                  self.removeRecordingFromSchedule(scheduledConflictProgram,myScheduledRecordings)
+                  self.addRecordingToSchedule(conflictProgram,myScheduledRecordings)
+                  (result, ratedConflicts, progsToChange)=getRatedConflicts(self, \
+                                                                            scheduledConflictProgram,\
+                                                                            myScheduledRecordings)
+                  if result:
+                     #No conflicts
+                     progsToChange.append(('del',scheduledConflictProgram))
+                     progsToChange.append(('add',conflictProgram))
+                     return (TRUE, 'No conflicts if scheduled program is rescheduled', progsToChange)
+                  #Return this to original state
+                  self.addRecordingToSchedule(scheduledConflictProgram,myScheduledRecordings)
+                  self.removeRecordingFromSchedule(conflictProgram,myScheduledRecordings)
+           if not atleastOneSingleConflict:
+              #Dirty way to (not) handle multiple conflicts
+              return (FALSE, 'Cannot handle multiple conflicts: %s not scheduled'%(prog.title), None)
 
-           _debug_('Going into conflict resolution via priority')
+           _debug_('Going into conflict resolution via priority', 5)
            # No viable option to reschedule the original program
            # Time to resolve the conflict via priority
            tempRating=1000
            tempConflicted=None
            tempProg=None
            #Find least conflicted
-           for (conflictedRating, conflictedProgram, tempProgram) in ratedConflicts:
-               _debug_('%s %s %s'%(conflictedRating, conflictedProgram.title, tempProgram.title))
+           for (conflictedRating, conflictedPrograms, tempProgram) in ratedConflicts:
+               #Cannot handle multiple conflicts
+               conflictedProgram=conflictedPrograms[0]
                if conflictedRating < tempRating:
                   tempRating=conflictedRating
                   tempConflicted=conflictedProgram
@@ -525,79 +554,69 @@ class RecordServer(xmlrpc.XMLRPC):
            (isConfFav, confFav) = self.getFavoriteObject(conflictedProgram)
            if not isProgFav and isConfFav:
               #Regular recording has higher priority then favorite
-              _debug_('new is regular and old is fav')
-              _debug_('resolved by removing old')
-              if config.DUPLICATE_DETECTION:
-                 #Already added to duplicates, need to remove
-                 self.removeDuplicate(conflictedProgram)
-              self.removeRecording(conflictedProgram)
-              self.addRecording(prog)
+              progsToChange=[]
+              progsToChange.append(('del', conflictedProgram))
+              progsToChange.append(('add', prog))
+              reason='New program is a regular recording(added), scheduled is a Favorite(removed)'
+              return (TRUE, reason, progsToChange)
            elif isProgFav and not isConfFav:
               #Regular recording has higher priority then favorite
-              _debug_('old is regular and new is favorite')
-              _debug_('resolved by removing new')
-              if config.DUPLICATE_DETECTION:
-                 #Already added to duplicates, need to remove
-                 self.removeDuplicate(prog)
-              self.removeRecording(prog)
-              self.addRecording(conflictedProgram)
+              progsToChange=[]
+              progsToChange.append(('del', prog))
+              progsToChange.append(('add', conflictedProgram))
+              reason='Scheduled program is a regular recording(added), new is a Favorite(removed)'
+              return (TRUE, reason, progsToChange)
            elif not isProgFav and not isConfFav:
-              _debug_('Both are regular; do not add new recording')
+              return (FALSE, 'Both are regular programs, not adding new recording', None)
            elif isProgFav and isConfFav:
               #Both are favorites, go by priority (lower is better)
               if progFav.priority < confFav.priority:
-                 _debug_('new prog has higher priority then old')
-                 if config.DUPLICATE_DETECTION:
-                    #Already added to duplicates, need to remove
-                    self.removeDuplicate(conflictedProgram)
-                 self.removeRecording(conflictedProgram)
-                 self.addRecording(prog)
+                 progsToChange=[]
+                 progsToChange.append(('del', conflictedProgram))
+                 progsToChange.append(('add', prog))
+                 reason='New program is higher rated(added), Scheduled is lower(removed)'
+                 return (TRUE, reason, progsToChange)
               elif confFav.priority < progFav.priority:
-                 _debug_('old prog has higher priority then new')
-                 if config.DUPLICATE_DETECTION:
-                    #Already added to duplicates, need to remove
-                    self.removeDuplicate(prog)
-                 self.removeRecording(prog)
-                 self.addRecording(conflictedProgram)
+                 progsToChange=[]
+                 progsToChange.append(('del', prog))
+                 progsToChange.append(('add', conflictedProgram))
+                 reason='Scheduled program is higher rated(added), New is lower(removed)'
+                 return (TRUE, reason, progsToChange)
               else:
                  #Equal priority, not adding new program
-                 _debug_('Both are equal; do not add new recording')
-                 _debug_('%s %s' % (progFav.priority, confFav.priority))
+                 return (FALSE, 'Both are regular programs, not adding new recording', None)
+           else:
+              return (FALSE, 'No viable way to schedule', None)
         else:
-           _debug_('Conflict resolution disabled')
-           self.addRecording(prog)
+           progsToChange=[]
+           progsToChange.append(('add', prog))
+           return (TRUE, 'Conflict resolution disabled', progsToChange)
 
 
     def checkOnlyNewDetection(self, prog=None):
-        if config.ONLY_NEW_DETECTION and self.doesFavoriteRecordOnlyNewEpisodes(prog):
-           _debug_('OnlyNew Episode Detection enabled 1')
+        if config.ONLY_NEW_DETECTION:
+           _debug_('Only new episode detection enabled', 5)
+           if not self.doesFavoriteRecordOnlyNewEpisodes(prog):
+              return (TRUE, 'Favorite records all episodes, record')
            if self.newEpisode(prog):
-              _debug_('New Episode')
-              self.conflictResolution(prog)
+              return (TRUE, 'New episode, record')
            else:
-              _debug_('Old Episode')
+              return (FALSE, 'Old episode, do not record')
         else:
-           _debug_('OnlyNew Episode Detection disabled or Favorite allows all Episodes 1')
-           self.conflictResolution(prog)
+           return (TRUE, 'Only new episode detection disabled, record')
 
 
     def checkDuplicateDetection(self, prog=None):
-        (isFav, favorite) = self.isProgAFavorite(prog)
-        if isFav:
-           if config.DUPLICATE_DETECTION and not self.doesFavoriteAllowDuplicates(prog):
-              _debug_('Duplicate Detection enabled 1')
-              if not self.duplicate(prog):
-                 # This checks OnlyNew and then hands it off to conflict detection
-                 self.checkOnlyNewDetection(prog)
-              else:
-                 return (FALSE, 'duplicate recording')
+        if config.DUPLICATE_DETECTION:
+           _debug_('Duplicate detection enabled', 5)
+           if self.doesFavoriteAllowDuplicates(prog):
+              return (TRUE, 'Favorite allows duplicates, record')
+           if not self.duplicate(prog):
+              return (TRUE, 'Not a duplicate, record')
            else:
-              _debug_('Duplicate Detection is disabled or Favorite allows duplicates 2')
-              # This checks OnlyNew and then hands it off to conflict detection
-              self.checkOnlyNewDetection(prog)
+              return (FALSE, 'Duplicate recording, do not record')
         else:
-           _debug_('Single recording')
-           self.conflictResolution(prog)
+           return (TRUE, 'Duplicate detection is disabled, record')
 
 
     def scheduleRecording(self, prog=None):
@@ -614,12 +633,47 @@ class RecordServer(xmlrpc.XMLRPC):
     
         for chan in guide.chan_list:
             if prog.channel_id == chan.id:
-                _debug_('scheduleRecording: "%s"' % (prog))
+                _debug_('scheduleRecording: "%s"' % (prog), 3)
                 prog.tunerid = chan.tunerid
 
-        # This check for Dups and then hands off to the OnlyNew func
-        self.checkDuplicateDetection(prog)
-    
+        (isFav, favorite) = self.isProgAFavorite(prog)
+        if isFav:
+           (onlyNewBool, onlyNewReason) = self.checkOnlyNewDetection(prog)
+           _debug_('Only new episode detection result: %s reason %s'%(onlyNewBool,onlyNewReason), 3)
+           if not onlyNewBool:
+              #failed only new episode check (old episode, etc)
+              return (FALSE, onlyNewReason)
+
+           (duplicateBool, duplicateReason) = self.checkDuplicateDetection(prog)
+           _debug_('Duplicate detection result: %s reason %s' % (duplicateBool,duplicateReason), 3)
+           if not duplicateBool:
+              #failed duplicate check (duplicate, etc)
+              return (FALSE, duplicateReason)
+
+        (ableToResolveBool, resolutionReason, progsToChange) = self.conflictResolution(prog)
+        _debug_('Conflict resolution result: %s reason %s' % (ableToResolveBool,resolutionReason), 3)
+        if not ableToResolveBool:
+           #No viable solution was found
+           return (FALSE, resolutionReason)
+
+        if progsToChange:
+           for (cmd, prog) in progsToChange:
+               if cmd=='add':
+                  _debug_('SCHEDULER: adding %s'%(prog.title), 3)
+                  if config.DUPLICATE_DETECTION:
+                     self.addDuplicate(prog)
+                  self.addRecordingToSchedule(prog)
+               elif cmd=='del':
+                  _debug_('SCHEDULER: removing %s'%(prog.title), 3)
+                  if config.DUPLICATE_DETECTION:
+                     self.removeDuplicate(prog)
+                  self.removeRecordingFromSchedule(prog)
+        else:
+           _debug_('SCHEDULER: adding %s'%(prog.title), 3)
+           if config.DUPLICATE_DETECTION:
+              self.addDuplicate(prog)
+           self.addRecordingToSchedule(prog)
+
         # check, maybe we need to start right now
         self.checkToRecord()
 
@@ -681,7 +735,7 @@ class RecordServer(xmlrpc.XMLRPC):
     def findProg(self, chan=None, start=None):
         global guide
 
-        _debug_('findProg: %s, %s' % (chan, start))
+        _debug_('findProg: %s, %s' % (chan, start), 3)
 
         if not chan or not start:
             return (FALSE, 'no chan or no start')
@@ -690,10 +744,10 @@ class RecordServer(xmlrpc.XMLRPC):
 
         for ch in guide.chan_list:
             if chan == ch.id:
-                _debug_('CHANNEL MATCH: %s' % ch.id)
+                _debug_('CHANNEL MATCH: %s' % ch.id, 5)
                 for prog in ch.programs:
                     if start == '%s' % prog.start:
-                        _debug_('PROGRAM MATCH 1: %s' % prog)
+                        _debug_('PROGRAM MATCH 1: %s' % prog, 5)
                         return (TRUE, prog.utf2str())
 
         return (FALSE, 'prog not found')
@@ -702,13 +756,13 @@ class RecordServer(xmlrpc.XMLRPC):
     def findMatches(self, find=None, movies_only=None):
         global guide
 
-        _debug_('findMatches: %s' % find)
+        _debug_('findMatches: %s' % find, 3)
     
         matches = []
         max_results = 500
 
         if not find and not movies_only:
-            _debug_('nothing to find')
+            _debug_('nothing to find', 5)
             return (FALSE, 'no search string')
 
         self.updateGuide()
@@ -728,16 +782,16 @@ class RecordServer(xmlrpc.XMLRPC):
                         # rating.  Suggestions are welcome.
                         if 'MPAA' in prog.utf2str().getattr('ratings').keys():
                             matches.append(prog.utf2str())
-                            _debug_('PROGRAM MATCH 2: %s' % prog)
+                            _debug_('PROGRAM MATCH 2: %s' % prog, 5)
                     else:
                         # We should never get here if not find and not 
                         # movies_only.
                         matches.append(prog.utf2str())
-                        _debug_('PROGRAM MATCH 3: %s' % prog)
+                        _debug_('PROGRAM MATCH 3: %s' % prog, 5)
                 if len(matches) >= max_results:
                     break
 
-        _debug_('Found %d matches.' % len(matches))
+        _debug_('Found %d matches.' % len(matches), 3)
 
         if matches:
             return (TRUE, matches)
@@ -770,7 +824,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         now = time.time()
         for prog in progs.values():
-            _debug_('checkToRecord: progloop=%s' % prog, 2)
+            _debug_('checkToRecord: progloop=%s' % prog, 5)
 
             try:
                 recording = prog.isRecording
@@ -800,13 +854,13 @@ class RecordServer(xmlrpc.XMLRPC):
                         if self.isProgAFavorite(prog)[0] \
                             and not self.isProgAFavorite(currently_recording)[0] \
                             and now < (prog.stop + config.TV_RECORD_PADDING_POST):
-                            _debug_('Ignoring %s' % prog)
+                            _debug_('Ignoring %s' % prog, 3)
                             continue
                         sr.removeProgram(currently_recording, 
                                          tv_util.getKey(currently_recording))
                         plugin.getbyname('RECORD').Stop()
                         time.sleep(5)
-                        _debug_('CALLED RECORD STOP 1: %s' % currently_recording)
+                        _debug_('CALLED RECORD STOP 1: %s' % currently_recording, 3)
                     else:
                         # at this moment we must be in the pre-record padding
                         if currently_recording.stop - 10 <= now:
@@ -823,7 +877,7 @@ class RecordServer(xmlrpc.XMLRPC):
                                                  tv_util.getKey(currently_recording))
                                 plugin.getbyname('RECORD').Stop()
                                 time.sleep(5)
-                                _debug_('CALLED RECORD STOP 2: %s' % currently_recording)
+                                _debug_('CALLED RECORD STOP 2: %s' % currently_recording, 3)
                             else: 
                                 delay_recording = TRUE
                         else: 
@@ -831,9 +885,9 @@ class RecordServer(xmlrpc.XMLRPC):
                              
                         
                 if delay_recording:
-                    _debug_('delaying: %s' % prog)
+                    _debug_('delaying: %s' % prog, 3)
                 else:
-                    _debug_('going to record: %s' % prog)
+                    _debug_('going to record: %s' % prog, 3)
                     prog.isRecording = TRUE
                     prog.rec_duration = duration
                     prog.filename = tv_util.getProgFilename(prog)
@@ -843,7 +897,7 @@ class RecordServer(xmlrpc.XMLRPC):
         for prog in progs.values():
             # If the program is over remove the entry.
             if now > (prog.stop + config.TV_RECORD_PADDING_POST):
-                _debug_('found a program to clean: %s' % prog)
+                _debug_('found a program to clean: %s' % prog, 3)
                 cleaned = TRUE
                 del progs[tv_util.getKey(prog)]
 
@@ -852,7 +906,7 @@ class RecordServer(xmlrpc.XMLRPC):
             self.saveScheduledRecordings(sr)
 
         if rec_prog:
-            _debug_('start recording: %s' % rec_prog)
+            _debug_('start recording: %s' % rec_prog, 1)
             self.record_app = plugin.getbyname('RECORD')
 
             if not self.record_app:
@@ -964,34 +1018,34 @@ class RecordServer(xmlrpc.XMLRPC):
         oldprio = int(me.priority)
         newprio = oldprio + mod
     
-        _debug_('ap: mod=%s' % mod)
+        _debug_('ap: mod=%s' % mod, 3)
        
         sr = self.getScheduledRecordings()
         favs = sr.getFavorites().values()
     
-        _debug_('adjusting prio of '+favname)
+        _debug_('adjusting prio of '+favname, 3)
         for fav in favs:
             fav.priority = int(fav.priority)
     
             if fav.name == me.name:
-                _debug_('MATCH')
+                _debug_('MATCH', 5)
                 fav.priority = newprio
-                _debug_('moved prio of %s: %s => %s' % (fav.name, oldprio, newprio))
+                _debug_('moved prio of %s: %s => %s' % (fav.name, oldprio, newprio), 3)
                 continue
             if mod < 0:
                 if fav.priority < newprio or fav.priority > oldprio:
-                    _debug_('fp: %s, old: %s, new: %s' % (fav.priority, oldprio, newprio))
-                    _debug_('skipping: %s' % fav.name)
+                    _debug_('fp: %s, old: %s, new: %s' % (fav.priority, oldprio, newprio), 3)
+                    _debug_('skipping: %s' % fav.name, 3)
                     continue
                 fav.priority = fav.priority + 1
-                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority-1, fav.priority))
+                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority-1, fav.priority), 3)
                 
             if mod > 0:
                 if fav.priority > newprio or fav.priority < oldprio:
-                    _debug_('skipping: %s' % fav.name)
+                    _debug_('skipping: %s' % fav.name, 3)
                     continue
                 fav.priority = fav.priority - 1
-                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority+1, fav.priority))
+                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority+1, fav.priority), 3)
     
         sr.setFavoritesList(favs)
         self.saveScheduledRecordings(sr)
@@ -1034,7 +1088,7 @@ class RecordServer(xmlrpc.XMLRPC):
            (status, favs) = self.getFavorites()
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
-               _debug_('NEW: %s'%fav.onlyNew)
+               _debug_('NEW: %s'%fav.onlyNew, 5)
                if fav.onlyNew == '1':
                   return TRUE 
     
@@ -1043,7 +1097,7 @@ class RecordServer(xmlrpc.XMLRPC):
            (status, favs) = self.getFavorites()
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
-               _debug_('DUP: %s'%fav.allowDuplicates)
+               _debug_('DUP: %s'%fav.allowDuplicates, 5)
                if fav.allowDuplicates == '1':
                   return TRUE
     
@@ -1417,7 +1471,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def startMinuteCheck(self):
         next_minute = (int(time.time()/60) * 60 + 60) - int(time.time())
-        _debug_('top of the minute in %s seconds' % next_minute)
+        _debug_('top of the minute in %s seconds' % next_minute, 1)
         reactor.callLater(next_minute, self.minuteCheck)
         
     def minuteCheck(self):
@@ -1526,11 +1580,11 @@ class RecordServer(xmlrpc.XMLRPC):
                     if result:
                        (status, idnr) = initCommDetectJob(prog.filename)
                        (status, output) = queueIt(idnr, True)
-                       _debug_(output)
+                       _debug_(output, 5)
                        (status, output) = listJobs()
-                       _debug_(output)
+                       _debug_(output, 5)
                     else:
-                       _debug_('commdetect server not running')
+                       _debug_('commdetect server not running', 1)
             else:
                 print 'not handling event %s' % str(event)
                 return
