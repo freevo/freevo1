@@ -243,7 +243,7 @@ class Videodev:
         val = struct.pack(FREQUENCY_ST, 0,0,0)
         r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
         res = struct.unpack(FREQUENCY_ST, r)
-        if DEBUG >= 3: print "getfreq: val=%r, r=%s, res=%r" % (val, r, res)
+        if DEBUG >= 3: print "getfreq: val=%r, r=%r, res=%r" % (val, r, res)
         (tuner, type, freq,) = res
         return freq
 
@@ -742,6 +742,7 @@ if __name__ == '__main__':
     #viddev.setextctrl(0x00990900, stream_type)
     print 'Stream Type = %d' % viddev.getcontrol('Stream Type')
     print '0x00990900 = %d' % viddev.getextctrl(0x00990900)
+    DEBUG=4
     print 'getfreq:', viddev.getfreq()
 
     viddev.close()
