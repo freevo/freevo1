@@ -239,35 +239,29 @@ class IVTV_XINE_TV:
                 self.tuner.PrevChannel()
 
             else:
-
-                # tune explicit channel
-                newinput_value = int(s_event[6])
-                newinput_time = int(time.time())
-
-                if (self.lastinput_value != None):
-
-                    # allow 2 seconds delay for multiple digit channels
-
-                    if (newinput_time - self.lastinput_time < 2):
-
+               eventInput=s_event[6]
+               isNumeric=TRUE
+               try:
+                  newinput_value = int(eventInput)
+               except:
+                  #Protected against INPUT_UP, INPUT_DOWN, etc
+                  isNumeric=FALSE
+               if isNumeric:
+                  # tune explicit channel
+                  newinput_time = int(time.time())
+                  if (self.lastinput_value != None):
+                     # allow 2 seconds delay for multiple digit channels
+                     if (newinput_time - self.lastinput_time < 2):
                         # this enables multiple (max 3) digit channel selection
-
                         if (self.lastinput_value >= 100):
-
-                            self.lastinput_value = (self.lastinput_value % 100)
-
+                           self.lastinput_value = (self.lastinput_value % 100)
                         newinput_value = self.lastinput_value * 10 + newinput_value
-
-                self.lastinput_value = newinput_value
-                self.lastinput_time = newinput_time
-
-                self.tuner.TuneChannelByNumber(newinput_value)
-
-                if newinput_value > 9:
-
-                    # cancel intermediate channels
-                    self.tuner.UnpushChannel()
-
+                  self.lastinput_value = newinput_value
+                  self.lastinput_time = newinput_time
+                  self.tuner.TuneChannelByNumber(newinput_value)
+                  if newinput_value > 9:
+                     # cancel intermediate channels
+                     self.tuner.UnpushChannel()
             return True
 
 

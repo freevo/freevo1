@@ -47,6 +47,7 @@ class FileInformation:
     def __init__(self):
         self.files     = []
         self.fxd_file  = ''
+        self.edl_file  = ''
         self.image     = ''
         self.read_only = False
 
@@ -55,6 +56,7 @@ class FileInformation:
         s = '\nitem:FileInformation:s:'
         s += ' files=%r' % self.files
         s += ' fxd_file=%r' % self.fxd_file
+        s += ' edl_file=%r' % self.edl_file
         s += ' image=%r' % self.image
         s += ' read_only=%r' % self.read_only
         s += ' dir(self)=%r' % dir(self)
@@ -65,6 +67,7 @@ class FileInformation:
         s = '\nitem:FileInformation:r:'
         s += ' files=%r' % self.files
         s += ' fxd_file=%r' % self.fxd_file
+        s += ' edl_file=%r' % self.edl_file
         s += ' image=%r' % self.image
         s += ' read_only=%r' % self.read_only
         #s += ' dir(self)=%r' % dir(self)
@@ -84,7 +87,7 @@ class FileInformation:
 
 
     def copy(self, destdir):
-        for f in self.files + [ self.fxd_file, self.image ]:
+        for f in self.files + [ self.fxd_file, self.image, self.edl_file ]:
             if f:
                 if vfs.isoverlay(f):
                     d = vfs.getoverlay(destdir)
@@ -100,7 +103,7 @@ class FileInformation:
 
 
     def move(self, destdir):
-        for f in self.files + [ self.fxd_file, self.image ]:
+        for f in self.files + [ self.fxd_file, self.image, self.edl_file ]:
             if f:
                 if vfs.isoverlay(f):
                     d = vfs.getoverlay(destdir)
@@ -116,7 +119,7 @@ class FileInformation:
 
 
     def delete(self):
-        for f in self.files + [ self.fxd_file, self.image ]:
+        for f in self.files + [ self.fxd_file, self.image, self.edl_file ]:
             if not f:
                 continue
             if os.path.isdir(f) and not os.path.islink(f):
@@ -250,6 +253,12 @@ class Item:
                 elif self.parent and self.parent.type != 'dir':
                     self.image = util.getimage(os.path.dirname(self.filename)+\
                                                '/cover', self.image)
+            if config.REMOVE_COMMERCIALS:
+               edlBase=self.filename[:self.filename.rfind('.')]
+               edlFile=edlBase+".edl"
+               self.edl_file=edlFile
+               _debug_('EDL: %s'%(edlFile))
+               self.files.edl_file=edlFile
             self.mimetype = self.filename[self.filename.rfind('.')+1:].lower()
             if info:
                 self.info = mediainfo.get(self.filename)

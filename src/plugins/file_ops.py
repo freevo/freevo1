@@ -43,6 +43,8 @@ class PluginInterface(plugin.ItemPlugin):
     def config(self):
         return [ ('FILE_OPS_ALLOW_DELETE_IMAGE', True,
                   'Add delete image to the menu.'),
+                 ('FILE_OPS_ALLOW_DELETE_EDL', True,
+                  'Add delete edl to the menu.'),
                  ('FILE_OPS_ALLOW_DELETE_INFO', True,
                   'Add delete info to the menu.') ]
 
@@ -63,6 +65,8 @@ class PluginInterface(plugin.ItemPlugin):
                 items.append((self.confirm_delete, _('Delete'), 'delete'))
             if item.files.fxd_file and config.FILE_OPS_ALLOW_DELETE_INFO:
                 items.append((self.confirm_info_delete, _('Delete info'), 'delete_info'))
+            if item.files.edl_file and config.FILE_OPS_ALLOW_DELETE_EDL:
+                items.append((self.confirm_edl_delete, _('Delete edl'), 'delete_edl'))
             if item.files.image and config.FILE_OPS_ALLOW_DELETE_IMAGE:
                 items.append((self.confirm_image_delete, _('Delete image'), 'delete_image'))
         return items
@@ -78,6 +82,11 @@ class PluginInterface(plugin.ItemPlugin):
         self.menuw = menuw
         ConfirmBox(text=_('Delete info about\n \'%s\'?') % self.item.name,
                    handler=self.delete_info, default_choice=1).show()
+
+    def confirm_edl_delete(self, arg=None, menuw=None):
+        self.menuw = menuw
+        ConfirmBox(text=_('Delete edl about\n \'%s\'?') % self.item.name,
+                   handler=self.delete_edl, default_choice=1).show()
 
     def confirm_image_delete(self, arg=None, menuw=None):
         self.menuw = menuw
@@ -97,7 +106,13 @@ class PluginInterface(plugin.ItemPlugin):
 
     def delete_info(self):
         self.safe_unlink(self.item.files.image)
+        self.safe_unlink(self.item.files.edl_file)
         self.safe_unlink(self.item.files.fxd_file)
+        if self.menuw:
+            self.menuw.delete_submenu(True, True)
+
+    def delete_edl(self):
+        self.safe_unlink(self.item.files.edl_file)
         if self.menuw:
             self.menuw.delete_submenu(True, True)
 
