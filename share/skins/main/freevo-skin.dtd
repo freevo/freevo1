@@ -1,0 +1,193 @@
+<!-- DTD for Freevo Skins -->
+<!ELEMENT freevo (skin)>
+
+<!-- This gets stupid as the sub-entities can appear in any order 
+<!ELEMENT skin (iconset, setvar, main+, menuset+, layout+, 
+(font,((color,image?)|(image,color?))?) | (color,((font,image?)|(image,font?))?) | (image,((font,color?)|(color,font?))?)
+popup, player, tv, splashscreen, headlines)>
+-->
+<!ELEMENT skin ANY>
+<!ATTLIST skin geometry CDATA #REQUIRED>
+<!ATTLIST skin include CDATA #IMPLIED>
+
+<!ELEMENT iconset EMPTY>
+<!ATTLIST iconset theme CDATA #REQUIRED>
+
+<!ELEMENT setvar EMPTY>
+<!ATTLIST setvar name CDATA #REQUIRED>
+<!ATTLIST setvar val CDATA #REQUIRED>
+
+<!ELEMENT main (item+)>
+<!ATTLIST main imagedir CDATA #IMPLIED>
+
+<!ELEMENT menu (style+)>
+<!ATTLIST menu type CDATA #REQUIRED>
+
+<!ELEMENT style EMPTY>
+<!ATTLIST style text CDATA #REQUIRED>
+<!ATTLIST style image CDATA #IMPLIED>
+
+<!-- sub-entities can appear in any order 
+<!ELEMENT menuset (screen?, title?, view?, listing?, info?)>
+-->
+<!ELEMENT menuset ANY>
+<!ATTLIST menuset label CDATA #REQUIRED>
+<!ATTLIST menuset inherits CDATA #IMPLIED>
+
+<!ELEMENT screen (area?)>
+<!ATTLIST screen layout CDATA #REQUIRED>
+<!ATTLIST screen height CDATA #IMPLIED>
+<!ATTLIST screen width CDATA #IMPLIED>
+<!ATTLIST screen x CDATA #IMPLIED>
+<!ATTLIST screen y CDATA #IMPLIED>
+<!ATTLIST screen visible CDATA #IMPLIED>
+
+<!ELEMENT area EMPTY>
+<!ATTLIST area layout CDATA #IMPLIED>
+<!ATTLIST area height CDATA #IMPLIED>
+<!ATTLIST area width CDATA #IMPLIED>
+<!ATTLIST area x CDATA #IMPLIED>
+<!ATTLIST area y CDATA #IMPLIED>
+<!ATTLIST area visible CDATA #IMPLIED>
+
+<!ELEMENT title EMPTY>
+<!ATTLIST title layout CDATA #IMPLIED>
+<!ATTLIST title height CDATA #IMPLIED>
+<!ATTLIST title width CDATA #IMPLIED>
+<!ATTLIST title x CDATA #IMPLIED>
+<!ATTLIST title y CDATA #IMPLIED>
+<!ATTLIST title visible CDATA #IMPLIED>
+
+<!ELEMENT view EMPTY>
+<!ATTLIST view layout CDATA #IMPLIED>
+<!ATTLIST view align CDATA #IMPLIED>
+<!ATTLIST view height CDATA #IMPLIED>
+<!ATTLIST view width CDATA #IMPLIED>
+<!ATTLIST view x CDATA #IMPLIED>
+<!ATTLIST view y CDATA #IMPLIED>
+<!ATTLIST view visible CDATA #IMPLIED>
+
+<!ELEMENT listing (image*, area*)>
+<!ATTLIST listing layout CDATA #IMPLIED>
+<!ATTLIST listing height CDATA #IMPLIED>
+<!ATTLIST listing width CDATA #IMPLIED>
+<!ATTLIST listing x CDATA #IMPLIED>
+<!ATTLIST listing y CDATA #IMPLIED>
+<!ATTLIST listing visible CDATA #IMPLIED>
+
+<!ELEMENT info EMPTY>
+<!ATTLIST info layout CDATA #IMPLIED>
+<!ATTLIST info height CDATA #IMPLIED>
+<!ATTLIST info width CDATA #IMPLIED>
+<!ATTLIST info x CDATA #IMPLIED>
+<!ATTLIST info y CDATA #IMPLIED>
+<!ATTLIST info visible CDATA #IMPLIED>
+
+<!ELEMENT layout (background?, content?)>
+<!ATTLIST layout label CDATA #REQUIRED>
+
+<!ELEMENT background (image*, rectangle*, image?)>
+
+<!ELEMENT content (item*)>
+<!ATTLIST content color CDATA #IMPLIED>
+<!ATTLIST content font CDATA #IMPLIED>
+<!ATTLIST content type CDATA #IMPLIED>
+<!ATTLIST content align CDATA #IMPLIED>
+<!ATTLIST content valign CDATA #IMPLIED>
+<!ATTLIST content spacing CDATA #IMPLIED>
+<!ATTLIST content height CDATA #IMPLIED>
+<!ATTLIST content width CDATA #IMPLIED>
+<!ATTLIST content x CDATA #IMPLIED>
+<!ATTLIST content y CDATA #IMPLIED>
+<!ATTLIST content hours_per_page CDATA #IMPLIED>
+<!ATTLIST content layout CDATA #IMPLIED>
+
+<!ELEMENT player (screen, ((view, info)? | (info, view)?), title)>
+
+<!ELEMENT image EMPTY>
+<!ATTLIST image filename CDATA #IMPLIED>
+<!ATTLIST image label CDATA #IMPLIED>
+<!ATTLIST image image CDATA #IMPLIED>
+<!ATTLIST image height CDATA #IMPLIED>
+<!ATTLIST image width CDATA #IMPLIED>
+<!ATTLIST image x CDATA #IMPLIED>
+<!ATTLIST image y CDATA #IMPLIED>
+<!ATTLIST image visible CDATA #IMPLIED>
+
+<!--
+<!ELEMENT item (rectangle?, ((if*, goto_pos*) | (goto_pos*, if*))*)>
+-->
+<!ELEMENT item ANY>
+<!ATTLIST item label CDATA #IMPLIED>
+<!ATTLIST item image CDATA #IMPLIED>
+<!ATTLIST item name CDATA #IMPLIED>
+<!ATTLIST item font CDATA #IMPLIED>
+<!ATTLIST item type CDATA #IMPLIED>
+<!ATTLIST item align CDATA #IMPLIED>
+<!ATTLIST item valign CDATA #IMPLIED>
+<!ATTLIST item height CDATA #IMPLIED>
+<!ATTLIST item width CDATA #IMPLIED>
+
+<!ELEMENT font (shadow?)>
+<!ATTLIST font color CDATA #IMPLIED>
+<!ATTLIST font label CDATA #REQUIRED>
+<!ATTLIST font name CDATA #REQUIRED>
+<!ATTLIST font size CDATA #REQUIRED>
+
+<!ELEMENT color EMPTY>
+<!ATTLIST color label CDATA #REQUIRED>
+<!ATTLIST color value CDATA #REQUIRED>
+
+<!ELEMENT shadow EMPTY>
+<!ATTLIST shadow border CDATA #IMPLIED>
+<!ATTLIST shadow color CDATA #REQUIRED>
+<!ATTLIST shadow visible CDATA #REQUIRED>
+<!ATTLIST shadow x CDATA #IMPLIED>
+<!ATTLIST shadow y CDATA #IMPLIED>
+
+<!ELEMENT rectangle EMPTY>
+<!ATTLIST rectangle color CDATA #IMPLIED>
+<!ATTLIST rectangle bgcolor CDATA #IMPLIED>
+<!ATTLIST rectangle radius CDATA #IMPLIED>
+<!ATTLIST rectangle height CDATA #IMPLIED>
+<!ATTLIST rectangle width CDATA #IMPLIED>
+<!ATTLIST rectangle size CDATA #IMPLIED>
+<!ATTLIST rectangle x CDATA #IMPLIED>
+<!ATTLIST rectangle y CDATA #IMPLIED>
+
+<!--
+<!ELEMENT if (((text, newline) | (text, goto_pos, text)), if*)>
+-->
+<!ELEMENT if ANY>
+<!ATTLIST if expression CDATA #IMPLIED>
+
+<!ELEMENT text (#PCDATA)>
+<!ATTLIST text expression CDATA #IMPLIED>
+<!ATTLIST text mode CDATA #IMPLIED>
+<!ATTLIST text dim CDATA #IMPLIED>
+<!ATTLIST text valign CDATA #IMPLIED>
+<!ATTLIST text align CDATA #IMPLIED>
+<!ATTLIST text height CDATA #IMPLIED>
+<!ATTLIST text width CDATA #IMPLIED>
+<!ATTLIST text font CDATA #IMPLIED>
+
+<!ELEMENT newline EMPTY>
+
+<!ELEMENT goto_pos EMPTY>
+<!ATTLIST goto_pos mode CDATA #REQUIRED>
+<!ATTLIST goto_pos x CDATA #IMPLIED>
+<!ATTLIST goto_pos y CDATA #IMPLIED>
+
+<!ELEMENT popup EMPTY>
+<!ATTLIST popup layout CDATA #REQUIRED>
+<!ATTLIST popup type CDATA #REQUIRED>
+
+<!ELEMENT tv (style)>
+
+<!ELEMENT splashscreen (screen, content)>
+
+<!ELEMENT headlines (screen, title, info)>
+
+<!-- Other attributes
+<!ATTLIST where like (true|false) "false">
+-->
