@@ -305,7 +305,10 @@ class TcpNetwork:
         for conn in self.connections:
             try:
                 buffer = conn.recv(self.MAX_MESSAGE_SIZE)
-                return buffer.strip()
+                if len(buffer) == 0:
+                    throwout.append(self.connections.index(conn))
+                else:
+                    return buffer.strip()
             except self.socket.error, oErr:
                 # if the error is not of typ 11 there is a problem with
                 # the connection, remove it from the list.
