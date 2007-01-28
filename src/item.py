@@ -95,7 +95,11 @@ class FileInformation:
                     d = destdir
                 if not os.path.isdir(d):
                     os.makedirs(d)
-                shutil.copy(f, d)
+                if os.path.isdir(f):
+                    dst = os.path.join(d, os.path.split(f)[1])
+                    shutil.copytree(f, dst)
+                else:
+                    shutil.copy2(f, d)
 
 
     def move_possible(self):

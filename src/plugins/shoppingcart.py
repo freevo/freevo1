@@ -40,7 +40,7 @@ import plugin
 import config
 import shutil
 import util
-from gui.PopupBox import PopupBox
+from gui import PopupBox, AlertBox
 import rc
 import event as em
 import menu
@@ -62,8 +62,11 @@ class PluginInterface(plugin.ItemPlugin):
     def moveHere(self, arg=None, menuw=None):
         popup = PopupBox(text=_('Moving files...'))
         popup.show()
-        for cartfile in self.cart:
-            cartfile.files.move(self.item.dir)
+        try:
+            for cartfile in self.cart:
+                cartfile.files.move(self.item.dir)
+        except OSError, e:
+            print 'Mode failed \'%s\'' % e
         popup.destroy()
         self.cart = []
         rc.post_event(em.MENU_BACK_ONE_MENU)
@@ -72,8 +75,11 @@ class PluginInterface(plugin.ItemPlugin):
     def copyHere(self, arg=None, menuw=None):
         popup = PopupBox(text=_('Copying files...'))
         popup.show()
-        for cartfile in self.cart:
-            cartfile.files.copy(self.item.dir)
+        try:
+            for cartfile in self.cart:
+                cartfile.files.copy(self.item.dir)
+        except OSError, e:
+            print 'Copy failed \'%s\'' % e
         popup.destroy()
         self.cart = []
         rc.post_event(em.MENU_BACK_ONE_MENU)
@@ -101,7 +107,7 @@ class PluginInterface(plugin.ItemPlugin):
         self.item = item
         myactions = []
 
-        if self.item.parent and self.item.parent.type != 'dir':
+        if self.item.parent and self.item.parent.type not in ('dir','mediamenu'):
             # only activate this for directory items
             return []
 
@@ -115,7 +121,8 @@ class PluginInterface(plugin.ItemPlugin):
                 myactions.append((self.copyHere, _('Cart: Copy Files Here')))
 
             if not item in self.cart:
-                myactions.append((self.addToCart, _('Add Directory to Cart'), 'cart:add'))
+                if self.item.parent and self.item.parent.type == 'dir':
+                    myactions.append((self.addToCart, _('Add Directory to Cart'), 'cart:add'))
 
         elif hasattr(item, 'files') and item.files and item.files.copy_possible() and \
                  not item in self.cart:
