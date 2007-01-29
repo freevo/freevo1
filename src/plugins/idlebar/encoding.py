@@ -51,15 +51,17 @@ def returnFromJelly(status, response):
         return (status, response)
 
 
+#class PluginInterface(IdleBarPlugin):
 class PluginInterface(plugin.DaemonPlugin):
     """
     This plugin shows the current encoding status
     Activate with:
-    plugin.activate('idlebar.encoding', level=0)
+    plugin.activate('idlebar.encoding')
     """
     def __init__(self):
         _debug_('__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
+        #IdleBarPlugin.__init__(self)
         self.poll_interval = 10 # 1/10th seconds (30secs)
         self.draw_interval = self.poll_interval
         self.last_interval = self.poll_interval
@@ -224,6 +226,9 @@ class PluginInterface(plugin.DaemonPlugin):
                 if self.idlebar_max - self.idlebar.free_space < 280:
                     _debug_('free space in idlebar to small, using normal detach')
                     self.idlebar = None
+                else:
+                    # this doesn't work, but needs to for the detachbar
+                    self.idlebar.free_space -= 280
 
         #turn off idlebar for testing
         #self.idlebar = None
