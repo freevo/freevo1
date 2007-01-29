@@ -200,28 +200,33 @@ class TVGuide(Item):
             eventInput=str(event)[6]
             isNumeric=TRUE
             try:
-               newinput_value = int(eventInput)
+                newinput_value = int(eventInput)
             except:
-               #Protected against INPUT_UP, INPUT_DOWN, etc
-               isNumeric=FALSE
+                #Protected against INPUT_UP, INPUT_DOWN, etc
+                isNumeric=FALSE
             if isNumeric:
-               newinput_time = int(time.time())
-               if (self.lastinput_value != None):
-                   # allow 2 seconds delay for multiple digit channels
-                   if (newinput_time - self.lastinput_time < 2):
-                       # this enables multiple (max 3) digit channel selection
-                       if (self.lastinput_value >= 100):
-                           self.lastinput_value = (self.lastinput_value % 100)
-                       newinput_value = self.lastinput_value * 10 + newinput_value
-               self.lastinput_value = newinput_value
-               self.lastinput_time = newinput_time
-               for c in self.guide.chan_list:
-                   if int(c.tunerid) == int(newinput_value):
-                       self.start_channel = c.id
-                       break
-               self.rebuild(self.start_time, self.stop_time, self.start_channel, self.selected)
-               self.menuw.refresh()
+                newinput_time = int(time.time())
+                if (self.lastinput_value != None):
+                    # allow 2 seconds delay for multiple digit channels
+                    if (newinput_time - self.lastinput_time < 2):
+                        # this enables multiple (max 3) digit channel selection
+                        if (self.lastinput_value >= 100):
+                            self.lastinput_value = (self.lastinput_value % 100)
+                        newinput_value = self.lastinput_value * 10 + newinput_value
+                self.lastinput_value = newinput_value
+                self.lastinput_time = newinput_time
+               
+                channel_no = int(newinput_value)-1
+                if channel_no < len(self.guide.chan_list):
+                    self.start_channel = self.guide.chan_list[channel_no].id               
+                else:
+                    self.lastinput_value = None
+               
+                self.rebuild(self.start_time, self.stop_time,
+                            self.start_channel, self.selected)
+                self.menuw.refresh()
  
+        
         elif event == MENU_SELECT or event == PLAY:
 
             suffix = self.fc.getVideoGroup(self.selected.channel_id, True).vdev.split('/')[-1]
