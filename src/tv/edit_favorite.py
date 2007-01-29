@@ -1,11 +1,11 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# EditFavorite - 
+# EditFavorite -
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Todo: 
-# Notes: 
+# Todo:
+# Notes:
 #
 # -----------------------------------------------------------------------
 #
@@ -62,7 +62,7 @@ class EditFavorite(PopupBox):
     height    Integer
     context   Context in which the object is instanciated
     """
-    
+
     def __init__(self, parent=None, subject=None, left=None, top=None, width=500,
                  height=350, context=None):
 
@@ -80,14 +80,15 @@ class EditFavorite(PopupBox):
             else:
                 self.priority = 1
 
-            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE, self.priority, TRUE, FALSE)
+            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE,
+                                self.priority, TRUE, FALSE)
         else:
             self.fav = subject
             self.oldname = self.fav.name
-            
 
 
-        PopupBox.__init__(self, text=_('Edit Favorite'), x=left, y=top, width=width, 
+
+        PopupBox.__init__(self, text=_('Edit Favorite'), x=left, y=top, width=width,
                           height=height)
 
         self.v_spacing = 15
@@ -114,7 +115,7 @@ class EditFavorite(PopupBox):
         self.chan_box = OptionBox('ANY')
         self.chan_box.h_align = Align.NONE
         self.chan_box.add_item(text=_('ANY'), value='ANY')
-      
+
         i = 1
         chan_index = 0
         for ch in guide.chan_list:
@@ -160,7 +161,7 @@ class EditFavorite(PopupBox):
 
         i = 0
         tod_index = 0
-        
+
         for h in range(0,24):
             for m in (00, 30):
                 val = i*30
@@ -189,14 +190,14 @@ class EditFavorite(PopupBox):
         self.add_child(self.cancel)
 
     def removeFavorite(self):
-       (result, msg) = record_client.removeFavorite(self.oldname) 
+       (result, msg) = record_client.removeFavorite(self.oldname)
        if result:
            searcher = None
            if self.parent and self.context == 'favorites':
                for child in self.parent.children:
                    if isinstance(child, ViewFavorites):
                        searcher = child
-                       break 
+                       break
                if searcher:
                    searcher.refreshList()
                self.destroy()
@@ -231,7 +232,7 @@ class EditFavorite(PopupBox):
                 self.name_input.get_selected_box().charDown()
                 self.draw()
                 return True
-            elif event in em.INPUT_ALL_NUMBERS: 
+            elif event in em.INPUT_ALL_NUMBERS:
                 self.name_input.get_selected_box().cycle_phone_char(event)
                 self.draw()
                 return True
@@ -306,11 +307,11 @@ class EditFavorite(PopupBox):
                 if self.oldname:
                     record_client.removeFavorite(self.oldname)
                 (result, msg) = record_client.addEditedFavorite(
-                             self.name_input.get_word(), 
-                             self.fav.title, 
+                             self.name_input.get_word(),
+                             self.fav.title,
                              self.chan_box.list.get_selected_item().value,
-                             self.dow_box.list.get_selected_item().value, 
-                             self.tod_box.list.get_selected_item().value, 
+                             self.dow_box.list.get_selected_item().value,
+                             self.tod_box.list.get_selected_item().value,
                              self.fav.priority,
                              self.fav.allowDuplicates,
                              self.fav.onlyNew)
@@ -354,7 +355,7 @@ class EditFavorite(PopupBox):
                 self.destroy()
                 return True
             return True
-        
+
         elif self.get_selected_child() == self.cancel:
             if event in (em.INPUT_LEFT, em.MENU_PAGEUP):
                 if self.remove:

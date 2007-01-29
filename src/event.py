@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,7 @@ class Event:
             self.arg     = None
             self.context = None
             self.handler = None
-        
+
         if arg or arg == 0:
             self.arg = arg
 
@@ -70,7 +70,7 @@ class Event:
         """
         return int(self.name[-1])
 
-    
+
     def __cmp__(self, other):
         """
         compare function, return 0 if the objects are identical, 1 otherwise
@@ -101,9 +101,9 @@ MIXER_MUTE             = Event('MIXER_MUTE')
 PLAYLIST_NEXT          = Event('PLAYLIST_NEXT')
 PLAYLIST_PREV          = Event('PLAYLIST_PREV')
 PLAYLIST_TOGGLE_REPEAT = Event('PLAYLIST_TOGGLE_REPEAT')
-                       
+
 EJECT                  = Event('EJECT')
-                       
+
 #
 # Menu
 #
@@ -115,7 +115,7 @@ MENU_DOWN              = Event('MENU_DOWN')
 MENU_PAGEUP            = Event('MENU_PAGEUP')
 MENU_PAGEDOWN          = Event('MENU_PAGEDOWN')
 MENU_REBUILD           = Event('MENU_REBUILD')
-                       
+
 MENU_GOTO_MAINMENU     = Event('MENU_GOTO_MAINMENU')
 MENU_GOTO_TV           = Event('MENU_GOTO_TV')
 MENU_GOTO_TVGUIDE      = Event('MENU_GOTO_TVGUIDE')
@@ -126,7 +126,7 @@ MENU_GOTO_GAMES        = Event('MENU_GOTO_GAMES')
 MENU_GOTO_RADIO        = Event('MENU_GOTO_RADIO')
 MENU_GOTO_SHUTDOWN     = Event('MENU_GOTO_SHUTDOWN')
 MENU_BACK_ONE_MENU     = Event('MENU_BACK_ONE_MENU')
-                       
+
 MENU_SELECT            = Event('MENU_SELECT')
 MENU_PLAY_ITEM         = Event('MENU_PLAY_ITEM')
 MENU_SUBMENU           = Event('MENU_SUBMENU')
@@ -271,7 +271,7 @@ MENU_EVENTS = {
     'ENTER'     : MENU_SUBMENU,
     'DISPLAY'   : MENU_CHANGE_STYLE,
     'EJECT'     : EJECT
-    } 
+    }
 
 TVMENU_EVENTS = {
     'LEFT'      : MENU_LEFT,
@@ -284,19 +284,10 @@ TVMENU_EVENTS = {
     'SHUTDOWN'  : MENU_GOTO_SHUTDOWN,
     'EXIT'      : MENU_BACK_ONE_MENU,
     'SELECT'    : MENU_SELECT,
+    'ENTER'     : MENU_SUBMENU,
     'DISPLAY'   : MENU_CHANGE_STYLE,
-    'REC'       : TV_START_RECORDING,
-    '1'         : INPUT_1,
-    '2'         : INPUT_2,
-    '3'         : INPUT_3,
-    '4'         : INPUT_4,
-    '5'         : INPUT_5,
-    '6'         : INPUT_6,
-    '7'         : INPUT_7,
-    '8'         : INPUT_8,
-    '9'         : INPUT_9,
-    '0'         : INPUT_0
-    } 
+    'REC'       : TV_START_RECORDING
+    }
 
 INPUT_EVENTS = {
     'EXIT'      : INPUT_EXIT,
@@ -435,7 +426,7 @@ AUDIO_EVENTS = {
     '8'         : INPUT_8,
     '9'         : INPUT_9,
     }
-    
+
 IMAGE_EVENTS = {
     'STOP'      : STOP,
     'EXIT'      : STOP,
@@ -499,7 +490,7 @@ GLOBAL_EVENTS = {
     'VOL-'      : MIXER_VOLDOWN,
     'MUTE'      : MIXER_MUTE
     }
-    
+
 
 import pygame.locals as key
 
