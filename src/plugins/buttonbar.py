@@ -88,7 +88,7 @@ def send_event_to_menu(arg=None, menuw=None):
     """
     menuw.eventhandler(arg)
 
- 
+
 # Program Info screen
 class ShowProgramDetails:
     """
@@ -119,14 +119,14 @@ class ShowProgramDetails:
             rc.app(None)
             self.menuw.show()
             return True
-        
+
         return False
 
 
 def show_program_info(arg=None, menuw =None):
     ShowProgramDetails(menuw)
 
-        
+
  # Plugin interface
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -148,7 +148,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.tvguide_actions = [MenuItem('-1 Day', action= advance_tv_guide, arg= -24),
                                              MenuItem('-6 Hours', action= advance_tv_guide, arg= -6),
                                              MenuItem('+6 Hours', action= advance_tv_guide, arg= 6),
-                                             MenuItem('+1 Day', action= advance_tv_guide, arg= 24)] 
+                                             MenuItem('+1 Day', action= advance_tv_guide, arg= 24)]
         else:
             # Process TV Guide buttons
             self.tvguide_actions = [None, None, None, None]
@@ -157,15 +157,15 @@ class PluginInterface(plugin.DaemonPlugin):
                     actionstr = config.BUTTONBAR_TVGUIDE_ACTIONS[self.colors[index]]
                     if actionstr == 'record':
                         self.tvguide_actions[index] = MenuItem(_('Record'),
-                                                                                  action=send_event_to_menu, 
+                                                                                  action=send_event_to_menu,
                                                                                   arg= event.TV_START_RECORDING)
                     elif actionstr == 'info':
                         self.tvguide_actions[index] = MenuItem(_('Info'),
                                                                                   action=show_program_info)
                     elif actionstr.startswith('adv:'):
                         hours = eval(actionstr[4:])
-                        self.tvguide_actions[index] = MenuItem('Advance %d hours' % hours, 
-                                                                                  action= advance_tv_guide, 
+                        self.tvguide_actions[index] = MenuItem('Advance %d hours' % hours,
+                                                                                  action= advance_tv_guide,
                                                                                   arg= hours)
         # Getting current LOCALE
         try:
@@ -173,7 +173,7 @@ class PluginInterface(plugin.DaemonPlugin):
         except:
             pass
 
-            
+
     def config(self):
         """
         Configuration options for the button bar.
@@ -222,7 +222,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.bar:
             osd.drawimage(self.bar, (0, y, w, h), background=True)
 
-        # Buttons modified from http://openclipart.org/cchost/media/files/kuba/1988 
+        # Buttons modified from http://openclipart.org/cchost/media/files/kuba/1988
         # draw the buttons
         buttonwidth = osd.width / 4
         x = osd.x
@@ -240,17 +240,17 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Draw a color button and associated text.
         """
-        iconfilename = os.path.join(config.ICON_DIR, 'misc/' + color + 'button.png' ) 
+        iconfilename = os.path.join(config.ICON_DIR, 'misc/' + color + 'button.png' )
         iw,ih = osd.drawimage(iconfilename, (x + 5, y + 7,  -1, -1))
 
         if isinstance(action, MenuItem):
             string = action.name
         else:
             string = action[1]
- 
-        font = osd.get_font('small0') 
-        osd.drawstring(string, font, None, 
-                              x = x + 5 + iw, y = y + 5, width = w - iw, height = h - 10, 
+
+        font = osd.get_font('small0')
+        osd.drawstring(string, font, None,
+                              x = x + 5 + iw, y = y + 5, width = w - iw, height = h - 10,
                               mode = 'soft', align_v='center')
 
 
@@ -258,7 +258,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Handle color button events.
         """
-        action = None	
+        action = None
         result = False
 
         if event == BUTTONBAR_RED:
@@ -274,7 +274,7 @@ class PluginInterface(plugin.DaemonPlugin):
             action = self.actions[3]
             result = True
 
-        
+
         if action is None:
            return result
 
@@ -290,11 +290,11 @@ class PluginInterface(plugin.DaemonPlugin):
         Retrieve the Red/Green/Yellow/Blue actions for supplied menu.
         The actions are returned in an array in the order:
         [red,green,yellow,blue].
-        None is returned if no actions are available and the bar should not 
+        None is returned if no actions are available and the bar should not
         be drawn.
         """
-            
-        if ((isinstance(menu, Menu) and (menu.item_types == 'main')) or 
+
+        if ((isinstance(menu, Menu) and (menu.item_types == 'main')) or
              isinstance(menu, MenuItem)):
             return None
 
@@ -305,18 +305,18 @@ class PluginInterface(plugin.DaemonPlugin):
                 timeformat = '%H:%M'
             if not dateformat:
                 dateformat = '%d-%b'
-            
+
             for action in self.tvguide_actions:
                 if action.function == advance_tv_guide:
                     newtime = menu.start_time + (action.arg * 60 *60)
-                    action.name = Unicode(time.strftime('%s %s' % (dateformat, timeformat), 
+                    action.name = Unicode(time.strftime('%s %s' % (dateformat, timeformat),
                                                         time.localtime(newtime)))
             return self.tvguide_actions
         else:
             # Determine the available actions
             if hasattr(menu, 'is_submenu') or (not hasattr(menu, 'selected')):
                     return None
-                    
+
             result = [None, None, None, None]
             found_color_actions = False
 
@@ -327,7 +327,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
             if found_color_actions:
                 return result
-         
+
             actions = menu.selected.actions()
             if not actions:
                actions = []
@@ -354,7 +354,7 @@ class PluginInterface(plugin.DaemonPlugin):
             if len(actions) >= 2:
                 result[1] = actions[1]
             if len(actions) >= 3:
-                result[2] = actions[2]                
+                result[2] = actions[2]
             if len(actions) == 4:
                 result[3] = actions[3]
 
