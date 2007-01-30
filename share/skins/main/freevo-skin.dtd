@@ -2,11 +2,10 @@
 <!ELEMENT freevo (skin)>
 
 <!-- This gets stupid as the sub-entities can appear in any order 
-<!ELEMENT skin (iconset, setvar, main+, menuset+, layout+, 
-(font,((color,image?)|(image,color?))?) | (color,((font,image?)|(image,font?))?) | (image,((font,color?)|(color,font?))?)
-popup, player, tv, splashscreen, headlines)>
--->
+<!ELEMENT skin (iconset, setvar, main+, ( menuset | layout | font | color | image )*, popup, player, tv, splashscreen, headlines)>
 <!ELEMENT skin ANY>
+-->
+<!ELEMENT skin ((iconset | setvar | main | menu | menuset | layout | font | color | image | popup | player | tv | splashscreen | headlines)+)>
 <!ATTLIST skin geometry CDATA #REQUIRED>
 <!ATTLIST skin include CDATA #IMPLIED>
 
@@ -29,8 +28,9 @@ popup, player, tv, splashscreen, headlines)>
 
 <!-- sub-entities can appear in any order 
 <!ELEMENT menuset (screen?, title?, view?, listing?, info?)>
--->
 <!ELEMENT menuset ANY>
+-->
+<!ELEMENT menuset ((screen | title | view | listing | info)+)>
 <!ATTLIST menuset label CDATA #REQUIRED>
 <!ATTLIST menuset inherits CDATA #IMPLIED>
 
@@ -115,9 +115,9 @@ popup, player, tv, splashscreen, headlines)>
 <!ATTLIST image visible CDATA #IMPLIED>
 
 <!--
-<!ELEMENT item (rectangle?, ((if*, goto_pos*) | (goto_pos*, if*))*)>
+<!ELEMENT item  | (goto_pos*, if*))*)>
 -->
-<!ELEMENT item ANY>
+<!ELEMENT item ((rectangle | if | goto_pos | text | shadow | newline)*)>
 <!ATTLIST item label CDATA #IMPLIED>
 <!ATTLIST item image CDATA #IMPLIED>
 <!ATTLIST item name CDATA #IMPLIED>
