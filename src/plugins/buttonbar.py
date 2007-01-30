@@ -201,6 +201,7 @@ class PluginInterface(plugin.DaemonPlugin):
         actions = self.get_actions(menu)
 
         if actions is None: # No actions, don't draw the bar.
+            self.actions = [None, None, None, None]
             return
 
         # draw Button bar
@@ -258,7 +259,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Handle color button events.
         """
-        action = None
+        action = None	
         result = False
 
         if event == BUTTONBAR_RED:
@@ -293,6 +294,16 @@ class PluginInterface(plugin.DaemonPlugin):
         None is returned if no actions are available and the bar should not
         be drawn.
         """
+        result = [None, None, None, None]
+        found_color_actions = False
+
+        for index in range(0, len(self.colors)):
+            if hasattr(menu, self.colors[index] + '_action'):
+                found_color_actions = True
+                result[index] = eval('menu.' + color + '_action')
+
+        if found_color_actions:
+            return result
 
         if ((isinstance(menu, Menu) and (menu.item_types == 'main')) or
              isinstance(menu, MenuItem)):
@@ -317,17 +328,6 @@ class PluginInterface(plugin.DaemonPlugin):
             if hasattr(menu, 'is_submenu') or (not hasattr(menu, 'selected')):
                     return None
 
-            result = [None, None, None, None]
-            found_color_actions = False
-
-            for index in range(0, len(self.colors)):
-                if hasattr(menu, self.colors[index] + '_action'):
-                    found_color_actions = True
-                    result[index] = eval('menu.' + color + '_action')
-
-            if found_color_actions:
-                return result
-
             actions = menu.selected.actions()
             if not actions:
                actions = []
@@ -346,10 +346,10 @@ class PluginInterface(plugin.DaemonPlugin):
                     elif len(a) == 2 or a[2] != 'MENU_SUBMENU':
                         actions.append(a[:2])
 
-            if len(actions) == 0:
+            if len(actions) <= 1:
                 result = None
 
-            if len(actions) >= 1:
+            if len(actions) > 1:
                 result[0] = actions[0]
             if len(actions) >= 2:
                 result[1] = actions[1]
