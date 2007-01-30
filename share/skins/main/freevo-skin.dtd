@@ -1,10 +1,6 @@
 <!-- DTD for Freevo Skins -->
 <!ELEMENT freevo (skin)>
 
-<!-- This gets stupid as the sub-entities can appear in any order 
-<!ELEMENT skin (iconset, setvar, main+, ( menuset | layout | font | color | image )*, popup, player, tv, splashscreen, headlines)>
-<!ELEMENT skin ANY>
--->
 <!ELEMENT skin ((iconset | setvar | main | menu | menuset | layout | font | color | image | popup | player | tv | splashscreen | headlines)+)>
 <!ATTLIST skin geometry CDATA #REQUIRED>
 <!ATTLIST skin include CDATA #IMPLIED>
@@ -26,10 +22,6 @@
 <!ATTLIST style text CDATA #REQUIRED>
 <!ATTLIST style image CDATA #IMPLIED>
 
-<!-- sub-entities can appear in any order 
-<!ELEMENT menuset (screen?, title?, view?, listing?, info?)>
-<!ELEMENT menuset ANY>
--->
 <!ELEMENT menuset ((screen | title | view | listing | info)+)>
 <!ATTLIST menuset label CDATA #REQUIRED>
 <!ATTLIST menuset inherits CDATA #IMPLIED>
@@ -114,9 +106,6 @@
 <!ATTLIST image y CDATA #IMPLIED>
 <!ATTLIST image visible CDATA #IMPLIED>
 
-<!--
-<!ELEMENT item  | (goto_pos*, if*))*)>
--->
 <!ELEMENT item ((rectangle | if | goto_pos | text | shadow | newline)*)>
 <!ATTLIST item label CDATA #IMPLIED>
 <!ATTLIST item image CDATA #IMPLIED>
@@ -155,10 +144,7 @@
 <!ATTLIST rectangle x CDATA #IMPLIED>
 <!ATTLIST rectangle y CDATA #IMPLIED>
 
-<!--
-<!ELEMENT if (((text, newline) | (text, goto_pos, text)), if*)>
--->
-<!ELEMENT if ANY>
+<!ELEMENT if ((if | text | newline | goto_pos)+)>
 <!ATTLIST if expression CDATA #IMPLIED>
 
 <!ELEMENT text (#PCDATA)>
