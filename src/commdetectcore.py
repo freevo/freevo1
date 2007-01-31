@@ -269,7 +269,7 @@ class CommDetectQueue:
                                 self.currentjob.source, \
                                 0, \
                                 self._runQueue)
-           _debug_("Started job %s, PID %s" % (self.currentjob.idnr, self.currentjob.pid))
+            _debug_("Started job %s, PID %s" % (self.currentjob.idnr, self.currentjob.pid))
 
         if self.currentjob.busy == 2:
             #DONE
