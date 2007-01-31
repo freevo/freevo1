@@ -622,9 +622,15 @@ class Skin_Area:
 
         # set default values from 'content'
         if x == -1:
-            x = content.x
+            if hasattr(content, 'x'):
+                x = content.x
+            else:
+                print 'No content.x for %s' % (self.name)
         if y == -1:
-            y = content.y
+            if hasattr(content, 'y'):
+                y = content.y
+            else:
+                print 'No content.y for %s' % (self.name)
 
         if width == None:
             width  = content.width
