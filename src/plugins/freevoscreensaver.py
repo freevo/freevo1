@@ -94,7 +94,7 @@ class PluginInterface(plugin.DaemonPlugin):
         return [ ('SSAVER_DELAY', 300, '# of seconds to wait to start saver.'),
                  ('SSAVER_POLL', 600, '# of seconds to wait between polling.') ]
 
-    def eventhandler(self, event = None, menuw=None, arg=None):
+    def eventhandler(self, event=None, menuw=None, arg=None):
         """
         eventhandler to handle the events. Always return false since we
         are just a listener and really can't send back true.

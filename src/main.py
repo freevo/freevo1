@@ -169,7 +169,7 @@ class MainMenu(Item):
         osd.add_app(menuw)
 
 
-    def eventhandler(self, event = None, menuw=None, arg=None):
+    def eventhandler(self, event=None, menuw=None, arg=None):
         """
         Automatically perform actions depending on the event, e.g. play DVD
         """

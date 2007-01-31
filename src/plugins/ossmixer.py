@@ -103,7 +103,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.setMicVolume(0)
 
 
-    def eventhandler(self, event = None, menuw=None, arg=None):
+    def eventhandler(self, event=None, menuw=None, arg=None):
         """
         eventhandler to handle the VOL events
         """

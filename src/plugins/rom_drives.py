@@ -141,7 +141,7 @@ class autostart(plugin.DaemonPlugin):
             init()
 
             
-    def eventhandler(self, event = None, menuw=None, arg=None):
+    def eventhandler(self, event=None, menuw=None, arg=None):
         """
         eventhandler to handle the IDENTIFY_MEDIA plugin event and the
         EJECT event
