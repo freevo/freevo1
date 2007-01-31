@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE freevo-skin SYSTEM "freevo-skin.dtd">
+<!DOCTYPE freevo-skin SYSTEM "../freevo-skin.dtd">
 <freevo>
  <skin geometry="800x600" include="info">
   <iconset theme="tuxntosh"/>

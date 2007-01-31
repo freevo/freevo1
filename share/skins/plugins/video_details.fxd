@@ -1,15 +1,16 @@
 <?xml version="1.0" ?>
+<!DOCTYPE freevo-skin SYSTEM "../freevo-skin.dtd">
 <freevo>
     <skin geometry="800x600">
-	<!-- skin informations for the plugin video.details -->
+		<!-- skin informations for the plugin video.details -->
 
 
-	<!-- the main menu -->
-	<menu type="video details">
-	    <style text="video details"/>
-	</menu>
+		<!-- the main menu -->
+		<menu type="video details">
+	    	<style text="video details"/>
+		</menu>
 
-	<menuset label="video details">
+		<menuset label="video details">
 	    <screen layout="screen" x="0" y="0" width="800" height="600"/>
 	    <view layout="view" x="590" y="100" width="200" height="280"/>
 	    <listing layout="listing" x="10" y="430" width="780" height="160"/>
