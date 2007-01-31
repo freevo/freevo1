@@ -66,12 +66,20 @@ class PluginInterface(plugin.DaemonPlugin):
         self.bar     = None
         self.barfile = ''
         self.free_space = -1
+        self.used_space = 0
 
         # Getting current LOCALE
         try:
             locale.resetlocale()
         except:
             pass
+
+
+    def take_space(self, space):
+        '''
+        reserve some space from the idlebar, this is for DaemonPlugins
+        '''
+        self.used_space = space
 
 
     def draw(self, (type, object), osd):
@@ -102,7 +110,7 @@ class PluginInterface(plugin.DaemonPlugin):
             add_x = p.draw((type, object), x, osd)
             if add_x:
                 x += add_x + 20
-        self.free_space = x
+        self.free_space = x - self.used_space
 
 
     def eventhandler(self, event, menuw=None):

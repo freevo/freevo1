@@ -62,7 +62,7 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_('__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
         #IdleBarPlugin.__init__(self)
-        self.poll_interval = 10 # 1/10th seconds (30secs)
+        self.poll_interval = 82 # 82*1/120th seconds (~1sec)
         self.draw_interval = self.poll_interval
         self.last_interval = self.poll_interval
         self.lastdraw  = 0
@@ -223,12 +223,12 @@ class PluginInterface(plugin.DaemonPlugin):
                     if hasattr(p, 'clock_left_position'):
                         self.idlebar_max = p.clock_left_position
 
-                if self.idlebar_max - self.idlebar.free_space < 280:
+                if self.idlebar_max - self.idlebar.free_space < 250:
                     _debug_('free space in idlebar to small, using normal detach')
                     self.idlebar = None
                 else:
                     # this doesn't work, but needs to for the detachbar
-                    self.idlebar.free_space -= 280
+                    self.idlebar.take_space(250)
 
         #turn off idlebar for testing
         #self.idlebar = None
@@ -271,9 +271,9 @@ class PluginInterface(plugin.DaemonPlugin):
 
         if self.idlebar:
             if self.image:
-                self.bx = self.idlebar.free_space + 70
+                self.bx = self.idlebar.free_space + 250 + 70
             else:
-                self.bx = self.idlebar.free_space
+                self.bx = self.idlebar.free_space + 250
             self.by = osd.y
             self.tx = self.bx + self.boxborder + self.padding
             self.ty = self.by + self.boxborder + self.padding
