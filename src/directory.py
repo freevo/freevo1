@@ -960,7 +960,7 @@ class Dirwatcher(plugin.DaemonPlugin):
         self.item_menu     = None
         self.dir           = None
         self.files         = None
-        self.poll_interval = 100
+        self.poll_interval = 100 # 1 sec
 
         plugin.register(self, 'Dirwatcher')
 

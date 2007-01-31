@@ -144,7 +144,7 @@ class DaemonPlugin(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.poll_counter   = 0         # poll counter, don't change this
-        self.poll_interval  = 1         # poll every x*0.1 seconds
+        self.poll_interval  = 10        # poll every 1/10 second, approximately
         self.poll_menu_only = True      # poll only when menu is active
         self.event_listener = False     # process all events
 
