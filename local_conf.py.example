@@ -488,6 +488,15 @@ CACHE_IMAGES = 1
 # KEYMAP[key.K_F7] = 'YELLOW'
 # KEYMAP[key.K_F8] = 'BLUE'
 
+# ----------------------------------------------------------------------
+# Freevo Screensaver Plug-in
+# ----------------------------------------------------------------------
+# SCREENSAVER_DELAY = 120 # of seconds to wait to start saver.
+# SCREENSAVER_CYCLE_TIME = 60 # of seconds to run a screensaver before starting another saver.
+# plugin.activate('screensaver')
+# plugin.activate('screensaver.balls') # Bouncing balls all over the screen
+# plugin.activate('screensaver.bouncing_freevo') # The freevo logo bouncing around the screen
+
 
 # ======================================================================
 # Freevo directory settings:
