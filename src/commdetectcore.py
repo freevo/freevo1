@@ -49,6 +49,10 @@ class CommDetectJob:
         self.name = source
         self.idnr = idnr
         self.pid = 0
+
+        self.busy = 0
+        """0==NEW, 1==BUSY 2==DONE"""
+
         self.blackframes=[]
         self.edlList=[]
         videoCodec='-ovc lavc'
@@ -66,11 +70,11 @@ class CommDetectJob:
                " "+outfile
         self.cls = [string]
 
-    def _run(self, program, arguments, source, flushbuffer=0):
+    def _run(self, program, arguments, source, flushbuffer, finalfunc):
         """Runs a program; supply program name (string) and arguments (list)"""
         command = program
         command += arguments
-        self.thread = CommandThread(self, command, flushbuffer=0)
+        self.thread = CommandThread(self, command, flushbuffer, finalfunc)
         self.thread.start()
 
     class blackframe:
@@ -95,18 +99,18 @@ class CommDetectJob:
             matchSeconds = re.compile('\d+\.\d+s')
             match = matchSeconds.search(splitframe[0])
             if match:
-               seconds=re.sub('s','',match.group())
-               newBlackFrame.seconds=float(seconds)
+                seconds=re.sub('s','',match.group())
+                newBlackFrame.seconds=float(seconds)
             matchFrame = re.compile('\d+f')
             match = matchFrame.search(splitframe[0])
             if match:
-               frame=re.sub('f','',match.group())
-               newBlackFrame.frame=float(frame)
+                frame=re.sub('f','',match.group())
+                newBlackFrame.frame=float(frame)
             matchTime = re.compile('\d+min')
             match = matchTime.search(splitframe[0])
             if match:
-               time=re.sub('min','',match.group())
-               newBlackFrame.time=int(time)
+                time=re.sub('min','',match.group())
+                newBlackFrame.time=int(time)
             self.blackframes.append(newBlackFrame)
         fileHandle.close()
 
@@ -116,52 +120,53 @@ class CommDetectJob:
         endFrame=None
         for bframe in self.blackframes:
             if (startFrameTime==0):
-               #Commerical break
-               startFrame=bframe
-               startFrameTime=bframe.time
+                #Commerical break
+                startFrame=bframe
+                startFrameTime=bframe.time
             else:
-               if ((bframe.time==startFrameTime)or(bframe.time==(startFrameTime-1))):
-                  #Same commercial break
-                  startFrameTime=bframe.time
-                  endFrame=bframe
-               else:
-                  #New commercial break
-                  if not endFrame:
-                     #Sometimes a blackframe is thrown in the beginning
-                     endFrame=startFrame
-                  if ((endFrame.seconds-startFrame.seconds)>0):
-                     newEdl = self.edl()
-                     newEdl.startSkipTime=startFrame.seconds
-                     newEdl.endSkipTime=endFrame.seconds
-                     self.edlList.append(newEdl)
-                  startFrame=None
-                  startFrameTime=0
-                  endFrame=None
+                if ((bframe.time==startFrameTime)or(bframe.time==(startFrameTime-1))):
+                    #Same commercial break
+                    startFrameTime=bframe.time
+                    endFrame=bframe
+                else:
+                    #New commercial break
+                    if not endFrame:
+                        #Sometimes a blackframe is thrown in the beginning
+                        endFrame=startFrame
+                    if ((endFrame.seconds-startFrame.seconds)>0):
+                        newEdl = self.edl()
+                        newEdl.startSkipTime=startFrame.seconds
+                        newEdl.endSkipTime=endFrame.seconds
+                        self.edlList.append(newEdl)
+                    startFrame=None
+                    startFrameTime=0
+                    endFrame=None
         if ((len(self.edlList)==0)and(startFrame and endFrame)):
-           #Only one commercial
-           newEdl = self.edl()
-           newEdl.startSkipTime=startFrame.seconds
-           newEdl.endSkipTime=endFrame.seconds
-           self.edlList.append(newEdl)
+            #Only one commercial
+            newEdl = self.edl()
+            newEdl.startSkipTime=startFrame.seconds
+            newEdl.endSkipTime=endFrame.seconds
+            self.edlList.append(newEdl)
 
     def writeEdl(self):
         if (len(self.edlList)>0):
-           outputFile=self.source.split(".")
-           output=outputFile[0]+".edl"
-           fileHandle = open(output,'w')
-           for skipSegment in self.edlList:
-               fileHandle.write("%d %d %d\n" % (skipSegment.startSkipTime, \
+            outputFile=self.source.split(".")
+            output=outputFile[0]+".edl"
+            fileHandle = open(output,'w')
+            for skipSegment in self.edlList:
+                fileHandle.write("%d %d %d\n" % (skipSegment.startSkipTime, \
                                                 skipSegment.endSkipTime, \
                                                 skipSegment.action))
-           fileHandle.close()
+            fileHandle.close()
 
 class CommandThread(threading.Thread):
     """Handle threading of external commands"""
-    def __init__(self, parent, command, flushbuffer=0):
+    def __init__(self, parent, command, flushbuffer, finalfunc):
         threading.Thread.__init__(self)
         self.parent = parent
         self.command = command
         self.flushbuffer = 0
+        self.finalfunc = finalfunc
         _debug_('command=\"%s\"' % command)
 
     def run(self):
@@ -170,6 +175,7 @@ class CommandThread(threading.Thread):
         self.parent.pid = copy(pid)
         totallines = []
         _debug_("Mencoder running at PID %s" % self.pipe.pid)
+        self.parent.busy = 1
         while 1:
             if self.flushbuffer:
                 line = self.pipe.fromchild.read(1000)
@@ -194,6 +200,8 @@ class CommandThread(threading.Thread):
         self.parent.findCommercials()
         _debug_("Writing edl file")
         self.parent.writeEdl()
+        self.parent.busy = 2
+        self.finalfunc()
         sys.exit(2)
 
     def kill_pipe(self):
@@ -247,14 +255,26 @@ class CommDetectQueue:
             _debug_("queue empty, stopping processing...", 0)
             return
         _debug_("runQueue callback data : %s" % line)
+
         #get the first queued object
         self.currentjob = self.qlist[0]
-
         _debug_("PID %s" % self.currentjob.pid)
 
-        _debug_("Running Mencoder, to write the blackframes to a file")
-        self.currentjob._run(config.CONF.mencoder, self.currentjob.cls[0], self.currentjob.source)
-        _debug_("Started job %s, PID %s" % (self.currentjob.idnr, self.currentjob.pid))
-        del self.qlist[0]
-        del self.qdict[self.currentjob.idnr]
-        self.running = False
+        if self.currentjob.busy == 0:
+            #NEW
+            _debug_("Running Mencoder, to write the blackframes to a file")
+            self.currentjob.busy = True
+            self.currentjob._run(config.CONF.mencoder, \
+                                self.currentjob.cls[0], \
+                                self.currentjob.source, \
+                                0, \
+                                self._runQueue)
+           _debug_("Started job %s, PID %s" % (self.currentjob.idnr, self.currentjob.pid))
+
+        if self.currentjob.busy == 2:
+            #DONE
+            del self.qlist[0]
+            del self.qdict[self.currentjob.idnr]
+            self.currentjob.busy = 0
+            self.running = False
+            self._runQueue()

@@ -933,16 +933,16 @@ class RecordServer(xmlrpc.XMLRPC):
 
             # Cleanup old recordings (if enabled)
             if config.RECORDSERVER_CLEANUP_THRESHOLD > 0:
-               space_threshold = config.RECORDSERVER_CLEANUP_THRESHOLD * 1024 * 1024 * 1024
-               path = config.TV_RECORD_DIR
-               freespace = util.freespace(path)
-               if freespace < space_threshold:
-                  files = os.listdir(path)
-                  files = util.find_matches(files, config.VIDEO_SUFFIX)
-                  files = [(f, os.stat(os.path.join(path,f)).st_mtime) for f in files]
-                  files.sort(lambda x,y: cmp(x[1], y[1]))
-                  i = 0
-                  while freespace < space_threshold and i < len(files):
+                space_threshold = config.RECORDSERVER_CLEANUP_THRESHOLD * 1024 * 1024 * 1024
+                path = config.TV_RECORD_DIR
+                freespace = util.freespace(path)
+                if freespace < space_threshold:
+                    files = os.listdir(path)
+                    files = util.find_matches(files, config.VIDEO_SUFFIX)
+                    files = [(f, os.stat(os.path.join(path,f)).st_mtime) for f in files]
+                    files.sort(lambda x,y: cmp(x[1], y[1]))
+                    i = 0
+                    while freespace < space_threshold and i < len(files):
                         oldestrec = files[i][0]
                         oldestfxd = oldestrec[:oldestrec.rfind('.')] + '.fxd'
                         print 'Low on disk space - delete oldest recording: %s' % oldestrec
@@ -1590,9 +1590,9 @@ class RecordServer(xmlrpc.XMLRPC):
                     (result, response) = connectionTest('connection test')
                     if result:
                        (status, idnr) = initCommDetectJob(prog.filename)
-                       (status, output) = queueIt(idnr, True)
-                       _debug_(output, 5)
                        (status, output) = listJobs()
+                       _debug_(output, 5)
+                       (status, output) = queueIt(idnr, True)
                        _debug_(output, 5)
                     else:
                        _debug_('commdetect server not running', 1)
