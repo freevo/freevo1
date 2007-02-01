@@ -24,14 +24,57 @@
 <!ELEMENT menu (style+)>
 <!ATTLIST menu type CDATA #REQUIRED>
 
-<!ELEMENT style EMPTY>
-<!ATTLIST style text CDATA #REQUIRED>
-<!ATTLIST style image CDATA #IMPLIED>
-
-<!-- label is really an id but can't have spaces -->
 <!ELEMENT menuset ((screen | title | subtitle | view | listing | info)+)>
 <!ATTLIST menuset label CDATA #REQUIRED>
 <!ATTLIST menuset inherits CDATA #IMPLIED>
+
+<!ELEMENT font (shadow?)>
+<!ATTLIST font 
+    label CDATA #REQUIRED
+    name CDATA #IMPLIED
+    size CDATA #IMPLIED
+    color CDATA #IMPLIED
+    bgcolor CDATA #IMPLIED
+>
+
+<!ELEMENT shadow EMPTY>
+<!ATTLIST shadow 
+    border CDATA #IMPLIED
+    color CDATA #REQUIRED
+    visible CDATA #REQUIRED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+>
+
+<!ELEMENT color EMPTY>
+<!ATTLIST color 
+    label CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!ELEMENT image EMPTY>
+<!ATTLIST image 
+    label CDATA #IMPLIED
+    filename CDATA #IMPLIED
+    image CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    visible CDATA #IMPLIED
+>
+
+<!ELEMENT popup EMPTY>
+<!ATTLIST popup
+    layout CDATA #REQUIRED>
+    type CDATA #REQUIRED
+>
+
+<!ELEMENT style EMPTY>
+<!ATTLIST style 
+    text CDATA #REQUIRED
+    image CDATA #IMPLIED
+>
 
 <!ELEMENT screen (area?)>
 <!ATTLIST screen
@@ -125,23 +168,8 @@
     hours_per_page CDATA #IMPLIED
     layout CDATA #IMPLIED
 >
-<!-- only splashscreen has a content with a layout
-    layout CDATA #IMPLIED
--->    
 
 <!ELEMENT player (screen, ((view, info)? | (info, view)?), title)>
-
-<!ELEMENT image EMPTY>
-<!ATTLIST image 
-    label CDATA #IMPLIED
-    filename CDATA #IMPLIED
-    image CDATA #IMPLIED
-    width CDATA #IMPLIED
-    height CDATA #IMPLIED
-    x CDATA #IMPLIED
-    y CDATA #IMPLIED
-    visible CDATA #IMPLIED
->
 
 <!ELEMENT item ((rectangle | if | goto_pos | text | shadow | newline)*)>
 <!ATTLIST item 
@@ -158,32 +186,6 @@
     height CDATA #IMPLIED
 >
 
-<!ELEMENT font (shadow?)>
-<!ATTLIST font 
-    label CDATA #REQUIRED
-    name CDATA #IMPLIED
-    color CDATA #IMPLIED
-    size CDATA #IMPLIED
->
-<!--
-    align %align; #IMPLIED
--->    
-
-<!ELEMENT color EMPTY>
-<!ATTLIST color 
-    label CDATA #REQUIRED
-    value CDATA #REQUIRED
->
-
-<!ELEMENT shadow EMPTY>
-<!ATTLIST shadow 
-    border CDATA #IMPLIED
-    color CDATA #REQUIRED
-    visible CDATA #REQUIRED
-    x CDATA #IMPLIED
-    y CDATA #IMPLIED
->
-
 <!ELEMENT rectangle EMPTY>
 <!ATTLIST rectangle
     color CDATA #IMPLIED
@@ -196,7 +198,7 @@
     y CDATA #IMPLIED
 >
 
-<!ELEMENT if ((if | text | newline | goto_pos)+)>
+<!ELEMENT if ((if | text | newline | goto_pos | img)+)>
 <!ATTLIST if expression CDATA #IMPLIED>
 
 <!ELEMENT text (#PCDATA)>
@@ -221,12 +223,17 @@
     y CDATA #IMPLIED
 >
 
-<!ELEMENT popup EMPTY>
-<!ATTLIST popup layout CDATA #REQUIRED>
-<!ATTLIST popup type CDATA #REQUIRED>
-
-<!ELEMENT tv (style)>
+<!ELEMENT img EMPTY>
+<!ATTLIST img
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    src CDATA #IMPLIED
+>
 
 <!ELEMENT splashscreen (screen, content)>
+
+<!ELEMENT tv (style)>
 
 <!ELEMENT headlines (screen, title?, info)>
