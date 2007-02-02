@@ -43,7 +43,7 @@
 import os, popen2, fcntl, select, time, re
 
 #freevo modules
-import config, menu, rc, plugin, util
+import config, menu, rc, plugin, util, re
 from audio.player import PlayerGUI
 from audio.audioitem import AudioItem
 from item import Item
@@ -99,52 +99,44 @@ class XmRadioMainMenuItem(Item):
         """
         return a list of actions for this item
         """
-        return [ ( self.create_stations_menu , 'xm stations' ) ]
+        return [ ( self.create_channels_menu , 'XM channels' ) ]
 
  
-    def create_stations_menu(self, arg=None, menuw=None):
-        string="rm -f /tmp/xmonline.cookies"
+    def create_channels_menu(self, arg=None, menuw=None):
+        string='rm -f /%s/xmonline.cookies'%config.LOGDIR
         os.system(string)
 
-        string=('curl -s -c /tmp/xmonline.cookies -d "user_id=%s" -d "pword=%s "'+ \
-            '"http://xmro.xmradio.com/xstream/login_servlet.jsp" > /tmp/xmonlinelogin.out' % \
-            (config.XM_USER, config.XM_PASS))
+        string=('curl -s -c /%s/xmonline.cookies -d "user_id=%s" -d "pword=%s" \
+                "http://xmro.xmradio.com/xstream/login_servlet.jsp" > /%s/xmonlinelogin.out' \
+                % (config.LOGDIR, config.XM_USER, config.XM_PASS, config.LOGDIR))
         os.system(string)
 
-        station_items = []
-        for rstation in config.XM_STATIONS:
-            string="rm -f /tmp/xmonlinechannel.out"
+        channel_items = []
+        for rchannel in config.XM_STATIONS:
+            string='rm -f /%s/xmonlinechannel.out'%config.LOGDIR
             os.system(string)
 
             string=('curl -s \
-                          -b /tmp/xmonline.cookies \
-                          -d "" \
-                          "http://player.xmradio.com/player/2ft/playMedia.jsp?ch=%s&speed=%s" \
-                          > /tmp/xmonlinestream.out'%(rstation[1],config.XM_RATE))
+                    -b /%s/xmonline.cookies \
+                    -d "" \
+                    "http://player.xmradio.com/player/2ft/playMedia.jsp?ch=%s&speed=%s" \
+                    > /%s/xmonlinestream.out' \
+                    % (config.LOGDIR,rchannel[1],config.XM_RATE,config.LOGDIR))
             os.system(string)
-
-            string='egrep "<PARAM NAME=.FileName. VALUE=" /tmp/xmonlinestream.out > /tmp/xmurl.out'
-            os.system(string)
-
-            string='sed "s/.*<PARAM NAME=.FileName. VALUE="// /tmp/xmurl.out > /tmp/xmurl2.out'
-            os.system(string)
-
-            string='sed "s/>.*//" /tmp/xmurl2.out > /tmp/xmurl3.out'
-            os.system(string)
-
-            file = open("/tmp/xmurl3.out","r")
+            file = open('/%s/xmonlinestream.out'%config.LOGDIR,'r')
             text = file.readlines()
             file.close()
             for line in text:
-                line=line.replace('"','')
-                radio_item = XmRadioItem(line,self,str(rstation[0]))
-            station_items += [ radio_item ]
-        if (len(station_items) == 0):
-            station_items += [menu.MenuItem( _( 'No Xm Radio Stations found' ),
-                                             menwu.goto_prev_page, 0)]
-        station_menu = menu.Menu( _( 'Radio Stations' ), station_items)
+                if re.search('FileName', line):
+                   (split)=re.split('"', line)
+                   url=split[3]
+            radio_item = XmRadioItem(url,self,str(rchannel[0]))
+            channel_items += [ radio_item ]
+        if (len(channel_items) == 0):
+            channel_items += [menu.MenuItem( _( 'No XM channels found' ), menwu.goto_prev_page, 0)]
+        channel_menu = menu.Menu( _( 'XM channels' ), channel_items)
         rc.app(None)
-        menuw.pushmenu(station_menu)
+        menuw.pushmenu(channel_menu)
         menuw.refresh()
 
 
