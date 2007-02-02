@@ -136,27 +136,10 @@ class Favorite:
     def __init__(self, name=None, prog=None, exactchan=FALSE, exactdow=FALSE, 
                  exacttod=FALSE, priority=0, allowDuplicates=TRUE, onlyNew=FALSE):
         self.TYPES_VERSION = TYPES_VERSION
-        translation_table = \
-                            '                ' \
-                            + '                ' \
-                            + ' !"#$%&' + "'" + '()*+,-./' \
-                            + '0123456789:;<=>?' \
-                            + '@ABCDEFGHIJKLMNO' \
-                            + 'PQRSTUVWXYZ[\]^_' \
-                            + '`abcdefghijklmno' \
-                            + 'pqrstuvwxyz{|}~ ' \
-                            + '                ' \
-                            + '                ' \
-                            + '                ' \
-                            + '                ' \
-                            + 'AAAAAAACEEEEIIII' \
-                            + 'DNOOOOOxOUUUUYPS' \
-                            + 'aaaaaaaceeeeiiii' \
-                            + 'dnooooo/ouuuuypy'
-
+        
         self.name = name
         if name:
-            self.name = string.translate(name,translation_table)
+            self.name = tv_util.progname2favname(name)
         self.priority = priority
         self.allowDuplicates = allowDuplicates
         self.onlyNew = onlyNew

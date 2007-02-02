@@ -286,6 +286,7 @@ TVMENU_EVENTS = {
     'SELECT'    : MENU_SELECT,
     'ENTER'     : MENU_SUBMENU,
     'DISPLAY'   : MENU_CHANGE_STYLE,
+    'PLAY'      : PLAY,
     'REC'       : TV_START_RECORDING
     }
 

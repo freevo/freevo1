@@ -50,6 +50,34 @@ def progname2filename(progname):
 
     return s
 
+def progname2favname(progname):
+    """ Translate the name of a program to a favorite name
+
+    The translation get rid of strange characters as e.g. german umlauts
+    """
+    translation_table = \
+                            '                ' \
+                            + '                ' \
+                            + ' !"#$%&' + "'" + '()*+,-./' \
+                            + '0123456789:;<=>?' \
+                            + '@ABCDEFGHIJKLMNO' \
+                            + 'PQRSTUVWXYZ[\]^_' \
+                            + '`abcdefghijklmno' \
+                            + 'pqrstuvwxyz{|}~ ' \
+                            + '                ' \
+                            + '                ' \
+                            + '                ' \
+                            + '                ' \
+                            + 'AAAAAAACEEEEIIII' \
+                            + 'DNOOOOOxOUUUUYPS' \
+                            + 'aaaaaaaceeeeiiii' \
+                            + 'dnooooo/ouuuuypy'
+
+    favname = string.translate(progname,translation_table)
+    return favname   
+    
+    
+    
 
 def getKey(prog=None):
     if not prog:

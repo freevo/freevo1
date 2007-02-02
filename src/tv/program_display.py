@@ -33,7 +33,7 @@
 import time, traceback
 from time import gmtime, strftime
 
-import plugin, config, menu
+import plugin, config, menu, string
 import osd
 
 import util.tv_util as tv_util
@@ -56,7 +56,7 @@ class ProgramItem(Item):
         Item.__init__(self, parent, skin_type='video')
         self.prog = prog
         self.context = context
-
+        
         self.name = self.title = prog.title
         if hasattr(prog,'sub_title'): self.sub_title = prog.sub_title
         if hasattr(prog,'desc'): self.desc = prog.desc
@@ -66,7 +66,7 @@ class ProgramItem(Item):
             self.scheduled = prog.scheduled
         else:
             self.scheduled = False
-
+                
         self.allowDuplicates = prog.allowDuplicates
 
         self.onlyNew = prog.onlyNew
@@ -116,7 +116,10 @@ class ProgramItem(Item):
 
         #list of entries for the menu
         items = []
-
+     
+       
+        ## 1.) 'Schedule for recording' OR 'Remove from schedule'
+        # check if this program is scheduled
 
         ## 1.) 'Schedule for recording' OR 'Remove from schedule'
         # check if this program is scheduled
@@ -136,7 +139,6 @@ class ProgramItem(Item):
             items.append(menu.MenuItem(_('Schedule for recording'),
                                        action=self.schedule_program))
 
-
         ## 2.) 'Seach for more of this menu
         if not self.context == 'search':
             items.append(menu.MenuItem(_('Search for more of this program'),
@@ -151,12 +153,11 @@ class ProgramItem(Item):
                 self.favorite = True
 
         if self.favorite:
-            items.append(menu.MenuItem(_('Remove from favorites'),
-                                       action=self.rem_favorite))
+            items.append(menu.MenuItem(_('Edit favorite'), 
+                                       action=self.edit_favorite)) 
         else:
             items.append(menu.MenuItem(_('Add to favorites'),
                                        action=self.add_favorite))
-
 
         ## Create the resulting menu
         program_menu = menu.Menu(_('Program Menu'), items,
@@ -167,28 +168,43 @@ class ProgramItem(Item):
 
 
     ### Actions:
+    
+    def schedule_program(self, arg=None, menuw=None):
+        """ 
+        add a program to schedule
+        """
+        (result, msg) = record_client.scheduleRecording(self.prog)
+        if result:
+            if menuw:
+                if self.context=='search':
+                    menuw.delete_menu()
+                    menuw.delete_menu()
+                menuw.back_one_menu(arg='reload')
+            msgtext= _('"%s" has been scheduled for recording') %self.prog.title   
+            AlertBox(text=msgtext).show()     
+        else:
+            AlertBox(text=_('Scheduling Failed')+(': %s' % msg)).show()
+                
 
-    def add_favorite(self, arg=None, menuw=None):
+    def remove_program(self, arg=None, menuw=None):
+        """ 
+        remove a program from schedule
         """
-        Add a program to favorites
-        """
-        fav = Favorite(self.prog.title, self.prog,
-                       True, True, True, -1, True, False)
-        fav_item = FavoriteItem(self, fav, fav_action='add')
-        fav_item.display_favorite(menuw=menuw)
-
-
-    def rem_favorite(self, arg=None, menuw=None):
-        """
-        Remove a program from the list of favorites
-        """
-        pass
+        (result, msg) = record_client.removeScheduledRecording(self.prog)
+        if result:
+            if menuw:  
+                menuw.back_one_menu(arg='reload')
+            msgtext = _('"%s" has been removed from schedule') % self.prog.title    
+            AlertBox(text=msgtext).show()
+        else:
+            AlertBox(text=_('Remove Failed')+(': %s' % msg)).show()
 
 
     def find_more(self, arg=None, menuw=None):
         """
         Find more of this program
         """
+
         _debug_(String('searching for: %s' % self.prog.title))
 
         pop = AlertBox(text=_('Searching, please wait...'))
@@ -219,45 +235,51 @@ class ProgramItem(Item):
         menuw.pushmenu(search_menu)
         menuw.refresh()
 
+     
+    def add_favorite(self, arg=None, menuw=None):
+        """ 
+        Add a program to favorites
+        """
+        if menuw:
+            # we do not want to return to this menu, 
+            # if we delete it here, then later back_one_menu 
+            # brings us back to the tvguide
+            menuw.delete_menu()
+        # create a favorite
+        fav = Favorite(self.prog.title, self.prog, 
+                       True, True, True, -1, True, False)
+        # and a favorite item which represents the submen
+        fav_item = FavoriteItem(self, fav, fav_action='add')
+        # and open that submenu                        
+        fav_item.display_favorite(menuw=menuw)
 
 
-    def schedule_program(self, arg=None, menuw=None):
+    def edit_favorite(self, arg=None, menuw=None):
         """
-        add a program to schedule
+        Edit the settings of a favorite
         """
-        (result, msg) = record_client.scheduleRecording(self.prog)
-        if result:
-            if menuw:
-                if self.context=='search':
-                    menuw.delete_menu()
-                    menuw.delete_menu()
-                menuw.back_one_menu(arg='reload')
-            AlertBox(text=_('"%s" has been scheduled for recording') % \
-                     self.prog.title).show()
+        if menuw:
+            # we do not want to return to this menu, 
+            # if we delete it here, then later back_one_menu 
+            # brings us back to the tvguide
+            menuw.delete_menu()
+        # fist we have to construct the favorite name
+        # (get rid of strange characters like german umlauts)
+        name = tv_util.progname2favname(self.name)
+        # get the favorite from the record_client
+        (got_fav, fav) = record_client.getFavorite(name)   
+        if got_fav:
+            # create a favorite item for the submenu
+            fav_item = FavoriteItem(self, fav, fav_action='edit')
+            # and open the submenu                        
+            fav_item.display_favorite(menuw=menuw)
         else:
-            AlertBox(text=_('Scheduling Failed')+(': %s' % msg)).show()
-
-
-    def remove_program(self, arg=None, menuw=None):
-        """
-        remove a program from schedule
-        """
-        (result, msg) = record_client.removeScheduledRecording(self.prog)
-        if result:
-            # then menu back one which should show an updated list if we
-            # were viewing scheduled recordings or back to the guide and
-            # update the colour of the program we selected.
-            # or refresh the menu with remove option instead of schedule
-            if menuw:
-                menuw.back_one_menu(arg='reload')
-            AlertBox(text=_('"%s" has been removed from schedule') % \
-                          self.prog.title).show()
-        else:
-            AlertBox(text=_('Remove Failed')+(': %s' % msg)).show()
+            AlertBox(text=_('getFavorites failed: %s') % self.name).show()   
+     
 
 
 class FavoriteItem(Item):
-    """
+    """ 
     Item class for favorite items
     """
     def __init__(self, parent, fav, fav_action='edit'):
@@ -301,17 +323,16 @@ class FavoriteItem(Item):
 
     def actions(self):
         return [( self.display_favorite , _('Display favorite') )]
-
-
+        
+    
     def display_favorite(self, arg=None, menuw=None):
         """ Display menu for a favorite
-
+        
         With this menu the user can made a program a favorite.
         All attributes of a favorite can be edited here and in the end
-        the user must select 'save changes' to finally create the favorite
-        or else choose not to remove the favorite by selecting 'Remove favorite'.
-        """
-
+        the user must select 'save changes' to finally create the favorite.
+        """ 
+        
         ### create menu items for editing the favorites attributes
         items = []
 
@@ -323,9 +344,11 @@ class FavoriteItem(Item):
                                     action=self.mod_day))
         items.append(menu.MenuItem(_('Modify time of day'),
                                     action=self.mod_time))
+
         if config.DUPLICATE_DETECTION:
            items.append(menu.MenuItem(_('Modify duplicate flag'),
                                        action=self.mod_dup))
+
         if config.ONLY_NEW_DETECTION:
            items.append(menu.MenuItem(_('Modify episodes flag'),
                                         action=self.mod_new))
@@ -337,16 +360,20 @@ class FavoriteItem(Item):
                 items.append(menu.MenuItem(_('Modify priority'),
                                            action=self.mod_priority))
 
+
         ### save favorite
-        items.append(menu.MenuItem(_('Save changes'),
+        items.append(menu.MenuItem(_('Save changes'), 
                                     action=self.save_changes))
-        ### cancel saving this program as favorite
-        items.append(menu.MenuItem(_('Remove favorite'),
-                                    action=self.rem_favorite))
+        
+        ### remove this program from favorites
+        if not self.fav_action == 'add':
+            items.append(menu.MenuItem(_('Remove favorite'), 
+                                       action=self.rem_favorite))
 
         ### put the whole menu together
         favorite_menu = menu.Menu(_('Favorite Menu'), items,
                                   item_types = 'tv favorite menu')
+
         favorite_menu.infoitem = self
         menuw.pushmenu(favorite_menu)
         menuw.refresh()
@@ -369,10 +396,9 @@ class FavoriteItem(Item):
     def alter_name(self, name):
         """ set the new name"""
         if name:
-            self.name = self.fav.name = name
+            self.name = self.fav.name = name.strip()
 
         self.menuw.refresh()
-
 
     def mod_dup(self, arg=None, menuw=None):
         """ Modify duplication flag
@@ -427,7 +453,8 @@ class FavoriteItem(Item):
         menuw.pushmenu(favorite_menu)
         menuw.refresh()
 
-
+    
+    
     def mod_day(self, arg=None, menuw=None):
         """ Modify day
 
@@ -473,12 +500,12 @@ class FavoriteItem(Item):
         menuw.refresh()
 
 
+
     def alter_prop(self, arg=(None,None), menuw=None):
         """ Alter a favorites property
 
         This function is where the properties of a favorite really are changed.
         """
-
         (prop, val) = arg
 
         if prop == 'channel':
@@ -531,55 +558,60 @@ class FavoriteItem(Item):
         """
         Save favorite
         """
-
         if self.fav_action == 'edit':
+            # first we remove the old favorite
             (result, msg) = record_client.removeFavorite(self.origname)
         else:
             result = True
 
         if result:
-           if not config.DUPLICATE_DETECTION or not hasattr(self.fav,
-                                                            'allowDuplicates'):
-              self.fav.allowDuplicates = 1
-           if not config.ONLY_NEW_DETECTION or not hasattr(self.fav,
-                                                           'onlyNew'):
-              self.fav.onlyNew = 0
+            # create a new edited favorite
+            if not config.DUPLICATE_DETECTION or not hasattr(self.fav,
+                                                             'allowDuplicates'):
+                self.fav.allowDuplicates = 1
 
-           (result, msg) = record_client.addEditedFavorite(self.fav.name,
-                                                           self.fav.title,
-                                                           self.fav.channel,
-                                                           self.fav.dow,
-                                                           self.fav.mod,
+            if not config.ONLY_NEW_DETECTION or not hasattr(self.fav,
+                                                           'onlyNew'):
+                self.fav.onlyNew = 0
+           
+            (result, msg) = record_client.addEditedFavorite(self.fav.name, 
+                                                           self.fav.title, 
+                                                           self.fav.channel, 
+                                                           self.fav.dow, 
+                                                           self.fav.mod, 
                                                            self.fav.priority,
                                                            self.fav.allowDuplicates,
                                                            self.fav.onlyNew)
-           if not result:
+            if not result:
+                # it is important to show the user this error,
+                # because that means the favorite is removed,
+                # and must be created again
                 msgtext=_('Save Failed, favorite was lost')+(': %s' % msg)
                 AlertBox(text=msgtext).show()
-           else:
+            else:
                 self.fav_action = 'edit'
                 if menuw:
-                    menuw.back_one_menu(arg='reload')
-
+                    # and reload the menu that we return to
+                    menuw.back_one_menu(arg='reload')    
         else:
+            # show an error messages when all failed
             AlertBox(text=_('Save Failed')+(': %s' % msg)).show()
 
 
     def rem_favorite(self, arg=None, menuw=None):
-        """
+        """ 
         Remove favorite
         """
-        if self.fav_action == 'add':
-            AlertBox(text=_('Favorite not added yet.')).show()
-            return
-
-        (result, msg) = record_client.removeFavorite(self.origname)
+        name = self.origname
+        (result, msg) = record_client.removeFavorite(name)
         if result:
-            # then menu back one which should show an updated list if we
-            # were viewing favorites or back to the program display
-            # or refresh the program menu with remove option instead of add
+            # if this is successfull
             if menuw:
+                # reload the menu that we return to
                 menuw.back_one_menu(arg='reload')
-
+            # and show a short message of success    
+            msgtext = text=_('"%s" has been removed from favorites') % name    
+            AlertBox(text=msgtext).show()
         else:
+            # if all fails then we should show an error
             AlertBox(text=_('Remove Failed')+(': %s' % msg)).show()

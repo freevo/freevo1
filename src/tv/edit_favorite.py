@@ -80,8 +80,9 @@ class EditFavorite(PopupBox):
             else:
                 self.priority = 1
 
-            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE,
+            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE, 
                                 self.priority, TRUE, FALSE)
+
         else:
             self.fav = subject
             self.oldname = self.fav.name

@@ -224,7 +224,8 @@ class TVGuide(Item):
 
         ## PLAY: Start to watch the selected channel (if it is possible)
         elif event == PLAY:
-            suffix = self.fc.getVideoGroup(self.selected.channel_id, True).vdev.split('/')[-1]
+            suffix = self.fc.getVideoGroup(self.selected.channel_id, True).vdev
+            suffix = suffix.split('/')[-1]
             tvlockfile = config.FREEVO_CACHEDIR + '/record.'+suffix
 
             # Check if the selected program is >7 min in the future
@@ -232,9 +233,10 @@ class TVGuide(Item):
             now = time.time() + (7*60)
             if self.selected.start > now:
                 self.event_submenu()
-            elif os.path.exists(tvlockfile):
+            elif True:
+            #elif os.path.exists(tvlockfile):
                 # XXX: In the future add the options to watch what we are
-                #      recording or cencel it and watch TV.
+                #      recording or cancel it and watch TV.
                 AlertBox(text=_('Sorry, you cannot watch TV while recording. ')+ \
                               _('If this is not true then remove ') + \
                               tvlockfile + '.', height=200).show()
@@ -455,8 +457,8 @@ class TVGuide(Item):
         pi = ProgramItem(self, prog=self.selected)
         # and show its submenu
         pi.display_program(menuw=self.menuw)
-
-
+        
+        
     def event_change_program(self, value, full_scan=False):
 
         start_time    = self.start_time
