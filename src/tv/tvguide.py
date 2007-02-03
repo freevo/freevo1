@@ -233,8 +233,7 @@ class TVGuide(Item):
             now = time.time() + (7*60)
             if self.selected.start > now:
                 self.event_submenu()
-            elif True:
-            #elif os.path.exists(tvlockfile):
+            elif os.path.exists(tvlockfile):
                 # XXX: In the future add the options to watch what we are
                 #      recording or cancel it and watch TV.
                 AlertBox(text=_('Sorry, you cannot watch TV while recording. ')+ \
