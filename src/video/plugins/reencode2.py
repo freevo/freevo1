@@ -112,7 +112,7 @@ class PluginInterface(plugin.ItemPlugin):
         if attr == 'disp_title':
             return '%s' % (self.title)
         if attr == 'disp_filename':
-            return '%s' % (os.path.split(self.filename)[1])+'.'+self.profile['container']
+            return '%s' % (os.path.split(self.source)[1])+'.'+self.profile['container']
         elif attr == 'disp_container':
             return '%s' % (self.profile['container'])
         elif attr == 'disp_resolution':
