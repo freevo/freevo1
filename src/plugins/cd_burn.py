@@ -773,11 +773,11 @@ class PluginInterface(plugin.ItemPlugin):
         AlertBox(text=_('Backup interrupted')).show()
 
     def actions(self, item):
-        _debug_('actions(self, item)')
+        _debug_('actions(self, item)', 2)
         self.item = item
         show_burn_menu = 0;
 
-        _debug_(_('Item type is %s' % item.type))
+        _debug_(_('Item type is %s' % item.type), 2)
 
         if self.thread_burn and self.thread_burn.running == 1:
             show_burn_menu = 1;
@@ -785,7 +785,7 @@ class PluginInterface(plugin.ItemPlugin):
         if ( item.type == 'audio' or item.type == 'image' or item.type == 'video' or item.type == 'dir' ):
             show_burn_menu = 1;
 
-        _debug_(_('Should show the menu? %i' % show_burn_menu))
+        _debug_(_('Should show the menu? %i' % show_burn_menu), 2)
 
         if show_burn_menu:
             return [ (self.fill_menu, 'Burn CD') ]
