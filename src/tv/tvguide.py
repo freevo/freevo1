@@ -266,7 +266,7 @@ class TVGuide(Item):
                         # this enables multiple (max 3) digit channel selection
                         if (self.lastinput_value >= 100):
                             self.lastinput_value = (self.lastinput_value % 100)
-                        newinput_value = self.lastinput_value * 10 + newinput_value
+                        newinput_value += self.lastinput_value * 10
                 self.lastinput_value = newinput_value
                 self.lastinput_time = newinput_time
 
@@ -312,17 +312,17 @@ class TVGuide(Item):
         if not self.menuw.children:
             rc.set_context(self.event_context)
             self.menuw.refresh()
-        self.update()
+        self.update(force=True)
 
 
-    def update(self):
+    def update(self, force=False):
         """ update the tv guide
 
         This function updates the scheduled and overlap flags for
         all currently displayed programs.
         """
         _debug_('Update',2)
-        self.update_schedules(force=True)
+        self.update_schedules(force)
         if self.table:
             for t in self.table:
                 try:
@@ -353,6 +353,7 @@ class TVGuide(Item):
         This is neccessary we change the set of programs that have to be
         displayed, this is the case when the user moves around in the menu.
         """
+        _debug_('Reload',2)
         self.guide = epg_xmltv.get_guide()
         channels = self.guide.GetPrograms(start=start_time+1, stop=stop_time-1)
 
