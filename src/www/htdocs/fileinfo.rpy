@@ -74,16 +74,16 @@ class FileInfoResource(FreevoResource):
                         title = item
             else:
                 media_info = util.mediainfo.get(file)
-                title = media_info['title']
+                title = Unicode(media_info['title'])
                 if not title:
                     title = item
                 #audio info
                 if media_info['artist']:
-                    info+='<tr><td><b>Artist: </b></td><td>'+media_info['artist']+'</td></tr>'
+                    info+='<tr><td><b>Artist: </b></td><td>'+Unicode(media_info['artist'])+'</td></tr>'
                 if media_info['album']:
-                    info+='<tr><td><b>Album: </b></td><td>'+media_info['album']+'</td></tr>'
+                    info+='<tr><td><b>Album: </b></td><td>'+Unicode(media_info['album'])+'</td></tr>'
                 if media_info['genre']:
-                    info+='<tr><td><b>Genre: </b></td><td>'+media_info['genre']+'</td></tr>'
+                    info+='<tr><td><b>Genre: </b></td><td>'+Unicode(media_info['genre'])+'</td></tr>'
                 if media_info['length']:
                     length = str(int(media_info['length']) / 60) + " min."
                     info+='<tr><td><b>Length: </b></td><td>'+length+'</td></tr>'
@@ -98,6 +98,7 @@ class FileInfoResource(FreevoResource):
             info+= "</table>"
             
             file_link = self.convert_dir(file)
+            print 'DJW:file_link=%r' % (urllib.quote(file_link)),
             
             fv.res += (
                u"<script>\n" \
@@ -111,7 +112,7 @@ class FileInfoResource(FreevoResource):
                u"</script>\n"
             ) % ( Unicode(title.replace("'", "\\'")),
                   Unicode(info.replace("'", "\\'")),
-                  "function() { window.open(\"%s\"); }" % (file_link),
+                  "function() { window.open(\"%s\"); }" % (urllib.quote(file_link)),
                   '\
                   function() { \
                       vlc_window = window.open(""); \
