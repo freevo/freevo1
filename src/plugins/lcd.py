@@ -704,7 +704,7 @@ class PluginInterface( plugin.DaemonPlugin ):
         if self.version.startswith( "0.5" ):
             self.animation_audioplayer_chars = ['-','\\','|','/']
         elif self.version.startswith( "0.4" ):
-            self.animation_audioplayer_chars = ['-','\\\\','|','/']
+            self.animation_audioplayer_chars = ['-','\\','|','/']
         else:
             self.disable = 1
             log.warning( "Unsupported LCDd version: %s" % ( self.version, ) )
