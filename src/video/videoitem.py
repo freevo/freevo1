@@ -88,8 +88,8 @@ class VideoItem(Item):
 
             show_name = config.VIDEO_SHOW_REGEXP_SPLIT(self.name)
             if show_name[0] and show_name[1] and show_name[2] and show_name[3]:
-                self.name = show_name[0] + u" " + show_name[1] + u"x" + show_name[2] +\
-                            u" - " + show_name[3]
+                self.name = show_name[0] + u' ' + show_name[1] + u'x' + show_name[2] +\
+                            u' - ' + show_name[3]
                 image = util.getimage((config.VIDEO_SHOW_DATA_DIR + \
                                        show_name[0].lower()))
                 if self.filename and not image:
@@ -117,7 +117,7 @@ class VideoItem(Item):
         # extra infos in discset_informations
         if parent and parent.media:
             fid = parent.media.id + \
-                  self.filename[len(os.path.join(parent.media.mountdir,"")):]
+                  self.filename[len(os.path.join(parent.media.mountdir,'')):]
             from video import discset_informations
             if discset_informations.has_key(fid):
                 self.mplayer_options = discset_informations[fid]
@@ -249,14 +249,17 @@ class VideoItem(Item):
                             total += length
                         except ValueError, TypeError:
                             pass
-                    total = "%s min" % str(int(total) / 60)
+                    total = '%s min' % str(int(total) / 60)
 
                 else:
                     if self.info['length']:
                         total = self.info['length']
                     elif hasattr(self, 'length'):
                         total = self.length
-                    total = "%s min" % str(int(total) / 60)
+                    if total != 'None':
+                        total = '%s min' % str(int(total) / 60)
+                    else:
+                        total = ''
 
             return total
 
@@ -270,7 +273,7 @@ class VideoItem(Item):
         if mode == 'date' and self.mode == 'file' and os.path.isfile(self.filename):
             return u'%s%s' % (os.stat(self.filename).st_ctime, Unicode(self.filename))
 
-        if self.name.find(u"The ") == 0:
+        if self.name.find(u'The ') == 0:
             return self.name[4:]
         return self.name
 
