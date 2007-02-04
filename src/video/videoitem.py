@@ -249,14 +249,14 @@ class VideoItem(Item):
                             total += length
                         except ValueError, TypeError:
                             pass
-                    total = "%s min" % str(int(total / 60))
+                    total = "%s min" % str(int(total) / 60)
 
                 else:
                     if self.info['length']:
                         total = self.info['length']
                     elif hasattr(self, 'length'):
                         total = self.length
-                    total = "%s min" % str(int(total / 60))
+                    total = "%s min" % str(int(total) / 60)
 
             return total
 
