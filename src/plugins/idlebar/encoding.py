@@ -287,9 +287,7 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 2)
         self.drawtime = now
         self.lastdraw = now
-        font = osd.get_font('detachbar')
-        if font == osd.get_font('default'):
-            font = osd.get_font('info value')
+        font = osd.get_font('small0')
 
         self.calculate = True
         self.settext()
