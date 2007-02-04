@@ -73,9 +73,10 @@ class PluginInterface(plugin.ItemPlugin):
         '''
         _debug_('actions(self, item)', 2)
         if item.type == 'video' and item.mode == 'file':
-            _debug_('len(item.info[\'audio\'])=%d' % (len(item.info['audio'])))
-            _debug_('item[\'audio\'][0][\'codec\']=%r' % (item['audio'][0]['codec']))
+            if hasattr(item, 'audio'):
+                _debug_('len(item.info[\'audio\'])=%d' % (len(item.info['audio'])))
             if len(item.info['audio']) == 1:
+                _debug_('item[\'audio\'][0][\'codec\']=%r' % (item['audio'][0]['codec']))
                 if item['audio'][0]['codec'] == 'MP2A':
                     self.item = item
                     return [ (self.language_selection_menu, _('Bilingual language selection')) ]
