@@ -92,13 +92,12 @@ class FileInfoResource(FreevoResource):
                     info +='<tr><td><b>Dimensions: </b></td><td>'+str(media_info['height'])+' x '\
                         +str(media_info['width'])+'</td></tr>' 
                 if media_info['type']:
-                   info+='<tr><td><b>Type: </b></td><td>'+media_info['type']+'</td></tr>' 
+                    info+='<tr><td><b>Type: </b></td><td>'+media_info['type']+'</td></tr>' 
             #add size
             info+='<tr><td><b>Size: </b></td><td>'+str((os.stat(file)[6]/1024)/1024)+' MB</td></tr>'
             info+= "</table>"
             
             file_link = self.convert_dir(file)
-            print 'DJW:file_link=%r' % (urllib.quote(file_link)),
             
             fv.res += (
                u"<script>\n" \
