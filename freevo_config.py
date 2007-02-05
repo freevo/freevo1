@@ -257,7 +257,6 @@ LOCAL_CONF_CHANGES = [
      Added USE_SDL_KEYBOARD to specify if generic keyboard handler should be used
      Added EVENT_DEVS and EVENTMAP for the new Linux event device handler
      Added VIDEO_PRE_PLAY and VIDEO_POST_PLAY to allow external commands to be run
-     Added CDBURN_ for the cd burning plug-in
      Added CD_RIP_ for the cd backup plug-in
      ''' ),
 ]
@@ -775,16 +774,6 @@ CD_RIP_OGG_OPTS = '-m 128'
 CD_RIP_FLAC_OPTS = '-8'
 CD_RIP_CASE = None          # Can be title, upper, lower
 CD_RIP_REPLACE_SPACE = None # Can be '_', '-', etc.
-
-# ----------------------------------------------------------------------
-# CD Burning
-# ----------------------------------------------------------------------
-CDBURN_AUDIO_DAO = 1
-CDBURN_MKISOFS_PATH = '/usr/bin/mkisofs'
-CDBURN_CDRECORD_PATH = '/usr/bin/cdrecord'
-CDBURN_TEMP_DIR='/tmp/'
-CDBURN_DEV = '/dev/cdrom'
-CDBURN_SPEED = 32
 
 # ======================================================================
 # Freevo directory settings:

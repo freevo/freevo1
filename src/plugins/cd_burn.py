@@ -183,58 +183,35 @@ class BurnCDItem:
     def burn_dvd_video(self):
         _debug_('burn_dvd_video(self)')
         """
-        copy this DIR to DVD as DVD VIDEO, NB: MUST BE DVD VIDEO ALREADY!!!!!!! (ie ripped with dvdcopy.py)
+        copy this file/DIR to DVD as DVD VIDEO, NB: MUST BE DVD VIDEO ALREADY!!!!!!! (ie ripped with dvdcopy.py)
         """
 
+        self.file_to_burn=None
         name  = self.files[0].split("/")
         self.name  = name[len(name) -1]
         _debug_('self.name = %s' % self.name)
-        dir = self.files[0]
-        self.dir = dir + "/"
+        self.dir = self.files[0]
         _debug_('self.dir = %s ' % self.dir)
-        for f in os.listdir(self.dir):
-            pathname = os.path.join(self.dir, f)
-            _debug_('%s ' % pathname[-3:])
-            if pathname[-3:].lower() == '_ts':
-                _debug_('would not delete %s' %pathname)
-                self.file_to_delete = None
-            else:
-                _debug_('would delete %s' % pathname)
-                #self.file_to_delete.append(pathname)
-                self.file_to_delete = pathname
-
-        if self.file_to_delete:
-            ConfirmBox(text=_('Delete %s?' % self.file_to_delete ),
-                             handler=self.delete_now, default_choice=0).show()
+        if self.name.endswith('.iso'):
+            self.file_to_burn=self.dir
         else:
+            self.subdirs = util.getdirnames(self.dir, softlinks=False)
+            for dir in self.subdirs:
+                pathname = os.path.join(self.dir, f)
+                _debug_('%s ' % pathname[-3:])
+                if pathname[-3:].lower() == '_ts':
+                    _debug_('OK TO BURN, folder DVD compliant %s' %pathname)
+                    self.file_to_burn = pathname
+                else:
+                    _debug_('NOT OK to BURN, folder NOT DVD compliant:  %s' % pathname)
+                    self.file_to_burn = None
+
+        if self.file_to_burn:
             ConfirmBox(text=_('Insert media then click OK'),
                              handler=self.start_burning, default_choice=0
                              ).show()
         return
 
-    def delete_now (self, arg=None, menuw=None):
-        _debug_('delete_now (self, arg=None, menuw=None)')
-        """
-        Called by burn_dvd_video to remove anything it sees fit.. I think
-        freevo should have a file op for this but it doesn't (that i can find).
-        """
-        for a in self.files_to_delete:
-            try:
-                mode = os.stat(a)[ST_MODE]
-                if S_ISDIR(mode):
-                    try:
-                        shutil.rmtree(a)
-                    except:
-                        rc.post_event(Event(OSD_MESSAGE, arg=_('Error, unable to delete dir %s' % a)))
-                        print "unable to delete tree %s" % a
-                elif S_ISREG(mode):
-                    try:
-                        os.unlink(a)
-                    except:
-                        rc.post_event(Event(OSD_MESSAGE, arg=_('Error, unable to delete file %s' % a)))
-                        print "unable to delete %s" % a
-            except:
-                pass
         self.burn()
 
 
@@ -628,8 +605,19 @@ class main_burn_thread(threading.Thread):
             os.unlink(image_file)
 
         elif self.token.burn_mode == "dvd_video":
-            growisofs_cmd = 'growisofs -use-the-force-luke -dvd-compat -Z /dev/dvd -V %s -dvd-video %s' \
-                % (self.token.name,self.token.dir)
+            #set command for VITEO_TS type DVD's
+            growisofs_cmd = '%s -use-the-force-luke -dvd-compat -Z /dev/dvd -V %s -dvd-video %s' \
+                % (config.CDBURN_GROWISOFS_PATH,self.token.name,self.token.dir)
+            if self.token.name.endswith('.iso'):
+                if config.CDBURN_DVDISO_USE_GROWISOFS:
+                    growisofs_cmd = '%s -use-the-force-luke -dvd-compat -Z /dev/dvd=%s' \
+                     % (config.CDBURN_GROWISOFS_PATH,self.token.dir)
+                else:
+                    growisofs_cmd = '%s -s -eject -v -driveropts=burnfree speed=%s dev=%s %s' \
+                    % (config.CDBURN_CDRECORD_PATH,config.CDBURN_DVD_BURN_SPEED,config.CDBURN_DEV,self.token.dir)
+
+            _debug_('growisofs command = %s' % growisofs_cmd)
+
             self.update_status(status='running', description='Burning DVD Video');
             burn_child = self.run_child(cmd=growisofs_cmd,wait=1,task_weight=100)
             if (not burn_child):
@@ -750,10 +738,13 @@ class PluginInterface(plugin.ItemPlugin):
         return [
             ('CDBURN_CDRECORD_PATH', '/usr/bin/cdrecord', 'Path to cdrecord'),
             ('CDBURN_MKISOFS_PATH', '/usr/bin/mkisofs', 'Path to mkisofs'),
+            ('CDBURN_GROWISOFS_PATH', '/usr/bin/growisofs', 'Path to growisofs'),
+            ('CDBURN_DVDISO_USE_GROWISOFS', 1, 'Set to 1 to use growisofs instead of cdrecord for DVDs'),
             # in tao (track at once mode, empty value) cd record will leave 2 sec gaps between tracks
             # in dao (disk at once) no gaps at all, but not all drives support it
             ('CDBURN_AUDIO_DAO',0,'CDRecord canburn audio cds in DAO mode'),
             ('CDBURN_SPEED', '8', 'Speed to burn with cdrecord'),
+            ('CDBURN_DVD_BURN_SPEED', '4', 'Speed to burn with cdrecord for DVDs'),
             ('CDBURN_TEMP_DIR', '/tmp/', 'Temp file name used by cdrecord'),
             ('CDBURN_DEV', record_dev, 'Device for cdrecord to burn with (not auto detected)')
         ]
@@ -859,7 +850,6 @@ class PluginInterface(plugin.ItemPlugin):
 
             if len(cur.files) > 1:
                 to_return.append(( cur.burn, _('Copy %s, and related, to CD' % item.name)) )
-                #to_return.append(( cur2.delete, _('Delete %s, and related' % item.name)) )
         except:
             pass
 
