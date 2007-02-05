@@ -94,6 +94,10 @@ class PluginInterface(plugin.DaemonPlugin):
         self.laststate = None
 
 
+    def config(self):
+        return [ ('ENCODING_IDLEBAR', True, 'Use the idlebar'), ]
+
+
     def getprogress(self):
         _debug_('getprogress(self)', 2)
         """Get the progress & pass information of the job currently encoding.
@@ -210,7 +214,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def calculatesizes(self, osd, font):
-        _debug_('calculatesizes(self, osd, font)', 2)
+        _debug_('calculatesizes(self, osd, font)', 0)
         """
         sizecalcs is not necessery on every pass
         """
@@ -231,7 +235,8 @@ class PluginInterface(plugin.DaemonPlugin):
                     self.idlebar.take_space(250)
 
         #turn off idlebar for testing
-        #self.idlebar = None
+        if not config.ENCODING_IDLEBAR:
+            self.idlebar = None
 
         if self.idlebar:
             self.boxborder = 0
@@ -287,7 +292,9 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 2)
         self.drawtime = now
         self.lastdraw = now
-        font = osd.get_font('small0')
+        font = osd.get_font('detachbar')
+        if font == osd.get_font('default'):     
+            font = osd.get_font('info value')
 
         self.calculate = True
         self.settext()
