@@ -214,7 +214,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def calculatesizes(self, osd, font):
-        _debug_('calculatesizes(self, osd, font)', 0)
+        _debug_('calculatesizes(self, osd, font)', 2)
         """
         sizecalcs is not necessery on every pass
         """
