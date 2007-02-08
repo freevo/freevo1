@@ -51,7 +51,7 @@ class PluginInterface(ScreenSaverPlugin):
 
     
     def config(self):
-        return [ ('BOUNCING_FREEVO_FPS', 10, 'Frames per second')]
+        return [ ('BOUNCING_FREEVO_FPS', 25, 'Frames per second')]
 
 
     def start(self, width, height):

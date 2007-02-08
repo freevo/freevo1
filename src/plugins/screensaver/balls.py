@@ -45,7 +45,7 @@ class PluginInterface(ScreenSaverPlugin):
         self.fps = config.BALLS_FPS
     
     def config(self):
-        return [ ('BALLS_FPS', 15, 'Frames per second'),
+        return [ ('BALLS_FPS', 25, 'Frames per second'),
                        ('BALLS_MAX_BALLS', 100, 'Maximum number of balls'),
                        ('BALLS_MIN_BALLS', 1, 'Minimum number of balls')]
 

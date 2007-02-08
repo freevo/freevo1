@@ -129,13 +129,20 @@ class PluginInterface(plugin.DaemonPlugin):
     def __run__(self):
         _debug_('Screensaver thread started')
         current_saver = None
+        index = 0
+        plugins_count = len(self.plugins)
         while not self.stop_screensaver:
             # No current screensaver so select one of the installed screensaver
             # plugins at random
             if current_saver is None:
-                if len(self.plugins) == 1:
+                if plugins_count == 1:
                     current_saver = self.plugins[0]
-                elif len(self.plugins) > 1:
+                elif plugins_count > 1 and plugins_count <= 4:
+                    current_saver = self.plugins[index]
+                    index += 1
+                    if index > plugins_count:
+                        index = 0
+                elif plugins_count > 4:
                     index = random.randint(0, len(self.plugins) - 1)
                     current_saver = self.plugins[index]
             
@@ -148,6 +155,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.screensaver_showing = False
         skin.force_redraw = True
         skin.redraw()
+        osd.update()
         _debug_('Screensaver thread stopped')
         
     def __run_screensaver__(self, screensaver):
@@ -175,8 +183,8 @@ class PluginInterface(plugin.DaemonPlugin):
             self.plugins.remove(screensaver)
             
         osd.clearscreen(osd.COL_BLACK)
-        pygame.display.flip()
-            
+        osd.update()
+
 
 
 class ScreenSaverPlugin(plugin.Plugin):
@@ -191,7 +199,7 @@ class ScreenSaverPlugin(plugin.Plugin):
         Returns the number of frames per second the saver
         wants to run at.
         """
-        return 50
+        return 25
 
     
     def stop(self):
