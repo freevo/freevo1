@@ -146,6 +146,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.__run_screensaver__(current_saver)
 
         self.screensaver_showing = False
+        skin.force_redraw = True
         skin.redraw()
         _debug_('Screensaver thread stopped')
         
@@ -190,7 +191,7 @@ class ScreenSaverPlugin(plugin.Plugin):
         Returns the number of frames per second the saver
         wants to run at.
         """
-        return 25
+        return 50
 
     
     def stop(self):
