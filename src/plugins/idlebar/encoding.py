@@ -72,6 +72,7 @@ class PluginInterface(plugin.DaemonPlugin):
                         (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
         self.server    = xmlrpclib.Server(server_string, allow_none=1)
 
+        self.skin      = skin.get_singleton()
         self.barimg    = os.path.join(config.ICON_DIR, 'status/encoding_bar.png')
         self.boximg    = os.path.join(config.ICON_DIR, 'status/encoding_box.png')
         self.boxborder = 3
@@ -92,6 +93,9 @@ class PluginInterface(plugin.DaemonPlugin):
         self.polltime  = 0
         self.state     = 'noserver'
         self.laststate = None
+        self.font      = self.skin.get_font('detachbar')
+        if self.font == skin.get_font('default'):     
+            self.font = skin.get_font('info value')
 
 
     def config(self):
@@ -292,13 +296,10 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 2)
         self.drawtime = now
         self.lastdraw = now
-        font = osd.get_font('detachbar')
-        if font == osd.get_font('default'):     
-            font = osd.get_font('info value')
 
         self.calculate = True
         self.settext()
-        self.calculatesizes(osd, font)
+        self.calculatesizes(osd, self.font)
 
         _debug_('self:bx=%s, by=%s, boxh=%s, boxw=%s, border=%s, padding=%s' % \
             (self.bx, self.by, self.boxh, self.boxw, self.boxborder, self.padding), 2)
@@ -313,7 +314,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         _debug_('self:tx=%s, ty=%s, texth=%s, textw=%s' % (self.tx, self.ty, self.texth, self.textw), 2)
         y = self.ty
-        osd.write_text(self.jobs, font, None, self.tx, y, self.textw, self.font_h, 'center', 'center')
+        osd.write_text(self.jobs, self.font, None, self.tx, y, self.textw, self.font_h, 'center', 'center')
         if self.running:
             y += self.font_h
             encbar = self.getimage(self.barimg, osd, True)
@@ -326,7 +327,7 @@ class PluginInterface(plugin.DaemonPlugin):
             osd.drawimage(encbox, (self.tx+x, y, -1, -1) )[0]
             y += h
             for text in self.text:
-                osd.write_text(text, font, None, self.tx, y, self.textw, self.font_h, 'center', 'center')
+                osd.write_text(text, self.font, None, self.tx, y, self.textw, self.font_h, 'center', 'center')
                 y += self.font_h
 
         return self.textw
