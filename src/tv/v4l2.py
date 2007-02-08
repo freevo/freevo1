@@ -292,7 +292,7 @@ class Videodev:
     def setfreq(self, freq):
         val = struct.pack(FREQUENCY_ST, long(0), long(2), freq)
         r = fcntl.ioctl(self.device, i32(SETFREQ_NO), val)
-        if DEBUG >= 3: print "setfreq_old: val=%r, r=%r" % (val, r)
+        if DEBUG >= 3: print "setfreq: val=%r, r=%r" % (val, r)
 
 
     def getinput(self):
