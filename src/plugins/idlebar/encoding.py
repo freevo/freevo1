@@ -341,8 +341,9 @@ class PluginInterface(plugin.DaemonPlugin):
         self.lastpoll = now
         _debug_("poll(self): poll=%.2f, draw=%.2f, interval=%s, state=%s" % \
             (pollduration, drawduration, self.draw_interval, self.state), 2)
-        if drawduration >= self.draw_interval / 100:
-            skin.redraw()
+        if skin.active():
+            if drawduration >= self.draw_interval / 100:
+                skin.redraw()
 
         # this is how to change the poll interval on the fly
         #if self.last_interval <> self.poll_interval:
