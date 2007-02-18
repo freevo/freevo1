@@ -261,8 +261,10 @@ class Item:
                edlBase=self.filename[:self.filename.rfind('.')]
                edlFile=edlBase+".edl"
                self.edl_file=edlFile
-               _debug_('EDL: %s'%(edlFile))
-               self.files.edl_file=edlFile
+               if os.path.exists(edlFile):
+                  self.files.edl_file=edlFile
+               else:
+                  self.files.edl_file=None
             self.mimetype = self.filename[self.filename.rfind('.')+1:].lower()
             if info:
                 self.info = mediainfo.get(self.filename)

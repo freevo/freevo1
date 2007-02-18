@@ -61,14 +61,14 @@ class PluginInterface(plugin.ItemPlugin):
         items = []
         
         if hasattr(item, 'files') and item.files:
-            if item.files.delete_possible():
-                items.append((self.confirm_delete, _('Delete'), 'delete'))
             if item.files.fxd_file and config.FILE_OPS_ALLOW_DELETE_INFO:
                 items.append((self.confirm_info_delete, _('Delete info'), 'delete_info'))
             if item.files.edl_file and config.FILE_OPS_ALLOW_DELETE_EDL:
                 items.append((self.confirm_edl_delete, _('Delete edl'), 'delete_edl'))
             if item.files.image and config.FILE_OPS_ALLOW_DELETE_IMAGE:
                 items.append((self.confirm_image_delete, _('Delete image'), 'delete_image'))
+            if item.files.delete_possible():
+                items.append((self.confirm_delete, _('Delete'), 'delete'))
         return items
 
 
