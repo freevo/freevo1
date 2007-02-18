@@ -1087,8 +1087,9 @@ IMAGEVIEWER_BLEND_MODE = -1
 # This will enable only new episodes to be recorded
 # ONLY_NEW_DETECTION = True
 
-#
+# ================================================================================
 # Watching TV
+# ================================================================================
 #
 # XXX You must change this to fit your local conditions!
 #
@@ -1113,6 +1114,10 @@ IMAGEVIEWER_BLEND_MODE = -1
 # TV_DEVICE = '/dev/video0'
 # TV_INPUT = 0
 # 
+# ================================================================================
+# Listening to radio
+# ================================================================================
+#
 # Radio device default is None, /dev/video24 for ivtv
 # RADIO_DEVICE = '/dev/radio'
 
@@ -1558,3 +1563,16 @@ IMAGEVIEWER_BLEND_MODE = -1
 # AMAZON_QUERY_ENCODING = 'latin-1'
 # plugin.activate('audio.coversearch')
 
+# plugin.activate('audio.album_tree')
+# see http://freevo.sourceforge.net/cgi-bin/doc/PluginAudioAlbumTree
+# AUDIO_ALBUM_TREE_SPEC = []
+# AUDIO_ALBUM_TREE_SPEC.append({'name':'Artist/Album/Track'
+#      ,'spec':["artist","album","track||'-'||title"]
+#      ,'alt_grouping':[None,None,'track']
+#     })
+# AUDIO_ALBUM_TREE_SPEC.append({'name':'(A-Z)/Artist/Album-Year/Track'
+#     ,'spec':["upper(substr(artist,0,1))"
+#             ,"artist","album||'-'||year"
+#             ,"track||'-'||title"]
+#     ,'alt_grouping':[None,None,'year||album','track']
+#     })
