@@ -183,7 +183,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         self.next_program  = self.findNextProgram()
 
-        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program))
+        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), 2)
 
         if self.next_program == None:
             return None
@@ -204,7 +204,7 @@ class PluginInterface(plugin.DaemonPlugin):
             return None
 
         secs_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
-        _debug_('next recording in %s secs' % (secs_to_next))
+        _debug_('next recording in %s secs' % (secs_to_next), 2)
 
         # announce 120 seconds before recording is due to start
         # stop the player 60 seconds before recording is due to start
@@ -261,7 +261,6 @@ class PluginInterface(plugin.DaemonPlugin):
         try:
             _debug_('eventhandler(self, %s, %s) name=%s arg=%s context=%s handler=%s' % \
                 (event, menuw, event.name, event.arg, event.context, event.handler), 2)
-            _debug_('event name=%s arg=%s' % (event.name, event.arg))
         finally:
             self.lock.release()
 
