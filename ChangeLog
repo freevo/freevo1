@@ -11,7 +11,7 @@ X is the category and #nnnnnnn is the tracker number.
 (F)eature requests http://sourceforge.net/tracker/?group_id=46652&atid=446898
 
 
-== Release 1.7.0 (2007-02-01) ==
+== Release 1.7.0 (2007-02-25) ==
 --------------------------------
 
 svn export svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
@@ -60,7 +60,7 @@ This release has all the changes in Release 1.6.x plus
  * Updated webradio to show the stream information (F#1587694)
  * Removed video plug-in mplayer for unichrome playback (B#1606699)
 
-== Release 1.6.3 (2007-??-??) ==
+== Release 1.6.3 (2007-02-18) ==
 --------------------------------
 
  * Fixed auto shutdown not calling the mount command (B#1632754)
