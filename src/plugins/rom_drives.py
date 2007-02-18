@@ -691,18 +691,20 @@ class Identify_Thread(threading.Thread):
             return
         
         self.lock.acquire()
-        for media in config.REMOVABLE_MEDIA:
-            last_status = media.drive_status
-            self.identify(media)
+        try:
+            for media in config.REMOVABLE_MEDIA:
+                last_status = media.drive_status
+                self.identify(media)
 
-            if last_status != media.drive_status:
-                _debug_('MEDIA: Status=%s' % media.drive_status,2)
-                _debug_('Posting IDENTIFY_MEDIA event',2)
-                if last_status == None:
-                    rc.post_event(plugin.event('IDENTIFY_MEDIA', arg=(media, True)))
-                else:
-                    rc.post_event(plugin.event('IDENTIFY_MEDIA', arg=(media, False)))
-        self.lock.release()
+                if last_status != media.drive_status:
+                    _debug_('MEDIA: Status=%s' % media.drive_status,2)
+                    _debug_('Posting IDENTIFY_MEDIA event',2)
+                    if last_status == None:
+                        rc.post_event(plugin.event('IDENTIFY_MEDIA', arg=(media, True)))
+                    else:
+                        rc.post_event(plugin.event('IDENTIFY_MEDIA', arg=(media, False)))
+        finally:
+            self.lock.release()
 
                 
     def __init__(self):

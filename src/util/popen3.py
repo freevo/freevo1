@@ -112,8 +112,10 @@ def waitpid(pid=0):
         
         if pid:
             wait_lock.acquire()
-            dead_childs.append(pid)
-            wait_lock.release()
+            try:
+                dead_childs.append(pid)
+            finally:
+                wait_lock.release()
         return
     
     if config.IS_RECORDSERVER:
@@ -130,12 +132,14 @@ def waitpid(pid=0):
         
     _debug_('poll', 2)
     wait_lock.acquire()
-    if pid in dead_childs:
-        dead_childs.remove(pid)
+    try:
+        if pid in dead_childs:
+            dead_childs.remove(pid)
+            wait_lock.release()
+            return 1
+        return 0
+    finally:
         wait_lock.release()
-        return 1
-    wait_lock.release()
-    return 0
     
 
 def stdout(app):

@@ -248,10 +248,12 @@ class BusyIcon(threading.Thread):
         
     def wait(self, timer):
         self.lock.acquire()
-        self.active = True
-        self.timer  = timer
-        self.mode_flag.set()
-        self.lock.release()
+        try:
+            self.active = True
+            self.timer  = timer
+            self.mode_flag.set()
+        finally:
+            self.lock.release()
         
     def stop(self):
         self.lock.acquire()
@@ -268,26 +270,28 @@ class BusyIcon(threading.Thread):
             if self.active:
                 import skin
                 self.lock.acquire()
-                osd = get_singleton()
-                icon = skin.get_icon('misc/osd_busy')
-                if icon:
-                    image  = osd.loadbitmap(icon)
-                    width  = image.get_width()
-                    height = image.get_height()
-                    x = osd.width  - config.OSD_OVERSCAN_X - 20 - width
-                    y = osd.height - config.OSD_OVERSCAN_Y - 20 - height
+                try:
+                    osd = get_singleton()
+                    icon = skin.get_icon('misc/osd_busy')
+                    if icon:
+                        image  = osd.loadbitmap(icon)
+                        width  = image.get_width()
+                        height = image.get_height()
+                        x = osd.width  - config.OSD_OVERSCAN_X - 20 - width
+                        y = osd.height - config.OSD_OVERSCAN_Y - 20 - height
 
-                    self.rect = (x,y,width,height)
-                    # backup the screen
-                    screen = pygame.Surface((width,height))
-                    screen.blit(osd.screen, (0,0), self.rect)
-                    # draw the icon
-                    osd.drawbitmap(image, x, y)
-                    osd.update(rect=self.rect, stop_busyicon=False)
+                        self.rect = (x,y,width,height)
+                        # backup the screen
+                        screen = pygame.Surface((width,height))
+                        screen.blit(osd.screen, (0,0), self.rect)
+                        # draw the icon
+                        osd.drawbitmap(image, x, y)
+                        osd.update(rect=self.rect, stop_busyicon=False)
 
-                    # restore the screen
-                    osd.screen.blit(screen, (x,y))
-                self.lock.release()
+                        # restore the screen
+                        osd.screen.blit(screen, (x,y))
+                finally:
+                    self.lock.release()
                 
             while self.active:
                 time.sleep(0.01)

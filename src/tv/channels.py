@@ -80,8 +80,8 @@ class FreevoChannels:
         """
         Gets the VideoGroup object used by this Freevo channel.
         """
+        self.lock.acquire()
         try:
-            self.lock.acquire()
             group = 0
 
             for i in range(len(config.TV_CHANNELS)):

@@ -181,75 +181,76 @@ class ChildApp:
             return
 
         self.lock.acquire()
-        # maybe child is dead and only waiting?
-        if self.wait():
-            _debug_('done the easy way', 2)
-            self.child = None
-            if not self.infile.closed:
-                self.infile.close()
-            self.lock.release()
-            return
-
-        if signal:
-            _debug_('childapp: killing pid %s signal %s' % (self.child.pid, signal))
-            try:
-                os.kill(self.child.pid, signal)
-            except OSError:
-                pass
-
-        _debug_('childapp: Before wait(%s)' % self.child.pid)
-        for i in range(60):
+        try:
+            # maybe child is dead and only waiting?
             if self.wait():
-                break
-            time.sleep(0.1)
-        else:
-            print 'force killing with signal 9'
-            try:
-                os.kill(self.child.pid, 9)
-            except OSError:
-                pass
-            for i in range(20):
+                _debug_('done the easy way', 2)
+                self.child = None
+                if not self.infile.closed:
+                    self.infile.close()
+                return
+
+            if signal:
+                _debug_('childapp: killing pid %s signal %s' % (self.child.pid, signal))
+                try:
+                    os.kill(self.child.pid, signal)
+                except OSError:
+                    pass
+
+            _debug_('childapp: Before wait(%s)' % self.child.pid)
+            for i in range(60):
                 if self.wait():
                     break
                 time.sleep(0.1)
-        _debug_('childapp: After wait()')
+            else:
+                print 'force killing with signal 9'
+                try:
+                    os.kill(self.child.pid, 9)
+                except OSError:
+                    pass
+                for i in range(20):
+                    if self.wait():
+                        break
+                    time.sleep(0.1)
+            _debug_('childapp: After wait()')
 
 
-        # now check if the app is really dead. If it is, outfile
-        # should be closed by the reading thread
-        for i in range(5):
-            if self.outfile.closed:
-                break
-            time.sleep(0.1)
-        else:
-            # Problem: the program had more than one thread, each thread has a
-            # pid. We killed only a part of the program. The filehandles are
-            # still open, the program still lives. If we try to close the infile
-            # now, Freevo will be dead.
-            # Solution: there is no good one, let's try killall on the binary. It's
-            # ugly but it's the _only_ way to stop this nasty app
-            print 'Oops, command refuses to die, try bad hack....'
-            util.killall(self.binary, sig=15)
-            for i in range(20):
+            # now check if the app is really dead. If it is, outfile
+            # should be closed by the reading thread
+            for i in range(5):
                 if self.outfile.closed:
                     break
                 time.sleep(0.1)
             else:
-                # still not dead. Puh, something is realy broekn here.
-                # Try killall -9 as last chance
-                print 'Try harder to kill the app....'
-                util.killall(self.binary, sig=9)
+                # Problem: the program had more than one thread, each thread has a
+                # pid. We killed only a part of the program. The filehandles are
+                # still open, the program still lives. If we try to close the infile
+                # now, Freevo will be dead.
+                # Solution: there is no good one, let's try killall on the binary. It's
+                # ugly but it's the _only_ way to stop this nasty app
+                print 'Oops, command refuses to die, try bad hack....'
+                util.killall(self.binary, sig=15)
                 for i in range(20):
                     if self.outfile.closed:
                         break
                     time.sleep(0.1)
                 else:
-                    # Oops...
-                    print 'PANIC'
-            if not self.infile.closed:
-                self.infile.close()
-        self.child = None
-        self.lock.release()
+                    # still not dead. Puh, something is realy broekn here.
+                    # Try killall -9 as last chance
+                    print 'Try harder to kill the app....'
+                    util.killall(self.binary, sig=9)
+                    for i in range(20):
+                        if self.outfile.closed:
+                            break
+                        time.sleep(0.1)
+                    else:
+                        # Oops...
+                        print 'PANIC'
+                if not self.infile.closed:
+                    self.infile.close()
+            self.child = None
+        finally:
+            self.lock.release()
 
 
 

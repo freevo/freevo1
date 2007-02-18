@@ -796,8 +796,10 @@ class Engine(threading.Thread):
                 # or addition of a socket
                 #
                 self.condition.acquire()
-                self.condition.wait(self.timeout)
-                self.condition.release()
+                try:
+                    self.condition.wait(self.timeout)
+                finally:
+                    self.condition.release()
             else:
                 rr, wr, er = select.select(rs, [], [], self.timeout)
                 for socket in rr:
@@ -809,26 +811,34 @@ class Engine(threading.Thread):
     def getReaders(self):
         result = []
         self.condition.acquire()
-        result = self.readers.keys()
-        self.condition.release()
+        try:
+            result = self.readers.keys()
+        finally:
+            self.condition.release()
         return result
     
     def addReader(self, reader, socket):
         self.condition.acquire()
-        self.readers[socket] = reader
-        self.condition.notify()
-        self.condition.release()
+        try:
+            self.readers[socket] = reader
+            self.condition.notify()
+        finally:
+            self.condition.release()
 
     def delReader(self, socket):
         self.condition.acquire()
-        del self.readers[socket]
-        self.condition.notify()
-        self.condition.release()
+        try:
+            del self.readers[socket]
+            self.condition.notify()
+        finally:
+            self.condition.release()
 
     def notify(self):
         self.condition.acquire()
-        self.condition.notify()
-        self.condition.release()
+        try:
+            self.condition.notify()
+        finally:
+            self.condition.release()
 
 class Listener(object):
     """A Listener is used by this module to listen on the multicast
@@ -1205,14 +1215,18 @@ class Rendezvous(object):
         """Calling thread waits for a given number of milliseconds or
         until notified."""
         self.condition.acquire()
-        self.condition.wait(timeout/1000)
-        self.condition.release()
+        try:
+            self.condition.wait(timeout/1000)
+        finally:
+            self.condition.release()
 
     def notifyAll(self):
         """Notifies all waiting threads"""
         self.condition.acquire()
-        self.condition.notifyAll()
-        self.condition.release()
+        try:
+            self.condition.notifyAll()
+        finally:
+            self.condition.release()
 
     def getServiceInfo(self, type, name, timeout=3000):
         """Returns network's service information for a particular

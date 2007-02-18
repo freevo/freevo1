@@ -511,11 +511,13 @@ class EventHandler:
         add event to the queue
         """
         self.lock.acquire()
-        if not isinstance(e, Event):
-            self.queue += [ Event(e, context=self.context) ]
-        else:
-            self.queue += [ e ]
-        self.lock.release()
+        try:
+            if not isinstance(e, Event):
+                self.queue += [ Event(e, context=self.context) ]
+            else:
+                self.queue += [ e ]
+        finally:
+            self.lock.release()
 
         if self.event_callback:
             self.event_callback()
@@ -549,14 +551,16 @@ class EventHandler:
         timer:  timer * 0.01 seconds when to call the function
         """
         self.lock.acquire()
-        if timer == SHUTDOWN:
-            _debug_('register shutdown callback: %s' % function, 2)
-            self.shutdown_callbacks.append([ function, arg ])
-        else:
-            if repeat:
-                _debug_('register callback: %s' % function, 2)
-            self.callbacks.append([ function, repeat, timer, 0, arg ])
-        self.lock.release()
+        try:
+            if timer == SHUTDOWN:
+                _debug_('register shutdown callback: %s' % function, 2)
+                self.shutdown_callbacks.append([ function, arg ])
+            else:
+                if repeat:
+                    _debug_('register callback: %s' % function, 2)
+                self.callbacks.append([ function, repeat, timer, 0, arg ])
+        finally:
+            self.lock.release()
 
         
     def unregister(self, function):
@@ -564,15 +568,17 @@ class EventHandler:
         unregister an object from the main loop
         """
         self.lock.acquire()
-        for c in copy.copy(self.callbacks):
-            if c[0] == function:
-                _debug_('unregister callback: %s' % function, 2)
-                self.callbacks.remove(c)
-        for c in copy.copy(self.shutdown_callbacks):
-            if c[0] == function:
-                _debug_('unregister shutdown callback: %s' % function, 2)
-                self.shutdown_callbacks.remove(c)
-        self.lock.release()
+        try:
+            for c in copy.copy(self.callbacks):
+                if c[0] == function:
+                    _debug_('unregister callback: %s' % function, 2)
+                    self.callbacks.remove(c)
+            for c in copy.copy(self.shutdown_callbacks):
+                if c[0] == function:
+                    _debug_('unregister shutdown callback: %s' % function, 2)
+                    self.shutdown_callbacks.remove(c)
+        finally:
+            self.lock.release()
 
         
     def suspend(self):
@@ -607,9 +613,11 @@ class EventHandler:
                 if not c[1]:
                     # remove if it is no repeat callback:
                     self.lock.acquire()
-                    if c in self.callbacks: 
-                        self.callbacks.remove(c)
-                    self.lock.release()
+                    try:
+                        if c in self.callbacks: 
+                            self.callbacks.remove(c)
+                    finally:
+                        self.lock.release()
                 else:
                     # reset counter for next run
                     c[3] = 0
