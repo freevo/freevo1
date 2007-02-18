@@ -4,9 +4,9 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: 
+# Notes:
 #
-# Todo: 
+# Todo:
 #   X pull down weather on demand MENU_SELECT (need to fix popup behavior)
 #   X Ability to specify custom location name in PLUGIN_WEATHER_LOCATIONS
 #   - get location name back onto details screen
@@ -20,7 +20,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -61,7 +61,7 @@ from item import Item
 skin = skin.get_singleton()
 osd  = osd.get_singleton()
 
-#check every 2 hours 
+#check every 2 hours
 WEATHER_AGE = 7200
 WEATHER_DIR = os.path.join(config.SHARE_DIR, 'images', 'weather')
 
@@ -188,9 +188,12 @@ WEATHER_DATA = [
 def wget(iUrl):
     for i in range(3):
         try:
+            t1 = time.time()
             fd = urllib.urlopen(iUrl)
             data = fd.read()
             fd.close()
+            t2 = time.time()
+            print "Weather download: ", iUrl, "-", "%.1f" % (t2-t1), "sec"
             return data
         except IOError:
             print "retrying wget '%s'" % (iUrl,)
@@ -198,7 +201,7 @@ def wget(iUrl):
 
 def toCelcius(fTemp):
     try:
-        tTemp = float ( fTemp  )
+        tTemp = float (fTemp )
     except ValueError:
         tTemp = 0.0
     nTemp = (5.0/9.0)*(tTemp - 32.0)
@@ -206,15 +209,15 @@ def toCelcius(fTemp):
 
 def toKilometers(miles):
     try:
-        tTemp = float( miles )
+        tTemp = float(miles)
     except ValueError:
         tTemp = 0.0
     nTemp = tTemp*1.6
-    return "%d" % ( int(nTemp),)
+    return "%d" % (int(nTemp),)
 
-def toBarometer( baro ):
+def toBarometer(baro):
     try:
-        tTemp = float( baro )
+        tTemp = float(baro)
     except ValueError:
         tTemp = 0.0
     nTemp = tTemp*3.386
@@ -227,10 +230,10 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate, put the following lines in local_conf.py:
 
-    plugin.activate('weather', level=45) 
+    plugin.activate('weather', level=45)
     PLUGIN_WEATHER_LOCATIONS = [ ("<val1>", <bool>, "<str>"), ("<val2>", <bool>, "<str>"), ...]
-    
-    where <val#> is a zipcode or 
+
+    where <val#> is a zipcode or
     and <bool> (1 == convert to SI Units; 0 == do not convert)
     and <str> is a custom name you wish to use for this location
     """
@@ -240,10 +243,10 @@ class PluginInterface(plugin.MainMenuPlugin):
             self.reason = 'PLUGIN_WEATHER_LOCATIONS not defined'
             return
         plugin.MainMenuPlugin.__init__(self)
-        
+
     def config(self):
         return [('PLUGIN_WEATHER_LOCATIONS', [("USNC0559", 0)],
-                 "Location codes to grab forecasts for" )]
+                 "Location codes to grab forecasts for")]
 
     def items(self, parent):
         return [ WeatherMainMenu(parent) ]
@@ -255,10 +258,10 @@ class WeatherItem(Item):
     """
     def __init__(self, parent, iLocation):
         Item.__init__(self, parent)
-    
+
         self.parent       = parent
 
-        # Flag to indicate whether this item is able to be displayed        
+        # Flag to indicate whether this item is able to be displayed
         self.error        = 0
 
         self.location     = None
@@ -292,11 +295,11 @@ class WeatherItem(Item):
         self.popupParam = None
 
         # were we asked to convert to SI units?
-        if isinstance( iLocation, tuple ):
+        if isinstance(iLocation, tuple):
             self.location    = iLocation[0]
-            if len( iLocation ) > 1:
+            if len(iLocation) > 1:
                 self.convertData = int(iLocation[1])
-            if len( iLocation ) > 2:
+            if len(iLocation) > 2:
                 self.name        = str(iLocation[2])
 
             self.popupParam = Unicode(self.name)
@@ -337,29 +340,29 @@ class WeatherItem(Item):
 
     def getWind(self):
         if self.convertData:
-            return "%s km/h" % (self.curWind, )
+            return "%s km/h" % (self.curWind,)
         else:
-            return "%s mph" % (self.curWind, )
+            return "%s mph" % (self.curWind,)
 
     def getTemp(self):
         if self.convertData:
-            return u"%s\xb0 C" % (self.curTemp,) 
+            return u"%s\xb0 C" % (self.curTemp,)
         else:
-            return u"%s\xb0 F" % (self.curTemp,) 
+            return u"%s\xb0 F" % (self.curTemp,)
 
     def getLastUpdated(self):
         if self.convertData:
             # day / month / year  24hour:min:sec
-            return _("Last updated: %s") % (time.strftime( "%d/%m/%Y %H:%M:%S", time.localtime( self.last_update) ), )
+            return _("Last updated: %s") % (time.strftime("%d/%m/%Y %H:%M:%S", time.localtime(self.last_update)),)
         else:
             # month / day / year  12hour:min:sec [AM|PM]
-            return _("Last updated: %s") % (time.strftime( "%m/%d/%Y %I:%M:%S %p", time.localtime( self.last_update) ), )
+            return _("Last updated: %s") % (time.strftime("%m/%d/%Y %I:%M:%S %p", time.localtime(self.last_update)),)
 
     def getFeel(self):
         if self.convertData:
-            return u"%s\xb0 C" % (self.curFeel,) 
+            return u"%s\xb0 C" % (self.curFeel,)
         else:
-            return u"%s\xb0 F" % (self.curFeel,) 
+            return u"%s\xb0 F" % (self.curFeel,)
 
     def getVisibility(self):
         if float(self.visibility) == 999.00:
@@ -368,7 +371,7 @@ class WeatherItem(Item):
             return "%s km" % (self.visibility,)
         else:
             return "%s mi" % (self.visibility,)
-        
+
     def start_detailed_interface(self, arg=None, menuw=None):
         WeatherDetailHandler(arg, menuw, self)
 
@@ -376,31 +379,31 @@ class WeatherItem(Item):
         """
         return a list of actions for this item
         """
-        return [ ( self.start_detailed_interface, _('Show Weather Details') ) ]
-    
+        return [ (self.start_detailed_interface, _('Show Weather Details')) ]
+
     def saveToCache(self):
         util.save_pickle(self.weatherData, self.cacheFile)
         # attempt to save weathermap
         try:
             if self.weatherMapData is not None:
-                imgfd = os.open( self.mapFile, os.O_CREAT|os.W_OK )
-                os.write( imgfd, self.weatherMapData )
-                os.close( imgfd )
+                imgfd = os.open(self.mapFile, os.O_CREAT|os.W_OK)
+                os.write(imgfd, self.weatherMapData)
+                os.close(imgfd)
         except:
             print "failed while saving weather map to cache '%s'" % (self.mapFile,)
 
     def loadFromCache(self):
         self.weatherData = util.read_pickle(self.cacheFile)
 
-        try: 
-            size = int( os.stat( self.mapFile )[6] )
+        try:
+            size = int(os.stat(self.mapFile)[6])
         except:
             print "Weather ERROR: failed attempting to load %s radar map from cache" % (self.location,)
             pass
         else:
-            imgfd = os.open( self.mapFile, os.R_OK )
-            self.weatherMapData = os.read( imgfd, size )
-            os.close( imgfd )
+            imgfd = os.open(self.mapFile, os.R_OK)
+            self.weatherMapData = os.read(imgfd, size)
+            os.close(imgfd)
 
     def needRefresh(self):
         '''is the cache too old?'''
@@ -412,8 +415,8 @@ class WeatherItem(Item):
 
     def getForecast(self, force=0):
         '''grab the forecast, updating for the website if needed'''
-    
-        # check cache 
+
+        # check cache
         try:
             if force or self.needRefresh():
                 self.updateData()
@@ -421,7 +424,7 @@ class WeatherItem(Item):
                 self.loadFromCache()
         except:
             self.error = 1
-            print "ERROR obtaining forecast data for '%s'" % (self.location, )
+            print "ERROR obtaining forecast data for '%s'" % (self.location,)
         else:
             # set the last update timestamp
             self.last_update = os.path.getmtime(self.cacheFile)
@@ -432,12 +435,12 @@ class WeatherItem(Item):
             except:
                 self.error = 1
                 import traceback, sys
-                print "ERROR parsing forecast data for '%s'" % (self.location, )
+                print "ERROR parsing forecast data for '%s'" % (self.location,)
                 print "\tThis could indicate a failed download of weather data from msnbc.  "\
                       "You can confirm this by examining the contents of the file '%s'.  "\
                       "Below is also the traceback indicating where we discovered the problem "\
                       "with the weather file.  If the weather file appears intact, please report " \
-                      "this to the 'freevo-users@lists.sourceforge.net'\n" % (self.cacheFile, )
+                      "this to the 'freevo-users@lists.sourceforge.net'\n" % (self.cacheFile,)
                 output = apply(traceback.format_exception, sys.exc_info())
                 output = ''.join(output)
                 output = urllib.unquote(output)
@@ -445,13 +448,13 @@ class WeatherItem(Item):
 
     def GetString(self, var):
         '''when given a variable, it returns the value stored in the MSNBC forecast data'''
-        
-        regexp  = re.compile('%s = "[^"]*"' % (var,) )
-        results = regexp.search( self.weatherData )
+
+        regexp  = re.compile('%s = "[^"]*"' % (var,))
+        results = regexp.search(self.weatherData)
         (start, end) = results.span()
         start += len(var) + 4 # the 4 chars is the ' = "'
         end   -= 1  # strip off the right "
-        return self.weatherData[start:end] 
+        return self.weatherData[start:end]
 
     def updateData(self):
         popup = PopupBox(text=_('Fetching Weather for %s...') % self.popupParam)
@@ -459,7 +462,7 @@ class WeatherItem(Item):
 
         # parse the document
         try:
-            self.weatherData = wget( self.dataurl )
+            self.weatherData = wget(self.dataurl)
         except:
             popup.destroy()
             raise WeatherError, 'Weather ERROR: failed attempting to grab forecast for %s' % self.location
@@ -467,35 +470,38 @@ class WeatherItem(Item):
         #TODO: Get description from http://weather.noaa.gov/pub/data/forecasts/zone/nc/ncz041.txt
 
         # obtain radar map
+        popup.destroy()
+        popup = PopupBox(text=_('Fetching Radar Map for %s...' % self.popupParam))
+        popup.show()
         try:
             if self.maplink is None:
 
                 # get the first web page
                 for attempt in range(3):
-                    weatherPage  = wget ( self.mapurl )
+                    weatherPage  = wget (self.mapurl)
                     try:
                         # find link to map page
-                        regexp       = re.compile ( 'if \(isMinNS4\) var mapNURL = "[^"]*";', re.IGNORECASE  )
-                        results      = regexp.search( weatherPage )
+                        regexp       = re.compile ('if \(isMinNS4\) var mapNURL = "[^"]*";', re.IGNORECASE )
+                        results      = regexp.search(weatherPage)
                         (start, end) = results.span()
                         # TODO: I don't like having fixed length offsets from start, end
-                        weatherPage2 = "http://w3.weather.com/%s" % (weatherPage[start+29:end-2], )
+                        weatherPage2 = "http://w3.weather.com/%s" % (weatherPage[start+29:end-2],)
 
-                        mapPage      = wget ( weatherPage2 )
+                        mapPage      = wget (weatherPage2)
                         # find a link to the real doplay map
                         regexp       = re.compile('<img NAME="mapImg" SRC="http://image.weather.com[^"]*jpg"', re.IGNORECASE)
-                        results      = regexp.search( mapPage )
+                        results      = regexp.search(mapPage)
                         (start, end) = results.span()
                         # TODO: I don't like having fixed length offsets from start, end
                         self.maplink = mapPage[start+24:end-1]
                         break;
-                    except: 
+                    except:
                         print "Retrying [%d] %s" % (attempt,self.mapurl)
                         pass
-            
+
             # pull down the map locally
             try:
-                self.weatherMapData = wget( self.maplink )
+                self.weatherMapData = wget(self.maplink)
             except:
                 print 'Weather ERROR: failed attempting to download radar map from %s' % self.maplink
         except:
@@ -532,34 +538,34 @@ class WeatherItem(Item):
         if self.name is None:
             self.name    = "%s" % (self.city)
 
-        # convert temperature 
+        # convert temperature
         if self.curTemp is None or len(self.curTemp) == 0:
             self.curTemp = "-na-"
             self.updated = self.updated + " (Not All Information Available)"
         else:
             if self.convertData:
-                self.curTemp = toCelcius( self.curTemp )
+                self.curTemp = toCelcius(self.curTemp)
 
         self.curIcon   = self.GetString("this.swCIcon")
         self.curWind   = self.GetString("this.swWindS")
 
         # convert wind
         if self.convertData:
-            self.curWind = toKilometers( self.curWind )
+            self.curWind = toKilometers(self.curWind)
 
         self.windDir   = self.GetString("this.swWindD")
         self.barometer = self.GetString("this.swBaro")
 
         # convert barometer
         if self.convertData:
-            self.barometer = toBarometer( self.barometer )
+            self.barometer = toBarometer(self.barometer)
 
         self.curHumid = self.GetString("this.swHumid")
         self.curFeel  = self.GetString("this.swReal")
 
         # convert feels-like temp
         if self.convertData:
-            self.curFeel = toCelcius( self.curFeel )
+            self.curFeel = toCelcius(self.curFeel)
 
         self.uvIndex     = self.GetString("this.swUV")
         self.visibility  = self.GetString("this.swVis")
@@ -568,17 +574,17 @@ class WeatherItem(Item):
 
         # convert visibility
         if self.convertData and float(self.visibility) != 999.0:
-            self.visibility = toKilometers( self.visibility )
+            self.visibility = toKilometers(self.visibility)
 
         self.shortdesc = _(self.GetString("this.swConText"))
-        if self.shortdesc is None or len( self.shortdesc ) == 0:
+        if self.shortdesc is None or len(self.shortdesc) == 0:
             self.shortdesc = self.curIcon
 
         self.forecastData = self.GetString("this.swFore")
         holdings     = []
         holdings     = self.forecastData.split("|")
-        dayNum       = int( holdings[0] )
-        curDay       = int( time.strftime("%u") ) + 1 # day of week 2(mon) - 1(sun)
+        dayNum       = int(holdings[0])
+        curDay       = int(time.strftime("%u")) + 1 # day of week 2(mon) - 1(sun)
 
         if dayNum != curDay:
             self.pastTime = 1
@@ -587,43 +593,43 @@ class WeatherItem(Item):
         ctr   = 0
         for i in range(5,10):
             (mons, days, years) = holdings[i].split("/")
-            mons  = int( mons )
-            days  = int( days )
-            years = int( years )
+            mons  = int(mons)
+            days  = int(days)
+            years = int(years)
             dnum  = (ltime[6] + ctr) % 7
-            self.date.append( time.strftime( "%A", (years, mons, days, ltime[3], ltime[4], ltime[5], \
-                dnum, ltime[7], ltime[8]) ) )
+            self.date.append(time.strftime("%A", (years, mons, days, ltime[3], ltime[4], ltime[5], \
+                dnum, ltime[7], ltime[8])))
             ctr += 1
 
         # weather icon
         for i in (10,11,12,13):
-            self.weatherIcon.append( holdings[i] )
+            self.weatherIcon.append(holdings[i])
 
         # calculate high temps
         for i in (20,21,22,23):
             if self.convertData:
-                holdings[i] = toCelcius( holdings[i] )
-            self.highTemp.append( holdings[i] )
+                holdings[i] = toCelcius(holdings[i])
+            self.highTemp.append(holdings[i])
 
         # calculate low temps
         for i in (40,41,42,43):
             if self.convertData:
-                holdings[i] = toCelcius( holdings[i] )
-            self.lowTemp.append( holdings[i] )
+                holdings[i] = toCelcius(holdings[i])
+            self.lowTemp.append(holdings[i])
 
         for i in (15,16,17,18):
-            self.weatherType.append( holdings[i] )
+            self.weatherType.append(holdings[i])
 
-        self.setWeatherTypeIcon( )
-        self.setWeatherIcon( )
+        self.setWeatherTypeIcon()
+        self.setWeatherIcon()
 
         # Create description
-        self.description = "%s %s %s" % ( self.shortdesc, _("at"), self.getTemp() )
+        self.description = "%s %s %s" % (self.shortdesc, _("at"), self.getTemp())
 
     def setWeatherIcon(self):
         '''set the weather icon given the short forecast description'''
 
-        match = weatherTypes.findType( name=self.shortdesc )
+        match = weatherTypes.findType(name=self.shortdesc)
         if match:
             self.curIcon     = match.getIcon()
         else:
@@ -643,12 +649,12 @@ class WeatherItem(Item):
         i = 0
         while i < 4:
 
-            match = weatherTypes.findType( number=self.weatherType[i] )
+            match = weatherTypes.findType(number=self.weatherType[i])
             if match:
                 self.weatherType[i] = match.getName()
                 self.weatherIcon[i] = match.getIcon()
             else:
-                self.weatherType[i] = "%s (%s)" % ( _("Unknown"), self.weatherType[i])
+                self.weatherType[i] = "%s (%s)" % (_("Unknown"), self.weatherType[i])
                 self.weatherIcon[i] = "unknown.png"
             i += 1
 
@@ -678,45 +684,46 @@ class WeatherTypesClass:
         self.icon_lookup = {} # reverse hash to quickly get a Weathertype w/ a icon
         self.loadWeatherTypes()
     def loadWeatherTypes(self):
-         
+
         for icdata in WEATHER_DATA:
             try:
                 wtype = WeatherType()
-                wtype.setNumber ( icdata[0] )
-                wtype.setName   ( icdata[1] )
-                wtype.setIcon   ( icdata[2] )
+                wtype.setNumber (icdata[0])
+                wtype.setName   (icdata[1])
+                wtype.setIcon   (icdata[2])
 
                 # populate reverse dictionaries
-                self.num_lookup[ wtype.getNumber() ] = len( self.wtypes )
-                self.name_lookup[ wtype.getName() ]  = len( self.wtypes )
-                self.icon_lookup[ wtype.getIcon() ]  = len( self.wtypes )
+                self.num_lookup[ wtype.getNumber() ] = len(self.wtypes)
+                self.name_lookup[ wtype.getName() ]  = len(self.wtypes)
+                self.icon_lookup[ wtype.getIcon() ]  = len(self.wtypes)
 
-                self.wtypes.append ( wtype )
+                self.wtypes.append (wtype)
             except:
                 pass
     def findType(self, number=None, name=None, icon=None):
         ''' return a type given a type number '''
         if number:
             try:
-                idx = self.num_lookup[number] 
+                idx = self.num_lookup[number]
                 return self.wtypes[ idx ]
             except:
                 return None
         elif name:
             try:
-                idx = self.name_lookup[name] 
+                idx = self.name_lookup[name]
                 return self.wtypes[ idx ]
             except:
                 return None
         elif icon:
             try:
-                idx = self.icon_lookup[icon] 
+                idx = self.icon_lookup[icon]
                 return self.wtypes[ idx ]
             except:
                 return None
         else:
-            raise Exception, "unknown type requested in WeatherTypesClass::findType()"  
-        
+            print "Unknown type requested in WeatherTypesClass::findType()"
+            return None
+
     def __len__(self): return len(self.wtypes)
     def __getitem__(self, i): return self.wtypes[i]
 
@@ -734,9 +741,9 @@ class WeatherMainMenu(Item):
         """
         return a list of actions for this item
         """
-        items = [ ( self.create_locations_menu , _('Locations') ) ]
+        items = [ (self.create_locations_menu , _('Locations')) ]
         return items
- 
+
     def __call__(self, arg=None, menuw=None):
         """
         call first action in the actions() list
@@ -752,7 +759,7 @@ class WeatherMainMenu(Item):
             weather_item = WeatherItem(self, location)
             # Only display this entry if no errors were found
             if weather_item.isValid():
-                locations.append ( weather_item )
+                locations.append (weather_item)
 
         # if only 1 valid location, autoselect it and go right to the detail screen
         if locations.__len__() == 1:
@@ -762,7 +769,7 @@ class WeatherMainMenu(Item):
         # if no locations were found, add a menu entry indicating that
         if not locations:
             nolocation = menu.MenuItem(_('No locations specified'), menuw.goto_prev_page, 0)
-            locations.append( nolocation )
+            locations.append(nolocation)
 
         # if only 1 valid menu entry present, autoselect it
         if autoselect:
@@ -777,7 +784,7 @@ class WeatherDetailHandler:
     """
     A handler class to display several detailed forecast screens and catch events
     """
-    def __init__(self, iArg=None, iMenuw=None, iWeather=None ):
+    def __init__(self, iArg=None, iMenuw=None, iWeather=None):
         self.arg     = iArg
         self.menuw   = iMenuw
         self.weather = iWeather
@@ -793,14 +800,14 @@ class WeatherDetailHandler:
 
         self.title    = self.weather.name
         self.subtitle = self.subtitles[0]
-        
+
         # Fire up splashscreen and load the plugins
         skin.draw('weather', self)
 
     def prevSkin(self):
         '''decriment self.curSkin'''
         self.curSkin -= 1
-        
+
         # out of bounds check, reset to size of skins array
         if self.curSkin < 0:
             self.curSkin = len(self.skins)-1
@@ -809,7 +816,7 @@ class WeatherDetailHandler:
     def nextSkin(self):
         '''increment self.curSkin'''
         self.curSkin += 1
-        
+
         # out of bounds check, reset to 0
         if self.curSkin >= len(self.skins):
             self.curSkin = 0
@@ -825,22 +832,22 @@ class WeatherDetailHandler:
         elif event == 'MENU_SELECT':
             # TODO: update the current forecast data, and refresh
             self.weather.getForecast(force=1)
-            skin.clear( )
-            skin.draw( 'weather', self )
+            skin.clear()
+            skin.draw('weather', self)
             return True
 
         elif event in ('MENU_DOWN', 'MENU_RIGHT'):
             # Fire up the next skin
             self.nextSkin()
-            skin.draw( 'weather', self )
+            skin.draw('weather', self)
             return True
 
         elif event in ('MENU_UP', 'MENU_LEFT'):
             # Fire up the previous skin
             self.prevSkin()
-            skin.draw( 'weather', self )
+            skin.draw('weather', self)
             return True
-        
+
         return False
 
 class WeatherBaseScreen(skin.Area):
@@ -857,8 +864,8 @@ class WeatherBaseScreen(skin.Area):
         self.big_font      = skin.get_font('huge0')
 
         # set the multiplier to be used in all screen drawing
-        self.xmult = float( osd.width  - 2*config.OSD_OVERSCAN_X ) / 800
-        self.ymult = float( osd.height - 2*config.OSD_OVERSCAN_Y ) / 600  
+        self.xmult = float(osd.width  - 2*config.OSD_OVERSCAN_X) / 800
+        self.ymult = float(osd.height - 2*config.OSD_OVERSCAN_Y) / 600
 
         self.update_functions = (self.update_day, self.update_forecast,
                                  self.update_week, self.update_doplar)
@@ -868,29 +875,29 @@ class WeatherBaseScreen(skin.Area):
         text      = _("Humidity")
         value     = self.parent.weather.getHumidity()
 
-        x_col1   = self.content.x + (50  * self.xmult) 
-        x_col2   = self.content.x + (250 * self.xmult) 
-        y_start  = self.content.y + (60  * self.xmult) 
+        x_col1   = self.content.x + (50  * self.xmult)
+        x_col2   = self.content.x + (250 * self.xmult)
+        y_start  = self.content.y + (60  * self.xmult)
         y_inc    = 40 * self.ymult
 
-        self.write_text(text,   self.key_font,   self.content,  
+        self.write_text(text,   self.key_font,   self.content,
             x=x_col1,  y=y_start, height=-1, align_h='left')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
             x=x_col2,  y=y_start, height=-1, align_h='left')
 
         text      = _("Pressure")
         value     = self.parent.weather.getBarometer()
-        self.write_text(text,   self.key_font,   self.content,  
+        self.write_text(text,   self.key_font,   self.content,
             x=x_col1,  y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
             x=x_col2,  y=y_start+y_inc, height=-1, align_h='left')
 
         text      = _("Wind")
-        value     = "%s %s %s" % ( self.parent.weather.windDir, _("at"), self.parent.weather.getWind())
+        value     = "%s %s %s" % (self.parent.weather.windDir, _("at"), self.parent.weather.getWind())
         y_start   += y_inc
-        self.write_text(text,   self.key_font,   self.content,  
+        self.write_text(text,   self.key_font,   self.content,
             x=x_col1,  y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
             x=x_col2,  y=y_start+y_inc, height=-1, align_h='left')
 
         text      = _("Wind Chill")
@@ -898,47 +905,47 @@ class WeatherBaseScreen(skin.Area):
         y_start   += y_inc
         self.write_text(text,   self.key_font,   self.content,
             x=x_col1,  y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
             x=x_col2,  y=y_start+y_inc, height=-1, align_h='left')
 
         text      = _("Visibility")
         value     = self.parent.weather.getVisibility()
         y_start   += y_inc
-        self.write_text(text,   self.key_font,   self.content,  
+        self.write_text(text,   self.key_font,   self.content,
             x=x_col1,  y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
             x=x_col2,  y=y_start+y_inc, height=-1, align_h='left')
 
         text      = _("UV Index")
         value     = self.parent.weather.uvIndex
         y_start   += y_inc
-        self.write_text(text,   self.key_font,   self.content,  
+        self.write_text(text,   self.key_font,   self.content,
             x=x_col1,  y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
             x=x_col2,  y=y_start+y_inc, height=-1, align_h='left')
 
         # draw current condition image
         x_start = self.content.x + (450*self.xmult)
         y_start = self.content.y + (40*self.ymult)
-        self.draw_image( self.parent.weather.image,
-            ( x_start, y_start, 
-              int(200*self.xmult), int(150*self.ymult) ) )
+        self.draw_image(self.parent.weather.image,
+            (x_start, y_start,
+              int(200*self.xmult), int(150*self.ymult)))
 
         y_start = self.content.y + (200*self.ymult)
         self.write_text(self.parent.weather.shortdesc,
-            self.key_font,   self.content,  
+            self.key_font,   self.content,
             x=x_start, y=y_start,
             width=200*self.xmult, height=-1, align_h='center')
         y_start = self.content.y + (250*self.ymult)
-        self.write_text(self.parent.weather.getTemp(),  
-            self.big_font,   self.content,  
+        self.write_text(self.parent.weather.getTemp(),
+            self.big_font,   self.content,
             x=x_start, y=y_start,
             width=200*self.xmult, height=-1, align_h='center')
 
         x_start = self.content.x + (40*self.xmult)
         y_start = self.content.y + (350*self.ymult)
         self.write_text(self.parent.weather.getLastUpdated() ,
-            self.small_font, self.content,  
+            self.small_font, self.content,
             x=x_start, y=y_start,
             width=self.content.width, height=-1, align_h='left')
 
@@ -948,41 +955,41 @@ class WeatherBaseScreen(skin.Area):
         around the day view. It would be nice if I could use the same source
         that the gnome-applet weather applet uses for detailed forecast data
         '''
-        x_start = self.content.x + (20  * self.xmult) 
-        y_start = self.content.y + (30  * self.xmult) 
+        x_start = self.content.x + (20  * self.xmult)
+        y_start = self.content.y + (30  * self.xmult)
 
         lines = []
-        lines.append( "%s %s %s %s." % ( _("Today, a high of"),
+        lines.append("%s %s %s %s." % (_("Today, a high of"),
                                          self.parent.weather.highTemp[0],
                                          _("and a low of"),
-                                         self.parent.weather.lowTemp[0] ) )
-        lines.append( "%s %s %s" \
-                  % ( _("Currently, there is a a humidity of"), 
-                      self.parent.weather.getHumidity(), 
-                      _("and"), ) )
+                                         self.parent.weather.lowTemp[0]))
+        lines.append("%s %s %s" \
+                  % (_("Currently, there is a a humidity of"),
+                      self.parent.weather.getHumidity(),
+                      _("and"),))
 
         text = _("the winds are ")
         if self.parent.weather.windDir == "CALM":
-            text += "%s. " % ( _("calm"),)
+            text += "%s. " % (_("calm"),)
         else:
-            text += "%s %s %s %s." % ( _("coming in at"), self.parent.weather.getWind(), _("from the"), self.parent.weather.windDir )
-        lines.append( text) 
+            text += "%s %s %s %s." % (_("coming in at"), self.parent.weather.getWind(), _("from the"), self.parent.weather.windDir)
+        lines.append(text)
 
         if float(self.parent.weather.visibility) == 999.00:
-            lines.append( _("Visibility will be unlimited today") )
+            lines.append(_("Visibility will be unlimited today"))
         else:
-            lines.append( "%s %s." % ( _("There will be a visibility of"), self.parent.weather.getVisibility(), ) )
+            lines.append("%s %s." % (_("There will be a visibility of"), self.parent.weather.getVisibility(),))
 
         y = y_start
         for line in lines:
-            self.write_text(line,   self.key_font,   self.content,  
+            self.write_text(line,   self.key_font,   self.content,
             x=x_start,  y=y, height=-1, align_h='left')
             y += (30 * self.ymult)
 
     def update_week(self):
 
-        x_start = self.content.x + (10  * self.xmult) 
-        y_start = self.content.y + (10  * self.xmult) 
+        x_start = self.content.x + (10  * self.xmult)
+        y_start = self.content.y + (10  * self.xmult)
 
         day = 0
         #for x in (40, 220, 400, 580):
@@ -990,51 +997,50 @@ class WeatherBaseScreen(skin.Area):
 
             x2_start = x_start + (x *self.xmult)
             y2_start = y_start
-            
+
             self.write_text(Unicode(self.parent.weather.date[day]),
-                self.key_font,   self.content,  
+                self.key_font,   self.content,
                 x=x2_start,  y=y2_start,
                 width=150*self.xmult, height=-1, align_h='center')
 
             iconFile = os.path.join(WEATHER_DIR, self.parent.weather.weatherIcon[day])
-            self.draw_image( iconFile, 
-                             ( x2_start,
+            self.draw_image(iconFile,
+                             (x2_start,
                                y2_start + (50*self.ymult),
-                               int(160*self.xmult), 
-                               int(120*self.ymult) ) )
-            self.write_text(self.parent.weather.weatherType[day],  
-                self.small_font,   self.content,  
-                x=x2_start,  y=y2_start + (200*self.ymult), 
+                               int(160*self.xmult),
+                               int(120*self.ymult)))
+            self.write_text(self.parent.weather.weatherType[day],
+                self.small_font,   self.content,
+                x=x2_start,  y=y2_start + (200*self.ymult),
                 width=160*self.xmult, height=-1, align_h='center')
             self.write_text(_("LO"),
-                self.val_font,   self.content,  
-                x=x2_start,  y=y2_start + (260*self.ymult), 
+                self.val_font,   self.content,
+                x=x2_start,  y=y2_start + (260*self.ymult),
                 width=90*self.xmult,  height=-1, align_h='center')
             self.write_text(self.parent.weather.lowTemp[day],
-                self.key_font,   self.content,  
-                x=x2_start,  y=y2_start + (300*self.ymult), 
+                self.key_font,   self.content,
+                x=x2_start,  y=y2_start + (300*self.ymult),
                 width=90*self.xmult, height=-1, align_h='center')
             self.write_text(_("HI"),
-                self.val_font,   self.content,  
-                x=x2_start+(70*self.xmult),  y=y2_start + (260*self.ymult), 
+                self.val_font,   self.content,
+                x=x2_start+(70*self.xmult),  y=y2_start + (260*self.ymult),
                 width=90*self.xmult, height=-1, align_h='center')
             self.write_text(self.parent.weather.highTemp[day],
-                self.key_font,   self.content,  
-                x=x2_start+(70*self.xmult),  y=y2_start + (300*self.ymult), 
+                self.key_font,   self.content,
+                x=x2_start+(70*self.xmult),  y=y2_start + (300*self.ymult),
                 width=90*self.xmult, height=-1, align_h='center')
             day += 1
 
     def update_doplar(self):
         if self.parent.weather.weatherMapData is None:
-            x_start = self.content.x + (10  * self.xmult) 
-            y_start = self.content.y + (10  * self.xmult) 
-            self.write_text( _("Error encountered while trying to download Radar map"),
-                self.key_font,   self.content,  
-                x=x_start,  y=y_start,
+            x_start = self.content.x + (10  * self.xmult)
+            y_start = self.content.y + (10  * self.xmult)
+            self.write_text(_("Error encountered while trying to download Radar map"),
+                self.key_font, self.content, x=x_start, y=y_start,
                 width=self.content.width, height=-1, align_h='left')
         else:
-            self.draw_image( self.parent.weather.mapFile, (self.content.x, self.content.y, self.content.width,
-                                                           self.content.height) )
+            self.draw_image(self.parent.weather.mapFile, (self.content.x, self.content.y, self.content.width,
+                                                           self.content.height))
 
     def update_content(self):
         self.parent   = self.menu
@@ -1044,4 +1050,4 @@ class WeatherBaseScreen(skin.Area):
 
 # create one instance of the WeatherType class
 weatherTypes = WeatherTypesClass()
-skin.register ( 'weather', ('screen', 'subtitle', 'title', 'plugin', WeatherBaseScreen()) )
+skin.register ('weather', ('screen', 'subtitle', 'title', 'plugin', WeatherBaseScreen()))
