@@ -105,6 +105,7 @@ class ShowProgramDetails:
             description =  prg.getattr('time') + u'\n' + prg.desc
         item = MenuItem(name=name)
         item.description = description
+        self.visible = True
         self.menuw = menuw
         self.menuw.hide(clear=False)
         rc.app(self)
