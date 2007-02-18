@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ if sys.argv[0].find('setup.py') == -1:
                         print e
         elif string.__class__ != unicode:
             return unicode(str(string), config.LOCALE)
-        
+
         return string
 
 
@@ -68,7 +68,7 @@ if sys.argv[0].find('setup.py') == -1:
                 return unicode(string).encode(encoding, 'replace')
         return string
 
-    
+
     import vfs
     from misc import *
     from fileops import *
@@ -76,7 +76,7 @@ if sys.argv[0].find('setup.py') == -1:
     import fxdparser
     import objectcache
     import popen3
-    
+
     __builtin__.__dict__['vfs']     = vfs
     __builtin__.__dict__['Unicode'] = Unicode
     __builtin__.__dict__['String']  = String

@@ -176,10 +176,10 @@ if __name__ == "__main__":
             except:
                 print 'unable to write file'
     else:
-        print "error creating capture for %s" % filename
+        print "error creating capture for %s" % Unicode(filename)
 
     for capture in captures:
         try:
             os.remove(capture)
         except:
-            print "error removing temporary captures for %s" % filename
+            print "error removing temporary captures for %s" % Unicode(filename)
