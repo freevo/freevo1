@@ -122,13 +122,15 @@ class PluginInterface(plugin.DaemonPlugin):
         update the bar according to showstatus
         """
         if self.status == BAR_SHOW:
-            skin.redraw()
+            if skin.active():
+                skin.redraw()
 
         elif self.status == BAR_IDLE:
             self.status = self.timer()
             if self.status == BAR_HIDE:
                 self.hide()
-            skin.redraw()
+            if skin.active():
+                skin.redraw()
     
 
     def draw(self, (type, object), osd):
