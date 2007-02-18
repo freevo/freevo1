@@ -222,24 +222,23 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         sizecalcs is not necessery on every pass
         """
-        if not hasattr(self, 'idlebar'):
-            self.idlebar = plugin.getbyname('idlebar')
-            if self.idlebar:
-                self.idlebar_max = osd.width + osd.x
-                _debug_('idlebar_max=%s, free_space=%s' % (self.idlebar_max, self.idlebar.free_space), 2)
-                for p in plugin.get('idlebar'):
-                    if hasattr(p, 'clock_left_position'):
-                        self.idlebar_max = p.clock_left_position
+        if config.ENCODING_IDLEBAR:
+            if not hasattr(self, 'idlebar'):
+                self.idlebar = plugin.getbyname('idlebar')
+                if self.idlebar:
+                    self.idlebar_max = osd.width + osd.x
+                    _debug_('idlebar_max=%s, free_space=%s' % (self.idlebar_max, self.idlebar.free_space), 2)
+                    for p in plugin.get('idlebar'):
+                        if hasattr(p, 'clock_left_position'):
+                            self.idlebar_max = p.clock_left_position
 
-                if self.idlebar_max - self.idlebar.free_space < 250:
-                    _debug_('free space in idlebar to small, using normal detach')
-                    self.idlebar = None
-                else:
-                    # this doesn't work, but needs to for the detachbar
-                    self.idlebar.take_space(250)
-
-        #turn off idlebar for testing
-        if not config.ENCODING_IDLEBAR:
+                    if self.idlebar_max - self.idlebar.free_space < 250:
+                        _debug_('free space in idlebar to small, using normal detach')
+                        self.idlebar = None
+                    else:
+                        # this doesn't work, but needs to for the detachbar
+                        self.idlebar.take_space(250)
+        else:
             self.idlebar = None
 
         if self.idlebar:
@@ -341,8 +340,8 @@ class PluginInterface(plugin.DaemonPlugin):
         self.lastpoll = now
         _debug_("poll(self): poll=%.2f, draw=%.2f, interval=%s, state=%s" % \
             (pollduration, drawduration, self.draw_interval, self.state), 2)
-        if skin.active():
-            if drawduration >= self.draw_interval / 100:
+        if drawduration >= self.draw_interval / 100:
+            if skin.active():
                 skin.redraw()
 
         # this is how to change the poll interval on the fly
