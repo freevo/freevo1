@@ -1,15 +1,15 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# tv.py - This is the Freevo TV module. 
+# tv.py - This is the Freevo TV module.
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -36,10 +36,6 @@ import config
 
 # The menu widget class
 import menu
-
-# The RemoteControl class, sets up a UDP daemon that the remote control client
-# sends commands to
-import rc
 
 import plugin
 
@@ -78,7 +74,7 @@ def get_tunerid(channel_id):
 def get_friendly_channel(channel_id):
     channel_name = tv_util.get_chan_displayname(channel_id)
 
-    if not channel_name: 
+    if not channel_name:
         AlertBox(text=_('Could not find TV channel %s') % channel_id).show()
 
     return channel_name
@@ -94,7 +90,7 @@ def start_tv(mode=None, channel_id=None):
 # The TV menu
 #
 class TVMenu(Item):
-    
+
     def __init__(self):
         Item.__init__(self)
         self.type = 'tv'

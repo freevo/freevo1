@@ -139,7 +139,7 @@ class TVGuide(Item):
         MENU_PAGEUP: Moves to the first of the currently displayed channels
         MENU_PAGEDOWN: Move to the last of the currently displayed channels
         MENU_SUBMENU: Open a submenu for the selected program
-        MENU_SELECT: Execute the first entry in the submenu
+        MENU_SELECT: Open a submenu for the selected program
         TV_START_RECORDING: Start to record this or put it on schedule
         PLAY: Start to watch the selected channel (if it is possible)
         PLAY_END: Show the guide again
@@ -147,7 +147,7 @@ class TVGuide(Item):
         """
 
 
-        _debug_('TVGUIDE EVENT is %s' % event, 2)
+        _debug_('TVGUIDE EVENT is %s' % event, 0)
 
         ## MENU_CHANGE_STYLE
         if event == MENU_CHANGE_STYLE:
@@ -216,7 +216,7 @@ class TVGuide(Item):
 
         ## MENU_SELECT: Open a submenu for the selected program
         elif event == MENU_SELECT:
-            self.event_record()
+            self.event_submenu()
 
         ## TV_START_RECORDING: Start to record this or put it on schedule
         elif event == TV_START_RECORDING:
@@ -457,8 +457,8 @@ class TVGuide(Item):
         pi = ProgramItem(self, prog=self.selected)
         # and show its submenu
         pi.display_program(menuw=self.menuw)
-        
-        
+
+
     def event_change_program(self, value, full_scan=False):
 
         start_time    = self.start_time
