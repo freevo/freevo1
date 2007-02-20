@@ -20,6 +20,8 @@ import javax.microedition.lcdui.AlertType;
 import protocol.*;
 import protocol.MusicPlayer;
 
+import translate.Translate;
+
 /*
  * Created on Apr 20, 2004
  *
@@ -69,6 +71,17 @@ public class BemusedProtocol implements MusicPlayer {
 		public int volume;
 	}
 	PlaybackStatus currentStatus;
+
+	public class ItemData {
+		public String data;
+		private Translate t;
+
+		public ItemData() {
+			t = Translate.getInstance();
+			data =  t.get("Press any key to control");
+		}
+	}
+	public ItemData itemdata;
 	
 	public BemusedProtocol(Display display) {
 		status = new ProtocolStatus();
@@ -76,6 +89,9 @@ public class BemusedProtocol implements MusicPlayer {
 		currentStatus = new PlaybackStatus();
 		commandTarget = new MyCommandTarget();
 		currentStatus.playlist = new String[0];
+
+		itemdata = new ItemData();
+
 		this.display = display;
 		runSignal = new Integer(0);
 		statusUpdateListeners = new Vector();
@@ -226,6 +242,12 @@ public class BemusedProtocol implements MusicPlayer {
 			fileBrowser.setDirInfo(contents);
 		}
 
+		public void setStatus(String data) {
+			itemdata.data = data;
+
+			notifyStatusUpdate();
+		}
+
 	}
 
 	void appendCommand(Command cmd) {
@@ -303,6 +325,10 @@ public class BemusedProtocol implements MusicPlayer {
 
 	public void requestMenu() {
 		appendCommand(new Command("MSND"));
+	}
+
+	public void requestItemData() {
+		appendCommand(new Command("STAT"));
 	}
 
 }

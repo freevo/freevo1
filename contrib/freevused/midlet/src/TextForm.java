@@ -10,6 +10,7 @@ import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.TextBox;
 import javax.microedition.lcdui.TextField;
 
+import translate.Translate;
 
 /*
  * Created February 2006
@@ -30,29 +31,30 @@ public class TextForm extends TextBox implements CommandListener  {
 
 	TextBox textBox;
 
+	Translate t;
+
 	public TextForm(Controller controller) {
-		super("Enter text", "", 40, TextField.ANY);
+		super("", "", 40, TextField.ANY);
 		this.controller = controller;
 		setCommandListener(this);
 
-		sendCommand = new Command("Send", "Send text to Freevo", Command.SCREEN, 0);
+		sendCommand = new Command(t.get("Send"), t.get("Send text to Freevo"), Command.SCREEN, 0);
 		addCommand(sendCommand);
 
-		numericCommand = new Command("Numeric", "Numeric keys", Command.SCREEN, 2);
+		numericCommand = new Command(t.get("Numeric"), t.get("Numeric keys"), Command.SCREEN, 2);
 		addCommand(numericCommand);
 
-		moreCommand = new Command("More", "More actions", Command.SCREEN, 2);
+		moreCommand = new Command(t.get("More"), t.get("More actions"), Command.SCREEN, 2);
 		addCommand(moreCommand);
 
-		browseCommand = new Command("Browse", "Browse Menu", Command.SCREEN, 2);
+		browseCommand = new Command(t.get("Browse"), t.get("Browse menu"), Command.SCREEN, 2);
 		addCommand(browseCommand);
 		
-		mainCommand = new Command("Main", "Main actions", Command.CANCEL, 0);
+		mainCommand = new Command(t.get("Main"), t.get("Main actions"), Command.CANCEL, 0);
 		addCommand(mainCommand);
 
-		textBox = new TextBox("Send this to Freevo", "", 20, 0);
+		textBox = new TextBox(t.get("Send this to Freevo"), "", 20, 0);
 
-		
 	}
 	
 	public void commandAction(Command cmd, Displayable display) {

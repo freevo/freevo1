@@ -8,10 +8,12 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Item;
+import javax.microedition.lcdui.Spacer;
 import javax.microedition.lcdui.ItemCommandListener;
 import javax.microedition.lcdui.StringItem;
 
 import bemused.BemusedProtocol;
+import translate.Translate;
 
 /*
  * Created on May 24, 2004
@@ -37,52 +39,54 @@ public class ControlForm extends Form implements CommandListener, ItemCommandLis
 	Command numericCommand;
 	Command moreCommand;
 	Command browseCommand;
+	Command getItemDataCommand;
 	
-	StringItem titleItem;
 	StringItem statusItem;
 	NavigationWidget naviItem;
 	
 	String[] lastPlaylistItems;
 	int lastPlaylistPos;
+
+	Translate t = Translate.getInstance();
 	
 	/**
 	 * @param arg0
 	 */
 	public ControlForm(Controller controller) {
 		super("Freevused");
+
 		this.controller = controller;
-		
+
 		setCommandListener(this);
 		
-		naviItem = new NavigationWidget(controller);
-		titleItem = new StringItem(null, "---");
-		statusItem = new StringItem(null, "Press any key to control");
+		naviItem = new NavigationWidget(controller, NavigationWidget.CONTROL_KEYS, getWidth(), -1);
+		naviItem.setLayout(naviItem.getLayout() | Item.LAYOUT_CENTER);
 
-		//titleItem.setLayout(titleItem.getLayout() | ChoiceGroup.HYPERLINK);
-		//titleItem.setLayout(titleItem.getLayout() | 
-		//		Item.LAYOUT_CENTER | Item.LAYOUT_NEWLINE_AFTER);
+		statusItem = new StringItem(null, t.get("Press any key to control"));
+		statusItem.setLayout(statusItem.getLayout() | Item.LAYOUT_CENTER);
+		statusItem.setPreferredSize(getWidth(), -1);
+		statusItem.setFont(Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_SMALL));
 		
-		statusItem.setLayout(statusItem.getLayout() | 
-				Item.LAYOUT_CENTER | Item.LAYOUT_NEWLINE_AFTER);
-		
-		//append(titleItem);
 		append(naviItem);
 		append(statusItem);
 		
-		exitCommand = new Command("Exit", Command.EXIT, 2);
+		exitCommand = new Command(t.get("Exit"), Command.EXIT, 2);
 		addCommand(exitCommand);
 
-		numericCommand = new Command("Numeric", "Numeric keys", Command.SCREEN, 2);
+		numericCommand = new Command(t.get("Numeric"), t.get("Numeric keys"), Command.SCREEN, 2);
 		addCommand(numericCommand);
 
-		moreCommand = new Command("More", "More actions", Command.SCREEN, 2);
+		moreCommand = new Command(t.get("More"), t.get("More actions"), Command.SCREEN, 2);
 		addCommand(moreCommand);
 
-		textCommand = new Command("Text", "Send Text", Command.SCREEN, 2);
+		textCommand = new Command(t.get("Text"), t.get("Send text"), Command.SCREEN, 2);
 		addCommand(textCommand);
 
-		browseCommand = new Command("Browse", "Browse Menu", Command.SCREEN, 2);
+		browseCommand = new Command(t.get("Browse"), t.get("Browse menu"), Command.SCREEN, 2);
 		addCommand(browseCommand); 
+
+		getItemDataCommand = new Command(t.get("Get data"), t.get("Get item data"), Command.SCREEN, 2);
+		addCommand(getItemDataCommand); 
 
 		/*
 
@@ -110,39 +114,8 @@ public class ControlForm extends Form implements CommandListener, ItemCommandLis
 		*/
 	}
 	
-	public void setStatus(BemusedProtocol.PlaybackStatus s) {
-		titleItem.setText(s.title);
-		
-		String lenText;
-		if (s.songLengthSecs >= 60) {
-			lenText = "" + ((s.songLengthSecs/60 > 9) ? ("" + s.songLengthSecs/60) : ("0" + s.songLengthSecs/60)) + ":"
-			+ ((s.songLengthSecs%60 > 9) ? ("" + s.songLengthSecs%60) : ("0" + s.songLengthSecs%60));
-		}
-		else {
-			lenText = ""+s.songLengthSecs;
-		}
-		
-		long songPosSecs = (new Date().getTime() - s.startTime.getTime())/1000;
-		String posText;
-		if (s.songLengthSecs >= 60) {
-			posText = "" + ((songPosSecs/60 > 9) ? ("" + songPosSecs/60) : ("0" + songPosSecs/60)) + ":"
-			+ ((songPosSecs%60 > 9) ? ("" + songPosSecs%60) : ("0" + songPosSecs%60));
-		}
-		else {
-			posText = ""+songPosSecs;
-		}
-		
-		String statusText = (s.playing?"playing":"not playing")+ 
-			" " +  posText + " of " + lenText + 
-			(s.shuffle?" [shuf]":"") + (s.repeat?" [repeat]":"")/*+" v:"+s.volume+
-			" pp:"+s.playlistPos+" pl:"+s.playlist.length+" sp:"+songPosSecs+" sl:"+
-			s.songLengthSecs*/;
-		statusText = "";
-		statusItem.setText(statusText);
-		
-		naviItem.setPlaylistPos(s.playlistPos, s.playlist.length-1);
-		naviItem.setTrackPos((int)songPosSecs, (int)s.songLengthSecs);
-		naviItem.setVolume(s.volume);
+	public void setStatus(BemusedProtocol.ItemData itemdata) {
+		statusItem.setText(itemdata.data);
 	}
 	
 	public void commandAction(Command cmd, Displayable d) {
@@ -166,6 +139,9 @@ public class ControlForm extends Form implements CommandListener, ItemCommandLis
 		}
 		else if (cmd == browseCommand) {
 			controller.showBrowseForm();
+		}
+		else if (cmd == getItemDataCommand) {
+			controller.getPlayer().requestItemData();
 		}
 		/*
 		else if (cmd == playlistCommand) {

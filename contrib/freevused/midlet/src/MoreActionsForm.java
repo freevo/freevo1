@@ -8,17 +8,12 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Item;
+import javax.microedition.lcdui.Spacer;
 import javax.microedition.lcdui.ItemCommandListener;
 import javax.microedition.lcdui.StringItem;
 
 import bemused.BemusedProtocol;
-
-/*
- * Created on May 24, 2004
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
+import translate.Translate;
 
 /**
  * @author fred
@@ -36,47 +31,56 @@ public class MoreActionsForm extends Form implements CommandListener, ItemComman
 	Command mainCommand;
 	Command numericCommand;
 	Command browseCommand;
+	Command getItemDataCommand;
 	
 	StringItem titleItem;
 	StringItem statusItem;
-	MoreActionsNavigationWidget naviItem;
+	NavigationWidget naviItem;
+
+	Translate t;
 	
 	/**
 	 * @param arg0
 	 */
 	public MoreActionsForm(Controller controller) {
-		super("More actions");
+		super("Freevused");
+
+		t = Translate.getInstance();
+
 		this.controller = controller;
+
 		
 		setCommandListener(this);
-		
-		naviItem = new MoreActionsNavigationWidget(controller);
-		titleItem = new StringItem(null, "---");
-		statusItem = new StringItem(null, "Press any key to control");
 
-		//titleItem.setLayout(titleItem.getLayout() | ChoiceGroup.HYPERLINK);
-		//titleItem.setLayout(titleItem.getLayout() | 
-		//		Item.LAYOUT_CENTER | Item.LAYOUT_NEWLINE_AFTER);
-		
-		statusItem.setLayout(statusItem.getLayout() | 
-				Item.LAYOUT_CENTER | Item.LAYOUT_NEWLINE_AFTER);
-		
-		//append(titleItem);
+		naviItem = new NavigationWidget(controller, NavigationWidget.MORE_KEYS, getWidth(), -1);
+
+		statusItem = new StringItem(null, t.get("Press any key to control"));
+		statusItem.setLayout(statusItem.getLayout() | Item.LAYOUT_CENTER);
+		statusItem.setPreferredSize(getWidth(), -1);
+		statusItem.setFont(Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_SMALL));
+
 		append(naviItem);
 		append(statusItem);
 		
-		mainCommand = new Command("Main", "Main actions", Command.CANCEL, 0);
+		mainCommand = new Command(t.get("Main"), t.get("Main actions"), Command.CANCEL, 0);
 		addCommand(mainCommand);
 		
-		browseCommand = new Command("Browse", "Browse Menu", Command.SCREEN, 2);
+		browseCommand = new Command(t.get("Browse"), t.get("Browse menu"), Command.SCREEN, 2);
 		addCommand(browseCommand);
 
-		textCommand = new Command("Text", "Send Text", Command.SCREEN, 2);
+		textCommand = new Command(t.get("Text"), t.get("Send text"), Command.SCREEN, 2);
 		addCommand(textCommand);
 
-		numericCommand = new Command("Numeric", "Numeric keys", Command.SCREEN, 2);
+		numericCommand = new Command(t.get("Numeric"), t.get("Numeric keys"), Command.SCREEN, 2);
 		addCommand(numericCommand);
 
+		getItemDataCommand = new Command(t.get("Get data"), t.get("Get item data"), Command.SCREEN, 2);
+		addCommand(getItemDataCommand); 
+
+	}
+
+	public void setStatus(BemusedProtocol.ItemData itemdata) {
+		statusItem.setText(itemdata.data);
 	}
 	
 	public void commandAction(Command cmd, Displayable d) {
@@ -100,6 +104,9 @@ public class MoreActionsForm extends Form implements CommandListener, ItemComman
 		}
 		else if (cmd == browseCommand) {
 			controller.showBrowseForm();
+		}
+		else if (cmd == getItemDataCommand) {
+			controller.getPlayer().requestItemData();
 		}
 	}
 

@@ -7,20 +7,11 @@ import javax.microedition.lcdui.Image;
 
 import protocol.MusicPlayer;
 
-/*
- * Created on Jun 7, 2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-
-/**
- * @author fred
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 public class NavigationWidget extends CustomItem {
+
+	public static final int CONTROL_KEYS = 0;
+	public static final int NUMERIC_KEYS = 1;
+	public static final int MORE_KEYS    = 2;
 
 	Controller controller;
 	Image clickIcon;
@@ -37,11 +28,43 @@ public class NavigationWidget extends CustomItem {
 	int currentVolume;
 	int maxPlaylistPos;
 	int maxTrackPos;
-	
-	
-	public NavigationWidget(Controller controller) {
+
+	int controlType = CONTROL_KEYS;
+
+	int formWidth = -1;
+	int formHeight = -1;
+
+	String imageName[][];
+
+	String imagesControlActions[][] = {
+		{ "previous", "play", "next" },
+		{ "rewind", "pause", "forward" },
+		{ "vol_down", "stop", "vol_up" },
+		{ "vol_mute", "select", "main" }
+	};
+
+	String imagesNumericActions[][] = {
+		{ "number_1", "number_2", "number_3" },
+		{ "number_4", "number_5", "number_6" },
+		{ "number_7", "number_8", "number_9" },
+		{ "play", "number_0", "stop" }
+	};
+
+	String imagesMoreActions[][] = {
+		{ "previous", "play", "next" },
+		{ "rewind", "guide", "forward" },
+		{ "chanplus", "stop", "chanminus" },
+		{ "eject", "display", "record" }
+	};
+
+	public NavigationWidget(Controller controller, int controlType, int fWidth, int fHeight) {
 		super(null);
 		this.controller = controller;
+
+		this.controlType = controlType;
+
+		this.formWidth  = fWidth;
+		this.formHeight = fHeight;
 		
 		clickIcon = loadImage("click_icon");
 		
@@ -52,21 +75,23 @@ public class NavigationWidget extends CustomItem {
 			keyPressed[n] = new boolean[columns];
 		}
 				
-		icons[0][0] = loadImage("previous");
-		icons[0][1] = loadImage("play");
-		icons[0][2] = loadImage("next");
-		
-		icons[1][0] = loadImage("rewind");
-		icons[1][1] = loadImage("pause");
-		icons[1][2] = loadImage("forward");
-		
-		icons[2][0] = loadImage("vol_down");
-		icons[2][1] = loadImage("stop");
-		icons[2][2] = loadImage("vol_up");
+		switch ( controlType ) {
+			case 1:
+				imageName = imagesNumericActions;
+				break;
+			case 2:
+				imageName = imagesMoreActions;
+				break;
+			default:
+				imageName = imagesControlActions;
+				break;
+		}
 
-		icons[3][0] = loadImage("vol_mute");
-		icons[3][1] = loadImage("select");
-		icons[3][2] = loadImage("main");
+		for (int x=0; x < imageName.length; x++) {
+			for (int y=0; y < imageName[x].length; y++) {
+        		icons[x][y] = loadImage( imageName[x][y] );
+			}
+		}
 
 		xSize = new int[columns];
 		ySize = new int[rows];
@@ -85,7 +110,7 @@ public class NavigationWidget extends CustomItem {
 			int maxRowHeight = 0;
 			for (int col=0; col<columns; ++col) {
 				if (icons[row][col] != null && icons[row][col].getHeight() > maxRowHeight) {
-					 maxRowHeight = icons[row][col].getWidth();
+					 maxRowHeight = icons[row][col].getHeight();
 				}
 			}
 			ySize[row] = maxRowHeight;
@@ -150,11 +175,35 @@ public class NavigationWidget extends CustomItem {
 	}
 
 	protected int getPrefContentWidth(int height) {
-		return getMinContentWidth();
+		int w;
+
+		if ( formWidth == -1 ) {
+			w = getMinContentWidth();
+		} else {
+			w = formWidth;
+		}
+
+		return w;
 	}
 
 	protected int getPrefContentHeight(int width) {
-		return getMinContentHeight();
+		int h;
+
+		if ( formHeight == -1 ) {
+			h = getMinContentHeight();
+		} else {
+			h = formHeight;
+		}
+
+		return h;
+	}
+
+	public int getWidth() {
+		return getPrefContentWidth( formHeight );
+	}
+
+	public int getHeight() {
+		return getPrefContentHeight( formWidth );
 	}
 
 	void drawBar(Graphics g, int w, int row, int val, int maxVal) {
@@ -241,6 +290,22 @@ public class NavigationWidget extends CustomItem {
 	
 	protected void keyReleased(int keyCode) {
 		MusicPlayer p = controller.getPlayer();
+		switch ( controlType ) {
+			case 1:
+			    keyReleasedNumericActions(p, keyCode);
+				break;
+			case 2:
+			    keyReleasedMoreActions(p, keyCode);
+				break;
+			default:
+			    keyReleasedControlActions(p, keyCode);
+				break;
+		}
+		keyPressed[getRowForKey(keyCode)][getColForKey(keyCode)] = false;
+		repaint();
+	}
+
+	private void keyReleasedControlActions(MusicPlayer p, int keyCode) {
 		switch (keyCode) {
 			case Canvas.KEY_NUM1:
 				p.previous();
@@ -278,8 +343,89 @@ public class NavigationWidget extends CustomItem {
 			case Canvas.KEY_POUND:
 				p.mainMenu();
 				break;
-		}			
-		keyPressed[getRowForKey(keyCode)][getColForKey(keyCode)] = false;
-		repaint();
+		}
 	}
+
+	private void keyReleasedNumericActions(MusicPlayer p, int keyCode) {
+		switch (keyCode) {
+			case Canvas.KEY_NUM1:
+				p.sendAction("NUM1");
+				break;
+			case Canvas.KEY_NUM2:
+				p.sendAction("NUM2");
+				break;
+			case Canvas.KEY_NUM3:
+				p.sendAction("NUM3");
+				break;
+			case Canvas.KEY_NUM4:
+				p.sendAction("NUM4");
+				break;
+			case Canvas.KEY_NUM5:
+				p.sendAction("NUM5");
+				break;
+			case Canvas.KEY_NUM6:
+				p.sendAction("NUM6");
+				break;
+			case Canvas.KEY_NUM7:
+				p.sendAction("NUM7");
+				break;
+			case Canvas.KEY_NUM8:
+				p.sendAction("NUM8");
+				break;
+			case Canvas.KEY_NUM9:
+				p.sendAction("NUM9");
+				break;
+			case Canvas.KEY_NUM0:
+				p.sendAction("NUM0");
+				break;
+			case Canvas.KEY_STAR:
+				p.play();
+				break;
+			case Canvas.KEY_POUND:
+				p.stop();
+				break;
+		}			
+	}
+
+	private void keyReleasedMoreActions(MusicPlayer p, int keyCode) {
+		switch (keyCode) {
+			case Canvas.KEY_NUM1:
+				p.previous();
+				break;
+			case Canvas.KEY_NUM2:
+				p.play();
+				break;
+			case Canvas.KEY_NUM3:
+				p.next();
+				break;
+			case Canvas.KEY_NUM4:
+				p.rewind();
+				break;
+			case Canvas.KEY_NUM5:
+				p.sendAction("GUID");
+				break;
+			case Canvas.KEY_NUM6:
+				p.forward();
+				break;
+			case Canvas.KEY_NUM7:
+				p.sendAction("CHA+");
+				break;
+			case Canvas.KEY_NUM8:
+				p.stop();
+				break;
+			case Canvas.KEY_NUM9:
+				p.sendAction("CHA-");
+				break;
+			case Canvas.KEY_NUM0:
+				p.sendAction("DISP");
+				break;
+			case Canvas.KEY_STAR:
+				p.sendAction("EJEC");
+				break;
+			case Canvas.KEY_POUND:
+				p.sendAction("RECO");
+				break;
+		}			
+	}
+
 }

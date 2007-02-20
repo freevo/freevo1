@@ -27,5 +27,6 @@ public interface MusicPlayer {
 	void volumeLouder();
 	void volumeQuieter();
 	void volumeMute();
+	void requestItemData();
 	void sendAction(String action);
 }

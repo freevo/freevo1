@@ -14,12 +14,16 @@ import java.util.Vector;
 import protocol.MusicPlayer;
 import bemused.BemusedProtocol;
 
+import translate.Translate;
+
 public class Command {
 
 	String name;
 	String strArg;
 	int intArg;
 	byte byteArg;
+
+	Translate t = Translate.getInstance();
 
 	public Command(String name) {
 		this.name = name;
@@ -49,7 +53,7 @@ public class Command {
 	}
 
 	private byte readByte(DataInputStream input) throws IOException {
-		return input.readByte();
+		return (byte) input.readUnsignedByte();
 	}
 
 	private void writeShort(DataOutputStream output, short val)
@@ -89,6 +93,10 @@ public class Command {
 				output.flush();
 				readMenu(input, target);
 			}
+			else if (name.equals("STAT")) {
+				output.flush();
+				readItemData(input, target);
+			}
 			else {
 				output.flush();
 			}
@@ -107,20 +115,20 @@ public class Command {
 		byte lastByte;
 		Vector dirList = new Vector();
 
-		lastByte = input.readByte();
+		lastByte = readByte(input);
 		while ( lastByte != 0 ) {
 			curItemBufPos = 0;
 			while ( lastByte != (byte) '\n' ) {
 				if (curItemBufPos < curItemBufLen) {
 					curItemBuf[curItemBufPos++] = lastByte;
 				}
-				lastByte = input.readByte();
+				lastByte = readByte(input);
 			}
 			if ( curItemBufPos > 0 ) {
 				String curItemStr = new String(curItemBuf, 0, curItemBufPos, "UTF-8");
 				dirList.addElement(curItemStr);
 			}
-			lastByte = input.readByte();
+			lastByte = readByte(input);
 		}
 
 		int listSize = dirList.size();
@@ -136,6 +144,36 @@ public class Command {
 	private void requestMenu(DataOutputStream output)
 		   	throws BemusedProtocolException {
 		writeString(output, "MSND");
+	}
+
+	private void readItemData(DataInputStream input, CommandTarget target)
+		throws IOException {
+
+		byte[] curItemBuf = new byte[128];
+		int curItemBufLen = curItemBuf.length;
+		int curItemBufPos;
+		byte lastByte;
+		StringBuffer ItemStr = new StringBuffer();
+		String data;
+
+		lastByte = readByte(input);
+		while ( lastByte != 0 ) {
+
+			curItemBufPos = 0;
+			while (curItemBufPos < curItemBufLen && lastByte != 0) {
+				curItemBuf[curItemBufPos++] = lastByte;
+				lastByte = readByte(input);
+			}
+			String curItemStr = new String(curItemBuf, 0, curItemBufPos, "UTF-8");
+			ItemStr.append(curItemStr);
+		}
+
+		data = ItemStr.toString();
+		if ( data.equals("") ) {
+			data = t.get("Press any key to control");
+		}
+		target.setStatus(data);
+
 	}
 
 }

@@ -54,12 +54,20 @@
 #     'NUM6': '6',
 #     'NUM7': '7',
 #     'NUM8': '8',
-#     'NUM9': '9'
+#     'NUM9': '9',
+#
+#     'STAT': 'FVUSED_ITEM_INFO'
 #   }
 # 
 #---------------------------------------------------- /etc/freevo/local.conf
 #
 # Changelog
+#
+# 1.5
+#
+# - Added i18n to the midlet
+# - Added information of the current playing element
+# - Modified debug info levels
 #
 # 1.4
 #
@@ -118,6 +126,11 @@ import plugin
 import rc
 import event as em
 import menu
+import audio.audioitem as aitem
+import video.videoitem as vitem
+
+import audio.player as player
+
 
 import plugin
 
@@ -180,7 +193,9 @@ class PluginInterface(plugin.DaemonPlugin):
       'NUM6': '6',
       'NUM7': '7',
       'NUM8': '8',
-      'NUM9': '9'
+      'NUM9': '9',
+
+      'STAT': 'FVUSED_ITEM_INFO'
     }
     ------------------------------------------------ /etc/freevo/local.conf
 
@@ -205,6 +220,8 @@ class PluginInterface(plugin.DaemonPlugin):
         self.menu_isfresh = False
         self.menu_client_waiting = False
         self.playing = False
+
+        self.audioplayer = None
 
         if hasattr(config, 'FVUSED_BIND_TIMEOUT'):
             self.bind_timeout = config.FVUSED_BIND_TIMEOUT
@@ -250,12 +267,16 @@ class PluginInterface(plugin.DaemonPlugin):
                   'NUM6': '6',
                   'NUM7': '7',
                   'NUM8': '8',
-                  'NUM9': '9'
+                  'NUM9': '9',
+
+                  'STAT': 'FVUSED_ITEM_INFO'
         }
 
         self.poll_menu_only = False
 
         self.rc = rc.get_singleton()
+
+        self.FVUSED_ITEM_INFO = em.Event('FVUSED_ITEM_INFO')
 
 
         thread.start_new_thread(self.bluetoothListener, ())
@@ -267,10 +288,10 @@ class PluginInterface(plugin.DaemonPlugin):
                     menupage = self.menuw.menustack[-1]
                     if hasattr(menupage, 'is_submenu') and menupage.is_submenu:
                         menuitem = self.menuw.menustack[-2].selected
-                        self.sendMessage('Playing %s' % menuitem.name)
+                        self.sendMessage(_('Playing') + ' %s' % menuitem.name)
                     else:
                         menuitem = menupage.selected
-                        self.sendMessage('Playing %s' % menuitem.name)
+                        self.sendMessage(_('Playing') + ' %s' % menuitem.name)
                             
                     self.menu_client_waiting = False
             else:
@@ -279,29 +300,38 @@ class PluginInterface(plugin.DaemonPlugin):
             self.menu_isfresh = False
 
     def eventhandler(self, event, menuw=None):
-        _debug_("Saw %s" % event)
+        _debug_("Saw event %s menuw %s" % (event, menuw) )
 
-        if event == em.VIDEO_START:
-            self.osd_message_status = self.osd_message
-            self.osd_message = False
-            self.playing = True
-            self.menu_isfresh = True
+        if menuw and isinstance(menuw, menu.MenuWidget):
 
-        elif event == em.VIDEO_END:
-            self.osd_message = self.osd_message_status
-            self.playing = False
+            if event == em.MENU_PROCESS_END:
+                    self.menuw = menuw
+                    self.menu_isfresh = True
 
-        elif event == em.PLAY_START:
-            self.playing = True
-            self.menu_isfresh = True
-
-        elif event == em.STOP:
-            self.playing = False
-
-        elif event == em.MENU_PROCESS_END:
-            if isinstance(menuw, menu.MenuWidget):
-                self.menuw = menuw
+        else:
+            if event == em.VIDEO_START:
+                self.osd_message_status = self.osd_message
+                self.osd_message = False
+                self.playing = True
                 self.menu_isfresh = True
+
+            elif event == em.VIDEO_END:
+                self.osd_message = self.osd_message_status
+                self.playing = False
+
+            elif event == em.PLAY_START:
+                self.playing = True
+                self.menu_isfresh = True
+
+            elif event == em.PLAY_END:
+                self.playing = False
+
+            elif event == em.STOP:
+                self.playing = False
+
+            elif event == self.FVUSED_ITEM_INFO:
+                    self.sendItemStats()
+                    return True
 
         return False
 
@@ -343,9 +373,9 @@ class PluginInterface(plugin.DaemonPlugin):
         str_arg = ''
         command = None
 
-        _debug_("Data received: %s" % str(self.data))
+        _debug_("Data received: %s" % str(self.data), 2)
         str_cmd = self.data[:4]
-        if str_cmd in ('VOL-', 'VOL+', 'VOLM', 'MAIN'):
+        if str_cmd in ('VOL-', 'VOL+', 'VOLM', 'MAIN', 'STAT'):
             command = self.cmds.get(str_cmd, '')
             if command:
                 _debug_('Event Translation: "%s" -> "%s"' % (str_cmd, command))
@@ -386,6 +416,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.rc.post_event(command)
 
         if command and self.osd_message:
+            _debug_('OSD Event: "%s"' % (command))
             rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('BT event %s' % command)))
 
         self.data=''
@@ -422,8 +453,14 @@ class PluginInterface(plugin.DaemonPlugin):
     def btSend(self, data=None):
         try:
             if self.client_sock and data:
-                self.client_sock.send(data)
-                _debug_("Data sent: %s" % data)
+                bytes = self.client_sock.send(data)
+                if data == '\0':
+                    _debug_("Data sent: EOS", 2)
+                else:
+                    _debug_("Data sent: %s" % data, 2)
+
+                _debug_("Bytes sent: %s" % bytes, 2)
+
         except bluetooth.BluetoothError, e:
             self.isconnected = False
             _debug_("broken tooth: %s" % str(e))
@@ -437,5 +474,79 @@ class PluginInterface(plugin.DaemonPlugin):
 
         self.btSend('\0')
 
+    def sendItemStats(self):
+        print "PLAYING: %s" % self.playing
+        print "MENU: %s" % self.menuw
+        if self.playing and self.menuw:
+            menuitem = self.menuw.menustack[-1]
+            if hasattr(menuitem, 'is_submenu') and menuitem.is_submenu:
+                menuitem = self.menuw.menustack[-2].selected
+            else:
+                menuitem = self.menuw.menustack[-1].selected
+
+            if isinstance(menuitem, aitem.AudioItem):
+
+                self.audioplayer = player.get()
+                if self.audioplayer:
+                    item = self.audioplayer.item
+                    if item and isinstance(item, aitem.AudioItem):
+                        self.sendAudioItemStats(item)
+
+            elif isinstance(menuitem, vitem.VideoItem):
+
+                self.sendVideoItemStats(menuitem)
+
+        self.btSend('\0')
+
+    def sendAudioItemStats(self, item):
+
+        info = item.info
+
+        if hasattr(item, 'name') and item['name']:
+            self.btSend(item['name'] + '\n')
+
+        if info.has_key('stream_name') and info['stream_name']:
+            self.btSend(_('Name') + ': ' + info['stream_name'] + '\n')
+
+        if info.has_key('album') and info['album']:
+            self.btSend(_('Album') + ': ' + info['album'] + '\n')
+
+        if info.has_key('artist') and info['artist']:
+            self.btSend(_('Artist') + ': ' + info['artist'] + '\n')
+
+        if info.has_key('genre') and info['genre']:
+            self.btSend(_('Genre') + ': ' + info['genre'] + '\n')
+
+        if info.has_key('trackno') and info['trackno']:
+            self.btSend(_('Track') + ': %s' % info['trackno'])
+
+            if info.has_key('trackof') and info['trackof']:
+                self.btSend('/%s\n' % info['trackof'])
+            else:
+                self.btSend('\n')
+
+        if info.has_key('bitrate') and info['bitrate']:
+            self.btSend(_('Bitrate') + ': %s\n' % info['bitrate'])
+
+        if hasattr(item, 'length') and item['length']:
+            self.btSend(_('Length') + ': %s\n' % item['length'])
+
+    def sendVideoItemStats(self, item):
+
+        if hasattr(item, 'name') and item['name']:
+            self.btSend(item['name'] + '\n')
+
+        if item['geometry']:
+            self.btSend(_('Geometry') + ': ' + item['geometry'])
+
+            if item['aspect']:
+                self.btSend(' (' + item['aspect'] + ')\n')
+            else:
+                self.btSend('\n')
+
+        if item['runtime']:
+            self.btSend(_('Length') + ': ' + item['runtime'] + '\n')
+
     def sendMessage(self, msg):
         self.btSend(msg + '\n\0')
+

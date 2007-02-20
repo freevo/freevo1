@@ -15,6 +15,8 @@ import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.List;
 
+import translate.Translate;
+
 /*
  * Created on May 24, 2004
  *
@@ -40,6 +42,8 @@ implements CommandListener, DiscoveryListener {
 	private int foundDevicesCount;
 	private RemoteDevice[] foundDevices;
 
+	private Translate t;
+
 	class ServiceInfo {
 		public boolean equals(Object o) {
 			ServiceInfo other = (ServiceInfo)o;
@@ -55,13 +59,16 @@ implements CommandListener, DiscoveryListener {
 	 */
 	public SearchForm(Controller controller) {
 		super("Search", List.IMPLICIT);
+
+		t = Translate.getInstance();
+
 		serviceList = new Vector();
 		this.controller = controller;
 		setCommandListener(this);
-		connectCommand = new Command("Connect", Command.ITEM, 2);
-		exitCommand = new Command("Exit", Command.EXIT, 1);
+		connectCommand = new Command(t.get("Connect"), Command.ITEM, 2);
+		exitCommand = new Command(t.get("Exit"), Command.EXIT, 1);
 		addCommand(exitCommand);
-		searchCommand = new Command("Search", Command.SCREEN, 1);
+		searchCommand = new Command(t.get("Search"), Command.SCREEN, 1);
 		//addCommand(searchCommand);
 		
 		setSelectCommand(connectCommand);
@@ -79,7 +86,7 @@ implements CommandListener, DiscoveryListener {
 		foundDevicesCount = 0;
 		deleteAll();
 		serviceList.removeAllElements();
-		setStatusText("Searching for devices...");
+		setStatusText(t.get("Searching for devices..."));
 		String lastURL = controller.getSettings().getLastUsedDeviceURL();			
 		String lastName = controller.getSettings().getLastUsedDeviceName();
 		if (lastURL != null && lastName != null) {
@@ -95,7 +102,7 @@ implements CommandListener, DiscoveryListener {
 			agent.startInquiry(DiscoveryAgent.GIAC, this);
 		} catch (BluetoothStateException e) {
 			e.printStackTrace();
-			setStatusText("Error - stopped");
+			setStatusText(t.get("Error - stopped"));
 			addCommand(searchCommand);
 		}
 	}
@@ -120,7 +127,11 @@ implements CommandListener, DiscoveryListener {
 		if (foundDevicesCount < foundDevices.length) {
 			foundDevices[foundDevicesCount] = dev;
 			foundDevicesCount++;
-			setStatusText(""+foundDevicesCount+" devices. Searching...");
+			if (foundDevicesCount == 1) {
+				setStatusText(""+foundDevicesCount+" "+t.get("device. Searching..."));
+			} else {
+				setStatusText(""+foundDevicesCount+" "+t.get("devices. Searching..."));
+			}
 		}
 	}
 
@@ -158,7 +169,7 @@ implements CommandListener, DiscoveryListener {
 				info.name = "???";
 			}
 			addInfo(info);
-			setStatusText("Bemused server found. Searching...");
+			setStatusText(t.get("Freevused server found. Searching..."));
 		}
 	}
 	
@@ -177,7 +188,7 @@ implements CommandListener, DiscoveryListener {
 	}
 
 	public void serviceSearchCompleted(int arg0, int arg1) {
-		setStatusText("Done.");
+		setStatusText(t.get("Done."));
 		searchNextDeviceForServices();
 	}
 
@@ -192,11 +203,11 @@ implements CommandListener, DiscoveryListener {
 				serialUUID[0] = new UUID("1101", true);
 				int attrSet[] = new int[1];
 				attrSet[0] = 0x0100; // service name (primary language)
-				setStatusText("Retrieving service list...");
+				setStatusText(t.get("Retrieving service list..."));
 				agent.searchServices(attrSet, serialUUID, dev, this);
 			} catch (BluetoothStateException e) {
 				e.printStackTrace();
-				setStatusText("Stopped - error.");
+				setStatusText(t.get("Error - stopped."));
 			}
 		}
 		else {
@@ -205,7 +216,7 @@ implements CommandListener, DiscoveryListener {
 	}
 
 	public void inquiryCompleted(int arg0) {
-		setStatusText("Done.");
+		setStatusText(t.get("Done."));
 		searchNextDeviceForServices();
 	}
 

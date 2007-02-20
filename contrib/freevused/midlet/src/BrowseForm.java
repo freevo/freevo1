@@ -9,6 +9,8 @@ import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.Image;
 
+import translate.Translate;
+
 /*
  * Created August 2004
  */
@@ -29,38 +31,41 @@ public class BrowseForm extends List implements CommandListener  {
 	Command refreshCommand;
 	Command menuBackCommand;
 
-	Image folderImage;
-	Image fileImage;
+	Image entryImage;
+
+	Translate t;
 	
 	public BrowseForm(Controller controller) {
 		super("Menu", List.IMPLICIT);
+
+		t = Translate.getInstance();
+
 		this.controller = controller;
 		setCommandListener(this);
 
-		menuBackCommand = new Command("Back Menu", Command.CANCEL, 0);
+		menuBackCommand = new Command(t.get("Up menu"), Command.CANCEL, 0);
 		addCommand(menuBackCommand);
 
-		submenuCommand = new Command("Submenu", "Options submenu", Command.SCREEN, 2);
+		submenuCommand = new Command(t.get("Submenu"), t.get("Options submenu"), Command.SCREEN, 2);
 		addCommand(submenuCommand);
 
-		refreshCommand = new Command("Refresh", "Refresh menu", Command.SCREEN, 2);
+		refreshCommand = new Command(t.get("Refresh"), t.get("Refresh menu"), Command.SCREEN, 2);
 		addCommand(refreshCommand);
 		
-		mainCommand = new Command("Main", "Main actions", Command.SCREEN, 2);
+		mainCommand = new Command(t.get("Main"), t.get("Main actions"), Command.SCREEN, 2);
 		addCommand(mainCommand);
 
-		numericCommand = new Command("Numeric", "Numeric keys", Command.SCREEN, 2);
+		numericCommand = new Command(t.get("Numeric"), t.get("Numeric keys"), Command.SCREEN, 2);
 		addCommand(numericCommand);
 		
-		moreCommand = new Command("More", "More actions", Command.SCREEN, 2);
+		moreCommand = new Command(t.get("More"), t.get("More actions"), Command.SCREEN, 2);
 		addCommand(moreCommand);
 
-		textCommand = new Command("Text", "Send Text", Command.SCREEN, 2);
+		textCommand = new Command(t.get("Text"), t.get("Send text"), Command.SCREEN, 2);
 		addCommand(textCommand);
 		
 		try {
-			folderImage = Image.createImage("/entry.png");
-			fileImage = Image.createImage("/file.png");
+			entryImage = Image.createImage("/entry.png");
 		} catch (IOException e) {
 			// no image found... hm
 		}
@@ -76,7 +81,7 @@ public class BrowseForm extends List implements CommandListener  {
 
 		for (index=0; index < dirs.length; index++) {
 			String name = dirs[index];
-			insert(index, name, folderImage);
+			insert(index, name, entryImage);
 			setFont(index, Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_SMALL));
 		}
 		

@@ -120,6 +120,10 @@ public class Controller implements StatusUpdateListener {
 		}
 		
 		browseForm.updateDirList(protocol.fileBrowser.dirs(), protocol.fileBrowser.dirChanged());
+
+		controlForm.setStatus(protocol.itemdata);
+		numericForm.setStatus(protocol.itemdata);
+		moreActionsForm.setStatus(protocol.itemdata);
 	}
 
 	MusicPlayer getPlayer() {

@@ -21,5 +21,6 @@ interface CommandTarget {
 	DataInputStream getInputStream();
 	DataOutputStream getOutputStream();
 	void setDirInfo(String[] structure);
+	void setStatus(String data);
 
 }
