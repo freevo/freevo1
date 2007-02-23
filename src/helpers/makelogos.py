@@ -6,11 +6,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -43,26 +43,25 @@ from tv import xmltv
 # proceeding
 
 if not os.path.isdir(config.TV_LOGOS):
-        print "Logo directory does not exist\n"
-        print "Creating: %s\n" % (config.TV_LOGOS)
-        os.mkdir(config.TV_LOGOS)
+    print "Logo directory does not exist\n"
+    print "Creating: %s\n" % (config.TV_LOGOS)
+    os.mkdir(config.TV_LOGOS)
 
 x = xmltv.read_channels(open(config.XMLTV_FILE))
 
 for i in x:
+    try:
+        imgsrc = i['icon'][0]['src']
+    except KeyError:
+        imgsrc = None
+    channel = i['id']
+    #print '%s - %s' % (imgsrc, channel)
+    if imgsrc:
+        img = Image.open_from_memory(urllib2.urlopen(str(imgsrc)).read())
+        # Convert the image into a PNG and save to logos directory
+        output_file = config.TV_LOGOS + '/' + channel + '.png'
         try:
-                imgsrc = i['icon'][0]['src']
-        except KeyError:
-                imgsrc = None
-        channel = i['id']
-        #print '%s - %s' % (imgsrc,channel)
-        if imgsrc != None:
-                # Get the file into a fp
-                fp = urllib2.urlopen(str(imgsrc))
-                # Make a seekable file object
-                img = cStringIO.StringIO(fp.read())
-                # Convert the image into a PNG and save to logos directory
-                output_file = config.TV_LOGOS + '/' + channel + '.png'
-                try: Image.open(img).save(output_file)
-                except IOError: pass
+            img.save(output_file)
+        except IOError:
+            pass
 
