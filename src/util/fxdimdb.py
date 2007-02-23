@@ -600,7 +600,8 @@ class FxdImdb:
             print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
             pass
 
-        title = soup.find('strong', {'class':'title'})
+        #title = soup.title
+        title = soup.find('h1')
         image = soup.find('img', { 'title':title.next.strip() })
 
         self.title = title.next.strip()
@@ -633,16 +634,16 @@ class FxdImdb:
         self.info['genre'] = ''
         genre=soup.find(text='Genre:').parent
         genres = []
-        while genre.findNextSibling('a').string != '(more)':
+        while genre.findNextSibling('a').string != 'more':
             genres.append(genre.findNextSibling('a').string.strip())
             genre=genre.findNextSibling('a')
         self.info['genre'] = genres[0]
         for i in genres[1:]:
             self.info['genre'] += ' / ' + i
-        rating = soup.find(text='User Rating:').parent.findNextSibling('b')
+        rating = soup.find(text='User Rating:').findNext(text=re.compile('/10'))
         if rating:
-            votes = rating.next.next.strip()
-            self.info['rating'] = rating.string.strip() + ' ' + votes.strip()
+            votes = rating.findNext('a')
+            self.info['rating'] = rating.strip() + ' (' + votes.string.strip() + ')'
         else:
             self.info['rating'] = ''
         runtime = soup.find(text='Runtime:')
