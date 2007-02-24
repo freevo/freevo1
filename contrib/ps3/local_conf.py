@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # local_conf.py - System configuration
 # -----------------------------------------------------------------------
@@ -47,13 +46,13 @@ CONFIG_VERSION = 5.17
 # General freevo settings:
 # ======================================================================
 
-# AUDIO_DEVICE       = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
-# AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
-# MAJOR_AUDIO_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
+AUDIO_DEVICE       = '/dev/alsa'       # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
+# AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/
+MAJOR_AUDIO_CTRL   = 'PCM'             # Freevo takes control over one audio ctrl
                                        # 'VOL', 'PCM' 'OGAIN' etc.
-# CONTROL_ALL_AUDIO  = 1               # Should Freevo take complete control of audio
-# MAX_VOLUME         = 90              # Set what you want maximum volume level to be.
-# DEFAULT_VOLUME     = 40              # Set default volume level.
+CONTROL_ALL_AUDIO  = 1                 # Should Freevo take complete control of audio
+MAX_VOLUME         = 100               # Set what you want maximum volume level to be.
+DEFAULT_VOLUME     = 80                # Set default volume level.
 # TV_IN_VOLUME       = 60              # Set this to your preferred level 0-100.
 # VCR_IN_VOLUME      = 90              # If you use different input from TV
 # RADIO_IN_VOLUME    = 80              # Set this to your preferred level 0-100.
@@ -61,7 +60,7 @@ CONFIG_VERSION = 5.17
 
 # START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 
-# CONFIRM_SHUTDOWN   = 1               # ask before shutdown
+CONFIRM_SHUTDOWN   = 0                 # ask before shutdown
 
 #
 # Physical ROM drives, multiple ones can be specified
@@ -74,11 +73,14 @@ CONFIG_VERSION = 5.17
 # set to [] to disable rom drive support at all
 #
 # ROM_DRIVES = None
+ROM_DRIVES = [ ('/media/','/dev/cdrom','DVD') ]
+plugin.remove('video.xine')
+
 
 #
 # Hide discs from the wrong menu (e.g. VCDs in audio menu) and empty discs.
 #
-# HIDE_UNUSABLE_DISCS = 1               
+HIDE_UNUSABLE_DISCS = 1               
 
 #
 # Attempt to set the speed of the ROM drive. A good value for keeping the
@@ -305,7 +307,7 @@ EVENT_DEVS = []
 # the IMDB movie database for movie info, and Amazon for cover searches. 
 # Set this to 0 if your computer isn't connected to a network.
 #
-# USE_NETWORK = 1
+USE_NETWORK = 1
 
 #
 # Directory location to save files when the normal filesystem
@@ -351,7 +353,7 @@ EVENT_DEVS = []
 # Cache images. This uses a lot of disc space but it's a huge speed
 # enhancement. The images will be cached in OVERLAY_DIR
 #
-CACHE_IMAGES = 1
+#CACHE_IMAGES = 1
 
 
 # ======================================================================
@@ -371,6 +373,8 @@ CACHE_IMAGES = 1
 #   menus
 #
 # See freevo_config.py for a list of loaded plugins
+#plugin.remove(plugin_tv) 
+
 
 #
 # Use ivtv_record instead if you have an ivtv based card (PVR-250/350)
@@ -382,7 +386,7 @@ CACHE_IMAGES = 1
 
 #
 # Enable this for joystick support:
-# plugin.activate('joy')
+plugin.activate('joy')
 
 
 # ----------------------------------------------------------------------
@@ -396,7 +400,7 @@ CACHE_IMAGES = 1
 # HEADLINES_LOCATIONS = [
 #    ('Freevo news releases', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652'),
 #    ('Freevo file releases', 'http://sourceforge.net/export/rss2_projfiles.php?group_id=46652'),
-#    ('Freevo summary+stats', 'http://sourceforge.net/export/rss2_projsummary.php?group_id=46652'),
+#    ('Freevo summary+stats', 'http://sourceforge.net/export/rss2_projsummary.php?group_id=46652')
 #    ('Freevo donors', 'http://sourceforge.net/export/rss2_projdonors.php?group_id=46652'),
 # ]
 
@@ -406,7 +410,6 @@ CACHE_IMAGES = 1
 # CD_RIP_TMP_DIR = '/tmp/'
 # CD_RIP_TMP_NAME = 'track_%(track)s_being_ripped'
 # CD_RIP_PN_PREF = '%(artist)s/%(album)s/%(track)s - %(song)s'
-# CD_RIP_CDPAR_OPTS = '-s'
 # CD_RIP_LAME_OPTS = '--vbr-new -b 192 -h'
 # CD_RIP_OGG_OPTS = '-m 128'
 # CD_RIP_FLAC_OPTS = '-8'
@@ -422,20 +425,6 @@ CACHE_IMAGES = 1
 # CDBURN_TEMP_DIR='/tmp/'
 # CDBURN_DEV = '/dev/cdrom'
 # CDBURN_SPEED = 32
-
-# ----------------------------------------------------------------------
-# Re-encode
-# This plug-in transcodes a video to a different format
-# ----------------------------------------------------------------------
-# plugin.activate('video.reencode2')
-# REENCODE_CONTAINER = 'avi'
-# REENCODE_RESOLUTION = 'Optimal'
-# REENCODE_VIDEOCODEC = 'XviD'
-# REENCODE_VIDEOBITRATE = 1000
-# REENCODE_AUDIOCODEC = 'MPEG 1 Layer 3 (mp3)'
-# REENCODE_AUDIOBITRATE = 128
-# REENCODE_NUMPASSES = 1
-# REENCODE_VIDEOFILTER = None
 
 # ----------------------------------------------------------------------
 # Freevo Music Player Daemon
@@ -474,29 +463,6 @@ CACHE_IMAGES = 1
 #       'SLCT': 'ENTER',             # 4th row center
 #       'MAIN': 'MENU'               # 4th row right
 # }
-
-# ----------------------------------------------------------------------
-# Freevo Button Bar Plug-in
-# ----------------------------------------------------------------------
-# plugin.activate('buttonbar')
-
-# You'll also need to map the 'RED', 'GREEN', 'YELLOW'
-# and 'BLUE' events to keys for example (don't use this
-# it overrides some default keys)
-# KEYMAP[key.K_F5] = 'RED'
-# KEYMAP[key.K_F6] = 'GREEN' #Already mapped to record
-# KEYMAP[key.K_F7] = 'YELLOW'
-# KEYMAP[key.K_F8] = 'BLUE'
-
-# ----------------------------------------------------------------------
-# Freevo Screensaver Plug-in
-# ----------------------------------------------------------------------
-# SCREENSAVER_DELAY = 120 # of seconds to wait to start saver.
-# SCREENSAVER_CYCLE_TIME = 60 # of seconds to run a screensaver before starting another saver.
-# plugin.activate('screensaver')
-# plugin.activate('screensaver.balls') # Bouncing balls all over the screen
-# plugin.activate('screensaver.bouncing_freevo') # The freevo logo bouncing around the screen
-
 
 # ======================================================================
 # Freevo directory settings:
@@ -621,6 +587,10 @@ CACHE_IMAGES = 1
 # Directory myserver:/files/server-stuff will show the item for the
 # directory /files/server-stuff if the computer myserver is alive.
 
+VIDEO_ITEMS = [ ('Local Videos', '/root/videos'), ('Torrents', '192.168.2.3:/torrents') ]
+
+VIDEO_SHOW_DATA_DIR = '/root/videos'
+
 #
 # The list of filename suffixes that are used to match the files that
 # are played wih MPlayer.
@@ -650,11 +620,6 @@ CACHE_IMAGES = 1
 # in your normal movie tree.
 #
 # VIDEO_ONLY_SCAN_DATADIR = 1
-
-# PRE and POST recording commands.  Set these to a runnable command if
-# you wish to have special mixer settings or video post processing.
-# VCR_PRE_REC  = None
-# VCR_POST_REC = None
 
 # PRE and POST playing commands.  Set these to a runnable command if
 # you wish to do something before and after playing a video, like
@@ -688,15 +653,6 @@ CACHE_IMAGES = 1
 #
 # This will match front.jpg and cover-f.jpg, but not back.jpg nor cover-b.jpg:
 # AUDIO_COVER_REGEXP = 'front|-f'
-
-#
-# Format strings used to seach for audio cover images.
-# Fist matching GIF, JPG or PNG image will be used as cover.
-#
-# Examples:
-# AUDIO_COVER_FORMAT_STRINGS = [ 'cover-%(artist)s-%(album)s', 'mycover' ]
-# AUDIO_COVER_FORMAT_STRINGS = [ '%(album)s', '../covers/%(album)s', '../covers/nocover' ]
-#
 
 #
 # Preferred audio player
@@ -912,9 +868,9 @@ IMAGEVIEWER_BLEND_MODE = -1
 # 2 = Use js1, 
 #  ... etc
 #
-# JOY_DEV = 0
-# JOY_SENS = 32000
-# JOY_LOCKFILE = /path/to/joystick/lockfile
+JOY_DEV = 1
+#JOY_SENS = 16384
+JOY_SENS = 32000
 
 # Freevo can support as many buttons as your controller has
 # as long as there is a corresponding entry in JOY_CMDS.
@@ -932,30 +888,59 @@ IMAGEVIEWER_BLEND_MODE = -1
 #     'button 4'       : 'ENTER',
 # }
 
-# Here are the PS3 joy stick mappings
-#JOY_CMDS = {
-#     'button 5'       : 'UP',
-#     'button 7'       : 'DOWN',
-#     'button 8'       : 'LEFT',
-#     'button 6'       : 'RIGHT',
-#     'up'             : 'UP',
-#     'down'           : 'DOWN',
-#     'left'           : 'LEFT',
-#     'right'          : 'RIGHT',
-#     'button 14'      : 'SELECT',         # <circle>
-#     'button 16'      : 'EXIT',           # <square>
-#     'button 15'      : 'STOP',           # <x>
-#     'button 1'       : 'ENTER',          # <select>
-#
-#     'button 11'      : 'VOL+',           # <L1>
-#     'button 9'       : 'VOL-',           # <L2>
-#     'button 2'       : 'MUTE',           # <L3>      
-#
-#     'button 10'      : 'MUTE',           # <R2>
-#     'button 4'       : 'PLAY',           # <start>
-#     'button 13'      : 'PLAY',           # <start>
-#     'button 17'      : 'MENU',           # <ps> 
-#}
+
+# Buttons for the PS3 controller
+# ( as reported by jtest):
+# UP            btn 4
+# RIGHT         btn 5
+# DOWN          btn 6
+# LEFT          btn 7
+# L1            btn 10
+# L2            btn 8
+# L3 (analog)   btn 1
+# R1            btn 11
+# R2            btn 9
+# R3 (analog)   btn 2
+# <triangle>    btn 12
+# <circle>      btn 13
+# <x>           btn 14
+# <square>      btn 15
+# <select>      btn 0
+# <start>       btn 3
+# Note: buttons for freevo need to be button-value +1 
+# so above <btn 0> = freevo <button 1>
+
+# all button-values for JOY_CMDS need to be there: 
+# Optional commands that can be mapped can be found in: /src/event.py
+
+JOY_CMDS = {     
+     'button 5'       : 'UP',
+     'button 7'       : 'DOWN',
+     'button 8'       : 'LEFT',
+     'button 6'       : 'RIGHT',
+     'up'             : 'UP',
+     'down'           : 'DOWN',
+     'left'           : 'LEFT',
+     'right'          : 'RIGHT',
+     'button 14'      : 'SELECT',         # <circle>
+     'button 16'      : 'EXIT',           # <square>
+     'button 15'      : 'STOP',           # <x>
+     'button 1'       : 'ENTER',          # <select>
+
+     'button 11'      : 'VOL+',           # <L1>
+     'button 9'       : 'VOL-',           # <L2>
+     'button 2'       : 'MUTE',           # <L3>      
+     
+     'button 10'      : 'MUTE',           # <R2>
+     'button 4'       : 'PLAY',           # <start>
+     'button 13'      : 'PLAY',           # <start>
+     'button 17'      : 'MENU',           # <ps> 
+}
+
+EVENTS['global']['VOL+'] = Event('MIXER_VOLUP', arg=10)
+EVENTS['global']['VOL-'] = Event('MIXER_VOLDOWN', arg=10)
+
+#JOY_LOCKFILE = '/tmp/.joy_lockfile'
 
 
 # ======================================================================
@@ -990,12 +975,12 @@ IMAGEVIEWER_BLEND_MODE = -1
 # with the mplayer option '-nosws'. If you have -framedrop or -hardframedrop
 # as mplayer option, the software scaler will also not be used.
 # A good value for this variable is:
-# MPLAYER_SOFTWARE_SCALER = "-subfont-text-scale 5 -fs -sws 2 -vf scale=%s:-3,"\
+#MPLAYER_SOFTWARE_SCALER = "-subfont-text-scale 5 -fs -sws 2 -vf scale=%s:-3,"\
 #                           "expand=%s:%s " % ( CONF.width, CONF.width, CONF.height )
 # older versions of mplayer may need
 # MPLAYER_SOFTWARE_SCALER = '-xy %s -sws 2 -vop scale:-1:-1:-1:100' % CONF.width
 #
-# MPLAYER_SOFTWARE_SCALER = ''
+MPLAYER_SOFTWARE_SCALER = ''
 
 #
 # Mplayer arguments for different media formats. (eg DVDs, CDs, AVI files, etc)
@@ -1106,15 +1091,8 @@ IMAGEVIEWER_BLEND_MODE = -1
 # XXX the path doesn't work from the www cgi scripts!
 # TV_RECORD_DIR = None
 
-# This will enable duplicate recording detection
-# DUPLICATE_DETECTION = True
-
-# This will enable only new episodes to be recorded
-# ONLY_NEW_DETECTION = True
-
-# ================================================================================
+#
 # Watching TV
-# ================================================================================
 #
 # XXX You must change this to fit your local conditions!
 #
@@ -1128,6 +1106,9 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # TV_SETTINGS = 'NORM INPUT CHANLIST DEVICE'
 
+TV_CHANNELS = [] 
+plugin.remove('tv')
+
 #
 # Video input device
 #
@@ -1139,10 +1120,6 @@ IMAGEVIEWER_BLEND_MODE = -1
 # TV_DEVICE = '/dev/video0'
 # TV_INPUT = 0
 # 
-# ================================================================================
-# Listening to radio
-# ================================================================================
-#
 # Radio device default is None, /dev/video24 for ivtv
 # RADIO_DEVICE = '/dev/radio'
 
@@ -1416,38 +1393,11 @@ IMAGEVIEWER_BLEND_MODE = -1
 
 
 # ======================================================================
-# Freevo builtin commdetect server settings:
-# ======================================================================
-# COMMDETECTSERVER_UID = 0
-# COMMDETECTSERVER_GID = 0
-#
-# COMMDETECTSERVER_IP   = 'localhost'
-# COMMDETECTSERVER_PORT = 6667
-
-# ======================================================================
-# Freevo xmradio plug-in settings:
-# ======================================================================
-# plugin.activate('audio.xmradio')
-# XM_CMD='mplayer'
-# XM_USER='your email address'
-# XM_PASS='your password'
-# XM_RATE='high'
-# XM_STATIONS = [
-#     ('The 60s', '6'),
-#     ('The 70s', '7'),
-#     ('The 80s', '8'),
-#     ('The 90s', '9'),
-#     ...etc...
-#     ('High Voltage', '202')
-# ]
-
-# ======================================================================
 # Freevo builtin rss server settings:
 # ======================================================================
 # RSSSERVER_UID = 0
 # RSSSERVER_GID = 0
 
-# RSS_CHECK_INTERVAL = 3600
 # RSS_FEEDS = '/etc/freevo/rss.feeds'
 # RSS_VIDEO = '/media/video'
 # RSS_AUDIO = '/media/podcasts'
@@ -1520,15 +1470,6 @@ IMAGEVIEWER_BLEND_MODE = -1
 
 
 #
-# Remote control daemon. Similar to the one above, but uses TCP instead 
-# of UDP. It is possible to send commands with a telnet client.
-#
-# ENABLE_TCP_NETWORK_REMOTE = 0
-# REMOTE_CONTROL_TCP_HOST = '127.0.0.1'
-# REMOTE_CONTROL_TCP_PORT = 16311
-
-
-#
 # XMLTV File
 #
 # This is the XMLTV file that can be optionally used for TV listings
@@ -1579,25 +1520,4 @@ IMAGEVIEWER_BLEND_MODE = -1
 # DISKFREE_LOW = 20     # less than this shows an orange bar
 #
 # display proc-stats, CPU and RAM usage
-# plugin.activate('idlebar.system.procstats',level=20)
-
-# Amazon coversearch seems to request the covers in one locale and get the data
-# in another encoding. Locale must be one of: de, jp, uk, us
-#
-# AMAZON_LOCALE = 'us'
-# AMAZON_QUERY_ENCODING = 'latin-1'
-# plugin.activate('audio.coversearch')
-
-# plugin.activate('audio.album_tree')
-# see http://freevo.sourceforge.net/cgi-bin/doc/PluginAudioAlbumTree
-# AUDIO_ALBUM_TREE_SPEC = []
-# AUDIO_ALBUM_TREE_SPEC.append({'name':'Artist/Album/Track'
-#      ,'spec':["artist","album","track||'-'||title"]
-#      ,'alt_grouping':[None,None,'track']
-#     })
-# AUDIO_ALBUM_TREE_SPEC.append({'name':'(A-Z)/Artist/Album-Year/Track'
-#     ,'spec':["upper(substr(artist,0,1))"
-#             ,"artist","album||'-'||year"
-#             ,"track||'-'||title"]
-#     ,'alt_grouping':[None,None,'year||album','track']
-#     })
+plugin.activate('idlebar.system.procstats',level=20)
