@@ -600,18 +600,46 @@ class FxdImdb:
             print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
             pass
 
+        # The parse tree can be now reduced by, everything outside this is not required:
+        main = soup.find('div', {'id': 'tn15main'})
         #title = soup.title
         title = soup.find('h1')
-        image = soup.find('img', { 'title':title.next.strip() })
+        #this no longer works
+        #image = soup.find('img', { 'title':title.next.strip() })
+        #if image:
+        #    self.info['image'] = image['src']
 
         self.title = title.next.strip()
         self.info['title'] = self.title
-
-        if image:
-            self.info['image'] = image['src']
-
         self.info['year'] = title.find('a').string.strip()
 
+        # Find the <div> with class info, each <h5> under this provides info
+        for info in main.findAll('div', {'class' : 'info'}):
+            infoh5 = info.find('h5')
+            if not infoh5:
+                continue
+            try:
+                infostr = infoh5.next
+                key = infostr.string.strip(':').lower()
+                nextsibling = nextsibling = infoh5.nextSibling.strip()
+                sections = info.findAll('a', { 'href' : re.compile('/Sections') })
+                lists = info.findAll('a', { 'href' : re.compile('/List') })
+                if len(nextsibling) > 0:
+                    self.info[key] = nextsibling
+                elif len(sections) > 0:
+                    items = []
+                    for item in sections:
+                        items.append(item.string)
+                    self.info[key] = items
+                elif len(lists) > 0:
+                    items = []
+                    for item in lists:
+                        items.append(item.string)
+                    self.info[key] = items
+            except:
+                pass
+
+        print self.info
         # Find Plot Outline/Summary:
         # Normally the tag is named "Plot Outline:" - however sometimes
         # the tag is "Plot Summary:". Search for both strings.
