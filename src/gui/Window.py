@@ -156,7 +156,7 @@ class Window(GUIObject):
             print 'Error: content has no parent, fixing...'
             print 'If you can reproduce this error message, please send a'
             print 'mail with the subject \'[Freevo-Bugreport] GUI\' to'
-            print 'freevo@dischi-home.de.'
+            print 'developer@freevo.org.'
             print '******************************************************************'
             self.content.parent = self
             
@@ -165,7 +165,7 @@ class Window(GUIObject):
             print 'Error: window has no parent, not showing...'
             print 'If you can reproduce this error message, please send a'
             print 'mail with the subject \'[Freevo-Bugreport] GUI\' to'
-            print 'freevo@dischi-home.de.'
+            print 'developer@freevo.org.'
             print '******************************************************************'
             return
             
