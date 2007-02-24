@@ -567,7 +567,7 @@ class FxdImdb:
         self.imdb_id_list = []
         m=re.compile('/title/tt([0-9]*)/')
         y=re.compile('\(([^)]+)\)')
-        soup = BeautifulSoup(results.read())
+        soup = BeautifulSoup(results.read(), convertEntities='xml')
         items = soup.findAll('a', href=re.compile('/title/tt'))
         for item in items:
             idm = m.search(item['href'])
@@ -595,7 +595,7 @@ class FxdImdb:
         dvd = 0
 
         try:
-            soup = BeautifulSoup(results.read())
+            soup = BeautifulSoup(results.read(), convertEntities='xml')
         except UnicodeDecodeError:
             print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
             pass
