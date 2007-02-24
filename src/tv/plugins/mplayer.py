@@ -161,7 +161,7 @@ class MPlayer:
 
         args += (tvcmd,)
 
-        mpl = '--prio=%s %s -vo %s %s -ao %s -fs %s -slave %s %s' % args
+        mpl = '--prio=%s %s -vo %s %s -ao %s %s -slave %s %s' % args
 
         command = mpl
         _debug_('command=\"%s\"', (command))
