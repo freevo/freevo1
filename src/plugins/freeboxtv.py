@@ -30,7 +30,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate, put the following lines in local_conf.py:
 
-    plugin.activate('freebox TV', level=45)
+    plugin.activate('freeboxtv', level=45)
     PLUGIN_FREEBOXTV_LOCATION = "http://mafreebox.freebox.fr/freeboxtv/playlist.m3u"
     plugin.activate('video.vlc')
     # ================
