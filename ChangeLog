@@ -30,7 +30,8 @@ This release has all the changes in Release 1.6.x plus
  * New home automation plug-in, allows controlling device in the home! (F#1605293)
  * New Linux event device support (F#1579124)
  * New Music Player Daemon (mpd) plug-in (F#1623023)
- * New record server commerical detection and removal (F#1633567)
+ * New PS3 support on Yellow Dog Linux
+ * New record server commercial detection and removal (F#1633567)
  * New RSS server, for getting podcasts, etc. (F#1580407)
  * New screensaver plug-in (F#1647485)
  * New Shuttle VFD plug-in (F#1619761)
