@@ -62,6 +62,6 @@ for i in x:
         output_file = config.TV_LOGOS + '/' + channel + '.png'
         try:
             img.save(output_file)
-        except IOError:
-            pass
+        except IOError, e:
+            print e
 
