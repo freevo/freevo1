@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo 1.4.0 cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-20 19:32+0100\n"
+"POT-Creation-Date: 2007-02-25 09:01+0100\n"
 "PO-Revision-Date: 2003-11-10 00:58+0200\n"
 "Last-Translator: Dirk Meyer <dmeyer@tzi.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -291,7 +291,7 @@ msgstr ""
 #: plugins/weather.py:108
 #, fuzzy
 msgid "AM Rain"
-msgstr "Radio"
+msgstr "Bewertung"
 
 #: plugins/weather.py:109
 msgid "Iso T-Storms/Wind"
@@ -336,7 +336,7 @@ msgstr ""
 #: plugins/weather.py:119
 #, fuzzy
 msgid "PM Rain"
-msgstr "Radio"
+msgstr "Bewertung"
 
 #: plugins/weather.py:120
 #, fuzzy
@@ -348,9 +348,8 @@ msgid "Rain to Snow"
 msgstr ""
 
 #: plugins/weather.py:122
-#, fuzzy
 msgid "PM Rain/Snow"
-msgstr "Radio"
+msgstr ""
 
 #: plugins/weather.py:123
 msgid "Few Showers/Wind"
@@ -821,7 +820,7 @@ msgid "Delete Cart"
 msgstr "Korb löschen"
 
 #: plugins/lcd.py:48 plugins/lcd.py:900 plugins/lcd.py:911 plugins/lcd.py:922
-#: plugins/freevused.py:127 plugins/vfd.py:52 plugins/vfd.py:518
+#: plugins/freevused.py:140 plugins/vfd.py:52 plugins/vfd.py:518
 #: plugins/vfd.py:526 plugins/vfd.py:728 plugins/vfd.py:741 plugins/vfd.py:752
 #: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
 #: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
@@ -842,25 +841,28 @@ msgstr "FEHLER"
 msgid "You need pylcd to run \"lcd\" plugin."
 msgstr "Sie benötigen pylcd für das LCD plugin"
 
-#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/vfd.py:93 plugins/vfd.py:101
+#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/freevused.py:532
+#: plugins/freevused.py:548 plugins/vfd.py:93 plugins/vfd.py:101
 #: share/skins/main/basic.fxd:416 share/skins/main/mediaportal.fxd:716
 #: share/skins/main/dark.fxd:537 share/skins/main/dark.fxd:774
 #: share/skins/main/blurr.fxd:724 share/skins/main/info.fxd:219
 msgid "Length"
 msgstr "Länge"
 
-#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183 plugins/vfd.py:94
-#: plugins/vfd.py:98 share/skins/main/dark.fxd:521
-#: share/skins/main/dark.fxd:734 share/skins/main/info.fxd:202
-#: share/skins/main/info.fxd:357 share/skins/main/info.fxd:397
+#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183
+#: plugins/freevused.py:515 plugins/vfd.py:94 plugins/vfd.py:98
+#: share/skins/main/dark.fxd:521 share/skins/main/dark.fxd:734
+#: share/skins/main/info.fxd:202 share/skins/main/info.fxd:357
+#: share/skins/main/info.fxd:397
 msgid "Artist"
 msgstr "Künstler"
 
-#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180 plugins/vfd.py:95
-#: plugins/vfd.py:99 share/skins/main/basic.fxd:374
-#: share/skins/main/mediaportal.fxd:674 share/skins/main/dark.fxd:527
-#: share/skins/main/dark.fxd:739 share/skins/main/blurr.fxd:680
-#: share/skins/main/info.fxd:208 share/skins/main/info.fxd:362
+#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180
+#: plugins/freevused.py:512 plugins/vfd.py:95 plugins/vfd.py:99
+#: share/skins/main/basic.fxd:374 share/skins/main/mediaportal.fxd:674
+#: share/skins/main/dark.fxd:527 share/skins/main/dark.fxd:739
+#: share/skins/main/blurr.fxd:680 share/skins/main/info.fxd:208
+#: share/skins/main/info.fxd:362
 msgid "Album"
 msgstr "Album"
 
@@ -894,7 +896,8 @@ msgstr "Inhalt"
 msgid "Plot"
 msgstr "Handlung"
 
-#: plugins/lcd.py:82 plugins/vfd.py:108 share/skins/main/dark.fxd:582
+#: plugins/lcd.py:82 plugins/freevused.py:540 plugins/vfd.py:108
+#: share/skins/main/dark.fxd:582
 msgid "Geometry"
 msgstr "Seitenverhältnis"
 
@@ -936,7 +939,7 @@ msgstr "Musik"
 msgid "Video"
 msgstr "Video"
 
-#: plugins/lcd.py:221 share/skins/main/basic.fxd:391
+#: plugins/lcd.py:221 plugins/freevused.py:518 share/skins/main/basic.fxd:391
 #: share/skins/main/mediaportal.fxd:692 share/skins/main/dark.fxd:453
 #: share/skins/main/dark.fxd:754 share/skins/main/blurr.fxd:708
 #: share/skins/main/info.fxd:465
@@ -987,17 +990,17 @@ msgid "WARNING"
 msgstr "WARNUNG"
 
 #: plugins/lcd.py:897
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find screens for %d lines LCD!"
 msgstr "Keine Bildschirme für %s-zeilige LCDs gefunden!"
 
 #: plugins/lcd.py:900 plugins/lcd.py:911 plugins/lcd.py:922
-#, fuzzy, python-format
+#, python-format
 msgid "No screens found for this LCD (%dx%d)!"
 msgstr "Kein Bildschirm für dieses LCD gefunden (%sx%s)!"
 
 #: plugins/lcd.py:908 plugins/lcd.py:921
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find screens for %d lines and %d columns LCD!"
 msgstr "Keine Bildschirme für %s-zeilige und %s-spaltige LCDs gefunden!"
 
@@ -1127,7 +1130,7 @@ msgstr "Lese CD in Laufwerk %s"
 
 #: plugins/icecast.py:157
 msgid "Set as icecast playlist"
-msgstr "Als Icecast-Widergabeliste kennzeichnen"
+msgstr "Als Icecast-Wiedergabeliste kennzeichnen"
 
 #: plugins/shutdown.py:133 plugins/shutdown.py:137
 msgid "Shutdown Freevo"
@@ -1197,17 +1200,41 @@ msgstr "Befehl ausgeführt"
 msgid "Commands"
 msgstr "Befehle"
 
-#: plugins/freevused.py:127
-#, fuzzy
+#: plugins/freevused.py:140
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
-msgstr "Sie benötigen pylcd für das LCD plugin"
+msgstr ""
 
-#: plugins/freevused.py:389
+#: plugins/freevused.py:291 plugins/freevused.py:294
+#, fuzzy
+msgid "Playing"
+msgstr "Abspielen"
+
+#: plugins/freevused.py:420
 #, fuzzy, python-format
 msgid "BT event %s"
 msgstr "Text: %s"
+
+#: plugins/freevused.py:509 tv/edit_favorite.py:106
+#: share/skins/main/basic.fxd:385 share/skins/main/basic.fxd:615
+#: share/skins/main/mediaportal.fxd:686 share/skins/main/dark.fxd:749
+#: share/skins/main/blurr.fxd:702 share/skins/main/info.fxd:270
+msgid "Name"
+msgstr "Name"
+
+#: plugins/freevused.py:521 share/skins/main/basic.fxd:397
+#: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
+#: share/skins/main/dark.fxd:759 share/skins/main/blurr.fxd:202
+#: share/skins/main/blurr.fxd:309 share/skins/main/blurr.fxd:692
+msgid "Track"
+msgstr "Titelnr."
+
+#: plugins/freevused.py:529 share/skins/main/basic.fxd:407
+#: share/skins/main/mediaportal.fxd:708 share/skins/main/dark.fxd:768
+#: share/skins/main/blurr.fxd:714 share/skins/main/info.fxd:225
+msgid "Bitrate"
+msgstr "Bitrate"
 
 #: plugins/cd_burn.py:153
 msgid "Not Yet implemented :)"
@@ -1386,9 +1413,8 @@ msgid "Info"
 msgstr ""
 
 #: plugins/buttonbar.py:364
-#, fuzzy
 msgid "More Options"
-msgstr "Beschreibung"
+msgstr ""
 
 #: plugins/freeboxtv.py:72
 msgid "Freebox TV"
@@ -1716,7 +1742,7 @@ msgid "Your listings are up to date."
 msgstr "Die Programmdaten sind aktuell."
 
 #: www/htdocs/index.rpy:75
-#, fuzzy, python-format
+#, python-format
 msgid "Now Recording %s."
 msgstr "$s wird momentan aufgezeichnet."
 
@@ -2251,7 +2277,7 @@ msgstr "Zeige geplante Aufnahmen"
 
 #: tv/plugins/scheduled_recordings.py:56
 msgid "Nothing scheduled."
-msgstr "Keine geplanten Aufnahmen."
+msgstr "Keine geplanten Aufnahmen"
 
 #: tv/plugins/scheduled_recordings.py:104
 msgid "Get recordings failed"
@@ -2294,7 +2320,7 @@ msgstr "Programmsuche"
 
 #: tv/program_search.py:84
 msgid "Feel free to implement this function inside the main guide."
-msgstr "Diese Funktion muss im main gude implementiert werden"
+msgstr "Diese Funktion muss im main guide implementiert werden"
 
 #: tv/program_search.py:112 tv/program_display.py:220
 msgid "Searching, please wait..."
@@ -2503,13 +2529,6 @@ msgstr "Die Liste der TV-Kanäle ist ungültig!\n"
 msgid "Please check the config file."
 msgstr "Bitte die Konfigurationsdatei überprüfen."
 
-#: tv/edit_favorite.py:106 share/skins/main/basic.fxd:385
-#: share/skins/main/basic.fxd:615 share/skins/main/mediaportal.fxd:686
-#: share/skins/main/dark.fxd:749 share/skins/main/blurr.fxd:702
-#: share/skins/main/info.fxd:270
-msgid "Name"
-msgstr "Name"
-
 #: tv/edit_favorite.py:137
 msgid "Day of Week"
 msgstr "Wochentag"
@@ -2704,15 +2723,15 @@ msgstr "Radiosender"
 
 #: audio/plugins/playlist.py:83
 msgid "Playlists"
-msgstr "Widergabelisten"
+msgstr "Wiedergabelisten"
 
 #: audio/plugins/playlist.py:99
 msgid "Enqueue this Music in Playlist"
-msgstr "Diesen Titel in die Widergabeliste aufnehmen"
+msgstr "Diesen Titel in die Wiedergabeliste aufnehmen"
 
 #: audio/plugins/playlist.py:101
 msgid "Make a new Audio Playlist"
-msgstr "Eine neue Audio-Widergabeliste erstellen"
+msgstr "Eine neue Audio-Wiedergabeliste erstellen"
 
 #: audio/plugins/playlist.py:119
 msgid "Queued Directory"
@@ -2724,7 +2743,7 @@ msgstr "Titel hinzugefügt"
 
 #: audio/plugins/playlist.py:129
 msgid "Added New Playlist"
-msgstr "Neue Widergabeliste wurde hinzugefügt"
+msgstr "Neue Wiedergabeliste wurde hinzugefügt"
 
 #: audio/plugins/vux.py:84
 msgid "[VUX] Start playing"
@@ -2839,7 +2858,7 @@ msgstr "Keine Bilder gefunden"
 #: audio/plugins/album_tree.py:326
 #, fuzzy
 msgid "Generating playlist..."
-msgstr "Kein weiterer Eintrag in dieser Widergabeliste"
+msgstr "Kein weiterer Eintrag in dieser Wiedergabeliste"
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -3025,7 +3044,7 @@ msgstr "Auflösung"
 #: video/plugins/reencode2.py:209
 #, fuzzy
 msgid "Modify Video Codec"
-msgstr "Video"
+msgstr "Tageszeit ändern"
 
 #: video/plugins/reencode2.py:143 video/plugins/reencode2.py:199
 #, fuzzy
@@ -3035,7 +3054,7 @@ msgstr "Tageszeit ändern"
 #: video/plugins/reencode2.py:144
 #, fuzzy
 msgid "Modify Audio Codec"
-msgstr "Audio-Menü"
+msgstr "Zeit bearbeiten"
 
 #: video/plugins/reencode2.py:145 video/plugins/reencode2.py:219
 #, fuzzy
@@ -3321,7 +3340,7 @@ msgstr "Datei \"%s\" konnte nicht geöffnet werden"
 
 #: playlist.py:282
 msgid "Browse Playlist"
-msgstr "Widergabeliste durchsuchen"
+msgstr "Wiedergabeliste durchsuchen"
 
 #: playlist.py:292 directory.py:451
 msgid "Random play all items"
@@ -3329,23 +3348,23 @@ msgstr "Alle Einträge in zufälliger Reihenfolge abspielen"
 
 #: playlist.py:338
 msgid "empty playlist"
-msgstr "Leere Widergabeliste"
+msgstr "Leere Wiedergabeliste"
 
 #: playlist.py:436
 msgid "playlist repeat on"
-msgstr "Widergabeliste widerholen"
+msgstr "Wiedergabeliste wiederholen"
 
 #: playlist.py:438
 msgid "playlist repeat off"
-msgstr "Widergabeliste nicht widerholen"
+msgstr "Wiedergabeliste nicht wiederholen"
 
 #: playlist.py:452
 msgid "no next item in playlist"
-msgstr "Kein weiterer Eintrag in dieser Widergabeliste"
+msgstr "Kein weiterer Eintrag in dieser Wiedergabeliste"
 
 #: playlist.py:479
 msgid "no previous item in playlist"
-msgstr "Kein vorheriger Eintrag in dieser Widergabeliste"
+msgstr "Kein vorheriger Eintrag in dieser Wiedergabeliste"
 
 #: menu.py:671
 msgid "No action defined for this choice!"
@@ -3357,7 +3376,7 @@ msgstr "Verzeichnis nach Datum sortieren"
 
 #: directory.py:56
 msgid "Sort directory by date and not by name."
-msgstr "Soertiere Verzeichnis nach Datum statt nach Name"
+msgstr "Sortiere Verzeichnis nach Datum statt nach Name"
 
 #: directory.py:58
 msgid "Directory Autoplay Single Item"
@@ -3425,35 +3444,35 @@ msgid ""
 "Handle the directory as playlist. After one file is played, the next one "
 "will be started."
 msgstr ""
-"Verzeichnis als Widergabeliste bahandeln. Nach dem Abspielen eines Titels "
+"Verzeichnis als Wiedergabeliste behandeln. Nach dem Abspielen eines Titels "
 "wird der Nächste gestartet."
 
 #: directory.py:84
 msgid "Directory Add Playlist Files"
-msgstr "Widergabeliste in's Verzeichnis"
+msgstr "Wiedergabeliste in's Verzeichnis"
 
 #: directory.py:85
 msgid "Add playlist files to the list of items"
-msgstr "Dateien aus der Widergabeliste im Verzeichnis auflisten"
+msgstr "Dateien aus der Wiedergabeliste im Verzeichnis auflisten"
 
 #: directory.py:87
 msgid "Directory Add Random Playlist"
-msgstr "Zufällige Widergabeliste in's Verzeichnis"
+msgstr "Zufällige Wiedergabeliste in's Verzeichnis"
 
 #: directory.py:88
 msgid "Add an item for a random playlist"
-msgstr "Einen Eintrag für eine zufällige Widergabeliste hinzufügen"
+msgstr "Einen Eintrag für eine zufällige Wiedergabeliste hinzufügen"
 
 #: directory.py:90
 msgid "Directory Autoplay Items"
-msgstr "Verzeichnis automatisch widergeben"
+msgstr "Verzeichnis automatisch wiedergeben"
 
 #: directory.py:91
 msgid ""
 "Autoplay the whole directory (as playlist) when it contains only files and "
 "no directories"
 msgstr ""
-"Das gesamte Verzeichnis automatisch widergeben (als Playliste) wenn es nur "
+"Das gesamte Verzeichnis automatisch wiedergeben (als Playliste) wenn es nur "
 "Dateien und keine Verzeichnisse enthält"
 
 #: directory.py:308
@@ -3467,7 +3486,7 @@ msgstr "Verzeichnis"
 
 #: directory.py:445
 msgid "Play all files in directory"
-msgstr "Alles im Verzeichnis widergeben"
+msgstr "Alles im Verzeichnis wiedergeben"
 
 #: directory.py:453
 msgid "Recursive random play all items"
@@ -3492,7 +3511,7 @@ msgstr "Falsches Passwort"
 #: directory.py:582
 #, fuzzy
 msgid "Directory does not exist"
-msgstr "Verzeichniss '%s' existiert nicht"
+msgstr "Verzeichnis '%s' existiert nicht"
 
 #: directory.py:611
 msgid "Scanning disc, be patient..."
@@ -3700,9 +3719,8 @@ msgid "From"
 msgstr ""
 
 #: share/skins/main/dark.fxd:671
-#, fuzzy
 msgid "New mail"
-msgstr "Neuer Favorit"
+msgstr ""
 
 #: share/skins/main/mediaportal.fxd:445 share/skins/main/blurr.fxd:452
 msgid "Play a Game"
@@ -3710,9 +3728,8 @@ msgstr "Videospiele"
 
 #: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:11
 #: share/skins/main/bluestar.fxd:11 share/skins/main/rain.fxd:11
-#, fuzzy
 msgid "Email"
-msgstr "klein"
+msgstr ""
 
 #: share/skins/main/dark.fxd:646
 msgid "Total mails"
@@ -3735,17 +3752,10 @@ msgstr "Einträge in dieser Playliste"
 msgid "kb/s"
 msgstr ""
 
-#: share/skins/main/basic.fxd:397 share/skins/main/mediaportal.fxd:204
-#: share/skins/main/mediaportal.fxd:698 share/skins/main/dark.fxd:759
-#: share/skins/main/blurr.fxd:202 share/skins/main/blurr.fxd:309
-#: share/skins/main/blurr.fxd:692
-msgid "Track"
-msgstr "Titelnr."
-
 #: share/skins/main/dark.fxd:565
 #, fuzzy
 msgid "One song in playlist"
-msgstr "Kein weiterer Eintrag in dieser Widergabeliste"
+msgstr "Kein weiterer Eintrag in dieser Wiedergabeliste"
 
 #: share/skins/main/mediaportal.fxd:193 share/skins/main/blurr.fxd:191
 #: share/skins/main/info.fxd:419 share/skins/main/info.fxd:424
@@ -3780,12 +3790,6 @@ msgstr "Video"
 #: share/skins/main/info.fxd:232
 msgid "Link"
 msgstr ""
-
-#: share/skins/main/basic.fxd:407 share/skins/main/mediaportal.fxd:708
-#: share/skins/main/dark.fxd:768 share/skins/main/blurr.fxd:714
-#: share/skins/main/info.fxd:225
-msgid "Bitrate"
-msgstr "Bitrate"
 
 #: share/skins/main/basic.fxd:627
 msgid "Day"
@@ -3881,7 +3885,7 @@ msgstr "Schlagzeilen"
 #: share/skins/main/dark.fxd:569
 #, fuzzy
 msgid "No songs in playlist"
-msgstr "Kein weiterer Eintrag in dieser Widergabeliste"
+msgstr "Kein weiterer Eintrag in dieser Wiedergabeliste"
 
 #: share/skins/main/mediaportal.fxd:444 share/skins/main/blurr.fxd:451
 #: share/skins/main/info.fxd:16
@@ -3905,7 +3909,7 @@ msgstr "TV"
 #: share/skins/main/dark.fxd:561
 #, fuzzy
 msgid "songs in playlist"
-msgstr "Kein weiterer Eintrag in dieser Widergabeliste"
+msgstr "Kein weiterer Eintrag in dieser Wiedergabeliste"
 
 #: share/skins/main/mediaportal.fxd:446 share/skins/main/crystal.fxd:13
 #: share/skins/main/blurr.fxd:453 share/skins/main/rain.fxd:13
@@ -3926,23 +3930,11 @@ msgstr "Audio-Menü"
 msgid "Subject"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Delete %s?"
-#~ msgstr "Lösche %s."
+#~ msgid "Choose a Directory"
+#~ msgstr "Verzeichnis auswählen"
 
 #~ msgid "Favorite not added yet."
 #~ msgstr "Favorit noch nicht hinzugefügt"
-
-#, fuzzy
-#~ msgid "No Xm Radio Stations found"
-#~ msgstr "Kein Radiosender gefunden"
-
-#~ msgid "Chapter"
-#~ msgstr "Kapitel"
-
-#, fuzzy
-#~ msgid " free of %s GB total (%s%% free)"
-#~ msgstr "%i von %i MB frei"
 
 #~ msgid "'fbxine' version too old, plugin 'xine' deactivated"
 #~ msgstr ""
@@ -3954,12 +3946,12 @@ msgstr ""
 #~ msgid "or make %s writable!"
 #~ msgstr "oder erlauben Sie das Beschreiben von %s!"
 
+#~ msgid "Chapter"
+#~ msgstr "Kapitel"
+
 #~ msgid "'xine-ui' version too old, plugin 'xine' deactivated"
 #~ msgstr ""
 #~ "Die Version von 'xine-ui' ist zu alt, das Plugin 'xine' wird deaktiviert"
 
 #~ msgid "Unable to get frequency for channel %s."
 #~ msgstr "Frequenz von %s konnte nicht geholt werden"
-
-#~ msgid "Choose a Directory"
-#~ msgstr "Verzeichnis auswählen"

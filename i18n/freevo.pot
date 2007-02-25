@@ -3,12 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-20 19:32+0100\n"
+"POT-Creation-Date: 2007-02-25 09:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -797,7 +797,7 @@ msgid "Delete Cart"
 msgstr ""
 
 #: plugins/lcd.py:48 plugins/lcd.py:900 plugins/lcd.py:911 plugins/lcd.py:922
-#: plugins/freevused.py:127 plugins/vfd.py:52 plugins/vfd.py:518
+#: plugins/freevused.py:140 plugins/vfd.py:52 plugins/vfd.py:518
 #: plugins/vfd.py:526 plugins/vfd.py:728 plugins/vfd.py:741 plugins/vfd.py:752
 #: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
 #: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
@@ -818,7 +818,8 @@ msgstr ""
 msgid "You need pylcd to run \"lcd\" plugin."
 msgstr ""
 
-#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/vfd.py:93 plugins/vfd.py:101
+#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/freevused.py:532
+#: plugins/freevused.py:548 plugins/vfd.py:93 plugins/vfd.py:101
 #: share/skins/main/basic.fxd:416
 #: share/skins/main/mediaportal.fxd:716
 #: share/skins/main/dark.fxd:537
@@ -828,8 +829,8 @@ msgstr ""
 msgid "Length"
 msgstr ""
 
-#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183 plugins/vfd.py:94
-#: plugins/vfd.py:98
+#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183
+#: plugins/freevused.py:515 plugins/vfd.py:94 plugins/vfd.py:98
 #: share/skins/main/dark.fxd:521
 #: share/skins/main/dark.fxd:734
 #: share/skins/main/info.fxd:202
@@ -838,8 +839,8 @@ msgstr ""
 msgid "Artist"
 msgstr ""
 
-#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180 plugins/vfd.py:95
-#: plugins/vfd.py:99
+#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180
+#: plugins/freevused.py:512 plugins/vfd.py:95 plugins/vfd.py:99
 #: share/skins/main/basic.fxd:374
 #: share/skins/main/mediaportal.fxd:674
 #: share/skins/main/dark.fxd:527
@@ -886,7 +887,7 @@ msgstr ""
 msgid "Plot"
 msgstr ""
 
-#: plugins/lcd.py:82 plugins/vfd.py:108
+#: plugins/lcd.py:82 plugins/freevused.py:540 plugins/vfd.py:108
 #: share/skins/main/dark.fxd:582
 msgid "Geometry"
 msgstr ""
@@ -933,7 +934,7 @@ msgstr ""
 msgid "Video"
 msgstr ""
 
-#: plugins/lcd.py:221
+#: plugins/lcd.py:221 plugins/freevused.py:518
 #: share/skins/main/basic.fxd:391
 #: share/skins/main/mediaportal.fxd:692
 #: share/skins/main/dark.fxd:453
@@ -1202,15 +1203,49 @@ msgstr ""
 msgid "Commands"
 msgstr ""
 
-#: plugins/freevused.py:127
+#: plugins/freevused.py:140
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
 msgstr ""
 
-#: plugins/freevused.py:389
+#: plugins/freevused.py:291 plugins/freevused.py:294
+msgid "Playing"
+msgstr ""
+
+#: plugins/freevused.py:420
 #, python-format
 msgid "BT event %s"
+msgstr ""
+
+#: plugins/freevused.py:509 tv/edit_favorite.py:106
+#: share/skins/main/basic.fxd:385
+#: share/skins/main/basic.fxd:615
+#: share/skins/main/mediaportal.fxd:686
+#: share/skins/main/dark.fxd:749
+#: share/skins/main/blurr.fxd:702
+#: share/skins/main/info.fxd:270
+msgid "Name"
+msgstr ""
+
+#: plugins/freevused.py:521
+#: share/skins/main/basic.fxd:397
+#: share/skins/main/mediaportal.fxd:204
+#: share/skins/main/mediaportal.fxd:698
+#: share/skins/main/dark.fxd:759
+#: share/skins/main/blurr.fxd:202
+#: share/skins/main/blurr.fxd:309
+#: share/skins/main/blurr.fxd:692
+msgid "Track"
+msgstr ""
+
+#: plugins/freevused.py:529
+#: share/skins/main/basic.fxd:407
+#: share/skins/main/mediaportal.fxd:708
+#: share/skins/main/dark.fxd:768
+#: share/skins/main/blurr.fxd:714
+#: share/skins/main/info.fxd:225
+msgid "Bitrate"
 msgstr ""
 
 #: plugins/cd_burn.py:153
@@ -2499,16 +2534,6 @@ msgstr ""
 msgid "Please check the config file."
 msgstr ""
 
-#: tv/edit_favorite.py:106
-#: share/skins/main/basic.fxd:385
-#: share/skins/main/basic.fxd:615
-#: share/skins/main/mediaportal.fxd:686
-#: share/skins/main/dark.fxd:749
-#: share/skins/main/blurr.fxd:702
-#: share/skins/main/info.fxd:270
-msgid "Name"
-msgstr ""
-
 #: tv/edit_favorite.py:137
 msgid "Day of Week"
 msgstr ""
@@ -3677,16 +3702,6 @@ msgstr ""
 msgid "kb/s"
 msgstr ""
 
-#: share/skins/main/basic.fxd:397
-#: share/skins/main/mediaportal.fxd:204
-#: share/skins/main/mediaportal.fxd:698
-#: share/skins/main/dark.fxd:759
-#: share/skins/main/blurr.fxd:202
-#: share/skins/main/blurr.fxd:309
-#: share/skins/main/blurr.fxd:692
-msgid "Track"
-msgstr ""
-
 #: share/skins/main/dark.fxd:565
 msgid "One song in playlist"
 msgstr ""
@@ -3728,14 +3743,6 @@ msgstr ""
 
 #: share/skins/main/info.fxd:232
 msgid "Link"
-msgstr ""
-
-#: share/skins/main/basic.fxd:407
-#: share/skins/main/mediaportal.fxd:708
-#: share/skins/main/dark.fxd:768
-#: share/skins/main/blurr.fxd:714
-#: share/skins/main/info.fxd:225
-msgid "Bitrate"
 msgstr ""
 
 #: share/skins/main/basic.fxd:627

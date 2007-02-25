@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-20 19:32+0100\n"
+"POT-Creation-Date: 2007-02-25 09:04+0100\n"
 "PO-Revision-Date:  Fri Sep 12 23:05:21 2003\n"
 "Last-Translator: Sylvain Fabre <centraladmin@lahiette.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -647,7 +647,7 @@ msgstr "Vent"
 
 #: plugins/weather.py:903
 msgid "Wind Chill"
-msgstr "Force du vent"
+msgstr "Temp. ressentie"
 
 #: plugins/weather.py:911
 msgid "Visibility"
@@ -659,7 +659,7 @@ msgstr "Index UV"
 
 #: plugins/weather.py:962
 msgid "Today, a high of"
-msgstr "Aujourd'hui, Température Max :"
+msgstr "Aujourd'hui, Température Maxi :"
 
 #: plugins/weather.py:964
 msgid "and a low of"
@@ -798,7 +798,7 @@ msgid "Delete Cart"
 msgstr "Vider le panier"
 
 #: plugins/lcd.py:48 plugins/lcd.py:900 plugins/lcd.py:911 plugins/lcd.py:922
-#: plugins/freevused.py:127 plugins/vfd.py:52 plugins/vfd.py:518
+#: plugins/freevused.py:140 plugins/vfd.py:52 plugins/vfd.py:518
 #: plugins/vfd.py:526 plugins/vfd.py:728 plugins/vfd.py:741 plugins/vfd.py:752
 #: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
 #: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
@@ -819,25 +819,28 @@ msgstr "ERREUR"
 msgid "You need pylcd to run \"lcd\" plugin."
 msgstr "pylcd doit être installé pour lancer le plugin \"lcd\""
 
-#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/vfd.py:93 plugins/vfd.py:101
+#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/freevused.py:532
+#: plugins/freevused.py:548 plugins/vfd.py:93 plugins/vfd.py:101
 #: share/skins/main/basic.fxd:416 share/skins/main/mediaportal.fxd:716
 #: share/skins/main/dark.fxd:537 share/skins/main/dark.fxd:774
 #: share/skins/main/blurr.fxd:724 share/skins/main/info.fxd:219
 msgid "Length"
 msgstr "Durée"
 
-#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183 plugins/vfd.py:94
-#: plugins/vfd.py:98 share/skins/main/dark.fxd:521
-#: share/skins/main/dark.fxd:734 share/skins/main/info.fxd:202
-#: share/skins/main/info.fxd:357 share/skins/main/info.fxd:397
+#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183
+#: plugins/freevused.py:515 plugins/vfd.py:94 plugins/vfd.py:98
+#: share/skins/main/dark.fxd:521 share/skins/main/dark.fxd:734
+#: share/skins/main/info.fxd:202 share/skins/main/info.fxd:357
+#: share/skins/main/info.fxd:397
 msgid "Artist"
 msgstr "Artiste"
 
-#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180 plugins/vfd.py:95
-#: plugins/vfd.py:99 share/skins/main/basic.fxd:374
-#: share/skins/main/mediaportal.fxd:674 share/skins/main/dark.fxd:527
-#: share/skins/main/dark.fxd:739 share/skins/main/blurr.fxd:680
-#: share/skins/main/info.fxd:208 share/skins/main/info.fxd:362
+#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180
+#: plugins/freevused.py:512 plugins/vfd.py:95 plugins/vfd.py:99
+#: share/skins/main/basic.fxd:374 share/skins/main/mediaportal.fxd:674
+#: share/skins/main/dark.fxd:527 share/skins/main/dark.fxd:739
+#: share/skins/main/blurr.fxd:680 share/skins/main/info.fxd:208
+#: share/skins/main/info.fxd:362
 msgid "Album"
 msgstr "Album"
 
@@ -871,7 +874,8 @@ msgstr "Nouvelles"
 msgid "Plot"
 msgstr "Point"
 
-#: plugins/lcd.py:82 plugins/vfd.py:108 share/skins/main/dark.fxd:582
+#: plugins/lcd.py:82 plugins/freevused.py:540 plugins/vfd.py:108
+#: share/skins/main/dark.fxd:582
 msgid "Geometry"
 msgstr "Géométrie"
 
@@ -913,7 +917,7 @@ msgstr "Musique"
 msgid "Video"
 msgstr "Vidéo"
 
-#: plugins/lcd.py:221 share/skins/main/basic.fxd:391
+#: plugins/lcd.py:221 plugins/freevused.py:518 share/skins/main/basic.fxd:391
 #: share/skins/main/mediaportal.fxd:692 share/skins/main/dark.fxd:453
 #: share/skins/main/dark.fxd:754 share/skins/main/blurr.fxd:708
 #: share/skins/main/info.fxd:465
@@ -1171,8 +1175,7 @@ msgstr "Commande terminée"
 msgid "Commands"
 msgstr "Commandes"
 
-#: plugins/freevused.py:127
-#, fuzzy
+#: plugins/freevused.py:140
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
@@ -1180,10 +1183,34 @@ msgstr ""
 "Vous devez installer pybluez (http://org.csail.mit.edu/pybluez/) pour "
 "utiliser le plugin \"freevused\"."
 
-#: plugins/freevused.py:389
+#: plugins/freevused.py:291 plugins/freevused.py:294
+msgid "Playing"
+msgstr "Lire"
+
+#: plugins/freevused.py:420
 #, python-format
 msgid "BT event %s"
 msgstr "Evènement BT : %s"
+
+#: plugins/freevused.py:509 tv/edit_favorite.py:106
+#: share/skins/main/basic.fxd:385 share/skins/main/basic.fxd:615
+#: share/skins/main/mediaportal.fxd:686 share/skins/main/dark.fxd:749
+#: share/skins/main/blurr.fxd:702 share/skins/main/info.fxd:270
+msgid "Name"
+msgstr "Nom"
+
+#: plugins/freevused.py:521 share/skins/main/basic.fxd:397
+#: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
+#: share/skins/main/dark.fxd:759 share/skins/main/blurr.fxd:202
+#: share/skins/main/blurr.fxd:309 share/skins/main/blurr.fxd:692
+msgid "Track"
+msgstr "Piste"
+
+#: plugins/freevused.py:529 share/skins/main/basic.fxd:407
+#: share/skins/main/mediaportal.fxd:708 share/skins/main/dark.fxd:768
+#: share/skins/main/blurr.fxd:714 share/skins/main/info.fxd:225
+msgid "Bitrate"
+msgstr "Débit"
 
 #: plugins/cd_burn.py:153
 msgid "Not Yet implemented :)"
@@ -1237,12 +1264,12 @@ msgid "Backup interrupted"
 msgstr "Sauvegarde interrompue"
 
 #: plugins/cd_burn.py:771
-#, fuzzy, python-format
+#, python-format
 msgid "Item type is %s"
 msgstr "Cet élément est du type %s"
 
 #: plugins/cd_burn.py:779
-#, fuzzy, python-format
+#, python-format
 msgid "Should show the menu? %i"
 msgstr "Afficher le menu ? %i"
 
@@ -1311,7 +1338,6 @@ msgstr ""
 "colonnes!"
 
 #: plugins/upsoon.py:224 plugins/upsoon.py:242
-#, fuzzy
 msgid "A recording will start in a few minutes"
 msgstr "Un enregistrement va démarrer dans quelques minutes"
 
@@ -1524,7 +1550,6 @@ msgid "unable to load html files"
 msgstr "impossible de charger les fichiers html"
 
 #: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
-#, fuzzy
 msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
 msgstr "Si vous utilisez la version CVS de Freevo, lancez <b>autogen.sh</b>."
 
@@ -2481,13 +2506,6 @@ msgstr "La liste des chaînes TV est invalide !\n"
 #: tv/tvmenu.py:141
 msgid "Please check the config file."
 msgstr "Merci de vérifier le fichier de configuration."
-
-#: tv/edit_favorite.py:106 share/skins/main/basic.fxd:385
-#: share/skins/main/basic.fxd:615 share/skins/main/mediaportal.fxd:686
-#: share/skins/main/dark.fxd:749 share/skins/main/blurr.fxd:702
-#: share/skins/main/info.fxd:270
-msgid "Name"
-msgstr "Nom"
 
 #: tv/edit_favorite.py:137
 msgid "Day of Week"
@@ -3701,13 +3719,6 @@ msgstr "Just un film dans cette liste"
 msgid "kb/s"
 msgstr "Kbits/s"
 
-#: share/skins/main/basic.fxd:397 share/skins/main/mediaportal.fxd:204
-#: share/skins/main/mediaportal.fxd:698 share/skins/main/dark.fxd:759
-#: share/skins/main/blurr.fxd:202 share/skins/main/blurr.fxd:309
-#: share/skins/main/blurr.fxd:692
-msgid "Track"
-msgstr "Piste"
-
 #: share/skins/main/dark.fxd:565
 msgid "One song in playlist"
 msgstr "Une chanson dans la playlist"
@@ -3744,12 +3755,6 @@ msgstr "Débit Vidéo"
 #: share/skins/main/info.fxd:232
 msgid "Link"
 msgstr "Liens"
-
-#: share/skins/main/basic.fxd:407 share/skins/main/mediaportal.fxd:708
-#: share/skins/main/dark.fxd:768 share/skins/main/blurr.fxd:714
-#: share/skins/main/info.fxd:225
-msgid "Bitrate"
-msgstr "Débit"
 
 #: share/skins/main/basic.fxd:627
 msgid "Day"
@@ -3880,40 +3885,12 @@ msgstr "Codec Audio"
 msgid "Subject"
 msgstr "Sujet"
 
-#, fuzzy
 #~ msgid ""
-#~ "Cannot find %s (%s). Please configure the right path in your config file "
-#~ "and make sure it has the right permissions."
+#~ "Please configure the right path in your config file and make sure it has "
+#~ "the right permissions."
 #~ msgstr ""
 #~ "Merci de configurer le bon répertoire dans votre fichier de configuration "
 #~ "et de vérifier que les droits sont appropriés."
-
-#, fuzzy
-#~ msgid "Delete %s?"
-#~ msgstr "Effacer %"
-
-#, fuzzy
-#~ msgid "Error, unable to delete dir %s"
-#~ msgstr "impossible de charger les fichiers html"
-
-#, fuzzy
-#~ msgid "Error, unable to delete file %s"
-#~ msgstr "impossible de charger les fichiers html"
-
-#, fuzzy
-#~ msgid "Remove from favorites"
-#~ msgstr "Enlever le favori"
-
-#, fuzzy
-#~ msgid "Favorite not added yet."
-#~ msgstr "Le favori %s n'existe pas."
-
-#, fuzzy
-#~ msgid "No Xm Radio Stations found"
-#~ msgstr "Aucune radio trouvée"
-
-#~ msgid "Chapter"
-#~ msgstr "Chapitre"
 
 #~ msgid "Search Moviecovers.com for this file"
 #~ msgstr "Lancer une recherche sur Moviecovers.com pour ce fichier"
@@ -3960,32 +3937,3 @@ msgstr "Sujet"
 
 #~ msgid "or make %s writable!"
 #~ msgstr "ou mettez %s en écriture!"
-
-#, fuzzy
-#~ msgid " free of %s GB total (%s%% free)"
-#~ msgstr "%i libre sur un total de %i Mb"
-
-#~ msgid "'fbxine' version too old, plugin 'xine' deactivated"
-#~ msgstr "'fbxine' est trop vieux, le plugin 'xine' est donc désactivé"
-
-#~ msgid "You need software %s"
-#~ msgstr "Vous avez besoin du logiciel %s"
-
-#, fuzzy
-#~ msgid "Unable to get frequency for channel %s."
-#~ msgstr "Impossible de sélectionner la fréquence pour la chaîne %s"
-
-#, fuzzy
-#~ msgid "'xine-ui' version too old, plugin 'xine' deactivated"
-#~ msgstr "'fbxine' est trop vieux, le plugin 'xine' est donc désactivé"
-
-#~ msgid ""
-#~ "This page is generated from the Freevo WiKi. The current Version can be "
-#~ "found <a href=\"%s\">here</a>."
-#~ msgstr ""
-#~ "Cette page est générée à partir du Wiki de Freevo. La version courrante "
-#~ "peut-êtretrouvée à <a href=\"%s\">here</a>."
-
-#, fuzzy
-#~ msgid "Choose a Directory"
-#~ msgstr "Selection du répertoire"

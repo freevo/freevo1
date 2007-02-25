@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-20 19:32+0100\n"
+"POT-Creation-Date: 2007-02-25 09:01+0100\n"
 "PO-Revision-Date: 2004-08-10 16:44+0300\n"
 "Last-Translator: Petri Damsten <damu@iki.fi>\n"
 "Language-Team: Finnish\n"
@@ -819,7 +819,7 @@ msgid "Delete Cart"
 msgstr ""
 
 #: plugins/lcd.py:48 plugins/lcd.py:900 plugins/lcd.py:911 plugins/lcd.py:922
-#: plugins/freevused.py:127 plugins/vfd.py:52 plugins/vfd.py:518
+#: plugins/freevused.py:140 plugins/vfd.py:52 plugins/vfd.py:518
 #: plugins/vfd.py:526 plugins/vfd.py:728 plugins/vfd.py:741 plugins/vfd.py:752
 #: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
 #: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
@@ -840,25 +840,28 @@ msgstr "VIRHE"
 msgid "You need pylcd to run \"lcd\" plugin."
 msgstr ""
 
-#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/vfd.py:93 plugins/vfd.py:101
+#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/freevused.py:532
+#: plugins/freevused.py:548 plugins/vfd.py:93 plugins/vfd.py:101
 #: share/skins/main/basic.fxd:416 share/skins/main/mediaportal.fxd:716
 #: share/skins/main/dark.fxd:537 share/skins/main/dark.fxd:774
 #: share/skins/main/blurr.fxd:724 share/skins/main/info.fxd:219
 msgid "Length"
 msgstr "Kesto"
 
-#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183 plugins/vfd.py:94
-#: plugins/vfd.py:98 share/skins/main/dark.fxd:521
-#: share/skins/main/dark.fxd:734 share/skins/main/info.fxd:202
-#: share/skins/main/info.fxd:357 share/skins/main/info.fxd:397
+#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183
+#: plugins/freevused.py:515 plugins/vfd.py:94 plugins/vfd.py:98
+#: share/skins/main/dark.fxd:521 share/skins/main/dark.fxd:734
+#: share/skins/main/info.fxd:202 share/skins/main/info.fxd:357
+#: share/skins/main/info.fxd:397
 msgid "Artist"
 msgstr "Artisti"
 
-#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180 plugins/vfd.py:95
-#: plugins/vfd.py:99 share/skins/main/basic.fxd:374
-#: share/skins/main/mediaportal.fxd:674 share/skins/main/dark.fxd:527
-#: share/skins/main/dark.fxd:739 share/skins/main/blurr.fxd:680
-#: share/skins/main/info.fxd:208 share/skins/main/info.fxd:362
+#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180
+#: plugins/freevused.py:512 plugins/vfd.py:95 plugins/vfd.py:99
+#: share/skins/main/basic.fxd:374 share/skins/main/mediaportal.fxd:674
+#: share/skins/main/dark.fxd:527 share/skins/main/dark.fxd:739
+#: share/skins/main/blurr.fxd:680 share/skins/main/info.fxd:208
+#: share/skins/main/info.fxd:362
 msgid "Album"
 msgstr "Albumi"
 
@@ -892,7 +895,8 @@ msgstr "Kuvaus"
 msgid "Plot"
 msgstr "Juoni"
 
-#: plugins/lcd.py:82 plugins/vfd.py:108 share/skins/main/dark.fxd:582
+#: plugins/lcd.py:82 plugins/freevused.py:540 plugins/vfd.py:108
+#: share/skins/main/dark.fxd:582
 msgid "Geometry"
 msgstr "Geometria"
 
@@ -934,7 +938,7 @@ msgstr "Musiikki"
 msgid "Video"
 msgstr "Video"
 
-#: plugins/lcd.py:221 share/skins/main/basic.fxd:391
+#: plugins/lcd.py:221 plugins/freevused.py:518 share/skins/main/basic.fxd:391
 #: share/skins/main/mediaportal.fxd:692 share/skins/main/dark.fxd:453
 #: share/skins/main/dark.fxd:754 share/skins/main/blurr.fxd:708
 #: share/skins/main/info.fxd:465
@@ -1191,16 +1195,41 @@ msgstr "Komento suoritettu"
 msgid "Commands"
 msgstr "Komennot"
 
-#: plugins/freevused.py:127
+#: plugins/freevused.py:140
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
 msgstr ""
 
-#: plugins/freevused.py:389
+#: plugins/freevused.py:291 plugins/freevused.py:294
+#, fuzzy
+msgid "Playing"
+msgstr "Soita"
+
+#: plugins/freevused.py:420
 #, fuzzy, python-format
 msgid "BT event %s"
 msgstr "Teksti: %s"
+
+#: plugins/freevused.py:509 tv/edit_favorite.py:106
+#: share/skins/main/basic.fxd:385 share/skins/main/basic.fxd:615
+#: share/skins/main/mediaportal.fxd:686 share/skins/main/dark.fxd:749
+#: share/skins/main/blurr.fxd:702 share/skins/main/info.fxd:270
+msgid "Name"
+msgstr "Nimi"
+
+#: plugins/freevused.py:521 share/skins/main/basic.fxd:397
+#: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
+#: share/skins/main/dark.fxd:759 share/skins/main/blurr.fxd:202
+#: share/skins/main/blurr.fxd:309 share/skins/main/blurr.fxd:692
+msgid "Track"
+msgstr "Kappale"
+
+#: plugins/freevused.py:529 share/skins/main/basic.fxd:407
+#: share/skins/main/mediaportal.fxd:708 share/skins/main/dark.fxd:768
+#: share/skins/main/blurr.fxd:714 share/skins/main/info.fxd:225
+msgid "Bitrate"
+msgstr "Bittinopeus"
 
 #: plugins/cd_burn.py:153
 msgid "Not Yet implemented :)"
@@ -2506,13 +2535,6 @@ msgstr "TV kanavien lista on viallinen!\n"
 msgid "Please check the config file."
 msgstr "Tarkista asetus tiedosto."
 
-#: tv/edit_favorite.py:106 share/skins/main/basic.fxd:385
-#: share/skins/main/basic.fxd:615 share/skins/main/mediaportal.fxd:686
-#: share/skins/main/dark.fxd:749 share/skins/main/blurr.fxd:702
-#: share/skins/main/info.fxd:270
-msgid "Name"
-msgstr "Nimi"
-
 #: tv/edit_favorite.py:137
 msgid "Day of Week"
 msgstr "Viikonpäivä"
@@ -3708,13 +3730,6 @@ msgstr "kappaletta tässä soittolistassa"
 msgid "kb/s"
 msgstr "kb/s"
 
-#: share/skins/main/basic.fxd:397 share/skins/main/mediaportal.fxd:204
-#: share/skins/main/mediaportal.fxd:698 share/skins/main/dark.fxd:759
-#: share/skins/main/blurr.fxd:202 share/skins/main/blurr.fxd:309
-#: share/skins/main/blurr.fxd:692
-msgid "Track"
-msgstr "Kappale"
-
 #: share/skins/main/dark.fxd:565
 #, fuzzy
 msgid "One song in playlist"
@@ -3753,12 +3768,6 @@ msgstr "Video"
 #: share/skins/main/info.fxd:232
 msgid "Link"
 msgstr "Linkki"
-
-#: share/skins/main/basic.fxd:407 share/skins/main/mediaportal.fxd:708
-#: share/skins/main/dark.fxd:768 share/skins/main/blurr.fxd:714
-#: share/skins/main/info.fxd:225
-msgid "Bitrate"
-msgstr "Bittinopeus"
 
 #: share/skins/main/basic.fxd:627
 msgid "Day"
