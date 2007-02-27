@@ -11,13 +11,16 @@ X is the category and #nnnnnnn is the tracker number.
 (F)eature requests http://sourceforge.net/tracker/?group_id=46652&atid=446898
 
 
-== Release 1.7.0 (2007-02-25) ==
+svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
+
+== Release 1.7.1 (2007-??-??) ==
 --------------------------------
 
-svn export svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
+ * Added Anamorphic widescreen "Panorama" skin (F#1669994)
+ * Fixed IMDB download, adds more data to fxd files (B#)
 
-The release date is only tentative at the moment.
-This release has all the changes in Release 1.6.x plus
+== Release 1.7.0 (2007-02-25) ==
+--------------------------------
 
  * Replaced mmpython with kaa.base and kaa.metadata (F#1580712)
  * Replaced PIL with kaa.imlib2 (F#1580712)
@@ -60,6 +63,9 @@ This release has all the changes in Release 1.6.x plus
  * Updated webserver login to allow for a encrypted password (F#1623854)
  * Updated webradio to show the stream information (F#1587694)
  * Removed video plug-in mplayer for unichrome playback (B#1606699)
+
+
+svn co svn://svn.freevo.org/freevo/branches/rel-1-6/freevo freevo-1.x
 
 == Release 1.6.3 (2007-02-18) ==
 --------------------------------
