@@ -103,8 +103,16 @@
       <shadow x="1" y="1" color="0x000000" visible="yes"/>
     </font>
 
+    <!--<font label="widget" name="VeraBd" size="16" color="0x000000"/>-->
+    <font label="widget" name="VeraBd.ttf" size="14">
+      <shadow visible="yes" color="0x000000" border="yes"/>
+    </font>
+
+    <font label="selected widget" name="VeraBd.ttf" size="14">
+      <shadow visible="yes" color="0x000000" border="yes"/>
+    </font>
+
     <color label="widget background" value="0xefb744"/>
-    <font label="widget" name="VeraBd" size="16" color="0x000000"/>
     <color label="widget text" value="0x000000"/>
     <color label="widget item background" value="0xefb744"/>
     <color label="widget selected background" value="0xfffe8d"/>
