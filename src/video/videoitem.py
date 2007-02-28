@@ -218,47 +218,38 @@ class VideoItem(Item):
                 return aspect
             
         if key == 'runtime':
-            total = 0
-            length = 0
 
             if self.info['runtime']:
-                length = self.info['runtime']
-                # Assuming that runtime is always a string
-                # Assume that a time 1:40 is hours:minutes
-                # Not sure when a '/' is used
-                p=re.compile('([0-9]+)[:/]*([0-9]*)')
-                m=p.match(length)
-                if m:
-                    length = int(m.group(1))
-                    if m.group(2):
-                        length *= 60 + int(m.group(2))
-                else:
-                    length = 0
-                total = '%s min' % str(int(length))
+                if self.info['runtime'] != 'None':
+                    return self.info['runtime']
 
-            if length == 0:
-                if self.subitems:
-                    for s in self.subitems:
-                        if s.info['length']:
-                            length = s.info['length']
-                        if not length and hasattr(s, 'length'):
-                            length = s.length
-                        if not length:
-                            continue
-                        try:
-                            total += length
-                        except ValueError, TypeError:
-                            pass
+            total = ''
+            if self.subitems:
+                for s in self.subitems:
+                    if s.info['length']:
+                        length = s.info['length']
+                    if not length and hasattr(s, 'length'):
+                        length = s.length
+                    if not length:
+                        continue
+                    try:
+                        total += length
+                    except ValueError, TypeError:
+                        pass
+                total = '%s min' % str(int(total) / 60)
+
+            else:
+                if self.info['length']:
+                    total = self.info['length']
+                elif hasattr(self, 'length'):
+                    total = self.length
+
+                try:
                     total = '%s min' % str(int(total) / 60)
-
-                else:
-                    if self.info['length']:
-                        total = self.info['length']
-                    elif hasattr(self, 'length'):
-                        total = self.length
-                    if total != 'None':
-                        total = '%s min' % str(int(total) / 60)
-                    else:
+                except ValueError:
+                    try:
+                        runtime = self.info['runtime']
+                    except:
                         total = ''
 
             return total

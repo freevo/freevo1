@@ -620,7 +620,7 @@ class FxdImdb:
                 continue
             try:
                 infostr = infoh5.next
-                key = infostr.string.strip(':').lower()
+                key = infostr.string.strip(':').lower().replace(' ', '_')
                 nextsibling = nextsibling = infoh5.nextSibling.strip()
                 sections = info.findAll('a', { 'href' : re.compile('/Sections') })
                 lists = info.findAll('a', { 'href' : re.compile('/List') })
@@ -630,16 +630,15 @@ class FxdImdb:
                     items = []
                     for item in sections:
                         items.append(item.string)
-                    self.info[key] = items
+                    self.info[key] = ' / '.join(items)
                 elif len(lists) > 0:
                     items = []
                     for item in lists:
                         items.append(item.string)
-                    self.info[key] = items
+                    self.info[key] = ' / '.join(items)
             except:
                 pass
 
-        print self.info
         # Find Plot Outline/Summary:
         # Normally the tag is named "Plot Outline:" - however sometimes
         # the tag is "Plot Summary:". Search for both strings.
@@ -659,30 +658,35 @@ class FxdImdb:
         else:
             self.info['tagline'] = u''
 
-        self.info['genre'] = ''
-        genre=soup.find(text='Genre:').parent
-        genres = []
-        while genre.findNextSibling('a').string != 'more':
-            genres.append(genre.findNextSibling('a').string.strip())
-            genre=genre.findNextSibling('a')
-        self.info['genre'] = genres[0]
-        for i in genres[1:]:
-            self.info['genre'] += ' / ' + i
         rating = soup.find(text='User Rating:').findNext(text=re.compile('/10'))
         if rating:
             votes = rating.findNext('a')
             self.info['rating'] = rating.strip() + ' (' + votes.string.strip() + ')'
         else:
             self.info['rating'] = ''
+
         runtime = soup.find(text='Runtime:')
         if runtime and runtime.next:
             self.info['runtime'] = runtime.next.strip()
         else:
             self.info['runtime'] = ''
+
+        # Replace special characters in the items
+        for (k,v) in self.info.items():
+            s = v.strip()
+            s = s.replace('\n',' ')
+            s = s.replace('  ',' ')
+            s = s.replace('&','&amp;')
+            s = s.replace('<','&lt;')
+            s = s.replace('>','&gt;')
+            s = s.replace('"','&quot;')
+            self.info[k] = s
+
         if config.DEBUG:
             for (k,v) in self.info.items():
                 print 'items:', k, ':', v
             print 'id:', id, 'dvd:', dvd
+            print self.info
 
         # Add impawards.com poster URLs.
         self.impawardsimages(self.info['title'], self.info['year'])
