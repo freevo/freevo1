@@ -64,7 +64,6 @@ msgid "%s%%"
 msgstr "%s%%"
 
 #: plugins/home_automation.py:59
-#, fuzzy
 msgid "Room Items"
 msgstr "Polo¾ky"
 
@@ -73,7 +72,6 @@ msgid "Home Automation Devices"
 msgstr ""
 
 #: plugins/home_automation.py:84 plugins/home_automation.py:100
-#, fuzzy
 msgid "Device Options"
 msgstr "Popis"
 
@@ -83,22 +81,20 @@ msgstr "Spustit príkaz"
 
 #: plugins/home_automation.py:129 plugins/home_automation.py:136
 #: plugins/home_automation.py:148
-#, fuzzy
 msgid "Home Automation"
 msgstr "Potvrdit automatické vypnutí"
 
 #: plugins/home_automation.py:147
-#, fuzzy
 msgid "No Home Automation items found"
 msgstr "®ádné stránky s titulky nebyly nalezeny"
 
 #: plugins/df.py:66
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i GB total (%i%% free)"
 msgstr "%i z %i MB volných (%i%%)"
 
 #: plugins/df.py:68
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i MB total (%i%% free)"
 msgstr "%i z %i MB volných (%i%%)"
 
@@ -145,17 +141,14 @@ msgid "Light Rain"
 msgstr ""
 
 #: plugins/weather.py:73
-#, fuzzy
 msgid "Showers"
 msgstr "Ukázat"
 
 #: plugins/weather.py:74
-#, fuzzy
 msgid "Snow"
 msgstr "Ukázat"
 
 #: plugins/weather.py:75 plugins/weather.py:170
-#, fuzzy
 msgid "Rain"
 msgstr "Hodnocení"
 
@@ -176,7 +169,6 @@ msgid "Mostly Sunny"
 msgstr ""
 
 #: plugins/weather.py:80
-#, fuzzy
 msgid "Sunny"
 msgstr "Ne"
 
@@ -213,7 +205,6 @@ msgid "Few Snow Showers"
 msgstr ""
 
 #: plugins/weather.py:89
-#, fuzzy
 msgid "Cloudy/Wind"
 msgstr "Zavøít okno"
 
@@ -262,7 +253,6 @@ msgid "Flurries"
 msgstr ""
 
 #: plugins/weather.py:101
-#, fuzzy
 msgid "Rain/Wind"
 msgstr "Vítr"
 
@@ -291,7 +281,6 @@ msgid "AM Thunderstorms"
 msgstr ""
 
 #: plugins/weather.py:108
-#, fuzzy
 msgid "AM Rain"
 msgstr "Rádio"
 
@@ -336,12 +325,10 @@ msgid "PM Light Rain"
 msgstr ""
 
 #: plugins/weather.py:119
-#, fuzzy
 msgid "PM Rain"
 msgstr "Rádio"
 
 #: plugins/weather.py:120
-#, fuzzy
 msgid "Snow Showers"
 msgstr "Ukázat chybový výstup"
 
@@ -350,7 +337,6 @@ msgid "Rain to Snow"
 msgstr ""
 
 #: plugins/weather.py:122
-#, fuzzy
 msgid "PM Rain/Snow"
 msgstr "Rádio"
 
@@ -359,7 +345,6 @@ msgid "Few Showers/Wind"
 msgstr ""
 
 #: plugins/weather.py:124
-#, fuzzy
 msgid "Snow/Wind"
 msgstr "Vítr"
 
@@ -556,7 +541,6 @@ msgid "Light Drizzle"
 msgstr ""
 
 #: plugins/weather.py:178
-#, fuzzy
 msgid "Mist"
 msgstr "Umìlec"
 
@@ -577,7 +561,6 @@ msgid "Light Snow Shower/ Windy"
 msgstr ""
 
 #: plugins/weather.py:183
-#, fuzzy
 msgid "Clear"
 msgstr "Rok"
 
@@ -608,7 +591,7 @@ msgid "Fetching Weather for %s..."
 msgstr "Stahuji pøedpovìï na %s"
 
 #: plugins/weather.py:474
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Stahuji pøedpovìï na %s"
 
@@ -730,7 +713,6 @@ msgid "Delete info"
 msgstr "Smazat info"
 
 #: plugins/file_ops.py:67
-#, fuzzy
 msgid "Delete edl"
 msgstr "Smazat"
 
@@ -765,7 +747,7 @@ msgstr ""
 " '%s'?"
 
 #: plugins/file_ops.py:88
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Delete edl about\n"
 " '%s'?"
@@ -1191,19 +1173,17 @@ msgid "Commands"
 msgstr "Pøíkazy"
 
 #: plugins/freevused.py:140
-#, fuzzy
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
 msgstr "Ke spu¹tìní \"lcd\" modulu potøebujete pylcd"
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
-#, fuzzy
 msgid "Playing"
 msgstr "Pøehrát"
 
 #: plugins/freevused.py:420
-#, fuzzy, python-format
+#, python-format
 msgid "BT event %s"
 msgstr "Text: %s"
 
@@ -1232,7 +1212,7 @@ msgid "Not Yet implemented :)"
 msgstr ""
 
 #: plugins/cd_burn.py:162
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot find %s (%s). "
 msgstr "Nelze nahrát '%s'! (%s)"
 
@@ -1289,7 +1269,6 @@ msgid "Should show the menu? %i"
 msgstr ""
 
 #: plugins/cd_burn.py:793
-#, fuzzy
 msgid "CD Burn Menu"
 msgstr "Konfigurace"
 
@@ -1313,7 +1292,6 @@ msgid "Copy %s, and related, file to CD"
 msgstr ""
 
 #: plugins/vfd.py:52
-#, fuzzy
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
 msgstr "Ke spu¹tìní \"lcd\" modulu potøebujete pylcd"
 
@@ -1351,7 +1329,6 @@ msgid "Could not find screens for %d lines and %d columns VFD!"
 msgstr ""
 
 #: plugins/upsoon.py:224 plugins/upsoon.py:242
-#, fuzzy
 msgid "A recording will start in a few minutes"
 msgstr "Nahrávání zaène bìhem minuty"
 
@@ -1376,12 +1353,10 @@ msgid "Song - "
 msgstr ""
 
 #: plugins/mpd.py:226
-#, fuzzy
 msgid "Artist - "
 msgstr "Umìlec"
 
 #: plugins/mpd.py:233
-#, fuzzy
 msgid "Album - "
 msgstr "Album"
 
@@ -1390,7 +1365,6 @@ msgid "Status - "
 msgstr ""
 
 #: plugins/buttonbar.py:101
-#, fuzzy
 msgid "No Information Available"
 msgstr "®ádné informace nejsou dostupné"
 
@@ -1404,7 +1378,6 @@ msgid "Info"
 msgstr ""
 
 #: plugins/buttonbar.py:364
-#, fuzzy
 msgid "More Options"
 msgstr "Popis"
 
@@ -1568,7 +1541,6 @@ msgid "unable to load html files"
 msgstr "nelze nahrát html soubory"
 
 #: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
-#, fuzzy
 msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
 msgstr "pokud pou¾íváte SVN, spus»te <b>autogen.sh</b>"
 
@@ -1825,7 +1797,6 @@ msgid "Duplicates"
 msgstr ""
 
 #: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
-#, fuzzy
 msgid "Episodes"
 msgstr "Kapitola"
 
@@ -2101,12 +2072,10 @@ msgid "Rename"
 msgstr "Pøejmenovat"
 
 #: www/htdocs/library.rpy:582
-#, fuzzy
 msgid "Play file"
 msgstr "Pøehrát titul %s"
 
 #: www/htdocs/library.rpy:585
-#, fuzzy
 msgid "Play file using VLC"
 msgstr "Pøehrát titul %s"
 
@@ -2347,7 +2316,6 @@ msgid "Search for more of this program"
 msgstr "Získej víc o poøadu"
 
 #: tv/program_display.py:161
-#, fuzzy
 msgid "Edit favorite"
 msgstr "Uprav oblíbené"
 
@@ -2369,7 +2337,7 @@ msgid "Scheduling Failed"
 msgstr "Chyba plánování"
 
 #: tv/program_display.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from schedule"
 msgstr "Odstraò ze seznamu"
 
@@ -2388,7 +2356,7 @@ msgid "findMatches failed: %s"
 msgstr "%s nenalezeno"
 
 #: tv/program_display.py:287
-#, fuzzy, python-format
+#, python-format
 msgid "getFavorites failed: %s"
 msgstr "Nelze získat seznam oblíbených poøadù"
 
@@ -2405,12 +2373,10 @@ msgid "Modify time of day"
 msgstr "Zmìna èasu"
 
 #: tv/program_display.py:359
-#, fuzzy
 msgid "Modify duplicate flag"
 msgstr "Zmìna programu"
 
 #: tv/program_display.py:363
-#, fuzzy
 msgid "Modify episodes flag"
 msgstr "Zmìna èasu"
 
@@ -2431,7 +2397,6 @@ msgid "Favorite Menu"
 msgstr "Seznam oblíbených"
 
 #: tv/program_display.py:424
-#, fuzzy
 msgid "Modify Duplicate Flag"
 msgstr "Zmìna programu"
 
@@ -2448,7 +2413,7 @@ msgid "Save Failed"
 msgstr "Chyba pøi ulo¾ení"
 
 #: tv/program_display.py:623
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from favorites"
 msgstr "Odeber z oblíbených"
 
@@ -2579,22 +2544,18 @@ msgstr ""
 "nenalezeno!"
 
 #: audio/plugins/xmradio.py:62
-#, fuzzy
 msgid "Listen to XM Station"
 msgstr "Poslouchat radiostanici"
 
 #: audio/plugins/xmradio.py:95
-#, fuzzy
 msgid "XM Radio"
 msgstr "Rádio"
 
 #: audio/plugins/xmradio.py:136
-#, fuzzy
 msgid "No XM channels found"
 msgstr "®ádné obrázky nebyly nalezeny"
 
 #: audio/plugins/xmradio.py:137
-#, fuzzy
 msgid "XM channels"
 msgstr "Zmìna programu"
 
@@ -2781,7 +2742,6 @@ msgid "[VUX] an audio item, do not select"
 msgstr "[VUX] an audio item, do not select ????"
 
 #: audio/plugins/xine.py:55
-#, fuzzy
 msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "'fbxine' nenalezen, plugin 'xine' byl deaktivován"
 
@@ -2843,17 +2803,14 @@ msgid "getting data..."
 msgstr "pøijímám data..."
 
 #: audio/plugins/album_tree.py:193 audio/plugins/album_tree.py:275
-#, fuzzy
 msgid "Album Tree"
 msgstr "Album"
 
 #: audio/plugins/album_tree.py:302
-#, fuzzy
 msgid "No Objects found"
 msgstr "®ádné obrázky nebyly nalezeny"
 
 #: audio/plugins/album_tree.py:326
-#, fuzzy
 msgid "Generating playlist..."
 msgstr "Jeden soubor k pøehrání"
 
@@ -2874,7 +2831,7 @@ msgid "Seeking not possible"
 msgstr "Vyhledávání není dostupné"
 
 #: video/plugins/mover.py:96
-#, fuzzy, python-format
+#, python-format
 msgid "Move to [%s]"
 msgstr "Pøesunout na []"
 
@@ -2970,24 +2927,20 @@ msgstr ""
 
 #: video/plugins/dvdbackup.py:94 video/plugins/reencode.py:92
 #: video/plugins/reencode2.py:148
-#, fuzzy
 msgid "Choose your encoding profile"
 msgstr "Nelze získat seznam nahrávek"
 
 #: video/plugins/dvdbackup.py:110 video/plugins/reencode.py:103
 #: video/plugins/reencode2.py:323
-#, fuzzy
 msgid "Please wait, analyzing video..."
 msgstr "Èekejte prosím..."
 
 #: video/plugins/dvdbackup.py:179 video/plugins/reencode.py:190
 #: video/plugins/reencode2.py:365
-#, fuzzy
 msgid "Encoding started"
 msgstr "Nahrávání spu¹tìno"
 
 #: video/plugins/reencode.py:76
-#, fuzzy
 msgid "Re-encode this program..."
 msgstr "Získej víc o poøadu"
 
@@ -3008,12 +2961,10 @@ msgid "Play Right Channel"
 msgstr ""
 
 #: video/plugins/bilingual.py:92
-#, fuzzy
 msgid "Language Menu"
 msgstr "Jazyk"
 
 #: video/plugins/reencode2.py:103
-#, fuzzy
 msgid "Transcode this program..."
 msgstr "Získej víc o poøadu"
 
@@ -3022,43 +2973,35 @@ msgid "Start Encoding"
 msgstr ""
 
 #: video/plugins/reencode2.py:139
-#, fuzzy
 msgid "Select Encoding Profile"
 msgstr "Nelze získat seznam nahrávek"
 
 #: video/plugins/reencode2.py:140 video/plugins/reencode2.py:169
-#, fuzzy
 msgid "Modify Container"
 msgstr "Zmìna jména"
 
 #: video/plugins/reencode2.py:141 video/plugins/reencode2.py:179
-#, fuzzy
 msgid "Modify Resolution"
 msgstr "Rozli¹ení"
 
 #: video/plugins/reencode2.py:142 video/plugins/reencode2.py:189
 #: video/plugins/reencode2.py:209
-#, fuzzy
 msgid "Modify Video Codec"
 msgstr "Video"
 
 #: video/plugins/reencode2.py:143 video/plugins/reencode2.py:199
-#, fuzzy
 msgid "Modify Video Bitrate"
 msgstr "Zmìna èasu"
 
 #: video/plugins/reencode2.py:144
-#, fuzzy
 msgid "Modify Audio Codec"
 msgstr "Menu zvuku"
 
 #: video/plugins/reencode2.py:145 video/plugins/reencode2.py:219
-#, fuzzy
 msgid "Modify Audio Bitrate"
 msgstr "Zmìna priority"
 
 #: video/plugins/reencode2.py:146
-#, fuzzy
 msgid "Modify Number of passes"
 msgstr "Zmìna èasu"
 
@@ -3083,22 +3026,18 @@ msgid "Select Profile"
 msgstr ""
 
 #: video/plugins/reencode2.py:229
-#, fuzzy
 msgid "Modify Number of Passes"
 msgstr "Zmìna èasu"
 
 #: video/plugins/reencode2.py:239
-#, fuzzy
 msgid "Modify Video Filter"
 msgstr "Zmìna priority"
 
 #: video/plugins/reencode2.py:275
-#, fuzzy
 msgid "Unknown Profile"
 msgstr "Neznámý umìlec"
 
 #: video/plugins/reencode2.py:303
-#, fuzzy
 msgid "Unknown Property"
 msgstr "Neznámý umìlec"
 
@@ -3402,12 +3341,10 @@ msgid "Use a smarter way to sort the items."
 msgstr "Pou¾ít chytøej¹í zpùsob tøídìní polo¾ek."
 
 #: directory.py:69
-#, fuzzy
 msgid "Directory Smart Names"
 msgstr "Inteligentní tøídìní adresáøù"
 
 #: directory.py:70
-#, fuzzy
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr "Pou¾ít chytøej¹í zpùsob tøídìní polo¾ek."
 
@@ -3661,7 +3598,6 @@ msgid "New mails"
 msgstr "Nové zprávy"
 
 #: share/skins/main/basic.fxd:729
-#, fuzzy
 msgid "Container"
 msgstr "Pokraèovat"
 
@@ -3688,7 +3624,6 @@ msgid "Audio tracks"
 msgstr "Audio stopy"
 
 #: share/skins/main/basic.fxd:759
-#, fuzzy
 msgid "Audio Rate"
 msgstr "Menu zvuku"
 
@@ -3767,7 +3702,6 @@ msgid "Watch a Movie"
 msgstr "Sledovat film"
 
 #: share/skins/main/basic.fxd:747
-#, fuzzy
 msgid "Video Rate"
 msgstr "Video"
 
@@ -3805,7 +3739,6 @@ msgid "Items"
 msgstr "Polo¾ky"
 
 #: share/skins/main/basic.fxd:723
-#, fuzzy
 msgid "File name"
 msgstr "Jméno souboru: %s"
 
@@ -3815,7 +3748,6 @@ msgid "of"
 msgstr "z"
 
 #: share/skins/main/basic.fxd:741
-#, fuzzy
 msgid "Video Codec"
 msgstr "Video"
 
@@ -3898,7 +3830,6 @@ msgid "Now playing"
 msgstr "Hraje"
 
 #: share/skins/main/basic.fxd:753
-#, fuzzy
 msgid "Audio Codec"
 msgstr "Menu zvuku"
 
@@ -3906,25 +3837,21 @@ msgstr "Menu zvuku"
 msgid "Subject"
 msgstr "Pøedmìt"
 
-#, fuzzy
 #~ msgid "Delete %s?"
 #~ msgstr "Smazat %s"
 
-#, fuzzy
 #~ msgid "Error, unable to delete file %s"
 #~ msgstr "nelze nahrát html soubory"
 
 #~ msgid "Favorite not added yet."
 #~ msgstr "Je¹tì není pøidáno k oblíbeným"
 
-#, fuzzy
 #~ msgid "No Xm Radio Stations found"
 #~ msgstr "®ádna radiostanice nebyla nalezena"
 
 #~ msgid "Chapter"
 #~ msgstr "Kapitola"
 
-#, fuzzy
 #~ msgid " free of %s GB total (%s%% free)"
 #~ msgstr "%i z %i GB volných (%i%%)"
 

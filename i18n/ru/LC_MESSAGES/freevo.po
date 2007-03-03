@@ -64,7 +64,6 @@ msgid "%s%%"
 msgstr ""
 
 #: plugins/home_automation.py:59
-#, fuzzy
 msgid "Room Items"
 msgstr "Объект(ов)"
 
@@ -73,7 +72,6 @@ msgid "Home Automation Devices"
 msgstr ""
 
 #: plugins/home_automation.py:84 plugins/home_automation.py:100
-#, fuzzy
 msgid "Device Options"
 msgstr "Описание"
 
@@ -87,17 +85,16 @@ msgid "Home Automation"
 msgstr ""
 
 #: plugins/home_automation.py:147
-#, fuzzy
 msgid "No Home Automation items found"
 msgstr "Сайты новостей не найдены"
 
 #: plugins/df.py:66
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i GB total (%i%% free)"
 msgstr "Свободно %i из %i Мб"
 
 #: plugins/df.py:68
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i MB total (%i%% free)"
 msgstr "Свободно %i из %i Мб"
 
@@ -144,17 +141,14 @@ msgid "Light Rain"
 msgstr ""
 
 #: plugins/weather.py:73
-#, fuzzy
 msgid "Showers"
 msgstr "Передача"
 
 #: plugins/weather.py:74
-#, fuzzy
 msgid "Snow"
 msgstr "Передача"
 
 #: plugins/weather.py:75 plugins/weather.py:170
-#, fuzzy
 msgid "Rain"
 msgstr "Рейтинг"
 
@@ -175,7 +169,6 @@ msgid "Mostly Sunny"
 msgstr ""
 
 #: plugins/weather.py:80
-#, fuzzy
 msgid "Sunny"
 msgstr "Вс"
 
@@ -212,7 +205,6 @@ msgid "Few Snow Showers"
 msgstr ""
 
 #: plugins/weather.py:89
-#, fuzzy
 msgid "Cloudy/Wind"
 msgstr "Закрыть окно"
 
@@ -261,7 +253,6 @@ msgid "Flurries"
 msgstr ""
 
 #: plugins/weather.py:101
-#, fuzzy
 msgid "Rain/Wind"
 msgstr "Ветер"
 
@@ -290,7 +281,6 @@ msgid "AM Thunderstorms"
 msgstr ""
 
 #: plugins/weather.py:108
-#, fuzzy
 msgid "AM Rain"
 msgstr "Радио"
 
@@ -335,7 +325,6 @@ msgid "PM Light Rain"
 msgstr ""
 
 #: plugins/weather.py:119
-#, fuzzy
 msgid "PM Rain"
 msgstr "Радио"
 
@@ -348,7 +337,6 @@ msgid "Rain to Snow"
 msgstr ""
 
 #: plugins/weather.py:122
-#, fuzzy
 msgid "PM Rain/Snow"
 msgstr "Радио"
 
@@ -357,7 +345,6 @@ msgid "Few Showers/Wind"
 msgstr ""
 
 #: plugins/weather.py:124
-#, fuzzy
 msgid "Snow/Wind"
 msgstr "Ветер"
 
@@ -554,7 +541,6 @@ msgid "Light Drizzle"
 msgstr ""
 
 #: plugins/weather.py:178
-#, fuzzy
 msgid "Mist"
 msgstr "Исполнитель"
 
@@ -575,7 +561,6 @@ msgid "Light Snow Shower/ Windy"
 msgstr ""
 
 #: plugins/weather.py:183
-#, fuzzy
 msgid "Clear"
 msgstr "Год"
 
@@ -606,7 +591,7 @@ msgid "Fetching Weather for %s..."
 msgstr "Получение прогноза для %s..."
 
 #: plugins/weather.py:474
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Получение прогноза для %s..."
 
@@ -728,7 +713,6 @@ msgid "Delete info"
 msgstr ""
 
 #: plugins/file_ops.py:67
-#, fuzzy
 msgid "Delete edl"
 msgstr "Удалить"
 
@@ -759,7 +743,7 @@ msgid ""
 msgstr ""
 
 #: plugins/file_ops.py:88
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Delete edl about\n"
 " '%s'?"
@@ -1015,7 +999,6 @@ msgid "%s Main Menu"
 msgstr "Главное меню %s"
 
 #: plugins/autoshutdown.py:144
-#, fuzzy
 msgid "A recording is in progress."
 msgstr "Сервер записи выключен."
 
@@ -1029,7 +1012,6 @@ msgid "There are important processes running."
 msgstr ""
 
 #: plugins/autoshutdown.py:157
-#, fuzzy
 msgid "No wakeup scheduled."
 msgstr "Расписание пусто."
 
@@ -1058,7 +1040,6 @@ msgid "Shutdown system"
 msgstr "Выключить систему"
 
 #: plugins/autoshutdown.py:180
-#, fuzzy
 msgid "Shutdown freevo"
 msgstr "Выключить Freevo"
 
@@ -1189,12 +1170,11 @@ msgid ""
 msgstr ""
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
-#, fuzzy
 msgid "Playing"
 msgstr "Список воспроизведения"
 
 #: plugins/freevused.py:420
-#, fuzzy, python-format
+#, python-format
 msgid "BT event %s"
 msgstr "Текст: %s"
 
@@ -1340,7 +1320,6 @@ msgid "Could not find screens for %d lines and %d columns VFD!"
 msgstr ""
 
 #: plugins/upsoon.py:224 plugins/upsoon.py:242
-#, fuzzy
 msgid "A recording will start in a few minutes"
 msgstr "Сервер записи выключен."
 
@@ -1365,12 +1344,10 @@ msgid "Song - "
 msgstr ""
 
 #: plugins/mpd.py:226
-#, fuzzy
 msgid "Artist - "
 msgstr "Исполнитель"
 
 #: plugins/mpd.py:233
-#, fuzzy
 msgid "Album - "
 msgstr "Альбом"
 
@@ -1379,7 +1356,6 @@ msgid "Status - "
 msgstr ""
 
 #: plugins/buttonbar.py:101
-#, fuzzy
 msgid "No Information Available"
 msgstr "Нет данных"
 
@@ -1393,7 +1369,6 @@ msgid "Info"
 msgstr ""
 
 #: plugins/buttonbar.py:364
-#, fuzzy
 msgid "More Options"
 msgstr "Описание"
 
@@ -1805,7 +1780,6 @@ msgid "Duplicates"
 msgstr ""
 
 #: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
-#, fuzzy
 msgid "Episodes"
 msgstr "Эпизод"
 
@@ -2015,7 +1989,7 @@ msgid "<h2>%s</h2>"
 msgstr ""
 
 #: www/htdocs/library.rpy:194
-#, fuzzy, python-format
+#, python-format
 msgid "Rename %s to %s, failed."
 msgstr "Переименовать %s в %s."
 
@@ -2029,7 +2003,7 @@ msgid "Delete %s."
 msgstr "Удалить %s."
 
 #: www/htdocs/library.rpy:210
-#, fuzzy, python-format
+#, python-format
 msgid "Delete %s, failed."
 msgstr "Удалить %s."
 
@@ -2081,12 +2055,10 @@ msgid "Rename"
 msgstr "Переименовать"
 
 #: www/htdocs/library.rpy:582
-#, fuzzy
 msgid "Play file"
 msgstr "Игры"
 
 #: www/htdocs/library.rpy:585
-#, fuzzy
 msgid "Play file using VLC"
 msgstr "Файлы данных на диске"
 
@@ -2326,7 +2298,6 @@ msgid "Search for more of this program"
 msgstr "Искать ещё эту программу"
 
 #: tv/program_display.py:161
-#, fuzzy
 msgid "Edit favorite"
 msgstr "Редактировать избранное"
 
@@ -2348,7 +2319,7 @@ msgid "Scheduling Failed"
 msgstr "Планирование не удалось"
 
 #: tv/program_display.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from schedule"
 msgstr "Удалить из расписания"
 
@@ -2367,7 +2338,7 @@ msgid "findMatches failed: %s"
 msgstr "поиск %s не удался"
 
 #: tv/program_display.py:287
-#, fuzzy, python-format
+#, python-format
 msgid "getFavorites failed: %s"
 msgstr "Ошибка получения избранного"
 
@@ -2384,12 +2355,10 @@ msgid "Modify time of day"
 msgstr "Изменить время дня"
 
 #: tv/program_display.py:359
-#, fuzzy
 msgid "Modify duplicate flag"
 msgstr "Изменить канал"
 
 #: tv/program_display.py:363
-#, fuzzy
 msgid "Modify episodes flag"
 msgstr "Изменить время дня"
 
@@ -2410,7 +2379,6 @@ msgid "Favorite Menu"
 msgstr "Меню избранного"
 
 #: tv/program_display.py:424
-#, fuzzy
 msgid "Modify Duplicate Flag"
 msgstr "Изменить канал"
 
@@ -2427,7 +2395,7 @@ msgid "Save Failed"
 msgstr "Ошибка сохранения"
 
 #: tv/program_display.py:623
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from favorites"
 msgstr "Удалить из избранного"
 
@@ -2556,22 +2524,18 @@ msgid ""
 msgstr ""
 
 #: audio/plugins/xmradio.py:62
-#, fuzzy
 msgid "Listen to XM Station"
 msgstr "Музыка"
 
 #: audio/plugins/xmradio.py:95
-#, fuzzy
 msgid "XM Radio"
 msgstr "Радио"
 
 #: audio/plugins/xmradio.py:136
-#, fuzzy
 msgid "No XM channels found"
 msgstr "Нет новостей"
 
 #: audio/plugins/xmradio.py:137
-#, fuzzy
 msgid "XM channels"
 msgstr "Изменить канал"
 
@@ -2809,17 +2773,14 @@ msgid "getting data..."
 msgstr ""
 
 #: audio/plugins/album_tree.py:193 audio/plugins/album_tree.py:275
-#, fuzzy
 msgid "Album Tree"
 msgstr "Альбом"
 
 #: audio/plugins/album_tree.py:302
-#, fuzzy
 msgid "No Objects found"
 msgstr "Нет новостей"
 
 #: audio/plugins/album_tree.py:326
-#, fuzzy
 msgid "Generating playlist..."
 msgstr "в списке воспроизведения нет следующего объекта"
 
@@ -2941,18 +2902,15 @@ msgstr ""
 
 #: video/plugins/dvdbackup.py:110 video/plugins/reencode.py:103
 #: video/plugins/reencode2.py:323
-#, fuzzy
 msgid "Please wait, analyzing video..."
 msgstr "Пожалуйста подождите..."
 
 #: video/plugins/dvdbackup.py:179 video/plugins/reencode.py:190
 #: video/plugins/reencode2.py:365
-#, fuzzy
 msgid "Encoding started"
 msgstr "Копирование начато"
 
 #: video/plugins/reencode.py:76
-#, fuzzy
 msgid "Re-encode this program..."
 msgstr "Искать ещё эту программу"
 
@@ -2973,12 +2931,10 @@ msgid "Play Right Channel"
 msgstr ""
 
 #: video/plugins/bilingual.py:92
-#, fuzzy
 msgid "Language Menu"
 msgstr "Язык"
 
 #: video/plugins/reencode2.py:103
-#, fuzzy
 msgid "Transcode this program..."
 msgstr "Искать ещё эту программу"
 
@@ -2991,38 +2947,31 @@ msgid "Select Encoding Profile"
 msgstr ""
 
 #: video/plugins/reencode2.py:140 video/plugins/reencode2.py:169
-#, fuzzy
 msgid "Modify Container"
 msgstr "Изменить название"
 
 #: video/plugins/reencode2.py:141 video/plugins/reencode2.py:179
-#, fuzzy
 msgid "Modify Resolution"
 msgstr "Разрешение"
 
 #: video/plugins/reencode2.py:142 video/plugins/reencode2.py:189
 #: video/plugins/reencode2.py:209
-#, fuzzy
 msgid "Modify Video Codec"
 msgstr "Видео"
 
 #: video/plugins/reencode2.py:143 video/plugins/reencode2.py:199
-#, fuzzy
 msgid "Modify Video Bitrate"
 msgstr "Изменить время дня"
 
 #: video/plugins/reencode2.py:144
-#, fuzzy
 msgid "Modify Audio Codec"
 msgstr "Меню звука"
 
 #: video/plugins/reencode2.py:145 video/plugins/reencode2.py:219
-#, fuzzy
 msgid "Modify Audio Bitrate"
 msgstr "Изменить приоритет"
 
 #: video/plugins/reencode2.py:146
-#, fuzzy
 msgid "Modify Number of passes"
 msgstr "Изменить время дня"
 
@@ -3047,22 +2996,18 @@ msgid "Select Profile"
 msgstr ""
 
 #: video/plugins/reencode2.py:229
-#, fuzzy
 msgid "Modify Number of Passes"
 msgstr "Изменить время дня"
 
 #: video/plugins/reencode2.py:239
-#, fuzzy
 msgid "Modify Video Filter"
 msgstr "Изменить приоритет"
 
 #: video/plugins/reencode2.py:275
-#, fuzzy
 msgid "Unknown Profile"
 msgstr "Неизвестный исполнитель"
 
 #: video/plugins/reencode2.py:303
-#, fuzzy
 msgid "Unknown Property"
 msgstr "Неизвестный исполнитель"
 
@@ -3189,7 +3134,6 @@ msgid "Config Menu"
 msgstr ""
 
 #: util/mediainfo.py:738
-#, fuzzy
 msgid "Reloading cache files, be patient..."
 msgstr "Чтение диска..."
 
@@ -3365,7 +3309,6 @@ msgid "Use a smarter way to sort the items."
 msgstr ""
 
 #: directory.py:69
-#, fuzzy
 msgid "Directory Smart Names"
 msgstr "Каталог \"%s\" уже существует"
 
@@ -3459,7 +3402,6 @@ msgid "Password incorrect"
 msgstr ""
 
 #: directory.py:582
-#, fuzzy
 msgid "Directory does not exist"
 msgstr "каталог \"%s\" не существует."
 
@@ -3538,7 +3480,6 @@ msgid "Shutdown"
 msgstr "Выключить"
 
 #: main.py:308
-#, fuzzy
 msgid "Continue"
 msgstr "Настроить"
 
@@ -3609,12 +3550,10 @@ msgid "Playlist"
 msgstr "Список воспроизведения"
 
 #: share/skins/main/dark.fxd:640
-#, fuzzy
 msgid "New mails"
 msgstr "Подробности"
 
 #: share/skins/main/basic.fxd:729
-#, fuzzy
 msgid "Container"
 msgstr "Настроить"
 
@@ -3624,12 +3563,10 @@ msgstr "Копирайт"
 
 #: share/skins/main/crystal.fxd:318 share/skins/main/bluestar.fxd:338
 #: share/skins/main/rain.fxd:314
-#, fuzzy
 msgid "Unread messages"
 msgstr "Сообщения"
 
 #: share/skins/main/bluestar.fxd:12
-#, fuzzy
 msgid "Pictures"
 msgstr "Изображения"
 
@@ -3643,7 +3580,6 @@ msgid "Audio tracks"
 msgstr "Звуковые дорожки"
 
 #: share/skins/main/basic.fxd:759
-#, fuzzy
 msgid "Audio Rate"
 msgstr "Меню звука"
 
@@ -3679,12 +3615,10 @@ msgstr ""
 
 #: share/skins/main/crystal.fxd:324 share/skins/main/bluestar.fxd:344
 #: share/skins/main/rain.fxd:320
-#, fuzzy
 msgid "Total messages"
 msgstr "Сообщения"
 
 #: share/skins/main/dark.fxd:496
-#, fuzzy
 msgid "Just one movie in this playlist."
 msgstr "объектов в этом списке воспроизведения"
 
@@ -3695,7 +3629,6 @@ msgid "kb/s"
 msgstr "кб/c"
 
 #: share/skins/main/dark.fxd:565
-#, fuzzy
 msgid "One song in playlist"
 msgstr "в списке воспроизведения нет следующего объекта"
 
@@ -3725,7 +3658,6 @@ msgid "Watch a Movie"
 msgstr "Фильмы"
 
 #: share/skins/main/basic.fxd:747
-#, fuzzy
 msgid "Video Rate"
 msgstr "Видео"
 
@@ -3743,7 +3675,6 @@ msgid "Subtitles"
 msgstr "Субтитры"
 
 #: share/skins/main/dark.fxd:492
-#, fuzzy
 msgid "movies in this playlist."
 msgstr "объектов в этом списке воспроизведения"
 
@@ -3764,7 +3695,6 @@ msgid "Items"
 msgstr "Объект(ов)"
 
 #: share/skins/main/basic.fxd:723
-#, fuzzy
 msgid "File name"
 msgstr "Имя файла: %s"
 
@@ -3774,7 +3704,6 @@ msgid "of"
 msgstr ""
 
 #: share/skins/main/basic.fxd:741
-#, fuzzy
 msgid "Video Codec"
 msgstr "Видео"
 
@@ -3793,7 +3722,6 @@ msgid "This playlist is empty!"
 msgstr "Список воспроизведения пуст!"
 
 #: share/skins/main/dark.fxd:628
-#, fuzzy
 msgid "This slideshow is empty!"
 msgstr "Список воспроизведения пуст!"
 
@@ -3802,7 +3730,6 @@ msgid "min."
 msgstr "мин"
 
 #: share/skins/main/dark.fxd:618
-#, fuzzy
 msgid "pictures in this slideshow."
 msgstr "объектов в этом списке воспроизведения"
 
@@ -3820,12 +3747,10 @@ msgid "Watch TV"
 msgstr "Телевидение"
 
 #: share/skins/main/mediaportal.fxd:440
-#, fuzzy
 msgid "Read Headlines"
 msgstr "Новости"
 
 #: share/skins/main/dark.fxd:569
-#, fuzzy
 msgid "No songs in playlist"
 msgstr "в списке воспроизведения нет следующего объекта"
 
@@ -3848,7 +3773,6 @@ msgid "TV"
 msgstr "ТВ"
 
 #: share/skins/main/dark.fxd:561
-#, fuzzy
 msgid "songs in playlist"
 msgstr "в списке воспроизведения нет следующего объекта"
 
@@ -3862,7 +3786,6 @@ msgid "Now playing"
 msgstr ""
 
 #: share/skins/main/basic.fxd:753
-#, fuzzy
 msgid "Audio Codec"
 msgstr "Меню звука"
 
@@ -3870,14 +3793,12 @@ msgstr "Меню звука"
 msgid "Subject"
 msgstr ""
 
-#, fuzzy
 #~ msgid "No Xm Radio Stations found"
 #~ msgstr "Радиостанции не найдены"
 
 #~ msgid "Chapter"
 #~ msgstr "Глава"
 
-#, fuzzy
 #~ msgid " free of %s GB total (%s%% free)"
 #~ msgstr "Свободно %i из %i Мб"
 

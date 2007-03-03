@@ -51,7 +51,7 @@ msgid "Software"
 msgstr "Programari"
 
 #: plugins/idlebar/diskfree.py:87
-#, fuzzy, python-format
+#, python-format
 msgid "%iGB"
 msgstr "%iGb"
 
@@ -66,7 +66,6 @@ msgid "%s%%"
 msgstr "%s%%"
 
 #: plugins/home_automation.py:59
-#, fuzzy
 msgid "Room Items"
 msgstr "Elements"
 
@@ -75,7 +74,6 @@ msgid "Home Automation Devices"
 msgstr ""
 
 #: plugins/home_automation.py:84 plugins/home_automation.py:100
-#, fuzzy
 msgid "Device Options"
 msgstr "Descripció"
 
@@ -85,22 +83,20 @@ msgstr "Cumpleix una ordre"
 
 #: plugins/home_automation.py:129 plugins/home_automation.py:136
 #: plugins/home_automation.py:148
-#, fuzzy
 msgid "Home Automation"
 msgstr "Continua l'aturada automàtica"
 
 #: plugins/home_automation.py:147
-#, fuzzy
 msgid "No Home Automation items found"
 msgstr "No s'ha trobat cap Pàgina de Titulars"
 
 #: plugins/df.py:66
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i GB total (%i%% free)"
 msgstr "%i lliures dels %i Gb totals (%i%% lliures)"
 
 #: plugins/df.py:68
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i MB total (%i%% free)"
 msgstr "%i lliures dels %i Mb totals (%i%% lliures)"
 
@@ -147,17 +143,14 @@ msgid "Light Rain"
 msgstr ""
 
 #: plugins/weather.py:73
-#, fuzzy
 msgid "Showers"
 msgstr "Mostra"
 
 #: plugins/weather.py:74
-#, fuzzy
 msgid "Snow"
 msgstr "Mostra"
 
 #: plugins/weather.py:75 plugins/weather.py:170
-#, fuzzy
 msgid "Rain"
 msgstr "Valoració"
 
@@ -178,7 +171,6 @@ msgid "Mostly Sunny"
 msgstr ""
 
 #: plugins/weather.py:80
-#, fuzzy
 msgid "Sunny"
 msgstr "Diu"
 
@@ -215,7 +207,6 @@ msgid "Few Snow Showers"
 msgstr ""
 
 #: plugins/weather.py:89
-#, fuzzy
 msgid "Cloudy/Wind"
 msgstr "Tanca la finestra"
 
@@ -264,7 +255,6 @@ msgid "Flurries"
 msgstr ""
 
 #: plugins/weather.py:101
-#, fuzzy
 msgid "Rain/Wind"
 msgstr "Vent"
 
@@ -293,7 +283,6 @@ msgid "AM Thunderstorms"
 msgstr ""
 
 #: plugins/weather.py:108
-#, fuzzy
 msgid "AM Rain"
 msgstr "Ràdio"
 
@@ -338,12 +327,10 @@ msgid "PM Light Rain"
 msgstr ""
 
 #: plugins/weather.py:119
-#, fuzzy
 msgid "PM Rain"
 msgstr "Ràdio"
 
 #: plugins/weather.py:120
-#, fuzzy
 msgid "Snow Showers"
 msgstr "Mostra el Stderr"
 
@@ -352,7 +339,6 @@ msgid "Rain to Snow"
 msgstr ""
 
 #: plugins/weather.py:122
-#, fuzzy
 msgid "PM Rain/Snow"
 msgstr "Ràdio"
 
@@ -361,7 +347,6 @@ msgid "Few Showers/Wind"
 msgstr ""
 
 #: plugins/weather.py:124
-#, fuzzy
 msgid "Snow/Wind"
 msgstr "Vent"
 
@@ -558,7 +543,6 @@ msgid "Light Drizzle"
 msgstr ""
 
 #: plugins/weather.py:178
-#, fuzzy
 msgid "Mist"
 msgstr "Artista"
 
@@ -579,7 +563,6 @@ msgid "Light Snow Shower/ Windy"
 msgstr ""
 
 #: plugins/weather.py:183
-#, fuzzy
 msgid "Clear"
 msgstr "Any"
 
@@ -610,7 +593,7 @@ msgid "Fetching Weather for %s..."
 msgstr "S'està obtenint l'informe meteorològic de %s..."
 
 #: plugins/weather.py:474
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "S'està obtenint l'informe meteorològic de %s..."
 
@@ -732,7 +715,6 @@ msgid "Delete info"
 msgstr "Suprimeix la informació"
 
 #: plugins/file_ops.py:67
-#, fuzzy
 msgid "Delete edl"
 msgstr "Suprimeix"
 
@@ -767,7 +749,7 @@ msgstr ""
 "'%s'?"
 
 #: plugins/file_ops.py:88
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Delete edl about\n"
 " '%s'?"
@@ -1194,19 +1176,17 @@ msgid "Commands"
 msgstr "Ordres"
 
 #: plugins/freevused.py:140
-#, fuzzy
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
 msgstr "Heu d'executar el connector \"lcd\"."
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
-#, fuzzy
 msgid "Playing"
 msgstr "Reprodueix"
 
 #: plugins/freevused.py:420
-#, fuzzy, python-format
+#, python-format
 msgid "BT event %s"
 msgstr "Text: %s"
 
@@ -1235,7 +1215,7 @@ msgid "Not Yet implemented :)"
 msgstr ""
 
 #: plugins/cd_burn.py:162
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot find %s (%s). "
 msgstr "No es pot copiar a '%s'! (%s)"
 
@@ -1292,7 +1272,6 @@ msgid "Should show the menu? %i"
 msgstr ""
 
 #: plugins/cd_burn.py:793
-#, fuzzy
 msgid "CD Burn Menu"
 msgstr "Menú de Configuració"
 
@@ -1316,7 +1295,6 @@ msgid "Copy %s, and related, file to CD"
 msgstr ""
 
 #: plugins/vfd.py:52
-#, fuzzy
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
 msgstr "Heu d'executar el connector \"lcd\"."
 
@@ -1339,22 +1317,21 @@ msgid "Cannot find MIXER"
 msgstr ""
 
 #: plugins/vfd.py:725
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find screens for %d lines VFD!"
 msgstr "No s'ha trobat cap pantalla LCD de %d línies!"
 
 #: plugins/vfd.py:728 plugins/vfd.py:741 plugins/vfd.py:752
-#, fuzzy, python-format
+#, python-format
 msgid "No screens found for this VFD (%dx%d)!"
 msgstr "No es troben pantalles per aquesta LCD (%dx%d)!"
 
 #: plugins/vfd.py:737
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find screens for %d lines and %d columns VFD!"
 msgstr "No s'han trobat pantalles LCD de %d línies i %d columnes!"
 
 #: plugins/upsoon.py:224 plugins/upsoon.py:242
-#, fuzzy
 msgid "A recording will start in a few minutes"
 msgstr "Abans d'un minut començara una gravació"
 
@@ -1379,12 +1356,10 @@ msgid "Song - "
 msgstr ""
 
 #: plugins/mpd.py:226
-#, fuzzy
 msgid "Artist - "
 msgstr "Artista"
 
 #: plugins/mpd.py:233
-#, fuzzy
 msgid "Album - "
 msgstr "Àlbum"
 
@@ -1393,7 +1368,6 @@ msgid "Status - "
 msgstr ""
 
 #: plugins/buttonbar.py:101
-#, fuzzy
 msgid "No Information Available"
 msgstr "No hi ha informació disponible"
 
@@ -1407,7 +1381,6 @@ msgid "Info"
 msgstr ""
 
 #: plugins/buttonbar.py:364
-#, fuzzy
 msgid "More Options"
 msgstr "Descripció"
 
@@ -1575,7 +1548,6 @@ msgid "unable to load html files"
 msgstr "no és possible carregar els fitxers html"
 
 #: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
-#, fuzzy
 msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
 msgstr "Si feu servir la versió CVS de Freevo, executeu <b>autogen.sh</b>."
 
@@ -1832,7 +1804,6 @@ msgid "Duplicates"
 msgstr ""
 
 #: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
-#, fuzzy
 msgid "Episodes"
 msgstr "Episodi"
 
@@ -2108,12 +2079,10 @@ msgid "Rename"
 msgstr "Canvia el nom"
 
 #: www/htdocs/library.rpy:582
-#, fuzzy
 msgid "Play file"
 msgstr "Reprodueix el Títol %s"
 
 #: www/htdocs/library.rpy:585
-#, fuzzy
 msgid "Play file using VLC"
 msgstr "Reprodueix el Títol %s"
 
@@ -2273,7 +2242,6 @@ msgstr ""
 "Feu-lo uns minuts més llarg."
 
 #: tv/plugins/xine.py:81
-#, fuzzy
 msgid ""
 "'XINE_COMMAND' not defined, 'xine' tv plugin deactivated.\n"
 "please check the xine section in freevo_config.py"
@@ -2359,7 +2327,6 @@ msgid "Search for more of this program"
 msgstr "Cerca més informació sobre aquest programa"
 
 #: tv/program_display.py:161
-#, fuzzy
 msgid "Edit favorite"
 msgstr "Edita el Preferit"
 
@@ -2381,7 +2348,7 @@ msgid "Scheduling Failed"
 msgstr "No ha estat possible Planificar"
 
 #: tv/program_display.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from schedule"
 msgstr "Suprimeix de la planificació"
 
@@ -2400,7 +2367,7 @@ msgid "findMatches failed: %s"
 msgstr "Ha fallat findMatches per a: %s"
 
 #: tv/program_display.py:287
-#, fuzzy, python-format
+#, python-format
 msgid "getFavorites failed: %s"
 msgstr "Ha fallat l'obtenció dels preferits"
 
@@ -2417,12 +2384,10 @@ msgid "Modify time of day"
 msgstr "Canvia l'hora del dia"
 
 #: tv/program_display.py:359
-#, fuzzy
 msgid "Modify duplicate flag"
 msgstr "Canvia el canal"
 
 #: tv/program_display.py:363
-#, fuzzy
 msgid "Modify episodes flag"
 msgstr "Canvia l'hora del dia"
 
@@ -2443,7 +2408,6 @@ msgid "Favorite Menu"
 msgstr "Menú de Preferits"
 
 #: tv/program_display.py:424
-#, fuzzy
 msgid "Modify Duplicate Flag"
 msgstr "Canvia el canal"
 
@@ -2460,7 +2424,7 @@ msgid "Save Failed"
 msgstr "Hi ha hagut un error en desar"
 
 #: tv/program_display.py:623
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from favorites"
 msgstr "Suprimeix el preferit"
 
@@ -2591,22 +2555,18 @@ msgstr ""
 "%s!"
 
 #: audio/plugins/xmradio.py:62
-#, fuzzy
 msgid "Listen to XM Station"
 msgstr "Escolta l'Emissora de Ràdio"
 
 #: audio/plugins/xmradio.py:95
-#, fuzzy
 msgid "XM Radio"
 msgstr "Ràdio"
 
 #: audio/plugins/xmradio.py:136
-#, fuzzy
 msgid "No XM channels found"
 msgstr "No s'han trobat imatges"
 
 #: audio/plugins/xmradio.py:137
-#, fuzzy
 msgid "XM channels"
 msgstr "Canvia el canal"
 
@@ -2793,7 +2753,6 @@ msgid "[VUX] an audio item, do not select"
 msgstr "[VUX] element d'àudio, no el trieu"
 
 #: audio/plugins/xine.py:55
-#, fuzzy
 msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "No es pot trobar 'fbxine', el connector 'xine' s'ha desactivat"
 
@@ -2857,17 +2816,14 @@ msgid "getting data..."
 msgstr "obtenint dades..."
 
 #: audio/plugins/album_tree.py:193 audio/plugins/album_tree.py:275
-#, fuzzy
 msgid "Album Tree"
 msgstr "Àlbum"
 
 #: audio/plugins/album_tree.py:302
-#, fuzzy
 msgid "No Objects found"
 msgstr "No s'han trobat imatges"
 
 #: audio/plugins/album_tree.py:326
-#, fuzzy
 msgid "Generating playlist..."
 msgstr "Només hi ha un elemen a la llista"
 
@@ -2918,7 +2874,6 @@ msgid "No information available from IMDB"
 msgstr "No hi ha informació a IMDB"
 
 #: video/plugins/xine.py:63
-#, fuzzy
 msgid ""
 "'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n"
 "please check the xine section in freevo_config.py"
@@ -2988,24 +2943,20 @@ msgstr ""
 
 #: video/plugins/dvdbackup.py:94 video/plugins/reencode.py:92
 #: video/plugins/reencode2.py:148
-#, fuzzy
 msgid "Choose your encoding profile"
 msgstr "Ha fallat l'obtenció d'enregistraments"
 
 #: video/plugins/dvdbackup.py:110 video/plugins/reencode.py:103
 #: video/plugins/reencode2.py:323
-#, fuzzy
 msgid "Please wait, analyzing video..."
 msgstr "Espereu... "
 
 #: video/plugins/dvdbackup.py:179 video/plugins/reencode.py:190
 #: video/plugins/reencode2.py:365
-#, fuzzy
 msgid "Encoding started"
 msgstr "Ha començat la gravació"
 
 #: video/plugins/reencode.py:76
-#, fuzzy
 msgid "Re-encode this program..."
 msgstr "Cerca més informació sobre aquest programa"
 
@@ -3026,12 +2977,10 @@ msgid "Play Right Channel"
 msgstr ""
 
 #: video/plugins/bilingual.py:92
-#, fuzzy
 msgid "Language Menu"
 msgstr "Idioma"
 
 #: video/plugins/reencode2.py:103
-#, fuzzy
 msgid "Transcode this program..."
 msgstr "Cerca més informació sobre aquest programa"
 
@@ -3040,43 +2989,35 @@ msgid "Start Encoding"
 msgstr ""
 
 #: video/plugins/reencode2.py:139
-#, fuzzy
 msgid "Select Encoding Profile"
 msgstr "Ha fallat l'obtenció d'enregistraments"
 
 #: video/plugins/reencode2.py:140 video/plugins/reencode2.py:169
-#, fuzzy
 msgid "Modify Container"
 msgstr "Canvia el nom"
 
 #: video/plugins/reencode2.py:141 video/plugins/reencode2.py:179
-#, fuzzy
 msgid "Modify Resolution"
 msgstr "Resolució"
 
 #: video/plugins/reencode2.py:142 video/plugins/reencode2.py:189
 #: video/plugins/reencode2.py:209
-#, fuzzy
 msgid "Modify Video Codec"
 msgstr "Vídeo"
 
 #: video/plugins/reencode2.py:143 video/plugins/reencode2.py:199
-#, fuzzy
 msgid "Modify Video Bitrate"
 msgstr "Canvia l'hora del dia"
 
 #: video/plugins/reencode2.py:144
-#, fuzzy
 msgid "Modify Audio Codec"
 msgstr "Menú d'àudio"
 
 #: video/plugins/reencode2.py:145 video/plugins/reencode2.py:219
-#, fuzzy
 msgid "Modify Audio Bitrate"
 msgstr "Canvia la prioritat"
 
 #: video/plugins/reencode2.py:146
-#, fuzzy
 msgid "Modify Number of passes"
 msgstr "Canvia l'hora del dia"
 
@@ -3101,22 +3042,18 @@ msgid "Select Profile"
 msgstr ""
 
 #: video/plugins/reencode2.py:229
-#, fuzzy
 msgid "Modify Number of Passes"
 msgstr "Canvia l'hora del dia"
 
 #: video/plugins/reencode2.py:239
-#, fuzzy
 msgid "Modify Video Filter"
 msgstr "Canvia la prioritat"
 
 #: video/plugins/reencode2.py:275
-#, fuzzy
 msgid "Unknown Profile"
 msgstr "Artista desconegut"
 
 #: video/plugins/reencode2.py:303
-#, fuzzy
 msgid "Unknown Property"
 msgstr "Artista desconegut"
 
@@ -3453,12 +3390,10 @@ msgid "Use a smarter way to sort the items."
 msgstr "Ordena els elements de forma intel·ligent."
 
 #: directory.py:69
-#, fuzzy
 msgid "Directory Smart Names"
 msgstr "Ordenació Intel·ligent la Carpeta"
 
 #: directory.py:70
-#, fuzzy
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr "Ordena els elements de forma intel·ligent."
 
@@ -3713,7 +3648,6 @@ msgid "New mails"
 msgstr "Nous correus"
 
 #: share/skins/main/basic.fxd:729
-#, fuzzy
 msgid "Container"
 msgstr "Continua"
 
@@ -3740,7 +3674,6 @@ msgid "Audio tracks"
 msgstr "Pistes d'àudio"
 
 #: share/skins/main/basic.fxd:759
-#, fuzzy
 msgid "Audio Rate"
 msgstr "Menú d'àudio"
 
@@ -3819,7 +3752,6 @@ msgid "Watch a Movie"
 msgstr "Pel·lícula"
 
 #: share/skins/main/basic.fxd:747
-#, fuzzy
 msgid "Video Rate"
 msgstr "Vídeo"
 
@@ -3857,7 +3789,6 @@ msgid "Items"
 msgstr "Elements"
 
 #: share/skins/main/basic.fxd:723
-#, fuzzy
 msgid "File name"
 msgstr "Nom del fitxer: %s"
 
@@ -3867,7 +3798,6 @@ msgid "of"
 msgstr "de"
 
 #: share/skins/main/basic.fxd:741
-#, fuzzy
 msgid "Video Codec"
 msgstr "Vídeo"
 
@@ -3950,7 +3880,6 @@ msgid "Now playing"
 msgstr "Reproduïnt"
 
 #: share/skins/main/basic.fxd:753
-#, fuzzy
 msgid "Audio Codec"
 msgstr "Menú d'àudio"
 
@@ -3958,18 +3887,15 @@ msgstr "Menú d'àudio"
 msgid "Subject"
 msgstr "Tema"
 
-#, fuzzy
 #~ msgid "Delete %s?"
 #~ msgstr "Suprimeix %s."
 
-#, fuzzy
 #~ msgid "Error, unable to delete file %s"
 #~ msgstr "no és possible carregar els fitxers html"
 
 #~ msgid "Favorite not added yet."
 #~ msgstr "Encara no s'ha afegit el preferit."
 
-#, fuzzy
 #~ msgid "No Xm Radio Stations found"
 #~ msgstr "No s'ha trobat cap emissora de ràdio"
 

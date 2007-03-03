@@ -30,7 +30,6 @@ msgid "Description"
 msgstr "Beskrivelse"
 
 #: ../freevo_config.py:1056
-#, fuzzy
 msgid "Author"
 msgstr "auto"
 
@@ -66,7 +65,6 @@ msgid "%s%%"
 msgstr "%s%%"
 
 #: plugins/home_automation.py:59
-#, fuzzy
 msgid "Room Items"
 msgstr "Element"
 
@@ -75,7 +73,6 @@ msgid "Home Automation Devices"
 msgstr ""
 
 #: plugins/home_automation.py:84 plugins/home_automation.py:100
-#, fuzzy
 msgid "Device Options"
 msgstr "Beskrivelse"
 
@@ -89,17 +86,16 @@ msgid "Home Automation"
 msgstr ""
 
 #: plugins/home_automation.py:147
-#, fuzzy
 msgid "No Home Automation items found"
 msgstr "Ingen overskriftssteder fundet"
 
 #: plugins/df.py:66
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i GB total (%i%% free)"
 msgstr "%i af %i Mb fri"
 
 #: plugins/df.py:68
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i MB total (%i%% free)"
 msgstr "%i af %i Mb fri"
 
@@ -146,17 +142,14 @@ msgid "Light Rain"
 msgstr ""
 
 #: plugins/weather.py:73
-#, fuzzy
 msgid "Showers"
 msgstr "Vis"
 
 #: plugins/weather.py:74
-#, fuzzy
 msgid "Snow"
 msgstr "Vis"
 
 #: plugins/weather.py:75 plugins/weather.py:170
-#, fuzzy
 msgid "Rain"
 msgstr "Rating:"
 
@@ -177,7 +170,6 @@ msgid "Mostly Sunny"
 msgstr ""
 
 #: plugins/weather.py:80
-#, fuzzy
 msgid "Sunny"
 msgstr "Søn"
 
@@ -214,7 +206,6 @@ msgid "Few Snow Showers"
 msgstr ""
 
 #: plugins/weather.py:89
-#, fuzzy
 msgid "Cloudy/Wind"
 msgstr "Luk vindue"
 
@@ -263,7 +254,6 @@ msgid "Flurries"
 msgstr ""
 
 #: plugins/weather.py:101
-#, fuzzy
 msgid "Rain/Wind"
 msgstr "indeks"
 
@@ -292,7 +282,6 @@ msgid "AM Thunderstorms"
 msgstr ""
 
 #: plugins/weather.py:108
-#, fuzzy
 msgid "AM Rain"
 msgstr "Radio"
 
@@ -337,12 +326,10 @@ msgid "PM Light Rain"
 msgstr ""
 
 #: plugins/weather.py:119
-#, fuzzy
 msgid "PM Rain"
 msgstr "Radio"
 
 #: plugins/weather.py:120
-#, fuzzy
 msgid "Snow Showers"
 msgstr "Vis standardfejl"
 
@@ -351,7 +338,6 @@ msgid "Rain to Snow"
 msgstr ""
 
 #: plugins/weather.py:122
-#, fuzzy
 msgid "PM Rain/Snow"
 msgstr "Radio"
 
@@ -360,7 +346,6 @@ msgid "Few Showers/Wind"
 msgstr ""
 
 #: plugins/weather.py:124
-#, fuzzy
 msgid "Snow/Wind"
 msgstr "indeks"
 
@@ -557,7 +542,6 @@ msgid "Light Drizzle"
 msgstr ""
 
 #: plugins/weather.py:178
-#, fuzzy
 msgid "Mist"
 msgstr "Kunstner"
 
@@ -578,7 +562,6 @@ msgid "Light Snow Shower/ Windy"
 msgstr ""
 
 #: plugins/weather.py:183
-#, fuzzy
 msgid "Clear"
 msgstr "År"
 
@@ -600,23 +583,21 @@ msgid "Unlimited"
 msgstr ""
 
 #: plugins/weather.py:382
-#, fuzzy
 msgid "Show Weather Details"
 msgstr "Vis overskrifter for steder"
 
 #: plugins/weather.py:460
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Weather for %s..."
 msgstr "Henter overskrifter..."
 
 #: plugins/weather.py:474
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Henter overskrifter..."
 
 #: plugins/weather.py:627 plugins/weather.py:896 util/misc.py:451
 #: util/misc.py:462 util/misc.py:473
-#, fuzzy
 msgid "at"
 msgstr "Lør"
 
@@ -625,22 +606,18 @@ msgid "Unknown"
 msgstr "Ukendt"
 
 #: plugins/weather.py:738 share/skins/main/bluestar.fxd:13
-#, fuzzy
 msgid "Weather"
 msgstr "Anden"
 
 #: plugins/weather.py:744 plugins/weather.py:779 plugins/mpd.py:117
-#, fuzzy
 msgid "Locations"
 msgstr "Handlinger"
 
 #: plugins/weather.py:771 plugins/freeboxtv.py:113
-#, fuzzy
 msgid "No locations specified"
 msgstr "Ingen ny fil angivet."
 
 #: plugins/weather.py:796
-#, fuzzy
 msgid "Current Conditions"
 msgstr "Nuværende billede"
 
@@ -665,7 +642,6 @@ msgid "Pressure"
 msgstr ""
 
 #: plugins/weather.py:895
-#, fuzzy
 msgid "Wind"
 msgstr "indeks"
 
@@ -678,7 +654,6 @@ msgid "Visibility"
 msgstr ""
 
 #: plugins/weather.py:919
-#, fuzzy
 msgid "UV Index"
 msgstr "Indeks"
 
@@ -695,7 +670,6 @@ msgid "Currently, there is a a humidity of"
 msgstr ""
 
 #: plugins/weather.py:969
-#, fuzzy
 msgid "and"
 msgstr "Jan"
 
@@ -740,7 +714,6 @@ msgid "Delete info"
 msgstr "Slet info"
 
 #: plugins/file_ops.py:67
-#, fuzzy
 msgid "Delete edl"
 msgstr "Slet"
 
@@ -775,7 +748,7 @@ msgstr ""
 " '%s'?"
 
 #: plugins/file_ops.py:88
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Delete edl about\n"
 " '%s'?"
@@ -981,7 +954,6 @@ msgid "Connecting to LCD: %s"
 msgstr "Forbinder til LCD: %s"
 
 #: plugins/lcd.py:677
-#, fuzzy
 msgid "Info as known by the LCD module:"
 msgstr "Info som LCD modulet kender det:"
 
@@ -1036,7 +1008,6 @@ msgid "%s Main Menu"
 msgstr "%s Hovedmenu"
 
 #: plugins/autoshutdown.py:144
-#, fuzzy
 msgid "A recording is in progress."
 msgstr "Optagelsesserveren er nede."
 
@@ -1050,7 +1021,6 @@ msgid "There are important processes running."
 msgstr ""
 
 #: plugins/autoshutdown.py:157
-#, fuzzy
 msgid "No wakeup scheduled."
 msgstr "Ingen programmerede optagelser"
 
@@ -1079,7 +1049,6 @@ msgid "Shutdown system"
 msgstr "Luk system ned"
 
 #: plugins/autoshutdown.py:180
-#, fuzzy
 msgid "Shutdown freevo"
 msgstr "Afslut Freevo"
 
@@ -1204,19 +1173,17 @@ msgid "Commands"
 msgstr "Kommandoer"
 
 #: plugins/freevused.py:140
-#, fuzzy
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
 msgstr "pylcd er nødvendig for at køre \"lcd\" plugin."
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
-#, fuzzy
 msgid "Playing"
 msgstr "Afspil"
 
 #: plugins/freevused.py:420
-#, fuzzy, python-format
+#, python-format
 msgid "BT event %s"
 msgstr "Text: %s"
 
@@ -1231,7 +1198,6 @@ msgstr "Navn"
 #: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
 #: share/skins/main/dark.fxd:759 share/skins/main/blurr.fxd:202
 #: share/skins/main/blurr.fxd:309 share/skins/main/blurr.fxd:692
-#, fuzzy
 msgid "Track"
 msgstr "Spor:"
 
@@ -1303,7 +1269,6 @@ msgid "Should show the menu? %i"
 msgstr ""
 
 #: plugins/cd_burn.py:793
-#, fuzzy
 msgid "CD Burn Menu"
 msgstr "Opsætningsmenu"
 
@@ -1327,7 +1292,6 @@ msgid "Copy %s, and related, file to CD"
 msgstr ""
 
 #: plugins/vfd.py:52
-#, fuzzy
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
 msgstr "pylcd er nødvendig for at køre \"lcd\" plugin."
 
@@ -1350,22 +1314,21 @@ msgid "Cannot find MIXER"
 msgstr ""
 
 #: plugins/vfd.py:725
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find screens for %d lines VFD!"
 msgstr "Kunne ikke finde skærme til %d-liniers LCD!"
 
 #: plugins/vfd.py:728 plugins/vfd.py:741 plugins/vfd.py:752
-#, fuzzy, python-format
+#, python-format
 msgid "No screens found for this VFD (%dx%d)!"
 msgstr "Ingen skærme fundet til denne LCD (%dx%d)!"
 
 #: plugins/vfd.py:737
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find screens for %d lines and %d columns VFD!"
 msgstr "Kunne ikke finde skærme til LCD på %d linier og %d kolonner!"
 
 #: plugins/upsoon.py:224 plugins/upsoon.py:242
-#, fuzzy
 msgid "A recording will start in a few minutes"
 msgstr "Optagelsesserveren er nede."
 
@@ -1390,12 +1353,10 @@ msgid "Song - "
 msgstr ""
 
 #: plugins/mpd.py:226
-#, fuzzy
 msgid "Artist - "
 msgstr "Kunstner"
 
 #: plugins/mpd.py:233
-#, fuzzy
 msgid "Album - "
 msgstr "Album"
 
@@ -1404,7 +1365,6 @@ msgid "Status - "
 msgstr ""
 
 #: plugins/buttonbar.py:101
-#, fuzzy
 msgid "No Information Available"
 msgstr "Ingen tilgængelige oplysninger"
 
@@ -1418,7 +1378,6 @@ msgid "Info"
 msgstr ""
 
 #: plugins/buttonbar.py:364
-#, fuzzy
 msgid "More Options"
 msgstr "Beskrivelse"
 
@@ -1584,7 +1543,6 @@ msgid "unable to load html files"
 msgstr "kunne ikke indlæse html filer"
 
 #: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
-#, fuzzy
 msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
 msgstr "Hvis du bruger en CVS version af Freevo, kør da <b>autogen.sh</b>."
 
@@ -1841,7 +1799,6 @@ msgid "Duplicates"
 msgstr ""
 
 #: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
-#, fuzzy
 msgid "Episodes"
 msgstr "Afsnit"
 
@@ -2051,7 +2008,7 @@ msgid "<h2>%s</h2>"
 msgstr ""
 
 #: www/htdocs/library.rpy:194
-#, fuzzy, python-format
+#, python-format
 msgid "Rename %s to %s, failed."
 msgstr "Omdøb %s til %s."
 
@@ -2065,7 +2022,7 @@ msgid "Delete %s."
 msgstr "Slet: %s"
 
 #: www/htdocs/library.rpy:210
-#, fuzzy, python-format
+#, python-format
 msgid "Delete %s, failed."
 msgstr "Slet: %s"
 
@@ -2118,12 +2075,10 @@ msgid "Rename"
 msgstr "Omdøb"
 
 #: www/htdocs/library.rpy:582
-#, fuzzy
 msgid "Play file"
 msgstr "Afspil titel %s"
 
 #: www/htdocs/library.rpy:585
-#, fuzzy
 msgid "Play file using VLC"
 msgstr "Afspil titel %s"
 
@@ -2283,7 +2238,6 @@ msgstr ""
 "nogle få minutter senere."
 
 #: tv/plugins/xine.py:81
-#, fuzzy
 msgid ""
 "'XINE_COMMAND' not defined, 'xine' tv plugin deactivated.\n"
 "please check the xine section in freevo_config.py"
@@ -2368,7 +2322,6 @@ msgid "Search for more of this program"
 msgstr "Søg efter mere af dette program"
 
 #: tv/program_display.py:161
-#, fuzzy
 msgid "Edit favorite"
 msgstr "Rediger foretrukne"
 
@@ -2390,7 +2343,7 @@ msgid "Scheduling Failed"
 msgstr "Programmering mislykkedes"
 
 #: tv/program_display.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from schedule"
 msgstr "Fjern fra programmering"
 
@@ -2409,7 +2362,7 @@ msgid "findMatches failed: %s"
 msgstr "findMatches fejlede: %s"
 
 #: tv/program_display.py:287
-#, fuzzy, python-format
+#, python-format
 msgid "getFavorites failed: %s"
 msgstr "Foretrukne kunne ikke hentes"
 
@@ -2426,12 +2379,10 @@ msgid "Modify time of day"
 msgstr "Rediger tid på dagen"
 
 #: tv/program_display.py:359
-#, fuzzy
 msgid "Modify duplicate flag"
 msgstr "Rediger kanal"
 
 #: tv/program_display.py:363
-#, fuzzy
 msgid "Modify episodes flag"
 msgstr "Rediger tid på dagen"
 
@@ -2452,7 +2403,6 @@ msgid "Favorite Menu"
 msgstr "Foretrukne"
 
 #: tv/program_display.py:424
-#, fuzzy
 msgid "Modify Duplicate Flag"
 msgstr "Rediger kanal"
 
@@ -2469,7 +2419,7 @@ msgid "Save Failed"
 msgstr "Kunne ikke gemme"
 
 #: tv/program_display.py:623
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from favorites"
 msgstr "Fjern fra foretrukne"
 
@@ -2600,22 +2550,18 @@ msgstr ""
 "blev ikke fundet!"
 
 #: audio/plugins/xmradio.py:62
-#, fuzzy
 msgid "Listen to XM Station"
 msgstr "Lyt til radiostation"
 
 #: audio/plugins/xmradio.py:95
-#, fuzzy
 msgid "XM Radio"
 msgstr "Radio"
 
 #: audio/plugins/xmradio.py:136
-#, fuzzy
 msgid "No XM channels found"
 msgstr "Ingen billeder fundet"
 
 #: audio/plugins/xmradio.py:137
-#, fuzzy
 msgid "XM channels"
 msgstr "Rediger kanal"
 
@@ -2624,7 +2570,6 @@ msgid "Show CD ripping status"
 msgstr "Vis status for CD kopiering"
 
 #: audio/plugins/cdbackup.py:189
-#, fuzzy
 msgid "Stop CD ripping"
 msgstr "Vis status for CD kopiering"
 
@@ -2685,7 +2630,6 @@ msgstr ""
 
 #: audio/plugins/cdbackup.py:356 audio/plugins/cdbackup.py:422
 #: audio/plugins/cdbackup.py:481
-#, fuzzy
 msgid "Ripping aborted"
 msgstr "Kopiering påbegyndt"
 
@@ -2804,7 +2748,6 @@ msgid "[VUX] an audio item, do not select"
 msgstr "[VUX] et lyd element kan ikke vælges"
 
 #: audio/plugins/xine.py:55
-#, fuzzy
 msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "'fbxine' kunne ikke findes, modulet 'xine' er deaktiveret"
 
@@ -2868,17 +2811,14 @@ msgid "getting data..."
 msgstr "henter data..."
 
 #: audio/plugins/album_tree.py:193 audio/plugins/album_tree.py:275
-#, fuzzy
 msgid "Album Tree"
 msgstr "Album"
 
 #: audio/plugins/album_tree.py:302
-#, fuzzy
 msgid "No Objects found"
 msgstr "Ingen billeder fundet"
 
 #: audio/plugins/album_tree.py:326
-#, fuzzy
 msgid "Generating playlist..."
 msgstr "intet næste element i afspilningsliste"
 
@@ -2929,7 +2869,6 @@ msgid "No information available from IMDB"
 msgstr "Der fandtes ingen tilgængelige oplysninger hos IMDB"
 
 #: video/plugins/xine.py:63
-#, fuzzy
 msgid ""
 "'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n"
 "please check the xine section in freevo_config.py"
@@ -2951,7 +2890,6 @@ msgid "Jump to %s"
 msgstr "Gå til %s"
 
 #: video/plugins/dvdimage.py:72
-#, fuzzy
 msgid "Play image as DVD"
 msgstr "Afspil DVD"
 
@@ -2999,24 +2937,20 @@ msgstr ""
 
 #: video/plugins/dvdbackup.py:94 video/plugins/reencode.py:92
 #: video/plugins/reencode2.py:148
-#, fuzzy
 msgid "Choose your encoding profile"
 msgstr "Kunne ikke hente optagelser"
 
 #: video/plugins/dvdbackup.py:110 video/plugins/reencode.py:103
 #: video/plugins/reencode2.py:323
-#, fuzzy
 msgid "Please wait, analyzing video..."
 msgstr "Vent venligst...."
 
 #: video/plugins/dvdbackup.py:179 video/plugins/reencode.py:190
 #: video/plugins/reencode2.py:365
-#, fuzzy
 msgid "Encoding started"
 msgstr "Kopiering påbegyndt"
 
 #: video/plugins/reencode.py:76
-#, fuzzy
 msgid "Re-encode this program..."
 msgstr "Søg efter mere af dette program"
 
@@ -3041,7 +2975,6 @@ msgid "Language Menu"
 msgstr ""
 
 #: video/plugins/reencode2.py:103
-#, fuzzy
 msgid "Transcode this program..."
 msgstr "Søg efter mere af dette program"
 
@@ -3050,43 +2983,35 @@ msgid "Start Encoding"
 msgstr ""
 
 #: video/plugins/reencode2.py:139
-#, fuzzy
 msgid "Select Encoding Profile"
 msgstr "Kunne ikke hente optagelser"
 
 #: video/plugins/reencode2.py:140 video/plugins/reencode2.py:169
-#, fuzzy
 msgid "Modify Container"
 msgstr "Rediger navn"
 
 #: video/plugins/reencode2.py:141 video/plugins/reencode2.py:179
-#, fuzzy
 msgid "Modify Resolution"
 msgstr "Opløsning"
 
 #: video/plugins/reencode2.py:142 video/plugins/reencode2.py:189
 #: video/plugins/reencode2.py:209
-#, fuzzy
 msgid "Modify Video Codec"
 msgstr "Video"
 
 #: video/plugins/reencode2.py:143 video/plugins/reencode2.py:199
-#, fuzzy
 msgid "Modify Video Bitrate"
 msgstr "Rediger tid på dagen"
 
 #: video/plugins/reencode2.py:144
-#, fuzzy
 msgid "Modify Audio Codec"
 msgstr "Lydspor-menu"
 
 #: video/plugins/reencode2.py:145 video/plugins/reencode2.py:219
-#, fuzzy
 msgid "Modify Audio Bitrate"
 msgstr "Juster prioritet"
 
 #: video/plugins/reencode2.py:146
-#, fuzzy
 msgid "Modify Number of passes"
 msgstr "Rediger tid på dagen"
 
@@ -3111,22 +3036,18 @@ msgid "Select Profile"
 msgstr ""
 
 #: video/plugins/reencode2.py:229
-#, fuzzy
 msgid "Modify Number of Passes"
 msgstr "Rediger tid på dagen"
 
 #: video/plugins/reencode2.py:239
-#, fuzzy
 msgid "Modify Video Filter"
 msgstr "Juster prioritet"
 
 #: video/plugins/reencode2.py:275
-#, fuzzy
 msgid "Unknown Profile"
 msgstr "Ukendt kunstner"
 
 #: video/plugins/reencode2.py:303
-#, fuzzy
 msgid "Unknown Property"
 msgstr "Ukendt kunstner"
 
@@ -3135,7 +3056,6 @@ msgid "Directory Autobuild Thumbnails "
 msgstr "Katalog Opret automatisk miniature"
 
 #: video/__init__.py:181
-#, fuzzy
 msgid "Build video thumbnails for all items (may take a while when entering)."
 msgstr "Opret video miniaturer for alle elementer (dette kan tage nogen tid)."
 
@@ -3254,7 +3174,6 @@ msgid "Config Menu"
 msgstr "Opsætningsmenu"
 
 #: util/mediainfo.py:738
-#, fuzzy
 msgid "Reloading cache files, be patient..."
 msgstr "Indlæser cache, vent venligst ..."
 
@@ -3283,7 +3202,6 @@ msgid "Widescreen"
 msgstr ""
 
 #: setup_freevo.py:75
-#, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -3463,12 +3381,10 @@ msgid "Use a smarter way to sort the items."
 msgstr "Brug en smartere metode til sortering af elementerne."
 
 #: directory.py:69
-#, fuzzy
 msgid "Directory Smart Names"
 msgstr "Intelligent søgning af katalog"
 
 #: directory.py:70
-#, fuzzy
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr "Brug en smartere metode til sortering af elementerne."
 
@@ -3560,7 +3476,6 @@ msgid "Password incorrect"
 msgstr "Ugyldig adgangskode"
 
 #: directory.py:582
-#, fuzzy
 msgid "Directory does not exist"
 msgstr "katalog %s findes ikke"
 
@@ -3607,7 +3522,6 @@ msgid "Cannot open \"%s\" for logging!"
 msgstr "\"%s\" kunne ikke åbnes til logning!"
 
 #: childapp.py:280
-#, fuzzy
 msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, "
 msgstr "Sæt CHILDAPP_DEBUG=0 i local_conf.py, eller gør %s skrivbar!"
 
@@ -3647,7 +3561,6 @@ msgid "Shutdown"
 msgstr "Luk ned"
 
 #: main.py:308
-#, fuzzy
 msgid "Continue"
 msgstr "Opsæt"
 
@@ -3714,33 +3627,27 @@ msgstr "h = Hjælp"
 
 #: share/skins/main/mediaportal.fxd:189 share/skins/main/blurr.fxd:187
 #: share/skins/main/info.fxd:543
-#, fuzzy
 msgid "Playlist"
 msgstr "Afspilningsliste"
 
 #: share/skins/main/dark.fxd:640
-#, fuzzy
 msgid "New mails"
 msgstr "Detaljer"
 
 #: share/skins/main/basic.fxd:729
-#, fuzzy
 msgid "Container"
 msgstr "Opsæt"
 
 #: share/skins/main/info.fxd:506
-#, fuzzy
 msgid "Copyright"
 msgstr "Copyright:"
 
 #: share/skins/main/crystal.fxd:318 share/skins/main/bluestar.fxd:338
 #: share/skins/main/rain.fxd:314
-#, fuzzy
 msgid "Unread messages"
 msgstr "Beskeder"
 
 #: share/skins/main/bluestar.fxd:12
-#, fuzzy
 msgid "Pictures"
 msgstr "Apod billeder"
 
@@ -3750,12 +3657,10 @@ msgstr ""
 
 #: share/skins/main/mediaportal.fxd:215 share/skins/main/blurr.fxd:213
 #: share/skins/main/info.fxd:310
-#, fuzzy
 msgid "Audio tracks"
 msgstr " Lydspor, "
 
 #: share/skins/main/basic.fxd:759
-#, fuzzy
 msgid "Audio Rate"
 msgstr "Lydspor-menu"
 
@@ -3765,7 +3670,6 @@ msgid "Message has not been read"
 msgstr ""
 
 #: share/skins/main/mediaportal.fxd:420 share/skins/main/blurr.fxd:428
-#, fuzzy
 msgid "Location"
 msgstr "Handling"
 
@@ -3774,7 +3678,6 @@ msgid "From"
 msgstr ""
 
 #: share/skins/main/dark.fxd:671
-#, fuzzy
 msgid "New mail"
 msgstr "Ny foretrukken"
 
@@ -3784,7 +3687,6 @@ msgstr ""
 
 #: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:11
 #: share/skins/main/bluestar.fxd:11 share/skins/main/rain.fxd:11
-#, fuzzy
 msgid "Email"
 msgstr "lille"
 
@@ -3794,7 +3696,6 @@ msgstr ""
 
 #: share/skins/main/crystal.fxd:324 share/skins/main/bluestar.fxd:344
 #: share/skins/main/rain.fxd:320
-#, fuzzy
 msgid "Total messages"
 msgstr "Beskeder"
 
@@ -3809,14 +3710,12 @@ msgid "kb/s"
 msgstr ""
 
 #: share/skins/main/dark.fxd:565
-#, fuzzy
 msgid "One song in playlist"
 msgstr "intet næste element i afspilningsliste"
 
 #: share/skins/main/mediaportal.fxd:193 share/skins/main/blurr.fxd:191
 #: share/skins/main/info.fxd:419 share/skins/main/info.fxd:424
 #: share/skins/main/info.fxd:547
-#, fuzzy
 msgid "items in this playlist"
 msgstr " elementer i denne afspilningsliste"
 
@@ -3827,7 +3726,6 @@ msgstr "Lyt til musik"
 
 #: share/skins/main/basic.fxd:422 share/skins/main/mediaportal.fxd:722
 #: share/skins/main/dark.fxd:779 share/skins/main/blurr.fxd:730
-#, fuzzy
 msgid "Elapsed"
 msgstr "Tid gået:"
 
@@ -3841,7 +3739,6 @@ msgid "Watch a Movie"
 msgstr "Se en film"
 
 #: share/skins/main/basic.fxd:747
-#, fuzzy
 msgid "Video Rate"
 msgstr "Video"
 
@@ -3850,18 +3747,15 @@ msgid "Link"
 msgstr ""
 
 #: share/skins/main/basic.fxd:627
-#, fuzzy
 msgid "Day"
 msgstr "Maj"
 
 #: share/skins/main/mediaportal.fxd:220 share/skins/main/blurr.fxd:218
 #: share/skins/main/info.fxd:314
-#, fuzzy
 msgid "Subtitles"
 msgstr " Undertekster, "
 
 #: share/skins/main/dark.fxd:492
-#, fuzzy
 msgid "movies in this playlist."
 msgstr " film i denne afspilningsliste."
 
@@ -3878,23 +3772,19 @@ msgstr ""
 #: share/skins/main/mediaportal.fxd:394 share/skins/main/mediaportal.fxd:402
 #: share/skins/main/blurr.fxd:181 share/skins/main/blurr.fxd:285
 #: share/skins/main/blurr.fxd:402 share/skins/main/blurr.fxd:410
-#, fuzzy
 msgid "Items"
 msgstr "Element"
 
 #: share/skins/main/basic.fxd:723
-#, fuzzy
 msgid "File name"
 msgstr "Filnavn: %s"
 
 #: share/skins/main/blurr.fxd:312 share/skins/main/info.fxd:348
 #: share/skins/main/info.fxd:535
-#, fuzzy
 msgid "of"
 msgstr "fra"
 
 #: share/skins/main/basic.fxd:741
-#, fuzzy
 msgid "Video Codec"
 msgstr "Video"
 
@@ -3903,7 +3793,6 @@ msgid "Filter"
 msgstr ""
 
 #: share/skins/main/info.fxd:324
-#, fuzzy
 msgid "Size"
 msgstr "Størrelse:"
 
@@ -3918,22 +3807,18 @@ msgid "This slideshow is empty!"
 msgstr "Denne sekvens er tom!"
 
 #: share/skins/main/info.fxd:306
-#, fuzzy
 msgid "min."
 msgstr " min. "
 
 #: share/skins/main/dark.fxd:618
-#, fuzzy
 msgid "pictures in this slideshow."
 msgstr " billeder i denne sekvens."
 
 #: share/skins/main/dark.fxd:459 share/skins/main/info.fxd:471
-#, fuzzy
 msgid "Rating"
 msgstr "Rating:"
 
 #: share/skins/main/info.fxd:350 share/skins/main/info.fxd:537
-#, fuzzy
 msgid "MB free"
 msgstr " MB fri"
 
@@ -3943,12 +3828,10 @@ msgid "Watch TV"
 msgstr "Se TV"
 
 #: share/skins/main/mediaportal.fxd:440
-#, fuzzy
 msgid "Read Headlines"
 msgstr "Overskrifter"
 
 #: share/skins/main/dark.fxd:569
-#, fuzzy
 msgid "No songs in playlist"
 msgstr "intet næste element i afspilningsliste"
 
@@ -3959,7 +3842,6 @@ msgstr "Se billeder"
 
 #: share/skins/main/mediaportal.fxd:225 share/skins/main/blurr.fxd:223
 #: share/skins/main/info.fxd:318
-#, fuzzy
 msgid "Chapters"
 msgstr " Scene"
 
@@ -3973,7 +3855,6 @@ msgid "TV"
 msgstr "TV"
 
 #: share/skins/main/dark.fxd:561
-#, fuzzy
 msgid "songs in playlist"
 msgstr "intet næste element i afspilningsliste"
 
@@ -3983,12 +3864,10 @@ msgid "Weather Forecast"
 msgstr ""
 
 #: share/skins/main/dark.fxd:722
-#, fuzzy
 msgid "Now playing"
 msgstr "Vis afspiller"
 
 #: share/skins/main/basic.fxd:753
-#, fuzzy
 msgid "Audio Codec"
 msgstr "Lydspor-menu"
 
@@ -3996,26 +3875,21 @@ msgstr "Lydspor-menu"
 msgid "Subject"
 msgstr ""
 
-#, fuzzy
 #~ msgid "Delete %s?"
 #~ msgstr "Slet: %s"
 
-#, fuzzy
 #~ msgid "Error, unable to delete file %s"
 #~ msgstr "kunne ikke indlæse html filer"
 
 #~ msgid "Favorite not added yet."
 #~ msgstr "Foretrukken er endnu ikke tilføjet."
 
-#, fuzzy
 #~ msgid "No Xm Radio Stations found"
 #~ msgstr "Ingen radiostationer blev fundet"
 
-#, fuzzy
 #~ msgid "Chapter"
 #~ msgstr " Scene"
 
-#, fuzzy
 #~ msgid " free of %s GB total (%s%% free)"
 #~ msgstr "%i af %i Mb fri"
 

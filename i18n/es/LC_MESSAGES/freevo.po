@@ -568,7 +568,6 @@ msgid "A Few Clouds"
 msgstr "Algunas nubes"
 
 #: plugins/weather.py:185
-#, fuzzy
 msgid "Fair"
 msgstr "Buen tiempo"
 
@@ -591,7 +590,7 @@ msgid "Fetching Weather for %s..."
 msgstr "Obteniendo parte meteorológico de %s..."
 
 #: plugins/weather.py:474
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Obteniendo parte meteorológico de %s..."
 
@@ -713,7 +712,6 @@ msgid "Delete info"
 msgstr "Eliminar info"
 
 #: plugins/file_ops.py:67
-#, fuzzy
 msgid "Delete edl"
 msgstr "Eliminar este elemento"
 
@@ -748,7 +746,7 @@ msgstr ""
 "'%s'?"
 
 #: plugins/file_ops.py:88
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Delete edl about\n"
 " '%s'?"
@@ -1175,7 +1173,6 @@ msgid "Commands"
 msgstr "Mandatos"
 
 #: plugins/freevused.py:140
-#, fuzzy
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
@@ -1183,12 +1180,11 @@ msgstr ""
 "Necesitas pyusb (http://pyusb.berlios.de/) para cargar el módulo \"vfd\"."
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
-#, fuzzy
 msgid "Playing"
 msgstr "Reproducir"
 
 #: plugins/freevused.py:420
-#, fuzzy, python-format
+#, python-format
 msgid "BT event %s"
 msgstr "Texto: %s"
 
@@ -1217,7 +1213,7 @@ msgid "Not Yet implemented :)"
 msgstr ""
 
 #: plugins/cd_burn.py:162
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot find %s (%s). "
 msgstr "No se encuenta MIXER"
 
@@ -1264,12 +1260,12 @@ msgid "Backup interrupted"
 msgstr "Copia de seguridad interrumpida"
 
 #: plugins/cd_burn.py:771
-#, fuzzy, python-format
+#, python-format
 msgid "Item type is %s"
 msgstr "CDBURN : El tipo del item es %s"
 
 #: plugins/cd_burn.py:779
-#, fuzzy, python-format
+#, python-format
 msgid "Should show the menu? %i"
 msgstr "CDBURN : ¿Debo mostrar el menu? %i"
 
@@ -1335,7 +1331,6 @@ msgid "Could not find screens for %d lines and %d columns VFD!"
 msgstr "No se encuentra ninguna pantalla VFD de %d líneas y %d columnas."
 
 #: plugins/upsoon.py:224 plugins/upsoon.py:242
-#, fuzzy
 msgid "A recording will start in a few minutes"
 msgstr "La grabación empezara en menos de un minuto"
 
@@ -1360,12 +1355,10 @@ msgid "Song - "
 msgstr ""
 
 #: plugins/mpd.py:226
-#, fuzzy
 msgid "Artist - "
 msgstr "Artista"
 
 #: plugins/mpd.py:233
-#, fuzzy
 msgid "Album - "
 msgstr "Álbum"
 
@@ -1374,7 +1367,6 @@ msgid "Status - "
 msgstr ""
 
 #: plugins/buttonbar.py:101
-#, fuzzy
 msgid "No Information Available"
 msgstr "No hay información disponible"
 
@@ -1388,7 +1380,6 @@ msgid "Info"
 msgstr ""
 
 #: plugins/buttonbar.py:364
-#, fuzzy
 msgid "More Options"
 msgstr "Opciones de dispositivos"
 
@@ -1557,7 +1548,6 @@ msgid "unable to load html files"
 msgstr "no se pueden cargar los ficheros html"
 
 #: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
-#, fuzzy
 msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
 msgstr ""
 "Si estás usando una versión del CVS de Freevo ejecuta <b>autogen.sh</b>."
@@ -1815,7 +1805,6 @@ msgid "Duplicates"
 msgstr ""
 
 #: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
-#, fuzzy
 msgid "Episodes"
 msgstr "Episodio"
 
@@ -2096,7 +2085,6 @@ msgid "Play file"
 msgstr "Reproducir fichero"
 
 #: www/htdocs/library.rpy:585
-#, fuzzy
 msgid "Play file using VLC"
 msgstr "Reproducir fichero en servidor"
 
@@ -2343,7 +2331,6 @@ msgid "Search for more of this program"
 msgstr "Buscar este programa"
 
 #: tv/program_display.py:161
-#, fuzzy
 msgid "Edit favorite"
 msgstr "Editar favoritos"
 
@@ -2365,7 +2352,7 @@ msgid "Scheduling Failed"
 msgstr "La programación ha fallado"
 
 #: tv/program_display.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from schedule"
 msgstr "Eliminar del programa"
 
@@ -2384,7 +2371,7 @@ msgid "findMatches failed: %s"
 msgstr "findMatches ha fallado: %s"
 
 #: tv/program_display.py:287
-#, fuzzy, python-format
+#, python-format
 msgid "getFavorites failed: %s"
 msgstr "La obtención de favoritos ha fallado."
 
@@ -2401,12 +2388,10 @@ msgid "Modify time of day"
 msgstr "Modificar hora del día"
 
 #: tv/program_display.py:359
-#, fuzzy
 msgid "Modify duplicate flag"
 msgstr "Modificar canal"
 
 #: tv/program_display.py:363
-#, fuzzy
 msgid "Modify episodes flag"
 msgstr "Modificar hora del día"
 
@@ -2427,7 +2412,6 @@ msgid "Favorite Menu"
 msgstr "Menú de favoritos"
 
 #: tv/program_display.py:424
-#, fuzzy
 msgid "Modify Duplicate Flag"
 msgstr "Modificar canal"
 
@@ -2444,7 +2428,7 @@ msgid "Save Failed"
 msgstr "La grabación ha fallado"
 
 #: tv/program_display.py:623
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from favorites"
 msgstr "Eliminar de favoritos"
 
@@ -2584,12 +2568,10 @@ msgid "XM Radio"
 msgstr "XM Radio"
 
 #: audio/plugins/xmradio.py:136
-#, fuzzy
 msgid "No XM channels found"
 msgstr "No se han encontrado fotografías"
 
 #: audio/plugins/xmradio.py:137
-#, fuzzy
 msgid "XM channels"
 msgstr "Modificar canal"
 
@@ -2840,17 +2822,14 @@ msgid "getting data..."
 msgstr "Obteniendo datos..."
 
 #: audio/plugins/album_tree.py:193 audio/plugins/album_tree.py:275
-#, fuzzy
 msgid "Album Tree"
 msgstr "Álbum"
 
 #: audio/plugins/album_tree.py:302
-#, fuzzy
 msgid "No Objects found"
 msgstr "No se han encontrado fotografías"
 
 #: audio/plugins/album_tree.py:326
-#, fuzzy
 msgid "Generating playlist..."
 msgstr "Hay una canción en la lista"
 
@@ -3005,58 +2984,47 @@ msgid "Play Right Channel"
 msgstr ""
 
 #: video/plugins/bilingual.py:92
-#, fuzzy
 msgid "Language Menu"
 msgstr "Idioma"
 
 #: video/plugins/reencode2.py:103
-#, fuzzy
 msgid "Transcode this program..."
 msgstr "Recodificar este programa"
 
 #: video/plugins/reencode2.py:138
-#, fuzzy
 msgid "Start Encoding"
 msgstr "¿Empiezo a grabar %s?"
 
 #: video/plugins/reencode2.py:139
-#, fuzzy
 msgid "Select Encoding Profile"
 msgstr "La obtención de grabaciones ha fallado."
 
 #: video/plugins/reencode2.py:140 video/plugins/reencode2.py:169
-#, fuzzy
 msgid "Modify Container"
 msgstr "Modificar nombre"
 
 #: video/plugins/reencode2.py:141 video/plugins/reencode2.py:179
-#, fuzzy
 msgid "Modify Resolution"
 msgstr "Resolución"
 
 #: video/plugins/reencode2.py:142 video/plugins/reencode2.py:189
 #: video/plugins/reencode2.py:209
-#, fuzzy
 msgid "Modify Video Codec"
 msgstr "Video"
 
 #: video/plugins/reencode2.py:143 video/plugins/reencode2.py:199
-#, fuzzy
 msgid "Modify Video Bitrate"
 msgstr "Modificar hora del día"
 
 #: video/plugins/reencode2.py:144
-#, fuzzy
 msgid "Modify Audio Codec"
 msgstr "Menú de audio"
 
 #: video/plugins/reencode2.py:145 video/plugins/reencode2.py:219
-#, fuzzy
 msgid "Modify Audio Bitrate"
 msgstr "Modificar prioridad"
 
 #: video/plugins/reencode2.py:146
-#, fuzzy
 msgid "Modify Number of passes"
 msgstr "Modificar hora del día"
 
@@ -3081,22 +3049,18 @@ msgid "Select Profile"
 msgstr ""
 
 #: video/plugins/reencode2.py:229
-#, fuzzy
 msgid "Modify Number of Passes"
 msgstr "Modificar hora del día"
 
 #: video/plugins/reencode2.py:239
-#, fuzzy
 msgid "Modify Video Filter"
 msgstr "Modificar prioridad"
 
 #: video/plugins/reencode2.py:275
-#, fuzzy
 msgid "Unknown Profile"
 msgstr "Artista desconocido"
 
 #: video/plugins/reencode2.py:303
-#, fuzzy
 msgid "Unknown Property"
 msgstr "Artista desconocido"
 
@@ -3253,7 +3217,6 @@ msgid "Widescreen"
 msgstr ""
 
 #: setup_freevo.py:75
-#, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -3434,12 +3397,10 @@ msgid "Use a smarter way to sort the items."
 msgstr "Ordenar los elementos de una forma inteligente."
 
 #: directory.py:69
-#, fuzzy
 msgid "Directory Smart Names"
 msgstr "Ordenar carpeta de forma inteligente"
 
 #: directory.py:70
-#, fuzzy
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr "Ordenar los elementos de una forma inteligente."
 
@@ -3700,7 +3661,6 @@ msgid "New mails"
 msgstr "Correo nuevo"
 
 #: share/skins/main/basic.fxd:729
-#, fuzzy
 msgid "Container"
 msgstr "Continuar"
 
@@ -3727,7 +3687,6 @@ msgid "Audio tracks"
 msgstr "Pistas de audio"
 
 #: share/skins/main/basic.fxd:759
-#, fuzzy
 msgid "Audio Rate"
 msgstr "Menú de audio"
 
@@ -3806,7 +3765,6 @@ msgid "Watch a Movie"
 msgstr "Ver una película"
 
 #: share/skins/main/basic.fxd:747
-#, fuzzy
 msgid "Video Rate"
 msgstr "Video"
 
@@ -3844,7 +3802,6 @@ msgid "Items"
 msgstr "Elementos"
 
 #: share/skins/main/basic.fxd:723
-#, fuzzy
 msgid "File name"
 msgstr "Fichero: %s"
 
@@ -3854,12 +3811,10 @@ msgid "of"
 msgstr "de"
 
 #: share/skins/main/basic.fxd:741
-#, fuzzy
 msgid "Video Codec"
 msgstr "Video"
 
 #: share/skins/main/basic.fxd:772
-#, fuzzy
 msgid "Filter"
 msgstr "Buen tiempo"
 
@@ -3939,7 +3894,6 @@ msgid "Now playing"
 msgstr "Está sonando"
 
 #: share/skins/main/basic.fxd:753
-#, fuzzy
 msgid "Audio Codec"
 msgstr "Menú de audio"
 
@@ -3965,7 +3919,6 @@ msgstr "Título"
 #~ msgid "Chapter"
 #~ msgstr "Capítulo"
 
-#, fuzzy
 #~ msgid " free of %s GB total (%s%% free)"
 #~ msgstr "libres %i de %i Gb (%i%% libre)"
 
@@ -4021,30 +3974,24 @@ msgstr "Título"
 #~ msgid "Wait while detecting media..."
 #~ msgstr "Espere mientras se detecta media..."
 
-#, fuzzy
 #~ msgid "unknow error while playing file"
 #~ msgstr "Error desconocido mientras conectaba con IMDB"
 
 #~ msgid "There is no IMDB information for this file."
 #~ msgstr "No hay información en IMDB para este fichero."
 
-#, fuzzy
 #~ msgid "Artist: %s"
 #~ msgstr "Artista:"
 
-#, fuzzy
 #~ msgid "Tracks: %s"
 #~ msgstr "Pista:"
 
-#, fuzzy
 #~ msgid "Geometry: %s"
 #~ msgstr "Geometría:"
 
-#, fuzzy
 #~ msgid "Description: %s"
 #~ msgstr "Descripción: "
 
-#, fuzzy
 #~ msgid "VIDEO"
 #~ msgstr "GUIA de TV"
 

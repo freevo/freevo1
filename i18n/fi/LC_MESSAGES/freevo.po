@@ -64,7 +64,6 @@ msgid "%s%%"
 msgstr "%s%%"
 
 #: plugins/home_automation.py:59
-#, fuzzy
 msgid "Room Items"
 msgstr "kappaletta"
 
@@ -73,7 +72,6 @@ msgid "Home Automation Devices"
 msgstr ""
 
 #: plugins/home_automation.py:84 plugins/home_automation.py:100
-#, fuzzy
 msgid "Device Options"
 msgstr "Kuvaus"
 
@@ -87,17 +85,16 @@ msgid "Home Automation"
 msgstr ""
 
 #: plugins/home_automation.py:147
-#, fuzzy
 msgid "No Home Automation items found"
 msgstr "Uutisotsikko sivustoja ei löytynyt"
 
 #: plugins/df.py:66
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i GB total (%i%% free)"
 msgstr "%i / %i MB vapaana"
 
 #: plugins/df.py:68
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i MB total (%i%% free)"
 msgstr "%i / %i MB vapaana"
 
@@ -144,17 +141,14 @@ msgid "Light Rain"
 msgstr ""
 
 #: plugins/weather.py:73
-#, fuzzy
 msgid "Showers"
 msgstr "Näytä"
 
 #: plugins/weather.py:74
-#, fuzzy
 msgid "Snow"
 msgstr "Näytä"
 
 #: plugins/weather.py:75 plugins/weather.py:170
-#, fuzzy
 msgid "Rain"
 msgstr "Arvostelu"
 
@@ -175,7 +169,6 @@ msgid "Mostly Sunny"
 msgstr ""
 
 #: plugins/weather.py:80
-#, fuzzy
 msgid "Sunny"
 msgstr "Sunnuntai"
 
@@ -288,7 +281,6 @@ msgid "AM Thunderstorms"
 msgstr ""
 
 #: plugins/weather.py:108
-#, fuzzy
 msgid "AM Rain"
 msgstr "Radio"
 
@@ -333,12 +325,10 @@ msgid "PM Light Rain"
 msgstr ""
 
 #: plugins/weather.py:119
-#, fuzzy
 msgid "PM Rain"
 msgstr "Radio"
 
 #: plugins/weather.py:120
-#, fuzzy
 msgid "Snow Showers"
 msgstr "Näytä virhe viesti jono"
 
@@ -347,7 +337,6 @@ msgid "Rain to Snow"
 msgstr ""
 
 #: plugins/weather.py:122
-#, fuzzy
 msgid "PM Rain/Snow"
 msgstr "Radio"
 
@@ -552,7 +541,6 @@ msgid "Light Drizzle"
 msgstr ""
 
 #: plugins/weather.py:178
-#, fuzzy
 msgid "Mist"
 msgstr "Artisti"
 
@@ -573,7 +561,6 @@ msgid "Light Snow Shower/ Windy"
 msgstr ""
 
 #: plugins/weather.py:183
-#, fuzzy
 msgid "Clear"
 msgstr "Vuosi"
 
@@ -595,38 +582,33 @@ msgid "Unlimited"
 msgstr ""
 
 #: plugins/weather.py:382
-#, fuzzy
 msgid "Show Weather Details"
 msgstr "Sääennuste"
 
 #: plugins/weather.py:460
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Weather for %s..."
 msgstr "Haetaan otsikoita..."
 
 #: plugins/weather.py:474
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Haetaan otsikoita..."
 
 #: plugins/weather.py:627 plugins/weather.py:896 util/misc.py:451
 #: util/misc.py:462 util/misc.py:473
-#, fuzzy
 msgid "at"
 msgstr "Lauantai"
 
 #: plugins/weather.py:657
-#, fuzzy
 msgid "Unknown"
 msgstr "Tuntematon CD levy"
 
 #: plugins/weather.py:738 share/skins/main/bluestar.fxd:13
-#, fuzzy
 msgid "Weather"
 msgstr "Sääennuste"
 
 #: plugins/weather.py:744 plugins/weather.py:779 plugins/mpd.py:117
-#, fuzzy
 msgid "Locations"
 msgstr "Paikka"
 
@@ -639,12 +621,10 @@ msgid "Current Conditions"
 msgstr ""
 
 #: plugins/weather.py:796
-#, fuzzy
 msgid "Today's Forecast"
 msgstr "Sääennuste"
 
 #: plugins/weather.py:797
-#, fuzzy
 msgid "Extended Forecast"
 msgstr "Sääennuste"
 
@@ -689,7 +669,6 @@ msgid "Currently, there is a a humidity of"
 msgstr ""
 
 #: plugins/weather.py:969
-#, fuzzy
 msgid "and"
 msgstr "Tam"
 
@@ -734,7 +713,6 @@ msgid "Delete info"
 msgstr "Poista info tiedosto"
 
 #: plugins/file_ops.py:67
-#, fuzzy
 msgid "Delete edl"
 msgstr "Poista"
 
@@ -769,7 +747,7 @@ msgstr ""
 "'%s'?"
 
 #: plugins/file_ops.py:88
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Delete edl about\n"
 " '%s'?"
@@ -1042,7 +1020,6 @@ msgid "There are important processes running."
 msgstr ""
 
 #: plugins/autoshutdown.py:157
-#, fuzzy
 msgid "No wakeup scheduled."
 msgstr "Ei ajastettuja nauhoituksia"
 
@@ -1071,7 +1048,6 @@ msgid "Shutdown system"
 msgstr "Sammuta tietokone"
 
 #: plugins/autoshutdown.py:180
-#, fuzzy
 msgid "Shutdown freevo"
 msgstr "Sulje Freevo"
 
@@ -1202,12 +1178,11 @@ msgid ""
 msgstr ""
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
-#, fuzzy
 msgid "Playing"
 msgstr "Soita"
 
 #: plugins/freevused.py:420
-#, fuzzy, python-format
+#, python-format
 msgid "BT event %s"
 msgstr "Teksti: %s"
 
@@ -1293,7 +1268,6 @@ msgid "Should show the menu? %i"
 msgstr ""
 
 #: plugins/cd_burn.py:793
-#, fuzzy
 msgid "CD Burn Menu"
 msgstr "Asetukset valikko"
 
@@ -1378,12 +1352,10 @@ msgid "Song - "
 msgstr ""
 
 #: plugins/mpd.py:226
-#, fuzzy
 msgid "Artist - "
 msgstr "Artisti"
 
 #: plugins/mpd.py:233
-#, fuzzy
 msgid "Album - "
 msgstr "Albumi"
 
@@ -1392,13 +1364,11 @@ msgid "Status - "
 msgstr ""
 
 #: plugins/buttonbar.py:101
-#, fuzzy
 msgid "No Information Available"
 msgstr "Tietoa ei saatavilla"
 
 #: plugins/buttonbar.py:160 www/htdocs/guide.rpy:285 www/htdocs/genre.rpy:217
 #: www/htdocs/search.rpy:139 www/htdocs/search.rpy:141
-#, fuzzy
 msgid "Record"
 msgstr "Nauhoitetut ohjelmat"
 
@@ -1407,7 +1377,6 @@ msgid "Info"
 msgstr ""
 
 #: plugins/buttonbar.py:364
-#, fuzzy
 msgid "More Options"
 msgstr "Kuvaus"
 
@@ -1533,7 +1502,6 @@ msgid "Plugin List"
 msgstr ""
 
 #: www/htdocs/help/index.rpy:56
-#, fuzzy
 msgid "FXD files"
 msgstr "Poista tiedosto"
 
@@ -1590,7 +1558,7 @@ msgid "Freevo Documentation"
 msgstr ""
 
 #: www/htdocs/help/doc.rpy:61
-#, fuzzy, python-format
+#, python-format
 msgid "unable to load %s.html"
 msgstr "Kohteen %s lataus epäonnistui"
 
@@ -1673,7 +1641,6 @@ msgid "Dec"
 msgstr "Jou"
 
 #: www/htdocs/manualrecord.rpy:200 www/web_types.py:203
-#, fuzzy
 msgid "Manual Recording"
 msgstr "Ajastetut nauhoitukset"
 
@@ -1688,18 +1655,15 @@ msgstr ""
 
 #: www/htdocs/manualrecord.rpy:219 www/htdocs/record.rpy:113
 #: www/htdocs/search.rpy:89
-#, fuzzy
 msgid "Stop Time"
 msgstr "Standardi viesti tiedosto"
 
 #: www/htdocs/manualrecord.rpy:221 www/htdocs/record.rpy:117
 #: www/htdocs/search.rpy:93
-#, fuzzy
 msgid "Program Description"
 msgstr "Kuvaus: "
 
 #: www/htdocs/manualrecord.rpy:232
-#, fuzzy
 msgid "Add to Recording Schedule"
 msgstr "Näytä nauhoitus aikataulu"
 
@@ -1742,7 +1706,7 @@ msgid "Your listings are up to date."
 msgstr ""
 
 #: www/htdocs/index.rpy:75
-#, fuzzy, python-format
+#, python-format
 msgid "Now Recording %s."
 msgstr "Näytä nauhoitus aikataulu"
 
@@ -1771,7 +1735,7 @@ msgid "Sorry, the program description for %s is unavailable."
 msgstr "%s-ohjelmalle ei ole saatavissa kuvausta."
 
 #: www/htdocs/record.rpy:85 www/htdocs/edit_favorite.rpy:80
-#, fuzzy, python-format
+#, python-format
 msgid "No program found on %s at %s."
 msgstr "%s:n raidalle %s ei löytynyt mediaa."
 
@@ -1916,7 +1880,6 @@ msgid "Show"
 msgstr "Näytä"
 
 #: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:120
-#, fuzzy
 msgid "Category"
 msgstr " Kappale"
 
@@ -1941,7 +1904,6 @@ msgstr "Loppu"
 #: www/htdocs/guide.rpy:274 www/htdocs/genre.rpy:206
 #: share/skins/main/dark.fxd:465 share/skins/main/info.fxd:278
 #: share/skins/main/info.fxd:303 share/skins/main/info.fxd:482
-#, fuzzy
 msgid "Runtime"
 msgstr "Kesto:"
 
@@ -2051,7 +2013,7 @@ msgid "Delete %s."
 msgstr "Poista %s"
 
 #: www/htdocs/library.rpy:210
-#, fuzzy, python-format
+#, python-format
 msgid "Delete %s, failed."
 msgstr "Poista %s"
 
@@ -2080,7 +2042,6 @@ msgid "Movies"
 msgstr "Elokuvat"
 
 #: www/htdocs/library.rpy:278
-#, fuzzy
 msgid "Recorded TV"
 msgstr "Nauhoitetut ohjelmat"
 
@@ -2092,7 +2053,6 @@ msgstr "Kuvat"
 
 #: www/htdocs/library.rpy:303 www/htdocs/library.rpy:376
 #: www/htdocs/library.rpy:378 www/htdocs/library.rpy:382
-#, fuzzy
 msgid "Back"
 msgstr "Varmuuskopioi CD"
 
@@ -2105,12 +2065,10 @@ msgid "Rename"
 msgstr ""
 
 #: www/htdocs/library.rpy:582
-#, fuzzy
 msgid "Play file"
 msgstr "Soita kappale %s"
 
 #: www/htdocs/library.rpy:585
-#, fuzzy
 msgid "Play file using VLC"
 msgstr "Soita kappale %s"
 
@@ -2120,7 +2078,6 @@ msgstr "Etsinnän tulokset"
 
 #: www/htdocs/search.rpy:51 www/htdocs/search.rpy:75 www/web_types.py:204
 #: www/web_types.py:347 www/web_types.py:360
-#, fuzzy
 msgid "Search"
 msgstr "Etsi oppaasta"
 
@@ -2154,7 +2111,6 @@ msgid "View Media Library"
 msgstr ""
 
 #: www/web_types.py:203
-#, fuzzy
 msgid "Schedule a Manual Recording"
 msgstr "Ajastetut nauhoitukset"
 
@@ -2163,7 +2119,6 @@ msgid "Advanced Search Page"
 msgstr ""
 
 #: www/web_types.py:205
-#, fuzzy
 msgid "Help"
 msgstr "k = Ohje"
 
@@ -2180,7 +2135,6 @@ msgid "Change Icecast List"
 msgstr ""
 
 #: www/web_types.py:361
-#, fuzzy
 msgid "Movies only"
 msgstr "Elokuvat"
 
@@ -2354,7 +2308,6 @@ msgid "Search for more of this program"
 msgstr "Etsi tätä ohjelmaa muualta"
 
 #: tv/program_display.py:161
-#, fuzzy
 msgid "Edit favorite"
 msgstr "Muokkaa suosikkia"
 
@@ -2376,7 +2329,7 @@ msgid "Scheduling Failed"
 msgstr "Ajastus epäonnistui"
 
 #: tv/program_display.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from schedule"
 msgstr "Poista ajastuksista"
 
@@ -2395,7 +2348,7 @@ msgid "findMatches failed: %s"
 msgstr "Epäonnistui: %s"
 
 #: tv/program_display.py:287
-#, fuzzy, python-format
+#, python-format
 msgid "getFavorites failed: %s"
 msgstr "Suosikkien haku epäonnistui"
 
@@ -2412,12 +2365,10 @@ msgid "Modify time of day"
 msgstr "Muuta aika"
 
 #: tv/program_display.py:359
-#, fuzzy
 msgid "Modify duplicate flag"
 msgstr "Muuta kanavaa"
 
 #: tv/program_display.py:363
-#, fuzzy
 msgid "Modify episodes flag"
 msgstr "Muuta aika"
 
@@ -2438,7 +2389,6 @@ msgid "Favorite Menu"
 msgstr "Suosikki valikko"
 
 #: tv/program_display.py:424
-#, fuzzy
 msgid "Modify Duplicate Flag"
 msgstr "Muuta kanavaa"
 
@@ -2455,7 +2405,7 @@ msgid "Save Failed"
 msgstr "Tallennus epäonnistui"
 
 #: tv/program_display.py:623
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from favorites"
 msgstr "Poista suosikeista"
 
@@ -2586,22 +2536,18 @@ msgstr ""
 "ei löytynyt!"
 
 #: audio/plugins/xmradio.py:62
-#, fuzzy
 msgid "Listen to XM Station"
 msgstr "Kuuntele radio asemaa"
 
 #: audio/plugins/xmradio.py:95
-#, fuzzy
 msgid "XM Radio"
 msgstr "Radio"
 
 #: audio/plugins/xmradio.py:136
-#, fuzzy
 msgid "No XM channels found"
 msgstr "Otsikoita ei löytynyt"
 
 #: audio/plugins/xmradio.py:137
-#, fuzzy
 msgid "XM channels"
 msgstr "Muuta kanavaa"
 
@@ -2819,7 +2765,6 @@ msgid "No matches for %(artist)s - %(album)s"
 msgstr ""
 
 #: audio/plugins/coversearch.py:210
-#, fuzzy
 msgid "Unknown error while searching."
 msgstr "Tuntematon virhe yhdistettäessä IMDB-palvelimeen"
 
@@ -2832,7 +2777,6 @@ msgid "Cover Search Results"
 msgstr ""
 
 #: audio/plugins/coversearch.py:274
-#, fuzzy
 msgid "No covers available from Amazon"
 msgstr "IMDB palvelusta ei löytynyt tietoa"
 
@@ -2841,17 +2785,14 @@ msgid "getting data..."
 msgstr "haetaan tietoa..."
 
 #: audio/plugins/album_tree.py:193 audio/plugins/album_tree.py:275
-#, fuzzy
 msgid "Album Tree"
 msgstr "Albumi"
 
 #: audio/plugins/album_tree.py:302
-#, fuzzy
 msgid "No Objects found"
 msgstr "Otsikoita ei löytynyt"
 
 #: audio/plugins/album_tree.py:326
-#, fuzzy
 msgid "Generating playlist..."
 msgstr "soittolistassa ei seuraavaa kappaletta"
 
@@ -2921,7 +2862,6 @@ msgid "Jump to %s"
 msgstr "Siirry %s"
 
 #: video/plugins/dvdimage.py:72
-#, fuzzy
 msgid "Play image as DVD"
 msgstr "Soita DVD"
 
@@ -2969,24 +2909,20 @@ msgstr ""
 
 #: video/plugins/dvdbackup.py:94 video/plugins/reencode.py:92
 #: video/plugins/reencode2.py:148
-#, fuzzy
 msgid "Choose your encoding profile"
 msgstr "Nauhoitusten haku epäonnistui"
 
 #: video/plugins/dvdbackup.py:110 video/plugins/reencode.py:103
 #: video/plugins/reencode2.py:323
-#, fuzzy
 msgid "Please wait, analyzing video..."
 msgstr "Odota..."
 
 #: video/plugins/dvdbackup.py:179 video/plugins/reencode.py:190
 #: video/plugins/reencode2.py:365
-#, fuzzy
 msgid "Encoding started"
 msgstr "Muuta aloitus päivää"
 
 #: video/plugins/reencode.py:76
-#, fuzzy
 msgid "Re-encode this program..."
 msgstr "Etsi tätä ohjelmaa muualta"
 
@@ -3007,12 +2943,10 @@ msgid "Play Right Channel"
 msgstr ""
 
 #: video/plugins/bilingual.py:92
-#, fuzzy
 msgid "Language Menu"
 msgstr "Kieli"
 
 #: video/plugins/reencode2.py:103
-#, fuzzy
 msgid "Transcode this program..."
 msgstr "Etsi tätä ohjelmaa muualta"
 
@@ -3021,43 +2955,35 @@ msgid "Start Encoding"
 msgstr ""
 
 #: video/plugins/reencode2.py:139
-#, fuzzy
 msgid "Select Encoding Profile"
 msgstr "Nauhoitusten haku epäonnistui"
 
 #: video/plugins/reencode2.py:140 video/plugins/reencode2.py:169
-#, fuzzy
 msgid "Modify Container"
 msgstr "Muuta nimeä"
 
 #: video/plugins/reencode2.py:141 video/plugins/reencode2.py:179
-#, fuzzy
 msgid "Modify Resolution"
 msgstr "Tarkkuus"
 
 #: video/plugins/reencode2.py:142 video/plugins/reencode2.py:189
 #: video/plugins/reencode2.py:209
-#, fuzzy
 msgid "Modify Video Codec"
 msgstr "Video"
 
 #: video/plugins/reencode2.py:143 video/plugins/reencode2.py:199
-#, fuzzy
 msgid "Modify Video Bitrate"
 msgstr "Muuta aika"
 
 #: video/plugins/reencode2.py:144
-#, fuzzy
 msgid "Modify Audio Codec"
 msgstr "Musiikki valikko"
 
 #: video/plugins/reencode2.py:145 video/plugins/reencode2.py:219
-#, fuzzy
 msgid "Modify Audio Bitrate"
 msgstr "Muuta prioriteetti"
 
 #: video/plugins/reencode2.py:146
-#, fuzzy
 msgid "Modify Number of passes"
 msgstr "Muuta aika"
 
@@ -3082,22 +3008,18 @@ msgid "Select Profile"
 msgstr ""
 
 #: video/plugins/reencode2.py:229
-#, fuzzy
 msgid "Modify Number of Passes"
 msgstr "Muuta aika"
 
 #: video/plugins/reencode2.py:239
-#, fuzzy
 msgid "Modify Video Filter"
 msgstr "Muuta prioriteetti"
 
 #: video/plugins/reencode2.py:275
-#, fuzzy
 msgid "Unknown Profile"
 msgstr "Tuntematon CD levy"
 
 #: video/plugins/reencode2.py:303
-#, fuzzy
 msgid "Unknown Property"
 msgstr "Tuntematon CD levy"
 
@@ -3224,7 +3146,6 @@ msgid "Config Menu"
 msgstr "Asetukset valikko"
 
 #: util/mediainfo.py:738
-#, fuzzy
 msgid "Reloading cache files, be patient..."
 msgstr "Luodaan välimuistia, odota..."
 
@@ -3400,12 +3321,10 @@ msgid "Use a smarter way to sort the items."
 msgstr "Käytä viisaampaa hakemiston järjestystä."
 
 #: directory.py:69
-#, fuzzy
 msgid "Directory Smart Names"
 msgstr "Viisas järjestely"
 
 #: directory.py:70
-#, fuzzy
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr "Käytä viisaampaa hakemiston järjestystä."
 
@@ -3496,7 +3415,6 @@ msgid "Password incorrect"
 msgstr "Väärä salasana"
 
 #: directory.py:582
-#, fuzzy
 msgid "Directory does not exist"
 msgstr "Levyllä on jo %s hakemisto"
 
@@ -3575,7 +3493,6 @@ msgid "Shutdown"
 msgstr "Sammuta"
 
 #: main.py:308
-#, fuzzy
 msgid "Continue"
 msgstr "Asetukset"
 
@@ -3646,12 +3563,10 @@ msgid "Playlist"
 msgstr "Soittolista"
 
 #: share/skins/main/dark.fxd:640
-#, fuzzy
 msgid "New mails"
 msgstr "Tarkemmat tiedot"
 
 #: share/skins/main/basic.fxd:729
-#, fuzzy
 msgid "Container"
 msgstr "Asetukset"
 
@@ -3665,7 +3580,6 @@ msgid "Unread messages"
 msgstr ""
 
 #: share/skins/main/bluestar.fxd:12
-#, fuzzy
 msgid "Pictures"
 msgstr "Katsele kuvia"
 
@@ -3679,7 +3593,6 @@ msgid "Audio tracks"
 msgstr "Ääniraidat"
 
 #: share/skins/main/basic.fxd:759
-#, fuzzy
 msgid "Audio Rate"
 msgstr "Musiikki valikko"
 
@@ -3697,7 +3610,6 @@ msgid "From"
 msgstr ""
 
 #: share/skins/main/dark.fxd:671
-#, fuzzy
 msgid "New mail"
 msgstr "Uusi suosikki"
 
@@ -3720,7 +3632,6 @@ msgid "Total messages"
 msgstr ""
 
 #: share/skins/main/dark.fxd:496
-#, fuzzy
 msgid "Just one movie in this playlist."
 msgstr "kappaletta tässä soittolistassa"
 
@@ -3731,7 +3642,6 @@ msgid "kb/s"
 msgstr "kb/s"
 
 #: share/skins/main/dark.fxd:565
-#, fuzzy
 msgid "One song in playlist"
 msgstr "soittolistassa ei seuraavaa kappaletta"
 
@@ -3761,7 +3671,6 @@ msgid "Watch a Movie"
 msgstr "Katsele elokuvia"
 
 #: share/skins/main/basic.fxd:747
-#, fuzzy
 msgid "Video Rate"
 msgstr "Video"
 
@@ -3779,7 +3688,6 @@ msgid "Subtitles"
 msgstr "Tekstitykset"
 
 #: share/skins/main/dark.fxd:492
-#, fuzzy
 msgid "movies in this playlist."
 msgstr "kappaletta tässä soittolistassa"
 
@@ -3800,7 +3708,6 @@ msgid "Items"
 msgstr "kappaletta"
 
 #: share/skins/main/basic.fxd:723
-#, fuzzy
 msgid "File name"
 msgstr "Tiedosto: %s"
 
@@ -3810,7 +3717,6 @@ msgid "of"
 msgstr "pois"
 
 #: share/skins/main/basic.fxd:741
-#, fuzzy
 msgid "Video Codec"
 msgstr "Video"
 
@@ -3829,7 +3735,6 @@ msgid "This playlist is empty!"
 msgstr "Tämä soittolista on tyhjä!"
 
 #: share/skins/main/dark.fxd:628
-#, fuzzy
 msgid "This slideshow is empty!"
 msgstr "Tämä soittolista on tyhjä!"
 
@@ -3838,7 +3743,6 @@ msgid "min."
 msgstr "min."
 
 #: share/skins/main/dark.fxd:618
-#, fuzzy
 msgid "pictures in this slideshow."
 msgstr "kappaletta tässä soittolistassa"
 
@@ -3856,12 +3760,10 @@ msgid "Watch TV"
 msgstr "Katsele televisiota"
 
 #: share/skins/main/mediaportal.fxd:440
-#, fuzzy
 msgid "Read Headlines"
 msgstr "Uutisotsikot"
 
 #: share/skins/main/dark.fxd:569
-#, fuzzy
 msgid "No songs in playlist"
 msgstr "soittolistassa ei seuraavaa kappaletta"
 
@@ -3885,7 +3787,6 @@ msgid "TV"
 msgstr "TV"
 
 #: share/skins/main/dark.fxd:561
-#, fuzzy
 msgid "songs in playlist"
 msgstr "soittolistassa ei seuraavaa kappaletta"
 
@@ -3895,12 +3796,10 @@ msgid "Weather Forecast"
 msgstr "Sääennuste"
 
 #: share/skins/main/dark.fxd:722
-#, fuzzy
 msgid "Now playing"
 msgstr "Näytä soitin"
 
 #: share/skins/main/basic.fxd:753
-#, fuzzy
 msgid "Audio Codec"
 msgstr "Musiikki valikko"
 
@@ -3908,21 +3807,18 @@ msgstr "Musiikki valikko"
 msgid "Subject"
 msgstr ""
 
-#, fuzzy
 #~ msgid "Delete %s?"
 #~ msgstr "Poista %s"
 
 #~ msgid "Favorite not added yet."
 #~ msgstr "Suosikkia ei ole vielä lisätty."
 
-#, fuzzy
 #~ msgid "No Xm Radio Stations found"
 #~ msgstr "Radio asemia ei löytynyt"
 
 #~ msgid "Chapter"
 #~ msgstr "Kappale"
 
-#, fuzzy
 #~ msgid " free of %s GB total (%s%% free)"
 #~ msgstr "%i / %i MB vapaana"
 
@@ -3932,6 +3828,5 @@ msgstr ""
 #~ msgid "Unable to get frequency for channel %s."
 #~ msgstr "%s-asemalle ei löydy taajuutta."
 
-#, fuzzy
 #~ msgid "Choose a Directory"
 #~ msgstr "Selaa hakemistoa"

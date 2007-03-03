@@ -64,7 +64,6 @@ msgid "%s%%"
 msgstr "%s%%"
 
 #: plugins/home_automation.py:59
-#, fuzzy
 msgid "Room Items"
 msgstr "Items"
 
@@ -73,7 +72,6 @@ msgid "Home Automation Devices"
 msgstr ""
 
 #: plugins/home_automation.py:84 plugins/home_automation.py:100
-#, fuzzy
 msgid "Device Options"
 msgstr "Beschrijving"
 
@@ -87,17 +85,16 @@ msgid "Home Automation"
 msgstr ""
 
 #: plugins/home_automation.py:147
-#, fuzzy
 msgid "No Home Automation items found"
 msgstr "Geen koppen sites gevonden"
 
 #: plugins/df.py:66
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i GB total (%i%% free)"
 msgstr "%i van de in totaal %i Mb"
 
 #: plugins/df.py:68
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i MB total (%i%% free)"
 msgstr "%i van de in totaal %i Mb"
 
@@ -144,17 +141,14 @@ msgid "Light Rain"
 msgstr ""
 
 #: plugins/weather.py:73
-#, fuzzy
 msgid "Showers"
 msgstr "Tonen"
 
 #: plugins/weather.py:74
-#, fuzzy
 msgid "Snow"
 msgstr "Tonen"
 
 #: plugins/weather.py:75 plugins/weather.py:170
-#, fuzzy
 msgid "Rain"
 msgstr "Waardering"
 
@@ -175,7 +169,6 @@ msgid "Mostly Sunny"
 msgstr ""
 
 #: plugins/weather.py:80
-#, fuzzy
 msgid "Sunny"
 msgstr "zo"
 
@@ -212,7 +205,6 @@ msgid "Few Snow Showers"
 msgstr ""
 
 #: plugins/weather.py:89
-#, fuzzy
 msgid "Cloudy/Wind"
 msgstr "Venster sluiten"
 
@@ -261,7 +253,6 @@ msgid "Flurries"
 msgstr ""
 
 #: plugins/weather.py:101
-#, fuzzy
 msgid "Rain/Wind"
 msgstr "Wind"
 
@@ -290,7 +281,6 @@ msgid "AM Thunderstorms"
 msgstr ""
 
 #: plugins/weather.py:108
-#, fuzzy
 msgid "AM Rain"
 msgstr "Radio"
 
@@ -335,12 +325,10 @@ msgid "PM Light Rain"
 msgstr ""
 
 #: plugins/weather.py:119
-#, fuzzy
 msgid "PM Rain"
 msgstr "Radio"
 
 #: plugins/weather.py:120
-#, fuzzy
 msgid "Snow Showers"
 msgstr "Toon Stderr"
 
@@ -349,7 +337,6 @@ msgid "Rain to Snow"
 msgstr ""
 
 #: plugins/weather.py:122
-#, fuzzy
 msgid "PM Rain/Snow"
 msgstr "Radio"
 
@@ -358,7 +345,6 @@ msgid "Few Showers/Wind"
 msgstr ""
 
 #: plugins/weather.py:124
-#, fuzzy
 msgid "Snow/Wind"
 msgstr "Wind"
 
@@ -555,7 +541,6 @@ msgid "Light Drizzle"
 msgstr ""
 
 #: plugins/weather.py:178
-#, fuzzy
 msgid "Mist"
 msgstr "Artiest"
 
@@ -576,7 +561,6 @@ msgid "Light Snow Shower/ Windy"
 msgstr ""
 
 #: plugins/weather.py:183
-#, fuzzy
 msgid "Clear"
 msgstr "Jaar"
 
@@ -607,7 +591,7 @@ msgid "Fetching Weather for %s..."
 msgstr "Het weer voor %s wordt opgehaald..."
 
 #: plugins/weather.py:474
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Het weer voor %s wordt opgehaald..."
 
@@ -729,7 +713,6 @@ msgid "Delete info"
 msgstr "Wis extra informatie"
 
 #: plugins/file_ops.py:67
-#, fuzzy
 msgid "Delete edl"
 msgstr "Verwijder bericht"
 
@@ -764,7 +747,7 @@ msgstr ""
 " '%s'?"
 
 #: plugins/file_ops.py:88
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Delete edl about\n"
 " '%s'?"
@@ -972,7 +955,6 @@ msgid "Connecting to LCD: %s"
 msgstr "Connecteren met LCD: %s"
 
 #: plugins/lcd.py:677
-#, fuzzy
 msgid "Info as known by the LCD module:"
 msgstr "Info van de LCD module:"
 
@@ -1027,7 +1009,6 @@ msgid "%s Main Menu"
 msgstr "%s Hoofdmenu"
 
 #: plugins/autoshutdown.py:144
-#, fuzzy
 msgid "A recording is in progress."
 msgstr "De opnameserver is niet beschikbaar."
 
@@ -1041,7 +1022,6 @@ msgid "There are important processes running."
 msgstr ""
 
 #: plugins/autoshutdown.py:157
-#, fuzzy
 msgid "No wakeup scheduled."
 msgstr "Geen ingeplande opnames."
 
@@ -1070,7 +1050,6 @@ msgid "Shutdown system"
 msgstr "Systeem afsluiten"
 
 #: plugins/autoshutdown.py:180
-#, fuzzy
 msgid "Shutdown freevo"
 msgstr "Freevo afsluiten"
 
@@ -1195,19 +1174,17 @@ msgid "Commands"
 msgstr "Commandos"
 
 #: plugins/freevused.py:140
-#, fuzzy
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
 msgstr "Voor de \"lcd\" plugin is pylcd benodigd"
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
-#, fuzzy
 msgid "Playing"
 msgstr "Afspelen"
 
 #: plugins/freevused.py:420
-#, fuzzy, python-format
+#, python-format
 msgid "BT event %s"
 msgstr "Tekst: %s"
 
@@ -1293,7 +1270,6 @@ msgid "Should show the menu? %i"
 msgstr ""
 
 #: plugins/cd_burn.py:793
-#, fuzzy
 msgid "CD Burn Menu"
 msgstr "Configuratiemenu"
 
@@ -1317,7 +1293,6 @@ msgid "Copy %s, and related, file to CD"
 msgstr ""
 
 #: plugins/vfd.py:52
-#, fuzzy
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
 msgstr "Voor de \"lcd\" plugin is pylcd benodigd"
 
@@ -1340,22 +1315,21 @@ msgid "Cannot find MIXER"
 msgstr ""
 
 #: plugins/vfd.py:725
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find screens for %d lines VFD!"
 msgstr "Geen schermen gevonden voor %d lijnen LCD!"
 
 #: plugins/vfd.py:728 plugins/vfd.py:741 plugins/vfd.py:752
-#, fuzzy, python-format
+#, python-format
 msgid "No screens found for this VFD (%dx%d)!"
 msgstr "Geen schermen gevonden voor deze LCD (%dx%d)!"
 
 #: plugins/vfd.py:737
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find screens for %d lines and %d columns VFD!"
 msgstr "Geen schermen gevonden voor %d lijnen en %d colommen LCD!"
 
 #: plugins/upsoon.py:224 plugins/upsoon.py:242
-#, fuzzy
 msgid "A recording will start in a few minutes"
 msgstr "De opnameserver is niet beschikbaar."
 
@@ -1380,12 +1354,10 @@ msgid "Song - "
 msgstr ""
 
 #: plugins/mpd.py:226
-#, fuzzy
 msgid "Artist - "
 msgstr "Artiest"
 
 #: plugins/mpd.py:233
-#, fuzzy
 msgid "Album - "
 msgstr "Album"
 
@@ -1394,7 +1366,6 @@ msgid "Status - "
 msgstr ""
 
 #: plugins/buttonbar.py:101
-#, fuzzy
 msgid "No Information Available"
 msgstr "Geen informatie beschikbaar"
 
@@ -1408,7 +1379,6 @@ msgid "Info"
 msgstr ""
 
 #: plugins/buttonbar.py:364
-#, fuzzy
 msgid "More Options"
 msgstr "Beschrijving"
 
@@ -1575,7 +1545,6 @@ msgid "unable to load html files"
 msgstr "niet mogelijk om de html bestanden te laden"
 
 #: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
-#, fuzzy
 msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
 msgstr "Als u een CVS versie van Freevo gebruikt, start dan <b>autogen.sh</b>."
 
@@ -1832,7 +1801,6 @@ msgid "Duplicates"
 msgstr ""
 
 #: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
-#, fuzzy
 msgid "Episodes"
 msgstr "Aflevering"
 
@@ -2042,7 +2010,7 @@ msgid "<h2>%s</h2>"
 msgstr ""
 
 #: www/htdocs/library.rpy:194
-#, fuzzy, python-format
+#, python-format
 msgid "Rename %s to %s, failed."
 msgstr "Hernoem %s naar %s."
 
@@ -2056,7 +2024,7 @@ msgid "Delete %s."
 msgstr "Bestand wissen: %s"
 
 #: www/htdocs/library.rpy:210
-#, fuzzy, python-format
+#, python-format
 msgid "Delete %s, failed."
 msgstr "Bestand wissen: %s"
 
@@ -2108,12 +2076,10 @@ msgid "Rename"
 msgstr "Hernoemen"
 
 #: www/htdocs/library.rpy:582
-#, fuzzy
 msgid "Play file"
 msgstr "Speel titel %s af"
 
 #: www/htdocs/library.rpy:585
-#, fuzzy
 msgid "Play file using VLC"
 msgstr "Speel titel %s af"
 
@@ -2273,7 +2239,6 @@ msgstr ""
 "pakken. Verleng de opname alstublieft met enkele minuten."
 
 #: tv/plugins/xine.py:81
-#, fuzzy
 msgid ""
 "'XINE_COMMAND' not defined, 'xine' tv plugin deactivated.\n"
 "please check the xine section in freevo_config.py"
@@ -2358,7 +2323,6 @@ msgid "Search for more of this program"
 msgstr "Zoek naar andere tijden voor dit programma"
 
 #: tv/program_display.py:161
-#, fuzzy
 msgid "Edit favorite"
 msgstr "Favorieten bewerken"
 
@@ -2380,7 +2344,7 @@ msgid "Scheduling Failed"
 msgstr "Het inplannen is mislukt."
 
 #: tv/program_display.py:207
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from schedule"
 msgstr "Verwijder uit planning"
 
@@ -2399,7 +2363,7 @@ msgid "findMatches failed: %s"
 msgstr "findMatches mislukt: %s"
 
 #: tv/program_display.py:287
-#, fuzzy, python-format
+#, python-format
 msgid "getFavorites failed: %s"
 msgstr "Het ophalen van de favorieten is mislukt."
 
@@ -2416,12 +2380,10 @@ msgid "Modify time of day"
 msgstr "Wijzig tijd"
 
 #: tv/program_display.py:359
-#, fuzzy
 msgid "Modify duplicate flag"
 msgstr "Kanaal wijzigen"
 
 #: tv/program_display.py:363
-#, fuzzy
 msgid "Modify episodes flag"
 msgstr "Wijzig tijd"
 
@@ -2442,7 +2404,6 @@ msgid "Favorite Menu"
 msgstr "Favorieten menu"
 
 #: tv/program_display.py:424
-#, fuzzy
 msgid "Modify Duplicate Flag"
 msgstr "Kanaal wijzigen"
 
@@ -2459,7 +2420,7 @@ msgid "Save Failed"
 msgstr "Het opslaan is mislukt"
 
 #: tv/program_display.py:623
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" has been removed from favorites"
 msgstr "Favoriet verwijderen"
 
@@ -2590,22 +2551,18 @@ msgstr ""
 "niet gevonden!"
 
 #: audio/plugins/xmradio.py:62
-#, fuzzy
 msgid "Listen to XM Station"
 msgstr "Luister naar een radiostation"
 
 #: audio/plugins/xmradio.py:95
-#, fuzzy
 msgid "XM Radio"
 msgstr "Radio"
 
 #: audio/plugins/xmradio.py:136
-#, fuzzy
 msgid "No XM channels found"
 msgstr "Geen afbeeldingen gevonden"
 
 #: audio/plugins/xmradio.py:137
-#, fuzzy
 msgid "XM channels"
 msgstr "Kanaal wijzigen"
 
@@ -2791,7 +2748,6 @@ msgid "[VUX] an audio item, do not select"
 msgstr "[VUX] een geluidsbestand, niet selecteren"
 
 #: audio/plugins/xine.py:55
-#, fuzzy
 msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "'fbxine' niet gevonden, 'xine' plugin gedeactiveerd"
 
@@ -2853,17 +2809,14 @@ msgid "getting data..."
 msgstr "Gegevens worden binnengehaald..."
 
 #: audio/plugins/album_tree.py:193 audio/plugins/album_tree.py:275
-#, fuzzy
 msgid "Album Tree"
 msgstr "Album"
 
 #: audio/plugins/album_tree.py:302
-#, fuzzy
 msgid "No Objects found"
 msgstr "Geen afbeeldingen gevonden"
 
 #: audio/plugins/album_tree.py:326
-#, fuzzy
 msgid "Generating playlist..."
 msgstr "geen volgend item in de afspeellijst"
 
@@ -2914,7 +2867,6 @@ msgid "No information available from IMDB"
 msgstr "Geen informatie beschikbaar op IMDB"
 
 #: video/plugins/xine.py:63
-#, fuzzy
 msgid ""
 "'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n"
 "please check the xine section in freevo_config.py"
@@ -2936,7 +2888,6 @@ msgid "Jump to %s"
 msgstr "Spring naar %s"
 
 #: video/plugins/dvdimage.py:72
-#, fuzzy
 msgid "Play image as DVD"
 msgstr "DVD afspelen"
 
@@ -2984,24 +2935,20 @@ msgstr ""
 
 #: video/plugins/dvdbackup.py:94 video/plugins/reencode.py:92
 #: video/plugins/reencode2.py:148
-#, fuzzy
 msgid "Choose your encoding profile"
 msgstr "Het ophalen van de opnames is mislukt."
 
 #: video/plugins/dvdbackup.py:110 video/plugins/reencode.py:103
 #: video/plugins/reencode2.py:323
-#, fuzzy
 msgid "Please wait, analyzing video..."
 msgstr "Een ogenblik geduld..."
 
 #: video/plugins/dvdbackup.py:179 video/plugins/reencode.py:190
 #: video/plugins/reencode2.py:365
-#, fuzzy
 msgid "Encoding started"
 msgstr "Het rippen is gestart"
 
 #: video/plugins/reencode.py:76
-#, fuzzy
 msgid "Re-encode this program..."
 msgstr "Zoek naar andere tijden voor dit programma"
 
@@ -3022,12 +2969,10 @@ msgid "Play Right Channel"
 msgstr ""
 
 #: video/plugins/bilingual.py:92
-#, fuzzy
 msgid "Language Menu"
 msgstr "Taal"
 
 #: video/plugins/reencode2.py:103
-#, fuzzy
 msgid "Transcode this program..."
 msgstr "Zoek naar andere tijden voor dit programma"
 
@@ -3036,43 +2981,35 @@ msgid "Start Encoding"
 msgstr ""
 
 #: video/plugins/reencode2.py:139
-#, fuzzy
 msgid "Select Encoding Profile"
 msgstr "Het ophalen van de opnames is mislukt."
 
 #: video/plugins/reencode2.py:140 video/plugins/reencode2.py:169
-#, fuzzy
 msgid "Modify Container"
 msgstr "Naam wijzigen"
 
 #: video/plugins/reencode2.py:141 video/plugins/reencode2.py:179
-#, fuzzy
 msgid "Modify Resolution"
 msgstr "Resolutie"
 
 #: video/plugins/reencode2.py:142 video/plugins/reencode2.py:189
 #: video/plugins/reencode2.py:209
-#, fuzzy
 msgid "Modify Video Codec"
 msgstr "Video"
 
 #: video/plugins/reencode2.py:143 video/plugins/reencode2.py:199
-#, fuzzy
 msgid "Modify Video Bitrate"
 msgstr "Wijzig tijd"
 
 #: video/plugins/reencode2.py:144
-#, fuzzy
 msgid "Modify Audio Codec"
 msgstr "Geluidsmenu"
 
 #: video/plugins/reencode2.py:145 video/plugins/reencode2.py:219
-#, fuzzy
 msgid "Modify Audio Bitrate"
 msgstr "Wijzig prioriteit"
 
 #: video/plugins/reencode2.py:146
-#, fuzzy
 msgid "Modify Number of passes"
 msgstr "Wijzig tijd"
 
@@ -3097,22 +3034,18 @@ msgid "Select Profile"
 msgstr ""
 
 #: video/plugins/reencode2.py:229
-#, fuzzy
 msgid "Modify Number of Passes"
 msgstr "Wijzig tijd"
 
 #: video/plugins/reencode2.py:239
-#, fuzzy
 msgid "Modify Video Filter"
 msgstr "Wijzig prioriteit"
 
 #: video/plugins/reencode2.py:275
-#, fuzzy
 msgid "Unknown Profile"
 msgstr "Onbekende artiest"
 
 #: video/plugins/reencode2.py:303
-#, fuzzy
 msgid "Unknown Property"
 msgstr "Onbekende artiest"
 
@@ -3241,7 +3174,6 @@ msgid "Config Menu"
 msgstr "Configuratiemenu"
 
 #: util/mediainfo.py:738
-#, fuzzy
 msgid "Reloading cache files, be patient..."
 msgstr "Bezig met inlezen van de cache, een ogenblik geduld..."
 
@@ -3270,7 +3202,6 @@ msgid "Widescreen"
 msgstr ""
 
 #: setup_freevo.py:75
-#, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -3451,12 +3382,10 @@ msgid "Use a smarter way to sort the items."
 msgstr "Gebruik een intelligentere manier om items te sorteren."
 
 #: directory.py:69
-#, fuzzy
 msgid "Directory Smart Names"
 msgstr "Folder slim sorteren"
 
 #: directory.py:70
-#, fuzzy
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr "Gebruik een intelligentere manier om items te sorteren."
 
@@ -3550,7 +3479,6 @@ msgid "Password incorrect"
 msgstr "Wachtwoord onjuist"
 
 #: directory.py:582
-#, fuzzy
 msgid "Directory does not exist"
 msgstr "Folder %s bestaat niet."
 
@@ -3637,7 +3565,6 @@ msgid "Shutdown"
 msgstr "Afsluiten"
 
 #: main.py:308
-#, fuzzy
 msgid "Continue"
 msgstr "Configureer"
 
@@ -3708,12 +3635,10 @@ msgid "Playlist"
 msgstr "Afspeellijst"
 
 #: share/skins/main/dark.fxd:640
-#, fuzzy
 msgid "New mails"
 msgstr "Mail lezen"
 
 #: share/skins/main/basic.fxd:729
-#, fuzzy
 msgid "Container"
 msgstr "Configureer"
 
@@ -3727,7 +3652,6 @@ msgid "Unread messages"
 msgstr "Ongelezen berichten"
 
 #: share/skins/main/bluestar.fxd:12
-#, fuzzy
 msgid "Pictures"
 msgstr "Apod afbeeldingen"
 
@@ -3741,7 +3665,6 @@ msgid "Audio tracks"
 msgstr "Geluidssporen"
 
 #: share/skins/main/basic.fxd:759
-#, fuzzy
 msgid "Audio Rate"
 msgstr "Geluidsmenu"
 
@@ -3759,7 +3682,6 @@ msgid "From"
 msgstr ""
 
 #: share/skins/main/dark.fxd:671
-#, fuzzy
 msgid "New mail"
 msgstr "Mail lezen"
 
@@ -3769,12 +3691,10 @@ msgstr "Speel een spel"
 
 #: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:11
 #: share/skins/main/bluestar.fxd:11 share/skins/main/rain.fxd:11
-#, fuzzy
 msgid "Email"
 msgstr "Klein"
 
 #: share/skins/main/dark.fxd:646
-#, fuzzy
 msgid "Total mails"
 msgstr "Totaal aantal berichten"
 
@@ -3784,7 +3704,6 @@ msgid "Total messages"
 msgstr "Totaal aantal berichten"
 
 #: share/skins/main/dark.fxd:496
-#, fuzzy
 msgid "Just one movie in this playlist."
 msgstr "items in deze afspeellijst"
 
@@ -3795,7 +3714,6 @@ msgid "kb/s"
 msgstr "kb/s"
 
 #: share/skins/main/dark.fxd:565
-#, fuzzy
 msgid "One song in playlist"
 msgstr "geen volgend item in de afspeellijst"
 
@@ -3825,7 +3743,6 @@ msgid "Watch a Movie"
 msgstr "Film kijken"
 
 #: share/skins/main/basic.fxd:747
-#, fuzzy
 msgid "Video Rate"
 msgstr "Video"
 
@@ -3843,7 +3760,6 @@ msgid "Subtitles"
 msgstr "Ondertitels"
 
 #: share/skins/main/dark.fxd:492
-#, fuzzy
 msgid "movies in this playlist."
 msgstr "items in deze afspeellijst"
 
@@ -3864,7 +3780,6 @@ msgid "Items"
 msgstr "Items"
 
 #: share/skins/main/basic.fxd:723
-#, fuzzy
 msgid "File name"
 msgstr "Bestand: %s"
 
@@ -3874,7 +3789,6 @@ msgid "of"
 msgstr "van"
 
 #: share/skins/main/basic.fxd:741
-#, fuzzy
 msgid "Video Codec"
 msgstr "Video"
 
@@ -3893,7 +3807,6 @@ msgid "This playlist is empty!"
 msgstr "Deze afspeellijst is leeg!"
 
 #: share/skins/main/dark.fxd:628
-#, fuzzy
 msgid "This slideshow is empty!"
 msgstr "Deze afspeellijst is leeg!"
 
@@ -3902,7 +3815,6 @@ msgid "min."
 msgstr "min."
 
 #: share/skins/main/dark.fxd:618
-#, fuzzy
 msgid "pictures in this slideshow."
 msgstr "items in deze afspeellijst"
 
@@ -3920,12 +3832,10 @@ msgid "Watch TV"
 msgstr "TV kijken"
 
 #: share/skins/main/mediaportal.fxd:440
-#, fuzzy
 msgid "Read Headlines"
 msgstr "Koppen"
 
 #: share/skins/main/dark.fxd:569
-#, fuzzy
 msgid "No songs in playlist"
 msgstr "geen volgend item in de afspeellijst"
 
@@ -3949,7 +3859,6 @@ msgid "TV"
 msgstr "TV"
 
 #: share/skins/main/dark.fxd:561
-#, fuzzy
 msgid "songs in playlist"
 msgstr "geen volgend item in de afspeellijst"
 
@@ -3959,39 +3868,32 @@ msgid "Weather Forecast"
 msgstr "Vooruitzichten"
 
 #: share/skins/main/dark.fxd:722
-#, fuzzy
 msgid "Now playing"
 msgstr "Toon de mediaspeler"
 
 #: share/skins/main/basic.fxd:753
-#, fuzzy
 msgid "Audio Codec"
 msgstr "Geluidsmenu"
 
 #: share/skins/main/dark.fxd:653 share/skins/main/dark.fxd:674
-#, fuzzy
 msgid "Subject"
 msgstr "Geen onderwerp"
 
-#, fuzzy
 #~ msgid "Delete %s?"
 #~ msgstr "Bestand wissen: %s"
 
-#, fuzzy
 #~ msgid "Error, unable to delete file %s"
 #~ msgstr "niet mogelijk om de html bestanden te laden"
 
 #~ msgid "Favorite not added yet."
 #~ msgstr "De favoriet is nog niet toegevoegd."
 
-#, fuzzy
 #~ msgid "No Xm Radio Stations found"
 #~ msgstr "Geen radiostation gevonden"
 
 #~ msgid "Chapter"
 #~ msgstr "Hoofdstuk"
 
-#, fuzzy
 #~ msgid " free of %s GB total (%s%% free)"
 #~ msgstr "%i van de in totaal %i Mb"
 
