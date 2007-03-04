@@ -49,6 +49,12 @@ Thomas Malt <thomas@malt.no>
 o Mplayer for Audio support
 o Ogg Vorbis Tag and Playback support
 
+TC Wan <tcwan@cs.usm.my>
+o FC rpm Maintainer
+
+Evan Hisey <ehisey@gmail.com>
+o Slackware Maintainer
+
 John Molohan <john.molohan@gcd.ie>
 o Web Site Maintainer
 
@@ -69,6 +75,7 @@ o Album tree audio plug-in
 Adam Charrett <ajmcharrett@hotmail.com>
 o Buttonbar plug-in
 o Screensaver plug-in
+o TV Recording Manager plug-in
 
 Andrew Flegg <andrew@bleb.org>
 o Skin additions, anamorphic and past programmes

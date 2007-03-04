@@ -8,9 +8,6 @@
 # Todo:        
 #
 # -----------------------------------------------------------------------
-# $Log$
-#
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al. 
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -29,7 +26,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# ----------------------------------------------------------------------- */
+# -----------------------------------------------------------------------
 
 
 import os
@@ -386,6 +383,7 @@ class RecordedProgramItem(Item):
 # ======================================================================
 # Series Menu Class
 # ======================================================================
+
 class Series(Item):
     """
     Class representing a set of programs with the same name, but (probably) 
@@ -400,7 +398,8 @@ class Series(Item):
         self.programs = programs
         self.items = []
         for program in self.programs:
-            self.items.append(RecordedProgramItem(program['tagline'], program))
+            tagline = self._gettagline(program)
+            self.items.append(RecordedProgramItem(tagline, program))
         # TODO: Replace with smart sort that knows about 'n/m <subtitle>' style names
         self.items.sort(lambda l, o: cmp(l.sort().upper(), o.sort().upper()))
         self.set_icon()
@@ -497,6 +496,24 @@ class Series(Item):
             self.icon = config.ICON_DIR + '/status/series_unwatched.png'
 
 
+    def _gettagline(self, program):
+        episode_name = program['tagline']
+        if not episode_name:
+            episode_name = program['subtitle']
+            program['tagline'] = episode_name
+            if not episode_name:
+                try:
+                    pat = re.compile(config.TVRM_EPISODE_FROM_PLOT)
+                    episode_name = pat.match(program['plot']).group(1)
+                    program['tagline'] = episode_name.strip()
+                except Exception, e:
+                    print program['name'], e
+                if not episode_name:
+                    episode_name = _('(Unnamed)')
+                    program['tagline'] = episode_name
+        return program['tagline']
+
+
     def __getitem__(self, key):
         """
         Returns the number of episodes when
@@ -506,21 +523,7 @@ class Series(Item):
         if key == 'content':
             content = ''
             for i in range(0, len(self.programs)):
-                episode_name = self.programs[i]['tagline']
-                if not episode_name:
-                    episode_name = self.programs[i]['subtitle']
-                    self.programs[i]['tagline'] = episode_name
-                    if not episode_name:
-                        try:
-                            pat = re.compile(config.TVRM_EPISODE_FROM_PLOT)
-                            episode_name = pat.match(self.programs[i]['plot']).group(1)
-                            self.programs[i]['tagline'] = episode_name.strip()
-                        except Exception, e:
-                            print self.programs[i]['name'], e
-                        if not episode_name:
-                            episode_name = _('(Unnamed)')
-                            self.programs[i]['tagline'] = episode_name
-                content += episode_name
+                content += self._gettagline(self.programs[i])
                 if i < (len(self.programs) - 1):
                     content += ', '
             return content
