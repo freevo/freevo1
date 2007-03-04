@@ -728,6 +728,9 @@ plugin_record = plugin.activate('tv.generic_record')
 # TV menu plugin to view scheduled recordings
 plugin.activate('tv.scheduled_recordings')
 
+# TV menu plugin to view recordings
+plugin.activate('tv.view_recordings')
+
 # TV menu plugin to view and edit favorites
 plugin.activate('tv.view_favorites')
 

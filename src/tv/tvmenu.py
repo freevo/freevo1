@@ -101,17 +101,11 @@ class TVMenu(Item):
         if config.TV_CHANNELS:
             items.append(menu.MenuItem(_('TV Guide'), action=self.start_tvguide))
 
-        items.append(DirItem(config.TV_RECORD_DIR, None, name = _('Recorded Shows'),
-                             display_type='tv'))
-
-        # XXX: these are becomming plugins
-        # items.append(menu.MenuItem(_('Search Guide'), action=self.show_search))
-
         plugins_list = plugin.get('mainmenu_tv')
         for p in plugins_list:
             items += p.items(self)
 
-        menuw.pushmenu(menu.Menu(_('TV Main Menu'), items, item_types = 'tv main menu'))
+        menuw.pushmenu(menu.Menu(_('TV Main Menu'), items, item_types='tv main menu'))
 
 
     def show_search(self, arg, menuw):
