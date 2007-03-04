@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# helpers/fxdimdb.py - class and helpers for fxd/imdb generation
+# fxdimdb.py - class and helpers for fxd/imdb generation
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -322,7 +322,8 @@ class FxdImdb:
 
         content = file.read()
         file.close()
-        if content.find('</disc-set>') != -1: return 1
+        if content.find('</disc-set>') != -1:
+            return 1
         return 0
 
 
@@ -345,7 +346,16 @@ class FxdImdb:
 
         if label:
             for r in config.IMDB_REMOVE_FROM_LABEL:
-                name  = re.sub(r, '', name)
+                try:
+                    name = re.sub(r, '', name)
+                except Exception, e:
+                    print e
+        else:
+            for r in config.IMDB_REMOVE_FROM_NAME:
+                try:
+                    name = re.sub(r, '', name)
+                except Exception, e:
+                    print e
 
         parts = re.split('[\._ -]', name)
         name = ''
@@ -359,6 +369,17 @@ class FxdImdb:
 
 
 #------ private functions below .....
+
+    def convert_entities(self, contents):
+        s = contents.strip()
+        s = s.replace('\n',' ')
+        s = s.replace('  ',' ')
+        s = s.replace('<','&lt;')
+        s = s.replace('>','&gt;')
+        s = s.replace('"','&quot;')
+        s = s.replace('&','&amp;')
+        s = s.replace('&amp;#','&#')
+        return s
 
     def write_discset(self):
         """Write a <disc-set> to a fresh file"""
@@ -375,7 +396,7 @@ class FxdImdb:
                 "    The information in this file are from the Internet " +
                 "Movie Database (IMDb).\n" +
                 "    Please visit http://www.imdb.com for more informations.\n")
-        i.write("    <source url=\"http://www.imdb.com/tt%s\"/>\n"  % self.imdb_id +
+        i.write("    <source url=\"http://www.imdb.com/title/tt%s\"/>\n"  % self.imdb_id +
                 "  </copyright>\n")
         #disc-set
         i.write("  <disc-set title=\"%s\">\n" % self.str2XML(self.title))
@@ -427,7 +448,7 @@ class FxdImdb:
                 "    The information in this file are from the Internet " +
                 "Movie Database (IMDb).\n" +
                 "    Please visit http://www.imdb.com for more informations.\n")
-        i.write("    <source url=\"http://www.imdb.com/Title?%s\"/>\n"  % self.imdb_id +
+        i.write("    <source url=\"http://www.imdb.com/title/tt%s\"/>\n"  % self.imdb_id +
                 "  </copyright>\n")
         # write movie
         i.write("  <movie title=\"%s\">\n" % self.str2XML(self.title))
@@ -673,14 +694,7 @@ class FxdImdb:
 
         # Replace special characters in the items
         for (k,v) in self.info.items():
-            s = v.strip()
-            s = s.replace('\n',' ')
-            s = s.replace('  ',' ')
-            s = s.replace('&','&amp;')
-            s = s.replace('<','&lt;')
-            s = s.replace('>','&gt;')
-            s = s.replace('"','&quot;')
-            self.info[k] = s
+            self.info[k] = self.convert_entities(v)
 
         if config.DEBUG:
             for (k,v) in self.info.items():
@@ -844,16 +858,21 @@ class FxdImdb:
         """return a valid XML string"""
         try:
             s = Unicode(line)
-            while s[-1] == u' ':
-                s = s[:-1]
-            if s[:4] == u'&#34':
+            # remove leading and trailing spaces
+            s = s.strip()
+            # remove leading and trailing quotes
+            s = s.strip('\'"')
+            if s[:5] == u'&#34;':
                 s = s[5:]
-            if s[-4:] == u'#34;':
+            if s[-5:] == u'&#34;':
                 s = s[:-5]
+            if s[:6] == u'&quot;':
+                s = s[6:]
+            if s[-6:] == u'&quot;':
+                s = s[:-6]
             # replace all & to &amp; ...
             s = s.replace(u"&", u"&amp;")
-
-            # ... but this may be wrong for &#
+            # ... but this is wrong for &#
             s = s.replace(u"&amp;#", u"&#")
             return s
         except:
