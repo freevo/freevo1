@@ -545,10 +545,10 @@ def __schedule_wakeup_and_shutdown():
             cmd = "%s %s --settime %d" % (config.AUTOSHUTDOWN_WAKEUP_CMD, \
                 config.AUTOSHUTDOWN_NVRAM_OPT, int(wakeup_utc_s))
             ec = __syscall(cmd)
-            if ec < 0 and ec > 1:
+            if  ec != 256 and ec != 0 :
                 _debug_("Wakeup-command command '%s' failed!" % cmd,0)
                 raise ExInternalError
-            elif ec == 1 or config.AUTOSHUTDOWN_BIOS_NEEDS_REBOOT:
+            elif ec == 256 or config.AUTOSHUTDOWN_BIOS_NEEDS_REBOOT:
                 # needs a reboot
                 if config.AUTOSHUTDOWN_BOOT_LOADER.upper() == "GRUB":
                     if config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD:
@@ -722,7 +722,7 @@ def __check_processes():
         searchstring = delimiter.join(config.AUTOSHUTDOWN_PROCESS_LIST)
         cmd = 'ps -eo cmd | egrep -v "grep" | egrep "(/|[[:space:]]|^)(%s)($|[[:space:]])"' % searchstring
         result = __syscall(cmd)
-        if (result == 0):
+        if result == 0:
             _debug_('external process(es) running')
             return True
         else:
