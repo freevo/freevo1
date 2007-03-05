@@ -34,7 +34,7 @@
 import time
 import os
 import random 
-import thread
+import threading
 import traceback
 import pygame
 
@@ -120,11 +120,13 @@ class PluginInterface(plugin.DaemonPlugin):
         skin.clear()
         # Start Screensaver thread
         self.stop_screensaver = False
-        thread.start_new_thread(self.__run__,())
+        self.thread = threading.Thread(target =self.__run__)
+        self.thread.start()
 
     def stop_saver (self):
         _debug_("stop screensaver")
         self.stop_screensaver = True
+        self.thread.join()
 
     def __run__(self):
         _debug_('Screensaver thread started')
