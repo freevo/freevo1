@@ -146,8 +146,7 @@ class TVGuide(Item):
         numerical INPUTs: Jump to a specific channel number
         """
 
-
-        _debug_('TVGUIDE EVENT is %s' % event, 0)
+        _debug_('TVGUIDE EVENT is %s' % event)
 
         ## MENU_CHANGE_STYLE
         if event == MENU_CHANGE_STYLE:
