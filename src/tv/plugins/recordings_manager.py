@@ -77,6 +77,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('TVRM_MINIMUM_DISK_FREE', 2048, 'Minimum amount of disk space that must be available at all times in MB'),
             ('TVRM_CONSIDER_UNWATCHED_AFTER', 45, 'Number of days after which to consider deleting unwatched shows if space is required'),
             ('TVRM_EPISODE_FROM_PLOT', None, 'Regular expression to extract the episode name from the plot'),
+            ('TVRM_EPISODE_TIME_FORMAT', '%c', 'When the episode name cannot be found use timestamp'),
         ]
 
     
@@ -398,7 +399,7 @@ class Series(Item):
         self.programs = programs
         self.items = []
         for program in self.programs:
-            tagline = self._gettagline(program)
+            tagline = self._get_episode_name(program)
             self.items.append(RecordedProgramItem(tagline, program))
         # TODO: Replace with smart sort that knows about 'n/m <subtitle>' style names
         self.items.sort(lambda l, o: cmp(l.sort().upper(), o.sort().upper()))
@@ -496,21 +497,32 @@ class Series(Item):
             self.icon = config.ICON_DIR + '/status/series_unwatched.png'
 
 
-    def _gettagline(self, program):
+    def _get_episode_name(self, program):
         episode_name = program['tagline']
         if not episode_name:
             episode_name = program['subtitle']
-            program['tagline'] = episode_name
-            if not episode_name:
-                try:
-                    pat = re.compile(config.TVRM_EPISODE_FROM_PLOT)
-                    episode_name = pat.match(program['plot']).group(1)
-                    program['tagline'] = episode_name.strip()
-                except Exception, e:
-                    print program['name'], e
-                if not episode_name:
-                    episode_name = _('(Unnamed)')
-                    program['tagline'] = episode_name
+        if not episode_name:
+            try:
+                pat = re.compile(config.TVRM_EPISODE_FROM_PLOT)
+                episode = pat.match(program['plot']).group(1)
+                episode_name = episode.strip()
+            except Exception, e:
+                episode_name = None
+        if not episode_name:
+            try:
+                episode = datetime.datetime.fromtimestamp(float(program['recording_timestamp']))
+                episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
+            except Exception, e:
+                episode_name = None
+        if not episode_name:
+            try:
+                episode = datetime.datetime.fromtimestamp(os.path.getctime(program['filename']))
+                episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
+            except Exception, e:
+                episode_name = None
+        if not episode_name:
+            episode_name = _('(Unnamed)')
+        program['tagline'] = episode_name
         return program['tagline']
 
 
@@ -523,7 +535,7 @@ class Series(Item):
         if key == 'content':
             content = ''
             for i in range(0, len(self.programs)):
-                content += self._gettagline(self.programs[i])
+                content += self._get_episode_name(self.programs[i])
                 if i < (len(self.programs) - 1):
                     content += ', '
             return content
@@ -627,9 +639,12 @@ def copy_and_replace_menu_item(menuw, item):
     cloned_item = copy.copy(item)
     menu = menuw.menustack[-1]
     # rebuild menu
-    menu.choices[menu.choices.index(item)] = cloned_item
-    if menu.selected is item:
-        menu.selected = cloned_item
+    try:
+        menu.choices[menu.choices.index(item)] = cloned_item
+        if menu.selected is item:
+            menu.selected = cloned_item
+    except ValueError, e:
+        print e
 
     menuw.init_page()
     menuw.refresh()
