@@ -113,9 +113,6 @@ class MPlayer:
         self.item_length  = -1
         self.item.elapsed = 0        
 
-        VODEV=config.MPLAYER_VO_DEV
-        VODEVOPTS=config.MPLAYER_VO_DEV_OPTS
-
         if mode == 'file':
             url = item.url[6:]
             self.item_info = mmpython.parse(url)
@@ -145,9 +142,10 @@ class MPlayer:
        
 
         # Build the MPlayer command
-        command = [ '--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD ] + \
-                  config.MPLAYER_ARGS_DEF.split(' ') + \
-                  [ '-slave', '-ao'] + config.MPLAYER_AO_DEV.split(' ')
+        command = [ '--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD ]
+        command += [ '-slave', '-v', ]
+        command += config.MPLAYER_ARGS_DEF.split(' ')
+        command += [ '-ao'] + config.MPLAYER_AO_DEV.split(' ')
 
         additional_args = []
 
@@ -215,8 +213,7 @@ class MPlayer:
             mode = 'default'
 
         # Mplayer command and standard arguments
-        command += [ '-v', '-vo', VODEV]
-        command += VODEVOPTS.split(' ')
+        command += [ '-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS ]
 
         # mode specific args
         command += config.MPLAYER_ARGS[mode].split(' ')
@@ -292,6 +289,8 @@ class MPlayer:
             command = p.play(command, self)
 
         command=self.sort_filter(command)
+
+        #_debug_(' '.join(command))
 
         if plugin.getbyname('MIXER'):
             plugin.getbyname('MIXER').reset()
