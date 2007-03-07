@@ -50,7 +50,7 @@ import fxditem
 from item import Item, FileInformation
 from playlist import Playlist
 from event import *
-from gui import InputBox, AlertBox, ProgressBox
+from gui import ConfirmBox, AlertBox, ProgressBox
 from menu import MenuItem, Menu
 from video import VideoItem
 
@@ -416,7 +416,7 @@ class Series(Item):
         return the default action
         """
         return [ ( self.browse, _('Browse episodes')),
-                  ( self.delete_all, _('Delete all episodes')),
+                  ( self.confirm_delete, _('Delete all episodes')),
                   ( self.mark_all_to_keep, _('Keep all episodes')),
                   ( self.play_all, _('Play all episodes') )]
 
@@ -636,15 +636,17 @@ class DiskManager(plugin.DaemonPlugin):
 # Helper functions
 # ======================================================================
 def copy_and_replace_menu_item(menuw, item):
-    cloned_item = copy.copy(item)
     menu = menuw.menustack[-1]
     # rebuild menu
     try:
-        menu.choices[menu.choices.index(item)] = cloned_item
+        idx = menu.choices.index(item)
+        cloned_item = copy.copy(item)
+        menu.choices[idx] = cloned_item
         if menu.selected is item:
             menu.selected = cloned_item
+        menuw.init_page()
+        menuw.refresh()
     except ValueError, e:
-        print e
+        menuw.delete_submenu(True, True)
 
-    menuw.init_page()
-    menuw.refresh()
+
