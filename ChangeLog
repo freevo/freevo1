@@ -17,7 +17,13 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * Added Anamorphic widescreen "Panorama" skin (F#1669994)
+ * Added TV recording manager (F#1672003)
+ * Updated and fixed German translations (B#1672040)
+ * Updated rss feed for better url detection (B#1675373)
+ * Fixed autoshutdown processing of return coded (B#1612257)
  * Fixed IMDB download, adds more data to fxd files (B#1670296)
+ * Fixed screensaver intermittent deadlock problem (B#1674028)
+ * Fixed tvguide showing too much debug information (B#1674014)
 
 == Release 1.7.0 (2007-02-25) ==
 --------------------------------

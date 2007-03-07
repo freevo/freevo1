@@ -55,6 +55,7 @@ class Feed:
         titlePattern = re.compile('<title>.*?</title>',re.DOTALL)
         descriptionPattern = re.compile('<description>.*?</description>',re.DOTALL)
         urlPattern = re.compile('<enclosure[^>]*?url=".*?/>',re.DOTALL)
+        httpPattern = re.compile('http',re.DOTALL)
         btPattern = re.compile('<link>.*?</link>',re.DOTALL)
         datePattern = re.compile('<pubDate>.*?</pubDate>',re.DOTALL)
 
@@ -66,7 +67,10 @@ class Feed:
             return re.sub('<\S+?>', '', string)
         def removeUrlTag(string):
             string = removeExcessSpaces(string)
-            return re.split('"',string)[1]
+            array = re.split('"',string)
+            for part in array:
+                if httpPattern.search(part):
+                   return part
         def removeDesTag(string):
             string = re.sub('<img src=.*?>','',string) 
             string = re.sub('&lt.*?&gt;','',string)
