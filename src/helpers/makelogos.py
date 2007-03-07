@@ -57,11 +57,15 @@ for i in x:
     channel = i['id']
     #print '%s - %s' % (imgsrc, channel)
     if imgsrc:
-        img = Image.open_from_memory(urllib2.urlopen(str(imgsrc)).read())
-        # Convert the image into a PNG and save to logos directory
-        output_file = config.TV_LOGOS + '/' + channel + '.png'
         try:
-            img.save(output_file)
-        except IOError, e:
-            print e
+            img = Image.open_from_memory(urllib2.urlopen(str(imgsrc)).read())
+            # Convert the image into a PNG and save to logos directory
+            output_file = config.TV_LOGOS + '/' + channel + '.png'
+            try:
+                img.save(output_file)
+                print 'Saved "%s" for channel "%s"' % (output_file, channel)
+            except IOError, e:
+                print e
+        except Exception, e:
+            print 'Failed to get "%s" for channel "%s"\nerror "%s"' % (imgsrc, channel, e)
 
