@@ -42,6 +42,7 @@ import rc
 import menu
 import configure
 import plugin
+import kaa.metadata as metadata
 
 from gui   import PopupBox, AlertBox, ConfirmBox
 from item  import Item, FileInformation
@@ -58,6 +59,10 @@ class VideoItem(Item):
 
         if info:
             self.info.set_variables(info)
+        # FIXME This is not the correct place to do this, should be done in mediainfo
+        if hasattr(self.info, 'filename') and self.info.filename:
+            self.info = metadata.parse(self.info.filename)
+
 
         self.variants          = []         # if this item has variants
         self.subitems          = []         # more than one file/track to play

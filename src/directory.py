@@ -606,14 +606,15 @@ class DirItem(Playlist):
 
         pop = None
         callback=None
-        if (num_changes > 10) or (num_changes and self.media):
-            if self.media:
-                pop = ProgressBox(text=_('Scanning disc, be patient...'), full=num_changes)
-            else:
-                pop = ProgressBox(text=_('Scanning directory, be patient...'),
-                                  full=num_changes)
-            pop.show()
-            callback=pop.tick
+        if skin.active():
+            if (num_changes > 10) or (num_changes and self.media):
+                if self.media:
+                    pop = ProgressBox(text=_('Scanning disc, be patient...'), full=num_changes)
+                else:
+                    pop = ProgressBox(text=_('Scanning directory, be patient...'),
+                                      full=num_changes)
+                pop.show()
+                callback=pop.tick
 
 
         elif config.OSD_BUSYICON_TIMER and len(files) > config.OSD_BUSYICON_TIMER[1]:

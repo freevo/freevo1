@@ -298,7 +298,8 @@ class MMCache(Cache):
         """
         create mmpython information about the given file
         """
-        info = mmpython.Factory().create(filename)
+        #info = mmpython.Factory().create(filename)
+        info = mmpython.parse(filename)
         if info:
             thumbnail = None
             if info.has_key('thumbnail'):
@@ -405,11 +406,11 @@ class Info:
         self.disc      = False
         self.variables = {}
         if mmdata:
-            self.mmdata    = mmdata
+            self.mmdata = mmdata
         else:
-            self.mmdata    = {}
+            self.mmdata = {}
         if metadata:
-            self.metadata  = metadata
+            self.metadata = metadata
         else:
             self.metadata = {}
         self.dicts = ( self.mmdata, self.variables, self.metadata )

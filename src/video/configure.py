@@ -45,8 +45,6 @@ def play_movie(arg=None, menuw=None):
     menuw.delete_menu()
     arg[0].play(menuw=menuw, arg=arg[1])
 
-
-
 #
 # Audio menu and selection
 #
@@ -60,8 +58,9 @@ def audio_selection_menu(arg=None, menuw=None):
     menu_items = []
 
     for a in item.info['audio']:
-        if not a.has_key('id') or a['id'] in ('', None):
-            a['id'] = item.info['audio'].index(a) + 1
+        print a.__dict__
+        #if not a.has_key('id') or a['id'] in ('', None):
+        #    a['id'] = item.info['audio'].index(a) + 1
         
         if a.has_key('languagedesc') and a['languagedesc']:
             a['language'] = a['languagedesc']
@@ -74,7 +73,7 @@ def audio_selection_menu(arg=None, menuw=None):
         if not a.has_key('codec') or not a['codec']:
             a['codec'] = '???'
 
-        txt = '%s (channels=%s:%s)' % (a['language'], a['channels'], a['codec'])
+        txt = '%(language)s (channels=%(channels)s:%(codec)s)' % a
         menu_items.append(menu.MenuItem(txt, audio_selection, (item, a['id'])))
 
     moviemenu = menu.Menu(_('Audio Menu'), menu_items, fxd_file=item.skin_fxd)
@@ -90,29 +89,24 @@ def subtitle_selection(arg=None, menuw=None):
     menuw.back_one_menu()
 
 def subtitle_selection_menu(arg=None, menuw=None):
-    item       = arg
+    item = arg
 
     menu_items = [ menu.MenuItem(_('no subtitles'), subtitle_selection, (item, -1)) ]
-    try:
-        for s in item.info['subtitles']:
-            if s.has_key('languagedesc') and s['languagedesc']:
-                s['language'] = s['languagedesc']
-            elif not s.has_key('language') or not s['language']:
-                s['language'] = _('Stream %s') % s['id']
+    for s in item.info['subtitles']:
+        if s.has_key('languagedesc') and s['languagedesc']:
+            s['language'] = s['languagedesc']
+        elif not s.has_key('language') or not s['language']:
+            s['language'] = _('Stream %s') % s['id']
 
-            if not s.has_key('content') or not s['content']:
-                s['content'] = ''
-            if s['content'] == 'Undefined':
-                s['content'] = ''
-            if s['content'] != '':
-                s['content'] = format(' (%s)' % s['content'])
+        if not s.has_key('content') or not s['content']:
+            s['content'] = ''
+        if s['content'] == 'Undefined':
+            s['content'] = ''
+        if s['content'] != '':
+            s['content'] = format(' (%s)' % s['content'])
 
-            txt = '%s%s' % (s['language'], s['content'])
-            menu_items.append(menu.MenuItem(txt, subtitle_selection, (item, s['number'])))
-    except AttributeError:
-        for s in range(len(item.info['subtitles'])):
-            menu_items.append(menu.MenuItem(item.info['subtitles'][s],
-                                            subtitle_selection, (item, s)))
+        txt = '%(language)s%(content)s' % s
+        menu_items.append(menu.MenuItem(txt, subtitle_selection, (item, s['id'])))
 
     moviemenu = menu.Menu(_('Subtitle Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
