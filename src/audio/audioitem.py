@@ -186,24 +186,40 @@ class AudioItem(Item):
         # strip it out first, when we see the only thing that can be
         # a number.
 
+        if self.parent and hasattr(self.parent, 'DIRECTORY_USE_MEDIAID_TAG_NAMES') and \
+            self.parent.DIRECTORY_USE_MEDIAID_TAG_NAMES:
 
-        # Before we begin, make sure track is an integer
-    
-        if self['trackno']:
-            try:
-                mytrack = ('%0.2d' % int(self['trackno']))
-            except ValueError:
+            # Before we begin, make sure track is an integer
+            if self['trackno']:
+                try:
+                    mytrack = ('%0.2d' % int(self['trackno']))
+                except ValueError:
+                    mytrack = '  '
+            else:
                 mytrack = '  '
-        else:
-            mytrack = '  '
 
-        song_info = {  'a'  : self['artist'],
-                       'l'  : self['album'],
-                       'n'  : mytrack,
-                       't'  : self['title'],
-                       'y'  : self['year'],
-                       'f'  : self['name'] }
+            song_info = {  'a'  : self['artist'],
+                           'l'  : self['album'],
+                           'n'  : mytrack,
+                           't'  : self['title'],
+                           'y'  : self['year'],
+                           'f'  : self['name'] }
 
-        if self.parent and hasattr(self.parent, 'AUDIO_FORMAT_STRING'):
-            return self.parent.DIRECTORY_AUDIO_FORMAT_STRING % song_info
-        return config.DIRECTORY_AUDIO_FORMAT_STRING % song_info
+            if hasattr(self.parent, 'AUDIO_FORMAT_STRING'):
+                formatstring = self.parent.DIRECTORY_AUDIO_FORMAT_STRING
+            else:
+                formatstring = config.DIRECTORY_AUDIO_FORMAT_STRING
+
+            formatted_info = formatstring % song_info
+
+            # check if the song info was not empty
+            if formatted_info != (formatstring % { 'a' : '', 'l' : '', 'n' : '  ', 't' : '', 'y' : '', 'f' : '' }):
+                return formatted_info
+
+        # fallback to current song name
+        if self.name:
+            return self.name
+
+        # last fallback: return filename
+        return os.path.split(self.filename)[1]
+
