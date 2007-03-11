@@ -1,0 +1,16 @@
+#!/bin/bash
+last=9238
+
+LAST=${1:-${last}}
+cd /sources/svn/freevo-1.x/freevo
+echo "last change is: ${LAST}"
+svn merge -r${LAST}:HEAD /sources/svn/freevo-1.6/ . --dry-run
+echo "press enter to do it"
+read ENTER
+svn merge -r${LAST}:HEAD /sources/svn/freevo-1.6/ .
+
+#svn export -r8215 svn://svn.freevo.org/freevo/branches/rel-1/freevo/src/video/plugins/xine.py x.py
+#svn log --verbose --stop-on-copy /sources/svn/freevo-1.6/src/www/htdocs/library.rpy
+#svn merge -r8389:HEAD /sources/svn/freevo-1.6/src/www/htdocs/library.rpy src/www/htdocs/library.rpy
+#svn merge -r8389:8390 svn://svn.freevo.org/freevo/branches/rel-1-6/freevo/src/www/htdocs/library.rpy src/www/htdocs/library.rpy
+#svn propedit --revprop -r 9323 svn:log src/audio/audioitem.py
