@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-25 09:01+0100\n"
+"POT-Creation-Date: 2007-03-11 19:44+0100\n"
 "PO-Revision-Date: 2006-07-21 23:28+0400\n"
 "Last-Translator: Serge Sireskin <sire@mail.ru>\n"
 "Language-Team: Русский <ru@li.org>\n"
@@ -16,35 +16,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10.2\n"
 
-#: ../freevo_config.py:1054 ../freevo_config.py:1059
+#: ../freevo_config.py:1059 ../freevo_config.py:1064
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Название"
 
-#: ../freevo_config.py:1055 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1060 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Описание"
 
-#: ../freevo_config.py:1056
+#: ../freevo_config.py:1061
 msgid "Author"
 msgstr "Автор"
 
-#: ../freevo_config.py:1060 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1065 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
-#: share/skins/main/rain.fxd:267 share/skins/main/info.fxd:332
+#: share/skins/main/rain.fxd:275 share/skins/main/info.fxd:332
 msgid "Date"
 msgstr "Дата"
 
-#: ../freevo_config.py:1063
+#: ../freevo_config.py:1068
 msgid "Model"
 msgstr "Модель"
 
-#: ../freevo_config.py:1064
+#: ../freevo_config.py:1069
 msgid "Software"
 msgstr "ПО"
 
@@ -62,31 +62,6 @@ msgstr "%iМб"
 #, python-format
 msgid "%s%%"
 msgstr ""
-
-#: plugins/home_automation.py:59
-msgid "Room Items"
-msgstr "Объект(ов)"
-
-#: plugins/home_automation.py:69
-msgid "Home Automation Devices"
-msgstr ""
-
-#: plugins/home_automation.py:84 plugins/home_automation.py:100
-msgid "Device Options"
-msgstr "Описание"
-
-#: plugins/home_automation.py:115 plugins/command.py:216
-msgid "Run Command"
-msgstr "Выполнить команду"
-
-#: plugins/home_automation.py:129 plugins/home_automation.py:136
-#: plugins/home_automation.py:148
-msgid "Home Automation"
-msgstr ""
-
-#: plugins/home_automation.py:147
-msgid "No Home Automation items found"
-msgstr "Сайты новостей не найдены"
 
 #: plugins/df.py:66
 #, python-format
@@ -721,17 +696,19 @@ msgid "Delete image"
 msgstr ""
 
 #: plugins/file_ops.py:71 www/htdocs/library.rpy:539
+#: tv/plugins/recordings_manager.py:267
 msgid "Delete"
 msgstr "Удалить"
 
-#: plugins/file_ops.py:77
+#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:289
 #, python-format
 msgid ""
 "Do you wish to delete\n"
 " '%s'?"
 msgstr "Вы хотите удалить<br> \"'%s\"?"
 
-#: plugins/file_ops.py:79
+#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:291
+#: tv/plugins/recordings_manager.py:451
 msgid "Deleting..."
 msgstr "Удаление..."
 
@@ -789,8 +766,8 @@ msgid "Delete Cart"
 msgstr ""
 
 #: plugins/lcd.py:48 plugins/lcd.py:900 plugins/lcd.py:911 plugins/lcd.py:922
-#: plugins/freevused.py:140 plugins/vfd.py:52 plugins/vfd.py:518
-#: plugins/vfd.py:526 plugins/vfd.py:728 plugins/vfd.py:741 plugins/vfd.py:752
+#: plugins/vfd.py:52 plugins/vfd.py:518 plugins/vfd.py:526 plugins/vfd.py:728
+#: plugins/vfd.py:741 plugins/vfd.py:752 plugins/freevused.py:140
 #: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
 #: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
 #: www/htdocs/record.rpy:84 www/htdocs/edit_favorite.rpy:55
@@ -810,26 +787,25 @@ msgstr "ОШИБКА"
 msgid "You need pylcd to run \"lcd\" plugin."
 msgstr ""
 
-#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/freevused.py:532
-#: plugins/freevused.py:548 plugins/vfd.py:93 plugins/vfd.py:101
-#: share/skins/main/basic.fxd:416 share/skins/main/mediaportal.fxd:716
-#: share/skins/main/dark.fxd:537 share/skins/main/dark.fxd:774
+#: plugins/lcd.py:67 plugins/lcd.py:75 plugins/vfd.py:93 plugins/vfd.py:101
+#: plugins/freevused.py:532 plugins/freevused.py:548
+#: share/skins/main/mediaportal.fxd:716 share/skins/main/dark.fxd:537
+#: share/skins/main/dark.fxd:774 share/skins/main/basic.fxd:416
 #: share/skins/main/blurr.fxd:724 share/skins/main/info.fxd:219
 msgid "Length"
 msgstr "Длительность"
 
-#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183
-#: plugins/freevused.py:515 plugins/vfd.py:94 plugins/vfd.py:98
-#: share/skins/main/dark.fxd:521 share/skins/main/dark.fxd:734
-#: share/skins/main/info.fxd:202 share/skins/main/info.fxd:357
-#: share/skins/main/info.fxd:397
+#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183 plugins/vfd.py:94
+#: plugins/vfd.py:98 plugins/freevused.py:515 share/skins/main/dark.fxd:521
+#: share/skins/main/dark.fxd:734 share/skins/main/info.fxd:202
+#: share/skins/main/info.fxd:357 share/skins/main/info.fxd:397
 msgid "Artist"
 msgstr "Исполнитель"
 
-#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180
-#: plugins/freevused.py:512 plugins/vfd.py:95 plugins/vfd.py:99
-#: share/skins/main/basic.fxd:374 share/skins/main/mediaportal.fxd:674
-#: share/skins/main/dark.fxd:527 share/skins/main/dark.fxd:739
+#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180 plugins/vfd.py:95
+#: plugins/vfd.py:99 plugins/freevused.py:512
+#: share/skins/main/mediaportal.fxd:674 share/skins/main/dark.fxd:527
+#: share/skins/main/dark.fxd:739 share/skins/main/basic.fxd:374
 #: share/skins/main/blurr.fxd:680 share/skins/main/info.fxd:208
 #: share/skins/main/info.fxd:362
 msgid "Album"
@@ -843,11 +819,12 @@ msgstr "Год"
 
 #: plugins/lcd.py:71 plugins/vfd.py:97 share/skins/main/mediaportal.fxd:331
 #: share/skins/main/blurr.fxd:339 share/skins/main/info.fxd:402
+#: share/skins/main/Panorama.fxd:360
 msgid "Tracks"
 msgstr "Дорожки"
 
-#: plugins/lcd.py:76 plugins/vfd.py:102 share/skins/main/basic.fxd:735
-#: share/skins/main/dark.fxd:477 share/skins/main/info.fxd:288
+#: plugins/lcd.py:76 plugins/vfd.py:102 share/skins/main/dark.fxd:477
+#: share/skins/main/basic.fxd:735 share/skins/main/info.fxd:288
 #: share/skins/main/info.fxd:494
 msgid "Resolution"
 msgstr "Разрешение"
@@ -865,7 +842,7 @@ msgstr ""
 msgid "Plot"
 msgstr ""
 
-#: plugins/lcd.py:82 plugins/freevused.py:540 plugins/vfd.py:108
+#: plugins/lcd.py:82 plugins/vfd.py:108 plugins/freevused.py:540
 #: share/skins/main/dark.fxd:582
 msgid "Geometry"
 msgstr "Геометрия"
@@ -898,8 +875,8 @@ msgid "Information"
 msgstr "Информация"
 
 #: plugins/lcd.py:177 plugins/lcd.py:527 www/htdocs/library.rpy:282
-#: share/skins/main/basic.fxd:22 share/skins/main/dark.fxd:19
-#: share/skins/main/crystal.fxd:10 share/skins/main/bluestar.fxd:10
+#: share/skins/main/dark.fxd:19 share/skins/main/crystal.fxd:10
+#: share/skins/main/bluestar.fxd:10 share/skins/main/basic.fxd:22
 #: share/skins/main/rain.fxd:10
 msgid "Music"
 msgstr "Музыка"
@@ -908,10 +885,10 @@ msgstr "Музыка"
 msgid "Video"
 msgstr "Видео"
 
-#: plugins/lcd.py:221 plugins/freevused.py:518 share/skins/main/basic.fxd:391
+#: plugins/lcd.py:221 plugins/freevused.py:518
 #: share/skins/main/mediaportal.fxd:692 share/skins/main/dark.fxd:453
-#: share/skins/main/dark.fxd:754 share/skins/main/blurr.fxd:708
-#: share/skins/main/info.fxd:465
+#: share/skins/main/dark.fxd:754 share/skins/main/basic.fxd:391
+#: share/skins/main/blurr.fxd:708 share/skins/main/info.fxd:465
 msgid "Genre"
 msgstr "Жанр"
 
@@ -928,9 +905,10 @@ msgstr "Канал"
 msgid "Program"
 msgstr "Программа"
 
-#: plugins/lcd.py:260 www/htdocs/guide.rpy:157 share/skins/main/basic.fxd:633
+#: plugins/lcd.py:260 www/htdocs/guide.rpy:157
 #: share/skins/main/crystal.fxd:273 share/skins/main/bluestar.fxd:293
-#: share/skins/main/noia.fxd:96 share/skins/main/rain.fxd:270
+#: share/skins/main/basic.fxd:633 share/skins/main/noia.fxd:96
+#: share/skins/main/rain.fxd:278
 msgid "Time"
 msgstr "Время"
 
@@ -986,9 +964,9 @@ msgstr ""
 msgid "Image"
 msgstr "Изображение"
 
-#: plugins/mediamenu.py:141 share/skins/main/basic.fxd:24
-#: share/skins/main/dark.fxd:21 share/skins/main/crystal.fxd:14
-#: share/skins/main/bluestar.fxd:14 share/skins/main/rain.fxd:14
+#: plugins/mediamenu.py:141 share/skins/main/dark.fxd:21
+#: share/skins/main/crystal.fxd:14 share/skins/main/bluestar.fxd:14
+#: share/skins/main/basic.fxd:24 share/skins/main/rain.fxd:14
 #: share/skins/main/info.fxd:17
 msgid "Games"
 msgstr "Игры"
@@ -1146,6 +1124,10 @@ msgstr ""
 msgid "Stderr File"
 msgstr ""
 
+#: plugins/command.py:216 plugins/home_automation.py:115
+msgid "Run Command"
+msgstr "Выполнить команду"
+
 #: plugins/command.py:227
 msgid "Running Command..."
 msgstr "Выполнение команды..."
@@ -1163,40 +1145,34 @@ msgstr "Команда выполнена"
 msgid "Commands"
 msgstr "Команды"
 
-#: plugins/freevused.py:140
-msgid ""
-"You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
-"plugin."
+#: plugins/upsoon.py:224 plugins/upsoon.py:242
+msgid "A recording will start in a few minutes"
+msgstr "Сервер записи выключен."
+
+#: plugins/upsoon.py:272
+msgid "TV stopped, a recording is about to start!"
 msgstr ""
 
-#: plugins/freevused.py:291 plugins/freevused.py:294
-msgid "Playing"
-msgstr "Список воспроизведения"
+#: plugins/home_automation.py:59
+msgid "Room Items"
+msgstr "Объект(ов)"
 
-#: plugins/freevused.py:420
-#, python-format
-msgid "BT event %s"
-msgstr "Текст: %s"
-
-#: plugins/freevused.py:509 tv/edit_favorite.py:106
-#: share/skins/main/basic.fxd:385 share/skins/main/basic.fxd:615
-#: share/skins/main/mediaportal.fxd:686 share/skins/main/dark.fxd:749
-#: share/skins/main/blurr.fxd:702 share/skins/main/info.fxd:270
-msgid "Name"
+#: plugins/home_automation.py:69
+msgid "Home Automation Devices"
 msgstr ""
 
-#: plugins/freevused.py:521 share/skins/main/basic.fxd:397
-#: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
-#: share/skins/main/dark.fxd:759 share/skins/main/blurr.fxd:202
-#: share/skins/main/blurr.fxd:309 share/skins/main/blurr.fxd:692
-msgid "Track"
-msgstr "Дорожка"
+#: plugins/home_automation.py:84 plugins/home_automation.py:100
+msgid "Device Options"
+msgstr "Описание"
 
-#: plugins/freevused.py:529 share/skins/main/basic.fxd:407
-#: share/skins/main/mediaportal.fxd:708 share/skins/main/dark.fxd:768
-#: share/skins/main/blurr.fxd:714 share/skins/main/info.fxd:225
-msgid "Bitrate"
-msgstr "Качество звука"
+#: plugins/home_automation.py:129 plugins/home_automation.py:136
+#: plugins/home_automation.py:148
+msgid "Home Automation"
+msgstr ""
+
+#: plugins/home_automation.py:147
+msgid "No Home Automation items found"
+msgstr "Сайты новостей не найдены"
 
 #: plugins/cd_burn.py:153
 msgid "Not Yet implemented :)"
@@ -1205,6 +1181,12 @@ msgstr ""
 #: plugins/cd_burn.py:162
 #, python-format
 msgid "Cannot find %s (%s). "
+msgstr ""
+
+#: plugins/cd_burn.py:163
+msgid ""
+"Please configure the right path in your config file and make sure it has the "
+"right permissions."
 msgstr ""
 
 #: plugins/cd_burn.py:180
@@ -1319,13 +1301,59 @@ msgstr ""
 msgid "Could not find screens for %d lines and %d columns VFD!"
 msgstr ""
 
-#: plugins/upsoon.py:224 plugins/upsoon.py:242
-msgid "A recording will start in a few minutes"
-msgstr "Сервер записи выключен."
+#: plugins/buttonbar.py:101
+msgid "No Information Available"
+msgstr "Нет данных"
 
-#: plugins/upsoon.py:272
-msgid "TV stopped, a recording is about to start!"
+#: plugins/buttonbar.py:160 www/htdocs/guide.rpy:285 www/htdocs/genre.rpy:217
+#: www/htdocs/search.rpy:139 www/htdocs/search.rpy:141
+msgid "Record"
+msgstr "Запись"
+
+#: plugins/buttonbar.py:164
+msgid "Info"
 msgstr ""
+
+#: plugins/buttonbar.py:364
+msgid "More Options"
+msgstr "Описание"
+
+#: plugins/freevused.py:140
+msgid ""
+"You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
+"plugin."
+msgstr ""
+
+#: plugins/freevused.py:291 plugins/freevused.py:294
+msgid "Playing"
+msgstr "Список воспроизведения"
+
+#: plugins/freevused.py:420
+#, python-format
+msgid "BT event %s"
+msgstr "Текст: %s"
+
+#: plugins/freevused.py:509 tv/edit_favorite.py:106
+#: share/skins/main/mediaportal.fxd:686 share/skins/main/dark.fxd:749
+#: share/skins/main/basic.fxd:385 share/skins/main/basic.fxd:615
+#: share/skins/main/blurr.fxd:702 share/skins/main/info.fxd:270
+msgid "Name"
+msgstr ""
+
+#: plugins/freevused.py:521 share/skins/main/mediaportal.fxd:204
+#: share/skins/main/mediaportal.fxd:698 share/skins/main/dark.fxd:759
+#: share/skins/main/basic.fxd:397 share/skins/main/blurr.fxd:202
+#: share/skins/main/blurr.fxd:309 share/skins/main/blurr.fxd:692
+#: share/skins/main/Panorama.fxd:205 share/skins/main/Panorama.fxd:330
+#: share/skins/main/Panorama.fxd:755
+msgid "Track"
+msgstr "Дорожка"
+
+#: plugins/freevused.py:529 share/skins/main/mediaportal.fxd:708
+#: share/skins/main/dark.fxd:768 share/skins/main/basic.fxd:407
+#: share/skins/main/blurr.fxd:714 share/skins/main/info.fxd:225
+msgid "Bitrate"
+msgstr "Качество звука"
 
 #: plugins/mpd.py:99
 msgid "not sure waht to do whit this"
@@ -1355,23 +1383,6 @@ msgstr "Альбом"
 msgid "Status - "
 msgstr ""
 
-#: plugins/buttonbar.py:101
-msgid "No Information Available"
-msgstr "Нет данных"
-
-#: plugins/buttonbar.py:160 www/htdocs/guide.rpy:285 www/htdocs/genre.rpy:217
-#: www/htdocs/search.rpy:139 www/htdocs/search.rpy:141
-msgid "Record"
-msgstr "Запись"
-
-#: plugins/buttonbar.py:164
-msgid "Info"
-msgstr ""
-
-#: plugins/buttonbar.py:364
-msgid "More Options"
-msgstr "Описание"
-
 #: plugins/freeboxtv.py:72
 msgid "Freebox TV"
 msgstr ""
@@ -1388,7 +1399,8 @@ msgstr ""
 msgid "View Image"
 msgstr ""
 
-#: image/plugins/gphoto.py:126 directory.py:442
+#: image/plugins/gphoto.py:126 tv/plugins/recordings_manager.py:108
+#: directory.py:442
 msgid "Browse directory"
 msgstr "Просмотр каталога"
 
@@ -1718,12 +1730,6 @@ msgstr "Нет программ в расписании записи."
 msgid "%i of %i Mb free in %s"
 msgstr "%i из %i Мб свободно в %s"
 
-#: www/htdocs/proginfo.rpy:60 www/htdocs/record.rpy:154
-#: www/htdocs/search.rpy:131
-#, python-format
-msgid "Sorry, the program description for %s is unavailable."
-msgstr "Нет описания программы %s."
-
 #: www/htdocs/record.rpy:85 www/htdocs/edit_favorite.rpy:80
 #, python-format
 msgid "No program found on %s at %s."
@@ -1747,6 +1753,12 @@ msgstr "Действия"
 #: www/htdocs/record.rpy:142
 msgid "UNKNOWN"
 msgstr "НЕИЗВЕСТНЫЙ"
+
+#: www/htdocs/record.rpy:154 www/htdocs/proginfo.rpy:60
+#: www/htdocs/search.rpy:131
+#, python-format
+msgid "Sorry, the program description for %s is unavailable."
+msgstr "Нет описания программы %s."
 
 #: www/htdocs/record.rpy:159 www/htdocs/favorites.rpy:174
 #: www/htdocs/search.rpy:137 tv/edit_favorite.py:186
@@ -2025,9 +2037,9 @@ msgstr ""
 msgid "Messages"
 msgstr "Сообщения"
 
-#: www/htdocs/library.rpy:274 share/skins/main/basic.fxd:21
-#: share/skins/main/dark.fxd:18 share/skins/main/crystal.fxd:9
-#: share/skins/main/bluestar.fxd:9 share/skins/main/rain.fxd:9
+#: www/htdocs/library.rpy:274 share/skins/main/dark.fxd:18
+#: share/skins/main/crystal.fxd:9 share/skins/main/bluestar.fxd:9
+#: share/skins/main/basic.fxd:21 share/skins/main/rain.fxd:9
 msgid "Movies"
 msgstr "Фильмы"
 
@@ -2035,8 +2047,8 @@ msgstr "Фильмы"
 msgid "Recorded TV"
 msgstr "Записанные передачи ТВ"
 
-#: www/htdocs/library.rpy:286 share/skins/main/basic.fxd:23
-#: share/skins/main/dark.fxd:20 share/skins/main/crystal.fxd:12
+#: www/htdocs/library.rpy:286 share/skins/main/dark.fxd:20
+#: share/skins/main/crystal.fxd:12 share/skins/main/basic.fxd:23
 #: share/skins/main/rain.fxd:12
 msgid "Images"
 msgstr "Изображения"
@@ -2241,6 +2253,68 @@ msgstr "Нет избранного."
 msgid "Get favorites failed"
 msgstr "Ошибка получения избранного"
 
+#: tv/plugins/recordings_manager.py:97
+#, fuzzy
+msgid "Manage Recordings"
+msgstr "Запись вручную"
+
+#: tv/plugins/recordings_manager.py:118
+#, fuzzy
+msgid "Recordings Directory does not exist"
+msgstr "каталог \"%s\" не существует."
+
+#: tv/plugins/recordings_manager.py:138
+#, fuzzy
+msgid "Scanning recordings, be patient..."
+msgstr "Чтение диска..."
+
+#: tv/plugins/recordings_manager.py:266 tv/program_display.py:126
+#: video/configure.py:221 video/videoitem.py:321 playlist.py:284
+msgid "Play"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:268
+msgid "(Un)Mark to Keep"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:269
+msgid "(Un)Mark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:418
+#, fuzzy
+msgid "Browse episodes"
+msgstr "Просмотр диска"
+
+#: tv/plugins/recordings_manager.py:419
+#, fuzzy
+msgid "Delete all episodes"
+msgstr "Удалить"
+
+#: tv/plugins/recordings_manager.py:420
+msgid "Keep all episodes"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:421
+msgid "Play all episodes"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:449
+#, fuzzy, python-format
+msgid ""
+"Do you wish to delete the series\n"
+" '%s'?"
+msgstr "Вы хотите удалить<br> \"'%s\"?"
+
+#: tv/plugins/recordings_manager.py:524
+msgid "(Unnamed)"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:534
+#, fuzzy
+msgid "episodes"
+msgstr "Эпизод"
+
 #: tv/plugins/ivtv_xine_tv.py:467
 msgid "This plugin only supports the ivtv video group in tv mode!"
 msgstr ""
@@ -2248,6 +2322,10 @@ msgstr ""
 #: tv/plugins/view_line_in.py:49
 msgid "View VCR Input"
 msgstr ""
+
+#: tv/plugins/view_recordings.py:46
+msgid "Recorded Shows"
+msgstr "Записанные передачи"
 
 #: tv/channels.py:134
 #, python-format
@@ -2279,11 +2357,6 @@ msgstr "Идёт поиск..."
 #: tv/program_display.py:103
 msgid "Display program"
 msgstr "Показать программу"
-
-#: tv/program_display.py:126 video/videoitem.py:325 video/configure.py:227
-#: playlist.py:284
-msgid "Play"
-msgstr ""
 
 #: tv/program_display.py:141
 msgid "Remove from schedule"
@@ -2420,11 +2493,11 @@ msgstr "Загрузка программы передач"
 msgid "TV Guide is corrupt!"
 msgstr "Программа передач повреждена"
 
-#: tv/tvguide.py:239
+#: tv/tvguide.py:238
 msgid "Sorry, you cannot watch TV while recording. "
 msgstr "Просмотр ТВ невозможен во время записи."
 
-#: tv/tvguide.py:240
+#: tv/tvguide.py:239
 msgid "If this is not true then remove "
 msgstr ""
 
@@ -2459,19 +2532,15 @@ msgstr ""
 msgid "Could not find TV channel %s"
 msgstr "ТВ канал %s не найден"
 
-#: tv/tvmenu.py:104
-msgid "Recorded Shows"
-msgstr "Записанные передачи"
-
-#: tv/tvmenu.py:114
+#: tv/tvmenu.py:108
 msgid "TV Main Menu"
 msgstr "Главное меню ТВ"
 
-#: tv/tvmenu.py:140
+#: tv/tvmenu.py:134
 msgid "The list of TV channels is invalid!\n"
 msgstr ""
 
-#: tv/tvmenu.py:141
+#: tv/tvmenu.py:135
 msgid "Please check the config file."
 msgstr ""
 
@@ -2522,22 +2591,6 @@ msgid ""
 "%s\n"
 "not found!"
 msgstr ""
-
-#: audio/plugins/xmradio.py:62
-msgid "Listen to XM Station"
-msgstr "Музыка"
-
-#: audio/plugins/xmradio.py:95
-msgid "XM Radio"
-msgstr "Радио"
-
-#: audio/plugins/xmradio.py:136
-msgid "No XM channels found"
-msgstr "Нет новостей"
-
-#: audio/plugins/xmradio.py:137
-msgid "XM channels"
-msgstr "Изменить канал"
 
 #: audio/plugins/cdbackup.py:188
 msgid "Show CD ripping status"
@@ -2772,6 +2825,22 @@ msgstr ""
 msgid "getting data..."
 msgstr ""
 
+#: audio/plugins/xmradio.py:62
+msgid "Listen to XM Station"
+msgstr "Музыка"
+
+#: audio/plugins/xmradio.py:95
+msgid "XM Radio"
+msgstr "Радио"
+
+#: audio/plugins/xmradio.py:136
+msgid "No XM channels found"
+msgstr "Нет новостей"
+
+#: audio/plugins/xmradio.py:137
+msgid "XM channels"
+msgstr "Изменить канал"
+
 #: audio/plugins/album_tree.py:193 audio/plugins/album_tree.py:275
 msgid "Album Tree"
 msgstr "Альбом"
@@ -2784,11 +2853,24 @@ msgstr "Нет новостей"
 msgid "Generating playlist..."
 msgstr "в списке воспроизведения нет следующего объекта"
 
+#: audio/plugins/musicip.py:423
+#, fuzzy
+msgid "MusicIP Mix"
+msgstr "Музыка"
+
+#: audio/plugins/musicip.py:425
+msgid "Songs From Same Album"
+msgstr ""
+
+#: audio/plugins/musicip.py:426
+msgid "Songs From Same Artist"
+msgstr ""
+
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
 msgstr "Просмотр диска"
 
-#: audio/audiodiskitem.py:107 directory.py:713
+#: audio/audiodiskitem.py:107 directory.py:714
 msgid "Random playlist"
 msgstr "В случайном порядке"
 
@@ -2796,7 +2878,7 @@ msgstr "В случайном порядке"
 msgid "Data files on disc"
 msgstr "Файлы данных на диске"
 
-#: video/plugins/mplayer.py:410
+#: video/plugins/mplayer.py:405
 msgid "Seeking not possible"
 msgstr ""
 
@@ -2830,11 +2912,24 @@ msgstr ""
 msgid "No information available from IMDB"
 msgstr ""
 
-#: video/plugins/xine.py:63
-msgid ""
-"'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n"
-"please check the xine section in freevo_config.py"
+#: video/plugins/dvdbackup.py:79
+msgid "Backup this dvd title..."
 msgstr ""
+
+#: video/plugins/dvdbackup.py:94 video/plugins/reencode.py:92
+#: video/plugins/reencode2.py:148
+msgid "Choose your encoding profile"
+msgstr ""
+
+#: video/plugins/dvdbackup.py:110 video/plugins/reencode.py:103
+#: video/plugins/reencode2.py:323
+msgid "Please wait, analyzing video..."
+msgstr "Пожалуйста подождите..."
+
+#: video/plugins/dvdbackup.py:179 video/plugins/reencode.py:190
+#: video/plugins/reencode2.py:365
+msgid "Encoding started"
+msgstr "Копирование начато"
 
 #: video/plugins/bookmarker.py:62
 msgid "Resume playback"
@@ -2883,6 +2978,12 @@ msgstr ""
 msgid "Failed to download %s"
 msgstr ""
 
+#: video/plugins/xine.py:63
+msgid ""
+"'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+
 #: video/plugins/details.py:65
 msgid "Show details for this item"
 msgstr ""
@@ -2890,25 +2991,6 @@ msgstr ""
 #: video/plugins/details.py:95
 msgid "Details"
 msgstr "Подробности"
-
-#: video/plugins/dvdbackup.py:79
-msgid "Backup this dvd title..."
-msgstr ""
-
-#: video/plugins/dvdbackup.py:94 video/plugins/reencode.py:92
-#: video/plugins/reencode2.py:148
-msgid "Choose your encoding profile"
-msgstr ""
-
-#: video/plugins/dvdbackup.py:110 video/plugins/reencode.py:103
-#: video/plugins/reencode2.py:323
-msgid "Please wait, analyzing video..."
-msgstr "Пожалуйста подождите..."
-
-#: video/plugins/dvdbackup.py:179 video/plugins/reencode.py:190
-#: video/plugins/reencode2.py:365
-msgid "Encoding started"
-msgstr "Копирование начато"
 
 #: video/plugins/reencode.py:76
 msgid "Re-encode this program..."
@@ -3019,121 +3101,121 @@ msgstr ""
 msgid "Build video thumbnails for all items (may take a while when entering)."
 msgstr ""
 
-#: video/videoitem.py:311
-msgid "Play DVD"
-msgstr ""
-
-#: video/videoitem.py:312 video/videoitem.py:314
-msgid "DVD title list"
-msgstr ""
-
-#: video/videoitem.py:315 video/videoitem.py:323
-msgid "Play default track"
-msgstr ""
-
-#: video/videoitem.py:319
-msgid "Play VCD"
-msgstr ""
-
-#: video/videoitem.py:320 video/videoitem.py:322
-msgid "VCD title list"
-msgstr ""
-
-#: video/videoitem.py:327
-msgid "Play with alternate player"
-msgstr ""
-
-#: video/videoitem.py:330
-msgid "Play with maximum cache"
-msgstr ""
-
-#: video/videoitem.py:335
-msgid "Show variants"
-msgstr ""
-
-#: video/videoitem.py:339
-msgid "Create Thumbnail"
-msgstr ""
-
-#: video/videoitem.py:360
-msgid "Please wait...."
-msgstr "Пожалуйста подождите..."
-
-#: video/videoitem.py:507 video/videoitem.py:521 video/videoitem.py:535
-#, python-format
-msgid "No media found for \"%s\".\n"
-msgstr ""
-
-#: video/videoitem.py:508 video/videoitem.py:522 video/videoitem.py:536
-msgid "Please insert the media."
-msgstr ""
-
-#: video/videoitem.py:541
-msgid "No player for this item found"
-msgstr ""
-
-#: video/videoitem.py:623
-#, python-format
-msgid "Play Title %s"
-msgstr ""
-
-#: video/configure.py:69 video/configure.py:101
+#: video/configure.py:68 video/configure.py:99
 #, python-format
 msgid "Stream %s"
 msgstr "Поток %s"
 
-#: video/configure.py:80
+#: video/configure.py:79
 msgid "Audio Menu"
 msgstr "Меню звука"
 
-#: video/configure.py:95
+#: video/configure.py:94
 msgid "no subtitles"
 msgstr "нет субтитров"
 
-#: video/configure.py:117
+#: video/configure.py:111
 msgid "Subtitle Menu"
 msgstr "Меню субтитров"
 
-#: video/configure.py:134 video/configure.py:161
+#: video/configure.py:128 video/configure.py:155
 #, python-format
 msgid "Play chapter %s"
 msgstr ""
 
-#: video/configure.py:141 video/configure.py:164
+#: video/configure.py:135 video/configure.py:158
 msgid "Chapter Menu"
 msgstr ""
 
-#: video/configure.py:193
+#: video/configure.py:187
 #, python-format
 msgid "Turn off %s"
 msgstr "Выключить %s"
 
-#: video/configure.py:194
+#: video/configure.py:188
 #, python-format
 msgid "Turn on %s"
 msgstr "Включить %s"
 
-#: video/configure.py:207
+#: video/configure.py:201
 msgid "Audio selection"
 msgstr ""
 
-#: video/configure.py:209
+#: video/configure.py:203
 msgid "Subtitle selection"
 msgstr ""
 
-#: video/configure.py:212 video/configure.py:216
+#: video/configure.py:206 video/configure.py:210
 msgid "Chapter selection"
 msgstr ""
 
-#: video/configure.py:222
+#: video/configure.py:216
 msgid "deinterlacing"
 msgstr ""
 
-#: video/configure.py:228
+#: video/configure.py:222
 msgid "Config Menu"
 msgstr ""
 
-#: util/mediainfo.py:738
+#: video/videoitem.py:307
+msgid "Play DVD"
+msgstr ""
+
+#: video/videoitem.py:308 video/videoitem.py:310
+msgid "DVD title list"
+msgstr ""
+
+#: video/videoitem.py:311 video/videoitem.py:319
+msgid "Play default track"
+msgstr ""
+
+#: video/videoitem.py:315
+msgid "Play VCD"
+msgstr ""
+
+#: video/videoitem.py:316 video/videoitem.py:318
+msgid "VCD title list"
+msgstr ""
+
+#: video/videoitem.py:323
+msgid "Play with alternate player"
+msgstr ""
+
+#: video/videoitem.py:326
+msgid "Play with maximum cache"
+msgstr ""
+
+#: video/videoitem.py:331
+msgid "Show variants"
+msgstr ""
+
+#: video/videoitem.py:335
+msgid "Create Thumbnail"
+msgstr ""
+
+#: video/videoitem.py:356
+msgid "Please wait...."
+msgstr "Пожалуйста подождите..."
+
+#: video/videoitem.py:503 video/videoitem.py:517 video/videoitem.py:531
+#, python-format
+msgid "No media found for \"%s\".\n"
+msgstr ""
+
+#: video/videoitem.py:504 video/videoitem.py:518 video/videoitem.py:532
+msgid "Please insert the media."
+msgstr ""
+
+#: video/videoitem.py:537
+msgid "No player for this item found"
+msgstr ""
+
+#: video/videoitem.py:619
+#, python-format
+msgid "Play Title %s"
+msgstr ""
+
+#: util/mediainfo.py:739
 msgid "Reloading cache files, be patient..."
 msgstr "Чтение диска..."
 
@@ -3405,35 +3487,35 @@ msgstr ""
 msgid "Directory does not exist"
 msgstr "каталог \"%s\" не существует."
 
-#: directory.py:611
+#: directory.py:612
 msgid "Scanning disc, be patient..."
 msgstr "Чтение диска..."
 
-#: directory.py:613
+#: directory.py:614
 msgid "Scanning directory, be patient..."
 msgstr "Чтение каталога..."
 
-#: directory.py:813 directory.py:903 directory.py:937
+#: directory.py:814 directory.py:904 directory.py:938
 msgid "on"
 msgstr "вкл"
 
-#: directory.py:815 directory.py:818 directory.py:907 directory.py:935
+#: directory.py:816 directory.py:819 directory.py:908 directory.py:936
 msgid "off"
 msgstr "выкл"
 
-#: directory.py:820
+#: directory.py:821
 msgid "auto"
 msgstr "авто"
 
-#: directory.py:939
+#: directory.py:940
 msgid "Show all kinds of items"
 msgstr ""
 
-#: directory.py:941
+#: directory.py:942
 msgid "Show video, audio and image items in this directory"
 msgstr ""
 
-#: directory.py:944
+#: directory.py:945
 msgid "Configure"
 msgstr "Настроить"
 
@@ -3449,6 +3531,11 @@ msgstr ""
 
 #: childapp.py:280
 msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, "
+msgstr ""
+
+#: childapp.py:281
+#, python-format
+msgid "or make %s writable!"
 msgstr ""
 
 #: main.py:167
@@ -3472,10 +3559,10 @@ msgid ""
 "\n"
 msgstr ""
 
-#: main.py:306 share/skins/main/basic.fxd:25
-#: share/skins/main/mediaportal.fxd:447 share/skins/main/dark.fxd:25
-#: share/skins/main/crystal.fxd:17 share/skins/main/bluestar.fxd:16
-#: share/skins/main/rain.fxd:17
+#: main.py:306 share/skins/main/mediaportal.fxd:447
+#: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
+#: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
+#: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
 msgid "Shutdown"
 msgstr "Выключить"
 
@@ -3544,10 +3631,211 @@ msgstr "Esc = Стоп/Назад"
 msgid "h = Help"
 msgstr "h = Помощь"
 
+#: share/skins/main/dark.fxd:496
+msgid "Just one movie in this playlist."
+msgstr "объектов в этом списке воспроизведения"
+
+#: share/skins/main/mediaportal.fxd:711 share/skins/main/dark.fxd:770
+#: share/skins/main/basic.fxd:410 share/skins/main/blurr.fxd:717
+#: share/skins/main/info.fxd:228
+msgid "kb/s"
+msgstr "кб/c"
+
+#: share/skins/main/dark.fxd:565
+msgid "One song in playlist"
+msgstr "в списке воспроизведения нет следующего объекта"
+
+#: share/skins/main/mediaportal.fxd:722 share/skins/main/dark.fxd:779
+#: share/skins/main/basic.fxd:422 share/skins/main/blurr.fxd:730
+msgid "Elapsed"
+msgstr "Время"
+
+#: share/skins/main/basic.fxd:747
+msgid "Video Rate"
+msgstr "Видео"
+
+#: share/skins/main/basic.fxd:627
+msgid "Day"
+msgstr "День"
+
+#: share/skins/main/mediaportal.fxd:220 share/skins/main/blurr.fxd:218
+#: share/skins/main/info.fxd:314 share/skins/main/Panorama.fxd:221
+msgid "Subtitles"
+msgstr "Субтитры"
+
+#: share/skins/main/basic.fxd:723
+msgid "File name"
+msgstr "Имя файла: %s"
+
+#: share/skins/main/mediaportal.fxd:197 share/skins/main/dark.fxd:501
+#: share/skins/main/blurr.fxd:195 share/skins/main/info.fxd:428
+#: share/skins/main/info.fxd:551 share/skins/main/Panorama.fxd:198
+msgid "This playlist is empty!"
+msgstr "Список воспроизведения пуст!"
+
+#: share/skins/main/dark.fxd:618
+msgid "pictures in this slideshow."
+msgstr "объектов в этом списке воспроизведения"
+
+#: share/skins/main/dark.fxd:459 share/skins/main/info.fxd:471
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: share/skins/main/crystal.fxd:369 share/skins/main/bluestar.fxd:389
+#: share/skins/main/rain.fxd:373
+msgid "Message has not been read"
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:225 share/skins/main/blurr.fxd:223
+#: share/skins/main/info.fxd:318 share/skins/main/Panorama.fxd:226
+msgid "Chapters"
+msgstr "Главы"
+
+#: share/skins/main/dark.fxd:561
+msgid "songs in playlist"
+msgstr "в списке воспроизведения нет следующего объекта"
+
+#: share/skins/main/basic.fxd:753
+msgid "Audio Codec"
+msgstr "Меню звука"
+
+#: share/skins/main/dark.fxd:653 share/skins/main/dark.fxd:674
+msgid "Subject"
+msgstr ""
+
 #: share/skins/main/mediaportal.fxd:189 share/skins/main/blurr.fxd:187
-#: share/skins/main/info.fxd:543
+#: share/skins/main/info.fxd:543 share/skins/main/Panorama.fxd:190
 msgid "Playlist"
 msgstr "Список воспроизведения"
+
+#: share/skins/main/dark.fxd:659 share/skins/main/dark.fxd:680
+msgid "From"
+msgstr ""
+
+#: share/skins/main/crystal.fxd:318 share/skins/main/bluestar.fxd:338
+#: share/skins/main/rain.fxd:322
+msgid "Unread messages"
+msgstr "Сообщения"
+
+#: share/skins/main/mediaportal.fxd:444 share/skins/main/blurr.fxd:451
+#: share/skins/main/info.fxd:16 share/skins/main/Panorama.fxd:471
+msgid "Look at Pictures"
+msgstr "Изображения"
+
+#: share/skins/main/mediaportal.fxd:420 share/skins/main/blurr.fxd:428
+#: share/skins/main/Panorama.fxd:448
+msgid "Location"
+msgstr "Расположение"
+
+#: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:11
+#: share/skins/main/bluestar.fxd:11 share/skins/main/rain.fxd:11
+msgid "Email"
+msgstr ""
+
+#: share/skins/main/Panorama.fxd:787
+msgid "Hz"
+msgstr ""
+
+#: share/skins/main/info.fxd:232
+msgid "Link"
+msgstr "Ссылка"
+
+#: share/skins/main/dark.fxd:623
+msgid "Just one picture in this slideshow."
+msgstr ""
+
+#: share/skins/main/basic.fxd:765
+msgid "Num Passes"
+msgstr ""
+
+#: share/skins/main/dark.fxd:646
+msgid "Total mails"
+msgstr ""
+
+#: share/skins/main/dark.fxd:628
+msgid "This slideshow is empty!"
+msgstr "Список воспроизведения пуст!"
+
+#: share/skins/main/mediaportal.fxd:183 share/skins/main/mediaportal.fxd:287
+#: share/skins/main/mediaportal.fxd:394 share/skins/main/mediaportal.fxd:402
+#: share/skins/main/blurr.fxd:181 share/skins/main/blurr.fxd:285
+#: share/skins/main/blurr.fxd:402 share/skins/main/blurr.fxd:410
+#: share/skins/main/Panorama.fxd:184 share/skins/main/Panorama.fxd:306
+#: share/skins/main/Panorama.fxd:422 share/skins/main/Panorama.fxd:430
+msgid "Items"
+msgstr "Объект(ов)"
+
+#: share/skins/main/mediaportal.fxd:441 share/skins/main/blurr.fxd:448
+#: share/skins/main/info.fxd:13 share/skins/main/Panorama.fxd:468
+msgid "Watch TV"
+msgstr "Телевидение"
+
+#: share/skins/main/blurr.fxd:312 share/skins/main/info.fxd:348
+#: share/skins/main/info.fxd:535 share/skins/main/Panorama.fxd:333
+msgid "of"
+msgstr ""
+
+#: share/skins/main/dark.fxd:722
+msgid "Now playing"
+msgstr ""
+
+#: share/skins/main/Panorama.fxd:777
+#, fuzzy
+msgid "kbps"
+msgstr "кб/c"
+
+#: share/skins/main/info.fxd:506
+msgid "Copyright"
+msgstr "Копирайт"
+
+#: share/skins/main/bluestar.fxd:12
+msgid "Pictures"
+msgstr "Изображения"
+
+#: share/skins/main/mediaportal.fxd:446 share/skins/main/crystal.fxd:13
+#: share/skins/main/blurr.fxd:453 share/skins/main/rain.fxd:13
+#: share/skins/main/Panorama.fxd:473
+msgid "Weather Forecast"
+msgstr "Прогноз погоды"
+
+#: share/skins/main/dark.fxd:671
+msgid "New mail"
+msgstr ""
+
+#: share/skins/main/mediaportal.fxd:193 share/skins/main/blurr.fxd:191
+#: share/skins/main/info.fxd:419 share/skins/main/info.fxd:424
+#: share/skins/main/info.fxd:547 share/skins/main/Panorama.fxd:194
+msgid "items in this playlist"
+msgstr "объектов в этом списке воспроизведения"
+
+#: share/skins/main/basic.fxd:741
+msgid "Video Codec"
+msgstr "Видео"
+
+#: share/skins/main/info.fxd:238
+msgid "Language"
+msgstr "Язык"
+
+#: share/skins/main/basic.fxd:772
+msgid "Filter"
+msgstr ""
+
+#: share/skins/main/info.fxd:350 share/skins/main/info.fxd:537
+msgid "MB free"
+msgstr "Мб свободно"
+
+#: share/skins/main/mediaportal.fxd:440
+msgid "Read Headlines"
+msgstr "Новости"
+
+#: share/skins/main/info.fxd:324
+msgid "Size"
+msgstr "Размер"
+
+#: share/skins/main/mediaportal.fxd:215 share/skins/main/blurr.fxd:213
+#: share/skins/main/info.fxd:310 share/skins/main/Panorama.fxd:216
+msgid "Audio tracks"
+msgstr "Звуковые дорожки"
 
 #: share/skins/main/dark.fxd:640
 msgid "New mails"
@@ -3557,122 +3845,29 @@ msgstr "Подробности"
 msgid "Container"
 msgstr "Настроить"
 
-#: share/skins/main/info.fxd:506
-msgid "Copyright"
-msgstr "Копирайт"
-
-#: share/skins/main/crystal.fxd:318 share/skins/main/bluestar.fxd:338
-#: share/skins/main/rain.fxd:314
-msgid "Unread messages"
-msgstr "Сообщения"
-
-#: share/skins/main/bluestar.fxd:12
-msgid "Pictures"
-msgstr "Изображения"
-
-#: share/skins/main/info.fxd:406
-msgid "Disc ID"
-msgstr "Идентифиикатор диска"
-
-#: share/skins/main/mediaportal.fxd:215 share/skins/main/blurr.fxd:213
-#: share/skins/main/info.fxd:310
-msgid "Audio tracks"
-msgstr "Звуковые дорожки"
-
 #: share/skins/main/basic.fxd:759
 msgid "Audio Rate"
 msgstr "Меню звука"
 
-#: share/skins/main/crystal.fxd:369 share/skins/main/bluestar.fxd:389
-#: share/skins/main/rain.fxd:365
-msgid "Message has not been read"
-msgstr ""
-
-#: share/skins/main/mediaportal.fxd:420 share/skins/main/blurr.fxd:428
-msgid "Location"
-msgstr "Расположение"
-
-#: share/skins/main/dark.fxd:659 share/skins/main/dark.fxd:680
-msgid "From"
-msgstr ""
-
-#: share/skins/main/dark.fxd:671
-msgid "New mail"
-msgstr ""
-
 #: share/skins/main/mediaportal.fxd:445 share/skins/main/blurr.fxd:452
+#: share/skins/main/Panorama.fxd:472
 msgid "Play a Game"
 msgstr "Игры"
 
-#: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:11
-#: share/skins/main/bluestar.fxd:11 share/skins/main/rain.fxd:11
-msgid "Email"
-msgstr ""
-
-#: share/skins/main/dark.fxd:646
-msgid "Total mails"
-msgstr ""
-
-#: share/skins/main/crystal.fxd:324 share/skins/main/bluestar.fxd:344
-#: share/skins/main/rain.fxd:320
-msgid "Total messages"
-msgstr "Сообщения"
-
-#: share/skins/main/dark.fxd:496
-msgid "Just one movie in this playlist."
-msgstr "объектов в этом списке воспроизведения"
-
-#: share/skins/main/basic.fxd:410 share/skins/main/mediaportal.fxd:711
-#: share/skins/main/dark.fxd:770 share/skins/main/blurr.fxd:717
-#: share/skins/main/info.fxd:228
-msgid "kb/s"
-msgstr "кб/c"
-
-#: share/skins/main/dark.fxd:565
-msgid "One song in playlist"
-msgstr "в списке воспроизведения нет следующего объекта"
-
-#: share/skins/main/mediaportal.fxd:193 share/skins/main/blurr.fxd:191
-#: share/skins/main/info.fxd:419 share/skins/main/info.fxd:424
-#: share/skins/main/info.fxd:547
-msgid "items in this playlist"
-msgstr "объектов в этом списке воспроизведения"
-
 #: share/skins/main/mediaportal.fxd:443 share/skins/main/blurr.fxd:450
-#: share/skins/main/info.fxd:15
+#: share/skins/main/info.fxd:15 share/skins/main/Panorama.fxd:470
 msgid "Listen to Music"
 msgstr "Музыка"
 
-#: share/skins/main/basic.fxd:422 share/skins/main/mediaportal.fxd:722
-#: share/skins/main/dark.fxd:779 share/skins/main/blurr.fxd:730
-msgid "Elapsed"
-msgstr "Время"
-
-#: share/skins/main/dark.fxd:623
-msgid "Just one picture in this slideshow."
-msgstr ""
+#: share/skins/main/crystal.fxd:324 share/skins/main/bluestar.fxd:344
+#: share/skins/main/rain.fxd:328
+msgid "Total messages"
+msgstr "Сообщения"
 
 #: share/skins/main/mediaportal.fxd:442 share/skins/main/blurr.fxd:449
-#: share/skins/main/info.fxd:14
+#: share/skins/main/info.fxd:14 share/skins/main/Panorama.fxd:469
 msgid "Watch a Movie"
 msgstr "Фильмы"
-
-#: share/skins/main/basic.fxd:747
-msgid "Video Rate"
-msgstr "Видео"
-
-#: share/skins/main/info.fxd:232
-msgid "Link"
-msgstr "Ссылка"
-
-#: share/skins/main/basic.fxd:627
-msgid "Day"
-msgstr "День"
-
-#: share/skins/main/mediaportal.fxd:220 share/skins/main/blurr.fxd:218
-#: share/skins/main/info.fxd:314
-msgid "Subtitles"
-msgstr "Субтитры"
 
 #: share/skins/main/dark.fxd:492
 msgid "movies in this playlist."
@@ -3683,115 +3878,21 @@ msgstr "объектов в этом списке воспроизведения
 msgid "Television"
 msgstr ""
 
-#: share/skins/main/info.fxd:238
-msgid "Language"
-msgstr "Язык"
-
-#: share/skins/main/mediaportal.fxd:183 share/skins/main/mediaportal.fxd:287
-#: share/skins/main/mediaportal.fxd:394 share/skins/main/mediaportal.fxd:402
-#: share/skins/main/blurr.fxd:181 share/skins/main/blurr.fxd:285
-#: share/skins/main/blurr.fxd:402 share/skins/main/blurr.fxd:410
-msgid "Items"
-msgstr "Объект(ов)"
-
-#: share/skins/main/basic.fxd:723
-msgid "File name"
-msgstr "Имя файла: %s"
-
-#: share/skins/main/blurr.fxd:312 share/skins/main/info.fxd:348
-#: share/skins/main/info.fxd:535
-msgid "of"
-msgstr ""
-
-#: share/skins/main/basic.fxd:741
-msgid "Video Codec"
-msgstr "Видео"
-
-#: share/skins/main/basic.fxd:772
-msgid "Filter"
-msgstr ""
-
-#: share/skins/main/info.fxd:324
-msgid "Size"
-msgstr "Размер"
-
-#: share/skins/main/mediaportal.fxd:197 share/skins/main/dark.fxd:501
-#: share/skins/main/blurr.fxd:195 share/skins/main/info.fxd:428
-#: share/skins/main/info.fxd:551
-msgid "This playlist is empty!"
-msgstr "Список воспроизведения пуст!"
-
-#: share/skins/main/dark.fxd:628
-msgid "This slideshow is empty!"
-msgstr "Список воспроизведения пуст!"
-
 #: share/skins/main/info.fxd:306
 msgid "min."
 msgstr "мин"
 
-#: share/skins/main/dark.fxd:618
-msgid "pictures in this slideshow."
-msgstr "объектов в этом списке воспроизведения"
-
-#: share/skins/main/dark.fxd:459 share/skins/main/info.fxd:471
-msgid "Rating"
-msgstr "Рейтинг"
-
-#: share/skins/main/info.fxd:350 share/skins/main/info.fxd:537
-msgid "MB free"
-msgstr "Мб свободно"
-
-#: share/skins/main/mediaportal.fxd:441 share/skins/main/blurr.fxd:448
-#: share/skins/main/info.fxd:13
-msgid "Watch TV"
-msgstr "Телевидение"
-
-#: share/skins/main/mediaportal.fxd:440
-msgid "Read Headlines"
-msgstr "Новости"
+#: share/skins/main/info.fxd:406
+msgid "Disc ID"
+msgstr "Идентифиикатор диска"
 
 #: share/skins/main/dark.fxd:569
 msgid "No songs in playlist"
 msgstr "в списке воспроизведения нет следующего объекта"
 
-#: share/skins/main/mediaportal.fxd:444 share/skins/main/blurr.fxd:451
-#: share/skins/main/info.fxd:16
-msgid "Look at Pictures"
-msgstr "Изображения"
-
-#: share/skins/main/mediaportal.fxd:225 share/skins/main/blurr.fxd:223
-#: share/skins/main/info.fxd:318
-msgid "Chapters"
-msgstr "Главы"
-
-#: share/skins/main/basic.fxd:765
-msgid "Num Passes"
-msgstr ""
-
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "ТВ"
-
-#: share/skins/main/dark.fxd:561
-msgid "songs in playlist"
-msgstr "в списке воспроизведения нет следующего объекта"
-
-#: share/skins/main/mediaportal.fxd:446 share/skins/main/crystal.fxd:13
-#: share/skins/main/blurr.fxd:453 share/skins/main/rain.fxd:13
-msgid "Weather Forecast"
-msgstr "Прогноз погоды"
-
-#: share/skins/main/dark.fxd:722
-msgid "Now playing"
-msgstr ""
-
-#: share/skins/main/basic.fxd:753
-msgid "Audio Codec"
-msgstr "Меню звука"
-
-#: share/skins/main/dark.fxd:653 share/skins/main/dark.fxd:674
-msgid "Subject"
-msgstr ""
 
 #~ msgid "No Xm Radio Stations found"
 #~ msgstr "Радиостанции не найдены"
