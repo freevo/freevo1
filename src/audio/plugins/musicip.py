@@ -8,6 +8,9 @@
 # Notes:
 #   HACK - sadly there's no way to import from the playlist module
 #   since there's another playlis module in this same package.
+#   To activate add
+#   plugin.activate(self, type="audio")
+#
 # Todo:
 #
 # -----------------------------------------------------------------------
@@ -388,21 +391,22 @@ class PluginInterface(plugin.ItemPlugin,plugin.MainMenuPlugin):
     """
     This plugin allows you to create a new mix based on MusicIP's automatic mixing
     feature.  It also allows browsing by Genre, Album, or Artist.
-
-    You may set config.MUSICIP_SERVER to the host:port of the MusicIP service;
-    127.0.0.1:10002 is the default.
     """
 
     def __init__(self):
-        try: server = config.MUSICIP_SERVER
-        except AttributeError: server = "127.0.0.1:10002"
+        server = config.MUSICIP_SERVER
         self.service = MusicIPClient(server)
-        #config.
         plugin.ItemPlugin.__init__(self)
         plugin.MainMenuPlugin.__init__(self)
 
-    #plugin.activate(self, type="audio")
-    #self._type = 'mainmenu_audio'
+
+    def config(self):
+        '''config is called automatically, for default settings run:
+        freevo plugins -i audio.musicip
+        '''
+        return [
+            ('MUSICIP_SERVER', '127.0.0.1:10002', 'IP address and port of the music ip server'),
+        ]
 
 
     def items(self, parent):
