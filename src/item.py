@@ -285,7 +285,7 @@ class Item:
                     if format_string.startswith('/'):
                         audiocover = util.getimage(filemask)
                     else:
-                        audiocover = util.getimage(os.path.dirname(self.filename)+'/'+filemask)
+                        audiocover = util.getimage(os.path.join(os.path.dirname(self.filename), filemask))
                     if audiocover:
                         self.image = audiocover
                         self.files.image = audiocover
