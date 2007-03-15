@@ -566,11 +566,9 @@ class Skin_Area:
                         if os.path.isfile(cache) and \
                                os.stat(cache)[stat.ST_MTIME] > \
                                os.stat(imagefile)[stat.ST_MTIME]:
-                            f = open(cache, 'r')
-                            image = pygame.image.fromstring(str().join(f.readlines()),
-                                                            (bg.width,bg.height), 'RGBA')
-                            f.close()
+                            image = pygame.image.fromstring(file(cache).read(), (bg.width,bg.height), 'RGBA')
                             self.imagecache[cname] = image
+
                     if not image:
                         image = osd.loadbitmap(imagefile)
                         if image:

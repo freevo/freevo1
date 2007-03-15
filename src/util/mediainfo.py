@@ -32,9 +32,9 @@
 import os, stat
 import sys
 import copy
+from pprint import pformat
 
 import kaa.metadata as mmpython
-#from kaa.metadata.disc.discinfo import cdrom_disc_id
 
 import config
 import util
@@ -257,7 +257,7 @@ class Cache:
 
 class MMCache(Cache):
     """
-    cache for mmpython information
+    cache for kaa metadata information
     """
     def __init__(self):
         Cache.__init__(self, 'mmpython.cache')
@@ -266,20 +266,22 @@ class MMCache(Cache):
 
     def simplify(self, object):
         """
-        mmpython has huge objects to cache, we don't need them.
+        kaa metadata has huge objects to cache, we don't need them.
         This function simplifies them to be only string, intger, dict or
         list of one of those above. This makes the caching much faster
+
+        kaa metadata has changed the definition of chapters and subtitles
         """
         ret = {}
         for k in object.keys():
             if not k in self.uncachable_keys and getattr(object,k) != None:
                 value = getattr(object,k)
                 if isstring(value):
-                    value = Unicode(value.replace('\0', '').lstrip().rstrip())
+                    value = Unicode(value.replace('\0', '').strip())
                 if value:
                     ret[k] = value
 
-        for k in  ( 'video', 'audio'):
+        for k in  ( 'video', 'audio', 'chapters', 'subtitles', 'tracks'):
             # if it's an AVCORE object, also simplify video and audio
             # lists to string and it
             if hasattr(object, k) and getattr(object, k):
@@ -287,8 +289,8 @@ class MMCache(Cache):
                 for o in getattr(object, k):
                     ret[k].append(self.simplify(o))
 
-        for k in ('subtitles', 'chapters', 'mime', 'id', 'tracks' ):
-            if hasattr(object, k) and getattr(object, k):
+        for k in ('mime', 'name', 'pos' ):
+            if hasattr(object, k) and getattr(object, k) != None:
                 ret[k] = getattr(object, k)
 
         return ret
@@ -298,7 +300,6 @@ class MMCache(Cache):
         """
         create mmpython information about the given file
         """
-        #info = mmpython.Factory().create(filename)
         info = mmpython.parse(filename)
         if info:
             thumbnail = None
@@ -338,7 +339,7 @@ class MMCache(Cache):
 
     def update(self, filename, info):
         """
-        update mmpython cache information
+        update kaa metadata cache information
         """
         return self.create(filename)
 
@@ -596,7 +597,7 @@ def cache_recursive(dirlist, verbose=False):
 
 def disc_info(media, force=False):
     """
-    return mmpython disc information for the media
+    return kaa metadata disc information for the media
     """
     type, id = mmpython.cdrom.status(media.devicename)
     if not id:
@@ -686,7 +687,7 @@ def load_cache(dirname):
 
 def del_cache():
     """
-    delete all cache files because mmpython got updated
+    delete all cache files because kaa metadata got updated
     """
     for f in util.recursefolders(config.OVERLAY_DIR,1,'mmpython.cache',1):
         os.unlink(f)
@@ -747,7 +748,7 @@ def check_cache_status():
 
 
 #
-# setup mmpython
+# setup kaa metadata
 #
 
 if config.DEBUG > 2:
@@ -794,7 +795,7 @@ if __freevo_app__ == 'main':
 
             elif kaa.metadata.version.VERSION > mmchanged:
                 print
-                print 'Warning: mmpython as changed.'
+                print 'Warning: kaa metadata as changed.'
                 print 'Please rerun \'freevo cache\' to get the latest updates'
                 print
                 del_cache()
@@ -806,7 +807,7 @@ if __freevo_app__ == 'main':
                 print
     except:
         print
-        print 'Error: unable to read mmpython version information'
+        print 'Error: unable to read kaa metadata version information'
         print 'Please update kaa.metadata to the latest release or if you use'
         print 'Freevo svn versions, please also use kaa.metadata svn.'
         print

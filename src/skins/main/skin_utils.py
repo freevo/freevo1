@@ -68,7 +68,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     cname = '%s-%s-%s-%s-%s-%s-%s' % (settings.icon_dir, item.image, type,
                                       item.type, width, height, force)
 
-    if item['rotation']:
+    if hasattr(item, 'rotation') and item['rotation']:
         cname = '%s-%s' % (cname, item['rotation'])
             
     if item.media and item.media.item == item:
@@ -100,10 +100,12 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
                     orientation = tags['Image Orientation']
                     if str(orientation) == "Rotated 90 CCW":
                         item['rotation'] = 90
+                        #item['rotation'] = 270
                     elif str(orientation) == "Rotated 180":
                         item['rotation'] = 180
                     elif str(orientation) == "Rotated 90 CW":
                         item['rotation'] = 270
+                        #item['rotation'] = 90
             except Exception, e:
                 pass
 

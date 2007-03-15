@@ -259,6 +259,9 @@ LOCAL_CONF_CHANGES = [
      Added VIDEO_PRE_PLAY and VIDEO_POST_PLAY to allow external commands to be run
      Added CD_RIP_ for the cd backup plug-in
      ''' ),
+    (5.18,
+     '''Added tv.recodings_manager plug-in to show what has been watched, TVRM_*,
+     ''' ),
 ]
 
 

@@ -479,7 +479,7 @@ class Item:
 
         else:
             r = None
-            if self.info.has_key(attr):
+            if self.info and self.info.has_key(attr):
                 r = self.info[attr]
             if (r == None or r == '') and hasattr(self, attr):
                 r = getattr(self,attr)
@@ -500,5 +500,7 @@ class Item:
         if attr[:4] == 'len(' and attr[-1] == ')':
             return self.__getitem__(attr)
         else:
-            r = self.__getitem__(attr)
-            return Unicode(r)
+            if self and self.__getitem__:
+                r = self.__getitem__(attr)
+                return Unicode(r)
+            return attr

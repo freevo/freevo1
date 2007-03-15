@@ -59,10 +59,6 @@ class VideoItem(Item):
 
         if info:
             self.info.set_variables(info)
-        # FIXME This is not the correct place to do this, should be done in mediainfo
-        if hasattr(self.info, 'filename') and self.info.filename:
-            self.info = metadata.parse(self.info.filename)
-
 
         self.variants          = []         # if this item has variants
         self.subitems          = []         # more than one file/track to play
@@ -207,6 +203,9 @@ class VideoItem(Item):
         """
         return the specific attribute
         """
+        if not self.info:
+            return ''
+
         if key == 'geometry' and self.info['width'] and self.info['height']:
             return '%sx%s' % (self.info['width'], self.info['height'])
 
@@ -605,18 +604,18 @@ class VideoItem(Item):
 
         # build a menu
         items = []
-        for title in range(len(self.info['tracks'])):
+        for titlenum in range(len(self.info['tracks'])):
             i = copy.copy(self)
             i.parent = self
-            i.set_url(self.url + str(title+1), False)
+            i.set_url(self.url + str(titlenum+1), False)
             i.info = copy.copy(self.info)
             # copy the attributes from mmpython about this track
-            i.info.mmdata = self.info.mmdata['tracks'][title]
+            i.info.mmdata = self.info.mmdata['tracks'][titlenum]
             i.info.set_variables(self.info.get_variables())
             i.info_type       = 'track'
             i.possible_player = []
             i.files           = None
-            i.name            = Unicode(_('Play Title %s')) % (title+1)
+            i.name            = Unicode(_('Play Title %d') % (titlenum+1))
             items.append(i)
 
         moviemenu = menu.Menu(self.name, items, umount_all = 1, fxd_file=self.skin_fxd)

@@ -29,13 +29,12 @@
 # -----------------------------------------------------------------------
 
 
+import re
+import copy
+
 # The menu widget class
 import menu
 import plugin
-
-# RegExp
-import re
-
 
 #
 # Dummy for playing the movie
@@ -57,14 +56,16 @@ def audio_selection_menu(arg=None, menuw=None):
     item       = arg
     menu_items = []
 
-    for a in item.info['audio']:
-        print a.__dict__
-        #if not a.has_key('id') or a['id'] in ('', None):
-        #    a['id'] = item.info['audio'].index(a) + 1
+    for audio in item.info['audio']:
+        a = copy.copy(audio)
         
-        if a.has_key('languagedesc') and a['languagedesc']:
-            a['language'] = a['languagedesc']
-        elif not a.has_key('language') or not a['language']:
+        if not a.has_key('id') or not a['id']:
+            a['id'] = item.info['audio'].index(audio)
+
+        if not a.has_key('title') or not a['title']:
+            a['title'] = ''
+
+        if not a.has_key('language') or not a['language']:
             a['language'] = _('Stream %s') % a['id']
 
         if not a.has_key('channels') or not a['channels']:
@@ -73,7 +74,7 @@ def audio_selection_menu(arg=None, menuw=None):
         if not a.has_key('codec') or not a['codec']:
             a['codec'] = '???'
 
-        txt = '%(language)s (channels=%(channels)s:%(codec)s)' % a
+        txt = '%(language)s %(title)s (channels=%(channels)s:%(codec)s)' % a
         menu_items.append(menu.MenuItem(txt, audio_selection, (item, a['id'])))
 
     moviemenu = menu.Menu(_('Audio Menu'), menu_items, fxd_file=item.skin_fxd)
@@ -92,20 +93,25 @@ def subtitle_selection_menu(arg=None, menuw=None):
     item = arg
 
     menu_items = [ menu.MenuItem(_('no subtitles'), subtitle_selection, (item, -1)) ]
-    for s in item.info['subtitles']:
-        if s.has_key('languagedesc') and s['languagedesc']:
-            s['language'] = s['languagedesc']
-        elif not s.has_key('language') or not s['language']:
+
+    for subtitle in item.info['subtitles']:
+        s = copy.copy(subtitle)
+        
+        if not s.has_key('id') or not s['id']:
+            s['id'] = item.info['subtitles'].index(subtitle)
+
+        if not s.has_key('language') or not s['language']:
             s['language'] = _('Stream %s') % s['id']
 
-        if not s.has_key('content') or not s['content']:
-            s['content'] = ''
-        if s['content'] == 'Undefined':
-            s['content'] = ''
-        if s['content'] != '':
-            s['content'] = format(' (%s)' % s['content'])
+        if not s.has_key('title') or not s['title']:
+            s['title'] = ''
+        if s['title'] == 'Undefined':
+            s['title'] = ''
 
-        txt = '%(language)s%(content)s' % s
+        if s['title'] != '':
+            s['title'] = ' (%s)' % s['title']
+
+        txt = '%(language)s%(title)s' % s
         menu_items.append(menu.MenuItem(txt, subtitle_selection, (item, s['id'])))
 
     moviemenu = menu.Menu(_('Subtitle Menu'), menu_items, fxd_file=item.skin_fxd)
@@ -121,16 +127,31 @@ def chapter_selection(menuw=None, arg=None):
     play_movie(menuw=menuw, arg=arg)
     
 def chapter_selection_menu(arg=None, menuw=None):
-    item  = arg
+    item = arg
     menu_items = []
     if isinstance(arg.info['chapters'], int):
         for c in range(1, arg.info['chapters']):
             menu_items += [ menu.MenuItem(_('Play chapter %s') % c, chapter_selection,
                                           (arg, ' -chapter %s' % c)) ]
     elif arg.info['chapters']:
-        for c in arg.info['chapters']:
-            menu_items += [ menu.MenuItem(c.name, chapter_selection,
-                                          (arg, ' -ss %s' % c.pos)) ]
+        for chapter in arg.info['chapters']:
+            c = copy.copy(chapter)
+
+            if not c.has_key('id') or not c['id']:
+                c['id'] = item.info['chapters'].index(chapter)
+
+            if not c.has_key('name') or not c['name']:
+                c['name'] = ''
+
+            if not c.has_key('pos') or not c['pos']:
+                c['pos'] = 0
+
+            if c['name']:
+                txt = '%(name)s (%(pos)s)' % c
+            else:
+                txt = '%(id)s (%(pos)s)' % c
+
+            menu_items.append(menu.MenuItem(txt, chapter_selection, (item, ' -ss %s' % c['pos'])))
         
     moviemenu = menu.Menu(_('Chapter Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
