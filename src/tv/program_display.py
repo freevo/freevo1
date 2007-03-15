@@ -190,7 +190,7 @@ class ProgramItem(Item):
                     menuw.delete_menu()
                     menuw.delete_menu()
                 menuw.back_one_menu(arg='reload')
-            msgtext= _('"%s" has been scheduled for recording') %self.prog.title
+            msgtext= _('"%s" has been scheduled for recording') % self.prog.title
             AlertBox(text=msgtext).show()
         else:
             AlertBox(text=_('Scheduling Failed')+(': %s' % msg)).show()
