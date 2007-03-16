@@ -374,11 +374,11 @@ class FxdImdb:
         s = contents.strip()
         s = s.replace('\n',' ')
         s = s.replace('  ',' ')
+        s = s.replace('&','&amp;')
+        s = s.replace('&amp;#','&#')
         s = s.replace('<','&lt;')
         s = s.replace('>','&gt;')
         s = s.replace('"','&quot;')
-        s = s.replace('&','&amp;')
-        s = s.replace('&amp;#','&#')
         return s
 
     def write_discset(self):
