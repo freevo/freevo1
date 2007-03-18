@@ -295,12 +295,27 @@ class RecordedProgramItem(Item):
         """
         Delete the recorded program.
         """
+        # delete the file
         self.video_item.files.delete()
         if self.menuw:
             self.menuw.delete_submenu(True, True)
-
-
-
+            try:
+                # we also need to delete the item from the menu
+                menu = self.menuw.menustack[-1]
+                idx = menu.choices.index(self)    
+                # delete it from menu
+                menu.choices.pop(idx)
+                if len(menu.choices)>0:
+                    # if there are more items
+                    self.menuw.init_page()
+                    # refresh the menu
+                    self.menuw.refresh()
+                else:
+                    # if menu is empty, remove it
+                    self.menuw.delete_menu()    
+            except ValueError, e:
+                pass
+    
     def mark_to_keep(self, arg=None, menuw=None):
         """
         Toggle whether this program should be kept.
@@ -510,13 +525,15 @@ class Series(Item):
                 episode_name = None
         if not episode_name:
             try:
-                episode = datetime.datetime.fromtimestamp(float(program['recording_timestamp']))
+                episode = datetime.datetime.fromtimestamp(
+                          float(program['recording_timestamp']))         
                 episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
             except Exception, e:
                 episode_name = None
         if not episode_name:
             try:
-                episode = datetime.datetime.fromtimestamp(os.path.getctime(program['filename']))
+                episode = datetime.datetime.fromtimestamp(
+                          os.path.getctime(program['filename']))
                 episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
             except Exception, e:
                 episode_name = None
