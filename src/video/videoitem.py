@@ -227,7 +227,7 @@ class VideoItem(Item):
                 if self.info['runtime'] != 'None':
                     return self.info['runtime']
 
-            total = ''
+            total = 0
             if self.subitems:
                 for s in self.subitems:
                     if s.info['length']:
