@@ -128,7 +128,8 @@ class PluginInterface(plugin.ItemPlugin):
                 except:
                     pass
                 try:
-                    items.append(menu.MenuItem('%s (%s, %s)' % (htmlenties2txt(name), year, type),
+                    #items.append(menu.MenuItem('%s (%s, %s)' % (htmlenties2txt(name), year, type),
+                    items.append(menu.MenuItem('%s (%s, %s)' % (name, year, type),
                         self.imdb_create_fxd, (id, year)))
                 except UnicodeError, e:
                     print e
