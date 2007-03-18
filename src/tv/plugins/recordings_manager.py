@@ -540,7 +540,7 @@ class Series(Item):
         if not episode_name:
             episode_name = _('(Unnamed)')
         program['tagline'] = episode_name
-        return program['tagline']
+        return Unicode(program['tagline'])
 
 
     def __getitem__(self, key):
