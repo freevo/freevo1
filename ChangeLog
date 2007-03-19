@@ -13,20 +13,28 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
-== Release 1.7.1 (2007-??-??) ==
+== Release 1.7.1 (2007-04-21) ==
 --------------------------------
 
  * Added Anamorphic widescreen "Panorama" skin (F#1669994)
  * Added MusicIP Mixer Plug-in (F#1676991)
  * Added TV recording manager (F#1672003)
+ * Added VIDEO_SEND_XINE_CMD event to send specific commands to xine (F#1683699)
  * Updated and fixed German translations (B#1672040)
  * Updated rss feed for better url detection (B#1675373)
+ * Updated and fixed video selection of audio, subtitles and chapters (B#1677364)
+ * Updated xine event handling to accept SEND_VIDEO_XINE_CMD (F#1683699)
  * Fixed audio item correctly processing files without media tags (B#1678392)
+ * Fixed audio directory containing accented characters (B#1679595)
  * Fixed autoshutdown processing of return coded (B#1612257)
+ * Fixed command plug-in for long running commands (B#1683533)
  * Fixed IMDB download, adds more data to fxd files (B#1670296)
+ * Fixed IMDB download, corrected accented characters (B#1683040)
+ * Fixed IMDB download, corrected handling of special characters (B#1682345)
  * Fixed mplayer video plug-in not correctly selecting the audio and subtitle tracks (B#1677364)
  * Fixed screensaver intermittent deadlock problem (B#1674028)
  * Fixed tvguide showing too much debug information (B#1674014)
+ * Fixed video item length (B#1683035)
 
 == Release 1.7.0 (2007-02-25) ==
 --------------------------------
