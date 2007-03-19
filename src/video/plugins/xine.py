@@ -240,6 +240,10 @@ class Xine:
             self.app.write('EventPrior\n')
             return True
 
+        if event == VIDEO_SEND_XINE_CMD:
+            self.app.write('%s\n' % event.arg)
+            return True
+
         # DVD NAVIGATION
         if event == DVDNAV_LEFT:
             self.app.write('EventLeft\n')
