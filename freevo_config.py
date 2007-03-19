@@ -1560,8 +1560,8 @@ RECORDSERVER_CLEANUP_THRESHOLD = 0
 # This must be a value in seconds although at the moment only has
 # the percision of one minute.
 TV_RECORD_PADDING = 0 * 60
-TV_RECORD_PADDING_PRE = TV_RECORD_PADDING
-TV_RECORD_PADDING_POST = TV_RECORD_PADDING
+TV_RECORD_PADDING_PRE = None
+TV_RECORD_PADDING_POST = None
 
 if os.uname()[0] == 'FreeBSD':
   # FreeBSD's bsdbt848 TV driver doesn't support audio settings?
