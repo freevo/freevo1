@@ -231,7 +231,8 @@ class CommandItem(Item):
         workapp = CommandChild(self.cmd, 'command', 1, self.stoposd)
         while workapp.isAlive():
             # make sure all callbacks in rc are running
-            rc.poll()
+            if not self.stoposd:
+                rc.poll()
             # wait some time
             time.sleep(0.5)
 
