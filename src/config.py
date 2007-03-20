@@ -434,7 +434,7 @@ if not HELPER:
             print 'this could mess up your X display, setting display to x11.'
             print 'If you really want to do this, start \'DISPLAY="" freevo\''
             print
-            CONF.display='x11'
+            CONF.display = 'x11'
     else:
         if CONF.display == 'x11':
             print
