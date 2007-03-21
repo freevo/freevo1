@@ -16,6 +16,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 == Release 1.7.1 (2007-04-21) ==
 --------------------------------
 
+ * Added ALSA mixer plug-in (F#1685326)
  * Added Anamorphic widescreen "Panorama" skin (F#1669994)
  * Added MusicIP Mixer Plug-in (F#1676991)
  * Added TV recording manager (F#1672003)
