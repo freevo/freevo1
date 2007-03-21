@@ -125,7 +125,7 @@ class MPlayer:
         if hasattr(item, 'is_playlist') and item.is_playlist:
             is_playlist = True
 
-        if item.network_play and ( str(filename).endswith('m3u') or str(filename).endswith('pls')):
+        if item.network_play and (str(filename).endswith('m3u') or str(filename).endswith('pls')):
             is_playlist = True
 
         if str(filename).find(".jsp?") >= 0:
@@ -158,8 +158,6 @@ class MPlayer:
             plugin.getbyname('MIXER').reset()
 
         self.item = item
-
-        _debug_('MPlayer.play(): Starting cmd=%s' % command)
 
         self.app = MPlayerApp(command, self)
         return None
@@ -202,7 +200,7 @@ class MPlayer:
             self.app.write('%s\n' % event.arg)
             return True
 
-        if event in ( STOP, PLAY_END, USER_END ):
+        if event in (STOP, PLAY_END, USER_END):
             self.playerGUI.stop()
             return self.item.eventhandler(event)
 
@@ -236,15 +234,15 @@ class MPlayerApp(childapp.ChildApp2):
         # [0] -> start of line to check with mplayer output
         # [1] -> keyword to store info in self.item.info
         self.STREAM_KEYWORDS = [
-            ( "Genre  : ", "genre" ),
-            ( "Artist : ", "artist" ),
-            ( "Name   : ", "stream_name" ),
-            ( " Genre: ", "genre" ),
-            ( " Artist: ", "artist" ),
-            ( " Name: ", "stream_name" ),
-            ( "Demuxer info Name changed to ", "stream_name" ),
-            ( "Demuxer info Genre changed to ", "genre" ),
-            ( "Demuxer info Artist changed to ", "artist" )
+            ("Genre  : ", "genre"),
+            ("Artist : ", "artist"),
+            ("Name   : ", "stream_name"),
+            (" Genre: ", "genre"),
+            (" Artist: ", "artist"),
+            (" Name: ", "stream_name"),
+            ("Demuxer info Name changed to ", "stream_name"),
+            ("Demuxer info Genre changed to ", "genre"),
+            ("Demuxer info Artist changed to ", "artist")
         ]
 
 
@@ -314,7 +312,7 @@ class MPlayerApp(childapp.ChildApp2):
         else:
             for keywords in self.STREAM_KEYWORDS:
                 if line.startswith(keywords[0]):
-                    _debug_("stream keyword found: %s %s" % (keywords[0], keywords[1] ))
+                    _debug_("stream keyword found: %s %s" % (keywords[0], keywords[1]))
                     titleStart = len(keywords[0])
                     self.item.info[ keywords[1] ] = line[titleStart:]
                     break
