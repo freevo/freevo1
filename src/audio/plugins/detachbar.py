@@ -56,8 +56,11 @@ class PluginInterface(plugin.DaemonPlugin):
     screen.
     """
     def __init__(self):
+        """initialise the DaemonPlugin interface"""
+        _debug_('__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'audio.detachbar'
+        self.update_registered = False
 
         # tunables
         self.TimeOut  = 3  # 3 seconds till we hide the bar
@@ -69,9 +72,10 @@ class PluginInterface(plugin.DaemonPlugin):
         internal timer
         returns status based on idletime
         """
+        _debug_('timer(self)', 3)
         if self.Timer:
             diff = time.time() - self.Timer
-            if diff>self.TimeOut:
+            if diff > self.TimeOut:
                 return BAR_HIDE
             else:
                 return BAR_IDLE
@@ -81,6 +85,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Needed to catch the plugin DETACH event
         """
+        _debug_('eventhandler(self, event, menuw=None)', 2)
         if plugin.isevent(event) == 'DETACH':
             self.show()
             return True
@@ -91,20 +96,26 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         used when hiding the bar
         """
+        _debug_('hide(self)', 2)
         self.status = BAR_HIDE
         self.render = []
         self.player = None
         self.Timer  = None
         self.bar    = None
-        rc.unregister(self.update)
+        if self.update_registered:
+            rc.unregister(self.update)
+            self.update_registered = False
     
 
     def show(self):
         """
         used when showing for the first time
         """
+        _debug_('show(self)', 2)
         self.player = audio.player.get()
-        rc.register(self.update, True, 10)
+        if not self.update_registered:
+            rc.register(self.update, True, 10)
+            self.update_registered = True
         self.getInfo()
         self.status = BAR_SHOW
     
@@ -113,6 +124,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         stops the player, waiting for timeout
         """
+        _debug_('stop(self)', 2)
         self.status = BAR_IDLE
         self.Timer  = time.time()
 
@@ -121,6 +133,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         update the bar according to showstatus
         """
+        _debug_('update(self)', 3)
         if self.status == BAR_SHOW:
             if skin.active():
                 skin.redraw()
@@ -137,6 +150,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         draws the bar
         """
+        _debug_('draw(self, (type, object), osd)', 3)
         if self.status == BAR_IDLE:
             # when idle, wait for a new player
             if audio.player.get():
@@ -161,7 +175,7 @@ class PluginInterface(plugin.DaemonPlugin):
             if font == osd.get_font('default'):
                 font = osd.get_font('info value')
        
-            self.calculatesizes(osd,font)
+            self.calculatesizes(osd, font)
 
             if self.image:
                 origin = self.x-70
@@ -199,6 +213,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         sets an array of things to draw
         """
+        _debug_('getInfo(self)', 2)
         self.render = []
         self.calculate = True
         info = self.player.item.info
@@ -223,10 +238,11 @@ class PluginInterface(plugin.DaemonPlugin):
             self.render += [ self.player.item.name ]
     
 
-    def calculatesizes(self,osd,font):
+    def calculatesizes(self, osd, font):
         """
         sizecalcs is not necessery on every pass
         """
+        _debug_('calculatesizes(self, osd, font)', 3)
         if not hasattr(self, 'idlebar'):
             self.idlebar = plugin.getbyname('idlebar')
             if self.idlebar:
@@ -254,7 +270,7 @@ class PluginInterface(plugin.DaemonPlugin):
     
             for r in self.render:
                 bar_height += self.font_h
-                bar_width = max(bar_width,font.font.stringsize(r))
+                bar_width = max(bar_width, font.font.stringsize(r))
                 
             self.y = (total_height - bar_height) - osd.y - pad - pad_internal
             self.x = (total_width - bar_width) - osd.x - pad - pad_internal
@@ -274,10 +290,11 @@ class PluginInterface(plugin.DaemonPlugin):
             self.t_w = min(self.t_w, self.idlebar_max - self.x - 30)
 
             
-    def formattime(self,seconds):
+    def formattime(self, seconds):
         """
         returns string formatted as mins:seconds
         """
+        _debug_('formattime(self, seconds)', 3)
         mins = 0
         mins = seconds / 60
         secs = seconds % 60
@@ -286,4 +303,4 @@ class PluginInterface(plugin.DaemonPlugin):
             secs = '0%s' % secs
         else:
             secs = '%s' % secs
-        return '%i:%s' % (mins,secs)
+        return '%i:%s' % (mins, secs)
