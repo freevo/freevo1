@@ -27,7 +27,13 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-
+"""
+Plugin to browse the TV recordings directory based on series rather than
+just a flat view of the recordings.
+Programs not in a series are placed at the top level, while programs that
+are a member of a series are placed in a series menu and the menu placed 
+at the top level.
+"""
 
 import os
 import datetime
@@ -54,22 +60,27 @@ from gui import ConfirmBox, AlertBox, ProgressBox
 from menu import MenuItem, Menu
 from video import VideoItem
 
+disk_manager = None
+
 class PluginInterface(plugin.MainMenuPlugin):
     """
+    Plugin interface for the Manage Recordings TV menu and
+    the disk space reclaiming feature.
     """
     def __init__(self):
         """
         normal plugin init, but sets _type to 'mainmenu_tv'
         """
+        global disk_manager 
         plugin.MainMenuPlugin.__init__(self)
         
         self._type = 'mainmenu_tv'
         self.parent = None
         
-        self.disk_manager = DiskManager(int(config.TVRM_MINIMUM_DISK_FREE) * 1024 * 1024)
+        disk_manager = DiskManager(int(config.TVRM_MINIMUM_DISK_FREE) * 1024 * 1024)
         
-        plugin.register(self.disk_manager, "DiskManager")
-        plugin.activate(self.disk_manager)
+        plugin.register(disk_manager, "DiskManager")
+        plugin.activate(disk_manager)
 
 
     def config(self):
@@ -126,92 +137,41 @@ class RecordingsDirectory(Item):
                 selected_id  = self.menu.selected.id()
                 selected_pos = self.menu.choices.index(self.menu.selected)
 
-        if config.OSD_BUSYICON_TIMER:
-            osd.get_singleton().busyicon.wait(config.OSD_BUSYICON_TIMER[0])
-        
-        files       = vfs.listdir(self.dir, include_overlay=True)
-        num_changes = mediainfo.check_cache(self.dir)
-
-        pop = None
-        callback=None
-        if num_changes > 10:
-            pop = ProgressBox(text=_('Scanning recordings, be patient...'),
-                              full=num_changes)
-            pop.show()
-            callback=pop.tick
-
-
-        elif config.OSD_BUSYICON_TIMER and len(files) > config.OSD_BUSYICON_TIMER[1]:
-            # many files, just show the busy icon now
-            osd.get_singleton().busyicon.wait(0)
-        
-
-        if num_changes > 0:
-            mediainfo.cache_dir(self.dir, callback=callback)
-
-        series = {}
-
-        recordings = fxditem.mimetype.get(self, files)       
-        for recorded_item in recordings:
-            if series.has_key(recorded_item.name):
-                series_items = series[recorded_item.name]
-            else:
-                series_items = []
-                series[recorded_item.name] = series_items
-            series_items.append(recorded_item)
-
-        items = []
-        
-        for name,programs in series.iteritems():
-            if len(programs) == 1:
-                # Just one program in so don't bother to add it to a series menu.
-                items.append(RecordedProgramItem(programs[0].name, programs[0]))
-            else:
-                # Create a series menu and add all the programs in order.
-                items.append(Series(name, programs))
             
-        items.sort(lambda l, o: cmp(o.sort('date+name').upper(), l.sort('date+name').upper()))
+        segregated_recordings.sort(lambda l, o: cmp(o.sort('date+name').upper(), l.sort('date+name').upper()))
         
-        if pop:
-            pop.destroy()
-            # closing the poup will rebuild the menu which may umount
-            # the drive
-
-        if config.OSD_BUSYICON_TIMER:
-            # stop the timer. If the icons is drawn, it will stay there
-            # until the osd is redrawn, if not, we don't need it to pop
-            # up the next milliseconds
-            osd.get_singleton().busyicon.stop()
 
         if arg == 'update':
-            # update because of dirwatcher changes            
-            self.menu.choices = items
+            # update because of DiskManager            
+            self.menu.choices = segregated_recordings
             if selected_pos != -1:
-                for i in items:
+                for i in segregated_recordings:
                     if Unicode(i.id()) == Unicode(selected_id):                       
                         self.menu.selected = i                        
                         break                
                     else:
                         # item is gone now, try to the selection close
                         # to the old item
-                        pos = max(0, min(selected_pos-1, len(items)-1))
-                        if items:
-                            self.menu.selected = items[pos]
+                        pos = max(0, min(selected_pos-1, len(segregated_recordings)-1))
+                        if segregated_recordings:
+                            self.menu.selected = segregated_recordings[pos]
                         else:
                             self.menu.selected = None
                 if self.menu.selected and selected_pos != -1:
                     self.menuw.rebuild_page()            
                 else:
                     self.menuw.init_page()            
-                    self.menuw.refresh()
+                self.menuw.refresh()
         else:
             # normal menu build
-            item_menu = Menu(self.name, items, reload_func=self.reload, item_types = 'tv')
+            item_menu = Menu(self.name, segregated_recordings, reload_func=self.reload, item_types = 'tv')
             menuw.pushmenu(item_menu)
             
             self.menu  = item_menu
             self.menuw = menuw
-
+            
+        disk_manager.set_update_menu(self, menuw, None)
+    
     # ======================================================================
     # Helper methods
     # ======================================================================
@@ -252,6 +212,11 @@ class RecordedProgramItem(Item):
         else:
             watched = eval(watched)
         self.watched =  watched
+        
+        try:
+            self.timestamp = float(self.video_item['recording_timestamp'])
+        except ValueError:
+            self.timestamp = 0.0
         
         self.set_icon()
 
@@ -299,23 +264,8 @@ class RecordedProgramItem(Item):
         self.video_item.files.delete()
         if self.menuw:
             self.menuw.delete_submenu(True, True)
-            try:
-                # we also need to delete the item from the menu
-                menu = self.menuw.menustack[-1]
-                idx = menu.choices.index(self)    
-                # delete it from menu
-                menu.choices.pop(idx)
-                if len(menu.choices)>0:
-                    # if there are more items
-                    self.menuw.init_page()
-                    # refresh the menu
-                    self.menuw.refresh()
-                else:
-                    # if menu is empty, remove it
-                    self.menuw.delete_menu()    
-            except ValueError, e:
-                pass
-    
+
+
     def mark_to_keep(self, arg=None, menuw=None):
         """
         Toggle whether this program should be kept.
@@ -337,6 +287,39 @@ class RecordedProgramItem(Item):
         if menuw:
             copy_and_replace_menu_item(menuw, self)
 
+
+    def set_name_to_episode(self):
+        """
+        Set the name of this recorded program item to the name of
+        the episode of this program.
+        """
+        episode_name = self.video_item['tagline']
+        if not episode_name:
+            episode_name = self.video_item['subtitle']
+        if not episode_name:
+            try:
+                pat = re.compile(config.TVRM_EPISODE_FROM_PLOT)
+                episode = pat.match(self.video_item['plot']).group(1)
+                episode_name = episode.strip()
+            except Exception, e:
+                episode_name = None
+        if not episode_name and (self.timestamp > 0.0):
+            try:
+                episode = datetime.datetime.fromtimestamp(self.timestamp)
+                episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
+            except Exception, e:
+                episode_name = None
+        if not episode_name:
+            try:
+                episode = datetime.datetime.fromtimestamp(os.path.getctime(self.video_item['filename']))
+                episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
+            except Exception, e:
+                episode_name = None
+        if not episode_name:
+            episode_name = _('(Unnamed)')
+        self.video_item['tagline'] = episode_name
+        self.name = episode_name
+
     # ======================================================================
     # Helper methods
     # ======================================================================
@@ -356,7 +339,7 @@ class RecordedProgramItem(Item):
         fxd.info['tagline'] = fxd.str2XML(self.video_item['tagline'])
         fxd.info['plot'] = fxd.str2XML(self.video_item['plot'])
         fxd.info['runtime'] = self.video_item['length']
-        fxd.info['recording_timestamp'] = self.video_item['recording_timestamp']
+        fxd.info['recording_timestamp'] = self.timestamp
         fxd.info['year'] = self.video_item['year']
         fxd.info['watched'] = str(watched)
         fxd.info['keep'] = str(keep)
@@ -389,10 +372,7 @@ class RecordedProgramItem(Item):
         Return a string to use to sort this item.
         """
         if mode == 'date+name':
-            try:
-                return u'%010.0f%s' % (float(self.video_item['recording_timestamp']), self.name)
-            except ValueError:
-                return u'%010.0f%s' % (0.0, self.name)
+            return u'%010.0f%s' % (self.timestamp, self.name)
             
         return self.name
     
@@ -408,21 +388,13 @@ class Series(Item):
     Class representing a set of programs with the same name, but (probably) 
     different taglines.
     """
-    def __init__(self, name, programs):
+    def __init__(self, name, items):
         Item.__init__(self, None, skin_type = 'tv')
         
         self.set_url(None)
         self.type = 'dir'
         self.name = name
-        self.programs = programs
-        self.items = []
-        for program in self.programs:
-            tagline = self._get_episode_name(program)
-            self.items.append(RecordedProgramItem(tagline, program))
-        # TODO: Replace with smart sort that knows about 'n/m <subtitle>' style names
-        self.items.sort(lambda l, o: cmp(l.sort().upper(), o.sort().upper()))
-        self.set_icon()
-
+        self.update(items)
 
 
     # ======================================================================
@@ -443,12 +415,48 @@ class Series(Item):
         """
         Browse the recorded programs in a series.
         """
-        # normal menu build
-        item_menu = Menu(self.name, self.items, item_types = 'tv')
-        menuw.pushmenu(item_menu)
-        
-        self.menu  = item_menu
-        self.menuw = menuw
+        if arg == 'update':
+            # series has been deleted!
+            if not self.items:
+                rc.post_event(MENU_BACK_ONE_MENU)
+                return
+                
+            if not self.menu.choices:
+                selected_pos = -1
+            else:
+                # store the current selected item
+                selected_id  = self.menu.selected.id()
+                selected_pos = self.menu.choices.index(self.menu.selected)
+
+            # update because of DiskManager
+            self.menu.choices = self.items
+            if selected_pos != -1:
+                for i in self.items:
+                    if Unicode(i.id()) == Unicode(selected_id):                       
+                        self.menu.selected = i                        
+                        break                
+                    else:
+                        # item is gone now, try to the selection close
+                        # to the old item
+                        pos = max(0, min(selected_pos-1, len(self.items)-1))
+                        if self.items:
+                            self.menu.selected = self.items[pos]
+                        else:
+                            self.menu.selected = None
+                if self.menu.selected and selected_pos != -1:
+                    self.menuw.rebuild_page()            
+                else:
+                    self.menuw.init_page()            
+                self.menuw.refresh()
+        else:
+            # normal menu build
+            item_menu = Menu(self.name, self.items, item_types = 'tv')
+            menuw.pushmenu(item_menu)
+            
+            self.menu  = item_menu
+            self.menuw = menuw
+            
+        disk_manager.set_update_menu(self, menuw, None)
 
 
     def play_all(self, arg=None, menuw=None):
@@ -490,6 +498,20 @@ class Series(Item):
         if menuw:
             copy_and_replace_menu_item(menuw, self)
 
+
+    def update(self, items):
+        """
+        Update the list of programs that make up this series.
+        """
+        self.items = items
+        for item in self.items:
+            item.set_name_to_episode()
+            
+        # TODO: Replace with smart sort that knows about 'n/m <subtitle>' style names
+        self.items.sort(lambda l, o: cmp(l.sort().upper(), o.sort().upper()))            
+        self.set_icon()
+
+
     # ======================================================================
     # Helper methods
     # ======================================================================
@@ -515,48 +537,17 @@ class Series(Item):
             self.icon = config.ICON_DIR + '/status/series_unwatched.png'
 
 
-    def _get_episode_name(self, program):
-        episode_name = program['tagline']
-        if not episode_name:
-            episode_name = program['subtitle']
-        if not episode_name:
-            try:
-                pat = re.compile(config.TVRM_EPISODE_FROM_PLOT)
-                episode = pat.match(program['plot']).group(1)
-                episode_name = episode.strip()
-            except Exception, e:
-                episode_name = None
-        if not episode_name:
-            try:
-                episode = datetime.datetime.fromtimestamp(
-                          float(program['recording_timestamp']))         
-                episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
-            except Exception, e:
-                episode_name = None
-        if not episode_name:
-            try:
-                episode = datetime.datetime.fromtimestamp(
-                          os.path.getctime(program['filename']))
-                episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
-            except Exception, e:
-                episode_name = None
-        if not episode_name:
-            episode_name = _('(Unnamed)')
-        program['tagline'] = episode_name
-        return Unicode(program['tagline'])
-
-
     def __getitem__(self, key):
         """
         Returns the number of episodes when
         """
         if key == 'tagline':
-            return unicode('%d ' % len(self.programs)) + _('episodes')
+            return unicode('%d ' % len(self.items)) + _('episodes')
         if key == 'content':
             content = ''
-            for i in range(0, len(self.programs)):
-                content += self._get_episode_name(self.programs[i])
-                if i < (len(self.programs) - 1):
+            for i in range(0, len(self.items)):
+                content += self.items[i].name
+                if i < (len(self.items) - 1):
                     content += ', '
             return content
                 
@@ -569,10 +560,9 @@ class Series(Item):
         """
         if mode == 'date+name':
             latest_timestamp = 0.0
-            for program in self.programs:
-                timestamp = float(program['recording_timestamp'])
-                if timestamp > latest_timestamp:
-                    latest_timestamp = timestamp
+            for item in self.items:
+                if item.timestamp > latest_timestamp:
+                    latest_timestamp = item.timestamp
             return u'%10d%s' % (int(latest_timestamp), self.name)
             
         return self.name
@@ -585,20 +575,128 @@ class Series(Item):
 # Disk Management Class
 # ======================================================================
  
+series_table = {}
+segregated_recordings = []
+all_recordings = []
+ 
 class DiskManager(plugin.DaemonPlugin):
     """
     Class to ensure a minimum amount of disk space is always available.
     """
     def __init__(self, required_space):
         plugin.DaemonPlugin.__init__(self)
-        self.poll_interval = 10 # Once a second
+        self.poll_interval = 5 # half a second
         self.poll_menu_only = False
         self.required_space = required_space
+        self.last_time = 0;
+        self.menu = None
+        self.menuw = None
+        self.interested_series = None
+        
+        self.update_recordings()
 
 
     def poll(self):
         """
         Check that the available disk space is greater than TVRM_MINIMUM_DISK_FREE
+        """
+        # Check space first so that any removals are picked up straight away.
+        self.check_space()
+        
+        self.check_recordings()
+    
+    def set_update_menu(self, menu, menuw, interested_series):
+        """
+        Set the menu to update when the recordings directory changes.
+        """
+        self.menuw = menuw
+        self.interested_series = interested_series
+        self.menu = menu
+        
+        
+    def check_recordings(self):
+        """
+        Check the TV recordings directory to determine if the contents have changed,
+        and if they have update the list of recordings and the currently registered 
+        menu.
+        """
+        changed = False
+        try:
+            if vfs.mtime(config.TV_RECORD_DIR) > self.last_time:
+                changed = True
+        except (OSError, IOError):
+            # the directory is gone
+            _debug_('DiskManager: unable to read recordings directory')
+            return
+            
+        if changed:
+            self.last_time = vfs.mtime(config.TV_RECORD_DIR)
+            self.update_recordings()
+            if self.menu:
+                self.menu.browse(menuw=self.menuw, arg='update')
+    
+    def update_recordings(self):
+        """
+        Update the list of recordings.
+        """
+        global all_recordings, segregated_recordings, series_table
+        files       = vfs.listdir(config.TV_RECORD_DIR, include_overlay=True)
+        num_changes = mediainfo.check_cache(config.TV_RECORD_DIR)
+
+        if num_changes > 0:
+            mediainfo.cache_dir(config.TV_RECORD_DIR, callback=None)
+
+        series = {}
+
+        recordings = fxditem.mimetype.get(None, files)       
+        for recorded_item in recordings:
+            rpitem = RecordedProgramItem(recorded_item.name, recorded_item)
+            
+            if series.has_key(recorded_item.name):
+                series_items = series[recorded_item.name]
+            else:
+                series_items = []
+                series[recorded_item.name] = series_items
+            series_items.append(rpitem)
+
+        items = []
+        all_items = []
+        for name,programs in series.iteritems():
+            if len(programs) == 1:
+                # Just one program in so don't bother to add it to a series menu.
+                item = programs[0]
+                if name in series_table:
+                    series_item = series_table[name]
+                    series_item.items = None
+                    del series_table[name]
+            else:
+                if name in series_table:
+                    item = series_table[name]
+                    item.update(programs)
+                else:
+                    # Create a series menu and add all the programs in order.
+                    item = Series(name, programs)
+                    series_table[name] = item
+                
+            items.append(item)
+            all_items += programs
+        
+        # Clean the series table of series that no longer exist
+        for name,series_item in series_table.items():
+            if not series_item in items:
+                series_item.items = None
+                del series_table[name]
+        
+        segregated_recordings = items
+        all_recordings = all_items
+        
+        self.last_time = vfs.mtime(config.TV_RECORD_DIR)
+
+ 
+    def check_space(self):
+        """
+        Check the amount of disk space has not dropped below the minimum required.
+        If it has attempt to remove some recordings.
         """
         if util.freespace(config.TV_RECORD_DIR) < self.required_space:
             print 'Need to free up some space now!'
@@ -612,48 +710,29 @@ class DiskManager(plugin.DaemonPlugin):
         
     
     def generate_candidates(self):
-        files       = vfs.listdir(config.TV_RECORD_DIR, include_overlay=True)
-        num_changes = mediainfo.check_cache(config.TV_RECORD_DIR)
-
         watched_candidates = []
         unwatched_candidates = []
         
         today = datetime.date.today()
         
-        recordings = fxditem.mimetype.get(None, files)       
-        for recorded_item in recordings:
-            watched, keep = self.candidate_status(recorded_item)
-            if watched and not keep:
+        for recorded_item in all_recordings:
+            if recorded_item.watched and not recorded_item.keep:
                 watched_candidates.append(recorded_item)
-            if not watched and not keep:    
-                recorded_date = datetime.date.fromtimestamp(float(recorded_item['recording_timestamp']))
+                
+            elif not recorded_item.watched and not recorded_item.keep:    
+                recorded_date = datetime.date.fromtimestamp(recorded_item.timestamp)
                 timediff = today - recorded_date
+                
                 if (timediff.days >  config.TVRM_CONSIDER_UNWATCHED_AFTER):
                     unwatched_candidates.append(recorded_item)
 
         # Now sort the recordings so the oldest one is first.
-        watched_candidates.sort(lambda l, o: cmp(float(l['recording_timestamp']), float(o['recording_timestamp'])))
-        unwatched_candidates.sort(lambda l, o: cmp(float(l['recording_timestamp']), float(o['recording_timestamp'])))
+        watched_candidates.sort(lambda l, o: cmp(l.timestamp, o.timestamp))
+        unwatched_candidates.sort(lambda l, o: cmp(l.timestamp, o.timestamp))
         
         return watched_candidates + unwatched_candidates
-    
-    def candidate_status(self, candidate):
-        keep = candidate['keep']
-        if not keep:
-            keep = False
-        else:
-            keep = eval(keep)
-        
-        watched = candidate['watched']
-        if not watched:
-            watched = False
-        else:
-            watched = eval(watched)
-            
-        return (watched, keep)
-        
-        
-        
+
+
 # ======================================================================
 # Helper functions
 # ======================================================================
