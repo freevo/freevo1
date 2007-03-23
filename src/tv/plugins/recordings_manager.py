@@ -395,6 +395,9 @@ class RecordedProgramItem(Item):
                 return u'%010.0f%s' % (0.0, self.name)
             
         return self.name
+    
+    def id(self):
+        return self.sort('date+name')
 
 # ======================================================================
 # Series Menu Class
@@ -573,6 +576,9 @@ class Series(Item):
             return u'%10d%s' % (int(latest_timestamp), self.name)
             
         return self.name
+        
+    def id(self):
+        return 'series:' + self.name
 
 
 # ======================================================================
@@ -602,8 +608,7 @@ class DiskManager(plugin.DaemonPlugin):
                 # Delete a candidate
                 candidate = candidates.pop(0)
                 watched, keep = self.candidate_status(candidate)
-                print 'Deleting %s (watched %s, keep %s timestamp %s)' % (candidate.name, watched, keep, candidate['recording_timestamp'])
-                #candidates.files.delete()
+                candidates.files.delete()
         
     
     def generate_candidates(self):
