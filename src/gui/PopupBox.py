@@ -32,6 +32,7 @@
 
 
 import config
+import skin
 import rc
 from event import *
 

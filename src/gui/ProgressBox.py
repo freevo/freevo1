@@ -57,5 +57,7 @@ class ProgressBox(PopupBox):
 
 
     def tick(self):
+        if not skin.active():
+            return;
         self.progressbar.tick()
         self.draw(update=True)

@@ -64,6 +64,9 @@ class Progressbar(Container):
 
 
     def _draw(self):
+        if not skin.active():
+            return;
+
         if not self.width or not self.height:
             raise TypeError, 'Not all needed variables set.'
 
