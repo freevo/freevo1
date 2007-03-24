@@ -278,7 +278,7 @@ class Read_Thread(threading.Thread):
                 except:
                     pass
                 self.logger = open(logger, 'w')
-                1debug_(String(_('logging child to "%s"')) % logger, 1)
+                _debug_(String(_('logging child to "%s"')) % logger, 1)
             except IOError:
                 _debug_(String(_('ERROR'))+': '+String(_('Cannot open "%s" for logging!')) \
                     % logger, 1)
