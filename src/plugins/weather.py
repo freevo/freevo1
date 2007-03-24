@@ -471,7 +471,7 @@ class WeatherItem(Item):
 
         # obtain radar map
         popup.destroy()
-        popup = PopupBox(text=_('Fetching Radar Map for %s...' % self.popupParam))
+        popup = PopupBox(text=_('Fetching Radar Map for %s...') % self.popupParam)
         popup.show()
         try:
             if self.maplink is None:
