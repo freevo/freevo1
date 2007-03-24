@@ -25,7 +25,7 @@ msgstr ""
 #: ../freevo_config.py:1060 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
-msgstr "Programme Description"
+msgstr "Description"
 
 #: ../freevo_config.py:1061
 msgid "Author"
@@ -742,7 +742,7 @@ msgstr ""
 
 #: plugins/shoppingcart.py:98
 msgid "Added to Cart"
-msgstr "Add to favourites"
+msgstr "Added to Cart"
 
 #: plugins/shoppingcart.py:120
 msgid "Cart: Move Files Here"
@@ -758,7 +758,7 @@ msgstr ""
 
 #: plugins/shoppingcart.py:129
 msgid "Add File to Cart"
-msgstr "Add to favourites"
+msgstr "Add File to Cart"
 
 #: plugins/shoppingcart.py:132
 msgid "Delete Cart"
@@ -977,7 +977,7 @@ msgstr ""
 
 #: plugins/autoshutdown.py:144
 msgid "A recording is in progress."
-msgstr "The record server is down."
+msgstr "A recording is in progress."
 
 #: plugins/autoshutdown.py:147
 #, python-format
@@ -990,7 +990,7 @@ msgstr ""
 
 #: plugins/autoshutdown.py:157
 msgid "No wakeup scheduled."
-msgstr "programme is scheduled"
+msgstr "No wakeup scheduled"
 
 #: plugins/autoshutdown.py:161
 msgid "The next wakeup is scheduled at"
@@ -1146,7 +1146,7 @@ msgstr ""
 
 #: plugins/upsoon.py:224 plugins/upsoon.py:242
 msgid "A recording will start in a few minutes"
-msgstr "The record server is down."
+msgstr "A recording will start in a few minutes"
 
 #: plugins/upsoon.py:272
 msgid "TV stopped, a recording is about to start!"
@@ -1162,7 +1162,7 @@ msgstr ""
 
 #: plugins/home_automation.py:84 plugins/home_automation.py:100
 msgid "Device Options"
-msgstr "Programme Description"
+msgstr "Device Options"
 
 #: plugins/home_automation.py:129 plugins/home_automation.py:136
 #: plugins/home_automation.py:148
@@ -1242,11 +1242,11 @@ msgstr ""
 
 #: plugins/cd_burn.py:793
 msgid "CD Burn Menu"
-msgstr "Programme Menu"
+msgstr "CD Burn Menu"
 
 #: plugins/cd_burn.py:830
 msgid "Copy this file to CD"
-msgstr ""
+msgstr "Copy this file to CD"
 
 #: plugins/cd_burn.py:838
 #, python-format
@@ -1315,13 +1315,15 @@ msgstr ""
 
 #: plugins/buttonbar.py:364
 msgid "More Options"
-msgstr "Programme Description"
+msgstr "More Options"
 
 #: plugins/freevused.py:140
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
 msgstr ""
+"You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
+"plugin.""
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
 msgid "Playing"
@@ -1434,7 +1436,7 @@ msgstr ""
 #: image/plugins/apod.py:127
 #, python-format
 msgid "directory %s does not exist."
-msgstr "Favourite %s doesn't exists."
+msgstr "directory %s does not exist."
 
 #: image/plugins/apod.py:131
 #, python-format
@@ -1574,7 +1576,7 @@ msgstr ""
 #: tv/plugins/scheduled_recordings.py:91 tv/plugins/view_favorites.py:90
 #: tv/program_search.py:82
 msgid "Recording server is unavailable."
-msgstr "record server is unavailable"
+msgstr "Record server is unavailable"
 
 #: www/htdocs/manualrecord.rpy:115
 msgid "Manual Recorded"
@@ -2071,7 +2073,7 @@ msgstr ""
 
 #: www/htdocs/library.rpy:585
 msgid "Play file using VLC"
-msgstr "Play lists"
+msgstr "Play file using VLC"
 
 #: www/htdocs/search.rpy:51 tv/program_display.py:242
 msgid "Search Results"
@@ -2080,7 +2082,7 @@ msgstr ""
 #: www/htdocs/search.rpy:51 www/htdocs/search.rpy:75 www/web_types.py:204
 #: www/web_types.py:347 www/web_types.py:360
 msgid "Search"
-msgstr "Programme Search"
+msgstr "Search"
 
 #: www/htdocs/search.rpy:52
 msgid "recording server is unavailable"
@@ -2088,7 +2090,7 @@ msgstr "record server is unavailable"
 
 #: www/htdocs/search.rpy:82
 msgid "No matches"
-msgstr "No favourites."
+msgstr "No matches"
 
 #: www/htdocs/search.rpy:143
 msgid "New favorite"
@@ -2149,7 +2151,7 @@ msgstr ""
 
 #: skins/main/listing_area.py:213
 msgid "This directory is empty"
-msgstr "This play list is empty!"
+msgstr "This directory is empty!"
 
 #: skins/main/info_area.py:133
 msgid "missing 'src' attribute in skin tag!"
@@ -2157,7 +2159,7 @@ msgstr ""
 
 #: tv/plugins/manual_record.py:114
 msgid "Display record item"
-msgstr "Display favourite"
+msgstr "Display record item"
 
 #: tv/plugins/manual_record.py:123 tv/program_display.py:349
 msgid "Modify name"
@@ -2193,11 +2195,11 @@ msgstr ""
 
 #: tv/plugins/manual_record.py:133
 msgid "Record Item Menu"
-msgstr "Favourite Menu"
+msgstr "Record Item Menu"
 
 #: tv/plugins/manual_record.py:142 tv/program_display.py:401
 msgid "Alter Name"
-msgstr "Favourite Name"
+msgstr "Change Name"
 
 #: tv/plugins/manual_record.py:153 tv/program_display.py:460
 msgid "Modify Channel"
@@ -2218,7 +2220,7 @@ msgstr ""
 #: tv/plugins/manual_record.py:372 tv/plugins/manual_record.py:377
 #: tv/plugins/manual_record.py:381
 msgid "Save Failed, recording was lost"
-msgstr "Save Failed, favourite was lost"
+msgstr "Save Failed, recording was lost"
 
 #: tv/plugins/manual_record.py:380
 msgid ""
@@ -2234,11 +2236,11 @@ msgstr ""
 
 #: tv/plugins/scheduled_recordings.py:50
 msgid "Display Scheduled Recordings"
-msgstr "%i programmes scheduled to record."
+msgstr "Display Scheduled Recordings"
 
 #: tv/plugins/scheduled_recordings.py:56
 msgid "Nothing scheduled."
-msgstr "programme is scheduled"
+msgstr "Nothing scheduled"
 
 #: tv/plugins/scheduled_recordings.py:104
 msgid "Get recordings failed"
@@ -2257,9 +2259,8 @@ msgid "Manage Recordings"
 msgstr ""
 
 #: tv/plugins/recordings_manager.py:118
-#, fuzzy
 msgid "Recordings Directory does not exist"
-msgstr "Directory Add Random Play list"
+msgstr "Record Directory does not exist"
 
 #: tv/plugins/recordings_manager.py:138
 msgid "Scanning recordings, be patient..."
@@ -2268,7 +2269,7 @@ msgstr ""
 #: tv/plugins/recordings_manager.py:266 tv/program_display.py:126
 #: video/configure.py:221 video/videoitem.py:321 playlist.py:284
 msgid "Play"
-msgstr "Play list"
+msgstr "Play"
 
 #: tv/plugins/recordings_manager.py:268
 msgid "(Un)Mark to Keep"
@@ -2279,9 +2280,8 @@ msgid "(Un)Mark as Watched"
 msgstr ""
 
 #: tv/plugins/recordings_manager.py:418
-#, fuzzy
 msgid "Browse episodes"
-msgstr "Browse Play list"
+msgstr "Browse episodes"
 
 #: tv/plugins/recordings_manager.py:419
 msgid "Delete all episodes"
@@ -2289,12 +2289,11 @@ msgstr ""
 
 #: tv/plugins/recordings_manager.py:420
 msgid "Keep all episodes"
-msgstr ""
+msgstr "Keep all episodes"
 
 #: tv/plugins/recordings_manager.py:421
-#, fuzzy
 msgid "Play all episodes"
-msgstr "Play lists"
+msgstr "Play all episodes"
 
 #: tv/plugins/recordings_manager.py:449
 #, python-format
@@ -2381,7 +2380,7 @@ msgstr "Programme Menu"
 #: tv/program_display.py:193
 #, python-format
 msgid "\"%s\" has been scheduled for recording"
-msgstr "%i programmes scheduled to record."
+msgstr "\"%s\" has been scheduled for recording"
 
 #: tv/program_display.py:196
 msgid "Scheduling Failed"
@@ -2390,11 +2389,11 @@ msgstr ""
 #: tv/program_display.py:207
 #, python-format
 msgid "\"%s\" has been removed from schedule"
-msgstr "Remove from favourites"
+msgstr "\"%s\" has been removed from schedule"
 
 #: tv/program_display.py:210 tv/program_display.py:627 tv/edit_favorite.py:210
 msgid "Remove Failed"
-msgstr "Remove favourite"
+msgstr "Remove Failed"
 
 #: tv/program_display.py:236
 #, python-format
@@ -2409,7 +2408,7 @@ msgstr ""
 #: tv/program_display.py:287
 #, python-format
 msgid "getFavorites failed: %s"
-msgstr "Get favourites failed"
+msgstr "getFavorites failed"
 
 #: tv/program_display.py:335
 msgid "Display favorite"
@@ -2466,7 +2465,7 @@ msgstr ""
 #: tv/program_display.py:623
 #, python-format
 msgid "\"%s\" has been removed from favorites"
-msgstr "Remove from favourites"
+msgstr "\"%s\" has been removed from favourites"
 
 #: tv/epg_xmltv.py:57
 msgid "Time conversion error"
@@ -2642,7 +2641,7 @@ msgstr ""
 #: audio/plugins/cdbackup.py:337
 #, python-format
 msgid "Directory %s already exists"
-msgstr "Directory Add Play list Files"
+msgstr "Directory \"%s\" already exists"
 
 #: audio/plugins/cdbackup.py:340
 #, python-format
@@ -2847,7 +2846,7 @@ msgstr ""
 
 #: audio/plugins/album_tree.py:326
 msgid "Generating playlist..."
-msgstr "no next item in play list"
+msgstr "Generating play list..."
 
 #: audio/plugins/musicip.py:423
 msgid "MusicIP Mix"
@@ -2863,7 +2862,7 @@ msgstr ""
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
-msgstr "Browse Play list"
+msgstr "Browse disc"
 
 #: audio/audiodiskitem.py:107 directory.py:714
 msgid "Random playlist"
@@ -2962,7 +2961,7 @@ msgstr ""
 
 #: video/plugins/linkbrowser.py:71
 msgid "Browse links"
-msgstr "Browse Play list"
+msgstr "Browse links"
 
 #: video/plugins/linkbrowser.py:140
 msgid "Downloading link list..."
@@ -2989,7 +2988,7 @@ msgstr ""
 
 #: video/plugins/reencode.py:76
 msgid "Re-encode this program..."
-msgstr "Search for more of this programme"
+msgstr "Re-encode this programme..."
 
 #: video/plugins/bilingual.py:82
 msgid "Bilingual language selection"
@@ -3013,7 +3012,7 @@ msgstr ""
 
 #: video/plugins/reencode2.py:103
 msgid "Transcode this program..."
-msgstr "Search for more of this programme"
+msgstr "Transcode this programme..."
 
 #: video/plugins/reencode2.py:138
 msgid "Start Encoding"
@@ -3021,7 +3020,7 @@ msgstr ""
 
 #: video/plugins/reencode2.py:139
 msgid "Select Encoding Profile"
-msgstr "Get favourites failed"
+msgstr "Select Encoding Profile"
 
 #: video/plugins/reencode2.py:140 video/plugins/reencode2.py:169
 msgid "Modify Container"
@@ -3111,7 +3110,7 @@ msgstr ""
 
 #: video/configure.py:111
 msgid "Subtitle Menu"
-msgstr "Favourite Menu"
+msgstr "Subtitle Menu"
 
 #: video/configure.py:128 video/configure.py:155
 #, python-format
@@ -3120,7 +3119,7 @@ msgstr ""
 
 #: video/configure.py:135 video/configure.py:158
 msgid "Chapter Menu"
-msgstr "Favourite Menu"
+msgstr "Chapter Menu"
 
 #: video/configure.py:187
 #, python-format
@@ -3150,7 +3149,7 @@ msgstr ""
 
 #: video/configure.py:222
 msgid "Config Menu"
-msgstr "Programme Menu"
+msgstr "Config Menu"
 
 #: video/videoitem.py:307
 msgid "Play DVD"
@@ -3208,7 +3207,7 @@ msgstr ""
 #: video/videoitem.py:619
 #, python-format
 msgid "Play Title %s"
-msgstr "Play lists"
+msgstr "Play Title %s"
 
 #: util/mediainfo.py:739
 msgid "Reloading cache files, be patient..."
@@ -3232,7 +3231,7 @@ msgstr ""
 
 #: util/misc.py:477
 msgid "No recordings are scheduled"
-msgstr "Add to Recording Schedule"
+msgstr "No recordings are scheduled"
 
 #: util/misc.py:518
 msgid "Widescreen"
@@ -3312,7 +3311,7 @@ msgstr ""
 
 #: fxditem.py:204
 msgid "Browse list"
-msgstr "Browse Play list"
+msgstr "Browse list"
 
 #: playlist.py:129 playlist.py:169
 #, python-format
@@ -3325,7 +3324,7 @@ msgstr "Browse Play list"
 
 #: playlist.py:292 directory.py:451
 msgid "Random play all items"
-msgstr "Random play list"
+msgstr "Random play all items"
 
 #: playlist.py:338
 msgid "empty playlist"
@@ -3361,7 +3360,7 @@ msgstr ""
 
 #: directory.py:58
 msgid "Directory Autoplay Single Item"
-msgstr "Directory Add Play list Files"
+msgstr "Directory Autoplay Single Item"
 
 #: directory.py:59
 msgid "Don't show directory if only one item exists and auto-select the item."
@@ -3387,7 +3386,7 @@ msgstr ""
 
 #: directory.py:69
 msgid "Directory Smart Names"
-msgstr "Directory Add Random Play list"
+msgstr ""
 
 #: directory.py:70
 msgid "Use a smarter way to abbreviate the name of the items."
@@ -3411,13 +3410,15 @@ msgstr ""
 
 #: directory.py:80
 msgid "Directory Create Playlist"
-msgstr "Directory Add Random Play list"
+msgstr "Directory Create Playlist"
 
 #: directory.py:81
 msgid ""
 "Handle the directory as playlist. After one file is played, the next one "
 "will be started."
 msgstr ""
+"Handle the directory as playlist. After one file is played, the next one "
+"will be started."
 
 #: directory.py:84
 msgid "Directory Add Playlist Files"
@@ -3437,7 +3438,7 @@ msgstr "Add an item for a random play list"
 
 #: directory.py:90
 msgid "Directory Autoplay Items"
-msgstr "Directory Add Play list Files"
+msgstr "Directory Autoplay Items"
 
 #: directory.py:91
 msgid ""
@@ -3450,7 +3451,7 @@ msgstr ""
 #: directory.py:308
 #, python-format
 msgid "Directory on disc [%s]"
-msgstr "Directory Add Play list Files"
+msgstr ""
 
 #: directory.py:309
 msgid "Directory"
@@ -3462,7 +3463,7 @@ msgstr ""
 
 #: directory.py:453
 msgid "Recursive random play all items"
-msgstr "Random play list"
+msgstr ""
 
 #: directory.py:454
 msgid "Recursive play all items"
@@ -3482,7 +3483,7 @@ msgstr ""
 
 #: directory.py:582
 msgid "Directory does not exist"
-msgstr "Directory Add Random Play list"
+msgstr ""
 
 #: directory.py:612
 msgid "Scanning disc, be patient..."
@@ -3537,11 +3538,11 @@ msgstr "or make %s writeable!"
 
 #: main.py:167
 msgid "Freevo Main Menu"
-msgstr "Favourite Menu"
+msgstr "Freevo Main Menu"
 
 #: main.py:183
 msgid "Skin Selector"
-msgstr ""
+msgstr "Skin Selector"
 
 #: main.py:296
 #, python-format
@@ -3630,7 +3631,7 @@ msgstr ""
 
 #: share/skins/main/dark.fxd:496
 msgid "Just one movie in this playlist."
-msgstr "items in this play list"
+msgstr "Just one movie in this play list."
 
 #: share/skins/main/mediaportal.fxd:711 share/skins/main/dark.fxd:770
 #: share/skins/main/basic.fxd:410 share/skins/main/blurr.fxd:717
@@ -3640,7 +3641,7 @@ msgstr ""
 
 #: share/skins/main/dark.fxd:565
 msgid "One song in playlist"
-msgstr "no next item in play list"
+msgstr "One song in play list"
 
 #: share/skins/main/mediaportal.fxd:722 share/skins/main/dark.fxd:779
 #: share/skins/main/basic.fxd:422 share/skins/main/blurr.fxd:730
@@ -3662,7 +3663,7 @@ msgstr ""
 
 #: share/skins/main/basic.fxd:723
 msgid "File name"
-msgstr "Favourite Name"
+msgstr ""
 
 #: share/skins/main/mediaportal.fxd:197 share/skins/main/dark.fxd:501
 #: share/skins/main/blurr.fxd:195 share/skins/main/info.fxd:428
@@ -3672,7 +3673,7 @@ msgstr "This play list is empty!"
 
 #: share/skins/main/dark.fxd:618
 msgid "pictures in this slideshow."
-msgstr "items in this play list"
+msgstr ""
 
 #: share/skins/main/dark.fxd:459 share/skins/main/info.fxd:471
 msgid "Rating"
@@ -3690,7 +3691,7 @@ msgstr ""
 
 #: share/skins/main/dark.fxd:561
 msgid "songs in playlist"
-msgstr "no next item in play list"
+msgstr "songs in play list"
 
 #: share/skins/main/basic.fxd:753
 msgid "Audio Codec"
@@ -3751,7 +3752,7 @@ msgstr ""
 
 #: share/skins/main/dark.fxd:628
 msgid "This slideshow is empty!"
-msgstr "This play list is empty!"
+msgstr "This slide show is empty!"
 
 #: share/skins/main/mediaportal.fxd:183 share/skins/main/mediaportal.fxd:287
 #: share/skins/main/mediaportal.fxd:394 share/skins/main/mediaportal.fxd:402
@@ -3796,7 +3797,7 @@ msgstr ""
 
 #: share/skins/main/dark.fxd:671
 msgid "New mail"
-msgstr "New favourite"
+msgstr "New mail"
 
 #: share/skins/main/mediaportal.fxd:193 share/skins/main/blurr.fxd:191
 #: share/skins/main/info.fxd:419 share/skins/main/info.fxd:424
@@ -3867,7 +3868,7 @@ msgstr ""
 
 #: share/skins/main/dark.fxd:492
 msgid "movies in this playlist."
-msgstr "items in this play list"
+msgstr "movies in this play list"
 
 #: share/skins/main/dark.fxd:17 share/skins/main/crystal.fxd:8
 #: share/skins/main/bluestar.fxd:8 share/skins/main/rain.fxd:8
@@ -3884,11 +3885,8 @@ msgstr ""
 
 #: share/skins/main/dark.fxd:569
 msgid "No songs in playlist"
-msgstr "no next item in play list"
+msgstr "No songs in play list"
 
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr ""
-
-#~ msgid "Favorite not added yet."
-#~ msgstr "Favourite not added yet."
