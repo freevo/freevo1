@@ -75,11 +75,13 @@ except ImportError, i:
 # check if kaa.metadata is up to date to avoid bug reports
 # for already fixed bugs
 try:
+    v = 'unknown'
     import kaa.metadata.version
     if kaa.metadata.version.VERSION < 0.6:
+        v = kaa.metadata.version.VERSION
         raise ImportError
 except ImportError:
-    print 'Error: Installed kaa.metadata version is too old.'
+    print 'Error: Installed kaa.metadata version (%s) is too old.' % v
     print 'Please update kaa.metadata to version 0.6 or higher or get it with subversion'
     print 'svn export svn://svn.freevo.org/kaa/trunk/metadata kaa/metadata'
     print
@@ -88,11 +90,13 @@ except ImportError:
 # check if kaa.imlib2 is up to date to avoid bug reports
 # for already fixed bugs
 try:
+    v = 'unknown'
     import kaa.imlib2.version
     if kaa.imlib2.version.VERSION < 0.1:
+        v = kaa.metadata.version.VERSION
         raise ImportError
 except ImportError:
-    print 'Error: Installed kaa.imlib2 version is too old.'
+    print 'Error: Installed kaa.imlib2 version (%s) is too old.' % v
     print 'Please update kaa.imlib2 to version 0.1 or higher or get it with subversion'
     print 'svn export svn://svn.freevo.org/kaa/trunk/imlib2 kaa/imlib2'
     print
