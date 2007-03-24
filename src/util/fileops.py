@@ -115,8 +115,12 @@ def freespace(path):
     Return the number of bytes available to the user on the file system
     pointed to by path.
     """
-    s = os.statvfs(path)
-    return s[statvfs.F_BAVAIL] * long(s[statvfs.F_BSIZE])
+    try:
+        s = os.statvfs(path)
+        return s[statvfs.F_BAVAIL] * long(s[statvfs.F_BSIZE])
+    except OSError, e:
+        print '\"%s\": %s' % (path, e)
+    return 0
         
 
 def totalspace(path):
