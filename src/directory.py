@@ -304,8 +304,8 @@ class DirItem(Playlist):
         return the specific attribute
         """
         if key == 'type':
-            if self.media:
-                return _('Directory on disc [%s]') % self.media.label
+            if self.media and hasattr(self.media, 'label'):
+                return _('Directory on disc [%s]' % self.media.label)
             return _('Directory')
 
         if key == 'num_items':
