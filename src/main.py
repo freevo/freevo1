@@ -55,6 +55,7 @@ try:
     import Numeric
     
     import config
+    import version
 
     import kaa.metadata as mmpython
     import kaa.imlib2 as Image
@@ -422,7 +423,8 @@ try:
     skin.prepare()
 
     # Fire up splashscreen and load the plugins
-    splash = Splashscreen(_('Starting Freevo, please wait ...'))
+    v = '%s' % version.__version__
+    splash = Splashscreen(_('Starting Freevo-%s, please wait ...') % v)
     skin.register('splashscreen', ('screen', splash))
     plugin.init(splash.progress)
     skin.delete('splashscreen')
