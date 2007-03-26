@@ -864,9 +864,12 @@
         <font label="info label"   name="Arial_Bold" size="14" color="0xffffff"/>
         <font label="info value"   name="Arial_Bold" size="14" color="0xffffff"/>
         
-        <font label="detachbar"  name="Arial_Bold" size="10" color="0xffffff">
+        <font label="detachbar"  name="Arial_Bold" size="10" color="default0"/>
+        <!-- for some reason shadow doesn't work with the detachbar
+        <font label="detachbar"  name="Arial_Bold" size="12" color="0xffffff">
             <shadow visible="yes" x="2" y="2" color="0xaa0000" border="yes"/>
         </font>
+        -->
 
         <font label="clock"   name="Arial_Bold" size="16" color="0xffffff"/>
         
