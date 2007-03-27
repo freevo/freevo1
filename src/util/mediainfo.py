@@ -35,6 +35,7 @@ import copy
 from pprint import pformat
 
 import kaa.metadata as mmpython
+import kaa.metadata
 
 import config
 import util
@@ -264,7 +265,7 @@ class MMCache(Cache):
         self.uncachable_keys = [ 'thumbnail', 'url' ]
 
 
-    def simplify(self, object):
+    def simplify(self, object, debug=0):
         """
         kaa metadata has huge objects to cache, we don't need them.
         This function simplifies them to be only string, intger, dict or
@@ -274,6 +275,8 @@ class MMCache(Cache):
         """
         ret = {}
         for k in object.keys():
+            if debug:
+                print 'object[%s] = %r' % (k, getattr(object, k))
             if not k in self.uncachable_keys and getattr(object,k) != None:
                 value = getattr(object,k)
                 if isstring(value):
@@ -281,7 +284,7 @@ class MMCache(Cache):
                 if value:
                     ret[k] = value
 
-        for k in  ( 'video', 'audio', 'chapters', 'subtitles', 'tracks'):
+        for k in  ( 'video', 'audio', 'chapters', 'subtitles', 'tracks' ):
             # if it's an AVCORE object, also simplify video and audio
             # lists to string and it
             if hasattr(object, k) and getattr(object, k):
@@ -289,10 +292,12 @@ class MMCache(Cache):
                 for o in getattr(object, k):
                     ret[k].append(self.simplify(o))
 
-        for k in ('mime', 'name', 'pos' ):
+        for k in ( 'mime', 'name', 'pos', 'title', 'comment', 'media', 'image' ):
             if hasattr(object, k) and getattr(object, k) != None:
                 ret[k] = getattr(object, k)
 
+        if debug:
+            print ret
         return ret
 
 
@@ -300,13 +305,20 @@ class MMCache(Cache):
         """
         create mmpython information about the given file
         """
+        data = os.path.split(filename)
+        if len(data) == 2:
+            if data[1] == '.directory':
+                filename = data[0]
+
         info = mmpython.parse(filename)
+
         if info:
             thumbnail = None
             if info.has_key('thumbnail'):
                 thumbnail = info.thumbnail
 
             info = self.simplify(info)
+
             name = util.getname(filename)
             if name == name.upper() and info.has_key('type') and \
                    info['type'] in ('DVD', 'VCD'):
@@ -325,6 +337,8 @@ class MMCache(Cache):
             elif config.CACHE_IMAGES and info.has_key('mime') and info['mime'] and \
                      info['mime'].startswith('image'):
                 util.cache_image(filename)
+            if info.has_key('media') and info['media'] == 'MEDIA_DIRECTORY':
+                pass
 
             return info
         return {}
@@ -418,23 +432,15 @@ class Info:
 
 
     def __str__(self):
-        s = '\nutil:mediainfo:Info:s:'
-        s += ' filename=%r' % self.filename
-        s += ' disc=%r' % self.disc
-        s += ' variables=%r' % self.variables
-        s += ' mmdata=%r' % self.mmdata
-        s += ' metadata=%r' % self.metadata
-        s += ' self.__dict__=%r' % self.__dict__
+        s = pformat(self, depth=2)
         return s
 
 
     def __repr__(self):
-        s = '\nutil:mediainfo:Info:r:'
-        s += ' filename=%r' % self.filename
-        s += ' disc=%r' % self.disc
-        s += ' variables=%r' % self.variables
-        s += ' mmdata=%r' % self.mmdata
-        s += ' metadata=%r' % self.metadata
+        if hasattr(self, 'filename'):
+            s = '%s: %r' % (self.filename, self.__class__)
+        else:
+            s = '%r' % (self.__class__)
         return s
 
 

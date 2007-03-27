@@ -85,14 +85,14 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         set informations for a diritem based on the content, etc.
         """
-        if not diritem.image and os.path.exists(diritem.dir):
+        if os.path.exists(diritem.dir):
             timestamp = os.stat(diritem.dir)[stat.ST_MTIME]
             if not diritem['coversearch_timestamp'] or \
                    timestamp > diritem['coversearch_timestamp']:
                 # Pick an image if it is the only image in this dir, or it matches
                 # the configurable regexp
                 files = util.find_matches(vfs.listdir(diritem.dir, include_overlay=True),
-                                          ('jpg', 'gif', 'png' ))
+                                          ('jpg', 'gif', 'png'))
                 if len(files) == 1:
                     diritem.image = os.path.join(diritem.dir, files[0])
                 elif len(files) > 1:
@@ -101,7 +101,7 @@ class PluginInterface(plugin.MimetypePlugin):
                         diritem.image = os.path.join(diritem.dir, covers[0])
                 diritem.store_info('coversearch_timestamp', timestamp)
                 diritem.store_info('coversearch_result', diritem.image)
-            else:
+            elif not diritem['coversearch_result']:
                 diritem.image = diritem['coversearch_result']
                 
         if not diritem.info.has_key('title') and diritem.parent:

@@ -35,6 +35,8 @@ import re
 import stat
 import copy
 import rc
+from pprint import pformat
+
 import util.mediainfo as mediainfo
 import kaa.metadata as mmpython
 
@@ -101,7 +103,7 @@ class DirItem(Playlist):
         self.autovars = [ ('num_dir_items', 0), ('show_all_items', False) ]
         Playlist.__init__(self, parent=parent, display_type=display_type)
         self.type = 'dir'
-        self.menu  = None
+        self.menu = None
 
         # store FileInformation for moving/copying
         self.files = FileInformation()
@@ -112,19 +114,25 @@ class DirItem(Playlist):
         self.dir  = os.path.abspath(directory)
         self.info = mediainfo.get_dir(directory)
 
-        mminfo = mmpython.parse(directory)
+        #FIXME This should be done in the cache create
+        if not self.image:
+            mminfo = mmpython.parse(directory)
+            if mminfo['image']:
+                self.image = mminfo['image']
+            if mminfo['title']:
+                self.title = mminfo['title']
+            if mminfo['comment']:
+                self.comment = mminfo['comment']
 
         if name:
             self.name = Unicode(name)
         elif self.info['title:filename']:
             self.name = self.info['title:filename']
-        elif mminfo['title']:
-            self.name = mminfo['title']
+        elif self.info['title']:
+            self.name = self.info['title']
         else:
             self.name = util.getname(directory, skip_ext=False)
             
-        self.comment = mminfo['comment']
-
         if add_args == None and hasattr(parent, 'add_args'): 
             add_args = parent.add_args
 
@@ -164,13 +172,14 @@ class DirItem(Playlist):
         self.modified_vars = []
 
         # Check for a cover in current dir
-        if mminfo['image']:
-            image = mminfo['image']
-        else:
-            image = util.getimage(os.path.join(directory, 'cover'))
+        image = util.getimage(os.path.join(directory, 'cover'))
+        if self.info['image']:
+            image = self.info['image']
         if image:
             self.image = image
             self.files.image = image
+
+        # Check for a folder.fxd in current dir
         self.folder_fxd = directory+'/folder.fxd'
         if vfs.isfile(self.folder_fxd):
             self.set_fxd_file(self.folder_fxd)
@@ -188,19 +197,15 @@ class DirItem(Playlist):
 
 
     def __str__(self):
-        s = '\ndirectory:DirItem:s:'
-        s += ' name=%r' % self.name
-        s += ' dir=%r' % self.dir
-        s += ' info=%r' % self.info
-        #s += ' __dict__=%r' % self.__dict__
+        s = pformat(self, depth=2)
         return s
 
 
     def __repr__(self):
-        s = '\ndirectory:DirItem:r:'
-        s += ' name=%r' % self.name
-        s += ' dir=%r' % self.dir
-        s += ' info=%r' % self.info
+        if hasattr(self, 'name'):
+            s = '<%s: %r>' % (self.name, self.__class__)
+        else:
+            s = '<%r>' % (self.__class__)
         return s
 
 
@@ -371,7 +376,7 @@ class DirItem(Playlist):
         """
         create some metainfo for the directory
         """
-        display_type   = self.display_type
+        display_type = self.display_type
 
         if self.display_type == 'tv':
             display_type = 'video'
@@ -387,7 +392,7 @@ class DirItem(Playlist):
                                ( 'num_%s_items' % name, 0 ) ]
             
         try:
-            timestamp     = os.stat(self.dir)[stat.ST_MTIME]
+            timestamp = os.stat(self.dir)[stat.ST_MTIME]
         except OSError:
             return
         
