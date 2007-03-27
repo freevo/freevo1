@@ -89,11 +89,6 @@ _debug_('PLUGIN_RECORD: %s' % config.plugin_record)
 
 plugin.init_special_plugin(config.plugin_record)
 
-if config.TV_RECORD_PADDING_PRE == None:
-    config.TV_RECORD_PADDING_PRE = config.TV_RECORD_PADDING
-if config.TV_RECORD_PADDING_POST == None:
-    config.TV_RECORD_PADDING_POST = config.TV_RECORD_PADDING
-
 def print_plugin_warning():
     print '*************************************************'
     print '**  Warning: No recording plugin registered.  **'
