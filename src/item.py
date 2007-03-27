@@ -32,6 +32,7 @@
 import os
 import gettext
 import shutil
+from pprint import pformat
 
 import config
 from event import *
@@ -53,24 +54,15 @@ class FileInformation:
 
 
     def __str__(self):
-        s = '\nitem:FileInformation:s:'
-        s += ' files=%r' % self.files
-        s += ' fxd_file=%r' % self.fxd_file
-        s += ' edl_file=%r' % self.edl_file
-        s += ' image=%r' % self.image
-        s += ' read_only=%r' % self.read_only
-        s += ' dir(self)=%r' % dir(self)
+        s = pformat(self, depth=2)
         return s
 
 
     def __repr__(self):
-        s = '\nitem:FileInformation:r:'
-        s += ' files=%r' % self.files
-        s += ' fxd_file=%r' % self.fxd_file
-        s += ' edl_file=%r' % self.edl_file
-        s += ' image=%r' % self.image
-        s += ' read_only=%r' % self.read_only
-        #s += ' dir(self)=%r' % dir(self)
+        if hasattr(self, 'name'):
+            s = '%s: %r' % (self.name, self.__class__)
+        else:
+            s = '%r' % (self.__class__)
         return s
 
 
@@ -202,22 +194,15 @@ class Item:
 
 
     def __str__(self):
-        s = '\nitem:Item:s:'
-        s += ' name=%r' % self.name
-        s += ' info=%r' % self.info
-        if hasattr(self, 'image'): s += ' image=%r' % self.image
-        if hasattr(self, 'arg'):   s += ' arg=%r' % (self.arg,)
-        else: s += ' self.__dict__=%r' % self.__dict__
+        s = pformat(self, depth=2)
         return s
 
 
     def __repr__(self):
-        s = '\nitem:Item:r:'
-        s += ' name=%r' % self.name
-        s += ' info=%r' % self.info
-        if hasattr(self, 'image'): s += ' image=%r' % self.image
-        if hasattr(self, 'arg'):   s += ' arg=%r' % (self.arg,)
-        #else: s += ' self.__dict__=%r' % self.__dict__
+        if hasattr(self, 'name'):
+            s = '%s: %r' % (self.name, self.__class__)
+        else:
+            s = '%r' % (self.__class__)
         return s
 
 

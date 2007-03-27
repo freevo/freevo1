@@ -35,6 +35,7 @@ import re
 import md5
 import time
 import copy
+from pprint import pformat
 
 import config
 import util
@@ -125,18 +126,15 @@ class VideoItem(Item):
 
         
     def __str__(self):
-        s = '\nvideo:videoitem:VideoItem:Info:s:'
-        s += ' name=%r' % self.name
-        s += ' filename=%r' % self.filename
-        s += ' dir(self)=%r' % dir(self)
+        s = pformat(self, depth=2)
         return s
 
 
     def __repr__(self):
-        s = '\nvideo:videoitem:VideoItem:Info:r:'
-        s += ' name=%r' % self.name
-        s += ' filename=%r' % self.filename
-        #s += ' dir(self)=%r' % dir(self)
+        if hasattr(self, 'name'):
+            s = '%s: %r' % (self.name, self.__class__)
+        else:
+            s = '%r' % (self.__class__)
         return s
 
 

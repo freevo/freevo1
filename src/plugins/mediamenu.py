@@ -32,6 +32,7 @@
 import os
 import traceback
 import copy
+from pprint import pformat
 
 import config
 import menu
@@ -75,12 +76,17 @@ class MediaMenu(Item):
         self.type = 'mediamenu'
 
     def __str__(self):
-        s = '\nplugins:mediamenu:MediaMenu:s'
+        s = pformat(self, depth=2)
         return s
 
+
     def __repr__(self):
-        s = '\nplugins:mediamenu:MediaMenu:r'
+        if hasattr(self, 'name'):
+            s = '%s: %r' % (self.name, self.__class__)
+        else:
+            s = '%r' % (self.__class__)
         return s
+
 
     def main_menu_generate(self):
         """
