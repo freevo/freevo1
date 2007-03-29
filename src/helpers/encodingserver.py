@@ -76,8 +76,6 @@ def _debug_(text, level=1):
         except:
             print String(text)
 
-tmppath = '/tmp/encodingserver'
-
 jam = jellyToXML
 unjam = unjellyFromXML
 
@@ -219,10 +217,7 @@ class EncodingServer(xmlrpc.XMLRPC):
         
 def main():
     global DEBUG
-    #check for /tmp/encodingserver and if it doesn't exist make it
-    if not (os.path.exists(tmppath) and os.path.isdir(tmppath)):
-        os.mkdir(tmppath)
-    #chdir to /tmp/encodingserver
+    tmppath = tempfile.mkdtemp(prefix = 'encodeserver')
     os.chdir(tmppath)
     
     app = Application("EncodingServer")
