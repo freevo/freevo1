@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.17
+LOCAL_CONF_VERSION = 5.18
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -261,6 +261,7 @@ LOCAL_CONF_CHANGES = [
      ''' ),
     (5.18,
      '''Added tv.recodings_manager plug-in to show what has been watched, TVRM_*,
+     Removed TV_RECORD_PADDING, use TV_RECORD_PADDING_PRE and TV_RECORD_PADDING_POST
      ''' ),
 ]
 
