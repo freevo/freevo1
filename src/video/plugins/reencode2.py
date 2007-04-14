@@ -75,7 +75,7 @@ class PluginInterface(plugin.ItemPlugin):
         _debug_('config(self)', 1)
         return [
             ('REENCODE_CONTAINER', 'avi', 'Container type'),
-            ('REENCODE_RESOLUTION', 'Optimal', 'Container type'),
+            ('REENCODE_RESOLUTION', 'Optimal', 'Resolution'),
             ('REENCODE_VIDEOCODEC', 'XviD', 'Video codec'),
             ('REENCODE_VIDEOBITRATE', '800', 'Video bit rate'),
             ('REENCODE_AUDIOCODEC', 'MPEG 1 Layer 3 (mp3)', 'Audio codec'),
