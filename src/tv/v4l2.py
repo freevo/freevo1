@@ -195,9 +195,10 @@ V4L2_CTRL_FLAGS = {
 
 
 NORMS = {
-    'NTSC'  : 0x3000,
-    'PAL'   : 0xff,
-    'SECAM' : 0x7f0000,
+    'NTSC'     : 0x00003000,
+    'PAL'      : 0x000000ff,
+    'SECAM'    : 0x007f0000,
+    'SECAM-DK' : 0x00320000,
 }
 
 
@@ -290,6 +291,33 @@ class Videodev:
 
 
     def setfreq(self, freq):
+        #standard norm
+        (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
+        std = NORMS.get(string.upper(v_norm))
+        if config.TV_NONSTANDARD_FREQ and config.TV_NONSTANDARD_NORM:
+            if string.upper(config.TV_NONSTANDARD_NORM) in NORMS.keys():
+                if DEBUG >= 3:
+                    print "found nonstandard freq list:",
+                    print config.TV_NONSTANDARD_FREQ
+                    print "found nonstandard norm: %s" % string.upper(config.TV_NONSTANDARD_NORM)
+                    
+                newfreq=freq*1000/16
+                if newfreq in config.TV_NONSTANDARD_FREQ:
+                    if DEBUG >= 3: print "new freq in TV_NONSTANDARD_FREQ: %r" % newfreq
+                    std = NORMS.get(string.upper(config.TV_NONSTANDARD_NORM))
+                    if DEBUG >= 3: print "prepare set new standard: 0x%x" % std
+            else:
+                print "Error! config.TV_NONSTANDARD_NORM value '%s' not from NORMS: %s" \
+                    % (config.TV_NONSTANDARD_NORM,NORMS.keys())
+
+        #get current norm
+        getst = self.getstd()
+        if DEBUG >= 3: print "get standard: 0x%x" % getst
+        if getst != std:
+            if DEBUG >= 3: print "set standard: 0x%x" % std
+            self.setstd(std)
+            sleep(1)
+
         val = struct.pack(FREQUENCY_ST, long(0), long(2), freq)
         r = fcntl.ioctl(self.device, i32(SETFREQ_NO), val)
         if DEBUG >= 3: print "setfreq: val=%r, r=%r" % (val, r)
