@@ -44,6 +44,7 @@ import util.tv_util as tv_util
 
 from event import Event
 from tv.channels import FreevoChannels
+import tv.v4l2 as V4L2
 
 DEBUG = config.DEBUG
 
@@ -123,6 +124,14 @@ class Record_Thread(threading.Thread):
                 if DEBUG: print 'Setting Input to %s' % vg.input_num
                 v.setinput(vg.input_num)
 
+                cur_std = v.getstd()
+                try:
+                    new_std = V4L2.NORMS.get(vg.tuner_norm)
+                    if cur_std != new_std:
+                        v.setstd(new_std)
+                except:
+                    print "Error! Videogroup norm value '%s' not from NORMS: %s" \
+                        % (vg.tuner_norm,V4L2.NORMS.keys())
                 if DEBUG: print 'Setting Channel to %s' % self.prog.tunerid
                 fc.chanSet(str(self.prog.tunerid), False)
 

@@ -1601,21 +1601,3 @@ IMAGEVIEWER_BLEND_MODE = -1
 #             ,"track||'-'||title"]
 #     ,'alt_grouping':[None,None,'year||album','track']
 #     })
-#
-#
-#This addition for use more than one tv standard (like PAL, SECAM, NTSC, SECAM-DK)
-#without modification source code (this addition may be used exUSSR countries)
-#
-#For use with nonstandard norm for some freq
-#please add freq in freq list (see tv/freq.py):
-#TV_NONSTANDARD_FREQ=(59250, 77250, 85250, 183250, 215250)
-#
-#and
-#
-#set norm for this freq list
-#TV_NONSTANDARD_NORM='secam-dk'
-#
-#After restart freevo if you switch to channel with freq from 
-#TV_NONSTANDARD_FREQ list, you switch tuner to TV_NONSTANDARD_NORM standard
-#If freq will be not from TV_NONSTANDARD_FREQ, you will be switched to CONF.tv standard
-#

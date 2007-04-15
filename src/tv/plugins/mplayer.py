@@ -101,6 +101,15 @@ class MPlayer:
                 ivtv_dev = ivtv.IVTV(vg.vdev)
                 ivtv_dev.init_settings()
                 ivtv_dev.setinput(vg.input_num)
+                cur_std = ivtv_dev.getstd()
+                import tv.v4l2
+                try:
+                    new_std = tv.v4l2.NORMS.get(vg.tuner_norm)
+                    if cur_std != new_std:
+                        ivtv_dev.setstd(new_std)
+                except:
+                    print "Error! Videogroup norm value '%s' not from NORMS: %s" \
+                        % (vg.tuner_norm,tv.v4l2.NORMS.keys())
                 #ivtv_dev.print_settings()
                 ivtv_dev.close()
                 self.fc.chanSet(tuner_channel, True)
