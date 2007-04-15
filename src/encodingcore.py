@@ -273,7 +273,7 @@ class EncodingJob:
         else:
             sstep = 60
 
-        arguments = [ "-vop", "cropdetect=30", "-nosound", "-vo", "null", "-frames", "10", "-sstep", str(sstep)]
+        arguments = [ "-vf", "cropdetect=30", "-nosound", "-vo", "null", "-frames", "10", "-sstep", str(sstep)]
 
         if self.sourcetype == "dvd":
             arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.chapter ]
