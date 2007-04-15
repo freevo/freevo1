@@ -461,7 +461,7 @@ class RecordedProgramItem(Item):
         if not episode_name:
             episode_name = _('(Unnamed)')
         self.video_item['tagline'] = episode_name
-        self.name = episode_name
+        self.name = Unicode(episode_name)
 
     # ======================================================================
     # Helper methods
