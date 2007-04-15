@@ -234,7 +234,9 @@ def get_items(item):
     if item.mode in ('dvd', 'vcd') or \
            (item.filename and item.info.has_key('type') and \
             item.info['type'] and item.info['type'].lower().find('mpeg') != -1):
-        items += [ add_toogle(_('deinterlacing'), item, 'deinterlace') ]
+        items += [ add_toogle(_('Deinterlacing'), item, 'deinterlace') ]
+        items += [ add_toogle(_('X-Video Motion Compensation (xvmc)'), item, 'xvmc') ]
+        items += [ add_toogle(_('Bottom field first'), item, 'field-dominance') ]
     return items
 
         

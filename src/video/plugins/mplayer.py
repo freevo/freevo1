@@ -140,6 +140,9 @@ class MPlayer:
             # try to play the next subitem
             return '%s\nnot found' % os.path.basename(url)
        
+        set_vcodec = False
+        if item['xvmc'] and item['type'][:6] in ['MPEG-1','MPEG-2']:
+            set_vcodec = True
 
         # Build the MPlayer command
         command = [ '--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD ]
@@ -196,20 +199,33 @@ class MPlayer:
             elif item.selected_language == 'right':
                 additional_args += [ '-af', 'pan=2:0:0:1:1' ]
 
-        if item['deinterlace'] and config.MPLAYER_VF_INTERLACED:
-            additional_args += [ '-vf', config.MPLAYER_VF_INTERLACED ]
-        elif config.MPLAYER_VF_PROGRESSIVE:
-            additional_args += [ '-vf', config.MPLAYER_VF_PROGRESSIVE ]
+        if not set_vcodec:
+            if item['deinterlace'] and config.MPLAYER_VF_INTERLACED:
+                additional_args += [ '-vf', config.MPLAYER_VF_INTERLACED ]
+            elif config.MPLAYER_VF_PROGRESSIVE:
+                additional_args += [ '-vf', config.MPLAYER_VF_PROGRESSIVE ]
+
+        additional_args += [ '-field-dominance', '%d' % int(item['field-dominance']) ]
 
         if os.path.isfile(os.path.splitext(item.filename)[0]+'.edl'):
-           additional_args += [ '-edl', str(os.path.splitext(item.filename)[0]+'.edl') ]
+            additional_args += [ '-edl', str(os.path.splitext(item.filename)[0]+'.edl') ]
                 
         mode = item.mimetype
         if not config.MPLAYER_ARGS.has_key(mode):
             mode = 'default'
 
+        if config.CHILDAPP_DEBUG:
+            command += [ '-v' ]
+
         # Mplayer command and standard arguments
-        command += [ '-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS ]
+        if set_vcodec:
+            if item['deinterlace']:
+                bobdeint='bobdeint'
+            else:
+                bobdeint='nobobdeint'
+            command += [ '-vo', 'xvmc:%s' % bobdeint, '-vc', 'ffmpeg12mc' ]
+        else:
+            command += [ '-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS ]
 
         # mode specific args
         command += config.MPLAYER_ARGS[mode].split(' ')

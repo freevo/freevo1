@@ -52,7 +52,8 @@ from event import *
 class VideoItem(Item):
 
     def __init__(self, url, parent, info=None, parse=True):
-        self.autovars = [ ('deinterlace', 0) ]
+        #self.autovars = [ ('deinterlace', 0), ('xvmc', config.USE_XVMC), ('field-dominance', config.FIELD_DOMINANCE) ]
+        self.autovars = [ ('deinterlace', 0), ('xvmc', 0), ('field-dominance', 0) ]
         Item.__init__(self, parent)
 
         self.type = 'video'
