@@ -142,6 +142,8 @@ class RecordingsDirectory(Item):
         self.dir = config.TV_RECORD_DIR
         self.settings_fxd = os.path.join(self.dir, 'folder.fxd')
         self.load_settings()
+        
+        self.blue_action = ( self.configure, _('Configure directory'))
 
     # ======================================================================
     # actions
@@ -152,8 +154,7 @@ class RecordingsDirectory(Item):
         return a list of actions for this item
         """
         items = [ ( self.browse, _('Browse directory')) ,
-                  ( self.configure, _('Configure directory'))]
-
+                  self.blue_action]
         return items
     
 
@@ -541,6 +542,7 @@ class Series(Item):
         self.set_url(None)
         self.type = 'dir'
         self.name = name
+        self.playlist = None
         self.update(items)
 
 
@@ -610,8 +612,8 @@ class Series(Item):
         """
         Play all programs in a series.
         """
-        # TODO: Implement!
-        pass
+        self.playlist = Playlist(playlist=self.items)
+        self.playlist.play(menuw=menuw)
 
     
     def confirm_delete(self, arg=None, menuw=None):
@@ -725,6 +727,14 @@ class Series(Item):
         
     def id(self):
         return 'series:' + self.name
+        
+    def eventhandler(self, event, menuw=None):
+        """
+        Handle playlist specific events
+        """
+        if self.playlist:
+            return self.playlist.eventhandler(event, menuw)
+        return False
 
 
 # ======================================================================
@@ -865,8 +875,9 @@ class DiskManager(plugin.DaemonPlugin):
             while (util.freespace(config.TV_RECORD_DIR) < self.required_space) and (len(candidates) > 0):
                 # Delete a candidate
                 candidate = candidates.pop(0)
-                watched, keep = self.candidate_status(candidate)
-                candidates.files.delete()
+                if (not candidate) or (not candidate.files):
+                    break
+                candidate.files.delete()
         
     
     def generate_candidates(self):
