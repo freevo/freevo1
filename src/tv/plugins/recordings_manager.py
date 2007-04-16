@@ -373,9 +373,9 @@ class RecordedProgramItem(Item):
         return the default action
         """
         return [ ( self.play, _('Play') ), 
-                  ( self.confirm_delete, _('Delete')),
-                  ( self.mark_to_keep, _('(Un)Mark to Keep')),
-                  ( self.mark_as_watched, _('(Un)Mark as Watched'))]
+                 ( self.confirm_delete, _('Delete')),
+                 ( self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')),
+                 ( self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched'))]
 
 
     def play(self, arg=None, menuw=None):
