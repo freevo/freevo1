@@ -53,7 +53,7 @@ class PluginInterface(plugin.ItemPlugin):
         plugin.ItemPlugin.__init__(self)
 
     def actions(self, item): 
-        if item.type == 'dir':
+        if item.type == 'dir' and hasattr(item, 'dir'):
             freespace = util.freespace(item.dir)
             totalspace = util.totalspace(item.dir)
             freespacemb = (freespace / 1024) / 1024
