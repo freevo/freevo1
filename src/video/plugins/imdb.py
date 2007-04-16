@@ -15,7 +15,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -52,9 +52,11 @@ class PluginInterface(plugin.ItemPlugin):
         if not config.USE_NETWORK:
             self.reason = 'no network'
             return
+        self.season = None
+        self.episode = None
         plugin.ItemPlugin.__init__(self)
 
-    
+
     def imdb_get_disc_searchstring(self, item):
         name  = item.media.label
         name  = re.sub('([a-z])([A-Z])', point_maker, name)
@@ -63,7 +65,7 @@ class PluginInterface(plugin.ItemPlugin):
         for r in config.IMDB_REMOVE_FROM_LABEL:
             name  = re.sub(r, '', name)
         parts = re.split('[\._ -]', name)
-        
+
         name = ''
         for p in parts:
             if p:
@@ -72,7 +74,7 @@ class PluginInterface(plugin.ItemPlugin):
             return name[:-1]
         else:
             return ''
-        
+
 
     def actions(self, item):
         self.item = item
@@ -84,7 +86,7 @@ class PluginInterface(plugin.ItemPlugin):
                 self.disc_set = False
                 return [ ( self.imdb_search , _('Search IMDB for this file'),
                            'imdb_search_or_cover_search') ]
-            
+
             elif item.mode in ('dvd', 'vcd') and item.info.has_key('tracks'):
                 self.disc_set = True
                 s = self.imdb_get_disc_searchstring(self.item)
@@ -100,7 +102,7 @@ class PluginInterface(plugin.ItemPlugin):
                            'imdb_search_or_cover_search') ]
         return []
 
-            
+
     def imdb_search(self, arg=None, menuw=None):
         """
         search imdb for this item
@@ -111,14 +113,14 @@ class PluginInterface(plugin.ItemPlugin):
         box.show()
 
         items = []
-        
+
         try:
             duplicates = []
             if self.disc_set:
                 self.searchstring = self.item.media.label
             else:
                 self.searchstring = self.item.name
-                
+
             for id,name,year,type in fxd.guessImdb(self.searchstring, self.disc_set):
                 try:
                     for i in self.item.parent.play_items:
@@ -133,6 +135,10 @@ class PluginInterface(plugin.ItemPlugin):
                         self.imdb_create_fxd, (id, year)))
                 except UnicodeError, e:
                     print e
+              # if filename had a season/episode lets´ grab it
+            self.season = fxd.season
+            self.episode = fxd.episode
+
         except Exception, e:
             print 'imdb_search:', e
             box.destroy()
@@ -141,7 +147,7 @@ class PluginInterface(plugin.ItemPlugin):
             time.sleep(2)
             box.destroy()
             return
-        
+
         # for d in duplicates:
         #     items = [ menu.MenuItem('Add to "%s"' % d.name,
         #                             self.imdb_add_to_fxd, (d, 'add')),
@@ -153,7 +159,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.imdb_create_fxd(arg=items[0].arg, menuw=menuw)
             return
 
-        if items: 
+        if items:
             moviemenu = menu.Menu(_('IMDB Query'), items)
             menuw.pushmenu(moviemenu)
             return
@@ -176,12 +182,12 @@ class PluginInterface(plugin.ItemPlugin):
         back = 1
         if menuw.menustack[-2].selected != self.item:
             back = 2
-            
+
         # maybe we called the function directly because there was only one
         # entry and we called it with an event
         if menuw.menustack[-1].selected == self.item:
             back = 0
-            
+
         # update the directory
         if directory.dirwatcher:
             directory.dirwatcher.scan()
@@ -189,25 +195,26 @@ class PluginInterface(plugin.ItemPlugin):
         # go back in menustack
         for i in range(back):
             menuw.delete_menu()
-        
-        
+
+
     def imdb_create_fxd(self, arg=None, menuw=None):
         """
         create fxd file for the item
         """
         fxd = FxdImdb()
-        
+
         box = PopupBox(text=_('getting data...'))
         box.show()
 
         #if this exists we got a cdrom/dvdrom
-        if self.item.media and self.item.media.devicename: 
+        if self.item.media and self.item.media.devicename:
             devicename = self.item.media.devicename
         else:
             devicename = None
-        
-        fxd.setImdbId(arg[0])
-        
+
+        # restore season/episode if we have it
+        fxd.setImdbId(arg[0], self.season, self.episode)
+
         if self.disc_set:
             fxd.setDiscset(devicename, None)
         else:
@@ -235,10 +242,10 @@ class PluginInterface(plugin.ItemPlugin):
         """
 
         #if this exists we got a cdrom/dvdrom
-        if self.item.media and self.item.media.devicename: 
+        if self.item.media and self.item.media.devicename:
             devicename = self.item.media.devicename
         else: devicename = None
-        
+
         fxd = FxdImdb()
         fxd.setFxdFile(arg[0].fxd_file)
 
@@ -256,6 +263,6 @@ class PluginInterface(plugin.ItemPlugin):
                     part = [ makePart('Variant 1', 'f1'), part ]
 
                 fxd.setVariants(part)
-            
+
         fxd.writeFxd()
         self.imdb_menu_back(menuw)

@@ -94,6 +94,10 @@ class FxdImdb:
 
         self.fxdfile = None # filename, full path, WITHOUT extension
 
+        self.season = None  # used if the file is a tv serie
+        self.episode = None # used if the file is a tv serie
+        self.newid = None   # used if the file is a tv serie
+
         self.append = False
         self.device = None
         self.regexp = None
@@ -168,12 +172,35 @@ class FxdImdb:
         return self.imdb_id_list
 
 
-    def setImdbId(self, id):
+    def setImdbId(self, id, season, episode):
         """id (number)
         Set an imdb_id number for object, and fetch data"""
+
         self.imdb_id = id
 
-        url = 'http://us.imdb.com/Title?%s' % id
+        self.season = season
+        self.episode = episode
+
+        if self.season and self.episode:
+            # This is a tv serie, lets use a special search
+            url = 'http://us.imdb.com/title/tt%s/episodes' % id
+            req = urllib2.Request(url, txdata, txheaders)
+
+            try:
+                idpage = urllib2.urlopen(req)
+            except urllib2.HTTPError, error:
+                raise FxdImdb_Net_Error("IMDB unreachable" + error)
+                return None
+
+            newid = self.findepisode(idpage)
+
+            if newid:
+                self.imdb_id = newid
+                self.newid = newid
+            idpage.close()
+
+        # do the standard search
+        url = 'http://us.imdb.com/Title?%s' % self.imdb_id
         req = urllib2.Request(url, txdata, txheaders)
 
         try:
@@ -183,6 +210,7 @@ class FxdImdb:
             return None
 
         self.parsedata(idpage, id)
+
         idpage.close()
 
 
@@ -337,6 +365,27 @@ class FxdImdb:
             name = res.group(1)
         else:
             name = filename
+
+
+
+        # is this a serie with season and episode number?
+        # if so we will remember season and episode but will take it off from name
+
+        # find SeasonXepisodeNumber
+        m = re.compile('([0-9]+)[xX]([0-9]+)')
+        res = m.search(name)
+        if res:
+            name = re.sub('%s.*' % res.group(0), '', name)
+            self.season = str(int(res.group(1)))
+            self.episode = str(int(res.group(2)))
+
+        # find S<season>E<episode>
+        m = re.compile('[sS]([0-9]+)[eE]([0-9]+)')
+        res = m.search(name)
+        if res:
+            name = re.sub('%s.*' % res.group(0), '', name)
+            self.season = str(int(res.group(1)))
+            self.episode = str(int(res.group(2)))
 
         name  = vfs.basename(vfs.splitext(name)[0])
         name  = re.sub('([a-z])([A-Z])', point_maker, name)
@@ -596,7 +645,7 @@ class FxdImdb:
                 continue
             yrm = y.findall(item.next.next)
             #print yrm
-    
+
             id = idm.group(1)
             name = item.string
             year = len(yrm) > 0 and yrm[0] or '0000'
@@ -608,6 +657,29 @@ class FxdImdb:
         if config.DEBUG:
             print self.imdb_id_list
         return self.imdb_id_list
+
+    def findepisode(self, results):
+        """results (imdb html page)
+        Returns a new id for setImdbId with tv serie episode data"""
+
+        newid = None
+
+        try:
+            soup = BeautifulSoup(results.read(), convertEntities='xml')
+        except UnicodeDecodeError:
+            print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
+            pass
+
+        m = re.compile('.*Season %s, Episode %s.*\/tt([0-9]+)' % (self.season, self.episode))
+
+        for episode in soup.findAll('h4'):
+            info = m.search(str(episode))
+            if not info:
+                continue
+            newid = info.group(1)
+            break
+
+        return(newid)
 
     def parsedata(self, results, id=0):
         """results (imdb html page), imdb_id
@@ -631,8 +703,18 @@ class FxdImdb:
         #    self.info['image'] = image['src']
 
         self.title = title.next.strip()
-        self.info['title'] = self.title
-        self.info['year'] = title.find('a').string.strip()
+
+        #is this a serie? series pages a little different
+        if self.newid:
+            self.title = self.title + " - %sx%s - %s" % (self.season, \
+                         self.episode, title.find('em').string.strip() )
+            self.info['title'] = self.title
+            y = title.find('em').next.next.string.strip()
+            self.info['year'] = y[1:-1]
+
+        else:
+            self.info['title'] = self.title
+            self.info['year'] = title.find('a').string.strip()
 
         # Find the <div> with class info, each <h5> under this provides info
         for info in main.findAll('div', {'class' : 'info'}):
@@ -743,7 +825,7 @@ class FxdImdb:
 
         # Format of an impawards.com image URL:
         #     http://www.impawards.com/<year>/posters/<title>.jpg
-        # 
+        #
         # Some special characters like: blanks, ticks, ':', ','... have to be replaced
         imp_image_name = title.lower()
         imp_image_name = imp_image_name.replace(u' ', u'_')
@@ -756,11 +838,11 @@ class FxdImdb:
         # build up an array with all kind of image urls
         imp_image_urls = [ ]
         imp_base_url   = 'http://www.impawards.com/%s/posters' % year
-    
+
         # add the normal poster URL to image_urls
         imp_image_url   = '%s/%s.jpg' % (imp_base_url, imp_image_name)
         imp_image_urls += [ imp_image_url ]
-        
+
         # add the xxl poster URL to image_urls
         imp_image_url   = '%s/%s_xlg.jpg' % (imp_base_url, imp_image_name)
         imp_image_urls += [ imp_image_url ]
@@ -775,7 +857,7 @@ class FxdImdb:
 
         # check for valid URLs and add them to self.image_urls
         for imp_image_url in imp_image_urls:
-        
+
             #print "IMPAWARDS: Checking image URL %s" % imp_image_url
             try:
                 imp_req = urllib2.Request(imp_image_url, txdata, txheaders)
@@ -861,7 +943,10 @@ class FxdImdb:
             # remove leading and trailing spaces
             s = s.strip()
             # remove leading and trailing quotes
-            s = s.strip('\'"')
+            #s = s.strip('\'"')
+            # remove quotes
+            s = re.sub('"', '', s)
+
             if s[:5] == u'&#34;':
                 s = s[5:]
             if s[-5:] == u'&#34;':
@@ -874,6 +959,7 @@ class FxdImdb:
             s = s.replace(u"&", u"&amp;")
             # ... but this is wrong for &#
             s = s.replace(u"&amp;#", u"&#")
+
             return s
         except:
             return Unicode(line)

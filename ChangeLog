@@ -24,6 +24,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Added VIDEO_SEND_XINE_CMD event to send specific commands to xine (F#1683699)
  * Updated and fixed German translations (B#1672040)
  * Updated and fixed video selection of audio, subtitles and chapters (B#1677364)
+ * Updated IMDB download to extract season and episode from TV programs (F#1683101)
  * Updated ivtv record to work with SECAM-DK (F#1694182)
  * Updated mplayer to allow the bottom field first and XvMC settings (F#1694186,F#1683423)
  * Updated rss feed for better url detection (B#1675373)
