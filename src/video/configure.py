@@ -236,7 +236,8 @@ def get_items(item):
             item.info['type'] and item.info['type'].lower().find('mpeg') != -1):
         items += [ add_toogle(_('Deinterlacing'), item, 'deinterlace') ]
         items += [ add_toogle(_('X-Video Motion Compensation (xvmc)'), item, 'xvmc') ]
-        items += [ add_toogle(_('Bottom field first'), item, 'field-dominance') ]
+        if hasattr(config, 'MPLAYER_HAS_FIELD_DOMINANCE') and config.MPLAYER_HAS_FIELD_DOMINANCE:
+            items += [ add_toogle(_('Bottom field first'), item, 'field-dominance') ]
     return items
 
         
