@@ -51,8 +51,8 @@ class Runtime(core.Command):
         url  = 'http://osdn.dl.sourceforge.net/sourceforge/' + package
         file = package[package.rfind('/')+1:]
         ddir = os.path.join(os.environ['HOME'], '.freevo/dist')
-	if not os.path.isdir(ddir):
-	    os.system('mkdir -p %s' % ddir)
+        if not os.path.isdir(ddir):
+            os.makedirs(ddir)
         full = os.path.join(ddir, file)
         if not os.path.isfile(full):
             print 'Downloading %s' % file
