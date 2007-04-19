@@ -33,6 +33,7 @@ import re
 import copy
 
 # The menu widget class
+import config
 import menu
 import plugin
 
