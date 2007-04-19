@@ -27,7 +27,7 @@
 #
 # -----------------------------------------------------------------------
 
-import sys, string, random, time, os, re, pwd, stat
+import sys, string, random, time, os, re, pwd, stat, tempfile
 import config
 from util import vfs
 
