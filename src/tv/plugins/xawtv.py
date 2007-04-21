@@ -104,8 +104,8 @@ class Xawtv:
                                                stop=time.time(), chanids=[chan_id])
 
         if channels and channels[0] and channels[0].programs:
-            start_s = time.strftime('%H:%M', time.localtime(channels[0].programs[0].start))
-            stop_s = time.strftime('%H:%M', time.localtime(channels[0].programs[0].stop))
+            start_s = time.strftime(config.TV_TIMEFORMAT, time.localtime(channels[0].programs[0].start))
+            stop_s = time.strftime(config.TV_TIMEFORMAT, time.localtime(channels[0].programs[0].stop))
             ts = '(%s-%s)' % (start_s, stop_s)
             prog_info = '%s %s' % (ts, channels[0].programs[0].title)
         else:

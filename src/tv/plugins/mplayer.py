@@ -291,7 +291,7 @@ class MPlayer:
 
             # Display a channel changed message
             tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
-            now = time.strftime('%H:%M')
+            now = time.strftime(config.TV_TIMEFORMAT)
             msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
             cmd = 'osd_show_text "%s"\n' % msg
             self.app.write(cmd)
@@ -300,7 +300,7 @@ class MPlayer:
         elif event == em.TOGGLE_OSD:
             # Display the channel info message
             tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
-            now = time.strftime('%H:%M')
+            now = time.strftime(config.TV_TIMEFORMAT)
             msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
             cmd = 'osd_show_text "%s"\n' % msg
             self.app.write(cmd)

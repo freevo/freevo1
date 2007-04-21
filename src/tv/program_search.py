@@ -131,11 +131,8 @@ class ProgramSearch(PopupBox):
             for prog in matches:
                 i += 1
                 self.results.add_item(text='%s %s: %s' % \
-                                        (time.strftime('%b %d %I:%M %p', 
-                                           time.localtime(prog.start)), 
-                                         tv_util.get_chan_displayname(prog.channel_id),
-                                         prog.title),
-                                      value=prog)
+                    (time.strftime(config.TV_DATETIMEFORMAT, time.localtime(prog.start)), 
+                    tv_util.get_chan_displayname(prog.channel_id), prog.title), value=prog)
 
             space_left = self.num_shown_items - i
             if space_left > 0:

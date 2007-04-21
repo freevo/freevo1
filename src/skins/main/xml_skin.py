@@ -1105,4 +1105,3 @@ class XMLSkin:
             print "ERROR: XML file corrupt"
             traceback.print_exc()
             return 0
-
