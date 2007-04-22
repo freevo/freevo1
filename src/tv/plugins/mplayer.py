@@ -173,7 +173,7 @@ class MPlayer:
         mpl = '--prio=%s %s -vo %s %s -ao %s %s -slave %s %s' % args
 
         command = mpl
-        _debug_('command=\"%s\"', (command))
+        _debug_('command=\"%s\"', ' '.join(command))
         self.mode = mode
 
 
