@@ -39,8 +39,8 @@ from string import split, join
 
 #some temporary hardcoded programs
 
-mencoder = "mencoder"
-mplayer = "mplayer"
+mencoder = config.CONF.mencoder
+mplayer = config.CONF.mplayer
 
 #some data
 __author__ = "den_RDC (rdc@kokosnoot.com)"
@@ -164,15 +164,18 @@ class EncodingJob:
         self.output = ('%s.%s' % (self.output, self.container))
 
     def getContainerList(self):
+        """Return a list of possible containers"""
         return ContainerCapList
 
 
     def getVideoCodecList(self):
-        """Return a possible video codec list"""
+        """Return a list of possible video codecs"""
         return VideoCodecList
 
     def setVideoCodec(self, vcodec, tgtsize, multipass=False, vbitrate=0):
         """Set video codec and target filesize (in MB) or bit rate (in kbits/sec)"""
+        _debug_('setVideoCodec(self, vcodec=%s, tgtsize=%s, multipass=%s, vbitrate=%s)' % \
+            (vcodec, tgtsize, multipass, vbitrate))
         #safety checks first
         if vcodec not in self.getVideoCodecList():
             return "Unknown video codec"
@@ -181,7 +184,7 @@ class EncodingJob:
         if vbitrate:
             self.tgtsize = 0
         else:
-            self.tgtsize = (int(tgtsize) * 1024) #filesize is internally stored in kb
+            self.tgtsize = (int(tgtsize) * 1024) #filesize is internally stored in kB
         self.multipass = multipass
         self.vbitrate = vbitrate
 
@@ -218,7 +221,7 @@ class EncodingJob:
     def _CalcVideoBR(self):
         """Calculates the video bitrate"""
 
-        _debug_('_CalcVideoBR: tgtsize=%s vbitrate=%s' % (self.tgtsize, self.vbrate), 2)
+        _debug_('_CalcVideoBR: tgtsize=%s vbitrate=%s' % (self.tgtsize, self.vbitrate), 2)
         if self.vbitrate > 0:
             self.vbrate = self.vbitrate
         else:
@@ -521,7 +524,9 @@ class EncodingJob:
         if self.pal: fps = 25.000
         if self.ntscprog: fps = 23.976
         if self.ntsc: fps = 29.970
-        return (self.vbrate * 1000)/(x * y * fps)
+        bpp = (self.vbrate * 1000) / (x * y * fps)
+        _debug_('_CalcBPP() = %s, fps=%s' % (bpp, fps))
+        return bpp
 
     def _OptimalRes(self, x, y):
         """Using BPP calculations, try to find out the ideal resolution for this movie"""
@@ -579,7 +584,7 @@ class CommandThread(threading.Thread): # seek to remove data andor crop (not rea
         self.command = command
         self.data = data
         self.lock = lock
-        _debug_('command=\"%s\"' % command)
+        _debug_('command=\"%s\"' % ' '.join(command))
 
     def run(self):
         #self.lock.acquire()
