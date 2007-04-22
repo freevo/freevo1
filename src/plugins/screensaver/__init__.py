@@ -133,20 +133,21 @@ class PluginInterface(plugin.DaemonPlugin):
         current_saver = None
         index = 0
         plugins_count = len(self.plugins)
+        _debug_('found %s screensaver(s)' % plugins_count)
         while not self.stop_screensaver:
             # No current screensaver so select one of the installed screensaver
             # plugins at random
-            if current_saver is None:
-                if plugins_count == 1:
-                    current_saver = self.plugins[0]
-                elif plugins_count > 1 and plugins_count <= 4:
-                    current_saver = self.plugins[index]
-                    index += 1
-                    if index > plugins_count:
-                        index = 0
-                elif plugins_count > 4:
-                    index = random.randint(0, len(self.plugins) - 1)
-                    current_saver = self.plugins[index]
+            # if current_saver is None:
+            if plugins_count == 1:
+                current_saver = self.plugins[0]
+            elif plugins_count > 1 and plugins_count <= 4:
+                current_saver = self.plugins[index]
+                index += 1
+                if index >= plugins_count:
+                    index = 0
+            elif plugins_count > 4:
+                index = random.randint(0, len(self.plugins) - 1)
+                current_saver = self.plugins[index]
             
             # No screensaver found just sleep for 200ms
             if current_saver is None:
