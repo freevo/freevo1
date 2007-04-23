@@ -444,7 +444,7 @@ class FxdImdb:
         i.write("  <copyright>\n" +
                 "    The information in this file are from the Internet " +
                 "Movie Database (IMDb).\n" +
-                "    Please visit http://www.imdb.com for more informations.\n")
+                "    Please visit http://www.imdb.com for more information.\n")
         i.write("    <source url=\"http://www.imdb.com/title/tt%s\"/>\n"  % self.imdb_id +
                 "  </copyright>\n")
         #disc-set
@@ -496,7 +496,7 @@ class FxdImdb:
         i.write("  <copyright>\n" +
                 "    The information in this file are from the Internet " +
                 "Movie Database (IMDb).\n" +
-                "    Please visit http://www.imdb.com for more informations.\n")
+                "    Please visit http://www.imdb.com for more information.\n")
         i.write("    <source url=\"http://www.imdb.com/title/tt%s\"/>\n"  % self.imdb_id +
                 "  </copyright>\n")
         # write movie
@@ -932,7 +932,7 @@ class FxdImdb:
 
         print "Downloaded cover image from %s" % self.image_url
         print "Freevo knows nothing about the copyright of this image, please"
-        print "go to %s to check for more informations about private." % self.image_url
+        print "go to %s to check for more information about private." % self.image_url
         print "use of this image"
 
 

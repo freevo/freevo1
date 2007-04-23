@@ -293,7 +293,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     Browse links to find video files
 
     This plugin makes it possible to play video files from the net. The
-    plugin needs to be activated with specific informations about the
+    plugin needs to be activated with specific information about the
     link to be shown. You can activate the plugin more than once with a
     different url.
 

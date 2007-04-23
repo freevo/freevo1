@@ -439,7 +439,7 @@ if __name__ == "__main__":
     print 'create thumbnails from images for faster access.'
     print
 
-    # check for current cache informations
+    # check for current cache information
     if (len(sys.argv)>1 and sys.argv[1] == '--rebuild'):
         rebuild = 1
     else:

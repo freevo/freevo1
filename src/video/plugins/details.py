@@ -45,7 +45,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
     This plugin shows more details for a movie item.
 
-    It replaces the item menu with a menu showing informations about the file.
+    It replaces the item menu with a menu showing information about the file.
     """
     def __init__(self):
         plugin.ItemPlugin.__init__(self)

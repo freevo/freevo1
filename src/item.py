@@ -326,7 +326,7 @@ class Item:
     def id(self):
         """
         Return a unique id of the item. This id should be the same when the
-        item is rebuild later with the same informations
+        item is rebuild later with the same information
         """
         if hasattr(self, 'url'):
             return self.url

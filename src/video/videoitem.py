@@ -102,9 +102,9 @@ class VideoItem(Item):
                 if image:
                     self.image = image
                     
-                from video import tv_show_informations
-                if tv_show_informations.has_key(show_name[0].lower()):
-                    tvinfo = tv_show_informations[show_name[0].lower()]
+                from video import tv_show_information
+                if tv_show_information.has_key(show_name[0].lower()):
+                    tvinfo = tv_show_information[show_name[0].lower()]
                     self.info.set_variables(tvinfo[1])
                     if not self.image:
                         self.image = tvinfo[0]
@@ -117,13 +117,13 @@ class VideoItem(Item):
                 self.tv_show_ep    = show_name[3]
                 
 
-        # extra infos in discset_informations
+        # extra infos in discset_information
         if parent and parent.media:
             fid = parent.media.id + \
                   self.filename[len(os.path.join(parent.media.mountdir,'')):]
-            from video import discset_informations
-            if discset_informations.has_key(fid):
-                self.mplayer_options = discset_informations[fid]
+            from video import discset_information
+            if discset_information.has_key(fid):
+                self.mplayer_options = discset_information[fid]
 
         
     def __str__(self):
@@ -186,7 +186,7 @@ class VideoItem(Item):
     def id(self):
         """
         Return a unique id of the item. This id should be the same when the
-        item is rebuild later with the same informations
+        item is rebuild later with the same information
         """
         ret = self.url
         if self.subitems:

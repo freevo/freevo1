@@ -68,7 +68,7 @@ except ImportError, i:
         print 'You need to recompile pygame after installing Numeric!'
     print
     print 'Not all requirements of Freevo are installed on your system.'
-    print 'Please check the INSTALL file for more informations.'
+    print 'Please check the INSTALL file for more information.'
     print
     sys.exit(0)
 

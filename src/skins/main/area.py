@@ -23,7 +23,7 @@
 # 5. If you drop an alpha layer on the screen, you can't get the original
 #    background back by making a reverse alpha layer.
 #
-# For more informations contact me (dmeyer@tzi.de)
+# For more information contact me (dmeyer@tzi.de)
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework

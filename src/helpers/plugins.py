@@ -5,7 +5,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes:       This script prints out informations aboyt plugins in
+# Notes:       This script prints out information aboyt plugins in
 #              Freevo. As descriptions the Python class description
 #              between two """ after the class name is used.
 #
@@ -292,7 +292,7 @@ elif len(sys.argv)>1 and sys.argv[1] == '-html':
 
 else:
     print 'This helper shows the list of all plugins included in Freevo and'
-    print 'can print informations about them.'
+    print 'can print information about them.'
     print
     print 'A plugin can be activated by adding "plugin.activate(name)" into the'
     print 'local_conf.py. Optional arguments are type, level and args'
@@ -324,8 +324,8 @@ else:
     print
     print 'usage: freevo plugins [-l | -i name | -a ]'
     print ' -l           list all plugins'
-    print ' -i name      print detailed informations about plugin "name"'
-    print ' -a           print detailed informations about all plugins (long)'
+    print ' -i name      print detailed information about plugin "name"'
+    print ' -a           print detailed information about all plugins (long)'
     print
     print 'Please note that this helper is new and not all plugins have a good description.'
     print 'Feel free to send patches to the Freevo mailing list'

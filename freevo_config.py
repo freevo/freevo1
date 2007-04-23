@@ -1740,7 +1740,7 @@ TV_CHANNELS = None
 # Program to grab xmltv listings. To get a grabber, you need to download
 # xmltv. A possible value for users in the USA is tv_grab_na
 # Use the tv_grab helper to grab the listings and cache them. Start
-# 'freevo tv_grab --help' for more informations.
+# 'freevo tv_grab --help' for more information.
 
 XMLTV_GRABBER = ''
 

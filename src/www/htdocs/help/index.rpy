@@ -40,12 +40,12 @@ class HelpResource(FreevoResource):
         fv.res += '&nbsp;<br/>'
         fv.res += _('This is the internal Freevo documentation. The documents \
         are in an early stage of development, if you like to help, please \
-        contact the developers. You find more informations like \
+        contact the developers. You find more information like \
         the <a href="http://freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage">\
         WiKi (online manual)</a> and mailing lists on the \
         <a href="http://www.freevo.org">Freevo Homepage</a>.\
         Everyone can edit the WiKi (and we can revert them if someone deletes \
-        informations), feel free to add informations there.')
+        information), feel free to add information there.')
 
         fv.res += '<p><b>'+_('Index')+'</b><ol>'
         
@@ -54,7 +54,7 @@ class HelpResource(FreevoResource):
         fv.res += '<li><a href="doc.rpy?file=recording">'+_('Recording Information')+'</a></li>'
         fv.res += '<li><a href="plugins.rpy">'+_('Plugin List')+'</a></li>'
         fv.res += '<li><a href="doc.rpy?file=FxdFiles">'+_('FXD files')+'</a></li>'
-        fv.res += '<li><a href="doc.rpy?file=SkinInfo">'+_('Skinning Informations')+'</a></li>'
+        fv.res += '<li><a href="doc.rpy?file=SkinInfo">'+_('Skinning Information')+'</a></li>'
         fv.res += '<li><a href="howto.rpy?type=plugin">'+_('Plugin Writing Howto')+'</a></li>'
 
         fv.res += '<br><br>'

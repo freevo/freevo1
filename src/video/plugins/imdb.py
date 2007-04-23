@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: IMDB plugin. You can add IMDB informations for video items
+# Notes: IMDB plugin. You can add IMDB information for video items
 #        with the plugin
 #        activate with plugin.activate('video.imdb')
 #        You can also set imdb_search on a key (e.g. '1') by setting

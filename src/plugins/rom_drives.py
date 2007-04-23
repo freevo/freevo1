@@ -599,8 +599,8 @@ class Identify_Thread(threading.Thread):
                     elif os.path.isfile((k + ".jpg").lower()):
                         image = (k + ".jpg").lower()
                     title = show_name + ' ('+ volumes + ')'
-                    if video.tv_show_informations.has_key(show_name.lower()):
-                        tvinfo = video.tv_show_informations[show_name.lower()]
+                    if video.tv_show_information.has_key(show_name.lower()):
+                        tvinfo = video.tv_show_information[show_name.lower()]
                         more_info = tvinfo[1]
                         if not image:
                             image = tvinfo[0]

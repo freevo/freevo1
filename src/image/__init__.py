@@ -75,7 +75,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
     def dirinfo(self, diritem):
         """
-        set informations for a diritem based on album.xml
+        set information for a diritem based on album.xml
         """
         #dirinfo  = bins.DirInfo(diritem.dir)
         #if dirinfo.has_key('desc'):

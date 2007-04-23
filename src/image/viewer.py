@@ -214,7 +214,7 @@ class ImageViewer(GUIObject):
             new_w, new_h = int(scale*width), int(scale*height)
 
 
-        # Now we have all necessary informations about zoom yes/no and
+        # Now we have all necessary information about zoom yes/no and
         # the kind of rotation
         
         x = (self.osd.width - new_w) / 2

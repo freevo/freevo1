@@ -41,7 +41,7 @@ if len(sys.argv)>1 and sys.argv[1] in ('-h', '--help'):
     print 'usage: makelircrc [-w] [section_index] [button=comand]'
     print
     print 'The -w will write the settings to %s' % config.LIRCRC
-    print 'If this is not the file the informations should be written to, set'
+    print 'If this is not the file the information should be written to, set'
     print 'LIRCRC in your local_conf.py to the correct filename. If the file'
     print 'exists, it will be overwritten.'
     print

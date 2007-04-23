@@ -83,7 +83,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
     def dirinfo(self, diritem):
         """
-        set informations for a diritem based on the content, etc.
+        set information for a diritem based on the content, etc.
         """
         if os.path.exists(diritem.dir):
             timestamp = os.stat(diritem.dir)[stat.ST_MTIME]

@@ -188,7 +188,7 @@ class Skin:
 
     def delete(self, type):
         """
-        delete informations about a special skin type
+        delete information about a special skin type
         """
         exec('del self.%s_areas' % type)
         self.last_draw = None, None, None

@@ -190,7 +190,7 @@ class MimetypePlugin(Plugin):
 
     def dirinfo(self, diritem):
         """
-        set informations for a diritem based on the content, etc.
+        set information for a diritem based on the content, etc.
         """
         pass
 
