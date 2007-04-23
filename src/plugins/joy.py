@@ -95,9 +95,9 @@ class PluginInterface(plugin.DaemonPlugin):
             return
 
         command = ''
-        _debug_('self.joyfd = %s' % self.joyfd, level=3)
+        _debug_('self.joyfd = %s' % self.joyfd, level=5)
         (r, w, e) = select.select([self.joyfd], [], [], 0)
-        _debug_('r,w,e = %s,%s,%s' % (r,w,e), level=3)
+        _debug_('r,w,e = %s,%s,%s' % (r,w,e), level=5)
 
         self.sensitivity = config.JOY_SENS
 
