@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-24 20:43+0100\n"
+"POT-Creation-Date: 2007-04-23 21:35+0200\n"
 "PO-Revision-Date: 2006-12-12 21:02+0100\n"
 "Last-Translator: Paco Rivière <friviere@palmcat.org>\n"
 "Language-Team: PacoRivière <web AT pacoriviere POINT cat>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../freevo_config.py:1062 ../freevo_config.py:1067
+#: ../freevo_config.py:1063 ../freevo_config.py:1068
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Títol"
 
-#: ../freevo_config.py:1063 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1064 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Descripció"
 
-#: ../freevo_config.py:1064
+#: ../freevo_config.py:1065
 msgid "Author"
 msgstr "Autor"
 
-#: ../freevo_config.py:1068 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1069 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -42,11 +42,11 @@ msgstr "Autor"
 msgid "Date"
 msgstr "Data"
 
-#: ../freevo_config.py:1071
+#: ../freevo_config.py:1072
 msgid "Model"
 msgstr "Model"
 
-#: ../freevo_config.py:1072
+#: ../freevo_config.py:1073
 msgid "Software"
 msgstr "Programari"
 
@@ -723,11 +723,11 @@ msgid "Delete image"
 msgstr "Suprimeix l'imatge"
 
 #: plugins/file_ops.py:71 www/htdocs/library.rpy:539
-#: tv/plugins/recordings_manager.py:375
+#: tv/plugins/recordings_manager.py:376
 msgid "Delete"
 msgstr "Suprimeix"
 
-#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:397
+#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:398
 #, python-format
 msgid ""
 "Do you wish to delete\n"
@@ -736,8 +736,8 @@ msgstr ""
 "Desitgeu eliminar\n"
 " '%s'?"
 
-#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:399
-#: tv/plugins/recordings_manager.py:624
+#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:400
+#: tv/plugins/recordings_manager.py:626
 msgid "Deleting..."
 msgstr "S'està suprimint..."
 
@@ -985,30 +985,30 @@ msgstr "No es troben pantalles per aquesta LCD (%dx%d)!"
 msgid "Could not find screens for %d lines and %d columns LCD!"
 msgstr "No s'han trobat pantalles LCD de %d línies i %d columnes!"
 
-#: plugins/mediamenu.py:130
+#: plugins/mediamenu.py:136
 msgid "Media"
 msgstr "Mitjà"
 
-#: plugins/mediamenu.py:135
+#: plugins/mediamenu.py:141
 msgid "Movie"
 msgstr "Pel·lícula"
 
-#: plugins/mediamenu.py:137
+#: plugins/mediamenu.py:143
 msgid "Audio"
 msgstr "Àudio"
 
-#: plugins/mediamenu.py:139
+#: plugins/mediamenu.py:145
 msgid "Image"
 msgstr "Imatge"
 
-#: plugins/mediamenu.py:141 share/skins/main/basic.fxd:24
+#: plugins/mediamenu.py:147 share/skins/main/basic.fxd:24
 #: share/skins/main/dark.fxd:21 share/skins/main/crystal.fxd:14
 #: share/skins/main/bluestar.fxd:14 share/skins/main/rain.fxd:14
 #: share/skins/main/info.fxd:17
 msgid "Games"
 msgstr "Jocs"
 
-#: plugins/mediamenu.py:143
+#: plugins/mediamenu.py:149
 #, python-format
 msgid "%s Main Menu"
 msgstr "%s Menú Principal"
@@ -1075,7 +1075,7 @@ msgstr "("
 msgid "SHUTDOWN FREEVO?"
 msgstr "VOLEU TANCAR FREEVO?"
 
-#: plugins/autoshutdown.py:601 plugins/shutdown.py:63 main.py:309
+#: plugins/autoshutdown.py:601 plugins/shutdown.py:63 main.py:310
 msgid "shutting down..."
 msgstr "S'està tancant..."
 
@@ -1407,8 +1407,8 @@ msgstr ""
 msgid "View Image"
 msgstr "Mosta l'imatge"
 
-#: image/plugins/gphoto.py:126 tv/plugins/recordings_manager.py:154
-#: directory.py:442
+#: image/plugins/gphoto.py:126 tv/plugins/recordings_manager.py:156
+#: directory.py:447
 msgid "Browse directory"
 msgstr "Navega la carpeta"
 
@@ -2302,88 +2302,96 @@ msgstr ""
 msgid "Manage Recordings"
 msgstr "Enregistrament Manual"
 
-#: tv/plugins/recordings_manager.py:155 directory.py:456
+#: tv/plugins/recordings_manager.py:146 directory.py:461
 msgid "Configure directory"
 msgstr "Preferències de la carpeta"
 
-#: tv/plugins/recordings_manager.py:165
+#: tv/plugins/recordings_manager.py:166
 #, fuzzy
 msgid "Recordings Directory does not exist"
 msgstr "La carpeta no existeix."
 
-#: tv/plugins/recordings_manager.py:243 directory.py:814 directory.py:904
-#: directory.py:938
+#: tv/plugins/recordings_manager.py:244 directory.py:819 directory.py:909
+#: directory.py:943
 msgid "on"
 msgstr "en marxa"
 
-#: tv/plugins/recordings_manager.py:245 directory.py:816 directory.py:819
-#: directory.py:908 directory.py:936
+#: tv/plugins/recordings_manager.py:246 directory.py:821 directory.py:824
+#: directory.py:913 directory.py:941
 msgid "off"
 msgstr "aturat"
 
-#: tv/plugins/recordings_manager.py:250
+#: tv/plugins/recordings_manager.py:251
 msgid "Sort by"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:252
+#: tv/plugins/recordings_manager.py:253
 #, fuzzy
 msgid "Reverse sort"
 msgstr "Ordena la Carpeta al'Inrevés"
 
-#: tv/plugins/recordings_manager.py:254
+#: tv/plugins/recordings_manager.py:255
 msgid "Sort series by"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:256
+#: tv/plugins/recordings_manager.py:257
 msgid "Reverse series sort"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:258
+#: tv/plugins/recordings_manager.py:259
 #, fuzzy
 msgid "Status order"
 msgstr "Dissabte"
 
-#: tv/plugins/recordings_manager.py:261 directory.py:945
+#: tv/plugins/recordings_manager.py:262 directory.py:950
 msgid "Configure"
 msgstr "Preferències"
 
-#: tv/plugins/recordings_manager.py:374 tv/program_display.py:126
-#: video/videoitem.py:320 video/configure.py:242 playlist.py:284
+#: tv/plugins/recordings_manager.py:375 tv/program_display.py:126
+#: video/videoitem.py:319 video/configure.py:246 playlist.py:284
 msgid "Play"
 msgstr "Reprodueix"
 
-#: tv/plugins/recordings_manager.py:376
-msgid "(Un)Mark to Keep"
+#: tv/plugins/recordings_manager.py:377
+msgid "Unmark to Keep"
 msgstr ""
 
 #: tv/plugins/recordings_manager.py:377
-msgid "(Un)Mark as Watched"
+msgid "Mark to Keep"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:462
+#: tv/plugins/recordings_manager.py:378
+msgid "Unmark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:378
+msgid "Mark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:463
 msgid "(Unnamed)"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:555
+#: tv/plugins/recordings_manager.py:557
 #, fuzzy
 msgid "Browse episodes"
 msgstr "Navega pel disc"
 
-#: tv/plugins/recordings_manager.py:556
+#: tv/plugins/recordings_manager.py:558
 #, fuzzy
 msgid "Delete all episodes"
 msgstr "Suprimeix"
 
-#: tv/plugins/recordings_manager.py:557
+#: tv/plugins/recordings_manager.py:559
 msgid "Keep all episodes"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:558
+#: tv/plugins/recordings_manager.py:560
 #, fuzzy
 msgid "Play all episodes"
 msgstr "Llistes de reproducció"
 
-#: tv/plugins/recordings_manager.py:622
+#: tv/plugins/recordings_manager.py:624
 #, fuzzy, python-format
 msgid ""
 "Do you wish to delete the series\n"
@@ -2392,7 +2400,7 @@ msgstr ""
 "Desitgeu eliminar\n"
 " '%s'?"
 
-#: tv/plugins/recordings_manager.py:696
+#: tv/plugins/recordings_manager.py:698
 #, fuzzy
 msgid "episodes"
 msgstr "Episodi"
@@ -2647,7 +2655,7 @@ msgstr "Voleu suprimir %s?"
 msgid "File \"%s\" not found!"
 msgstr "El fitxer \"%s\" no s'ha trobat!"
 
-#: games/__init__.py:75
+#: games/__init__.py:74
 msgid "please update GAMES_ITEMS in local_conf.py"
 msgstr "actualitzeu GAMES_ITEMS a local_conf.py"
 
@@ -2926,7 +2934,7 @@ msgstr "Resultats de la Cerca de Caràtules"
 msgid "No covers available from Amazon"
 msgstr "A Amazon no hi han caràtules"
 
-#: audio/plugins/coversearch.py:287 video/plugins/imdb.py:200
+#: audio/plugins/coversearch.py:287 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr "obtenint dades..."
 
@@ -2959,7 +2967,7 @@ msgstr ""
 msgid "Browse disc"
 msgstr "Navega pel disc"
 
-#: audio/audiodiskitem.py:107 directory.py:714
+#: audio/audiodiskitem.py:107 directory.py:719
 msgid "Random playlist"
 msgstr "Llista de reproducció aleatòria"
 
@@ -2967,7 +2975,7 @@ msgstr "Llista de reproducció aleatòria"
 msgid "Data files on disc"
 msgstr "Hi han fitxers de dades al disc"
 
-#: video/plugins/mplayer.py:405
+#: video/plugins/mplayer.py:422
 msgid "Seeking not possible"
 msgstr "La cerca no és possible"
 
@@ -2976,28 +2984,28 @@ msgstr "La cerca no és possible"
 msgid "Move to [%s]"
 msgstr "Mou a [%s]"
 
-#: video/plugins/imdb.py:85
+#: video/plugins/imdb.py:87
 msgid "Search IMDB for this file"
 msgstr "Cerca aquest fitxer a IMDB"
 
-#: video/plugins/imdb.py:92 video/plugins/imdb.py:99
+#: video/plugins/imdb.py:94 video/plugins/imdb.py:101
 #, python-format
 msgid "Search IMDB for [%s]"
 msgstr "Cerca [%s] a IMDB"
 
-#: video/plugins/imdb.py:110
+#: video/plugins/imdb.py:112
 msgid "searching IMDB..."
 msgstr "s'està cercant l'IMDB..."
 
-#: video/plugins/imdb.py:139
+#: video/plugins/imdb.py:145
 msgid "Unknown error while connecting to IMDB"
 msgstr "Hi ha hagut un error desconegut al connectar a IMDB"
 
-#: video/plugins/imdb.py:157
+#: video/plugins/imdb.py:163
 msgid "IMDB Query"
 msgstr "Consulta MDB"
 
-#: video/plugins/imdb.py:161
+#: video/plugins/imdb.py:167
 msgid "No information available from IMDB"
 msgstr "No hi ha informació a IMDB"
 
@@ -3185,131 +3193,140 @@ msgstr "Artista desconegut"
 msgid "Unknown Property"
 msgstr "Artista desconegut"
 
-#: video/__init__.py:180
+#: video/__init__.py:181
 msgid "Directory Autobuild Thumbnails "
 msgstr "Genera les Miniatures de la Carpeta Automàticament"
 
-#: video/__init__.py:181
+#: video/__init__.py:182
 msgid "Build video thumbnails for all items (may take a while when entering)."
 msgstr ""
 "Genera les miniatures del vídeo per a tots els elements (pot trigar una "
 "mica)."
 
-#: video/videoitem.py:306
+#: video/videoitem.py:305
 msgid "Play DVD"
 msgstr "Reprodueix el DVD"
 
-#: video/videoitem.py:307 video/videoitem.py:309
+#: video/videoitem.py:306 video/videoitem.py:308
 msgid "DVD title list"
 msgstr "Llista de títols de DVD"
 
-#: video/videoitem.py:310 video/videoitem.py:318
+#: video/videoitem.py:309 video/videoitem.py:317
 msgid "Play default track"
 msgstr "Reprodueix la pista per omissió"
 
-#: video/videoitem.py:314
+#: video/videoitem.py:313
 msgid "Play VCD"
 msgstr "Reprodueix el VCD"
 
-#: video/videoitem.py:315 video/videoitem.py:317
+#: video/videoitem.py:314 video/videoitem.py:316
 msgid "VCD title list"
 msgstr "Llista de títols de VCD"
 
-#: video/videoitem.py:322
+#: video/videoitem.py:321
 msgid "Play with alternate player"
 msgstr "Reprodueix amb un altre reproductor"
 
-#: video/videoitem.py:325
+#: video/videoitem.py:324
 msgid "Play with maximum cache"
 msgstr "Reprodueix amb el màxim de memòria cau"
 
-#: video/videoitem.py:330
+#: video/videoitem.py:329
 msgid "Show variants"
 msgstr "Mostra les variants"
 
-#: video/videoitem.py:334
+#: video/videoitem.py:333
 msgid "Create Thumbnail"
 msgstr "Genera la Miniatura"
 
-#: video/videoitem.py:355
+#: video/videoitem.py:354
 msgid "Please wait...."
 msgstr "Espereu... "
 
-#: video/videoitem.py:502 video/videoitem.py:516 video/videoitem.py:530
+#: video/videoitem.py:501 video/videoitem.py:515 video/videoitem.py:529
 #, python-format
 msgid "No media found for \"%s\".\n"
 msgstr "No s'ha trobat cap mitjà per \"%s\".\n"
 
-#: video/videoitem.py:503 video/videoitem.py:517 video/videoitem.py:531
+#: video/videoitem.py:502 video/videoitem.py:516 video/videoitem.py:530
 msgid "Please insert the media."
 msgstr "Introduïu el mitjà."
 
-#: video/videoitem.py:536
+#: video/videoitem.py:535
 msgid "No player for this item found"
 msgstr "No hi ha cap reproductor per aquest element"
 
-#: video/videoitem.py:618
+#: video/videoitem.py:617
 #, fuzzy, python-format
 msgid "Play Title %d"
 msgstr "Reprodueix el Títol %s"
 
-#: video/configure.py:69 video/configure.py:104
+#: video/configure.py:70 video/configure.py:105
 #, python-format
 msgid "Stream %s"
 msgstr "Flux %s"
 
-#: video/configure.py:80
+#: video/configure.py:81
 msgid "Audio Menu"
 msgstr "Menú d'àudio"
 
-#: video/configure.py:95
+#: video/configure.py:96
 msgid "no subtitles"
 msgstr "no hi ha subtítols"
 
-#: video/configure.py:117
+#: video/configure.py:118
 msgid "Subtitle Menu"
 msgstr "Menú de Subtítols"
 
-#: video/configure.py:134 video/configure.py:176
+#: video/configure.py:135 video/configure.py:177
 #, python-format
 msgid "Play chapter %s"
 msgstr "Reprodueix el capítol %s"
 
-#: video/configure.py:156 video/configure.py:179
+#: video/configure.py:157 video/configure.py:180
 msgid "Chapter Menu"
 msgstr "Menú de Capítols"
 
-#: video/configure.py:208
+#: video/configure.py:209
 #, python-format
 msgid "Turn off %s"
 msgstr "Atura %s"
 
-#: video/configure.py:209
+#: video/configure.py:210
 #, python-format
 msgid "Turn on %s"
 msgstr "Engega %s"
 
-#: video/configure.py:222
+#: video/configure.py:223
 msgid "Audio selection"
 msgstr "Selecció d'àudio"
 
-#: video/configure.py:224
+#: video/configure.py:225
 msgid "Subtitle selection"
 msgstr "Selecció de subtítols"
 
-#: video/configure.py:227 video/configure.py:231
+#: video/configure.py:228 video/configure.py:232
 msgid "Chapter selection"
 msgstr "Selecció de capítol"
 
-#: video/configure.py:237
-msgid "deinterlacing"
+#: video/configure.py:238
+#, fuzzy
+msgid "Deinterlacing"
 msgstr "desentrellaçat"
 
-#: video/configure.py:243
+#: video/configure.py:239
+msgid "X-Video Motion Compensation (xvmc)"
+msgstr ""
+
+#: video/configure.py:241
+msgid "Bottom field first"
+msgstr ""
+
+#: video/configure.py:247
 msgid "Config Menu"
 msgstr "Menú de Configuració"
 
-#: util/mediainfo.py:740
+#: util/mediainfo.py:746
 msgid "Reloading cache files, be patient..."
 msgstr "S'està llegint la memòria cau, espereu..."
 
@@ -3451,7 +3468,7 @@ msgstr "No es pot obrir el fitxer \"%s\""
 msgid "Browse Playlist"
 msgstr "Navega la llista de reproducció"
 
-#: playlist.py:292 directory.py:451
+#: playlist.py:292 directory.py:456
 msgid "Random play all items"
 msgstr "Reprodueix tots els elements de forma aleatòria"
 
@@ -3479,29 +3496,29 @@ msgstr "no hi ha cap element anterior a la llista de reproducció"
 msgid "No action defined for this choice!"
 msgstr "Aquesta opció no correspon a cap acció!"
 
-#: directory.py:55
+#: directory.py:57
 msgid "Directory Sort By Date"
 msgstr "Ordena la Carpeta per Data"
 
-#: directory.py:56
+#: directory.py:58
 msgid "Sort directory by date and not by name."
 msgstr "Ordena la carpeta data i no per nom."
 
-#: directory.py:58
+#: directory.py:60
 msgid "Directory Autoplay Single Item"
 msgstr "Reprodueix automàticament un sol element"
 
-#: directory.py:59
+#: directory.py:61
 msgid "Don't show directory if only one item exists and auto-select the item."
 msgstr ""
 "No mostris la carpeta si només hi ha un element i selecciona automàticament "
 "l'element."
 
-#: directory.py:62
+#: directory.py:64
 msgid "Force Skin Layout"
 msgstr "Força la Disposició de l'Aparença"
 
-#: directory.py:63
+#: directory.py:65
 msgid ""
 "Force skin to a specific layout. This option doesn't work with all skins and "
 "the result may differ based on the skin."
@@ -3509,44 +3526,44 @@ msgstr ""
 "Força l'aparença a una disposició concreta. Aquesta opció no funciona amb "
 "totes les aparences i el resultat pot dependre de l'aparença."
 
-#: directory.py:66
+#: directory.py:68
 msgid "Directory Smart Sort"
 msgstr "Ordenació Intel·ligent la Carpeta"
 
-#: directory.py:67
+#: directory.py:69
 msgid "Use a smarter way to sort the items."
 msgstr "Ordena els elements de forma intel·ligent."
 
-#: directory.py:69
+#: directory.py:71
 msgid "Directory Smart Names"
 msgstr "Ordenació Intel·ligent la Carpeta"
 
-#: directory.py:70
+#: directory.py:72
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr "Ordena els elements de forma intel·ligent."
 
-#: directory.py:72
+#: directory.py:74
 msgid "Use MediaID Tag Names"
 msgstr "Fes servir etiquetes MediaID"
 
-#: directory.py:73
+#: directory.py:75
 msgid "Use the names from the media files tags as display name."
 msgstr ""
 "Fes servir els noms dels fitxers d'etiquetes de mitjans per mostrar el nom."
 
-#: directory.py:75
+#: directory.py:77
 msgid "Directory Reverse Sort"
 msgstr "Ordena la Carpeta al'Inrevés"
 
-#: directory.py:76
+#: directory.py:78
 msgid "Show the items in the list in reverse order."
 msgstr "Mostra els elements de la llista en ordre invers."
 
-#: directory.py:80
+#: directory.py:82
 msgid "Directory Create Playlist"
 msgstr "Genera la Llista de Reproducció de la Carpeta"
 
-#: directory.py:81
+#: directory.py:83
 msgid ""
 "Handle the directory as playlist. After one file is played, the next one "
 "will be started."
@@ -3554,27 +3571,27 @@ msgstr ""
 "Tracta la carpeta com una llista de reproducció. Després de reproduir un "
 "fitxer, comença amb el següent."
 
-#: directory.py:84
+#: directory.py:86
 msgid "Directory Add Playlist Files"
 msgstr "Afegeix els Fitxers a la Llista de Reproducció"
 
-#: directory.py:85
+#: directory.py:87
 msgid "Add playlist files to the list of items"
 msgstr "Afegeix els fitxers a la llista d'elements"
 
-#: directory.py:87
+#: directory.py:89
 msgid "Directory Add Random Playlist"
 msgstr "Afegeix la Carpeta a la Llista de Reproducció Aleatòria"
 
-#: directory.py:88
+#: directory.py:90
 msgid "Add an item for a random playlist"
 msgstr "Afegeix un element a la Llista de reproducció aleatòria"
 
-#: directory.py:90
+#: directory.py:92
 msgid "Directory Autoplay Items"
 msgstr "Reprodueix els elements de forma Automàtica"
 
-#: directory.py:91
+#: directory.py:93
 msgid ""
 "Autoplay the whole directory (as playlist) when it contains only files and "
 "no directories"
@@ -3582,56 +3599,56 @@ msgstr ""
 "Reprodueix automàticament la carpeta (com una llista de reproducció) si "
 "només conté fitxers"
 
-#: directory.py:308
+#: directory.py:313
 #, python-format
 msgid "Directory on disc [%s]"
 msgstr "Carpeta del disc [%s]"
 
-#: directory.py:309
+#: directory.py:314
 msgid "Directory"
 msgstr "Carpeta"
 
-#: directory.py:445
+#: directory.py:450
 msgid "Play all files in directory"
 msgstr "Reprodueix tots els fitxers de la carpeta"
 
-#: directory.py:453
+#: directory.py:458
 msgid "Recursive random play all items"
 msgstr "Reprodueix tots els elements recursivament de forma aleatòria"
 
-#: directory.py:454
+#: directory.py:459
 msgid "Recursive play all items"
 msgstr "Reprodueix tots els elements recursivament"
 
-#: directory.py:523
+#: directory.py:528
 msgid "Enter Password"
 msgstr "Introduïu la contrasenya"
 
-#: directory.py:548
+#: directory.py:553
 msgid "Password incorrect"
 msgstr "Contrasenya errònia"
 
-#: directory.py:582
+#: directory.py:587
 msgid "Directory does not exist"
 msgstr "La carpeta no existeix."
 
-#: directory.py:612
+#: directory.py:617
 msgid "Scanning disc, be patient..."
 msgstr "S'està analitzant el disc, sigueu pacient..."
 
-#: directory.py:614
+#: directory.py:619
 msgid "Scanning directory, be patient..."
 msgstr "S'està analitzant la carpeta, sigueu pacient..."
 
-#: directory.py:821
+#: directory.py:826
 msgid "auto"
 msgstr "automàtic"
 
-#: directory.py:940
+#: directory.py:945
 msgid "Show all kinds of items"
 msgstr "Mostra tots els tipus d'elements"
 
-#: directory.py:942
+#: directory.py:947
 msgid "Show video, audio and image items in this directory"
 msgstr "Mostra els elements de vídeo, àudio i imatges d'aquesta carpeta"
 
@@ -3650,15 +3667,15 @@ msgstr "No es pot obrir el registre \"%s\"!"
 msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
 msgstr "Estableix CHILDAPP_DEBUG=0 a local_conf.py, "
 
-#: main.py:171
+#: main.py:172
 msgid "Freevo Main Menu"
 msgstr "Menú Principal de Freevo"
 
-#: main.py:187
+#: main.py:188
 msgid "Skin Selector"
 msgstr "Tria l'Aparença"
 
-#: main.py:300
+#: main.py:301
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -3679,54 +3696,55 @@ msgstr ""
 "Fitxer de registre: %s\n"
 "\n"
 
-#: main.py:310 share/skins/main/basic.fxd:25
+#: main.py:311 share/skins/main/basic.fxd:25
 #: share/skins/main/mediaportal.fxd:447 share/skins/main/dark.fxd:25
 #: share/skins/main/crystal.fxd:17 share/skins/main/bluestar.fxd:16
 #: share/skins/main/Panorama.fxd:474 share/skins/main/rain.fxd:17
 msgid "Shutdown"
 msgstr "Atura"
 
-#: main.py:312
+#: main.py:313
 msgid "Continue"
 msgstr "Continua"
 
-#: main.py:425
-msgid "Starting Freevo, please wait ..."
+#: main.py:427
+#, fuzzy, python-format
+msgid "Starting Freevo-%s, please wait ..."
 msgstr "S'està engegant Freevo, espereu ..."
 
-#: main.py:434
+#: main.py:436
 msgid "Reading cache, please wait ..."
 msgstr "S'està llegint la memòria cau, espereu..."
 
-#: main.py:485
+#: main.py:487
 msgid "Freevo crashed!"
 msgstr "El Freevo s'ha penjat!"
 
-#: main.py:486
+#: main.py:488
 #, python-format
 msgid "Filename: %s"
 msgstr "Nom del fitxer: %s"
 
-#: main.py:487
+#: main.py:489
 #, python-format
 msgid "Lineno: %s"
 msgstr "Línia núm.: %s"
 
-#: main.py:488
+#: main.py:490
 #, python-format
 msgid "Function: %s"
 msgstr "Funció: %s"
 
-#: main.py:489
+#: main.py:491
 #, python-format
 msgid "Text: %s"
 msgstr "Text: %s"
 
-#: main.py:491
+#: main.py:493
 msgid "Please see the logfiles for more info"
 msgstr "Trobareu més informació als fitxers de registre"
 
-#: main.py:493
+#: main.py:495
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Es sortirà en %s segons"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo 1.70\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-24 20:43+0100\n"
+"POT-Creation-Date: 2007-04-23 21:35+0200\n"
 "PO-Revision-Date: 2007-03-22 18:45+0100\n"
 "Last-Translator: Tonous <tonous@dkm.cz>\n"
 "Language-Team: Jiri Kulhan <jiri@kulhan.cz>\n"
@@ -16,23 +16,23 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../freevo_config.py:1062 ../freevo_config.py:1067
+#: ../freevo_config.py:1063 ../freevo_config.py:1068
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Název"
 
-#: ../freevo_config.py:1063 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1064 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Popis"
 
-#: ../freevo_config.py:1064
+#: ../freevo_config.py:1065
 msgid "Author"
 msgstr "Autor"
 
-#: ../freevo_config.py:1068 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1069 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -40,11 +40,11 @@ msgstr "Autor"
 msgid "Date"
 msgstr "Datum"
 
-#: ../freevo_config.py:1071
+#: ../freevo_config.py:1072
 msgid "Model"
 msgstr "Model"
 
-#: ../freevo_config.py:1072
+#: ../freevo_config.py:1073
 msgid "Software"
 msgstr "Software"
 
@@ -721,11 +721,11 @@ msgid "Delete image"
 msgstr "Smazat obrázek"
 
 #: plugins/file_ops.py:71 www/htdocs/library.rpy:539
-#: tv/plugins/recordings_manager.py:375
+#: tv/plugins/recordings_manager.py:376
 msgid "Delete"
 msgstr "Smazat"
 
-#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:397
+#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:398
 #, python-format
 msgid ""
 "Do you wish to delete\n"
@@ -734,8 +734,8 @@ msgstr ""
 "Pøejete si smazat\n"
 " '%s'?"
 
-#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:399
-#: tv/plugins/recordings_manager.py:624
+#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:400
+#: tv/plugins/recordings_manager.py:626
 msgid "Deleting..."
 msgstr "Ma¾u..."
 
@@ -982,30 +982,30 @@ msgstr ""
 msgid "Could not find screens for %d lines and %d columns LCD!"
 msgstr ""
 
-#: plugins/mediamenu.py:130
+#: plugins/mediamenu.py:136
 msgid "Media"
 msgstr "Média"
 
-#: plugins/mediamenu.py:135
+#: plugins/mediamenu.py:141
 msgid "Movie"
 msgstr "Filmy"
 
-#: plugins/mediamenu.py:137
+#: plugins/mediamenu.py:143
 msgid "Audio"
 msgstr "Audio"
 
-#: plugins/mediamenu.py:139
+#: plugins/mediamenu.py:145
 msgid "Image"
 msgstr "Obrázky"
 
-#: plugins/mediamenu.py:141 share/skins/main/basic.fxd:24
+#: plugins/mediamenu.py:147 share/skins/main/basic.fxd:24
 #: share/skins/main/dark.fxd:21 share/skins/main/crystal.fxd:14
 #: share/skins/main/bluestar.fxd:14 share/skins/main/rain.fxd:14
 #: share/skins/main/info.fxd:17
 msgid "Games"
 msgstr "Hry"
 
-#: plugins/mediamenu.py:143
+#: plugins/mediamenu.py:149
 #, python-format
 msgid "%s Main Menu"
 msgstr "%s hlavní menu"
@@ -1072,7 +1072,7 @@ msgstr "(spu¹tení zakázáno)"
 msgid "SHUTDOWN FREEVO?"
 msgstr "Ukonèit Freevo?"
 
-#: plugins/autoshutdown.py:601 plugins/shutdown.py:63 main.py:309
+#: plugins/autoshutdown.py:601 plugins/shutdown.py:63 main.py:310
 msgid "shutting down..."
 msgstr "Ukonèuji..."
 
@@ -1404,8 +1404,8 @@ msgstr ""
 msgid "View Image"
 msgstr "Prohlí¾et obrázky"
 
-#: image/plugins/gphoto.py:126 tv/plugins/recordings_manager.py:154
-#: directory.py:442
+#: image/plugins/gphoto.py:126 tv/plugins/recordings_manager.py:156
+#: directory.py:447
 msgid "Browse directory"
 msgstr "Procházet adresáø"
 
@@ -2292,88 +2292,96 @@ msgstr ""
 msgid "Manage Recordings"
 msgstr "Manuální nahrávání"
 
-#: tv/plugins/recordings_manager.py:155 directory.py:456
+#: tv/plugins/recordings_manager.py:146 directory.py:461
 msgid "Configure directory"
 msgstr "Nastavení adresáøe"
 
-#: tv/plugins/recordings_manager.py:165
+#: tv/plugins/recordings_manager.py:166
 #, fuzzy
 msgid "Recordings Directory does not exist"
 msgstr "Adresáø neexistuje"
 
-#: tv/plugins/recordings_manager.py:243 directory.py:814 directory.py:904
-#: directory.py:938
+#: tv/plugins/recordings_manager.py:244 directory.py:819 directory.py:909
+#: directory.py:943
 msgid "on"
 msgstr "zapnuto"
 
-#: tv/plugins/recordings_manager.py:245 directory.py:816 directory.py:819
-#: directory.py:908 directory.py:936
+#: tv/plugins/recordings_manager.py:246 directory.py:821 directory.py:824
+#: directory.py:913 directory.py:941
 msgid "off"
 msgstr "vypnuto"
 
-#: tv/plugins/recordings_manager.py:250
+#: tv/plugins/recordings_manager.py:251
 msgid "Sort by"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:252
+#: tv/plugins/recordings_manager.py:253
 #, fuzzy
 msgid "Reverse sort"
 msgstr "Obrácené tøídìní adresáøù"
 
-#: tv/plugins/recordings_manager.py:254
+#: tv/plugins/recordings_manager.py:255
 msgid "Sort series by"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:256
+#: tv/plugins/recordings_manager.py:257
 msgid "Reverse series sort"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:258
+#: tv/plugins/recordings_manager.py:259
 #, fuzzy
 msgid "Status order"
 msgstr "Sobota"
 
-#: tv/plugins/recordings_manager.py:261 directory.py:945
+#: tv/plugins/recordings_manager.py:262 directory.py:950
 msgid "Configure"
 msgstr "Nastavení"
 
-#: tv/plugins/recordings_manager.py:374 tv/program_display.py:126
-#: video/videoitem.py:320 video/configure.py:242 playlist.py:284
+#: tv/plugins/recordings_manager.py:375 tv/program_display.py:126
+#: video/videoitem.py:319 video/configure.py:246 playlist.py:284
 msgid "Play"
 msgstr "Pøehrát"
 
-#: tv/plugins/recordings_manager.py:376
-msgid "(Un)Mark to Keep"
+#: tv/plugins/recordings_manager.py:377
+msgid "Unmark to Keep"
 msgstr ""
 
 #: tv/plugins/recordings_manager.py:377
-msgid "(Un)Mark as Watched"
+msgid "Mark to Keep"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:462
+#: tv/plugins/recordings_manager.py:378
+msgid "Unmark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:378
+msgid "Mark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:463
 msgid "(Unnamed)"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:555
+#: tv/plugins/recordings_manager.py:557
 #, fuzzy
 msgid "Browse episodes"
 msgstr "Procházet disk"
 
-#: tv/plugins/recordings_manager.py:556
+#: tv/plugins/recordings_manager.py:558
 #, fuzzy
 msgid "Delete all episodes"
 msgstr "Smazat"
 
-#: tv/plugins/recordings_manager.py:557
+#: tv/plugins/recordings_manager.py:559
 msgid "Keep all episodes"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:558
+#: tv/plugins/recordings_manager.py:560
 #, fuzzy
 msgid "Play all episodes"
 msgstr "Seznamy k pøehrávání (playlisty)"
 
-#: tv/plugins/recordings_manager.py:622
+#: tv/plugins/recordings_manager.py:624
 #, fuzzy, python-format
 msgid ""
 "Do you wish to delete the series\n"
@@ -2382,7 +2390,7 @@ msgstr ""
 "Pøejete si smazat\n"
 " '%s'?"
 
-#: tv/plugins/recordings_manager.py:696
+#: tv/plugins/recordings_manager.py:698
 #, fuzzy
 msgid "episodes"
 msgstr "Kapitola"
@@ -2636,7 +2644,7 @@ msgstr "Smazat %s?"
 msgid "File \"%s\" not found!"
 msgstr "Soubor \"%s\" nenalezen!"
 
-#: games/__init__.py:75
+#: games/__init__.py:74
 msgid "please update GAMES_ITEMS in local_conf.py"
 msgstr "Prosím upravte GAMES_ITEMS v souboru local%conf.py"
 
@@ -2913,7 +2921,7 @@ msgstr "Výsledky hledání obalu"
 msgid "No covers available from Amazon"
 msgstr "Na Amazonu nejsou dostupné ¾ádné obaly"
 
-#: audio/plugins/coversearch.py:287 video/plugins/imdb.py:200
+#: audio/plugins/coversearch.py:287 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr "pøijímám data..."
 
@@ -2946,7 +2954,7 @@ msgstr ""
 msgid "Browse disc"
 msgstr "Procházet disk"
 
-#: audio/audiodiskitem.py:107 directory.py:714
+#: audio/audiodiskitem.py:107 directory.py:719
 msgid "Random playlist"
 msgstr "Náhodný playlist"
 
@@ -2954,7 +2962,7 @@ msgstr "Náhodný playlist"
 msgid "Data files on disc"
 msgstr "Datové soubory na disku"
 
-#: video/plugins/mplayer.py:405
+#: video/plugins/mplayer.py:422
 msgid "Seeking not possible"
 msgstr "Vyhledávání není dostupné"
 
@@ -2963,28 +2971,28 @@ msgstr "Vyhledávání není dostupné"
 msgid "Move to [%s]"
 msgstr "Pøesunout na []"
 
-#: video/plugins/imdb.py:85
+#: video/plugins/imdb.py:87
 msgid "Search IMDB for this file"
 msgstr "Prohledat IMDB pro tento soubor"
 
-#: video/plugins/imdb.py:92 video/plugins/imdb.py:99
+#: video/plugins/imdb.py:94 video/plugins/imdb.py:101
 #, python-format
 msgid "Search IMDB for [%s]"
 msgstr "Prohledat IMDB pro [%s]"
 
-#: video/plugins/imdb.py:110
+#: video/plugins/imdb.py:112
 msgid "searching IMDB..."
 msgstr "Prohledávám IMDB"
 
-#: video/plugins/imdb.py:139
+#: video/plugins/imdb.py:145
 msgid "Unknown error while connecting to IMDB"
 msgstr "Neznámá chyba pøi pøipojování k IMDB"
 
-#: video/plugins/imdb.py:157
+#: video/plugins/imdb.py:163
 msgid "IMDB Query"
 msgstr "IMDB dotaz"
 
-#: video/plugins/imdb.py:161
+#: video/plugins/imdb.py:167
 msgid "No information available from IMDB"
 msgstr "Informace z IMDB nejsou dostupné"
 
@@ -3171,129 +3179,138 @@ msgstr "Neznámý umìlec"
 msgid "Unknown Property"
 msgstr "Neznámý umìlec"
 
-#: video/__init__.py:180
+#: video/__init__.py:181
 msgid "Directory Autobuild Thumbnails "
 msgstr "Automaticky vytvoøit náhledy pro adresáø"
 
-#: video/__init__.py:181
+#: video/__init__.py:182
 msgid "Build video thumbnails for all items (may take a while when entering)."
 msgstr "Vytvoøit náhledy pro v¹echny polo¾ky (mù¾e chvilku trvat)"
 
-#: video/videoitem.py:306
+#: video/videoitem.py:305
 msgid "Play DVD"
 msgstr "Pøehrát DVD"
 
-#: video/videoitem.py:307 video/videoitem.py:309
+#: video/videoitem.py:306 video/videoitem.py:308
 msgid "DVD title list"
 msgstr "Seznam titulù DVD"
 
-#: video/videoitem.py:310 video/videoitem.py:318
+#: video/videoitem.py:309 video/videoitem.py:317
 msgid "Play default track"
 msgstr "Pøehrát standardní stopu"
 
-#: video/videoitem.py:314
+#: video/videoitem.py:313
 msgid "Play VCD"
 msgstr "Pøehrát Video CD"
 
-#: video/videoitem.py:315 video/videoitem.py:317
+#: video/videoitem.py:314 video/videoitem.py:316
 msgid "VCD title list"
 msgstr "Seznam titulù Video CD"
 
-#: video/videoitem.py:322
+#: video/videoitem.py:321
 msgid "Play with alternate player"
 msgstr "Pøehrát jiným pøehrávaèem"
 
-#: video/videoitem.py:325
+#: video/videoitem.py:324
 msgid "Play with maximum cache"
 msgstr "Pøehrát s maximální velikostí cache"
 
-#: video/videoitem.py:330
+#: video/videoitem.py:329
 msgid "Show variants"
 msgstr "Ukázat varianty"
 
-#: video/videoitem.py:334
+#: video/videoitem.py:333
 msgid "Create Thumbnail"
 msgstr "Vytvoøit náhledy"
 
-#: video/videoitem.py:355
+#: video/videoitem.py:354
 msgid "Please wait...."
 msgstr "Èekejte prosím..."
 
-#: video/videoitem.py:502 video/videoitem.py:516 video/videoitem.py:530
+#: video/videoitem.py:501 video/videoitem.py:515 video/videoitem.py:529
 #, python-format
 msgid "No media found for \"%s\".\n"
 msgstr "Nenalezeno médium \"%s\".\n"
 
-#: video/videoitem.py:503 video/videoitem.py:517 video/videoitem.py:531
+#: video/videoitem.py:502 video/videoitem.py:516 video/videoitem.py:530
 msgid "Please insert the media."
 msgstr "Prosím vlo¾te médium"
 
-#: video/videoitem.py:536
+#: video/videoitem.py:535
 msgid "No player for this item found"
 msgstr "Pro tuto polo¾ku nebyl nalezen ¾ádný pøehrávaè"
 
-#: video/videoitem.py:618
+#: video/videoitem.py:617
 #, fuzzy, python-format
 msgid "Play Title %d"
 msgstr "Pøehrát titul %s"
 
-#: video/configure.py:69 video/configure.py:104
+#: video/configure.py:70 video/configure.py:105
 #, python-format
 msgid "Stream %s"
 msgstr "Proud %s"
 
-#: video/configure.py:80
+#: video/configure.py:81
 msgid "Audio Menu"
 msgstr "Menu zvuku"
 
-#: video/configure.py:95
+#: video/configure.py:96
 msgid "no subtitles"
 msgstr "¾ádné titulky"
 
-#: video/configure.py:117
+#: video/configure.py:118
 msgid "Subtitle Menu"
 msgstr "Menu titulky"
 
-#: video/configure.py:134 video/configure.py:176
+#: video/configure.py:135 video/configure.py:177
 #, python-format
 msgid "Play chapter %s"
 msgstr "Pøehrát kapitolu %s"
 
-#: video/configure.py:156 video/configure.py:179
+#: video/configure.py:157 video/configure.py:180
 msgid "Chapter Menu"
 msgstr "Kapitoly"
 
-#: video/configure.py:208
+#: video/configure.py:209
 #, python-format
 msgid "Turn off %s"
 msgstr "Vypnout %s"
 
-#: video/configure.py:209
+#: video/configure.py:210
 #, python-format
 msgid "Turn on %s"
 msgstr "Zapnout %s"
 
-#: video/configure.py:222
+#: video/configure.py:223
 msgid "Audio selection"
 msgstr "Výbìr audio stopy"
 
-#: video/configure.py:224
+#: video/configure.py:225
 msgid "Subtitle selection"
 msgstr "Výbìr titulkù"
 
-#: video/configure.py:227 video/configure.py:231
+#: video/configure.py:228 video/configure.py:232
 msgid "Chapter selection"
 msgstr "Výbìr kapitoly"
 
-#: video/configure.py:237
-msgid "deinterlacing"
+#: video/configure.py:238
+#, fuzzy
+msgid "Deinterlacing"
 msgstr "deinterlace"
 
-#: video/configure.py:243
+#: video/configure.py:239
+msgid "X-Video Motion Compensation (xvmc)"
+msgstr ""
+
+#: video/configure.py:241
+msgid "Bottom field first"
+msgstr ""
+
+#: video/configure.py:247
 msgid "Config Menu"
 msgstr "Konfigurace"
 
-#: util/mediainfo.py:740
+#: util/mediainfo.py:746
 msgid "Reloading cache files, be patient..."
 msgstr "Naèítám vyrovnávací pamìt, èekejte prosím..."
 
@@ -3406,7 +3423,7 @@ msgstr "Nelze otevøít soubor \"%s\""
 msgid "Browse Playlist"
 msgstr "Procházet playlist"
 
-#: playlist.py:292 directory.py:451
+#: playlist.py:292 directory.py:456
 msgid "Random play all items"
 msgstr "Náhodnì v¹echny soubory"
 
@@ -3434,27 +3451,27 @@ msgstr "v seznamu k pøehrání není ¾ádná pøedchozí polo¾ka"
 msgid "No action defined for this choice!"
 msgstr "Pro tuto volbu není definována ¾ádná akce!"
 
-#: directory.py:55
+#: directory.py:57
 msgid "Directory Sort By Date"
 msgstr "Tøídìní adresáøe podle data"
 
-#: directory.py:56
+#: directory.py:58
 msgid "Sort directory by date and not by name."
 msgstr "Tøídìní adresáøe podle data a nikoli podle jména"
 
-#: directory.py:58
+#: directory.py:60
 msgid "Directory Autoplay Single Item"
 msgstr "Automatické pøehrání jediné polo¾ky v adresáøi"
 
-#: directory.py:59
+#: directory.py:61
 msgid "Don't show directory if only one item exists and auto-select the item."
 msgstr "Neukazovat adresáø s jedinou polo¾kou a automaticky ji vybrat"
 
-#: directory.py:62
+#: directory.py:64
 msgid "Force Skin Layout"
 msgstr "Vynutit vzhled"
 
-#: directory.py:63
+#: directory.py:65
 msgid ""
 "Force skin to a specific layout. This option doesn't work with all skins and "
 "the result may differ based on the skin."
@@ -3462,43 +3479,43 @@ msgstr ""
 "Vynutit nastavení specifického vzhledu pro skin. Tato volba nefunguje pro "
 "v¹echny skiny a výsledky se mohou pro jednotlivé skiny li¹it."
 
-#: directory.py:66
+#: directory.py:68
 msgid "Directory Smart Sort"
 msgstr "Inteligentní tøídìní adresáøù"
 
-#: directory.py:67
+#: directory.py:69
 msgid "Use a smarter way to sort the items."
 msgstr "Pou¾ít chytøej¹í zpùsob tøídìní polo¾ek."
 
-#: directory.py:69
+#: directory.py:71
 msgid "Directory Smart Names"
 msgstr "Inteligentní tøídìní adresáøù"
 
-#: directory.py:70
+#: directory.py:72
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr "Pou¾ít chytøej¹í zpùsob tøídìní polo¾ek."
 
-#: directory.py:72
+#: directory.py:74
 msgid "Use MediaID Tag Names"
 msgstr "Pou¾ít jména MediaID tagù"
 
-#: directory.py:73
+#: directory.py:75
 msgid "Use the names from the media files tags as display name."
 msgstr "Pou¾ije jména tagù z multimediálních souborù pro zobrazení"
 
-#: directory.py:75
+#: directory.py:77
 msgid "Directory Reverse Sort"
 msgstr "Obrácené tøídìní adresáøù"
 
-#: directory.py:76
+#: directory.py:78
 msgid "Show the items in the list in reverse order."
 msgstr "Øadit polo¾ky v adresáøi v obráceném poøadí."
 
-#: directory.py:80
+#: directory.py:82
 msgid "Directory Create Playlist"
 msgstr "Vytvoøit playlist z adresáøe"
 
-#: directory.py:81
+#: directory.py:83
 msgid ""
 "Handle the directory as playlist. After one file is played, the next one "
 "will be started."
@@ -3506,27 +3523,27 @@ msgstr ""
 "Pou¾ije adresáø jako playlist. Po pøehrání jednoho souboru automaticky "
 "pokraèuje dal¹ím."
 
-#: directory.py:84
+#: directory.py:86
 msgid "Directory Add Playlist Files"
 msgstr "Pøidat playlisty do seznamu"
 
-#: directory.py:85
+#: directory.py:87
 msgid "Add playlist files to the list of items"
 msgstr "Pøidat playlisty do seznamu polo¾ek"
 
-#: directory.py:87
+#: directory.py:89
 msgid "Directory Add Random Playlist"
 msgstr "Pøidat obsah adresáøe do seznamu pro náhodné pøehrávání"
 
-#: directory.py:88
+#: directory.py:90
 msgid "Add an item for a random playlist"
 msgstr "Pøidat polo¾ku k playlistu pro náhodné pøehrávání"
 
-#: directory.py:90
+#: directory.py:92
 msgid "Directory Autoplay Items"
 msgstr "Automaticky pøehrát obsah adresáøe"
 
-#: directory.py:91
+#: directory.py:93
 msgid ""
 "Autoplay the whole directory (as playlist) when it contains only files and "
 "no directories"
@@ -3534,56 +3551,56 @@ msgstr ""
 "Automaticky pøehraje celý adresáø (jako playlist), pokud obsahuje pouze "
 "soubory a ne dal¹í adresáøe"
 
-#: directory.py:308
+#: directory.py:313
 #, python-format
 msgid "Directory on disc [%s]"
 msgstr "Adresáø na disku [%s]"
 
-#: directory.py:309
+#: directory.py:314
 msgid "Directory"
 msgstr "Adresáø"
 
-#: directory.py:445
+#: directory.py:450
 msgid "Play all files in directory"
 msgstr "Pøehrát v¹e v adresáøi"
 
-#: directory.py:453
+#: directory.py:458
 msgid "Recursive random play all items"
 msgstr "Náhodnì v¹echny podadresáøe"
 
-#: directory.py:454
+#: directory.py:459
 msgid "Recursive play all items"
 msgstr "Pøehrát v¹e v podadresáøích"
 
-#: directory.py:523
+#: directory.py:528
 msgid "Enter Password"
 msgstr "Zadejte heslo"
 
-#: directory.py:548
+#: directory.py:553
 msgid "Password incorrect"
 msgstr "Nesprávné heslo"
 
-#: directory.py:582
+#: directory.py:587
 msgid "Directory does not exist"
 msgstr "Adresáø neexistuje"
 
-#: directory.py:612
+#: directory.py:617
 msgid "Scanning disc, be patient..."
 msgstr "Prohledávám disky, èekejte prosím..."
 
-#: directory.py:614
+#: directory.py:619
 msgid "Scanning directory, be patient..."
 msgstr "Prohledávám adresáø, èekejte prosím..."
 
-#: directory.py:821
+#: directory.py:826
 msgid "auto"
 msgstr "auto"
 
-#: directory.py:940
+#: directory.py:945
 msgid "Show all kinds of items"
 msgstr "Ukázat v¹echny druhy polo¾ek"
 
-#: directory.py:942
+#: directory.py:947
 msgid "Show video, audio and image items in this directory"
 msgstr "Ukázat polo¾ky typu video, audio nebo obrázky v tomto adresáøi"
 
@@ -3602,15 +3619,15 @@ msgstr "Nelze otevøít \"%s\" pro zápis!"
 msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
 msgstr "Nastavte CHILDAPP_DEBUG=0 v souboru local_conf.py, "
 
-#: main.py:171
+#: main.py:172
 msgid "Freevo Main Menu"
 msgstr "Freevo Hlavní menu"
 
-#: main.py:187
+#: main.py:188
 msgid "Skin Selector"
 msgstr "Výbìr vzhledu"
 
-#: main.py:300
+#: main.py:301
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -3631,54 +3648,55 @@ msgstr ""
 "Soubor s dal¹ími informacemi: %s\n"
 "\n"
 
-#: main.py:310 share/skins/main/basic.fxd:25
+#: main.py:311 share/skins/main/basic.fxd:25
 #: share/skins/main/mediaportal.fxd:447 share/skins/main/dark.fxd:25
 #: share/skins/main/crystal.fxd:17 share/skins/main/bluestar.fxd:16
 #: share/skins/main/Panorama.fxd:474 share/skins/main/rain.fxd:17
 msgid "Shutdown"
 msgstr "Vypnout"
 
-#: main.py:312
+#: main.py:313
 msgid "Continue"
 msgstr "Pokraèovat"
 
-#: main.py:425
-msgid "Starting Freevo, please wait ..."
+#: main.py:427
+#, fuzzy, python-format
+msgid "Starting Freevo-%s, please wait ..."
 msgstr "Startuji Freevo, èekejte prosím..."
 
-#: main.py:434
+#: main.py:436
 msgid "Reading cache, please wait ..."
 msgstr "Naèítám vyrovnávací pamìt, èekejte prosím..."
 
-#: main.py:485
+#: main.py:487
 msgid "Freevo crashed!"
 msgstr "Freevo havarovalo!"
 
-#: main.py:486
+#: main.py:488
 #, python-format
 msgid "Filename: %s"
 msgstr "Jméno souboru: %s"
 
-#: main.py:487
+#: main.py:489
 #, python-format
 msgid "Lineno: %s"
 msgstr "Èíslo øádku: %s"
 
-#: main.py:488
+#: main.py:490
 #, python-format
 msgid "Function: %s"
 msgstr "Funkce: %s"
 
-#: main.py:489
+#: main.py:491
 #, python-format
 msgid "Text: %s"
 msgstr "Text: %s"
 
-#: main.py:491
+#: main.py:493
 msgid "Please see the logfiles for more info"
 msgstr "Prosím provìøte logovací soubory pro dal¹í informace"
 
-#: main.py:493
+#: main.py:495
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Konec za %s vteøin"
