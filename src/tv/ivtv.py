@@ -140,7 +140,7 @@ class IVTV(tv.v4l2.Videodev):
 
     def getCodecInfo(self):
         if self.version >= 0x800:
-            aspect = tv.v4l2.Videodev.getcontrol(self, 'Video Aspect')
+            aspect = tv.v4l2.Videodev.getcontrol(self, 'Video Aspect')+1
             audio_bitmask = 0
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Sampling Frequency') << 0)
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Layer II Bitrate') << 2)
@@ -149,7 +149,7 @@ class IVTV(tv.v4l2.Videodev):
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Stereo Mode Extension') << 10)
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Emphasis') << 12)
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio CRC') << 14)
-            bframes = tv.v4l2.Videodev.getcontrol(self, 'Video B Frames')
+            bframes = tv.v4l2.Videodev.getcontrol(self, 'Video B Frames')+1
             bitrate_mode = tv.v4l2.Videodev.getcontrol(self, 'Video Bitrate Mode')
             bitrate = tv.v4l2.Videodev.getcontrol(self, 'Video Bitrate')
             bitrate_peak = tv.v4l2.Videodev.getcontrol(self, 'Video Peak Bitrate')
@@ -267,7 +267,7 @@ class IVTV(tv.v4l2.Videodev):
             'Video Pulldown'       'pulldown'       : 0,
             'Stream Type'          'stream_type'    : 14,
             '''
-            tv.v4l2.Videodev.updatecontrol(self, 'Video Aspect', codec.aspect)
+            tv.v4l2.Videodev.updatecontrol(self, 'Video Aspect', codec.aspect-1)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Sampling Frequency', (codec.audio_bitmask >> 0) & 0x03)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Layer II Bitrate', (codec.audio_bitmask >> 2) & 0x0F)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Encoding Layer', (codec.audio_bitmask >> 6) & 0x01)
@@ -275,7 +275,7 @@ class IVTV(tv.v4l2.Videodev):
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Stereo Mode Extension', (codec.audio_bitmask >> 10) & 0x03)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Emphasis', (codec.audio_bitmask >> 12) & 0x03)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio CRC', (codec.audio_bitmask >> 14) & 0x01)
-            tv.v4l2.Videodev.updatecontrol(self, 'Video B Frames', codec.bframes)
+            tv.v4l2.Videodev.updatecontrol(self, 'Video B Frames', codec.bframes-1)
             tv.v4l2.Videodev.updatecontrol(self, 'Video Bitrate Mode', codec.bitrate_mode)
             tv.v4l2.Videodev.updatecontrol(self, 'Video Bitrate', codec.bitrate)
             tv.v4l2.Videodev.updatecontrol(self, 'Video Peak Bitrate', codec.bitrate_peak)
@@ -389,7 +389,7 @@ class IVTV(tv.v4l2.Videodev):
 
         print 'CODEC::aspect: %s' % codec.aspect
         print 'CODEC::audio_bitmask: 0x%X' % codec.audio_bitmask
-        print 'CODEC::bfrmes: %s' % codec.bframes
+        print 'CODEC::bframes: %s' % codec.bframes
         print 'CODEC::bitrate_mode: %s' % codec.bitrate_mode
         print 'CODEC::bitrate: %s' % codec.bitrate
         print 'CODEC::bitrate_peak: %s' % codec.bitrate_peak
