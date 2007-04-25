@@ -43,8 +43,8 @@ from videoitem import VideoItem, FileInformation
 
 # variables for the hashing function
 fxd_database         = {}
-discset_informations = {}
-tv_show_informations = {}
+discset_information = {}
+tv_show_information = {}
 
 
 class PluginInterface(plugin.MimetypePlugin):
@@ -139,7 +139,7 @@ class PluginInterface(plugin.MimetypePlugin):
                 file_id = parent.media.id + \
                           file[len(os.path.join(parent.media.mountdir,"")):]
                 try:
-                    x.mplayer_options = discset_informations[file_id]
+                    x.mplayer_options = discset_information[file_id]
                 except KeyError:
                     pass
             items.append(x)
@@ -156,15 +156,15 @@ class PluginInterface(plugin.MimetypePlugin):
 
     def dirinfo(self, diritem):
         """
-        set informations for a diritem based on the content, etc.
+        set information for a diritem based on the content, etc.
         """
-        global tv_show_informations
+        global tv_show_information
         if not diritem.image and config.VIDEO_SHOW_DATA_DIR:
             diritem.image = util.getimage(vfs.join(config.VIDEO_SHOW_DATA_DIR,
                                                    vfs.basename(diritem.dir).lower()))
 
-        if tv_show_informations.has_key(vfs.basename(diritem.dir).lower()):
-            tvinfo = tv_show_informations[vfs.basename(diritem.dir).lower()]
+        if tv_show_information.has_key(vfs.basename(diritem.dir).lower()):
+            tvinfo = tv_show_information[vfs.basename(diritem.dir).lower()]
             diritem.info.set_variables(tvinfo[1])
             if not diritem.image:
                 diritem.image = tvinfo[0]
@@ -190,14 +190,14 @@ def hash_fxd_movie_database():
     """
     import fxditem
     
-    global tv_show_informations
-    global discset_informations
+    global tv_show_information
+    global discset_information
     global fxd_database
 
     fxd_database['id']    = {}
     fxd_database['label'] = []
-    discset_informations  = {}
-    tv_show_informations  = {}
+    discset_information  = {}
+    tv_show_information  = {}
 
     rebuild_file = os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database')
     if vfs.exists(rebuild_file):
@@ -231,7 +231,7 @@ def hash_fxd_movie_database():
             for l in info.__fxd_rom_label__:
                 fxd_database['label'].append((re.compile(l), info))
             for fo in info.__fxd_files_options__:
-                discset_informations[fo['file-id']] = fo['mplayer-options']
+                discset_information[fo['file-id']] = fo['mplayer-options']
 
     if config.VIDEO_SHOW_DATA_DIR:
         files = util.recursefolders(config.VIDEO_SHOW_DATA_DIR,1, '*.fxd',1)
@@ -239,11 +239,11 @@ def hash_fxd_movie_database():
             if info.type != 'video':
                 continue
             k = vfs.splitext(vfs.basename(info.files.fxd_file))[0]
-            tv_show_informations[k] = (info.image, info.info, info.mplayer_options,
+            tv_show_information[k] = (info.image, info.info, info.mplayer_options,
                                        info.skin_fxd)
             if hasattr(info, '__fxd_rom_info__'):
                 for fo in info.__fxd_files_options__:
-                    discset_informations[fo['file-id']] = fo['mplayer-options']
+                    discset_information[fo['file-id']] = fo['mplayer-options']
             
     _debug_('done',1)
     return 1

@@ -134,8 +134,8 @@ class ChildApp:
                 (self.so.isAlive(), self.se.isAlive()), 1)
             time.sleep(0.1)
             if not isinstance(start_str, str):
-                start_str = str(' ').join(start_str)
-            _debug_('ChildApp.__init__(), pid=%s, app=%s, poll=%s' % \
+                start_str = ' '.join(start_str)
+            _debug_('ChildApp.__init__(), pid=%s, app=\"%s\", poll=%s' % \
                   (self.child.pid, start_str, self.child.poll()), 1)
 
         self.ready = True
