@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: 
+# Notes:
 # need to have radio installed before using this plugin
 # to activate put the following in your local_conf.py
 # plugin.activate('audio.radioplayer')
@@ -14,11 +14,11 @@
 #                    ('Kiss 108', '108'),
 #                    ('Mix 98.5', '98.5'),
 #                    ('Magic 106', '106.7') ]
-# Todo: 
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -40,12 +40,14 @@
 
 #python modules
 import os, popen2, fcntl, select, time
+import glob
 
 #freevo modules
 import config, menu, rc, plugin, util
 from audio.player import PlayerGUI
 from item import Item
 from menu import MenuItem
+from gui import AlertBox, ConfirmBox
 
 
 class RadioItem(Item):
@@ -62,6 +64,13 @@ class RadioItem(Item):
         return items
 
 
+    def checktv(self):
+        self.tvlockfile = config.FREEVO_CACHEDIR + '/record.*'
+        if len(glob.glob(self.tvlockfile)) > 0:
+            return True
+        return False
+
+
     def play(self, arg=None, menuw=None):
         print self.station+" "+str(self.station_index)+" "+self.name
         # self.parent.current_item = self
@@ -70,12 +79,25 @@ class RadioItem(Item):
         if not self.menuw:
             self.menuw = menuw
 
+        if self.checktv():
+            #AlertBox(text=_('Cannot play - recording in progress')).show()
+            AlertBox(text=_('Cannot play - recording in progress'), handler=self.confirm).show()
+            return 'Cannot play with RadioPlayer - recording in progress'
+
         self.player = PlayerGUI(self, menuw)
         error = self.player.play()
 
         if error and menuw:
             AlertBox(text=error).show()
             rc.post_event(rc.PLAY_END)
+
+
+    def confirm (self, arg=None, menuw=None):
+        _debug_('confirm (self, arg=%r, menuw=%r)' % (arg, menuw))
+        if menuw:
+            menuw.menu_back()
+            #menuw.refresh()
+
 
     def stop(self, arg=None, menuw=None):
         """
@@ -102,7 +124,7 @@ class RadioMainMenuItem(MenuItem):
         """
         return [ ( self.create_stations_menu , 'stations' ) ]
 
- 
+
     def create_stations_menu(self, arg=None, menuw=None):
         station_items = []
         for rstation in config.RADIO_STATIONS:

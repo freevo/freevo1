@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -38,7 +38,6 @@ import rc         # To post events
 import config     # Configuration handler. reads config file.
 import util       # Various utilities
 import plugin
-
 from event import *
 
 
@@ -47,7 +46,7 @@ class PluginInterface(plugin.Plugin):
     This is the player plugin for the radio. Basically it tunes all the
     radio stations set in the radio plugin and does the interaction
     between the radio command line program and freevo. please see the
-    audio.radio plugin for setup information  
+    audio.radio plugin for setup information
 
     """
     def __init__(self):
@@ -107,14 +106,14 @@ class RadioPlayer:
             os.system('%s -f %s &' % (config.RADIO_CMD, self.item.station))
         else:
             # BTTV cards
- 
+
             os.system('%s' % (config.RADIO_CMD_START % self.item.station))
         thread.start_new_thread(self.__update_thread, ())
 
         rc.app(self)
         rc.post_event(PLAY_START)
         return None
-    
+
 
     def stop(self):
         """
