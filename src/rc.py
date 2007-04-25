@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes: This is the only class to be thread safe!
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,7 @@ def get_singleton(**kwargs):
     # One-time init
     if _singleton == None:
         _singleton = EventHandler(**kwargs)
-        
+
     return _singleton
 
 
@@ -109,6 +109,20 @@ def shutdown():
     shutdown the rc
     """
     return get_singleton().shutdown()
+
+
+def suspend():
+    """
+    suspend the rc
+    """
+    return get_singleton().suspend()
+
+
+def resume():
+    """
+    resume the rc
+    """
+    return get_singleton().resume()
 
 
 def poll():
@@ -168,11 +182,12 @@ class Lirc:
         global PYLIRC
         PYLIRC = True
 
-        
+
     def resume(self):
         """
         (re-)initialize pylirc, e.g. after calling close()
         """
+        print 'PyLirc resumed!'	
         pylirc.init('freevo', config.LIRCRC)
         pylirc.blocking(0)
 
@@ -181,6 +196,7 @@ class Lirc:
         """
         cleanup pylirc, close devices
         """
+        print 'PyLirc suspended!'
         pylirc.exit()
 
 
@@ -250,7 +266,7 @@ class Lirc:
             for code in list:
                 return code
 
-        
+
 # --------------------------------------------------------------------------------
 
 class Keyboard:
@@ -347,7 +363,7 @@ class Network:
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.setblocking(0)
         self.sock.bind(('', self.port))
-        
+
 
     def poll(self, rc):
         """
@@ -436,7 +452,7 @@ class Evdev:
                         return config.EVENTMAP[code][1]
 
 # --------------------------------------------------------------------------------
-    
+
 class EventHandler:
     """
     Class to transform input keys or buttons into events. This class
@@ -482,7 +498,7 @@ class EventHandler:
         self.lock               = thread.allocate_lock()
         # last time we stopped sleeping
         self.sleep_timer        = 0
-        
+
 
     def set_app(self, app, context):
         """
@@ -504,7 +520,7 @@ class EventHandler:
         set context for key mapping
         """
         self.context = context
-        
+
 
     def post_event(self, e):
         """
@@ -562,7 +578,7 @@ class EventHandler:
         finally:
             self.lock.release()
 
-        
+
     def unregister(self, function):
         """
         unregister an object from the main loop
@@ -580,7 +596,7 @@ class EventHandler:
         finally:
             self.lock.release()
 
-        
+
     def suspend(self):
         for i in self.inputs:
             if hasattr(i, 'suspend'):
@@ -614,7 +630,7 @@ class EventHandler:
                     # remove if it is no repeat callback:
                     self.lock.acquire()
                     try:
-                        if c in self.callbacks: 
+                        if c in self.callbacks:
                             self.callbacks.remove(c)
                     finally:
                         self.lock.release()
@@ -646,7 +662,7 @@ class EventHandler:
                     time.sleep(duration)
                 self.sleep_timer = time.time()
 
-                
+
         # search for events in the queue
         if len(self.queue):
             self.lock.acquire()

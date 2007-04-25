@@ -6,7 +6,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: no echo of output of command to screen. 
+# Notes: no echo of output of command to screen.
 #        To use add the following to local_conf.py:
 #        plugin.activate('commands', level=45)
 #        COMMANDS_DIR = '/usr/local/freevo_data/Commands'
@@ -14,7 +14,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -61,8 +61,8 @@ def islog(name):
         data = f.readline()
     f.close()
     return data
-    
-    
+
+
 class LogScroll(PopupBox):
     """
     left      x coordinate. Integer
@@ -90,7 +90,7 @@ class LogScroll(PopupBox):
                           icon, None, None, parent)
 
         myfont = self.osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE)
-        surf_w = myfont.stringsize('AAAAAAAAAA'*8) 
+        surf_w = myfont.stringsize('AAAAAAAAAA'*8)
         data = self.osd.drawstringframed(self.filetext, 0, 0, surf_w, 1000000,
                                          myfont, align_h='left', align_v='top',
                                          fgcolor=self.osd.COL_BLACK,
@@ -134,10 +134,10 @@ class CommandOptions(PopupBox):
                  left=None, top=None, width=600, height=300, bg_color=None,
                  fg_color=None, icon=None, border=None, bd_color=None,
                  bd_width=None, vertical_expansion=1):
-        
+
         if not text:
             text = _('Command finished')
-        
+
         #PopupBox.__init__(self, text, handler=handler, x=top, y=left, width=width, height=height)
         PopupBox.__init__(self, text, handler, top, left, width, height,
                           icon, vertical_expansion, None, parent)
@@ -148,7 +148,7 @@ class CommandOptions(PopupBox):
                                height=self.num_shown_items*items_height,
                                show_v_scrollbar=0)
         self.results.y_scroll_interval = self.results.items_height = items_height
-        
+
         self.add_child(self.results)
         self.results.add_item(text=_('OK'), value='ok')
         if islog('err'):
@@ -156,7 +156,7 @@ class CommandOptions(PopupBox):
         if islog('out'):
             self.results.add_item(text=_('Show Stdout'), value='out')
         self.results.toggle_selected_index(0)
-        
+
 
 
     def eventhandler(self, event, menuw=None):
@@ -182,13 +182,13 @@ class CommandOptions(PopupBox):
             self.destroy()
         else:
             return self.parent.eventhandler(event)
-                                                                                
+
 
 class CommandChild(childapp.ChildApp2):
     def poll(self):
         pass
 
-    
+
 class CommandItem(Item):
     """
     This is the class that actually runs the commands. Eventually
@@ -228,6 +228,9 @@ class CommandItem(Item):
             pop = PopupBox(text=popup_string)
             pop.show()
 
+        if self.stoposd:
+	    rc.suspend()
+	
         workapp = CommandChild(self.cmd, 'command', 1, self.stoposd)
         while workapp.isAlive():
             # make sure all callbacks in rc are running
@@ -243,6 +246,10 @@ class CommandItem(Item):
         else:
             pop.destroy()
         workapp.stop()
+
+        if self.stoposd:
+	    rc.resume()
+	
         message = ''
         if workapp.status:
             message = _('Command Failed')
@@ -251,7 +258,7 @@ class CommandItem(Item):
 
         if not self.stoposd and self.stdout:
             CommandOptions(text=message).show()
-        
+
 
 def fxdparser(fxd, node):
     """
@@ -267,11 +274,11 @@ def fxdparser(fxd, node):
         item.use_wm  = True
     if fxd.get_children(node, 'nostdout'):
         item.stdout =  False
-    
+
     # parse <info> tag
     fxd.parse_info(fxd.get_children(node, 'info', 1), item)
     fxd.getattr(None, 'items', []).append(item)
-    
+
 
 class CommandMenuItem(Item):
     """
@@ -282,7 +289,7 @@ class CommandMenuItem(Item):
         Item.__init__(self, parent, skin_type='commands')
         self.name = _('Commands')
 
-        
+
     def actions(self):
         """
         return a list of actions for this item
@@ -290,7 +297,7 @@ class CommandMenuItem(Item):
         items = [ ( self.create_commands_menu , 'commands' ) ]
         return items
 
- 
+
     def create_commands_menu(self, arg=None, menuw=None):
         """
         create a list with commands
@@ -310,7 +317,7 @@ class CommandMenuItem(Item):
 
                 # set handler
                 parser.set_handler('command', fxdparser)
-                
+
                 # start the parsing
                 parser.parse()
             else:
@@ -333,8 +340,8 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     to activate it, put the following in your local_conf.py:
 
-    plugin.activate('command', level=45) 
-    COMMANDS_DIR = '/usr/local/freevo_data/Commands' 
+    plugin.activate('command', level=45)
+    COMMANDS_DIR = '/usr/local/freevo_data/Commands'
 
     The level argument is used to influence the placement in the Main Menu. consult
     freevo_config.py for the level of the other Menu Items if you wish to place it
@@ -348,7 +355,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         # to enable <command> tags in fxd files in every menu
         plugin.register_callback('fxditem', [], 'command', fxdparser)
         plugin.MainMenuPlugin.__init__(self)
-        
+
     def items(self, parent):
         return [ CommandMenuItem(parent) ]
 
@@ -389,7 +396,7 @@ class fxdhandler(plugin.Plugin):
         # to enable <command> tags in fxd files in every menu
         plugin.register_callback('fxditem', [], 'command', fxdparser)
         plugin.Plugin.__init__(self)
-        
+
 class CommandMainMenuItem(plugin.MainMenuPlugin):
     """
     A small plugin to put a command in the main menu.
@@ -397,7 +404,7 @@ class CommandMainMenuItem(plugin.MainMenuPlugin):
     All output is logged in the freevo logdir.
     to activate it, put the following in your local_conf.py:
 
-    plugin.activate('command.CommandMainMenuItem', args=(/usr/local/freevo_data/Commands/Mozilla.fxd', ), level=45) 
+    plugin.activate('command.CommandMainMenuItem', args=(/usr/local/freevo_data/Commands/Mozilla.fxd', ), level=45)
 
     The level argument is used to influence the placement in the Main Menu.
     consult freevo_config.py for the level of the other Menu Items if you
@@ -406,7 +413,7 @@ class CommandMainMenuItem(plugin.MainMenuPlugin):
     def __init__(self, commandxmlfile):
         plugin.MainMenuPlugin.__init__(self)
         self.cmd_xml = commandxmlfile
-    
+
     def config(self):
         return [ ('COMMAND_SPAWN_WM', '', 'command to start window manager.'),
                  ('COMMAND_KILL_WM', '', 'command to stop window manager.') ]
