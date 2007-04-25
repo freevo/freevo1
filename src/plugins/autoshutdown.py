@@ -38,8 +38,8 @@ import config
 import plugin
 import menu
 import event as em
-from gui import ConfirmBox
 from item import Item
+from gui import ConfirmBox
 from gui.AlertBox import AlertBox
 import tv.record_client as record_client
 
@@ -265,6 +265,8 @@ class ShutdownMenuItem(Item):
         menuw.menustack[-1].selected = menuw.menustack[-1].choices[pos]
         menuw.init_page()
         menuw.refresh()
+
+
     def restart_system(self, arg=None, menuw=None):
         shutdown_action(action=Shutdown.RESTART_SYSTEM)
 
