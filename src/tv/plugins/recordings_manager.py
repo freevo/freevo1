@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@
 Plugin to browse the TV recordings directory based on series rather than
 just a flat view of the recordings.
 Programs not in a series are placed at the top level, while programs that
-are a member of a series are placed in a series menu and the menu placed 
+are a member of a series are placed in a series menu and the menu placed
 at the top level.
 """
 
@@ -69,9 +69,9 @@ SORTING_STATUS_NAME      = 1
 SORTING_STATUS_DATE_NAME = 2
 SORTING_NAME             = 4
 
-sorting_methods = [_('Date then Name'), 
-                   _('Status then Name'), 
-                   _('Status, Date then Name'), 
+sorting_methods = [_('Date then Name'),
+                   _('Status then Name'),
+                   _('Status, Date then Name'),
                    _('Name')
                    ]
 series_sorting_methods = sorting_methods
@@ -104,14 +104,14 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         normal plugin init, but sets _type to 'mainmenu_tv'
         """
-        global disk_manager 
+        global disk_manager
         plugin.MainMenuPlugin.__init__(self)
-        
+
         self._type = 'mainmenu_tv'
         self.parent = None
-        
+
         disk_manager = DiskManager(int(config.TVRM_MINIMUM_DISK_FREE) * 1024 * 1024)
-        
+
         plugin.register(disk_manager, "DiskManager")
         plugin.activate(disk_manager)
 
@@ -124,11 +124,11 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('TVRM_EPISODE_TIME_FORMAT', '%c', 'When the episode name cannot be found use timestamp'),
         ]
 
-    
+
     def items(self, parent):
         self.parent = parent
         return [RecordingsDirectory(parent)]
-    
+
 # ======================================================================
 # Recordings Directory Browsing Class
 # ======================================================================
@@ -142,7 +142,7 @@ class RecordingsDirectory(Item):
         self.dir = config.TV_RECORD_DIR
         self.settings_fxd = os.path.join(self.dir, 'folder.fxd')
         self.load_settings()
-        
+
         self.blue_action = ( self.configure, _('Configure directory'))
 
     # ======================================================================
@@ -156,7 +156,7 @@ class RecordingsDirectory(Item):
         items = [ ( self.browse, _('Browse directory')) ,
                   self.blue_action]
         return items
-    
+
 
     def browse(self, arg=None, menuw=None):
         """
@@ -180,13 +180,13 @@ class RecordingsDirectory(Item):
             items.reverse()
 
         if arg == 'update':
-            # update because of DiskManager            
+            # update because of DiskManager
             self.menu.choices = items
             if selected_pos != -1:
                 for i in items:
-                    if Unicode(i.id()) == Unicode(selected_id):                       
-                        self.menu.selected = i                        
-                        break                
+                    if Unicode(i.id()) == Unicode(selected_id):
+                        self.menu.selected = i
+                        break
                     else:
                         # item is gone now, try to the selection close
                         # to the old item
@@ -196,46 +196,46 @@ class RecordingsDirectory(Item):
                         else:
                             self.menu.selected = None
                 if self.menu.selected and selected_pos != -1:
-                    self.menuw.rebuild_page()            
+                    self.menuw.rebuild_page()
                 else:
-                    self.menuw.init_page()            
+                    self.menuw.init_page()
                 self.menuw.refresh()
         else:
             # normal menu build
             item_menu = Menu(self.name, items, reload_func=self.reload, item_types = 'tv')
             menuw.pushmenu(item_menu)
-            
+
             self.menu  = item_menu
             self.menuw = menuw
-            
+
         disk_manager.set_update_menu(self, self.menu, self.menuw)
 
 
     # ======================================================================
     # Configure methods
     # ======================================================================
-    
+
     def configure_sorting(self, arg=None, menuw=None):
         exec('%s += 1' % arg, globals())
-        
+
         if eval('%s >= len(%s_methods)' %(arg, arg), globals()):
             exec('%s = 0' % arg, globals())
-        
+
         self.save_settings()
-        
+
         item = menuw.menustack[-1].selected
         item.name = item.name[:item.name.find(u'\t') + 1]  + _(eval('%s_methods[%s]' % (arg,arg), globals()))
-        
+
         copy_and_replace_menu_item(menuw, item)
 
 
     def configure_sorting_reversed(self, arg=None, menuw=None):
         exec('%s = not %s' % (arg,arg), globals())
         self.save_settings()
-        
+
         item = menuw.menustack[-1].selected
         item.name = item.name[:item.name.find(u'\t') + 1]  + self.configure_get_icon( eval(arg, globals()))
-        
+
         copy_and_replace_menu_item(menuw, item)
 
 
@@ -248,13 +248,13 @@ class RecordingsDirectory(Item):
 
 
     def configure(self, arg=None, menuw=None):
-        items = [ MenuItem(_('Sort by') + u'\t' + _(sorting_methods[sorting]), 
+        items = [ MenuItem(_('Sort by') + u'\t' + _(sorting_methods[sorting]),
                            self.configure_sorting, 'sorting'),
                   MenuItem(_('Reverse sort')+ u'\t' + self.configure_get_icon(sorting_reversed),
                             self.configure_sorting_reversed, 'sorting_reversed'),
-                  MenuItem(_('Sort series by') + u'\t' + _(series_sorting_methods[series_sorting]), 
+                  MenuItem(_('Sort series by') + u'\t' + _(series_sorting_methods[series_sorting]),
                            self.configure_sorting, 'series_sorting'),
-                  MenuItem(_('Reverse series sort')+  u'\t' + self.configure_get_icon(series_sorting_reversed), 
+                  MenuItem(_('Reverse series sort')+  u'\t' + self.configure_get_icon(series_sorting_reversed),
                            self.configure_sorting_reversed, 'series_sorting_reversed'),
                   MenuItem(_('Status order') + u'\t' + _(status_order_methods[status_order]),
                            self.configure_sorting, 'status_order')
@@ -262,7 +262,7 @@ class RecordingsDirectory(Item):
         m = Menu(_('Configure'), items)
         m.table = (50, 50)
         menuw.pushmenu(m)
-    
+
     # ======================================================================
     # Helper methods
     # ======================================================================
@@ -273,7 +273,7 @@ class RecordingsDirectory(Item):
         """
         self.browse(arg='update')
         return None
-        
+
     def load_settings(self):
         if vfs.isfile(self.settings_fxd):
             try:
@@ -296,7 +296,7 @@ class RecordingsDirectory(Item):
     def read_settings_fxd(self, fxd, node):
         '''
         parse the xml file for directory settings
-        
+
         <?xml version="1.0" ?>
         <freevo>
           <tvrmsettings>
@@ -304,7 +304,7 @@ class RecordingsDirectory(Item):
           </tvrmsettings>
         </freevo>
         '''
-        
+
         for child in fxd.get_children(node, 'setvar', 1):
             name = child.attrs[('', 'name')]
             val = child.attrs[('', 'val')]
@@ -326,7 +326,7 @@ class RecordingsDirectory(Item):
         fxd.add(fxd.XMLnode('setvar', (('name', 'series_sorting'),          ('val', series_sorting))),   node, None)
         fxd.add(fxd.XMLnode('setvar', (('name', 'series_sorting_reversed'), ('val', series_sorting_reversed))), node, None)
         fxd.add(fxd.XMLnode('setvar', (('name', 'status_order'),            ('val', status_order))),     node, None)
-        
+
 
 # ======================================================================
 # Program Class
@@ -341,38 +341,39 @@ class RecordedProgramItem(Item):
         self.set_url(None)
         self.type='video'
         self.name  = name
+        self.filename = video_item.filename
         self.video_item = video_item
-        
+
         keep = self.video_item['keep']
         if not keep:
             keep = False
         else:
             keep = eval(keep)
         self.keep = keep
-        
+
         watched = self.video_item['watched']
         if not watched:
             watched = False
         else:
             watched = eval(watched)
         self.watched =  watched
-        
+
         try:
             self.timestamp = float(self.video_item['recording_timestamp'])
         except ValueError:
             self.timestamp = 0.0
-        
+
         self.set_icon()
 
     # ======================================================================
     # actions
     # ======================================================================
-    
+
     def actions(self):
         """
         return the default action
         """
-        return [ ( self.play, _('Play') ), 
+        return [ ( self.play, _('Play') ),
                  ( self.confirm_delete, _('Delete')),
                  ( self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')),
                  ( self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched'))]
@@ -382,8 +383,8 @@ class RecordedProgramItem(Item):
         """
         Play the recorded program, and then mark it as watched.
         """
-        self.video_item.play(menuw=menuw)
-        
+        self.video_item.play(menuw=menuw, arg=arg)
+
         # Mark this programme as watched.
         self.update_fxd( True, self.keep)
         self.set_icon()
@@ -398,7 +399,7 @@ class RecordedProgramItem(Item):
         ConfirmBox(text=_('Do you wish to delete\n \'%s\'?') % self.name,
                    handler=self.delete, default_choice=1,
                    handler_message=_('Deleting...')).show()
-    
+
 
     def delete(self):
         """
@@ -493,7 +494,7 @@ class RecordedProgramItem(Item):
 
     def set_icon(self):
         """
-        Set the image displayed next to the menu item text, based on whether 
+        Set the image displayed next to the menu item text, based on whether
         the program is being kept or has been watched.
         """
         if self.keep:
@@ -502,7 +503,7 @@ class RecordedProgramItem(Item):
             self.icon = config.ICON_DIR + '/status/television_watched.png'
         else:
             self.icon = config.ICON_DIR + '/status/television_unwatched.png'
-   
+
 
     def __getitem__(self, key):
         """
@@ -521,9 +522,9 @@ class RecordedProgramItem(Item):
             return get_status_sort_order(self.watched, self.keep) + self.name
         elif mode == SORTING_STATUS_DATE_NAME:
             return get_status_sort_order(self.watched, self.keep) + self.sort(SORTING_DATE_NAME)
-            
+
         return self.name
-    
+
     def id(self):
         return self.sort('date+name')
 
@@ -533,12 +534,12 @@ class RecordedProgramItem(Item):
 
 class Series(Item):
     """
-    Class representing a set of programs with the same name, but (probably) 
+    Class representing a set of programs with the same name, but (probably)
     different taglines.
     """
     def __init__(self, name, items):
         Item.__init__(self, None, skin_type = 'tv')
-        
+
         self.set_url(None)
         self.type = 'dir'
         self.name = name
@@ -569,7 +570,7 @@ class Series(Item):
             if not self.items:
                 rc.post_event(MENU_BACK_ONE_MENU)
                 return
-                
+
             if not self.menu.choices:
                 selected_pos = -1
             else:
@@ -581,9 +582,9 @@ class Series(Item):
             self.menu.choices = self.items
             if selected_pos != -1:
                 for i in self.items:
-                    if Unicode(i.id()) == Unicode(selected_id):                       
-                        self.menu.selected = i                        
-                        break                
+                    if Unicode(i.id()) == Unicode(selected_id):
+                        self.menu.selected = i
+                        break
                     else:
                         # item is gone now, try to the selection close
                         # to the old item
@@ -593,18 +594,18 @@ class Series(Item):
                         else:
                             self.menu.selected = None
                 if self.menu.selected and selected_pos != -1:
-                    self.menuw.rebuild_page()            
+                    self.menuw.rebuild_page()
                 else:
-                    self.menuw.init_page()            
+                    self.menuw.init_page()
                 self.menuw.refresh()
         else:
             # normal menu build
             item_menu = Menu(self.name, self.items, item_types = 'tv')
             menuw.pushmenu(item_menu)
-            
+
             self.menu  = item_menu
             self.menuw = menuw
-            
+
         disk_manager.set_update_menu(self, self.menu, self.menuw)
 
 
@@ -615,7 +616,7 @@ class Series(Item):
         self.playlist = Playlist(playlist=self.items)
         self.playlist.play(menuw=menuw)
 
-    
+
     def confirm_delete(self, arg=None, menuw=None):
         """
         Confirm the user wants to delete an entire series.
@@ -655,26 +656,26 @@ class Series(Item):
         self.items = items
         for item in self.items:
             item.set_name_to_episode()
-            
-        self.items.sort(lambda l, o: cmp(o.sort(series_sorting), l.sort(series_sorting)))            
+
+        self.items.sort(lambda l, o: cmp(o.sort(series_sorting), l.sort(series_sorting)))
         if series_sorting_reversed:
             self.items.reverse()
-            
+
         self.set_icon()
 
 
     # ======================================================================
     # Helper methods
     # ======================================================================
-    
+
     def set_icon(self):
         """
-        Set the image displayed next to the menu item text, based on whether 
+        Set the image displayed next to the menu item text, based on whether
         the series is being kept or has been watched.
         """
         keep = True
         watched = True
-        
+
         for item in self.items:
             if not item.keep:
                 keep = False
@@ -686,7 +687,7 @@ class Series(Item):
             self.icon = config.ICON_DIR + '/status/series_watched.png'
         else:
             self.icon = config.ICON_DIR + '/status/series_unwatched.png'
-            
+
         self.watched = watched
         self.keep = keep
 
@@ -703,7 +704,7 @@ class Series(Item):
                 if i < (len(self.items) - 1):
                     content += ', '
             return content
-                
+
         return Item.__getitem__(self,key)
 
 
@@ -717,17 +718,17 @@ class Series(Item):
                 if item.timestamp > latest_timestamp:
                     latest_timestamp = item.timestamp
             return u'%10d%s' % (int(latest_timestamp), self.name)
-        
+
         elif mode == SORTING_STATUS_NAME:
             return get_status_sort_order(self.watched, self.keep) + self.name
         elif mode == SORTING_STATUS_DATE_NAME:
             return get_status_sort_order(self.watched, self.keep) + self.sort(SORTING_DATE_NAME)
-        
+
         return self.name
-        
+
     def id(self):
         return 'series:' + self.name
-        
+
     def eventhandler(self, event, menuw=None):
         """
         Handle playlist specific events
@@ -740,11 +741,11 @@ class Series(Item):
 # ======================================================================
 # Disk Management Class
 # ======================================================================
- 
+
 series_table = {}
 segregated_recordings = []
 all_recordings = []
- 
+
 class DiskManager(plugin.DaemonPlugin):
     """
     Class to ensure a minimum amount of disk space is always available.
@@ -758,7 +759,7 @@ class DiskManager(plugin.DaemonPlugin):
         self.menu = None
         self.menuw = None
         self.interested_series = None
-        
+
         self.update_recordings()
 
 
@@ -768,9 +769,9 @@ class DiskManager(plugin.DaemonPlugin):
         """
         # Check space first so that any removals are picked up straight away.
         self.check_space()
-        
+
         self.check_recordings()
-    
+
     def set_update_menu(self, obj, menu, menuw):
         """
         Set the menu to update when the recordings directory changes.
@@ -781,12 +782,12 @@ class DiskManager(plugin.DaemonPlugin):
         self.menuw = menuw
         self.obj = obj
         self.menu = menu
-        
-        
+
+
     def check_recordings(self):
         """
         Check the TV recordings directory to determine if the contents have changed,
-        and if they have update the list of recordings and the currently registered 
+        and if they have update the list of recordings and the currently registered
         menu.
         """
         changed = False
@@ -797,14 +798,14 @@ class DiskManager(plugin.DaemonPlugin):
             # the directory is gone
             _debug_('DiskManager: unable to read recordings directory')
             return
-            
+
         if changed:
             self.last_time = vfs.mtime(config.TV_RECORD_DIR)
             self.update_recordings()
             # Only call update if the menu is on the top of the menu stack
             if self.menu and (self.menuw.menustack[-1] == self.menu):
                 self.obj.browse(menuw=self.menuw, arg='update')
-    
+
     def update_recordings(self):
         """
         Update the list of recordings.
@@ -818,10 +819,10 @@ class DiskManager(plugin.DaemonPlugin):
 
         series = {}
 
-        recordings = fxditem.mimetype.get(None, files)       
+        recordings = fxditem.mimetype.get(None, files)
         for recorded_item in recordings:
             rpitem = RecordedProgramItem(recorded_item.name, recorded_item)
-            
+
             if series.has_key(recorded_item.name):
                 series_items = series[recorded_item.name]
             else:
@@ -847,22 +848,22 @@ class DiskManager(plugin.DaemonPlugin):
                     # Create a series menu and add all the programs in order.
                     item = Series(name, programs)
                     series_table[name] = item
-                
+
             items.append(item)
             all_items += programs
-        
+
         # Clean the series table of series that no longer exist
         for name,series_item in series_table.items():
             if not series_item in items:
                 series_item.items = None
                 del series_table[name]
-        
+
         segregated_recordings = items
         all_recordings = all_items
-        
+
         self.last_time = vfs.mtime(config.TV_RECORD_DIR)
 
- 
+
     def check_space(self):
         """
         Check the amount of disk space has not dropped below the minimum required.
@@ -871,36 +872,36 @@ class DiskManager(plugin.DaemonPlugin):
         if util.freespace(config.TV_RECORD_DIR) < self.required_space:
             print 'Need to free up some space now!'
             candidates = self.generate_candidates()
-            
+
             while (util.freespace(config.TV_RECORD_DIR) < self.required_space) and (len(candidates) > 0):
                 # Delete a candidate
                 candidate = candidates.pop(0)
                 if (not candidate) or (not candidate.files):
                     break
                 candidate.files.delete()
-        
-    
+
+
     def generate_candidates(self):
         watched_candidates = []
         unwatched_candidates = []
-        
+
         today = datetime.date.today()
-        
+
         for recorded_item in all_recordings:
             if recorded_item.watched and not recorded_item.keep:
                 watched_candidates.append(recorded_item)
-                
-            elif not recorded_item.watched and not recorded_item.keep:    
+
+            elif not recorded_item.watched and not recorded_item.keep:
                 recorded_date = datetime.date.fromtimestamp(recorded_item.timestamp)
                 timediff = today - recorded_date
-                
+
                 if (timediff.days >  config.TVRM_CONSIDER_UNWATCHED_AFTER):
                     unwatched_candidates.append(recorded_item)
 
         # Now sort the recordings so the oldest one is first.
         watched_candidates.sort(lambda l, o: cmp(l.timestamp, o.timestamp))
         unwatched_candidates.sort(lambda l, o: cmp(l.timestamp, o.timestamp))
-        
+
         return watched_candidates + unwatched_candidates
 
 
@@ -924,7 +925,7 @@ def copy_and_replace_menu_item(menuw, item):
 
 def get_status_sort_order(watched, keep):
     orders = STATUS_ORDERS[status_order]
-    
+
     order = orders[STATUS_ORDER_UNWATCHED]
     if keep:
         order = orders[STATUS_ORDER_KEEP]
