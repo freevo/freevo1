@@ -310,6 +310,7 @@ class WeatherItem(Item):
             self.popupParam = self.location
 
         self.dataurl        = "http://www.msnbc.com/m/chnk/d/weather_d_src.asp?acid=%s" % (self.location,)
+        self.dataurl        = "http://72.9.224.178/~tpfansc/rss/weather_test_de.php?Citycode=%s" % (self.location,)
         self.mapurl         = "http://w3.weather.com/weather/map/%s?from=LAPmaps" % (self.location,)
         self.mapurl2        = None
         self.maplink        = None
@@ -451,6 +452,8 @@ class WeatherItem(Item):
 
         regexp  = re.compile('%s = "[^"]*"' % (var,))
         results = regexp.search(self.weatherData)
+        if not results:
+            return ''
         (start, end) = results.span()
         start += len(var) + 4 # the 4 chars is the ' = "'
         end   -= 1  # strip off the right "
@@ -583,7 +586,9 @@ class WeatherItem(Item):
         self.forecastData = self.GetString("this.swFore")
         holdings     = []
         holdings     = self.forecastData.split("|")
-        dayNum       = int(holdings[0])
+        try:
+            dayNum       = int(holdings[0])
+        except ValueError:
         curDay       = int(time.strftime("%u")) + 1 # day of week 2(mon) - 1(sun)
 
         if dayNum != curDay:
