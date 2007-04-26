@@ -974,7 +974,7 @@ class WeatherBaseScreen(skin.Area):
                                          _("and a low of"),
                                          self.parent.weather.lowTemp[0]))
         lines.append("%s %s %s" \
-                  % (_("Currently, there is a a humidity of"),
+                  % (_("Currently, there is a humidity of"),
                       self.parent.weather.getHumidity(),
                       _("and"),))
 
