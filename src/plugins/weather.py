@@ -265,6 +265,7 @@ class WeatherItem(Item):
         self.error        = 0
 
         self.location     = None
+        self.language     = 'EN'
         self.convertData  = 0
         self.name         = None
         self.city         = None
@@ -300,7 +301,9 @@ class WeatherItem(Item):
             if len(iLocation) > 1:
                 self.convertData = int(iLocation[1])
             if len(iLocation) > 2:
-                self.name        = str(iLocation[2])
+                self.language = str(iLocation[2])
+            if len(iLocation) > 3:
+                self.name     = str(iLocation[3])
 
             self.popupParam = Unicode(self.name)
 
@@ -309,8 +312,9 @@ class WeatherItem(Item):
             self.convertData = 0
             self.popupParam = self.location
 
-        self.dataurl        = "http://www.msnbc.com/m/chnk/d/weather_d_src.asp?acid=%s" % (self.location,)
-        self.dataurl        = "http://72.9.224.178/~tpfansc/rss/weather_test_de.php?Citycode=%s" % (self.location,)
+        self.dataurl = "http://www.msnbc.com/m/chnk/d/weather_d_src.asp?acid=%s" % (self.location,)
+        self.dataurl = "http://72.9.224.178/~tpfansc/rss/weather_test_de.php?Citycode=%s" % (self.location,)
+        self.dataurl = "http://www.tpfans.com/rss/weather.php?Citycode=%s&Language=%s" % (self.location, self.language)
         self.mapurl         = "http://w3.weather.com/weather/map/%s?from=LAPmaps" % (self.location,)
         self.mapurl2        = None
         self.maplink        = None
@@ -587,9 +591,10 @@ class WeatherItem(Item):
         holdings     = []
         holdings     = self.forecastData.split("|")
         try:
-            dayNum       = int(holdings[0])
+            dayNum = int(holdings[0])
         except ValueError:
-        curDay       = int(time.strftime("%u")) + 1 # day of week 2(mon) - 1(sun)
+            dayNum = int(time.strftime("%u")) + 1
+        curDay = int(time.strftime("%u")) + 1 # day of week 2(mon) - 1(sun)
 
         if dayNum != curDay:
             self.pastTime = 1
