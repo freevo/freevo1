@@ -1,15 +1,15 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# game.py - Freevo module to run games. 
+# game.py - Freevo module to run games.
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -61,7 +61,7 @@ def get_singleton():
     # One-time init
     if _singleton == None:
         _singleton = Game()
-        
+
     return _singleton
 
 class Game:
@@ -73,16 +73,16 @@ class Game:
     def play(self, item, menuw):
 
         self.item = item
-        self.filename = item.filename 
+        self.filename = item.filename
         self.command = item.command
         self.mode = item.mode
         self.menuw = menuw
-        
+
         if not os.path.isfile(self.filename):
             osd.clearscreen()
             osd.drawstring(_('File "%s" not found!') % self.filename, 30, 280)
             osd.update()
-            time.sleep(2.0) 
+            time.sleep(2.0)
             self.menuw.refresh()
             return 0
 
@@ -97,15 +97,17 @@ class Game:
 
         if DEBUG:
             print 'Game.play(): Starting thread, cmd=%s' % self.command
-        
+
         self.app=GameApp(self.command, stop_osd=1)
         self.prev_app = rc.app()
+        rc.suspend()
         rc.app(self)
 
 
     def stop(self):
         self.app.stop()
         rc.app(None)
+        rc.resume()
         if plugin.is_active('joy'):
             try:
                 plugin.getbyname('JOY').enable(TRUE)
@@ -116,7 +118,7 @@ class Game:
     def eventhandler(self, event, menuw=None):
         return self.item.eventhandler(event, self.menuw)
 
- 
+
 # ======================================================================
 class GameApp(childapp.ChildApp2):
     def stop_event(self):
