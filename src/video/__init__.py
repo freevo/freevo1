@@ -140,6 +140,7 @@ class PluginInterface(plugin.MimetypePlugin):
                           file[len(os.path.join(parent.media.mountdir,"")):]
                 try:
                     x.mplayer_options = discset_information[file_id]
+                    _debug_('x.mplayer_options=%r' % x.mplayer_options)
                 except KeyError:
                     pass
             items.append(x)

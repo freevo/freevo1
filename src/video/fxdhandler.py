@@ -39,11 +39,11 @@ def parse_movie(fxd, node):
 
     <movie title>
         <cover-img>file</cover-img>
-        <video>
-            <dvd|vcd|file id name media_id mplayer_options>file</>+
+        <video mplayer-options>
+            <dvd|vcd|file id name media_id mplayer-options>file</>+
         <variants>
             <variant>
-                <part ref mplayer_options>
+                <part ref mplayer-options>
                     <subtitle media_id>file</subtitle>
                     <audio media_id>file</audio>
                 </part>+
@@ -95,7 +95,7 @@ def parse_movie(fxd, node):
 
     video = fxd.get_children(node, 'video')
     if video:
-        mplayer_options = fxd.getattr(video[0], 'mplayer_options')
+        mplayer_options = fxd.getattr(video[0], 'mplayer-options')
         video = fxd.get_children(video[0], 'file') + \
                 fxd.get_children(video[0], 'vcd') + \
                 fxd.get_children(video[0], 'dvd') + \
@@ -208,25 +208,27 @@ def parse_movie(fxd, node):
             item.force_player = player
         if is_playlist:
             item.is_playlist  = True
-        # global <video> mplayer_options
-        if mplayer_options:
-            item.mplayer_options += mplayer_options
+        if len(video) == 1:
+            # global <video> mplayer_options
+            if mplayer_options:
+                item.mplayer_options += mplayer_options
 
         # if there is more than one item add them to subitems
         if len(video) > 1:
             # a list of files
             for s in video:
+                #id, url, item.media_id, mplayer_options, player, is_playlist = parse_video_child(fxd, s, dirname)
                 video_child = parse_video_child(fxd, s, dirname)
                 v = VideoItem(video_child[1], parent=item, info=item.info, parse=False)
                 v.files = None
                 v.media_id, v.mplayer_options, player, is_playlist = video_child[2:]
-                if video_child[-2]:
-                    v.force_player = video_child[-2]
-                if video_child[-1]:
+                if player:
+                    v.force_player = player
+                if is_playlist:
                     item.is_playlist = True
                 # global <video> mplayer_options
                 if mplayer_options:
-                    v.mplayer_options += mplayer_options
+                    v.mplayer_options += ' ' + mplayer_options
                 item.subitems.append(v)
 
     if not item.files:
@@ -284,7 +286,7 @@ def parse_disc_set(fxd, node):
         #         mplayer_options apply. <file-opt> is not such a good
         #         name,  though.
         # So I ignore that we are in a disc right now and use the 'item'
-        item.mplayer_options = fxd.getattr(disc, 'mplayer-options')
+        item.mplayer_options = fxd.getattr(disc, 'mplayer_options')
         there_are_file_opts = 0
         for f in fxd.get_children(disc, 'file-opt'):
             there_are_file_opts = 1
@@ -293,7 +295,7 @@ def parse_disc_set(fxd, node):
                 file_media_id = id
             mpl_opts = item.mplayer_options + ' ' + fxd.getattr(f, 'mplayer-options')
             opt = { 'file-id' : file_media_id + fxd.gettext(f),
-                    'mplayer-options': mpl_opts }
+                    'mplayer_options': mpl_opts }
             item.__fxd_files_options__.append(opt)
         if there_are_file_opts:
             # in this case, the disc/@mplayer_options is retricted to the set

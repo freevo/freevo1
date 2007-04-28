@@ -480,7 +480,9 @@ class VideoItem(Item):
                 # options
                 if self.current_subitem.mplayer_options:
                     if self.mplayer_options:
-                        self.current_subitem.mplayer_options += ' ' + self.mplayer_options
+                        # With this set the player options are incorrect when there is more than 1 item
+                        #self.current_subitem.mplayer_options += ' ' + self.mplayer_options
+                        pass
                 else:
                     self.current_subitem.mplayer_options = self.mplayer_options
                 # When playing a subitem, the menu must be hidden. If it is not,
