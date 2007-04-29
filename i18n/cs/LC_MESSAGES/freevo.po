@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo 1.70\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-23 21:35+0200\n"
+"POT-Creation-Date: 2007-04-29 11:48+0200\n"
 "PO-Revision-Date: 2007-03-22 18:45+0100\n"
 "Last-Translator: Tonous <tonous@dkm.cz>\n"
 "Language-Team: Jiri Kulhan <jiri@kulhan.cz>\n"
@@ -572,139 +572,140 @@ msgstr "skoro jasno"
 msgid "Fair"
 msgstr "jasno"
 
-#: plugins/weather.py:356 plugins/weather.py:359
+#: plugins/weather.py:361 plugins/weather.py:364
 #, python-format
 msgid "Last updated: %s"
 msgstr "aktualizace: %s"
 
-#: plugins/weather.py:369
+#: plugins/weather.py:374
 msgid "Unlimited"
 msgstr "Neomezený"
 
-#: plugins/weather.py:382
+#: plugins/weather.py:387
 msgid "Show Weather Details"
 msgstr "Podrobná pøedpovìï"
 
-#: plugins/weather.py:460
+#: plugins/weather.py:467
 #, python-format
 msgid "Fetching Weather for %s..."
 msgstr "Stahuji pøedpovìï na %s"
 
-#: plugins/weather.py:474
+#: plugins/weather.py:481
 #, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Stahuji radarovou mapu %s"
 
-#: plugins/weather.py:627 plugins/weather.py:896 util/misc.py:451
+#: plugins/weather.py:637 plugins/weather.py:906 util/misc.py:451
 #: util/misc.py:462 util/misc.py:473
 msgid "at"
 msgstr "v"
 
-#: plugins/weather.py:657
+#: plugins/weather.py:667
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: plugins/weather.py:738 share/skins/main/bluestar.fxd:13
+#: plugins/weather.py:748 share/skins/main/bluestar.fxd:13
 msgid "Weather"
 msgstr "Poèasí"
 
-#: plugins/weather.py:744 plugins/weather.py:779 plugins/mpd.py:117
+#: plugins/weather.py:754 plugins/weather.py:789 plugins/mpd.py:117
 msgid "Locations"
 msgstr "Mista"
 
-#: plugins/weather.py:771 plugins/freeboxtv.py:113
+#: plugins/weather.py:781 plugins/freeboxtv.py:113
 msgid "No locations specified"
 msgstr "Nejsou zadaná ¾ádné kódy míst"
 
-#: plugins/weather.py:796
+#: plugins/weather.py:806
 msgid "Current Conditions"
 msgstr "Souèasná situace"
 
-#: plugins/weather.py:796
+#: plugins/weather.py:806
 msgid "Today's Forecast"
 msgstr "Dne¹ní pøedpovìï"
 
-#: plugins/weather.py:797
+#: plugins/weather.py:807
 msgid "Extended Forecast"
 msgstr "Dlouhodobá pøedpovìï"
 
-#: plugins/weather.py:797
+#: plugins/weather.py:807
 msgid "Radar Map"
 msgstr "Radarová mapa"
 
-#: plugins/weather.py:875
+#: plugins/weather.py:885
 msgid "Humidity"
 msgstr "Vlhkost"
 
-#: plugins/weather.py:888
+#: plugins/weather.py:898
 msgid "Pressure"
 msgstr "Tlak"
 
-#: plugins/weather.py:895
+#: plugins/weather.py:905
 msgid "Wind"
 msgstr "Vítr"
 
-#: plugins/weather.py:903
+#: plugins/weather.py:913
 msgid "Wind Chill"
 msgstr "Zdán. teplota"
 
-#: plugins/weather.py:911
+#: plugins/weather.py:921
 msgid "Visibility"
 msgstr "Viditelnost"
 
-#: plugins/weather.py:919
+#: plugins/weather.py:929
 msgid "UV Index"
 msgstr "UV index"
 
-#: plugins/weather.py:962
+#: plugins/weather.py:972
 msgid "Today, a high of"
 msgstr "Dnes, maximálnì"
 
-#: plugins/weather.py:964
+#: plugins/weather.py:974
 msgid "and a low of"
 msgstr "a minimálnì"
 
-#: plugins/weather.py:967
-msgid "Currently, there is a a humidity of"
+#: plugins/weather.py:977
+#, fuzzy
+msgid "Currently, there is a humidity of"
 msgstr "Viditelnost"
 
-#: plugins/weather.py:969
+#: plugins/weather.py:979
 msgid "and"
 msgstr "a"
 
-#: plugins/weather.py:971
+#: plugins/weather.py:981
 msgid "the winds are "
-msgstr " "
+msgstr ""
 
-#: plugins/weather.py:973
+#: plugins/weather.py:983
 msgid "calm"
 msgstr "Bezvìtøí"
 
-#: plugins/weather.py:975
+#: plugins/weather.py:985
 msgid "coming in at"
 msgstr "Vítr o rychlosti "
 
-#: plugins/weather.py:975
+#: plugins/weather.py:985
 msgid "from the"
 msgstr "z"
 
-#: plugins/weather.py:979
+#: plugins/weather.py:989
 msgid "Visibility will be unlimited today"
 msgstr "Bude jasno"
 
-#: plugins/weather.py:981
+#: plugins/weather.py:991
 msgid "There will be a visibility of"
 msgstr "Viditelnost a¾"
 
-#: plugins/weather.py:1016
+#: plugins/weather.py:1026
 msgid "LO"
 msgstr "od"
 
-#: plugins/weather.py:1024
+#: plugins/weather.py:1034
 msgid "HI"
 msgstr "do"
 
-#: plugins/weather.py:1038
+#: plugins/weather.py:1048
 msgid "Error encountered while trying to download Radar map"
 msgstr "Nelze stáhnot radarovou mapu"
 
@@ -721,11 +722,11 @@ msgid "Delete image"
 msgstr "Smazat obrázek"
 
 #: plugins/file_ops.py:71 www/htdocs/library.rpy:539
-#: tv/plugins/recordings_manager.py:376
+#: tv/plugins/recordings_manager.py:377
 msgid "Delete"
 msgstr "Smazat"
 
-#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:398
+#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:399
 #, python-format
 msgid ""
 "Do you wish to delete\n"
@@ -734,8 +735,8 @@ msgstr ""
 "Pøejete si smazat\n"
 " '%s'?"
 
-#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:400
-#: tv/plugins/recordings_manager.py:626
+#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:401
+#: tv/plugins/recordings_manager.py:627
 msgid "Deleting..."
 msgstr "Ma¾u..."
 
@@ -1072,7 +1073,7 @@ msgstr "(spu¹tení zakázáno)"
 msgid "SHUTDOWN FREEVO?"
 msgstr "Ukonèit Freevo?"
 
-#: plugins/autoshutdown.py:601 plugins/shutdown.py:63 main.py:310
+#: plugins/autoshutdown.py:603 plugins/shutdown.py:63 main.py:310
 msgid "shutting down..."
 msgstr "Ukonèuji..."
 
@@ -1163,15 +1164,15 @@ msgstr "Soubor pro chybový výstup"
 msgid "Running Command..."
 msgstr "Spou¹tím pøíkaz"
 
-#: plugins/command.py:248
+#: plugins/command.py:255
 msgid "Command Failed"
 msgstr "Pøíkaz selhal"
 
-#: plugins/command.py:250
+#: plugins/command.py:257
 msgid "Command Completed"
 msgstr "Pøíkaz dokonèen"
 
-#: plugins/command.py:283 plugins/command.py:321 share/skins/main/dark.fxd:23
+#: plugins/command.py:290 plugins/command.py:328 share/skins/main/dark.fxd:23
 #: share/skins/main/crystal.fxd:16 share/skins/main/rain.fxd:16
 msgid "Commands"
 msgstr "Pøíkazy"
@@ -1479,14 +1480,15 @@ msgid "Freevo Help"
 msgstr "Nápovìda"
 
 #: www/htdocs/help/index.rpy:41
+#, fuzzy
 msgid ""
 "This is the internal Freevo documentation. The documents         are in an "
 "early stage of development, if you like to help, please         contact the "
-"developers. You find more informations like         the <a href=\"http://"
+"developers. You find more information like         the <a href=\"http://"
 "freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online "
 "manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org"
 "\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
-"them if someone deletes         informations), feel free to add informations "
+"them if someone deletes         information), feel free to add information "
 "there."
 msgstr ""
 "Tato dokumentace není zatím kompletní, pokud chcete pomoci, kontaktujte "
@@ -1521,7 +1523,8 @@ msgid "FXD files"
 msgstr "Co jsou FXD soubory"
 
 #: www/htdocs/help/index.rpy:57
-msgid "Skinning Informations"
+#, fuzzy
+msgid "Skinning Information"
 msgstr "Nastavení vzhledu (skiny)"
 
 #: www/htdocs/help/index.rpy:58
@@ -2337,51 +2340,51 @@ msgstr "Sobota"
 msgid "Configure"
 msgstr "Nastavení"
 
-#: tv/plugins/recordings_manager.py:375 tv/program_display.py:126
+#: tv/plugins/recordings_manager.py:376 tv/program_display.py:126
 #: video/videoitem.py:319 video/configure.py:246 playlist.py:284
 msgid "Play"
 msgstr "Pøehrát"
 
-#: tv/plugins/recordings_manager.py:377
+#: tv/plugins/recordings_manager.py:378
 msgid "Unmark to Keep"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:377
+#: tv/plugins/recordings_manager.py:378
 msgid "Mark to Keep"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:378
+#: tv/plugins/recordings_manager.py:379
 msgid "Unmark as Watched"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:378
+#: tv/plugins/recordings_manager.py:379
 msgid "Mark as Watched"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:463
+#: tv/plugins/recordings_manager.py:464
 msgid "(Unnamed)"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:557
+#: tv/plugins/recordings_manager.py:558
 #, fuzzy
 msgid "Browse episodes"
 msgstr "Procházet disk"
 
-#: tv/plugins/recordings_manager.py:558
+#: tv/plugins/recordings_manager.py:559
 #, fuzzy
 msgid "Delete all episodes"
 msgstr "Smazat"
 
-#: tv/plugins/recordings_manager.py:559
+#: tv/plugins/recordings_manager.py:560
 msgid "Keep all episodes"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:560
+#: tv/plugins/recordings_manager.py:561
 #, fuzzy
 msgid "Play all episodes"
 msgstr "Seznamy k pøehrávání (playlisty)"
 
-#: tv/plugins/recordings_manager.py:624
+#: tv/plugins/recordings_manager.py:625
 #, fuzzy, python-format
 msgid ""
 "Do you wish to delete the series\n"
@@ -2390,7 +2393,7 @@ msgstr ""
 "Pøejete si smazat\n"
 " '%s'?"
 
-#: tv/plugins/recordings_manager.py:698
+#: tv/plugins/recordings_manager.py:699
 #, fuzzy
 msgid "episodes"
 msgstr "Kapitola"
@@ -2788,19 +2791,24 @@ msgstr ""
 msgid "Problem trying to call:"
 msgstr "Problém pøi volání:"
 
-#: audio/plugins/radio.py:61
+#: audio/plugins/radio.py:63
 msgid "Listen to Radio Station"
 msgstr "Poslouchat radiostanici"
 
-#: audio/plugins/radio.py:96
+#: audio/plugins/radio.py:84
+#, fuzzy
+msgid "Cannot play - recording in progress"
+msgstr "Právì probíhá nahrávání"
+
+#: audio/plugins/radio.py:118
 msgid "Radio"
 msgstr "Rádio"
 
-#: audio/plugins/radio.py:121
+#: audio/plugins/radio.py:143
 msgid "No Radio Stations found"
 msgstr "®ádna radiostanice nebyla nalezena"
 
-#: audio/plugins/radio.py:123
+#: audio/plugins/radio.py:145
 msgid "Radio Stations"
 msgstr "Radiostanice"
 
@@ -3227,23 +3235,23 @@ msgstr "Vytvoøit náhledy"
 msgid "Please wait...."
 msgstr "Èekejte prosím..."
 
-#: video/videoitem.py:501 video/videoitem.py:515 video/videoitem.py:529
+#: video/videoitem.py:503 video/videoitem.py:517 video/videoitem.py:531
 #, python-format
 msgid "No media found for \"%s\".\n"
 msgstr "Nenalezeno médium \"%s\".\n"
 
-#: video/videoitem.py:502 video/videoitem.py:516 video/videoitem.py:530
+#: video/videoitem.py:504 video/videoitem.py:518 video/videoitem.py:532
 msgid "Please insert the media."
 msgstr "Prosím vlo¾te médium"
 
-#: video/videoitem.py:535
+#: video/videoitem.py:537
 msgid "No player for this item found"
 msgstr "Pro tuto polo¾ku nebyl nalezen ¾ádný pøehrávaè"
 
-#: video/videoitem.py:617
+#: video/videoitem.py:619
 #, fuzzy, python-format
 msgid "Play Title %d"
-msgstr "Pøehrát titul %s"
+msgstr "Pøehrát titul %d"
 
 #: video/configure.py:70 video/configure.py:105
 #, python-format
@@ -3662,7 +3670,7 @@ msgstr "Pokraèovat"
 #: main.py:427
 #, fuzzy, python-format
 msgid "Starting Freevo-%s, please wait ..."
-msgstr "Startuji Freevo, èekejte prosím..."
+msgstr "Startuji Freevo-%s, èekejte prosím..."
 
 #: main.py:436
 msgid "Reading cache, please wait ..."
@@ -3984,7 +3992,6 @@ msgstr "Tento seznam je prázdný!"
 msgid "TV"
 msgstr "TV"
 
-#, fuzzy
 #~ msgid "Scanning recordings, be patient..."
 #~ msgstr "Prohledávám disky, èekejte prosím..."
 

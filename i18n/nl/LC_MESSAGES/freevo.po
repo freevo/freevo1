@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-23 21:35+0200\n"
+"POT-Creation-Date: 2007-04-29 11:48+0200\n"
 "PO-Revision-Date: 2004-06-03 17:30+0200\n"
 "Last-Translator: eborn <freevo@fambus.nl>\n"
 "Language-Team: Nederlands <none>\n"
@@ -572,139 +572,140 @@ msgstr ""
 msgid "Fair"
 msgstr ""
 
-#: plugins/weather.py:356 plugins/weather.py:359
+#: plugins/weather.py:361 plugins/weather.py:364
 #, python-format
 msgid "Last updated: %s"
 msgstr "Laatste update: %s"
 
-#: plugins/weather.py:369
+#: plugins/weather.py:374
 msgid "Unlimited"
 msgstr "Ongelimiteerd"
 
-#: plugins/weather.py:382
+#: plugins/weather.py:387
 msgid "Show Weather Details"
 msgstr "Toon weer details"
 
-#: plugins/weather.py:460
+#: plugins/weather.py:467
 #, python-format
 msgid "Fetching Weather for %s..."
 msgstr "Het weer voor %s wordt opgehaald..."
 
-#: plugins/weather.py:474
+#: plugins/weather.py:481
 #, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Het weer voor %s wordt opgehaald..."
 
-#: plugins/weather.py:627 plugins/weather.py:896 util/misc.py:451
+#: plugins/weather.py:637 plugins/weather.py:906 util/misc.py:451
 #: util/misc.py:462 util/misc.py:473
 msgid "at"
 msgstr "op"
 
-#: plugins/weather.py:657
+#: plugins/weather.py:667
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: plugins/weather.py:738 share/skins/main/bluestar.fxd:13
+#: plugins/weather.py:748 share/skins/main/bluestar.fxd:13
 msgid "Weather"
 msgstr "Weer"
 
-#: plugins/weather.py:744 plugins/weather.py:779 plugins/mpd.py:117
+#: plugins/weather.py:754 plugins/weather.py:789 plugins/mpd.py:117
 msgid "Locations"
 msgstr "Locaties"
 
-#: plugins/weather.py:771 plugins/freeboxtv.py:113
+#: plugins/weather.py:781 plugins/freeboxtv.py:113
 msgid "No locations specified"
 msgstr "Geen locaties opgegeven"
 
-#: plugins/weather.py:796
+#: plugins/weather.py:806
 msgid "Current Conditions"
 msgstr "Huidige condities"
 
-#: plugins/weather.py:796
+#: plugins/weather.py:806
 msgid "Today's Forecast"
 msgstr "Voorspelling voor vandaag"
 
-#: plugins/weather.py:797
+#: plugins/weather.py:807
 msgid "Extended Forecast"
 msgstr "Vooruitzichten"
 
-#: plugins/weather.py:797
+#: plugins/weather.py:807
 msgid "Radar Map"
 msgstr "Radarkaart"
 
-#: plugins/weather.py:875
+#: plugins/weather.py:885
 msgid "Humidity"
 msgstr "Vochtigheid"
 
-#: plugins/weather.py:888
+#: plugins/weather.py:898
 msgid "Pressure"
 msgstr "Druk"
 
-#: plugins/weather.py:895
+#: plugins/weather.py:905
 msgid "Wind"
 msgstr "Wind"
 
-#: plugins/weather.py:903
+#: plugins/weather.py:913
 msgid "Wind Chill"
 msgstr "Gevoelstemp."
 
-#: plugins/weather.py:911
+#: plugins/weather.py:921
 msgid "Visibility"
 msgstr "Zicht"
 
-#: plugins/weather.py:919
+#: plugins/weather.py:929
 msgid "UV Index"
 msgstr "UV Index"
 
-#: plugins/weather.py:962
+#: plugins/weather.py:972
 msgid "Today, a high of"
 msgstr "Vandaag een maximum van"
 
-#: plugins/weather.py:964
+#: plugins/weather.py:974
 msgid "and a low of"
 msgstr "en een minimum van"
 
-#: plugins/weather.py:967
-msgid "Currently, there is a a humidity of"
+#: plugins/weather.py:977
+#, fuzzy
+msgid "Currently, there is a humidity of"
 msgstr "Momenteel is de luchtvochtigheid"
 
-#: plugins/weather.py:969
+#: plugins/weather.py:979
 msgid "and"
 msgstr "en"
 
-#: plugins/weather.py:971
+#: plugins/weather.py:981
 msgid "the winds are "
 msgstr "de wind heeft "
 
-#: plugins/weather.py:973
+#: plugins/weather.py:983
 msgid "calm"
 msgstr "kalm"
 
-#: plugins/weather.py:975
+#: plugins/weather.py:985
 msgid "coming in at"
 msgstr "een kracht van"
 
-#: plugins/weather.py:975
+#: plugins/weather.py:985
 msgid "from the"
 msgstr "en komt vanuit het"
 
-#: plugins/weather.py:979
+#: plugins/weather.py:989
 msgid "Visibility will be unlimited today"
 msgstr "Het zicht is vandaag ongelimiteerd"
 
-#: plugins/weather.py:981
+#: plugins/weather.py:991
 msgid "There will be a visibility of"
 msgstr "Het zicht is"
 
-#: plugins/weather.py:1016
+#: plugins/weather.py:1026
 msgid "LO"
 msgstr "MIN"
 
-#: plugins/weather.py:1024
+#: plugins/weather.py:1034
 msgid "HI"
 msgstr "MAX"
 
-#: plugins/weather.py:1038
+#: plugins/weather.py:1048
 msgid "Error encountered while trying to download Radar map"
 msgstr "Het ophalen van de radarmap is mislukt"
 
@@ -721,11 +722,11 @@ msgid "Delete image"
 msgstr "Afbeelding verwijderen"
 
 #: plugins/file_ops.py:71 www/htdocs/library.rpy:539
-#: tv/plugins/recordings_manager.py:376
+#: tv/plugins/recordings_manager.py:377
 msgid "Delete"
 msgstr "Verwijder bestand"
 
-#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:398
+#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:399
 #, python-format
 msgid ""
 "Do you wish to delete\n"
@@ -734,8 +735,8 @@ msgstr ""
 "Weetjeu zeker dat je dit bestand wilt verwijderen:\n"
 " '%s'?"
 
-#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:400
-#: tv/plugins/recordings_manager.py:626
+#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:401
+#: tv/plugins/recordings_manager.py:627
 msgid "Deleting..."
 msgstr "Bezig met verwijderen..."
 
@@ -1073,7 +1074,7 @@ msgstr ""
 msgid "SHUTDOWN FREEVO?"
 msgstr ""
 
-#: plugins/autoshutdown.py:601 plugins/shutdown.py:63 main.py:310
+#: plugins/autoshutdown.py:603 plugins/shutdown.py:63 main.py:310
 msgid "shutting down..."
 msgstr "Bezig met afsluiten..."
 
@@ -1164,15 +1165,15 @@ msgstr "Stderr bestand"
 msgid "Running Command..."
 msgstr "Bezig met commando te starten..."
 
-#: plugins/command.py:248
+#: plugins/command.py:255
 msgid "Command Failed"
 msgstr "Commando mislukt"
 
-#: plugins/command.py:250
+#: plugins/command.py:257
 msgid "Command Completed"
 msgstr "Commando Volbracht"
 
-#: plugins/command.py:283 plugins/command.py:321 share/skins/main/dark.fxd:23
+#: plugins/command.py:290 plugins/command.py:328 share/skins/main/dark.fxd:23
 #: share/skins/main/crystal.fxd:16 share/skins/main/rain.fxd:16
 msgid "Commands"
 msgstr "Commandos"
@@ -1480,14 +1481,15 @@ msgid "Freevo Help"
 msgstr "Freevo Help"
 
 #: www/htdocs/help/index.rpy:41
+#, fuzzy
 msgid ""
 "This is the internal Freevo documentation. The documents         are in an "
 "early stage of development, if you like to help, please         contact the "
-"developers. You find more informations like         the <a href=\"http://"
+"developers. You find more information like         the <a href=\"http://"
 "freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online "
 "manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org"
 "\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
-"them if someone deletes         informations), feel free to add informations "
+"them if someone deletes         information), feel free to add information "
 "there."
 msgstr ""
 "Dit is de interne Freevo documentatie. Deze documenten zijn ver van "
@@ -1525,7 +1527,8 @@ msgid "FXD files"
 msgstr "FXD bestanden"
 
 #: www/htdocs/help/index.rpy:57
-msgid "Skinning Informations"
+#, fuzzy
+msgid "Skinning Information"
 msgstr "Uiterlijk informatie"
 
 #: www/htdocs/help/index.rpy:58
@@ -2306,7 +2309,7 @@ msgstr "Configureer deze folder"
 #: tv/plugins/recordings_manager.py:166
 #, fuzzy
 msgid "Recordings Directory does not exist"
-msgstr "Folder %s bestaat niet."
+msgstr ""
 
 #: tv/plugins/recordings_manager.py:244 directory.py:819 directory.py:909
 #: directory.py:943
@@ -2344,53 +2347,53 @@ msgstr "zaterdag"
 msgid "Configure"
 msgstr "Configureer"
 
-#: tv/plugins/recordings_manager.py:375 tv/program_display.py:126
+#: tv/plugins/recordings_manager.py:376 tv/program_display.py:126
 #: video/videoitem.py:319 video/configure.py:246 playlist.py:284
 msgid "Play"
 msgstr "Afspelen"
 
-#: tv/plugins/recordings_manager.py:377
+#: tv/plugins/recordings_manager.py:378
 msgid "Unmark to Keep"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:377
+#: tv/plugins/recordings_manager.py:378
 msgid "Mark to Keep"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:378
+#: tv/plugins/recordings_manager.py:379
 #, fuzzy
 msgid "Unmark as Watched"
 msgstr "Markeer als gelezen"
 
-#: tv/plugins/recordings_manager.py:378
+#: tv/plugins/recordings_manager.py:379
 #, fuzzy
 msgid "Mark as Watched"
 msgstr "Markeer als gelezen"
 
-#: tv/plugins/recordings_manager.py:463
+#: tv/plugins/recordings_manager.py:464
 msgid "(Unnamed)"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:557
+#: tv/plugins/recordings_manager.py:558
 #, fuzzy
 msgid "Browse episodes"
 msgstr "Schijf verkennen"
 
-#: tv/plugins/recordings_manager.py:558
+#: tv/plugins/recordings_manager.py:559
 #, fuzzy
 msgid "Delete all episodes"
 msgstr "Verwijder bericht"
 
-#: tv/plugins/recordings_manager.py:559
+#: tv/plugins/recordings_manager.py:560
 msgid "Keep all episodes"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:560
+#: tv/plugins/recordings_manager.py:561
 #, fuzzy
 msgid "Play all episodes"
 msgstr "Afspeellijsten"
 
-#: tv/plugins/recordings_manager.py:624
+#: tv/plugins/recordings_manager.py:625
 #, fuzzy, python-format
 msgid ""
 "Do you wish to delete the series\n"
@@ -2399,7 +2402,7 @@ msgstr ""
 "Weetjeu zeker dat je dit bestand wilt verwijderen:\n"
 " '%s'?"
 
-#: tv/plugins/recordings_manager.py:698
+#: tv/plugins/recordings_manager.py:699
 #, fuzzy
 msgid "episodes"
 msgstr "Aflevering"
@@ -2796,19 +2799,24 @@ msgstr ""
 msgid "Problem trying to call:"
 msgstr "Probleem tijdens aanroepen van:"
 
-#: audio/plugins/radio.py:61
+#: audio/plugins/radio.py:63
 msgid "Listen to Radio Station"
 msgstr "Luister naar een radiostation"
 
-#: audio/plugins/radio.py:96
+#: audio/plugins/radio.py:84
+#, fuzzy
+msgid "Cannot play - recording in progress"
+msgstr "De opnameserver is niet beschikbaar."
+
+#: audio/plugins/radio.py:118
 msgid "Radio"
 msgstr "Radio"
 
-#: audio/plugins/radio.py:121
+#: audio/plugins/radio.py:143
 msgid "No Radio Stations found"
 msgstr "Geen radiostation gevonden"
 
-#: audio/plugins/radio.py:123
+#: audio/plugins/radio.py:145
 msgid "Radio Stations"
 msgstr "Radiostations"
 
@@ -3237,23 +3245,23 @@ msgstr "Maak pictogram"
 msgid "Please wait...."
 msgstr "Een ogenblik geduld..."
 
-#: video/videoitem.py:501 video/videoitem.py:515 video/videoitem.py:529
+#: video/videoitem.py:503 video/videoitem.py:517 video/videoitem.py:531
 #, python-format
 msgid "No media found for \"%s\".\n"
 msgstr "Media niet gevonden voor \"%s\".\n"
 
-#: video/videoitem.py:502 video/videoitem.py:516 video/videoitem.py:530
+#: video/videoitem.py:504 video/videoitem.py:518 video/videoitem.py:532
 msgid "Please insert the media."
 msgstr "Gelieve het medium in te voeren"
 
-#: video/videoitem.py:535
+#: video/videoitem.py:537
 msgid "No player for this item found"
 msgstr "Geen afspeler gevonden voor dit element"
 
-#: video/videoitem.py:617
+#: video/videoitem.py:619
 #, fuzzy, python-format
 msgid "Play Title %d"
-msgstr "Speel titel %s af"
+msgstr "Speel titel %d af"
 
 #: video/configure.py:70 video/configure.py:105
 #, python-format
@@ -3658,7 +3666,7 @@ msgstr "Kan \"%s\" niet openen voor logging!"
 #: childapp.py:285
 #, fuzzy, python-format
 msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
-msgstr "Zet CHILDAPP_DEBUG=0 in local_conf.py."
+msgstr "Zet CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
 
 #: main.py:172
 msgid "Freevo Main Menu"
@@ -3703,7 +3711,7 @@ msgstr "Configureer"
 #: main.py:427
 #, fuzzy, python-format
 msgid "Starting Freevo-%s, please wait ..."
-msgstr "Freevo wordt gestart, een ogenblik geduld..."
+msgstr "Freevo-%s wordt gestart, een ogenblik geduld..."
 
 #: main.py:436
 msgid "Reading cache, please wait ..."
@@ -4026,7 +4034,6 @@ msgstr "geen volgend item in de afspeellijst"
 msgid "TV"
 msgstr "TV"
 
-#, fuzzy
 #~ msgid "Scanning recordings, be patient..."
 #~ msgstr "De schijf wordt geanalyseerd, een ogenblik geduld..."
 
