@@ -16,7 +16,8 @@
 # activate:
 #
 #    plugin.activate('weather', level=45)
-#    PLUGIN_WEATHER_LOCATIONS = [ ("USNC0559", 0, "Home sweet home") ]
+#    PLUGIN_WEATHER_LOCATIONS = [ ("USNC0559", 0, 'ES', "Home sweet home") ]
+#                                   Location, metric, language, description
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -231,11 +232,17 @@ class PluginInterface(plugin.MainMenuPlugin):
     To activate, put the following lines in local_conf.py:
 
     plugin.activate('weather', level=45)
-    PLUGIN_WEATHER_LOCATIONS = [ ("<val1>", <bool>, "<str>"), ("<val2>", <bool>, "<str>"), ...]
+    PLUGIN_WEATHER_LOCATIONS = [
+      ("<val1>", <bool>, "<lang>", "<str>"),
+      ("<val2>", <bool>, "<lang>", "<str>"),
+    ...
+    ]
 
-    where <val#> is a zipcode or
-    and <bool> (1 == convert to SI Units; 0 == do not convert)
-    and <str> is a custom name you wish to use for this location
+    where:
+    <val#> is a zipcode or location code
+    <bool> (1 == convert to SI Units; 0 == do not convert)
+    <lang> is the two character iso language code
+    <str> is a custom name you wish to use for this location
     """
     # make an init func that creates the cache dir if it don't exist
     def __init__(self):
@@ -313,7 +320,6 @@ class WeatherItem(Item):
             self.popupParam = self.location
 
         self.dataurl = "http://www.msnbc.com/m/chnk/d/weather_d_src.asp?acid=%s" % (self.location,)
-        self.dataurl = "http://72.9.224.178/~tpfansc/rss/weather_test_de.php?Citycode=%s" % (self.location,)
         self.dataurl = "http://www.tpfans.com/rss/weather.php?Citycode=%s&Language=%s" % (self.location, self.language)
         self.mapurl         = "http://w3.weather.com/weather/map/%s?from=LAPmaps" % (self.location,)
         self.mapurl2        = None
