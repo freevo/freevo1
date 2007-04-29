@@ -3,7 +3,7 @@
 # rssfeed.py - This is the Freevo RSS Feed module
 # -----------------------------------------------------------------------
 # $Id$
-#
+# 
 # Notes:
 # Todo:        
 #
@@ -54,8 +54,8 @@ class Feed:
         itemPattern = re.compile('<item>.*?</item>',re.DOTALL)
         titlePattern = re.compile('<title>.*?</title>',re.DOTALL)
         descriptionPattern = re.compile('<description>.*?</description>',re.DOTALL)
-        urlPattern = re.compile('<enclosure[^>]*?url=".*?/>',re.DOTALL)
-        httpPattern = re.compile('http',re.DOTALL)
+        urlPattern = re.compile('url=".*?.mp4',re.DOTALL)
+        httpPattern = re.compile('http',re.DOTALL ) 
         btPattern = re.compile('<link>.*?</link>',re.DOTALL)
         datePattern = re.compile('<pubDate>.*?</pubDate>',re.DOTALL)
 

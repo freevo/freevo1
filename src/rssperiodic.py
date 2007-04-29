@@ -28,7 +28,7 @@
 #
 # -----------------------------------------------------------------------
 
-import re,os,glob,urllib,datetime,pickle
+import re,os,glob,urllib,datetime,pickle,time
 import config
 import rssfeed
 
@@ -89,6 +89,53 @@ def addFileToCache(string):
     downloadedUrls.append(string)
     pickle.dump(downloadedUrls, open(cacheFile,"w"))
 
+def addFileToExpiration(string,goodUntil):
+    ''' the new file gets added with the expiration date to the expiration file '''
+    cacheFile=config.FREEVO_CACHEDIR+"/rss.expiration"
+    downloadedFiles=[]
+    try:
+       downloadedFiles = pickle.load(open(cacheFile,"r"))
+    except IOError:
+       pass
+    downloadedFiles.append(string + ";" + goodUntil.__str__())
+    pickle.dump(downloadedFiles, open(cacheFile,"w"))
+
+def checkForExpiration():
+    ''' checking for expired files by reading the rss.expiration file the file
+    contains the expiration date. once a file is expired it and its fxd gets
+    deleted at the end the file gets removed from the rss.expiration file '''
+    cacheFile=config.FREEVO_CACHEDIR+"/rss.expiration"
+    try:
+       downloadedFiles=pickle.load(open(cacheFile,"r"))
+    except IOError:
+       return 
+    deletedItems = []
+    for line in downloadedFiles:
+        (filename,goodUntil)=re.split(";", line)
+        expirationdate = datetime.datetime(*time.strptime(goodUntil, "%Y-%m-%d")[0:5])
+        diff = expirationdate - datetime.datetime.today()
+        if int(diff.days)<=0:
+            deletedItems.append(line)
+            tempList=re.split("\.",filename)
+            fxdfile=tempList[0]
+            for line in tempList[1:-1]:
+                fxdfile=fxdfile+"."+line
+            fxdfile=fxdfile+".fxd"
+            try:
+                os.remove(config.RSS_VIDEO+fxdfile)
+            except OSError:
+                print"removing the file %s failed"%(fxdfile)
+            try:
+                os.remove(config.RSS_VIDEO+filename)
+            except OSError:
+                print"removing the file %s failed"%(filename)
+    for line in deletedItems:
+#      try:
+       downloadedFiles.remove(line)
+#      except ValueError:
+#          _debug_("removing the line %s failed" % (line))
+    pickle.dump(downloadedFiles, open(cacheFile,"w"))
+
 def createFxd(item,filename):
     if "audio" in item.type:
         fullFilename=config.RSS_AUDIO+filename
@@ -128,7 +175,7 @@ def checkForUpdates():
         if re.search("^#",line):
             continue
         try:
-            (url,numberOfDays)=re.split(",", line)
+            (url,numberOfDays)=re.split(";", line)
         except ValueError:
             continue
         print "Check %s for updates" % url
@@ -138,6 +185,7 @@ def checkForUpdates():
             sock.close()
             for item in rssfeed.Feed(feedSource).items:
                 diff = datetime.date.today() - convertDate(item.date)
+                goodUntil = datetime.date.today() + datetime.timedelta(days=int(numberOfDays))
                 if int(diff.days)<=int(numberOfDays) and not re.search("None",item.url):
                     if "audio" in item.type:
                         os.chdir(config.RSS_AUDIO)
@@ -155,6 +203,7 @@ def checkForUpdates():
                         if not exitStatus:
                             createFxd(item,filename)
                             addFileToCache(item.url)
+                            addFileToExpiration(filename,goodUntil)
                             print "Download completed (%s bytes)" % os.path.getsize(filename)
                         else:
                             print "Download failed - exit status %s." % exitStatus

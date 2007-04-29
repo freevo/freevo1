@@ -40,17 +40,18 @@ RSS_VIDEO='/path/to/video/feeds/'
 # Download directory for audio files.
 RSS_AUDIO='/path/to/podcasts/'
 
-You will need to make a rss.feeds file: it contains the URL and the number of
-days it's been published.
+You will need to make a rss.feeds file: it contains the URL. And after the 
+semicolon the number of days it's been published and how long the copy
+should stay on the local machine before it gets deleted.
 
 # Begin /etc/freevo/rss.feeds
-http://twit.libsyn.com/rss,7
-http://leo.am/podcasts/twit,7
-http://leo.am/podcasts/itn,7
-http://feeds.feedburner.com/TechRenegades,7
-http://www.linuxactionshow.com/?feed=rss2&cat=3,30
-http://www.thelinuxlink.net/tllts/tllts.rss,30
-http://www.linux-games.ca/2006/redneck.xml,360
+http://twit.libsyn.com/rss;7
+http://leo.am/podcasts/twit;7
+http://leo.am/podcasts/itn;7
+http://feeds.feedburner.com/TechRenegades;7
+http://www.linuxactionshow.com/?feed=rss2&cat=3;30
+http://www.thelinuxlink.net/tllts/tllts.rss;30
+http://www.linux-games.ca/2006/redneck.xml;360
 # End /etc/freevo/rss.feeds
 '''
 
@@ -80,6 +81,7 @@ if len(sys.argv)>1 and sys.argv[1] == '--help':
     print 'usage freevo rssserver [ start | stop ]'
     sys.exit(0)
 
+'''
 # No debugging in this module
 DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
 
@@ -91,8 +93,14 @@ def _debug_(text, level=1):
         try:
             log.debug(String(text))
         except:
-            print String(text)
+           print String(text)
+'''
+# check for expired files and delete them
+to = threading.Thread(rssperiodic.checkForExpiration())
+to.start()
+to.join()
 
+# than starting server to poll podcasts
 while True:
     t = threading.Thread(rssperiodic.checkForUpdates())
     t.start()
