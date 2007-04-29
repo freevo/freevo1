@@ -1642,7 +1642,7 @@ TV_IVTV_OPTIONS = {
     'dnr_temporal'  : 0,
     'dnr_type'      : 0,
     'framerate'     : 0,
-    'framespergop'  : 15,
+    'framespergop'  : 12,
     'gop_closure'   : 1,
     'pulldown'      : 0,
     'stream_type'   : 10,

@@ -462,7 +462,7 @@ if __name__ == '__main__':
     #print "reset vbi embed=%s (%s)" % (ivtv_dev.getvbiembed(), embed)
 
     #print ivtv_dev.getCodecInfo()
-    codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 12, 1, 0, 10))
+    codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 15, 1, 0, 10))
     print 'codec:', codec
     ivtv_dev.setCodecInfo(codec)
     print ivtv_dev.getCodecInfo()
