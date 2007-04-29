@@ -1,3 +1,28 @@
+Release Notes for 1.7.1
+-----------------------
+
+This release contains some newfeatures and some significant bug fixes.  A
+native ALSA misxer has been added, a widescreen skin "Panorama" has been added,
+a TV recordings manager has been added and user defined commands can now be
+sent to the Xine player
+
+The TV_RECORD_PADDING has been removed, use TV_RECORD_PADDING_PRE and
+TV_RECORD_PADDING_POST instead.
+
+Release Notes for 1.7.0
+-----------------------
+
+This release contains quite a few major new features. Including a great web
+interface to the media on your freevo machine, a web remote, an encodeserver to
+compress recordings in the background, an rss feedserver so you can download
+your favourite podcasts in the background, support for Linux event devices,
+support anamorphic skins and colour in the tv guide to show overlapping
+recording, currently showing and already shown, a commercial detection and
+duplicate recording additions to the record server. 
+
+A significant change that is not too visible is that mmpython has been replaced
+with kaa modules.
+
 Release Notes for 1.6.0
 -----------------------
 
