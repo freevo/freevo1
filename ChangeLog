@@ -13,7 +13,7 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
-== Release 1.7.1 (2007-04-21) ==
+== Release 1.7.1 (2007-04-29) ==
 --------------------------------
 
  * Added ALSA mixer plug-in (F#1685326)
@@ -27,7 +27,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated IMDB download to extract season and episode from TV programs (F#1683101)
  * Updated ivtv record to work with SECAM-DK (F#1694182)
  * Updated mplayer to allow the bottom field first and XvMC settings (F#1694186,F#1683423)
- * Updated rss feed for better url detection (B#1675373)
+ * Updated rss feed for better url detection (B#1675373,B#1709515)
  * Updated xine event handling to accept SEND_VIDEO_XINE_CMD (F#1683699)
  * Fixed audio item correctly processing files without media tags (B#1678392)
  * Fixed audio covers not working when a .directory file is on the path (B#1687649)
@@ -37,10 +37,14 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed IMDB download, adds more data to fxd files (B#1670296)
  * Fixed IMDB download, corrected accented characters (B#1683040)
  * Fixed IMDB download, corrected handling of special characters (B#1682345)
+ * Fixed lirc to suspend and resume correctly after external commands and games are run (B#1707338)
  * Fixed mplayer video plug-in not correctly selecting the audio and subtitle tracks (B#1677364)
+ * Fixed radio player to prevent it starting when a recording is in progress (B#1707295)
  * Fixed screensaver intermittent deadlock problem (B#1674028)
+ * Fixed screensaver never changing the screen saver (B#1704956)
  * Fixed tvguide showing too much debug information (B#1674014)
  * Fixed video item length (B#1683035)
+ * Fixed video mplayer options for a combined video (B#1696110)
 
 == Release 1.7.0 (2007-02-25) ==
 --------------------------------
