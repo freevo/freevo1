@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-29 11:48+0200\n"
-"PO-Revision-Date: 2006-12-12 21:02+0100\n"
-"Last-Translator: Paco Rivière <friviere@palmcat.org>\n"
+"POT-Creation-Date: 2007-04-30 17:54+0200\n"
+"PO-Revision-Date: 2007-04-30 03:26+0100\n"
+"Last-Translator: Paco Rivière <friviere@palmcat.cat>\n"
 "Language-Team: PacoRivière <web AT pacoriviere POINT cat>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -18,23 +18,23 @@ msgstr ""
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../freevo_config.py:1063 ../freevo_config.py:1068
+#: ../freevo_config.py:1067 ../freevo_config.py:1072
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Títol"
 
-#: ../freevo_config.py:1064 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1068 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Descripció"
 
-#: ../freevo_config.py:1065
+#: ../freevo_config.py:1069
 msgid "Author"
 msgstr "Autor"
 
-#: ../freevo_config.py:1069 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1073 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -42,11 +42,11 @@ msgstr "Autor"
 msgid "Date"
 msgstr "Data"
 
-#: ../freevo_config.py:1072
+#: ../freevo_config.py:1076
 msgid "Model"
 msgstr "Model"
 
-#: ../freevo_config.py:1073
+#: ../freevo_config.py:1077
 msgid "Software"
 msgstr "Programari"
 
@@ -71,24 +71,24 @@ msgstr "Elements"
 
 #: plugins/home_automation.py:69
 msgid "Home Automation Devices"
-msgstr ""
+msgstr "Dispositius domòtics"
 
 #: plugins/home_automation.py:84 plugins/home_automation.py:100
 msgid "Device Options"
-msgstr "Descripció"
+msgstr "Opcions del dispositiu"
 
 #: plugins/home_automation.py:115 plugins/command.py:216
 msgid "Run Command"
-msgstr "Cumpleix una ordre"
+msgstr "Compleix una ordre"
 
 #: plugins/home_automation.py:129 plugins/home_automation.py:136
 #: plugins/home_automation.py:148
 msgid "Home Automation"
-msgstr "Continua l'aturada automàtica"
+msgstr "Domòtica"
 
 #: plugins/home_automation.py:147
 msgid "No Home Automation items found"
-msgstr "No s'ha trobat cap Pàgina de Titulars"
+msgstr "No s'ha trobat dispositius domòtics"
 
 #: plugins/df.py:66
 #, python-format
@@ -126,587 +126,587 @@ msgstr "Pàgines de titulars"
 msgid "No Headlines Sites found"
 msgstr "No s'ha trobat cap Pàgina de Titulars"
 
-#: plugins/weather.py:69
-msgid "Cloudy"
-msgstr ""
-
 #: plugins/weather.py:70
-msgid "Mostly Cloudy"
-msgstr ""
+msgid "Cloudy"
+msgstr "Cel Núvol"
 
 #: plugins/weather.py:71
-msgid "Partly Cloudy"
-msgstr ""
+msgid "Mostly Cloudy"
+msgstr "Cel molt Núvol"
 
 #: plugins/weather.py:72
-msgid "Light Rain"
-msgstr ""
+msgid "Partly Cloudy"
+msgstr "Cel una mica núvol"
 
 #: plugins/weather.py:73
-msgid "Showers"
-msgstr "Mostra"
+msgid "Light Rain"
+msgstr "Pluja lleugera"
 
 #: plugins/weather.py:74
+msgid "Showers"
+msgstr "Ruixats"
+
+#: plugins/weather.py:75
 msgid "Snow"
-msgstr "Mostra"
+msgstr "Neu"
 
-#: plugins/weather.py:75 plugins/weather.py:170
+#: plugins/weather.py:76 plugins/weather.py:171
 msgid "Rain"
-msgstr "Valoració"
-
-#: plugins/weather.py:76
-msgid "AM Showers"
-msgstr ""
+msgstr "Pluja"
 
 #: plugins/weather.py:77
-msgid "Fog"
-msgstr ""
+msgid "AM Showers"
+msgstr "Ruixats al matí"
 
 #: plugins/weather.py:78
-msgid "Few Showers"
-msgstr ""
+msgid "Fog"
+msgstr "Boira"
 
 #: plugins/weather.py:79
-msgid "Mostly Sunny"
-msgstr ""
+msgid "Few Showers"
+msgstr "Alguns ruixats"
 
 #: plugins/weather.py:80
-msgid "Sunny"
-msgstr "Diu"
+msgid "Mostly Sunny"
+msgstr "Força assoleiat"
 
 #: plugins/weather.py:81
-msgid "Scattered Flurries"
-msgstr ""
+msgid "Sunny"
+msgstr "Assoleiat"
 
 #: plugins/weather.py:82
-msgid "AM Clouds/PM Sun"
-msgstr ""
+msgid "Scattered Flurries"
+msgstr "Xàfecs de neu dispersos"
 
 #: plugins/weather.py:83
-msgid "Isolated T-Storms"
-msgstr ""
+msgid "AM Clouds/PM Sun"
+msgstr "Núbols al matí/Sol a la tarda"
 
 #: plugins/weather.py:84
-msgid "Scattered Thunderstorms"
-msgstr ""
+msgid "Isolated T-Storms"
+msgstr "Tempestes aïllades"
 
 #: plugins/weather.py:85
-msgid "PM Showers"
-msgstr ""
+msgid "Scattered Thunderstorms"
+msgstr "Tempestes disperses"
 
 #: plugins/weather.py:86
-msgid "PM Showers/Wind"
-msgstr ""
+msgid "PM Showers"
+msgstr "Ruixats a la tarda"
 
 #: plugins/weather.py:87
-msgid "Rain/Snow Showers"
-msgstr ""
+msgid "PM Showers/Wind"
+msgstr "Ruixats/Vent a la tarda"
 
 #: plugins/weather.py:88
-msgid "Few Snow Showers"
-msgstr ""
+msgid "Rain/Snow Showers"
+msgstr "Pluja/Ruixats de Neu"
 
 #: plugins/weather.py:89
+msgid "Few Snow Showers"
+msgstr "Alguns Ruixats de Neu"
+
+#: plugins/weather.py:90
 msgid "Cloudy/Wind"
 msgstr "Tanca la finestra"
 
-#: plugins/weather.py:90
-msgid "Flurries/Wind"
-msgstr ""
-
 #: plugins/weather.py:91
-msgid "Mostly Cloudy/Windy"
-msgstr ""
+msgid "Flurries/Wind"
+msgstr "Xàfecs de neu/Vent"
 
 #: plugins/weather.py:92
+msgid "Mostly Cloudy/Windy"
+msgstr "Cel molt Núvol/Vent"
+
+#: plugins/weather.py:93
 msgid "Rain/Thunder"
-msgstr ""
+msgstr "Pluja/Trons"
 
-#: plugins/weather.py:93 plugins/weather.py:174
+#: plugins/weather.py:94 plugins/weather.py:175
 msgid "Partly Cloudy/Windy"
-msgstr ""
-
-#: plugins/weather.py:94
-msgid "AM Rain/Snow Showers"
-msgstr ""
+msgstr "Parcialment Nuvolat/Vent"
 
 #: plugins/weather.py:95
-msgid "Light Rain/Wind"
-msgstr ""
+msgid "AM Rain/Snow Showers"
+msgstr "Pluja/Ruixats de Neu al matí"
 
 #: plugins/weather.py:96
-msgid "Showers/Wind"
-msgstr ""
+msgid "Light Rain/Wind"
+msgstr "Pluja lleugera/Vent"
 
 #: plugins/weather.py:97
+msgid "Showers/Wind"
+msgstr "Ruixats/Vent"
+
+#: plugins/weather.py:98
 msgid "Heavy Snow"
-msgstr ""
+msgstr "Força neu"
 
-#: plugins/weather.py:98 plugins/weather.py:166
+#: plugins/weather.py:99 plugins/weather.py:167
 msgid "Drizzle"
-msgstr ""
-
-#: plugins/weather.py:99
-msgid "Mostly Sunny/Wind"
-msgstr ""
+msgstr "Plovisqueig"
 
 #: plugins/weather.py:100
-msgid "Flurries"
-msgstr ""
+msgid "Mostly Sunny/Wind"
+msgstr "Força assoleiat/Vent"
 
 #: plugins/weather.py:101
+msgid "Flurries"
+msgstr "Xàfecs de neu"
+
+#: plugins/weather.py:102
 msgid "Rain/Wind"
 msgstr "Vent"
 
-#: plugins/weather.py:102
-msgid "Sct Flurries/Wind"
-msgstr ""
-
 #: plugins/weather.py:103
-msgid "Sct Strong Storms"
-msgstr ""
+msgid "Sct Flurries/Wind"
+msgstr "Xàfecs de neu dispersos/Vent"
 
 #: plugins/weather.py:104
-msgid "PM T-Storms"
-msgstr ""
+msgid "Sct Strong Storms"
+msgstr "Fortes turmentes disperses"
 
 #: plugins/weather.py:105
-msgid "Thunderstorms"
-msgstr ""
+msgid "PM T-Storms"
+msgstr "Tempestes a la tarda"
 
 #: plugins/weather.py:106
-msgid "Sunny/Windy"
-msgstr ""
+msgid "Thunderstorms"
+msgstr "Turmentes amb llamps"
 
 #: plugins/weather.py:107
-msgid "AM Thunderstorms"
-msgstr ""
+msgid "Sunny/Windy"
+msgstr "Sol/Vent"
 
 #: plugins/weather.py:108
-msgid "AM Rain"
-msgstr "Ràdio"
+msgid "AM Thunderstorms"
+msgstr "Tempestes amb llamps al matí"
 
 #: plugins/weather.py:109
-msgid "Iso T-Storms/Wind"
-msgstr ""
+msgid "AM Rain"
+msgstr "Pluja al matí"
 
 #: plugins/weather.py:110
-msgid "Rain/Snow"
-msgstr ""
+msgid "Iso T-Storms/Wind"
+msgstr "Tempestes amb llamps/Vent aïllats"
 
 #: plugins/weather.py:111
-msgid "Sct T-Storms/Wind"
-msgstr ""
+msgid "Rain/Snow"
+msgstr "Neu/Pluja"
 
 #: plugins/weather.py:112
-msgid "AM Showers/Wind"
-msgstr ""
+msgid "Sct T-Storms/Wind"
+msgstr "Turmentes amb llamps/Vent disperses"
 
 #: plugins/weather.py:113
-msgid "Sct Snow Showers"
-msgstr ""
+msgid "AM Showers/Wind"
+msgstr "Ruixats/Vent al matí"
 
 #: plugins/weather.py:114
-msgid "Snow to Ice/Wind"
-msgstr ""
+msgid "Sct Snow Showers"
+msgstr "Ruixats de Neu dispersos"
 
 #: plugins/weather.py:115
-msgid "AM Ice"
-msgstr ""
+msgid "Snow to Ice/Wind"
+msgstr "Neu i gel/Vent"
 
 #: plugins/weather.py:116
-msgid "Snow to Rain"
-msgstr ""
+msgid "AM Ice"
+msgstr "Gel al matí"
 
 #: plugins/weather.py:117
-msgid "AM Light Rain"
-msgstr ""
+msgid "Snow to Rain"
+msgstr "Neu i pluja"
 
 #: plugins/weather.py:118
-msgid "PM Light Rain"
-msgstr ""
+msgid "AM Light Rain"
+msgstr "Pluja lleugera al matí"
 
 #: plugins/weather.py:119
-msgid "PM Rain"
-msgstr "Ràdio"
+msgid "PM Light Rain"
+msgstr "Pluja lleugera a la tarda"
 
 #: plugins/weather.py:120
-msgid "Snow Showers"
-msgstr "Mostra el Stderr"
+msgid "PM Rain"
+msgstr "Pluja a la tarda"
 
 #: plugins/weather.py:121
-msgid "Rain to Snow"
-msgstr ""
+msgid "Snow Showers"
+msgstr "Ruixats de Neu"
 
 #: plugins/weather.py:122
-msgid "PM Rain/Snow"
-msgstr "Ràdio"
+msgid "Rain to Snow"
+msgstr "Pluja i Neu"
 
 #: plugins/weather.py:123
-msgid "Few Showers/Wind"
-msgstr ""
+msgid "PM Rain/Snow"
+msgstr "Pluja/Neu a la tarda"
 
 #: plugins/weather.py:124
-msgid "Snow/Wind"
-msgstr "Vent"
+msgid "Few Showers/Wind"
+msgstr "Alguns Ruixats/Vent"
 
 #: plugins/weather.py:125
+msgid "Snow/Wind"
+msgstr "Neu/Vent"
+
+#: plugins/weather.py:126
 msgid "PM Rain/Snow Showers"
-msgstr ""
+msgstr "Pluja/Ruixats de Neu a la tarda"
 
-#: plugins/weather.py:126 plugins/weather.py:137
+#: plugins/weather.py:127 plugins/weather.py:138
 msgid "PM Rain/Snow/Wind"
-msgstr ""
-
-#: plugins/weather.py:127
-msgid "Rain/Snow Showers/Wind"
-msgstr ""
+msgstr "Pluja/Neu/Vent a la tarda"
 
 #: plugins/weather.py:128
-msgid "Rain/Snow/Wind"
-msgstr ""
+msgid "Rain/Snow Showers/Wind"
+msgstr "Pluja/Ruixats de Neu/Vent"
 
 #: plugins/weather.py:129
-msgid "Light Snow"
-msgstr ""
+msgid "Rain/Snow/Wind"
+msgstr "Pluja/Neu/Vent"
 
 #: plugins/weather.py:130
-msgid "PM Snow"
-msgstr ""
+msgid "Light Snow"
+msgstr "Una mica de neu"
 
 #: plugins/weather.py:131
-msgid "Few Snow Showers/Wind"
-msgstr ""
+msgid "PM Snow"
+msgstr "Neu a la tarda"
 
 #: plugins/weather.py:132
-msgid "Light Snow/Wind"
-msgstr ""
+msgid "Few Snow Showers/Wind"
+msgstr "Fortes tempestes/Vent"
 
 #: plugins/weather.py:133
-msgid "Wintry Mix"
-msgstr ""
+msgid "Light Snow/Wind"
+msgstr "Una mica de Neu/Vent"
 
 #: plugins/weather.py:134
+msgid "Wintry Mix"
+msgstr "Vents variables"
+
+#: plugins/weather.py:135
 msgid "AM Wintry Mix"
-msgstr ""
+msgstr "Vents variables al matí"
 
-#: plugins/weather.py:135 plugins/weather.py:172
+#: plugins/weather.py:136 plugins/weather.py:173
 msgid "Hvy Rain/Freezing Rain"
-msgstr ""
+msgstr "Forta Pluja/Pluja gelant"
 
-#: plugins/weather.py:136
+#: plugins/weather.py:137
 msgid "AM Light Snow"
-msgstr ""
-
-#: plugins/weather.py:138
-msgid "Rain/Freezing Rain"
-msgstr ""
+msgstr "Una mica de Neu al matí"
 
 #: plugins/weather.py:139
-msgid "T-Storms/Wind"
-msgstr ""
+msgid "Rain/Freezing Rain"
+msgstr "Pluja/Pluja gelant"
 
 #: plugins/weather.py:140
-msgid "Sprinkles"
-msgstr ""
+msgid "T-Storms/Wind"
+msgstr "Tempestes/vent"
 
 #: plugins/weather.py:141
-msgid "AM Snow Showers"
-msgstr ""
+msgid "Sprinkles"
+msgstr "Ruixats"
 
 #: plugins/weather.py:142
-msgid "AM Clouds/PM Sun/Wind"
-msgstr ""
+msgid "AM Snow Showers"
+msgstr "Ruixats al matí"
 
 #: plugins/weather.py:143
-msgid "AM Rain/Snow/Wind"
-msgstr ""
+msgid "AM Clouds/PM Sun/Wind"
+msgstr "Núvols al matí/Sol/Vent a la tarda"
 
 #: plugins/weather.py:144
-msgid "Rain to Snow/Wind"
-msgstr ""
+msgid "AM Rain/Snow/Wind"
+msgstr "Pluja/Neu/Vent al matí"
 
 #: plugins/weather.py:145
-msgid "Snow to Wintry Mix"
-msgstr ""
+msgid "Rain to Snow/Wind"
+msgstr "Pluja o Neu/Vent"
 
 #: plugins/weather.py:146
-msgid "PM Snow Showers/Wind"
-msgstr ""
+msgid "Snow to Wintry Mix"
+msgstr "Neu o Vents variables"
 
 #: plugins/weather.py:147
-msgid "Snow and Ice to Rain"
-msgstr ""
+msgid "PM Snow Showers/Wind"
+msgstr "Ruixats de Neu/Vent a la tarda"
 
 #: plugins/weather.py:148
-msgid "Heavy Rain"
-msgstr ""
+msgid "Snow and Ice to Rain"
+msgstr "Neu i Glaç o Pluja"
 
 #: plugins/weather.py:149
-msgid "AM Rain/Ice"
-msgstr ""
+msgid "Heavy Rain"
+msgstr "Pluja forta"
 
 #: plugins/weather.py:150
-msgid "AM Snow Showers/Wind"
-msgstr ""
+msgid "AM Rain/Ice"
+msgstr "Pluja a l matí/Gel"
 
 #: plugins/weather.py:151
-msgid "AM Light Snow/Wind"
-msgstr ""
+msgid "AM Snow Showers/Wind"
+msgstr "Ruixats de Neu/Vent al matí"
 
 #: plugins/weather.py:152
-msgid "PM Light Rain/Wind"
-msgstr ""
+msgid "AM Light Snow/Wind"
+msgstr "Una mica de Neu/Vent al matí"
 
 #: plugins/weather.py:153
-msgid "AM Light Wintry Mix"
-msgstr ""
+msgid "PM Light Rain/Wind"
+msgstr "Lleugera Pluja/Vent a la tarda"
 
 #: plugins/weather.py:154
-msgid "PM Light Snow/Wind"
-msgstr ""
+msgid "AM Light Wintry Mix"
+msgstr "Pluja/Neu/Vent"
 
 #: plugins/weather.py:155
-msgid "Heavy Rain/Wind"
-msgstr ""
+msgid "PM Light Snow/Wind"
+msgstr "Una mica de Neu/Vent a la tarda"
 
 #: plugins/weather.py:156
-msgid "PM Snow Shower"
-msgstr ""
+msgid "Heavy Rain/Wind"
+msgstr "Força Pluja/Vent"
 
 #: plugins/weather.py:157
-msgid "Snow to Rain/Wind"
-msgstr ""
+msgid "PM Snow Shower"
+msgstr "Neu a la tarda"
 
 #: plugins/weather.py:158
-msgid "PM Light Rain/Ice"
-msgstr ""
+msgid "Snow to Rain/Wind"
+msgstr "Neu o Pluja/Vent"
 
 #: plugins/weather.py:159
-msgid "AM Snow"
-msgstr ""
+msgid "PM Light Rain/Ice"
+msgstr "Lleugera Pluja/Gel a la tarda"
 
 #: plugins/weather.py:160
-msgid "Snow to Ice"
-msgstr ""
+msgid "AM Snow"
+msgstr "Neu al matí"
 
 #: plugins/weather.py:161
-msgid "Wintry Mix/Wind"
-msgstr ""
+msgid "Snow to Ice"
+msgstr "Neu i Gel"
 
 #: plugins/weather.py:162
-msgid "PM Light Snow"
-msgstr ""
+msgid "Wintry Mix/Wind"
+msgstr "Vents Variables/Vent"
 
 #: plugins/weather.py:163
-msgid "AM Drizzle"
-msgstr ""
+msgid "PM Light Snow"
+msgstr "Una mica de Neu a la tarda"
 
 #: plugins/weather.py:164
-msgid "Strong Storms/Wind"
-msgstr ""
+msgid "AM Drizzle"
+msgstr "Plugim al matí"
 
 #: plugins/weather.py:165
-msgid "PM Drizzle"
-msgstr ""
+msgid "Strong Storms/Wind"
+msgstr "Fortes tempestes/Vent"
 
-#: plugins/weather.py:167
-msgid "AM Light Rain/Wind"
-msgstr ""
+#: plugins/weather.py:166
+msgid "PM Drizzle"
+msgstr "Plugim a la tarda"
 
 #: plugins/weather.py:168
-msgid "AM Rain/Wind"
-msgstr ""
+msgid "AM Light Rain/Wind"
+msgstr "Una mica de Pluja/Vent al matí"
 
 #: plugins/weather.py:169
+msgid "AM Rain/Wind"
+msgstr "Pluja/Vent al matí"
+
+#: plugins/weather.py:170
 msgid "Wintry Mix to Snow"
-msgstr ""
+msgstr "Vents variables o Neu"
 
-#: plugins/weather.py:171
+#: plugins/weather.py:172
 msgid "AM Light Rain/Ice"
-msgstr ""
+msgstr "Una mica de Pluja/Gel al matí"
 
-#: plugins/weather.py:173
+#: plugins/weather.py:174
 msgid "Snow Showers/Windy"
-msgstr ""
-
-#: plugins/weather.py:175
-msgid "Light Rain Shower"
-msgstr ""
+msgstr "Ruixats de Neu/Ventós"
 
 #: plugins/weather.py:176
-msgid "Light Rain with Thunder"
-msgstr ""
+msgid "Light Rain Shower"
+msgstr "Alguns Ruixats"
 
 #: plugins/weather.py:177
-msgid "Light Drizzle"
-msgstr ""
+msgid "Light Rain with Thunder"
+msgstr "Una mica de Pluja amb trons"
 
 #: plugins/weather.py:178
-msgid "Mist"
-msgstr "Artista"
+msgid "Light Drizzle"
+msgstr "Lleuger Plovisqueig"
 
 #: plugins/weather.py:179
-msgid "Smoke"
-msgstr ""
+msgid "Mist"
+msgstr "Boirina"
 
 #: plugins/weather.py:180
-msgid "Haze"
-msgstr ""
+msgid "Smoke"
+msgstr "Boira"
 
 #: plugins/weather.py:181
-msgid "Light Snow Shower"
-msgstr ""
+msgid "Haze"
+msgstr "Calitja"
 
 #: plugins/weather.py:182
-msgid "Light Snow Shower/ Windy"
-msgstr ""
+msgid "Light Snow Shower"
+msgstr "Lleugera pluja de neu"
 
 #: plugins/weather.py:183
-msgid "Clear"
-msgstr "Any"
+msgid "Light Snow Shower/ Windy"
+msgstr "Alguns Ruixats de Neu/Ventós"
 
 #: plugins/weather.py:184
-msgid "A Few Clouds"
-msgstr ""
+msgid "Clear"
+msgstr "Cel Clar"
 
 #: plugins/weather.py:185
-msgid "Fair"
-msgstr ""
+msgid "A Few Clouds"
+msgstr "Alguns núvols"
 
-#: plugins/weather.py:361 plugins/weather.py:364
+#: plugins/weather.py:186
+msgid "Fair"
+msgstr "Correcte"
+
+#: plugins/weather.py:367 plugins/weather.py:370
 #, python-format
 msgid "Last updated: %s"
-msgstr ""
+msgstr "El darrer actualitzat és: %s"
 
-#: plugins/weather.py:374
+#: plugins/weather.py:380
 msgid "Unlimited"
 msgstr "Sense límit"
 
-#: plugins/weather.py:387
+#: plugins/weather.py:393
 msgid "Show Weather Details"
 msgstr "Amplia l'Informe Metereològic"
 
-#: plugins/weather.py:467
+#: plugins/weather.py:473
 #, python-format
 msgid "Fetching Weather for %s..."
 msgstr "S'està obtenint l'informe meteorològic de %s..."
 
-#: plugins/weather.py:481
+#: plugins/weather.py:487
 #, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "S'està obtenint l'informe meteorològic de %s..."
 
-#: plugins/weather.py:637 plugins/weather.py:906 util/misc.py:451
+#: plugins/weather.py:643 plugins/weather.py:912 util/misc.py:451
 #: util/misc.py:462 util/misc.py:473
 msgid "at"
 msgstr "a les"
 
-#: plugins/weather.py:667
+#: plugins/weather.py:673
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: plugins/weather.py:748 share/skins/main/bluestar.fxd:13
+#: plugins/weather.py:754 share/skins/main/bluestar.fxd:13
 msgid "Weather"
 msgstr "Temps"
 
-#: plugins/weather.py:754 plugins/weather.py:789 plugins/mpd.py:117
+#: plugins/weather.py:760 plugins/weather.py:795 plugins/mpd.py:117
 msgid "Locations"
 msgstr "Ubicacions"
 
-#: plugins/weather.py:781 plugins/freeboxtv.py:113
+#: plugins/weather.py:787 plugins/freeboxtv.py:113
 msgid "No locations specified"
-msgstr "No s'ha indicat cap ubicació."
+msgstr "No s'ha indicat cap ubicació"
 
-#: plugins/weather.py:806
+#: plugins/weather.py:812
 msgid "Current Conditions"
 msgstr "Condicions actuals"
 
-#: plugins/weather.py:806
+#: plugins/weather.py:812
 msgid "Today's Forecast"
 msgstr "Informe Metereològic d'Avui"
 
-#: plugins/weather.py:807
+#: plugins/weather.py:813
 msgid "Extended Forecast"
 msgstr "Informe Metereològic"
 
-#: plugins/weather.py:807
+#: plugins/weather.py:813
 msgid "Radar Map"
 msgstr "Mapa del radar"
 
-#: plugins/weather.py:885
+#: plugins/weather.py:891
 msgid "Humidity"
 msgstr "Humitat"
 
-#: plugins/weather.py:898
+#: plugins/weather.py:904
 msgid "Pressure"
 msgstr "Pressió"
 
-#: plugins/weather.py:905
+#: plugins/weather.py:911
 msgid "Wind"
 msgstr "Vent"
 
-#: plugins/weather.py:913
+#: plugins/weather.py:919
 msgid "Wind Chill"
 msgstr "Gebrada"
 
-#: plugins/weather.py:921
+#: plugins/weather.py:927
 msgid "Visibility"
 msgstr "Visibilitat"
 
-#: plugins/weather.py:929
+#: plugins/weather.py:935
 msgid "UV Index"
 msgstr "Índex de UV"
 
-#: plugins/weather.py:972
+#: plugins/weather.py:978
 msgid "Today, a high of"
 msgstr "Avui, una màxima de"
 
-#: plugins/weather.py:974
+#: plugins/weather.py:980
 msgid "and a low of"
 msgstr "i una mínima de"
 
-#: plugins/weather.py:977
+#: plugins/weather.py:983
 msgid "Currently, there is a humidity of"
 msgstr "Ara, la humitat és de"
 
-#: plugins/weather.py:979
+#: plugins/weather.py:985
 msgid "and"
 msgstr "i"
 
-#: plugins/weather.py:981
+#: plugins/weather.py:987
 msgid "the winds are "
 msgstr "els vents són "
 
-#: plugins/weather.py:983
+#: plugins/weather.py:989
 msgid "calm"
 msgstr "calma"
 
-#: plugins/weather.py:985
+#: plugins/weather.py:991
 msgid "coming in at"
 msgstr "serà a les"
 
-#: plugins/weather.py:985
+#: plugins/weather.py:991
 msgid "from the"
 msgstr "des de"
 
-#: plugins/weather.py:989
+#: plugins/weather.py:995
 msgid "Visibility will be unlimited today"
 msgstr "Avui hi haurà bona visibilitat"
 
-#: plugins/weather.py:991
+#: plugins/weather.py:997
 msgid "There will be a visibility of"
 msgstr "Hi haurà una visibilitat de"
 
-#: plugins/weather.py:1026
+#: plugins/weather.py:1032
 msgid "LO"
 msgstr "BAIX"
 
-#: plugins/weather.py:1034
+#: plugins/weather.py:1040
 msgid "HI"
 msgstr "ALT"
 
-#: plugins/weather.py:1048
+#: plugins/weather.py:1054
 msgid "Error encountered while trying to download Radar map"
 msgstr "Hi ha hagut un error en baixar el Mapa del radar"
 
@@ -1015,7 +1015,7 @@ msgstr "%s Menú Principal"
 
 #: plugins/autoshutdown.py:144
 msgid "A recording is in progress."
-msgstr "S'està enregistrant d'enregistrament."
+msgstr "S'està enregistrant."
 
 #: plugins/autoshutdown.py:147
 #, python-format
@@ -1069,7 +1069,7 @@ msgstr "VOLEU TORNAR A ARRENCAR EL SISTEMA?"
 #: plugins/autoshutdown.py:210 plugins/autoshutdown.py:224
 #: plugins/autoshutdown.py:238
 msgid "(wakeup disabled)"
-msgstr "("
+msgstr "(l'arrencada planificada està desactivada)"
 
 #: plugins/autoshutdown.py:232
 msgid "SHUTDOWN FREEVO?"
@@ -1077,7 +1077,7 @@ msgstr "VOLEU TANCAR FREEVO?"
 
 #: plugins/autoshutdown.py:603 plugins/shutdown.py:63 main.py:310
 msgid "shutting down..."
-msgstr "S'està tancant..."
+msgstr "s'està tancant..."
 
 #: plugins/ossmixer.py:114 plugins/ossmixer.py:117 plugins/ossmixer.py:123
 #: plugins/ossmixer.py:126 plugins/ossmixer.py:131 plugins/mixer.py:119
@@ -1139,7 +1139,7 @@ msgstr "Missatge: %s"
 
 #: plugins/command.py:139
 msgid "Command finished"
-msgstr "Ha acabat  l'ordre"
+msgstr "Ha acabat l'ordre"
 
 #: plugins/command.py:153 plugins/cd_burn.py:92 gui/ConfirmBox.py:71
 #: gui/AlertBox.py:62
@@ -1183,16 +1183,18 @@ msgstr "Ordres"
 msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
-msgstr "Heu d'executar el connector \"lcd\"."
+msgstr ""
+"Cal pybluez (http://org.csail.mit.edu/pybluez/) per executar el connector"
+"\"freevused\"."
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
 msgid "Playing"
-msgstr "Reprodueix"
+msgstr "Reproduïnt"
 
 #: plugins/freevused.py:420
 #, python-format
 msgid "BT event %s"
-msgstr "Text: %s"
+msgstr "Esdeveniment BT: %s"
 
 #: plugins/freevused.py:509 tv/plugins/recordings_manager.py:75
 #: tv/edit_favorite.py:106 share/skins/main/basic.fxd:385
@@ -1219,7 +1221,7 @@ msgstr "Qualitat"
 
 #: plugins/cd_burn.py:153
 msgid "Not Yet implemented :)"
-msgstr ""
+msgstr "Encara no està disponible :)"
 
 #: plugins/cd_burn.py:162
 #, python-format
@@ -1229,114 +1231,114 @@ msgstr "No es pot copiar a '%s'! (%s)"
 #: plugins/cd_burn.py:180
 #, python-format
 msgid "Start burning %s audio files?"
-msgstr ""
+msgstr "Començar la gravació dels arxius d'àudio %s?"
 
 #: plugins/cd_burn.py:210
 msgid "Insert media then click OK"
-msgstr ""
+msgstr "Poseu el suport i cliqueu D'acord"
 
 #: plugins/cd_burn.py:235
 #, python-format
 msgid "Start burning %s ?"
-msgstr ""
+msgstr "Voleu començar a cremar %s ?"
 
 #: plugins/cd_burn.py:245
 #, python-format
 msgid "Start burning %s entries? ( %d Mb )"
-msgstr ""
+msgstr "Començar la gravació de les entrades %s? ( %d Mb )"
 
 #: plugins/cd_burn.py:501
 #, python-format
 msgid "Burning status: %s"
-msgstr ""
+msgstr "Estat de la gravació: %s"
 
 #: plugins/cd_burn.py:647
 #, python-format
 msgid "Error : Could not convert %s"
-msgstr ""
+msgstr "Hi ha hagut un error : No es pot convertir %s"
 
 #: plugins/cd_burn.py:652
 #, python-format
 msgid "/tmp/burnlist/%s"
-msgstr ""
+msgstr "/tmp/burnlist/%s"
 
 #: plugins/cd_burn.py:754
 msgid "Interrupting burning process..."
-msgstr ""
+msgstr "Aturant el procés de cremat..."
 
 #: plugins/cd_burn.py:764
 msgid "Backup interrupted"
-msgstr ""
+msgstr "S'ha aturat la còpia de seguretat"
 
 #: plugins/cd_burn.py:771
 #, python-format
 msgid "Item type is %s"
-msgstr ""
+msgstr "El tipus d'element és %s"
 
 #: plugins/cd_burn.py:779
 #, python-format
 msgid "Should show the menu? %i"
-msgstr ""
+msgstr "S'ha de mostrar al menú? %i"
 
 #: plugins/cd_burn.py:793
 msgid "CD Burn Menu"
-msgstr "Menú de Configuració"
+msgstr "Menú de Gravació de CD"
 
 #: plugins/cd_burn.py:830
 msgid "Copy this file to CD"
-msgstr ""
+msgstr "Copia aquest arxiu a CD"
 
 #: plugins/cd_burn.py:838
 #, python-format
 msgid "Copy %s to CD"
-msgstr ""
+msgstr "Copia %s a CD"
 
 #: plugins/cd_burn.py:852
 #, python-format
 msgid "Copy %s, and related, to CD"
-msgstr ""
+msgstr "Copia %s, i allò relacionat, a CD"
 
 #: plugins/cd_burn.py:866
 #, python-format
 msgid "Copy %s, and related, file to CD"
-msgstr ""
+msgstr "Copia %s, i allò relacionat, arxiu a CD"
 
 #: plugins/vfd.py:52
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
-msgstr "Heu d'executar el connector \"lcd\"."
+msgstr "Cal pyusb (http://pyusb.berlios.de/) pel connector \"vfd\"."
 
 #: plugins/vfd.py:299
 #, python-format
 msgid "Sending data %r attempt=%d"
-msgstr ""
+msgstr "Enviant dades %r intent=%d"
 
 #: plugins/vfd.py:309
 #, python-format
 msgid "%r attempt=%d"
-msgstr ""
+msgstr "%r intent=%d"
 
 #: plugins/vfd.py:518
 msgid "Cannot find VFD device"
-msgstr ""
+msgstr "No es pot trobar un dispositiu VFD"
 
 #: plugins/vfd.py:526
 msgid "Cannot find MIXER"
-msgstr ""
+msgstr "No es pot trobar el mesclador"
 
 #: plugins/vfd.py:725
 #, python-format
 msgid "Could not find screens for %d lines VFD!"
-msgstr "No s'ha trobat cap pantalla LCD de %d línies!"
+msgstr "No s'ha trobat cap pantalla VFD de %d línies!"
 
 #: plugins/vfd.py:728 plugins/vfd.py:741 plugins/vfd.py:752
 #, python-format
 msgid "No screens found for this VFD (%dx%d)!"
-msgstr "No es troben pantalles per aquesta LCD (%dx%d)!"
+msgstr "No es troben pantalles per aquesta VFD (%dx%d)!"
 
 #: plugins/vfd.py:737
 #, python-format
 msgid "Could not find screens for %d lines and %d columns VFD!"
-msgstr "No s'han trobat pantalles LCD de %d línies i %d columnes!"
+msgstr "No s'han trobat pantalles VFD de %d línies i %d columnes!"
 
 #: plugins/upsoon.py:224 plugins/upsoon.py:242
 msgid "A recording will start in a few minutes"
@@ -1344,23 +1346,23 @@ msgstr "Abans d'un minut començara una gravació"
 
 #: plugins/upsoon.py:272
 msgid "TV stopped, a recording is about to start!"
-msgstr ""
+msgstr "TV aturada, començarà un enregistrament!"
 
 #: plugins/mpd.py:99
 msgid "not sure waht to do whit this"
-msgstr ""
+msgstr "no sé qué fer amb això"
 
 #: plugins/mpd.py:110
 msgid "MPD"
-msgstr ""
+msgstr "MPD"
 
 #: plugins/mpd.py:153
 msgid "mpd"
-msgstr ""
+msgstr "mpd"
 
 #: plugins/mpd.py:215
 msgid "Song - "
-msgstr ""
+msgstr "Cançó -"
 
 #: plugins/mpd.py:226
 msgid "Artist - "
@@ -1372,7 +1374,7 @@ msgstr "Àlbum"
 
 #: plugins/mpd.py:241
 msgid "Status - "
-msgstr ""
+msgstr "Estat - "
 
 #: plugins/buttonbar.py:101
 msgid "No Information Available"
@@ -1385,7 +1387,7 @@ msgstr "Enregistrament"
 
 #: plugins/buttonbar.py:164
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: plugins/buttonbar.py:364
 msgid "More Options"
@@ -1393,15 +1395,15 @@ msgstr "Descripció"
 
 #: plugins/freeboxtv.py:72
 msgid "Freebox TV"
-msgstr ""
+msgstr "Freebox TV"
 
 #: plugins/freeboxtv.py:79
 msgid "Freebox TV :: Les chaines"
-msgstr ""
+msgstr "Freebox TV :: Les cadenes"
 
 #: plugins/freeboxtv.py:117
 msgid "Freebox TV :: Les chaines Multiposte"
-msgstr ""
+msgstr "Freebox TV :: Els canals Multilloc"
 
 #: image/plugins/gphoto.py:99 image/imageitem.py:98
 msgid "View Image"
@@ -1410,7 +1412,7 @@ msgstr "Mosta l'imatge"
 #: image/plugins/gphoto.py:126 tv/plugins/recordings_manager.py:156
 #: directory.py:447
 msgid "Browse directory"
-msgstr "Navega la carpeta"
+msgstr "Navega per la carpeta"
 
 #: image/plugins/apod.py:50 image/plugins/apod.py:51
 msgid "APOD"
@@ -1477,11 +1479,11 @@ msgstr "No hi ha informació disponible"
 
 #: gui/ConfirmBox.py:75 tv/edit_favorite.py:190
 msgid "CANCEL"
-msgstr "CANCEL·LA"
+msgstr "ANUL·LA"
 
 #: www/htdocs/help/index.rpy:38
 msgid "Freevo Help"
-msgstr "Temes d'ajuda de Freevo"
+msgstr "Ajuda de Freevo"
 
 #: www/htdocs/help/index.rpy:41
 msgid ""
@@ -1569,7 +1571,7 @@ msgstr "Llista de Connectors per Freevo"
 
 #: www/htdocs/help/plugins.rpy:89 www/htdocs/help/plugins.rpy:96
 msgid "top"
-msgstr "superior"
+msgstr "capçalera"
 
 #: www/htdocs/help/plugins.rpy:90 www/htdocs/help/plugins.rpy:97
 msgid "index"
@@ -1809,11 +1811,11 @@ msgstr "Hora del dia"
 
 #: www/htdocs/edit_favorite.rpy:134 www/htdocs/favorites.rpy:111
 msgid "Duplicates"
-msgstr ""
+msgstr "Duplicats"
 
 #: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
 msgid "Episodes"
-msgstr "Episodi"
+msgstr "Episodis"
 
 #: www/htdocs/edit_favorite.rpy:137
 msgid "Action"
@@ -1870,19 +1872,19 @@ msgstr "QUALSEVOL HORA"
 
 #: www/htdocs/edit_favorite.rpy:238
 msgid "ALLOW"
-msgstr ""
+msgstr "PERMET"
 
 #: www/htdocs/edit_favorite.rpy:239
 msgid "PREVENT"
-msgstr ""
+msgstr "NO PERMETIS"
 
 #: www/htdocs/edit_favorite.rpy:248
 msgid "ALL"
-msgstr ""
+msgstr "TOT"
 
 #: www/htdocs/edit_favorite.rpy:249
 msgid "ONLY NEW"
-msgstr ""
+msgstr "NOMÉS NOU"
 
 #: www/htdocs/edit_favorite.rpy:262 tv/plugins/manual_record.py:131
 #: tv/edit_favorite.py:183
@@ -1921,7 +1923,7 @@ msgstr "Engega"
 #: www/htdocs/guide.rpy:273 www/htdocs/genre.rpy:205
 #: share/skins/main/basic.fxd:602 share/skins/main/basic.fxd:664
 msgid "Stop"
-msgstr "Surt"
+msgstr "Atura"
 
 #: www/htdocs/guide.rpy:274 www/htdocs/genre.rpy:206
 #: share/skins/main/dark.fxd:465 share/skins/main/info.fxd:278
@@ -1999,11 +2001,11 @@ msgstr "Edita"
 
 #: www/htdocs/favorites.rpy:181
 msgid "Higher"
-msgstr "Més amunt"
+msgstr "Puja"
 
 #: www/htdocs/favorites.rpy:188
 msgid "Lower"
-msgstr "baixa"
+msgstr "Baixa"
 
 #: www/htdocs/library.rpy:186
 #, python-format
@@ -2287,19 +2289,19 @@ msgstr "Mostra l'entrada VCR"
 
 #: tv/plugins/recordings_manager.py:72
 msgid "Date then Name"
-msgstr ""
+msgstr "Data i Nom"
 
 #: tv/plugins/recordings_manager.py:73
 msgid "Status then Name"
-msgstr ""
+msgstr "Estat i Nom"
 
 #: tv/plugins/recordings_manager.py:74
 msgid "Status, Date then Name"
-msgstr ""
+msgstr "Estat, Data i Nom"
 
 #: tv/plugins/recordings_manager.py:141
 msgid "Manage Recordings"
-msgstr "Enregistrament Manual"
+msgstr "Gestió d'enregistraments"
 
 #: tv/plugins/recordings_manager.py:146 directory.py:461
 msgid "Configure directory"
@@ -2307,7 +2309,7 @@ msgstr "Preferències de la carpeta"
 
 #: tv/plugins/recordings_manager.py:166
 msgid "Recordings Directory does not exist"
-msgstr "La carpeta no existeix."
+msgstr "La carpeta dels enregistraments no existeix."
 
 #: tv/plugins/recordings_manager.py:244 directory.py:819 directory.py:909
 #: directory.py:943
@@ -2321,25 +2323,23 @@ msgstr "aturat"
 
 #: tv/plugins/recordings_manager.py:251
 msgid "Sort by"
-msgstr ""
+msgstr "Ordenació:"
 
 #: tv/plugins/recordings_manager.py:253
-#, fuzzy
 msgid "Reverse sort"
-msgstr "Ordena la Carpeta al'Inrevés"
+msgstr "Ordenat a l'Inrevés"
 
 #: tv/plugins/recordings_manager.py:255
 msgid "Sort series by"
-msgstr ""
+msgstr "Ordena les sèries per"
 
 #: tv/plugins/recordings_manager.py:257
 msgid "Reverse series sort"
-msgstr ""
+msgstr "Ordena les sèries a l'inrevés"
 
 #: tv/plugins/recordings_manager.py:259
-#, fuzzy
 msgid "Status order"
-msgstr "Dissabte"
+msgstr "Per ordre d'estat"
 
 #: tv/plugins/recordings_manager.py:262 directory.py:950
 msgid "Configure"
@@ -2352,39 +2352,39 @@ msgstr "Reprodueix"
 
 #: tv/plugins/recordings_manager.py:378
 msgid "Unmark to Keep"
-msgstr ""
+msgstr "Desmarca per conservar"
 
 #: tv/plugins/recordings_manager.py:378
 msgid "Mark to Keep"
-msgstr ""
+msgstr "Marca com a Vist"
 
 #: tv/plugins/recordings_manager.py:379
 msgid "Unmark as Watched"
-msgstr ""
+msgstr "Desmarca com a Vist"
 
 #: tv/plugins/recordings_manager.py:379
 msgid "Mark as Watched"
-msgstr ""
+msgstr "Marca com a vist"
 
 #: tv/plugins/recordings_manager.py:464
 msgid "(Unnamed)"
-msgstr ""
+msgstr "(sense nom)"
 
 #: tv/plugins/recordings_manager.py:558
 msgid "Browse episodes"
-msgstr ""
+msgstr "Navega pels episodis"
 
 #: tv/plugins/recordings_manager.py:559
 msgid "Delete all episodes"
-msgstr ""
+msgstr "Suprimeix tots els episodis"
 
 #: tv/plugins/recordings_manager.py:560
 msgid "Keep all episodes"
-msgstr ""
+msgstr "Conserva tots els episodis"
 
 #: tv/plugins/recordings_manager.py:561
 msgid "Play all episodes"
-msgstr ""
+msgstr "Reprodueix tots els episodis"
 
 #: tv/plugins/recordings_manager.py:625
 #, python-format
@@ -2392,10 +2392,12 @@ msgid ""
 "Do you wish to delete the series\n"
 " '%s'?"
 msgstr ""
+"Voleu suprimir les sèries\n"
+" '%s'?"
 
 #: tv/plugins/recordings_manager.py:699
 msgid "episodes"
-msgstr "Episodi"
+msgstr "episodis"
 
 #: tv/plugins/view_recordings.py:46
 msgid "Recorded Shows"
@@ -2469,7 +2471,7 @@ msgstr "No ha estat possible Planificar"
 #: tv/program_display.py:207
 #, python-format
 msgid "\"%s\" has been removed from schedule"
-msgstr "Suprimeix de la planificació"
+msgstr "S'ha suprimit \"%s\" de la planificació"
 
 #: tv/program_display.py:210 tv/program_display.py:627 tv/edit_favorite.py:210
 msgid "Remove Failed"
@@ -2488,7 +2490,7 @@ msgstr "Ha fallat findMatches per a: %s"
 #: tv/program_display.py:287
 #, python-format
 msgid "getFavorites failed: %s"
-msgstr "Ha fallat l'obtenció dels preferits"
+msgstr "Ha fallat getFavorites: %s"
 
 #: tv/program_display.py:335
 msgid "Display favorite"
@@ -2528,11 +2530,11 @@ msgstr "Menú de Preferits"
 
 #: tv/program_display.py:424
 msgid "Modify Duplicate Flag"
-msgstr "Canvia el canal"
+msgstr "Modifica la Bandera duplicada"
 
 #: tv/program_display.py:442
 msgid "Modify Only New Flag"
-msgstr ""
+msgstr "Modifica Només la Nova Bandera"
 
 #: tv/program_display.py:599
 msgid "Save Failed, favorite was lost"
@@ -2545,7 +2547,7 @@ msgstr "Hi ha hagut un error en desar"
 #: tv/program_display.py:623
 #, python-format
 msgid "\"%s\" has been removed from favorites"
-msgstr "Suprimeix el preferit"
+msgstr "S'ha suprimit \"%s\" dels preferits"
 
 #: tv/epg_xmltv.py:57
 msgid "Time conversion error"
@@ -2675,7 +2677,7 @@ msgstr "Escolta l'Emissora de Ràdio"
 
 #: audio/plugins/xmradio.py:95
 msgid "XM Radio"
-msgstr "Ràdio"
+msgstr "Ràdio XM"
 
 #: audio/plugins/xmradio.py:136
 msgid "No XM channels found"
@@ -2683,7 +2685,7 @@ msgstr "No s'han trobat imatges"
 
 #: audio/plugins/xmradio.py:137
 msgid "XM channels"
-msgstr "Canvia el canal"
+msgstr "Canals XM"
 
 #: audio/plugins/cdbackup.py:188
 msgid "Show CD ripping status"
@@ -2796,9 +2798,8 @@ msgid "Listen to Radio Station"
 msgstr "Escolta l'Emissora de Ràdio"
 
 #: audio/plugins/radio.py:84
-#, fuzzy
 msgid "Cannot play - recording in progress"
-msgstr "S'està enregistrant d'enregistrament."
+msgstr "No es pot reproduïr - s'està enregistrant."
 
 #: audio/plugins/radio.py:118
 msgid "Radio"
@@ -2899,8 +2900,8 @@ msgstr ""
 "El connector 'coversearch' s'ha desactivat per aquest element! 'coversearch' "
 "necessita un element amb un Artista i un Àlbum (si és un mp3 o ogg) o un "
 "Títol (si és una pista de cd) per poder cercar. Per això us cal un fitxer "
-"amb una etiqueta ID3 (mp3) o una informació Ogg. potser heu de corregir "
-"l'etiqueta d'aquest fitxer(%s)?"
+"amb una etiqueta ID3 (mp3) o una informació Ogg. Potser cal corregir "
+"l'etiqueta d'aquest fitxer (%s)?"
 
 #: audio/plugins/coversearch.py:175
 msgid "Unknown CD, cover searching is disabled"
@@ -2929,7 +2930,7 @@ msgstr "Resultats de la Cerca de Caràtules"
 
 #: audio/plugins/coversearch.py:274
 msgid "No covers available from Amazon"
-msgstr "A Amazon no hi han caràtules"
+msgstr "No hi han caràtules a Amazon"
 
 #: audio/plugins/coversearch.py:287 video/plugins/imdb.py:206
 msgid "getting data..."
@@ -2937,11 +2938,11 @@ msgstr "obtenint dades..."
 
 #: audio/plugins/album_tree.py:193 audio/plugins/album_tree.py:275
 msgid "Album Tree"
-msgstr "Àlbum"
+msgstr "Arbre de l'Àlbum"
 
 #: audio/plugins/album_tree.py:302
 msgid "No Objects found"
-msgstr "No s'han trobat imatges"
+msgstr "No s'han trobat objectes"
 
 #: audio/plugins/album_tree.py:326
 msgid "Generating playlist..."
@@ -2949,15 +2950,15 @@ msgstr "Només hi ha un elemen a la llista"
 
 #: audio/plugins/musicip.py:423
 msgid "MusicIP Mix"
-msgstr ""
+msgstr "MusicIP Mix"
 
 #: audio/plugins/musicip.py:425
 msgid "Songs From Same Album"
-msgstr ""
+msgstr "Cançons del Mateix Album"
 
 #: audio/plugins/musicip.py:426
 msgid "Songs From Same Artist"
-msgstr ""
+msgstr "Cançons del Mateix Artiste"
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -3046,7 +3047,7 @@ msgstr "Navega pels enllaços (de forma automàtica)"
 #: video/plugins/linkbrowser.py:70
 msgid "Browse links (autoplay, maximum caching)"
 msgstr ""
-"Navega els enllaços (reproducció automàtica, amb el màxim de memòria cau)"
+"Navega pels enllaços (reproducció automàtica, amb el màxim de memòria cau)"
 
 #: video/plugins/linkbrowser.py:71
 msgid "Browse links"
@@ -3071,42 +3072,42 @@ msgstr "Detalls"
 
 #: video/plugins/dvdbackup.py:79
 msgid "Backup this dvd title..."
-msgstr ""
+msgstr "Fes una còpia de seguretat d'aquest dvd..."
 
 #: video/plugins/dvdbackup.py:94 video/plugins/reencode.py:92
 #: video/plugins/reencode2.py:148
 msgid "Choose your encoding profile"
-msgstr "Ha fallat l'obtenció d'enregistraments"
+msgstr "Trieu el perfil de codificació"
 
 #: video/plugins/dvdbackup.py:110 video/plugins/reencode.py:103
 #: video/plugins/reencode2.py:323
 msgid "Please wait, analyzing video..."
-msgstr "Espereu... "
+msgstr "Espereu, s'està analitzant el vídeo... "
 
 #: video/plugins/dvdbackup.py:179 video/plugins/reencode.py:190
 #: video/plugins/reencode2.py:365
 msgid "Encoding started"
-msgstr "Ha començat la gravació"
+msgstr "Ha començat la codificació"
 
 #: video/plugins/reencode.py:76
 msgid "Re-encode this program..."
-msgstr "Cerca més informació sobre aquest programa"
+msgstr "Torna a codificar aquest programa"
 
 #: video/plugins/bilingual.py:82
 msgid "Bilingual language selection"
-msgstr ""
+msgstr "Tria de llengua bilingüe"
 
 #: video/plugins/bilingual.py:89
 msgid "Play Both Channels"
-msgstr ""
+msgstr "Reprodueix els dos Canals"
 
 #: video/plugins/bilingual.py:90
 msgid "Play Left Channel"
-msgstr ""
+msgstr "Reprodueix el Canal Esquerre"
 
 #: video/plugins/bilingual.py:91
 msgid "Play Right Channel"
-msgstr ""
+msgstr "Reprodueix el Canal Dret"
 
 #: video/plugins/bilingual.py:92
 msgid "Language Menu"
@@ -3114,11 +3115,11 @@ msgstr "Idioma"
 
 #: video/plugins/reencode2.py:103
 msgid "Transcode this program..."
-msgstr "Cerca més informació sobre aquest programa"
+msgstr "Transcodifica aquest programa"
 
 #: video/plugins/reencode2.py:138
 msgid "Start Encoding"
-msgstr ""
+msgstr "Comença la codificació"
 
 #: video/plugins/reencode2.py:139
 msgid "Select Encoding Profile"
@@ -3155,35 +3156,35 @@ msgstr "Canvia l'hora del dia"
 
 #: video/plugins/reencode2.py:147
 msgid "Modify Video Filter (not implemented)"
-msgstr ""
+msgstr "Modifica el Filtre de Vídeo (No permés)"
 
 #: video/plugins/reencode2.py:156
 msgid "Xvid Low Quality"
-msgstr ""
+msgstr "Xvid de Baixa Qualitat"
 
 #: video/plugins/reencode2.py:157
 msgid "Xvid High Quality"
-msgstr ""
+msgstr "Xvid d'Alta Qualitat"
 
 #: video/plugins/reencode2.py:158
 msgid "iPod"
-msgstr ""
+msgstr "iPod"
 
 #: video/plugins/reencode2.py:159
 msgid "Select Profile"
-msgstr ""
+msgstr "Tria el Perfil"
 
 #: video/plugins/reencode2.py:229
 msgid "Modify Number of Passes"
-msgstr "Canvia l'hora del dia"
+msgstr "Canvia el número de passades"
 
 #: video/plugins/reencode2.py:239
 msgid "Modify Video Filter"
-msgstr "Canvia la prioritat"
+msgstr "Canvia el Filtre de Vídeo"
 
 #: video/plugins/reencode2.py:275
 msgid "Unknown Profile"
-msgstr "Artista desconegut"
+msgstr "Perfil desconegut"
 
 #: video/plugins/reencode2.py:303
 msgid "Unknown Property"
@@ -3225,7 +3226,7 @@ msgstr "Reprodueix amb un altre reproductor"
 
 #: video/videoitem.py:324
 msgid "Play with maximum cache"
-msgstr "Reprodueix amb el màxim de memòria cau"
+msgstr "Reprodueix amb tota la memòria ca possible."
 
 #: video/videoitem.py:329
 msgid "Show variants"
@@ -3253,9 +3254,9 @@ msgid "No player for this item found"
 msgstr "No hi ha cap reproductor per aquest element"
 
 #: video/videoitem.py:619
-#, fuzzy, python-format
+#, python-format
 msgid "Play Title %d"
-msgstr "Reprodueix el Títol %s"
+msgstr "Reprodueix el Títol %d"
 
 #: video/configure.py:70 video/configure.py:105
 #, python-format
@@ -3306,17 +3307,16 @@ msgid "Chapter selection"
 msgstr "Selecció de capítol"
 
 #: video/configure.py:238
-#, fuzzy
 msgid "Deinterlacing"
-msgstr "desentrellaçat"
+msgstr "Desentrellaçat"
 
 #: video/configure.py:239
 msgid "X-Video Motion Compensation (xvmc)"
-msgstr ""
+msgstr "Compensació X-Video Motion (xvmc)"
 
 #: video/configure.py:241
 msgid "Bottom field first"
-msgstr ""
+msgstr "Primer el darrer camp"
 
 #: video/configure.py:247
 msgid "Config Menu"
@@ -3348,7 +3348,7 @@ msgstr "No hi ha enregistraments planificats"
 
 #: util/misc.py:518
 msgid "Widescreen"
-msgstr ""
+msgstr "Pantalla ample"
 
 #: setup_freevo.py:75
 msgid ""
@@ -3466,7 +3466,7 @@ msgstr "Navega la llista de reproducció"
 
 #: playlist.py:292 directory.py:456
 msgid "Random play all items"
-msgstr "Reprodueix tots els elements de forma aleatòria"
+msgstr "Reprodueix de forma aleatòria tots els elements"
 
 #: playlist.py:338
 msgid "empty playlist"
@@ -3474,11 +3474,11 @@ msgstr "la llista està buida"
 
 #: playlist.py:436
 msgid "playlist repeat on"
-msgstr "la llista de reproducció es repetirà"
+msgstr "es repetirà la llista de reproducció"
 
 #: playlist.py:438
 msgid "playlist repeat off"
-msgstr "la llista de reproducció no es repetirà"
+msgstr "no es repetirà la llista de reproducció"
 
 #: playlist.py:452
 msgid "no next item in playlist"
@@ -3502,7 +3502,7 @@ msgstr "Ordena la carpeta data i no per nom."
 
 #: directory.py:60
 msgid "Directory Autoplay Single Item"
-msgstr "Reprodueix automàticament un sol element"
+msgstr "Reprodueix un sol element automàticament"
 
 #: directory.py:61
 msgid "Don't show directory if only one item exists and auto-select the item."
@@ -3528,7 +3528,7 @@ msgstr "Ordenació Intel·ligent la Carpeta"
 
 #: directory.py:69
 msgid "Use a smarter way to sort the items."
-msgstr "Ordena els elements de forma intel·ligent."
+msgstr "Ordena els elements de forma més intel·ligent."
 
 #: directory.py:71
 msgid "Directory Smart Names"
@@ -3536,7 +3536,7 @@ msgstr "Ordenació Intel·ligent la Carpeta"
 
 #: directory.py:72
 msgid "Use a smarter way to abbreviate the name of the items."
-msgstr "Ordena els elements de forma intel·ligent."
+msgstr "Fes servir abreviacions intel·ligents per a els noms dels elements."
 
 #: directory.py:74
 msgid "Use MediaID Tag Names"
@@ -3585,15 +3585,15 @@ msgstr "Afegeix un element a la Llista de reproducció aleatòria"
 
 #: directory.py:92
 msgid "Directory Autoplay Items"
-msgstr "Reprodueix els elements de forma Automàtica"
+msgstr "Reprodueix  automàticament els elements de la carpeta"
 
 #: directory.py:93
 msgid ""
 "Autoplay the whole directory (as playlist) when it contains only files and "
 "no directories"
 msgstr ""
-"Reprodueix automàticament la carpeta (com una llista de reproducció) si "
-"només conté fitxers"
+"Si només conté fitxers, reprodueix tota la carpeta automàticament (com una "
+"llista de reproducció)"
 
 #: directory.py:313
 #, python-format
@@ -3610,11 +3610,11 @@ msgstr "Reprodueix tots els fitxers de la carpeta"
 
 #: directory.py:458
 msgid "Recursive random play all items"
-msgstr "Reprodueix tots els elements recursivament de forma aleatòria"
+msgstr "Reprodueix de forma aleatòria i recursiva tots els elements"
 
 #: directory.py:459
 msgid "Recursive play all items"
-msgstr "Reprodueix tots els elements recursivament"
+msgstr "Reprodueix de forma recursiva tots els elements"
 
 #: directory.py:528
 msgid "Enter Password"
@@ -3661,7 +3661,7 @@ msgstr "No es pot obrir el registre \"%s\"!"
 #: childapp.py:285
 #, python-format
 msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
-msgstr ""
+msgstr "Poseu CHILDAPP_DEBUG=0 a local_conf.py, o permeteu l'escriptura a %s!"
 
 #: main.py:172
 msgid "Freevo Main Menu"
@@ -3706,7 +3706,7 @@ msgstr "Continua"
 #: main.py:427
 #, python-format
 msgid "Starting Freevo-%s, please wait ..."
-msgstr ""
+msgstr "Arrencant Freevo-%s, espereu..."
 
 #: main.py:436
 msgid "Reading cache, please wait ..."
@@ -3879,7 +3879,7 @@ msgstr "Correu"
 
 #: share/skins/main/Panorama.fxd:787
 msgid "Hz"
-msgstr ""
+msgstr "Hz"
 
 #: share/skins/main/info.fxd:232
 msgid "Link"
@@ -3891,7 +3891,7 @@ msgstr "Només hi ha una imatge a la presentació"
 
 #: share/skins/main/basic.fxd:765
 msgid "Num Passes"
-msgstr ""
+msgstr "Núm. de voltes"
 
 #: share/skins/main/dark.fxd:646
 msgid "Total mails"
@@ -3920,9 +3920,8 @@ msgid "Now playing"
 msgstr "Reproduïnt"
 
 #: share/skins/main/Panorama.fxd:777
-#, fuzzy
 msgid "kbps"
-msgstr "kb/s"
+msgstr "kbps"
 
 #: share/skins/main/info.fxd:506
 msgid "Copyright"
@@ -3948,7 +3947,7 @@ msgstr "Idioma"
 
 #: share/skins/main/basic.fxd:772
 msgid "Filter"
-msgstr ""
+msgstr "Filtre"
 
 #: share/skins/main/basic.fxd:741
 msgid "Video Codec"
