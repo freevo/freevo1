@@ -17,6 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * Updated Catalan translation (F#1709740)
+ * rss feed not correctly writing the fxd file (B#1710553)
 
 == Release 1.7.1 (2007-04-29) ==
 --------------------------------

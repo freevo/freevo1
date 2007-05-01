@@ -124,11 +124,11 @@ def checkForExpiration():
             try:
                 os.remove(config.RSS_VIDEO+fxdfile)
             except OSError:
-                print"removing the file %s failed"%(fxdfile)
+                print"removing the file %s failed" % (fxdfile)
             try:
                 os.remove(config.RSS_VIDEO+filename)
             except OSError:
-                print"removing the file %s failed"%(filename)
+                print"removing the file %s failed" % (filename)
     for line in deletedItems:
 #      try:
        downloadedFiles.remove(line)
@@ -148,25 +148,26 @@ def createFxd(item,filename):
     ofile=ofile+".fxd"
     try:
        file = open(ofile, 'w')
+       file.write('<?xml version="1.0" encoding="iso-8859-1"?>\n')
        file.write('<freevo>\n')
-       file.write('   <movie title="%s">\n'%item.title)
+       file.write('   <movie title="%s">\n' % item.title)
        file.write('      <video>\n')
-       file.write('         <file id="f1">%s</file>\n'%fullFilename)
+       file.write('         <file id="f1">%s</file>\n' % fullFilename)
        file.write('      </video>\n')
        file.write('      <info>\n')
-       file.write('         <plot>%s</plot>\n'%item.description)
+       file.write('         <plot>%s</plot>\n' % item.description)
        file.write('      </info>\n')
        file.write('   </movie>\n')
        file.write('</freevo>\n')
        file.close()
     except IOError:
-       print "ERROR: Unable to write FXD file %s"%(ofile)
+       print "ERROR: Unable to write FXD file %s" % (ofile)
 
 def checkForUpdates():
     try:
         file = open(config.RSS_FEEDS,"r")
     except IOError:
-       print "ERROR: Could not open configuration file %s"%(config.RSS_FEEDS)
+       print "ERROR: Could not open configuration file %s" % (config.RSS_FEEDS)
        return
 
     for line in file:
@@ -195,11 +196,11 @@ def checkForUpdates():
                     if (len(glob.glob(filename))==0) and not checkForDup(item.url):
                         if re.search("torrent",item.url):
                             print "Start downloading %s" % item.url
-                            exitStatus=os.popen("bittorrent-console %s"%(item.url)).close()
+                            exitStatus=os.popen("bittorrent-console %s" % (item.url)).close()
                             filename=re.sub("\.torrent","",filename)
                         else:
                             print "Start downloading %s" % item.url
-                            exitStatus=os.popen("wget %s" %(item.url)).close()
+                            exitStatus=os.popen("wget %s" % (item.url)).close()
                         if not exitStatus:
                             createFxd(item,filename)
                             addFileToCache(item.url)
@@ -207,7 +208,7 @@ def checkForUpdates():
                             print "Download completed (%s bytes)" % os.path.getsize(filename)
                         else:
                             print "Download failed - exit status %s." % exitStatus
-                            os.popen("rm %s" %(filename))
+                            os.popen("rm %s" % (filename))
         except IOError:
-            print "ERROR: Unable to download %s. Connection may be down."%(url)
+            print "ERROR: Unable to download %s. Connection may be down." % (url)
 
