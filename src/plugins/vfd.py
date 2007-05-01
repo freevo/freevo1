@@ -503,16 +503,24 @@ class PluginInterface(plugin.DaemonPlugin):
         self.disable = 0
         self.playitem = None
         self.event_listener = 1
-        self.vendorID = 4872    # Shuttle Inc
-        self.productID = 0003   # VFD Module
+
+        # There seem to exist at least two different vendor/product ID
+        # combinations for the Shuttle VFD. Thus, we have to check all
+        # of them, until a valid one is found.
+        #self.vendorID = 4872    # Shuttle Inc
+        #self.productID = 0003   # VFD Module
+
+        # self.usbIDs is a list of tuples (vendorID, productID)
+        self.usbIDs = [ (0x1308, 0x0003), (0x051c, 0x0005), (0x1308, 0xc001), ]
         self.maxStringLength = 20
         self.sleepLength = 0.015
         self.vfd = None
         for bus in pyusb.busses():
             for dev in bus.devices:
-                if dev.idVendor == self.vendorID and dev.idProduct == self.productID:
-                    self.vfd = dev.open()
-                    _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), dbglvl)
+                for (self.vendorID, self.productID) in self.usbIDs:
+                    if dev.idVendor == self.vendorID and dev.idProduct == self.productID:
+                        self.vfd = dev.open()
+                        _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), dbglvl)
 
         if self.vfd == None:
             _debug_(String(_("ERROR")) + ":" + String(_("Cannot find VFD device")), 0)
@@ -868,3 +876,15 @@ class PluginInterface(plugin.DaemonPlugin):
         else:
             return ''
 
+    def show_clock(self, settime=None):
+        """ Show the clock, setting the time as necessary """
+        if not settime:
+            settime = time.localtime()
+
+        self.send(self.msg(0xd,time.strftime("%S%M%H0%w%d%m%y",settime).decode("hex")))
+        self.send(self.msg(3,3))
+
+    def shutdown(self):
+        """ This method is automagically called upon shutdown of freevo. """
+        self.clear()
+        self.show_clock()
