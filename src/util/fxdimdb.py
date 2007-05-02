@@ -172,7 +172,7 @@ class FxdImdb:
         return self.imdb_id_list
 
 
-    def setImdbId(self, id, season, episode):
+    def setImdbId(self, id, season=None, episode=None):
         """id (number)
         Set an imdb_id number for object, and fetch data"""
 
