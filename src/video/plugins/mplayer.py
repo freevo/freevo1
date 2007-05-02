@@ -146,7 +146,7 @@ class MPlayer:
 
         # Build the MPlayer command
         command = [ '--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD ]
-        command += [ '-slave', '-v', ]
+        command += [ '-slave', ]
         command += config.MPLAYER_ARGS_DEF.split(' ')
         command += [ '-ao'] + config.MPLAYER_AO_DEV.split(' ')
 
