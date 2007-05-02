@@ -266,6 +266,7 @@ LOCAL_CONF_CHANGES = [
     (5.19,
      '''Changed rss.feeds field separator to use a ';' instead of a ','
      Changed weather locations to add a language code as the third parameter
+     Moved video.reencode to video.reencode-old and video.reencode2 to video.reencode
      ''' ),
 ]
 
