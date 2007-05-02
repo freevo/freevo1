@@ -300,8 +300,8 @@ class IVTV(tv.v4l2.Videodev):
                            codec.dnr_spatial,
                            codec.dnr_temporal,
                            codec.dnr_type,
-                           codec.framerate,
-                           codec.framespergop,
+                           codec.framerate,     #read only, ignored on write
+                           codec.framespergop,  #read only, ignored on write
                            codec.gop_closure,
                            codec.pulldown,
                            codec.stream_type)
@@ -448,6 +448,7 @@ if __name__ == '__main__':
 
     ivtv_dev = IVTV('/dev/video0')
     ivtv_dev.init_settings()
+    ivtv_dev.print_settings()
 
     print 'driver="%s"' % ivtv_dev.driver
     print 'version=%x' % ivtv_dev.version
