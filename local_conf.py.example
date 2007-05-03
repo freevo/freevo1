@@ -1056,10 +1056,9 @@ IMAGEVIEWER_BLEND_MODE = -1
 # of the xine plugin
 
 # XINE_VO_DEV  = 'xv'
-# XINE_COMMAND = '%s --hide-gui -pq -g -B --geometry %sx%s+0+0 --no-splash' % \
-#                  (CONF.xine, CONF.width, CONF.height)
-
-# XINE_ARGS_DEF = '--no-lirc --post=pp:quality=10,expand'
+# XINE_COMMAND = '%s --auto-play=fq --hide-gui --borderless --geometry %sx%s+0+0 --no-splash' % \
+#                (CONF.xine, CONF.width, CONF.height)
+# XINE_ARGS_DEF = "--no-lirc --post='pp:quality=10;expand'"
 
 # XINE_AO_DEV = 'oss'                     # alsa or oss
 

@@ -1440,9 +1440,10 @@ if CONF.display == 'dxr3' and CONF.fbxine:
     XINE_VO_DEV = 'dxr3'
     XINE_COMMAND = CONF.fbxine
     
+
 if CONF.display == 'x11' and CONF.xine:
     XINE_VO_DEV = 'xv'
-    XINE_COMMAND = '%s --hide-gui -pq -g -B --geometry %sx%s+0+0 --no-splash' % \
+    XINE_COMMAND = '%s --auto-play=fq --hide-gui --borderless --geometry %sx%s+0+0 --no-splash' % \
                    (CONF.xine, CONF.width, CONF.height)
 
 if CONF.display in ('dfbmga', 'directfb') and CONF.df_xine:
