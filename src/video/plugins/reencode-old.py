@@ -57,9 +57,6 @@ class PluginInterface(plugin.ItemPlugin):
 
     def actions(self, item):
         _debug_('actions(self, item)')
-        print 'DJW:item.__class__:', item.__class__
-        if DEBUG >= 2:
-            print 'DJW:item.__dict__:', item.__dict__
 
         if item.type == 'video' and item.mode == 'file':
             # TODO: use a config variable
