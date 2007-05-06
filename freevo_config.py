@@ -1920,3 +1920,9 @@ DIRECTORY_USE_STAT_FOR_CHANGES = True
 MPLAYER_DEBUG = 0
 
 TIME_DEBUG = 0
+
+# Instruct player to use XVMC for playback
+USE_XVMC = 0
+
+# Pass field dominance paramenter to MPlayer
+FIELD_DOMINANCE = 0

@@ -52,8 +52,7 @@ from event import *
 class VideoItem(Item):
 
     def __init__(self, url, parent, info=None, parse=True):
-        #self.autovars = [ ('deinterlace', 0), ('xvmc', config.USE_XVMC), ('field-dominance', config.FIELD_DOMINANCE) ]
-        self.autovars = [ ('deinterlace', 0), ('xvmc', 0), ('field-dominance', 0) ]
+        self.autovars = [ ('deinterlace', 0), ('xvmc', config.USE_XVMC), ('field-dominance', config.FIELD_DOMINANCE) ]
         Item.__init__(self, parent)
 
         self.type = 'video'
@@ -175,8 +174,7 @@ class VideoItem(Item):
                self.image = image
                self.files.image = image
 
-        if config.VIDEO_INTERLACING and self.info['interlaced'] \
-               and not self['deinterlace']:
+        if config.VIDEO_INTERLACING and self.info['interlaced']:
             # force deinterlacing
             self['deinterlace'] = 1
         else:

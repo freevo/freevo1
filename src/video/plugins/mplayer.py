@@ -141,12 +141,12 @@ class MPlayer:
             return '%s\nnot found' % os.path.basename(url)
        
         set_vcodec = False
-        if item['xvmc'] and item['type'][:6] in ['MPEG-1','MPEG-2']:
+        if item['xvmc'] and item['type'][:6] in ['MPEG-1','MPEG-2','MPEG-T']:
             set_vcodec = True
 
         # Build the MPlayer command
         command = [ '--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD ]
-        command += [ '-slave', ]
+        command += [ '-slave' ]
         command += config.MPLAYER_ARGS_DEF.split(' ')
         command += [ '-ao'] + config.MPLAYER_AO_DEV.split(' ')
 
