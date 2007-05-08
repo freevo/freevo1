@@ -472,7 +472,7 @@ class FavoriteItem(Item):
         """
         items = []
 
-        items.append(menu.MenuItem('ANY DAY', action=self.alter_prop,
+        items.append(menu.MenuItem(_('ANY DAY'), action=self.alter_prop,
                      arg=('dow', 'ANY')))
 
         for i in range(len(self.week_days)):
@@ -493,7 +493,7 @@ class FavoriteItem(Item):
         """
         items = []
 
-        items.append(menu.MenuItem('ANY TIME', action=self.alter_prop,
+        items.append(menu.MenuItem(_('ANY TIME'), action=self.alter_prop,
                      arg=('mod', 'ANY')))
 
         for i in range(48):

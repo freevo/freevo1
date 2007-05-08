@@ -96,7 +96,7 @@ class MpdItem(Item):
 
     def actions(self):
      #   return a list of actions for this item
-        return [ ( self.start_detailed_interface, _('not sure waht to do whit this') ) ]
+        return [ ( self.start_detailed_interface, _('not sure what to do with this') ) ]
 
 class MpdMainMenu(Item):
     """

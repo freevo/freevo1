@@ -171,13 +171,13 @@ class PluginInterface(plugin.DaemonPlugin):
         (status, jobs) = self.listjobs()
         if not status:
             self.state = 'noserver'
-            self.jobs = 'encoding server not running'
+            self.jobs = _('encoding server not running')
             self.draw_interval = 5000
             self.running = False
             return 0;
         if not jobs:
             self.state = 'nojobs'
-            self.jobs = 'encoding server has no jobs'
+            self.jobs = _('encoding server has no jobs')
             self.draw_interval = 5000
             self.running = False
             return 0;

@@ -779,7 +779,7 @@ class PluginInterface(plugin.ItemPlugin):
         _debug_(_('Should show the menu? %i' % show_burn_menu), 2)
 
         if show_burn_menu:
-            return [ (self.fill_menu, 'Burn CD') ]
+            return [ (self.fill_menu, _('Burn CD')) ]
         else:
             return []
         
