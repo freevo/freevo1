@@ -136,8 +136,8 @@ SETFREQ_NO       = _IOW ('V', 57, FREQUENCY_ST)
 
 LOG_STATUS       = _IO  ('V', 70)
 
-EXT_CTRL_ST      = "@L2Lq"         # (id, res1, res2, s64)
-EXT_CTRLS_ST     = "@LLL2LP"       # (class, count, error_idx, res1, res2, ptr)
+EXT_CTRL_ST      = "=I2Iq"         # (id, res1, res2, s64)
+EXT_CTRLS_ST     = "@III2IP"       # (class, count, error_idx, res1, res2, ptr)
 G_EXT_CTRLS_NO   = _IOWR('V', 71, EXT_CTRLS_ST)
 S_EXT_CTRLS_NO   = _IOWR('V', 72, EXT_CTRLS_ST)
 TRY_EXT_CTRLS_NO = _IOWR('V', 73, EXT_CTRLS_ST)
@@ -260,13 +260,11 @@ class Videodev:
         freq = config.FREQUENCY_TABLE.get(channel)
         if freq:
             if DEBUG: 
-                print 'USING CUSTOM FREQUENCY: chan="%s", freq="%s"' % \
-                      (channel, freq)
+                print 'Using custom frequency: chan="%s", freq="%s"' % (channel, freq)
         else:
             freq = self.chanlist[str(channel)]
             if DEBUG: 
-                print 'USING STANDARD FREQUENCY: chan="%s", freq="%s"' % \
-                      (channel, freq)
+                print 'Using standard frequency: chan="%s", freq="%s"' % (channel, freq)
 
         freq *= 16
 
@@ -431,7 +429,7 @@ class Videodev:
             if DEBUG >= 3: print "getextctrl: extctrl=%r, %d, extres=%s" % (extctrl.tostring(), len(extctrl), extres)
         except IOError, e:
             extres = struct.unpack(EXT_CTRL_ST, extctrl.tostring())
-            print 'getextctrl:', e
+            print 'getextctrl(%s)=%s' % (id, e)
         return extres[3]
 
 
@@ -591,11 +589,12 @@ class Videodev:
         '''
         set the control record by name
         '''
-        if DEBUG >= 1: print 'name=\"%s\", value=%d' % (name, value)
         if not self.getcontrol(name):
+            print '\"%s\" not found' % (name)
             return
 
         oldvalue = self.getcontrol(name)
+        if DEBUG >= 1: print '\"%s\", value %d->%d' % (name, oldvalue, value)
         if value == oldvalue:
             return
 
@@ -667,7 +666,7 @@ class V4LGroup:
 
 if __name__ == '__main__':
 
-    DEBUG = 4
+    DEBUG = 0
     viddev=Videodev('/dev/video0')
     print 'Driver = \"%s\"' % viddev.getdriver()
     print 'Driver Version = %x' % viddev.getversion()
@@ -682,7 +681,22 @@ if __name__ == '__main__':
     viddev.setfmt(720, 576)
     std = viddev.getfmt()
     print 'std:', std
-    
+    print 'CONTROLS'
+    viddev.listcontrols()
+    dict = viddev.getcontrols()
+    viddev.setextctrl(0x009909c9, 2)
+    print '0x009909c9 = %d' % viddev.getextctrl(0x009909c9)
+    viddev.setextctrl(0x009909cf, 7000000)
+    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+    try:
+        bitrate = viddev.getcontrol('Video Bitrate')
+        viddev.updatecontrol('Video Bitrate', bitrate+1)
+        print 'Video Bitrate = %d' % viddev.getcontrol('Video Bitrate')
+    except:
+        pass
+    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+    print 'SIZES'
     print 'QUERYCAP_ST=%s %s' % (QUERYCAP_ST, struct.calcsize(QUERYCAP_ST))
     print 'FREQUENCY_ST=%s %s' % (FREQUENCY_ST, struct.calcsize(FREQUENCY_ST))
     print 'ENUMSTD_ST=%s %s' % (ENUMSTD_ST, struct.calcsize(ENUMSTD_ST))
@@ -692,9 +706,11 @@ if __name__ == '__main__':
     print 'FMT_ST=%s %s' % (FMT_ST, struct.calcsize(FMT_ST))
     print 'TUNER_ST=%s %s' % (TUNER_ST, struct.calcsize(TUNER_ST))
     print 'AUDIO_ST=%s %s' % (AUDIO_ST, struct.calcsize(AUDIO_ST))
+    print 'EXT_CTRL_ST=%s %s' % (EXT_CTRL_ST, struct.calcsize(EXT_CTRL_ST))
+    print 'EXT_CTRLS_ST=%s %s' % (EXT_CTRLS_ST, struct.calcsize(EXT_CTRLS_ST))
 
-    viddev=Videodev('/dev/video0')
     '''
+    viddev=Videodev('/dev/video0')
     viddev.print_settings()
     print 
     print viddev.querycap()
@@ -718,7 +734,7 @@ if __name__ == '__main__':
     print viddev.setfreq(8948)
     print viddev.getfreq()
     print viddev.getfreq2()
-    '''
+
     DEBUG=0
     viddev.listcontrols()
     dict = viddev.getcontrols()
@@ -744,6 +760,7 @@ if __name__ == '__main__':
     print '0x00990900 = %d' % viddev.getextctrl(0x00990900)
     DEBUG=4
     print 'getfreq:', viddev.getfreq()
+    '''
 
     viddev.close()
 
