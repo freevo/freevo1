@@ -51,20 +51,13 @@ class ScheduledRecordings:
             # key = rec_interface.getKey(prog)
             pass
 
-        print 'config.LOCALE=%s' % config.LOCALE
-        print 'prog=%s' % (prog)
-
-        if config.DEBUG:
-            print 'addProgram: key is "%s"' % String(key)
+        _debug_('program key is \"%s\""' % String(key), 1)
         if not self.programList.has_key(key):
-            if config.DEBUG:
-                print 'addProgram: actually adding "%s"' % prog
+            _debug_('adding program %s"' % prog, 1)
             self.programList[key] = prog
         else:
-            if config.DEBUG:
-                print 'We already know about this recording.'
-        if config.DEBUG:
-            print 'addProgram: len is "%s"' % len(self.programList)
+            _debug_('We already know about this recording \"%s\"' % (key), 0)
+        _debug_('"%s" items' % len(self.programList), 2)
 
 
     def removeProgram(self, prog, key=None):
@@ -74,11 +67,9 @@ class ScheduledRecordings:
 
         if self.programList.has_key(key):
             del self.programList[key]
-            if config.DEBUG:
-                print 'removeProgram: removed "%s"' % prog
+            _debug_('removed "%s"' % prog, 1)
         else:
-            if config.DEBUG:
-                print 'We do not know about this recording.'
+            _debug_('We do not know about this recording \"%s\"' % (prog), 0)
 
 
     def getProgramList(self):
@@ -91,22 +82,18 @@ class ScheduledRecordings:
 
     def addFavorite(self, fav):
         if not self.favorites.has_key(fav.name):
-            if config.DEBUG:
-                print 'addFavorites: actually adding "%s"' % String(fav.name)
+            _debug_('added favorite "%s"' % String(fav.name), 1)
             self.favorites[fav.name] = fav
         else:
-            if config.DEBUG:
-                print 'We already have a favorite called "%s".' % String(fav.name)
+            _debug_('We already have a favorite called "%s"' % String(fav.name), 0)
 
 
     def removeFavorite(self, name):
         if self.favorites.has_key(name):
             del self.favorites[name]
-            if config.DEBUG:
-                print 'removed favorite: %s' % String(name)
+            _debug_('removed favorite: %s' % String(name), 1)
         else:
-            if config.DEBUG:
-                print 'We do not have a favorite called "%s".' % String(name)
+            _debug_('We do not have a favorite called "%s".' % String(name), 0)
 
 
     def getFavorites(self):
