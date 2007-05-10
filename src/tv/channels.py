@@ -159,9 +159,7 @@ class FreevoChannels:
 
         freq = config.FREQUENCY_TABLE.get(chan)
         if freq:
-            if DEBUG:
-                print String('USING CUSTOM FREQUENCY: chan="%s", freq="%s"'% \
-                      (chan, freq))
+            _debug_('Using custom frequency: chan="%s", freq="%s"' % (chan, freq))
         else:
             clist = tv.freq.CHANLIST.get(vg.tuner_chanlist)
             if clist:
@@ -169,18 +167,14 @@ class FreevoChannels:
             else:
                 if vg.group_type != 'dvb':
                     print String(_('ERROR')+': ' + \
-                                 (_('Unable to get channel list for %s.') % \
-                                  vg.tuner_chanlist))
+                        (_('Unable to get channel list for %s.') % vg.tuner_chanlist))
                 return 0
             if not freq:
                 if vg.group_type != 'dvb':
                     print String(_('ERROR')+': ' + \
-                                 (_('Unable to get channel list for %s.') % \
-                                  vg.tuner_chanlist))
+                        (_('Unable to get channel list for %s.') % vg.tuner_chanlist))
                 return 0
-            if DEBUG:
-                print String('USING STANDARD FREQUENCY: chan="%s", freq="%s"' % \
-                      (chan, freq))
+            _debug_('USING STANDARD FREQUENCY: chan="%s", freq="%s"' % (chan, freq))
 
         if app:
             if app_cmd:
