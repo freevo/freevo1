@@ -237,13 +237,13 @@ class Record_Thread(threading.Thread):
                 if DEBUG: v.print_settings()
 
                 self.app = RecordApp(self.command)
+                if DEBUG: print 'app child pid: %s' % self.app.child.pid
                 
                 while self.mode == 'record' and self.app.isAlive():
                     self.autokill -= 0.5
                     time.sleep(0.5)
                     if self.autokill <= 0:
-                        if DEBUG:
-                            print 'autokill timeout, stopping recording'
+                        if DEBUG: print 'autokill timeout, stopping recording'
                         self.mode = 'stop'
                         
                 if self.app.isAlive():
