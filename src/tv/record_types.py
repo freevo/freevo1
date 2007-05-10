@@ -51,10 +51,9 @@ class ScheduledRecordings:
             # key = rec_interface.getKey(prog)
             pass
 
-        _debug_('program key is \"%s\""' % String(key), 1)
         if not self.programList.has_key(key):
-            _debug_('adding program %s"' % prog, 1)
             self.programList[key] = prog
+            _debug_('added \"%s\" %s"' % (String(key), prog), 1)
         else:
             _debug_('We already know about this recording \"%s\"' % (key), 0)
         _debug_('"%s" items' % len(self.programList), 2)
@@ -67,7 +66,7 @@ class ScheduledRecordings:
 
         if self.programList.has_key(key):
             del self.programList[key]
-            _debug_('removed "%s"' % prog, 1)
+            _debug_('removed \"%s\" %s"' % (String(key), prog), 1)
         else:
             _debug_('We do not know about this recording \"%s\"' % (prog), 0)
 
