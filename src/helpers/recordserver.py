@@ -112,10 +112,11 @@ class RecordServer(xmlrpc.XMLRPC):
         self.tv_lock_file = None
         self.vg = None
         self.previouslyRecordedShows = None
+        self.delay_recording = None
 
 
     def isRecording(self):
-        _debug_('in isRecording', 3)
+        _debug_('in isRecording', 4)
         return glob.glob(config.FREEVO_CACHEDIR + '/record.*') and TRUE or FALSE
 
 
@@ -130,7 +131,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def findOverlaps(self, scheduledRecordings):
-        _debug_('in findOverlaps', 3)
+        _debug_('in findOverlaps', 4)
         progs = scheduledRecordings.getProgramList()
         proglist = list(progs)
         proglist.sort(self.progsTimeCompare)
@@ -142,11 +143,11 @@ class RecordServer(xmlrpc.XMLRPC):
             if thisprog.stop > nextprog.start:
                 thisprog.overlap = 1
                 nextprog.overlap = 1
-                _debug_('Overlap:\n%s\n%s' % (thisprog, nextprog), 3)
+                _debug_('Overlap:\n%s\n%s' % (thisprog, nextprog), 0)
 
 
     def findNextProgram(self):
-        _debug_('in findNextProgram', 3)
+        _debug_('in findNextProgram', 4)
 
         next_program = None
         progs = self.getScheduledRecordings().getProgramList()
@@ -162,13 +163,12 @@ class RecordServer(xmlrpc.XMLRPC):
                 recording = prog.isRecording
             except:
                 recording = FALSE
-            _debug_('%s: recording=%s' % (prog.title, recording), 2)
+            endtime = time.strftime(config.TV_TIMEFORMAT, time.localtime(prog.stop+config.TV_RECORD_PADDING_POST))
+            _debug_('%s is recording %s stopping at %s' % (prog.title, recording and 'yes' or 'no', endtime), 3)
 
-            endtime = time.localtime(prog.stop+config.TV_RECORD_PADDING_POST)
             if now > prog.stop + config.TV_RECORD_PADDING_POST:
-                _debug_('%s: prog.stop=%s, now=%s' % (prog.title, endtime, timenow), 2)
+                _debug_('%s: finished %s > %s' % (prog.title, timenow, endtime), 1)
                 continue
-            _debug_('%s: endtime=%s' % (prog.title, endtime), 2)
 
             if not recording:
                 next_program = prog
@@ -179,7 +179,7 @@ class RecordServer(xmlrpc.XMLRPC):
             _debug_('No program scheduled to record', 3)
             return None
 
-        _debug_('%s' % (next_program), 3)
+        _debug_('next is %s' % (next_program), 2)
         return next_program
 
 
@@ -190,7 +190,7 @@ class RecordServer(xmlrpc.XMLRPC):
             real player running test, check /dev/videoX.
             this could go into the upsoon client
         '''
-        _debug_('in isPlayerRunning', 3)
+        _debug_('in isPlayerRunning', 4)
         return (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
 
 
@@ -200,14 +200,15 @@ class RecordServer(xmlrpc.XMLRPC):
         scheduledRecordings = None
 
         if os.path.isfile(config.TV_RECORD_SCHEDULE):
-            _debug_('GET: reading cached file (%s)' % config.TV_RECORD_SCHEDULE, 5)
+            _debug_('reading cached file (%s)' % config.TV_RECORD_SCHEDULE, 4)
             if hasattr(self, 'scheduledRecordings_cache'):
                 mod_time, scheduledRecordings = self.scheduledRecordings_cache
                 try:
                     if os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME] == mod_time:
-                        _debug_('Return cached data', 5)
+                        _debug_('Return cached data', 4)
                         return scheduledRecordings
-                except OSError:
+                except OSError, e:
+                    _debug_('exception=%r' % e, 0)
                     pass
 
             f = open(config.TV_RECORD_SCHEDULE, 'r')
@@ -217,17 +218,17 @@ class RecordServer(xmlrpc.XMLRPC):
             try:
                 file_ver = scheduledRecordings.TYPES_VERSION
             except AttributeError:
-                _debug_('The cache does not have a version and must be recreated.', 1)
+                _debug_('The cache does not have a version and must be recreated.', 0)
 
             if file_ver != TYPES_VERSION:
                 _debug_(('ScheduledRecordings version number %s is stale (new is %s), must ' +
                         'be reloaded') % (file_ver, TYPES_VERSION), 1)
                 scheduledRecordings = None
             else:
-                _debug_('Got ScheduledRecordings (version %s).' % file_ver, 5)
+                _debug_('Got ScheduledRecordings (version %s).' % file_ver, 0)
 
         if not scheduledRecordings:
-            _debug_('GET: making a new ScheduledRecordings', 2)
+            _debug_('GET: making a new ScheduledRecordings', 0)
             scheduledRecordings = ScheduledRecordings()
             self.saveScheduledRecordings(scheduledRecordings)
 
@@ -242,18 +243,16 @@ class RecordServer(xmlrpc.XMLRPC):
         return scheduledRecordings
 
 
-    #
-    # function to save the schedule to disk
-    #
     def saveScheduledRecordings(self, scheduledRecordings=None):
+        ''' function to save the schedule to disk '''
 
         if not scheduledRecordings:
-            _debug_('SAVE: making a new ScheduledRecordings', 2)
+            _debug_('making a new ScheduledRecordings', 0)
             scheduledRecordings = ScheduledRecordings()
 
         self.findOverlaps(scheduledRecordings)
-        _debug_('SAVE: saving cached file (%s)' % config.TV_RECORD_SCHEDULE, 2)
-        _debug_("SAVE: ScheduledRecordings has %s items." % len(scheduledRecordings.programList), 2)
+        _debug_('saving cached file (%s) with %s items' % \
+            (config.TV_RECORD_SCHEDULE, len(scheduledRecordings.programList)), 2)
         try:
             f = open(config.TV_RECORD_SCHEDULE, 'w')
         except IOError:
@@ -271,10 +270,8 @@ class RecordServer(xmlrpc.XMLRPC):
 
         return TRUE
 
-    #
-    # Load the saved set of recorded shows
-    #
     def loadPreviouslyRecordedShows(self):
+        ''' Load the saved set of recorded shows '''
         if self.previouslyRecordedShows:
             return
 
@@ -285,26 +282,22 @@ class RecordServer(xmlrpc.XMLRPC):
             self.previouslyRecordedShows = {}
             pass
 
-    #
-    # Save the set of recorded shows
-    #
     def savePreviouslyRecordedShows(self):
+        ''' Save the set of recorded shows '''
         if not self.previouslyRecordedShows:
             return
 
         cacheFile=config.FREEVO_CACHEDIR+"/previouslyRecorded.pickle"
-        pickle.dump(self.previouslyRecordedShows, open(cacheFile,"w"))
+        pickle.dump(self.previouslyRecordedShows, open(cacheFile, "w"))
 
-    #
-    # Return true if this is a new episode of 'prog'
-    #
     def newEpisode(self, prog=None):
+        ''' Return true if this is a new episode of 'prog' '''
         todayStr = datetime.date.today().strftime('%Y%m%d')
         progStr = str(prog.date)
-        _debug_('Program Date: "%s"' % progStr, 5)
-        _debug_('Todays Date : "%s"' % todayStr, 5)
+        _debug_('Program Date: "%s"' % progStr, 0)
+        _debug_('Todays Date : "%s"' % todayStr, 0)
         if (len(progStr)==8):
-            _debug_('Good date format', 5)
+            _debug_('Good date format', 0)
             #Year
             todaysYear=(todayStr[0:4])
             progYear=(progStr[0:4])
@@ -321,7 +314,7 @@ class RecordServer(xmlrpc.XMLRPC):
                 #program in the future
                 return TRUE
             else:
-                _debug_('Same year', 5)
+                _debug_('Same year', 0)
                 #program in the same year
                 if todaysMonth > progMonth:
                     #program in a previous month
@@ -330,24 +323,22 @@ class RecordServer(xmlrpc.XMLRPC):
                     #program in the future
                     return TRUE
                 else:
-                    _debug_('Same month', 5)
+                    _debug_('Same month', 0)
                     #program in the same month
                     if todaysDay > progDay:
                         #program was previous aired this month
                         return FALSE
                     else:
-                        _debug_('Same day or in the upcoming month', 5)
+                        _debug_('Same day or in the upcoming month', 0)
                         #program is today or in the upcoming days
                         return TRUE
         else:
-            _debug_('No good date format, assuming new Episode to be on the safe side', 3)
+            _debug_('No good date format, assuming new Episode to be on the safe side', 0)
             return TRUE
 
-    #
-    # Shrink a string by removing all spaces and making it
-    # lower case and then returning the MD5 digest of it.
-    #
     def shrink(self, text):
+        ''' Shrink a string by removing all spaces and making it
+        lower case and then returning the MD5 digest of it. '''
         if text:
             text = md5.new(text.lower().replace(' ', '')).hexdigest()
         else:
@@ -362,7 +353,7 @@ class RecordServer(xmlrpc.XMLRPC):
         shrunkSub   = self.shrink(prog.sub_title)
         shrunkDesc  = self.shrink(prog.desc);
         return ('%s-%s-%s' % (shrunkTitle, shrunkSub, shrunkDesc), \
-                '%s-%s-'   % (shrunkTitle, shrunkSub),              \
+                '%s-%s-'   % (shrunkTitle, shrunkSub),             \
                 '%s--%s'   % (shrunkTitle, shrunkDesc))
 
 
@@ -379,7 +370,7 @@ class RecordServer(xmlrpc.XMLRPC):
         self.loadPreviouslyRecordedShows()
         previous = self.getPreviousRecording(prog)
         if previous:
-            _debug_('Found duplicate, removing', 5)
+            _debug_('Found duplicate, removing', 0)
             del self.previouslyRecordedShows[self.getPreviousRecordingKey(previous)]
             self.savePreviouslyRecordedShows()
 
@@ -438,7 +429,7 @@ class RecordServer(xmlrpc.XMLRPC):
                 descMatches=None
                 (descResult, descMatches)=self.findMatches(prog.desc)
                 if descResult:
-                    _debug_('Exact Matches %s' % (len(descMatches)), 5)
+                    _debug_('Exact Matches %s' % (len(descMatches)), 0)
                     return descMatches
 
             if prog.sub_title:
@@ -446,12 +437,12 @@ class RecordServer(xmlrpc.XMLRPC):
                 sub_titleMatches=None
                 (sub_titleResult, sub_titleMatches)=self.findMatches(prog.sub_title)
                 if sub_titleResult:
-                    _debug_('Exact Matches %s' % (len(sub_titleMatches)), 5)
+                    _debug_('Exact Matches %s' % (len(sub_titleMatches)), 0)
                     return sub_titleMatches
             return None
 
         def getConflicts(self, prog, myScheduledRecordings):
-            _debug_('Before mySched recordings; ignore all addProgram lines', 5)
+            _debug_('Before mySched recordings; ignore all addProgram lines', 0)
             self.addRecordingToSchedule(prog, myScheduledRecordings)
             progs = myScheduledRecordings.getProgramList()
             proglist = list(progs)
@@ -468,42 +459,42 @@ class RecordServer(xmlrpc.XMLRPC):
                     elif nextprog==prog:
                         conflicts.append(thisprog)
             self.removeRecordingFromSchedule(prog, myScheduledRecordings)
-            _debug_('After mySched recordings; stop ignoring all addProgram lines', 5)
-            return (conflictRating,conflicts)
+            _debug_('After mySched recordings; stop ignoring all addProgram lines', 0)
+            return (conflictRating, conflicts)
 
-        def getRatedConflicts(self,prog,myScheduledRecordings):
+        def getRatedConflicts(self, prog, myScheduledRecordings):
             ratedConflicts=[]
-            occurances = exactMatch(self,prog)
+            occurances = exactMatch(self, prog)
             if not occurances:
                 #program no longer exists
-                return (FALSE,None,None)
+                return (FALSE, None, None)
             #Search through all occurances of looking for a non-conflicted occurance
             for oneOccurance in occurances:
-                (rating, conflictedProgs)=getConflicts(self,oneOccurance,myScheduledRecordings)
+                (rating, conflictedProgs)=getConflicts(self, oneOccurance, myScheduledRecordings)
                 if rating==0:
-                    _debug_('No Conflict', 5)
+                    _debug_('No Conflict', 0)
                     programsToChange=[]
-                    programsToChange.append(('add',oneOccurance))
-                    return(TRUE,ratedConflicts,programsToChange)
-                _debug_('Conflict Found', 5)
-                ratedConflicts.append((rating,conflictedProgs,oneOccurance))
-            return (FALSE,ratedConflicts,None)
+                    programsToChange.append(('add', oneOccurance))
+                    return(TRUE, ratedConflicts, programsToChange)
+                _debug_('Conflict Found', 0)
+                ratedConflicts.append((rating, conflictedProgs, oneOccurance))
+            return (FALSE, ratedConflicts, None)
 
         if config.CONFLICT_RESOLUTION:
-            _debug_('Conflict resolution enabled', 5)
+            _debug_('Conflict resolution enabled', 0)
             ratedConflicts=[]
             myScheduledRecordings = copy.deepcopy(self.getScheduledRecordings())
 
             #Try to record it at its listed time
-            (rating, conflictedProg)=getConflicts(self,prog,myScheduledRecordings)
+            (rating, conflictedProg)=getConflicts(self, prog, myScheduledRecordings)
             if rating==0:
                 #No need to do anything fancy; this will work at its defaul time
                 progsToChange=[]
-                progsToChange.append(('add',prog))
+                progsToChange.append(('add', prog))
                 return (TRUE, 'No conflicts, using default time', progsToChange)
 
             #Default time didn't work, let's try all times known
-            (result, ratedConflicts, progsToChange)=getRatedConflicts(self,prog,myScheduledRecordings)
+            (result, ratedConflicts, progsToChange)=getRatedConflicts(self, prog, myScheduledRecordings)
             if result:
                 #No conflicts
                 return (TRUE, 'No conflicts if new program is added', progsToChange)
@@ -511,38 +502,38 @@ class RecordServer(xmlrpc.XMLRPC):
                 #Program no longer exists, should never hit this unless schedule changes
                 return (FALSE, 'Cannot schedule, new prog no longer exists', None)
 
-            _debug_('Going into conflict resolution via scheduled program re-scheduling', 5)
+            _debug_('Going into conflict resolution via scheduled program re-scheduling', 0)
             # No viable time to schedule the program without a conflict
             # Try and reschedule the already scheduled program
             atleastOneSingleConflict=FALSE
-            for (scheduledConflictRating,scheduledConflictPrograms,conflictProgram) in ratedConflicts:
+            for (scheduledConflictRating, scheduledConflictPrograms, conflictProgram) in ratedConflicts:
                 #Only handle one conflict at the moment
                 if scheduledConflictRating==1:
                     atleastOneSingleConflict=TRUE
                     scheduledConflictProgram=scheduledConflictPrograms[0]
                     #remove already scheduled program and try to reschedule it with the new program
-                    self.removeRecordingFromSchedule(scheduledConflictProgram,myScheduledRecordings)
-                    self.addRecordingToSchedule(conflictProgram,myScheduledRecordings)
+                    self.removeRecordingFromSchedule(scheduledConflictProgram, myScheduledRecordings)
+                    self.addRecordingToSchedule(conflictProgram, myScheduledRecordings)
                     (result, ratedConflicts, progsToChange)=getRatedConflicts(self, \
                         scheduledConflictProgram, myScheduledRecordings)
                     if result:
                         #No conflicts
-                        progsToChange.append(('del',scheduledConflictProgram))
-                        progsToChange.append(('add',conflictProgram))
+                        progsToChange.append(('del', scheduledConflictProgram))
+                        progsToChange.append(('add', conflictProgram))
                         return (TRUE, 'No conflicts if scheduled program is rescheduled', progsToChange)
                     if not ratedConflicts:
                         #Program no longer exists, should never hit this unless schedule changes
-                        progsToChange.append(('del',scheduledConflictProgram))
-                        progsToChange.append(('add',conflictProgram))
+                        progsToChange.append(('del', scheduledConflictProgram))
+                        progsToChange.append(('add', conflictProgram))
                         return (TRUE, 'Cannot find conflicted program, adding new', progsToChange)
                     #Return this to original state
-                    self.addRecordingToSchedule(scheduledConflictProgram,myScheduledRecordings)
-                    self.removeRecordingFromSchedule(conflictProgram,myScheduledRecordings)
+                    self.addRecordingToSchedule(scheduledConflictProgram, myScheduledRecordings)
+                    self.removeRecordingFromSchedule(conflictProgram, myScheduledRecordings)
             if not atleastOneSingleConflict:
                 #Dirty way to (not) handle multiple conflicts
                 return (FALSE, 'Cannot handle multiple conflicts: %s not scheduled' % (prog.title), None)
 
-            _debug_('Going into conflict resolution via priority', 5)
+            _debug_('Going into conflict resolution via priority', 0)
             # No viable option to reschedule the original program
             # Time to resolve the conflict via priority
             tempRating=1000
@@ -605,7 +596,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def checkOnlyNewDetection(self, prog=None):
         if config.ONLY_NEW_DETECTION:
-            _debug_('Only new episode detection enabled', 5)
+            _debug_('Only new episode detection enabled', 0)
             if not self.doesFavoriteRecordOnlyNewEpisodes(prog):
                 return (TRUE, 'Favorite records all episodes, record')
             if self.newEpisode(prog):
@@ -618,7 +609,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def checkDuplicateDetection(self, prog=None):
         if config.DUPLICATE_DETECTION:
-            _debug_('Duplicate detection enabled', 5)
+            _debug_('Duplicate detection enabled', 0)
             if self.doesFavoriteAllowDuplicates(prog):
                 return (TRUE, 'Favorite allows duplicates, record')
             if not self.duplicate(prog):
@@ -632,8 +623,8 @@ class RecordServer(xmlrpc.XMLRPC):
     def setTunerid(self, prog):
         for chan in guide.chan_list:
             if prog.channel_id == chan.id:
-                _debug_('scheduleRecording: "%s"' % (prog), 3)
                 prog.tunerid = chan.tunerid
+                _debug_('%s tuner: %s' % (prog, prog.tunerid), 1)
         return prog
 
 
@@ -652,19 +643,19 @@ class RecordServer(xmlrpc.XMLRPC):
         (isFav, favorite) = self.isProgAFavorite(prog)
         if isFav:
             (onlyNewBool, onlyNewReason) = self.checkOnlyNewDetection(prog)
-            _debug_('Only new episode detection result: %s reason %s' % (onlyNewBool,onlyNewReason), 3)
+            _debug_('Only new episode detection: %s reason %s' % (onlyNewBool, onlyNewReason), 2)
             if not onlyNewBool:
                 #failed only new episode check (old episode, etc)
                 return (FALSE, onlyNewReason)
 
             (duplicateBool, duplicateReason) = self.checkDuplicateDetection(prog)
-            _debug_('Duplicate detection result: %s reason %s' % (duplicateBool,duplicateReason), 3)
+            _debug_('Duplicate detection: %s reason %s' % (duplicateBool, duplicateReason), 2)
             if not duplicateBool:
                 #failed duplicate check (duplicate, etc)
                 return (FALSE, duplicateReason)
 
         (ableToResolveBool, resolutionReason, progsToChange) = self.conflictResolution(prog)
-        _debug_('Conflict resolution result: %s reason %s' % (ableToResolveBool,resolutionReason), 3)
+        _debug_('Conflict resolution: %s reason %s' % (ableToResolveBool, resolutionReason), 2)
         if not ableToResolveBool:
             #No viable solution was found
             return (FALSE, resolutionReason)
@@ -673,14 +664,14 @@ class RecordServer(xmlrpc.XMLRPC):
             for (cmd, prog) in progsToChange:
                 prog=self.setTunerid(prog)
                 if cmd=='add':
-                    _debug_('SCHEDULER: adding %s' % (prog.title), 3)
+                    _debug_('adding %s to schedule' % (prog.title), 2)
                     self.addRecordingToSchedule(prog)
                 elif cmd=='del':
-                    _debug_('SCHEDULER: removing %s' % (prog.title), 3)
+                    _debug_('removed %s from schedule' % (prog.title), 2)
                     self.removeRecordingFromSchedule(prog)
         else:
             prog=self.setTunerid(prog)
-            _debug_('SCHEDULER: adding %s' % (prog.title), 3)
+            _debug_('added %s to schedule' % (prog.title), 0)
             self.addRecordingToSchedule(prog)
 
         # check, maybe we need to start right now
@@ -706,7 +697,6 @@ class RecordServer(xmlrpc.XMLRPC):
         try:
             recording = prog.isRecording
         except Exception, e:
-            print 'prog.isRecording:', e
             recording = FALSE
 
         self.removeRecordingFromSchedule(prog)
@@ -715,7 +705,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         # if now >= prog.start and now <= prog.stop and recording:
         if recording:
-            print 'stopping current recording %s' % (prog)
+            _debug_('stopping current recording %s' % (prog), 0)
             rec_plugin = plugin.getbyname('RECORD')
             if rec_plugin:
                 rec_plugin.Stop()
@@ -741,7 +731,7 @@ class RecordServer(xmlrpc.XMLRPC):
     def findProg(self, chan=None, start=None):
         global guide
 
-        _debug_('findProg: %s, %s' % (chan, start), 3)
+        _debug_('findProg: %s, %s' % (chan, start), 0)
 
         if not chan or not start:
             return (FALSE, 'no chan or no start')
@@ -750,10 +740,10 @@ class RecordServer(xmlrpc.XMLRPC):
 
         for ch in guide.chan_list:
             if chan == ch.id:
-                _debug_('CHANNEL MATCH: %s' % ch.id, 5)
+                _debug_('CHANNEL MATCH: %s' % ch.id, 0)
                 for prog in ch.programs:
                     if start == '%s' % prog.start:
-                        _debug_('PROGRAM MATCH 1: %s' % prog, 5)
+                        _debug_('PROGRAM MATCH 1: %s' % prog, 0)
                         return (TRUE, prog.utf2str())
 
         return (FALSE, 'prog not found')
@@ -762,13 +752,13 @@ class RecordServer(xmlrpc.XMLRPC):
     def findMatches(self, find=None, movies_only=None):
         global guide
 
-        _debug_('findMatches: %s' % find, 3)
+        _debug_('findMatches: %s' % find, 0)
 
         matches = []
         max_results = 500
 
         if not find and not movies_only:
-            _debug_('nothing to find', 5)
+            _debug_('nothing to find', 0)
             return (FALSE, 'no search string')
 
         self.updateGuide()
@@ -788,16 +778,16 @@ class RecordServer(xmlrpc.XMLRPC):
                         # rating.  Suggestions are welcome.
                         if 'MPAA' in prog.utf2str().getattr('ratings').keys():
                             matches.append(prog.utf2str())
-                            _debug_('PROGRAM MATCH 2: %s' % prog, 5)
+                            _debug_('PROGRAM MATCH 2: %s' % prog, 0)
                     else:
                         # We should never get here if not find and not
                         # movies_only.
                         matches.append(prog.utf2str())
-                        _debug_('PROGRAM MATCH 3: %s' % prog, 5)
+                        _debug_('PROGRAM MATCH 3: %s' % prog, 0)
                 if len(matches) >= max_results:
                     break
 
-        _debug_('Found %d matches.' % len(matches), 3)
+        _debug_('Found %d matches.' % len(matches), 0)
 
         if matches:
             return (TRUE, matches)
@@ -810,10 +800,10 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def checkToRecord(self):
+        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 1)
         rec_cmd = None
         rec_prog = None
         cleaned = None
-        delay_recording = FALSE
 
         sr = self.getScheduledRecordings()
         progs = sr.getProgramList()
@@ -830,7 +820,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         now = time.time()
         for prog in progs.values():
-            _debug_('checkToRecord: progloop=%s' % prog, 5)
+            _debug_('progloop=%s' % prog, 4)
 
             try:
                 recording = prog.isRecording
@@ -844,66 +834,59 @@ class RecordServer(xmlrpc.XMLRPC):
                 # then end the loop, and figure out which has priority,
                 # remember to take into account the full length of the shows
                 # and how much they overlap, or chop one short
-                duration = int((prog.stop + config.TV_RECORD_PADDING_POST) - now)
+                duration = int(prog.stop) - int(now)
                 if duration < 10:
+                    _debug_('duration %s too small' % duration, 0)
                     return
 
                 if currently_recording:
                     # Hey, something is already recording!
+                    overlap_duration = currently_recording.stop - prog.start
+                    _debug_('overlap_duration=%r' % overlap_duration, 0)
                     if prog.start - 10 <= now:
                         # our new recording should start no later than now!
                         # check if the new prog is a favorite and the current running is
                         # not. If so, the user manually added something, we guess it
                         # has a higher priority.
-
-
                         if self.isProgAFavorite(prog)[0] \
                             and not self.isProgAFavorite(currently_recording)[0] \
                             and now < (prog.stop + config.TV_RECORD_PADDING_POST):
-                            _debug_('Ignoring %s' % prog, 3)
+                            _debug_('Ignoring %s' % prog, 0)
                             continue
                         sr.removeProgram(currently_recording,
                                          tv_util.getKey(currently_recording))
                         plugin.getbyname('RECORD').Stop()
-                        time.sleep(5)
-                        _debug_('CALLED RECORD STOP 1: %s' % currently_recording, 3)
+                        _debug_('CALLED RECORD STOP 1: %s' % currently_recording, 0)
                     else:
                         # at this moment we must be in the pre-record padding
                         if currently_recording.stop - 10 <= now:
-                            # The only reason we are still recording is because of
-                            # the post-record padding.
-                            # Therefore we have overlapping paddings but not
-                            # real stop / start times.
-                            overlap = (currently_recording.stop + \
-                                       config.TV_RECORD_PADDING_POST) - \
+                            # The only reason we are still recording is because of the post-record padding.
+                            # Therefore we have overlapping paddings but not real stop / start times.
+                            overlap = (currently_recording.stop + config.TV_RECORD_PADDING_POST) - \
                                       (prog.start - config.TV_RECORD_PADDING_PRE)
                             if overlap <= ((config.TV_RECORD_PADDING_PRE +
                                             config.TV_RECORD_PADDING_POST)/4):
                                 sr.removeProgram(currently_recording,
                                                  tv_util.getKey(currently_recording))
                                 plugin.getbyname('RECORD').Stop()
-                                time.sleep(5)
-                                _debug_('CALLED RECORD STOP 2: %s' % currently_recording, 3)
-                            else:
-                                delay_recording = TRUE
-                        else:
-                            delay_recording = TRUE
-
-
-                if delay_recording:
-                    _debug_('delaying: %s' % prog, 3)
+                                _debug_('CALLED RECORD STOP 2: %s' % currently_recording, 0)
+                    self.delay_recording = prog
                 else:
-                    _debug_('going to record: %s' % prog, 3)
+                    self.delay_recording = None
+
+                if self.delay_recording:
+                    _debug_('delaying: %s' % prog, 0)
+                else:
+                    _debug_('going to record: %s' % prog, 0)
                     prog.isRecording = TRUE
-                    prog.rec_duration = duration
+                    prog.rec_duration = duration + config.TV_RECORD_PADDING_POST - 10
                     prog.filename = tv_util.getProgFilename(prog)
                     rec_prog = prog
-
 
         for prog in progs.values():
             # If the program is over remove the entry.
             if now > (prog.stop + config.TV_RECORD_PADDING_POST):
-                _debug_('found a program to clean: %s' % prog, 3)
+                _debug_('found a program to clean: %s' % prog, 0)
                 cleaned = TRUE
                 del progs[tv_util.getKey(prog)]
 
@@ -912,7 +895,7 @@ class RecordServer(xmlrpc.XMLRPC):
             self.saveScheduledRecordings(sr)
 
         if rec_prog:
-            _debug_('start recording: %s' % rec_prog, 1)
+            _debug_('start recording: %s' % rec_prog, 0)
             self.record_app = plugin.getbyname('RECORD')
 
             if not self.record_app:
@@ -934,15 +917,15 @@ class RecordServer(xmlrpc.XMLRPC):
                 if freespace < space_threshold:
                     files = os.listdir(path)
                     files = util.find_matches(files, config.VIDEO_SUFFIX)
-                    files = [(f, os.stat(os.path.join(path,f)).st_mtime) for f in files]
-                    files.sort(lambda x,y: cmp(x[1], y[1]))
+                    files = [(f, os.stat(os.path.join(path, f)).st_mtime) for f in files]
+                    files.sort(lambda x, y: cmp(x[1], y[1]))
                     i = 0
                     while freespace < space_threshold and i < len(files):
                         oldestrec = files[i][0]
                         oldestfxd = oldestrec[:oldestrec.rfind('.')] + '.fxd'
-                        print 'Low on disk space - delete oldest recording: %s' % oldestrec
-                        os.remove(os.path.join(path,oldestrec))
-                        os.remove(os.path.join(path,oldestfxd))
+                        _debug_('Low on disk space - delete oldest recording: %s' % oldestrec, 0)
+                        os.remove(os.path.join(path, oldestrec))
+                        os.remove(os.path.join(path, oldestfxd))
                         freespace = util.freespace(path)
                         i = i + 1
 
@@ -1024,34 +1007,34 @@ class RecordServer(xmlrpc.XMLRPC):
         oldprio = int(me.priority)
         newprio = oldprio + mod
 
-        _debug_('ap: mod=%s' % mod, 3)
+        _debug_('ap: mod=%s' % mod, 0)
 
         sr = self.getScheduledRecordings()
         favs = sr.getFavorites().values()
 
-        _debug_('adjusting prio of '+favname, 3)
+        _debug_('adjusting prio of '+favname, 0)
         for fav in favs:
             fav.priority = int(fav.priority)
 
             if fav.name == me.name:
-                _debug_('MATCH', 5)
+                _debug_('MATCH', 0)
                 fav.priority = newprio
-                _debug_('moved prio of %s: %s => %s' % (fav.name, oldprio, newprio), 3)
+                _debug_('moved prio of %s: %s => %s' % (fav.name, oldprio, newprio), 0)
                 continue
             if mod < 0:
                 if fav.priority < newprio or fav.priority > oldprio:
-                    _debug_('fp: %s, old: %s, new: %s' % (fav.priority, oldprio, newprio), 3)
-                    _debug_('skipping: %s' % fav.name, 3)
+                    _debug_('fp: %s, old: %s, new: %s' % (fav.priority, oldprio, newprio), 0)
+                    _debug_('skipping: %s' % fav.name, 0)
                     continue
                 fav.priority = fav.priority + 1
-                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority-1, fav.priority), 3)
+                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority-1, fav.priority), 0)
 
             if mod > 0:
                 if fav.priority > newprio or fav.priority < oldprio:
-                    _debug_('skipping: %s' % fav.name, 3)
+                    _debug_('skipping: %s' % fav.name, 0)
                     continue
                 fav.priority = fav.priority - 1
-                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority+1, fav.priority), 3)
+                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority+1, fav.priority), 0)
 
         sr.setFavoritesList(favs)
         self.saveScheduledRecordings(sr)
@@ -1064,7 +1047,7 @@ class RecordServer(xmlrpc.XMLRPC):
             (status, favs) = self.getFavorites()
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
-               return (TRUE, fav)
+                return (TRUE, fav)
         # if we get this far prog is not a favorite
         return (FALSE, 'not a favorite')
 
@@ -1091,21 +1074,21 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def doesFavoriteRecordOnlyNewEpisodes(self, prog, favs=None):
         if not favs:
-           (status, favs) = self.getFavorites()
+            (status, favs) = self.getFavorites()
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
-               _debug_('NEW: %s'%fav.onlyNew, 5)
-               if fav.onlyNew == '1':
-                  return TRUE
+                _debug_('NEW: %s'%fav.onlyNew, 0)
+                if fav.onlyNew == '1':
+                    return TRUE
 
     def doesFavoriteAllowDuplicates(self, prog, favs=None):
         if not favs:
-           (status, favs) = self.getFavorites()
+            (status, favs) = self.getFavorites()
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
-               _debug_('DUP: %s'%fav.allowDuplicates, 5)
-               if fav.allowDuplicates == '1':
-                  return TRUE
+                _debug_('DUP: %s'%fav.allowDuplicates, 0)
+                if fav.allowDuplicates == '1':
+                    return TRUE
 
     def removeFavoriteFromSchedule(self, fav):
         # TODO: make sure the program we remove is not
@@ -1478,15 +1461,14 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def startMinuteCheck(self):
         next_minute = (int(time.time()/60) * 60 + 60) - int(time.time())
-        _debug_('top of the minute in %s seconds' % next_minute, 1)
+        _debug_('top of the minute in %s seconds' % next_minute, 0)
         reactor.callLater(next_minute, self.minuteCheck)
 
     def minuteCheck(self):
         next_minute = (int(time.time()/60) * 60 + 60) - int(time.time())
         if next_minute != 60:
             # Compensate for timer drift
-            if DEBUG:
-                log.debug('top of the minute in %s seconds' % next_minute)
+            _debug_('top of the minute in %s seconds' % next_minute, 0)
             reactor.callLater(next_minute, self.minuteCheck)
         else:
             reactor.callLater(60, self.minuteCheck)
@@ -1506,12 +1488,12 @@ class RecordServer(xmlrpc.XMLRPC):
 
         if event:
             if event == OS_EVENT_POPEN2:
-                print 'popen %s' % event.arg[1]
+                _debug_('OS_EVENT_POPEN2 pid: %s' % event.arg[1], 0)
                 event.arg[0].child = util.popen3.Popen3(event.arg[1])
 
             elif event == OS_EVENT_WAITPID:
                 pid = event.arg[0]
-                print 'waiting on pid %s' % pid
+                _debug_('OS_EVENT_WAITPID pid: %s' % pid, 0)
 
                 for i in range(20):
                     try:
@@ -1527,7 +1509,7 @@ class RecordServer(xmlrpc.XMLRPC):
                 pid = event.arg[0]
                 sig = event.arg[1]
 
-                print 'killing pid %s with sig %s' % (pid, sig)
+                _debug_('OS_EVENT_KILL pid: %s sig: %s' % (pid, sig), 0)
                 try:
                     os.kill(pid, sig)
                 except OSError:
@@ -1543,35 +1525,35 @@ class RecordServer(xmlrpc.XMLRPC):
                         break
                     time.sleep(0.1)
 
-                else:
-                    print 'force killing with signal 9'
-                    try:
-                        os.kill(pid, 9)
-                    except OSError:
-                        pass
-                    for i in range(20):
-                        try:
-                            wpid = os.waitpid(pid, os.WNOHANG)[0]
-                        except OSError:
-                            # forget it
-                            continue
-                        if wpid == pid:
-                            break
-                        time.sleep(0.1)
-                print 'recorderver: After wait()'
+                # to what does this else apply to
+                #else:
+                #    _debug_('OS_EVENT_KILL pid: %s force sig: 9' % (pid), 0)
+                #    try:
+                #        os.kill(pid, 9)
+                #    except OSError:
+                #        pass
+                #    for i in range(20):
+                #        try:
+                #            wpid = os.waitpid(pid, os.WNOHANG)[0]
+                #        except OSError:
+                #            # forget it
+                #            continue
+                #        if wpid == pid:
+                #            break
+                #        time.sleep(0.1)
+                _debug_('recorderver: After wait()', 0)
 
             elif event == RECORD_START:
-                print 'received event RECORD_START'
                 prog = event.arg
+                _debug_('RECORD_START %s' % (prog), 0)
                 open(self.tv_lock_file, 'w').close()
                 self.create_fxd(prog)
                 if config.VCR_PRE_REC:
                     util.popen3.Popen3(config.VCR_PRE_REC)
 
             elif event == RECORD_STOP:
-                print 'received event RECORD_STOP'
-                os.remove(self.tv_lock_file)
                 prog = event.arg
+                _debug_('RECORD_STOP %s' % (prog), 0)
                 try:
                     snapshot(prog.filename)
                 except:
@@ -1585,24 +1567,43 @@ class RecordServer(xmlrpc.XMLRPC):
                 if config.REMOVE_COMMERCIALS:
                     (result, response) = connectionTest('connection test')
                     if result:
-                       (status, idnr) = initCommDetectJob(prog.filename)
-                       (status, output) = listJobs()
-                       _debug_(output, 5)
-                       (status, output) = queueIt(idnr, True)
-                       _debug_(output, 5)
+                        (status, idnr) = initCommDetectJob(prog.filename)
+                        (status, output) = listJobs()
+                        _debug_(output, 0)
+                        (status, output) = queueIt(idnr, True)
+                        _debug_(output, 0)
                     else:
-                       _debug_('commdetect server not running', 1)
+                        _debug_('commdetect server not running', 0)
+                # This is a really nasty hack but if it fixes the problem then great
+                if self.delay_recording:
+                    prog = self.delay_recording
+                    #sr.setProgramList(progs)
+                    #self.saveScheduledRecordings(sr)
+                    prog.isRecording = TRUE
+                    duration = int(prog.stop) - int(time.time())
+                    prog.rec_duration = duration + config.TV_RECORD_PADDING_POST - 10
+                    prog.filename = tv_util.getProgFilename(prog)
+                    rec_prog = prog
+                    _debug_('start delayed recording: %s' % rec_prog, 0)
+                    self.record_app = plugin.getbyname('RECORD')
+                    self.vg = self.fc.getVideoGroup(rec_prog.channel_id, FALSE)
+                    suffix=self.vg.vdev.split('/')[-1]
+                    self.record_app.Record(rec_prog)
+                    self.delay_recording = None
+                else:
+                    os.remove(self.tv_lock_file)
             else:
-                print 'not handling event %s' % str(event)
+                _debug_('%s not handled' % (event), 0)
                 return
         else:
-            print 'no event to get'
+            # Should never happen
+            _debug_('%s unknown' % (event), 0)
 
 
 def main():
     app = Application("RecordServer")
     rs = RecordServer()
-    if (DEBUG == 0):
+    if (DEBUG < 0):
         app.listenTCP(config.RECORDSERVER_PORT, server.Site(rs, logPath='/dev/null'))
     else:
         app.listenTCP(config.RECORDSERVER_PORT, server.Site(rs))
@@ -1618,7 +1619,7 @@ if __name__ == '__main__':
 
     locks = glob.glob(config.FREEVO_CACHEDIR + '/record.*')
     for f in locks:
-        print 'Removed old record lock \"%s\"' % f
+        _debug_('Removed old record lock \"%s\"' % f, 0)
         os.remove(f)
 
     while 1:
@@ -1629,6 +1630,5 @@ if __name__ == '__main__':
         except:
             traceback.print_exc()
             if start + 10 > time.time():
-                print 'server problem, sleeping 1 min'
+                _debug_('server problem, sleeping 1 min', 0)
                 time.sleep(60)
-
