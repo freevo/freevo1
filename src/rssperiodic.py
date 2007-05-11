@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,13 +28,14 @@
 #
 # -----------------------------------------------------------------------
 
-import re,os,glob,urllib,datetime,pickle,time
+import re,os,glob,urllib,datetime,time
+import cPickle, pickle
 import config
 import rssfeed
 
 def convertDate(string):
     if not re.search("\d+\s+\S+\s+\d+",string):
-       return datetime.date.today()
+        return datetime.date.today()
     itemDateList = re.split(" ", re.search("\d+\s+\S+\s+\d+",string).group())
     day=int(itemDateList[0])
     if itemDateList[1] == "Jan":
@@ -68,37 +69,52 @@ def convertDate(string):
 def checkForDup(string):
     cacheFile=config.FREEVO_CACHEDIR+"/rss.pickle"
     try:
-       downloadedUrls=pickle.load(open(cacheFile,"r"))
+        try:
+            downloadedUrls=cPickle.load(open(cacheFile,"r"))
+        except:
+            downloadedUrls=pickle.load(open(cacheFile,"r"))
     except IOError:
-       return False
+        return False
     except EOFError:
-       return False
+        return False
     foundFile=False
     for line in downloadedUrls:
         if string in line:
-           foundFile=True
+            foundFile=True
     return foundFile
 
 def addFileToCache(string):
     cacheFile=config.FREEVO_CACHEDIR+"/rss.pickle"
     downloadedUrls=[]
     try:
-       downloadedUrls = pickle.load(open(cacheFile,"r"))
+        try:
+            downloadedUrls = cPickle.load(open(cacheFile,"r"))
+        except:
+            downloadedUrls = pickle.load(open(cacheFile,"r"))
     except IOError:
-       pass
+        pass
     downloadedUrls.append(string)
-    pickle.dump(downloadedUrls, open(cacheFile,"w"))
+    try:
+        cPickle.dump(downloadedUrls, open(cacheFile,"w"))
+    except:
+        pickle.dump(downloadedUrls, open(cacheFile,"w"))
 
 def addFileToExpiration(string,goodUntil):
     ''' the new file gets added with the expiration date to the expiration file '''
     cacheFile=config.FREEVO_CACHEDIR+"/rss.expiration"
     downloadedFiles=[]
     try:
-       downloadedFiles = pickle.load(open(cacheFile,"r"))
+        try:
+            downloadedFiles = cPickle.load(open(cacheFile,"r"))
+        except:
+            downloadedFiles = pickle.load(open(cacheFile,"r"))
     except IOError:
-       pass
+        pass
     downloadedFiles.append(string + ";" + goodUntil.__str__())
-    pickle.dump(downloadedFiles, open(cacheFile,"w"))
+    try:
+        cPickle.dump(downloadedFiles, open(cacheFile,"w"))
+    except:
+        pickle.dump(downloadedFiles, open(cacheFile,"w"))
 
 def checkForExpiration():
     ''' checking for expired files by reading the rss.expiration file the file
@@ -106,9 +122,12 @@ def checkForExpiration():
     deleted at the end the file gets removed from the rss.expiration file '''
     cacheFile=config.FREEVO_CACHEDIR+"/rss.expiration"
     try:
-       downloadedFiles=pickle.load(open(cacheFile,"r"))
+        try:
+            downloadedFiles=cPickle.load(open(cacheFile,"r"))
+        except:
+            downloadedFiles=pickle.load(open(cacheFile,"r"))
     except IOError:
-       return 
+        return
     deletedItems = []
     for line in downloadedFiles:
         (filename,goodUntil)=re.split(";", line)
@@ -131,10 +150,13 @@ def checkForExpiration():
                 print"removing the file %s failed" % (filename)
     for line in deletedItems:
 #      try:
-       downloadedFiles.remove(line)
+        downloadedFiles.remove(line)
 #      except ValueError:
 #          _debug_("removing the line %s failed" % (line))
-    pickle.dump(downloadedFiles, open(cacheFile,"w"))
+    try:
+        cPickle.dump(downloadedFiles, open(cacheFile,"w"))
+    except:
+        pickle.dump(downloadedFiles, open(cacheFile,"w"))
 
 def createFxd(item,filename):
     if "audio" in item.type:
@@ -147,28 +169,28 @@ def createFxd(item,filename):
         ofile=ofile+"."+line
     ofile=ofile+".fxd"
     try:
-       file = open(ofile, 'w')
-       file.write('<?xml version="1.0" encoding="iso-8859-1"?>\n')
-       file.write('<freevo>\n')
-       file.write('   <movie title="%s">\n' % item.title)
-       file.write('      <video>\n')
-       file.write('         <file id="f1">%s</file>\n' % fullFilename)
-       file.write('      </video>\n')
-       file.write('      <info>\n')
-       file.write('         <plot>%s</plot>\n' % item.description)
-       file.write('      </info>\n')
-       file.write('   </movie>\n')
-       file.write('</freevo>\n')
-       file.close()
+        file = open(ofile, 'w')
+        file.write('<?xml version="1.0" encoding="iso-8859-1"?>\n')
+        file.write('<freevo>\n')
+        file.write('   <movie title="%s">\n' % item.title)
+        file.write('      <video>\n')
+        file.write('         <file id="f1">%s</file>\n' % fullFilename)
+        file.write('      </video>\n')
+        file.write('      <info>\n')
+        file.write('         <plot>%s</plot>\n' % item.description)
+        file.write('      </info>\n')
+        file.write('   </movie>\n')
+        file.write('</freevo>\n')
+        file.close()
     except IOError:
-       print "ERROR: Unable to write FXD file %s" % (ofile)
+        print "ERROR: Unable to write FXD file %s" % (ofile)
 
 def checkForUpdates():
     try:
         file = open(config.RSS_FEEDS,"r")
     except IOError:
-       print "ERROR: Could not open configuration file %s" % (config.RSS_FEEDS)
-       return
+        print "ERROR: Could not open configuration file %s" % (config.RSS_FEEDS)
+        return
 
     for line in file:
         if line == '\n':
@@ -211,4 +233,3 @@ def checkForUpdates():
                             os.popen("rm %s" % (filename))
         except IOError:
             print "ERROR: Unable to download %s. Connection may be down." % (url)
-

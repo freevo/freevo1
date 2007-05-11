@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@ import stat
 import statvfs
 import string
 import copy
-import cPickle, pickle # pickle because sometimes cPickle doesn't work
+import cPickle, pickle
 import fnmatch
 import traceback
 
@@ -52,7 +52,7 @@ else:
 if traceback.extract_stack()[0][0].find('install.py') == -1:
     # Configuration file. Determines where to look for AVI/MP3 files, etc
     import config
-    
+
     # import stuff from util.misc
     import misc
 
@@ -93,9 +93,9 @@ def gzopen(file):
     magic = m.read(2)
     m.close
     if magic == '\037\213':
-         f = gzip.open(file)
+        f = gzip.open(file)
     else:
-         f = open(file)
+        f = open(file)
     return f
 
 
@@ -121,7 +121,7 @@ def freespace(path):
     except OSError, e:
         print '\"%s\": %s' % (path, e)
     return 0
-        
+
 
 def totalspace(path):
     """
@@ -135,7 +135,7 @@ def totalspace(path):
     except OSError, e:
         print '\"%s\": %s' % (path, e)
     return 0
-        
+
 
 def touch(file):
     """
@@ -214,9 +214,9 @@ def match_files(dirname, suffix_list):
         return []
 
     matches = [ fname for fname in files if match_suffix(fname, suffix_list) ]
-        
+
     matches.sort(lambda l, o: cmp(l.upper(), o.upper()))
-    
+
     return matches
 
 
@@ -258,7 +258,7 @@ def match_files_recursively(dir, suffix_list):
     matches = misc.unique([f for f in all_files if match_suffix(f, suffix_list) ])
 
     matches.sort(lambda l, o: cmp(l.upper(), o.upper()))
-    
+
     return matches
 
 
@@ -278,19 +278,19 @@ def get_subdirs_recursively(dir):
 
 def recursefolders(root, recurse=0, pattern='*', return_folders=0):
     """
-    Before anyone asks why I didn't use os.path.walk; it's simple, 
+    Before anyone asks why I didn't use os.path.walk; it's simple,
     os.path.walk is difficult, clunky and doesn't work right in my
-    mind. 
-    
+    mind.
+
     Here's how you use this function:
-    
+
     songs = recursefolders('/media/Music/Guttermouth',1,'*.mp3',1):
     for song in songs:
-          print song      
-    
+          print song
+
     Should be easy to add to the mp3.py app.
     """
-    
+
     # initialize
     result = []
 
@@ -359,8 +359,8 @@ def mount(dir, force=0):
             mounted_dirs.append(dir)
     if force and not dir in mounted_dirs:
         mounted_dirs.append(dir)
-        
-    
+
+
 def umount_all():
     """
     umount all mounted directories
@@ -368,7 +368,7 @@ def umount_all():
     global mounted_dirs
     for d in copy.copy(mounted_dirs):
         umount(d)
-        
+
 
 def is_mounted(dir):
     """
@@ -377,7 +377,7 @@ def is_mounted(dir):
     global mounted_dirs
     return dir in mounted_dirs
 
-    
+
 def resolve_media_mountdir(*arg):
     """
     get the mount point of the media with media_id
@@ -488,7 +488,7 @@ def create_thumbnail(filename, thumbnail=None):
                 f=open(filename, 'rb')
                 tags=exif.process_file(f)
                 f.close()
-                
+
                 if tags.has_key('JPEGThumbnail'):
                     image = imlib2.open_from_memory(tags['JPEGThumbnail'])
             except Exception, e:
@@ -504,7 +504,7 @@ def create_thumbnail(filename, thumbnail=None):
                 if config.DEBUG:
                     print 'caching image:', e
                 return None
-        
+
     try:
         if image.width > 255 or image.height > 255:
             image.thumbnail((255,255))
@@ -527,7 +527,7 @@ def create_thumbnail(filename, thumbnail=None):
     except Exception, e:
         print 'error caching image %s: %s' % (filename, e)
         return None
-        
+
 
 def cache_image(filename, thumbnail=None, use_exif=False):
     """

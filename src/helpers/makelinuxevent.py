@@ -9,7 +9,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the fout freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -98,7 +98,7 @@ def parse_input_h(path):
     _ids = ids
     _buses = buses
 
-import pickle
+import cPickle, pickle
 
 def save_event(fout):
     #fout = open('ev.dat', 'wb')
@@ -361,7 +361,7 @@ def help():
     print 'The linux/input.h will be parsed and the event data will be'
     print 'written to stdout which can be redirected to the linuxevent.py'
     print 'E.g.: freevo makelinuxevent > src/linuxevent.py'
-    print 
+    print
     print 'if <device> is given then the device information will be also'
     print 'written to stdout.'
     print 'E.g.: freevo makelinuxevent /dev/input/event0'
