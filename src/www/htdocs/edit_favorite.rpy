@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -59,7 +59,7 @@ class EditFavoriteResource(FreevoResource):
         chan = Unicode(fv.formValue(form, 'chan'))
         if isinstance( chan, str ):
             chan = Unicode( chan, 'latin-1' )
-        
+
         start = fv.formValue(form, 'start')
         action = fv.formValue(form, 'action')
         name = Unicode(fv.formValue(form, 'name'))
@@ -131,9 +131,9 @@ class EditFavoriteResource(FreevoResource):
         fv.tableCell(_('Day of week'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Time of day'), 'class="guidehead" colspan="1"')
         if config.DUPLICATE_DETECTION:
-           fv.tableCell(_('Duplicates'), 'class="guidehead" colspan="1"')
+            fv.tableCell(_('Duplicates'), 'class="guidehead" colspan="1"')
         if config.ONLY_NEW_DETECTION:
-           fv.tableCell(_('Episodes'), 'class="guidehead" colspan="1"')
+            fv.tableCell(_('Episodes'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Action'), 'class="guidehead" colspan="1"')
         fv.tableRowClose()
 
@@ -171,7 +171,7 @@ class EditFavoriteResource(FreevoResource):
                '   <option value="5">'+_('Sat')+'</option>\n' \
                '   <option value="6">'+_('Sun')+'</option>\n' \
                '</select>\n'
-        
+
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
         cell = '\n<select name="mod" selected="%s">\n' % fav.mod
@@ -230,25 +230,25 @@ class EditFavoriteResource(FreevoResource):
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
         if config.DUPLICATE_DETECTION:
-           if hasattr(fav, 'allowDuplicates'):
-              cell = '\n<select name="allowDuplicates" selected="%s">\n' % \
-              fav.allowDuplicates
-           else:
-              cell = '\n<select name="allowDuplicates">\n'
-           cell += '          <option value="1">'+_('ALLOW')+'</option>\n'
-           cell += '          <option value="0">'+_('PREVENT')+'</option>\n'
-           cell += '</select>\n'
-           fv.tableCell(cell, 'class="'+status+'" colspan="1"')
+            if hasattr(fav, 'allowDuplicates'):
+                cell = '\n<select name="allowDuplicates" selected="%s">\n' % \
+                fav.allowDuplicates
+            else:
+                cell = '\n<select name="allowDuplicates">\n'
+            cell += '          <option value="1">'+_('ALLOW')+'</option>\n'
+            cell += '          <option value="0">'+_('PREVENT')+'</option>\n'
+            cell += '</select>\n'
+            fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
         if config.ONLY_NEW_DETECTION:
-           if hasattr(fav, 'onlyNew'):
-              cell = '\n<select name="onlyNew" selected="%s">\n' % fav.onlyNew
-           else:
-              cell = '\n<select name="onlyNew">\n'
-           cell += '          <option value="0">'+_('ALL')+'</option>\n'
-           cell += '          <option value="1">'+_('ONLY NEW')+'</option>\n'
-           cell += '</select>\n'
-           fv.tableCell(cell, 'class="'+status+'" colspan="1"')
+            if hasattr(fav, 'onlyNew'):
+                cell = '\n<select name="onlyNew" selected="%s">\n' % fav.onlyNew
+            else:
+                cell = '\n<select name="onlyNew">\n'
+            cell += '          <option value="0">'+_('ALL')+'</option>\n'
+            cell += '          <option value="1">'+_('ONLY NEW')+'</option>\n'
+            cell += '</select>\n'
+            fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
 
         # cell = '\n<select name="priority" selected="%s">\n' % fav.priority
@@ -259,7 +259,7 @@ class EditFavoriteResource(FreevoResource):
 
         cell = '<input type="hidden" name="priority" value="%s">' % fav.priority
         cell += '<input type="hidden" name="action" value="%s">' % action
-        cell += '<input type="submit" value="'+_('Save')+'">' 
+        cell += '<input type="submit" value="'+_('Save')+'">'
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
         fv.tableRowClose()
@@ -295,6 +295,5 @@ class EditFavoriteResource(FreevoResource):
         fv.printFooter()
 
         return String( fv.res )
-    
-resource = EditFavoriteResource()
 
+resource = EditFavoriteResource()

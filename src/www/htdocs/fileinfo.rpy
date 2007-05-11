@@ -4,7 +4,7 @@
 # proginfo.rpy - Dynamically update program info popup box.
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -29,8 +29,8 @@ import time
 from www.web_types import HTMLResource, FreevoResource
 from twisted.web.woven import page
 import util
-import config 
-import kaa.metadata as metadata 
+import config
+import kaa.metadata as metadata
 from twisted.web import static
 
 MAX_DESCRIPTION_CHAR = 1000
@@ -51,18 +51,18 @@ class FileInfoResource(FreevoResource):
         form = request.args
         file = fv.formValue(form, 'dir')
         img = fv.formValue(form, 'img')
-        
+
         if file:
             medium = metadata.parse(file)
             #print medium
             title = ""
             info = "<table>"
             (basedir, item) = os.path.split(file)
-            
+
             fxd_file = file[:file.rindex('.')] + ".fxd"
             if os.path.exists(fxd_file):
                 fxd_info = self.get_fxd_info(fxd_file)
-                i = 0            
+                i = 0
                 for z in fxd_info:
                     if z and z != "cover-img":
                         info += "<tr><td><b>" + fxd_info.keys()[i] + ": </b></td><td>"+fxd_info.values()[i]+"</td></tr>"
@@ -90,15 +90,15 @@ class FileInfoResource(FreevoResource):
                 #movie info
                 if media_info['height'] and media_info['width']:
                     info +='<tr><td><b>Dimensions: </b></td><td>'+str(media_info['height'])+' x '\
-                        +str(media_info['width'])+'</td></tr>' 
+                        +str(media_info['width'])+'</td></tr>'
                 if media_info['type']:
-                    info+='<tr><td><b>Type: </b></td><td>'+media_info['type']+'</td></tr>' 
+                    info+='<tr><td><b>Type: </b></td><td>'+media_info['type']+'</td></tr>'
             #add size
             info+='<tr><td><b>Size: </b></td><td>'+str((os.stat(file)[6]/1024)/1024)+' MB</td></tr>'
             info+= "</table>"
-            
+
             file_link = self.convert_dir(file)
-            
+
             fv.res += (
                u"<script>\n" \
                u"var doc = parent.top.document;\n" \
@@ -126,7 +126,7 @@ class FileInfoResource(FreevoResource):
                       vlc_window.document.write(\'</body></html>\'); \
                   }\
                   '
-            )           
+            )
 
         elif img:
             _img = img.split("_")#
@@ -141,9 +141,9 @@ class FileInfoResource(FreevoResource):
                u"<img src=\"%s\" height=\"%s\" width=\"%s\" />"\
                u"</body></html>"
             ) % ( img_name, img, height, width )
-            
+
         return String(fv.res)
-    
+
     def get_fxd_info(self, fxd_file):
         print 'get_fxd_info(self, %r)' % (fxd_file)
         fxd_info = {}

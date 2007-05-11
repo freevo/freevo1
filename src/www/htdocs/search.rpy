@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -66,7 +66,7 @@ class SearchResource(FreevoResource):
 
         (got_matches, progs) = ri.findMatches(find, movies_only)
 
-        if got_matches: 
+        if got_matches:
             (result, favs) = ri.getFavorites()
             (result, recordings) = ri.getScheduledRecordings()
             if result:
@@ -78,7 +78,7 @@ class SearchResource(FreevoResource):
         fv.printAdvancedSearchForm()
 
         if not got_matches:
-            if find or movies_only: 
+            if find or movies_only:
                 fv.res += '<h3>'+_('No matches')+'</h3>'
 
         else:
@@ -107,10 +107,10 @@ class SearchResource(FreevoResource):
                                 status = 'recording'
                         except:
                             sys.stderr.write('isRecording not set')
-    
+
                 if ri.isProgAFavorite(prog, favs):
                     status = 'favorite'
-   
+
 
                 fv.tableRowOpen('class="chanrow"')
                 fv.tableCell(time.strftime('%b %d ' + config.TV_TIMEFORMAT, time.localtime(prog.start)), 'class="'+status+'" colspan="1"')
@@ -125,24 +125,24 @@ class SearchResource(FreevoResource):
                     fv.tableCell(prog.sub_title, 'class="'+status+'" colspan="1"')
                 else:
                     fv.tableCell('&nbsp;', 'class="'+status+'" colspan="1"')
-                    
-    
+
+
                 if prog.desc == '':
                     cell = _('Sorry, the program description for %s is unavailable.') % ('<b>'+prog.title+'</b>')
                 else:
                     cell = prog.desc
                 fv.tableCell(cell, 'class="'+status+'" colspan="1"')
-    
+
                 if status == 'scheduled':
                     cell = ('<a href="record.rpy?chan=%s&start=%s&action=remove">'+_('Remove')+'</a>') % (prog.channel_id, prog.start)
                 elif status == 'recording':
                     cell = ('<a href="record.rpy?chan=%s&start=%s&action=add">'+_('Record')+'</a>') % (prog.channel_id, prog.start)
                 else:
                     cell = ('<a href="record.rpy?chan=%s&start=%s&action=add">'+_('Record')+'</a>') % (prog.channel_id, prog.start)
-    
+
                 cell += (' | <a href="edit_favorite.rpy?chan=%s&start=%s&action=add">'+_('New favorite')+'</a>') % (prog.channel_id, prog.start)
                 fv.tableCell(cell, 'class="'+status+'" colspan="1"')
-    
+
                 fv.tableRowClose()
 
             fv.tableClose()
@@ -155,6 +155,5 @@ class SearchResource(FreevoResource):
         fv.printFooter()
 
         return String( fv.res )
-    
-resource = SearchResource()
 
+resource = SearchResource()

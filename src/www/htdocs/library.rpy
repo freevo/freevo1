@@ -420,7 +420,7 @@ class LibraryResource(FreevoResource):
                         else:
                             image_link = "images/library/www-mp-tv.png"
                         mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
-                            +'<img src="' + image_link + '" class="folder" height="200px" width="200px" /><br />'+mydispdir+'</a>'                    
+                            +'<img src="' + image_link + '" class="folder" height="200px" width="200px" /><br />'+mydispdir+'</a>'
                     ### show image cover
                     elif action_mediatype == "images":
                         image_link = "images/library/www-mp-pictures.png"
@@ -515,7 +515,7 @@ class LibraryResource(FreevoResource):
                             image = '<img src="images/library/recorded_small.png" height="30px" width="30px" />'
                         fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
                             +image+Unicode(title)+'</a>',\
-                            'class="'+status+'" colspan="1"')                    
+                            'class="'+status+'" colspan="1"')
                     ### show music
                     elif action_mediatype == "music":
                         try:
@@ -658,4 +658,3 @@ class LibraryResource(FreevoResource):
 
 
 resource = LibraryResource()
-

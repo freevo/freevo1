@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -48,7 +48,7 @@ class IceslistchangerResource(FreevoResource):
     def _render(self, request):
         fv = HTMLResource()
         form = request.args
- 
+
         directories = config.AUDIO_ITEMS
         rpyscript = 'iceslistchanger.rpy'
         #rpyscript = os.path.basename(os.environ['SCRIPT_FILENAME'])
@@ -97,7 +97,7 @@ class IceslistchangerResource(FreevoResource):
                 fv.tableRowClose()
             fv.tableClose()
 
-    
+
         fv.printSearchForm()
         fv.printLinks()
         fv.printFooter()

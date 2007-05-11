@@ -5,7 +5,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -48,7 +48,7 @@ TYPES = {
                 _('Freevo Plugin Writing HOWTO'),
                 _('Freevo Plugin Writing HOWTO')+': '+_('Writing your own plugins for Freevo'))
     }
-                
+
 class HowtoResource(FreevoResource):
     def __init__(self):
         FreevoResource.__init__(self)
@@ -62,7 +62,7 @@ class HowtoResource(FreevoResource):
                     self.BASEDIR[type] = os.path.join(d, dirname)
                 elif os.path.isfile(os.path.join(d, dirname, 'book1.html')):
                     self.BASEDIR[type] = os.path.join(d, dirname)
-        
+
     def _render(self, request):
         fv = HTMLResource()
         pos = 0
@@ -75,9 +75,9 @@ class HowtoResource(FreevoResource):
         type = fv.formValue(form, 'type')
         if not type:
             type = 'install'
-            
+
         name = TYPES[type][1]
-            
+
         if not self.BASEDIR.has_key(type):
             fv.printHeader(name, '/styles/main.css', prefix=request.path.count('/')-1)
             fv.res += '<div id="content">\n'
@@ -107,7 +107,7 @@ class HowtoResource(FreevoResource):
                 # remove border for some DocBook stylesheets
                 if line.find('BGCOLOR="#E0E0E0"') == 0:
                     line = ''
-                    
+
                 if pos == 0 and line.find('><TITLE') == 0:
                     pos = 1
                 elif pos == 1:
@@ -131,6 +131,6 @@ class HowtoResource(FreevoResource):
         fv.printFooter()
         fv.res+=('</ul>')
         return String(fv.res)
-    
+
 
 resource = HowtoResource()

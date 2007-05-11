@@ -6,11 +6,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@ class WLoginResource(FreevoWapResource):
         user = fv.formValue(form, 'user')
         passw = fv.formValue(form, 'passw')
         action = fv.formValue(form, 'action')
-        
+
         fv.printHeader()
 
         fv.res += '  <card id="card1" title="Freevo Wap">\n'

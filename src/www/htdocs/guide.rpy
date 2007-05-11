@@ -6,11 +6,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -37,8 +37,8 @@ from twisted.web.woven import page
 
 import util.tv_util as tv_util
 import util
-import config 
-import tv.epg_xmltv 
+import config
+import tv.epg_xmltv
 import tv.record_client as ri
 from twisted.web import static
 
@@ -73,7 +73,7 @@ class GuideResource(FreevoResource):
         myt = time.time()
         myt_t = time.localtime(myt)
         gstart_t = time.localtime(gstart)
-        myt = time.mktime((myt_t[0], myt_t[1], myt_t[2], 0, 0, 5, 
+        myt = time.mktime((myt_t[0], myt_t[1], myt_t[2], 0, 0, 5,
                            myt_t[6], myt_t[7], -1))
         listh = tv_util.when_listings_expire()
         if listh == 0:
@@ -96,7 +96,7 @@ class GuideResource(FreevoResource):
         retval = '<select name="offset">\n'
         myt = gstart
         myt_t = time.localtime(myt)
-        hrstart = time.mktime((myt_t[0], myt_t[1], myt_t[2], 0, 0, 5, 
+        hrstart = time.mktime((myt_t[0], myt_t[1], myt_t[2], 0, 0, 5,
                                myt_t[6], myt_t[7], -1))
         hrinc = hrstart
         hrstop = hrstart + (60*60*24)
@@ -176,7 +176,7 @@ class GuideResource(FreevoResource):
                         datime = time.strftime(config.TV_TIMEFORMAT, time.localtime(headerstart))
                         if i == n_cols-1:
                             dacell = datime + '&nbsp;&nbsp;<a href="guide.rpy?stime=%i">&raquo;</a>' % mfrnextguide
-                        else:                            
+                        else:
                             if mfrprevguide > 0:
                                 dacell = '<a href="guide.rpy?stime=%i">&laquo;</a>&nbsp;&nbsp;' % mfrprevguide + datime
                             else:
@@ -188,7 +188,7 @@ class GuideResource(FreevoResource):
                     headerstart += INTERVAL
                 fv.tableRowClose()
             showheader+= 1
-                
+
             rowdata = []
             now = mfrguidestart
             # chan.displayname = string.replace(chan.displayname, "&", "SUB")
@@ -212,7 +212,7 @@ class GuideResource(FreevoResource):
                             status = 'scheduled'
                             really_now = time.time()
                             if prog.start <= really_now and prog.stop >= really_now:
-                                # in the future we should REALLY see if it is 
+                                # in the future we should REALLY see if it is
                                 # recording instead of just guessing
                                 status = 'recording'
 
@@ -228,7 +228,7 @@ class GuideResource(FreevoResource):
                         # prog.title = string.replace(prog.title, "&", "SUB")
                         # prog.desc = string.replace(prog.desc, "&", "SUB")
                         cell += '%s' % prog.title
-                        if colspan > c_left:                            
+                        if colspan > c_left:
                             # show extends past visible range,
                             # insert right arrows
                             cell += '   &raquo;'
@@ -246,7 +246,7 @@ class GuideResource(FreevoResource):
             rowdata.append("</tr>")
             fv.res += string.join(rowdata, "\n")
         fv.tableClose()
-        
+
         fv.printSearchForm()
         fv.printLinks()
         fv.res += '</div>'

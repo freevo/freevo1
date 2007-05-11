@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -69,9 +69,9 @@ class FavoritesResource(FreevoResource):
         allowDuplicates = 1
         onlyNew = 0
         if config.DUPLICATE_DETECTION:
-           allowDuplicates = fv.formValue(form, 'allowDuplicates')
+            allowDuplicates = fv.formValue(form, 'allowDuplicates')
         if config.ONLY_NEW_DETECTION:
-           onlyNew = fv.formValue(form, 'onlyNew')
+            onlyNew = fv.formValue(form, 'onlyNew')
 
         if action == 'remove':
             ri.removeFavorite(name)
@@ -108,20 +108,20 @@ class FavoritesResource(FreevoResource):
         fv.tableCell(_('Day of week'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Time of day'), 'class="guidehead" colspan="1"')
         if config.DUPLICATE_DETECTION:
-           fv.tableCell(_('Duplicates'), 'class="guidehead" colspan="1"')
+            fv.tableCell(_('Duplicates'), 'class="guidehead" colspan="1"')
         if config.ONLY_NEW_DETECTION:
-           fv.tableCell(_('Episodes'), 'class="guidehead" colspan="1"')
+            fv.tableCell(_('Episodes'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Actions'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Priority'), 'class="guidehead" colspan="1"')
         fv.tableRowClose()
 
         def sortByPriority(a,b):
             if (a.priority < b.priority):
-               return -1
+                return -1
             elif (a.priority > b.priority):
-               return 1
+                return 1
             else:
-               return 0
+                return 0
         favs = favorites.values()
         favs.sort(sortByPriority)
         for fav in favs:
@@ -130,7 +130,7 @@ class FavoritesResource(FreevoResource):
                 fchan = _('ANY')
             else:
                 fchan = fav.channel
-                
+
             fv.tableRowOpen('class="chanrow"')
             fv.tableCell(Unicode(fav.name), 'class="'+status+'" colspan="1"')
             fv.tableCell(Unicode(fav.title), 'class="'+status+'" colspan="1"')
@@ -149,24 +149,24 @@ class FavoritesResource(FreevoResource):
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             if config.DUPLICATE_DETECTION:
-               (tempStatus, tempFav) = ri.getFavorite(fav.title)
-               if hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 1:
-                  cell = 'ALLOW'
-               elif hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 0:
-                  cell = 'PREVENT'
-               else:
-                  cell = 'NONE'
-               fv.tableCell(cell, 'class="'+status+'" colspan="1"')
+                (tempStatus, tempFav) = ri.getFavorite(fav.title)
+                if hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 1:
+                    cell = 'ALLOW'
+                elif hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 0:
+                    cell = 'PREVENT'
+                else:
+                    cell = 'NONE'
+                fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             if config.ONLY_NEW_DETECTION:
-               (tempStatus, tempFav) = ri.getFavorite(fav.title)
-               if hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 1:
-                  cell = 'ONLY NEW'
-               elif hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 0:
-                  cell = 'ALL'
-               else:
-                  cell = 'NONE'
-               fv.tableCell(cell, 'class="'+status+'" colspan="1"')
+                (tempStatus, tempFav) = ri.getFavorite(fav.title)
+                if hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 1:
+                    cell = 'ONLY NEW'
+                elif hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 0:
+                    cell = 'ALL'
+                else:
+                    cell = 'NONE'
+                fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             fname_esc = urllib.quote(String(fav.name.replace('&','%26')))
             # cell = '<input type="hidden" name="action" value="%s">' % action
@@ -188,7 +188,7 @@ class FavoritesResource(FreevoResource):
                 cell += ('<a href="favorites.rpy?action=bump&name=%s&priority=1">'+_('Lower')+'</a>') % fname_esc
 
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
-        
+
             fv.tableRowClose()
 
         fv.tableClose()
@@ -200,6 +200,5 @@ class FavoritesResource(FreevoResource):
         fv.printFooter()
 
         return String( fv.res )
-    
-resource = FavoritesResource()
 
+resource = FavoritesResource()

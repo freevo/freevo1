@@ -41,33 +41,33 @@ class WebRemoteResource(FreevoResource):
         form = request.args
 
         if not (config.ENABLE_NETWORK_REMOTE == 1 and config.REMOTE_CONTROL_PORT):
-           fv.res += """
-             The WebRemote is currently disabled.<br/><br/>
-             To enable, add the following settings to your local_conf.py file and restart freevo:<br/>
-             <ul>
-                <li>ENABLE_NETWORK_REMOTE = 1</li>
-                <li>REMOTE_CONTROL_HOST = '127.0.0.1'</li>
-                <li>REMOTE_CONTROL_PORT = 16310</li>
-             </ul>
-           """
-           return String( fv.res )
+            fv.res += """
+              The WebRemote is currently disabled.<br/><br/>
+              To enable, add the following settings to your local_conf.py file and restart freevo:<br/>
+              <ul>
+                 <li>ENABLE_NETWORK_REMOTE = 1</li>
+                 <li>REMOTE_CONTROL_HOST = '127.0.0.1'</li>
+                 <li>REMOTE_CONTROL_PORT = 16310</li>
+              </ul>
+            """
+            return String( fv.res )
 
         code = fv.formValue(form, 'code')
         if code:
-           if code == 'VOLP': code = 'VOL+';
-           if code == 'VOLM': code = 'VOL-';
-           if code == 'CHP':  code = 'CH+';
-           if code == 'CHM':  code = 'CH-';
+            if code == 'VOLP': code = 'VOL+';
+            if code == 'VOLM': code = 'VOL-';
+            if code == 'CHP':  code = 'CH+';
+            if code == 'CHM':  code = 'CH-';
 
-           host = config.REMOTE_CONTROL_HOST
-           port = config.REMOTE_CONTROL_PORT
-           buf  = 1024
-           addr = (host, port)
+            host = config.REMOTE_CONTROL_HOST
+            port = config.REMOTE_CONTROL_PORT
+            buf  = 1024
+            addr = (host, port)
 
-           UDPSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-           UDPSock.sendto(code, addr)
-           UDPSock.close()
-           return;
+            UDPSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            UDPSock.sendto(code, addr)
+            UDPSock.close()
+            return;
 
         fv.res += """
 <?xml version="1.0" encoding="UTF-8"?>

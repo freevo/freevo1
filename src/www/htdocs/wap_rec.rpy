@@ -6,11 +6,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -67,25 +67,25 @@ class WRecResource(FreevoWapResource):
 
         # look for action to do an add
         if action:
-           if action == 'add':
-              starttime = time.mktime(strptime.strptime(str(startdate)+" "+str(start)+":00",'%d/%m/%y %H:%M:%S'))
-              stoptime = time.mktime(strptime.strptime(str(startdate)+" "+str(stop)+":00",'%d/%m/%y %H:%M:%S'))
-              if stoptime < starttime:
-                  stoptime = stoptime + 86400
-              prog = tv.epg_types.TvProgram()
-              prog.channel_id = channel
-              prog.title = "Wap Recorded"
-              prog.start = starttime
-              prog.stop = stoptime
-              ri.scheduleRecording(prog)
-              fv.res += '  <card id="card3" title="Freevo">\n'
-              fv.res += '   <p><strong>Rec. Sheduled</strong><br/>\n'
-              fv.res += '          Date : %s<br/>\n' % startdate
-              fv.res += '          Start : %s<br/>\n' % start
-              fv.res += '          Stop : %s<br/>\n' % stop
-              fv.res += '          Chan.: %s</p>\n' % channel
-              fv.res += '  </card>\n'
-              
+            if action == 'add':
+                starttime = time.mktime(strptime.strptime(str(startdate)+" "+str(start)+":00",'%d/%m/%y %H:%M:%S'))
+                stoptime = time.mktime(strptime.strptime(str(startdate)+" "+str(stop)+":00",'%d/%m/%y %H:%M:%S'))
+                if stoptime < starttime:
+                    stoptime = stoptime + 86400
+                prog = tv.epg_types.TvProgram()
+                prog.channel_id = channel
+                prog.title = "Wap Recorded"
+                prog.start = starttime
+                prog.stop = stoptime
+                ri.scheduleRecording(prog)
+                fv.res += '  <card id="card3" title="Freevo">\n'
+                fv.res += '   <p><strong>Rec. Sheduled</strong><br/>\n'
+                fv.res += '          Date : %s<br/>\n' % startdate
+                fv.res += '          Start : %s<br/>\n' % start
+                fv.res += '          Stop : %s<br/>\n' % stop
+                fv.res += '          Chan.: %s</p>\n' % channel
+                fv.res += '  </card>\n'
+
         else:
 
             if errormsg == 'not validated':
@@ -116,7 +116,7 @@ class WRecResource(FreevoWapResource):
                 fv.res += '          Channel: <select  name="channel">\n'
                 for ch in guide.chan_list:
                     fv.res += '                   <option value="'+ch.id+'">'+ch.displayname+"</option>\n"
-                fv.res += '                  </select></p>\n'         
+                fv.res += '                  </select></p>\n'
                 fv.res += '   <do type="accept" label="Record">\n'
                 fv.res += '     <go href="wap_rec.rpy" method="post">\n'
                 fv.res += '       <postfield name="action" value="add"/>\n'

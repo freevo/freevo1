@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -50,7 +50,7 @@ class RecordResource(FreevoResource):
         chan = Unicode(fv.formValue(form, 'chan'))
         if isinstance( chan, str ):
             chan = Unicode( chan, 'latin-1' )
-        
+
         start = fv.formValue(form, 'start')
         action = fv.formValue(form, 'action')
 
@@ -66,7 +66,7 @@ class RecordResource(FreevoResource):
         if action == 'remove':
             (status, recordings) = ri.getScheduledRecordings()
             progs = recordings.getProgramList()
-    
+
             prog = None
             for what in progs.values():
                 if start == '%s' % what.start and chan == '%s' % what.channel_id:
@@ -93,7 +93,7 @@ class RecordResource(FreevoResource):
 
                 return String(fv.res)
 
-            
+
             #print 'RESULT: %s' % status
             #print 'PROG: %s' % String(prog)
             ri.scheduleRecording(prog)
@@ -149,24 +149,24 @@ class RecordResource(FreevoResource):
                 cell = Unicode(prog.sub_title)
             fv.tableCell(cell,'class="'+status+'" colspan="1"')
 
-    
+
             if prog.desc == '':
                 cell = _('Sorry, the program description for %s is unavailable.') % ('<b>'+prog.title+'</b>')
             else:
                 cell = Unicode(prog.desc)
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
-    
+
             cell = ('<a href="record.rpy?chan=%s&amp;start=%s&amp;action=remove">'+_('Remove')+'</a>') % (prog.channel_id, prog.start)
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             fv.tableRowClose()
 
         fv.tableClose()
-    
+
         fv.printSearchForm()
         #fv.printLinks()
         fv.printFooter()
 
         return String( fv.res )
-    
+
 resource = RecordResource()

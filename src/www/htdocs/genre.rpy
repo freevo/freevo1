@@ -114,7 +114,7 @@ class GenreResource(FreevoResource):
             bforcell=('<a href="genre.rpy?stime=%i%s">'
                       +'<img src="images/LeftArrow.png" alt="left" border="0"/></a>&nbsp;&nbsp;&nbsp;') \
                       % (mfrprevguide, keepcat)
-        
+
         fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
         fv.tableRowOpen('class="chanrow"')
         fv.tableCell('<form action="">'+bforcell+_('Show')+'&nbsp;'+_('Category')+':&nbsp;'\
@@ -167,7 +167,7 @@ class GenreResource(FreevoResource):
                     fv.tableRowOpen('class="chanrow"')
                     fv.tableCell(chan.displayname, 'class="channel"')
                     popid = '%s:%s' % (prog.channel_id, prog.start)
-                        
+
                     fv.tableCell(prog.title+'&nbsp;&nbsp;-&nbsp;&nbsp;'+prog.desc, 'class="'+status+'" \
                         onclick="guide_click(this, event)" id="%s"  width="80%%"' % popid )
                     fv.tableCell(time.strftime('%H:%M', time.localtime(prog.start)), 'class="channel"')

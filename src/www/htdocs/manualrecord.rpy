@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -76,13 +76,13 @@ class ManualRecordResource(FreevoResource):
         startday = fv.formValue(form, 'startday')
         starthour = fv.formValue(form, 'starthour')
         startminute = fv.formValue(form, 'startminute')
-        startyear = curtime[0] 
+        startyear = curtime[0]
         stopmonth = fv.formValue(form, 'stopmonth')
         stopday = fv.formValue(form, 'stopday')
         stophour = fv.formValue(form, 'stophour')
         stopminute = fv.formValue(form, 'stopminute')
-        stopyear = curtime[0] 
-        currentmonth = curtime[1] 
+        stopyear = curtime[0]
+        currentmonth = curtime[1]
         desc = fv.formValue(form, 'desc')
         title = fv.formValue(form, 'title')
         action = fv.formValue(form, 'action')
@@ -101,7 +101,7 @@ class ManualRecordResource(FreevoResource):
                 # create utc stop time
                 stoptime = time.mktime(strptime.strptime(str(stopmonth)+" "+str(stopday)+" "+str(stopyear)+" "+str(stophour)+":"+str(stopminute)+":00",'%m %d %Y %H:%M:%S'))
                 # so we don't record for more then maxdays (maxdays day * 24hr/day * 60 min/hr * 60 sec/min)
-                if abs(stoptime - starttime) < (MAXDAYS * 86400): 
+                if abs(stoptime - starttime) < (MAXDAYS * 86400):
                     if starttime < stoptime:
                         if stoptime < curtime_epoch + MINPICKUP:
                             errormsg = "Sorry, the stop time does not give enough time for cron to pickup the change.  Please set it to record for a few minutes longer."
@@ -187,14 +187,14 @@ class ManualRecordResource(FreevoResource):
             startcell = startcell + dayselect % ("startday", 'onChange="document.manrec.stopday.selectedIndex=document.manrec.startday.selectedIndex"')
             startcell = startcell + '@'
             startcell = startcell + hourselect % ("starthour", 'onChange="document.manrec.stophour.selectedIndex=document.manrec.starthour.selectedIndex"')
-            startcell = startcell + ':' 
+            startcell = startcell + ':'
             startcell = startcell + minuteselect % ("startminute", 'onChange="document.manrec.stopminute.selectedIndex=document.manrec.startminute.selectedIndex"')
 
             stopcell = monthselect % ("stopmonth", " ")
             stopcell = stopcell + dayselect % ("stopday", " ")
-            stopcell = stopcell + '@' 
+            stopcell = stopcell + '@'
             stopcell = stopcell + hourselect % ("stophour", " ")
-            stopcell = stopcell + ':' 
+            stopcell = stopcell + ':'
             stopcell = stopcell + minuteselect % ("stopminute", " ")
 
             fv.printHeader(_('Manual Record'), 'styles/main.css', selected=_("Manual Recording"))
@@ -240,7 +240,5 @@ class ManualRecordResource(FreevoResource):
             fv.printFooter()
 
         return String( fv.res )
-    
+
 resource = ManualRecordResource()
-
-

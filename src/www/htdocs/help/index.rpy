@@ -5,7 +5,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -48,7 +48,7 @@ class HelpResource(FreevoResource):
         information), feel free to add information there.')
 
         fv.res += '<p><b>'+_('Index')+'</b><ol>'
-        
+
         fv.res += '<li><a href="howto.rpy">'+_('Freevo Installation Howto')+'</a></li>'
         fv.res += '<li><a href="doc.rpy?file=faq">'+_('Frequently Asked Questions')+'</a></li>'
         fv.res += '<li><a href="doc.rpy?file=recording">'+_('Recording Information')+'</a></li>'
@@ -63,5 +63,5 @@ class HelpResource(FreevoResource):
         fv.res+=('</ul>')
         fv.res+='</div>'
         return String( fv.res )
-    
+
 resource = HelpResource()

@@ -5,7 +5,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -42,7 +42,7 @@ FALSE = 0
 class PluginResource(FreevoResource):
 
     def _render(self, request):
-        
+
         fv = HTMLResource()
         form = request.args
 
@@ -103,6 +103,6 @@ class PluginResource(FreevoResource):
         fv.printFooter()
         fv.res+=('</ul>')
         return String( fv.res )
-    
+
 
 resource = PluginResource()

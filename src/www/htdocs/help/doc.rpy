@@ -5,7 +5,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -44,7 +44,7 @@ class WikiResource(FreevoResource):
         else:
             docRoot = os.path.join(config.SHARE_DIR, 'htdocs')
         self.docRoot = docRoot + '/help/wiki'
-        
+
     def _render(self, request):
         fv = HTMLResource()
 

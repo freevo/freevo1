@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -31,7 +31,7 @@
 
 import sys, time
 
-import tv.record_client 
+import tv.record_client
 from www.web_types import HTMLResource, FreevoResource
 import util, config
 import util.tv_util as tv_util
@@ -46,10 +46,10 @@ class IndexResource(FreevoResource):
 
         fv.printHeader(_('Welcome'), 'styles/main.css',selected=_('Home'))
         fv.res += '<div id="contentmain">\n'
-        
+
         fv.res += '<br/><br/><h2>'+( _('Freevo Web Status as of %s') % \
                 time.strftime('%B %d ' + config.TV_TIMEFORMAT, time.localtime()) ) +'</h2>'
-    
+
         (server_available, schedule) = tv.record_client.connectionTest()
         if not server_available:
             fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('The recording server is down.')+'</p>\n'
@@ -95,6 +95,6 @@ class IndexResource(FreevoResource):
         fv.printFooter()
 
         return String( fv.res )
-    
+
 
 resource = IndexResource()
