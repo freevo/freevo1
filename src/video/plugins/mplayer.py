@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -83,7 +83,7 @@ class MPlayer:
         0 = unplayable
         """
         # this seems strange that it is 'possible' for dvd:// and 'good' for dvd
-        if item.url[:6] in ('dvd://', 'vcd://') and item.url.endswith('/'): 
+        if item.url[:6] in ('dvd://', 'vcd://') and item.url.endswith('/'):
             return 1
         if item.mode in ('dvd', 'vcd'):
             return 2
@@ -97,21 +97,21 @@ class MPlayer:
         if item.network_play:
             return 1
         return 0
-    
-    
+
+
     def play(self, options, item):
         """
         play a videoitem with mplayer
         """
         self.options = options
         self.item    = item
-        
+
         mode         = item.mode
         url          = item.url
 
         self.item_info    = None
         self.item_length  = -1
-        self.item.elapsed = 0        
+        self.item.elapsed = 0
 
         if mode == 'file':
             url = item.url[6:]
@@ -119,17 +119,17 @@ class MPlayer:
             if hasattr(self.item_info, 'get_length'):
                 self.item_length = self.item_info.get_endpos()
                 self.dynamic_seek_control = True
-                
+
         if url.startswith('dvd://') and url[-1] == '/':
             url += '1'
-            
+
         if url == 'vcd://':
             c_len = 0
             for i in range(len(item.info.tracks)):
                 if item.info.tracks[i].length > c_len:
                     c_len = item.info.tracks[i].length
                     url = item.url + str(i+1)
-            
+
         try:
             _debug_('MPlayer.play(): mode=%s, url=%s' % (mode, url))
         except UnicodeError:
@@ -139,7 +139,7 @@ class MPlayer:
             # This event allows the videoitem which contains subitems to
             # try to play the next subitem
             return '%s\nnot found' % os.path.basename(url)
-       
+
         set_vcodec = False
         if item['xvmc'] and item['type'][:6] in ['MPEG-1','MPEG-2','MPEG-T']:
             set_vcodec = True
@@ -174,7 +174,7 @@ class MPlayer:
             # dvd on harddisc
             additional_args += [ '-dvd-device', item.filename ]
             url = url[:6] + url[url.rfind('/')+1:]
-            
+
         if item.media and hasattr(item.media,'devicename'):
             additional_args += [ '-cdrom-device', item.media.devicename ]
 
@@ -188,7 +188,7 @@ class MPlayer:
                     additional_args += [ '-sid', str(item.selected_subtitle) ]
             else:
                 additional_args += [ '-sid', str(item.selected_subtitle) ]
-            
+
         if item.selected_audio != None:
             additional_args += [ '-aid', str(item.selected_audio) ]
 
@@ -210,7 +210,7 @@ class MPlayer:
 
         if os.path.isfile(os.path.splitext(item.filename)[0]+'.edl'):
             additional_args += [ '-edl', str(os.path.splitext(item.filename)[0]+'.edl') ]
-                
+
         mode = item.mimetype
         if not config.MPLAYER_ARGS.has_key(mode):
             mode = 'default'
@@ -263,28 +263,17 @@ class MPlayer:
         if config.MPLAYER_AUTOCROP and not item.network_play and str(' ').join(command).find('crop=') == -1:
             _debug_('starting autocrop')
             (x1, y1, x2, y2) = (1000, 1000, 0, 0)
-            crop_cmd = [config.MPLAYER_CMD, '-ao', 'null', '-vo', 'null', '-slave', '-nolirc',
-                '-ss', '%s' % config.MPLAYER_AUTOCROP_START, '-frames', '20', '-vf', 'cropdetect' ]
-            crop_cmd.append(url)
-            child = popen2.Popen3(self.sort_filter(crop_cmd), 1, 100)
-            exp = re.compile('^.*-vf crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*).*')
-            while(1):
-                data = child.fromchild.readline()
-                if not data:
-                    break
-                m = exp.match(data)
-                if m:
-                    x1 = min(x1, int(m.group(3)))
-                    y1 = min(y1, int(m.group(4)))
-                    x2 = max(x2, int(m.group(1)) + int(m.group(3)))
-                    y2 = max(y2, int(m.group(2)) + int(m.group(4)))
-                    _debug_('x1=%s x2=%s y1=%s y2=%s' % (x1, x2, y1, y2))
-        
+            crop_points = config.MPLAYER_AUTOCROP_START
+            if not isinstance(crop_points, list):
+                crop_points = [crop_points]
+
+            for crop_point in crop_points:
+                (x1, y1, x2, y2) = self.get_crop(crop_point, x1, y1, x2, y2)
+
             if x1 < 1000 and x2 < 1000:
                 command = command + [ '-vf' , 'crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1) ]
                 _debug_('crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1))
-            
-            child.wait()
+
 
         if item.subtitle_file:
             d, f = util.resolve_media_mountdir(item.subtitle_file)
@@ -312,7 +301,7 @@ class MPlayer:
 
         self.app = MPlayerApp(command, self)
         return None
-    
+
 
     def stop(self):
         """
@@ -323,7 +312,7 @@ class MPlayer:
 
         if not self.app:
             return
-        
+
         self.app.stop('quit\n')
         rc.app(None)
         self.app = None
@@ -346,13 +335,13 @@ class MPlayer:
             rc.set_context('input')
             self.app.write('osd_show_text "input"\n')
             return True
-        
+
         if event.context == 'input':
             if event in INPUT_ALL_NUMBERS:
                 self.reset_seek_timeout()
                 self.seek = self.seek * 10 + int(event);
                 return True
-            
+
             elif event == INPUT_ENTER:
                 self.seek_timer.cancel()
                 self.seek *= 60
@@ -378,7 +367,7 @@ class MPlayer:
             self.stop()
             self.play(self.options, self.item)
             return True
-        
+
         if event in ( PLAY_END, USER_END ):
             self.stop()
             return self.item.eventhandler(event)
@@ -414,14 +403,14 @@ class MPlayer:
                 if self.item_length <= self.item.elapsed + event.arg + seek_safety_time:
                     # get new length
                     self.item_length = self.item_info.get_endpos()
-                    
+
                 # check again if seek is allowed
                 if self.item_length <= self.item.elapsed + event.arg + seek_safety_time:
                     _debug_('unable to seek %s secs at time %s, length %s' % \
                             (event.arg, self.item.elapsed, self.item_length))
                     self.app.write('osd_show_text "%s"\n' % _('Seeking not possible'))
                     return False
-                
+
             self.app.write('seek %s\n' % event.arg)
             return True
 
@@ -432,19 +421,19 @@ class MPlayer:
         # nothing found? Try the eventhandler of the object who called us
         return self.item.eventhandler(event)
 
-    
+
     def reset_seek(self):
         _debug_('seek timeout')
         self.seek = 0
         rc.set_context('video')
 
-        
+
     def reset_seek_timeout(self):
         self.seek_timer.cancel()
         self.seek_timer = threading.Timer(config.MPLAYER_SEEK_TIMEOUT, self.reset_seek)
         self.seek_timer.start()
 
-        
+
     def sort_filter(self, command):
         """
         Change a mplayer command to support more than one -vf
@@ -454,7 +443,7 @@ class MPlayer:
         ret = []
         vf = ''
         next_is_vf = False
-    
+
         for arg in command:
             if next_is_vf:
                 vf += ',%s' % arg
@@ -467,6 +456,28 @@ class MPlayer:
         if vf:
             return ret + [ '-vf', vf[1:] ]
         return ret
+
+    def get_crop(self, pos, x1, y1, x2, y2):
+        crop_cmd = [config.MPLAYER_CMD, '-ao', 'null', '-vo', 'null', '-slave', '-nolirc',
+            '-ss', '%s' % pos, '-frames', '10', '-vf', 'cropdetect' ]
+        crop_cmd.append(self.item.url)
+        child = popen2.Popen3(self.sort_filter(crop_cmd), 1, 100)
+        exp = re.compile('^.*-vf crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*).*')
+        while(1):
+            data = child.fromchild.readline()
+            if not data:
+                break
+            m = exp.match(data)
+            if m:
+                x1 = min(x1, int(m.group(3)))
+                y1 = min(y1, int(m.group(4)))
+                x2 = max(x2, int(m.group(1)) + int(m.group(3)))
+                y2 = max(y2, int(m.group(2)) + int(m.group(4)))
+                _debug_('x1=%s x2=%s y1=%s y2=%s' % (x1, x2, y1, y2))
+
+        child.wait()
+        return (x1, y1, x2, y2)
+
 
 
 
@@ -485,7 +496,7 @@ class MPlayerApp(childapp.ChildApp2):
         self.item      = mplayer.item
         self.mplayer   = mplayer
         self.exit_type = None
-                       
+
         # DVD items also store mplayer_audio_broken to check if you can
         # start them with -alang or not
         if hasattr(self.item, 'mplayer_audio_broken') or self.item.mode != 'dvd':
@@ -493,7 +504,7 @@ class MPlayerApp(childapp.ChildApp2):
         else:
             self.check_audio = 1
 
-        import osd     
+        import osd
         self.osd       = osd.get_singleton()
         self.osdfont   = self.osd.getfont(config.OSD_DEFAULT_FONTNAME,
                                           config.OSD_DEFAULT_FONTSIZE)
@@ -511,7 +522,7 @@ class MPlayerApp(childapp.ChildApp2):
         childapp.ChildApp2.__init__(self, app)
 
 
-                
+
     def stop_event(self):
         """
         return the stop event send through the eventhandler
@@ -522,7 +533,7 @@ class MPlayerApp(childapp.ChildApp2):
             return USER_END
         else:
             return PLAY_END
-                        
+
 
     def stdout_cb(self, line):
         """
@@ -568,14 +579,14 @@ class MPlayerApp(childapp.ChildApp2):
         elif not self.item.elapsed:
             for p in self.stdout_plugins:
                 p.stdout(line)
-                
+
             if self.check_audio:
                 if line.find('MPEG: No audio stream found -> no sound') == 0:
                     # OK, audio is broken, restart without -alang
                     self.check_audio = 2
                     self.item.mplayer_audio_broken = True
                     rc.post_event(Event('AUDIO_ERROR_START_AGAIN'))
-                
+
                 if self.RE_START(line):
                     if self.check_audio == 1:
                         # audio seems to be ok
