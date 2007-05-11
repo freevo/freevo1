@@ -260,7 +260,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Handle color button events.
         """
-        action = None	
+        action = None
         result = False
 
         if event == BUTTONBAR_RED:
@@ -278,12 +278,12 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
         if action is None:
-           return result
+            return result
 
         if isinstance(action, MenuItem):
-           action.select(menuw=menuw)
+            action.select(menuw=menuw)
         else:
-           action[0](menuw=menuw)
+            action[0](menuw=menuw)
 
         return result
 
@@ -327,11 +327,11 @@ class PluginInterface(plugin.DaemonPlugin):
         else:
             # Determine the available actions
             if hasattr(menu, 'is_submenu') or (not hasattr(menu, 'selected')):
-                    return None
+                return None
 
             actions = menu.selected.actions()
             if not actions:
-               actions = []
+                actions = []
 
             plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
 
@@ -363,5 +363,3 @@ class PluginInterface(plugin.DaemonPlugin):
             if len(actions) > 4:
                 result[3] = MenuItem(_("More Options"), action=send_event_to_menu, arg= event.MENU_SUBMENU)
         return result
-
-

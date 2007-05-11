@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes: http://bytesex.org/v4l/spec/
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -56,7 +56,7 @@ _IOC_TYPEMASK = ((1 << _IOC_TYPEBITS)-1)
 _IOC_SIZEMASK = ((1 << _IOC_SIZEBITS)-1)
 _IOC_DIRMASK = ((1 << _IOC_DIRBITS)-1)
 
-_IOC_NRSHIFT = 0 
+_IOC_NRSHIFT = 0
 _IOC_TYPESHIFT = (_IOC_NRSHIFT+_IOC_NRBITS)
 _IOC_SIZESHIFT = (_IOC_TYPESHIFT+_IOC_TYPEBITS)
 _IOC_DIRSHIFT = (_IOC_SIZESHIFT+_IOC_SIZEBITS)
@@ -217,7 +217,7 @@ class Videodev:
         self.version      = results[3]
         self.capabilities = results[4]
         self.controls     = {}
-    
+
 
     def getdriver(self):
         return self.driver
@@ -259,17 +259,17 @@ class Videodev:
     def setchannel(self, channel):
         freq = config.FREQUENCY_TABLE.get(channel)
         if freq:
-            if DEBUG: 
+            if DEBUG:
                 print 'Using custom frequency: chan="%s", freq="%s"' % (channel, freq)
         else:
             freq = self.chanlist[str(channel)]
-            if DEBUG: 
+            if DEBUG:
                 print 'Using standard frequency: chan="%s", freq="%s"' % (channel, freq)
 
         freq *= 16
 
         # The folowing check for TUNER_LOW capabilities was not working for
-        # me... needs further investigation. 
+        # me... needs further investigation.
         # if not (self.capabilities & V4L2_TUNER_CAP_LOW):
         #     # Tune in MHz.
         #     freq /= 1000
@@ -279,11 +279,11 @@ class Videodev:
             self.setfreq(freq)
         except:
             self.setfreq_old(freq)
-      
+
 
     def setfreq_old(self, freq):
         val = struct.pack("L", freq)
-        r = fcntl.ioctl(self.device, i32(SETFREQ_NO_V4L), val)        
+        r = fcntl.ioctl(self.device, i32(SETFREQ_NO_V4L), val)
         if DEBUG >= 3: print "setfreq_old: val=%r, r=%r" % (val, r)
 
 
@@ -299,7 +299,7 @@ class Videodev:
         res = struct.unpack(INPUT_ST,r)
         if DEBUG >= 3: print "getinput: val=%r, %d, res=%r" % (val, len(val), res)
         return res[0]
-  
+
 
     def setinput(self, value):
         try:
@@ -348,7 +348,7 @@ class Videodev:
         return res
 
 
-    def getfmt(self):  
+    def getfmt(self):
         val = struct.pack(FMT_ST, 1,0,0,0,0,0,0,0)
         r = fcntl.ioctl(self.device, i32(GET_FMT_NO), val)
         res = struct.unpack(FMT_ST, r)
@@ -712,7 +712,7 @@ if __name__ == '__main__':
     '''
     viddev=Videodev('/dev/video0')
     viddev.print_settings()
-    print 
+    print
     print viddev.querycap()
     inp = viddev.getinput()
     print 'viddev.getinput=%s' % (inp)

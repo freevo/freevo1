@@ -35,26 +35,26 @@ import sys
 import socket
 
 def usage():
-        print 'a small tkinter example remote program'
-        print 'You need to set ENABLE_NETWORK_REMOTE = 1 in you local_conf.py'
-        print
-        print 'It takes two optional arguments:'
-        print '    - the first is host which defaults to localhost'
-        print '    - the second is port which defaults to 16310'
-        print 
-        print 'when run with no args it connects to the localhost on port 16310'
-        print 'freevo remote'
-        print 
-        print 'when run with one arg it connects to the given host on port 16310'
-        print 'freevo remote myfreevo.local'
-        print
-        sys.exit(0)
+    print 'a small tkinter example remote program'
+    print 'You need to set ENABLE_NETWORK_REMOTE = 1 in you local_conf.py'
+    print
+    print 'It takes two optional arguments:'
+    print '    - the first is host which defaults to localhost'
+    print '    - the second is port which defaults to 16310'
+    print
+    print 'when run with no args it connects to the localhost on port 16310'
+    print 'freevo remote'
+    print
+    print 'when run with one arg it connects to the given host on port 16310'
+    print 'freevo remote myfreevo.local'
+    print
+    sys.exit(0)
 
 try:
     from Tkinter import *
 except:
     print 'Warning: Tkinter not found. This script won\'t work.'
-    print 
+    print
     usage()
 
 
@@ -82,7 +82,7 @@ class FreevoRemote(Frame):
                 #create the button for each element
                 btn = Button(bframe, text=b, command=(lambda b=b: self.ButtonClick(b)))
                 btn.grid(row=rcnt, column=ccnt, sticky=NSEW)
-                    
+
                 ccnt = ccnt + 1
             # add the now complete row to panel
             bframe.rowconfigure(rcnt, weight=1)
@@ -96,15 +96,15 @@ class FreevoRemote(Frame):
     def PowerClick(self):
         self.ButtonClick('POWER')
         self.quit()
-        
+
     def ButtonClick(self, b):
         print b
         sockobj = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sockobj.connect((self.host, self.port))
         sockobj.send(b)
         sockobj.close()
-        
-if __name__ == '__main__': 
+
+if __name__ == '__main__':
     if len(sys.argv)>1 and sys.argv[1] == '--help':
         usage()
     root = FreevoRemote()
@@ -114,4 +114,3 @@ if __name__ == '__main__':
         if len(sys.argv) > 2:
             root.port = int(sys.argv[2])
     root.mainloop()
-

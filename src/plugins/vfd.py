@@ -9,12 +9,12 @@
 #       plugin.activate('vfd')
 #    You need a patched pyusb (http://pyusb.berlios.de/)
 #    The patch is in contrib/patches
-# Todo:        
+# Todo:
 #    1) Use Threads. pyusb is too blocking!
 #    2) See if it's possible to scroll the display
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -55,14 +55,14 @@ dbglvl=1
 
 # Configuration: (Should move to freevo_conf.py?)
 sep_str = " | " # use as separator between two strings. Like: "Length: 123<sep_str>Plot: ..."
-sep_str_mscroll = "   " # if string > width of vfd add this 
+sep_str_mscroll = "   " # if string > width of vfd add this
 
 # Animaton-Sequence used in audio playback
 # Some displays (like the CrytstalFontz) do display the \ as a /
 animation_audioplayer_chars = ['-','\\','|','/']
 
 # Bitmapped codes for icons
-Clock =       0x10000000 
+Clock =       0x10000000
 Radio =       0x08000000
 Music =       0x04000000
 CD_DVD =      0x02000000
@@ -249,7 +249,7 @@ layouts = { 1 : # 1 line display
 #                  ...
 #                }
 poll_widgets = { 1 : {
-    20 : { "welcome" : [ "clock" ] },    
+    20 : { "welcome" : [ "clock" ] },
     },
                  }
 
@@ -558,7 +558,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         # Show welcome screen:
         for w in self.screens[ "welcome" ]:
-            type, param, val = self.screens[ "welcome" ][ w ]            
+            type, param, val = self.screens[ "welcome" ][ w ]
             if val: param = param % eval(val)
 
             self.widget_set("welcome", w, param)
@@ -604,7 +604,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.generate_screen(sname)
             self.lsv = { } # reset last changed values
 
-        if type == 'menu':   
+        if type == 'menu':
             menu  = object.menustack[ -1 ]
             title = menu.selected.name
             if isinstance(menu.selected, MenuItem):
@@ -727,7 +727,7 @@ class PluginInterface(plugin.DaemonPlugin):
         # Find a screen
         # find a display with 'l' lines
         while not screens:
-            try:                
+            try:
                 screens = layouts[ l ]
             except KeyError:
                 _debug_(_("WARNING") + ": " + _("Could not find screens for %d lines VFD!") % l, dbglvl)

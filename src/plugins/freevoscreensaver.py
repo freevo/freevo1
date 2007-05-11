@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes: maybe some day i will make it really start and stop the saver
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -49,13 +49,13 @@ class PluginInterface(plugin.DaemonPlugin):
     A plugin to start a screensaver when freevo has been inactive in a menu
     for a long time. There are 4 basic types and one of the types has two
     subtypes. The types are xscreensaver, ssr, fxd, and script. The fxd type
-    has two subtypes: one for movies and one for slideshows. The 
-    xsccreensaver type will only work if you are using an Xserver. 
-    
+    has two subtypes: one for movies and one for slideshows. The
+    xsccreensaver type will only work if you are using an Xserver.
+
     Here is an example xscreensaver type. You must provide the paths to
     your xscreensaver and xscreensaver-command programs.
     plugin.activate('freevoscreensaver', args=('xscreensaver','/usr/bin/xscreensaver','/usr/bin/xscreensaver-command',))
-    
+
     Here is a script type example. Basically you write a  start and stop
     script you wish to use for a screensaver. This is a catchall for people
     wanting a very specific saver with a specific config.
@@ -129,43 +129,42 @@ class PluginInterface(plugin.DaemonPlugin):
             rc.post_event(em.Event("SCREENSAVER_START"))
 
     def start_saver (self):
-         _debug_("start screensaver")
-         self.screensaver_showing = TRUE
-         if self.saver_type == 'xscreensaver':
-             os.system('%s -no-splash &' % self.arg1)
-             os.system('sleep 5 ; %s -activate' % self.arg2)
-         elif self.saver_type == 'script':
-             os.system('%s' % self.arg1)
-         elif self.saver_type == 'ssr':
-             self.pl = Playlist('ScreenSaver', playlist=self.arg1, display_type='image', repeat=True)
-             self.pl.play(menuw=self.menuw)
-         elif self.saver_type == 'fxd':
-             mylist = fxditem.mimetype.parse(None, [self.arg1], display_type=self.arg2)
-             if len(mylist) > 0:
-                 self.pl = mylist[0]
-                 arg = None
-                 if self.arg2 == 'image':
-                     self.pl.repeat = 1
-                 elif self.arg2 == 'video':
-                     arg = '-nosound -loop 0'
-                 self.pl.play(arg=arg, menuw=self.menuw)
-             else:
-                 _debug_("saver thinks fxd blew up trying to parse?")
-         else:
-             _debug_("Unknown saver type to start.")
+        _debug_("start screensaver")
+        self.screensaver_showing = TRUE
+        if self.saver_type == 'xscreensaver':
+            os.system('%s -no-splash &' % self.arg1)
+            os.system('sleep 5 ; %s -activate' % self.arg2)
+        elif self.saver_type == 'script':
+            os.system('%s' % self.arg1)
+        elif self.saver_type == 'ssr':
+            self.pl = Playlist('ScreenSaver', playlist=self.arg1, display_type='image', repeat=True)
+            self.pl.play(menuw=self.menuw)
+        elif self.saver_type == 'fxd':
+            mylist = fxditem.mimetype.parse(None, [self.arg1], display_type=self.arg2)
+            if len(mylist) > 0:
+                self.pl = mylist[0]
+                arg = None
+                if self.arg2 == 'image':
+                    self.pl.repeat = 1
+                elif self.arg2 == 'video':
+                    arg = '-nosound -loop 0'
+                self.pl.play(arg=arg, menuw=self.menuw)
+            else:
+                _debug_("saver thinks fxd blew up trying to parse?")
+        else:
+            _debug_("Unknown saver type to start.")
 
-    
+
     def stop_saver (self):
-         _debug_("stop screensaver")
-         self.screensaver_showing = FALSE
-         if self.saver_type == 'xscreensaver':
-             os.system('%s -exit' % self.arg2)
-         elif self.saver_type == 'script':
-             os.system('%s' % self.arg2)
-         elif self.saver_type == 'ssr':
-             rc.post_event(em.STOP)
-         elif self.saver_type == 'fxd':
-             rc.post_event(em.STOP)
-         else:
-             _debug_("Unknown saver type to stop.")
-
+        _debug_("stop screensaver")
+        self.screensaver_showing = FALSE
+        if self.saver_type == 'xscreensaver':
+            os.system('%s -exit' % self.arg2)
+        elif self.saver_type == 'script':
+            os.system('%s' % self.arg2)
+        elif self.saver_type == 'ssr':
+            rc.post_event(em.STOP)
+        elif self.saver_type == 'fxd':
+            rc.post_event(em.STOP)
+        else:
+            _debug_("Unknown saver type to stop.")

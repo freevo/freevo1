@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -59,7 +59,7 @@ class PluginInterface(plugin.ItemPlugin):
         self.item = item
 
         items = []
-        
+
         if hasattr(item, 'files') and item.files:
             if item.files.fxd_file and config.FILE_OPS_ALLOW_DELETE_INFO:
                 items.append((self.confirm_info_delete, _('Delete info'), 'delete_info'))
@@ -77,7 +77,7 @@ class PluginInterface(plugin.ItemPlugin):
         ConfirmBox(text=_('Do you wish to delete\n \'%s\'?') % self.item.name,
                    handler=self.delete_file, default_choice=1,
                    handler_message=_('Deleting...')).show()
-        
+
     def confirm_info_delete(self, arg=None, menuw=None):
         self.menuw = menuw
         ConfirmBox(text=_('Delete info about\n \'%s\'?') % self.item.name,
@@ -98,7 +98,7 @@ class PluginInterface(plugin.ItemPlugin):
             os.unlink(filename)
         except:
             print 'can\'t delete %s' % filename
-        
+
     def delete_file(self):
         self.item.files.delete()
         if self.menuw:

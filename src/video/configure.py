@@ -9,7 +9,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -59,7 +59,7 @@ def audio_selection_menu(arg=None, menuw=None):
 
     for audio in item.info['audio']:
         a = copy.copy(audio)
-        
+
         if not a.has_key('id') or not a['id']:
             a['id'] = item.info['audio'].index(audio)
 
@@ -80,7 +80,7 @@ def audio_selection_menu(arg=None, menuw=None):
 
     moviemenu = menu.Menu(_('Audio Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
-        
+
 
 #
 # Subtitle menu and selection
@@ -97,7 +97,7 @@ def subtitle_selection_menu(arg=None, menuw=None):
 
     for subtitle in item.info['subtitles']:
         s = copy.copy(subtitle)
-        
+
         if not s.has_key('id') or not s['id']:
             s['id'] = item.info['subtitles'].index(subtitle)
 
@@ -118,7 +118,7 @@ def subtitle_selection_menu(arg=None, menuw=None):
     moviemenu = menu.Menu(_('Subtitle Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
 
-        
+
 #
 # Chapter selection
 #
@@ -126,7 +126,7 @@ def subtitle_selection_menu(arg=None, menuw=None):
 def chapter_selection(menuw=None, arg=None):
     menuw.delete_menu()
     play_movie(menuw=menuw, arg=arg)
-    
+
 def chapter_selection_menu(arg=None, menuw=None):
     item = arg
     menu_items = []
@@ -153,7 +153,7 @@ def chapter_selection_menu(arg=None, menuw=None):
                 txt = '%(id)s (%(pos)s)' % c
 
             menu_items.append(menu.MenuItem(txt, chapter_selection, (item, ' -ss %s' % c['pos'])))
-        
+
     moviemenu = menu.Menu(_('Chapter Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
 
@@ -167,7 +167,7 @@ def subitem_selection(menuw=None, arg=None):
     item.conf_select_this_item = item.subitems[pos]
     menuw.delete_menu()
     play_movie(menuw=menuw, arg=(item, None))
-    
+
 
 def subitem_selection_menu(arg=None, menuw=None):
     item  = arg
@@ -176,7 +176,7 @@ def subitem_selection_menu(arg=None, menuw=None):
     for pos in range(len(item.subitems)):
         menu_items += [ menu.MenuItem(_('Play chapter %s') % (pos+1),
                                       subitem_selection, (arg, pos)) ]
-        
+
     moviemenu = menu.Menu(_('Chapter Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
 
@@ -209,7 +209,7 @@ def add_toogle(name, item, var):
         return menu.MenuItem(_('Turn off %s') % name, toggle, (name, item, var))
     return menu.MenuItem(_('Turn on %s') % name, toggle, (name, item, var))
 
-    
+
 #
 # config main menu
 #
@@ -231,7 +231,7 @@ def get_items(item):
         # show subitems as chapter
         items.append(menu.MenuItem(_('Chapter selection'),
                                    subitem_selection_menu, item))
-        
+
     if item.mode in ('dvd', 'vcd') or \
            (item.filename and item.info.has_key('type') and \
             item.info['type'] and item.info['type'].lower().find('mpeg') != -1):
@@ -241,8 +241,7 @@ def get_items(item):
             items += [ add_toogle(_('Bottom field first'), item, 'field-dominance') ]
     return items
 
-        
+
 def get_menu(item, menuw):
     items = get_items(item) + [ menu.MenuItem(_('Play'), play_movie, (item, '')) ]
     return menu.Menu(_('Config Menu'), items, fxd_file=item.skin_fxd)
-    

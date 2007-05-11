@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -50,7 +50,7 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     import plugin
     import rc
     import util.mediainfo
-    
+
     osd = osd.get_singleton()
 
     util.mediainfo.sync()
@@ -67,7 +67,7 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     osd.update()
     time.sleep(0.5)
 
-    if argshutdown or argrestart:  
+    if argshutdown or argrestart:
         # shutdown dual head for mga
         if config.CONF.display == 'mga':
             os.system('%s runapp matroxset -f /dev/fb1 -m 0' % \
@@ -93,7 +93,7 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     #
     # Exit Freevo
     #
-    
+
     # Shutdown any daemon plugins that need it.
     plugin.shutdown()
 
@@ -113,7 +113,7 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     # Just wait until we're dead. SDL cannot be polled here anyway.
     while 1:
         time.sleep(1)
-        
+
 
 
 class ShutdownItem(Item):
@@ -150,8 +150,8 @@ class ShutdownItem(Item):
         self.menuw = menuw
         what = _('Do you really want to shut down Freevo?')
         ConfirmBox(text=what, handler=self.shutdown_freevo, default_choice=1).show()
-        
-        
+
+
     def confirm_system(self, arg=None, menuw=None):
         """
         Pops up a ConfirmBox.
@@ -175,7 +175,7 @@ class ShutdownItem(Item):
         """
         shutdown(menuw=menuw, argshutdown=False, argrestart=False)
 
-        
+
     def shutdown_system(self, arg=None, menuw=None):
         """
         shutdown the complete system
@@ -188,8 +188,8 @@ class ShutdownItem(Item):
         """
         shutdown(menuw=menuw, argshutdown=False, argrestart=True)
 
-        
-        
+
+
 
 
 #
@@ -203,5 +203,3 @@ class PluginInterface(MainMenuPlugin):
 
     def items(self, parent):
         return [ ShutdownItem(parent) ]
-
-

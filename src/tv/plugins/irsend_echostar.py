@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # irsend_echostar.py - Send IR commands to an echostar receiver used by
-#                       Dish and ExpressVu sattelite service.  Tested 
+#                       Dish and ExpressVu sattelite service.  Tested
 #                       using a homebrew infrared transmitter.
 # -----------------------------------------------------------------------
 # $Id$
@@ -10,7 +10,7 @@
 #        we do things outside of (most) of the lirc space and talk to
 #        the device.
 #        This module borrows logic and code from jvc_send.c  Which
-#        is Copyright 2002 Karl Bongers, karl@turbobit.com and Copyright 
+#        is Copyright 2002 Karl Bongers, karl@turbobit.com and Copyright
 #        2002 Pyroman, webvcrplus.
 #
 #        This modules is very young and will be changing to have functions
@@ -18,11 +18,11 @@
 #        lircd.conf.
 #
 # Notes from jvc_send.c:
-#        Send codes for weird Dish networks box that uses JVC_4700 at 
+#        Send codes for weird Dish networks box that uses JVC_4700 at
 #        57600 modulation/carrier frequency.
 #        Requires multiple back to back signals with accurate
 #        timing between signals.
-# 
+#
 #        Send JVC_4700 signals, try to send out exactly
 #        as they come in.  lircd/lirc_serial handling gives inaccurate
 #        signal lengths between 16 bit blocks.  The signal we see
@@ -31,11 +31,11 @@
 #
 #        lirc_serial.o must be loaded and setup correctly, see LIRC project.
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -69,7 +69,7 @@ class PluginInterface(plugin.Plugin):
 
     MODULATION_FREQ = 57600
 
-    ## 0 to 100, where 100=strongest? 
+    ## 0 to 100, where 100=strongest?
     DUTY_CYCLE = 50
 
     ## 1 block takes up 16bits*2+2, or 34 samples.  lirc_serial
@@ -77,7 +77,7 @@ class PluginInterface(plugin.Plugin):
     ## signals.
     NUM_BACK_TO_BACK = 3
 
-    POWER_BITS = 0xf7ff; ## power button bits 
+    POWER_BITS = 0xf7ff; ## power button bits
     PULSE_LEN = 350
     HEADER_SPACE = 6000
     ONE_LEN = 2700
@@ -131,50 +131,50 @@ class PluginInterface(plugin.Plugin):
         self.prepareSend()
         self.transmitSignal(code)
         self.clean()
-    
-    
+
+
     def prepareSend(self):
         self.fd = os.open(self.device, os.O_RDWR)
         if self.fd < 0:
             sys.exit("Error: %d\n" % fd)
         else:
             print "Lirc Opened at %s" % self.device
-    
-    
+
+
         print 'LIRC_SET_SEND_CARRIER: %s' % LIRC_SET_SEND_CARRIER
-        r = fcntl.ioctl(self.fd, long(LIRC_SET_SEND_CARRIER), 
+        r = fcntl.ioctl(self.fd, long(LIRC_SET_SEND_CARRIER),
                             struct.pack( "L", self.MODULATION_FREQ))
         print 'LIRC_SET_SEND_CARRIER got %s' % r
         #    printf("couldn't set modulation\n");
-    
-    
-        r = fcntl.ioctl(self.fd, long(LIRC_SET_SEND_DUTY_CYCLE), 
+
+
+        r = fcntl.ioctl(self.fd, long(LIRC_SET_SEND_DUTY_CYCLE),
                             struct.pack( "L", self.DUTY_CYCLE))
         print 'LIRC_SET_SEND_DUTY_CYCLE got %s' % r
         #    printf("couldn't set duty cycle");
-    
+
 
     def clean(self):
         os.close(self.fd)
-    
+
 
     def transmitSignal(self, code):
         data = []
 
-        ## fill up our buffer with signal data to send driver 
+        ## fill up our buffer with signal data to send driver
         for k in range(self.NUM_BACK_TO_BACK):
             data.append(self.PULSE_LEN)
             data.append(self.HEADER_SPACE)
-    
+
             v = code
             for i in range(16):
                 data.append(self.PULSE_LEN)
                 if (v & 0x8000):
-                   data.append(self.ONE_LEN)
+                    data.append(self.ONE_LEN)
                 else:
-                   data.append(self.ZERO_LEN)
+                    data.append(self.ZERO_LEN)
                 v <<= 1
-        
+
         for i in range(self.num_times_to_send):
             print 'sending code: %x\n' % code
             a1 = array.array('I', data)
@@ -211,7 +211,7 @@ class PluginInterface(plugin.Plugin):
             sio.close()
             # os.close(self.fd)
             time.sleep(1)
-    
+
 
 # ir = IRTrans('/etc/lircd-transmit.conf')
 # ir.transmit_button('1')

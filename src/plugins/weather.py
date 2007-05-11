@@ -583,7 +583,7 @@ class WeatherItem(Item):
         self.uvIndex     = self.GetString("this.swUV")
         self.visibility  = self.GetString("this.swVis")
         if not self.visibility:
-           self.visibility = 0.0
+            self.visibility = 0.0
 
         # convert visibility
         if self.convertData and float(self.visibility) != 999.0:

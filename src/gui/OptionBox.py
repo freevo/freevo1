@@ -11,12 +11,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -53,10 +53,10 @@ class OptionBox(Button):
 
     """
 
-    
-    def __init__(self, text=' ', left=None, top=None, width=100, height=25, 
+
+    def __init__(self, text=' ', left=None, top=None, width=100, height=25,
                  bg_color=None, fg_color=None, selected_bg_color=None,
-                 selected_fg_color=None, border=None, bd_color=None, 
+                 selected_fg_color=None, border=None, bd_color=None,
                  bd_width=None):
 
         handler = None
@@ -84,7 +84,7 @@ class OptionBox(Button):
 
         if self.list.get_selected_index() >= 0:
             self.set_text(self.list.get_selected_item().text)
-        
+
 
     def add_item(self, text, value=None):
         self.list.add_item(None, text, value, h_margin=10)
@@ -141,4 +141,3 @@ class OptionBox(Button):
         self.blit_parent()
         if self.list:
             self.list.draw(self.parent.surface)
-    

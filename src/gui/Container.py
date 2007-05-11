@@ -41,9 +41,9 @@ class Container(GUIObject):
     """
     """
 
-    def __init__(self, type='frame', left=0, top=0, width=0, height=0, 
-                 bg_color=None, fg_color=None, selected_bg_color=None, 
-                 selected_fg_color=None, border=None, bd_color=None, 
+    def __init__(self, type='frame', left=0, top=0, width=0, height=0,
+                 bg_color=None, fg_color=None, selected_bg_color=None,
+                 selected_fg_color=None, border=None, bd_color=None,
                  bd_width=None, vertical_expansion=0):
 
         GUIObject.__init__(self, left, top, width, height, bg_color, fg_color)
@@ -63,13 +63,13 @@ class Container(GUIObject):
             ci = self.content_layout.types['selected'].rectangle
             self.selected_bg_color = selected_bg_color or Color(ci.bgcolor)
             self.selected_fg_color = selected_fg_color or Color(ci.color)
-    
+
             if not self.bd_color:
                 self.bd_color = Color(self.skin_info_widget.rectangle.color)
-    
+
             if not self.bd_width:
                 self.bd_width = self.skin_info_widget.rectangle.size
-    
+
             if not self.border:
                 self.border = Border(self, Border.BORDER_FLAT, self.bd_color, self.bd_width)
 
@@ -84,7 +84,7 @@ class Container(GUIObject):
 
 
     def get_layout(self):
-        return self.layout_manager 
+        return self.layout_manager
 
 
     def layout(self):

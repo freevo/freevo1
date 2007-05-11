@@ -55,7 +55,7 @@ def connectionTest(teststr='testing'):
     except:
         return (False, 'CommDetectClient: connection error')
     return (status, response)
-    
+
 def initCommDetectJob(source):
     """Initialize the commdetectjob."""
     _debug_('initCommDetectJob(%s)' % (source))
@@ -68,7 +68,7 @@ def initCommDetectJob(source):
         raise
         return (False, 'CommDetectClient: connection error')
     return (status, response)
-    
+
 def queueIt(idnr, now=False):
     """
     Insert the current job in the commdetectqueue
@@ -81,16 +81,16 @@ def queueIt(idnr, now=False):
     except:
         return (False, 'CommDetectClient: connection error')
     return (status, response)
-    
+
 def startQueue():
     """Start the commdetect queue"""
     try:
         (status, response) = server.startQueue()
     except:
         return (False, 'CommDetectClient: connection error')
-    
+
     return (status, response)
-    
+
 def listJobs():
     """
     Get a list with all jobs in the commdetect queue and their current state
@@ -102,18 +102,18 @@ def listJobs():
     return returnFromJelly(status, response)
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 2: 
+    if len(sys.argv) >= 2:
         function = sys.argv[1]
     else:
         function = 'none'
 
     from time import sleep
-    
+
     if function == "test":
         (result, response) = connectionTest('connection test')
         print 'result: %s, response: %s ' % (result, response)
         print listJobs()
-        
+
     if function == "runtest":
         (status, idnr) = initCommDetectJob('/opt/media/tv/01-09_21_00_Dirty_Jobs_-_Bug_Breeder.mpeg')
         print "Job has idnr nr : %s" % idnr

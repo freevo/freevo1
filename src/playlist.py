@@ -1,15 +1,15 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# playlist.py - This is the Freevo playlist reading module. 
+# playlist.py - This is the Freevo playlist reading module.
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -66,7 +66,7 @@ class Playlist(Item):
 
         if isstring(playlist) and not name:
             self.name = util.getname(playlist)
-            
+
         # variables only for Playlist
         self.current_item = None
         self.playlist     = playlist
@@ -104,7 +104,7 @@ class Playlist(Item):
         except IndexError:
             print 'Bad m3u playlist file "%s"' % plsname
             return 0
-        
+
         (curdir, playlistname) = os.path.split(plsname)
         for line in playlist_lines:
             if line.endswith('\r\n'):
@@ -114,7 +114,7 @@ class Playlist(Item):
                     self.playlist.append(os.path.join(curdir,line))
             except TypeError:
                 print 'Bad m3u playlist line in "%s":%r' % (plsname, line)
-            
+
 
     def read_pls(self, plsname):
         """
@@ -144,7 +144,7 @@ class Playlist(Item):
                 line = line.replace('\\', '/') # Fix MSDOS slashes
             if os.path.exists(os.path.join(curdir,line)):
                 self.playlist.append(os.path.join(curdir,line))
-            
+
 
 
     def read_ssr(self, ssrname):
@@ -174,7 +174,7 @@ class Playlist(Item):
 
 
         """
-        Here's where we parse the line.  See the format above.  
+        Here's where we parse the line.  See the format above.
         TODO:  Make the search case insensitive
         """
         for line in playlist_lines:
@@ -218,7 +218,7 @@ class Playlist(Item):
             # XXX This is a short-term fix I guess
             self.suffixlist += p.suffix()
             self.get_plugins.append(p)
-                
+
         if isstring(playlist):
             # it's a filename with a playlist
             try:
@@ -259,7 +259,7 @@ class Playlist(Item):
                     self.playlist.append(i)
 
         self.__build__ = True
-                
+
 
     def randomize(self):
         """
@@ -273,7 +273,7 @@ class Playlist(Item):
             old.remove(element)
             self.playlist += [ element ]
 
-        
+
     def actions(self):
         """
         return the actions for this item: play and browse
@@ -282,7 +282,7 @@ class Playlist(Item):
         items = [ ( self.browse, _('Browse Playlist') ) ]
 
         play_item = ( self.play, _('Play') )
-        
+
         if self.autoplay:
             items = [ play_item ] + items
         else:
@@ -292,7 +292,7 @@ class Playlist(Item):
             items.append((self.random_play, _('Random play all items')))
 
         return items
-    
+
 
     def browse(self, arg=None, menuw=None):
         """
@@ -309,13 +309,13 @@ class Playlist(Item):
                 items.append(item)
 
         self.playlist = items
-        
+
         if self.random:
             self.randomize()
 
         moviemenu = menu.Menu(self.name, self.playlist)
         menuw.pushmenu(moviemenu)
-        
+
 
     def random_play(self, arg=None, menuw=None):
         """
@@ -325,7 +325,7 @@ class Playlist(Item):
                  display_type=self.display_type, random=True,
                  repeat=self.repeat).play(arg,menuw)
 
-        
+
     def play(self, arg=None, menuw=None):
         """
         play the playlist
@@ -337,7 +337,7 @@ class Playlist(Item):
             # XXX PopupBox please
             print String(_('empty playlist'))
             return False
-        
+
         if not arg or arg != 'next':
             # first start
             Playlist.build(self)
@@ -382,7 +382,7 @@ class Playlist(Item):
             self.current_item.play(menuw=menuw)
         else:
             self.current_item.actions()[0][0](menuw=menuw)
-        
+
 
     def cache_next(self):
         """
@@ -409,7 +409,7 @@ class Playlist(Item):
                     self.current_item.stop()
                 except OSError:
                     pass
-        
+
 
     def eventhandler(self, event, menuw=None):
         """
@@ -451,7 +451,7 @@ class Playlist(Item):
             elif event == PLAYLIST_NEXT:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('no next item in playlist')))
 
-                
+
         # end and no next item
         if event in (PLAY_END, USER_END, STOP):
             if self.background_playlist:
@@ -460,7 +460,7 @@ class Playlist(Item):
             if menuw:
                 menuw.show()
             return True
-            
+
 
         if event == PLAYLIST_PREV and self.current_item and self.playlist:
             pos = self.playlist.index(self.current_item)
@@ -482,7 +482,7 @@ class Playlist(Item):
         return Item.eventhandler(self, event, menuw)
 
 
-    
+
 
 
 class Mimetype(plugin.MimetypePlugin):
@@ -502,7 +502,7 @@ class Mimetype(plugin.MimetypePlugin):
         """
         return config.PLAYLIST_SUFFIX + config.IMAGE_SSHOW_SUFFIX
 
-    
+
     def get(self, parent, files):
         """
         return a list of items based on the files
@@ -512,7 +512,7 @@ class Mimetype(plugin.MimetypePlugin):
             display_type = parent.display_type
         else:
             display_type = None
-            
+
         for filename in util.find_matches(files, self.suffix()):
             items.append(Playlist(playlist=filename, parent=parent,
                                   display_type=display_type, build=True))

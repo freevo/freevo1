@@ -62,10 +62,10 @@ class FreevoPage(page.Page):
 
 class FreevoResource(Resource):
     """ Base class of webpages which handels the authentication.
-    
-    All webpages should be subclasses of this class. 
+
+    All webpages should be subclasses of this class.
     The subclasses must not have a render methode
-    but they need a _render methode instead. 
+    but they need a _render methode instead.
     When a webpage is opened by the user then first the render methode
     of this base class is called and then if the authentication was successfull
     the _render methode of the subclass is called.
@@ -74,11 +74,11 @@ class FreevoResource(Resource):
 
     def render(self, request):
         """ render methode of this class.
-        
+
         This methode will be called when a user requests this page.
         It only handels the authentication but does not present any
         content.If authentication is successfull this methode returns the
-        _render methode, which does the actuall work. 
+        _render methode, which does the actuall work.
         """
         # get username and password from the user
         username = request.getUser()
@@ -87,7 +87,7 @@ class FreevoResource(Resource):
         if not self.auth_user(username, password):
             # authentication fails, thus we send 401 error
             request.setResponseCode(401, 'Authentication needed')
-            # still we have to create a few things for the header       
+            # still we have to create a few things for the header
             request.setHeader('WWW-Authenticate', 'Basic realm="unknown"')
             request.setHeader('Content-Length', str(len('401: = Authorization needed.')))
             request.setHeader('Content-Type', 'text/html')
@@ -95,14 +95,14 @@ class FreevoResource(Resource):
             return '<h1>401 Authentication required</h1>'
         else:
             # authentication was successfull
-            # thus we return the self._render methode 
+            # thus we return the self._render methode
             # which hopefully will do something usefull
             return self._render(request)
 
 
     def auth_user(self, username, password):
         """ check of username and password
-        
+
         This methode validates username and password.
         If authentication is successfull it returns True otherwise False.
         """
@@ -121,14 +121,14 @@ class FreevoResource(Resource):
 
 class HTMLResource:
     """ HTML elements of a freevo webpage
-    
+
     This class provides many usefull elements which can be used
-    in a webpage. It provides a string called res which should be used to 
+    in a webpage. It provides a string called res which should be used to
     build up the html string that should form the content of a webpage.
     Usage: Create a instance of this class in the _render methode of the
-    subclass which represents the webpage, use all this methodes to build 
+    subclass which represents the webpage, use all this methodes to build
     the html string  and return HTMLResource.res in the end.
-    """ 
+    """
     def __init__(self):
         # create empty result string which must be filled with life
         self.res =''
@@ -143,8 +143,8 @@ class HTMLResource:
 
 
     def printHeader(self, title='unknown page', style=None, script=None, selected='Help', prefix=0):
-        """ Header 
-        
+        """ Header
+
         This produces the header of a freevo page with the navigation bar.
         Parameter:
             title    = title of the webpage
@@ -154,23 +154,23 @@ class HTMLResource:
             prefix   = how many directory levels is this file below the main level
                        this is needed for the links in the navigation bar.
         """
-        
+
         # debug print
         print 'printHeader(self, title=\"%s\", style=\"%s\", script=\"%s\", selected=\"%s\", prefix=\"%s\")' % \
             (title, style, script, selected, prefix)
 
-        # we are prefix level below the main directory thus we must go prefix times up, 
+        # we are prefix level below the main directory thus we must go prefix times up,
         # before we are in the same directory than those pages that are in the navigation bar.
         # This is needed for creating the links in the navigation bar.
         strprefix = '../' * prefix
 
         # now we can start to create the header:
 
-        # doc type 
+        # doc type
         self.res += '<?xml version="1.0" encoding="'+ config.encoding +'"?>\n'
         self.res += '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" '
         self.res += '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n'
-               
+
         # <html> and <head> tag
         self.res += '<html>\n\t<head>\n'
         # <title>
@@ -209,7 +209,7 @@ class HTMLResource:
                 items.append((_('Icecast List'),_('Change Icecast List'),'%siceslistchanger.rpy' % (strprefix)))
         except AttributeError:
             pass
-        # go through the items and create the bar       
+        # go through the items and create the bar
         for i in items:
             if selected == i[0]:
                 # this item is selected, thus we highlight the tab
@@ -225,7 +225,7 @@ class HTMLResource:
 
     def tableOpen(self, opts=''):
         """ Opens a table
-        
+
         opts are additional parameters for the <table> tag.
         """
         print 'tableOpen(self, opts=\"%s\")' % (opts)
@@ -233,7 +233,7 @@ class HTMLResource:
 
 
     def tableClose(self):
-        """ 
+        """
         Close a table
         """
         print 'tableClose(self)'
@@ -242,7 +242,7 @@ class HTMLResource:
 
     def tableHeadOpen(self, opts=''):
         """ Open a table header line
-        
+
         opts are additional parameters for the <thead> tag.
         """
         print 'tableHeadOpen(self, opts=\"%s\")' % (opts)
@@ -250,7 +250,7 @@ class HTMLResource:
 
 
     def tableHeadClose(self, opts=''):
-        """ 
+        """
         Closes a table header line
         """
         print 'tableHeadClose(self, opts=\"%s\")' % (opts)
@@ -259,7 +259,7 @@ class HTMLResource:
 
     def tableBodyOpen(self, opts=''):
         """ Opens a table body
-        
+
         opts are additional parameter for the <tbody> tag
         """
         print 'tableBodyOpen(self, opts=\"%s\")' % (opts)
@@ -267,7 +267,7 @@ class HTMLResource:
 
 
     def tableBodyClose(self, opts=''):
-        """ 
+        """
         Closes a table body
         """
         print 'tableBodyClose(self, opts=\"%s\")' % (opts)
@@ -276,7 +276,7 @@ class HTMLResource:
 
     def tableFootOpen(self, opts=''):
         """ Opens a table footer
-        
+
         opts are additional parameters for the <tfoot> tag.
         """
         print 'tableFootOpen(self, opts=\"%s\")' % (opts)
@@ -284,7 +284,7 @@ class HTMLResource:
 
 
     def tableFootClose(self, opts=''):
-        """ 
+        """
         Closes a table footer.
         """
         print 'tableFootClose(self, opts=\"%s\")' % (opts)
@@ -293,7 +293,7 @@ class HTMLResource:
 
     def tableRowOpen(self, opts=''):
         """ Opens a table row
-        
+
         opts are additonal parameters for the <tr> tag
         """
         print 'tableRowOpen(self, opts=\"%s\")' % (opts)
@@ -310,7 +310,7 @@ class HTMLResource:
 
     def tableCell(self, data='', opts=''):
         """ Creates a table cell
-        
+
         opts are additonal parameters for the <td>.
         data is the content of this table cell.
         """
@@ -331,7 +331,7 @@ class HTMLResource:
 
 
     def printFooter(self):
-        """ 
+        """
         Closes the html document
         """
         print 'printFooter(self)'
@@ -340,7 +340,7 @@ class HTMLResource:
 
     def printSearchForm(self):
         """ Creates the simple search form"""
-        
+
         print 'printSearchForm(self)'
         self.res += """
     <form id="SearchForm" action="search.rpy" method="get">
@@ -350,10 +350,10 @@ class HTMLResource:
 
     def printAdvancedSearchForm(self):
         """ Creates the advanced search form.
-        
+
         This search form has an additonal checkbox and a go button
         """
-        
+
         print 'printAdvancedSearchForm(self)'
         self.res += """
     <form id="SearchForm" action="search.rpy" method="get">
@@ -365,7 +365,7 @@ class HTMLResource:
     """
 
     def printMessages(self, messages):
-        """ 
+        """
         Prints a message
         """
         print 'printMessages(self, messages=\"%s\")' % (messages)
@@ -386,7 +386,7 @@ class HTMLResource:
         self.printFooter()
 
     def printLinks(self, prefix=0):
-        """ 
+        """
         Print Link
         """
         # seems to do nothing at the moment ????
@@ -417,7 +417,7 @@ class HTMLResource:
 
     def printPassword(self, password):
         """
-        ??? 
+        ???
         """
         print 'printPassword(self, password=\"%s\")' % (password)
         self.res += """<script language="JavaScript"> <!--
@@ -436,7 +436,7 @@ class HTMLResource:
         </script>"""
 
     def printImagePopup(self):
-        """ 
+        """
         Opens a Popup to display an image
         """
         print 'printImagePopup(self)'
@@ -504,14 +504,14 @@ class HTMLResource:
 
     def printWebRemote(self):
         """ Prints web remote
-        
-        If configured to do so, 
-        then this displays a remote to control freevo 
+
+        If configured to do so,
+        then this displays a remote to control freevo
         via the web browser
         """
         print 'printWebRemote(self)'
         if not (config.ENABLE_NETWORK_REMOTE == 1 and config.REMOTE_CONTROL_PORT):
-           self.res += "no remote enabled"
+            self.res += "no remote enabled"
 
         self.res += u"""
            <style type="text/css" media="screen">
@@ -556,7 +556,7 @@ class HTMLResource:
                xmlHttp.open('GET', url, true);
                xmlHttp.send(null);
              }
-            
+
             function openremote(){
               if(remoteWin) {
                 if(!remoteWin.closed) {remoteWin.focus();}

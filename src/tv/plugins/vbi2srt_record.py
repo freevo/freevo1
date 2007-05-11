@@ -11,7 +11,7 @@
 #   To use this plug-in add the following to local_conf.py
 #   plugin.remove('tv.generic_record')
 #   plugin_record = plugin.activate('tv.vbi2srt_record')
-# Todo:        
+# Todo:
 #   Clean up the code and remove unused stuff
 # Bugs:
 #   There is a bug in vbi2srt that causes incorrect timings when vps is
@@ -19,7 +19,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -47,8 +47,8 @@ import signal
 
 import config
 import tv.ivtv
-import childapp 
-import plugin 
+import childapp
+import plugin
 import rc
 import util.tv_util as tv_util
 
@@ -111,7 +111,7 @@ class Recorder:
         self.thread.setDaemon(1)
         self.thread.mode = 'idle'
         self.thread.start()
-        
+
     def Record(self, rec_prog):
         frequency = self.fc.chanSet(str(rec_prog.tunerid), False, 'record plugin')
 
@@ -149,16 +149,16 @@ class Recorder:
             # there is a bug in vbi2srt that causes out of sync subtitles when VPS is used
             self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s --page=%s' % \
                 (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.pdc_start, pagenum)
-    
+
         self.thread.mode     = 'record'
         self.thread.prog     = rec_prog
         self.thread.command  = self.rec_command
         self.thread.autokill = float(rec_prog.rec_duration + 10)
         self.thread.mode_flag.set()
-        
+
         if DEBUG: print('Recorder::Record: %s' % self.rec_command)
-        
-        
+
+
     def Stop(self):
         self.thread.mode = 'stop'
         self.thread.mode_flag.set()
@@ -167,7 +167,7 @@ class Recorder:
 class RecordApp(childapp.ChildApp):
 
     def __init__(self, app):
-        if DEBUG: 
+        if DEBUG:
             fname_out = os.path.join(config.LOGDIR, 'vbi2srt-stdout.log')
             fname_err = os.path.join(config.LOGDIR, 'vbi2srt-stderr.log')
             try:
@@ -184,7 +184,7 @@ class RecordApp(childapp.ChildApp):
                 print 'Record logging to "%s" and "%s"' % (fname_out, fname_err)
 
         childapp.ChildApp.__init__(self, app)
-        
+
 
     def kill(self):
         childapp.ChildApp.kill(self, signal.SIGINT)
@@ -198,7 +198,7 @@ class Record_Thread(threading.Thread):
 
     def __init__(self):
         threading.Thread.__init__(self)
-        
+
         self.mode = 'idle'
         self.mode_flag = threading.Event()
         self.command  = ''
@@ -212,7 +212,7 @@ class Record_Thread(threading.Thread):
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
-                
+
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
                 if DEBUG: print('Record_Thread::run: cmd=%s' % self.command)
@@ -238,14 +238,14 @@ class Record_Thread(threading.Thread):
 
                 self.app = RecordApp(self.command)
                 if DEBUG: print 'app child pid: %s' % self.app.child.pid
-                
+
                 while self.mode == 'record' and self.app.isAlive():
                     self.autokill -= 0.5
                     time.sleep(0.5)
                     if self.autokill <= 0:
                         if DEBUG: print 'autokill timeout, stopping recording'
                         self.mode = 'stop'
-                        
+
                 if self.app.isAlive():
                     # might not want to do this is PDC is valid, programme may be delayed
                     if DEBUG: print('Record_Thread::run: past wait!!')

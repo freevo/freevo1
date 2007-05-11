@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -46,7 +46,7 @@ class AudioItem(Item):
     """
     This is the common class to get information about audiofiles.
     """
-    
+
     def __init__(self, url, parent, name=None, scan=True):
         self.type = 'audio'
         Item.__init__(self, parent)
@@ -64,12 +64,12 @@ class AudioItem(Item):
         self.pause      = 0
 
         self.mplayer_options = ''
-            
+
         try:
             self.length = int(self.info['length'])
         except:
             self.length = 0
-            
+
         # Let's try to find if there is any image in the current directory
         # that could be used as a cover
         if self.filename and not self.image and not \
@@ -141,10 +141,10 @@ class AudioItem(Item):
 
         if key  == 'elapsed':
             return '%d:%02d' % (int(self.elapsed / 60), int(self.elapsed % 60))
-            
+
         return Item.__getitem__(self, key)
 
-   
+
     # ----------------------------------------------------------------------------
 
     def actions(self):
@@ -222,4 +222,3 @@ class AudioItem(Item):
 
         # last fallback: return filename
         return os.path.split(self.filename)[1]
-

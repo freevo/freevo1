@@ -12,12 +12,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -65,13 +65,13 @@ class InputBox(PopupBox):
         self.lbg = LetterBoxGroup(type=type, numboxes=numboxes, text=input_text,
                                   width=self.content.width-self.content.h_margin*2)
         self.add_child(self.lbg)
-        
+
 
     def eventhandler(self, event):
         if self.lbg.eventhandler(event):
             self.draw()
             return True
-        
+
         if event == INPUT_ENTER:
             txt = self.lbg.get_word()
             self.destroy()

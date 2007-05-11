@@ -6,11 +6,11 @@
 #
 # Notes: do not use the OSD object inside a thread
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -56,7 +56,7 @@ if __freevo_app__ == 'main':
     # import animations
     import animation
 
-        
+
 
 
 help_text = """\
@@ -116,11 +116,11 @@ def get_singleton():
     # don't start osd for helpers
     if config.HELPER:
         return
-    
+
     # One-time init
     if _singleton == None:
         _singleton = OSD()
-        
+
     return _singleton
 
 
@@ -130,7 +130,7 @@ def stop():
     device, e.g. for DXR3 and dfbmga output,
     """
     get_singleton().stopdisplay()
-    
+
 
 def restart():
     """
@@ -138,7 +138,7 @@ def restart():
     """
     get_singleton().restartdisplay()
     get_singleton().update()
-    
+
 
 class Font:
     def __init__(self, filename='', ptsize=0, font=None):
@@ -157,7 +157,7 @@ class OSDFont:
         self.chars  = {}
         self.name   = name
         self.ptsize = ptsize
-        
+
     def charsize(self, c):
         try:
             return self.chars[c]
@@ -181,8 +181,8 @@ class OSDFont:
             except (RuntimeError, IOError):
                 return None
         return None
-    
-        
+
+
     def __getfont__(self, filename, ptsize):
         ptsize = int(ptsize / 0.7)  # XXX pygame multiplies by 0.7 for some reason
 
@@ -194,7 +194,7 @@ class OSDFont:
 
         font   = self.__loadfont__(filename, ptsize)
         if not font:
-            
+
             # search OSD_EXTRA_FONT_PATH for this font
             fontname = os.path.basename(filename)
             for path in config.OSD_EXTRA_FONT_PATH:
@@ -206,7 +206,7 @@ class OSDFont:
                 # font  = self.__loadfont__(fname.replace('_bold', 'bd'), ptsize)
                 # if font:
                 #     break
-                
+
         if not font:
             _debug_('Couldnt load font "%s"' % os.path.basename(filename))
 
@@ -232,7 +232,7 @@ class OSDFont:
 
         return font
 
-        
+
 
 
 class BusyIcon(threading.Thread):
@@ -245,7 +245,7 @@ class BusyIcon(threading.Thread):
         self.active = False
         self.lock   = thread.allocate_lock()
         self.rect   = None
-        
+
     def wait(self, timer):
         self.lock.acquire()
         try:
@@ -254,12 +254,12 @@ class BusyIcon(threading.Thread):
             self.mode_flag.set()
         finally:
             self.lock.release()
-        
+
     def stop(self):
         self.lock.acquire()
         self.active = False
         self.lock.release()
-    
+
     def run(self):
         while (1):
             self.mode_flag.clear()
@@ -292,7 +292,7 @@ class BusyIcon(threading.Thread):
                         osd.screen.blit(screen, (x,y))
                 finally:
                     self.lock.release()
-                
+
             while self.active:
                 time.sleep(0.01)
 
@@ -322,7 +322,7 @@ class OSD:
 
         self.bitmapcache = util.objectcache.ObjectCache(5, desc='bitmap')
         self.font_info_cache = {}
-        
+
         self.default_fg_color = self.COL_BLACK
         self.default_bg_color = self.COL_WHITE
 
@@ -357,7 +357,7 @@ class OSD:
                               (config.CONF.setterm, i,i))
                 except:
                     pass
-            
+
         self.busyicon = BusyIcon()
 
         # Initialize the PyGame modules.
@@ -378,7 +378,7 @@ class OSD:
 
         self.depth     = self.screen.get_bitsize()
         self.must_lock = self.screen.mustlock()
-        
+
         if config.CONF.display == 'x11' and config.START_FULLSCREEN_X == 1:
             self.toggle_fullscreen()
 
@@ -394,7 +394,7 @@ class OSD:
         icon = pygame.image.load(os.path.join(config.ICON_DIR,
                                               'misc/freevo_app.png')).convert()
         pygame.display.set_icon(icon)
-        
+
         self.clearscreen(self.COL_BLACK)
         self.update()
 
@@ -407,7 +407,7 @@ class OSD:
         pygame.mouse.set_visible(0)
         pygame.key.set_repeat(500, 30)
         self.mousehidetime = time.time()
-        
+
         self._help       = 0  # Is the helpscreen displayed or not
         self._help_saved = pygame.Surface((self.width, self.height))
         self._help_last  = 0
@@ -474,7 +474,7 @@ class OSD:
 
             if event.type == NOEVENT:
                 return
-            
+
             if event.type == KEYDOWN:
                 _debug_('KEYDOWN: type=%s key=%s' % (event.type, event.key), 2)
 
@@ -484,7 +484,7 @@ class OSD:
                             return event.unicode
                     except:
                         pass
-                    
+
                 if event.key in config.KEYMAP.keys():
                     # Turn off the helpscreen if it was on
                     if self._help:
@@ -510,7 +510,7 @@ class OSD:
                             return event.unicode
                     except:
                         return None
-    
+
     def shutdown(self):
         """
         shutdown the display
@@ -552,15 +552,15 @@ class OSD:
         if hasattr(self, '__stop_screen__'):
             self.screen.blit(self.__stop_screen__, (0,0))
             del self.__stop_screen__
-            
+
         # We need to go back to fullscreen mode if that was the mode before the shutdown
         if self.fullscreen:
             pygame.display.toggle_fullscreen()
-            
+
         # restart all animations
         self.render.restartall()
 
-        
+
     def toggle_fullscreen(self):
         """
         toggle between window and fullscreen mode
@@ -576,7 +576,7 @@ class OSD:
         return 1 is fullscreen is running
         """
         return self.fullscreen
-    
+
 
     def clearscreen(self, color=None):
         """
@@ -588,8 +588,8 @@ class OSD:
         if color == None:
             color = self.default_bg_color
         self.screen.fill(self._sdlcol(color))
-        
-    
+
+
     def printdata(self, data):
         print 'image=%s %d %r' % (type(data[0]), len(data[0]), data[0][:10])
         print 'size=%s %s' % (type(data[1]), data[1])
@@ -623,14 +623,14 @@ class OSD:
             else:
                 filename = os.path.abspath(url)
                 thumbnail = False
-            
+
             if not os.path.isfile(filename):
                 filename = os.path.join(config.IMAGE_DIR, url[8:])
 
             if not os.path.isfile(filename):
                 print 'osd.py: Bitmap file "%s" doesn\'t exist!' % filename
                 return None
-            
+
             try:
                 if isstring(filename) and filename.endswith('.raw'):
                     # load cache
@@ -657,7 +657,7 @@ class OSD:
                         print 'SDL image load problem: %s - trying Imaging' % e
                         i = Image.open(filename)
                         image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
-            
+
             except:
                 print 'Problem while loading image %s' % String(url)
                 if config.DEBUG:
@@ -676,10 +676,10 @@ class OSD:
             cache[url] = image
         return image
 
-    
+
     def drawbitmap(self, image, x=0, y=0, scaling=None,
                    bbx=0, bby=0, bbw=0, bbh=0, rotation = 0, layer=None):
-        """           
+        """
         Draw a bitmap on the OSD. It is automatically loaded into the cache
         if not already there.
         """
@@ -713,7 +713,7 @@ class OSD:
         """
         if not image:
             return None
-        
+
         if bbx or bby or bbw or bbh:
             imbb = pygame.Surface((bbw, bbh))
             imbb.blit(image, (0, 0), (bbx, bby, bbw, bbh))
@@ -741,10 +741,10 @@ class OSD:
         # Make sure the order is top left, bottom right
         x0, x1 = min(x0, x1), max(x0, x1)
         y0, y1 = min(y0, y1), max(y0, y1)
-        
+
         if color == None:
             color = self.default_fg_color
-            
+
         if width == None:
             width = 1
 
@@ -776,7 +776,7 @@ class OSD:
             return self.screen.subsurface(rect).convert()
         else:
             return self.screen.subsurface( (x, y, width, height) ).convert()
-    
+
 
     def putsurface(self, surface, x, y):
         """
@@ -893,7 +893,7 @@ class OSD:
         # calc the matching and rest string and return all this
         return (width+ellipses_size, string[:c]+ellipses, string[c:], False)
 
-            
+
 
     def __draw_transparent_text__(self, surface, pixels=30):
         """
@@ -958,7 +958,7 @@ class OSD:
         dim = config.OSD_DIM_TEXT and dim
         # XXX pixels to dim, this should probably be tweaked
         dim_size = 25
-            
+
         if hasattr(font, 'shadow'):
             # skin font
             if font.shadow.visible:
@@ -996,7 +996,7 @@ class OSD:
 
         if width <= 0 or height < font.height:
             return string, (x,y,x,y)
-            
+
         num_lines_left   = int((height+line_height-font.height) / line_height)
         lines            = []
         current_ellipses = ''
@@ -1007,7 +1007,7 @@ class OSD:
             mode = hard = 'hard'
         else:
             dim = False
-            
+
         while(num_lines_left > 0):
             # calc each line and put the rest into the next
             if num_lines_left == 1:
@@ -1105,7 +1105,7 @@ class OSD:
                                                   render.get_size()[1] + \
                                                   2 * border_radius)).convert_alpha()
                             tmp.fill((255, 0, 0, 0))
-                            
+
                             for ox in (0, border_radius, border_radius*2):
                                 for oy in (0, border_radius, border_radius*2):
                                     if ox or oy:
@@ -1119,7 +1119,7 @@ class OSD:
                                 for oy in (-border_radius, 0, border_radius):
                                     if ox or oy:
                                         layer.blit(re, (x0+ox, y0+oy))
-                                    
+
                     if shadow_x or shadow_y:
                         # draw the text in the shadow_color to get a shadow
                         re = font.font.render(l, 1, shadow_color)
@@ -1138,7 +1138,7 @@ class OSD:
                     print e
                     if config.DEBUG:
                         traceback.print_exc()
-                    
+
             if x0 < min_x:
                 min_x = x0
             if x0 + w > max_x:
@@ -1168,7 +1168,7 @@ class OSD:
             height_needed += border_radius * 2
 
         return r, (min_x, y, max_x, y+height_needed)
-    
+
 
 
 
@@ -1199,7 +1199,7 @@ class OSD:
             tx -= width/2
         elif align == 'right':
             tx -= width
-            
+
         self.drawstringframed(string, x, y, width, -1, self.getfont(font, ptsize),
                               fgcolor, bgcolor, align_h = align, layer=layer,
                               ellipses='')
@@ -1214,7 +1214,7 @@ class OSD:
             return (x, y, s.get_at((x,y)))
         except:
             return None
-            
+
     def _restorepixel(self, save, s):
         """
         restore the saved pixel
@@ -1239,15 +1239,15 @@ class OSD:
         p6 = self._savepixel(x+1, y+radius, s)
 
         pygame.draw.circle(s, color, (x, y), radius)
-        
+
         self._restorepixel(p1, s)
         self._restorepixel(p2, s)
         self._restorepixel(p3, s)
         self._restorepixel(p4, s)
         self._restorepixel(p5, s)
         self._restorepixel(p6, s)
-        
-        
+
+
     def drawroundbox(self, x0, y0, x1, y1, color=None, border_size=0, border_color=None,
                      radius=0, layer=None):
         """
@@ -1271,7 +1271,7 @@ class OSD:
         else:
             x = 0
             y = 0
-            
+
         w = x1 - x0
         h = y1 - y0
 
@@ -1280,7 +1280,7 @@ class OSD:
 
         # make sure the radius fits the box
         radius = min(radius, h / 2, w / 2)
-        
+
         if not layer:
             box = pygame.Surface((w, h), SRCALPHA)
 
@@ -1288,9 +1288,9 @@ class OSD:
             box.fill((0,0,0,0))
         else:
             box = layer
-            
+
         r,g,b,a = self._sdlcol(color)
-        
+
         if border_size:
             if radius >= 1:
                 self.drawcircle(box, bc, x+radius, y+radius, radius)
@@ -1299,13 +1299,13 @@ class OSD:
                 self.drawcircle(box, bc, x+w-radius, y+h-radius, radius)
                 pygame.draw.rect(box, bc, (x+radius, y, w-2*radius, h))
             pygame.draw.rect(box, bc, (x, y+radius, w, h-2*radius))
-        
+
             x += border_size
             y += border_size
             h -= 2* border_size
             w -= 2* border_size
             radius -= min(0, border_size)
-        
+
         if radius >= 1:
             self.drawcircle(box, c, x+radius, y+radius, radius)
             self.drawcircle(box, c, x+w-radius, y+radius, radius)
@@ -1313,7 +1313,7 @@ class OSD:
             self.drawcircle(box, c, x+w-radius, y+h-radius, radius)
             pygame.draw.rect(box, c, (x+radius, y, w-2*radius, h))
         pygame.draw.rect(box, c, (x, y+radius, w, h-2*radius))
-        
+
         if not layer:
             self.screen.blit(box, (x0, y0))
 
@@ -1345,7 +1345,7 @@ class OSD:
 
         if stop_busyicon:
             self.busyicon.rect = None
-        
+
 
 
 
@@ -1354,7 +1354,7 @@ class OSD:
             return None
 
         self._help = {0:1, 1:0}[self._help]
-        
+
         if self._help:
             _debug_('Help on')
             # Save current display
@@ -1370,7 +1370,7 @@ class OSD:
 
                 ks = line[:8]
                 cmd = line[8:]
-                
+
                 print '"%s" "%s" %s %s' % (ks, cmd, x, y)
                 fname = config.OSD_DEFAULT_FONTNAME
                 if ks: self.drawstring(ks, x, y, font=fname, ptsize=14)
@@ -1386,7 +1386,7 @@ class OSD:
             self.screen.blit(self._help_saved, (0, 0))
             self.update()
 
-        
+
     # Convert a 32-bit TRGB color to a 4 element tuple for SDL
     def _sdlcol(self, col):
         if col==None:

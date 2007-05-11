@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes: This contains some rominfo code from videogame.py.
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@
 import sys
 import random
 # modifications made 21 Jul 2004 by vputz
-# 
+#
 # xmame version 0.84 made --listinfo obsolete; all rom list information
 # is obtained by --listxml, which produces an XML feed of rom information.
 # This current file switches based on the xmame version number; for 0.83 and
@@ -68,7 +68,7 @@ FALSE = 0
 
 
 #
-# Lets get a MameRomList if one is available from disk.  If not 
+# Lets get a MameRomList if one is available from disk.  If not
 # then we shall return an empty one.
 #
 def getMameRomList():
@@ -210,7 +210,7 @@ def mameRomListFromListxml( mame_cmd ) :
     parser.setContentHandler( handler )
 
     parser.parse( listinfo )
-    
+
     listinfo.close()
     try:
         os.remove('/tmp/roms')
@@ -224,7 +224,7 @@ def mameRomListFromListxml( mame_cmd ) :
 def roms_equal( lhs, rhs ) :
     return ( (lhs.name == rhs.name) and
              (lhs.description == rhs.description) and
-             (lhs.year == rhs.year) and 
+             (lhs.year == rhs.year) and
              (lhs.manufacturer == rhs.manufacturer) and
              (lhs.cloneof == rhs.cloneof) and
              (lhs.romof == rhs.romof) )
@@ -271,21 +271,21 @@ def xmame_semimajor_version( mame_cmd ) :
 
     verinfo.close()
     return result
-        
 
-    
+
+
 def updateMameRomList( mame_cmd ) :
     if xmame_semimajor_version( mame_cmd ) == FALSE :
         return FALSE
     if xmame_semimajor_version(mame_cmd) >= 83 :
-        if DEBUG: 
+        if DEBUG:
             print "updating via listxml"
         mameRomList = mameRomListFromListxml( mame_cmd )
     else :
-        if DEBUG: 
+        if DEBUG:
             print "updating via listinfo"
         mameRomList = mameRomListFromListinfo( mame_cmd )
-    saveMameRomList(mameRomList)        
+    saveMameRomList(mameRomList)
     return TRUE
 
 
@@ -321,7 +321,7 @@ def getMameItemInfoList(mame_files, mame_cmd):
                      'description': rom.description,
                      'year': rom.year,
                      'cloneof': rom.cloneof,
-                     'romof': rom.romof } 
+                     'romof': rom.romof }
             items += [(rom.description, romfile, None, info)]
             rm_files.append(romfile)
 
@@ -338,4 +338,3 @@ def getMameItemInfo(mame_file):
         return roms[key]
     else:
         return
-

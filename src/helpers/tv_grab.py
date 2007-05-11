@@ -7,11 +7,11 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,7 @@ def grab():
 
     print 'Grabbing listings.'
     xmltvtmp = '/tmp/TV.xml.tmp'
-    ec = os.system('%s --output %s --days %s' % ( config.XMLTV_GRABBER, 
+    ec = os.system('%s --output %s --days %s' % ( config.XMLTV_GRABBER,
                                              xmltvtmp,
                                              config.XMLTV_DAYS ))
 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 
     if len(sys.argv)>1 and sys.argv[1] == '--help':
         usage()
-    
+
     if len(sys.argv)>1 and sys.argv[1] == '--query':
         print
         print 'searching for station information'
@@ -111,10 +111,8 @@ if __name__ == '__main__':
     grab()
 
     import tv.record_client as rc
-    
+
     print 'Scheduling favorites for recording:  '
 
     (result, response) = rc.updateFavoritesSchedule()
     print '    %s' % response
-
-

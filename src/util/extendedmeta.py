@@ -5,11 +5,11 @@
 # $Id: extendedmeta.py,v #
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -42,15 +42,15 @@ try:
     from util.dbutil import *
 except ImportError:
     pass
-    
+
 import kaa.metadata.audio.eyeD3 as eyeD3
 from util import recursefolders
 
 ##### Database
 
-dbschema = """CREATE TABLE music (id INTEGER PRIMARY KEY, dirtitle VARCHAR(255), path VARCHAR(255), 
-        filename VARCHAR(255), type VARCHAR(3), artist VARCHAR(255), title VARCHAR(255), album VARCHAR(255), 
-        year VARCHAR(255), track NUMERIC(3), track_total NUMERIC(3), bpm NUMERIC(3), last_play float, 
+dbschema = """CREATE TABLE music (id INTEGER PRIMARY KEY, dirtitle VARCHAR(255), path VARCHAR(255),
+        filename VARCHAR(255), type VARCHAR(3), artist VARCHAR(255), title VARCHAR(255), album VARCHAR(255),
+        year VARCHAR(255), track NUMERIC(3), track_total NUMERIC(3), bpm NUMERIC(3), last_play float,
         play_count NUMERIC, start_time NUMERIC, end_time NUMERIC, rating NUMERIC, eq  VARCHAR)"""
 
 def make_query(filename,dirtitle):
@@ -74,7 +74,7 @@ def addPathDB(path, dirtitle, type='*.mp3', verbose=True):
     # Get some stuff ready
     count = 0
     db = MetaDatabase();
-    if not db.checkTable('music'): 
+    if not db.checkTable('music'):
         db.runQuery(dbschema)
 
     # Compare and contrast the db to the disc
@@ -86,7 +86,7 @@ def addPathDB(path, dirtitle, type='*.mp3', verbose=True):
         except ValueError:
             # Why doesn't it just give a return code
             pass
-  
+
     if count > 0 and verbose:
         print "  Skipped %i songs already in the database..." % (count)
 
@@ -136,11 +136,11 @@ class AudioParser:
 
         if not filelist:
             filelist = util.match_files(dirname, config.AUDIO_SUFFIX)
-            
+
         if not filelist and not subdirs:
             # no files in here? We are done
             return
-        
+
         # ok, something changed here, too bad :-(
         self.changed = True
         self.force   = False
@@ -156,7 +156,7 @@ class AudioParser:
         mediainfo.cache_dir(dirname)
 
         use_tracks = True
-        
+
         for song in filelist:
             try:
                 data = mediainfo.get(song)
@@ -171,7 +171,7 @@ class AudioParser:
 
         if use_tracks and (self.album or self.artist):
             mediainfo.set(dirname, 'audio_advanced_sort', True)
-            
+
         if not self.length:
             return
 
@@ -185,11 +185,11 @@ class AudioParser:
             data.store('coverscan', modtime)
             self.extract_image(dirname)
 
-            
+
     def strcmp(self, s1, s2):
         s1 = Unicode(s1)
         s2 = Unicode(s2)
-        
+
         if not s1 or not s2:
             return s1 or s2
         if s1 == various or s2 == various:
@@ -227,7 +227,7 @@ class AudioParser:
                 if vfs.isfile(myname) and (self.get_md5(vfs.open(myname,'rb')) == \
                                            self.get_md5(img.imageData)):
                     # Image already there and has identical md5, skip
-                    pass 
+                    pass
                 else:
                     f = vfs.open(myname, "wb")
                     f.write(img.imageData)

@@ -1,17 +1,17 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # irsend_generic.py - Send commands to an external tv receiver using a
-#                     shell command like irsend from Lirc.  
+#                     shell command like irsend from Lirc.
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:  Plugin wrapper for irsend or any other remote controll command.
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@ class PluginInterface(plugin.Plugin):
     to tell an external tuner to change the channel.
     Example usage (local_conf.py):
 
-    plugin_external_tuner = plugin.activate('tv.irsend_generic', 
+    plugin_external_tuner = plugin.activate('tv.irsend_generic',
                             args=('/usr/bin/irsend SEND_ONCE <remote_name>', ))
 
     Where <remote_name> is the name of the remote you are using to send codes
@@ -68,16 +68,15 @@ class PluginInterface(plugin.Plugin):
         self.transmitSignal(chan_args)
         if self.enterkey:
             # Sometimes you need to send a "ENTER" or a "SELECT"
-            # after keying in a code. 
+            # after keying in a code.
             self.transmitSignal(self.enterkey)
 
 
     def transmitButton(self, button):
         print 'sending button: %s\n' % button
         self.transmitSignal(code)
-    
+
 
     def transmitSignal(self, code):
         sendcmd = '%s %s' % (self.command, code)
         os.system(sendcmd)
-    

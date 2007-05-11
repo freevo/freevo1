@@ -101,7 +101,7 @@ class PluginInterface(plugin.ItemPlugin):
     will be executed is stored in CDPAR_CMD.
     CDPAR_CMD = 'cdparanoia'
 
-    For ripping the wav from the CD, we use cdparanoia. You can specify the options 
+    For ripping the wav from the CD, we use cdparanoia. You can specify the options
     used. For error pertection, you the following:
     CD_RIP_CDPAR_OPTS = '-s'
     For a quick rip (about an eight of the time as the line above) use:
@@ -324,7 +324,7 @@ class main_backup_thread(threading.Thread):
 
         # If no directory structure preferences were given use default dir structure
         if len(path_list) == 0:
-             pathname = dir_audio + "/" + artists + "/" + album + "/"
+            pathname = dir_audio + "/" + artists + "/" + album + "/"
         # Else use the preferences given by user
         else:
             path_temp  =  dir_audio + path_head

@@ -7,11 +7,11 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -87,9 +87,9 @@ for arg in sys.argv[1:]:
     if arg == '-w':
         write_option = True
 
-if os.path.exists('/etc/lircd.conf'): 
+if os.path.exists('/etc/lircd.conf'):
     x = open('/etc/lircd.conf')
-elif os.path.exists('/etc/lirc/lircd.conf'): 
+elif os.path.exists('/etc/lirc/lircd.conf'):
     x = open ('/etc/lirc/lircd.conf')
 
 pos = 0
@@ -102,7 +102,7 @@ for line in x.readlines():
             if button.upper() in needed:
                 needed.remove(button.upper())
                 mapping.append((button.upper(), button))
-            
+
             elif alternatives.has_key(button.upper()) and \
                      alternatives[button.upper()] in needed:
                 needed.remove(alternatives[button.upper()])
@@ -152,7 +152,7 @@ if needed:
     for i in needed:
         print '  %s' % i
     print
-if use_pos == None and pos > 1:    
+if use_pos == None and pos > 1:
     print 'Your %s seems to contain %d sections starting with "begin codes".' % (x.name, pos)
     print 'You should select the one best matching your remote by giving its number (1..%d)' % (pos, )
     print 'on the commandline.'

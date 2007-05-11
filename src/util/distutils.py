@@ -26,16 +26,16 @@
 #  The setup.py file should look like this:
 #
 #  |   #!/usr/bin/env python
-#  |   
+#  |
 #  |   """Setup script for my freevo plugin."""
-#  |   
-#  |   
+#  |
+#  |
 #  |   __revision__ = "$Id$"
-#  |   
+#  |
 #  |   from distutils.core import setup, Extension
 #  |   import distutils.command.install
 #  |   from freevo.util.distutils import *
-#  |   
+#  |
 #  |   # now start the python magic
 #  |   setup (name = "nice_plugin",
 #  |          version = '0.1',
@@ -43,7 +43,7 @@
 #  |          author = "me",
 #  |          author_email = "my@mail.address",
 #  |          url = "http://i-also-have-a-web.address",
-#  |   
+#  |
 #  |          package_dir = package_dir,
 #  |          packages    = packages,
 #  |          data_files  = data_files
@@ -62,11 +62,11 @@
 #  If you need help, please join the freevo developer mailing list
 #
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -93,7 +93,7 @@ try:
     import version
 except:
     import freevo.version as version
-    
+
 def package_finder(result, dirname, names):
     """
     os.path.walk helper for 'src'
@@ -116,7 +116,7 @@ def data_finder(result, dirname, names):
             if dirname.find('i18n') == -1 or (name.find('pot') == -1 and \
                                               name.find('update.py') == -1):
                 files.append(os.path.join(dirname, name))
-            
+
     if files and dirname.find('/.svn') == -1:
         result.append((dirname.replace('./share', 'share/freevo').
                        replace('./src/www', 'share/freevo').\
@@ -135,7 +135,7 @@ def docbook_finder(result, dirname, names):
     for name in names:
         if os.path.splitext(name)[1] == '.html':
             files.append(os.path.join(dirname, name))
-            
+
     if files and dirname.find('/.svn') == -1:
         result.append((dirname.replace('/html', ''). \
                        replace('./Docs', 'share/doc/freevo-%s' % version.__version__), files))
@@ -157,7 +157,7 @@ def check_libs(libs):
                 print 'not found'
                 print 'please download it from %s and install it' % url
                 sys.exit(1)
-            
+
 
 def i18n(application):
     """
@@ -177,7 +177,7 @@ def i18n(application):
             print '  --no-merge     don\'t merge pot file into po files'
             print
             sys.exit(0)
-            
+
         # arg i18n will update the pot file and maybe merge the po files
         print 'updating pot file'
 
@@ -246,7 +246,7 @@ def finalize():
         print
 
 
-        
+
 # use i18n command option
 use_i18n = 0
 
@@ -265,4 +265,3 @@ os.path.walk('./contrib/fbcon', data_finder, data_files)
 os.path.walk('./contrib/xmltv', data_finder, data_files)
 os.path.walk('./src/www/htdocs', data_finder, data_files)
 os.path.walk('./i18n', data_finder, data_files)
-

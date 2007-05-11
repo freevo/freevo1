@@ -9,7 +9,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -42,13 +42,13 @@ from plugins.idlebar import IdleBarPlugin
 class MultiMail(IdleBarPlugin):
     """
     Displays an icon in the idlebar representing the number of emails for a specified account. In the case of IMAP, it only lists unread messages
-    
+
     Activate with:
     plugin.activate('idlebar.MultiMail.Imap',    level=10, args=('username', 'password', 'host', 'port', 'folder')) (port and folder are optional)
     plugin.activate('idlebar.MultiMail.Pop3',    level=10, args=('username', 'password', 'host', 'port')) (port is optional)
-    plugin.activate('idlebar.MultiMail.Mbox',    level=10, args=('path to mailbox file')    
+    plugin.activate('idlebar.MultiMail.Mbox',    level=10, args=('path to mailbox file')
     plugin.activate('idlebar.MultiMail.Maildir', level=10, args=('path to maildir')
-    
+
     """
     def __init__(self):
         IdleBarPlugin.__init__(self)
@@ -59,12 +59,12 @@ class MultiMail(IdleBarPlugin):
         self.bg_thread = threading.Thread(target=self._bg_function, name='MultiMail Thread')
         self.bg_thread.setDaemon(1)
         self.bg_thread.start() # Run self._bg_function() in a separate thread
-        
+
     def _bg_function(self):
         while 1:
             self.unread = self.checkmail()
             time.sleep(self.FREQUENCY)
-        
+
     def checkmail(self):
         return 0
 
@@ -77,7 +77,7 @@ class MultiMail(IdleBarPlugin):
             osd.write_text(unread_str, font, None, x, osd.y + 55 - font.h, text_width, font.h, 'left', 'top')
             display_width = max(image_width, text_width)
         else:
-            display_width = osd.draw_image(self.NO_MAILIMAGE, (x, osd.y + 10, -1, -1))[0] 
+            display_width = osd.draw_image(self.NO_MAILIMAGE, (x, osd.y + 10, -1, -1))[0]
         return display_width
 
 class Imap(MultiMail):
@@ -88,7 +88,7 @@ class Imap(MultiMail):
         self.PORT = port
         self.FOLDER = folder
         MultiMail.__init__(self)
-        
+
     def checkmail(self):
         try:
             imap = imaplib.IMAP4(self.HOST)
@@ -96,18 +96,18 @@ class Imap(MultiMail):
             imap.select(self.FOLDER)
             unread = len(imap.search(None,"(UNSEEN)")[1][0].split())
             imap.logout
-            return unread            
+            return unread
         except:
             _debug_('IMAP exception')
             return 0
-        
-class Pop3(MultiMail):        
+
+class Pop3(MultiMail):
     def __init__(self, username, password, host, port=110):
         self.USERNAME = username
         self.PASSWORD = password
         self.HOST = host
         self.PORT = port
-        MultiMail.__init__(self)    
+        MultiMail.__init__(self)
 
     def checkmail(self):
         try:
@@ -120,11 +120,11 @@ class Pop3(MultiMail):
         except:
             _debug_('Error loading POP account')
             return 0
-      
+
 class Mbox(MultiMail):
     def __init__(self, mailbox):
         self.MAILBOX = mailbox
-        MultiMail.__init__(self)    
+        MultiMail.__init__(self)
 
     def checkmail(self):
         if os.path.isfile(self.MAILBOX):

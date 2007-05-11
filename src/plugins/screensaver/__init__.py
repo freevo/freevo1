@@ -33,7 +33,7 @@
 
 import time
 import os
-import random 
+import random
 import threading
 import traceback
 import pygame
@@ -59,13 +59,13 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         self.event_listener = True
         self.poll_menu_only = True
-        
+
         self.last_event = time.time()
         self.screensaver_showing = False
         self.menuw = None
         self.start_delay = config.SCREENSAVER_DELAY
         self.cycle_time = config.SCREENSAVER_CYCLE_TIME
-        self.plugins = None   
+        self.plugins = None
         _debug_('Screensaver install (delay = %d)' % self.start_delay)
 
 
@@ -98,7 +98,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         if not event.name == 'IDENTIFY_MEDIA':
             self.last_event = time.time()
-            
+
         if self.screensaver_showing :
             self.stop_saver()
             return True
@@ -148,7 +148,7 @@ class PluginInterface(plugin.DaemonPlugin):
             elif plugins_count > 4:
                 index = random.randint(0, len(self.plugins) - 1)
                 current_saver = self.plugins[index]
-            
+
             # No screensaver found just sleep for 200ms
             if current_saver is None:
                 time.sleep(0.200)
@@ -160,31 +160,31 @@ class PluginInterface(plugin.DaemonPlugin):
         skin.redraw()
         osd.update()
         _debug_('Screensaver thread stopped')
-        
+
     def __run_screensaver__(self, screensaver):
         _debug_('Running %s' % screensaver.plugin_name)
         try:
             fps = screensaver.start(osd.width, osd.height)
-            
+
             max_iterations = int(self.cycle_time / (1.0 / fps))
             iteration = 0
             clock = pygame.time.Clock()
-            
+
             while (not self.stop_screensaver) and (iteration < max_iterations):
                 # Draw the screen and update the display
                 screensaver.draw(osd.screen)
                 pygame.display.flip()
-                
+
                 clock.tick(fps)
                 iteration += 1
-                
+
             screensaver.stop()
         except:
             print 'Screensaver %s crashed!' % screensaver.plugin_name
             traceback.print_exc()
             # Remove the broken screensaver so we don't try to run it again
             self.plugins.remove(screensaver)
-            
+
         osd.clearscreen(osd.COL_BLACK)
         osd.update()
 
@@ -204,14 +204,14 @@ class ScreenSaverPlugin(plugin.Plugin):
         """
         return 25
 
-    
+
     def stop(self):
         """
         Deinitialise the screensaver after each run.
         """
         pass
 
-    
+
     def draw(self, surface):
         """
         Draw a frame onto the supplied surface called

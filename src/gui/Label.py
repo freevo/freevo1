@@ -44,7 +44,7 @@ class Label(GUIObject):
                  align_h = text horizontal alignment
                  mode    = hard (break at chars); soft (break at words)
                  hfill   = True (don't shorten width) or False
-    
+
     Displays a single line of text. Really it maintains a surface with a
     rendered text. If text is updated text is rerendered and reblitted to
     the screen.
@@ -52,8 +52,8 @@ class Label(GUIObject):
     Both text and align can be set using functions. If text is not set when
     draw is called an exception is raised.
     """
-    
-    def __init__(self, text=None, parent=None, h_align=None, v_align=None, 
+
+    def __init__(self, text=None, parent=None, h_align=None, v_align=None,
                  width=-1, height=-1, text_prop=None):
 
         GUIObject.__init__(self, width=width, height=height)
@@ -116,7 +116,7 @@ class Label(GUIObject):
         """
         font  String. Filename of font to use.
         size  Size in pixels to render font.
-        
+
         Sets the font of label.
         Uses _getfont in osd, and the fontcache in osd.
         """
@@ -129,13 +129,13 @@ class Label(GUIObject):
             self.fg_color = color
         else:
             self.fg_color = self.parent.fg_color
-            
+
         self.font_name = font
         self.font_size = size
         self.width     = -1
         self.height    = -1
 
-            
+
     def get_font(self):
         """
         Returns the fontobject.

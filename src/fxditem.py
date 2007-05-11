@@ -22,11 +22,11 @@
 # b) add the files as list _fxd_covered_ to the item
 #
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -74,7 +74,7 @@ class Mimetype(plugin.MimetypePlugin):
                 files.remove(f)
             except:
                 pass
-            
+
         # check of directories with a fxd covering it
         for d in copy.copy(files):
             if os.path.isdir(d):
@@ -96,14 +96,14 @@ class Mimetype(plugin.MimetypePlugin):
         """
         return [ 'fxd' ]
 
-    
+
     def count(self, parent, files):
         """
         return how many items will be build on files
         """
         return len(self.get(parent, files))
 
-    
+
     def parse(self, parent, fxd_files, duplicate_check=[], display_type=None):
         """
         return a list of items that belong to a fxd files
@@ -158,7 +158,7 @@ class Container(item.Item):
         self.name     = fxd.getattr(node, 'title', 'no title')
         self.type     = fxd.getattr(node, 'type', '')
         self.fxd_file = fxd_file
-        
+
         self.image    = fxd.childcontent(node, 'cover-img')
         if self.image:
             self.image = vfs.join(vfs.dirname(fxd_file), self.image)
@@ -186,7 +186,7 @@ class Container(item.Item):
         fxd.setattr(None, 'items', parent_items)
 
         self.display_type = display_type
-        
+
 
     def sort(self, mode=None):
         """
@@ -196,7 +196,7 @@ class Container(item.Item):
             return '%s%s' % (os.stat(self.fxd_file).st_ctime, self.fxd_file)
         return self.name
 
-        
+
     def actions(self):
         """
         actions for this item
@@ -212,7 +212,7 @@ class Container(item.Item):
         moviemenu = menu.Menu(self.name, self.items, item_types=self.display_type)
         menuw.pushmenu(moviemenu)
 
-        
+
 
 def container_callback(fxd, node):
     """
@@ -222,7 +222,7 @@ def container_callback(fxd, node):
     c = Container(fxd, node)
     if c.items:
         fxd.getattr(None, 'items', []).append(c)
-    
+
 
 
 # -------------------------------------------------------------------------------------
@@ -230,4 +230,3 @@ def container_callback(fxd, node):
 plugin.register_callback('fxditem', None, 'container', container_callback)
 mimetype = Mimetype()
 plugin.activate(mimetype, level=0)
-

@@ -6,11 +6,11 @@
 #
 # Author: thehog@t3i.nl
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -68,63 +68,63 @@ class ExRecordingInProgress(Exception) : pass
 class PluginInterface(plugin.MainMenuPlugin):
     """
     Plugin to shutdown Freevo from the main menu
-    
-    At each shutdown this plugin configures the system to 
-    bootup for the next recording or a configured default time. 
+
+    At each shutdown this plugin configures the system to
+    bootup for the next recording or a configured default time.
     The wakeup can be done via acpi-alarm or nvram-wakeup.
     Moreover it adds warning information about the next
     recording to the shutdown confirmation messages.
-    
+
     Activate with:
     plugin.remove('shutdown')
     plugin.activate('autoshutdown',level=90)
-    
+
     Configuration:
     ENABLE_SHUTDOWN_SYS = 1
     AUTOSHUTDOWN_METHOD = 'acpi|nvram'
     AUTOSHUTDOWN_WAKEUP_CMD = PATH/TO/THE/WAKEUP_SCRIPT
     AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = "13:00"
     AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP = True
-    
+
     The wakeup methode can be either nvram or acpi.
-        
+
     NVRAM:
-    If you want to use nvram-wakeup, 
+    If you want to use nvram-wakeup,
     you will need a working nvram configuration first.
     (This plugin can deal automatically with the often needed reboot).
-    Put the path to nvram-wakeup in AUTOSHUTDOWN_WAKEUP_CMD. 
-    
+    Put the path to nvram-wakeup in AUTOSHUTDOWN_WAKEUP_CMD.
+
     More variables:
     AUTOSHUTDOWN_NVRAM_OPT = "--syslog"
     AUTOSHUTDOWN_BIOS_NEEDS_REBOOT = True
-    
+
     Your boot loader can be either GRUB or LILO:
     AUTOSHUTDOWN_BOOT_LOADER = "GRUB|LILO"
-        
+
     AUTOSHUTDOWN_REMOUNT_BOOT_CMD = "/bin/mount"
     AUTOSHUTDOWN_REMOUNT_BOOT_OPT = "/boot -o remount,rw"
     AUTOSHUTDOWN_GRUB_CMD = "/sbin/grub-set-default 0"
     AUTOSHUTDOWN_GRUB_OPT = "0"
     AUTOSHUTDOWN_LILO_CMD = "/sbin/lilo"
     AUTOSHUTDOWN_LILO_OPT = "-R PowerOff"
-    
+
     ACPI:
     If you want to use acpi instead, you need to create a small script:
-    
+
     !/bin/sh
-    ##############################   
+    ##############################
     #acpi_wakeup.sh
     ##############################
-    echo "$1" >/proc/acpi/alarm   
-    
-    and put its path in AUTOSHUTDOWN_WAKEUP_CMD. 
-    You have to be root or use sudo for this to work.    
-    
+    echo "$1" >/proc/acpi/alarm
+
+    and put its path in AUTOSHUTDOWN_WAKEUP_CMD.
+    You have to be root or use sudo for this to work.
+
     """
-    
+
     def items(self, parent):
         return [ ShutdownMenuItem(parent) ]
-   
+
 
 # ***************************************************************
 # CLASS ShutdownMenuItem
@@ -285,31 +285,31 @@ class ShutdownMenuItem(Item):
 class autoshutdowntimer(plugin.DaemonPlugin):
     """
     Plugin to shutdown Freevo automatically with a timer
-    
+
     This plugin provides a timer which causes a shutdown of the system
-    after a certain idle time has passed. 
-    
+    after a certain idle time has passed.
+
     Activate with:
-    plugin.activate('autoshutdown.autoshutdowntimer')    
-    
+    plugin.activate('autoshutdown.autoshutdowntimer')
+
     Variables:
     AUTOSHUTDOWN_TIMER_TIMEOUT=30
     AUTOSHUTDOWN_ALLOWED_IDLE_TIME = 15
-        
+
     After AUTOSHUTDOWN_TIMER_TIMEOUT minutes of idle time the system goes down,
-    unless the time until the next recording is 
+    unless the time until the next recording is
     less than AUTOSHUTDOWN_ALLOWED_IDLE_TIME.
-    
+
     Moreover one can define a list of external commands,
-    which freevo should check for before shutting down the 
+    which freevo should check for before shutting down the
     system. If one of these commands is running,
     the shutdown is stopped.
-    
-    AUTOSHUTDOWN_PROCESS_LIST = ['mplayer', 'tv_grab']  
-    
+
+    AUTOSHUTDOWN_PROCESS_LIST = ['mplayer', 'tv_grab']
+
     In the shutdown menu there is a item to pause/resume
     the automatic shutdown.
-          
+
     """
 
 
@@ -452,16 +452,16 @@ def get_next_wakeup():
     try:
         default_utc_s = __get_next_default_wakeup()
     except ExNoDefaultWakeup:
-            _debug_("Default wakeup is disabled")
+        _debug_("Default wakeup is disabled")
     # test which wakeup time applies
     if (default_utc_s == 0) and (scheduled_utc_s == 0):
-            # no default and scheduled wakeups available
-            _debug_("No wakeup time available")
-            raise ExNoWakeupNeeded
+        # no default and scheduled wakeups available
+        _debug_("No wakeup time available")
+        raise ExNoWakeupNeeded
     elif (default_utc_s > 0) and (scheduled_utc_s > 0):
         # default wakeup and scheduled wakeups available
         if config.AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP and default_utc_s < scheduled_utc_s:
-            # forced default wakeup is sooner than scheduled wakeup
+        # forced default wakeup is sooner than scheduled wakeup
             wakeup = default_utc_s
         else:
             # no forced default wakeup or scheduled wakeup is sooner
@@ -531,17 +531,17 @@ def __schedule_wakeup_and_shutdown():
         else:
             next_action = Shutdown.IGNORE
     else:
-             
+
         # wake up a little earlier because of the time the booting takes
-        # 180 s = 3 min should be enough 
+        # 180 s = 3 min should be enough
         wakeup_utc_s = wakeup_utc_s - 180
-        
+
         # let's see which methode we should use for wakeup
         if config.AUTOSHUTDOWN_METHOD.upper() == 'ACPI':
             cmd = '%s "%s"' % (config.AUTOSHUTDOWN_WAKEUP_CMD, \
                 time.strftime('%F %H:%M', time.localtime(wakeup_utc_s)))
             _debug_(" Wakeup-command %s" %cmd)
-            __syscall(cmd) 
+            __syscall(cmd)
             next_action =  Shutdown.SHUTDOWN_SYSTEM
         elif config.AUTOSHUTDOWN_METHOD.upper() == 'NVRAM':
             cmd = "%s %s --settime %d" % (config.AUTOSHUTDOWN_WAKEUP_CMD, \
@@ -574,7 +574,7 @@ def __schedule_wakeup_and_shutdown():
                 next_action =  Shutdown.SHUTDOWN_SYSTEM
         else:
             raise ExInternalError
-            
+
     return next_action
 
 
@@ -648,24 +648,24 @@ def __get_scheduled_recording(index):
                         time.ctime(wakeup), proglist[index]))
         else:
             raise ExIndexNotAvailable
-    
-    # we must take in consideration the TV_RECORD_PADDING_PRE here, 
+
+    # we must take in consideration the TV_RECORD_PADDING_PRE here,
     # otherwise we are to late for the recording
-        
+
     # try if the user configured some paddings
     try:
         pre_padding = config.TV_RECORD_PADDING_PRE
     except:
-        pre_padding = 0    
+        pre_padding = 0
     try:
         padding = config.TV_RECORD_PADDING
     except:
-        padding = 0   
-    # take the longer padding    
+        padding = 0
+    # take the longer padding
     if pre_padding < padding:
         pre_padding = padding
     # and substract it from the next wakeup time
-    wakeup = wakeup - pre_padding       
+    wakeup = wakeup - pre_padding
     return wakeup
 
 

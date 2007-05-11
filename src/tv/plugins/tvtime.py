@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -111,7 +111,7 @@ class PluginInterface(plugin.Plugin):
         elif self.major == 0 and self.minor == 9 and self.minorversion >= 10:
             has_xmltv=True
         return has_xmltv
- 
+
     def isOptionDSupported(self):
         has_D=False
         if self.major == 0 and self.minor == 9 and self.minorversion < 13:
@@ -154,7 +154,7 @@ class PluginInterface(plugin.Plugin):
         cachelconf_t = cachelconf_t.rstrip()
         cachefconf_t = cachefconf_t.rstrip()
 
-        if not (cachelconf == self.mylocalconf): 
+        if not (cachelconf == self.mylocalconf):
             _debug_('local_conf changed places')
             return 1
 
@@ -317,11 +317,11 @@ class PluginInterface(plugin.Plugin):
 
     def lookupChannelBand(self, channel):
         # check if we have custom
-       
+
         #Aubin's auto detection code works only for numeric channels and
         #forces them to int.
         channel = str(channel)
-       
+
         if config.FREQUENCY_TABLE.has_key(channel):
             _debug_("have a custom")
             return "Custom"
@@ -367,7 +367,7 @@ class TVTime:
 
     __muted    = 0
     __igainvol = 0
-    
+
     def __init__(self):
         self.app_mode = 'tv'
         self.fc = FreevoChannels()
@@ -400,7 +400,7 @@ class TVTime:
             return
 
         if mode == 'tv' or mode == 'vcr':
-            
+
             w, h = config.TV_VIEW_SIZE
             cf_norm = vg.tuner_norm
             cf_input = vg.input_num
@@ -469,7 +469,7 @@ class TVTime:
             mixer.setPcmVolume(0)
 
         # Start up the TV task
-        self.app=TVTimeApp(command)        
+        self.app=TVTimeApp(command)
 
         self.prev_app = rc.app() # ???
         rc.app(self)
@@ -482,15 +482,15 @@ class TVTime:
         elif mixer:
             mixer.setLineinVolume(config.TV_IN_VOLUME)
             mixer.setIgainVolume(config.TV_IN_VOLUME)
-            
+
         if mixer and config.MAJOR_AUDIO_CTRL == 'VOL':
             mixer.setMainVolume(mixer_vol)
         elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
             mixer.setPcmVolume(mixer_vol)
 
         if DEBUG: print '%s: started %s app' % (time.time(), self.mode)
-        
-        
+
+
     def Stop(self, channel_change=0):
         mixer = plugin.getbyname('MIXER')
         if mixer and not channel_change:
@@ -507,11 +507,11 @@ class TVTime:
             self.Stop()
             rc.post_event(em.PLAY_END)
             return True
-        
+
         elif event == em.TV_CHANNEL_UP or event == em.TV_CHANNEL_DOWN:
             if self.mode == 'vcr':
                 return
-             
+
             if event == em.TV_CHANNEL_UP:
                 nextchan = self.fc.getNextChannel()
             elif event == em.TV_CHANNEL_DOWN:
@@ -538,34 +538,34 @@ class TVTime:
                 self.app.write('CHANNEL_DOWN\n')
 
             return True
-            
+
         elif event == em.TOGGLE_OSD:
             self.app.write('DISPLAY_INFO\n')
             return True
-        
+
         elif event == em.OSD_MESSAGE:
             # XXX this doesn't work
             #self.app.write('display_message %s\n' % event.arg)
             #this does
             os.system('tvtime-command display_message \'%s\'' % event.arg)
             return True
-       
+
         elif event == em.TV_SEND_TVTIME_CMD:
             os.system('tvtime-command %s' % event.arg)
             return True
 
         elif event in em.INPUT_ALL_NUMBERS:
             self.app.write('CHANNEL_%s\n' % event.arg)
-        
+
         elif event == em.BUTTON:
             if event.arg == 'PREV_CH':
                 self.app.write('CHANNEL_PREV\n')
                 return True
-            
+
 
         return False
-        
-            
+
+
 
 # ======================================================================
 class TVTimeApp(childapp.ChildApp2):
@@ -614,4 +614,3 @@ class TVTimeApp(childapp.ChildApp2):
                 if DEBUG: print 'posted translated tvtime event "%s"' % event
             else:
                 if DEBUG: print 'tvtime cmd "%s" not found!' % line
-   

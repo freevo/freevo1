@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -61,7 +61,7 @@ class MenuItem(Item):
         self.arg      = arg
         self.type     = type
 
-            
+
     def __str__(self):
         """
         return the event as string
@@ -121,14 +121,14 @@ class Menu:
 
         # Called when a child menu returns. This function returns a new menu
         # or None and the old menu will be reused
-        self.reload_func       = reload_func  
+        self.reload_func       = reload_func
         self.item_types        = item_types
         self.force_skin_layout = force_skin_layout
         self.display_style     = skin.get_display_style(self)
 
         # How many menus to go back when 'BACK_ONE_MENU' is called
         self.back_one_menu = 1
-        
+
 
     def __str__(self):
         """
@@ -160,8 +160,8 @@ class MenuWidget(GUIObject):
         self.event_context  = 'menu'
         self.show_callbacks = []
         self.force_page_rebuild = False
-        
-        
+
+
     def __str__(self):
         """
         return the class as string
@@ -188,14 +188,14 @@ class MenuWidget(GUIObject):
                 callback()
         rc.app(None)
 
-                
+
     def hide(self, clear=True):
         if self.visible:
             self.visible = 0
             if clear:
                 skin.clear(osd_update=clear)
 
-        
+
     def delete_menu(self, arg=None, menuw=None, allow_reload=True):
         if len(self.menustack) > 1:
             self.menustack = self.menustack[:-1]
@@ -203,12 +203,12 @@ class MenuWidget(GUIObject):
 
             if not isinstance(menu, Menu):
                 return True
-            
+
             if menu.reload_func and allow_reload:
                 reload = menu.reload_func()
                 if reload:
                     self.menustack[-1] = reload
-                
+
             self.init_page()
 
 
@@ -229,7 +229,7 @@ class MenuWidget(GUIObject):
         elif len(self.menustack) > 1 and osd_message:
             rc.post_event(Event(OSD_MESSAGE, arg=osd_message))
 
-            
+
     def back_one_menu(self, arg=None, menuw=None):
         if len(self.menustack) > 1:
             try:
@@ -243,10 +243,10 @@ class MenuWidget(GUIObject):
             if not isinstance(menu, Menu):
                 menu.refresh()
                 return True
-            
+
             if skin.get_display_style(menu) != menu.display_style:
                 self.rebuild_page()
-                
+
             if menu.reload_func:
                 reload = menu.reload_func()
                 if reload:
@@ -259,7 +259,7 @@ class MenuWidget(GUIObject):
                 self.refresh(reload=1)
             else:
                 self.refresh()
-                
+
 
     def goto_main_menu(self, arg=None, menuw=None):
         self.menustack = [self.menustack[0]]
@@ -267,7 +267,7 @@ class MenuWidget(GUIObject):
         self.init_page()
         self.refresh()
 
-    
+
     def goto_media_menu(self, media='audio'):
         """
         Go to a main menu item
@@ -281,12 +281,12 @@ class MenuWidget(GUIObject):
             MENU_GOTO_GAMESMENU
             MENU_GOTO_RADIOMENU
             MENU_GOTO_SHUTDOWN
-        """        
+        """
         self.menustack = [self.menustack[0]]
         menu = self.menustack[0]
         self.init_page()
 
-        if media == 'shutdown': 
+        if media == 'shutdown':
             for menuitem in self.menustack[0].choices:
                 if self.all_items.index(menuitem) >= self.rows - 1:
                     self.goto_next_page()
@@ -326,7 +326,7 @@ class MenuWidget(GUIObject):
                     pass
             level += 1
 
-    
+
     def goto_prev_page(self, arg=None, menuw=None):
         menu = self.menustack[-1]
 
@@ -343,7 +343,7 @@ class MenuWidget(GUIObject):
         if arg != 'no_refresh':
             self.refresh()
 
-    
+
     def goto_next_page(self, arg=None, menuw=None):
         menu = self.menustack[-1]
         self.rows, self.cols = menu.items_per_page()
@@ -351,7 +351,7 @@ class MenuWidget(GUIObject):
 
         if self.cols == 1:
             down_items = items_per_page - 1
-                
+
             if menu.page_start + down_items < len(menu.choices):
                 menu.previous_page_start.append(menu.page_start)
                 menu.page_start += down_items
@@ -364,11 +364,11 @@ class MenuWidget(GUIObject):
                 else:
                     menu.page_start += self.cols * (self.rows-1)
                 self.init_page()
-            
+
         if arg != 'no_refresh':
             self.refresh()
-    
-    
+
+
     def pushmenu(self, menu):
         self.menustack.append(menu)
         if isinstance(menu, Menu):
@@ -387,12 +387,12 @@ class MenuWidget(GUIObject):
             # Do not draw if there are any children
             if self.children:
                 return False
-            
+
             return skin.draw(menu.type, menu)
 
         if self.menustack[-1].umount_all == 1:
             util.umount_all()
-                    
+
         if reload:
             if menu.reload_func:
                 reload = menu.reload_func()
@@ -425,12 +425,12 @@ class MenuWidget(GUIObject):
                 i.display_type = item.display_type
             elif hasattr(item, 'type'):
                 i.display_type = item.type
-                
+
         s = Menu(menu_name, items, fxd_file=fxd_file)
         s.is_submenu = True
         self.pushmenu(s)
-            
-        
+
+
     def eventhandler(self, event):
         menu = self.menustack[-1]
 
@@ -440,52 +440,52 @@ class MenuWidget(GUIObject):
                     event = MENU_BACK_ONE_MENU
                 elif event == MENU_RIGHT:
                     event = MENU_SELECT
-            
+
             else:
                 if event == MENU_LEFT:
                     event = MENU_PAGEUP
                 elif event == MENU_RIGHT:
                     event = MENU_PAGEDOWN
-            
+
         if self.eventhandler_plugins == None:
             self.eventhandler_plugins = plugin.get('daemon_eventhandler')
 
         if event == MENU_GOTO_MAINMENU:
             self.goto_main_menu()
             return
-        
+
         if event == MENU_GOTO_TV:
             self.goto_media_menu("tv")
             return
-        
+
         if event == MENU_GOTO_TVGUIDE:
             self.goto_media_menu("tv.guide")
             return
-        
+
         if event == MENU_GOTO_VIDEOS:
             self.goto_media_menu("video")
             return
-        
+
         if event == MENU_GOTO_MUSIC:
             self.goto_media_menu("audio")
             return
-        
+
         if event == MENU_GOTO_IMAGES:
             self.goto_media_menu("image")
             return
-        
+
         if event == MENU_GOTO_GAMES:
             self.goto_media_menu("games")
             return
-        
+
         if event == MENU_GOTO_RADIO:
             self.goto_media_menu("audio.radio")
             return
-        
+
         if event == MENU_GOTO_SHUTDOWN:
             self.goto_media_menu("shutdown")
             return
-        
+
         if event == MENU_BACK_ONE_MENU:
             self.back_one_menu()
             return
@@ -496,12 +496,12 @@ class MenuWidget(GUIObject):
         if event == 'MENU_REFRESH':
             self.refresh()
             return
-        
+
         if event == 'MENU_REBUILD':
             self.init_page()
             self.refresh()
             return
-        
+
         if not self.menu_items:
             if event in ( MENU_SELECT, MENU_SUBMENU, MENU_PLAY_ITEM):
                 self.back_one_menu()
@@ -514,7 +514,7 @@ class MenuWidget(GUIObject):
                 if p.eventhandler(event=event, menuw=self):
                     return
             return
-            
+
         if not isinstance(menu, Menu):
             if self.eventhandler_plugins == None:
                 self.eventhandler_plugins = plugin.get('daemon_eventhandler')
@@ -571,7 +571,7 @@ class MenuWidget(GUIObject):
             # Do nothing for an empty file list
             if not len(self.menu_items):
                 return
-            
+
             curr_selected = self.all_items.index(menu.selected)
 
             # Move to the previous page if the current position is at the
@@ -592,7 +592,7 @@ class MenuWidget(GUIObject):
 
             if menu.selected == menu.choices[-1]:
                 return
-            
+
             curr_selected = self.all_items.index(menu.selected)
             bottom_index = self.menu_items.index(self.menu_items[-1])
 
@@ -625,7 +625,7 @@ class MenuWidget(GUIObject):
             menu.selected = self.all_items[curr_selected]
             self.refresh()
             return
-        
+
 
         elif event == MENU_RIGHT:
             # Do nothing for an empty file list
@@ -650,7 +650,7 @@ class MenuWidget(GUIObject):
 
         elif event == MENU_PLAY_ITEM and hasattr(menu.selected, 'play'):
             menu.selected.play(menuw=self)
-            
+
         elif event == MENU_SELECT or event == MENU_PLAY_ITEM:
             action = None
             arg    = None
@@ -690,7 +690,7 @@ class MenuWidget(GUIObject):
                 plugins += plugin.get('item_%s' % menu.selected.display_type)
 
             plugins.sort(lambda l, o: cmp(l._level, o._level))
-            
+
             for p in plugins:
                 for a in p.actions(menu.selected):
                     if isinstance(a, MenuItem):
@@ -700,11 +700,11 @@ class MenuWidget(GUIObject):
                         if len(a) == 3 and a[2] == 'MENU_SUBMENU':
                             a[0](menuw=self)
                             return
-                        
+
             if actions and (len(actions) > 1 or force):
                 self.make_submenu(menu.selected.name, actions, menu.selected)
             return
-            
+
 
         elif event == MENU_CALL_ITEM_ACTION:
             _debug_('calling action %s' % event.arg)
@@ -713,7 +713,7 @@ class MenuWidget(GUIObject):
                 if not isinstance(a, Item) and len(a) > 2 and a[2] == event.arg:
                     a[0](arg=None, menuw=self)
                     return
-                
+
             plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
 
             if hasattr(menu.selected, 'display_type'):
@@ -726,19 +726,19 @@ class MenuWidget(GUIObject):
                         return
             _debug_('action %s not found' % event.arg)
 
-                    
+
         elif event == MENU_CHANGE_STYLE and len(self.menustack) > 1:
             # did the menu change?
             if skin.toggle_display_style(menu):
                 self.rebuild_page()
                 self.refresh()
                 return
-                
+
 
         elif hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
             if menu.selected.eventhandler(event=event, menuw=self):
                 return
-            
+
         for p in self.eventhandler_plugins:
             if p.eventhandler(event=event, menuw=self):
                 return
@@ -750,7 +750,7 @@ class MenuWidget(GUIObject):
 
     def rebuild_page(self):
         menu = self.menustack[-1]
-       
+
         if not menu:
             return
 
@@ -771,10 +771,10 @@ class MenuWidget(GUIObject):
         menu.selected = current
         self.init_page()
         menu.display_style = skin.get_display_style(menu)
-        
+
 
     def init_page(self):
-        
+
         menu = self.menustack[-1]
         if not menu:
             return
@@ -783,14 +783,14 @@ class MenuWidget(GUIObject):
         menu_items           = []
         first                = menu.page_start
         self.rows, self.cols = menu.items_per_page()
-        
+
         for choice in menu.choices[first : first+(self.rows*self.cols)]:
             menu_items.append(choice)
-     
+
         self.rows, self.cols = menu.items_per_page()
 
         self.menu_items = menu_items
-        
+
         if len(menu_items) == 0:
             self.all_items = menu_items + [ MenuItem('Back', self.back_one_menu) ]
         else:
@@ -803,7 +803,7 @@ class MenuWidget(GUIObject):
             menu.selected = self.all_items[0]
 
         rc.post_event(MENU_PROCESS_END)
- 
+
         # make sure we are in context 'menu'
         rc.set_context(self.event_context)
 

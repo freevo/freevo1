@@ -77,7 +77,7 @@ class CommDetectServer(xmlrpc.XMLRPC):
         self.jobs = {}
         self.queue = CommDetectQueue(log, DEBUG)
         _debug_("CommDetectServer started...", 0)
-        
+
     def xmlrpc_echotest(self, blah):
         _debug_("xmlrpc_echotest(self, blah)", 3)
         return (True, 'CommDetectServer::echotest: %s' % blah)
@@ -92,7 +92,7 @@ class CommDetectServer(xmlrpc.XMLRPC):
         self.jobs[idnr] = CommDetectJob(source,idnr)
         _debug_("Initialized job %s (idnr : %s)" % (source,idnr), 0)
         return (True, idnr)
-        
+
     def xmlrpc_queueIt(self, idnr, now=False):
         _debug_("xmlrpc_queueIt(self, idnr, now=False)", 3)
         self.queue.addCommDetectJob(self.jobs[idnr])
@@ -101,17 +101,17 @@ class CommDetectServer(xmlrpc.XMLRPC):
         if now:
             self.queue.startQueue()
         return (True, "CommDetectServer::queueIt: OK")
-        
+
     def xmlrpc_startQueue(self):
         _debug_("xmlrpc_startQueue(self)", 3)
         self.queue.startQueue()
         return (True, "CommDetectServer::startqueue: OK")
-        
+
     def xmlrpc_listJobs(self):
         _debug_("xmlrpc_listJobs(self)", 3)
         jlist = self.queue.listJobs()
         return (True, jam(jlist))
-        
+
 def main():
     global DEBUG
     if not (os.path.exists(tmppath) and os.path.isdir(tmppath)):
@@ -130,7 +130,7 @@ def main():
     else:
         app.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(es))
     app.run(save=0)
-    
+
 if __name__ == '__main__':
     import traceback
     while 1:

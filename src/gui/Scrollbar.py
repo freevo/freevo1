@@ -11,12 +11,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -46,14 +46,14 @@ class Scrollbar(GUIObject):
     fg_color  Foreground color (Color)
     """
 
-    
+
     def __init__(self, parent, orientation, thickness=10, left=None, top=None,
                  width=None, height=None, bg_color=None, fg_color=None,
                  border=None, bd_color=None, bd_width=1):
 
         if orientation != "vertical" and orientation != "horizontal":
             raise TypeError, 'orientation'
-        
+
         GUIObject.__init__(self, left, top, width, height)
 
         self.orientation = orientation
@@ -76,13 +76,13 @@ class Scrollbar(GUIObject):
             else:
                 self.fg_color = Color(self.osd.default_fg_color)
 
-        if not self.bd_color: 
+        if not self.bd_color:
             if self.skin_info_widget.rectangle.color:
                 self.bd_color = Color(self.skin_info_widget.rectangle.color)
             else:
                 self.bd_color = Color(self.osd.default_fg_color)
 
-        if not self.border:   
+        if not self.border:
             self.border = Border(self, Border.BORDER_FLAT,
                                  self.bd_color, self.bd_width)
 
@@ -131,7 +131,7 @@ class Scrollbar(GUIObject):
 
 
     def calculate_position(self):
-       
+
         if self.orientation == 'vertical':
             self.width = self.thickness
             self.height = self.parent.height
@@ -193,7 +193,3 @@ class Scrollbar(GUIObject):
 
         _debug_('SB::_draw: pos=%s,%s' % (self.left, self.top), 2)
         self.blit_parent()
-
-
-    
-

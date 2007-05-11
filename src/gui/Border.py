@@ -38,7 +38,7 @@ All suggestions on improvement are welcome
 """
 
 __date__    = "$Date$"
-__version__ = "$Revision$" 
+__version__ = "$Revision$"
 __author__  = """Thomas Malt <thomas@malt.no>"""
 
 
@@ -47,7 +47,7 @@ from GUIObject import *
 
 class Border(GUIObject):
     """
-    Draw borders around objects. 
+    Draw borders around objects.
 
     Border can only be used when called from other GUI Objects. If no
     parent object is passed on creation Border will raise an exception.
@@ -81,7 +81,7 @@ class Border(GUIObject):
             self.thickness = width
         else:
             self.thickness = 1
-            
+
         self.style     = self.BORDER_FLAT
         self.rect      = None
         self.shadow_ho = 6          # Horisontal offset for dropshadow
@@ -110,7 +110,7 @@ class Border(GUIObject):
         if style in self.bd_types: self.style = style
         else: raise TypeError, style
 
-        
+
     def _draw(self):
         """
         Draws the border around the parent.
@@ -130,7 +130,7 @@ class Border(GUIObject):
         # if self.style == self.BORDER_SHADOW:
         #    self.rect = pygame.draw.rect(self.osd.screen, color, rect,
         #                               self.thickness)
-        #    
+        #
         #if self.style == self.BORDER_RAISED:
         #    self.rect = pygame.draw.rect(self.osd.screen, color, rect,
         #                               self.thickness)
@@ -139,5 +139,3 @@ class Border(GUIObject):
         #    self.rect = pygame.draw.rect(self.osd.screen, color, rect,
         #                               self.thickness)
         #
-
-

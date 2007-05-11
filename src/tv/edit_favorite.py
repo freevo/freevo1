@@ -80,7 +80,7 @@ class EditFavorite(PopupBox):
             else:
                 self.priority = 1
 
-            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE, 
+            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE,
                                 self.priority, TRUE, FALSE)
 
         else:
@@ -191,23 +191,23 @@ class EditFavorite(PopupBox):
         self.add_child(self.cancel)
 
     def removeFavorite(self):
-       (result, msg) = record_client.removeFavorite(self.oldname)
-       if result:
-           searcher = None
-           if self.parent and self.context == 'favorites':
-               for child in self.parent.children:
-                   if isinstance(child, ViewFavorites):
-                       searcher = child
-                       break
-               if searcher:
-                   searcher.refreshList()
-               self.destroy()
-               if searcher:
-                   searcher.draw()
-                   self.osd.update()
-       else:
-           AlertBox(parent=self,
-                    text=_('Remove Failed')+(': %s' % msg)).show()
+        (result, msg) = record_client.removeFavorite(self.oldname)
+        if result:
+            searcher = None
+            if self.parent and self.context == 'favorites':
+                for child in self.parent.children:
+                    if isinstance(child, ViewFavorites):
+                        searcher = child
+                        break
+                if searcher:
+                    searcher.refreshList()
+                self.destroy()
+                if searcher:
+                    searcher.draw()
+                    self.osd.update()
+        else:
+            AlertBox(parent=self,
+                     text=_('Remove Failed')+(': %s' % msg)).show()
 
     def eventhandler(self, event, menuw=None):
 
@@ -376,6 +376,3 @@ class EditFavorite(PopupBox):
             return True
         else:
             return self.parent.eventhandler(event)
-
-
-

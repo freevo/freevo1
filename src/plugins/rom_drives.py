@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -66,7 +66,7 @@ except:
         CDROM_SELECT_SPEED = 0x5322
         CDS_NO_DISC = 1
         CDS_DISC_OK = 4
-        
+
 
 import config
 import util
@@ -94,7 +94,7 @@ def init():
     """
     # Add the drives to the config.removable_media list. There doesn't have
     # to be any drives defined.
-    if config.ROM_DRIVES != None: 
+    if config.ROM_DRIVES != None:
         for i in range(len(config.ROM_DRIVES)):
             (dir, device, name) = config.ROM_DRIVES[i]
             media = RemovableMedia(mountdir=dir, devicename=device,
@@ -106,7 +106,7 @@ def init():
     # Remove the ROM_DRIVES member to make sure it is not used by
     # legacy code!
     del config.ROM_DRIVES
-    
+
     # Start identifymedia thread
     global im_thread
     im_thread = Identify_Thread()
@@ -124,7 +124,7 @@ def shutdown():
         im_thread.stop = True
         while im_thread.isAlive():
             time.sleep(0.1)
-        
+
 
 class autostart(plugin.DaemonPlugin):
     """
@@ -140,7 +140,7 @@ class autostart(plugin.DaemonPlugin):
         if not im_thread:
             init()
 
-            
+
     def eventhandler(self, event=None, menuw=None, arg=None):
         """
         eventhandler to handle the IDENTIFY_MEDIA plugin event and the
@@ -180,10 +180,10 @@ class autostart(plugin.DaemonPlugin):
             # Are there any drives defined?
             if config.REMOVABLE_MEDIA:
                 # The default is the first drive in the list
-                media = config.REMOVABLE_MEDIA[0]  
+                media = config.REMOVABLE_MEDIA[0]
                 media.move_tray(dir='toggle')
                 return True
-            
+
     def shutdown(self):
         shutdown()
 
@@ -201,7 +201,7 @@ class rom_items(plugin.MainMenuPlugin):
         global im_thread
         if not im_thread:
             init()
-        
+
     def items(self, parent):
         """
         return the list of rom drives
@@ -212,7 +212,7 @@ class rom_items(plugin.MainMenuPlugin):
                 if parent.display_type == 'video' and media.videoitem:
                     m = media.videoitem
                     # FIXME: how to play video is maybe subdirs?
-                    
+
                 else:
                     if media.item.type == 'dir':
                         media.item.display_type = parent.display_type
@@ -230,7 +230,7 @@ class rom_items(plugin.MainMenuPlugin):
             m.parent = parent
             m.eventhandler_plugins.append(self.items_eventhandler)
             items.append(m)
-            
+
         return items
 
 
@@ -243,7 +243,7 @@ class rom_items(plugin.MainMenuPlugin):
             item.media.move_tray(dir='toggle')
             return True
         return False
-    
+
 
 class RemovableMedia:
     """
@@ -288,7 +288,7 @@ class RemovableMedia:
             _debug_('Ejecting disc in drive %s' % self.drivename,2)
 
             if notify:
-                pop = PopupBox(text=_('Ejecting disc in drive %s') % self.drivename) 
+                pop = PopupBox(text=_('Ejecting disc in drive %s') % self.drivename)
                 pop.show()
 
             try:
@@ -316,7 +316,7 @@ class RemovableMedia:
             if notify:
                 pop.destroy()
 
-        
+
         elif dir == 'close':
             _debug_('Inserting %s' % self.drivename,2)
 
@@ -328,7 +328,7 @@ class RemovableMedia:
             # including refresh screen
             try:
                 fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
-                if os.uname()[0] == 'FreeBSD':            
+                if os.uname()[0] == 'FreeBSD':
                     s = ioctl(fd, CDIOCCLOSE, 0)
                 else:
                     s = ioctl(fd, CDROMCLOSETRAY)
@@ -349,7 +349,7 @@ class RemovableMedia:
             if notify:
                 pop.destroy()
 
-    
+
     def mount(self):
         """
         Mount the media
@@ -358,7 +358,7 @@ class RemovableMedia:
         util.mount(self.mountdir, force=True)
         return
 
-    
+
     def umount(self):
         """
         Mount the media
@@ -373,7 +373,7 @@ class RemovableMedia:
         Check if the media is mounted
         """
         return util.is_mounted(self.mountdir)
-        
+
 
     def shutdown(self):
         shutdown()
@@ -440,9 +440,9 @@ class Identify_Thread(threading.Thread):
             # bad disc, e.g. blank disc.
             os.close(fd)
             return
-            
+
         data = disc_info.mmdata
-        
+
         # try to set the speed
         if config.ROM_SPEED and data and not data['mime'] == 'video/dvd':
             try:
@@ -477,7 +477,7 @@ class Identify_Thread(threading.Thread):
             movie_info = video.fxd_database['id'][media.id]
             if movie_info:
                 title = movie_info.name
-            
+
         # no? Maybe we can find a label regexp match
         else:
             for (re_label, movie_info_t) in video.fxd_database['label']:
@@ -496,10 +496,10 @@ class Identify_Thread(threading.Thread):
                             title=string.replace(title, '\\%s' % re_count, g)
                             re_count += 1
                         break
-                
+
         if movie_info:
             image = movie_info.image
-                        
+
 
         # DVD/VCD/SVCD:
         # There is data from mmpython for these three types
@@ -538,20 +538,20 @@ class Identify_Thread(threading.Thread):
                 media.drive_status = CDS_NO_DISC
                 util.umount(media.mountdir)
                 return self.identify(media, True)
-        
+
         # Check for movies/audio/images on the disc
         num_video = disc_info['disc_num_video']
         num_audio = disc_info['disc_num_audio']
         num_image = disc_info['disc_num_image']
 
         video_files = util.match_files(media.mountdir, config.VIDEO_SUFFIX)
-        
+
         _debug_('identifymedia: mplayer = "%s"' % video_files, level = 2)
-            
+
         media.item = DirItem(media.mountdir, None, create_metainfo=False)
         media.item.info = disc_info
         util.umount(media.mountdir)
-        
+
         # if there is a video file on the root dir of the disc, we guess
         # it's a video disc. There may also be audio files and images, but
         # they only belong to the movie
@@ -606,7 +606,7 @@ class Identify_Thread(threading.Thread):
                             image = tvinfo[0]
                         if not fxd_file:
                             fxd_file = tvinfo[3]
-                        
+
                 elif (not show_name) and len(video_files) == 1:
                     movie = video_files[0]
                     title = os.path.splitext(os.path.basename(movie))[0]
@@ -631,7 +631,7 @@ class Identify_Thread(threading.Thread):
         elif num_video or num_audio or num_image:
             media.type = None
             title = '%s [%s]' % (media.drivename, label)
-        
+
         # Strange, no useable files
         else:
             media.type = None
@@ -664,7 +664,7 @@ class Identify_Thread(threading.Thread):
             util.umount(media.mountdir)
             media.videoitem.media    = media
             media.videoitem.media_id = media.id
-            
+
             # set the infos we have
             if title:
                 media.videoitem.name = title
@@ -677,7 +677,7 @@ class Identify_Thread(threading.Thread):
 
             if fxd_file:
                 media.videoitem.fxd_file = fxd_file
-                
+
         media.item.media = media
         return
 
@@ -689,7 +689,7 @@ class Identify_Thread(threading.Thread):
         if rc.app():
             # Some app is running, do not scan, it's not necessary
             return
-        
+
         self.lock.acquire()
         try:
             for media in config.REMOVABLE_MEDIA:
@@ -706,7 +706,7 @@ class Identify_Thread(threading.Thread):
         finally:
             self.lock.release()
 
-                
+
     def __init__(self):
         """
         init the thread
@@ -714,7 +714,7 @@ class Identify_Thread(threading.Thread):
         threading.Thread.__init__(self)
         self.lock = thread.allocate_lock()
 
-        
+
     def run(self):
         """
         thread main function
@@ -729,7 +729,7 @@ class Identify_Thread(threading.Thread):
                 if video.hash_fxd_movie_database() == 0:
                     # something is wrong, deactivate this feature
                     rebuild_file = '/this/file/should/not/exist'
-                    
+
                 for media in config.REMOVABLE_MEDIA:
                     media.drive_status = None
 
@@ -744,4 +744,3 @@ class Identify_Thread(threading.Thread):
                 # check if we need to stop
                 if hasattr(self, 'stop'):
                     return
-

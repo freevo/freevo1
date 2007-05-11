@@ -9,14 +9,14 @@
 # when needed.
 #
 # A Object Oriented GUI Widget library for Freevo
-# 
+#
 # This is aimed at being a general library for GUI programming with Freevo.
 # It is built directly on top of SDL with pygame, and it's aimed at being
 # fairly fast.
-# 
+#
 # Event though the library is built from the ground the design is heavy
 # influenced by other GUI toolkits, such as Java JDK and QT.
-# 
+#
 # Currently not many classes are in place, but hopefully we will add more
 # in time.
 #
@@ -60,4 +60,3 @@ from InputBox          import *
 from LayoutManagers    import *
 from exceptions        import *
 from ProgressBox       import *
-

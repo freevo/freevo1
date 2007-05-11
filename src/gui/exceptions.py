@@ -39,7 +39,7 @@ class BadColorException(StandardError):
     def __init__(self, value):
         value = 'Nobody expects the BadColorException: ' + str(value)
         StandardError.__init__(self, value)
-        
+
 
 class LabelException(StandardError):
     """

@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #  - Proper pausing of animations (should it still be drawn to screen?)
 #  - What to do when an app like imageviewer takes the whole screen. Ex. the
 #    detachbar needs to stop it's animation when this happens
@@ -16,7 +16,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -174,7 +174,7 @@ class Render:
         for a in self.animations:
             a.remove()
         rc.unregister(self.update)
-        
+
 
     def suspendall(self):
         """

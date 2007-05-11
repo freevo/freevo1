@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -53,7 +53,7 @@ class View_Area(Skin_Area):
             image = item.image
 
         return Unicode(image) != Unicode(self.image)
-    
+
 
     def update_content(self):
         """
@@ -61,7 +61,7 @@ class View_Area(Skin_Area):
         """
 
         item = self.viewitem
-        
+
         layout    = self.layout
         area      = self.area_val
         content   = self.calc_geometry(layout.content, copy_object=True)
@@ -83,18 +83,18 @@ class View_Area(Skin_Area):
         width  = content.width - 2*content.spacing
         height = content.height - 2*content.spacing
 
-        
+
         if val.rectangle:
             r = self.get_item_rectangle(val.rectangle, width, height)[2]
 
             if r.x < 0:
                 x0 -= r.x
                 r.x = 0
-            
+
             if r.y < 0:
                 y0 -= r.y
                 r.y = 0
-            
+
             if r.x + r.width > x0 + width:
                 r.width, width = width, width - (r.width - width)
 
@@ -108,13 +108,13 @@ class View_Area(Skin_Area):
 
         if not image:
             return
-        
+
         if content.align == 'center' and i_w < width:
             addx += (width - i_w) / 2
 
         if content.align == 'right' and i_w < width:
             addx += width - i_w
-            
+
         if content.valign == 'center' and i_h < height:
             addy += (height - i_h) / 2
 

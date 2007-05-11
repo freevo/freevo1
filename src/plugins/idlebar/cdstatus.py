@@ -72,5 +72,3 @@ class PluginInterface(IdleBarPlugin):
         if width:
             width -= 10
         return width
-
-   

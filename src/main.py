@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -48,19 +48,19 @@ import signal
 try:
     from xml.utils import qp_xml
     from xml.dom import minidom
-    
+
     # now load other modules to check if all requirements are installed
     import pygame
     import twisted
     import Numeric
-    
+
     import config
     import version
 
     import kaa.metadata as mmpython
     import kaa.imlib2 as Image
 
-    
+
 except ImportError, i:
     print 'Can\'t find all Python dependencies:'
     print i
@@ -87,7 +87,7 @@ except ImportError:
     print 'svn export svn://svn.freevo.org/kaa/trunk/metadata kaa/metadata'
     print
     sys.exit(0)
-    
+
 # check if kaa.imlib2 is up to date to avoid bug reports
 # for already fixed bugs
 try:
@@ -102,7 +102,7 @@ except ImportError:
     print 'svn export svn://svn.freevo.org/kaa/trunk/imlib2 kaa/imlib2'
     print
     sys.exit(0)
-    
+
 import util    # Various utilities
 import osd     # The OSD class, used to communicate with the OSD daemon
 import menu    # The menu widget class
@@ -127,7 +127,7 @@ class SkinSelectItem(Item):
         self.name  = name
         self.image = image
         self.skin  = skin
-        
+
     def actions(self):
         return [ ( self.select, '' ) ]
 
@@ -150,7 +150,7 @@ class SkinSelectItem(Item):
         menuw.menustack[0].selected = menuw.menustack[0].choices[pos]
         menuw.back_one_menu()
 
-        
+
 
 class MainMenu(Item):
     """
@@ -190,8 +190,8 @@ class MainMenu(Item):
 
         # give the event to the next eventhandler in the list
         return Item.eventhandler(self, event, menuw)
-        
-    
+
+
 
 class Splashscreen(skin.Area):
     """
@@ -251,7 +251,7 @@ class MainTread:
             else:
                 self.eventhandler_plugins.append(p)
 
-        
+
     def eventhandler(self, event):
         """
         event handling function for the main loop
@@ -314,7 +314,7 @@ class MainTread:
                         pop.b1.toggle_selected()
                         pop.show()
                     else:
-                        raise 
+                        raise
             else:
                 _debug_('no target for events given')
 

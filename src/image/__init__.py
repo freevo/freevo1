@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -53,7 +53,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
         # activate the mediamenu for image
         plugin.activate('mediamenu', level=plugin.is_active('image')[2], args='image')
-        
+
 
     def suffix(self):
         """
@@ -137,7 +137,7 @@ class PluginInterface(plugin.MimetypePlugin):
                     for i in citems:
                         i.duration = duration
                 items += citems
-                
+
             except OSError, e:
                 print 'slideshow error:', e
 

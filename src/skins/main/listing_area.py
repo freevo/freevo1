@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,7 @@ class Listing_Area(Skin_Area):
         self.last_choices = ( None, None )
         self.last_get_items_geometry = [ None, None ]
 
-        
+
     def get_items_geometry(self, settings, menu, display_style):
         """
         get the geometry of the items. How many items per row/col, spaces
@@ -59,7 +59,7 @@ class Listing_Area(Skin_Area):
         if self.last_get_items_geometry[0] == ( menu, settings, display_style ) and \
                hasattr(menu, 'skin_force_text_view'):
             return self.last_get_items_geometry[1]
-        
+
         # store the old values in case we are called by ItemsPerMenuPage
         backup = ( self.area_val, self.layout)
 
@@ -73,7 +73,7 @@ class Listing_Area(Skin_Area):
         content   = self.calc_geometry(self.layout.content, copy_object=True)
 
         self.last_get_items_geometry[0] = ( menu, settings, display_style )
-        
+
         if content.type == 'text':
             items_w = content.width
             items_h = 0
@@ -134,7 +134,7 @@ class Listing_Area(Skin_Area):
                 addh = 0
                 if content.type == 'image+text':
                     addh = int(ct.font.h * 1.1)
-                    
+
                 items_w = max(items_w, ct.width, rw)
                 items_h = max(items_h, ct.height + addh, rh + addh)
 
@@ -143,7 +143,7 @@ class Listing_Area(Skin_Area):
             print 'unknown content type %s' % content.type
             self.area_val, self.layout = backup
             return None
-        
+
         # restore
         self.area_val, self.layout = backup
 
@@ -152,7 +152,7 @@ class Listing_Area(Skin_Area):
         width = content.width
 
         if items_w > width:
-            width, items_w = width - (items_w - width), width 
+            width, items_w = width - (items_w - width), width
 
         cols = 0
         rows = 0
@@ -189,8 +189,8 @@ class Listing_Area(Skin_Area):
                 i += 1
             except IndexError:
                 return True
-            
-        
+
+
     def update_content(self):
         """
         update the listing area
@@ -211,7 +211,7 @@ class Listing_Area(Skin_Area):
         if not len(menu.choices):
             val = content.types['default']
             self.drawstring(_('This directory is empty'), content.font, content)
-            
+
         if content.align == 'center':
             item_x0 = content.x + (content.width - cols * hspace) / 2
         else:
@@ -223,15 +223,15 @@ class Listing_Area(Skin_Area):
             item_y0 = content.y
 
         current_col = 1
-        
+
         if content.type == 'image':
             width  = hspace - content.spacing
             height = vspace - content.spacing
-            
+
         last_tvs      = ('', 0)
         all_tvs       = True
         tvs_shortname = True
-                
+
         for choice in menuw.menu_items:
             if content.types.has_key( '%s selected' % choice.type ):
                 s_val = content.types[ '%s selected' % choice.type ]
@@ -242,13 +242,13 @@ class Listing_Area(Skin_Area):
                 n_val = content.types[ choice.type ]
             else:
                 n_val = content.types['default']
-                
+
 
             if choice == menu.selected:
                 val = s_val
             else:
                 val = n_val
-                
+
             text = choice.name
             if not text:
                 text = "unknown"
@@ -256,7 +256,7 @@ class Listing_Area(Skin_Area):
             type_image = None
             if hasattr( val, 'icon' ):
                 type_image = val.icon
-                
+
             if not choice.icon and not type_image:
                 if choice.type == 'playlist':
                     text = 'PL: %s' % text
@@ -271,7 +271,7 @@ class Listing_Area(Skin_Area):
                 icon_x = 0
                 image = None
                 align = val.align or content.align
-                
+
                 if choice != menu.selected and hasattr( choice, 'outicon' ) and \
                        choice.outicon:
                     image = self.loadimage(choice.outicon, (vspace-content.spacing,
@@ -307,7 +307,7 @@ class Listing_Area(Skin_Area):
                             min_rx = min( min_rx, r2.x )
                             max_rw = max( max_rw, r2.width )
 
-                        mx = x0 + width + hskip + ( max_rw + min_rx - width ) - icon_x 
+                        mx = x0 + width + hskip + ( max_rw + min_rx - width ) - icon_x
                         x_icon = 0
                     self.drawimage(image, (mx, y0))
 
@@ -345,13 +345,13 @@ class Listing_Area(Skin_Area):
 
                         if all_tvs and not tvs_shortname and len(menu.choices) > 5:
                             tvs_shortname = True
-                            
+
                         if all_tvs and tvs_shortname:
                             tvs_w = val.font.stringsize('x') + season + episode
                         else:
                             tvs_w = val.font.stringsize('%s x' % sn[0]) + season + episode
                         last_tvs = (sn[0], tvs_w)
-                        
+
                     self.drawstring(' - %s' % sn[3], val.font, content,
                                     x=x0 + hskip + icon_x + tvs_w,
                                     y=y0 + vskip, width=width-icon_x-tvs_w, height=-1,
@@ -381,7 +381,7 @@ class Listing_Area(Skin_Area):
                             if not isstring(table_text[i]):
                                 self.drawimage(table_text[i], (table_x + x_mod, y0 + vskip))
                                 table_text[i] = ''
-                                
+
                         if table_text[i]:
                             self.drawstring(table_text[i], val.font, content,
                                             x=table_x + x_mod,
@@ -428,10 +428,10 @@ class Listing_Area(Skin_Area):
 
                     if val.align == 'right' and i_w < val.width:
                         addx = val.width - i_w
-            
+
                     if val.valign == 'center' and i_h < val.height:
                         addy = (val.height - i_h) / 2
-                        
+
                     if val.valign == 'bottom' and i_h < val.height:
                         addy = val.height - i_h
 
@@ -441,12 +441,12 @@ class Listing_Area(Skin_Area):
                                           y0 + addy + val.shadow.y,
                                           image.get_width(), image.get_height(),
                                           (val.shadow.color, 0, 0, 0))
-                        
+
                 if content.type == 'image+text':
                     self.drawstring(choice.name, val.font, content, x=x0,
                                     y=y0 + val.height, width=val.width, height=-1,
                                     align_h=val.align, mode='hard', ellipses='', dim=False)
-                    
+
             else:
                 print 'no support for content type %s' % content.type
 
@@ -460,7 +460,7 @@ class Listing_Area(Skin_Area):
             else:
                 item_x0 += hspace
                 current_col += 1
-                
+
         # print arrow:
         try:
             if menuw.menu_items[0] != menu.choices[0] and area.images['uparrow']:
@@ -475,5 +475,5 @@ class Listing_Area(Skin_Area):
         except:
             # empty menu / missing images
             pass
-        
+
         self.last_choices = (menu.selected, copy.copy(menuw.menu_items))

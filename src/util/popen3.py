@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ class Popen4(popen2.Popen3):
     def __init__(self, cmd, cwd=None):
         self._cwd = cwd
         popen2.Popen3.__init__(self, cmd, 1, 100)
-        
+
     def _run_child(self, cmd):
         if self._cwd:
             os.chdir(self._cwd)
@@ -69,7 +69,7 @@ class Popen4(popen2.Popen3):
             os.execvp(cmd[0], cmd)
         finally:
             os._exit(1)
-    
+
 
 def Popen3(cmd, cwd = None):
     """
@@ -82,13 +82,13 @@ def Popen3(cmd, cwd = None):
     # do not use this for the main thread
     if traceback.extract_stack()[0][0].find('thread') == -1:
         return Popen4(cmd, cwd=cwd)
-        
+
     childapp = child_handler()
-    
+
     rc.post_event(Event(OS_EVENT_POPEN2, (childapp, cmd)))
     while(childapp.child == ''):
         time.sleep(0.01)
-    
+
     return childapp.child
 
 
@@ -109,7 +109,7 @@ def waitpid(pid=0):
         except OSError:
             # child anymore
             return
-        
+
         if pid:
             wait_lock.acquire()
             try:
@@ -117,7 +117,7 @@ def waitpid(pid=0):
             finally:
                 wait_lock.release()
         return
-    
+
     if config.IS_RECORDSERVER:
         rc.post_event(Event(OS_EVENT_WAITPID, (pid,)))
         return True
@@ -129,7 +129,7 @@ def waitpid(pid=0):
     # do not use this for the main thread
     if traceback.extract_stack()[0][0].find('thread') == -1:
         return os.waitpid(pid, os.WNOHANG)[0] == pid
-        
+
     _debug_('poll', 2)
     wait_lock.acquire()
     try:
@@ -140,7 +140,7 @@ def waitpid(pid=0):
         return 0
     finally:
         wait_lock.release()
-    
+
 
 def stdout(app):
     """
@@ -168,7 +168,7 @@ def run(app, object, signal=15):
     if isinstance(app, str) or isinstance(app, unicode):
         print 'WARNING: popen.run with string as app'
         print 'This may cause some problems with threads'
-        
+
     child = popen2.Popen3(app, 1, 100)
     child.childerr.close()
     child.fromchild.close()
@@ -181,8 +181,8 @@ def run(app, object, signal=15):
             pid = os.waitpid(child.pid, os.WNOHANG)[0]
         except OSError:
             break
-        
+
         if pid:
             break
-        
+
     child.tochild.close()

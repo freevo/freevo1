@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo: 
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -46,7 +46,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.plugin_name = 'audio.logger'
         plugin.register(self, self.plugin_name)
         self.db = MetaDatabase()
-        
+
 
     def runquery(self,query):
         self.db.runQuery(query)
@@ -55,16 +55,16 @@ class PluginInterface(plugin.DaemonPlugin):
     def log_track(self, filename):
         if filename:
             query = 'UPDATE music SET play_count=play_count+1,last_play=%f WHERE \
-                     path = "%s" and filename = "%s"' % (time.time(),  
-                     util.escape(os.path.dirname(filename)), 
+                     path = "%s" and filename = "%s"' % (time.time(),
+                     util.escape(os.path.dirname(filename)),
                      util.escape(os.path.basename(filename)) )
             self.runquery(query)
 
     def log_rating(self, filename, rating):
         if filename:
             query = 'UPDATE music SET rating=%i WHERE \
-                     path = "%s" and filename = "%s"' % (int(rating),  
-                     util.escape(os.path.dirname(filename)), 
+                     path = "%s" and filename = "%s"' % (int(rating),
+                     util.escape(os.path.dirname(filename)),
                      util.escape(os.path.basename(filename)) )
             self.runquery(query)
 

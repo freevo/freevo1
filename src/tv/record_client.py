@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -50,10 +50,10 @@ def returnFromJelly(status, response):
         return (status, unjellyFromXML(response))
     else:
         return (status, response)
-   
+
 
 def getScheduledRecordings():
-    try: 
+    try:
         (status, message) = server.getScheduledRecordings()
     except Exception, e:
         print 'getScheduledRecordings:', e
@@ -88,7 +88,7 @@ def scheduleRecording(prog=None):
 
     if prog.stop < time.time():
         return (FALSE, _('ERROR')+': '+_('cannot record it if it is over'))
-        
+
     try:
         (status, message) = server.scheduleRecording(jellyToXML(prog))
     except:
@@ -135,8 +135,8 @@ def isProgScheduled(prog, schedule=None):
         except:
             return (FALSE, 'record_client: '+_('connection error'))
 
-        return (status, message) 
-    
+        return (status, message)
+
 
 def findProg(chan, start):
     try:
@@ -146,7 +146,7 @@ def findProg(chan, start):
 
 
     return returnFromJelly(status, response)
-    
+
 
 def findMatches(find='', movies_only=0):
     try:
@@ -165,7 +165,7 @@ def addFavorite(name, prog, exactchan, exactdow, exacttod):
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
-    return (status, message) 
+    return (status, message)
 
 
 def addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
@@ -178,7 +178,7 @@ def addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, on
         traceback.print_exc()
         return (FALSE, 'record_client: '+_('connection error'))
 
-    return (status, message) 
+    return (status, message)
 
 
 def removeFavorite(name):
@@ -187,7 +187,7 @@ def removeFavorite(name):
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
-    return (status, message) 
+    return (status, message)
 
 
 def clearFavorites():
@@ -196,7 +196,7 @@ def clearFavorites():
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
-    return (status, message) 
+    return (status, message)
 
 
 def getFavorites():
@@ -225,7 +225,7 @@ def adjustPriority(favname, mod):
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
-    return (status, message) 
+    return (status, message)
 
 
 def isProgAFavorite(prog, favs):
@@ -234,7 +234,7 @@ def isProgAFavorite(prog, favs):
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
-    return (status, message) 
+    return (status, message)
 
 
 def removeFavoriteFromSchedule(fav):
@@ -243,7 +243,7 @@ def removeFavoriteFromSchedule(fav):
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
-    return (status, message) 
+    return (status, message)
 
 
 def addFavoriteToSchedule(fav):
@@ -252,7 +252,7 @@ def addFavoriteToSchedule(fav):
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
-    return (status, message) 
+    return (status, message)
 
 
 def updateFavoritesSchedule():
@@ -261,11 +261,11 @@ def updateFavoritesSchedule():
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
-    return (status, message) 
+    return (status, message)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 2: 
+    if len(sys.argv) >= 2:
         function = sys.argv[1]
     else:
         function = 'none'
@@ -292,5 +292,3 @@ if __name__ == '__main__':
                 print 'Prog: %s' % prog.title
         else:
             print 'result: %s, response: %s ' % (result, response)
-
-

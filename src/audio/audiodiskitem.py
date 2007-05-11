@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -50,7 +50,7 @@ class AudioDiskItem(Playlist):
         self.disc_id = disc_id
         self.devicename = devicename
         self.name = _('Unknown CD Album')
-        
+
         # variables only for Playlist
         self.autoplay = 0
 
@@ -60,7 +60,7 @@ class AudioDiskItem(Playlist):
         cover = '%s/disc/metadata/%s.jpg' % (config.OVERLAY_DIR, disc_id)
         if os.path.isfile(cover):
             self.image = cover
-            
+
 
     def actions(self):
         """
@@ -69,7 +69,7 @@ class AudioDiskItem(Playlist):
         items = [ ( self.cwd, _('Browse disc') ) ]
         return items
 
-    
+
     def cwd(self, arg=None, menuw=None):
         """
         make a menu item for each file in the directory
@@ -114,7 +114,7 @@ class AudioDiskItem(Playlist):
             d = DirItem(self.media.mountdir, self)
             d.name = _('Data files on disc')
             items.append(d)
-            
+
         self.play_items = play_items
 
         title = self.name

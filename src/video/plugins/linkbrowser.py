@@ -10,7 +10,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -66,14 +66,14 @@ class Link(Item):
         """
         list of possible actions for a Link
         """
-        p = [ ( self.play,           _('Browse links (autoplay)') ), 
+        p = [ ( self.play,           _('Browse links (autoplay)') ),
               ( self.play_max_cache, _('Browse links (autoplay, maximum caching)') ) ]
         b = [ ( self.cwd,            _('Browse links') ) ]
 
         if self.autoplay:
             return p + b
         return b + p
-    
+
 
     def sort(self):
         """
@@ -87,7 +87,7 @@ class Link(Item):
             return 'b %3d%s' % (100 - self.counter, self.url_name)
         return 'a %3d%s' % (100 - self.counter, self.url_name)
 
-        
+
     def make_complete_url(self, base, url):
         """
         Make a complete url from given url and the base. Return None
@@ -95,7 +95,7 @@ class Link(Item):
         """
         if url.find('mailto:') > 0 or url.find('.css') > 0:
             return None
-                
+
         if url.find('javascript:') == 0:
             x = url[url.find('(')+1:url.rfind(')')]
             if x and x[0] in ('\'', '"') and x[-1] in ('\'', '"'):
@@ -103,7 +103,7 @@ class Link(Item):
 
         if url.find('javascript:') >= 0:
             return None
-                
+
         # create the correct url
         if not url.find('http://') == 0:
             if url.find('/') == 0:
@@ -112,7 +112,7 @@ class Link(Item):
                 url = base[:base.rfind('/')+1] + url
         return url
 
-    
+
     def play(self, arg=None, menuw=None):
         """
         download the link and activate autoplay
@@ -126,17 +126,17 @@ class Link(Item):
         """
         self.cwd(arg='autoplay_max', menuw=menuw)
 
-        
+
     def cwd(self, arg=None, menuw=None):
         """
         Download the url and create a menu with more links
         """
         txdata = None
-        txheaders = {   
+        txheaders = {
             'User-Agent': 'freevo %s (%s)' % (config.VERSION, sys.platform),
             'Accept-Language': 'en-us',
             }
-        
+
         popup = PopupBox(text=_('Downloading link list...'))
         popup.show()
         try:
@@ -150,7 +150,7 @@ class Link(Item):
 
         # base for this url
         self.base = response.geturl()[:response.geturl().rfind('/')+1]
-        
+
         # normalize the text so that it can be searched
         all = ''
         for line in response.read().split('\n'):
@@ -192,7 +192,7 @@ class Link(Item):
                 # bad url?
                 if not long_url:
                     continue
-                
+
                 # find a title
                 title = url
                 if name_map.has_key(url):
@@ -239,7 +239,7 @@ class Link(Item):
                     l.url_name = short
                     l.image = None
                     items.append(l)
-                    
+
 
         # sort all items
         items.sort(lambda l, o: cmp(l.sort().upper(),
@@ -262,7 +262,7 @@ class Link(Item):
                         url = o.url[o.url[:-1].rfind('/')+1:]
                     if url:
                         o.name = '%s (%s)' % (o.name, url)
-                    
+
         # now search for movies
         movies = []
         if movie_urls:
@@ -286,7 +286,7 @@ class Link(Item):
         elif items or movies:
             menuw.pushmenu(menu.Menu(self.name, movies + items))
 
-            
+
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -317,7 +317,7 @@ class PluginInterface(plugin.MainMenuPlugin):
              if False, only links deeper to the current one will be shown. E.g.
              when viewing www.foo.com/bar, www.bar.com and www.foo.com/bar will
              be blocked.
-             
+
     activate this plugin with
     plugin.activate('video.linkbrowser', args=('name', 'url') or
     plugin.activate('video.linkbrowser', args=('name', 'url', image', ...)
@@ -335,7 +335,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         self.type = 'linkbrowser'
         for b in blacklist_regexp:
             self.blacklist_regexp.append(re.compile(b).match)
-        
+
     def items(self, parent):
         l = Link(self.name, self.url, self.blacklist_regexp, self.autoplay,
                  self.all_links, parent)

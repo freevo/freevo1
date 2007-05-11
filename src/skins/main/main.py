@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,7 @@ class Skin:
     """
     main skin class
     """
-    
+
     Rectange = xml_skin.Rectangle
     Image    = xml_skin.Image
     Area     = Skin_Area
@@ -66,7 +66,7 @@ class Skin:
         """
         global skin_engine
         skin_engine = self
-        
+
         self.display_style = { 'menu' : 0 }
         self.force_redraw  = True
         self.last_draw     = None, None, None
@@ -79,7 +79,7 @@ class Skin:
         from view_area      import View_Area
         from info_area      import Info_Area
         from default_areas  import Screen_Area, Title_Area, Subtitle_Area, Plugin_Area
-        
+
         for a in ( 'screen', 'title', 'subtitle', 'view', 'listing', 'info', 'plugin'):
             self.areas[a] = eval('%s_Area()' % a.capitalize())
         self.areas['tvlisting'] = TVListing_Area()
@@ -95,7 +95,7 @@ class Skin:
             if not config.SKIN_XML_FILE:
                 config.SKIN_XML_FILE = config.SKIN_DEFAULT_XML_FILE
             self.storage = {}
-            
+
         # load the fxd file
         self.settings = xml_skin.XMLSkin()
         self.set_base_fxd(config.SKIN_XML_FILE)
@@ -109,7 +109,7 @@ class Skin:
                                 config.OSD_OVERSCAN_Y)
         return vfs.getoverlay('%s.skin-%s-%s' % (filename, config.SKIN_XML_FILE, geo))
 
-        
+
     def save_cache(self, settings, filename):
         """
         cache the fxd skin settings in 'settings' to the OVERLAY_DIR cachfile
@@ -126,7 +126,7 @@ class Skin:
             for f in settings.font:
                 settings.font[f].font = osd.getfont(settings.font[f].name,
                                                     settings.font[f].size)
-            
+
 
     def load_cache(self, filename):
         """
@@ -134,17 +134,17 @@ class Skin:
         """
         if hasattr(self, '__last_load_cache__') and self.__last_load_cache__[0] == filename:
             return self.__last_load_cache__[1]
-            
+
         if not os.path.isfile(filename):
             return None
-        
+
         cache = self.cachename(filename)
         if not cache:
             return None
 
         if not os.path.isfile(cache):
             return None
-        
+
         version, settings = util.read_pickle(cache)
         if not settings or version != xml_skin.FXD_FORMAT_VERSION:
             return None
@@ -158,7 +158,7 @@ class Skin:
         for f in settings.fxd_files:
             if not os.path.dirname(f).endswith(pdir):
                 ffiles.append(f)
-            
+
         # check if all files used by the skin are not newer than
         # the cache file
         ftime = os.stat(cache)[stat.ST_MTIME]
@@ -173,7 +173,7 @@ class Skin:
         self.__last_load_cache__ = filename, settings
         return settings
 
-        
+
     def register(self, type, areas):
         """
         register a new type objects to the skin
@@ -201,19 +201,19 @@ class Skin:
         exec('import skins.plugins.%s' % module)
         self.areas[name] = eval('skins.plugins.%s.%s()' % (module, object))
 
-        
+
     def set_base_fxd(self, name):
         """
         set the basic skin fxd file
         """
         config.SKIN_XML_FILE = os.path.splitext(os.path.basename(name))[0]
         _debug_('load basic skin settings: %s' % config.SKIN_XML_FILE)
-        
+
         # try to find the skin xml file
         if not self.settings.load(name, clear=True):
             print "skin not found, using fallback skin"
             self.settings.load('basic.fxd', clear=True)
-            
+
         for dir in config.cfgfilepath:
             local_skin = '%s/local_skin.fxd' % dir
             if os.path.isfile(local_skin):
@@ -228,8 +228,8 @@ class Skin:
             self.display_style['menu'] = self.storage[config.SKIN_XML_FILE]
         else:
             self.display_style['menu'] = 0
-        
-        
+
+
     def load(self, filename, copy_content = 1):
         """
         return an object with new skin settings
@@ -247,7 +247,7 @@ class Skin:
         settings = self.load_cache(filename)
         if settings:
             return settings
-            
+
         if copy_content:
             settings = copy.copy(self.settings)
         else:
@@ -258,7 +258,7 @@ class Skin:
 
         self.save_cache(settings, filename)
         return settings
-    
+
 
 
     def get_skins(self):
@@ -271,7 +271,7 @@ class Skin:
         # image is not usable stand alone
         skin_files.remove(os.path.join(config.SKIN_DIR, 'main/image.fxd'))
         skin_files.remove(os.path.join(config.SKIN_DIR, 'main/basic.fxd'))
-        
+
         for skin in skin_files:
             name  = os.path.splitext(os.path.basename(skin))[0]
             if os.path.isfile('%s.png' % os.path.splitext(skin)[0]):
@@ -289,8 +289,8 @@ class Skin:
         return the current loaded settings
         """
         return self.settings
-    
-        
+
+
     def toggle_display_style(self, menu):
         """
         Toggle display style
@@ -301,10 +301,10 @@ class Skin:
             self.display_style[menu] = (self.display_style[menu] + 1) % \
                                        len(self.settings.sets[menu].style)
             return 1
-            
+
         if menu.force_skin_layout != -1:
             return 0
-        
+
         if menu and menu.skin_settings:
             settings = menu.skin_settings
         else:
@@ -332,8 +332,8 @@ class Skin:
             if not self.display_style.has_key(menu):
                 self.display_style[menu] = 0
             return self.display_style[menu]
-        
-        if menu:            
+
+        if menu:
             if menu.force_skin_layout != -1:
                 return menu.force_skin_layout
         return self.display_style['menu']
@@ -345,7 +345,7 @@ class Skin:
         if not hasattr(widget, 'menustack'):
             return self.__find_current_menu__(widget.parent)
         return widget.menustack[-1]
-        
+
 
     def get_popupbox_style(self, widget=None):
         """
@@ -396,7 +396,7 @@ class Skin:
         except:
             return self.settings.font['default']
 
-        
+
     def get_image(self, name):
         """
         Get the skin image object 'name'. Return None if
@@ -407,7 +407,7 @@ class Skin:
         except:
             return None
 
-        
+
     def get_icon(self, name):
         """
         Get the icon object 'name'. Return the icon in the theme dir if it
@@ -418,7 +418,7 @@ class Skin:
             return icon
         return util.getimage(os.path.join(config.ICON_DIR, name), '')
 
-        
+
     def items_per_page(self, (type, object)):
         """
         returns the number of items per menu page
@@ -473,7 +473,7 @@ class Skin:
         """
         self.settings.prepare()
 
-        
+
     def draw(self, type, object, menu=None):
         """
         draw the object.
@@ -494,7 +494,7 @@ class Skin:
                 return
 
         settings = self.settings
-            
+
         if type == 'menu':
             menu = object.menustack[-1]
             if menu.skin_settings:
@@ -516,7 +516,7 @@ class Skin:
         if self.last_draw[0] != type:
             self.force_redraw = True
             self.all_areas    = getattr(self, '%s_areas' % type)
-            
+
 
         self.last_draw = type, object, menu
 

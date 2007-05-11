@@ -187,7 +187,7 @@ class Lirc:
         """
         (re-)initialize pylirc, e.g. after calling close()
         """
-        print 'PyLirc resumed!'	
+        print 'PyLirc resumed!'
         pylirc.init('freevo', config.LIRCRC)
         pylirc.blocking(0)
 

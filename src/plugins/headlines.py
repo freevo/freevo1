@@ -4,8 +4,8 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: 
-# Todo: 
+# Notes:
+# Todo:
 # activate:
 # plugin.activate('headlines', level=45)
 # HEADLINES_LOCATIONS = [ ("Advogato", "http://advogato.org/rss/articles.xml"),
@@ -15,7 +15,7 @@
 # for a full list of tested sites see Docs/plugins/headlines.txt
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -53,7 +53,7 @@ skin = skin.get_singleton()
 osd  = osd.get_singleton()
 
 skin.register('headlines', ('screen', 'title', 'info', 'plugin'))
-              
+
 #check every 30 minutes
 MAX_HEADLINE_AGE = 1800
 
@@ -64,12 +64,12 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate, put the following lines in local_conf.py:
 
-    plugin.activate('headlines', level=45) 
+    plugin.activate('headlines', level=45)
     HEADLINES_LOCATIONS = [
-          ('Advogato', 'http://advogato.org/rss/articles.xml'), 
-          ('DVD Review', 'http://www.dvdreview.com/rss/newschannel.rss') ] 
+          ('Advogato', 'http://advogato.org/rss/articles.xml'),
+          ('DVD Review', 'http://www.dvdreview.com/rss/newschannel.rss') ]
 
-    For a full list of tested sites, see 'Docs/plugins/headlines.txt'. 
+    For a full list of tested sites, see 'Docs/plugins/headlines.txt'.
     """
     # make an init func that creates the cache dir if it don't exist
     def __init__(self):
@@ -77,7 +77,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             self.reason = 'HEADLINES_LOCATIONS not defined'
             return
         plugin.MainMenuPlugin.__init__(self)
-        
+
     def config(self):
         return [('HEADLINES_LOCATIONS',
                  [ ("DVD Review", "http://www.dvdreview.com/rss/newschannel.rss"),
@@ -107,10 +107,10 @@ class ShowHeadlineDetails:
             rc.app(None)
             self.menuw.show()
             return True
-        
+
         return False
 
-        
+
 class HeadlinesSiteItem(Item):
     """
     Item for the menu for one rss feed
@@ -123,7 +123,7 @@ class HeadlinesSiteItem(Item):
             os.mkdir(self.cachedir,
                      stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
         self.location_index = None
-        
+
 
     def actions(self):
         """
@@ -132,7 +132,7 @@ class HeadlinesSiteItem(Item):
         items = [ ( self.getheadlines , _('Show Sites Headlines') ) ]
         return items
 
-    
+
     def getsiteheadlines(self):
         headlines = []
         pfile = os.path.join(self.cachedir, 'headlines-%i' % self.location_index)
@@ -163,7 +163,7 @@ class HeadlinesSiteItem(Item):
                 title = ''
                 link  = ''
                 description = ''
-                
+
                 if item.hasChildNodes():
                     for c in item.childNodes:
                         if c.localName == 'title':
@@ -194,7 +194,7 @@ class HeadlinesSiteItem(Item):
 
 
     def getheadlines(self, arg=None, menuw=None):
-        headlines = [] 
+        headlines = []
         rawheadlines = []
         rawheadlines = self.getsiteheadlines()
         for title, link, description in rawheadlines:
@@ -238,7 +238,7 @@ class HeadlinesMainMenuItem(Item):
         """
         items = [ ( self.create_locations_menu , _('Headlines Sites' )) ]
         return items
- 
+
     def create_locations_menu(self, arg=None, menuw=None):
         headlines_sites = []
         for location in config.HEADLINES_LOCATIONS:
@@ -253,5 +253,3 @@ class HeadlinesMainMenuItem(Item):
         headlines_site_menu = menu.Menu(_('Headlines Sites'), headlines_sites)
         menuw.pushmenu(headlines_site_menu)
         menuw.refresh()
-
-

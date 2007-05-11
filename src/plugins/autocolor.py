@@ -14,7 +14,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -67,7 +67,7 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.register(self, 'autocolor')
         self.before = before
         self.after = after
-        
+
     def eventhandler(self, event, menuw=None):
         """
         catch VIDEO_START/VIDEOEND and run a command, return False, maybe someone

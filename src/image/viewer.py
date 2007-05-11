@@ -9,7 +9,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -31,8 +31,8 @@
 
 import os
 
-import config 
-import osd    
+import config
+import osd
 import plugin
 import util
 import rc
@@ -53,7 +53,7 @@ def get_singleton():
     # One-time init
     if _singleton == None:
         _singleton = ImageViewer()
-        
+
     return _singleton
 
 
@@ -86,10 +86,10 @@ class ImageViewer(GUIObject):
         free the current cache to save memory
         """
         self.bitmapcache = util.objectcache.ObjectCache(3, desc='viewer')
-        if self.parent and self.free_cache in self.parent.show_callbacks: 
+        if self.parent and self.free_cache in self.parent.show_callbacks:
             self.parent.show_callbacks.remove(self.free_cache)
 
-        
+
     def view(self, item, zoom=0, rotation=0):
         #print 'view(self, item, zoom=%s, rotation=%s)' % (zoom, rotation)
         if zoom:
@@ -102,9 +102,9 @@ class ImageViewer(GUIObject):
         self.fileitem = item
         self.parent   = item.menuw
 
-        if not self.free_cache in item.menuw.show_callbacks: 
+        if not self.free_cache in item.menuw.show_callbacks:
             item.menuw.show_callbacks.append(self.free_cache)
-        
+
         self.filename = filename
         self.rotation = rotation
 
@@ -129,9 +129,9 @@ class ImageViewer(GUIObject):
                                       align_h='center', align_v='center', mode='soft')
             self.osd.update()
             return
-        
+
         width, height = image.get_size()
-            
+
         # Bounding box default values
         bbx = bby = bbw = bbh = 0
 
@@ -158,7 +158,7 @@ class ImageViewer(GUIObject):
                 h, v = bb[zoom]
             else:
                 h, v = bb[zoom[0]]
-                
+
             # Bounding box center
             bbcx = ([1, 3, 5][h]) * width / 6
             bbcy = ([1, 3, 5][v]) * height / 6
@@ -183,7 +183,7 @@ class ImageViewer(GUIObject):
                 # image width (same for height)
                 bbw = min(max((width / 3) * scale, self.osd.width), width) / scale
                 bbh = min(max((height / 3) * scale, self.osd.height), height) / scale
-                
+
 
             # calculate the beginning of the bounding box
             bbx = max(0, bbcx - bbw/2)
@@ -200,36 +200,36 @@ class ImageViewer(GUIObject):
 
 
         else:
-            if self.rotation % 180:  
+            if self.rotation % 180:
                 height, width = width, height
-                
+
             # scale_x = scale_y = 1.0
             # if width > osd.width: scale_x = float(osd.width) / width
             # if height > osd.height: scale_y = float(osd.height) / height
             scale_x = float(self.osd.width) / width
             scale_y = float(self.osd.height) / height
-            
+
             scale = min(scale_x, scale_y)
-            
+
             new_w, new_h = int(scale*width), int(scale*height)
 
 
         # Now we have all necessary information about zoom yes/no and
         # the kind of rotation
-        
+
         x = (self.osd.width - new_w) / 2
         y = (self.osd.height - new_h) / 2
-        
+
         last_image = self.last_image[1]
 
 
         if not isinstance(zoom, int):
             # change zoom based on rotation
-            if self.rotation == 90:  
+            if self.rotation == 90:
                 zoom = zoom[0], -zoom[2], zoom[1]
-            if self.rotation == 180:  
+            if self.rotation == 180:
                 zoom = zoom[0], -zoom[1], -zoom[2]
-            if self.rotation == 270:  
+            if self.rotation == 270:
                 zoom = zoom[0], zoom[2], -zoom[1]
 
             # don't move outside the image
@@ -245,7 +245,7 @@ class ImageViewer(GUIObject):
             # change bbx
             bbx += zoom[1]
             bby += zoom[2]
-            
+
         if (last_image and self.last_image[0] != item and
             config.IMAGEVIEWER_BLEND_MODE != None):
             screen = self.osd.screen.convert()
@@ -272,7 +272,7 @@ class ImageViewer(GUIObject):
 
         if plugin.getbyname('osd'):
             plugin.getbyname('osd').draw(('osd', None), self.osd)
-            
+
         # draw
         self.osd.update()
 
@@ -294,11 +294,11 @@ class ImageViewer(GUIObject):
 
         # save zoom, but revert the rotation mix up
         if not isinstance(zoom, int) and self.rotation:
-            if self.rotation == 90:  
+            if self.rotation == 90:
                 zoom = zoom[0], zoom[2], -zoom[1]
-            if self.rotation == 180:  
+            if self.rotation == 180:
                 zoom = zoom[0], -zoom[1], -zoom[2]
-            if self.rotation == 270:  
+            if self.rotation == 270:
                 zoom = zoom[0], -zoom[2], zoom[1]
         self.zoom = zoom
         return None
@@ -308,12 +308,12 @@ class ImageViewer(GUIObject):
         #print 'redraw(self)'
         self.view(self.fileitem, zoom=self.zoom, rotation=self.rotation)
 
-        
+
     def cache(self, fileitem):
         #print 'cache(self, fileitem.filename=%s)' % (fileitem.filename)
         # cache the next image (most likely we need this)
         self.osd.loadbitmap(fileitem.filename, cache=self.bitmapcache)
-        
+
 
     def signalhandler(self):
         #print 'signalhandler(self)'
@@ -335,7 +335,7 @@ class ImageViewer(GUIObject):
                 rc.register(self.signalhandler, False, 100)
                 self.signal_registered = True
             return True
-        
+
         elif event == STOP:
             self.last_image  = None, None
             self.signal_registered = False
@@ -351,7 +351,7 @@ class ImageViewer(GUIObject):
             rc.unregister(self.signalhandler)
             self.fileitem.eventhandler(event)
             return True
-            
+
         # rotate image
         elif event == IMAGE_ROTATE:
             if event.arg == 'left':
@@ -373,7 +373,7 @@ class ImageViewer(GUIObject):
         # 1 is upper left, 9 is lower right, 0 zoom off
         elif str(event) in self.zoom_btns:
             self.zoom = self.zoom_btns[str(event)]
-                
+
             if self.zoom:
                 # Zoom one third of the image, don't load the next
                 # image in the list
@@ -382,7 +382,7 @@ class ImageViewer(GUIObject):
                 # Display entire picture, don't load next image in case
                 # the user wants to zoom around some more.
                 self.view(self.fileitem, zoom=0, rotation = self.rotation)
-            return True                
+            return True
 
         elif event == IMAGE_MOVE:
             coord = event.arg
@@ -392,7 +392,7 @@ class ImageViewer(GUIObject):
                 self.zoom = self.zoom[0], self.zoom[1] + coord[0], self.zoom[2] + coord[1]
             self.view(self.fileitem, zoom=self.zoom, rotation = self.rotation)
             return True
-        
+
         # save the image with the current rotation
         elif event == IMAGE_SAVE:
             if self.rotation and os.path.splitext(self.filename)[1] == ".jpg":
@@ -402,12 +402,12 @@ class ImageViewer(GUIObject):
                 os.system('mv /tmp/freevo-iview %s' % self.filename)
                 self.rotation = 0
                 self.osd.bitmapcache.__delitem__(self.filename)
-                return True                
+                return True
 
         else:
             return self.fileitem.eventhandler(event)
 
-            
+
     def drawosd(self, layer=None):
         #print 'drawosd(self, layer=%s)' % (layer)
 
@@ -424,7 +424,7 @@ class ImageViewer(GUIObject):
         # If after all that there is nothing then tell the users that
         if osdstring == []:
             osdstring = [_('No information available')]
-        
+
         # Now sort the text into lines of length line_length
         line = 0
         if config.OSD_OVERSCAN_X:
@@ -454,7 +454,7 @@ class ImageViewer(GUIObject):
         # Create a black box for text
         self.osd.drawbox(config.OSD_OVERSCAN_X, self.osd.height - \
                          (config.OSD_OVERSCAN_X + 25 + (len(prt_line) * 30)),
-                         self.osd.width, self.osd.height, width=-1, 
+                         self.osd.width, self.osd.height, width=-1,
                          color=((60 << 24) | self.osd.COL_BLACK), layer=layer)
 
         # Now print the Text
@@ -463,5 +463,3 @@ class ImageViewer(GUIObject):
                                  ((len(prt_line) - line - 1) * 30))
             self.osd.drawstring(prt_line[line], 15 + config.OSD_OVERSCAN_X, h,
                                 fgcolor=self.osd.COL_ORANGE, layer=layer)
-
-

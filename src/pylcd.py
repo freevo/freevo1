@@ -103,11 +103,11 @@ class client:
         Read and return a whole line. May block.
         """
         try:
-            return self.conn.read_until("\n")    
+            return self.conn.read_until("\n")
         except:
             print 'self.conn.read_until("\n") failed'
             return None
-        
+
     def connect(self):
         """
         Send connect message ("hello") to server and
@@ -116,7 +116,7 @@ class client:
         """
         self.send("hello")
         line=string.strip(self.readl())
-        
+
         try:
             (self.state,self.server,self.s_version,c,self.proto,self.type,c,self.ds_width,c,self.ds_height,c,self.cs_width,c,self.cs_height)=string.split(line," ")
         except ValueError:
@@ -154,41 +154,41 @@ class client:
         return self.readl()
 
     def screen_add(self,id):
-        """     
+        """
         Implement the screen_add command, return server answer
-        """     
-        
+        """
+
         self.send("screen_add %s"%id)
         return self.readl()
 
     def screen_del(self,id):
-        """     
+        """
         Implement the screen_del command, return server answer
-        """     
+        """
         self.send("screen_del %s"%id)
         return self.readl()
 
     def screen_set(self,id,params):
-        """     
+        """
         Implement the screen_set command, return server answer
-        """     
+        """
         self.send("screen_set %s %s"%(id,params))
         return self.readl()
 
     def widget_add(self,id,type,params=""):
-        """     
+        """
         Implement the widget_add command, return server answer
         """
         self.send("widget_add %s %s %s"%(id,type,params))
         return self.readl()
 
     def widget_set(self,screen,id,data):
-        """     
+        """
         Implement the widget_set command, return server answer
         """
         self.send("widget_set %s %s %s"%(screen,id,data))
         return self.readl()
-    
+
     def remap(self,str):
         """
         Maps high-bit ascii charactes which often produce kanjii
@@ -199,4 +199,3 @@ class client:
         """
         ret=string.translate(str,self.transtable,self.deltable)
         return(ret)
-        

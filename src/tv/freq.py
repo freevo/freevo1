@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
- 
+
 
 NTSC_BCAST = [
      ("2",     55250),
@@ -691,11 +691,11 @@ FREQ_CCIR_I_III = [
      ("E2",    48250),
      ("E3",    55250),
      ("E4",    62250),
-                                
+
      ("S01",   69250),
      ("S02",   76250),
      ("S03",   83250),
-                                
+
      ("E5",   175250),
      ("E6",   182250),
      ("E7",   189250),
@@ -717,7 +717,7 @@ FREQ_CCIR_SL_SH = [
      ("SE8",  154250),
      ("SE9",  161250),
      ("SE10", 168250),
-                                
+
      ("SE11", 231250),
      ("SE12", 238250),
      ("SE13", 245250),
@@ -778,7 +778,7 @@ FREQ_OIRT_SL_SH = [
      ("SR6",  151250),
      ("SR7",  159250),
      ("SR8",  167250),
-                                
+
      ("SR11", 231250),
      ("SR12", 239250),
      ("SR13", 247250),
@@ -1315,7 +1315,7 @@ PAL_SWITZERLAND = [
      ("K08",  196750), # TSI 1
      ("S18",  281500), # TSI 2
      ("K12",  225000), # TVE Int.
-     ("S16",  267500), # cablecom infokanal 
+     ("S16",  267500), # cablecom infokanal
      ("S06",  140250), # Tele M1**
 ]
 

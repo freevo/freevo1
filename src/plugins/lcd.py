@@ -956,4 +956,3 @@ class PluginInterface( plugin.DaemonPlugin ):
             return sep_str_mscroll
         else:
             return ''
-

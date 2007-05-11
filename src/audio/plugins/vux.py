@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: 
+# Notes:
 # vux.py - a trivial vux plugin for freevo
 #
 # coded by P.W.deBruin@its.tudelft.nl
@@ -26,15 +26,15 @@
 # 3) playlist control and what have you
 # 4) ...
 #
-# Usage: 
+# Usage:
 # after adding the plugin any of of the items (dir/mp3/ogg) in the music
-# menu should have a number of [VUX] entries. 
+# menu should have a number of [VUX] entries.
 #
-# Todo: 
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@
 # -----------------------------------------------------------------------
 
 
-import os 
+import os
 import plugin
 
 
@@ -65,17 +65,17 @@ class PluginInterface(plugin.ItemPlugin):
     skipped the 'score' of that file is adapted. My freevo box is
     Debian based, so adding vux is as simple as:
     apt-get install vux
-   
+
     have all the playlist and scorelist stuff done (see man vux)
-   
+
     add a line to local_conf.py containing
     plugin.activate('audio.vux')
-   
-    Usage: 
+
+    Usage:
     after adding the plugin any of of the items (dir/mp3/ogg) in the music
-    menu should have a number of [VUX] entries. 
+    menu should have a number of [VUX] entries.
     """
-    
+
     def __init__(self):
 
         plugin.ItemPlugin.__init__(self)
@@ -92,7 +92,7 @@ class PluginInterface(plugin.ItemPlugin):
                          ('audio',   _('[VUX] an audio item, do not select'), None) ]
 
 
-    def actions(self, item): 
+    def actions(self, item):
         items = []
         for action_type in ['default', item.type]:
             items.extend(([(eval('lambda arg=None, menuw=None: os.system("%s")' % x[2]) ,

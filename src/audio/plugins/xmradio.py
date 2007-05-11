@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: 
+# Notes:
 # need to have an XM Radio account with a username and password
 # to activate put the following in your local_conf.py
 # plugin.activate('audio.xmradio')
@@ -15,11 +15,11 @@
 # XM_STATIONS = [ ('High Voltage', '202'),
 #                 ('Home Ice', '204'),
 #                 ('Music Lab', '51') ]
-# Todo: 
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -101,7 +101,7 @@ class XmRadioMainMenuItem(Item):
         """
         return [ ( self.create_channels_menu , 'XM channels' ) ]
 
- 
+
     def create_channels_menu(self, arg=None, menuw=None):
         string='rm -f /%s/xmonline.cookies'%config.LOGDIR
         os.system(string)
@@ -128,8 +128,8 @@ class XmRadioMainMenuItem(Item):
             file.close()
             for line in text:
                 if re.search('FileName', line):
-                   (split)=re.split('"', line)
-                   url=split[3]
+                    (split)=re.split('"', line)
+                    url=split[3]
             radio_item = XmRadioItem(url,self,str(rchannel[0]))
             channel_items += [ radio_item ]
         if (len(channel_items) == 0):
@@ -144,9 +144,9 @@ class XmRadioMainMenuItem(Item):
 class PluginInterface(plugin.MainMenuPlugin):
     """
     need to have an XM Radio account with a username and password
-    to activate put the following in your local_conf.py          
+    to activate put the following in your local_conf.py
     plugin.activate('audio.xmradioplayer')
-    plugin.activate('audio.xmradio')      
+    plugin.activate('audio.xmradio')
     XM_CMD='xine'
     XM_STATIONS = [ ('High Voltage', '202'),
                     ('Home Ice', '204'),

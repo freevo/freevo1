@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -72,7 +72,7 @@ class ManualRecordItem(Item):
         self.MINPICKUP = 70
 
         self.months = [ _('Jan'), _('Feb'), _('Mar'), _('Apr'), _('May'), _('Jun'), _('Jul'), _('Aug'), _('Sep'), _('Oct'), _('Nov'), _('Dec') ]
-    
+
         now = time.time()
         now += 300
         self.startnow = now
@@ -150,7 +150,7 @@ class ManualRecordItem(Item):
             items.append(menu.MenuItem(chanline[1], action=self.alter_prop,
                          arg=('channel', (chanline[1],chanline[0]))))
 
-        manualrecord_menu = menu.Menu(_('Modify Channel'), items, 
+        manualrecord_menu = menu.Menu(_('Modify Channel'), items,
                                   item_types = 'tv manual record menu')
         manualrecord_menu.infoitem = self
         menuw.pushmenu(manualrecord_menu)
@@ -209,11 +209,11 @@ class ManualRecordItem(Item):
         for i in range(288):
             mod = (i * 5 + currminutes + minpadding) % 1440
             showtime = strftime(config.TV_TIMEFORMAT, gmtime(float(mod * 60)))
-            items.append(menu.MenuItem(showtime, 
+            items.append(menu.MenuItem(showtime,
                                        action=self.alter_prop,
                                        arg=('starttime', showtime)))
 
-        manualrecord_menu = menu.Menu(_('Modify Time'), items, 
+        manualrecord_menu = menu.Menu(_('Modify Time'), items,
                                   item_types = 'tv manual record menu')
         manualrecord_menu.infoitem = self
         menuw.pushmenu(manualrecord_menu)
@@ -271,11 +271,11 @@ class ManualRecordItem(Item):
         for i in range(288):
             mod = (i * 5 + currminutes + minpadding) % 1440
             showtime = strftime(config.TV_TIMEFORMAT, gmtime(float(mod * 60)))
-            items.append(menu.MenuItem(showtime, 
+            items.append(menu.MenuItem(showtime,
                                        action=self.alter_prop,
                                        arg=('stoptime', showtime)))
 
-        manualrecord_menu = menu.Menu(_('Modify Time'), items, 
+        manualrecord_menu = menu.Menu(_('Modify Time'), items,
                                   item_types = 'tv manual record menu')
         manualrecord_menu.infoitem = self
         menuw.pushmenu(manualrecord_menu)
@@ -324,7 +324,7 @@ class ManualRecordItem(Item):
             self.stop_time = val
             self.disp_stoptime = '%s %s %s' % (self.disp_stop_month, self.stop_day, self.stop_time)
 
-        if menuw:  
+        if menuw:
             menuw.back_one_menu(arg='reload')
 
 
@@ -346,10 +346,10 @@ class ManualRecordItem(Item):
         isgood = True
         curtime_epoch = time.time()
         curtime = time.localtime(curtime_epoch)
-        startyear = curtime[0] 
-        stopyear = curtime[0] 
-        currentmonth = curtime[1] 
-        
+        startyear = curtime[0]
+        stopyear = curtime[0]
+        currentmonth = curtime[1]
+
         # handle the year wraparound
         if int(self.stop_month) < currentmonth:
             stopyear = str(int(stopyear) + 1)
@@ -361,7 +361,7 @@ class ManualRecordItem(Item):
         stoptime = time.mktime(strptime.strptime(str(self.stop_month)+" "+str(self.stop_day)+" "+str(stopyear)+" "+str(self.stop_time)+":00",'%m %d %Y '+config.TV_TIMEFORMAT+':%S'))
 
         # so we don't record for more then maxdays (maxdays day * 24hr/day * 60 min/hr * 60 sec/min)
-        if not abs(stoptime - starttime) < (self.MAXDAYS * 86400): 
+        if not abs(stoptime - starttime) < (self.MAXDAYS * 86400):
             if self.MAXDAYS > 1:
                 isgood = False
                 msg = _("Program would record for more than %d days!") % self.MAXDAYS

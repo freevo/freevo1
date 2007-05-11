@@ -68,4 +68,3 @@ for i in x:
                 print e
         except Exception, e:
             print 'Failed to get "%s" for channel "%s"\nerror "%s"' % (imgsrc, channel, e)
-

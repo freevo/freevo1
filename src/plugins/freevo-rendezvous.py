@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -41,11 +41,11 @@ class PluginInterface(plugin.DaemonPlugin):
     Rendezvous Broadcaster Plugin
     See: http://www.porchdogsoft.com/products/howl/ (Win32 Plugin/Linux/FreeBSD)
 
-    This plugin has been tested with 
+    This plugin has been tested with
        * Safari on Mac OS X Panther
        * IE6 + Howl on Windows XP
 
-    To enable this plugin, add 
+    To enable this plugin, add
         plugin.activate('freevo-rendezvous')
     to your local_conf.py
     """
@@ -56,7 +56,7 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         desc = {'version':__version__}
         myip = self.my_ipaddr('localhost')
-        info = Rendezvous.ServiceInfo("_http._tcp.local.", "Freevo Web._http._tcp.local.", address=socket.inet_aton(myip), 
+        info = Rendezvous.ServiceInfo("_http._tcp.local.", "Freevo Web._http._tcp.local.", address=socket.inet_aton(myip),
             port=config.WEBSERVER_PORT, weight=0, priority=0, properties=desc, server=socket.gethostname)
         r.registerService(info)
 
@@ -72,8 +72,3 @@ class PluginInterface(plugin.DaemonPlugin):
     def shutdown(self):
         r.unregisterService(info)
         r.close()
-
-
-
-
-

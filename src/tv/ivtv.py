@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes: http://ivtv.sf.net
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@ _IOC_TYPEMASK = ((1 << _IOC_TYPEBITS)-1)
 _IOC_SIZEMASK = ((1 << _IOC_SIZEBITS)-1)
 _IOC_DIRMASK = ((1 << _IOC_DIRBITS)-1)
 
-_IOC_NRSHIFT = 0 
+_IOC_NRSHIFT = 0
 _IOC_TYPESHIFT = (_IOC_NRSHIFT+_IOC_NRBITS)
 _IOC_SIZESHIFT = (_IOC_TYPESHIFT+_IOC_TYPEBITS)
 _IOC_DIRSHIFT = (_IOC_SIZESHIFT+_IOC_SIZEBITS)
@@ -95,7 +95,7 @@ SETVBI_EMBED_NO  = _IOW('@', 54, VBI_EMBED_ST) #IVTV_IOC_S_VBI_EMBED
 
 GOP_END_NO   = _IOWR('@', 50, GOP_END_ST) #IVTV_IOC_S_GOP_END used to wait for a GOP
 
-# Stream types 
+# Stream types
 IVTV_STREAM_PS     = 0
 IVTV_STREAM_TS     = 1
 IVTV_STREAM_MPEG1  = 2
@@ -289,7 +289,7 @@ class IVTV(tv.v4l2.Videodev):
             tv.v4l2.Videodev.updatecontrol(self, 'Video Pulldown', codec.pulldown)
             tv.v4l2.Videodev.updatecontrol(self, 'Stream Type', self.streamTypeIvtvToV4l2(codec.stream_type))
             return
-        val = struct.pack( CODEC_ST, 
+        val = struct.pack( CODEC_ST,
                            codec.aspect,
                            codec.audio_bitmask,
                            codec.bframes,
@@ -330,7 +330,7 @@ class IVTV(tv.v4l2.Videodev):
         except IOError:
             print 'getvbiembed: failed'
             return 0
-  
+
 
     def setvbiembed(self, value):
         if self.version >= 0x800:

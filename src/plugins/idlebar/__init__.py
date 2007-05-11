@@ -97,7 +97,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.bar = transform.scale(image.load(f).convert_alpha(), (w,h))
             except:
                 self.bar = None
-                
+
         # draw the cached barimage
         if self.bar:
             osd.drawimage(self.bar, (0, 0, w, h), background=True)
@@ -189,7 +189,7 @@ class clock(IdleBarPlugin):
         return 0
 
 
-  
+
 class logo(IdleBarPlugin):
     """
     Display the freevo logo in the idlebar

@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -40,7 +40,7 @@ RSS_VIDEO='/path/to/video/feeds/'
 # Download directory for audio files.
 RSS_AUDIO='/path/to/podcasts/'
 
-You will need to make a rss.feeds file: it contains the URL. And after the 
+You will need to make a rss.feeds file: it contains the URL. And after the
 semicolon the number of days it's been published and how long the copy
 should stay on the local machine before it gets deleted.
 

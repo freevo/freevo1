@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -64,7 +64,7 @@ class PlayerGUI(GUIObject):
             _player_.stop()
 
         _player_ = self
-        
+
         if self.player and self.player.is_playing():
             self.stop()
 
@@ -80,11 +80,11 @@ class PlayerGUI(GUIObject):
 
                 if hasattr(self.item, 'force_player') and p.name == self.item.force_player:
                     rating += 100
-                
+
                 self.possible_player.append((rating, p))
             self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
             self.player = self.possible_player[0][1]
-        
+
         if self.menuw and self.menuw.visible:
             self.menuw.hide(clear=False)
 
@@ -96,7 +96,7 @@ class PlayerGUI(GUIObject):
             if self.visible:
                 rc.app(None)
             self.item.eventhandler(event.PLAY_END)
-            
+
         else:
             if self.visible:
                 rc.app(self.player)
@@ -121,7 +121,7 @@ class PlayerGUI(GUIObject):
         _debug_('no more players found')
         return 0
 
-        
+
     def stop(self):
         global _player_
         _player_ = None
@@ -130,21 +130,21 @@ class PlayerGUI(GUIObject):
         self.running = False
         if self.visible:
             rc.app(None)
-        
+
 
     def show(self):
         if not self.visible:
             self.visible = 1
             self.refresh()
             rc.app(self.player)
-            
+
 
     def hide(self):
         if self.visible:
             self.visible = 0
             skin.clear()
             rc.app(None)
-            
+
 
     def refresh(self):
         """
@@ -155,7 +155,7 @@ class PlayerGUI(GUIObject):
 
         if not self.running:
             return
-        
+
         # Calculate some new values
         if not self.item.length:
             self.item.remain = 0

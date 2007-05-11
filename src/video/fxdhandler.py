@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -48,13 +48,13 @@ def parse_movie(fxd, node):
                     <audio media_id>file</audio>
                 </part>+
             </variant>+
-        </variants>  
+        </variants>
         <info/>
     </movie>
     """
 
     files = []
-    
+
     def parse_video_child(fxd, node, dirname):
         """
         parse a subitem from <video>
@@ -78,7 +78,7 @@ def parse_movie(fxd, node):
             return id, filename, media_id, options, player, playlist
         return id, String('%s://%s' % (String(mode), String(filename))), \
                media_id, options, player, playlist
-    
+
 
     item = VideoItem('', fxd.getattr(None, 'parent', None), parse=False)
 
@@ -90,7 +90,7 @@ def parse_movie(fxd, node):
     if item.image:
         item.image = vfs.abspath(os.path.join(dirname, item.image))
         image = item.image
-        
+
     fxd.parse_info(node, item, {'runtime': 'length'})
 
     video = fxd.get_children(node, 'video')
@@ -156,7 +156,7 @@ def parse_movie(fxd, node):
                     ref = fxd.getattr(p ,'ref')
                     audio    = fxd.get_children(p, 'audio')
                     subtitle = fxd.get_children(p, 'subtitle')
-    
+
                     if audio:
                         audio = { 'media_id': fxd.getattr(audio[0], 'media-id'),
                                   'file'    : fxd.gettext(audio[0]) }
@@ -164,7 +164,7 @@ def parse_movie(fxd, node):
                             audio['file'] = os.path.join(dirname, audio['file'])
                     else:
                         audio = {}
-                        
+
                     if subtitle:
                         subtitle = { 'media_id': fxd.getattr(subtitle[0], 'media-id'),
                                      'file'    : fxd.gettext(subtitle[0]) }
@@ -182,7 +182,7 @@ def parse_movie(fxd, node):
                     if mplayer_options:
                         sub.mplayer_options += mplayer_options
                     v.subitems.append(sub)
- 
+
             v.name = fxd.getattr(variant, 'name')
             item.variants.append(v)
 
@@ -238,7 +238,7 @@ def parse_movie(fxd, node):
     item.files.fxd_file  = fxd.filename
     if image:
         item.files.image = image
-    
+
     # remove them from the filelist (if given)
     duplicates = fxd.getattr(None, 'duplicate_check', [])
     for f in files:
@@ -246,7 +246,7 @@ def parse_movie(fxd, node):
             duplicates.remove(f)
         except:
             pass
-        
+
     if fxd.is_skin_fxd:
         item.skin_fxd = fxd.filename
     fxd.getattr(None, 'items', []).append(item)
@@ -259,7 +259,7 @@ def parse_disc_set(fxd, node):
     item = VideoItem('', fxd.getattr(None, 'parent', None), parse=False)
 
     dirname  = os.path.dirname(fxd.filename)
-    
+
     item.name  = fxd.getattr(node, 'title')
     item.image = fxd.childcontent(node, 'cover-img')
     if item.image:
@@ -301,7 +301,7 @@ def parse_disc_set(fxd, node):
             # in this case, the disc/@mplayer_options is retricted to the set
             # of files defined in the file-opt elements
             item.mplayer_options = ''
-    
+
     if not item.files:
         item.files = FileInformation()
     item.files.fxd_file  = fxd.filename

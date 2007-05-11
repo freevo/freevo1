@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,7 @@ class XMLnode:
         self.children = []
         self.first_cdata = first_cdata
         self.following_cdata = following_cdata
-        
+
     def items(self):
         return self.attr_list
 
@@ -85,7 +85,7 @@ class FXDtree(qp_xml.Parser):
                 f.close()
                 if self.tree:
                     util.save_pickle(self.tree, cache)
-                
+
 
     def add(self, node, parent=None, pos=None):
         """
@@ -141,7 +141,7 @@ class FXDtree(qp_xml.Parser):
             else:
                 data = Unicode(elem.first_cdata).replace(u'&', u'&amp;')
                 f.write(u'>' + data)
-                    
+
             for child in elem.children:
                 self._dump_recurse(f, child, depth=depth+1)
                 if child.following_cdata == None:
@@ -162,13 +162,13 @@ class FXD:
     """
     class to help parsing fxd files
     """
-    
+
     class XMLnode(XMLnode):
         """
         a new node
         """
         pass
-    
+
     def __init__(self, filename):
         self.tree = FXDtree(filename)
         self.read_callback  = {}
@@ -177,7 +177,7 @@ class FXD:
         self.is_skin_fxd    = False
         self.filename       = filename
 
-        
+
     def set_handler(self, name, callback, mode='r', force=False):
         """
         create callbacks for a node named 'name'. Mode can be 'r' when
@@ -193,7 +193,7 @@ class FXD:
         else:
             debug('unknown mode %s for fxd handler' % mode, 0)
 
-            
+
     def parse(self):
         """
         parse the tree and call all the callbacks
@@ -236,8 +236,8 @@ class FXD:
 
         # and save
         self.tree.save()
-        
-        
+
+
     def get_children(self, node, name, deep=1):
         """
         deep = 0, every deep, 1 = children, 2 = childrens children, etc.
@@ -263,8 +263,8 @@ class FXD:
         child = XMLnode(name)
         self.add(child, node)
         return child
-    
-        
+
+
     def childcontent(self, node, name):
         """
         return the content of the child node with the given name
@@ -343,7 +343,7 @@ class FXD:
                     break
             else:
                 nodes = []
-                
+
         for node in nodes:
             for child in node.children:
                 txt = child.textof()
@@ -352,7 +352,7 @@ class FXD:
                 if child.name in map:
                     object.info[map[child.name]] = util.format_text(txt)
                 object.info[child.name] = util.format_text(txt)
-                    
+
 
     def add(self, node, parent=None, pos=None):
         """

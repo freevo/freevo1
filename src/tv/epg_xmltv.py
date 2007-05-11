@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -73,12 +73,12 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
 
     # Can we use the cached version (if same as the file)?
     if (cached_guide == None or
-        (os.path.isfile(XMLTV_FILE) and 
+        (os.path.isfile(XMLTV_FILE) and
          cached_guide.timestamp != os.path.getmtime(XMLTV_FILE))):
 
         # No, is there a pickled version ("file cache") in a file?
         pname = '%s/TV.xml.pickled' % config.FREEVO_CACHEDIR
-        
+
         got_cached_guide = False
         if (os.path.isfile(XMLTV_FILE) and
             os.path.isfile(pname) and (os.path.getmtime(pname) >
@@ -109,7 +109,7 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
                 # timestamp. We need to reload!
                 if verbose:
                     _debug_('EPG: Pickled file timestamp mismatch, reloading!')
-                
+
             else:
                 if verbose:
                     _debug_('XMLTV, got cached guide (version %s).' % epg_ver)
@@ -120,10 +120,10 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
 
             if popup:
                 popup.show()
-                
+
             if verbose:
                 _debug_('XMLTV, trying to read raw file (%s)' % XMLTV_FILE)
-            try:    
+            try:
                 cached_guide = load_guide(verbose, XMLTV_FILE)
             except:
                 # Don't violently crash on a incomplete or empty TV.xml please.
@@ -146,7 +146,7 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
     if not cached_guide:
         # An error occurred, return an empty guide
         cached_guide = epg_types.TvGuide()
-        
+
     if popup:
         popup.destroy()
 
@@ -200,11 +200,11 @@ def load_guide(verbose=True, XMLTV_FILE=None):
         if gotfile:
             # Don't read the channel info unless we have to, takes a long time!
             xmltv_channels = xmltv.read_channels(util.gzopen(XMLTV_FILE))
-        
+
         # Was the guide read successfully?
         if not xmltv_channels:
             return None     # No
-        
+
         for chan in xmltv_channels:
             id = chan['id'].encode(config.LOCALE, 'ignore')
             c = epg_types.TvChannel()
@@ -231,7 +231,7 @@ def load_guide(verbose=True, XMLTV_FILE=None):
         f = util.gzopen(XMLTV_FILE)
         xmltv_programs = xmltv.read_programmes(f)
         f.close()
-        
+
     # Was the guide read successfully?
     if not xmltv_programs:
         return guide    # Return the guide, it has the channels at least...
@@ -297,7 +297,7 @@ def load_guide(verbose=True, XMLTV_FILE=None):
         except:
             traceback.print_exc()
             print 'Error in tv guide, skipping'
-            
+
     guide.Sort()
     return guide
 
@@ -322,7 +322,7 @@ def timestr2secs_utc(timestr):
 
     # Is it the '+1' format?
     if tz[0] == '+' or tz[0] == '-':
-        tmTuple = ( int(tval[0:4]), int(tval[4:6]), int(tval[6:8]), 
+        tmTuple = ( int(tval[0:4]), int(tval[4:6]), int(tval[6:8]),
                     int(tval[8:10]), int(tval[10:12]), 0, -1, -1, -1 )
         secs = calendar.timegm( tmTuple )
 

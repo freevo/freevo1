@@ -6,11 +6,11 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -78,7 +78,7 @@ class VideoItem(Item):
         self.selected_subtitle = None
         self.selected_audio    = None
         self.elapsed           = 0
-        
+
         self.possible_player   = []
 
         self.player        = None
@@ -100,7 +100,7 @@ class VideoItem(Item):
 
                 if image:
                     self.image = image
-                    
+
                 from video import tv_show_information
                 if tv_show_information.has_key(show_name[0].lower()):
                     tvinfo = tv_show_information[show_name[0].lower()]
@@ -114,7 +114,7 @@ class VideoItem(Item):
                 self.show_name     = show_name
                 self.tv_show_name  = show_name[0]
                 self.tv_show_ep    = show_name[3]
-                
+
 
         # extra infos in discset_information
         if parent and parent.media:
@@ -124,7 +124,7 @@ class VideoItem(Item):
             if discset_information.has_key(fid):
                 self.mplayer_options = discset_information[fid]
 
-        
+
     def __str__(self):
         s = pformat(self, depth=2)
         return s
@@ -162,17 +162,17 @@ class VideoItem(Item):
                 self.filename = self.url[5:self.url.rfind('/')]
             else:
                 self.filename = ''
-                
+
         elif url.endswith('.iso') and self.info['mime'] == 'video/dvd':
             self.mimetype = 'dvd'
             self.mode     = 'dvd'
             self.url      = 'dvd' + self.url[4:] + '/'
-            
+
         if not self.image or (self.parent and self.image == self.parent.image):
-           image = vfs.getoverlay(self.filename + '.raw')
-           if os.path.exists(image):
-               self.image = image
-               self.files.image = image
+            image = vfs.getoverlay(self.filename + '.raw')
+            if os.path.exists(image):
+                self.image = image
+                self.files.image = image
 
         if config.VIDEO_INTERLACING and self.info['interlaced']:
             # force deinterlacing
@@ -217,7 +217,7 @@ class VideoItem(Item):
 
             if aspect:
                 return aspect
-            
+
         if key == 'runtime':
 
             if self.info['runtime']:
@@ -257,7 +257,7 @@ class VideoItem(Item):
 
         return Item.__getitem__(self, key)
 
-    
+
     def sort(self, mode=None):
         """
         Returns the string how to sort this item
@@ -305,7 +305,7 @@ class VideoItem(Item):
             else:
                 items = [ ( self.dvd_vcd_title_menu, _('DVD title list') ),
                           (self.play, _('Play default track')) ]
-                    
+
         elif self.url == 'vcd://':
             if self.player_rating >= 20:
                 items = [ (self.play, _('Play VCD')),
@@ -322,14 +322,14 @@ class VideoItem(Item):
             items.append((self.play_max_cache, _('Play with maximum cache')))
 
         items += configure.get_items(self)
-            
+
         if self.variants and len(self.variants) > 1:
             items = [ (self.show_variants, _('Show variants')) ] + items
 
         if self.mode == 'file' and not self.variants and \
                (not self.image or not self.image.endswith('raw')):
             items.append((self.create_thumbnail, _('Create Thumbnail'), 'create_thumbnail'))
-            
+
         return items
 
 
@@ -363,7 +363,7 @@ class VideoItem(Item):
         play and use maximum cache with mplayer
         """
         self.play(menuw=menuw, arg='-cache 65536')
-        
+
     def play_alternate(self, arg=None, menuw=None):
         """
         play and use maximum cache with mplayer
@@ -390,7 +390,7 @@ class VideoItem(Item):
             self.current_subitem = self.conf_select_this_item
             del self.conf_select_this_item
             return True
-            
+
         cont = 1
         from_start = 0
         si = self.current_subitem
@@ -443,9 +443,9 @@ class VideoItem(Item):
                 if hasattr(self, 'force_player') and p.name == self.force_player:
                     rating += 100
                 self.possible_player.append((rating, p))
-        
+
             self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
-        
+
         if alternateplayer:
             self.possible_player.reverse()
 
@@ -495,7 +495,7 @@ class VideoItem(Item):
                     # Go to the next playable subitem, using the loop in
                     # eventhandler()
                     self.eventhandler(PLAY_END)
-                    
+
             elif not result:
                 # No media at all was found: error
                 ConfirmBox(text=(_('No media found for "%s".\n')+
@@ -534,7 +534,7 @@ class VideoItem(Item):
         if self.player_rating < 10:
             AlertBox(text=_('No player for this item found')).show()
             return
-        
+
         mplayer_options = self.mplayer_options.split(' ')
         if not mplayer_options:
             mplayer_options = []
@@ -546,7 +546,7 @@ class VideoItem(Item):
             self.menuw.hide()
 
         self.plugin_eventhandler(PLAY, menuw)
-        
+
         error = self.player.play(mplayer_options, self)
 
         if error:
@@ -590,7 +590,7 @@ class VideoItem(Item):
 
         # delete the submenu that got us here
         self.menuw.delete_submenu(False)
-        
+
         # XXX only one track, play it
         # XXX disabled, it makes it impossible to set languages
         # if len(self.info['tracks']) == 1:
@@ -630,7 +630,7 @@ class VideoItem(Item):
             self.menuw = menuw
         confmenu = configure.get_menu(self, self.menuw)
         self.menuw.pushmenu(confmenu)
-        
+
 
     def eventhandler(self, event, menuw=None):
         """
@@ -651,7 +651,7 @@ class VideoItem(Item):
                     self.error_in_subitem = 0
                 self.set_next_available_subitem()
                 # Loop until we find a subitem which plays without error
-                while self.current_subitem: 
+                while self.current_subitem:
                     _debug_('playing next item')
                     error = self.current_subitem.play(menuw=menuw)
                     if error:
@@ -664,7 +664,7 @@ class VideoItem(Item):
                     # No more subitems to play, and an error occured
                     self.menuw.show()
                     AlertBox(text=self.last_error_msg).show()
-                    
+
             elif event == USER_END:
                 pass
 
@@ -675,7 +675,7 @@ class VideoItem(Item):
             self.settings(menuw=menuw)
             menuw.show()
             return True
-        
+
         # give the event to the next eventhandler in the list
         if isstring(self.parent):
             self.parent = None

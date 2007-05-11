@@ -18,11 +18,11 @@
 # plugin.activate('ossmixer')
 #
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -59,14 +59,14 @@ import ossaudiodev
 class PluginInterface(plugin.DaemonPlugin):
     SOUND_MIXER_LINE = 7
     SOUND_MASK_LINE = 64
-    
+
     def __init__(self):
         self.mixfd = None
         self.muted = 0
-        
+
         # If you're using ALSA or something and you don't set the mixer,
         # why are we trying to open it?
-        if config.DEV_MIXER:    
+        if config.DEV_MIXER:
             try:
                 self.mixfd = ossaudiodev.openmixer(config.DEV_MIXER)
             except IOError:
@@ -82,7 +82,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.pcmVolume    = 0
             self.lineinVolume = 0
             self.micVolume    = 0
-            self.igainVolume  = 0 
+            self.igainVolume  = 0
             self.ogainVolume  = 0
 
         if config.MAJOR_AUDIO_CTRL == 'VOL':
@@ -116,7 +116,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.incPcmVolume()
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             return True
-        
+
         elif event == MIXER_VOLDOWN:
             if config.MAJOR_AUDIO_CTRL == 'VOL':
                 self.decMainVolume()
@@ -168,7 +168,7 @@ class PluginInterface(plugin.DaemonPlugin):
             return self.mainVolume
         elif config.MAJOR_AUDIO_CTRL == 'PCM':
             return self.pcmVolume
-        
+
     def getMainVolume(self):
         return self.mainVolume
 
@@ -190,7 +190,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def getPcmVolume(self):
         return self.pcmVolume
-    
+
     def setPcmVolume(self, volume):
         self.pcmVolume = volume
         self._setVolume(ossaudiodev.SOUND_MIXER_PCM, volume)
@@ -206,7 +206,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.pcmVolume < 0:
             self.pcmVolume = 0
         self._setVolume( ossaudiodev.SOUND_MIXER_PCM, self.pcmVolume )
-    
+
     def setLineinVolume(self, volume):
         if config.CONTROL_ALL_AUDIO:
             self.lineinVolume = volume
@@ -214,7 +214,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def getLineinVolume(self):
         return self.lineinVolume
-       
+
     def setMicVolume(self, volume):
         if config.CONTROL_ALL_AUDIO:
             self.micVolume = volume
@@ -223,7 +223,7 @@ class PluginInterface(plugin.DaemonPlugin):
     def setIgainVolume(self, volume):
         if config.CONTROL_ALL_AUDIO:
             if volume > 100:
-                volume = 100 
+                volume = 100
             elif volume < 0:
                 volume = 0
             self._setVolume(ossaudiodev.SOUND_MIXER_IGAIN, volume)
@@ -236,7 +236,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.igainVolume < 0:
             self.igainVolume = 0
         self._setVolume(ossaudiodev.SOUND_MIXER_IGAIN, volume)
-        
+
     def incIgainVolume(self):
         self.igainVolume += 5
         if self.igainVolume > 100:
@@ -245,7 +245,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def setOgainVolume(self, volume):
         if volume > 100:
-            volume = 100 
+            volume = 100
         elif volume < 0:
             volume = 0
         self.ogainVolume = volume

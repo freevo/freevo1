@@ -8,13 +8,13 @@ import config, menu, rc, plugin, skin, osd, util
 class PluginInterface(plugin.MainMenuPlugin):
     """
     Home Automation Plugin
-    
+
     Activate:
     plugin.activate('home_automation')
-    
+
     This plugin is for controlling home automation items, such as X10 devices.
     It uses external programs to control the hardware.
-    
+
     Configuration is as follows:
     ('ROOM NAME/LOCATION'('FUNCTION','COMMAND TO RUN'))
 
@@ -31,8 +31,8 @@ class PluginInterface(plugin.MainMenuPlugin):
                          (
                          ('Light',('On','heyu','Off','heyu'))
                          ))]
-    
- 
+
+
     """
 
     def __init__(self):
@@ -51,7 +51,7 @@ class AutomationItem(Item):
     """
     def __init__(self, parent):
         Item.__init__(self, parent)
-    
+
     def actions(self):
         """
         return a list of actions for this item
@@ -63,7 +63,7 @@ class AutomationItem(Item):
         room_devices = []
         for device in self.room_items:
             room_device = RoomDevice(self)
-            room_device.name = device[0]            
+            room_device.name = device[0]
             room_device.functions = device[1]
             room_devices += [ room_device ]
         room_devices_menu = menu.Menu(_('Home Automation Devices'), room_devices)
@@ -93,7 +93,7 @@ class RoomDevice(Item):
             device_index = device_index + 1
             if device_index % 2:
                 device_name = option
-            else: 
+            else:
                 device_option.name = device_name
                 device_option.cmd = option
                 device_options += [ device_option ]
@@ -113,7 +113,7 @@ class DeviceOptions(Item):
         return a list of actions for this item
         """
         return [ ( self.runcmd , _('Run Command') ) ]
-        
+
     def runcmd(self, arg=None, menuw=None):
         """
         Run Command
@@ -127,7 +127,7 @@ class HomeAutomationMainMenu(Item):
     def __init__(self, parent):
         Item.__init__(self, parent, skin_type='homeautomation')
         self.name = _('Home Automation')
-    
+
 
     def actions(self):
         """

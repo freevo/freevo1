@@ -13,7 +13,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -46,12 +46,12 @@ def parse_plugins():
     comment = re.compile('^[\t ]*"""')
     config_start = re.compile('^[ \t]+def +config *\( *self *\) *:')
     config_end   = re.compile(' *(class|def)')
-    
+
     print_line = 0
     ptypes = {}
-    
+
     all_plugins = []
-    
+
     active = []
     for p in plugin.__all_plugins__:
         active.append(p[0])
@@ -66,7 +66,7 @@ def parse_plugins():
             if config_end.match(line) and scan_config:
                 scan_config = 0
                 all_plugins[-1][-1] = config
-                
+
             if scan_config:
                 config += line+'\n'
 
@@ -91,7 +91,7 @@ def parse_plugins():
             if comment.match(line) and parse_status == 1:
                 parse_status = 2
                 whitespaces  = 0
-                
+
             if start.match(line):
                 fname = re.sub('^src.', '', file)
                 fname = re.sub('^%s.' % os.environ['FREEVO_PYTHON'], '', fname)
@@ -225,7 +225,7 @@ def info_html(plugin_name, all_plugins):
                 ret += '<p>The plugin is not activated in the current setting</p>'
             return ret
     return ret
-    
+
 
 
 # show a list of all plugins
@@ -330,4 +330,3 @@ else:
     print 'Please note that this helper is new and not all plugins have a good description.'
     print 'Feel free to send patches to the Freevo mailing list'
     print
-    

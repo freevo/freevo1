@@ -10,19 +10,19 @@
 #   1) ~/.freevo/freevo_config.py       The user's private config
 #   2) /etc/freevo/freevo_config.py     Systemwide config
 #   3) ./freevo_config.py               Defaults from the freevo dist
-#   
+#
 #   Customize freevo_config.py from the freevo dist and copy it to one
 #   of the other places where it will not get overwritten by new
 #   checkouts/installs of freevo.
-#   
+#
 #   The format of freevo_config.py might change, in that case you'll
 #   have to update your customized version.
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -78,7 +78,7 @@ __builtin__.__dict__['FALSE'] = 0
 # object is a string or not. It checks against str and unicode
 def __isstring__(s):
     return isinstance(s, str) or isinstance(s, unicode)
-        
+
 __builtin__.__dict__['isstring'] = __isstring__
 
 
@@ -99,7 +99,7 @@ class Logger:
             print 'Could not open logfile: %s' % logfile
             self.fp = open('/dev/null','a')
         self.softspace = 0
-        
+
     def write(self, msg):
         global DEBUG_STDOUT
         if isinstance(msg, unicode):
@@ -120,7 +120,7 @@ class Logger:
 
     def close():
         pass
-    
+
 
 class VideoGroup:
     """
@@ -131,7 +131,7 @@ class VideoGroup:
     input_num:    The number of this input according to V4L
     tuner_type:   internal (on a v4l device), or external (cable or sat box)
     tuner_norm:   NTSC, PAL, SECAM
-    tuner_chanlist:  us-cable, 
+    tuner_chanlist:  us-cable,
     tuner_chan:   If using input_type=tuner and tuner_type=external set this to
                   what channel it needs to be to get the signal, usually 3 or 4.
     record_group: VideoGroup that records for this tuner, default is to use the same device for record and play
@@ -141,7 +141,7 @@ class VideoGroup:
     """
 
     def __init__(self, vdev='/dev/video', vvbi='/dev/vbi', adev=None, input_type='tuner',
-                 input_num=0, tuner_norm='NTSC', tuner_chanlist='us-cable', 
+                 input_num=0, tuner_norm='NTSC', tuner_chanlist='us-cable',
                  tuner_type='internal', tuner_chan=None,
                  record_group=None, desc='Freevo default VideoGroup',
                  group_type='normal'):
@@ -188,7 +188,7 @@ def print_config_changes(conf_version, file_version, changelist):
                 print '    ', line.strip()
             print
     print
-            
+
 
 def print_help():
     """
@@ -288,7 +288,7 @@ def _debug_function_(s, level=1):
     except UnicodeEncodeError:
         print "_debug_ failed."
 
-            
+
 __builtin__.__dict__['_debug_']= _debug_function_
 
 
@@ -334,7 +334,7 @@ for dirname in cfgfilepath[1:]:
         print (('\nERROR: freevo_config.py found in %s, please remove it ' +
                 'and use local_conf.py instead!') % freevoconf)
         sys.exit(1)
-        
+
 #
 # Search for freevo.conf:
 #
@@ -401,14 +401,14 @@ else:
 if not os.path.isdir(FREEVO_CACHEDIR):
     try:
         os.makedirs(FREEVO_CACHEDIR)
-        
+
     except OSError:
         print 'Warning: %s does not exists and can\'t be created' % FREEVO_CACHEDIR
         print 'Please create this directory as root and set permissions for the'
         print 'Freevo user to write to it.'
-        OS_CACHEDIR = '/tmp'        
+        OS_CACHEDIR = '/tmp'
         FREEVO_CACHEDIR = OS_CACHEDIR + '/freevo'
-        
+
         if not os.path.isdir( FREEVO_CACHEDIR ):
             try:
                 os.makedirs( FREEVO_CACHEDIR )
@@ -447,14 +447,14 @@ elif CONF.display == 'dxr3':
     # don't use dxr3 for helpers. They don't use the osd anyway, but
     # it may mess up the dxr3 output (don't ask why).
     CONF.display='fbdev'
-    
+
 #
 # Load freevo_config.py:
 #
 if os.path.isfile(os.environ['FREEVO_CONFIG']):
     _debug_('Loading cfg: %s' % os.environ['FREEVO_CONFIG'])
     execfile(os.environ['FREEVO_CONFIG'], globals(), locals())
-    
+
 else:
     print
     print "Error: %s: no such file" % os.environ['FREEVO_CONFIG']
@@ -496,7 +496,7 @@ for dirname in cfgfilepath:
            int(str(LOCAL_CONF_VERSION).split('.')[1]):
             print
             print 'Warning: freevo_config.py was changed, please check local_config.py'
-            print_config_changes(LOCAL_CONF_VERSION, CONFIG_VERSION, 
+            print_config_changes(LOCAL_CONF_VERSION, CONFIG_VERSION,
                                  LOCAL_CONF_CHANGES)
         break
 
@@ -517,7 +517,7 @@ os.umask(UMASK)
 
 if not HELPER:
     _debug_('Logging to %s' % sys.stdout.logfile)
-   
+
 #
 # force fullscreen when freevo is it's own windowmanager
 #
@@ -532,7 +532,7 @@ OSD_DEFAULT_FONTNAME = os.path.join(FONT_DIR, OSD_DEFAULT_FONTNAME)
 
 #
 # set list of video files to []
-# (fill be filled from the plugins) 
+# (fill be filled from the plugins)
 #
 VIDEO_SUFFIX = []
 
@@ -545,7 +545,7 @@ for p in plugin.getall():
         except:
             pass
 
-            
+
 #
 # set data dirs
 # if not set, set it to root and home dir
@@ -574,7 +574,7 @@ for type in ('video', 'audio', 'image', 'games'):
             if pos == -1:
                 abs.append((d[0], os.path.abspath(d[1]), d[2]))
             else:
-                if pos > d[1].find('/'):                        
+                if pos > d[1].find('/'):
                     abs.append((d[0], os.path.abspath(d[1]), d[2]))
                 else:
                     abs.append((d[0], d[1][0:pos+1] + os.path.abspath(d[1][pos+1:]), d[2]))
@@ -588,7 +588,7 @@ for type in ('video', 'audio', 'image', 'games'):
                 if pos == -1:
                     abs.append(os.path.abspath(d))
                 else:
-                    if pos > d.find('/'):                        
+                    if pos > d.find('/'):
                         abs.append(os.path.abspath(d))
                     else:
                         abs.append(d[0:pos+1] + os.path.abspath(d[pos+1:]))
@@ -597,14 +597,14 @@ for type in ('video', 'audio', 'image', 'games'):
                 if pos == -1:
                     abs.append((d[0], os.path.abspath(d[1])))
                 else:
-                    if pos > d[1].find('/'):                        
+                    if pos > d[1].find('/'):
                         abs.append((d[0], os.path.abspath(d[1])))
                     else:
                         abs.append((d[0], d[1][0:pos+1] + os.path.abspath(d[1][pos+1:])))
         exec ('%s = abs' % n)
-            
 
-        
+
+
 if not TV_RECORD_DIR:
     TV_RECORD_DIR = VIDEO_ITEMS[0][1]
     if not HELPER and plugin.is_active('tv'):
@@ -613,10 +613,10 @@ if not TV_RECORD_DIR:
         print 'Please set TV_RECORD_DIR to the directory, where recordings should be stored'
         print 'or remove the tv plugin. Autoset variable to %s.' % TV_RECORD_DIR
         print
-        
+
 if not VIDEO_SHOW_DATA_DIR and not HELPER:
     print 'Error: VIDEO_SHOW_DATA_DIR not found'
-    
+
 #
 # Autodetect the CD/DVD drives in the system if not given in local_conf.py
 #
@@ -625,7 +625,7 @@ if not VIDEO_SHOW_DATA_DIR and not HELPER:
 #
 if ROM_DRIVES == None:
     ROM_DRIVES = []
-    if os.path.isfile('/etc/fstab'):        
+    if os.path.isfile('/etc/fstab'):
         re_cd        = re.compile( '^(/dev/cdrom[0-9]*|/dev/[am]?cd[0-9]+[a-z]?)[ \t]+([^ \t]+)[ \t]+', re.I )
         re_cdrec     = re.compile( '^(/dev/cdrecorder[0-9]*)[ \t]+([^ \t]+)[ \t]+', re.I )
         re_dvd       = re.compile( '^(/dev/dvd[0-9]*)[ \t]+([^ \t]+)[ \t]+', re.I )
@@ -649,7 +649,7 @@ if ROM_DRIVES == None:
                 mntdir = m.group(2)
                 devname = m.group(1)
                 dispname = 'CD-%s' % (len(ROM_DRIVES)+1)
-            elif match_cdrec: 
+            elif match_cdrec:
                 mntdir = match_cdrec.group(2)
                 devname = match_cdrec.group(1)
                 dispname = 'CDREC-%s' % (len(ROM_DRIVES)+1)
@@ -690,7 +690,7 @@ if ROM_DRIVES == None:
                     devname = devname[:-1]
                 # Use native FreeBSD device names
                 dispname = devname[5:]
- 
+
             # Weed out duplicates
             for rd_mntdir, rd_devname, rd_dispname in ROM_DRIVES:
                 if os.path.realpath(rd_devname) == os.path.realpath(devname):
@@ -705,7 +705,7 @@ if ROM_DRIVES == None:
                     if not HELPER:
                         print 'ROM_DRIVES: Auto-detected and added "%s"' % (ROM_DRIVES[-1], )
         fd_fstab.close()
-                
+
 
 
 #
@@ -753,7 +753,7 @@ def detect_channels():
             print 'local_conf.py. TVguide is deactivated now.'
             print
         return []
-        
+
     elif os.path.isfile(pname) and (os.path.getmtime(pname) >
                                     os.path.getmtime(file)):
         try:
@@ -818,7 +818,7 @@ def detect_channels():
             if c[2] == 0:
                 print_list = 1
                 if not HELPER:
-                    print 
+                    print
                     print 'Error: XMLTV auto detection failed'
                     print 'Some channels in the channel list have no station id. Please add'
                     print 'it by putting the list in your local_conf.py. Start '
@@ -829,7 +829,7 @@ def detect_channels():
             print 'XMTV: Auto-detected channel list'
 
         return chanlist
-         
+
 
 if TV_CHANNELS == None and plugin.is_active('tv'):
     # auto detect them
@@ -841,7 +841,7 @@ if TV_CHANNELS == None and plugin.is_active('tv'):
         print e
         print
         TV_CHANNELS = []
-        
+
 #
 # compile the regexp
 #
@@ -859,10 +859,10 @@ if not OVERLAY_DIR or OVERLAY_DIR == '/':
     print 'Set OVERLAY_DIR it to a directory on the local filesystem where Freevo'
     print 'can store the metadata. Make sure this filesystem has about 100 MB free space'
     sys.exit(0)
-    
+
 if not os.path.isdir(OVERLAY_DIR):
     os.makedirs(OVERLAY_DIR)
-    
+
 # Make sure OVERLAY_DIR doesn't ends with a slash
 # With that, we don't need to use os.path.join, normal string
 # concat is much faster
@@ -871,10 +871,10 @@ if OVERLAY_DIR and OVERLAY_DIR.endswith('/'):
 
 if not os.path.isdir(OVERLAY_DIR + '/disc'):
     os.makedirs(OVERLAY_DIR + '/disc')
-    
+
 if not os.path.isdir(OVERLAY_DIR + '/disc/metadata'):
     os.makedirs(OVERLAY_DIR + '/disc/metadata')
-    
+
 if not os.path.isdir(OVERLAY_DIR + '/disc-set'):
     os.makedirs(OVERLAY_DIR + '/disc-set')
 
@@ -884,7 +884,7 @@ if not os.path.isdir(OVERLAY_DIR + '/disc-set'):
 #
 if HELPER:
     os.environ['LD_PRELOAD'] = ''
-    
+
 encoding = None
 try:
     encoding = os.environ[ 'LANG' ].split( '.' )[ 1 ]

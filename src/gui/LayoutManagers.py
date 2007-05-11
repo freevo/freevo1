@@ -6,11 +6,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -53,7 +53,7 @@ class FlowLayout(LayoutManager):
     def __init__(self, container):
         self.container = container
 
-    
+
     def get_next_child(self, j):
         num_children = len(self.container.children)
         if j < num_children - 1:
@@ -105,8 +105,8 @@ class FlowLayout(LayoutManager):
                     child.height = self.container.height - \
                                    self.container.v_margin - y
                 child.get_rendered_size()
-        
-            end = x + child.width + self.container.h_margin 
+
+            end = x + child.width + self.container.h_margin
 
             if end > self.container.width or \
                    (len(self.table[row]) and (child.h_align == Align.LEFT or \
@@ -165,7 +165,7 @@ class FlowLayout(LayoutManager):
 
                 if child.v_align == Align.CENTER:
                     y_offset = self.container.height / 2 - (child.top + child.height / 2)
-                    child.top += y_offset 
+                    child.top += y_offset
 
                 # If there is really just one visible child inside this
                 # container then we are done.
@@ -192,7 +192,7 @@ class FlowLayout(LayoutManager):
                 x_offset = self.container.width / 2 - row_center
 
                 for child in row:
-                    child.left += x_offset 
+                    child.left += x_offset
 
             elif len(row) == 1 and row[0].h_align == Align.CENTER:
                 x_offset = self.container.width / 2 - (row[0].left + row[0].width / 2)
@@ -210,7 +210,7 @@ class FlowLayout(LayoutManager):
                     current += shift
 
         self.needed_space = global_height
-        
+
 
 class GridLayout(LayoutManager):
 
@@ -222,5 +222,3 @@ class BorderLayout(LayoutManager):
 
     def __init__(self):
         pass
-
-

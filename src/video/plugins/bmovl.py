@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -51,7 +51,7 @@ class Surface:
         self.width  = width
         self.height = height
 
-        
+
     def blit(self, *arg1, **arg2):
         self.screen.blit(*arg1, **arg2)
 
@@ -120,13 +120,13 @@ class OSDbmovl(OSD):
         if not layer:
             self.calc_update_area(ret[1][0], ret[1][1], ret[1][2], ret[1][3])
         return ret
-    
-        
+
+
     def close(self):
         print 'close'
         os.close(self.bmovl)
 
-        
+
     def show(self):
         try:
             os.write(self.bmovl, 'SHOW\n')
@@ -138,7 +138,7 @@ class OSDbmovl(OSD):
             os.write(self.bmovl, 'HIDE\n')
         except OSError:
             pass
-        
+
 
     def clearscreen(self, color=None):
         self.screen.fill((0,0,0,0))
@@ -147,21 +147,21 @@ class OSDbmovl(OSD):
         except OSError:
             pass
 
-        
+
     def update(self, rect=None):
         if not rect:
             if self.x0 > self.x1:
                 return
             rect = self.x0, self.y0, self.x1 - self.x0, self.y1 - self.y0
             self.x0, self.y0, self.x1, self.y1 = self.width, self.height, 0, 0
-        
+
         try:
             update = self.screen.subsurface(rect)
         except Exception, e:
             print 'update:', e
             print rect, self.screen
             return
-        
+
         try:
             os.write(self.bmovl, 'RGBA32 %d %d %d %d %d %d\n' % \
                      (update.get_width(), update.get_height(), rect[0], rect[1], 0, 0))
@@ -198,7 +198,7 @@ class PluginInterface(plugin.Plugin):
         self.status = 'waiting'
         self.background = None
 
-        
+
     def play(self, command, player):
         """
         called before playing is started to add some stuff to the command line
@@ -219,7 +219,7 @@ class PluginInterface(plugin.Plugin):
                 self.start = self.player.item_info.start
 
         self.last_timer = self.start
-        
+
         self.bg  = None
         self.cbg = None
 
@@ -235,7 +235,7 @@ class PluginInterface(plugin.Plugin):
 
     def create_background(self, x, y, width, height):
         self.background = Surface(x, y, width, height)
-        
+
         wallpaper = skin.get_singleton().settings.images['background']
         if wallpaper:
             wallpaper = self.bmovl.loadbitmap(wallpaper)
@@ -259,7 +259,7 @@ class PluginInterface(plugin.Plugin):
         self.x0     = config.OSD_OVERSCAN_X
         self.height = self.background.height - config.OSD_OVERSCAN_Y - self.y0
         self.width  = self.background.width  - 2 * config.OSD_OVERSCAN_X
-        
+
         # draw movie image
         f = skin.get_singleton().settings.images['logo']
         i = self.bmovl.load_scaled_image(f, self.width / 4, self.height)
@@ -269,7 +269,7 @@ class PluginInterface(plugin.Plugin):
             self.width = self.background.width - self.x0 - config.OSD_OVERSCAN_X
 
         title   = self.item.name
-        
+
         if self.item.tv_show:
             show     = config.VIDEO_SHOW_REGEXP_SPLIT(self.item.name)
             title    = String(show[0]) + " " + String(show[1]) + "x" + \
@@ -280,13 +280,13 @@ class PluginInterface(plugin.Plugin):
                                            font, layer=self.background)
 
         self.y0 += font.height * 1.5
-        
+
         font = skin.get_singleton().get_font('bmovl text')
         pos  = self.bmovl.drawstringframed('%s min.' % (self.length / 60),
                                            self.x0, self.y0 , self.width, -1, font,
                                            layer=self.background)
 
-        
+
 
     def show_osd(self):
         """
@@ -295,7 +295,7 @@ class PluginInterface(plugin.Plugin):
         _debug_('show osd')
 
         self.bmovl.screenblit(self.background.screen, self.background.pos)
-        
+
         self.elapsed(self.last_timer, update=False)
 
         self.bmovl.update()
@@ -312,8 +312,8 @@ class PluginInterface(plugin.Plugin):
         self.player.app.refresh = None
         self.bmovl.clearscreen()
         self.bmovl.hide()
-        
-        
+
+
     def stop(self):
         """
         stop bmovl
@@ -323,7 +323,7 @@ class PluginInterface(plugin.Plugin):
             self.bmovl.close()
             self.bmovl = None
 
-        
+
     def eventhandler(self, event):
         """
         eventhandler to do our own osd toggle
@@ -364,7 +364,7 @@ class PluginInterface(plugin.Plugin):
         else:
             return '%d:%02d' % (timer / 60, timer % 60)
 
-        
+
     def elapsed(self, timer, update=True):
         """
         update osd
@@ -393,18 +393,18 @@ class PluginInterface(plugin.Plugin):
             self.bmovl.drawbox(x0 + box - 1, y0 + 1, self.background.width - x0 - box + 1,
                                y0 + self.clockfont.height + 4,
                                fill=0, color=0x000000)
-            
+
             self.bmovl.drawbox(x0 + box, y0 + 2, self.background.width - x0 - box,
                                y0 + self.clockfont.height + 3,
                                fill=1, color=0xa0ffffff)
-            
+
             self.bmovl.drawbox(x0 + box, y0 + 2, x0 + box + pos,
                                y0 + self.clockfont.height + 3,
                                fill=1, color=0x164668)
-            
+
             font = self.clockfont
             y0   = self.background.pos[1] + 3
-            
+
             self.bmovl.drawstringframed('%s' % self.time2str(start),
                                         x0, y0, box, -1, font,
                                         align_v='center', align_h='center')

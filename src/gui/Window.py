@@ -43,7 +43,7 @@ class Window(GUIObject):
     width     Integer
     height    Integer
     """
-    
+
     def __init__(self, parent='osd', x=None, y=None, width=0, height=0):
         GUIObject.__init__(self, x, y, width, height)
 
@@ -51,11 +51,11 @@ class Window(GUIObject):
             parent = self.osd.app_list[0]
 
         parent.add_child(self)
-        
+
         self.osd.add_app(self)
 
         self.event_context = 'input'
-        rc.set_context(self.event_context) 
+        rc.set_context(self.event_context)
 
         if not width:
             self.width  = self.osd.width / 2
@@ -104,14 +104,14 @@ class Window(GUIObject):
         width, height = self.content_layout.width, self.content_layout.height
         self.content.width  = eval(str(width),  { 'MAX': self.width }) or self.width
         self.content.height = eval(str(height), { 'MAX': self.height }) or self.height
-        
+
         self.left = self.osd.width/2 - self.width/2
         self.top  = self.osd.height/2 - self.height/2
 
         # adjust left to content
         self.left += (self.width - self.content.width-self.content.left) / 2
 
-        
+
 
     def _draw(self):
         """
@@ -132,7 +132,7 @@ class Window(GUIObject):
 
         self.surface = self.osd.Surface(self.get_size()).convert_alpha()
         self.surface.fill((0,0,0,0))
-            
+
         for o in self.background_layout:
             if o[0] == 'rectangle':
                 r = copy.deepcopy(o[1])
@@ -159,7 +159,7 @@ class Window(GUIObject):
             print 'developer@freevo.org.'
             print '******************************************************************'
             self.content.parent = self
-            
+
         if not self.parent:
             print '******************************************************************'
             print 'Error: window has no parent, not showing...'
@@ -168,8 +168,7 @@ class Window(GUIObject):
             print 'developer@freevo.org.'
             print '******************************************************************'
             return
-            
+
         self.content.surface = self.content.get_surface()
         self.content.draw()
         self.blit_parent()
-        

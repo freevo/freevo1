@@ -11,12 +11,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -49,7 +49,7 @@ class Progressbar(Container):
 
     def __init__(self, x=None, y=None, width=70, height=25, bg_color=None,
                  border=None, bd_color=None, bd_width=None, full=0):
-        
+
         Container.__init__(self, 'widget', x, y, width, height, bg_color,
                            0, 0, 0, border, bd_color, bd_width)
 
@@ -73,7 +73,7 @@ class Progressbar(Container):
         if not self.full:
             # catch division by zero error.
             return
-        
+
         position = min((self.position * 100) / self.full, 100)
         width, height = self.get_size()
 

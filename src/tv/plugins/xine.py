@@ -8,12 +8,12 @@
 #
 # This plugin is beta and only working with dvb
 #
-# Todo:        
+# Todo:
 #
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -56,19 +56,19 @@ class PluginInterface(plugin.Plugin):
     as frequence, e.g.
 
     TV_CHANNELS = [
-        ( 'ard.de', 'ARD', 'Das Erste RB' ), 
+        ( 'ard.de', 'ARD', 'Das Erste RB' ),
         ( 'zdf.de', 'ZDF', 'ZDF' ),
-        ( 'ndr.de', 'NDR', 'NDR RB' ), 
-        ( 'rtl.de', 'RTL', 'RTL Television' ), 
-        ( 'sat1.de', 'SAT.1', 'SAT.1' ), 
-        ( 'rtl2.de', 'RTL 2', 'RTL2' ), 
-        ( 'prosieben.de', 'PRO 7', 'ProSieben' ), 
-        ( 'kabel1.de', 'KABEL 1', 'KABEL1' ), 
-        ( 'vox.de', 'VOX', 'VOX' ), 
-        ( 'n24.de', 'N24', 'N24' ), 
-        ( 'arte-tv.com', 'ARTE', 'arte' ), 
-        ( 'C3sat.de', '3SAT', 'Info/3sat' ), 
-        ( 'superrtl.de', 'Super RTL', 'Super RTL' ), 
+        ( 'ndr.de', 'NDR', 'NDR RB' ),
+        ( 'rtl.de', 'RTL', 'RTL Television' ),
+        ( 'sat1.de', 'SAT.1', 'SAT.1' ),
+        ( 'rtl2.de', 'RTL 2', 'RTL2' ),
+        ( 'prosieben.de', 'PRO 7', 'ProSieben' ),
+        ( 'kabel1.de', 'KABEL 1', 'KABEL1' ),
+        ( 'vox.de', 'VOX', 'VOX' ),
+        ( 'n24.de', 'N24', 'N24' ),
+        ( 'arte-tv.com', 'ARTE', 'arte' ),
+        ( 'C3sat.de', '3SAT', 'Info/3sat' ),
+        ( 'superrtl.de', 'Super RTL', 'Super RTL' ),
         ( 'kika.de', 'Kika', 'Doku/KiKa' ) ]
     """
     def __init__(self):
@@ -128,14 +128,14 @@ class Xine:
             command.remove('--no-lirc')
 
         command.append('dvb://' + tuner_channel)
-            
+
         _debug_('Xine.play(): Starting cmd=%s' % command)
 
         rc.app(self)
 
         self.app = childapp.ChildApp2(command)
         return None
-    
+
 
     def stop(self, channel_change=0):
         """
@@ -147,7 +147,7 @@ class Xine:
 
             if not channel_change:
                 pass
-            
+
 
     def eventhandler(self, event, menuw=None):
         """

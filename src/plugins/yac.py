@@ -11,14 +11,14 @@
 # This plugin supports the "YAC" protocol as documented here:
 #       http://www.sunflowerhead.com/software/yac/
 #
-# It allows you to use a "YAC Server" to send messages; the yac 
+# It allows you to use a "YAC Server" to send messages; the yac
 # server can run on Windows, and there is also a Linux version
 # available: http://bah.org/tivo/ and clients for Windows and
-# Linux. 
+# Linux.
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -73,4 +73,4 @@ class PluginInterface (plugin.DaemonPlugin):
             pass
 
     def shutdown(self):
-        self.sock = None 
+        self.sock = None

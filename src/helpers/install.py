@@ -7,11 +7,11 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -50,8 +50,8 @@ def mkalldir(d):
         cd = os.path.join(cd, p)
         if not os.path.isdir(cd):
             os.mkdir(cd)
-            
-    
+
+
 if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
     is_local = False
     tgz = os.path.abspath(sys.argv[1])
@@ -125,7 +125,7 @@ if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
 
     # remove tmp directory
     util.fileops.rmrf('tmp')
-    
+
 else:
     print 'freevo install helper to install external plugins or themes into Freevo'
     print

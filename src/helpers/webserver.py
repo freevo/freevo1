@@ -7,11 +7,11 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -73,10 +73,10 @@ def _debug_(text, level=1):
 
 def helpimagesrewrite(request):
     if request.postpath and request.postpath[0]=='help' and request.postpath[1]=='images':
-        request.postpath.pop(0) 
+        request.postpath.pop(0)
         request.path = '/'+'/'.join(request.prepath+request.postpath)
     if request.postpath and request.postpath[0]=='help' and request.postpath[1]=='styles':
-        request.postpath.pop(0) 
+        request.postpath.pop(0)
         request.path = '/'+'/'.join(request.prepath+request.postpath)
 
 def main():
@@ -103,19 +103,19 @@ def main():
         if isinstance(item, tuple) and len(item) == 2:
             (title, path) = item
             root.putChild(path.replace("/", "_"), static.File(path))
-    
+
     root.putChild('vhost', vhost.VHostMonsterResource())
     rewriter =  rewrite.RewriterResource(root, helpimagesrewrite)
     if (config.DEBUG == 0):
         site = server.Site(rewriter, logPath='/dev/null')
     else:
         site = server.Site(rewriter)
-    
+
     application = app.Application('web')
     application.listenTCP(config.WEBSERVER_PORT, site)
     application.run(save=0)
 
-    
+
 if __name__ == '__main__':
     import traceback
     import time
@@ -129,4 +129,3 @@ if __name__ == '__main__':
             if start + 10 > time.time():
                 print 'server problem, sleeping 1 min'
                 time.sleep(60)
-

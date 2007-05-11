@@ -84,8 +84,8 @@ class PluginInterface(plugin.ItemPlugin):
         menu_items.append( menu.MenuItem("DivX, 800bps", self.create_job, (0,0,0,None,700,False,800)) )
         menu_items.append( menu.MenuItem("DivX, 800bps, High Quality", self.create_job, (0,0,0,None,700,True,800)) )
         menu_items.append( menu.MenuItem("DivX, 1200bps", self.create_job, (0,0,0,None,1400,False,1200)) )
-        menu_items.append( menu.MenuItem("DivX, 1200bps, High Quality", self.create_job, (0,0,0,None,1400,True,1200)) ) 
-        menu_items.append( menu.MenuItem("iPod", self.create_job,(2,2,2,None,None,False,1200)) ) 
+        menu_items.append( menu.MenuItem("DivX, 1200bps, High Quality", self.create_job, (0,0,0,None,1400,True,1200)) )
+        menu_items.append( menu.MenuItem("iPod", self.create_job,(2,2,2,None,None,False,1200)) )
         encoding_menu = menu.Menu(_('Choose your encoding profile'), menu_items)
         menuw.pushmenu(encoding_menu)
 

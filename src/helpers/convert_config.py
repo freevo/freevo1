@@ -6,11 +6,11 @@
 #
 # Notes:
 #   Run with freevo convert_config
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -157,6 +157,6 @@ if len(sys.argv) <= 3 and sys.argv[1] == '-s':
     for f in util.match_files_recursively('src', [ 'py', 'rpy' ]):
         change(f, print_name=True)
     sys.exit(0)
-    
-    
+
+
 change(sys.argv[1])

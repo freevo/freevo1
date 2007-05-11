@@ -6,11 +6,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -79,7 +79,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 return BAR_HIDE
             else:
                 return BAR_IDLE
-    
+
 
     def eventhandler(self, event, menuw=None):
         """
@@ -105,7 +105,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.update_registered:
             rc.unregister(self.update)
             self.update_registered = False
-    
+
 
     def show(self):
         """
@@ -118,7 +118,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.update_registered = True
         self.getInfo()
         self.status = BAR_SHOW
-    
+
 
     def stop(self):
         """
@@ -144,7 +144,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.hide()
             if skin.active():
                 skin.redraw()
-    
+
 
     def draw(self, (type, object), osd):
         """
@@ -155,7 +155,7 @@ class PluginInterface(plugin.DaemonPlugin):
             # when idle, wait for a new player
             if audio.player.get():
                 self.show()
-                
+
         if self.status == BAR_SHOW:
             if not self.player.running:
                 # player stopped, we also stop
@@ -174,7 +174,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
             if font == osd.get_font('default'):
                 font = osd.get_font('info value')
-       
+
             self.calculatesizes(osd, font)
 
             if self.image:
@@ -187,12 +187,12 @@ class PluginInterface(plugin.DaemonPlugin):
             if not self.idlebar:
                 osd.drawroundbox(origin, self.y, width, osd.height,
                     (0xf0ffffffL, 5, 0xb0000000L, 10))
-            
+
             if self.image:
                 osd.draw_image(self.image, (origin+5, self.y, 50, 50))
-                    
+
             y = self.t_y
-        
+
             for r in self.render:
                 osd.write_text( r, font, None, self.t_x, y, self.t_w,
                                 self.font_h, 'center', 'center')
@@ -207,7 +207,7 @@ class PluginInterface(plugin.DaemonPlugin):
             osd.write_text( progress, font, None, self.t_x, y,
                             self.t_w, self.font_h , 'center', 'center')
         return 0
-   
+
 
     def getInfo(self):
         """
@@ -217,7 +217,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.render = []
         self.calculate = True
         info = self.player.item.info
-       
+
         self.image =  self.player.item.image
         # artist : album
         if info['artist'] and info['album']:
@@ -226,17 +226,17 @@ class PluginInterface(plugin.DaemonPlugin):
             self.render += [ info['album'] ]
         elif info['artist']:
             self.render += [ info['artist'] ]
-        
+
         # trackno - title
         if info['trackno'] and info['title']:
             self.render += [ '%s - %s' % ( info['trackno'], info['title'] ) ]
         elif info['title']:
             self.render += [ info['title'] ]
-        
+
         # no info available
         if len(self.render)==0:
             self.render += [ self.player.item.name ]
-    
+
 
     def calculatesizes(self, osd, font):
         """
@@ -254,24 +254,24 @@ class PluginInterface(plugin.DaemonPlugin):
                 if self.idlebar_max - self.idlebar.free_space < 250:
                     _debug_('free space in idlebar to small, using normal detach')
                     self.idlebar = None
-                    
-            
+
+
         pad_internal = 5 # internal padding for box vs text
 
         if self.calculate:
             self.calculate = False
             self.font_h = font.font.height
-            
+
             total_width = osd.width + 2*osd.x
             total_height = osd.height + 2*osd.y
             pad = 10 # padding for safety (overscan may not be 100% correct)
             bar_height = self.font_h
             bar_width = 0
-    
+
             for r in self.render:
                 bar_height += self.font_h
                 bar_width = max(bar_width, font.font.stringsize(r))
-                
+
             self.y = (total_height - bar_height) - osd.y - pad - pad_internal
             self.x = (total_width - bar_width) - osd.x - pad - pad_internal
             self.w = bar_width + pad + pad_internal + 10
@@ -289,7 +289,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.t_x = self.x
             self.t_w = min(self.t_w, self.idlebar_max - self.x - 30)
 
-            
+
     def formattime(self, seconds):
         """
         returns string formatted as mins:seconds
@@ -298,7 +298,7 @@ class PluginInterface(plugin.DaemonPlugin):
         mins = 0
         mins = seconds / 60
         secs = seconds % 60
-        
+
         if secs<10:
             secs = '0%s' % secs
         else:

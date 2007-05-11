@@ -55,10 +55,10 @@ class PopupBox(Window):
                  align_h = text horizontal alignment
                  mode    = hard (break at chars); soft (break at words)
                  hfill   = True (don't shorten width) or False
-    
+
     Trying to make a standard popup/dialog box for various usages.
     """
-    
+
     def __init__(self, text, handler=None, x=None, y=None, width=0, height=0,
                  icon=None, vertical_expansion=1, text_prop=None, parent='osd'):
 
@@ -71,18 +71,18 @@ class PopupBox(Window):
 
         self.font = None
         if self.skin_info_font:
-            self.set_font(self.skin_info_font.name, 
-                          self.skin_info_font.size, 
+            self.set_font(self.skin_info_font.name,
+                          self.skin_info_font.size,
                           Color(self.skin_info_font.color))
         else:
             self.set_font(config.OSD_DEFAULT_FONTNAME,
                           config.OSD_DEFAULT_FONTSIZE)
-                
+
         if not width:
             tw = self.font.stringsize(text) + self.h_margin*2
             if tw < self.osd.width * 2 / 3:
                 self.width = max(self.osd.width / 2, tw)
-            
+
         self.__init__content__()
 
         if type(text) in StringTypes:
@@ -93,7 +93,7 @@ class PopupBox(Window):
 
         if icon:
             self.set_icon(icon)
-        
+
 
     def get_text(self):
         """
@@ -136,7 +136,7 @@ class PopupBox(Window):
         """
         Set the icon of the popupbox.
         Also scales the icon to fit the size of the box.
-        
+
         Not working right now
         """
         pass

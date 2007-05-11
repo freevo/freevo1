@@ -26,14 +26,14 @@
 #  The setup.py file should look like this:
 #
 #  |   #!/usr/bin/env python
-#  |   
+#  |
 #  |   """Setup script for my freevo plugin."""
-#  |   
-#  |   
+#  |
+#  |
 #  |   __revision__ = "$Id$"
-#  |   
+#  |
 #  |   from freevo.util.distribution import setup
-#  |   
+#  |
 #  |   # now start the python magic
 #  |   setup (name = "nice_plugin",
 #  |          version = '0.1',
@@ -41,7 +41,7 @@
 #  |          author = "me",
 #  |          author_email = "my@mail.address",
 #  |          url = "http://i-also-have-a-web.address",
-#  |   
+#  |
 #  |          i18n = 'my_app', # optional
 #  |          )
 #
@@ -57,11 +57,11 @@
 #  If you need help, please join the freevo developer mailing list
 #
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -132,7 +132,7 @@ def data_finder(result, dirname, names):
             if dirname.find('i18n') == -1 or (name.find('pot') == -1 and \
                                               name.find('update.py') == -1):
                 files.append(os.path.join(dirname, name))
-            
+
     if files and dirname.find('/.svn') == -1:
         result.append((dirname.replace('./share', 'share/freevo').
                        replace('./src/www', 'share/freevo').\
@@ -151,7 +151,7 @@ def docbook_finder(result, dirname, names):
     for name in names:
         if os.path.splitext(name)[1] == '.html':
             files.append(os.path.join(dirname, name))
-            
+
     if files and dirname.find('/.svn') == -1:
         result.append((dirname.replace('/html', ''). \
                        replace('./Docs', 'share/doc/freevo-%s' % version.__version__), files))
@@ -175,7 +175,7 @@ def check_libs(libs):
                 print 'not found'
                 print 'please download it from %s and install it' % url
                 sys.exit(1)
-            
+
 
 i18n_application = ''
 
@@ -207,10 +207,10 @@ class i18n (core.Command):
     def initialize_options (self):
         self.no_merge     = 0
         self.compile_only = 0
-        
+
     def finalize_options (self):
         pass
-        
+
     def run (self):
         if not self.compile_only:
             print 'updating pot file'
@@ -250,7 +250,7 @@ class i18n (core.Command):
                             # strip ' ' at the beginnig and ' ', ': ', ':',
                             # ',' or ', ' at the end
                             text = text.strip(' ').rstrip(' :,')
-                            
+
                             if fxd_strings.has_key(text):
                                 fxd_strings[text].append('%s:%s' % (file, i))
                             else:
@@ -289,7 +289,7 @@ class i18n (core.Command):
                         f.write('#: %s\n' % line)
                     f.write('msgid "%s"\nmsgstr ""\n' % text)
                 f.close()
-             
+
         if not self.no_merge and not self.compile_only:
             print 'updating po files'
             print '',
@@ -320,7 +320,7 @@ class freevo_install_lib (install_lib.install_lib):
                     os.remove(init)
         install_lib.install_lib.install(self)
 
-        
+
 def setup(**attrs):
     for i in ('name', 'version', 'description', 'author', 'author_email', 'url'):
         if not attrs.has_key(i):
@@ -338,7 +338,7 @@ def setup(**attrs):
     if not attrs.has_key('i18n') or attrs['i18n'] != 'freevo':
         # this is a plugin, replace the cmdclass install_lib
         cmdclass['install_lib'] = freevo_install_lib
-    
+
     if attrs.has_key('i18n'):
         global i18n_application
         i18n_application = attrs['i18n']
@@ -374,7 +374,7 @@ def setup(**attrs):
         author       = attrs['author'],
         author_email = attrs['author_email'],
         url          = attrs['url'],
-        
+
         scripts      = attrs['scripts'],
         package_dir  = package_dir,
         packages     = packages,
@@ -382,5 +382,3 @@ def setup(**attrs):
 
         cmdclass     = cmdclass
         )
-    
-

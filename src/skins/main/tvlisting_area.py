@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@ class TVListing_Area(Skin_Area):
         self.last_choices = ( None, None )
         self.last_settings = None
         self.last_items_geometry = None
-        
+
     def update_content_needed(self):
         """
         check if the content needs an update
@@ -59,13 +59,13 @@ class TVListing_Area(Skin_Area):
     def get_items_geometry(self, settings, obj, display_style=0):
         if self.last_settings == settings:
             return self.last_items_geometry
-        
+
         self.display_style = display_style
         self.init_vars(settings, None, widget_type = 'tv')
 
         menuw     = obj
         menu      = obj
-        
+
         layout    = self.layout
         area      = self.area_val
         content   = self.calc_geometry(layout.content, copy_object=True)
@@ -81,7 +81,7 @@ class TVListing_Area(Skin_Area):
 
         self.all_vals = label_val, head_val, selected_val, default_val, scheduled_val, overlap_val,\
                         past_val, current_val
-        
+
         font_h = max(selected_val.font.h, default_val.font.h, label_val.font.h)
 
 
@@ -116,7 +116,7 @@ class TVListing_Area(Skin_Area):
         if selected_val.rectangle:
             r = self.get_item_rectangle(selected_val.rectangle, 20, selected_val.font.h)[2]
             item_h = max(item_h, r.height + content.spacing)
-            
+
         head_h = head_val.font.h
         if head_val.rectangle:
             r = self.get_item_rectangle(head_val.rectangle, 20, head_val.font.h)[2]
@@ -128,8 +128,8 @@ class TVListing_Area(Skin_Area):
                                    content_h / item_h, item_h, head_h, \
                                    content.hours_per_page
         return self.last_items_geometry
-    
-        
+
+
 
     def fit_item_in_rectangle(self, rectangle, width, height, font_h):
         """
@@ -149,7 +149,7 @@ class TVListing_Area(Skin_Area):
             r.y, y = 0, -r.y
             height -= y
         return Geometry(x, y, width, height), r
-    
+
 
     def update_content(self):
         """
@@ -191,7 +191,7 @@ class TVListing_Area(Skin_Area):
 
         x_contents = content.x + content.spacing
         y_contents = content.y + content.spacing
-        
+
         w_contents = content.width  - 2 * content.spacing
         h_contents = content.height - 2 * content.spacing
 
@@ -266,20 +266,20 @@ class TVListing_Area(Skin_Area):
             tx0 = content.x
 
             logo_geo = [ tx0, ty0, label_width, font_h ]
-            
+
             if label_val.rectangle:
                 r = self.get_item_rectangle(label_val.rectangle, label_width, item_h)[2]
                 if r.x < 0:
                     tx0 -= r.x
                 if r.y < 0:
                     ty0 -= r.y
-                            
+
                 val = default_val
 
                 self.drawroundbox(tx0 + r.x, ty0 + r.y, r.width+1, item_h, r)
                 logo_geo =[ tx0+r.x+r.size, ty0+r.y+r.size, r.width-2*r.size,
                             r.height-2*r.size ]
-                    
+
 
             channel_logo = config.TV_LOGOS + '/' + to_listing[i].id + '.png'
             if os.path.isfile(channel_logo):
@@ -311,7 +311,7 @@ class TVListing_Area(Skin_Area):
 
                     if prg.stop > stop_time:
                         flag_right = 1
-                        w = w_contents + x_contents - x0                        
+                        w = w_contents + x_contents - x0
                         x1 = x_contents + w_contents
                     else:
                         w =  int( float(prg.stop - t_start) * prop_1sec )
@@ -341,7 +341,7 @@ class TVListing_Area(Skin_Area):
                             val.align='center'
                     except UnicodeError:
                         pass
-                    
+
                     if x0 > x1:
                         break
 
@@ -393,4 +393,3 @@ class TVListing_Area(Skin_Area):
             else:
                 v = area.images['downarrow']
             self.drawimage(area.images['downarrow'].filename, v)
-

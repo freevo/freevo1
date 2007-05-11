@@ -7,11 +7,11 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -40,14 +40,14 @@ except ImportError:
     print 'imdb.py can\'t be executed outside the Freevo environment.'
     print 'Please use \'freevo imdb [args]\' instead'
     sys.exit(0)
-    
+
 from util.fxdimdb import FxdImdb, makeVideo
 from random import Random
 
 def usage():
     print 'imdb.py -s string:   search imdb for string'
     print
-    print 'imdb.py -g filename:   guess imdb for possible filename match'    
+    print 'imdb.py -g filename:   guess imdb for possible filename match'
     print
     print 'imdb.py [--rom-drive=/path/to/device] nr output files'
     print '  Generate output.fxd for the movie.'
@@ -84,15 +84,15 @@ if __name__ == "__main__":
 
     task = ''
     search_arg = ''
-    
-    
-    
+
+
+
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'ag:s:', ('rom-drive=','list-guess='))
     except getopt.GetoptError:
         usage()
         pass
-    
+
     for o, a in opts:
         if o == '-a':
             if task:
@@ -115,8 +115,8 @@ if __name__ == "__main__":
             drive=a
             driveset = TRUE
 
-    fxd = FxdImdb()        
-            
+    fxd = FxdImdb()
+
     if task == 'add':
         if len(args) == 2:
             usage()
@@ -127,7 +127,7 @@ if __name__ == "__main__":
             type = 'file'
             if arg[1].find('[dvd]') != -1: type = 'dvd'
             if arg[1].find('[vcd]') != -1: type = 'vcd'
-            
+
             id = abs( Random() * 100 )
             if driveset == TRUE:
                 video = makeVideo(type, 'f' + str(id), arg[1], device=drive)
@@ -138,7 +138,7 @@ if __name__ == "__main__":
             sys.exit(1)
         fxd.writeFxd()
         sys.exit(0)
-    
+
     if task == 'search':
         if len(args) != 0:
             usage()
@@ -162,7 +162,7 @@ if __name__ == "__main__":
             else:
                 print '%s   %s (%s)' % (result[0], result[1], result[2])
         sys.exit(0)
-        
+
     # normal usage
     if len(args) < 2:
         usage()
@@ -175,10 +175,10 @@ if __name__ == "__main__":
 
     if not (files or cdid):
         usage()
-        
+
     fxd.setImdbId(imdb_number)
     fxd.setFxdFile(filename)
-    
+
     x=0
     for file in files:
         type = 'file'
@@ -191,5 +191,5 @@ if __name__ == "__main__":
 
     if not files:
         fxd.setDiscset(drive, None)
-        
+
     fxd.writeFxd()

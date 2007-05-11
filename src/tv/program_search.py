@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # ProgramSearch - a popup that allows the user to search the EPG
 #                 using a remote.
-#               
+#
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -13,12 +13,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -65,15 +65,15 @@ class ProgramSearch(PopupBox):
     bd_width  Border width Integer
     """
 
-        
-    def __init__(self, parent='osd', text=None, search=None, handler=None, 
-                 left=None, top=None, width=600, height=200, bg_color=None, 
-                 fg_color=None, icon=None, border=None, bd_color=None, 
+
+    def __init__(self, parent='osd', text=None, search=None, handler=None,
+                 left=None, top=None, width=600, height=200, bg_color=None,
+                 fg_color=None, icon=None, border=None, bd_color=None,
                  bd_width=None, vertical_expansion=1):
 
         if not text:
             text = _('Program Search')
-        
+
         PopupBox.__init__(self, text, handler, left, top, width, height,
                           icon, vertical_expansion, parent=parent)
 
@@ -81,9 +81,9 @@ class ProgramSearch(PopupBox):
         if not self.server_available:
             errormsg = Label(_('Recording server is unavailable.') + \
                              ( ': %s\n\n' % msg ) + \
-                             _('Feel free to implement this function inside the main guide.'), 
+                             _('Feel free to implement this function inside the main guide.'),
                              self, Align.CENTER)
-            return 
+            return
 
 
         self.internal_h_align = Align.CENTER
@@ -105,7 +105,7 @@ class ProgramSearch(PopupBox):
         if search:
             self.searchProg(search)
         self.center_on_screen = TRUE
-        
+
 
     def searchProg(self, find):
         if DEBUG: print String('SEARCHING FOR: %s' % find)
@@ -131,7 +131,7 @@ class ProgramSearch(PopupBox):
             for prog in matches:
                 i += 1
                 self.results.add_item(text='%s %s: %s' % \
-                    (time.strftime(config.TV_DATETIMEFORMAT, time.localtime(prog.start)), 
+                    (time.strftime(config.TV_DATETIMEFORMAT, time.localtime(prog.start)),
                     tv_util.get_chan_displayname(prog.channel_id), prog.title), value=prog)
 
             space_left = self.num_shown_items - i
@@ -172,7 +172,7 @@ class ProgramSearch(PopupBox):
                 self.lbg.boxes[0].toggle_selected()
                 self.draw()
                 return
-            
+
             elif event == em.INPUT_ENTER:
                 prog = self.results.get_selected_child().value
                 if prog:
@@ -184,4 +184,3 @@ class ProgramSearch(PopupBox):
             return
         else:
             return self.parent.eventhandler(event)
-

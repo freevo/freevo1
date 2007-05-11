@@ -16,7 +16,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -49,12 +49,12 @@ from event import *
 class PluginInterface(plugin.ItemPlugin):
     """
     This plugin will allow you to create playlists of audio files. It will also
-    add a "Playlists" submenu to your Audio Folder. 
+    add a "Playlists" submenu to your Audio Folder.
     To activate this plugin, put the following in your local_conf.py.
 
-    plugin.activate( 'audio.playlist' ) 
+    plugin.activate( 'audio.playlist' )
 
-    You can also change the physical location of the Playlists folder, or 
+    You can also change the physical location of the Playlists folder, or
     specify the naming convention like this:
 
     plugin.activate('audio.playlist', args=('/path/to/folder','Freevo %m%d'))
@@ -69,7 +69,7 @@ class PluginInterface(plugin.ItemPlugin):
     EVENTS['menu']['SAVE'] = Event(MENU_CALL_ITEM_ACTION, arg='close_playlist')
 
     """
-    
+
     def __init__(self,playlist_folder=None, naming='Freevo Playlist - %m%d-%I%M'):
         if playlist_folder == None:
             self.playlist_folder = ('%s/playlists' % config.FREEVO_CACHEDIR)
@@ -102,7 +102,7 @@ class PluginInterface(plugin.ItemPlugin):
                           'close_playlist'))
         return items
 
-    
+
     def queue_file(self,arg=None, menuw=None):
         if not self.playlist_handle:
             self.playlist_handle = open(('%s/%s.m3u' % (self.playlist_folder,

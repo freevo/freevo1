@@ -9,11 +9,11 @@
 #
 #        Based on videothumb.py commited to the freevo wiki
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     import vfs
     import gui.PopupBox
     import osd
-    
+
     if not imagefile:
         imagefile = vfs.getoverlay(videofile + '.raw')
 
@@ -58,13 +58,13 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
 
     if imagefile.endswith('.raw'):
         imagefile += '.tmp'
-        
+
     if popup:
         pop = gui.PopupBox(text='Creating thumbnail for \'%s\'...' % \
             Unicode(os.path.basename(videofile)),
             width=osd.get_singleton().width-config.OSD_OVERSCAN_X*2-80)
         pop.show()
-        
+
     args = [ config.MPLAYER_CMD, videofile, imagefile ]
 
     if pos != None:
@@ -115,10 +115,10 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     else:
         print 'no imagefile found'
         print imagefile
-        
+
     if popup:
         pop.destroy()
-        
+
 #
 # main function, will be called when this file is executed, not imported
 # args: mplayer, videofile, imagefile, [ pos ]
@@ -126,7 +126,7 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
 
 if __name__ == "__main__":
     import popen2
-    
+
     mplayer   = os.path.abspath(sys.argv[1])
     filename  = os.path.abspath(sys.argv[2])
     imagefile = os.path.abspath(sys.argv[3])

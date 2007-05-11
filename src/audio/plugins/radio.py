@@ -171,5 +171,3 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     def items(self, parent):
         return [ RadioMainMenuItem(parent) ]
-
-

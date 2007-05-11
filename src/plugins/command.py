@@ -116,7 +116,7 @@ class LogScroll(PopupBox):
     def eventhandler(self, event, menuw=None):
 
         if event in (INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT ):
-           return self.pb.eventhandler(event)
+            return self.pb.eventhandler(event)
 
         elif event == INPUT_ENTER or event == INPUT_EXIT:
             self.destroy()
@@ -229,8 +229,8 @@ class CommandItem(Item):
             pop.show()
 
         if self.stoposd:
-	    rc.suspend()
-	
+            rc.suspend()
+
         workapp = CommandChild(self.cmd, 'command', 1, self.stoposd)
         while workapp.isAlive():
             # make sure all callbacks in rc are running
@@ -248,8 +248,8 @@ class CommandItem(Item):
         workapp.stop()
 
         if self.stoposd:
-	    rc.resume()
-	
+            rc.resume()
+
         message = ''
         if workapp.status:
             message = _('Command Failed')
@@ -426,4 +426,3 @@ class CommandMainMenuItem(plugin.MainMenuPlugin):
         parser.parse()
         cmd_item = command_items[0]
         return [ cmd_item ]
-

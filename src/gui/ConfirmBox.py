@@ -12,12 +12,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -54,7 +54,7 @@ class ConfirmBox(PopupBox):
                  hfill   = True (don't shorten width) or False
 
     If 'handler_message' is set, the box will transform into a normal popup
-    showing this text while 'handler' is called and will destry itself after that. 
+    showing this text while 'handler' is called and will destry itself after that.
     """
     def __init__(self, text, handler=None, handler_message=None, default_choice=0,
                  x=None, y=None, width=0, height=0, icon=None, vertical_expansion=1,
@@ -85,7 +85,7 @@ class ConfirmBox(PopupBox):
             self.b1.toggle_selected()
             self.draw()
             return
-        
+
         elif event == INPUT_EXIT:
             self.destroy()
 

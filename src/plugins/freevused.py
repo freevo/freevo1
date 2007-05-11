@@ -7,7 +7,7 @@
 # Notes: This is a plugin to remote control Freevo with a bluetooth mobile
 #        phone using a j2me client running in the phone.
 #
-# Activate: 
+# Activate:
 #
 #---------------------------------------------------- /etc/freevo/local.conf
 #
@@ -58,7 +58,7 @@
 #
 #     'STAT': 'FVUSED_ITEM_INFO'
 #   }
-# 
+#
 #---------------------------------------------------- /etc/freevo/local.conf
 #
 # Changelog
@@ -102,7 +102,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -148,7 +148,7 @@ class PluginInterface(plugin.DaemonPlugin):
     To activate add this to your local_conf.py:
 
     plugin.activate('freevused')
-    
+
     Optionally you could set those variables if you don't like the default
     ones
 
@@ -156,14 +156,14 @@ class PluginInterface(plugin.DaemonPlugin):
 
     # if RFCOMM port is already binded wait this seconds to retry binding
     FVUSED_BIND_TIMEOUT = 30
-  
+
     # Send received event to OSD
     FVUSED_OSD_MESSAGE = True
 
     #Translation of commands from j2me client to events of Freevo
     #
     FVUSED_CMDS = {
- 
+
       'PREV': 'UP',                # 1st row left
       'STRT': 'SELECT',            # 1nd row center
       'NEXT': 'DOWN',              # 1st row right
@@ -237,7 +237,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.cmds = config.FVUSED_CMDS
         else:
             self.cmds = {
- 
+
                   'PREV': 'UP',                # 1st row left
                   'STRT': 'SELECT',            # 1nd row center
                   'NEXT': 'DOWN',              # 1st row right
@@ -292,7 +292,7 @@ class PluginInterface(plugin.DaemonPlugin):
                     else:
                         menuitem = menupage.selected
                         self.sendMessage(_('Playing') + ' %s' % menuitem.name)
-                            
+
                     self.menu_client_waiting = False
             else:
                 self.sendMenu()
@@ -305,8 +305,8 @@ class PluginInterface(plugin.DaemonPlugin):
         if menuw and isinstance(menuw, menu.MenuWidget):
 
             if event == em.MENU_PROCESS_END:
-                    self.menuw = menuw
-                    self.menu_isfresh = True
+                self.menuw = menuw
+                self.menu_isfresh = True
 
         else:
             if event == em.VIDEO_START:
@@ -330,8 +330,8 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.playing = False
 
             elif event == self.FVUSED_ITEM_INFO:
-                    self.sendItemStats()
-                    return True
+                self.sendItemStats()
+                return True
 
         return False
 
@@ -359,7 +359,7 @@ class PluginInterface(plugin.DaemonPlugin):
             bluetooth.advertise_service( self.server_sock, "Freevused",
                                   service_classes = [ bluetooth.SERIAL_PORT_CLASS ],
                                   profiles = [ bluetooth.SERIAL_PORT_PROFILE ] )
-            
+
             self.isbinded = True
             _debug_("Advertising server to the world")
 
@@ -368,7 +368,7 @@ class PluginInterface(plugin.DaemonPlugin):
             _debug_("broken tooth: %s" % str(e))
             time.sleep(self.bind_timeout)
 
-        
+
     def process_data(self):
         str_arg = ''
         command = None
@@ -549,4 +549,3 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def sendMessage(self, msg):
         self.btSend(msg + '\n\0')
-

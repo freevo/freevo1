@@ -9,7 +9,7 @@
 #              couldn't figure out how to use playlist.Playlist() object.
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -45,58 +45,58 @@ from gui import ProgressBox
 class treeSpec(object):
     """
     see: PluginInterface() below for freevo plugin doc.
-    this class contains no freevo specific code 
-    Inspired by foobar2000 albumlist (NOT playlist tree)    
+    this class contains no freevo specific code
+    Inspired by foobar2000 albumlist (NOT playlist tree)
     (http://www.hydrogenaudio.org/forums/index.php?showforum=28)
     This is a tree/not a playlist generator.
-    generates ugly sql(only as ugly as the spec),but sqlite is fast enough.    
-    operates directly on a sqlite cursor.    
-    see http://www.sqlite.org/lang_expr.html for "scripting" functions 
+    generates ugly sql(only as ugly as the spec),but sqlite is fast enough.
+    operates directly on a sqlite cursor.
+    see http://www.sqlite.org/lang_expr.html for "scripting" functions
     """
     def __init__(self,name='unnamed',cursor=None,spec=None,alt_grouping=None):
         self.spec = spec
         self.name = name
         self.alt_grouping = alt_grouping
         self.cursor = cursor
-        
+
     def get_query(self,data):
         """
-        builds query        
+        builds query
         """
-        
+
         where = []
         for i,item in enumerate(self.spec):
             if i < len(data):
                 where.append('%s="%s"' % (item,data[i]))
             else:
-                break        
+                break
         if where:
             wheresql = ' where ' + ' and '.join(where)
         else:
             wheresql = ''
-                
-        #group by:        
+
+        #group by:
         grouping = self.spec[i]
         if self.alt_grouping and self.alt_grouping[i]:
             grouping = self.alt_grouping[i]
-            
+
         #last level in tree-->,no-count ; use path,filename + order by instead of group by
-        if len(self.spec) -1 == len(data):            
+        if len(self.spec) -1 == len(data):
             query = 'select %s,path,filename from music'% (self.spec[i],)
             query += wheresql
             query += ' order by ' + grouping
         #normal/not last level in tree
-        else:            
+        else:
             query = 'select %s,count() from music'% (self.spec[i],)
             query += wheresql
             query += ' group by %s order by %s'  % (grouping,grouping)
-            
-        
-        return query     
-        
+
+
+        return query
+
     def execute(self,data):
         self.cursor.execute(self.get_query(data))
-        return list(self.cursor) 
+        return list(self.cursor)
         #should return an iterator/generator instead of a list?
         #dont confuse others/need count for progress -->return list
 
@@ -107,7 +107,7 @@ http://freevo.sourceforge.net/cgi-bin/doc/PluginAudioAlbumTree
 = Summary =
 Plugin to browse songs in a tree-like way.
 
-Requires pysqlite.   
+Requires pysqlite.
 
 Tested on freevo 1.5.3 and a 12.000 mp3/6.0 MB database.
 
@@ -116,16 +116,16 @@ Tested on freevo 1.5.3 and a 12.000 mp3/6.0 MB database.
 The sqlite-meta-database should be available.
 
 The audio.rating and audio.logger plugin allso use this database
-,you can skip the rest of the pre-install if those plugins 
-are already succesfully installed. 
+,you can skip the rest of the pre-install if those plugins
+are already succesfully installed.
 
  *install pysqlite,sqlite
- *edit your local_config.py : Configure AUDIO_ITEMS 
+ *edit your local_config.py : Configure AUDIO_ITEMS
  ('''AudioConfig''' ,don't leave it at the default!)
  *run {{{freevo cache}}}
  *wait.....
  *The meta database should be available now.
-          
+
 = Installation =
 
  *Download freevo-audio-album-tree-0.x.x.tgz
@@ -187,19 +187,19 @@ New plugins are not immediately visible on the freevo webserver.
 
 You might want to restart the  [wiki:Webserver freevo webserver] after the installation of a new plugin.
     """
-    def __init__(self):        
-        plugin.MainMenuPlugin.__init__(self)        
+    def __init__(self):
+        plugin.MainMenuPlugin.__init__(self)
         #config.EVENTS['audio']['DISPLAY'] = Event(FUNCTION_CALL, arg=self.detach)
         self.show_item = menu.MenuItem(_('Album Tree'),action=self.onchoose_main)
         self.show_item.type = 'audio'
         plugin.register(self,'audio.album_tree')
-               
+
         if (not config.__dict__.has_key('AUDIO_ALBUM_TREE_SPEC') ) or  (not config.AUDIO_ALBUM_TREE_SPEC):
             print '*ALBUM_TREE:"config.AUDIO_ALBUM_TREE_SPEC" is empty:DEMO-MODE:USING PREDEFINED TREES'
             self.load_demo()
         else:
             self.load_spec(config.AUDIO_ALBUM_TREE_SPEC)
-            
+
     def load_spec(self,spec_list):
         """
         load definitions from config
@@ -211,13 +211,13 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
             if specdef.has_key('alt_grouping'):
                 tree.alt_grouping = specdef['alt_grouping']
             self.album_tree_list.append(tree)
-        
+
     def load_demo(self):
         """
         load predefined testing layout
         """
         curs = db.cursor
-        self.album_tree_list = [        
+        self.album_tree_list = [
         treeSpec('Artist/Album/Track',curs
                 ,["artist","album","track||'-'||title"],[None,None,'track'])
 
@@ -229,11 +229,11 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
 
         ,treeSpec('Artist-Album/Track',curs
                 ,["artist||'-'||album","track||'-'||title"],[None,'track'])
-                
+
         ,treeSpec('a-z/artist/title-album-track',curs
                 ,["lower(substr(artist,0,1))"
                 ,"lower(artist)","title||'-'||album||'-'||track"])
-                
+
         ,treeSpec('Year/Artist-Album/Track',curs,
                 ["year","artist||'-'||album","track||'-'||title"]
                 ,[None,None,None,'track'])
@@ -241,9 +241,9 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
         ,treeSpec('Dirtitle/Artist/Album/Track',curs
             ,["dirtitle","artist","album","track||'-'||title"]
             ,[None,None,None,'track'])
-                
+
         ]
-        
+
         #treespec below:
         #INSANE,but this is what i like about foobar2000.
         #NOT YET POSSIBLE, "album_artist" tag is not in sql database.
@@ -253,7 +253,7 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
         #           "ifnull(album_artist,artist)"
         #           ,"album","track||'-'||nullif(artist,ifnull(album_artist,artist))||'-'||title"]
         #           ,[None,None,None,None,'track'])
-        
+
 
     def items(self, parent):
         return [ self.show_item ]
@@ -261,7 +261,7 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
     def actions(self):
         #todo: add random 10 etc..
         return []
-    
+
     def onchoose_main(self,arg=None, menuw=None):
         """
         main menu
@@ -286,17 +286,17 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
         data = arg[1]
         title = '-'.join(data)
 
-        mylistofitems =  []           
-        
+        mylistofitems =  []
+
         if len(tree.spec) -1 <> len(data): #non-tracks
             for tree_item,count in tree.execute(data):
-                mylistofitems.append(                 
+                mylistofitems.append(
                     menu.MenuItem("%s(%i)" % (tree_item ,count)
                     ,action=self.onchoose_node,arg=[tree,data + [tree_item]]))
         else: #tracks
             self.onchoose_last_node(tree,data,menuw)
             return
-        
+
         #should be impossible?
         if (len(mylistofitems) == 0):
             mylistofitems += [menu.MenuItem(_('No Objects found'),
@@ -307,7 +307,7 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
         rc.app(None)
         menuw.pushmenu(myobjectmenu)
         menuw.refresh()
-        
+
     def onchoose_last_node(self,tree,data,menuw):
         """
         last node in tree generates a playlist.
@@ -318,13 +318,13 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
         pl = playlist.Playlist(
                 name='-'.join(data)
                 ,playlist=[]
-                ,display_type='audiocd') 
-        
-        tracks = tree.execute(data)  #returns list of (desc,path,filename)       
+                ,display_type='audiocd')
+
+        tracks = tree.execute(data)  #returns list of (desc,path,filename)
 
 
         pop = ProgressBox(text=_('Generating playlist...'), full=len(tracks))
-        pop.show()                                           
+        pop.show()
         items = []
         i = 0
         for desc,path,filename in tracks:
@@ -332,22 +332,19 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
             item = audioitem.AudioItem(filepath,parent=pl)
             item.name = desc
             item.track = i
-            items.append( item)        
+            items.append( item)
             pop.tick()
             i+=1
         pop.destroy()
-        
-        pl.playlist = items 
-        
+
+        pl.playlist = items
+
         #note/question for core developers:
         #command below causes strange errors?
         #plugin.__plugin_type_list__ is empty??? but it's Not?
         #pl.browse(arg=None,menuw=menuw)
         #print 'LIST=',plugin.__plugin_type_list__['mimetype']
         #workaround: not all features of a real playlist :(
-        
+
         mymenu = menu.Menu(title, pl.playlist,item_types="audio")
         menuw.pushmenu(mymenu)
-
-
-

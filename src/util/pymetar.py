@@ -5,14 +5,14 @@
 # $Id$
 #
 # Modified by Jerome Alet
-# 
+#
 # Code contributed by:
-# Jerome Alet 
+# Jerome Alet
 # Davide Di Blasi
 # Adrian Holovaty
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Copyright (C) 2002  Tobias Klausmann
@@ -37,7 +37,7 @@
 # When reading this code you'll noctice that not everything is parsed
 # from the raw METAR info as supplied with the report. Before you start
 # flaming the authors, please read the FHM-1 spec and guess how hairy a
-# parser for that format would be. As a side note, the reference 
+# parser for that format would be. As a side note, the reference
 # implementation of the parser is written in... FORTRAN. Now stop crying.
 
 import fpformat
@@ -389,7 +389,7 @@ _WeatherConditions = {
 
 class WeatherReport:
     """Incorporates both the unparsed textual representation of the
-    weather report and the parsed values as soon as they are filled 
+    weather report and the parsed values as soon as they are filled
     in by ReportParser."""
 
     def _ClearAllFields(self):
@@ -555,9 +555,9 @@ class WeatherReport:
     def getCycle(self):
         """
         Return cycle value.
-        The cycle value is not the frequency or delay between 
-        observations but the "time slot" in which the observation was made. 
-        There are 24 cycle slots every day which usually last from N:45 to 
+        The cycle value is not the frequency or delay between
+        observations but the "time slot" in which the observation was made.
+        There are 24 cycle slots every day which usually last from N:45 to
         N+1:45. The cycle from 23:45 to 0:45 is cycle 0.
         """
         return self.cycle
@@ -565,19 +565,19 @@ class WeatherReport:
     def getStationPosition(self):
         """
         Return latitude, longitude and altitude above sea level of station
-        as a tuple. Some stations don't deliver altitude, for those, None 
+        as a tuple. Some stations don't deliver altitude, for those, None
         is returned as altitude.  The lat/longs are expressed as follows:
         xx-yyd
         where xx is degrees, yy minutes and d the direction.
-        Thus 51-14N means 51 degrees, 14 minutes north.  d may take the 
-        values N, S for latitues and W, E for longitudes. Latitude and 
-        Longitude may include seconds.  Altitude is always given as meters 
+        Thus 51-14N means 51 degrees, 14 minutes north.  d may take the
+        values N, S for latitues and W, E for longitudes. Latitude and
+        Longitude may include seconds.  Altitude is always given as meters
         above sea level, including a trailing M.
         Schipohl Int. Airport Amsterdam has, for example:
         ('52-18N', '004-46E', '-2M')
         Moenchengladbach (where I live):
         ('51-14N', '063-03E', None)
-        If you need lat and long as float values, look at 
+        If you need lat and long as float values, look at
         getStationPositionFloat() instead
         """
         # convert self.altitude to string for consistency
@@ -585,7 +585,7 @@ class WeatherReport:
 
     def getStationPositionFloat(self):
         """
-        Return latitude and longitude as float values in a 
+        Return latitude and longitude as float values in a
         tuple (lat,long,alt).
         """
         return (self.latf,self.longf,self.altitude)
@@ -636,7 +636,7 @@ class WeatherReport:
 
     def getTime(self):
         """
-        Return the time when the observation was made.  Note that this 
+        Return the time when the observation was made.  Note that this
         is *not* the time when the report was fetched by us
         Format:  YYYY.MM.DD HHMM UTC
         Example: 2002.04.01 1020 UTC
@@ -652,14 +652,14 @@ class WeatherReport:
 
     def getPixmap(self):
         """
-        Return a suggested pixmap name, without extension, depending on 
+        Return a suggested pixmap name, without extension, depending on
         current weather.
         """
         return self.pixmap
 
 
 class ReportParser:
-    """Parse raw METAR data from a WeatherReport object into actual 
+    """Parse raw METAR data from a WeatherReport object into actual
     values and return the object with the values filled in."""
 
     def __init__(self, MetarReport=None):
@@ -676,7 +676,7 @@ class ReportParser:
         """
         Extract cloud information. Return None or a tuple (sky type as a
         string of text and suggested pixmap name)
-        """   
+        """
         wcloud = self.match_WeatherPart(CLOUD_RE_STR)
         if wcloud is not None :
             stype = wcloud[:3]
@@ -695,9 +695,9 @@ class ReportParser:
 
     def extractSkyConditions(self) :
         """
-        Extract sky condition information from the encoded report. Return 
-        a tuple containing the description of the sky conditions as a 
-        string and a suggested pixmap name for an icon representing said 
+        Extract sky condition information from the encoded report. Return
+        a tuple containing the description of the sky conditions as a
+        string and a suggested pixmap name for an icon representing said
         sky condition.
         """
         wcond = self.match_WeatherPart(COND_RE_STR)
@@ -724,10 +724,10 @@ class ReportParser:
 
     def match_WeatherPart(self, regexp) :
         """
-        Return the matching part of the encoded Metar report.  
-        regexp: the regexp needed to extract this part.  
-        Return the first matching string or None.  
-        WARNING: Some Metar reports may contain several matching 
+        Return the matching part of the encoded Metar report.
+        regexp: the regexp needed to extract this part.
+        Return the first matching string or None.
+        WARNING: Some Metar reports may contain several matching
         strings, only the first one is taken into account!
         """
         if self.Report.code is not None :
@@ -739,8 +739,8 @@ class ReportParser:
 
     def parseLatLong(self, latlong):
         """
-        Parse Lat or Long in METAR notation into float values. N and E 
-        are +, S and W are -. Expects one positional string and returns 
+        Parse Lat or Long in METAR notation into float values. N and E
+        are +, S and W are -. Expects one positional string and returns
         one float value.
         """
         # I know, I could invert this if and put
@@ -778,7 +778,7 @@ class ReportParser:
         return f+i
 
     def ParseReport(self, MetarReport=None):
-        """Take report with raw info only and return it with in 
+        """Take report with raw info only and return it with in
         parsed values filled in. Note: This function edits the
         WeatherReport object you supply!"""
         if self.Report is None and MetarReport is None:
@@ -840,7 +840,7 @@ class ReportParser:
 
 
             # wind dir and speed
-            
+
             elif (header == "Wind"):
                 if (data.find("Calm")!=-1):
                     self.Report.windspeed=0.0
@@ -868,7 +868,7 @@ class ReportParser:
                         pass
 
             # dew point
-            
+
             elif (header == "Dew Point"):
                 f,i,c,i=data.split(None,3)
                 self.Report.dewpf=int(f)
@@ -876,19 +876,19 @@ class ReportParser:
                 self.Report.dewp=int(c[1:])
 
             # humidity
-             
+
             elif (header == "Relative Humidity"):
                 h,i=data.split("%",1)
                 self.Report.humid=int(h)
 
             # pressure
-            
+
             elif (header == "Pressure (altimeter)"):
                 p,r=data.split(" ",1)
                 self.Report.press=(float(p)*33.863886)
 
             # shot weather desc. ("rain", "mist", ...)
-            
+
             elif (header == "Weather"):
                 self.Report.weather=data
 
@@ -898,7 +898,7 @@ class ReportParser:
                 self.Report.sky=data
 
             # the encoded report itself
-            
+
             elif (header == "ob"):
                 self.Report.code=data.strip()
 
@@ -933,7 +933,7 @@ class ReportParser:
 
 class ReportFetcher:
     """Fetches a report from a given METAR id, optionally taking into
-       account a different baseurl and using environment var-specified 
+       account a different baseurl and using environment var-specified
        proxies."""
 
     def __init__(self, MetarStationCode=None, baseurl="http://weather.noaa.gov/pub/data/observations/metar/decoded/"):
@@ -964,11 +964,9 @@ class ReportFetcher:
 
         if fn.info().status:
             raise NetworkException, "Could not fetch METAR report"
-            
+
         report=WeatherReport(self.stationid)
         report.reporturl=self.reporturl
         report.fullreport=self.fullreport
 
         return report
-        
-

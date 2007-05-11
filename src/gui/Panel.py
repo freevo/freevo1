@@ -37,7 +37,7 @@ class Panel(Container):
     """
     """
 
-    def __init__(self, left=0, top=0, width=0, height=0, bg_color=None, 
+    def __init__(self, left=0, top=0, width=0, height=0, bg_color=None,
                  fg_color=None, border=None, bd_color=None, bd_width=None):
 
         Container.__init__(self, left, top, width, height, bg_color, fg_color,

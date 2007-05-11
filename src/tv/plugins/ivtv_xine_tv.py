@@ -23,7 +23,7 @@
 # -----------------------------------------------------------------------
 #
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -239,29 +239,29 @@ class IVTV_XINE_TV:
                 self.tuner.PrevChannel()
 
             else:
-               eventInput=s_event[6]
-               isNumeric=TRUE
-               try:
-                  newinput_value = int(eventInput)
-               except:
-                  #Protected against INPUT_UP, INPUT_DOWN, etc
-                  isNumeric=FALSE
-               if isNumeric:
-                  # tune explicit channel
-                  newinput_time = int(time.time())
-                  if (self.lastinput_value != None):
-                     # allow 2 seconds delay for multiple digit channels
-                     if (newinput_time - self.lastinput_time < 2):
-                        # this enables multiple (max 3) digit channel selection
-                        if (self.lastinput_value >= 100):
-                           self.lastinput_value = (self.lastinput_value % 100)
-                        newinput_value = self.lastinput_value * 10 + newinput_value
-                  self.lastinput_value = newinput_value
-                  self.lastinput_time = newinput_time
-                  self.tuner.TuneChannelByNumber(newinput_value)
-                  if newinput_value > 9:
-                     # cancel intermediate channels
-                     self.tuner.UnpushChannel()
+                eventInput=s_event[6]
+                isNumeric=TRUE
+                try:
+                    newinput_value = int(eventInput)
+                except:
+                    #Protected against INPUT_UP, INPUT_DOWN, etc
+                    isNumeric=FALSE
+                if isNumeric:
+                    # tune explicit channel
+                    newinput_time = int(time.time())
+                    if (self.lastinput_value != None):
+                        # allow 2 seconds delay for multiple digit channels
+                        if (newinput_time - self.lastinput_time < 2):
+                            # this enables multiple (max 3) digit channel selection
+                            if (self.lastinput_value >= 100):
+                                self.lastinput_value = (self.lastinput_value % 100)
+                            newinput_value = self.lastinput_value * 10 + newinput_value
+                    self.lastinput_value = newinput_value
+                    self.lastinput_time = newinput_time
+                    self.tuner.TuneChannelByNumber(newinput_value)
+                    if newinput_value > 9:
+                        # cancel intermediate channels
+                        self.tuner.UnpushChannel()
             return True
 
 
@@ -412,7 +412,7 @@ class TunerControl:
 
         if (next_channel == None):
 
-           _debug_("TunerControl: Cannot find tuner channel '%s' in the TV channel listing" % channel)
+            _debug_("TunerControl: Cannot find tuner channel '%s' in the TV channel listing" % channel)
 
         else:
 
@@ -516,7 +516,7 @@ class MixerControl:
 
                 self.volume = self.mixer.getMainVolume()
                 self.mixer.setMainVolume(0)
- 
+
             elif config.MAJOR_AUDIO_CTRL == "PCM":
 
                 self.volume = self.mixer.getPcmVolume()
@@ -691,9 +691,9 @@ class XineThread(threading.Thread):
 
                     if self.fbxine:
 
-                        # directfb needs xine to be killed
-                        # else the display is messed up
-                        # and freevo crashes
+                            # directfb needs xine to be killed
+                            # else the display is messed up
+                            # and freevo crashes
                         time.sleep(1.0)
                         _debug_("XineThread: Killing xine")
                         self.app._kill_()

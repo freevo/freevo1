@@ -11,12 +11,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -47,10 +47,10 @@ class ListItem(Button):
     bd_width  Border width Integer
     """
 
-    
-    def __init__(self, text=' ', value=None, width=75, height=None, 
+
+    def __init__(self, text=' ', value=None, width=75, height=None,
                  bg_color=None, fg_color=None, selected_bg_color=None,
-                 selected_fg_color=None, border=None, bd_color=None, 
+                 selected_fg_color=None, border=None, bd_color=None,
                  bd_width=None, h_margin=None):
 
         handler = None
@@ -90,6 +90,3 @@ class ListItem(Button):
         Container._draw(self)
 
         self.parent.region_surface.blit(self.surface, self.get_position())
-
-
-    

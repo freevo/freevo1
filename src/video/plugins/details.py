@@ -4,15 +4,15 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: 
+# Notes:
 #        You can also bind it to a key (in this case key 2):
 #        EVENTS['menu']['2'] = Event(MENU_CALL_ITEM_ACTION, arg='show_details')
 #
-# Todo:  
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@ import skin
 import item
 
 
-class PluginInterface(plugin.ItemPlugin):        
+class PluginInterface(plugin.ItemPlugin):
     """
     This plugin shows more details for a movie item.
 
@@ -75,7 +75,7 @@ class PluginInterface(plugin.ItemPlugin):
         plugins = plugin.get('item') + plugin.get('item_video')
 
         plugins.sort(lambda l, o: cmp(l._level, o._level))
-            
+
         for p in plugins:
             if p != self:
                 for a in p.actions(self.item):

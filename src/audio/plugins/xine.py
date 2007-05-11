@@ -11,7 +11,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -65,7 +65,7 @@ class Xine:
     """
     the main class to control xine
     """
-    
+
     def __init__(self):
         self.name         = 'xine'
         self.app_mode     = 'audio'
@@ -74,7 +74,7 @@ class Xine:
         if config.XINE_HAS_NO_LIRC:
             self.command = '%s --no-lirc' % self.command
 
-        
+
     def rate(self, item):
         """
         How good can this player play the file:
@@ -95,7 +95,7 @@ class Xine:
         self.item      = item
         self.playerGUI = playerGUI
         add_args       = []
-        
+
         if plugin.getbyname('MIXER'):
             plugin.getbyname('MIXER').reset()
 
@@ -103,10 +103,10 @@ class Xine:
         if url.startswith('cdda://'):
             url = url.replace('//', '/')
             add_args.append('cfg:/input.cdda_device:%s' % item.media.devicename)
-            
+
         command = self.command.split(' ') + add_args + [ url ]
         self.app = XineApp(command, self)
-    
+
 
     def is_playing(self):
         return self.app.isAlive()
@@ -114,14 +114,14 @@ class Xine:
 
     def refresh(self):
         self.playerGUI.refresh()
-        
+
 
     def stop(self):
         """
         Stop xine
         """
         self.app.stop('quit\n')
-            
+
 
     def eventhandler(self, event, menuw=None):
         """
@@ -164,7 +164,7 @@ class Xine:
         # nothing found? Try the eventhandler of the object who called us
         return self.item.eventhandler(event)
 
-        
+
 
 # ======================================================================
 
@@ -197,4 +197,3 @@ class XineApp(childapp.ChildApp2):
     def stderr_cb(self, line):
         if line.startswith('Unable to open MRL'):
             self.stop_reason = 1
-            

@@ -1130,4 +1130,3 @@ def relative_path(filename):
 
 def point_maker(matching):
     return '%s.%s' % (matching.groups()[0], matching.groups()[1])
-

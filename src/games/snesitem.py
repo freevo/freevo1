@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -227,7 +227,7 @@ class SnesItem(Item):
                 snesFile = open(unzipped, 'rb')
             else:
                 snesFile = open(file, 'rb')
-        
+
             (self['romName'],self['romHL'],self['romMem'],self['romROM'],self['romSRAM'],self['romCountry'],\
                 self['romLic'],self['romVer'],self['romICHK'],self['romCHK']) = self._read_rom(snesFile)
 
@@ -252,7 +252,7 @@ class SnesItem(Item):
         else:
             self.name = capwords(romName)
         self.parent = parent
-        
+
         # find image for this file
         shot = imgpath + '/' + \
                os.path.splitext(os.path.basename(file))[0] + ".png"
@@ -269,7 +269,7 @@ class SnesItem(Item):
 
         self.game_player = game.get_singleton()
         self['description'] = self['romCountryTxt'] + ' - ' + self['romLicTxt']
-        
+
     def _read_rom(self, snesFile):
         for offset in snesromFileOffset:
             snesFile.seek(offset)
@@ -320,7 +320,7 @@ class SnesItem(Item):
 
     def actions(self):
         return [ ( self.play, 'Play' ) ]
-    
+
 
     def play(self, arg=None, menuw=None):
         self.parent.current_item = self
@@ -350,4 +350,3 @@ class SnesItem(Item):
 
         # give the event to the next eventhandler in the list
         return Item.eventhandler(self, event, menuw)
-

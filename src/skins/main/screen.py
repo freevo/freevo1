@@ -6,7 +6,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -69,7 +69,7 @@ class Screen:
         self.s_alpha.fill((0,0,0,0))
 
 
-        
+
     def clear(self):
         self.update_bg      = None
         self.update_alpha   = []
@@ -98,7 +98,7 @@ class Screen:
             else:
                 self.update_bg = rect
 
-            
+
     def in_update(self, x1, y1, x2, y2, update_area, full=False):
         if full:
             for ux1, uy1, ux2, uy2 in update_area:
@@ -108,7 +108,7 @@ class Screen:
                    (not (x2 < ux1 or y2 < uy1 or x1 > ux2 or y1 > uy2)):
                     return False
             return True
-        
+
         for ux1, uy1, ux2, uy2 in update_area:
             if not (x2 < ux1 or y2 < uy1 or x1 > ux2 or y1 > uy2):
                 return True
@@ -134,7 +134,7 @@ class Screen:
 
         # if the background has some changes ...
         if self.update_bg:
-            ux1, uy1, ux2, uy2 = self.update_bg 
+            ux1, uy1, ux2, uy2 = self.update_bg
             for x1, y1, x2, y2, image in self.drawlist.bgimages:
                 if not (x2 < ux1 or y2 < uy1 or x1 > ux2 or y1 > uy2):
                     self.s_bg.blit(image, (ux1, uy1), (ux1-x1, uy1-y1, ux2-ux1, uy2-uy1))
@@ -169,7 +169,7 @@ class Screen:
         layer = self.s_screen
         for x0, y0, x1, y1 in update_area:
             layer.blit(self.s_content, (x0, y0), (x0, y0, x1-x0, y1-y0))
-        
+
         # if something changed redraw all content objects
         if update_area:
             ux1, uy1, ux2, uy2 = osd.width, osd.height, 0, 0
@@ -178,7 +178,7 @@ class Screen:
                 uy1 = min(uy1, a[1])
                 ux2 = max(ux2, a[2])
                 uy2 = max(uy2, a[3])
-                
+
             for x1, y1, x2, y2, image in self.drawlist.images:
                 if self.in_update(x1, y1, x2, y2, update_area):
                     layer.blit(image, (ux1, uy1), (ux1-x1, uy1-y1, ux2-ux1, uy2-uy1))
@@ -193,7 +193,7 @@ class Screen:
 
         if not update_area:
             return None
-        
+
         rect = (osd.width, osd.height, 0, 0)
         for u in update_area:
             osd.screenblit(layer, (u[0], u[1]), (u[0], u[1], u[2] - u[0], u[3] - u[1]))

@@ -53,8 +53,8 @@ class PluginInterface(plugin.ItemPlugin):
 
     def actions(self, item):
         for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
-                if config.VIDEO_PREFERED_PLAYER == p.name:
-                    self.player = p
+            if config.VIDEO_PREFERED_PLAYER == p.name:
+                self.player = p
 
         if item.type == 'video' and self.player.name == 'mplayer':
 
@@ -123,4 +123,3 @@ class PluginInterface(plugin.ItemPlugin):
         else:
             self.selected = 1
             self.chapter()
-

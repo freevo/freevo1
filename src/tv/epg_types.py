@@ -6,11 +6,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -83,7 +83,7 @@ class TvProgram:
         self.date       = None
 
         # Due to problems with Twisted's marmalade this should not be changed
-        # to a boolean type. 
+        # to a boolean type.
         self.scheduled  = 0
         self.overlap    = 0
         self.previouslyRecorded = 0
@@ -148,7 +148,7 @@ class TvProgram:
             if not var.startswith('_') and isinstance(getattr(ret, var), unicode):
                 setattr(ret, var, String(getattr(ret, var)))
         return ret
-    
+
 
     def str2utf(self):
         """
@@ -159,7 +159,7 @@ class TvProgram:
             if not var.startswith('_') and isinstance(getattr(ret, var), str):
                 setattr(ret, var, Unicode(getattr(ret, var)))
         return ret
-    
+
 
 class TvChannel:
     id = ''
@@ -173,12 +173,12 @@ class TvChannel:
     def __init__(self):
         self.programs = []
 
-        
+
     def Sort(self):
         # Sort the programs so that the earliest is first in the list
         f = lambda a, b: cmp(a.start, b.start)
         self.programs.sort(f)
-        
+
 
     def __str__(self):
         s = 'CHANNEL ID   %-20s' % self.id
@@ -191,8 +191,8 @@ class TvChannel:
             s += '     NO DATA\n'
 
         return s
-    
-        
+
+
 class TvGuide:
     chan_dict = None
     chan_list = None
@@ -213,7 +213,7 @@ class TvGuide:
             self.chan_dict[channel.id] = channel
             self.chan_list += [channel]
 
-        
+
     def AddProgram(self, program):
         # The channel must be present, or the program is
         # silently dropped
@@ -227,7 +227,7 @@ class TvGuide:
                     print 'wrong stop time: %s' % \
                           String(self.chan_dict[program.channel_id].programs[-1])
                 self.chan_dict[program.channel_id].programs[-1].stop = program.start
-                
+
             if len(p) and p[-1].start == p[-1].stop:
                 # Oops, something is broken here
                 self.chan_dict[program.channel_id].programs = p[:-1]
@@ -258,7 +258,7 @@ class TvGuide:
                 a = cache_last_time - time.time()
                 print 'epg: Returning cached results, valid for %1.1f secs.' % a
             return cache_last_result[:]  # Return a copy
-        
+
         channels = []
         for chan in self.chan_list:
             if chanids and (not chan.id in chanids):
@@ -288,15 +288,15 @@ class TvGuide:
         cache_last_result = channels[:] # Make a copy in case the caller modifies it
         if config.DEBUG > 1:
             print 'epg: Returning new results'
-            
+
         return channels
-            
-            
+
+
     def Sort(self):
         # Sort all channel programs in time order
         for chan in self.chan_list:
             chan.Sort()
-        
+
 
     def __str__(self):
         s = 'XML TV Guide\n'

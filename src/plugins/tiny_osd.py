@@ -14,7 +14,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -69,7 +69,7 @@ class PluginInterface(plugin.DaemonPlugin):
         # we have an idlebar
         self.idlebar_visible = 2
         self.poll_menu_only  = False
-        
+
 
     def draw(self, (type, object), renderer):
         """
@@ -123,7 +123,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 rc.app().im_self.redraw()
         return False
 
-    
+
     def poll(self):
         """
         clear the osd after 2 seconds

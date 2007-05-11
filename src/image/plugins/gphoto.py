@@ -7,11 +7,11 @@
 # Notes: you need gphoto and the python bindings to get this working
 #        add plugin.activate('image.gphoto') to your local_conf.py
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,7 @@ import plugin
 class PluginInterface(plugin.MainMenuPlugin):
 
     def detectCameras(self):
-        gplist = pygphoto.gp_detectcameras( ) 
+        gplist = pygphoto.gp_detectcameras( )
         count = pygphoto.gp_list_count( gplist )
         list = []
         while count > 0:
@@ -69,7 +69,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             m.name = c[0]
             items.append(m)
         return items
-    
+
 
 
 class CameraFile( Item ):
@@ -151,5 +151,5 @@ class CameraFolder( Item ):
             subFile = CameraFile( self, self.gCamera, parentPath, name )
             items.append( subFile )
         item_menu = menu.Menu(self.name, items)
-        menuw.pushmenu(item_menu)        
+        menuw.pushmenu(item_menu)
         return items

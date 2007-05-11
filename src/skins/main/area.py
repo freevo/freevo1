@@ -27,7 +27,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -91,7 +91,7 @@ class Skin_Area:
         self.name      = name
         self.screen    = screen.get_singleton()
         self.objects   = SkinObjects()
-        
+
         self.imagecache = util.objectcache.ObjectCache(imagecachesize,
                                                        desc='%s_image' % self.name)
 
@@ -112,7 +112,7 @@ class Skin_Area:
         there is no content in this area
         """
         pass
-    
+
 
     def draw(self, settings, obj, menu, display_style=0, widget_type='menu',
              force_redraw=False):
@@ -130,7 +130,7 @@ class Skin_Area:
             self.menu = menu
             if self.menu.force_skin_layout != -1:
                 self.display_style = self.menu.force_skin_layout
-            
+
             if self.menu.viewitem:
                 self.viewitem = self.menu.viewitem
             else:
@@ -153,7 +153,7 @@ class Skin_Area:
                 self.infoitem = obj
 
         self.redraw = force_redraw
-        
+
         area = self.area_val
         if area:
             visible = area.visible
@@ -161,12 +161,12 @@ class Skin_Area:
             visible = False
 
         self.redraw = self.init_vars(settings, item_type, widget_type)
-            
+
         if area and area != self.area_val:
             old_area = area
         else:
             old_area = None
-            
+
         area = self.area_val
 
         # maybe we are NOW invisible
@@ -185,7 +185,7 @@ class Skin_Area:
             self.__draw_background__()
         else:
             self.tmp_objects = SkinObjects()
-            
+
         # dependencies haven't changed, if no update needed: return
         if not self.redraw and not self.update_content_needed():
             self.screen.draw(self.objects)
@@ -297,7 +297,7 @@ class Skin_Area:
 
         if hasattr(menu, 'is_submenu'):
             menu.skin_default_has_images = True
-            
+
         for i in menu.choices:
             if i.image:
                 menu.skin_default_has_images = True
@@ -307,7 +307,7 @@ class Skin_Area:
                 menu.skin_default_has_description = True
             if menu.skin_default_has_images and menu.skin_default_has_description:
                 break
-            
+
         self.use_images      = menu.skin_default_has_images
         self.use_description = menu.skin_default_has_description
 
@@ -326,7 +326,7 @@ class Skin_Area:
                     # directory with few items and folder:
                     self.use_text_view = False
                     return
-                    
+
                 if image and i.image != image:
                     menu.skin_force_text_view = False
                     self.use_text_view        = False
@@ -344,17 +344,17 @@ class Skin_Area:
                 if config.SKIN_FORCE_TEXTVIEW_STYLE == 1 and folder > 3 and not i.media:
                     self.use_text_view = False
                     return
-                    
+
             if image and i.image != image:
                 menu.skin_force_text_view = False
                 self.use_text_view        = False
                 return
             image = i.image
-            
+
         menu.skin_force_text_view = True
         self.use_text_view        = True
 
-    
+
     def calc_geometry(self, object, copy_object=0):
         """
         calculate the real values of the object (e.g. content) based
@@ -373,7 +373,7 @@ class Skin_Area:
 
         object.x += self.area_val.x
         object.y += self.area_val.y
-        
+
         if not object.width:
             object.width = self.area_val.width
 
@@ -388,7 +388,7 @@ class Skin_Area:
 
         return object
 
-        
+
     def get_item_rectangle(self, rectangle, item_w, item_h):
         """
         calculates the values for a rectangle to fit item_w and item_h
@@ -427,7 +427,7 @@ class Skin_Area:
         # return needed width and height to fit original width and height
         # and the rectangle attributes
         return max(item_w, r.width), max(item_h, r.height), r
-    
+
 
     def init_vars(self, settings, display_type, widget_type = 'menu'):
         """
@@ -460,7 +460,7 @@ class Skin_Area:
 
             if area[0] and (not self.use_text_view):
                 area = area[0]
-            elif area[1]: 
+            elif area[1]:
                 area = area[1]
             else:
                 print 'want to fall back, but no text view defined'
@@ -495,7 +495,7 @@ class Skin_Area:
         if (not self.area_val) or area != self.area_val:
             self.area_val = area
             redraw = True
-            
+
         if not area.layout:
             return redraw
 
@@ -508,7 +508,7 @@ class Skin_Area:
         area.r = (area.x, area.y, area.width, area.height)
 
         return redraw
-        
+
 
     def __draw_background__(self):
         """
@@ -530,13 +530,13 @@ class Skin_Area:
                     pass
         except:
             pass
-        
+
         for bg in self.layout.background:
             bg = copy.copy(bg)
             if isinstance(bg, xml_skin.Image) and bg.visible:
                 self.calc_geometry(bg)
                 imagefile = ''
-                
+
                 # if this is the real background image, ignore the
                 # OVERSCAN to fill the whole screen
                 if bg.label == 'background':
@@ -556,7 +556,7 @@ class Skin_Area:
                 # set to 'background' to be added to that image list
                 if bg.label != 'top':
                     bg.label = 'background'
-                    
+
                 if imagefile:
                     cname = '%s-%s-%s' % (imagefile, bg.width, bg.height)
                     image = self.imagecache[cname]
@@ -579,12 +579,12 @@ class Skin_Area:
                         self.imagecache[cname] = image
                     if image:
                         self.drawimage(image, bg)
-                            
+
             elif isinstance(bg, xml_skin.Rectangle):
                 self.calc_geometry(bg)
                 self.drawroundbox(bg.x, bg.y, bg.width, bg.height, bg)
 
-            
+
 
 
     # functions for the area to draw stuff on the screen
@@ -606,7 +606,7 @@ class Skin_Area:
                                                  rect[1], rect[2], rect[3] ))
 
 
-            
+
     def drawstring(self, text, font, content, x=-1, y=-1, width=None, height=None,
                    align_h = None, align_v = None, mode='hard', ellipses='...',
                    dim=True):
@@ -639,7 +639,7 @@ class Skin_Area:
             align_h = content.align
         if not align_h:
             align_h = 'left'
-                
+
         if not align_v and content:
             align_v = content.valign
         if not align_v:
@@ -668,7 +668,7 @@ class Skin_Area:
         else:
             w = val.width
             h = val.height
-            
+
         cname = '%s-%s-%s' % (image, w, h)
         cimage = self.imagecache[cname]
         if not cimage:
@@ -686,7 +686,7 @@ class Skin_Area:
             self.imagecache[cname] = cimage
         return cimage
 
-        
+
     def drawimage(self, image, val, background=False):
         """
         draws an image ... or better stores the information about this call
@@ -704,7 +704,7 @@ class Skin_Area:
 
         if not image:
             return 0,0
-        
+
         if isinstance(val, tuple):
             if background:
                 o = self.tmp_objects.bgimages
@@ -721,11 +721,11 @@ class Skin_Area:
                 return val.width, val.height
         except:
             pass
-        
+
         self.tmp_objects.images.append((val.x, val.y, val.x + val.width,
                                         val.y + val.height, image))
         return val.width, val.height
-        
+
 
 
     # compatibility functions, will be removed

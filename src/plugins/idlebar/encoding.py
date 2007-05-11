@@ -22,7 +22,7 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc., 
+# with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
@@ -94,7 +94,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.state     = 'noserver'
         self.laststate = None
         self.font      = self.skin.get_font('detachbar')
-        if self.font == skin.get_font('default'):     
+        if self.font == skin.get_font('default'):
             self.font = skin.get_font('info value')
 
 
@@ -303,12 +303,12 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_('self:bx=%s, by=%s, boxh=%s, boxw=%s, border=%s, padding=%s' % \
             (self.bx, self.by, self.boxh, self.boxw, self.boxborder, self.padding), 2)
         if self.idlebar:
-            osd.drawroundbox(self.bx, self.by, self.boxw, self.boxh, 
+            osd.drawroundbox(self.bx, self.by, self.boxw, self.boxh,
                 (0xffffffffL, self.boxborder, 0x40ffff00L, 0))
-                #  A R G B                      A R G B 
+                #  A R G B                      A R G B
                 #  background border_width      border     border_radius
         else:
-            osd.drawroundbox(self.bx, self.by, self.boxw, self.boxh, 
+            osd.drawroundbox(self.bx, self.by, self.boxw, self.boxh,
                 (0xf0ffffffL, self.boxborder, 0xb0000000L, self.boxborder))
 
         _debug_('self:tx=%s, ty=%s, texth=%s, textw=%s' % (self.tx, self.ty, self.texth, self.textw), 2)
@@ -321,7 +321,7 @@ class PluginInterface(plugin.DaemonPlugin):
             w, h = encbox.get_size()
             encbox.blit(encbar, (3, 3), (0, 0, (w * self.percent), h))
             x = (self.textw - w) / 2
-            #osd.drawroundbox(self.tx+x-2, y-2, w+4, h+4, 
+            #osd.drawroundbox(self.tx+x-2, y-2, w+4, h+4,
             #    (0xf0ffffffL, 2, 0xb000ffffL, 0))
             osd.drawimage(encbox, (self.tx+x, y, -1, -1) )[0]
             y += h

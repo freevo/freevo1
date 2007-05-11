@@ -299,13 +299,13 @@ class FavoriteItem(Item):
         self.title = fav.title
         self.fav_action = fav_action
         if hasattr(fav,'allowDuplicates'):
-           self.allowDuplicates = fav.allowDuplicates
+            self.allowDuplicates = fav.allowDuplicates
         else:
-           self.allowDuplicates = 1
+            self.allowDuplicates = 1
         if hasattr(fav,'onlyNew'):
-           self.onlyNew = fav.onlyNew
+            self.onlyNew = fav.onlyNew
         else:
-           self.onlyNew = 0
+            self.onlyNew = 0
 
         self.week_days = (_('Mon'), _('Tue'), _('Wed'), _('Thu'),
                           _('Fri'), _('Sat'), _('Sun'))
@@ -356,12 +356,12 @@ class FavoriteItem(Item):
                                     action=self.mod_time))
 
         if config.DUPLICATE_DETECTION:
-           items.append(menu.MenuItem(_('Modify duplicate flag'),
-                                       action=self.mod_dup))
+            items.append(menu.MenuItem(_('Modify duplicate flag'),
+                                        action=self.mod_dup))
 
         if config.ONLY_NEW_DETECTION:
-           items.append(menu.MenuItem(_('Modify episodes flag'),
-                                        action=self.mod_new))
+            items.append(menu.MenuItem(_('Modify episodes flag'),
+                                         action=self.mod_new))
 
         # XXX: priorities aren't quite supported yet
         if 0:
@@ -545,18 +545,18 @@ class FavoriteItem(Item):
                 self.fav.mod = val
 
         elif prop == 'dup':
-             if val == 'True':
+            if val == 'True':
                 self.allowDuplicates=TRUE
                 self.fav.allowDuplicates=TRUE
-             else:
+            else:
                 self.allowDuplicates=FALSE
                 self.fav.allowDuplicates=FALSE
 
         elif prop == 'new':
-             if val == 'True':
+            if val == 'True':
                 self.onlyNew=TRUE
                 self.fav.onlyNew=TRUE
-             else:
+            else:
                 self.onlyNew=FALSE
                 self.fav.onlyNew=FALSE
 

@@ -11,12 +11,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -33,7 +33,7 @@ import config
 
 from GUIObject  import *
 from Container  import *
-from Label      import * 
+from Label      import *
 
 
 class Button(Container):
@@ -52,8 +52,8 @@ class Button(Container):
     bd_color  Border color (Color)
     bd_width  Border width Integer
     """
-    def __init__(self, text=' ', handler=None, left=None, top=None, 
-                 width=70, height=None, bg_color=None, fg_color=None, 
+    def __init__(self, text=' ', handler=None, left=None, top=None,
+                 width=70, height=None, bg_color=None, fg_color=None,
                  selected_bg_color=None, selected_fg_color=None,
                  border=-1, bd_color=None, bd_width=None):
 
@@ -76,11 +76,11 @@ class Button(Container):
             self.set_text('')
 
         button_normal      = self.content_layout.types['button']
-        font_percent       = button_normal.font.size * 100 / default_button_height 
+        font_percent       = button_normal.font.size * 100 / default_button_height
         self.info_normal   = button_normal, int(font_percent * self.height / 120)
-        
+
         button_selected    = self.content_layout.types['button selected']
-        font_percent       = button_selected.font.size * 100 / default_button_height 
+        font_percent       = button_selected.font.size * 100 / default_button_height
         self.info_selected = button_selected, int(font_percent * self.height / 120)
 
         self.fg_color  = fg_color or Color(button_normal.rectangle.color)
@@ -88,7 +88,7 @@ class Button(Container):
 
         self.selected_fg_color = selected_fg_color or Color(button_selected.rectangle.color)
         self.selected_bg_color = selected_bg_color or Color(button_selected.rectangle.bgcolor)
-    
+
         # now check the height, maybe the font is too large
         self.height = max(self.height, button_normal.height + 2 * self.v_margin,
                           button_selected.font.height + 2 * self.v_margin)
@@ -106,7 +106,7 @@ class Button(Container):
         else:
             i = self.info_normal
         self.label.set_font(i[0].font.name, i[1], Color(i[0].font.color))
-        
+
 
     def toggle_selected(self):
         self.selected = not self.selected
@@ -133,11 +133,11 @@ class Button(Container):
                                   0, self.surface)
         Container._draw(self)
 
-    
+
     def get_text(self):
         return self.text
 
-        
+
     def set_text(self, text):
         if type(text) in StringTypes:
             self.text = text

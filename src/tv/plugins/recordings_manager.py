@@ -932,4 +932,3 @@ def get_status_sort_order(watched, keep):
     elif watched:
         order = orders[STATUS_ORDER_WATCHED]
     return order
-

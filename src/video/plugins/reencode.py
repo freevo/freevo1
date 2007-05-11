@@ -135,7 +135,7 @@ class PluginInterface(plugin.ItemPlugin):
     def encoding_profile_menu(self, menuw=None, arg=None):
         _debug_('encoding_profile_menu(self, menuw=%r, arg=%r)' % (menuw, arg), 1)
         menu_items = []
-        menu_items += [ menu.MenuItem(_('Start Encoding'), self.create_job, self.profile) ] 
+        menu_items += [ menu.MenuItem(_('Start Encoding'), self.create_job, self.profile) ]
         menu_items += [ menu.MenuItem(_('Select Encoding Profile'), action=self.select_profile) ]
         menu_items += [ menu.MenuItem(_('Modify Container'), action=self.mod_container) ]
         menu_items += [ menu.MenuItem(_('Modify Resolution'), action=self.mod_resolution) ]
@@ -153,9 +153,9 @@ class PluginInterface(plugin.ItemPlugin):
     def select_profile(self, arg=None, menuw=None):
         _debug_('select_profile(self, arg=None, menuw=None)', 1)
         menu_items = []
-        menu_items += [ menu.MenuItem(_('Xvid Low Quality'), action=self.select_encoding_profile, arg='xvid_low') ] 
-        menu_items += [ menu.MenuItem(_('Xvid High Quality'), action=self.select_encoding_profile, arg='xvid_high') ] 
-        menu_items += [ menu.MenuItem(_('iPod'), action=self.select_encoding_profile, arg='ipod') ] 
+        menu_items += [ menu.MenuItem(_('Xvid Low Quality'), action=self.select_encoding_profile, arg='xvid_low') ]
+        menu_items += [ menu.MenuItem(_('Xvid High Quality'), action=self.select_encoding_profile, arg='xvid_high') ]
+        menu_items += [ menu.MenuItem(_('iPod'), action=self.select_encoding_profile, arg='ipod') ]
         encoding_menu = menu.Menu(_('Select Profile'), menu_items, item_types = 'video encoding menu')
         encoding_menu.infoitem = self
         menuw.pushmenu(encoding_menu)

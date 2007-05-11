@@ -30,7 +30,7 @@
 A color handling object.
 """
 __date__    = "$Date$"
-__version__ = "$Revision$" 
+__version__ = "$Revision$"
 __author__  = """Thomas Malt <thomas@malt.no>"""
 
 import osd
@@ -42,7 +42,7 @@ from exceptions import *
 class Color:
     """
     General Color utility class for Freevo.
-    
+
     I like SDL's way of handling color, but we want to be able to do
     both Freevo old way and SDL, 'so why not make a class?' I said to
     myself.
@@ -93,7 +93,7 @@ class Color:
             self.green = color[1]
             self.blue  = color[2]
             self.alpha = color[3]
-            
+
         else:
             raise BadColorException, type(color)
 
@@ -102,25 +102,25 @@ class Color:
         Get level of red in Color
         """
         return self.red
-    
+
     def get_green(self):
         """
         Get level of green in Color
         """
         return self.green
-    
+
     def get_blue(self):
         """
         Get level of blue in Color
         """
         return self.blue
-    
+
     def get_alpha(self):
         """
         Get level of alpha in Color
         """
         return self.alpha
-    
+
     def set_red(self, val):
         """
         Set level of red in Color
@@ -129,7 +129,7 @@ class Color:
             self.red = val
         else:
             raise BadColorException, val
-        
+
     def set_green(self, val):
         """
         Set level of green in Color
@@ -160,7 +160,7 @@ class Color:
             self.alpha = val
         else:
             raise BadColorException, val
-    
+
     def trgb_to_sdl(self, color):
         """
         Translates TRGB color integer to SDL color list (R,G,B,A)
@@ -170,7 +170,7 @@ class Color:
         """
         if not type(color) == IntType and not type(color) == LongType:
             raise BadColorException, type(color)
-        
+
         return self.osd._sdlcol(color)
 
     def sdl_to_trgb(self, color):
@@ -183,8 +183,6 @@ class Color:
         if(not type(color) == ListType and
            not type(color) == TupleType):
             raise BadColorException, type(color)
-        
+
         return (((255-color[3]) << 24) + (color[0] << 16) +
                 (color[1] << 8) + (color[2] << 0))
-
-

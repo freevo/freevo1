@@ -7,11 +7,11 @@
 # Notes:
 #    To activate, put the following line in local_conf.py:
 #       plugin.activate('mpd', level=45)
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -58,20 +58,20 @@ def mpdstatus():
     ms = execMPC("mpc status","")
     status = "stop"
     if ms.find("[paused]") <> -1:
-           status = "Paused"
+        status = "Paused"
     if ms.find("[playing]") <> -1:
-           status = "Playing"
+        status = "Playing"
     return status
- 
+
 class PluginInterface(plugin.MainMenuPlugin):
     """
     To activate, put the following lines in local_conf.py:
-    plugin.activate('mpd', level=45) 
+    plugin.activate('mpd', level=45)
     """
     # make an init func that creates the cache dir if it don't exist
     def __init__(self):
         plugin.MainMenuPlugin.__init__(self)
-        
+
     def config(self):
         return [('mpd plugin',"what is this " ,  "Config" )]
 
@@ -88,7 +88,7 @@ class MpdItem(Item):
         self.error        = 0
         self.location = "mpd"
         self.name = "MPD"
-        self.last_update = 0 
+        self.last_update = 0
 
     def start_detailed_interface(self, arg=None, menuw=None):
         print "starting detailed interface !"
@@ -156,7 +156,7 @@ class MpdDetailHandler:
         print self.mpd.name
         self.title    = self.mpd.name
         self.subtitle = self.subtitles[0]
-        
+
         # Fire up splashscreen and load the plugins
         skin.draw('mpd', self)
 
@@ -184,7 +184,7 @@ class MpdDetailHandler:
             execMPC("mpc prev","")
             skin.draw( 'mpd', self )
             return True
-        
+
         return False
 
 class MpdBaseScreen(skin.Area):
@@ -203,7 +203,7 @@ class MpdBaseScreen(skin.Area):
 
         # set the multiplier to be used in all screen drawing
         self.xmult = float( osd.width  - 2*config.OSD_OVERSCAN_X ) / 800
-        self.ymult = float( osd.height - 2*config.OSD_OVERSCAN_Y ) / 600  
+        self.ymult = float( osd.height - 2*config.OSD_OVERSCAN_Y ) / 600
 
         self.update_functions = (self.update_info, self.update_info,
         self.update_info, self.update_info)
@@ -214,36 +214,36 @@ class MpdBaseScreen(skin.Area):
         print "update Info"
         text      = _("Song - ")
         value     = execMPC("mpc --format %title% status","")
-        x_col1   = self.content.x + (50  * self.xmult) 
-        x_col2   = self.content.x + (200 * self.xmult) 
-        y_start  = self.content.y + (60  * self.xmult) 
+        x_col1   = self.content.x + (50  * self.xmult)
+        x_col2   = self.content.x + (200 * self.xmult)
+        y_start  = self.content.y + (60  * self.xmult)
         y_inc    = 40 * self.ymult
-        self.write_text(text,   self.key_font,   self.content,  
+        self.write_text(text,   self.key_font,   self.content,
         x=x_col1,  y=y_start, height=-1, width=x_col2-x_col1, align_h='right')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
         x=x_col2,  y=y_start, height=-1, align_h='left')
 
         text      = _("Artist - ")
         value     = execMPC("mpc --format %artist% status","")
-        self.write_text(text,   self.key_font,   self.content,  
+        self.write_text(text,   self.key_font,   self.content,
         x=x_col1,  y=y_start+y_inc, height=-1, width=x_col2-x_col1 , align_h='right')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
         x=x_col2,  y=y_start+y_inc, height=-1, align_h='left')
 
         text      = _("Album - ")
         value     = execMPC("mpc --format %album%","")
         y_start   += y_inc
-        self.write_text(text,   self.key_font,   self.content,  
+        self.write_text(text,   self.key_font,   self.content,
         x=x_col1,  y=y_start+y_inc, height=-1, width=x_col2-x_col1 ,align_h='right')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
         x=x_col2,  y=y_start+y_inc, height=-1, align_h='left')
-  
+
         text      = _("Status - ")
         value     = execMPC("mpc status","")
         y_start   += y_inc
-        self.write_text(text,   self.key_font,   self.content,  
+        self.write_text(text,   self.key_font,   self.content,
         x=x_col1,  y=y_start+y_inc, height=-1, width=x_col2-x_col1 ,align_h='right')
-        self.write_text(value,  self.val_font,   self.content,  
+        self.write_text(value,  self.val_font,   self.content,
         x=x_col2,  y=y_start+y_inc, height=100, align_h='left')
 
         # draw current condition image
@@ -255,7 +255,7 @@ class MpdBaseScreen(skin.Area):
         y_start = self.content.y + (250*self.ymult)
         y_start = y_start + 100
         value = mpdstatus()
-        self.write_text(value, self.big_font,   self.content,  
+        self.write_text(value, self.big_font,   self.content,
         x=x_start, y=y_start,
         width=200*self.xmult, height=-1, align_h='center')
 

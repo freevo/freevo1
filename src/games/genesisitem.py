@@ -9,7 +9,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -102,7 +102,7 @@ class GenesisItem(Item):
         elif os.path.isfile(os.path.splitext(file)[0] + ".png"):
             self.image = os.path.splitext(file)[0] + ".png"
 
-        command = ['--prio=%s' % config.GAMES_NICE, cmd] 
+        command = ['--prio=%s' % config.GAMES_NICE, cmd]
         command.extend(args.split())
         command.append(file)
 
@@ -124,7 +124,7 @@ class GenesisItem(Item):
 
     def actions(self):
         return [ ( self.play, 'Play' ) ]
-    
+
 
     def play(self, arg=None, menuw=None):
         self.parent.current_item = self
@@ -154,4 +154,3 @@ class GenesisItem(Item):
 
         # give the event to the next eventhandler in the list
         return Item.eventhandler(self, event, menuw)
-

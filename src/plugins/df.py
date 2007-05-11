@@ -8,11 +8,11 @@
 # Notes: but plugin.activate('df') in your local_conf.py. You can see the
 #        disc usage by pressing ENTER on a directory item
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@ class PluginInterface(plugin.ItemPlugin):
 
     to activate it, put this in your local_conf.py:
 
-    plugin.activate('df') 
+    plugin.activate('df')
 
     to see the disk usage go to any directory listing and, press ENTER ('e' key or
     key it maps to on your remote) and you will see the disk usage under the Browse
@@ -52,7 +52,7 @@ class PluginInterface(plugin.ItemPlugin):
     def __init__(self):
         plugin.ItemPlugin.__init__(self)
 
-    def actions(self, item): 
+    def actions(self, item):
         if item.type == 'dir' and hasattr(item, 'dir'):
             freespace = util.freespace(item.dir)
             totalspace = util.totalspace(item.dir)

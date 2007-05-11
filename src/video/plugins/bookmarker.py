@@ -15,12 +15,12 @@
 #        menu to start were the plackback stopped.
 #
 # Todo:
-#     Currently this only works for files without subitems or variant. 
+#     Currently this only works for files without subitems or variant.
 #
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -61,11 +61,11 @@ class PluginInterface(plugin.ItemPlugin):
         if item['autobookmark_resume']:
             items.append((self.resume, _('Resume playback')))
         if item.type == 'dir' or item.type == 'playlist':
-            return items    
+            return items
         if item.mode == 'file' and not item.variants and \
                not item.subitems and os.path.exists(util.get_bookmarkfile(item.filename)):
             items.append(( self.bookmark_menu, _('Bookmarks')))
-            
+
         return items
 
 
@@ -83,7 +83,7 @@ class PluginInterface(plugin.ItemPlugin):
             menuw.back_one_menu()
         self.item.play(menuw=menuw, arg=arg)
 
-        
+
     def bookmark_menu(self,arg=None, menuw=None):
         """
         Bookmark list
@@ -93,7 +93,7 @@ class PluginInterface(plugin.ItemPlugin):
         for line in util.readfile(bookmarkfile):
             file = copy.copy(self.item)
             file.info = {}
-            
+
             sec = int(line)
             hour = int(sec/3600)
             min = int((sec-(hour*3600))/60)
@@ -103,7 +103,7 @@ class PluginInterface(plugin.ItemPlugin):
             file.name = Unicode(_('Jump to %s') % (time))
             if hasattr(file, 'tv_show'):
                 del file.tv_show
-            
+
             if not self.item.mplayer_options:
                 self.item.mplayer_options = ''
             file.mplayer_options = str(self.item.mplayer_options) +  ' -ss %s' % time
@@ -114,7 +114,7 @@ class PluginInterface(plugin.ItemPlugin):
             menuw.pushmenu(moviemenu)
         return
 
-        
+
     def eventhandler(self, item, event, menuw):
         if event in (STOP, USER_END):
             if item.mode == 'file' and not item.variants and \
@@ -122,7 +122,7 @@ class PluginInterface(plugin.ItemPlugin):
                 item.store_info('autobookmark_resume', item.elapsed)
             else:
                 _debug_('auto-bookmark not supported for this item')
-                
+
         if event == PLAY_END:
             item.delete_info('autobookmark_resume')
 
@@ -130,8 +130,8 @@ class PluginInterface(plugin.ItemPlugin):
         # Bookmark the current time into a file
         if event == STORE_BOOKMARK:
             bookmarkfile = util.get_bookmarkfile(item.filename)
-            
-            handle = open(bookmarkfile,'a+') 
+
+            handle = open(bookmarkfile,'a+')
             handle.write(str(item.elapsed))
             handle.write('\n')
             handle.close()
@@ -139,4 +139,3 @@ class PluginInterface(plugin.ItemPlugin):
             return True
 
         return False
-    

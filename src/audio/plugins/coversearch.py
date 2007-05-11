@@ -23,7 +23,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -81,16 +81,16 @@ class PluginInterface(plugin.ItemPlugin):
     To activate this plugin, put the following in your local_conf.py.
 
     If you have the key in ~/.amazonkey
-    plugin.activate( 'audio.coversearch' ) 
+    plugin.activate( 'audio.coversearch' )
 
     Or this one if you want to pass the key to the plugin directly:
-    plugin.activate( 'audio.coversearch', args=('YOUR_KEY',) ) 
+    plugin.activate( 'audio.coversearch', args=('YOUR_KEY',) )
     """
     def __init__(self, license=None):
         if not config.USE_NETWORK:
             self.reason = 'no network'
             return
-        
+
         if license:
             amazon.setLicense(license)
         try:
@@ -102,7 +102,7 @@ class PluginInterface(plugin.ItemPlugin):
                   'developer/application.html'
             self.reason = 'no amazon key'
             return
-            
+
         plugin.ItemPlugin.__init__(self)
 
 
@@ -125,7 +125,7 @@ class PluginInterface(plugin.ItemPlugin):
         and vfs.isfile(os.path.join(os.path.join(os.path.dirname(item.filename),
                                                 'cover.jpg'))):
             return []
-        
+
         if item.type in ('audio', 'audiocd', 'dir'):
             if config.DEBUG > 0:
                 print 'coversearch'
@@ -159,7 +159,7 @@ class PluginInterface(plugin.ItemPlugin):
                                  "Artist and Album (if it's a mp3 or ogg) or " \
                                  "Title (if it's a cd track) to be able to search. "  \
                                  "So you need a file with a ID3 tag (mp3) or an Ogg Info. "  \
-                                 "Maybe you must fix this file (%s) tag?" )) % item.filename 
+                                 "Maybe you must fix this file (%s) tag?" )) % item.filename
             except KeyError:
                 if config.DEBUG > 1:
                     print String(_( "WARNING" )) + ": " +\
@@ -214,7 +214,7 @@ class PluginInterface(plugin.ItemPlugin):
             return
 
         items = []
-        
+
         # Check if they're valid before presenting the list to the user
         # Grrr I wish Amazon wouldn't return an empty gif (807b)
 
@@ -266,7 +266,7 @@ class PluginInterface(plugin.ItemPlugin):
         if len(items) == 1:
             self.cover_create(arg=items[0].arg, menuw=menuw)
             return
-        if items: 
+        if items:
             moviemenu = menu.Menu( _( 'Cover Search Results' ), items)
             menuw.pushmenu(moviemenu)
             return
@@ -283,10 +283,10 @@ class PluginInterface(plugin.ItemPlugin):
         create cover file for the item
         """
         import directory
-        
+
         box = PopupBox(text= _( 'getting data...' ) )
         box.show()
-        
+
         #filename = os.path.splitext(self.item.filename)[0]
         if self.item.type == 'audiocd':
             filename = '%s/disc/metadata/%s.jpg' % (config.OVERLAY_DIR,
@@ -328,7 +328,7 @@ class PluginInterface(plugin.ItemPlugin):
         # cover and we called it with an event
         if menuw.menustack[-1].selected == self.item:
             back = 0
-            
+
         # update the directory
         if directory.dirwatcher:
             directory.dirwatcher.scan()

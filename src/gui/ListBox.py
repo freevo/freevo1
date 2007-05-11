@@ -11,12 +11,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -35,7 +35,7 @@ import osd
 from GUIObject      import *
 from RegionScroller import *
 from Button         import *
-from ListItem       import * 
+from ListItem       import *
 
 
 class ListBox(RegionScroller):
@@ -56,10 +56,10 @@ class ListBox(RegionScroller):
     show_v_scrollbar Integer
     """
 
-    
-    def __init__(self, items=None, left=None, top=None, width=100, height=200, 
+
+    def __init__(self, items=None, left=None, top=None, width=100, height=200,
                  bg_color=None, fg_color=None, selected_bg_color=None,
-                 selected_fg_color=None, border=None, bd_color=None, 
+                 selected_fg_color=None, border=None, bd_color=None,
                  bd_width=None, show_h_scrollbar=None, show_v_scrollbar=None):
 
         self.items             = items
@@ -74,7 +74,7 @@ class ListBox(RegionScroller):
 
         dummy_surface = osd.get_singleton().Surface((1,1), 0, 32)
 
-        RegionScroller.__init__(self, dummy_surface, left, top, width, 
+        RegionScroller.__init__(self, dummy_surface, left, top, width,
                                 height, bg_color, fg_color,
                                 border, bd_color, bd_width,
                                 self.show_h_scrollbar, self.show_v_scrollbar)
@@ -145,7 +145,7 @@ class ListBox(RegionScroller):
 
     def set_items(self, items):
         self.items = items
-       
+
         for item in self.items:
             self.add_child(item)
 
@@ -163,12 +163,12 @@ class ListBox(RegionScroller):
         if not item:
             if not text:
                 text = ' '
-            if not value: 
+            if not value:
                 value = text
 
-            item = ListItem(text, value, self.width, self.items_height, 
-                            self.bg_color, self.fg_color, 
-                            self.selected_bg_color, self.selected_fg_color, 
+            item = ListItem(text, value, self.width, self.items_height,
+                            self.bg_color, self.fg_color,
+                            self.selected_bg_color, self.selected_fg_color,
                             h_margin=h_margin)
             if item.border:
                 item.border.thickness = 1
@@ -240,5 +240,3 @@ class ListBox(RegionScroller):
             return True
         else:
             return self.parent.eventhandler(event)
-
-

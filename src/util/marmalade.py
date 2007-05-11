@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Twisted, the Framework of Your Internet
@@ -55,7 +55,7 @@ import copy_reg
 
 #for some reason, __builtins__ == __builtin__.__dict__ in the context where this is used.
 #Can someone tell me why?
-import __builtin__ 
+import __builtin__
 
 
 def instance(klass, d):
@@ -285,7 +285,7 @@ class DOMJellier:
         if objType is types.UnicodeType:
             obj = String(obj)
             objType = str
-            
+
         #immutable (We don't care if these have multiple refs)
         if objType is types.NoneType:
             node = self.document.createElement("None")

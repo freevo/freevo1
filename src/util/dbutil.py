@@ -5,11 +5,11 @@
 # $Id: dbutil.py,v #
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@ import config
 # helper functions
 
 def tracknum(track):
-    """ 
+    """
     Extract the track numbers from a mmpython result
     """
 
@@ -46,7 +46,7 @@ def tracknum(track):
         trackno = inti(track.split('/')[0])
         if track.find('/') != -1:
             trackof = inti(track.split('/')[1])
-    return (trackno, trackof)    
+    return (trackno, trackof)
 
 
 def escape(sql):
@@ -62,7 +62,7 @@ def escape(sql):
 def inti(a):
     ret = 0
     if a:
-        try: 
+        try:
             ret = int(a)
         except ValueError:
             traceback.print_exc()
@@ -97,12 +97,12 @@ class MetaDatabase:
         if close:
             # run a single query then close
             result = self.cursor.fetchall()
-            self.db.commit()           
+            self.db.commit()
             self.db.close()
             return result
         else:
             return self.cursor.fetchall()
-        
+
     def close(self):
         self.db.commit()
         self.db.close()
@@ -119,5 +119,3 @@ class MetaDatabase:
         if not self.cursor.fetchone():
             return None
         return table
-    
-

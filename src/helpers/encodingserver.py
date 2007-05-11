@@ -83,7 +83,7 @@ class EncodingServer(xmlrpc.XMLRPC):
 
     def __init__(self, debug=False):
         self.jobs = {}
-        
+
         #setup a logger
         #if debug: #when debugging, output everything to stdout using the root logging class
         #    self.log = logging
@@ -93,11 +93,11 @@ class EncodingServer(xmlrpc.XMLRPC):
         #    FHandler = logging.FileHandler("encodingserver.log")
         #    FHandler.setFormatter(logging.Formatter("%(asctime)s:%(levelname)s %(message)s"))
         #    self.log.addHandler(FHandler)
-        
+
         self.queue = EncodingQueue(log, DEBUG)
-        
+
         _debug_("EncodingServer started...", 0)
-        
+
     def xmlrpc_echotest(self, blah):
         _debug_("xmlrpc_echotest(self, blah)", 3)
         return (True, 'EncodingServer::echotest: %s' % blah)
@@ -113,81 +113,81 @@ class EncodingServer(xmlrpc.XMLRPC):
         idnr = int((time.time() / random.random()) / 100)
         _debug_("idnr=%s" % (idnr), 2)
         self.jobs[idnr] = EncodingJob(source, output, friendlyname, idnr, chapter)
-        
+
         #wait for the analyzing to end
         while not self.jobs[idnr].finishedanalyze:
             time.sleep(0.1)
-        
+
         _debug_("Initialized job %s (idnr : %s)" % (friendlyname,idnr), 0)
-        
+
         return (True, idnr)
-        
+
     def xmlrpc_getContainerCAP(self, idnr):
         _debug_("xmlrpc_getContainerCAP(self, idnr)", 3)
         return (True, jam(self.jobs[idnr].getContainerList()))
-       
+
     def xmlrpc_setContainer(self, idnr, container):
         _debug_("xmlrpc_setContainer(self, idnr, container)", 3)
         status = self.jobs[idnr].setContainer(container)
-        
+
         if not status:
             return (True, "EncodingServer::setContainer: OK")
         else:
             return (False, "EncodingServer::setContainer: %s" % status)
-            
+
     def xmlrpc_getVideoCodecCAP(self, idnr):
         _debug_("xmlrpc_getVideoCodecCAP(self, idnr)", 3)
         return (True, jam(self.jobs[idnr].getVideoCodecList()))
-        
+
     def xmlrpc_setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0):
         _debug_("xmlrpc_setVideoCodec(self, %s, %s, %s, %s %s)" % \
             (idnr, vcodec, tgtsize, multipass, vbitrate), 3)
         #safety checks
         if not (vcodec or (tgtsize and vbitrate)):
             return (False, 'EncodingServer::setVideoCodec:  no codec or target size given')
-            
+
         status = self.jobs[idnr].setVideoCodec(vcodec, tgtsize, multipass, vbitrate)
-        
+
         if not status:
             return (True, "EncodingServer::setVideoCodec: OK")
         else:
-            return (False, "EncodingServer::setVideoCodec: %s" % status)   
-           
+            return (False, "EncodingServer::setVideoCodec: %s" % status)
+
     def xmlrpc_getAudioCodecCAP(self, idnr):
         _debug_("xmlrpc_getAudioCodecCAP(self, idnr)", 3)
         return (True, jam(self.jobs[idnr].getAudioCodecList()))
-        
+
     def xmlrpc_setAudioCodec(self, idnr, acodec, abrate):
         _debug_("xmlrpc_setAudioCodec(self, idnr, acodec, abrate)", 3)
         #safety checks
         if not (acodec or abrate):
             return (False, 'EncodingServer::setAudioCodec:  no codec or bitrate given')
-            
+
         status = self.jobs[idnr].setAudioCodec(acodec, abrate)
-        
+
         if not status:
             return (True, "EncodingServer::setAudioCodec: OK")
         else:
             return (False, "EncodingServer::setAudioCodec: %s" % status)
-            
+
     def xmlrpc_getVideoFiltersCAP(self, idnr):
         _debug_("xmlrpc_getVideoFiltersCAP(self, idnr)", 3)
         return (True, jam(self.jobs[idnr].getVideoFiltersList()))
-        
+
 
     def xmlrpc_setVideoFilters(self, idnr, filters):
         _debug_("xmlrpc_setVideoFilters(self, idnr, filters)", 3)
         #safety checks
         if not filters:
             return (False, 'EncodingServer::setAudioCodec:  no codec or bitrate given')
-            
+
         status = self.jobs[idnr].setVideoFilters(unjam(filters))
-        
+
         if not status:
             return (True, "EncodingServer::setVideoFilters: OK")
         else:
             return (False, "EncodingServer::setVideoFilters: %s" % status)
-        
+
     def xmlrpc_queueIt(self, idnr, now=False):
         _debug_("xmlrpc_queueIt(self, idnr, now=False)", 3)
         self.queue.addEncodingJob(self.jobs[idnr])
@@ -196,30 +196,30 @@ class EncodingServer(xmlrpc.XMLRPC):
         if now:
             self.queue.startQueue()
         return (True, "EncodingServer::queueIt: OK")
-        
+
     def xmlrpc_getProgress(self):
         _debug_("xmlrpc_getProgress(self)", 3)
         prog = self.queue.getProgress()
         if type(prog) is str:
             return (False, "EncodingServer::getProgress: %s" % prog)
         return (True, jam(prog))
-        
+
     def xmlrpc_startQueue(self):
         _debug_("xmlrpc_startQueue(self)", 3)
         self.queue.startQueue()
         return (True, "EncodingServer::startqueue: OK")
-        
+
     def xmlrpc_listJobs(self):
         _debug_("xmlrpc_listJobs(self)", 3)
         jlist = self.queue.listJobs()
         return (True, jam(jlist))
 
-        
+
 def main():
     global DEBUG
     tmppath = tempfile.mkdtemp(prefix = 'encodeserver')
     os.chdir(tmppath)
-    
+
     app = Application("EncodingServer")
     if len(sys.argv) >= 2 and sys.argv[1] == "debug":
         es = EncodingServer(True)
@@ -233,7 +233,7 @@ def main():
     else:
         app.listenTCP(config.ENCODINGSERVER_PORT, server.Site(es))
     app.run(save=0)
-    
+
 
 if __name__ == '__main__':
     import traceback

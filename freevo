@@ -127,12 +127,12 @@ def get_python(check_freevo):
         return None, None
     return None
 
-                
+
 def getpid(name, arg):
     """
     get pid of running 'name'
     """
-    for fname in ('/var/run/' + name  + '-%s.pid' % os.getuid(), 
+    for fname in ('/var/run/' + name  + '-%s.pid' % os.getuid(),
                   '/tmp/' + name + '-%s.pid' % os.getuid()):
         if os.path.isfile(fname):
             f = open(fname)
@@ -160,7 +160,7 @@ def getpid(name, arg):
 
             if '-OO' in proc_arg:
                 proc_arg.remove('-OO')
-                
+
             if proc_arg and ((arg[0].find('runapp') == -1 and \
                 len(proc_arg)>2 and arg[1] != proc_arg[1]) or \
                 len(proc_arg)>3 and arg[2] != proc_arg[2]):
@@ -331,7 +331,7 @@ if arg == 'stop':
     if not stop(name, python + proc):
         print 'freevo not running'
     sys.exit(0)
-    
+
 elif arg == 'start':
     # start freevo in background
     sys.argv = [ sys.argv[0] ]
@@ -394,7 +394,7 @@ elif arg and name == 'freevo' and not (arg in ['-force-fs', '-trace', '-doc']):
 else:
     # arg for freevo
     proc += sys.argv[1:]
-    
+
 
 if name != 'freevo':
     proc = [ os.path.join(freevo_python, 'helpers', name + '.py') ] +  sys.argv[1:]

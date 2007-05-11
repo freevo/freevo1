@@ -11,12 +11,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -55,17 +55,17 @@ class RegionScroller(Container):
     show_v_scrollbar Integer
     """
 
-    
-    def __init__(self, region_surface=None, left=None, top=None, width=300, 
-                 height=160, bg_color=None, fg_color=None, border=None, 
-                 bd_color=None, bd_width=None, show_h_scrollbar=None, 
+
+    def __init__(self, region_surface=None, left=None, top=None, width=300,
+                 height=160, bg_color=None, fg_color=None, border=None,
+                 bd_color=None, bd_width=None, show_h_scrollbar=None,
                  show_v_scrollbar=None):
 
         self.show_h_scrollbar = show_h_scrollbar
         self.show_v_scrollbar = show_v_scrollbar
 
         Container.__init__(self, 'widget', left, top, width, height, bg_color,
-                           fg_color, border=border, bd_color=bd_color, 
+                           fg_color, border=border, bd_color=bd_color,
                            bd_width=bd_width)
 
         self.internal_h_align = Align.NONE
@@ -106,13 +106,13 @@ class RegionScroller(Container):
 
     def get_view_percent(self, orientation):
         if orientation == 'vertical':
-            a = self.v_y * 100 / self.s_h 
-            b = self.height * 100 / self.s_h 
-            c = (self.s_h - (self.v_y + self.height)) * 100 / self.s_h 
+            a = self.v_y * 100 / self.s_h
+            b = self.height * 100 / self.s_h
+            c = (self.s_h - (self.v_y + self.height)) * 100 / self.s_h
         else:
-            a = self.v_x * 100 / self.s_w 
-            b = self.width * 100 / self.s_w 
-            c = (self.s_w - (self.v_x + self.width)) * 100 / self.s_w 
+            a = self.v_x * 100 / self.s_w
+            b = self.width * 100 / self.s_w
+            c = (self.s_w - (self.v_x + self.width)) * 100 / self.s_w
 
         rem = 100 - a - b - c
         b = b + rem
@@ -211,7 +211,7 @@ class RegionScroller(Container):
             surface.blit(self.surface, self.get_position())
         else:
             self.blit_parent()
-    
+
 
     def set_position(self, left, top):
         """
@@ -226,7 +226,7 @@ class RegionScroller(Container):
             # if self.h_scrollbar: self.h_scrollbar.calculate_position()
         # if self.show_v_scrollbar:
             # if self.v_scrollbar: self.v_scrollbar.calculate_position()
-        
+
 
     def eventhandler(self, event):
 
@@ -236,5 +236,3 @@ class RegionScroller(Container):
             return
         else:
             return self.parent.eventhandler(event)
-
-

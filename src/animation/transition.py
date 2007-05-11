@@ -6,11 +6,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@ class Transition(BaseAnimation):
     """
     image        = None
     finished     = False  # flag for finished animation
-    
+
     surf_blend1  = None
     surf_blend2  = None
 
@@ -211,4 +211,3 @@ class Transition(BaseAnimation):
 
         if self.index_alpha > len(self.blend_alphas) - 1:
             self.finished = True
-

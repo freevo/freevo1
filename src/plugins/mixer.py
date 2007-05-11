@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -54,14 +54,14 @@ class PluginInterface(plugin.DaemonPlugin):
     SOUND_MIXER_WRITE_RECSRC = 0xc0044dff
     SOUND_MIXER_LINE = 7
     SOUND_MASK_LINE = 64
-    
+
     def __init__(self):
         self.mixfd = None
         self.muted = 0
-        
+
         # If you're using ALSA or something and you don't set the mixer,
         # why are we trying to open it?
-        if config.DEV_MIXER:    
+        if config.DEV_MIXER:
             try:
                 self.mixfd = open(config.DEV_MIXER, 'r')
             except IOError:
@@ -86,7 +86,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 except IOError:
                     _debug_('IOError for ioctl')
                     pass
-                
+
         if config.MAJOR_AUDIO_CTRL == 'VOL':
             self.setMainVolume(config.DEFAULT_VOLUME)
             if config.CONTROL_ALL_AUDIO:
@@ -121,7 +121,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.incPcmVolume(event.arg)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             return True
-        
+
         elif event == MIXER_VOLDOWN:
             if( config.MAJOR_AUDIO_CTRL == 'VOL' ):
                 self.decMainVolume(event.arg)
@@ -157,7 +157,7 @@ class PluginInterface(plugin.DaemonPlugin):
             except IOError:
                 _debug_('IOError for ioctl')
                 pass
-            
+
     def getMuted(self):
         return(self.muted)
 
@@ -179,7 +179,7 @@ class PluginInterface(plugin.DaemonPlugin):
             return self.mainVolume
         elif config.MAJOR_AUDIO_CTRL == 'PCM':
             return self.pcmVolume
-        
+
     def getMainVolume(self):
         return(self.mainVolume)
 
@@ -201,7 +201,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def getPcmVolume(self):
         return self.pcmVolume
-    
+
     def setPcmVolume(self, volume):
         self.pcmVolume = volume
         self._setVolume(self.SOUND_MIXER_WRITE_PCM, volume)
@@ -217,7 +217,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.pcmVolume < 0:
             self.pcmVolume = 0
         self._setVolume( self.SOUND_MIXER_WRITE_PCM, self.pcmVolume )
-    
+
     def setLineinVolume(self, volume):
         if config.CONTROL_ALL_AUDIO:
             self.lineinVolume = volume
@@ -225,7 +225,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def getLineinVolume(self):
         return self.lineinVolume
-       
+
     def setMicVolume(self, volume):
         if config.CONTROL_ALL_AUDIO:
             self.micVolume = volume
@@ -235,7 +235,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """For Igain (input from TV etc) on emu10k cards"""
         if config.CONTROL_ALL_AUDIO:
             if volume > 100:
-                volume = 100 
+                volume = 100
             elif volume < 0:
                 volume = 0
             self.igainVolume = volume
@@ -249,17 +249,17 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.igainVolume < 0:
             self.igainVolume = 0
         os.system('aumix -i-%s > /dev/null 2>&1 &' % step)
-        
+
     def incIgainVolume(self, step=5):
         self.igainVolume += step
         if self.igainVolume > 100:
             self.igainVolume = 100
         os.system('aumix -i+%s > /dev/null 2>&1 &' % step)
-        
+
     def setOgainVolume(self, volume):
         """For Ogain on SB Live Cards"""
         if volume > 100:
-            volume = 100 
+            volume = 100
         elif volume < 0:
             volume = 0
         self.ogainVolume = volume

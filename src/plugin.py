@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes: This file handles the Freevo plugin interface
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -61,7 +61,7 @@ class Plugin:
         for var, val, desc in self.config():
             if not hasattr(config, var):
                 setattr(config, var, val)
-            
+
     def config(self):
         """
         return a list of config variables this plugin needs to be set in
@@ -83,7 +83,7 @@ class Plugin:
         except:
             self._ = lambda m: m
 
-        
+
 class MainMenuPlugin(Plugin):
     """
     Plugin class for plugins to add something to the main menu
@@ -108,7 +108,7 @@ class ItemPlugin(Plugin):
     now (each item type must support it directly). If the function returns
     True, the event won't be passed to other eventhandlers and also not to
     the item itself.
-    
+
     def eventhandler(self, item, event, menuw=None):
     """
     def __init__(self):
@@ -122,7 +122,7 @@ class ItemPlugin(Plugin):
         """
         return []
 
-    
+
 class DaemonPlugin(Plugin):
     """
     Plugin class for daemon objects who will be activate in the
@@ -154,7 +154,7 @@ class DaemonPlugin(Plugin):
             return
         self.real_poll()
 
-        
+
 class MimetypePlugin(Plugin):
     """
     Plugin class for mimetypes handled in a directory/playlist.
@@ -173,7 +173,7 @@ class MimetypePlugin(Plugin):
         """
         return []
 
-    
+
     def get(self, parent, files):
         """
         return a list of items based on the files
@@ -186,7 +186,7 @@ class MimetypePlugin(Plugin):
         return how many items will be build on files
         """
         return len(self.find_matches(files, self.suffix()))
-            
+
 
     def dirinfo(self, diritem):
         """
@@ -201,7 +201,7 @@ class MimetypePlugin(Plugin):
         """
         return []
 
-    
+
 #
 # Some plugin names to avoid typos
 #
@@ -261,7 +261,7 @@ def remove(id):
                 return
 
     # remove by name
-    r = [] 
+    r = []
     for p in copy.copy(__all_plugins__):
         if p[0] == id:
             __all_plugins__.remove(p)
@@ -289,8 +289,8 @@ def is_active(name, arg=None):
             if arg == p[3]:
                 return p
     return False
-                
-    
+
+
 def init(callback = None):
     """
     load and init all the plugins
@@ -298,7 +298,7 @@ def init(callback = None):
     global __all_plugins__
     global __initialized__
     global __plugin_basedir__
-    
+
     __initialized__ = True
     __plugin_basedir__ = os.environ['FREEVO_PYTHON']
 
@@ -310,7 +310,7 @@ def init(callback = None):
         __load_plugin__(name, type, level, args, number)
 
     # sort plugins in extra function (exec doesn't like to be
-    # in the same function is 'lambda' 
+    # in the same function is 'lambda'
     __sort_plugins__()
 
 
@@ -322,7 +322,7 @@ def init_special_plugin(id):
     global __all_plugins__
     global __initialized__
     global __plugin_basedir__
-    
+
     __plugin_basedir__ = os.environ['FREEVO_PYTHON']
 
     try:
@@ -335,11 +335,11 @@ def init_special_plugin(id):
             __load_plugin__(name, type, level, args, number)
             del __all_plugins__[i]
             break
-        
+
     # sort plugins in extra function (exec doesn't like to be
-    # in the same function is 'lambda' 
+    # in the same function is 'lambda'
     __sort_plugins__()
-    
+
 
 def shutdown(plugin_name=None):
     """
@@ -351,7 +351,7 @@ def shutdown(plugin_name=None):
                 _debug_('shutdown plugin %s' % p.plugin_name, 2)
                 p.shutdown()
 
- 
+
 def get(type):
     """
     get the plugin list 'type'
@@ -377,7 +377,7 @@ def mimetype(display_type):
             ret.append(p)
     return ret
 
-        
+
 def getall():
     """
     return a list of all plugins
@@ -434,7 +434,7 @@ def get_callbacks(name):
         __callbacks__[name] = []
     return __callbacks__[name]
 
-    
+
 def event(name, arg=None):
     """
     create plugin event
@@ -477,7 +477,7 @@ def __add_to_ptl__(type, object):
     if not __plugin_type_list__.has_key(type):
         __plugin_type_list__[type] = []
     __plugin_type_list__[type].append(object)
-    
+
 
 
 def __find_plugin_file__(filename):
@@ -511,14 +511,14 @@ def __find_plugin_file__(filename):
 
     return None, None
 
-        
+
 
 def __load_plugin__(name, type, level, args, number):
     """
     load the plugin and add it to the lists
     """
     import rc
-    
+
     global __plugin_type_list__
     global __named_plugins__
     global __plugin_basedir__
@@ -547,7 +547,7 @@ def __load_plugin__(name, type, level, args, number):
             print 'can\'t locate plugin %s' % name
             print 'start \'freevo plugins -l\' to get a list of plugins'
             return
-        
+
     try:
         if not isinstance(name, Plugin):
             if DEBUG:
@@ -574,7 +574,7 @@ def __load_plugin__(name, type, level, args, number):
                 return
         else:
             p = name
-            
+
         p._number = number
         p._level = level
 
@@ -592,7 +592,7 @@ def __load_plugin__(name, type, level, args, number):
         if p._type:
             __add_to_ptl__(p._type, p)
 
-        else: 
+        else:
             if isinstance(p, DaemonPlugin):
                 __add_to_ptl__('daemon', p)
                 for type in ('poll', 'draw', 'eventhandler', 'shutdown' ):
@@ -620,7 +620,7 @@ def __load_plugin__(name, type, level, args, number):
             if hasattr(p, 'shutdown'):
                 # register shutdown handler
                 rc.register(p.shutdown, True, rc.SHUTDOWN)
-                
+
         if p.plugin_name:
             __named_plugins__[p.plugin_name] = p
 
@@ -638,4 +638,3 @@ def __sort_plugins__():
     global __plugin_type_list__
     for key in __plugin_type_list__:
         __plugin_type_list__[key].sort(lambda l, o: cmp(l._level, o._level))
-

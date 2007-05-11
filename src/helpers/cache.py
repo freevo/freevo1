@@ -408,27 +408,27 @@ if __name__ == "__main__":
     if len(sys.argv)>1 and sys.argv[1] == '--thumbnail':
         import util.videothumb
         if len(sys.argv)>2:
-          if sys.argv[2] == '--recursive':
-              if len(sys.argv)>3:
-                dirname = os.path.abspath(sys.argv[3])
-                files = util.match_files_recursively(dirname, config.VIDEO_SUFFIX)
-              else:
-                print_error_and_exit()
+            if sys.argv[2] == '--recursive':
+                if len(sys.argv)>3:
+                    dirname = os.path.abspath(sys.argv[3])
+                    files = util.match_files_recursively(dirname, config.VIDEO_SUFFIX)
+                else:
+                    print_error_and_exit()
 
-          elif os.path.isdir(sys.argv[2]):
-              dirname = os.path.abspath(sys.argv[2])
-              files = util.match_files(dirname, config.VIDEO_SUFFIX)
-          else:
-              files = [ os.path.abspath(sys.argv[2]) ]
+            elif os.path.isdir(sys.argv[2]):
+                dirname = os.path.abspath(sys.argv[2])
+                files = util.match_files(dirname, config.VIDEO_SUFFIX)
+            else:
+                files = [ os.path.abspath(sys.argv[2]) ]
 
-          print 'creating video thumbnails....'
-          for filename in files:
-              print '  %4d/%-4d %s' % (files.index(filename)+1, len(files),
-                                     os.path.basename(filename))
-              util.videothumb.snapshot(filename, update=False)
-          print
+            print 'creating video thumbnails....'
+            for filename in files:
+                print '  %4d/%-4d %s' % (files.index(filename)+1, len(files),
+                                       os.path.basename(filename))
+                util.videothumb.snapshot(filename, update=False)
+            print
         else:
-          print_error_and_exit()
+            print_error_and_exit()
 
         sys.exit(0)
 

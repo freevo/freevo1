@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -49,11 +49,11 @@ def pygamesurface_imlib2_scale(image, newsize):
     buf = pygame.image.tostring(image, 'RGBA')
     im2 = imlib2.new(image.get_size(), buf)
     scaled_im2 = im2.scale(newsize)
-    
+
     buf = str(scaled_im2.get_raw_data('BGRA'))
 
     return pygame.image.frombuffer(buf, newsize, 'RGBA')
-    
+
 
 def format_image(settings, item, width, height, force=0, anamorphic=0):
     try:
@@ -64,16 +64,16 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
         except:
             type = item.type
 
-    
+
     cname = '%s-%s-%s-%s-%s-%s-%s' % (settings.icon_dir, item.image, type,
                                       item.type, width, height, force)
 
     if hasattr(item, 'rotation') and item['rotation']:
         cname = '%s-%s' % (cname, item['rotation'])
-            
+
     if item.media and item.media.item == item:
         cname = '%s-%s' % (cname, item.media)
-        
+
     cimage = format_imagecache[cname]
 
     if cimage:
@@ -81,7 +81,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
 
     image     = None
     imagefile = None
-    
+
     if item.image:
         if isinstance(item.image, imlib2.Image):
             image = osd.loadbitmap(item.image)
@@ -111,7 +111,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
 
         if image and item['rotation']:
             image = pygame.transform.rotate(image, item['rotation'])
-            
+
     if not image:
         if not force:
             return None, 0, 0
@@ -119,7 +119,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
         if hasattr(item, 'media') and item.media and item.media.item == item and \
            os.path.isfile('%s/mimetypes/%s.png' % (settings.icon_dir, item.media.type)):
             imagefile = '%s/mimetypes/%s.png' % (settings.icon_dir, item.media.type)
-            
+
 
         elif item.type == 'dir':
             if os.path.isfile('%s/mimetypes/folder_%s.png' % \
@@ -128,7 +128,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
                             (settings.icon_dir, item.display_type)
             else:
                 imagefile = '%s/mimetypes/folder.png' % settings.icon_dir
-    
+
         elif item.type == 'playlist':
             if item.parent and os.path.isfile('%s/mimetypes/playlist_%s.png' % \
                                               (settings.icon_dir, item.parent.display_type)):
@@ -145,7 +145,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
 
         elif os.path.isfile('%s/mimetypes/unknown.png' % settings.icon_dir):
             imagefile = '%s/mimetypes/unknown.png' % settings.icon_dir
-            
+
         if not imagefile:
             return None, 0, 0
 
@@ -162,7 +162,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
 
     if type and len(type) > 4:
         type = type[:5]
-        
+
     i_w, i_h = image.get_size()
     if anamorphic:
         i_w  = i_w * 0.75
@@ -173,12 +173,12 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
         m = min(height, width)
         i_w = m
         i_h = m
-        
+
     elif type == 'video' and aspect > 1.3 and aspect < 1.6:
         # video cover, set aspect 7:5
         i_w = 5
         i_h = 7
-        
+
     if int(float(width * i_h) / i_w) > height:
         width =  int(float(height * i_w) / i_h)
     else:
@@ -188,7 +188,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
 
     format_imagecache[cname] = cimage, width, height
     return cimage, width, height
-    
+
 
 def text_or_icon(settings, string, x, width, font):
     l = string.split('_')
@@ -198,7 +198,7 @@ def text_or_icon(settings, string, x, width, font):
         height = font.h
         image = os.path.join(settings.icon_dir, l[2].lower())
         if os.path.isfile(image + '.jpg'):
-            image += '.jpg' 
+            image += '.jpg'
         if os.path.isfile(image + '.png'):
             image += '.png'
         else:
@@ -218,7 +218,7 @@ def text_or_icon(settings, string, x, width, font):
                 width =  int(float(height * i_w) / i_h)
             else:
                 height = int(float(width * i_h) / i_w)
-        
+
             cimage = pygamesurface_imlib2_scale(image, (width, height))
             cimage.set_alpha(cimage.get_alpha(), RLEACCEL)
             x_mod = 0

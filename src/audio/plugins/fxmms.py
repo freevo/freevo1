@@ -9,7 +9,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -70,7 +70,7 @@ class PluginInterface(plugin.Plugin):
     default of /usr/bin/xmms.
     There are two ways to get this plugin to work. The first is to remove the
     audio.mplayer plugin and then activate this plugin. This is not reccomended
-    since xmms supports many less formats than mplayer. but here is how to 
+    since xmms supports many less formats than mplayer. but here is how to
     activate it in local_conf.py:
     plugin.remove('audio.mplayer')
     plugin.activate('audio.fxmms')
@@ -78,7 +78,7 @@ class PluginInterface(plugin.Plugin):
     then activate the plugin in local_conf.py:
     plugin.activate('audio.fxmms')
     AUDIO_PREFERED_PLAYER = 'fxmms'
-    
+
     """
     def __init__(self):
         # create the plugin object
@@ -97,7 +97,7 @@ class FXMMS:
     """
     the main class to control xmms
     """
-    
+
     def __init__(self):
         self.name     = 'fxmms'
         self.app_mode = 'audio'
@@ -135,9 +135,9 @@ class FXMMS:
             filename = item.url
         else:
             filename = item.filename
-            
+
         self.playerGUI = playerGUI
-        
+
         # Do we care if the file streamed over the network?
 
         if not os.path.isfile(filename) and filename.find('://') == -1:
@@ -146,8 +146,8 @@ class FXMMS:
         # need to convert filename for cds to /mnt/cdrom/Track??.cda
         # the /mnt/cdrom is supposed to be where you mount your cd
         if filename.startswith('cdda://'):
-            filename = '%s/Track%.2d.cda' % (item.parent.media.mountdir, int(item.url[7:])) 
-            
+            filename = '%s/Track%.2d.cda' % (item.parent.media.mountdir, int(item.url[7:]))
+
         if plugin.getbyname('MIXER'):
             plugin.getbyname('MIXER').reset()
 
@@ -165,12 +165,12 @@ class FXMMS:
         else:
             xmms.playlist_clear()
             xmms.enqueue_and_play([(filename)])
-        
+
         # restart OSD update thread if neccessary
         if (not self.is_alive):
             thread.start_new_thread(self.__update_thread, ())
-        
-        return None 
+
+        return None
 
     def hide_windows(self):
         #hide windows
@@ -184,7 +184,7 @@ class FXMMS:
         Stop xmms
         """
         xmms.stop()
-        
+
 
     def is_playing(self):
         return xmms.is_playing()
@@ -195,22 +195,22 @@ class FXMMS:
         """
         self.is_alive = True
         self.idle = 0
-        
+
         while self.is_alive:
             if xmms.is_main_win():
                 self.hide_windows()
-        
+
             if self.is_playing():
-                
+
                 # update OSD while playing
                 while self.is_playing():
                     self.refresh()
                     time.sleep(0.3)  # is this too short???
-                
+
                 # trigger end of song event if song ended naturally
                 if not (self.last_event in (PLAYLIST_NEXT, STOP)):
                     self.eventhandler(PLAY_END)
-                
+
                 # reset idle time out
                 self.idle = 0
 
@@ -244,26 +244,26 @@ class FXMMS:
             self.stop()
             if self.playerGUI.try_next_player():
                 return True
-        
+
         if event in ( STOP, PLAY_END, USER_END ):
             self.playerGUI.stop()
             return self.item.eventhandler(event)
-            
+
         elif event == PAUSE or event == PLAY:
             xmms.pause()
             return True
-            
+
         elif event == SEEK:
             curtime = xmms.get_output_time()
             nexttime = curtime + (event.arg * 1000)
-            
+
             # trim down seek time if it past end of the song
             while nexttime > xmms.get_playlist_time(xmms.get_playlist_pos()):
                 event.arg/=2
                 nexttime = curtime + (event.arg * 1000)
             xmms.jump_to_time(nexttime)
             return True
-            
+
         else:
             # everything else: give event to the items eventhandler
             return self.item.eventhandler(event)

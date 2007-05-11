@@ -65,7 +65,7 @@ class PluginInterface(plugin.ItemPlugin):
 
     def actions(self, item):
         '''Determines if an action applies to the menu
-        
+
         Normally, the only way to record bilingual audio is with a recent
         version of the ivtv driver (>=0.8.2) the ideas is that you can select the
         left, right or both channels and this information is passed to the player
@@ -97,5 +97,3 @@ class PluginInterface(plugin.ItemPlugin):
         _debug_('language_selection(self, menuw=%r, arg=%r)' % (menuw, arg), 2)
         arg[0].selected_language = arg[1]
         menuw.back_one_menu()
-
-

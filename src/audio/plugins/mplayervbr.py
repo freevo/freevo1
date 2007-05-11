@@ -14,11 +14,11 @@
 #        plugin.remove('audio.mplayer')
 #        plugin.activate('audio.mplayervbr')
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -67,7 +67,7 @@ class MPlayer:
     """
     the main class to control mplayer
     """
-    
+
     def __init__(self):
         self.name     = 'mplayer'
         self.app_mode = 'audio'
@@ -87,7 +87,7 @@ class MPlayer:
             return 1
         return 2
 
-        
+
     def get_demuxer(self, filename):
         DEMUXER_MP3 = 17
         DEMUXER_OGG = 18
@@ -111,10 +111,10 @@ class MPlayer:
 
         if filename and not os.path.isfile(filename):
             return _('%s\nnot found!') % item.url
-            
+
         if not filename:
             filename = item.url
-            
+
         # Build the MPlayer command
         mpl = '--prio=%s %s -slave %s' % (config.MPLAYER_NICE,
                                           config.MPLAYER_CMD,
@@ -131,7 +131,7 @@ class MPlayer:
         is_playlist = False
         if hasattr(item, 'is_playlist') and item.is_playlist:
             is_playlist = True
-            
+
         if item.network_play and ( str(filename).endswith('m3u') or str(filename).endswith('pls')):
             is_playlist = True
 
@@ -140,35 +140,35 @@ class MPlayer:
 
         if hasattr(item, 'reconnect') and item.reconnect:
             extra_opts += ' -loop 0'
-            
+
         command = '%s -vo null -ao %s %s %s' % (mpl, config.MPLAYER_AO_DEV, demux,
                                                 extra_opts)
 
         if command.find('-playlist') > 0:
             command = command.replace('-playlist', '')
-            
+
         command = command.replace('\n', '').split(' ')
 
         if is_playlist:
             command.append('-playlist')
-            
+
         command.append(filename)
 
         self.plugins = plugin.get('mplayer_audio')
         for p in self.plugins:
             command = p.play(command, self)
-            
+
         if plugin.getbyname('MIXER'):
             plugin.getbyname('MIXER').reset()
 
         self.item = item
 
         _debug_('MPlayer.play(): Starting cmd=%s' % command)
-            
+
         self.app = MPlayerApp(command, self)
         self.app.write('seek -1\n');
         return None
-    
+
 
     def stop(self):
         """
@@ -186,7 +186,7 @@ class MPlayer:
 
     def refresh(self):
         self.playerGUI.refresh()
-        
+
 
     def eventhandler(self, event, menuw=None):
         """
@@ -202,7 +202,7 @@ class MPlayer:
             self.stop()
             if self.playerGUI.try_next_player():
                 return True
-            
+
         if event == AUDIO_SEND_MPLAYER_CMD:
             self.app.write('%s\n' % event.arg)
             return True
@@ -222,8 +222,8 @@ class MPlayer:
         else:
             # everything else: give event to the items eventhandler
             return self.item.eventhandler(event)
-            
-            
+
+
 # ======================================================================
 
 class MPlayerApp(childapp.ChildApp2):
@@ -252,7 +252,7 @@ class MPlayerApp(childapp.ChildApp2):
     def stop_event(self):
         return Event(PLAY_END, self.stop_reason, handler=self.player.eventhandler)
 
-        
+
     def stdout_cb(self, line):
         if line.startswith("A:"):         # get current time
             m = self.RE_TIME_NEW(line)
@@ -277,21 +277,21 @@ class MPlayerApp(childapp.ChildApp2):
                     # playing for only seconds
                     self.item.elapsed = int(timestrs[1])
             else:
-                m = self.RE_TIME(line) # Convert decimal 
+                m = self.RE_TIME(line) # Convert decimal
                 if m:
                     self.item.elapsed = int(m.group(1))
 
             if self.item.elapsed != self.elapsed:
                 self.player.refresh()
             self.elapsed = self.item.elapsed
-            
+
             for p in self.elapsed_plugins:
                 p.elapsed(self.elapsed)
-            
+
         elif not self.item.elapsed:
             for p in self.stdout_plugins:
                 p.stdout(line)
-                
+
 
 
 

@@ -6,11 +6,11 @@
 #
 # Notes: do not use the OSD object inside a thread
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -53,7 +53,7 @@ class PluginInterface(IdleBarPlugin):
         self.images['cross'] = os.path.join(icondir, 'cross.png')
         self.images['check'] = os.path.join(icondir, 'check.png')
         self.image = self.images['cross']
-        
+
     def config(self):
         '''config is called automatically, for default settings run:
         freevo plugins -i idlebar.progactive'''
@@ -72,7 +72,7 @@ class PluginInterface(IdleBarPlugin):
                 self.image = self.images['cross']
             else:
                 self.image = self.images['check']
-        
+
     def draw(self, (type, object), x, osd):
         self.getstatus()
         font = osd.get_font('small0')

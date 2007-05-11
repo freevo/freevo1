@@ -6,11 +6,11 @@
 #
 # Notes: This plugin sends an event if an usb device is added
 #        or removed
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -49,7 +49,7 @@ class PluginInterface(plugin.DaemonPlugin):
     list with actions. Each action is also a list of device, message
     and program to call. Limitation: this works only when Freevo shows
     the menu and is not running a video.
-    
+
     Example:
     call pilot-xfer when a pda with the id 082d:0100 is pluged in:
     USB_HOTPLUG = [ ('082d:0100', 'Synchronizing',
@@ -64,7 +64,7 @@ class PluginInterface(plugin.DaemonPlugin):
     def config(self):
         return [( 'USB_HOTPLUG', [], 'action list when a devices comes up' )]
 
-    
+
     def poll(self, menuw=None, arg=None):
         """
         poll to check for devices
@@ -86,12 +86,12 @@ class PluginInterface(plugin.DaemonPlugin):
                         break
                 else:
                     changes = True
-                        
+
         for d in self.devices:
             changes = True
             print 'usb.py: removed device %s' % d
 
         if changes:
             rc.post_event(plugin.event('USB'))
-            
+
         self.devices = current_devices

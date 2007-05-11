@@ -49,7 +49,7 @@ class PluginInterface(ScreenSaverPlugin):
         self.image_width = 200
         self.image_height = 98
 
-    
+
     def config(self):
         return [ ('BOUNCING_FREEVO_FPS', 25, 'Frames per second')]
 
@@ -57,15 +57,15 @@ class PluginInterface(ScreenSaverPlugin):
     def start(self, width, height):
         self.width = width
         self.height = height
-        
+
         self.x = randint(0, width - self.image_width)
         self.y = randint(0, height - self.image_height)
         self.x_speed = randint(5,10)
         self.y_speed = randint(5,10)
-        
+
         return self.fps
 
-    
+
     def draw(self, screen):
         black = (0,0,0)
         dirty = []
@@ -89,5 +89,5 @@ class PluginInterface(ScreenSaverPlugin):
         if (self.y + self.image_height) > self.height:
             self.y = self.height - self.image_height
             self.y_speed *= -1
-        
+
         screen.blit(self.image, (self.x, self.y))

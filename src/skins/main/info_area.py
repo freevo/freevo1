@@ -80,7 +80,7 @@ class Info_Area(Skin_Area):
             print "skin error: unable to parse expression in info_area"
             traceback.print_exc()
             return 0
-        
+
         if self.sellist  != list:
             self.sellist = list
             update += 1
@@ -207,10 +207,10 @@ class Info_Area(Skin_Area):
             elif b.startswith('\'') and b.endswith('\''):
                 # string
                 exp += ' %s' % ( b )
-                
+
             elif b.startswith('function:'):
                 exp += ' %s()' % b[9:]
-                
+
             elif b[ :4 ] == 'len(' and b.find( ')' ) > 0 and \
                      len(b) - b.find(')') < 5:
                 # lenght of something
@@ -400,7 +400,7 @@ class Info_Area(Skin_Area):
                     element.width = min( m_width, r.width )
                 else:
                     element.width = r.width
-                    
+
                 if isinstance( element.height, int ) or element.height == 'line_height':
                     if element.height <= 0 or element.height == 'line_height':
                         element.height = m_height

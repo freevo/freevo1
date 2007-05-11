@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -37,8 +37,8 @@ import signal
 
 import config
 import tv.ivtv
-import childapp 
-import plugin 
+import childapp
+import plugin
 import rc
 import util.tv_util as tv_util
 
@@ -70,7 +70,7 @@ class Recorder:
         self.thread.setDaemon(1)
         self.thread.mode = 'idle'
         self.thread.start()
-        
+
 
     def Record(self, rec_prog):
         # It is safe to ignore config.TV_RECORDFILE_SUFFIX here.
@@ -79,9 +79,9 @@ class Recorder:
         self.thread.mode = 'record'
         self.thread.prog = rec_prog
         self.thread.mode_flag.set()
-        
+
         if DEBUG: print('Recorder::Record: %s' % rec_prog)
-        
+
 
     def Stop(self):
         self.thread.mode = 'stop'
@@ -93,7 +93,7 @@ class Record_Thread(threading.Thread):
 
     def __init__(self):
         threading.Thread.__init__(self)
-        
+
         self.mode = 'idle'
         self.mode_flag = threading.Event()
         self.prog = None
@@ -106,7 +106,7 @@ class Record_Thread(threading.Thread):
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
-                
+
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
                 if DEBUG: print 'Record_Thread::run: started recording'

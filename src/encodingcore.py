@@ -96,8 +96,8 @@ class Enum(dict):
 
     def __init__(self, names, x=0):
         for i in range(x, x+len(names)):
-          self.__dict__[names[i-x]]=i
-          self[i]=names[i-x]
+            self.__dict__[names[i-x]]=i
+            self[i]=names[i-x]
     # __init__()
 
 

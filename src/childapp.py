@@ -357,7 +357,7 @@ class ChildApp2(ChildApp):
 
         self.stop_osd = stop_osd
         if self.stop_osd:
-           osd.stop()
+            osd.stop()
 
         if hasattr(self, 'item'):
             rc.post_event(Event(PLAY_START, arg=self.item))
@@ -426,4 +426,3 @@ class ChildApp2(ChildApp):
         if not self.isAlive():
             rc.post_event(self.stop_event())
             self.stop()
-

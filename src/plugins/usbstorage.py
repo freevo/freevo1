@@ -4,13 +4,13 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: 
+# Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     Parameter: name and mountpoint..
     You should also activate the usb plugin so that the menu will change
     when you plugin in or remove the usb storage device.
-    
+
     Example:
     plugin.activate('usb')
     plugin.activate('usbstorage', type='video', args=('USB Key', '/mnt/hd'))
@@ -59,4 +59,3 @@ class PluginInterface(plugin.MainMenuPlugin):
             d.mountpoint = self.mountpoint
             return [ d ]
         return []
-        

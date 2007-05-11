@@ -8,11 +8,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -80,9 +80,9 @@ Set up Freevo for your specific environment.
                                   WIDTHxHEIGHT can be 800x600, 768x576 or 640x480
 
    --display=DISP               set the display
-                                  DISP can be x11, fbdev, dxr3, mga, 
+                                  DISP can be x11, fbdev, dxr3, mga,
                                   directfb, dfbmga or dga
-                                  
+
    --tv=NORM                    set the TV standard
                                   NORM can be ntsc, pal or secam
 
@@ -100,8 +100,8 @@ Please report bugs to <freevo-users@lists.sourceforge.net>.
 ''')
 
     print usage
-    
-    
+
+
 class Struct:
     pass
 
@@ -130,22 +130,22 @@ def check_config(conf):
     if not conf.geometry in vals_geometry:
         print 'geometry must be one of: %s' % ' '.join(vals_geometry)
         sys.exit(1)
-        
+
     if not conf.display in vals_display:
         print 'display must be one of: %s' % ' '.join(vals_display)
         sys.exit(1)
-        
+
     if not conf.tv in vals_tv:
         print 'tv must be one of: %s' % ' '.join(vals_tv)
         sys.exit(1)
-        
+
     if not conf.chanlist in vals_chanlist:
         print 'chanlist must be one of: %s' % ' '.join(vals_chanlist)
         sys.exit(1)
-        
+
 
 def create_config(conf):
-    
+
     outfile='/etc/freevo/freevo.conf'
     try:
         fd = open(outfile, 'w')
@@ -154,13 +154,13 @@ def create_config(conf):
             os.mkdir(os.path.expanduser('~/.freevo'))
         outfile=os.path.expanduser('~/.freevo/freevo.conf')
         fd = open(outfile, 'w')
-        
+
     for val in dir(conf):
         if val[0:2] == '__': continue
 
         # Some Python magic to get all members of the struct
         fd.write('%s = %s\n' % (val, conf.__dict__[val]))
-        
+
     print
     print 'wrote %s' % outfile
 
@@ -174,7 +174,7 @@ def check_program(conf, name, variable, necessary, sysfirst=1, verbose=1):
         search_dirs = os.environ['PATH'].split(':') + search_dirs_runtime
     else:
         search_dirs = search_dirs_runtime + os.environ['PATH'].split(':')
-        
+
     if verbose:
         print _('checking for %-13s') % (name+'...'),
 
@@ -213,7 +213,7 @@ if __name__ == '__main__':
     conf.chanlist = 'us-cable'
     conf.version = CONFIG_VERSION
     sysfirst = 0 # Check the system path for apps first, then the runtime
-    
+
     # Parse commandline options
     try:
         long_opts = 'help compile= geometry= display= tv= chanlist= sysfirst'.split()
@@ -227,7 +227,7 @@ if __name__ == '__main__':
         if o in ("-h", "--help"):
             print_usage()
             sys.exit()
-            
+
         if o == '--geometry':
             conf.geometry = a
 
@@ -286,5 +286,5 @@ if __name__ == '__main__':
     # Build everything
     create_config(conf)
     print
-    
+
     sys.exit()

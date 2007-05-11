@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -65,7 +65,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
         # activate the mediamenu for video
         plugin.activate('mediamenu', level=plugin.is_active('video')[2], args='video')
-        
+
 
     def suffix(self):
         """
@@ -95,7 +95,7 @@ class PluginInterface(plugin.MimetypePlugin):
             if file in hidden_files:
                 files.remove(file)
                 continue
-            
+
             x = VideoItem(file, parent)
 
             # join video files
@@ -117,7 +117,7 @@ class PluginInterface(plugin.MimetypePlugin):
                         elif not missing:
                             # one file missing, stop searching
                             missing = i
-                        
+
                     if add_file and missing > end:
                         if len(add_file) > 3:
                             # more than 4 files, I don't belive it
@@ -134,7 +134,7 @@ class PluginInterface(plugin.MimetypePlugin):
                         break
                     else:
                         pos += file[pos:].find('1') + 1
-                        
+
             if parent.media:
                 file_id = parent.media.id + \
                           file[len(os.path.join(parent.media.mountdir,"")):]
@@ -190,7 +190,7 @@ def hash_fxd_movie_database():
     rom drive plugin, but also for a directory and a videoitem.
     """
     import fxditem
-    
+
     global tv_show_information
     global discset_information
     global fxd_database
@@ -245,6 +245,6 @@ def hash_fxd_movie_database():
             if hasattr(info, '__fxd_rom_info__'):
                 for fo in info.__fxd_files_options__:
                     discset_information[fo['file-id']] = fo['mplayer-options']
-            
+
     _debug_('done',1)
     return 1

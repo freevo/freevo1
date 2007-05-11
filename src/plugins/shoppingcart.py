@@ -6,16 +6,16 @@
 #
 # Notes: This is a plugin to move and copy files
 #
-# Activate: 
+# Activate:
 #   plugin.activate('shoppingcart')
 #
-# Todo:        
+# Todo:
 #   o handle fxd files
 #   o also add metafiles like covers to the cart
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -96,7 +96,7 @@ class PluginInterface(plugin.ItemPlugin):
             rc.post_event(em.MENU_BACK_ONE_MENU)
         else:
             rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Added to Cart')))
-            
+
 
     def deleteCart(self, arg=None, menuw=None):
         self.cart = []
@@ -132,4 +132,3 @@ class PluginInterface(plugin.ItemPlugin):
             myactions.append((self.deleteCart, _('Delete Cart')))
 
         return myactions
-

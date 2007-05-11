@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@
 
 CLASSES:
     LocaleTime -- Discovers and/or stores locale-specific time information
-    TimeRE -- Creates regexes for pattern matching a string of text containing 
+    TimeRE -- Creates regexes for pattern matching a string of text containing
                 time information as is returned by time.strftime()
 
 FUNCTIONS:
@@ -40,7 +40,7 @@ FUNCTIONS:
                     year
     gregorian -- Calculates the Gregorian date based on the Julian day and
                     year
-    julianday -- Calculates the Julian day since the first of the year based 
+    julianday -- Calculates the Julian day since the first of the year based
                     on the Gregorian date
     dayofweek -- Calculates the day of the week from the Gregorian date.
     strptime -- Calculates the time struct represented by the passed-in string
@@ -70,30 +70,30 @@ class LocaleTime(object):
                 store the values have mangled names):
         f_weekday -- full weekday names; %A (7-item list)
         a_weekday -- abbreviated weekday names; %a (7-item list)
-        f_month -- full weekday names; %B (14-item list; dummy value in [0], 
+        f_month -- full weekday names; %B (14-item list; dummy value in [0],
                     which is added by code)
-        a_month -- abbreviated weekday names; %b (13-item list, dummy value in 
+        a_month -- abbreviated weekday names; %b (13-item list, dummy value in
                     [0], which is added by code)
         am_pm -- AM/PM representation; %p (2-item list)
         LC_date_time -- format string for date/time representation; %c (string)
         LC_date -- format string for date representation; %x (string)
         LC_time -- format string for time representation; %X (string)
         timezone -- daylight- and non-daylight-savings timezone representation;
-                    %Z (3-item list; code tacks on blank item at end for 
+                    %Z (3-item list; code tacks on blank item at end for
                     possible lack of timezone such as UTC)
         lang -- Language used by instance (string)
-    
+
     """
 
-    #<bc>: If LocaleTime is never exposed in the stdlib, can just remove 
+    #<bc>: If LocaleTime is never exposed in the stdlib, can just remove
     #      to instantiate values and just initially set them all to None.
-    def __init__(self, f_weekday=None, a_weekday=None, f_month=None, 
-    a_month=None, am_pm=None, LC_date_time=None, LC_time=None, LC_date=None, 
+    def __init__(self, f_weekday=None, a_weekday=None, f_month=None,
+    a_month=None, am_pm=None, LC_date_time=None, LC_time=None, LC_date=None,
     timezone=None, lang=None):
         """Optionally set attributes with passed-in values.
-        
+
         Only check for passed-in values is that length of sequence is correct.
-        
+
         """
         if f_weekday is None:
             self.__f_weekday = None
@@ -140,10 +140,10 @@ class LocaleTime(object):
 
     def __pad(self, seq, front):
         """Add '' to seq to either front (if front is true) or the back.
-        
+
         Used for when sequence can contain the empty string as an answer.  Also
         use for padding to get 0-offset indexing with sequence.
-        
+
         """
         seq = list(seq)
         if front:
@@ -154,12 +154,12 @@ class LocaleTime(object):
 
     def __set_nothing(self, stuff):
         """Raise TypeError when trying to set an attribute.
-        
-        
-        There should be no need to change these values.  This means that it 
-        would be better for an exception to be raised then let the assignment 
+
+
+        There should be no need to change these values.  This means that it
+        would be better for an exception to be raised then let the assignment
         happen quietly.
-        
+
         """
         raise TypeError("attribute does not support assignment")
 
@@ -176,9 +176,9 @@ class LocaleTime(object):
             self.__calc_weekday()
         return self.__a_weekday
 
-    f_weekday = property(__get_f_weekday, __set_nothing, 
+    f_weekday = property(__get_f_weekday, __set_nothing,
                         doc="Full weekday names")
-    a_weekday = property(__get_a_weekday, __set_nothing, 
+    a_weekday = property(__get_a_weekday, __set_nothing,
                         doc="Abbreviated weekday names")
 
     def __get_f_month(self):
@@ -256,7 +256,7 @@ class LocaleTime(object):
             self.__a_weekday = a_weekday
         if not self.__f_weekday:
             self.__f_weekday = f_weekday
-        
+
     def __calc_month(self):
         """Set self.__f_month and self.__a_month using the calendar module."""
         a_month = [calendar.month_abbr[i] for i in range(13)]
@@ -268,11 +268,11 @@ class LocaleTime(object):
 
     def __calc_am_pm(self):
         """Set self.__am_pm by using time.strftime().
-        
-        The magic date (2002, 3, 17, hour, 44, 44, 2, 76, 0) is not really 
-        that magical; just happened to have used it everywhere else where a 
+
+        The magic date (2002, 3, 17, hour, 44, 44, 2, 76, 0) is not really
+        that magical; just happened to have used it everywhere else where a
         static date was needed.
-        
+
         """
         am_pm = []
         for hour in (01,22):
@@ -281,14 +281,14 @@ class LocaleTime(object):
         self.__am_pm = am_pm
 
     def __calc_date_time(self):
-        """Set self.__date_time, self.__date, & self.__time by using 
+        """Set self.__date_time, self.__date, & self.__time by using
         time.strftime().
-        
-        Use (1999,3,17,22,44,55,2,76,0) for magic date because the amount of 
+
+        Use (1999,3,17,22,44,55,2,76,0) for magic date because the amount of
         overloaded numbers is minimized.
-        
+
         The order in which values are searched within the format string is very
-        important; it eliminates possible ambiguity for what something 
+        important; it eliminates possible ambiguity for what something
         represents.
 
         """
@@ -299,16 +299,16 @@ class LocaleTime(object):
         date_time[2] = time.strftime("%X", time_tuple)
         for offset,directive in ((0,'%c'), (1,'%x'), (2,'%X')):
             current_format = date_time[offset]
-            for old, new in (('%', '%%'), (self.f_weekday[2], '%A'), 
+            for old, new in (('%', '%%'), (self.f_weekday[2], '%A'),
                              (self.f_month[3], '%B'), (self.a_weekday[2], '%a'),
-                             (self.a_month[3], '%b'), (self.am_pm[1], '%p'), 
+                             (self.a_month[3], '%b'), (self.am_pm[1], '%p'),
                              (self.timezone[0], '%Z'), (self.timezone[1], '%Z'),
-                             ('1999', '%Y'), ('99', '%y'), ('22', '%H'), 
-                             ('44', '%M'), ('55', '%S'), ('76', '%j'), 
+                             ('1999', '%Y'), ('99', '%y'), ('22', '%H'),
+                             ('44', '%M'), ('55', '%S'), ('76', '%j'),
                              ('17', '%d'), ('03', '%m'), ('3', '%m'),
                              # '3' needed for when no leading zero.
                              ('2', '%w'), ('10', '%I')):
-                #Need to deal with exception raised when locale info is the 
+                #Need to deal with exception raised when locale info is the
                 #empty string.
                 try:
                     current_format = current_format.replace(old, new)
@@ -329,17 +329,17 @@ class LocaleTime(object):
 
     def __calc_timezone(self):
         """Set self.__timezone by using time.tzname.
-        
-        Empty string used for matching when timezone is not used/needed such 
+
+        Empty string used for matching when timezone is not used/needed such
         as with UTC.
 
         """
         self.__timezone = self.__pad(time.tzname, 0)
 
     def __calc_lang(self):
-        """Set self.lang by using locale.getlocale() or 
+        """Set self.lang by using locale.getlocale() or
         locale.getdefaultlocale().
-        
+
         """
         current_lang = locale.getlocale(locale.LC_TIME)[0]
         if current_lang:
@@ -353,7 +353,7 @@ class TimeRE(dict):
     def __init__(self, locale_time=LocaleTime()):
         """Initialize instance with non-locale regexes and store LocaleTime object."""
         super(TimeRE,self).__init__({
-            'd': r"(?P<d>3[0-1]|[0-2]\d|\d| \d)",  #The " \d" option is 
+            'd': r"(?P<d>3[0-1]|[0-2]\d|\d| \d)",  #The " \d" option is
                                                          #to make %c from ANSI
                                                          #C work
             'H': r"(?P<H>2[0-3]|[0-1]\d|\d)",
@@ -371,25 +371,25 @@ class TimeRE(dict):
 
     def __getitem__(self, fetch):
         """Try to fetch regex; if it does not exist, construct it."""
-        constructors = {'A': lambda: self.__seqToRE(self.locale_time.f_weekday, 
+        constructors = {'A': lambda: self.__seqToRE(self.locale_time.f_weekday,
                                                 fetch),
-                        'a': lambda: self.__seqToRE(self.locale_time.a_weekday, 
+                        'a': lambda: self.__seqToRE(self.locale_time.a_weekday,
                                                 fetch),
-                        'B': lambda: self.__seqToRE(self.locale_time.f_month[1:], 
+                        'B': lambda: self.__seqToRE(self.locale_time.f_month[1:],
                                                 fetch),
-                        'b': lambda: self.__seqToRE(self.locale_time.a_month[1:], 
+                        'b': lambda: self.__seqToRE(self.locale_time.a_month[1:],
                                                 fetch),
                         'c': lambda: self.pattern(self.locale_time.LC_date_time),
-                        'p': lambda: self.__seqToRE(self.locale_time.am_pm, 
+                        'p': lambda: self.__seqToRE(self.locale_time.am_pm,
                                                     fetch),
                         'x': lambda: self.pattern(self.locale_time.LC_date),
                         'X': lambda: self.pattern(self.locale_time.LC_time),
-                        'Z': lambda: self.__seqToRE(self.locale_time.timezone, 
+                        'Z': lambda: self.__seqToRE(self.locale_time.timezone,
                                                 fetch),
                         '%': lambda: '%'}
         #Could use dict.setdefault(), but it calls dict.__getitem__() so would
         #have to deal with second call by catching KeyError since the call will
-        #fail; code below is just as clear without having to know the above 
+        #fail; code below is just as clear without having to know the above
         #fact.
         try:
             return super(TimeRE, self).__getitem__(fetch)
@@ -404,11 +404,11 @@ class TimeRE(dict):
         """Convert a list to a regex string for matching directive."""
         def sorter(a, b):
             """Sort based on length.
-            
+
             Done in case for some strange reason that names in the locale only
             differ by a suffix and thus want the name with the suffix to match
             first.
-            
+
             """
             try:
                 a_length = len(a)
@@ -419,7 +419,7 @@ class TimeRE(dict):
             except TypeError:
                 b_length = 0
             return cmp(b_length, a_length)
-        
+
         to_convert = to_convert[:]  #Don't want to change value in-place.
         to_convert.sort(sorter)
         regex = '(?P<%s>' % directive
@@ -436,7 +436,7 @@ class TimeRE(dict):
             format = format.replace(whitespace, r'\s*')
         while format.find('%') != -1:
             directive_index = format.index('%')+1
-            processed_format = "%s%s%s" % (processed_format, 
+            processed_format = "%s%s%s" % (processed_format,
                                 format[:directive_index-1],
                                 self[format[directive_index]])
             format = format[directive_index+1:]
@@ -449,15 +449,15 @@ class TimeRE(dict):
 
 
 def strptime(data_string, format="%a %b %d %H:%M:%S %Y"):
-    """Convert data_string to a time struct based on the format string or re 
+    """Convert data_string to a time struct based on the format string or re
     object; will return an re object for format if data_string is False.
-    
-    The object passed in for format may either be an re object compiled by 
-    strptime() or a format string.  If False is passed in for data_string 
-    then an re object for format will be returned which can be used as an 
-    argument for format.  The re object must be used with the same language 
+
+    The object passed in for format may either be an re object compiled by
+    strptime() or a format string.  If False is passed in for data_string
+    then an re object for format will be returned which can be used as an
+    argument for format.  The re object must be used with the same language
     as used to compile the re object.
-    
+
     """
     locale_time = LocaleTime()
     if isinstance(format, type(re_compile(''))):
@@ -544,9 +544,9 @@ def firstjulian(year):
     return ((146097*(year+4799))//400)-31738
 
 def julianday(year, month, day):
-    """Calculate the Julian day since the beginning of the year from the 
+    """Calculate the Julian day since the beginning of the year from the
     Gregorian date.
-    
+
     """
     #<bc>: If fxns are never exposed, can inline firstjulian() into julianday.
     a = (14-month)//12
@@ -554,9 +554,9 @@ def julianday(year, month, day):
     ((146097*(year+4800-a))//400))-firstjulian(year)+1
 
 def gregorian(julian, year):
-    """Return a 3-item list containing the Gregorian date based on the Julian 
+    """Return a 3-item list containing the Gregorian date based on the Julian
     day.
-    
+
     """
     a = 32043+julian+firstjulian(year)
     b = ((4*a)+3)//146097

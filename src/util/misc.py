@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -135,7 +135,7 @@ def escape(sql):
         return String(sql)
     else:
         return 'null'
-    
+
 
 
 FILENAME_REGEXP = re.compile("^(.*?)_(.)(.*)$")
@@ -170,7 +170,7 @@ def getname(file, skip_ext=True):
         # never happen
         return Unicode(file)
     name = name[0].upper() + name[1:]
-    
+
     while file.find('_') > 0 and FILENAME_REGEXP.match(name):
         m = FILENAME_REGEXP.match(name)
         if m:
@@ -189,7 +189,7 @@ def killall(appname, sig=9):
 
     unify_name = re.compile('[^A-Za-z0-9]').sub
     appname = unify_name('', appname)
-    
+
     cmdline_filenames = glob.glob('/proc/[0-9]*/cmdline')
 
     for cmdline_filename in cmdline_filenames:
@@ -216,7 +216,7 @@ def killall(appname, sig=9):
 
 def title_case(phrase):
     """
-    Return a text string (i.e. from CDDB) with 
+    Return a text string (i.e. from CDDB) with
     the case normalized into title case.
     This is because people frequently put in ugly
     information, and we can avoid it here'
@@ -227,16 +227,16 @@ def title_case(phrase):
         if s and s[-1] == ' ' or s == '' or s[-1] == '-' or s[-1] == '.':
             s += string.upper(letter)
         elif letter == '_':
-                s += ' '
+            s += ' '
         else:
             s += string.lower(letter)
     return s
 
 
 
- 
+
 def get_bookmarkfile(filename):
-    myfile = vfs.basename(filename) 
+    myfile = vfs.basename(filename)
     myfile = config.FREEVO_CACHEDIR + "/" + myfile + '.bookmark'
     return myfile
 
@@ -268,9 +268,9 @@ def list_usb_devices():
 def is_usb_storage_device():
     fd = open('/proc/bus/usb/devices', 'r')
     for line in fd.readlines():
-           if line.lower().find('storage') != -1:
-               fd.close()
-               return 0
+        if line.lower().find('storage') != -1:
+            fd.close()
+            return 0
     fd.close()
     return -1
 
@@ -278,11 +278,11 @@ def is_usb_storage_device():
 def smartsort(x,y): # A compare function for use in list.sort()
     """
     Compares strings after stripping off 'The' and 'A' to be 'smarter'
-    Also obviously ignores the full path when looking for 'The' and 'A' 
+    Also obviously ignores the full path when looking for 'The' and 'A'
     """
     m = os.path.basename(x)
     n = os.path.basename(y)
-    
+
     for word in ('The', 'A'):
         word += ' '
         if m.find(word) == 0:
@@ -315,12 +315,12 @@ def find_start_string(s1, s2):
 
 def remove_start_string(string, start):
     """
-    remove start from the beginning of string. 
+    remove start from the beginning of string.
     """
     start = start.replace(u' ', '')
     for i in range(len(start)):
         string = string[1:].lstrip(' -_,:.')
-            
+
     return string[0].upper() + string[1:]
 
 
@@ -342,7 +342,7 @@ def tagmp3 (filename, title=None, artist=None, album=None, track=None,
         if album:  tag.setAlbum(String(album))
         if title:  tag.setTitle(String(title))
         if track:  tag.setTrackNum((track,tracktotal))   # eyed3 accepts None for tracktotal
-        if year:   tag.setDate(year) 
+        if year:   tag.setDate(year)
         tag.update()
     except:
         print 'Cannot tag \"%s\"' % (String(filename))
@@ -393,7 +393,7 @@ def htmlenties2txt(string):
     return string
 
 
-# 
+#
 # Coming Up for TV schedule
 #
 
@@ -401,7 +401,7 @@ def comingup(items=None, ScheduledRecordings=None):
     import tv.record_client as ri
     import time
     import codecs
-   
+
     result = u''
 
     cachefile = '%s/upsoon' % (config.FREEVO_CACHEDIR)
@@ -423,7 +423,7 @@ def comingup(items=None, ScheduledRecordings=None):
         return result
 
     progs = recordings.getProgramList()
-    
+
     f = lambda a, b: cmp(a.start, b.start)
     progl = progs.values()
     progl.sort(f)
@@ -461,7 +461,7 @@ def comingup(items=None, ScheduledRecordings=None):
                      ( Unicode(m.title), Unicode(sub_title) ) \
                      + _('at') + u" %s\n" % \
                      Unicode(time.strftime(config.TV_TIMEFORMAT,time.localtime(m.start)))
-           
+
     if len(later) > 0:
         result = result + _('This Week') + u':\n'
         for m in later:
@@ -475,7 +475,7 @@ def comingup(items=None, ScheduledRecordings=None):
 
     if not result:
         result = _('No recordings are scheduled')
-        
+
     if os.path.isfile(cachefile):
         os.unlink(cachefile)
     cache = codecs.open(cachefile,'w', config.encoding)
@@ -490,12 +490,12 @@ def comingup(items=None, ScheduledRecordings=None):
 # synchronized objects and methods.
 # By André Bjärby
 # From http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/65202
-# 
+#
 from types import *
 def _get_method_names (obj):
     if type(obj) == InstanceType:
         return _get_method_names(obj.__class__)
-    
+
     elif type(obj) == ClassType:
         result = []
         for name, func in obj.__dict__.items():
@@ -518,7 +518,7 @@ def human_aspect_ratio (width, height):
             ratio = _('Widescreen')
     except ValueError:
         ratio = None
-    
+
     return ratio
 
 
@@ -540,7 +540,7 @@ class _SynchronizedMethod:
 
 
 class SynchronizedObject:
-    
+
     def __init__ (self, obj, ignore=[], lock=None):
         import threading
 
@@ -556,4 +556,3 @@ class SynchronizedObject:
             return self.__methods[name]
         except KeyError:
             return getattr(self.__obj, name)
-

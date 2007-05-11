@@ -12,12 +12,12 @@
 # and the default player (mplayer) will be used. You need xine-ui >= 0.9.22
 # to use this.
 #
-# Todo:        
+# Todo:
 #
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -113,8 +113,8 @@ class Xine:
         if item.network_play:
             return 1
         return 0
-    
-    
+
+
     def play(self, options, item):
         """
         play a dvd with xine
@@ -123,7 +123,7 @@ class Xine:
         if config.EVENTS.has_key(item.mode):
             self.app_mode = item.mode
         else:
-             self.app_mode = 'video'
+            self.app_mode = 'video'
 
         if plugin.getbyname('MIXER'):
             plugin.getbyname('MIXER').reset()
@@ -167,16 +167,16 @@ class Xine:
         elif item.mimetype == 'cue':
             command.append('vcd://%s' % item.filename)
             self.app_mode = 'vcd'
-            
+
         else:
             command.append(item.url)
-            
+
         _debug_('Xine.play(): Starting cmd=%s' % command)
 
         rc.app(self)
         self.app = childapp.ChildApp2(command)
         return None
-    
+
 
     def stop(self):
         """
@@ -185,7 +185,7 @@ class Xine:
         if self.app:
             self.app.stop('quit\n')
             rc.app(None)
-            
+
 
     def eventhandler(self, event, menuw=None):
         """
@@ -194,7 +194,7 @@ class Xine:
         """
         if not self.app:
             return self.item.eventhandler(event)
-            
+
         if event in ( PLAY_END, USER_END ):
             self.stop()
             return self.item.eventhandler(event)
@@ -248,27 +248,27 @@ class Xine:
         if event == DVDNAV_LEFT:
             self.app.write('EventLeft\n')
             return True
-            
+
         if event == DVDNAV_RIGHT:
             self.app.write('EventRight\n')
             return True
-            
+
         if event == DVDNAV_UP:
             self.app.write('EventUp\n')
             return True
-            
+
         if event == DVDNAV_DOWN:
             self.app.write('EventDown\n')
             return True
-            
+
         if event == DVDNAV_SELECT:
             self.app.write('EventSelect\n')
             return True
-            
+
         if event == DVDNAV_TITLEMENU:
             self.app.write('TitleMenu\n')
             return True
-            
+
         if event == DVDNAV_MENU:
             self.app.write('Menu\n')
             return True
@@ -279,7 +279,7 @@ class Xine:
             time.sleep(0.1)
             self.app.write('EventSelect\n')
             return True
-        
+
         if event == MENU:
             self.app.write('TitleMenu\n')
             return True
@@ -302,7 +302,7 @@ class Xine:
                     time.sleep(0.1)
                 self.current_audio = -1
             return True
-            
+
         if event == VIDEO_NEXT_SUBTITLE and self.max_subtitle:
             if self.current_subtitle < self.max_subtitle - 1:
                 self.app.write('SpuNext\n')
@@ -319,11 +319,11 @@ class Xine:
                     time.sleep(0.1)
                 self.current_subtitle = -1
             return True
-            
+
         if event == VIDEO_NEXT_ANGLE:
             self.app.write('EventAngleNext\n')
             time.sleep(0.1)
-            return True            
+            return True
 
         # nothing found? Try the eventhandler of the object who called us
         return self.item.eventhandler(event)

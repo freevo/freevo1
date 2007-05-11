@@ -4,13 +4,13 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: 
+# Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -47,20 +47,20 @@ class PluginInterface(plugin.DaemonPlugin):
     adjust paths and passwords appropriately.
 
     To activate, put the following lines in local_conf.py:
-    plugin.activate('icecast') 
-     
-    ICECAST_WWW_PAGE = 1 
-    ICECAST_CMD = '/usr/local/icecast/bin/icecast' 
-    ICECAST_CONF_DIR = '/usr/local/icecast/conf' 
-    ICES_CMD = '/usr/local/icecast/bin/ices' 
-    ICES_OPTIONS = [ '-d', 'FreevoIcecast', 
-                     '-g', 'Rock', 
-                     '-m', '/freevo', 
-                     '-n', 'Freevo_Music_Collection', 
-                     '-P', 'hackme', 
-                     '-s', 
-                     '-r' ] 
-    ICES_DEF_LIST = '/usr/local/freevo_data/Music/ROCK/mymix.m3u' 
+    plugin.activate('icecast')
+
+    ICECAST_WWW_PAGE = 1
+    ICECAST_CMD = '/usr/local/icecast/bin/icecast'
+    ICECAST_CONF_DIR = '/usr/local/icecast/conf'
+    ICES_CMD = '/usr/local/icecast/bin/ices'
+    ICES_OPTIONS = [ '-d', 'FreevoIcecast',
+                     '-g', 'Rock',
+                     '-m', '/freevo',
+                     '-n', 'Freevo_Music_Collection',
+                     '-P', 'hackme',
+                     '-s',
+                     '-r' ]
+    ICES_DEF_LIST = '/usr/local/freevo_data/Music/ROCK/mymix.m3u'
     """
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
@@ -136,7 +136,7 @@ class IcecastChanger(plugin.ItemPlugin):
     """
     This plugin is automatically included by the icecast plugin. There
     should be no need to activate it yourself. It's purpose is to add
-    the extra action to m3u files to use them as playlists for icecast. 
+    the extra action to m3u files to use them as playlists for icecast.
     """
     def __init__(self):
         plugin.ItemPlugin.__init__(self)
@@ -147,7 +147,7 @@ class IcecastChanger(plugin.ItemPlugin):
         myfile.flush()
         myfile.close()
         rc.post_event(em.MENU_BACK_ONE_MENU)
-        
+
     def actions(self, item):
         self.item = item
         if item.type == 'playlist':

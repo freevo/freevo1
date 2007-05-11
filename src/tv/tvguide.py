@@ -253,10 +253,10 @@ class TVGuide(Item):
             eventInput=str(event)[6]
             isNumeric=TRUE
             try:
-               newinput_value = int(eventInput)
+                newinput_value = int(eventInput)
             except:
-               #Protected against INPUT_UP, INPUT_DOWN, etc
-               isNumeric=FALSE
+                #Protected against INPUT_UP, INPUT_DOWN, etc
+                isNumeric=FALSE
             if isNumeric:
                 newinput_time = int(time.time())
                 if (self.lastinput_value != None):

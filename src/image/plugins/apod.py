@@ -8,7 +8,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -122,7 +122,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         if not apoddir:
             self.reason = _('Need a directory to store APOD pictures.')
             return
-    
+
         if not os.path.isdir(apoddir):
             self.reason = _('directory %s does not exist.') % apoddir
             return
@@ -138,6 +138,3 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def items(self, parent):
         return [ ApodMainMenuItem(parent, self.apoddir) ]
-                                                                                        
-
-

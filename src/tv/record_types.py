@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@ class ScheduledRecordings:
         self.programList = {}
         self.favorites = {}
         self.TYPES_VERSION = TYPES_VERSION
-        
+
 
     def addProgram(self, prog, key=None):
         if not key:
@@ -119,10 +119,10 @@ class ScheduledRecordings:
 
 class Favorite:
 
-    def __init__(self, name=None, prog=None, exactchan=FALSE, exactdow=FALSE, 
+    def __init__(self, name=None, prog=None, exactchan=FALSE, exactdow=FALSE,
                  exacttod=FALSE, priority=0, allowDuplicates=TRUE, onlyNew=FALSE):
         self.TYPES_VERSION = TYPES_VERSION
-        
+
         self.name = name
         if name:
             self.name = tv_util.progname2favname(name)
@@ -137,13 +137,13 @@ class Favorite:
                 self.channel = tv_util.get_chan_displayname(prog.channel_id)
             else:
                 self.channel = 'ANY'
-          
+
             if exactdow:
                 lt = time.localtime(prog.start)
                 self.dow = lt[6]
             else:
                 self.dow = 'ANY'
-          
+
             if exacttod:
                 lt = time.localtime(prog.start)
                 self.mod = (lt[3]*60)+lt[4]
@@ -170,5 +170,3 @@ class ScheduledTvProgram:
         self.favoriteName = None
         self.removed      = FALSE
         self.quality      = self.HIGH_QUALITY
-
-

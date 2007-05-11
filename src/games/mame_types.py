@@ -6,11 +6,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -105,10 +105,10 @@ class MameRomList:
     # We are using a dictionary that will be keyed on the
     # absolute filename of the actual rom.
     mameRoms = {}
- 
+
     def __init__(self):
         self.TYPES_VERSION = TYPES_VERSION
-        
+
     def addMameRom(self, rom):
         if not self.mameRoms.has_key(rom.getFilename()):
             self.mameRoms[rom.getFilename()] = rom
@@ -123,5 +123,3 @@ class MameRomList:
 
     def Sort(self):
         self.mameRoms.Sort()
-        
-

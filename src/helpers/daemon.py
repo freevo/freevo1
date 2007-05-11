@@ -7,11 +7,11 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         print 'usage: freevo daemon [ start | stop ]'
         sys.exit(0)
 
-        
+
 start()
 while 1:
     time.sleep(1)
@@ -74,7 +74,6 @@ while 1:
             options = '-fs'
         else:
             options = ''
-            
+
         os.system('%s %s >/dev/null 2>/dev/null' % (os.environ['FREEVO_SCRIPT'], options))
         start()
-        

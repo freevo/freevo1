@@ -7,22 +7,22 @@
 # Notes:
 #    Works as a middle layer between the users preferred skin and rest of
 #    the system.
-#    
+#
 #    Which skin you want to use is set in freevo_config.py. This small
 #    module gets your skin preferences from the configuration file and loads
 #    the correct skin implementation into the system.
-#    
+#
 #    The path to the skin implementation is also added to the system path.
-#    
+#
 #    get_singleton() returns an initialized skin object which is kept unique
 #    and consistent throughout.
 #
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ __all__ = ( 'Rectange', 'Image', 'Area', 'register', 'delete', 'change_area',
             'toggle_display_style', 'get_display_style', 'get_popupbox_style',
             'get_font', 'get_image', 'get_icon', 'items_per_page', 'clear', 'redraw',
             'prepare', 'draw' )
-    
+
 
 def get_singleton():
     """
@@ -66,13 +66,13 @@ def get_singleton():
         # we don't need this for helpers
         if config.HELPER:
             return None
-    
+
         # Loads the skin implementation defined in freevo_config.py
         exec('import skins.' + config.SKIN_MODULE  + '.' + config.SKIN_MODULE  + \
              ' as skinimpl')
 
         _debug_('Imported skin %s' % config.SKIN_MODULE,2)
-    
+
         _singleton = skinimpl.Skin()
 
     return _singleton
@@ -92,14 +92,14 @@ if __freevo_app__ == 'main':
     # the all function to this module
     for i in __all__:
         exec('%s = _singleton.%s' % (i,i))
-        
+
 else:
     # set all skin functions to the dummy function so nothing
     # bad happens when we call it from inside a helper
     class dummy_class:
         def __init__(*arg1, **arg2):
             pass
-        
+
     def dummy_function(*arg1, **arg2):
         pass
 
@@ -108,4 +108,3 @@ else:
             exec('%s = dummy_class' % i)
         else:
             exec('%s = dummy_function' % i)
-    

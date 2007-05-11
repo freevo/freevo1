@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -58,7 +58,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
         # activate the mediamenu for audio
         plugin.activate('mediamenu', level=plugin.is_active('audio')[2], args='audio')
-        
+
 
     def suffix(self):
         """
@@ -103,7 +103,7 @@ class PluginInterface(plugin.MimetypePlugin):
                 diritem.store_info('coversearch_result', diritem.image)
             elif not diritem['coversearch_result']:
                 diritem.image = diritem['coversearch_result']
-                
+
         if not diritem.info.has_key('title') and diritem.parent:
             # ok, try some good name creation
             p_album  = diritem.parent['album']
@@ -124,7 +124,7 @@ class PluginInterface(plugin.MimetypePlugin):
                 # parent has no info, item no artist but album (== collection)
                 diritem.name = album
 
-                
+
     def fxdhandler(self, fxd, node):
         """
         parse audio specific stuff from fxd files
@@ -168,6 +168,6 @@ class PluginInterface(plugin.MimetypePlugin):
             a.is_playlist  = True
         if fxd.get_children(node, 'reconnect'):
             a.reconnect    = True
-            
+
         fxd.parse_info(fxd.get_children(node, 'info', 1), a)
         fxd.getattr(None, 'items', []).append(a)

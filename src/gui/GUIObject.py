@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Todo: o Add move function 
+# Todo: o Add move function
 # -----------------------------------------------------------------------
 #
 # Freevo - A Home Theater PC framework
@@ -42,7 +42,7 @@ Currently not many classes are in place, but hopefully we will add more
 in time.
 """
 __date__    = "$Date$"
-__version__ = "$Revision$" 
+__version__ = "$Revision$"
 __author__  = """Thomas Malt <thomas@malt.no>"""
 
 
@@ -90,10 +90,10 @@ class GUIObject:
 
         style = skin.get_singleton().get_popupbox_style(self)
         self.content_layout, self.background_layout = style
-        
+
         self.skin_info_widget = self.content_layout.types['widget']
         self.skin_info_font   = self.skin_info_widget.font
-        
+
         self.h_margin = self.content_layout.spacing
         self.v_margin = self.content_layout.spacing
 
@@ -119,7 +119,7 @@ class GUIObject:
         Returns: left,top,width,height
         """
         return (self.left, self.top, self.width, self.height)
- 
+
 
     def get_position(self):
         """
@@ -187,7 +187,7 @@ class GUIObject:
 
         This is really handled by the render object.
         """
-        self.visible = 1    
+        self.visible = 1
         self.draw()
         self.osd.update(self.get_rect())
 
@@ -200,14 +200,14 @@ class GUIObject:
         if self.parent and self.parent.visible and self.bg_surface:
             self.osd.screenblit(self.bg_surface, self.get_position())
             self.osd.update(self.get_rect())
-                
+
 
 
     def move(self, x, y):
         """
         x Integer, amount to move along x axis.
         y Integer, amount to move along y axis.
-        
+
         Move the object by a certain amount
 
         Note: either the user would have to hide and show the object
@@ -217,16 +217,16 @@ class GUIObject:
         self.set_position(self.left+x, self.top+y)
         self.show()
 
-        
+
     def is_visible(self):
         """
         Returns whether the object is visible or not.
 
-        Returns: 0 or 1 
+        Returns: 0 or 1
         """
         return self.visible
 
-    
+
     def enable(self):
         self.enabled = 1
 
@@ -260,7 +260,7 @@ class GUIObject:
 
         if not update:
             return
-        
+
         # now blit all parent to really update
         object = self.parent
         while object:
@@ -273,7 +273,7 @@ class GUIObject:
         self.osd.app_list[-1].blit_parent()
         self.osd.update()
 
-        
+
     def _draw(self, surface=None):
         """
         This function should be overriden by those
@@ -311,7 +311,7 @@ class GUIObject:
             print
             print '******************************************************************'
             return
-        
+
         if not self.bg_surface:
             self.bg_surface = self.osd.Surface((int(self.width), int(self.height)))
             if p:
@@ -330,7 +330,7 @@ class GUIObject:
             self.osd.screenblit(self.surface, self.get_position())
             self.osd.update(self.get_rect())
 
-            
+
     def get_surface(self):
         """
         get a subsurface from the parent to draw in
@@ -376,7 +376,7 @@ class GUIObject:
         """
         if self.parent != parent and self.parent and self in self.parent.children:
             self.parent.children.remove(self)
-            
+
         self.parent = parent
 
 
@@ -407,13 +407,13 @@ class GUIObject:
             while self.children:
                 child = self.children[0]
                 child.destroy() # the child will remove itself from children
-                
+
         _debug_('parent: %s' % self.parent, 2)
         if self.parent:
             self.parent.children.remove(self)
 
         self.osd.remove_app(self)
-                
+
         self.hide()
         if self.parent:
             self.parent.refresh()
@@ -433,13 +433,13 @@ class GUIObject:
         """
         return self.v_align
 
-    
+
     def set_h_align(self, align):
         """
         Sets horizontal alignment of text.
         """
         if type(align) is IntType and align >= 1000 and align < 1004:
-                self.h_align = align
+            self.h_align = align
         else:
             raise TypeError, align
 
@@ -495,7 +495,7 @@ class GUIObject:
 
         # Render the surface if we don't have it to get correct size.
         # if not self.surface: self.render()
-        
+
         lx          = 0
         ly          = 0
         bx,by,bw,bh = self.parent.get_rect()
@@ -504,7 +504,7 @@ class GUIObject:
         ha          = self.h_align
         hm          = self.h_margin
         vm          = self.v_margin
-        
+
         if ha == Align.LEFT:
             if self.parent.icon:
                 iw = self.parent.icon.get_width()
@@ -531,7 +531,7 @@ class GUIObject:
             ly = self.top
         else:
             raise TypeError, 'Wrong v_align'
-            
+
         # for child in self.children:
         #     child.calc_position()
 
@@ -540,11 +540,9 @@ class GUIObject:
 
 class Align:
 
-    NONE   = 1000 
+    NONE   = 1000
     CENTER = 1001
     LEFT   = 1002
     RIGHT  = 1003
     TOP    = 1004
     BOTTOM = 1005
-
-

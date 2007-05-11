@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@ FALSE = 0
 class FreevoWapResource(Resource):
 
     def render(self, request):
-        request.setHeader('Content-Type', 'text/vnd.wap.wml')            
+        request.setHeader('Content-Type', 'text/vnd.wap.wml')
         return self._render(request)
 
 class WapResource:
@@ -54,11 +54,11 @@ class WapResource:
         if not form or not key:
             return None
 
-        try: 
+        try:
             val = form[key][0]
-        except: 
+        except:
             val = None
-    
+
         return val
 
     def printHeader(self):
@@ -67,7 +67,7 @@ class WapResource:
         self.res += '<wml>\n'
 
     def printFooter(self):
-        self.res += '</wml>\n '  
+        self.res += '</wml>\n '
 
     def validate(self, request):
         session = request.getSession()

@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -43,11 +43,10 @@ class PluginInterface(plugin.Plugin):
         plugin.Plugin.__init__(self)
         self._type = 'mainmenu_tv'
         self.parent = None
-                                                                                
+
     def items(self, parent):
         self.parent = parent
         return [menu.MenuItem(_('View VCR Input'), action=self.start_vcr)]
-                                                                                
+
     def start_vcr(self, menuw=None, arg=None):
         plugin.getbyname(plugin.TV).Play('vcr', None)
-

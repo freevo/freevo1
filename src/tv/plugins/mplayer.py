@@ -307,4 +307,3 @@ class MPlayer:
             return FALSE
 
         return FALSE
-

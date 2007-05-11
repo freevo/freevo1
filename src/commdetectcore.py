@@ -78,14 +78,14 @@ class CommDetectJob:
         self.thread.start()
 
     class blackframe:
-          frame=0.0
-          seconds=0.0
-          time=0.0
+        frame=0.0
+        seconds=0.0
+        time=0.0
 
     class edl:
-          startSkipTime=0.0
-          endSkipTime=0.0
-          action=0.0
+        startSkipTime=0.0
+        endSkipTime=0.0
+        action=0.0
 
     def grabBlackFrames(self):
         #Grab all possible blackframes

@@ -1,16 +1,16 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# scheduled_recordings.py - A plugin to view your list of scheduled 
+# scheduled_recordings.py - A plugin to view your list of scheduled
 #                           recordings.
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2003 Krister Lagerstrom, et al. 
+# Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -118,7 +118,4 @@ class PluginInterface(plugin.MainMenuPlugin):
         plugin.MainMenuPlugin.__init__(self)
 
     def items(self, parent):
-            return [ ScheduledRecordingsItem(parent) ]
-
-
-
+        return [ ScheduledRecordingsItem(parent) ]

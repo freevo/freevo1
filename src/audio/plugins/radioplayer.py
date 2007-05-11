@@ -169,4 +169,3 @@ class RadioPlayer:
         while self.is_playing():
             self.refresh()
             time.sleep(0.3)
-

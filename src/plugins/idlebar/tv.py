@@ -51,7 +51,7 @@ class PluginInterface(IdleBarPlugin):
     """
     def __init__(self, listings_threshold=-1):
         IdleBarPlugin.__init__(self)
-        self.plugin_name = 'idlebar.tv' 
+        self.plugin_name = 'idlebar.tv'
         self.listings_threshold = listings_threshold
         self.next_guide_check = 0
         self.listings_expire = 0

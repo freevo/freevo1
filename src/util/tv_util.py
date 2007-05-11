@@ -6,7 +6,7 @@
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -74,10 +74,10 @@ def progname2favname(progname):
                             + 'dnooooo/ouuuuypy'
 
     favname = string.translate(progname,translation_table)
-    return favname   
-    
-    
-    
+    return favname
+
+
+
 
 def getKey(prog=None):
     if not prog:
@@ -85,7 +85,7 @@ def getKey(prog=None):
 
     return '%s:%s' % (prog.channel_id, prog.start)
 
-  
+
 def progRunning(prog):
     now = time.time()
     if prog.start <= now and prog.stop >= now:
@@ -99,8 +99,8 @@ def getProgFilename(prog):
 
     filemask = config.TV_RECORDFILE_MASK % filename_array
     filemask = time.strftime(filemask, time.localtime(prog.start))
-    filename = os.path.join(config.TV_RECORD_DIR, 
-                            progname2filename(filemask).rstrip(' -_:') + 
+    filename = os.path.join(config.TV_RECORD_DIR,
+                            progname2filename(filemask).rstrip(' -_:') +
                             config.TV_RECORDFILE_SUFFIX)
     return filename
 
@@ -171,4 +171,3 @@ def when_listings_expire():
             left /= 3600
 
     return left
-

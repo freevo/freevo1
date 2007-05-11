@@ -12,12 +12,12 @@
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
-#   
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-#                
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MER-
 # CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
@@ -54,8 +54,8 @@ class LetterBoxGroup(Container):
     bd_color  Border color (Color)
     bd_width  Border width Integer
     """
-    def __init__(self, numboxes=7, text=None, handler=None, type=None, 
-                 x=None, y=None, width=None, height=None, bg_color=None, 
+    def __init__(self, numboxes=7, text=None, handler=None, type=None,
+                 x=None, y=None, width=None, height=None, bg_color=None,
                  fg_color=None, selected_bg_color=None, selected_fg_color=None,
                  border=None, bd_color=None, bd_width=None):
 
@@ -80,14 +80,14 @@ class LetterBoxGroup(Container):
                      self.content_layout.types['button selected'].font.stringsize(c))
 
         bw += 2
-        
+
         l = 0
         h = 0
 
         for i in range(numboxes or 60):
             lb = LetterBox(width=bw)
 
-            if self.type != 'password': 
+            if self.type != 'password':
                 if self.text and len(self.text) > i:
                     lb.set_text(self.text[i], fix_case=False)
                 else:
@@ -105,7 +105,7 @@ class LetterBoxGroup(Container):
 
         self.set_h_align(Align.CENTER)
         self.last_key = None
-        
+
         if self.type != 'password' and self.text and len(self.text) < len(self.boxes):
             self.boxes[len(self.text)].toggle_selected()
         else:
@@ -131,7 +131,7 @@ class LetterBoxGroup(Container):
                     boxNext = 0
             elif allow_roundtrip:
                 boxNext = 0
-                
+
         else:
             if boxNow > 0:
                 boxNext = boxNow - 1
@@ -160,7 +160,7 @@ class LetterBoxGroup(Container):
         for i in range(min(len(self.boxes), len(text))):
             self.boxes[i].set_text(text[i], fix_case=False)
 
-            
+
     def _draw(self):
         """
         The actual internal draw function.
@@ -178,7 +178,7 @@ class LetterBoxGroup(Container):
         Handle basic events for this widget. Returns True when the event
         was used and a redraw is needed.
         """
-        if self.type == 'password': 
+        if self.type == 'password':
             if event == INPUT_LEFT or event == INPUT_UP:
                 the_box = self.get_selected_box()
                 if self.boxes.index(the_box) != 0:
@@ -195,7 +195,7 @@ class LetterBoxGroup(Container):
                 if self.boxes.index(the_box) != len(self.boxes)-1:
                     self.change_selected_box('right')
                 return True
-            
+
         else:
             if event == INPUT_LEFT:
                 self.change_selected_box('left', allow_roundtrip=True)
@@ -233,7 +233,7 @@ class LetterBoxGroup(Container):
         return False
 
 
-    
+
 class LetterBox(Button):
     """
     x         x coordinate. Integer
@@ -244,10 +244,10 @@ class LetterBox(Button):
     bg_color  Background color (Color)
     fg_color  Foreground color (Color)
     """
-    ourChars = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 
-                 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 
-                 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 
-                 '-', '.', ' ' ] 
+    ourChars = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+                 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+                 '-', '.', ' ' ]
 
     phoneChars = ([ " ", "-", ".", "0" ],
                   [ "1", ],
@@ -259,10 +259,10 @@ class LetterBox(Button):
                   [ "P", "Q", "R", "S", "7" ],
                   [ "T", "U", "V", "8"],
                   [ "W", "X", "Y", "Z" ,"9"])
-        
 
-    def __init__(self, text=' ', x=None, y=None, width=35, height=35, 
-                 bg_color=None, fg_color=None, selected_bg_color=None, 
+
+    def __init__(self, text=' ', x=None, y=None, width=35, height=35,
+                 bg_color=None, fg_color=None, selected_bg_color=None,
                  selected_fg_color=None):
 
         self.upper_case = True
@@ -285,7 +285,7 @@ class LetterBox(Button):
                 self.children.remove(c)
 
         self.border = -1
-        
+
 
     def draw(self):
         if self.left + self.max_width <= self.parent.width - self.parent.bd_width - \
@@ -294,8 +294,8 @@ class LetterBox(Button):
         else:
             self.visible = False
         Button.draw(self)
-        
-        
+
+
     def set_text(self, text, fix_case=True):
         if fix_case:
             if self.upper_case:

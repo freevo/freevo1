@@ -7,11 +7,11 @@
 # Notes: This file contains only small areas, other areas like
 #        ListingArea have there own file
 #
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -70,7 +70,7 @@ class Title_Area(Skin_Area):
         Skin_Area.__init__(self, 'title')
         self.text = ''
 
-        
+
     def update_content_needed(self):
         """
         check if the content needs an update. This function does the same as
@@ -100,7 +100,7 @@ class Title_Area(Skin_Area):
                        ((item.image and not item.image.endswith('.raw')) or \
                         (item.parent and item.parent.name == item.show_name[0])):
                     sn   = item.show_name
-                    text = sn[1] + "x" + sn[2] + " - " + sn[3] 
+                    text = sn[1] + "x" + sn[2] + " - " + sn[3]
                 elif item.parent and len(item.parent.name) > 5 and \
                          Unicode(item.name).startswith(Unicode(item.parent.name)):
                     text = item.name[len(item.parent.name):].strip(' -_')
@@ -156,7 +156,7 @@ class Plugin_Area(Skin_Area):
         self.width   = osd.width  - 2 * config.OSD_OVERSCAN_X
         self.height  = osd.height - 2 * config.OSD_OVERSCAN_Y
 
-        
+
     def __str__(self):
         return 'x=%s, y=%s, width=%s, height=%s' % (self.x, self.y, self.width, self.height)
 
@@ -166,7 +166,7 @@ class Plugin_Area(Skin_Area):
             return self.xml_settings.font[name]
         except:
             return self.xml_settings.font['default']
-    
+
 
     def update_content(self):
         """
@@ -177,4 +177,3 @@ class Plugin_Area(Skin_Area):
 
         for p in self.plugins:
             p.draw((self.widget_type, self.menuw), self)
-

@@ -57,7 +57,7 @@ import alsaaudio
 
 class PluginInterface(plugin.DaemonPlugin):
     """
-    Mixer for ALSA, requires pyalsaaudio module from 
+    Mixer for ALSA, requires pyalsaaudio module from
     http://sourceforge.net/projects/pyalsaaudio/
     """
 

@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -70,7 +70,7 @@ class MediaMenu(Item):
     This is the main menu for audio, video and images. It displays the default
     directories and the ROM_DRIVES
     """
-    
+
     def __init__(self):
         Item.__init__(self)
         self.type = 'mediamenu'
@@ -107,16 +107,16 @@ class MediaMenu(Item):
             for type in ('audio', 'video', 'image', 'games'):
                 dir_types[type] = [ 'dir', 'audiocd', 'audio', 'video',
                                     'vcd', 'dvd', 'empty_cdrom' ]
-                
+
         if self.display_type:
             plugins_list = plugin.get('mainmenu_%s' % self.display_type)
         else:
             plugins_list = []
 
         dir_type = dir_types.get( self.display_type, [ ] )
-        
+
         for p in plugins_list:
-            
+
             if isinstance( p, plugins.rom_drives.rom_items ):
                 # do not show media from other menus
                 for i in p.items( self ):
@@ -136,7 +136,7 @@ class MediaMenu(Item):
         title = _('Media')
 
         self.menuw = menuw
-        
+
         if self.display_type == 'video':
             title = _('Movie')
         if self.display_type == 'audio':
@@ -147,7 +147,7 @@ class MediaMenu(Item):
             title = _('Games')
 
         menutitle = _('%s Main Menu') % title
-        
+
         if self.display_type:
             items = getattr(config, '%s_ITEMS' % self.display_type.upper())
         else:
@@ -169,7 +169,7 @@ class MediaMenu(Item):
                 reachable = 1
                 pos = filename.find(':/')
                 if pos > 0:
-                    if filename.find(':/') < filename.find('/'):                        
+                    if filename.find(':/') < filename.find('/'):
                         hostname = filename[0:pos]
                         filename = filename[pos+1:]
                         try:
@@ -181,7 +181,7 @@ class MediaMenu(Item):
                 elif not os.path.exists(filename):
                     print '\"%s\" doesn\'t exist' % (filename)
                     reachable = 0
-                       
+
                 if reachable:
                     if vfs.isdir(filename):
                         item = directory.DirItem(String(filename), self,
@@ -218,7 +218,7 @@ class MediaMenu(Item):
         if len(items) == 1:
             items[0](menuw=menuw)
             return
-        
+
         item_menu = menu.Menu(menutitle, items,
                               item_types = '%s main menu' % self.display_type,
                               umount_all=1, reload_func = self.reload)

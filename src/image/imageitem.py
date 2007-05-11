@@ -5,11 +5,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -57,7 +57,7 @@ class ImageItem(Item):
             self.image = self.filename
         self.duration = duration
 
-        
+
     def __getitem__(self, key):
         #print "__getitem__(self=%s, key=%s)" % (self.filename, key)
         """
@@ -67,7 +67,7 @@ class ImageItem(Item):
             if self['width'] and self['height']:
                 return '%sx%s' % (self['width'], self['height'])
             return ''
-        
+
         if key == "date":
             try:
                 t = str(Item.__getitem__(self, key))
@@ -76,9 +76,9 @@ class ImageItem(Item):
                                          time.strptime(t, '%Y:%m:%d %H:%M:%S'))
             except:
                 pass
-            
+
         return Item.__getitem__(self, key)
-        
+
 
     def sort(self, mode=None):
         #print "sort(self, mode=%s)" % (mode)
