@@ -134,14 +134,17 @@ class Cache:
             return 0
 
         new = 0
-        for filename in os.listdir(directory):
-            fullname  = os.path.join(directory, filename)
-            try:
-                info = self.find(filename, directory, fullname)
-            except (KeyError, FileOutdatedException):
-                new += 1
-            except (OSError, IOError):
-                pass
+        try:
+            for filename in os.listdir(directory):
+                fullname  = os.path.join(directory, filename)
+                try:
+                    info = self.find(filename, directory, fullname)
+                except (KeyError, FileOutdatedException):
+                    new += 1
+                except (OSError, IOError):
+                    pass
+        except OSError, e:
+            print 'Cannot list directory: %s' % (e)
         return new
 
 
