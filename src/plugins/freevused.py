@@ -34,7 +34,7 @@
 #     'VOL-': 'MIXER_VOLDOWN',     # 3rd row left
 #     'STOP': 'EXIT',              # 3rd row center
 #     'VOL+': 'MIXER_VOLUP',       # 3rd row right
-#     'VOLM': 'MIXER_VOLMUTE',     # 4th row left
+#     'VOLM': 'MIXER_MUTE',        # 4th row left
 #     'SLCT': 'ENTER',             # 4th row center
 #     'MAIN': 'STOP',              # 4th row right
 
@@ -173,7 +173,7 @@ class PluginInterface(plugin.DaemonPlugin):
       'VOL-': 'MIXER_VOLDOWN',     # 3rd row left
       'STOP': 'EXIT',              # 3rd row center
       'VOL+': 'MIXER_VOLUP',       # 3rd row right
-      'VOLM': 'MIXER_VOLMUTE',     # 4th row left
+      'VOLM': 'MIXER_MUTE',        # 4th row left
       'SLCT': 'ENTER',             # 4th row center
       'MAIN': 'STOP',              # 4th row right
 
@@ -247,7 +247,7 @@ class PluginInterface(plugin.DaemonPlugin):
                   'VOL-': 'MIXER_VOLDOWN',     # 3rd row left
                   'STOP': 'EXIT',              # 3rd row center
                   'VOL+': 'MIXER_VOLUP',       # 3rd row right
-                  'VOLM': 'MIXER_VOLMUTE',     # 4th row left
+                  'VOLM': 'MIXER_MUTE',        # 4th row left
                   'SLCT': 'ENTER',             # 4th row center
                   'MAIN': 'STOP',              # 4th row right
 

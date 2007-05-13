@@ -19,9 +19,10 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated Catalan translation (F#1709740)
  * Updated mplayer to allow multiple crop points (F#1712397)
  * Fixed alsamixer choose mute control (B#1717659)
+ * Fixed freevused mute mixer event name has changed (B#1717661)
  * Fixed recordserver failing to record consecutive shows (B#1715260)
  * Fixed rss feed not correctly writing the fxd file (B#1710553)
- * Fixed weather plug-in for changed URLs (B#1717788)
+ * Fixed weather plug-in for changed URLs (B#1717788,B#1717660)
 
 == Release 1.7.1 (2007-04-29) ==
 --------------------------------
