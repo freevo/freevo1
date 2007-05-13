@@ -211,6 +211,39 @@ def add_toogle(name, item, var):
 
 
 #
+# Field_dominance
+#
+
+def toggle3(arg=None, menuw=None):
+    arg[1][arg[2]] += 1
+    if arg[1][arg[2]] > 1:
+        arg[1][arg[2]] = -1
+
+    old = menuw.menustack[-1].selected
+    pos = menuw.menustack[-1].choices.index(menuw.menustack[-1].selected)
+
+    new = add_toogle3(arg[0], arg[1], arg[2])
+    new.image = old.image
+
+    if hasattr(old, 'display_type'):
+        new.display_type = old.display_type
+
+    menuw.menustack[-1].choices[pos] = new
+    menuw.menustack[-1].selected = menuw.menustack[-1].choices[pos]
+
+    menuw.init_page()
+    menuw.refresh()
+
+def add_toogle3(name, item, var):
+    if item[var] == -1:
+        return menu.MenuItem(_('Turn TOP field first'), toggle3, (name, item, var))
+    elif item[var] == 0:
+        return menu.MenuItem(_('Turn BOTTOM field first'), toggle3, (name, item, var))
+    else:
+        return menu.MenuItem(_('Turn AUTO field first'), toggle3, (name, item, var))
+
+
+#
 # config main menu
 #
 
@@ -238,7 +271,7 @@ def get_items(item):
         items += [ add_toogle(_('Deinterlacing'), item, 'deinterlace') ]
         items += [ add_toogle(_('X-Video Motion Compensation (xvmc)'), item, 'xvmc') ]
         if hasattr(config, 'MPLAYER_HAS_FIELD_DOMINANCE') and config.MPLAYER_HAS_FIELD_DOMINANCE:
-            items += [ add_toogle(_('Bottom field first'), item, 'field-dominance') ]
+            items += [ add_toogle3(_('Turn BOTTOM field first'), item, 'field-dominance') ]
     return items
 
 

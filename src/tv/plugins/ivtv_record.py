@@ -135,6 +135,14 @@ class Record_Thread(threading.Thread):
                 if DEBUG: print 'Setting Channel to %s' % self.prog.tunerid
                 fc.chanSet(str(self.prog.tunerid), False)
 
+                if vg.desc == "INTER":
+                    cmd="sudo /usr/local/sbin/set_inter"
+                    if DEBUG:
+                        print "run cmd: %s" % cmd
+                    retcode=os.system(cmd)
+                    if DEBUG:
+                        print "exit code: %g" % retcode
+
                 if DEBUG: v.print_settings()
 
                 now = time.time()

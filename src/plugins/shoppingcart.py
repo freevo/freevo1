@@ -98,6 +98,15 @@ class PluginInterface(plugin.ItemPlugin):
             rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Added to Cart')))
 
 
+    def addItemToCart(self, item):
+        if hasattr(item, 'subitems') and item.subitems:
+            for s in item.subitems:
+                self.cart.append(s)
+        else:
+            self.cart.append(item)
+        rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Added Item to Cart')))
+
+
     def deleteCart(self, arg=None, menuw=None):
         self.cart = []
         rc.post_event(em.MENU_BACK_ONE_MENU)

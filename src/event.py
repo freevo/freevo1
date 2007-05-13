@@ -208,6 +208,7 @@ IMAGE_ROTATE           = Event('IMAGE_ROTATE')
 IMAGE_SAVE             = Event('IMAGE_SAVE')
 
 IMAGE_MOVE             = Event('IMAGE_MOVE')
+IMAGE_TAG              = Event('IMAGE_TAG')
 
 #
 # Games module
@@ -448,6 +449,7 @@ IMAGE_EVENTS = {
     '0'         : IMAGE_NO_ZOOM,
     'DISPLAY'   : TOGGLE_OSD,
     'REC'       : IMAGE_SAVE,
+    'ENTER'     : IMAGE_TAG,
     'UP'        : PLAYLIST_PREV,
     'DOWN'      : PLAYLIST_NEXT,
     'CH+'       : PLAYLIST_PREV,

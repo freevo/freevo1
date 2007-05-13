@@ -404,6 +404,15 @@ class ImageViewer(GUIObject):
                 self.osd.bitmapcache.__delitem__(self.filename)
                 return True
 
+        # append the image filename to shoppingcart list
+        elif event == IMAGE_TAG:
+            if plugin.is_active('shoppingcart'):
+                try:
+                    plugin.get('item')[0].addItemToCart(self.fileitem)
+                    return True
+                except Exception, e:
+                    print 'getbyname(\'shoppingcart\')', e
+
         else:
             return self.fileitem.eventhandler(event)
 
