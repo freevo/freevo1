@@ -267,6 +267,7 @@ LOCAL_CONF_CHANGES = [
      '''Changed rss.feeds field separator to use a ';' instead of a ','
      Changed weather locations to add a language code as the third parameter
      Moved video.reencode to video.reencode-old and video.reencode2 to video.reencode
+     Added MAJOR_AUDIO_CTRL_MUTE to be able to choose a differente control for mute in the Alsa mixer plugin
      ''' ),
 ]
 
@@ -298,6 +299,10 @@ AUDIO_DEVICE       = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 MAJOR_AUDIO_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
                                      # 'VOL', 'PCM' 'OGAIN' etc.
+MAJOR_AUDIO_CTRL_MUTE = 'PCM'        # used in alsamixer.py
+                                     # There are systems where volume
+                                     # and mute use different controls
+
 CONTROL_ALL_AUDIO  = 1               # Should Freevo take complete control of audio
 MAX_VOLUME         = 90              # Set what you want maximum volume level to be.
 DEFAULT_VOLUME     = 40              # Set default volume level.

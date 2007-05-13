@@ -51,6 +51,11 @@ CONFIG_VERSION = 5.17
 # AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 # MAJOR_AUDIO_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
                                        # 'VOL', 'PCM' 'OGAIN' etc.
+
+# MAJOR_AUDIO_CTRL_MUTE = 'PCM'        # used in alsamixer.py
+#                                      # There are systems where volume
+#                                      # and mute use different controls
+
 # CONTROL_ALL_AUDIO  = 1               # Should Freevo take complete control of audio
 # MAX_VOLUME         = 90              # Set what you want maximum volume level to be.
 # DEFAULT_VOLUME     = 40              # Set default volume level.
