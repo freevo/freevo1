@@ -268,6 +268,7 @@ LOCAL_CONF_CHANGES = [
      Changed weather locations to add a language code as the third parameter
      Moved video.reencode to video.reencode-old and video.reencode2 to video.reencode
      Added MAJOR_AUDIO_CTRL_MUTE to be able to choose a differente control for mute in the Alsa mixer plugin
+     Changed default locale from latin-1 to iso-8859-15, they are really the same
      ''' ),
 ]
 
@@ -705,7 +706,7 @@ plugin.activate('audio.detachbar')
 # in another encoding. Locale must be one of: de, jp, uk, us
 #
 AMAZON_LOCALE = 'us'
-AMAZON_QUERY_ENCODING = 'latin-1'
+AMAZON_QUERY_ENCODING = 'iso-8859-15'
 
 # use mplayer for tv
 # to use tvtime, put the following two lines in your local_conf.py:
@@ -1910,7 +1911,7 @@ else:
     TV_LOGOS = '/tmp/freevo/xmltv/logos'
 
 
-LOCALE='latin-1'
+LOCALE='iso-8859-15'
 
 FREEVO_EVENTHANDLER_SANDBOX = 1
 

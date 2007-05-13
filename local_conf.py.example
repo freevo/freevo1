@@ -1547,7 +1547,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 # to those logos here
 # TV_LOGOS = OS_CACHEDIR + '/xmltv/logos'
 
-# LOCALE='latin-1'
+# LOCALE='iso-8859-15'
 
 # ======================================================================
 # Idlebar and plugins
