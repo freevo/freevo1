@@ -706,8 +706,8 @@ class FxdImdb:
 
         #is this a serie? series pages a little different
         if self.newid:
-            self.title = self.title + " - %sx%s - %s" % (self.season, \
-                         self.episode, title.find('em').string.strip() )
+            self.title = self.title + " - %sx%.2d - %s" % (self.season, \
+                         int(self.episode), title.find('em').string.strip() )
             self.info['title'] = self.title
             y = title.find('em').next.next.string.strip()
             self.info['year'] = y[1:-1]

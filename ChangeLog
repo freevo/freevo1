@@ -20,6 +20,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated mplayer to allow multiple crop points (F#1712397)
  * Fixed alsamixer choose mute control (B#1717659)
  * Fixed freevused mute mixer event name has changed (B#1717661)
+ * Fixed imdb plug-in to correct episode number format (B#1716131)
  * Fixed recordserver failing to record consecutive shows (B#1715260)
  * Fixed rss feed not correctly writing the fxd file (B#1710553)
  * Fixed weather plug-in for changed URLs (B#1717788,B#1717660)
