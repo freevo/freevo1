@@ -44,11 +44,18 @@ class PluginInterface(plugin.MainMenuPlugin):
     def __init__(self):
         _debug_('__init__(self)', 2)
         plugin.MainMenuPlugin.__init__(self)
-        config.EVENTS['audio']['DISPLAY'] = Event(FUNCTION_CALL, arg=self.detach)
-        #config.EVENTS['audio']['EXIT'] = Event(FUNCTION_CALL, arg=self.detach)
+        config.EVENTS['audio'][config.DETACH_KEY] = Event(FUNCTION_CALL, arg=self.detach)
         self.show_item = menu.MenuItem(_('Show player'), action=self.show)
         self.show_item.type = 'detached_player'
 
+
+    def config(self):
+        '''config is called automatically,
+        freevo plugins -i audio.detach returns the info
+        '''
+        return [
+            ('DETACH_KEY', 'DISPLAY', 'Event to activate the detach bar, DISPLAY, ENTER, EXIT'),
+        ]
 
     def detach(self):
         _debug_('detach(self)', 2)
