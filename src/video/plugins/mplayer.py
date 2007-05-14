@@ -294,8 +294,8 @@ class MPlayer:
 
         #_debug_(' '.join(command))
 
-        if plugin.getbyname('MIXER'):
-            plugin.getbyname('MIXER').reset()
+        #if plugin.getbyname('MIXER'):
+            #plugin.getbyname('MIXER').reset()
 
         rc.app(self)
 

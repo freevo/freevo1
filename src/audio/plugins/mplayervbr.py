@@ -158,8 +158,8 @@ class MPlayer:
         for p in self.plugins:
             command = p.play(command, self)
 
-        if plugin.getbyname('MIXER'):
-            plugin.getbyname('MIXER').reset()
+        #if plugin.getbyname('MIXER'):
+            #plugin.getbyname('MIXER').reset()
 
         self.item = item
 
