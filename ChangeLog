@@ -18,6 +18,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
  * Updated Catalan translation (F#1709740)
  * Updated mplayer to allow multiple crop points (F#1712397)
+ * Updated mplayer to allow previous channel selection (F#1720667)
  * Fixed alsamixer choose mute control (B#1717659)
  * Fixed directory listing crash when permission is denied (B#1715447)
  * Fixed freevused mute mixer event name has changed (B#1717661)

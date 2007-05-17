@@ -232,6 +232,15 @@ class MPlayer:
 
         if os.path.exists('/tmp/freevo.wid'): os.unlink('/tmp/freevo.wid')
 
+        lastchanfile = os.path.join(config.FREEVO_CACHEDIR, 'lastchan')
+        lcfp = open(lastchanfile, "w")
+        lastchan = self.fc.getChannel()
+        lastchannum = self.fc.getChannelNum()
+        lcfp.write(str(lastchan))
+        lcfp.write('\n')
+        lcfp.write(str(lastchannum))
+        lcfp.write('\n')
+        lcfp.close()
 
     def eventhandler(self, event, menuw=None):
         s_event = '%s' % event
@@ -246,7 +255,7 @@ class MPlayer:
             if DEBUG: print '%s: sending pause to mplayer' % (time.time())
             return TRUE
 
-        elif event in [ em.TV_CHANNEL_UP, em.TV_CHANNEL_DOWN] or s_event.startswith('INPUT_'):
+        elif event in [ em.TV_CHANNEL_UP, em.TV_CHANNEL_DOWN, em.TV_CHANNEL_LAST ] or s_event.startswith('INPUT_'):
             chan = None
             if event == em.TV_CHANNEL_UP:
                 nextchan = self.fc.getNextChannel()
@@ -254,6 +263,15 @@ class MPlayer:
             elif event == em.TV_CHANNEL_DOWN:
                 nextchan = self.fc.getPrevChannel()
                 nextchannum = self.fc.getPrevChannelNum()
+            elif event == em.TV_CHANNEL_LAST:
+                lastchanfile = os.path.join(config.FREEVO_CACHEDIR, 'lastchan')
+                lcfp = open(lastchanfile, "r")
+                nextchan = lcfp.readline()
+                nextchan = nextchan.strip()
+                nextchannum = lcfp.readline()
+                nextchannum = nextchannum.strip()
+                nextchannum = int(nextchannum)
+                lcfp.close()
             else:
                 chan = int( s_event[6] )
                 nextchan = self.fc.getManChannel(chan)

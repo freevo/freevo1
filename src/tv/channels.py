@@ -216,6 +216,8 @@ class FreevoChannels:
     def getChannel(self):
         return config.TV_CHANNELS[self.chan_index][2]
 
+    def getChannelNum(self):
+        return (self.chan_index) % len(config.TV_CHANNELS)
 
     def getManChannelNum(self, channel=0):
         return (channel-1) % len(config.TV_CHANNELS)
