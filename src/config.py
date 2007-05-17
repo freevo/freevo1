@@ -138,13 +138,14 @@ class VideoGroup:
     desc:         A nice description for this VideoGroup.
     group_type:   Special variable to identify devices like dvb or ivtv.  This
                   can be left as default, 'normal', or set to 'ivtv' or 'dvb'.
+    cmd:          Command for execute external prog after the channel switched, such as 'sudo /usr/local/bin/setuptuner'
     """
 
     def __init__(self, vdev='/dev/video', vvbi='/dev/vbi', adev=None, input_type='tuner',
                  input_num=0, tuner_norm='NTSC', tuner_chanlist='us-cable',
                  tuner_type='internal', tuner_chan=None,
                  record_group=None, desc='Freevo default VideoGroup',
-                 group_type='normal'):
+                 group_type='normal', cmd=None):
 
         # XXX: Put checks in here for supplied values.
         self.vdev = vdev
@@ -161,6 +162,9 @@ class VideoGroup:
         self.group_type = group_type
         self.in_use = FALSE
         self.tuner = None
+        self.cmd = None
+        if cmd != None and isinstance(cmd,str) and cmd.strip() != '':
+            self.cmd = cmd.strip()
 
     def __str__(self):
         s = '<%s: %s %s %s %s %s %s>' % (self.group_type, self.vdev, self.vvbi, self.adev,

@@ -202,12 +202,11 @@ class FreevoChannels:
             except:
                 print String(_('Failed to set freq for channel %s.') % chan)
 
-            if vg.desc == "INTER":
-                cmd="sudo /usr/local/sbin/set_inter"
+            if vg.cmd:
                 if DEBUG:
-                    print "run cmd: %s" % cmd
+                    _debug_("run cmd: %s" % vg.cmd, 1)
                 import os
-                retcode=os.system(cmd)
+                retcode=os.system(vg.cmd)
                 if DEBUG:
                     print "exit code: %g" % retcode
 
