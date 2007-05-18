@@ -36,6 +36,7 @@ import os
 import config
 import util
 import plugin
+import re
 
 from imageitem import ImageItem
 from playlist import Playlist
@@ -67,9 +68,11 @@ class PluginInterface(plugin.MimetypePlugin):
         return a list of items based on the files
         """
         items = []
+        exclude_string = re.compile('|'.join(config.IMAGE_EXCLUDE))
         for file in util.find_matches(files, config.IMAGE_SUFFIX):
-            items.append(ImageItem(file, parent))
-            files.remove(file)
+            if not re.search(exclude_string, file):
+                items.append(ImageItem(file, parent))
+                files.remove(file)
         return items
 
 
