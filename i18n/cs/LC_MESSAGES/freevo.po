@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo 1.70\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-11 20:32+0200\n"
+"POT-Creation-Date: 2007-05-18 20:51+0200\n"
 "PO-Revision-Date: 2007-03-22 18:45+0100\n"
 "Last-Translator: Tonous <tonous@dkm.cz>\n"
 "Language-Team: Jiri Kulhan <jiri@kulhan.cz>\n"
@@ -16,23 +16,23 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../freevo_config.py:1068 ../freevo_config.py:1073
+#: ../freevo_config.py:1075 ../freevo_config.py:1080
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Název"
 
-#: ../freevo_config.py:1069 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1076 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Popis"
 
-#: ../freevo_config.py:1070
+#: ../freevo_config.py:1077
 msgid "Author"
 msgstr "Autor"
 
-#: ../freevo_config.py:1074 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1081 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -40,11 +40,11 @@ msgstr "Autor"
 msgid "Date"
 msgstr "Datum"
 
-#: ../freevo_config.py:1077
+#: ../freevo_config.py:1084
 msgid "Model"
 msgstr "Model"
 
-#: ../freevo_config.py:1078
+#: ../freevo_config.py:1085
 msgid "Software"
 msgstr "Software"
 
@@ -134,588 +134,598 @@ msgstr "Stránky s titulky"
 msgid "No Headlines Sites found"
 msgstr "®ádné stránky s titulky nebyly nalezeny"
 
-#: plugins/weather.py:70
+#: plugins/weather.py:69
 msgid "Cloudy"
 msgstr "oblaèno"
 
-#: plugins/weather.py:71
+#: plugins/weather.py:70
 msgid "Mostly Cloudy"
 msgstr "vìt¹inou oblaèno"
 
-#: plugins/weather.py:72
+#: plugins/weather.py:71
 msgid "Partly Cloudy"
 msgstr "místní oblaènost"
 
-#: plugins/weather.py:73
+#: plugins/weather.py:72
 msgid "Light Rain"
 msgstr "slabý dé¹»"
 
-#: plugins/weather.py:74
+#: plugins/weather.py:73
 msgid "Showers"
 msgstr "pøeháòky"
 
-#: plugins/weather.py:75
+#: plugins/weather.py:74
 msgid "Snow"
 msgstr "snì¾ení"
 
-#: plugins/weather.py:76 plugins/weather.py:171
+#: plugins/weather.py:75 plugins/weather.py:170
 msgid "Rain"
 msgstr "dé¹»"
 
-#: plugins/weather.py:77
+#: plugins/weather.py:76
 msgid "AM Showers"
 msgstr "dop. pøeháòky"
 
-#: plugins/weather.py:78
+#: plugins/weather.py:77
 msgid "Fog"
 msgstr "mlha"
 
-#: plugins/weather.py:79
+#: plugins/weather.py:78
 msgid "Few Showers"
 msgstr "obè. pøeháòky"
 
-#: plugins/weather.py:80
+#: plugins/weather.py:79
 msgid "Mostly Sunny"
 msgstr "polojasno"
 
-#: plugins/weather.py:81
+#: plugins/weather.py:80
 msgid "Sunny"
 msgstr "jasno"
 
-#: plugins/weather.py:82
+#: plugins/weather.py:81
 msgid "Scattered Flurries"
 msgstr "nárazový vítr "
 
-#: plugins/weather.py:83
+#: plugins/weather.py:82
 msgid "AM Clouds/PM Sun"
 msgstr "dop. zamraèeno, odp. jasno"
 
-#: plugins/weather.py:84
+#: plugins/weather.py:83
 msgid "Isolated T-Storms"
 msgstr "místní silné bouøky"
 
-#: plugins/weather.py:85
+#: plugins/weather.py:84
 msgid "Scattered Thunderstorms"
 msgstr "místní bouøky"
 
-#: plugins/weather.py:86
+#: plugins/weather.py:85
 msgid "PM Showers"
 msgstr "odp. pøeháòky"
 
-#: plugins/weather.py:87
+#: plugins/weather.py:86
 msgid "PM Showers/Wind"
 msgstr "odp. pøeháòky/vítr"
 
-#: plugins/weather.py:88
+#: plugins/weather.py:87
 msgid "Rain/Snow Showers"
 msgstr "smí¹ené pøeháòky"
 
-#: plugins/weather.py:89
+#: plugins/weather.py:88
 msgid "Few Snow Showers"
 msgstr "místní snìhové pøeháòky"
 
-#: plugins/weather.py:90
+#: plugins/weather.py:89
 msgid "Cloudy/Wind"
 msgstr "zata¾eno/vítr"
 
-#: plugins/weather.py:91
+#: plugins/weather.py:90
 msgid "Flurries/Wind"
 msgstr "poryvy vìtru"
 
-#: plugins/weather.py:92
+#: plugins/weather.py:91
 msgid "Mostly Cloudy/Windy"
 msgstr "pøevá¾nì zata¾eno/vítr"
 
-#: plugins/weather.py:93
+#: plugins/weather.py:92
 msgid "Rain/Thunder"
 msgstr "dé¹» s bouøkou"
 
-#: plugins/weather.py:94 plugins/weather.py:175
+#: plugins/weather.py:93 plugins/weather.py:174
 msgid "Partly Cloudy/Windy"
 msgstr "èásteènì zata¾eno/vítr"
 
-#: plugins/weather.py:95
+#: plugins/weather.py:94
 msgid "AM Rain/Snow Showers"
 msgstr "dop. smí¹ené pøeháòky"
 
-#: plugins/weather.py:96
+#: plugins/weather.py:95
 msgid "Light Rain/Wind"
 msgstr "slabý dé¹»/vítr"
 
-#: plugins/weather.py:97
+#: plugins/weather.py:96
 msgid "Showers/Wind"
 msgstr "pøeháòky/vítr"
 
-#: plugins/weather.py:98
+#: plugins/weather.py:97
 msgid "Heavy Snow"
 msgstr "silné snì¾ení"
 
-#: plugins/weather.py:99 plugins/weather.py:167
+#: plugins/weather.py:98 plugins/weather.py:166
 msgid "Drizzle"
 msgstr "mrholení"
 
-#: plugins/weather.py:100
+#: plugins/weather.py:99
 msgid "Mostly Sunny/Wind"
 msgstr "jasno/vítr"
 
-#: plugins/weather.py:101
+#: plugins/weather.py:100
 msgid "Flurries"
 msgstr "metelice"
 
-#: plugins/weather.py:102
+#: plugins/weather.py:101
 msgid "Rain/Wind"
 msgstr "dé¹»/vítr"
 
-#: plugins/weather.py:103
+#: plugins/weather.py:102
 msgid "Sct Flurries/Wind"
 msgstr "místní metelice/vítr"
 
-#: plugins/weather.py:104
+#: plugins/weather.py:103
 msgid "Sct Strong Storms"
 msgstr "silné místní bouøky"
 
-#: plugins/weather.py:105
+#: plugins/weather.py:104
 msgid "PM T-Storms"
 msgstr "odp. silné bouøky"
 
-#: plugins/weather.py:106
+#: plugins/weather.py:105
 msgid "Thunderstorms"
 msgstr "bouøka"
 
-#: plugins/weather.py:107
+#: plugins/weather.py:106
 msgid "Sunny/Windy"
 msgstr "jasno/vítr"
 
-#: plugins/weather.py:108
+#: plugins/weather.py:107
 msgid "AM Thunderstorms"
 msgstr "dop. bouøky"
 
-#: plugins/weather.py:109
+#: plugins/weather.py:108
 msgid "AM Rain"
 msgstr "dop. dé¹»"
 
-#: plugins/weather.py:110
+#: plugins/weather.py:109
 msgid "Iso T-Storms/Wind"
 msgstr "místní bouøky/vítr"
 
-#: plugins/weather.py:111
+#: plugins/weather.py:110
 msgid "Rain/Snow"
 msgstr "dé¹» se snìhem"
 
-#: plugins/weather.py:112
+#: plugins/weather.py:111
 msgid "Sct T-Storms/Wind"
 msgstr "obè. bouøky/vítr"
 
-#: plugins/weather.py:113
+#: plugins/weather.py:112
 msgid "AM Showers/Wind"
 msgstr "dop. pøeháòky/vítr"
 
-#: plugins/weather.py:114
+#: plugins/weather.py:113
 msgid "Sct Snow Showers"
 msgstr "obè. snìhové pøeháòky"
 
-#: plugins/weather.py:115
+#: plugins/weather.py:114
 msgid "Snow to Ice/Wind"
 msgstr "krupice/vítr"
 
-#: plugins/weather.py:116
+#: plugins/weather.py:115
 msgid "AM Ice"
 msgstr "dop. krupice"
 
-#: plugins/weather.py:117
+#: plugins/weather.py:116
 msgid "Snow to Rain"
 msgstr "sníh/dé¹»"
 
-#: plugins/weather.py:118
+#: plugins/weather.py:117
 msgid "AM Light Rain"
 msgstr "dop. slabý dé¹»"
 
-#: plugins/weather.py:119
+#: plugins/weather.py:118
 msgid "PM Light Rain"
 msgstr "odp. slabý dé¹»"
 
-#: plugins/weather.py:120
+#: plugins/weather.py:119
 msgid "PM Rain"
 msgstr "odp. dé¹»"
 
-#: plugins/weather.py:121
+#: plugins/weather.py:120
 msgid "Snow Showers"
 msgstr "snìhové pøeháòky"
 
-#: plugins/weather.py:122
+#: plugins/weather.py:121
 msgid "Rain to Snow"
 msgstr "dé¹»/sníh"
 
-#: plugins/weather.py:123
+#: plugins/weather.py:122
 msgid "PM Rain/Snow"
 msgstr "odp. dé¹»/sníh"
 
-#: plugins/weather.py:124
+#: plugins/weather.py:123
 msgid "Few Showers/Wind"
 msgstr "obè. pøeháòky/vítr"
 
-#: plugins/weather.py:125
+#: plugins/weather.py:124
 msgid "Snow/Wind"
 msgstr "snì¾ení/vítr"
 
-#: plugins/weather.py:126
+#: plugins/weather.py:125
 msgid "PM Rain/Snow Showers"
 msgstr "odp. dé¹»/sníh pøeháòky"
 
-#: plugins/weather.py:127 plugins/weather.py:138
+#: plugins/weather.py:126 plugins/weather.py:137
 msgid "PM Rain/Snow/Wind"
 msgstr "odp. dé¹»/sníh/vítr"
 
-#: plugins/weather.py:128
+#: plugins/weather.py:127
 msgid "Rain/Snow Showers/Wind"
 msgstr "dé¹»/sníh pøeháòky/vítr"
 
-#: plugins/weather.py:129
+#: plugins/weather.py:128
 msgid "Rain/Snow/Wind"
 msgstr "dé¹»/sníh/vítr"
 
-#: plugins/weather.py:130
+#: plugins/weather.py:129
 msgid "Light Snow"
 msgstr "slabé snì¾ení"
 
-#: plugins/weather.py:131
+#: plugins/weather.py:130
 msgid "PM Snow"
 msgstr "odp. snì¾ení"
 
-#: plugins/weather.py:132
+#: plugins/weather.py:131
 msgid "Few Snow Showers/Wind"
 msgstr "obè. snìhové pøeháòky/vítr"
 
-#: plugins/weather.py:133
+#: plugins/weather.py:132
 msgid "Light Snow/Wind"
 msgstr "slabé snì¾ení/vítr"
 
-#: plugins/weather.py:134
+#: plugins/weather.py:133
 msgid "Wintry Mix"
 msgstr "prostì zima"
 
-#: plugins/weather.py:135
+#: plugins/weather.py:134
 msgid "AM Wintry Mix"
 msgstr "dop. zima"
 
-#: plugins/weather.py:136 plugins/weather.py:173
+#: plugins/weather.py:135 plugins/weather.py:172
 msgid "Hvy Rain/Freezing Rain"
 msgstr "silný mrznoucí dé¹r»"
 
-#: plugins/weather.py:137
+#: plugins/weather.py:136
 msgid "AM Light Snow"
 msgstr "dop. slabý dé¹»"
 
-#: plugins/weather.py:139
+#: plugins/weather.py:138
 msgid "Rain/Freezing Rain"
 msgstr "dé¹»/mrznoucí dé¹»"
 
-#: plugins/weather.py:140
+#: plugins/weather.py:139
 msgid "T-Storms/Wind"
 msgstr "bouøky/vítr"
 
-#: plugins/weather.py:141
+#: plugins/weather.py:140
 msgid "Sprinkles"
 msgstr "pøeháòky"
 
-#: plugins/weather.py:142
+#: plugins/weather.py:141
 msgid "AM Snow Showers"
 msgstr "dop. snìhové pøeháòky"
 
-#: plugins/weather.py:143
+#: plugins/weather.py:142
 msgid "AM Clouds/PM Sun/Wind"
 msgstr "dop. mlhy odp. jasno/vítr"
 
-#: plugins/weather.py:144
+#: plugins/weather.py:143
 msgid "AM Rain/Snow/Wind"
 msgstr "dop. dé¹»/sníh/vítr"
 
-#: plugins/weather.py:145
+#: plugins/weather.py:144
 msgid "Rain to Snow/Wind"
 msgstr "dé¹»/sníh/vítr"
 
-#: plugins/weather.py:146
+#: plugins/weather.py:145
 msgid "Snow to Wintry Mix"
 msgstr "snih/zimní mrazivé poèasí"
 
-#: plugins/weather.py:147
+#: plugins/weather.py:146
 msgid "PM Snow Showers/Wind"
 msgstr "odp. snìhové pøeháòky/vítr"
 
-#: plugins/weather.py:148
+#: plugins/weather.py:147
 msgid "Snow and Ice to Rain"
 msgstr "krupice v dé¹»"
 
-#: plugins/weather.py:149
+#: plugins/weather.py:148
 msgid "Heavy Rain"
 msgstr "silný dé¹»"
 
-#: plugins/weather.py:150
+#: plugins/weather.py:149
 msgid "AM Rain/Ice"
 msgstr "dop. dé¹» v krupici"
 
-#: plugins/weather.py:151
+#: plugins/weather.py:150
 msgid "AM Snow Showers/Wind"
 msgstr "dop. snìhové pøeháòky/vítr"
 
-#: plugins/weather.py:152
+#: plugins/weather.py:151
 msgid "AM Light Snow/Wind"
 msgstr "dop. slabé snì¾ení/vítr"
 
-#: plugins/weather.py:153
+#: plugins/weather.py:152
 msgid "PM Light Rain/Wind"
 msgstr "opd. slabé snì¾ení/vítr"
 
-#: plugins/weather.py:154
+#: plugins/weather.py:153
 msgid "AM Light Wintry Mix"
 msgstr "dop. pravé zimní"
 
-#: plugins/weather.py:155
+#: plugins/weather.py:154
 msgid "PM Light Snow/Wind"
 msgstr "odp. slabé snì¾ení/vítr"
 
-#: plugins/weather.py:156
+#: plugins/weather.py:155
 msgid "Heavy Rain/Wind"
 msgstr "silný dé¹»/vítr"
 
-#: plugins/weather.py:157
+#: plugins/weather.py:156
 msgid "PM Snow Shower"
 msgstr "odp. snìhové pøeháòky"
 
-#: plugins/weather.py:158
+#: plugins/weather.py:157
 msgid "Snow to Rain/Wind"
 msgstr "sníh s de¹tìm a vìtrem"
 
-#: plugins/weather.py:159
+#: plugins/weather.py:158
 msgid "PM Light Rain/Ice"
 msgstr "odp. slabý dé¹» mrznoucí"
 
-#: plugins/weather.py:160
+#: plugins/weather.py:159
 msgid "AM Snow"
 msgstr "dop. snì¾ení"
 
-#: plugins/weather.py:161
+#: plugins/weather.py:160
 msgid "Snow to Ice"
 msgstr "sníh s ledem"
 
-#: plugins/weather.py:162
+#: plugins/weather.py:161
 msgid "Wintry Mix/Wind"
 msgstr "zimni poèasi/vítr"
 
-#: plugins/weather.py:163
+#: plugins/weather.py:162
 msgid "PM Light Snow"
 msgstr "odp. slabé snì¾ení"
 
-#: plugins/weather.py:164
+#: plugins/weather.py:163
 msgid "AM Drizzle"
 msgstr "dop. mrholení"
 
-#: plugins/weather.py:165
+#: plugins/weather.py:164
 msgid "Strong Storms/Wind"
 msgstr "silné bouøe/vítr"
 
-#: plugins/weather.py:166
+#: plugins/weather.py:165
 msgid "PM Drizzle"
 msgstr "odp. mrholení"
 
-#: plugins/weather.py:168
+#: plugins/weather.py:167
 msgid "AM Light Rain/Wind"
 msgstr "dop. slabý dé¹»/vítr"
 
-#: plugins/weather.py:169
+#: plugins/weather.py:168
 msgid "AM Rain/Wind"
 msgstr "dop. dé¹»/vítr"
 
-#: plugins/weather.py:170
+#: plugins/weather.py:169
 msgid "Wintry Mix to Snow"
 msgstr "zimní poèasí pøechází do snì¾ení"
 
-#: plugins/weather.py:172
+#: plugins/weather.py:171
 msgid "AM Light Rain/Ice"
 msgstr "dop. slabý mrznoucí dé¹»"
 
-#: plugins/weather.py:174
+#: plugins/weather.py:173
 msgid "Snow Showers/Windy"
 msgstr "snìhové pøeháòky/vítr"
 
-#: plugins/weather.py:176
+#: plugins/weather.py:175
 msgid "Light Rain Shower"
 msgstr "slabé de¹»ové pøeháòky"
 
-#: plugins/weather.py:177
+#: plugins/weather.py:176
 msgid "Light Rain with Thunder"
 msgstr "slabý dé¹» s bouøkou"
 
-#: plugins/weather.py:178
+#: plugins/weather.py:177
 msgid "Light Drizzle"
 msgstr "slabé mrholení"
 
-#: plugins/weather.py:179
+#: plugins/weather.py:178
 msgid "Mist"
 msgstr "mlha"
 
-#: plugins/weather.py:180
+#: plugins/weather.py:179
 msgid "Smoke"
 msgstr "mlha"
 
-#: plugins/weather.py:181
+#: plugins/weather.py:180
 msgid "Haze"
 msgstr "opar"
 
-#: plugins/weather.py:182
+#: plugins/weather.py:181
 msgid "Light Snow Shower"
 msgstr "slabé snìhové pøeháòky"
 
-#: plugins/weather.py:183
+#: plugins/weather.py:182
 msgid "Light Snow Shower/ Windy"
 msgstr "slabé snìhové pøeháòky/vítr"
 
-#: plugins/weather.py:184
+#: plugins/weather.py:183
 msgid "Clear"
 msgstr "jasno"
 
-#: plugins/weather.py:185
+#: plugins/weather.py:184
 msgid "A Few Clouds"
 msgstr "skoro jasno"
 
-#: plugins/weather.py:186
+#: plugins/weather.py:185
 msgid "Fair"
 msgstr "jasno"
 
-#: plugins/weather.py:367 plugins/weather.py:370
+#: plugins/weather.py:370 plugins/weather.py:373
 #, python-format
 msgid "Last updated: %s"
 msgstr "aktualizace: %s"
 
-#: plugins/weather.py:380
+#: plugins/weather.py:383
 msgid "Unlimited"
 msgstr "Neomezený"
 
-#: plugins/weather.py:393
+#: plugins/weather.py:396
 msgid "Show Weather Details"
 msgstr "Podrobná pøedpovìï"
 
-#: plugins/weather.py:473
+#: plugins/weather.py:476
 #, python-format
 msgid "Fetching Weather for %s..."
 msgstr "Stahuji pøedpovìï na %s"
 
-#: plugins/weather.py:487
+#: plugins/weather.py:490
 #, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Stahuji radarovou mapu %s"
 
-#: plugins/weather.py:643 plugins/weather.py:912 util/misc.py:451
+#: plugins/weather.py:646 plugins/weather.py:920 util/misc.py:451
 #: util/misc.py:462 util/misc.py:473
 msgid "at"
 msgstr "v"
 
-#: plugins/weather.py:673
+#: plugins/weather.py:668
+#, python-format
+msgid "%s (day: %s)"
+msgstr ""
+
+#: plugins/weather.py:668 plugins/weather.py:676
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: plugins/weather.py:754 share/skins/main/bluestar.fxd:13
+#: plugins/weather.py:676
+#, python-format
+msgid "%s (type: %s)"
+msgstr ""
+
+#: plugins/weather.py:762 share/skins/main/bluestar.fxd:13
 msgid "Weather"
 msgstr "Poèasí"
 
-#: plugins/weather.py:760 plugins/weather.py:795 plugins/mpd.py:117
+#: plugins/weather.py:768 plugins/weather.py:803 plugins/mpd.py:117
 msgid "Locations"
 msgstr "Mista"
 
-#: plugins/weather.py:787 plugins/freeboxtv.py:113
+#: plugins/weather.py:795 plugins/freeboxtv.py:113
 msgid "No locations specified"
 msgstr "Nejsou zadaná ¾ádné kódy míst"
 
-#: plugins/weather.py:812
+#: plugins/weather.py:820
 msgid "Current Conditions"
 msgstr "Souèasná situace"
 
-#: plugins/weather.py:812
+#: plugins/weather.py:820
 msgid "Today's Forecast"
 msgstr "Dne¹ní pøedpovìï"
 
-#: plugins/weather.py:813
+#: plugins/weather.py:821
 msgid "Extended Forecast"
 msgstr "Dlouhodobá pøedpovìï"
 
-#: plugins/weather.py:813
+#: plugins/weather.py:821
 msgid "Radar Map"
 msgstr "Radarová mapa"
 
-#: plugins/weather.py:891
+#: plugins/weather.py:899
 msgid "Humidity"
 msgstr "Vlhkost"
 
-#: plugins/weather.py:904
+#: plugins/weather.py:912
 msgid "Pressure"
 msgstr "Tlak"
 
-#: plugins/weather.py:911
+#: plugins/weather.py:919
 msgid "Wind"
 msgstr "Vítr"
 
-#: plugins/weather.py:919
+#: plugins/weather.py:927
 msgid "Wind Chill"
 msgstr "Zdán. teplota"
 
-#: plugins/weather.py:927
+#: plugins/weather.py:935
 msgid "Visibility"
 msgstr "Viditelnost"
 
-#: plugins/weather.py:935
+#: plugins/weather.py:943
 msgid "UV Index"
 msgstr "UV index"
 
-#: plugins/weather.py:978
+#: plugins/weather.py:987
 msgid "Today, a high of"
 msgstr "Dnes, maximálnì"
 
-#: plugins/weather.py:980
+#: plugins/weather.py:988
 msgid "and a low of"
 msgstr "a minimálnì"
 
-#: plugins/weather.py:983
+#: plugins/weather.py:989
 #, fuzzy
 msgid "Currently, there is a humidity of"
 msgstr "Viditelnost"
 
-#: plugins/weather.py:985
+#: plugins/weather.py:990
 msgid "and"
 msgstr "a"
 
-#: plugins/weather.py:987
+#: plugins/weather.py:992
 msgid "the winds are "
 msgstr ""
 
-#: plugins/weather.py:989
+#: plugins/weather.py:994
 msgid "calm"
 msgstr "Bezvìtøí"
 
-#: plugins/weather.py:991
+#: plugins/weather.py:997
 msgid "coming in at"
 msgstr "Vítr o rychlosti "
 
-#: plugins/weather.py:991
+#: plugins/weather.py:998
 msgid "from the"
 msgstr "z"
 
-#: plugins/weather.py:995
+#: plugins/weather.py:1002
 msgid "Visibility will be unlimited today"
 msgstr "Bude jasno"
 
-#: plugins/weather.py:997
+#: plugins/weather.py:1005
 msgid "There will be a visibility of"
 msgstr "Viditelnost a¾"
 
-#: plugins/weather.py:1032
+#: plugins/weather.py:1037
 msgid "LO"
 msgstr "od"
 
-#: plugins/weather.py:1040
+#: plugins/weather.py:1045
 msgid "HI"
 msgstr "do"
 
-#: plugins/weather.py:1054
+#: plugins/weather.py:1059
 msgid "Error encountered while trying to download Radar map"
 msgstr "Nelze stáhnot radarovou mapu"
 
@@ -789,23 +799,28 @@ msgstr "Kopírování souborù"
 msgid "Added to Cart"
 msgstr "Pøidáno do vozíku"
 
-#: plugins/shoppingcart.py:120
+#: plugins/shoppingcart.py:107
+#, fuzzy
+msgid "Added Item to Cart"
+msgstr "Pøidáno do vozíku"
+
+#: plugins/shoppingcart.py:129
 msgid "Cart: Move Files Here"
 msgstr "Vozík: pøesunout soubory sem"
 
-#: plugins/shoppingcart.py:121
+#: plugins/shoppingcart.py:130
 msgid "Cart: Copy Files Here"
 msgstr "Vozík: kopírovat soubory sem"
 
-#: plugins/shoppingcart.py:125
+#: plugins/shoppingcart.py:134
 msgid "Add Directory to Cart"
 msgstr "Pøidat adresáø do vozíku"
 
-#: plugins/shoppingcart.py:129
+#: plugins/shoppingcart.py:138
 msgid "Add File to Cart"
 msgstr "Pridat soubor do vozíku"
 
-#: plugins/shoppingcart.py:132
+#: plugins/shoppingcart.py:141
 msgid "Delete Cart"
 msgstr "Vyprázdnit vozík"
 
@@ -1481,7 +1496,7 @@ msgstr "pauza"
 msgid "play"
 msgstr "pøehrávat"
 
-#: image/viewer.py:426
+#: image/viewer.py:435
 msgid "No information available"
 msgstr "®ádné informace nejsou dostupné"
 
@@ -2355,7 +2370,7 @@ msgid "Configure"
 msgstr "Nastavení"
 
 #: tv/plugins/recordings_manager.py:376 tv/program_display.py:126
-#: video/videoitem.py:317 video/configure.py:246 playlist.py:284
+#: video/videoitem.py:317 video/configure.py:279 playlist.py:284
 msgid "Play"
 msgstr "Pøehrát"
 
@@ -2669,7 +2684,7 @@ msgstr "Prosím upravte GAMES_ITEMS v souboru local%conf.py"
 msgid "Generating MAME cache, please wait."
 msgstr "Vytváøím MAME cache, èekejte prosím..."
 
-#: audio/plugins/detach.py:49
+#: audio/plugins/detach.py:48
 msgid "Show player"
 msgstr "Ukázat pøehrávaè"
 
@@ -3303,36 +3318,44 @@ msgstr "Vypnout %s"
 msgid "Turn on %s"
 msgstr "Zapnout %s"
 
-#: video/configure.py:223
+#: video/configure.py:239
+msgid "Turn TOP field first"
+msgstr ""
+
+#: video/configure.py:241 video/configure.py:274
+msgid "Turn BOTTOM field first"
+msgstr ""
+
+#: video/configure.py:243
+msgid "Turn AUTO field first"
+msgstr ""
+
+#: video/configure.py:256
 msgid "Audio selection"
 msgstr "Výbìr audio stopy"
 
-#: video/configure.py:225
+#: video/configure.py:258
 msgid "Subtitle selection"
 msgstr "Výbìr titulkù"
 
-#: video/configure.py:228 video/configure.py:232
+#: video/configure.py:261 video/configure.py:265
 msgid "Chapter selection"
 msgstr "Výbìr kapitoly"
 
-#: video/configure.py:238
+#: video/configure.py:271
 #, fuzzy
 msgid "Deinterlacing"
 msgstr "deinterlace"
 
-#: video/configure.py:239
+#: video/configure.py:272
 msgid "X-Video Motion Compensation (xvmc)"
 msgstr ""
 
-#: video/configure.py:241
-msgid "Bottom field first"
-msgstr ""
-
-#: video/configure.py:247
+#: video/configure.py:280
 msgid "Config Menu"
 msgstr "Konfigurace"
 
-#: util/mediainfo.py:746
+#: util/mediainfo.py:749
 msgid "Reloading cache files, be patient..."
 msgstr "Naèítám vyrovnávací pamìt, èekejte prosím..."
 
