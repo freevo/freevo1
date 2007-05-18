@@ -323,6 +323,7 @@ TV_EVENTS = {
     'PAUSE'     : PAUSE,
     'CH+'       : TV_CHANNEL_UP,
     'CH-'       : TV_CHANNEL_DOWN,
+    'PREV_CH'   : TV_CHANNEL_LAST,
     'LEFT'      : Event(SEEK, arg=-60),
     'RIGHT'     : Event(SEEK, arg=60),
     'REW'       : Event(SEEK, arg=-10),

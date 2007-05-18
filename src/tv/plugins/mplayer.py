@@ -232,15 +232,16 @@ class MPlayer:
 
         if os.path.exists('/tmp/freevo.wid'): os.unlink('/tmp/freevo.wid')
 
-        lastchanfile = os.path.join(config.FREEVO_CACHEDIR, 'lastchan')
-        lcfp = open(lastchanfile, "w")
-        lastchan = self.fc.getChannel()
-        lastchannum = self.fc.getChannelNum()
-        lcfp.write(str(lastchan))
-        lcfp.write('\n')
-        lcfp.write(str(lastchannum))
-        lcfp.write('\n')
-        lcfp.close()
+        if config.MPLAYER_OLDTVCHANNELCHANGE:
+            lastchanfile = os.path.join(config.FREEVO_CACHEDIR, 'lastchan')
+            lcfp = open(lastchanfile, "w")
+            lastchan = self.fc.getChannel()
+            lastchannum = self.fc.getChannelNum()
+            lcfp.write(str(lastchan))
+            lcfp.write('\n')
+            lcfp.write(str(lastchannum))
+            lcfp.write('\n')
+            lcfp.close()
 
     def eventhandler(self, event, menuw=None):
         s_event = '%s' % event
@@ -264,14 +265,21 @@ class MPlayer:
                 nextchan = self.fc.getPrevChannel()
                 nextchannum = self.fc.getPrevChannelNum()
             elif event == em.TV_CHANNEL_LAST:
-                lastchanfile = os.path.join(config.FREEVO_CACHEDIR, 'lastchan')
-                lcfp = open(lastchanfile, "r")
-                nextchan = lcfp.readline()
-                nextchan = nextchan.strip()
-                nextchannum = lcfp.readline()
-                nextchannum = nextchannum.strip()
-                nextchannum = int(nextchannum)
-                lcfp.close()
+                if config.MPLAYER_OLDTVCHANNELCHANGE:
+                    if os.path.isfile(os.path.join(config.FREEVO_CACHEDIR, 'lastchan')):
+                        lastchanfile = os.path.join(config.FREEVO_CACHEDIR, 'lastchan')
+                        lcfp = open(lastchanfile, "r")
+                        nextchan = lcfp.readline()
+                        nextchan = nextchan.strip()
+                        nextchannum = lcfp.readline()
+                        nextchannum = nextchannum.strip()
+                        nextchannum = int(nextchannum)
+                        lcfp.close()
+                    else:
+                        nextchan = self.fc.getChannel()
+                        nextchannum = self.fc.getChannelNum()
+                else:
+                    return TRUE
             else:
                 chan = int( s_event[6] )
                 nextchan = self.fc.getManChannel(chan)
@@ -289,11 +297,15 @@ class MPlayer:
                 return
 
             elif self.current_vg.group_type == 'dvb':
-                card = 0 # May be this should come from video groups or TV_CHANNELS
-                if em.TV_CHANNEL_UP:
-                    self.app.write('dvb_set_channel %s %s\n' % (nextchannum, card))
-                elif em.TV_CHANNEL_DOWN:
-                    self.app.write('dvb_set_channel %s %s\n' % (nextchannum, card))
+                if not config.MPLAYER_OLDTVCHANNELCHANGE:
+                    card = 0 # May be this should come from video groups or TV_CHANNELS
+                    if em.TV_CHANNEL_UP:
+                        self.app.write('dvb_set_channel %s %s\n' % (nextchannum, card))
+                    elif em.TV_CHANNEL_DOWN:
+                        self.app.write('dvb_set_channel %s %s\n' % (nextchannum, card))
+                else:
+                    self.Stop(channel_change=1)
+                    self.Play('tv', nextchan)
                 return TRUE
 
             elif self.current_vg.group_type == 'ivtv':

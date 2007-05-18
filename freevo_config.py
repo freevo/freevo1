@@ -269,6 +269,7 @@ LOCAL_CONF_CHANGES = [
      Moved video.reencode to video.reencode-old and video.reencode2 to video.reencode
      Added MAJOR_AUDIO_CTRL_MUTE to be able to choose a differente control for mute in the Alsa mixer plugin
      Changed default locale from latin-1 to iso-8859-15, they are really the same
+     Added MPLAYER_OLDTVCHANNELCHANGE to allow the PREV_CH button to swap to previous channel
      ''' ),
 ]
 
@@ -1428,6 +1429,12 @@ MPLAYER_SET_AUDIO_DELAY = 0
 MPLAYER_VF_INTERLACED = 'pp=de/fd'
 MPLAYER_VF_PROGRESSIVE = 'pp=de'
 
+# This setting is for the MPlayer TV plugin. You can either use dvb_set_channel
+# for switching TV channels (set this to 0) or you can restart mplayer (set this
+# to 1).
+# NOTE: You need to set this to 1 to be able to use the TV_CHANNEL_LAST feature.
+#
+MPLAYER_OLDTVCHANNELCHANGE = False
 
 # ======================================================================
 # Xine settings:
