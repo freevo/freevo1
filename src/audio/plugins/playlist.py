@@ -109,7 +109,7 @@ class PluginInterface(plugin.ItemPlugin):
                                                         time.strftime(self.naming))),'w+')
         for f in self.item.files.get():
             if os.path.isdir(f):
-                for file in util.match_files_recursively(f, config.AUDIO_SUFFIX):
+                for file in util.match_files_recursively(f, config.AUDIO_SUFFIX, skip_password=True):
                     self.playlist_handle.write('%s\n' % os.path.join(f, file))
             else:
                 self.playlist_handle.write('%s\n' % f)

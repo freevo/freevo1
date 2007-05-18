@@ -124,7 +124,7 @@ class PluginInterface(plugin.MimetypePlugin):
                 fname  = os.path.join(dirname, String(fxd.gettext(child)))
                 if child.name == 'directory':
                     if fxd.getattr(child, 'recursive', 0):
-                        f = util.match_files_recursively(fname, self.suffix())
+                        f = util.match_files_recursively(fname, self.suffix(), skip_password=True)
                     else:
                         f = util.match_files(fname, self.suffix())
                     citems = self.get(None, f)
@@ -168,7 +168,7 @@ class PluginInterface(plugin.MimetypePlugin):
                 fname  = os.path.join(dirname, fxd.gettext(child))
                 if child.name == 'directory':
                     if fxd.getattr(child, 'recursive', 0):
-                        files += util.match_files_recursively(fname, suffix)
+                        files += util.match_files_recursively(fname, suffix, skip_password=True)
                     else:
                         files += util.match_files(fname, suffix)
                 elif child.name == 'file':

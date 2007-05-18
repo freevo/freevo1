@@ -248,12 +248,33 @@ def match_files_recursively_helper(result, dirname, names):
     return result
 
 
-def match_files_recursively(dir, suffix_list):
+def match_files_recursively_skip_protected(result, dirname, names):
+    """
+    help function for match_files_recursively_skip_protected, skipping directories with a .password file
+    """
+    if dirname:
+        lastdir = dirname[dirname.rfind('/'):]
+        if os.path.exists(os.path.join(dirname, '.password')):
+            _debug_('.password found in "%s"' % dirname)
+            return result
+        if len(lastdir) > 1 and lastdir[1] == '.':
+            return result
+        for name in names:
+            fullpath = vfs.join(dirname, name)
+            result.append(fullpath)
+
+    return result
+
+
+def match_files_recursively(dir, suffix_list, skip_password=False):
     """
     get all files matching suffix_list in the dir and in it's subdirectories
     """
     all_files = []
-    os.path.walk(dir, match_files_recursively_helper, all_files)
+    if skip_password:
+        os.path.walk(dir, match_files_recursively_skip_protected, all_files)
+    else:
+        os.path.walk(dir, match_files_recursively_helper, all_files)
 
     matches = misc.unique([f for f in all_files if match_suffix(f, suffix_list) ])
 
