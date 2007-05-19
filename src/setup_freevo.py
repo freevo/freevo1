@@ -68,7 +68,8 @@ EXTERNAL_PROGRAMS = (("mplayer", "mplayer", 1),
                      ("oggenc","oggenc",0),
                      ("renice","renice",0),
                      ("setterm", "setterm", 0),
-                     ("mpav", "mpav", 0))
+                     ("mpav", "mpav", 0),
+                     ("vlc", "vlc", 0))
 
 # Help text
 def print_usage():

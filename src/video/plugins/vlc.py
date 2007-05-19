@@ -23,6 +23,8 @@ class PluginInterface(plugin.Plugin):
         plugin.Plugin.__init__(self)
         plugin.register(Vlc(), plugin.VIDEO_PLAYER, True)
 
+    def config(self):
+        return [ ('VLC_OPTIONS', 'None', 'Add your specific VLC options here'), ]
 
 
 class Vlc:
@@ -71,7 +73,10 @@ class Vlc:
         except UnicodeError:
             _debug_('Vlc.play(): [non-ASCII data]')
 
-        command = self.cmd + ' --intf dummy -f --key-quit=esc "%s"' % url
+        if config.VLC_OPTIONS:
+            vlc_options=config.VLC_OPTIONS
+
+        command = self.cmd + ' ' + vlc_options + ' --intf dummy -f --key-quit=esc "%s"' % url
         rc.app(self)
 
         self.app = childapp.ChildApp2(command)
