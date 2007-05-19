@@ -113,11 +113,14 @@ class MPlayer:
 
 
 
-        if not item.network_play:
-            demux = ' %s ' % self.get_demuxer(filename)
-        else:
-            # Don't include demuxer for network files
-            demux = ''
+        #if not item.network_play:
+        #    demux = ' %s ' % self.get_demuxer(filename)
+        #else:
+        #    # Don't include demuxer for network files
+        #    demux = ''
+
+        # Let mplayer determine the demuxer
+        demux = ''
 
         extra_opts = item.mplayer_options
 
