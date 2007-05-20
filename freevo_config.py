@@ -270,6 +270,7 @@ LOCAL_CONF_CHANGES = [
      Added MAJOR_AUDIO_CTRL_MUTE to be able to choose a differente control for mute in the Alsa mixer plugin
      Changed default locale from latin-1 to iso-8859-15, they are really the same
      Added MPLAYER_OLDTVCHANNELCHANGE to allow the PREV_CH button to swap to previous channel
+     Added RSS_DOWNLOAD for a place to save downloaded data
      ''' ),
 ]
 
@@ -1862,8 +1863,9 @@ RSSSERVER_GID = 0
 
 RSS_CHECK_INTERVAL = 3600
 RSS_FEEDS = '/etc/freevo/rss.feeds'
-RSS_VIDEO = "you must set RSS_VIDEO in your local_conf.py"
-RSS_AUDIO = "you must set RSS_AUDIO in your local_conf.py"
+RSS_DOWNLOAD = '/tmp'
+RSS_VIDEO = 'you must set RSS_VIDEO in your local_conf.py'
+RSS_AUDIO = 'you must set RSS_AUDIO in your local_conf.py'
 
 # ======================================================================
 # Internal stuff, you shouldn't change anything here unless you know

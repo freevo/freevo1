@@ -54,7 +54,7 @@ class Feed:
         itemPattern = re.compile('<item>.*?</item>',re.DOTALL)
         titlePattern = re.compile('<title>.*?</title>',re.DOTALL)
         descriptionPattern = re.compile('<description>.*?</description>',re.DOTALL)
-        urlPattern = re.compile('url=".*?.mp4',re.DOTALL)
+        urlPattern = re.compile('url=".*?.mp.',re.DOTALL)
         httpPattern = re.compile('http',re.DOTALL )
         btPattern = re.compile('<link>.*?</link>',re.DOTALL)
         datePattern = re.compile('<pubDate>.*?</pubDate>',re.DOTALL)

@@ -28,10 +28,23 @@
 #
 # -----------------------------------------------------------------------
 
-import re,os,glob,urllib,datetime,time
+import re,os,sys,glob,urllib,datetime,time,shutil
+from subprocess import Popen
 import cPickle, pickle
 import config
 import rssfeed
+import kaa.metadata as metadata
+
+appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+appconf = appname.upper()
+DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
+
+def _debug_(text, level=1):
+    if DEBUG >= level:
+        try:
+            log.debug(str(text))
+        except:
+           print str(text)
 
 def convertDate(string):
     if not re.search("\d+\s+\S+\s+\d+",string):
@@ -63,7 +76,15 @@ def convertDate(string):
     else:
         month=12
     year=int(itemDateList[2])
-    itemDate = datetime.date(year,month,day)
+    try:
+        itemDate = datetime.date(year,month,day)
+    except ValueError:
+        '''There is some incorrect data out there, ie. 31 Apr 2006'''
+        newmonth = month + 1
+        year += month / 12
+        month = (month+1) % 12
+        day = 1
+        itemDate = datetime.date(year,month,day)+datetime.timedelta(-1)
     return itemDate
 
 def checkForDup(string):
@@ -143,11 +164,11 @@ def checkForExpiration():
             try:
                 os.remove(config.RSS_VIDEO+fxdfile)
             except OSError:
-                print"removing the file %s failed" % (fxdfile)
+                _debug_("removing the file %s failed" % (fxdfile))
             try:
                 os.remove(config.RSS_VIDEO+filename)
             except OSError:
-                print"removing the file %s failed" % (filename)
+                _debug_("removing the file %s failed" % (filename))
     for line in deletedItems:
 #      try:
         downloadedFiles.remove(line)
@@ -158,23 +179,15 @@ def checkForExpiration():
     except:
         pickle.dump(downloadedFiles, open(cacheFile,"w"))
 
-def createFxd(item,filename):
-    if "audio" in item.type:
-        fullFilename=config.RSS_AUDIO+filename
-    else:
-        fullFilename=config.RSS_VIDEO+filename
-    tempList=re.split("\.",filename)
-    ofile=tempList[0]
-    for line in tempList[1:-1]:
-        ofile=ofile+"."+line
-    ofile=ofile+".fxd"
+def createFxd(item, filename):
+    ofile = os.path.splitext(filename)[0]+'.fxd'
     try:
         file = open(ofile, 'w')
         file.write('<?xml version="1.0" encoding="iso-8859-1"?>\n')
         file.write('<freevo>\n')
         file.write('   <movie title="%s">\n' % item.title)
         file.write('      <video>\n')
-        file.write('         <file id="f1">%s</file>\n' % fullFilename)
+        file.write('         <file id="f1">%s</file>\n' % filename)
         file.write('      </video>\n')
         file.write('      <info>\n')
         file.write('         <plot>%s</plot>\n' % item.description)
@@ -183,13 +196,14 @@ def createFxd(item,filename):
         file.write('</freevo>\n')
         file.close()
     except IOError:
-        print "ERROR: Unable to write FXD file %s" % (ofile)
+        _debug_("ERROR: Unable to write FXD file %s" % (ofile))
+    return ofile
 
 def checkForUpdates():
     try:
         file = open(config.RSS_FEEDS,"r")
     except IOError:
-        print "ERROR: Could not open configuration file %s" % (config.RSS_FEEDS)
+        _debug_("ERROR: Could not open configuration file %s" % (config.RSS_FEEDS))
         return
 
     for line in file:
@@ -201,7 +215,7 @@ def checkForUpdates():
             (url,numberOfDays)=re.split(";", line)
         except ValueError:
             continue
-        print "Check %s for updates" % url
+        _debug_("Check %s for updates" % url)
         try:
             sock = urllib.urlopen(url)
             feedSource = sock.read()
@@ -209,27 +223,49 @@ def checkForUpdates():
             for item in rssfeed.Feed(feedSource).items:
                 diff = datetime.date.today() - convertDate(item.date)
                 goodUntil = datetime.date.today() + datetime.timedelta(days=int(numberOfDays))
-                if int(diff.days)<=int(numberOfDays) and not re.search("None",item.url):
-                    if "audio" in item.type:
-                        os.chdir(config.RSS_AUDIO)
-                    else:
-                        os.chdir(config.RSS_VIDEO)
-                    filename=re.split("/",item.url).pop()
-                    if (len(glob.glob(filename))==0) and not checkForDup(item.url):
-                        if re.search("torrent",item.url):
-                            print "Start downloading %s" % item.url
-                            exitStatus=os.popen("bittorrent-console %s" % (item.url)).close()
+                if int(diff.days) <= int(numberOfDays) and not re.search("None",item.url):
+                    os.chdir(config.RSS_DOWNLOAD)
+                    filename = os.path.basename(item.url)
+                    _debug_('"%s" -> %s' % (item.title, filename))
+                    if len(glob.glob(filename)) == 0 and not checkForDup(item.url):
+                        if re.search("torrent", item.url):
+                            _debug_("Start bittorrent downloading %s" % item.url)
+                            cmdlog=open(os.path.join(config.LOGDIR, 'rss-bittorrent.out'), 'a')
+                            p = Popen('bittorrent-console %s' % (item.url), shell=True, stderr=cmdlog, stdout=cmdlog)
+                            exitStatus = p.wait()
                             filename=re.sub("\.torrent","",filename)
                         else:
-                            print "Start downloading %s" % item.url
-                            exitStatus=os.popen("wget %s" % (item.url)).close()
-                        if not exitStatus:
-                            createFxd(item,filename)
+                            _debug_("Start wget downloading %s as %s" % (item.url, filename))
+                            cmdlog=open(os.path.join(config.LOGDIR, 'rss-wget.out'), 'a')
+                            p = Popen('wget -O %s %s' % (filename, item.url), shell=True, stderr=cmdlog, stdout=cmdlog)
+                            exitStatus = p.wait()
+                        if exitStatus:
+                            _debug_("Download failed - exit status %s." % exitStatus)
+                            os.remove(filename)
+                        else:
+                            _debug_("Download completed (%s bytes)" % os.path.getsize(filename))
+                            meta = metadata.parse(filename)
+                            if meta.has_key('media'):
+                                if meta.media == 'MEDIA_AUDIO':
+                                    try:
+                                        fxdpath = createFxd(item, filename)
+                                        shutil.move(filename, config.RSS_AUDIO)
+                                        shutil.move(fxdpath, config.RSS_AUDIO)
+                                    except:
+                                        _debug_('failed to move %s to %s' % (filename, newpath))
+                                elif meta.media == 'MEDIA_VIDEO':
+                                    try:
+                                        fxdpath = createFxd(item, filename)
+                                        shutil.move(filename, config.RSS_VIDEO)
+                                        shutil.move(fxdpath, config.RSS_VIDEO)
+                                    except:
+                                        _debug_('failed to move %s to %s' % (filename, newpath))
+                                else:
+                                    _debug_('Cannot move %s as it media type is %s', (filename, meta.media))
+                                    fxdpath = createFxd(item,filename)
+                            else:
+                                _debug_('Cannot move %s as cannot determine its media type', (filename))
                             addFileToCache(item.url)
                             addFileToExpiration(filename,goodUntil)
-                            print "Download completed (%s bytes)" % os.path.getsize(filename)
-                        else:
-                            print "Download failed - exit status %s." % exitStatus
-                            os.popen("rm %s" % (filename))
         except IOError:
-            print "ERROR: Unable to download %s. Connection may be down." % (url)
+            _debug_("ERROR: Unable to download %s. Connection may be down." % (url))
