@@ -31,30 +31,70 @@
 #
 # -----------------------------------------------------------------------
 
+'''
+Band name          Channels provided
+US Cable           1-99
+US Cable 100       100-125
+US Two-Way         T7, T8, T9, T10, T11, T12 T13, T14
+US Broadcast       2-83
+China Broadcast    1-68, A1-A7, B1-B31, C1-C5
+Japan Broadcast    1-62
+Japan Cable        13-63
+VHF E2-E12         E1-E12
+VHF S1-S41         S1-S41
+VHF Misc           X, Y, Z, Z+1, Z+2
+VHF France         K01-K10, KB-KQ, H01-H19
+VHF Russia         R1-R12, SR1-SR19
+VHF Australia      AS1-AS12, AS5A, AS9A
+VHF Italy          A-H, H1, H2
+VHF Ireland        I1-I9
+VHF South Africa   1-13
+UHF                U21-U69
+UHF Australia      AU28-AU69
+Australia Optus    01-058
+'''
 
 import sys
 import config
 import cgi
 
+bands = [
+    'US Cable', 'US Cable 100', 'US Two-Way', 'US Broadcast', 
+    'China Broadcast', 'Japan Broadcast', 'Japan Cable', 
+    'VHF E2-E12', 'VHF S1-S41', 'VHF Misc', 'VHF France', 
+    'VHF Russia', 'VHF Australia', 'VHF Italy', 'VHF Ireland', 
+    'VHF South Africa', 'UHF', 'UHF Australia', 'Australia Optus'
+]
+
 if len(sys.argv)>1 and sys.argv[1] == '--help':
-    print 'convert freevo_config.py station list for tvtime'
-    print 'this script has no options'
+    print 'convert local_conf.py station list for tvtime'
+    print 'option: --band <name>\nwhere: name is one of:\n\'%s\'' % '\', \''.join(bands)
     print
     sys.exit(0)
 
+band = "US-Cable"
+if len(sys.argv)>2 and sys.argv[1] == '--band':
+    if sys.argv[2] in bands:
+        band = sys.argv[2]
 
-norm = "US-Cable"
+norm = config.CONF.tv.upper()
 
 fp = open('/tmp/stationlist.xml','w')
 
 fp.write('<?xml version="1.0"?>\n')
 fp.write('<!DOCTYPE stationlist PUBLIC "-//tvtime//DTD stationlist 1.0//EN" "http://tvtime.sourceforge.net/DTD/stationlist1.dtd">\n')
 fp.write('<stationlist xmlns="http://tvtime.sourceforge.net/DTD/">\n')
-fp.write('  <list norm="NTSC" frequencies="%s">\n' % (norm))
+fp.write('  <list norm="%s" frequencies="%s">\n' % (norm, band))
 
 c = 0
 for m in config.TV_CHANNELS:
-    fp.write('    <station name="%s" active="1" position="%s" band="US Cable" channel="%s"/>\n' % (cgi.escape(m[1]),c,m[2]))
+    if config.FREQUENCY_TABLE.has_key(m[2]):
+        channelfreq = float(config.FREQUENCY_TABLE[m[2]]) / 1000.0
+        fp.write('    <station name="%s" active="1" position="%s" band="Custom" channel="%sMHz"/>\n' % \
+            (cgi.escape(m[1]), c, channelfreq))
+    else:
+        fp.write('    <station name="%s" active="1" position="%s" band="%s" channel="%s"/>\n' % \
+            (cgi.escape(m[1]), c, band, m[2]))
     c = c + 1
 
 fp.write('  </list>\n')
