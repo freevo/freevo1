@@ -117,12 +117,13 @@ class DirItem(Playlist):
         #FIXME This should be done in the cache create
         if not self.image:
             mminfo = mmpython.parse(directory)
-            if mminfo['image']:
-                self.image = mminfo['image']
-            if mminfo['title']:
-                self.title = mminfo['title']
-            if mminfo['comment']:
-                self.comment = mminfo['comment']
+            if mminfo:
+                if mminfo['image']:
+                    self.image = mminfo['image']
+                if mminfo['title']:
+                    self.title = mminfo['title']
+                if mminfo['comment']:
+                    self.comment = mminfo['comment']
 
         if name:
             self.name = Unicode(name)
