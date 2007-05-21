@@ -226,16 +226,16 @@ def checkForUpdates():
                 if int(diff.days) <= int(numberOfDays) and not re.search("None",item.url):
                     os.chdir(config.RSS_DOWNLOAD)
                     filename = os.path.basename(item.url)
-                    _debug_('"%s" -> %s' % (item.title, filename))
+                    _debug_('"%s" -> %s' % (item.title, filename), 2)
                     if len(glob.glob(filename)) == 0 and not checkForDup(item.url):
                         if re.search("torrent", item.url):
-                            _debug_("Start bittorrent downloading %s" % item.url)
+                            _debug_("Running bittorrent download from %s" % item.url)
                             cmdlog=open(os.path.join(config.LOGDIR, 'rss-bittorrent.out'), 'a')
                             p = Popen('bittorrent-console %s' % (item.url), shell=True, stderr=cmdlog, stdout=cmdlog)
                             exitStatus = p.wait()
                             filename=re.sub("\.torrent","",filename)
                         else:
-                            _debug_("Start wget downloading %s as %s" % (item.url, filename))
+                            _debug_("Running wget download from %s" % (item.url))
                             cmdlog=open(os.path.join(config.LOGDIR, 'rss-wget.out'), 'a')
                             p = Popen('wget -O %s %s' % (filename, item.url), shell=True, stderr=cmdlog, stdout=cmdlog)
                             exitStatus = p.wait()
@@ -245,7 +245,7 @@ def checkForUpdates():
                         else:
                             _debug_("Download completed (%s bytes)" % os.path.getsize(filename))
                             meta = metadata.parse(filename)
-                            if meta.has_key('media'):
+                            if meta and meta.has_key('media'):
                                 if meta.media == 'MEDIA_AUDIO':
                                     try:
                                         fxdpath = createFxd(item, filename)
