@@ -176,7 +176,7 @@ class BurnCDItem:
         if not self.clean_up_burndir():
             return
 
-        ConfirmBox(text=_('Start burning %s audio files?' % len(self.files)),
+        ConfirmBox(text=_('Start burning %s audio files?') % len(self.files),
             handler=self.start_burning, default_choice=0).show()
 
     def burn_dvd_video(self):
@@ -231,7 +231,7 @@ class BurnCDItem:
 
         #if list of files not to big just display it
         if len( self.files) <= 4:
-            ConfirmBox(text=_('Start burning %s ?' % self.files),
+            ConfirmBox(text=_('Start burning %s ?') % self.files,
                        handler=self.start_burning, default_choice=0).show()
         #else display the size of the burning
         else:
@@ -241,7 +241,7 @@ class BurnCDItem:
                 c = os.stat(a)[ST_SIZE]
                 t_sum = t_sum + (int(c)/1024/1024)
 
-            ConfirmBox(text=_('Start burning %s entries? ( %d Mb )' % (t_files, t_sum)),
+            ConfirmBox(text=_('Start burning %s entries? ( %d Mb )') % (t_files, t_sum),
                      handler=self.start_burning, default_choice=0).show()
 
 
@@ -812,9 +812,9 @@ class PluginInterface(plugin.ItemPlugin):
                 cur2 = BurnCDItem(item=item, plugin=self,menu=menuw,burn_mode="audio_cd")
                 cur2.findFromDirMatches(suffix=['mp3','flac','ogg','wav'])
                 if cur.files:
-                    to_return.append(( cur.burn, 'Copy dir to CD') )
+                    to_return.append(( cur.burn, _('Copy dir to CD')) )
                 if len(cur2.files)>0:
-                    to_return.append(( cur2.burn, 'Burn audio files (MP3, Wav and Ogg) as Audio CD'))
+                    to_return.append(( cur2.burn, _('Burn audio files (MP3, Wav and Ogg) as Audio CD')))
             except Exception, e:
                 print 'fill_menu:', e
                 pass
@@ -876,7 +876,7 @@ class PluginInterface(plugin.ItemPlugin):
 
                 if cur.files and len(cur.files) == 1:
                     _debug_("Adding DVD-VIDEO Item to menu")
-                    to_return.append(( cur.burn, 'Burn as DVD-VIDEO disc') )
+                    to_return.append(( cur.burn, _('Burn as DVD-VIDEO disc')) )
                 elif len(self.files) > 1:
                     _debug_("To many objects to burn into a DVD Video")
 
