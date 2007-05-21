@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-18 20:51+0200\n"
+"POT-Creation-Date: 2007-05-21 18:05+0200\n"
 "PO-Revision-Date:  2007-05-19 14:30+0200\n"
 "Last-Translator: Pascal Schirrmann <freevo@schirrms.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: ../freevo_config.py:1075 ../freevo_config.py:1080
+#: ../freevo_config.py:1076 ../freevo_config.py:1081
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Titre"
 
-#: ../freevo_config.py:1076 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1077 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Description"
 
-#: ../freevo_config.py:1077
+#: ../freevo_config.py:1078
 msgid "Author"
 msgstr "Auteur"
 
-#: ../freevo_config.py:1081 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1082 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -41,11 +41,11 @@ msgstr "Auteur"
 msgid "Date"
 msgstr "Date"
 
-#: ../freevo_config.py:1084
+#: ../freevo_config.py:1085
 msgid "Model"
 msgstr "Modèle"
 
-#: ../freevo_config.py:1085
+#: ../freevo_config.py:1086
 msgid "Software"
 msgstr "Logiciel"
 
@@ -1310,6 +1310,15 @@ msgstr "Graver le CD"
 msgid "CD Burn Menu"
 msgstr "Menu de gravure CD"
 
+#: plugins/cd_burn.py:815
+#, fuzzy
+msgid "Copy dir to CD"
+msgstr "Copie de %s sur CD"
+
+#: plugins/cd_burn.py:817
+msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
+msgstr ""
+
 #: plugins/cd_burn.py:829
 msgid "Copy this file to CD"
 msgstr "Copier ce fichier sur un CD"
@@ -1328,6 +1337,10 @@ msgstr "Copie de %s et ses fichiers associés sur CD"
 #, python-format
 msgid "Copy %s, and related, file to CD"
 msgstr "Copie du fichier %s et ses fichiers associés sur CD"
+
+#: plugins/cd_burn.py:879
+msgid "Burn as DVD-VIDEO disc"
+msgstr ""
 
 #: plugins/vfd.py:52
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
@@ -1529,11 +1542,10 @@ msgstr ""
 "Vous êtes dans la documentation interne de Freevo. Ces documents sont en "
 "cours de développement. Si vous souhaitez contribuer, contactez les "
 "developpeurs.Vous pouvez trouver plus d'informations sur le <a href=\"http://"
-"freevo.sourceforge.net/cgi-bin/doc\">Wiki ( Manuel en ligne)</"
-"a> et dans les 'Mailing Lists' sur le <a href=\"http://www.freevo.org\">site "
-"Freevo</a>. Tout le monde peut éditer le Wiki (et nous pouvons revenir en "
-"arrière en cas d'effacement), sentez vous libres d'ajouter des informations "
-"dedans."
+"freevo.sourceforge.net/cgi-bin/doc\">Wiki ( Manuel en ligne)</a> et dans les "
+"'Mailing Lists' sur le <a href=\"http://www.freevo.org\">site Freevo</a>. "
+"Tout le monde peut éditer le Wiki (et nous pouvons revenir en arrière en cas "
+"d'effacement), sentez vous libres d'ajouter des informations dedans."
 
 #: www/htdocs/help/index.rpy:50
 msgid "Index"
@@ -3386,7 +3398,7 @@ msgstr "Aucun enregistrement programmé"
 msgid "Widescreen"
 msgstr "Ecran Large"
 
-#: setup_freevo.py:75
+#: setup_freevo.py:76
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -3445,42 +3457,42 @@ msgstr ""
 "Les options par défaut sont \"--geometry=800x600 --display=x11 --tv=ntsc --"
 "chanlist=us-cable\"\n"
 
-#: setup_freevo.py:179
+#: setup_freevo.py:180
 #, python-format
 msgid "checking for %-13s"
 msgstr "verification pour %-13s"
 
-#: setup_freevo.py:192
+#: setup_freevo.py:193
 #, python-format
 msgid "ERROR: can't find %s"
 msgstr "ERREUR: %s introuvable"
 
-#: setup_freevo.py:193
+#: setup_freevo.py:194
 msgid "Please install the application respectively put it in your path."
 msgstr "Merci d'installer les applications dans votre PATH."
 
-#: setup_freevo.py:194
+#: setup_freevo.py:195
 msgid "Freevo won't work without it."
 msgstr "Freevo ne fonctionne pas sans."
 
-#: setup_freevo.py:200
+#: setup_freevo.py:201
 msgid "not found (deactivated)"
 msgstr "non trouvé (desactivé)"
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 #, python-format
 msgid "System path first=%s"
 msgstr "Chemin système primaire=%s"
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 msgid "No"
 msgstr "Non"
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 msgid "Yes"
 msgstr "Oui"
 
-#: setup_freevo.py:279
+#: setup_freevo.py:280
 msgid "Settings:"
 msgstr "Paramètres:"
 
@@ -3694,7 +3706,9 @@ msgstr "Impossible d'ouvrir \"%s\" pour les logs!"
 #: childapp.py:285
 #, python-format
 msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
-msgstr "Positionnez CHILDAPP_DEBUG=0 dans local_conf.py, ou permettez l'écriture dans %s !"
+msgstr ""
+"Positionnez CHILDAPP_DEBUG=0 dans local_conf.py, ou permettez l'écriture "
+"dans %s !"
 
 #: main.py:172
 msgid "Freevo Main Menu"

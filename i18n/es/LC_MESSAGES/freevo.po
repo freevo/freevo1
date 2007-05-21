@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-18 20:51+0200\n"
+"POT-Creation-Date: 2007-05-21 18:05+0200\n"
 "PO-Revision-Date: 2006-12-10 15:35+0100\n"
 "Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,23 +15,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: ../freevo_config.py:1075 ../freevo_config.py:1080
+#: ../freevo_config.py:1076 ../freevo_config.py:1081
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Título"
 
-#: ../freevo_config.py:1076 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1077 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Descripción"
 
-#: ../freevo_config.py:1077
+#: ../freevo_config.py:1078
 msgid "Author"
 msgstr "Autor"
 
-#: ../freevo_config.py:1081 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1082 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -39,11 +39,11 @@ msgstr "Autor"
 msgid "Date"
 msgstr "Fecha"
 
-#: ../freevo_config.py:1084
+#: ../freevo_config.py:1085
 msgid "Model"
 msgstr "Modelo"
 
-#: ../freevo_config.py:1085
+#: ../freevo_config.py:1086
 msgid "Software"
 msgstr "Software"
 
@@ -1203,7 +1203,8 @@ msgid ""
 "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
 "plugin."
 msgstr ""
-"Necesitas pybluez (http://org.csail.mit.edu/pybluez/) para cargar el módulo \"freevused\"."
+"Necesitas pybluez (http://org.csail.mit.edu/pybluez/) para cargar el módulo "
+"\"freevused\"."
 
 #: plugins/freevused.py:291 plugins/freevused.py:294
 msgid "Playing"
@@ -1306,6 +1307,15 @@ msgstr "Grabar en disco"
 msgid "CD Burn Menu"
 msgstr "Menú de grabación en disco"
 
+#: plugins/cd_burn.py:815
+#, fuzzy
+msgid "Copy dir to CD"
+msgstr "Grabar %s en disco"
+
+#: plugins/cd_burn.py:817
+msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
+msgstr ""
+
 #: plugins/cd_burn.py:829
 msgid "Copy this file to CD"
 msgstr "Grabar este elemento en disco"
@@ -1324,6 +1334,10 @@ msgstr "Grabar %s, y relacionados en disco"
 #, python-format
 msgid "Copy %s, and related, file to CD"
 msgstr "Grabar el elemento %s, y relacionados en disco"
+
+#: plugins/cd_burn.py:879
+msgid "Burn as DVD-VIDEO disc"
+msgstr ""
 
 #: plugins/vfd.py:52
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
@@ -3390,7 +3404,7 @@ msgstr "No hay grabaciones programadas"
 msgid "Widescreen"
 msgstr ""
 
-#: setup_freevo.py:75
+#: setup_freevo.py:76
 #, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
@@ -3453,42 +3467,42 @@ msgstr ""
 "chanlist=us-cable\"\n"
 "Por favor informe de errores en <freevo-users@lists.sourceforge.net>.\n"
 
-#: setup_freevo.py:179
+#: setup_freevo.py:180
 #, python-format
 msgid "checking for %-13s"
 msgstr "comprobando %-13s"
 
-#: setup_freevo.py:192
+#: setup_freevo.py:193
 #, python-format
 msgid "ERROR: can't find %s"
 msgstr "ERROR: no se puede encontrar %s"
 
-#: setup_freevo.py:193
+#: setup_freevo.py:194
 msgid "Please install the application respectively put it in your path."
 msgstr "Por favor instale la aplicación y póngala en la ruta del sistema"
 
-#: setup_freevo.py:194
+#: setup_freevo.py:195
 msgid "Freevo won't work without it."
 msgstr "Freevo no funcionará sin ello."
 
-#: setup_freevo.py:200
+#: setup_freevo.py:201
 msgid "not found (deactivated)"
 msgstr "no encontrado (desactivado)"
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 #, python-format
 msgid "System path first=%s"
 msgstr "Ruta del sistema primero=%s"
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 msgid "No"
 msgstr "No"
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 msgid "Yes"
 msgstr "Sí"
 
-#: setup_freevo.py:279
+#: setup_freevo.py:280
 msgid "Settings:"
 msgstr "Configuración:"
 
@@ -3707,7 +3721,8 @@ msgstr "No se puede abrir el registro \"%s\""
 #: childapp.py:285
 #, python-format
 msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
-msgstr "Establece CHILDAPP_DEBUG=0 en local_conf.py, o da permisos de escritura a %s"
+msgstr ""
+"Establece CHILDAPP_DEBUG=0 en local_conf.py, o da permisos de escritura a %s"
 
 #: main.py:172
 msgid "Freevo Main Menu"

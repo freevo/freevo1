@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-18 20:51+0200\n"
+"POT-Creation-Date: 2007-05-21 18:05+0200\n"
 "PO-Revision-Date:  Fri Oct 05 14:20:00 2006\n"
 "Last-Translator: Duncan Webb <duncan-freevo@linuxowl.com>\n"
 "Language-Team: British English <LL@li.org>\n"
@@ -15,23 +15,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: ../freevo_config.py:1075 ../freevo_config.py:1080
+#: ../freevo_config.py:1076 ../freevo_config.py:1081
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr ""
 
-#: ../freevo_config.py:1076 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1077 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Description"
 
-#: ../freevo_config.py:1077
+#: ../freevo_config.py:1078
 msgid "Author"
 msgstr ""
 
-#: ../freevo_config.py:1081 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1082 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -39,11 +39,11 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: ../freevo_config.py:1084
+#: ../freevo_config.py:1085
 msgid "Model"
 msgstr ""
 
-#: ../freevo_config.py:1085
+#: ../freevo_config.py:1086
 msgid "Software"
 msgstr ""
 
@@ -788,9 +788,8 @@ msgid "Added to Cart"
 msgstr "Added to Cart"
 
 #: plugins/shoppingcart.py:107
-#, fuzzy
 msgid "Added Item to Cart"
-msgstr "Added to Cart"
+msgstr "Added Item to Cart"
 
 #: plugins/shoppingcart.py:129
 msgid "Cart: Move Files Here"
@@ -1298,6 +1297,14 @@ msgstr ""
 msgid "CD Burn Menu"
 msgstr "CD Burn Menu"
 
+#: plugins/cd_burn.py:815
+msgid "Copy dir to CD"
+msgstr "Copy dir to CD"
+
+#: plugins/cd_burn.py:817
+msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
+msgstr "Burn audio files (MP3, Wav and Ogg) as Audio CD"
+
 #: plugins/cd_burn.py:829
 msgid "Copy this file to CD"
 msgstr "Copy this file to CD"
@@ -1305,7 +1312,7 @@ msgstr "Copy this file to CD"
 #: plugins/cd_burn.py:837
 #, python-format
 msgid "Copy %s to CD"
-msgstr ""
+msgstr "Copy %s to CD"
 
 #: plugins/cd_burn.py:851
 #, python-format
@@ -1315,6 +1322,10 @@ msgstr ""
 #: plugins/cd_burn.py:865
 #, python-format
 msgid "Copy %s, and related, file to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:879
+msgid "Burn as DVD-VIDEO disc"
 msgstr ""
 
 #: plugins/vfd.py:52
@@ -3334,7 +3345,7 @@ msgstr "No recordings are scheduled"
 msgid "Widescreen"
 msgstr ""
 
-#: setup_freevo.py:75
+#: setup_freevo.py:76
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -3367,42 +3378,42 @@ msgid ""
 "Please report bugs to <freevo-users@lists.sourceforge.net>.\n"
 msgstr ""
 
-#: setup_freevo.py:179
+#: setup_freevo.py:180
 #, python-format
 msgid "checking for %-13s"
 msgstr ""
 
-#: setup_freevo.py:192
+#: setup_freevo.py:193
 #, python-format
 msgid "ERROR: can't find %s"
 msgstr ""
 
-#: setup_freevo.py:193
+#: setup_freevo.py:194
 msgid "Please install the application respectively put it in your path."
 msgstr ""
 
-#: setup_freevo.py:194
+#: setup_freevo.py:195
 msgid "Freevo won't work without it."
 msgstr ""
 
-#: setup_freevo.py:200
+#: setup_freevo.py:201
 msgid "not found (deactivated)"
 msgstr ""
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 #, python-format
 msgid "System path first=%s"
 msgstr ""
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 msgid "No"
 msgstr ""
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 msgid "Yes"
 msgstr ""
 
-#: setup_freevo.py:279
+#: setup_freevo.py:280
 msgid "Settings:"
 msgstr ""
 

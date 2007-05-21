@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-18 20:51+0200\n"
+"POT-Creation-Date: 2007-05-21 18:05+0200\n"
 "PO-Revision-Date: 2004-05-28 17:10+0200\n"
 "Last-Translator: Viggo Fredriksen <viggo@katatonic.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -19,23 +19,23 @@ msgstr ""
 "X-Generator: KBabel 1.3\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
-#: ../freevo_config.py:1075 ../freevo_config.py:1080
+#: ../freevo_config.py:1076 ../freevo_config.py:1081
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Tittel"
 
-#: ../freevo_config.py:1076 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1077 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: ../freevo_config.py:1077
+#: ../freevo_config.py:1078
 msgid "Author"
 msgstr "Forfatter"
 
-#: ../freevo_config.py:1081 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1082 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -43,11 +43,11 @@ msgstr "Forfatter"
 msgid "Date"
 msgstr "Dato"
 
-#: ../freevo_config.py:1084
+#: ../freevo_config.py:1085
 msgid "Model"
 msgstr "Modell"
 
-#: ../freevo_config.py:1085
+#: ../freevo_config.py:1086
 msgid "Software"
 msgstr "Program"
 
@@ -1311,6 +1311,14 @@ msgstr ""
 msgid "CD Burn Menu"
 msgstr "Konfigurasjonsmeny"
 
+#: plugins/cd_burn.py:815
+msgid "Copy dir to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:817
+msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
+msgstr ""
+
 #: plugins/cd_burn.py:829
 msgid "Copy this file to CD"
 msgstr ""
@@ -1328,6 +1336,10 @@ msgstr ""
 #: plugins/cd_burn.py:865
 #, python-format
 msgid "Copy %s, and related, file to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:879
+msgid "Burn as DVD-VIDEO disc"
 msgstr ""
 
 #: plugins/vfd.py:52
@@ -3378,7 +3390,7 @@ msgstr "Ingen opptak programmert"
 msgid "Widescreen"
 msgstr ""
 
-#: setup_freevo.py:75
+#: setup_freevo.py:76
 #, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
@@ -3441,42 +3453,42 @@ msgstr ""
 "\"\n"
 "Vennligst rapporter feil til <freevo-users@lists.sourceforge.net>.\n"
 
-#: setup_freevo.py:179
+#: setup_freevo.py:180
 #, python-format
 msgid "checking for %-13s"
 msgstr "sjekker etter %-13s"
 
-#: setup_freevo.py:192
+#: setup_freevo.py:193
 #, python-format
 msgid "ERROR: can't find %s"
 msgstr "FEIL: kan ikke finne %s"
 
-#: setup_freevo.py:193
+#: setup_freevo.py:194
 msgid "Please install the application respectively put it in your path."
 msgstr "Vennligst installer programmet i path."
 
-#: setup_freevo.py:194
+#: setup_freevo.py:195
 msgid "Freevo won't work without it."
 msgstr "Freevo vil ikke fungere uten dette."
 
-#: setup_freevo.py:200
+#: setup_freevo.py:201
 msgid "not found (deactivated)"
 msgstr "ikke funnet (deaktivert)"
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 #, python-format
 msgid "System path first=%s"
 msgstr ""
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 msgid "No"
 msgstr "Nei"
 
-#: setup_freevo.py:263
+#: setup_freevo.py:264
 msgid "Yes"
 msgstr "Ja"
 
-#: setup_freevo.py:279
+#: setup_freevo.py:280
 msgid "Settings:"
 msgstr "Innstillinger:"
 
