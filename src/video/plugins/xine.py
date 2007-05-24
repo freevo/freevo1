@@ -143,10 +143,12 @@ class Xine:
 
         if item.mode == 'dvd':
             for track in item.info['tracks']:
-                self.max_audio = max(self.max_audio, len(track['audio']))
+                if track.has_key['audio']:
+                    self.max_audio = max(self.max_audio, len(track['audio']))
 
             for track in item.info['tracks']:
-                self.max_subtitle = max(self.max_subtitle, len(track['subtitles']))
+                if track.has_key['subtitles']:
+                    self.max_subtitle = max(self.max_subtitle, len(track['subtitles']))
 
         if item.mode == 'dvd' and hasattr(item, 'filename') and item.filename and \
                item.filename.endswith('.iso'):
