@@ -227,6 +227,8 @@ class RecordingsDirectory(Item):
         item.name = item.name[:item.name.find(u'\t') + 1]  + _(eval('%s_methods[%s]' % (arg,arg), globals()))
 
         copy_and_replace_menu_item(menuw, item)
+        menuw.init_page()
+        menuw.refresh()
 
 
     def configure_sorting_reversed(self, arg=None, menuw=None):
@@ -237,6 +239,8 @@ class RecordingsDirectory(Item):
         item.name = item.name[:item.name.find(u'\t') + 1]  + self.configure_get_icon( eval(arg, globals()))
 
         copy_and_replace_menu_item(menuw, item)
+        menuw.init_page()
+        menuw.refresh()
 
 
     def configure_get_icon(self, value):
@@ -419,6 +423,7 @@ class RecordedProgramItem(Item):
         self.update_fxd(self.watched, self.keep)
         self.set_icon()
         if menuw:
+            copy_and_replace_menu_item(menuw, self)
             menuw.refresh(reload=True)
 
 
@@ -430,6 +435,7 @@ class RecordedProgramItem(Item):
         self.update_fxd(self.watched, self.keep)
         self.set_icon()
         if menuw:
+            copy_and_replace_menu_item(menuw, self)
             menuw.refresh(reload=True)
 
 
@@ -598,9 +604,11 @@ class Series(Item):
                 else:
                     self.menuw.init_page()
                 self.menuw.refresh()
+                # Update the icon just incase we were called because a series item updated its watched/keep state.
+                self.set_icon()
         else:
             # normal menu build
-            item_menu = Menu(self.name, self.items, item_types = 'tv')
+            item_menu = Menu(self.name, self.items,reload_func=self.reload, item_types = 'tv')
             menuw.pushmenu(item_menu)
 
             self.menu  = item_menu
@@ -646,6 +654,7 @@ class Series(Item):
                 item.mark_to_keep()
         self.set_icon()
         if menuw:
+            copy_and_replace_menu_item(menuw, self)
             menuw.refresh(reload=True)
 
 
@@ -667,6 +676,13 @@ class Series(Item):
     # ======================================================================
     # Helper methods
     # ======================================================================
+    def reload(self):
+        """
+        Rebuilds the menu.
+        """
+        self.browse(arg='update')
+        return None
+    
 
     def set_icon(self):
         """
@@ -917,8 +933,6 @@ def copy_and_replace_menu_item(menuw, item):
         menu.choices[idx] = cloned_item
         if menu.selected is item:
             menu.selected = cloned_item
-        menuw.init_page()
-        menuw.refresh()
     except ValueError, e:
         menuw.delete_submenu(True, True)
 
