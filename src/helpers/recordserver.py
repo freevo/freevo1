@@ -1495,7 +1495,8 @@ class RecordServer(xmlrpc.XMLRPC):
 
         if event:
             if event == OS_EVENT_POPEN2:
-                _debug_('OS_EVENT_POPEN2 pid: %s' % event.arg[1], 0)
+                pid = event.arg[1]
+                _debug_('OS_EVENT_POPEN2 pid: %s' % pid, 0)
                 event.arg[0].child = util.popen3.Popen3(event.arg[1])
 
             elif event == OS_EVENT_WAITPID:
@@ -1516,39 +1517,34 @@ class RecordServer(xmlrpc.XMLRPC):
                 pid = event.arg[0]
                 sig = event.arg[1]
 
-                _debug_('OS_EVENT_KILL pid: %s sig: %s' % (pid, sig), 0)
+                _debug_('killing pid %s with signal %s' % (pid, sig), 0)
                 try:
                     os.kill(pid, sig)
+                    for i in range(20):
+                        try:
+                            wpid = os.waitpid(pid, os.WNOHANG)[0]
+                            if wpid == pid:
+                                break
+                        except OSError:
+                            continue
+                        time.sleep(0.1)
                 except OSError:
                     pass
-
-                for i in range(20):
+                else:
+                    _debug_('killing pid %s with signal 9' % (pid), 0)
                     try:
-                        wpid = os.waitpid(pid, os.WNOHANG)[0]
+                        os.kill(pid, 9)
+                        for i in range(20):
+                            try:
+                                wpid = os.waitpid(pid, os.WNOHANG)[0]
+                                if wpid == pid:
+                                    break
+                            except OSError:
+                                continue
+                            time.sleep(0.1)
                     except OSError:
-                        # forget it
-                        continue
-                    if wpid == pid:
-                        break
-                    time.sleep(0.1)
-
-                # to what does this else apply to
-                #else:
-                #    _debug_('OS_EVENT_KILL pid: %s force sig: 9' % (pid), 0)
-                #    try:
-                #        os.kill(pid, 9)
-                #    except OSError:
-                #        pass
-                #    for i in range(20):
-                #        try:
-                #            wpid = os.waitpid(pid, os.WNOHANG)[0]
-                #        except OSError:
-                #            # forget it
-                #            continue
-                #        if wpid == pid:
-                #            break
-                #        time.sleep(0.1)
-                _debug_('recorderver: After wait()', 0)
+                        pass
+                _debug_('OS_EVENT_KILL done', 0)
 
             elif event == RECORD_START:
                 prog = event.arg
