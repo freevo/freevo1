@@ -17,16 +17,28 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * Updated Catalan translation (F#1709740)
+ * Updated French translation (B#1721805)
+ * Updated Spanish translation (B#1722301)
+ * Updated audio detached player to allow user configured event (F#1636457)
  * Updated mplayer to allow multiple crop points (F#1712397)
  * Updated mplayer to allow previous channel selection (F#1720667)
+ * Updated vlc plug-in for better integration in freevo (F#1721808)
  * Fixed alsamixer choose mute control (B#1717659)
+ * Fixed CD burn plug-in's incorrect internationalization strings (B#1722295)
  * Fixed directory listing crash when permission is denied (B#1715447)
  * Fixed freevused mute mixer event name has changed (B#1717661)
  * Fixed imdb plug-in to correct episode number format (B#1716131)
- * Fixed playlists to skip directories with a .password file for recursive play (B#1715447)
+ * Fixed mplayer plug-ins not resetting the audio before each track (F#1718436)
+ * Fixed play lists to skip directories with a .password file for recursive play (B#1715447)
+ * Fixed record manager not updating the keep/watched states (B#1725041)
  * Fixed recordserver failing to record consecutive shows (B#1715260)
+ * Fixed recursive playing of password protected directories (B#1715447)
  * Fixed rss feed not correctly writing the fxd file (B#1710553)
+ * Fixed rss feed to correctly process the URLs (B#1721637)
+ * Fixed USB storage devices causing crash when plugged in or removed (B#1722590)
  * Fixed weather plug-in for changed URLs (B#1717788,B#1717660)
+ * Fixed xine playing DVDs that are on the hard disk in VIDEO_TS (B#1724489)
+ * Fixed XvMC handling to allow configuration option (B#1713801)
 
 == Release 1.7.1 (2007-04-29) ==
 --------------------------------
@@ -42,7 +54,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated IMDB download to extract season and episode from TV programs (F#1683101)
  * Updated ivtv record to work with SECAM-DK (F#1694182)
  * Updated mplayer to allow the bottom field first and XvMC settings (F#1694186,F#1683423)
- * Updated rss feed for better url detection (B#1675373,B#1709515)
+ * Updated rss feed for better URL detection (B#1675373,B#1709515)
  * Updated xine event handling to accept SEND_VIDEO_XINE_CMD (F#1683699)
  * Fixed audio item correctly processing files without media tags (B#1678392)
  * Fixed audio covers not working when a .directory file is on the path (B#1687649)
