@@ -1501,7 +1501,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
             elif event == OS_EVENT_WAITPID:
                 pid = event.arg[0]
-                _debug_('OS_EVENT_WAITPID pid: %s' % pid, 0)
+                _debug_('waiting for pid %s' % (pid), 0)
 
                 for i in range(20):
                     try:
@@ -1510,8 +1510,11 @@ class RecordServer(xmlrpc.XMLRPC):
                         # forget it
                         continue
                     if wpid == pid:
+                        _debug_('pid %s terminated' % (pid), 0)
                         break
                     time.sleep(0.1)
+                else:
+                    _debug_('pid %s still running' % (pid), 0)
 
             elif event == OS_EVENT_KILL:
                 pid = event.arg[0]
@@ -1520,31 +1523,38 @@ class RecordServer(xmlrpc.XMLRPC):
                 _debug_('killing pid %s with signal %s' % (pid, sig), 0)
                 try:
                     os.kill(pid, sig)
-                    for i in range(20):
-                        try:
-                            wpid = os.waitpid(pid, os.WNOHANG)[0]
-                            if wpid == pid:
-                                break
-                        except OSError:
-                            continue
-                        time.sleep(0.1)
                 except OSError:
                     pass
+
+                for i in range(20):
+                    try:
+                        wpid = os.waitpid(pid, os.WNOHANG)[0]
+                    except OSError:
+                        # forget it
+                        continue
+                    if wpid == pid:
+                        _debug_('killed pid %s with signal %s' % (pid, sig), 0)
+                        break
+                    time.sleep(0.1)
+                # We fall into this else from the for loop when break is not executed
                 else:
                     _debug_('killing pid %s with signal 9' % (pid), 0)
                     try:
                         os.kill(pid, 9)
-                        for i in range(20):
-                            try:
-                                wpid = os.waitpid(pid, os.WNOHANG)[0]
-                                if wpid == pid:
-                                    break
-                            except OSError:
-                                continue
-                            time.sleep(0.1)
                     except OSError:
                         pass
-                _debug_('OS_EVENT_KILL done', 0)
+                    for i in range(20):
+                        try:
+                            wpid = os.waitpid(pid, os.WNOHANG)[0]
+                        except OSError:
+                            # forget it
+                            continue
+                        if wpid == pid:
+                            _debug_('killed pid %s with signal 9' % (pid), 0)
+                            break
+                        time.sleep(0.1)
+                    else:
+                        _debug_('failed to kill pid %s' % (pid), 0)
 
             elif event == RECORD_START:
                 prog = event.arg
