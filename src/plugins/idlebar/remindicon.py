@@ -30,9 +30,9 @@
 
 __author__ = "Christian Lyra"
 __version__ = "0.1"
-__cvsversion__ = "$Revision$"[11:-2]
+__svnversion__ = "$Revision$"[11:-2]
 __date__ = "$Date$"[7:-2]
-__copyright__ = "Copyright (c) 2002 Mark Pilgrim"
+__copyright__ = "Copyright (c) 2007 Christian Lyra"
 __license__ = "GPL"
 
 
@@ -55,9 +55,9 @@ class PluginInterface(IdleBarPlugin):
 
     You can define the remind command with:
     REMINDICON_CMD='<cmd> (defaults to /usr/bin/remind -h )
+    remind homepage:http://www.roaringpenguin.com/en/penguin/openSourceProducts/remind
 
     if the command output something then show the alert button else show the blue button.
-    obs: command will be called only once per minute.
     """
     def __init__(self):
         IdleBarPlugin.__init__(self)
@@ -71,7 +71,7 @@ class PluginInterface(IdleBarPlugin):
         self.cmd = config.REMINDICON_CMD
 
     def config(self):
-        return [ (REMINDICON_CMD, 'remind -h', 'Command to run the remind process') ]
+        return [ ('REMINDICON_CMD', 'remind -h', 'Command to run the remind process') ]
 
     def getStatus(self):
         if (time.time()-self.time)>60:
