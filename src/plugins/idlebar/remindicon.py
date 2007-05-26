@@ -88,9 +88,8 @@ class PluginInterface(IdleBarPlugin):
                 _debug_("Remind: %s" % f)
             else:
                 self.status = self.images['nothing']
+        return self.status
 
 
     def draw(self, (type, object), x, osd):
-        self.getStatus()
-        width = osd.draw_image(self.status, (x+width, osd.y + 10, -1, -1))[0] + 10
-        return width
+        return osd.draw_image(self.getStatus(), (x, osd.y + 10, -1, -1))[0]
