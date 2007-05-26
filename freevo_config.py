@@ -271,6 +271,7 @@ LOCAL_CONF_CHANGES = [
      Changed default locale from latin-1 to iso-8859-15, they are really the same
      Added MPLAYER_OLDTVCHANNELCHANGE to allow the PREV_CH button to swap to previous channel
      Added RSS_DOWNLOAD for a place to save downloaded data
+     Added IMAGE_EXCLUDE as a regular expression to exclude images such as thumbnails
      ''' ),
 ]
 
@@ -1051,6 +1052,10 @@ IMAGE_SUFFIX = [ 'jpg','gif','png', 'jpeg','bmp','tiff','psd' ]
 
 IMAGE_SSHOW_SUFFIX = [ 'ssr' ]
 
+# The viewer can exclude certain types of images based on the regular expression list
+# eg IMAGE_EXCLUDE = [('thm','tn_')]
+
+IMAGE_EXCLUDE = [ ]
 
 #
 # Mode of the blending effect in the image viewer between two images

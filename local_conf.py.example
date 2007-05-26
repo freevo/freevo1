@@ -737,6 +737,11 @@ CACHE_IMAGES = 1
 #
 # IMAGE_SSHOW_SUFFIX = [ 'ssr' ]
 
+# The viewer can exclude certain types of images based on the regular expression list
+# eg IMAGE_EXCLUDE = [('thm','tn_')]
+
+# IMAGE_EXCLUDE = [ ]
+
 #
 # Mode of the blending effect in the image viewer between two images
 # Possible values are:
@@ -745,8 +750,8 @@ CACHE_IMAGES = 1
 # -1    random effect
 #  0    alpha blending
 #  1    wipe effect
-#
-IMAGEVIEWER_BLEND_MODE = -1
+
+# IMAGEVIEWER_BLEND_MODE = -1
 
 
 
