@@ -16,6 +16,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 == Release 1.7.2 (2007-05-26) ==
 --------------------------------
 
+ * Added remind main menu plug-in that calls remind showing calendar events (F#1726070)
  * Added remindicon idlebar plug-in that calls remind showing calendar events (F#1726069)
  * Updated Catalan translation (F#1709740)
  * Updated French translation (B#1721805)
