@@ -1308,13 +1308,12 @@ msgid "CD Burn Menu"
 msgstr "Menú de grabación en disco"
 
 #: plugins/cd_burn.py:815
-#, fuzzy
 msgid "Copy dir to CD"
-msgstr "Grabar %s en disco"
+msgstr "Grabar directorio en disco"
 
 #: plugins/cd_burn.py:817
 msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
-msgstr ""
+msgstr "Grabar ficheros de audio (MP3, Wav y Ogg) como CD-Audio"
 
 #: plugins/cd_burn.py:829
 msgid "Copy this file to CD"
@@ -1337,7 +1336,7 @@ msgstr "Grabar el elemento %s, y relacionados en disco"
 
 #: plugins/cd_burn.py:879
 msgid "Burn as DVD-VIDEO disc"
-msgstr ""
+msgstr "Grabar como disco DVD-Video"
 
 #: plugins/vfd.py:52
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
@@ -1383,35 +1382,35 @@ msgstr "La grabación empezara en menos de un minuto"
 
 #: plugins/upsoon.py:272
 msgid "TV stopped, a recording is about to start!"
-msgstr ""
+msgstr "TV parada. Va a comenzar una grabación"
 
 #: plugins/mpd.py:99
 msgid "not sure what to do with this"
-msgstr ""
+msgstr "no estoy seguro de qué hacer con esto"
 
 #: plugins/mpd.py:110
 msgid "MPD"
-msgstr ""
+msgstr "MPD"
 
 #: plugins/mpd.py:153
 msgid "mpd"
-msgstr ""
+msgstr "mpd"
 
 #: plugins/mpd.py:215
 msgid "Song - "
-msgstr ""
+msgstr "Canción - "
 
 #: plugins/mpd.py:226
 msgid "Artist - "
-msgstr "Artista"
+msgstr "Artista - "
 
 #: plugins/mpd.py:233
 msgid "Album - "
-msgstr "Álbum"
+msgstr "Álbum - "
 
 #: plugins/mpd.py:241
 msgid "Status - "
-msgstr ""
+msgstr "Estado - "
 
 #: plugins/buttonbar.py:101
 msgid "No Information Available"
@@ -1424,7 +1423,7 @@ msgstr "Grabar"
 
 #: plugins/buttonbar.py:164
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: plugins/buttonbar.py:364
 msgid "More Options"
@@ -1432,15 +1431,15 @@ msgstr "Opciones de dispositivos"
 
 #: plugins/freeboxtv.py:72
 msgid "Freebox TV"
-msgstr ""
+msgstr "Freebox TV"
 
 #: plugins/freeboxtv.py:79
 msgid "Freebox TV :: Les chaines"
-msgstr ""
+msgstr "Freebox TV :: Cadenas"
 
 #: plugins/freeboxtv.py:117
 msgid "Freebox TV :: Les chaines Multiposte"
-msgstr ""
+msgstr "Freebox TV :: Cadenas multipuesto"
 
 #: image/plugins/gphoto.py:99 image/imageitem.py:98
 msgid "View Image"
@@ -1851,7 +1850,7 @@ msgstr "Hora del día"
 
 #: www/htdocs/edit_favorite.rpy:134 www/htdocs/favorites.rpy:111
 msgid "Duplicates"
-msgstr ""
+msgstr "Duplicados"
 
 #: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
 msgid "Episodes"
@@ -1912,19 +1911,19 @@ msgstr "CUALQUIER HORA"
 
 #: www/htdocs/edit_favorite.rpy:238
 msgid "ALLOW"
-msgstr ""
+msgstr "Permitir"
 
 #: www/htdocs/edit_favorite.rpy:239
 msgid "PREVENT"
-msgstr ""
+msgstr "Impedir"
 
 #: www/htdocs/edit_favorite.rpy:248
 msgid "ALL"
-msgstr ""
+msgstr "Todos"
 
 #: www/htdocs/edit_favorite.rpy:249
 msgid "ONLY NEW"
-msgstr ""
+msgstr "Sólo nuevos"
 
 #: www/htdocs/edit_favorite.rpy:262 tv/plugins/manual_record.py:131
 #: tv/edit_favorite.py:183
@@ -2060,7 +2059,7 @@ msgstr "Renombrar %s a %s."
 #: www/htdocs/library.rpy:193 www/htdocs/library.rpy:209
 #, python-format
 msgid "<h2>%s</h2>"
-msgstr ""
+msgstr "<h2>%s</h2>"
 
 #: www/htdocs/library.rpy:194
 #, python-format
