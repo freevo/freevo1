@@ -23,6 +23,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated image viewer to exclude certain types of images be a regex (F#1719613)
  * Updated mplayer to allow multiple crop points (F#1712397)
  * Updated mplayer to allow previous channel selection (F#1720667)
+ * Updated recordserver to allow a tolerance for a favourite (F#1725823)
  * Updated vlc plug-in for better integration in freevo (F#1721808)
  * Fixed alsamixer choose mute control (B#1717659)
  * Fixed CD burn plug-in's incorrect internationalization strings (B#1722295)

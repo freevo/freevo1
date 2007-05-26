@@ -1064,7 +1064,6 @@ class RecordServer(xmlrpc.XMLRPC):
 
         lt = time.localtime(prog.start)
         dow = '%s' % lt[6]
-        mod = '%s' % ((lt[3]*60)+(lt[4] / 30 * 30))
         mod = '%s' % ((lt[3]*60)+lt[4])
 
         for fav in favs.values():
@@ -1072,8 +1071,8 @@ class RecordServer(xmlrpc.XMLRPC):
                 if fav.channel == tv_util.get_chan_displayname(prog.channel_id) \
                 or fav.channel == 'ANY':
                     if Unicode(fav.dow) == Unicode(dow) or Unicode(fav.dow) == u'ANY':
-                        if Unicode(fav.mod) == Unicode(mod) \
-                        or Unicode(fav.mod) == u'ANY':
+                        if Unicode(fav.mod) == u'ANY' \
+                        or abs(int(fav.mod) - int(mod)) <= config.TV_RECORD_FAVORITE_MARGIN:
                             return (TRUE, fav.name)
 
         # if we get this far prog is not a favorite

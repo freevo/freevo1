@@ -1213,12 +1213,16 @@ CACHE_IMAGES = 1
 
 # TV_RECORDFILE_MASK = '%%m-%%d %%H:%%M %(progname)s - %(title)s'
 
-
-# if using the persitant recordserver
+# If using the persistent recordserver
 # TV_RECORD_SCHEDULE = '%s/record_schedule.xml' % FREEVO_CACHEDIR
 
 # RECORDSERVER_IP = 'localhost'
 # RECORDSERVER_PORT = 18001
+
+# If the recordserver runs as root, set the uid to the given one
+# after startup. The gui must also match one of the users group ids
+# RECORDSERVER_UID = 0
+# RECORDSERVER_UID = 0
 
 # Remove old recordings if GB free is less than specified value
 # RECORDSERVER_CLEANUP_THRESHOLD = 0
@@ -1227,7 +1231,18 @@ CACHE_IMAGES = 1
 # and stop X minutes after scheduled - default to zero minutes.
 # This must be a value in seconds although at the moment only has
 # the percision of one minute.
-# TV_RECORD_PADDING = 0 * 60
+# TV_RECORD_PADDING_PRE = 0
+# TV_RECORD_PADDING_POST = 0
+
+# Number of minutes before or after the start time of a favorite where
+# a program matching the name, day of week etc should still be considered a
+# favorite. For example a favorite has a start time of 21.00, but the program
+# has been brought forward by the broadcaster by 10 minutes to 20.50, with
+# a margin of less than 10 this program will not be recorded as the start time 
+# is outside the margin. But if the margin is set at 10 minutes or greater this
+# program will be considered a favorite and recorded. Probably about 45 minutes 
+# is the best bet, better a false positive than a false negative.
+# TV_RECORD_FAVORITE_MARGIN = 45
 
 # VCR_AUDIO = (':adevice=%s' % AUDIO_DEVICE +
 #              ':audiorate=32000' +         # 44100 for better sound

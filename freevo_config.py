@@ -272,6 +272,7 @@ LOCAL_CONF_CHANGES = [
      Added MPLAYER_OLDTVCHANNELCHANGE to allow the PREV_CH button to swap to previous channel
      Added RSS_DOWNLOAD for a place to save downloaded data
      Added IMAGE_EXCLUDE as a regular expression to exclude images such as thumbnails
+     Added TV_RECORD_FAVORITE_MARGIN to allow favourites to be added to the schedule within a tolerance value
      ''' ),
 ]
 
@@ -1587,6 +1588,16 @@ RECORDSERVER_CLEANUP_THRESHOLD = 0
 # the percision of one minute.
 TV_RECORD_PADDING_PRE = 0
 TV_RECORD_PADDING_POST = 0
+
+# Number of minutes before or after the start time of a favorite where
+# a program matching the name, day of week etc should still be considered a
+# favorite. For example a favorite has a start time of 21.00, but the program
+# has been brought forward by the broadcaster by 10 minutes to 20.50, with
+# a margin of less than 10 this program will not be recorded as the start time 
+# is outside the margin. But if the margin is set at 10 minutes or greater this
+# program will be considered a favorite and recorded. Probably about 45 minutes 
+# is the best bet, better a false positive than a false negative.
+TV_RECORD_FAVORITE_MARGIN = 45
 
 if os.uname()[0] == 'FreeBSD':
     # FreeBSD's bsdbt848 TV driver doesn't support audio settings?
