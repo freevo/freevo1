@@ -1,0 +1,96 @@
+Release Notes for 1.7.1
+-----------------------
+
+This release contains some newfeatures and some significant bug fixes.  A
+native ALSA misxer has been added, a widescreen skin "Panorama" has been added,
+a TV recordings manager has been added and user defined commands can now be
+sent to the Xine player
+
+The TV_RECORD_PADDING has been removed, use TV_RECORD_PADDING_PRE and
+TV_RECORD_PADDING_POST instead.
+
+Release Notes for 1.7.0
+-----------------------
+
+This release contains quite a few major new features. Including a great web
+interface to the media on your freevo machine, a web remote, an encodeserver to
+compress recordings in the background, an rss feedserver so you can download
+your favourite podcasts in the background, support for Linux event devices,
+support anamorphic skins and colour in the tv guide to show overlapping
+recording, currently showing and already shown, a commercial detection and
+duplicate recording additions to the record server. 
+
+A significant change that is not too visible is that mmpython has been replaced
+with kaa modules.
+
+Release Notes for 1.6.0
+-----------------------
+
+The have been quite a number of changes, see ChangeLog for details.
+The ChangeLog has a tracker reference for a discussion about the
+changes.
+
+IMPORTANT
+---------
+
+The recordable setting has been from from VIDEO_GROUPS
+Delete this setting from your local_conf.py
+
+This change can be mostly automated by running:
+freevo convert_config
+
+To use multi-tuner support the VIDEO_GROUPS needs setting up correctly
+see http://freevo.sourceforge.net/cgi-bin/doc/MultiTunerConfig
+
+elementtree, include in Python-2.5+, is now a prerequisite for freevo,
+if can be downloaded from http://effbot.org/zone/elementtree.htm
+
+idlebar and headlines plug-ins are now enabled by default, you will need
+to remove the following plug-ins from local_conf.py:
+
+plugin.activate('headlines', level=XX)
+plugin.activate('idlebar')
+plugin.activate('idlebar.tv', level=20)
+plugin.activate('idlebar.cdstatus', level=25)
+plugin.activate('idlebar.diskfree', level=30)
+plugin.activate('idlebar.clock', level=50, args='%a %d %H:%M')
+
+If you don't like and of these plug-ins the can be deactivated by:
+plugin.remove('<plug-in name>')
+
+
+Known Problems
+--------------
+
+If a directory is name with a media extension it will be treated as a
+media file, e.g. music.mp3 or record.avi. Use music_mp3 and record_avi
+instead.
+
+If a mp3 file is incorrectly named the header search will scan the whole
+file, e.g. something.mp3 which is really a wave file.
+
+Sometime the headlines plug-in crashed when it receives incorrect data
+from the rss feed.
+
+
+Release Notes for 1.5.3
+-----------------------
+
+This release is stable, but there are some plugins know to cause
+problems. For a crash-free usage, you shouldn't activate them.
+
+
+
+Plugins with problems:
+----------------------
+
+video.mplayer-vis:
+There seems to be a problem in pygoom resulting in a pygame segfault. 
+
+video.bmovl:
+This plugin is experimental, it may crash
+
+video.details:
+It won't crash Freevo, but maybe it doesn't work as expected
+
+

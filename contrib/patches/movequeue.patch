@@ -1,0 +1,279 @@
+Index: freevo_config.py
+===================================================================
+--- freevo_config.py	(revision 8846)
++++ freevo_config.py	(working copy)
+@@ -997,6 +997,11 @@
+ #
+ AUDIO_SHOW_VIDEOFILES = False
+ 
++#
++# Directory for queuing video files to be moved
++#
++VIDEO_QUEUE_DIR = 'you must set VIDEO_QUEUE_DIR in your local_conf.py'
++
+ # ======================================================================
+ # Freevo image viewer settings:
+ # ======================================================================
+Index: local_conf.py.example
+===================================================================
+--- local_conf.py.example	(revision 8859)
++++ local_conf.py.example	(working copy)
+@@ -1310,6 +1310,15 @@
+ 
+ 
+ # ======================================================================
++# Freevo video mover settings:
++# ======================================================================
++#
++# Directory for queuing video files to be moved
++#
++# VIDEO_QUEUE_DIR = '/tmp'
++
++
++# ======================================================================
+ # Freevo builtin rss server settings:
+ # ======================================================================
+ # RSSSERVER_UID = 0
+Index: src/video/plugins/movequeue.py
+===================================================================
+--- src/video/plugins/movequeue.py	(revision 0)
++++ src/video/plugins/movequeue.py	(revision 0)
+@@ -0,0 +1,162 @@
++# -*- coding: iso-8859-1 -*-
++# -----------------------------------------------------------------------
++# movequeue.py - freevo video mover
++# -----------------------------------------------------------------------
++# $Id$
++#
++# Notes:
++#    Activate:
++#    plugin.activate('video.movequeue')
++#    VIDEO_QUEUE_DIR = '/path/to/move/queue'
++#
++# Todo:        
++#
++# -----------------------------------------------------------------------
++# Freevo - A Home Theater PC framework
++# Copyright (C) 2002 Krister Lagerstrom, et al. 
++# Please see the file freevo/Docs/CREDITS for a complete list of authors.
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful, but
++# WITHOUT ANY WARRANTY; without even the implied warranty of MER-
++# CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
++# Public License for more details.
++#
++# You should have received a copy of the GNU General Public License along
++# with this program; if not, write to the Free Software Foundation, Inc.,
++# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++#
++# -----------------------------------------------------------------------
++
++import os
++import plugin
++import config
++
++import rc
++import event 
++
++from gui import ConfirmBox
++from gui.PopupBox import PopupBox
++from item import Item
++import config, menu, rc, plugin, osd, util
++
++class PluginInterface(plugin.MainMenuPlugin):
++    """
++    Video File Mover With Queue
++
++    Activate:
++    plugin.activate('video.movequeue')
++    """
++    def __init__(self):
++        if not hasattr(config, 'VIDEO_QUEUE_DIR'):
++            self.reason = 'VIDEO_QUEUE_DIR not defined'
++            return
++        plugin.MainMenuPlugin.__init__(self)
++
++    def items(self, parent):
++        return [ VideoQueueMainMenu(parent) ]
++
++
++class QueueItem(Item):
++    """
++    Item for the menu
++    """
++    def __init__(self, parent):
++        Item.__init__(self, parent)
++        self.queue = '%s/video_move_queue' % (config.FREEVO_CACHEDIR)
++
++
++    def actions(self):
++        """
++        return a list of actions for this item
++        """
++        return [ ( self.runcmd , _('Run Command') ) ]
++
++
++    def runcmd(self, arg=None, menuw=None):
++        """
++        Run Move Command
++        """
++        if self.function == 'move_queue':
++            queue_items = open(self.queue,'r')
++            popup = PopupBox(text=_('Moving queued files..'))
++            popup.show()
++            for line in queue_items:
++                os.system('mv "%s" "%s"' % (line[:-1], config.VIDEO_QUEUE_DIR))
++            queue_items.close()
++            util.touch(self.queue)
++            popup.destroy()
++        else:
++            what = _('Delete from queue?')
++            ConfirmBox(text=what, handler=self.delete_from_queue, default_choice=1).show()
++        return
++
++
++    def delete_from_queue(self, arg=None, menuw=None):
++        new_file = ''
++        index = 0
++        delete_item = open(self.queue,'r')
++        for line in delete_item.readlines():
++            index = index + 1
++            if index <> self.index:
++                new_file += line
++        delete_item.close
++        delete_item = open(self.queue,'w')
++        delete_item.write(new_file)
++        delete_item.close()
++        # 
++        # really, really bad hack to redraw menu
++        #
++        rc.post_event(event.MENU_BACK_ONE_MENU)
++        rc.post_event(event.MENU_SELECT)
++
++        return
++
++
++class VideoQueueMainMenu(Item):
++    """
++    this is the item for the main menu.
++    """
++    def __init__(self, parent):
++        Item.__init__(self, parent)
++        self.name = _('Video Mover Queue')
++        self.queue = '%s/video_move_queue' % (config.FREEVO_CACHEDIR)
++
++
++    def actions(self):
++        """
++        return a list of actions for this item
++        """
++        items = [ ( self.create_queue_menu , _('Video Mover Queue' )) ]
++        return items
++
++
++    def create_queue_menu(self, arg=None, menuw=None):
++        queue_item = []
++        queue_menu_items = []
++        index = 0
++        queue_item = QueueItem(self)
++        queue_item.name = 'Move Queue Now'
++        queue_item.function = 'move_queue'
++        queue_item.index = 0
++        queue_menu_items += [ queue_item ]
++        if not os.path.exists(self.queue):
++            util.touch(self.queue)
++        queue_items = open(self.queue,'r')
++        for line in queue_items:
++            queue_item = QueueItem(self)
++            queue_item.name = line
++            queue_item.function = 'sub_menu'
++            index += 1
++            queue_item.index = index 
++            queue_menu_items += [ queue_item ]
++        queue_items.close()
++        if (len(queue_menu_items) == 0):
++            queue_menu_items += [menu.MenuItem(_('No queued items found'), menuw.goto_prev_page, 0)]
++        queue_menu = menu.Menu(_('Video Mover Queue'), queue_menu_items)
++        menuw.pushmenu(queue_menu)
++        menuw.refresh()
+
+Property changes on: src/video/plugins/movequeue.py
+___________________________________________________________________
+Name: svn:keywords
+   + Author Date Id Revision
+
+Index: src/video/plugins/movequeuehelper.py
+===================================================================
+--- src/video/plugins/movequeuehelper.py	(revision 0)
++++ src/video/plugins/movequeuehelper.py	(revision 0)
+@@ -0,0 +1,59 @@
++# -*- coding: iso-8859-1 -*-
++# -----------------------------------------------------------------------
++# movequeue.py - freevo video mover
++# -----------------------------------------------------------------------
++# $Id$
++#
++# Notes:
++# Todo:        
++#
++# -----------------------------------------------------------------------
++# Freevo - A Home Theater PC framework
++# Copyright (C) 2002 Krister Lagerstrom, et al. 
++# Please see the file freevo/Docs/CREDITS for a complete list of authors.
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful, but
++# WITHOUT ANY WARRANTY; without even the implied warranty of MER-
++# CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
++# Public License for more details.
++#
++# You should have received a copy of the GNU General Public License along
++# with this program; if not, write to the Free Software Foundation, Inc.,
++# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++#
++# -----------------------------------------------------------------------
++
++import os  
++import plugin
++import config
++
++class PluginInterface(plugin.ItemPlugin):
++    """
++    Video File Mover
++
++    Activate:
++    plugin.activate('video.movequeue')
++    """
++    
++    def __init__(self):
++        plugin.ItemPlugin.__init__(self)
++        self.queue = '%s/video_move_queue' % (config.FREEVO_CACHEDIR)
++                
++    #Actions: 
++    def actions(self,item): 
++        self.item = item
++        return [ (self.queue_to_move, 'Add to queue to be moved')] 
++
++    def queue_to_move(self,arg=None, menuw=None):
++        item = self.item 
++        f = file(self.queue, 'a')
++        f.write(item.filename)
++        f.write('\n')
++        f.close()
++        menuw.delete_menu(arg, menuw) 
++        menuw.refresh()
+
+Property changes on: src/video/plugins/movequeuehelper.py
+___________________________________________________________________
+Name: svn:keywords
+   + Author Date Id Revision
+
