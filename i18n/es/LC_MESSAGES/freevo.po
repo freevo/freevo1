@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-21 18:05+0200\n"
+"POT-Creation-Date: 2007-05-26 17:08+0200\n"
 "PO-Revision-Date: 2006-12-10 15:35+0100\n"
 "Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,23 +15,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: ../freevo_config.py:1076 ../freevo_config.py:1081
+#: ../freevo_config.py:1082 ../freevo_config.py:1087
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Título"
 
-#: ../freevo_config.py:1077 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1083 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Descripción"
 
-#: ../freevo_config.py:1078
+#: ../freevo_config.py:1084
 msgid "Author"
 msgstr "Autor"
 
-#: ../freevo_config.py:1082 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1088 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -39,11 +39,11 @@ msgstr "Autor"
 msgid "Date"
 msgstr "Fecha"
 
-#: ../freevo_config.py:1085
+#: ../freevo_config.py:1091
 msgid "Model"
 msgstr "Modelo"
 
-#: ../freevo_config.py:1086
+#: ../freevo_config.py:1092
 msgid "Software"
 msgstr "Software"
 
@@ -738,11 +738,11 @@ msgid "Delete image"
 msgstr "Eliminar miniatura"
 
 #: plugins/file_ops.py:71 www/htdocs/library.rpy:539
-#: tv/plugins/recordings_manager.py:377
+#: tv/plugins/recordings_manager.py:381
 msgid "Delete"
 msgstr "Eliminar este elemento"
 
-#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:399
+#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:403
 #, python-format
 msgid ""
 "Do you wish to delete\n"
@@ -751,8 +751,8 @@ msgstr ""
 "¿Estás seguro de querer eliminar el elemento\n"
 "'%s'?"
 
-#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:401
-#: tv/plugins/recordings_manager.py:627
+#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:405
+#: tv/plugins/recordings_manager.py:635
 msgid "Deleting..."
 msgstr "Eliminando..."
 
@@ -833,7 +833,7 @@ msgstr "Vaciar carrito"
 #: tv/channels.py:133 tv/channels.py:169 tv/channels.py:174
 #: tv/record_client.py:90 audio/plugins/cdbackup.py:197
 #: audio/plugins/cdbackup.py:580 audio/plugins/xine.py:54
-#: video/plugins/xine.py:62 childapp.py:283
+#: video/plugins/xine.py:62
 msgid "ERROR"
 msgstr "ERROR"
 
@@ -1441,12 +1441,35 @@ msgstr "Freebox TV :: Cadenas"
 msgid "Freebox TV :: Les chaines Multiposte"
 msgstr "Freebox TV :: Cadenas multipuesto"
 
+#: plugins/remind.py:100
+#, fuzzy
+msgid "Show Reminders"
+msgstr "Chubascos"
+
+#: plugins/remind.py:111
+#, fuzzy
+msgid "No Reminders Found"
+msgstr "No se han encontrado titulares."
+
+#: plugins/remind.py:113 plugins/remind.py:163
+msgid "Reminders"
+msgstr ""
+
+#: plugins/remind.py:175
+#, fuzzy
+msgid "Reminders types"
+msgstr "Sitios de Titulares"
+
+#: plugins/remind.py:189
+msgid "Remind type"
+msgstr ""
+
 #: image/plugins/gphoto.py:99 image/imageitem.py:98
 msgid "View Image"
 msgstr "Ver Fotografía"
 
 #: image/plugins/gphoto.py:126 tv/plugins/recordings_manager.py:156
-#: directory.py:447
+#: directory.py:448
 msgid "Browse directory"
 msgstr "Entrar a la carpeta"
 
@@ -2345,7 +2368,7 @@ msgstr "Estado, Fecha y después Nombre"
 msgid "Manage Recordings"
 msgstr "Gestionar grabaciones"
 
-#: tv/plugins/recordings_manager.py:146 directory.py:461
+#: tv/plugins/recordings_manager.py:146 directory.py:462
 msgid "Configure directory"
 msgstr "Configurar carpeta"
 
@@ -2353,82 +2376,82 @@ msgstr "Configurar carpeta"
 msgid "Recordings Directory does not exist"
 msgstr "La carpeta de grabaciones no existe"
 
-#: tv/plugins/recordings_manager.py:244 directory.py:819 directory.py:909
-#: directory.py:943
+#: tv/plugins/recordings_manager.py:248 directory.py:820 directory.py:910
+#: directory.py:944
 msgid "on"
 msgstr "sí"
 
-#: tv/plugins/recordings_manager.py:246 directory.py:821 directory.py:824
-#: directory.py:913 directory.py:941
+#: tv/plugins/recordings_manager.py:250 directory.py:822 directory.py:825
+#: directory.py:914 directory.py:942
 msgid "off"
 msgstr "no"
 
-#: tv/plugins/recordings_manager.py:251
+#: tv/plugins/recordings_manager.py:255
 msgid "Sort by"
 msgstr "Ordenar por"
 
-#: tv/plugins/recordings_manager.py:253
+#: tv/plugins/recordings_manager.py:257
 msgid "Reverse sort"
 msgstr "Ordenar en órden inverso"
 
-#: tv/plugins/recordings_manager.py:255
+#: tv/plugins/recordings_manager.py:259
 msgid "Sort series by"
 msgstr "Ordenar series por"
 
-#: tv/plugins/recordings_manager.py:257
+#: tv/plugins/recordings_manager.py:261
 msgid "Reverse series sort"
 msgstr "Ordenar series inversamente"
 
-#: tv/plugins/recordings_manager.py:259
+#: tv/plugins/recordings_manager.py:263
 msgid "Status order"
 msgstr "Ordenar por estado"
 
-#: tv/plugins/recordings_manager.py:262 directory.py:950
+#: tv/plugins/recordings_manager.py:266 directory.py:951
 msgid "Configure"
 msgstr "Configurar"
 
-#: tv/plugins/recordings_manager.py:376 tv/program_display.py:126
+#: tv/plugins/recordings_manager.py:380 tv/program_display.py:126
 #: video/videoitem.py:317 video/configure.py:279 playlist.py:284
 msgid "Play"
 msgstr "Reproducir"
 
-#: tv/plugins/recordings_manager.py:378
+#: tv/plugins/recordings_manager.py:382
 msgid "Unmark to Keep"
 msgstr "Desmarcar para guardar"
 
-#: tv/plugins/recordings_manager.py:378
+#: tv/plugins/recordings_manager.py:382
 msgid "Mark to Keep"
 msgstr "Marcar para guardar"
 
-#: tv/plugins/recordings_manager.py:379
+#: tv/plugins/recordings_manager.py:383
 msgid "Unmark as Watched"
 msgstr "Desmarcar tras visionado"
 
-#: tv/plugins/recordings_manager.py:379
+#: tv/plugins/recordings_manager.py:383
 msgid "Mark as Watched"
 msgstr "Marcar tras visionado"
 
-#: tv/plugins/recordings_manager.py:464
+#: tv/plugins/recordings_manager.py:470
 msgid "(Unnamed)"
 msgstr "(Sin nombre)"
 
-#: tv/plugins/recordings_manager.py:558
+#: tv/plugins/recordings_manager.py:564
 msgid "Browse episodes"
 msgstr "Hojear episodios"
 
-#: tv/plugins/recordings_manager.py:559
+#: tv/plugins/recordings_manager.py:565
 msgid "Delete all episodes"
 msgstr "Eliminar todos los episodios"
 
-#: tv/plugins/recordings_manager.py:560
+#: tv/plugins/recordings_manager.py:566
 msgid "Keep all episodes"
 msgstr "Guardar todos los episodios"
 
-#: tv/plugins/recordings_manager.py:561
+#: tv/plugins/recordings_manager.py:567
 msgid "Play all episodes"
 msgstr "Reproducir todos los episodios"
 
-#: tv/plugins/recordings_manager.py:625
+#: tv/plugins/recordings_manager.py:633
 #, python-format
 msgid ""
 "Do you wish to delete the series\n"
@@ -2437,7 +2460,7 @@ msgstr ""
 "¿Estás seguro de querer eliminar esta serie\n"
 "'%s'?"
 
-#: tv/plugins/recordings_manager.py:699
+#: tv/plugins/recordings_manager.py:715
 msgid "episodes"
 msgstr "episodios"
 
@@ -3008,7 +3031,7 @@ msgstr "Canciones del mismo artista"
 msgid "Browse disc"
 msgstr "Hojear disco"
 
-#: audio/audiodiskitem.py:107 directory.py:719
+#: audio/audiodiskitem.py:107 directory.py:720
 msgid "Random playlist"
 msgstr "Lista aleatoria"
 
@@ -3518,7 +3541,7 @@ msgstr "No se puede abrir el fichero \"%s\""
 msgid "Browse Playlist"
 msgstr "Navegar por la lista"
 
-#: playlist.py:292 directory.py:456
+#: playlist.py:292 directory.py:457
 msgid "Random play all items"
 msgstr "Reproducir todo aleatoriamente"
 
@@ -3650,78 +3673,62 @@ msgstr ""
 "Reproducir automáticamente todo el directorio (como si fuera una lista de "
 "reproducción) cuando contenga solamente ficheros."
 
-#: directory.py:313
+#: directory.py:314
 #, python-format
 msgid "Directory on disc [%s]"
 msgstr "Carpeta en el disco [%s]"
 
-#: directory.py:314
+#: directory.py:315
 msgid "Directory"
 msgstr "Carpeta"
 
-#: directory.py:450
+#: directory.py:451
 msgid "Play all files in directory"
 msgstr "Reproducir todo"
 
-#: directory.py:458
+#: directory.py:459
 msgid "Recursive random play all items"
 msgstr "Reproducir todo aleatoria y recursivamente"
 
-#: directory.py:459
+#: directory.py:460
 msgid "Recursive play all items"
 msgstr "Reproducir todo recursivamente"
 
-#: directory.py:528
+#: directory.py:529
 msgid "Enter Password"
 msgstr "Introduzca la contraseña"
 
-#: directory.py:553
+#: directory.py:554
 msgid "Password incorrect"
 msgstr "Contraseña incorrecta"
 
-#: directory.py:587
+#: directory.py:588
 msgid "Directory does not exist"
 msgstr "La carpeta no existe"
 
-#: directory.py:617
+#: directory.py:618
 msgid "Scanning disc, be patient..."
 msgstr ""
 "Escaneando disco.\n"
 "Ten paciencia, por favor..."
 
-#: directory.py:619
+#: directory.py:620
 msgid "Scanning directory, be patient..."
 msgstr ""
 "Escaneando carpeta.\n"
 "Ten paciencia, por favor..."
 
-#: directory.py:826
+#: directory.py:827
 msgid "auto"
 msgstr "auto"
 
-#: directory.py:945
+#: directory.py:946
 msgid "Show all kinds of items"
 msgstr "Mostrar todos los tipos de elementos"
 
-#: directory.py:947
+#: directory.py:948
 msgid "Show video, audio and image items in this directory"
 msgstr "Mostrar los elementos de video, audio y fotografía en esta carpeta."
-
-#: childapp.py:281
-#, python-format
-msgid "logging child to \"%s\""
-msgstr "registrando proceso hijo en \"%s\""
-
-#: childapp.py:283
-#, python-format
-msgid "Cannot open \"%s\" for logging!"
-msgstr "No se puede abrir el registro \"%s\""
-
-#: childapp.py:285
-#, python-format
-msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
-msgstr ""
-"Establece CHILDAPP_DEBUG=0 en local_conf.py, o da permisos de escritura a %s"
 
 #: main.py:172
 msgid "Freevo Main Menu"
@@ -4088,6 +4095,17 @@ msgstr "No hay canciones en esta lista de reproducción"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "TV"
+
+#~ msgid "logging child to \"%s\""
+#~ msgstr "registrando proceso hijo en \"%s\""
+
+#~ msgid "Cannot open \"%s\" for logging!"
+#~ msgstr "No se puede abrir el registro \"%s\""
+
+#~ msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
+#~ msgstr ""
+#~ "Establece CHILDAPP_DEBUG=0 en local_conf.py, o da permisos de escritura a "
+#~ "%s"
 
 #, fuzzy
 #~ msgid "Scanning recordings, be patient..."

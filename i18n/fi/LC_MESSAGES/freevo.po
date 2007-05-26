@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-21 18:05+0200\n"
+"POT-Creation-Date: 2007-05-26 17:08+0200\n"
 "PO-Revision-Date: 2004-08-10 16:44+0300\n"
 "Last-Translator: Petri Damsten <damu@iki.fi>\n"
 "Language-Team: Finnish\n"
@@ -16,23 +16,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3.1\n"
 
-#: ../freevo_config.py:1076 ../freevo_config.py:1081
+#: ../freevo_config.py:1082 ../freevo_config.py:1087
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
 #: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Otsikko"
 
-#: ../freevo_config.py:1077 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1083 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:110 plugins/vfd.py:112
 msgid "Description"
 msgstr "Kuvaus"
 
-#: ../freevo_config.py:1078
+#: ../freevo_config.py:1084
 msgid "Author"
 msgstr "Tekij‰"
 
-#: ../freevo_config.py:1082 plugins/lcd.py:83 plugins/vfd.py:109
+#: ../freevo_config.py:1088 plugins/lcd.py:83 plugins/vfd.py:109
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
@@ -40,11 +40,11 @@ msgstr "Tekij‰"
 msgid "Date"
 msgstr "P‰iv‰ys"
 
-#: ../freevo_config.py:1085
+#: ../freevo_config.py:1091
 msgid "Model"
 msgstr "Malli"
 
-#: ../freevo_config.py:1086
+#: ../freevo_config.py:1092
 msgid "Software"
 msgstr "Sovellus"
 
@@ -741,11 +741,11 @@ msgid "Delete image"
 msgstr "Poista kuva"
 
 #: plugins/file_ops.py:71 www/htdocs/library.rpy:539
-#: tv/plugins/recordings_manager.py:377
+#: tv/plugins/recordings_manager.py:381
 msgid "Delete"
 msgstr "Poista"
 
-#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:399
+#: plugins/file_ops.py:77 tv/plugins/recordings_manager.py:403
 #, python-format
 msgid ""
 "Do you wish to delete\n"
@@ -754,8 +754,8 @@ msgstr ""
 "Haluatko poistaa\n"
 "'%s'?"
 
-#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:401
-#: tv/plugins/recordings_manager.py:627
+#: plugins/file_ops.py:79 tv/plugins/recordings_manager.py:405
+#: tv/plugins/recordings_manager.py:635
 msgid "Deleting..."
 msgstr "Poistetaan..."
 
@@ -836,7 +836,7 @@ msgstr ""
 #: tv/channels.py:133 tv/channels.py:169 tv/channels.py:174
 #: tv/record_client.py:90 audio/plugins/cdbackup.py:197
 #: audio/plugins/cdbackup.py:580 audio/plugins/xine.py:54
-#: video/plugins/xine.py:62 childapp.py:283
+#: video/plugins/xine.py:62
 msgid "ERROR"
 msgstr "VIRHE"
 
@@ -1439,12 +1439,35 @@ msgstr ""
 msgid "Freebox TV :: Les chaines Multiposte"
 msgstr ""
 
+#: plugins/remind.py:100
+#, fuzzy
+msgid "Show Reminders"
+msgstr "N‰yt‰"
+
+#: plugins/remind.py:111
+#, fuzzy
+msgid "No Reminders Found"
+msgstr "Otsikoita ei lˆytynyt"
+
+#: plugins/remind.py:113 plugins/remind.py:163
+msgid "Reminders"
+msgstr ""
+
+#: plugins/remind.py:175
+#, fuzzy
+msgid "Reminders types"
+msgstr "Uutisotsikko sivustot"
+
+#: plugins/remind.py:189
+msgid "Remind type"
+msgstr ""
+
 #: image/plugins/gphoto.py:99 image/imageitem.py:98
 msgid "View Image"
 msgstr "N‰yt‰ kuva"
 
 #: image/plugins/gphoto.py:126 tv/plugins/recordings_manager.py:156
-#: directory.py:447
+#: directory.py:448
 msgid "Browse directory"
 msgstr "Selaa hakemistoa"
 
@@ -2325,7 +2348,7 @@ msgstr ""
 msgid "Manage Recordings"
 msgstr "Ajastetut nauhoitukset"
 
-#: tv/plugins/recordings_manager.py:146 directory.py:461
+#: tv/plugins/recordings_manager.py:146 directory.py:462
 msgid "Configure directory"
 msgstr "Hakemiston asetukset"
 
@@ -2334,86 +2357,86 @@ msgstr "Hakemiston asetukset"
 msgid "Recordings Directory does not exist"
 msgstr "Levyll‰ on jo %s hakemisto"
 
-#: tv/plugins/recordings_manager.py:244 directory.py:819 directory.py:909
-#: directory.py:943
+#: tv/plugins/recordings_manager.py:248 directory.py:820 directory.py:910
+#: directory.py:944
 msgid "on"
 msgstr "p‰‰ll‰"
 
-#: tv/plugins/recordings_manager.py:246 directory.py:821 directory.py:824
-#: directory.py:913 directory.py:941
+#: tv/plugins/recordings_manager.py:250 directory.py:822 directory.py:825
+#: directory.py:914 directory.py:942
 msgid "off"
 msgstr "pois"
 
-#: tv/plugins/recordings_manager.py:251
+#: tv/plugins/recordings_manager.py:255
 msgid "Sort by"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:253
+#: tv/plugins/recordings_manager.py:257
 #, fuzzy
 msgid "Reverse sort"
 msgstr "K‰‰nteinen j‰rjestys"
 
-#: tv/plugins/recordings_manager.py:255
+#: tv/plugins/recordings_manager.py:259
 msgid "Sort series by"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:257
+#: tv/plugins/recordings_manager.py:261
 msgid "Reverse series sort"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:259
+#: tv/plugins/recordings_manager.py:263
 msgid "Status order"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:262 directory.py:950
+#: tv/plugins/recordings_manager.py:266 directory.py:951
 msgid "Configure"
 msgstr "Asetukset"
 
-#: tv/plugins/recordings_manager.py:376 tv/program_display.py:126
+#: tv/plugins/recordings_manager.py:380 tv/program_display.py:126
 #: video/videoitem.py:317 video/configure.py:279 playlist.py:284
 msgid "Play"
 msgstr "Soita"
 
-#: tv/plugins/recordings_manager.py:378
+#: tv/plugins/recordings_manager.py:382
 msgid "Unmark to Keep"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:378
+#: tv/plugins/recordings_manager.py:382
 msgid "Mark to Keep"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:379
+#: tv/plugins/recordings_manager.py:383
 msgid "Unmark as Watched"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:379
+#: tv/plugins/recordings_manager.py:383
 msgid "Mark as Watched"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:464
+#: tv/plugins/recordings_manager.py:470
 msgid "(Unnamed)"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:558
+#: tv/plugins/recordings_manager.py:564
 #, fuzzy
 msgid "Browse episodes"
 msgstr "Selaa levy‰"
 
-#: tv/plugins/recordings_manager.py:559
+#: tv/plugins/recordings_manager.py:565
 #, fuzzy
 msgid "Delete all episodes"
 msgstr "Poista"
 
-#: tv/plugins/recordings_manager.py:560
+#: tv/plugins/recordings_manager.py:566
 msgid "Keep all episodes"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:561
+#: tv/plugins/recordings_manager.py:567
 #, fuzzy
 msgid "Play all episodes"
 msgstr "Soittolistat"
 
-#: tv/plugins/recordings_manager.py:625
+#: tv/plugins/recordings_manager.py:633
 #, fuzzy, python-format
 msgid ""
 "Do you wish to delete the series\n"
@@ -2422,7 +2445,7 @@ msgstr ""
 "Haluatko poistaa\n"
 "'%s'?"
 
-#: tv/plugins/recordings_manager.py:699
+#: tv/plugins/recordings_manager.py:715
 msgid "episodes"
 msgstr ""
 
@@ -2979,7 +3002,7 @@ msgstr ""
 msgid "Browse disc"
 msgstr "Selaa levy‰"
 
-#: audio/audiodiskitem.py:107 directory.py:719
+#: audio/audiodiskitem.py:107 directory.py:720
 msgid "Random playlist"
 msgstr "Satunnainen soittolista"
 
@@ -3454,7 +3477,7 @@ msgstr "Tiedostoa \"%s\" ei voitu avata"
 msgid "Browse Playlist"
 msgstr "Selaa soittolistaa"
 
-#: playlist.py:292 directory.py:456
+#: playlist.py:292 directory.py:457
 msgid "Random play all items"
 msgstr "Soita kaikki satunnaisesti"
 
@@ -3577,73 +3600,58 @@ msgid ""
 msgstr ""
 "Soita kappaleet automaattisesti kun hakemisto ei sis‰ll‰ muita hakemistoja"
 
-#: directory.py:313
+#: directory.py:314
 #, python-format
 msgid "Directory on disc [%s]"
 msgstr "Hakemisto levyll‰ [%s]"
 
-#: directory.py:314
+#: directory.py:315
 msgid "Directory"
 msgstr "Hakemisto"
 
-#: directory.py:450
+#: directory.py:451
 msgid "Play all files in directory"
 msgstr "Soita kaikki kappaleet"
 
-#: directory.py:458
+#: directory.py:459
 msgid "Recursive random play all items"
 msgstr "Satunnainen soitto kaikista alihakemistoista"
 
-#: directory.py:459
+#: directory.py:460
 msgid "Recursive play all items"
 msgstr "Soita kaikki"
 
-#: directory.py:528
+#: directory.py:529
 msgid "Enter Password"
 msgstr "Anna salasana"
 
-#: directory.py:553
+#: directory.py:554
 msgid "Password incorrect"
 msgstr "V‰‰r‰ salasana"
 
-#: directory.py:587
+#: directory.py:588
 msgid "Directory does not exist"
 msgstr "Levyll‰ on jo %s hakemisto"
 
-#: directory.py:617
+#: directory.py:618
 msgid "Scanning disc, be patient..."
 msgstr "Tutkitaan levy‰, odota..."
 
-#: directory.py:619
+#: directory.py:620
 msgid "Scanning directory, be patient..."
 msgstr "Tutkitaan hakemistoa, odota..."
 
-#: directory.py:826
+#: directory.py:827
 msgid "auto"
 msgstr "auto"
 
-#: directory.py:945
+#: directory.py:946
 msgid "Show all kinds of items"
 msgstr "N‰yt‰ kaikki tiedostot"
 
-#: directory.py:947
+#: directory.py:948
 msgid "Show video, audio and image items in this directory"
 msgstr "N‰yt‰ kaikki video, ‰‰ni ja kuva tiedostot t‰ss‰ hakemistossa"
-
-#: childapp.py:281
-#, python-format
-msgid "logging child to \"%s\""
-msgstr "Kirjataan \"%s\" -tiedostoon"
-
-#: childapp.py:283
-#, python-format
-msgid "Cannot open \"%s\" for logging!"
-msgstr "\"%s\"-tiedostoa ei voi avata"
-
-#: childapp.py:285
-#, python-format
-msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
-msgstr ""
 
 #: main.py:172
 msgid "Freevo Main Menu"
@@ -4002,6 +4010,12 @@ msgstr "soittolistassa ei seuraavaa kappaletta"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "TV"
+
+#~ msgid "logging child to \"%s\""
+#~ msgstr "Kirjataan \"%s\" -tiedostoon"
+
+#~ msgid "Cannot open \"%s\" for logging!"
+#~ msgstr "\"%s\"-tiedostoa ei voi avata"
 
 #, fuzzy
 #~ msgid "Scanning recordings, be patient..."
