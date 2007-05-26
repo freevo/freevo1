@@ -384,7 +384,7 @@ class autoshutdowntimer(plugin.DaemonPlugin):
                     _debug_("Shutdown issued by autoshutdown timer!")
                     shutdown_action(action=Shutdown.SHUTDOWN_WAKEUP)
             else:
-                _debug_("idle for %d seconds, %d minutes remaining" % (tdif, trem))
+                _debug_("idle for %d seconds, %d minutes remaining" % (tdif, trem), 2)
 
 
 # ***************************************************************

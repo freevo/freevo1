@@ -285,7 +285,7 @@ class RemovableMedia:
                 dir = 'open'
 
         if dir == 'open':
-            _debug_('Ejecting disc in drive %s' % self.drivename,2)
+            _debug_('Ejecting disc in drive %s' % self.drivename, 1)
 
             if notify:
                 pop = PopupBox(text=_('Ejecting disc in drive %s') % self.drivename)
@@ -318,7 +318,7 @@ class RemovableMedia:
 
 
         elif dir == 'close':
-            _debug_('Inserting %s' % self.drivename,2)
+            _debug_('Inserting disc in drive %s' % self.drivename, 1)
 
             if notify:
                 pop = PopupBox(text=_('Reading disc in drive %s') % self.drivename)
