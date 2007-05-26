@@ -115,10 +115,10 @@ class Logger:
         self.fp.flush()
         return
 
-    def flush():
+    def flush(self):
         pass
 
-    def close():
+    def close(self):
         pass
 
 
