@@ -165,7 +165,7 @@ class RemindMainMenuItem(Item):
 
     def config(self):
         return [
-            ( 'REMINDERS', None, '' )
+            ( 'REMINDERS', None, 'list of tuples containing (command, group, width, header prefix)' )
         ]
 
     def actions(self):
