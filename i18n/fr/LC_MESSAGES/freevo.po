@@ -2345,7 +2345,7 @@ msgstr "Etat, Date puis Nom"
 
 #: tv/plugins/recordings_manager.py:141
 msgid "Manage Recordings"
-msgstr "Gestion des enregistrments"
+msgstr "Gestion des enregistrements"
 
 #: tv/plugins/recordings_manager.py:146 directory.py:461
 msgid "Configure directory"
