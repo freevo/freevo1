@@ -1055,7 +1055,7 @@ IMAGE_SSHOW_SUFFIX = [ 'ssr' ]
 # The viewer can exclude certain types of images based on the regular expression list
 # eg IMAGE_EXCLUDE = [('thm','tn_')]
 
-IMAGE_EXCLUDE = [ ]
+IMAGE_EXCLUDE = None
 
 #
 # Mode of the blending effect in the image viewer between two images

@@ -68,9 +68,14 @@ class PluginInterface(plugin.MimetypePlugin):
         return a list of items based on the files
         """
         items = []
-        exclude_string = re.compile('|'.join(config.IMAGE_EXCLUDE))
+        if config.IMAGE_EXCLUDE:
+            exclude_string = re.compile('|'.join(config.IMAGE_EXCLUDE))
         for file in util.find_matches(files, config.IMAGE_SUFFIX):
-            if not re.search(exclude_string, file):
+            if config.IMAGE_EXCLUDE:
+                if not re.search(exclude_string, file):
+                    items.append(ImageItem(file, parent))
+                    files.remove(file)
+            else:
                 items.append(ImageItem(file, parent))
                 files.remove(file)
         return items
