@@ -85,7 +85,7 @@ class PluginInterface(IdleBarPlugin):
 
             if f:
                 self.status = self.images['alert']
-                _debug_("Remind: %s" % f)
+                _debug_("Remind: %s" % f, 2)
             else:
                 self.status = self.images['nothing']
         return self.status
