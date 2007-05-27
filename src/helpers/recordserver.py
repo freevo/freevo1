@@ -1453,10 +1453,11 @@ class RecordServer(xmlrpc.XMLRPC):
         (filebase, fileext) = os.path.splitext(rec_prog.filename)
         fxd.setFxdFile(filebase, overwrite=TRUE)
 
+        desc = rec_prog.desc.replace('\n\n','\n').replace('\n','&#10;')
         video = makeVideo('file', 'f1', os.path.basename(rec_prog.filename))
         fxd.setVideo(video)
         fxd.info['tagline'] = fxd.str2XML(rec_prog.sub_title)
-        fxd.info['plot'] = fxd.str2XML(rec_prog.desc)
+        fxd.info['plot'] = fxd.str2XML(desc)
         fxd.info['runtime'] = None
         fxd.info['recording_timestamp'] = str(time.time())
         fxd.info['year'] = time.strftime('%m-%d ' + config.TV_TIMEFORMAT,
