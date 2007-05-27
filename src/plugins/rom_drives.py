@@ -297,22 +297,10 @@ class RemovableMedia:
                     s = ioctl(fd, CDIOCEJECT, 0)
                 else:
                     s = ioctl(fd, CDROMEJECT)
+                self.tray_open = 1
+            finally:
                 os.close(fd)
-            except:
-                try:
-                    traceback.print_exc()
-                except IOError:
-                    # believe it or not, this sometimes causes an IOError if
-                    # you've got a music track playing in the background (detached)
-                    pass
-                # maybe we need to close the fd if ioctl fails, maybe
-                # open fails and there is no fd
-                try:
-                    os.close(fd)
-                except:
-                    pass
 
-            self.tray_open = 1
             if notify:
                 pop.destroy()
 
@@ -332,17 +320,10 @@ class RemovableMedia:
                     s = ioctl(fd, CDIOCCLOSE, 0)
                 else:
                     s = ioctl(fd, CDROMCLOSETRAY)
+                self.tray_open = 0
+            finally:
                 os.close(fd)
-            except:
-                traceback.print_exc()
-                # maybe we need to close the fd if ioctl fails, maybe
-                # open fails and there is no fd
-                try:
-                    os.close(fd)
-                except:
-                    pass
 
-            self.tray_open = 0
             global im_thread
             if im_thread:
                 im_thread.check_all()
