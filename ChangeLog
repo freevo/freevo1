@@ -13,6 +13,11 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
+== Release 1.7.3 (2007-??-??) ==
+--------------------------------
+
+ * Fixed tv recordings manager not deleting files when out of space (B#1728182)
+
 == Release 1.7.2 (2007-05-26) ==
 --------------------------------
 

@@ -886,15 +886,13 @@ class DiskManager(plugin.DaemonPlugin):
         If it has attempt to remove some recordings.
         """
         if util.freespace(config.TV_RECORD_DIR) < self.required_space:
-            print 'Need to free up some space now!'
             candidates = self.generate_candidates()
-
             while (util.freespace(config.TV_RECORD_DIR) < self.required_space) and (len(candidates) > 0):
                 # Delete a candidate
                 candidate = candidates.pop(0)
-                if (not candidate) or (not candidate.files):
+                if (not candidate):
                     break
-                candidate.files.delete()
+                candidate.delete()
 
 
     def generate_candidates(self):
