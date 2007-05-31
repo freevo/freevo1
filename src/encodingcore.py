@@ -247,9 +247,7 @@ class EncodingJob:
             dvddata = mmpython.parse(self.source)
             dvdtitle = dvddata.tracks[self.chapter - 1]
             self.length = dvdtitle['length']
-            _debug_('Video length: %s' % self.length)
-            #NI : maybe implement procedure to get resolution, handy for scaling/manual cropping
-            self._CropDetect()
+            _debug_('Video length is %s' % self.length)
         else:
             data = mmpython.parse(self.source)
             _debug_('source=\"%s\"' % (self.source))
@@ -257,12 +255,14 @@ class EncodingJob:
             if config.DEBUG >= 2:
                 for f in dir(data):
                     _debug_('%s: %s' % (f, eval('data["%s"]' % f)), 2)
-            try:
-                self.length = data.get_length()
-            except:
+            if data.has_key('length'):
+                self.length = data['length']
+                _debug_('Video length is %s' % self.length)
+            else:
                 self.length = 600
-            _debug_('Video length: %s' % self.length)
-            self._CropDetect()
+                _debug_('Video length not found, using %s' % (self.length))
+        #NI : maybe implement procedure to get resolution, handy for scaling/manual cropping
+        self._CropDetect()
 
 
     def _CropDetect(self): #contains pieces of QuickRip
