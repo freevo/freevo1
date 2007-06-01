@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.19
+LOCAL_CONF_VERSION = 5.20
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -273,6 +273,9 @@ LOCAL_CONF_CHANGES = [
      Added RSS_DOWNLOAD for a place to save downloaded data
      Added IMAGE_EXCLUDE as a regular expression to exclude images such as thumbnails
      Added TV_RECORD_FAVORITE_MARGIN to allow favourites to be added to the schedule within a tolerance value
+     ''' ),
+    (5.20,
+     '''Added PERSONAL_WWW_PAGE config item to allow private web pages in the webserver
      ''' ),
 ]
 

@@ -16,7 +16,9 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 == Release 1.7.3 (2007-??-??) ==
 --------------------------------
 
+ * Added personal web pages to the webserver, using PERSONAL_WWW_PAGE (F#1729595)
  * Fixed tv recordings manager not deleting files when out of space (B#1728182)
+ * Fixed problem with FXD.setattr not working correctly in all cases (B#1728421)
 
 == Release 1.7.2 (2007-05-26) ==
 --------------------------------

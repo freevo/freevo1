@@ -201,14 +201,16 @@ class HTMLResource:
                  (_('Favorites'),_('View Favorites'),'%sfavorites.rpy' % str(strprefix)),
                  (_('Media Library'),_('View Media Library'),'%slibrary.rpy' % str(strprefix)),
                  (_('Manual Recording'),_('Schedule a Manual Recording'),'%smanualrecord.rpy' % str(strprefix)),
+                 #(_('Sensors'),_('Sensors Page'),'%duncan.html' % str(strprefix)),
                  (_('Search'),_('Advanced Search Page'),'%ssearch.rpy' % str(strprefix)),
                  (_('Help'),_('View Online Help and Documentation'),'%shelp/' % str(strprefix))]
-        # maybe also the ICECAST_WWW_PAGE
-        try:
-            if config.ICECAST_WWW_PAGE:
-                items.append((_('Icecast List'),_('Change Icecast List'),'%siceslistchanger.rpy' % (strprefix)))
-        except AttributeError:
-            pass
+        print 'DJW:items:', items
+        # maybe also a personal web pages
+        if hasattr(config, 'PERSONAL_WWW_PAGE'):
+            for page in config.PERSONAL_WWW_PAGE:
+                items.append((page[0], page[1], '%s%s' % (str(strprefix), page[2])))
+        if hasattr(config, 'ICECAST_WWW_PAGE') and config.ICECAST_WWW_PAGE:
+            items.append((_('Icecast List'),_('Change Icecast List'),'%siceslistchanger.rpy' % (strprefix)))
         # go through the items and create the bar
         for i in items:
             if selected == i[0]:

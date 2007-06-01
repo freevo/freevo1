@@ -1521,6 +1521,12 @@ CACHE_IMAGES = 1
 
 # WWW_JAVASCRIPT = 'scripts/display_prog-head.js'
 
+# Integrate personal web pages into the web server
+# PERSONAL_WWW_PAGE = [
+#     ('My Page', 'a single personal web page', 'page.html'),
+#     ('My Site', 'site description', 'site/'),
+# ]
+
 
 # ======================================================================
 # Internal stuff, you shouldn't change anything here unless you know
