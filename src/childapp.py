@@ -32,10 +32,10 @@
 import sys
 import time
 import os
-import util.popen3
 import threading, thread
 import signal
 import copy
+from subprocess import Popen, PIPE
 
 import config
 import osd
@@ -61,7 +61,6 @@ class ChildApp:
             app = app.encode(config.LOCALE, 'ignore')
 
         if isinstance(app, str):
-            _debug_('%r is a string' % app, 1)
             # app is a string to execute. It will be executed by 'sh -c '
             # inside the popen code
             if app.find('--prio=') == 0 and not config.RUNAPP:
@@ -75,11 +74,10 @@ class ChildApp:
             else:
                 self.binary = app.lstrip()
 
-            start_str = '%s %s' % (config.RUNAPP, app)
+            command = '%s %s' % (config.RUNAPP, app)
             debug_name = app[:app.find(' ')]
 
         else:
-            _debug_('%r is a list' % app, 1)
             while '' in app:
                 app.remove('')
 
@@ -93,9 +91,9 @@ class ChildApp:
             self.binary = str(' ').join(app)
 
             if config.RUNAPP:
-                start_str = [ config.RUNAPP ] + app
+                command = [ config.RUNAPP ] + app
             else:
-                start_str = app
+                command = app
 
             debug_name = app[0]
 
@@ -111,16 +109,39 @@ class ChildApp:
         if doeslogging or config.CHILDAPP_DEBUG:
             doeslogging = 1
 
-        self.child   = util.popen3.Popen3(start_str)
-        self.outfile = self.child.fromchild
-        self.errfile = self.child.childerr
-        self.infile  = self.child.tochild
+        stdout_logger = os.path.join(config.LOGDIR, '%s-stdout.log' % (debug_name))
+        try:
+            self.stdout_log = doeslogging and open(stdout_logger, 'w') or None
+        except OSError, e:
+            _debug_('Cannot open "%s": %s' % (stdout_logger, e), 0)
+            self.stdout_log = None
 
-        self.so = Read_Thread('stdout', self.outfile, self.stdout_cb, debug_name, doeslogging)
+        stderr_logger = os.path.join(config.LOGDIR, '%s-stderr.log' % (debug_name))
+        try:
+            self.stderr_log = doeslogging and open(stderr_logger, 'w') or None
+        except OSError, e:
+            _debug_('Cannot open "%s": %s' % (stderr_logger, e), 0)
+            self.stderr_log = None
+
+        command_isstr = isinstance(command, str)
+        if command_isstr:
+            command = command.split()
+        command_str = ' '.join(command)
+        self.child = None
+        try:
+            self.child = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            _debug_('Running (%s) "%s" with pid %s prioity %s' % (\
+                command_isstr and 'str' or 'list', command_str, self.child.pid, prio), 1)
+        except OSError, e:
+            _debug_('Cannot run "%s": %s' % (command_str, e), 0)
+            self.ready = False
+            return
+
+        self.so = Read_Thread('stdout', self.child.stdout, self.stdout_cb, debug_name, doeslogging)
         self.so.setDaemon(1)
         self.so.start()
 
-        self.se = Read_Thread('stderr', self.errfile, self.stderr_cb, debug_name, doeslogging)
+        self.se = Read_Thread('stderr', self.child.stderr, self.stderr_cb, debug_name, doeslogging)
         self.se.setDaemon(1)
         self.se.start()
 
@@ -129,72 +150,83 @@ class ChildApp:
             os.system('%s %s -p %s 2>/dev/null >/dev/null' % \
                       (config.CONF.renice, prio, self.child.pid))
 
-        if config.DEBUG:
-            _debug_('self.so.isAlive()=%s, self.se.isAlive()=%s' % \
-                (self.so.isAlive(), self.se.isAlive()), 1)
-            time.sleep(0.1)
-            if not isinstance(start_str, str):
-                start_str = ' '.join(start_str)
-            _debug_('ChildApp.__init__(), pid=%s, app=\"%s\", poll=%s' % \
-                  (self.child.pid, start_str, self.child.poll()), 1)
-
         self.ready = True
 
 
     # Write a string to the app.
     def write(self, line):
-        try:
-            self.infile.write(line)
-            self.infile.flush()
-        except (IOError, ValueError):
-            pass
+        _debug_('sending "%s" to pid %s' % (line.strip('\n'), self.child.pid))
+        #self.shild.communicate(line)
+        self.child.stdin.write(line)
+        self.child.stdin.flush()
 
 
-    # Override this method to receive stdout from the child app
-    # The function receives complete lines
     def stdout_cb(self, line):
+        '''Override this method to receive stdout from the child app
+        The function receives complete lines'''
         pass
 
 
-    # Override this method to receive stderr from the child app
-    # The function receives complete lines
     def stderr_cb(self, line):
+        '''Override this method to receive stderr from the child app
+        The function receives complete lines'''
         pass
 
 
     def isAlive(self):
+        if not self.child:
+            return False
         if not self.ready: # return true if constructor has not finished yet
             return True
-        return self.so.isAlive() or self.se.isAlive()
+        return self.child.poll() == None
 
 
     def wait(self):
-        return util.popen3.waitpid(self.child.pid)
+        """
+        wait for the child process to stop
+        returns the (pid, status) tuple
+        """
+        #self.child.wait()
+        #self.status = self.child.returncode
+        #return (self.child.pid, self.status)
+        # this is the wait in ChildApp2
+        try:
+            pid, status = os.waitpid(self.child.pid, os.WNOHANG)
+        except OSError:
+            # strange, no child? So it is finished
+            return True
+
+        if pid == self.child.pid:
+            self.status = self.child.returncode
+            return True
+        return False
 
 
     def kill(self, signal=15):
-        _debug_('kill signal=%s' % (signal), 1)
+        '''
+        Kill the application
+        '''
 
         # killed already
-        if hasattr(self,'child'):
-            if not self.child:
-                _debug_('already dead', 1)
-                return
-        else:
+        if not hasattr(self, 'child'):
             _debug_('This should never happen!', 1)
+            #raise 'no child attribute'
+            return
+
+        if not self.child:
+            _debug_('already dead', 1)
+            #raise 'already dead'
             return
 
         self.lock.acquire()
         try:
             # maybe child is dead and only waiting?
-            if self.wait():
-                _debug_('killed the easy way', 1)
-                self.so.join()
-                self.se.join()
-                _debug_('reading threads stopped', 1)
+            if self.child.poll() != None:
+                _debug_('killed the easy way, status %s' % (self.child.returncode), 1)
+                if not self.child.stdin.closed: self.child.stdin.close()
+                if self.stdout_log: self.stdout_log.close()
+                if self.stderr_log: self.stderr_log.close()
                 self.child = None
-                if not self.infile.closed:
-                    self.infile.close()
                 return
 
             if signal:
@@ -210,9 +242,10 @@ class ChildApp:
                     break
                 time.sleep(0.1)
             else:
-                _debug_('force killing with signal 9', 1)
+                signal = 9
+                _debug_('killing pid %s signal %s' % (self.child.pid, signal), 1)
                 try:
-                    os.kill(self.child.pid, 9)
+                    os.kill(self.child.pid, signal)
                 except OSError:
                     pass
                 for i in range(20):
@@ -222,23 +255,23 @@ class ChildApp:
             _debug_('childapp: After wait()', 1)
 
 
-            # now check if the app is really dead. If it is, outfile
-            # should be closed by the reading thread
+            # now check if the app is really dead. If it is, poll()
+            # will return the status code
             for i in range(5):
-                if self.outfile.closed:
+                if self.child.poll() != None:
                     break
                 time.sleep(0.1)
             else:
                 # Problem: the program had more than one thread, each thread has a
                 # pid. We killed only a part of the program. The filehandles are
                 # still open, the program still lives. If we try to close the infile
-                # now, Freevo will be dead.
+                # now, Freevo will die.
                 # Solution: there is no good one, let's try killall on the binary. It's
                 # ugly but it's the _only_ way to stop this nasty app
                 _debug_('Oops, command refuses to die, try bad hack....', 1)
                 util.killall(self.binary, sig=15)
                 for i in range(20):
-                    if self.outfile.closed:
+                    if self.child.poll() != None:
                         break
                     time.sleep(0.1)
                 else:
@@ -247,97 +280,17 @@ class ChildApp:
                     _debug_('Try harder to kill the app....', 1)
                     util.killall(self.binary, sig=9)
                     for i in range(20):
-                        if self.outfile.closed:
+                        if self.child.poll() != None:
                             break
                         time.sleep(0.1)
                     else:
                         _debug_('PANIC can\'t kill program', 0)
-                if not self.infile.closed:
-                    self.infile.close()
-            self.child = None
         finally:
             self.lock.release()
-
-
-
-class Read_Thread(threading.Thread):
-    """
-    Thread for reading stdout or stderr from the child
-    """
-    def __init__(self, name, fp, callback, logger=None, doeslogging=0):
-        threading.Thread.__init__(self)
-        self.name = name
-        self.fp = fp
-        self.callback = callback
-        self.logger = None
-        if logger and doeslogging:
-            logger = os.path.join(config.LOGDIR, '%s-%s.log' % (logger, name))
-            try:
-                try:
-                    os.unlink(logger)
-                except:
-                    pass
-                self.logger = open(logger, 'w')
-                _debug_(String(_('logging child to "%s"')) % logger, 1)
-            except IOError:
-                _debug_(String(_('ERROR'))+': '+String(_('Cannot open "%s" for logging!')) \
-                    % logger, 1)
-                _debug_(String(_('Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!')) \
-                    % config.LOGDIR, 1)
-
-
-    def run(self):
-        try:
-            self._handle_input()
-        except (IOError, ValueError):
-            pass
-
-
-    def _handle_input(self):
-        saved = ''
-        while 1:
-
-            data = self.fp.readline(300)
-            if not data:
-                _debug_('%s: No data, stopping (pid %s)!' % (self.name, os.getpid()), 1)
-                self.fp.close()
-                if self.logger:
-                    self.logger.close()
-                break
-            else:
-                data  = data.replace('\r', '\n')
-                lines = data.split('\n')
-
-                # Only one partial line?
-                if len(lines) == 1:
-                    saved += data
-                else:
-                    # Combine saved data and first line, send to app
-                    if self.logger:
-                        line = (saved + lines[0]).strip('\n')
-                        self.logger.write(line+'\n')
-                    rc.register(self.callback, False, 0, saved + lines[0])
-                    saved = ''
-
-                    # There's one or more lines + possibly a partial line
-                    if lines[-1] != '':
-                        # The last line is partial, save it for the next time
-                        saved = lines[-1]
-
-                        # Send all lines except the last partial line to the app
-                        for line in lines[1:-1]:
-                            if self.logger:
-                                line = line.strip('\n')
-                                self.logger.write(line+'\n')
-                            rc.register(self.callback, False, 0, line)
-                    else:
-                        # Send all lines to the app
-                        for line in lines[1:]:
-                            if self.logger:
-                                line = line.strip('\n')
-                                self.logger.write(line+'\n')
-                            rc.register(self.callback, False, 0, line)
-
+        if not self.child.stdin.closed: self.child.stdin.close()
+        if self.stdout_log: self.stdout_log.close()
+        if self.stderr_log: self.stderr_log.close()
+        self.child = None
 
 
 
@@ -400,7 +353,6 @@ class ChildApp2(ChildApp):
         rc.unregister(self.stop)
 
         if cmd and self.isAlive():
-            _debug_('sending exit command to app \"%r\"' % cmd, 1)
             self.write(cmd)
             # wait for the app to terminate itself
             for i in range(60):
@@ -409,7 +361,8 @@ class ChildApp2(ChildApp):
                 time.sleep(0.1)
 
         # kill the app
-        self.kill()
+        if self.isAlive():
+            self.kill()
 
         # Ok, we can use the OSD again.
         if self.stop_osd:
@@ -426,3 +379,81 @@ class ChildApp2(ChildApp):
         if not self.isAlive():
             rc.post_event(self.stop_event())
             self.stop()
+
+
+
+class Read_Thread(threading.Thread):
+    """
+    Thread for reading stdout or stderr from the child
+    """
+    def __init__(self, name, fh, callback, logger=None, doeslogging=0):
+        '''Constructor of Read_Thread'''
+        _debug_('Read_Thread.__init__(name=%r, fh=%r, callback=%r, logger=%r, doeslogging=%r' % \
+            (name, fh, callback, logger, doeslogging), 2)
+        threading.Thread.__init__(self)
+        self.name = name
+        self.fh = fh
+        self.callback = callback
+        self.logger = None
+        if logger and doeslogging:
+            logger = os.path.join(config.LOGDIR, '%s-%s.log' % (logger, name))
+            try:
+                try:
+                    os.unlink(logger)
+                except:
+                    pass
+                self.logger = open(logger, 'w')
+                _debug_('logging %s child to "%s"' % (name, logger))
+            except IOError, e:
+                _debug_('cannot open "%s" for logging: %s' % (logger, e))
+
+
+    def run(self):
+        try:
+            self._handle_input()
+        except (IOError, ValueError):
+            pass
+
+
+    def _handle_input(self):
+        saved = ''
+        while 1:
+            data = self.fh.readline(300)
+            if not data:
+                _debug_('%s: no data, closing log' % (self.name), 1)
+                self.fh.close()
+                if self.logger: self.logger.close()
+                break
+            else:
+                data  = data.replace('\r', '\n')
+                lines = data.split('\n')
+
+                # Only one partial line?
+                if len(lines) == 1:
+                    saved += data
+                else:
+                    # Combine saved data and first line, send to app
+                    if self.logger:
+                        line = (saved + lines[0]).strip('\n')
+                        self.logger.write(line+'\n')
+                    rc.register(self.callback, False, 0, saved + lines[0])
+                    saved = ''
+
+                    # There's one or more lines + possibly a partial line
+                    if lines[-1] != '':
+                        # The last line is partial, save it for the next time
+                        saved = lines[-1]
+
+                        # Send all lines except the last partial line to the app
+                        for line in lines[1:-1]:
+                            if self.logger:
+                                line = line.strip('\n')
+                                self.logger.write(line+'\n')
+                            rc.register(self.callback, False, 0, line)
+                    else:
+                        # Send all lines to the app
+                        for line in lines[1:]:
+                            if self.logger:
+                                line = line.strip('\n')
+                                self.logger.write(line+'\n')
+                            rc.register(self.callback, False, 0, line)
