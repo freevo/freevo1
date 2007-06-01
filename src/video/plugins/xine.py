@@ -50,9 +50,9 @@ import plugin
 
 
 class PluginInterface(plugin.Plugin):
-    """
+    '''
     Xine plugin for the video player.
-    """
+    '''
     def __init__(self):
         plugin.Plugin.__init__(self)
 
@@ -77,30 +77,31 @@ class PluginInterface(plugin.Plugin):
 
 
 class Xine:
-    """
-    the main class to control xine
-    """
+    '''the main class to control xine
+    '''
     def __init__(self, type):
+        '''Xine contructor
+        '''
         self.name      = 'xine'
 
-        self.app_mode  = ''
+        self.app_mode  = 'video'
         self.xine_type = type
         self.app       = None
+        self.plugins   = []
 
         self.command = [ '--prio=%s' % config.MPLAYER_NICE ] + \
-                       config.XINE_COMMAND.split(' ') + \
-                       [ '--stdctl', '-V', config.XINE_VO_DEV,
-                         '-A', config.XINE_AO_DEV ] + \
-                       config.XINE_ARGS_DEF.split(' ')
+            config.XINE_COMMAND.split(' ') +  \
+            [ '--stdctl', '-V', config.XINE_VO_DEV, '-A', config.XINE_AO_DEV ] + \
+            config.XINE_ARGS_DEF.split(' ')
 
 
     def rate(self, item):
-        """
+        '''
         How good can this player play the file:
         2 = good
         1 = possible, but not good
         0 = unplayable
-        """
+        '''
         if item.url.startswith('dvd://'):
             return 2
         if item.url.startswith('vcd://'):
@@ -116,10 +117,10 @@ class Xine:
 
 
     def play(self, options, item):
-        """
+        '''
         play a dvd with xine
-        """
-        self.item     = item
+        '''
+        self.item = item
         if config.EVENTS.has_key(item.mode):
             self.app_mode = item.mode
         else:
@@ -173,27 +174,33 @@ class Xine:
         else:
             command.append(item.url)
 
-        _debug_('Xine.play(): Starting cmd=%s' % command)
+        #_debug_('Xine.play(): Starting cmd=%s' % command)
+
+        self.stdout_plugins = []
 
         rc.app(self)
-        self.app = childapp.ChildApp2(command)
+
+        self.app = XineApp(command, self)
         return None
 
 
     def stop(self):
-        """
+        '''
         Stop xine
-        """
-        if self.app:
-            self.app.stop('quit\n')
-            rc.app(None)
+        '''
+        if not self.app:
+            return
+
+        self.app.stop('quit\n')
+        rc.app(None)
+        self.app = None
 
 
     def eventhandler(self, event, menuw=None):
-        """
+        '''
         eventhandler for xine control. If an event is not bound in this
         function it will be passed over to the items eventhandler
-        """
+        '''
         if not self.app:
             return self.item.eventhandler(event)
 
@@ -329,3 +336,39 @@ class Xine:
 
         # nothing found? Try the eventhandler of the object who called us
         return self.item.eventhandler(event)
+
+
+
+class XineApp(childapp.ChildApp2):
+    '''
+    class controlling the in and output from the xine process
+    '''
+    def __init__(self, command, player):
+        _debug_('XineApp.__init__(command=%r, player=%r)' % (command, player), 3)
+        self.item = player.item
+        self.player = player
+
+        childapp.ChildApp2.__init__(self, command)
+
+    def stdout_cb(self, line):
+        '''
+        parse the stdout of the xine process
+        '''
+        # show connection status for network play
+        if self.item.network_play:
+            pass
+
+    def stderr_cb(self, line):
+        '''
+        parse the stderr of the xine process
+        '''
+        _debug_('%r' % line, 2)
+        # Has it started?
+        if line.find('playing mrl') >= 0:
+            _debug_('playback started')
+
+        # Has it finished?
+        if line.find('playback finished for mrl') >= 0:
+            _debug_('playback finished')
+            if self.player:
+                self.player.stop()

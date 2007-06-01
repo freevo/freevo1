@@ -489,7 +489,7 @@ class MPlayerApp(childapp.ChildApp2):
     class controlling the in and output from the mplayer process
     """
 
-    def __init__(self, app, mplayer):
+    def __init__(self, command, mplayer):
         self.RE_TIME   = re.compile("^A: *([0-9]+)").match
         self.RE_START  = re.compile("^Starting playback\.\.\.").match
         self.RE_EXIT   = re.compile("^Exiting\.\.\. \((.*)\)$").match
@@ -519,8 +519,7 @@ class MPlayerApp(childapp.ChildApp2):
                 self.elapsed_plugins.append(p)
 
         # init the child (== start the threads)
-        childapp.ChildApp2.__init__(self, app)
-
+        childapp.ChildApp2.__init__(self, command)
 
 
     def stop_event(self):
