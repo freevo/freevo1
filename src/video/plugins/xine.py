@@ -121,6 +121,8 @@ class Xine:
         play a dvd with xine
         '''
         self.item = item
+        self.options = options
+        self.item.elapsed = 0
         if config.EVENTS.has_key(item.mode):
             self.app_mode = item.mode
         else:
@@ -172,9 +174,13 @@ class Xine:
             self.app_mode = 'vcd'
 
         else:
-            command.append(item.url)
-
-        #_debug_('Xine.play(): Starting cmd=%s' % command)
+            if (len(options) > 1):
+                if (options[1] == '--playlist'):
+                    #command.append('%s %s' % (options[1],options[2]))
+                    command.append(options[1])
+                    command.append(options[2])
+            else:
+                command.append(item.url)
 
         self.stdout_plugins = []
 
@@ -190,6 +196,14 @@ class Xine:
         '''
         if not self.app:
             return
+
+        self.app.stop('quit\n')
+        command = "%s -S get_time" % config.CONF.xine
+        handle = os.popen(command,'r')
+        position = handle.read();
+        handle.close()
+        _debug_("Elapsed = %s" % position)
+        self.item.elapsed = int(position)
 
         self.app.stop('quit\n')
         rc.app(None)

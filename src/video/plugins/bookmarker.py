@@ -41,6 +41,7 @@
 
 
 import os, time, copy
+import glob
 import kaa.metadata as mmpython
 
 import plugin
@@ -75,13 +76,30 @@ class PluginInterface(plugin.ItemPlugin):
         """
         t    = max(0, self.item['autobookmark_resume'] - 10)
         info = mmpython.parse(self.item.filename)
-        if hasattr(info, 'seek') and t:
-            arg='-sb %s' % info.seek(t)
+        if (config.VIDEO_PREFERED_PLAYER == 'xine'):
+            self.write_playlist(t)
+            arg = ("--playlist %s/playlist_xine_%s.tox" % (config.FREEVO_CACHEDIR, t))
         else:
-            arg='-ss %s' % t
+            if hasattr(info, 'seek') and t:
+                arg='-sb %s' % info.seek(t)
+            else:
+                arg='-ss %s' % t
         if menuw:
             menuw.back_one_menu()
         self.item.play(menuw=menuw, arg=arg)
+
+    def write_playlist(self,time):
+        t = time
+        name = '%s/playlist_xine_%s.tox' % (config.FREEVO_CACHEDIR,t)
+        playlist = open(name,'w')
+        playlist.write ("# toxine playlist\n")
+        playlist.write ("entry {\n")
+        playlist.write ("       identifier = %s;\n" % self.item.filename)
+        playlist.write ("       mrl = %s;\n" % self.item.filename)
+        playlist.write ("       start = %s\n" % t)
+        playlist.write ("};\n")
+        playlist.write ("# END\n")
+        playlist.close()
 
 
     def bookmark_menu(self,arg=None, menuw=None):
@@ -106,7 +124,12 @@ class PluginInterface(plugin.ItemPlugin):
 
             if not self.item.mplayer_options:
                 self.item.mplayer_options = ''
-            file.mplayer_options = str(self.item.mplayer_options) +  ' -ss %s' % time
+            if (config.VIDEO_PREFERED_PLAYER == 'xine'):
+                self.write_playlist(int(line))
+                cmd = ' --playlist %s/playlist_xine_%s.tox' % (config.FREEVO_CACHEDIR,int(line))
+                file.mplayer_options = (cmd)
+            else:
+                file.mplayer_options = str(self.item.mplayer_options) +  ' -ss %s' % time
             items.append(file)
 
         if items:
@@ -117,8 +140,11 @@ class PluginInterface(plugin.ItemPlugin):
 
     def eventhandler(self, item, event, menuw):
         if event in (STOP, USER_END):
+            playlist_remove = ("%s/playlist_xine*.tox" % config.FREEVO_CACHEDIR)
+            for filename in glob.glob(playlist_remove):
+                os.remove(filename)
             if item.mode == 'file' and not item.variants and \
-                   not item.subitems and item.elapsed:
+                not item.subitems and item.elapsed:
                 item.store_info('autobookmark_resume', item.elapsed)
             else:
                 _debug_('auto-bookmark not supported for this item')
@@ -129,6 +155,15 @@ class PluginInterface(plugin.ItemPlugin):
 
         # Bookmark the current time into a file
         if event == STORE_BOOKMARK:
+            #Get time elapsed for xine video
+            videoplayer = config.VIDEO_PREFERED_PLAYER
+            if (videoplayer == 'xine'):
+                command = ("%s -S get_time" % config.CONF.xine)
+                handle = os.popen(command,'r')
+                position = handle.read();
+                handle.close()
+                item.elapsed = int(position)
+
             bookmarkfile = util.get_bookmarkfile(item.filename)
 
             handle = open(bookmarkfile,'a+')

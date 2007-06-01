@@ -19,6 +19,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Added personal web pages to the webserver, using PERSONAL_WWW_PAGE (F#1729595)
  * Updated childapp to use subprocess instead of popen (F#1729597)
  * Updated local_conf.py.example with MPLAYER_HAS_FIELD_DOMINANCE (F#1729404)
+ * Updated xine video plug-in to allow bookmarks to work (F#1729024)
  * Updated xine video plug-in to process stdout and stderr message (F#1729603)
  * Fixed tv recordings manager not deleting files when out of space (B#1728182)
  * Fixed problem with FXD.setattr not working correctly in all cases (B#1728421)
