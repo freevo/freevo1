@@ -1958,5 +1958,5 @@ TIME_DEBUG = 0
 # Instruct player to use XVMC for playback
 USE_XVMC = 0
 
-# Pass field dominance paramenter to MPlayer
+# Pass field dominance parameter to MPlayer
 FIELD_DOMINANCE = 0
