@@ -236,11 +236,11 @@ def toggle3(arg=None, menuw=None):
 
 def add_toogle3(name, item, var):
     if item[var] == -1:
-        return menu.MenuItem(_('Turn TOP field first'), toggle3, (name, item, var))
+        return menu.MenuItem(_('Activate TOP field first'), toggle3, (name, item, var))
     elif item[var] == 0:
-        return menu.MenuItem(_('Turn BOTTOM field first'), toggle3, (name, item, var))
+        return menu.MenuItem(_('Activate BOTTOM field first'), toggle3, (name, item, var))
     else:
-        return menu.MenuItem(_('Turn AUTO field first'), toggle3, (name, item, var))
+        return menu.MenuItem(_('Activate AUTO field first'), toggle3, (name, item, var))
 
 
 #
@@ -270,13 +270,13 @@ def get_items(item):
             item.info['type'] and item.info['type'].lower().find('mpeg') != -1):
 
         if hasattr(config, 'VIDEO_DEINTERLACE') and config.VIDEO_DEINTERLACE != None:
-            items += [ add_toogle(_('Deinterlacing'), item, 'deinterlace') ]
+            items += [ add_toogle(_('de-interlacing'), item, 'deinterlace') ]
 
         if hasattr(config, 'VIDEO_USE_XVMC') and config.VIDEO_USE_XVMC != None:
             items += [ add_toogle(_('X-Video Motion Compensation (xvmc)'), item, 'xvmc') ]
 
         if hasattr(config, 'VIDEO_FIELD_DOMINANCE') and config.VIDEO_FIELD_DOMINANCE != None:
-            items += [ add_toogle3(_('Turn BOTTOM field first'), item, 'field-dominance') ]
+            items += [ add_toogle3(_('Activate BOTTOM field first'), item, 'field-dominance') ]
     return items
 
 

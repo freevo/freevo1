@@ -53,12 +53,15 @@ class VideoItem(Item):
 
     def __init__(self, url, parent, info=None, parse=True):
         self.autovars = []
-        if config.VIDEO_DEINTERLACE != None:
-            self.autovars.append(('deinterlace', config.VIDEO_DEINTERLACE))
-        if config.VIDEO_USE_XVMC != None:
-            self.autovars.append(('xvmc', config.VIDEO_USE_XVMC))
-        if config.VIDEO_FIELD_DOMINANCE != None:
-            self.autovars.append(('field-dominance', config.VIDEO_FIELD_DOMINANCE))
+
+        video_deinterlace = config.VIDEO_DEINTERLACE != None and config.VIDEO_DEINTERLACE or False
+        self.autovars.append(('deinterlace', video_deinterlace))
+
+        video_use_xvmc = config.VIDEO_USE_XVMC != None and config.VIDEO_USE_XVMC or False
+        self.autovars.append(('xvmc', video_use_xvmc))
+
+        video_field_dominance = config.VIDEO_FIELD_DOMINANCE != None and config.VIDEO_FIELD_DOMINANCE or False
+        self.autovars.append(('field-dominance', video_field_dominance))
 
         Item.__init__(self, parent)
 
@@ -131,6 +134,12 @@ class VideoItem(Item):
             if discset_information.has_key(fid):
                 self.mplayer_options = discset_information[fid]
 
+        if config.VIDEO_DEINTERLACE and self.info['deinterlaced']:
+            # force deinterlacing
+            self['deinterlace'] = True
+        else:
+            self['deinterlace'] = False
+
 
     def __str__(self):
         s = pformat(self, depth=2)
@@ -180,12 +189,6 @@ class VideoItem(Item):
             if os.path.exists(image):
                 self.image = image
                 self.files.image = image
-
-        if config.VIDEO_DEINTERLACE and self.info['interlaced']:
-            # force deinterlacing
-            self['deinterlace'] = 1
-        else:
-            self['deinterlace'] = 0
 
 
     def id(self):

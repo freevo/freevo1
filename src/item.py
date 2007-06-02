@@ -295,7 +295,7 @@ class Item:
                 if val == value:
                     if self.info[key]:
                         if not self.delete_info(key):
-                            _debug_(u'unable to store \"%s\":\"%s\" info for \'%s\'' % (key, value, self.name), 0)
+                            _debug_(u'unable to store \'%s\':\'%s\' info for \'%s\'' % (key, value, self.filename), 0)
                 else:
                     self.store_info(key, value)
                 return
@@ -306,11 +306,16 @@ class Item:
         """
         store the key/value in metadata
         """
+        #if not self.filename:
+        #    return
+
         if isinstance(self.info, mediainfo.Info):
             if not self.info.store(key, value):
-                _debug_(u'unable to store info for \'%s\'' % self.name, 0)
+                _debug_(u'cannot store \'%s\':\'%s\' for \'%s\'' % (key, value, self.filename), 0)
+                #print '%s : %s' % (dir(self), type(self))
+                _debug_('%s' % self.__dict__)
         else:
-            _debug_(u'unable to store info for that kind of item \'%s\'' % self.name, 0)
+            _debug_(u'cannot store \'%s\':\'%s\' for \'%s\' item' % (key, value, self.filename), 0)
 
 
     def delete_info(self, key):
