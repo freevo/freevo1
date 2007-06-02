@@ -197,13 +197,15 @@ class Xine:
         if not self.app:
             return
 
-        self.app.stop('quit\n')
         command = "%s -S get_time" % config.CONF.xine
         handle = os.popen(command,'r')
-        position = handle.read();
-        handle.close()
-        _debug_("Elapsed = %s" % position)
-        self.item.elapsed = int(position)
+        try:
+            position = handle.read();
+            _debug_("Elapsed = %s" % position)
+            if position:
+                self.item.elapsed = int(position)
+        finally:
+            handle.close()
 
         self.app.stop('quit\n')
         rc.app(None)
