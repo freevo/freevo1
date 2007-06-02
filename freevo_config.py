@@ -276,6 +276,7 @@ LOCAL_CONF_CHANGES = [
      ''' ),
     (5.20,
      '''Added PERSONAL_WWW_PAGE config item to allow private web pages in the webserver
+        Changed VIDEO_INTERLACING to VIDEO_DEINTERLACE to be more consistent with autovars
      ''' ),
 ]
 
@@ -979,7 +980,13 @@ VIDEO_AUTOJOIN = 1
 #
 # try to find out if deinterlacing is needed or not
 #
-VIDEO_INTERLACING = 1
+VIDEO_DEINTERLACE = None
+
+# Instruct player to use XVMC for playback
+VIDEO_USE_XVMC = None
+
+# Pass field dominance parameter to MPlayer
+VIDEO_FIELD_DOMINANCE = None
 
 # PRE and POST playing commands.  Set these to a runnable command if
 # you wish to do something before and after playing a video, like
@@ -1955,8 +1962,3 @@ MPLAYER_DEBUG = 0
 
 TIME_DEBUG = 0
 
-# Instruct player to use XVMC for playback
-USE_XVMC = 0
-
-# Pass field dominance parameter to MPlayer
-FIELD_DOMINANCE = 0

@@ -205,7 +205,7 @@ class MPlayer:
             elif config.MPLAYER_VF_PROGRESSIVE:
                 additional_args += [ '-vf', config.MPLAYER_VF_PROGRESSIVE ]
 
-        if hasattr(config, 'MPLAYER_HAS_FIELD_DOMINANCE') and config.MPLAYER_HAS_FIELD_DOMINANCE:
+        if hasattr(config, 'VIDEO_FIELD_DOMINANCE') and config.VIDEO_FIELD_DOMINANCE != None:
             additional_args += [ '-field-dominance', '%d' % int(item['field-dominance']) ]
 
         if os.path.isfile(os.path.splitext(item.filename)[0]+'.edl'):

@@ -268,9 +268,14 @@ def get_items(item):
     if item.mode in ('dvd', 'vcd') or \
            (item.filename and item.info.has_key('type') and \
             item.info['type'] and item.info['type'].lower().find('mpeg') != -1):
-        items += [ add_toogle(_('Deinterlacing'), item, 'deinterlace') ]
-        items += [ add_toogle(_('X-Video Motion Compensation (xvmc)'), item, 'xvmc') ]
-        if hasattr(config, 'MPLAYER_HAS_FIELD_DOMINANCE') and config.MPLAYER_HAS_FIELD_DOMINANCE:
+
+        if hasattr(config, 'VIDEO_DEINTERLACE') and config.VIDEO_DEINTERLACE != None:
+            items += [ add_toogle(_('Deinterlacing'), item, 'deinterlace') ]
+
+        if hasattr(config, 'VIDEO_USE_XVMC') and config.VIDEO_USE_XVMC != None:
+            items += [ add_toogle(_('X-Video Motion Compensation (xvmc)'), item, 'xvmc') ]
+
+        if hasattr(config, 'VIDEO_FIELD_DOMINANCE') and config.VIDEO_FIELD_DOMINANCE != None:
             items += [ add_toogle3(_('Turn BOTTOM field first'), item, 'field-dominance') ]
     return items
 
