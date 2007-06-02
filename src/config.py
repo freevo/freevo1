@@ -278,6 +278,17 @@ if not HELPER:
     sys.stdout.log('Freevo (%s) start at %s\n' % (VERSION, ts))
     sys.stdout.log('-' * 79 + '\n')
 
+def _stack_function_(message=None, limit=None):
+    import traceback
+    if message:
+        print '%s' % (message)
+    stack = traceback.extract_stack()
+    if stack:
+        if limit:
+            print '*** %s' % ('*** '.join(traceback.format_list(stack[-limit-1:-1])))
+        else:
+            print '*** %s' % ('*** '.join(traceback.format_list(stack)[0:-1]))
+
 def _debug_function_(s, level=1):
     if DEBUG < level:
         return
@@ -294,6 +305,7 @@ def _debug_function_(s, level=1):
 
 
 __builtin__.__dict__['_debug_']= _debug_function_
+__builtin__.__dict__['_stack_']= _stack_function_
 
 
 #
