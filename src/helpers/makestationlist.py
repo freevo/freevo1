@@ -59,10 +59,10 @@ import config
 import cgi
 
 bands = [
-    'US Cable', 'US Cable 100', 'US Two-Way', 'US Broadcast', 
-    'China Broadcast', 'Japan Broadcast', 'Japan Cable', 
-    'VHF E2-E12', 'VHF S1-S41', 'VHF Misc', 'VHF France', 
-    'VHF Russia', 'VHF Australia', 'VHF Italy', 'VHF Ireland', 
+    'US Cable', 'US Cable 100', 'US Two-Way', 'US Broadcast',
+    'China Broadcast', 'Japan Broadcast', 'Japan Cable',
+    'VHF E2-E12', 'VHF S1-S41', 'VHF Misc', 'VHF France',
+    'VHF Russia', 'VHF Australia', 'VHF Italy', 'VHF Ireland',
     'VHF South Africa', 'UHF', 'UHF Australia', 'Australia Optus'
 ]
 

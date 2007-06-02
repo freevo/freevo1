@@ -44,7 +44,7 @@ def _debug_(text, level=1):
         try:
             log.debug(str(text))
         except:
-           print str(text)
+            print str(text)
 
 def convertDate(string):
     if not re.search("\d+\s+\S+\s+\d+",string):

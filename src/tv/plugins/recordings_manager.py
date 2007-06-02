@@ -682,7 +682,7 @@ class Series(Item):
         """
         self.browse(arg='update')
         return None
-    
+
 
     def set_icon(self):
         """
