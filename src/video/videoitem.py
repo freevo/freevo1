@@ -54,11 +54,11 @@ class VideoItem(Item):
     def __init__(self, url, parent, info=None, parse=True):
         self.autovars = []
         if config.VIDEO_DEINTERLACE != None:
-            self.autovars.append(('deinterlace', config.VIDEO_DEINTERLACE)
+            self.autovars.append(('deinterlace', config.VIDEO_DEINTERLACE))
         if config.VIDEO_USE_XVMC != None:
-            self.autovars.append(('xvmc', config.VIDEO_USE_XVMC)
+            self.autovars.append(('xvmc', config.VIDEO_USE_XVMC))
         if config.VIDEO_FIELD_DOMINANCE != None:
-            self.autovars.append(('field-dominance', config.VIDEO_FIELD_DOMINANCE)
+            self.autovars.append(('field-dominance', config.VIDEO_FIELD_DOMINANCE))
 
         Item.__init__(self, parent)
 
