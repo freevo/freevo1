@@ -277,7 +277,7 @@ class FXD:
 
     def getattr(self, node, name, default=''):
         """
-        return the attribute of the node or the 'default' if the atrribute is not
+        return the attribute of the node or the 'default' if the attribute is not
         set. If 'node' is 'None', it return the user defined data in the fxd
         object.
         """
@@ -314,8 +314,10 @@ class FXD:
         for the fxd parser.
         """
         if node:
-            node.attr_list.append(((None, name), value))
-            #node.attrs[('',name)] = value
+            try:
+                node.attr_list.append(((None, name), value))
+            except AttributeError:
+                node.attrs[('',name)] = value
         else:
             self.user_data[name] = value
 
