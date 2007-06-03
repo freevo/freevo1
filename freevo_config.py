@@ -276,6 +276,7 @@ LOCAL_CONF_CHANGES = [
      ''' ),
     (5.20,
      '''Added PERSONAL_WWW_PAGE config item to allow private web pages in the webserver
+        Added LOGGING, can be one of CRITICAL, ERROR, WARNING, INFO, DEBUG
         Changed VIDEO_INTERLACING to VIDEO_DEINTERLACE to be more consistent with autovars
      ''' ),
 ]
@@ -1603,9 +1604,9 @@ TV_RECORD_PADDING_POST = 0
 # a program matching the name, day of week etc should still be considered a
 # favorite. For example a favorite has a start time of 21.00, but the program
 # has been brought forward by the broadcaster by 10 minutes to 20.50, with
-# a margin of less than 10 this program will not be recorded as the start time 
+# a margin of less than 10 this program will not be recorded as the start time
 # is outside the margin. But if the margin is set at 10 minutes or greater this
-# program will be considered a favorite and recorded. Probably about 45 minutes 
+# program will be considered a favorite and recorded. Probably about 45 minutes
 # is the best bet, better a false positive than a false negative.
 TV_RECORD_FAVORITE_MARGIN = 45
 
@@ -1962,3 +1963,6 @@ MPLAYER_DEBUG = 0
 
 TIME_DEBUG = 0
 
+# The default logging level
+# can be one of CRITICAL (FATAL), ERROR, WARNING (WARN), INFO, DEBUG, NOTSET
+LOGGING = logging.WARNING

@@ -48,6 +48,8 @@ import traceback
 import __builtin__
 import version
 import locale
+import logging
+
 
 locale.setlocale(locale.LC_TIME,'')
 
@@ -57,6 +59,10 @@ if float(sys.version[0:3]) >= 2.3:
     warnings.simplefilter("ignore", category=DeprecationWarning)
 
 VERSION = version.__version__
+
+LOGGING = logging.WARNING
+global loggerisinitialised
+loggerisinitialised = False
 
 # For Internationalization purpose
 # an exception is raised with Python 2.1 if LANG is unavailable.
@@ -92,13 +98,21 @@ class Logger:
         self.logtype = logtype
         appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
         logfile = '%s/%s-%s.log' % (LOGDIR, appname, os.getuid())
+        logging.basicConfig(level=LOGGING, \
+            #datefmt='%a, %H:%M:%S',
+            format='%(asctime)s %(levelname)-8s %(message)s', \
+            filename=logfile+'.log', filemode='a')
         self.logfile = logfile
+        self.isinitialised = False
         try:
             self.fp = open(logfile, 'a')
         except IOError:
             print 'Could not open logfile: %s' % logfile
             self.fp = open('/dev/null','a')
         self.softspace = 0
+
+    def initialised(self):
+        self.isinitialised = True
 
     def write(self, msg):
         global DEBUG_STDOUT
@@ -119,7 +133,9 @@ class Logger:
         pass
 
     def close(self):
-        pass
+        logging.info('-' * 80)
+        logging.info('Log closed')
+        logging.info('=' * 80)
 
 
 class VideoGroup:
@@ -278,16 +294,14 @@ if not HELPER:
     sys.stdout.log('Freevo (%s) start at %s\n' % (VERSION, ts))
     sys.stdout.log('-' * 79 + '\n')
 
-def _stack_function_(message=None, limit=None):
+def _stack_function_(message='', limit=None):
     import traceback
-    if message:
-        print '%s' % (message)
     stack = traceback.extract_stack()
     if stack:
         if limit:
-            print '*** %s' % ('*** '.join(traceback.format_list(stack[-limit-1:-1])))
+            logging.debug('%s\n*** %s' % (message, '*** '.join(traceback.format_list(stack[-limit-1:-1]))))
         else:
-            print '*** %s' % ('*** '.join(traceback.format_list(stack)[0:-1]))
+            logging.debug('%s\n*** %s' % (message, '*** '.join(traceback.format_list(stack)[0:-1])))
 
 def _debug_function_(s, level=1):
     if DEBUG < level:
@@ -300,6 +314,16 @@ def _debug_function_(s, level=1):
         s = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
         # print debug message
         print s
+        if level <= -3:
+            logging.critical(s)
+        elif level == -2:
+            logging.error(s)
+        elif level == -1:
+            logging.warning(s)
+        elif level == 0:
+            logging.info(s)
+        else:
+            logging.debug(s)
     except UnicodeEncodeError:
         print "_debug_ failed."
 
@@ -491,7 +515,7 @@ for dirname in cfgfilepath:
             CONFIG_VERSION
         except NameError:
             print
-            print 'Error: your local_config.py file has no version information'
+            print 'Error: your local_conf.py file has no version information'
             print 'Please check freevo_config.py for changes and set CONFIG_VERSION'
             print 'in %s to %s' % (overridefile, LOCAL_CONF_VERSION)
             print
@@ -501,7 +525,7 @@ for dirname in cfgfilepath:
            int(str(LOCAL_CONF_VERSION).split('.')[0]):
             print
             print 'Error: The version information in freevo_config.py doesn\'t'
-            print 'match the version in your local_config.py.'
+            print 'match the version in your local_conf.py.'
             print 'Please check freevo_config.py for changes and set CONFIG_VERSION'
             print 'in %s to %s' % (overridefile, LOCAL_CONF_VERSION)
             print_config_changes(LOCAL_CONF_VERSION, CONFIG_VERSION,
@@ -511,7 +535,7 @@ for dirname in cfgfilepath:
         if int(str(CONFIG_VERSION).split('.')[1]) != \
            int(str(LOCAL_CONF_VERSION).split('.')[1]):
             print
-            print 'Warning: freevo_config.py was changed, please check local_config.py'
+            print 'Warning: freevo_config.py was changed, please check local_conf.py'
             print_config_changes(LOCAL_CONF_VERSION, CONFIG_VERSION,
                                  LOCAL_CONF_CHANGES)
         break
@@ -532,7 +556,15 @@ os.umask(UMASK)
 
 
 if not HELPER:
-    _debug_('Logging to %s' % sys.stdout.logfile)
+    logging.getLogger('').setLevel(LOGGING)
+
+    if not loggerisinitialised:
+        loggerisinitialised = True
+        import freevo.version, freevo.revision
+        logging.warn('=' * 80)
+        logging.warn('Log opened for Freevo %s r%s' % (freevo.version.__version__, freevo.revision.__revision__))
+        logging.warn('-' * 80)
+        _debug_('Logging to %s' % sys.stdout.logfile)
 
 #
 # force fullscreen when freevo is it's own windowmanager

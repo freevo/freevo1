@@ -1058,7 +1058,7 @@ CACHE_IMAGES = 1
 # MPLAYER_VF_INTERLACED  = 'pp=de/fd'
 # MPLAYER_VF_PROGRESSIVE = 'pp=de'
 #
-# For the autodetect TOP/BOTTOM field first in mplayer 
+# For the autodetect TOP/BOTTOM field first in mplayer
 # (if this feature present in mplayer)
 # MPLAYER_HAS_FIELD_DOMINANCE = 1
 #
@@ -1242,9 +1242,9 @@ CACHE_IMAGES = 1
 # a program matching the name, day of week etc should still be considered a
 # favorite. For example a favorite has a start time of 21.00, but the program
 # has been brought forward by the broadcaster by 10 minutes to 20.50, with
-# a margin of less than 10 this program will not be recorded as the start time 
+# a margin of less than 10 this program will not be recorded as the start time
 # is outside the margin. But if the margin is set at 10 minutes or greater this
-# program will be considered a favorite and recorded. Probably about 45 minutes 
+# program will be considered a favorite and recorded. Probably about 45 minutes
 # is the best bet, better a false positive than a false negative.
 # TV_RECORD_FAVORITE_MARGIN = 45
 
