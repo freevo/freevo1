@@ -5,9 +5,16 @@
 # Dirk Meyer  <dmeyer@tzi.de>
 # $Id$
 
+revision() {
+    echo -n generating revision.py
+    rev=$(svn info --revision=HEAD | sed -n '/Revision:/s/Revision: *\([0-9]*\)/\1/p')
+    echo "__revision__ = ${rev}" > src/revision.py
+    echo " ${rev}"
+}
+
 gen_i18n() {
-    for file in `find i18n -name freevo.po`; do
-     out=`echo $file | sed 's/\.po$/.mo/'`
+    for file in $(find i18n -name freevo.po); do
+     out=$(echo $file | sed 's/\.po$/.mo/')
      echo generating $out
      msgfmt -o $out $file 2> /dev/null
     done
@@ -34,6 +41,9 @@ case "$1" in
     nodocs)
         gen_i18n
         ;;
+    revision)
+        revision
+        ;;
     howto)
         howto
         ;;
@@ -45,6 +55,7 @@ case "$1" in
         echo "          <default>  -  Generate translations and generate Howto"
         ;;
     *)
+        revision
         gen_i18n
         howto
         ;;

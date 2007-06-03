@@ -108,12 +108,26 @@ class Runtime(core.Command):
 
     
 # check if everything is in place
-if (not os.path.isdir('./Docs/installation/html')) and \
-   (len(sys.argv) < 2 or sys.argv[1].lower() not in ('i18n', '--help', '--help-commands')):
-    print 'Docs/howto not found. Looks like you are using the CVS version'
-    print 'of Freevo. Please run ./autogen.sh first'
-    sys.exit(0)
+if (len(sys.argv) < 2 or sys.argv[1].lower() not in ('i18n', '--help', '--help-commands')):
+    if os.path.isdir('.svn'):
+        try:
+            from subprocess import Popen, PIPE
+            p1 = Popen(["svn", "info", "--revision=HEAD"], stdout=PIPE)
+            p2 = Popen(["sed", "-n", "/Revision:/s/Revision: *\([0-9]*\)/\\1/p"], stdin=p1.stdout, stdout=PIPE)
+            revision = p2.communicate()[0]
+            fh = open('src/revision.py', 'w')
+            try:
+                fh.write('__revision__ = \'%s\'\n' % revision.strip('\n'))
+            finally:
+                fh.close()
+        except Exception, e:
+            print e
 
+    if (not os.path.isdir('./Docs/installation/html')):
+        print 'Docs/howto not found. Please run ./autogen.sh'
+        sys.exit(0)
+
+import revision
 # only add files not in share and src
 
 data_files = []

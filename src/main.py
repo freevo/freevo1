@@ -422,8 +422,13 @@ try:
     # prepare the skin
     skin.prepare()
 
-    # Fire up splashscreen and load the plugins
     v = '%s' % version.__version__
+    try:
+        import freevo.revision
+        v = v.replace('-svn', ' r%s' % freevo.revision.__revision__)
+    except ImportError:
+        pass
+    # Fire up splashscreen and load the plugins
     splash = Splashscreen(_('Starting Freevo-%s, please wait ...') % v)
     skin.register('splashscreen', ('screen', splash))
     plugin.init(splash.progress)
