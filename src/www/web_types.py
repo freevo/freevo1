@@ -204,7 +204,6 @@ class HTMLResource:
                  #(_('Sensors'),_('Sensors Page'),'%duncan.html' % str(strprefix)),
                  (_('Search'),_('Advanced Search Page'),'%ssearch.rpy' % str(strprefix)),
                  (_('Help'),_('View Online Help and Documentation'),'%shelp/' % str(strprefix))]
-        print 'DJW:items:', items
         # maybe also a personal web pages
         if hasattr(config, 'PERSONAL_WWW_PAGE'):
             for page in config.PERSONAL_WWW_PAGE:
