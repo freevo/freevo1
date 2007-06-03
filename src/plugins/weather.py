@@ -412,7 +412,7 @@ class WeatherItem(Item):
         try:
             size = int(os.stat(self.mapFile)[6])
         except:
-            print "Weather ERROR: failed attempting to load %s radar map from cache" % (self.location,)
+            _debug_("failed attempting to load %s radar map from cache" % (self.location,), -2)
             pass
         else:
             imgfd = os.open(self.mapFile, os.R_OK)

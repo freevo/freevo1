@@ -707,7 +707,7 @@ class PluginInterface( plugin.DaemonPlugin ):
             self.animation_audioplayer_chars = ['-','\\','|','/']
         else:
             self.disable = 1
-            log.warning( "Unsupported LCDd version: %s" % ( self.version, ) )
+            log.warning("Unsupported LCDd version: %s" % (self.version,))
 
         plugin.register( self, "lcd" )
 
@@ -894,10 +894,10 @@ class PluginInterface( plugin.DaemonPlugin ):
             try:
                 screens = layouts[ l ]
             except KeyError:
-                _debug_( _( "WARNING" ) + ": " + _( "Could not find screens for %d lines LCD!" ) % l )
+                _debug_("Could not find screens for %d lines LCD!" % (l), -1)
                 l -= 1
                 if l < 1:
-                    print String(_( "ERROR" )) + ": " + String(_( "No screens found for this LCD (%dx%d)!" )) % ( self.height, self.width )
+                    _debug_("No screens found for this LCD (%dx%d)!" % (self.height, self.width), -2)
                     self.disable = 1
                     return
         # find a display with 'l' line and 'c' columns
@@ -905,10 +905,10 @@ class PluginInterface( plugin.DaemonPlugin ):
             try:
                 screens = layouts[ l ][ c ]
             except KeyError:
-                _debug_( _( "WARNING" ) + ": " + _( "Could not find screens for %d lines and %d columns LCD!" ) % ( l, c ) )
+                _debug_("Could not find screens for %d lines and %d columns LCD!" % (l, c), -1)
                 c -= 1
                 if c < 1:
-                    print String(_( "ERROR" )) + ": " + String(_( "No screens found for this LCD (%dx%d)!" )) % ( self.height, self.width )
+                    _debug_("No screens found for this LCD (%dx%d)!" % (self.height, self.width), -2)
                     self.disable = 1
                     return
 
@@ -918,8 +918,8 @@ class PluginInterface( plugin.DaemonPlugin ):
         try:
             self.screens = screens = layouts[ l ][ c ]
         except KeyError:
-            _debug_( _( "WARNING" ) + ": " + _( "Could not find screens for %d lines and %d columns LCD!" ) % ( self.height, self.width ))
-            print String(_( "ERROR" )) + ": " + String(_( "No screens found for this LCD (%dx%d)!" )) % ( self.height, self.width )
+            _debug_("Could not find screens for %d lines and %d columns LCD!" % (self.height, self.width), -1)
+            _debug_("No screens found for this LCD (%dx%d)!" % (self.height, self.width), -2)
             self.disable = 1
             return
 
