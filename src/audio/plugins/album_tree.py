@@ -31,14 +31,14 @@
 import config
 import plugin
 import menu
-import rc #what is rc??
+import rc
 #import audio.player
 
 from event import *
 from util.dbutil import *
 db = MetaDatabase()
 
-import freevo.playlist as playlist #namespaces :( not the playlist-pligin
+import freevo.playlist as playlist
 from audio import audioitem
 from gui import ProgressBox
 

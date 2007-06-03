@@ -91,13 +91,14 @@ _debug_('PLUGIN_RECORD: %s' % config.plugin_record)
 plugin.init_special_plugin(config.plugin_record)
 
 def print_plugin_warning():
-    print '*************************************************'
-    print '**  Warning: No recording plugin registered.  **'
-    print '**           Check your local_conf.py for a   **'
-    print '**           bad "plugin_record =" line or    **'
-    print '**           this log for a plugin failure.   **'
-    print '**           Recordings will fail!            **'
-    print '*************************************************'
+    _debug_('''
+    *************************************************
+    **  Warning: No recording plugin registered.   **
+    **           Check your local_conf.py for a    **
+    **           bad "plugin_record =" line or     **
+    **           this log for a plugin failure.    **
+    **           Recordings will fail!             **
+    *************************************************''', -1)
 
 
 if not plugin.getbyname('RECORD'):
@@ -907,7 +908,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
             if not self.record_app:
                 print_plugin_warning()
-                _debug_('ERROR:  Recording %s failed.' % rec_prog.title, 0)
+                _debug_('Recording %s failed.' % rec_prog.title, -2)
                 self.removeScheduledRecording(rec_prog)
                 return
 
