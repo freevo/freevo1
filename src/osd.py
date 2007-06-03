@@ -221,8 +221,8 @@ class OSDFont:
             # not good
             global font_warning
             if not fontname in font_warning:
-                print 'WARNING: No alternate found in the alias list!'
-                print 'Falling back to default font, this may look very ugly'
+                _debug_('No alternate found in the alias list!', -1)
+                _debug_('Falling back to default font, this may look very ugly', -1)
                 font_warning.append(fontname)
             font = self.__loadfont__(config.OSD_DEFAULT_FONTNAME, ptsize)
 
