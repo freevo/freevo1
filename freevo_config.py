@@ -277,6 +277,7 @@ LOCAL_CONF_CHANGES = [
     (5.20,
      '''Added PERSONAL_WWW_PAGE config item to allow private web pages in the webserver
         Added LOGGING, can be one of CRITICAL, ERROR, WARNING, INFO, DEBUG
+        Added RECORDSERVER_LOGGING to allow different levels of errors to be reported
         Changed VIDEO_INTERLACING to VIDEO_DEINTERLACE to be more consistent with autovars
      ''' ),
 ]
