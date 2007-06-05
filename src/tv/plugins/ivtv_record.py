@@ -130,8 +130,8 @@ class Record_Thread(threading.Thread):
                     if cur_std != new_std:
                         v.setstd(new_std)
                 except:
-                    _debug("Videogroup norm value '%s' not from NORMS: %s" % \
-                        (vg.tuner_norm,V4L2.NORMS.keys(), config.DERROR)
+                    _debug_("Videogroup norm value '%s' not from NORMS: %s" % \
+                        (vg.tuner_norm, V4L2.NORMS.keys()), config.DERROR)
                 _debug_('Setting Channel to %s' % self.prog.tunerid)
                 fc.chanSet(str(self.prog.tunerid), False)
 
