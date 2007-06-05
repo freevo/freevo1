@@ -61,7 +61,7 @@ def audio_selection_menu(arg=None, menuw=None):
         a = copy.copy(audio)
 
         if not a.has_key('id') or not a['id']:
-            a['id'] = item.info['audio'].index(audio)
+            a['id'] = int(item.info['audio'].index(audio))+1
 
         if not a.has_key('title') or not a['title']:
             a['title'] = ''
