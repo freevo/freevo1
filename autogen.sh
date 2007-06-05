@@ -7,7 +7,7 @@
 
 revision() {
     echo -n generating revision.py
-    rev=$(svn info --revision=HEAD | sed -n '/Revision:/s/Revision: *\([0-9]*\)/\1/p')
+    rev=$(svn info --revision=BASE | sed -n '/Revision:/s/Revision: *\([0-9]*\)/\1/p')
     echo "__revision__ = ${rev}" > src/revision.py
     echo " ${rev}"
 }
@@ -36,7 +36,7 @@ howto() {
     docbook plugin_writing
 }
 
-# Main
+# main
 case "$1" in
     nodocs)
         gen_i18n
@@ -48,11 +48,12 @@ case "$1" in
         howto
         ;;
     help)
-        echo -n "Usage:   "
+        echo -n "usage:   "
         echo $0
-        echo "          nodocs     -  Just generate translations"
-        echo "          howto      -  Just generate the docbook howto"
-        echo "          <default>  -  Generate translations and generate Howto"
+        echo "          revision   -  just generate svn revision module"
+        echo "          nodocs     -  just generate translations"
+        echo "          howto      -  just generate the docbook howto"
+        echo "          <default>  -  generate translations and generate howto"
         ;;
     *)
         revision

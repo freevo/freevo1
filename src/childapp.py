@@ -113,14 +113,14 @@ class ChildApp:
         try:
             self.stdout_log = doeslogging and open(stdout_logger, 'w') or None
         except OSError, e:
-            _debug_('Cannot open "%s": %s' % (stdout_logger, e), 0)
+            _debug_('Cannot open "%s": %s' % (stdout_logger, e), config.DWARNING)
             self.stdout_log = None
 
         stderr_logger = os.path.join(config.LOGDIR, '%s-stderr.log' % (debug_name))
         try:
             self.stderr_log = doeslogging and open(stderr_logger, 'w') or None
         except OSError, e:
-            _debug_('Cannot open "%s": %s' % (stderr_logger, e), 0)
+            _debug_('Cannot open "%s": %s' % (stderr_logger, e), config.DWARNING)
             self.stderr_log = None
 
         command_isstr = isinstance(command, str)
@@ -133,7 +133,7 @@ class ChildApp:
             _debug_('Running (%s) "%s" with pid %s prioity %s' % (\
                 command_isstr and 'str' or 'list', command_str, self.child.pid, prio), 1)
         except OSError, e:
-            _debug_('Cannot run "%s": %s' % (command_str, e), 0)
+            _debug_('Cannot run "%s": %s' % (command_str, e), config.DERROR)
             self.ready = False
             return
 
@@ -284,7 +284,7 @@ class ChildApp:
                             break
                         time.sleep(0.1)
                     else:
-                        _debug_('PANIC can\'t kill program', 0)
+                        _debug_('PANIC can\'t kill program', config.DERROR)
         finally:
             self.lock.release()
         if not self.child.stdin.closed: self.child.stdin.close()

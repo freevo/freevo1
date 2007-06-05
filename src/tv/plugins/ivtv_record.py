@@ -64,7 +64,7 @@ class Recorder:
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
 
-        if DEBUG: print 'ACTIVATING IVTV RECORD PLUGIN'
+        _debug_('ACTIVATING IVTV RECORD PLUGIN', config.DINFO)
 
         self.thread = Record_Thread()
         self.thread.setDaemon(1)
@@ -80,7 +80,7 @@ class Recorder:
         self.thread.prog = rec_prog
         self.thread.mode_flag.set()
 
-        if DEBUG: print('Recorder::Record: %s' % rec_prog)
+        _debug_('Recorder::Record: %s' % rec_prog, config.DINFO)
 
 
     def Stop(self):
@@ -102,17 +102,17 @@ class Record_Thread(threading.Thread):
 
     def run(self):
         while 1:
-            if DEBUG: print('Record_Thread::run: mode=%s' % self.mode)
+            _debug_('Record_Thread::run: mode=%s' % self.mode)
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
 
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
-                if DEBUG: print 'Record_Thread::run: started recording'
+                _debug_('Record_Thread::run: started recording', config.DINFO)
 
                 fc = FreevoChannels()
-                if DEBUG: print 'CHAN: %s' % fc.getChannel()
+                _debug_('CHAN: %s' % fc.getChannel())
 
                 (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
 
@@ -121,7 +121,7 @@ class Record_Thread(threading.Thread):
                 v.init_settings()
                 vg = fc.getVideoGroup(self.prog.tunerid, False)
 
-                if DEBUG: print 'Setting Input to %s' % vg.input_num
+                _debug_('Setting Input to %s' % vg.input_num)
                 v.setinput(vg.input_num)
 
                 cur_std = v.getstd()
@@ -130,19 +130,17 @@ class Record_Thread(threading.Thread):
                     if cur_std != new_std:
                         v.setstd(new_std)
                 except:
-                    print "Error! Videogroup norm value '%s' not from NORMS: %s" \
-                        % (vg.tuner_norm,V4L2.NORMS.keys())
-                if DEBUG: print 'Setting Channel to %s' % self.prog.tunerid
+                    _debug("Videogroup norm value '%s' not from NORMS: %s" % \
+                        (vg.tuner_norm,V4L2.NORMS.keys(), config.DERROR)
+                _debug_('Setting Channel to %s' % self.prog.tunerid)
                 fc.chanSet(str(self.prog.tunerid), False)
 
                 if vg.cmd != None:
-                    if DEBUG:
-                        print "run cmd: %s" % vg.cmd
+                    _debug_("run cmd: %s" % vg.cmd)
                     retcode=os.system(vg.cmd)
-                    if DEBUG:
-                        print "exit code: %g" % retcode
+                    _debug_("exit code: %g" % retcode)
 
-                if DEBUG: v.print_settings()
+                _debug_('%s' % v.print_settings())
 
                 now = time.time()
                 stop = now + self.prog.rec_duration
@@ -166,7 +164,7 @@ class Record_Thread(threading.Thread):
                 self.mode = 'idle'
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))
-                if DEBUG: print('Record_Thread::run: finished recording')
+                _debug_('Record_Thread::run: finished recording', config.DINFO)
 
             else:
                 self.mode = 'idle'

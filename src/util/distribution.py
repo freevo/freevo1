@@ -86,9 +86,11 @@ import sys
 import re
 
 try:
-    import version
-except:
     import freevo.version as version
+    import freevo.revision as revision
+except:
+    import version
+    import revision
 
 # Get the real distutils (not the Freevo stuff)
 # This is a bad hack and will be removed when the distutils.py

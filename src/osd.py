@@ -142,7 +142,7 @@ def restart():
 
 class Font:
     def __init__(self, filename='', ptsize=0, font=None):
-        print 'deprecated font object use'
+        _debug_('deprecated font object use', config.DWARNING)
         self.filename = filename
         self.ptsize   = ptsize
         self.font     = font
@@ -221,13 +221,13 @@ class OSDFont:
             # not good
             global font_warning
             if not fontname in font_warning:
-                _debug_('No alternate found in the alias list!', -1)
-                _debug_('Falling back to default font, this may look very ugly', -1)
+                _debug_('No alternate found in the alias list!', config.DWARNING)
+                _debug_('Falling back to default font, this may look very ugly', config.DWARNING)
                 font_warning.append(fontname)
             font = self.__loadfont__(config.OSD_DEFAULT_FONTNAME, ptsize)
 
         if not font:
-            print 'Couldnt load font "%s"' % config.OSD_DEFAULT_FONTNAME
+            _debug_('Couldn\'t load font "%s"' % config.OSD_DEFAULT_FONTNAME, config.INFO)
             raise
 
         return font
@@ -628,7 +628,7 @@ class OSD:
                 filename = os.path.join(config.IMAGE_DIR, url[8:])
 
             if not os.path.isfile(filename):
-                print 'osd.py: Bitmap file "%s" doesn\'t exist!' % filename
+                _debug_('Bitmap file "%s" doesn\'t exist!' % filename, config.DWARNING)
                 return None
 
             try:
@@ -654,18 +654,18 @@ class OSD:
                     try:
                         image = pygame.image.load(filename)
                     except pygame.error, e:
-                        print 'SDL image load problem: %s - trying Imaging' % e
+                        _debug_('SDL image load problem: %s - trying Imaging' % e, config.DINFO)
                         i = Image.open(filename)
                         image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
 
             except:
-                print 'Problem while loading image %s' % String(url)
+                _debug_('Problem while loading image "%s"' % String(url), config.DWARNING)
                 if config.DEBUG:
                     traceback.print_exc()
                 return None
 
         except Exception, e:
-            print 'image.fromstring:', e
+            _debug_('image.fromstring: %r' % e)
             return None
 
         # convert the surface to speed up blitting later
@@ -914,7 +914,7 @@ class OSD:
                         alpha[x,y] = int(alpha[x,y][0]*opaque_mod)
                 opaque_mod -= opaque_stp
         except Exception, e:
-            print '__draw_transparent_text__:', e
+            _debug_('__draw_transparent_text__: %s' % e, config.DERROR)
 
 
     def drawstringframed(self, string, x, y, width, height, font, fgcolor=None,
@@ -1134,8 +1134,7 @@ class OSD:
                         layer.blit(render, (x0, y0))
 
                 except Exception, e:
-                    print 'Render failed, skipping \'%s\'...' % l
-                    print e
+                    _debug_('Render failed, skipping \'%s\': %s' % (l, e), config.DERROR)
                     if config.DEBUG:
                         traceback.print_exc()
 

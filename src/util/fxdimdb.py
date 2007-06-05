@@ -55,7 +55,12 @@ import util
 import kaa.metadata as mmpython
 #Constants
 
-freevo_version = '1.7.0'
+try:
+    import freevo.version as version
+    import freevo.revision as revision
+except:
+    import version
+    import revision
 
 imdb_title_list = '/tmp/imdb-movies.list'
 imdb_title_list_url = 'ftp://ftp.funet.fi/pub/mirrors/ftp.imdb.com/pub/movies.list.gz'
@@ -66,7 +71,7 @@ imdb_info_tags = ('year', 'genre', 'tagline', 'plot', 'rating', 'runtime');
 # headers for urllib2
 txdata = None
 txheaders = {
-    'User-Agent': 'freevo %s (%s)' % (freevo_version, sys.platform),
+    'User-Agent': 'freevo %s (%s)' % (version, sys.platform),
     'Accept-Language': 'en-us',
 }
 

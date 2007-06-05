@@ -306,7 +306,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 return
             except Exception,e:
                 attempts -= 1
-                _debug_(_("WARNING") + ": " + _("%r attempt=%d"%(data,4-attempts)), 1)
+                _debug_("%r attempt=%d" % (data, 4-attempts))
 
         raise e
 
@@ -460,7 +460,7 @@ class PluginInterface(plugin.DaemonPlugin):
         elif screen == "tv":
             self.set_device(Television)
         else:
-            _debug_('ERROR: unknown screen screen=%s, widget=%s, value=%s' % (screen, widget, value), 0)
+            _debug_('unknown screen screen=%s, widget=%s, value=%s' % (screen, widget, value), config.DERROR)
 
         if widget == "title":
             pass
@@ -491,7 +491,7 @@ class PluginInterface(plugin.DaemonPlugin):
         elif widget == "calendar":
             pass
         else:
-            _debug_('ERROR: unknown widget screen=%s, widget=%s, value=%s' % (screen, widget, value), 0)
+            _debug_('ERROR: unknown widget screen=%s, widget=%s, value=%s' % (screen, widget, value), config.DERROR)
         self.icons()
 
     def __init__(self):
@@ -520,10 +520,10 @@ class PluginInterface(plugin.DaemonPlugin):
                 for (self.vendorID, self.productID) in self.usbIDs:
                     if dev.idVendor == self.vendorID and dev.idProduct == self.productID:
                         self.vfd = dev.open()
-                        _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), dbglvl)
+                        _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), config.DINFO)
 
         if self.vfd == None:
-            _debug_(String(_("ERROR")) + ":" + String(_("Cannot find VFD device")), 0)
+            _debug_("Cannot find VFD device", config.DERROR)
             self.disable = 1
             self.reason = "Cannot find VFD device"
             return
@@ -531,7 +531,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         self.mixer = plugin.getbyname('MIXER')
         if self.mixer == None:
-            _debug_(String(_("ERROR")) + ":" + String(_("Cannot find MIXER")), 0)
+            _debug_("Cannot find MIXER", config.DERROR)
             self.disable = 1
             self.reason = "Cannot find MIXER"
             return
@@ -730,11 +730,10 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 screens = layouts[ l ]
             except KeyError:
-                _debug_(_("WARNING") + ": " + _("Could not find screens for %d lines VFD!") % l, dbglvl)
+                _debug_("Could not find screens for %d lines VFD!" % l, config.DERROR)
                 l -= 1
                 if l < 1:
-                    _debug_(String(_("ERROR")) + ": " + String(_("No screens found for this VFD (%dx%d)!")) % \
-                        (self.height, self.width), 0)
+                    _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), config.DERROR)
                     self.disable = 1
                     return
         # find a display with 'l' line and 'c' columns
@@ -742,12 +741,10 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 screens = layouts[ l ][ c ]
             except KeyError:
-                _debug_(_("WARNING") + ": " + _("Could not find screens for %d lines and %d columns VFD!") % \
-                    (l, c), 1)
+                _debug_("Could not find screens for %d lines and %d columns VFD!" % (l, c), config.DERROR)
                 c -= 1
                 if c < 1:
-                    _debug_(String(_("ERROR")) + ": " + String(_("No screens found for this VFD (%dx%d)!")) % \
-                        (self.height, self.width), 0)
+                    _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), config.DERROR)
                     self.disable = 1
                     return
 
@@ -757,8 +754,7 @@ class PluginInterface(plugin.DaemonPlugin):
         try:
             self.screens = screens = layouts[ l ][ c ]
         except KeyError:
-            _debug_(String(_("ERROR")) + ": " + String(_("No screens found for this VFD (%dx%d)!")) % \
-                (self.height, self.width), 0)
+            _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), config.DERROR)
             self.disable = 1
             return
 

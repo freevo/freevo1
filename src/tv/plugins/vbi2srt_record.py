@@ -55,8 +55,6 @@ import util.tv_util as tv_util
 from event import *
 from tv.channels import FreevoChannels
 
-DEBUG = config.DEBUG
-
 
 class PluginInterface(plugin.Plugin):
     """
@@ -102,7 +100,7 @@ class Recorder:
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
 
-        if DEBUG: print 'ACTIVATING VBI2SRT RECORD PLUGIN'
+        _debug_('ACTIVATING VBI2SRT RECORD PLUGIN', config.DINFO)
 
         self.vg = None
         self.fc = FreevoChannels()
@@ -117,7 +115,7 @@ class Recorder:
 
         rec_prog.filename = tv_util.getProgFilename(rec_prog)
         rec_prog.filename = os.path.splitext(tv_util.getProgFilename(rec_prog))[0] + '.mpeg'
-        if DEBUG: print('Recorder::Record:filename %s' % rec_prog.filename)
+        _debug_('Recorder::Record:filename %s' % rec_prog.filename)
 
         cl_options = { 'channel'  : rec_prog.tunerid,
                        'frequency' : frequency,
@@ -131,16 +129,16 @@ class Recorder:
         }
 
         self.vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
-        if DEBUG: print('Recorder::Record:cl_options %s' % cl_options)
-        if DEBUG: print('Recorder::Record:chan_index %s' % self.fc.chan_index)
-        if DEBUG: print('Recorder::Record:vg.vdev %s' % self.vg.vdev)
-        if DEBUG: print('Recorder::Record:vg.vvbi %s' % self.vg.vvbi)
+        _debug_('Recorder::Record:cl_options %s' % cl_options)
+        _debug_('Recorder::Record:chan_index %s' % self.fc.chan_index)
+        _debug_('Recorder::Record:vg.vdev %s' % self.vg.vdev)
+        _debug_('Recorder::Record:vg.vvbi %s' % self.vg.vvbi)
         pagenum = None;
         try:
             pagenum = int(config.TV_CHANNELS[self.fc.chan_index][5])
         except:
             pagenum = None;
-        if DEBUG: print('Recorder::Record:pagenum "%s"' % pagenum)
+        _debug_('Recorder::Record:pagenum "%s"' % pagenum)
         self.rec_command = config.VCR_CMD % cl_options
         if pagenum == None:
             self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s' % \
@@ -156,7 +154,7 @@ class Recorder:
         self.thread.autokill = float(rec_prog.rec_duration + 10)
         self.thread.mode_flag.set()
 
-        if DEBUG: print('Recorder::Record: %s' % self.rec_command)
+        _debug_('Recorder::Record: %s' % self.rec_command)
 
 
     def Stop(self):
@@ -167,21 +165,20 @@ class Recorder:
 class RecordApp(childapp.ChildApp):
 
     def __init__(self, app):
-        if DEBUG:
+        if config.DEBUG:
             fname_out = os.path.join(config.LOGDIR, 'vbi2srt-stdout.log')
             fname_err = os.path.join(config.LOGDIR, 'vbi2srt-stderr.log')
             try:
                 self.log_stdout = open(fname_out, 'a')
                 self.log_stderr = open(fname_err, 'a')
             except IOError:
+                _debug_('Cannot open "%s" and "%s" for record logging!' % \
+                    (fname_out, fname_err), config.DERROR)
                 print
-                print (('ERROR: Cannot open "%s" and "%s" for ' +
-                        'record logging!') % (fname_out, fname_err))
-                print 'Please set DEBUG=0 or '
-                print 'start Freevo from a directory that is writeable!'
+                print 'Please set DEBUG=0 or start Freevo from a directory that is writeable!'
                 print
             else:
-                print 'Record logging to "%s" and "%s"' % (fname_out, fname_err)
+                _debug_('Record logging to "%s" and "%s"' % (fname_out, fname_err), config.DERROR)
 
         childapp.ChildApp.__init__(self, app)
 
@@ -208,17 +205,17 @@ class Record_Thread(threading.Thread):
 
     def run(self):
         while 1:
-            if DEBUG: print('Record_Thread::run: mode=%s' % self.mode)
+            _debug_('Record_Thread::run: mode=%s' % self.mode)
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
 
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
-                if DEBUG: print('Record_Thread::run: cmd=%s' % self.command)
+                _debug_('Record_Thread::run: cmd=%s' % self.command)
 
                 fc = FreevoChannels()
-                if DEBUG: print 'CHAN: %s' % fc.getChannel()
+                _debug_('CHAN: %s' % fc.getChannel())
 
                 (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
 
@@ -227,33 +224,33 @@ class Record_Thread(threading.Thread):
                 v.init_settings()
                 self.vg = fc.getVideoGroup(self.prog.tunerid, False)
 
-                if DEBUG: print 'Using video device %s' % self.vg.vdev
-                if DEBUG: print 'Setting Input to %s' % self.vg.input_num
+                _debug_('Using video device %s' % self.vg.vdev)
+                _debug_('Setting Input to %s' % self.vg.input_num)
                 v.setinput(self.vg.input_num)
 
-                if DEBUG: print 'Setting Channel to %s' % self.prog.tunerid
+                _debug_('Setting Channel to %s' % self.prog.tunerid)
                 fc.chanSet(str(self.prog.tunerid), False)
 
-                if DEBUG: v.print_settings()
+                _debug_('%s' % v.print_settings())
 
                 self.app = RecordApp(self.command)
-                if DEBUG: print 'app child pid: %s' % self.app.child.pid
+                _debug_('app child pid: %s' % self.app.child.pid)
 
                 while self.mode == 'record' and self.app.isAlive():
                     self.autokill -= 0.5
                     time.sleep(0.5)
                     if self.autokill <= 0:
-                        if DEBUG: print 'autokill timeout, stopping recording'
+                        _debug_('autokill timeout, stopping recording')
                         self.mode = 'stop'
 
                 if self.app.isAlive():
                     # might not want to do this is PDC is valid, programme may be delayed
-                    if DEBUG: print('Record_Thread::run: past wait!!')
+                    _debug_('Record_Thread::run: past wait!!')
                     rc.post_event(Event(OS_EVENT_KILL, (self.app.child.pid, 15)))
                     self.app.kill()
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))
-                if DEBUG: print('Record_Thread::run: finished recording')
+                _debug_('Record_Thread::run: finished recording')
 
                 self.mode = 'idle'
             else:

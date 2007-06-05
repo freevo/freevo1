@@ -177,7 +177,7 @@ class HeadlinesSiteItem(Item):
 
         except:
             #unreachable or url error
-            _debug_('HEADLINES ERROR: could not open %s' % self.url, -2)
+            _debug_('could not open %s' % self.url, config.DERROR)
             pass
 
         #write the file

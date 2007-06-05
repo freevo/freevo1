@@ -55,8 +55,6 @@ try:
     import Numeric
 
     import config
-    import version
-
     import kaa.metadata as mmpython
     import kaa.imlib2 as Image
 
@@ -422,10 +420,15 @@ try:
     # prepare the skin
     skin.prepare()
 
-    v = '%s' % version.__version__
     try:
-        import freevo.revision
-        v = v.replace('-svn', ' r%s' % freevo.revision.__revision__)
+        try:
+            import freevo.version as version
+            import freevo.revision as revision
+        except ImportError:
+            import version
+            import revision
+        v = '%s' % version.__version__
+        v = v.replace('-svn', ' r%s' % revision.__revision__)
     except ImportError:
         pass
     # Fire up splashscreen and load the plugins

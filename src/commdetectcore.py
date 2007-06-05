@@ -232,7 +232,7 @@ class CommDetectQueue:
         """Start the queue"""
         if not self.running:
             self.running = True
-            _debug_("queue started", 0)
+            _debug_("queue started", config.DINFO)
             self._runQueue()
 
     def listJobs(self):
@@ -252,7 +252,7 @@ class CommDetectQueue:
             self.running = False
             if hasattr(self,"currentjob"):
                 del self.currentjob
-            _debug_("queue empty, stopping processing...", 0)
+            _debug_("queue empty, stopping processing...", config.DINFO)
             return
         _debug_("runQueue callback data : %s" % line)
 

@@ -271,7 +271,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.profile['numpasses'] = 2
             self.profile['videofilter'] = 'ipod'
         else:
-            _debug_('Unknown Profile "%s"' % (arg), 0)
+            _debug_('Unknown Profile "%s"' % (arg), config.DERROR)
             self.error(_('Unknown Profile')+(' "%s"' % (arg)))
             return
 
@@ -299,7 +299,7 @@ class PluginInterface(plugin.ItemPlugin):
         elif prop == 'videofilter':
             self.profile['videofilter'] = val
         else:
-            _debug_('Unknown property "%s"' % (prop), 0)
+            _debug_('Unknown property "%s"' % (prop), config.DERROR)
             self.error(_('Unknown Property')+(' "%s"' % (prop)))
             return
 

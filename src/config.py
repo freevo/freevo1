@@ -61,8 +61,6 @@ if float(sys.version[0:3]) >= 2.3:
 VERSION = version.__version__
 
 LOGGING = logging.WARNING
-global loggerisinitialised
-loggerisinitialised = False
 
 # For Internationalization purpose
 # an exception is raised with Python 2.1 if LANG is unavailable.
@@ -103,16 +101,12 @@ class Logger:
             format='%(asctime)s %(levelname)-8s %(message)s', \
             filename=logfile+'.log', filemode='a')
         self.logfile = logfile
-        self.isinitialised = False
         try:
             self.fp = open(logfile, 'a')
         except IOError:
             print 'Could not open logfile: %s' % logfile
             self.fp = open('/dev/null','a')
         self.softspace = 0
-
-    def initialised(self):
-        self.isinitialised = True
 
     def write(self, msg):
         global DEBUG_STDOUT
@@ -303,6 +297,11 @@ def _stack_function_(message='', limit=None):
         else:
             logging.debug('%s\n*** %s' % (message, '*** '.join(traceback.format_list(stack)[0:-1])))
 
+DINFO = 0
+DWARNING = -1
+DERROR = -2
+DCRITICAL = -3
+
 def _debug_function_(s, level=1):
     if DEBUG < level:
         return
@@ -314,13 +313,13 @@ def _debug_function_(s, level=1):
         s = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
         # print debug message
         print s
-        if level <= -3:
+        if level <= DCRITICAL:
             logging.critical(s)
-        elif level == -2:
+        elif level == DERROR:
             logging.error(s)
-        elif level == -1:
+        elif level == DWARNING:
             logging.warning(s)
-        elif level == 0:
+        elif level == DINFO:
             logging.info(s)
         else:
             logging.debug(s)
@@ -556,15 +555,16 @@ os.umask(UMASK)
 
 
 if not HELPER:
+    try:
+        import freevo.version as version
+        import freevo.revision as revision
+    except:
+        import version
+        import revision
     logging.getLogger('').setLevel(LOGGING)
-
-    if not loggerisinitialised:
-        loggerisinitialised = True
-        import freevo.version, freevo.revision
-        logging.warn('=' * 80)
-        logging.warn('Log opened for Freevo %s r%s' % (freevo.version.__version__, freevo.revision.__revision__))
-        logging.warn('-' * 80)
-        _debug_('Logging to %s' % sys.stdout.logfile)
+    logging.warn('=' * 80)
+    logging.warn('Log opened for Freevo %s r%s' % (version.__version__, revision.__revision__))
+    logging.warn('-' * 80)
 
 #
 # force fullscreen when freevo is it's own windowmanager

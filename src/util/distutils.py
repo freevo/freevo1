@@ -90,9 +90,11 @@ import os
 import sys
 
 try:
-    import version
-except:
     import freevo.version as version
+    import freevo.revision as revision
+except:
+    import version
+    import revision
 
 def package_finder(result, dirname, names):
     """

@@ -55,7 +55,7 @@ class ScheduledRecordings:
             self.programList[key] = prog
             _debug_('added \"%s\" %s"' % (String(key), prog), 1)
         else:
-            _debug_('We already know about this recording \"%s\"' % (key), 0)
+            _debug_('We already know about this recording \"%s\"' % (key), config.DINFO)
         _debug_('"%s" items' % len(self.programList), 2)
 
 
@@ -68,7 +68,7 @@ class ScheduledRecordings:
             del self.programList[key]
             _debug_('removed \"%s\" %s"' % (String(key), prog), 1)
         else:
-            _debug_('We do not know about this recording \"%s\"' % (prog), 0)
+            _debug_('We do not know about this recording \"%s\"' % (prog), config.DINFO)
 
 
     def getProgramList(self):
@@ -84,7 +84,7 @@ class ScheduledRecordings:
             _debug_('added favorite "%s"' % String(fav.name), 1)
             self.favorites[fav.name] = fav
         else:
-            _debug_('We already have a favorite called "%s"' % String(fav.name), 0)
+            _debug_('We already have a favorite called "%s"' % String(fav.name), config.DINFO)
 
 
     def removeFavorite(self, name):
@@ -92,7 +92,7 @@ class ScheduledRecordings:
             del self.favorites[name]
             _debug_('removed favorite: %s' % String(name), 1)
         else:
-            _debug_('We do not have a favorite called "%s".' % String(name), 0)
+            _debug_('We do not have a favorite called "%s".' % String(name), config.DINFO)
 
 
     def getFavorites(self):

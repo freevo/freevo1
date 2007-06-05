@@ -33,8 +33,12 @@ import socket
 from util import Rendezvous
 import time
 import plugin
-from freevo.version import __version__
 import config
+
+try:
+    import freevo.version as version
+except:
+    import version
 
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -54,7 +58,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
-        desc = {'version':__version__}
+        desc = {'version':version.__version__}
         myip = self.my_ipaddr('localhost')
         info = Rendezvous.ServiceInfo("_http._tcp.local.", "Freevo Web._http._tcp.local.", address=socket.inet_aton(myip),
             port=config.WEBSERVER_PORT, weight=0, priority=0, properties=desc, server=socket.gethostname)
