@@ -112,7 +112,7 @@ if (len(sys.argv) < 2 or sys.argv[1].lower() not in ('i18n', '--help', '--help-c
     if os.path.isdir('.svn'):
         try:
             from subprocess import Popen, PIPE
-            p1 = Popen(["svn", "info", "--revision=HEAD"], stdout=PIPE)
+            p1 = Popen(["svn", "info", "--revision=BASE"], stdout=PIPE)
             p2 = Popen(["sed", "-n", "/Revision:/s/Revision: *\([0-9]*\)/\\1/p"], stdin=p1.stdout, stdout=PIPE)
             revision = p2.communicate()[0]
             fh = open('src/revision.py', 'w')

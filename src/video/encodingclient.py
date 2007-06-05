@@ -116,7 +116,7 @@ def initEncodeJob(source, output, friendlyname="", title=None):
     This call can take some time (10 seconds on average) before returning, because the
     encodingserver analyzes the video during this call."""
 
-    _debug_('initEncodeJob(%s, %s, %s, %s)' % (source, output, friendlyname, title), 0)
+    _debug_('initEncodeJob(%s, %s, %s, %s)' % (source, output, friendlyname, title), config.DINFO)
     if not (source or output):
         return (False, "EncodingClient: no source and/or output")
 
