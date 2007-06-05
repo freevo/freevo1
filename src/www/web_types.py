@@ -201,7 +201,6 @@ class HTMLResource:
                  (_('Favorites'),_('View Favorites'),'%sfavorites.rpy' % str(strprefix)),
                  (_('Media Library'),_('View Media Library'),'%slibrary.rpy' % str(strprefix)),
                  (_('Manual Recording'),_('Schedule a Manual Recording'),'%smanualrecord.rpy' % str(strprefix)),
-                 #(_('Sensors'),_('Sensors Page'),'%duncan.html' % str(strprefix)),
                  (_('Search'),_('Advanced Search Page'),'%ssearch.rpy' % str(strprefix)),
                  (_('Help'),_('View Online Help and Documentation'),'%shelp/' % str(strprefix))]
         # maybe also a personal web pages
