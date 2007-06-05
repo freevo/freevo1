@@ -38,11 +38,12 @@ howto() {
 
 # main
 case "$1" in
-    nodocs)
-        gen_i18n
-        ;;
     revision)
         revision
+        ;;
+    nodocs)
+        revision
+        gen_i18n
         ;;
     howto)
         howto
