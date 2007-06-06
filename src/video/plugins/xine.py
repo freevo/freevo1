@@ -386,5 +386,5 @@ class XineApp(childapp.ChildApp2):
         # Has it finished?
         if line.find('playback finished for mrl') >= 0:
             _debug_('playback finished')
-            if self.player:
-                self.player.stop()
+            #if self.player:
+            #    self.player.stop()
