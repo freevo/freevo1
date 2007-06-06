@@ -128,7 +128,7 @@ class VideoItem(Item):
 
         # extra infos in discset_information
         if parent and parent.media:
-            fid = parent.media.id + \
+            fid = String(parent.media.id) + \
                   self.filename[len(os.path.join(parent.media.mountdir,'')):]
             from video import discset_information
             if discset_information.has_key(fid):

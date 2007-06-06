@@ -72,7 +72,7 @@ def getoverlay(directory):
     for media in config.REMOVABLE_MEDIA:
         if directory.startswith(media.mountdir):
             directory = directory[len(media.mountdir):]
-            return '%s/disc/%s%s' % (config.OVERLAY_DIR, media.id, directory)
+            return '%s/disc/%s%s' % (config.OVERLAY_DIR, String(media.id), directory)
     return config.OVERLAY_DIR + directory
 
 

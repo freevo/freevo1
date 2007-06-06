@@ -136,7 +136,7 @@ class PluginInterface(plugin.MimetypePlugin):
                         pos += file[pos:].find('1') + 1
 
             if parent.media:
-                file_id = parent.media.id + \
+                file_id = String(parent.media.id) + \
                           file[len(os.path.join(parent.media.mountdir,"")):]
                 try:
                     x.mplayer_options = discset_information[file_id]

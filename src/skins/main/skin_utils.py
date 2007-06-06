@@ -65,7 +65,12 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
             type = item.type
 
 
-    cname = '%s-%s-%s-%s-%s-%s-%s' % (settings.icon_dir, item.image, type,
+    if isinstance(item.image, str):
+        item_image=Unicode(item.image)
+    else:
+        item_image=item.image
+
+    cname = '%s-%s-%s-%s-%s-%s-%s' % (settings.icon_dir, item_image, type,
                                       item.type, width, height, force)
 
     if hasattr(item, 'rotation') and item['rotation']:

@@ -29,6 +29,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed Panorama skin thumbnail (B#1731877)
  * Fixed recordings manager not deleting old video when the disk is full (B#1728182)
  * Fixed tv recordings manager not deleting files when out of space (B#1728182)
+ * Fixed unicoding errors for media ids when there are Unicode (F#1731825)
 
 == Release 1.7.2 (2007-05-26) ==
 --------------------------------
