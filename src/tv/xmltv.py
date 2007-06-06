@@ -30,10 +30,15 @@
 #  If you have any trouble: jfunk@funktronics.ca
 #
 import types, re
-try:
-    from cElementTree import ElementTree, Element, SubElement, tostring
-except ImportError:
-    from elementtree.ElementTree import ElementTree, Element, SubElement, tostring
+import sys
+
+if sys.hexversion >= 0x2050000:
+    from xml.etree.cElementTree import ElementTree, Element, SubElement, tostring
+else:
+    try:
+        from cElementTree import ElementTree, Element, SubElement, tostring
+    except ImportError:
+        from elementtree.ElementTree import ElementTree, Element, SubElement, tostring
 
 # The Python-XMLTV version
 VERSION = "1.2"

@@ -16,18 +16,22 @@ from util.distribution import setup, Extension, check_libs, docbook_finder
 from distutils import core
 
 
-check_libs((
-            ('xml.utils.qp_xml', 'http://pyxml.sourceforge.net/'),
-            ('kaa', '\"svn co svn://svn.freevo.org/kaa/trunk/ kaa\"' ),
-            ('kaa.metadata', '\"svn co svn://svn.freevo.org/kaa/trunk/ kaa\"' ),
-            ('kaa.imlib2', '\"svn co svn://svn.freevo.org/kaa/trunk/ kaa\"' ),
-            ('BeautifulSoup', 'http://www.crummy.com/software/BeautifulSoup/' ),
-            ('pygame', 'http://www.pygame.org'),
-            ('Image', 'http://www.pythonware.com/products/pil/'),
-            ('elementtree', 'http://effbot.org/zone/elementtree.htm'),
-            ('twisted', 'http://www.twistedmatrix.com/'),
-            ('twisted.web.microdom', 'http://www.twistedmatrix.com/')
-))
+libs_to_check = [
+    ('xml.utils.qp_xml', 'http://pyxml.sourceforge.net/'),
+    ('kaa', '\"svn co svn://svn.freevo.org/kaa/trunk/ kaa\"' ),
+    ('kaa.metadata', '\"svn co svn://svn.freevo.org/kaa/trunk/ kaa\"' ),
+    ('kaa.imlib2', '\"svn co svn://svn.freevo.org/kaa/trunk/ kaa\"' ),
+    ('BeautifulSoup', 'http://www.crummy.com/software/BeautifulSoup/' ),
+    ('pygame', 'http://www.pygame.org'),
+    ('Image', 'http://www.pythonware.com/products/pil/'),
+    ('twisted', 'http://www.twistedmatrix.com/'),
+    ('twisted.web.microdom', 'http://www.twistedmatrix.com/'),
+]
+
+if sys.hexversion < 0x2050000:
+    libs_to_check.append(('elementtree', 'http://effbot.org/zone/elementtree.htm'))
+
+check_libs(libs_to_check)
 
 
 class Runtime(core.Command):
