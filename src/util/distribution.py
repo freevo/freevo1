@@ -86,11 +86,15 @@ import sys
 import re
 
 try:
-    import freevo.version as version
-    import freevo.revision as revision
-except:
-    import version
-    import revision
+    try:
+        import freevo.version as version
+        import freevo.revision as revision
+    except ImportError:
+        import version
+        import revision
+except ImportError:
+    print 'If your using a subversion of Freevo'
+    print 'You may need run "./autogen.sh nodocs"'
 
 # Get the real distutils (not the Freevo stuff)
 # This is a bad hack and will be removed when the distutils.py
