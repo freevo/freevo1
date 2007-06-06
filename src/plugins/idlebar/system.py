@@ -190,14 +190,20 @@ class sensors(IdleBarPlugin):
         small class defining a temperature sensor
         """
         def __init__(self, sensor, compute_expression, hotstack):
-            self.initpath = "/proc/sys/dev/sensors/"
-            self.k6path = '/sys/bus/i2c/devices'
-            self.k6 = 0
+            self.pathform_path = config.SENSORS_PLATFORM_PATH
+            self.i2cdev_path = config.SENSORS_I2CDEV_PATH
+            self.kernel26 = False
             self.senspath = self.getSensorPath()
             self.sensor = sensor
             self.compute_expression = compute_expression
             self.hotstack = hotstack
             self.washot = False
+
+        def config(self):
+            return [
+                ( 'SENSORS_PLATFORM_PATH', '/sys/devices/platform', 'path to the sensor devices' ),
+                ( 'SENSORS_I2CDEV_PATH', '/sys/bus/i2c/devices', 'path to the i2c devices' ),
+            ]
 
         def temp(self):
             def temp_compute (rawvalue):
@@ -211,7 +217,7 @@ class sensors(IdleBarPlugin):
             if self.senspath == -1 or not self.senspath:
                 return "?"
 
-            if self.k6 :
+            if self.kernel26:
                 file = os.path.join( self.senspath, 'temp_input' + self.sensor[-1] )
                 fhot = os.path.join( self.senspath, 'temp_max' + self.sensor[-1] )
                 if not os.path.exists(file):
@@ -228,7 +234,7 @@ class sensors(IdleBarPlugin):
             data = f.read()
             f.close()
 
-            if self.k6:
+            if self.kernel26:
                 temp = int(temp_compute(float(data[0:2])))
                 hot = int(temp_compute(float(hotdata[0:2])))
 
@@ -249,30 +255,30 @@ class sensors(IdleBarPlugin):
 
         def getSensorPath(self):
             #let's try if we find a sys filesystem (and kernel2.6 style sensors)
-            if os.path.exists(self.k6path):
-                self.k6 = 1
+            if os.path.exists(self.i2cdev_path):
+                self.kernel26 = True
                 #print "Detected kernel 2.6 sys fs"
-                for senspath in os.listdir(self.k6path):
-                    testpath = os.path.join(self.k6path , senspath)
+                for senspath in os.listdir(self.i2cdev_path):
+                    testpath = os.path.join(self.i2cdev_path , senspath)
                     for pos_sensors in os.listdir(testpath):
                         if pos_sensors == "temp_input1":
                             return testpath
                         if pos_sensors == "temp1_input":
                             return testpath
 
-            if not os.path.exists(self.initpath):
-                if self.k6:
+            if not os.path.exists(self.pathform_path):
+                if self.kernel26:
                     print "Kernel 2.5/2.6 detected, but no i2c sensors found"
-                    print "Did u load (or compile) the necessary bus driver"
+                    print "Did you load (or compile) the necessary bus driver"
                     print "and sensor chip modules"
                 else:
-                    print "LM_Sensors proc data not available? Did you load i2c-proc"
+                    print "LM_Sensors data not available? Did you load i2c-proc"
                     print "and configured lm_sensors?"
                     print "temperatures will be bogus"
                 return -1 #failure
 
-            for senspath in os.listdir(self.initpath):
-                testpath = os.path.join(self.initpath , senspath)
+            for senspath in os.listdir(self.pathform_path):
+                testpath = os.path.join(self.pathform_path , senspath)
                 if os.path.isdir(testpath):
                     return testpath
 

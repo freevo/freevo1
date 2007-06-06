@@ -279,6 +279,7 @@ LOCAL_CONF_CHANGES = [
         Added LOGGING, can be one of CRITICAL, ERROR, WARNING, INFO, DEBUG
         Added RECORDSERVER_LOGGING to allow different levels of errors to be reported
         Changed VIDEO_INTERLACING to VIDEO_DEINTERLACE to be more consistent with autovars
+        Added SENSORS_PLATFORM_PATH and SENSORS_I2CDEV_PATH for sensor paths
      ''' ),
 ]
 
