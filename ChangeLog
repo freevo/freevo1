@@ -23,6 +23,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated xine video plug-in to allow bookmarks to work (F#1729024)
  * Updated xine video plug-in to process stdout and stderr message (F#1729603)
  * Fixed audio channel selection for AVI files, when no id is present (B#1731232)
+ * Fixed CD cover image search because of changes to Amazon developer services (B#1731835)
  * Fixed fxd parser's setattr not working correctly in all cases (B#1728421)
  * Fixed Panorama skin thumbnail (B#1731877)
  * Fixed recordings manager not deleting old video when the disk is full (B#1728182)

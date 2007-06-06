@@ -218,49 +218,49 @@ class PluginInterface(plugin.ItemPlugin):
         # Check if they're valid before presenting the list to the user
         # Grrr I wish Amazon wouldn't return an empty gif (807b)
 
-        MissingFile = False
-        m = None
-        n = None
-
         for i in range(len(cover)):
+            m = None
+            imageFound = False
             try:
-                m = urllib2.urlopen(cover[i].ImageUrlLarge)
+                if cover[i].ImageUrlLarge:
+                    m = urllib2.urlopen(cover[i].ImageUrlLarge)
+                    imageFound = True
             except urllib2.HTTPError:
                 # Amazon returned a 404
-                MissingFile = True
-            if not MissingFile and not (m.info()['Content-Length'] == '807'):
+                pass
+            if imageFound and (m.info()['Content-Length'] != '807'):
                 image = Image.open_from_memory(m.read())
                 items += [ menu.MenuItem('%s' % cover[i].ProductName,
-                                         self.cover_create, cover[i].ImageUrlLarge,
-                                         image=image) ]
-                m.close()
+                    self.cover_create, cover[i].ImageUrlLarge, image=image) ]
             else:
-                if m: m.close()
-                MissingFile = False
                 # see if a small one is available
                 try:
-                    n = urllib2.urlopen(cover[i].ImageUrlMedium)
+                    if cover[i].ImageUrlMedium:
+                        if m: m.close()
+                        m = urllib2.urlopen(cover[i].ImageUrlMedium)
+                        imageFound = True
                 except urllib2.HTTPError:
-                    MissingFile = True
-                if not MissingFile and not (n.info()['Content-Length'] == '807'):
-                    image = Image.open_from_memory(n.read())
+                    pass
+                if imageFound and (m.info()['Content-Length'] != '807'):
+                    image = Image.open_from_memory(m.read())
                     items += [ menu.MenuItem( ('%s [' + _( 'small' ) + ']') % cover[i].ProductName,
-                                    self.cover_create, cover[i].ImageUrlMedium) ]
-                    n.close()
+                        self.cover_create, cover[i].ImageUrlMedium) ]
                 else:
-                    if n: n.close()
                     # maybe the url is wrong, try to change '.01.' to '.03.'
                     cover[i].ImageUrlLarge = cover[i].ImageUrlLarge.replace('.01.', '.03.')
                     try:
-                        n = urllib2.urlopen(cover[i].ImageUrlLarge)
+                        if cover[i].ImageUrlLarge:
+                            if m: m.close()
+                            m = urllib2.urlopen(cover[i].ImageUrlLarge)
+                            imageFound = True
 
-                        if not (n.info()['Content-Length'] == '807'):
-                            image = Image.open_from_memory(n.read())
+                        if imageFound and (m.info()['Content-Length'] != '807'):
+                            image = Image.open_from_memory(m.read())
                             items += [ menu.MenuItem( ('%s [' + _( 'small' ) + ']' ) % cover[i].ProductName,
-                                                     self.cover_create, cover[i].ImageUrlLarge) ]
-                        n.close()
+                                self.cover_create, cover[i].ImageUrlLarge) ]
                     except urllib2.HTTPError:
                         pass
+            if m: m.close()
 
         box.destroy()
         if len(items) == 1:
