@@ -895,6 +895,17 @@ CACHE_IMAGES = 1
 # Dim text that doesn't fit instead of using ellipses.
 # OSD_DIM_TEXT = 1
 
+#
+# OSD sound effects
+#
+# OSD_SOUNDS_ENABLED=False
+
+# OSD_SOUNDS= {
+#     'menu.navigate': None,
+#     'menu.back_one': None,
+#     'menu.select'  : None
+# }
+
 # ======================================================================
 # Freevo remote control settings:
 # ======================================================================
