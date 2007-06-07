@@ -280,6 +280,7 @@ LOCAL_CONF_CHANGES = [
         Added RECORDSERVER_LOGGING to allow different levels of errors to be reported
         Changed VIDEO_INTERLACING to VIDEO_DEINTERLACE to be more consistent with autovars
         Added SENSORS_PLATFORM_PATH and SENSORS_I2CDEV_PATH for sensor paths
+        Added OSD_SOUNDS_ENABLED defaulted to False for menu sounds
      ''' ),
 ]
 
@@ -1298,6 +1299,16 @@ OSD_UPDATE_COMPLETE_REDRAW = 0
 
 if CONF.display in ( 'dxr3', 'dga' ):
     OSD_UPDATE_COMPLETE_REDRAW = 1
+#
+# OSD sound effects
+#
+OSD_SOUNDS_ENABLED=False
+
+OSD_SOUNDS= {
+    'menu.navigate': None,
+    'menu.back_one': None,
+    'menu.select'  : None
+}
 
 # ======================================================================
 # Freevo remote control settings:

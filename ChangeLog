@@ -17,6 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * Added personal web pages to the webserver, using PERSONAL_WWW_PAGE (F#1729595)
+ * Added sounds to menu selection, enabled with OSD_SOUNDS_ENABLED (F#1732380)
  * Updated childapp to use subprocess instead of popen (F#1729597)
  * Updated local_conf.py.example with MPLAYER_HAS_FIELD_DOMINANCE (F#1729404)
  * Updated system sensors for a configurable path (B#1731892)

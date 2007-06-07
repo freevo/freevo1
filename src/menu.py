@@ -37,6 +37,7 @@ import util
 import skin
 import rc
 
+from audio import sounds
 from event import *
 from item import Item
 from gui import GUIObject, AlertBox
@@ -487,6 +488,7 @@ class MenuWidget(GUIObject):
             return
 
         if event == MENU_BACK_ONE_MENU:
+            sounds.play_sound(sounds.MENU_BACK_ONE)
             self.back_one_menu()
             return
 
@@ -528,6 +530,7 @@ class MenuWidget(GUIObject):
 
         if event == MENU_UP:
             curr_selected = self.all_items.index(menu.selected)
+            sounds.play_sound(sounds.MENU_NAVIGATE)
             if curr_selected-self.cols < 0 and \
                    menu.selected != menu.choices[0]:
                 self.goto_prev_page(arg='no_refresh')
@@ -548,6 +551,7 @@ class MenuWidget(GUIObject):
 
         elif event == MENU_DOWN:
             curr_selected = self.all_items.index(menu.selected)
+            sounds.play_sound(sounds.MENU_NAVIGATE)
             if curr_selected+self.cols > len(self.all_items)-1 and \
                    menu.page_start + len(self.all_items) < len(menu.choices):
 
@@ -612,6 +616,7 @@ class MenuWidget(GUIObject):
             if not len(self.menu_items):
                 return
 
+            sounds.play_sound(sounds.MENU_NAVIGATE)
             curr_selected = self.all_items.index(menu.selected)
             if curr_selected == 0:
                 self.goto_prev_page(arg='no_refresh')
@@ -632,6 +637,7 @@ class MenuWidget(GUIObject):
             if not len(self.menu_items):
                 return
 
+            sounds.play_sound(sounds.MENU_NAVIGATE)
             curr_selected = self.all_items.index(menu.selected)
             if curr_selected == len(self.all_items)-1:
                 self.goto_next_page(arg='no_refresh')
@@ -655,6 +661,7 @@ class MenuWidget(GUIObject):
             action = None
             arg    = None
 
+            sounds.play_sound(sounds.MENU_SELECT)
             try:
                 action = menu.selected.action
             except AttributeError:
