@@ -25,6 +25,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated xine video plug-in to process stdout and stderr message (F#1729603)
  * Updated xmltv's use of element tree for Python-2.5 (F#1731775)
  * Fixed audio channel selection for AVI files, when no id is present (B#1731232)
+ * Fixed button bar raising an exception when using colour actions (B#1732378)
  * Fixed CD cover image search because of changes to Amazon developer services (B#1731835)
  * Fixed fxd parser's setattr not working correctly in all cases (B#1728421)
  * Fixed Panorama skin thumbnail (B#1731877)

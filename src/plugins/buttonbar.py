@@ -299,9 +299,9 @@ class PluginInterface(plugin.DaemonPlugin):
         found_color_actions = False
 
         for index in range(0, len(self.colors)):
-            if hasattr(menu, self.colors[index] + '_action'):
+            if hasattr(menu.selected, self.colors[index] + '_action'):
                 found_color_actions = True
-                result[index] = eval('menu.' + color + '_action')
+                result[index] = eval('menu.selected.' +  self.colors[index] + '_action')
 
         if found_color_actions:
             return result
