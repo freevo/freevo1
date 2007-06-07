@@ -76,7 +76,7 @@ class PluginInterface(plugin.ItemPlugin):
         """
         t    = max(0, self.item['autobookmark_resume'] - 10)
         info = mmpython.parse(self.item.filename)
-        if (config.VIDEO_PREFERED_PLAYER == 'xine'):
+        if (self.item.player.name == 'xine'):
             self.write_playlist(t)
             arg = ("--playlist %s/playlist_xine_%s.tox" % (config.FREEVO_CACHEDIR, t))
         else:
@@ -91,12 +91,24 @@ class PluginInterface(plugin.ItemPlugin):
     def write_playlist(self,time):
         t = time
         name = '%s/playlist_xine_%s.tox' % (config.FREEVO_CACHEDIR,t)
+
+        # this file has a companion subtitle file?
+        subtitle = None
+        try:
+            for file in glob.glob('%s.*' % os.path.splitext(self.item.filename)[0]):
+                if os.path.splitext(file)[1].lower() in ['.srt', '.sub', '.ssa']:
+                    subtitle = file
+                    break
+        except:
+            pass
         playlist = open(name,'w')
         playlist.write ("# toxine playlist\n")
         playlist.write ("entry {\n")
         playlist.write ("       identifier = %s;\n" % self.item.filename)
         playlist.write ("       mrl = %s;\n" % self.item.filename)
-        playlist.write ("       start = %s\n" % t)
+        if subtitle:
+            playlist.write("       subtitle = %s;\n" % subtitle)
+        playlist.write ("       start = %s;\n" % t)
         playlist.write ("};\n")
         playlist.write ("# END\n")
         playlist.close()
@@ -124,7 +136,7 @@ class PluginInterface(plugin.ItemPlugin):
 
             if not self.item.mplayer_options:
                 self.item.mplayer_options = ''
-            if (config.VIDEO_PREFERED_PLAYER == 'xine'):
+            if (self.item.player.name == 'xine'):
                 self.write_playlist(int(line))
                 cmd = ' --playlist %s/playlist_xine_%s.tox' % (config.FREEVO_CACHEDIR,int(line))
                 file.mplayer_options = (cmd)
@@ -152,11 +164,10 @@ class PluginInterface(plugin.ItemPlugin):
         if event == PLAY_END:
             item.delete_info('autobookmark_resume')
 
-
         # Bookmark the current time into a file
         if event == STORE_BOOKMARK:
             #Get time elapsed for xine video
-            videoplayer = config.VIDEO_PREFERED_PLAYER
+            videoplayer = self.item.player.name
             if (videoplayer == 'xine'):
                 command = ("%s -S get_time" % config.CONF.xine)
                 handle = os.popen(command,'r')
