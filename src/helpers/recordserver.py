@@ -87,7 +87,7 @@ def _debug_function_(s, level=1):
         # add the current trace to the string
         where =  traceback.extract_stack(limit = 2)[0]
         if isinstance(s, unicode):
-            s = s.encode(encoding, 'replace')
+            s = s.encode(config.encoding, 'replace')
         s = '%s %-6s: %s' % (where[0][where[0].rfind('/')+1:], '('+str(where[1])+')', s)
         # print debug message
         if level <= config.DCRITICAL:
