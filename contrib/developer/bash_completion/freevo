@@ -22,7 +22,7 @@ _freevo()
               makelinuxevent encodingserver install makestationlist \
               imdb makelircrc schedulefavorites plugins makelogos \
               tv_grab passwd rssserver commdetectserver convert_config \
-              recordserver2 prompt -h'
+              recordserver2 prompt execute -h'
 
 	if [[ $COMP_CWORD -eq 1 ]] ; then
 		COMPREPLY=( $( compgen -W "$cmds" -- $cur ) )
