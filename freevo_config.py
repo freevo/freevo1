@@ -276,11 +276,11 @@ LOCAL_CONF_CHANGES = [
      ''' ),
     (5.20,
      '''Added PERSONAL_WWW_PAGE config item to allow private web pages in the webserver
-        Added LOGGING, can be one of CRITICAL, ERROR, WARNING, INFO, DEBUG
-        Added RECORDSERVER_LOGGING to allow different levels of errors to be reported
-        Changed VIDEO_INTERLACING to VIDEO_DEINTERLACE to be more consistent with autovars
-        Added SENSORS_PLATFORM_PATH and SENSORS_I2CDEV_PATH for sensor paths
-        Added OSD_SOUNDS_ENABLED defaulted to False for menu sounds
+     Added LOGGING, can be one of CRITICAL, ERROR, WARNING, INFO, DEBUG or NOTSET
+     Added RECORDSERVER_LOGGING to allow different levels of errors to be reported
+     Changed VIDEO_INTERLACING to VIDEO_DEINTERLACE to be more consistent with autovars
+     Added SENSORS_PLATFORM_PATH and SENSORS_I2CDEV_PATH for sensor paths
+     Added OSD_SOUNDS_ENABLED defaulted to False for menu sounds
      ''' ),
 ]
 

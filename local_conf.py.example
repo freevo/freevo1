@@ -1646,3 +1646,20 @@ CACHE_IMAGES = 1
 #             ,"track||'-'||title"]
 #     ,'alt_grouping':[None,None,'year||album','track']
 #     })
+
+#
+# Debugging and logging settings
+#
+# logging can be one of:
+# CRITICAL, ERROR, WARNING, INFO, DEBUG or NOTSET
+#
+# debugging is a number from 0 to 9, 0 is no debugging 9 is most
+#
+# LOGGING = logging.DEBUG
+# RECORDSERVER_LOGGING = logging.DEBUG
+# DEBUG = 1
+# CHILDAPP_DEBUG = 1
+# MPLAYER_DEBUG = 1
+# TIME_DEBUG = 0
+
+
