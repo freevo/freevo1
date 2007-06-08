@@ -38,6 +38,7 @@
 
 
 import time, os, re
+import subprocess
 import copy
 
 import config     # Configuration handler. reads config file.
@@ -194,18 +195,23 @@ class Xine:
         '''
         Stop xine
         '''
+
         if not self.app:
             return
 
-        command = "%s -S get_time" % config.CONF.xine
-        handle = os.popen(command,'r')
+        command = "%s -S get_time --stdctl --no-splash --hide-gui " % config.CONF.xine
+        handle = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE )
+        (cin, cout) = (handle.stdin, handle.stdout)
         try:
-            position = handle.read();
+            position = cout.read();
             _debug_("Elapsed = %s" % position)
             if position:
                 self.item.elapsed = int(position)
         finally:
-            handle.close()
+            #xine should exit nicely, but if the first xine is already closed this xine will hang
+            exit_code = handle.poll()
+            if not exit_code:
+                cin.write('quit\n')
 
         self.app.stop('quit\n')
         rc.app(None)
