@@ -34,7 +34,7 @@ import rc
 
 from GUIObject import GUIObject, Align
 from Container import Container
-
+from skin import eval_attr
 
 class Window(GUIObject):
     """
@@ -81,8 +81,8 @@ class Window(GUIObject):
     def __init__content__(self):
         x, y, width, height = self.content_layout.x, self.content_layout.y, \
                               self.content_layout.width, self.content_layout.height
-        width  = eval(str(width),  { 'MAX': self.width }) or self.width
-        height = eval(str(height), { 'MAX': self.height }) or self.height
+        width  = eval_attr(str(width), self.width) or self.width
+        height = eval_attr(str(height), self.height) or self.height
 
         self.content = Container('frame', x, y, width, height, vertical_expansion=1)
         GUIObject.add_child(self, self.content)
@@ -102,8 +102,8 @@ class Window(GUIObject):
         self.height += height
 
         width, height = self.content_layout.width, self.content_layout.height
-        self.content.width  = eval(str(width),  { 'MAX': self.width }) or self.width
-        self.content.height = eval(str(height), { 'MAX': self.height }) or self.height
+        self.content.width  = eval_attr(str(width),  self.width ) or self.width
+        self.content.height = eval_attr(str(height), self.height) or self.height
 
         self.left = self.osd.width/2 - self.width/2
         self.top  = self.osd.height/2 - self.height/2
@@ -136,8 +136,8 @@ class Window(GUIObject):
         for o in self.background_layout:
             if o[0] == 'rectangle':
                 r = copy.deepcopy(o[1])
-                r.width  = eval(str(r.width),  { 'MAX' : self.get_size()[0] })
-                r.height = eval(str(r.height), { 'MAX' : self.get_size()[1] })
+                r.width  = eval_attr(str(r.width),  self.get_size()[0])
+                r.height = eval_attr(str(r.height), self.get_size()[1])
                 if not r.width:
                     r.width  = self.get_size()[0]
                 if not r.height:

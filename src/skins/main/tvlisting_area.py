@@ -36,7 +36,7 @@ import config
 import math
 from area import Skin_Area, Geometry
 from skin_utils import *
-
+from skin import eval_attr
 
 class TVListing_Area(Skin_Area):
     """
@@ -389,7 +389,7 @@ class TVListing_Area(Skin_Area):
         if menuw.display_down_arrow and area.images['downarrow']:
             if isinstance(area.images['downarrow'].y, str):
                 v = copy.copy(area.images['downarrow'])
-                v.y = eval(v.y, {'MAX' : y0})
+                v.y = eval_attr(v.y, y0)
             else:
                 v = area.images['downarrow']
             self.drawimage(area.images['downarrow'].filename, v)
