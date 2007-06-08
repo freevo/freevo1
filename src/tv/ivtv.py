@@ -424,7 +424,7 @@ class IVTVCodec:
 
 
     def __str__(self):
-        res = 'aspect=%d, ' % self.aspect
+        res =  'aspect=%d, ' % self.aspect
         res += 'audio_bitmask=0x%0X, ' % self.audio_bitmask
         res += 'bframes=%d, ' % self.bframes
         res += 'bitrate_mode=%d, ' % self.bitrate_mode
@@ -448,25 +448,25 @@ if __name__ == '__main__':
 
     ivtv_dev = IVTV('/dev/video0')
     ivtv_dev.init_settings()
-    ivtv_dev.print_settings()
+    #ivtv_dev.print_settings()
 
-    print 'driver="%s"' % ivtv_dev.driver
-    print 'version=%x' % ivtv_dev.version
-    print config.TV_IVTV_OPTIONS
+    #print 'driver="%s"' % ivtv_dev.driver
+    #print 'version=%x' % ivtv_dev.version
+    #print config.TV_IVTV_OPTIONS
 
-    print ivtv_dev.print_settings()
-    #embed = ivtv_dev.getvbiembed()
-    #print "current vbi embed=%s" % embed
-    #ivtv_dev.setvbiembed(1)
-    #print "set vbi embed=%s (%s)" % (ivtv_dev.getvbiembed(), 1)
-    #ivtv_dev.setvbiembed(embed)
-    #print "reset vbi embed=%s (%s)" % (ivtv_dev.getvbiembed(), embed)
+    #print ivtv_dev.print_settings()
+    ##embed = ivtv_dev.getvbiembed()
+    ##print "current vbi embed=%s" % embed
+    ##ivtv_dev.setvbiembed(1)
+    ##print "set vbi embed=%s (%s)" % (ivtv_dev.getvbiembed(), 1)
+    ##ivtv_dev.setvbiembed(embed)
+    ##print "reset vbi embed=%s (%s)" % (ivtv_dev.getvbiembed(), embed)
 
+    ##print ivtv_dev.getCodecInfo()
+    #codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 15, 1, 0, 10))
+    #print 'codec:', codec
+    #ivtv_dev.setCodecInfo(codec)
     #print ivtv_dev.getCodecInfo()
-    codec = IVTVCodec((2, 0x00e9, 3, 0, 8000000, 9600000, 0, 0, 8, 0, 0, 15, 1, 0, 10))
-    print 'codec:', codec
-    ivtv_dev.setCodecInfo(codec)
-    print ivtv_dev.getCodecInfo()
 
 '''
 To run this as standalone use the following before running python ivtv.py

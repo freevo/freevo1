@@ -220,7 +220,7 @@ class Videodev:
 
 
     def getdriver(self):
-        return self.driver
+        return self.driver.strip('\0')
 
 
     def getversion(self):
@@ -482,6 +482,7 @@ class Videodev:
 
     def printcontrol(self, res):
         (id, type, name, min, max, step, default, flags, value) = res
+        #name = self.ctrlname(name)
         if flags & 0x0001:
             return
         if type == V4L2_CTRL_TYPE_CTRL_CLASS:
@@ -494,6 +495,12 @@ class Videodev:
             for i in range(min,max+1):
                 (id, index, name, res1) = self.querymenu(id, i)
                 print 'index=%d, name=\"%s\"' % (index, name)
+
+
+    def ctrlname(self, name):
+        ''' converts a control to lowercase and replaces spaces with dashes
+        '''
+        return name.replace(' ', '-').lower()
 
 
     def listcontrols(self):
@@ -528,6 +535,7 @@ class Videodev:
                 if flags == V4L2_CTRL_FLAG_DISABLED:
                     id = res[0] | V4L2_CTRL_FLAG_NEXT_CTRL
                     continue
+                name = self.ctrlname(name)
                 self.controls[name] = res
                 id = res[0] | V4L2_CTRL_FLAG_NEXT_CTRL
             except IOError, e:
@@ -540,10 +548,12 @@ class Videodev:
             try:
                 res = self.queryctrl(id)
                 (id, type, name, min, max, step, default, flags, value) = res
+                name = self.ctrlname(name)
                 if flags & V4L2_CTRL_FLAG_DISABLED:
                     continue
             except IOError, e:
                 break
+        print '%r' % self.controls
         return self.controls
 
 
@@ -561,6 +571,7 @@ class Videodev:
         '''
         get the control record by name
         '''
+        name = self.ctrlname(name)
         if not self.controls.has_key(name):
             print 'control \"%s\" does not exists' % (name)
             return None
@@ -572,6 +583,7 @@ class Videodev:
         '''
         get the control record by name
         '''
+        name = self.ctrlname(name)
         if not self.controls.has_key(name):
             print 'control \"%s\" does not exists' % (name)
             return None
@@ -586,15 +598,14 @@ class Videodev:
 
 
     def updatecontrol(self, name, value):
+        ''' set the control record by name
         '''
-        set the control record by name
-        '''
-        if not self.getcontrol(name):
-            print '\"%s\" not found' % (name)
+        name = self.ctrlname(name)
+        if self.getcontrol(name) == None:
             return
 
         oldvalue = self.getcontrol(name)
-        if DEBUG >= 1: print '\"%s\", value %d->%d' % (name, oldvalue, value)
+        if DEBUG >= 1: print '%-30s: value %d->%d' % ('"'+name+'"', oldvalue, value)
         if value == oldvalue:
             return
 
@@ -603,6 +614,8 @@ class Videodev:
 
 
     def init_settings(self):
+        ''' initialise the IVTV setting
+        '''
         (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
         v_norm = string.upper(v_norm)
         self.setstd(NORMS.get(v_norm))
@@ -614,16 +627,16 @@ class Videodev:
 
 
     def print_settings(self):
-        print 'Driver: %s' % self.driver
-        print 'Card: %s' % self.card
-        print 'Version: %x' % self.version
-        print 'Capabilities: %s' % self.capabilities
+        print 'Driver: %s' % self.driver.strip('\0')
+        print 'Card: %s' % self.card.strip('\0')
+        print 'Version: %02d.%02d' % (self.version / 256, self.version % 256)
+        print 'Capabilities: 0x%08x' % int(self.capabilities)
 
         print "Enumerating supported Standards."
         try:
             for i in range(0,255):
                 (index,id,name,junk,junk,junk) = self.enumstd(i)
-                print "  %i: 0x%x %s" % (index, id, name)
+                print "  %i: 0x%x %s" % (index, id, name.strip('\0'))
         except:
             pass
         print "Current Standard is: 0x%x" % self.getstd()
@@ -632,7 +645,7 @@ class Videodev:
         try:
             for i in range(0,255):
                 (index,name,type,audioset,tuner,std,status) = self.enuminput(i)
-                print "  %i: %s" % (index, name)
+                print "  %i: %s" % (index, name.strip('\0'))
         except:
             pass
         print "Input: %i" % self.getinput()
@@ -667,112 +680,114 @@ class V4LGroup:
 if __name__ == '__main__':
 
     DEBUG = 0
+
     viddev=Videodev('/dev/video0')
     print 'Driver = \"%s\"' % viddev.getdriver()
-    print 'Driver Version = %x' % viddev.getversion()
-    #print viddev.querycap()
-    inp = viddev.getinput()
-    viddev.setinput(inp)
-    print 'querycap:', viddev.querycap()
-    fmt = viddev.getstd()
-    print 'fmt:', fmt
-    std = viddev.getfmt()
-    print 'std:', std
-    viddev.setfmt(720, 576)
-    std = viddev.getfmt()
-    print 'std:', std
-    print 'CONTROLS'
-    viddev.listcontrols()
-    dict = viddev.getcontrols()
-    viddev.setextctrl(0x009909c9, 2)
-    print '0x009909c9 = %d' % viddev.getextctrl(0x009909c9)
-    viddev.setextctrl(0x009909cf, 7000000)
-    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
-    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
-    try:
-        bitrate = viddev.getcontrol('Video Bitrate')
-        viddev.updatecontrol('Video Bitrate', bitrate+1)
-        print 'Video Bitrate = %d' % viddev.getcontrol('Video Bitrate')
-    except:
-        pass
-    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
-    print 'SIZES'
-    print 'QUERYCAP_ST=%s %s' % (QUERYCAP_ST, struct.calcsize(QUERYCAP_ST))
-    print 'FREQUENCY_ST=%s %s' % (FREQUENCY_ST, struct.calcsize(FREQUENCY_ST))
-    print 'ENUMSTD_ST=%s %s' % (ENUMSTD_ST, struct.calcsize(ENUMSTD_ST))
-    print 'STANDARD_ST=%s %s' % (STANDARD_ST, struct.calcsize(STANDARD_ST))
-    print 'ENUMINPUT_ST=%s %s' % (ENUMINPUT_ST, struct.calcsize(ENUMINPUT_ST))
-    print 'INPUT_ST=%s %s' % (INPUT_ST, struct.calcsize(INPUT_ST))
-    print 'FMT_ST=%s %s' % (FMT_ST, struct.calcsize(FMT_ST))
-    print 'TUNER_ST=%s %s' % (TUNER_ST, struct.calcsize(TUNER_ST))
-    print 'AUDIO_ST=%s %s' % (AUDIO_ST, struct.calcsize(AUDIO_ST))
-    print 'EXT_CTRL_ST=%s %s' % (EXT_CTRL_ST, struct.calcsize(EXT_CTRL_ST))
-    print 'EXT_CTRLS_ST=%s %s' % (EXT_CTRLS_ST, struct.calcsize(EXT_CTRLS_ST))
-
-    '''
-    viddev=Videodev('/dev/video0')
+    print 'Driver Version = %02d.%02d' % (viddev.getversion() / 256, viddev.getversion() % 256)
     viddev.print_settings()
-    print
-    print viddev.querycap()
-    inp = viddev.getinput()
-    print 'viddev.getinput=%s' % (inp)
-    viddev.setinput(inp)
-    print 'viddev.setinput okay'
-    fmt = viddev.getfmt()
-    (buf_type, width, height, pixelformat, field, bytesperline,
-         sizeimage, colorspace) = fmt
-    print 'viddev.getfmt=%s' % (buf_type)
-    print viddev.enuminput(inp)
-    for i in range(0,99):
-        try:
-            print viddev.gettuner(i)
-        except IOError:
-            break
-    print viddev.getaudio(0)
-    print viddev.setfreq(2132)
-    print viddev.getfreq()
-    print viddev.setfreq(8948)
-    print viddev.getfreq()
-    print viddev.getfreq2()
+    #viddev.listcontrols()
+    #dict = viddev.getcontrols()
+    #keys = list(dict)
+    #keys.sort()
+    #print keys
+    #for ctrl in keys:
+    #    print '%-28s : %r' % (ctrl, dict[ctrl],)
 
-    DEBUG=0
-    viddev.listcontrols()
-    dict = viddev.getcontrols()
-    keys = list(dict)
-    keys.sort()
-    print keys
-    for ctrl in keys:
-        print dict[ctrl]
-    viddev.setextctrl(0x009909c9, 2)
-    print '0x009909c9 = %d' % viddev.getextctrl(0x009909c9)
-    viddev.setextctrl(0x009909cf, 7000000)
-    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
-    bitrate = viddev.getcontrol('Video Bitrate')
-    viddev.updatecontrol('Video Bitrate', bitrate+1)
-    print 'Video Bitrate = %d' % viddev.getcontrol('Video Bitrate')
-    print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+    ##print viddev.querycap()
+    #inp = viddev.getinput()
+    #viddev.setinput(inp)
+    #print 'querycap:', viddev.querycap()
+    #fmt = viddev.getstd()
+    #print 'fmt:', fmt
+    #std = viddev.getfmt()
+    #print 'std:', std
+    #viddev.setfmt(720, 576)
+    #std = viddev.getfmt()
+    #print 'std:', std
+    #print 'CONTROLS'
+    #viddev.listcontrols()
+    #dict = viddev.getcontrols()
+    #viddev.setextctrl(0x009909c9, 2)
+    #print '0x009909c9 = %d' % viddev.getextctrl(0x009909c9)
+    #viddev.setextctrl(0x009909cf, 7000000)
+    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+    #try:
+        #bitrate = viddev.getcontrol('Video Bitrate')
+        #viddev.updatecontrol('Video Bitrate', bitrate+1)
+        #print 'Video Bitrate = %d' % viddev.getcontrol('Video Bitrate')
+    #except:
+        #pass
+    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+    #print 'SIZES'
+    #print 'QUERYCAP_ST=%s %s' % (QUERYCAP_ST, struct.calcsize(QUERYCAP_ST))
+    #print 'FREQUENCY_ST=%s %s' % (FREQUENCY_ST, struct.calcsize(FREQUENCY_ST))
+    #print 'ENUMSTD_ST=%s %s' % (ENUMSTD_ST, struct.calcsize(ENUMSTD_ST))
+    #print 'STANDARD_ST=%s %s' % (STANDARD_ST, struct.calcsize(STANDARD_ST))
+    #print 'ENUMINPUT_ST=%s %s' % (ENUMINPUT_ST, struct.calcsize(ENUMINPUT_ST))
+    #print 'INPUT_ST=%s %s' % (INPUT_ST, struct.calcsize(INPUT_ST))
+    #print 'FMT_ST=%s %s' % (FMT_ST, struct.calcsize(FMT_ST))
+    #print 'TUNER_ST=%s %s' % (TUNER_ST, struct.calcsize(TUNER_ST))
+    #print 'AUDIO_ST=%s %s' % (AUDIO_ST, struct.calcsize(AUDIO_ST))
+    #print 'EXT_CTRL_ST=%s %s' % (EXT_CTRL_ST, struct.calcsize(EXT_CTRL_ST))
+    #print 'EXT_CTRLS_ST=%s %s' % (EXT_CTRLS_ST, struct.calcsize(EXT_CTRLS_ST))
 
-    stream_type = 4
-    viddev.updatecontrol('Stream Type', stream_type)
-    #viddev.setcontrol('Stream Type', stream_type)
-    #viddev.setextctrl(0x00990900, stream_type)
-    print 'Stream Type = %d' % viddev.getcontrol('Stream Type')
-    print '0x00990900 = %d' % viddev.getextctrl(0x00990900)
-    DEBUG=4
-    print 'getfreq:', viddev.getfreq()
-    '''
+    #'''
+    #viddev=Videodev('/dev/video0')
+    #print
+    #print viddev.querycap()
+    #inp = viddev.getinput()
+    #print 'viddev.getinput=%s' % (inp)
+    #viddev.setinput(inp)
+    #print 'viddev.setinput okay'
+    #fmt = viddev.getfmt()
+    #(buf_type, width, height, pixelformat, field, bytesperline,
+         #sizeimage, colorspace) = fmt
+    #print 'viddev.getfmt=%s' % (buf_type)
+    #print viddev.enuminput(inp)
+    #for i in range(0,99):
+        #try:
+            #print viddev.gettuner(i)
+        #except IOError:
+            #break
+    #print viddev.getaudio(0)
+    #print viddev.setfreq(2132)
+    #print viddev.getfreq()
+    #print viddev.setfreq(8948)
+    #print viddev.getfreq()
+    #print viddev.getfreq2()
+
+    #DEBUG=0
+    #viddev.setextctrl(0x009909c9, 2)
+    #print '0x009909c9 = %d' % viddev.getextctrl(0x009909c9)
+    #viddev.setextctrl(0x009909cf, 7000000)
+    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+    #bitrate = viddev.getcontrol('Video Bitrate')
+    #viddev.updatecontrol('Video Bitrate', bitrate+1)
+    #print 'Video Bitrate = %d' % viddev.getcontrol('Video Bitrate')
+    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
+
+    #stream_type = 4
+    #viddev.updatecontrol('Stream Type', stream_type)
+    ##viddev.setcontrol('Stream Type', stream_type)
+    ##viddev.setextctrl(0x00990900, stream_type)
+    #print 'Stream Type = %d' % viddev.getcontrol('Stream Type')
+    #print '0x00990900 = %d' % viddev.getextctrl(0x00990900)
+    #DEBUG=4
+    #print 'getfreq:', viddev.getfreq()
+    #'''
 
     viddev.close()
 
-'''
-To run this as standalone use the following before running python v4l2.py
-pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
-export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
-export FREEVO_SHARE=/usr/share/freevo
-export FREEVO_CONFIG=/usr/share/freevo/freevo_config.py
-export FREEVO_CONTRIB=/usr/share/freevo/contrib
-export RUNAPP=""
-python v4l2.py
-OR
-freevo execute v4l2.py
-'''
+#'''
+#To run this as standalone use the following before running python v4l2.py
+#pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
+#export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
+#export FREEVO_SHARE=/usr/share/freevo
+#export FREEVO_CONFIG=/usr/share/freevo/freevo_config.py
+#export FREEVO_CONTRIB=/usr/share/freevo/contrib
+#export RUNAPP=""
+#python v4l2.py
+#OR
+#freevo execute v4l2.py
+#'''
