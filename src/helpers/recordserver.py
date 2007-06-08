@@ -50,7 +50,7 @@ if __name__ == '__main__':
     except Exception, e:
         print e
 
-from twisted.web import xmlrpc, server
+from twisted.web import xmlrpc, server, sux
 from twisted.internet.app import Application
 from twisted.internet import reactor
 from twisted.python import log
@@ -107,6 +107,8 @@ __builtin__.__dict__['_debug_']= _debug_function_
 
 
 logfile = '%s/%s-%s.log' % (config.LOGDIR, appname, os.getuid())
+sys.stdout = open(logfile, 'a')
+sys.stderr = sys.stdout
 
 logging.getLogger('').setLevel(LOGGING)
 logging.basicConfig(level=LOGGING, \
@@ -251,9 +253,13 @@ class RecordServer(xmlrpc.XMLRPC):
                     _debug_('exception=%r' % e, config.DERROR)
                     pass
 
-            f = open(config.TV_RECORD_SCHEDULE, 'r')
-            scheduledRecordings = unjellyFromXML(f)
-            f.close()
+            try:
+                f = open(config.TV_RECORD_SCHEDULE, 'r')
+                scheduledRecordings = unjellyFromXML(f)
+                f.close()
+            except sux.ParseError, e:
+                _debug_('"%s" is invalid, removed' % (config.TV_RECORD_SCHEDULE), config.DWARNING)
+                os.unlink(config.TV_RECORD_SCHEDULE)
 
             try:
                 file_ver = scheduledRecordings.TYPES_VERSION
@@ -846,7 +852,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def checkToRecord(self):
-        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 1)
+        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 2)
         rec_cmd = None
         rec_prog = None
         cleaned = None
