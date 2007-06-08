@@ -76,7 +76,7 @@
       <listing y="140">
 	<image y="140" label="uparrow"/>
       </listing>
-      <info layout="tv info" y="440" height="150-buttonbar_height"/>
+      <info layout="tv info" y="440" height="150"/>
     </menuset>
 
     <menuset label="tv menu more info">
@@ -84,7 +84,7 @@
       <listing y="140">
 	<image y="140" label="uparrow"/>
       </listing>
-      <info layout="tv info" y="290" height="290-(buttonbar*(buttonbar_height-10))"/>
+      <info layout="tv info" y="290" height="290"/>
     </menuset>
 
     <!-- tv info area -->

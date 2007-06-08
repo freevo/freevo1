@@ -101,7 +101,7 @@
             <!-- 4. listing area: the list of all items -->
             <screen layout="video screen" visible="yes"/>
             <view layout="view" x="10" y="90" width="280" height="250" align="left"/>
-            <listing x="30" y="350" width="710" height="230-(buttonbar*(buttonbar_height-10))">
+            <listing x="30" y="350" width="710" height="230">
                 <image filename="up.png" label="uparrow" x="750" y="350"/>
                 <image filename="down.png" label="downarrow" x="750" y="max-32"/>
             </listing>
@@ -243,7 +243,7 @@
         <menuset label="audio" inherits="normal text style">
             <screen layout="audio screen"/>
             <view layout="view" x="15" y="90" width="280" height="300"/>
-            <info layout="audio info" x="28" y="370" width="273" height="190-(buttonbar*(buttonbar_height-30))"/>
+            <info layout="audio info" x="28" y="370" width="273" height="190"/>
         </menuset>
         
         <layout label="audio screen">
@@ -350,7 +350,7 @@
         <menuset label="image" inherits="normal text style">
             <screen layout="image screen"/>
             <listing y="80" x="60" height="430" width="700" layout="image list"/>
-            <info layout="image info" x="10" y="510" width="780" height="80-buttonbar_height"/>
+            <info layout="image info" x="10" y="510" width="780" height="80"/>
             <view visible="no"/>
         </menuset>
 
@@ -519,7 +519,7 @@
             <screen layout="screen" x="0" y="0" width="800" height="600"/>
             <title visible="no"/>
             <info layout="tv info" x="10" y="80" width="760" height="115"/>
-            <listing layout="tv listing" x="10" y="220" width="750" height="350-(buttonbar*(buttonbar_height-20))">
+            <listing layout="tv listing" x="10" y="220" width="750" height="350">
                 <image x="765" y="220" width="33" height="17" label="uparrow"
 	            filename="tv_up.png"/>
                 <image x="765" y="max-32" width="33" height="17" label="downarrow" 

@@ -209,7 +209,7 @@ Images: defaults to video/audio
 
 <!-- video ************************** -->
 <menuset label="video default" inherits="default textual">
- <info visible="yes" layout="video info" x="30" y="470" width="780" height="150-"/>
+ <info visible="yes" layout="video info" x="30" y="470" width="780" height="150"/>
 </menuset>
 
 <!-- MODE 0 -->
@@ -230,7 +230,7 @@ Images: defaults to video/audio
 
 <!-- audio **************************** -->
 <menuset label="audio default" inherits="default textual">
- <info visible="yes" layout="audio info" x="30" y="470" width="780" height="130-buttonbar_height"/>
+ <info visible="yes" layout="audio info" x="30" y="470" width="780" height="150"/>
 </menuset>
 
 <!-- MODE 0 -->
@@ -251,7 +251,7 @@ Images: defaults to video/audio
 
 <!-- image **************************** -->
 <menuset label="image default" inherits="default textual">
- <info visible="yes" layout="image info" x="30" y="470" width="780" height="130-buttonbar_height"/>
+ <info visible="yes" layout="image info" x="30" y="470" width="780" height="150"/>
 </menuset>
 
 <!-- MODE 0 -->
@@ -272,7 +272,7 @@ Images: defaults to video/audio
 
 <!-- mail ***************************** -->
 <menuset label="mail default" inherits="default textual">
- <info visible="yes" layout="mail info" x="30" y="470" width="780" height="130-buttonbar_height"/>
+ <info visible="yes" layout="mail info" x="30" y="470" width="780" height="150"/>
 </menuset>
 
 <menuset label="mail textual" inherits="mail default">

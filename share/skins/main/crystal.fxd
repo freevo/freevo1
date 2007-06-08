@@ -120,13 +120,13 @@
     <!-- default description: make listing area smaller, show info area -->
     <menuset label="default description">
       <listing height="340"/>
-      <info x="40" y="460" width="750" height="120-buttonbar_height" />
+      <info x="40" y="460" width="750" height="120" />
     </menuset>
 
     <!-- default description no image: mix between the two above -->
     <menuset label="default description no image">
       <listing height="340"/>
-      <info x="40" y="460" width="750" height="120-buttonbar_height" />
+      <info x="40" y="460" width="750" height="120" />
     </menuset>
     
     <!-- special settings for audio. The default style is an image based style -->
@@ -164,13 +164,13 @@
     <menuset label="video details" inherits="normal text style">
       <subtitle layout="subtitle" x="10" y="100" width="780" height="60"/>
 
-      <listing layout="video list" x="500" y="450" width="290" height="140-buttonbar_height">
+      <listing layout="video list" x="500" y="450" width="290" height="140">
 	<image label="uparrow" filename=""/>
 	<image label="downarrow" filename=""/>
       </listing>
 
       <view x="545" y="150"/>
-      <info layout="video info" x="10" y="160" width="480" height="430-buttonbar_height"/>
+      <info layout="video info" x="10" y="160" width="480" height="430"/>
     </menuset>
 
 
@@ -245,7 +245,7 @@
       <listing y="140">
 	<image y="140" label="uparrow"/>
       </listing>
-      <info layout="tv info" y="440" height="150-buttonbar_height"/>
+      <info layout="tv info" y="440" height="150"/>
     </menuset>
 
     <layout label="tv screen">
@@ -261,7 +261,7 @@
       <listing y="140">
 	<image y="140" label="uparrow"/>
       </listing>
-      <info layout="tv info" y="290" height="290-buttonbar_height"/>
+      <info layout="tv info" y="290" height="290"/>
     </menuset>
 
     <!-- tv info area -->

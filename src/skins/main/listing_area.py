@@ -33,7 +33,6 @@ import copy
 
 from area import Skin_Area
 from skin_utils import *
-from skin import eval_attr
 import config
 
 class Listing_Area(Skin_Area):
@@ -469,7 +468,7 @@ class Listing_Area(Skin_Area):
             if menuw.menu_items[-1] != menu.choices[-1] and area.images['downarrow']:
                 if isinstance(area.images['downarrow'].y, str):
                     v = copy.copy(area.images['downarrow'])
-                    v.y = eval_attr(v.y, (item_y0-vskip))
+                    v.y = eval(v.y, {'MAX':(item_y0-vskip)})
                 else:
                     v = area.images['downarrow']
                 self.drawimage(area.images['downarrow'].filename, v)

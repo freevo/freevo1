@@ -53,36 +53,6 @@ FXD_FORMAT_VERSION = 2
 #
 # Help functions
 #
-attr_global_dict = None
-
-def eval_attr(attr_value):
-    """
-    Returns attr_value if it is not a string or evaluates it substituting max 
-    for 'MAX' or 'max' in the attr_value string.
-    """
-    global attr_global_dict
-    
-    if attr_global_dict is None:
-        attr_global_dict = {}
-            
-        # Setup idlebar related values
-        p = plugin.getbyname('idlebar')
-        if p:
-            attr_global_dict['idlebar'] = 1
-            attr_global_dict['idlebar_height'] = 60
-        else:
-            attr_global_dict['idlebar'] = 0
-            attr_global_dict['idlebar_height'] = 0
-        
-        # Setup buttonbar related values
-        p = plugin.getbyname('buttonbar')
-        if p:
-            attr_global_dict['buttonbar'] = 1
-            attr_global_dict['buttonbar_height'] = 60
-        else:
-            attr_global_dict['buttonbar'] = 0
-            attr_global_dict['buttonbar_height'] = 0
-    return eval(attr_value, attr_global_dict)
 
 
 def attr_int(node, attr, default, scale=0.0):
@@ -94,12 +64,37 @@ def attr_int(node, attr, default, scale=0.0):
             val = node.attrs[('', attr)]
             if val == 'line_height':
                 return -1
- 
+            new_val = ''
+
+            while val:
+                ppos = val[1:].find('+') + 1
+                mpos = val[1:].find('-') + 1
+                if ppos and mpos:
+                    pos = min(ppos, mpos)
+                elif ppos or mpos:
+                    pos = max(ppos, mpos)
+                else:
+                    pos = len(val)
+
+                try:
+                    i = int(round(scale*int(val[:pos])))
+                    if i < 0:
+                        new_val += str(i)
+                    else:
+                        new_val += '+' + str(i)
+                except ValueError:
+                    if val[:pos].upper() in ( '+MAX', 'MAX', '-MAX' ):
+                        new_val += val[:pos].upper()
+                    elif val[:pos].lower() in ( '+font_h', 'font_h', '-font_h' ):
+                        new_val += val[:pos].lower()
+                    else:
+                        print 'WARNING: unsupported value %s' % val[:pos]
+                val = val[pos:]
+
             try:
-                value = eval(val)
-                return int(round(scale * value))
-            except:
-                return 'int(round(((%s) * %f)))' % (str(val), scale)
+                return int(new_val)
+            except ValueError:
+                return str(new_val)
 
     except ValueError:
         pass
@@ -331,14 +326,6 @@ class XML_data:
         basic prepare function
         """
         try:
-            for c in self.content:               
-                if XML_types[c][0] == 'int' and isinstance(getattr(self,c), str):
-                    try:
-                        result = eval_attr(getattr(self, c))
-                        setattr(self, c, result)
-                    except:
-                        pass
-                
             if self.visible not in ('', 'yes'):
                 if len(self.visible) > 4 and self.visible[:4] == 'not ':
                     p = plugin.getbyname(self.visible[4:])
@@ -951,8 +938,6 @@ class XMLSkin:
 
 
     def prepare(self):
-        global attr_global_dict
-        attr_global_dict = None
         self.prepared = True
         self.sets     = copy.deepcopy(self._sets)
 

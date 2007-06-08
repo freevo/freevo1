@@ -57,7 +57,6 @@ import config
 import util
 
 from skin_utils import *
-from skin import eval_attr
 import xml_skin
 import screen
 
@@ -367,10 +366,10 @@ class Skin_Area:
         font_h=0
 
         if isinstance(object.width, str):
-            object.width = int(eval_attr(object.width, self.area_val.width))
+            object.width = int(eval(object.width, {'MAX':self.area_val.width}))
 
         if isinstance(object.height, str):
-            object.height = int(eval_attr(object.height, self.area_val.height))
+            object.height = int(eval(object.height, {'MAX':self.area_val.height}))
 
         object.x += self.area_val.x
         object.y += self.area_val.y
@@ -399,9 +398,9 @@ class Skin_Area:
 
         # get the x and y value, based on MAX
         if isinstance(r.x, str):
-            r.x = int(eval_attr(r.x, item_w))
+            r.x = int(eval(r.x, {'MAX':item_w}))
         if isinstance(r.y, str):
-            r.y = int(eval_attr(r.y, item_h))
+            r.y = int(eval(r.y, {'MAX':item_h}))
 
         # set rect width and height to something
         if not r.width:
@@ -412,10 +411,10 @@ class Skin_Area:
 
         # calc width and height based on MAX settings
         if isinstance(r.width, str):
-            r.width = int(eval_attr(r.width, item_w))
+            r.width = int(eval(r.width, {'MAX':item_w}))
 
         if isinstance(r.height, str):
-            r.height = int(eval_attr(r.height, item_h))
+            r.height = int(eval(r.height, {'MAX':item_h}))
 
         # correct item_w and item_h to fit the rect
         item_w = max(item_w, r.width)

@@ -42,7 +42,6 @@
 # -----------------------------------------------------------------------
 
 
-import plugin
 import config
 import sys
 import os.path
@@ -85,43 +84,6 @@ def active():
     """
     return not _singleton.force_redraw
 
-def eval_attr(attr_value, max):
-    """
-    Returns attr_value if it is not a string or evaluates it substituting max 
-    for 'MAX' or 'max' in the attr_value string.
-    """
-    if isinstance(attr_value,str):
-        global attr_global_dict
-        if attr_global_dict is None:
-            attr_global_dict = {}
-            
-            # Setup idlebar related values
-            p = plugin.getbyname('idlebar')
-            if p:
-                attr_global_dict['idlebar'] = 1
-                attr_global_dict['idlebar_height'] = 60
-            else:
-                attr_global_dict['idlebar'] = 0
-                attr_global_dict['idlebar_height'] = 0
-            
-            # Setup buttonbar related values
-            p = plugin.getbyname('buttonbar')
-            if p:
-                attr_global_dict['buttonbar'] = 1
-                attr_global_dict['buttonbar_height'] = 60
-            else:
-                attr_global_dict['buttonbar'] = 0
-                attr_global_dict['buttonbar_height'] = 0
-        # Set max values
-        if max is not None:
-            attr_global_dict['MAX'] = max
-            attr_global_dict['max'] = max
-        
-        return eval(attr_value, attr_global_dict)
-    
-    return attr_value
-
-attr_global_dict = None
 
 if __freevo_app__ == 'main':
     # init the skin
