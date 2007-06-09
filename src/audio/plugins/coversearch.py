@@ -124,25 +124,25 @@ class PluginInterface(plugin.ItemPlugin):
         if item.type == 'audio' and item.filename \
         and vfs.isfile(os.path.join(os.path.join(os.path.dirname(item.filename),
                                                 'cover.jpg'))):
+            _debug_('"%s" has a cover' % (item.filename), 1)
             return []
 
         if item.type in ('audio', 'audiocd', 'dir'):
             if config.DEBUG > 0:
-                print 'coversearch'
-                print 'type=\"%s\"' % item.type
-                print 'name=\"%s\"' % item['name']
+                _debug_('type=\"%s\"' % item.type, 2)
+                _debug_('name=\"%s\"' % item['name'], 2)
                 try:
-                    print 'artist=\"%s\"' % item.getattr('artist')
+                    _debug_('artist=\"%s\"' % item.getattr('artist'), 2)
                 except:
-                    print 'NO artist'
+                    _debug_('NO artist', 2)
                 try:
-                    print 'album=\"%s\"' % item.getattr('album')
+                    _debug_('album=\"%s\"' % item.getattr('album'), 2)
                 except:
-                    print 'NO album'
+                    _debug_('NO album', 2)
                 try:
-                    print 'title=\"%s\"' % item.getattr('title')
+                    _debug_('title=\"%s\"' % item.getattr('title'), 2)
                 except:
-                    print 'NO title'
+                    _debug_('NO title', 2)
 
             try:
                 # use title for audicds and album for normal data
