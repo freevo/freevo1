@@ -37,7 +37,7 @@ import util
 import skin
 import rc
 
-from audio import sounds
+from gui import sounds
 from event import *
 from item import Item
 from gui import GUIObject, AlertBox
