@@ -191,7 +191,7 @@ class Xine:
         return None
 
 
-    def stop(self):
+    def stop(self, event=None):
         '''
         Stop xine
         '''
@@ -199,19 +199,21 @@ class Xine:
         if not self.app:
             return
 
-        command = "%s -S get_time --stdctl --no-splash --hide-gui " % config.CONF.xine
-        handle = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE )
-        (cin, cout) = (handle.stdin, handle.stdout)
-        try:
-            position = cout.read();
-            _debug_("Elapsed = %s" % position)
-            if position:
-                self.item.elapsed = int(position)
-        finally:
-            #xine should exit nicely, but if the first xine is already closed this xine will hang
-            exit_code = handle.poll()
-            if not exit_code:
-                cin.write('quit\n')
+        # if the file ends do nothing, else get elapsed time
+        if event in (STOP, USER_END):
+            command = "%s -S get_time --stdctl --no-splash --hide-gui " % config.CONF.xine
+            handle = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE )
+            (cin, cout) = (handle.stdin, handle.stdout)
+            try:
+                position = cout.read();
+                _debug_("Elapsed = %s" % position)
+                if position:
+                    self.item.elapsed = int(position)
+            finally:
+                #xine should exit nicely, but if the first xine is already closed this xine will hang
+                exit_code = handle.poll()
+                if not exit_code:
+                    cin.write('quit\n')
 
         self.app.stop('quit\n')
         rc.app(None)
@@ -227,7 +229,7 @@ class Xine:
             return self.item.eventhandler(event)
 
         if event in ( PLAY_END, USER_END ):
-            self.stop()
+            self.stop(event)
             return self.item.eventhandler(event)
 
         if event == PAUSE or event == PLAY:
@@ -235,7 +237,7 @@ class Xine:
             return True
 
         if event == STOP:
-            self.stop()
+            self.stop(event)
             return self.item.eventhandler(event)
 
         if event == SEEK:
