@@ -99,7 +99,7 @@ class DirItem(Playlist):
     class for handling directories
     """
     def __init__(self, directory, parent, name = '', display_type = None,
-                 add_args = None, create_metainfo=True):
+                 add_args = None, create_metainfo = True):
         self.autovars = [ ('num_dir_items', 0), ('show_all_items', False) ]
         Playlist.__init__(self, parent=parent, display_type=display_type)
         self.type = 'dir'
@@ -173,9 +173,11 @@ class DirItem(Playlist):
         self.modified_vars = []
 
         # Check for a cover in current dir
-        image = util.getimage(os.path.join(directory, 'cover'))
         if self.info['image']:
             image = self.info['image']
+        else:
+            image = util.getimage(os.path.join(directory, 'cover'))
+        # if we have an image then use it
         if image:
             self.image = image
             self.files.image = image

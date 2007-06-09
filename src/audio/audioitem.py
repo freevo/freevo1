@@ -80,7 +80,9 @@ class AudioItem(Item):
             def image_filter(x):
                 return re.match('.*(jpg|png)$', x, re.IGNORECASE)
             def cover_filter(x):
-                return re.search(config.AUDIO_COVER_REGEXP, x, re.IGNORECASE)
+                result = re.search(config.AUDIO_COVER_REGEXP, x, re.IGNORECASE)
+                if result: _debug_('cover_filter(%s): %r' % (x, result.group()), 2)
+                return result
 
             # Pick an image if it is the only image in this dir, or it matches
             # the configurable regexp

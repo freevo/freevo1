@@ -307,17 +307,15 @@ class Item:
         """
         store the key/value in metadata
         """
-        #if not self.filename:
-        #    return
+        _debug_('key=%s value=%s info-class=%s' % (key, value, self.info.__class__), 2)
+        if hasattr(self, 'filename'): _debug_('filename=%s' % (self.filename), 2)
 
         if isinstance(self.info, mediainfo.Info):
             if not self.info.store(key, value):
                 _debug_('cannot store \'%s\':\'%s\' for \'%s\'' % \
                     (key, value, self.filename), config.DINFO)
-                #print '%s : %s' % (dir(self), type(self))
-                _debug_('%s' % self.__dict__)
         else:
-            _debug_(u'cannot store \'%s\':\'%s\' for \'%s\' item' % \
+            _debug_('cannot store \'%s\':\'%s\' for \'%s\' item, not mediainfo' % \
                 (key, value, self.filename), config.DINFO)
 
 
