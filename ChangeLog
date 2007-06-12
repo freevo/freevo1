@@ -20,6 +20,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Added sounds to menu selection, enabled with OSD_SOUNDS_ENABLED (F#1732380)
  * Updated childapp to use subprocess instead of popen (F#1729597)
  * Updated local_conf.py.example with MPLAYER_HAS_FIELD_DOMINANCE (F#1729404)
+ * Updated skins to adjust the window heights when the button bar is active (F#1733061)
  * Updated system sensors for a configurable path (B#1731892)
  * Updated xine video plug-in to allow bookmarks to work (F#1729024)
  * Updated xine video plug-in to process stdout and stderr message (F#1729603)
@@ -30,6 +31,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed fxd parser's setattr not working correctly in all cases (B#1728421)
  * Fixed Panorama skin thumbnail (B#1731877)
  * Fixed recordings manager not deleting old video when the disk is full (B#1728182)
+ * Fixed recordserver causing stack traces when the record_schedule.xml is empty (B#1733192)
  * Fixed tv recordings manager not deleting files when out of space (B#1728182)
  * Fixed unicoding errors for media ids when there are Unicode (F#1731825)
 
