@@ -119,9 +119,9 @@ def eval_attr(attr_value, max):
             scaled_max = int(round(float(max) / scale))
             attr_global_dict['MAX'] = scaled_max
             attr_global_dict['max'] = scaled_max
-        
+
         return int(round(scale * eval(attr_str, attr_global_dict)))
-    
+
     return attr_value
 
 attr_global_dict = None
