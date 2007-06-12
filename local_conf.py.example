@@ -1658,8 +1658,11 @@ CACHE_IMAGES = 1
 # LOGGING = logging.DEBUG
 # RECORDSERVER_LOGGING = logging.DEBUG
 # DEBUG = 1
+# messages go to stdout
+# DEBUG_STDOUT = 0
+# messages from starting a child application
 # CHILDAPP_DEBUG = 1
-# MPLAYER_DEBUG = 1
+# timing messages
 # TIME_DEBUG = 0
 
 

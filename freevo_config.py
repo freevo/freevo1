@@ -588,11 +588,6 @@ USE_NETWORK = 1
 HOST_ALIVE_CHECK = 'ping -c 1 -W 1 %s > /dev/null 2>&1'
 
 #
-# store output of started processes for debug
-#
-CHILDAPP_DEBUG = 0
-
-#
 # Directory location to save files when the normal filesystem
 # doesn't allow saving. This directory can save covers and fxd files
 # for read only filesystems like ROM drives. Set this variable to your
@@ -1970,12 +1965,17 @@ FREEVO_EVENTHANDLER_SANDBOX = 1
 
 DIRECTORY_USE_STAT_FOR_CHANGES = True
 
-# Set to 1 to log mplayer output to ./mplayer_stdout.log and
-# ./mplayer_stderr.log
-MPLAYER_DEBUG = 0
+#
+# store output of started processes for debug
+# Set to 1 to log child application output to <app>_stdout.log and <app>_stderr.log
+#
+CHILDAPP_DEBUG = 0
 
 TIME_DEBUG = 0
 
 # The default logging level
 # can be one of CRITICAL (FATAL), ERROR, WARNING (WARN), INFO, DEBUG, NOTSET
-LOGGING = logging.WARNING
+LOGGING = logging.INFO
+
+# When logging is DEBUG or NOTSET then DEBUG level logs messages
+DEBUG = 0

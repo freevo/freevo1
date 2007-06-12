@@ -51,6 +51,11 @@ import locale
 import logging
 
 
+DINFO = 0
+DWARNING = -1
+DERROR = -2
+DCRITICAL = -3
+
 locale.setlocale(locale.LC_TIME,'')
 
 if float(sys.version[0:3]) >= 2.3:
@@ -59,8 +64,6 @@ if float(sys.version[0:3]) >= 2.3:
     warnings.simplefilter("ignore", category=DeprecationWarning)
 
 VERSION = version.__version__
-
-LOGGING = logging.WARNING
 
 # For Internationalization purpose
 # an exception is raised with Python 2.1 if LANG is unavailable.
@@ -99,28 +102,29 @@ class Logger:
         logging.basicConfig(level=LOGGING, \
             #datefmt='%a, %H:%M:%S',
             format='%(asctime)s %(levelname)-8s %(message)s', \
-            filename=logfile+'.log', filemode='a')
+            filename=logfile, filemode='a')
         self.logfile = logfile
-        try:
-            self.fp = open(logfile, 'a')
-        except IOError:
-            print 'Could not open logfile: %s' % logfile
-            self.fp = open('/dev/null','a')
-        self.softspace = 0
+        #try:
+        #    self.fp = open(logfile, 'a')
+        #except IOError:
+        #    print 'Could not open logfile: %s' % logfile
+        #    self.fp = open('/dev/null','a')
 
     def write(self, msg):
         global DEBUG_STDOUT
         if isinstance(msg, unicode):
             msg = msg.encode(LOCALE)
         if DEBUG_STDOUT:
-            sys.__stdout__.write(msg)
-        self.fp.write(msg)
-        self.fp.flush()
+            print >> sys.__stdout__, s
+            sys.__stdout__.flush
+            #sys.__stdout__.write(msg)
+        #self.fp.write(msg)
+        #self.fp.flush()
         return
 
     def log(self, msg):
-        self.fp.write(msg)
-        self.fp.flush()
+        #self.fp.write(msg)
+        #self.fp.flush()
         return
 
     def flush(self):
@@ -259,12 +263,13 @@ elif sys.argv[0].find('webserver.py') != -1:
 DEBUG_STDOUT = 1
 
 #
-# Debug all modules?
-# 0 = Debug output off
-# 1 = Some debug output
-# A higher number will generate more detailed output from some modules.
+# debugging messages are set by the logging level
+# except for higher debugging message levels
+# the DEBUG setting is overridden in local_conf.py
 #
 DEBUG = 0
+
+LOGGING = logging.DEBUG
 
 #
 # find the log directory
@@ -285,8 +290,9 @@ if not HELPER:
     sys.stderr = Logger(sys.argv[0] + ':stderr')
     ts = time.asctime(time.localtime(time.time()))
     sys.stdout.log('-' * 79 + '\n')
-    sys.stdout.log('Freevo (%s) start at %s\n' % (VERSION, ts))
+    sys.stdout.log('Freevo (%s) started at %s\n' % (VERSION, ts))
     sys.stdout.log('-' * 79 + '\n')
+
 
 def _stack_function_(message='', limit=None):
     import traceback
@@ -297,12 +303,13 @@ def _stack_function_(message='', limit=None):
         else:
             logging.debug('%s\n*** %s' % (message, '*** '.join(traceback.format_list(stack)[0:-1])))
 
-DINFO = 0
-DWARNING = -1
-DERROR = -2
-DCRITICAL = -3
 
 def _debug_function_(s, level=1):
+    '''The debug function that is mapped to the _debug_ builtin
+    There are different levels of debugging and logging. Debug messages
+    range from 1 (default) to 9 (most verbose), logging messages range
+    from NOTSET to DCRITICAL
+    '''
     if DEBUG < level:
         return
     try:
@@ -311,8 +318,11 @@ def _debug_function_(s, level=1):
         if isinstance( s, unicode ):
             s = s.encode(encoding, 'replace')
         s = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
-        # print debug message
-        print s
+        # print the message for info, warning, error and critical
+        if level <= DINFO and DEBUG_STDOUT:
+            sys.__stdout__.write(s+'\n')
+            sys.__stdout__.flush()
+        # log all the messages
         if level <= DCRITICAL:
             logging.critical(s)
         elif level == DERROR:
@@ -507,7 +517,7 @@ else:
 for dirname in cfgfilepath:
     overridefile = dirname + '/local_conf.py'
     if os.path.isfile(overridefile):
-        if DEBUG: print 'Loading cfg overrides: %s' % overridefile
+        _debug_('Loading cfg overrides: %s' % overridefile, DINFO)
         execfile(overridefile, globals(), locals())
 
         try:
@@ -562,9 +572,9 @@ if not HELPER:
         import version
         import revision
     logging.getLogger('').setLevel(LOGGING)
-    logging.warn('=' * 80)
-    logging.warn('Log opened for Freevo %s r%s' % (version.__version__, revision.__revision__))
-    logging.warn('-' * 80)
+    logging.info('=' * 80)
+    logging.info('Log opened for Freevo %s r%s' % (version.__version__, revision.__revision__))
+    logging.info('-' * 80)
 
 #
 # force fullscreen when freevo is it's own windowmanager
