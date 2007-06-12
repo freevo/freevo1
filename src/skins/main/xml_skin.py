@@ -32,6 +32,7 @@
 # some python stuff
 import os
 import copy
+import types
 import re
 import traceback
 import config
@@ -99,7 +100,7 @@ def attr_int(node, attr, default, scale=0.0):
                 value = eval(val)
                 return int(round(scale * value))
             except:
-                return 'int(%s)' % (str(val))
+                return ('int(%s)' % str(val), scale)
 
     except ValueError:
         pass
@@ -297,6 +298,8 @@ class XML_data:
         create all object variables for this type
         """
         self.content = content
+        self.ints_to_prepare = []
+
         for c in content:
             if XML_types[c][0] in ('str', 'file', 'font'):
                 setattr(self, c, '')
@@ -320,10 +323,12 @@ class XML_data:
                 if XML_types[c][1] == 3: this_scale = min(scale[0], scale[1])
 
                 if this_scale:
-                    e = 'attr_int(node, "%s", self.%s, %s)' % (c, c, this_scale)
+                    value = eval('attr_int(node, "%s", self.%s, %s)' % (c, c, this_scale))
+                    if isinstance(value, types.TupleType):
+                        self.ints_to_prepare.append(c)
                 else:
-                    e = 'attr_%s(node, "%s", self.%s)' % (XML_types[c][0], c, c)
-                setattr(self, c, eval(e))
+                    value = eval('attr_%s(node, "%s", self.%s)' % (XML_types[c][0], c, c))
+                setattr(self, c, value)
 
 
     def prepare(self):
@@ -331,13 +336,13 @@ class XML_data:
         basic prepare function
         """
         try:
-            for c in self.content:
-                if XML_types[c][0] == 'int' and isinstance(getattr(self,c), str):
-                    try:
-                        result = eval_attr(getattr(self, c))
-                        setattr(self, c, result)
-                    except:
-                        pass
+            for c in self.ints_to_prepare:
+                try:
+                    value,scale = getattr(self, c)
+                    result = int(round(scale * eval_attr(value) ))
+                    setattr(self, c,  result)
+                except:
+                    pass
 
             if self.visible not in ('', 'yes'):
                 if len(self.visible) > 4 and self.visible[:4] == 'not ':

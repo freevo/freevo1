@@ -30,7 +30,7 @@
 
 
 import copy
-
+import types
 import time
 import config
 import math
@@ -387,7 +387,7 @@ class TVListing_Area(Skin_Area):
         if menuw.display_up_arrow and area.images['uparrow']:
             self.drawimage(area.images['uparrow'].filename, area.images['uparrow'])
         if menuw.display_down_arrow and area.images['downarrow']:
-            if isinstance(area.images['downarrow'].y, str):
+            if isinstance(area.images['downarrow'].y, types.TupleType):
                 v = copy.copy(area.images['downarrow'])
                 v.y = eval_attr(v.y, y0)
             else:

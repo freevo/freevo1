@@ -30,6 +30,7 @@
 
 
 import copy
+import types
 
 from area import Skin_Area
 from skin_utils import *
@@ -467,7 +468,7 @@ class Listing_Area(Skin_Area):
             if menuw.menu_items[0] != menu.choices[0] and area.images['uparrow']:
                 self.drawimage(area.images['uparrow'].filename, area.images['uparrow'])
             if menuw.menu_items[-1] != menu.choices[-1] and area.images['downarrow']:
-                if isinstance(area.images['downarrow'].y, str):
+                if isinstance(area.images['downarrow'].y, types.TupleType):
                     v = copy.copy(area.images['downarrow'])
                     v.y = eval_attr(v.y, (item_y0-vskip))
                 else:

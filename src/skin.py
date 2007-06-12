@@ -45,6 +45,7 @@
 import plugin
 import config
 import sys
+import types
 import os.path
 
 _singleton = None
@@ -90,7 +91,7 @@ def eval_attr(attr_value, max):
     Returns attr_value if it is not a string or evaluates it substituting max
     for 'MAX' or 'max' in the attr_value string.
     """
-    if isinstance(attr_value,str):
+    if isinstance(attr_value,types.TupleType):
         global attr_global_dict
         if attr_global_dict is None:
             attr_global_dict = {}
@@ -112,13 +113,15 @@ def eval_attr(attr_value, max):
             else:
                 attr_global_dict['buttonbar'] = 0
                 attr_global_dict['buttonbar_height'] = 0
+        attr_str,scale = attr_value
         # Set max values
         if max is not None:
-            attr_global_dict['MAX'] = max
-            attr_global_dict['max'] = max
-
-        return eval(attr_value, attr_global_dict)
-
+            scaled_max = int(round(float(max) / scale))
+            attr_global_dict['MAX'] = scaled_max
+            attr_global_dict['max'] = scaled_max
+        
+        return int(round(scale * eval(attr_str, attr_global_dict)))
+    
     return attr_value
 
 attr_global_dict = None

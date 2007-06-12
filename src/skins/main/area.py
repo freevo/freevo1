@@ -51,6 +51,7 @@ import copy
 import os
 import pygame
 import stat
+import types
 
 import osd
 import config
@@ -366,10 +367,10 @@ class Skin_Area:
 
         font_h=0
 
-        if isinstance(object.width, str):
+        if isinstance(object.width, types.TupleType):
             object.width = int(eval_attr(object.width, self.area_val.width))
 
-        if isinstance(object.height, str):
+        if isinstance(object.height, types.TupleType):
             object.height = int(eval_attr(object.height, self.area_val.height))
 
         object.x += self.area_val.x
@@ -398,9 +399,9 @@ class Skin_Area:
         r = copy.copy(rectangle)
 
         # get the x and y value, based on MAX
-        if isinstance(r.x, str):
+        if isinstance(r.x, types.TupleType):
             r.x = int(eval_attr(r.x, item_w))
-        if isinstance(r.y, str):
+        if isinstance(r.y, types.TupleType):
             r.y = int(eval_attr(r.y, item_h))
 
         # set rect width and height to something
@@ -411,10 +412,10 @@ class Skin_Area:
             r.height = item_h
 
         # calc width and height based on MAX settings
-        if isinstance(r.width, str):
+        if isinstance(r.width, types.TupleType):
             r.width = int(eval_attr(r.width, item_w))
 
-        if isinstance(r.height, str):
+        if isinstance(r.height, types.TupleType):
             r.height = int(eval_attr(r.height, item_h))
 
         # correct item_w and item_h to fit the rect
