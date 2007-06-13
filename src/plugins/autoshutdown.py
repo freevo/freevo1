@@ -33,6 +33,7 @@
 import os
 import time
 import sys
+import glob
 import commands
 import config
 import plugin
@@ -49,6 +50,8 @@ DEBUG = config.DEBUG
 class ExInternalError : pass
 
 class ExNoRecordServer(Exception) : pass
+
+class ExRecordServerRemote(Exception): pass
 
 class ExNoDefaultWakeup(Exception) : pass
 
@@ -415,6 +418,8 @@ def is_shutdown_allowed():
         t = now + (config.AUTOSHUTDOWN_ALLOWED_IDLE_TIME*60) + 1
     except ExNoRecordServer:
         t = now + (config.AUTOSHUTDOWN_ALLOWED_IDLE_TIME*60) + 1
+    except ExRecordServerRemote:
+        t = now + (config.AUTOSHUTDOWN_ALLOWED_IDLE_TIME*60) + 1
     if (t - now < 0):
         raise ExRecordingInProgress
     if ((t - now) <= (config.AUTOSHUTDOWN_ALLOWED_IDLE_TIME*60)):
@@ -443,6 +448,9 @@ def get_next_wakeup():
             scheduled_utc_s = __get_scheduled_recording(i)
         except ExNoRecordServer:
             _debug_("Record serer is down")
+            break
+        except ExRecordServerRemote:
+            _debug_("Record serer is remote")
             break
         except ExIndexNotAvailable:
             _debug_("No more recordings available")
@@ -618,6 +626,21 @@ def __cleanup_freevo():
         osd.clearscreen(color=osd.COL_BLACK)
         osd.shutdown()
 
+# -----------------------------------------------------------
+# __is_recordserver_remote
+# See if the recordserver is on this local machine
+# -----------------------------------------------------------
+# Input:    None
+# Result:   True/False
+# -----------------------------------------------------------
+def __is_recordserver_remote():
+    if len(glob.glob('/var/run/recordserver*.pid'))>0:
+        return False
+    elif len(glob.glob('/tmp/recordserver*.pid'))>0:
+        return False
+    else:
+        return True
+
 
 # -----------------------------------------------------------
 # __get_scheduled_recording
@@ -626,11 +649,14 @@ def __cleanup_freevo():
 # Input:    index 0..n
 # Result:   UTC time of next recording
 # Raises:   ExNoRecordServer if the recordserver is down
+#           ExRecordServerRemote if the recordserver is on
+#                                a different machine
 #           ExIndexNotAvailable
 # -----------------------------------------------------------
 def __get_scheduled_recording(index):
+    if __is_recordserver_remote():
+        raise ExRecordServerRemote
     try:
-        #(result, response) = record_client.updateFavoritesSchedule()
         (result, schedule) = record_client.getScheduledRecordings()
     except:
         raise ExNoRecordServer
