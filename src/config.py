@@ -42,7 +42,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, os, time, re, string, pwd
+import sys, os, time, re, string, pwd, thread
 import setup_freevo
 import traceback
 import __builtin__
@@ -286,6 +286,7 @@ else:
 # Redirect stdout and stderr to stdout and /tmp/freevo.log
 #
 if not HELPER:
+    lock = thread.allocate_lock()
     sys.stdout = Logger(sys.argv[0] + ':stdin')
     sys.stderr = Logger(sys.argv[0] + ':stderr')
     ts = time.asctime(time.localtime(time.time()))
@@ -312,29 +313,36 @@ def _debug_function_(s, level=1):
     '''
     if DEBUG < level:
         return
+    global lock
+    lock.acquire()
     try:
-        # add the current trace to the string
-        where =  traceback.extract_stack(limit = 2)[0]
-        if isinstance( s, unicode ):
-            s = s.encode(encoding, 'replace')
-        s = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
-        # print the message for info, warning, error and critical
-        if level <= DINFO and DEBUG_STDOUT:
-            sys.__stdout__.write(s+'\n')
-            sys.__stdout__.flush()
-        # log all the messages
-        if level <= DCRITICAL:
-            logging.critical(s)
-        elif level == DERROR:
-            logging.error(s)
-        elif level == DWARNING:
-            logging.warning(s)
-        elif level == DINFO:
-            logging.info(s)
-        else:
-            logging.debug(s)
-    except UnicodeEncodeError:
-        print "_debug_ failed."
+        try:
+            # add the current trace to the string
+            if isinstance( s, unicode ):
+                s = s.encode(encoding, 'replace')
+            where =  traceback.extract_stack(limit = 2)[0]
+            msg = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
+            # log all the messages
+            if level <= DCRITICAL:
+                logging.critical(msg)
+            elif level == DERROR:
+                logging.error(msg)
+            elif level == DWARNING:
+                logging.warning(msg)
+            elif level == DINFO:
+                logging.info(msg)
+            else:
+                logging.debug(msg)
+            # print the message for info, warning, error and critical
+            if level <= DINFO and DEBUG_STDOUT:
+                sys.__stdout__.write('%s\n' % (msg))
+                sys.__stdout__.flush()
+        except UnicodeEncodeError:
+            print "_debug_ failed. %r" % msg
+        except Exception, e:
+            print "_debug_ failed: %r" % e
+    finally:
+        lock.release()
 
 
 __builtin__.__dict__['_debug_']= _debug_function_

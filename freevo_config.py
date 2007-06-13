@@ -1976,6 +1976,10 @@ TIME_DEBUG = 0
 # The default logging level
 # can be one of CRITICAL (FATAL), ERROR, WARNING (WARN), INFO, DEBUG, NOTSET
 LOGGING = logging.INFO
+WEBSERVER_LOGGING = logging.INFO
+RECORDSERVER_LOGGING = logging.INFO
+ENCODINGSERVER_LOGGING = logging.INFO
+RSSSERVER_LOGGING = logging.INFO
 
 # When logging is DEBUG or NOTSET then DEBUG level logs messages
 DEBUG = 0
