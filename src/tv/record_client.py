@@ -56,7 +56,7 @@ def getScheduledRecordings():
     try:
         (status, message) = server.getScheduledRecordings()
     except Exception, e:
-        print 'getScheduledRecordings:', e
+        _debug_('%s' % e)
         return (FALSE, 'record_client: '+_('connection error'))
 
     return returnFromJelly(status, message)
@@ -75,7 +75,7 @@ def connectionTest(teststr='testing'):
     try:
         (status, message) = server.echotest(teststr)
     except Exception, e:
-        print 'connectionTest:', e
+        _debug_('%s' % e)
         traceback.print_exc()
         return (FALSE, 'record_client: '+_('connection error'))
 
@@ -152,8 +152,7 @@ def findMatches(find='', movies_only=0):
     try:
         (status, response) = server.findMatches(find, movies_only)
     except Exception, e:
-        print 'Search error for \'%s\'' % find
-        print e
+        _debug_('Search error for \'%s\' %s' % (find, e), config.DWARNING)
         return (FALSE, 'record_client: '+_('connection error'))
 
     return returnFromJelly(status, response)
@@ -174,7 +173,7 @@ def addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, on
             server.addEditedFavorite(jellyToXML(name), \
             jellyToXML(title), chan, dow, mod, priority, allowDuplicates, onlyNew)
     except Exception, e:
-        print e
+        _debug_('%s' % e, config.DERROR)
         traceback.print_exc()
         return (FALSE, 'record_client: '+_('connection error'))
 
@@ -273,22 +272,49 @@ if __name__ == '__main__':
 
     if function == "updateFavoritesSchedule":
         (result, response) = updateFavoritesSchedule()
-        print response
+        _debug_('%r' % response)
 
 
     if function == "test":
         (result, response) = connectionTest('connection test')
-        print 'result: %s, response: %s ' % (result, response)
+        _debug_('result: %s, response: %s ' % (result, response))
+
 
     if function == "moviesearch":
         if len(sys.argv) >= 3:
-            find = sys.argv[2]
+            find = Unicode(sys.argv[2])
+
+            (result, response) = findMatches(find, 0)
+            if result:
+                for prog in response:
+                    _debug_('Prog: %s' % prog.title)
+            else:
+                _debug_('result: %s, response: %s ' % (result, response))
         else:
             find = ''
 
-        (result, response) = findMatches(find, 1)
-        if result:
-            for prog in response:
-                print 'Prog: %s' % prog.title
+
+    if function == "addfavorite":
+        if len(sys.argv) >= 3:
+            name=Unicode(string.join(sys.argv[2:]))
+            title=name
+            channel="ANY"
+            dow="ANY"
+            mod="ANY"
+            priority=0
+            allowDuplicates=FALSE
+            onlyNew=TRUE
+
+            (result, msg) = addEditedFavorite(name,title,channel,dow,mod,priority,allowDuplicates,onlyNew)
+            if not result:
+                # it is important to show the user this error,
+                # because that means the favorite is removed,
+                # and must be created again
+                _debug_('Save Failed, favorite was lost: %s' % (msg), config.DWARNING)
+            else:
+                _debug_('Ok!')
+                (result, response) = updateFavoritesSchedule()
+                _debug_('%r' % response)
         else:
-            print 'result: %s, response: %s ' % (result, response)
+            favorite = ''
+            _debug_('no data')
