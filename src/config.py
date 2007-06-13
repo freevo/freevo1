@@ -286,7 +286,6 @@ else:
 # Redirect stdout and stderr to stdout and /tmp/freevo.log
 #
 if not HELPER:
-    lock = thread.allocate_lock()
     sys.stdout = Logger(sys.argv[0] + ':stdin')
     sys.stderr = Logger(sys.argv[0] + ':stderr')
     ts = time.asctime(time.localtime(time.time()))
@@ -294,6 +293,7 @@ if not HELPER:
     sys.stdout.log('Freevo (%s) started at %s\n' % (VERSION, ts))
     sys.stdout.log('-' * 79 + '\n')
 
+lock = thread.allocate_lock()
 
 def _stack_function_(message='', limit=None):
     import traceback
