@@ -39,6 +39,7 @@ appconf = appname.upper()
 
 # change uid
 if __name__ == '__main__':
+    lock = threading.Lock()
     uid='config.'+appconf+'_UID'
     gid='config.'+appconf+'_GID'
     try:
@@ -83,25 +84,33 @@ def _debug_function_(s, level=1):
     import traceback
     if DEBUG < level:
         return
+    global lock
+    if not lock.acquire():
+        print '%r' % s
     try:
-        # add the current trace to the string
-        where =  traceback.extract_stack(limit = 2)[0]
-        if isinstance(s, unicode):
-            s = s.encode(config.encoding, 'replace')
-        s = '%s %-6s: %s' % (where[0][where[0].rfind('/')+1:], '('+str(where[1])+')', s)
-        # print debug message
-        if level <= config.DCRITICAL:
-            logging.critical(s)
-        elif level == config.DERROR:
-            logging.error(s)
-        elif level == config.DWARNING:
-            logging.warning(s)
-        elif level == config.DINFO:
-            logging.info(s)
-        else:
-            logging.debug(s)
-    except UnicodeEncodeError:
-        print "_debug_ failed. %r" % s
+        try:
+            # add the current trace to the string
+            where =  traceback.extract_stack(limit = 2)[0]
+            if isinstance(s, unicode):
+                s = s.encode(config.encoding, 'replace')
+            s = '%s %-6s: %s' % (where[0][where[0].rfind('/')+1:], '('+str(where[1])+')', s)
+            # print debug message
+            if level <= config.DCRITICAL:
+                logging.critical(s)
+            elif level == config.DERROR:
+                logging.error(s)
+            elif level == config.DWARNING:
+                logging.warning(s)
+            elif level == config.DINFO:
+                logging.info(s)
+            else:
+                logging.debug(s)
+        except UnicodeEncodeError:
+            print "_debug_ failed. %r" % s
+        except Exception, e:
+            print "_debug_ failed: %r" % e
+    finally:
+        lock.release()
 
 __builtin__.__dict__['_debug_']= _debug_function_
 
@@ -354,11 +363,11 @@ class RecordServer(xmlrpc.XMLRPC):
             todaysYear=(todayStr[0:4])
             progYear=(progStr[0:4])
             #Month
-            todaysMonth=(todayStr[4:2])
-            progMonth=(progStr[4:2])
+            todaysMonth=(todayStr[4:-2])
+            progMonth=(progStr[4:-2])
             #Day
-            todaysDay=(todayStr[6:2])
-            progDay=(progStr[6:2])
+            todaysDay=(todayStr[6:])
+            progDay=(progStr[6:])
             if todaysYear > progYear:
                 #program from a previous year
                 return FALSE
