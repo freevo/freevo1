@@ -417,7 +417,7 @@ class Area(XML_data):
     def __init__(self, name):
         XML_data.__init__(self, ('visible', 'layout', 'x', 'y', 'width', 'height'))
         self.name = name
-        if name == 'listing':
+        if name in ('listing', 'scrollabletext'):
             self.images = {}
         self.x = -1
         self.y = -1
@@ -441,7 +441,7 @@ class Area(XML_data):
             except TypeError:
                 pass
         for subnode in node.children:
-            if subnode.name == u'image' and self.name == 'listing':
+            if subnode.name == u'image' and self.name in ('listing', 'scrollabletext'):
                 label = attr_str(subnode, 'label', '')
                 if label:
                     if not label in self.images:
@@ -1016,6 +1016,11 @@ class XMLSkin:
             if isinstance(self.sets[s], AreaSet):
                 # prepare an areaset
                 self.sets[s].prepare(layout)
+                for area in self.sets[s].areas.values():
+                    if hasattr(area, 'images'):
+                        for image in area.images.values():
+                            image.prepare(None, search_dirs, self._images)
+
             else:
                 # prepare a menu
                 self.sets[s].prepare(self._menuset, layout)

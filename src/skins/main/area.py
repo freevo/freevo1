@@ -267,6 +267,15 @@ class Skin_Area:
         elif c_rect[0] < c_rect[2]:
             self.screen.update('content', c_rect)
 
+        if config.SKIN_DEBUG:
+            if self.layout:
+                name = self.area_name + u':' + self.layout.label
+
+                content = self.calc_geometry(self.layout.content, copy_object=1)
+                self.tmp_objects.skin_area = (content.x, content.y,
+                        content.width, content.height,
+                        name)
+
         # save and exit
         self.objects = self.tmp_objects
         self.screen.draw(self.objects)

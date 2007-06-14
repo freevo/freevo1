@@ -232,9 +232,7 @@ class PluginInterface(plugin.DaemonPlugin):
         for index in range(0, len(self.colors)):
             if actions[index] is not None:
                 self.draw_button(osd, x, y, buttonwidth, BUTTON_BAR_HEIGHT, self.colors[index], actions[index])
-                self.actions[index] = actions[index]
-            else:
-                self.actions[index] = None
+            self.actions[index] = actions[index]
             x += buttonwidth
 
 
@@ -324,42 +322,40 @@ class PluginInterface(plugin.DaemonPlugin):
                     action.name = Unicode(time.strftime('%s %s' % (dateformat, timeformat),
                                                         time.localtime(newtime)))
             return self.tvguide_actions
-        else:
-            # Determine the available actions
-            if hasattr(menu, 'is_submenu') or (not hasattr(menu, 'selected')):
-                return None
 
-            actions = menu.selected.actions()
-            if not actions:
-                actions = []
+        # Make sure this is a menu and not a submenu.
+        if hasattr(menu, 'is_submenu') or (not hasattr(menu, 'selected')):
+            return result
 
-            plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
+        # Determine the available actions
+        actions = menu.selected.actions()
+        if not actions:
+            actions = []
 
-            if hasattr(menu.selected, 'display_type'):
-                plugins += plugin.get('item_%s' % menu.selected.display_type)
+        plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
 
-            plugins.sort(lambda l, o: cmp(l._level, o._level))
+        if hasattr(menu.selected, 'display_type'):
+            plugins += plugin.get('item_%s' % menu.selected.display_type)
 
-            for p in plugins:
-                for a in p.actions(menu.selected):
-                    if isinstance(a, MenuItem):
-                        actions.append(a)
-                    elif len(a) == 2 or a[2] != 'MENU_SUBMENU':
-                        actions.append(a[:2])
+        plugins.sort(lambda l, o: cmp(l._level, o._level))
 
-            if len(actions) <= 1:
-                result = None
+        for p in plugins:
+            for a in p.actions(menu.selected):
+                if isinstance(a, MenuItem):
+                    actions.append(a)
+                elif len(a) == 2 or a[2] != 'MENU_SUBMENU':
+                    actions.append(a[:2])
 
-            if len(actions) > 1:
-                result[0] = actions[0]
-            if len(actions) >= 2:
-                result[1] = actions[1]
-            if len(actions) >= 3:
-                result[2] = actions[2]
-            if len(actions) == 4:
-                result[3] = actions[3]
+        if len(actions) > 1:
+            result[0] = actions[1]
+        if len(actions) > 2:
+            result[1] = actions[2]
+        if len(actions) > 3:
+            result[2] = actions[3]
+        if len(actions) > 4:
+            result[3] = actions[4]
 
-            # Special case for when there are more than 4 possible actions the last button will 'Enter' the submenu
-            if len(actions) > 4:
-                result[3] = MenuItem(_("More Options"), action=send_event_to_menu, arg= event.MENU_SUBMENU)
+        # Special case for when there are more than 5 possible actions the last button will 'Enter' the submenu
+        if len(actions) > 5:
+            result[3] = MenuItem(_("More Options"), action=send_event_to_menu, arg= event.MENU_SUBMENU)
         return result

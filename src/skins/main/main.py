@@ -79,8 +79,9 @@ class Skin:
         from view_area      import View_Area
         from info_area      import Info_Area
         from default_areas  import Screen_Area, Title_Area, Subtitle_Area, Plugin_Area
+        from scrollabletext_area import Scrollabletext_Area
 
-        for a in ( 'screen', 'title', 'subtitle', 'view', 'listing', 'info', 'plugin'):
+        for a in ( 'screen', 'title', 'subtitle', 'view', 'listing', 'info', 'plugin', 'scrollabletext'):
             self.areas[a] = eval('%s_Area()' % a.capitalize())
         self.areas['tvlisting'] = TVListing_Area()
 

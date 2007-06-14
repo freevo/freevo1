@@ -50,6 +50,7 @@ class SkinObjects:
         self.rectangles = []
         self.images     = []
         self.text       = []
+        self.skin_area  = None
 
 
 class Screen:
@@ -82,6 +83,11 @@ class Screen:
         self.drawlist.rectangles += obj.rectangles
         self.drawlist.images     += obj.images
         self.drawlist.text       += obj.text
+
+        if obj.skin_area:
+            if self.drawlist.skin_area is None:
+                self.drawlist.skin_area = []
+            self.drawlist.skin_area.append(obj.skin_area)
 
 
     def update(self, layer, rect):
@@ -190,6 +196,13 @@ class Screen:
                                          align_h = align_h,
                                          align_v = align_v, mode=mode,
                                          ellipses=ellipses, dim=dim, layer=layer)
+
+        if self.drawlist.skin_area:
+            for area in self.drawlist.skin_area:
+                x,y,w,h,name = area
+                osd.drawbox(x,y,x + w, y +h, 1, osd.COL_WHITE, 0, layer)
+                osd.drawstring(name, x + 1, y + 1, fgcolor=osd.COL_WHITE, bgcolor=osd.COL_BLUE, layer=layer)
+                update_area.append((x,y,x+w,y+h))
 
         if not update_area:
             return None
