@@ -58,6 +58,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         try:
             self.joyfd = os.open(self.device_name, os.O_RDONLY|os.O_NONBLOCK)
+            _debug_('self.joyfd = %s' % self.joyfd, level=5)
         except OSError:
 
             print 'Unable to open %s, trying /dev/js%s...' % \
@@ -66,6 +67,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
             try:
                 self.joyfd = os.open(self.device_name, os.O_RDONLY|os.O_NONBLOCK)
+                _debug_('self.joyfd = %s' % self.joyfd, level=5)
             except OSError:
                 print 'Unable to open %s, check modules and/or permissions' % \
                       self.device_name
@@ -95,7 +97,6 @@ class PluginInterface(plugin.DaemonPlugin):
             return
 
         command = ''
-        _debug_('self.joyfd = %s' % self.joyfd, level=5)
         (r, w, e) = select.select([self.joyfd], [], [], 0)
         _debug_('r,w,e = %s,%s,%s' % (r,w,e), level=5)
 
