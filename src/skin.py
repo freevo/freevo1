@@ -58,6 +58,134 @@ __all__ = ( 'Rectange', 'Image', 'Area', 'register', 'delete', 'change_area',
             'prepare', 'draw' )
 
 
+class ScrollableText:
+    """
+    Container for scrolling text using the skin area "scrollabletext"
+    """
+    def __init__(self, text):
+        """
+        Initialise the scrollable text area with the text to scroll.
+        """
+        self.text = text
+        self.page = []
+        self.lines = []
+        self.max_lines = 1
+
+    def get_page(self):
+        """
+        Returns the page of text to display.
+        """
+        return self.page
+
+    def __get_line__(self, string, max_width, font, word_splitter, hard):
+        """
+        calculate _one_ line. Returns a list:
+        string to draw, rest that didn't fit and True if this
+        function stopped because of a \n.
+        """
+        c = 0                           # num of chars fitting
+        width = 0                       # width needed
+        ls = len(string)
+        space = 0                       # position of last space
+        last_char_size = 0              # width of the last char
+        last_word_size = 0              # width of the last word
+
+        data = None
+        while(True):
+            if width > (max_width - 1):
+                # ok, that's it. We don't have any space left
+                break
+            if ls == c:
+                # everything fits
+                return (string, '', False)
+            if string[c] == '\n':
+                # linebreak, we have to stop
+                return (string[:c], string[c+1:], True)
+            if string[c] in word_splitter:
+                # rememeber the last space for mode == 'soft' (not hard)
+                space = c
+                last_word_size = 0
+
+            # add a char
+            last_char_size = font.charsize(string[c])
+            width += last_char_size
+            last_word_size += last_char_size
+            c += 1
+
+        rest_start = c
+
+        if not hard:
+            # go one word back, than it fits
+            c = space
+            if string[c] == ' ':
+                rest_start = c + 1
+
+        # calc the matching and rest string and return all this
+        return (string[:c], string[rest_start:], False)
+
+    def layout(self, width, height, font):
+        """
+        Layout the text into lines/pages based on the width,height and font
+        supplied.
+        """
+        self.first_line_index = 0
+        self.max_lines = height / font.height
+        self.lines = []
+        rest = self.text
+        while rest:
+            line, rest, nl = self.__get_line__(rest, width, font, ' ', False)
+            if not line and rest and not nl:
+                line, rest, nl = self.__get_line__(rest, width, font, ' -_', False)
+                if not line and rest and not nl:
+                    line, rest, nl = self.__get_line__(rest, width, font, ' -_', True)
+
+            self.lines.append(line)
+
+        self.build_page()
+
+
+    def build_page(self):
+        """
+        Create the page based on the first_line_index.
+        """
+        self.page = []
+        if self.first_line_index + self.max_lines >= len(self.lines):
+            self.page = self.lines[self.first_line_index:]
+        else:
+            end_line_index = self.first_line_index + self.max_lines
+            self.page = self.lines[self.first_line_index:end_line_index]
+
+    def more_lines_up(self):
+        """
+        Returns true if the first line of the page is not the top of text, false
+        if we are at the top.
+        """
+        return self.first_line_index != 0
+
+    def more_lines_down(self):
+        """
+        Returns true if there are more lines below the bottom line of the
+        current page.
+        """
+        return self.first_line_index + self.max_lines < len(self.lines)
+
+    def scroll(self, up):
+        """
+        Scrolls the current page, up if 'up' is true or down if it is false, by
+        one line.
+        """
+        # The text is not larger than the area so no need to scroll.
+        if len(self.lines) <= self.max_lines:
+            return
+
+        if up:
+            self.first_line_index = max(0, self.first_line_index - 1)
+        else:
+            self.first_line_index = min(self.first_line_index + 1,
+                min(len(self.lines) - 1, len(self.lines) - self.max_lines))
+        self.build_page()
+
+
 def get_singleton():
     """
     Returns an initialized skin object, containing the users preferred

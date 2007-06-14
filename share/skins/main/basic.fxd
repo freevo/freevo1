@@ -823,13 +823,28 @@
 
 	<tvguideinfo>
 	    <screen layout="screen" x="0" y="0" width="800" height="600"/>
-	    <title layout="tvguideinfo title" x="10" y="70" width="780" height="80"/>
-	    <info layout="info" x="10" y="130" width="780" height="460"/>
+	    <info layout="tvguideinfo program details" x="10" y="70" width="780" height="80"/>
+        <scrollabletext layout="info" x="10" y="160" width="740" height="420 - buttonbar_height">
+            <image x="758" y="160" width="32" height="32" label="uparrow" filename="up.png"/>
+            <image x="758" y="max-32" width="32" height="32" label="downarrow" filename="down.png"/>
+        </scrollabletext>
 	</tvguideinfo>
     
-    <layout label="tvguideinfo title">
-	    <content x="0" y="0" type="menu" font="title area" align="left" valign="center"/>
-	</layout>
+    <layout label="tvguideinfo program details">
+        <content x="0" y="0" type="text" spacing="20" font="default">
+            <item type="default">
+                <if expression="time">
+                    <text font="info font" align="right" width="max" expression="time"/>
+                    <newline/>
+                </if>
+                <if expression="title">
+                    <text font="tv title"  align="left"  expression="title"/>
+                    <newline/>
+                </if>                
+            </item>
+        </content>
+    </layout>
+
     </skin>
 </freevo>
 <!-- Keep this comment at the end of the file
