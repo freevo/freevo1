@@ -44,7 +44,6 @@ from tv.channels import FreevoChannels
 import tv.ivtv as ivtv
 import plugin
 
-# Set to 1 for debug output
 DEBUG = config.DEBUG
 
 TRUE = 1
