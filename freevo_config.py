@@ -1966,6 +1966,11 @@ FREEVO_EVENTHANDLER_SANDBOX = 1
 DIRECTORY_USE_STAT_FOR_CHANGES = True
 
 #
+# Debug the current skin, display boxes around each area.
+#
+SKIN_DEBUG = 0
+
+#
 # store output of started processes for debug
 # Set to 1 to log child application output to <app>_stdout.log and <app>_stderr.log
 #
