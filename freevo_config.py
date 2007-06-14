@@ -281,6 +281,7 @@ LOCAL_CONF_CHANGES = [
      Changed VIDEO_INTERLACING to VIDEO_DEINTERLACE to be more consistent with autovars
      Added SENSORS_PLATFORM_PATH and SENSORS_I2CDEV_PATH for sensor paths
      Added OSD_SOUNDS_ENABLED defaulted to False for menu sounds
+     Added SKIN_DEBUG to show boxes around each skin area for debugging skins
      ''' ),
 ]
 
