@@ -481,7 +481,7 @@ except SystemExit:
     pass
 
 except:
-    print 'Crash!'
+    _debug_('Crash!', config.DCRITICAL)
     try:
         tb = sys.exc_info()[2]
         fname, lineno, funcname, text = traceback.extract_tb(tb)[-1]

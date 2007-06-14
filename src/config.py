@@ -46,10 +46,15 @@ import sys, os, time, re, string, pwd, thread
 import setup_freevo
 import traceback
 import __builtin__
-import version
 import locale
 import logging
 
+try:
+    import freevo.version as version
+    import freevo.revision as revision
+except:
+    import version
+    import revision
 
 DINFO = 0
 DWARNING = -1
@@ -62,8 +67,6 @@ if float(sys.version[0:3]) >= 2.3:
     import warnings
     warnings.simplefilter("ignore", category=FutureWarning)
     warnings.simplefilter("ignore", category=DeprecationWarning)
-
-VERSION = version.__version__
 
 # For Internationalization purpose
 # an exception is raised with Python 2.1 if LANG is unavailable.
@@ -98,42 +101,51 @@ class Logger:
         self.lineno = 1
         self.logtype = logtype
         appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-        logfile = '%s/%s-%s.log' % (LOGDIR, appname, os.getuid())
-        logging.basicConfig(level=LOGGING, \
-            #datefmt='%a, %H:%M:%S',
-            format='%(asctime)s %(levelname)-8s %(message)s', \
-            filename=logfile, filemode='a')
-        self.logfile = logfile
-        #try:
-        #    self.fp = open(logfile, 'a')
-        #except IOError:
-        #    print 'Could not open logfile: %s' % logfile
-        #    self.fp = open('/dev/null','a')
+        try:
+            self.logfile = '%s/%s-%s.log' % (LOGDIR, appname, os.getuid())
+            self.fp = open(self.logfile, 'a')
+            logging.basicConfig(level=LOGGING, \
+                #datefmt='%a, %H:%M:%S',
+                format='%(asctime)s %(levelname)-8s %(message)s', \
+                filename=self.logfile, filemode='a')
+        except IOError, e:
+            print '%s' % e
+            self.logfile = '/dev/null'
+            self.fp = open(self.logfile, 'a')
+            logging.basicConfig(level=LOGGING, \
+                format='%(asctime)s %(levelname)-8s %(message)s', \
+                filename=self.logfile, filemode='a')
+
 
     def write(self, msg):
-        global DEBUG_STDOUT
-        if isinstance(msg, unicode):
-            msg = msg.encode(LOCALE)
-        if DEBUG_STDOUT:
-            print >> sys.__stdout__, s
-            sys.__stdout__.flush
-            #sys.__stdout__.write(msg)
-        #self.fp.write(msg)
-        #self.fp.flush()
+        global lock, DEBUG_STDOUT
+        #print >> sys.__stdout__, 'lock-wrt=%s' % lock
+        lock.acquire()
+        try:
+            if isinstance(msg, unicode):
+                msg = msg.encode(LOCALE)
+            if DEBUG_STDOUT:
+                #print >> sys.__stdout__, msg
+                sys.__stdout__.write(msg)
+                sys.__stdout__.flush()
+            self.fp.write(msg)
+            self.fp.flush()
+        finally:
+            lock.release()
         return
 
     def log(self, msg):
-        #self.fp.write(msg)
-        #self.fp.flush()
+        self.fp.write('%s\n' % msg)
+        self.fp.flush()
         return
 
     def flush(self):
         pass
 
     def close(self):
-        logging.info('-' * 80)
-        logging.info('Log closed')
-        logging.info('=' * 80)
+        sys.stdout.log('-' * 80)
+        sys.stdout.log('Freevo %s r%s finished at %s' % (version.__version__, revision.__revision__, ts))
+        sys.stdout.log('=' * 80)
 
 
 class VideoGroup:
@@ -281,19 +293,22 @@ else:
     if not os.path.isdir(LOGDIR):
         os.makedirs(LOGDIR)
 
-
 #
 # Redirect stdout and stderr to stdout and /tmp/freevo.log
 #
-if not HELPER:
-    sys.stdout = Logger(sys.argv[0] + ':stdin')
-    sys.stderr = Logger(sys.argv[0] + ':stderr')
-    ts = time.asctime(time.localtime(time.time()))
-    sys.stdout.log('-' * 79 + '\n')
-    sys.stdout.log('Freevo (%s) started at %s\n' % (VERSION, ts))
-    sys.stdout.log('-' * 79 + '\n')
-
+#if not HELPER:
 lock = thread.allocate_lock()
+sys.stdout = Logger(sys.argv[0] + ':stdin')
+sys.stderr = Logger(sys.argv[0] + ':stderr')
+ts = time.asctime(time.localtime(time.time()))
+sys.stdout.log('=' * 80)
+sys.stdout.log('Freevo %s r%s started at %s' % (version.__version__, revision.__revision__, ts))
+sys.stdout.log('-' * 80)
+
+def shutdown():
+    sys.stdout.close()
+    #sys.stderr.close()
+    return
 
 def _stack_function_(message='', limit=None):
     import traceback
@@ -313,7 +328,10 @@ def _debug_function_(s, level=1):
     '''
     if DEBUG < level:
         return
+    if not s:
+        return
     global lock
+    global DEBUG_STDOUT
     lock.acquire()
     try:
         try:
@@ -335,7 +353,7 @@ def _debug_function_(s, level=1):
                 logging.debug(msg)
             # print the message for info, warning, error and critical
             if level <= DINFO and DEBUG_STDOUT:
-                sys.__stdout__.write('%s\n' % (msg))
+                sys.__stdout__.write('%s\n' % (s))
                 sys.__stdout__.flush()
         except UnicodeEncodeError:
             print "_debug_ failed. %r" % msg
@@ -572,17 +590,8 @@ else:
 os.umask(UMASK)
 
 
-if not HELPER:
-    try:
-        import freevo.version as version
-        import freevo.revision as revision
-    except:
-        import version
-        import revision
-    logging.getLogger('').setLevel(LOGGING)
-    logging.info('=' * 80)
-    logging.info('Log opened for Freevo %s r%s' % (version.__version__, revision.__revision__))
-    logging.info('-' * 80)
+#if not HELPER:
+logging.getLogger('').setLevel(LOGGING)
 
 #
 # force fullscreen when freevo is it's own windowmanager

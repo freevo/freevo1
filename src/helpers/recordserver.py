@@ -39,6 +39,7 @@ appconf = appname.upper()
 
 # change uid
 if __name__ == '__main__':
+    config.DEBUG_STDOUT = 0
     lock = threading.Lock()
     uid='config.'+appconf+'_UID'
     gid='config.'+appconf+'_GID'
@@ -80,7 +81,7 @@ from event import *
 DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
 LOGGING = hasattr(config, appconf+'_LOGGING') and eval('config.'+appconf+'_LOGGING') or config.LOGGING
 
-def _debug_function_(s, level=1):
+def _debug_func_(s, level=1):
     import traceback
     if DEBUG < level:
         return
@@ -112,7 +113,7 @@ def _debug_function_(s, level=1):
     finally:
         lock.release()
 
-__builtin__.__dict__['_debug_']= _debug_function_
+__builtin__.__dict__['_debug_']= _debug_func_
 
 
 logfile = '%s/%s-%s.log' % (config.LOGDIR, appname, os.getuid())
@@ -131,9 +132,6 @@ try:
 except:
     import version
     import revision
-logging.warn('=' * 80)
-logging.warn('Log opened for recordserver %s r%s' % (version.__version__, revision.__revision__))
-logging.warn('-' * 80)
 
 _debug_('PLUGIN_RECORD: %s' % config.plugin_record, config.DINFO)
 

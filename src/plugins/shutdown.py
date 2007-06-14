@@ -104,6 +104,8 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     osd.clearscreen(color=osd.COL_BLACK)
     osd.shutdown()
 
+    config.shutdown()
+
     if exit:
         # realy exit, we are called by the signal handler
         sys.exit(0)
