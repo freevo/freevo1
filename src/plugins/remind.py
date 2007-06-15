@@ -57,7 +57,7 @@ from item import Item
 skin = skin.get_singleton()
 osd  = osd.get_singleton()
 
-skin.register('headlines', ('screen', 'title', 'info', 'plugin'))
+skin.register('reminder', ('screen', 'title', 'info', 'plugin'))
 
 
 class PluginInterface(plugin.MainMenuPlugin):
@@ -159,7 +159,7 @@ class RemindMainMenuItem(Item):
     of Reminders in a submenu.
     """
     def __init__(self, parent):
-        Item.__init__(self, parent, skin_type='headlines')
+        Item.__init__(self, parent, skin_type='reminder')
         self.name = _('Reminders')
         self.reminders = config.REMINDERS
 
