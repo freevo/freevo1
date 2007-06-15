@@ -291,7 +291,7 @@ if __name__ == '__main__':
             else:
                 _debug_('result: %s, response: %s ' % (result, response))
         else:
-            find = ''
+            _debug_('no data')
 
 
     if function == "addfavorite":
@@ -316,5 +316,4 @@ if __name__ == '__main__':
                 (result, response) = updateFavoritesSchedule()
                 _debug_('%r' % response)
         else:
-            favorite = ''
             _debug_('no data')
