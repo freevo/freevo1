@@ -45,9 +45,9 @@ from pygame import image,transform, Surface
 
 DEBUG = config.DEBUG
 
-# Create the skin object
-skin = skin.get_singleton()
-skin.register('tvguideinfo', ('screen', 'title', 'info', 'plugin'))
+# Create the skin_object object
+skin_object = skin.get_singleton()
+skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
 
 # Create the events and assign them to the menus.
 BUTTONBAR_RED    = event.Event('BUTTONBAR_RED')
@@ -99,17 +99,37 @@ class ShowProgramDetails:
         prg = tvguide.selected
         if prg is None:
             name = _('No Information Available')
+            sub_title = ''
+            time = ''
             description = ''
         else:
             name = prg.title
-            description =  prg.getattr('time') + u'\n' + prg.desc
-        item = MenuItem(name=name)
-        item.description = description
+            sub_title = prg.sub_title
+            time =  prg.getattr('time')
+            if sub_title:
+                description = u'"' + sub_title + u'"\n' + prg.desc
+            else:
+                description = prg.desc
+        self.program         = prg
+        self.name            = name
+        self.time            = time
+        self.scrollable_text = skin.ScrollableText(description)
         self.visible = True
+
         self.menuw = menuw
         self.menuw.hide(clear=False)
         rc.app(self)
-        skin.draw('tvguideinfo', item)
+        skin_object.draw('tvguideinfo', self)
+
+
+    def getattr(self, name):
+        if name == 'title':
+            return self.name
+
+        if self.program:
+            return self.program.getattr(name)
+
+        return u''
 
 
     def eventhandler(self, event, menuw=None):
@@ -120,7 +140,14 @@ class ShowProgramDetails:
             rc.app(None)
             self.menuw.show()
             return True
-
+        elif event == 'MENU_UP':
+            self.scrollable_text.scroll(True)
+            skin_object.draw('tvguideinfo', self)
+            return True
+        elif event == 'MENU_DOWN':
+            self.scrollable_text.scroll(False)
+            skin_object.draw('tvguideinfo', self)
+            return True
         return False
 
 
@@ -210,7 +237,7 @@ class PluginInterface(plugin.DaemonPlugin):
         h = osd.y + BUTTON_BAR_HEIGHT
         y = ((osd.y * 2) + osd.height) - h
 
-        f = skin.get_image('idlebar')
+        f = skin_object.get_image('idlebar')
 
         if self.barfile != f:
             self.barfile = f
@@ -296,10 +323,15 @@ class PluginInterface(plugin.DaemonPlugin):
         result = [None, None, None, None]
         found_color_actions = False
 
+        if hasattr(menu, 'selected'):
+            color_object = menu.selected
+        else:
+            color_object = menu
+
         for index in range(0, len(self.colors)):
-            if hasattr(menu.selected, self.colors[index] + '_action'):
+            if hasattr(color_object, self.colors[index] + '_action'):
                 found_color_actions = True
-                result[index] = eval('menu.selected.' +  self.colors[index] + '_action')
+                result[index] = eval('color_object.' +  self.colors[index] + '_action')
 
         if found_color_actions:
             return result
