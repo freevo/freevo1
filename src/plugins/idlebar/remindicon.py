@@ -63,15 +63,14 @@ class PluginInterface(IdleBarPlugin):
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.remindicon'
         self.time = 0
-        icondir = config.ICON_DIR
         self.images = {}
-        self.images['alert']   = os.path.join(icondir, 'misc/redbutton.png')
-        self.images['nothing'] = os.path.join(icondir, 'misc/bluebutton.png')
+        self.images['alert']   = os.path.join(config.ICON_DIR, 'misc/reminder_on.png')
+        self.images['nothing'] = os.path.join(config.ICON_DIR, 'misc/reminder_off.png')
         self.status = self.images['nothing']
         self.cmd = config.REMINDICON_CMD
 
     def config(self):
-        return [ ('REMINDICON_CMD', 'remind -h', 'Command to run the remind process') ]
+        return [ ('REMINDICON_CMD', 'remind -h', 'Command to run the remind (-h is hush)') ]
 
     def getStatus(self):
         if (time.time()-self.time)>60:
