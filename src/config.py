@@ -143,9 +143,7 @@ class Logger:
         pass
 
     def close(self):
-        sys.stdout.log('-' * 80)
-        sys.stdout.log('Freevo %s r%s finished at %s' % (version.__version__, revision.__revision__, ts))
-        sys.stdout.log('=' * 80)
+        pass
 
 
 class VideoGroup:
@@ -306,8 +304,11 @@ sys.stdout.log('Freevo %s r%s started at %s' % (version.__version__, revision.__
 sys.stdout.log('-' * 80)
 
 def shutdown():
+    sys.stdout.log('-' * 80)
+    sys.stdout.log('Freevo %s r%s finished at %s' % (version.__version__, revision.__revision__, ts))
+    sys.stdout.log('=' * 80)
     sys.stdout.close()
-    #sys.stderr.close()
+    sys.stderr.close()
     return
 
 def _stack_function_(message='', limit=None):
