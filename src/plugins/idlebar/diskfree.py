@@ -106,10 +106,10 @@ class PluginInterface(IdleBarPlugin):
         diskimg.blit(diskbar, (0,0), (0, 0, (w * self.percent), h))
         self.cacheimg['cached'] = diskimg
         font = osd.get_font('small0')
-        widthdf = 0
         widthdf = font.stringsize(self.diskfree)
+        diskfree_x = x + ((w - widthdf) / 2)
+        diskfree_y = osd.y + 55 - font.h
         w = osd.drawimage(diskimg, (x, osd.y + 7, -1, -1) )[0]
-        osd.write_text(self.diskfree, font, None, x, osd.y + 55 - font.h, widthdf, font.h, 'center', 'top')
-        #print 'w=%s, widthdf=%s' % (w, widthdf+15)
+        osd.write_text(self.diskfree, font, None, diskfree_x, diskfree_y, widthdf, font.h, 'center', 'top')
 
         return widthdf + 15
