@@ -30,7 +30,7 @@
 
 # python modules
 import os, sys, pygame, xmlrpclib
-import time
+import time, re
 
 # freevo modules
 import skin
@@ -78,6 +78,9 @@ class PluginInterface(IdleBarPlugin):
         self.background_w, self.background_h = (0, 0)
         self.leftclamp_w, self.leftclamp_h = (0, 0)
         self.rightclamp_w, self.rightclamp_h = (0, 0)
+        self.remaining_min = re.compile('[0-9]*')
+        self.remaining = ''
+        self.progress  = 0
         self.progress_x = None
         self.leftclamp_x = 0
         self.rightclamp_x = 0
@@ -88,30 +91,20 @@ class PluginInterface(IdleBarPlugin):
         self.last_interval = self.poll_interval
         self.lastdraw  = 0
         self.lastpoll  = 0
+        self.drawtime  = 0
         server_string  = 'http://%s:%s/' % \
                         (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
         self.server    = xmlrpclib.Server(server_string, allow_none=1)
 
         self.skin      = skin.get_singleton()
-        self.boxborder = 3
-        self.padding   = 5 # internal padding for box vs text
-        self.image     = None
-        self.cacheimg  = {}
-        self.muted     = False
-        self.encoding  = -1
-        self.progress  = 0
-        self.jobname   = ''
         self.calculate = True
         self.jobs      = ''
         self.mode      = 'Not Running'
-        self.text      = []
-        self.percent   = 0.0
-        self.running   = False
-        self.drawtime  = 0
-        self.polltime  = 0
         self.state     = 'noserver'
         self.laststate = None
-        self.font      = self.skin.get_font('detachbar')
+        self.percent   = 0.0
+        self.running   = False
+        self.font      = self.skin.get_font('small0')
         if self.font == skin.get_font('default'):
             self.font = skin.get_font('info value')
 
@@ -210,7 +203,6 @@ class PluginInterface(IdleBarPlugin):
         self.jobs = joblist
         self.running = True
 
-        self.text = []
         (status, progress) = self.getprogress();
         if status:
             if progress[1] == 0:
@@ -238,7 +230,8 @@ class PluginInterface(IdleBarPlugin):
                 self.mode = 'Multiplexing'
                 self.state = 'multiplexing'
                 self.draw_interval = 1000
-            self.text.append("%s %s%% %s" % (self.mode, progress[2], progress[3]))
+            remaining = self.remaining_min.search(progress[3])
+            self.remaining = remaining and remaining.group() or ''
             self.progress = progress[2]
             self.percent = progress[2] / 100.0
             return (self.background_w, self.background_h);
@@ -248,6 +241,7 @@ class PluginInterface(IdleBarPlugin):
         '''size calcs is not necessery on every pass
         There are some shortcuts here, the left and right clamps are the same with
         all sprites are the same size and the background
+        return true when the progress has changed, false otherwise
         '''
         _debug_('calculatesizes(self, osd, font)', 2)
         if self.progress_x == None:
@@ -271,6 +265,8 @@ class PluginInterface(IdleBarPlugin):
             self.rightclamp_x = self.background_w - self.rightclamp_w - self.progress_x
             _debug_('progress_x=%s, leftclamp_x=%s, rightclamp_x=%s' % \
                 (self.progress_x, self.leftclamp_x, self.rightclamp_x))
+            return True
+        return False
 
 
     def draw(self, (type, object), x, osd):
@@ -287,14 +283,22 @@ class PluginInterface(IdleBarPlugin):
         self.calculatesizes(osd, self.font)
 
         background = self.getimage(self.background, osd)
+        if self.sprite:
+            sprite = self.getimage(self.sprite, osd)
+            background.blit(sprite, (0, 0), (0, 0, self.background_w, self.background_h))
         leftclamp = self.getimage(self.leftclamp, osd, True)
         rightclamp = self.getimage(self.rightclamp, osd, True)
         background.blit(leftclamp, (self.leftclamp_x, 1), (0, 0, self.leftclamp_w, self.leftclamp_h))
         background.blit(rightclamp, (self.rightclamp_x, 1), (0, 0, self.rightclamp_w, self.rightclamp_h))
-        if self.sprite:
-            sprite = self.getimage(self.sprite, osd)
-            background.blit(sprite, (0, 0), (0, 0, self.background_w, self.background_h))
         osd.drawimage(background, (x, osd.y, -1, -1) )[0]
+        if self.remaining:
+            font = osd.get_font('small0')
+            widthdf = font.stringsize(self.remaining)
+            remaining_x = x + ((self.background_w - widthdf) / 2)
+            remaining_y = osd.y + self.background_h - font.h + 10
+            _debug_('remaining=%r x=%s y=%s widthdf=%s font.h=%s' % \
+                (self.remaining, remaining_x, remaining_y, widthdf, font.h))
+            osd.write_text(self.remaining, font, None, remaining_x, remaining_y, widthdf, font.h, 'center', 'top')
 
         return self.background_w
 
