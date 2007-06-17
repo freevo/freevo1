@@ -200,6 +200,13 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
         else:
             self.load_spec(config.AUDIO_ALBUM_TREE_SPEC)
 
+    def shutdown(self):
+        """
+        shut down the sqlite database
+        """
+        _debug_('shutdown', 2)
+        db.close()
+
     def load_spec(self,spec_list):
         """
         load definitions from config

@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # util/dbutil.py - database wrapper
 # -----------------------------------------------------------------------
-# $Id: dbutil.py,v #
+# $Id$
 #
 # Notes:
 # Todo:
@@ -88,7 +88,9 @@ class MetaDatabase:
         self.cursor = self.db.cursor()
 
     def runQuery(self,query, close=False):
+        '''Execute a sql query on the database'''
         try:
+            _debug_('query=%s' % (query))
             self.cursor.execute(query)
         except TypeError:
             traceback.print_exc()
@@ -104,10 +106,13 @@ class MetaDatabase:
             return self.cursor.fetchall()
 
     def close(self):
-        self.db.commit()
-        self.db.close()
+        '''close the database, committing any open transactions first'''
+        if not self.db.closed:
+            self.db.commit()
+            self.db.close()
 
     def commit(self):
+        '''commit transactions'''
         self.db.commit()
 
     def checkTable(self,table=None):
