@@ -282,6 +282,7 @@ LOCAL_CONF_CHANGES = [
      Added SENSORS_PLATFORM_PATH and SENSORS_I2CDEV_PATH for sensor paths
      Added OSD_SOUNDS_ENABLED defaulted to False for menu sounds
      Added SKIN_DEBUG to show boxes around each skin area for debugging skins
+     Added IMAGEVIEWER_REVERSED_IMAGES for when the images are incorrectly rotated
      ''' ),
 ]
 
@@ -1078,6 +1079,12 @@ IMAGE_EXCLUDE = None
 #  1    wipe effect
 #
 IMAGEVIEWER_BLEND_MODE = -1
+
+#
+# Some images are incorrected rotated, if the images are rotated clock-
+# wise instead of anti-clockwise then set this to true
+#
+IMAGEVIEWER_REVERSED_IMAGES = 0
 
 #
 # What information to display by pressing DISPLAY.

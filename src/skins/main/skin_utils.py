@@ -103,19 +103,30 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
                 f.close()
                 if tags.has_key('Image Orientation'):
                     orientation = tags['Image Orientation']
+                    _debug_('%s orientation=%s' % (item['name'], tags['Image Orientation']))
                     if str(orientation) == "Rotated 90 CCW":
-                        item['rotation'] = 90
-                        #item['rotation'] = 270
+                        if config.IMAGEVIEWER_REVERSED_IMAGES:
+                            item['rotation'] = 90
+                        else:
+                            item['rotation'] = 270
                     elif str(orientation) == "Rotated 180":
                         item['rotation'] = 180
                     elif str(orientation) == "Rotated 90 CW":
-                        item['rotation'] = 270
-                        #item['rotation'] = 90
+                        if config.IMAGEVIEWER_REVERSED_IMAGES:
+                            item['rotation'] = 270
+                        else:
+                            item['rotation'] = 90
             except Exception, e:
                 pass
 
         if image and item['rotation']:
-            image = pygame.transform.rotate(image, item['rotation'])
+            # pygame reverses the image rotation
+            if config.IMAGEVIEWER_REVERSED_IMAGES:
+                rotation = item['rotation']
+            else:
+                rotation = 360 - item['rotation']
+            _debug_('%s rotation=%s->%s' % (item['name'], item['rotation'], rotation))
+            image = pygame.transform.rotate(image, rotation)
 
     if not image:
         if not force:
