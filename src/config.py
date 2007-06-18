@@ -118,16 +118,13 @@ class Logger:
 
 
     def write(self, msg):
-        global lock, DEBUG_STDOUT
-        #print >> sys.__stdout__, 'lock-wrt=%s' % lock
+        global lock
         lock.acquire()
         try:
             if isinstance(msg, unicode):
                 msg = msg.encode(LOCALE)
-            if DEBUG_STDOUT:
-                #print >> sys.__stdout__, msg
-                sys.__stdout__.write(msg)
-                sys.__stdout__.flush()
+            sys.__stdout__.write(msg)
+            sys.__stdout__.flush()
             self.fp.write(msg)
             self.fp.flush()
         finally:
