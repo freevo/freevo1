@@ -98,12 +98,12 @@ msgstr "Hittade inget kommando"
 #: plugins/df.py:66
 #, python-format
 msgid "%i free of %i GB total (%i%% free)"
-msgstr "%i av %i Mb ledigt"
+msgstr "%i av %i Mb ledigt (%i%%)"
 
 #: plugins/df.py:68
 #, python-format
 msgid "%i free of %i MB total (%i%% free)"
-msgstr "%i av %i Mb ledigt"
+msgstr "%i av %i Mb ledigt (%i%%)"
 
 #: plugins/headlines.py:132
 msgid "Show Sites Headlines"
@@ -766,7 +766,9 @@ msgstr ""
 msgid ""
 "Delete edl about\n"
 " '%s'?"
-msgstr "Datum:"
+msgstr ""
+"Delete edl about\n"
+" '%s'?"
 
 #: plugins/file_ops.py:93
 #, python-format
@@ -988,7 +990,7 @@ msgstr ""
 #: plugins/lcd.py:900 plugins/lcd.py:911 plugins/lcd.py:922
 #, python-format
 msgid "No screens found for this LCD (%dx%d)!"
-msgstr "Hittade inget kommando"
+msgstr "Hittade inget kommando (%dx%d)!"
 
 #: plugins/lcd.py:908 plugins/lcd.py:921
 #, python-format
@@ -1021,7 +1023,7 @@ msgstr "Spel"
 #: plugins/mediamenu.py:149
 #, python-format
 msgid "%s Main Menu"
-msgstr "TV Huvudmeny"
+msgstr "%s Huvudmeny"
 
 #: plugins/autoshutdown.py:144
 msgid "A recording is in progress."
@@ -1096,7 +1098,7 @@ msgstr "Avslutar Freevo..."
 #: plugins/alsamixer.py:154 plugins/alsamixer.py:157 plugins/alsamixer.py:162
 #, python-format
 msgid "Volume: %s%%"
-msgstr "Album:"
+msgstr "Album: %s%%"
 
 #: plugins/ossmixer.py:134 plugins/mixer.py:139 plugins/alsamixer.py:165
 msgid "Mute"
@@ -1140,12 +1142,12 @@ msgstr ""
 #: plugins/yac.py:68
 #, python-format
 msgid "Call: %s"
-msgstr "År:"
+msgstr "År: %s"
 
 #: plugins/yac.py:70
 #, python-format
 msgid "Message: %s"
-msgstr "Datum:"
+msgstr "message: %s"
 
 #: plugins/command.py:139
 msgid "Command finished"
@@ -1202,7 +1204,7 @@ msgstr "Spela VCD"
 #: plugins/freevused.py:420
 #, python-format
 msgid "BT event %s"
-msgstr "Längd:"
+msgstr "Längd: %s"
 
 #: plugins/freevused.py:509 tv/plugins/recordings_manager.py:75
 #: tv/edit_favorite.py:106 share/skins/main/basic.fxd:385
@@ -1768,7 +1770,7 @@ msgstr ""
 #: www/htdocs/index.rpy:75
 #, python-format
 msgid "Now Recording %s."
-msgstr "Visa inspelningsschema"
+msgstr "Visa inspelningsschema %s"
 
 #: www/htdocs/index.rpy:81
 msgid "One program scheduled to record."
@@ -2070,7 +2072,7 @@ msgstr ""
 #: www/htdocs/library.rpy:203 www/htdocs/library.rpy:207
 #, python-format
 msgid "Delete %s."
-msgstr "Datum:"
+msgstr "delete: %s"
 
 #: www/htdocs/library.rpy:210
 #, python-format
@@ -2512,7 +2514,7 @@ msgstr ""
 #: tv/program_display.py:236
 #, python-format
 msgid "No matches found for %s"
-msgstr "Hittade inget kommando"
+msgstr "Hittade inget kommando %s"
 
 #: tv/program_display.py:239
 #, python-format
@@ -2522,7 +2524,7 @@ msgstr ""
 #: tv/program_display.py:287
 #, python-format
 msgid "getFavorites failed: %s"
-msgstr "Datum:"
+msgstr "getFavorites failed: %s"
 
 #: tv/program_display.py:335
 msgid "Display favorite"
@@ -2669,7 +2671,7 @@ msgstr ""
 #: tv/edit_favorite.py:324
 #, python-format
 msgid "Failed: %s"
-msgstr "Datum:"
+msgstr "Failed: %s"
 
 #: tv/edit_favorite.py:344
 #, python-format
@@ -2840,7 +2842,7 @@ msgstr ""
 
 #: audio/plugins/playlist.py:83
 msgid "Playlists"
-msgstr "Spela titel %s"
+msgstr "Spela titel"
 
 #: audio/plugins/playlist.py:99
 msgid "Enqueue this Music in Playlist"
@@ -3002,7 +3004,7 @@ msgstr "Flytta till [%s]"
 
 #: video/plugins/imdb.py:87
 msgid "Search IMDB for this file"
-msgstr "Sök IMDB efter [%s]"
+msgstr "Sök IMDB efter"
 
 #: video/plugins/imdb.py:94 video/plugins/imdb.py:101
 #, python-format
@@ -3545,7 +3547,7 @@ msgstr ""
 
 #: directory.py:82
 msgid "Directory Create Playlist"
-msgstr "Katalog på disk [%s]"
+msgstr "Katalog på disk"
 
 #: directory.py:83
 msgid ""
@@ -3555,7 +3557,7 @@ msgstr ""
 
 #: directory.py:86
 msgid "Directory Add Playlist Files"
-msgstr "Katalog på disk [%s]"
+msgstr "Katalog på disk"
 
 #: directory.py:87
 msgid "Add playlist files to the list of items"
@@ -3563,7 +3565,7 @@ msgstr ""
 
 #: directory.py:89
 msgid "Directory Add Random Playlist"
-msgstr "Katalog på disk [%s]"
+msgstr "Katalog på disk"
 
 #: directory.py:90
 msgid "Add an item for a random playlist"
@@ -3571,7 +3573,7 @@ msgstr ""
 
 #: directory.py:92
 msgid "Directory Autoplay Items"
-msgstr "Katalog på disk [%s]"
+msgstr "Katalog på disk"
 
 #: directory.py:93
 msgid ""
@@ -3610,7 +3612,7 @@ msgstr "Felaktigt lösenord"
 
 #: directory.py:588
 msgid "Directory does not exist"
-msgstr "Katalog på disk [%s]"
+msgstr "Katalog på disk"
 
 #: directory.py:618
 msgid "Scanning disc, be patient..."
@@ -3680,22 +3682,22 @@ msgstr ""
 #: main.py:488
 #, python-format
 msgid "Filename: %s"
-msgstr "Datum:"
+msgstr "Filename: %s"
 
 #: main.py:489
 #, python-format
 msgid "Lineno: %s"
-msgstr "Längd:"
+msgstr "Längd: %s"
 
 #: main.py:490
 #, python-format
 msgid "Function: %s"
-msgstr "Upplösning:"
+msgstr "Upplösning: %s"
 
 #: main.py:491
 #, python-format
 msgid "Text: %s"
-msgstr "Längd:"
+msgstr "Längd: %s"
 
 #: main.py:493
 msgid "Please see the logfiles for more info"
