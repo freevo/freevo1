@@ -145,7 +145,7 @@ class PluginInterface(plugin.ItemPlugin):
                     _debug_('NO title', 2)
 
             try:
-                # use title for audicds and album for normal data
+                # use title for audio cds and album for normal data
                 if self.item.getattr('artist') and \
                    ((self.item.getattr('album') and item.type in ('audio', 'dir')) or \
                     (self.item.getattr('title') and item.type == 'audiocd')):
