@@ -254,7 +254,7 @@ def get_items(item):
     if item.filename or (item.mode in ('dvd', 'vcd') and item.player_rating >= 20):
         if item.info.has_key('audio') and len(item.info['audio']) > 1:
             items.append(menu.MenuItem(_('Audio selection'), audio_selection_menu, item))
-        if item.info.has_key('subtitles') and len(item.info['subtitles']) > 1:
+        if item.info.has_key('subtitles') and len(item.info['subtitles']) >= 1:
             items.append(menu.MenuItem(_('Subtitle selection'),
                                        subtitle_selection_menu, item))
         if item.info.has_key('chapters') and item.info['chapters'] > 1:
