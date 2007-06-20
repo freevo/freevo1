@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# encoding.py - IdleBarplugin for showing encoding status
+# transcode.py - Idlebar plugin for showing encoding status
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -257,14 +257,14 @@ class PluginInterface(IdleBarPlugin):
 
         progress_x = ((self.background_w - (2 * self.leftclamp_w)) * self.progress) / 200
         _debug_('progress_x=%s, background_w=%s, leftclamp_w=%s, progress=%s' % \
-            (progress_x, self.background_w, self.leftclamp_w, self.progress))
+            (progress_x, self.background_w, self.leftclamp_w, self.progress), 3)
 
         if self.progress_x != progress_x:
             self.progress_x = progress_x
             self.leftclamp_x = self.progress_x
             self.rightclamp_x = self.background_w - self.rightclamp_w - self.progress_x
             _debug_('progress_x=%s, leftclamp_x=%s, rightclamp_x=%s' % \
-                (self.progress_x, self.leftclamp_x, self.rightclamp_x))
+                (self.progress_x, self.leftclamp_x, self.rightclamp_x), 2)
             return True
         return False
 
@@ -272,7 +272,7 @@ class PluginInterface(IdleBarPlugin):
     def draw(self, (type, object), x, osd):
         '''Build the image by blitting sub images on the background and draw the background
         '''
-        _debug_('draw((type=%r, object=), x=%r, osd=)' % (type, x), 1)
+        _debug_('draw((type=%r, object=), x=%r, osd=)' % (type, x), 3)
         now = time.time()
         duration = now - self.drawtime
         _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 2)
