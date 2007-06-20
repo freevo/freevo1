@@ -34,6 +34,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed Panorama skin thumbnail (B#1731877)
  * Fixed recordings manager not deleting old video when the disk is full (B#1728182)
  * Fixed recordserver causing stack traces when the record_schedule.xml is empty (B#1733192)
+ * Fixed shopping cart to allow copying over existing read-only files (B#1738914)
  * Fixed tv recordings manager not deleting files when out of space (B#1728182)
  * Fixed unicoding errors for media ids when there are Unicode (F#1731825)
 

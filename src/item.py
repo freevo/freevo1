@@ -40,6 +40,7 @@ import plugin
 import util
 
 from util import mediainfo, vfs, Unicode
+from gui import AlertBox
 
 class FileInformation:
     """
@@ -80,18 +81,39 @@ class FileInformation:
 
     def copy(self, destdir):
         for f in self.files + [ self.fxd_file, self.image, self.edl_file ]:
+            error_msg=''
             if f:
                 if vfs.isoverlay(f):
                     d = vfs.getoverlay(destdir)
                 else:
                     d = destdir
+
                 if not os.path.isdir(d):
                     os.makedirs(d)
+
                 if os.path.isdir(f):
                     dst = os.path.join(d, os.path.split(f)[1])
                     shutil.copytree(f, dst)
                 else:
-                    shutil.copy2(f, d)
+                    dst = os.path.join(d, os.path.split(f)[1])
+                    if os.path.exists(dst):
+                        if config.SHOPPINGCART_CLOBBER:
+                            try:
+                                os.unlink(dst)
+                            except IOError, e:
+                                error_msg='Can\'t delete "%s": %s' % (dst, e)
+
+                        else:
+                            error_msg='Can\'t copy "%s", destination exists' % dst
+                    else:
+                        try:
+                            shutil.copy2(f, d)
+                        except IOError, e:
+                            error_msg='Can\'t copy "%s": %s' % (f, e)
+
+            if error_msg:
+                _debug_(error_msg, config.DWARNING)
+                #AlertBox(text=_(Unicode(error_msg))).show()
 
 
     def move_possible(self):

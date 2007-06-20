@@ -283,6 +283,7 @@ LOCAL_CONF_CHANGES = [
      Added OSD_SOUNDS_ENABLED defaulted to False for menu sounds
      Added SKIN_DEBUG to show boxes around each skin area for debugging skins
      Added IMAGEVIEWER_REVERSED_IMAGES for when the images are incorrectly rotated
+     Added SHOPPINGCART_CLOBBER to allow a move to clobber an existing file
      ''' ),
 ]
 
@@ -676,6 +677,8 @@ rom_plugins = {}
 for t in ('video', 'audio', 'image', 'games'):
     rom_plugins[t] = plugin.activate('rom_drives.rom_items', type=t, level=50)
 
+# Set to true to allow destination to be clobbered
+SHOPPINGCART_CLOBBER = False
 
 # mixer
 plugin.activate('mixer')
