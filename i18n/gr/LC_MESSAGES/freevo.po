@@ -1,0 +1,1665 @@
+# GREEK TRANSLATION FOR FREEVO
+# Copyright (C) 2007 FREEVO
+# Per Wigren <lefteris@kerkyra.gr, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Freevo 1.7\n"
+"POT-Creation-Date: 2007-03-21 19:11-0200\n"
+"PO-Revision-Date: 2007-03-28 03:15+0100\n"
+"Last-Translator: Lefteris F. Sarakinos <lefteris@kerkyra.gr>\n"
+"Language-Team: My Self :)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Translate with: msgfmt freevo.po -o freevo.mo\n"
+
+msgid "My Movies"
+msgstr "Οι ταινίες μου"
+
+msgid "My Videos"
+msgstr "Τα βίντεο μου"
+
+msgid "Volume: %s%%"
+msgstr "Ένταση: %s%%"
+
+msgid "Mute"
+msgstr "Σίγαση"
+
+#: tv/tvmenu.py:147 tv/tvmenu.py:155
+#, python-format
+msgid "Could not find TV channel %s"
+msgstr "Δεν βρέθκε το κανάλι %s"
+
+msgid "No recordings are scheduled"
+msgstr "Δεν βρέθηκαν προγραμματισμένες μαγνητοσκοπήσεις"
+
+msgid "Nothing scheduled."
+msgstr "Τίποτα προγραμματισμένο"
+
+msgid "No favorites."
+msgstr "Τίποτα αγαπημένο"
+
+#: tv/tvmenu.py:180
+msgid "TV Guide"
+msgstr "Οδηγός-TV"
+
+#: tv/tvmenu.py:181
+msgid "Recorded Shows"
+msgstr "Μαγνητοσκοπημένα"
+
+#: tv/tvmenu.py:183
+msgid "Scheduled Recordings"
+msgstr "Προγραμματισμένες Μαγνητοσκοπίσεις"
+
+msgid "View Favorites"
+msgstr "Προβολή Αγαπημένων"
+
+msgid "Manual Record"
+msgstr "Χειροκίνητη Μαγνητοσκόπηση"
+
+msgid "View VCR Input"
+msgstr "Δείτε την είσοδο VCR"
+
+msgid "Program"
+msgstr "Πρόγραμμα"
+
+msgid "Channel"
+msgstr "Κανάλι"
+
+msgid "Start"
+msgstr "Έναρξη"
+
+msgid "Stop"
+msgstr "Τερματισμός"
+
+#: tv/tvmenu.py:185
+msgid "Search Guide"
+msgstr "Αναζήτηση Οδηγού"
+
+#: tv/tvmenu.py:188
+msgid "TV Main Menu"
+msgstr "Βασικό Μενού TV"
+
+#: tv/tvmenu.py:224
+msgid "The list of TV channels is invalid!\n"
+msgstr "Η λίστα με τα κανάλια τηλεόρασης δεν είναι έγκυρη!\n"
+
+#: tv/tvmenu.py:225
+msgid "Please check the config file."
+msgstr "Παρακαλώ ελένξτε το αρχείο παραμετροποίησης!"
+
+#: tv/record_schedule.py:98
+msgid "View Recording Schedule"
+msgstr "Εμφάνιση του Προγράμματος Μαγνητοσκοπήσεων"
+
+#: tv/record_schedule.py:100
+msgid "Delete Scheduled Item"
+msgstr "Διαγραφή Προγραμματισμένου αντικειμένου"
+
+#: tv/record_schedule.py:102
+msgid "RECORDING SCHEDULE"
+msgstr "ΠΡΟΓΡΑΜΜΑ ΜΑΓΝΗΤΟΣΚΟΠΙΣΗΣ"
+
+#: tv/record_schedule.py:175
+msgid "VIEW RECORDING SCHEDULE"
+msgstr "ΕΜΦΑΝΙΣΗ ΠΡΟΓΡΑΜΜΑΤΟΣ ΜΑΓΝΗΤΟΣΚΟΠΗΣΕΩΝ"
+
+#: tv/record_schedule.py:178
+msgid "DELETE SCHEDULED ITEM"
+msgstr "ΔΙΑΓΡΑΦΗ ΠΡΟΓΡΑΜΜΑΤΙΣΜΕΝΟΥ ΑΝΤΙΚΕΙΜΕΝΟΥ"
+
+#: tv/record_schedule.py:182
+msgid "All Currently Recording Items Have Been Killed!"
+msgstr "Όλα τα Τρέχοντα Προγραμματισμένα Αντικείμενα σκοτώθηκαν!"
+
+#: tv/tvguide.py:77 tv/tvguide.py:525 tv/tvguide.py:527
+#: skins/main/tvlisting_area.py:367
+msgid "This channel has no data loaded"
+msgstr "Αυτό το κανάλι δεν έχει πληροφορίες φορτωμένες"
+
+#: tv/tvguide.py:87
+msgid "Preparing the program guide"
+msgstr "Προετοιμασία του οδηγού προγράμματος"
+
+#: tv/tvguide.py:91
+msgid "TV Guide is corrupt!"
+msgstr "Ο Οδηγός Τηλεόρασης είναι κατεστραμένος!"
+
+#: gui/AlertBox.py:162 gui/ConfirmBox.py:162 plugins/commands.py:174
+msgid "OK"
+msgstr "OK"
+
+#: gui/ConfirmBox.py:166
+msgid "CANCEL"
+msgstr "Άκυρο"
+
+#: audio/xmms.py:156 games/game.py:99
+#, python-format
+msgid "File \"%s\" not found!"
+msgstr "Το αρχείο \"%s\" δεν βρέθηκε!"
+
+msgid "Track 1 "
+msgstr "Κομμάτι 1"
+
+#: audio/audiodiskitem.py:60 audio/plugins/cdbackup.py:459
+msgid "Unknown CD Album"
+msgstr "Άγνωστο Άλμπουμ CD"
+
+#: audio/audiodiskitem.py:95 image/plugins/gphoto.py:155 directory.py:439
+msgid "Browse directory"
+msgstr "Περιήγηση καταλόγου"
+
+#: audio/plugins/coversearch.py:140
+msgid ""
+"To search for covers you need an Amazon.com Web Services\n"
+"license key. You can get yours from:\n"
+msgstr ""
+"Για την αναζήτηση των εξωφύλλων χρειάζεστε ένα κλειδί\n"
+"για την Υπηρεσία Web του Amazon.com. Μπορείται να αποκτήσετε από το:\n"
+
+
+#: audio/plugins/coversearch.py:166
+msgid "Find a cover for this music"
+msgstr "Βρες ένα εξώφυλλο για αυτή την μουσική"
+
+#: audio/plugins/coversearch.py:170 audio/plugins/coversearch.py:178
+#: audio/plugins/coversearch.py:186 audio/plugins/cdbackup.py:455
+#: video/plugins/xine.py:131 plugins/lcd.py:910 plugins/lcd.py:921
+#: plugins/lcd.py:934
+msgid "WARNING"
+msgstr "ΠΡΟΣΟΧΗ"
+
+#: audio/plugins/coversearch.py:170 audio/plugins/coversearch.py:178
+#, python-format
+msgid ""
+"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
+"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
+"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
+"Info. Maybe you must fix this file (%s) tag?"
+msgstr ""
+
+#: audio/plugins/coversearch.py:186
+msgid "Unknown CD, cover searching is disabled"
+msgstr "Άγνωστο Άλμουμ CD, το εξώφυλλο είναι ανενεργό"
+
+#: audio/plugins/coversearch.py:194
+msgid "searching Amazon..."
+msgstr "αναζήτηση Amazon..."
+
+#: audio/plugins/coversearch.py:211
+#, python-format
+msgid "No matches for %(artist)s - %(album)s"
+msgstr "Δεν ταιριάζει κάτι στο %(album)s - %(artist)s"
+
+#: audio/plugins/coversearch.py:219
+msgid "The cover provider returned bad information."
+msgstr "Ο προμηθευτής του Εξωφύλλου επέστρεψε λάθος πληροφορία."
+
+#: audio/plugins/coversearch.py:256 audio/plugins/coversearch.py:266
+msgid "small"
+msgstr "μικρό"
+
+#: audio/plugins/coversearch.py:275
+msgid "Cover Search Results"
+msgstr "Αποτελέσματα Αναζήτησης Εξωφύλλου"
+
+#: audio/plugins/coversearch.py:279
+msgid "No covers available from Amazon"
+msgstr "Δεν υπαρχουν διαθέσιμα εξώφυλλα από το Amazon IMDB"
+
+#: audio/plugins/coversearch.py:293 video/plugins/imdb.py:221
+msgid "getting data..."
+msgstr "ανάκτηση πληροφοριών..."
+
+#: audio/plugins/webradio.py:65
+msgid "Browse entries"
+msgstr "περιήγηση καταχωρήσεων"
+
+#: audio/plugins/webradio.py:85
+msgid "Webradio"
+msgstr "Ραδιόφωνο"
+
+#: audio/plugins/webradio.py:90
+msgid "Browse genre list"
+msgstr "περιήγηση λίστας"
+
+#: audio/plugins/webradio.py:99
+msgid "Webradio Genre List"
+msgstr "Λίστα Ραδιοφώνου"
+
+#: audio/plugins/xine.py:74 audio/plugins/xine.py:98
+#: audio/plugins/cdbackup.py:221 audio/plugins/cdbackup.py:524
+#: audio/plugins/mplayer.py:234 video/plugins/xine.py:97
+#: video/plugins/xine.py:128 video/plugins/mplayer.py:583
+#: video/plugins/mplayer.py:637 plugins/lcd.py:716 plugins/lcd.py:913
+#: plugins/lcd.py:924 plugins/lcd.py:935
+msgid "ERROR"
+msgstr "ΛΑΘΟΣ"
+
+#: audio/plugins/xine.py:74
+msgid "'fbxine' not found, plugin 'xine' deactivated"
+msgstr "δεν βρέθηκε το 'fbxine', το πρόσθετο 'xine' απενεργοποιήθηκε"
+
+#: audio/plugins/xine.py:98 video/plugins/xine.py:128
+msgid "'fbxine' version too old, plugin 'xine' deactivated"
+msgstr "η έκδοση του 'fbxine' είναι πολύ παλιά, το πρόσθετο 'xine' απενεργοποιήθηκε" 
+
+#: audio/plugins/xine.py:99 video/plugins/xine.py:129
+#, python-format
+msgid "You need software %s"
+msgstr "Χρειάζεστε το λογισμικό %s"
+
+#: audio/plugins/cdbackup.py:213
+msgid "Show CD ripping status"
+msgstr "Εμφάνιση κατάστασης αντιγραφής του CD"
+
+#: audio/plugins/cdbackup.py:218
+msgid "Rip the CD to the hard drive"
+msgstr "Αντιγραφή του CD στο σκληρό δίσκο"
+
+#: audio/plugins/cdbackup.py:219
+msgid "Get CDs available for ripping"
+msgstr "Πάρε τα CDs που είναι διαθέσιμα για αντιγραφή"
+
+#: audio/plugins/cdbackup.py:221
+msgid "Item is not an Audio CD"
+msgstr "Το αντικείμενο δεν είναι CD μουσικής"
+
+#: audio/plugins/cdbackup.py:228
+#, python-format
+msgid ""
+"Ripping in progress\n"
+"Track %d of %d"
+msgstr ""
+"Αντιγραφή σε εξέλιξη\n"
+"Κομμάτι %d από %d"
+
+#: audio/plugins/cdbackup.py:243
+msgid "Backup CD to hard drive in mp3 format"
+msgstr "Αντγραφή του CD στο σκληρό δίσκο σε μορφή MP3"
+
+#: audio/plugins/cdbackup.py:246
+msgid "Backup CD to hard drive in Ogg format"
+msgstr "Αντγραφή του CD στο σκληρό δίσκο σε μορφή Ogg"
+
+#: audio/plugins/cdbackup.py:249
+msgid "Backup CD to hard drive in FLAC format"
+msgstr "Αντγραφή του CD στο σκληρό δίσκο σε μορφή FLAC"
+
+#: audio/plugins/cdbackup.py:251
+msgid "Backup CD to hard drive in wav format"
+msgstr "Αντγραφή του CD στο σκληρό δίσκο σε μορφή wav"
+
+
+#: audio/plugins/cdbackup.py:254
+msgid "CD Backup"
+msgstr "Αντιγραφή CD"
+
+#: audio/plugins/cdbackup.py:262
+msgid "Ripping started"
+msgstr "Η αντιγραφή άρχισε"
+
+msgid "Ripping aborted"
+msgstr "Η αντιγραφή διακόπηκε"
+
+#: audio/plugins/cdbackup.py:329
+msgid "Directory %s already exists"
+msgstr "Ο Φάκελος [%s] υπάρχει ήδη"
+
+#: audio/plugins/cdbackup.py:455
+msgid "No CDDB data available to mmpython"
+msgstr "Δεν υπαρχουν διαθέσιμες πληροφορίες CDDB για το mmpython"
+
+#: audio/plugins/cdbackup.py:458
+msgid "Unknown Artist"
+msgstr "Άγνωστος Καλλιτέχνης"
+
+#: audio/plugins/cdbackup.py:458 audio/plugins/cdbackup.py:459
+msgid "RENAME"
+msgstr "Μετονομασία"
+
+#: audio/plugins/cdbackup.py:460
+msgid "Other"
+msgstr "Άλλο"
+
+#: audio/plugins/cdbackup.py:463
+msgid ""
+"CD info not found!\n"
+"Must manually rename files\n"
+"when finished ripping"
+msgstr ""
+"Δεν υπαρχουν πληροφορίες για το CD!\n"
+"πρέπει να μετονομάσετε τα αρχεία\n"
+"οταν τελειώσει η αντιγραφή"
+
+#: audio/plugins/cdbackup.py:524
+msgid "Problem trying to call:"
+msgstr "Πρόβλημα κατά την κλήση του:"
+
+msgid "Browse disc"
+msgstr "Περιήγηση δίσκου"
+
+msgid "Stop CD ripping"
+msgstr "Τέλος αντιγραφής CD"
+
+
+#: audio/plugins/radio.py:70
+msgid "Listen to Radio Station"
+msgstr "Ακούστε το Ραδιοφωνικό Σταθμό"
+
+#: audio/plugins/radio.py:120
+msgid "No Radio Stations found"
+msgstr "Δεν βρέθηκαν Ραδιοφωνικοί Σταθμοί"
+
+#: audio/plugins/radio.py:121
+msgid "Radio Stations"
+msgstr "Ραδιοφωνικοί Σταθμοί"
+
+#: audio/plugins/radio.py:151
+msgid "Radio"
+msgstr "Ράδιο"
+
+#: audio/plugins/detach.py:63
+msgid "Show player"
+msgstr "Εμφάνιση αναπαραγωγής"
+
+#: audio/plugins/vux.py:90
+msgid "[VUX] Start playing"
+msgstr "[VUX] Εκκίνηση"
+
+#: audio/plugins/vux.py:91
+msgid "[VUX] Stop playing"
+msgstr "[VUX] Διακοπή"
+
+#: audio/plugins/vux.py:92
+msgid "[VUX] Next (rating down)"
+msgstr "[VUX] Επόμενο (χαμηλότερα)"
+
+#: audio/plugins/vux.py:93
+msgid "[VUX] Next (rating intact)"
+msgstr "[VUX] Επόμενο (ασχέτως βαθμού)"
+
+#: audio/plugins/vux.py:94
+msgid "[VUX] Next (rating up)"
+msgstr "[VUX] Επόμενο (υψηλότερα)"
+
+#: audio/plugins/vux.py:95
+msgid "[VUX] Playing item rating up"
+msgstr "[VUX] Παίζωντας το αντικείμενο προς τα πάνω"
+
+#: audio/plugins/vux.py:96
+msgid "[VUX] Playing item rating down"
+msgstr "[VUX] Παίζωντας το αντικείμενο προς τα κάτω"
+
+#: audio/plugins/vux.py:97
+msgid "[VUX] a dir item do not select"
+msgstr "[VUX] ένας φάκελος δεν επιλεγέται"
+
+#: audio/plugins/vux.py:98
+msgid "[VUX] an audio item, do not select"
+msgstr "[VUX] ένα αντικείμενο ήχου, δεν επιλέγεται"
+
+#: audio/plugins/mplayer.py:138
+#, python-format
+msgid ""
+"%s\n"
+"not found!"
+msgstr ""
+"%s\n"
+"δεν βρέθηκε!"
+
+#: audio/plugins/mplayer.py:165
+msgid "Invalid audio file"
+msgstr "Απαράδεκτο αρχείο ήχου"
+
+#: audio/plugins/mplayer.py:234 video/plugins/mplayer.py:583
+#, python-format
+msgid "Cannot open \"%s\" and \"%s\" for MPlayer logging!"
+msgstr "Δεν μπορεί να ανοιχτεί το \"%s\" και \"%s\" για καταγραφή του Maplayer!"
+
+#: audio/plugins/mplayer.py:237
+msgid ""
+"Please set MPLAYER_DEBUG=0 in local_conf.py, or start Freevo from a "
+"directory that is writeable!"
+msgstr ""
+
+#: audio/plugins/mplayer.py:241 video/plugins/mplayer.py:580
+#, python-format
+msgid "MPlayer logging to \"%s\" and \"%s\""
+msgstr ""
+
+#: audio/plugins/playlist.py:90
+msgid "Enqueue this Music in Playlist"
+msgstr "Προσθήκη στην λίστα αναπαραγωγής"
+
+#: audio/plugins/playlist.py:92
+msgid "Make a new Audio Playlist"
+msgstr "Φτιάξε μια νέα λίστα αναπαραγωγής"
+
+#: games/mame_cache.py:170
+msgid "Generating MAME cache, please wait."
+msgstr "Δημιουργία MAME-cache, παρακαλώ περιμένετε."
+
+#: image/viewer.py:118
+#, python-format
+msgid ""
+"Can't Open Image\n"
+"'%s'"
+msgstr ""
+"Δεν μπορεί να ανοιχτεί η φωτογραφία\n"
+"'%s'"
+
+#: image/viewer.py:351
+msgid "Title: "
+msgstr "Τίτλος:"
+
+#: image/viewer.py:352
+msgid "Description: "
+msgstr "Περιγραφή:"
+
+#: image/viewer.py:386
+msgid "No information available"
+msgstr "Μη διαθέσιμες πληροφορίες"
+
+#: image/imageitem.py:110 image/plugins/gphoto.py:119
+msgid "View Image"
+msgstr "Εμφάνιση Φωτογραφίας"
+
+msgid "Delete"
+msgstr "Διαγραφή"
+
+msgid "Delete image"
+msgstr "Διαγραφή φωτογραφίας"
+
+msgid "Play all files in directory"
+msgstr "Παίξε όλα τα αρχεία του φακέλου"
+
+#: skins/main/listing_area.py:249
+msgid "This directory is empty"
+msgstr "Αυτός ο φάκελος είναι άδειος"
+
+#: skins/main/main.py:160
+msgid "TV GUIDE"
+msgstr "Οδηγός-TV"
+
+#: skins/main/main.py:290
+msgid "Starting Freevo, please wait ..."
+msgstr "Ξεκινά το Freevo, παρακαλώ περιμένετε..."
+
+msgid "Starting Freevo-%s, please wait ..."
+msgstr "Ξεκινά το Freevo-%s, παρακαλώ περιμένετε..."
+
+#: skins/main/main.py:550 skins/main/main.py:622
+msgid "INTERNAL ERROR, NO MENU!"
+msgstr "ΕΣΩΤΕΡΙΚΟ ΛΑΘΟΣ, ΔΕΝ ΥΠΑΡΧΕΙ ΜΕΝΟΥ!"
+
+#: video/videoitem.py:290 video/configure.py:178 playlist.py:249
+#: playlist.py:253 playlist.py:361
+msgid "Play"
+msgstr "Παίξε το VCD"
+
+#: video/videoitem.py:294
+msgid "Play DVD"
+msgstr "Παίξε το DVD"
+
+msgid "Stream %s"
+msgstr "Εκπομπή %s"
+
+
+#: video/videoitem.py:295 video/videoitem.py:297
+msgid "DVD title list"
+msgstr "Λίστα τίτλων του DVD"
+
+#: video/videoitem.py:298 video/videoitem.py:306
+msgid "Play default track"
+msgstr "Παίξε το προεπιλεγμένο κομμάτι"
+
+#: video/videoitem.py:302
+msgid "Play VCD"
+msgstr "Παίξε το VCD"
+
+#: video/videoitem.py:303 video/videoitem.py:305
+msgid "VCD title list"
+msgstr "Λίστα τίτλων του VCD"
+
+#: video/videoitem.py:311
+msgid "Play with maximum cache"
+msgstr "Παίξε με το μέγιστο cache"
+
+msgid "Play with alternate player"
+msgstr "Παίξε με το εναλακτικό πρόγραμμα"
+
+#: video/videoitem.py:314
+msgid "Show variants"
+msgstr "Εμφάνιση μεταβλητών"
+
+#: video/videoitem.py:395
+msgid "Wait while detecting media..."
+msgstr "Παρακαλώ περιμένετε καθώς αναλύεται το μέσο..."
+
+#: video/videoitem.py:417
+#, python-format
+msgid "Media not found for file \"%s\".\n"
+msgstr "Το μέσο δεν βρέθηκε για το αρχείο \"%s\".\n"
+
+#: video/videoitem.py:418
+msgid "Please insert the media."
+msgstr "Παρακαλώ εισάγετε το μέσο."
+
+#: video/videoitem.py:434
+#, python-format
+msgid "Media not found for %s track %s"
+msgstr "Το μέσο δεν βρέθηκε για το %s τμήμα %s"
+
+#: video/videoitem.py:554
+#, python-format
+msgid "Play Title %s"
+msgstr "Παίξε τον τίτλο %s"
+
+#: video/configure.py:83
+msgid "Audio Menu"
+msgstr "Άκουσε Μουσική"
+
+#: video/configure.py:99
+msgid "no subtitles"
+msgstr "χωρίς υπότιτλους"
+
+#: video/configure.py:102
+msgid "Subtitle Menu"
+msgstr "Μενού Υποτίτλων"
+
+#: video/configure.py:118
+msgid "Play chapter %s"
+msgstr "Παίξε το κεφάλαιο %s"
+
+#: video/configure.py:120
+msgid "Chapter Menu"
+msgstr "Μενού Κεφαλαίων"
+
+#: video/configure.py:147
+#, python-format
+msgid "Turn off %s"
+msgstr "Σβήσε %s"
+
+#: video/configure.py:148
+#, python-format
+msgid "Turn on %s"
+msgstr "Άνοιξε %s"
+
+#: video/configure.py:163
+msgid "Audio selection"
+msgstr "Επιλογή ήχου"
+
+#: video/configure.py:165
+msgid "Subtitle selection"
+msgstr "Επιλογή υπότιτλου"
+
+#: video/configure.py:168
+msgid "Chapter selection"
+msgstr "Επιλογή κεφαλαίου"
+
+#: video/configure.py:170
+msgid "deinterlacing"
+msgstr "Επιδίπλωση"
+
+#: video/configure.py:179
+msgid "Config Menu"
+msgstr "Μενού Παραμετροποίησης"
+
+#: video/plugins/xine.py:97
+msgid "'XINE_COMMAND' not defined, plugin 'xine' deactivated"
+msgstr "Το 'XINE_COMMAND' δεν ορίστηκε, το plugin 'xine' απενεργοποιήθηκε" 
+
+#: video/plugins/xine.py:98
+msgid "please check the xine section in freevo_config.py"
+msgstr "παρακαλώ ελέγξτε το τμήμα του xine στο freevo_config.py"
+
+#: video/plugins/xine.py:131
+msgid "'xine' version too old, plugin in fallback mode"
+msgstr "η έκδοση του 'xine' είναι πολύ παλιά, το plugin θα υπολειτουργεί"
+
+#: video/plugins/xine.py:132
+#, python-format
+msgid "You need %s to use all features of the '%s' plugin"
+msgstr "Χρειάζεστε το %s για να εκμεταλευτείτε όλες τις δυνατότητες του '%s' plugin"
+
+#: video/plugins/bookmarker.py:99
+msgid "Resume playback"
+msgstr "Επιστροφή στην ταινία"
+
+#: video/plugins/bookmarker.py:104
+msgid "Bookmarks"
+msgstr "Σελιδοδείκτες"
+
+#: video/plugins/bookmarker.py:139
+#, python-format
+msgid "Jump to %s"
+msgstr "Μεταπίδηση στο %s"
+
+#: video/plugins/mover.py:114
+#, python-format
+msgid "Move to [%s]"
+msgstr "Μετάβαση στο [%s]"
+
+#: video/plugins/linkbrowser.py:155
+msgid "Downloading link list..."
+msgstr "Κατεβάσμα του καταλόγου συνδέσμων..."
+
+#: video/plugins/linkbrowser.py:162
+#, python-format
+msgid "Failed to download %s"
+msgstr "Αδυναμία στο κατέβασμα του %s"
+
+#: video/plugins/mplayer.py:637
+msgid "unknow error while playing file"
+msgstr ""
+
+#: video/plugins/imdb_info.py:72
+msgid "Show info for this file"
+msgstr "Δείξε πληροφορίες για αυτό το αρχείο"
+
+#: video/plugins/imdb_info.py:86
+msgid "There is no IMDB information for this file."
+msgstr "Δεν υπάρχουν πληροφορίες IMDB για αυτό το αρχείο."
+
+#: video/plugins/imdb.py:112
+msgid "Search IMDB for this file"
+msgstr "Αναζήτησε IMDB για αυτό το αρχείο"
+
+#: video/plugins/imdb.py:119 video/plugins/imdb.py:125
+#, python-format
+msgid "Search IMDB for [%s]"
+msgstr "Αναζήτησε IMDB για το αρχείο [%s]"
+
+#: video/plugins/imdb.py:136
+msgid "searching IMDB..."
+msgstr "αναζήτηση IMDB..."
+
+#: video/plugins/imdb.py:160
+msgid "Unknown error while connecting to IMDB"
+msgstr "Άγνωστο σφάλμα καθώς συνδέθηκα στο IMDB"
+
+#: video/plugins/imdb.py:178
+msgid "IMDB Query"
+msgstr "IMDB Ερώτημα"
+
+#: video/plugins/imdb.py:182
+msgid "No information available from IMDB"
+msgstr "Δεν υπάρχουν διαθέσιμες πληροφορίες από το IMDB"
+
+#: main.py:128
+msgid "shutting down..."
+msgstr "Απενεργοποίση..."
+
+#: main.py:234
+msgid "Freevo Main Menu"
+msgstr "Κεντρικό Μενού του Freevo"
+
+#: main.py:347
+#, python-format
+msgid ""
+"Event '%s' crashed\n"
+"\n"
+"Please take a look at the logfile and report the bug to the Freevo mailing "
+"list. The state of Freevo may be corrupt now and this error could cause more "
+"errors until you restart Freevo.\n"
+"\n"
+"Logfile: %s\n"
+"\n"
+msgstr ""
+"Γεγονός '%s' έσπασε \n"
+"\n"
+"Παρακαλώ ελένξτε το αρχείο καταγραφής και κοινοποιήστε το πρόβλημα στις λίστες "
+"του Freevo. Η κατάσταση του Freevo μπορεί να καταστράφηκε τώρα και αυτό το λάθος "
+"μπορεί να δημιουργήσει και άλλα μέχρι να επανεκκινήσετε το Freevo.\n"
+"Αρχείο καταγραφής: %s\n"
+"\n"
+
+#: menu.py:565
+msgid "No action defined for this choice!"
+msgstr "Δεν έχει οριστεί ενέργεια για αυτή την επιλογή!"
+
+#: osd.py:414
+msgid "z = Toggle Fullscreen"
+msgstr "z = Εναλλαγή Πλήρους Οθόνης"
+
+#: osd.py:415
+msgid "Arrow Keys = Move"
+msgstr "Πλήκτρα Βελών = Κίνηση"
+
+#: osd.py:416
+msgid "Spacebar = Select"
+msgstr "Μπάρα κενού [Space] = Επιλογή"
+
+#: osd.py:417
+msgid "Escape = Stop/Prev. Menu"
+msgstr "Escape = Σταμάτημα/Προηγούμενο Μενού"
+
+#: osd.py:418
+msgid "h = Help"
+msgstr "h = Βοήθεια"
+
+#: directory.py:121
+msgid "Movie Playlists"
+msgstr "Λίστες Ταινιών"
+
+#: directory.py:122
+msgid "Use automatic playlist for movie items."
+msgstr "Χρήση αυτόματης λίστας για τις ταινίες."
+
+#: directory.py:124
+msgid "Directory Sort By Date"
+msgstr "Ταξινόμηση Φακέλου κατά Ημ/νια"
+
+#: directory.py:125
+msgid "Sort directory by date and not by name."
+msgstr "Ταξινόμηση Φακέλου κατά ημ/νια και όχι κατά όνομα."
+
+#: directory.py:127
+msgid "Directory Autoplay Single Item"
+msgstr "Αυτόματη Εκκίνηση Μοναδικού αντικείμένου Φακέλου"
+
+#: directory.py:128
+msgid "Don't show directory if only one item exists and auto-select the item."
+msgstr "Μη δείχνεις το φάκελο αν υπάρχει μόνο ένα αντικείμενο και αυτόματα επέλεξε το."
+
+#: directory.py:131
+msgid "Audio Random Playlist"
+msgstr "Τυχαία Λίστα Μουσικής"
+
+#: directory.py:132
+msgid "Show radom playlist item for audio menus."
+msgstr "Εμφάνιση Τυχαίας Λίστας Αντικειμένων για τα μουσικά μενού."
+
+#: directory.py:134
+msgid "Force Skin Layout"
+msgstr "Επιβολή Δέρματος Εμφάνισης"
+
+#: directory.py:135
+msgid ""
+"Force skin to a specific layout. This option doesn't work with all skins and "
+"the result may differ based on the skin."
+msgstr ""
+"Επιβολή δέρματος για μια οθόνη. Αυτή η επιλογή δεν λειτουργεί σε όλα τα δέρματα "
+"και το αποτέλεσμα μπορεί να διαφέρει ανα δέρμα."
+
+#: directory.py:138
+msgid "Directory Smart Sort"
+msgstr "Έξυπνη Ταξινόμηση Φακέλου"
+
+#: directory.py:139
+msgid "Use a smarter way to sort the items."
+msgstr "Χρησιμοποίησε ένα εξυπνότερο τρόπο για την ταξινόμηση των αντικειμένων."
+
+msgid "Directory Smart Names"
+msgstr "Έξυπνα Ονόματα Φακέλου"
+
+msgid "Use a smarter way to abbreviate the name of the items."
+msgstr "Χρησιμοποίησε ένα εξυπνότερο τρόπο για την δημιουργία των ονομάτων των αντικειμένων."
+
+#: directory.py:141
+msgid "Use MediaID Tag Names"
+msgstr "Χρησιμοποίησε Ταυτότητα Μέσου για Ονόματα"
+
+#: directory.py:142
+msgid "Use the names from the media files tags as display name."
+msgstr "Χρησιμοποιήσε τα ονόματα των αρχείων για εμφανιζόμενα ονόματα."
+
+#: directory.py:144
+msgid "Directory Reverse Sort"
+msgstr "Αντίστροφη Ταξινόμηση Φακέλου"
+
+#: directory.py:145
+msgid "Show the items in the list in reverse order."
+msgstr "Εμφάνισε τα αντικείμενα της λίστας σε αντίστροφη κατάταξη."
+
+msgid "Directory Create Playlist"
+msgstr "Δημιουργία Λίστας Αναπαραγωγής Φακέλου"
+
+msgid "Handle the directory as playlist. After one file is played, the next one will be started."
+msgstr "Χειρισμός του φακέλου ως λίστα αναπαραγωγής. Μόλις το αρχείο παίξει, το επόμενο θα αρχίσει."
+
+msgid "Directory Add Playlist Files"
+msgstr "Προσθήκη Φακέλου στη Λίστας Αναπαραγωγής"
+
+msgid "Add playlist files to the list of items"
+msgstr "Προσθήκη των αντικειμένων στην λίστα αναπαραγωγής"
+
+msgid "Directory Add Random Playlist"
+msgstr "Προσθήκη Φακέλου σε Λίστα Τυχαίας Αναπαραγωγής"
+
+msgid "Add an item for a random playlist"
+msgstr "Προσθήκη ενός αντικειμένου σε μια Λίστα Τυχαίας Αναπαραγωγής"
+
+msgid "Directory Autoplay Items"
+msgstr "Αυτόματη Αναπαραγωγή Αντικειμένων Φακέλου"
+
+msgid "Autoplay the whole directory (as playlist) when it contains only files and no directories"
+msgstr "Αυτόματη αναπαραγωγή ολόκληρου του φακέλου (ως λίστα αναπαραγωγής) όταν περιέχει μόνο αρχεία και όχι φακέλους"
+
+msgid "Show all kinds of items"
+msgstr "Εμφάνισε τα όλων των ειδών τα αντικείμενα"
+
+msgid "Show video, audio and image items in this directory"
+msgstr "Εμφάνισε αρχεία βίντεο, μουσικής και φωτογραφιών σε αυτό τον φάκελο"
+
+msgid "Directory Autobuild Thumbnails "
+msgstr "Επαναδόμηση Μικρογραφιών Φακέλου "
+
+msgid "Build video thumbnails for all items (may take a while when entering)."
+msgstr "Χτίζει τις μικρογραφίες των βίντεο για όλα  λίγο παραπάνω όταν εισέρχεστε). "
+
+#: directory.py:414
+#, python-format
+msgid "Directory on disc [%s]"
+msgstr "Φάκελος στο δίσκο [%s]"
+
+#: directory.py:415
+msgid "Directory"
+msgstr "Φάκελος"
+
+#: directory.py:442
+msgid "Random play all items"
+msgstr "Τυχαία Παίξε όλα τα αντικείμενα"
+
+#: directory.py:444
+msgid "Recursive random play all items"
+msgstr "Παρατεταμένα τυχαία παίξε όλα τα αντικείμενα"
+
+#: directory.py:446
+msgid "Recursive play all items"
+msgstr "Παρατεταμένα παίξε όλα τα αντικείμανα"
+
+#: directory.py:448
+msgid "Configure directory"
+msgstr "Παραμετροποίηση Φακέλου"
+
+#: directory.py:471
+msgid "Enter Password"
+msgstr "Δώστε Κωδικό"
+
+#: directory.py:496
+msgid "Password incorrect"
+msgstr "Λάθος Κωδικός"
+
+#: directory.py:540
+msgid "Scanning disc, be patient..."
+msgstr "Ανάλυση δίσκου, υπομονή..."
+
+#: directory.py:542
+msgid "Scanning directory, be patient..."
+msgstr "Ανάλυση φακέλου, υπομονή..."
+
+#: directory.py:859 directory.py:896
+msgid "on"
+msgstr "Άναψε"
+
+#: directory.py:861 directory.py:864 directory.py:898 directory.py:901
+msgid "off"
+msgstr "Σβήσε"
+
+#: directory.py:866 directory.py:903
+msgid "auto"
+msgstr "αυτόματο"
+
+#: directory.py:907
+msgid "Configure"
+msgstr "Παραμετροποίηση"
+
+#: playlist.py:115 playlist.py:157
+msgid "Cannot open file \"%s\""
+msgstr "Δεν μπορώ να ανοίξω το αρχείο \"%s\"."
+
+#: playlist.py:244
+msgid "Random playlist"
+msgstr "Τυχαία Λίστα Αναπαραγωγής"
+
+#: playlist.py:250 playlist.py:252
+msgid "Browse Playlist"
+msgstr "Εμφάνιση Λίστας Αναπαραγωγής"
+
+#: playlist.py:268
+msgid "empty playlist"
+msgstr "κενή λίστα αναπαραγωγής"
+
+#: plugins/headlines.py:117 plugins/headlines.py:283
+msgid "Headlines"
+msgstr "Επικεφαλίδες"
+
+#: plugins/headlines.py:206
+msgid "Show Sites Headlines"
+msgstr "Εμφάνιση Επικεφαλίδων του Site"
+
+#: plugins/headlines.py:228
+msgid "Fetching headlines..."
+msgstr "Ανάκτηση επικεφαλίδων..."
+
+#: plugins/headlines.py:281
+msgid "No Headlines found"
+msgstr "Δεν βρέθηκαν Επικεφαλίδες"
+
+#: plugins/headlines.py:298 plugins/headlines.py:312
+msgid "Headlines Sites"
+msgstr "Site Επικεφαλίδων"
+
+#: plugins/headlines.py:310
+msgid "No Headlines Sites found"
+msgstr "Δεν βρέθηκαν Site επικεφαλίδων"
+
+#: plugins/df.py:70
+msgid "%i free of %i Gb total (%i%% free)"
+msgstr "%i κενά από %i Gb συνολικά (%i%% κενό)"
+
+msgid "%i free of %i Mb total (%i%% free)"
+msgstr "%i κενά από %i Mb συνολικά (%i%% κενό)"
+
+#: plugins/mediamenu.py:190
+msgid "Media"
+msgstr "Μέσα"
+
+#: plugins/mediamenu.py:196
+msgid "Movie"
+msgstr "Ταινίες"
+
+#: plugins/mediamenu.py:199
+msgid "Audio"
+msgstr "Μουσική"
+
+#: plugins/mediamenu.py:202
+msgid "Image"
+msgstr "Φωτογραφίες"
+
+#: plugins/mediamenu.py:205
+msgid "Games"
+msgstr "Παιχνίδια"
+
+#: plugins/mediamenu.py:225
+msgid "%s Main Menu"
+msgstr "%s Κεντρικό Μενού"
+
+#: plugins/icecastchanger.py:77
+msgid "Set as icecast playlist"
+msgstr "ορισμός ως λίστας αναπαραγωγής icecast."
+
+#: plugins/commands.py:159
+msgid "Command finished"
+msgstr "Η εντολή ολοκληρώθηκε"
+
+#: plugins/commands.py:175
+msgid "Show Stderr"
+msgstr "Εμφάνιση Stderr"
+
+#: plugins/commands.py:176
+msgid "Show Stdout"
+msgstr "Εμφάνιση Stdout"
+
+#: plugins/commands.py:190
+msgid "Stdout File"
+msgstr "Αρχείο Stdout"
+
+#: plugins/commands.py:194
+msgid "Stderr File"
+msgstr "Αρχείο Stderr"
+
+#: plugins/commands.py:248
+msgid "Run Command"
+msgstr "Εκτέλεση Εντολής"
+
+#: plugins/commands.py:257
+msgid "Running Command..."
+msgstr "Εκτελείται η εντολή..."
+
+#: plugins/commands.py:271
+msgid "Command Failed"
+msgstr "Η εντολή απέτυχε"
+
+#: plugins/commands.py:274
+msgid "Command Completed"
+msgstr "Η εντολή ολοκληρώθηκε"
+
+#: plugins/commands.py:299
+msgid "No Commands found"
+msgstr "Δεν βρέθηκαν Εντολές"
+
+#: plugins/commands.py:300 plugins/commands.py:326
+msgid "Commands"
+msgstr "Εντολές"
+
+#: plugins/idlebar.py:495
+#, python-format
+msgid "%iM"
+msgstr ""
+
+#: plugins/idlebar.py:520
+#, python-format
+msgid "%s%%"
+msgstr ""
+
+#: plugins/file_ops.py:83
+msgid "Delete file"
+msgstr "Διαγραφή αρχείου"
+
+#: plugins/file_ops.py:85
+msgid "Delete info"
+msgstr "Διαγραφή πληροφοριών"
+
+#: plugins/file_ops.py:92
+#, python-format
+msgid ""
+"Do you wish to delete\n"
+" '%s'?"
+msgstr ""
+"Επιθυμείτε να διαγράψετε το\n"
+" '%s';"
+
+#: plugins/file_ops.py:97
+#, python-format
+msgid ""
+"Delete info about\n"
+" '%s'?"
+msgstr ""
+"Να διαγραφούν οι πληροφορίες για το\n"
+" '%s';"
+
+#: plugins/lcd.py:118 plugins/lcd.py:126
+msgid "Length: %s"
+msgstr "Διάρκεια: %s"
+
+#: plugins/lcd.py:119 plugins/lcd.py:123
+msgid "Artist: %s"
+msgstr "Καλλιτέχνης: %s"
+
+msgid "Artist"
+msgstr "Καλλιτέχνης"
+
+#: plugins/lcd.py:120 plugins/lcd.py:124
+msgid "Album: %s"
+msgstr "Άλμπουμ: %s"
+
+msgid "Album"
+msgstr "Άλμπουμ"
+
+#: plugins/lcd.py:121 plugins/lcd.py:125
+msgid "Year: %s"
+msgstr "Έτος: %s"
+
+msgid "Year"
+msgstr "Έτος"
+
+#: plugins/lcd.py:122
+msgid "Tracks: %s"
+msgstr "Κομμάτια: %s"
+
+msgid "Tracks"
+msgstr "Κομμάτια"
+
+#: plugins/lcd.py:127
+msgid "Resolution: %s"
+msgstr "Ανάλυση: %s"
+
+msgid "Resolution"
+msgstr "Ανάλυση"
+
+#: plugins/lcd.py:128
+#, python-format
+msgid "Aspect: %s"
+msgstr "Αναλογία: %s"
+
+msgid "Aspect"
+msgstr "Αναλογία"
+
+#: plugins/lcd.py:129 plugins/lcd.py:132
+#, python-format
+msgid "Tagline: %s"
+msgstr "Γραμμές: %s"
+
+msgid "Tagline"
+msgstr "Γραμμές"
+
+#: plugins/lcd.py:130 plugins/lcd.py:131
+#, python-format
+msgid "Plot: %s"
+msgstr "Σχέδιο: %s"
+
+msgid "Plot"
+msgstr "Σχέδιο"
+
+#: plugins/lcd.py:133
+msgid "Geometry: %s"
+msgstr "Γεωμετρία: %s"
+
+msgid "Geometry"
+msgstr "Γεωμετρία"
+
+#: plugins/lcd.py:134
+msgid "Date: %s"
+msgstr "Ημ/νια: %s"
+
+msgid "Date"
+msgstr "Ημ/νια"
+
+#: plugins/lcd.py:135 plugins/lcd.py:137
+msgid "Description: %s"
+msgstr "Περιγραφή: %s"
+
+msgid "Description"
+msgstr "Περιγραφή"
+
+#: plugins/lcd.py:136
+#, python-format
+msgid "%s items"
+msgstr "%s αντικείμενα"
+
+#: plugins/lcd.py:191 plugins/lcd.py:339
+#, python-format
+msgid "Today is %s."
+msgstr "Σήμερα είναι %s."
+
+#: plugins/lcd.py:201 plugins/lcd.py:560
+msgid "MENU"
+msgstr "ΜΕΝΟΥ"
+
+#: plugins/lcd.py:204 plugins/lcd.py:563
+msgid "ITEM"
+msgstr "ΑΝΤΙΚΕΙΜΕΝΟ"
+
+#: plugins/lcd.py:207
+msgid "TYPE"
+msgstr "ΤΥΠΟΣ"
+
+#: plugins/lcd.py:210
+msgid "INFO"
+msgstr "ΠΛΗΡΟΦΟΡΙΕΣ"
+
+#: plugins/lcd.py:228
+msgid " MUSIC"
+msgstr " ΜΟΥΣΙΚΗ"
+
+#: plugins/lcd.py:231
+msgid " ALBUM"
+msgstr " ΑΛΜΠΟΥΜ"
+
+#: plugins/lcd.py:234
+msgid "ARTIST"
+msgstr "ΚΑΛΛΙΤΕΧΝΗΣ"
+
+#: plugins/lcd.py:266 plugins/lcd.py:602
+msgid "VIDEO"
+msgstr "ΟΔΗΓΟΣ-TV"
+
+#: plugins/lcd.py:269
+msgid "  TAG"
+msgstr "  ΣΗΜ"
+
+#: plugins/lcd.py:272
+msgid "GENRE"
+msgstr "ΦΥΛΛΟ"
+
+#: plugins/lcd.py:305 plugins/lcd.py:630
+msgid "CHAN"
+msgstr "ΚΑΝΑ"
+
+#: plugins/lcd.py:308 plugins/lcd.py:633
+msgid "PROG"
+msgstr "ΠΡΟΓ"
+
+#: plugins/lcd.py:311
+msgid "TIME"
+msgstr " ΩΡΑ"
+
+#: plugins/lcd.py:314
+msgid "DESC"
+msgstr "ΠΕΡΙ"
+
+#: plugins/lcd.py:575
+msgid "MUSIC"
+msgstr "ΜΟΥΣΙΚΗ"
+
+#: plugins/lcd.py:716
+msgid ""
+"LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
+msgstr ""
+"Το πρόσθετο για Οθόνη Υγρών Κρυστάλων δεν βρέθηκε! Μπορεί να μη τρέχει το LCDd (δαίμονας lcdproc)"
+
+#: plugins/lcd.py:721
+#, python-format
+msgid "Connecting to LCD: %s"
+msgstr "Σύνδεση στο LCD: %s"
+
+#: plugins/lcd.py:722
+msgid "Info as know by the LCD module:"
+msgstr "Πληροφορίες όπως γίνονται γνωστές από το πρόσθετο του LCD:"
+
+#: plugins/lcd.py:910
+#, python-format
+msgid "Could not find screens for %d lines LCD!"
+msgstr "Δεν βρέθηκαν οθόνες για %d γραμμές στο LCD!"
+
+#: plugins/lcd.py:913 plugins/lcd.py:924 plugins/lcd.py:935
+msgid "No screens found for this LCD (%dx%d)!"
+msgstr "Δεν βρέθηκαν οθόνες για αυτό το LCD (%dx%d)!"
+
+#: plugins/lcd.py:921 plugins/lcd.py:934
+#, python-format
+msgid "Could not find screens for %d lines and %d columns LCD!"
+msgstr "Δεν βρέθηκαν οθόνες για %d γραμμές και %d στήλες στο LCD!"
+
+#: plugins/rom_drives.py:260
+#, python-format
+msgid "Drive %s (no disc)"
+msgstr "Οδηγός %s (χωρίς δίσκο)"
+
+#: plugins/rom_drives.py:323
+#, python-format
+msgid "Ejecting disc in drive %s"
+msgstr "Αποβολή του δίσκου από τον οδηγό %s"
+
+#: plugins/rom_drives.py:356
+#, python-format
+msgid "Reading disc in drive %s"
+msgstr "Ανάγνωση δίσκου στον οδηγό %s"
+
+#: plugins/base.py:71
+msgid "Shutdown Freevo"
+msgstr "Απενεργοποίηση του Freevo"
+
+#: plugins/base.py:72
+msgid "Shutdown system"
+msgstr "Απενεργοποίηση Συστήματος"
+
+#: plugins/base.py:72
+msgid "Restart system"
+msgstr "Επανεκίνηση Συστήματος"
+
+msgid "Do you really want to shut down the system?"
+msgstr "Θέλετε πραγματικά να απενεργοποιήσετε το σύστημα;"
+
+msgid "Do you really want to shut down Freevo?"
+msgstr "Θελετε πραγματικά να τερματίσετε το Freevo;"
+
+msgid "Do you really want to restart the system?"
+msgstr "Θελετε πραγματικά να επανεκκινήσετε το σύστημα;"
+
+# Manualy added from fxd skin files
+msgid "TV"
+msgstr "Τηλεόραση"
+
+msgid "Movies"
+msgstr "Ταινίες"
+
+msgid "Music"
+msgstr "Μουσική"
+
+msgid "Images"
+msgstr "Φωτογραφίες"
+
+msgid "Shutdown"
+msgstr "Τερματισμός"
+
+msgid "Watch TV"
+msgstr "Δείτε Τηλεόραση"
+
+msgid "Watch a Movie"
+msgstr "Δείτε μια Ταινία"
+
+msgid "Listen to Music"
+msgstr "Ακούστε Μουσική"
+
+msgid "Look at Pictures"
+msgstr "Δείτε Φωτογραφίες"
+
+msgid "Play a Game"
+msgstr "Παίξτε παιχνίδια"
+
+msgid " of "
+msgstr " από "
+
+msgid " MB free"
+msgstr " MB ελεύθερα"
+
+msgid "Artist:"
+msgstr "Καλλιτέχνης:"
+
+msgid "Album:"
+msgstr "Άλμπουμ:"
+
+msgid " musics in this playlist."
+msgstr " μουσικές σε αυτή την λίστα αναπαραγωγής."
+
+msgid "Just one music in this playlist."
+msgstr "Μόνο μια μουσική σε αυτή την λίστας αναπαραγωγής."
+
+msgid "This playlist is empty!"
+msgstr "Αυτή η λίστα αναπαραγωγής είναι κενή!"
+
+msgid " movies in this playlist."
+msgstr " ταινίες σε αυτή την λίστα αναπαραγωγής."
+
+msgid "Just one movie in this playlist."
+msgstr "Μόνο μια ταινία σε αυτή την λίστα αναπαραγωγής."
+
+msgid "Year:"
+msgstr "Έτος:"
+
+msgid "Genre: %s"
+msgstr "Κατηγορία: %s"
+
+msgid "Rating:"
+msgstr "Βαθμολογία:"
+
+msgid "Runtime:"
+msgstr "Χρόνος:"
+
+msgid "Type:"
+msgstr "Τύπος:"
+
+msgid "Resolution:"
+msgstr "Ανάλυση:"
+
+msgid "Copyright:"
+msgstr "Copyright:"
+
+msgid "Geometry:"
+msgstr "Γεωμετρία:"
+
+msgid "Date:"
+msgstr "Ημ/νια:"
+
+msgid " pictures in this slideshow."
+msgstr " φωτογραφίες σε αυτή την παρουσιάση."
+
+msgid "Just one picture in this slideshow."
+msgstr "Μόνο μια φωτογραφία σε αυτή την παρουσίαση."
+
+msgid "This slideshow is empty!"
+msgstr "Αυτή η παρουσίαση είναι κενή!"
+
+msgid "Track"
+msgstr "Κομμάτι"
+
+msgid "Length"
+msgstr "Διάρκεια"
+
+msgid "Elapsed"
+msgstr "Παίζει"
+
+msgid " min. "
+msgstr " λεπτά "
+
+# The following is not actually working /usr/lib/python2.3/site-packages/freevo/video/videoitem.py editted instead
+msgid "%s min"
+msgstr "%s λεπτά"
+
+msgid " Audiotracks, "
+msgstr " ΗχοΤμήματα, "
+
+msgid " Subtitles, "
+msgstr " Υπότιτλοι, "
+
+msgid " Chapter"
+msgstr " Κεφάλαια"
+
+msgid "Size"
+msgstr "Μέγεθος"
+
+msgid " items in this playlist"
+msgstr " αντικείμενα σε αυτή την λίστα αναπαραγωγής"
+
+#~ msgid "Show database information for this file"
+#~ msgstr "Δείξε πληροφορίες βάσης για αυτό το αρχείο"
+
+msgid "Modify name"
+msgstr "Αλλαγή ονόματος"
+
+msgid "Modify channel"
+msgstr "Αλλαγή καναλιού"
+
+msgid "Modify start month"
+msgstr "Αλλαγή μήνα έναρξης"
+
+msgid "Modify start day"
+msgstr "Αλλαγή ημέρα έναρξης"
+
+msgid "Modify start time"
+msgstr "Αλλαγή ώρα έναρξης"
+
+msgid "Modify stop month"
+msgstr "Αλλαγή μήνα τερματισμού"
+
+msgid "Modify stop day"
+msgstr "Αλλαγή ημέρα τερματισμού"
+
+msgid "Modify stop time"
+msgstr "Αλλαγή ώρα τερματισμού"
+
+msgid "Save"
+msgstr "Αποθήκευση"
+
+msgid "Remove from schedule"
+msgstr "Διαγραφή από το πρόγραμμα"
+
+msgid "Search for more of this program"
+msgstr "Αναζήτηση περισσοτέρων για αυτό το πρόγραμμα"
+
+msgid "Add to favorites"
+msgstr "Προσθήκη στα αγαπημένα"
+
+msgid "Schedule for recording"
+msgstr "Προγραμματισμός για εγγραφή"
+
+msgid "%s has been scheduled for recording"
+msgstr "%s προγραμματίστηκε για εγγραφή"
+
+msgid "Remove from favorites"
+msgstr "Διαγραφή από τα αγαπημένα"
+
+msgid "Jan"
+msgstr "Ιαν"
+
+msgid "Feb"
+msgstr "Φεβ"
+
+msgid "Mar"
+msgstr "Μαρ"
+
+msgid "Apr"
+msgstr "Απρ"
+
+msgid "May"
+msgstr "Μαι"
+
+msgid "Jun"
+msgstr "Ιουν"
+
+msgid "Jul"
+msgstr "Ιουλ"
+
+msgid "Aug"
+msgstr "Αυγ"
+
+msgid "Sep"
+msgstr "Σεπ"
+
+msgid "Oct"
+msgstr "Οκτ"
+
+msgid "Nov"
+msgstr "Νοε"
+
+msgid "Dec"
+msgstr "Δεκ"
+
+msgid "Name"
+msgstr "Όνομα"
+
+msgid "Day"
+msgstr "Ημέρα"
+
+msgid "Time"
+msgstr "Ώρα"
+
+msgid "Mon"
+msgstr "Δευ"
+
+msgid "Tue"
+msgstr "Τρι"
+
+msgid "Wed"
+msgstr "Τετ"
+
+msgid "Thu"
+msgstr "Πεμ"
+
+msgid "Fri"
+msgstr "Παρ"
+
+msgid "Sat"
+msgstr "Σαβ"
+
+msgid "Sun"
+msgstr "Κυρ"
+
+msgid "ANY DAY"
+msgstr "ΚΑΘΕ ΜΕΡΑ"
+
+msgid "ANY TIME"
+msgstr "ΚΑΘΕ ΩΡΑ"
+
+msgid "ANY CHANNEL"
+msgstr "ΚΑΘΕ ΚΑΝΑΛΙ"
+
+msgid "Modify day of week"
+msgstr "Αλλαγή ημέρα της εβδομάδας"
+
+msgid "Modify time of day"
+msgstr "Αλλαγή ώρα της ημέρας"
+
+msgid "Save changes"
+msgstr "Αποθήκευση αλλαγών"
+
+msgid "Remove favorite"
+msgstr "Διαγραφή από τα αγαπημένα"
+
+msgid "The recordserver is down"
+msgstr "Ο διακομιστής βιντοσκοπήσεων είναι κάτω"
+
+msgid ""
+"Delete image about\n"
+" '%s'?"
+msgstr ""
+"Επιθυμείτε να διαγράψετε\n"
+"την φωτογραφία για το\n"
+" '%s';"
+
+msgid "Deleting...."
+msgstr "Διαγραφή...."
+
+msgid "Create Thumbnail"
+msgstr "Δημιουργία μικρογραφίας"
+
+msgid "Please wait...."
+msgstr "Παρακαλώ περιμένετε...."
+
+msgid "Playlists"
+msgstr "Λίστες Αναπαραγωγής"
+
+msgid "Recorded TV"
+msgstr "Μαγνητοσκοπημένα"
+
+msgid "Weather"
+msgstr "Ο Καιρός"
+
+msgid "Fetching Weather for %s..."
+msgstr "Ανάλυση καιρού για %s..."
+
+msgid "Fetching Radar Map for %s..."
+msgstr "Ανάλυση χάρτη ραντάρ για %s..."
+
+msgid "%s km/h"
+msgstr "%s χλμ/ώρα"
+
+msgid "Last updated: %s"
+msgstr "Τελευταία ενημέρωση: %s"
+
+msgid "%s km"
+msgstr "%s χλμ"
+
+msgid "Show Weather Details"
+msgstr "Εμφάνιση λεπτομερειών καιρού"
+
+msgid "Humidity"
+msgstr "Υγρασία"
+
+msgid "Pressure"
+msgstr "Πίεση"
+
+msgid "Wind"
+msgstr "Άνεμος"
+
+msgid "at"
+msgstr "στα"
+
+msgid "Wind Chill"
+msgstr "Αίσθηση ανέμου"
+
+msgid "Visibility"
+msgstr "Ορατότητα"
+
+msgid "UV Index"
+msgstr "Δείκτης Υπ/δους"
+
+msgid "Today, a high of"
+msgstr "Σήμερα, μέγιστη θερμοκρασία"
+
+msgid "and a low of"
+msgstr "και ελάχιστη"
+
+msgid "Currently, there is a humidity of"
+msgstr "Αυτή τη στιγμή, υπάρχει υγρασία"
+
+msgid "and"
+msgstr "και"
+
+msgid "the winds are "
+msgstr "οι άνεμοι "
+
+msgid "calm"
+msgstr "άπνια"
+
+msgid "coming in at"
+msgstr "πνέουν με ταχύτητα"
+
+msgid "from the"
+msgstr "και διεύθυνση"
+
+msgid "Visibility will be unlimited today"
+msgstr "Η ορατότητα θα είναι απεριόριστη σήμερα"
+
+msgid "There will be a visibility of"
+msgstr "Θα υπάρχει ορατότητα των"
+
+msgid "Current Conditions"
+msgstr "Παρούσες συνθήκες"
+
+msgid "Today's Forecast"
+msgstr "Σημερινή Πρόγνωση"
+
+msgid "Extended Forecast"
+msgstr "Εκτεταμένη Πρόγνωση"
+
+msgid "Radar Map"
+msgstr "Χάρτης Ραντάρ"
+
+msgid "LO"
+msgstr "Ελ"
+
+msgid "HI"
+msgstr "Μεγ"
+
+msgid "Sunny"
+msgstr "Λιακάδα"
+
+msgid "Partly Cloudy"
+msgstr "Σποραδικές Νεφώσεις"
