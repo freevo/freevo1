@@ -818,8 +818,9 @@ class DiskManager(plugin.DaemonPlugin):
         if changed:
             self.last_time = vfs.mtime(config.TV_RECORD_DIR)
             self.update_recordings()
-            # Only call update if the menu is on the top of the menu stack
-            if self.menu and (self.menuw.menustack[-1] == self.menu):
+            # Only call update if the menu is on the top of the menu stack and we are in the menu's context
+            if self.menu and (self.menuw.menustack[-1] == self.menu) and \
+                self.menuw.event_context == rc.get_singleton().context:
                 self.obj.browse(menuw=self.menuw, arg='update')
 
     def update_recordings(self):

@@ -18,6 +18,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
  * Added personal web pages to the webserver, using PERSONAL_WWW_PAGE (F#1729595)
  * Added sounds to menu selection, enabled with OSD_SOUNDS_ENABLED (F#1732380)
+ * Added translation for Greek (F#)
  * Updated childapp to use subprocess instead of popen (F#1729597)
  * Updated local_conf.py.example with MPLAYER_HAS_FIELD_DOMINANCE (F#1729404)
  * Updated record_client to allow favourites to be added from the command line (F#1734781)
@@ -33,6 +34,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed fxd parser's setattr not working correctly in all cases (B#1728421)
  * Fixed Panorama skin thumbnail (B#1731877)
  * Fixed recordings manager not deleting old video when the disk is full (B#1728182)
+ * Fixed recordings manager changing the menu context (B#1741842)
  * Fixed recordserver causing stack traces when the record_schedule.xml is empty (B#1733192)
  * Fixed shopping cart to allow copying over existing read-only files (B#1738914)
  * Fixed tv recordings manager not deleting files when out of space (B#1728182)
