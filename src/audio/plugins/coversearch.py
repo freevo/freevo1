@@ -108,23 +108,26 @@ class PluginInterface(plugin.ItemPlugin):
 
     def actions(self, item):
         self.item = item
+        print item.name
         # don't allow this for items on an audio cd, only on the disc itself
-        if item.type == 'audio' and item.parent.type == 'audiocd':
+        if item.type == 'audio' and item.parent and item.parent.type == 'audiocd':
+            _debug_('cannot search for a cover for a cd item "%s"', (item.name))
             return []
 
         # don't allow this for items in a playlist
-        if item.type == 'audio' and item.parent.type == 'playlist':
+        if item.type == 'audio' and item.parent and item.parent.type == 'playlist':
+            _debug_('cannot search for a cover for a playlist item "%s"', (item.name))
             return []
 
         # do don't call this when we have an image
         if item.type == 'audiocd' and item.image:
+            _debug_('already have a cover for this cd "%s"', (item.name))
             return []
 
         # do don't call this when we have an image
-        if item.type == 'audio' and item.filename \
-        and vfs.isfile(os.path.join(os.path.join(os.path.dirname(item.filename),
-                                                'cover.jpg'))):
-            _debug_('"%s" has a cover' % (item.filename), 1)
+        if item.type == 'audio' and hasattr(item, 'filename') and item.filename and \
+            vfs.isfile(os.path.join(os.path.join(os.path.dirname(item.filename), 'cover.jpg'))):
+            _debug_('already has a cover "%s"', (item.name))
             return []
 
         if item.type in ('audio', 'audiocd', 'dir'):
