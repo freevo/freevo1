@@ -54,15 +54,6 @@ class VideoItem(Item):
     def __init__(self, url, parent, info=None, parse=True):
         self.autovars = []
 
-        video_deinterlace = config.VIDEO_DEINTERLACE != None and config.VIDEO_DEINTERLACE or False
-        self.autovars.append(('deinterlace', video_deinterlace))
-
-        video_use_xvmc = config.VIDEO_USE_XVMC != None and config.VIDEO_USE_XVMC or False
-        self.autovars.append(('xvmc', video_use_xvmc))
-
-        video_field_dominance = config.VIDEO_FIELD_DOMINANCE != None and config.VIDEO_FIELD_DOMINANCE or False
-        self.autovars.append(('field-dominance', video_field_dominance))
-
         Item.__init__(self, parent)
 
         self.type = 'video'
@@ -70,6 +61,15 @@ class VideoItem(Item):
 
         if info:
             self.info.set_variables(info)
+
+        video_deinterlace = config.VIDEO_DEINTERLACE != None and config.VIDEO_DEINTERLACE or False
+        self['deinterlace'] = video_deinterlace
+
+        video_use_xvmc = config.VIDEO_USE_XVMC != None and config.VIDEO_USE_XVMC or False
+        self['xvmc'] = video_use_xvmc
+
+        video_field_dominance = config.VIDEO_FIELD_DOMINANCE != None and config.VIDEO_FIELD_DOMINANCE or False
+        self['field-dominance'] = video_field_dominance
 
         self.variants          = []         # if this item has variants
         self.subitems          = []         # more than one file/track to play
@@ -134,12 +134,11 @@ class VideoItem(Item):
             if discset_information.has_key(fid):
                 self.mplayer_options = discset_information[fid]
 
-        if config.VIDEO_DEINTERLACE and self.info['deinterlaced']:
+        if config.VIDEO_DEINTERLACE and self.info['deinterlace']:
             # force deinterlacing
             self['deinterlace'] = True
         else:
             self['deinterlace'] = False
-
 
     def __str__(self):
         s = pformat(self, depth=2)
