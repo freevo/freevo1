@@ -81,8 +81,8 @@ class FileInformation:
 
     def copy(self, destdir):
         for f in self.files + [ self.fxd_file, self.image, self.edl_file ]:
-            error_msg=''
             if f:
+                error_msg=''
                 if vfs.isoverlay(f):
                     d = vfs.getoverlay(destdir)
                 else:
@@ -111,9 +111,9 @@ class FileInformation:
                         except IOError, e:
                             error_msg='Can\'t copy "%s": %s' % (f, e)
 
-            if error_msg:
-                _debug_(error_msg, config.DWARNING)
-                #AlertBox(text=_(Unicode(error_msg))).show()
+                if error_msg:
+                    _debug_(error_msg, config.DWARNING)
+                    #AlertBox(text=_(Unicode(error_msg))).show()
 
 
     def move_possible(self):
