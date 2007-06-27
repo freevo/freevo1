@@ -28,7 +28,7 @@
 #
 # -----------------------------------------------------------------------
 
-
+import config
 import pygame
 from pygame.locals import *
 import kaa.imlib2 as imlib2
@@ -87,18 +87,18 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     image     = None
     imagefile = None
 
-    if item.image:
-        if isinstance(item.image, imlib2.Image):
-            image = osd.loadbitmap(item.image)
+    if item_image:
+        if isinstance(item_image, imlib2.Image):
+            image = osd.loadbitmap(item_image)
         else:
-            image = load_imagecache['thumb://%s' % item.image]
+            image = load_imagecache['thumb://%s' % item_image]
             if not image:
-                image = osd.loadbitmap('thumb://%s' % item.image)
-                load_imagecache['thumb://%s' % item.image] = image
+                image = osd.loadbitmap('thumb://%s' % item_image)
+                load_imagecache['thumb://%s' % item_image] = image
 
         if not item['rotation']:
             try:
-                f=open(item.filename, 'rb')
+                f=open(item.image, 'rb')
                 tags=exif.process_file(f)
                 f.close()
                 if tags.has_key('Image Orientation'):
