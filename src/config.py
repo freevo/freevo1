@@ -350,7 +350,7 @@ def _debug_function_(s, level=1):
             else:
                 logging.debug(msg)
             # print the message for info, warning, error and critical
-            if level <= DINFO and DEBUG_STDOUT:
+            if level <= DWARNING and DEBUG_STDOUT:
                 sys.__stdout__.write('%s\n' % (s))
                 sys.__stdout__.flush()
         except UnicodeEncodeError:
