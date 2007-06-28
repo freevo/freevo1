@@ -131,7 +131,7 @@ class FxdImdb:
 
         url = 'http://us.imdb.com/Tsearch?title=%s&restrict=Movies+and+TV' % urllib.quote(name)
         url = 'http://www.imdb.com/find?s=tt;site=aka;q=%s' % urllib.quote(name)
-        print 'url:', url
+        _debug_('url="%s"' % (url))
 
         req = urllib2.Request(url, txdata, txheaders)
         searchstring = name
@@ -143,7 +143,7 @@ class FxdImdb:
             return None
 
         if config.DEBUG:
-            print 'response.url:', response.geturl()
+            _debug_('response.url="%s"' % (response.geturl()))
 
         m=re.compile('/title/tt([0-9]*)/')
         idm = m.search(response.geturl())
@@ -169,7 +169,7 @@ class FxdImdb:
             for result in self.imdb_id_list:
                 appended = False
                 for search_word in words:
-                    if appended == False and \
+                    if not appended and result[1] and \
                            result[1].lower().find(search_word.lower()) != -1:
                         new_list.append(result)
                         appended = True
@@ -447,8 +447,7 @@ class FxdImdb:
         #header
         i.write("<?xml version=\"1.0\" ?>\n<freevo>\n")
         i.write("  <copyright>\n" +
-                "    The information in this file are from the Internet " +
-                "Movie Database (IMDb).\n" +
+                "    The information in this file are from the Internet Movie Database (IMDb).\n" +
                 "    Please visit http://www.imdb.com for more information.\n")
         i.write("    <source url=\"http://www.imdb.com/title/tt%s\"/>\n"  % self.imdb_id +
                 "  </copyright>\n")
@@ -644,6 +643,7 @@ class FxdImdb:
         y=re.compile('\(([^)]+)\)')
         soup = BeautifulSoup(results.read(), convertEntities='xml')
         items = soup.findAll('a', href=re.compile('/title/tt'))
+        ids = set([])
         for item in items:
             idm = m.search(item['href'])
             if not idm:
@@ -653,14 +653,20 @@ class FxdImdb:
 
             id = idm.group(1)
             name = item.string
+            # skip empty names
+            if not name:
+                continue
+            # skip diplicate ids
+            if id in ids:
+                continue
+            ids.add(id)
             year = len(yrm) > 0 and yrm[0] or '0000'
             type = len(yrm) > 1 and yrm[1] or ''
             #print 'url', item['href']
             #print item.parent.findChildren(text=re.compile('[^ ]'))
             self.imdb_id_list += [ ( id, name, year, type ) ]
 
-        if config.DEBUG:
-            print self.imdb_id_list
+        _debug_(self.imdb_id_list)
         return self.imdb_id_list
 
     def findepisode(self, results):
@@ -785,9 +791,9 @@ class FxdImdb:
 
         if config.DEBUG:
             for (k,v) in self.info.items():
-                print 'items:', k, ':', v
-            print 'id:', id, 'dvd:', dvd
-            print self.info
+                _debug_('items=%s:%s' % (k, v))
+            _debug_('id="%s", dvd="%s"' % (id, dvd))
+            _debug_(self.info)
 
         # Add impawards.com poster URLs.
         self.impawardsimages(self.info['title'], self.info['year'])
@@ -799,7 +805,7 @@ class FxdImdb:
 
         if not dvd:
             url = 'http://us.imdb.com/title/tt%s/dvd' % id
-            print 'url:', url
+            _debug_('url="%s"' % (url))
             req = urllib2.Request(url, txdata, txheaders)
 
             try:
@@ -819,7 +825,7 @@ class FxdImdb:
                 # This is a bad hack. Some character could not be converted to ascii.
                 # We ignore these errors as it does not really affect the FXD output.
                 pass
-        print 'image_urls:', self.image_urls
+        _debug_('image_urls=%s' % (self.image_urls))
 
         return (self.title, self.info, self.image_urls)
 
@@ -891,8 +897,7 @@ class FxdImdb:
 
     def fetch_image(self):
         """Fetch the best image"""
-        if config.DEBUG:
-            print 'fetch_image', self.image_urls
+        _debug_('fetch_image=%s' % (self.image_urls))
 
         image_len = 0
         if len(self.image_urls) == 0: # No images
@@ -900,7 +905,7 @@ class FxdImdb:
 
         for image in self.image_urls:
             try:
-                print 'image:', image
+                _debug_('image=%s' % (image))
                 # get sizes of images
                 req = urllib2.Request(image, txdata, txheaders)
                 r = urllib2.urlopen(req)
@@ -935,7 +940,7 @@ class FxdImdb:
 
         self.image = vfs.basename(self.image)
 
-        print "Downloaded cover image from %s" % self.image_url
+        _debug_('Downloaded cover image from %s' % (self.image_url))
         print "Freevo knows nothing about the copyright of this image, please"
         print "go to %s to check for more information about private." % self.image_url
         print "use of this image"
