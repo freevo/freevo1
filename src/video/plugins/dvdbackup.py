@@ -47,22 +47,22 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def actions(self, item):
-        if DEBUG >= 1:
+        if DEBUG >= 2:
             #testing stuff
             if hasattr(item, 'type'):
-                print 'item.type=\"%s\"' % (item.type)
+                _debug_('item.type=\"%s\"' % (item.type))
             if hasattr(item, 'mode'):
-                print 'item.mode=\"%s\"' % (item.mode)
+                _debug_('item.mode=\"%s\"' % (item.mode))
             if hasattr(item, 'info_type'):
-                print 'item.info_type=\"%s\"' % (item.info_type)
+                _debug_('item.info_type=\"%s\"' % (item.info_type))
             if hasattr(item, 'name'):
-                print 'item.name=\"%s\"' % (item.name)
+                _debug_('item.name=\"%s\"' % (item.name))
             if hasattr(item, 'filename'):
-                print 'item.filename=\"%s\"' % (item.filename)
+                _debug_('item.filename=\"%s\"' % (item.filename))
             if hasattr(item, 'parentname'):
-                print 'item.parentname=\"%s\"' % (item.parentname)
+                _debug_('item.parentname=\"%s\"' % (item.parentname))
             if hasattr(item, 'media') and hasattr(item.media, 'devicename'):
-                print 'item.media.devicename=\"%s\"' % (item.media.devicename)
+                _debug_('item.media.devicename=\"%s\"' % (item.media.devicename))
 
         if item.type == 'video' and item.mode == 'dvd' and hasattr(item, 'info_type'):
             if item.info_type == "track": #and item.media and item.media.devicename:
@@ -100,8 +100,8 @@ class PluginInterface(plugin.ItemPlugin):
         #create a filename for the to-be-encoded dvd title
         #title = int(self.item.url[6:])
         fname = join(config.VIDEO_ITEMS[0][1], "%s_%s.avi" % (self.item.parent.name, self.title))
-        #print title, fname
-        print arg
+        #_debug_('title=%s, fname=%s' % (title, fname))
+        _debug_('arg=%r' % (arg))
         #unwrap settings tupple
         vcodecnr, tgtsize, mpass, vbitrate = arg
 
@@ -178,7 +178,7 @@ class PluginInterface(plugin.ItemPlugin):
         self.menuw = menuw
         AlertBox(width=400, height=200, text=_("Encoding started"), handler=self.mopup).show()
 
-        print "boe"
+        _debug_("boe")
         #menuw.delete_menu()
         #menuw.delete_menu()
 
