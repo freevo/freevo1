@@ -54,9 +54,9 @@ class Feed:
         itemPattern = re.compile('<item>.*?</item>',re.DOTALL)
         titlePattern = re.compile('<title>.*?</title>',re.DOTALL)
         descriptionPattern = re.compile('<description>.*?</description>',re.DOTALL)
-        urlPattern = re.compile('url=".*?.mp.',re.DOTALL)
+        urlPattern = re.compile('enclosure url=".*?"',re.DOTALL)
+        btPattern = re.compile('<link>.*?torrent</link>',re.DOTALL)
         httpPattern = re.compile('http',re.DOTALL )
-        btPattern = re.compile('<link>.*?</link>',re.DOTALL)
         datePattern = re.compile('<pubDate>.*?</pubDate>',re.DOTALL)
 
         def removeExcessSpaces(string):
