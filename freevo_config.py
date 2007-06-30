@@ -284,6 +284,7 @@ LOCAL_CONF_CHANGES = [
      Added SKIN_DEBUG to show boxes around each skin area for debugging skins
      Added IMAGEVIEWER_REVERSED_IMAGES for when the images are incorrectly rotated
      Added SHOPPINGCART_CLOBBER to allow a move to clobber an existing file
+     Added XINE_BOOKMARK to enable the resume function to work with xine
      ''' ),
 ]
 
@@ -1511,6 +1512,9 @@ if CONF.fbxine:
 
 # Set to False if xine doesn't have '--no-lirc' option
 XINE_HAS_NO_LIRC = True
+
+# Set to True is xine supports get_time this enables the position to be saved
+XINE_BOOKMARK = False
 
 # Defaults to XINE_VO/AO_DEV:
 XINE_TV_VO_DEV = None

@@ -1090,6 +1090,9 @@ CACHE_IMAGES = 1
 # Set to False if xine doesn't have '--no-lirc' option
 # XINE_HAS_NO_LIRC = True
 
+# Set to True is xine supports get_time this enables the position to be saved
+# XINE_BOOKMARK = False
+
 
 # ======================================================================
 # IVTV Xine TV settings:
@@ -1303,7 +1306,7 @@ CACHE_IMAGES = 1
 #            'br=128:cbr:mode=3 ' +          # MP3 const. bitrate, 128 kbit/s
 #            '-ffourcc divx ' +              # Force 'divx' ident, better compat.
 #            '-endpos %(seconds)s ' +        # only mencoder uses this so do it here.
-#            '-o %(filename)s')         # Filled in by Freevo
+#            '-o %(filename)s')              # Filled in by Freevo
 
 
 #

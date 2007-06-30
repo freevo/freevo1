@@ -199,21 +199,22 @@ class Xine:
         if not self.app:
             return
 
-        # if the file ends do nothing, else get elapsed time
-        if event in (STOP, USER_END):
-            command = "%s -S get_time --stdctl --no-splash --hide-gui " % config.CONF.xine
-            handle = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE )
-            (cin, cout) = (handle.stdin, handle.stdout)
-            try:
-                position = cout.read();
-                _debug_("Elapsed = %s" % position)
-                if position:
-                    self.item.elapsed = int(position)
-            finally:
-                #xine should exit nicely, but if the first xine is already closed this xine will hang
-                exit_code = handle.poll()
-                if not exit_code:
-                    cin.write('quit\n')
+        if config.XINE_BOOKMARK:
+            # if the file ends do nothing, else get elapsed time
+            if event in (STOP, USER_END):
+                command = "%s -S get_time --stdctl --no-splash --hide-gui" % config.CONF.xine
+                handle = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE )
+                (cin, cout) = (handle.stdin, handle.stdout)
+                try:
+                    position = cout.read();
+                    _debug_("Elapsed = %s" % position)
+                    if position:
+                        self.item.elapsed = int(position)
+                finally:
+                    #xine should exit nicely, but if the first xine is already closed this xine will hang
+                    exit_code = handle.poll()
+                    if not exit_code and not cin.closed:
+                        cin.write('quit\n')
 
         self.app.stop('quit\n')
         rc.app(None)
