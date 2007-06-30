@@ -130,7 +130,7 @@ class ChildApp:
         self.child = None
         try:
             self.child = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-            _debug_('Running (%s) "%s" with pid %s prioity %s' % (\
+            _debug_('Running (%s) "%s" with pid %s priority %s' % (\
                 command_isstr and 'str' or 'list', command_str, self.child.pid, prio), 1)
         except OSError, e:
             _debug_('Cannot run "%s": %s' % (command_str, e), config.DERROR)

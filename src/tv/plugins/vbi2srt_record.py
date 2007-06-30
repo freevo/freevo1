@@ -4,13 +4,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Author: duncan-freevo@linuxowl.com (Duncan Webb)
-# Notes: This module requires vbi2srt, see:
-#   http://www.linuxowl.com/vbi2srt.html
-#   Currently only ivtv cards and teletext is supported
-#   To use this plug-in add the following to local_conf.py
-#   plugin.remove('tv.generic_record')
-#   plugin_record = plugin.activate('tv.vbi2srt_record')
+# Notes:
 # Todo:
 #   Clean up the code and remove unused stuff
 # Bugs:
@@ -38,6 +32,13 @@
 #
 # -----------------------------------------------------------------------
 
+__author__ = 'Duncan Webb <duncan@freevo.org>'
+__doc__ = '''This module requires vbi2srt, see:
+http://www.linuxowl.com/vbi2srt.html
+Currently only ivtv cards and teletext is supported
+To use this plug-in add the following to local_conf.py
+plugin.remove('tv.generic_record')
+plugin_record = plugin.activate('tv.vbi2srt_record')'''
 
 import sys, string
 import random
@@ -112,6 +113,7 @@ class Recorder:
         self.thread.mode = 'idle'
         self.thread.start()
 
+
     def Record(self, rec_prog):
         frequency = self.fc.chanSet(str(rec_prog.tunerid), False, 'record plugin')
 
@@ -121,6 +123,7 @@ class Recorder:
 
         cl_options = { 'channel'  : rec_prog.tunerid,
                        'frequency' : frequency,
+                       'frequencyMHz' : float(frequency) / 1000,
                        'filename' : rec_prog.filename,
                        'base_filename' : os.path.basename(rec_prog.filename),
                        'title' : rec_prog.title,
@@ -180,7 +183,7 @@ class RecordApp(childapp.ChildApp):
                 print 'Please set DEBUG=0 or start Freevo from a directory that is writeable!'
                 print
             else:
-                _debug_('Record logging to "%s" and "%s"' % (fname_out, fname_err))
+                _debug_('Record logging to "%s" and "%s"' % (fname_out, fname_err), config.DINFO)
 
         childapp.ChildApp.__init__(self, app)
 

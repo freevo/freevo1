@@ -82,7 +82,10 @@ class Recorder:
                        'base_filename' : os.path.basename(rec_prog.filename),
                        'title' : rec_prog.title,
                        'sub-title' : rec_prog.sub_title,
-                       'seconds'  : rec_prog.rec_duration }
+                       'seconds'  : rec_prog.rec_duration,
+                       'start'  : rec_prog.start,
+                       'pdc-start'  : rec_prog.pdc_start,
+        }
 
         self.rec_command = config.VCR_CMD % cl_options
 
@@ -110,8 +113,9 @@ class RecordApp(childapp.ChildApp):
                 self.log_stdout = open(fname_out, 'a')
                 self.log_stderr = open(fname_err, 'a')
             except IOError:
+                _debug_('Cannot open "%s" and "%s" for record logging!' % \
+                    (fname_out, fname_err), config.DERROR)
                 print
-                print 'ERROR: Cannot open "%s" and "%s" for record logging!' % (fname_out, fname_err)
                 print 'Please set DEBUG=0 or start Freevo from a directory that is writeable!'
                 print
             else:
@@ -141,31 +145,32 @@ class Record_Thread(threading.Thread):
 
     def run(self):
         while 1:
-            _debug_('Record_Thread::run: mode=%s' % self.mode, config.DINFO)
+            _debug_('Record_Thread::run: mode=%s' % self.mode)
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
 
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
-                _debug_('Record_Thread::run: cmd=%s' % self.command, config.DINFO)
+                _debug_('Record_Thread::run: cmd=%s' % self.command)
 
                 self.app = RecordApp(self.command)
+                _debug_('app child pid: %s' % self.app.child.pid)
 
                 while self.mode == 'record' and self.app.isAlive():
                     self.autokill -= 0.5
                     time.sleep(0.5)
                     if self.autokill <= 0:
-                        _debug_('autokill timeout, stopping recording', config.DINFO)
+                        _debug_('autokill timeout, stopping recording')
                         self.mode = 'stop'
 
                 if self.app.isAlive():
-                    _debug_('Record_Thread::run: past wait()!!', config.DINFO)
+                    _debug_('Record_Thread::run: past wait!!')
                     rc.post_event(Event(OS_EVENT_KILL, (self.app.child.pid, 15)))
                     self.app.kill()
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))
-                _debug_('Record_Thread::run: finished recording', config.DINFO)
+                _debug_('Record_Thread::run: finished recording')
 
                 self.mode = 'idle'
             else:
