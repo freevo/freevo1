@@ -46,6 +46,38 @@ def _debug_(text, level=1):
         except:
             print str(text)
 
+def getFileExtension(string):
+    string = os.path.splitext(string)[-1]
+    string = string[1:]
+    return string
+
+def isAudioItem(filename):
+    string = getFileExtension(filename)
+    _debug_("%s" %(string),5)
+    for suffix in config.AUDIO_SUFFIX:
+        _debug_("%s" %(suffix),5)
+        if (cmp(string.lower(),suffix.lower())==0):
+            _debug_("True",5)
+            return True
+    _debug_("False",5)
+    return False
+
+def isVideoItem(filename):
+    string = getFileExtension(filename)
+    _debug_("%s" %(string),5)
+    for suffix in config.VIDEO_MPLAYER_SUFFIX:
+        _debug_("%s" %(suffix),5)
+        if (cmp(string.lower(),suffix.lower())==0):
+            _debug_("True",5)
+            return True
+    for suffix in config.VIDEO_XINE_SUFFIX:
+        _debug_("%s" %(suffix),5)
+        if (cmp(string.lower(),suffix.lower())==0):
+            _debug_("True",5)
+            return True
+    _debug_("False",5)
+    return False
+
 def convertDate(string):
     if not re.search("\d+\s+\S+\s+\d+",string):
         return datetime.date.today()
@@ -246,14 +278,14 @@ def checkForUpdates():
                             _debug_("Download completed (%s bytes)" % os.path.getsize(filename))
                             meta = metadata.parse(filename)
                             if meta and meta.has_key('media'):
-                                if meta.media == 'MEDIA_AUDIO':
+                                if meta.media == 'MEDIA_AUDIO' or isAudioItem(filename):
                                     try:
                                         fxdpath = createFxd(item, filename)
                                         shutil.move(filename, config.RSS_AUDIO)
                                         shutil.move(fxdpath, config.RSS_AUDIO)
                                     except:
                                         _debug_('failed to move %s to %s' % (filename, newpath))
-                                elif meta.media == 'MEDIA_VIDEO':
+                                elif meta.media == 'MEDIA_VIDEO' or isVideoItem(filename):
                                     try:
                                         fxdpath = createFxd(item, filename)
                                         shutil.move(filename, config.RSS_VIDEO)
