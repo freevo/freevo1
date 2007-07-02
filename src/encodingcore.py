@@ -362,6 +362,9 @@ class EncodingJob:
 
             vpass = passname % passnr
 
+            if self.vcodec == 'MPEG 4 (lavc)' and passnr == 1 :
+                vpass = vpass + ':turbo'
+
         #generate videofilters first, NI completly yet
         if self.crop != None:
             vf += [ 'crop=%s' % self.crop ]
