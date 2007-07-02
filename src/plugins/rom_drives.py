@@ -316,13 +316,16 @@ class RemovableMedia:
             # including refresh screen
             try:
                 fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
-                if os.uname()[0] == 'FreeBSD':
-                    s = ioctl(fd, CDIOCCLOSE, 0)
-                else:
-                    s = ioctl(fd, CDROMCLOSETRAY)
-                self.tray_open = 0
-            finally:
-                os.close(fd)
+                try:
+                    if os.uname()[0] == 'FreeBSD':
+                        s = ioctl(fd, CDIOCCLOSE, 0)
+                    else:
+                        s = ioctl(fd, CDROMCLOSETRAY)
+                    self.tray_open = 0
+                finally:
+                    os.close(fd)
+            except Exception, e:
+                _debug_('Cannot open "%s": %s"' % (self.devicename, e), config.DWARNING)
 
             global im_thread
             if im_thread:
