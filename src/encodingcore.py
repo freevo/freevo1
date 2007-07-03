@@ -48,12 +48,6 @@ __revision__ = '$Rev$'
 __copyright__ = 'Copyright (C) 2004 den_RDC'
 __license__ = 'GPL'
 
-def _debug_(text, level=1):
-    if DEBUG >= level:
-        try:
-            self.log.debug(String(text))
-        except:
-            print(String(text))
 
 #"hardcoded capabilities" .. these might change or become dynamic in the future, when more capabilities are supported
 #the "container format" will remain hardcoded
@@ -473,7 +467,7 @@ class EncodingJob:
 
         if not foundtype: self.ntsc = True
 
-        if DEBUG:
+        if config.DEBUG:
             print 'All collected cropopts: %s' % crop_options
             if self.pal: print 'This is a PAL dvd'
             if self.ntsc: print 'This is an NTSC dvd'
