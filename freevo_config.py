@@ -285,6 +285,7 @@ LOCAL_CONF_CHANGES = [
      Added IMAGEVIEWER_REVERSED_IMAGES for when the images are incorrectly rotated
      Added SHOPPINGCART_CLOBBER to allow a move to clobber an existing file
      Added XINE_BOOKMARK to enable the resume function to work with xine
+     Added CACHE_CROPDETECT to enable caching of crop detection using encodingcode
      ''' ),
 ]
 
@@ -639,6 +640,11 @@ MEDIAINFO_USE_MEMORY = 1
 # enhancement. The images will be cached in OVERLAY_DIR
 #
 CACHE_IMAGES = 1
+
+#
+# Cache cropdetection. This will take quite a while to run
+#
+CACHE_CROPDETECT = 0
 
 # ======================================================================
 # Plugins:
