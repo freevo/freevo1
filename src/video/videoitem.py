@@ -134,7 +134,7 @@ class VideoItem(Item):
             if discset_information.has_key(fid):
                 self.mplayer_options = discset_information[fid]
 
-        if config.VIDEO_DEINTERLACE and self.info['deinterlace']:
+        if config.VIDEO_DEINTERLACE and self.info['interlaced']:
             # force deinterlacing
             self['deinterlace'] = True
         else:
