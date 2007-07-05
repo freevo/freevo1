@@ -33,7 +33,7 @@ import threading
 from time import sleep
 import sys, os, re, popen2 #, ConfigParser, copy
 import config
-import kaa.metadata as mmpython
+import kaa.metadata
 from copy import copy
 from string import split, join
 
@@ -112,8 +112,6 @@ class EncodingJob:
         self.idnr = idnr
         self.chapter = chapter
 
-        self.sourcetype = None
-
         self.container = 'avi'
 
         self.tgtsize = None
@@ -124,7 +122,7 @@ class EncodingJob:
         self.multipass = False
         self.vfilters = []
         self.crop = None
-
+        self.cropres = None
 
         self.acodec = AudioCodecList[0]
         self.abrate = 128
@@ -143,9 +141,14 @@ class EncodingJob:
         self.ntscprog = False
         self.ana = False
 
-        #Analyze our source
         self.finishedanalyze = False
-        self._AnalyzeSource()
+        self.info = {}
+        if self.source:
+            try:
+                self.info = kaa.metadata.parse(self.source)
+                self._AnalyzeSource()
+            except Exception, e:
+                print 'Failed to analyse "%s": %s' % (self.source, e)
 
 
     def setContainer(self, container):
@@ -235,17 +238,15 @@ class EncodingJob:
         _debug_('_AnalyzeSource(self)', 2)
 
         if self.chapter:
-            self.sourcetype = 'dvd'
             #check some things, like length
             _debug_('source=\"%s\" chapter=%s' % (self.source, self.chapter))
-            dvddata = mmpython.parse(self.source)
+            dvddata = self.info
             dvdtitle = dvddata.tracks[self.chapter - 1]
             self.length = dvdtitle['length']
             _debug_('Video length is %s' % self.length)
         else:
-            data = mmpython.parse(self.source)
+            data = self.info
             _debug_('source=\"%s\"' % (self.source))
-            self.sourcetype = data['type'].encode('latin1')
             if config.DEBUG >= 2:
                 for f in dir(data):
                     _debug_('%s: %s' % (f, eval('data["%s"]' % f)), 2)
@@ -272,13 +273,14 @@ class EncodingJob:
 
         arguments = [ '-vf', 'cropdetect=30', '-nosound', '-vo', 'null', '-frames', '10', '-sstep', str(sstep)]
 
-        if self.sourcetype == 'dvd':
+        if self.info.mime == 'video/dvd':
             arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.chapter ]
         else:
             arguments += [ self.source ]
 
-        _debug_('arguments=%s' % arguments)
         _debug_('_run(mplayer, arguments, self._CropDetectParse, None, 0, None)', 2)
+        _debug_(' '.join([mplayer]+arguments))
+        #print (' '.join([mplayer]+arguments))
         self._run(mplayer, arguments, self._CropDetectParse, None, 0, None)
 
     def _GenerateCLMencoder(self):
@@ -315,7 +317,7 @@ class EncodingJob:
 
     def _GCLMSource(self):
         """Returns source part of mencoder"""
-        if self.sourcetype == 'dvd':
+        if self.info.mime == 'video/dvd':
             if hasattr(config, 'DVD_LANG_PREF') and config.DVD_LANG_PREF:
                 audio = ['-alang', config.DVD_LANG_PREF]
             else:
@@ -386,7 +388,7 @@ class EncodingJob:
         _debug_('Video filters: %s' % vf)
 
         #join vf options
-        if len(vf)> 1:
+        if len(vf) > 1:
             for vfopt in vf[0:-1]:
                 vfilter = vfilter + vfopt + ','
         if len(vf) >= 1:
@@ -430,6 +432,7 @@ class EncodingJob:
     #TODO give this another name, it does more then crop detection only
     def _CropDetectParse(self, lines, data): #seek to remove data
         """Parses Mplayer output to obtain ideal cropping parameters, and do PAL/NTSC detection"""
+        #print '_CropDetectParse(self, lines=%r, data=%r)' % (lines, data)
 
         re_crop = re.compile('.*-vf crop=(\d*:\d*:\d*:\d*).*')
         re_ntscprog = re.compile('24fps progressive NTSC content detected')
@@ -442,9 +445,20 @@ class EncodingJob:
 
         foundtype = False
 
+        try:
+            if not self.info.video[0].haskey('width') or not self.info.video[0].haskey('height'):
+                self.finishedanalyze = True
+                return
+            crop = str(self.info.video[0].width)+':'+str(self.info.video[0].height)+':0:0'
+            crop_options[crop] = 1
+        except Exception, e:
+            pass
         for line in lines:
+            line = line.strip('\n')
+            #print 'DJW:line:',line
             if re_crop.search(line):
                 crop = re_crop.search(line).group(1)
+                #print 'DJW:crop:',crop
                 try:
                     crop_options[crop] = crop_options[crop] + 1
                     #if crop_options[crop] > cc_hits:
@@ -453,7 +467,7 @@ class EncodingJob:
                     crop_options[crop] = 1
 
             #try to see if this is a PAL DVD, an NTSC Progressive DVD, ar an NTSC DVD
-            if not foundtype and self.sourcetype == 'dvd':
+            if not foundtype and self.info.mime == 'video/dvd':
                 if re_pal.search(line):
                     self.pal = True
                     foundtype = True
@@ -467,18 +481,13 @@ class EncodingJob:
 
         if not foundtype: self.ntsc = True
 
-        if config.DEBUG:
-            print 'All collected cropopts: %s' % crop_options
-            if self.pal: print 'This is a PAL dvd'
-            if self.ntsc: print 'This is an NTSC dvd'
-            if self.ntscprog: print 'This is a progressive NTSC dvd'
+        _debug_('All collected cropopts: %s' % crop_options)
 
         #if we didn't find cropping options (seems to happen sometimes on VERY short dvd chapters)
         if crop_options == {}:
             #end analyzing
             self.finishedanalyze = True
             return
-
 
         #some homegrown sleezy alghorythm to pick the best crop options
         hcounter = 0
@@ -498,13 +507,13 @@ class EncodingJob:
                     self.crop = crop
 
 
-
         #make the final crop outputs a resolution wich is a multiple of 16 , v and h ....
         crop = split(self.crop, ':')
         adjustedcrop = []
         for res in crop[0:2]:
-            over = int(res) % 16
-            adjustedcrop.append(str(int(res) - over))
+            if res:
+                over = int(res) % 16
+                adjustedcrop.append(str(int(res) - over))
         adjustedcrop += crop[2:]
         #save cropped resolution for later
         self.cropres = ( int(adjustedcrop[0]), int(adjustedcrop[1]) )

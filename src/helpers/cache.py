@@ -258,6 +258,72 @@ def cache_www_thumbnails():
         print
 
 
+def cache_cropdetect():
+    """
+    cache all video files for crop detection
+    """
+    import encodingcore
+    import kaa.metadata
+    print 'checking cropdetect...................................',
+    print
+    sys.__stdout__.flush()
+
+    suffixes = set(config.VIDEO_MPLAYER_SUFFIX).union(config.VIDEO_XINE_SUFFIX)
+    files = []
+    fxd = []
+    for d in config.VIDEO_ITEMS:
+        if d.__class__ != tuple:
+            continue
+        if not os.path.isdir(d[1]):
+            continue
+        try:
+            files += util.match_files_recursively(d[1], suffixes)
+            fxd += util.match_files_recursively(d[1], fxditem.mimetype.suffix())
+        except:
+            pass
+
+    def lowercaseSort(lhs, rhs):
+        lhs, rhs = lhs.lower(), rhs.lower()
+        return cmp(lhs, rhs)
+
+    fxd.sort(lowercaseSort)
+
+    files = util.misc.unique(files)
+    files.sort(lowercaseSort)
+    for filename in copy.copy(files):
+        try:
+            info = kaa.metadata.parse(filename)
+            if not info:
+                print 'ERROR: "%s" has no metadata' % (filename)
+                continue
+            if info.length < 5 or info.length > 5 * 60 * 60:
+                print 'ERROR: "%s" has invalid length of %s' % (filename, info.length)
+                continue
+            encjob = encodingcore.EncodingJob(None, None, None, None)
+            encjob.source = filename
+            encjob.info = info
+            encjob.length = info.length
+            encjob._CropDetect()
+            encjob.thread.join(10.0)
+            if encjob.thread.isAlive():
+                encjob.thread.kill_pipe()
+                encjob.thread.join(10.0)
+                if encjob.thread.isAlive():
+                    print 'CRITICAL: "%s" thread is still alive (pid %s)' % (filename, encjob.pipe.pid)
+                    print
+                    print dir(encjob.thread)
+                    print
+                    print encjob.thread.__dict__
+                    print
+                    continue
+                else:
+                    print 'ERROR: "%s" cropdetect thread was killed' % (filename)
+                    continue
+            print filename, info.mime, info.length, encjob.crop, encjob.cropres
+        except Exception, e:
+            print 'ERROR: "%s" failed: %s' % (filename, e)
+
+
 def create_metadata():
     """
     scan files and create metadata
@@ -508,6 +574,8 @@ if __name__ == "__main__":
     if config.CACHE_IMAGES:
         cache_thumbnails()
         cache_www_thumbnails()
+    if config.CACHE_CROPDETECT:
+        cache_cropdetect()
     create_metadata()
     create_tv_pickle()
 
