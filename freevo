@@ -345,7 +345,7 @@ elif arg == '-fs':
             break
         server_num += 1
     sys.stdin.close()
-    os.execvp('xinit', [ 'xinit', freevo_script, '-force-fs',  '--', ':'+str(server_num) ])
+    os.execvp('xinit', [ 'xinit', freevo_script, '-force-fs',  '--', ':'+str(server_num) ] + sys.argv[2:])
 
 elif arg == 'execute':
     # execute a python script
