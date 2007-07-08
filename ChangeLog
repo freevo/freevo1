@@ -34,6 +34,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed button bar raising an exception when using colour actions (B#1732378)
  * Fixed CD cover image search because of changes to Amazon developer services (B#1731835)
  * Fixed fxd parser's setattr not working correctly in all cases (B#1728421)
+ * Fixed imdb search sometimes crashing and not returning the names (B#1749945)
  * Fixed Panorama skin thumbnail (B#1731877)
  * Fixed recordings manager not deleting old video when the disk is full (B#1728182)
  * Fixed recordings manager changing the menu context (B#1741842)
