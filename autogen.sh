@@ -7,7 +7,7 @@
 
 revision() {
     echo -n generating revision.py
-    rev=$(svn info --revision=BASE | sed -n '/Revision:/s/Revision: *\([0-9]*\)/\1/p')
+    rev=$(LC_ALL=C svn info --revision=BASE | sed -n '/Revision:/s/Revision: *\([0-9]*\)/\1/p')
     echo "__revision__ = ${rev}" > src/revision.py
     echo " ${rev}"
 }
