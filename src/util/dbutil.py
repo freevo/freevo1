@@ -64,9 +64,9 @@ def inti(a):
     if a:
         try:
             ret = int(a)
-        except ValueError:
+        except ValueError, e:
+            print '"%s": %r' % (a, e)
             traceback.print_exc()
-            ret = 0
 
     return ret
 
