@@ -144,14 +144,24 @@ class Recorder:
         except:
             pagenum = None;
         _debug_('Recorder::Record:pagenum "%s"' % pagenum)
-        self.rec_command = config.VCR_CMD % cl_options
-        if pagenum == None:
-            self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s' % \
-                (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.pdc_start)
-        else:
+
+        # this is not used
+        if isinstance(config.VCR_CMD, str) or isinstance(config.VCR_CMD, unicode):
+            self.rec_command = config.VCR_CMD % cl_options
+        elif isinstance(config.VCR_CMD, list) or isinstance(config.VCR_CMD, tuple):
+            self.rec_command = []
+            for arg in config.VCR_CMD:
+                self.rec_command.append(arg % cl_options)
+
+        if pagenum:
             # there is a bug in vbi2srt that causes out of sync subtitles when VPS is used
-            self.rec_command = 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s --page=%s' % \
+            self.rec_command = \
+                'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s --page=%s' % \
                 (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.pdc_start, pagenum)
+        else:
+            self.rec_command = \
+                'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s' % \
+                (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.pdc_start)
 
         self.thread.mode     = 'record'
         self.thread.prog     = rec_prog

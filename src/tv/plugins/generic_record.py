@@ -87,7 +87,12 @@ class Recorder:
                        'pdc-start'  : rec_prog.pdc_start,
         }
 
-        self.rec_command = config.VCR_CMD % cl_options
+        if isinstance(config.VCR_CMD, str) or isinstance(config.VCR_CMD, unicode):
+            self.rec_command = config.VCR_CMD % cl_options
+        elif isinstance(config.VCR_CMD, list) or isinstance(config.VCR_CMD, tuple):
+            self.rec_command = []
+            for arg in config.VCR_CMD:
+                self.rec_command.append(arg % cl_options)
 
         self.thread.mode     = 'record'
         self.thread.prog     = rec_prog
