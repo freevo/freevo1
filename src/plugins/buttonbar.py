@@ -39,6 +39,7 @@ import event
 import rc
 
 from tv.tvguide import TVGuide
+from tv.program_display import ShowProgramDetails
 from item import Item
 from menu import MenuItem, Menu
 from pygame import image,transform, Surface
@@ -47,7 +48,6 @@ DEBUG = config.DEBUG
 
 # Create the skin_object object
 skin_object = skin.get_singleton()
-skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
 
 # Create the events and assign them to the menus.
 BUTTONBAR_RED    = event.Event('BUTTONBAR_RED')
@@ -89,70 +89,13 @@ def send_event_to_menu(arg=None, menuw=None):
     menuw.eventhandler(arg)
 
 
-# Program Info screen
-class ShowProgramDetails:
-    """
-    Screen to show the details of the TV program
-    """
-    def __init__(self, menuw):
-        tvguide = menuw.menustack[-1]
-        prg = tvguide.selected
-        if prg is None:
-            name = _('No Information Available')
-            sub_title = ''
-            time = ''
-            description = ''
-        else:
-            name = prg.title
-            sub_title = prg.sub_title
-            time =  prg.getattr('time')
-            if sub_title:
-                description = u'"' + sub_title + u'"\n' + prg.desc
-            else:
-                description = prg.desc
-        self.program         = prg
-        self.name            = name
-        self.time            = time
-        self.scrollable_text = skin.ScrollableText(description)
-        self.visible = True
 
-        self.menuw = menuw
-        self.menuw.hide(clear=False)
-        rc.app(self)
-        skin_object.draw('tvguideinfo', self)
-
-
-    def getattr(self, name):
-        if name == 'title':
-            return self.name
-
-        if self.program:
-            return self.program.getattr(name)
-
-        return u''
-
-
-    def eventhandler(self, event, menuw=None):
-        """
-        eventhandler
-        """
-        if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
-            rc.app(None)
-            self.menuw.show()
-            return True
-        elif event == 'MENU_UP':
-            self.scrollable_text.scroll(True)
-            skin_object.draw('tvguideinfo', self)
-            return True
-        elif event == 'MENU_DOWN':
-            self.scrollable_text.scroll(False)
-            skin_object.draw('tvguideinfo', self)
-            return True
-        return False
 
 
 def show_program_info(arg=None, menuw =None):
-    ShowProgramDetails(menuw)
+    tvguide = menuw.menustack[-1]
+    prg = tvguide.selected
+    ShowProgramDetails(menuw, prg)
 
 
  # Plugin interface

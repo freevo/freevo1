@@ -48,6 +48,10 @@ from tv.record_types import Favorite
 
 DEBUG = config.DEBUG
 
+# Create the skin_object object
+import skin
+skin_object = skin.get_singleton()
+skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
 
 class ProgramItem(Item):
     """
@@ -125,6 +129,7 @@ class ProgramItem(Item):
         if self.prog.start <= now:
             items.append(menu.MenuItem(_('Play'), action= self.play_program))
 
+        items.append(menu.MenuItem(_('Full Description'), action=self.view_description))
 
         ## 1.) 'Schedule for recording' OR 'Remove from schedule'
         # check if this program is scheduled
@@ -178,6 +183,11 @@ class ProgramItem(Item):
         menuw.delete_menu()
         rc.post_event('PLAY')
 
+    def view_description(self, arg=None, menuw=None):
+        """
+        View a full scrollable description of the program.
+        """
+        ShowProgramDetails(menuw, self.prog)
 
     def schedule_program(self, arg=None, menuw=None):
         """
@@ -625,3 +635,80 @@ class FavoriteItem(Item):
         else:
             # if all fails then we should show an error
             AlertBox(text=_('Remove Failed')+(': %s' % msg)).show()
+# Program Info screen
+class ShowProgramDetails:
+    """
+    Screen to show the details of the TV program
+    """
+    def __init__(self, menuw, prg):
+        if prg is None:
+            name = _('No Information Available')
+            sub_title = ''
+            time = ''
+            description = ''
+        else:
+            name = prg.title
+            sub_title = prg.sub_title
+            time =  prg.getattr('time') 
+            if sub_title:
+                description = u'"' + sub_title + u'"\n' + prg.desc
+            else:
+                description = prg.desc
+            
+            if prg.categories:
+                description += u'\n'
+                
+            for category in prg.categories:
+                description += u'\n' + _('Category : ') + category
+            
+            if prg.advisories:
+                description += u'\n'
+ 
+            for advisory in prg.advisories:
+                description += u'\n' + _('Advisory : ') + advisory
+            
+            if prg.ratings:
+                description += u'\n'
+
+            for system,value in prg.ratings.items():
+                description += u'\n' + _('Rating') + u'(' + system + u') : ' + value
+
+        self.program         = prg
+        self.name            = name
+        self.time            = time
+        self.scrollable_text = skin.ScrollableText(description)
+        self.visible = True
+
+        self.menuw = menuw
+        self.menuw.hide(clear=False)
+        rc.app(self)
+        skin_object.draw('tvguideinfo', self)
+
+
+    def getattr(self, name):
+        if name == 'title':
+            return self.name
+        
+        if self.program:
+            return self.program.getattr(name)
+
+        return u''
+
+
+    def eventhandler(self, event, menuw=None):
+        """
+        eventhandler
+        """
+        if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
+            rc.app(None)
+            self.menuw.show()
+            return True
+        elif event == 'MENU_UP':
+            self.scrollable_text.scroll(True)
+            skin_object.draw('tvguideinfo', self)
+            return True
+        elif event == 'MENU_DOWN':
+            self.scrollable_text.scroll(False)
+            skin_object.draw('tvguideinfo', self)
+            return True
+        return False
