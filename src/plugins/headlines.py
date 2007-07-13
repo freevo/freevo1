@@ -49,10 +49,10 @@ from item import Item
 
 
 #get the singletons so we get skin info and access the osd
-skin = skin.get_singleton()
+skin_object = skin.get_singleton()
 osd  = osd.get_singleton()
 
-skin.register('headlines', ('screen', 'title', 'info', 'plugin'))
+skin_object.register('headlines', ('screen', 'title', 'scrollabletext', 'plugin'))
 
 #check every 30 minutes
 MAX_HEADLINE_AGE = 1800
@@ -96,7 +96,8 @@ class ShowHeadlineDetails:
         self.menuw = menuw
         self.menuw.hide(clear=False)
         rc.app(self)
-        skin.draw('headlines', item)
+        self.scrollable_text = skin.ScrollableText(item.description)
+        skin_object.draw('headlines', self)
 
 
     def eventhandler(self, event, menuw=None):
@@ -106,6 +107,14 @@ class ShowHeadlineDetails:
         if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
             rc.app(None)
             self.menuw.show()
+            return True
+        elif event == 'MENU_UP':
+            self.scrollable_text.scroll(True)
+            skin_object.draw('headlines', self)
+            return True
+        elif event == 'MENU_DOWN':
+            self.scrollable_text.scroll(False)
+            skin_object.draw('headlines', self)
             return True
 
         return False

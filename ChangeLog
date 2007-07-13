@@ -21,6 +21,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Added sounds to menu selection, enabled with OSD_SOUNDS_ENABLED (F#1732380)
  * Added translation for Greek (F#)
  * Added XINE_BOOKMARK for when xine has support for get_time, default is off (B#1745076)
+ * Updated headlines to allow the window to be scrolled (F#1752971)
  * Updated childapp to use subprocess instead of popen (F#1729597)
  * Updated freevo to allow X server options to be passed when using -fs (F#1749908)
  * Updated local_conf.py.example with MPLAYER_HAS_FIELD_DOMINANCE (F#1729404)
