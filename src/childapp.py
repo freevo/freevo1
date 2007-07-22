@@ -125,8 +125,9 @@ class ChildApp:
 
         command_isstr = isinstance(command, str)
         if command_isstr:
-            command = command.split()
-        command_str = ' '.join(command)
+            command_str = command
+        else:
+            command_str = ' '.join(command)
         self.child = None
         try:
             self.child = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
