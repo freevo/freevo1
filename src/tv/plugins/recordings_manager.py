@@ -104,6 +104,13 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         normal plugin init, but sets _type to 'mainmenu_tv'
         """
+        if not config.TV_RECORD_DIR:
+            self.reason = 'TV_RECORD_DIR is not set'
+            return
+        if not os.path.isdir(config.TV_RECORD_DIR):
+            self.reason = 'TV_RECORD_DIR "%s" is not a directory' % (config.TV_RECORD_DIR)
+            return
+
         global disk_manager
         plugin.MainMenuPlugin.__init__(self)
 

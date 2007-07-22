@@ -48,10 +48,10 @@ class PluginInterface(IdleBarPlugin):
     """
     def __init__(self):
         if not config.TV_RECORD_DIR:
-            print 'TV_RECORD_DIR is not set'
+            self.reason = 'TV_RECORD_DIR is not set'
             return
         if not os.path.isdir(config.TV_RECORD_DIR):
-            print 'TV_RECORD_DIR "%s" is not a directory' % (config.TV_RECORD_DIR)
+            self.reason = 'TV_RECORD_DIR "%s" is not a directory' % (config.TV_RECORD_DIR)
             return
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.diskfree'
