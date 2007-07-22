@@ -55,7 +55,7 @@ from gui.RegionScroller import RegionScroller
 from gui.PopupBox import PopupBox
 
 def islog(name):
-    f = open(os.path.join(config.LOGDIR,'command-std%s.log' % name))
+    f = open(os.path.join(config.LOGDIR, 'command-std%s-%s.log' % (name, os.getuid())))
     data = f.readline()
     if name == 'out':
         data = f.readline()
