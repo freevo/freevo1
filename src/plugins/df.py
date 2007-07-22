@@ -62,7 +62,9 @@ class PluginInterface(plugin.ItemPlugin):
             totalspacegb = totalspacemb / 1024
             percentage = freespace * 100.0 / totalspace
 
-            if (totalspace > 1073741824): # more than 1024 Mb
+            if (totalspace == 0): # no space perhaps a bad path
+                diskfree = _( 'Bad Path' )
+            elif (totalspace > 1073741824): # more than 1024 Mb
                 diskfree = _( '%i free of %i GB total (%i%% free)' ) % (freespacegb, totalspacegb, percentage)
             else:
                 diskfree = _( '%i free of %i MB total (%i%% free)' ) % (freespacemb, totalspacemb, percentage)

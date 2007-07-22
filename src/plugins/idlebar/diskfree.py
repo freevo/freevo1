@@ -47,6 +47,12 @@ class PluginInterface(IdleBarPlugin):
     This plugin displays the total amount of free disk space for recordings
     """
     def __init__(self):
+        if not config.TV_RECORD_DIR:
+            print 'TV_RECORD_DIR is not set'
+            return
+        if not os.path.isdir(config.TV_RECORD_DIR):
+            print 'TV_RECORD_DIR "%s" is not a directory' % (config.TV_RECORD_DIR)
+            return
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.diskfree'
         self.time = 0
@@ -61,6 +67,13 @@ class PluginInterface(IdleBarPlugin):
         self.badimg  = os.path.join(config.ICON_DIR, 'status/diskfree-bad.png')
         self.cacheimg = {}
 
+
+    def config(self):
+        return [
+            ('TV_RECORD_DIR', None, 'Directory for TV recordings'),
+            ('DISKFREE_LOW', 20, 'Amount of space in GB to show the low warning icon'),
+            ('DISKFREE_VERY_LOW', 8, 'Amount of space in GB to show the very low warning icon'),
+        ]
 
     def getimage(self, image, osd, cache=False):
         if image.find(config.ICON_DIR) == 0 and image.find(osd.settings.icon_dir) == -1:
@@ -80,13 +93,18 @@ class PluginInterface(IdleBarPlugin):
         Update maximum every 30 seconds
 
         """
-        if (time.time()-self.time) > 30:
-            self.time = time.time()
-            freespace = util.freespace(config.TV_RECORD_DIR)
-            totalspace = util.totalspace(config.TV_RECORD_DIR)
-            self.diskfree = _('%iGB') % (((freespace / 1024) / 1024) / 1024)
-            self.freespace = (((freespace / 1024) / 1024) / 1024)
-            self.totalspace = (((totalspace / 1024) / 1024) / 1024)
+        if not os.path.isdir(config.TV_RECORD_DIR):
+            return
+
+        self.time = time.time()
+        freespace = util.freespace(config.TV_RECORD_DIR)
+        totalspace = util.totalspace(config.TV_RECORD_DIR)
+        self.diskfree = _('%iGB') % (((freespace / 1024) / 1024) / 1024)
+        self.freespace = (((freespace / 1024) / 1024) / 1024)
+        self.totalspace = (((totalspace / 1024) / 1024) / 1024)
+        if self.totalspace == 0:
+            self.percent = 0
+        else:
             self.percent = (self.totalspace - self.freespace) * 1.0 / self.totalspace
 
 
