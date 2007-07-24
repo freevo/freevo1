@@ -125,6 +125,7 @@ class ChildApp:
 
         command_isstr = isinstance(command, str)
         if command_isstr:
+            command = command.strip() # strip spaces from the command string
             command_str = command
         else:
             command_str = ' '.join(command)
