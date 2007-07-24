@@ -649,24 +649,24 @@ class ShowProgramDetails:
         else:
             name = prg.title
             sub_title = prg.sub_title
-            time =  prg.getattr('time') 
+            time =  prg.getattr('time')
             if sub_title:
                 description = u'"' + sub_title + u'"\n' + prg.desc
             else:
                 description = prg.desc
-            
+
             if prg.categories:
                 description += u'\n'
-                
+
             for category in prg.categories:
                 description += u'\n' + _('Category : ') + category
-            
+
             if prg.advisories:
                 description += u'\n'
- 
+
             for advisory in prg.advisories:
                 description += u'\n' + _('Advisory : ') + advisory
-            
+
             if prg.ratings:
                 description += u'\n'
 
@@ -688,7 +688,7 @@ class ShowProgramDetails:
     def getattr(self, name):
         if name == 'title':
             return self.name
-        
+
         if self.program:
             return self.program.getattr(name)
 

@@ -60,6 +60,7 @@ from event import *
 from gui import ConfirmBox, AlertBox, ProgressBox
 from menu import MenuItem, Menu
 from video import VideoItem
+from tv.program_display import ShowProgramDetails
 
 disk_manager = None
 
@@ -129,6 +130,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('TVRM_CONSIDER_UNWATCHED_AFTER', 45, 'Number of days after which to consider deleting unwatched shows if space is required'),
             ('TVRM_EPISODE_FROM_PLOT', None, 'Regular expression to extract the episode name from the plot'),
             ('TVRM_EPISODE_TIME_FORMAT', '%c', 'When the episode name cannot be found use timestamp'),
+            ('TVRM_ADD_VIDEO_ACTIONS', False, 'Append VideoItem actions to the end a RecordedProgramItem list of actions'),
         ]
 
 
@@ -384,11 +386,14 @@ class RecordedProgramItem(Item):
         """
         return the default action
         """
-        return [ ( self.play, _('Play') ),
-                 ( self.confirm_delete, _('Delete')),
-                 ( self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')),
-                 ( self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched'))]
-
+        actions = [ ( self.play, _('Play') ),
+                         ( self.confirm_delete, _('Delete')),
+                         ( self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')),
+                         ( self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched')),
+                         ( self.view_details, _('View Details'))]
+        if config.TVRM_ADD_VIDEO_ACTIONS:
+            actions += self.video_item.actions()[1:] # Remove 'Play' as we've already got it.
+        return actions
 
     def play(self, arg=None, menuw=None):
         """
@@ -445,6 +450,8 @@ class RecordedProgramItem(Item):
             copy_and_replace_menu_item(menuw, self)
             menuw.refresh(reload=True)
 
+    def view_details(self, arg=None, menuw=None):
+        ShowProgramDetails(menuw, Details(self))
 
     def set_name_to_episode(self):
         """
@@ -952,3 +959,18 @@ def get_status_sort_order(watched, keep):
     elif watched:
         order = orders[STATUS_ORDER_WATCHED]
     return order
+
+
+class Details:
+    def __init__(self, episode):
+        self.episode = episode
+        self.time = episode.video_item['year']
+        self.title = episode.name
+        self.sub_title = episode.video_item['tagline']
+        self.desc  = episode.video_item['plot']
+        self.ratings    = {}
+        self.advisories = []
+        self.categories = []
+
+    def getattr(self, attr):
+        return getattr(self, attr)
