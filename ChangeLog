@@ -18,6 +18,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
  * New Chinese Translation (F#1752417)
  * Added personal web pages to the webserver, using PERSONAL_WWW_PAGE (F#1729595)
+ * Added audio scrobbler plug-in for last fm (F#1760242)
  * Added sounds to menu selection, enabled with OSD_SOUNDS_ENABLED (F#1732380)
  * Added translation for Greek (F#)
  * Added XINE_BOOKMARK for when xine has support for get_time, default is off (B#1745076)
@@ -26,6 +27,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated headlines to allow the window to be scrolled (F#1752971)
  * Updated local_conf.py.example with MPLAYER_HAS_FIELD_DOMINANCE (F#1729404)
  * Updated record_client to allow favourites to be added from the command line (F#1734781)
+ * Updated recordings manager to show full scrollable description (F#1759171)
  * Updated skins to adjust the window heights when the button bar is active (F#1733061)
  * Updated system sensors for a configurable path (B#1731892)
  * Updated tv program menu to show full description (F#1752973)

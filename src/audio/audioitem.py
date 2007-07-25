@@ -41,6 +41,14 @@ import rc
 from player import PlayerGUI
 from item import Item
 
+try:
+    if config.LASTFM_SCROBBLE:
+        from plugins.freevo_scrobbler import Scrobbler
+        SCROBBLE = True
+    else:
+        SCROBBLE = False
+except:
+    SCROBBLE = False
 
 class AudioItem(Item):
     """
@@ -168,6 +176,12 @@ class AudioItem(Item):
 
         self.player = PlayerGUI(self, menuw)
         error = self.player.play()
+
+        #last.fm scrobbler
+        if SCROBBLE:
+            scrobbler = Scrobbler()
+            if scrobbler.send_handshake():
+                scrobbler.submit_song(self.info)
 
         if error and menuw:
             AlertBox(text=error).show()
