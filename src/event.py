@@ -167,6 +167,7 @@ VIDEO_NEXT_AUDIOLANG   = Event('VIDEO_NEXT_AUDIOLANG')
 VIDEO_NEXT_SUBTITLE    = Event('VIDEO_NEXT_SUBTITLE')
 VIDEO_TOGGLE_INTERLACE = Event('VIDEO_TOGGLE_INTERLACE')
 VIDEO_NEXT_ANGLE       = Event('VIDEO_NEXT_ANGLE')
+VIDEO_AVSYNC           = Event('VIDEO_AVSYNC')
 STORE_BOOKMARK         = Event('STORE_BOOKMARK')
 MENU                   = Event('MENU')
 
@@ -357,7 +358,9 @@ VIDEO_EVENTS = {
     'MENU'      : MENU,
     'DISPLAY'   : TOGGLE_OSD,
     'REC'       : STORE_BOOKMARK,
-    '0'         : VIDEO_MANUAL_SEEK
+    '0'         : VIDEO_MANUAL_SEEK,
+    'AVSYNC+'   : Event(VIDEO_AVSYNC, arg=0.100),
+    'AVSYNC-'   : Event(VIDEO_AVSYNC, arg=-0.100),
     }
 
 DVD_EVENTS = {

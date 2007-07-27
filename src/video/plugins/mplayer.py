@@ -414,6 +414,10 @@ class MPlayer:
             self.app.write('seek %s\n' % event.arg)
             return True
 
+        if event == VIDEO_AVSYNC:
+            self.app.write('audio_delay %g\n' % event.arg);
+            return True
+
         if event == OSD_MESSAGE:
             self.app.write('osd_show_text "%s"\n' % event.arg);
             return True

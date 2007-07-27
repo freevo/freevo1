@@ -17,6 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * New Chinese Translation (F#1752417)
+ * Updated French Translation (F#1762163)
  * Added personal web pages to the webserver, using PERSONAL_WWW_PAGE (F#1729595)
  * Added audio scrobbler plug-in for last fm (F#1760242)
  * Added sounds to menu selection, enabled with OSD_SOUNDS_ENABLED (F#1732380)
@@ -26,6 +27,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated freevo to allow X server options to be passed when using -fs (F#1749908)
  * Updated headlines to allow the window to be scrolled (F#1752971)
  * Updated local_conf.py.example with MPLAYER_HAS_FIELD_DOMINANCE (F#1729404)
+ * Updated mplayer to allow av sync to be adjusted during playback (F#1762273)
  * Updated record_client to allow favourites to be added from the command line (F#1734781)
  * Updated recordings manager to show full scrollable description (F#1759171)
  * Updated skins to adjust the window heights when the button bar is active (F#1733061)
@@ -34,6 +36,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated xine video plug-in to allow bookmarks to work (F#1729024)
  * Updated xine video plug-in to process stdout and stderr message (F#1729603)
  * Updated xmltv's use of element tree for Python-2.5 (F#1731775)
+ * Fixed apple trailers after web site update (B#1762274)
  * Fixed audio channel selection for AVI files, when no id is present (B#1731232)
  * Fixed auto shutdown when the record server is running remotely (B#1721638)
  * Fixed button bar raising an exception when using colour actions (B#1732378)
