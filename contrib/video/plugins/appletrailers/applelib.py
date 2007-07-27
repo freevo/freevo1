@@ -35,6 +35,16 @@ import pickle
 
 _DEFAULT_URL = 'http://www.apple.com/trailers/'
 
+_FEEDS = (
+        ( 'home/feeds/just_added.json', 'Just Added' ),
+        ( 'home/feeds/exclusive.json', 'Exclusive' ),
+        ( 'home/feeds/just_hd.json', 'HD' ),
+        ( 'home/feeds/upcoming.json', 'Featured' ),
+        ( 'home/feeds/most_pop.json', 'Most Popular' ),
+        ( 'home/feeds/genres.json', None ),
+        ( 'home/feeds/studios.json', None),
+        )
+
 # Date of trailer addition. Comes on a separate line.
 _date_re = re.compile(r'''<dt>(?P<month>[0-9]+)\.(?P<day>[0-9]+)</dt>''', re.IGNORECASE)
 
@@ -51,7 +61,11 @@ _genre_name_re = re.compile(r'''<h4>(?P<name>[^<]*).*</h4>''', re.IGNORECASE)
 _trailer_list_link_re = re.compile(r'''<li><a[^>]*href="(?P<url>[^"]+)"[^>]*>(?P<title>[^<]+).*</a>.*</li>''', re.IGNORECASE)
 
 # Trailer subpages
-_subpage_link_re = re.compile(r'''href="(?P<url>[^"]*(?P<size>sm|small|low|240|mid|medium|320|lg|large|high|480|fullscreen)[^"]*\.html[^"]*)"''', re.IGNORECASE)
+_subpage_link_res = (
+        re.compile(r'''href="(?P<url>[^"]*(?P<size>sm|small|low|240|mid|medium|320|lg|large|high|480|fullscreen)[^"]*\.html[^"]*)"''', re.IGNORECASE),
+        re.compile(r'''movieAddress[^=]*=[^"]*"(?P<url>[^"]*(?P<size>240|320|480|640)[^"]*\.mov[^"]*)"''', re.IGNORECASE),
+        re.compile(r'''<li><a href="(?P<url>/trailers/[^"]*)">''', re.IGNORECASE)
+        )
 
 # Extra step before trailer page
 _frontpage_link_re = re.compile(r'''<a[^>]+href="(?P<url>/trailers/[^"]*(?P<type>trailer|teaser)[^"]*)"[^>]*>''', re.IGNORECASE)
@@ -60,14 +74,16 @@ _frontpage_link_re = re.compile(r'''<a[^>]+href="(?P<url>/trailers/[^"]*(?P<type
 _stream_link_res = (
         re.compile(r'''<param[^>]+name="href"[^>]+value="(?P<url>[^"]+)"[^>]*>''', re.IGNORECASE),
         re.compile(r'''<param[^>]*name="src"[^>]*value="(?P<url>[^"]*)"[^>]*>''', re.IGNORECASE),
-        re.compile(r'''XHTML[(]([^)]*\'href\',)?\'(?P<url>[^\']*)\'''', re.IGNORECASE)
+        re.compile(r'''XHTML[(]([^)]*\'href\',)?\'(?P<url>[^\']*)\'''', re.IGNORECASE),
+        re.compile(r'''\'(?P<url>http[^\']*mov)\'''', re.IGNORECASE)
+        )
+# Stream exclude regexps
+_stream_excl_res = (
+        re.compile(r'''trailers/images.*btn''', re.IGNORECASE),
         )
 
 # Old regexps
 #       re.compile(r'''XHTML[(]\'(?P<url>[^\']*)\'''', re.IGNORECASE)
-
-# New script based pages
-_scriptpage_link_re = re.compile(r'''href="(?P<url>[^"]*video.html\?[^"]*)"''', re.IGNORECASE)
 
 # Stream URLs in script based pages
 _scriptpage_stream_link_re = re.compile(r'''movieAddress[^=]*=[^"]*"(?P<url>[^"]*(?P<size>240|320|480|640)[^"]*\.mov[^"]*)"''', re.IGNORECASE)
@@ -87,82 +103,6 @@ _sizemap = [
         (('1080p',), ('Large [HD 1080p]', 13))
         ]
 
-_last_date = None
-_last_studio = None
-_last_genre = None
-
-def _parse_hidef(line, t):
-    global _last_date
-
-    m = _date_re.search(line)
-    if m:
-        _last_date = "%s/%s" % (m.group("day"), m.group("month"))
-        return
-
-    m = _trailer_link_re.search(line)
-    if m:
-        t.add_trailer(m.group("title"), url = m.group("url"), date = _last_date, category = "HD")
-        _last_date = None
-
-def _parse_exclusive(line, t):
-    global _last_date
-
-    m = _date_re.search(line)
-    if m:
-        _last_date = "%s/%s" % (m.group("day"), m.group("month"))
-        return
-
-    m = _trailer_link_re.search(line)
-    if m:
-        t.add_trailer(m.group("title"), url = m.group("url"), date = _last_date, category = "Exclusive")
-        _last_date = None
-
-def _parse_newest(line, t):
-    global _last_date
-
-    m = _date_re.search(line)
-    if m:
-        _last_date = "%s/%s" % (m.group("day"), m.group("month"))
-        return
-
-    m = _trailer_link_re.search(line)
-    if m:
-        t.add_trailer(m.group("title"), url = m.group("url"), date = _last_date, category = "Newest")
-        _last_date = None
-
-def _parse_studios(line, t):
-    global _last_studio
-
-    m = _studio_name_re.search(line)
-    if m:
-        _last_studio = m.group("name")
-        return
-
-    m = _trailer_list_link_re.search(line)
-    if m:
-        t.add_trailer(m.group("title"), url = m.group("url"), studio = _last_studio)
-
-def _parse_genres(line, t):
-    global _last_genre
-
-    m = _genre_name_re.search(line)
-    if m:
-        _last_genre = m.group("name")
-        return
-
-    m = _trailer_list_link_re.search(line)
-    if m:
-        t.add_trailer(m.group("title"), url = m.group("url"), genre = _last_genre)
-
-# Stages of parsing the page. Each stage consists of a start regexp, a stop
-# regexp and a line parser.
-_stages = [
-        ('<h3>Featured High Definition Trailers</h3>', '<!-- .* High Definition Trailers -->', _parse_hidef),
-        ('<h3>Trailers Exclusive</h3>', '<!-- .* Trailer Exclusives-->', _parse_exclusive),
-        ('<h3>Newest Trailers</h3>', '<!-- .* Newest Trailers -->', _parse_newest),
-        ('<div id="trailers-studio">', '</div>', _parse_studios),
-        ('<div id="trailers-genre">', '</div>', _parse_genres) ]
-
 class Trailers:
     def __init__(self):
         self.titles = {}
@@ -172,30 +112,25 @@ class Trailers:
 
         self._url = url
 
-        lines = self._dl(url).split("\n")
+        feed_count = 0
+        for feed in _FEEDS:
+            data = self._dl(url + feed[0])
+            try:
+                false = False
+                true = True
+                data = eval(data)
+            except:
+                continue
 
-        count = 0
-        in_stage = False
-        stage = 0
-        start = re.compile(_stages[0][0], re.IGNORECASE)
-        for line in lines:
-            count += 1
-            if callback is not None:
-                callback(100 * count / len(lines))
+            title_count = 0
+            for title in data:
+                self.parse_title(title, feed[1])
 
-            if in_stage:
-                _stages[stage][2](line, self)
-                if stop.search(line):
-                    in_stage = False
-                    stage += 1
-                    if stage >= len(_stages):
-                        break
-                    start = re.compile(_stages[stage][0], re.IGNORECASE)
+                title_count += 1
+                callback(100 * feed_count / len(_FEEDS) + 100 * title_count / len(data) / len(_FEEDS))
 
-            if not in_stage and start.search(line):
-                in_stage = True
-                stop = re.compile(_stages[stage][1], re.IGNORECASE)
-                _stages[stage][2](line, self)
+            feed_count += 1
+            callback(100 * feed_count / len(_FEEDS))
 
         if callback is not None:
             callback(100)
@@ -219,25 +154,29 @@ class Trailers:
 
         return self.titles
 
-    def add_trailer(self, title, date = None, url = None, category = None, studio = None, genre = None):
-        title = title.strip()
-        if not self.titles.has_key(title):
-            self.titles[title] = {"studio":None, "genres":[], "trailers":[]}
+    def parse_title(self, title, category):
+        name = title["title"]
+        name = name.strip()
 
-        t = self.titles[title]
+        if not self.titles.has_key(name):
+            self.titles[name] = {"studio":title["studio"], "image":title["poster"], "genres":[], "trailers":[]}
+
+        t = self.titles[name]
 
         if t.has_key("_old"):
             del t["_old"]
 
+        for genre in title["genre"]:
+            if genre is not None and genre not in t["genres"]:
+                t["genres"].append(genre)
+
+        for trailer in title["trailers"]:
+            self.add_trailer(t, trailer["postdate"], trailer["url"], category)
+
+    def add_trailer(self, t, date = None, url = None, category = None):
         if url is not None:
             url = urlparse.urljoin(self._url, url)
             self._parse_trailer_page(t, url, date, category)
-
-        if studio is not None:
-            t["studio"] = studio
-
-        if genre is not None and genre not in t["genres"]:
-            t["genres"].append(genre)
 
     def _parse_trailer_page(self, title, url, date, category):
         for t in title["trailers"]:
@@ -262,43 +201,32 @@ class Trailers:
 
         streams = []
         for line in lines:
-            iterator = _subpage_link_re.finditer(line)
-            for m in iterator:
-                page_size, page_key = self._map_size(m.group("size"))
+            for expr in _subpage_link_res:
+                iterator = expr.finditer(line)
+                for m in iterator:
+                    try:
+                        page_size, page_key = self._map_size(m.group("size"))
+                    except (IndexError):
+                        page_size = None
+                        page_key = None
 
-                suburl = urlparse.urljoin(url, m.group("url"))
-                substreams = self._parse_stream_page(suburl)
+                    suburl = urlparse.urljoin(url, m.group("url"))
+                    substreams = self._parse_stream_page(suburl)
 
-                for ss in substreams:
-                    for s in streams:
-                        if s["url"] == ss["url"]:
-                            break
-                    else:
-                        if ss["size"] is None:
-                            size = page_size
-                            key = page_key
+                    for ss in substreams:
+                        for s in streams:
+                            if s["url"] == ss["url"]:
+                                break
                         else:
-                            size, key = self._map_size(ss["size"])
-                        self._add_stream(streams,
-                                         {"url":ss["url"],
-                                          "size":size,
-                                          "sort_key":key})
-
-            iterator = _scriptpage_link_re.finditer(line)
-            for m in iterator:
-                suburl = urlparse.urljoin(url, m.group("url"))
-                substreams = self._parse_stream_page(suburl)
-
-                for ss in substreams:
-                    for s in streams:
-                        if s["url"] == ss["url"]:
-                            break
-                    else:
-                        size, key = self._map_size(ss["size"])
-                        self._add_stream(streams,
-                                         {"url":ss["url"],
-                                          "size":size,
-                                          "sort_key":key})
+                            if ss["size"] is None:
+                                size = page_size
+                                key = page_key
+                            else:
+                                size, key = self._map_size(ss["size"])
+                            self._add_stream(streams,
+                                             {"url":ss["url"],
+                                              "size":size,
+                                              "sort_key":key})
 
             iterator = _frontpage_link_re.finditer(line)
             for m in iterator:
@@ -366,12 +294,20 @@ class Trailers:
                 elif stream_url.find("1080i") != -1:
                     size = "1080i"
 
-                streams.append({"url":stream_url, "size":size})
+                for excl in _stream_excl_res:
+                    if excl.search(stream_url):
+                        break
+                else:
+                    streams.append({"url":stream_url, "size":size})
 
         m = _scriptpage_stream_link_re.search(line)
         if m:
             stream_url = urlparse.urljoin(baseurl, m.group("url"))
-            streams.append({"url":stream_url, "size":m.group("size")})
+            for excl in _stream_excl_res:
+                if excl.search(stream_url):
+                    break
+            else:
+                streams.append({"url":stream_url, "size":m.group("size")})
 
         return streams
 
@@ -443,23 +379,23 @@ class Trailers:
         keys.sort()
         return keys
 
+def progress(perc):
+    print "\rProgress: %d %%" % perc,
+
 if __name__ == '__main__':
     # Use this to test loading subpages
-    t = Trailers()
-    title = {"trailers":[]}
-    t._parse_trailer_page(title, "http://www.apple.com/trailers/wb/blooddiamond/hd/", None, None)
-    print title
-    print ""
-    title = {"trailers":[]}
-    t._parse_trailer_page(title, "http://www.apple.com/trailers/touchstone/apocalypto/", None, None)
-    print title
-    sys.exit(0)
+    if 1:
+        t = Trailers()
+        title = {"trailers":[]}
+        t._parse_trailer_page(title, "http://www.apple.com/trailers/weinstein/doadeadoralive/", None, None)
+        print title
+        sys.exit(0)
 
     try:
         t = pickle.load(file("trailers.dump"))
     except:
         t = Trailers()
-    l = t.parse()
+    l = t.parse(progress)
     pickle.dump(t, file("trailers.dump", "w"))
     keys = l.keys()
     keys.sort()

@@ -28,6 +28,7 @@
 # -----------------------------------------------------------------------
 
 import os
+import urllib
 
 import config
 import plugin
@@ -51,6 +52,19 @@ if not os.path.isdir(cachedir):
     os.mkdir(cachedir,
             stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
 
+def _fetch_image(url):
+    idx = url.rfind('/')
+    if idx == -1:
+        return None
+
+    fn = url[(idx+1):]
+    fn = os.path.join(cachedir, fn)
+
+    if not os.path.exists(fn):
+        urllib.urlretrieve(url, fn)
+
+    return fn
+
 class PluginInterface(plugin.MainMenuPlugin):
     """
     A freevo interface to http://www.apple.com/trailers
@@ -66,7 +80,8 @@ class PluginInterface(plugin.MainMenuPlugin):
 class AppleItem(Item):
     def __init__(self, parent):
         Item.__init__(self, parent)
-        self.type = 'trailers'
+        self.type = 'dir'
+        self.skin_display_type = 'video'
         self.__load()
 
     def __progress(self, percent):
@@ -99,14 +114,20 @@ class TrailerVideoItem(VideoItem):
     def __init__(self, name, url, parent):
         VideoItem.__init__(self, url, parent)
         self.name = name
-        self.type = 'trailers'
+        self.description = "URL: " + url
 
 class Trailer(Item):
     def __init__(self, name, title, trailer, parent):
         Item.__init__(self, parent)
         self.name = name
-        self.type = 'trailers'
-        self.title = title
+        self.type = 'video'
+
+        self.image = _fetch_image(title['image'])
+        self.description = "Genres: " + ",".join(title["genres"])
+        self.description += "\nCategories: " + ",".join(trailer["categories"])
+        self.description += "\nDate: " + trailer["date"]
+
+        self._title = title
         self._trailer = trailer
 
     def actions(self):
@@ -120,15 +141,18 @@ class Trailer(Item):
             else:
                 name = s["size"]
             entries.append(TrailerVideoItem(name, s["url"], self))
-        menuw.pushmenu(menu.Menu(self.title, entries))
+        menuw.pushmenu(menu.Menu(self.name, entries))
 
-class TrailerMenu(Item):
-    def __init__(self, name, title, trailer, parent):
+class Title(Item):
+    def __init__(self, name, title, parent):
         Item.__init__(self, parent)
         self.name = name
-        self.type = 'trailers'
-        self.title = title
-        self._trailer = trailer
+
+        self.image = _fetch_image(title['image'])
+        self.description = "Genres: " + ",".join(title["genres"])
+        self.description += "\n\n%d trailers available" % len(title["trailers"])
+
+        self._title = title
 
     def actions(self):
         return [ (self.make_menu, 'Trailers') ]
@@ -136,15 +160,11 @@ class TrailerMenu(Item):
     def make_menu(self, arg=None, menuw=None):
         entries = []
         i = 1
-        for t in self._trailer["trailers"]:
+        for trailer in self._title["trailers"]:
             name = "Trailer %d" % i
-            if t["categories"] is not None:
-                name += " [" + ",".join(t["categories"]) + "]"
-            if t["date"] is not None:
-                name += " (" + t["date"] + ")"
-            entries.append(Trailer(name, self.title, t, self))
+            entries.append(Trailer(name, self._title, trailer, self))
             i += 1
-        menuw.pushmenu(menu.Menu(self.title, entries))
+        menuw.pushmenu(menu.Menu(self.name, entries))
 
 class BrowseByTitle(AppleItem):
     def __init__(self, parent):
@@ -155,30 +175,14 @@ class BrowseByTitle(AppleItem):
     def actions(self):
         return [ (self.make_menu, 'Titles') ]
 
-    def _gen_name(self, title, trailer):
-        name = title
-        dates = []
-        categories = []
-        for t in trailer["trailers"]:
-            if t["date"] is not None and t["date"] not in dates:
-                dates.append(t["date"])
-            if t["categories"] is not None and t["categories"] not in categories:
-                categories += t["categories"]
-        if categories:
-            name += " [" + ",".join(categories) + "]"
-        if dates:
-            name += " (" + ",".join(dates) + ")"
-        return name
-
     def make_menu(self, arg=None, menuw=None):
         entries = []
-        for t in self.trailers.sort_by_title():
-            title = self.trailers.titles[t]
-            name = self._gen_name(t, title)
+        for name in self.trailers.sort_by_title():
+            title = self.trailers.titles[name]
             if len(title["trailers"]) == 1:
-                entries.append(Trailer(name, t, title["trailers"][0], self))
+                entries.append(Trailer(name, title, title["trailers"][0], self))
             else:
-                entries.append(TrailerMenu(name, t, title, self))
+                entries.append(Title(name, title, self))
         menuw.pushmenu(menu.Menu(self.title, entries))
 
 class Genre(BrowseByTitle):
