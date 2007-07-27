@@ -59,7 +59,6 @@ class PluginInterface(plugin.ItemPlugin):
         '''
         _debug_('config(self)', 2)
         return [
-            ('BILINGUAL_PATH', '/usr/bin/cdrecord', 'Path to bilingual'),
         ]
 
 
