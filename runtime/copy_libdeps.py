@@ -4,11 +4,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -74,7 +74,7 @@ def main():
     fd = open('preloads', 'w')
     fd.write(preloads_str + '\n')
     fd.close()
-    
+
     return
 
 
@@ -85,7 +85,7 @@ def check_dir(dirname, libdeps, level=0):
     filenames = os.listdir(dirname)
 
     print ' ' * level*2, 'Checking dir %s' % dirname
-    
+
     subdirs = []
     for filename in filenames:
         full_name = os.path.join(dirname, filename)
@@ -121,7 +121,7 @@ def check_lib(filename, libdeps, level=0):
             check_lib(dep, libdeps, level=level+1)
         else:
             print 'seen'
-    
+
     return
 
 
@@ -141,7 +141,6 @@ def get_deps(filename):
 
     return deps
 
-    
+
 if __name__ == '__main__':
     main()
-    
