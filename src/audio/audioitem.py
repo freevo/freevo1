@@ -44,6 +44,7 @@ from item import Item
 try:
     if config.LASTFM_SCROBBLE:
         from plugins.freevo_scrobbler import Scrobbler
+        import thread
         SCROBBLE = True
     else:
         SCROBBLE = False
@@ -179,19 +180,28 @@ class AudioItem(Item):
 
         #last.fm scrobbler
         if SCROBBLE:
-            scrobbler = Scrobbler()
-            if scrobbler.send_handshake():
-                scrobbler.submit_song(self.info)
+            self.scrobbled = False
+            thread.start_new_thread(self.scrobble_song,())
 
         if error and menuw:
             AlertBox(text=error).show()
             rc.post_event(rc.PLAY_END)
 
+    def scrobble_song(self):
+        """ Scrobble the song """
+        while True and not self.scrobbled and self.player.player.is_playing():
+            if self.elapsed > self.info['length'] / 2:
+                scrobbler = Scrobbler()
+                if scrobbler.send_handshake():
+                    scrobbler.submit_song(self.info)
+                self.scrobbled = True
+            time.sleep(1)
 
     def stop(self, arg=None, menuw=None):
         """
         Stop the current playing
         """
+        if SCROBBLE: self.scrobbled = True
         self.player.stop()
 
 
