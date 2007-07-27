@@ -8,4 +8,4 @@ if item.info.has_key('audio'):
 if item.info.has_key('subtitles'):
     items.append(menu.MenuItem(_('Subtitle selection'), subtitle_selection_menu, item))
 if item.info.has_key('chapters'):
-    items.append(menu.MenuItem(_('Chapter selection'), chapter_selection_menu, item))                                                                                
+    items.append(menu.MenuItem(_('Chapter selection'), chapter_selection_menu, item))

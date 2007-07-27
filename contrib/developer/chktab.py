@@ -22,13 +22,13 @@ def scandir(tabfiles, dirname, fnames):
         if tablines:
             tabfiles += [[fullname, tablines]]
 
-    
+
 if __name__ == '__main__':
     tabfiles = []
     os.path.walk('.', scandir, tabfiles)
 
     print
-    
+
     for rec in tabfiles:
         fullname, tablines = rec[0], rec[1]
         print '%-40s %s' % (fullname, tablines[:25])

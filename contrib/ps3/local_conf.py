@@ -10,15 +10,15 @@
 #    you # want a alsa as mplayer audio out, just put
 #    "MPLAYER_AO_DEV = # 'alsa9'" in local_conf.py
 #
-#    This is no normal config file, it's Python code. Because of that, you 
+#    This is no normal config file, it's Python code. Because of that, you
 #    need to follow some rules to avoid crashes. The examples should explain
-#    the settings, but make sure a line starting with a variable has 
+#    the settings, but make sure a line starting with a variable has
 #    NO SPACES OR TABS at the beginning.
 #
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -56,7 +56,7 @@ DEFAULT_VOLUME     = 80                # Set default volume level.
 # TV_IN_VOLUME       = 60              # Set this to your preferred level 0-100.
 # VCR_IN_VOLUME      = 90              # If you use different input from TV
 # RADIO_IN_VOLUME    = 80              # Set this to your preferred level 0-100.
-# DEV_MIXER          = '/dev/mixer'    # mixer device 
+# DEV_MIXER          = '/dev/mixer'    # mixer device
 
 # START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 
@@ -80,13 +80,13 @@ plugin.remove('video.xine')
 #
 # Hide discs from the wrong menu (e.g. VCDs in audio menu) and empty discs.
 #
-HIDE_UNUSABLE_DISCS = 1               
+HIDE_UNUSABLE_DISCS = 1
 
 #
 # Attempt to set the speed of the ROM drive. A good value for keeping the
 # drive silent while playing movies is 8.
 #
-# ROM_SPEED = 0                
+# ROM_SPEED = 0
 
 #
 # Perform a whole system shutdown at SHUTDOWN! Useful for standalone boxes.
@@ -186,19 +186,19 @@ HIDE_UNUSABLE_DISCS = 1
 # -- autoshutdown acpi-alarm configuration
 
 # This method uses the wakeup on alarm function that most BIOSs have.
-# The wakeup time is set by a simple 
+# The wakeup time is set by a simple
 #
 # "echo 2004-08-02 20:15:00 >/proc/acpi/alarm"
 #
-# On most mainbords you will have to ENABLE "Wake on Timer", "Resume on Alarm", 
+# On most mainbords you will have to ENABLE "Wake on Timer", "Resume on Alarm",
 # "RTC Alarm Resume" or similar things for the acpi wakeup method to work.
 # If you want to use acpi, you need to create a small script:
 #
 #    !/bin/sh
-#    echo "$1" >/proc/acpi/alarm   
-#    
-# You have to be root or use sudo for this to work.    
-#AUTOSHUTDOWN_WAKEUP_CMD = sudo /PATH/TO/set_acpi.sh    
+#    echo "$1" >/proc/acpi/alarm
+#
+# You have to be root or use sudo for this to work.
+#AUTOSHUTDOWN_WAKEUP_CMD = sudo /PATH/TO/set_acpi.sh
 
 
 # -- autoshutdown nvram-wakeup configuration --
@@ -252,9 +252,9 @@ HIDE_UNUSABLE_DISCS = 1
 # Events
 # ======================================================================
 #
-# You can add more keybindings by adding them to the correct hash. 
-# e.g. If you want to send 'contrast -100' to mplayer by pressing the '1' key, 
-# just add the following line: 
+# You can add more keybindings by adding them to the correct hash.
+# e.g. If you want to send 'contrast -100' to mplayer by pressing the '1' key,
+# just add the following line:
 #
 # EVENTS['video']['1'] = Event(VIDEO_SEND_MPLAYER_CMD, arg='contrast -100')
 #
@@ -304,7 +304,7 @@ EVENT_DEVS = []
 
 # Use Internet resources to fetch information?
 # For example, Freevo can use CDDB for album information,
-# the IMDB movie database for movie info, and Amazon for cover searches. 
+# the IMDB movie database for movie info, and Amazon for cover searches.
 # Set this to 0 if your computer isn't connected to a network.
 #
 USE_NETWORK = 1
@@ -360,8 +360,8 @@ USE_NETWORK = 1
 # Plugins:
 # ======================================================================
 
-# Remove undesired plugins by setting plugin.remove(code). 
-# You can also use the name to remove a plugin. But if you do that, 
+# Remove undesired plugins by setting plugin.remove(code).
+# You can also use the name to remove a plugin. But if you do that,
 # all instances of this plugin will be removed.
 #
 # Examples:
@@ -373,12 +373,12 @@ USE_NETWORK = 1
 #   menus
 #
 # See freevo_config.py for a list of loaded plugins
-#plugin.remove(plugin_tv) 
+#plugin.remove(plugin_tv)
 
 
 #
 # Use ivtv_record instead if you have an ivtv based card (PVR-250/350)
-# and want freevo to do everthing for you. TV_SETTINGS must be set 
+# and want freevo to do everthing for you. TV_SETTINGS must be set
 # correctly. To use you need to set the following two lines:
 #
 # plugin.remove('tv.generic_record')
@@ -485,7 +485,7 @@ plugin.activate('joy')
 # Should directories sorted by date instead of filename?
 # 0 = No, always sort by filename.
 # 1 = Yes, sort by date
-# 2 = No, don't sory by date for normal directories, 
+# 2 = No, don't sory by date for normal directories,
 #     but sort by date for TV_RECORD_DIR.
 #
 # DIRECTORY_SORT_BY_DATE = 2
@@ -519,7 +519,7 @@ plugin.activate('joy')
 # DIRECTORY_FORCE_SKIN_LAYOUT = -1
 
 #
-# Format string for the audio item names. 
+# Format string for the audio item names.
 #
 # Possible strings:
 # a=artist, n=tracknumber, t=title, y=year, f=filename
@@ -532,7 +532,7 @@ plugin.activate('joy')
 
 #
 # Use media id tags to generate the name of the item. This should be
-# enabled all the time. It should only be disabled for directories with 
+# enabled all the time. It should only be disabled for directories with
 # broken tags.
 #
 # DIRECTORY_USE_MEDIAID_TAG_NAMES = 1
@@ -543,7 +543,7 @@ plugin.activate('joy')
 #
 # If you set this variable in a folder.fxd, the value is 1 (enabled)
 # or 0 (disabled).
-# 
+#
 # Examples:
 # To enable autoplay for audio and image files:
 # DIRECTORY_AUTOPLAY_ITEMS = [ 'audio', 'image' ]
@@ -594,7 +594,7 @@ VIDEO_SHOW_DATA_DIR = '/root/videos'
 #
 # The list of filename suffixes that are used to match the files that
 # are played wih MPlayer.
-# 
+#
 # VIDEO_MPLAYER_SUFFIX = [ 'avi', 'mpg', 'mpeg', 'wmv', 'bin', 'rm',
 #                          'divx', 'ogm', 'vob', 'asf', 'm2v', 'm2p',
 #                          'mp4', 'viv', 'nuv', 'mov', 'iso',
@@ -603,7 +603,7 @@ VIDEO_SHOW_DATA_DIR = '/root/videos'
 #
 # The list of filename suffixes that are used to match the files that
 # are played wih Xine.
-# 
+#
 # VIDEO_XINE_SUFFIX = [ 'avi', 'mpg', 'mpeg', 'rm', 'divx', 'ogm',
 #                       'asf', 'm2v', 'm2p', 'mp4', 'mov', 'cue' ]
 
@@ -644,12 +644,12 @@ VIDEO_SHOW_DATA_DIR = '/root/videos'
 #
 # The list of filename suffixes that are used to match the files that
 # are played as audio.
-# 
+#
 # AUDIO_SUFFIX = [ 'mp3', 'ogg', 'wav','m4a', 'wma', 'aac', 'flac', 'mka' ]
 
 #
-# Regular expression used to recognize filenames which are likely to be 
-# covers for an album 
+# Regular expression used to recognize filenames which are likely to be
+# covers for an album
 #
 # This will match front.jpg and cover-f.jpg, but not back.jpg nor cover-b.jpg:
 # AUDIO_COVER_REGEXP = 'front|-f'
@@ -678,7 +678,7 @@ VIDEO_SHOW_DATA_DIR = '/root/videos'
 #
 # The list of filename suffixes that are used to match the files that
 # are used for the image viewer.
-# 
+#
 # IMAGE_SUFFIX = [ 'jpg','gif','png','jpeg','bmp','tiff','psd' ]
 
 #
@@ -698,7 +698,7 @@ VIDEO_SHOW_DATA_DIR = '/root/videos'
 #  1    wipe effect
 #
 IMAGEVIEWER_BLEND_MODE = -1
-    
+
 
 
 # ======================================================================
@@ -714,7 +714,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # SNES stands for Super Nintendo Entertainment System. Freevo relies
 # on other programs that are not included in Freevo to play these games.
-# 
+#
 # NEW GAMES SYSTEM :
 # =================
 # The GAMES_ITEMS structure is now build as follows :
@@ -730,14 +730,14 @@ IMAGEVIEWER_BLEND_MODE = -1
 #                                            type, then you must specify here
 #                                        the file suffix used by the emulator
 # GAMES_ITEMS = [
-#     ('MAME', '/home/media/games/xmame/roms',     
-#         ('MAME', '/usr/local/bin/xmame.SDL', '-fullscreen -modenumber 6', 
+#     ('MAME', '/home/media/games/xmame/roms',
+#         ('MAME', '/usr/local/bin/xmame.SDL', '-fullscreen -modenumber 6',
 #             '/home/media/games/xmame/shots', None)),
-#     ('SUPER NINTENDO', '/home/media/games/snes/roms', 
+#     ('SUPER NINTENDO', '/home/media/games/snes/roms',
 #         ('SNES', '/usr/local/bin/zsnes', '-m -r 3 -k 100 -cs -u', '', None )),
 #     ('Visual Boy Advance', '/home/media/games/vba/roms/',
 #         ('GENERIC', '/usr/local/vba/VisualBoyAdvance', ' ', '', [ 'gba' ] )),
-#     ('MEGADRIVE', '/home/media/games/megadrive/roms', 
+#     ('MEGADRIVE', '/home/media/games/megadrive/roms',
 #         ('GENESIS', '/usr/local/bin/generator-svgalib', '', '', '' ))
 # ]
 #
@@ -754,7 +754,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # GAMES_NICE = -20
 
-# 
+#
 # MAME cache directory
 #
 # GAMES_MAME_CACHE = '%s/romlist-%s.pickled' % (FREEVO_CACHEDIR, os.getuid())
@@ -771,7 +771,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 #
 # Select a way when to switch to text view even if a image menu is there
-# 
+#
 # 1 = Force text view when all items have the same image and there are no
 #     directories
 # 2 = Ignore the directories, always switch to text view when all images
@@ -781,8 +781,8 @@ IMAGEVIEWER_BLEND_MODE = -1
 
 #
 # Force text view for the media menu
-# (The media menu is the first menu displayed for video, audio, images 
-# and games). 
+# (The media menu is the first menu displayed for video, audio, images
+# and games).
 #
 # SKIN_MEDIAMENU_FORCE_TEXTVIEW = 0
 
@@ -797,12 +797,12 @@ IMAGEVIEWER_BLEND_MODE = -1
 # OSD_EXTRA_FONT_PATH = [ '/usr/X11R6/lib/X11/fonts/truetype/' ]
 
 #
-# Font aliases 
+# Font aliases
 # All names must be lowercase! All alternate fonts must be in './share/fonts/'
 #
 # OSD_FONT_ALIASES = { 'arial_bold.ttf' : 'VeraBd.ttf' }
 
-# For non-european character sets the OSD_FORCE_FONTNAME and 
+# For non-european character sets the OSD_FORCE_FONTNAME and
 # OSD_FORCE_FONTSIZE can be set. The size is a scaling ratio, ie 1.2.
 # Setting OSD_FORCE_FONTNAME='batang.ttf' and OSD_FORCE_FONTSIZE=1.0
 # allows Korean characters.
@@ -812,7 +812,7 @@ IMAGEVIEWER_BLEND_MODE = -1
 # Number of seconds to wait until the busy icon is shown in the menu.
 # Busy icon can also be shown right away when there is more than a certain
 # number of files in a directory.
-# 
+#
 # Set this to None to disable this.
 # (seconds, files)
 #
@@ -838,9 +838,9 @@ IMAGEVIEWER_BLEND_MODE = -1
 # OSD_STOP_WHEN_PLAYING = 0
 
 #
-# Dim text that doesn't fit instead of using ellipses. 
+# Dim text that doesn't fit instead of using ellipses.
 # OSD_DIM_TEXT = 1
-    
+
 # ======================================================================
 # Freevo remote control settings:
 # ======================================================================
@@ -863,9 +863,9 @@ IMAGEVIEWER_BLEND_MODE = -1
 
 #
 # Joystick support
-# 0 = Disable joystick support 
-# 1 = Use js0, 
-# 2 = Use js1, 
+# 0 = Disable joystick support
+# 1 = Use js0,
+# 2 = Use js1,
 #  ... etc
 #
 JOY_DEV = 1
@@ -907,13 +907,13 @@ JOY_SENS = 32000
 # <square>      btn 15
 # <select>      btn 0
 # <start>       btn 3
-# Note: buttons for freevo need to be button-value +1 
+# Note: buttons for freevo need to be button-value +1
 # so above <btn 0> = freevo <button 1>
 
-# all button-values for JOY_CMDS need to be there: 
+# all button-values for JOY_CMDS need to be there:
 # Optional commands that can be mapped can be found in: /src/event.py
 
-JOY_CMDS = {     
+JOY_CMDS = {
      'button 5'       : 'UP',
      'button 7'       : 'DOWN',
      'button 8'       : 'LEFT',
@@ -929,12 +929,12 @@ JOY_CMDS = {
 
      'button 11'      : 'VOL+',           # <L1>
      'button 9'       : 'VOL-',           # <L2>
-     'button 2'       : 'MUTE',           # <L3>      
-     
+     'button 2'       : 'MUTE',           # <L3>
+
      'button 10'      : 'MUTE',           # <R2>
      'button 4'       : 'PLAY',           # <start>
      'button 13'      : 'PLAY',           # <start>
-     'button 17'      : 'MENU',           # <ps> 
+     'button 17'      : 'MENU',           # <ps>
 }
 
 EVENTS['global']['VOL+'] = Event('MIXER_VOLUP', arg=10)
@@ -950,7 +950,7 @@ EVENTS['global']['VOL-'] = Event('MIXER_VOLDOWN', arg=10)
 #
 # Location of the TV time program
 # Default: Use the value in freevo.conf
-# 
+#
 # TVTIME_CMD = CONF.tvtime
 
 
@@ -967,7 +967,7 @@ EVENTS['global']['VOL-'] = Event('MIXER_VOLDOWN', arg=10)
 
 # Priority of mplayer process. 0 is unchanged, <0 is higher prio, >0 lower prio.
 # prio <0 has no effect unless run as root.
-# MPLAYER_NICE        = -20             
+# MPLAYER_NICE        = -20
 
 #
 # Mplayer options to use the software scaler. If your CPU is fast enough, you
@@ -1014,11 +1014,11 @@ MPLAYER_SOFTWARE_SCALER = ''
 
 #
 # Try to set correct 'delay' and 'mc' values for mplayer based on the delay
-# from mmpython. 
+# from mmpython.
 #
-# This should correct av sync problems with mplayer for some files, but 
-# may also break things. (I don't know, that's why it's disabled by default). 
-# WARNING: When seeking, the playback is out of sync for some seconds! 
+# This should correct av sync problems with mplayer for some files, but
+# may also break things. (I don't know, that's why it's disabled by default).
+# WARNING: When seeking, the playback is out of sync for some seconds!
 #
 # MPLAYER_SET_AUDIO_DELAY = 0
 
@@ -1106,7 +1106,7 @@ MPLAYER_SOFTWARE_SCALER = ''
 #
 # TV_SETTINGS = 'NORM INPUT CHANLIST DEVICE'
 
-TV_CHANNELS = [] 
+TV_CHANNELS = []
 plugin.remove('tv')
 
 #
@@ -1119,7 +1119,7 @@ plugin.remove('tv')
 # TV_DRIVER = 'v4l'
 # TV_DEVICE = '/dev/video0'
 # TV_INPUT = 0
-# 
+#
 # Radio device default is None, /dev/video24 for ivtv
 # RADIO_DEVICE = '/dev/radio'
 
@@ -1151,13 +1151,13 @@ plugin.remove('tv')
 # TV_SETTINGS = '%s television %s %s' % (CONF.tv, CONF.chanlist, TV_DEVICE)
 
 #
-# Size (in MB) of the timeshift buffer. (ie: how long you can pause tv for.)  
-# This is set to a low default because the default buffer location is 
+# Size (in MB) of the timeshift buffer. (ie: how long you can pause tv for.)
+# This is set to a low default because the default buffer location is
 # under FREEVO_CACHEDIR and we don't want to blow /var or /tmp.
 # TIMESHIFT_BUFFER_SIZE = 128
 
 # TIMESHIFT_ENCODE_CMD = 'mp1e -m3 -c%s -p%s -r14,100' % \
-#                        (TV_SETTINGS.split()[3], AUDIO_INPUT_DEVICE) 
+#                        (TV_SETTINGS.split()[3], AUDIO_INPUT_DEVICE)
 
 # TIMESHIFT_BUFFER = '%s/timeshift.mpeg' % FREEVO_CACHEDIR
 
@@ -1167,8 +1167,8 @@ plugin.remove('tv')
 
 # This is the filename format for files recorded using Freevo.
 # You can use any of the strftime variables in it, provided you
-# put two '%%' at the beginning. 
-# 
+# put two '%%' at the beginning.
+#
 # Some examples:
 # %%A - Full weekday name.
 # %%H - Hour (24-hour clock) as a decimal number [00,23].
@@ -1176,7 +1176,7 @@ plugin.remove('tv')
 # %%m - Month as a decimal number [01,12].
 # %%d - Day of the month as a decimal number [01,31].
 # %%p - Locale's equivalent of either AM or PM.
-# 
+#
 # More can be found at: http://www.python.org/doc/current/lib/module-time.html
 
 # TV_RECORDFILE_MASK = '%%m-%%d %%H:%%M %(progname)s - %(title)s'
@@ -1277,7 +1277,7 @@ plugin.remove('tv')
 # FREQUENCY_TABLE - This is only used when Freevo changes the channel natively.
 # This is only the case if you are using V4L2 and any of the following plugins:
 # timeshift, ivtv_record, ivtv_basic_tv.
-# For the standard frequancy tables see src/tv/freq.py.  To add your own just 
+# For the standard frequancy tables see src/tv/freq.py.  To add your own just
 # replace tuner_id in the following example with a valid tuner id (ie: '5' or
 # 'BBC1') and a frequency in KHz.  You may have as many entries as you like,
 # anything here will simply override a corresponding entry in your standard
@@ -1343,7 +1343,7 @@ plugin.remove('tv')
 #
 # All channels listed here will be displayed on the TV menu, even if they're
 # not present in the XMLTV listing.
-# 
+#
 #
 # Timedependent channels:
 #
@@ -1355,7 +1355,7 @@ plugin.remove('tv')
 #                ('27', 'TV4',               'E6'),
 #                ('10', 'Kanal 5',           'E7'),
 #                ('60', 'Fox Kids',          'E8', ('1234567','0600','1659')),
-#                ('16', 'TV6',               'E8', ('1234567','1700','2359'), 
+#                ('16', 'TV6',               'E8', ('1234567','1700','2359'),
 #                                                  ('1234567','0000','0300')),
 #                ('14', 'MTV Europe',        'E11') ]
 #
@@ -1365,7 +1365,7 @@ plugin.remove('tv')
 # 1234567 in days means all days.
 # 12345 would mean monday to friday.
 #
-# It will display "Fox Kids" from 06:00 to 16:59 and "TV6" from 17:00 to 03:00. 
+# It will display "Fox Kids" from 06:00 to 16:59 and "TV6" from 17:00 to 03:00.
 # 03:00 to 06:00 it won't be displayed at all.
 #
 
@@ -1421,9 +1421,9 @@ plugin.remove('tv')
 
 #
 # Username / Password combinations to login to the web interface.
-# 
+#
 # WWW_USERS = {
-#     "user1" : "changeme", 
+#     "user1" : "changeme",
 #     "optional" : "changeme2"
 # }
 #
@@ -1505,7 +1505,7 @@ plugin.remove('tv')
 # %b - Name of Month
 # %d - Day of the month as a decimal number [01,31].
 # %p - Locale's equivalent of either AM or PM.
-# %y - Year without century as a decimal number [00,99].          
+# %y - Year without century as a decimal number [00,99].
 # %Y - Year with century as a decimal number.
 # ======================================================================
 # plugin.activate('idlebar')

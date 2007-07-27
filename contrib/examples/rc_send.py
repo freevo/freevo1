@@ -36,48 +36,46 @@ import socket
 ######################################################################
 
 def usage():
-        print 'a small standalone program to send remote events to Freevo'
-        print 'You need to set ENABLE_NETWORK_REMOTE = 1 in you local_conf.py'
-        print
-        print 'The first argument is the event name, e.g. "SELECT"'
-        print 'Please see the freevo source file freevo/src/event.py'
-        print 'for a list of event names'
-        print
-        print 'It takes two optional arguments:'
-	print '    - the first is host which defaults to localhost'
-	print '    - the second is port which defaults to 16310'
-	print 
-	print 'when run with no args it connects to the localhost on port 16130'
-	print 'freevo remote'
-	print 
-	print 'when run with one arg it connects to the given host on port 16130'
-	print 'python rc_send <EVENT> [HOST] [PORT]'
-        print
-        sys.exit(0)
+    print 'a small standalone program to send remote events to Freevo'
+    print 'You need to set ENABLE_NETWORK_REMOTE = 1 in you local_conf.py'
+    print
+    print 'The first argument is the event name, e.g. "SELECT"'
+    print 'Please see the freevo source file freevo/src/event.py'
+    print 'for a list of event names'
+    print
+    print 'It takes two optional arguments:'
+    print '    - the first is host which defaults to localhost'
+    print '    - the second is port which defaults to 16310'
+    print
+    print 'when run with no args it connects to the localhost on port 16130'
+    print 'freevo remote'
+    print
+    print 'when run with one arg it connects to the given host on port 16130'
+    print 'python rc_send <EVENT> [HOST] [PORT]'
+    print
+    sys.exit(0)
 
 ######################################################################
-        
+
 def send(event, host, port):
-        sockobj = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sockobj.connect((host, port))
-        err = sockobj.send(event)
-        sockobj.close()
-        print 'Sent event "%s" to host "%s" on port %s' % (event, host, port)
+    sockobj = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sockobj.connect((host, port))
+    err = sockobj.send(event)
+    sockobj.close()
+    print 'Sent event "%s" to host "%s" on port %s' % (event, host, port)
 
 ######################################################################
-        
-if __name__ == '__main__': 
+
+if __name__ == '__main__':
     if len(sys.argv) < 2 or sys.argv[1] == '--help':
         usage()
 
     event = sys.argv[1]
     host = '127.0.0.1'
     port = 16310
-    
+
     if len(sys.argv) > 2:
         host = sys.argv[2]
         if len(sys.argv) > 3:
             port = int(sys.argv[3])
     send(event, host, port)
-    
-

@@ -6,7 +6,7 @@ from plugins.idlebar import IdleBarPlugin
 class PluginInterface(IdleBarPlugin):
     """
     Shows Yea or Nay randomly as text in the idlebar
-                                                                                
+
     Activate with:
     plugin.activate('idlebar.YeaNay',   level=45)
     """
@@ -16,7 +16,7 @@ class PluginInterface(IdleBarPlugin):
             self.yeanay = 'yea'
         else:
             self.yeanay = 'nay'
-                                                                        
+
     def draw(self, (type, object), x, osd):
         font  = osd.get_font('clock')
         idlebar_height = 60
@@ -29,4 +29,3 @@ class PluginInterface(IdleBarPlugin):
                         ( osd.y + ( idlebar_height - h ) / 2 ),
                         ( w + 1 ), h , 'right', 'center')
         return 0
-

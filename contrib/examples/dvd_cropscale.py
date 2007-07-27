@@ -4,11 +4,11 @@
 # $Id$
 #
 # Notes:
-# Todo:        
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -56,7 +56,7 @@ def main():
     # Parsed settings
     aspect = None
     crop = None
-    
+
     lines = output.split('\n')
     for line in lines:
 
@@ -97,7 +97,7 @@ def main():
     # Ok, now we got the crop values. Calculate the scaling so that
     # the aspect ratio is correct, and the number of pixels on the line
     # is divisible by 16.
-    
+
     # Scaling. The aspect on the disc is 1.5 (720/480), correct for that.
     scale_x = aspect / 1.5
     new_w = w * scale_x
@@ -109,8 +109,8 @@ def main():
     print 'Settings: -vop scale=%s:%s,crop=%s:%s:%s:%s' % args
 
     print 'Original aspect = %1.2f, new = %1.2f' % (aspect, (float(new_w) / new_h) )
-    
-            
+
+
 
 if __name__ == '__main__':
     main()

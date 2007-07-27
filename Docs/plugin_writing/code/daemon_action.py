@@ -13,4 +13,3 @@ class FooReceiverPlugin(plugin.DaemonPlugin):
             self.foo += 1
             return True
         return False
-

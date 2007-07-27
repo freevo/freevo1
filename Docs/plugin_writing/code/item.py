@@ -8,11 +8,11 @@ class PluginInterface(plugin.ItemPlugin):
                      (self.sws, 'Use Software Scaler') ]
         else:
             return []
-        
+
     def remove_sws(self, menuw=None, arg=None):
         config.MPLAYER_SOFTWARE_SCALER = ''
         menuw.back_one_menu()
-        
+
     def sws(self, menuw=None, arg=None):
         config.MPLAYER_SOFTWARE_SCALER = "-subfont-text-scale 15 -fs -sws 0 "\
                                          "-vf scale=%s:-3"\

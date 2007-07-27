@@ -13,4 +13,3 @@ class CoolItem(Item):
 
     def runMyCommand(self, arg=None, menuw=None):
         # do some real cool stuff..
-

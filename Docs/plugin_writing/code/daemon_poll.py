@@ -12,4 +12,3 @@ class FooSenderPlugin(plugin.DaemonPlugin):
 
     def poll(self):
         rc.post_event(Event('foo'))
-        

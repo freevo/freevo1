@@ -25,8 +25,8 @@ class CoolMainMenuItem(Item):
     # creates a submenu with two choices
     def create_cool_menu(self, arg=None, menuw=None):
         myitems = []
-	myitems += [menu.MenuItem(_('Cool Choice1'), action=self.doChoice1)]
-	myitems += [menu.MenuItem(_('Cool Choice2'), action=self.doChoice2)]
+        myitems += [menu.MenuItem(_('Cool Choice1'), action=self.doChoice1)]
+        myitems += [menu.MenuItem(_('Cool Choice2'), action=self.doChoice2)]
         cool_menu = menu.Menu( _( 'Cool Menu' ), myitems)
         rc.app(None)
         menuw.pushmenu(cool_menu)
@@ -55,7 +55,7 @@ class CoolMainMenuItem(Item):
     # display an image if we select this option in the menu
     def doChoice2(self, arg=None, menuw=None):
         imgitem = ImageItem(self.importantData, self)
-	imgitem.view(menuw=menuw)
+        imgitem.view(menuw=menuw)
 
 # This class basically only exists to give the item to the main menu and
 # to setup variables to pass to the real meat of the plugin above. The
@@ -73,18 +73,15 @@ class PluginInterface(plugin.MainMenuPlugin):
         if not cooldata:
             self.reason = _('Need an arg to display.')
             return
-	
-	if not os.path.isfile(cooldata):
-	    self.reason = _('%s does not exist.') % cooldata
+
+        if not os.path.isfile(cooldata):
+            self.reason = _('%s does not exist.') % cooldata
             return
 
-	self.importantData = cooldata
+        self.importantData = cooldata
 
         # init the plugin
         plugin.MainMenuPlugin.__init__(self)
 
     def items(self, parent):
-            return [ CoolMainMenuItem(parent, self.importantData) ]
-	                                                                                    
-
-
+        return [ CoolMainMenuItem(parent, self.importantData) ]

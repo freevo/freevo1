@@ -7,4 +7,3 @@ class PluginInterface(plugin.Plugin):
 
 plugin.activate('foo', args=('1',))
 plugin.activate('foo', args=('1', 'bar'))
-

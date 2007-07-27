@@ -8,16 +8,15 @@ class DaemonPlugin(Plugin):
     # Functions
     def __init__(self):
         pass
-    
+
     def poll(self):
         pass
-    
+
     def draw(self(type, object), osd):
         pass
 
     def eventhandler(self, event, menuw=None):
         return False
-    
+
     def shutdown(self):
         pass
-    

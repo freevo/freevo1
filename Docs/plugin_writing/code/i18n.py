@@ -5,4 +5,3 @@ class PluginInterface(plugin.Plugin):
 
     def foo(self):
         return self._('Text to translate')
-    
