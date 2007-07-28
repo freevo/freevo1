@@ -119,7 +119,7 @@ class Recorder:
 
         rec_prog.filename = tv_util.getProgFilename(rec_prog)
         rec_prog.filename = os.path.splitext(tv_util.getProgFilename(rec_prog))[0] + '.mpeg'
-        _debug_('Recorder::Record:filename %s' % rec_prog.filename)
+        _debug_('filename %s' % rec_prog.filename)
 
         cl_options = { 'channel'  : rec_prog.tunerid,
                        'frequency' : frequency,
@@ -134,16 +134,16 @@ class Recorder:
         }
 
         self.vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
-        _debug_('Recorder::Record:cl_options %s' % cl_options)
-        _debug_('Recorder::Record:chan_index %s' % self.fc.chan_index)
-        _debug_('Recorder::Record:vg.vdev %s' % self.vg.vdev)
-        _debug_('Recorder::Record:vg.vvbi %s' % self.vg.vvbi)
+        _debug_('cl_options %s' % cl_options)
+        _debug_('chan_index %s' % self.fc.chan_index)
+        _debug_('vg.vdev %s' % self.vg.vdev)
+        _debug_('vg.vvbi %s' % self.vg.vvbi)
         pagenum = None;
         try:
             pagenum = int(config.TV_CHANNELS[self.fc.chan_index][5])
         except:
             pagenum = None;
-        _debug_('Recorder::Record:pagenum "%s"' % pagenum)
+        _debug_('pagenum "%s"' % pagenum)
 
         # this is not used
         if isinstance(config.VCR_CMD, str) or isinstance(config.VCR_CMD, unicode):
@@ -169,7 +169,7 @@ class Recorder:
         self.thread.autokill = float(rec_prog.rec_duration + 10)
         self.thread.mode_flag.set()
 
-        _debug_('Recorder::Record: %s' % self.rec_command)
+        _debug_('rec_command=%r' % self.rec_command)
 
 
     def Stop(self):
@@ -220,14 +220,14 @@ class Record_Thread(threading.Thread):
 
     def run(self):
         while 1:
-            _debug_('Record_Thread::run: mode=%s' % self.mode)
+            _debug_('mode=%s' % self.mode)
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
 
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
-                _debug_('Record_Thread::run: cmd=%s' % self.command)
+                _debug_('cmd=%r' % self.command)
 
                 fc = FreevoChannels()
                 _debug_('CHAN: %s' % fc.getChannel())
@@ -260,12 +260,12 @@ class Record_Thread(threading.Thread):
 
                 if self.app.isAlive():
                     # might not want to do this is PDC is valid, programme may be delayed
-                    _debug_('Record_Thread::run: past wait!!')
+                    _debug_('past wait!!')
                     rc.post_event(Event(OS_EVENT_KILL, (self.app.child.pid, 15)))
                     self.app.kill()
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))
-                _debug_('Record_Thread::run: finished recording')
+                _debug_('finished recording')
 
                 self.mode = 'idle'
             else:

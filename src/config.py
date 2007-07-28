@@ -427,7 +427,7 @@ for dirname in cfgfilepath:
             vals = line.split()
             _debug_('Cfg file data: "%s"' % line, 2)
             try:
-                name, val = vals[0], vals[2]
+                name, val = vals[0].strip(), vals[2].strip()
             except:
                 print 'Error parsing config file data "%s"' % line
                 continue
@@ -974,6 +974,9 @@ if not encoding:
 
 if not HELPER:
     _debug_( "Using '%s' encoding" % encoding )
+
+for k,v in CONF.__dict__.items():
+    _debug_('%r: %r' % (k, v), 1)
 
 # make sure USER and HOME are set
 os.environ['USER'] = pwd.getpwuid(os.getuid())[0]

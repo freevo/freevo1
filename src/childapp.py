@@ -125,15 +125,18 @@ class ChildApp:
 
         command_isstr = isinstance(command, str)
         if command_isstr:
-            command = command.strip() # strip spaces from the command string
+            #command = command.strip() # strip spaces from the command string
+            command_shell = True
             command_str = command
         else:
+            command_shell = False
             command_str = ' '.join(command)
         self.child = None
         try:
-            self.child = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-            _debug_('Running (%s) "%s" with pid %s priority %s' % (\
-                command_isstr and 'str' or 'list', command_str, self.child.pid, prio), 1)
+            self.child = Popen(command, shell=command_shell, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            _debug_('Running (%s) "%s"%s with pid %s priority %s' % (\
+                command_isstr and 'str' or 'list', command_str, command_shell and ' in shell' or '', \
+                self.child.pid, prio), 1)
         except OSError, e:
             _debug_('Cannot run "%s": %s' % (command_str, e), config.DERROR)
             self.ready = False
