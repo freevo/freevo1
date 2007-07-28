@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-27 20:29+0200\n"
+"POT-Creation-Date: 2007-07-28 13:57+0200\n"
 "PO-Revision-Date:  Fri Oct 05 14:20:00 2006\n"
 "Last-Translator: Duncan Webb <duncan-freevo@linuxowl.com>\n"
 "Language-Team: British English <LL@li.org>\n"
@@ -2949,6 +2949,18 @@ msgstr ""
 #: audio/plugins/musicip.py:426
 msgid "Songs From Same Artist"
 msgstr ""
+
+#: audio/plugins/lyrics.py:45
+msgid "searching lyrics..."
+msgstr "searching lyrics..."
+
+#: audio/plugins/lyrics.py:59
+msgid "lyrics"
+msgstr "lyrics"
+
+#: audio/plugins/lyrics.py:64
+msgid "Lyrics not found, sorry..."
+msgstr "Lyrics not found, sorry..."
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"

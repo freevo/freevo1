@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-27 20:31+0200\n"
+"POT-Creation-Date: 2007-07-28 13:57+0200\n"
 "PO-Revision-Date:  Tue Jul 12 13:08:00 2007\n"
 "Last-Translator: Yuki He <yuki.he@gmail.com>\n"
 "Language-Team: Simplified Chinese <yuki.he@gmail.com>\n"
@@ -2964,6 +2964,19 @@ msgstr "同一部专辑的歌曲"
 #: audio/plugins/musicip.py:426
 msgid "Songs From Same Artist"
 msgstr "同一个艺术家的歌曲"
+
+#: audio/plugins/lyrics.py:45
+#, fuzzy
+msgid "searching lyrics..."
+msgstr "搜索 IMDB 中..."
+
+#: audio/plugins/lyrics.py:59
+msgid "lyrics"
+msgstr ""
+
+#: audio/plugins/lyrics.py:64
+msgid "Lyrics not found, sorry..."
+msgstr ""
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"

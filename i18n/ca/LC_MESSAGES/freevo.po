@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-27 20:29+0200\n"
+"POT-Creation-Date: 2007-07-28 13:57+0200\n"
 "PO-Revision-Date: 2007-04-30 03:26+0100\n"
 "Last-Translator: Paco Rivière <friviere@palmcat.cat>\n"
 "Language-Team: PacoRivière <web AT pacoriviere POINT cat>\n"
@@ -3006,6 +3006,19 @@ msgstr "Cançons del Mateix Album"
 #: audio/plugins/musicip.py:426
 msgid "Songs From Same Artist"
 msgstr "Cançons del Mateix Artiste"
+
+#: audio/plugins/lyrics.py:45
+#, fuzzy
+msgid "searching lyrics..."
+msgstr "s'està cercant l'IMDB..."
+
+#: audio/plugins/lyrics.py:59
+msgid "lyrics"
+msgstr ""
+
+#: audio/plugins/lyrics.py:64
+msgid "Lyrics not found, sorry..."
+msgstr ""
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"

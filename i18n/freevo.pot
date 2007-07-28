@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-27 20:39+0200\n"
+"POT-Creation-Date: 2007-07-28 13:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3008,6 +3008,18 @@ msgstr ""
 
 #: audio/plugins/musicip.py:426
 msgid "Songs From Same Artist"
+msgstr ""
+
+#: audio/plugins/lyrics.py:45
+msgid "searching lyrics..."
+msgstr ""
+
+#: audio/plugins/lyrics.py:59
+msgid "lyrics"
+msgstr ""
+
+#: audio/plugins/lyrics.py:64
+msgid "Lyrics not found, sorry..."
 msgstr ""
 
 #: audio/audiodiskitem.py:69

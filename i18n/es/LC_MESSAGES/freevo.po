@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-27 20:29+0200\n"
+"POT-Creation-Date: 2007-07-28 13:57+0200\n"
 "PO-Revision-Date: 2006-12-10 15:35+0100\n"
 "Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3007,6 +3007,19 @@ msgstr "Canciones del mismo álbum"
 #: audio/plugins/musicip.py:426
 msgid "Songs From Same Artist"
 msgstr "Canciones del mismo artista"
+
+#: audio/plugins/lyrics.py:45
+#, fuzzy
+msgid "searching lyrics..."
+msgstr "Buscando en IMDB..."
+
+#: audio/plugins/lyrics.py:59
+msgid "lyrics"
+msgstr ""
+
+#: audio/plugins/lyrics.py:64
+msgid "Lyrics not found, sorry..."
+msgstr ""
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"

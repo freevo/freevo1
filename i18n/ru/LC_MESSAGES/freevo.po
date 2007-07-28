@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-27 20:29+0200\n"
+"POT-Creation-Date: 2007-07-28 13:57+0200\n"
 "PO-Revision-Date: 2006-07-21 23:28+0400\n"
 "Last-Translator: Serge Sireskin <sire@mail.ru>\n"
 "Language-Team: Русский <ru@li.org>\n"
@@ -2965,6 +2965,19 @@ msgstr ""
 
 #: audio/plugins/musicip.py:426
 msgid "Songs From Same Artist"
+msgstr ""
+
+#: audio/plugins/lyrics.py:45
+#, fuzzy
+msgid "searching lyrics..."
+msgstr "поиск в IMDB..."
+
+#: audio/plugins/lyrics.py:59
+msgid "lyrics"
+msgstr ""
+
+#: audio/plugins/lyrics.py:64
+msgid "Lyrics not found, sorry..."
 msgstr ""
 
 #: audio/audiodiskitem.py:69
