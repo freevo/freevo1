@@ -1,0 +1,24 @@
+Panorama                      An anamorphic skin for Freevo
+========                      by Andrew Flegg, 2007
+
+
+Versions
+~~~~~~~~
+  v1.00 (07-Jan-2007)    Initial release, requires Freevo
+                         v1.7.0-rc2 or above.
+
+Lineage
+~~~~~~~
+  Adapted from MythCenter-wide:
+
+        Robert Tsai (rtsai1111@comcast.net)
+        http://www.geocities.com/rtsai/
+
+  Adapted from MythCenter:
+
+        Jeroen Brosens (jeroen@fotoniq.nl)
+        http://www.fotoniq.nl/projects/mythtv/
+
+Licensing
+~~~~~~~~~
+  The contents may be freely distributed and changed.
