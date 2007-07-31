@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-28 13:57+0200\n"
+"POT-Creation-Date: 2007-07-31 18:30+0200\n"
 "PO-Revision-Date:  2007-05-19 14:30+0200\n"
 "Last-Translator: Pascal Schirrmann <freevo@schirrms.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2791,8 +2791,8 @@ msgstr "Extraction abandonnée"
 msgid "Ripping complete"
 msgstr "Extraction terminée"
 
-#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:159
-#: audio/plugins/coversearch.py:168 audio/plugins/coversearch.py:177
+#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:156
+#: audio/plugins/coversearch.py:165 audio/plugins/coversearch.py:174
 msgid "WARNING"
 msgstr "ATTENTION"
 
@@ -2915,60 +2915,65 @@ msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "'fbxine' introuvable, le plugin 'xine' est donc désactivé"
 
 #: audio/plugins/coversearch.py:99
-msgid ""
-"To search for covers you need an Amazon.com Web Services\n"
-"license key. You can get yours from:\n"
+#, fuzzy
+msgid "To search for covers you need an Amazon.com Web Services\n"
 msgstr ""
 "Pour faire des recherches sur une pochette, vous devez avoir\n"
 "une clef Amazon. Vous pouvez en récupérer une depuis :\n"
 
-#: audio/plugins/coversearch.py:155
+#: audio/plugins/coversearch.py:152
 msgid "Find a cover for this music"
 msgstr "Rechercher la pochette de cet album"
 
-#: audio/plugins/coversearch.py:160 audio/plugins/coversearch.py:169
-#, python-format
-msgid ""
-"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
-"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
-"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
-"Info. Maybe you must fix this file (%s) tag?"
+#: audio/plugins/coversearch.py:157 audio/plugins/coversearch.py:166
+msgid "Plugin 'coversearch' was disabled for this item! "
 msgstr ""
-"Le plugin 'coversearch' n'est pas disponible pour ce morceau ! 'coversearch "
-"a besoin d'un artiste et d'un album (s'il s'agit de mp3/ogg) ou d'un titre "
-"(s'il s'agit d'une piste CD) pour faire une recherche. Vous avez donc besoin "
-"de renseigner les tags mp3 ou ogg. Vous devriez corriger le tag du fichier %s"
 
-#: audio/plugins/coversearch.py:178
+#: audio/plugins/coversearch.py:175
 msgid "Unknown CD, cover searching is disabled"
 msgstr "CD inconnu, aucune recherche de pochette effectuée"
 
-#: audio/plugins/coversearch.py:186
+#: audio/plugins/coversearch.py:183
 msgid "searching Amazon..."
 msgstr "recherche sur Amazon en cours..."
 
-#: audio/plugins/coversearch.py:205
+#: audio/plugins/coversearch.py:202
 #, python-format
 msgid "No matches for %(artist)s - %(album)s"
 msgstr "Rien n'a été trouvé pour %(artist)s - %(album)s"
 
-#: audio/plugins/coversearch.py:213
+#: audio/plugins/coversearch.py:210
 msgid "Unknown error while searching."
 msgstr "Erreur inconnue pendant la recherche."
 
-#: audio/plugins/coversearch.py:249 audio/plugins/coversearch.py:262
+#: audio/plugins/coversearch.py:229
+#, fuzzy, python-format
+msgid "Testing on %s"
+msgstr "Activer %s"
+
+#: audio/plugins/coversearch.py:230 audio/plugins/coversearch.py:240
+#, python-format
+msgid "    URL length is %s chars"
+msgstr ""
+
+#: audio/plugins/coversearch.py:239
+#, fuzzy, python-format
+msgid "Working on %s"
+msgstr "Activer %s"
+
+#: audio/plugins/coversearch.py:263 audio/plugins/coversearch.py:275
 msgid "small"
 msgstr "petit"
 
-#: audio/plugins/coversearch.py:273
+#: audio/plugins/coversearch.py:286
 msgid "Cover Search Results"
 msgstr "Résultat de la recherche de pochettes"
 
-#: audio/plugins/coversearch.py:277
+#: audio/plugins/coversearch.py:290
 msgid "No covers available from Amazon"
 msgstr "Aucune pochette disponible sur Amazon"
 
-#: audio/plugins/coversearch.py:290 video/plugins/imdb.py:206
+#: audio/plugins/coversearch.py:303 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr "Récupération des données..."
 
@@ -2997,17 +3002,16 @@ msgid "Songs From Same Artist"
 msgstr "Titres du même artiste"
 
 #: audio/plugins/lyrics.py:45
-#, fuzzy
 msgid "searching lyrics..."
-msgstr "Recherche IMDB en cours..."
+msgstr "Recherche des paroles..."
 
 #: audio/plugins/lyrics.py:59
 msgid "lyrics"
-msgstr ""
+msgstr "paroles"
 
 #: audio/plugins/lyrics.py:64
 msgid "Lyrics not found, sorry..."
-msgstr ""
+msgstr "Paroles non trouvées, désolé..."
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -3235,27 +3239,25 @@ msgid "Language Menu"
 msgstr "Menu 'Langage'"
 
 #: video/plugins/fxdarchive.py:94
-#, fuzzy
 msgid "Archive FXD files"
-msgstr "Fichiers FXD"
+msgstr "Fichiers d'archives FXD"
 
 #: video/plugins/fxdarchive.py:104
-#, fuzzy
 msgid "Finding and copying FXD files..."
-msgstr "Copie des fichiers en cours..."
+msgstr "Recherche et rcCopie des fichiers FXD..."
 
 #: video/plugins/fxdarchive.py:123
 msgid "There was a error while trying to write the fxd file"
-msgstr ""
+msgstr "Une erreur est survenue pendant l'écriture du fichier FXD"
 
 #: video/plugins/fxdarchive.py:133
 msgid "But I couldn't copy a cover image file."
-msgstr ""
+msgstr "Mais je n'ai pas pu copier un fichier image de couverture"
 
 #: video/plugins/fxdarchive.py:136
 #, python-format
 msgid "%d fxd files archived. %s"
-msgstr ""
+msgstr "%d fichiers fxd archivés. %s"
 
 #: video/plugins/reencode-old.py:73
 msgid "Re-encode this program..."
@@ -4082,3 +4084,15 @@ msgstr "Pas de chansons dans la playlist"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "Télé"
+
+#~ msgid ""
+#~ "Plugin 'coversearch' was disabled for this item! 'coversearch' needs an "
+#~ "item with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd "
+#~ "track) to be able to search. So you need a file with a ID3 tag (mp3) or "
+#~ "an Ogg Info. Maybe you must fix this file (%s) tag?"
+#~ msgstr ""
+#~ "Le plugin 'coversearch' n'est pas disponible pour ce morceau ! "
+#~ "'coversearch a besoin d'un artiste et d'un album (s'il s'agit de mp3/ogg) "
+#~ "ou d'un titre (s'il s'agit d'une piste CD) pour faire une recherche. Vous "
+#~ "avez donc besoin de renseigner les tags mp3 ou ogg. Vous devriez corriger "
+#~ "le tag du fichier %s"

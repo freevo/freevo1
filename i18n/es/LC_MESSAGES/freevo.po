@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-28 13:57+0200\n"
+"POT-Creation-Date: 2007-07-31 18:30+0200\n"
 "PO-Revision-Date: 2006-12-10 15:35+0100\n"
 "Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1390,27 +1390,24 @@ msgid "Freebox TV :: Les chaines Multiposte"
 msgstr "Freebox TV :: Cadenas multipuesto"
 
 #: plugins/remind.py:100
-#, fuzzy
 msgid "Show Reminders"
-msgstr "Chubascos"
+msgstr "Mostrar recordatorios"
 
 #: plugins/remind.py:111
-#, fuzzy
 msgid "No Reminders Found"
-msgstr "No se han encontrado titulares."
+msgstr "No se han encontrado recordatorios."
 
 #: plugins/remind.py:113 plugins/remind.py:163
 msgid "Reminders"
-msgstr ""
+msgstr "Recordatorios"
 
 #: plugins/remind.py:175
-#, fuzzy
 msgid "Reminders types"
-msgstr "Sitios de Titulares"
+msgstr "Tipos de recordatorio"
 
 #: plugins/remind.py:189
 msgid "Remind type"
-msgstr ""
+msgstr "Tipo"
 
 #: image/plugins/gphoto.py:99 image/imageitem.py:98
 msgid "View Image"
@@ -1493,7 +1490,6 @@ msgid "Freevo Help"
 msgstr "Ayuda de Freevo"
 
 #: www/htdocs/help/index.rpy:41
-#, fuzzy
 msgid ""
 "This is the internal Freevo documentation. The documents         are in an "
 "early stage of development, if you like to help, please         contact the "
@@ -2380,7 +2376,6 @@ msgid "Mark as Watched"
 msgstr "Marcar tras visionado"
 
 #: tv/plugins/recordings_manager.py:393
-#, fuzzy
 msgid "View Details"
 msgstr "Detalles"
 
@@ -2454,7 +2449,6 @@ msgid "Display program"
 msgstr "Mostrar programa"
 
 #: tv/program_display.py:132
-#, fuzzy
 msgid "Full Description"
 msgstr "Descripción"
 
@@ -2577,18 +2571,17 @@ msgid "No Information Available"
 msgstr "No hay información disponible"
 
 #: tv/program_display.py:662
-#, fuzzy
 msgid "Category : "
-msgstr " Categoría"
+msgstr "Categoría : "
 
 #: tv/program_display.py:668
 msgid "Advisory : "
-msgstr ""
+msgstr "Recomendación : "
 
 #: tv/program_display.py:674 share/skins/main/dark.fxd:459
 #: share/skins/main/info.fxd:471
 msgid "Rating"
-msgstr "Calificación:"
+msgstr "Calificación"
 
 #: tv/epg_xmltv.py:57
 msgid "Time conversion error"
@@ -2801,8 +2794,8 @@ msgstr "Extracción cancelada"
 msgid "Ripping complete"
 msgstr "Extracción completa"
 
-#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:159
-#: audio/plugins/coversearch.py:168 audio/plugins/coversearch.py:177
+#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:156
+#: audio/plugins/coversearch.py:165 audio/plugins/coversearch.py:174
 msgid "WARNING"
 msgstr "ATENCIÓN"
 
@@ -2925,62 +2918,66 @@ msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "'fbxine' no encontrado. El módulo de audio 'xine' ha sido desactivado."
 
 #: audio/plugins/coversearch.py:99
-msgid ""
-"To search for covers you need an Amazon.com Web Services\n"
-"license key. You can get yours from:\n"
+#, fuzzy
+msgid "To search for covers you need an Amazon.com Web Services\n"
 msgstr ""
 "Para buscar carátulas necesitas una licencia de los servicios web de Amazon."
 "com\n"
 "Puedes tener la tuya en:\n"
 
-#: audio/plugins/coversearch.py:155
+#: audio/plugins/coversearch.py:152
 msgid "Find a cover for this music"
 msgstr "Buscar una carátula para esta música"
 
-#: audio/plugins/coversearch.py:160 audio/plugins/coversearch.py:169
-#, python-format
-msgid ""
-"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
-"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
-"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
-"Info. Maybe you must fix this file (%s) tag?"
+#: audio/plugins/coversearch.py:157 audio/plugins/coversearch.py:166
+msgid "Plugin 'coversearch' was disabled for this item! "
 msgstr ""
-"El módulo de búsqueda de carátulas (coversearch) no está disponible para "
-"este elemento. Este módulo necesita un elemento con Artista y Álbum (si es "
-"un fichero mp3 u ogg) o Título (si es una pista de CD) para poder realizar "
-"la búsqueda. Se necesita un fichero mp3 con etiquetas ID3 u Ogg info para "
-"los ficheros Ogg. Quizás necesites arreglar la etiqueta de este fichero %s."
 
-#: audio/plugins/coversearch.py:178
+#: audio/plugins/coversearch.py:175
 msgid "Unknown CD, cover searching is disabled"
 msgstr "CD desconocido. La búsqueda de carátulas se ha desactivado."
 
-#: audio/plugins/coversearch.py:186
+#: audio/plugins/coversearch.py:183
 msgid "searching Amazon..."
 msgstr "Buscando en Amazon..."
 
-#: audio/plugins/coversearch.py:205
+#: audio/plugins/coversearch.py:202
 #, python-format
 msgid "No matches for %(artist)s - %(album)s"
 msgstr "No se han encontrado coincidencias para %(artist)s - %(album)s"
 
-#: audio/plugins/coversearch.py:213
+#: audio/plugins/coversearch.py:210
 msgid "Unknown error while searching."
 msgstr "Error desconocido mientras se buscaba"
 
-#: audio/plugins/coversearch.py:249 audio/plugins/coversearch.py:262
+#: audio/plugins/coversearch.py:229
+#, fuzzy, python-format
+msgid "Testing on %s"
+msgstr "Activar %s"
+
+#: audio/plugins/coversearch.py:230 audio/plugins/coversearch.py:240
+#, python-format
+msgid "    URL length is %s chars"
+msgstr ""
+
+#: audio/plugins/coversearch.py:239
+#, fuzzy, python-format
+msgid "Working on %s"
+msgstr "Activar %s"
+
+#: audio/plugins/coversearch.py:263 audio/plugins/coversearch.py:275
 msgid "small"
 msgstr "pequeña"
 
-#: audio/plugins/coversearch.py:273
+#: audio/plugins/coversearch.py:286
 msgid "Cover Search Results"
 msgstr "Resultados de la búsqueda de carátulas"
 
-#: audio/plugins/coversearch.py:277
+#: audio/plugins/coversearch.py:290
 msgid "No covers available from Amazon"
 msgstr "No hay carátulas disponibles en Amazon"
 
-#: audio/plugins/coversearch.py:290 video/plugins/imdb.py:206
+#: audio/plugins/coversearch.py:303 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr "Obteniendo datos..."
 
@@ -3009,17 +3006,16 @@ msgid "Songs From Same Artist"
 msgstr "Canciones del mismo artista"
 
 #: audio/plugins/lyrics.py:45
-#, fuzzy
 msgid "searching lyrics..."
-msgstr "Buscando en IMDB..."
+msgstr "Buscando letras..."
 
 #: audio/plugins/lyrics.py:59
 msgid "lyrics"
-msgstr ""
+msgstr "letras"
 
 #: audio/plugins/lyrics.py:64
 msgid "Lyrics not found, sorry..."
-msgstr ""
+msgstr "No se han encontrado letras."
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -3404,9 +3400,8 @@ msgid "Chapter selection"
 msgstr "Selección de capítulos"
 
 #: video/configure.py:273
-#, fuzzy
 msgid "de-interlacing"
-msgstr "Desentrelazar"
+msgstr "Desentrelazado"
 
 #: video/configure.py:276
 msgid "X-Video Motion Compensation (xvmc)"
@@ -3445,7 +3440,6 @@ msgid "Widescreen"
 msgstr ""
 
 #: setup_freevo.py:76
-#, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -4109,6 +4103,19 @@ msgstr "No hay canciones en esta lista de reproducción"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "TV"
+
+#~ msgid ""
+#~ "Plugin 'coversearch' was disabled for this item! 'coversearch' needs an "
+#~ "item with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd "
+#~ "track) to be able to search. So you need a file with a ID3 tag (mp3) or "
+#~ "an Ogg Info. Maybe you must fix this file (%s) tag?"
+#~ msgstr ""
+#~ "El módulo de búsqueda de carátulas (coversearch) no está disponible para "
+#~ "este elemento. Este módulo necesita un elemento con Artista y Álbum (si "
+#~ "es un fichero mp3 u ogg) o Título (si es una pista de CD) para poder "
+#~ "realizar la búsqueda. Se necesita un fichero mp3 con etiquetas ID3 u Ogg "
+#~ "info para los ficheros Ogg. Quizás necesites arreglar la etiqueta de este "
+#~ "fichero %s."
 
 #~ msgid "Could not find screens for %d lines LCD!"
 #~ msgstr "No se encuentra ninguna pantalla LCD de %d líneas."

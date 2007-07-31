@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo 1.4.0 cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-28 13:57+0200\n"
+"POT-Creation-Date: 2007-07-31 18:30+0200\n"
 "PO-Revision-Date: 2003-11-10 00:58+0200\n"
 "Last-Translator: Dirk Meyer <dmeyer@tzi.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -2789,8 +2789,8 @@ msgstr "Kopieren wurde abgebrochen"
 msgid "Ripping complete"
 msgstr "Kopieren erfolgreich beended"
 
-#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:159
-#: audio/plugins/coversearch.py:168 audio/plugins/coversearch.py:177
+#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:156
+#: audio/plugins/coversearch.py:165 audio/plugins/coversearch.py:174
 msgid "WARNING"
 msgstr "WARNUNG"
 
@@ -2914,61 +2914,65 @@ msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "'fbxine' nicht gefunden, das Audioplugin 'xine' wurde deaktiviert"
 
 #: audio/plugins/coversearch.py:99
-msgid ""
-"To search for covers you need an Amazon.com Web Services\n"
-"license key. You can get yours from:\n"
+#, fuzzy
+msgid "To search for covers you need an Amazon.com Web Services\n"
 msgstr ""
 "Um nach Covers suchen zu können, benötigen Sie einen 'Amazon.com\n"
 "Web Services' Lizenz-Schlüssel. Sie erhalten Ihren unter:\n"
 
-#: audio/plugins/coversearch.py:155
+#: audio/plugins/coversearch.py:152
 msgid "Find a cover for this music"
 msgstr "Ein Cover suchen"
 
-#: audio/plugins/coversearch.py:160 audio/plugins/coversearch.py:169
-#, python-format
-msgid ""
-"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
-"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
-"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
-"Info. Maybe you must fix this file (%s) tag?"
+#: audio/plugins/coversearch.py:157 audio/plugins/coversearch.py:166
+msgid "Plugin 'coversearch' was disabled for this item! "
 msgstr ""
-"Das Plugin 'coversearch' (Suche nach CD-Covern) wurde für diesen Eintrag "
-"deaktiviert!'coversearch' benötigt einen Eintrag mit Interpret und "
-"Albumtitel (sofern es ein mp3oder ogg ist) oder einen Titel (wenn es ein CD-"
-"Track ist). Sie benötigen für mp3 einID3-Tag oder für ogg-Info. Eventuell "
-"kann das %s-Tag dieser Datei bearbeitet werden?"
 
-#: audio/plugins/coversearch.py:178
+#: audio/plugins/coversearch.py:175
 msgid "Unknown CD, cover searching is disabled"
 msgstr "Unbekannte CD, die Suche nach Covern wurde deaktiviert"
 
-#: audio/plugins/coversearch.py:186
+#: audio/plugins/coversearch.py:183
 msgid "searching Amazon..."
 msgstr "Amazon wird durchsucht..."
 
-#: audio/plugins/coversearch.py:205
+#: audio/plugins/coversearch.py:202
 #, python-format
 msgid "No matches for %(artist)s - %(album)s"
 msgstr "Es wurde kein Eintrag für %(artist)s - %(album)s gefunden"
 
-#: audio/plugins/coversearch.py:213
+#: audio/plugins/coversearch.py:210
 msgid "Unknown error while searching."
 msgstr "Unbekannter Fehler beim Suchen"
 
-#: audio/plugins/coversearch.py:249 audio/plugins/coversearch.py:262
+#: audio/plugins/coversearch.py:229
+#, fuzzy, python-format
+msgid "Testing on %s"
+msgstr "%s einschalten"
+
+#: audio/plugins/coversearch.py:230 audio/plugins/coversearch.py:240
+#, python-format
+msgid "    URL length is %s chars"
+msgstr ""
+
+#: audio/plugins/coversearch.py:239
+#, fuzzy, python-format
+msgid "Working on %s"
+msgstr "%s einschalten"
+
+#: audio/plugins/coversearch.py:263 audio/plugins/coversearch.py:275
 msgid "small"
 msgstr "klein"
 
-#: audio/plugins/coversearch.py:273
+#: audio/plugins/coversearch.py:286
 msgid "Cover Search Results"
 msgstr "Cover-Suchergebnisse"
 
-#: audio/plugins/coversearch.py:277
+#: audio/plugins/coversearch.py:290
 msgid "No covers available from Amazon"
 msgstr "Bei Amazon wurden keine Covers gefunden"
 
-#: audio/plugins/coversearch.py:290 video/plugins/imdb.py:206
+#: audio/plugins/coversearch.py:303 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr "Daten werden geholt..."
 
@@ -4057,6 +4061,18 @@ msgstr "Keine Einträge in dieser Wiedergabeliste"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "TV"
+
+#~ msgid ""
+#~ "Plugin 'coversearch' was disabled for this item! 'coversearch' needs an "
+#~ "item with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd "
+#~ "track) to be able to search. So you need a file with a ID3 tag (mp3) or "
+#~ "an Ogg Info. Maybe you must fix this file (%s) tag?"
+#~ msgstr ""
+#~ "Das Plugin 'coversearch' (Suche nach CD-Covern) wurde für diesen Eintrag "
+#~ "deaktiviert!'coversearch' benötigt einen Eintrag mit Interpret und "
+#~ "Albumtitel (sofern es ein mp3oder ogg ist) oder einen Titel (wenn es ein "
+#~ "CD-Track ist). Sie benötigen für mp3 einID3-Tag oder für ogg-Info. "
+#~ "Eventuell kann das %s-Tag dieser Datei bearbeitet werden?"
 
 #~ msgid "Could not find screens for %d lines LCD!"
 #~ msgstr "Keine Bildschirme für %s-zeilige LCDs gefunden!"

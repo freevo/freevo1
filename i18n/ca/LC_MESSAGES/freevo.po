@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-28 13:57+0200\n"
+"POT-Creation-Date: 2007-07-31 18:30+0200\n"
 "PO-Revision-Date: 2007-04-30 03:26+0100\n"
 "Last-Translator: Paco Rivière <friviere@palmcat.cat>\n"
 "Language-Team: PacoRivière <web AT pacoriviere POINT cat>\n"
@@ -2801,8 +2801,8 @@ msgstr "S'ha aturat l'enregistrament"
 msgid "Ripping complete"
 msgstr "Ha acabat l'enregistrament"
 
-#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:159
-#: audio/plugins/coversearch.py:168 audio/plugins/coversearch.py:177
+#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:156
+#: audio/plugins/coversearch.py:165 audio/plugins/coversearch.py:174
 msgid "WARNING"
 msgstr "AVÍS"
 
@@ -2925,61 +2925,65 @@ msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "No es pot trobar 'fbxine', el connector 'xine' s'ha desactivat"
 
 #: audio/plugins/coversearch.py:99
-msgid ""
-"To search for covers you need an Amazon.com Web Services\n"
-"license key. You can get yours from:\n"
+#, fuzzy
+msgid "To search for covers you need an Amazon.com Web Services\n"
 msgstr ""
 "Per cercar caràtules cal una clau de llicència d'Amazon.com\n"
 "Web Services. La podeu obtenir a:\n"
 
-#: audio/plugins/coversearch.py:155
+#: audio/plugins/coversearch.py:152
 msgid "Find a cover for this music"
 msgstr "Troba una caràtula d'aquesta música"
 
-#: audio/plugins/coversearch.py:160 audio/plugins/coversearch.py:169
-#, python-format
-msgid ""
-"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
-"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
-"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
-"Info. Maybe you must fix this file (%s) tag?"
+#: audio/plugins/coversearch.py:157 audio/plugins/coversearch.py:166
+msgid "Plugin 'coversearch' was disabled for this item! "
 msgstr ""
-"El connector 'coversearch' s'ha desactivat per aquest element! 'coversearch' "
-"necessita un element amb un Artista i un Àlbum (si és un mp3 o ogg) o un "
-"Títol (si és una pista de cd) per poder cercar. Per això us cal un fitxer "
-"amb una etiqueta ID3 (mp3) o una informació Ogg. Potser cal corregir "
-"l'etiqueta d'aquest fitxer (%s)?"
 
-#: audio/plugins/coversearch.py:178
+#: audio/plugins/coversearch.py:175
 msgid "Unknown CD, cover searching is disabled"
 msgstr "El CD és desconegut, no es pot cercar la caràtula."
 
-#: audio/plugins/coversearch.py:186
+#: audio/plugins/coversearch.py:183
 msgid "searching Amazon..."
 msgstr "s'està cercant a Amazon..."
 
-#: audio/plugins/coversearch.py:205
+#: audio/plugins/coversearch.py:202
 #, python-format
 msgid "No matches for %(artist)s - %(album)s"
 msgstr "Cap coincidència per %(artist)s - %(album)s"
 
-#: audio/plugins/coversearch.py:213
+#: audio/plugins/coversearch.py:210
 msgid "Unknown error while searching."
 msgstr "S'ha produït un error desconegut en cercar."
 
-#: audio/plugins/coversearch.py:249 audio/plugins/coversearch.py:262
+#: audio/plugins/coversearch.py:229
+#, fuzzy, python-format
+msgid "Testing on %s"
+msgstr "Engega %s"
+
+#: audio/plugins/coversearch.py:230 audio/plugins/coversearch.py:240
+#, python-format
+msgid "    URL length is %s chars"
+msgstr ""
+
+#: audio/plugins/coversearch.py:239
+#, fuzzy, python-format
+msgid "Working on %s"
+msgstr "Engega %s"
+
+#: audio/plugins/coversearch.py:263 audio/plugins/coversearch.py:275
 msgid "small"
 msgstr "petit"
 
-#: audio/plugins/coversearch.py:273
+#: audio/plugins/coversearch.py:286
 msgid "Cover Search Results"
 msgstr "Resultats de la Cerca de Caràtules"
 
-#: audio/plugins/coversearch.py:277
+#: audio/plugins/coversearch.py:290
 msgid "No covers available from Amazon"
 msgstr "No hi han caràtules a Amazon"
 
-#: audio/plugins/coversearch.py:290 video/plugins/imdb.py:206
+#: audio/plugins/coversearch.py:303 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr "obtenint dades..."
 
@@ -4103,6 +4107,18 @@ msgstr "No hi ha cap cançó a la llista de reproducció"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "TV"
+
+#~ msgid ""
+#~ "Plugin 'coversearch' was disabled for this item! 'coversearch' needs an "
+#~ "item with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd "
+#~ "track) to be able to search. So you need a file with a ID3 tag (mp3) or "
+#~ "an Ogg Info. Maybe you must fix this file (%s) tag?"
+#~ msgstr ""
+#~ "El connector 'coversearch' s'ha desactivat per aquest element! "
+#~ "'coversearch' necessita un element amb un Artista i un Àlbum (si és un "
+#~ "mp3 o ogg) o un Títol (si és una pista de cd) per poder cercar. Per això "
+#~ "us cal un fitxer amb una etiqueta ID3 (mp3) o una informació Ogg. Potser "
+#~ "cal corregir l'etiqueta d'aquest fitxer (%s)?"
 
 #~ msgid "Could not find screens for %d lines LCD!"
 #~ msgstr "No s'ha trobat cap pantalla LCD de %d línies!"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-28 13:57+0200\n"
+"POT-Creation-Date: 2007-07-31 18:30+0200\n"
 "PO-Revision-Date:  Fri Oct 05 14:20:00 2006\n"
 "Last-Translator: Duncan Webb <duncan-freevo@linuxowl.com>\n"
 "Language-Team: British English <LL@li.org>\n"
@@ -2754,8 +2754,8 @@ msgstr ""
 msgid "Ripping complete"
 msgstr ""
 
-#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:159
-#: audio/plugins/coversearch.py:168 audio/plugins/coversearch.py:177
+#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:156
+#: audio/plugins/coversearch.py:165 audio/plugins/coversearch.py:174
 msgid "WARNING"
 msgstr ""
 
@@ -2875,54 +2875,62 @@ msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr ""
 
 #: audio/plugins/coversearch.py:99
-msgid ""
-"To search for covers you need an Amazon.com Web Services\n"
-"license key. You can get yours from:\n"
+msgid "To search for covers you need an Amazon.com Web Services\n"
 msgstr ""
 
-#: audio/plugins/coversearch.py:155
+#: audio/plugins/coversearch.py:152
 msgid "Find a cover for this music"
 msgstr ""
 
-#: audio/plugins/coversearch.py:160 audio/plugins/coversearch.py:169
-#, python-format
-msgid ""
-"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
-"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
-"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
-"Info. Maybe you must fix this file (%s) tag?"
+#: audio/plugins/coversearch.py:157 audio/plugins/coversearch.py:166
+msgid "Plugin 'coversearch' was disabled for this item! "
 msgstr ""
 
-#: audio/plugins/coversearch.py:178
+#: audio/plugins/coversearch.py:175
 msgid "Unknown CD, cover searching is disabled"
 msgstr ""
 
-#: audio/plugins/coversearch.py:186
+#: audio/plugins/coversearch.py:183
 msgid "searching Amazon..."
 msgstr ""
 
-#: audio/plugins/coversearch.py:205
+#: audio/plugins/coversearch.py:202
 #, python-format
 msgid "No matches for %(artist)s - %(album)s"
 msgstr ""
 
-#: audio/plugins/coversearch.py:213
+#: audio/plugins/coversearch.py:210
 msgid "Unknown error while searching."
 msgstr ""
 
-#: audio/plugins/coversearch.py:249 audio/plugins/coversearch.py:262
+#: audio/plugins/coversearch.py:229
+#, python-format
+msgid "Testing on %s"
+msgstr ""
+
+#: audio/plugins/coversearch.py:230 audio/plugins/coversearch.py:240
+#, python-format
+msgid "    URL length is %s chars"
+msgstr ""
+
+#: audio/plugins/coversearch.py:239
+#, python-format
+msgid "Working on %s"
+msgstr ""
+
+#: audio/plugins/coversearch.py:263 audio/plugins/coversearch.py:275
 msgid "small"
 msgstr ""
 
-#: audio/plugins/coversearch.py:273
+#: audio/plugins/coversearch.py:286
 msgid "Cover Search Results"
 msgstr ""
 
-#: audio/plugins/coversearch.py:277
+#: audio/plugins/coversearch.py:290
 msgid "No covers available from Amazon"
 msgstr ""
 
-#: audio/plugins/coversearch.py:290 video/plugins/imdb.py:206
+#: audio/plugins/coversearch.py:303 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr ""
 

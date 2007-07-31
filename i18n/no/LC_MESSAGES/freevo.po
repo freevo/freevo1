@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-28 13:57+0200\n"
+"POT-Creation-Date: 2007-07-31 18:30+0200\n"
 "PO-Revision-Date: 2004-05-28 17:10+0200\n"
 "Last-Translator: Viggo Fredriksen <viggo@katatonic.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -2792,8 +2792,8 @@ msgstr "Kopiering startet"
 msgid "Ripping complete"
 msgstr "Kopiering fullført"
 
-#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:159
-#: audio/plugins/coversearch.py:168 audio/plugins/coversearch.py:177
+#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:156
+#: audio/plugins/coversearch.py:165 audio/plugins/coversearch.py:174
 msgid "WARNING"
 msgstr "ADVARSEL"
 
@@ -2917,62 +2917,65 @@ msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "'fbxine' ikke funnet, 'xine er nå skrudd av"
 
 #: audio/plugins/coversearch.py:99
-msgid ""
-"To search for covers you need an Amazon.com Web Services\n"
-"license key. You can get yours from:\n"
+#, fuzzy
+msgid "To search for covers you need an Amazon.com Web Services\n"
 msgstr ""
 "For å søke etter omslag trenger du en Amazon.com Web Service\n"
 "lisens nøkkel. Du kan få den fra:\n"
 
-#: audio/plugins/coversearch.py:155
+#: audio/plugins/coversearch.py:152
 msgid "Find a cover for this music"
 msgstr "Finn omslag til denne sangen"
 
-#: audio/plugins/coversearch.py:160 audio/plugins/coversearch.py:169
-#, python-format
-msgid ""
-"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
-"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
-"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
-"Info. Maybe you must fix this file (%s) tag?"
+#: audio/plugins/coversearch.py:157 audio/plugins/coversearch.py:166
+msgid "Plugin 'coversearch' was disabled for this item! "
 msgstr ""
-"Pluginen 'coversearch' ble skrudd av for denne gjenstanden! 'coversearch' "
-"trenger en gjenstand\n"
-"med artist og album(hvis det er en mp3 eller ogg) eller tittel (hvis det er "
-"et cd-spor) \n"
-"for å kunne søke. Så du trenger en fil med ID3-tag (mp3) eller en Ogg Info. "
-"Kanskje du må fikse denne filens tag (%s)?"
 
-#: audio/plugins/coversearch.py:178
+#: audio/plugins/coversearch.py:175
 msgid "Unknown CD, cover searching is disabled"
 msgstr "Ukjent CD, søking etter omslag er skrudd av"
 
-#: audio/plugins/coversearch.py:186
+#: audio/plugins/coversearch.py:183
 msgid "searching Amazon..."
 msgstr "søker på Amazon..."
 
-#: audio/plugins/coversearch.py:205
+#: audio/plugins/coversearch.py:202
 #, python-format
 msgid "No matches for %(artist)s - %(album)s"
 msgstr "Ingen treff på %(artist)s - %(album)s"
 
-#: audio/plugins/coversearch.py:213
+#: audio/plugins/coversearch.py:210
 msgid "Unknown error while searching."
 msgstr "Ukjent feil under søking."
 
-#: audio/plugins/coversearch.py:249 audio/plugins/coversearch.py:262
+#: audio/plugins/coversearch.py:229
+#, fuzzy, python-format
+msgid "Testing on %s"
+msgstr "Skru på %s"
+
+#: audio/plugins/coversearch.py:230 audio/plugins/coversearch.py:240
+#, python-format
+msgid "    URL length is %s chars"
+msgstr ""
+
+#: audio/plugins/coversearch.py:239
+#, fuzzy, python-format
+msgid "Working on %s"
+msgstr "Skru på %s"
+
+#: audio/plugins/coversearch.py:263 audio/plugins/coversearch.py:275
 msgid "small"
 msgstr "liten"
 
-#: audio/plugins/coversearch.py:273
+#: audio/plugins/coversearch.py:286
 msgid "Cover Search Results"
 msgstr "Omslag Søkeresultater"
 
-#: audio/plugins/coversearch.py:277
+#: audio/plugins/coversearch.py:290
 msgid "No covers available from Amazon"
 msgstr "Ingen omslag tilgjengelig fra Amazon"
 
-#: audio/plugins/coversearch.py:290 video/plugins/imdb.py:206
+#: audio/plugins/coversearch.py:303 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr "henter data..."
 
@@ -4084,6 +4087,19 @@ msgstr "ingen neste fil i spillelisten"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "TV"
+
+#~ msgid ""
+#~ "Plugin 'coversearch' was disabled for this item! 'coversearch' needs an "
+#~ "item with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd "
+#~ "track) to be able to search. So you need a file with a ID3 tag (mp3) or "
+#~ "an Ogg Info. Maybe you must fix this file (%s) tag?"
+#~ msgstr ""
+#~ "Pluginen 'coversearch' ble skrudd av for denne gjenstanden! 'coversearch' "
+#~ "trenger en gjenstand\n"
+#~ "med artist og album(hvis det er en mp3 eller ogg) eller tittel (hvis det "
+#~ "er et cd-spor) \n"
+#~ "for å kunne søke. Så du trenger en fil med ID3-tag (mp3) eller en Ogg "
+#~ "Info. Kanskje du må fikse denne filens tag (%s)?"
 
 #~ msgid "Could not find screens for %d lines LCD!"
 #~ msgstr "Fant ingen LCD-skjerm for %d linjer!"
