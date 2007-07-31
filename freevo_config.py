@@ -696,8 +696,8 @@ plugin.activate('video.imdb')
 # list of regexp to be ignored on a disc label
 IMDB_REMOVE_FROM_LABEL = ('season[\._ -][0-9]+', 'disc[\._ -][0-9]+',
                           'd[\._ -][0-9]+', 'german')
-# list of regexp to be ignored on a filename
-IMDB_REMOVE_FROM_NAME = ['^[0-9_]+']
+# list of regexp to be ignored on a filename, match TV_RECORDMASK
+IMDB_REMOVE_FROM_NAME = ['^[0-9]+-[0-9]+[ _][0-9]+\.[0-9]+[ _]']
 
 # list of words to ignore when searching based on a filename
 IMDB_REMOVE_FROM_SEARCHSTRING = ('the', 'a')

@@ -63,9 +63,10 @@ class PluginInterface(plugin.ItemPlugin):
             items.append((self.resume, _('Resume playback')))
         if item.type == 'dir' or item.type == 'playlist':
             return items
-        if item.mode == 'file' and not item.variants and \
-               not item.subitems and os.path.exists(util.get_bookmarkfile(item.filename)):
-            items.append(( self.bookmark_menu, _('Bookmarks')))
+        if hasattr(item, 'mode'):
+            if item.mode == 'file' and not item.variants and \
+                   not item.subitems and os.path.exists(util.get_bookmarkfile(item.filename)):
+                items.append(( self.bookmark_menu, _('Bookmarks')))
 
         return items
 

@@ -129,8 +129,9 @@ class FxdImdb:
         Search for name and returns an id list with tuples:
             (id , name, year, type)"""
 
-        url = 'http://us.imdb.com/Tsearch?title=%s&restrict=Movies+and+TV' % urllib.quote(name)
-        url = 'http://www.imdb.com/find?s=tt;site=aka;q=%s' % urllib.quote(name)
+        _debug_('searching imdb for "%s"' % (name))
+        url = 'http://us.imdb.com/Tsearch?title=%s&restrict=Movies+and+TV' % urllib.quote(str(name))
+        url = 'http://www.imdb.com/find?s=tt;site=aka;q=%s' % urllib.quote(str(name))
         _debug_('url="%s"' % (url))
 
         req = urllib2.Request(url, txdata, txheaders)
@@ -142,8 +143,7 @@ class FxdImdb:
             raise FxdImdb_Net_Error("IMDB unreachable : " + error)
             return None
 
-        if config.DEBUG:
-            _debug_('response.url="%s"' % (response.geturl()))
+        _debug_('response.url="%s"' % (response.geturl()))
 
         m=re.compile('/title/tt([0-9]*)/')
         idm = m.search(response.geturl())
@@ -154,15 +154,17 @@ class FxdImdb:
         data = self.parsesearchdata(response)
         response.close()
 
+        _debug_('imdb_id_list has %s items' % (len(self.imdb_id_list)))
         if len(self.imdb_id_list) > 20:
-            # too much results, check if there are stupid results in the
-            # list
+            # too many results, check if there are stupid results in the list
             words = []
 
             # make a list of all words (no numbers) in the search string
             for p in re.split('[\._ -]', searchstring):
-                if p and not p[0] in '0123456789':
-                    words.append(p)
+                #XXX this is incorrect for number only searches
+                #if p and not p[0] in '0123456789':
+                #    words.append(p)
+                words.append(p)
 
             # at least one word has to be in the result
             new_list = []
@@ -174,6 +176,7 @@ class FxdImdb:
                         new_list.append(result)
                         appended = True
             self.imdb_id_list = new_list
+            _debug_('imdb_id_list has now %s items' % (len(self.imdb_id_list)))
         return self.imdb_id_list
 
 
@@ -666,7 +669,8 @@ class FxdImdb:
             #print item.parent.findChildren(text=re.compile('[^ ]'))
             self.imdb_id_list += [ ( id, name, year, type ) ]
 
-        _debug_(self.imdb_id_list)
+        for item in self.imdb_id_list:
+            _debug_('%r' % (item,), 2)
         return self.imdb_id_list
 
     def findepisode(self, results):
@@ -793,7 +797,7 @@ class FxdImdb:
             for (k,v) in self.info.items():
                 _debug_('items=%s:%s' % (k, v))
             _debug_('id="%s", dvd="%s"' % (id, dvd))
-            _debug_(self.info)
+            _debug_(self.info, 2)
 
         # Add impawards.com poster URLs.
         self.impawardsimages(self.info['title'], self.info['year'])
