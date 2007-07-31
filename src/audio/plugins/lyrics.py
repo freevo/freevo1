@@ -71,7 +71,7 @@ class PluginInterface(plugin.ItemPlugin):
         self.item = item
 
         if item.type == 'audio':
-            return [ (self.search_lyrics, "Show lyrics", self) ]
+            return [ (self.search_lyrics, _("Show lyrics"), self) ]
 
         return []
 
