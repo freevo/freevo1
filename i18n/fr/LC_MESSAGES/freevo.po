@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 18:08+0200\n"
+"POT-Creation-Date: 2007-07-31 18:27+0200\n"
 "PO-Revision-Date:  2007-05-19 14:30+0200\n"
 "Last-Translator: Pascal Schirrmann <freevo@schirrms.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1028,17 +1028,16 @@ msgid "getting data..."
 msgstr "Récupération des données..."
 
 #: audio/plugins/lyrics.py:45
-#, fuzzy
 msgid "searching lyrics..."
-msgstr "Recherche IMDB en cours..."
+msgstr "Recherche des paroles..."
 
 #: audio/plugins/lyrics.py:59
 msgid "lyrics"
-msgstr ""
+msgstr "paroles"
 
 #: audio/plugins/lyrics.py:64
 msgid "Lyrics not found, sorry..."
-msgstr ""
+msgstr "Paroles non trouvées, désolé..."
 
 #: audio/plugins/musicip.py:423
 msgid "MusicIP Mix"
@@ -4061,10 +4060,17 @@ msgstr "Pas de chansons dans la playlist"
 msgid "TV"
 msgstr "Télé"
 
-#, fuzzy
 #~ msgid "Archive FXD files"
-#~ msgstr "Fichiers FXD"
+#~ msgstr "Fichiers d'archives FXD"
 
-#, fuzzy
 #~ msgid "Finding and copying FXD files..."
-#~ msgstr "Copie des fichiers en cours..."
+#~ msgstr "Recherche et rcCopie des fichiers FXD..."
+
+#~ msgid "There was a error while trying to write the fxd file"
+#~ msgstr "Une erreur est survenue pendant l'écriture du fichier FXD"
+
+#~ msgid "But I couldn't copy a cover image file."
+#~ msgstr "Mais je n'ai pas pu copier un fichier image de couverture"
+
+#~ msgid "%d fxd files archived. %s"
+#~ msgstr "%d fichiers fxd archivés. %s"
