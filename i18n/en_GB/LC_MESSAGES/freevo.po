@@ -1016,9 +1016,8 @@ msgid "Lyrics not found, sorry..."
 msgstr "Lyrics not found, sorry..."
 
 #: audio/plugins/lyrics.py:74
-#, fuzzy
 msgid "Show lyrics"
-msgstr "lyrics"
+msgstr "Show lyrics"
 
 #: audio/plugins/musicip.py:423
 msgid "MusicIP Mix"
