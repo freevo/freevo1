@@ -144,10 +144,14 @@ if __name__ == "__main__":
             usage()
 
         filename = search_arg
-        print "searching " + filename
-        for result in fxd.searchImdb(filename):
+        print "Searching IMDB for '%s'..." % filename
+        results = fxd.searchImdb(filename)
+        _debug_('%r' % results)
+        if len(results) == 0:
+            print 'No results'
+        for result in results:
             if result[3]:
-                print '%s   %s (%s, %s)' % result
+                print '%s   %s (%s) %s' % result
             else:
                 print '%s   %s (%s)' % (result[0], result[1], result[2])
         sys.exit(0)
@@ -155,10 +159,14 @@ if __name__ == "__main__":
 
     if task == 'guess':
         filename = search_arg
-        print "searching " + filename
-        for result in fxd.guessImdb(filename):
+        print "Searching IMDB for '%s'..." % filename
+        results = fxd.guessImdb(filename)
+        if len(results) == 0:
+            print 'No results'
+        _debug_('%r' % results)
+        for result in results:
             if result[3]:
-                print '%s   %s (%s, %s)' % result
+                print '%s   %s (%s) %s' % result
             else:
                 print '%s   %s (%s)' % (result[0], result[1], result[2])
         sys.exit(0)

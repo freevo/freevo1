@@ -44,7 +44,7 @@ class Runtime(core.Command):
 
     def initialize_options (self):
         pass
-    
+
     def finalize_options (self):
         pass
 
@@ -93,7 +93,7 @@ class Runtime(core.Command):
                     # the normal one doesn't work
                     continue
                 os.system('mv "%s" "%s"' % (source, dest))
-        
+
     def run (self):
         """
         download and install the runtime + current mmpython
@@ -110,7 +110,7 @@ class Runtime(core.Command):
         os.path.walk('mmpython-%s' % version.mmpython, self.mmpython_install, None)
         os.system('rm -rf mmpython-%s' % version.mmpython)
 
-    
+
 # check if everything is in place
 if (len(sys.argv) < 2 or sys.argv[1].lower() not in ('i18n', '--help', '--help-commands')):
     if os.path.isdir('.svn'):
