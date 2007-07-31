@@ -2915,11 +2915,10 @@ msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "'fbxine' introuvable, le plugin 'xine' est donc désactivé"
 
 #: audio/plugins/coversearch.py:99
-#, fuzzy
 msgid "To search for covers you need an Amazon.com Web Services\n"
 msgstr ""
-"Pour faire des recherches sur une pochette, vous devez avoir\n"
-"une clef Amazon. Vous pouvez en récupérer une depuis :\n"
+"Pour faire des recherches sur une pochette, vous devez avoir "
+"un acces web à Amazon.com\n"
 
 #: audio/plugins/coversearch.py:152
 msgid "Find a cover for this music"
@@ -2927,7 +2926,7 @@ msgstr "Rechercher la pochette de cet album"
 
 #: audio/plugins/coversearch.py:157 audio/plugins/coversearch.py:166
 msgid "Plugin 'coversearch' was disabled for this item! "
-msgstr ""
+msgstr "Le plugin 'coversearch' a été désactivé pour cet élément! "
 
 #: audio/plugins/coversearch.py:175
 msgid "Unknown CD, cover searching is disabled"
@@ -2947,19 +2946,19 @@ msgid "Unknown error while searching."
 msgstr "Erreur inconnue pendant la recherche."
 
 #: audio/plugins/coversearch.py:229
-#, fuzzy, python-format
+#, python-format
 msgid "Testing on %s"
-msgstr "Activer %s"
+msgstr "En test sur %s"
 
 #: audio/plugins/coversearch.py:230 audio/plugins/coversearch.py:240
 #, python-format
 msgid "    URL length is %s chars"
-msgstr ""
+msgstr "    La longueur de l'URL est de %s caractères"
 
 #: audio/plugins/coversearch.py:239
-#, fuzzy, python-format
+#, python-format
 msgid "Working on %s"
-msgstr "Activer %s"
+msgstr "En travail sur %s"
 
 #: audio/plugins/coversearch.py:263 audio/plugins/coversearch.py:275
 msgid "small"
@@ -3012,6 +3011,10 @@ msgstr "paroles"
 #: audio/plugins/lyrics.py:64
 msgid "Lyrics not found, sorry..."
 msgstr "Paroles non trouvées, désolé..."
+
+#: audio/plugins/lyrics.py:74
+msgid "Show lyrics"
+msgstr "Afficher les paroles"
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -4084,15 +4087,3 @@ msgstr "Pas de chansons dans la playlist"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "Télé"
-
-#~ msgid ""
-#~ "Plugin 'coversearch' was disabled for this item! 'coversearch' needs an "
-#~ "item with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd "
-#~ "track) to be able to search. So you need a file with a ID3 tag (mp3) or "
-#~ "an Ogg Info. Maybe you must fix this file (%s) tag?"
-#~ msgstr ""
-#~ "Le plugin 'coversearch' n'est pas disponible pour ce morceau ! "
-#~ "'coversearch a besoin d'un artiste et d'un album (s'il s'agit de mp3/ogg) "
-#~ "ou d'un titre (s'il s'agit d'une piste CD) pour faire une recherche. Vous "
-#~ "avez donc besoin de renseigner les tags mp3 ou ogg. Vous devriez corriger "
-#~ "le tag du fichier %s"
