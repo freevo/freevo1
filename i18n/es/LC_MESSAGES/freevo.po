@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-31 18:30+0200\n"
+"POT-Creation-Date: 2007-08-01 00:10+0200\n"
 "PO-Revision-Date: 2006-12-10 15:35+0100\n"
 "Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2794,8 +2794,8 @@ msgstr "Extracción cancelada"
 msgid "Ripping complete"
 msgstr "Extracción completa"
 
-#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:156
-#: audio/plugins/coversearch.py:165 audio/plugins/coversearch.py:174
+#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:159
+#: audio/plugins/coversearch.py:168 audio/plugins/coversearch.py:177
 msgid "WARNING"
 msgstr "ATENCIÓN"
 
@@ -2919,65 +2919,62 @@ msgstr "'fbxine' no encontrado. El módulo de audio 'xine' ha sido desactivado."
 
 #: audio/plugins/coversearch.py:99
 #, fuzzy
-msgid "To search for covers you need an Amazon.com Web Services\n"
+msgid ""
+"To search for covers you need an Amazon.com Web Services\n"
+"license key. You can get yours from:\n"
 msgstr ""
 "Para buscar carátulas necesitas una licencia de los servicios web de Amazon."
 "com\n"
 "Puedes tener la tuya en:\n"
 
-#: audio/plugins/coversearch.py:152
+#: audio/plugins/coversearch.py:155
 msgid "Find a cover for this music"
 msgstr "Buscar una carátula para esta música"
 
-#: audio/plugins/coversearch.py:157 audio/plugins/coversearch.py:166
-msgid "Plugin 'coversearch' was disabled for this item! "
+#: audio/plugins/coversearch.py:160 audio/plugins/coversearch.py:169
+#, python-format
+msgid ""
+"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
+"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
+"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
+"Info. Maybe you must fix this file (%s) tag?"
 msgstr ""
+"El módulo de búsqueda de carátulas (coversearch) no está disponible para "
+"este elemento. Este módulo necesita un elemento con Artista y Álbum (si es "
+"un fichero mp3 u ogg) o Título (si es una pista de CD) para poder realizar "
+"la búsqueda. Se necesita un fichero mp3 con etiquetas ID3 u Ogg info para "
+"los ficheros Ogg. Quizás necesites arreglar la etiqueta de este fichero %s."
 
-#: audio/plugins/coversearch.py:175
+#: audio/plugins/coversearch.py:178
 msgid "Unknown CD, cover searching is disabled"
 msgstr "CD desconocido. La búsqueda de carátulas se ha desactivado."
 
-#: audio/plugins/coversearch.py:183
+#: audio/plugins/coversearch.py:186
 msgid "searching Amazon..."
 msgstr "Buscando en Amazon..."
 
-#: audio/plugins/coversearch.py:202
+#: audio/plugins/coversearch.py:205
 #, python-format
 msgid "No matches for %(artist)s - %(album)s"
 msgstr "No se han encontrado coincidencias para %(artist)s - %(album)s"
 
-#: audio/plugins/coversearch.py:210
+#: audio/plugins/coversearch.py:213
 msgid "Unknown error while searching."
 msgstr "Error desconocido mientras se buscaba"
 
-#: audio/plugins/coversearch.py:229
-#, fuzzy, python-format
-msgid "Testing on %s"
-msgstr "Activar %s"
-
-#: audio/plugins/coversearch.py:230 audio/plugins/coversearch.py:240
-#, python-format
-msgid "    URL length is %s chars"
-msgstr ""
-
-#: audio/plugins/coversearch.py:239
-#, fuzzy, python-format
-msgid "Working on %s"
-msgstr "Activar %s"
-
-#: audio/plugins/coversearch.py:263 audio/plugins/coversearch.py:275
+#: audio/plugins/coversearch.py:249 audio/plugins/coversearch.py:262
 msgid "small"
 msgstr "pequeña"
 
-#: audio/plugins/coversearch.py:286
+#: audio/plugins/coversearch.py:273
 msgid "Cover Search Results"
 msgstr "Resultados de la búsqueda de carátulas"
 
-#: audio/plugins/coversearch.py:290
+#: audio/plugins/coversearch.py:277
 msgid "No covers available from Amazon"
 msgstr "No hay carátulas disponibles en Amazon"
 
-#: audio/plugins/coversearch.py:303 video/plugins/imdb.py:206
+#: audio/plugins/coversearch.py:290 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr "Obteniendo datos..."
 
@@ -3016,6 +3013,11 @@ msgstr "letras"
 #: audio/plugins/lyrics.py:64
 msgid "Lyrics not found, sorry..."
 msgstr "No se han encontrado letras."
+
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Mostrar el reproductor"
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -3077,11 +3079,11 @@ msgstr ""
 msgid "Resume playback"
 msgstr "Continuar reproducción"
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr "Favoritos"
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr "Saltar a %s"
@@ -4104,18 +4106,13 @@ msgstr "No hay canciones en esta lista de reproducción"
 msgid "TV"
 msgstr "TV"
 
-#~ msgid ""
-#~ "Plugin 'coversearch' was disabled for this item! 'coversearch' needs an "
-#~ "item with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd "
-#~ "track) to be able to search. So you need a file with a ID3 tag (mp3) or "
-#~ "an Ogg Info. Maybe you must fix this file (%s) tag?"
-#~ msgstr ""
-#~ "El módulo de búsqueda de carátulas (coversearch) no está disponible para "
-#~ "este elemento. Este módulo necesita un elemento con Artista y Álbum (si "
-#~ "es un fichero mp3 u ogg) o Título (si es una pista de CD) para poder "
-#~ "realizar la búsqueda. Se necesita un fichero mp3 con etiquetas ID3 u Ogg "
-#~ "info para los ficheros Ogg. Quizás necesites arreglar la etiqueta de este "
-#~ "fichero %s."
+#, fuzzy
+#~ msgid "Testing on %s"
+#~ msgstr "Activar %s"
+
+#, fuzzy
+#~ msgid "Working on %s"
+#~ msgstr "Activar %s"
 
 #~ msgid "Could not find screens for %d lines LCD!"
 #~ msgstr "No se encuentra ninguna pantalla LCD de %d líneas."

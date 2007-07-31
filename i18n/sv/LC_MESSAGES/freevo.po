@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freevo 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-31 18:30+0200\n"
+"POT-Creation-Date: 2007-08-01 00:10+0200\n"
 "PO-Revision-Date: 2003-10-05 03:15+0100\n"
 "Last-Translator: Per Wigren <per@wigren.nu>\n"
 "Language-Team: Who needs a team? :)\n"
@@ -2764,8 +2764,8 @@ msgstr ""
 msgid "Ripping complete"
 msgstr ""
 
-#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:156
-#: audio/plugins/coversearch.py:165 audio/plugins/coversearch.py:174
+#: audio/plugins/cdbackup.py:507 audio/plugins/coversearch.py:159
+#: audio/plugins/coversearch.py:168 audio/plugins/coversearch.py:177
 msgid "WARNING"
 msgstr ""
 
@@ -2885,62 +2885,54 @@ msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr ""
 
 #: audio/plugins/coversearch.py:99
-msgid "To search for covers you need an Amazon.com Web Services\n"
+msgid ""
+"To search for covers you need an Amazon.com Web Services\n"
+"license key. You can get yours from:\n"
 msgstr ""
 
-#: audio/plugins/coversearch.py:152
+#: audio/plugins/coversearch.py:155
 msgid "Find a cover for this music"
 msgstr ""
 
-#: audio/plugins/coversearch.py:157 audio/plugins/coversearch.py:166
-msgid "Plugin 'coversearch' was disabled for this item! "
+#: audio/plugins/coversearch.py:160 audio/plugins/coversearch.py:169
+#, python-format
+msgid ""
+"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
+"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
+"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
+"Info. Maybe you must fix this file (%s) tag?"
 msgstr ""
 
-#: audio/plugins/coversearch.py:175
+#: audio/plugins/coversearch.py:178
 msgid "Unknown CD, cover searching is disabled"
 msgstr ""
 
-#: audio/plugins/coversearch.py:183
+#: audio/plugins/coversearch.py:186
 msgid "searching Amazon..."
 msgstr "söker i IMDB..."
 
-#: audio/plugins/coversearch.py:202
+#: audio/plugins/coversearch.py:205
 #, python-format
 msgid "No matches for %(artist)s - %(album)s"
 msgstr ""
 
-#: audio/plugins/coversearch.py:210
+#: audio/plugins/coversearch.py:213
 msgid "Unknown error while searching."
 msgstr "Okänt fel vid uppkoppling till IMDB"
 
-#: audio/plugins/coversearch.py:229
-#, fuzzy, python-format
-msgid "Testing on %s"
-msgstr "Beskrivning:"
-
-#: audio/plugins/coversearch.py:230 audio/plugins/coversearch.py:240
-#, python-format
-msgid "    URL length is %s chars"
-msgstr ""
-
-#: audio/plugins/coversearch.py:239
-#, python-format
-msgid "Working on %s"
-msgstr ""
-
-#: audio/plugins/coversearch.py:263 audio/plugins/coversearch.py:275
+#: audio/plugins/coversearch.py:249 audio/plugins/coversearch.py:262
 msgid "small"
 msgstr ""
 
-#: audio/plugins/coversearch.py:286
+#: audio/plugins/coversearch.py:273
 msgid "Cover Search Results"
 msgstr ""
 
-#: audio/plugins/coversearch.py:290
+#: audio/plugins/coversearch.py:277
 msgid "No covers available from Amazon"
 msgstr "Ingen information tillgänglig från IMDB"
 
-#: audio/plugins/coversearch.py:303 video/plugins/imdb.py:206
+#: audio/plugins/coversearch.py:290 video/plugins/imdb.py:206
 msgid "getting data..."
 msgstr "hämtar data..."
 
@@ -2981,6 +2973,11 @@ msgstr ""
 #: audio/plugins/lyrics.py:64
 msgid "Lyrics not found, sorry..."
 msgstr ""
+
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Visa spelare"
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -3038,11 +3035,11 @@ msgstr "Var god undersök konfigurationsfilen!"
 msgid "Resume playback"
 msgstr ""
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr ""
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr ""
@@ -4008,6 +4005,10 @@ msgstr " filmer i den här spellistan."
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "TV"
+
+#, fuzzy
+#~ msgid "Testing on %s"
+#~ msgstr "Beskrivning:"
 
 #~ msgid "No screens found for this LCD (%dx%d)!"
 #~ msgstr "Hittade inget kommando (%dx%d)!"
