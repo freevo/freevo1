@@ -550,8 +550,7 @@ def __load_plugin__(name, type, level, args, number):
 
     try:
         if not isinstance(name, Plugin):
-            if DEBUG:
-                print 'loading %s as plugin %s' % (module, object)
+            _debug_('loading %s as plugin %s' % (module, object))
 
             exec('import %s' % module)
             if not args:
