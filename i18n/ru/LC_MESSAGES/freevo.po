@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 18:08+0200\n"
+"POT-Creation-Date: 2007-08-01 00:01+0200\n"
 "PO-Revision-Date: 2006-07-21 23:28+0400\n"
 "Last-Translator: Serge Sireskin <sire@mail.ru>\n"
 "Language-Team: Русский <ru@li.org>\n"
@@ -1019,6 +1019,11 @@ msgstr ""
 msgid "Lyrics not found, sorry..."
 msgstr ""
 
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Передача"
+
 #: audio/plugins/musicip.py:423
 #, fuzzy
 msgid "MusicIP Mix"
@@ -1231,11 +1236,11 @@ msgstr ""
 msgid "Resume playback"
 msgstr "Возобновить воспроизведение"
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr "Перейти к %s"

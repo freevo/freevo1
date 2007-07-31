@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 18:08+0200\n"
+"POT-Creation-Date: 2007-08-01 00:01+0200\n"
 "PO-Revision-Date: 2004-03-21 15:44+0100\n"
 "Last-Translator: Esben Jensen <esben.jon@privat.dk>\n"
 "Language-Team: Danish <en@li.org>\n"
@@ -1041,6 +1041,11 @@ msgstr ""
 msgid "Lyrics not found, sorry..."
 msgstr ""
 
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Vis afspiller"
+
 #: audio/plugins/musicip.py:423
 msgid "MusicIP Mix"
 msgstr ""
@@ -1257,11 +1262,11 @@ msgstr "Der fandtes ingen tilgængelige oplysninger hos IMDB"
 msgid "Resume playback"
 msgstr "Fortsæt afspilning"
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr "Bogmærker"
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr "Gå til %s"

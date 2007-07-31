@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo 1.4.0 cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 18:08+0200\n"
+"POT-Creation-Date: 2007-08-01 00:01+0200\n"
 "PO-Revision-Date: 2003-11-10 00:58+0200\n"
 "Last-Translator: Dirk Meyer <dmeyer@tzi.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1029,6 +1029,11 @@ msgstr ""
 msgid "Lyrics not found, sorry..."
 msgstr ""
 
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Player aufrufen"
+
 #: audio/plugins/musicip.py:423
 #, fuzzy
 msgid "MusicIP Mix"
@@ -1246,11 +1251,11 @@ msgstr "Keine Informationen von IMDB verfügbar"
 msgid "Resume playback"
 msgstr "Abspielen fortsetzen"
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr "Lesezeichen"
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr "Zu '%s' springen"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 18:08+0200\n"
+"POT-Creation-Date: 2007-08-01 00:01+0200\n"
 "PO-Revision-Date: 2004-08-10 16:44+0300\n"
 "Last-Translator: Petri Damsten <damu@iki.fi>\n"
 "Language-Team: Finnish\n"
@@ -1022,6 +1022,11 @@ msgstr ""
 msgid "Lyrics not found, sorry..."
 msgstr ""
 
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Näytä soitin"
+
 #: audio/plugins/musicip.py:423
 #, fuzzy
 msgid "MusicIP Mix"
@@ -1234,11 +1239,11 @@ msgstr "IMDB palvelusta ei löytynyt tietoa"
 msgid "Resume playback"
 msgstr "Jatka soittoa"
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr "Siirry %s"

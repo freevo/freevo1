@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 18:08+0200\n"
+"POT-Creation-Date: 2007-08-01 00:01+0200\n"
 "PO-Revision-Date:  Tue Jul 12 13:08:00 2007\n"
 "Last-Translator: Yuki He <yuki.he@gmail.com>\n"
 "Language-Team: Simplified Chinese <yuki.he@gmail.com>\n"
@@ -1024,6 +1024,11 @@ msgstr ""
 msgid "Lyrics not found, sorry..."
 msgstr ""
 
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "显示播放器"
+
 #: audio/plugins/musicip.py:423
 msgid "MusicIP Mix"
 msgstr ""
@@ -1240,11 +1245,11 @@ msgstr "没有在 IMDB 发现有效信息"
 msgid "Resume playback"
 msgstr "重回播放"
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr "书签"
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr "跳到 %s"

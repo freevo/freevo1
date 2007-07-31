@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freevo 1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 18:08+0200\n"
+"POT-Creation-Date: 2007-08-01 00:01+0200\n"
 "PO-Revision-Date: 2007-03-28 03:15+0100\n"
 "Last-Translator: Lefteris F. Sarakinos <lefteris@kerkyra.gr>\n"
 "Language-Team: My Self :)\n"
@@ -1084,6 +1084,11 @@ msgstr ""
 msgid "Lyrics not found, sorry..."
 msgstr ""
 
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Εμφάνιση αναπαραγωγής"
+
 #: audio/plugins/musicip.py:423
 #, fuzzy
 msgid "MusicIP Mix"
@@ -1306,11 +1311,11 @@ msgstr "Δεν υπάρχουν διαθέσιμες πληροφορίες απ
 msgid "Resume playback"
 msgstr "Επιστροφή στην ταινία"
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr "Μεταπίδηση στο %s"

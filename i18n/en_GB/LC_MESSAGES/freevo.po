@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 18:08+0200\n"
+"POT-Creation-Date: 2007-08-01 00:01+0200\n"
 "PO-Revision-Date:  Fri Oct 05 14:20:00 2006\n"
 "Last-Translator: Duncan Webb <duncan-freevo@linuxowl.com>\n"
 "Language-Team: British English <LL@li.org>\n"
@@ -1015,6 +1015,11 @@ msgstr "lyrics"
 msgid "Lyrics not found, sorry..."
 msgstr "Lyrics not found, sorry..."
 
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "lyrics"
+
 #: audio/plugins/musicip.py:423
 msgid "MusicIP Mix"
 msgstr ""
@@ -1226,11 +1231,11 @@ msgstr ""
 msgid "Resume playback"
 msgstr ""
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr ""
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr ""

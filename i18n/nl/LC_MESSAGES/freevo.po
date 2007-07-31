@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 18:08+0200\n"
+"POT-Creation-Date: 2007-08-01 00:01+0200\n"
 "PO-Revision-Date: 2004-06-03 17:30+0200\n"
 "Last-Translator: eborn <freevo@fambus.nl>\n"
 "Language-Team: Nederlands <none>\n"
@@ -1038,6 +1038,11 @@ msgstr ""
 msgid "Lyrics not found, sorry..."
 msgstr ""
 
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Toon de mediaspeler"
+
 #: audio/plugins/musicip.py:423
 #, fuzzy
 msgid "MusicIP Mix"
@@ -1254,11 +1259,11 @@ msgstr "Geen informatie beschikbaar op IMDB"
 msgid "Resume playback"
 msgstr "Verder met afspelen"
 
-#: video/plugins/bookmarker.py:68
+#: video/plugins/bookmarker.py:69
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
-#: video/plugins/bookmarker.py:133
+#: video/plugins/bookmarker.py:134
 #, python-format
 msgid "Jump to %s"
 msgstr "Spring naar %s"
