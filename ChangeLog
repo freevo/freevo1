@@ -16,13 +16,14 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 == Release 1.7.3 (2007-07-28) ==
 --------------------------------
 
- * New Chinese Translation (F#1752417)
- * Updated French Translation (F#1762163)
+ * New Chinese translation (F#1752417)
+ * New Greek translation (F#1764757)
+ * Updated French translation (F#1762163)
+ * Updated Spanish translation (F#1764193)
  * Added personal web pages to the webserver, using PERSONAL_WWW_PAGE (F#1729595)
  * Added audio scrobbler plug-in for last fm (F#1760242)
  * Added lyrics grabber to display the lyrics (F#1762610)
  * Added sounds to menu selection, enabled with OSD_SOUNDS_ENABLED (F#1732380)
- * Added translation for Greek (F#)
  * Added XINE_BOOKMARK for when xine has support for get_time, default is off (B#1745076)
  * Updated childapp to use subprocess instead of popen (F#1729597)
  * Updated freevo to allow X server options to be passed when using -fs (F#1749908)

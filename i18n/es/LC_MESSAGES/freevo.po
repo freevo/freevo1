@@ -124,7 +124,6 @@ msgid "Freevo Help"
 msgstr "Ayuda de Freevo"
 
 #: www/htdocs/help/index.rpy:41
-#, fuzzy
 msgid ""
 "This is the internal Freevo documentation. The documents         are in an "
 "early stage of development, if you like to help, please         contact the "
@@ -1030,17 +1029,16 @@ msgid "getting data..."
 msgstr "Obteniendo datos..."
 
 #: audio/plugins/lyrics.py:45
-#, fuzzy
 msgid "searching lyrics..."
-msgstr "Buscando en IMDB..."
+msgstr "Buscando letras..."
 
 #: audio/plugins/lyrics.py:59
 msgid "lyrics"
-msgstr ""
+msgstr "letras"
 
 #: audio/plugins/lyrics.py:64
 msgid "Lyrics not found, sorry..."
-msgstr ""
+msgstr "No se han encontrado letras."
 
 #: audio/plugins/musicip.py:423
 msgid "MusicIP Mix"
@@ -1510,9 +1508,8 @@ msgid "Chapter selection"
 msgstr "Selección de capítulos"
 
 #: video/configure.py:273
-#, fuzzy
 msgid "de-interlacing"
-msgstr "Desentrelazar"
+msgstr "Desentrelazado"
 
 #: video/configure.py:276
 msgid "X-Video Motion Compensation (xvmc)"
@@ -2564,27 +2561,24 @@ msgid "Message: %s"
 msgstr "Mensaje: %s"
 
 #: plugins/remind.py:100
-#, fuzzy
 msgid "Show Reminders"
-msgstr "Chubascos"
+msgstr "Mostrar recordatorios"
 
 #: plugins/remind.py:111
-#, fuzzy
 msgid "No Reminders Found"
-msgstr "No se han encontrado titulares."
+msgstr "No se han encontrado recordatorios."
 
 #: plugins/remind.py:113 plugins/remind.py:163
 msgid "Reminders"
-msgstr ""
+msgstr "Recordatorios"
 
 #: plugins/remind.py:175
-#, fuzzy
 msgid "Reminders types"
-msgstr "Sitios de Titulares"
+msgstr "Tipos de recordatorio"
 
 #: plugins/remind.py:189
 msgid "Remind type"
-msgstr ""
+msgstr "Tipo"
 
 #: plugins/command.py:139
 msgid "Command finished"
@@ -2981,7 +2975,6 @@ msgid "Mark as Watched"
 msgstr "Marcar tras visionado"
 
 #: tv/plugins/recordings_manager.py:393
-#, fuzzy
 msgid "View Details"
 msgstr "Detalles"
 
@@ -3162,7 +3155,6 @@ msgid "Display program"
 msgstr "Mostrar programa"
 
 #: tv/program_display.py:132
-#, fuzzy
 msgid "Full Description"
 msgstr "Descripción"
 
@@ -3285,18 +3277,17 @@ msgid "No Information Available"
 msgstr "No hay información disponible"
 
 #: tv/program_display.py:662
-#, fuzzy
 msgid "Category : "
-msgstr " Categoría"
+msgstr "Categoría : "
 
 #: tv/program_display.py:668
 msgid "Advisory : "
-msgstr ""
+msgstr "Recomendación : "
 
 #: tv/program_display.py:674 share/skins/main/dark.fxd:459
 #: share/skins/main/info.fxd:471
 msgid "Rating"
-msgstr "Calificación:"
+msgstr "Calificación"
 
 #: tv/epg_xmltv.py:57
 msgid "Time conversion error"
@@ -3621,7 +3612,6 @@ msgid "Show video, audio and image items in this directory"
 msgstr "Mostrar los elementos de video, audio y fotografía en esta carpeta."
 
 #: setup_freevo.py:76
-#, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
