@@ -287,6 +287,9 @@ LOCAL_CONF_CHANGES = [
      Added XINE_BOOKMARK to enable the resume function to work with xine
      Added CACHE_CROPDETECT to enable caching of crop detection using encodingcode
      ''' ),
+    (5.21,
+     '''Items for release-1.7.4
+     '''),
 ]
 
 

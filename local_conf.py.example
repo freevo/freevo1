@@ -38,10 +38,7 @@
 #
 # -----------------------------------------------------------------------
 
-
-
-
-CONFIG_VERSION = 5.20
+CONFIG_VERSION = 5.21
 
 # ======================================================================
 # General freevo settings:
@@ -617,8 +614,10 @@ CACHE_IMAGES = 1
 # This is a list of items (e.g. directories, fxd files). The items themselves
 # can also be a list of (title, file)
 #
-# VIDEO_ITEMS = [ ('action movies', '/files/movies/action'),
-#                 ('funny stuff', '/files/movies/comedy') ]
+# VIDEO_ITEMS = [
+#     ('action movies', '/freevo/movies/action'),
+#     ('funny stuff', '/freevo/movies/comedy'),
+# ]
 #
 # Some people access movies on a different machine using an automounter.
 # To avoid timeouts, you can specify the machine name in the directory
@@ -678,8 +677,10 @@ CACHE_IMAGES = 1
 #
 # To add webradio support, add fxd/webradio.fxd to this list
 #
-# AUDIO_ITEMS = [ ('Music Collection', '/local/mp3/'),
-#                 'fxd/webradio.fxd' ]
+# AUDIO_ITEMS = [
+#     ('Music Collection', '/freevo/audio/mp3'),
+#     'fxd/webradio.fxd',
+# ]
 
 #
 # The list of filename suffixes that are used to match the files that
@@ -722,7 +723,9 @@ CACHE_IMAGES = 1
 # This is a list of items (e.g. directories, fxd files). The items itself
 # can also be a list of (title, file)
 #
-# IMAGE_ITEMS = None
+# IMAGE_ITEMS = [
+#     ('My Photos', '/freevo/images'),
+# ]
 
 #
 # The list of filename suffixes that are used to match the files that
@@ -848,7 +851,7 @@ CACHE_IMAGES = 1
 #
 # System Path to search for fonts not included in the Freevo distribution
 #
-# OSD_EXTRA_FONT_PATH = [ '/usr/X11R6/lib/X11/fonts/truetype/' ]
+# OSD_EXTRA_FONT_PATH = [ '/usr/share/fonts/truetype' ]
 
 #
 # Font aliases
