@@ -51,8 +51,6 @@ try:
 except:
     print String(_("ERROR")+": "+_("You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."))
 
-dbglvl=1
-
 # Configuration: (Should move to freevo_conf.py?)
 sep_str = " | " # use as separator between two strings. Like: "Length: 123<sep_str>Plot: ..."
 sep_str_mscroll = "   " # if string > width of vfd add this
@@ -126,33 +124,35 @@ menu_strinfo = {
     }
 
 
-# layouts: dict of layouts (screens and widgets)
-# Structure:
+'''
+layouts: dict of layouts (screens and widgets)
+Structure:
 #
-# layouts = { <#_OF_LINES_IN_DISPLAY> :
-#             { <#_OF_CHARS_IN_LINES> :
-#                { <SCREEN_NAME> :
-#                  <WIDGET_NAME> : (<WIDGET_TYPE>,
-#                                    <WIDGET_PARAMETERS>,
-#                                    <PARAMETERS_VALUES>),
-#                  ...
-#                  <MORE_WIDGETS>
-#                  ...
-#                },
-#                ...
-#                <MORE_SCREENS>
-#                ...
-#              }
-#           }
-# Note:
-#    <PARAMETERS_VALUES>: will be used like this:
-#       <WIDGET_PARAMETERS> % eval(<PARAMETERS_VALUES>)
-#    There should be at least these screens:
-#       welcome: will be the shown during the startup
-#          menu: will be used in menu mode
-#        player: will be used in player mode
-#            tv: will be used in tv mode
-# Values should match the ones supported by VFDd (man VFDd)
+layouts = { <#_OF_LINES_IN_DISPLAY> :
+            { <#_OF_CHARS_IN_LINES> :
+               { <SCREEN_NAME> :
+                 <WIDGET_NAME> : (<WIDGET_TYPE>,
+                                   <WIDGET_PARAMETERS>,
+                                   <PARAMETERS_VALUES>),
+                 ...
+                 <MORE_WIDGETS>
+                 ...
+               },
+               ...
+               <MORE_SCREENS>
+               ...
+             }
+          }
+Note:
+   <PARAMETERS_VALUES>: will be used like this:
+      <WIDGET_PARAMETERS> % eval(<PARAMETERS_VALUES>)
+   There should be at least these screens:
+      welcome: will be the shown during the startup
+         menu: will be used in menu mode
+       player: will be used in player mode
+           tv: will be used in tv mode
+Values should match the ones supported by VFDd (man VFDd)
+'''
 layouts = { 1 : # 1 line display
             { 20 : # 20 chars per line
               # Welcome screen
@@ -254,6 +254,7 @@ poll_widgets = { 1 : {
                  }
 
 def get_info(item, list):
+    '''Get the information'''
     info = ""
 
     for l in list:
@@ -268,8 +269,7 @@ def get_info(item, list):
 
 
 class PluginInterface(plugin.DaemonPlugin):
-    """
-    Display context info on Shuttle's VFD (Versatile Front-panel Display)
+    """Display context info on Shuttle's VFD (Versatile Front-panel Display)
 
     Requirements:
        * pyusb: installed (http://pyusb.berlios.de/) with name patch as
@@ -286,17 +286,17 @@ class PluginInterface(plugin.DaemonPlugin):
 
     """
     __author__           = 'Duncan Webb'
-    __author_email__     = 'duncan-ffs@linuxowl.com'
+    __author_email__     = 'duncan@freevo.org'
     __maintainer__       = __author__
     __maintainer_email__ = __author_email__
     __version__          = '$Revision$'
 
     def send(self, data):
-        "Send a piece of data to specified VFD device, retrying if necessary"
+        '''Send a piece of data to specified VFD device, retrying if necessary'''
         attempts = 3
         while attempts > 0:
             try:
-                _debug_(_("Sending data %r attempt=%d"%(data,4-attempts)), dbglvl+1)
+                _debug_(_("Sending data %r attempt=%d"%(data,4-attempts)), 2)
                 time.sleep(self.sleepLength)
                 r=self.vfd.controlMsg(0x21,   # Message to Class Interface
                                0x09,
@@ -311,6 +311,7 @@ class PluginInterface(plugin.DaemonPlugin):
         raise e
 
     def msg(self, msgtype, *msgdata):
+        '''Prepares a message for the VFD device'''
         assert msgtype >= 0 and msgtype <= 0xf
         assert len(msgdata) <= 7
 
@@ -321,26 +322,26 @@ class PluginInterface(plugin.DaemonPlugin):
             retval += "".join([type(x) == int and chr(x) or x for x in msgdata])
             retval += "\x00"*(7-len(msgdata))
         _debug_('retval=%r, msgtype=%s, len(msgdata)=%s, msgdata=%s' % \
-            (retval, msgtype, len(msgdata), msgdata), dbglvl+1)
+            (retval, msgtype, len(msgdata), msgdata), 2)
         return retval
 
     def clear(self):
-        "Clear the display"
+        '''Clear the display'''
         self.last_message = None
         self.last_bitmask = None
         self.send(self.msg(1,1))
 
     def reset(self):
-        "Reset the cursor position"
+        '''Reset the cursor position'''
         self.send(self.msg(1,2))
 
     def brightness(self, level=0):
         pass
 
     def split(self, s, length, maxlength):
-        "Split a string into chunks, but no longer than maxlength"
+        '''Split a string into chunks, but no longer than maxlength'''
         if len(s) > maxlength:
-            _debug_('Truncating \"%s\" longer than %d characters' % (s,maxlength), dbglvl+1)
+            _debug_('Truncating \"%s\" longer than %d characters' % (s,maxlength), 2)
             s = s[:maxlength]
         s = s.center(maxlength)
         out = []
@@ -349,8 +350,7 @@ class PluginInterface(plugin.DaemonPlugin):
         return out
 
     def message(self, msgstring, cls=0):
-        "Update the display with a string, specifying if it should be cleared first"
-
+        '''Update the display with a string, specifying if it should be cleared first'''
         try:
             if msgstring.__class__ == unicode:
                 msgstring = msgstring.encode('iso-8859-15')
@@ -365,11 +365,11 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.last_message == msgstring:
             return
 
-        _debug_('message \"%s\"->\"%s\" cls=%s' % (self.last_message, msgstring, cls), dbglvl)
+        _debug_('message \"%s\"->\"%s\" cls=%s' % (self.last_message, msgstring, cls))
         self.last_message = msgstring
 
         msgparts = self.split(msgstring, 7, self.maxStringLength)
-        _debug_('msgparts=%s' % (msgparts), dbglvl+1)
+        _debug_('msgparts=%s' % (msgparts), 2)
 
         if cls:
             self.clear()
@@ -380,39 +380,44 @@ class PluginInterface(plugin.DaemonPlugin):
             self.send(self.msg(9,*part))
 
     def icons(self):
-        "Update icons to be shown"
+        '''Update icons to be shown'''
         _debug_('device=%x media=%x recording=%x running=%x muted=%x volume=%x' % \
-            (self.device, self.media, self.recording, self.running, self.muted, self.volume), dbglvl+1)
+            (self.device, self.media, self.recording, self.running, self.muted, self.volume), 2)
         self.bitmask = self.device | self.media | self.recording | self.running | self.muted | self.volume
         if self.bitmask == self.last_bitmask:
             return
-        _debug_('last_bitmask=\"%r\"->bitmask=\"%r\"' % (self.last_bitmask, self.bitmask), dbglvl+1)
+        _debug_('last_bitmask=\"%r\"->bitmask=\"%r\"' % (self.last_bitmask, self.bitmask), 2)
         self.last_bitmask = self.bitmask
         self.send(self.msg(7,pack('I', self.bitmask)))
 
     def set_device(self, device=None):
+        '''Sets the device'''
         if device != None:
             self.device = device
-        _debug_('device=%s, self.device=%s' % (device, self.device), dbglvl+1)
+        _debug_('device=%s, self.device=%s' % (device, self.device), 2)
 
     def set_media(self, media=None):
+        '''Indicates if a CD/DVD is in the drive'''
         if media != None:
             self.media = media
-        _debug_('media=%s, self.media=%s' % (media, self.media), dbglvl)
+        _debug_('media=%s, self.media=%s' % (media, self.media))
 
     def set_running(self, running=None):
+        '''Sets the running flag if running'''
         if running != None:
             self.running = running
-        _debug_('running=%s, self.running=%s' % (running, self.running), dbglvl+1)
+        _debug_('running=%s, self.running=%s' % (running, self.running), 2)
 
     def set_recording(self, recording=None):
+        '''Sets the recoring flag if recoring'''
         if recording != None:
             self.recording = recording
         else:
             self.recording = (os.path.exists(self.tvlockfile) and Record) or 0
-        _debug_('recording=%s, self.recording=%s' % (recording, self.recording), dbglvl+1)
+        _debug_('recording=%s, self.recording=%s' % (recording, self.recording), 2)
 
     def set_mixer(self, muted=None, volume=None):
+        '''Read the mixer state'''
         if self.mixer == None:
             return
 
@@ -424,12 +429,13 @@ class PluginInterface(plugin.DaemonPlugin):
             volume = self.mixer.getVolume()
         self.volume = int(((volume + 8.0) * 11.0) / 99.0) # 99 / 11 - 1 = 8
 
-        _debug_('muted=%s, self.muted=%s, volume=%s, self.volume=%s' % (muted, self.muted, volume, self.volume), dbglvl)
+        _debug_('muted=%s, self.muted=%s, volume=%s, self.volume=%s' % (muted, self.muted, volume, self.volume))
 
     def widget_set(self, screen, widget, value):
+        '''Set the widget text'''
         #if widget != 'clock' and widget != 'time_v1' and widget != 'time_v2' and widget != 'time_v3' and widget != 'animation_v':
         if widget != 'clock' and widget != 'time_v2' and widget != 'time_v3' and widget != 'animation_v':
-            _debug_('screen=%s, widget=%s, value=%s' % (screen, widget, value), dbglvl)
+            _debug_('screen=%s, widget=%s, value=%s' % (screen, widget, value))
         if screen == "welcome":
             pass
         elif screen == "menu":
@@ -498,8 +504,6 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         init the vfd
         """
-        plugin.DaemonPlugin.__init__(self)
-
         self.disable = 0
         self.playitem = None
         self.event_listener = 1
@@ -522,20 +526,24 @@ class PluginInterface(plugin.DaemonPlugin):
                         self.vfd = dev.open()
                         _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), config.DINFO)
 
-        if self.vfd == None:
+        if not self.vfd:
             _debug_("Cannot find VFD device", config.DERROR)
             self.disable = 1
             self.reason = "Cannot find VFD device"
             return
         self.clear()
 
+        # We need a mixer to set the volume level
         self.mixer = plugin.getbyname('MIXER')
-        if self.mixer == None:
+        if not self.mixer:
             _debug_("Cannot find MIXER", config.DERROR)
             self.disable = 1
             self.reason = "Cannot find MIXER"
             return
 
+        plugin.DaemonPlugin.__init__(self)
+
+        # We need a tvlockfile to determine if we are recording
         self.tvlockfile = config.FREEVO_CACHEDIR + '/record'
 
         self.set_device(0)
@@ -595,7 +603,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if not self.screens.has_key(sname):
             sname = 'menu'
 
-        _debug_('sname=%s, last_screen=%s' % (sname, self.last_screen), dbglvl+1)
+        _debug_('sname=%s, last_screen=%s' % (sname, self.last_screen), 2)
         if sname != self.last_screen:
             # recreate screen
             # This is used to handle cases where the previous screen was dirty
@@ -769,12 +777,12 @@ class PluginInterface(plugin.DaemonPlugin):
 
         for w in widgets:
             type, param, val = self.screens[ s ][ w ]
-            _debug_('self.screens[ %s ][ %s ]=%s' % (s,w,self.screens[ s ][ w ]), dbglvl+1)
+            _debug_('self.screens[ %s ][ %s ]=%s' % (s,w,self.screens[ s ][ w ]), 2)
 
 
     def eventhandler(self, event, menuw=None):
         update_bits = 0
-        _debug_('eventhandler(self, %s, %s) %s arg=%s' % (event, menuw, self, event.arg), dbglvl)
+        _debug_('eventhandler(self, %s, %s) %s arg=%s' % (event, menuw, self, event.arg))
 
         if event == 'MIXER_MUTE':
             # it seems that the exent is received before the mixer has been set!
@@ -855,7 +863,7 @@ class PluginInterface(plugin.DaemonPlugin):
         elif event == 'AUDIO_LOG':
             pass
         else:
-            #_debug_('eventhandler(self, %s, %s) %s arg=%s' % (event, menuw, self, event.arg), dbglvl)
+            #_debug_('eventhandler(self, %s, %s) %s arg=%s' % (event, menuw, self, event.arg))
             _debug_('\"%s\" not handled' % (event))
 
         if update_bits:
