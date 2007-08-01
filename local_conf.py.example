@@ -41,7 +41,7 @@
 
 
 
-CONFIG_VERSION = 5.17
+CONFIG_VERSION = 5.20
 
 # ======================================================================
 # General freevo settings:
