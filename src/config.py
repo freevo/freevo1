@@ -413,8 +413,9 @@ for dirname in cfgfilepath[1:]:
 #
 for dirname in cfgfilepath:
     freevoconf = dirname + '/freevo.conf'
+    _debug_('Trying freevo configuration file "%s"...' % freevoconf)
     if os.path.isfile(freevoconf):
-        _debug_('Loading configure settings: %s' % freevoconf)
+        _debug_('Loading freevo configuration file "%s"' % freevoconf, DINFO)
 
         commentpat = re.compile('([^#]*)( *#.*)')
         c = open(freevoconf)
@@ -540,8 +541,9 @@ else:
 #
 for dirname in cfgfilepath:
     overridefile = dirname + '/local_conf.py'
+    _debug_('Trying local configuration file "%s"...' % overridefile)
     if os.path.isfile(overridefile):
-        _debug_('Loading cfg overrides: %s' % overridefile, DINFO)
+        _debug_('Loading local configuration file "%s"' % overridefile, DINFO)
         execfile(overridefile, globals(), locals())
 
         try:
@@ -744,7 +746,7 @@ if ROM_DRIVES == None:
                 elif devname.lower().find('dvd') != -1:
                     dispname = 'DVD-%s' % (len(ROM_DRIVES)+1)
                 elif devname.lower().find('hd') != -1:
-                    print 'Trying to autodetect type of %s' %devname
+                    print 'Trying to autodetect type of %s' % devname
                     if os.path.exists('/proc/ide/' + re.sub(r'^(/dev/)', '', devname) + '/media'):
                         if open('/proc/ide/'+  re.sub(r'^(/dev/)', '', devname) +\
                              '/media','r').read().lower().find('cdrom') !=1:
@@ -786,7 +788,6 @@ if ROM_DRIVES == None:
 # DVDs, etc.
 #
 REMOVABLE_MEDIA = []
-
 
 #
 # Auto detect xmltv channel list
@@ -976,7 +977,7 @@ if not HELPER:
     _debug_( "Using '%s' encoding" % encoding )
 
 for k,v in CONF.__dict__.items():
-    _debug_('%r: %r' % (k, v), 1)
+    _debug_('%r: %r' % (k, v))
 
 # make sure USER and HOME are set
 os.environ['USER'] = pwd.getpwuid(os.getuid())[0]
