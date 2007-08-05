@@ -1971,18 +1971,19 @@ else:
 # Use the "makelogos.py" script to download all the
 # Station logos into a directory. And then put the path
 # to those logos here
-if os.path.isdir(OS_CACHEDIR + '/xmltv/logos'):
-    TV_LOGOS = OS_CACHEDIR + '/xmltv/logos'
-else:
-    if not os.path.isdir('/tmp/freevo/xmltv/logos'):
-        os.makedirs('/tmp/freevo/xmltv/logos')
-    TV_LOGOS = '/tmp/freevo/xmltv/logos'
+TV_LOGOS = OS_CACHEDIR + '/xmltv/logos'
+if not os.path.isdir(TV_LOGOS):
+    os.makedirs(TV_LOGOS)
 
-
+#
+# Default locale
+#
 LOCALE='iso-8859-15'
 
+#
+# Changed the handling of crashes in freevo
+#
 FREEVO_EVENTHANDLER_SANDBOX = 1
-
 
 # Use stat to check if a directory has changed. This is faster and should
 # work with all kinds of filesystems. No need to change it I guess
