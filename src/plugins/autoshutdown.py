@@ -657,6 +657,7 @@ def __get_scheduled_recording(index):
     if __is_recordserver_remote():
         raise ExRecordServerRemote
     try:
+        (result, schedule) = record_client.updateFavoritesSchedule()
         (result, schedule) = record_client.getScheduledRecordings()
     except:
         raise ExNoRecordServer
