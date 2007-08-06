@@ -66,6 +66,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.pcm_mixer = None
         self.line_mixer = None
         self.mic_mixer = None
+        self.sync_mixer = None
         self.muted = 0
 
         # If you're using ALSA or something and you don't set the mixer,
@@ -90,6 +91,12 @@ class PluginInterface(plugin.DaemonPlugin):
         except alsaaudio.ALSAAudioError:
             print 'Couldn\'t open mixer "%s"' % config.ALSA_MICMIXER_NAME
             return
+
+        try:
+            self.sync_mixer = alsaaudio.Mixer(config.ALSA_SYNCMIXER_NAME, 0, config.ALSA_CARDID)
+        except alsaaudio.ALSAAudioError:
+            print 'Couldn\'t open mixer "%s"' % config.ALSA_SYNCMIXER_NAME
+
 
         # init here
         plugin.DaemonPlugin.__init__(self)
@@ -131,6 +138,9 @@ class PluginInterface(plugin.DaemonPlugin):
             ('ALSA_PCMMIXER_NAME', 'PCM', 'Alsa PCM Mixer Name'),
             ('ALSA_LINEMIXER_NAME', 'Line', 'Alsa Line Mixer Name'),
             ('ALSA_MICMIXER_NAME', 'Mic', 'Alsa Mic Mixer Name'),
+            ('ALSA_SYNCMIXER_NAME', 'Master Surround', 'Alsa Sync Mixer Name'),
+            ('ALSA_SYNCMIXER', '0', 'Alsa Sync Mixer Name'),
+
         ]
 
 
@@ -141,20 +151,24 @@ class PluginInterface(plugin.DaemonPlugin):
         # Handle volume control
         if event == MIXER_VOLUP:
             if config.MAJOR_AUDIO_CTRL == 'VOL':
-                self.incMainVolume()
+                self.incMainVolume(event.arg)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             elif config.MAJOR_AUDIO_CTRL == 'PCM':
-                self.incPcmVolume()
+                self.incPcmVolume(event.arg)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+            if config.ALSA_SYNCMIXER == 1:
+                self.setSyncVolume(self.getVolume())
             return True
 
         elif event == MIXER_VOLDOWN:
             if config.MAJOR_AUDIO_CTRL == 'VOL':
-                self.decMainVolume()
+                self.decMainVolume(event.arg)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             elif config.MAJOR_AUDIO_CTRL == 'PCM':
-                self.decPcmVolume()
+                self.decPcmVolume(event.arg)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+            if config.ALSA_SYNCMIXER == 1:
+                self.setSyncVolume(self.getVolume())
             return True
 
         elif event == MIXER_MUTE:
@@ -209,14 +223,14 @@ class PluginInterface(plugin.DaemonPlugin):
         self.mainVolume = volume
         self._setVolume(self.main_mixer, self.mainVolume)
 
-    def incMainVolume(self):
-        self.mainVolume += 5
+    def incMainVolume(self,step=5):
+        self.mainVolume += step
         if self.mainVolume > 100:
             self.mainVolume = 100
         self._setVolume(self.main_mixer, self.mainVolume)
 
-    def decMainVolume(self):
-        self.mainVolume -= 5
+    def decMainVolume(self,step=5):
+        self.mainVolume -= step
         if self.mainVolume < 0:
             self.mainVolume = 0
         self._setVolume(self.main_mixer, self.mainVolume)
@@ -228,14 +242,17 @@ class PluginInterface(plugin.DaemonPlugin):
         self.pcmVolume = volume
         self._setVolume(self.pcm_mixer, volume)
 
-    def incPcmVolume(self):
-        self.pcmVolume += 5
+    def setSyncVolume(self, volume):
+        self._setVolume(self.sync_mixer, volume)
+
+    def incPcmVolume(self, step=5):
+        self.pcmVolume += step
         if self.pcmVolume > 100:
             self.pcmVolume = 100
         self._setVolume(self.pcm_mixer, self.pcmVolume)
 
-    def decPcmVolume(self):
-        self.pcmVolume -= 5
+    def decPcmVolume(self, step=5):
+        self.pcmVolume -= step
         if self.pcmVolume < 0:
             self.pcmVolume = 0
         self._setVolume(self.pcm_mixer, self.pcmVolume)
@@ -264,14 +281,14 @@ class PluginInterface(plugin.DaemonPlugin):
     def getIgainVolume(self):
         return self.igainVolume
 
-    def decIgainVolume(self):
-        self.igainVolume -= 5
+    def decIgainVolume(self, step=5):
+        self.igainVolume -= step
         if self.igainVolume < 0:
             self.igainVolume = 0
         #self._setVolume(ossaudiodev.SOUND_MIXER_IGAIN, volume)
 
-    def incIgainVolume(self):
-        self.igainVolume += 5
+    def incIgainVolume(self, step=5):
+        self.igainVolume += step
         if self.igainVolume > 100:
             self.igainVolume = 100
         #self._setVolume(ossaudiodev.SOUND_MIXER_IGAIN, volume)
