@@ -116,7 +116,7 @@ def _debug_func_(s, level=1):
 __builtin__.__dict__['_debug_']= _debug_func_
 
 
-logfile = '%s/%s-%s.log' % (config.LOGDIR, appname, os.getuid())
+logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
 sys.stdout = open(logfile, 'a')
 sys.stderr = sys.stdout
 

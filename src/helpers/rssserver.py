@@ -82,7 +82,7 @@ if len(sys.argv)>1 and sys.argv[1] == '--help':
     sys.exit(0)
 
 
-logfile = '%s/%s-%s.log' % (config.LOGDIR, appname, os.getuid())
+logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
 log.startLogging(open(logfile, 'a'))
 
 # check for expired files and delete them

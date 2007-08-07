@@ -288,7 +288,8 @@ LOCAL_CONF_CHANGES = [
      Added CACHE_CROPDETECT to enable caching of crop detection using encodingcode
      ''' ),
     (5.21,
-     '''Items for release-1.7.4
+     '''Added OS_STATICDIR
+     Change static data to use /var/lib/freevo or ~/.freevo
      '''),
 ]
 
@@ -602,10 +603,11 @@ HOST_ALIVE_CHECK = 'ping -c 1 -W 1 %s > /dev/null 2>&1'
 # old MOVIE_DATA_DIR if you have one. It needs to be set to a directory
 # Freevo can write to.
 #
-if os.environ.has_key('HOME') and os.environ['HOME']:
-    OVERLAY_DIR = os.path.join(os.environ['HOME'], '.freevo/vfs')
-else:
-    OVERLAY_DIR = os.path.join(FREEVO_CACHEDIR, 'vfs')
+#if os.environ.has_key('HOME') and os.environ['HOME']:
+#    OVERLAY_DIR = os.path.join(os.environ['HOME'], '.freevo/vfs')
+#else:
+#    OVERLAY_DIR = os.path.join(FREEVO_CACHEDIR, 'vfs')
+OVERLAY_DIR = os.path.join(FREEVO_CACHEDIR, 'vfs')
 
 #
 # Umask setting for all files.
@@ -1961,9 +1963,9 @@ REMOTE_CONTROL_TCP_PORT = 16311
 # This is the XMLTV file that can be optionally used for TV listings
 #
 if os.uname()[0] == 'FreeBSD':
-    XMLTV_FILE = OS_CACHEDIR + '/xmltv/TV.xml'
+    XMLTV_FILE = FREEVO_CACHEDIR + '/TV.xml'
 else:
-    XMLTV_FILE = '/tmp/TV.xml'
+    XMLTV_FILE = FREEVO_STATICDIR + '/TV.xml'
 
 #
 # XML TV Logo Location
@@ -1971,7 +1973,7 @@ else:
 # Use the "makelogos.py" script to download all the
 # Station logos into a directory. And then put the path
 # to those logos here
-TV_LOGOS = OS_CACHEDIR + '/xmltv/logos'
+TV_LOGOS = FREEVO_STATICDIR + '/logos'
 if not os.path.isdir(TV_LOGOS):
     os.makedirs(TV_LOGOS)
 

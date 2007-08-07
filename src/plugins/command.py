@@ -55,7 +55,7 @@ from gui.RegionScroller import RegionScroller
 from gui.PopupBox import PopupBox
 
 def islog(name):
-    f = open(os.path.join(config.LOGDIR, 'command-std%s-%s.log' % (name, os.getuid())))
+    f = open(os.path.join(config.FREEVO_LOGDIR, 'command-std%s-%s.log' % (name, os.getuid())))
     data = f.readline()
     if name == 'out':
         data = f.readline()
@@ -171,11 +171,11 @@ class CommandOptions(PopupBox):
             if selection == 'ok':
                 self.destroy()
             elif selection == 'out':
-                LogScroll(os.path.join(config.LOGDIR,'command-stdout.log'),
+                LogScroll(os.path.join(config.FREEVO_LOGDIR,'command-stdout.log'),
                           text=_('Stdout File')).show()
                 return
             elif selection == 'err':
-                LogScroll(os.path.join(config.LOGDIR,'command-stderr.log'),
+                LogScroll(os.path.join(config.FREEVO_LOGDIR,'command-stderr.log'),
                           text=_('Stderr File')).show()
                 return
         elif event == INPUT_EXIT:

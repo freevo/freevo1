@@ -102,7 +102,7 @@ class Logger:
         self.logtype = logtype
         appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
         try:
-            self.logfile = '%s/%s-%s.log' % (LOGDIR, appname, os.getuid())
+            self.logfile = '%s/%s-%s.log' % (FREEVO_LOGDIR, appname, os.getuid())
             self.fp = open(self.logfile, 'a')
             logging.basicConfig(level=LOGGING, \
                 #datefmt='%a, %H:%M:%S',
@@ -278,15 +278,75 @@ DEBUG = 0
 
 LOGGING = logging.DEBUG
 
+
+def make_freevodir(envvar, linux_dir, bsd_dir, private_dir):
+    '''Make the freevo specific directory and return it's name
+    '''
+    if os.environ.has_key('OS_' + envvar):
+        os_dirname = os.environ['OS_' + envvar]
+    elif os.uname()[0] == 'FreeBSD':
+        os_dirname = bsd_dir
+    else:
+        os_dirname = linux_dir
+
+    if os.environ.has_key('FREEVO_' + envvar):
+        freevo_dirname = os.environ['FREEVO_' + envvar]
+    else:
+        freevo_dirname = os.path.join(os_dirname, 'freevo')
+
+    if not os.path.isdir(freevo_dirname):
+        try:
+            print 'trying "%s"...' % (freevo_dirname)
+            os.makedirs(freevo_dirname)
+        except OSError:
+            freevo_dirname = os.path.join(os.environ['HOME'], '.freevo', private_dir)
+            if not os.path.isdir(freevo_dirname):
+                try:
+                    print 'trying "%s"...' % (freevo_dirname)
+                    os.makedirs(freevo_dirname)
+                except OSError, e:
+                    print 'Warning: %s does not exists and can\'t be created' % freevo_dirname
+                    print 'Please create this directory as root and set permissions for the'
+                    print 'Freevo user to write to it.'
+                    os_dirname = '/tmp'
+                    freevo_dirname = os.path.join(os_dirname, 'freevo')
+                    if not os.path.isdir(freevo_dirname):
+                        try:
+                            print 'trying "%s"...' % (freevo_dirname)
+                            os.makedirs(freevo_dirname)
+                        except OSError:
+                            os_dirname = '/tmp'
+                            freevo_dirname = os.path.join(os_dirname, ('freevo-' + os.getuid()), private_dir)
+                            if not os.path.isdir(freevo_dirname):
+                                print 'trying "%s"...' % (freevo_dirname)
+                                os.makedirs(freevo_dirname)
+                    print 'Using %s as cache directory, but this is a bad idea' % freevo_dirname
+                    print
+    return (os_dirname, freevo_dirname)
+
+
 #
 # find the log directory
 #
-if os.path.isdir('/var/log/freevo'):
-    LOGDIR = '/var/log/freevo'
-else:
-    LOGDIR = '/tmp/freevo'
-    if not os.path.isdir(LOGDIR):
-        os.makedirs(LOGDIR)
+OS_LOGDIR, FREEVO_LOGDIR = make_freevodir('LOGDIR', '/var/log', '/var/log', 'log')
+
+#
+# Freevo static dir:
+#
+# Under Linux, use /var/lib. Under FreeBSD, use /var/db.
+#
+OS_STATICDIR, FREEVO_STATICDIR = make_freevodir('STATICDIR', '/var/lib', '/var/db', 'static')
+
+#
+# Freevo cache dir:
+#
+# Under Linux, use /var/cache. Under FreeBSD, use /var/db.
+#
+OS_CACHEDIR, FREEVO_CACHEDIR = make_freevodir('CACHEDIR', '/var/cache', '/var/db', 'cache')
+
+print 'log: %s %s' % (OS_LOGDIR, FREEVO_LOGDIR)
+print 'static: %s %s' % (OS_STATICDIR, FREEVO_STATICDIR)
+print 'cache: %s %s' % (OS_CACHEDIR, FREEVO_CACHEDIR)
 
 #
 # Redirect stdout and stderr to stdout and /tmp/freevo.log
@@ -454,46 +514,6 @@ for program, valname, needed in setup_freevo.EXTERNAL_PROGRAMS:
         setup_freevo.check_program(CONF, program, valname, needed, verbose=0)
     if not hasattr(CONF, valname) or not getattr(CONF, valname):
         setattr(CONF, valname, '')
-
-#
-# Freevo cache dir:
-#
-# Under Linux, use /var/cache. Under FreeBSD, use /var/db.
-#
-if os.environ.has_key('OS_CACHEDIR'):
-    OS_CACHEDIR = os.environ['OS_CACHEDIR']
-elif os.uname()[0] == 'FreeBSD':
-    OS_CACHEDIR = '/var/db'
-else:
-    OS_CACHEDIR = '/var/cache'
-
-if os.environ.has_key('FREEVO_CACHEDIR'):
-    FREEVO_CACHEDIR = os.environ['FREEVO_CACHEDIR']
-else:
-    FREEVO_CACHEDIR = OS_CACHEDIR + '/freevo'
-
-if not os.path.isdir(FREEVO_CACHEDIR):
-    try:
-        os.makedirs(FREEVO_CACHEDIR)
-
-    except OSError:
-        print 'Warning: %s does not exists and can\'t be created' % FREEVO_CACHEDIR
-        print 'Please create this directory as root and set permissions for the'
-        print 'Freevo user to write to it.'
-        OS_CACHEDIR = '/tmp'
-        FREEVO_CACHEDIR = OS_CACHEDIR + '/freevo'
-
-        if not os.path.isdir( FREEVO_CACHEDIR ):
-            try:
-                os.makedirs( FREEVO_CACHEDIR )
-            except OSError:
-                OS_CACHEDIR = '/tmp/'
-                FREEVO_CACHEDIR = OS_CACHEDIR + '/freevo-' + os.getuid()
-                if not os.path.isdir( FREEVO_CACHEDIR ):
-                    os.makedirs( FREEVO_CACHEDIR )
-        print 'Using %s as cache directory, but this is a bad idea' % FREEVO_CACHEDIR
-        print
-
 
 #
 # fall back to x11 if display is mga or fb and DISPLAY ist set
@@ -926,7 +946,7 @@ VIDEO_SHOW_REGEXP_SPLIT = re.compile("[\.\- ]*" + VIDEO_SHOW_REGEXP + "[\.\- ]*"
 #
 # create cache subdirs
 #
-
+print 'overlay: %s' % (OVERLAY_DIR)
 if not OVERLAY_DIR or OVERLAY_DIR == '/':
     print
     print 'ERROR: bad OVERLAY_DIR.'
@@ -951,6 +971,7 @@ if not os.path.isdir(OVERLAY_DIR + '/disc/metadata'):
 
 if not os.path.isdir(OVERLAY_DIR + '/disc-set'):
     os.makedirs(OVERLAY_DIR + '/disc-set')
+
 
 #
 # delete LD_PRELOAD for all helpers, main.py does it after

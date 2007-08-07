@@ -103,17 +103,17 @@ class XmRadioMainMenuItem(Item):
 
 
     def create_channels_menu(self, arg=None, menuw=None):
-        string='rm -f /%s/xmonline.cookies'%config.LOGDIR
+        string='rm -f /%s/xmonline.cookies'%config.FREEVO_LOGDIR
         os.system(string)
 
         string=('curl -s -c /%s/xmonline.cookies -d "user_id=%s" -d "pword=%s" \
                 "http://xmro.xmradio.com/xstream/login_servlet.jsp" > /%s/xmonlinelogin.out' \
-                % (config.LOGDIR, config.XM_USER, config.XM_PASS, config.LOGDIR))
+                % (config.FREEVO_LOGDIR, config.XM_USER, config.XM_PASS, config.FREEVO_LOGDIR))
         os.system(string)
 
         channel_items = []
         for rchannel in config.XM_STATIONS:
-            string='rm -f /%s/xmonlinechannel.out'%config.LOGDIR
+            string='rm -f /%s/xmonlinechannel.out'%config.FREEVO_LOGDIR
             os.system(string)
 
             string=('curl -s \
@@ -121,9 +121,9 @@ class XmRadioMainMenuItem(Item):
                     -d "" \
                     "http://player.xmradio.com/player/2ft/playMedia.jsp?ch=%s&speed=%s" \
                     > /%s/xmonlinestream.out' \
-                    % (config.LOGDIR,rchannel[1],config.XM_RATE,config.LOGDIR))
+                    % (config.FREEVO_LOGDIR,rchannel[1],config.XM_RATE,config.FREEVO_LOGDIR))
             os.system(string)
-            file = open('/%s/xmonlinestream.out'%config.LOGDIR,'r')
+            file = open('/%s/xmonlinestream.out'%config.FREEVO_LOGDIR,'r')
             text = file.readlines()
             file.close()
             for line in text:

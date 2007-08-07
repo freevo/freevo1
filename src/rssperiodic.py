@@ -262,13 +262,13 @@ def checkForUpdates():
                     if len(glob.glob(filename)) == 0 and not checkForDup(item.url):
                         if re.search("torrent", item.url):
                             _debug_("Running bittorrent download from %s" % item.url)
-                            cmdlog=open(os.path.join(config.LOGDIR, 'rss-bittorrent.out'), 'a')
+                            cmdlog=open(os.path.join(config.FREEVO_LOGDIR, 'rss-bittorrent.out'), 'a')
                             p = Popen('bittorrent-console %s' % (item.url), shell=True, stderr=cmdlog, stdout=cmdlog)
                             exitStatus = p.wait()
                             filename=re.sub("\.torrent","",filename)
                         else:
                             _debug_("Running wget download from %s" % (item.url))
-                            cmdlog=open(os.path.join(config.LOGDIR, 'rss-wget.out'), 'a')
+                            cmdlog=open(os.path.join(config.FREEVO_LOGDIR, 'rss-wget.out'), 'a')
                             p = Popen('wget -O %s %s' % (filename, item.url), shell=True, stderr=cmdlog, stdout=cmdlog)
                             exitStatus = p.wait()
                         if exitStatus:

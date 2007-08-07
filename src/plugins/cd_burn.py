@@ -111,7 +111,7 @@ class MyProgressBox(ProgressBox):
 class Logger:
     def __init__(self):
         _debug_('__init__(self)')
-        self.filename = '%s/%s-%s.log' % (config.LOGDIR, 'burn_cd-helpers', os.getuid())
+        self.filename = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, 'burn_cd-helpers', os.getuid())
         self.file     = file(self.filename,"a")
 
     def log (self,line=None):

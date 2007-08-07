@@ -109,14 +109,14 @@ class ChildApp:
         if doeslogging or config.CHILDAPP_DEBUG:
             doeslogging = 1
 
-        stdout_logger = os.path.join(config.LOGDIR, '%s-stdout-%s.log' % (debug_name, os.getuid()))
+        stdout_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stdout-%s.log' % (debug_name, os.getuid()))
         try:
             self.stdout_log = doeslogging and open(stdout_logger, 'w') or None
         except OSError, e:
             _debug_('Cannot open "%s": %s' % (stdout_logger, e), config.DWARNING)
             self.stdout_log = None
 
-        stderr_logger = os.path.join(config.LOGDIR, '%s-stderr-%s.log' % (debug_name, os.getuid()))
+        stderr_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stderr-%s.log' % (debug_name, os.getuid()))
         try:
             self.stderr_log = doeslogging and open(stderr_logger, 'w') or None
         except OSError, e:
@@ -401,7 +401,7 @@ class Read_Thread(threading.Thread):
         self.callback = callback
         self.logger = None
         if logger and doeslogging:
-            logger = os.path.join(config.LOGDIR, '%s-%s-%s.log' % (logger, name, os.getuid()))
+            logger = os.path.join(config.FREEVO_LOGDIR, '%s-%s-%s.log' % (logger, name, os.getuid()))
             try:
                 try:
                     os.unlink(logger)

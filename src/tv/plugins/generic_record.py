@@ -112,8 +112,8 @@ class RecordApp(childapp.ChildApp):
 
     def __init__(self, app):
         if DEBUG:
-            fname_out = os.path.join(config.LOGDIR, 'recorder_stdout.log')
-            fname_err = os.path.join(config.LOGDIR, 'recorder_stderr.log')
+            fname_out = os.path.join(config.FREEVO_LOGDIR, 'recorder_stdout.log')
+            fname_err = os.path.join(config.FREEVO_LOGDIR, 'recorder_stderr.log')
             try:
                 self.log_stdout = open(fname_out, 'a')
                 self.log_stderr = open(fname_err, 'a')

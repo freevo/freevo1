@@ -181,8 +181,8 @@ class RecordApp(childapp.ChildApp):
 
     def __init__(self, app):
         if DEBUG:
-            fname_out = os.path.join(config.LOGDIR, 'vbi2srt-stdout.log')
-            fname_err = os.path.join(config.LOGDIR, 'vbi2srt-stderr.log')
+            fname_out = os.path.join(config.FREEVO_LOGDIR, 'vbi2srt-stdout.log')
+            fname_err = os.path.join(config.FREEVO_LOGDIR, 'vbi2srt-stderr.log')
             try:
                 self.log_stdout = open(fname_out, 'a')
                 self.log_stderr = open(fname_err, 'a')

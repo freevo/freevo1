@@ -375,7 +375,7 @@ if len(sys.argv) >= 2:
 
     # activate a trace function
     if sys.argv[1] == '-trace':
-        tracefd = open(os.path.join(config.LOGDIR, 'trace.txt'), 'w')
+        tracefd = open(os.path.join(config.FREEVO_LOGDIR, 'trace.txt'), 'w')
         sys.settrace(tracefunc)
         config.DEBUG = 2
 
