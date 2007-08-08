@@ -39,11 +39,11 @@ class BaseAnimation:
     Base class for animations, this should perhaps be changed to use sprites
     in the future (if one decides to go with a RenderGroup model)
 
-     @rectstyle  : the rectangle defining the position on the screen (pygame)
-     @fps        : Desired fps
-     @bg_update  : update the animation with background from screen
-     @bg_wait    : initially wait for updated background before activating
-     @bg_redraw  : set background to original screen bg when finished
+    @rectstyle  : the rectangle defining the position on the screen (pygame)
+    @fps        : Desired fps
+    @bg_update  : update the animation with background from screen
+    @bg_wait    : initially wait for updated background before activating
+    @bg_redraw  : set background to original screen bg when finished
     """
 
     background   = None   # Surface Background (screen)
@@ -160,10 +160,8 @@ class BaseAnimation:
         """
         Checks if the screen background has been damaged
 
-        Note:
-            If the rect passed damages our rect, but no actual blit is done
-            on osd.screen, we'll end up with a copy of our animation in our
-            bg. This is BAD.
+        @notes: If the rect passed damages our rect, but no actual blit is done
+        on osd.screen, we'll end up with a copy of our animation in our bg. This is BAD.
         """
 
         if not (self.bg_redraw or self.bg_update) or rectstyles == None:

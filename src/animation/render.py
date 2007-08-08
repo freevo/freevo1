@@ -67,15 +67,13 @@ class Render:
     """
     This class/interface handles updating animation sprites
 
-    Problems:
-      How to do everything correctly so we don't end up with garbled screens.
-      Currently there's probably tons of problems with this.
+    @problems: How to do everything correctly so we don't end up with garbled
+    screens.  Currently there's probably tons of problems with this.
 
-    Notes:
-      Perhaps we should utilize spritegroups for this, as it is supposed
-      to be optimized for this kind of stuff - pluss we get alot of code
-      for free. (ex. RenderUpdates). All animations objects would need to
-      extend the pygame.sprite.Sprite object.
+    @notes: Perhaps we should utilize spritegroups for this, as it is supposed
+    to be optimized for this kind of stuff - pluss we get alot of code for free.
+    (ex. RenderUpdates). All animations objects would need to extend the
+    pygame.sprite.Sprite object.
     """
 
     animations   = []    # all animations
