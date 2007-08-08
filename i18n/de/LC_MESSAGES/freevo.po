@@ -51,12 +51,12 @@ msgstr ""
 #: plugins/idlebar/encoding.py:174 plugins/idlebar/transcode.py:186
 #, fuzzy
 msgid "encoding server not running"
-msgstr "Der Aufnahmeserver ist aktiv."
+msgstr "Encodingserver inaktiv."
 
 #: plugins/idlebar/encoding.py:180 plugins/idlebar/transcode.py:193
 #, fuzzy
 msgid "encoding server has no jobs"
-msgstr "Aufnahmeserver ist nicht verfügbar"
+msgstr "Nichts zum Encodieren vorhanden"
 
 #: plugins/idlebar/diskfree.py:102
 #, python-format
@@ -105,7 +105,7 @@ msgstr ""
 #: plugins/df.py:68
 #, python-format
 msgid "%i free of %i GB total (%i%% free)"
-msgstr "%i von von %i GB (%i%% frei)"
+msgstr "%i frei von %i GB (%i%% frei)"
 
 #: plugins/df.py:70
 #, python-format
@@ -212,7 +212,7 @@ msgstr "Nachmittags Schauer"
 
 #: plugins/weather.py:87
 msgid "Rain/Snow Showers"
-msgstr "Regen/Schnee Schauer"
+msgstr "Regen/Schneeschauer"
 
 #: plugins/weather.py:88
 msgid "Few Snow Showers"
@@ -224,7 +224,7 @@ msgstr "Bewölkt/windig"
 
 #: plugins/weather.py:90
 msgid "Flurries/Wind"
-msgstr "Schauer/windig"
+msgstr "Böig/windig"
 
 #: plugins/weather.py:91
 msgid "Mostly Cloudy/Windy"
@@ -260,39 +260,39 @@ msgstr "Nieselregen"
 
 #: plugins/weather.py:99
 msgid "Mostly Sunny/Wind"
-msgstr ""
+msgstr "Meist sonnig/windig"
 
 #: plugins/weather.py:100
 msgid "Flurries"
-msgstr ""
+msgstr "Böen"
 
 #: plugins/weather.py:101
 msgid "Rain/Wind"
-msgstr ""
+msgstr "Regen/windig"
 
 #: plugins/weather.py:102
 msgid "Sct Flurries/Wind"
-msgstr ""
+msgstr "Vereinzelt böiger Wind"
 
 #: plugins/weather.py:103
 msgid "Sct Strong Storms"
-msgstr ""
+msgstr "Vereinzelt starker Sturm"
 
 #: plugins/weather.py:104
 msgid "PM T-Storms"
-msgstr ""
+msgstr "Abends Gewitter"
 
 #: plugins/weather.py:105
 msgid "Thunderstorms"
-msgstr ""
+msgstr "Gewitter"
 
 #: plugins/weather.py:106
 msgid "Sunny/Windy"
-msgstr ""
+msgstr "Sonnig/winig"
 
 #: plugins/weather.py:107
 msgid "AM Thunderstorms"
-msgstr ""
+msgstr "Morgens Gewitter"
 
 #: plugins/weather.py:108
 msgid "AM Rain"
@@ -300,43 +300,43 @@ msgstr "Vormittags Regen"
 
 #: plugins/weather.py:109
 msgid "Iso T-Storms/Wind"
-msgstr ""
+msgstr "Gewitter/Wind"
 
 #: plugins/weather.py:110
 msgid "Rain/Snow"
-msgstr ""
+msgstr "Regen/Schnee"
 
 #: plugins/weather.py:111
 msgid "Sct T-Storms/Wind"
-msgstr ""
+msgstr "Vereinzelt Gewitter/Wind"
 
 #: plugins/weather.py:112
 msgid "AM Showers/Wind"
-msgstr ""
+msgstr "Morgens Schauer/windig"
 
 #: plugins/weather.py:113
 msgid "Sct Snow Showers"
-msgstr ""
+msgstr "Vereinzelt Schneeschauer"
 
 #: plugins/weather.py:114
 msgid "Snow to Ice/Wind"
-msgstr ""
+msgstr "Schnee und Eis/Wind"
 
 #: plugins/weather.py:115
 msgid "AM Ice"
-msgstr ""
+msgstr "Morgens Eis"
 
 #: plugins/weather.py:116
 msgid "Snow to Rain"
-msgstr ""
+msgstr "Schnee bis Regen"
 
 #: plugins/weather.py:117
 msgid "AM Light Rain"
-msgstr ""
+msgstr "Morgens leichter Regen"
 
 #: plugins/weather.py:118
 msgid "PM Light Rain"
-msgstr ""
+msgstr "Abends leichter Regen"
 
 #: plugins/weather.py:119
 msgid "PM Rain"
@@ -348,75 +348,75 @@ msgstr "Schneeschauer"
 
 #: plugins/weather.py:121
 msgid "Rain to Snow"
-msgstr ""
+msgstr "Regen bis Schnee"
 
 #: plugins/weather.py:122
 msgid "PM Rain/Snow"
-msgstr ""
+msgstr "Abends Regen/Schnee"
 
 #: plugins/weather.py:123
 msgid "Few Showers/Wind"
-msgstr ""
+msgstr "Wenige Schauer/Wind"
 
 #: plugins/weather.py:124
 msgid "Snow/Wind"
-msgstr ""
+msgstr "Schnee/Wind"
 
 #: plugins/weather.py:125
 msgid "PM Rain/Snow Showers"
-msgstr ""
+msgstr "Abends Regen/Schneeschauer"
 
 #: plugins/weather.py:126 plugins/weather.py:137
 msgid "PM Rain/Snow/Wind"
-msgstr ""
+msgstr "Abends Regen/Schnee/Wind"
 
 #: plugins/weather.py:127
 msgid "Rain/Snow Showers/Wind"
-msgstr ""
+msgstr "Regen/Schneeschauer/Wind"
 
 #: plugins/weather.py:128
 msgid "Rain/Snow/Wind"
-msgstr ""
+msgstr "Regen/Schnee/Wind"
 
 #: plugins/weather.py:129
 msgid "Light Snow"
-msgstr ""
+msgstr "Wenig Schnee"
 
 #: plugins/weather.py:130
 msgid "PM Snow"
-msgstr ""
+msgstr "Abends Schnee"
 
 #: plugins/weather.py:131
 msgid "Few Snow Showers/Wind"
-msgstr ""
+msgstr "Wenige Schneeschauer/Wind"
 
 #: plugins/weather.py:132
 msgid "Light Snow/Wind"
-msgstr ""
+msgstr "Etwas Schnee/Wind"
 
 #: plugins/weather.py:133
 msgid "Wintry Mix"
-msgstr ""
+msgstr "Winterwetter"
 
 #: plugins/weather.py:134
 msgid "AM Wintry Mix"
-msgstr ""
+msgstr "Morgens Winterwetter"
 
 #: plugins/weather.py:135 plugins/weather.py:172
 msgid "Hvy Rain/Freezing Rain"
-msgstr ""
+msgstr "Starker Regen/überfrierende Nässe"
 
 #: plugins/weather.py:136
 msgid "AM Light Snow"
-msgstr ""
+msgstr "Morgens etwas Schnee"
 
 #: plugins/weather.py:138
 msgid "Rain/Freezing Rain"
-msgstr ""
+msgstr "Regen/überfrierende Nässe"
 
 #: plugins/weather.py:139
 msgid "T-Storms/Wind"
-msgstr ""
+msgstr "Gewitter/Wind"
 
 #: plugins/weather.py:140
 msgid "Sprinkles"
@@ -424,75 +424,75 @@ msgstr ""
 
 #: plugins/weather.py:141
 msgid "AM Snow Showers"
-msgstr ""
+msgstr "Morgens Schneeschauer"
 
 #: plugins/weather.py:142
 msgid "AM Clouds/PM Sun/Wind"
-msgstr ""
+msgstr "Morgens wolkig/Abends sonnig/windig"
 
 #: plugins/weather.py:143
 msgid "AM Rain/Snow/Wind"
-msgstr ""
+msgstr "Morgens Regen/Schnee/Wind"
 
 #: plugins/weather.py:144
 msgid "Rain to Snow/Wind"
-msgstr ""
+msgstr "Regen bis Schnee/windig"
 
 #: plugins/weather.py:145
 msgid "Snow to Wintry Mix"
-msgstr ""
+msgstr "Winterwetter mit Schnee"
 
 #: plugins/weather.py:146
 msgid "PM Snow Showers/Wind"
-msgstr ""
+msgstr "Abends Schneeschauer/Wind"
 
 #: plugins/weather.py:147
 msgid "Snow and Ice to Rain"
-msgstr ""
+msgstr "Schnee und Eis"
 
 #: plugins/weather.py:148
 msgid "Heavy Rain"
-msgstr ""
+msgstr "Starker Regen"
 
 #: plugins/weather.py:149
 msgid "AM Rain/Ice"
-msgstr ""
+msgstr "Morgens Regen/Ice"
 
 #: plugins/weather.py:150
 msgid "AM Snow Showers/Wind"
-msgstr ""
+msgstr "Morgens Schneeschauer/Wind"
 
 #: plugins/weather.py:151
 msgid "AM Light Snow/Wind"
-msgstr ""
+msgstr "Morgbes leichte Schneefälle/Wind"
 
 #: plugins/weather.py:152
 msgid "PM Light Rain/Wind"
-msgstr ""
+msgstr "Abends leichte Regenfälle/Wind"
 
 #: plugins/weather.py:153
 msgid "AM Light Wintry Mix"
-msgstr ""
+msgstr "Morgens Winterwetter"
 
 #: plugins/weather.py:154
 msgid "PM Light Snow/Wind"
-msgstr ""
+msgstr "Abends leichter Schneefall/Wind"
 
 #: plugins/weather.py:155
 msgid "Heavy Rain/Wind"
-msgstr ""
+msgstr "Starker Regen/Wind"
 
 #: plugins/weather.py:156
 msgid "PM Snow Shower"
-msgstr ""
+msgstr "Abends Schneeschauer"
 
 #: plugins/weather.py:157
 msgid "Snow to Rain/Wind"
-msgstr ""
+msgstr "Schnee bis Regen/Wind"
 
 #: plugins/weather.py:158
 msgid "PM Light Rain/Ice"
-msgstr ""
+msgstr "Abends leichter Regen/Eis"
 
 #: plugins/weather.py:159
 msgid "AM Snow"
@@ -500,59 +500,59 @@ msgstr ""
 
 #: plugins/weather.py:160
 msgid "Snow to Ice"
-msgstr ""
+msgstr "Schnee bis Eis"
 
 #: plugins/weather.py:161
 msgid "Wintry Mix/Wind"
-msgstr ""
+msgstr "Winterwetter/Wind"
 
 #: plugins/weather.py:162
 msgid "PM Light Snow"
-msgstr ""
+msgstr "Abends etwas Schnee"
 
 #: plugins/weather.py:163
 msgid "AM Drizzle"
-msgstr ""
+msgstr "Morgens Nieselregen"
 
 #: plugins/weather.py:164
 msgid "Strong Storms/Wind"
-msgstr ""
+msgstr "Starker Sturm/Wind"
 
 #: plugins/weather.py:165
 msgid "PM Drizzle"
-msgstr ""
+msgstr "Abends Nieselregen"
 
 #: plugins/weather.py:167
 msgid "AM Light Rain/Wind"
-msgstr ""
+msgstr "Morgens leichter Regen/Wind"
 
 #: plugins/weather.py:168
 msgid "AM Rain/Wind"
-msgstr ""
+msgstr "Morgens Regen/Wind"
 
 #: plugins/weather.py:169
 msgid "Wintry Mix to Snow"
-msgstr ""
+msgstr "Winterwetter mit Schnee"
 
 #: plugins/weather.py:171
 msgid "AM Light Rain/Ice"
-msgstr ""
+msgstr "Morgens etwas Regen/Eis"
 
 #: plugins/weather.py:173
 msgid "Snow Showers/Windy"
-msgstr ""
+msgstr "Schneeschauer/windig"
 
 #: plugins/weather.py:175
 msgid "Light Rain Shower"
-msgstr ""
+msgstr "Leichte Regenschauer"
 
 #: plugins/weather.py:176
 msgid "Light Rain with Thunder"
-msgstr ""
+msgstr "Leichter Regen mit Gewitter"
 
 #: plugins/weather.py:177
 msgid "Light Drizzle"
-msgstr ""
+msgstr "Nieselregen"
 
 #: plugins/weather.py:178
 msgid "Mist"
@@ -560,19 +560,19 @@ msgstr "Nebel"
 
 #: plugins/weather.py:179
 msgid "Smoke"
-msgstr ""
+msgstr "dunstig"
 
 #: plugins/weather.py:180
 msgid "Haze"
-msgstr ""
+msgstr "Hagel"
 
 #: plugins/weather.py:181
 msgid "Light Snow Shower"
-msgstr ""
+msgstr "Leichte Schneeschauer"
 
 #: plugins/weather.py:182
 msgid "Light Snow Shower/ Windy"
-msgstr ""
+msgstr "Leichte Schneeschauer/windig"
 
 #: plugins/weather.py:183
 msgid "Clear"
@@ -580,11 +580,11 @@ msgstr "Klar"
 
 #: plugins/weather.py:184
 msgid "A Few Clouds"
-msgstr ""
+msgstr "Wenige Wolken"
 
 #: plugins/weather.py:185
 msgid "Fair"
-msgstr ""
+msgstr "heiter"
 
 #: plugins/weather.py:370 plugins/weather.py:373
 #, python-format
@@ -617,7 +617,7 @@ msgstr "bei"
 #: plugins/weather.py:668
 #, python-format
 msgid "%s (day: %s)"
-msgstr ""
+msgstr "%s (Tag: %s)"
 
 #: plugins/weather.py:668 plugins/weather.py:676
 msgid "Unknown"
@@ -626,7 +626,7 @@ msgstr "Unbekannt"
 #: plugins/weather.py:676
 #, python-format
 msgid "%s (type: %s)"
-msgstr ""
+msgstr "%s (Type: %s)"
 
 #: plugins/weather.py:762 share/skins/main/bluestar.fxd:13
 msgid "Weather"
@@ -694,7 +694,7 @@ msgstr ""
 
 #: plugins/weather.py:990
 msgid "and"
-msgstr ""
+msgstr "und"
 
 #: plugins/weather.py:992
 msgid "the winds are "
@@ -702,7 +702,7 @@ msgstr ""
 
 #: plugins/weather.py:994
 msgid "calm"
-msgstr ""
+msgstr "ruhig"
 
 #: plugins/weather.py:997
 msgid "coming in at"
@@ -710,15 +710,15 @@ msgstr ""
 
 #: plugins/weather.py:998
 msgid "from the"
-msgstr ""
+msgstr "von"
 
 #: plugins/weather.py:1002
 msgid "Visibility will be unlimited today"
-msgstr ""
+msgstr "Unbegrenzte Sichtweite"
 
 #: plugins/weather.py:1005
 msgid "There will be a visibility of"
-msgstr ""
+msgstr "Sichtweite von"
 
 #: plugins/weather.py:1037
 msgid "LO"
@@ -730,7 +730,7 @@ msgstr "Max"
 
 #: plugins/weather.py:1059
 msgid "Error encountered while trying to download Radar map"
-msgstr ""
+msgstr "Fehler beim laden der Radarkarte"
 
 #: plugins/file_ops.py:65
 msgid "Delete info"
@@ -1023,11 +1023,11 @@ msgstr "Eine Aufnahme läuft."
 #: plugins/autoshutdown.py:150
 #, python-format
 msgid "Would wakeup again within %d minutes."
-msgstr ""
+msgstr "Würde innerhalb von %d Minuten wieder angehen"
 
 #: plugins/autoshutdown.py:154
 msgid "There are important processes running."
-msgstr ""
+msgstr "Es laufen wichtige Prozesse im Hintergrund"
 
 #: plugins/autoshutdown.py:160
 msgid "No wakeup scheduled."
@@ -1035,19 +1035,19 @@ msgstr "Keine geplanten Aufnahmen."
 
 #: plugins/autoshutdown.py:164
 msgid "The next wakeup is scheduled at"
-msgstr ""
+msgstr "Das System wird wieder hochgefahren um "
 
 #: plugins/autoshutdown.py:175 plugins/autoshutdown.py:259
 msgid "Resume automatic shutdown"
-msgstr ""
+msgstr "Automatische Abschaltung aktivieren"
 
 #: plugins/autoshutdown.py:177 plugins/autoshutdown.py:256
 msgid "Pause automatic shutdown"
-msgstr ""
+msgstr "Automatische Abschaltung deaktivieren"
 
 #: plugins/autoshutdown.py:179
 msgid "Shutdown and wakeup"
-msgstr ""
+msgstr "Abschalten und wieder hochfahren"
 
 #: plugins/autoshutdown.py:181 plugins/shutdown.py:137 plugins/shutdown.py:141
 msgid "Restart system"
@@ -1063,20 +1063,20 @@ msgstr "Freevo beenden"
 
 #: plugins/autoshutdown.py:193 plugins/autoshutdown.py:221
 msgid "SHUTDOWN SYSTEM?"
-msgstr ""
+msgstr "System abschalten"
 
 #: plugins/autoshutdown.py:207
 msgid "RESTART SYSTEM?"
-msgstr ""
+msgstr "System neustarten"
 
 #: plugins/autoshutdown.py:213 plugins/autoshutdown.py:227
 #: plugins/autoshutdown.py:241
 msgid "(wakeup disabled)"
-msgstr ""
+msgstr "(automatisches Hochfahren deaktiviert)"
 
 #: plugins/autoshutdown.py:235
 msgid "SHUTDOWN FREEVO?"
-msgstr ""
+msgstr "Freevo beenden?"
 
 #: plugins/autoshutdown.py:611 plugins/shutdown.py:63 main.py:308
 msgid "shutting down..."
@@ -1093,7 +1093,7 @@ msgstr "Lautstärke: %s%%"
 
 #: plugins/ossmixer.py:134 plugins/mixer.py:139 plugins/alsamixer.py:165
 msgid "Mute"
-msgstr "Still"
+msgstr "Stumm"
 
 #: plugins/rom_drives.py:225
 #, python-format
@@ -1227,36 +1227,36 @@ msgstr ""
 #: plugins/cd_burn.py:161
 #, python-format
 msgid "Cannot find %s (%s). "
-msgstr ""
+msgstr "Kann %s (%s) nicht finden. "
 
 #: plugins/cd_burn.py:179
 #, python-format
 msgid "Start burning %s audio files?"
-msgstr ""
+msgstr "%s Audiodateien brennen?"
 
 #: plugins/cd_burn.py:209
 msgid "Insert media then click OK"
-msgstr ""
+msgstr "Medium einlegen und OK drücken"
 
 #: plugins/cd_burn.py:234
 #, python-format
 msgid "Start burning %s ?"
-msgstr ""
+msgstr "%s brennen? "
 
 #: plugins/cd_burn.py:244
 #, python-format
 msgid "Start burning %s entries? ( %d Mb )"
-msgstr ""
+msgstr "% s Einträge brennen (%d Mb)"
 
 #: plugins/cd_burn.py:500
 #, python-format
 msgid "Burning status: %s"
-msgstr ""
+msgstr "Status des Brennvorgangs: %s"
 
 #: plugins/cd_burn.py:646
 #, python-format
 msgid "Error : Could not convert %s"
-msgstr ""
+msgstr "Fehler: Kontte %s nicht konvertieren"
 
 #: plugins/cd_burn.py:651
 #, python-format
@@ -1265,11 +1265,11 @@ msgstr ""
 
 #: plugins/cd_burn.py:753
 msgid "Interrupting burning process..."
-msgstr ""
+msgstr "Brennprozess unterbrochen"
 
 #: plugins/cd_burn.py:763
 msgid "Backup interrupted"
-msgstr ""
+msgstr "Backup unterbrochen"
 
 #: plugins/cd_burn.py:770
 #, python-format
@@ -1283,7 +1283,7 @@ msgstr ""
 
 #: plugins/cd_burn.py:781
 msgid "Burn CD"
-msgstr ""
+msgstr "Brenne CD"
 
 #: plugins/cd_burn.py:792
 msgid "CD Burn Menu"
@@ -1291,20 +1291,20 @@ msgstr "Brenn-Menü"
 
 #: plugins/cd_burn.py:815
 msgid "Copy dir to CD"
-msgstr ""
+msgstr "Kopiere Verzeichnis auf CD"
 
 #: plugins/cd_burn.py:817
 msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
-msgstr ""
+msgstr "Brenne Audiodateien (MP3, Wav und Ogg) als Audio-CD"
 
 #: plugins/cd_burn.py:829
 msgid "Copy this file to CD"
-msgstr ""
+msgstr "Kopiere diese Datei auf CD"
 
 #: plugins/cd_burn.py:837
 #, python-format
 msgid "Copy %s to CD"
-msgstr ""
+msgstr "Kopiere %s auf CD"
 
 #: plugins/cd_burn.py:851
 #, python-format
@@ -1318,7 +1318,7 @@ msgstr ""
 
 #: plugins/cd_burn.py:879
 msgid "Burn as DVD-VIDEO disc"
-msgstr ""
+msgstr "Brenne als Video-DVD"
 
 #: plugins/vfd.py:52
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
@@ -1335,7 +1335,7 @@ msgstr "Der Aufnahmeserver ist nicht aktiv."
 
 #: plugins/upsoon.py:272
 msgid "TV stopped, a recording is about to start!"
-msgstr ""
+msgstr "TV angehalten, eine Aufnahme soll gleich starten"
 
 #: plugins/mpd.py:99
 msgid "not sure what to do with this"
@@ -1376,7 +1376,7 @@ msgstr ""
 
 #: plugins/buttonbar.py:335
 msgid "More Options"
-msgstr ""
+msgstr "Mehr Optionen"
 
 #: plugins/freeboxtv.py:72
 msgid "Freebox TV"
@@ -1393,25 +1393,25 @@ msgstr ""
 #: plugins/remind.py:100
 #, fuzzy
 msgid "Show Reminders"
-msgstr "Schauer"
+msgstr "Erinnerungen anzeigen"
 
 #: plugins/remind.py:111
 #, fuzzy
 msgid "No Reminders Found"
-msgstr "Keine Schlagzeilen gefunden"
+msgstr "Keine Erinnerungen gefunden"
 
 #: plugins/remind.py:113 plugins/remind.py:163
 msgid "Reminders"
-msgstr ""
+msgstr "Erinnerungen"
 
 #: plugins/remind.py:175
 #, fuzzy
 msgid "Reminders types"
-msgstr "Schlagzeilen-Sites"
+msgstr "Arten"
 
 #: plugins/remind.py:189
 msgid "Remind type"
-msgstr ""
+msgstr "Art"
 
 #: image/plugins/gphoto.py:99 image/imageitem.py:98
 msgid "View Image"
@@ -1444,7 +1444,7 @@ msgstr "Keine Bilder gefunden"
 
 #: image/plugins/apod.py:96 image/plugins/apod.py:109
 msgid "Unable to open URL"
-msgstr ""
+msgstr "Kann URL nicht öffnen"
 
 #: image/plugins/apod.py:123
 msgid "Need a directory to store APOD pictures."
@@ -1460,7 +1460,8 @@ msgstr "Verzeichniss '%s' existiert nicht"
 msgid ""
 "directory %s must be able to be read, written to and executed by the user "
 "running freevo."
-msgstr ""
+msgstr "das Verzeichnis %s muss less- und schreibbar für den User sein"
+"der freevo ausführt."
 
 #: image/viewer.py:121
 #, python-format
@@ -1489,7 +1490,7 @@ msgstr "ABBRECHEN"
 
 #: www/htdocs/help/index.rpy:38
 msgid "Freevo Help"
-msgstr ""
+msgstr "Freevo Hilfe"
 
 #: www/htdocs/help/index.rpy:41
 msgid ""
@@ -1608,11 +1609,11 @@ msgstr "Anfangszeitpunkt liegt nach dem Endzeitpukt"
 #: www/htdocs/manualrecord.rpy:127 tv/plugins/manual_record.py:367
 #, python-format
 msgid "Program would record for more than %d days!"
-msgstr "Programm würde für mehr als %d Tage aufzeichnen"
+msgstr "Programm würde für mehr als %d Tage aufgezeichnet"
 
 #: www/htdocs/manualrecord.rpy:129 tv/plugins/manual_record.py:371
 msgid "Program would record for more than 1 day!"
-msgstr "Programm würde über einen Tag aufzeichnen"
+msgstr "Programm würde über einen Tag aufgezeichnet"
 
 #: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:74
 msgid "Jan"
@@ -1683,7 +1684,7 @@ msgstr "Ende"
 #: www/htdocs/manualrecord.rpy:221 www/htdocs/record.rpy:117
 #: www/htdocs/search.rpy:93
 msgid "Program Description"
-msgstr "Programm Beschreibung"
+msgstr "Programmbeschreibung"
 
 #: www/htdocs/manualrecord.rpy:232
 msgid "Add to Recording Schedule"
@@ -1891,7 +1892,7 @@ msgstr "Sichern"
 
 #: www/htdocs/guide.rpy:145 www/web_types.py:199 tv/tvmenu.py:102
 msgid "TV Guide"
-msgstr "Programmführer"
+msgstr "Programmzeitung"
 
 #: www/htdocs/guide.rpy:157
 msgid "View"
@@ -2285,27 +2286,25 @@ msgstr "Video-Eingang anzeigen"
 
 #: tv/plugins/recordings_manager.py:73
 msgid "Date then Name"
-msgstr ""
+msgstr "Datum dann Name"
 
 #: tv/plugins/recordings_manager.py:74
 msgid "Status then Name"
-msgstr ""
+msgstr "Status dann Name"
 
 #: tv/plugins/recordings_manager.py:75
 msgid "Status, Date then Name"
-msgstr ""
+msgstr "Status, Datum dann Name"
 
 #: tv/plugins/recordings_manager.py:150
-#, fuzzy
 msgid "Manage Recordings"
-msgstr "Manuelle Aufnahme"
+msgstr "Manage aufgenommene Sendungen"
 
 #: tv/plugins/recordings_manager.py:155 directory.py:464
 msgid "Configure directory"
 msgstr "Verzeichnis konfigurieren"
 
 #: tv/plugins/recordings_manager.py:175
-#, fuzzy
 msgid "Recordings Directory does not exist"
 msgstr "Verzeichnis existiert nicht"
 
@@ -2321,7 +2320,7 @@ msgstr "aus"
 
 #: tv/plugins/recordings_manager.py:264
 msgid "Sort by"
-msgstr ""
+msgstr "Sortiere nach"
 
 #: tv/plugins/recordings_manager.py:266
 #, fuzzy
@@ -2330,16 +2329,16 @@ msgstr "Umgekehrte Verzeichnis-Sortierung"
 
 #: tv/plugins/recordings_manager.py:268
 msgid "Sort series by"
-msgstr ""
+msgstr "Sortiere Folgen nach"
 
 #: tv/plugins/recordings_manager.py:270
 msgid "Reverse series sort"
-msgstr ""
+msgstr "Kehre die Sortierung der Folgen um"
 
 #: tv/plugins/recordings_manager.py:272
 #, fuzzy
 msgid "Status order"
-msgstr "Samstag"
+msgstr ""
 
 #: tv/plugins/recordings_manager.py:275 directory.py:953
 msgid "Configure"
@@ -2352,60 +2351,55 @@ msgstr "Abspielen"
 
 #: tv/plugins/recordings_manager.py:391
 msgid "Unmark to Keep"
-msgstr ""
+msgstr "Markiere als löschbar"
 
 #: tv/plugins/recordings_manager.py:391
 msgid "Mark to Keep"
-msgstr ""
+msgstr "Markiere als unlöschbar"
 
 #: tv/plugins/recordings_manager.py:392
 msgid "Unmark as Watched"
-msgstr ""
+msgstr "Markiere als ungesehen"
 
 #: tv/plugins/recordings_manager.py:392
 msgid "Mark as Watched"
-msgstr ""
+msgstr "Markiere als gesehen"
 
 #: tv/plugins/recordings_manager.py:393
-#, fuzzy
 msgid "View Details"
-msgstr "Favoriten"
+msgstr "Zeige Details"
 
 #: tv/plugins/recordings_manager.py:484
 msgid "(Unnamed)"
-msgstr ""
+msgstr "(Unbenannt)"
 
 #: tv/plugins/recordings_manager.py:578
-#, fuzzy
 msgid "Browse episodes"
-msgstr "CD navigieren"
+msgstr "Zeige alle Folgen"
 
 #: tv/plugins/recordings_manager.py:579
-#, fuzzy
 msgid "Delete all episodes"
-msgstr "Lösche edl"
+msgstr "Lösche alle Folgen"
 
 #: tv/plugins/recordings_manager.py:580
 msgid "Keep all episodes"
-msgstr ""
+msgstr "Behalte alle Folgen"
 
 #: tv/plugins/recordings_manager.py:581
-#, fuzzy
 msgid "Play all episodes"
-msgstr "Wiedergabelisten"
+msgstr "Spiele alle Folgen"
 
 #: tv/plugins/recordings_manager.py:647
-#, fuzzy, python-format
 msgid ""
 "Do you wish to delete the series\n"
 " '%s'?"
 msgstr ""
-"Soll die Datei '%s'\n"
+"Soll die Folge '%s'\n"
 "wirklich gelöscht werden?"
 
 #: tv/plugins/recordings_manager.py:729
 msgid "episodes"
-msgstr ""
+msgstr "Folge"
 
 #: tv/plugins/view_recordings.py:46
 msgid "Recorded Shows"
@@ -2483,7 +2477,7 @@ msgstr "Planung fehlgeschlagen"
 #: tv/program_display.py:217
 #, python-format
 msgid "\"%s\" has been removed from schedule"
-msgstr "Aus Plan entfernen"
+msgstr "\"%s\" wurde aus dem Aufnahmeplan entfernen"
 
 #: tv/program_display.py:220 tv/program_display.py:637 tv/edit_favorite.py:210
 msgid "Remove Failed"
@@ -2559,14 +2553,13 @@ msgstr "Speichern fehlgeschlagen"
 #: tv/program_display.py:633
 #, python-format
 msgid "\"%s\" has been removed from favorites"
-msgstr "Aus Favoriten löschen"
+msgstr "\"%s\" wurde aus der Favoritenliste löschen"
 
 #: tv/program_display.py:645
 msgid "No Information Available"
 msgstr "Keine Informationen verfügbar"
 
 #: tv/program_display.py:662
-#, fuzzy
 msgid "Category : "
 msgstr "Kategorie"
 
@@ -2988,33 +2981,31 @@ msgstr "Erstelle Wiedergabeliste..."
 #: audio/plugins/musicip.py:423
 #, fuzzy
 msgid "MusicIP Mix"
-msgstr "Musik"
+msgstr ""
 
 #: audio/plugins/musicip.py:425
 msgid "Songs From Same Album"
-msgstr ""
+msgstr "Title vom gleichen Album"
 
 #: audio/plugins/musicip.py:426
 msgid "Songs From Same Artist"
-msgstr ""
+msgstr "Title vom selben Künstler"
 
 #: audio/plugins/lyrics.py:45
-#, fuzzy
 msgid "searching lyrics..."
-msgstr "IMDB wird durchsucht..."
+msgstr "nach Text suchen..."
 
 #: audio/plugins/lyrics.py:59
 msgid "lyrics"
-msgstr ""
+msgstr "Text"
 
 #: audio/plugins/lyrics.py:64
 msgid "Lyrics not found, sorry..."
-msgstr ""
+msgstr "Text leider nicht gefunden..."
 
 #: audio/plugins/lyrics.py:74
-#, fuzzy
 msgid "Show lyrics"
-msgstr "Player aufrufen"
+msgstr "Text zeigen"
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -4045,7 +4036,7 @@ msgstr "Filme in dieser Wiedergabeliste"
 #: share/skins/main/dark.fxd:17 share/skins/main/crystal.fxd:8
 #: share/skins/main/bluestar.fxd:8 share/skins/main/rain.fxd:8
 msgid "Television"
-msgstr ""
+msgstr "Fernsehen"
 
 #: share/skins/main/info.fxd:306
 msgid "min."
@@ -4128,3 +4119,5 @@ msgstr "TV"
 
 #~ msgid "Unable to get frequency for channel %s."
 #~ msgstr "Frequenz von %s konnte nicht geholt werden"
+
+ 	  	 

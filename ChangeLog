@@ -13,6 +13,12 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
+== Release 1.7.4 (2007-??-??) ==
+--------------------------------
+
+ * Updated German translation (F#1770195)
+ * Updated alsamixer with event args and synchronous mixer control (F#1767928)
+
 == Release 1.7.3 (2007-08-01) ==
 --------------------------------
 
