@@ -74,45 +74,45 @@ class SearchPrograms(Item):
         self.name = _('Search Programs')
         self.text_entry = skin.TextEntry('')
         self.type = 'searchprograms'
-        
+
         #
         # Create button groups for alphabet/numbers/symbols
         #
-        
+
         # Create common buttons
         self.search_button = skin.Button(_('Search'), self.search_for_programs, None)
         self.left_button   = skin.Button(_('Left'), self.move_caret, 'left')
         self.right_button  = skin.Button(_('Right'), self.move_caret, 'right')
         self.delete_button = skin.Button(_('Delete'), self.delete_char, None)
-        
-        
+
+
         self.alphabet_button_group = skin.ButtonGroup(6, 7)
         keys = _('ABCDEFGHIJKLMNOPQRSTUVWXYZ ')
         self.__init_keyboard_buttons(keys,  self.alphabet_button_group)
-        
+
         self.numbers_button_group = skin.ButtonGroup(6, 7)
         keys = _('1234567890')
         self.__init_keyboard_buttons(keys,  self.numbers_button_group)
-        
+
         self.symbols_button_group = skin.ButtonGroup(6, 7)
         keys = _('!"#$%^&*();:\'@~?,.<>-=+\[]{}')
         self.__init_keyboard_buttons(keys,  self.symbols_button_group)
-        
+
         characters_button = skin.Button(_('ABC'),  self.change_button_group, self.alphabet_button_group)
         numbers_button = skin.Button(_('123'),  self.change_button_group, self.numbers_button_group)
         symbols_button = skin.Button(_('Symbls'),  self.change_button_group, self.symbols_button_group)
-        
+
         self.numbers_button_group.set_button(0, 5, characters_button)
         self.symbols_button_group.set_button(0, 5, characters_button)
-        
+
         self.alphabet_button_group.set_button(1, 5, numbers_button)
         self.symbols_button_group.set_button(1, 5, numbers_button)
-        
+
         self.alphabet_button_group.set_button(2, 5, symbols_button)
         self.numbers_button_group.set_button(2, 5, symbols_button)
-        
+
         self.button_group = self.alphabet_button_group
-        
+
 
     def actions(self):
         return [(self.show_search, self.name)]
@@ -124,7 +124,7 @@ class SearchPrograms(Item):
         #rc.app(self)
         #skin_object.draw('searchprograms', self)
         menuw.pushmenu(self)
-    
+
     def refresh(self):
         self.__redraw = False
         skin_object.draw('searchprograms', self)
@@ -134,12 +134,12 @@ class SearchPrograms(Item):
         eventhandler
         """
         consumed = False
-        
+
 #        if event is MENU_BACK_ONE_MENU:
 #            rc.app(None)
 #            self.menuw.refresh()
 #            consumed = True
-        
+
         if event is MENU_SELECT:
             sounds.play_sound(sounds.MENU_SELECT)
             self.button_group.selected_button.select()
@@ -176,7 +176,7 @@ class SearchPrograms(Item):
         elif arg == 'right':
             self.text_entry.caret_right()
         self.__redraw = True
-    
+
 
     def delete_char(self, arg):
         self.text_entry.delete_char_at_caret()
@@ -207,14 +207,14 @@ class SearchPrograms(Item):
         button_group.set_button(1,6, self.left_button)
         button_group.set_button(2,6, self.right_button)
         button_group.set_button(3,6, self.delete_button)
-    
+
     def search_for_programs(self, arg):
         text = self.text_entry.text
         pop = PopupBox(text=_('Searching, please wait...'))
         pop.show()
         (result, matches) = self.findMatches(text)
         pop.destroy()
-        
+
         items = []
         if result:
             _debug_('search found %s matches' % len(matches))

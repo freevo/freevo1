@@ -202,7 +202,7 @@ class TextEntry:
 
     def caret_left(self):
         """
-        Moves the caret, marking the position the next character will be 
+        Moves the caret, marking the position the next character will be
         inserted at, left one character.
         """
         self.caret_position -= 1
@@ -212,7 +212,7 @@ class TextEntry:
 
     def caret_right(self):
         """
-        Moves the caret, marking the position the next character will be 
+        Moves the caret, marking the position the next character will be
         inserted at, right one character.
         """
         self.caret_position += 1
@@ -222,7 +222,7 @@ class TextEntry:
 
     def delete_char_at_caret(self):
         """
-        Delete one character at the current caret position and possibly update 
+        Delete one character at the current caret position and possibly update
         the caret position.
         """
         # TODO: Right to Left handling
@@ -236,7 +236,7 @@ class TextEntry:
 
     def insert_char_at_caret(self, char):
         """
-        Insert one character at the current caret positon and possibly update 
+        Insert one character at the current caret positon and possibly update
         the caret position.
         """
         if self.caret_position == 0:
@@ -257,7 +257,7 @@ class Button:
 
     def __init__(self, text, action, arg):
         """
-        Initialise the model which will display the text specified and 
+        Initialise the model which will display the text specified and
         call the action function with the specified argument when selected.
         """
         self.text = text
@@ -283,7 +283,7 @@ class ButtonGroup:
     columns         = Number of columns per row.
     selected_button = Currently Selected button.
     selected_row    = The row of the currently selected button.
-    selected_column = 
+    selected_column =
     """
 
     def __init__(self, rows, columns):
@@ -307,7 +307,7 @@ class ButtonGroup:
     def set_button(self, row, column, button):
         """
         Set the button at the specified row and column to be the one supplied.
-        The first button added to the group will be the first selected button. 
+        The first button added to the group will be the first selected button.
         """
         self.buttons[row][column] = button
         if self.selected_button == None:
@@ -382,7 +382,7 @@ class ButtonGroup:
     def set_selected(self, button):
         """
         Set the selected button to the one specified.
-        Returns True if the button was selected, False if the button is not in 
+        Returns True if the button was selected, False if the button is not in
         the group.
         """
         for r in range(self.rows):
