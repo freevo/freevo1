@@ -186,6 +186,215 @@ class ScrollableText:
         self.build_page()
 
 
+class TextEntry:
+    """
+    Data model for a single line of editable text.
+    """
+
+    def __init__(self, text, left_to_right=True):
+        """
+        Initialise the model with the specified text and direction of input.
+        """
+        self.text = text
+        self.left_to_right = left_to_right
+        self.caret_position = 0
+
+
+    def caret_left(self):
+        """
+        Moves the caret, marking the position the next character will be 
+        inserted at, left one character.
+        """
+        self.caret_position -= 1
+        if self.caret_position < 0:
+            self.caret_position = 0
+
+
+    def caret_right(self):
+        """
+        Moves the caret, marking the position the next character will be 
+        inserted at, right one character.
+        """
+        self.caret_position += 1
+        if self.caret_position > len(self.text):
+            self.caret_position = len(self.text)
+
+
+    def delete_char_at_caret(self):
+        """
+        Delete one character at the current caret position and possibly update 
+        the caret position.
+        """
+        # TODO: Right to Left handling
+        if self.caret_position == 0:
+            return
+        if self.caret_position == 1:
+            self.text = self.text[self.caret_position:]
+        else:
+            self.text = self.text[:self.caret_position - 1] + self.text[self.caret_position:]
+        self.caret_position -= 1
+
+    def insert_char_at_caret(self, char):
+        """
+        Insert one character at the current caret positon and possibly update 
+        the caret position.
+        """
+        if self.caret_position == 0:
+            self.text = char + self.text
+        elif self.caret_position == len(self.text):
+            self.text = self.text + char
+        else:
+            self.text = self.text[:self.caret_position] + char + self.text[self.caret_position:]
+
+        # TODO: Right to Left handling
+        self.caret_position += 1
+
+
+class Button:
+    """
+    Data model representing one button in a button group/grid.
+    """
+
+    def __init__(self, text, action, arg):
+        """
+        Initialise the model which will display the text specified and 
+        call the action function with the specified argument when selected.
+        """
+        self.text = text
+        self.action = action
+        self.arg = arg
+
+
+    def select(self):
+        """
+        Call the action function associate with this button.
+        """
+        if self.action:
+            self.action(self.arg)
+
+
+class ButtonGroup:
+    """
+    Data model used to describe a grid of Buttons.
+
+    Instance varaiables:
+    buttons         = List of buttons rows containing a list of buttons (columns).
+    rows            = Number of rows in the group.
+    columns         = Number of columns per row.
+    selected_button = Currently Selected button.
+    selected_row    = The row of the currently selected button.
+    selected_column = 
+    """
+
+    def __init__(self, rows, columns):
+        """
+        Initialise the button group to contain the specified number of rows and
+        columns of buttons.
+        """
+        self.rows = rows
+        self.columns = columns
+        self.selected_row = -1
+        self.selected_column = -1
+        self.selected_button = None
+        self.buttons = []
+        for r in range(rows):
+            button_row = []
+            for c in range(columns):
+                button_row.append(None)
+            self.buttons.append(button_row)
+
+
+    def set_button(self, row, column, button):
+        """
+        Set the button at the specified row and column to be the one supplied.
+        The first button added to the group will be the first selected button. 
+        """
+        self.buttons[row][column] = button
+        if self.selected_button == None:
+            self.selected_button = button
+            self.selected_row = row
+            self.selected_column = column
+
+
+    def get_button(self, row, column):
+        """
+        Retrieve the button at the specified row and column.
+        """
+        return self.buttons[row][column]
+
+
+    def move_up(self):
+        """
+        Select the button above the currently selected button.
+        """
+        if self.selected_row == 0:
+            return False
+        for r in range(self.selected_row-1, -1,  -1):
+            if self.buttons[r][self.selected_column]:
+                self.selected_row = r
+                self.selected_button = self.buttons[r][self.selected_column]
+                return True
+        return False
+
+
+    def move_down(self):
+        """
+        Select the button below the currently selected button.
+        """
+        if self.selected_row + 1 == self.rows:
+            return False
+        for r in range(self.selected_row+1, self.rows):
+            if self.buttons[r][self.selected_column]:
+                self.selected_row = r
+                self.selected_button = self.buttons[r][self.selected_column]
+                return True
+        return False
+
+
+    def move_left(self):
+        """
+        Select the button to the left of the currently selected button.
+        """
+        if self.selected_column == 0:
+            return False
+        for c in range(self.selected_column - 1,  -1,  -1):
+            if self.buttons[self.selected_row][c]:
+                self.selected_column = c
+                self.selected_button = self.buttons[self.selected_row][c]
+                return True
+        return False
+
+
+    def move_right(self):
+        """
+        Select the button to the right of the currently selected button.
+        """
+        if self.selected_column + 1 == self.columns:
+            return False
+        for c in range(self.selected_column + 1,  self.columns):
+            if self.buttons[self.selected_row][c]:
+                self.selected_column = c
+                self.selected_button = self.buttons[self.selected_row][c]
+                return True
+        return False
+
+
+    def set_selected(self, button):
+        """
+        Set the selected button to the one specified.
+        Returns True if the button was selected, False if the button is not in 
+        the group.
+        """
+        for r in range(self.rows):
+            for c in range(self.columns):
+                if self.buttons[r][c] == button:
+                    self.selected_row = r
+                    self.selected_column = c
+                    self.selected_button = button
+                    return True
+        return False
+
+
 def get_singleton():
     """
     Returns an initialized skin object, containing the users preferred

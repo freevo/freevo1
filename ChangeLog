@@ -17,6 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * Updated German translation (F#1770195)
+ * New Text Entry and Program Search (F#1768790)
  * Updated alsamixer with event args and synchronous mixer control (F#1767928)
 
 == Release 1.7.3 (2007-08-01) ==

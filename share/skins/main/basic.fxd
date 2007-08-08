@@ -819,35 +819,62 @@
                 <image x="758" y="max-32" width="32" height="32" label="downarrow" filename="down.png"/>
             </scrollabletext>
         </headlines>
-	<!-- 
-	*******************************************************
-	** Button Bar TVGuide Info
-	******************************************************* -->
+        
+        <!-- 
+        *******************************************************
+        ** Button Bar TVGuide Info
+        ******************************************************* -->
 
-	<tvguideinfo>
-	    <screen layout="screen" x="0" y="0" width="800" height="600"/>
-	    <info layout="tvguideinfo program details" x="10" y="70" width="780" height="80"/>
-        <scrollabletext layout="info" x="10" y="160" width="740" height="420 - buttonbar_height">
-            <image x="758" y="160" width="32" height="32" label="uparrow" filename="up.png"/>
-            <image x="758" y="max-32" width="32" height="32" label="downarrow" filename="down.png"/>
-        </scrollabletext>
-	</tvguideinfo>
-    
-    <layout label="tvguideinfo program details">
-        <content x="0" y="0" type="text" spacing="20" font="default">
-            <item type="default">
-                <if expression="time">
-                    <text font="info font" align="right" width="max" expression="time"/>
-                    <newline/>
-                </if>
-                <if expression="title">
-                    <text font="tv title"  align="left"  expression="title"/>
-                    <newline/>
-                </if>                
-            </item>
-        </content>
-    </layout>
+        <tvguideinfo>
+            <screen layout="screen" x="0" y="0" width="800" height="600"/>
+            <info layout="tvguideinfo program details" x="10" y="70" width="780" height="80"/>
+            <scrollabletext layout="info" x="10" y="160" width="740" height="420 - buttonbar_height">
+                <image x="758" y="160" width="32" height="32" label="uparrow" filename="up.png"/>
+                <image x="758" y="max-32" width="32" height="32" label="downarrow" filename="down.png"/>
+            </scrollabletext>
+        </tvguideinfo>
+        
+        <searchprograms>
+            <screen layout="screen" x="0" y="0" width="800" height="600"/>
+            <textentry layout="program search" x="10" y="70" width="780" height="40"/>
+            <buttongroup layout="keyboard" x="10" y="120" width="780" height="400"/>
+        </searchprograms>
+        
+        <layout label="tvguideinfo program details">
+            <content x="0" y="0" type="text" spacing="20" font="default">
+                <item type="default">
+                    <if expression="time">
+                        <text font="info font" align="right" width="max" expression="time"/>
+                        <newline/>
+                    </if>
+                    <if expression="title">
+                        <text font="tv title"  align="left"  expression="title"/>
+                        <newline/>
+                    </if>                
+                </item>
+            </content>
+        </layout>
 
+        <layout label="program search">
+            <background >
+                <rectangle size="2" color="0x000000" bgcolor="0xff000000" radius="0"/>
+            </background>
+            <content x="2" y="2" width="MAX-4" height="MAX-4" type="text" spacing="20" font="default" />
+        </layout>
+        <layout label="keyboard">
+            <content font="default">
+                <item type="padding" width="5" height="5" />
+                <item type="default" font="tv" align="center" valign="center">
+                    <rectangle bgcolor="0xff000000" color="0x000000" size="2" radius="10" x="0"
+                        y="0" width="max" height="max"/>
+                </item>
+                
+                <item type="selected" font="tv selected" align="center" valign="center">
+                    <rectangle bgcolor="tv selection" size="2" radius="10" color="0x000000" x="0"
+                        y="0" width="max" height="max"/>
+                </item>
+            </content>
+        </layout>
     </skin>
 </freevo>
 <!-- Keep this comment at the end of the file
