@@ -288,8 +288,9 @@ LOCAL_CONF_CHANGES = [
      Added CACHE_CROPDETECT to enable caching of crop detection using encodingcode
      ''' ),
     (5.21,
-     '''Added OS_STATICDIR
-     Change static data to use /var/lib/freevo or ~/.freevo
+     '''Added OS_STATICDIR, FREEVO_STATICDIR, OS_LOGDIR and FREEVO_LOGDIR
+     Change static data to use /var/lib/freevo or ~/.freevo, including TV_RECORD_SCHEDULE, TV_LOGOS,
+     XMLTV_FILE, you may also prefer OVERLAY_DIR to be FREEVO_STATICDIR+'/overlay'
      '''),
 ]
 
@@ -1614,7 +1615,7 @@ TV_RECORDFILE_SUFFIX = '.avi'
 TV_RECORDFILE_OKLETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-:'
 
 # if using the persitant recordserver
-TV_RECORD_SCHEDULE = '%s/record_schedule.xml' % FREEVO_CACHEDIR
+TV_RECORD_SCHEDULE = FREEVO_STATICDIR + '/record_schedule.xml'
 
 RECORDSERVER_IP = 'localhost'
 RECORDSERVER_PORT = 18001
@@ -1962,10 +1963,7 @@ REMOTE_CONTROL_TCP_PORT = 16311
 #
 # This is the XMLTV file that can be optionally used for TV listings
 #
-if os.uname()[0] == 'FreeBSD':
-    XMLTV_FILE = FREEVO_CACHEDIR + '/TV.xml'
-else:
-    XMLTV_FILE = FREEVO_STATICDIR + '/TV.xml'
+XMLTV_FILE = FREEVO_STATICDIR + '/TV.xml'
 
 #
 # XML TV Logo Location
