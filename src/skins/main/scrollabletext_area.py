@@ -72,7 +72,7 @@ class Scrollabletext_Area(Skin_Area):
 
         if self.scrollable_text != scrollable_text:
 
-            scrollable_text.layout(content.width, content.height, content.font.font)
+            scrollable_text.layout(content.width, content.height, content.font)
             self.scrollable_text = scrollable_text
 
         page = scrollable_text.get_page()

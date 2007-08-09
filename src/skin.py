@@ -133,11 +133,11 @@ class ScrollableText:
         self.lines = []
         rest = self.text
         while rest:
-            line, rest, nl = self.__get_line__(rest, width, font, ' ', False)
+            line, rest, nl = self.__get_line__(rest, width, font.font, ' ', False)
             if not line and rest and not nl:
-                line, rest, nl = self.__get_line__(rest, width, font, ' -_', False)
+                line, rest, nl = self.__get_line__(rest, width, font.font, ' -_', False)
                 if not line and rest and not nl:
-                    line, rest, nl = self.__get_line__(rest, width, font, ' -_', True)
+                    line, rest, nl = self.__get_line__(rest, width, font.font, ' -_', True)
 
             self.lines.append(line)
 
