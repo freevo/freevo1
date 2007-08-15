@@ -2561,11 +2561,11 @@ msgstr "Keine Informationen verfügbar"
 
 #: tv/program_display.py:662
 msgid "Category : "
-msgstr "Kategorie"
+msgstr "Kategorie: "
 
 #: tv/program_display.py:668
 msgid "Advisory : "
-msgstr ""
+msgstr "Empfehlung: "
 
 #: tv/program_display.py:674 share/skins/main/dark.fxd:459
 #: share/skins/main/info.fxd:471
