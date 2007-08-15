@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# view_recordings.py - Directory handling
+# search_programs.py: searchs for programs
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -51,6 +51,7 @@ from item import Item
 from event import *
 from menu import MenuItem, Menu
 from tv.program_display import ProgramItem
+import tv.record_client as record_client
 
 # Create the skin_object object
 import skin
@@ -98,9 +99,12 @@ class SearchPrograms(Item):
         keys = _('!"#$%^&*();:\'@~?,.<>-=+\[]{}')
         self.__init_keyboard_buttons(keys,  self.symbols_button_group)
 
-        characters_button = skin.Button(_('ABC'),  self.change_button_group, self.alphabet_button_group)
-        numbers_button = skin.Button(_('123'),  self.change_button_group, self.numbers_button_group)
-        symbols_button = skin.Button(_('Symbls'),  self.change_button_group, self.symbols_button_group)
+        characters_button = skin.Button(_('ABC'),  self.change_button_group,
+                                                   self.alphabet_button_group)
+        numbers_button = skin.Button(_('123'),  self.change_button_group,
+                                                self.numbers_button_group)
+        symbols_button = skin.Button(_('Symbls'),  self.change_button_group,
+                                                   self.symbols_button_group)
 
         self.numbers_button_group.set_button(0, 5, characters_button)
         self.symbols_button_group.set_button(0, 5, characters_button)
@@ -263,13 +267,13 @@ class SearchPrograms(Item):
                     if movies_only:
                         # We can do better here than just look for the MPAA
                         # rating.  Suggestions are welcome.
-                        if 'MPAA' in prog.utf2str().getattr('ratings').keys():
-                            matches.append(prog.utf2str())
+                        if 'MPAA' in prog.getattr('ratings').keys():
+                            matches.append(prog)
                             _debug_('PROGRAM MATCH 2: %s' % prog, config.DINFO)
                     else:
                         # We should never get here if not find and not
                         # movies_only.
-                        matches.append(prog.utf2str())
+                        matches.append(prog)
                         _debug_('PROGRAM MATCH 3: %s' % prog, config.DINFO)
                 if len(matches) >= max_results:
                     break
