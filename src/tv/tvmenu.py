@@ -108,11 +108,6 @@ class TVMenu(Item):
         menuw.pushmenu(menu.Menu(_('TV Main Menu'), items, item_types='tv main menu'))
 
 
-    def show_search(self, arg, menuw):
-        tv.program_search.ProgramSearch().show()
-        return
-
-
     def get_start_time(self):
         ttime = time.localtime()
         stime = [ ]
