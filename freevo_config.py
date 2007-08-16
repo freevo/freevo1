@@ -290,7 +290,8 @@ LOCAL_CONF_CHANGES = [
     (5.21,
      '''Added OS_STATICDIR, FREEVO_STATICDIR, OS_LOGDIR and FREEVO_LOGDIR
      Change static data to use /var/lib/freevo or ~/.freevo, including TV_RECORD_SCHEDULE, TV_LOGOS,
-     XMLTV_FILE, you may also prefer OVERLAY_DIR to be FREEVO_STATICDIR+'/overlay'
+     XMLTV_FILE, you may also prefer OVERLAY_DIR to be FREEVO_STATICDIR+'/overlay',
+         Added a plugin that adds a submenu entry for ejecting rom drives and binds the default action of an empty drive to the eject action
      '''),
 ]
 
@@ -684,6 +685,7 @@ if CONF.xmame or CONF.snes:
 
 # autostarter when inserting roms while Freevo is in the MAIN MENU
 plugin.activate('rom_drives.autostart')
+plugin.activate('ejectromdrives')
 
 # add the rom drives to each sub main menu
 rom_plugins = {}

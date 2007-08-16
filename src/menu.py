@@ -665,9 +665,38 @@ class MenuWidget(GUIObject):
             try:
                 action = menu.selected.action
             except AttributeError:
-                action = menu.selected.actions()
-                if action:
-                    action = action[0]
+                actions = menu.selected.actions()
+                if not actions:
+                    actions = []
+
+                # Add the actions of the plugins to the list of actions.
+                # This is needed when a Item class has no actions but plugins
+                # provides them. This case happens with an empty disc.
+                #
+                # FIXME The event MENU_SELECT is called when selecting
+                # a submenu entry too. The item passed to the plugin is then
+                # the submenu entry instead its parent item. So if we are in
+                # a submenu we don't want to call the actions of the plugins.
+                # because we'll break some (or all) plugins behavior.
+                # Does that sound correct?
+                #
+                if not hasattr(menu, 'is_submenu'):
+                    plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
+
+                    if hasattr(menu.selected, 'display_type'):
+                        plugins += plugin.get('item_%s' % menu.selected.display_type)
+
+                    plugins.sort(lambda l, o: cmp(l._level, o._level))
+
+                    for p in plugins:
+                        for a in p.actions(menu.selected):
+                            if isinstance(a, MenuItem):
+                                actions.append(a)
+                            else:
+                                actions.append(a[:2])
+
+                if actions:
+                    action = actions[0]
                     if isinstance(action, MenuItem):
                         action = action.function
                         arg    = action.arg
