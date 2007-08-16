@@ -533,9 +533,8 @@ class Skin:
         except UnicodeError, e:
             print '******************************************************************'
             print 'Unicode Error: %s' % e
-            print 'Please report the following lines to the freevo mailing list'
-            print 'or with the subject \'[Freevo-Bugreport\] Unicode\' to'
-            print 'freevo@dischi-home.de.'
+            print 'Please report the following lines to the freevo users mailing list'
+            print 'https://lists.sourceforge.net/lists/listinfo/freevo-users'
             print
             print traceback.print_exc()
             print
