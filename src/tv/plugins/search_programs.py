@@ -117,6 +117,7 @@ class SearchPrograms(Item):
 
         self.button_group = self.alphabet_button_group
 
+        self.__redraw = False
 
     def actions(self):
         return [(self.show_search, self.name)]
