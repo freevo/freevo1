@@ -708,9 +708,15 @@ class MenuWidget(GUIObject):
                             a[0](menuw=self)
                             return
 
-            if actions and (len(actions) > 1 or force):
-                self.make_submenu(menu.selected.name, actions, menu.selected)
-            return
+            if actions:
+                if len(actions[0]) == 3 and actions[0][2] == 'MENU_SUBMENU':
+                    actions[0][0](menuw=self)
+                    return
+
+                if (len(actions) > 0 or force):
+                    self.make_submenu(menu.selected.name, actions, menu.selected)
+                    return
+
 
 
         elif event == MENU_CALL_ITEM_ACTION:

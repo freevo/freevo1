@@ -104,7 +104,7 @@ class ProgramItem(Item):
 
 
     def actions(self):
-        return [( self.display_program , _('Display program') )]
+        return [( self.display_program , _('Display program') , 'MENU_SUBMENU')]
 
 
     ### action menu
@@ -342,7 +342,7 @@ class FavoriteItem(Item):
 
 
     def actions(self):
-        return [( self.display_favorite , _('Display favorite') )]
+        return [( self.display_favorite , _('Display favorite') , 'MENU_SUBMENU')]
 
 
     def display_favorite(self, arg=None, menuw=None):
