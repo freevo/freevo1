@@ -371,7 +371,113 @@ layouts = { 4 : # 4 lines display
                                  "1 4 %d 4 m 3 \"%s%s\"",
                                  "( self.width, tv.desc, self.get_sepstrmscroll(tv.desc) )" )
                   }
+                },
+
+
+                16 : # 16 chars per line
+
+              # Welcome screen  16x4
+              { "welcome" :
+                { "title"    : ( "title",
+                                 "Freevo",
+                                 None ),
+                  "calendar" : ( "scroller",
+                                 "1 2 %d 2 m 3 \"" + _( "Today is %s." ) + "%s\"",
+                                 "( self.width, time.strftime('%A, %d-%B'), self.get_sepstrmscroll(time.strftime('%A, %d-%B')) )" ),
+                  "clock"    : ( "string",
+                                 "%d 3 \"%s\"",
+                                 "( ( self.width - len( time.strftime('%T') ) ) / 2 + 1 ," + \
+                                 " time.strftime('%T') )" )
+                  },
+
+                  # Menu Screen 16x4
+                "menu"    :
+                { "title_v"  : ( "scroller",
+                                 "1 1 %d 1 m 3 \"%s%s\"",
+                                 "( self.width, menu.heading, self.get_sepstrmscroll(menu.heading) )" ),
+                  "item_v"   : ( "scroller",
+                                 "1 2 %d 2 m 3 \"%s%s\"",
+                                 "( self.width, title, self.get_sepstrmscroll(title) )" ),
+                  "type_v"   : ( "scroller",
+                                 "1 3 %d 3 m 3 \"%s%s\"",
+                                 "( self.width, typeinfo, self.get_sepstrmscroll(typeinfo) )" ),
+
+                  "info_v"   : ( "scroller",
+                                 "1 4 %d 1 m 3 \"%s%s\"",
+                                 "( self.width, info, self.get_sepstrmscroll(info) )" )
+                  },
+
+                  # Audio Player 16x4
+                "audio_player"  :
+                { "music_v"   : ( "scroller",
+                                  "1 1 %d 1 m 3 \"%s%s\"",
+                                  "( self.width, title, self.get_sepstrmscroll(title) )" ),
+                  "album_v"   : ( "scroller",
+                                  "1 2 %d 2 m 3 \"%s%s\"",
+                                  "( self.width, player.getattr('album'), self.get_sepstrmscroll(player.getattr('album')) )" ),
+                  "artist_v"  : ( "scroller",
+                                  "1 3 %d 3 m 3 \"%s%s\"",
+                                  "( self.width, player.getattr('artist'), self.get_sepstrmscroll(player.getattr('artist')) )" ),
+                  "time_v1"   : ( "string",
+                                  "2 4 \"% 2d:%02d/\"",
+                                  "( int(player.length / 60), int(player.length % 60) )" ),
+                  "time_v2"   : ( "string",
+                                  "8 4 \"% 2d:%02d\"",
+                                  "( int(player.elapsed / 60), int(player.elapsed % 60) )" ),
+                  "time_v3"   : ( "string",
+                                  "14 4 \"( %2d%%)\"",
+                                  "( int(player.elapsed * 100 / player.length) )" ),
+                  # animation at the begining of the time line
+                  "animation_v": ( "string", "1 4 \"%s\"",
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
+                  },
+
+                  # Video Player 16x4
+                "video_player"  :
+                { "video_v"   : ( "scroller",
+                                  "1 1 %d 1 m 3 \"%s%s\"",
+                                "( self.width, title, self.get_sepstrmscroll(title) )" ),
+
+                  "time_v1"   : ( "string",
+                                  "9 2 \"%s\"",
+                                  "( length )" ),
+
+                  "time_v2"   : ( "string",
+                                  "1 2 \"%s\"",
+                                  "( elapsed.rjust(7) )" ),
+
+                 "time_v3"    : ( "hbar",
+                                  "1 3 \"%d\"",
+                                        "( (float(player.elapsed) / float(get_lengthsecs(length))) * 80 )" ),
+
+                  "clock"     : ( "string",
+                                  "3 4 \"%s\"",
+                                  " time.strftime('%I:%M  %b-%d') " ),
+
+                  # animation at the begining of the time line
+                  "animation_v": ( "string", "1 4 \"%s\"",
+                                   "self.animation_audioplayer_chars[" +
+                                   " player.elapsed % len(self.animation_audioplayer_chars)]")
+                  },
+
+                  # TV 16x4
+                "tv"            :
+                { "chan_v"   : ( "scroller",
+                                 "1 1 %d 1 m 3 \"%s%s\"",
+                                 "( self.width,  get_chan_displayname(tv.channel_id), self.get_sepstrmscroll( get_chan_displayname(tv.channel_id)) )" ),
+                  "prog_v"   : ( "scroller",
+                                 "1 2 %d 2 m 3 \"%s%s\"",
+                                 "( self.width, tv.title, self.get_sepstrmscroll(tv.title) )" ),
+                  "time_v"   : ( "scroller",
+                                 "1 3 %d 3 m 3 \"%s-%s%s\"",
+                                 "( self.width, tv.start, tv.stop, self.get_sepstrmscroll(tv.start+'-'+tv.stop) )" ),
+                  "desc_v"   : ( "scroller",
+                                 "1 4 %d 4 m 3 \"%s%s\"",
+                                 "( self.width, tv.desc, self.get_sepstrmscroll(tv.desc) )" )
+                  }
                 } # screens
+
               }, # chars per line
 
 
@@ -613,6 +719,16 @@ poll_widgets = { 4 : {
     20 : { "welcome" : [ "clock" ] },
     },
                  }
+
+
+def get_lengthsecs( slen ):
+    splen = slen.rsplit(":")
+    m = 1
+    ts = 0
+    for e in reversed(splen):
+        ts = ts + (int(e) * m)
+        m = m * 60
+    return ts
 
 def get_info( item, list ):
     info = ""
