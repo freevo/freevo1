@@ -41,6 +41,7 @@ import config
 import util
 import rc
 import menu
+import skin
 import configure
 import plugin
 import kaa.metadata as metadata
@@ -310,20 +311,21 @@ class VideoItem(Item):
         if self.url.startswith('dvd://') and self.url[-1] == '/':
             if self.player_rating >= 20:
                 items = [ (self.play, _('Play DVD')),
-                          ( self.dvd_vcd_title_menu, _('DVD title list') ) ]
+                          (self.dvd_vcd_title_menu, _('DVD title list')) ]
             else:
-                items = [ ( self.dvd_vcd_title_menu, _('DVD title list') ),
+                items = [ (self.dvd_vcd_title_menu, _('DVD title list')),
                           (self.play, _('Play default track')) ]
 
         elif self.url == 'vcd://':
             if self.player_rating >= 20:
                 items = [ (self.play, _('Play VCD')),
-                          ( self.dvd_vcd_title_menu, _('VCD title list') ) ]
+                          (self.dvd_vcd_title_menu, _('VCD title list')) ]
             else:
-                items = [ ( self.dvd_vcd_title_menu, _('VCD title list') ),
+                items = [ (self.dvd_vcd_title_menu, _('VCD title list')),
                           (self.play, _('Play default track')) ]
         else:
             items = [ (self.play, _('Play')) ]
+            items.append((self.show_details, _('Full description')))
             if len(self.possible_player) > 1:
                 items.append((self.play_alternate, _('Play with alternate player')))
 
@@ -340,6 +342,24 @@ class VideoItem(Item):
             items.append((self.create_thumbnail, _('Create Thumbnail'), 'create_thumbnail'))
 
         return items
+
+
+    def display_submenu(self, arg=None, menuw=None):
+        """
+        Open the submenu for this item
+        """
+        if not menuw:
+            return
+        # this tries to imitated freevo's internal way of creating submenus
+        menuw.make_submenu(_('Video Menu'), self.actions(), self)
+        menuw.show()
+
+
+    def show_details(self, arg=None, menuw=None):
+        """
+        Show more details
+        """
+        ShowDetails(menuw, self)
 
 
     def show_variants(self, arg=None, menuw=None):
@@ -440,7 +460,7 @@ class VideoItem(Item):
         execute commands if defined
         """
         if config.VIDEO_PRE_PLAY:
-            os.system( config.VIDEO_PRE_PLAY )
+            os.system(config.VIDEO_PRE_PLAY)
         """
         play the item.
         """
@@ -509,7 +529,7 @@ class VideoItem(Item):
                 # No media at all was found: error
                 ConfirmBox(text=(_('No media found for "%s".\n')+
                                  _('Please insert the media.')) %
-                                 self.name, handler=self.play ).show()
+                                 self.name, handler=self.play).show()
             return
 
         # normal plackback of one file
@@ -523,7 +543,7 @@ class VideoItem(Item):
                     self.menuw.show()
                     ConfirmBox(text=(_('No media found for "%s".\n')+
                                      _('Please insert the media.')) % file,
-                               handler=self.play ).show()
+                               handler=self.play).show()
                     return
 
             elif self.media:
@@ -581,7 +601,7 @@ class VideoItem(Item):
         execute commands if defined
         """
         if config.VIDEO_POST_PLAY:
-            os.system( config.VIDEO_POST_PLAY )
+            os.system(config.VIDEO_POST_PLAY)
 
         """
         stop playing
@@ -628,6 +648,7 @@ class VideoItem(Item):
 
         moviemenu = menu.Menu(self.name, items, umount_all = 1, fxd_file=self.skin_fxd)
         moviemenu.item_types = 'video'
+        moviemenu.is_submenu = True
         self.menuw.pushmenu(moviemenu)
 
 
@@ -689,3 +710,107 @@ class VideoItem(Item):
         if isstring(self.parent):
             self.parent = None
         return Item.eventhandler(self, event, menuw)
+
+
+########################
+# Show Details
+
+# Create the skin_object object
+skin_object = skin.get_singleton()
+skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
+
+# Program Info screen
+class ShowDetails:
+    """
+    Screen to show more details
+    """
+    def __init__(self, menuw, movie):
+        if movie is None:
+            name = _('No Information Available')
+            description = ''
+        else:
+            self.movie = movie
+            name = movie.name
+            sub_title = movie['tagline']
+            desc = movie['plot']
+            # gather the infos and construct the description text
+            if sub_title:
+                # subtitle + newline + description
+                description = u'"' + sub_title + u'"\n' + desc + u'\n\n'
+            else:
+                # or just the description, if there is no subtitle
+                description = desc + u'\n\n'
+            # add some additional inofs if they are available
+            if movie['genre']:
+                description += _('Genre') + u' : '+movie['genre'] + u'\n'
+            if movie['length']:
+                description +=  _('Length')+ u' : '+movie['length'] + u'\n'
+            if movie['year']:
+                description +=  _('Year')+u' : '+movie['year'] + u'\n'
+
+
+        # that's all, we can show this to the user
+        self.name            = name
+        self.scrollable_text = skin.ScrollableText(description)
+        self.visible = True
+
+        self.menuw = menuw
+        self.menuw.hide(clear=False)
+
+        # this activates the eventhandler and the context of this class
+        rc.app(self)
+
+        skin_object.draw('tvguideinfo', self)
+
+
+
+    def getattr(self, name):
+        if name == 'title':
+            return self.name
+
+        if self.movie:
+            return self.movie.getattr(name)
+
+        return u''
+
+
+    def eventhandler(self, event, menuw=None):
+        """
+        eventhandler for the programm description display
+        """
+        if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
+            # leave the description display and return to the previous menu
+            self.menuw.show()
+            # we do not need to call rc.app(None) here,
+            # because that is done by menuw.show(),
+            # but we need to set the context manually,
+            # because rc.app(None) sets it always to 'menu'
+            rc.set_context(self.menuw.get_event_context())
+            return True
+        elif event == 'MENU_SUBMENU':
+            if hasattr(self.menuw.menustack[-1],'is_submenu'):
+                # the last menu has been a submenu, we just have to show it
+                self.menuw.show()
+                rc.set_context(self.menuw.get_event_context())
+            else:
+                # we have to create the submenu
+                self.movie.display_submenu(menuw=self.menuw)
+            return True
+        elif event == 'MENU_UP':
+            # scroll the description up
+            self.scrollable_text.scroll(True)
+            skin_object.draw('tvguideinfo', self)
+            return True
+        elif event == 'MENU_DOWN':
+            # scroll the description down
+            self.scrollable_text.scroll(False)
+            skin_object.draw('tvguideinfo', self)
+            return True
+        elif event == 'MENU_PLAY_ITEM':
+            self.menuw.show()
+            rc.set_context(self.menuw.get_event_context())
+            # try to watch this program
+            self.movie.play(menuw=self.menuw)
+            return True
+        else:
+            return False
