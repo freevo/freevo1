@@ -70,7 +70,7 @@ class PluginInterface(plugin.ItemPlugin):
 
     def config(self):
         '''config is called automatically, for default settings run:
-        freevo plugins -i video.reencode2
+        freevo plugins -i video.reencode
         '''
         _debug_('config(self)', 1)
         return [
