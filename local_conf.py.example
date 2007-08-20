@@ -429,7 +429,7 @@ CACHE_IMAGES = 1
 # Re-encode
 # This plug-in transcodes a video to a different format
 # ----------------------------------------------------------------------
-# plugin.activate('video.reencode2')
+# plugin.activate('video.reencode')
 # REENCODE_CONTAINER = 'avi'
 # REENCODE_RESOLUTION = 'Optimal'
 # REENCODE_VIDEOCODEC = 'XviD'
