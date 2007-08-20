@@ -29,6 +29,11 @@
 #
 # ----------------------------------------------------------------------
 
+print '======================================================'
+print 'WARNING: This file is deprecated.'
+print 'Please use favoriteitem.py and programitem.py instead.'
+print '======================================================'
+
 
 import time, traceback
 from time import gmtime, strftime

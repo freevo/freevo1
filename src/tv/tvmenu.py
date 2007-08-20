@@ -52,8 +52,6 @@ from directory import DirItem
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
-import tv.program_display
-
 DEBUG = config.DEBUG
 
 TRUE = 1

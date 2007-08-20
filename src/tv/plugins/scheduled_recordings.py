@@ -36,7 +36,7 @@ import tv.record_client as record_client
 
 from gui.AlertBox import AlertBox
 from item import Item
-from tv.program_display import ProgramItem
+from tv.programitem import ProgramItem
 
 
 class ScheduledRecordingsItem(Item):

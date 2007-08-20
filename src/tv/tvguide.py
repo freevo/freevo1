@@ -29,25 +29,19 @@
 # -----------------------------------------------------------------------
 
 
-import os
-import time
+import os, time
 
-import config
-import rc
-import util
+
+import config, skin, util, rc
 
 from gui.PopupBox import PopupBox
 from gui.AlertBox import AlertBox
 
-import skin
+from item import Item
+from programitem import ProgramItem
 from event import *
 
-# The Electronic Program Guide
 import epg_xmltv, epg_types
-
-from item import Item
-from program_display import ProgramItem
-from tv.channels import FreevoChannels
 import record_client as ri
 
 skin = skin.get_singleton()
@@ -57,26 +51,34 @@ skin.register('tv', ('screen', 'title', 'subtitle', 'view',
 CHAN_NO_DATA = _('This channel has no data loaded')
 
 class TVGuide(Item):
+    """
+    Class for TVGuide
+    """
     def __init__(self, start_time, player, menuw):
         Item.__init__(self)
 
+        # get skin definitions of the TVGuide
         self.n_items, hours_per_page = skin.items_per_page(('tv', self))
+        # end of visible guide
         stop_time = start_time + hours_per_page * 60 * 60
 
+        # constructing the guide takes some time
         msgtext = _('Preparing the program guide')
         guide = epg_xmltv.get_guide(PopupBox(text=msgtext))
+        # getting channels
         channels = guide.GetPrograms(start=start_time+1, stop=stop_time-1)
         if not channels:
             AlertBox(text=_('TV Guide is corrupt!')).show()
             return
 
+        # select the first available program
         selected = None
         for chan in channels:
             if chan.programs:
                 selected = chan.programs[0]
                 break
 
-        self.col_time = 30 # each col represents 30 minutes
+        self.col_time = 30      # each col represents 30 minutes
         self.n_cols  = (stop_time - start_time) / 60 / self.col_time
         self.player = player
 
@@ -90,7 +92,6 @@ class TVGuide(Item):
         self.lastinput_time = None
 
         self.update_schedules(force=True)
-        self.fc = FreevoChannels()
 
         self.rebuild(start_time, stop_time, guide.chan_list[0].id, selected)
         self.event_context = 'tvmenu'
@@ -98,12 +99,17 @@ class TVGuide(Item):
 
 
     def update_schedules(self, force=False):
+        """
+        update schedule
+
+        reload the list of scheduled programs and check for overlapping
+        """
         if not force and self.last_update + 60 > time.time():
             return
 
         # less than one second? Do not belive the force update
-        if self.last_update + 1 > time.time():
-            return
+        #if self.last_update + 1 > time.time():
+        #    return
 
         upsoon = '%s/upsoon' % (config.FREEVO_CACHEDIR)
         if os.path.isfile(upsoon):
@@ -128,25 +134,10 @@ class TVGuide(Item):
 ### event handler
 
     def eventhandler(self, event, menuw=None):
-        """ Handles events in the tv guide
-
-        Events handled by this are:
-        MENU_CHANGE_STYLE: ?
-        MENU_UP: Move one channel up in the guide
-        MENU_DOWN: Move one channel down in the guide
-        MENU_LEFT: Move to the next program on this channel
-        MENU_RIGHT: Move to previous programm on this channel
-        MENU_PAGEUP: Moves to the first of the currently displayed channels
-        MENU_PAGEDOWN: Move to the last of the currently displayed channels
-        MENU_SUBMENU: Open a submenu for the selected program
-        MENU_SELECT: Open a submenu for the selected program
-        TV_START_RECORDING: Start to record this or put it on schedule
-        PLAY: Start to watch the selected channel (if it is possible)
-        PLAY_END: Show the guide again
-        numerical INPUTs: Jump to a specific channel number
         """
-
-        _debug_('TVGUIDE EVENT is %s' % event, 2)
+        Handles events in the tv guide
+        """
+        _debug_('TVGUIDE EVENT is %s' % event)
 
         ## MENU_CHANGE_STYLE
         if event == MENU_CHANGE_STYLE:
@@ -187,66 +178,61 @@ class TVGuide(Item):
 
         ## MENU_UP: Move one channel up in the guide
         if event == MENU_UP:
-            self.event_change_channel(-1)
+            self.change_channel(-1)
 
         ## MENU_DOWN: Move one channel down in the guide
         elif event == MENU_DOWN:
-            self.event_change_channel(1)
+            self.change_channel(1)
 
         ## MENU_LEFT: Move to the next program on this channel
         elif event == MENU_LEFT:
-            self.event_change_program(-1)
+            self.change_program(-1)
 
         ## MENU_RIGHT: Move to previous programm on this channel
         elif event == MENU_RIGHT:
-            self.event_change_program(1)
+            self.change_program(1)
 
         ## MENU_PAGEUP: Moves to the first of the currently displayed channels
         elif event == MENU_PAGEUP:
-            self.event_change_channel(-self.n_items)
+            self.change_channel(-self.n_items)
 
         ## MENU_PAGEDOWN: Move to the last of the currently displayed channels
         elif event == MENU_PAGEDOWN:
-            self.event_change_channel(self.n_items)
+            self.change_channel(self.n_items)
+
 
         ## MENU_SUBMENU: Open a submenu for the selected program
         elif event == MENU_SUBMENU:
-            self.event_submenu()
+            # create a ProgramItem for the selected program
+            pi = ProgramItem(self, prog=self.selected, context='guide')
+            #and show its submenu
+            pi.display_submenu(menuw=self.menuw)
 
-        ## MENU_SELECT: Open a submenu for the selected program
+        ## MENU_SELECT: Show the description
         elif event == MENU_SELECT:
-            self.event_submenu()
+            # create a ProgramItem for the selected program
+            pi = ProgramItem(self, prog=self.selected, context='guide')
+            #and show selecte the first action in the actions list
+            pi.actions()[0][0](menuw=self.menuw)
 
-        ## TV_START_RECORDING: Start to record this or put it on schedule
+        ## TV_START_RECORDING: add or remove this program from schedule
         elif event == TV_START_RECORDING:
-            self.event_record()
+            pi = ProgramItem(self, prog=self.selected, context='guide')
+            pi.toggle_rec(menuw=self.menuw)
 
         ## PLAY: Start to watch the selected channel (if it is possible)
         elif event == PLAY:
-            suffix = self.fc.getVideoGroup(self.selected.channel_id, True).vdev
-            suffix = suffix.split('/')[-1]
-            tvlockfile = config.FREEVO_CACHEDIR + '/record.'+suffix
-
-            # Check if the selected program is >7 min in the future
-            # if so, bring up the record dialog
-            now = time.time() + (7*60)
-            if self.selected.start > now:
-                self.event_submenu()
-            elif os.path.exists(tvlockfile):
-                # XXX: In the future add the options to watch what we are
-                #      recording or cancel it and watch TV.
-                AlertBox(text=_('Sorry, you cannot watch TV while recording. ')+ \
-                              _('If this is not true then remove ') + \
-                              tvlockfile + '.', height=200).show()
-                return TRUE
-            else:
-                self.hide()
-                self.player('tv', self.selected.channel_id)
+            # create a ProgramItem for the selected program
+            pi = ProgramItem(self, prog=self.selected, context='guide')
+            #and show its submenu
+            pi.play(menuw=self.menuw)
 
         ## PLAY_END: Show the guide again
         elif event == PLAY_END:
             self.show()
 
+        # FIX or REMOVE:
+        # the numerical INPUT events are not available in the tvmenu context
         ## numerical INPUT: Jump to a specific channel number
         if str(event).startswith("INPUT_"):
             # tune explicit channel
@@ -285,10 +271,11 @@ class TVGuide(Item):
         return TRUE
 
 
-    ### actions
+    ### gui functions
 
     def show(self):
         """ show the guide"""
+        _debug_('show',2)
         if not self.visible:
             self.visible = 1
             self.refresh()
@@ -296,6 +283,7 @@ class TVGuide(Item):
 
     def hide(self):
         """ hide the guide"""
+        _debug_('hide',2)
         if self.visible:
             self.visible = 0
             skin.clear()
@@ -307,7 +295,7 @@ class TVGuide(Item):
         This function is called automatically by freevo whenever this menu is
         opened or reopened.
         """
-        _debug_('Refresh',2)
+        _debug_('refresh',2)
         if not self.menuw.children:
             rc.set_context(self.event_context)
             self.menuw.refresh()
@@ -315,12 +303,12 @@ class TVGuide(Item):
 
 
     def update(self, force=False):
-        """ update the tv guide
+        """ update the guide
 
         This function updates the scheduled and overlap flags for
         all currently displayed programs.
         """
-        _debug_('Update',2)
+        _debug_('update',2)
         self.update_schedules(force)
         if self.table:
             for t in self.table:
@@ -345,14 +333,13 @@ class TVGuide(Item):
         self.menuw.refresh()
 
 
-
     def rebuild(self, start_time, stop_time, start_channel, selected):
         """ rebuild the guide
 
         This is neccessary we change the set of programs that have to be
         displayed, this is the case when the user moves around in the menu.
         """
-        _debug_('Reload',2)
+        _debug_('reload',2)
         self.guide = epg_xmltv.get_guide()
         channels = self.guide.GetPrograms(start=start_time+1, stop=stop_time-1)
 
@@ -428,38 +415,10 @@ class TVGuide(Item):
         self.update()
 
 
-    def event_record(self):
-        """ Add to schedule or remove from schedule
-
-        This function adds or removes the selected program to schedule,
-        if the user presses REC inside of TVGuide.
-        This is a kind of a short cut, which directly manipulates the schedule
-        without opening the submenu for ProgramItems.
+    def change_program(self, value, full_scan=False):
         """
-        if self.selected.scheduled:
-            # remove this program from schedule it it is already scheduled
-            pi = ProgramItem(self, prog=self.selected).remove_program()
-        else:
-            # otherwise add it to schedule without more questions
-            pi = ProgramItem(self, prog=self.selected).schedule_program()
-        self.refresh()
-
-
-    def event_submenu(self):
-        """ Opens the submenu for ProgramItems
-
-        The user can choose from this submenu what to do with the selected
-        program, e.g. schedule a program for recording or search for more of
-        that program.
+        Move to the next program
         """
-        # create a ProgramItem for the selected program
-        pi = ProgramItem(self, prog=self.selected)
-        # and show its submenu
-        pi.display_program(menuw=self.menuw)
-
-
-    def event_change_program(self, value, full_scan=False):
-
         start_time    = self.start_time
         stop_time     = self.stop_time
         start_channel = self.start_channel
@@ -493,14 +452,14 @@ class TVGuide(Item):
                 elif full_scan:
                     prg = programs[-1]
                 else:
-                    return self.event_change_program(value, True)
+                    return self.change_program(value, True)
             else:
                 if i+value >= 0:
                     prg = programs[i+value]
                 elif full_scan:
                     prg = programs[0]
                 else:
-                    return self.event_change_program(value, True)
+                    return self.change_program(value, True)
 
             if prg.sub_title:
                 procdesc = '"' + prg.sub_title + '"\n' + prg.desc
@@ -521,8 +480,6 @@ class TVGuide(Item):
             while prg.start + extra_space <= start_time:
                 start_time -= (self.col_time * 60)
                 stop_time -= (self.col_time * 60)
-
-
         else:
             prg = epg_types.TvProgram()
             prg.channel_id = channel.id
@@ -535,7 +492,10 @@ class TVGuide(Item):
         self.rebuild(start_time, stop_time, start_channel, prg)
 
 
-    def event_change_channel(self, value):
+    def change_channel(self, value):
+        """
+        Move to the next channel
+        """
         start_time    = self.start_time
         stop_time     = self.stop_time
         start_channel = self.start_channel

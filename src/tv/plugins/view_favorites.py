@@ -34,7 +34,7 @@ import config, plugin, menu, rc
 import tv.record_client as record_client
 
 from item import Item
-from tv.program_display import FavoriteItem
+from tv.favoriteitem import FavoriteItem
 from gui.AlertBox import AlertBox
 
 

@@ -50,7 +50,7 @@ from gui.AlertBox import AlertBox
 from item import Item
 from event import *
 from menu import MenuItem, Menu
-from tv.program_display import ProgramItem
+from tv.programitem import ProgramItem
 import tv.record_client as record_client
 
 # Create the skin_object object
