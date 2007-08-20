@@ -82,7 +82,7 @@ class MenuItem(Item):
         """
         return the default action
         """
-        return [ ( self.select, self.name ) ]
+        return [ ( self.select, self.name, 'MENU_SUBMENU' ) ]
 
 
     def select(self, arg=None, menuw=None):

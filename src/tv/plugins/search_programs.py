@@ -120,7 +120,7 @@ class SearchPrograms(Item):
         self.__redraw = False
 
     def actions(self):
-        return [(self.show_search, self.name)]
+        return [(self.show_search, self.name, 'MENU_SUBMENU')]
 
 
     def show_search(self, arg=None, menuw=None):

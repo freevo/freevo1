@@ -46,7 +46,7 @@ class ViewFavoritesItem(Item):
 
 
     def actions(self):
-        return [ ( self.view_favorites , _('View Favorites') ) ]
+        return [ ( self.view_favorites , _('View Favorites'), 'MENU_SUBMENU' ) ]
 
 
     def view_favorites(self, arg=None, menuw=None):
