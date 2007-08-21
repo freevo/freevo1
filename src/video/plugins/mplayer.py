@@ -88,7 +88,7 @@ class MPlayer:
         if item.mode in ('dvd', 'vcd'):
             return 2
         if item.mimetype in config.VIDEO_MPLAYER_SUFFIX:
-            if config.DEBUG >= 2:
+            if config.DEBUG >= 4:
                 for d in dir(item):
                     print '%s: %s' % (d, eval('item.%s' % d))
                 for d in dir(item.info):
@@ -145,10 +145,10 @@ class MPlayer:
             set_vcodec = True
 
         # Build the MPlayer command
-        command = [ '--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD ]
-        command += [ '-slave' ]
+        command = ['--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD]
+        command += ['-slave']
         command += config.MPLAYER_ARGS_DEF.split(' ')
-        command += [ '-ao'] + config.MPLAYER_AO_DEV.split(' ')
+        command += ['-ao'] + config.MPLAYER_AO_DEV.split(' ')
 
         additional_args = []
 
@@ -161,62 +161,62 @@ class MPlayer:
                 if hasattr(item, 'mplayer_audio_broken') and item.mplayer_audio_broken:
                     print '*** dvd audio broken, try without alang ***'
                 else:
-                    additional_args += [ '-alang', config.DVD_LANG_PREF ]
+                    additional_args += ['-alang', config.DVD_LANG_PREF]
 
             if config.DVD_SUBTITLE_PREF:
                 # Only use if defined since it will always turn on subtitles
                 # if defined
-                additional_args += [ '-slang', config.DVD_SUBTITLE_PREF ]
+                additional_args += ['-slang', config.DVD_SUBTITLE_PREF]
 
         if hasattr(item.media, 'devicename') and mode != 'file':
-            additional_args += [ '-dvd-device', item.media.devicename ]
+            additional_args += ['-dvd-device', item.media.devicename]
         elif mode == 'dvd':
             # dvd on harddisc
-            additional_args += [ '-dvd-device', item.filename ]
+            additional_args += ['-dvd-device', item.filename]
             url = url[:6] + url[url.rfind('/')+1:]
 
         if item.media and hasattr(item.media,'devicename'):
-            additional_args += [ '-cdrom-device', item.media.devicename ]
+            additional_args += ['-cdrom-device', item.media.devicename]
 
         if item.selected_subtitle == -1:
-            additional_args += [ '-noautosub' ]
+            additional_args += ['-noautosub']
         elif item.selected_subtitle != None:
             if mode == 'file':
                 if os.path.isfile(os.path.splitext(item.filename)[0]+'.idx'):
-                    additional_args += [ '-vobsubid', str(item.selected_subtitle) ]
+                    additional_args += ['-vobsubid', str(item.selected_subtitle)]
                 else:
-                    additional_args += [ '-sid', str(item.selected_subtitle) ]
+                    additional_args += ['-sid', str(item.selected_subtitle)]
             else:
-                additional_args += [ '-sid', str(item.selected_subtitle) ]
+                additional_args += ['-sid', str(item.selected_subtitle)]
 
         if item.selected_audio != None:
-            additional_args += [ '-aid', str(item.selected_audio) ]
+            additional_args += ['-aid', str(item.selected_audio)]
 
         # This comes from the bilingual language selection menu
         if hasattr(item, 'selected_language') and item.selected_language:
             if item.selected_language == 'left':
-                additional_args += [ '-af', 'pan=2:1:1:0:0' ]
+                additional_args += ['-af', 'pan=2:1:1:0:0']
             elif item.selected_language == 'right':
-                additional_args += [ '-af', 'pan=2:0:0:1:1' ]
+                additional_args += ['-af', 'pan=2:0:0:1:1']
 
         if not set_vcodec:
             if item['deinterlace'] and config.MPLAYER_VF_INTERLACED:
-                additional_args += [ '-vf', config.MPLAYER_VF_INTERLACED ]
+                additional_args += ['-vf', config.MPLAYER_VF_INTERLACED]
             elif config.MPLAYER_VF_PROGRESSIVE:
-                additional_args += [ '-vf', config.MPLAYER_VF_PROGRESSIVE ]
+                additional_args += ['-vf', config.MPLAYER_VF_PROGRESSIVE]
 
         if hasattr(config, 'VIDEO_FIELD_DOMINANCE') and config.VIDEO_FIELD_DOMINANCE != None:
-            additional_args += [ '-field-dominance', '%d' % int(item['field-dominance']) ]
+            additional_args += ['-field-dominance', '%d' % int(item['field-dominance'])]
 
         if os.path.isfile(os.path.splitext(item.filename)[0]+'.edl'):
-            additional_args += [ '-edl', str(os.path.splitext(item.filename)[0]+'.edl') ]
+            additional_args += ['-edl', str(os.path.splitext(item.filename)[0]+'.edl')]
 
         mode = item.mimetype
         if not config.MPLAYER_ARGS.has_key(mode):
             mode = 'default'
 
         if config.CHILDAPP_DEBUG:
-            command += [ '-v' ]
+            command += ['-v']
 
         # Mplayer command and standard arguments
         if set_vcodec:
@@ -224,9 +224,9 @@ class MPlayer:
                 bobdeint='bobdeint'
             else:
                 bobdeint='nobobdeint'
-            command += [ '-vo', 'xvmc:%s' % bobdeint, '-vc', 'ffmpeg12mc' ]
+            command += ['-vo', 'xvmc:%s' % bobdeint, '-vc', 'ffmpeg12mc']
         else:
-            command += [ '-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS ]
+            command += ['-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS]
 
         # mode specific args
         command += config.MPLAYER_ARGS[mode].split(' ')
@@ -253,8 +253,8 @@ class MPlayer:
         # correct avi delay based on kaa.metadata settings
         if config.MPLAYER_SET_AUDIO_DELAY and item.info.has_key('delay') and \
                item.info['delay'] > 0:
-            command += [ '-mc', str(int(item.info['delay'])+1), '-delay',
-                         '-' + str(item.info['delay']) ]
+            command += ['-mc', str(int(item.info['delay'])+1), '-delay',
+                         '-' + str(item.info['delay'])]
 
         while '' in command:
             command.remove('')
@@ -271,7 +271,7 @@ class MPlayer:
                 (x1, y1, x2, y2) = self.get_crop(crop_point, x1, y1, x2, y2)
 
             if x1 < 1000 and x2 < 1000:
-                command = command + [ '-vf' , 'crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1) ]
+                command = command + ['-vf' , 'crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1)]
                 _debug_('crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1))
 
 
@@ -368,7 +368,7 @@ class MPlayer:
             self.play(self.options, self.item)
             return True
 
-        if event in ( PLAY_END, USER_END ):
+        if event in (PLAY_END, USER_END):
             self.stop()
             return self.item.eventhandler(event)
 
@@ -455,15 +455,15 @@ class MPlayer:
             elif (arg == '-vf'):
                 next_is_vf=True
             else:
-                ret += [ arg ]
+                ret += [arg]
 
         if vf:
-            return ret + [ '-vf', vf[1:] ]
+            return ret + ['-vf', vf[1:]]
         return ret
 
     def get_crop(self, pos, x1, y1, x2, y2):
         crop_cmd = [config.MPLAYER_CMD, '-ao', 'null', '-vo', 'null', '-slave', '-nolirc',
-            '-ss', '%s' % pos, '-frames', '10', '-vf', 'cropdetect' ]
+            '-ss', '%s' % pos, '-frames', '10', '-vf', 'cropdetect']
         crop_cmd.append(self.item.url)
         child = popen2.Popen3(self.sort_filter(crop_cmd), 1, 100)
         exp = re.compile('^.*-vf crop=([0-9]*):([0-9]*):([0-9]*):([0-9]*).*')

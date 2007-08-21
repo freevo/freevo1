@@ -49,13 +49,12 @@ import config
 import util
 
 
-import skin
 import plugin
-import osd
 import fxditem
 
-from item import Item, FileInformation
+from item import Item
 from playlist import Playlist
+from directory import DirItem
 from event import *
 from gui import ConfirmBox, AlertBox, ProgressBox
 from menu import MenuItem, Menu
@@ -97,9 +96,21 @@ status_order = 0
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
-    Plugin interface for the Manage Recordings TV menu and
-    the disk space reclaiming feature.
+    Plugin to browse the TV recordings directory based on series rather than
+    just a flat view of the recordings.
+    Programs not in a series are placed at the top level, while programs that
+    are a member of a series are placed in a series menu and the menu placed
+    at the top level.
+
+    Activate with:
+    plugin.activate('tv.recordings_manager',level=5)
+    This also automatically activates tv.recordings_manager.DiscManager.
+
+    You probably want also to deactivate the generic view_recordings plugin,
+    which is kind of redundant if you use the recordings_manager plugin:
+    plugin.remove('tv.view_recordings')
     """
+
     def __init__(self):
         """
         normal plugin init, but sets _type to 'mainmenu_tv'
@@ -128,8 +139,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('TVRM_MINIMUM_DISK_FREE', 2048, 'Minimum amount of disk space that must be available at all times in MB'),
             ('TVRM_CONSIDER_UNWATCHED_AFTER', 45, 'Number of days after which to consider deleting unwatched shows if space is required'),
             ('TVRM_EPISODE_FROM_PLOT', None, 'Regular expression to extract the episode name from the plot'),
-            ('TVRM_EPISODE_TIME_FORMAT', '%c', 'When the episode name cannot be found use timestamp'),
-            ('TVRM_ADD_VIDEO_ACTIONS', False, 'Append VideoItem actions to the end a RecordedProgramItem list of actions'),
+            ('TVRM_EPISODE_TIME_FORMAT', '%c', 'When the episode name cannot be found use timestamp in this format'),
         ]
 
 
@@ -161,7 +171,7 @@ class RecordingsDirectory(Item):
         """
         return a list of actions for this item
         """
-        items = [ (self.browse, _('Browse directory')), self.blue_action]
+        items = [(self.browse, _('Browse directory')) , self.blue_action]
         return items
 
 
@@ -259,17 +269,18 @@ class RecordingsDirectory(Item):
 
 
     def configure(self, arg=None, menuw=None):
-        items = [ MenuItem(_('Sort by') + u'\t' + _(sorting_methods[sorting]),
-                           self.configure_sorting, 'sorting'),
-                  MenuItem(_('Reverse sort')+ u'\t' + self.configure_get_icon(sorting_reversed),
-                            self.configure_sorting_reversed, 'sorting_reversed'),
-                  MenuItem(_('Sort series by') + u'\t' + _(series_sorting_methods[series_sorting]),
-                           self.configure_sorting, 'series_sorting'),
-                  MenuItem(_('Reverse series sort')+  u'\t' + self.configure_get_icon(series_sorting_reversed),
-                           self.configure_sorting_reversed, 'series_sorting_reversed'),
-                  MenuItem(_('Status order') + u'\t' + _(status_order_methods[status_order]),
-                           self.configure_sorting, 'status_order')
-                 ]
+        items = [
+            MenuItem(_('Sort by') + u'\t' + _(sorting_methods[sorting]),
+                self.configure_sorting, 'sorting'),
+            MenuItem(_('Reverse sort')+ u'\t' + self.configure_get_icon(sorting_reversed),
+                self.configure_sorting_reversed, 'sorting_reversed'),
+            MenuItem(_('Sort series by') + u'\t' + _(series_sorting_methods[series_sorting]),
+                self.configure_sorting, 'series_sorting'),
+            MenuItem(_('Reverse series sort')+  u'\t' + self.configure_get_icon(series_sorting_reversed),
+                self.configure_sorting_reversed, 'series_sorting_reversed'),
+            MenuItem(_('Status order') + u'\t' + _(status_order_methods[status_order]),
+                self.configure_sorting, 'status_order')
+        ]
         m = Menu(_('Configure'), items)
         m.table = (50, 50)
         menuw.pushmenu(m)
@@ -343,18 +354,16 @@ class RecordingsDirectory(Item):
 # Program Class
 # ======================================================================
 
-class RecordedProgramItem(Item):
+class RecordedProgramItem(VideoItem):
     """
     Class to represent a recorded TV program.
     """
     def __init__(self, name, video_item):
-        Item.__init__(self, None, skin_type = 'tv')
-        self.set_url(None)
-        self.type='video'
-        self.name  = name
-        self.filename = video_item.filename
+        VideoItem.__init__(self, url=video_item.url, parent=video_item.parent)
         self.video_item = video_item
-
+        self.name = name
+        self.files = video_item.files
+        self.parent = DirItem(config.TV_RECORD_DIR, None)
         keep = self.video_item['keep']
         if not keep:
             keep = False
@@ -384,16 +393,10 @@ class RecordedProgramItem(Item):
         """
         return the default action
         """
-        actions = [
-            (self.play, _('Play')),
-            (self.view_details, _('Full Description')),
-            (self.confirm_delete, _('Delete')),
-            (self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')),
-            (self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched'))
-        ]
-        if config.TVRM_ADD_VIDEO_ACTIONS:
-            actions += self.video_item.actions()[1:] # Remove 'Play' as we've already got it.
-        return actions
+        items = self.video_item.actions()
+        items.append((self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')))
+        items.append((self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched')))
+        return items
 
 
     def play(self, arg=None, menuw=None):
@@ -405,26 +408,6 @@ class RecordedProgramItem(Item):
         # Mark this programme as watched.
         self.update_fxd(True, self.keep)
         self.set_icon()
-
-
-    def confirm_delete(self, arg=None, menuw=None):
-        """
-        Confirm whether the user really wants to delete this program.
-        """
-        self.menuw = menuw
-        ConfirmBox(text=_('Do you wish to delete\n \'%s\'?') % self.name,
-                   handler=self.delete, default_choice=1,
-                   handler_message=_('Deleting...')).show()
-
-
-    def delete(self):
-        """
-        Delete the recorded program.
-        """
-        # delete the file
-        self.video_item.files.delete()
-        if self.menuw:
-            self.menuw.delete_submenu(True, True)
 
 
     def mark_to_keep(self, arg=None, menuw=None):
@@ -449,21 +432,6 @@ class RecordedProgramItem(Item):
         if menuw:
             copy_and_replace_menu_item(menuw, self)
             menuw.refresh(reload=True)
-
-
-    def view_details(self, arg=None, menuw=None):
-        ShowDetails(menuw, self)
-
-
-    def display_submenu(self, arg=None, menuw=None):
-        """
-        Open the submenu for this item
-        """
-        if not menuw:
-            return
-        # this tries to imitated freevo's internal way of creating submenus
-        menuw.make_submenu(_('Recordings Menu'), self.actions(), self)
-        menuw.show()
 
 
     def set_name_to_episode(self):
@@ -793,7 +761,14 @@ all_recordings = []
 
 class DiskManager(plugin.DaemonPlugin):
     """
-    Class to ensure a minimum amount of disk space is always available.
+    This plugin automatically removes recordings
+    when disc space is getting low.
+
+    It is automatically activated by the tv.recordings_manager plugin,
+    and should not be used standalone.
+    For more information read the details for tv.recordings_manager.
+
+    freevo plugins -i tv.recordings_manager
     """
     def __init__(self, required_space):
         plugin.DaemonPlugin.__init__(self)
@@ -852,6 +827,7 @@ class DiskManager(plugin.DaemonPlugin):
                 self.menuw.event_context == rc.get_singleton().context:
                 self.obj.browse(menuw=self.menuw, arg='update')
 
+
     def update_recordings(self):
         """
         Update the list of recordings.
@@ -864,6 +840,7 @@ class DiskManager(plugin.DaemonPlugin):
             mediainfo.cache_dir(config.TV_RECORD_DIR, callback=None)
 
         series = {}
+
 
         recordings = fxditem.mimetype.get(None, files)
         for recorded_item in recordings:
@@ -974,114 +951,3 @@ def get_status_sort_order(watched, keep):
     elif watched:
         order = orders[STATUS_ORDER_WATCHED]
     return order
-
-
-import skin
-# Create the skin_object object
-skin_object = skin.get_singleton()
-skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
-
-
-class ShowDetails:
-    """
-    Screen to show the details of the TV program
-    """
-    def __init__(self, menuw, episode):
-        if episode is None:
-            name = _('No Information Available')
-            sub_title = ''
-            time = ''
-            description = ''
-        else:
-            self.episode = episode
-            name = episode.name
-            sub_title = episode.video_item['tagline']
-            desc = episode.video_item['plot']
-            # gather the infos and construct the description text
-            if sub_title:
-                # subtitle + newline + description
-                description = u'"' + sub_title + u'"\n' + desc
-            else:
-                # or just the description, if there is no subtitle
-                description = desc
-
-            # maybe there is more infos to add (categories, advisories, ratings)
-            if hasattr(episode.video_item, 'categories'):
-                description += u'\n'
-                for category in episode.video_item.categories:
-                    description += u'\n' + _('Category : ') + category
-
-            if hasattr(episode.video_item, 'advisories'):
-                description += u'\n'
-                for advisory in episode.video_item.advisories:
-                    description += u'\n' + _('Advisory : ') + advisory
-
-            if hasattr(episode.video_item, 'ratings'):
-                description += u'\n'
-                for system,value in episode.video_item.ratings.items():
-                    description += u'\n' + _('Rating') + u'(' + system + u') : ' + value
-
-        # that's all, we can show this to the user
-        self.name            = name
-        self.scrollable_text = skin.ScrollableText(description)
-        self.visible = True
-
-        self.menuw = menuw
-        self.menuw.hide(clear=False)
-
-        # this activates the eventhandler and the context of this class
-        rc.app(self)
-
-        skin_object.draw('tvguideinfo', self)
-
-
-
-    def getattr(self, name):
-        if name == 'title':
-            return self.name
-
-        if self.episode:
-            return self.episode.getattr(name)
-
-        return u''
-
-
-    def eventhandler(self, event, menuw=None):
-        """
-        eventhandler for the programm description display
-        """
-        if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
-            # leave the description display and return to the previous menu
-            self.menuw.show()
-            # we do not need to call rc.app(None) here,
-            # because that is done by menuw.show(),
-            # but we need to set the context manually,
-            # because rc.app(None) sets it always to 'menu'
-            rc.set_context(self.menuw.get_event_context())
-            return True
-        elif event == 'MENU_SUBMENU':
-            if hasattr(self.menuw.menustack[-1],'is_submenu'):
-                # the last menu has been a submenu, we just have to show it
-                self.menuw.show()
-                rc.set_context(self.menuw.get_event_context())
-            else:
-                # we have to create the submenu
-                self.episode.display_submenu(menuw=self.menuw)
-            return True
-        elif event == 'MENU_UP':
-            # scroll the description up
-            self.scrollable_text.scroll(True)
-            skin_object.draw('tvguideinfo', self)
-            return True
-        elif event == 'MENU_DOWN':
-            # scroll the description down
-            self.scrollable_text.scroll(False)
-            skin_object.draw('tvguideinfo', self)
-            return True
-        elif event == 'MENU_PLAY_ITEM':
-            self.menuw.show()
-            rc.set_context(self.menuw.get_event_context())
-            self.episode.play(menuw=self.menuw)
-            return True
-        else:
-            return False

@@ -75,26 +75,37 @@ class PluginInterface(plugin.ItemPlugin):
     """
     def __init__(self, from_dir, to_dir, recursive=False, makedirs=False):
         plugin.ItemPlugin.__init__(self)
-        self.from_dir = from_dir
-        self.to_dir   = to_dir
+
+        self.from_dir = from_dir.rstrip(os.sep)
+        self.to_dir   = to_dir.rstrip(os.sep)
         self.recursive = recursive
         self.makedirs =  makedirs
 
     def actions(self, item):
         self.item = item
-        if ( item.type == 'video'
-             and item.mode == 'file'
-             and item.parent.type == 'dir'
-             # don't bother moving to current-dir
-             and self.to_dir != os.path.dirname(self.item.filename)
-             # recursive
-             and ( ( self.recursive
-                     and os.path.commonprefix( ( item.parent.dir, self.from_dir)) == self.from_dir )
-                   # or absolute
-                   or ( item.parent.dir == self.from_dir))):
-            return [ (self.mover_to_series,
-                      _('Move to [%s]') % os.path.basename(self.to_dir)) ]
-        return []
+        if not item.type == 'video':
+            return []
+        if not item.mode == 'file':
+            return []
+        if not item.parent.type == 'dir':
+            return []
+        # don't bother moving to current-dir
+        if self.to_dir == os.path.dirname(self.item.filename):
+            return []
+
+        # check if we are inside the from_dir:
+        if self.recursive:
+            # recursive
+            prefix = os.path.commonprefix((item.parent.dir, self.from_dir))
+            if not prefix == self.from_dir:
+                return []
+        else:
+            # or absolute
+            if not item.parent.dir == self.from_dir:
+                return []
+
+        return [ (self.mover_to_series, _('Move to [%s]') % os.path.basename(self.to_dir)) ]
+
 
     def mover_to_series(self, arg=None, menuw=None):
         # make to_dir an absolute path
