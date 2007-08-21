@@ -41,7 +41,6 @@ import config
 import util
 import rc
 import menu
-import skin
 import configure
 import plugin
 import kaa.metadata as metadata
@@ -91,9 +90,19 @@ class VideoItem(Item):
         self.elapsed           = 0
 
         self.possible_player   = []
-
         self.player        = None
         self.player_rating = 0
+
+        for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
+            rating = p.rate(self) * 10
+            if config.VIDEO_PREFERED_PLAYER == p.name:
+                rating += 1
+            if hasattr(self, 'force_player') and p.name == self.force_player:
+                rating += 100
+            self.possible_player.append((rating, p))
+        self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
+        self.player_rating, self.player = self.possible_player[0]
+
 
         # find image for tv show and build new title
         if config.VIDEO_SHOW_REGEXP_MATCH(self.name) and not self.network_play and \
@@ -289,24 +298,9 @@ class VideoItem(Item):
         return a list of possible actions on this item.
         """
 
-        self.possible_player = []
-        for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
-            rating = p.rate(self) * 10
-            if config.VIDEO_PREFERED_PLAYER == p.name:
-                rating += 1
-            if hasattr(self, 'force_player') and p.name == self.force_player:
-                rating += 100
-            self.possible_player.append((rating, p))
-
-        self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
-
-        self.player        = None
-        self.player_rating = 0
 
         if not self.possible_player:
             return []
-
-        self.player_rating, self.player = self.possible_player[0]
 
         if self.url.startswith('dvd://') and self.url[-1] == '/':
             if self.player_rating >= 20:
@@ -715,9 +709,11 @@ class VideoItem(Item):
 ########################
 # Show Details
 
+import skin
 # Create the skin_object object
 skin_object = skin.get_singleton()
-skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
+if skin_object:
+    skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
 
 # Program Info screen
 class ShowDetails:
@@ -760,7 +756,8 @@ class ShowDetails:
         # this activates the eventhandler and the context of this class
         rc.app(self)
 
-        skin_object.draw('tvguideinfo', self)
+        if skin_object:
+            skin_object.draw('tvguideinfo', self)
 
 
 
