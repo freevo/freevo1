@@ -39,7 +39,7 @@ import event
 import rc
 
 from tv.tvguide import TVGuide
-from tv.program_display import ShowProgramDetails
+from tv.programitem import ShowProgramDetails
 from item import Item
 from menu import MenuItem, Menu
 from pygame import image,transform, Surface
