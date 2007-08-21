@@ -344,10 +344,6 @@ OS_STATICDIR, FREEVO_STATICDIR = make_freevodir('STATICDIR', '/var/lib', '/var/d
 #
 OS_CACHEDIR, FREEVO_CACHEDIR = make_freevodir('CACHEDIR', '/var/cache', '/var/db', 'cache')
 
-print 'log: %s %s' % (OS_LOGDIR, FREEVO_LOGDIR)
-print 'static: %s %s' % (OS_STATICDIR, FREEVO_STATICDIR)
-print 'cache: %s %s' % (OS_CACHEDIR, FREEVO_CACHEDIR)
-
 #
 # Redirect stdout and stderr to stdout and /tmp/freevo.log
 #
@@ -457,6 +453,9 @@ FONT_DIR  = os.path.join(SHARE_DIR, 'fonts')
 
 RUNAPP = os.environ['RUNAPP']
 
+_debug_('logdir: %s %s' % (OS_LOGDIR, FREEVO_LOGDIR), DINFO)
+_debug_('staticdir: %s %s' % (OS_STATICDIR, FREEVO_STATICDIR), DINFO)
+_debug_('cachedir: %s %s' % (OS_CACHEDIR, FREEVO_CACHEDIR), DINFO)
 
 #
 # Check that freevo_config.py is not found in the config file dirs
@@ -946,7 +945,6 @@ VIDEO_SHOW_REGEXP_SPLIT = re.compile("[\.\- ]*" + VIDEO_SHOW_REGEXP + "[\.\- ]*"
 #
 # create cache subdirs
 #
-print 'overlay: %s' % (OVERLAY_DIR)
 if not OVERLAY_DIR or OVERLAY_DIR == '/':
     print
     print 'ERROR: bad OVERLAY_DIR.'
@@ -962,6 +960,7 @@ if not os.path.isdir(OVERLAY_DIR):
 # concat is much faster
 if OVERLAY_DIR and OVERLAY_DIR.endswith('/'):
     OVERLAY_DIR = OVERLAY_DIR[:-1]
+_debug_('overlaydir: %s' % (OVERLAY_DIR), DINFO)
 
 if not os.path.isdir(OVERLAY_DIR + '/disc'):
     os.makedirs(OVERLAY_DIR + '/disc')
