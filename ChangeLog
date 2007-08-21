@@ -25,6 +25,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated tv favourite handling and programme item to provide a consistant interface (F#1776909)
  * Updated video item to include the full description (F#1777187)
  * Fixed cd-rom drives eject causing a crash (B#1775892)
+ * Fixed matching favourites, by initially restricting the search (B#1776072)
  * Fixed tvmenu crashing because of the search plug-in (B#1774544)
 
 == Release 1.7.3 (2007-08-01) ==

@@ -204,7 +204,6 @@ def getFavorites():
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
-
     return returnFromJelly(status, response)
 
 
@@ -214,6 +213,14 @@ def getFavorite(name):
     except:
         return (FALSE, 'record_client: '+_('connection error'))
 
+    return returnFromJelly(status, response)
+
+
+def getFavoriteObject(prog, favs=None):
+    try:
+        (status, response) = server.getFavoriteObject(jellyToXML(prog), jellyToXML(favs))
+    except:
+        return (FALSE, 'record_client: '+_('connection error'))
 
     return returnFromJelly(status, response)
 
@@ -227,7 +234,7 @@ def adjustPriority(favname, mod):
     return (status, message)
 
 
-def isProgAFavorite(prog, favs):
+def isProgAFavorite(prog, favs=None):
     try:
         (status, message) = server.isProgAFavorite(jellyToXML(prog), jellyToXML(favs))
     except:

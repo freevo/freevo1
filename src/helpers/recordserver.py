@@ -1101,9 +1101,15 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'priorities adjusted')
 
     def getFavoriteObject(self, prog, favs=None):
-        #more liberal favorite check that returns an object
+        """more liberal favorite check that returns an object"""
         if not favs:
             (status, favs) = self.getFavorites()
+        # first try the strict test
+        name = tv_util.progname2favname(prog.title)
+        if favs.has_key(name):
+            fav = favs[name]
+            return (TRUE, fav)
+        # try harder to find this favorite in a more liberal search
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
                 return (TRUE, fav)
@@ -1435,6 +1441,20 @@ class RecordServer(xmlrpc.XMLRPC):
         return (status, message)
 
 
+    def xmlrpc_getFavoriteObject(self, prog, favs=None):
+        (status, message) = (FALSE, 'RecordServer::getFavoriteObject: cannot acquire lock')
+        self.lock.acquire()
+        try:
+            prog = unjellyFromXML(prog)
+            if favs:
+                favs = unjellyFromXML(favs)
+            (status, response) = self.getFavoriteObject(prog, favs)
+            message = status and jellyToXML(response) or 'RecordServer::getFavoriteObject: %s' % response
+        finally:
+            self.lock.release()
+        return (status, message)
+
+
     def xmlrpc_adjustPriority(self, favname, mod=0):
         (status, message) = (FALSE, 'RecordServer::adjustPriority: cannot acquire lock')
         self.lock.acquire()
@@ -1447,14 +1467,14 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def xmlrpc_isProgAFavorite(self, prog, favs=None):
-        (status, message) = (FALSE, 'RecordServer::adjustPriority: cannot acquire lock')
+        (status, message) = (FALSE, 'RecordServer::isProgAFavorite: cannot acquire lock')
         self.lock.acquire()
         try:
             prog = unjellyFromXML(prog)
             if favs:
                 favs = unjellyFromXML(favs)
             (status, response) = self.isProgAFavorite(prog, favs)
-            message = 'RecordServer::adjustPriority: %s' % response
+            message = 'RecordServer::isProgAFavorite: %s' % response
         finally:
             self.lock.release()
         return (status, message)
