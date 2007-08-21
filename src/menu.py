@@ -738,13 +738,19 @@ class MenuWidget(GUIObject):
                             return
 
             if actions:
-                if len(actions[0]) == 3 and actions[0][2] == 'MENU_SUBMENU':
-                    actions[0][0](menuw=self)
-                    return
-
-                if (len(actions) > 0 or force):
+                if len(actions) > 1 or force:
                     self.make_submenu(menu.selected.name, actions, menu.selected)
-                    return
+                elif len(actions) == 1:
+                    # if there is only one action, call it!
+                    action = actions[0]
+                    arg = None
+                    if isinstance(action, MenuItem):
+                        action = action.function
+                        arg    = action.arg
+                    else:
+                        action = action[0]
+                    action( arg=arg, menuw=self )
+            return
 
 
 

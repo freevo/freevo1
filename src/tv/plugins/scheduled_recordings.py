@@ -47,7 +47,7 @@ class ScheduledRecordingsItem(Item):
 
 
     def actions(self):
-        return [ ( self.display_schedule , _('Display Scheduled Recordings'),'MENU_SUBMENU' ) ]
+        return [ ( self.display_schedule , _('Display Scheduled Recordings') ) ]
 
 
     def display_schedule(self, arg=None, menuw=None):

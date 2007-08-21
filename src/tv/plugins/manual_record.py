@@ -111,7 +111,7 @@ class ManualRecordItem(Item):
 
     def actions(self):
         _debug_('actions(self)', 2)
-        return [( self.display_recitem , _('Display record item') , 'MENU_SUBMENU')]
+        return [( self.display_recitem , _('Display record item') )]
 
 
     def display_recitem(self, arg=None, menuw=None):
