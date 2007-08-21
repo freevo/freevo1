@@ -320,6 +320,8 @@ class OSD:
         self.fullscreen = 0 # Keep track of fullscreen state
         self.app_list = []
 
+        self.mutex = thread.allocate_lock()
+
         self.bitmapcache = util.objectcache.ObjectCache(5, desc='bitmap')
         self.font_info_cache = {}
 
@@ -528,13 +530,17 @@ class OSD:
         if not pygame.display.get_init():
             return None
 
-        # stop all animations
-        self.render.suspendall()
+        self.mutex.acquire()
+        try:
+            # stop all animations
+            self.render.suspendall()
 
-        # backup the screen
-        self.__stop_screen__ = pygame.Surface((self.width, self.height))
-        self.__stop_screen__.blit(self.screen, (0,0))
-        pygame.display.quit()
+            # backup the screen
+            self.__stop_screen__ = pygame.Surface((self.width, self.height))
+            self.__stop_screen__.blit(self.screen, (0,0))
+            pygame.display.quit()
+        finally:
+            self.mutex.release()
 
 
     def restartdisplay(self):
@@ -544,21 +550,25 @@ class OSD:
         if pygame.display.get_init():
             return None
 
-        pygame.display.init()
-        self.width  = config.CONF.width
-        self.height = config.CONF.height
-        self.screen = pygame.display.set_mode((self.width, self.height), self.hw,
-                                              self.depth)
-        if hasattr(self, '__stop_screen__'):
-            self.screen.blit(self.__stop_screen__, (0,0))
-            del self.__stop_screen__
+        self.mutex.acquire()
+        try:
+            pygame.display.init()
+            self.width  = config.CONF.width
+            self.height = config.CONF.height
+            self.screen = pygame.display.set_mode((self.width, self.height), self.hw,
+                                                  self.depth)
+            if hasattr(self, '__stop_screen__'):
+                self.screen.blit(self.__stop_screen__, (0,0))
+                del self.__stop_screen__
 
-        # We need to go back to fullscreen mode if that was the mode before the shutdown
-        if self.fullscreen:
-            pygame.display.toggle_fullscreen()
+            # We need to go back to fullscreen mode if that was the mode before the shutdown
+            if self.fullscreen:
+                pygame.display.toggle_fullscreen()
 
-        # restart all animations
-        self.render.restartall()
+            # restart all animations
+            self.render.restartall()
+        finally:
+            self.mutex.release()
 
 
     def toggle_fullscreen(self):
@@ -587,7 +597,11 @@ class OSD:
 
         if color == None:
             color = self.default_bg_color
-        self.screen.fill(self._sdlcol(color))
+        self.mutex.acquire()
+        try:
+            self.screen.fill(self._sdlcol(color))
+        finally:
+            self.mutex.release()
 
 
     def printdata(self, data):
@@ -697,13 +711,19 @@ class OSD:
         """
         if not pygame.display.get_init():
             return None
+
         image = self.zoomsurface(image, scaling, bbx, bby, bbw, bbh, rotation)
         if not image:
             return
-        if layer:
-            layer.blit(image, (x, y))
-        else:
-            self.screen.blit(image, (x, y))
+
+        self.mutex.acquire()
+        try:
+            if layer:
+                layer.blit(image, (x, y))
+            else:
+                self.screen.blit(image, (x, y))
+        finally:
+            self.mutex.release()
 
 
     def zoomsurface(self, image, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation = 0):
@@ -738,67 +758,83 @@ class OSD:
         """
         draw a normal box
         """
-        # Make sure the order is top left, bottom right
-        x0, x1 = min(x0, x1), max(x0, x1)
-        y0, y1 = min(y0, y1), max(y0, y1)
+        self.mutex.acquire()
+        try:
+            # Make sure the order is top left, bottom right
+            x0, x1 = min(x0, x1), max(x0, x1)
+            y0, y1 = min(y0, y1), max(y0, y1)
 
-        if color == None:
-            color = self.default_fg_color
+            if color == None:
+                color = self.default_fg_color
 
-        if width == None:
-            width = 1
+            if width == None:
+                width = 1
 
-        if width == -1 or fill:
-            r,g,b,a = self._sdlcol(color)
-            w = x1 - x0
-            h = y1 - y0
-            box = pygame.Surface((int(w), int(h)))
-            box.fill((r,g,b))
-            box.set_alpha(a)
-            if layer:
-                layer.blit(box, (x0, y0))
+            if width == -1 or fill:
+                r,g,b,a = self._sdlcol(color)
+                w = x1 - x0
+                h = y1 - y0
+                box = pygame.Surface((int(w), int(h)))
+                box.fill((r,g,b))
+                box.set_alpha(a)
+                if layer:
+                    layer.blit(box, (x0, y0))
+                else:
+                    self.screen.blit(box, (x0, y0))
             else:
-                self.screen.blit(box, (x0, y0))
-        else:
-            c = self._sdlcol(color)
-            if not layer:
-                layer = self.screen
-            for i in range(0, width):
-                # looks strange, but sometimes thinkness doesn't work
-                pygame.draw.rect(layer, c, (x0+i, y0+i, x1-x0-2*i, y1-y0-2*i), 1)
+                c = self._sdlcol(color)
+                if not layer:
+                    layer = self.screen
+                for i in range(0, width):
+                    # looks strange, but sometimes thinkness doesn't work
+                    pygame.draw.rect(layer, c, (x0+i, y0+i, x1-x0-2*i, y1-y0-2*i), 1)
+        finally:
+            self.mutex.release()
 
 
     def getsurface(self, x=0, y=0, width=0, height=0, rect=None):
         """
         returns a copy of the given area of the current screen
         """
-        if  rect != None:
-            return self.screen.subsurface(rect).convert()
-        else:
-            return self.screen.subsurface( (x, y, width, height) ).convert()
+        self.mutex.acquire()
+        try:
+            if rect != None:
+                return self.screen.subsurface(rect).convert()
+            else:
+                return self.screen.subsurface( (x, y, width, height) ).convert()
+        finally:
+            self.mutex.release()
 
 
     def putsurface(self, surface, x, y):
         """
         copy a surface to the screen
         """
-        self.screen.blit(surface, (x, y))
+        self.mutex.acquire()
+        try:
+            self.screen.blit(surface, (x, y))
+        finally:
+            self.mutex.release()
 
 
     def screenblit(self, source, destpos, sourcerect=None):
         """
         blit the source to the screen
         """
-        if sourcerect:
-            w = sourcerect[2]
-            h = sourcerect[3]
-            ret = self.screen.blit(source, destpos, sourcerect)
-        else:
-            w, h = source.get_size()
-            ret = self.screen.blit(source, destpos)
+        self.mutex.acquire()
+        try:
+            if sourcerect:
+                w = sourcerect[2]
+                h = sourcerect[3]
+                ret = self.screen.blit(source, destpos, sourcerect)
+            else:
+                w, h = source.get_size()
+                ret = self.screen.blit(source, destpos)
 
-        if self.render:
-            self.render.damage( [(destpos[0], destpos[1], w, h)] )
+            if self.render:
+                self.render.damage( [(destpos[0], destpos[1], w, h)] )
+        finally:
+            self.mutex.release()
 
         return ret
 
@@ -1252,69 +1288,73 @@ class OSD:
         """
         draw a round box
         """
-        if not pygame.display.get_init():
-            return None
+        self.mutex.acquire()
+        try:
+            if not pygame.display.get_init():
+                return None
 
-        # Make sure the order is top left, bottom right
-        x0, x1 = min(x0, x1), max(x0, x1)
-        y0, y1 = min(y0, y1), max(y0, y1)
-        if color == None:
-            color = self.default_fg_color
+            # Make sure the order is top left, bottom right
+            x0, x1 = min(x0, x1), max(x0, x1)
+            y0, y1 = min(y0, y1), max(y0, y1)
+            if color == None:
+                color = self.default_fg_color
 
-        if border_color == None:
-            border_color = self.default_fg_color
+            if border_color == None:
+                border_color = self.default_fg_color
 
-        if layer:
-            x = x0
-            y = y0
-        else:
-            x = 0
-            y = 0
+            if layer:
+                x = x0
+                y = y0
+            else:
+                x = 0
+                y = 0
 
-        w = x1 - x0
-        h = y1 - y0
+            w = x1 - x0
+            h = y1 - y0
 
-        bc = self._sdlcol(border_color)
-        c =  self._sdlcol(color)
+            bc = self._sdlcol(border_color)
+            c =  self._sdlcol(color)
 
-        # make sure the radius fits the box
-        radius = min(radius, h / 2, w / 2)
+            # make sure the radius fits the box
+            radius = min(radius, h / 2, w / 2)
 
-        if not layer:
-            box = pygame.Surface((w, h), SRCALPHA)
+            if not layer:
+                box = pygame.Surface((w, h), SRCALPHA)
 
-            # clear surface
-            box.fill((0,0,0,0))
-        else:
-            box = layer
+                # clear surface
+                box.fill((0,0,0,0))
+            else:
+                box = layer
 
-        r,g,b,a = self._sdlcol(color)
+            r,g,b,a = self._sdlcol(color)
 
-        if border_size:
+            if border_size:
+                if radius >= 1:
+                    self.drawcircle(box, bc, x+radius, y+radius, radius)
+                    self.drawcircle(box, bc, x+w-radius, y+radius, radius)
+                    self.drawcircle(box, bc, x+radius, y+h-radius, radius)
+                    self.drawcircle(box, bc, x+w-radius, y+h-radius, radius)
+                    pygame.draw.rect(box, bc, (x+radius, y, w-2*radius, h))
+                pygame.draw.rect(box, bc, (x, y+radius, w, h-2*radius))
+
+                x += border_size
+                y += border_size
+                h -= 2* border_size
+                w -= 2* border_size
+                radius -= min(0, border_size)
+
             if radius >= 1:
-                self.drawcircle(box, bc, x+radius, y+radius, radius)
-                self.drawcircle(box, bc, x+w-radius, y+radius, radius)
-                self.drawcircle(box, bc, x+radius, y+h-radius, radius)
-                self.drawcircle(box, bc, x+w-radius, y+h-radius, radius)
-                pygame.draw.rect(box, bc, (x+radius, y, w-2*radius, h))
-            pygame.draw.rect(box, bc, (x, y+radius, w, h-2*radius))
+                self.drawcircle(box, c, x+radius, y+radius, radius)
+                self.drawcircle(box, c, x+w-radius, y+radius, radius)
+                self.drawcircle(box, c, x+radius, y+h-radius, radius)
+                self.drawcircle(box, c, x+w-radius, y+h-radius, radius)
+                pygame.draw.rect(box, c, (x+radius, y, w-2*radius, h))
+            pygame.draw.rect(box, c, (x, y+radius, w, h-2*radius))
 
-            x += border_size
-            y += border_size
-            h -= 2* border_size
-            w -= 2* border_size
-            radius -= min(0, border_size)
-
-        if radius >= 1:
-            self.drawcircle(box, c, x+radius, y+radius, radius)
-            self.drawcircle(box, c, x+w-radius, y+radius, radius)
-            self.drawcircle(box, c, x+radius, y+h-radius, radius)
-            self.drawcircle(box, c, x+w-radius, y+h-radius, radius)
-            pygame.draw.rect(box, c, (x+radius, y, w-2*radius, h))
-        pygame.draw.rect(box, c, (x, y+radius, w, h-2*radius))
-
-        if not layer:
-            self.screen.blit(box, (x0, y0))
+            if not layer:
+                self.screen.blit(box, (x0, y0))
+        finally:
+            self.mutex.release()
 
 
 
@@ -1326,26 +1366,28 @@ class OSD:
         if not pygame.display.get_init():
             return None
 
-        if self.busyicon.active and stop_busyicon:
-            self.busyicon.stop()
+        self.mutex.acquire()
+        try:
+            if self.busyicon.active and stop_busyicon:
+                self.busyicon.stop()
 
-        if config.OSD_UPDATE_COMPLETE_REDRAW:
-            rect = None
+            if config.OSD_UPDATE_COMPLETE_REDRAW:
+                rect = None
 
-        if rect and not (stop_busyicon and self.busyicon.rect):
-            try:
-                pygame.display.update(rect)
-            except:
-                _debug_('osd.update(rect) failed, bad rect? - %s' % str(rect), 1)
-                _debug_('updating whole screen')
+            if rect and not (stop_busyicon and self.busyicon.rect):
+                try:
+                    pygame.display.update(rect)
+                except:
+                    _debug_('osd.update(rect) failed, bad rect? - %s' % str(rect), 1)
+                    _debug_('updating whole screen')
+                    pygame.display.flip()
+            else:
                 pygame.display.flip()
-        else:
-            pygame.display.flip()
 
-        if stop_busyicon:
-            self.busyicon.rect = None
-
-
+            if stop_busyicon:
+                self.busyicon.rect = None
+        finally:
+            self.mutex.release()
 
 
     def _helpscreen(self):
