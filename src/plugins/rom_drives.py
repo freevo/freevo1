@@ -59,13 +59,24 @@ except:
         CDS_NO_DISC = 1
         CDS_DISC_OK = 4
     else:
-        # strange ioctrls missing
+        # see linux/cdrom.h and Documentation/ioctl/cdrom.txt
         CDROMEJECT = 0x5309
         CDROMCLOSETRAY = 0x5319
         CDROM_DRIVE_STATUS = 0x5326
         CDROM_SELECT_SPEED = 0x5322
+        CDROM_LOCKDOOR = 0x5329  # lock or unlock door
+        CDS_NO_INFO = 0
         CDS_NO_DISC = 1
+        CDS_TRAY_OPEN = 2
+        CDS_DRIVE_NOT_READY = 3
         CDS_DISC_OK = 4
+        CDS_AUDIO = 100
+        CDS_DATA_1 = 101
+        CDS_DATA_2 = 102
+        CDS_XA_2_1 = 103
+        CDS_XA_2_2 = 104
+        CDS_MIXED = 105
+
 
 
 import config
@@ -293,13 +304,16 @@ class RemovableMedia:
 
             try:
                 fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
-                if os.uname()[0] == 'FreeBSD':
-                    s = ioctl(fd, CDIOCEJECT, 0)
-                else:
-                    s = ioctl(fd, CDROMEJECT)
-                self.tray_open = 1
-            finally:
-                os.close(fd)
+                try:
+                    if os.uname()[0] == 'FreeBSD':
+                        s = ioctl(fd, CDIOCEJECT, 0)
+                    else:
+                        s = ioctl(fd, CDROMEJECT)
+                    self.tray_open = 1
+                finally:
+                    os.close(fd)
+            except Exception, e:
+                _debug_('Cannot open "%s": %s"' % (self.devicename, e), config.DWARNING)
 
             if notify:
                 pop.destroy()
