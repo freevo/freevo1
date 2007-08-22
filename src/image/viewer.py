@@ -81,17 +81,20 @@ class ImageViewer(GUIObject):
 
 
     def free_cache(self):
-        #print 'free_cache(self)'
         """
         free the current cache to save memory
         """
+        _debug_('free_cache(self)', 2)
         self.bitmapcache = util.objectcache.ObjectCache(3, desc='viewer')
         if self.parent and self.free_cache in self.parent.show_callbacks:
             self.parent.show_callbacks.remove(self.free_cache)
 
 
     def view(self, item, zoom=0, rotation=0):
-        #print 'view(self, item, zoom=%s, rotation=%s)' % (zoom, rotation)
+        '''
+        view an image
+        '''
+        _debug_('view(self, item, zoom=%s, rotation=%s)' % (zoom, rotation), 2)
         if zoom:
             self.app_mode    = 'image_zoom'
         else:
@@ -106,7 +109,10 @@ class ImageViewer(GUIObject):
             item.menuw.show_callbacks.append(self.free_cache)
 
         self.filename = filename
-        self.rotation = rotation
+        if config.IMAGEVIEWER_REVERSED_IMAGES:
+            self.rotation = 360 - rotation
+        else:
+            self.rotation = rotation
 
         if filename and len(filename) > 0:
             image = self.osd.loadbitmap(filename, cache=self.bitmapcache)
@@ -184,7 +190,6 @@ class ImageViewer(GUIObject):
                 bbw = min(max((width / 3) * scale, self.osd.width), width) / scale
                 bbh = min(max((height / 3) * scale, self.osd.height), height) / scale
 
-
             # calculate the beginning of the bounding box
             bbx = max(0, bbcx - bbw/2)
             bby = max(0, bbcy - bbh/2)
@@ -196,8 +201,6 @@ class ImageViewer(GUIObject):
                 new_h, new_w = bbw * scale, bbh * scale
             else:
                 new_w, new_h = bbw * scale, bbh * scale
-
-
 
         else:
             if self.rotation % 180:
@@ -246,8 +249,7 @@ class ImageViewer(GUIObject):
             bbx += zoom[1]
             bby += zoom[2]
 
-        if (last_image and self.last_image[0] != item and
-            config.IMAGEVIEWER_BLEND_MODE != None):
+        if (last_image and self.last_image[0] != item and config.IMAGEVIEWER_BLEND_MODE):
             screen = self.osd.screen.convert()
             screen.fill((0,0,0,0))
             screen.blit(self.osd.zoomsurface(image, scale, bbx, bby, bbw, bbh,
