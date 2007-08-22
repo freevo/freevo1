@@ -101,7 +101,8 @@ class VideoItem(Item):
                 rating += 100
             self.possible_player.append((rating, p))
         self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
-        self.player_rating, self.player = self.possible_player[0]
+        if len(self.possible_player) > 0:
+            self.player_rating, self.player = self.possible_player[0]
 
 
         # find image for tv show and build new title
@@ -246,16 +247,14 @@ class VideoItem(Item):
             total = 0
             if self.subitems:
                 for s in self.subitems:
+                    length = 0
                     if s.info['length']:
                         length = s.info['length']
                     if not length and hasattr(s, 'length'):
                         length = s.length
                     if not length:
                         continue
-                    try:
-                        total += length
-                    except ValueError, TypeError:
-                        pass
+                    total += length
                 total = '%s min' % str(int(total) / 60)
 
             else:
