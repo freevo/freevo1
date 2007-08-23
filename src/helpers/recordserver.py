@@ -1141,7 +1141,9 @@ class RecordServer(xmlrpc.XMLRPC):
             (status, favs) = self.getFavorites()
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
-                _debug_('NEW: %s'%fav.onlyNew, config.DINFO)
+                if not hasattr(fav, 'onlyNew'):
+                    return TRUE
+                _debug_('NEW: %s' % fav.onlyNew, config.DINFO)
                 if fav.onlyNew == '1':
                     return TRUE
 
@@ -1150,7 +1152,9 @@ class RecordServer(xmlrpc.XMLRPC):
             (status, favs) = self.getFavorites()
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
-                _debug_('DUP: %s'%fav.allowDuplicates, config.DINFO)
+                if not hasattr(fav, 'allowDuplicates'):
+                    return TRUE
+                _debug_('DUP: %s' % fav.allowDuplicates, config.DINFO)
                 if fav.allowDuplicates == '1':
                     return TRUE
 
