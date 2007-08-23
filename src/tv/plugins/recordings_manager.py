@@ -661,7 +661,7 @@ class Series(Item):
         Delete all programs in a series.
         """
         for item in self.items:
-            item.delete()
+            item.files.delete()
         if self.menuw:
             self.menuw.delete_submenu(True, True)
 
