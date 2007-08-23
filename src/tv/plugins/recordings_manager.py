@@ -219,7 +219,7 @@ class RecordingsDirectory(Item):
                 self.menuw.refresh()
         else:
             # normal menu build
-            item_menu = Menu(self.name, items, reload_func=self.reload, item_types = 'tv')
+            item_menu = Menu(self.name, items, reload_func=self.reload, item_types='tv')
             menuw.pushmenu(item_menu)
 
             self.menu  = item_menu
@@ -233,6 +233,9 @@ class RecordingsDirectory(Item):
     # ======================================================================
 
     def configure_sorting(self, arg=None, menuw=None):
+        '''
+        document me
+        '''
         exec('%s += 1' % arg, globals())
 
         if eval('%s >= len(%s_methods)' %(arg, arg), globals()):
@@ -249,6 +252,9 @@ class RecordingsDirectory(Item):
 
 
     def configure_sorting_reversed(self, arg=None, menuw=None):
+        '''
+        document me
+        '''
         exec('%s = not %s' % (arg,arg), globals())
         self.save_settings()
 
@@ -261,6 +267,9 @@ class RecordingsDirectory(Item):
 
 
     def configure_get_icon(self, value):
+        '''
+        document me
+        '''
         if value:
             icon = u'ICON_LEFT_ON_' + _('on')
         else:
@@ -269,6 +278,9 @@ class RecordingsDirectory(Item):
 
 
     def configure(self, arg=None, menuw=None):
+        '''
+        document me
+        '''
         items = [
             MenuItem(_('Sort by') + u'\t' + _(sorting_methods[sorting]),
                 self.configure_sorting, 'sorting'),
@@ -297,6 +309,9 @@ class RecordingsDirectory(Item):
         return None
 
     def load_settings(self):
+        '''
+        document me
+        '''
         if vfs.isfile(self.settings_fxd):
             try:
                 parser = util.fxdparser.FXD(self.settings_fxd)
@@ -307,6 +322,9 @@ class RecordingsDirectory(Item):
                 traceback.print_exc()
 
     def save_settings(self):
+        '''
+        document me
+        '''
         try:
             parser = util.fxdparser.FXD(self.settings_fxd)
             parser.set_handler('tvrmsettings', self.write_settings_fxd, 'w', True)
@@ -364,6 +382,7 @@ class RecordedProgramItem(VideoItem):
         self.name = name
         self.files = video_item.files
         self.parent = DirItem(config.TV_RECORD_DIR, None)
+
         keep = self.video_item['keep']
         if not keep:
             keep = False
@@ -393,17 +412,19 @@ class RecordedProgramItem(VideoItem):
         """
         return the default action
         """
-        items = self.video_item.actions()
+        actions = VideoItem.actions(self)
+        items = actions[0:2]
         items.append((self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')))
         items.append((self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched')))
+        items = items + actions[2:]
         return items
 
 
-    def play(self, arg=None, menuw=None):
+    def play(self, arg=None, menuw=None, alternateplayer=False):
         """
         Play the recorded program, and then mark it as watched.
         """
-        self.video_item.play(menuw=menuw, arg=arg)
+        self.video_item.play(menuw=menuw, arg=arg, alternateplayer=alternateplayer)
 
         # Mark this programme as watched.
         self.update_fxd(True, self.keep)
@@ -491,6 +512,9 @@ class RecordedProgramItem(VideoItem):
         fxd.info['keep'] = str(keep)
         fxd.title = self.video_item.name
         fxd.writeFxd()
+
+        self.watched = watched
+        self.keep = keep
 
 
     def set_icon(self):
@@ -930,6 +954,9 @@ class DiskManager(plugin.DaemonPlugin):
 # Helper functions
 # ======================================================================
 def copy_and_replace_menu_item(menuw, item):
+    '''
+    document me
+    '''
     menu = menuw.menustack[-1]
     # rebuild menu
     try:
@@ -943,6 +970,9 @@ def copy_and_replace_menu_item(menuw, item):
 
 
 def get_status_sort_order(watched, keep):
+    '''
+    document me
+    '''
     orders = STATUS_ORDERS[status_order]
 
     order = orders[STATUS_ORDER_UNWATCHED]

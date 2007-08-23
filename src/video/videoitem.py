@@ -376,8 +376,7 @@ class VideoItem(Item):
 
         util.videothumb.snapshot(self.filename)
         pop.destroy()
-        if menuw.menustack[-1].selected != self:
-            menuw.back_one_menu()
+        menuw.delete_submenu()
 
 
     def play_max_cache(self, arg=None, menuw=None):
@@ -569,7 +568,10 @@ class VideoItem(Item):
 
         self.plugin_eventhandler(PLAY, menuw)
 
+        self.menuw.delete_submenu()
+
         error = self.player.play(mplayer_options, self)
+
 
         if error:
             # If we are a subitem we don't show any error message before

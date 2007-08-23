@@ -331,7 +331,7 @@ class ProgramItem(Item):
                                 item_types = 'tv program menu')
         # do not return from the search list to the submenu
         # where the search was initiated
-        search_menu.back_one_menu = 2
+        menuw.delete_submenu()
         menuw.pushmenu(search_menu)
         menuw.refresh()
 
