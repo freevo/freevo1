@@ -84,9 +84,12 @@ class FavoriteItem(Item):
         # needed by the inputbox handler
         self.menuw = None
 
+        self.red_action = (self.display_submenu,_('Edit favorite'))
+        self.green_action = (self.rem_favorite, _('Remove favorite'))
+
 
     def actions(self):
-        return [( self.display_submenu , _('Display favorite'))]
+        return [( self.display_submenu , _('Edit favorite'))]
 
 
     def display_submenu(self, arg=None, menuw=None):
@@ -354,10 +357,11 @@ class FavoriteItem(Item):
                                                            self.fav.allowDuplicates,
                                                            self.fav.onlyNew)
             if result:
-                self.fav_action = 'edit'
                 if menuw:
-                    # and reload the menu that we return to
-                    menuw.back_one_menu(arg='reload')
+                    menuw.delete_submenu()
+                    if self.fav_action == 'add':
+                        menuw.refresh(reload=1)
+                self.fav_action = 'edit'
                 pop.destroy()
             else:
                 pop.destroy()
@@ -377,8 +381,8 @@ class FavoriteItem(Item):
         if result:
             # if this is successfull
             if menuw:
-                # reload the menu that we return to
-                menuw.back_one_menu(arg='reload')
+                menuw.delete_submenu()
+                menuw.refresh(reload=1)
             # and show a short message of success
             msgtext = text=_('"%s" has been removed from favorites') % name
             AlertBox(text=msgtext).show()

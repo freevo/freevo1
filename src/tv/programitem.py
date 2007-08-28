@@ -258,10 +258,7 @@ class ProgramItem(Item):
         Add a program to favorites
         """
         if menuw:
-            # we do not want to return to this menu,
-            # if we delete it here, then later back_one_menu
-            # brings us back to the tvguide
-            menuw.delete_menu()
+            menuw.delete_submenu(refresh=False)
         # create a favorite
         fav = Favorite(self.title, self.prog,
                        True, True, True, -1, True, False)
@@ -276,10 +273,7 @@ class ProgramItem(Item):
         Edit the settings of a favorite
         """
         if menuw:
-            # we do not want to return to this menu,
-            # if we delete it here, then later back_one_menu
-            # brings us back to the tvguide
-            menuw.delete_menu()
+            menuw.delete_submenu(refresh=False)
 
         # get the favorite from the record_client
         (got_fav, fav) = record_client.getFavoriteObject(self.prog)
