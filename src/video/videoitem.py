@@ -337,17 +337,6 @@ class VideoItem(Item):
         return items
 
 
-    def display_submenu(self, arg=None, menuw=None):
-        """
-        Open the submenu for this item
-        """
-        if not menuw:
-            return
-        # this tries to imitated freevo's internal way of creating submenus
-        menuw.make_submenu(_('Video Menu'), self.actions(), self)
-        menuw.show()
-
-
     def show_details(self, arg=None, menuw=None):
         """
         Show more details
@@ -788,11 +777,12 @@ class ShowDetails:
         elif event == 'MENU_SUBMENU':
             if hasattr(self.menuw.menustack[-1],'is_submenu'):
                 # the last menu has been a submenu, we just have to show it
-                self.menuw.show()
                 rc.set_context(self.menuw.get_event_context())
+                self.menuw.show()
             else:
                 # we have to create the submenu
-                self.movie.display_submenu(menuw=self.menuw)
+                self.menuw.eventhandler('MENU_SUBMENU')
+                self.menuw.show()
             return True
         elif event == 'MENU_UP':
             # scroll the description up
