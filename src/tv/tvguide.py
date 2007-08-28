@@ -58,9 +58,9 @@ class TVGuide(Item):
         Item.__init__(self)
 
         # get skin definitions of the TVGuide
-        self.n_items, hours_per_page = skin.items_per_page(('tv', self))
+        self.n_items, self.hours_per_page = skin.items_per_page(('tv', self))
         # end of visible guide
-        stop_time = start_time + hours_per_page * 60 * 60
+        stop_time = start_time + self.hours_per_page * 60 * 60
 
         # constructing the guide takes some time
         msgtext = _('Preparing the program guide')
@@ -75,8 +75,9 @@ class TVGuide(Item):
         selected = None
         for chan in channels:
             if chan.programs:
-                selected = chan.programs[0]
+                self.selected = chan.programs[0]
                 break
+
 
         self.col_time = 30      # each col represents 30 minutes
         self.n_cols  = (stop_time - start_time) / 60 / self.col_time
@@ -331,6 +332,49 @@ class TVGuide(Item):
                     pass
 
         self.menuw.refresh()
+
+
+    def jump_to_now(self, old_selected):
+        """
+        jump to now in the tv guide.
+        """
+        start_time = time.time()
+        stop_time = start_time + self.hours_per_page * 60 * 60
+        start_channel = self.start_channel
+
+        # we need to determine the program,
+        # that is running now at the selected channel
+        programs = self.guide.GetPrograms(start = start_time+1,
+                                          stop = stop_time-1,
+                                          chanids = old_selected.channel_id)
+
+        if (len(programs) > 0) and (len(programs[0].programs) > 0):
+            selected = programs[0].programs[0]
+        else:
+            selected = None
+
+        self.rebuild(start_time, stop_time, start_channel, selected)
+
+
+    def advance_tv_guide(self, hours=0):
+        """
+        advance the tv guide by the number of hours that is passed in arg.
+        """
+        new_start_time = self.start_time + (hours * 60 * 60)
+        new_end_time =  self.stop_time + (hours * 60 * 60)
+        start_channel = self.start_channel
+
+        # we need to determine the new selected program
+        programs = self.guide.GetPrograms(start = new_start_time+1,
+                                          stop = new_end_time-1,
+                                          chanids = self.start_channel)
+
+        if (len(programs) > 0) and (len(programs[0].programs) > 0):
+            selected = programs[0].programs[0]
+        else:
+            selected = None
+
+        self.rebuild(new_start_time,new_end_time, start_channel, selected)
 
 
     def rebuild(self, start_time, stop_time, start_channel, selected):

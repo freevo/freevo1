@@ -39,7 +39,7 @@ import event
 import rc
 
 from tv.tvguide import TVGuide
-from tv.programitem import ShowProgramDetails
+from tv.programitem import ProgramItem
 from item import Item
 from menu import MenuItem, Menu
 from pygame import image,transform, Surface
@@ -65,44 +65,35 @@ event.TVMENU_EVENTS['GREEN']  = BUTTONBAR_GREEN
 event.TVMENU_EVENTS['YELLOW'] = BUTTONBAR_YELLOW
 event.TVMENU_EVENTS['BLUE']   = BUTTONBAR_BLUE
 
-# Action functions used to perform special actions for the button bar
-def advance_tv_guide(arg=0, menuw=None):
-    """
-    action to advance the tv guide by a number of hours passed in arg.
-    """
-    tvguide = menuw.menustack[-1]
-    new_start_time = tvguide.start_time + (arg * 60 * 60)
-    new_end_time =  tvguide.stop_time + (arg * 60 * 60)
-    programs = tvguide.guide.GetPrograms(new_start_time+1, new_end_time-1, [ tvguide.start_channel])
-    if (len(programs) > 0) and (len(programs[0].programs) > 0):
-        new_selected_program = programs[0].programs[0]
-    else:
-        new_selected_program = None
-    tvguide.rebuild(new_start_time,new_end_time, tvguide.start_channel, new_selected_program)
-    menuw.refresh()
-
-
-def send_event_to_menu(arg=None, menuw=None):
-    """
-    send the event specified in arg to menuw's eventhandler.
-    """
-    menuw.eventhandler(arg)
-
-
-
-
-
-def show_program_info(arg=None, menuw =None):
-    tvguide = menuw.menustack[-1]
-    prg = tvguide.selected
-    ShowProgramDetails(menuw, prg)
-
-
  # Plugin interface
 class PluginInterface(plugin.DaemonPlugin):
     """
-    global button bar plugin.
+    This plugin adds to the bottom of the display the familiar
+    Red/Green/Yellow/Blue buttons found on most TVs and settop boxes.
+    The buttons make some actions from the submenu of a item available
+    directly.
+
+    To use the button bar add the following line to your local_conf.py:
+    plugin.activate('buttonbar')
+
+    Where the actions mapped to each of the colors can be one of the following:
+    * info - Brings up a screen displaying more information than can be displayed
+      in the few lines available on the TV guide page.
+    * record - Same as the record button.
+    * adv:<number> - Special action to allow navigation of the TV Guide,
+      <number> can be either positive or negative and is the number of hours
+      to go forward/back.
+    * now - jumps back to the currently running program
+
+    You can also map the following actions to unused keys of your keyboard
+    (For example):
+
+    KEYMAP[key.K_F7] = 'RED'
+    KEYMAP[key.K_F8] = 'GREEN'
+    KEYMAP[key.K_F11] = 'YELLOW'
+    KEYMAP[key.K_F12] = 'BLUE'
     """
+
     def __init__(self):
         """
         init the buttonbar
@@ -116,10 +107,10 @@ class PluginInterface(plugin.DaemonPlugin):
         self.colors = ['red', 'green', 'yellow', 'blue']
         self.actions = [None, None, None, None]
         if not hasattr(config, 'BUTTONBAR_TVGUIDE_ACTIONS'):
-            self.tvguide_actions = [MenuItem('-1 Day', action= advance_tv_guide, arg= -24),
-                                             MenuItem('-6 Hours', action= advance_tv_guide, arg= -6),
-                                             MenuItem('+6 Hours', action= advance_tv_guide, arg= 6),
-                                             MenuItem('+1 Day', action= advance_tv_guide, arg= 24)]
+            self.tvguide_actions = [MenuItem('-1 Day', action= self.advance_tv_guide, arg= -24),
+                                    MenuItem('-6 Hours', action= self.advance_tv_guide, arg= -6),
+                                    MenuItem('+6 Hours', action= self.advance_tv_guide, arg= 6),
+                                    MenuItem('+1 Day', action= self.advance_tv_guide, arg= 24)]
         else:
             # Process TV Guide buttons
             self.tvguide_actions = [None, None, None, None]
@@ -128,21 +119,64 @@ class PluginInterface(plugin.DaemonPlugin):
                     actionstr = config.BUTTONBAR_TVGUIDE_ACTIONS[self.colors[index]]
                     if actionstr == 'record':
                         self.tvguide_actions[index] = MenuItem(_('Record'),
-                                                                                  action=send_event_to_menu,
-                                                                                  arg= event.TV_START_RECORDING)
+                                                      action=self.send_event_to_menu,
+                                                      arg= event.TV_START_RECORDING)
                     elif actionstr == 'info':
-                        self.tvguide_actions[index] = MenuItem(_('Info'),
-                                                                                  action=show_program_info)
+                        self.tvguide_actions[index] = MenuItem(_('Full Description'),
+                                                      action=self.show_program_info)
+                    elif actionstr == 'now':
+                        self.tvguide_actions[index] = MenuItem(_('Now'),
+                                                      action=self.jump_to_now)
+
                     elif actionstr.startswith('adv:'):
                         hours = eval(actionstr[4:])
                         self.tvguide_actions[index] = MenuItem('Advance %d hours' % hours,
-                                                                                  action= advance_tv_guide,
-                                                                                  arg= hours)
+                                                      action= self.advance_tv_guide,
+                                                      arg= hours)
+                    else:
+                        msgtext = _('WARNING: ')
+                        msgtext+= _('"%s" is not a valid argument for the button bar. ') % actionstr
+                        _debug_(msgtext, config.DERROR)
+
+
+
         # Getting current LOCALE
         try:
             locale.resetlocale()
         except:
             pass
+
+    # Action functions used to perform special actions for the button bar
+    def advance_tv_guide(self, arg=0, menuw=None):
+        """
+        action to advance the tv guide by a number of hours passed in arg.
+        """
+        tvguide = menuw.menustack[-1]
+        tvguide.advance_tv_guide(hours=arg)
+
+
+    def jump_to_now(self, arg=None, menuw=None):
+        """
+        action to return to 'now' in the tv guide.
+        """
+        tvguide = menuw.menustack[-1]
+        tvguide.jump_to_now(tvguide.selected)
+
+
+    def send_event_to_menu(self, arg=None, menuw=None):
+        """
+        send the event specified in arg to menuw's eventhandler.
+        """
+        menuw.eventhandler(arg)
+
+
+    def show_program_info(self, arg=None, menuw=None):
+        """
+        open the 'Full description' screen
+        """
+        tvguide = menuw.menustack[-1]
+        prg = ProgramItem(tvguide, tvguide.selected, context = 'guide')
+        prg.show_description(menuw=menuw)
 
 
     def config(self):
@@ -255,6 +289,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         return result
 
+
     def get_actions(self, menu):
         """
         Retrieve the Red/Green/Yellow/Blue actions for supplied menu.
@@ -292,7 +327,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 dateformat = '%d-%b'
 
             for action in self.tvguide_actions:
-                if action.function == advance_tv_guide:
+                if action and action.function == self.advance_tv_guide:
                     newtime = menu.start_time + (action.arg * 60 *60)
                     action.name = Unicode(time.strftime('%s %s' % (dateformat, timeformat),
                                                         time.localtime(newtime)))
@@ -332,5 +367,5 @@ class PluginInterface(plugin.DaemonPlugin):
 
         # Special case for when there are more than 5 possible actions the last button will 'Enter' the submenu
         if len(actions) > 5:
-            result[3] = MenuItem(_("More Options"), action=send_event_to_menu, arg= event.MENU_SUBMENU)
+            result[3] = MenuItem(_("More Options"), action=self.send_event_to_menu, arg= event.MENU_SUBMENU)
         return result
