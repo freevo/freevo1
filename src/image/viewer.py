@@ -253,7 +253,7 @@ class ImageViewer(GUIObject):
             screen = self.osd.screen.convert()
             screen.fill((0,0,0,0))
             screen.blit(self.osd.zoomsurface(image, scale, bbx, bby, bbw, bbh,
-                                        rotation = self.rotation).convert(), (x, y))
+                                        rotation=self.rotation).convert(), (x, y))
             # update the OSD
             self.drawosd(layer=screen)
 
@@ -266,7 +266,7 @@ class ImageViewer(GUIObject):
         else:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
             self.osd.drawsurface(image, x, y, scale, bbx, bby, bbw, bbh,
-                                 rotation = self.rotation)
+                                 rotation=self.rotation)
 
             # update the OSD
             self.drawosd()
@@ -383,7 +383,7 @@ class ImageViewer(GUIObject):
             else:
                 # Display entire picture, don't load next image in case
                 # the user wants to zoom around some more.
-                self.view(self.fileitem, zoom=0, rotation = self.rotation)
+                self.view(self.fileitem, zoom=0, rotation=self.rotation)
             return True
 
         elif event == IMAGE_MOVE:
@@ -392,7 +392,7 @@ class ImageViewer(GUIObject):
                 self.zoom = self.zoom, coord[0], coord[1]
             else:
                 self.zoom = self.zoom[0], self.zoom[1] + coord[0], self.zoom[2] + coord[1]
-            self.view(self.fileitem, zoom=self.zoom, rotation = self.rotation)
+            self.view(self.fileitem, zoom=self.zoom, rotation=self.rotation)
             return True
 
         # save the image with the current rotation
