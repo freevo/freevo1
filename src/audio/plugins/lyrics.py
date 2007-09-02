@@ -27,11 +27,10 @@
 #
 # -----------------------------------------------------------------------
 
-import time
-import plugin, menu
+import time, os, re
+import plugin, menu, rc
 
 import urllib, urllib2
-import re
 
 from gui.PopupBox import PopupBox
 
@@ -42,23 +41,13 @@ class PluginInterface(plugin.ItemPlugin):
         plugin.ItemPlugin.__init__(self)
 
     def search_lyrics(self, arg=None, menuw=None):
-        box = PopupBox(text=_('searching lyrics...'))
+        box = PopupBox(text=_('Searching lyrics...'))
         box.show()
         lyrics = self.fetch_lyric_leoslyrics()
 
         if lyrics != False:
-            #create the menu with all the lines
-            items = []
-            for line in lyrics:
-                #bad hack to remove last "bad" character
-                if line != lyrics[len(lyrics) -1]:
-                    line = line[:-1]
-                if line == "":
-                    line = "\n"
-                items.append(menu.MenuItem('%s' % (line)))
-            lyricsmenu = menu.Menu(_('lyrics'), items)
             box.destroy()
-            menuw.pushmenu(lyricsmenu)
+            ShowDetails(menuw, self.item, lyrics)
         else:
             box.destroy()
             box = PopupBox(text=_('Lyrics not found, sorry...'))
@@ -90,8 +79,9 @@ class PluginInterface(plugin.ItemPlugin):
 
         if result_code == '0': #ok
             #get the hid
-            filter_info = re.search('.+hid="(.+)" exactMatch="(.+)".+', info)
-            hid = '"' + filter_info.group(1) + '"'
+            filter_info = re.search('.+hid="(.+)" exactMatch="true".+', info)
+            if filter_info:
+                hid = '"' + filter_info.group(1) + '"'
 
             #fetch the new url
             try:
@@ -101,12 +91,95 @@ class PluginInterface(plugin.ItemPlugin):
                 lyrics_raw = urllib2.urlopen(url2).read()
                 reg_expr = re.compile('.+<text>(.+)</text>.+', re.DOTALL|re.MULTILINE)
                 self.lyrics = re.search(reg_expr, lyrics_raw).group(1)
-                self.lyrics = self.lyrics.replace("&#xD;", "")
-                lyrics = self.lyrics.split("\n")
-
-                return lyrics
+                self.lyrics = self.lyrics.replace("&#xD;", os.linesep)
+                self.lyrics = self.lyrics.replace('\r\n','')
+                self.lyrics = self.lyrics.replace('&amp;','&')
+                return Unicode(self.lyrics, encoding='utf-8')
             except:
                 print "Error fetching lyrics."
                 return False
+        else:
+            return False
+
+########################
+# Show Text
+
+import skin
+# Create the skin_object object
+skin_object = skin.get_singleton()
+if skin_object:
+    skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
+
+# Program Info screen
+class ShowDetails:
+    """
+    Screen to show more details
+    """
+    def __init__(self, menuw, audio, lyrics):
+        self.audio           = audio
+        self.name            = audio.name
+        self.scrollable_text = skin.ScrollableText(lyrics)
+        self.visible = True
+
+        self.menuw = menuw
+        self.menuw.hide(clear=False)
+
+        # this activates the eventhandler and the context of this class
+        rc.app(self)
+
+        if skin_object:
+            skin_object.draw('tvguideinfo', self)
+
+
+
+    def getattr(self, name):
+        if name == 'title':
+            return self.name
+
+        if self.audio:
+            return self.audio.getattr(name)
+
+        return u''
+
+
+    def eventhandler(self, event, menuw=None):
+        """
+        eventhandler for the programm description display
+        """
+        if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
+            # leave the description display and return to the previous menu
+            self.menuw.show()
+            # we do not need to call rc.app(None) here,
+            # because that is done by menuw.show(),
+            # but we need to set the context manually,
+            # because rc.app(None) sets it always to 'menu'
+            rc.set_context(self.menuw.get_event_context())
+            return True
+        elif event == 'MENU_SUBMENU':
+            if hasattr(self.menuw.menustack[-1],'is_submenu'):
+                # the last menu has been a submenu, we just have to show it
+                rc.set_context(self.menuw.get_event_context())
+                self.menuw.show()
+            else:
+                # we have to create the submenu
+                self.menuw.eventhandler('MENU_SUBMENU')
+                self.menuw.show()
+            return True
+        elif event == 'MENU_UP':
+            # scroll the description up
+            self.scrollable_text.scroll(True)
+            skin_object.draw('tvguideinfo', self)
+            return True
+        elif event == 'MENU_DOWN':
+            # scroll the description down
+            self.scrollable_text.scroll(False)
+            skin_object.draw('tvguideinfo', self)
+            return True
+        elif event == 'MENU_PLAY_ITEM':
+            self.menuw.show()
+            rc.set_context(self.menuw.get_event_context())
+            # start playing
+            self.audio.play(menuw=self.menuw)
+            return True
         else:
             return False
