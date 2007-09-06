@@ -402,7 +402,6 @@ class Item:
         """
         simple eventhandler for an item
         """
-
         if not menuw:
             menuw = self.menuw
 

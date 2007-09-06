@@ -55,6 +55,7 @@ class Window(GUIObject):
         self.osd.add_app(self)
 
         self.event_context = 'input'
+        _debug_('window: setting context to %s' % self.event_context, 2)
         rc.set_context(self.event_context)
 
         if not width:

@@ -48,6 +48,7 @@ import kaa.metadata as metadata
 from gui   import PopupBox, AlertBox, ConfirmBox
 from item  import Item, FileInformation
 from event import *
+from skin.widgets import ScrollableTextScreen
 
 class VideoItem(Item):
 
@@ -706,7 +707,7 @@ if skin_object:
     skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
 
 # Program Info screen
-class ShowDetails:
+class ShowDetails(ScrollableTextScreen):
     """
     Screen to show more details
     """
@@ -734,21 +735,12 @@ class ShowDetails:
             if movie['year']:
                 description +=  _('Year')+u' : '+movie['year'] + u'\n'
 
-
         # that's all, we can show this to the user
+        ScrollableTextScreen.__init__(self, 'tvguideinfo', description)
         self.name            = name
-        self.scrollable_text = skin.ScrollableText(description)
         self.visible = True
 
-        self.menuw = menuw
-        self.menuw.hide(clear=False)
-
-        # this activates the eventhandler and the context of this class
-        rc.app(self)
-
-        if skin_object:
-            skin_object.draw('tvguideinfo', self)
-
+        self.show(menuw)
 
 
     def getattr(self, name):
@@ -765,40 +757,13 @@ class ShowDetails:
         """
         eventhandler for the programm description display
         """
-        if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
-            # leave the description display and return to the previous menu
-            self.menuw.show()
-            # we do not need to call rc.app(None) here,
-            # because that is done by menuw.show(),
-            # but we need to set the context manually,
-            # because rc.app(None) sets it always to 'menu'
-            rc.set_context(self.menuw.get_event_context())
-            return True
-        elif event == 'MENU_SUBMENU':
-            if hasattr(self.menuw.menustack[-1],'is_submenu'):
-                # the last menu has been a submenu, we just have to show it
-                rc.set_context(self.menuw.get_event_context())
-                self.menuw.show()
-            else:
-                # we have to create the submenu
-                self.menuw.eventhandler('MENU_SUBMENU')
-                self.menuw.show()
-            return True
-        elif event == 'MENU_UP':
-            # scroll the description up
-            self.scrollable_text.scroll(True)
-            skin_object.draw('tvguideinfo', self)
-            return True
-        elif event == 'MENU_DOWN':
-            # scroll the description down
-            self.scrollable_text.scroll(False)
-            skin_object.draw('tvguideinfo', self)
-            return True
-        elif event == 'MENU_PLAY_ITEM':
-            self.menuw.show()
-            rc.set_context(self.menuw.get_event_context())
-            # try to watch this program
-            self.movie.play(menuw=self.menuw)
-            return True
-        else:
-            return False
+        event_consumed = ScrollableTextScreen.eventhandler(self, event, menuw)
+
+        if not event_consumed:
+            if event == MENU_PLAY_ITEM:
+                self.menuw.back_one_menu()
+                # try to watch this program
+                self.movie.play(menuw=self.menuw)
+                event_consumed = True
+
+        return event_consumed

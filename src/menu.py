@@ -389,7 +389,7 @@ class MenuWidget(GUIObject):
             if self.children:
                 return False
 
-            return skin.draw(menu.type, menu)
+            return menu.refresh()
 
         if self.menustack[-1].umount_all == 1:
             util.umount_all()
@@ -853,6 +853,7 @@ class MenuWidget(GUIObject):
         rc.post_event(MENU_PROCESS_END)
 
         # make sure we are in context 'menu'
+        _debug_('menu: setting context to %s' % self.event_context, 2)
         rc.set_context(self.event_context)
 
 

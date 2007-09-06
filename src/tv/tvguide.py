@@ -94,8 +94,8 @@ class TVGuide(Item):
 
         self.update_schedules(force=True)
 
-        self.rebuild(start_time, stop_time, guide.chan_list[0].id, selected)
         self.event_context = 'tvmenu'
+        self.rebuild(start_time, stop_time, guide.chan_list[0].id, selected)
         menuw.pushmenu(self)
 
 
@@ -139,6 +139,7 @@ class TVGuide(Item):
         Handles events in the tv guide
         """
         _debug_('TVGUIDE EVENT is %s' % event)
+        event_consumed = False
 
         ## MENU_CHANGE_STYLE
         if event == MENU_CHANGE_STYLE:
@@ -176,30 +177,37 @@ class TVGuide(Item):
 
                 self.n_cols  = (stop_time - start_time) / 60 / self.col_time
                 self.rebuild(start_time, stop_time, start_channel, selected)
+            event_consumed = True
 
         ## MENU_UP: Move one channel up in the guide
         if event == MENU_UP:
             self.change_channel(-1)
+            event_consumed = True
 
         ## MENU_DOWN: Move one channel down in the guide
         elif event == MENU_DOWN:
             self.change_channel(1)
+            event_consumed = True
 
         ## MENU_LEFT: Move to the next program on this channel
         elif event == MENU_LEFT:
             self.change_program(-1)
+            event_consumed = True
 
         ## MENU_RIGHT: Move to previous programm on this channel
         elif event == MENU_RIGHT:
             self.change_program(1)
+            event_consumed = True
 
         ## MENU_PAGEUP: Moves to the first of the currently displayed channels
         elif event == MENU_PAGEUP:
             self.change_channel(-self.n_items)
+            event_consumed = True
 
         ## MENU_PAGEDOWN: Move to the last of the currently displayed channels
         elif event == MENU_PAGEDOWN:
             self.change_channel(self.n_items)
+            event_consumed = True
 
 
         ## MENU_SUBMENU: Open a submenu for the selected program
@@ -208,6 +216,7 @@ class TVGuide(Item):
             pi = ProgramItem(self, prog=self.selected, context='guide')
             #and show its submenu
             pi.display_submenu(menuw=self.menuw)
+            event_consumed = True
 
         ## MENU_SELECT: Show the description
         elif event == MENU_SELECT:
@@ -215,11 +224,13 @@ class TVGuide(Item):
             pi = ProgramItem(self, prog=self.selected, context='guide')
             #and show selecte the first action in the actions list
             pi.actions()[0][0](menuw=self.menuw)
+            event_consumed = True
 
         ## TV_START_RECORDING: add or remove this program from schedule
         elif event == TV_START_RECORDING:
             pi = ProgramItem(self, prog=self.selected, context='guide')
             pi.toggle_rec(menuw=self.menuw)
+            event_consumed = True
 
         ## PLAY: Start to watch the selected channel (if it is possible)
         elif event == PLAY:
@@ -227,10 +238,12 @@ class TVGuide(Item):
             pi = ProgramItem(self, prog=self.selected, context='guide')
             #and show its submenu
             pi.play(menuw=self.menuw)
+            event_consumed = True
 
         ## PLAY_END: Show the guide again
         elif event == PLAY_END:
             self.show()
+            event_consumed = True
 
         # FIX or REMOVE:
         # the numerical INPUT events are not available in the tvmenu context
@@ -264,12 +277,9 @@ class TVGuide(Item):
 
                 self.rebuild(self.start_time, self.stop_time,
                              self.start_channel, self.selected)
+                event_consumed = True
 
-        ## unknown event
-        else:
-            return FALSE
-
-        return TRUE
+        return event_consumed
 
 
     ### gui functions
@@ -290,17 +300,19 @@ class TVGuide(Item):
             skin.clear()
 
 
-    def refresh(self):
+    def refresh(self, force_update=True):
         """refresh the guide
 
         This function is called automatically by freevo whenever this menu is
         opened or reopened.
         """
         _debug_('refresh',2)
-        if not self.menuw.children:
-            rc.set_context(self.event_context)
-            self.menuw.refresh()
-        self.update(force=True)
+        if self.menuw.children:
+            return
+        _debug_('tvguide: setting context to %s' % self.event_context, 2)
+        rc.set_context(self.event_context)
+        self.update(force_update)
+        skin.draw(self.type, self)
 
 
     def update(self, force=False):
@@ -331,7 +343,7 @@ class TVGuide(Item):
                 except:
                     pass
 
-        self.menuw.refresh()
+        #self.refresh()
 
 
     def jump_to_now(self, old_selected):
@@ -456,7 +468,8 @@ class TVGuide(Item):
 
         self.table = table
         # then we can refresh the display with this programs
-        self.update()
+        #self.update()
+        self.refresh(force_update=False)
 
 
     def change_program(self, value, full_scan=False):

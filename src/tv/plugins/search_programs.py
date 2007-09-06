@@ -48,15 +48,12 @@ from gui import sounds
 from gui.PopupBox import PopupBox
 from gui.AlertBox import AlertBox
 from item import Item
-from event import *
+
 from menu import MenuItem, Menu
 from tv.programitem import ProgramItem
 import tv.record_client as record_client
+from skin.widgets import TextEntryScreen
 
-# Create the skin_object object
-import skin
-skin_object = skin.get_singleton()
-skin_object.register('searchprograms', ('screen', 'textentry', 'buttongroup', 'plugin'))
 
 class PluginInterface(plugin.MainMenuPlugin):
     def __init__(self):
@@ -73,148 +70,18 @@ class SearchPrograms(Item):
     def __init__(self, parent):
         Item.__init__(self, parent, skin_type='tv')
         self.name = _('Search Programs')
-        self.text_entry = skin.TextEntry('')
-        self.type = 'searchprograms'
 
-        #
-        # Create button groups for alphabet/numbers/symbols
-        #
-
-        # Create common buttons
-        self.search_button = skin.Button(_('Search'), self.search_for_programs, None)
-        self.left_button   = skin.Button(_('Left'), self.move_caret, 'left')
-        self.right_button  = skin.Button(_('Right'), self.move_caret, 'right')
-        self.delete_button = skin.Button(_('Delete'), self.delete_char, None)
-
-
-        self.alphabet_button_group = skin.ButtonGroup(6, 7)
-        keys = _('ABCDEFGHIJKLMNOPQRSTUVWXYZ ')
-        self.__init_keyboard_buttons(keys,  self.alphabet_button_group)
-
-        self.numbers_button_group = skin.ButtonGroup(6, 7)
-        keys = _('1234567890')
-        self.__init_keyboard_buttons(keys,  self.numbers_button_group)
-
-        self.symbols_button_group = skin.ButtonGroup(6, 7)
-        keys = _('!"#$%^&*();:\'@~?,.<>-=+\[]{}')
-        self.__init_keyboard_buttons(keys,  self.symbols_button_group)
-
-        characters_button = skin.Button(_('ABC'),  self.change_button_group,
-                                                   self.alphabet_button_group)
-        numbers_button = skin.Button(_('123'),  self.change_button_group,
-                                                self.numbers_button_group)
-        symbols_button = skin.Button(_('Symbls'),  self.change_button_group,
-                                                   self.symbols_button_group)
-
-        self.numbers_button_group.set_button(0, 5, characters_button)
-        self.symbols_button_group.set_button(0, 5, characters_button)
-
-        self.alphabet_button_group.set_button(1, 5, numbers_button)
-        self.symbols_button_group.set_button(1, 5, numbers_button)
-
-        self.alphabet_button_group.set_button(2, 5, symbols_button)
-        self.numbers_button_group.set_button(2, 5, symbols_button)
-
-        self.button_group = self.alphabet_button_group
-
-        self.__redraw = False
 
     def actions(self):
         return [(self.show_search, self.name)]
 
 
     def show_search(self, arg=None, menuw=None):
-        self.menuw = menuw
-        #self.__redraw = False
-        #rc.app(self)
-        #skin_object.draw('searchprograms', self)
-        menuw.pushmenu(self)
-
-    def refresh(self):
-        self.__redraw = False
-        skin_object.draw('searchprograms', self)
-
-    def eventhandler(self, event, menuw=None):
-        """
-        eventhandler
-        """
-        consumed = False
-
-#        if event is MENU_BACK_ONE_MENU:
-#            rc.app(None)
-#            self.menuw.refresh()
-#            consumed = True
-
-        if event is MENU_SELECT:
-            sounds.play_sound(sounds.MENU_SELECT)
-            self.button_group.selected_button.select()
-            consumed = True
-
-        elif event in (MENU_LEFT, MENU_RIGHT, MENU_DOWN, MENU_UP):
-            if event is MENU_LEFT:
-                self.__redraw = self.button_group.move_left()
-            elif event is MENU_RIGHT:
-                self.__redraw = self.button_group.move_right()
-            elif event is MENU_DOWN:
-                self.__redraw = self.button_group.move_down()
-            elif event is MENU_UP:
-                self.__redraw = self.button_group.move_up()
-
-            if self.__redraw:
-                sounds.play_sound(sounds.MENU_NAVIGATE)
-            consumed = True
-
-        if self.__redraw:
-            skin_object.draw('searchprograms', self)
-            self.__redraw = False
-        return consumed
+        text_entry = TextEntryScreen((_('Search'), self.search_for_programs), self.name)
+        text_entry.show(menuw)
 
 
-    def insert_key(self, arg):
-        self.text_entry.insert_char_at_caret(arg)
-        self.__redraw = True
-
-
-    def move_caret(self, arg):
-        if arg == 'left':
-            self.text_entry.caret_left()
-        elif arg == 'right':
-            self.text_entry.caret_right()
-        self.__redraw = True
-
-
-    def delete_char(self, arg):
-        self.text_entry.delete_char_at_caret()
-        self.__redraw = True
-
-
-    def change_button_group(self, arg):
-        self.button_group = arg
-        self.button_group.set_selected(self.button_group.buttons[0][0])
-        self.__redraw = True
-
-
-    def __init_keyboard_buttons(self, keys, button_group):
-        r = 0
-        c = 0
-        for key in keys:
-            if key == ' ':
-                text = _('Space')
-            else:
-                text = key
-            button_group.set_button(r, c, skin.Button(text, self.insert_key, key))
-            c += 1
-            if c == 5:
-                r += 1
-                c = 0
-        # Add common buttons to the group
-        button_group.set_button(0,6, self.search_button)
-        button_group.set_button(1,6, self.left_button)
-        button_group.set_button(2,6, self.right_button)
-        button_group.set_button(3,6, self.delete_button)
-
-    def search_for_programs(self, arg):
-        text = self.text_entry.text
+    def search_for_programs(self, menuw, text):
         pop = PopupBox(text=_('Searching, please wait...'))
         pop.show()
         (result, matches) = self.findMatches(text)
@@ -238,8 +105,8 @@ class SearchPrograms(Item):
         search_menu = Menu(_( 'Search Results' ), items,
                            item_types = 'tv program menu')
 
-        self.menuw.pushmenu(search_menu)
-        self.menuw.refresh()
+        menuw.pushmenu(search_menu)
+        menuw.refresh()
 
     def findMatches(self, find=None, movies_only=None):
         global guide

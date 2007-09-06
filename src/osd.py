@@ -447,7 +447,7 @@ class OSD:
             self.app_list.remove(app)
         if _times and hasattr(self.focused_app(), 'event_context'):
             _debug_('app is %s' % self.focused_app(),2)
-            _debug_('Setting context to %s' % self.focused_app().get_event_context(),2)
+            _debug_('osd: Setting context to %s' % self.focused_app().get_event_context(),2)
             rc.set_context(self.focused_app().get_event_context())
 
 

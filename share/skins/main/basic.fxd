@@ -83,7 +83,7 @@
 
             <!-- 2. title: the area where the title of the menu (e.g. directory name -->
             <!-- will be displayed -->
-            <title visible="not idlebar" layout="title" x="10" y="10" 
+            <title  visible="not idlebar" layout="title" x="10" y="10" 
                 width="780" height="80"/>
 
             <!-- 3. view area: the cover image for audio/video, a thumbnail for image -->
@@ -105,12 +105,12 @@
         <!-- default no image: make listing area larger, don't show view area -->
         <menuset label="default no image" inherits="normal text style">
             <view visible="no"/>
-            <listing width="740"/>
+            <listing width="730"/>
         </menuset>
 
         <!-- default description: make listing area smaller, show info area -->
         <menuset label="default description" inherits="normal text style">
-            <listing height="370"/>
+            <listing height="370 - (buttonbar * (buttonbar_height + 10))"/>
             <info visible="yes" layout="info" x="10" y="490 - (buttonbar * (buttonbar_height + 10))" height="100" width="780"/>
         </menuset>
 
@@ -833,13 +833,7 @@
                 <image x="758" y="max-32" width="32" height="32" label="downarrow" filename="down.png"/>
             </scrollabletext>
         </tvguideinfo>
-        
-        <searchprograms>
-            <screen layout="screen" x="0" y="0" width="800" height="600"/>
-            <textentry layout="program search" x="10" y="70" width="780" height="40"/>
-            <buttongroup layout="keyboard" x="10" y="120" width="780" height="400"/>
-        </searchprograms>
-        
+
         <layout label="tvguideinfo program details">
             <content x="0" y="0" type="text" spacing="20" font="default">
                 <item type="default">
@@ -855,12 +849,25 @@
             </content>
         </layout>
 
-        <layout label="program search">
+        <!-- 
+        *******************************************************
+        ** Text Entry Screen 
+        ******************************************************* -->
+        
+        <textentry>
+            <screen layout="screen" x="0" y="0" width="800" height="600"/>
+            <title layout="subtitle" x="10" y="10 + idlebar_height" width="780" height="60"/>
+            <textentry layout="text entry" x="10" y="80 + idlebar_height" width="780" height="40"/>
+            <buttongroup layout="keyboard" x="10" y="130 + idlebar_height" width="780" height="390 - idlebar_height"/>
+        </textentry>
+        
+        <layout label="text entry">
             <background >
                 <rectangle size="2" color="0x000000" bgcolor="0xff000000" radius="0"/>
             </background>
             <content x="2" y="2" width="MAX-4" height="MAX-4" type="text" spacing="20" font="default" />
         </layout>
+
         <layout label="keyboard">
             <content font="default">
                 <item type="padding" width="5" height="5" />

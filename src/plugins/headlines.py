@@ -46,6 +46,7 @@ import urllib
 import config, menu, rc, plugin, skin, osd, util
 from gui.PopupBox import PopupBox
 from item import Item
+from skin.widgets import ScrollableTextScreen
 
 
 #get the singletons so we get skin info and access the osd
@@ -86,38 +87,6 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def items(self, parent):
         return [ HeadlinesMainMenuItem(parent) ]
-
-
-class ShowHeadlineDetails:
-    """
-    Screen to show the details of the headline items
-    """
-    def __init__(self, (item, menuw)):
-        self.menuw = menuw
-        self.menuw.hide(clear=False)
-        rc.app(self)
-        self.scrollable_text = skin.ScrollableText(item.description)
-        skin_object.draw('headlines', self)
-
-
-    def eventhandler(self, event, menuw=None):
-        """
-        eventhandler
-        """
-        if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
-            rc.app(None)
-            self.menuw.show()
-            return True
-        elif event == 'MENU_UP':
-            self.scrollable_text.scroll(True)
-            skin_object.draw('headlines', self)
-            return True
-        elif event == 'MENU_DOWN':
-            self.scrollable_text.scroll(False)
-            skin_object.draw('headlines', self)
-            return True
-
-        return False
 
 
 class HeadlinesSiteItem(Item):
@@ -199,7 +168,8 @@ class HeadlinesSiteItem(Item):
 
 
     def show_details(self, arg=None, menuw=None):
-        ShowHeadlineDetails(arg)
+        screen = ScrollableTextScreen('headlines', arg.description)
+        screen.show(menuw)
 
 
     def getheadlines(self, arg=None, menuw=None):
@@ -208,7 +178,7 @@ class HeadlinesSiteItem(Item):
         rawheadlines = self.getsiteheadlines()
         for title, link, description in rawheadlines:
             mi = menu.MenuItem('%s' % title, self.show_details, 0)
-            mi.arg = (mi, menuw)
+            mi.arg = mi
             mi.link = link
 
             description = description.replace('\n\n', '&#xxx;').replace('\n', ' ').\

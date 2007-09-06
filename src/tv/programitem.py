@@ -33,6 +33,8 @@ import time, os
 
 import config, menu, rc, skin
 
+from skin.widgets import ScrollableTextScreen
+from event import *
 from item import Item
 from favoriteitem import FavoriteItem
 
@@ -152,9 +154,10 @@ class ProgramItem(Item):
         """
         # watching TV should only be possible from the guide
         if not self.context=='guide':
-            rc.post_event('MENU_SELECT')
+            rc.post_event(MENU_SELECT)
             return
         now = time.time()
+        if menuw: menuw.delete_submenu()
         # Check if the selected program is >7 min in the future
         if self.prog.start > now + (7*60):
             if menuw: menuw.show()
@@ -188,9 +191,6 @@ class ProgramItem(Item):
             else:
                 # everything is ok, we can start watching!
                 self.parent.hide()
-                # return to the guide, which is self.parent
-                while not menuw.menustack[-1]==self.parent:
-                    menuw.delete_menu
                 self.parent.player('tv', self.prog.channel_id)
 
 
@@ -208,10 +208,11 @@ class ProgramItem(Item):
         if self.scheduled:
             # remove this program from schedule it it is already scheduled
             self.remove_program(menuw=menuw)
+            self.scheduled = False
         else:
             # otherwise add it to schedule without more questions
             self.schedule_program(menuw=menuw)
-
+            self.scheduled = True
 
     def schedule_program(self, arg=None, menuw=None):
         """
@@ -220,7 +221,7 @@ class ProgramItem(Item):
         # schedule the program
         (result, msg) = record_client.scheduleRecording(self.prog)
         if result:
-            menuw.delete_submenu()
+            menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
                 self.parent.update(force=True)
             else:
@@ -240,7 +241,7 @@ class ProgramItem(Item):
         # remove the program
         (result, msg) = record_client.removeScheduledRecording(self.prog)
         if result:
-            menuw.delete_submenu()
+            menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
                 self.parent.update(force=True)
             else:
@@ -325,7 +326,7 @@ class ProgramItem(Item):
                                 item_types = 'tv program menu')
         # do not return from the search list to the submenu
         # where the search was initiated
-        menuw.delete_submenu()
+        menuw.delete_submenu(refresh = False)
         menuw.pushmenu(search_menu)
         menuw.refresh()
 
@@ -341,13 +342,12 @@ class ProgramItem(Item):
         menuw.show()
 
 
-
 # Create the skin_object object
 skin_object = skin.get_singleton()
 skin_object.register('tvguideinfo', ('screen', 'info', 'scrollabletext', 'plugin'))
 
 # Program Info screen
-class ShowProgramDetails:
+class ShowProgramDetails(ScrollableTextScreen):
     """
     Screen to show the details of the TV program
     """
@@ -386,18 +386,10 @@ class ShowProgramDetails:
                     description += u'\n' + _('Rating') + u'(' + system + u') : ' + value
 
         # that's all, we can show this to the user
-        self.name            = name
-        self.scrollable_text = skin.ScrollableText(description)
-        self.visible = True
-
-        self.menuw = menuw
-        self.menuw.hide(clear=False)
-
-        self.app_mode = 'tvmenu'  # context
-        # this activates the eventhandler and the context of this class
-        rc.app(self)
-
-        skin_object.draw('tvguideinfo', self)
+        ScrollableTextScreen.__init__(self, 'tvguideinfo', description)
+        self.name = name
+        self.event_context = 'tvmenu'
+        self.show(menuw)
 
 
 
@@ -415,42 +407,19 @@ class ShowProgramDetails:
         """
         eventhandler for the programm description display
         """
-        if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
-            # leave the description display and return to the previous menu
-            self.menuw.show()
-            # we do not need to call rc.app(None) here,
-            # because that is done by menuw.show(),
-            # but we need to set the context manually,
-            # because rc.app(None) sets it always to 'menu'
-            rc.set_context(self.menuw.get_event_context())
-            return True
-        elif event == 'MENU_SUBMENU':
-            if hasattr(self.menuw.menustack[-1],'is_submenu'):
-                # the last menu has been a submenu, we just have to show it
-                self.menuw.show()
-                rc.set_context(self.menuw.get_event_context())
-            else:
-                # we have to create the submenu
-                self.program.display_submenu(menuw=self.menuw)
-            return True
-        elif event == 'MENU_UP':
-            # scroll the description up
-            self.scrollable_text.scroll(True)
-            skin_object.draw('tvguideinfo', self)
-            return True
-        elif event == 'MENU_DOWN':
-            # scroll the description down
-            self.scrollable_text.scroll(False)
-            skin_object.draw('tvguideinfo', self)
-            return True
-        elif event == 'PLAY':
-            # try to watch this program
-            self.program.play(menuw=self.menuw)
-            return True
-        elif event == 'TV_START_RECORDING':
-            self.menuw.show()
-            # short cut to change the schedule status of this program
-            self.program.toggle_rec(menuw=self.menuw)
-            return True
-        else:
-            return False
+        menuw = self.menuw
+        _debug_('programdescription: %s' % event, 2)
+        event_consumed = ScrollableTextScreen.eventhandler(self, event, menuw)
+        if not event_consumed:
+            if event == PLAY:
+                menuw.delete_menu()
+                # try to watch this program
+                self.program.play(menuw=menuw)
+                event_consumed = True
+            elif event == TV_START_RECORDING:
+                menuw.delete_menu()
+                # short cut to change the schedule status of this program
+                self.program.toggle_rec(menuw=menuw)
+                event_consumed = True
+
+        return event_consumed

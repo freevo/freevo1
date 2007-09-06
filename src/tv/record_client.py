@@ -42,7 +42,7 @@ FALSE = 0
 
 server_string = 'http://%s:%s/' % \
                 (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
-
+print 'server_string=%s'%server_string
 server = xmlrpclib.Server(server_string, allow_none=1)
 
 def returnFromJelly(status, response):
