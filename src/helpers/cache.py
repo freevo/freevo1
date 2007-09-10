@@ -33,13 +33,12 @@
 
 import sys
 import os
-
-import config
-import util
 import stat
 import time
 import copy
 
+import config
+import util
 import util.mediainfo
 import plugin
 import directory
@@ -123,6 +122,10 @@ def delete_old_files_2():
     for filename in util.recursefolders(config.OVERLAY_DIR,1,'freevo.cache',1):
         if filename.startswith(config.OVERLAY_DIR + '/disc'):
             continue
+        sinfo = os.stat(filename)
+        if not sinfo[stat.ST_SIZE]:
+            #print '%s is empty' % filename
+            continue
         dirname = os.path.dirname(filename)[len(config.OVERLAY_DIR):]
         data    = util.read_pickle(filename)
         for key in copy.copy(data):
@@ -160,7 +163,6 @@ def cache_thumbnails():
     cache all image files by creating thumbnails
     """
     import cStringIO
-    import stat
 
     print 'checking thumbnails...................................',
     sys.__stdout__.flush()
