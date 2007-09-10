@@ -73,6 +73,8 @@ change_map = {
     'recordable=False': 'record_group=None',
     'recordable = True': 'record_group=None',
     'recordable = False': 'record_group=None',
+    'OSD_OVERSCAN_X': 'OSD_OVERSCAN_LEFT = OSD_OVERSCAN_RIGHT',
+    'OSD_OVERSCAN_Y': 'OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM',
     }
 
 def help():

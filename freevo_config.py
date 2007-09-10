@@ -291,7 +291,9 @@ LOCAL_CONF_CHANGES = [
      '''Added OS_STATICDIR, FREEVO_STATICDIR, OS_LOGDIR and FREEVO_LOGDIR
      Change static data to use /var/lib/freevo or ~/.freevo, including TV_RECORD_SCHEDULE, TV_LOGOS,
      XMLTV_FILE, you may also prefer OVERLAY_DIR to be FREEVO_STATICDIR+'/overlay',
-         Added a plugin that adds a submenu entry for ejecting rom drives and binds the default action of an empty drive to the eject action
+     Added a plugin that adds a submenu entry for ejecting rom drives and binds the default action of an empty drive to the eject action
+     Replaced OSD_OVERSCAN_X with OSD_OVERSCAN_LEFT and OSD_OVERSCAN_RIGHT and OSD_OVERSCAN_Y with 
+     OSD_OVERSCAN_TOP and OSD_OVERSCAN_BOTTOM
      '''),
 ]
 
@@ -1277,8 +1279,8 @@ OSD_SDL_EXEC_AFTER_STARTUP = ""
 #
 OSD_SDL_EXEC_AFTER_CLOSE = ""
 
-OSD_OVERSCAN_X = 0
-OSD_OVERSCAN_Y = 0
+OSD_OVERSCAN_LEFT = OSD_OVERSCAN_RIGHT = 0
+OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM = 0
 
 
 # Exec a script after the osd startup. Matrox G400 users who wants to
