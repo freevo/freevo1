@@ -432,12 +432,12 @@ class Area(XML_data):
         XML_data.parse(self, node, scale, current_dir)
         if x != self.x:
             try:
-                self.x += config.OSD_OVERSCAN_X
+                self.x += config.OSD_OVERSCAN_LEFT
             except TypeError:
                 pass
         if y != self.y:
             try:
-                self.y += config.OSD_OVERSCAN_Y
+                self.y += config.OSD_OVERSCAN_TOP
             except TypeError:
                 pass
         for subnode in node.children:
@@ -450,12 +450,12 @@ class Area(XML_data):
                     self.images[label].parse(subnode, scale, current_dir)
                     if x != self.images[label].x:
                         try:
-                            self.images[label].x += config.OSD_OVERSCAN_X
+                            self.images[label].x += config.OSD_OVERSCAN_LEFT
                         except TypeError:
                             pass
                     if y != self.images[label].y:
                         try:
-                            self.images[label].y += config.OSD_OVERSCAN_Y
+                            self.images[label].y += config.OSD_OVERSCAN_TOP
                         except TypeError:
                             pass
 
@@ -468,14 +468,14 @@ class Area(XML_data):
 
     def rect(self, type):
         if type == 'screen':
-            return (self.x - config.OSD_OVERSCAN_X, self.y - config.OSD_OVERSCAN_X,
-                    self.width + 2 * config.OSD_OVERSCAN_X,
-                    self.height + 2 * config.OSD_OVERSCAN_X)
+            return (self.x - config.OSD_OVERSCAN_LEFT, self.y - config.OSD_OVERSCAN_TOP,
+                    self.width + (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT),
+                    self.height + (config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM))
         return (self.x, self.y, self.width, self.height)
 
     def pos(self, type):
         if type == 'screen':
-            return (self.x - config.OSD_OVERSCAN_X, self.y - config.OSD_OVERSCAN_X)
+            return (self.x - config.OSD_OVERSCAN_LEFT, self.y - config.OSD_OVERSCAN_TOP)
         return (self.x, self.y)
 
 
@@ -1058,8 +1058,8 @@ class XMLSkin:
             w = config.CONF.width
             h = config.CONF.height
 
-        scale = (float(config.CONF.width-2*config.OSD_OVERSCAN_X)/float(w),
-                 float(config.CONF.height-2*config.OSD_OVERSCAN_Y)/float(h))
+        scale = (float(config.CONF.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT))/float(w),
+                 float(config.CONF.height-(config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM))/float(h))
 
         include  = attr_str(node, 'include', '')
 

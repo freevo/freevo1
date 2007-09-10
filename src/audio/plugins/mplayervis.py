@@ -144,13 +144,13 @@ class mpv_Goom(BaseAnimation):
 
 
     def set_fullscreen(self):
-        t_h = config.CONF.height-2*config.OSD_OVERSCAN_Y
-        w   = config.CONF.width-2*config.OSD_OVERSCAN_X
+        t_h = config.CONF.height-(config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM)
+        w   = config.CONF.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
 
         # ~16:9
         h   = int(9.0*float(w)/16.0)
-        y   = ((t_h-h)/2) + config.OSD_OVERSCAN_Y
-        x   = config.OSD_OVERSCAN_X
+        y   = ((t_h-h)/2) + config.OSD_OVERSCAN_TOP
+        x   = config.OSD_OVERSCAN_LEFT
 
         self.set_resolution(x, y, w, h, 0)
         self.max_blend = 80

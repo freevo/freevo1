@@ -125,10 +125,10 @@ class ImageViewer(GUIObject):
         if not image:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
             self.osd.drawstringframed(_('Can\'t Open Image\n\'%s\'') % Unicode(filename),
-                                      config.OSD_OVERSCAN_X + 20,
-                                      config.OSD_OVERSCAN_Y + 20,
-                                      self.osd.width - 2 * config.OSD_OVERSCAN_X - 40,
-                                      self.osd.height - 2 * config.OSD_OVERSCAN_Y - 40,
+                                      config.OSD_OVERSCAN_LEFT + 20,
+                                      config.OSD_OVERSCAN_TOP + 20,
+                                      self.osd.width - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT) - 40,
+                                      self.osd.height - (config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM) - 40,
                                       self.osd.getfont(config.OSD_DEFAULT_FONTNAME,
                                                        config.OSD_DEFAULT_FONTSIZE),
                                       fgcolor=self.osd.COL_ORANGE,
@@ -438,7 +438,7 @@ class ImageViewer(GUIObject):
 
         # Now sort the text into lines of length line_length
         line = 0
-        if config.OSD_OVERSCAN_X:
+        if config.OSD_OVERSCAN_LEFT or config.OSD_OVERSCAN_RIGHT:
             line_length = 35
         else:
             line_length = 60
@@ -463,14 +463,14 @@ class ImageViewer(GUIObject):
                     prt_line[line] += '   ' + textstr
 
         # Create a black box for text
-        self.osd.drawbox(config.OSD_OVERSCAN_X, self.osd.height - \
-                         (config.OSD_OVERSCAN_X + 25 + (len(prt_line) * 30)),
+        self.osd.drawbox(config.OSD_OVERSCAN_LEFT, self.osd.height - \
+                         (config.OSD_OVERSCAN_LEFT + 25 + (len(prt_line) * 30)),
                          self.osd.width, self.osd.height, width=-1,
                          color=((60 << 24) | self.osd.COL_BLACK), layer=layer)
 
         # Now print the Text
         for line in range(len(prt_line)):
-            h=self.osd.height - (40 + config.OSD_OVERSCAN_Y + \
+            h=self.osd.height - (40 + config.OSD_OVERSCAN_TOP + \
                                  ((len(prt_line) - line - 1) * 30))
-            self.osd.drawstring(prt_line[line], 15 + config.OSD_OVERSCAN_X, h,
+            self.osd.drawstring(prt_line[line], 15 + config.OSD_OVERSCAN_LEFT, h,
                                 fgcolor=self.osd.COL_ORANGE, layer=layer)

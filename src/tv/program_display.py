@@ -414,7 +414,7 @@ class FavoriteItem(Item):
         """
         self.menuw = menuw
         InputBox(text=_('Alter Name'), handler=self.alter_name,
-                 width = osd.get_singleton().width - config.OSD_OVERSCAN_X - 20,
+                 width = osd.get_singleton().width - config.OSD_OVERSCAN_RIGHT - 20,
                  input_text=self.name).show()
 
 

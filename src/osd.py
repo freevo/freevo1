@@ -277,8 +277,8 @@ class BusyIcon(threading.Thread):
                         image  = osd.loadbitmap(icon)
                         width  = image.get_width()
                         height = image.get_height()
-                        x = osd.width  - config.OSD_OVERSCAN_X - 20 - width
-                        y = osd.height - config.OSD_OVERSCAN_Y - 20 - height
+                        x = osd.width  - config.OSD_OVERSCAN_RIGHT - 20 - width
+                        y = osd.height - config.OSD_OVERSCAN_BOTTOM - 20 - height
 
                         self.rect = (x,y,width,height)
                         # backup the screen

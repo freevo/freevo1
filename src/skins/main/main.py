@@ -109,8 +109,8 @@ class Skin:
         """
         create cache name
         """
-        geo  = '%sx%s-%s-%s' % (osd.width, osd.height, config.OSD_OVERSCAN_X,
-                                config.OSD_OVERSCAN_Y)
+        geo  = '%sx%s-%s-%s' % (osd.width, osd.height, config.OSD_OVERSCAN_LEFT,
+                                config.OSD_OVERSCAN_TOP)
         return vfs.getoverlay('%s.skin-%s-%s' % (filename, config.SKIN_XML_FILE, geo))
 
 

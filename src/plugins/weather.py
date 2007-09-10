@@ -888,8 +888,8 @@ class WeatherBaseScreen(skin.Area):
         self.big_font      = skin.get_font('huge0')
 
         # set the multiplier to be used in all screen drawing
-        self.xmult = float(osd.width  - 2*config.OSD_OVERSCAN_X) / 800
-        self.ymult = float(osd.height - 2*config.OSD_OVERSCAN_Y) / 600
+        self.xmult = float(osd.width  - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)) / 800
+        self.ymult = float(osd.height - (config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM)) / 600
 
         self.update_functions = (self.update_day, self.update_forecast,
                                  self.update_week, self.update_doplar)

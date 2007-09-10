@@ -90,12 +90,12 @@ class PluginInterface(plugin.DaemonPlugin):
         w = font.stringsize(self.message)
 
         if type == 'osd':
-            x = config.OSD_OVERSCAN_X
-            y = config.OSD_OVERSCAN_Y
+            x = config.OSD_OVERSCAN_LEFT
+            y = config.OSD_OVERSCAN_TOP
 
-            renderer.drawstringframed(self.message, config.OSD_OVERSCAN_X,
-                                      config.OSD_OVERSCAN_Y + 10,
-                                      renderer.width - 10 - 2 * config.OSD_OVERSCAN_X, -1,
+            renderer.drawstringframed(self.message, config.OSD_OVERSCAN_LEFT,
+                                      config.OSD_OVERSCAN_TOP + 10,
+                                      renderer.width - 10 - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT), -1,
                                       font, align_h='right', mode='hard')
 
         else:

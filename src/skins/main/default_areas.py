@@ -151,10 +151,10 @@ class Plugin_Area(Skin_Area):
     def __init__(self):
         Skin_Area.__init__(self, 'plugin')
         self.plugins = None
-        self.x = config.OSD_OVERSCAN_X
-        self.y = config.OSD_OVERSCAN_Y
-        self.width   = osd.width  - 2 * config.OSD_OVERSCAN_X
-        self.height  = osd.height - 2 * config.OSD_OVERSCAN_Y
+        self.x = config.OSD_OVERSCAN_LEFT
+        self.y = config.OSD_OVERSCAN_TOP
+        self.width   = osd.width  - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
+        self.height  = osd.height - (config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM)
 
 
     def __str__(self):

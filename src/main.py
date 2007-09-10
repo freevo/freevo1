@@ -303,7 +303,7 @@ class MainTread:
                                                 'could cause more errors until you restart '\
                                                 'Freevo.\n\nLogfile: %s\n\n') % \
                                          (event, sys.stdout.logfile),
-                                         width=osd.width-2*config.OSD_OVERSCAN_X-50,
+                                         width=osd.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)-50,
                                          handler=shutdown,
                                          handler_message = _('shutting down...'))
                         pop.b0.set_text(_('Shutdown'))

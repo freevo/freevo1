@@ -555,9 +555,9 @@ class MPlayerApp(childapp.ChildApp2):
                 if line.startswith('Connecting to server'):
                     line = 'Connecting to server'
                 self.osd.clearscreen(self.osd.COL_BLACK)
-                self.osd.drawstringframed(line, config.OSD_OVERSCAN_X+10,
-                                          config.OSD_OVERSCAN_Y+10,
-                                          self.osd.width - 2 * (config.OSD_OVERSCAN_X+10),
+                self.osd.drawstringframed(line, config.OSD_OVERSCAN_LEFT+10,
+                                          config.OSD_OVERSCAN_TOP+10,
+                                          self.osd.width - (config.OSD_OVERSCAN_LEFT+10 + config.OSD_OVERSCAN_RIGHT+10),
                                           -1, self.osdfont, self.osd.COL_WHITE)
                 self.osd.update()
 

@@ -364,8 +364,8 @@ class GUIObject:
                 c = c.parent
             print
             print 'Configuration: %sx%s %s %s' % \
-                  (self.osd.width, self.osd.height, config.OSD_OVERSCAN_X,
-                   config.OSD_OVERSCAN_Y)
+                  (self.osd.width, self.osd.height, config.OSD_OVERSCAN_LEFT,
+                   config.OSD_OVERSCAN_TOP)
             print
             raise Exception, e
 

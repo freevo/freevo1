@@ -34,14 +34,14 @@
 
 
 import sys, os, glob, shutil
-import kaa.metadata as mmpython
 from stat import *
+import kaa.metadata as mmpython
+import config
 
 def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     """
     make a snapshot of the videofile at position pos to imagefile
     """
-    import config
     import popen3
     import kaa.imlib2 as Image
     import util
@@ -62,7 +62,7 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     if popup:
         pop = gui.PopupBox(text='Creating thumbnail for \'%s\'...' % \
             Unicode(os.path.basename(videofile)),
-            width=osd.get_singleton().width-config.OSD_OVERSCAN_X*2-80)
+            width=osd.get_singleton().width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)-80)
         pop.show()
 
     args = [ config.MPLAYER_CMD, videofile, imagefile ]
@@ -70,8 +70,8 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     if pos != None:
         args.append(str(pos))
 
-    out = popen3.stdout([os.environ['FREEVO_SCRIPT'], 'execute',
-                         os.path.abspath(__file__) ] + args)
+    #print "%r" % ([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args)
+    out = popen3.stdout([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args)
     if out:
         for line in out:
             print line
@@ -152,6 +152,7 @@ if __name__ == "__main__":
     os.chdir('/tmp')
 
     # call mplayer to get the image
+    #print "%r" % ((mplayer, '-nosound', '-vo', 'png', '-frames', '8', '-ss', position, '-zoom', filename),)
     child = popen2.Popen3((mplayer, '-nosound', '-vo', 'png', '-frames', '8',
                            '-ss', position, '-zoom', filename), 1, 100)
     while(1):

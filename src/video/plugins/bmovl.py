@@ -256,9 +256,9 @@ class PluginInterface(plugin.Plugin):
                            layer=self.background)
 
         self.y0     = self.clockfont.height + 10
-        self.x0     = config.OSD_OVERSCAN_X
-        self.height = self.background.height - config.OSD_OVERSCAN_Y - self.y0
-        self.width  = self.background.width  - 2 * config.OSD_OVERSCAN_X
+        self.x0     = config.OSD_OVERSCAN_LEFT
+        self.height = self.background.height - config.OSD_OVERSCAN_BOTTOM - self.y0
+        self.width  = self.background.width  - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
 
         # draw movie image
         f = skin.get_singleton().settings.images['logo']
@@ -266,7 +266,7 @@ class PluginInterface(plugin.Plugin):
         if i:
             self.background.blit(i, (self.x0, self.y0))
             self.x0   += i.get_width() + 10
-            self.width = self.background.width - self.x0 - config.OSD_OVERSCAN_X
+            self.width = self.background.width - self.x0 - config.OSD_OVERSCAN_RIGHT
 
         title   = self.item.name
 
@@ -371,8 +371,8 @@ class PluginInterface(plugin.Plugin):
         """
         if not self.bmovl and self.status == 'playing' and self.height and self.width:
             self.bmovl = OSDbmovl(self.width, self.height)
-            self.create_background(0, self.height - self.height / 5 - config.OSD_OVERSCAN_Y,
-                                   self.width, self.height / 5 + config.OSD_OVERSCAN_Y)
+            self.create_background(0, self.height - self.height / 5 - config.OSD_OVERSCAN_BOTTOM,
+                                   self.width, self.height / 5 + config.OSD_OVERSCAN_BOTTOM)
 
 
         if self.osd_visible and self.bmovl:
@@ -383,8 +383,8 @@ class PluginInterface(plugin.Plugin):
                                   (0, 0, self.background.width, self.clockfont.height + 6))
 
             # new calc the bar
-            box  = (self.background.width - 2 * config.OSD_OVERSCAN_X) / 4
-            x0   = config.OSD_OVERSCAN_X
+            box  = (self.background.width - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)) / 4
+            x0   = config.OSD_OVERSCAN_LEFT
             y0   = self.background.pos[1]
 
             mpos = self.background.width - 2 * (x0 + box)
@@ -414,7 +414,7 @@ class PluginInterface(plugin.Plugin):
                                         -1, font, align_v='center', align_h='center')
 
             self.bmovl.drawstringframed('%s' % self.time2str(end),
-                                        self.background.width - config.OSD_OVERSCAN_X - box,
+                                        self.background.width - config.OSD_OVERSCAN_RIGHT - box,
                                         y0, box, -1, font, align_v='center', align_h='center')
 
             if update:
@@ -428,7 +428,7 @@ class PluginInterface(plugin.Plugin):
 
             format = time.strftime(format)
 
-            x0 = self.background.width - 2 * config.OSD_OVERSCAN_X
+            x0 = self.background.width - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
             s  = font.stringsize(format) * 5
 
             self.bmovl.screenblit(self.background.screen,
