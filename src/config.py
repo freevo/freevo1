@@ -101,6 +101,8 @@ class Logger:
         self.lineno = 1
         self.logtype = logtype
         appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+        if not appname:
+            appname = 'prompt'
         try:
             self.logfile = '%s/%s-%s.log' % (FREEVO_LOGDIR, appname, os.getuid())
             self.fp = open(self.logfile, 'a')
