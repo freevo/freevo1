@@ -401,16 +401,16 @@ class Read_Thread(threading.Thread):
         self.callback = callback
         self.logger = None
         if logger and doeslogging:
-            logger = os.path.join(config.FREEVO_LOGDIR, '%s-%s-%s.log' % (logger, name, os.getuid()))
+            logfile = os.path.join(config.FREEVO_LOGDIR, '%s-%s-%s.log' % (logger, name, os.getuid()))
             try:
                 try:
-                    os.unlink(logger)
+                    os.unlink(logfile)
                 except:
                     pass
-                self.logger = open(logger, 'w')
-                _debug_('logging %s child to "%s"' % (name, logger))
+                self.logger = open(logfile, 'w')
+                _debug_('logging %s child to "%s"' % (name, logfile))
             except IOError, e:
-                _debug_('cannot open "%s" for logging: %s' % (logger, e))
+                _debug_('cannot open "%s" for logging: %s' % (logfile, e))
 
 
     def run(self):
