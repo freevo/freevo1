@@ -170,7 +170,8 @@ class MPlayer:
         """
         Stop mplayer
         """
-        self.app.stop('quit\n')
+        if self.app:
+            self.app.stop('quit\n')
 
         for p in self.plugins:
             command = p.stop()
