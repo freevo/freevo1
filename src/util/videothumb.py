@@ -70,7 +70,7 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     if pos != None:
         args.append(str(pos))
 
-    #print "%r" % ([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args)
+    _debug_("%r" % ([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args))
     out = popen3.stdout([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args)
     if out:
         for line in out:
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     os.chdir('/tmp')
 
     # call mplayer to get the image
-    #print "%r" % ((mplayer, '-nosound', '-vo', 'png', '-frames', '8', '-ss', position, '-zoom', filename),)
+    _debug_("%r" % ((mplayer, '-nosound', '-vo', 'png', '-frames', '8', '-ss', position, '-zoom', filename),))
     child = popen2.Popen3((mplayer, '-nosound', '-vo', 'png', '-frames', '8',
                            '-ss', position, '-zoom', filename), 1, 100)
     while(1):
@@ -165,17 +165,20 @@ if __name__ == "__main__":
     child.tochild.close()
     # store the correct thumbnail
     captures = glob.glob('000000??.png')
+    _debug_("%r" % (captures,))
     if captures:
         capture = captures[-1]
         try:
             shutil.copy(capture, imagefile)
+            _debug_("copied %r to %r" % (capture, imagefile))
         except:
             try:
                 import config
                 import vfs
                 shutil.copy(capture, vfs.getoverlay(imagefile[1:]))
+                _debug_("copied %r to %r" % (capture, vfs.getoverlay(imagefile[1:])))
             except:
-                print 'unable to write file'
+                print 'unable to write file %s' % Unicode(filename)
     else:
         print "error creating capture for %s" % Unicode(filename)
 
