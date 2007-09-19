@@ -289,6 +289,7 @@ class IVTV(tv.v4l2.Videodev):
             tv.v4l2.Videodev.updatecontrol(self, 'Video Pulldown', codec.pulldown)
             tv.v4l2.Videodev.updatecontrol(self, 'Stream Type', self.streamTypeIvtvToV4l2(codec.stream_type))
             return
+
         val = struct.pack( CODEC_ST,
                            codec.aspect,
                            codec.audio_bitmask,
@@ -448,6 +449,12 @@ if __name__ == '__main__':
 
     ivtv_dev = IVTV('/dev/video0')
     ivtv_dev.init_settings()
+    ivtv_dev.listcontrols()
+    x = ivtv_dev.getcontrol('Spatial Luma Filter Type')
+    print x
+    ivtv_dev.setcontrol('Spatial Luma Filter Type', x+1)
+    print ivtv_dev.getcontrol('Spatial Luma Filter Type')
+    print ivtv_dev.getextctrl(0x00991002)
     #ivtv_dev.print_settings()
 
     #print 'driver="%s"' % ivtv_dev.driver

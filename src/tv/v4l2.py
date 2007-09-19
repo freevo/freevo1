@@ -498,9 +498,9 @@ class Videodev:
 
 
     def ctrlname(self, name):
-        ''' converts a control to lowercase and replaces spaces with dashes
+        ''' converts a control to lowercase and replaces spaces with underscore, like v4l2-ctl
         '''
-        return name.replace(' ', '-').lower()
+        return name.replace(' ', '_').lower()
 
 
     def listcontrols(self):
@@ -587,8 +587,8 @@ class Videodev:
         if not self.controls.has_key(name):
             print 'control \"%s\" does not exists' % (name)
             return None
-        (id, type, name, min, max, step, default, flags, oldvalue) = self.controls[name]
-        self.controls[name] = (id, type, name, min, max, step, default, flags, value)
+        (id, type, name2, min, max, step, default, flags, oldvalue) = self.controls[name]
+        self.controls[name] = (id, type, name2, min, max, step, default, flags, value)
 
         if _ID2CLASS(id) != V4L2_CTRL_CLASS_USER and id < V4L2_CID_PRIVATE_BASE:
             self.setextctrl(id, value)
@@ -685,7 +685,16 @@ if __name__ == '__main__':
     print 'Driver = \"%s\"' % viddev.getdriver()
     print 'Driver Version = %02d.%02d' % (viddev.getversion() / 256, viddev.getversion() % 256)
     viddev.print_settings()
-    #viddev.listcontrols()
+    viddev.getcontrols()
+    viddev.listcontrols()
+    ctrlname = 'Median Luma Filter Minimum'
+    ctrlcode = 0x00991007
+    mlfm = viddev.getcontrol(ctrlname)
+    mlfm = viddev.getextctrl(ctrlcode)
+    print mlfm
+    viddev.setcontrol(ctrlname, mlfm+1)
+    print '%s -> %s %s' % (mlfm, viddev.getcontrol(ctrlname), viddev.getextctrl(ctrlcode))
+
     #dict = viddev.getcontrols()
     #keys = list(dict)
     #keys.sort()
