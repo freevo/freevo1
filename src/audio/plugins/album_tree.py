@@ -279,8 +279,8 @@ You might want to restart the  [wiki:Webserver freevo webserver] after the insta
             items.append(menu.MenuItem(tree.name
                 ,action=self.onchoose_node,arg=[tree,[]]) )
 
-        myobjectmenu = menu.Menu(_('Album Tree'), items,
-                                 reload_func=menuw.back_one_menu )
+        #myobjectmenu = menu.Menu(_('Album Tree'), items, reload_func=menuw.back_one_menu )
+        myobjectmenu = menu.Menu(_('Album Tree'), items)
         rc.app(None)
         menuw.pushmenu(myobjectmenu)
         menuw.refresh()

@@ -29,6 +29,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated osd overscan to allow different margins for all sides (F#1791026)
  * Updated tv favourite handling and programme item to provide a consistant interface (F#1776909)
  * Updated video item to include the full description (F#1777187)
+ * Fixed audio plug-in albumtree navigating back to the main menu (B#1798462)
  * Fixed cd-rom drives eject causing a crash (B#1775892)
  * Fixed favourite crashing because of duplicate detection flag (B#1778494,B#1777726)
  * Fixed matching favourites, by initially restricting the search (B#1776072)
