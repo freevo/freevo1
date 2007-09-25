@@ -70,9 +70,7 @@ osd = osd.get_singleton()
 
 #check every 1 hour
 WEATHER_AGE = 3600
-WEATHER_AGE = 3600 * 24
 WEATHER_DIR = os.path.join(config.SHARE_DIR, 'images', 'weather')
-WEATHER_DIR = '/sources/svn/freevo-1.x/testing/Duncan/weather/1click/images'
 
 #FIXME Not sure that all of these are correctly named
 WEATHER_ICONS = {
