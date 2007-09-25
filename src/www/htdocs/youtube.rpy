@@ -35,7 +35,7 @@ from getopt import getopt
 from stat import *
 
 def xmlStatus(fstatus):
-    xmlstatus = ""       
+    xmlstatus = ""
     xmlstatus += "<PERCENT>" + fstatus['percent'] + "</PERCENT>"
     xmlstatus += "<DOWNLOADED>" + fstatus['downloaded'] + "</DOWNLOADED>"
     xmlstatus += "<FILESIZE>" + fstatus['filesize'] + "</FILESIZE>"
@@ -45,23 +45,23 @@ def xmlStatus(fstatus):
 
 # Get optimum 1k exponent to represent a number of bytes
 def optimum_k_exp(num_bytes):
-	const_1k = 1024
-	if num_bytes == 0:
-		return 0
-	return long(math.log(num_bytes, const_1k))
+    const_1k = 1024
+    if num_bytes == 0:
+        return 0
+    return long(math.log(num_bytes, const_1k))
 
 # Get optimum representation of number of bytes
 def format_bytes(num_bytes):
-	const_1k = 1024
-	try:
-		exp = optimum_k_exp(num_bytes)
-		suffix = 'bkMGTPEZY'[exp]
-		if exp == 0:
-			return '%s%s' % (num_bytes, suffix)
-		converted = float(num_bytes) / float(const_1k**exp)
-		return '%.2f%s' % (converted, suffix)
-	except IndexError:
-		return "Error"
+    const_1k = 1024
+    try:
+        exp = optimum_k_exp(num_bytes)
+        suffix = 'bkMGTPEZY'[exp]
+        if exp == 0:
+            return '%s%s' % (num_bytes, suffix)
+        converted = float(num_bytes) / float(const_1k**exp)
+        return '%.2f%s' % (converted, suffix)
+    except IndexError:
+        return "Error"
 
 def getStatus(ytfile):
     fileStatus = {'percent': '-', 'downloaded': 'done' , 'filesize': 'done' ,'speed' : '--', 'eta' : '--:--'}
@@ -83,7 +83,7 @@ def getStatus(ytfile):
                 fileStatus['percent'] = "NA"
                 fileStatus['downloaded'] = "NA"
                 fileStatus['speed'] = "NA"
-                fileStatus['eta'] = "Unknown"            
+                fileStatus['eta'] = "Unknown"
         except Exception, e:
             fileStatus['percent'] = "NA"
             fileStatus['downloaded'] = "NA"
@@ -92,7 +92,7 @@ def getStatus(ytfile):
     return fileStatus
 
 
-def getXML(): 
+def getXML():
     filesXML = '<?xml version="1.0" encoding="ISO-8859-1" ?>'
     filesXML += '<FILELIST>'
 
@@ -111,7 +111,7 @@ def getXML():
     filesXML += "</FILELIST>"
     return filesXML
 
-def displaytableheader(): 
+def displaytableheader():
     fvhtml = HTMLResource()
 
     fvhtml.tableOpen('class="library" id="filelist"')
@@ -144,14 +144,14 @@ def startdownload(dlcommand,logfile):
 def download_youtube(yt_url):
     logfile = config.YOUTUBE_DIR + ".tmp/" +  yt_url.split("=")[-1] + ".log"
     startdownload((config.YOUTUBE_DL,"-t",yt_url),logfile)
-   
+
 def download_url(dl_url):
 
     # get the file name from the url.
     logfile = config.YOUTUBE_DIR + ".tmp/partfile" +  dl_url.split("/")[-1]
     logfile = os.path.splitext(logfile)[0] + ".log"
     startdownload((config.DOWNLOAD_DL,dl_url),logfile)
-    
+
 def addPageRefresh():
     prhtml = '<script type="text/JavaScript" src="scripts/youtube.js">window.onload=beginrefresh</script>'
     prhtml += '\n<div class="searchform" id="refresh">Refresh In : ??</div>'
@@ -162,8 +162,8 @@ def envCheck():
     if (not config.__dict__.has_key('YOUTUBE_DIR')):
         yterrors.append('Unable to Find YOUTUDE_DIR setting in local_conf.py')
         yterrors.append('Add YOUTUBE_DIR = "Directory to Save Downloads." to your local_conf.py')
-        config.YOUTUBE_DIR = "MISSING"   
-        
+        config.YOUTUBE_DIR = "MISSING"
+
     if (not config.__dict__.has_key('YOUTUBE_DL')):
         yterrors.append('Unable to Find YOUTUDE_DL setting in local_conf.py')
         yterrors.append('Add YOUTUBE_DL = "Path to youtube-dl script" to your local_conf.py')
@@ -195,79 +195,78 @@ def doFlowPlayer(pfile):
 class YouTubeResource(FreevoResource):
 
     def _render(self, request):
-       fv = HTMLResource()
-       form = request.args
+        fv = HTMLResource()
+        form = request.args
 
-       blxml = fv.formValue(form,"xml")
-       if blxml :
+        blxml = fv.formValue(form,"xml")
+        if blxml :
             fv.res = getXML()
             #fv.res += fdisplay[0]
-            return String( fv.res )     
+            return String( fv.res )
 
-       fv.printHeader(_('YouTube'), 'styles/main.css',selected=_('YouTube'))       
-       yterrors = envCheck() 
- 
-       playfile = fv.formValue(form,"playfile")
-       if playfile:
-           fv.res += doFlowPlayer(playfile)
+        fv.printHeader(_('YouTube'), 'styles/main.css',selected=_('YouTube'))
+        yterrors = envCheck()
 
-       if config.YOUTUBE_DIR == "MISSING"  or ((config.YOUTUBE_DL == "MISSING") and (config.DOWNLOAD_DL ==  "MISSING")):
-           fv.printMessages(yterrors)
-           return String( fv.res )
-       
-       if not os.path.exists(config.YOUTUBE_DIR):
-           fv.res += '<br><b>Unable to locate youtube download location "' + config.YOUTUBE_DIR + '" </b><br>' 
-           fv.res += 'Add YOUTUBE_DIR = "download directory" to your local_conf.py'
+        playfile = fv.formValue(form,"playfile")
+        if playfile:
+            fv.res += doFlowPlayer(playfile)
 
-       if not os.path.exists(config.YOUTUBE_DL):
-           fv.res += '<br><br><br><b>Unable to locate youtube-dl script  "' + config.YOUTUBE_DL + '" </b><br>' 
-           fv.res += 'Download scripts from  <a href="http://www.arrakis.es/~rggi3/youtube-dl/">http://www.arrakis.es/~rggi3/youtube-dl/</a>'
-           fv.res += '<br>Add YOUTUBE_DL = "path and file name to youtube_dl script"<br>'
+        if config.YOUTUBE_DIR == "MISSING"  or ((config.YOUTUBE_DL == "MISSING") and (config.DOWNLOAD_DL ==  "MISSING")):
+            fv.printMessages(yterrors)
+            return String( fv.res )
 
-       if not os.path.exists(config.DOWNLOAD_DL):
-           fv.res += '<br><b>Unable to locate downloadurl.py script  "' + config.YOUTUBE_DL + '" </b><br>' 
-           fv.res += 'Download scripts from  <a href="http://www.arrakis.es/~rggi3/youtube-dl/">http://www.arrakis.es/~rggi3/youtube-dl/</a>'
-           fv.res += '<br>Add YOUTUBE_DL = "path and file name to youtube_dl script"<br><br>'
+        if not os.path.exists(config.YOUTUBE_DIR):
+            fv.res += '<br><b>Unable to locate youtube download location "' + config.YOUTUBE_DIR + '" </b><br>'
+            fv.res += 'Add YOUTUBE_DIR = "download directory" to your local_conf.py'
 
-       if os.path.exists(config.YOUTUBE_DIR):
-           if not os.path.exists(config.YOUTUBE_DIR + ".tmp"):
-               os.mkdir(config.YOUTUBE_DIR + ".tmp")
+        if not os.path.exists(config.YOUTUBE_DL):
+            fv.res += '<br><br><br><b>Unable to locate youtube-dl script  "' + config.YOUTUBE_DL + '" </b><br>'
+            fv.res += 'Download scripts from  <a href="http://www.arrakis.es/~rggi3/youtube-dl/">http://www.arrakis.es/~rggi3/youtube-dl/</a>'
+            fv.res += '<br>Add YOUTUBE_DL = "path and file name to youtube_dl script"<br>'
 
-       fldelete = fv.formValue(form,'Delete')
-       if fldelete:
-            filename = fv.formValue(form,'file') 
+        if not os.path.exists(config.DOWNLOAD_DL):
+            fv.res += '<br><b>Unable to locate downloadurl.py script  "' + config.YOUTUBE_DL + '" </b><br>'
+            fv.res += 'Download scripts from  <a href="http://www.arrakis.es/~rggi3/youtube-dl/">http://www.arrakis.es/~rggi3/youtube-dl/</a>'
+            fv.res += '<br>Add YOUTUBE_DL = "path and file name to youtube_dl script"<br><br>'
+
+        if os.path.exists(config.YOUTUBE_DIR):
+            if not os.path.exists(config.YOUTUBE_DIR + ".tmp"):
+                os.mkdir(config.YOUTUBE_DIR + ".tmp")
+
+        fldelete = fv.formValue(form,'Delete')
+        if fldelete:
+            filename = fv.formValue(form,'file')
             if filename:
                 filename = config.YOUTUBE_DIR + filename
                 if os.path.exists(filename):
-                       os.remove(filename)
-                       fv.res += "DELETED FILE - " + filename 
+                    os.remove(filename)
+                    fv.res += "DELETED FILE - " + filename
 
-       dlurl = ""
-       fv.res  += '\n<br><form id="Url Download" action="youtube.rpy" method="get">'
-       fv.res  += '\n    <div class="searchform"><br><b>Download URL :</b>'
-       fv.res  += '\n       <input type="text" name="dl_url" size="40" value="' + dlurl + '" />'
-       fv.res  += '\n       <select name="dlscript" value="downloadurl">'
-       fv.res  += '\n           <option value="youtube">Youtube</option>'
-       fv.res  += '\n           <option value="downloadurl">Donwload Url</option>'
-       fv.res  += '\        </select>'
-       fv.res  += '\n       <input type="submit" value=" Download! " />'
-       fv.res  += '\n    </div>'
-       fv.res  += '\n</form><br>\n'
+        dlurl = ""
+        fv.res  += '\n<br><form id="Url Download" action="youtube.rpy" method="get">'
+        fv.res  += '\n    <div class="searchform"><br><b>Download URL :</b>'
+        fv.res  += '\n       <input type="text" name="dl_url" size="40" value="' + dlurl + '" />'
+        fv.res  += '\n       <select name="dlscript" value="downloadurl">'
+        fv.res  += '\n           <option value="youtube">Youtube</option>'
+        fv.res  += '\n           <option value="downloadurl">Donwload Url</option>'
+        fv.res  += '\        </select>'
+        fv.res  += '\n       <input type="submit" value=" Download! " />'
+        fv.res  += '\n    </div>'
+        fv.res  += '\n</form><br>\n'
 
-       dltype = fv.formValue(form,'dlscript')
-       dlurl = fv.formValue(form,'dl_url')
-       if dltype and dlurl:
-           if dltype == "youtube":
-             download_youtube(dlurl)
-           if dltype == "downloadurl":
-             download_url(dlurl)
+        dltype = fv.formValue(form,'dlscript')
+        dlurl = fv.formValue(form,'dl_url')
+        if dltype and dlurl:
+            if dltype == "youtube":
+                download_youtube(dlurl)
+            if dltype == "downloadurl":
+                download_url(dlurl)
 
-       fv.res  += displaytableheader()       
-       fv.res  +=  addPageRefresh()
+        fv.res  += displaytableheader()
+        fv.res  +=  addPageRefresh()
 
 #       fv.res += '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/grCTXGW3sxQ"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/grCTXGW3sxQ" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>'
 
-       return String( fv.res )
+        return String( fv.res )
 
 resource = YouTubeResource()
-

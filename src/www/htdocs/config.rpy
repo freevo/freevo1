@@ -83,14 +83,14 @@ def UpdateConfig(varName,varValue,varEnable,sline,eline):
             status = "RELOAD PAGE"
 
     if blOK:
-         WriteConfigFile(config.CONFIG_EDIT_FILE,fconf)
+        WriteConfigFile(config.CONFIG_EDIT_FILE,fconf)
 
     results = '<font color="%s">%s</font>' % (color , status)
     return results
 
 def DeleteLines(startline,endline):
     rconf = ReadConfig()
-    
+
     dellines = "<ul>"
     for dline in range(startline, endline+1):
         rline = rconf.pop(startline)
@@ -117,13 +117,13 @@ def GetItemsArray(cvalue):
     if CheckSyntax(cmd):
         exec cmd
     return itemlist
-    
+
 def GetGroupList(cfgvars):
     grps = ['Other']
     agrps = []
     for vrs in cfgvars:
         grp = vrs['group']
-        agrps.append(grp) 
+        agrps.append(grp)
         if not grp in grps:
             grps.append(grp)
 
@@ -155,9 +155,9 @@ def ParseList(cname,cvalue):
         rows = 5
     cvalue = cvalue.replace(elemsep,elemsep + "\n")
     ctrl = '<textarea  id= "%s_tb" rows = %s cols=55 wrap="SOFT" name=%s_tb>%s</textarea>'  % (cname, str(rows),cname,cvalue)
-    return ctrl    
+    return ctrl
 
-   
+
 def CreateFilterControl(grps,cvalue):
     ctrl = '\n<select name="filterlist" value="%s"  id="filterlist" onchange="FilterList(\'filterlist\')">' % cvalue
     ctrl += '\n    <option value="All">All</option>'
@@ -170,50 +170,50 @@ def CreateFilterControl(grps,cvalue):
     return ctrl
 
 def ParseConfigFile(rconf):
-     cnt = 0
-     fconfig = []
-     while cnt < len(rconf):
-           startline = cnt
-           ln = rconf[cnt]
-           if ln.find("[") <> -1:
-              if ln.find("]") <> -1:
-                  fln = ln  
-              else:
-                  fln = ln
-                  while ln.find("]") == -1:
-                     cnt += 1
-                     ln = rconf[cnt]
-                     ln = ln.strip("#")
-                     ln = ln.strip()
-                     fln += ln
-           
-           elif ln.find("{") <> -1:
-              if ln.find("}") <> -1:
-                  fln = ln  
-              else:
-                  fln = ln
-                  while ln.find("}") == -1:
-                     cnt += 1
-                     ln = rconf[cnt]
-                     ln = ln.strip("#")
-                     ln = ln.strip()
-                     fln += ln
-                  fln = fln.replace("\n","")
-           else:
-               fln = ln
-           pln = ParseLine(fln)
-           if pln['type']:
-               pln['startline'] = startline
-               pln['endline'] = cnt
-               fconfig.append(pln)
-           cnt += 1
-     fconfig.sort()
-     return fconfig
+    cnt = 0
+    fconfig = []
+    while cnt < len(rconf):
+        startline = cnt
+        ln = rconf[cnt]
+        if ln.find("[") <> -1:
+            if ln.find("]") <> -1:
+                fln = ln
+            else:
+                fln = ln
+                while ln.find("]") == -1:
+                    cnt += 1
+                    ln = rconf[cnt]
+                    ln = ln.strip("#")
+                    ln = ln.strip()
+                    fln += ln
+
+        elif ln.find("{") <> -1:
+            if ln.find("}") <> -1:
+                fln = ln
+            else:
+                fln = ln
+                while ln.find("}") == -1:
+                    cnt += 1
+                    ln = rconf[cnt]
+                    ln = ln.strip("#")
+                    ln = ln.strip()
+                    fln += ln
+                fln = fln.replace("\n","")
+        else:
+            fln = ln
+        pln = ParseLine(fln)
+        if pln['type']:
+            pln['startline'] = startline
+            pln['endline'] = cnt
+            fconfig.append(pln)
+        cnt += 1
+    fconfig.sort()
+    return fconfig
 
 def CreateControl(nctrl):
     htmlctrl = HTMLResource()
     htmlctrl.tableRowOpen('class="chanrow"')
-   
+
     checked = ""
     if nctrl['checked']:
         checked = "checked"
@@ -230,13 +230,13 @@ def CreateControl(nctrl):
 
     htmlctrl.tableCell(chkbox,'')
     htmlctrl.tableCell(nctrl['ctrlname'],'align="right"')
-          
+
     if nctrl['type'] == "textbox":
-       inputbox = CreateTextBox(nctrl['ctrlvalue'],nctrl['ctrlname'],nctrl['vartype'])
-       htmlctrl.tableCell(inputbox,'colspan="1" align="left"')
+        inputbox = CreateTextBox(nctrl['ctrlvalue'],nctrl['ctrlname'],nctrl['vartype'])
+        htmlctrl.tableCell(inputbox,'colspan="1" align="left"')
 
     chkline = nctrl['ctrlname'] + " = " + nctrl['ctrlvalue']
-    
+
     lcheck = '<font color="#00FF00">OK</font>'
     if not CheckSyntax(chkline):
         lcheck = '<font color="#FF0000">Error</font>'
@@ -246,7 +246,7 @@ def CreateControl(nctrl):
             filename = nctrl['ctrlvalue'].replace("'","").strip()
             if not os.path.exists(filename):
                 lcheck = '<font color="#FF0000">Missing File - ' + filename + '</font>'
-    
+
     check = '<div id="%s_check">%s</div>' % (nctrl['ctrlname'],lcheck)
     opts = 'align="left" id="' + nctrl['ctrlname'] + '_check"'
     htmlctrl.tableCell(lcheck,opts)
@@ -258,11 +258,11 @@ def CreateControl(nctrl):
 def CreateBooleanControl(cname,cvalue):
     ctrl = '<select id = "%s_tb" name="%s_tb" value="">' % ( cname , cname )
     if cvalue.startswith("True"):
-         ctrl  += '\n    <option value="True" selected="yes">True</option>'
-         ctrl  += '\n    <option value="False">False</option>'
+        ctrl  += '\n    <option value="True" selected="yes">True</option>'
+        ctrl  += '\n    <option value="False">False</option>'
     else:
-         ctrl  += '\n    <option value="True" >True</option>'
-         ctrl  += '\n    <option value="False" selected="yes">False</option>'
+        ctrl  += '\n    <option value="True" >True</option>'
+        ctrl  += '\n    <option value="False" selected="yes">False</option>'
     ctrl  += '</select>'
     return ctrl
 
@@ -273,9 +273,9 @@ def CreateTextBox(cvalue,cname,vtype):
     cid = cname + "_tb"
     ctrl = "ERROR!!!"
     if vtype == "boolean":
-         ctrl = CreateBooleanControl(cname,cvalue)
+        ctrl = CreateBooleanControl(cname,cvalue)
     elif vtype == "list":
-         ctrl = ParseList(cname,cvalue)
+        ctrl = ParseList(cname,cvalue)
     else:
         tbsize = "45"
         if vtype == "number":
@@ -285,29 +285,29 @@ def CreateTextBox(cvalue,cname,vtype):
 
 def isNumber(s):
     try:
-      i = int(s)
-      return True
+        i = int(s)
+        return True
     except ValueError:
-      return False
+        return False
 
-    
+
 def FileTypeVarArray(cname):
     filevars = ['VIDEO_ITEMS','AUDIO_ITEMS','IMAGE_ITEMS','GAME_ITEMS']
-       
+
     if cname in filevars:
-       return True
+        return True
     return False
-    
+
 def FileTypeVar(cname):
     vtype = cname.split("_")[-1]
     filetypes = ['PATH','DIR','FILE','DEV','DEVICE']
     filevars = ['XMLTV_GRABBER','RSS_AUDIO','RSS_VIDEO','RSS_FEEDS','XMLTV_SORT','LIRCRC']
-    
+
     if vtype in filetypes:
-       return True     
+        return True
     if cname in filevars:
-       return True
-    return False    
+        return True
+    return False
 
 def VarType(cvalue):
     if cvalue.startswith("'") and cvalue.endswith("'"):
@@ -320,11 +320,11 @@ def VarType(cvalue):
         return "list"
     if cvalue.startswith("{") and cvalue.endswith("}"):
         return "list"
-    if cvalue.startswith("True") or cvalue.startswith("False"):         
+    if cvalue.startswith("True") or cvalue.startswith("False"):
         return 'boolean'
     return "Unknow"
-        
-    
+
+
 def ParseLine(cline):
     lparsed = {'ctrlname': '',
                'ctrlvalue': '' ,
@@ -337,14 +337,14 @@ def ParseLine(cline):
                'endline':'',
                'fileline':cline,
                'vartype':''}
-    
+
     tln = cline.strip()
     tln = tln.replace("\n","")
     if tln.startswith("#"):
         lparsed['checked'] = False
         tln = tln.lstrip("#")
         tln = tln.lstrip()
-        
+
     if len(tln) > 1:
         fsplit = tln.split("=")
         if len(fsplit) == 2:
@@ -354,16 +354,16 @@ def ParseLine(cline):
             if lparsed['ctrlname'].endswith("_VOLUME"):
                 lparsed['group'] = "Volume"
             if not lparsed['ctrlname'].isupper():
-               lparsed['type'] = ''
+                lparsed['type'] = ''
             if (not config.__dict__.has_key(lparsed['ctrlname'])):
-               try:
-                   fvvalue = eval('config.' + lparsed['ctrlname'])
-               except Exception, e:
-                   fvvalue = ""
-                   
+                try:
+                    fvvalue = eval('config.' + lparsed['ctrlname'])
+                except Exception, e:
+                    fvvalue = ""
+
             ctrlvalue = fsplit[1].split("#")
             if len(ctrlvalue) == 2:
-                 lparsed['comments'] = ctrlvalue[1]
+                lparsed['comments'] = ctrlvalue[1]
             lparsed['ctrlvalue'] = ctrlvalue[0].strip()
     lparsed['vartype'] = VarType(lparsed['ctrlvalue'])
 
@@ -372,76 +372,75 @@ def ParseLine(cline):
     return lparsed
 
 def DisplaySettings(fconfig,filterlist):
-     fv = HTMLResource()
+    fv = HTMLResource()
 
-     groups = GetGroupList(fconfig)
-     fv.tableOpen('class="library" id="filelist"')
-     fv.tableRowOpen('class="chanrow"')
-     fv.tableCell(CreateFilterControl(groups,filterlist),'class ="guidehead"  colspan="2"')
-     fv.tableCell('Enable','class ="guidehead"  colspan="1"')
-     fv.tableCell('Name','class ="guidehead"  colspan="1"')
-     fv.tableCell('Value','class ="guidehead"  colspan="1"')
-     fv.tableCell('Comments','class ="guidehead"  colspan="1"')
-     fv.tableRowClose()
+    groups = GetGroupList(fconfig)
+    fv.tableOpen('class="library" id="filelist"')
+    fv.tableRowOpen('class="chanrow"')
+    fv.tableCell(CreateFilterControl(groups,filterlist),'class ="guidehead"  colspan="2"')
+    fv.tableCell('Enable','class ="guidehead"  colspan="1"')
+    fv.tableCell('Name','class ="guidehead"  colspan="1"')
+    fv.tableCell('Value','class ="guidehead"  colspan="1"')
+    fv.tableCell('Comments','class ="guidehead"  colspan="1"')
+    fv.tableRowClose()
 
-     for cctrl in fconfig:
-          if cctrl['type'] == "textbox":
-              if filterlist and filterlist <> "All":
-                  if cctrl['group'] == filterlist:
-                      fv.res += CreateControl(cctrl)
-              else:
-                 fv.res += CreateControl(cctrl)
+    for cctrl in fconfig:
+        if cctrl['type'] == "textbox":
+            if filterlist and filterlist <> "All":
+                if cctrl['group'] == filterlist:
+                    fv.res += CreateControl(cctrl)
+            else:
+                fv.res += CreateControl(cctrl)
 
-     fv.tableClose()
-     return fv.res
+    fv.tableClose()
+    return fv.res
 
 class ConfigResource(FreevoResource):
-    
+
     def _render(self, request):
-         fv = HTMLResource()
-         form = request.args
-         fv.printHeader(_('Config'), 'styles/main.css','scripts/config.js',selected=_('Config'))
+        fv = HTMLResource()
+        form = request.args
+        fv.printHeader(_('Config'), 'styles/main.css','scripts/config.js',selected=_('Config'))
 
-         if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
-             fv.printMessages(["Unable to find local_conf.py setting CONFIG_EDIT_FILE"])
-             return String ( fv.res )
+        if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
+            fv.printMessages(["Unable to find local_conf.py setting CONFIG_EDIT_FILE"])
+            return String ( fv.res )
 
-         if not os.path.exists(config.CONFIG_EDIT_FILE):
-             fv.printMessages(["Unable to find file - " + config.CONFIG_EDIT_FILE])
-             return String ( fv.res )
+        if not os.path.exists(config.CONFIG_EDIT_FILE):
+            fv.printMessages(["Unable to find file - " + config.CONFIG_EDIT_FILE])
+            return String ( fv.res )
 
-         update = fv.formValue(form,"update")
-         if update:            
-             udname = fv.formValue(form,"udname")
-             udenable = fv.formValue(form,"udenable")
-             udvalue = fv.formValue(form,"udvalue")
-             startline = fv.formValue(form,"startline")
-             endline = fv.formValue(form,"endline")
-             fv.res = UpdateConfig(udname,udvalue,udenable,int(startline),int(endline))
-             return String( fv.res )
+        update = fv.formValue(form,"update")
+        if update:
+            udname = fv.formValue(form,"udname")
+            udenable = fv.formValue(form,"udenable")
+            udvalue = fv.formValue(form,"udvalue")
+            startline = fv.formValue(form,"startline")
+            endline = fv.formValue(form,"endline")
+            fv.res = UpdateConfig(udname,udvalue,udenable,int(startline),int(endline))
+            return String( fv.res )
 
-         delete = fv.formValue(form,"delete")
-         startline = fv.formValue(form,"startline")
-         endline = fv.formValue(form,"endline")
-         if delete == "TRUE" and startline and endline:            
-             dlines = DeleteLines(int(startline),int(endline))
-             fv.res += "<br><h4>The following Lines were deleted :</h4>" + dlines
-             
-         rconf = ReadConfig()
-         fconfig = ParseConfigFile(rconf)
-       
-         filterlist = fv.formValue(form,"filterlist")
-         fv.res  += '\n<br><form id="Url Download" action="config.rpy" method="get">'
-         fv.res  += '\n    <div class="searchform" align="left"><br>'
-         fv.res += '<div align="left">'
+        delete = fv.formValue(form,"delete")
+        startline = fv.formValue(form,"startline")
+        endline = fv.formValue(form,"endline")
+        if delete == "TRUE" and startline and endline:
+            dlines = DeleteLines(int(startline),int(endline))
+            fv.res += "<br><h4>The following Lines were deleted :</h4>" + dlines
+
+        rconf = ReadConfig()
+        fconfig = ParseConfigFile(rconf)
+
+        filterlist = fv.formValue(form,"filterlist")
+        fv.res  += '\n<br><form id="Url Download" action="config.rpy" method="get">'
+        fv.res  += '\n    <div class="searchform" align="left"><br>'
+        fv.res += '<div align="left">'
 #         fv.res += NewLineControl()
-         fv.res += '</div>'
+        fv.res += '</div>'
 
-         fv.res += DisplaySettings(fconfig,filterlist)
-         fv.res += '\n    </div>'
-         fv.res += '\n</form><br>\n'               
- 
-         return String( fv.res )
+        fv.res += DisplaySettings(fconfig,filterlist)
+        fv.res += '\n    </div>'
+        fv.res += '\n</form><br>\n'
+
+        return String( fv.res )
 
 resource = ConfigResource()
-

@@ -65,30 +65,30 @@ def UpdatePlugin(pcmd,pname,pline):
         pline = len(lconf) - 1
 
     if pline <> -1:
-       lcline = lconf[pline]
-       if pcmd == "Disabled":
-           nline = "# plugin.activate('%s') \n" % pname
-           status =  "DISABLE Plugin " + pname + "\n" + nline
-           lconf[pline] = nline
-           WriteConfigFile(config.CONFIG_EDIT_FILE,lconf)
+        lcline = lconf[pline]
+        if pcmd == "Disabled":
+            nline = "# plugin.activate('%s') \n" % pname
+            status =  "DISABLE Plugin " + pname + "\n" + nline
+            lconf[pline] = nline
+            WriteConfigFile(config.CONFIG_EDIT_FILE,lconf)
 
-       elif pcmd == "REMOVE":
-           nline = "plugin.remove('%s')\n" % pname
-           status =  "REMOVE Plugin " + pname + "\n" + nline
-           lconf[pline] = nline
-           WriteConfigFile(config.CONFIG_EDIT_FILE,lconf)
+        elif pcmd == "REMOVE":
+            nline = "plugin.remove('%s')\n" % pname
+            status =  "REMOVE Plugin " + pname + "\n" + nline
+            lconf[pline] = nline
+            WriteConfigFile(config.CONFIG_EDIT_FILE,lconf)
 
-       elif pcmd == "Enabled":
-           nline = "plugin.activate('%s')\n" % pname
-           status =  "ACTIVATE Plugin " + pname + "\n" + nline
-           lconf[pline] = nline
-           WriteConfigFile(config.CONFIG_EDIT_FILE,lconf)
+        elif pcmd == "Enabled":
+            nline = "plugin.activate('%s')\n" % pname
+            status =  "ACTIVATE Plugin " + pname + "\n" + nline
+            lconf[pline] = nline
+            WriteConfigFile(config.CONFIG_EDIT_FILE,lconf)
 
-       elif pcmd == "DELETE":
-           status = "ACTIVATE Plugin " + pname
+        elif pcmd == "DELETE":
+            status = "ACTIVATE Plugin " + pname
 
     return status
-   
+
 def ParsePluginName(line):
     sline = line.split("'")
     if len(sline) > 2:
@@ -105,13 +105,13 @@ def GetConfigSetting(vname):
         ln = ln.strip("#")
         ln = ln.strip()
         if ln.startswith(vname):
-           print "LINE FOUND"
-           sln = ln.split("=")
-           print sln
-           if len(sln) > 1:
-              ret = sln[1].split("#")[0]
+            print "LINE FOUND"
+            sln = ln.split("=")
+            print sln
+            if len(sln) > 1:
+                ret = sln[1].split("#")[0]
     return ret
-           
+
 def ReadConfigPlugins():
     rconf = ReadConfig()
     pluginlines = []
@@ -125,27 +125,27 @@ def ReadConfigPlugins():
             pline['enabled'] = False
             ln = ln.strip('#')
             ln = ln.strip()
-            
+
         if ln.startswith('plugin'):
             pline['name'] = ParsePluginName(ln)
             pline['lineno'] = cnt
             pline['orgline'] = rconf[cnt]
             pluginlines.append(pline)
 
-            
+
         cnt += 1
-     
+
     return pluginlines
 
 def GetPlugConfig(pname,all_plugins):
     config_list = []
     for p in all_plugins:
         if p[0] == pname:
-           if p[5].find('config') > 0:
-               exec (p[5])
-               config_list = return_config()
+            if p[5].find('config') > 0:
+                exec (p[5])
+                config_list = return_config()
     return config_list
-    
+
 def CreateListBox(cname,grps,cvalue,opts):
     ctrl = '\n<select name="%s" value=""  id="%s" %s>' % ( cname , cname, opts )
     for grp in grps:
@@ -158,11 +158,11 @@ def CreateListBox(cname,grps,cvalue,opts):
 
 def displayplugin(plugin,group,pfilter,lconf,plugins_all):
     html = HTMLResource()
-   
+
     pluginname = plugin[0]
     for e in plugin:
         if e.find("level") <> -1:
-            level = "30" 
+            level = "30"
 
     status = "Deactive"
     btnlabel = "Disabled"
@@ -171,7 +171,7 @@ def displayplugin(plugin,group,pfilter,lconf,plugins_all):
         status = "Active"
         btnlabel = "Enabled"
         jscmd = "DisablePlugin"
-        
+
     # check tos ee fi the plugin has a line in localconf
     lconfline = "No local_conf.py entry"
     confentry = False
@@ -182,17 +182,17 @@ def displayplugin(plugin,group,pfilter,lconf,plugins_all):
             linenumber = lcline['lineno']
             confentry = True
     level = "N/A"
-    
+
     if is_active(plugin[0]) and not confentry:
-         status = "Active"
-         btnlabel = "Enabled"
-         jscmd = "RemovePlugin"
+        status = "Active"
+        btnlabel = "Enabled"
+        jscmd = "RemovePlugin"
 
     if lconfline.startswith("plugin.remove"):
-         status = "Removed"
-         btnlabel = "Removed"
-         jscmd = "EnablePlugin"
-  
+        status = "Removed"
+        btnlabel = "Removed"
+        jscmd = "EnablePlugin"
+
     cmds = ["Enabled","Disabled","Removed"]
     jsupdate = 'onchange="UpdatePlugin(\'%s\')"' % pluginname
     btns = CreateListBox(pluginname + "_cmd",cmds,btnlabel,jsupdate)
@@ -220,7 +220,7 @@ def displayplugin(plugin,group,pfilter,lconf,plugins_all):
             html.tableRowClose()
 
     return html.res
-    
+
 class ConfigurePluginsResource(FreevoResource):
 
     def _render(self, request):
@@ -247,22 +247,22 @@ class ConfigurePluginsResource(FreevoResource):
         fv.res  += '\n<div class="searchform" align="left"><br>'
         fv.res  += '\n<br><form id="Url Download" action="pluginconfig.rpy" method="get">'
         fv.res += '<br>'
-        
+
         filterlist = special_plugins
         filterlist.insert(0,"Global")
         filterlist.insert(0,"(All)")
-        
+
         # Read the settings from localconf for plugins.
         lcplugins = ReadConfigPlugins()
 
         pluginfilter = fv.formValue(form, 'pluginfilter')
         if not pluginfilter:
             pluginfilter = "(All)"
-        
+
         filter = fv.formValue(form, 'filterlist')
         if not filter:
             filter = "(All)"
-            
+
         fv.tableOpen()
         fv.tableRowOpen('class="chanrow"')
         jsfilter = 'onchange="FilterListPlugin()"'
@@ -290,13 +290,13 @@ class ConfigurePluginsResource(FreevoResource):
                     if p[0][:p[0].find('.')] == type:
                         fv.res += displayplugin(p,grp,pluginfilter,lcplugins,all_plugins)
                         grp = ""
-                        
+
         else:
             grp = filter
-            for p in all_plugins:    
-                        if p[0][:p[0].find('.')] == filter:
-                            fv.res += displayplugin(p,grp,pluginfilter,lcplugins,all_plugins)
-                            grp = ""
+            for p in all_plugins:
+                if p[0][:p[0].find('.')] == filter:
+                    fv.res += displayplugin(p,grp,pluginfilter,lcplugins,all_plugins)
+                    grp = ""
 
         fv.tableClose()
         fv.res += '</form>'
