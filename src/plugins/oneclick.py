@@ -53,7 +53,13 @@ import re
 from xml.dom.ext.reader import Sax2
 import urllib, urllib2
 
-import cElementTree as ET
+if sys.hexversion >= 0x2050000:
+    import xml.etree.cElementTree as ET
+else:
+    try:
+        import cElementTree as ET
+    except ImportError:
+        import elementtree.ElementTree as ET
 
 #freevo modules
 import config, menu, rc, plugin, skin, osd, util

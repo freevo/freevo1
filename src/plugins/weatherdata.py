@@ -4,9 +4,13 @@
 # wget 'http://ff.1click.weather.com/weather/local/SZXX0033?dayf=5&unit=m'
 # wget 'http://ff.1click.weather.com/weather/local/SZXX0033?cc=*&unit=m'
 
-import cElementTree as ET
-import cPickle, pickle
-from pprint import pprint
+if sys.hexversion >= 0x2050000:
+    import xml.etree.cElementTree as ET
+else:
+    try:
+        import cElementTree as ET
+    except ImportError:
+        import elementtree.ElementTree as ET
 
 
 class WeatherData:
@@ -434,12 +438,6 @@ if __name__ == '__main__':
     print dir(forecast)
     for i in dir(forecast):
         item = eval('forecast.%s' % (i))
-        #print i, type(item), item
-    #pprint(forecast)
-    f = open('forecast.pickle', 'w')
-    #pickle.dump(forecast, f, pickle.HIGHEST_PROTOCOL)
-    #pickle.dump(forecast_tree, f, pickle.HIGHEST_PROTOCOL)
-    f.close()
 
     print dir(forecast.loc)
     print forecast.loc.id
