@@ -5,33 +5,51 @@ function FilterList(cname) {
      window.location = 'config.rpy?filterlist=' + filter
 }
 
-function EnablePlugin(pname) {
-	alert("Enable Plugin - " + pname)
+function UpdatePlugin(pname) {
+    var cmd,lineno,url;
+
+    cmd = document.getElementById(pname + "_cmd").value;
+    lineno = document.getElementById(pname + "_lineno").value;
+    url = "pluginconfig.rpy?cmd=" + cmd + "&pluginname=" + pname + "&pluginline=" + lineno;
+    makeRequest(url , pname);
 }
 
-function DisablePlugin(pname) {
-    var lineno;
+
+function RemovePlugin(pname) {
+    var lineno,url;
+
+    // Get the Line Number of the Plugin.
+    lineno = document.getElementById(pname + "_lineno").value;
+    url = "pluginconfig.rpy?cmd=REMOVE&pluginname=" + pname + "&pluginline=" + lineno;
+    makeRequest(url , pname);
+}
+
+function EnablePlugin(pname) {
+    var lineno,url;
 
     // Get the Line Number of the Plugin.
     lineno = document.getElementById(pname + "_lineno").value  
-    alert("Disable Plugin - " + pname)
+    url = "pluginconfig.rpy?cmd=ACTIVATE&pluginname=" + pname + "&pluginline=" + lineno
+    makeRequest(url , pname)
+}
+
+function DisablePlugin(pname) {
+    var lineno,url;
+
+    // Get the Line Number of the Plugin.
+    lineno = document.getElementById(pname + "_lineno").value  
+    url = "pluginconfig.rpy?cmd=DISABLE&pluginname=" + pname + "&pluginline=" + lineno
+    makeRequest(url , pname)
 }
 
 
-function FilterListPlugin(cname) {
-     var filter;   
+function FilterListPlugin() {
+     var grpfilter,statfilter;   
 
-     filter = document.getElementById(cname).value;
-     window.location = 'pluginconfig.rpy?' + cname + '=' + filter
-}
+     grpfilter = document.getElementById('grpfilter').value;
+     statfilter = document.getElementById('statfilter').value;
 
-
-function DeleteLines(sline,eline) {
-     var filter,url;   
-
-     filter = document.getElementById("filterlist").value;
-     url = 'config.rpy?filterlist=' + filter + "&delete=TRUE&startline=" + sline + "&endline=" + eline
-     window.location = url;
+     window.location = 'pluginconfig.rpy?filterlist=' + grpfilter + "&pluginfilter=" + statfilter
 }
 
 function UpdateStatus(hRequest,cname) {
@@ -39,8 +57,8 @@ function UpdateStatus(hRequest,cname) {
 
     if (hRequest.readyState == 4) {
         if (hRequest.status == 200) {
-           cell = document.getElementById(cname + "_check");
-           cell.innerHTML = hRequest.responseText;
+            cell = ""
+//            alert(hRequest.responseText)           
         } else {
             
             alert('There was a problem with the request.');

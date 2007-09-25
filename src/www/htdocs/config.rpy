@@ -47,8 +47,8 @@ def UpdateConfig(varName,varValue,varEnable,sline,eline):
     color = cred
     status = 'NOT Updated, Error'
     blOK = False
-
     newline = varName + " = " + varValue
+
     # Check the syntax of the new line.
     if CheckSyntax(newline):
         blOK = True
@@ -119,11 +119,20 @@ def GetItemsArray(cvalue):
     return itemlist
     
 def GetGroupList(cfgvars):
-    grps = []
+    grps = ['Other']
+    agrps = []
     for vrs in cfgvars:
         grp = vrs['group']
+        agrps.append(grp) 
         if not grp in grps:
             grps.append(grp)
+
+    for vrs in cfgvars:
+        ngrp = agrps.count(vrs['group'])
+        if ngrp == 1:
+            grps.remove(vrs['group'])
+            vrs['group'] = 'Other'
+
     grps.sort()
     return grps
 
@@ -131,7 +140,7 @@ def NewLineControl():
     ctrl = ""
     ctrl += '<input  id="newname" name="newname" size="40"> ='
     ctrl += '<input  id="newvalue" name="newvalue" size="40">'
-    ctrl += '<input type="button" onclick="FilterList(\'filterlist\')" value="New Setting"><br><br>\n'
+    ctrl += '<input type="button" onclick="AddNewLine()" value="New Setting"><br><br>\n'
     return ctrl
 
 
@@ -147,9 +156,10 @@ def ParseList(cname,cvalue):
     cvalue = cvalue.replace(elemsep,elemsep + "\n")
     ctrl = '<textarea  id= "%s_tb" rows = %s cols=55 wrap="SOFT" name=%s_tb>%s</textarea>'  % (cname, str(rows),cname,cvalue)
     return ctrl    
+
    
 def CreateFilterControl(grps,cvalue):
-    ctrl = '\n<select name="filterlist" value="%s"  id="filterlist">' % cvalue
+    ctrl = '\n<select name="filterlist" value="%s"  id="filterlist" onchange="FilterList(\'filterlist\')">' % cvalue
     ctrl += '\n    <option value="All">All</option>'
     for grp in grps:
         if grp == cvalue:
@@ -157,7 +167,6 @@ def CreateFilterControl(grps,cvalue):
         else:
             ctrl  += '\n    <option value="%s">%s</option>' % (grp,grp)
     ctrl += '\n</select>'
-    ctrl += '<input type="button" onclick="FilterList(\'filterlist\')" value="Apply Fiilter"><br><br>\n'
     return ctrl
 
 def ParseConfigFile(rconf):
@@ -200,35 +209,6 @@ def ParseConfigFile(rconf):
            cnt += 1
      fconfig.sort()
      return fconfig
-
-def CreatePluginControl(nctrl):
-    htmlctrl = HTMLResource()
-    htmlctrl.tableRowOpen('class="chanrow"')
-   
-    checked = "Deactivated"
-    btnName = "Activate"
-    if nctrl['checked']:
-        checked = "Activated"
-        btnName = "Deactivate"
-
-    cname = "'" + nctrl['ctrlname'] + "'"
-    chkbox = ""
-    htmlctrl.tableCell('<input type="button" onclick="SaveValue(' + cname + ')" value="' + btnName + '">\n','')
-    htmlctrl.tableCell('<input type="button" onclick="DeleteLines(' + cname + ')" value="Delete">\n','')
-
-#    chkbox += '<a href="config.rpy?delete=TRUE&startline=' + str(nctrl['startline']) + '&endline=' + str(nctrl['endline']) + '">delete</a>'
-    chkbox += '<input type="hidden" id="' + nctrl['ctrlname'] + '_startline" value="' + str(nctrl['startline']) + '">\n'
-    chkbox += checked + '\n'
-
-    htmlctrl.tableCell(chkbox,'')
-    htmlctrl.tableCell(nctrl['ctrlname'],'align="right"')
-          
-    if nctrl['level']:
-       inputbox = '<input name="LEVEL' + nctrl['ctrlname'] + '" size="2" value="' + nctrl['level'] + '">'
-       htmlctrl.tableCell(inputbox,'align="right"')
-         
-    htmlctrl.tableRowClose()
-    return htmlctrl.res
 
 def CreateControl(nctrl):
     htmlctrl = HTMLResource()
@@ -329,33 +309,6 @@ def FileTypeVar(cname):
        return True
     return False    
 
-def ParsePlugin(lparsed,cline):
-     lparsed['type'] = "plugin"
-     tsplit = cline.split("'")
-     if len(tsplit) > 2:
-         lparsed['ctrlname'] = tsplit[1].strip()
-     else:
-         lparsed['ctrlname'] = tsplit[0].strip()
-     lparsed['group'] = lparsed['ctrlname'].split(".")[0].upper()
-            
-     if cline.find("level=") <> -1 or cline.find('level =') <> -1:
-         cline=cline.replace(" ","")
-         plevel = cline[cline.find("level=")+6:cline.find("level=")+9]
-         plevel = plevel.replace(")","")
-         plevel = plevel.replace(",","")
-         lparsed['level'] = plevel
-     else:
-         lparsed['level'] = "00"
-            
-     if cline.startswith('plugin.remove'):
-         lparsed['checked'] = False
-     ctrlvalue = cline.split("#")
-     if len(ctrlvalue) == 2:
-         lparsed['comments'] = ctrlvalue[1]
-     lparsed['comments'] = cline
-     return lparsed   
-    
-
 def VarType(cvalue):
     if cvalue.startswith("'") and cvalue.endswith("'"):
         return "string"
@@ -392,15 +345,14 @@ def ParseLine(cline):
         tln = tln.lstrip("#")
         tln = tln.lstrip()
         
-    if tln.startswith('plugin'):
-        return lparsed
-        
     if len(tln) > 1:
         fsplit = tln.split("=")
         if len(fsplit) == 2:
             lparsed['type'] = "textbox"
             lparsed['ctrlname'] = fsplit[0].strip()
-            lparsed['group'] = lparsed['ctrlname'].split("_")[0]
+            lparsed['group'] = lparsed['ctrlname'].split("_")[0].capitalize()
+            if lparsed['ctrlname'].endswith("_VOLUME"):
+                lparsed['group'] = "Volume"
             if not lparsed['ctrlname'].isupper():
                lparsed['type'] = ''
             if (not config.__dict__.has_key(lparsed['ctrlname'])):
@@ -422,10 +374,10 @@ def ParseLine(cline):
 def DisplaySettings(fconfig,filterlist):
      fv = HTMLResource()
 
+     groups = GetGroupList(fconfig)
      fv.tableOpen('class="library" id="filelist"')
      fv.tableRowOpen('class="chanrow"')
-     fv.tableCell('','class ="guidehead"  colspan="2"')
-#     fv.tableCell('','class ="guidehead"  colspan="1"')
+     fv.tableCell(CreateFilterControl(groups,filterlist),'class ="guidehead"  colspan="2"')
      fv.tableCell('Enable','class ="guidehead"  colspan="1"')
      fv.tableCell('Name','class ="guidehead"  colspan="1"')
      fv.tableCell('Value','class ="guidehead"  colspan="1"')
@@ -448,7 +400,6 @@ class ConfigResource(FreevoResource):
     def _render(self, request):
          fv = HTMLResource()
          form = request.args
-       
          fv.printHeader(_('Config'), 'styles/main.css','scripts/config.js',selected=_('Config'))
 
          if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
@@ -476,16 +427,13 @@ class ConfigResource(FreevoResource):
              dlines = DeleteLines(int(startline),int(endline))
              fv.res += "<br><h4>The following Lines were deleted :</h4>" + dlines
              
-
          rconf = ReadConfig()
          fconfig = ParseConfigFile(rconf)
        
          filterlist = fv.formValue(form,"filterlist")
-         groups = GetGroupList(fconfig)
          fv.res  += '\n<br><form id="Url Download" action="config.rpy" method="get">'
          fv.res  += '\n    <div class="searchform" align="left"><br>'
          fv.res += '<div align="left">'
-         fv.res += CreateFilterControl(groups,filterlist)       
 #         fv.res += NewLineControl()
          fv.res += '</div>'
 

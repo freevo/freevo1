@@ -1,21 +1,22 @@
-//enter refresh time in "minutes:seconds" Minutes should range from 0 to inifinity. Seconds should range from 0 to 59'
-//var limit="0:10"
 if (document.images){
-  var parselimit=5
+  var parselimit=2
 }
 
 function beginrefresh(){
   if (!document.images)
      return
+     
+  cellObj = document.getElementById("refresh");
   if (parselimit==1) {
-       document.refreshForm.visited.value = "-1";
+       
+       cellObj.childNodes[0].nodeValue="Updating";
+       parselimit=60
        makeRequest('youtube.rpy?xml=1');
-       parselimit=5
        setTimeout("beginrefresh()",1000)
   }
   else{ 
      parselimit-=1
-     document.refreshForm.visited.value = parselimit
+     cellObj.childNodes[0].nodeValue="Refresh In : " + parselimit;
      curmin=Math.floor(parselimit/60)
      cursec=parselimit%60
      if (curmin!=0)
@@ -35,7 +36,6 @@ function makeRequest(url) {
         httpRequest = new XMLHttpRequest();
         if (httpRequest.overrideMimeType) {
             httpRequest.overrideMimeType('text/xml');
-            // See note below about this line
         }
     } 
     else if (window.ActiveXObject) { // IE
@@ -54,7 +54,7 @@ function makeRequest(url) {
         alert('Giving up :( Cannot create an XMLHTTP instance');
         return false;
     }
-    httpRequest.onreadystatechange = function() { alertContents(httpRequest); };
+    httpRequest.onreadystatechange = function() { UpdateTable(httpRequest); };
     httpRequest.open('GET', url, true);
     httpRequest.send('');
 
@@ -64,6 +64,8 @@ function TableAddRow(file,filesize,percent,amtdone,speed,eta) {
     var tbl,lastrow,newrow,cellLeft;
     var textNode;
 
+    var pickLink,pickText
+
     tbl = document.getElementById("filelist")
     lastrow = tbl.rows.length;
     newrow = tbl.insertRow(lastrow);
@@ -71,14 +73,25 @@ function TableAddRow(file,filesize,percent,amtdone,speed,eta) {
     newrow.className = "chanrow"
 
     cellLeft = newrow.insertCell(0);
-    textNode = document.createTextNode("Delete");
-    cellLeft.appendChild(textNode);
+    delLink=document.createElement('a');
+    pickText=document.createTextNode('delete');
+    delLink.appendChild(pickText);
+    delLink.setAttribute('href','youtube.rpy?Delete=1&file=' + file);
+    cellLeft.appendChild(delLink);
     cellLeft.className = "basic"
 
     cellLeft = newrow.insertCell(1);
-    textNode = document.createTextNode(file);
-    cellLeft.appendChild(textNode);
+    delLink=document.createElement('a');
+    pickText=document.createTextNode(file);
+    delLink.appendChild(pickText);
+    delLink.setAttribute('href','youtube.rpy?playfile=' + file);
+    cellLeft.appendChild(delLink);
     cellLeft.className = "basic"
+
+//    cellLeft = newrow.insertCell(1);
+//    textNode = document.createTextNode(file);
+//    cellLeft.appendChild(textNode);
+//    cellLeft.className = "basic"
 
     cellLeft = newrow.insertCell(2);
     textNode = document.createTextNode(percent);
@@ -109,14 +122,12 @@ function TableAddRow(file,filesize,percent,amtdone,speed,eta) {
     cellLeft.appendChild(textNode);
     cellLeft.id = file + ".ETA"
     cellLeft.className = "basic"
-
-    lastrow = tbl.rows.length;
 }
 
 function RemoveRows(lfiles) {
     var tbl,r,cnt,rfile,fnd,xfile ;
+
     tbl = document.getElementById("filelist");
-    
     for (r=1; r < tbl.rows.length; r++) {
         rfile = tbl.rows[r].id
         fnd = 0
@@ -128,20 +139,27 @@ function RemoveRows(lfiles) {
                 j = lfiles.childNodes.length
             }
         }
+        
         if (fnd == 0) {
             fnd = 1;
             tbl.deleteRow(r);
-            //alert("Delete Row - " + rfile);
         }
         cnt = 0;
     }
-    
 }
 
-function alertContents(httpRequest) {
-    var j,cellObj;
+function UpdateCell(cellname,value) {
+    var cellObj;
+
+    cellObj = document.getElementById(cellname);
+    cellObj.childNodes[0].nodeValue=value;
+}
+
+function UpdateTable(httpRequest) {
+    var j,cellObj,nodls;
     var cfile,filename,percent,amtdone,filesize,speed,eta;
 
+    nodls = true;
     if (httpRequest.readyState == 4) {
         if (httpRequest.status == 200) {
                 
@@ -155,25 +173,22 @@ function alertContents(httpRequest) {
                 filesize = cfile.childNodes[3].firstChild.nodeValue;
                 speed = cfile.childNodes[4].firstChild.nodeValue;
                 eta = cfile.childNodes[5].firstChild.nodeValue;
+                if (amtdone != "done") {
+                    parselimit = 10;
+                }
 
                 // Check to see if a table row exists for the file.
-                cellObj = document.getElementById(filename + ".FILESIZE");
+                cellObj = document.getElementById(filename);
                 if (cellObj == null) {
-                      TableAddRow(filename,filesize,percent,amtdone,speed,eta)
+                    TableAddRow(filename,filesize,percent,amtdone,speed,eta)
                 }
                 else {
-                    cellObj = document.getElementById(filename + ".FILESIZE");
-                    cellObj.childNodes[0].nodeValue=filesize;
-                    cellObj = document.getElementById(filename + ".PERCENT");
-                    cellObj.childNodes[0].nodeValue=percent;
-                    cellObj = document.getElementById(filename + ".SOFAR");
-                    cellObj.childNodes[0].nodeValue=amtdone;
-                    cellObj = document.getElementById(filename + ".SPEED");
-                    cellObj.childNodes[0].nodeValue=speed;
-                    cellObj = document.getElementById(filename + ".ETA");
-                    cellObj.childNodes[0].nodeValue=eta;
-                }
-                    
+                    UpdateCell(filename + ".FILESIZE",filesize)
+                    UpdateCell(filename + ".PERCENT",percent)
+                    UpdateCell(filename + ".SOFAR",amtdone)
+                    UpdateCell(filename + ".SPEED",speed)
+                    UpdateCell(filename + ".ETA",eta)
+                }                
             }
             RemoveRows(filelist);
         } else {

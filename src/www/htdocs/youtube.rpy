@@ -32,44 +32,39 @@ import math
 from www.web_types import HTMLResource, FreevoResource
 from urllib import urlopen
 from getopt import getopt
-
-print "CONFIG====="
-print (config)
+from stat import *
 
 def xmlStatus(fstatus):
-    xmlstatus = ""
+    xmlstatus = ""       
     xmlstatus += "<PERCENT>" + fstatus['percent'] + "</PERCENT>"
     xmlstatus += "<DOWNLOADED>" + fstatus['downloaded'] + "</DOWNLOADED>"
     xmlstatus += "<FILESIZE>" + fstatus['filesize'] + "</FILESIZE>"
     xmlstatus += "<SPEED>" + fstatus['speed'] + "</SPEED>"
     xmlstatus += "<ETA>" + fstatus['eta'] + "</ETA>"
-
     return xmlstatus
 
 # Get optimum 1k exponent to represent a number of bytes
 def optimum_k_exp(num_bytes):
-    const_1k = 1024
-    if num_bytes == 0:
-        return 0
-    return long(math.log(num_bytes, const_1k))
-
+	const_1k = 1024
+	if num_bytes == 0:
+		return 0
+	return long(math.log(num_bytes, const_1k))
 
 # Get optimum representation of number of bytes
 def format_bytes(num_bytes):
-    const_1k = 1024
-    try:
-        exp = optimum_k_exp(num_bytes)
-        suffix = 'bkMGTPEZY'[exp]
-        if exp == 0:
-            return '%s%s' % (num_bytes, suffix)
-        converted = float(num_bytes) / float(const_1k**exp)
-        return '%.2f%s' % (converted, suffix)
-    except IndexError:
-        return "Error"
-
+	const_1k = 1024
+	try:
+		exp = optimum_k_exp(num_bytes)
+		suffix = 'bkMGTPEZY'[exp]
+		if exp == 0:
+			return '%s%s' % (num_bytes, suffix)
+		converted = float(num_bytes) / float(const_1k**exp)
+		return '%.2f%s' % (converted, suffix)
+	except IndexError:
+		return "Error"
 
 def getStatus(ytfile):
-    fileStatus = {'percent': '--.-%', 'downloaded': 'done' , 'filesize': 'DONE' ,'speed' : '--', 'eta' : '--:--'}
+    fileStatus = {'percent': '-', 'downloaded': 'done' , 'filesize': 'done' ,'speed' : '--', 'eta' : '--:--'}
     fileStatus['filesize'] = format_bytes(os.path.getsize(config.YOUTUBE_DIR + ytfile))
     logfile = config.YOUTUBE_DIR + ".tmp/" + os.path.splitext(ytfile)[0] + ".log"
     if os.path.exists(logfile):
@@ -88,7 +83,7 @@ def getStatus(ytfile):
                 fileStatus['percent'] = "NA"
                 fileStatus['downloaded'] = "NA"
                 fileStatus['speed'] = "NA"
-                fileStatus['eta'] = "Unknown"
+                fileStatus['eta'] = "Unknown"            
         except Exception, e:
             fileStatus['percent'] = "NA"
             fileStatus['downloaded'] = "NA"
@@ -97,30 +92,28 @@ def getStatus(ytfile):
     return fileStatus
 
 
-def getXML():
-
-    dfiles = '<?xml version="1.0" encoding="ISO-8859-1" ?>'
-    dfiles += '<FILELIST>'
-    enablerefresh = False
+def getXML(): 
+    filesXML = '<?xml version="1.0" encoding="ISO-8859-1" ?>'
+    filesXML += '<FILELIST>'
 
     filelist = os.listdir(config.YOUTUBE_DIR)
     filelist.sort()
     for fl in filelist :
-        if fl != ".tmp" and fl != "folder.fxd" :
+        fstat = os.stat(config.YOUTUBE_DIR + fl)[ST_MODE]
+        isdir = S_ISDIR(fstat)
+        if not isdir and fl != "folder.fxd" :
             # check for log file.
-            dfiles += '<FILE id="' + fl + '">'
-            dfiles += '<FILENAME>' + fl + '</FILENAME>'
+            filesXML += '<FILE id="' + fl + '">'
+            filesXML += '<FILENAME>' + fl + '</FILENAME>'
             fstats = getStatus(fl)
-            dfiles += xmlStatus(fstats)
-            dfiles += '</FILE>'
-    dfiles += "</FILELIST>"
-    retdfile = []
-    retdfile.append(dfiles)
-    retdfile.append(enablerefresh)
-    return retdfile
+            filesXML += xmlStatus(fstats)
+            filesXML += '</FILE>'
+    filesXML += "</FILELIST>"
+    return filesXML
 
-def displayfiles(fvhtml):
-    fvhtml.res += ''
+def displaytableheader(): 
+    fvhtml = HTMLResource()
+
     fvhtml.tableOpen('class="library" id="filelist"')
     fvhtml.tableRowOpen('class="chanrow"')
     fvhtml.tableCell('Current Downloads','class ="guidehead"  colspan="2"')
@@ -130,178 +123,151 @@ def displayfiles(fvhtml):
     fvhtml.tableCell('Speed','class ="guidehead"  colspan="1"')
     fvhtml.tableCell('ETA','class ="guidehead"  colspan="1"')
     fvhtml.tableRowClose()
-
-    enablerefresh = False
-
-    filelist = os.listdir(config.YOUTUBE_DIR)
-    filelist.sort()
-    for fl in filelist :
-
-        # check to see if the file is currently being downloaded.
-        if fl != ".tmp" and fl != "folder.fxd" :
-
-            # check for log file.
-            flstatus = getStatus(fl)
-            fvhtml.tableRowOpen('class="chanrow" colspan="1" id="'+fl +'"')
-            fvhtml.tableCell('<a href="youtube.rpy?Delete=1&file=' + fl + '">DELETE</a>','class="basic" colspan="1"')
-            fvhtml.tableCell(fl,'class="basic" colspan="1"')
-            fvhtml.tableCell(flstatus['percent'],'class="basic" colspan="1" id="' + fl + '.PERCENT"')
-            fvhtml.tableCell(flstatus['downloaded'],'class="basic" colspan="1" id = "' + fl + '.SOFAR"')
-            fvhtml.tableCell(flstatus['filesize'],'class="basic" colspan="1" id="' + fl + '.FILESIZE"')
-            fvhtml.tableCell(flstatus['speed'],'class="basic" colspan="1" id="' + fl + '.SPEED"')
-            fvhtml.tableCell(flstatus['eta'],'class="basic" colspan="1" id="' + fl + '.ETA"')
-            fvhtml.tableRowClose()
-
     fvhtml.tableClose()
-    retdfile = []
-    retdfile.append(fvhtml.res)
-    retdfile.append(enablerefresh)
-    return retdfile
-
+    return fvhtml.res
 
 def CleanupLogFiles():
     logfiles = os.listdir(config.YOUTUBE_DIR + ".tmp/")
-
     for lfile in logfiles:
         # Check to see if the movie file exists.
         vfile = config.YOUTUBE_DIR + os.path.splitext(lfile)[0] + ".flv"
         if not os.path.exists(vfile):
             os.remove(config.YOUTUBE_DIR + ".tmp/" + lfile)
 
-
-def download_youtube(yt_url, yt_out):
-
-    stime = time.localtime()
-    cmd = "python " + config.YOUTUBE_DL + " -t " + yt_url
+def startdownload(dlcommand,logfile):
     pwdcur = os.getcwd()
     os.chdir(config.YOUTUBE_DIR)
-
-    # get the file name from the url.
-    logfile = config.YOUTUBE_DIR + ".tmp/" +  yt_url.split("=")[-1] + ".log"
-    ytpid = 0
     lfile = open (logfile, "w")
-    ytpid = subprocess.Popen((config.YOUTUBE_DL,"-t",yt_url),universal_newlines=True,stdout=lfile).pid
+    ytpid = subprocess.Popen(dlcommand,universal_newlines=True,stdout=lfile).pid
     os.chdir(pwdcur)
-    dlstatus = "<br><br>Starting download of " + yt_url + " <br>"
-    dlstatus = dlstatus + '<input type="text" name="pid" size="40" value="' + str(ytpid) + '" />'
 
-    return dlstatus
-
-def download_url(dl_url, dl_out):
-
-    stime = time.localtime()
-    cmd = "python " + config.DOWNLOAD_DL + " " + dl_url
-    pwdcur = os.getcwd()
-    os.chdir(config.YOUTUBE_DIR)
+def download_youtube(yt_url):
+    logfile = config.YOUTUBE_DIR + ".tmp/" +  yt_url.split("=")[-1] + ".log"
+    startdownload((config.YOUTUBE_DL,"-t",yt_url),logfile)
+   
+def download_url(dl_url):
 
     # get the file name from the url.
     logfile = config.YOUTUBE_DIR + ".tmp/partfile" +  dl_url.split("/")[-1]
     logfile = os.path.splitext(logfile)[0] + ".log"
-    ytpid = 0
-    lfile = open (logfile, "w")
-    ytpid = subprocess.Popen((config.DOWNLOAD_DL,dl_url),universal_newlines=True,stdout=lfile).pid
-    os.chdir(pwdcur)
-    dlstatus = ""
-
-    return dlstatus
-
-
+    startdownload((config.DOWNLOAD_DL,dl_url),logfile)
+    
 def addPageRefresh():
-
     prhtml = '<script type="text/JavaScript" src="scripts/youtube.js">window.onload=beginrefresh</script>'
-    prhtml += '\n<form name="refreshForm">'
-    prhtml += '\n    <div class="searchform"><br><b>Refresh In :</b>'
-    prhtml += '\n    <input type="text" name="visited" value="1" size="4" align="middle" />'
-    prhtml += '\n    </div>'
-    prhtml += '\n</form><br>'
+    prhtml += '\n<div class="searchform" id="refresh">Refresh In : ??</div>'
     return prhtml
 
+def envCheck():
+    yterrors = []
+    if (not config.__dict__.has_key('YOUTUBE_DIR')):
+        yterrors.append('Unable to Find YOUTUDE_DIR setting in local_conf.py')
+        yterrors.append('Add YOUTUBE_DIR = "Directory to Save Downloads." to your local_conf.py')
+        config.YOUTUBE_DIR = "MISSING"   
+        
+    if (not config.__dict__.has_key('YOUTUBE_DL')):
+        yterrors.append('Unable to Find YOUTUDE_DL setting in local_conf.py')
+        yterrors.append('Add YOUTUBE_DL = "Path to youtube-dl script" to your local_conf.py')
+        config.YOUTUBE_DL = "MISSING"
+
+    if (not config.__dict__.has_key('DOWNLOAD_DL')):
+        yterrors.append('Unable to Find DOWNLOAD_DL setting in local_conf.py')
+        yterrors.append('Add DOWNLOAD_DL = "Path to downloadurl.py script" to your local_conf.py')
+        config.DOWNLOAD_DL = "MISSING"
+    return yterrors
+
+def doFlowPlayer(pfile):
+    flash = '\n<br><br><script type="text/javascript" src="flowplayer/swfobject.js"></script>'
+    flash += '\n<div align="center" id="flowplayerholder">'
+    flash += '\nThis will be replaced by the player. '
+    flash += '\n</div>'
+    flash += '\n<script type="text/javascript">'
+    flash += '\n// <![CDATA['
+    flash += '\nvar fo = new SWFObject("flowplayer/FlowPlayerThermo.swf", "FlowPlayer", "468", "350", "7", "#ffffff", true);'
+    flash += '\n// need this next line for local testing, its optional if your swf is on the same domain as your html page'
+    flash += '\nfo.addParam("allowScriptAccess", "always");'
+    flash += '\nfo.addVariable("config", "{ showPlayListButtons: true, playList: [ {overlayId: \'play\' },'
+    flash += ' { url: \'http://archserve/youtube/'+ pfile + '\' } ], initialScale: \'fit\' }");'
+    flash += '\nfo.write("flowplayerholder");'
+    flash += '\n// ]]>'
+    flash += '\n</script>'
+    return flash
 
 class YouTubeResource(FreevoResource):
 
     def _render(self, request):
-        fv = HTMLResource()
-        form = request.args
+       fv = HTMLResource()
+       form = request.args
 
-        blxml = fv.formValue(form,"xml")
-        if blxml :
-            fdisplay = getXML()
-            fv.res += fdisplay[0]
-            return String( fv.res )
+       blxml = fv.formValue(form,"xml")
+       if blxml :
+            fv.res = getXML()
+            #fv.res += fdisplay[0]
+            return String( fv.res )     
 
-        fv.printHeader(_('YouTube'), 'styles/main.css',selected=_('YouTube'))
+       fv.printHeader(_('YouTube'), 'styles/main.css',selected=_('YouTube'))       
+       yterrors = envCheck() 
+ 
+       playfile = fv.formValue(form,"playfile")
+       if playfile:
+           fv.res += doFlowPlayer(playfile)
 
-        yterrors = []
-        if (not config.__dict__.has_key('YOUTUBE_DIR')):
-            yterrors.append('Unable to Find YOUTUDE_DIR setting in local_conf.py')
-            yterrors.append('Add YOUTUBE_DIR = "Directory to Save Downloads." to your local_conf.py')
-            config.YOUTUBE_DIR = "MISSING"
-        if (not config.__dict__.has_key('YOUTUBE_DL')):
-            yterrors.append('Unable to Find YOUTUDE_DL setting in local_conf.py')
-            yterrors.append('Add YOUTUBE_DL = "Path to youtube-dl script" to your local_conf.py')
-            config.YOUTUBE_DL = "MISSING"
-        if (not config.__dict__.has_key('DOWNLOAD_DL')):
-            yterrors.append('Unable to Find DOWNLOAD_DL setting in local_conf.py')
-            yterrors.append('Add DOWNLOAD_DL = "Path to downloadurl.py script" to your local_conf.py')
-            config.DOWNLOAD_DL = "MISSING"
+       if config.YOUTUBE_DIR == "MISSING"  or ((config.YOUTUBE_DL == "MISSING") and (config.DOWNLOAD_DL ==  "MISSING")):
+           fv.printMessages(yterrors)
+           return String( fv.res )
+       
+       if not os.path.exists(config.YOUTUBE_DIR):
+           fv.res += '<br><b>Unable to locate youtube download location "' + config.YOUTUBE_DIR + '" </b><br>' 
+           fv.res += 'Add YOUTUBE_DIR = "download directory" to your local_conf.py'
 
-        if len(yterrors) > 0:
-            fv.printMessages(yterrors)
-            return String( fv.res )
+       if not os.path.exists(config.YOUTUBE_DL):
+           fv.res += '<br><br><br><b>Unable to locate youtube-dl script  "' + config.YOUTUBE_DL + '" </b><br>' 
+           fv.res += 'Download scripts from  <a href="http://www.arrakis.es/~rggi3/youtube-dl/">http://www.arrakis.es/~rggi3/youtube-dl/</a>'
+           fv.res += '<br>Add YOUTUBE_DL = "path and file name to youtube_dl script"<br>'
 
+       if not os.path.exists(config.DOWNLOAD_DL):
+           fv.res += '<br><b>Unable to locate downloadurl.py script  "' + config.YOUTUBE_DL + '" </b><br>' 
+           fv.res += 'Download scripts from  <a href="http://www.arrakis.es/~rggi3/youtube-dl/">http://www.arrakis.es/~rggi3/youtube-dl/</a>'
+           fv.res += '<br>Add YOUTUBE_DL = "path and file name to youtube_dl script"<br><br>'
 
-        fldelete = fv.formValue(form,'Delete')
-        if fldelete:
-            filename = fv.formValue(form,'file')
+       if os.path.exists(config.YOUTUBE_DIR):
+           if not os.path.exists(config.YOUTUBE_DIR + ".tmp"):
+               os.mkdir(config.YOUTUBE_DIR + ".tmp")
+
+       fldelete = fv.formValue(form,'Delete')
+       if fldelete:
+            filename = fv.formValue(form,'file') 
             if filename:
                 filename = config.YOUTUBE_DIR + filename
                 if os.path.exists(filename):
-                    os.remove(filename)
-                    fv.res += "DELETED FILE - " + filename
+                       os.remove(filename)
+                       fv.res += "DELETED FILE - " + filename 
 
-        yturl = ""
-        if not os.path.exists(config.YOUTUBE_DL):
-            fv.res += '<br><br><br><b>Unable to locate youtube-dl script  "' + config.YOUTUBE_DL + '" </b><br>'
-            fv.res += 'Download scripts from  <a href="http://www.arrakis.es/~rggi3/youtube-dl/">http://www.arrakis.es/~rggi3/youtube-dl/</a>'
-            fv.res += '<br>Add YOUTUBE_DL = "path and file name to youtube_dl script"<br>'
-        else:
-            fv.res  += '\n<br><form id="YouTube Download" action="youtube.rpy" method="get">'
-            fv.res  += '\n<div class="searchform"><br><b>Youtube URL :</b><input type="text" name="yt_url" size="40" value="' + yturl + '" />'
-            fv.res  += '\n<input type="submit" value=" Download! " />'
-            fv.res  += '\n</div>'
-            fv.res  += '\n</form>'
+       dlurl = ""
+       fv.res  += '\n<br><form id="Url Download" action="youtube.rpy" method="get">'
+       fv.res  += '\n    <div class="searchform"><br><b>Download URL :</b>'
+       fv.res  += '\n       <input type="text" name="dl_url" size="40" value="' + dlurl + '" />'
+       fv.res  += '\n       <select name="dlscript" value="downloadurl">'
+       fv.res  += '\n           <option value="youtube">Youtube</option>'
+       fv.res  += '\n           <option value="downloadurl">Donwload Url</option>'
+       fv.res  += '\        </select>'
+       fv.res  += '\n       <input type="submit" value=" Download! " />'
+       fv.res  += '\n    </div>'
+       fv.res  += '\n</form><br>\n'
 
-            yturl = fv.formValue(form,'yt_url')
-            if yturl :
-                yt_status = str(download_youtube(yturl,""))
-                refreshon = True
+       dltype = fv.formValue(form,'dlscript')
+       dlurl = fv.formValue(form,'dl_url')
+       if dltype and dlurl:
+           if dltype == "youtube":
+             download_youtube(dlurl)
+           if dltype == "downloadurl":
+             download_url(dlurl)
 
-        if not os.path.exists(config.YOUTUBE_DIR):
-            fv.res += '<br><b>Unable to locate youtube download location "' + config.YOUTUBE_DIR + '" </b><br>'
-            fv.res += 'Add YOUTUBE_DIR = "download directory" to your local_conf.py'
+       fv.res  += displaytableheader()       
+       fv.res  +=  addPageRefresh()
 
+#       fv.res += '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/grCTXGW3sxQ"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/grCTXGW3sxQ" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>'
 
-        if os.path.exists(config.YOUTUBE_DIR):
-            if not os.path.exists(config.YOUTUBE_DIR + ".tmp"):
-                os.mkdir(config.YOUTUBE_DIR + ".tmp")
-
-        dlurl = fv.formValue(form,'dl_url')
-        if dlurl :
-            dl_status = download_url(dlurl,"")
-            fv.res += "<br>" + dl_status
-            refreshon = True
-
-        dlurl = ""
-        fv.res  += '\n<form id="Url Download" action="youtube.rpy" method="get">'
-        fv.res  += '\n    <div class="searchform"><br><b>Download URL :</b>'
-        fv.res  += '\n       <input type="text" name="dl_url" size="40" value="' + dlurl + '" />'
-        fv.res  += '\n       <input type="submit" value=" Download! " />'
-        fv.res  += '\n    </div>'
-        fv.res  += '\n</form><br>\n'
-
-        fdisplay = displayfiles(fv)
-        fv.res  +=  addPageRefresh()
-
-        return String( fv.res )
+       return String( fv.res )
 
 resource = YouTubeResource()
+
