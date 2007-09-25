@@ -4,6 +4,7 @@
 # wget 'http://ff.1click.weather.com/weather/local/SZXX0033?dayf=5&unit=m'
 # wget 'http://ff.1click.weather.com/weather/local/SZXX0033?cc=*&unit=m'
 
+import sys
 if sys.hexversion >= 0x2050000:
     import xml.etree.cElementTree as ET
 else:
