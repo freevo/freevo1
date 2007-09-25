@@ -53,14 +53,6 @@ import re
 from xml.dom.ext.reader import Sax2
 import urllib, urllib2
 
-if sys.hexversion >= 0x2050000:
-    import xml.etree.cElementTree as ET
-else:
-    try:
-        import cElementTree as ET
-    except ImportError:
-        import elementtree.ElementTree as ET
-
 #freevo modules
 import config, menu, rc, plugin, skin, osd, util
 from gui.PopupBox import PopupBox
@@ -650,9 +642,9 @@ class WeatherItem(Item):
         #print self.elocationData
         #print self.currentData
         #print self.forecastData
-        elocation = WeatherData(ET.XML(self.elocationData))
-        current = WeatherData(ET.XML(self.currentData))
-        forecast = WeatherData(ET.XML(self.forecastData))
+        elocation = WeatherData(self.elocationData)
+        current = WeatherData(self.currentData)
+        forecast = WeatherData(self.forecastData)
 
         if not self.name:
             self.name = elocation.loc.dnam

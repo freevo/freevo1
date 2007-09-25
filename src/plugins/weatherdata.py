@@ -16,8 +16,9 @@ else:
 class WeatherData:
     """Main weather data class
     """
-    def __init__(self, tree):
-        self.tree = tree
+    def __init__(self, xml):
+        self.xml = xml
+        self.tree = ET.XML(xml)
         self.head = None
         self.loc = None
         self.eloc = None
