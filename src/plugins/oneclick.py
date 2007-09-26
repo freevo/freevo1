@@ -539,6 +539,8 @@ class WeatherItem(Item):
             pm = re.compile('(.*) PM.*')
             if pm.match(self.updated):
                 value = time.strptime(pm.match(self.updated).groups()[0], '%m/%d/%y %H:%M')
+                (year, mon, day, hour, min, sec, weekday, yearday, saving) = value
+                value = (year, mon, day, hour+12, min, sec, weekday, yearday, saving)
                 return time.strftime("%c", time.localtime(time.mktime(value)))
             else:
                 return self.updated.replace(' Local Time', '')
@@ -956,7 +958,7 @@ class WeatherBaseScreen(skin.Area):
             x=x_col2, y=y_start+y_inc, height=-1, align_h='left')
 
         # draw current condition image
-        x_start = self.content.x + (460*self.xmult)
+        x_start = self.content.x + (480*self.xmult)
         y_start = self.content.y + (40*self.ymult)
         self.draw_image(self.parent.weather.image,
             (x_start, y_start,
@@ -974,7 +976,7 @@ class WeatherBaseScreen(skin.Area):
             width=200*self.xmult, height=-1, align_h='center')
 
         x_start = self.content.x + (40*self.xmult)
-        y_start = self.content.y + (360*self.ymult)
+        y_start = self.content.y + (380*self.ymult)
         self.write_text(self.parent.weather.getLastUpdated() ,
             self.small_font, self.content,
             x=x_start, y=y_start,
