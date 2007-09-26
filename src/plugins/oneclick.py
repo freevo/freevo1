@@ -992,10 +992,8 @@ class WeatherBaseScreen(skin.Area):
 
         lines = []
         try:
-            lines.append('%s %s' %
-                (_('As of:'), weather.getLastUpdated())
-            lines.append('%s %s' %
-                (_('at'), weather.getObservationStation()))
+            lines.append('%s %s' % (_('As of:'), weather.getLastUpdated()))
+            lines.append('%s %s' % (_('at'), weather.getObservationStation()))
             lines.append('  %s' % (weather.getCurrentCondition()))
             lines.append('  %s %s' % (_('Temperature:'), weather.getTemperature()))
             lines.append('  %s %s' % (_('Dew Point:'), weather.getDewPoint()))
