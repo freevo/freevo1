@@ -72,62 +72,65 @@ osd = osd.get_singleton()
 WEATHER_AGE = 3600
 WEATHER_DIR = os.path.join(config.SHARE_DIR, 'images', 'weather')
 if os.path.isdir(os.path.join(WEATHER_DIR, config.SKIN_XML_FILE)):
-    WEATHER_DIR = os.path.join(WEATHER_DIR, config.SKIN_XML_FILE)
+    WEATHER_SKIN_DIR = os.path.join(WEATHER_DIR, config.SKIN_XML_FILE)
+else:
+    WEATHER_SKIN_DIR = WEATHER_DIR
 _debug_('WEATHER_AGE=%d' % WEATHER_AGE)
 _debug_('WEATHER_DIR=%r' % WEATHER_DIR)
+_debug_('WEATHER_SKIN_DIR=%r' % WEATHER_SKIN_DIR)
 
 #From the Yahoo! weather
 WEATHER_ICONS = {
-#  icon      twc.com      image                            fallback
-     '0': ( 'twc/0.png', 'tornado.png',                   'thunshowers.png'),
-     '1': ( 'twc/1.png', 'tropical_storm.png',            'thunshowers.png'),
-     '2': ( 'twc/2.png', 'hurricane.png',                 'thunshowers.png'),
-     '3': ( 'twc/3.png', 'severe_thunderstorms.png',      'thunshowers.png'),
-     '4': ( 'twc/4.png', 'thunderstorms.png',             'thunshowers.png'),
-     '5': ( 'twc/5.png', 'mixed_rain_and_snow.png',       'rainsnow.png'),
-     '6': ( 'twc/6.png', 'mixed_rain_and_sleet.png',      'rainsnow.png'),
-     '7': ( 'twc/7.png', 'mixed_snow_and_sleet.png',      'rainsnow.png'),
-     '8': ( 'twc/8.png', 'freezing drizzle.png',          'fog.png'),
-     '9': ( 'twc/9.png', 'drizzle.png',                   'fog.png'),
-    '10': ('twc/10.png', 'freezing_rain.png',             'rainsnow.png'),
-    '11': ('twc/11.png', 'showers.png',                   'lshowers.png'),
-    '12': ('twc/12.png', 'showers.png',                   'showers.png'),
-    '13': ('twc/13.png', 'snow_flurries.png',             'flurries.png'),
-    '14': ('twc/14.png', 'light_snow_showers.png',        'flurries.png'),
-    '15': ('twc/15.png', 'blowing_snow.png',              'flurries.png'),
-    '16': ('twc/16.png', 'snow.png',                      'flurries.png'),
-    '17': ('twc/17.png', 'hail.png',                      'thunshowers.png'),
-    '18': ('twc/18.png', 'sleet.png',                     'showers.png'),
-    '19': ('twc/19.png', 'dust.png',                      'fog.png'),
-    '20': ('twc/20.png', 'foggy.png',                     'fog.png'),
-    '21': ('twc/21.png', 'haze.png',                      'fog.png'),
-    '22': ('twc/22.png', 'smoke.png',                     'fog.png'),
-    '23': ('twc/23.png', 'blustery.png',                  'pcloudy.png'),
-    '24': ('twc/24.png', 'wind.png',                      'pcloudy.png'),
-    '25': ('twc/25.png', 'cold.png',                      'pcloudy.png'),
-    '26': ('twc/26.png', 'cloudy.png',                    'pcloudy.png'),
-    '27': ('twc/27.png', 'mostly_cloudy_night.png',       'mcloudy.png'),
-    '28': ('twc/28.png', 'mostly_cloudy_day.png',         'mcloudy.png'),
-    '29': ('twc/29.png', 'partly_cloudy_night.png',       'pcloudy.png'),
-    '30': ('twc/30.png', 'partly_cloudy_day.png',         'pcloudy.png'),
-    '31': ('twc/31.png', 'clear_night.png',               'sunny.png'),
-    '32': ('twc/32.png', 'sunny.png',                     'sunny.png'),
-    '33': ('twc/33.png', 'fair_night.png',                'sunny.png'),
-    '34': ('twc/34.png', 'fair_day.png',                  'sunny.png'),
-    '35': ('twc/35.png', 'mixed_rain_and_hail.png',       'thunshowers.png'),
-    '36': ('twc/36.png', 'hot.png',                       'sunny.png'),
-    '37': ('twc/37.png', 'isolated_thunderstorms.png',    'thunshowers.png'),
-    '38': ('twc/38.png', 'scattered_thunderstorms.png',   'thunshowers.png'),
-    '39': ('twc/39.png', 'scattered_thunderstorms.png',   'thunshowers.png'),
-    '40': ('twc/40.png', 'scattered_showers.png',         'showers.png'),
-    '41': ('twc/41.png', 'heavy_snow.png',                'snowshow.png'),
-    '42': ('twc/42.png', 'scattered_snow_showers.png',    'rainsnow.png'),
-    '43': ('twc/43.png', 'heavy_snow.png',                'rainsnow.png'),
-    '44': ('twc/44.png', 'na.png',                        'unknown.png'),
-    '45': ('twc/45.png', 'thundershowers-n.png',          'rainsnow.png'),
-    '46': ('twc/46.png', 'snow_showers-n.png',            'snowshow.png'),
-    '47': ('twc/47.png', 'isolated_thundershowers-n.png', 'thunshowers.png'),
-    'na': ('twc/na.png', 'na.png',                        'unknown.png'),
+#  icon     image                            fallback            twc.com
+     '0': ('tornado.png',                   'thunshowers.png',  'twc/0.png'),
+     '1': ('tropical_storm.png',            'thunshowers.png',  'twc/1.png'),
+     '2': ('hurricane.png',                 'thunshowers.png',  'twc/2.png'),
+     '3': ('severe_thunderstorms.png',      'thunshowers.png',  'twc/3.png'),
+     '4': ('thunderstorms.png',             'thunshowers.png',  'twc/4.png'),
+     '5': ('mixed_rain_and_snow.png',       'rainsnow.png',     'twc/5.png'),
+     '6': ('mixed_rain_and_sleet.png',      'rainsnow.png',     'twc/6.png'),
+     '7': ('mixed_snow_and_sleet.png',      'rainsnow.png',     'twc/7.png'),
+     '8': ('freezing_drizzle.png',          'rainsnow.png',     'twc/8.png'),
+     '9': ('drizzle.png',                   'lshowers.png',     'twc/9.png'),
+    '10': ('freezing_rain.png',             'rainsnow.png',     'twc/10.png'),
+    '11': ('light_showers.png',             'lshowers.png',     'twc/11.png'),
+    '12': ('showers.png',                   'lshowers.png',     'twc/12.png'),
+    '13': ('snow_flurries.png',             'flurries.png',     'twc/13.png'),
+    '14': ('light_snow_showers.png',        'flurries.png',     'twc/14.png'),
+    '15': ('blowing_snow.png',              'flurries.png',     'twc/15.png'),
+    '16': ('snow.png',                      'snowshow.png',     'twc/16.png'),
+    '17': ('hail.png',                      'showers.png',      'twc/17.png'),
+    '18': ('sleet.png',                     'rainsnow.png',     'twc/18.png'),
+    '19': ('dust.png',                      'fog.png',          'twc/19.png'),
+    '20': ('foggy.png',                     'fog.png',          'twc/20.png'),
+    '21': ('haze.png',                      'fog.png',          'twc/21.png'),
+    '22': ('smoke.png',                     'fog.png',          'twc/22.png'),
+    '23': ('blustery.png',                  'fair.png',         'twc/23.png'),
+    '24': ('wind.png',                      'fair.png',         'twc/24.png'),
+    '25': ('cold.png',                      'fair.png',         'twc/25.png'),
+    '26': ('cloudy.png',                    'cloudy.png',       'twc/26.png'),
+    '27': ('mostly_cloudy_night.png',       'mcloudy.png',      'twc/27.png'),
+    '28': ('mostly_cloudy_day.png',         'mcloudy.png',      'twc/28.png'),
+    '29': ('partly_cloudy_night.png',       'pcloudy.png',      'twc/29.png'),
+    '30': ('partly_cloudy_day.png',         'pcloudy.png',      'twc/30.png'),
+    '31': ('clear_night.png',               'sunny.png',        'twc/31.png'),
+    '32': ('sunny.png',                     'sunny.png',        'twc/32.png'),
+    '33': ('fair_night.png',                'fair.png',         'twc/33.png'),
+    '34': ('fair_day.png',                  'fair.png',         'twc/34.png'),
+    '35': ('mixed_rain_and_hail.png',       'rainsnow.png',     'twc/35.png'),
+    '36': ('hot.png',                       'sunny.png',        'twc/36.png'),
+    '37': ('isolated_thunderstorms.png',    'thunshowers.png',  'twc/37.png'),
+    '38': ('scattered_thunderstorms.png',   'thunshowers.png',  'twc/38.png'),
+    '39': ('scattered_showers.png',         'showers.png',      'twc/39.png'),
+    '40': ('showers.png',                   'showers.png',      'twc/40.png'),
+    '41': ('scattered_snow_showers.png',    'snowshow.png',     'twc/41.png'),
+    '42': ('heavy_snow.png',                'snowshow.png',     'twc/42.png'),
+    '43': ('heavy_snow.png',                'snowshow.png',     'twc/43.png'),
+    '44': ('na.png',                        'unknown.png',      'twc/44.png'),
+    '45': ('thundershowers_night.png',      'thunshowers.png',  'twc/45.png'),
+    '46': ('scattered_snow_showers_n.png',  'snowshow.png',     'twc/46.png'),
+    '47': ('isolated_thundershowers_n.png', 'thunshowers.png',  'twc/47.png'),
+    'na': ('na.png',                        'unknown.png',      'twc/na.png'),
 }
 
 
@@ -356,7 +359,6 @@ class WeatherItem(Item):
             self.last_update = os.path.getmtime(self.cacheCurrent)
 
             # now convert the self.weatherData structure to parsable information
-            self.convertWeatherData()
             try:
                 self.convertWeatherData()
             except Exception, error:
@@ -529,17 +531,16 @@ class WeatherItem(Item):
         @notes there seems to be a problem with AM/PM not parsing correctly
         '''
         _debug_('getLastUpdated() "%s"' % self.updated, 2)
-        try:
-            value = time.strptime(self.updated.replace(' AM Local Time', ''), '%m/%d/%y %H:%M')
+        am = re.compile('(.*) AM.*')
+        if am.match(self.updated):
+            value = time.strptime(am.match(self.updated).groups()[0], '%m/%d/%y %H:%M')
             return time.strftime("%c", time.localtime(time.mktime(value)))
-        except ValueError, e:
-            try:
-                value = time.strptime(self.updated.replace(' PM Local Time', ''), '%m/%d/%y %H:%M')
-                (year, mon, day, hour, min, sec, weekday, yearday, saving) = value
-                value = (year, mon, day, hour+12, min, sec, weekday, yearday, saving)
+        else:
+            pm = re.compile('(.*) PM.*')
+            if pm.match(self.updated):
+                value = time.strptime(pm.match(self.updated).groups()[0], '%m/%d/%y %H:%M')
                 return time.strftime("%c", time.localtime(time.mktime(value)))
-            except ValueError, error:
-                print error
+            else:
                 return self.updated.replace(' Local Time', '')
         #if self.ismetric:
         #    return time.strftime("%d/%m/%Y %H:%M:%S", time.localtime(self.updated))
@@ -719,14 +720,14 @@ class WeatherItem(Item):
         '''obtain the weather icons for multiple day forecast'''
         _debug_('getDayImage()', 2)
 
-        icon = os.path.join(WEATHER_DIR, WEATHER_ICONS[num][1])
+        icon = os.path.join(WEATHER_SKIN_DIR, WEATHER_ICONS[num][0])
         if not os.path.isfile(icon):
-            icon = os.path.join(WEATHER_DIR, WEATHER_ICONS[num][2])
+            icon = os.path.join(WEATHER_SKIN_DIR, WEATHER_ICONS[num][1])
             if not os.path.isfile(icon):
-                icon = os.path.join(WEATHER_DIR, WEATHER_ICONS[num][0])
+                icon = os.path.join(WEATHER_DIR, WEATHER_ICONS[num][2])
         if not os.path.isfile(icon):
-            icon = os.path.join(WEATHER_DIR, 'na.png')
-        print '%s: %s %s' % (num, icon, os.path.split(WEATHER_ICONS[num][1])[1])
+            icon = os.path.join(WEATHER_DIR, WEATHER_ICONS['na'][0])
+        print '%s: %s %s' % (num, icon, os.path.split(WEATHER_ICONS[num][0])[1])
         return icon
 
 
@@ -897,7 +898,8 @@ class WeatherBaseScreen(skin.Area):
                                  self.update_week, self.update_map)
 
     def update_day(self):
-        '''
+        ''' Update the day screen
+        TODO Fix last updated for time zones
         '''
         _debug_('update_day()', 2)
         # display data
@@ -954,7 +956,7 @@ class WeatherBaseScreen(skin.Area):
             x=x_col2, y=y_start+y_inc, height=-1, align_h='left')
 
         # draw current condition image
-        x_start = self.content.x + (450*self.xmult)
+        x_start = self.content.x + (460*self.xmult)
         y_start = self.content.y + (40*self.ymult)
         self.draw_image(self.parent.weather.image,
             (x_start, y_start,
@@ -972,7 +974,7 @@ class WeatherBaseScreen(skin.Area):
             width=200*self.xmult, height=-1, align_h='center')
 
         x_start = self.content.x + (40*self.xmult)
-        y_start = self.content.y + (350*self.ymult)
+        y_start = self.content.y + (360*self.ymult)
         self.write_text(self.parent.weather.getLastUpdated() ,
             self.small_font, self.content,
             x=x_start, y=y_start,
@@ -980,7 +982,9 @@ class WeatherBaseScreen(skin.Area):
 
 
     def update_forecast(self):
-        ''' this screen is taken from the 1click weather forecast of the firefox plug-in. '''
+        ''' this screen is taken from the 1click weather forecast of the firefox plug-in.
+        TODO Switch to night after sunset
+        '''
         _debug_('update_forecast()', 2)
         x_start = self.content.x + (20 * self.xmult)
         y_start = self.content.y + (30 * self.xmult)
@@ -988,8 +992,10 @@ class WeatherBaseScreen(skin.Area):
 
         lines = []
         try:
-            lines.append('%s %s %s %s' %
-                (_('As of:'), weather.getLastUpdated(), _('in'), weather.getObservationStation()))
+            lines.append('%s %s' %
+                (_('As of:'), weather.getLastUpdated())
+            lines.append('%s %s' %
+                (_('at'), weather.getObservationStation()))
             lines.append('  %s' % (weather.getCurrentCondition()))
             lines.append('  %s %s' % (_('Temperature:'), weather.getTemperature()))
             lines.append('  %s %s' % (_('Dew Point:'), weather.getDewPoint()))
@@ -1017,8 +1023,7 @@ class WeatherBaseScreen(skin.Area):
         try:
             x_start = self.content.x + (500 * self.xmult)
             y_start = self.content.y + (300 * self.ymult)
-            iconFile = weather.getMoonImage(weather.getMoonIcon())
-            #self.draw_image(iconFile,
+            #self.draw_image(weather.getMoonImage(weather.getMoonIcon()),
             #    (x_start, y_start, 90, 90))
                 #(x_start, y_start, int(60 * self.xmult), int(60 * self.ymult)))
             print 'x_start=%s, y_start=%s, xmult=%s, ymult=%s' % (x_start, y_start, self.xmult, self.ymult)
@@ -1046,8 +1051,7 @@ class WeatherBaseScreen(skin.Area):
                 x=x2_start, y=y2_start,
                 width=150*self.xmult, height=-1, align_h='center')
 
-            iconFile = os.path.join(WEATHER_DIR, self.parent.weather.weatherIcon[day])
-            self.draw_image(iconFile,
+            self.draw_image(self.parent.weather.weatherIcon[day],
                 (x2_start, y2_start + (50*self.ymult), int(160*self.xmult), int(120*self.ymult)))
             self.write_text(self.parent.weather.weatherType[day],
                 self.small_font, self.content,
