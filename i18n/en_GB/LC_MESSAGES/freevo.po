@@ -2496,7 +2496,7 @@ msgstr ""
 
 #: tv/plugins/search_programs.py:72
 msgid "Search Programs"
-msgstr "Search Programme"
+msgstr "Search Programmes"
 
 #: tv/plugins/search_programs.py:85 tv/program_display.py:235
 #: tv/programitem.py:298
@@ -2553,7 +2553,7 @@ msgstr "Search for more of this programme"
 #: tv/program_display.py:171 tv/favoriteitem.py:87 tv/favoriteitem.py:92
 #: tv/programitem.py:138
 msgid "Edit favorite"
-msgstr "Edit Favourite"
+msgstr "Edit favourite"
 
 #: tv/program_display.py:174 tv/programitem.py:140
 msgid "Add to favorites"
@@ -2682,7 +2682,7 @@ msgstr ""
 
 #: tv/favoriteitem.py:338
 msgid "Saving the changes to this favorite."
-msgstr ""
+msgstr "Saving the changes to this favourite"
 
 #: tv/favoriteitem.py:339
 msgid "This may take some time."
@@ -3266,7 +3266,7 @@ msgstr ""
 
 #: video/plugins/reencode.py:103
 msgid "Transcode this program..."
-msgstr "Transcode this programme.."
+msgstr "Transcode this programme..."
 
 #: video/plugins/reencode.py:138
 msgid "Start Encoding"
@@ -3384,7 +3384,7 @@ msgstr ""
 
 #: video/plugins/reencode-old.py:73
 msgid "Re-encode this program..."
-msgstr "Re-encode this programme.."
+msgstr "Re-encode this programme..."
 
 #: video/__init__.py:181
 msgid "Directory Autobuild Thumbnails "
@@ -3729,14 +3729,14 @@ msgstr ""
 
 #: directory.py:82
 msgid "Directory Create Playlist"
-msgstr "Directory Create Playlist"
+msgstr "Directory Create Play list"
 
 #: directory.py:83
 msgid ""
 "Handle the directory as playlist. After one file is played, the next one "
 "will be started."
 msgstr ""
-"Handle the directory as playlist. After one file is played, the next one "
+"Handle the directory as play list. After one file is played, the next one "
 "will be started."
 
 #: directory.py:86
