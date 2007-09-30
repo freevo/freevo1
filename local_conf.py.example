@@ -756,6 +756,18 @@ CACHE_IMAGES = 1
 
 # IMAGEVIEWER_BLEND_MODE = -1
 
+#
+# When viewing images on a TV screen where the pixels are not square
+# the images need to be scaled according to the aspect ratio of the TV
+# Use this setting for 16x9 TVs
+#   IMAGEVIEWER_ASPECT = (float(1024) / float(720))
+# Use this setting for 4x3 TVs
+#   IMAGEVIEWER_ASPECT = (float(768) / float(720))
+# Use this setting for Monitors including HDTVs
+#   IMAGEVIEWER_ASPECT = 1.0
+#
+# IMAGEVIEWER_ASPECT = 1.0
+
 
 
 # ======================================================================

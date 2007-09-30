@@ -74,6 +74,8 @@ class ImageViewer(GUIObject):
         self.app_mode    = 'image'
         self.last_image  = (None, None)
         self.osd         = osd.get_singleton()
+        self.osd_height  = self.osd.height
+        self.osd_width   = self.osd.width * float(config.IMAGEVIEWER_ASPECT)
 
         self.signal_registered = False
 
@@ -125,14 +127,11 @@ class ImageViewer(GUIObject):
         if not image:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
             self.osd.drawstringframed(_('Can\'t Open Image\n\'%s\'') % Unicode(filename),
-                                      config.OSD_OVERSCAN_LEFT + 20,
-                                      config.OSD_OVERSCAN_TOP + 20,
-                                      self.osd.width - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT) - 40,
-                                      self.osd.height - (config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM) - 40,
-                                      self.osd.getfont(config.OSD_DEFAULT_FONTNAME,
-                                                       config.OSD_DEFAULT_FONTSIZE),
-                                      fgcolor=self.osd.COL_ORANGE,
-                                      align_h='center', align_v='center', mode='soft')
+                config.OSD_OVERSCAN_LEFT + 20, config.OSD_OVERSCAN_TOP + 20,
+                self.osd.width - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT) - 40,
+                self.osd.height - (config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM) - 40,
+                self.osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE),
+                fgcolor=self.osd.COL_ORANGE, align_h='center', align_v='center', mode='soft')
             self.osd.update()
             return
 
@@ -171,24 +170,24 @@ class ImageViewer(GUIObject):
 
             if self.rotation % 180:
                 # different calculations because image width is screen height
-                scale_x = float(self.osd.width) / (height / 3)
-                scale_y = float(self.osd.height) / (width / 3)
+                scale_x = float(self.osd_width) / (height / 3)
+                scale_y = float(self.osd_height) / (width / 3)
                 scale = min(scale_x, scale_y)
 
                 # read comment for the bbw and bbh calculations below
-                bbw = min(max((width / 3) * scale, self.osd.height), width) / scale
-                bbh = min(max((height / 3) * scale, self.osd.width), height) / scale
+                bbw = min(max((width / 3) * scale, self.osd_height), width) / scale
+                bbh = min(max((height / 3) * scale, self.osd_width), height) / scale
 
             else:
-                scale_x = float(self.osd.width) / (width / 3)
-                scale_y = float(self.osd.height) / (height / 3)
+                scale_x = float(self.osd_width) / (width / 3)
+                scale_y = float(self.osd_height) / (height / 3)
                 scale = min(scale_x, scale_y)
 
                 # the bb width is the width / 3 * scale, to avoid black bars left
-                # and right exapand it to the osd.width but not if this is more than the
+                # and right exapand it to the osd_width but not if this is more than the
                 # image width (same for height)
-                bbw = min(max((width / 3) * scale, self.osd.width), width) / scale
-                bbh = min(max((height / 3) * scale, self.osd.height), height) / scale
+                bbw = min(max((width / 3) * scale, self.osd_width), width) / scale
+                bbh = min(max((height / 3) * scale, self.osd_height), height) / scale
 
             # calculate the beginning of the bounding box
             bbx = max(0, bbcx - bbw/2)
@@ -207,10 +206,10 @@ class ImageViewer(GUIObject):
                 height, width = width, height
 
             # scale_x = scale_y = 1.0
-            # if width > osd.width: scale_x = float(osd.width) / width
-            # if height > osd.height: scale_y = float(osd.height) / height
-            scale_x = float(self.osd.width) / width
-            scale_y = float(self.osd.height) / height
+            # if width > osd_width: scale_x = float(osd_width) / width
+            # if height > osd_height: scale_y = float(osd_height) / height
+            scale_x = float(self.osd_width) / width
+            scale_y = float(self.osd_height) / height
 
             scale = min(scale_x, scale_y)
 
@@ -220,8 +219,8 @@ class ImageViewer(GUIObject):
         # Now we have all necessary information about zoom yes/no and
         # the kind of rotation
 
-        x = (self.osd.width - new_w) / 2
-        y = (self.osd.height - new_h) / 2
+        x = (self.osd_width - new_w) / 2
+        y = (self.osd_height - new_h) / 2
 
         last_image = self.last_image[1]
 
@@ -463,14 +462,14 @@ class ImageViewer(GUIObject):
                     prt_line[line] += '   ' + textstr
 
         # Create a black box for text
-        self.osd.drawbox(config.OSD_OVERSCAN_LEFT, self.osd.height - \
+        self.osd.drawbox(config.OSD_OVERSCAN_LEFT, self.osd_height - \
                          (config.OSD_OVERSCAN_LEFT + 25 + (len(prt_line) * 30)),
-                         self.osd.width, self.osd.height, width=-1,
+                         self.osd_width, self.osd_height, width=-1,
                          color=((60 << 24) | self.osd.COL_BLACK), layer=layer)
 
         # Now print the Text
         for line in range(len(prt_line)):
-            h=self.osd.height - (40 + config.OSD_OVERSCAN_TOP + \
+            h=self.osd_height - (40 + config.OSD_OVERSCAN_TOP + \
                                  ((len(prt_line) - line - 1) * 30))
             self.osd.drawstring(prt_line[line], 15 + config.OSD_OVERSCAN_LEFT, h,
                                 fgcolor=self.osd.COL_ORANGE, layer=layer)

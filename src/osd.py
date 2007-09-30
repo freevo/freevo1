@@ -643,6 +643,7 @@ class OSD:
 
             if not os.path.isfile(filename):
                 _debug_('Bitmap file "%s" doesn\'t exist!' % filename, config.DWARNING)
+                #raise 'Bitmap file'
                 return None
 
             try:
@@ -705,10 +706,13 @@ class OSD:
 
 
     def drawsurface(self, image, x=0, y=0, scaling=None,
-                   bbx=0, bby=0, bbw=0, bbh=0, rotation = 0, layer=None):
+                   bbx=0, bby=0, bbw=0, bbh=0, rotation=0, layer=None):
         """
         scales and rotates a surface and then draws it to the screen.
         """
+        _debug_('drawsurface(image=%s, x=%s, y=%s, scaling=%s, bbx=%s, bby=%s, bbw=%s, bbh=%s, rotation=%s, layer=%s)' \
+            % (image, x, y, scaling, bbx, bby, bbw, bbh, rotation, layer), 2)
+
         if not pygame.display.get_init():
             return None
 
@@ -716,6 +720,7 @@ class OSD:
         if not image:
             return
 
+        x = int(float(x) / config.IMAGEVIEWER_ASPECT)
         self.mutex.acquire()
         try:
             if layer:
@@ -726,11 +731,13 @@ class OSD:
             self.mutex.release()
 
 
-    def zoomsurface(self, image, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation = 0):
+    def zoomsurface(self, image, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation=0):
         """
         Zooms a Surface. It gets a Pygame Surface which is rotated and scaled according
         to the parameters.
         """
+        _debug_('zoomsurface(image=%s, scaling=%s, bbx=%s, bby=%s, bbw=%s, bbh=%s, rotation=%s)' \
+            % (image, scaling, bbx, bby, bbw, bbh, rotation), 2)
         if not image:
             return None
 
@@ -741,10 +748,11 @@ class OSD:
 
         if scaling:
             w, h = image.get_size()
-            w = int(w*scaling)
             h = int(h*scaling)
+            w = int(float(w) * scaling / config.IMAGEVIEWER_ASPECT)
             if rotation:
                 image = pygame.transform.rotozoom(image, rotation, scaling)
+                image = pygame.transform.scale(image, (w, h))
             else:
                 image = pygame.transform.scale(image, (w, h))
 
@@ -758,6 +766,8 @@ class OSD:
         """
         draw a normal box
         """
+        _debug_('drawbox(x0=%s, y0=%s, x1=%s, y1=%s, width=%s, color=%s, fill=%s, layer=%s)' \
+            % (x0, y0, x1, y1, width, color, fill, layer), 2)
         self.mutex.acquire()
         try:
             # Make sure the order is top left, bottom right

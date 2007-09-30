@@ -294,6 +294,7 @@ LOCAL_CONF_CHANGES = [
      Added a plugin that adds a submenu entry for ejecting rom drives and binds the default action of an empty drive to the eject action
      Replaced OSD_OVERSCAN_X with OSD_OVERSCAN_LEFT and OSD_OVERSCAN_RIGHT and OSD_OVERSCAN_Y with 
      OSD_OVERSCAN_TOP and OSD_OVERSCAN_BOTTOM
+     Added IMAGEVIEW_ASPECT to show images correctly on non-square pixel displays, it TVs
      '''),
 ]
 
@@ -1135,6 +1136,18 @@ IMAGEVIEWER_OSD = [
 # in seconds for an auto slideshow
 #
 IMAGEVIEWER_DURATION = 0
+
+#
+# When viewing images on a TV screen where the pixels are not square
+# the images need to be scaled according to the aspect ratio of the TV
+# Use this setting for 16x9 TVs
+#   IMAGEVIEWER_ASPECT = (float(1024) / float(720))
+# Use this setting for 4x3 TVs
+#   IMAGEVIEWER_ASPECT = (float(768) / float(720))
+# Use this setting for Monitors including HDTVs
+#   IMAGEVIEWER_ASPECT = 1.0
+#
+IMAGEVIEWER_ASPECT = 1.0
 
 #
 # use exif thumbnail your thumbnail review. The quality is lower but
