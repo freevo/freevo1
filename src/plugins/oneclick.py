@@ -7,16 +7,15 @@
 # Notes:
 #
 # Todo:
-#   X pull down weather on demand MENU_SELECT (need to fix popup behavior)
-#   X Ability to specify custom location name in ONECLICK_LOCATIONS
-#   - get location name back onto details screen
 #   - i18n support
-#   - a freevo helper to grab weather data behind the scenes
 #
 # activate:
 #
 #    plugin.activate('oneclick', level=45)
-#    ONECLICK_LOCATIONS = [ ("USNC0559", "", "Home sweet home", 0) ]
+#    ONECLICK_LOCATIONS = [
+#      ("27560", False, "http://image.weather.com/web/radar/us_phl_metroradar_plus_usen.jpg", "Home sweet home"),
+#      ("UKXX0054", True),
+#    ]
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -295,8 +294,10 @@ class WeatherItem(Item):
         self.pastTime = 0
         self.date = []
         self.weatherIcon = []
-        self.highTemp = []
         self.lowTemp = []
+        self.highTemp = []
+        self.ppcp = []
+        self.hmid = []
         self.weatherType = []
         self.wdata = []
         self.popupParam = None
@@ -531,6 +532,14 @@ class WeatherItem(Item):
         @notes there seems to be a problem with AM/PM not parsing correctly
         '''
         _debug_('getLastUpdated() "%s"' % self.updated, 2)
+        if self.zone < 0:
+            return '%s  (GMT%s)' % (self.updated, self.zone)
+        elif self.zone > 0:
+            return '%s  (GMT+%s)' % (self.updated, self.zone)
+        else:
+            return '%s  (GMT)' % (self.updated)
+
+        #this was a silly idea but the dates are very american
         am = re.compile('(.*) AM.*')
         if am.match(self.updated):
             value = time.strptime(am.match(self.updated).groups()[0], '%m/%d/%y %H:%M')
@@ -544,10 +553,6 @@ class WeatherItem(Item):
                 return time.strftime("%c", time.localtime(time.mktime(value)))
             else:
                 return self.updated.replace(' Local Time', '')
-        #if self.ismetric:
-        #    return time.strftime("%d/%m/%Y %H:%M:%S", time.localtime(self.updated))
-        #else:
-        #    return time.strftime("%m/%d/%Y %I:%M:%S %p", time.localtime(self.updated))
 
     def getObservationStation(self):
         ''' get the observation station '''
@@ -669,8 +674,10 @@ class WeatherItem(Item):
         # reset variables
         self.date = []
         self.weatherIcon = []
-        self.highTemp = []
         self.lowTemp = []
+        self.highTemp = []
+        self.ppcp = []
+        self.hmid = []
         self.weatherType = []
 
         self.unit_t = current.head.ut
@@ -684,7 +691,7 @@ class WeatherItem(Item):
         self.longitude = current.loc.lon
         self.sunrise = current.loc.sunr
         self.sunset = current.loc.suns
-        self.zone = current.loc.zone
+        self.zone = int(current.loc.zone)
 
         self.updated = current.cc.lsup
         self.observation_station = current.cc.obst
@@ -710,12 +717,14 @@ class WeatherItem(Item):
         # skip today in the days
         for day in forecast.dayf.days[1:]:
             self.date.append(day.t)
-            self.highTemp.append(day.hi)
             self.lowTemp.append(day.low)
+            self.highTemp.append(day.hi)
             for part in day.parts:
                 if part.p == 'd':
                     self.weatherIcon.append(self.getDayImage(part.icon))
                     self.weatherType.append(part.t)
+                    self.ppcp.append(part.ppcp)
+                    self.hmid.append(part.hmid)
 
 
     def getDayImage(self, num):
@@ -896,91 +905,60 @@ class WeatherBaseScreen(skin.Area):
         self.xmult = float(osd.width  - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)) / 800
         self.ymult = float(osd.height - (config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM)) / 600
 
+        self.xscale = lambda x: int(x * self.xmult)
+        self.yscale = lambda y: int(y * self.ymult)
+
         self.update_functions = (self.update_day, self.update_forecast,
                                  self.update_week, self.update_map)
 
+    def day_item(self, x1, text, x2, value, y, align='left'):
+        ''' This is helper function for update_day
+        '''
+        self.write_text(text, self.key_font, self.content, x=x1, y=y, height=-1, align_h=align)
+        self.write_text(value, self.val_font, self.content, x=x2, y=y, height=-1, align_h=align)
+
     def update_day(self):
         ''' Update the day screen
-        TODO Fix last updated for time zones
         '''
         _debug_('update_day()', 2)
         # display data
-        text = _('Humidity')
-        value = self.parent.weather.getHumidity()
 
-        x_col1 = self.content.x + (50  * self.xmult)
-        x_col2 = self.content.x + (250 * self.xmult)
-        y_start = self.content.y + (60  * self.xmult)
-        y_inc = 40 * self.ymult
+        x_col1 = self.content.x + self.xscale(50)
+        x_col2 = self.content.x + self.xscale(250)
+        y_start = self.content.y + self.yscale(60)
+        y_inc = self.yscale(40)
 
-        self.write_text(text, self.key_font, self.content,
-            x=x_col1, y=y_start, height=-1, align_h='left')
-        self.write_text(value, self.val_font, self.content,
-            x=x_col2, y=y_start, height=-1, align_h='left')
+        y = y_start
+        self.day_item(x_col1, _('Humidity'), x_col2, self.parent.weather.getHumidity(), y)
+        y += y_inc
+        self.day_item(x_col1, _('Pressure'), x_col2, self.parent.weather.getPressure(), y)
+        y += y_inc
+        self.day_item(x_col1, _('Wind'), x_col2, self.parent.weather.getWind(), y)
+        y += y_inc
+        self.day_item(x_col1, _('Wind Chill'), x_col2, self.parent.weather.getFeeling(), y)
+        y += y_inc
+        self.day_item(x_col1, _('Visibility'), x_col2, self.parent.weather.getVisibility(), y)
+        y += y_inc
+        self.day_item(x_col1, _('UV Index'), x_col2, self.parent.weather.getUvType(), y)
 
-        text = _('Pressure')
-        value = self.parent.weather.getPressure()
-        self.write_text(text, self.key_font, self.content,
-            x=x_col1, y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value, self.val_font, self.content,
-            x=x_col2, y=y_start+y_inc, height=-1, align_h='left')
-
-        text = _('Wind')
-        value = '%s' % (self.parent.weather.getWind())
-        y_start   += y_inc
-        self.write_text(text, self.key_font, self.content,
-            x=x_col1, y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value, self.val_font, self.content,
-            x=x_col2, y=y_start+y_inc, height=-1, align_h='left')
-
-        text = _('Wind Chill')
-        value = self.parent.weather.getFeeling()
-        y_start   += y_inc
-        self.write_text(text, self.key_font, self.content,
-            x=x_col1, y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value, self.val_font, self.content,
-            x=x_col2, y=y_start+y_inc, height=-1, align_h='left')
-
-        text = _('Visibility')
-        value = self.parent.weather.getVisibility()
-        y_start   += y_inc
-        self.write_text(text, self.key_font, self.content,
-            x=x_col1, y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value, self.val_font, self.content,
-            x=x_col2, y=y_start+y_inc, height=-1, align_h='left')
-
-        text = _('UV Index')
-        value = self.parent.weather.getUvType()
-        y_start   += y_inc
-        self.write_text(text, self.key_font, self.content,
-            x=x_col1, y=y_start+y_inc, height=-1, align_h='left')
-        self.write_text(value, self.val_font, self.content,
-            x=x_col2, y=y_start+y_inc, height=-1, align_h='left')
 
         # draw current condition image
-        x_start = self.content.x + (480*self.xmult)
-        y_start = self.content.y + (40*self.ymult)
+        x_start = self.content.x + self.xscale(480)
+        y_start = self.content.y + self.yscale(40)
         self.draw_image(self.parent.weather.image,
-            (x_start, y_start,
-              int(200*self.xmult), int(150*self.ymult)))
+            (x_start, y_start, self.xscale(200), self.yscale(150)))
 
-        y_start = self.content.y + (200*self.ymult)
-        self.write_text(self.parent.weather.getCurrentCondition(),
-            self.key_font, self.content,
-            x=x_start, y=y_start,
-            width=200*self.xmult, height=-1, align_h='center')
-        y_start = self.content.y + (250*self.ymult)
-        self.write_text(self.parent.weather.getTemperature(),
-            self.big_font, self.content,
-            x=x_start, y=y_start,
-            width=200*self.xmult, height=-1, align_h='center')
+        y_start = self.content.y + self.yscale(200)
+        self.write_text(self.parent.weather.getCurrentCondition(), self.key_font, self.content,
+            x=x_start, y=y_start, width=self.xscale(200), height=-1, align_h='center')
+        y_start = self.content.y + self.yscale(250)
+        self.write_text(self.parent.weather.getTemperature(), self.big_font, self.content,
+            x=x_start, y=y_start, width=self.xscale(200), height=-1, align_h='center')
 
-        x_start = self.content.x + (40*self.xmult)
-        y_start = self.content.y + (380*self.ymult)
-        self.write_text(self.parent.weather.getLastUpdated() ,
-            self.small_font, self.content,
-            x=x_start, y=y_start,
-            width=self.content.width, height=-1, align_h='left')
+        x_start = self.content.x + self.xscale(40)
+        y_start = self.content.y + self.yscale(380)
+        self.write_text(self.parent.weather.getLastUpdated(), self.small_font, self.content,
+            x=x_start, y=y_start, width=self.content.width, height=-1, align_h='left')
 
 
     def update_forecast(self):
@@ -988,8 +966,8 @@ class WeatherBaseScreen(skin.Area):
         TODO Switch to night after sunset
         '''
         _debug_('update_forecast()', 2)
-        x_start = self.content.x + (20 * self.xmult)
-        y_start = self.content.y + (30 * self.xmult)
+        x_start = self.content.x + self.xscale(20)
+        y_start = self.content.y + self.yscale(30)
         weather = self.parent.weather
 
         lines = []
@@ -1018,18 +996,21 @@ class WeatherBaseScreen(skin.Area):
         for line in lines:
             self.write_text(line, self.key_font, self.content,
             x=x_start, y=y, height=-1, align_h='left')
-            y += (30 * self.ymult)
+            y += self.yscale(30)
 
         try:
-            x_start = self.content.x + (500 * self.xmult)
-            y_start = self.content.y + (300 * self.ymult)
+            x_start = self.content.x + self.xscale(500)
+            y_start = self.content.y + self.yscale(300)
             #self.draw_image(weather.getMoonImage(weather.getMoonIcon()),
-            #    (x_start, y_start, 90, 90))
-                #(x_start, y_start, int(60 * self.xmult), int(60 * self.ymult)))
-            print 'x_start=%s, y_start=%s, xmult=%s, ymult=%s' % (x_start, y_start, self.xmult, self.ymult)
+            #(x_start, y_start, self.xscale(90), self.yscale(90)))
         except Exception, error:
             print error
 
+
+    def week_item(self, x, y, text, font, width=90, align='center'):
+        ''' This is helper function for update_week
+        '''
+        self.write_text(text, font, self.content, x=x, y=y, width=self.xscale(width), height=-1, align_h=align)
 
     def update_week(self):
         ''' update the weeks forecast
@@ -1037,56 +1018,54 @@ class WeatherBaseScreen(skin.Area):
         '''
         _debug_('update_week()', 2)
 
-        x_start = self.content.x + (10  * self.xmult)
-        y_start = self.content.y + (10  * self.xmult)
+        x_start = self.content.x + self.xscale(10)
+        y_start = self.content.y + self.yscale(20)
 
         day = 0
-        for x in (0, 180, 360, 540):
+        for pos in (0, 180, 360, 540):
 
-            x2_start = x_start + (x *self.xmult)
-            y2_start = y_start
+            x = x_start + self.xscale(pos)
+            y = y_start
 
-            self.write_text(Unicode(self.parent.weather.date[day]),
-                self.key_font, self.content,
-                x=x2_start, y=y2_start,
-                width=150*self.xmult, height=-1, align_h='center')
+            self.week_item(x, y, Unicode(self.parent.weather.date[day]), self.key_font, 160)
 
             self.draw_image(self.parent.weather.weatherIcon[day],
-                (x2_start, y2_start + (50*self.ymult), int(160*self.xmult), int(120*self.ymult)))
-            self.write_text(self.parent.weather.weatherType[day],
-                self.small_font, self.content,
-                x=x2_start, y=y2_start + (200*self.ymult),
-                width=160*self.xmult, height=-1, align_h='center')
-            self.write_text(_("LO"),
-                self.val_font, self.content,
-                x=x2_start, y=y2_start + (260*self.ymult),
-                width=90*self.xmult, height=-1, align_h='center')
-            self.write_text(self.parent.weather.lowTemp[day],
-                self.key_font, self.content,
-                x=x2_start, y=y2_start + (300*self.ymult),
-                width=90*self.xmult, height=-1, align_h='center')
-            self.write_text(_("HI"),
-                self.val_font, self.content,
-                x=x2_start+(70*self.xmult), y=y2_start + (260*self.ymult),
-                width=90*self.xmult, height=-1, align_h='center')
-            self.write_text(self.parent.weather.highTemp[day],
-                self.key_font, self.content,
-                x=x2_start+(70*self.xmult), y=y2_start + (300*self.ymult),
-                width=90*self.xmult, height=-1, align_h='center')
+                (x, y + self.yscale(50), self.xscale(160), self.yscale(120)))
+
+            y = y_start + self.yscale(200)
+            self.week_item(x, y, Unicode(self.parent.weather.weatherType[day]), self.small_font, 160)
+
+            y = y_start + self.yscale(240)
+            self.week_item(x, y, _("LO"), self.val_font)
+
+            y = y_start + self.yscale(270)
+            self.week_item(x, y, self.parent.weather.lowTemp[day], self.key_font)
+
+            y = y_start + self.yscale(240)
+            self.week_item(x+self.xscale(70), y, _("HI"), self.val_font)
+
+            y = y_start + self.yscale(270)
+            self.week_item(x+self.xscale(70), y, self.parent.weather.highTemp[day], self.key_font)
+
+            y = y_start + self.yscale(300)
+            self.week_item(x, y, '%s%%' % self.parent.weather.ppcp[day], self.key_font, 160)
+
             day += 1
+
 
     def update_map(self):
         ''' update the contents of the skin's doppler weather map '''
         _debug_('update_map()', 2)
         if not self.parent.weather.weatherMapData:
-            x_start = self.content.x + (10 * self.xmult)
-            y_start = self.content.y + (10 * self.xmult)
+            x_start = self.content.x + self.xscale(10)
+            y_start = self.content.y + self.yscale(10)
             self.write_text(_("Error encountered while trying to download weather map"),
                 self.key_font, self.content, x=x_start, y=y_start,
                 width=self.content.width, height=-1, align_h='left')
         else:
-            self.draw_image(self.parent.weather.mapFile,
-                (self.content.x-3, self.content.y+14, self.content.width, self.content.height))
+            self.draw_image(self.parent.weather.mapFile, 
+                (self.content.x-self.xscale(2), self.content.y+self.xscale(10), 
+                self.content.width, self.content.height))
 
     def update_content(self):
         ''' update the contents of the skin '''
