@@ -80,7 +80,7 @@ class ConfirmBox(PopupBox):
 
 
     def eventhandler(self, event):
-        if event in (INPUT_LEFT, INPUT_RIGHT):
+        if event in (INPUT_LEFT, INPUT_RIGHT, INPUT_UP, INPUT_DOWN):
             self.b0.toggle_selected()
             self.b1.toggle_selected()
             self.draw()
