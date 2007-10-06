@@ -4,17 +4,17 @@
     <skin include="info" geometry="800x600">
         
         <!-- 
-	*******************************************************
-	** DEFAULT AND GENERAL SETTINGS
-	******************************************************* -->
+        *******************************************************
+        ** DEFAULT AND GENERAL SETTINGS
+        ******************************************************* -->
 
-	<iconset theme="geexbox"/>
-	<image label="background" filename="geexbox/back_main.png"/>
+        <iconset theme="geexbox"/>
+        <image label="background" filename="geexbox/back.png"/>
 
         <!-- Redefine of the type default -->
-	<menuset label="normal text style">
+        <menuset label="normal text style">
             <view x="20" y="100" width="300" height="300"/>
-	    
+            
             <listing layout="listing" x="330" y="150" width="420" height="430">
                 <image filename="up.png" label="uparrow" x="760" y="110"/>
                 <image filename="down.png" label="downarrow" x="760" y="max-32"/>
@@ -76,26 +76,26 @@
                     <if expression="description">
                         <text font="info value" mode="soft" height="max" expression="description"/>
                     </if>
-                </item>	
+                </item>        
             </content>
         </layout>
 
-	<image label="background_main" filename="geexbox/back_main.png"/>
-	<image label="background_image" filename="geexbox/back_image.png"/>
-	<image label="background_movie" filename="geexbox/back_movie.png"/>
-	<image label="background_music" filename="geexbox/back_music.png"/>
-	<image label="background_tv" filename="geexbox/back_tv.png"/>
-	<image label="background_weather" filename="geexbox/back_weather.png"/>
-	<image label="main_logo" filename="geexbox/logo.png"/>
-	<image label="logo" filename="geexbox/logo.png"/>
-	<image label="panel" filename="geexbox/panel.png"/>
-	<image label="panel2" filename="geexbox/panel2.png"/>
-	<image label="shutdown" filename="geexbox/shutdown.jpg"/>
+        <image label="background_main" filename="geexbox/back_main.png"/>
+        <image label="background_image" filename="geexbox/back_image.png"/>
+        <image label="background_movie" filename="geexbox/back_movie.png"/>
+        <image label="background_music" filename="geexbox/back_music.png"/>
+        <image label="background_tv" filename="geexbox/back_tv.png"/>
+        <image label="background_weather" filename="geexbox/back_weather.png"/>
+        <image label="main_logo" filename="geexbox/logo.png"/>
+        <image label="logo" filename="geexbox/logo.png"/>
+        <image label="panel" filename="geexbox/panel.png"/>
+        <image label="panel2" filename="geexbox/panel2.png"/>
+        <image label="shutdown" filename="geexbox/shutdown.jpg"/>
         
         <!-- 
-	*******************************************************
-	** VIDEO MENU
-	******************************************************* -->
+        *******************************************************
+        ** VIDEO MENU
+        ******************************************************* -->
 
         <menu type="video">
             <style text="text with info style"/>
@@ -143,14 +143,14 @@
                     <if expression="tagline">
                         <text font="info tagline">"</text>
                         <text font="info tagline" expression="tagline"
-			    dim="no"/>
+                            dim="no"/>
                         <text font="info tagline">"</text>
                         <newline/>
                     </if>
                     <if expression="plot">
                         <goto_pos x="20" mode="relative"/>
                         <text font="info plot" height="120" mode="soft" 
-			    align="justified" expression="plot"/>
+                            align="justified" expression="plot"/>
                         <newline/>
                     </if>
                     <goto_pos y="190" mode="absolute"/>
@@ -177,12 +177,12 @@
                     <if expression="plot">
                         <goto_pos x="10" mode="relative"/>
                         <text font="info plot" height="max" mode="soft" 
-			    align="justified" expression="plot"/>
+                            align="justified" expression="plot"/>
                         <newline/>
                     </if>
                     <if expression="content and not plot">
                         <text font="info plot" height="max" mode="soft" 
-			    align="justified" expression="content"/>
+                            align="justified" expression="content"/>
                         <newline/>
                     </if>
                     <if expression="not content and not plot">
@@ -238,13 +238,13 @@
         </layout>
         
 
-	<menuset label="full video screen">
-	    <screen layout="video running screen"/>
-	</menuset>
+        <menuset label="full video screen">
+            <screen layout="video running screen"/>
+        </menuset>
 
-	<menuset label="small video screen">
-	    <screen layout="video running screen"/>
-	</menuset>
+        <menuset label="small video screen">
+            <screen layout="video running screen"/>
+        </menuset>
 
         <layout label="video running screen">
             <background>
@@ -255,9 +255,9 @@
         
 
         <!-- 
-	*******************************************************
-	** AUDIO MENU
-	******************************************************* -->
+        *******************************************************
+        ** AUDIO MENU
+        ******************************************************* -->
 
         <menu type="audio">
             <style text="audio"/>
@@ -293,7 +293,7 @@
                         <text font="info tagline" expression="name" mode="soft" />
                         <newline/>
                     </if>
-		    
+                    
                     <if expression="display_type == 'audio' and year">
                         <if expression="album or artist">
                             <text font="info value" expression="year"/>
@@ -309,10 +309,10 @@
                         <text font="info value"> Items</text>
                         <newline/>
                     </if>
-		    <if expression="content">
-			<text font="info value" expression="content" 
-			    height="max" mode="soft"/>
-		    </if>
+                    <if expression="content">
+                        <text font="info value" expression="content" 
+                            height="max" mode="soft"/>
+                    </if>
                 </item>
                 
                 <item type="audio">
@@ -329,19 +329,19 @@
                         <newline/>
                         <if expression="description"> <!-- e.g. webradio -->
                             <text font="info value" expression="description" 
-				height="max" mode="soft"/>
+                                height="max" mode="soft"/>
                         </if>
                     </if>
-		    
-		    <if expression="parent(audio_advanced_sort)">
+                    
+                    <if expression="parent(audio_advanced_sort)">
                         <text font="info value">Track </text>
                         <text font="info value" expression="trackno"/>
-			<if expression="trackof">
-			    <text font="info value"> of </text>
-			    <text font="info value" expression="trackof"/>
-			</if>
+                        <if expression="trackof">
+                            <text font="info value"> of </text>
+                            <text font="info value" expression="trackof"/>
+                        </if>
                         <newline/>
-		    </if>
+                    </if>
 
                     <if expression="date">
                         <text font="info value" expression="date"/>
@@ -373,9 +373,9 @@
         
         
         <!-- 
-	*******************************************************
-	** IMAGE MENU
-	******************************************************* -->
+        *******************************************************
+        ** IMAGE MENU
+        ******************************************************* -->
 
         <menu type="image">
             <style image="image" text="normal text style (image)"/>
@@ -392,7 +392,7 @@
         
         <menuset label="normal text style (image)" inherits="normal text style">
             <screen layout="image screen" visible="yes"/>
-	</menuset>
+        </menuset>
 
         <layout label="image screen">
             <background>
@@ -423,7 +423,7 @@
                         <text font="info plot" height="max" mode="soft" expression="description"/>
                         <newline/>
                     </if>
-		</item>
+                </item>
 
                 <item type="dir">
                     <text font="info tagline" width="max" expression="name"/>
@@ -432,7 +432,7 @@
                     <text font="info value"> Items</text>
                     <!-- other values are num_play_items and num_dir_items -->
                 </item>
-		
+                
                 <item type="playlist">
                     <text font="info tagline" width="max" expression="name"/>
                     <newline/>
@@ -440,7 +440,7 @@
                     <text font="info value"> Items</text>
                     <!-- other values are num_play_items and num_dir_items -->
                 </item>
-		
+                
                 <item type="image">
                     <text font="info tagline" expression="name"/>
                     <goto_pos x="50" mode="relative"/>
@@ -450,7 +450,7 @@
                     <newline/>
                     <if expression="description">
                         <text font="info plot" height="max" mode="soft" 
-			    expression="description"/>
+                            expression="description"/>
                         <newline/>
                     </if>
                     <if expression="not description">
@@ -470,17 +470,17 @@
         
 
         <!-- 
-	*******************************************************
-	** MAIN MENU
-	******************************************************* -->
+        *******************************************************
+        ** MAIN MENU
+        ******************************************************* -->
 
         <main imagedir="geexbox">
-            <item label="tv" name="Watch TV" image="tv.png" />
-            <item label="video" name="Watch a Movie" image="movie.png" />
-            <item label="audio" name="Listen to Music" image="music.png" />
-            <item label="image" name="Look at Pictures" image="image.png" />
-	    <item label="headlines" name="Headlines" image="headlines.jpg" />
-            <item label="weather" name="Weather Forecast" image="weather.png" />
+            <item label="tv" name="Watch TV" image="geexbox/tv.png" />
+            <item label="video" name="Watch a Movie" image="geexbox/movie.png" />
+            <item label="audio" name="Listen to Music" image="geexbox/music.png" />
+            <item label="image" name="Look at Pictures" image="geexbox/image.png" />
+            <item label="headlines" name="Headlines" image="geexbox/headlines.jpg" />
+            <item label="weather" name="Weather Forecast" image="geexbox/weather.png" />
         </main>
 
         <!-- definition of the main menu -->
@@ -494,7 +494,7 @@
         
         <layout label="screen watermark">
             <background>
-		<image image="background_main" x="0" y="0" label="background_main"/>
+                <image image="background_main" x="0" y="0" label="background_main"/>
                 <image x="362" y="112" width="438" height="372" label="watermark"/>
                 <image image="main_logo" x="70" y="25" width="285" height="167" label="main_logo"/>
             </background>
@@ -511,14 +511,14 @@
         </layout>
 
         <!-- 
-	*******************************************************
-	** TV DEFINITIONS
-	******************************************************* -->
+        *******************************************************
+        ** TV DEFINITIONS
+        ******************************************************* -->
 
 
         <layout label="tv screen">
             <background>
-		    <image image="background_tv" x="0" y="0" label="background_tv"/>
+                    <image image="background_tv" x="0" y="0" label="background_tv"/>
             </background>
         </layout>
         
@@ -527,9 +527,9 @@
         <menuset label="tv menu">
             <screen layout="screen" x="0" y="0" width="800" height="600"/>
             <title visible="no" x="40" y="40"/>
-	    <info visible="no" layout="tv info" x="10" y="90" width="780" height="30"/>
-	    <listing layout="tv listing" x="10" y="120" width="750" height="440">
-		<rectangle size="490" x="0" y="110" bgcolor="0x80000000" radius="10" width="max"/>
+            <info visible="no" layout="tv info" x="10" y="90" width="780" height="30"/>
+            <listing layout="tv listing" x="10" y="120" width="750" height="440">
+                <rectangle size="490" x="0" y="110" bgcolor="0x80000000" radius="10" width="max"/>
                 <image x="765" y="150" width="32" height="32" label="uparrow" filename="up.png"/>
                 <image x="765" y="max-32" width="32" height="32" label="downarrow" filename="down.png"/>
                 <image width="16" height="16" label="leftarrow" filename="left.png"/>
@@ -546,7 +546,7 @@
                     <if expression="title">
                         <text font="tv title" width="550" expression="title"/>
                     </if>
-	            <text font="tv time" width="max" align="right" expression="time"/>
+                    <text font="tv time" width="max" align="right" expression="time"/>
                     <newline/>
                     <if expression="subtitle">
                         <text font="info tagline">"</text>
@@ -563,7 +563,7 @@
         </layout>
         
 
-	<!-- tv main menu -->
+        <!-- tv main menu -->
 
         <menu type="tv main menu">
             <style text="tv main menu"/>
@@ -578,43 +578,43 @@
         <layout label="tv main menu info">
             <background>
                 <rectangle size="0" bgcolor="0x80000000" radius="10" x="0" y="0" width="max" height="max"/>
-	    </background>
+            </background>
             <content x="10" y="10" type="text" height="max-20" width="max-20" spacing="20" font="default">
                 <item type="default">
                     <if expression="recordserver">
-			<if expression="running">
-			    <text font="tv title" width="max" height="-1">Currently recording:</text>
-			    <newline/>
-			    <goto_pos y="20" mode="relative"/>
-			    <text font="comingup" width="max" height="max" expression="running" mode="soft"/>
-			    <newline/>
-			    <goto_pos y="30" mode="relative"/>
-			</if>
-			<if expression="comingup">
-			    <text font="tv title" width="max" height="-1">Next recordings:</text>
-			    <newline/>
-			    <goto_pos y="20" mode="relative"/>
-			    <text font="comingup" width="max" height="max" expression="comingup" mode="soft"/>
-			</if>
-			<if expression="not comingup and not running">
-			    <text font="tv title" width="max" height="-1">Nothing scheduled</text>
-			</if>
-		    </if>
+                        <if expression="running">
+                            <text font="tv title" width="max" height="-1">Currently recording:</text>
+                            <newline/>
+                            <goto_pos y="20" mode="relative"/>
+                            <text font="comingup" width="max" height="max" expression="running" mode="soft"/>
+                            <newline/>
+                            <goto_pos y="30" mode="relative"/>
+                        </if>
+                        <if expression="comingup">
+                            <text font="tv title" width="max" height="-1">Next recordings:</text>
+                            <newline/>
+                            <goto_pos y="20" mode="relative"/>
+                            <text font="comingup" width="max" height="max" expression="comingup" mode="soft"/>
+                        </if>
+                        <if expression="not comingup and not running">
+                            <text font="tv title" width="max" height="-1">Nothing scheduled</text>
+                        </if>
+                    </if>
                     <if expression="not recordserver">
-			<text font="tv title" width="max" height="-1">Recordserver not found</text>
-		    </if>
+                        <text font="tv title" width="max" height="-1">Recordserver not found</text>
+                    </if>
                 </item>
             </content>
         </layout>
 
-	<!-- program details -->
+        <!-- program details -->
 
         <menu type="tv program menu">
-	    <style text="text with program info style"/>
+            <style text="text with program info style"/>
         </menu>
 
         <menu type="tv favorite menu">
-	    <style text="text with program info style"/>
+            <style text="text with program info style"/>
         </menu>
 
         <menuset label="text with program info style" inherits="tv main menu">
@@ -625,12 +625,12 @@
         <layout label="tv program info">
             <background>
                 <rectangle size="0" bgcolor="0x80000000" radius="10" x="0" y="0" width="max" height="max"/>
-	    </background>
+            </background>
             <content x="10" y="10" width="max-20" height="max-20"/>
-	</layout>
+        </layout>
 
 
-	<!-- normal menus in tv -->
+        <!-- normal menus in tv -->
 
         <menu type="tv">
             <style text="text with tv info style"/>
@@ -644,8 +644,8 @@
             <background>
                 <image image="background" x="0" y="0" label="background"/>
                 <rectangle size="0" bgcolor="0x80000000" radius="10" x="10" y="90" width="780" height="250"/>
-		<image filename="tv.png" x="435" y="230" width="370" height="380"/>
-		<listing label="listing" y="130" height="340"/>
+                <image filename="geexbox/tv.png" x="435" y="230" width="370" height="380"/>
+                <listing label="listing" y="130" height="340"/>
             </background>
         </layout>
         
@@ -661,9 +661,9 @@
         <font label="comingup" name="Arial_Bold" size="14" color="0xffffff"/>
 
         <!-- 
-	*******************************************************
-	** AUDIO PLAYER DEFINITIONS
-	******************************************************* -->
+        *******************************************************
+        ** AUDIO PLAYER DEFINITIONS
+        ******************************************************* -->
         
         <player>
             <screen layout="player screen" x="0" y="0" width="800" height="600"/>
@@ -751,9 +751,9 @@
         
 
         <!-- 
-	*******************************************************
-	** Splashscreen
-	******************************************************* -->
+        *******************************************************
+        ** Splashscreen
+        ******************************************************* -->
         
         <splashscreen>
             <screen layout="screen"/>
@@ -762,7 +762,7 @@
         
         <layout label="splashscreen">
             <background>
-                <image filename="back_main.png"/>
+                <image filename="geexbox/back_main.png"/>
             </background>
             <content x="30" y="400" width="740" font="splashscreen font" spacing="10"/>
         </layout>
@@ -770,11 +770,11 @@
         <font label="splashscreen font" name="Arial_Bold" size="20" color="0xffffff"/>
         
         
-	
+        
         <!-- 
-	*******************************************************
-	** POPUP DEFINITIONS
-	******************************************************* -->
+        *******************************************************
+        ** POPUP DEFINITIONS
+        ******************************************************* -->
 
         <layout label="popup">
             <background>
@@ -783,15 +783,15 @@
                 <rectangle x="5" y="5" width="max-15" height="max-15" color="0x000000" size="2" bgcolor="widget background" radius="5"/>
             </background>
             <content x="15" y="15" width="max-35" height="max-35">
-	        <!-- special button settings -->
+                <!-- special button settings -->
                 <item type="button">
                     <rectangle color="0x000000" bgcolor="widget item background" size="2" radius="6"/>
                 </item>
-         	<!-- special settings for selected buttons -->
+                 <!-- special settings for selected buttons -->
                 <item type="button selected">
                     <rectangle color="0x000000" bgcolor="widget selected background" size="2" radius="6"/>
                 </item>
-	    </content>
+            </content>
         </layout>
         
         <font label="widget" name="Arial_Bold" size="14">
@@ -804,9 +804,9 @@
         
 
         <!-- 
-	*******************************************************
-	** FONT DEFINITIONS
-	******************************************************* -->
+        *******************************************************
+        ** FONT DEFINITIONS
+        ******************************************************* -->
         
         <font label="default" name="Arial_Bold" size="16" color="0xffffff">
             <shadow visible="yes" color="0x000000" border="yes"/>
@@ -816,7 +816,6 @@
         </font>
         <font label="title" name="Arial_Bold" size="18" color="0xffffff">
             <shadow visible="yes" color="0x000000" border="yes"/>
-	    
         </font>
         <font label="subtitle" name="Arial_Bold" size="18" color="0xffffff">
             <shadow visible="yes" color="0x000000" border="yes"/>
