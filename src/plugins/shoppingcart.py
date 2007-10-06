@@ -98,13 +98,28 @@ class PluginInterface(plugin.ItemPlugin):
             rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Added to Cart')))
 
 
-    def addItemToCart(self, item):
-        if hasattr(item, 'subitems') and item.subitems:
-            for s in item.subitems:
-                self.cart.append(s)
+    def removeFromCart(self, arg=None, menuw=None):
+        if hasattr(self.item, 'subitems') and self.item.subitems:
+            for s in self.item.subitems:
+                self.cart.remove(s)
+        else:
+            self.cart.remove(self.item)
+
+        if isinstance(menuw.menustack[-1].selected, menu.MenuItem):
+            rc.post_event(em.MENU_BACK_ONE_MENU)
+        else:
+            rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Removed Item from Cart')))
+
+
+    def shuntItemInCart(self, item):
+        ''' Move an image item into or out of the shopping cart
+        '''
+        if self.cart != [] and item in self.cart:
+            self.cart.remove(item)
+            rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Removed Item from Cart')))
         else:
             self.cart.append(item)
-        rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Added Item to Cart')))
+            rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Added Item to Cart')))
 
 
     def deleteCart(self, arg=None, menuw=None):
@@ -120,6 +135,7 @@ class PluginInterface(plugin.ItemPlugin):
             # only activate this for directory items
             return []
 
+        _debug_('item=%s, type=%s, cart=%s' % (item, item.type, self.cart), 2)
         if item.type == 'dir':
             if len(self.cart) > 0:
                 for c in self.cart:
@@ -129,13 +145,17 @@ class PluginInterface(plugin.ItemPlugin):
                     myactions.append((self.moveHere, _('Cart: Move Files Here')))
                 myactions.append((self.copyHere, _('Cart: Copy Files Here')))
 
-            if not item in self.cart:
-                if self.item.parent and self.item.parent.type == 'dir':
+            if self.item.parent and self.item.parent.type == 'dir':
+                if item not in self.cart:
                     myactions.append((self.addToCart, _('Add Directory to Cart'), 'cart:add'))
+                elif item in self.cart:
+                    myactions.append((self.removeFromCart, _('Remove Directory from Cart'), 'cart:remove'))
 
-        elif hasattr(item, 'files') and item.files and item.files.copy_possible() and \
-                 not item in self.cart:
-            myactions.append((self.addToCart, _('Add File to Cart'), 'cart:add'))
+        elif hasattr(item, 'files') and item.files:
+            if item not in self.cart and item.files.copy_possible():
+                myactions.append((self.addToCart, _('Add to Cart'), 'cart:add'))
+            elif item in self.cart:
+                myactions.append((self.removeFromCart, _('Remove from Cart'), 'cart:remove'))
 
         if self.cart:
             myactions.append((self.deleteCart, _('Delete Cart')))

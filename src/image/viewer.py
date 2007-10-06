@@ -409,7 +409,7 @@ class ImageViewer(GUIObject):
         elif event == IMAGE_TAG:
             if plugin.is_active('shoppingcart'):
                 try:
-                    plugin.get('item')[0].addItemToCart(self.fileitem)
+                    plugin.get('item')[0].shuntItemInCart(self.fileitem)
                     return True
                 except Exception, e:
                     print 'getbyname(\'shoppingcart\')', e
