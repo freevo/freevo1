@@ -1303,16 +1303,16 @@ if CONF.display == 'mga':
     OSD_SDL_EXEC_AFTER_STARTUP='%s %s %s' % (os.path.join(CONTRIB_DIR, 'fbcon/mgafb'),
                                              CONF.tv, CONF.geometry)
     OSD_SDL_EXEC_AFTER_CLOSE='%s restore' % os.path.join(CONTRIB_DIR, 'fbcon/mgafb')
-    OSD_OVERSCAN_X = 20
-    OSD_OVERSCAN_Y = 10
+    OSD_OVERSCAN_LEFT = OSD_OVERSCAN_RIGHT = 20
+    OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM = 10
 
 if CONF.display in ( 'directfb', 'dfbmga' ):
-    OSD_OVERSCAN_X = 50
-    OSD_OVERSCAN_Y = 50
+    OSD_OVERSCAN_LEFT = OSD_OVERSCAN_RIGHT = 50
+    OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM = 50
 
 if CONF.display == 'dxr3':
-    OSD_OVERSCAN_X = 65
-    OSD_OVERSCAN_Y = 45
+    OSD_OVERSCAN_LEFT = OSD_OVERSCAN_RIGHT = 65
+    OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM = 45
 
 #
 # Stop the osd before playing a movie with xine or mplayer. Some output

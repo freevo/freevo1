@@ -887,8 +887,11 @@ CACHE_IMAGES = 1
 #
 # OSD_BUSYICON_TIMER = (0.7, 200)
 
-# OSD_OVERSCAN_X = 0
-# OSD_OVERSCAN_Y = 0
+#
+# Number of pixels to move the display to centre the OSD on the display
+#
+# OSD_OVERSCAN_LEFT = OSD_OVERSCAN_RIGHT = 0
+# OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM = 0
 
 #
 # Execute a script on OSD startup.
@@ -1369,10 +1372,29 @@ CACHE_IMAGES = 1
 # }
 
 
-# VIDEO_GROUPS is a new setting to handle multiple arbitrary groups of devices
-# for viewing or recording.  It will be possible to have different Freevo
+# VIDEO_GROUPS setting to handles multiple arbitrary groups of devices
+# for viewing or recording.  It is possible to have different Freevo
 # channels use different Video Groups.
-
+# 
+# This example is when you have one IVTV type card installed
+#
+# VIDEO_GROUPS = [
+#     VideoGroup(vdev=TV_DEVICE,
+#                adev=AUDIO_DEVICE,
+#                input_type='tuner',
+#                input_num=0,
+#                tuner_norm=CONF.tv,
+#                tuner_chanlist=CONF.chanlist,
+#                group_type = 'ivtv',
+#                desc='PVR-350 Video Group'),
+# ]
+#
+# This example is for two normal TV cards to allow you to use one card to
+# view a programme and the other card to record at the same time
+# See the wiki for more details:
+#   http://doc.freevo.org/MultiTunerConfig
+#   http://doc.freevo.org/Analoguemulti
+#
 # VIDEO_GROUPS = [
 #     # Use this group for watching tv
 #     VideoGroup(vdev=TV_DEVICE,
