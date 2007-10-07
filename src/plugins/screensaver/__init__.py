@@ -46,11 +46,11 @@ from event import Event
 import osd
 import skin
 
-# Set to 1 for debug output
-DEBUG = config.DEBUG
 
 osd = osd.get_singleton()
 skin = skin.get_singleton()
+print 'DJW:osd:', dir(osd)
+print 'DJW:skin:', dir(skin)
 
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -116,7 +116,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.screensaver_showing = True
         if self.plugins is None:
             self.plugins = plugin.get('screensaver')
-            print 'Plugins =', self.plugins
+            _debug_('Plugins =', self.plugins)
         skin.clear()
         # Start Screensaver thread
         self.stop_screensaver = False
