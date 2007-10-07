@@ -49,8 +49,6 @@ import skin
 
 osd = osd.get_singleton()
 skin = skin.get_singleton()
-print 'DJW:osd:', dir(osd)
-print 'DJW:skin:', dir(skin)
 
 class PluginInterface(plugin.DaemonPlugin):
     """
