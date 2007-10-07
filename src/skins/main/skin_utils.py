@@ -116,7 +116,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
         if image and item['rotation']:
             # pygame reverses the image rotation
             if config.IMAGEVIEWER_REVERSED_IMAGES:
-                rotation = 360 - item['rotation']
+                rotation = (360 - item['rotation']) % 360
             else:
                 rotation = item['rotation']
             image = pygame.transform.rotate(image, rotation)
@@ -173,8 +173,10 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
         type = type[:5]
 
     i_w, i_h = image.get_size()
-    if anamorphic:
-        i_w  = i_w * 0.75
+    # this was the original anamorphic code
+    #if anamorphic:
+    #    i_w  = i_w * 0.75
+    i_w  = float(i_w) / config.IMAGEVIEWER_ASPECT
     aspect   = float(i_h)/i_w
 
     if type == 'audio' and aspect < 1.3 and aspect > 0.8:

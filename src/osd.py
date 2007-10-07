@@ -720,6 +720,8 @@ class OSD:
         if not image:
             return
 
+        if not rotation % 180:
+            pass
         x = int(float(x) / config.IMAGEVIEWER_ASPECT)
         self.mutex.acquire()
         try:
@@ -749,12 +751,12 @@ class OSD:
         if scaling:
             w, h = image.get_size()
             h = int(h*scaling)
-            w = int(float(w) * scaling / config.IMAGEVIEWER_ASPECT)
-            if rotation:
-                image = pygame.transform.rotozoom(image, rotation, scaling)
-                image = pygame.transform.scale(image, (w, h))
+            if rotation % 180:
+                w = int(float(w) * scaling)
             else:
-                image = pygame.transform.scale(image, (w, h))
+                w = int(float(w) * scaling / config.IMAGEVIEWER_ASPECT)
+            image = pygame.transform.rotozoom(image, rotation, scaling)
+            image = pygame.transform.scale(image, (w, h))
 
         elif rotation:
             image = pygame.transform.rotate(image, rotation)

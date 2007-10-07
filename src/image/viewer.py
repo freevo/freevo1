@@ -47,7 +47,7 @@ from animation import render, Transition
 _singleton = None
 
 def get_singleton():
-    #print 'get_singleton()'
+    _debug_('get_singleton()', 2)
     global _singleton
 
     # One-time init
@@ -60,7 +60,7 @@ def get_singleton():
 class ImageViewer(GUIObject):
 
     def __init__(self):
-        #print '__init__(self)'
+        _debug_('ImageViewer.__init__()', 2)
         GUIObject.__init__(self)
         self.osd_mode = 0    # Draw file info on the image
         self.zoom = 0   # Image zoom
@@ -86,7 +86,7 @@ class ImageViewer(GUIObject):
         """
         free the current cache to save memory
         """
-        _debug_('free_cache(self)', 2)
+        _debug_('free_cache()', 2)
         self.bitmapcache = util.objectcache.ObjectCache(3, desc='viewer')
         if self.parent and self.free_cache in self.parent.show_callbacks:
             self.parent.show_callbacks.remove(self.free_cache)
@@ -96,7 +96,7 @@ class ImageViewer(GUIObject):
         '''
         view an image
         '''
-        _debug_('view(self, item, zoom=%s, rotation=%s)' % (zoom, rotation), 2)
+        _debug_('view(item, zoom=%s, rotation=%s)' % (zoom, rotation), 2)
         if zoom:
             self.app_mode    = 'image_zoom'
         else:
@@ -112,7 +112,7 @@ class ImageViewer(GUIObject):
 
         self.filename = filename
         if config.IMAGEVIEWER_REVERSED_IMAGES:
-            self.rotation = 360 - rotation
+            self.rotation = (360 - rotation) % 360
         else:
             self.rotation = rotation
 
@@ -306,24 +306,24 @@ class ImageViewer(GUIObject):
 
 
     def redraw(self):
-        #print 'redraw(self)'
+        _debug_('redraw()', 2)
         self.view(self.fileitem, zoom=self.zoom, rotation=self.rotation)
 
 
     def cache(self, fileitem):
-        #print 'cache(self, fileitem.filename=%s)' % (fileitem.filename)
+        _debug_('cache(fileitem.filename=%s)' % (fileitem.filename), 2)
         # cache the next image (most likely we need this)
         self.osd.loadbitmap(fileitem.filename, cache=self.bitmapcache)
 
 
     def signalhandler(self):
-        #print 'signalhandler(self)'
+        _debug_('signalhandler()', 2)
         self.signal_registered = False
         self.eventhandler(PLAY_END)
 
 
     def eventhandler(self, event, menuw=None):
-        #print 'eventhandler(self, event=%s, menuw=%s)' % (event, menuw)
+        _debug_('eventhandler(event=%s, menuw=%s)' % (event, menuw), 2)
         if event == PAUSE or event == PLAY:
             if self.slideshow:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('pause')))
@@ -356,7 +356,7 @@ class ImageViewer(GUIObject):
         # rotate image
         elif event == IMAGE_ROTATE:
             if event.arg == 'left':
-                self.rotation = (self.rotation + 270) % 360
+                self.rotation = (self.rotation - 90) % 360
             else:
                 self.rotation = (self.rotation + 90) % 360
             self.fileitem['rotation'] = self.rotation
@@ -419,7 +419,7 @@ class ImageViewer(GUIObject):
 
 
     def drawosd(self, layer=None):
-        #print 'drawosd(self, layer=%s)' % (layer)
+        _debug_('drawosd(layer=%s)' % (layer), 2)
 
         if not self.osd_mode:
             return
