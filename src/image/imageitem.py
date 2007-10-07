@@ -65,7 +65,7 @@ class ImageItem(Item):
         """
         returns the specific attribute as string or an empty string
         """
-        _debug_("__getitem__(self=%s, key=%s)" % (self.filename, key), 2)
+        #_debug_("__getitem__(self=%s, key=%s)" % (self.filename, key), 2)
         if key == "geometry":
             if self['width'] and self['height']:
                 return '%sx%s' % (self['width'], self['height'])
@@ -80,7 +80,7 @@ class ImageItem(Item):
             except:
                 pass
 
-        print "__getitem__(self=%s, key=%s, res=%r)" % (self.filename, key, Item.__getitem__(self, key))
+        _debug_("__getitem__(self=%s, key=%s, res=%r)" % (self.filename, key, Item.__getitem__(self, key)), 2)
         return Item.__getitem__(self, key)
 
 
