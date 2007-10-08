@@ -339,8 +339,6 @@ class ImageViewer(GUIObject):
 
     def eventhandler(self, event, menuw=None):
         _debug_('eventhandler(event=%s, menuw=%s)' % (event, menuw), 2)
-        if event and hasattr(event, 'arg'):
-        else:
         if event == PAUSE or event == PLAY:
             if self.slideshow:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('pause')))
