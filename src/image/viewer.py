@@ -111,10 +111,7 @@ class ImageViewer(GUIObject):
             item.menuw.show_callbacks.append(self.free_cache)
 
         self.filename = filename
-        if config.IMAGEVIEWER_REVERSED_IMAGES:
-            self.rotation = (360 - rotation) % 360
-        else:
-            self.rotation = rotation
+        self.rotation = rotation
 
         if filename and len(filename) > 0:
             image = self.osd.loadbitmap(filename, cache=self.bitmapcache)
@@ -142,22 +139,40 @@ class ImageViewer(GUIObject):
 
         if zoom:
             # Translate the 9-element grid to bounding boxes
-            if self.rotation == 90:
-                bb = { 1:(2,0), 2:(2,1), 3:(2,2),
-                       4:(1,0), 5:(1,1), 6:(1,2),
-                       7:(0,0), 8:(0,1), 9:(0,2) }
-            elif self.rotation == 180:
-                bb = { 1:(2,2), 2:(1,2), 3:(0,2),
-                       4:(2,1), 5:(1,1), 6:(0,1),
-                       7:(2,0), 8:(1,0), 9:(0,0) }
-            elif self.rotation == 270:
-                bb = { 1:(0,2), 2:(0,1), 3:(0,0),
-                       4:(1,2), 5:(1,1), 6:(1,0),
-                       7:(2,2), 8:(2,1), 9:(2,0) }
+            if config.IMAGEVIEWER_REVERSED_IMAGES:
+                if self.rotation == 90:
+                    bb = { 1:(2,2), 2:(2,1), 3:(2,0),
+                           4:(1,2), 5:(1,1), 6:(1,0),
+                           7:(0,2), 8:(0,1), 9:(0,0) }
+                elif self.rotation == 180:
+                    bb = { 1:(2,0), 2:(1,0), 3:(0,0),
+                           4:(2,1), 5:(1,1), 6:(0,1),
+                           7:(2,2), 8:(1,2), 9:(0,2) }
+                elif self.rotation == 270:
+                    bb = { 1:(0,0), 2:(0,1), 3:(0,2),
+                           4:(1,0), 5:(1,1), 6:(1,2),
+                           7:(2,0), 8:(2,1), 9:(2,2) }
+                else:
+                    bb = { 1:(0,2), 2:(1,2), 3:(2,2),
+                           4:(0,1), 5:(1,1), 6:(2,1),
+                           7:(0,0), 8:(1,0), 9:(2,0) }
             else:
-                bb = { 1:(0,0), 2:(1,0), 3:(2,0),
-                       4:(0,1), 5:(1,1), 6:(2,1),
-                       7:(0,2), 8:(1,2), 9:(2,2) }
+                if self.rotation == 90:
+                    bb = { 1:(2,0), 2:(2,1), 3:(2,2),
+                           4:(1,0), 5:(1,1), 6:(1,2),
+                           7:(0,0), 8:(0,1), 9:(0,2) }
+                elif self.rotation == 180:
+                    bb = { 1:(2,2), 2:(1,2), 3:(0,2),
+                           4:(2,1), 5:(1,1), 6:(0,1),
+                           7:(2,0), 8:(1,0), 9:(0,0) }
+                elif self.rotation == 270:
+                    bb = { 1:(0,2), 2:(0,1), 3:(0,0),
+                           4:(1,2), 5:(1,1), 6:(1,0),
+                           7:(2,2), 8:(2,1), 9:(2,0) }
+                else:
+                    bb = { 1:(0,0), 2:(1,0), 3:(2,0),
+                           4:(0,1), 5:(1,1), 6:(2,1),
+                           7:(0,2), 8:(1,2), 9:(2,2) }
 
             if isinstance(zoom, int):
                 h, v = bb[zoom]
@@ -324,6 +339,8 @@ class ImageViewer(GUIObject):
 
     def eventhandler(self, event, menuw=None):
         _debug_('eventhandler(event=%s, menuw=%s)' % (event, menuw), 2)
+        if event and hasattr(event, 'arg'):
+        else:
         if event == PAUSE or event == PLAY:
             if self.slideshow:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('pause')))

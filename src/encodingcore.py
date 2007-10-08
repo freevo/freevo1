@@ -455,10 +455,8 @@ class EncodingJob:
             pass
         for line in lines:
             line = line.strip('\n')
-            #print 'DJW:line:',line
             if re_crop.search(line):
                 crop = re_crop.search(line).group(1)
-                #print 'DJW:crop:',crop
                 try:
                     crop_options[crop] = crop_options[crop] + 1
                     #if crop_options[crop] > cc_hits:

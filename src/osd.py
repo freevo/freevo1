@@ -748,15 +748,19 @@ class OSD:
             imbb.blit(image, (0, 0), (bbx, bby, bbw, bbh))
             image = imbb
 
+        if config.IMAGEVIEWER_REVERSED_IMAGES:
+            rotation = (360 - rotation) % 360
         if scaling:
             w, h = image.get_size()
-            h = int(h*scaling)
             if rotation % 180:
                 w = int(float(w) * scaling)
+                h = int(float(h) * scaling / config.IMAGEVIEWER_ASPECT)
             else:
                 w = int(float(w) * scaling / config.IMAGEVIEWER_ASPECT)
-            image = pygame.transform.rotozoom(image, rotation, scaling)
+                h = int(float(h) * scaling)
             image = pygame.transform.scale(image, (w, h))
+            image = pygame.transform.rotozoom(image, rotation, 1.0)
+            #image = pygame.transform.rotozoom(image, rotation, scaling)
 
         elif rotation:
             image = pygame.transform.rotate(image, rotation)
