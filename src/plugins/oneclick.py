@@ -140,6 +140,7 @@ def wget(url):
     txheaders = {
         'User-Agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7'
     }
+    print 'getting url %r...' % (url)
     req = urllib2.Request(url, txdata, txheaders)
     try:
         t1 = time.time()
