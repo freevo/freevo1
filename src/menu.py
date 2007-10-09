@@ -69,7 +69,7 @@ class MenuItem(Item):
         """
         s = '"'+self.name+'"'
         if hasattr(self, 'action'):    s += ' action=%s' % self.action
-        if hasattr(self, 'arg') and self.arg: s += ' arg=%s' % self.arg[0]
+        #if hasattr(self, 'arg') and self.arg: s += ' arg=%s' % self.arg[0]
         if hasattr(self, 'type'):      s += ' type=%s' % self.type
         if hasattr(self, 'image'):     s += ' image=%s' % self.image
         if hasattr(self, 'icon'):      s += ' icon=%s' % self.icon
