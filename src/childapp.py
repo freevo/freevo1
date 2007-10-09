@@ -57,7 +57,7 @@ class ChildApp:
         prio = 0
 
         if isinstance(app, unicode):
-            _debug_('%r is a unicode string' % app, 1)
+            _debug_('%r is a unicode string' % app)
             app = app.encode(config.LOCALE, 'ignore')
 
         if isinstance(app, str):
@@ -151,7 +151,7 @@ class ChildApp:
         self.se.start()
 
         if prio and config.CONF.renice:
-            _debug_('%s %s -p %s' % (config.CONF.renice, prio, self.child.pid), 1)
+            _debug_('%s %s -p %s' % (config.CONF.renice, prio, self.child.pid))
             os.system('%s %s -p %s 2>/dev/null >/dev/null' % \
                       (config.CONF.renice, prio, self.child.pid))
 
@@ -214,20 +214,20 @@ class ChildApp:
 
         # killed already
         if not hasattr(self, 'child'):
-            _debug_('This should never happen!', 1)
+            _debug_('This should never happen!')
             #raise 'no child attribute'
             return
 
         if not self.child:
-            _debug_('already dead', 1)
+            _debug_('already dead')
             #raise 'already dead'
             return
 
         self.lock.acquire()
         try:
             # maybe child is dead and only waiting?
-            if self.child.poll() != None:
-                _debug_('killed the easy way, status %s' % (self.child.returncode), 1)
+            if self.child.poll() is not None:
+                _debug_('killed the easy way, status %s' % (self.child.returncode))
                 if not self.child.stdin.closed: self.child.stdin.close()
                 if self.stdout_log: self.stdout_log.close()
                 if self.stderr_log: self.stderr_log.close()
@@ -235,35 +235,33 @@ class ChildApp:
                 return
 
             if signal:
-                _debug_('killing pid %s signal %s' % (self.child.pid, signal), 1)
+                _debug_('killing pid %s signal %s' % (self.child.pid, signal))
                 try:
                     os.kill(self.child.pid, signal)
-                except OSError:
-                    pass
+                except OSError, e:
+                    _debug_('OSError killing pid %s: %s' % (self.child.pid, e))
 
-            _debug_('Before wait(%s)' % self.child.pid, 1)
             for i in range(60):
                 if self.wait():
                     break
                 time.sleep(0.1)
             else:
                 signal = 9
-                _debug_('killing pid %s signal %s' % (self.child.pid, signal), 1)
+                _debug_('killing pid %s signal %s' % (self.child.pid, signal))
                 try:
                     os.kill(self.child.pid, signal)
-                except OSError:
-                    pass
+                except OSError, e:
+                    _debug_('OSError killing pid %s: %s' % (self.child.pid, e))
                 for i in range(20):
                     if self.wait():
                         break
                     time.sleep(0.1)
-            _debug_('childapp: After wait()', 1)
 
 
             # now check if the app is really dead. If it is, poll()
             # will return the status code
             for i in range(5):
-                if self.child.poll() != None:
+                if self.child.poll() is not None:
                     break
                 time.sleep(0.1)
             else:
@@ -273,7 +271,7 @@ class ChildApp:
                 # now, Freevo will die.
                 # Solution: there is no good one, let's try killall on the binary. It's
                 # ugly but it's the _only_ way to stop this nasty app
-                _debug_('Oops, command refuses to die, try bad hack....', 1)
+                _debug_('Oops, command refuses to die, try bad hack....')
                 util.killall(self.binary, sig=15)
                 for i in range(20):
                     if self.child.poll() != None:
@@ -282,7 +280,7 @@ class ChildApp:
                 else:
                     # still not dead. Puh, something is realy broekn here.
                     # Try killall -9 as last chance
-                    _debug_('Try harder to kill the app....', 1)
+                    _debug_('Try harder to kill the app....')
                     util.killall(self.binary, sig=9)
                     for i in range(20):
                         if self.child.poll() != None:
@@ -339,9 +337,10 @@ class ChildApp2(ChildApp):
         wait for the child process to stop
         """
         try:
+            self.child.poll()
             pid, status = os.waitpid(self.child.pid, os.WNOHANG)
-        except OSError:
-            # strange, no child? So it is finished
+        except OSError, e:
+            #print 'OSError: %s' % (e)
             return True
 
         if pid == self.child.pid:
@@ -425,7 +424,7 @@ class Read_Thread(threading.Thread):
         while 1:
             data = self.fh.readline(300)
             if not data:
-                _debug_('%s: no data, closing log' % (self.name), 1)
+                _debug_('%s: no data, closing log' % (self.name))
                 self.fh.close()
                 if self.logger: self.logger.close()
                 break
