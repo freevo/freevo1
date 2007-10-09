@@ -108,7 +108,7 @@ class PluginInterface(plugin.ItemPlugin):
         if isinstance(menuw.menustack[-1].selected, menu.MenuItem):
             rc.post_event(em.MENU_BACK_ONE_MENU)
         else:
-            rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Removed Item from Cart')))
+            rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('Removed from Cart')))
 
 
     def shuntItemInCart(self, item):
