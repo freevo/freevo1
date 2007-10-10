@@ -306,11 +306,11 @@ class WeatherItem(Item):
 
         if isinstance(location, tuple):
             self.location = location[0]
-            if len(location) > 1:
+            if len(location) > 1 and location[1]:
                 self.ismetric = bool(location[1])
-            if len(location) > 2:
+            if len(location) > 2 and location[2]:
                 self.mapuri = str(location[2])
-            if len(location) > 3:
+            if len(location) > 3 and location[3]:
                 self.name = str(location[3])
         else:
             self.location = location
