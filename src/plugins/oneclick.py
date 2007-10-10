@@ -759,9 +759,9 @@ class WeatherMainMenu(Item):
     '''
     def __init__(self, parent):
         _debug_('WeatherMainMenu.__init__(parent=%r)' % (parent), 2)
-        Item.__init__(self, parent, skin_type='oneclick')
+        Item.__init__(self, parent, skin_type='weather')
         self.parent = parent
-        self.name = _('Weather')
+        #self.name = _('Weather')
 
     def actions(self):
         ''' return a list of actions for this item '''

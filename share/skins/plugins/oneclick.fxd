@@ -4,7 +4,7 @@
   <skin geometry="800x600">
     <!-- Items of the main menu -->
     <main>
-      <item label="oneclick" name="Weather Forecast" image="weather/weather_watermark.png"/>
+      <item label="weather" name="Weather Forecast" image="weather/weather_watermark.png"/>
     </main>
 
     <oneclick>
