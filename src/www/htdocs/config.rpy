@@ -42,7 +42,7 @@ def ReadConfig(cfile):
     fconf = lconf_hld.readlines()
     return fconf
 
-    
+
 def ParseConfigFile(rconf):
     cnt = 0
     fconfig = []
@@ -134,9 +134,9 @@ def ParseLine(cline):
     if lparsed['ctrlname'].startswith('"'):
         lparsed['type'] = ""
     return lparsed
-    
-    
-    
+
+
+
 def CheckSyntax(fvsetting):
     status = False
     try :
@@ -173,7 +173,7 @@ def GetGroupList(cfgvars):
     grps.sort()
     return grps
 
-    
+
 def getCtrlType(cname , cvalue, vtype):
     if vtype == 'boolean':
         return 'boolean'
@@ -188,7 +188,7 @@ def getCtrlType(cname , cvalue, vtype):
     if vtype == 'list':
         return 'itemlist'
     return 'textbox'
-    
+
 def isNumber(s):
     try:
         i = int(s)
@@ -231,7 +231,7 @@ def VarType(cvalue):
     if cvalue.startswith('True') or cvalue.startswith('False'):
         return 'boolean'
     return 'Unknow'
-        
+
 
 def CreateNewLineControl():
     ctrl = '<div align="left">'
@@ -275,7 +275,7 @@ def CreateTV_Channels_ctrl(cname,cvalue, cenabled):
 def CreateFileItemList(cname,cvalue,cenabled):
     ctrl = '<span class="FileList">'
     vitems = GetItemsArray(cvalue)
-    
+
     spDisable_open = ''
     spDisable_close = ''
     if not cenabled:
@@ -341,10 +341,10 @@ def CreateDictionaryControl(cname,cvalue , cenabled):
         ctrl += txtbox % (spDisable_open, ctrl2type,cname,r+1,1,'""', spDisable_close) + '</li>'
         ctrl += '</ul>'
         ctrl += '}</span>'
-        
+
         if cenabled:
             ctrl += '</span>'
-            
+
     return ctrl
 
 
@@ -359,9 +359,9 @@ def CreateListControl(cname,cvalue,cenable):
         print 'DISPABLED CONNTROL !!! %' + cname
         spDisable_open = '<span class="disablecontrol">'
         spDisable_close = '</span>'
-        
+
     print spDisable_open + spDisable_close
-        
+
     ctrl = '<span class="ItemList">['
     ctrl += '<ul class="ItemList">'
     vitems = GetItemsArray(cvalue)
@@ -457,7 +457,7 @@ def CreateConfigLine(nctrl,expALL,plugin_group):
         disable_span_open =  '<span class="disablecontrol">'
         disable_span_close =  '</span>'
 
-    
+
     htmlctrl.res += '%s<span id="%s_check" class="check">%s</span>%s' % (disable_span_open, cname , lcheck, disable_span_close)
     ctrltype = getCtrlType(cname,cvalue, vtype)
     jsonChange = 'onchange=CheckValue("%s","%s",0) '  % (cname , ctrltype )
@@ -474,7 +474,7 @@ def CreateConfigLine(nctrl,expALL,plugin_group):
     jsSave =  'onclick=SaveValue("%s","%s")' % (cname , ctrltype)
 
     btnupdate = '<input type="button" style="display:none;" id="%s_btn_update" class="button.config" value="Update" %s >\n' % (cname , jsSave )
-    htmlctrl.res += btnupdate 
+    htmlctrl.res += btnupdate
 
     if nctrl['type'] == 'textbox':
         inputbox = CreateTextBox(cname,cvalue,nctrl['vartype'],plugin_group,nctrl['checked'])
@@ -497,15 +497,15 @@ def CreateTextBox(cname, cvalue ,vtype, plugin_group , cenabled):
     if cname == 'TV_CHANNELS':
         ctrl = CreateTV_Channels_ctrl(cname,cvalue,cenabled)
         return ctrl
-        
+
     if plugin_group == "Enable":
         if cvalue == 1:
             cvalue = "True"
         else :
             cvalue = "False"
         ctrl = CreateListBoxControl(cname,bllist,cvalue, 'onchange=CheckValue("%s","textbox",0)')
-        return ctrl 
-        
+        return ctrl
+
     if FileTypeVarArray(cname):
         ctrl = CreateFileItemList(cname,cvalue,cenabled)
         return ctrl
@@ -549,11 +549,11 @@ def DisplayGroups(fconfig,expALL):
         displayStyle = ''
 
     fv.res +=  '<ul class="GroupHeader">'
-    
+
     for grp in groups:
         dopts = 'class="GroupHeader"'
         aopts = ''
-        
+
         fv.res += '<li>'
         fv.res += '<a %s onclick=ShowList("%s")>%s</a>\n'  % (aopts , grp, grp)
         fv.res += '   <ul id="%s" style= display:%s>\n' % (grp , displayStyle )
@@ -564,8 +564,8 @@ def DisplayGroups(fconfig,expALL):
         fv.res += '    </ul>\n'
         fv.res += '</li>'
      #   </div>\n'
-    fv.res += '</ul>' 
-    
+    fv.res += '</ul>'
+
     return fv.res
 
 

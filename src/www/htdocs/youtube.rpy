@@ -39,8 +39,8 @@ from stat import *
 
 def xmlStatus(fstatus):
     xmlstatus = ''
-    xmlstatus += '<PERCENT>%s</PERCENT>' %  fstatus['percent'] 
-    xmlstatus += '<DOWNLOADED>%s</DOWNLOADED>' % fstatus['downloaded'] 
+    xmlstatus += '<PERCENT>%s</PERCENT>' %  fstatus['percent']
+    xmlstatus += '<DOWNLOADED>%s</DOWNLOADED>' % fstatus['downloaded']
     xmlstatus += '<FILESIZE>%s</FILESIZE>' % fstatus['filesize']
     xmlstatus += '<SPEED>%s</SPEED>' % fstatus['speed']
     xmlstatus += '<ETA>%s</ETA>' %  fstatus['eta']
@@ -151,7 +151,7 @@ def startdownload(dlcommand,logfile):
     os.chdir(pwdcur)
 
 def convert_file_to_flv(convert_file):
-    
+
     source_file = config.YOUTUBE_DIR + convert_file
     destin_file = source_file + ".flv"
 
@@ -211,7 +211,7 @@ def envCheck():
 def doFlowPlayer(pfile, flow_player = 'FlowPlayerThermo.swf' ):
 
   #  pfile = "stoneham.avi.flv"
-    
+
     flash = '\n<script type="text/javascript" src="flowplayer/swfobject.js"></script>'
     flash += '\n<div align="center" style= display:"" id="flowplayerholder">'
     flash += '\n<a href="http://flowplayer.org/">flowplayer.org</a>'
@@ -251,13 +251,13 @@ class YouTubeResource(FreevoResource):
 
         convert_file = fv.formValue(form,'convert_file')
         if cmd == 'Convert' and convert_file:
-             convert_file_to_flv(convert_file)
+            convert_file_to_flv(convert_file)
 
         playfile = fv.formValue(form,'playfile')
         flow_player = fv.formValue(form,'flow_player')
         if not flow_player:
             flow_player = 'FlowPlayerThermo.swf'
-             
+
         if cmd == "Play" and playfile:
             flowplayer_html = doFlowPlayer(playfile,flow_player)
             return String( flowplayer_html )
@@ -301,7 +301,7 @@ class YouTubeResource(FreevoResource):
                 download_youtube(dlurl)
             if dltype == 'downloadurl':
                 download_url(dlurl)
-                
+
         blxml = fv.formValue(form,"xml")
         if blxml :
             fv.res = getXML()

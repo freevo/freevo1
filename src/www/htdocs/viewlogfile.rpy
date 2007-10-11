@@ -4,9 +4,9 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: viewlogfile.rpy args : displayfile="logfile to display" eg 
-#                               
-# Todo: 
+# Notes: viewlogfile.rpy args : displayfile="logfile to display" eg
+#
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -104,7 +104,7 @@ class ViewLogFileResource(FreevoResource):
             delayamount = 9999
 
         fv.printHeader(_('viewlog'), 'styles/main.css','scripts/viewlogfile.js',selected=_('View Logs'))
-        
+
         fv.res += '\n<link rel="stylesheet" href="styles/viewlogfile.css" type="text/css" />\n'
         fv.res  += '\n<br><div class="viewlog">'
         fv.res  += '\n<form id="viewlog_form" name="viewlog_form" action="viewlogfile.rpy" method="get">'
@@ -119,7 +119,7 @@ class ViewLogFileResource(FreevoResource):
         txt_ctrl = '<input type="textbox" name=%s id=%s value="%s" size="3" %s >'
         fv.res += txt_ctrl  % (txt_name, txt_name , delayamount  ,  js_delay)
         fv.res += ' Refresh Delay '
-        
+
         fv.res += txt_ctrl % ( "rows", "rows", rows , js_update )
         fv.res += 'Rows'
         fv.res += addPageRefresh()
