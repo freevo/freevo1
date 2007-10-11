@@ -30,17 +30,17 @@
 # -----------------------------------------------------------------------
 
 import sys, time
+import os
 
 from www.web_types import HTMLResource, FreevoResource
 import util, config
-import os
 
 TRUE = 1
 FALSE = 0
 
 
-def ReadFile(file,number_lines = 40):
-    lconf_hld = open(file,'r')
+def ReadFile(file, number_lines = 40):
+    lconf_hld = open(file, 'r')
     retlines = lconf_hld.readlines()[number_lines * -1:]
 
     rlines = ''
@@ -51,8 +51,8 @@ def ReadFile(file,number_lines = 40):
     return rlines
 
 
-def CreateListBox(cname,grps,cvalue,opts):
-    ctrl = '\n<select name="%s" value=""  id="%s" %s>' % ( cname , cname, opts )
+def CreateListBox(cname, grps, cvalue, opts):
+    ctrl = '\n<select name="%s" value=""  id="%s" %s>' % (cname, cname, opts)
 
     for grp in grps:
         if grp == cvalue:
@@ -64,7 +64,7 @@ def CreateListBox(cname,grps,cvalue,opts):
 
 
 def GetLogFiles():
-    filelist = os.listdir( config.LOGDIR)
+    filelist = os.listdir(config.FREEVO_LOGDIR)
     for l in filelist:
         if not l.endswith('.log'):
             filelist.remove(l)
@@ -83,27 +83,27 @@ class ViewLogFileResource(FreevoResource):
 
         fv = HTMLResource()
         form = request.args
-        dfile = fv.formValue(form,'displayfile')
+        dfile = fv.formValue(form, 'displayfile')
         if not dfile:
             dfile = 'webserver-0.log'
 
-        dfile = config.LOGDIR + "/" + dfile
-        update = fv.formValue(form,'update')
+        dfile = os.path.join(config.FREEVO_LOGDIR, dfile)
+        update = fv.formValue(form, 'update')
 
-        rows = fv.formValue(form,'rows')
+        rows = fv.formValue(form, 'rows')
         if not rows:
             rows = '20'
         rows = int(rows)
 
         if update:
-            fv.res = ReadFile(dfile,rows)
-            return String( fv.res )
+            fv.res = ReadFile(dfile, rows)
+            return String(fv.res)
 
-        delayamount = fv.formValue(form,'delayamount')
+        delayamount = fv.formValue(form, 'delayamount')
         if not delayamount:
             delayamount = 9999
 
-        fv.printHeader(_('viewlog'), 'styles/main.css','scripts/viewlogfile.js',selected=_('View Logs'))
+        fv.printHeader(_('viewlog'), 'styles/main.css', 'scripts/viewlogfile.js', selected=_('View Logs'))
 
         fv.res += '\n<link rel="stylesheet" href="styles/viewlogfile.css" type="text/css" />\n'
         fv.res  += '\n<br><div class="viewlog">'
@@ -117,19 +117,19 @@ class ViewLogFileResource(FreevoResource):
         js_delay = 'onchange = "UpdateDelay()"'
         txt_name = '"delayamount"'
         txt_ctrl = '<input type="textbox" name=%s id=%s value="%s" size="3" %s >'
-        fv.res += txt_ctrl  % (txt_name, txt_name , delayamount  ,  js_delay)
+        fv.res += txt_ctrl % (txt_name, txt_name, delayamount, js_delay)
         fv.res += ' Refresh Delay '
 
-        fv.res += txt_ctrl % ( "rows", "rows", rows , js_update )
+        fv.res += txt_ctrl % ("rows", "rows", rows, js_update)
         fv.res += 'Rows'
         fv.res += addPageRefresh()
         fv.res += "</form>"
 
         ta_name = '"loglines"'
-        fv.res +=  '<textarea  id=%s name=%s  wrap="OFF" READONLY ></textarea>'  %  ( ta_name, ta_name )
+        fv.res +=  '<textarea  id=%s name=%s  wrap="OFF" READONLY ></textarea>' % (ta_name, ta_name)
         fv.res += '</div>\n'
 
         fv.printFooter()
-        return String( fv.res )
+        return String(fv.res)
 
 resource = ViewLogFileResource()
