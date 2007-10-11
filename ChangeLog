@@ -17,9 +17,12 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * New Afrikaans translation (F#1790781)
+ * New Romanian translation (F#1809393)
  * Updated German translation (F#1770195)
- * New Eject CD-ROM plug-in, adding a menu item to the drive menu (F#1773418)
+ * New eject CD-ROM plug-in, adding a menu item to the drive menu (F#1773418)
+ * New internet TV plug-in (F#1811634)
  * New lastfm menu plug-in (F#1792494)
+ * New RSS audio podcast plug-in (F#1807634)
  * New text entry and program search (F#1768790)
  * New youtube plug-in for the webserver (F#1783643,F#1792819)
  * Updated lyrics grabber for scrollable lyrics (F#1786313)

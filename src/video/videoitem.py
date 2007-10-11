@@ -541,6 +541,13 @@ class VideoItem(Item):
                                  _('Please insert the media.')) % self.url,
                            handler=self.play).show()
                 return
+        elif self.mode in ('http') and not self.filename and not self.media:
+            self.player_rating, self.player = self.possible_player[0]
+            self.player_rating = 20
+            for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
+                rating = p.rate(self) * 10
+                if p.name == 'mplayer':
+                    self.player = p
 
         if self.player_rating < 10:
             AlertBox(text=_('No player for this item found')).show()
