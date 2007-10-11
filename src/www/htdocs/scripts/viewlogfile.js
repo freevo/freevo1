@@ -2,20 +2,23 @@ if (document.images){
   var parselimit=2
 }
 
+
 function UpdateDelay() {
     parselimit=document.forms[0].delayamount.value
 }
 
+
 function UpdateDisplay() {
-    var cellObj,displayfile;
+    var cellObj,displayfile,rows;
 
     cellObj = document.getElementById("refresh");  
     cellObj.childNodes[0].nodeValue="Updating";
     parselimit=document.forms[0].delayamount.value
     displayfile = document.getElementById("logfile").value;
-    numlines = document.getElementById("numlines").value;
-    makeRequest('viewlogfile.rpy?update=TRUE&displayfile=' + displayfile + "&rows=" + numlines);    
+    rows = document.getElementById("rows").value;
+    makeRequest('viewlogfile.rpy?update=TRUE&displayfile=' + displayfile + "&rows=" + rows);    
 }
+
 
 function beginrefresh(){
   var cellObj,displayfile;
@@ -43,6 +46,7 @@ function beginrefresh(){
   }
 }
 window.onload=beginrefresh
+
 
 function makeRequest(url) {
     var httpRequest;
@@ -74,6 +78,7 @@ function makeRequest(url) {
     httpRequest.send('');
 
 }
+
 
 function UpdateTable(httpRequest) {
     var filelist,logfile,winWidth,winHeight,loffset,toffset,nWidth,nHeight;

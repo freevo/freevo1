@@ -2,6 +2,41 @@ if (document.images){
   var parselimit=2
 }
 
+function StartDownload() {
+    var url,file_url,download_type;
+    
+    file_url = Url.encode(document.getElementById('dl_url').value);
+    download_type = document.getElementById('download_type').value;
+    if (file_url != "") {
+        url = "youtube.rpy?xml=1&dlscript=" + download_type + "&dl_url=" + file_url;
+        makeRequest(url,'file_list'); 
+        document.getElementById('dl_url').value = ""
+        parselimit=3
+    }
+}
+
+function PlayFile(flv_file) {
+    var url;
+    
+    url = 'youtube.rpy?cmd=Play&playfile=' + flv_file ;
+    makeRequest(url,'flowplayer');
+}
+function PlayFileOld(flv_file) {
+    var divflowplayer,flowplayer,clip,setA;
+   
+    divflowplayer = document.getElementById('flowplayerholder')
+    divflowplayer.style.display = ""
+    clip = {name: 'flv_file' , url: 'youtube/' + flv_file }
+
+    flowplayer = document.getElementById("FlowPlayer");
+    flowplayer.videoFile = flv_file;
+    flv_file = "/youtube/" + flv_file
+    setA = {"url" : flv_file}
+    this.fo.setAttribute(setA);
+
+}
+
+
 function beginrefresh(){
   if (!document.images)
      return
@@ -11,7 +46,7 @@ function beginrefresh(){
        
        cellObj.childNodes[0].nodeValue="Updating";
        parselimit=60
-       makeRequest('youtube.rpy?xml=1');
+       makeRequest('youtube.rpy?xml=1','file_list');
        setTimeout("beginrefresh()",1000)
   }
   else{ 
@@ -29,7 +64,7 @@ function beginrefresh(){
 }
 window.onload=beginrefresh
 
-function makeRequest(url) {
+function makeRequest(url , request_type) {
     var httpRequest;
 
     if (window.XMLHttpRequest) { // Mozilla, Safari, ...
@@ -54,10 +89,37 @@ function makeRequest(url) {
         alert('Giving up :( Cannot create an XMLHTTP instance');
         return false;
     }
-    httpRequest.onreadystatechange = function() { UpdateTable(httpRequest); };
+
+    if (request_type == "file_list") 
+        httpRequest.onreadystatechange = function() { UpdateTable(httpRequest); };
+    
+    if (request_type == "flowplayer") 
+        httpRequest.onreadystatechange = function() { UpdateFlowPlayer(httpRequest); };
+
     httpRequest.open('GET', url, true);
     httpRequest.send('');
 
+}
+
+function ConvertToFlv(media_file) {
+    var answer,url;
+    
+    answer = confirm ("Covert File to flv ?" + media_file);
+    if (answer)  {
+       url = "youtube.rpy?xml=1&cmd=Convert&convert_file=" + media_file 
+       makeRequest(url)
+    }
+
+}
+
+function DeleteFile(delete_file) {
+    var answer,url;
+    
+    answer = confirm ("Delete File ?" + delete_file);
+    if (answer)  {
+       url = "youtube.rpy?xml=1&cmd=Delete&delete_file=" + delete_file 
+       makeRequest(url,file_list)
+    }
 }
 
 function TableAddRow(file,filesize,percent,amtdone,speed,eta) {
@@ -76,7 +138,7 @@ function TableAddRow(file,filesize,percent,amtdone,speed,eta) {
     delLink=document.createElement('a');
     pickText=document.createTextNode('delete');
     delLink.appendChild(pickText);
-    delLink.setAttribute('href','youtube.rpy?Delete=1&file=' + file);
+    delLink.setAttribute('onclick','DeleteFile("' + file  + '")');
     cellLeft.appendChild(delLink);
     cellLeft.className = "basic"
 
@@ -84,14 +146,15 @@ function TableAddRow(file,filesize,percent,amtdone,speed,eta) {
     delLink=document.createElement('a');
     pickText=document.createTextNode(file);
     delLink.appendChild(pickText);
-    delLink.setAttribute('href','youtube.rpy?playfile=' + file);
+    file_ext = file.substr(file.length - 3, file.length);
+    if (file_ext == "flv") 
+        //delLink.setAttribute('onclick','PlayFile("' + file + '")');
+        delLink.setAttribute('href','youtube.rpy?playfile=' + file);
+    else 
+        delLink.setAttribute('onclick','ConvertToFlv("' + file + '")');
+
     cellLeft.appendChild(delLink);
     cellLeft.className = "basic"
-
-//    cellLeft = newrow.insertCell(1);
-//    textNode = document.createTextNode(file);
-//    cellLeft.appendChild(textNode);
-//    cellLeft.className = "basic"
 
     cellLeft = newrow.insertCell(2);
     textNode = document.createTextNode(percent);
@@ -196,7 +259,97 @@ function UpdateTable(httpRequest) {
         }
     }
 }
-    
 
+function UpdateFlowPlayer(httpRequest) {
+    var flowplayer_div;
     
-    
+    if (httpRequest.readyState == 4) {
+        if (httpRequest.status == 200) {
+            flowplayer_div = document.getElementById('flowplayer_div')
+            flowplayer_div.innerHTML = httpRequest.responseText
+
+        } else {
+            alert('There was a problem with the request.');
+        }
+    }
+}
+
+
+/**
+*
+* URL encode / decode
+* http://www.webtoolkit.info/
+*
+**/
+
+var Url = {
+
+    // public method for url encoding
+    encode : function (string) {
+        return escape(this._utf8_encode(string));
+    },
+
+    // public method for url decoding
+    decode : function (string) {
+        return this._utf8_decode(unescape(string));
+    },
+
+    // private method for UTF-8 encoding
+    _utf8_encode : function (string) {
+        string = string.replace(/\r\n/g,"\n");
+        var utftext = "";
+
+        for (var n = 0; n < string.length; n++) {
+
+            var c = string.charCodeAt(n);
+
+            if (c < 128) {
+                utftext += String.fromCharCode(c);
+            }
+            else if((c > 127) && (c < 2048)) {
+                utftext += String.fromCharCode((c >> 6) | 192);
+                utftext += String.fromCharCode((c & 63) | 128);
+            }
+            else {
+                utftext += String.fromCharCode((c >> 12) | 224);
+                utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                utftext += String.fromCharCode((c & 63) | 128);
+            }
+
+        }
+
+        return utftext;
+    },
+
+    // private method for UTF-8 decoding
+    _utf8_decode : function (utftext) {
+        var string = "";
+        var i = 0;
+        var c = c1 = c2 = 0;
+
+        while ( i < utftext.length ) {
+
+            c = utftext.charCodeAt(i);
+
+            if (c < 128) {
+                string += String.fromCharCode(c);
+                i++;
+            }
+            else if((c > 191) && (c < 224)) {
+                c2 = utftext.charCodeAt(i+1);
+                string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                i += 2;
+            }
+            else {
+                c2 = utftext.charCodeAt(i+1);
+                c3 = utftext.charCodeAt(i+2);
+                string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                i += 3;
+            }
+
+        }
+
+        return string;
+    }
+
+}

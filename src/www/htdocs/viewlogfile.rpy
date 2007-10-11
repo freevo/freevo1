@@ -4,8 +4,9 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes:
-# Todo:
+# Notes: viewlogfile.rpy args : displayfile="logfile to display" eg 
+#                               
+# Todo: 
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -33,24 +34,22 @@ import sys, time
 from www.web_types import HTMLResource, FreevoResource
 import util, config
 import os
-from plugin import is_active
-from helpers.plugins import parse_plugins
-from helpers.plugins import info_html
 
 TRUE = 1
 FALSE = 0
 
-def ReadFile(file,numberlines = 40):
-#    print  "READING FILE = %s Number lines = %i"  % (  file , numberlines )
-    lconf_hld = open(file,"r")
-    retlines = lconf_hld.readlines()[numberlines * -1:]
 
-    rlines = ""
+def ReadFile(file,number_lines = 40):
+    lconf_hld = open(file,'r')
+    retlines = lconf_hld.readlines()[number_lines * -1:]
+
+    rlines = ''
     retlines.reverse()
     for ln in retlines:
         rlines += ln
 
     return rlines
+
 
 def CreateListBox(cname,grps,cvalue,opts):
     ctrl = '\n<select name="%s" value=""  id="%s" %s>' % ( cname , cname, opts )
@@ -63,18 +62,18 @@ def CreateListBox(cname,grps,cvalue,opts):
     ctrl += '\n</select>'
     return ctrl
 
+
 def GetLogFiles():
     filelist = os.listdir( config.LOGDIR)
     for l in filelist:
-        if not l.endswith(".log"):
+        if not l.endswith('.log'):
             filelist.remove(l)
     return filelist
 
+
 def addPageRefresh():
-    style = 'style="z-index:100; position:absolute; top:150px; a"'
-    style = ""
     prhtml = '<script type="text/JavaScript">window.onload=beginrefresh</script>'
-    prhtml += '\n<div class="searchform" id="refresh" %s  align="Center">Refresh In : ??</div>' % style
+    prhtml += '\n<span class="refresh" id="refresh"  align="Center">Refresh In : ??</span>'
     return prhtml
 
 
@@ -84,15 +83,14 @@ class ViewLogFileResource(FreevoResource):
 
         fv = HTMLResource()
         form = request.args
-        dfile = fv.formValue(form,"displayfile")
-#        print "LOG FILE = %s " % dfile
+        dfile = fv.formValue(form,'displayfile')
         if not dfile:
             dfile = 'webserver-0.log'
 
         dfile = config.LOGDIR + "/" + dfile
-        update = fv.formValue(form,"update")
-        rows = fv.formValue(form,"rows")
-#        print update
+        update = fv.formValue(form,'update')
+
+        rows = fv.formValue(form,'rows')
         if not rows:
             rows = '20'
         rows = int(rows)
@@ -101,45 +99,37 @@ class ViewLogFileResource(FreevoResource):
             fv.res = ReadFile(dfile,rows)
             return String( fv.res )
 
-        autorefresh = fv.formValue(form,"autorefresh")
-        if not autorefresh:
-            autorefresh = ""
-        autorefresh = "checked"
-
-        numlines = fv.formValue(form,"numlines")
-        if not numlines:
-            numlines = 20
-
-        delayamount = fv.formValue(form,"delayamount")
+        delayamount = fv.formValue(form,'delayamount')
         if not delayamount:
             delayamount = 9999
 
         fv.printHeader(_('viewlog'), 'styles/main.css','scripts/viewlogfile.js',selected=_('View Logs'))
-
-        fv.res  += '\n<div class="searchform" align="left"><br>'
-        fv.res  += '\n<div align="left">'
-        fv.res  += '\n<form id="form1" name="form1" action="viewlogfile.rpy" method="get">'
+        
+        fv.res += '\n<link rel="stylesheet" href="styles/viewlogfile.css" type="text/css" />\n'
+        fv.res  += '\n<br><div class="viewlog">'
+        fv.res  += '\n<form id="viewlog_form" name="viewlog_form" action="viewlogfile.rpy" method="get">'
         fv.res += '<br>'
 
         logfiles = GetLogFiles()
-        opts = 'onchange="UpdateDisplay()"'
-        fv.res +=  "Log File :  " + CreateListBox("logfile",logfiles,dfile,opts)
-#        fv.res  += '<input type="submit" value="View File">'
-        fv.res += '<input type="textbox" name="delayamount" id="delayamount" value="%s" size="3" onchange="UpdateDelay()"> Refresh Delay' % delayamount
-        fv.res += '<input type="textbox" name="numlines" id="numlines" value="%s" size="3" onchange="UpdateDisplay()"> Number Lines' % numlines
-#        fv.res += '<input type=checkbox name="autorefresh" id="autorefresh" %s> Auto Refresh' % autorefresh
+        js_update = 'onchange=UpdateDisplay()'
+        fv.res +=  'Log File :  ' + CreateListBox('logfile', logfiles, dfile, js_update)
+        fv.res  += '<input type="Button" value="Refresh" onclick=%s >' % js_update
+        js_delay = 'onchange = "UpdateDelay()"'
+        txt_name = '"delayamount"'
+        txt_ctrl = '<input type="textbox" name=%s id=%s value="%s" size="3" %s >'
+        fv.res += txt_ctrl  % (txt_name, txt_name , delayamount  ,  js_delay)
+        fv.res += ' Refresh Delay '
+        
+        fv.res += txt_ctrl % ( "rows", "rows", rows , js_update )
+        fv.res += 'Rows'
         fv.res += addPageRefresh()
         fv.res += "</form>"
 
-        style = 'style="z-index:100; left:1%; width: 95%; height: 50%; position:absolute; top:220px;  bottom:2%;  padding: 2px;"'
-        fv.res +=  '<br><textarea  id="loglines" name="loglines" rows = %i cols=120 wrap="OFF" READONLY %s ></textarea>'  %  ( rows , style )
+        ta_name = '"loglines"'
+        fv.res +=  '<textarea  id=%s name=%s  wrap="OFF" READONLY ></textarea>'  %  ( ta_name, ta_name )
+        fv.res += '</div>\n'
 
-#        fv.res += '</form>'
-        fv.res += '</div>\n'
-        fv.res += '</div>\n'
-        fv.res += '<br><br>'
         fv.printFooter()
-
         return String( fv.res )
 
 resource = ViewLogFileResource()

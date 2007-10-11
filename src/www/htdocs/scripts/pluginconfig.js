@@ -1,55 +1,45 @@
-function FilterList(cname) {
-     var filter;   
+function DisplayList(listname) {
+    var list;
+    
+    list = document.getElementById(listname)
+    if (list.style.display == "none")
+        list.style.display = "";
+    else 
+        list.style.display = "none";
+}
 
-     filter = document.getElementById(cname).value;
-     window.location = 'config.rpy?filterlist=' + filter
+function GetPluginVars(pname) {
+    var vr,cnt,vrctrl;
+    var varlist = [];
+    
+    cnt =0
+    vrctrl =  document.getElementById(pname + "_var" + cnt);
+    
+    while (vrctrl != null) {
+        vr = [vrctrl.name, vrctrl.value]
+        varlist[cnt] = vr
+        cnt++;
+        vrctrl =  document.getElementById(pname + "_var" + cnt);
+    }
+    return varlist;
 }
 
 function UpdatePlugin(pname) {
-    var cmd,lineno,url;
-
+    var cmd,lineno,url,varlist,level_ctrl;
+ 
+    varlist = GetPluginVars(pname);
     cmd = document.getElementById(pname + "_cmd").value;
     lineno = document.getElementById(pname + "_lineno").value;
-    url = "pluginconfig.rpy?cmd=" + cmd + "&pluginname=" + pname + "&pluginline=" + lineno;
+    url = "configedit.rpy?cmd=PLUGINUPDATE&pluginaction=" + cmd + "&pluginname=" + pname + "&pluginline=" + lineno;
+
+    // Check to see if plugin has level control.
+    level_ctrl = document.getElementById(pname + '_level')
+    if (level_ctrl) {
+        url = url + '&level='  + level_ctrl.value
+    }
+
+
     makeRequest(url , pname);
-}
-
-
-function RemovePlugin(pname) {
-    var lineno,url;
-
-    // Get the Line Number of the Plugin.
-    lineno = document.getElementById(pname + "_lineno").value;
-    url = "pluginconfig.rpy?cmd=REMOVE&pluginname=" + pname + "&pluginline=" + lineno;
-    makeRequest(url , pname);
-}
-
-function EnablePlugin(pname) {
-    var lineno,url;
-
-    // Get the Line Number of the Plugin.
-    lineno = document.getElementById(pname + "_lineno").value  
-    url = "pluginconfig.rpy?cmd=ACTIVATE&pluginname=" + pname + "&pluginline=" + lineno
-    makeRequest(url , pname)
-}
-
-function DisablePlugin(pname) {
-    var lineno,url;
-
-    // Get the Line Number of the Plugin.
-    lineno = document.getElementById(pname + "_lineno").value  
-    url = "pluginconfig.rpy?cmd=DISABLE&pluginname=" + pname + "&pluginline=" + lineno
-    makeRequest(url , pname)
-}
-
-
-function FilterListPlugin() {
-     var grpfilter,statfilter;   
-
-     grpfilter = document.getElementById('grpfilter').value;
-     statfilter = document.getElementById('statfilter').value;
-
-     window.location = 'pluginconfig.rpy?filterlist=' + grpfilter + "&pluginfilter=" + statfilter
 }
 
 function UpdateStatus(hRequest,cname) {
@@ -57,8 +47,9 @@ function UpdateStatus(hRequest,cname) {
 
     if (hRequest.readyState == 4) {
         if (hRequest.status == 200) {
-            cell = ""
-//            alert(hRequest.responseText)           
+            cell = document.getElementById(cname + "_config_line");
+            cell.innerHTML = hRequest.responseText;
+           
         } else {
             
             alert('There was a problem with the request.');
@@ -96,36 +87,4 @@ function makeRequest(url,cname) {
     httpRequest.send('');
 }
 
-function SaveValue(sname) {
-    // Get the Value from the text box. 
-    var svalue,tb,chk,updateurl,strenable;
-    var startline,endline;
 
-    tb = document.getElementById(sname + "_tb")
-    chk  = document.getElementById(sname + "_chk")
-    startline = document.getElementById(sname + "_startline").value
-    endline = document.getElementById(sname + "_endline").value
-    svalue = tb.value
-    strenable = "FALSE"
-    if (chk.checked) 
-        strenable = "TRUE"
-    updateurl = 'config.rpy?update=TRUE&udname=' + sname + '&udvalue=' + svalue + '&udenable=' + strenable
-    updateurl = updateurl + "&startline=" + startline + '&endline=' + endline
-    
-    makeRequest(updateurl,sname);
-}
-
-function DeleteValue(sname) {
-    // Get the Value from the text box. 
-    var svalue,tb,chk,updateurl,strenable;
-    var startline,endline;
-
-    startline = document.getElementById(sname + "_startline").value
-    endline = document.getElementById(sname + "_endline").value
-    svalue = tb.value
-    strenable = "FALSE"
-    if (chk.checked) 
-        strenable = "TRUE"
-    updateurl = 'config.rpy?delete=TRUE&startline=' + startline + '&endline=' + endline
-//    makeRequest(updateurl);
-}
