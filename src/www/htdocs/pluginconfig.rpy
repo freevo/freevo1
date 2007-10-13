@@ -31,8 +31,9 @@
 
 import sys, time
 import urllib
+import config
 from www.web_types import HTMLResource, FreevoResource
-import util, config
+import util
 from plugin import is_active
 from helpers.plugins import parse_plugins
 from helpers.plugins import info_html
@@ -43,6 +44,9 @@ FALSE = 0
 
 
 def ReadConfig(cfile):
+    '''
+    '''
+    _debug_('ReadConfig(cfile=%r)' % (cfile), 2)
     lconf = cfile
     lconf_hld = open(lconf, 'r')
     fconf = lconf_hld.readlines()
@@ -51,6 +55,9 @@ def ReadConfig(cfile):
 
 
 def ParsePluginName(line):
+    '''
+    '''
+    _debug_('ParsePluginName(line=%r)' % (line), 2)
     sline = line.replace('"', "'")
     sline = sline.split("'")
     if len(sline) > 2:
@@ -61,6 +68,9 @@ def ParsePluginName(line):
 
 
 def GetConfigSetting(cfile, vname):
+    '''
+    '''
+    _debug_('GetConfigSetting(cfile=%r, vname=%r)' % (cfile, vname), 2)
 
     lconf = ReadConfig(cfile)
     ret = ''
@@ -75,6 +85,9 @@ def GetConfigSetting(cfile, vname):
 
 
 def ReadConfigPlugins(cfile):
+    '''
+    '''
+    _debug_('ReadConfigPlugins(cfile=%r)' % (cfile), 2)
     rconf = ReadConfig(cfile)
     pluginlines = []
     cnt = 0
@@ -100,6 +113,9 @@ def ReadConfigPlugins(cfile):
 
 
 def GetPlugConfig(plugin):
+    '''
+    '''
+    _debug_('GetPlugConfig(plugin=%r)' % (plugin), 2)
 
     config_list = []
     if plugin[5].find('config') > 0:
@@ -110,6 +126,9 @@ def GetPlugConfig(plugin):
 
 
 def SortPlugins(pluginlist, plugin_grps):
+    '''
+    '''
+    _debug_('SortPlugins(pluginlist=%r, plugin_grps=%r)' % (pluginlist, plugin_grps), 2)
     sorted = []
     for plugin in pluginlist:
         pgrp = plugin[0].split('.')[0]
@@ -119,30 +138,37 @@ def SortPlugins(pluginlist, plugin_grps):
     return sorted
 
 def CreateListBox(cname, grps, cvalue, opts):
+    '''
+    '''
+    _debug_('CreateListBox(cname=%r, grps=%r, cvalue=%r, opts=%r)' % (cname, grps, cvalue, opts), 2)
     ctrl = '\n<select name="%s" value=""  id="%s" %s>' % (cname, cname, opts)
     for grp in grps:
         if grp == cvalue:
-            ctrl  += '\n    <option value="' + grp + '" selected="yes">' + grp + '</option>'
+            ctrl += '\n    <option value="' + grp + '" selected="yes">' + grp + '</option>'
         else:
-            ctrl  += '\n    <option value="' + grp + '">' + grp + '</option>'
+            ctrl += '\n    <option value="' + grp + '">' + grp + '</option>'
     ctrl += '\n</select>'
     return ctrl
 
 
-def get_config_setting(lconf, plugin_name) :
+def get_config_setting(lconf, plugin_name):
+    '''
+    '''
+    _debug_('get_config_setting(lconf=%r, plugin_name=%r)' % (lconf, plugin_name), 2)
     conf_line = 'None'
     confentry = False
     linenumber = -1
     for lnum, lcline in enumerate(lconf):
-
         if  lcline['name'] == plugin_name:
-
             conf_line = lcline['orgline']
             linenumber = lcline['lineno']
             confentry = True
     return conf_line, linenumber
 
-def plugin_level_control(lconf_line, plugin) :
+def plugin_level_control(lconf_line, plugin):
+    '''
+    '''
+    _debug_('plugin_level_control(lconf_line=%r, plugin=%r)' % (lconf_line, plugin), 2)
     # check to see if the plugin supports levels.
     lconf_line = lconf_line.replace(' ', '')
     if lconf_line.find('level=') == -1:
@@ -158,12 +184,15 @@ def plugin_level_control(lconf_line, plugin) :
 
     level_ctrl = ''
     if level <> "none":
-        level_ctrl = 'Level :<input  id="%s_level" name="newname" size="2" value="%s">' % (plugin[0], level)
+        level_ctrl = 'Level: <input  id="%s_level" name="newname" size="2" value="%s">' % (plugin[0], level)
 
     return level_ctrl
 
 
-def get_plugin_status(plugin_name,  lconfline)    :
+def get_plugin_status(plugin_name, lconfline):
+    '''
+    '''
+    _debug_('get_plugin_status(plugin_name=%r, lconfline=%r)' % (plugin_name, lconfline), 2)
     status = 'Deactive'
 
     if is_active(plugin_name):
@@ -178,16 +207,21 @@ def get_plugin_status(plugin_name,  lconfline)    :
     return status
 
 def get_plugin_args(config_line):
+    '''
+    '''
+    _debug_('get_plugin_args(config_line=%r)' % (config_line), 2)
 
     plugin_args = ''
     if config_line.find("args=") <> -1:
         plugin_args = config_line.split('args=')[1]
-        print "PLugin Args Found !!!"
 
     return plugin_args
 
 
 def displayplugin(cfile, plugin, lconf, expAll):
+    '''
+    '''
+    _debug_('displayplugin(cfile=%r, plugin=%r, lconf=%r, expAll=%r)' % (cfile, plugin, lconf, expAll), 2)
     ctrlopts = ['Active', 'Deactive', 'Remove']
     html = HTMLResource()
 
@@ -215,50 +249,62 @@ def displayplugin(cfile, plugin, lconf, expAll):
     html.res += spDisable_open
     html.res += CreateListBox(pluginname + '_cmd', ctrlopts, status, pc_opts)
     html.res +=  '<input type="hidden" id="%s_lineno" value="%i">\n' % (pluginname, linenumber)
-    html.res += '<a  onclick=DisplayList("%s_info")>%s</a></li>\n' % (pluginname,   pluginname)
+    html.res += '<a onclick=DisplayList("%s_info")>%s</a></li>\n' % (pluginname, pluginname)
     html.res += spDisable_close
     html.res += '<span id=%s_updateinfo></span>' % pluginname
 
-    html.res += '<ul id="%s_info" style="display:%s;")>\n' %  (pluginname, dstyle)
-    html.res += '<li><span id="%s_config_line" class="config_line">%i - %s</span></li>'  %  (pluginname, linenumber, lconfline)
+    html.res += '<ul id="%s_info" style="display:%s;")>\n' % (pluginname, dstyle)
+    html.res += '<li><span id="%s_config_line" class="config_line">%i - %s</span></li>' % \
+        (pluginname, linenumber, lconfline)
 
     html.res += '<li>' + plugin_level_control(lconfline, plugin) + '</li>'
-    html.res += '<li> Plugin Args :<input  id="%s_args" name="newname" size="20" value="%s">%s</li>' % \
+    html.res += '<li> Plugin Args: <input id="%s_args" name="newname" size="20" value="%s">%s</li>' % \
         (pluginname, plugin_args, plugin_args)
 
 
-    html.res += dispay_vars(plugin, cfile)
+    html.res += display_vars(plugin, cfile)
     html.res += '<li><div class="plugin_info">%s</div></li>' % plugin[4].replace('\n', '<br>\n')
     html.res += '</ul>'
     return html.res
 
-def dispay_vars(plugin, cfile) :
+def display_vars(plugin, cfile):
+    '''
+    '''
+    _debug_('display_vars(plugin=%r, cfile=%r)' % (plugin, cfile), 2)
 
-    clist = GetPlugConfig(plugin)
-    dsp_vars = '<ul class="plugin_vars">'
-    for cnt, vr in enumerate(clist):
-        curvalue = GetConfigSetting(cfile, vr[0])
-        dsp_vars += '<li>\n'
-        dsp_vars += vr[0] + '\n'
-        dsp_vars += curvalue
-        dsp_vars += vr[2]
-        dsp_vars += '</li>\n'
-    dsp_vars += '</ul>\n'
+    try:
+        clist = GetPlugConfig(plugin)
+        dsp_vars = '<ul class="plugin_vars">'
+        for cnt, vr in enumerate(clist):
+            curvalue = GetConfigSetting(cfile, vr[0])
+            dsp_vars += '<li>\n'
+            dsp_vars += vr[0] + '\n'
+            dsp_vars += curvalue
+            dsp_vars += vr[2]
+            dsp_vars += '</li>\n'
+        dsp_vars += '</ul>\n'
+    except SyntaxError, e:
+        dsp_vars = 'plugin=%r %s\n' % (plugin[0], e)
+        print plugin[0], e
 
     return dsp_vars
 
 def display_group(dsp_group, splugins, configfile, lcplugins, expandAll):
+    '''
+    '''
+    _debug_('display_group(dsp_group=%r, splugins=%r, configfile=%r, lcplugins=%r, expandAll=%r)' % \
+        (dsp_group, splugins, configfile, lcplugins, expandAll), 2)
 
     grpheader = ''
     grpheader += '<li><a onclick=DisplayList("%s_list")>%s</a>\n'
-    grouplist = grpheader  % (dsp_group, dsp_group)
-    grouplist+= '    <ul id="%s_list" class="GroupHeader" >\n' % dsp_group
+    grouplist = grpheader % (dsp_group, dsp_group)
+    grouplist += '    <ul id="%s_list" class="GroupHeader" >\n' % dsp_group
     for plugin in splugins:
         if dsp_group == plugin[0]:
             pluginname = plugin[1][0]
             pluginctrl = displayplugin(configfile, plugin[1], lcplugins, expandAll)
             grouplist += pluginctrl
-    grouplist += '</ul>\n'
+    grouplist += '    </ul>\n'
     grouplist += '</li>\n'
 
     return grouplist
@@ -267,6 +313,9 @@ def display_group(dsp_group, splugins, configfile, lcplugins, expandAll):
 class ConfigurePluginsResource(FreevoResource):
 
     def _render(self, request):
+        '''
+        '''
+        _debug_('_render(request)', 2)
 
         fv = HTMLResource()
         form = request.args
@@ -282,13 +331,13 @@ class ConfigurePluginsResource(FreevoResource):
         if not configfile:
             if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
                 fv.printMessages(["Unable to find local_conf.py setting CONFIG_EDIT_FILE"])
-                return String (fv.res)
+                return str(fv.res)
             else:
                 configfile = config.CONFIG_EDIT_FILE
 
         if not os.path.exists(configfile):
             fv.res += "Error unable to find File - %s" % configfile
-            return String (fv.res)
+            return str(fv.res)
 
         all_plugins = config.all_plugins
         group_list = ['Global', 'tv', 'video', 'audio', 'image', 'idlebar']
@@ -302,18 +351,19 @@ class ConfigurePluginsResource(FreevoResource):
         if expAll:
             expandAll = True
 
-        fv.res += '<link rel="stylesheet" href="styles/config.css" type="text/css" />'
-        fv.res  += '\n<div class="VarGroups">\n'
+        fv.res += '<link rel="stylesheet" href="styles/config.css" type="text/css" />\n'
+        fv.res += '<div class="VarGroups">\n'
         fv.res += '<form action="#" class="searchform">\n'
         fv.res += '<ul class="GroupHeader">\n'
 
         for grp in group_list:
-            fv.res += display_group(grp, splugins, configfile, lcplugins, expandAll)
+            #fv.res += display_group(grp, splugins, configfile, lcplugins, expandAll)
+            fv.res += Unicode(display_group(grp, splugins, configfile, lcplugins, expandAll))
 
         fv.res += '</ul>\n'
         fv.res += '</div>\n'
         fv.res += '</form>\n'
 
-        return String(fv.res)
+        return str(fv.res)
 
 resource = ConfigurePluginsResource()

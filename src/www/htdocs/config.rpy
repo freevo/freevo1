@@ -1,4 +1,5 @@
 # -*- coding: iso-8859-1 -*-
+# vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -25,19 +26,21 @@
 # config.rpy?expAll=True - Will Expand all the settings.
 #
 # Required configedit.rpy - To write the settings to the local_conf.py
-#
-# Edit Date - Oct. 1, 8:30pm  2007
 
 import sys
 import os.path
-import config
 import string
 import types
 import time
 import urllib
 from www.web_types import HTMLResource, FreevoResource
+import config
+import util
 
 def ReadConfig(cfile):
+    '''
+    '''
+    _debug_('ReadConfig(cfile=%r)' % (cfile), 2)
     lconf = cfile
     lconf_hld = open(lconf, 'r')
     fconf = lconf_hld.readlines()
@@ -45,6 +48,9 @@ def ReadConfig(cfile):
 
 
 def ParseConfigFile(rconf):
+    '''
+    '''
+    _debug_('ParseConfigFile(rconf=%r)' % (rconf), 2)
     cnt = 0
     fconfig = []
     while cnt < len(rconf):
@@ -88,6 +94,9 @@ def ParseConfigFile(rconf):
 
 
 def ParseLine(cline):
+    '''
+    '''
+    _debug_('ParseLine(cline=%r)' % (cline), 2)
     lparsed = {'ctrlname': '',
                'ctrlvalue': '',
                'checked': True,
@@ -128,7 +137,7 @@ def ParseLine(cline):
             ctrlvalue = fsplit[1].split('#')
             if len(ctrlvalue) == 2:
                 lparsed['comments'] = ctrlvalue[1]
-            lparsed['ctrlvalue'] = ctrlvalue[0].strip()
+            lparsed['ctrlvalue'] = Unicode(ctrlvalue[0].strip())
     lparsed['vartype'] = VarType(lparsed['ctrlvalue'])
     lparsed['ctrlvalue'] = lparsed['ctrlvalue'].replace('"', "'")
 
@@ -139,16 +148,22 @@ def ParseLine(cline):
 
 
 def CheckSyntax(fvsetting):
+    '''
+    '''
+    _debug_('CheckSyntax(fvsetting=%r)' % (fvsetting), 2)
     status = False
-    try :
+    try:
         exec fvsetting
         status = True
-    except :
+    except:
         status = False
     return status
 
 
 def GetItemsArray(cvalue):
+    '''
+    '''
+    _debug_('GetItemsArray(cvalue=%r)' % (cvalue), 2)
     itemlist = None
     cmd = 'itemlist = ' + cvalue
     if CheckSyntax(cmd):
@@ -157,6 +172,9 @@ def GetItemsArray(cvalue):
 
 
 def GetGroupList(cfgvars):
+    '''
+    '''
+    _debug_('GetGroupList(cfgvars=%r)' % (cfgvars), 2)
     grps = ['Other']
     agrps = []
     for vrs in cfgvars:
@@ -176,6 +194,9 @@ def GetGroupList(cfgvars):
 
 
 def getCtrlType(cname, cvalue, vtype):
+    '''
+    '''
+    _debug_('getCtrlType(cname=%r, cvalue=%r, vtype=%r)' % (cname, cvalue, vtype), 2)
     if vtype == 'boolean':
         return 'boolean'
     if cname == 'TV_CHANNELS':
@@ -191,6 +212,9 @@ def getCtrlType(cname, cvalue, vtype):
     return 'textbox'
 
 def isNumber(s):
+    '''
+    '''
+    _debug_('isNumber(s=%r) % (s)', 2)
     try:
         i = int(s)
         return True
@@ -199,6 +223,9 @@ def isNumber(s):
 
 
 def FileTypeVarArray(cname):
+    '''
+    '''
+    _debug_('FileTypeVarArray(cname=%r)' % (cname), 2)
     filevars = ['VIDEO_ITEMS', 'AUDIO_ITEMS', 'IMAGE_ITEMS', 'GAME_ITEMS']
 
     if cname in filevars:
@@ -207,6 +234,9 @@ def FileTypeVarArray(cname):
 
 
 def FileTypeVar(cname):
+    '''
+    '''
+    _debug_('FileTypeVar(cname)', 2)
     vtype = cname.split('_')[-1]
     filetypes = ['PATH', 'DIR', 'FILE', 'DEV', 'DEVICE']
     filevars = ['XMLTV_GRABBER', 'RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'XMLTV_SORT', 'LIRCRC']
@@ -219,6 +249,9 @@ def FileTypeVar(cname):
 
 
 def VarType(cvalue):
+    '''
+    '''
+    _debug_('VarType(cvalue)', 2)
     if cvalue.startswith("'") and cvalue.endswith("'"):
         return 'string'
     if isNumber(cvalue):
@@ -235,6 +268,9 @@ def VarType(cvalue):
 
 
 def CreateNewLineControl():
+    '''
+    '''
+    _debug_('CreateNewLineControl()', 2)
     ctrl = '<div align="left">'
     ctrl += '<input  id="newname" name="newname" size="4"> ='
     ctrl += '<input  id="newvalue" name="newvalue" size="40">'
@@ -245,6 +281,9 @@ def CreateNewLineControl():
 
 
 def CreateTV_Channels_ctrl(cname, cvalue, cenabled):
+    '''
+    '''
+    _debug_('CreateTV_Channels_ctrl(cname, cvalue, cenabled)', 2)
     ctrl = '<span class="Tv_Channels">'
     btnUp =  ''
     btnDown = ''
@@ -274,6 +313,9 @@ def CreateTV_Channels_ctrl(cname, cvalue, cenabled):
 
 
 def CreateFileItemList(cname, cvalue, cenabled):
+    '''
+    '''
+    _debug_('CreateFileItemList(cname, cvalue, cenabled)', 2)
     ctrl = '<span class="FileList">'
     vitems = GetItemsArray(cvalue)
 
@@ -290,11 +332,14 @@ def CreateFileItemList(cname, cvalue, cenabled):
 
             ctrl += '<li>'
             if type(e) == types.StringType or type(e) ==  types.IntType:
-                ctrl +=  '%s<input type="textbox" %s id="%s_label%i"value="%s">%s' % (spDisable_open, txtops, cname, r, e, spDisable_close)
+                ctrl +=  '%s<input type="textbox" %s id="%s_label%i"value="%s">%s' % \
+                    (spDisable_open, txtops, cname, r, e, spDisable_close)
             else:
-                txtLabelBox = '%s<input type="textbox" id="%s_label%i" "value="%s">%s' % (spDisable_open, cname, r, e[0], spDisable_close)
+                txtLabelBox = '%s<input type="textbox" id="%s_label%i" "value="%s">%s' % \
+                    (spDisable_open, cname, r, e[0], spDisable_close)
                 jsCheckFile = 'onchange=CheckValue("%s", "fileitemlist", "%i")' % (cname, r)
-                txtFolderBox = '%s<input type="textbox" id="%s_file%i" value="%s" %s>%s' % (spDisable_open, cname, r, e[1], jsCheckFile, spDisable_close)
+                txtFolderBox = '%s<input type="textbox" id="%s_file%i" value="%s" %s>%s' % \
+                    (spDisable_open, cname, r, e[1], jsCheckFile, spDisable_close)
                 ctrl += txtLabelBox + txtFolderBox
 
                 filecheck = ''
@@ -302,7 +347,8 @@ def CreateFileItemList(cname, cvalue, cenabled):
                 if not os.path.exists(e[1]):
                     filecheck = 'Missing File'
                     chkClass = 'CheckWarning'
-                ctrl += '%s<span class="%s" id="%s_check_%i">%s</span>%s' % (spDisable_open, chkClass, cname, r, filecheck, spDisable_close)
+                ctrl += '%s<span class="%s" id="%s_check_%i">%s</span>%s' % \
+                    (spDisable_open, chkClass, cname, r, filecheck, spDisable_close)
             ctrl += '</li>'
 
         r += 1;
@@ -319,6 +365,9 @@ def CreateFileItemList(cname, cvalue, cenabled):
 
 
 def CreateDictionaryControl(cname, cvalue, cenabled):
+    '''
+    '''
+    _debug_('CreateDictionaryControl(cname, cvalue, cenabled)', 2)
     ctrl2type = 'textbox'
     if cname =='WWW_USERS':
         ctrl2type = 'password'
@@ -351,17 +400,15 @@ def CreateDictionaryControl(cname, cvalue, cenabled):
 
 
 def CreateListControl(cname, cvalue, cenable):
+    '''
+    '''
+    _debug_('CreateListControl(cname=%r, cvalue=%r, cenable=%r)' % (cname, cvalue, cenable), 2)
 
     spDisable_open = ''
     spDisable_close = ''
-    print "List Conftrol %s  " % cname
-    print cenable
     if not cenable:
-        print 'DISPABLED CONNTROL !!! %' + cname
         spDisable_open = '<span class="disablecontrol">'
         spDisable_close = '</span>'
-
-    print spDisable_open + spDisable_close
 
     ctrl = '<span class="ItemList">['
     ctrl += '<ul class="ItemList">'
@@ -370,7 +417,8 @@ def CreateListControl(cname, cvalue, cenable):
     if vitems:
         txtops = ''
 
-        txtbox = '%s<input type="textbox" onchange=CheckValue("' + cname + '", "itemlist", 0)  %s id="%s_item%i%i"value="%s">%s'
+        txtbox = '%s<input type="textbox" onchange=CheckValue("' + cname + \
+            '", "itemlist", 0)  %s id="%s_item%i%i"value="%s">%s'
         for r, e in enumerate(vitems):
             vtype = type(e)
             if vtype == types.StringType or vtype == types.FloatType or vtype == types.IntType:
@@ -401,6 +449,9 @@ def CreateListControl(cname, cvalue, cenable):
 
 
 def CreateTextArea(cname, cvalue):
+    '''
+    '''
+    _debug_('CreateTextArea(cname, cvalue)', 2)
     elemsep = ')'
     rows = cvalue.count(elemsep) + 1
     if rows > 5:
@@ -412,6 +463,9 @@ def CreateTextArea(cname, cvalue):
 
 
 def CreateListBoxControl(cname, grps, cvalue, opts=""):
+    '''
+    '''
+    _debug_('CreateListBoxControl(cname, grps, cvalue, opts="")', 2)
     ctrl = '\n<select name="%s" value="%s"  id="%s" %s >' % (cname,  cvalue, cname, opts)
     for grp in grps:
         if grp == cvalue:
@@ -423,6 +477,9 @@ def CreateListBoxControl(cname, grps, cvalue, opts=""):
 
 
 def CreateConfigLine(nctrl, expALL, plugin_group):
+    '''
+    '''
+    _debug_('CreateConfigLine(nctrl=%r, expALL=%r, plugin_group=%r)' % (nctrl, expALL, plugin_group), 2)
     htmlctrl = HTMLResource()
 
     cname = nctrl['ctrlname']
@@ -458,12 +515,14 @@ def CreateConfigLine(nctrl, expALL, plugin_group):
         disable_span_open =  '<span class="disablecontrol">'
         disable_span_close =  '</span>'
 
-
-    htmlctrl.res += '%s<span id="%s_check" class="check">%s</span>%s' % (disable_span_open, cname, lcheck, disable_span_close)
+    htmlctrl.res += '%s<span id="%s_check" class="check">%s</span>%s' % \
+        (disable_span_open, cname, lcheck, disable_span_close)
     ctrltype = getCtrlType(cname, cvalue, vtype)
     jsonChange = 'onchange=CheckValue("%s", "%s", 0) '  % (cname, ctrltype)
-    chkbox = '%s<input type="checkbox" id = "%s_chk" %s  %s>%s\n' % (disable_span_open, cname, checked, jsonChange, disable_span_close)
-    delbtn = '%s<input type="button" class="configbutton" onclick=DeleteLines("%s", %i, %i) value="Delete">%s\n' % (disable_span_open, cname, sline, eline, disable_span_close)
+    chkbox = '%s<input type="checkbox" id = "%s_chk" %s  %s>%s\n' % \
+        (disable_span_open, cname, checked, jsonChange, disable_span_close)
+    delbtn = '%s<input type="button" class="configbutton" onclick=DeleteLines("%s", %i, %i) value="Delete">%s\n' % \
+        (disable_span_open, cname, sline, eline, disable_span_close)
     htmlctrl.res += delbtn
     htmlctrl.res += chkbox
 
@@ -486,6 +545,9 @@ def CreateConfigLine(nctrl, expALL, plugin_group):
 
 
 def CreateTextBox(cname, cvalue, vtype, plugin_group, cenabled):
+    '''
+    '''
+    _debug_('CreateTextBox(cname, cvalue, vtype, plugin_group, cenabled)', 2)
     cvalue = cvalue.replace(' ', '')
     cvalue = cvalue.strip()
     bllist = ['True', 'False']
@@ -536,6 +598,9 @@ def CreateTextBox(cname, cvalue, vtype, plugin_group, cenabled):
 
 
 def CreateNumberControl(cname, cvalue):
+    '''
+    '''
+    _debug_('CreateNumberControl(cname, cvalue)', 2)
     tbClass = 'VarInputInt'
     ctrl = '<span class="%s">' % tbClass
     ctrl += '<input type=textbox  id="%s" name="%s" value="%s" onchange=CheckValue("%s", "textbox", 0) size="50" >' \
@@ -545,6 +610,9 @@ def CreateNumberControl(cname, cvalue):
 
 
 def DisplayGroups(fconfig, expALL):
+    '''
+    '''
+    _debug_('DisplayGroups(fconfig=%r, expALL=%r)' % (fconfig, expALL), 2)
     fv = HTMLResource()
     groups = GetGroupList(fconfig)
 
@@ -567,7 +635,6 @@ def DisplayGroups(fconfig, expALL):
                 fv.res += '        <li>' + lctrl + '</li>'
         fv.res += '    </ul>\n'
         fv.res += '</li>'
-     #   </div>\n'
     fv.res += '</ul>'
 
     return fv.res
@@ -576,6 +643,9 @@ def DisplayGroups(fconfig, expALL):
 class ConfigResource(FreevoResource):
 
     def _render(self, request):
+        '''
+        '''
+        _debug_('_render(self, request)', 2)
         fv = HTMLResource()
         form = request.args
         fv.printHeader(_('Config'), 'styles/main.css', 'scripts/config.js', selected=_('Config'))
@@ -588,13 +658,15 @@ class ConfigResource(FreevoResource):
         if not configfile:
             if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
                 fv.printMessages(['Unable to find local_conf.py setting CONFIG_EDIT_FILE'])
-                return String (fv.res)
+                return fv.res
+                #return String (fv.res)
             else:
                 configfile = config.CONFIG_EDIT_FILE
 
         if not os.path.exists(configfile):
             fv.printMessages(['Unable to find file - ' + configfile])
-            return String (fv.res)
+            return fv.res
+            #return String (fv.res)
 
         rconf = ReadConfig(configfile)
         fconfig = ParseConfigFile(rconf)
@@ -608,9 +680,10 @@ class ConfigResource(FreevoResource):
         fv.res += '<input type="hidden" id="configfile" value="%s"\n>' % configfile
         fv.res += '<div class="VarGroups">\n'
         fv.res += '\n<form id="config" class="searchform" action="config.rpy" method="get">\n'
-        fv.res += DisplayGroups(str(fconfig), expandAll)
+        fv.res += DisplayGroups(fconfig, expandAll)
         fv.res + '</div>\n'
         fv.res += '\n</form><br>\n'
-        return String(fv.res)
+        return str(fv.res)
+        #return String(fv.res)
 
 resource = ConfigResource()

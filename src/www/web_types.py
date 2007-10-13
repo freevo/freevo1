@@ -204,8 +204,8 @@ class HTMLResource:
                  (_('Search'),_('Advanced Search Page'),'%ssearch.rpy' % str(strprefix)),
                  (_('Help'),_('View Online Help and Documentation'),'%shelp/' % str(strprefix))]
         # maybe also a personal web pages
-        if hasattr(config, 'PERSONAL_WWW_PAGE'):
-            for page in config.PERSONAL_WWW_PAGE:
+        if hasattr(config, 'WWW_PERSONAL_PAGE'):
+            for page in config.WWW_PERSONAL_PAGE:
                 items.append((page[0], page[1], '%s%s' % (str(strprefix), page[2])))
         if hasattr(config, 'ICECAST_WWW_PAGE') and config.ICECAST_WWW_PAGE:
             items.append((_('Icecast List'),_('Change Icecast List'),'%siceslistchanger.rpy' % (strprefix)))
