@@ -596,7 +596,7 @@ class TVTimeApp(childapp.ChildApp2):
                    'F3' : em.MIXER_MUTE,
                    's' : em.STOP }
 
-        _debug_('TVTIME 1 KEY EVENT: "%s"' % str(list(line))
+        _debug_('TVTIME 1 KEY EVENT: "%s"' % str(list(line)))
         if line == 'F10':
             _debug_('TVTIME screenshot!')
             self.write('screenshot\n')
