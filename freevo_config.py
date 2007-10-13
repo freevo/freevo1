@@ -981,7 +981,7 @@ VIDEO_SHOW_DATA_DIR = None
 VIDEO_MPLAYER_SUFFIX = [ 'avi', 'mpg', 'mpeg', 'wmv', 'bin', 'rm',
                          'divx', 'ogm', 'vob', 'asf', 'm2v', 'm2p',
                          'mp4', 'viv', 'nuv', 'mov', 'iso',
-                         'nsv', 'mkv', 'ts' ]
+                         'nsv', 'mkv', 'ts', 'flv' ]
 
 #
 # The list of filename suffixes that are used to match the files that
