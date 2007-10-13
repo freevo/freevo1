@@ -195,7 +195,7 @@ def toBarometer(baro):
 
 
 class PluginInterface(plugin.MainMenuPlugin):
-    '''
+    """
     A plugin to obtain more detailed weather forecast information
 
     To activate, put the following lines in local_conf.py:
@@ -212,7 +212,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     [metric] (1 == convert to SI Units; 0 == do not convert)
     [mapuri] is the map's url, doesn't parse the page for a map url
     [location name] is a custom name you wish to use for this location
-    '''
+    """
+
     def __init__(self):
         '''
         '''
