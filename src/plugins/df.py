@@ -60,7 +60,11 @@ class PluginInterface(plugin.ItemPlugin):
             freespacegb = freespacemb / 1024
             totalspacemb = (totalspace / 1024) / 1024
             totalspacegb = totalspacemb / 1024
-            percentage = freespace * 100.0 / totalspace
+            try:
+                percentage = freespace * 100.0 / totalspace
+            except ZeroDivisionError, e:
+                percentage = 0.0
+                print e
 
             if (totalspace == 0): # no space perhaps a bad path
                 diskfree = _( 'Bad Path' )
