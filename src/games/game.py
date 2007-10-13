@@ -44,8 +44,6 @@ import rc         # The RemoteControl class.
 import plugin
 import event as em
 
-DEBUG = config.DEBUG
-
 TRUE  = 1
 FALSE = 0
 
@@ -93,10 +91,9 @@ class Game:
             try:
                 plugin.getbyname('JOY').enable(FALSE)
             except Exception, e:
-                print 'getbyname(\'JOY\')', e
+                _debug_('getbyname(\'JOY\')', e, DWARNING)
 
-        if DEBUG:
-            print 'Game.play(): Starting thread, cmd=%s' % self.command
+        _debug_('Game.play(): Starting thread, cmd=%s' % self.command)
 
         self.app=GameApp(self.command, stop_osd=1)
         self.prev_app = rc.app()
@@ -112,7 +109,7 @@ class Game:
             try:
                 plugin.getbyname('JOY').enable(TRUE)
             except Exception, e:
-                print 'getbyname(\'JOY\')', e
+                _debug_('getbyname(\'JOY\')', e, DWARNING)
 
 
     def eventhandler(self, event, menuw=None):

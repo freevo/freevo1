@@ -42,6 +42,7 @@ import util
 from util import mediainfo, vfs, Unicode
 from gui import AlertBox
 
+
 class FileInformation:
     """
     file operations for an item
@@ -112,7 +113,7 @@ class FileInformation:
                             error_msg='Can\'t copy "%s": %s' % (f, e)
 
                 if error_msg:
-                    _debug_(error_msg, config.DWARNING)
+                    _debug_(error_msg, DWARNING)
                     #AlertBox(text=_(Unicode(error_msg))).show()
 
 
@@ -318,7 +319,7 @@ class Item:
                     if self.info[key]:
                         if not self.delete_info(key):
                             _debug_('unable to store \'%s\':\'%s\' info for \'%s\'' % \
-                                (key, value, self.filename), config.DINFO)
+                                (key, value, self.filename), DINFO)
                 else:
                     self.store_info(key, value)
                 return
@@ -335,10 +336,10 @@ class Item:
         if isinstance(self.info, mediainfo.Info):
             if not self.info.store(key, value):
                 _debug_('cannot store \'%s\':\'%s\' for \'%s\'' % \
-                    (key, value, self.filename), config.DINFO)
+                    (key, value, self.filename), DINFO)
         else:
             _debug_('cannot store \'%s\':\'%s\' for \'%s\' item, not mediainfo' % \
-                (key, value, self.filename), config.DINFO)
+                (key, value, self.filename), DINFO)
 
 
     def delete_info(self, key):

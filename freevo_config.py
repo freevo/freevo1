@@ -299,6 +299,7 @@ LOCAL_CONF_CHANGES = [
      For the webserver configuration tool the following have been changed
         PERSONAL_WWW_PAGE to WWW_PERSONAL_PAGE
         TIME_DEBUG to DEBUG_TIME
+        SKIN_DEBUG to DEBUG_SKIN
         CHILDAPP_DEBUG to DEBUG_CHILDAPP
         RECORDSERVER_LOGGING to LOGGING_RECORDSERVER
         DEFAULT_VOLUME to VOLUME_DEFAULT
@@ -2021,7 +2022,7 @@ DIRECTORY_USE_STAT_FOR_CHANGES = True
 #
 # Debug the current skin, display boxes around each area.
 #
-SKIN_DEBUG = 0
+DEBUG_SKIN = 0
 
 #
 # store output of started processes for debug

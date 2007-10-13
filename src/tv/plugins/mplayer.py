@@ -44,7 +44,6 @@ from tv.channels import FreevoChannels
 import tv.ivtv as ivtv
 import plugin
 
-DEBUG = config.DEBUG
 
 TRUE = 1
 FALSE = 0
@@ -212,7 +211,7 @@ class MPlayer:
         elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
             mixer.setPcmVolume(mixer_vol)
 
-        if DEBUG: print '%s: started %s app' % (time.time(), self.mode)
+        _debug_('%s: started %s app' % (time.time(), self.mode))
 
 
 
@@ -252,7 +251,7 @@ class MPlayer:
 
         elif event == em.PAUSE or event == em.PLAY:
             self.app.write('pause\n')
-            if DEBUG: print '%s: sending pause to mplayer' % (time.time())
+            _debug_('%s: sending pause to mplayer' % (time.time()))
             return TRUE
 
         elif event in [ em.TV_CHANNEL_UP, em.TV_CHANNEL_DOWN, em.TV_CHANNEL_LAST ] or s_event.startswith('INPUT_'):

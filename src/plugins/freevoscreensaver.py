@@ -38,8 +38,6 @@ import rc
 import event as em
 import fxditem
 
-# Set to 1 for debug output
-DEBUG = config.DEBUG
 
 TRUE = 1
 FALSE = 0

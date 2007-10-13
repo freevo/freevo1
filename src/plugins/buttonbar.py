@@ -44,8 +44,6 @@ from item import Item
 from menu import MenuItem, Menu
 from pygame import image,transform, Surface
 
-DEBUG = config.DEBUG
-
 # Create the skin_object object
 skin_object = skin.get_singleton()
 
@@ -136,7 +134,7 @@ class PluginInterface(plugin.DaemonPlugin):
                     else:
                         msgtext = _('WARNING: ')
                         msgtext+= _('"%s" is not a valid argument for the button bar. ') % actionstr
-                        _debug_(msgtext, config.DERROR)
+                        _debug_(msgtext, DERROR)
 
 
 

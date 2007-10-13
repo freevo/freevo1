@@ -100,14 +100,14 @@ class PluginInterface(IdleBarPlugin):
                     temperature,icon = newlist
                     cachefile.close()
                 except IOError:
-                    _debug_('error reading cache. Using fake weather.', config.DWARNING)
+                    _debug_('error reading cache. Using fake weather.', DWARNING)
                     try:
                         cachefile = open(self.WEATHERCACHE,'w+')
                         cachefile.write('?' + '\n')
                         cachefile.write('sun.png' + '\n')
                         cachefile.close()
                     except IOError:
-                        _debug_('You have no permission to write %s' % self.WEATHERCACHE, config.DERROR)
+                        _debug_('You have no permission to write %s' % self.WEATHERCACHE, DERROR)
                     return '0', 'sun.png'
 
 

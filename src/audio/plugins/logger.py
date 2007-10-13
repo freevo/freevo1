@@ -38,7 +38,6 @@ import util
 import os
 import time
 
-DEBUG = config.DEBUG
 
 class PluginInterface(plugin.DaemonPlugin):
     def __init__(self):

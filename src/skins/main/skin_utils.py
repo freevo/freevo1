@@ -111,7 +111,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
                     elif str(orientation) == "Rotated 90 CW":
                         item['rotation'] = 90
             except Exception, e:
-                _debug_('%s' % (e), config.DINFO)
+                _debug_('%s' % (e), DINFO)
 
         if image and item['rotation']:
             # pygame reverses the image rotation

@@ -39,7 +39,6 @@ import socket
 from twisted.web.woven import page
 from twisted.web.resource import Resource
 
-DEBUG = config.DEBUG
 TRUE = 1
 FALSE = 0
 

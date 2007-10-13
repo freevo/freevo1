@@ -48,7 +48,6 @@ from gui.OptionBox      import *
 from gui.LetterBoxGroup import *
 from gui.ConfirmBox     import ConfirmBox
 
-DEBUG = config.DEBUG
 TRUE = 1
 FALSE = 0
 

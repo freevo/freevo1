@@ -41,7 +41,6 @@ from encodingcore import ContainerCapList,VideoCodecList,AudioCodecList,VFDict
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
-DEBUG = config.DEBUG
 
 class PluginInterface(plugin.ItemPlugin):
     '''
@@ -271,7 +270,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.profile['numpasses'] = 2
             self.profile['videofilter'] = 'ipod'
         else:
-            _debug_('Unknown Profile "%s"' % (arg), config.DERROR)
+            _debug_('Unknown Profile "%s"' % (arg), DERROR)
             self.error(_('Unknown Profile')+(' "%s"' % (arg)))
             return
 
@@ -299,7 +298,7 @@ class PluginInterface(plugin.ItemPlugin):
         elif prop == 'videofilter':
             self.profile['videofilter'] = val
         else:
-            _debug_('Unknown property "%s"' % (prop), config.DERROR)
+            _debug_('Unknown property "%s"' % (prop), DERROR)
             self.error(_('Unknown Property')+(' "%s"' % (prop)))
             return
 

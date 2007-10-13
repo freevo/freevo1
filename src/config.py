@@ -419,8 +419,12 @@ def _debug_function_(s, level=1):
         lock.release()
 
 
-__builtin__.__dict__['_debug_']= _debug_function_
-__builtin__.__dict__['_stack_']= _stack_function_
+__builtin__.__dict__['_debug_'] = _debug_function_
+__builtin__.__dict__['_stack_'] = _stack_function_
+__builtin__.__dict__['DCRITICAL'] = DCRITICAL
+__builtin__.__dict__['DERROR'] = DERROR
+__builtin__.__dict__['DWARNING'] = DWARNING
+__builtin__.__dict__['DINFO'] = DINFO
 
 
 #

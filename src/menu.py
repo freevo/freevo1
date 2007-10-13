@@ -42,7 +42,6 @@ from event import *
 from item import Item
 from gui import GUIObject, AlertBox
 
-DEBUG = config.DEBUG
 
 class MenuItem(Item):
     """
@@ -312,7 +311,7 @@ class MenuWidget(GUIObject):
         level = 0
         for mediaitem in media.split('.'):
             for menuitem in self.menustack[level].choices:
-                if DEBUG:
+                if config.DEBUG:
                     try:
                         print 'menuitem=%s' % menuitem
                     except:

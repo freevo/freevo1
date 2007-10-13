@@ -53,9 +53,6 @@ from tv.channels import FreevoChannels
 
 import plugin
 
-# Set to 1 for debug output
-DEBUG = config.DEBUG
-
 # Create the OSD object
 osd = osd.get_singleton()
 
@@ -488,7 +485,7 @@ class TVTime:
         elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
             mixer.setPcmVolume(mixer_vol)
 
-        if DEBUG: print '%s: started %s app' % (time.time(), self.mode)
+        _debug_('%s: started %s app' % (time.time(), self.mode))
 
 
     def Stop(self, channel_change=0):
@@ -599,18 +596,18 @@ class TVTimeApp(childapp.ChildApp2):
                    'F3' : em.MIXER_MUTE,
                    's' : em.STOP }
 
-        if DEBUG: print 'TVTIME 1 KEY EVENT: "%s"' % str(list(line))
+        _debug_('TVTIME 1 KEY EVENT: "%s"' % str(list(line))
         if line == 'F10':
-            if DEBUG: print 'TVTIME screenshot!'
+            _debug_('TVTIME screenshot!')
             self.write('screenshot\n')
         elif line == 'z':
-            if DEBUG: print 'TVTIME fullscreen toggle!'
+            _debug_('TVTIME fullscreen toggle!')
             self.write('toggle_fullscreen\n')
             osd.toggle_fullscreen()
         else:
             event = events.get(line, None)
             if event is not None:
                 rc.post_event(event)
-                if DEBUG: print 'posted translated tvtime event "%s"' % event
+                _debug_('posted translated tvtime event "%s"' % event)
             else:
-                if DEBUG: print 'tvtime cmd "%s" not found!' % line
+                _debug_('tvtime cmd "%s" not found!' % line)

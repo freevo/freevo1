@@ -34,9 +34,6 @@ import os
 import config
 import game
 
-# Set to 1 for debug output
-DEBUG = config.DEBUG
-
 TRUE  = 1
 FALSE = 0
 

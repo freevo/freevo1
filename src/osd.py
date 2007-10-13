@@ -142,7 +142,7 @@ def restart():
 
 class Font:
     def __init__(self, filename='', ptsize=0, font=None):
-        _debug_('deprecated font object use', config.DWARNING)
+        _debug_('deprecated font object use', DWARNING)
         self.filename = filename
         self.ptsize   = ptsize
         self.font     = font
@@ -221,8 +221,8 @@ class OSDFont:
             # not good
             global font_warning
             if not fontname in font_warning:
-                _debug_('No alternate found in the alias list!', config.DWARNING)
-                _debug_('Falling back to default font, this may look very ugly', config.DWARNING)
+                _debug_('No alternate found in the alias list!', DWARNING)
+                _debug_('Falling back to default font, this may look very ugly', DWARNING)
                 font_warning.append(fontname)
             font = self.__loadfont__(config.OSD_DEFAULT_FONTNAME, ptsize)
 
@@ -642,7 +642,7 @@ class OSD:
                 filename = os.path.join(config.IMAGE_DIR, url[8:])
 
             if not os.path.isfile(filename):
-                _debug_('Bitmap file "%s" doesn\'t exist!' % filename, config.DWARNING)
+                _debug_('Bitmap file "%s" doesn\'t exist!' % filename, DWARNING)
                 #raise 'Bitmap file'
                 return None
 
@@ -669,12 +669,12 @@ class OSD:
                     try:
                         image = pygame.image.load(filename)
                     except pygame.error, e:
-                        _debug_('SDL image load problem: %s - trying Imaging' % e, config.DINFO)
+                        _debug_('SDL image load problem: %s - trying Imaging' % e, DINFO)
                         i = Image.open(filename)
                         image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
 
             except:
-                _debug_('Problem while loading image "%s"' % String(url), config.DWARNING)
+                _debug_('Problem while loading image "%s"' % String(url), DWARNING)
                 if config.DEBUG:
                     traceback.print_exc()
                 return None
@@ -966,7 +966,7 @@ class OSD:
                         alpha[x,y] = int(alpha[x,y][0]*opaque_mod)
                 opaque_mod -= opaque_stp
         except Exception, e:
-            _debug_('__draw_transparent_text__: %s' % e, config.DERROR)
+            _debug_('__draw_transparent_text__: %s' % e, DERROR)
 
 
     def drawstringframed(self, string, x, y, width, height, font, fgcolor=None,
@@ -1186,7 +1186,7 @@ class OSD:
                         layer.blit(render, (x0, y0))
 
                 except Exception, e:
-                    _debug_('Render failed, skipping \'%s\': %s' % (l, e), config.DERROR)
+                    _debug_('Render failed, skipping \'%s\': %s' % (l, e), DERROR)
                     if config.DEBUG:
                         traceback.print_exc()
 

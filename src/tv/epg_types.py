@@ -223,9 +223,7 @@ class TvGuide:
                 # the tv guide is corrupt, the last entry has a stop time higher than
                 # the next start time. Correct that by reducing the stop time of
                 # the last entry
-                if config.DEBUG > 1:
-                    print 'wrong stop time: %s' % \
-                          String(self.chan_dict[program.channel_id].programs[-1])
+                _debug_('wrong stop time: %s' % String(self.chan_dict[program.channel_id].programs[-1]))
                 self.chan_dict[program.channel_id].programs[-1].stop = program.start
 
             if len(p) and p[-1].start == p[-1].stop:
@@ -256,7 +254,7 @@ class TvGuide:
             time.time() < cache_last_time):
             if config.DEBUG > 1:
                 a = cache_last_time - time.time()
-                print 'epg: Returning cached results, valid for %1.1f secs.' % a
+                _debug_('epg: Returning cached results, valid for %1.1f secs.' % a)
             return cache_last_result[:]  # Return a copy
 
         channels = []
@@ -286,8 +284,7 @@ class TvGuide:
             cache_last_chanids = None
         cache_last_timeout = time.time() + 20
         cache_last_result = channels[:] # Make a copy in case the caller modifies it
-        if config.DEBUG > 1:
-            print 'epg: Returning new results'
+        _debug_('epg: Returning new results')
 
         return channels
 

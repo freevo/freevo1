@@ -38,9 +38,6 @@ import config
 # changes are made to the file format.
 TYPES_VERSION = 2
 
-# Set to 1 for debug output
-DEBUG = config.DEBUG
-
 TRUE = 1
 FALSE = 0
 

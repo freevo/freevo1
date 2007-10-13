@@ -507,7 +507,7 @@ class WeatherItem(Item):
         try:
             size = int(os.stat(self.mapFile)[6])
         except Exception, error:
-            _debug_('failed loading weather map for "%s" from cache: %s' % (self.location, error), config.DWARNING)
+            _debug_('failed loading weather map for "%s" from cache: %s' % (self.location, error), DWARNING)
             pass
         else:
             imgfd = os.open(self.mapFile, os.R_OK)

@@ -107,8 +107,7 @@ class Playlist(Item):
 
         (curdir, playlistname) = os.path.split(plsname)
         for line in playlist_lines:
-            if line.endswith('\r\n'):
-                line = line.replace('\\', '/') # Fix MSDOS slashes
+            line = line.replace('\\', '/') # Fix MSDOS slashes
             try:
                 if os.path.exists(os.path.join(curdir,line)):
                     self.playlist.append(os.path.join(curdir,line))

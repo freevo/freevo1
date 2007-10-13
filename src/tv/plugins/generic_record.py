@@ -44,8 +44,6 @@ import util.tv_util as tv_util
 from event import *
 from tv.channels import FreevoChannels
 
-DEBUG = config.DEBUG
-
 
 class PluginInterface(plugin.Plugin):
     def __init__(self):
@@ -61,7 +59,7 @@ class Recorder:
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
 
-        _debug_('ACTIVATING GENERIC RECORD PLUGIN', config.DINFO)
+        _debug_('ACTIVATING GENERIC RECORD PLUGIN', DINFO)
 
         self.fc = FreevoChannels()
         self.thread = Record_Thread()
@@ -111,7 +109,7 @@ class Recorder:
 class RecordApp(childapp.ChildApp):
 
     def __init__(self, app):
-        if DEBUG:
+        if config.DEBUG:
             fname_out = os.path.join(config.FREEVO_LOGDIR, 'recorder_stdout.log')
             fname_err = os.path.join(config.FREEVO_LOGDIR, 'recorder_stderr.log')
             try:
@@ -119,12 +117,12 @@ class RecordApp(childapp.ChildApp):
                 self.log_stderr = open(fname_err, 'a')
             except IOError:
                 _debug_('Cannot open "%s" and "%s" for record logging!' % \
-                    (fname_out, fname_err), config.DERROR)
+                    (fname_out, fname_err), DERROR)
                 print
                 print 'Please set DEBUG=0 or start Freevo from a directory that is writeable!'
                 print
             else:
-                _debug_('Record logging to "%s" and "%s"' % (fname_out, fname_err), config.DINFO)
+                _debug_('Record logging to "%s" and "%s"' % (fname_out, fname_err), DINFO)
 
         childapp.ChildApp.__init__(self, app)
 
@@ -132,7 +130,7 @@ class RecordApp(childapp.ChildApp):
     def kill(self):
         childapp.ChildApp.kill(self, signal.SIGINT)
 
-        if DEBUG:
+        if config.DEBUG:
             self.log_stdout.close()
             self.log_stderr.close()
 

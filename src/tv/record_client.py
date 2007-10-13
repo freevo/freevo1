@@ -152,7 +152,7 @@ def findMatches(find='', movies_only=0):
     try:
         (status, response) = server.findMatches(find, movies_only)
     except Exception, e:
-        _debug_('Search error for \'%s\' %s' % (find, e), config.DWARNING)
+        _debug_('Search error for \'%s\' %s' % (find, e), DWARNING)
         return (FALSE, 'record_client: '+_('connection error'))
 
     return returnFromJelly(status, response)
@@ -173,7 +173,7 @@ def addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, on
             server.addEditedFavorite(jellyToXML(name), \
             jellyToXML(title), chan, dow, mod, priority, allowDuplicates, onlyNew)
     except Exception, e:
-        _debug_('%s' % e, config.DERROR)
+        _debug_('%s' % e, DERROR)
         traceback.print_exc()
         return (FALSE, 'record_client: '+_('connection error'))
 
@@ -317,7 +317,7 @@ if __name__ == '__main__':
                 # it is important to show the user this error,
                 # because that means the favorite is removed,
                 # and must be created again
-                _debug_('Save Failed, favorite was lost: %s' % (msg), config.DWARNING)
+                _debug_('Save Failed, favorite was lost: %s' % (msg), DWARNING)
             else:
                 _debug_('Ok!')
                 (result, response) = updateFavoritesSchedule()

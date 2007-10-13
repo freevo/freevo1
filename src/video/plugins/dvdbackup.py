@@ -34,7 +34,6 @@ from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 import config
 
-DEBUG=config.DEBUG
 
 class PluginInterface(plugin.ItemPlugin):
     """
@@ -47,7 +46,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def actions(self, item):
-        if DEBUG >= 2:
+        if config.DEBUG >= 2:
             #testing stuff
             if hasattr(item, 'type'):
                 _debug_('item.type=\"%s\"' % (item.type))

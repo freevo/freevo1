@@ -44,8 +44,6 @@ from tv.channels import FreevoChannels
 
 import plugin
 
-# Set to 1 for debug output
-DEBUG = config.DEBUG
 
 class PluginInterface(plugin.Plugin):
     """
@@ -208,7 +206,7 @@ class Xawtv:
         elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
             mixer.setPcmVolume(mixer_vol)
 
-        if DEBUG: print '%s: started %s app' % (time.time(), self.mode)
+        _debug_('%s: started %s app' % (time.time(), self.mode))
 
 
     def Stop(self, channel_change=0):

@@ -40,7 +40,6 @@ from util.marmalade import jellyToXML, unjellyFromXML
 from gui import Progressbar
 import rc
 
-DEBUG=config.DEBUG
 
 def returnFromJelly(status, response):
     '''Un-serialize EncodingServer responses'''

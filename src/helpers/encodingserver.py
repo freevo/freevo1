@@ -96,7 +96,7 @@ class EncodingServer(xmlrpc.XMLRPC):
 
         self.queue = EncodingQueue(log, DEBUG)
 
-        _debug_("EncodingServer started...", config.DINFO)
+        _debug_("EncodingServer started...", DINFO)
 
     def xmlrpc_echotest(self, blah):
         _debug_("xmlrpc_echotest(self, blah)", 3)
@@ -118,7 +118,7 @@ class EncodingServer(xmlrpc.XMLRPC):
         while not self.jobs[idnr].finishedanalyze:
             time.sleep(0.1)
 
-        _debug_("Initialized job %s (idnr : %s)" % (friendlyname,idnr), config.DINFO)
+        _debug_("Initialized job %s (idnr : %s)" % (friendlyname,idnr), DINFO)
 
         return (True, idnr)
 
@@ -192,7 +192,7 @@ class EncodingServer(xmlrpc.XMLRPC):
         _debug_("xmlrpc_queueIt(self, idnr, now=False)", 3)
         self.queue.addEncodingJob(self.jobs[idnr])
         del self.jobs[idnr]
-        _debug_("Added job %s to the queue" % idnr, config.DINFO)
+        _debug_("Added job %s to the queue" % idnr, DINFO)
         if now:
             self.queue.startQueue()
         return (True, "EncodingServer::queueIt: OK")
@@ -227,7 +227,7 @@ def main():
         encodingcore.DEBUG=True
     else:
         es = EncodingServer()
-    _debug_('main: DEBUG=%s' % DEBUG, config.DINFO)
+    _debug_('main: DEBUG=%s' % DEBUG, DINFO)
     if (DEBUG == 0):
         app.listenTCP(config.ENCODINGSERVER_PORT, server.Site(es, logPath='/dev/null'))
     else:
@@ -245,5 +245,5 @@ if __name__ == '__main__':
         except:
             traceback.print_exc()
             if start + 10 > time.time():
-                _debug_('server problem, sleeping 1 min', config.DINFO)
+                _debug_('server problem, sleeping 1 min', DINFO)
                 time.sleep(60)

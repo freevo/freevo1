@@ -53,8 +53,6 @@ if float(sys.version[0:3]) < 2.3:
 else:
     import _strptime as strptime
 
-DEBUG = config.DEBUG
-
 
 class ManualRecordItem(Item):
     def __init__(self, parent):

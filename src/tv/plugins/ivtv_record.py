@@ -46,7 +46,6 @@ from event import Event
 from tv.channels import FreevoChannels
 import tv.v4l2 as V4L2
 
-DEBUG = config.DEBUG
 
 CHUNKSIZE = 65536
 
@@ -64,7 +63,7 @@ class Recorder:
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
 
-        _debug_('ACTIVATING IVTV RECORD PLUGIN', config.DINFO)
+        _debug_('ACTIVATING IVTV RECORD PLUGIN', DINFO)
 
         self.thread = Record_Thread()
         self.thread.setDaemon(1)
@@ -80,7 +79,7 @@ class Recorder:
         self.thread.prog = rec_prog
         self.thread.mode_flag.set()
 
-        _debug_('Recorder::Record: %s' % rec_prog, config.DINFO)
+        _debug_('Recorder::Record: %s' % rec_prog, DINFO)
 
 
     def Stop(self):
@@ -109,7 +108,7 @@ class Record_Thread(threading.Thread):
 
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
-                _debug_('Record_Thread::run: started recording', config.DINFO)
+                _debug_('Record_Thread::run: started recording', DINFO)
 
                 fc = FreevoChannels()
                 _debug_('CHAN: %s' % fc.getChannel())
@@ -131,7 +130,7 @@ class Record_Thread(threading.Thread):
                         v.setstd(new_std)
                 except:
                     _debug_("Videogroup norm value '%s' not from NORMS: %s" % \
-                        (vg.tuner_norm, V4L2.NORMS.keys()), config.DERROR)
+                        (vg.tuner_norm, V4L2.NORMS.keys()), DERROR)
                 _debug_('Setting Channel to %s' % self.prog.tunerid)
                 fc.chanSet(str(self.prog.tunerid), False)
 
@@ -164,7 +163,7 @@ class Record_Thread(threading.Thread):
                 self.mode = 'idle'
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))
-                _debug_('Record_Thread::run: finished recording', config.DINFO)
+                _debug_('Record_Thread::run: finished recording', DINFO)
 
             else:
                 self.mode = 'idle'

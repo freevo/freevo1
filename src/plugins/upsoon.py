@@ -105,7 +105,7 @@ class PluginInterface(plugin.DaemonPlugin):
             (status, message) = self.server.findNextProgram()
             _debug_('status=%s, message=%s' % (status, message), 2)
         except TypeError, e:
-            _debug_('findNextProgram:%s' % e, config.DINFO)
+            _debug_('findNextProgram:%s' % e, DINFO)
             status = False
             pass
         except Exception, e:

@@ -51,8 +51,6 @@ from gui.AlertBox import AlertBox
 from gui.InputBox import InputBox
 from tv.record_types import Favorite
 
-DEBUG = config.DEBUG
-
 # Create the skin_object object
 import skin
 skin_object = skin.get_singleton()
@@ -371,33 +369,27 @@ class FavoriteItem(Item):
                                     action=self.mod_time))
 
         if config.DUPLICATE_DETECTION:
-            items.append(menu.MenuItem(_('Modify duplicate flag'),
-                                        action=self.mod_dup))
+            items.append(menu.MenuItem(_('Modify duplicate flag'), action=self.mod_dup))
 
         if config.ONLY_NEW_DETECTION:
-            items.append(menu.MenuItem(_('Modify episodes flag'),
-                                         action=self.mod_new))
+            items.append(menu.MenuItem(_('Modify episodes flag'), action=self.mod_new))
 
         # XXX: priorities aren't quite supported yet
         if 0:
             (got_favs, favs) = record_client.getFavorites()
             if got_favs and len(favs) > 1:
-                items.append(menu.MenuItem(_('Modify priority'),
-                                           action=self.mod_priority))
+                items.append(menu.MenuItem(_('Modify priority'), action=self.mod_priority))
 
 
         ### save favorite
-        items.append(menu.MenuItem(_('Save changes'),
-                                    action=self.save_changes))
+        items.append(menu.MenuItem(_('Save changes'), action=self.save_changes))
 
         ### remove this program from favorites
         if not self.fav_action == 'add':
-            items.append(menu.MenuItem(_('Remove favorite'),
-                                       action=self.rem_favorite))
+            items.append(menu.MenuItem(_('Remove favorite'), action=self.rem_favorite))
 
         ### put the whole menu together
-        favorite_menu = menu.Menu(_('Favorite Menu'), items,
-                                  item_types = 'tv favorite menu')
+        favorite_menu = menu.Menu(_('Favorite Menu'), items, item_types = 'tv favorite menu')
 
         favorite_menu.infoitem = self
         menuw.pushmenu(favorite_menu)
@@ -591,12 +583,10 @@ class FavoriteItem(Item):
 
         if result:
             # create a new edited favorite
-            if not config.DUPLICATE_DETECTION or not hasattr(self.fav,
-                                                             'allowDuplicates'):
+            if not config.DUPLICATE_DETECTION or not hasattr(self.fav, 'allowDuplicates'):
                 self.fav.allowDuplicates = 1
 
-            if not config.ONLY_NEW_DETECTION or not hasattr(self.fav,
-                                                           'onlyNew'):
+            if not config.ONLY_NEW_DETECTION or not hasattr(self.fav, 'onlyNew'):
                 self.fav.onlyNew = 0
 
             (result, msg) = record_client.addEditedFavorite(self.fav.name,

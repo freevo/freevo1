@@ -37,9 +37,6 @@ import util
 import game
 import rc
 
-# Set to 1 for debug output
-DEBUG = config.DEBUG
-
 TRUE  = 1
 FALSE = 0
 
@@ -81,7 +78,7 @@ class MameItem(Item):
         if os.path.isfile(file + '.mame'):
             addargs = open(filename + '.mame').read().strip()
             command.extend(addargs.split())
-            if DEBUG: print 'Read additional options = "%s"' % addargs
+            _debug_('Read additional options = "%s"' % addargs)
 
         command.append(file)
 
@@ -117,7 +114,7 @@ class MameItem(Item):
         if self.menuw.visible:
             self.menuw.hide()
 
-        print "Playing:  %s" % self.filename
+        _debug_("Playing:  %s" % self.filename)
 
         self.game_player.play(self, menuw)
 

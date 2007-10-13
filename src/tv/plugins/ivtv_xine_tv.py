@@ -60,10 +60,8 @@ from event import *
 from gui.AlertBox import AlertBox
 from tv.channels import FreevoChannels
 
-DEBUG = config.DEBUG
 
 # guard important config variables
-
 if not config.XINE_TV_VO_DEV:
     config.XINE_TV_VO_DEV = config.XINE_VO_DEV
     _debug_("XINE_TV_VO_DEV set to config.XINE_VO_DEV")

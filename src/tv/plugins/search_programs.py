@@ -111,13 +111,13 @@ class SearchPrograms(Item):
     def findMatches(self, find=None, movies_only=None):
         global guide
 
-        _debug_('findMatches: %s' % find, config.DINFO)
+        _debug_('findMatches: %s' % find, DINFO)
 
         matches = []
         max_results = 500
 
         if not find and not movies_only:
-            _debug_('nothing to find', config.DINFO)
+            _debug_('nothing to find', DINFO)
             return (FALSE, 'no search string')
 
         self.updateGuide()
@@ -137,16 +137,16 @@ class SearchPrograms(Item):
                         # rating.  Suggestions are welcome.
                         if 'MPAA' in prog.getattr('ratings').keys():
                             matches.append(prog)
-                            _debug_('PROGRAM MATCH 2: %s' % prog, config.DINFO)
+                            _debug_('PROGRAM MATCH 2: %s' % prog, DINFO)
                     else:
                         # We should never get here if not find and not
                         # movies_only.
                         matches.append(prog)
-                        _debug_('PROGRAM MATCH 3: %s' % prog, config.DINFO)
+                        _debug_('PROGRAM MATCH 3: %s' % prog, DINFO)
                 if len(matches) >= max_results:
                     break
 
-        _debug_('Found %d matches.' % len(matches), config.DINFO)
+        _debug_('Found %d matches.' % len(matches), DINFO)
 
         if matches:
             return (TRUE, matches)

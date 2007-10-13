@@ -34,9 +34,6 @@ import os
 import config
 import game
 
-# Set to 1 for debug output
-DEBUG = config.DEBUG
-
 TRUE  = 1
 FALSE = 0
 
@@ -102,7 +99,7 @@ class GenericItem(Item):
         if self.menuw.visible:
             self.menuw.hide()
 
-        print "Playing:  %s" % self.filename
+        _debug_("Playing:  %s" % self.filename)
 
         self.game_player.play(self, menuw)
 

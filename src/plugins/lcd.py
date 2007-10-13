@@ -789,8 +789,8 @@ class PluginInterface( plugin.DaemonPlugin ):
             return
 
         if config.DEBUG > 0:
-            print String(_( "Connecting to LCD: %s" )) % cm
-            print String(_( "Info as known by the LCD module:" ))
+            print "Connecting to LCD: %s" % cm
+            print "Info as known by the LCD module:"
             self.lcd.getinfo()
             print ""
 
@@ -1010,10 +1010,10 @@ class PluginInterface( plugin.DaemonPlugin ):
             try:
                 screens = layouts[ l ]
             except KeyError:
-                _debug_("Could not find screens for %d lines LCD!" % (l), config.DWARNING)
+                _debug_("Could not find screens for %d lines LCD!" % (l), DWARNING)
                 l -= 1
                 if l < 1:
-                    _debug_("No screens found for this LCD (%dx%d)!" % (self.height, self.width), config.DERROR)
+                    _debug_("No screens found for this LCD (%dx%d)!" % (self.height, self.width), DERROR)
                     self.disable = 1
                     return
         # find a display with 'l' line and 'c' columns
@@ -1021,10 +1021,10 @@ class PluginInterface( plugin.DaemonPlugin ):
             try:
                 screens = layouts[ l ][ c ]
             except KeyError:
-                _debug_("Could not find screens for %d lines and %d columns LCD!" % (l, c), config.DWARNING)
+                _debug_("Could not find screens for %d lines and %d columns LCD!" % (l, c), DWARNING)
                 c -= 1
                 if c < 1:
-                    _debug_("No screens found for this LCD (%dx%d)!" % (self.height, self.width), config.DERROR)
+                    _debug_("No screens found for this LCD (%dx%d)!" % (self.height, self.width), DERROR)
                     self.disable = 1
                     return
 
@@ -1035,8 +1035,8 @@ class PluginInterface( plugin.DaemonPlugin ):
             self.screens = screens = layouts[ l ][ c ]
         except KeyError:
             _debug_("Could not find screens for %d lines and %d columns LCD!" % \
-                (self.height, self.width), config.DWARNING)
-            _debug_("No screens found for this LCD (%dx%d)!" % (self.height, self.width), config.DERROR)
+                (self.height, self.width), DWARNING)
+            _debug_("No screens found for this LCD (%dx%d)!" % (self.height, self.width), DERROR)
             self.disable = 1
             return
 

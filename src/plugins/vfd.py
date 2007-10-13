@@ -466,7 +466,7 @@ class PluginInterface(plugin.DaemonPlugin):
         elif screen == "tv":
             self.set_device(Television)
         else:
-            _debug_('unknown screen screen=%s, widget=%s, value=%s' % (screen, widget, value), config.DERROR)
+            _debug_('unknown screen screen=%s, widget=%s, value=%s' % (screen, widget, value), DERROR)
 
         if widget == "title":
             pass
@@ -497,7 +497,7 @@ class PluginInterface(plugin.DaemonPlugin):
         elif widget == "calendar":
             pass
         else:
-            _debug_('ERROR: unknown widget screen=%s, widget=%s, value=%s' % (screen, widget, value), config.DERROR)
+            _debug_('ERROR: unknown widget screen=%s, widget=%s, value=%s' % (screen, widget, value), DERROR)
         self.icons()
 
     def __init__(self):
@@ -524,10 +524,10 @@ class PluginInterface(plugin.DaemonPlugin):
                 for (self.vendorID, self.productID) in self.usbIDs:
                     if dev.idVendor == self.vendorID and dev.idProduct == self.productID:
                         self.vfd = dev.open()
-                        _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), config.DINFO)
+                        _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), DINFO)
 
         if not self.vfd:
-            _debug_("Cannot find VFD device", config.DERROR)
+            _debug_("Cannot find VFD device", DERROR)
             self.disable = 1
             self.reason = "Cannot find VFD device"
             return
@@ -536,7 +536,7 @@ class PluginInterface(plugin.DaemonPlugin):
         # We need a mixer to set the volume level
         self.mixer = plugin.getbyname('MIXER')
         if not self.mixer:
-            _debug_("Cannot find MIXER", config.DERROR)
+            _debug_("Cannot find MIXER", DERROR)
             self.disable = 1
             self.reason = "Cannot find MIXER"
             return
@@ -738,10 +738,10 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 screens = layouts[ l ]
             except KeyError:
-                _debug_("Could not find screens for %d lines VFD!" % l, config.DERROR)
+                _debug_("Could not find screens for %d lines VFD!" % l, DERROR)
                 l -= 1
                 if l < 1:
-                    _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), config.DERROR)
+                    _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), DERROR)
                     self.disable = 1
                     return
         # find a display with 'l' line and 'c' columns
@@ -749,10 +749,10 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 screens = layouts[ l ][ c ]
             except KeyError:
-                _debug_("Could not find screens for %d lines and %d columns VFD!" % (l, c), config.DERROR)
+                _debug_("Could not find screens for %d lines and %d columns VFD!" % (l, c), DERROR)
                 c -= 1
                 if c < 1:
-                    _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), config.DERROR)
+                    _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), DERROR)
                     self.disable = 1
                     return
 
@@ -762,7 +762,7 @@ class PluginInterface(plugin.DaemonPlugin):
         try:
             self.screens = screens = layouts[ l ][ c ]
         except KeyError:
-            _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), config.DERROR)
+            _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), DERROR)
             self.disable = 1
             return
 

@@ -76,7 +76,7 @@ class CommDetectServer(xmlrpc.XMLRPC):
     def __init__(self, debug=False):
         self.jobs = {}
         self.queue = CommDetectQueue(log, DEBUG)
-        _debug_("CommDetectServer started...", config.DINFO)
+        _debug_("CommDetectServer started...", DINFO)
 
     def xmlrpc_echotest(self, blah):
         _debug_("xmlrpc_echotest(self, blah)", 3)
@@ -90,14 +90,14 @@ class CommDetectServer(xmlrpc.XMLRPC):
         idnr = int((time.time() / random.random()) / 100)
         _debug_("idnr=%s" % (idnr), 2)
         self.jobs[idnr] = CommDetectJob(source,idnr)
-        _debug_("Initialized job %s (idnr : %s)" % (source,idnr), config.DINFO)
+        _debug_("Initialized job %s (idnr : %s)" % (source,idnr), DINFO)
         return (True, idnr)
 
     def xmlrpc_queueIt(self, idnr, now=False):
         _debug_("xmlrpc_queueIt(self, idnr, now=False)", 3)
         self.queue.addCommDetectJob(self.jobs[idnr])
         del self.jobs[idnr]
-        _debug_("Added job %s to the queue" % idnr, config.DINFO)
+        _debug_("Added job %s to the queue" % idnr, DINFO)
         if now:
             self.queue.startQueue()
         return (True, "CommDetectServer::queueIt: OK")
@@ -124,7 +124,7 @@ def main():
         commdetectcore.DEBUG=True
     else:
         es = CommDetectServer()
-    _debug_('main: DEBUG=%s' % DEBUG, config.DINFO)
+    _debug_('main: DEBUG=%s' % DEBUG, DINFO)
     if (DEBUG == 0):
         app.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(es, logPath='/dev/null'))
     else:
@@ -141,5 +141,5 @@ if __name__ == '__main__':
         except:
             traceback.print_exc()
             if start + 10 > time.time():
-                _debug_('server problem, sleeping 1 min', config.DINFO)
+                _debug_('server problem, sleeping 1 min', DINFO)
                 time.sleep(60)

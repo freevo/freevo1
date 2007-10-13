@@ -113,14 +113,14 @@ class ChildApp:
         try:
             self.stdout_log = doeslogging and open(stdout_logger, 'w') or None
         except OSError, e:
-            _debug_('Cannot open "%s": %s' % (stdout_logger, e), config.DWARNING)
+            _debug_('Cannot open "%s": %s' % (stdout_logger, e), DWARNING)
             self.stdout_log = None
 
         stderr_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stderr-%s.log' % (debug_name, os.getuid()))
         try:
             self.stderr_log = doeslogging and open(stderr_logger, 'w') or None
         except OSError, e:
-            _debug_('Cannot open "%s": %s' % (stderr_logger, e), config.DWARNING)
+            _debug_('Cannot open "%s": %s' % (stderr_logger, e), DWARNING)
             self.stderr_log = None
 
         command_isstr = isinstance(command, str)
@@ -138,7 +138,7 @@ class ChildApp:
                 command_isstr and 'str' or 'list', command_str, command_shell and ' in shell' or '', \
                 self.child.pid, prio), 1)
         except OSError, e:
-            _debug_('Cannot run "%s": %s' % (command_str, e), config.DERROR)
+            _debug_('Cannot run "%s": %s' % (command_str, e), DERROR)
             self.ready = False
             return
 
@@ -287,7 +287,7 @@ class ChildApp:
                             break
                         time.sleep(0.1)
                     else:
-                        _debug_('PANIC can\'t kill program', config.DERROR)
+                        _debug_('PANIC can\'t kill program', DERROR)
         finally:
             self.lock.release()
         if not self.child.stdin.closed: self.child.stdin.close()

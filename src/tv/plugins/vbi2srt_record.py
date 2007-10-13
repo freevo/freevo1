@@ -56,7 +56,6 @@ import util.tv_util as tv_util
 from event import *
 from tv.channels import FreevoChannels
 
-DEBUG = config.DEBUG
 
 
 class PluginInterface(plugin.Plugin):
@@ -103,7 +102,7 @@ class Recorder:
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
 
-        _debug_('ACTIVATING VBI2SRT RECORD PLUGIN', config.DINFO)
+        _debug_('ACTIVATING VBI2SRT RECORD PLUGIN', DINFO)
 
         self.vg = None
         self.fc = FreevoChannels()
@@ -188,12 +187,12 @@ class RecordApp(childapp.ChildApp):
                 self.log_stderr = open(fname_err, 'a')
             except IOError:
                 _debug_('Cannot open "%s" and "%s" for record logging!' % \
-                    (fname_out, fname_err), config.DERROR)
+                    (fname_out, fname_err), DERROR)
                 print
                 print 'Please set DEBUG=0 or start Freevo from a directory that is writeable!'
                 print
             else:
-                _debug_('Record logging to "%s" and "%s"' % (fname_out, fname_err), config.DINFO)
+                _debug_('Record logging to "%s" and "%s"' % (fname_out, fname_err), DINFO)
 
         childapp.ChildApp.__init__(self, app)
 

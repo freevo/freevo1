@@ -39,8 +39,6 @@ import sys
 
 import config
 
-DEBUG = config.DEBUG
-
 # Different formats depending on word size
 bit32 = struct.calcsize('L') == struct.calcsize('I')
 
@@ -427,7 +425,7 @@ class Videodev:
             _debug_('getextctrl: extctrl=%r, %d, extres=%s' % (extctrl.tostring(), len(extctrl), extres), 3)
         except IOError, e:
             extres = struct.unpack(EXT_CTRL_ST, extctrl.tostring())
-            _debug_('getextctrl(%s)=%s' % (id, e), config.DWARNING)
+            _debug_('getextctrl(%s)=%s' % (id, e), DWARNING)
         return extres[3]
 
 
@@ -446,7 +444,7 @@ class Videodev:
             _debug_('setextctrl: val=%r, %d, res=%r' % (val, len(val), res), 3)
             _debug_('setextctrl: extctrl=%r, %d, extres=%s' % (extctrl.tostring(), len(extctrl), extres), 3)
         except IOError, e:
-            _debug_('setextctrl(%s) %r: %s' % (id, self.findcontrol(id), e), config.DWARNING)
+            _debug_('setextctrl(%s) %r: %s' % (id, self.findcontrol(id), e), DWARNING)
 
 
     def querymenu(self, id, index):
@@ -568,7 +566,7 @@ class Videodev:
         '''
         key = self.ctrlname(name)
         if not self.controls.has_key(key):
-            _debug_('control \"%s\" does not exists' % (name), config.DWARNING)
+            _debug_('control \"%s\" does not exists' % (name), DWARNING)
             return None
         (id, type, name, min, max, step, default, flags, value) = self.controls[key]
         return value
@@ -580,7 +578,7 @@ class Videodev:
         '''
         key = self.ctrlname(name)
         if not self.controls.has_key(key):
-            _debug_('control \"%s\" does not exists' % (name), config.DWARNING)
+            _debug_('control \"%s\" does not exists' % (name), DWARNING)
             return None
         (id, type, name, min, max, step, default, flags, oldvalue) = self.controls[key]
         self.controls[key] = (id, type, name, min, max, step, default, flags, value)

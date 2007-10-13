@@ -44,7 +44,6 @@ from gui import ConfirmBox
 from gui.AlertBox import AlertBox
 import tv.record_client as record_client
 
-DEBUG = config.DEBUG
 
 # Exception handling classes
 class ExInternalError : pass
@@ -556,7 +555,7 @@ def __schedule_wakeup_and_shutdown():
                 config.AUTOSHUTDOWN_NVRAM_OPT, int(wakeup_utc_s))
             ec = __syscall(cmd)
             if  ec != 256 and ec != 0 :
-                _debug_("Wakeup-command command '%s' failed!" % cmd, config.DERROR)
+                _debug_("Wakeup-command command '%s' failed!" % cmd, DERROR)
                 raise ExInternalError
             elif ec == 256 or config.AUTOSHUTDOWN_BIOS_NEEDS_REBOOT:
                 # needs a reboot

@@ -680,7 +680,7 @@ class EncodingQueue:
         """Start the queue"""
         if not self.running:
             self.running = True
-            _debug_('queue started', config.DINFO)
+            _debug_('queue started', DINFO)
             self._runQueue()
 
     def listJobs(self):
@@ -708,7 +708,7 @@ class EncodingQueue:
             self.running = False
             if hasattr(self, 'currentjob'):
                 del self.currentjob
-            _debug_('queue empty, stopping processing...', config.DINFO)
+            _debug_('queue empty, stopping processing...', DINFO)
             return
 
         _debug_('runQueue callback data : %s' % line)
@@ -718,7 +718,7 @@ class EncodingQueue:
         _debug_('PID %s' % self.currentjob.pid)
 
         if self.currentjob.status == status.vpassfinal:
-            _debug_('Job %s finished' % self.currentjob.idnr, config.DINFO)
+            _debug_('Job %s finished' % self.currentjob.idnr, DINFO)
             #we are done with this job, remove it
             del self.qlist[0]
             del self.qdict[self.currentjob.idnr]
@@ -762,8 +762,8 @@ class EncodingQueue:
                             self.currentjob._MencoderParse, 1, None)
 
         _debug_('Started job %s, %s on PID %s' % (self.currentjob.idnr, \
-            status[self.currentjob.status], self.currentjob.pid), config.DINFO)
-        _debug_('Encoder Command is "%s"' % ' '.join(self.currentjob.cls[0]), config.DINFO)
+            status[self.currentjob.status], self.currentjob.pid), DINFO)
+        _debug_('Encoder Command is "%s"' % ' '.join(self.currentjob.cls[0]), DINFO)
 
 
 

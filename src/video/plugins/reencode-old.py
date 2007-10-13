@@ -40,7 +40,6 @@ from video.encodingclient import *
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
-DEBUG = config.DEBUG
 
 class PluginInterface(plugin.ItemPlugin):
     """

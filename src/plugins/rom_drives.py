@@ -313,7 +313,7 @@ class RemovableMedia:
                 finally:
                     os.close(fd)
             except Exception, e:
-                _debug_('Cannot open "%s": %s"' % (self.devicename, e), config.DWARNING)
+                _debug_('Cannot open "%s": %s"' % (self.devicename, e), DWARNING)
 
             if notify:
                 pop.destroy()
@@ -339,7 +339,7 @@ class RemovableMedia:
                 finally:
                     os.close(fd)
             except Exception, e:
-                _debug_('Cannot open "%s": %s"' % (self.devicename, e), config.DWARNING)
+                _debug_('Cannot open "%s": %s"' % (self.devicename, e), DWARNING)
 
             global im_thread
             if im_thread:

@@ -35,7 +35,6 @@ import epg_xmltv
 import threading
 import time
 
-DEBUG = config.DEBUG
 
 # Sample for local_conf.py:
 # Three video cards and one web camera.
@@ -130,8 +129,7 @@ class FreevoChannels:
                 self.chan_index = pos
 
         if not new_chan:
-            print String(_('ERROR')+': '+\
-                        (_('Cannot find tuner channel "%s" in the TV channel listing') % chan))
+            print 'Cannot find tuner channel "%s" in the TV channel listing' % chan
             return
 
         vg = self.getVideoGroup(new_chan, isplayer)
@@ -166,13 +164,11 @@ class FreevoChannels:
                 freq = clist.get(chan)
             else:
                 if vg.group_type != 'dvb':
-                    print String(_('ERROR')+': ' + \
-                        (_('Unable to get channel list for %s.') % vg.tuner_chanlist))
+                    print 'Unable to get channel list for %s.' % vg.tuner_chanlist
                 return 0
             if not freq:
                 if vg.group_type != 'dvb':
-                    print String(_('ERROR')+': ' + \
-                        (_('Unable to get channel list for %s.') % vg.tuner_chanlist))
+                    print 'Unable to get channel list for %s.' % vg.tuner_chanlist
                 return 0
             _debug_('USING STANDARD FREQUENCY: chan="%s", freq="%s"' % (chan, freq))
 
@@ -200,15 +196,13 @@ class FreevoChannels:
                     vd.setfreq_old(freq)
                 vd.close()
             except:
-                print String(_('Failed to set freq for channel %s.') % chan)
+                print 'Failed to set freq for channel %s.' % chan
 
             if vg.cmd:
-                if DEBUG:
-                    _debug_("run cmd: %s" % vg.cmd, 1)
+                _debug_("run cmd: %s" % vg.cmd)
                 import os
                 retcode=os.system(vg.cmd)
-                if DEBUG:
-                    print "exit code: %g" % retcode
+                _debug_("exit code: %g" % retcode)
 
         return 0
 

@@ -52,8 +52,6 @@ from directory import DirItem
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
-DEBUG = config.DEBUG
-
 TRUE = 1
 FALSE = 0
 
