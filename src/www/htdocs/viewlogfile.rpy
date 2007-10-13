@@ -1,4 +1,5 @@
 # -*- coding: iso-8859-1 -*-
+# vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
 # plugins.rpy - Show all plugins
 # -----------------------------------------------------------------------
