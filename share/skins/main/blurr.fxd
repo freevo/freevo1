@@ -462,7 +462,7 @@
             <listing layout="main listing" visible="yes">
                 <area x="230" y="280" width="360" height="240"/>
             </listing>
-            <listing layout="list_main" x="230" y="180" width="380" height="390"/>
+            <listing layout="list_main" x="230" y="140" width="380" height="430"/>
             <view visible="no"/>
         </menuset>
 
@@ -921,9 +921,7 @@
 
     </skin>
 </freevo>
-<!-- Keep this comment at the end of the file
-Local variables:
-mode: xml
-sgml-indent-step:4
-End:
+
+<!--
+vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=xml:
 -->

@@ -893,9 +893,7 @@
         
     </skin>
 </freevo>
-<!-- Keep this comment at the end of the file
-Local variables:
-mode: xml
-sgml-indent-step:4
-End:
+
+<!--
+vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=xml:
 -->

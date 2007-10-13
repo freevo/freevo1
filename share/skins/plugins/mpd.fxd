@@ -1,10 +1,9 @@
 <?xml version="1.0" ?>
 <freevo>
-
   <skin geometry="800x600">
     <!-- Items of the main menu -->
     <main>
-      <item label="mpd" name="MPD " image="mpd_watermark.png"/>
+      <item label="mpd" name="MPD" image="mpd_watermark.png"/>
     </main>
 
     <mpd>
@@ -23,3 +22,7 @@
 
   </skin>
 </freevo>
+
+<!--
+vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=xml:
+-->
