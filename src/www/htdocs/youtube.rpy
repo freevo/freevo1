@@ -1,5 +1,4 @@
-# -*- coding: iso-8859-1 -*-
-# vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
+#!/usr/bin/python
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -16,10 +15,12 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
+# with this program; if not, write to the Free Software Foundation, Inc., 
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+#
+# Edit Date - Oct 2, 2007 6:31am
 
 import sys
 import time
@@ -37,6 +38,9 @@ from stat import *
 
 
 def xmlStatus(fstatus):
+    '''
+    '''
+    _debug_('xmlStatus(fstatus)', 1)
     xmlstatus = ''
     xmlstatus += '<PERCENT>%s</PERCENT>' %  fstatus['percent']
     xmlstatus += '<DOWNLOADED>%s</DOWNLOADED>' % fstatus['downloaded']
@@ -48,6 +52,9 @@ def xmlStatus(fstatus):
 
 # Get optimum 1k exponent to represent a number of bytes
 def optimum_k_exp(num_bytes):
+    '''
+    '''
+    _debug_('optimum_k_exp(num_bytes)', 1)
     const_1k = 1024
     if num_bytes == 0:
         return 0
@@ -56,6 +63,9 @@ def optimum_k_exp(num_bytes):
 
 # Get optimum representation of number of bytes
 def format_bytes(num_bytes):
+    '''
+    '''
+    _debug_('format_bytes(num_bytes)', 1)
     const_1k = 1024
     try:
         exp = optimum_k_exp(num_bytes)
@@ -69,7 +79,10 @@ def format_bytes(num_bytes):
 
 
 def getStatus(ytfile):
-    fileStatus = {'percent': '-', 'downloaded': 'done' , 'filesize': 'done' ,'speed' : '--', 'eta' : '--:--'}
+    '''
+    '''
+    _debug_('getStatus(ytfile)', 1)
+    fileStatus = {'percent': '-', 'downloaded': 'done' , 'filesize': 'done' , 'speed' : '--', 'eta' : '--:--'}
     fileStatus['filesize'] = format_bytes(os.path.getsize(config.YOUTUBE_DIR + ytfile))
     logfile = config.YOUTUBE_DIR + '.tmp/' + os.path.splitext(ytfile)[0] + '.log'
     if os.path.exists(logfile):
@@ -98,6 +111,9 @@ def getStatus(ytfile):
 
 
 def getXML():
+    '''
+    '''
+    _debug_('getXML()', 1)
     filesXML = '<?xml version="1.0" encoding="ISO-8859-1" ?>'
     filesXML += '<FILELIST>'
 
@@ -118,22 +134,28 @@ def getXML():
 
 
 def displaytableheader():
+    '''
+    '''
+    _debug_('displaytableheader()', 1)
     fvhtml = HTMLResource()
 
     fvhtml.tableOpen('class="library" id="filelist"')
     fvhtml.tableRowOpen('class="chanrow"')
-    fvhtml.tableCell('Current Downloads','class ="guidehead"  colspan="2"')
-    fvhtml.tableCell('% Done','class ="guidehead"  colspan="1"')
-    fvhtml.tableCell('','class ="guidehead"  colspan="1"')
-    fvhtml.tableCell('Size','class ="guidehead"  colspan="1"')
-    fvhtml.tableCell('Speed','class ="guidehead"  colspan="1"')
-    fvhtml.tableCell('ETA','class ="guidehead"  colspan="1"')
+    fvhtml.tableCell('Current Downloads', 'class ="guidehead"  colspan="2"')
+    fvhtml.tableCell('% Done', 'class ="guidehead"  colspan="1"')
+    fvhtml.tableCell('', 'class ="guidehead"  colspan="1"')
+    fvhtml.tableCell('Size', 'class ="guidehead"  colspan="1"')
+    fvhtml.tableCell('Speed', 'class ="guidehead"  colspan="1"')
+    fvhtml.tableCell('ETA', 'class ="guidehead"  colspan="1"')
     fvhtml.tableRowClose()
     fvhtml.tableClose()
     return fvhtml.res
 
 
 def CleanupLogFiles():
+    '''
+    '''
+    _debug_('CleanupLogFiles()', 1)
     logfiles = os.listdir(config.YOUTUBE_DIR + '.tmp/')
     for lfile in logfiles:
         # Check to see if the movie file exists.
@@ -142,14 +164,20 @@ def CleanupLogFiles():
             os.remove(config.YOUTUBE_DIR + '.tmp/' + lfile)
 
 
-def startdownload(dlcommand,logfile):
+def startdownload(dlcommand, logfile):
+    '''
+    '''
+    _debug_('startdownload(dlcommand=%r, logfile=%r)' % (dlcommand, logfile), 1)
     pwdcur = os.getcwd()
     os.chdir(config.YOUTUBE_DIR)
     lfile = open (logfile, 'w')
-    ytpid = subprocess.Popen(dlcommand,universal_newlines=True,stdout=lfile).pid
+    ytpid = subprocess.Popen(dlcommand, universal_newlines=True, shell=True, stdout=lfile).pid
     os.chdir(pwdcur)
 
 def convert_file_to_flv(convert_file):
+    '''
+    '''
+    _debug_('convert_file_to_flv(convert_file)', 1)
 
     source_file = config.YOUTUBE_DIR + convert_file
     destin_file = source_file + ".flv"
@@ -158,37 +186,49 @@ def convert_file_to_flv(convert_file):
     # /var/videos/flv/video.flv
 
     convert_cmd = ' -i "%s" -s 320x240 -ar 44100 -r 12 "%s" '
-    convert_cmd = convert_cmd % ( source_file , destin_file )
-    convert_cmd = ('/usr/bin/ffmpeg','-i',source_file,'-s','320x240','-ar','44100','-r','12',destin_file)
-    print convert_cmd
+    convert_cmd = convert_cmd % (source_file , destin_file)
+    convert_cmd = ('/usr/bin/ffmpeg', '-i', source_file, '-s', '320x240', '-ar', '44100', '-r', '12', destin_file)
+    _debug_(convert_cmd, 1)
 
     pwdcur = os.getcwd()
     os.chdir(config.YOUTUBE_DIR)
-    logfile = '/home/dlocke/youtube/.tmp/test.tst'
-    lfile = open (logfile, 'w')
-    ytpid = subprocess.Popen(convert_cmd,universal_newlines=True,stdout=lfile).pid
+    logfile = os.path.join(config.FREEVO_LOGDIR, 'YouTube.log')
+    lfile = open(logfile, 'w')
+    ytpid = subprocess.Popen(convert_cmd, universal_newlines=True, stdout=lfile).pid
     os.chdir(pwdcur)
 
 
 def download_youtube(yt_url):
+    '''
+    '''
+    _debug_('download_youtube(yt_url)', 1)
     logfile = config.YOUTUBE_DIR + '.tmp/' +  yt_url.split('=')[-1] + '.log'
-    startdownload((config.YOUTUBE_DL,'-t',yt_url),logfile)
+    startdownload([config.YOUTUBE_DL, '-t', yt_url], logfile)
 
 
 def download_url(dl_url):
+    '''
+    '''
+    _debug_('download_url(dl_url)', 1)
     # get the file name from the url.
     logfile = config.YOUTUBE_DIR + '.tmp/partfile' +  dl_url.split('/')[-1]
     logfile = os.path.splitext(logfile)[0] + '.log'
-    startdownload((config.DOWNLOAD_DL,dl_url),logfile)
+    startdownload((config.DOWNLOAD_DL, dl_url), logfile)
 
 
 def addPageRefresh():
-    prhtml = '<script type="text/JavaScript" src="scripts/youtube.js">window.onload=beginrefresh</script>'
-    prhtml += '\n<span class="refresh" id="refresh">Refresh In : ??</span>'
+    '''
+    '''
+    _debug_('addPageRefresh()', 1)
+    prhtml = '<script type="text/JavaScript" src="scripts/youtube.js">window.onload=beginrefresh</script>\n'
+    prhtml += '<span class="refresh" id="refresh">Refresh In : ??</span>'
     return prhtml
 
 
 def envCheck():
+    '''
+    '''
+    _debug_('envCheck()', 1)
     yterrors = []
     if (not config.__dict__.has_key('YOUTUBE_DIR')):
         yterrors.append('Unable to Find YOUTUDE_DIR setting in local_conf.py')
@@ -207,9 +247,10 @@ def envCheck():
     return yterrors
 
 
-def doFlowPlayer(pfile, flow_player = 'FlowPlayerThermo.swf' ):
-
-  #  pfile = "stoneham.avi.flv"
+def doFlowPlayer(pfile, flow_player='FlowPlayerThermo.swf'):
+    '''
+    '''
+    _debug_('doFlowPlayer(pfile, flow_player)', 1)
 
     flash = '\n<script type="text/javascript" src="flowplayer/swfobject.js"></script>'
     flash += '\n<div align="center" style= display:"" id="flowplayerholder">'
@@ -220,7 +261,7 @@ def doFlowPlayer(pfile, flow_player = 'FlowPlayerThermo.swf' ):
     flash += '\nvar fo = new SWFObject("flowplayer/%s", "FlowPlayer", "468", "350", "7", "#ffffff", true);' % flow_player
     flash += '\n// need this next line for local testing, its optional if your swf is on the same domain as your html page'
     flash += '\nfo.addParam("allowScriptAccess", "always");'
-    flash += '\nfo.addVariable("config", "{ showPlayListButtons: true, playList: [ {overlayId: \'play\' },'
+    flash += '\nfo.addVariable("config", "{ showPlayListButtons: true, playList: [ {overlayId: \'play\' }, '
     flash += ' { url: \'/youtube/'+ pfile + '\' } ], initialScale: \'fit\' }");'
     flash += '\nfo.write("flowplayerholder");'
     flash += '\n// ]]>'
@@ -232,68 +273,70 @@ def doFlowPlayer(pfile, flow_player = 'FlowPlayerThermo.swf' ):
 class YouTubeResource(FreevoResource):
 
     def _render(self, request):
+        '''
+        '''
+        _debug_('_render(request)', 1)
         fv = HTMLResource()
         form = request.args
 
-        fv.printHeader(_('YouTube'), 'styles/main.css',selected=_('YouTube'))
+        fv.printHeader(_('YouTube'), 'styles/main.css', selected=_('YouTube'))
         fv.res += '\n<link rel="stylesheet" href="styles/youtube.css" type="text/css" />\n'
         yterrors = envCheck()
 
-        cmd = fv.formValue(form,'cmd')
+        cmd = fv.formValue(form, 'cmd')
 
         if cmd == 'Delete':
-            filename = fv.formValue(form,'delete_file')
+            filename = fv.formValue(form, 'delete_file')
             if filename:
                 filename = config.YOUTUBE_DIR + filename
                 if os.path.exists(filename):
                     os.remove(filename)
 
-        convert_file = fv.formValue(form,'convert_file')
+        convert_file = fv.formValue(form, 'convert_file')
         if cmd == 'Convert' and convert_file:
             convert_file_to_flv(convert_file)
 
-        playfile = fv.formValue(form,'playfile')
-        flow_player = fv.formValue(form,'flow_player')
+        playfile = fv.formValue(form, 'playfile')
+        flow_player = fv.formValue(form, 'flow_player')
         if not flow_player:
             flow_player = 'FlowPlayerThermo.swf'
 
         if cmd == "Play" and playfile:
-            flowplayer_html = doFlowPlayer(playfile,flow_player)
-            return String( flowplayer_html )
+            flowplayer_html = doFlowPlayer(playfile, flow_player)
+            return str(flowplayer_html)
 
         if playfile:
-            fv.res += doFlowPlayer(playfile,flow_player)
+            fv.res += doFlowPlayer(playfile, flow_player)
 
-        #fv.res += doFlowPlayer('',flow_player)
+        #fv.res += doFlowPlayer('', flow_player)
 
 
         if config.YOUTUBE_DIR == 'MISSING'  or ((config.YOUTUBE_DL == "MISSING") and (config.DOWNLOAD_DL ==  "MISSING")):
             fv.printMessages(yterrors)
-            return String( fv.res )
+            return str(fv.res)
 
         if not os.path.exists(config.YOUTUBE_DIR):
             fv.res += '<br><b>Unable to locate youtube download location "' + config.YOUTUBE_DIR + '" </b><br>'
             fv.res += 'Add YOUTUBE_DIR = "download directory" to your local_conf.py'
-            return String( fv.res )
+            return str(fv.res)
 
         if not os.path.exists(config.YOUTUBE_DL):
-            fv.res += '<div class="youtube_error" Unable to locate youtube-dl script  "' + config.YOUTUBE_DL + '" </b>'
-            fv.res += 'Download scripts from  <a href="http://www.arrakis.es/~rggi3/youtube-dl/">http://www.arrakis.es/~rggi3/youtube-dl/</a>'
+            fv.res += '<div class="youtube_error" Unable to locate youtube-dl script "%s"</b>' % config.YOUTUBE_DL 
+            fv.res += 'Download scripts from <a href="http://www.arrakis.es/~rggi3/youtube-dl/">' + \
+                'http://www.arrakis.es/~rggi3/youtube-dl/</a>'
             fv.res += '<br>Add YOUTUBE_DL = "path and file name to youtube_dl script" </div>'
 
         if not os.path.exists(config.DOWNLOAD_DL):
-            fv.res += '<div class="youtube_error">Unable to locate downloadurl.py script  "' + config.DOWNLOAD_DL + '" </b>'
+            fv.res += '<div class="youtube_error">Unable to locate downloadurl.py script "%s"</b>' % config.DOWNLOAD_DL 
             fv.res += '<br>Add DOWNLOAD_DL = "path and file name to downloadurl script"</div>'
 
-        if os.path.exists(config.YOUTUBE_DIR):
-            if not os.path.exists(config.YOUTUBE_DIR + '.tmp'):
-                os.mkdir(config.YOUTUBE_DIR + '.tmp')
+        if not os.path.isdir(config.YOUTUBE_DIR):
+            os.makedirs(config.YOUTUBE_DIR)
+        if not os.path.isdir(config.YOUTUBE_DIR + '.tmp'):
+            os.makedirs(config.YOUTUBE_DIR + '.tmp')
 
-        dltype = fv.formValue(form,'dlscript')
-        dlurl = fv.formValue(form,'dl_url')
-
-        print dltype
-        print dlurl
+        dltype = fv.formValue(form, 'dlscript')
+        dlurl = fv.formValue(form, 'dl_url')
 
         if dltype and dlurl:
             if dltype == 'youtube':
@@ -301,10 +344,10 @@ class YouTubeResource(FreevoResource):
             if dltype == 'downloadurl':
                 download_url(dlurl)
 
-        blxml = fv.formValue(form,"xml")
+        blxml = fv.formValue(form, "xml")
         if blxml :
             fv.res = getXML()
-            return String( fv.res )
+            return str(fv.res)
 
         dlurl = ''
         fv.res += '\n<div id="flowplayer_div"></div>'
@@ -323,6 +366,6 @@ class YouTubeResource(FreevoResource):
 
         fv.res  += displaytableheader()
 
-        return String( fv.res )
+        return str(fv.res)
 
 resource = YouTubeResource()
