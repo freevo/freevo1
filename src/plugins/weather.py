@@ -611,7 +611,10 @@ class WeatherItem(Item):
         ltime = time.localtime()
         ctr   = 0
         for i in range(5,10):
-            (mons, days, years) = holdings[i].split("/")
+            try:
+                (mons, days, years) = holdings[i].split("/")
+            except IndexError, e:
+                mons = days = years = '0'
             mons  = int(mons)
             days  = int(days)
             years = int(years)
