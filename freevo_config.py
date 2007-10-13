@@ -342,11 +342,11 @@ MAJOR_AUDIO_CTRL_MUTE = 'PCM'        # used in alsamixer.py
                                      # and mute use different controls
 
 CONTROL_ALL_AUDIO  = 1               # Should Freevo take complete control of audio
-MAX_VOLUME         = 90              # Set what you want maximum volume level to be.
-DEFAULT_VOLUME     = 40              # Set default volume level.
-TV_IN_VOLUME       = 60              # Set this to your preferred level 0-100.
-VCR_IN_VOLUME      = 90              # If you use different input from TV
-RADIO_IN_VOLUME    = 80              # Set this to your preferred level 0-100.
+VOLUME_MAX         = 90              # Set what you want maximum volume level to be.
+VOLUME_DEFAULT     = 40              # Set default volume level.
+VOLUME_TV_IN       = 60              # Set this to your preferred level 0-100.
+VOLUME_VCR_IN      = 90              # If you use different input from TV
+VOLUME_RADIO_IN    = 80              # Set this to your preferred level 0-100.
 DEV_MIXER          = '/dev/mixer'    # mixer device
 
 START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
@@ -2027,17 +2027,17 @@ SKIN_DEBUG = 0
 # store output of started processes for debug
 # Set to 1 to log child application output to <app>_stdout.log and <app>_stderr.log
 #
-CHILDAPP_DEBUG = 0
+DEBUG_CHILDAPP = 0
 
-TIME_DEBUG = 0
+DEBUG_TIME = 0
 
 # The default logging level
 # can be one of CRITICAL (FATAL), ERROR, WARNING (WARN), INFO, DEBUG, NOTSET
 LOGGING = logging.INFO
-WEBSERVER_LOGGING = logging.INFO
-RECORDSERVER_LOGGING = logging.INFO
-ENCODINGSERVER_LOGGING = logging.INFO
-RSSSERVER_LOGGING = logging.INFO
+LOGGING_WEBSERVER = logging.INFO
+LOGGING_RECORDSERVER = logging.INFO
+LOGGING_ENCODINGSERVER = logging.INFO
+LOGGING_RSSSERVER = logging.INFO
 
 # When logging is DEBUG or NOTSET then DEBUG level logs messages
 DEBUG = 0

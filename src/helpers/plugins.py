@@ -131,8 +131,12 @@ def print_info(plugin_name, all_plugins):
             print desc
             print
             if config_string.find('config') > 0:
-                exec(config_string)
-                config_list = return_config()
+                try:
+                    exec(config_string)
+                    config_list = return_config()
+                except SyntaxError, e:
+                    config_list = None
+                    print '%s in %r' % (e, config_string)
 
                 if config_list:
                     print
