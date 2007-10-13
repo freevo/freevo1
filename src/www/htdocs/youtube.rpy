@@ -1,4 +1,4 @@
-#!/usr/bin/python
+# -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -19,8 +19,6 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-#
-# Edit Date - Oct 2, 2007 6:31am
 
 import sys
 import time
