@@ -75,8 +75,8 @@ if not config.XINE_TV_AO_DEV:
 if not config.TV_CHANNELS:
     _debug_("TV_CHANNELS is not configured!")
 
-if not config.TV_IN_VOLUME:
-    _debug_("TV_IN_VOLUME is not configured!")
+if not config.VOLUME_TV_IN:
+    _debug_("VOLUME_TV_IN is not configured!")
 
 if not config.MAJOR_AUDIO_CTRL:
     _debug_("MAJOR_AUDIO_CTRL is not configured!")
@@ -115,7 +115,7 @@ class PluginInterface(plugin.Plugin):
     The following items should be configured in local_conf.py:
 
     - TV_CHANNELS
-    - TV_IN_VOLUME
+    - VOLUME_TV_IN
     - MAJOR_AUDIO_CTRL
     - XINE_COMMAND
     - XINE_ARGS_DEF
@@ -527,8 +527,8 @@ class MixerControl:
 
         if (self.mixer != None):
 
-            self.mixer.setLineinVolume(config.TV_IN_VOLUME)
-            self.mixer.setIgainVolume(config.TV_IN_VOLUME)
+            self.mixer.setLineinVolume(config.VOLUME_TV_IN)
+            self.mixer.setIgainVolume(config.VOLUME_TV_IN)
 
             if config.MAJOR_AUDIO_CTRL == "VOL":
 

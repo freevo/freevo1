@@ -55,7 +55,7 @@ import config
 
 from commdetectcore import CommDetectJob, CommDetectQueue
 
-DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
+DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 
 logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
 log.startLogging(open(logfile, 'a'))

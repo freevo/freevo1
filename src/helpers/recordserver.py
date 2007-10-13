@@ -78,8 +78,8 @@ from util.videothumb import snapshot
 from event import *
 
 
-DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
-LOGGING = hasattr(config, appconf+'_LOGGING') and eval('config.'+appconf+'_LOGGING') or config.LOGGING
+DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
+LOGGING = hasattr(config, 'LOGGING_'+appconf) and eval('config.LOGGING_'+appconf) or config.LOGGING
 
 def _debug_func_(s, level=1):
     import traceback

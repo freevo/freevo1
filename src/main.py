@@ -283,10 +283,10 @@ class MainTread:
             app = osd.focused_app()
             if app:
                 try:
-                    if config.TIME_DEBUG:
+                    if config.DEBUG_TIME:
                         t1 = time.clock()
                     app.eventhandler(event)
-                    if config.TIME_DEBUG:
+                    if config.DEBUG_TIME:
                         print time.clock() - t1
 
                 except SystemExit:

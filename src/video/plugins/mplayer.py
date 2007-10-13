@@ -215,7 +215,7 @@ class MPlayer:
         if not config.MPLAYER_ARGS.has_key(mode):
             mode = 'default'
 
-        if config.CHILDAPP_DEBUG:
+        if config.DEBUG_CHILDAPP:
             command += ['-v']
 
         # Mplayer command and standard arguments

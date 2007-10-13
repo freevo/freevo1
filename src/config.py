@@ -150,7 +150,7 @@ class VideoGroup:
     vdev:         The video recording device, such as /dev/video0.
     vvbi:         The video vbi device, such as /dev/vbi0.
     adev:         The audio device, such as /dev/dsp.
-    input_type:   tuner, composite, svideo, webcam
+    input_type:   tuner, webcam
     input_num:    The number of this input according to V4L
     tuner_type:   internal (on a v4l device), or external (cable or sat box)
     tuner_norm:   NTSC, PAL, SECAM
@@ -160,7 +160,7 @@ class VideoGroup:
     record_group: VideoGroup that records for this tuner, default is to use the same device for record and play
     desc:         A nice description for this VideoGroup.
     group_type:   Special variable to identify devices like dvb or ivtv.  This
-                  can be left as default, 'normal', or set to 'ivtv' or 'dvb'.
+                  can be left as default, 'normal', or set to 'ivtv', 'dvb', 'webcam', 'tvalsa'.
     cmd:          Command for execute external prog after the channel switched, such as 'sudo /usr/local/bin/setuptuner'
     """
 
@@ -549,7 +549,6 @@ elif CONF.display == 'dxr3':
 if os.path.isfile(os.environ['FREEVO_CONFIG']):
     _debug_('Loading cfg: %s' % os.environ['FREEVO_CONFIG'])
     execfile(os.environ['FREEVO_CONFIG'], globals(), locals())
-
 else:
     print
     print "Error: %s: no such file" % os.environ['FREEVO_CONFIG']

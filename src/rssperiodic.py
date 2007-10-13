@@ -37,7 +37,8 @@ import kaa.metadata as metadata
 
 appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 appconf = appname.upper()
-DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
+
+DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 
 def _debug_(text, level=1):
     if DEBUG >= level:

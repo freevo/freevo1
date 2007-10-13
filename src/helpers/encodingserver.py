@@ -64,7 +64,7 @@ __revision__ = "$Rev$"
 __copyright__ = "Copyright (C) 2004 den_RDC"
 __license__ = "GPL"
 
-DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
+DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 
 logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
 log.startLogging(open(logfile, 'a'))

@@ -291,10 +291,21 @@ LOCAL_CONF_CHANGES = [
      '''Added OS_STATICDIR, FREEVO_STATICDIR, OS_LOGDIR and FREEVO_LOGDIR
      Change static data to use /var/lib/freevo or ~/.freevo, including TV_RECORD_SCHEDULE, TV_LOGOS,
      XMLTV_FILE, you may also prefer OVERLAY_DIR to be FREEVO_STATICDIR+'/overlay',
-     Added a plugin that adds a submenu entry for ejecting rom drives and binds the default action of an empty drive to the eject action
+     Added a plugin that adds a submenu entry for ejecting rom drives and binds the default action of
+     an empty drive to the eject action
      Replaced OSD_OVERSCAN_X with OSD_OVERSCAN_LEFT and OSD_OVERSCAN_RIGHT and OSD_OVERSCAN_Y with 
      OSD_OVERSCAN_TOP and OSD_OVERSCAN_BOTTOM
      Added IMAGEVIEW_ASPECT to show images correctly on non-square pixel displays, it TVs
+     For the webserver configuration tool the following have been changed
+        PERSONAL_WWW_PAGE to WWW_PERSONAL_PAGE
+        TIME_DEBUG to DEBUG_TIME
+        CHILDAPP_DEBUG to DEBUG_CHILDAPP
+        RECORDSERVER_LOGGING to LOGGING_RECORDSERVER
+        DEFAULT_VOLUME to VOLUME_DEFAULT
+        TV_IN_VOLUME to VOLUME_TV_IN
+        VCR_IN_VOLUME to VOLUME_VCR_IN
+        RADIO_IN_VOLUME to VOLUME_RADIO_IN
+        MAX_VOLUME to VOLUME_MAX
      '''),
 ]
 

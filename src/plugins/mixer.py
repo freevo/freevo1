@@ -88,19 +88,19 @@ class PluginInterface(plugin.DaemonPlugin):
                     pass
 
         if config.MAJOR_AUDIO_CTRL == 'VOL':
-            self.setMainVolume(config.DEFAULT_VOLUME)
+            self.setMainVolume(config.VOLUME_DEFAULT)
             if config.CONTROL_ALL_AUDIO:
-                self.setPcmVolume(config.MAX_VOLUME)
+                self.setPcmVolume(config.VOLUME_MAX)
                 # XXX This is for SB Live cards should do nothing to others
                 # XXX Please tell if you have problems with this.
-                self.setOgainVolume(config.MAX_VOLUME)
+                self.setOgainVolume(config.VOLUME_MAX)
         elif config.MAJOR_AUDIO_CTRL == 'PCM':
-            self.setPcmVolume(config.DEFAULT_VOLUME)
+            self.setPcmVolume(config.VOLUME_DEFAULT)
             if config.CONTROL_ALL_AUDIO:
-                self.setMainVolume(config.MAX_VOLUME)
+                self.setMainVolume(config.VOLUME_MAX)
                 # XXX This is for SB Live cards should do nothing to others
                 # XXX Please tell if you have problems with this.
-                self.setOgainVolume(config.MAX_VOLUME)
+                self.setOgainVolume(config.VOLUME_MAX)
         else:
             _debug_("No appropriate audio channel found for mixer")
 
@@ -270,8 +270,8 @@ class PluginInterface(plugin.DaemonPlugin):
             self.setLineinVolume(0)
             self.setMicVolume(0)
             if config.MAJOR_AUDIO_CTRL == 'VOL':
-                self.setPcmVolume(config.MAX_VOLUME)
+                self.setPcmVolume(config.VOLUME_MAX)
             elif config.MAJOR_AUDIO_CTRL == 'PCM':
-                self.setMainVolume(config.MAX_VOLUME)
+                self.setMainVolume(config.VOLUME_MAX)
 
         self.setIgainVolume(0) # SB Live input from TV Card.

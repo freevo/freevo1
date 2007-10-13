@@ -62,7 +62,7 @@ if len(sys.argv)>1 and sys.argv[1] == '--help':
     sys.exit(0)
 
 # No debugging in this module
-DEBUG = hasattr(config, appconf+'_DEBUG') and eval('config.'+appconf+'_DEBUG') or config.DEBUG
+DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 
 def _debug_(text, level=1):
     if DEBUG >= level:

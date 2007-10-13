@@ -198,10 +198,10 @@ class Xawtv:
         time.sleep(0.4)
         # BUG Hm.. This is hardcoded and very unflexible.
         if mixer and mode == 'vcr':
-            mixer.setMicVolume(config.VCR_IN_VOLUME)
+            mixer.setMicVolume(config.VOLUME_VCR_IN)
         elif mixer:
-            mixer.setLineinVolume(config.TV_IN_VOLUME)
-            mixer.setIgainVolume(config.TV_IN_VOLUME)
+            mixer.setLineinVolume(config.VOLUME_TV_IN)
+            mixer.setIgainVolume(config.VOLUME_TV_IN)
 
         if mixer and config.MAJOR_AUDIO_CTRL == 'VOL':
             mixer.setMainVolume(mixer_vol)

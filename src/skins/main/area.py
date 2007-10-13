@@ -267,7 +267,7 @@ class Skin_Area:
         elif c_rect[0] < c_rect[2]:
             self.screen.update('content', c_rect)
 
-        if config.SKIN_DEBUG:
+        if config.DEBUG_SKIN:
             if self.layout:
                 name = self.area_name + u':' + self.layout.label
 

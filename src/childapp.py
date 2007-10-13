@@ -106,7 +106,7 @@ class ChildApp:
         if debugname:
             debug_name = debugname
 
-        if doeslogging or config.CHILDAPP_DEBUG:
+        if doeslogging or config.DEBUG_CHILDAPP:
             doeslogging = 1
 
         stdout_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stdout-%s.log' % (debug_name, os.getuid()))
