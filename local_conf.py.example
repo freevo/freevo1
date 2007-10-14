@@ -59,7 +59,7 @@ CONFIG_VERSION = 5.21
 # VOLUME_TV_IN       = 60              # Set this to your preferred level 0-100.
 # VOLUME_VCR_IN      = 90              # If you use different input from TV
 # VOLUME_RADIO_IN    = 80              # Set this to your preferred level 0-100.
-# DEV_MIXER          = '/dev/mixer'    # mixer device
+# VOLUME_MIXER_DEV   = '/dev/mixer'    # mixer device
 
 # START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 
