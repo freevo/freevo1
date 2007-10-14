@@ -108,7 +108,11 @@ class PluginInterface(plugin.ItemPlugin):
 
     def actions(self, item):
         self.item = item
-        print item.name
+
+        if not hasattr(item, 'name'):
+            _debug_('cannot search for a cover as item has no name')
+            return []
+
         # don't allow this for items on an audio cd, only on the disc itself
         if item.type == 'audio' and item.parent and item.parent.type == 'audiocd':
             _debug_('cannot search for a cover for a cd item "%s"', (item.name))
@@ -131,33 +135,30 @@ class PluginInterface(plugin.ItemPlugin):
             return []
 
         if item.type in ('audio', 'audiocd', 'dir'):
-            if config.DEBUG > 0:
-                _debug_('type=\"%s\"' % item.type, 2)
-                _debug_('name=\"%s\"' % item['name'], 2)
-                try:
-                    _debug_('artist=\"%s\"' % item.getattr('artist'), 2)
-                except:
-                    _debug_('NO artist', 2)
-                try:
-                    _debug_('album=\"%s\"' % item.getattr('album'), 2)
-                except:
-                    _debug_('NO album', 2)
-                try:
-                    _debug_('title=\"%s\"' % item.getattr('title'), 2)
-                except:
-                    _debug_('NO title', 2)
+            _debug_('type=\"%s\"' % item.type)
+            _debug_('name=\"%s\"' % item['name'])
+            _debug_(hasattr(item, 'artist') and 'artist="%s"' % item.getattr('artist') or 'NO artist')
+            _debug_(hasattr(item, 'album')  and 'album="%s"'  % item.getattr('album')  or 'NO album')
+            _debug_(hasattr(item, 'title')  and 'title="%s"'  % item.getattr('title')  or 'NO title')
+            try:
+                if not hasattr(item, 'artist'):
+                    if item.type in ('audio', 'dir') and not hasattr(item, 'album'):
+                        item.artist, item.album = item.name.split(' - ')
+                    if item.type in ('audiocd',) and not hasattr(item, 'title'):
+                        item.title = item.name
+            except Exception, e:
+                _debug_('%s: %s' % (item.name, e))
 
             try:
                 # use title for audio cds and album for normal data
                 if self.item.getattr('artist') and \
                    ((self.item.getattr('album') and item.type in ('audio', 'dir')) or \
                     (self.item.getattr('title') and item.type == 'audiocd')):
-                    return [ ( self.cover_search_file, _( 'Find a cover for this music' ),
+                    return [ (self.cover_search_file, _('Find a cover for this music'),
                                'imdb_search_or_cover_search') ]
                 else:
                     if config.DEBUG > 1:
-                        print String(_( "WARNING" )) + ": "+\
-                              String(_( "Plugin 'coversearch' was disabled for this item! " \
+                        print String(_( "Plugin 'coversearch' was disabled for this item! " \
                                  "'coversearch' needs an item with " \
                                  "Artist and Album (if it's a mp3 or ogg) or " \
                                  "Title (if it's a cd track) to be able to search. "  \
@@ -165,8 +166,7 @@ class PluginInterface(plugin.ItemPlugin):
                                  "Maybe you must fix this file (%s) tag?" )) % item.filename
             except KeyError:
                 if config.DEBUG > 1:
-                    print String(_( "WARNING" )) + ": " +\
-                          String(_( "Plugin 'coversearch' was disabled for this item! " \
+                    print String(_( "Plugin 'coversearch' was disabled for this item! " \
                              "'coversearch' needs an item with " \
                              "Artist and Album (if it's a mp3 or ogg) or " \
                              "Title (if it's a cd track) to be able to search. " \
@@ -174,8 +174,7 @@ class PluginInterface(plugin.ItemPlugin):
                              "Maybe you must fix this file (%s) tag?" )) % item.filename
             except AttributeError:
                 if config.DEBUG > 1:
-                    print String(_( "WARNING" )) + ": " +\
-                          String(_( "Unknown CD, cover searching is disabled" ))
+                    print String(_( "Unknown CD, cover searching is disabled" ))
         return []
 
 
