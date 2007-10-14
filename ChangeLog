@@ -34,6 +34,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated tv favourite handling and programme item to provide a consistant interface (F#1776909)
  * Updated video item to include the full description (F#1777187)
  * Fixed audio plug-in albumtree navigating back to the main menu (B#1798462)
+ * Fixed music causing a crash when the directory has non-ascii characters and an image (B#1801929)
  * Fixed cd-rom drives eject causing a crash (B#1775892)
  * Fixed df plug-in crashing when totalspace is zero (B#1812877)
  * Fixed favourite crashing because of duplicate detection flag (B#1778494,B#1777726)

@@ -87,14 +87,15 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     image     = None
     imagefile = None
 
-    if item_image:
-        if isinstance(item_image, imlib2.Image):
-            image = osd.loadbitmap(item_image)
+    if item.image:
+        if isinstance(item.image, imlib2.Image):
+            image = osd.loadbitmap(item.image)
         else:
-            image = load_imagecache['thumb://%s' % item_image]
+            #print 'thumb://%r %r' % (item.image, item_image)
+            image = load_imagecache['thumb://%s' % item.image]
             if not image:
-                image = osd.loadbitmap('thumb://%s' % item_image)
-                load_imagecache['thumb://%s' % item_image] = image
+                image = osd.loadbitmap('thumb://%s' % item.image)
+                load_imagecache['thumb://%s' % item.image] = image
 
         if not item['rotation']:
             try:
