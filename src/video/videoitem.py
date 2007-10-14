@@ -633,7 +633,6 @@ class VideoItem(Item):
             i.info.mmdata = self.info.mmdata['tracks'][titlenum]
             i.info.set_variables(self.info.get_variables())
             i.info_type       = 'track'
-            i.possible_player = []
             i.files           = None
             i.name            = Unicode(_('Play Title %d') % (titlenum+1))
             items.append(i)
