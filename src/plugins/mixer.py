@@ -61,15 +61,17 @@ class PluginInterface(plugin.DaemonPlugin):
 
         # If you're using ALSA or something and you don't set the mixer,
         # why are we trying to open it?
-        if config.DEV_MIXER:
+        if config.VOLUME_MIXER_DEV:
             try:
-                self.mixfd = open(config.DEV_MIXER, 'r')
+                self.mixfd = open(config.VOLUME_MIXER_DEV, 'r')
             except IOError:
-                print 'Couldn\'t open mixer %s' % config.DEV_MIXER
+                print 'Couldn\'t open mixer %s' % config.VOLUME_MIXER_DEV
                 return
         # init here
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'MIXER'
+
+        self.default_step = config.VOLUME_MIXER_STEP
 
         if 0:
             self.mainVolume   = 0
@@ -113,21 +115,27 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         eventhandler to handle the VOL events
         """
+        if event in (MIXER_VOLUP, MIXER_VOLDOWN):
+            step = event.arg
+            if not isinstance(step, int):
+                _debug_("%s event type '%s' is not 'int'" % (event, step), DWARNING)
+                step = self.default_step
+
         if event == MIXER_VOLUP:
             if config.MAJOR_AUDIO_CTRL == 'VOL':
-                self.incMainVolume(event.arg)
+                self.incMainVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             elif config.MAJOR_AUDIO_CTRL == 'PCM':
-                self.incPcmVolume(event.arg)
+                self.incPcmVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             return True
 
         elif event == MIXER_VOLDOWN:
-            if( config.MAJOR_AUDIO_CTRL == 'VOL' ):
-                self.decMainVolume(event.arg)
+            if config.MAJOR_AUDIO_CTRL == 'VOL':
+                self.decMainVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             elif( config.MAJOR_AUDIO_CTRL == 'PCM' ):
-                self.decPcmVolume(event.arg)
+                self.decPcmVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             return True
 

@@ -307,6 +307,8 @@ LOCAL_CONF_CHANGES = [
         VCR_IN_VOLUME to VOLUME_VCR_IN
         RADIO_IN_VOLUME to VOLUME_RADIO_IN
         MAX_VOLUME to VOLUME_MAX
+        DEV_MIXER to VOLUME_MIXER_DEV
+     Added VOLUME_MIXER_STEP to allow the mixer volume change to be specified
      '''),
 ]
 
@@ -348,7 +350,9 @@ VOLUME_DEFAULT     = 40              # Set default volume level.
 VOLUME_TV_IN       = 60              # Set this to your preferred level 0-100.
 VOLUME_VCR_IN      = 90              # If you use different input from TV
 VOLUME_RADIO_IN    = 80              # Set this to your preferred level 0-100.
-DEV_MIXER          = '/dev/mixer'    # mixer device
+
+VOLUME_MIXER_DEV   = '/dev/mixer'    # mixer device
+VOLUME_MIXER_STEP  = 5               # Amount to increment the mixer volume
 
 START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 

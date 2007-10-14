@@ -92,6 +92,8 @@ change_map = {
     'VCR_IN_VOLUME': 'VOLUME_VCR_IN',
     'RADIO_IN_VOLUME': 'VOLUME_RADIO_IN',
     'MAX_VOLUME': 'VOLUME_MAX',
+    'DEV_MIXER': 'VOLUME_MIXER_DEV',
+    'MIXER_DEFAULT_STEP': 'VOLUME_MIXER_STEP',
     }
 
 def help():

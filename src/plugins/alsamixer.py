@@ -102,6 +102,8 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'MIXER'
 
+        self.default_step = config.VOLUME_MIXER_STEP
+
         self.mainVolume   = 0
         self.pcmVolume    = 0
         self.lineinVolume = 0
@@ -148,13 +150,19 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         eventhandler to handle the VOL events
         """
+        if event in (MIXER_VOLUP, MIXER_VOLDOWN):
+            step = event.arg
+            if not isinstance(step, int):
+                _debug_("%s event type '%s' is not 'int'" % (event, step), DWARNING)
+                step = self.default_step
+
         # Handle volume control
         if event == MIXER_VOLUP:
             if config.MAJOR_AUDIO_CTRL == 'VOL':
-                self.incMainVolume(event.arg)
+                self.incMainVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             elif config.MAJOR_AUDIO_CTRL == 'PCM':
-                self.incPcmVolume(event.arg)
+                self.incPcmVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             if config.ALSA_SYNCMIXER == 1:
                 self.setSyncVolume(self.getVolume())
@@ -162,10 +170,10 @@ class PluginInterface(plugin.DaemonPlugin):
 
         elif event == MIXER_VOLDOWN:
             if config.MAJOR_AUDIO_CTRL == 'VOL':
-                self.decMainVolume(event.arg)
+                self.decMainVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             elif config.MAJOR_AUDIO_CTRL == 'PCM':
-                self.decPcmVolume(event.arg)
+                self.decPcmVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             if config.ALSA_SYNCMIXER == 1:
                 self.setSyncVolume(self.getVolume())
@@ -223,13 +231,13 @@ class PluginInterface(plugin.DaemonPlugin):
         self.mainVolume = volume
         self._setVolume(self.main_mixer, self.mainVolume)
 
-    def incMainVolume(self,step=5):
+    def incMainVolume(self, step=5):
         self.mainVolume += step
         if self.mainVolume > 100:
             self.mainVolume = 100
         self._setVolume(self.main_mixer, self.mainVolume)
 
-    def decMainVolume(self,step=5):
+    def decMainVolume(self, step=5):
         self.mainVolume -= step
         if self.mainVolume < 0:
             self.mainVolume = 0

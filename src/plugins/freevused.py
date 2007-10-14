@@ -278,6 +278,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         self.FVUSED_ITEM_INFO = em.Event('FVUSED_ITEM_INFO')
 
+        self.mixer_default_step = config.VOLUME_MIXER_STEP
 
         thread.start_new_thread(self.bluetoothListener, ())
 
@@ -379,7 +380,10 @@ class PluginInterface(plugin.DaemonPlugin):
             command = self.cmds.get(str_cmd, '')
             if command:
                 _debug_('Event Translation: "%s" -> "%s"' % (str_cmd, command))
-                self.rc.post_event(em.Event(command))
+                if str_cmd in ('VOL-', 'VOL+'):
+                    self.rc.post_event(em.Event(command, arg=self.mixer_default_step))
+                else:
+                    self.rc.post_event(em.Event(command))
 
         elif str_cmd == 'TEXT':
             str_arg = self.data[4:]
