@@ -43,6 +43,9 @@ import image.viewer
 import plugin
 
 class PluginInterface(plugin.MainMenuPlugin):
+    """
+    Use the gphoto application to retrieve and show the images
+    """
 
     def detectCameras(self):
         gplist = pygphoto.gp_detectcameras( )

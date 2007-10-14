@@ -56,6 +56,10 @@ from skin.widgets import TextEntryScreen
 
 
 class PluginInterface(plugin.MainMenuPlugin):
+    """
+    Search for programs
+    """
+
     def __init__(self):
         plugin.MainMenuPlugin.__init__(self)
 
@@ -66,20 +70,19 @@ class PluginInterface(plugin.MainMenuPlugin):
         self.parent = parent
         return [SearchPrograms(parent)]
 
+
 class SearchPrograms(Item):
+
     def __init__(self, parent):
         Item.__init__(self, parent, skin_type='tv')
         self.name = _('Search Programs')
 
-
     def actions(self):
         return [(self.show_search, self.name)]
-
 
     def show_search(self, arg=None, menuw=None):
         text_entry = TextEntryScreen((_('Search'), self.search_for_programs), self.name)
         text_entry.show(menuw)
-
 
     def search_for_programs(self, menuw, text):
         pop = PopupBox(text=_('Searching, please wait...'))
@@ -151,7 +154,6 @@ class SearchPrograms(Item):
         if matches:
             return (TRUE, matches)
         return (FALSE, 'no matches')
-
 
     def updateGuide(self):
         global guide

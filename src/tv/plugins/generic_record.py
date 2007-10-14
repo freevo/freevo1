@@ -46,6 +46,10 @@ from tv.channels import FreevoChannels
 
 
 class PluginInterface(plugin.Plugin):
+    """
+    Generic TV recording application used with BTTV and DVB cards
+    """
+
     def __init__(self):
         plugin.Plugin.__init__(self)
 
