@@ -39,10 +39,13 @@ The Prog-Name is also drawn over the icon.
 '''
 
 class PluginInterface(IdleBarPlugin):
-    '''
-    Display an Icon if prog is active, put following Lines in local_conf.py:
-    plugin.activate('idlebar.progactive')
-    '''
+    """
+    Display an Icon if prog is active.
+
+    To activate put following Lines in local_conf.py:
+        plugin.activate('idlebar.progactive')
+    """
+
     def __init__(self):
         IdleBarPlugin.__init__(self)
         self.plugin_name='idlebar.progactive'

@@ -269,7 +269,8 @@ def get_info(item, list):
 
 
 class PluginInterface(plugin.DaemonPlugin):
-    """Display context info on Shuttle's VFD (Versatile Front-panel Display)
+    """
+    Display context info on Shuttle's VFD (Versatile Front-panel Display)
 
     Requirements:
        * pyusb: installed (http://pyusb.berlios.de/) with name patch as
@@ -283,7 +284,6 @@ class PluginInterface(plugin.DaemonPlugin):
     local_conf.py file:
 
     plugin.activate('vfd')
-
     """
     __author__           = 'Duncan Webb'
     __author_email__     = 'duncan@freevo.org'
@@ -292,7 +292,9 @@ class PluginInterface(plugin.DaemonPlugin):
     __version__          = '$Revision$'
 
     def send(self, data):
-        '''Send a piece of data to specified VFD device, retrying if necessary'''
+        '''
+        Send a piece of data to specified VFD device, retrying if necessary
+        '''
         attempts = 3
         while attempts > 0:
             try:

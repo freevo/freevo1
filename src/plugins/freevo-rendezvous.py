@@ -43,15 +43,15 @@ except:
 class PluginInterface(plugin.DaemonPlugin):
     """
     Rendezvous Broadcaster Plugin
+
     See: http://www.porchdogsoft.com/products/howl/ (Win32 Plugin/Linux/FreeBSD)
 
     This plugin has been tested with
        * Safari on Mac OS X Panther
        * IE6 + Howl on Windows XP
 
-    To enable this plugin, add
+    To enable this plugin, add to your local_conf.py:
         plugin.activate('freevo-rendezvous')
-    to your local_conf.py
     """
 
     r = RendezVous.Rendezvous()

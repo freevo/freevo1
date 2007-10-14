@@ -723,8 +723,6 @@ class DirItem(Playlist):
             pl.autoplay = True
             items = [ pl ] + items
 
-
-
         if pop:
             pop.destroy()
             # closing the poup will rebuild the menu which may umount
@@ -961,6 +959,9 @@ class DirItem(Playlist):
 # ======================================================================
 
 class Dirwatcher(plugin.DaemonPlugin):
+    """
+    Directory handling
+    """
 
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)

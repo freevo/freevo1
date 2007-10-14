@@ -24,9 +24,10 @@ _player_ = None
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
-    Last FM plugin
-    To activate this plugin, put the following in your local_conf.py.
-    -------------------------------------------------------------------
+    Last FM player client
+
+    To activate this plugin, put the following in your local_conf.py:
+
     plugin.activate('audio.lastfm')
     LASTFM_USER = '<last fm user name>'
     LASTFM_PASS = '<last fm password>'
@@ -44,7 +45,6 @@ class PluginInterface(plugin.MainMenuPlugin):
     RIGHT - skip song
     1     - send to last.fm LOVE song
     9     - send to last.fm BAN song
-
     """
 
     def __init__(self):

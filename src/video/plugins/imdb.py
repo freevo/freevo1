@@ -48,6 +48,16 @@ from gui.PopupBox import PopupBox
 from util import htmlenties2txt
 
 class PluginInterface(plugin.ItemPlugin):
+    """
+    You can add IMDB information for video items with the plugin.
+
+    activate with:
+        plugin.activate('video.imdb')
+
+    You can also set imdb_search on a key (e.g. '1') by setting
+    EVENTS['menu']['1'] = Event(MENU_CALL_ITEM_ACTION, arg='imdb_search_or_cover_search')
+    """
+
     def __init__(self, license=None):
         if not config.USE_NETWORK:
             self.reason = 'no network'

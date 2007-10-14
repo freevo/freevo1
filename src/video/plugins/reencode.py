@@ -43,12 +43,12 @@ from gui.PopupBox import PopupBox
 
 
 class PluginInterface(plugin.ItemPlugin):
-    '''
-    Plug-in to archive recorded TV programmes using EncodingServer
+    """
+    Archive recorded TV programmes using EncodingServer
 
-    This plugin NEEDS a running encodingserver to work properly.
+    This plugin needs a running encodingserver to work properly.
     You can start an encodingserver with 'freevo encodingserver start'.
-    '''
+    """
 
     def __init__(self):
         _debug_('__init__(self)')

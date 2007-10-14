@@ -39,6 +39,10 @@ from plugins.screensaver import ScreenSaverPlugin
 
 
 class PluginInterface(ScreenSaverPlugin):
+    """
+    A bouncing balls screensaver
+    """
+
     def __init__(self):
         ScreenSaverPlugin.__init__(self)
         self.plugin_name = 'screensaver.balls'

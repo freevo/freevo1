@@ -51,11 +51,13 @@ def returnFromJelly(status, response):
 
 
 class PluginInterface(IdleBarPlugin):
-    '''
-    This plugin shows the current encoding status
+    """
+    Shows the status of the current encoding job
+
     Activate with:
-    plugin.activate('idlebar.encoding')
-    '''
+        plugin.activate('idlebar.transcode')
+    """
+
     def __init__(self):
         _debug_('__init__(self)', 2)
         IdleBarPlugin.__init__(self)
@@ -109,7 +111,7 @@ class PluginInterface(IdleBarPlugin):
 
 
     def config(self):
-        return [ ('ENCODING_IDLEBAR', True, 'Use the idlebar'), ]
+        return [ ('ENCODING_IDLEBAR', True, 'Show on the idlebar, otherwise on the main screen'), ]
 
 
     def getprogress(self):

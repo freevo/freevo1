@@ -38,6 +38,7 @@ from directory import DirItem
 class PluginInterface(plugin.MainMenuPlugin):
     """
     Plugin for usb storage devices.
+
     Parameter: name and mountpoint..
     You should also activate the usb plugin so that the menu will change
     when you plugin in or remove the usb storage device.

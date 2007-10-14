@@ -23,24 +23,21 @@ _player_ = None
             
 
 class PluginInterface(plugin.MainMenuPlugin):
-    
     """
-    AUDIO PODCAST plugin 
+    Audio podcast plugin 
+
     Add to local_conf.py
-    
-    plugin.activate('audio.apodcast')
-    APODCAST_LOCATIONS = [
+        plugin.activate('audio.apodcast')
+        APODCAST_LOCATIONS = [
           ('TWIT','http://leo.am/podcasts/twit'),
           ('NPR: Science Friday', 'http://www.sciencefriday.com/audio/scifriaudio.xml'),
           ('NPR: Story of the Day', 'http://www.npr.org/rss/podcast.php?id=1090'),
           ('PodTech.net: Technology and Entertainment Video Network', 'http://www.podtech.net/?feed=rss2'),
           (' 60 Minutes Podcast - Selected Segments', 'http://www.cbsnews.com/common/includes/podcast/podcast_60min_1.rss'),
           ('English as a Second Language Podcast', 'http://feeds.feedburner.com/EnglishAsASecondLanguagePodcast')
-          ]
+        ]
 
     APODCAST_DIR = '/home/user_name/apodcast'
-
-    
     """
 
     def __init__(self):
@@ -55,11 +52,9 @@ class PluginInterface(plugin.MainMenuPlugin):
         '''
         freevo plugins -i audio.apodcast returns the info
         '''
-        
-        
         return [
-            ('APODCAST_LOCATIONS',' ' ,'List of podcast locations'),
-            ('APODCAST_DIR',' ' ,'Dir for downloaded podcasts')
+            ('APODCAST_LOCATIONS', None, 'List of podcast locations'),
+            ('APODCAST_DIR', None, 'Dir for downloaded podcasts')
         ]
     
     def check_dir(self):
@@ -112,7 +107,7 @@ class ApodcastItem(Item):
         """
         return a list of actions for this item
         """
-        items = [ ( self.play , _( 'Listen Audio Podcast' ) ) ]
+        items = [ ( self.play, _( 'Listen Audio Podcast' ) ) ]
         return items
 
     def play(self, arg=None, menuw=None):
@@ -157,7 +152,7 @@ class ApodcastMainMenuItem(MenuItem):
         """
         return a list of actions for this item
         """
-        return [ ( self.create_podcast_menu , 'stations' ) ]
+        return [ ( self.create_podcast_menu, 'stations' ) ]
 
         
     def create_podcast_submenu(self, arg=None, menuw=None, image=None):

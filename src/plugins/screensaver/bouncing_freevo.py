@@ -41,6 +41,10 @@ from plugins.screensaver import ScreenSaverPlugin
 osd = osd.get_singleton()
 
 class PluginInterface(ScreenSaverPlugin):
+    """
+    A sliding and bouncing Freevo screensaver
+    """
+
     def __init__(self):
         ScreenSaverPlugin.__init__(self)
         self.plugin_name = 'screensaver.bouncing_freevo'
