@@ -66,8 +66,14 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
-Ringj Cn <zhmy at ringj.cn>
-o Chinese translation
+Krasimir <krasimir_a at users.sourceforge.net>
+o RSS audio podcast plug-in
+
+Cypress <cypresstwist at users.sourceforge.net>
+o Romanian translation
+
+Aleph <alephlg at users.sourceforge.net>
+o Hungarian translation
 
 Lefteris F. Sarakinos <lefteris at kerkyra.gr>
 o Greek translation
@@ -103,6 +109,9 @@ o Skin additions, anamorphic and past programmes
 
 Don Locke <dlock3 at gmail.com>
 o Music Player Daemon (MPD) plug-in
+o Webserver configuration and plug-in configuration tools
+o Webserver log viewer
+o Webserver YouTube download interface
 
 Frank Naude <naudefj at telkomsa.net>
 o Afrikaans translation
