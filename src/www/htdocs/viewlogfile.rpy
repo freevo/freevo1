@@ -64,8 +64,8 @@ def CreateListBox(cname, grps, cvalue, opts):
     return ctrl
 
 
-def GetLogFiles():
-    filelist = os.listdir(config.FREEVO_LOGDIR)
+def GetLogFiles(logfile_directory):
+    filelist = os.listdir(logfile_directory)
     for l in filelist:
         if not l.endswith('.log'):
             filelist.remove(l)
@@ -88,7 +88,12 @@ class ViewLogFileResource(FreevoResource):
         if not dfile:
             dfile = 'webserver-0.log'
 
-        dfile = os.path.join(config.FREEVO_LOGDIR, dfile)
+        if config.__dict__.has_key('FREEVO_LOGDIR'):
+            logfile_directory = config.FREEVO_LOGDIR
+        else:
+            logfile_directory = config.LOGDIR
+
+        dfile = os.path.join(logfile_directory, dfile)
         update = fv.formValue(form, 'update')
 
         rows = fv.formValue(form, 'rows')
@@ -111,7 +116,7 @@ class ViewLogFileResource(FreevoResource):
         fv.res  += '\n<form id="viewlog_form" name="viewlog_form" action="viewlogfile.rpy" method="get">'
         fv.res += '<br>'
 
-        logfiles = GetLogFiles()
+        logfiles = GetLogFiles(logfile_directory)
         js_update = 'onchange=UpdateDisplay()'
         fv.res +=  'Log File :  ' + CreateListBox('logfile', logfiles, dfile, js_update)
         fv.res  += '<input type="Button" value="Refresh" onclick=%s >' % js_update

@@ -1,31 +1,3 @@
-function UpdateFileList(cname,crow) {
-    var x,fList,checkurl,configfile;
-
-    // Check to see if the sytax of the line is ok.
-    fList = PrepareFileList(cname);
-
-    configfile =document.getElementById('configfile')
-    checkurl = 'configedit.rpy?configfile=' + configfile + '&cmd=CHECK&udname=' + cname + '&udvalue=' + fList
-    makeRequest(checkurl,cname,cname + "_check");
-}
-
-function CheckFileList(cname,crow,cmd) {
-    var x,fList,checkurl,configfile;
-
-    // Check to see if the sytax of the line is ok.
-    fList = PrepareFileList(cname);
-
-    configfile =document.getElementById('configfile')
-    checkurl = 'configedit.rpy?configfile=' + configfile + '&cmd=' + cmd  + '&udname=' + cname + '&udvalue=' + fList
-    makeRequest(checkurl,cname,cname + "_check");
-
-    // Check to see if file is ok.
-    filename = document.getElementById(cname + "_file" + crow).value
-    checkurl = 'configedit.rpy?configfile=' + configfile + '&cmd=CHECKFILE&udvalue=' + filename
-    makeRequest(checkurl,cname,cname + "_check_" + crow)
-}
-
-
 function PrepareFileList(cname) {
     var cvalue,tblabel,tbfile,cnt;
 
@@ -90,9 +62,6 @@ function PrepareChannelList(cname) {
     return cvalue;
 }
 
-
-
-
 function PrepareItemList(cname) {
     var rcnt,ccnt,cvalue,tblcell,start_char,end_char;
     var cline;
@@ -105,7 +74,7 @@ function PrepareItemList(cname) {
     while (tblcell != null ) {
         // Loop throught all of the cols
         ccnt = 0
-        cline = ""
+        cline = "("
         while (tblcell != null) {
             if (tblcell.value != "")
                 start_char = "'"
@@ -117,18 +86,18 @@ function PrepareItemList(cname) {
                 if (echar == ")")
                     end_char = "";
                 //if  start_char.charAt(0)
-                cline =  start_char + tblcell.value + end_char + ",";
+                cline =  cline + start_char + tblcell.value + end_char + ",";
             ccnt++;
             tblcell = document.getElementById(cname + "_item" + rcnt + ccnt)
         }
         rcnt++;
         ccnt = 0
-        cvalue = cvalue + cline;
+        cvalue = cvalue + cline.substring(0,cline.length -1) + '),';
         tblcell = document.getElementById(cname + "_item" + rcnt + ccnt);
     }
         
     if (cvalue != "") 
-        cvalue = "[" + cvalue.substring(0,cvalue.length -1) + "]";
+        cvalue = "[" + cvalue.substring(0,cvalue.length -2) + ")]";
 
     return cvalue;
 }
@@ -148,8 +117,7 @@ function UpdateStatus(hRequest,cname,cstatus) {
                btnUpdate.style.display = ""; 
             else
                btnUpdate.style.display = "none";
-            
-//            btnUpdate.disabled = disableupdate;
+
         } else {
             alert('There was a problem with the request.');
         }
@@ -186,55 +154,59 @@ function makeRequest(url,cname,cstatus) {
     httpRequest.send('');
 }
 
-function SaveValue(sname,type) {
+function SaveValue(control_name,type) {
     // Get the Value from the text box. 
     var svalue,tb,chk,updateurl,strenable;
-    var startline,endline;
+    var startline,endline, sname;
 
+    sname = document.getElementById(control_name + '_ctrlname').value
+    
     if (type == "tv_channels") 
-        svalue = PrepareChannelList(sname);
+        svalue = PrepareChannelList(control_name);
     else if (type == "fileitemlist")
-        svalue =  PrepareFileList(sname);
+        svalue =  PrepareFileList(control_name);
     else if (type == "itemlist")
-        svalue = PrepareItemList(sname);
+        svalue = PrepareItemList(control_name);
     else {
-        tb = document.getElementById(sname );
+        tb = document.getElementById(control_name);
         svalue = tb.value;
     }
     
-    chk  = document.getElementById(sname + "_chk")
-    startline = document.getElementById(sname + "_startline").value
-    endline = document.getElementById(sname + "_endline").value
+    chk  = document.getElementById(control_name + "_chk")
+    startline = document.getElementById(control_name + "_startline").value
+    endline = document.getElementById(control_name + "_endline").value
     
     strenable = "FALSE"
     if (chk.checked) 
         strenable = "TRUE";
     
-    configfile =document.getElementById('configfile')
+    configfile =document.getElementById('configfile').value
     updateurl = 'configedit.rpy?configfile=' + configfile + '&cmd=UPDATE&udname=' + sname + '&udvalue=' + svalue + '&udenable=' + strenable;
     updateurl = updateurl + "&startline=" + startline + '&endline=' + endline;
    
-   makeRequest(updateurl,sname,sname + "_check");
+   makeRequest(updateurl,control_name,control_name + "_check");
 }
 
-function CheckValue(sname,type,row) {
+function CheckValue(control_name ,type,row) {
         // Get the Value from the text box. 
     var svalue,tb,chk,updateurl,strenable;
+    
+    sname = document.getElementById(control_name + '_ctrlname').value
 
     if (type == "tv_channels") 
-        svalue = PrepareChannelList(sname);
-    else if (type == "fileitemlist")
-        svalue =  PrepareFileList(sname);
-    else if (type == "itemlist")
-        svalue = PrepareItemList(sname);
+        svalue = PrepareChannelList(control_name);
+    else if (type == "fileitemlist") 
+        svalue =  PrepareFileList(control_name);
+    else if (type == "itemlist") 
+        svalue = PrepareItemList(control_name);
     else {
-        tb = document.getElementById(sname );
+        tb = document.getElementById(control_name);
         svalue = tb.value;
     }
 
     configfile =document.getElementById('configfile')
     updateurl = 'configedit.rpy?configfile=' + configfile + '&cmd=CHECK&udname=' + sname + '&udvalue=' + svalue
-    makeRequest(updateurl,sname,sname + "_check");
+    makeRequest(updateurl,control_name,control_name + "_check");
 }
 
 
@@ -248,53 +220,4 @@ function DeleteLines(cname, sline,eline) {
 
 }
 
-//function DeleteValue(sname, sline, eline) {
-//    var updateurl;
-
-//    updateurl = 'configedit.rpy?cmd=DELETE&startline=' + sline + '&endline=' + eline
-//    makeRequest(updateurl,sname,sname + "_list");
-//}
-
-/* function CheckSyntax(hRequest, varID) {
-    var cell;
-    if (hRequest.readyState == 4) {
-        if (hRequest.status == 200) {
-           cell = document.getElementById(varID + "_check");
-           cell.innerHTML = hRequest.responseText;
-        } else {
-            alert('There was a problem with the request.');
-        }
-    }
-}  
-
-function makeCheckSyntaxRequest(url,cname) {
-    var httpRequest;
-
-    if (window.XMLHttpRequest) { // Mozilla, Safari, ...
-        httpRequest = new XMLHttpRequest();
-        if (httpRequest.overrideMimeType) {
-            httpRequest.overrideMimeType('text/xml');
-        }
-    } 
-    else if (window.ActiveXObject) { // IE
-        try {
-            httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
-        } 
-        catch (e) {
-            try {
-                httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-            } 
-        catch (e) {}
-        }
-    }
-
-    if (!httpRequest) {
-        alert('Giving up :( Cannot create an XMLHTTP instance');
-        return false;
-    }
-    httpRequest.onreadystatechange = function() { CheckSyntax(httpRequest,cname); };
-    httpRequest.open('GET', url, true);
-    httpRequest.send('');
-}
-*/
 

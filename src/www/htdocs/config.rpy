@@ -87,6 +87,7 @@ def ParseConfigFile(rconf):
         if pln['type']:
             pln['startline'] = startline
             pln['endline'] = cnt
+            pln['control_name'] = pln['ctrlname'] + '_' + str(startline)
             fconfig.append(pln)
         cnt += 1
     fconfig.sort()
@@ -107,6 +108,7 @@ def ParseLine(cline):
                'startline':'',
                'endline':'',
                'fileline':cline,
+               'control_name':'',
                'vartype':''}
 
     tln = cline.strip()
@@ -238,7 +240,7 @@ def FileTypeVar(cname):
     '''
     _debug_('FileTypeVar(cname)', 2)
     vtype = cname.split('_')[-1]
-    filetypes = ['PATH', 'DIR', 'FILE', 'DEV', 'DEVICE']
+    filetypes = ['PATH', 'DIR', 'FILE', 'DEVICE']
     filevars = ['XMLTV_GRABBER', 'RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'XMLTV_SORT', 'LIRCRC']
 
     if vtype in filetypes:
@@ -288,7 +290,7 @@ def CreateTV_Channels_ctrl(cname, cvalue, cenabled):
     btnUp =  ''
     btnDown = ''
     btnMove =  '<input type="button" value="%s" '
-    btnMove += 'onclick=MoveTVChannel("%s", %i, %i)>'
+    btnMove += 'onclick=MoveTVChannel("%s",%i,%i)>'
     vitems = GetItemsArray(cvalue)
 
     spDisable_open = ''
@@ -298,11 +300,16 @@ def CreateTV_Channels_ctrl(cname, cvalue, cenabled):
         spDisable_close = '</span>'
 
     if vitems:
-        txtbox =  '<input type="textbox" style={background:00BFFF} '
-        txtbox += 'id="%s_item%i"value = "%s" size=30>'
+        txtbox =  '<input type="textbox"  '
+        txtbox += 'id="%s_item%i" value = "%s" size=30>'
         for r, e in enumerate(vitems):
             ctrl += '<li>%s' % spDisable_open
             ctrl += btnMove % ('Up', cname, r, -1)
+
+            control_id = '%s_item%i' % ( cname, r )
+            #html_textbox = Create_HTML_input('textbox', control_id, e, '30',  '' )
+            #ctrl += html_textbox
+
             ctrl +=  txtbox % (cname, r, e)
             if r <>  (len(vitems) -1):
                 ctrl += btnMove % ('Down', cname, r, 1)
@@ -329,34 +336,57 @@ def CreateFileItemList(cname, cvalue, cenabled):
     if vitems:
         txtops = ''
         for r, e in enumerate(vitems):
+            filecheck = ''
+            chkClass = ''
 
             ctrl += '<li>'
-            if type(e) == types.StringType or type(e) ==  types.IntType:
-                ctrl +=  '%s<input type="textbox" %s id="%s_label%i"value="%s">%s' % \
-                    (spDisable_open, txtops, cname, r, e, spDisable_close)
-            else:
-                txtLabelBox = '%s<input type="textbox" id="%s_label%i" "value="%s">%s' % \
-                    (spDisable_open, cname, r, e[0], spDisable_close)
-                jsCheckFile = 'onchange=CheckValue("%s", "fileitemlist", "%i")' % (cname, r)
-                txtFolderBox = '%s<input type="textbox" id="%s_file%i" value="%s" %s>%s' % \
-                    (spDisable_open, cname, r, e[1], jsCheckFile, spDisable_close)
-                ctrl += txtLabelBox + txtFolderBox
+            ctrl += spDisable_open
 
-                filecheck = ''
-                chkClass = ''
+            if type(e) == types.StringType or type(e) ==  types.IntType:
+                control_id = '%s_label%i' % ( cname, r)
+                html_input = Create_HTML_input('textbox', control_id, e, '', '' )
+                ctrl += html_input
+
+                if not os.path.exists(e):
+                    filecheck = 'Missing File'
+                    chkClass = 'CheckWarning'
+
+            else:
+                js_onchange = 'onchange=CheckValue("%s","fileitemlist","%i")' % (cname, r)
+                label_ctrl_id = '%s_label%i' % ( cname, r )
+                label_ctrl = Create_HTML_input('textbox', label_ctrl_id, e[0], '', '')
+
+                dir_ctrl_id = '%s_file%i' % ( cname, r )
+                dir_ctrl = Create_HTML_input('textbox', dir_ctrl_id, e[1], '', js_onchange )
+
+                ctrl += label_ctrl
+                ctrl += dir_ctrl
+
                 if not os.path.exists(e[1]):
                     filecheck = 'Missing File'
                     chkClass = 'CheckWarning'
-                ctrl += '%s<span class="%s" id="%s_check_%i">%s</span>%s' % \
-                    (spDisable_open, chkClass, cname, r, filecheck, spDisable_close)
+
+            span_id = '%s_check_%i' % ( cname, r )
+            ctrl += '<span class="%s" id="%s">%s</span>' % ( chkClass, span_id, filecheck)
+
+            ctrl += spDisable_close
             ctrl += '</li>'
 
         r += 1;
-        txtLabelBox = '<input type="textbox" id="%s_label%i" "value="%s">' % (cname, r, "")
-        jsCheckFile = 'onchange=CheckValue("%s", "fileitemlist", "%i")' % (cname, r)
-        txtFolderBox = '<input type="textbox" id="%s_file%i" value="%s" %s>' % (cname, r, "", jsCheckFile)
+
+        js_onchange = 'onchange=CheckValue("%s","fileitemlist","%i")' % (cname, r)
+        label_ctrl_id = '%s_label%i' % ( cname, r )
+        label_ctrl = Create_HTML_input('textbox', label_ctrl_id, '', '', '')
+
+        dir_ctrl_id = '%s_file%i' % ( cname, r )
+        dir_ctrl = Create_HTML_input('textbox', dir_ctrl_id, '', '', js_onchange )
+
         ctrl += '<li>'
-        ctrl += txtLabelBox + txtFolderBox
+        ctrl += spDisable_open
+        ctrl += label_ctrl
+        ctrl += dir_ctrl
+        ctrl += spDisable_close
+
         ctrl += '<span class="" id="%s_check_%i"></span' % (cname, r)
         ctrl += '</li>'
 
@@ -369,7 +399,7 @@ def CreateDictionaryControl(cname, cvalue, cenabled):
     '''
     _debug_('CreateDictionaryControl(cname, cvalue, cenabled)', 2)
     ctrl2type = 'textbox'
-    if cname =='WWW_USERS':
+    if cname.startswith('WWW_USERS'):
         ctrl2type = 'password'
     vitems = GetItemsArray(cvalue)
     ctrl = ""
@@ -381,19 +411,43 @@ def CreateDictionaryControl(cname, cvalue, cenabled):
 
     ctrl += '<span class="ItemList">{'
     ctrl += '<ul class="ItemList">'
+
     if vitems:
         txtbox = '%s<input type="%s" id="%s_item%i%i" size=10 value="%s">%s'
         for r, e in enumerate(vitems):
             pword =  vitems[e]
-            ctrl += '<li>' +  txtbox % (spDisable_open, 'textbox', cname, r, 0, e, spDisable_close)
-            ctrl +=  txtbox % (spDisable_open,  ctrl2type, cname, r, 0, vitems[e], spDisable_close) + '</li>\n'
-        ctrl += '<li>' + txtbox % (spDisable_open, 'textbox', cname, r+1, 0, '""', spDisable_close)
-        ctrl += txtbox % (spDisable_open, ctrl2type, cname, r+1, 1, '""', spDisable_close) + '</li>'
-        ctrl += '</ul>'
-        ctrl += '}</span>'
+
+            label_ctrl_id = '%s_item%i%i' % ( cname, r, 0 )
+            label_ctrl = Create_HTML_input('textbox', label_ctrl_id, e, '15', '')
+
+            value_ctrl_id = '%s_item%i%i' % ( cname, r , 1 )
+            value_ctrl = Create_HTML_input(ctrl2type, value_ctrl_id, vitems[e], '15', '')
+
+            ctrl += '<li>'
+            ctrl += spDisable_open
+            ctrl += label_ctrl
+            ctrl += value_ctrl
+            ctrl += spDisable_close
+            ctrl += '</li>\n'
+
+
+        label_ctrl_id = '%s_item%i%i' % ( cname, r+1, 0 )
+        label_ctrl = Create_HTML_input('textbox', label_ctrl_id, '', '15', '')
+
+        value_ctrl_id = '%s_item%i%i' % ( cname, r+1 , 1 )
+        value_ctrl = Create_HTML_input(ctrl2type, value_ctrl_id, '', '15', '')
+
+        ctrl += '<li>'
+        ctrl += spDisable_open
+        ctrl += label_ctrl
+        ctrl += value_ctrl
+        ctrl += spDisable_close
+        ctrl += '</li>\n'
+        ctrl += '</ul>\n'
+        ctrl += '}</span>\n'
 
         if cenabled:
-            ctrl += '</span>'
+            ctrl += '</span>\n'
 
     return ctrl
 
@@ -411,35 +465,52 @@ def CreateListControl(cname, cvalue, cenable):
         spDisable_close = '</span>'
 
     ctrl = '<span class="ItemList">['
-    ctrl += '<ul class="ItemList">'
+    ctrl += '<ul class="ItemList">\n'
     vitems = GetItemsArray(cvalue)
     maxcols = 1
     if vitems:
         txtops = ''
 
-        txtbox = '%s<input type="textbox" onchange=CheckValue("' + cname + \
-            '", "itemlist", 0)  %s id="%s_item%i%i"value="%s">%s'
         for r, e in enumerate(vitems):
             vtype = type(e)
+            js_onchange = 'onchange=CheckValue("%s","itemlist","%i")' % (cname, r)
+
             if vtype == types.StringType or vtype == types.FloatType or vtype == types.IntType:
-                ctrl +=  '<li>' +  txtbox % (spDisable_open, txtops, cname, r, 0, e, spDisable_close) + '</li>'
+
+                html_textbox_id = '%s_item%i%i'
+                html_textbox = Create_HTML_input('textbox', html_textbox_id, e, '15', js_onchange)
+                ctrl_line = html_textbox
+
             else:
-                ctrl += '<li>'
                 cols = 0
+                ctrl_line = ''
                 for c, e2 in enumerate(e):
                     cols += 1;
-                    ctrl +=  txtbox % (spDisable_open, '', cname, r, c, e2, spDisable_close)
+                    html_textbox_id = '%s_item%i%i' % ( cname, r, c )
+                    html_textbox = Create_HTML_input('textbox', html_textbox_id, e2, '15', js_onchange)
+                    ctrl_line += html_textbox
 
                 if cols > maxcols:
                     maxcols = cols
 
-                ctrl += '</li>\n'
+            ctrl += '\n<li>'
+            ctrl += spDisable_open
+            ctrl += ctrl_line
+            ctrl += spDisable_close
+            ctrl += '</li>\n'
+
         ctrl += '<li>\n'
+        ctrl += spDisable_open
 
         r+= 1;
+        js_onchange = 'onchange=CheckValue("%s","itemlist","%i")' % (cname, r)
         for c in range(0, maxcols):
-            ctrl +=  txtbox % (spDisable_open, '', cname, r, c, '', spDisable_close)
-        ctrl += "</li>\n"
+            html_textbox_id = '%s_item%i%i' % ( cname, r, c )
+            html_textbox = Create_HTML_input('textbox', html_textbox_id, '', '15', js_onchange)
+            ctrl += html_textbox
+
+        ctrl += spDisable_close
+        ctrl += '</li>\n'
         ctrl += '</ul>\n'
         ctrl += "%s]%s</span>\n" % (spDisable_open, spDisable_close)
         return ctrl
@@ -458,8 +529,24 @@ def CreateTextArea(cname, cvalue):
         rows = 5
     cvalue = cvalue.replace(elemsep, elemsep + "\n")
     ctrl = ''
-    ctrl += '<textarea  id= "%s" rows = %s cols=35 wrap="SOFT" name=%s onchange=CheckValue("%s", "textbox", 0) >%s</textarea>'  % (cname, str(rows), cname, cname, cvalue)
+    js_onchange = 'onchange=CheckValue("%s","textbox",0)' % cname
+    ctrl += '<textarea  id= "%s" rows = %s cols=35 wrap="SOFT" name=%s %s>'  % (cname, str(rows), cname, js_onchange)
+
+    ctrl += cvalue
+    ctrl += '</textarea>'
     return ctrl
+
+def Create_HTML_input(control_type, control_id, control_value, control_size, control_javascript):
+
+    html_input = '<input '
+    html_input += 'type = "%s" ' % control_type
+    html_input += 'id = "%s" ' % control_id
+    html_input += 'value = "%s" ' % control_value
+    html_input += 'size = "%s"' % control_size
+    html_input += control_javascript
+    html_input += '>'
+
+    return html_input
 
 
 def CreateListBoxControl(cname, grps, cvalue, opts=""):
@@ -482,6 +569,7 @@ def CreateConfigLine(nctrl, expALL, plugin_group):
     _debug_('CreateConfigLine(nctrl=%r, expALL=%r, plugin_group=%r)' % (nctrl, expALL, plugin_group), 2)
     htmlctrl = HTMLResource()
 
+    control_name = nctrl['control_name']
     cname = nctrl['ctrlname']
     cvalue = nctrl['ctrlvalue']
     sline = nctrl['startline']
@@ -516,35 +604,38 @@ def CreateConfigLine(nctrl, expALL, plugin_group):
         disable_span_close =  '</span>'
 
     htmlctrl.res += '%s<span id="%s_check" class="check">%s</span>%s' % \
-        (disable_span_open, cname, lcheck, disable_span_close)
+        (disable_span_open, control_name, lcheck, disable_span_close)
+
     ctrltype = getCtrlType(cname, cvalue, vtype)
-    jsonChange = 'onchange=CheckValue("%s", "%s", 0) '  % (cname, ctrltype)
+    jsonChange = 'onchange=CheckValue("%s","%s",0) '  % (control_name, ctrltype)
     chkbox = '%s<input type="checkbox" id = "%s_chk" %s  %s>%s\n' % \
-        (disable_span_open, cname, checked, jsonChange, disable_span_close)
-    delbtn = '%s<input type="button" class="configbutton" onclick=DeleteLines("%s", %i, %i) value="Delete">%s\n' % \
-        (disable_span_open, cname, sline, eline, disable_span_close)
+        (disable_span_open, control_name, checked, jsonChange, disable_span_close)
+
+    delbtn = '%s<input type="button" class="configbutton" onclick=DeleteLines("%s",%i,%i) value="Delete">%s\n' % \
+        (disable_span_open, control_name, sline, eline, disable_span_close)
     htmlctrl.res += delbtn
     htmlctrl.res += chkbox
 
-    htmlctrl.res += '<a onclick=ShowList("%s_list")>%s</a>' % (cname, cname)
-    htmlctrl.res += '<ul style= display:%s id="%s_list">' % (displayvars, cname)
-    htmlctrl.res += '<input type="hidden" id="%s_startline" value="%i">\n' % (cname, sline)
-    htmlctrl.res += '<input type="hidden" id="%s_endline" value="%i">\n' % (cname, eline)
+    htmlctrl.res += '<a onclick=ShowList("%s_list")>%s</a>' % (control_name, cname)
+    htmlctrl.res += '<ul style= display:%s id="%s_list">' % (displayvars, control_name)
+    htmlctrl.res += '<input type="hidden" id="%s_startline" value="%i">\n' % (control_name, sline)
+    htmlctrl.res += '<input type="hidden" id="%s_endline" value="%i">\n' % (control_name, eline)
+    htmlctrl.res += '<input type="hidden" id="%s_ctrlname" value="%s">\n' % (control_name, cname)
 
-    jsSave =  'onclick=SaveValue("%s", "%s")' % (cname, ctrltype)
+    jsSave =  'onclick=SaveValue("%s","%s")' % (control_name, ctrltype)
 
-    btnupdate = '<input type="button" style="display:none;" id="%s_btn_update" class="button.config" value="Update" %s >\n' % (cname, jsSave)
+    btnupdate = '<input type="button" style="display:none;" id="%s_btn_update" class="button.config" value="Update" %s >\n' % (control_name, jsSave)
     htmlctrl.res += btnupdate
 
     if nctrl['type'] == 'textbox':
-        inputbox = CreateTextBox(cname, cvalue, nctrl['vartype'], plugin_group, nctrl['checked'])
+        inputbox = CreateTextBox(control_name, cname, cvalue, nctrl['vartype'], plugin_group, nctrl['checked'])
         htmlctrl.res += "<li>%s %s %s</li>"  % (disable_span_open, inputbox, disable_span_close)
 
     htmlctrl.res += '</ul>'
     return htmlctrl.res
 
 
-def CreateTextBox(cname, cvalue, vtype, plugin_group, cenabled):
+def CreateTextBox(cname, setting_name, cvalue, vtype, plugin_group, cenabled):
     '''
     '''
     _debug_('CreateTextBox(cname, cvalue, vtype, plugin_group, cenabled)', 2)
@@ -554,10 +645,10 @@ def CreateTextBox(cname, cvalue, vtype, plugin_group, cenabled):
 
     ctrl = ""
     if vtype == 'boolean':
-        ctrl = CreateListBoxControl(cname, bllist, cvalue, 'onchange=CheckValue("%s", "textbox", 0)')
+        ctrl = CreateListBoxControl(cname, bllist, cvalue, 'onchange=CheckValue("%s","textbox",0)')
         return ctrl
 
-    if cname == 'TV_CHANNELS':
+    if setting_name == 'TV_CHANNELS':
         ctrl = CreateTV_Channels_ctrl(cname, cvalue, cenabled)
         return ctrl
 
@@ -566,10 +657,10 @@ def CreateTextBox(cname, cvalue, vtype, plugin_group, cenabled):
             cvalue = "True"
         else :
             cvalue = "False"
-        ctrl = CreateListBoxControl(cname, bllist, cvalue, 'onchange=CheckValue("%s", "textbox", 0)')
+        ctrl = CreateListBoxControl(cname, bllist, cvalue, 'onchange=CheckValue("%s","textbox",0)')
         return ctrl
 
-    if FileTypeVarArray(cname):
+    if FileTypeVarArray(setting_name):
         ctrl = CreateFileItemList(cname, cvalue, cenabled)
         return ctrl
 
@@ -589,11 +680,10 @@ def CreateTextBox(cname, cvalue, vtype, plugin_group, cenabled):
         ctrl = CreateNumberControl(cname, cvalue)
         return ctrl
 
-    jscheck = '"=makeCheckSyntaxRequest(%s);"' % cname
-    ctrl = '<span class="%s">' % jscheck
-    ctrl += '<input type=textbox id="%s" name="%s" value="%s" onchange=CheckValue("%s", "textbox", 0) size="50" >' \
-        % (cname, cname, cvalue, cname)
-    ctrl += '</span>'
+    js_onchange = 'onchange=CheckValue("%s","textbox",0)' % cname
+    html_input = Create_HTML_input('textbox', cname, cvalue, '50', js_onchange)
+    ctrl += html_input
+
     return ctrl
 
 
@@ -603,7 +693,7 @@ def CreateNumberControl(cname, cvalue):
     _debug_('CreateNumberControl(cname, cvalue)', 2)
     tbClass = 'VarInputInt'
     ctrl = '<span class="%s">' % tbClass
-    ctrl += '<input type=textbox  id="%s" name="%s" value="%s" onchange=CheckValue("%s", "textbox", 0) size="50" >' \
+    ctrl += '<input type=textbox  id="%s" name="%s" value="%s" onchange=CheckValue("%s","textbox",0) size="50" >' \
         % (cname, cname, cvalue, cname)
     ctrl += '</span>'
     return ctrl

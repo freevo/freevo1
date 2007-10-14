@@ -31,7 +31,13 @@ from www.web_types import HTMLResource, FreevoResource
 
 
 def LogTransaction(cmd, lineno, line):
-    logfile = open (os.path.join(config.FREEVO_LOGDIR, 'webconfig.log'), 'a')
+
+    if config.__dict__.has_key('FREEVO_LOGDIR'):
+        logfile_directory = config.FREEVO_LOGDIR
+    else:
+        logfile_directory = config.LOGDIR
+
+    logfile = open (os.path.join(logfile_directory, 'webconfig.log'), 'a')
     logtime = time.strftime('%Y-%m-%d %H:%M:%S')
     message = 'Line : %i  %s %s ' % ( lineno, cmd, line)
     mess =  logtime + " -- " + message
@@ -54,24 +60,26 @@ def WriteConfigFile(filename, conf):
 
 
 def cmdCheckValue(varName, varValue):
-    retClass = 'UpdateError'
-    status = 'Error !'
+    retClass = 'checkError'
+    status = 'Error'
     blOK = False
     newline = varName + ' = ' + varValue + '\n'
 
     # Check the syntax of the new line.
     if CheckSyntax(newline):
         blOK = True
-        retClass = 'UpdateOK'
+        retClass = 'checkOK'
         status = 'OK'
 
     if FileTypeVar(varName) and blOK:
-        if os.path.exists(varValue):
-            retClass='UpdateWarning'
-            status = 'Missing File'
-        else:
-            retClass = 'UpdateOK'
+        file_name = varValue.replace("'", '').strip()
+
+        if os.path.exists(file_name):
+            retClass = 'checkOK'
             status = 'OK'
+        else:
+            retClass='CheckWarning'
+            status = 'Missing File'
 
     results = '<span class="%s">%s</span>' % (retClass, status)
     return blOK, results
@@ -173,6 +181,11 @@ def UpdatePlugin(cfile, pcmd, pname, pline, plugin_level):
     level = ''
     if plugin_level:
         level = ', level=' + plugin_level
+
+
+    args = ''
+    if plugin_args:
+        args = ', args =' + plugin_args
 
     if pline == -1:
         lconf.append('')
