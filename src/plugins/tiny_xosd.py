@@ -42,7 +42,7 @@ from event import *
 OSD_MESSAGE_FONT    = '-*-helvetica-medium-r-normal-*-*-260-*-*-p-*-*-*'
 OSD_MESSAGE_COLOR   = '#D3D3D3'  # LightGray
 OSD_MESSAGE_TIMEOUT = 3          # 3 seconds
-OSD_MESSAGE_OFFSET  = 20 + config.OSD_OVERSCAN_Y  # Offset of 20 pixels
+OSD_MESSAGE_OFFSET  = 20 + config.OSD_OVERSCAN_BOTTOM  # Offset of 20 pixels
 
 # Labels which are displayed with percent
 PERCENT = [ 'Volume',
@@ -134,7 +134,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 if config.START_FULLSCREEN_X == 1:
                     # Map xosd to Freevo osd
                     self.osd.set_pos(pyosd.POS_TOP)
-                    self.osd.set_offset(config.CONF.height - 3*config.OSD_DEFAULT_FONTSIZE - config.OSD_OVERSCAN_Y)
+                    self.osd.set_offset(config.CONF.height - 3*config.OSD_DEFAULT_FONTSIZE - config.OSD_OVERSCAN_BOTTOM)
                 else:
                     self.osd.set_pos(pyosd.POS_BOT)
 
