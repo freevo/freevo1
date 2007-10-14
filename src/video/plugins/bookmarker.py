@@ -174,7 +174,11 @@ class PluginInterface(plugin.ItemPlugin):
                 handle = os.popen(command,'r')
                 position = handle.read();
                 handle.close()
-                item.elapsed = int(position)
+                try:
+                    item.elapsed = int(position)
+                except ValueError, e:
+                    _debug_('Cannot save bookmark for postion %r: %s' % (position, e)
+                    return False
 
             bookmarkfile = util.get_bookmarkfile(item.filename)
 
