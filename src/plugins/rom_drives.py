@@ -110,15 +110,14 @@ def init():
     """
     create a list of media objects and start the Identify_Thread
     """
-    print 'init()'
     # Add the drives to the config.removable_media list. There doesn't have
     # to be any drives defined.
     if config.ROM_DRIVES != None:
         for i in range(len(config.ROM_DRIVES)):
             (dir, device, name) = config.ROM_DRIVES[i]
-            media = RemovableMedia(mountdir=dir, devicename=device,
-                                   drivename=name)
+            media = RemovableMedia(mountdir=dir, devicename=device, drivename=name)
             media.get_capabilities()
+            media.get_drive_status()
             # close the tray without popup message
             media.move_tray(dir='close', notify=0)
             config.REMOVABLE_MEDIA.append(media)
@@ -155,7 +154,6 @@ class autostart(plugin.DaemonPlugin):
         """
         load the plugin and start the thread
         """
-        print 'autostart:__init__()'
         plugin.DaemonPlugin.__init__(self)
         global im_thread
         if not im_thread:
@@ -298,11 +296,11 @@ class RemovableMedia:
         """
         return self.tray_open
 
+
     def get_capabilities(self):
+        """ Open the CD/DVD drive and read its capabilities
         """
-        """
-        print 'get_capabilities(self)'
-        _debug_('Getting capabilities of drive %s' % self.drivename, DINFO)
+        _debug_('Getting capabilities for %s' % self.drivename, DINFO)
         try:
             fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
             try:
@@ -310,53 +308,74 @@ class RemovableMedia:
                     self.can_close = True
                     self.can_eject = True
                 else:
-                    s = ioctl(fd, CDROM_GET_CAPABILITY)
+                    cdc = ioctl(fd, CDROM_GET_CAPABILITY)
+                    self.cdc = cdc
 
-                    if s & CDC_CLOSE_TRAY:
+                    if cdc & CDC_CLOSE_TRAY:
                         self.can_close = True
                         _debug_('Drive %s can close' % self.drivename, DINFO)
 
-                    if s & CDC_OPEN_TRAY:
+                    if cdc & CDC_OPEN_TRAY:
                         self.can_eject = True
                         _debug_('Drive %s can open' % self.drivename, DINFO)
 
-                    if s & CDC_SELECT_SPEED:
+                    if cdc & CDC_SELECT_SPEED:
                         self.can_select_speed = True
                         _debug_('Drive %s can select speed' % self.drivename, DINFO)
 
                     if config.DEBUG:
                         # some code to view the capabilities
-                        print 's=%r 0x%08x' % (s, s)
-                        print s & CDC_CLOSE_TRAY      and 'CDC_CLOSE_TRAY'      or 'not CDC_CLOSE_TRAY'
-                        print s & CDC_OPEN_TRAY       and 'CDC_OPEN_TRAY'       or 'not CDC_OPEN_TRAY' 
-                        print s & CDC_LOCK            and 'CDC_LOCK'            or 'not CDC_LOCK'
-                        print s & CDC_SELECT_SPEED    and 'CDC_SELECT_SPEED'    or 'not CDC_SELECT_SPEED'
-                        print s & CDC_SELECT_DISC     and 'CDC_SELECT_DISC'     or 'not CDC_SELECT_DISC'
-                        print s & CDC_MULTI_SESSION   and 'CDC_MULTI_SESSION'   or 'not CDC_MULTI_SESSION'
-                        print s & CDC_MCN             and 'CDC_MCN'             or 'not CDC_MCN'
-                        print s & CDC_MEDIA_CHANGED   and 'CDC_MEDIA_CHANGED'   or 'not CDC_MEDIA_CHANGED'
-                        print s & CDC_PLAY_AUDIO      and 'CDC_PLAY_AUDIO'      or 'not CDC_PLAY_AUDIO'
-                        print s & CDC_RESET           and 'CDC_RESET'           or 'not CDC_RESET'
-                        print s & CDC_DRIVE_STATUS    and 'CDC_DRIVE_STATUS'    or 'not CDC_DRIVE_STATUS'
-                        print s & CDC_GENERIC_PACKET  and 'CDC_GENERIC_PACKET'  or 'not CDC_GENERIC_PACKET'
-                        print s & CDC_CD_R            and 'CDC_CD_R'            or 'not CDC_CD_R'
-                        print s & CDC_CD_RW           and 'CDC_CD_RW'           or 'not CDC_CD_RW'
-                        print s & CDC_DVD             and 'CDC_DVD'             or 'not CDC_DVD'
-                        print s & CDC_DVD_R           and 'CDC_DVD_R'           or 'not CDC_DVD_R'
-                        print s & CDC_DVD_RAM         and 'CDC_DVD_RAM'         or 'not CDC_DVD_RAM'
-                        print s & CDC_MO_DRIVE        and 'CDC_MO_DRIVE'        or 'not CDC_MO_DRIVE'
-                        print s & CDC_MRW             and 'CDC_MRW'             or 'not CDC_MRW'
-                        print s & CDC_MRW_W           and 'CDC_MRW_W'           or 'not CDC_MRW_W'
-                        print s & CDC_RAM             and 'CDC_RAM'             or 'not CDC_RAM'
-                        if s & CDC_DRIVE_STATUS:
-                            t = ioctl(fd, CDROM_DRIVE_STATUS)
-                            print 't=%r 0x%08x' % (t, t)
-                            print t == CDS_NO_INFO         and 'CDS_NO_INFO'         or 'not CDS_NO_INFO'
-                            print t == CDS_NO_DISC         and 'CDS_NO_DISC'         or 'not CDS_NO_DISC'
-                            print t == CDS_TRAY_OPEN       and 'CDS_TRAY_OPEN'       or 'not CDS_TRAY_OPEN'
-                            print t == CDS_DRIVE_NOT_READY and 'CDS_DRIVE_NOT_READY' or 'not CDS_DRIVE_NOT_READY'
-                            print t == CDS_DISC_OK         and 'CDS_DISC_OK'         or 'not CDS_DISC_OK'
+                        print '%s cdc=0x%08x ' % (self.devicename, cdc)
+                        print cdc & CDC_CLOSE_TRAY      and 'CDC_CLOSE_TRAY'      or 'not CDC_CLOSE_TRAY'
+                        print cdc & CDC_OPEN_TRAY       and 'CDC_OPEN_TRAY'       or 'not CDC_OPEN_TRAY' 
+                        print cdc & CDC_LOCK            and 'CDC_LOCK'            or 'not CDC_LOCK'
+                        print cdc & CDC_SELECT_SPEED    and 'CDC_SELECT_SPEED'    or 'not CDC_SELECT_SPEED'
+                        print cdc & CDC_SELECT_DISC     and 'CDC_SELECT_DISC'     or 'not CDC_SELECT_DISC'
+                        print cdc & CDC_MULTI_SESSION   and 'CDC_MULTI_SESSION'   or 'not CDC_MULTI_SESSION'
+                        print cdc & CDC_MCN             and 'CDC_MCN'             or 'not CDC_MCN'
+                        print cdc & CDC_MEDIA_CHANGED   and 'CDC_MEDIA_CHANGED'   or 'not CDC_MEDIA_CHANGED'
+                        print cdc & CDC_PLAY_AUDIO      and 'CDC_PLAY_AUDIO'      or 'not CDC_PLAY_AUDIO'
+                        print cdc & CDC_RESET           and 'CDC_RESET'           or 'not CDC_RESET'
+                        print cdc & CDC_DRIVE_STATUS    and 'CDC_DRIVE_STATUS'    or 'not CDC_DRIVE_STATUS'
+                        print cdc & CDC_GENERIC_PACKET  and 'CDC_GENERIC_PACKET'  or 'not CDC_GENERIC_PACKET'
+                        print cdc & CDC_CD_R            and 'CDC_CD_R'            or 'not CDC_CD_R'
+                        print cdc & CDC_CD_RW           and 'CDC_CD_RW'           or 'not CDC_CD_RW'
+                        print cdc & CDC_DVD             and 'CDC_DVD'             or 'not CDC_DVD'
+                        print cdc & CDC_DVD_R           and 'CDC_DVD_R'           or 'not CDC_DVD_R'
+                        print cdc & CDC_DVD_RAM         and 'CDC_DVD_RAM'         or 'not CDC_DVD_RAM'
+                        print cdc & CDC_MO_DRIVE        and 'CDC_MO_DRIVE'        or 'not CDC_MO_DRIVE'
+                        print cdc & CDC_MRW             and 'CDC_MRW'             or 'not CDC_MRW'
+                        print cdc & CDC_MRW_W           and 'CDC_MRW_W'           or 'not CDC_MRW_W'
+                        print cdc & CDC_RAM             and 'CDC_RAM'             or 'not CDC_RAM'
+            finally:
+                os.close(fd)
+        except Exception, e:
+            _debug_('Cannot open "%s": %s"' % (self.devicename, e), DWARNING)
 
+
+    def get_drive_status(self):
+        """ Open the CD/DVD drive and read its drive status
+        """
+        _debug_('Getting drive staus for %s' % self.drivename, DINFO)
+        self.cds = 0
+        try:
+            fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
+            try:
+                if os.uname()[0] == 'FreeBSD':
+                    self.can_close = True
+                    self.can_eject = True
+                else:
+                    if self.cdc & CDC_DRIVE_STATUS:
+                        cds = ioctl(fd, CDROM_DRIVE_STATUS)
+                        self.cds = cds
+
+                        if config.DEBUG:
+                            print '%s cds=%s' % (self.devicename, cds)
+                            if   cds == CDS_NO_INFO:         print 'CDS_NO_INFO'
+                            elif cds == CDS_NO_DISC:         print 'CDS_NO_DISC'
+                            elif cds == CDS_TRAY_OPEN:       print 'CDS_TRAY_OPEN'
+                            elif cds == CDS_DRIVE_NOT_READY: print 'CDS_DRIVE_NOT_READY'
+                            elif cds == CDS_DISC_OK:         print 'CDS_DISC_OK'
             finally:
                 os.close(fd)
         except Exception, e:
