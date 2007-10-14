@@ -35,7 +35,9 @@ import menu
 
 class PluginInterface(plugin.Plugin):
     """
+    View the line in in VCR mode
     """
+
     def __init__(self):
         """
         normal plugin init, but sets _type to 'mainmenu_tv'

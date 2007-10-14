@@ -45,6 +45,13 @@ import rc
 rc = rc.get_singleton()
 
 class PluginInterface(plugin.DaemonPlugin):
+    """
+    A joystick control plugin for Freevo
+
+    To use this plugin make sure that your joystick is already working properly and
+    then configure JOY_DEV and JOY_CMDS in your local_conf.py.  You will also need
+    to have plugin.activate('joy') in your config as well.
+    """
 
     def __init__(self):
         self.device_name = ''

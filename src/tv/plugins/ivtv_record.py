@@ -51,6 +51,10 @@ CHUNKSIZE = 65536
 
 
 class PluginInterface(plugin.Plugin):
+    """
+    A plugin to record tv using an ivtv based card
+    """
+
     def __init__(self):
         plugin.Plugin.__init__(self)
         plugin.register(Recorder(), plugin.RECORD)

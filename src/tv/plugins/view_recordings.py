@@ -34,7 +34,9 @@ from directory import DirItem
 
 class PluginInterface(plugin.Plugin):
     """
+    View the TV recordings directory
     """
+
     def __init__(self):
         """
         normal plugin init, but sets _type to 'mainmenu_tv'

@@ -13,7 +13,6 @@
 # http://www.python.org/doc/current/lib/mixer-device-objects.html
 #
 # And to activate:
-#
 # plugin.remove('mixer')
 # plugin.activate('ossmixer')
 #
@@ -57,6 +56,17 @@ import ossaudiodev
 
 
 class PluginInterface(plugin.DaemonPlugin):
+    """
+    The OSS mixer interface for Freevo
+
+    Last note, here is the documentation again:
+    http://www.python.org/doc/current/lib/mixer-device-objects.html
+
+    And to activate:
+    plugin.remove('mixer')
+    plugin.activate('ossmixer')
+    """
+
     SOUND_MIXER_LINE = 7
     SOUND_MASK_LINE = 64
 

@@ -44,6 +44,10 @@ from event import *
 def i32(x): return (x&0x80000000L and -2*0x40000000 or 0) + int(x&0x7fffffff)
 
 class PluginInterface(plugin.DaemonPlugin):
+    """
+    Mixer for Freevo
+    """
+
     # These magic numbers were determined by writing a C-program using the
     # macros in /usr/include/linux/... and printing the values.
     # They seem to work on my machine. XXX Is there a real python interface?

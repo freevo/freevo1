@@ -52,7 +52,9 @@ skin = skin.get_singleton()
 
 class PluginInterface(plugin.DaemonPlugin):
     """
+    Yet another Freevo Screensaver
     """
+
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
         self.event_listener = True

@@ -1,35 +1,10 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # irsend_echostar.py - Send IR commands to an echostar receiver used by
-#                       Dish and ExpressVu sattelite service.  Tested
-#                       using a homebrew infrared transmitter.
+#                      Dish and ExpressVu sattelite service.  Tested
+#                      using a homebrew infrared transmitter.
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes: The echostar boxes and lirc don't play naturally together so
-#        we do things outside of (most) of the lirc space and talk to
-#        the device.
-#        This module borrows logic and code from jvc_send.c  Which
-#        is Copyright 2002 Karl Bongers, karl@turbobit.com and Copyright
-#        2002 Pyroman, webvcrplus.
-#
-#        This modules is very young and will be changing to have functions
-#        to perform specific tasks and used remotes and codes from your
-#        lircd.conf.
-#
-# Notes from jvc_send.c:
-#        Send codes for weird Dish networks box that uses JVC_4700 at
-#        57600 modulation/carrier frequency.
-#        Requires multiple back to back signals with accurate
-#        timing between signals.
-#
-#        Send JVC_4700 signals, try to send out exactly
-#        as they come in.  lircd/lirc_serial handling gives inaccurate
-#        signal lengths between 16 bit blocks.  The signal we see
-#        coming in is back-to-back packets, that is what we
-#        try to duplicate.
-#
-#        lirc_serial.o must be loaded and setup correctly, see LIRC project.
 #
 # Todo:
 #
@@ -66,6 +41,30 @@ LIRC_SET_SEND_DUTY_CYCLE = util.ioctl.IOW('i', 0x00000015, 'I')
 
 
 class PluginInterface(plugin.Plugin):
+
+    """ 
+    Send IR commands to an echostar receiver used by Dish and ExpressVu sattelite
+    service. Tested using a homebrew infrared transmitter.
+
+    The echostar boxes and lirc don't play naturally together so we do things
+    outside of (most) of the lirc space and talk to the device.  This module
+    borrows logic and code from jvc_send.c  Which is Copyright 2002 Karl Bongers,
+    karl@turbobit.com and Copyright 2002 Pyroman, webvcrplus.
+
+    This modules is very young and will be changing to have functions to perform
+    specific tasks and used remotes and codes from your lircd.conf.
+
+    Notes from jvc_send.c: Send codes for weird Dish networks box that uses
+    JVC_4700 at 57600 modulation/carrier frequency.  Requires multiple back to back
+    signals with accurate timing between signals.
+
+    Send JVC_4700 signals, try to send out exactly as they come in.
+    lircd/lirc_serial handling gives inaccurate signal lengths between 16 bit
+    blocks.  The signal we see coming in is back-to-back packets, that is what we
+    try to duplicate.
+
+    lirc_serial.o must be loaded and setup correctly, see LIRC project.
+    """
 
     MODULATION_FREQ = 57600
 

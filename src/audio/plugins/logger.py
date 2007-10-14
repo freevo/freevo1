@@ -40,6 +40,10 @@ import time
 
 
 class PluginInterface(plugin.DaemonPlugin):
+    """
+    Sqlite Play Counter
+    """
+
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'audio.logger'
