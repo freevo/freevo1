@@ -73,11 +73,11 @@ if not config.XINE_TV_AO_DEV:
 if not config.TV_CHANNELS:
     _debug_("TV_CHANNELS is not configured!")
 
-if not config.VOLUME_TV_IN:
-    _debug_("VOLUME_TV_IN is not configured!")
+if not config.MIXER_VOLUME_TV_IN:
+    _debug_("MIXER_VOLUME_TV_IN is not configured!")
 
-if not config.MAJOR_AUDIO_CTRL:
-    _debug_("MAJOR_AUDIO_CTRL is not configured!")
+if not config.MIXER_MAJOR_CTRL:
+    _debug_("MIXER_MAJOR_CTRL is not configured!")
 
 if not config.XINE_COMMAND:
     config.XINE_COMMAND = "xine"
@@ -113,8 +113,8 @@ class PluginInterface(plugin.Plugin):
     The following items should be configured in local_conf.py:
 
     - TV_CHANNELS
-    - VOLUME_TV_IN
-    - MAJOR_AUDIO_CTRL
+    - MIXER_VOLUME_TV_IN
+    - MIXER_MAJOR_CTRL
     - XINE_COMMAND
     - XINE_ARGS_DEF
     - XINE_TV_VO_DEV
@@ -510,12 +510,12 @@ class MixerControl:
 
         if (self.mixer != None):
 
-            if config.MAJOR_AUDIO_CTRL == "VOL":
+            if config.MIXER_MAJOR_CTRL == "VOL":
 
                 self.volume = self.mixer.getMainVolume()
                 self.mixer.setMainVolume(0)
 
-            elif config.MAJOR_AUDIO_CTRL == "PCM":
+            elif config.MIXER_MAJOR_CTRL == "PCM":
 
                 self.volume = self.mixer.getPcmVolume()
                 self.mixer.setPcmVolume(0)
@@ -525,14 +525,14 @@ class MixerControl:
 
         if (self.mixer != None):
 
-            self.mixer.setLineinVolume(config.VOLUME_TV_IN)
-            self.mixer.setIgainVolume(config.VOLUME_TV_IN)
+            self.mixer.setLineinVolume(config.MIXER_VOLUME_TV_IN)
+            self.mixer.setIgainVolume(config.MIXER_VOLUME_TV_IN)
 
-            if config.MAJOR_AUDIO_CTRL == "VOL":
+            if config.MIXER_MAJOR_CTRL == "VOL":
 
                 self.mixer.setMainVolume(self.volume)
 
-            elif config.MAJOR_AUDIO_CTRL == "PCM":
+            elif config.MIXER_MAJOR_CTRL == "PCM":
 
                 self.mixer.setPcmVolume(self.volume)
 

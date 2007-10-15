@@ -82,7 +82,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     plugin.activate('autoshutdown',level=90)
 
     Configuration:
-    ENABLE_SHUTDOWN_SYS = 1
+    SHUTDOWN_SYS_ENABLE = 1
     AUTOSHUTDOWN_METHOD = 'acpi|nvram'
     AUTOSHUTDOWN_WAKEUP_CMD = PATH/TO/THE/WAKEUP_SCRIPT
     AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = "13:00"

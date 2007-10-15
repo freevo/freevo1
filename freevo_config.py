@@ -308,7 +308,17 @@ LOCAL_CONF_CHANGES = [
         RADIO_IN_VOLUME to VOLUME_RADIO_IN
         MAX_VOLUME to VOLUME_MAX
         DEV_MIXER to VOLUME_MIXER_DEV
-     Added VOLUME_MIXER_STEP to allow the mixer volume change to be specified
+     and subsequently these, sorry if this is a little inconvenient
+        CONTROL_ALL_AUDIO to MIXER_CONTROL_ALL
+        VOLUME_DEFAULT to MIXER_VOLUME_DEFAULT
+        VOLUME_VCR_IN to MIXER_VOLUME_VCR_IN
+        VOLUME_TV_IN to MIXER_VOLUME_TV_IN
+        VOLUME_MIXER_STEP to MIXER_VOLUME_STEP
+        VOLUME_RADIO_IN to MIXER_VOLUME_RADIO_IN
+        VOLUME_MAX to MIXER_VOLUME_MAX
+        VOLUME_MIXER_DEV to MIXER_DEVICE
+        ENABLE_SHUTDOWN_SYS to SHUTDOWN_SYS_ENABLE
+     Added MIXER_VOLUME_STEP to allow the mixer volume change to be specified
      '''),
 ]
 
@@ -336,27 +346,24 @@ if int(str(CONF.version).split('.')[1]) != \
 # General freevo settings:
 # ======================================================================
 
-AUDIO_DEVICE       = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
-AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
-MAJOR_AUDIO_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
+AUDIO_DEVICE          = '/dev/dsp'   # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
+AUDIO_INPUT_DEVICE    = '/dev/dsp1'  # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
+
+MIXER_MAJOR_CTRL      = 'VOL'        # Freevo takes control over one audio ctrl
                                      # 'VOL', 'PCM' 'OGAIN' etc.
-MAJOR_AUDIO_CTRL_MUTE = 'PCM'        # used in alsamixer.py
-                                     # There are systems where volume
-                                     # and mute use different controls
+MIXER_MAJOR_MUTE_CTRL = 'PCM'        # used in alsamixer.py, There are systems where 
+                                     # volume and mute use different controls
 
-CONTROL_ALL_AUDIO  = 1               # Should Freevo take complete control of audio
-VOLUME_MAX         = 90              # Set what you want maximum volume level to be.
-VOLUME_DEFAULT     = 40              # Set default volume level.
-VOLUME_TV_IN       = 60              # Set this to your preferred level 0-100.
-VOLUME_VCR_IN      = 90              # If you use different input from TV
-VOLUME_RADIO_IN    = 80              # Set this to your preferred level 0-100.
-
-VOLUME_MIXER_DEV   = '/dev/mixer'    # mixer device
-VOLUME_MIXER_STEP  = 5               # Amount to increment the mixer volume
+MIXER_DEVICE          = '/dev/mixer' # mixer device
+MIXER_CONTROL_ALL     = 1            # Should Freevo take complete control of audio
+MIXER_VOLUME_STEP     = 5            # Amount to increment the mixer volume
+MIXER_VOLUME_MAX      = 90           # Set what you want maximum volume level to be.
+MIXER_VOLUME_DEFAULT  = 40           # Set default volume level.
+MIXER_VOLUME_TV_IN    = 60           # Set this to your preferred level 0-100.
+MIXER_VOLUME_VCR_IN   = 90           # If you use different input from TV
+MIXER_VOLUME_RADIO_IN = 80           # Set this to your preferred level 0-100.
 
 START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
-
-CONFIRM_SHUTDOWN   = 1               # ask before shutdown
 
 #
 # Physical ROM drives, multiple ones can be specified
@@ -381,12 +388,14 @@ HIDE_UNUSABLE_DISCS = 1
 #
 ROM_SPEED = 0
 
+CONFIRM_SHUTDOWN = 1                  # ask before shutdown
+
 SHUTDOWN_SYS_CMD = 'shutdown -h now'  # set this to 'sudo shutdown -h now' if
-                                      # you don't have the permissions to
-                                      # shutdown
+                                      # you don't have the permissions to shutdown
+
 RESTART_SYS_CMD  = 'shutdown -r now'  # like SHUTDOWN_SYS_CMD, only for reboot
 
-ENABLE_SHUTDOWN_SYS = 0  # Performs a whole system shutdown at SHUTDOWN!
+SHUTDOWN_SYS_ENABLE = 0  # Performs a whole system shutdown at SHUTDOWN!
                          # For standalone boxes.
 
 
@@ -395,11 +404,11 @@ ENABLE_SHUTDOWN_SYS = 0  # Performs a whole system shutdown at SHUTDOWN!
 # ======================================================================
 
 # replace the default shutdown plugin
-#plugin.remove('shutdown')
-#plugin.activate('autoshutdown', level=90)
+# plugin.remove('shutdown')
+# plugin.activate('autoshutdown', level=90)
 
 # activate the timer
-#plugin.activate('autoshutdown.autoshutdowntimer')
+# plugin.activate('autoshutdown.autoshutdowntimer')
 
 # -- autoshutdown menu item configuration --
 

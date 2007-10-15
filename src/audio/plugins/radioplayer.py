@@ -94,7 +94,7 @@ class RadioPlayer:
 
         mixer = plugin.getbyname('MIXER')
         if mixer:
-            mixer_vol = config.VOLUME_RADIO_IN
+            mixer_vol = config.MIXER_VOLUME_RADIO_IN
             mixer.setLineinVolume(mixer_vol)
             mixer.setIgainVolume(mixer_vol)
             mixer.setMicVolume(mixer_vol)

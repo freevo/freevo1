@@ -46,20 +46,19 @@ CONFIG_VERSION = 5.21
 
 # AUDIO_DEVICE       = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 # AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
-# MAJOR_AUDIO_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
+# MIXER_MAJOR_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
                                        # 'VOL', 'PCM' 'OGAIN' etc.
 
-# MAJOR_AUDIO_CTRL_MUTE = 'PCM'        # used in alsamixer.py
-#                                      # There are systems where volume
-#                                      # and mute use different controls
+# MIXER_MAJOR_MUTE_CTRL = 'PCM'        # used in alsamixer.py There are systems where 
+                                       # volume and mute use different controls 
 
-# CONTROL_ALL_AUDIO  = 1               # Should Freevo take complete control of audio
-# VOLUME_MAX         = 90              # Set what you want maximum volume level to be.
-# VOLUME_DEFAULT     = 40              # Set default volume level.
-# VOLUME_TV_IN       = 60              # Set this to your preferred level 0-100.
-# VOLUME_VCR_IN      = 90              # If you use different input from TV
-# VOLUME_RADIO_IN    = 80              # Set this to your preferred level 0-100.
-# VOLUME_MIXER_DEV   = '/dev/mixer'    # mixer device
+# MIXER_DEVICE          = '/dev/mixer' # mixer device
+# MIXER_CONTROL_ALL     = 1            # Should Freevo take complete control of audio
+# MIXER_VOLUME_MAX      = 90           # Set what you want maximum volume level to be.
+# MIXER_VOLUME_DEFAULT  = 40           # Set default volume level.
+# MIXER_VOLUME_TV_IN    = 60           # Set this to your preferred level 0-100.
+# MIXER_VOLUME_VCR_IN   = 90           # If you use different input from TV
+# MIXER_VOLUME_RADIO_IN = 80           # Set this to your preferred level 0-100.
 
 # START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 
@@ -91,7 +90,7 @@ CONFIG_VERSION = 5.21
 #
 # Perform a whole system shutdown at SHUTDOWN! Useful for standalone boxes.
 #
-# ENABLE_SHUTDOWN_SYS = 0
+# SHUTDOWN_SYS_ENABLE = 0
 #
 # Command to execute to shutdown the system
 #

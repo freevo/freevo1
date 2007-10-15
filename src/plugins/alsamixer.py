@@ -102,7 +102,7 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'MIXER'
 
-        self.default_step = config.VOLUME_MIXER_STEP
+        self.default_step = config.MIXER_VOLUME_STEP
 
         self.mainVolume   = 0
         self.pcmVolume    = 0
@@ -111,20 +111,20 @@ class PluginInterface(plugin.DaemonPlugin):
         self.igainVolume  = 0
         self.ogainVolume  = 0
 
-        if config.MAJOR_AUDIO_CTRL == 'VOL':
-            self.setMainVolume(config.VOLUME_DEFAULT)
-            if config.CONTROL_ALL_AUDIO:
-                self.setPcmVolume(config.VOLUME_MAX)
-                self.setOgainVolume(config.VOLUME_MAX)
-        elif config.MAJOR_AUDIO_CTRL == 'PCM':
-            self.setPcmVolume(config.VOLUME_DEFAULT)
-            if config.CONTROL_ALL_AUDIO:
-                self.setMainVolume(config.VOLUME_MAX)
-                self.setOgainVolume(config.VOLUME_MAX)
+        if config.MIXER_MAJOR_CTRL == 'VOL':
+            self.setMainVolume(config.MIXER_VOLUME_DEFAULT)
+            if config.MIXER_CONTROL_ALL:
+                self.setPcmVolume(config.MIXER_VOLUME_MAX)
+                self.setOgainVolume(config.MIXER_VOLUME_MAX)
+        elif config.MIXER_MAJOR_CTRL == 'PCM':
+            self.setPcmVolume(config.MIXER_VOLUME_DEFAULT)
+            if config.MIXER_CONTROL_ALL:
+                self.setMainVolume(config.MIXER_VOLUME_MAX)
+                self.setOgainVolume(config.MIXER_VOLUME_MAX)
         else:
             _debug_("No appropriate audio channel found for mixer")
 
-        if config.CONTROL_ALL_AUDIO:
+        if config.MIXER_CONTROL_ALL:
             self.setLineinVolume(0)
             self.setMicVolume(0)
 
@@ -158,10 +158,10 @@ class PluginInterface(plugin.DaemonPlugin):
 
         # Handle volume control
         if event == MIXER_VOLUP:
-            if config.MAJOR_AUDIO_CTRL == 'VOL':
+            if config.MIXER_MAJOR_CTRL == 'VOL':
                 self.incMainVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
-            elif config.MAJOR_AUDIO_CTRL == 'PCM':
+            elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.incPcmVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             if config.ALSA_SYNCMIXER == 1:
@@ -169,10 +169,10 @@ class PluginInterface(plugin.DaemonPlugin):
             return True
 
         elif event == MIXER_VOLDOWN:
-            if config.MAJOR_AUDIO_CTRL == 'VOL':
+            if config.MIXER_MAJOR_CTRL == 'VOL':
                 self.decMainVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
-            elif config.MAJOR_AUDIO_CTRL == 'PCM':
+            elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.decPcmVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             if config.ALSA_SYNCMIXER == 1:
@@ -207,21 +207,21 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def setMuted(self, mute):
         self.muted = mute
-        if config.MAJOR_AUDIO_CTRL_MUTE == 'VOL':
+        if config.MIXER_MAJOR_CTRL_MUTE == 'VOL':
             if mute == 1:
                 self.main_mixer.setmute(1)
             else:
                 self.main_mixer.setmute(0)
-        elif config.MAJOR_AUDIO_CTRL_MUTE == 'PCM':
+        elif config.MIXER_MAJOR_CTRL_MUTE == 'PCM':
             if mute == 1:
                 self.pcm_mixer.setmute(1)
             else:
                 self.pcm_mixer.setmute(0)
 
     def getVolume(self):
-        if config.MAJOR_AUDIO_CTRL == 'VOL':
+        if config.MIXER_MAJOR_CTRL == 'VOL':
             return self.mainVolume
-        elif config.MAJOR_AUDIO_CTRL == 'PCM':
+        elif config.MIXER_MAJOR_CTRL == 'PCM':
             return self.pcmVolume
 
     def getMainVolume(self):
@@ -266,7 +266,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self._setVolume(self.pcm_mixer, self.pcmVolume)
 
     def setLineinVolume(self, volume):
-        if config.CONTROL_ALL_AUDIO:
+        if config.MIXER_CONTROL_ALL:
             self.lineinVolume = volume
             self._setVolume(self.line_mixer, volume)
 
@@ -274,12 +274,12 @@ class PluginInterface(plugin.DaemonPlugin):
         return self.lineinVolume
 
     def setMicVolume(self, volume):
-        if config.CONTROL_ALL_AUDIO:
+        if config.MIXER_CONTROL_ALL:
             self.micVolume = volume
             self._setVolume(self.mic_mixer, volume)
 
     def setIgainVolume(self, volume):
-        if config.CONTROL_ALL_AUDIO:
+        if config.MIXER_CONTROL_ALL:
             if volume > 100:
                 volume = 100
             elif volume < 0:
@@ -310,12 +310,12 @@ class PluginInterface(plugin.DaemonPlugin):
         #self._setVolume(ossaudiodev.SOUND_MIXER_IGAIN, volume)
 
     def reset(self):
-        if config.CONTROL_ALL_AUDIO:
+        if config.MIXER_CONTROL_ALL:
             self.setLineinVolume(0)
             self.setMicVolume(0)
-            if config.MAJOR_AUDIO_CTRL == 'VOL':
-                self.setPcmVolume(config.VOLUME_DEFAULT)
-            elif config.MAJOR_AUDIO_CTRL == 'PCM':
-                self.setMainVolume(config.VOLUME_DEFAULT)
+            if config.MIXER_MAJOR_CTRL == 'VOL':
+                self.setPcmVolume(config.MIXER_VOLUME_DEFAULT)
+            elif config.MIXER_MAJOR_CTRL == 'PCM':
+                self.setMainVolume(config.MIXER_VOLUME_DEFAULT)
 
         self.setIgainVolume(0) # SB Live input from TV Card.

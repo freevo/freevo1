@@ -139,7 +139,7 @@ class ShutdownItem(Item):
             items = [ (self.shutdown_freevo, _('Shutdown Freevo') ),
                           (self.shutdown_system, _('Shutdown system') ),
                           (self.shutdown_system_restart, _('Restart system') ) ]
-        if config.ENABLE_SHUTDOWN_SYS:
+        if config.SHUTDOWN_SYS_ENABLE:
             items = [ items[1], items[0], items[2] ]
 
         return items

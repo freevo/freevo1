@@ -174,10 +174,10 @@ class Xawtv:
         # TV is on line in
         # VCR is mic in
         # btaudio (different dsp device) will be added later
-        if mixer and config.MAJOR_AUDIO_CTRL == 'VOL':
+        if mixer and config.MIXER_MAJOR_CTRL == 'VOL':
             mixer_vol = mixer.getMainVolume()
             mixer.setMainVolume(0)
-        elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
+        elif mixer and config.MIXER_MAJOR_CTRL == 'PCM':
             mixer_vol = mixer.getPcmVolume()
             mixer.setPcmVolume(0)
 
@@ -196,14 +196,14 @@ class Xawtv:
         time.sleep(0.4)
         # BUG Hm.. This is hardcoded and very unflexible.
         if mixer and mode == 'vcr':
-            mixer.setMicVolume(config.VOLUME_VCR_IN)
+            mixer.setMicVolume(config.MIXER_VOLUME_VCR_IN)
         elif mixer:
-            mixer.setLineinVolume(config.VOLUME_TV_IN)
-            mixer.setIgainVolume(config.VOLUME_TV_IN)
+            mixer.setLineinVolume(config.MIXER_VOLUME_TV_IN)
+            mixer.setIgainVolume(config.MIXER_VOLUME_TV_IN)
 
-        if mixer and config.MAJOR_AUDIO_CTRL == 'VOL':
+        if mixer and config.MIXER_MAJOR_CTRL == 'VOL':
             mixer.setMainVolume(mixer_vol)
-        elif mixer and config.MAJOR_AUDIO_CTRL == 'PCM':
+        elif mixer and config.MIXER_MAJOR_CTRL == 'PCM':
             mixer.setPcmVolume(mixer_vol)
 
         _debug_('%s: started %s app' % (time.time(), self.mode))

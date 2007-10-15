@@ -69,7 +69,7 @@ class PluginInterface(IdleBarPlugin):
         w = 0
         if mixer:
             muted = mixer.getMuted()
-            vol = (float(mixer.getVolume())/float(config.VOLUME_MAX))
+            vol = (float(mixer.getVolume())/float(config.MIXER_VOLUME_MAX))
             if muted != self.muted or vol != self.volume:
                 self.muted  = muted
                 self.volume = vol

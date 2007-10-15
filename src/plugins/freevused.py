@@ -278,7 +278,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         self.FVUSED_ITEM_INFO = em.Event('FVUSED_ITEM_INFO')
 
-        self.mixer_default_step = config.VOLUME_MIXER_STEP
+        self.mixer_default_step = config.MIXER_VOLUME_STEP
 
         thread.start_new_thread(self.bluetoothListener, ())
 
