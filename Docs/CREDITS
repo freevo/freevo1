@@ -66,13 +66,16 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
-Krasimir <krasimir_a at users.sourceforge.net>
+Henri Valeins <senufo at users.sourceforge.net>
+o Internet TV plug-in
+
+Krasimir Atanasov <krasimir_a at users.sourceforge.net>
 o RSS audio podcast plug-in
 
-Cypress <cypresstwist at users.sourceforge.net>
+Răzvan T. Coloja <cypresstwist at gmail.com>
 o Romanian translation
 
-Aleph <alephlg at users.sourceforge.net>
+Lónyai Gergely <alephlg at gmail.com>
 o Hungarian translation
 
 Lefteris F. Sarakinos <lefteris at kerkyra.gr>
@@ -89,6 +92,7 @@ o Various bug fixes
 
 Koval Valery <Valery.Koval at innovinn.com>
 o Various mplayer changes
+o Various image viewer and shopping cart changes
 
 Dobes Vandermeer <dobesv at gmail.com>
 o MusicIP Mixer plug-in
