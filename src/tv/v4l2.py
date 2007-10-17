@@ -300,7 +300,7 @@ class Videodev:
     def setinput(self, value):
         try:
             r = fcntl.ioctl(self.device, i32(SETINPUT_NO), struct.pack(INPUT_ST, value))
-            _debug_('setinput: val=%r, res=%r' % (struct.pack(INPUT_ST, value), r))
+            _debug_('setinput: val=%r, res=%r' % (struct.pack(INPUT_ST, value), r), 3)
         except IOError:
             self.print_settings
             raise

@@ -63,6 +63,7 @@ class PluginInterface(plugin.Plugin):
     Record subtitles from teletext pages (IVTV cards only)
 
     The teletext page number is taken from TV_CHANNELS, eg:
+
 TV_CHANNELS = [
     #'XMLTV Id',    'Channel Name', 'Freq', 'Times', 'Video Group', 'Teletext Page Number'
     ('bbc.co.uk',   'BBC Prime',    'K32',  '',      '0',           '881'),
@@ -96,8 +97,10 @@ FREQUENCY_TABLE = {
 
 
 class Recorder:
-
+    """
+    """
     def __init__(self):
+        _debug_('Recorder.__init__()', 1)
         # Disable this plugin if not loaded by record_server.
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
@@ -168,8 +171,6 @@ class Recorder:
         self.thread.autokill = float(rec_prog.rec_duration + 10)
         self.thread.mode_flag.set()
 
-        _debug_('rec_command=%r' % self.rec_command)
-
 
     def Stop(self):
         self.thread.mode = 'stop'
@@ -177,37 +178,21 @@ class Recorder:
 
 
 class RecordApp(childapp.ChildApp):
-
+    """
+    """
     def __init__(self, app):
-        if DEBUG:
-            fname_out = os.path.join(config.FREEVO_LOGDIR, 'vbi2srt-stdout.log')
-            fname_err = os.path.join(config.FREEVO_LOGDIR, 'vbi2srt-stderr.log')
-            try:
-                self.log_stdout = open(fname_out, 'a')
-                self.log_stderr = open(fname_err, 'a')
-            except IOError:
-                _debug_('Cannot open "%s" and "%s" for record logging!' % \
-                    (fname_out, fname_err), DERROR)
-                print
-                print 'Please set DEBUG=0 or start Freevo from a directory that is writeable!'
-                print
-            else:
-                _debug_('Record logging to "%s" and "%s"' % (fname_out, fname_err), DINFO)
-
-        childapp.ChildApp.__init__(self, app)
-
+        _debug_('RecordApp.__init__(app=%r)' % (app), 1)
+        childapp.ChildApp.__init__(self, app, doeslogging=1)
 
     def kill(self):
         childapp.ChildApp.kill(self, signal.SIGINT)
 
-        if DEBUG:
-            self.log_stdout.close()
-            self.log_stderr.close()
-
 
 class Record_Thread(threading.Thread):
-
+    """
+    """
     def __init__(self):
+        _debug_('Record_Thread.__init__()', 1)
         threading.Thread.__init__(self)
 
         self.mode = 'idle'
@@ -226,10 +211,9 @@ class Record_Thread(threading.Thread):
 
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
-                _debug_('cmd=%r' % self.command)
 
                 fc = FreevoChannels()
-                _debug_('CHAN: %s' % fc.getChannel())
+                _debug_('channel %s' % fc.getChannel())
 
                 (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
 
@@ -245,8 +229,7 @@ class Record_Thread(threading.Thread):
                 _debug_('Setting Channel to %s' % self.prog.tunerid)
                 fc.chanSet(str(self.prog.tunerid), False)
 
-                _debug_('%s' % v.print_settings())
-
+                _debug_('command %r' % self.command)
                 self.app = RecordApp(self.command)
                 _debug_('app child pid: %s' % self.app.child.pid)
 

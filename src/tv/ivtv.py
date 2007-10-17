@@ -161,7 +161,9 @@ class IVTV(tv.v4l2.Videodev):
             framerate = 0
             framespergop = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Size')
             gop_closure = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Closure')
-            pulldown = tv.v4l2.Videodev.getcontrol(self, 'Video Pulldown')
+            pulldown = 0
+            #pulldown = tv.v4l2.Videodev.getcontrol(self, 'Video Pulldown')
+            #insert_navigation_packets = tv.v4l2.Videodev.getcontrol(self, 'insert_navigation_packets')
             stream_type = self.streamTypeV4l2ToIVTV(tv.v4l2.Videodev.getcontrol(self, 'Stream Type'))
             codec_list = (aspect, audio_bitmask, bframes, bitrate_mode, bitrate, bitrate_peak,
                 dnr_mode, dnr_spatial, dnr_temporal, dnr_type, framerate, framespergop, gop_closure,

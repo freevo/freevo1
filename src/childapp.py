@@ -52,6 +52,10 @@ class ChildApp:
     ready = False
 
     def __init__(self, app, debugname=None, doeslogging=0):
+        """
+        Initialise ChildApp
+        """
+        _debug_('ChildApp.__init__(app=%r, debugname=%r, doeslogging=%r)' % (app, debugname, doeslogging), 1)
         self.lock = thread.allocate_lock()
 
         prio = 0
@@ -109,31 +113,35 @@ class ChildApp:
         if doeslogging or config.DEBUG_CHILDAPP:
             doeslogging = 1
 
-        stdout_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stdout-%s.log' % (debug_name, os.getuid()))
-        try:
-            self.stdout_log = doeslogging and open(stdout_logger, 'w') or None
-        except OSError, e:
-            _debug_('Cannot open "%s": %s' % (stdout_logger, e), DWARNING)
-            self.stdout_log = None
+        if doeslogging:
+            stdout_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stdout-%s.log' % (debug_name, os.getuid()))
+            try:
+                self.stdout_log = open(stdout_logger, 'w')
+            except OSError, e:
+                _debug_('Cannot open "%s": %s' % (stdout_logger, e), DWARNING)
+                self.stdout_log = None
 
-        stderr_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stderr-%s.log' % (debug_name, os.getuid()))
-        try:
-            self.stderr_log = doeslogging and open(stderr_logger, 'w') or None
-        except OSError, e:
-            _debug_('Cannot open "%s": %s' % (stderr_logger, e), DWARNING)
+            stderr_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stderr-%s.log' % (debug_name, os.getuid()))
+            try:
+                self.stderr_log = open(stderr_logger, 'w')
+            except OSError, e:
+                _debug_('Cannot open "%s": %s' % (stderr_logger, e), DWARNING)
+                self.stderr_log = None
+        else:
+            self.stdout_log = None
             self.stderr_log = None
 
         command_isstr = isinstance(command, str)
         if command_isstr:
-            #command = command.strip() # strip spaces from the command string
             command_shell = True
-            command_str = command
+            command_str = command.strip()
         else:
             command_shell = False
             command_str = ' '.join(command)
         self.child = None
         try:
-            self.child = Popen(command, shell=command_shell, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            self.child = Popen(command, shell=command_shell, stdin=PIPE, stdout=PIPE, stderr=PIPE, \
+                universal_newlines=True)
             _debug_('Running (%s) "%s"%s with pid %s priority %s' % (\
                 command_isstr and 'str' or 'list', command_str, command_shell and ' in shell' or '', \
                 self.child.pid, prio), 1)
@@ -302,6 +310,11 @@ class ChildApp2(ChildApp):
     Enhanced version of ChildApp handling most playing stuff
     """
     def __init__(self, app, debugname=None, doeslogging=0, stop_osd=2):
+        """
+        Initialise ChildApp2
+        """
+        _debug_('ChildApp2.__init__(app=%r, debugname=%r, doeslogging=%r, stop_osd=%r)' % \
+            (app, debugname, doeslogging, stop_osd), 1)
         rc.register(self.poll, True, 10)
         rc.register(self.stop, True, rc.SHUTDOWN)
 
@@ -391,9 +404,11 @@ class Read_Thread(threading.Thread):
     Thread for reading stdout or stderr from the child
     """
     def __init__(self, name, fh, callback, logger=None, doeslogging=0):
-        '''Constructor of Read_Thread'''
+        """
+        Constructor of Read_Thread
+        """
         _debug_('Read_Thread.__init__(name=%r, fh=%r, callback=%r, logger=%r, doeslogging=%r' % \
-            (name, fh, callback, logger, doeslogging), 2)
+            (name, fh, callback, logger, doeslogging), 1)
         threading.Thread.__init__(self)
         self.name = name
         self.fh = fh
@@ -426,38 +441,29 @@ class Read_Thread(threading.Thread):
             if not data:
                 _debug_('%s: no data, closing log' % (self.name))
                 self.fh.close()
-                if self.logger: self.logger.close()
+                if saved:
+                    self.logger.write(saved+'\n')
+                if self.logger:
+                    self.logger.close()
                 break
             else:
-                data  = data.replace('\r', '\n')
+                data = saved + data
+                complete_last_line = data.endswith('\n')
+                if complete_last_line:
+                    data = data.strip('\n')
                 lines = data.split('\n')
 
-                # Only one partial line?
-                if len(lines) == 1:
-                    saved += data
-                else:
-                    # Combine saved data and first line, send to app
-                    if self.logger:
-                        line = (saved + lines[0]).strip('\n')
-                        self.logger.write(line+'\n')
-                    rc.register(self.callback, False, 0, saved + lines[0])
+                if complete_last_line:
+                    complete_lines = lines
                     saved = ''
+                else:
+                    # not seen a case where there is an incomplete last line, so this may not work
+                    complete_lines = lines[:-1]
+                    saved += lines[-1]
+                    #print 'saved=%r complete=%s lines=%r' % (saved, complete_last_line, lines)
 
-                    # There's one or more lines + possibly a partial line
-                    if lines[-1] != '':
-                        # The last line is partial, save it for the next time
-                        saved = lines[-1]
-
-                        # Send all lines except the last partial line to the app
-                        for line in lines[1:-1]:
-                            if self.logger:
-                                line = line.strip('\n')
-                                self.logger.write(line+'\n')
-                            rc.register(self.callback, False, 0, line)
-                    else:
-                        # Send all lines to the app
-                        for line in lines[1:]:
-                            if self.logger:
-                                line = line.strip('\n')
-                                self.logger.write(line+'\n')
-                            rc.register(self.callback, False, 0, line)
+                for line in complete_lines:
+                    if self.logger:
+                        self.logger.write(line+'\n')
+                        self.logger.flush()
+                    rc.register(self.callback, False, 0, line)

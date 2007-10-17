@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # record_server.py - A network aware TV recording server.
@@ -1568,8 +1567,12 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def handleEvents(self):
         event = rc_object.get_event()
-
         if event:
+            if hasattr(event, 'arg'):
+                _debug_('event=%s arg=%r' % (event, event.arg))
+            else:
+                _debug_('event=%s' % (event))
+
             if event == OS_EVENT_POPEN2:
                 pid = event.arg[1]
                 _debug_('OS_EVENT_POPEN2 pid: %s' % pid, DINFO)
@@ -1709,12 +1712,17 @@ if __name__ == '__main__':
         os.remove(f)
 
     while 1:
-        try:
-            start = time.time()
-            main()
-            break
-        except:
-            traceback.print_exc()
-            if start + 10 > time.time():
-                _debug_('server problem, sleeping 1 min', DINFO)
-                time.sleep(60)
+        main()
+
+        # Don't see the point to this code, errors are system errors or programming errors
+        # Better to exit. May there was a reason
+        #try:
+        #    start = time.time()
+        #    main()
+        #    break
+        #except Exception, e:
+        #    print e
+        #    traceback.print_exc()
+        #    if start + 10 > time.time():
+        #        _debug_('server problem, sleeping 1 min', DINFO)
+        #        time.sleep(60)
