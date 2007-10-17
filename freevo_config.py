@@ -319,6 +319,11 @@ LOCAL_CONF_CHANGES = [
         VOLUME_MIXER_DEV to MIXER_DEVICE
         ENABLE_SHUTDOWN_SYS to SHUTDOWN_SYS_ENABLE
      Added MIXER_VOLUME_STEP to allow the mixer volume change to be specified
+     Added for IVTV XINE TV:
+        XINE_TV_CONFIRM_STOP
+        XINE_TV_PROGRESSIVE_SEEK
+        XINE_TV_PROGRESSIVE_SEEK_THRESHOLD
+        XINE_TV_PROGRESSIVE_SEEK_INCREMENT
      '''),
 ]
 
@@ -1570,10 +1575,30 @@ XINE_HAS_NO_LIRC = True
 # Set to True is xine supports get_time this enables the position to be saved
 XINE_BOOKMARK = False
 
-# Defaults to XINE_VO/AO_DEV:
+# -- TV/XINE configuration --
+
+# Video output device for TV. For Hauppage PVR x50,
+# use "xxmc" if you have hardware acceleration enabled.
+# Otherwise, see XINE_VO_DEV
 XINE_TV_VO_DEV = None
+
+# Audio output device to use for TV. See XINE_AO_DEV.
 XINE_TV_AO_DEV = None
+
+# This specifies the path and filemask that xine uses for
+# timeshifting. File can get quite big (several gigabytes)
 XINE_TV_TIMESHIFT_FILEMASK = "you must set XINE_TV_TIMESHIFT_FILEMASK in your local_conf.py"
+
+# Stop confirmation: press STOP twice to return to menu
+XINE_TV_CONFIRM_STOP = True
+
+# This enables the progressive seek feature. The speed
+# for seeking (fast forward and rewind) is increased
+# automatically. The speed is increased every [THRESHOLD]
+# seconds in steps of [INCREMENT] secnds.
+XINE_TV_PROGRESSIVE_SEEK = True
+XINE_TV_PROGRESSIVE_SEEK_THRESHOLD = 2
+XINE_TV_PROGRESSIVE_SEEK_INCREMENT = 5
 
 # ======================================================================
 # Freevo TV settings:

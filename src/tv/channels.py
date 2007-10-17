@@ -248,21 +248,23 @@ class FreevoChannels:
         app.write(app_cmd)
 
 
-    def getChannelInfo(self):
+    def getChannelInfo(self, showtime=True):
         '''Get program info for the current channel'''
 
         tuner_id = self.getChannel()
         chan_name = config.TV_CHANNELS[self.chan_index][1]
         chan_id = config.TV_CHANNELS[self.chan_index][0]
 
-        channels = epg_xmltv.get_guide().GetPrograms(start=time.time(),
-                                               stop=time.time(), chanids=[chan_id])
+        channels = epg_xmltv.get_guide().GetPrograms(start=time.time(), stop=time.time(), chanids=[chan_id])
 
         if channels and channels[0] and channels[0].programs:
-            start_s = time.strftime(config.TV_TIMEFORMAT, time.localtime(channels[0].programs[0].start))
-            stop_s = time.strftime(config.TV_TIMEFORMAT, time.localtime(channels[0].programs[0].stop))
-            ts = '(%s-%s)' % (start_s, stop_s)
-            prog_info = '%s %s' % (ts, channels[0].programs[0].title)
+            if showtime:
+                start_s = time.strftime(config.TV_TIMEFORMAT, time.localtime(channels[0].programs[0].start))
+                stop_s = time.strftime(config.TV_TIMEFORMAT, time.localtime(channels[0].programs[0].stop))
+                ts = '(%s-%s)' % (start_s, stop_s)
+                prog_info = '%s %s' % (ts, channels[0].programs[0].title)
+            else:
+                prog_info = channels[0].programs[0].title
         else:
             prog_info = 'No info'
 

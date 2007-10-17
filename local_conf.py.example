@@ -1130,15 +1130,25 @@ CACHE_IMAGES = 1
 # Video output device for TV. For Hauppage PVR x50,
 # use "xxmc" if you have hardware acceleration enabled.
 # Otherwise, see XINE_VO_DEV
-#XINE_TV_VO_DEV = "xxmc"
+# XINE_TV_VO_DEV = "xxmc"
 
 # Audio output device to use for TV. See XINE_AO_DEV.
-#XINE_TV_AO_DEV = "alsa"
+# XINE_TV_AO_DEV = "alsa"
 
-# This specifies the path and filemask that
-# xine uses for timeshifting. File can get
-# quite big (several gigabytes)
-#XINE_TV_TIMESHIFT_FILEMASK = "/tmp/xine-buf-"
+# This specifies the path and filemask that xine uses for
+# timeshifting. File can get quite big (several gigabytes)
+# XINE_TV_TIMESHIFT_FILEMASK = "/tmp/xine-buf-"
+
+# Stop confirmation: press STOP twice to return to menu
+# XINE_TV_CONFIRM_STOP = True
+
+# This enables the progressive seek feature. The speed
+# for seeking (fast forward and rewind) is increased
+# automatically. The speed is increased every [THRESHOLD]
+# seconds in steps of [INCREMENT] secnds.
+# XINE_TV_PROGRESSIVE_SEEK = True
+# XINE_TV_PROGRESSIVE_SEEK_THRESHOLD = 2
+# XINE_TV_PROGRESSIVE_SEEK_INCREMENT = 5
 
 # ======================================================================
 # Freevo TV settings:
