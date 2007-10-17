@@ -36,7 +36,7 @@ from www.web_types import HTMLResource, FreevoResource
 import util
 from plugin import is_active
 from helpers.plugins import parse_plugins
-from helpers.plugins import info_html
+from helpers.plugins import html_info
 import os
 
 TRUE = 1

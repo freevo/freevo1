@@ -131,7 +131,7 @@ class ShutdownItem(Item):
         """
         return a list of actions for this item
         """
-        if config.CONFIRM_SHUTDOWN:
+        if config.SHUTDOWN_CONFIRM:
             items = [ (self.confirm_freevo, _('Shutdown Freevo') ),
                           (self.confirm_system, _('Shutdown system') ),
                           (self.confirm_system_restart, _('Restart system') ) ]

@@ -255,7 +255,7 @@ class Videodev:
 
 
     def setchannel(self, channel):
-        freq = config.FREQUENCY_TABLE.get(channel)
+        freq = config.TV_FREQUENCY_TABLE.get(channel)
         if freq:
             _debug_('Using custom frequency: chan="%s", freq="%s"' % (channel, freq))
         else:

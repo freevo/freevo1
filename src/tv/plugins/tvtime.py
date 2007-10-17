@@ -239,7 +239,7 @@ class PluginInterface(plugin.Plugin):
             mychan = m[2]
             myband = self.lookupChannelBand(mychan)
             if myband == "Custom":
-                mychan = config.FREQUENCY_TABLE.get(mychan)
+                mychan = config.TV_FREQUENCY_TABLE.get(mychan)
                 mychan = float(mychan)
                 mychan = mychan / 1000.0
                 mychan = "%.2fMHz" % mychan
@@ -294,7 +294,7 @@ class PluginInterface(plugin.Plugin):
             mychan = str(m[2])
             myband = self.lookupChannelBand(mychan)
             if myband == "Custom":
-                mychan = config.FREQUENCY_TABLE.get(mychan)
+                mychan = config.TV_FREQUENCY_TABLE.get(mychan)
                 mychan = float(mychan)
                 mychan = mychan / 1000.0
                 mychan = "%.2fMHz" % mychan
@@ -319,7 +319,7 @@ class PluginInterface(plugin.Plugin):
         #forces them to int.
         channel = str(channel)
 
-        if config.FREQUENCY_TABLE.has_key(channel):
+        if config.TV_FREQUENCY_TABLE.has_key(channel):
             _debug_("have a custom")
             return "Custom"
         elif (re.search('^\d+$', channel)):

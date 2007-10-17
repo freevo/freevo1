@@ -318,6 +318,8 @@ LOCAL_CONF_CHANGES = [
         VOLUME_MAX to MIXER_VOLUME_MAX
         VOLUME_MIXER_DEV to MIXER_DEVICE
         ENABLE_SHUTDOWN_SYS to SHUTDOWN_SYS_ENABLE
+        FREQUENCY_TABLE to TV_FREQUENCY_TABLE
+        CONFIRM_SHUTDOWN to SHUTDOWN_CONFIRM
      Added MIXER_VOLUME_STEP to allow the mixer volume change to be specified
      Added for IVTV XINE TV:
         XINE_TV_CONFIRM_STOP
@@ -393,7 +395,7 @@ HIDE_UNUSABLE_DISCS = 1
 #
 ROM_SPEED = 0
 
-CONFIRM_SHUTDOWN = 1                  # ask before shutdown
+SHUTDOWN_CONFIRM = 1                  # ask before shutdown
 
 SHUTDOWN_SYS_CMD = 'shutdown -h now'  # set this to 'sudo shutdown -h now' if
                                       # you don't have the permissions to shutdown
@@ -417,7 +419,7 @@ SHUTDOWN_SYS_ENABLE = 0  # Performs a whole system shutdown at SHUTDOWN!
 
 # -- autoshutdown menu item configuration --
 
-# CONFIRM_SHUTDOWN
+# SHUTDOWN_CONFIRM
 # Set to True to popup dialog boxes for confirmation.
 # this applies to menu items only.
 AUTOSHUTDOWN_CONFIRM=True
@@ -1798,7 +1800,7 @@ TV_IVTV_OPTIONS = {
 }
 
 #
-# FREQUENCY_TABLE - This is only used when Freevo changes the channel natively.
+# TV_FREQUENCY_TABLE - This is only used when Freevo changes the channel natively.
 # This is only the case if you are using V4L2 and any of the following plugins:
 # timeshift, ivtv_record, ivtv_basic_tv.
 # For the standard frequancy tables see src/tv/freq.py.  To add your own just
@@ -1808,7 +1810,7 @@ TV_IVTV_OPTIONS = {
 # frequency table and you can also have entries here that are not present in
 # there.
 
-FREQUENCY_TABLE = {
+TV_FREQUENCY_TABLE = {
     'tuner_id'   :    55250,
 }
 

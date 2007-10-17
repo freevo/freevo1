@@ -88,8 +88,8 @@ fp.write('  <list norm="%s" frequencies="%s">\n' % (norm, band))
 
 c = 0
 for m in config.TV_CHANNELS:
-    if config.FREQUENCY_TABLE.has_key(m[2]):
-        channelfreq = float(config.FREQUENCY_TABLE[m[2]]) / 1000.0
+    if config.TV_FREQUENCY_TABLE.has_key(m[2]):
+        channelfreq = float(config.TV_FREQUENCY_TABLE[m[2]]) / 1000.0
         fp.write('    <station name="%s" active="1" position="%s" band="Custom" channel="%sMHz"/>\n' % \
             (cgi.escape(m[1]), c, channelfreq))
     else:

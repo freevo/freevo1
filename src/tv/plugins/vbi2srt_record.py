@@ -71,7 +71,7 @@ TV_CHANNELS = [
     ('C1.sfdrs.ch', 'SF 1',         'K05',  '',      '0',           '777'),
     ('C2.sfdrs.ch', 'SF 2',         'K10',  '',      '0',           '777'),
 ]
-FREQUENCY_TABLE = {
+TV_FREQUENCY_TABLE = {
     'K32' : 559250,
     'S13' : 246250,
     'K05' : 175500,
