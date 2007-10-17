@@ -27,7 +27,7 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
+# with this program; if not, write to the Free Software Foundation, Inc., 
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
@@ -56,7 +56,7 @@ def parse_plugins():
     for p in plugin.__all_plugins__:
         active.append(p[0])
 
-    for file in util.recursefolders(os.environ['FREEVO_PYTHON'],1, '*.py',1):
+    for file in util.recursefolders(os.environ['FREEVO_PYTHON'], 1, '*.py', 1):
         if file.find('plugin.py') > 0:
             continue
         parse_status = 0
@@ -73,7 +73,6 @@ def parse_plugins():
             if config_start.match(line):
                 config      = 'def return_config():\n'
                 scan_config = line.find('def')
-
 
             if (comment.match(line) and parse_status == 2) or \
                    (stop.match(line) and parse_status == 1):
@@ -161,10 +160,10 @@ def print_info(plugin_name, all_plugins):
 def iscode(line):
     return (len(line) > 2 and line[:2].upper() == line[:2] and \
             line.find('=') > 0) or \
-            (line and line[0] in ('#',' ', '[', '(')) or (line.find('plugin.') == 0)
+            (line and line[0] in ('#', ' ', '[', '(')) or (line.find('plugin.') == 0)
 
 
-def info_html(plugin_name, all_plugins):
+def html_info(plugin_name, all_plugins):
     ret = ''
     for name, file, type, status, desc, config_string in all_plugins:
         if name == plugin_name:
@@ -231,6 +230,96 @@ def info_html(plugin_name, all_plugins):
     return ret
 
 
+def wiki_word(s, mode):
+    '''
+    Need to escape mixed case words for the wiki
+    '''
+    if mode == 'moin':
+        return s
+    needs_pling=re.compile('^([A-Z]+[^.]*[A-Z]+[^.]*)')
+    words = []
+    for word in s.split('.'):
+        if needs_pling.match(word):
+            word = '!'+word
+        words.append(word)
+    return '.'.join(words)
+        
+
+def wiki_info(name, file, type, status, desc, config, mode):
+    """
+    Wiki formatter, formats a single entry for a wiki page
+    """
+    #print '%s f=%r t=%s s=%r d=%r c=%r' % (name, file, type, status, desc, config_list)
+    ret = ""
+    ret += "-----\n"
+    ret += "== %s ==\n" % (wiki_word(name, mode)) 
+    ret += "----\n"
+    ret += "'''File: %s'''\n" % (file)
+    if not desc:
+        ret += "The plugin has no description. You can help by " + \
+               "writing a small description and send it to the Freevo "\
+               "mailinglist.\n"
+        return ret
+
+    ret += "=== Description ===\n"
+    ret += "\n"
+    tmp  = desc
+    desc = []
+    for block in tmp.split("\n\n"):
+        for line in block.split("\n"):
+            desc.append(line)
+        desc.append("")
+
+    code = 0
+    for i in range(len(desc)):
+        line = desc[i]
+        if iscode(line):
+            if not code:
+                #ret += "{{{\n"
+                ret += "{{{#!python\n"
+            ret += line+"\n"
+            code = 1
+
+            try:
+                if (desc[i+1] and not iscode(desc[i+1])) or (desc[i+2] and not iscode(desc[i+2])):
+                    ret += "}}}\n"
+                    code = 0
+            except IndexError:
+                ret += "}}}\n"
+                code = 0
+        elif line:
+            ret += line+"\n"
+        elif code:
+            ret += "\n"
+        else:
+            #ret += "[[BR]]\n"
+            ret += "\n"
+
+    if code:
+        ret += "}}}\n"
+        code = 0
+    ret += "\n"
+
+    ret += "=== Configuration ===\n"
+    ret += "\n"
+    if mode == 'trac':
+        ret += "{{{\n"
+        ret += "#!rst\n"
+        ret += "Config Item    Value        Description\n"
+        ret += "============== ============ =================================\n"
+        for config_item in config:
+            ret += "%s %s %s\n" % config_item
+        ret += "============== ============ =================================\n"
+        ret += "}}}\n"
+    else:
+        ret += "||<20%>'''Config Item'''||<20%>'''Value'''||<:99%>'''Description'''||\n"
+        for config_item in config:
+            ret += "||%s||%s||%s||\n" % config_item
+    ret += "\n"
+
+    return ret
+
+
 
 # show a list of all plugins
 if len(sys.argv)>1 and sys.argv[1] == '-l':
@@ -271,7 +360,7 @@ elif len(sys.argv)>1 and sys.argv[1] == '-a':
             print '\n********************************\n'
         print_info(p[0], [p])
 
-# show infos about all plugins as html
+# show info about all plugins as html
 elif len(sys.argv)>1 and sys.argv[1] == '-html':
     all_plugins = parse_plugins()
 
@@ -290,9 +379,50 @@ elif len(sys.argv)>1 and sys.argv[1] == '-html':
 
     for p in all_plugins:
         print '<a name="%s"></a>' % p[0]
-        print info_html(p[0], [p])
+        print html_info(p[0], [p])
 
     print '</body>'
+
+# show info about all plugins in wiki format
+elif len(sys.argv)>1 and sys.argv[1] == '-wiki':
+    mode = 'moin'
+    if len(sys.argv) > 2:
+        mode = sys.argv[2]
+        if mode not in ('moin','trac',):
+            print "mode can be one of 'moin', 'trac'"
+            sys.exit(2)
+    all_plugins = parse_plugins()
+
+    if mode == 'trac':
+        print '[[TOC(depth=2)]]'
+    else:
+        print '[[TableOfContents(2)]]'
+    print
+
+    types = []
+    for p in all_plugins:
+        if not p[2] in types:
+            types.append(p[2])
+    types.sort()
+    for t in types:
+        print
+        print '= %ss =' % t
+        print '------'
+        print ''
+        for name, file, type, status, desc, config in all_plugins:
+            if type == t:
+                try:
+                    exec(config)
+                    config_list = return_config()
+                except SyntaxError, e:
+                    config_list = [('', '', e)]
+                except AttributeError, e:
+                    config_list = [('', '', e)]
+
+                if file.startswith(os.environ['FREEVO_PYTHON']):
+                    file = file[len(os.environ['FREEVO_PYTHON'])+1:]
+
+                print wiki_info(name, file, type, status, desc, config_list, mode)
 
 else:
     print 'This helper shows the list of all plugins included in Freevo and'
