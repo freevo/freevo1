@@ -834,7 +834,10 @@ def detect_channels():
     Auto detect a list of possible channels in the xmltv file
     """
     import codecs
-    import cPickle, pickle
+    try:
+        import cPickle as pickle
+    except ImportError:
+        import pickle
 
     file = XMLTV_FILE
     path = FREEVO_CACHEDIR
@@ -856,10 +859,7 @@ def detect_channels():
                                     os.path.getmtime(file)):
         try:
             f = open(pname, 'r')
-            try:
-                data = cPickle.load(f)
-            except:
-                data = pickle.load(f)
+            data = pickle.load(f)
             f.close()
             return data
         except:
@@ -907,7 +907,7 @@ def detect_channels():
             if os.path.isfile(pname):
                 os.unlink(pname)
             f = open(pname, 'w')
-            cPickle.dump(chanlist, f, 1)
+            pickle.dump(chanlist, f, 1)
             f.close()
         except IOError:
             print 'Error: unable to save to cachefile %s' % pname

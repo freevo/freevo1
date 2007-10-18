@@ -35,7 +35,10 @@ import stat
 import statvfs
 import string
 import copy
-import cPickle, pickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import fnmatch
 import traceback
 
@@ -447,10 +450,7 @@ def read_pickle(file):
     """
     try:
         f = vfs.open(file, 'r')
-        try:
-            data = cPickle.load(f)
-        except:
-            data = pickle.load(f)
+        data = pickle.load(f)
         f.close()
         return data
     except:
@@ -465,7 +465,7 @@ def save_pickle(data, file):
         if vfs.isfile(file):
             vfs.unlink(file)
         f = vfs.open(file, 'w')
-        cPickle.dump(data, f, PICKLE_PROTOCOL)
+        pickle.dump(data, f, PICKLE_PROTOCOL)
         f.close()
     except IOError:
         print 'unable to save to cachefile %s' % file

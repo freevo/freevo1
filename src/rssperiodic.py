@@ -30,7 +30,10 @@
 
 import re,os,sys,glob,urllib,datetime,time,shutil
 from subprocess import Popen
-import cPickle, pickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import config
 import rssfeed
 import kaa.metadata as metadata
@@ -123,10 +126,7 @@ def convertDate(string):
 def checkForDup(string):
     cacheFile=config.FREEVO_CACHEDIR+"/rss.pickle"
     try:
-        try:
-            downloadedUrls=cPickle.load(open(cacheFile,"r"))
-        except:
-            downloadedUrls=pickle.load(open(cacheFile,"r"))
+        downloadedUrls=pickle.load(open(cacheFile,"r"))
     except IOError:
         return False
     except EOFError:
@@ -141,34 +141,22 @@ def addFileToCache(string):
     cacheFile=config.FREEVO_CACHEDIR+"/rss.pickle"
     downloadedUrls=[]
     try:
-        try:
-            downloadedUrls = cPickle.load(open(cacheFile,"r"))
-        except:
-            downloadedUrls = pickle.load(open(cacheFile,"r"))
+        downloadedUrls = pickle.load(open(cacheFile,"r"))
     except IOError:
         pass
     downloadedUrls.append(string)
-    try:
-        cPickle.dump(downloadedUrls, open(cacheFile,"w"))
-    except:
-        pickle.dump(downloadedUrls, open(cacheFile,"w"))
+    pickle.dump(downloadedUrls, open(cacheFile,"w"))
 
 def addFileToExpiration(string,goodUntil):
     ''' the new file gets added with the expiration date to the expiration file '''
     cacheFile=config.FREEVO_CACHEDIR+"/rss.expiration"
     downloadedFiles=[]
     try:
-        try:
-            downloadedFiles = cPickle.load(open(cacheFile,"r"))
-        except:
-            downloadedFiles = pickle.load(open(cacheFile,"r"))
+        downloadedFiles = pickle.load(open(cacheFile,"r"))
     except IOError:
         pass
     downloadedFiles.append(string + ";" + goodUntil.__str__())
-    try:
-        cPickle.dump(downloadedFiles, open(cacheFile,"w"))
-    except:
-        pickle.dump(downloadedFiles, open(cacheFile,"w"))
+    pickle.dump(downloadedFiles, open(cacheFile,"w"))
 
 def checkForExpiration():
     ''' checking for expired files by reading the rss.expiration file the file
@@ -176,10 +164,7 @@ def checkForExpiration():
     deleted at the end the file gets removed from the rss.expiration file '''
     cacheFile=config.FREEVO_CACHEDIR+"/rss.expiration"
     try:
-        try:
-            downloadedFiles=cPickle.load(open(cacheFile,"r"))
-        except:
-            downloadedFiles=pickle.load(open(cacheFile,"r"))
+        downloadedFiles=pickle.load(open(cacheFile,"r"))
     except IOError:
         return
     deletedItems = []
@@ -203,14 +188,11 @@ def checkForExpiration():
             except OSError:
                 _debug_("removing the file %s failed" % (filename))
     for line in deletedItems:
-#      try:
+        #try:
         downloadedFiles.remove(line)
-#      except ValueError:
-#          _debug_("removing the line %s failed" % (line))
-    try:
-        cPickle.dump(downloadedFiles, open(cacheFile,"w"))
-    except:
-        pickle.dump(downloadedFiles, open(cacheFile,"w"))
+        #except ValueError:
+        #    _debug_("removing the line %s failed" % (line))
+    pickle.dump(downloadedFiles, open(cacheFile,"w"))
 
 def createFxd(item, filename):
     ofile = os.path.splitext(filename)[0]+'.fxd'

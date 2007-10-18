@@ -27,7 +27,10 @@
 
 
 import sys, string, random, time, os, re, pwd, stat, threading, md5, datetime, copy
-import cPickle, pickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import logging
 import __builtin__
 import config
@@ -329,13 +332,10 @@ class RecordServer(xmlrpc.XMLRPC):
 
         cacheFile = config.FREEVO_CACHEDIR + "/previouslyRecorded.pickle"
         try:
-            self.previouslyRecordedShows = cPickle.load(open(cacheFile, "r"))
-        except:
-            try:
-                self.previouslyRecordedShows = pickle.load(open(cacheFile, "r"))
-            except IOError:
-                self.previouslyRecordedShows = {}
-                pass
+            self.previouslyRecordedShows = pickle.load(open(cacheFile, "r"))
+        except IOError:
+            self.previouslyRecordedShows = {}
+            pass
 
     def savePreviouslyRecordedShows(self):
         ''' Save the set of recorded shows '''
@@ -343,10 +343,7 @@ class RecordServer(xmlrpc.XMLRPC):
             return
 
         cacheFile=config.FREEVO_CACHEDIR+"/previouslyRecorded.pickle"
-        try:
-            cPickle.dump(self.previouslyRecordedShows, open(cacheFile, "w"))
-        except:
-            pickle.dump(self.previouslyRecordedShows, open(cacheFile, "w"))
+        pickle.dump(self.previouslyRecordedShows, open(cacheFile, "w"))
 
     def newEpisode(self, prog=None):
         ''' Return true if this is a new episode of 'prog' '''
