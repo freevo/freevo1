@@ -62,7 +62,7 @@ CONFIG_VERSION = 5.21
 
 # START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 
-# CONFIRM_SHUTDOWN   = 1               # ask before shutdown
+# SHUTDOWN_CONFIRM   = 1               # ask before shutdown
 
 #
 # Physical ROM drives, multiple ones can be specified
@@ -111,7 +111,7 @@ CONFIG_VERSION = 5.21
 
 # -- autoshutdown menu item configuration --
 
-# CONFIRM_SHUTDOWN
+# SHUTDOWN_CONFIRM
 # Set to True to popup dialog boxes for confirmation.
 # this applies to menu items only.
 #AUTOSHUTDOWN_CONFIRM = True
@@ -1121,7 +1121,7 @@ CACHE_IMAGES = 1
 #plugin.activate('tv.ivtv_xine_tv')
 
 # Note: TV_IVTV_OPTIONS must be configured properly
-# Note: FREQUENCY_TABLE must be configured properly
+# Note: TV_FREQUENCY_TABLE must be configured properly
 # Note: XINE_COMMAND must be configured properly
 # Note: XINE_ARGS_DEF must be configured properly
 
@@ -1366,7 +1366,7 @@ CACHE_IMAGES = 1
 # }
 
 #
-# FREQUENCY_TABLE - This is only used when Freevo changes the channel natively.
+# TV_FREQUENCY_TABLE - This is only used when Freevo changes the channel natively.
 # This is only the case if you are using V4L2 and any of the following plugins:
 # timeshift, ivtv_record, ivtv_basic_tv.
 # For the standard frequancy tables see src/tv/freq.py.  To add your own just
@@ -1376,7 +1376,7 @@ CACHE_IMAGES = 1
 # frequency table and you can also have entries here that are not present in
 # there.
 
-# FREQUENCY_TABLE = {
+# TV_FREQUENCY_TABLE = {
 #     'tuner_id'   :    55250,
 # }
 

@@ -28,20 +28,20 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate this plugin, put the following in your local_conf.py:
 
-    plugin.activate('audio.lastfm')
-    LASTFM_USER = '<last fm user name>'
-    LASTFM_PASS = '<last fm password>'
-    LASTFM_SESSION = ' '
+    | plugin.activate('audio.lastfm')
+    | LASTFM_USER = '<last fm user name>'
+    | LASTFM_PASS = '<last fm password>'
+    | LASTFM_SESSION = ' '
+    |
+    | LASTFM_LOCATIONS = [
+    |      ('Last Fm - Neighbours','lastfm://user/<lastfm user name>/neighbours'),
+    |      ('Last FM - Jazz', 'lastfm://globaltags/jazz'),
+    |      ('Last FM - Rock', 'lastfm://globaltags/rock'),
+    |      ('Last FM - Oldies', 'lastfm://globaltags/oldies'),
+    |      ('Las FM - Pop', 'lastfm://globaltags/pop'),
+    |      ('Las FM - Norah Jones', 'lastfm://artist/norah jones')
+    |      ]
 
-    LASTFM_LOCATIONS = [
-          ('Last Fm - Neighbours','lastfm://user/<lastfm user name>/neighbours'),
-          ('Last FM - Jazz', 'lastfm://globaltags/jazz'),
-          ('Last FM - Rock', 'lastfm://globaltags/rock'),
-          ('Last FM - Oldies', 'lastfm://globaltags/oldies'),
-          ('Las FM - Pop', 'lastfm://globaltags/pop'),
-          ('Las FM - Norah Jones', 'lastfm://artist/norah jones')
-          ]
-    ------------------------------------------------------------------------
     RIGHT - skip song
     1     - send to last.fm LOVE song
     9     - send to last.fm BAN song

@@ -36,6 +36,10 @@ import sys
 import plugin
 
 class PluginInterface(plugin.DaemonPlugin):
+    """
+    Starts the webserver when freevo is started
+    """
+
     def __init__(self):
         if config.CONF.display in ('dxr3', 'directfb', 'dfbmga'):
             print 'For some strange reason, the starting of the webserver inside'

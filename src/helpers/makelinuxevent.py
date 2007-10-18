@@ -98,7 +98,6 @@ def parse_input_h(path):
     _ids = ids
     _buses = buses
 
-import cPickle, pickle
 
 def save_event(fout):
     #fout = open('ev.dat', 'wb')

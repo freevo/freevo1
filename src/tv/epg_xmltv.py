@@ -39,22 +39,24 @@ import shutil
 import config
 import util
 
-# Use the alternate strptime module which seems to handle time zones
-# XXX Remove when we are ready to require Python 2.3
-if float(sys.version[0:3]) < 2.3:
-    import strptime
-else:
-    import _strptime as strptime
+import _strptime as strptime
 
-# The XMLTV handler from openpvr.sourceforge.net
 import tv.xmltv as xmltv
 
-# The EPG data types. They need to be in an external module in order for
-# pickling to work properly when run from inside this module and from the
-# tv.py module.
+# The EPG data types. They need to be in an external module in order for pickling 
+# to work properly when run from inside this module and from the tv.py module.
 import tv.epg_types as epg_types
 
-EPG_TIME_EXC = _('Time conversion error')
+class EpgException(Exception):
+    """
+    Electronic programming guide exception class
+    """
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
 
 
 cached_guide = None
@@ -277,7 +279,8 @@ def load_guide(verbose=True, XMLTV_FILE=None):
                     # Fudging end time
                     prog.stop = timestr2secs_utc(p['start'][0:8] + '235900' + \
                                                  p['start'][14:18])
-            except EPG_TIME_EXC:
+            # Don't think that this is ever raised
+            except EpgException:
                 continue
             # fix bad German titles to make favorites working
             if prog.title.endswith('. Teil'):

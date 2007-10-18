@@ -325,28 +325,28 @@ class RemovableMedia:
 
                     if config.DEBUG:
                         # some code to view the capabilities
-                        print '%s cdc=0x%08x ' % (self.devicename, cdc)
-                        print cdc & CDC_CLOSE_TRAY      and 'CDC_CLOSE_TRAY'      or 'not CDC_CLOSE_TRAY'
-                        print cdc & CDC_OPEN_TRAY       and 'CDC_OPEN_TRAY'       or 'not CDC_OPEN_TRAY' 
-                        print cdc & CDC_LOCK            and 'CDC_LOCK'            or 'not CDC_LOCK'
-                        print cdc & CDC_SELECT_SPEED    and 'CDC_SELECT_SPEED'    or 'not CDC_SELECT_SPEED'
-                        print cdc & CDC_SELECT_DISC     and 'CDC_SELECT_DISC'     or 'not CDC_SELECT_DISC'
-                        print cdc & CDC_MULTI_SESSION   and 'CDC_MULTI_SESSION'   or 'not CDC_MULTI_SESSION'
-                        print cdc & CDC_MCN             and 'CDC_MCN'             or 'not CDC_MCN'
-                        print cdc & CDC_MEDIA_CHANGED   and 'CDC_MEDIA_CHANGED'   or 'not CDC_MEDIA_CHANGED'
-                        print cdc & CDC_PLAY_AUDIO      and 'CDC_PLAY_AUDIO'      or 'not CDC_PLAY_AUDIO'
-                        print cdc & CDC_RESET           and 'CDC_RESET'           or 'not CDC_RESET'
-                        print cdc & CDC_DRIVE_STATUS    and 'CDC_DRIVE_STATUS'    or 'not CDC_DRIVE_STATUS'
-                        print cdc & CDC_GENERIC_PACKET  and 'CDC_GENERIC_PACKET'  or 'not CDC_GENERIC_PACKET'
-                        print cdc & CDC_CD_R            and 'CDC_CD_R'            or 'not CDC_CD_R'
-                        print cdc & CDC_CD_RW           and 'CDC_CD_RW'           or 'not CDC_CD_RW'
-                        print cdc & CDC_DVD             and 'CDC_DVD'             or 'not CDC_DVD'
-                        print cdc & CDC_DVD_R           and 'CDC_DVD_R'           or 'not CDC_DVD_R'
-                        print cdc & CDC_DVD_RAM         and 'CDC_DVD_RAM'         or 'not CDC_DVD_RAM'
-                        print cdc & CDC_MO_DRIVE        and 'CDC_MO_DRIVE'        or 'not CDC_MO_DRIVE'
-                        print cdc & CDC_MRW             and 'CDC_MRW'             or 'not CDC_MRW'
-                        print cdc & CDC_MRW_W           and 'CDC_MRW_W'           or 'not CDC_MRW_W'
-                        print cdc & CDC_RAM             and 'CDC_RAM'             or 'not CDC_RAM'
+                        _debug_('%s cdc=0x%08x ' % (self.devicename, cdc))
+                        _debug_(cdc & CDC_CLOSE_TRAY     and 'CDC_CLOSE_TRAY'     or 'not CDC_CLOSE_TRAY')
+                        _debug_(cdc & CDC_OPEN_TRAY      and 'CDC_OPEN_TRAY'      or 'not CDC_OPEN_TRAY' )
+                        _debug_(cdc & CDC_LOCK           and 'CDC_LOCK'           or 'not CDC_LOCK')
+                        _debug_(cdc & CDC_SELECT_SPEED   and 'CDC_SELECT_SPEED'   or 'not CDC_SELECT_SPEED')
+                        _debug_(cdc & CDC_SELECT_DISC    and 'CDC_SELECT_DISC'    or 'not CDC_SELECT_DISC')
+                        _debug_(cdc & CDC_MULTI_SESSION  and 'CDC_MULTI_SESSION'  or 'not CDC_MULTI_SESSION')
+                        _debug_(cdc & CDC_MCN            and 'CDC_MCN'            or 'not CDC_MCN')
+                        _debug_(cdc & CDC_MEDIA_CHANGED  and 'CDC_MEDIA_CHANGED'  or 'not CDC_MEDIA_CHANGED')
+                        _debug_(cdc & CDC_PLAY_AUDIO     and 'CDC_PLAY_AUDIO'     or 'not CDC_PLAY_AUDIO')
+                        _debug_(cdc & CDC_RESET          and 'CDC_RESET'          or 'not CDC_RESET')
+                        _debug_(cdc & CDC_DRIVE_STATUS   and 'CDC_DRIVE_STATUS'   or 'not CDC_DRIVE_STATUS')
+                        _debug_(cdc & CDC_GENERIC_PACKET and 'CDC_GENERIC_PACKET' or 'not CDC_GENERIC_PACKET')
+                        _debug_(cdc & CDC_CD_R           and 'CDC_CD_R'           or 'not CDC_CD_R')
+                        _debug_(cdc & CDC_CD_RW          and 'CDC_CD_RW'          or 'not CDC_CD_RW')
+                        _debug_(cdc & CDC_DVD            and 'CDC_DVD'            or 'not CDC_DVD')
+                        _debug_(cdc & CDC_DVD_R          and 'CDC_DVD_R'          or 'not CDC_DVD_R')
+                        _debug_(cdc & CDC_DVD_RAM        and 'CDC_DVD_RAM'        or 'not CDC_DVD_RAM')
+                        _debug_(cdc & CDC_MO_DRIVE       and 'CDC_MO_DRIVE'       or 'not CDC_MO_DRIVE')
+                        _debug_(cdc & CDC_MRW            and 'CDC_MRW'            or 'not CDC_MRW')
+                        _debug_(cdc & CDC_MRW_W          and 'CDC_MRW_W'          or 'not CDC_MRW_W')
+                        _debug_(cdc & CDC_RAM            and 'CDC_RAM'            or 'not CDC_RAM')
             finally:
                 os.close(fd)
         except Exception, e:
@@ -370,12 +370,12 @@ class RemovableMedia:
                         self.cds = cds
 
                         if config.DEBUG:
-                            print '%s cds=%s' % (self.devicename, cds)
-                            if   cds == CDS_NO_INFO:         print 'CDS_NO_INFO'
-                            elif cds == CDS_NO_DISC:         print 'CDS_NO_DISC'
-                            elif cds == CDS_TRAY_OPEN:       print 'CDS_TRAY_OPEN'
-                            elif cds == CDS_DRIVE_NOT_READY: print 'CDS_DRIVE_NOT_READY'
-                            elif cds == CDS_DISC_OK:         print 'CDS_DISC_OK'
+                            _debug_('%s cds=%s' % (self.devicename, cds))
+                            if   cds == CDS_NO_INFO:         _debug_('CDS_NO_INFO')
+                            elif cds == CDS_NO_DISC:         _debug_('CDS_NO_DISC')
+                            elif cds == CDS_TRAY_OPEN:       _debug_('CDS_TRAY_OPEN')
+                            elif cds == CDS_DRIVE_NOT_READY: _debug_('CDS_DRIVE_NOT_READY')
+                            elif cds == CDS_DISC_OK:         _debug_('CDS_DISC_OK')
             finally:
                 os.close(fd)
         except Exception, e:

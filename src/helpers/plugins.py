@@ -158,6 +158,12 @@ def print_info(plugin_name, all_plugins):
                 print 'The plugin is not activated in the current setting'
 
 def iscode(line):
+    """
+    Find code lines in the docstring
+    When the line starts with a '|' then is has been marked as a code line
+    @note this does not work too well in all cases
+    """
+    return line.strip().startswith('|')
     return (len(line) > 2 and line[:2].upper() == line[:2] and \
             line.find('=') > 0) or \
             (line and line[0] in ('#', ' ', '[', '(')) or (line.find('plugin.') == 0)
@@ -245,7 +251,7 @@ def wiki_word(s, mode):
     return '.'.join(words)
         
 
-def wiki_info(name, file, type, status, desc, config, mode):
+def wiki_info(name, file, type, status, desc, config, mode, names=[]):
     """
     Wiki formatter, formats a single entry for a wiki page
     """
@@ -255,6 +261,7 @@ def wiki_info(name, file, type, status, desc, config, mode):
     ret += "== %s ==\n" % (wiki_word(name, mode)) 
     ret += "----\n"
     ret += "'''File: %s'''\n" % (file)
+    ret += "\n"
     if not desc:
         ret += "The plugin has no description. You can help by " + \
                "writing a small description and send it to the Freevo "\
@@ -275,8 +282,12 @@ def wiki_info(name, file, type, status, desc, config, mode):
         line = desc[i]
         if iscode(line):
             if not code:
-                #ret += "{{{\n"
-                ret += "{{{#!python\n"
+                if mode == 'trac':
+                    ret += "{{{\n"
+                    ret += "#!python\n"
+                else:
+                    ret += "{{{#!python\n"
+            line = line.lstrip(' ')[1:]
             ret += line+"\n"
             code = 1
 
@@ -292,34 +303,45 @@ def wiki_info(name, file, type, status, desc, config, mode):
         elif code:
             ret += "\n"
         else:
-            #ret += "[[BR]]\n"
             ret += "\n"
 
     if code:
         ret += "}}}\n"
         code = 0
-    ret += "\n"
+    #ret += "\n"
 
-    ret += "=== Configuration ===\n"
-    ret += "\n"
-    if mode == 'trac':
-        ret += "{{{\n"
-        ret += "#!rst\n"
-        ret += "Config Item    Value        Description\n"
-        ret += "============== ============ =================================\n"
-        for config_item in config:
-            ret += "%s %s %s\n" % config_item
-        ret += "============== ============ =================================\n"
-        ret += "}}}\n"
-    else:
-        ret += "||<20%>'''Config Item'''||<20%>'''Value'''||<:99%>'''Description'''||\n"
-        for config_item in config:
-            ret += "||%s||%s||%s||\n" % config_item
-    ret += "\n"
+    if config:
+        ret += "=== Configuration ===\n"
+        ret += "\n"
+        if mode == 'trac':
+            ret += "{{{\n"
+            ret += "#!rst\n"
+            ret += "Config Item    Value        Description\n"
+            ret += "============== ============ =================================\n"
+            for config_item in config:
+                ret += "%s %s %s\n" % config_item
+            ret += "============== ============ =================================\n"
+            ret += "}}}\n"
+        else:
+            ret += "||<20%>'''Config Item'''||<20%>'''Value'''||<:99%>'''Description'''||\n"
+            for config_item in config:
+                ret += "||%s||%s||%s||\n" % config_item
 
     return ret
 
-
+def compare_types(first, second):
+    values = {
+        'MainMenuPlugin': 1,
+        'Plugin': 2,
+        'DaemonPlugin': 3,
+        'IdleBarPlugin': 4,
+        'ItemPlugin': 5,
+        'MimetypePlugin': 6,
+        'ScreenSaverPlugin': 7,
+    }
+    value_first = values.has_key(first) and values[first] or 10
+    value_second = values.has_key(second) and values[second] or 10
+    return value_first - value_second
 
 # show a list of all plugins
 if len(sys.argv)>1 and sys.argv[1] == '-l':
@@ -385,25 +407,57 @@ elif len(sys.argv)>1 and sys.argv[1] == '-html':
 
 # show info about all plugins in wiki format
 elif len(sys.argv)>1 and sys.argv[1] == '-wiki':
+    # we should be able to call this in one of several modes
+    # freevo plugins -wiki [moin|trac] [<plug-in type>*|<plug-in name>*]
     mode = 'moin'
+    types = []
+    modules = []
     if len(sys.argv) > 2:
         mode = sys.argv[2]
-        if mode not in ('moin','trac',):
-            print "mode can be one of 'moin', 'trac'"
-            sys.exit(2)
+        if mode in ('moin','trac',):
+            modules = sys.argv[3:]
+        else:
+            modules = sys.argv[2:]
     all_plugins = parse_plugins()
 
+    # This is a bit horrid
     if mode == 'trac':
         print '[[TOC(depth=2)]]'
     else:
         print '[[TableOfContents(2)]]'
     print
 
-    types = []
-    for p in all_plugins:
-        if not p[2] in types:
-            types.append(p[2])
-    types.sort()
+    #print 'name=%r file=%r type=%r status=%r desc=%r config=%r' % (name, file, type, status, desc, config)
+    list_plugins_by_type = False
+    if modules:
+        for name, file, type, status, desc, config in all_plugins:
+            if type in modules:
+                if type in types:
+                    continue
+                list_plugins_by_type = True
+                types.append(type)
+                continue
+
+        if list_plugins_by_type:
+            modules = []
+        else:
+            # specified a list of modules by name
+            for name, file, type, status, desc, config in all_plugins:
+                if name in modules:
+                    if type in types:
+                        continue
+                    types.append(type)
+                    continue
+
+    else:
+        for name, file, type, status, desc, config in all_plugins:
+            if type in types:
+                continue
+            types.append(type)
+
+    if not list_plugins_by_type:
+        types.sort(compare_types)
+
     for t in types:
         print
         print '= %ss =' % t
@@ -411,13 +465,21 @@ elif len(sys.argv)>1 and sys.argv[1] == '-wiki':
         print ''
         for name, file, type, status, desc, config in all_plugins:
             if type == t:
-                try:
-                    exec(config)
-                    config_list = return_config()
-                except SyntaxError, e:
-                    config_list = [('', '', e)]
-                except AttributeError, e:
-                    config_list = [('', '', e)]
+                if modules and name not in modules:
+                    continue
+
+                if config:
+                    try:
+                        exec(config)
+                        config_list = return_config()
+                    except SyntaxError, e:
+                        config_list = [('', '', e)]
+                    except AttributeError, e:
+                        config_list = [('', '', e)]
+                    except Exception, e:
+                        config_list = [('', '', e)]
+                else:
+                    config_list = []
 
                 if file.startswith(os.environ['FREEVO_PYTHON']):
                     file = file[len(os.environ['FREEVO_PYTHON'])+1:]
