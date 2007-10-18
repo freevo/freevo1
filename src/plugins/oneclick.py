@@ -200,12 +200,12 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate, put the following lines in local_conf.py:
 
-    plugin.activate('oneclick', level=45)
-    ONECLICK_LOCATIONS = [
-      ("<loc>", [metric], [mapuri], [location name]),
-      ("<loc>", [metric], [mapuri], [location name]),
-    ...
-    ]
+    | plugin.activate('oneclick', level=45)
+    | ONECLICK_LOCATIONS = [
+    |   ("<loc>", [metric], [mapuri], [location name]),
+    |   ("<loc>", [metric], [mapuri], [location name]),
+    | ...
+    | ]
 
     where:
     <loc> is a zipcode or an airport code

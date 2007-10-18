@@ -27,17 +27,17 @@ class PluginInterface(plugin.MainMenuPlugin):
     Audio podcast plugin 
 
     Add to local_conf.py
-        plugin.activate('audio.apodcast')
-        APODCAST_LOCATIONS = [
-          ('TWIT','http://leo.am/podcasts/twit'),
-          ('NPR: Science Friday', 'http://www.sciencefriday.com/audio/scifriaudio.xml'),
-          ('NPR: Story of the Day', 'http://www.npr.org/rss/podcast.php?id=1090'),
-          ('PodTech.net: Technology and Entertainment Video Network', 'http://www.podtech.net/?feed=rss2'),
-          (' 60 Minutes Podcast - Selected Segments', 'http://www.cbsnews.com/common/includes/podcast/podcast_60min_1.rss'),
-          ('English as a Second Language Podcast', 'http://feeds.feedburner.com/EnglishAsASecondLanguagePodcast')
-        ]
-
-    APODCAST_DIR = '/home/user_name/apodcast'
+    | plugin.activate('audio.apodcast')
+    | APODCAST_LOCATIONS = [
+    |     ('TWIT','http://leo.am/podcasts/twit'),
+    |     ('NPR: Science Friday', 'http://www.sciencefriday.com/audio/scifriaudio.xml'),
+    |     ('NPR: Story of the Day', 'http://www.npr.org/rss/podcast.php?id=1090'),
+    |     ('PodTech.net: Technology and Entertainment Video Network', 'http://www.podtech.net/?feed=rss2'),
+    |     ('60 Minutes - Selected Segments', 'http://www.cbsnews.com/common/includes/podcast/podcast_60min_1.rss'),
+    |     ('English as a Second Language Podcast', 'http://feeds.feedburner.com/EnglishAsASecondLanguagePodcast')
+    | ]
+    |
+    | APODCAST_DIR = '/home/user_name/apodcast'
     """
 
     def __init__(self):

@@ -41,6 +41,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     plugin to detach the audio player to e.g. view pictures while listening
     to music
     """
+
     def __init__(self):
         _debug_('__init__(self)', 2)
         plugin.MainMenuPlugin.__init__(self)

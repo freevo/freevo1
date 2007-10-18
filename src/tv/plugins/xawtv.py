@@ -49,7 +49,7 @@ class PluginInterface(plugin.Plugin):
     """
     Plugin to watch tv with xawtv. very beta use at your own risk.
     to activate:
-    plugin.activate('tv.xawtv', args=('/usr/bin/xawtv', '/usr/bin/xawtv-remote',))
+    | plugin.activate('tv.xawtv', args=('/usr/bin/xawtv', '/usr/bin/xawtv-remote',))
 
     replace the paths for the programs fo wherever you installed them.
     currently only remote support really works well. Keyboard is taken by
@@ -59,6 +59,7 @@ class PluginInterface(plugin.Plugin):
     groups functionality on startup and no vg switching on ch+/ch- at the
     moment.
     """
+
     def __init__(self, app, remote):
         plugin.Plugin.__init__(self)
 

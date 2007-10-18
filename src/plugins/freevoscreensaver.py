@@ -52,26 +52,29 @@ class PluginInterface(plugin.DaemonPlugin):
 
     Here is an example xscreensaver type. You must provide the paths to
     your xscreensaver and xscreensaver-command programs.
-    plugin.activate('freevoscreensaver', args=('xscreensaver','/usr/bin/xscreensaver','/usr/bin/xscreensaver-command',))
+    | plugin.activate('freevoscreensaver', \
+    | args=('xscreensaver','/usr/bin/xscreensaver','/usr/bin/xscreensaver-command',))
 
     Here is a script type example. Basically you write a  start and stop
     script you wish to use for a screensaver. This is a catchall for people
     wanting a very specific saver with a specific config.
-    plugin.activate('freevoscreensaver', args=('script','/usr/local/bin/screensaverstart','/usr/local/bin/screensaverstop',))
+    | plugin.activate('freevoscreensaver', \
+    | args=('script','/usr/local/bin/screensaverstart','/usr/local/bin/screensaverstop',))
 
     Shown below is and example of a ssr type of screensaver. It takes an ssr
     file which refers to a bunch of pictures and displays them repeatedly.
-    plugin.activate('freevoscreensaver', args=('ssr','/usr/local/freevo_data/Images/blah.ssr',))
+    | plugin.activate('freevoscreensaver', args=('ssr','/usr/local/freevo_data/Images/blah.ssr',))
 
     Here is an image type fxd. Very similar to the ssr but taking the fxd
     playlist approach to showing the images. This way you can set random if
     you want it for example.
-    plugin.activate('freevoscreensaver', args=('fxd','/usr/local/freevo_data/Images/saver.fxd','image',))
+    | plugin.activate('freevoscreensaver', args=('fxd','/usr/local/freevo_data/Images/saver.fxd','image',))
 
     A video version of the fxd type screensaver. It repeatedly shows a movie
     in a loop with no sound.
-    plugin.activate('freevoscreensaver', args=('fxd','/usr/local/freevo_data/Movies/saver.fxd','video',))
+    | plugin.activate('freevoscreensaver', args=('fxd','/usr/local/freevo_data/Movies/saver.fxd','video',))
     """
+
     def __init__(self, sstype, ssarg1, ssarg2=None):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'SCREENSAVER'

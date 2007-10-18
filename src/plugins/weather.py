@@ -230,18 +230,18 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate, put the following lines in local_conf.py:
 
-    plugin.activate('weather', level=45)
-    PLUGIN_WEATHER_LOCATIONS = [
-      ("<val1>", <bool>, "<lang>", "<str>"),
-      ("<val2>", <bool>, "<lang>", "<str>"),
-    ...
-    ]
+    | plugin.activate('weather', level=45)
+    | PLUGIN_WEATHER_LOCATIONS = [
+    |   ("<val1>", <bool>, "<lang>", "<str>"),
+    |   ("<val2>", <bool>, "<lang>", "<str>"),
+    | ...
+    | ]
 
     where <val#> is a zipcode or
     and <bool> (1 == convert to SI Units; 0 == do not convert)
     and <str> is a custom name you wish to use for this location
     """
-    # make an init func that creates the cache dir if it don't exist
+
     def __init__(self):
         if not hasattr(config, 'PLUGIN_WEATHER_LOCATIONS'):
             self.reason = 'PLUGIN_WEATHER_LOCATIONS not defined'

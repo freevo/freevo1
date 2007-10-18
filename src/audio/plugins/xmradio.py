@@ -145,12 +145,15 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     need to have an XM Radio account with a username and password
     to activate put the following in your local_conf.py
-    plugin.activate('audio.xmradioplayer')
-    plugin.activate('audio.xmradio')
-    XM_CMD='xine'
-    XM_STATIONS = [ ('High Voltage', '202'),
-                    ('Home Ice', '204'),
-                    ('Music Lab', '51') ]
+    | plugin.activate('audio.xmradioplayer')
+    | plugin.activate('audio.xmradio')
+    | XM_CMD='xine'
+    | XM_STATIONS = [
+    |     ('High Voltage', '202'),
+    |     ('Home Ice', '204'),
+    |     ('Music Lab', '51'),
+    | ]
     """
+
     def items(self, parent):
         return [ XmRadioMainMenuItem(parent) ]

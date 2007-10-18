@@ -77,6 +77,7 @@ class PluginInterface(plugin.DaemonPlugin):
     """
     DVBStreamer plugin use the dvbstreamer application to minimise channel change time.
     """
+
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
         self.event_listener = True

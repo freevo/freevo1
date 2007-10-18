@@ -10,29 +10,27 @@ class PluginInterface(plugin.MainMenuPlugin):
     Home Automation Plugin
 
     Activate:
-    plugin.activate('home_automation')
+    | plugin.activate('home_automation')
 
     This plugin is for controlling home automation items, such as X10 devices.
     It uses external programs to control the hardware.
 
     Configuration is as follows:
-    ('ROOM NAME/LOCATION'('FUNCTION','COMMAND TO RUN'))
+    | ('ROOM NAME/LOCATION'('FUNCTION','COMMAND TO RUN'))
 
     In the following example I demonstrate using this plugin with the heyu application.
 
     Example local_conf.py configuration:
 
-     AUTOMATION_ITEMS = [('Living Room',
-                         (
-                         ('Lights',('On','heyu on a2','Off','heyu off a2','Brighten','heyu bright a2 1','Dim','heyu dim a2 1')),
-                         ('TV',('On','heyu','Off','heyu'))
-                         )),
-                         ('Porch',
-                         (
-                         ('Light',('On','heyu','Off','heyu'))
-                         ))]
-
-
+    | AUTOMATION_ITEMS = [
+    |     ('Living Room', (
+    |         ('Lights', ('On','heyu on a2','Off','heyu off a2','Brighten','heyu bright a2 1','Dim','heyu dim a2 1'))),
+    |         ('TV',('On','heyu','Off','heyu'))
+    |     ),
+    |     ('Porch', (
+    |         ('Light',('On','heyu','Off','heyu')))
+    |     )
+    | ]
     """
 
     def __init__(self):

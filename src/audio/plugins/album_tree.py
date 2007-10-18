@@ -107,83 +107,80 @@ class PluginInterface(plugin.MainMenuPlugin):
     Requires:
     * pysqlite.
 
-    = Pre Installation =
+    Pre Installation
 
     The sqlite-meta-database should be available.
 
-    The audio.rating and audio.logger plugin allso use this database
-    ,you can skip the rest of the pre-install if those plugins
+    The audio.rating and audio.logger plugin allso use this database,
+    you can skip the rest of the pre-install if those plugins
     are already succesfully installed.
 
-     *install pysqlite,sqlite
-     *edit your local_config.py : Configure AUDIO_ITEMS
-     ('''AudioConfig''' ,don't leave it at the default!)
-     *run {{{freevo cache}}}
-     *wait.....
-     *The meta database should be available now.
+    * install pysqlite,sqlite
+    * edit your local_config.py : Configure AUDIO_ITEMS
+    ('''AudioConfig''' ,don't leave it at the default!)
+    * run freevo cache
+    * wait.....
+    * The meta database should be available now.
 
-    = Installation =
+    Installation
 
-     *Download freevo-audio-album-tree-0.x.x.tgz
-     *{{{
-    tar -zxvf freevo-audio-album-tree-0.x.x.tgz
-    cd freevo-audio-album-tree0.x.x
-    python setup.py
-    }}}
-
-    = Configuration =
-
-         Edit your local_config.py and add this:
+    *Download freevo-audio-album-tree-0.x.x.tgz
     {{{
-    plugin.activate('audio.album_tree')
-    AUDIO_ALBUM_TREE_SPEC = []
-
-    #You could add all trees below:, but probably you only want 1 or 2 of them:
-    AUDIO_ALBUM_TREE_SPEC.append({'name':'Artist/Album/Track'
-         ,'spec':["artist","album","track||'-'||title"]
-         ,'alt_grouping':[None,None,'track']
-        })
-    #A case sensitive tree like above...
-    #Is easy to convert to a convert to a case insensitive tree like below:
-    AUDIO_ALBUM_TREE_SPEC.append({'name':'nocase:artist/album/Track'
-         ,'spec':["lower(artist)","lower(album)","track||'-'||title"]
-         ,'alt_grouping':[None,None,'track']
-        })
-
-    #my favorite layout:
-    AUDIO_ALBUM_TREE_SPEC.append({'name':'(A-Z)/Artist/Album-Year/Track'
-        ,'spec':["upper(substr(artist,0,1))"
-                ,"artist","album||'-'||year"
-                ,"track||'-'||title"]
-        ,'alt_grouping':[None,None,'year||album','track']
-        })
-
-    #you can comment out a tree definition like this:
-    #AUDIO_ALBUM_TREE_SPEC.append({'name':'Artist-Album/Track'
-    #    ,'spec':["artist||'-'||album","track||'-'||title"]
-    #    ,'alt_grouping':[None,'track']
-    #    })
-
-    #More Examples:
-    AUDIO_ALBUM_TREE_SPEC.append({'name':'Year/Artist-Album/Track'
-        ,'spec':["year","artist||'-'||album","track||'-'||title"]
-        ,'alt_grouping':[None,None,None,'track']
-        })
-
-    AUDIO_ALBUM_TREE_SPEC.append({'name':'Dirtitle/Artist/Album/Track'
-        ,'spec':["dirtitle","artist","album","track||'-'||title"]
-        ,'alt_grouping':[None,None,None,'track']
-        })
-
-    #see http://www.sqlite.org/lang_expr.html for "scripting" functions
+        tar -zxvf freevo-audio-album-tree-0.x.x.tgz
+        cd freevo-audio-album-tree0.x.x
+        python setup.py install
     }}}
 
-    = Post Installation =
+    Configuration
+
+    Edit your local_config.py and add this:
+
+    | plugin.activate('audio.album_tree')
+    | AUDIO_ALBUM_TREE_SPEC = []
+    |
+    | #You could add all trees below:, but probably you only want 1 or 2 of them:
+    | AUDIO_ALBUM_TREE_SPEC.append({'name':'Artist/Album/Track'
+    |   ,'spec':["artist","album","track||'-'||title"]
+    |   ,'alt_grouping':[None,None,'track']
+    | })
+    |
+    | #A case sensitive tree like above...
+    | #Is easy to convert to a convert to a case insensitive tree like below:
+    | AUDIO_ALBUM_TREE_SPEC.append({'name':'nocase:artist/album/Track'
+    |   ,'spec':["lower(artist)","lower(album)","track||'-'||title"]
+    |   ,'alt_grouping':[None,None,'track']
+    | })
+    |
+    | #my favorite layout:
+    | AUDIO_ALBUM_TREE_SPEC.append({'name':'(A-Z)/Artist/Album-Year/Track'
+    |   ,'spec':["upper(substr(artist,0,1))"
+    |   ,"artist","album||'-'||year"
+    |   ,"track||'-'||title"]
+    |   ,'alt_grouping':[None,None,'year||album','track']
+    | })
+    |
+    | #you can comment out a tree definition like this:
+    | #AUDIO_ALBUM_TREE_SPEC.append({'name':'Artist-Album/Track'
+    | #  ,'spec':["artist||'-'||album","track||'-'||title"]
+    | #  ,'alt_grouping':[None,'track']
+    | #})
+    |
+    | #More Examples:
+    | AUDIO_ALBUM_TREE_SPEC.append({'name':'Year/Artist-Album/Track'
+    |   ,'spec':["year","artist||'-'||album","track||'-'||title"]
+    |   ,'alt_grouping':[None,None,None,'track']
+    | })
+    |
+    | AUDIO_ALBUM_TREE_SPEC.append({'name':'Dirtitle/Artist/Album/Track'
+    |   ,'spec':["dirtitle","artist","album","track||'-'||title"]
+    |   ,'alt_grouping':[None,None,None,'track']
+    | })
+
+    Post Installation
     New plugins are not immediately visible on the freevo webserver.
 
     You might want to restart the  [wiki:Webserver freevo webserver] after the
     installation of a new plugin.
-
     """
     __version__ = "album_tree v0.51"
 

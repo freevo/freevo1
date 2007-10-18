@@ -388,9 +388,9 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     This plugin is used to display your list of favorites.
 
-    plugin.activate('tv.view_favorites')
-
+    | plugin.activate('tv.view_favorites')
     """
+
     def __init__(self):
         _debug_('__init__(self)', 2)
         plugin.MainMenuPlugin.__init__(self)

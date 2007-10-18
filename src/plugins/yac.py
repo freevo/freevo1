@@ -49,6 +49,7 @@ class PluginInterface (plugin.DaemonPlugin):
     and then display them using OSD_MESSAGE. Anything can be sent, though
     it was originally designed to show Caller ID information on a TIVO.
     """
+
     def __init__ ( self):
         port = 10629
         host = ''

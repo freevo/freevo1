@@ -52,11 +52,12 @@ class PluginInterface(plugin.DaemonPlugin):
     a video file. I use this because I prefer to adjust brightness/contrast
     in hardware before playing a video file.
 
-    activate with plugin.activate('plugin.autocolor')
+    activate with
+    | plugin.activate('plugin.autocolor')
 
     Yes, I spelled it the American way. No, I'm not American.
-
     """
+
     def __init__(self,before='/bin/true', after='/bin/true'):
         """
         init the autocolor plugin

@@ -55,22 +55,24 @@ class PluginInterface(plugin.Plugin):
     Your channel list must contain the identifier from the xine channels.conf
     as frequence, e.g.
 
-    TV_CHANNELS = [
-        ( 'ard.de', 'ARD', 'Das Erste RB' ),
-        ( 'zdf.de', 'ZDF', 'ZDF' ),
-        ( 'ndr.de', 'NDR', 'NDR RB' ),
-        ( 'rtl.de', 'RTL', 'RTL Television' ),
-        ( 'sat1.de', 'SAT.1', 'SAT.1' ),
-        ( 'rtl2.de', 'RTL 2', 'RTL2' ),
-        ( 'prosieben.de', 'PRO 7', 'ProSieben' ),
-        ( 'kabel1.de', 'KABEL 1', 'KABEL1' ),
-        ( 'vox.de', 'VOX', 'VOX' ),
-        ( 'n24.de', 'N24', 'N24' ),
-        ( 'arte-tv.com', 'ARTE', 'arte' ),
-        ( 'C3sat.de', '3SAT', 'Info/3sat' ),
-        ( 'superrtl.de', 'Super RTL', 'Super RTL' ),
-        ( 'kika.de', 'Kika', 'Doku/KiKa' ) ]
+    | TV_CHANNELS = [
+    |     ( 'ard.de', 'ARD', 'Das Erste RB' ),
+    |     ( 'zdf.de', 'ZDF', 'ZDF' ),
+    |     ( 'ndr.de', 'NDR', 'NDR RB' ),
+    |     ( 'rtl.de', 'RTL', 'RTL Television' ),
+    |     ( 'sat1.de', 'SAT.1', 'SAT.1' ),
+    |     ( 'rtl2.de', 'RTL 2', 'RTL2' ),
+    |     ( 'prosieben.de', 'PRO 7', 'ProSieben' ),
+    |     ( 'kabel1.de', 'KABEL 1', 'KABEL1' ),
+    |     ( 'vox.de', 'VOX', 'VOX' ),
+    |     ( 'n24.de', 'N24', 'N24' ),
+    |     ( 'arte-tv.com', 'ARTE', 'arte' ),
+    |     ( 'C3sat.de', '3SAT', 'Info/3sat' ),
+    |     ( 'superrtl.de', 'Super RTL', 'Super RTL' ),
+    |     ( 'kika.de', 'Kika', 'Doku/KiKa' )
+    | ]
     """
+
     def __init__(self):
         plugin.Plugin.__init__(self)
 

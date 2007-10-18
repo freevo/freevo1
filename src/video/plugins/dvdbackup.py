@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # dvdbackup.py - Plugin for encoding DVD's with the EncodingServer
@@ -37,7 +36,7 @@ import config
 
 class PluginInterface(plugin.ItemPlugin):
     """
-    PLugin for making DVD backups (aka dvdrips) using EncodingServer
+    Make DVD backups (aka dvdrips) using EncodingServer
 
     This plugin NEEDS a running encodingserver to work properly.
     You can start an encodingserver with "freevo encodingserver start".

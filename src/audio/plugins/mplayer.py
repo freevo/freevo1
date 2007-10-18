@@ -46,6 +46,7 @@ class PluginInterface(plugin.Plugin):
     Mplayer plugin for the audio player. Use mplayer to play all audio
     files.
     """
+
     def __init__(self):
         # create the mplayer object
         plugin.Plugin.__init__(self)

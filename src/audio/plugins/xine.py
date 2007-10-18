@@ -45,6 +45,7 @@ class PluginInterface(plugin.Plugin):
     """
     Xine plugin for the video player.
     """
+
     def __init__(self):
         plugin.Plugin.__init__(self)
 

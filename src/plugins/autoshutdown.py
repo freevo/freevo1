@@ -78,15 +78,15 @@ class PluginInterface(plugin.MainMenuPlugin):
     recording to the shutdown confirmation messages.
 
     Activate with:
-    plugin.remove('shutdown')
-    plugin.activate('autoshutdown',level=90)
+    | plugin.remove('shutdown')
+    | plugin.activate('autoshutdown',level=90)
 
     Configuration:
-    SHUTDOWN_SYS_ENABLE = 1
-    AUTOSHUTDOWN_METHOD = 'acpi|nvram'
-    AUTOSHUTDOWN_WAKEUP_CMD = PATH/TO/THE/WAKEUP_SCRIPT
-    AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = "13:00"
-    AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP = True
+    | SHUTDOWN_SYS_ENABLE = 1
+    | AUTOSHUTDOWN_METHOD = 'acpi|nvram'
+    | AUTOSHUTDOWN_WAKEUP_CMD = PATH/TO/THE/WAKEUP_SCRIPT
+    | AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = "13:00"
+    | AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP = True
 
     The wakeup methode can be either nvram or acpi.
 
@@ -97,18 +97,17 @@ class PluginInterface(plugin.MainMenuPlugin):
     Put the path to nvram-wakeup in AUTOSHUTDOWN_WAKEUP_CMD.
 
     More variables:
-    AUTOSHUTDOWN_NVRAM_OPT = "--syslog"
-    AUTOSHUTDOWN_BIOS_NEEDS_REBOOT = True
+    | AUTOSHUTDOWN_NVRAM_OPT = "--syslog"
+    | AUTOSHUTDOWN_BIOS_NEEDS_REBOOT = True
 
     Your boot loader can be either GRUB or LILO:
-    AUTOSHUTDOWN_BOOT_LOADER = "GRUB|LILO"
-
-    AUTOSHUTDOWN_REMOUNT_BOOT_CMD = "/bin/mount"
-    AUTOSHUTDOWN_REMOUNT_BOOT_OPT = "/boot -o remount,rw"
-    AUTOSHUTDOWN_GRUB_CMD = "/sbin/grub-set-default 0"
-    AUTOSHUTDOWN_GRUB_OPT = "0"
-    AUTOSHUTDOWN_LILO_CMD = "/sbin/lilo"
-    AUTOSHUTDOWN_LILO_OPT = "-R PowerOff"
+    | AUTOSHUTDOWN_BOOT_LOADER = "GRUB|LILO"
+    | AUTOSHUTDOWN_REMOUNT_BOOT_CMD = "/bin/mount"
+    | AUTOSHUTDOWN_REMOUNT_BOOT_OPT = "/boot -o remount,rw"
+    | AUTOSHUTDOWN_GRUB_CMD = "/sbin/grub-set-default 0"
+    | AUTOSHUTDOWN_GRUB_OPT = "0"
+    | AUTOSHUTDOWN_LILO_CMD = "/sbin/lilo"
+    | AUTOSHUTDOWN_LILO_OPT = "-R PowerOff"
 
     ACPI:
     If you want to use acpi instead, you need to create a small script:
@@ -117,7 +116,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     ##############################
     #acpi_wakeup.sh
     ##############################
-    echo "$1" >/proc/acpi/alarm
+    echo "$1" > /proc/acpi/alarm
 
     and put its path in AUTOSHUTDOWN_WAKEUP_CMD.
     You have to be root or use sudo for this to work.

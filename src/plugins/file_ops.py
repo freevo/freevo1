@@ -40,6 +40,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
     small plugin to delete files
     """
+
     def config(self):
         return [ ('FILE_OPS_ALLOW_DELETE_IMAGE', True,
                   'Add delete image to the menu.'),

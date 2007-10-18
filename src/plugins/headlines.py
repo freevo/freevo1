@@ -65,15 +65,18 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate, put the following lines in local_conf.py:
 
-    plugin.activate('headlines', level=45)
-    HEADLINES_LOCATIONS = [
-          ('Advogato', 'http://advogato.org/rss/articles.xml'),
-          ('DVD Review', 'http://www.dvdreview.com/rss/newschannel.rss') ]
+    | plugin.activate('headlines', level=45)
+    | HEADLINES_LOCATIONS = [
+    |       ('Advogato', 'http://advogato.org/rss/articles.xml'),
+    |       ('DVD Review', 'http://www.dvdreview.com/rss/newschannel.rss') ]
 
     For a full list of tested sites, see 'Docs/plugins/headlines.txt'.
     """
-    # make an init func that creates the cache dir if it don't exist
+
     def __init__(self):
+        """
+        make an init func that creates the cache dir if it don't exist
+        """
         if not hasattr(config, 'HEADLINES_LOCATIONS'):
             self.reason = 'HEADLINES_LOCATIONS not defined'
             return

@@ -160,14 +160,16 @@ class PluginInterface(plugin.MainMenuPlugin):
     radio is availble in binary form for most linux distros.
 
     to activate put the following in your local_conf.py:
-    plugin.activate('audio.radioplayer')
-    plugin.activate('audio.radio')
-    RADIO_CMD='/usr/bin/radio'
-    RADIO_STATIONS = [ ('Sea FM', '90.9'),
-                       ('Kiss 108', '108'),
-                       ('Mix 98.5', '98.5'),
-                       ('Magic 106', '106.7') ]
-
+    | plugin.activate('audio.radioplayer')
+    | plugin.activate('audio.radio')
+    | RADIO_CMD='/usr/bin/radio'
+    | RADIO_STATIONS = [
+    |     ('Sea FM', '90.9'),
+    |     ('Kiss 108', '108'),
+    |     ('Mix 98.5', '98.5'),
+    |     ('Magic 106', '106.7')
+    | ]
     """
+
     def items(self, parent):
         return [ RadioMainMenuItem(parent) ]

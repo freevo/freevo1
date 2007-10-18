@@ -42,7 +42,8 @@ class PluginInterface(IdleBarPlugin):
     Informs you, when the xmltv-listings expires.
 
     Activate with:
-    plugin.activate('idlebar.tv', level=20, args=(listings_threshold,))
+    | plugin.activate('idlebar.tv', level=20, args=(listings_threshold,))
+
     listings_threshold must be a number in hours.  For example if you put
     args=(12, ) then 12 hours befor your xmltv listings run out the tv icon
     will present a warning.  Once your xmltv data is expired it will present

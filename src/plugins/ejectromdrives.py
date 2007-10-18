@@ -44,9 +44,9 @@ class PluginInterface(plugin.ItemPlugin):
     """
     This plugin ejects/close the tray of rom drives.
 
-    plugin.activate('ejectromdrives')
-
+    | plugin.activate('ejectromdrives')
     """
+
     __author__           = 'Gorka Olaizola'
     __author_email__     = 'gorka@escomposlinux.org'
     __maintainer__       = __author__

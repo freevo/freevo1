@@ -52,12 +52,12 @@ class PluginInterface(plugin.ItemPlugin):
     add a "Playlists" submenu to your Audio Folder.
     To activate this plugin, put the following in your local_conf.py.
 
-    plugin.activate( 'audio.playlist' )
+    | plugin.activate( 'audio.playlist' )
 
     You can also change the physical location of the Playlists folder, or
     specify the naming convention like this:
 
-    plugin.activate('audio.playlist', args=('/path/to/folder','Freevo %m%d'))
+    | plugin.activate('audio.playlist', args=('/path/to/folder','Freevo %m%d'))
 
     where the naming format uses the standard strftime format options.
 
@@ -65,9 +65,8 @@ class PluginInterface(plugin.ItemPlugin):
 
     Add something like this to your local_conf.py
 
-    EVENTS['menu']['REC']  = Event(MENU_CALL_ITEM_ACTION, arg='queue_a_track')
-    EVENTS['menu']['SAVE'] = Event(MENU_CALL_ITEM_ACTION, arg='close_playlist')
-
+    | EVENTS['menu']['REC']  = Event(MENU_CALL_ITEM_ACTION, arg='queue_a_track')
+    | EVENTS['menu']['SAVE'] = Event(MENU_CALL_ITEM_ACTION, arg='close_playlist')
     """
 
     def __init__(self,playlist_folder=None, naming='Freevo Playlist - %m%d-%I%M'):

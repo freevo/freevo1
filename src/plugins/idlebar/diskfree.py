@@ -42,10 +42,11 @@ class PluginInterface(IdleBarPlugin):
     Displays the amount of free disk space
 
     Activate with:
-    plugin.activate('idlebar.diskfree', level=30)
+    | plugin.activate('idlebar.diskfree', level=30)
 
     This plugin displays the total amount of free disk space for recordings
     """
+
     def __init__(self):
         if not config.TV_RECORD_DIR:
             self.reason = 'TV_RECORD_DIR is not set'

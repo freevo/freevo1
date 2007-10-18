@@ -64,19 +64,20 @@ class PluginInterface(plugin.Plugin):
 
     The teletext page number is taken from TV_CHANNELS, eg:
 
-TV_CHANNELS = [
-    #'XMLTV Id',    'Channel Name', 'Freq', 'Times', 'Video Group', 'Teletext Page Number'
-    ('bbc.co.uk',   'BBC Prime',    'K32',  '',      '0',           '881'),
-    ('cnn.com',     'CNN Int.',     'S13'),
-    ('C1.sfdrs.ch', 'SF 1',         'K05',  '',      '0',           '777'),
-    ('C2.sfdrs.ch', 'SF 2',         'K10',  '',      '0',           '777'),
-]
-TV_FREQUENCY_TABLE = {
-    'K32' : 559250,
-    'S13' : 246250,
-    'K05' : 175500,
-    'K10' : 211000,
-]
+    | TV_CHANNELS = [
+    |     #'XMLTV Id',    'Channel Name', 'Freq', 'Times', 'Video Group', 'Teletext Page Number'
+    |     ('bbc.co.uk',   'BBC Prime',    'K32',  '',      '0',           '881'),
+    |     ('cnn.com',     'CNN Int.',     'S13'),
+    |     ('C1.sfdrs.ch', 'SF 1',         'K05',  '',      '0',           '777'),
+    |     ('C2.sfdrs.ch', 'SF 2',         'K10',  '',      '0',           '777'),
+    | ]
+    |
+    | TV_FREQUENCY_TABLE = {
+    |     'K32' : 559250,
+    |     'S13' : 246250,
+    |     'K05' : 175500,
+    |     'K10' : 211000,
+    | ]
 
     Requirements:
        * vbi2srt: (http://www.linuxowl.com/vbi2srt.html)
@@ -86,13 +87,12 @@ TV_FREQUENCY_TABLE = {
     To activate this plugin, just put the following line at the end of your
     local_conf.py file:
 
-    plugin.remove('tv.generic_record')
-    plugin_record = plugin.activate('tv.vbi2srt_record')
-
+    | plugin.remove('tv.generic_record')
+    | plugin_record = plugin.activate('tv.vbi2srt_record')
     """
+
     def __init__(self):
         plugin.Plugin.__init__(self)
-
         plugin.register(Recorder(), plugin.RECORD)
 
 

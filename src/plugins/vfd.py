@@ -276,14 +276,12 @@ class PluginInterface(plugin.DaemonPlugin):
        * pyusb: installed (http://pyusb.berlios.de/) with name patch as
                 the default module is called usb and conflicts with freevo's
                 usb plugin.
-       * pyusb-0.3.3-name.patch (http://www.linuxowl.com/patches/)
-
-    Updates available from http://www.linuxowl.com/software.
+       * pyusb-0.X.X-name.patch contrib/patches
 
     To activate this plugin, just put the following line at the end of your
     local_conf.py file:
 
-    plugin.activate('vfd')
+    | plugin.activate('vfd')
     """
     __author__           = 'Duncan Webb'
     __author_email__     = 'duncan@freevo.org'

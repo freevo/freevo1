@@ -72,7 +72,7 @@ class PluginInterface(plugin.DaemonPlugin):
     directly.
 
     To use the button bar add the following line to your local_conf.py:
-    plugin.activate('buttonbar')
+    | plugin.activate('buttonbar')
 
     Where the actions mapped to each of the colors can be one of the following:
     * info - Brings up a screen displaying more information than can be displayed
@@ -86,10 +86,10 @@ class PluginInterface(plugin.DaemonPlugin):
     You can also map the following actions to unused keys of your keyboard
     (For example):
 
-    KEYMAP[key.K_F7] = 'RED'
-    KEYMAP[key.K_F8] = 'GREEN'
-    KEYMAP[key.K_F11] = 'YELLOW'
-    KEYMAP[key.K_F12] = 'BLUE'
+    | KEYMAP[key.K_F7] = 'RED'
+    | KEYMAP[key.K_F8] = 'GREEN'
+    | KEYMAP[key.K_F11] = 'YELLOW'
+    | KEYMAP[key.K_F12] = 'BLUE'
     """
 
     def __init__(self):

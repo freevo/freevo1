@@ -30,20 +30,21 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate, put the following lines in local_conf.py:
 
-    plugin.activate('freeboxtv', level=45)
-    PLUGIN_FREEBOXTV_LOCATION = "http://mafreebox.freebox.fr/freeboxtv/playlist.m3u"
-    plugin.activate('video.vlc')
-    # ================
-    # VLC Settings :
-    # ================
-    VLC_NICE    = -30
-    VLC_CMD     = CONF.vlc
+    | plugin.activate('freeboxtv', level=45)
+    | PLUGIN_FREEBOXTV_LOCATION = "http://mafreebox.freebox.fr/freeboxtv/playlist.m3u"
+    | plugin.activate('video.vlc')
+    |
+    | # ================
+    | # VLC Settings
+    | # ================
+    | VLC_NICE    = -30
+    | VLC_CMD     = CONF.vlc
 
     dans /etc/freevo/freevo.conf
     rajouter
     vlc = /usr/bin/vlc
     """
-    # make an init func that creates the cache dir if it don't exist
+
     def __init__(self):
         if not hasattr(config, 'PLUGIN_FREEBOXTV_LOCATION'):
             PLUGIN_FREEBOXTV_LOCATION = "http://mafreebox.freebox.fr/freeboxtv/playlist.m3u"

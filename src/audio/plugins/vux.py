@@ -69,7 +69,7 @@ class PluginInterface(plugin.ItemPlugin):
     have all the playlist and scorelist stuff done (see man vux)
 
     add a line to local_conf.py containing
-    plugin.activate('audio.vux')
+    | plugin.activate('audio.vux')
 
     Usage:
     after adding the plugin any of of the items (dir/mp3/ogg) in the music

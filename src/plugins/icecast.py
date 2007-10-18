@@ -62,6 +62,7 @@ class PluginInterface(plugin.DaemonPlugin):
     |                  '-r' ]
     | ICES_DEF_LIST = '/usr/local/freevo_data/Music/ROCK/mymix.m3u'
     """
+
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
         self.icecast_pid = None

@@ -52,9 +52,10 @@ class PluginInterface(plugin.DaemonPlugin):
 
     Example:
     call pilot-xfer when a pda with the id 082d:0100 is pluged in:
-    USB_HOTPLUG = [ ('082d:0100', 'Synchronizing',
-                     '/usr/bin/pilot-xfer -t -u /local/visor/current') ]
+    | USB_HOTPLUG = [ ('082d:0100', 'Synchronizing',
+    |                  '/usr/bin/pilot-xfer -t -u /local/visor/current') ]
     """
+
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
         self.devices = util.list_usb_devices()

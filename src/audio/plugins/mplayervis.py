@@ -215,11 +215,12 @@ class PluginInterface(plugin.Plugin):
     the freevo addons page.
 
     Activate with:
-     plugin.activate('audio.mplayervis')
+    | plugin.activate('audio.mplayervis')
 
     When activated one can change between view-modes
     with the 0 (zero) button.
     """
+
     player = None
     visual = None
     view   = DOCK

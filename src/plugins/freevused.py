@@ -147,58 +147,53 @@ class PluginInterface(plugin.DaemonPlugin):
 
     To activate add this to your local_conf.py:
 
-    plugin.activate('freevused')
+    | plugin.activate('freevused')
 
     Optionally you could set those variables if you don't like the default
-    ones
+    ones by adding in /etc/freevo/local.conf:
 
-    ------------------------------------------------ /etc/freevo/local.conf
-
-    # if RFCOMM port is already binded wait this seconds to retry binding
-    FVUSED_BIND_TIMEOUT = 30
-
-    # Send received event to OSD
-    FVUSED_OSD_MESSAGE = True
-
-    #Translation of commands from j2me client to events of Freevo
-    #
-    FVUSED_CMDS = {
-
-      'PREV': 'UP',                # 1st row left
-      'STRT': 'SELECT',            # 1nd row center
-      'NEXT': 'DOWN',              # 1st row right
-      'RWND': 'LEFT',              # 2nd row left
-      'PAUS': 'PAUSE',             # 2nd row center
-      'FFWD': 'RIGHT',             # 2nd row right
-      'VOL-': 'MIXER_VOLDOWN',     # 3rd row left
-      'STOP': 'EXIT',              # 3rd row center
-      'VOL+': 'MIXER_VOLUP',       # 3rd row right
-      'VOLM': 'MIXER_MUTE',        # 4th row left
-      'SLCT': 'ENTER',             # 4th row center
-      'MAIN': 'STOP',              # 4th row right
-
-      'DISP': 'DISPLAY',           # More actions
-      'EJEC': 'EJECT',
-      'DEAU': 'DISPLAY',
-      'CHA+': 'CH+',
-      'CHA-': 'CH-',
-      'RECO': 'REC',
-      'GUID': 'GUIDE',
-      'NUM0': '0',                 # Numeric keyboard
-      'NUM1': '1',
-      'NUM2': '2',
-      'NUM3': '3',
-      'NUM4': '4',
-      'NUM5': '5',
-      'NUM6': '6',
-      'NUM7': '7',
-      'NUM8': '8',
-      'NUM9': '9',
-
-      'STAT': 'FVUSED_ITEM_INFO'
-    }
-    ------------------------------------------------ /etc/freevo/local.conf
-
+    | # if RFCOMM port is already binded wait this seconds to retry binding
+    | FVUSED_BIND_TIMEOUT = 30
+    |
+    | # Send received event to OSD
+    | FVUSED_OSD_MESSAGE = True
+    |
+    | #Translation of commands from j2me client to events of Freevo
+    | FVUSED_CMDS = {
+    |
+    |   'PREV': 'UP',                # 1st row left
+    |   'STRT': 'SELECT',            # 1nd row center
+    |   'NEXT': 'DOWN',              # 1st row right
+    |   'RWND': 'LEFT',              # 2nd row left
+    |   'PAUS': 'PAUSE',             # 2nd row center
+    |   'FFWD': 'RIGHT',             # 2nd row right
+    |   'VOL-': 'MIXER_VOLDOWN',     # 3rd row left
+    |   'STOP': 'EXIT',              # 3rd row center
+    |   'VOL+': 'MIXER_VOLUP',       # 3rd row right
+    |   'VOLM': 'MIXER_MUTE',        # 4th row left
+    |   'SLCT': 'ENTER',             # 4th row center
+    |   'MAIN': 'STOP',              # 4th row right
+    |
+    |   'DISP': 'DISPLAY',           # More actions
+    |   'EJEC': 'EJECT',
+    |   'DEAU': 'DISPLAY',
+    |   'CHA+': 'CH+',
+    |   'CHA-': 'CH-',
+    |   'RECO': 'REC',
+    |   'GUID': 'GUIDE',
+    |   'NUM0': '0',                 # Numeric keyboard
+    |   'NUM1': '1',
+    |   'NUM2': '2',
+    |   'NUM3': '3',
+    |   'NUM4': '4',
+    |   'NUM5': '5',
+    |   'NUM6': '6',
+    |   'NUM7': '7',
+    |   'NUM8': '8',
+    |   'NUM9': '9',
+    |
+    |   'STAT': 'FVUSED_ITEM_INFO'
+    | }
     """
 
     def __init__(self):

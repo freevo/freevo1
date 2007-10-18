@@ -85,10 +85,10 @@ class PluginInterface(plugin.DaemonPlugin):
     This is a replacement for tiny_osd which works with PyOSD (XOsd)
 
     activate with:
-    plugin.remove('tiny_osd')
-    plugin.activate('tiny_xosd')
-
+    | plugin.remove('tiny_osd')
+    | plugin.activate('tiny_xosd')
     """
+
     def __init__(self):
         """
         init the osd

@@ -42,13 +42,14 @@ class PluginInterface(plugin.ItemPlugin):
 
     to activate it, put this in your local_conf.py:
 
-    plugin.activate('df')
+    | plugin.activate('df')
 
     to see the disk usage go to any directory listing and, press ENTER ('e' key or
     key it maps to on your remote) and you will see the disk usage under the Browse
     directory option. This also works on the main directory listings where you see
     your cdrom drives.
     """
+
     def __init__(self):
         plugin.ItemPlugin.__init__(self)
 

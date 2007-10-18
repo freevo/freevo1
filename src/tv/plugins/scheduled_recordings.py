@@ -111,9 +111,9 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     This plugin is used to display your currently scheduled recordings.
 
-    plugin.activate('tv.scheduled_recordings')
-
+    | plugin.activate('tv.scheduled_recordings')
     """
+
     def __init__(self):
         plugin.MainMenuPlugin.__init__(self)
 

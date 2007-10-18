@@ -752,10 +752,11 @@ class PluginInterface( plugin.DaemonPlugin ):
        * lcdproc: installed and LCDd running. (http://lcdproc.sourceforge.net/)
        * pylcd: installed (http://www.schwarzvogel.de/software-pylcd.shtml)
 
-       Also, your LCD dimensions must be supported. Right now it support: 4x20,
+    Also, your LCD dimensions must be supported. Right now it support: 4x20,
     4x40, 2x16, 2x20, 2x40. If you have one with different dimension, it will
     try to fit a smaller one, if none was find, then it will be disabled.
-       To support a new dimension is just a matter of creating "screens" to
+
+    To support a new dimension is just a matter of creating "screens" to
     that dimension, which is really easy, since a "screen" is just a set of
     python dicts telling how to display information on the LCD. You can try it
     yourself, just take a look in src/plugins/lcd.py, the variable is
@@ -763,11 +764,10 @@ class PluginInterface( plugin.DaemonPlugin ):
     the list freevo-devel@lists.sourceforge.net, or if you weren't able, just
     ask for it there.
 
-       To activate this plugin, just put the following line at the end of your
+    To activate this plugin, just put the following line at the end of your
     local_conf.py file:
 
-    plugin.activate( 'lcd' )
-
+    | plugin.activate('lcd')
     """
     __author__           = 'Gustavo Sverzut Barbieri'
     __author_email__     = 'barbieri@gmail.com'

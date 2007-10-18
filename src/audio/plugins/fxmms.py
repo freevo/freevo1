@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# xmms.py - the Freevo XMMS plugin for audio
+# fxmms.py - the Freevo XMMS plugin for audio
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -63,23 +63,26 @@ class PluginInterface(plugin.Plugin):
     by setting a custom FXMMS_SUFFIX variable. The variable was introduced
     since freevo uses mplayer by default which supports many more
     sound formats.
+
     I have also added a variable (FXMMS_NETRADIO) which allows you to
     turn off xmms for netradio. I have had limited succes with netradio
     with xmms so i turn it off but other people wanted it.
     I also have a variable for where xmms is. I have set it to the Gentoo
     default of /usr/bin/xmms.
+
     There are two ways to get this plugin to work. The first is to remove the
     audio.mplayer plugin and then activate this plugin. This is not reccomended
     since xmms supports many less formats than mplayer. but here is how to
     activate it in local_conf.py:
-    plugin.remove('audio.mplayer')
-    plugin.activate('audio.fxmms')
+    | plugin.remove('audio.mplayer')
+    | plugin.activate('audio.fxmms')
+
     The second better option is to set fxmms to your AUDIO_PREFERED_PLAYER and
     then activate the plugin in local_conf.py:
-    plugin.activate('audio.fxmms')
-    AUDIO_PREFERED_PLAYER = 'fxmms'
-
+    | plugin.activate('audio.fxmms')
+    | AUDIO_PREFERED_PLAYER = 'fxmms'
     """
+
     def __init__(self):
         # create the plugin object
         plugin.Plugin.__init__(self)

@@ -52,6 +52,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     the Freevo main menu. This plugin is auto-loaded when you activate
     the 'video', 'audio', 'image' or 'games' plugin.
     """
+
     def __init__(self, type=None, force_text_view=FALSE):
         plugin.MainMenuPlugin.__init__(self)
         self.type = type

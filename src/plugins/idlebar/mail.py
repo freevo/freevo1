@@ -42,9 +42,9 @@ class PluginInterface(IdleBarPlugin):
     Shows if new mail is in the mailbox.
 
     Activate with:
-    plugin.activate('idlebar.mail', level=10, args=('path to mailbox', ))
-
+    | plugin.activate('idlebar.mail', level=10, args=('path to mailbox', ))
     """
+
     def __init__(self, mailbox):
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.mail'

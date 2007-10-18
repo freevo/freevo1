@@ -51,14 +51,15 @@ class PluginInterface(IdleBarPlugin):
     Show a icon status based on remind command output.
 
     Activate with:
-    plugin.activate('idlebar.remindicon')
+    | plugin.activate('idlebar.remindicon')
 
     You can define the remind command with:
-    REMINDICON_CMD='<cmd> (defaults to /usr/bin/remind -h )
+    | REMINDICON_CMD='/usr/bin/remind -h'
     remind homepage:http://www.roaringpenguin.com/en/penguin/openSourceProducts/remind
 
     if the command output something then show the alert button else show the blue button.
     """
+
     def __init__(self):
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.remindicon'

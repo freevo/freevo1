@@ -39,10 +39,9 @@ class PluginInterface(plugin.Plugin):
     """
     Use this plugin if you need to use Lirc's irsend (or similar) command
     to tell an external tuner to change the channel.
-    Example usage (local_conf.py):
 
-    plugin_external_tuner = plugin.activate('tv.irsend_generic',
-                            args=('/usr/bin/irsend SEND_ONCE <remote_name>', ))
+    Example usage (local_conf.py):
+    | plugin_external_tuner = plugin.activate('tv.irsend_generic', args=('/usr/bin/irsend SEND_ONCE <remote_name>',))
 
     Where <remote_name> is the name of the remote you are using to send codes
     with in lircd.conf.

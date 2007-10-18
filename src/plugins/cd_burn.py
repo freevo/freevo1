@@ -689,7 +689,7 @@ class PluginInterface(plugin.ItemPlugin):
     freevo/plugins/.
 
     Activate in local_conf.py by:
-    plugin.activate(cd_burn)
+    | plugin.activate(cd_burn)
     """
 
     def __init__(self):

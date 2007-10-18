@@ -19,6 +19,7 @@ class PluginInterface(plugin.Plugin):
     """
     VLC plugin for the video player, for RTSP streams
     """
+
     def __init__(self):
         plugin.Plugin.__init__(self)
         plugin.register(Vlc(), plugin.VIDEO_PLAYER, True)

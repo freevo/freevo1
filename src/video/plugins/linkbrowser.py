@@ -297,30 +297,32 @@ class PluginInterface(plugin.MainMenuPlugin):
     link to be shown. You can activate the plugin more than once with a
     different url.
 
-    Options: name, url, image (optional), blacklist_regexp (optional),
-             autoplay (optional), all_links (optional)
+    Options:
 
-             name:  the name the link browser should have in the menu
-             url:   the url to be parsed
-             image: image for the menu (default: None)
+    name, url, image (optional), blacklist_regexp (optional),
+    autoplay (optional), all_links (optional)
 
-             blacklist_regexp: a list of regular expressions for links to
-             be ignored. The default value is []. Notice: the regexp will
-             be used witg match() in python, so: 'foo' will only match 'foo',
-             not http://www.foo.com. Use '.*foo.*' for that.
+    name:  the name the link browser should have in the menu
+    url:   the url to be parsed
+    image: image for the menu (default: None)
 
-             autoplay: if only one video is found (besides some links),
-             play it and don't show the links. It's still possible to
-             browse the link list by pressing ENTER. Default is False.
+    blacklist_regexp: a list of regular expressions for links to
+    be ignored. The default value is []. Notice: the regexp will
+    be used witg match() in python, so: 'foo' will only match 'foo',
+    not http://www.foo.com. Use '.*foo.*' for that.
 
-             all_links: if True, all links (except blacklisted) will be shown,
-             if False, only links deeper to the current one will be shown. E.g.
-             when viewing www.foo.com/bar, www.bar.com and www.foo.com/bar will
-             be blocked.
+    autoplay: if only one video is found (besides some links),
+    play it and don't show the links. It's still possible to
+    browse the link list by pressing ENTER. Default is False.
+
+    all_links: if True, all links (except blacklisted) will be shown,
+    if False, only links deeper to the current one will be shown. E.g.
+    when viewing www.foo.com/bar, www.bar.com and www.foo.com/bar will
+    be blocked.
 
     activate this plugin with
-    plugin.activate('video.linkbrowser', args=('name', 'url') or
-    plugin.activate('video.linkbrowser', args=('name', 'url', image', ...)
+    | plugin.activate('video.linkbrowser', args=('name', 'url') or
+    | plugin.activate('video.linkbrowser', args=('name', 'url', image', ...)
     """
 
     def __init__(self, name, url, image=None, blacklist_regexp = [],

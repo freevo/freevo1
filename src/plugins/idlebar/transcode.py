@@ -55,7 +55,7 @@ class PluginInterface(IdleBarPlugin):
     Shows the status of the current encoding job
 
     Activate with:
-        plugin.activate('idlebar.transcode')
+    | plugin.activate('idlebar.transcode')
     """
 
     def __init__(self):

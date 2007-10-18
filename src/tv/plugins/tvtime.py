@@ -60,6 +60,7 @@ class PluginInterface(plugin.Plugin):
     """
     Plugin to watch tv with tvtime.
     """
+
     def __init__(self):
         plugin.Plugin.__init__(self)
 

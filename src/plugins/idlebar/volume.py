@@ -39,8 +39,9 @@ class PluginInterface(IdleBarPlugin):
     """
     This plugin shows the current volume level on the idlebar.
     Activate with:
-    plugin.activate('idlebar.volume.Volume', level=0)
+    | plugin.activate('idlebar.volume.Volume', level=0)
     """
+
     def __init__(self):
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.volume'

@@ -53,6 +53,7 @@ class PluginInterface(plugin.DaemonPlugin):
     """
     global idlebar plugin.
     """
+
     def __init__(self):
         """
         init the idlebar

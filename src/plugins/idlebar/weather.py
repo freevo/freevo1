@@ -42,11 +42,12 @@ class PluginInterface(IdleBarPlugin):
     Shows the current weather.
 
     Activate with:
-    plugin.activate('idlebar.weather', level=30, args=('4-letter code', ))
+    | plugin.activate('idlebar.weather', level=30, args=('4-letter code', ))
 
     For weather station codes see: http://www.nws.noaa.gov/tg/siteloc.shtml
     You can also set the unit as second parameter in args ('C', 'F', or 'K')
     """
+
     def __init__(self, zone='CYYZ', units='C'):
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.weather'

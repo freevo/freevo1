@@ -47,6 +47,7 @@ class PluginInterface(plugin.ItemPlugin):
 
     It replaces the item menu with a menu showing information about the file.
     """
+
     def __init__(self):
         plugin.ItemPlugin.__init__(self)
         skin.register('video_details', ('screen', 'title', 'view',

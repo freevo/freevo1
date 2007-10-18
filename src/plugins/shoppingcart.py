@@ -51,9 +51,9 @@ class PluginInterface(plugin.ItemPlugin):
     enter pick 'add to cart' and then go to a directory. Press enter
     and pick what you want to do.
 
-    plugin.activate('shoppingcart')
-
+    | plugin.activate('shoppingcart')
     """
+
     def __init__(self):
         plugin.ItemPlugin.__init__(self)
         self.item = None

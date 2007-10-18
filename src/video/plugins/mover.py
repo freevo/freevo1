@@ -40,39 +40,31 @@ class PluginInterface(plugin.ItemPlugin):
     Plugin to move video files
 
     Activate:
-      plugin.activate('video.mover', args=('from-dir', 'to-dir'))
+    | plugin.activate('video.mover', args=('from-dir', 'to-dir'))
 
     from_dir: from which directory the files should be moved from
     to_dir:   to which directory the files should be moved to
 
     Optional parameters:
+
     recursive (boolean): should the plugin work for every subdirectory of
-                         the from-directory (defaults to False)
+    the from-directory
 
-      This parameter can be used to make a "safe delete function":
-      map(lambda dir: plugin.activate('video.mover', args=(dir[1],
-                                                           '/mnt/media/trash',
-                                                           True)),
-          VIDEO_ITEMS)
-
+    This parameter can be used to make a "safe delete function":
+    | map(lambda dir: plugin.activate('video.mover', args=(dir[1], '/mnt/media/trash', True)), VIDEO_ITEMS)
 
     makedirs (boolean): should freevo create the to-dir if it doesn't exist
-                        (defaults to False)
 
-      This parameter can be used to move seen tv-episodes/movies
-      into a subdirectory ('seen'):
+    This parameter can be used to move seen tv-episodes/movies
+    into a subdirectory ('seen'):
 
-      map(lambda dir: plugin.activate('video.mover', args=(dir[1],
-                                                           'seen',
-                                                           True,
-                                                           True)),
-          VIDEO_ITEMS)
+    | map(lambda dir: plugin.activate('video.mover', args=(dir[1], 'seen', True, True)), VIDEO_ITEMS)
 
-      When to-dir is not specified as an absolute path, the mover will try
-      to locate it in the current dir. If makedirs==True and to-dir
-      doesn't exist, it will be created in the current-dir.
-
+    When to-dir is not specified as an absolute path, the mover will try
+    to locate it in the current dir. If makedirs==True and to-dir
+    doesn't exist, it will be created in the current-dir.
     """
+
     def __init__(self, from_dir, to_dir, recursive=False, makedirs=False):
         plugin.ItemPlugin.__init__(self)
 

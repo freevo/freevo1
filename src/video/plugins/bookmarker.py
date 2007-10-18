@@ -54,8 +54,10 @@ from event import *
 
 class PluginInterface(plugin.ItemPlugin):
     """
-    class to handle auto bookmarks
+    Automatically bookmark where you were when pausing or stopping.
+    Can resume play back afterward from the Bookmarks menu item
     """
+
     def actions(self, item):
         self.item = item
         items = []

@@ -387,7 +387,7 @@ class AlbumsItem(item.Item):
 
 
 
-class PluginInterface(plugin.ItemPlugin,plugin.MainMenuPlugin):
+class PluginInterface(plugin.ItemPlugin, plugin.MainMenuPlugin):
     """
     This plugin allows you to create a new mix based on MusicIP's automatic mixing
     feature.  It also allows browsing by Genre, Album, or Artist.

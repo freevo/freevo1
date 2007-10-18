@@ -43,7 +43,7 @@ class PluginInterface(IdleBarPlugin):
     Display an Icon if prog is active.
 
     To activate put following Lines in local_conf.py:
-        plugin.activate('idlebar.progactive')
+    | plugin.activate('idlebar.progactive')
     """
 
     def __init__(self):

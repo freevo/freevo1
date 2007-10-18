@@ -44,11 +44,12 @@ class PluginInterface(plugin.MainMenuPlugin):
     when you plugin in or remove the usb storage device.
 
     Example:
-    plugin.activate('usb')
-    plugin.activate('usbstorage', type='video', args=('USB Key', '/mnt/hd'))
-    plugin.activate('usbstorage', type='audio', args=('USB Key', '/mnt/hd'))
-    plugin.activate('usbstorage', type='image', args=('USB Key', '/mnt/hd'))
+    | plugin.activate('usb')
+    | plugin.activate('usbstorage', type='video', args=('USB Key', '/mnt/hd'))
+    | plugin.activate('usbstorage', type='audio', args=('USB Key', '/mnt/hd'))
+    | plugin.activate('usbstorage', type='image', args=('USB Key', '/mnt/hd'))
     """
+
     def __init__(self, name, mountpoint):
         plugin.MainMenuPlugin.__init__(self)
         self.name       = name

@@ -42,11 +42,12 @@ class PluginInterface(plugin.ItemPlugin):
     """
     Displays the lyric of a selected song.
 
-    The lyrics are fetched from http:\\leoslyrics.com.
+    The lyrics are fetched from http://leoslyrics.com.
 
     To activate this plugin use:
-    plugin.activate('audio.lyrics')
+    | plugin.activate('audio.lyrics')
     """
+
     def __init__(self):
         plugin.ItemPlugin.__init__(self)
 

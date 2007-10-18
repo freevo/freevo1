@@ -115,9 +115,9 @@ class PluginInterface(plugin.MainMenuPlugin):
     for the current day and allow access to the dir for browsing the old
     pictures
 
-    plugin.activate('image.apod', args=('/dir_for_apod',))
-
+    | plugin.activate('image.apod', args=('/dir_for_apod',))
     """
+
     def __init__(self, apoddir=None):
         if not apoddir:
             self.reason = _('Need a directory to store APOD pictures.')

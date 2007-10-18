@@ -40,7 +40,7 @@ class PluginInterface(IdleBarPlugin):
     Show the status of all rom drives.
 
     Activate with:
-    plugin.activate('idlebar.cdstatus')
+    | plugin.activate('idlebar.cdstatus')
     """
     def __init__(self):
         IdleBarPlugin.__init__(self)

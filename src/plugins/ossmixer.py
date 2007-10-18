@@ -63,8 +63,8 @@ class PluginInterface(plugin.DaemonPlugin):
     http://www.python.org/doc/current/lib/mixer-device-objects.html
 
     And to activate:
-    plugin.remove('mixer')
-    plugin.activate('ossmixer')
+    | plugin.remove('mixer')
+    | plugin.activate('ossmixer')
     """
 
     SOUND_MIXER_LINE = 7

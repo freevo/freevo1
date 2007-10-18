@@ -47,31 +47,38 @@ class PluginInterface(IdleBarPlugin):
     You can customize the list of holidays with the variable HOLIDAYS in
     local_config.py. The default value is:
 
-    [ ('01-01',  'newyear.png'),
-      ('02-14',  'valentine.png'),
-      ('05-07',  'freevo_bday.png'),
-      ('07-03',  'usa_flag.png'),
-      ('07-04',  'usa_flag.png'),
-      ('10-30',  'ghost.png'),
-      ('10-31',  'pumpkin.png'),
-      ('12-21',  'snowman.png'),
-      ('12-25',  'christmas.png')]
+    | plugin.activate('idlebar.holidays', level=20)
+    | HOLIDAYS = [
+    |   ('01-01',  'newyear.png'),
+    |   ('02-14',  'valentine.png'),
+    |   ('05-07',  'freevo_bday.png'),
+    |   ('07-03',  'usa_flag.png'),
+    |   ('07-04',  'usa_flag.png'),
+    |   ('10-30',  'ghost.png'),
+    |   ('10-31',  'pumpkin.png'),
+    |   ('12-21',  'snowman.png'),
+    |   ('12-25',  'christmas.png')
+    | ]
     """
+
     def __init__(self):
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.holidays'
 
     def config(self):
-        return [ ('HOLIDAYS', [ ('01-01',  'newyear.png'),
-                                ('02-14',  'valentine.png'),
-                                ('05-07',  'freevo_bday.png'),
-                                ('07-03',  'usa_flag.png'),
-                                ('07-04',  'usa_flag.png'),
-                                ('10-30',  'ghost.png'),
-                                ('10-31',  'pumpkin.png'),
-                                ('12-21',  'snowman.png'),
-                                ('12-25',  'christmas.png')],
-                  'list of holidays this plugin knows') ]
+        return [
+            ('HOLIDAYS', [
+                ('01-01',  'newyear.png'),
+                ('02-14',  'valentine.png'),
+                ('05-07',  'freevo_bday.png'),
+                ('07-03',  'usa_flag.png'),
+                ('07-04',  'usa_flag.png'),
+                ('10-30',  'ghost.png'),
+                ('10-31',  'pumpkin.png'),
+                ('12-21',  'snowman.png'),
+                ('12-25',  'christmas.png')
+            ],
+            'list of holidays this plugin knows') ]
 
     def get_holiday_icon(self):
         # Creates a string which looks like "07-04" meaning July 04

@@ -81,11 +81,12 @@ class PluginInterface(plugin.ItemPlugin):
     To activate this plugin, put the following in your local_conf.py.
 
     If you have the key in ~/.amazonkey
-    plugin.activate( 'audio.coversearch' )
+    | plugin.activate( 'audio.coversearch' )
 
     Or this one if you want to pass the key to the plugin directly:
-    plugin.activate( 'audio.coversearch', args=('YOUR_KEY',) )
+    | plugin.activate( 'audio.coversearch', args=('YOUR_KEY',) )
     """
+
     def __init__(self, license=None):
         if not config.USE_NETWORK:
             self.reason = 'no network'

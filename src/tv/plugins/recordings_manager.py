@@ -98,17 +98,18 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     Plugin to browse the TV recordings directory based on series rather than
     just a flat view of the recordings.
+
     Programs not in a series are placed at the top level, while programs that
     are a member of a series are placed in a series menu and the menu placed
     at the top level.
 
     Activate with:
-    plugin.activate('tv.recordings_manager',level=5)
+    | plugin.activate('tv.recordings_manager',level=5)
     This also automatically activates tv.recordings_manager.DiscManager.
 
     You probably want also to deactivate the generic view_recordings plugin,
     which is kind of redundant if you use the recordings_manager plugin:
-    plugin.remove('tv.view_recordings')
+    | plugin.remove('tv.view_recordings')
     """
 
     def __init__(self):

@@ -53,7 +53,8 @@ class PluginInterface(plugin.DaemonPlugin):
     This plugin shows messages send from other parts of Freevo on
     the screen for 2 seconds.
 
-    activate with plugin.activate('plugin.tiny_osd')
+    activate with
+    | plugin.activate('plugin.tiny_osd')
     """
     def __init__(self):
         """

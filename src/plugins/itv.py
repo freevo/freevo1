@@ -68,19 +68,21 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate, put the following lines in local_conf.py:
 
-    plugin.activate('itv', level=45)
-    ITV_PLAYER = 'mplayer'
-    ITV_ARGS = '-nolirc -nojoystick -autoq 100 -screenw 800 -screenh 600 -fs '
-    ITV_LOCATIONS = [
-        ('JT LCI 18h', 'http://tf1.lci.fr/xml/rss/0,,14,00.xml'),
-        ('JT i>Tele', 'http://podcast12.streamakaci.com/iTELE/iTELElejournal.xml'),
-        ('Flash Equipe', 'http://www.lequipe.fr/Podcast/flashETV_rss.xml'),
-        ('Météo LCI', 'http://tf1.fr/xml/rss/0,,23,00.xml'),
-        ('Météo France 2', 'file:///home/henri2/.freevo/meteo.xml')]
+    | plugin.activate('itv', level=45)
+    |
+    | ITV_PLAYER = 'mplayer'
+    | ITV_ARGS = '-nolirc -nojoystick -autoq 100 -screenw 800 -screenh 600 -fs '
+    | ITV_LOCATIONS = [
+    |     ('JT LCI 18h', 'http://tf1.lci.fr/xml/rss/0,,14,00.xml'),
+    |     ('JT i>Tele', 'http://podcast12.streamakaci.com/iTELE/iTELElejournal.xml'),
+    |     ('Flash Equipe', 'http://www.lequipe.fr/Podcast/flashETV_rss.xml'),
+    |     ('Météo LCI', 'http://tf1.fr/xml/rss/0,,23,00.xml'),
+    |     ('Météo France 2', 'file:///home/henri2/.freevo/meteo.xml')
+    | ]
 
-    For a full list of tested sites, see 'Docs/plugins/iTV.txt'.
+    For a full list of tested sites, see 'Docs/plugins/itv.txt'.
     """
-    # make an init func that creates the cache dir if it don't exist
+
     def __init__(self):
         if not hasattr(config, 'ITV_LOCATIONS'):
             self.reason = 'ITV_LOCATIONS not defined'

@@ -52,7 +52,6 @@ class PluginInterface(plugin.Plugin):
 
     def __init__(self):
         plugin.Plugin.__init__(self)
-
         plugin.register(Recorder(), plugin.RECORD)
 
 

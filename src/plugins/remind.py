@@ -33,17 +33,17 @@ __svnversion__ = "$Revision$"[11:-2]
 __date__ = "$Date$"[7:-2]
 __copyright__ = "Copyright (c) 2007 Christian Lyra"
 __license__ = "GPL"
-__doc__ = '''A plugin to list reminders, but can be used to
+__doc__ = """A plugin to list reminders, but can be used to
 show the output of a user command.
 
 To activate, put the following lines in local_conf.py:
-plugin.activate('reminders', level=45)
+plugin.activate("reminders", level=45)
 REMINDERS = [ ("cmd", "name", <wrap 0|N>, "string") ]
 wrap should be the maximum number of columns, and string if defined would be used to
 indent the output. ("/usr/bin/remind -h", "Today", 47, "Reminders for") should output something like:
 Reminders for Saturday, 26th May, 2007 (today):
 Uncle Bob birthday
-'''
+"""
 
 #python modules
 import os, time, stat, re, copy
@@ -66,15 +66,15 @@ class PluginInterface(plugin.MainMenuPlugin):
     show the output of a user command.
 
     To activate, put the following lines in local_conf.py:
-    plugin.activate('reminders', level=45)
-    REMINDERS = [ ("cmd", "name", <wrap 0|N>, "string") ]
+    | plugin.activate('reminders', level=45)
+    | REMINDERS = [ ("cmd", "name", <wrap 0|N>, "string") ]
+
     wrap should be the maximum number of columns, and string if defined would be used to
     indent the output. ("/usr/bin/remind -h", "Today", 47, "Reminders for") should output something like:
     Reminders for Saturday, 26th May, 2007 (today):
         Uncle Bob birthday
-
     """
-    # make an init func that creates the cache dir if it don't exist
+
     def __init__(self):
         plugin.MainMenuPlugin.__init__(self)
 

@@ -50,6 +50,7 @@ class PluginInterface(plugin.Plugin):
     With this plugin Freevo can play all video files defined in
     VIDEO_MPLAYER_SUFFIX. This is the default video player for Freevo.
     """
+
     def __init__(self):
         # create plugin structure
         plugin.Plugin.__init__(self)

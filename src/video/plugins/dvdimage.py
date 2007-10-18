@@ -1,7 +1,12 @@
-#if 0 /*
+# -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # dvdimage.py - A video plugin handling images as dvd
 # Author: Viggo Fredriksen <viggo@katatonic.org>
+# -----------------------------------------------------------------------
+# $Id$
+#
+# Todo:
+#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
@@ -22,7 +27,6 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-#endif
 
 # imports
 import config, plugin, os, rc
@@ -36,16 +40,18 @@ class PluginInterface(plugin.ItemPlugin):
     file, and passes this symlink as the --dvd-device to mplayer.
 
     Activate with:
-     plugin.activate('video.dvdimage')
+    | plugin.activate('video.dvdimage')
 
-     Remember to add .img and .iso to VIDEO_MPLAYER_SUFFIX found in
-     share/freevo/freevo_config.py. Override this in your local_conf.py
+    Remember to add .img and .iso to VIDEO_MPLAYER_SUFFIX found in
+    share/freevo/freevo_config.py. Override this in your local_conf.py
 
     Usage:
-     Select your image in the video menu, bring up the submenu and select
-     <Play image as DVD>. You will be prompted for title, answer with numeric
-     input.
+
+    Select your image in the video menu, bring up the submenu and select
+    <Play image as DVD>. You will be prompted for title, answer with numeric
+    input.
     """
+
     def __init__(self):
         plugin.ItemPlugin.__init__(self)
         self.symlink = vfs.join(config.OVERLAY_DIR,'dvdlink')

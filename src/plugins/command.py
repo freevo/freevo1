@@ -340,8 +340,8 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     to activate it, put the following in your local_conf.py:
 
-    plugin.activate('command', level=45)
-    COMMANDS_DIR = '/usr/local/freevo_data/Commands'
+    | plugin.activate('command', level=45)
+    | COMMANDS_DIR = '/usr/local/freevo_data/Commands'
 
     The level argument is used to influence the placement in the Main Menu. consult
     freevo_config.py for the level of the other Menu Items if you wish to place it
@@ -350,6 +350,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     This plugin also activates <command> tag support in all menus, see information
     from command.fxdhandler for details.
     """
+
     def __init__(self):
         # register command to normal fxd item parser
         # to enable <command> tags in fxd files in every menu

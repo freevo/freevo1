@@ -55,6 +55,7 @@ class PluginInterface(plugin.DaemonPlugin):
     will draw itself there, otherwise it will draw at the right bottom of the
     screen.
     """
+
     def __init__(self):
         """initialise the DaemonPlugin interface"""
         _debug_('__init__(self)', 2)

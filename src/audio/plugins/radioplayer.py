@@ -47,8 +47,8 @@ class PluginInterface(plugin.Plugin):
     radio stations set in the radio plugin and does the interaction
     between the radio command line program and freevo. please see the
     audio.radio plugin for setup information
-
     """
+
     def __init__(self):
         plugin.Plugin.__init__(self)
 

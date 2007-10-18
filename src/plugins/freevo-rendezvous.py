@@ -51,7 +51,7 @@ class PluginInterface(plugin.DaemonPlugin):
        * IE6 + Howl on Windows XP
 
     To enable this plugin, add to your local_conf.py:
-        plugin.activate('freevo-rendezvous')
+    | plugin.activate('freevo-rendezvous')
     """
 
     r = RendezVous.Rendezvous()

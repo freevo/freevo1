@@ -171,17 +171,15 @@ class PluginInterface(plugin.Plugin):
     =================================================================
     The following additional events can be defined:
 
-    # --local_conf.py:
-
-    # go back to the previous viewed channel
-    EVENTS['tv']['SOME_LIRC_CMD'] = Event('POPCHANNEL')
-
-    # show program info
-    EVENTS['tv']['SOME_LIRC_CMD'] = Event('TOGGLE_OSD')
-
-    # normal seek forward/backward by 1 second
-    EVENTS['tv']['SOME_LIRC_CMD'] = Event(SEEK, arg=-1)
-    EVENTS['tv']['SOME_LIRC_CMD'] = Event(SEEK, arg=+1)
+    | # go back to the previous viewed channel
+    | EVENTS['tv']['SOME_LIRC_CMD'] = Event('POPCHANNEL')
+    |
+    | # show program info
+    | EVENTS['tv']['SOME_LIRC_CMD'] = Event('TOGGLE_OSD')
+    |
+    | # normal seek forward/backward by 1 second
+    | EVENTS['tv']['SOME_LIRC_CMD'] = Event(SEEK, arg=-1)
+    | EVENTS['tv']['SOME_LIRC_CMD'] = Event(SEEK, arg=+1)
 
     =================================================================
     Timeshift Filemask
@@ -189,11 +187,9 @@ class PluginInterface(plugin.Plugin):
     The LIVE TV functionality requires a large buffer on disk
     where the TV stream is being recorded while watching.
 
-    # --local_conf.py:
-
-    # This specifies the path and filemask that xine uses for
-    # timeshifting. File can get quite big (several gigabytes)
-    XINE_TV_TIMESHIFT_FILEMASK = "/local/tmp/xine-buf-!!20"
+    | # This specifies the path and filemask that xine uses for
+    | # timeshifting. File can get quite big (several gigabytes)
+    | XINE_TV_TIMESHIFT_FILEMASK = "/local/tmp/xine-buf-!!20"
 
     =================================================================
     STOP Confirmation
@@ -202,10 +198,8 @@ class PluginInterface(plugin.Plugin):
     prevent that this happens by accident, a confirmation can be
     requested.
 
-    # --local_conf.py:
-
-    # Stop confirmation: press STOP twice to return to menu
-    XINE_TV_CONFIRM_STOP = True
+    | # Stop confirmation: press STOP twice to return to menu
+    | XINE_TV_CONFIRM_STOP = True
 
     =================================================================
     Progressive Seek
@@ -215,15 +209,13 @@ class PluginInterface(plugin.Plugin):
     seconds. Note, set the starting seek event to 1 second to
     allow fine control.
 
-    # --local_conf.py:
-
-    # This enables the progressive seek feature. The speed
-    # for seeking (fast forward and rewind) is increased
-    # automatically. The speed is increased every [THRESHOLD]
-    # seconds in steps of [INCREMENT] secnds.
-    XINE_TV_PROGRESSIVE_SEEK = True
-    XINE_TV_PROGRESSIVE_SEEK_THRESHOLD = 2
-    XINE_TV_PROGRESSIVE_SEEK_INCREMENT = 5
+    | # This enables the progressive seek feature. The speed
+    | # for seeking (fast forward and rewind) is increased
+    | # automatically. The speed is increased every [THRESHOLD]
+    | # seconds in steps of [INCREMENT] secnds.
+    | XINE_TV_PROGRESSIVE_SEEK = True
+    | XINE_TV_PROGRESSIVE_SEEK_THRESHOLD = 2
+    | XINE_TV_PROGRESSIVE_SEEK_INCREMENT = 5
 
     =================================================================
     Video Groups Setup Example
@@ -232,64 +224,58 @@ class PluginInterface(plugin.Plugin):
     PVR 250 card and adds S-VIDEO and Composite Inputs. Note that the
     audio input is selected automatically by ivtv.
 
-    # --local_conf.py:
+    | VIDEO_GROUPS = [
+    |         VideoGroup(
+    |             vdev='/dev/video0',
+    |             adev=None,
+    |             input_type='tuner',
+    |             input_num=0,
+    |             tuner_norm='pal',
+    |             tuner_chanlist='europe-west',
+    |             desc='Regular Cable',
+    |             group_type='ivtv',
+    |             record_group = None
+    |         ),
+    |         VideoGroup(
+    |             vdev='/dev/video0',
+    |             adev=None,
+    |             input_type='svideo',
+    |             input_num=1,
+    |             tuner_type='external',
+    |             desc='S-Video Input',
+    |             group_type='ivtv',
+    |             record_group = None
+    |         ),
+    |         VideoGroup(
+    |             vdev='/dev/video0',
+    |             adev=None,
+    |             input_type='composite',
+    |             input_num=5,
+    |             tuner_type='external',
+    |             desc='Composite Input',
+    |             group_type='ivtv',
+    |             record_group = None
+    |         ),
+    | ]
+    | 
+    | TV_CHANNELS = [
+    |     ('ned1',        'NED 1',                'C22', '', 0),
+    |     ...
+    |     ('natg',        'National Geographic',  'C47', '', 0),
+    |     ...
+    |     ('svideo',      'S-Video Input',        'EX1', '', 1),
+    |     ('composite',   'Composite Input',      'EX2', '', 2),
+    | ]
 
-    VIDEO_GROUPS = [
-            VideoGroup(
-                vdev='/dev/video0',
-                adev=None,
-                input_type='tuner',
-                input_num=0,
-                tuner_norm='pal',
-                tuner_chanlist='europe-west',
-                desc='Regular Cable',
-                group_type='ivtv',
-                record_group = None
-            ),
-            VideoGroup(
-                vdev='/dev/video0',
-                adev=None,
-                input_type='svideo',
-                input_num=1,
-                tuner_type='external',
-                desc='S-Video Input',
-                group_type='ivtv',
-                record_group = None
-            ),
-            VideoGroup(
-                vdev='/dev/video0',
-                adev=None,
-                input_type='composite',
-                input_num=5,
-                tuner_type='external',
-                desc='Composite Input',
-                group_type='ivtv',
-                record_group = None
-            ),
-    ]
-
-    TV_CHANNELS = [
-        ('ned1',        'NED 1',                'C22', '', 0),
-        ...
-        ('natg',        'National Geographic',  'C47', '', 0),
-        ...
-        ('svideo',      'S-Video Input',        'EX1', '', 1),
-        ('composite',   'Composite Input',      'EX2', '', 2),
-    ]
-
-    =================================================================
     Refer to the config file for further explanation.
     """
-
     __author__           = "Richard van Paasen"
     __author_email__     = "rvpaasen@t3i.nl"
-
     __maintainer__       = __author__
     __maintainer_email__ = __author_email__
     __version__          = "$Revision$"
 
     def __init__(self):
-
         plugin.Plugin.__init__(self)
         plugin.register(IVTV_XINE_TV(), plugin.TV)
 

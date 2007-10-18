@@ -50,13 +50,13 @@ def returnFromJelly(status, response):
         return (status, response)
 
 
-#class PluginInterface(IdleBarPlugin):
 class PluginInterface(plugin.DaemonPlugin):
     """
     This plugin shows the current encoding status
     Activate with:
-    plugin.activate('idlebar.encoding')
+    | plugin.activate('idlebar.encoding')
     """
+
     def __init__(self):
         _debug_('__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
