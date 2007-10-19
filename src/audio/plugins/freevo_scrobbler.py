@@ -35,6 +35,7 @@ URL = "http://post.audioscrobbler.com/?hs=true&p=1.1&c=xms&v=0.7"
 
 
 class Scrobbler:
+
     def __init__(self):
         self.username = config.LASTFM_USER
         self.md5_pass = config.LASTFM_PASS
@@ -43,13 +44,7 @@ class Scrobbler:
         self.password = hasher.hexdigest()
 
     def config(self):
-        '''config is called automatically,
-        freevo plugins -i video.bilingual returns the info
-        '''
-        return [
-            ('LASTFM_USER', 'None', 'User id for last fm'),
-            ('LASTFM_PASS', 'None', 'Password for last fm'),
-        ]
+        pass
 
     def send_handshake(self):
         url = URL + "&u=%s" % self.username

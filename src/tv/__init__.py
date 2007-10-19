@@ -35,6 +35,9 @@ import plugin
 # Plugin interface to integrate the tv module into Freevo
 #
 class PluginInterface(plugin.MainMenuPlugin):
+    """
+    TV main menu option
+    """
 
     def items(self, parent):
         import tvmenu

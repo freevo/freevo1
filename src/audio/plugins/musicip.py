@@ -48,6 +48,120 @@ import socket
 from urllib import urlencode
 from httplib import HTTPConnection
 
+
+class PluginInterface(plugin.ItemPlugin, plugin.MainMenuPlugin):
+    """
+    This plugin allows you to create a new mix based on MusicIP's automatic mixing
+    feature.  It also allows browsing by Genre, Album, or Artist.
+    """
+
+    def __init__(self):
+        server = config.MUSICIP_SERVER
+        self.service = MusicIPClient(server)
+        plugin.ItemPlugin.__init__(self)
+        plugin.MainMenuPlugin.__init__(self)
+
+
+    def config(self):
+        '''config is called automatically, for default settings run:
+        freevo plugins -i audio.musicip
+        '''
+        return [
+            ('MUSICIP_SERVER', '127.0.0.1:10002', 'IP address and port of the music ip server'),
+        ]
+
+
+    def items(self, parent):
+        return [GenresItem(parent, self.service),
+        ArtistsItem(parent, self.service),
+        AlbumsItem(parent, self.service)]
+
+
+    def actions(self, item):
+        self.item = item
+        #print 'actions called for item', item
+        items = []
+        if item.type in ('audio', 'playlist'):
+            items.append((self.file_mix, _('MusicIP Mix'), 'musicip_file_mix'))
+        if item.type == 'audio':
+            items.append((self.file_play_album, _('Songs From Same Album'), 'musicip_file_play_album'))
+            items.append((self.file_play_all_by_artist, _('Songs From Same Artist'), 'musicip_file_play_all_by_artist'))
+
+        return items
+
+
+    def file_mix(self, arg=None, menuw=None):
+        kwargs = {}
+        try:
+            if self.item.type == 'playlist':
+                filenames = self.service.getMix(playlist=self.item.filename)
+            elif self.item.type == 'audio':
+                filenames = self.service.getMix(song=self.item.filename)
+            else:
+                print 'Bad file type', self.item.type, self.item.filename, 'for MusicIP mix'
+        except MusicIPException, x:
+            pop = PopupBox(text=_(str(x)))
+            pop.show()
+            time.sleep(2)
+            pop.destroy()
+            return
+
+        #file = NamedTemporaryFile(prefix="freevo-musicip-playlist", suffix=".tmp")
+        #file.write(m3u)
+        #print '\n'.join(filenames)
+        #items = [kaa.beacon.query(filename=f) for f in filenames]
+        playlist = Playlist('MusicIP Mix', playlist=filenames, display_type="audio", autoplay=True)
+        playlist.browse(arg=arg, menuw=menuw)
+
+
+    def file_play_album(self, arg=None, menuw=None):
+        kwargs = {}
+        try:
+            if self.item.type == 'audio':
+                songInfo = self.service.getSongInfo(file=self.item.filename)
+                filenames = self.service.getSongs(album=songInfo['artist']+'@@'+songInfo['album'])
+            else:
+                print 'Bad file type', self.item.type, self.item.filename, 'for MusicIP mix'
+        except MusicIPException, x:
+            pop = PopupBox(text=_(str(x)))
+            pop.show()
+            time.sleep(2)
+            pop.destroy()
+            return
+
+        #file = NamedTemporaryFile(prefix="freevo-musicip-playlist", suffix=".tmp")
+        #file.write(m3u)
+        #print '\n'.join(filenames)
+        #items = [kaa.beacon.query(filename=f) for f in filenames]
+        playlist = Playlist('%s - %s' % (songInfo['artist'], songInfo['album']), \
+            playlist=filenames, display_type="audio", autoplay=True)
+        playlist.browse(arg=arg, menuw=menuw)
+
+
+    def file_play_all_by_artist(self, arg=None, menuw=None):
+        kwargs = {}
+        try:
+            if self.item.type == 'audio':
+                songInfo = self.service.getSongInfo(file=self.item.filename)
+                filenames = self.service.getSongs(artist=songInfo['artist'])
+            else:
+                print 'Bad file type', self.item.type, self.item.filename, 'for MusicIP mix'
+        except MusicIPException, x:
+            pop = PopupBox(text=_(str(x)))
+            pop.show()
+            time.sleep(2)
+            pop.destroy()
+            return
+
+        #file = NamedTemporaryFile(prefix="freevo-musicip-playlist", suffix=".tmp")
+        #file.write(m3u)
+        #print '\n'.join(filenames)
+        #items = [kaa.beacon.query(filename=f) for f in filenames]
+        playlist = Playlist(songInfo['artist'], playlist=filenames, display_type="audio", autoplay=True)
+        playlist.browse(arg=arg, menuw=menuw)
+
+
+
 class MusicIPException(Exception):
     pass
 
@@ -384,115 +498,3 @@ class AlbumsItem(item.Item):
             time.sleep(2)
             pop.destroy()
             return
-
-
-
-class PluginInterface(plugin.ItemPlugin, plugin.MainMenuPlugin):
-    """
-    This plugin allows you to create a new mix based on MusicIP's automatic mixing
-    feature.  It also allows browsing by Genre, Album, or Artist.
-    """
-
-    def __init__(self):
-        server = config.MUSICIP_SERVER
-        self.service = MusicIPClient(server)
-        plugin.ItemPlugin.__init__(self)
-        plugin.MainMenuPlugin.__init__(self)
-
-
-    def config(self):
-        '''config is called automatically, for default settings run:
-        freevo plugins -i audio.musicip
-        '''
-        return [
-            ('MUSICIP_SERVER', '127.0.0.1:10002', 'IP address and port of the music ip server'),
-        ]
-
-
-    def items(self, parent):
-        return [GenresItem(parent, self.service),
-        ArtistsItem(parent, self.service),
-        AlbumsItem(parent, self.service)]
-
-
-    def actions(self, item):
-        self.item = item
-        #print 'actions called for item', item
-        items = []
-        if item.type in ('audio', 'playlist'):
-            items.append((self.file_mix, _('MusicIP Mix'), 'musicip_file_mix'))
-        if item.type == 'audio':
-            items.append((self.file_play_album, _('Songs From Same Album'), 'musicip_file_play_album'))
-            items.append((self.file_play_all_by_artist, _('Songs From Same Artist'), 'musicip_file_play_all_by_artist'))
-
-        return items
-
-
-    def file_mix(self, arg=None, menuw=None):
-        kwargs = {}
-        try:
-            if self.item.type == 'playlist':
-                filenames = self.service.getMix(playlist=self.item.filename)
-            elif self.item.type == 'audio':
-                filenames = self.service.getMix(song=self.item.filename)
-            else:
-                print 'Bad file type', self.item.type, self.item.filename, 'for MusicIP mix'
-        except MusicIPException, x:
-            pop = PopupBox(text=_(str(x)))
-            pop.show()
-            time.sleep(2)
-            pop.destroy()
-            return
-
-        #file = NamedTemporaryFile(prefix="freevo-musicip-playlist", suffix=".tmp")
-        #file.write(m3u)
-        #print '\n'.join(filenames)
-        #items = [kaa.beacon.query(filename=f) for f in filenames]
-        playlist = Playlist('MusicIP Mix', playlist=filenames, display_type="audio", autoplay=True)
-        playlist.browse(arg=arg, menuw=menuw)
-
-
-    def file_play_album(self, arg=None, menuw=None):
-        kwargs = {}
-        try:
-            if self.item.type == 'audio':
-                songInfo = self.service.getSongInfo(file=self.item.filename)
-                filenames = self.service.getSongs(album=songInfo['artist']+'@@'+songInfo['album'])
-            else:
-                print 'Bad file type', self.item.type, self.item.filename, 'for MusicIP mix'
-        except MusicIPException, x:
-            pop = PopupBox(text=_(str(x)))
-            pop.show()
-            time.sleep(2)
-            pop.destroy()
-            return
-
-        #file = NamedTemporaryFile(prefix="freevo-musicip-playlist", suffix=".tmp")
-        #file.write(m3u)
-        #print '\n'.join(filenames)
-        #items = [kaa.beacon.query(filename=f) for f in filenames]
-        playlist = Playlist('%s - %s'%(songInfo['artist'], songInfo['album']), playlist=filenames, display_type="audio", autoplay=True)
-        playlist.browse(arg=arg, menuw=menuw)
-
-
-    def file_play_all_by_artist(self, arg=None, menuw=None):
-        kwargs = {}
-        try:
-            if self.item.type == 'audio':
-                songInfo = self.service.getSongInfo(file=self.item.filename)
-                filenames = self.service.getSongs(artist=songInfo['artist'])
-            else:
-                print 'Bad file type', self.item.type, self.item.filename, 'for MusicIP mix'
-        except MusicIPException, x:
-            pop = PopupBox(text=_(str(x)))
-            pop.show()
-            time.sleep(2)
-            pop.destroy()
-            return
-
-        #file = NamedTemporaryFile(prefix="freevo-musicip-playlist", suffix=".tmp")
-        #file.write(m3u)
-        #print '\n'.join(filenames)
-        #items = [kaa.beacon.query(filename=f) for f in filenames]
-        playlist = Playlist(songInfo['artist'], playlist=filenames, display_type="audio", autoplay=True)
-        playlist.browse(arg=arg, menuw=menuw)

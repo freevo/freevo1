@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # plugins.py - list all plugins and prints help about them
@@ -39,6 +38,92 @@ import util
 import re
 import os
 import sys
+import imp
+
+
+def find_plugin_interface(data):
+    """
+    Search a source file for the PluginInterface classes
+    @returns a list of classes source code as a string
+    """
+
+    has_classes = re.compile('\n\s*(class[^\n]*:.*?)((\n\s*class)|($))', re.DOTALL)
+    has_plugin = re.compile('\n *class PluginInterface *(.*) *:')
+    classes = []
+    while 1:
+        res = has_classes.search(data)
+        if not res:
+            break
+        begin, end = res.span()
+        length = len(res.groups()[1])
+        classes.append(data[begin:end-length])
+        data = data[end-length:]
+
+    class_srcs = []
+    for class_src in classes:
+        if has_plugin.search(class_src):
+            class_srcs.append(class_src)
+
+    return class_srcs
+
+
+def parse_plugins2():
+    """
+    The idea is to extract the PluginInterface class or classes from the source module
+    and then to import it and extract the __doc__ string from the Class and the 
+    config() from the class instance.
+
+    This does't quite work, neither does import PluginInterface from <m> as <a>
+    nor do any of the import methods that I've tried. I've left this code in to
+    remind any that this techique does work in all cases, it does work in come
+    cases and from the freevo prompt.
+    """
+
+    import time
+    import pygame
+    from screensaver import ScreenSaverPlugin
+    from idlebar import IdleBarPlugin
+    from util import Rendezvous
+    import osd
+    osd = osd.get_singleton()
+
+    all_plugins = []
+    print 'FREEVO_PYTHON', os.environ['FREEVO_PYTHON']
+    print 'PYTHONPATH', os.environ['PYTHONPATH']
+    for file in util.recursefolders(os.environ['FREEVO_PYTHON'], 1, '*.py', 1):
+        if file.find('plugin.py') > 0:
+            continue
+
+        data = open(file, 'r').read()
+        for plugin_interface in find_plugin_interface(data):
+            if not plugin_interface:
+                print 'Can\'t find interface in %s' % file
+                continue
+
+            try:
+                exec plugin_interface
+            except Exception, e:
+                print 'Error:1:%s: %s' % (file, e)
+                break
+
+            print '<<<%s>>>' % file
+            print PluginInterface.__bases__
+            for base in PluginInterface.__bases__:
+                print base.__name__
+            print PluginInterface.__doc__
+
+            try:
+                interface = PluginInterface()
+                print interface.config()
+            except Exception, e:
+                print 'Error:2:%s: %s' % (file, e)
+                continue
+
+            interface = None
+            PluginInterface = None
+
+    return ''
+
 
 def parse_plugins():
     start = re.compile('^class *(.*)\((.*Plugin\s*).:')
@@ -420,7 +505,7 @@ elif len(sys.argv)>1 and sys.argv[1] == '-wiki':
             modules = sys.argv[2:]
     all_plugins = parse_plugins()
 
-    # This is a bit horrid
+    # This is a bit horrid, should do this cleaner
     if mode == 'trac':
         print '[[TOC(depth=2)]]'
     else:

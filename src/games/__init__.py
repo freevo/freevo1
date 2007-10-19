@@ -49,6 +49,7 @@ class PluginInterface(plugin.MimetypePlugin):
     """
     Plugin to handle all kinds of games items
     """
+
     def __init__(self):
         plugin.MimetypePlugin.__init__(self)
         self.display_type = [ 'games' ]

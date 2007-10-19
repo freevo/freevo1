@@ -5,8 +5,6 @@
 # $Id$
 #
 # Notes:
-#    To activate, put the following line in local_conf.py:
-#       plugin.activate('video.bilingual')
 # ToDo:
 #
 # -----------------------------------------------------------------------
@@ -44,6 +42,9 @@ from gui.PopupBox import PopupBox
 class PluginInterface(plugin.ItemPlugin):
     """
     Plug-in to play tv recordings which have bilingual audio
+
+    To activate, put the following line in local_conf.py:
+    | plugin.activate('video.bilingual')
     """
 
     def __init__(self):
