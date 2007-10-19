@@ -48,7 +48,7 @@ class IndexResource(FreevoResource):
         fv.res += '<div id="contentmain">\n'
 
         fv.res += '<br/><br/><h2>'+( _('Freevo Web Status as of %s') % \
-                time.strftime('%B %d ' + config.TV_TIMEFORMAT, time.localtime()) ) +'</h2>'
+                time.strftime('%B %d ' + config.TV_TIME_FORMAT, time.localtime()) ) +'</h2>'
 
         (server_available, schedule) = tv.record_client.connectionTest()
         if not server_available:

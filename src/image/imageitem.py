@@ -75,7 +75,7 @@ class ImageItem(Item):
             try:
                 t = str(Item.__getitem__(self, key))
                 if t:
-                    return time.strftime(config.TV_DATETIMEFORMAT,
+                    return time.strftime(config.TV_DATETIME_FORMAT,
                                          time.strptime(t, '%Y:%m:%d %H:%M:%S'))
             except:
                 pass

@@ -157,7 +157,7 @@ class ShutdownMenuItem(Item):
                 except ExNoWakeupNeeded:
                     msg = _("No wakeup scheduled.")
                 else:
-                    next_msg = Unicode(time.strftime( config.TV_DATETIMEFORMAT, time.localtime(next)))
+                    next_msg = Unicode(time.strftime( config.TV_DATETIME_FORMAT, time.localtime(next)))
                     next_min = int((next - time.time()) / 60)
                     msg = _("The next wakeup is scheduled at") + "\n" + next_msg
             else:

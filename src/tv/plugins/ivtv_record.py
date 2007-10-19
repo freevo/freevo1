@@ -76,7 +76,7 @@ class Recorder:
 
 
     def Record(self, rec_prog):
-        # It is safe to ignore config.TV_RECORDFILE_SUFFIX here.
+        # It is safe to ignore config.TV_RECORD_FILE_SUFFIX here.
         rec_prog.filename = os.path.splitext(tv_util.getProgFilename(rec_prog))[0] + '.mpeg'
 
         self.thread.mode = 'record'

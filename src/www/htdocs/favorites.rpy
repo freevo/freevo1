@@ -68,9 +68,9 @@ class FavoritesResource(FreevoResource):
         priority = fv.formValue(form, 'priority')
         allowDuplicates = 1
         onlyNew = 0
-        if config.DUPLICATE_DETECTION:
+        if config.TV_RECORD_DUPLICATE_DETECTION:
             allowDuplicates = fv.formValue(form, 'allowDuplicates')
-        if config.ONLY_NEW_DETECTION:
+        if config.TV_RECORD_ONLY_NEW_DETECTION:
             onlyNew = fv.formValue(form, 'onlyNew')
 
         if action == 'remove':
@@ -107,9 +107,9 @@ class FavoritesResource(FreevoResource):
         fv.tableCell(_('Channel'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Day of week'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Time of day'), 'class="guidehead" colspan="1"')
-        if config.DUPLICATE_DETECTION:
+        if config.TV_RECORD_DUPLICATE_DETECTION:
             fv.tableCell(_('Duplicates'), 'class="guidehead" colspan="1"')
-        if config.ONLY_NEW_DETECTION:
+        if config.TV_RECORD_ONLY_NEW_DETECTION:
             fv.tableCell(_('Episodes'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Actions'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Priority'), 'class="guidehead" colspan="1"')
@@ -148,7 +148,7 @@ class FavoritesResource(FreevoResource):
                 cell = _('ANY')
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
-            if config.DUPLICATE_DETECTION:
+            if config.TV_RECORD_DUPLICATE_DETECTION:
                 (tempStatus, tempFav) = ri.getFavorite(fav.title)
                 if hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 1:
                     cell = 'ALLOW'
@@ -158,7 +158,7 @@ class FavoritesResource(FreevoResource):
                     cell = 'NONE'
                 fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
-            if config.ONLY_NEW_DETECTION:
+            if config.TV_RECORD_ONLY_NEW_DETECTION:
                 (tempStatus, tempFav) = ri.getFavorite(fav.title)
                 if hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 1:
                     cell = 'ONLY NEW'

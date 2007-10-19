@@ -265,7 +265,7 @@ class Item:
                 elif self.parent and self.parent.type != 'dir':
                     self.image = util.getimage(os.path.dirname(self.filename)+\
                                                '/cover', self.image)
-            if config.REMOVE_COMMERCIALS:
+            if config.TV_RECORD_REMOVE_COMMERCIALS:
                 edlBase=self.filename[:self.filename.rfind('.')]
                 edlFile=edlBase+".edl"
                 self.edl_file=edlFile

@@ -38,7 +38,7 @@ def progname2filename(progname):
     '''Translate a program name to something that can be used as a filename.'''
 
     # Letters that can be used in the filename
-    ok = config.TV_RECORDFILE_OKLETTERS
+    ok = config.TV_RECORD_FILE_OKLETTERS
 
     s = ''
     for letter in progname:
@@ -97,11 +97,11 @@ def getProgFilename(prog):
     filename_array = { 'progname': String(prog.title),
                        'title'   : String(prog.sub_title) }
 
-    filemask = config.TV_RECORDFILE_MASK % filename_array
+    filemask = config.TV_RECORD_FILE_MASK % filename_array
     filemask = time.strftime(filemask, time.localtime(prog.start))
     filename = os.path.join(config.TV_RECORD_DIR,
                             progname2filename(filemask).rstrip(' -_:') +
-                            config.TV_RECORDFILE_SUFFIX)
+                            config.TV_RECORD_FILE_SUFFIX)
     return filename
 
 

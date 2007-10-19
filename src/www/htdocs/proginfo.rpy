@@ -76,8 +76,8 @@ class ProgInfoResource(FreevoResource):
         #if config.LOCALE.lower() != 'utf8' and config.LOCALE.lower() != 'utf-8':
         #    title = title.encode('ascii', 'ignore')
         #    desc = desc.encode('ascii', 'ignore')
-        start = time.strftime(config.TV_TIMEFORMAT, time.localtime(prog.start))
-        stop = time.strftime(config.TV_TIMEFORMAT, time.localtime(prog.stop))
+        start = time.strftime(config.TV_TIME_FORMAT, time.localtime(prog.start))
+        stop = time.strftime(config.TV_TIME_FORMAT, time.localtime(prog.stop))
         fv.res += u"<script>\n"
         fv.res += u"var doc = parent.top.document;\n"
         fv.res += u"doc.getElementById('program-title').innerHTML = '"+Unicode(title).replace("'", "\\'")+"';\n"

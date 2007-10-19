@@ -113,8 +113,8 @@ class SearchResource(FreevoResource):
 
 
                 fv.tableRowOpen('class="chanrow"')
-                fv.tableCell(time.strftime('%b %d ' + config.TV_TIMEFORMAT, time.localtime(prog.start)), 'class="'+status+'" colspan="1"')
-                fv.tableCell(time.strftime('%b %d ' + config.TV_TIMEFORMAT, time.localtime(prog.stop)), 'class="'+status+'" colspan="1"')
+                fv.tableCell(time.strftime('%b %d ' + config.TV_TIME_FORMAT, time.localtime(prog.start)), 'class="'+status+'" colspan="1"')
+                fv.tableCell(time.strftime('%b %d ' + config.TV_TIME_FORMAT, time.localtime(prog.stop)), 'class="'+status+'" colspan="1"')
 
                 chan = tv_util.get_chan_displayname(prog.channel_id)
                 if not chan: chan = 'UNKNOWN'

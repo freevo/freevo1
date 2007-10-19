@@ -83,9 +83,9 @@ class ProgramItem(Item):
 
         self.favorite = False
 
-        self.start = time.strftime(config.TV_DATETIMEFORMAT,
+        self.start = time.strftime(config.TV_DATETIME_FORMAT,
                                    time.localtime(prog.start))
-        self.stop = time.strftime(config.TV_DATETIMEFORMAT,
+        self.stop = time.strftime(config.TV_DATETIME_FORMAT,
                                        time.localtime(prog.stop))
 
         self.categories = ''
@@ -335,7 +335,7 @@ class FavoriteItem(Item):
             self.mod = _('ANY TIME')
         else:
             try:
-                self.mod = strftime(config.TV_TIMEFORMAT,
+                self.mod = strftime(config.TV_TIME_FORMAT,
                                     gmtime(float(int(fav.mod) * 60)))
             except:
                 print 'Cannot add "%s" to favorites' % fav.name
@@ -368,10 +368,10 @@ class FavoriteItem(Item):
         items.append(menu.MenuItem(_('Modify time of day'),
                                     action=self.mod_time))
 
-        if config.DUPLICATE_DETECTION:
+        if config.TV_RECORD_DUPLICATE_DETECTION:
             items.append(menu.MenuItem(_('Modify duplicate flag'), action=self.mod_dup))
 
-        if config.ONLY_NEW_DETECTION:
+        if config.TV_RECORD_ONLY_NEW_DETECTION:
             items.append(menu.MenuItem(_('Modify episodes flag'), action=self.mod_new))
 
         # XXX: priorities aren't quite supported yet
@@ -505,7 +505,7 @@ class FavoriteItem(Item):
 
         for i in range(48):
             mod = i * 30
-            items.append(menu.MenuItem(strftime(config.TV_TIMEFORMAT,
+            items.append(menu.MenuItem(strftime(config.TV_TIME_FORMAT,
                                                 gmtime(float(mod * 60))),
                                        action=self.alter_prop,
                                        arg=('mod', mod)))
@@ -547,7 +547,7 @@ class FavoriteItem(Item):
                 self.fav.mod = 'ANY'
             else:
                 # self.mod = tv_util.minToTOD(val)
-                self.mod = strftime(config.TV_TIMEFORMAT,
+                self.mod = strftime(config.TV_TIME_FORMAT,
                                     gmtime(float(val * 60)))
                 self.fav.mod = val
 
@@ -583,10 +583,10 @@ class FavoriteItem(Item):
 
         if result:
             # create a new edited favorite
-            if not config.DUPLICATE_DETECTION or not hasattr(self.fav, 'allowDuplicates'):
+            if not config.TV_RECORD_DUPLICATE_DETECTION or not hasattr(self.fav, 'allowDuplicates'):
                 self.fav.allowDuplicates = 1
 
-            if not config.ONLY_NEW_DETECTION or not hasattr(self.fav, 'onlyNew'):
+            if not config.TV_RECORD_ONLY_NEW_DETECTION or not hasattr(self.fav, 'onlyNew'):
                 self.fav.onlyNew = 0
 
             (result, msg) = record_client.addEditedFavorite(self.fav.name,

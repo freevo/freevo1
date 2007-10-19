@@ -167,7 +167,7 @@ class EditFavorite(PopupBox):
                 val = i*30
                 # Little hack: we calculate the hours from Jan 1st, 1970 GMT,
                 # and then use strftime to get the string representation
-                text = strftime(config.TV_TIMEFORMAT, gmtime(h * 3600 + 60 * m))
+                text = strftime(config.TV_TIME_FORMAT, gmtime(h * 3600 + 60 * m))
                 self.tod_box.add_item(text=text, value=val)
                 if val == self.fav.mod:
                     tod_index = i+1

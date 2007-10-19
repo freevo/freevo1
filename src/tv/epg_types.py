@@ -125,13 +125,13 @@ class TvProgram:
         return the specific attribute as string or an empty string
         """
         if attr == 'start':
-            return Unicode(time.strftime(config.TV_TIMEFORMAT, time.localtime(self.start)))
+            return Unicode(time.strftime(config.TV_TIME_FORMAT, time.localtime(self.start)))
         if attr == 'pdc_start':
-            return Unicode(time.strftime(config.TV_TIMEFORMAT, time.localtime(self.pdc_start)))
+            return Unicode(time.strftime(config.TV_TIME_FORMAT, time.localtime(self.pdc_start)))
         if attr == 'stop':
-            return Unicode(time.strftime(config.TV_TIMEFORMAT, time.localtime(self.stop)))
+            return Unicode(time.strftime(config.TV_TIME_FORMAT, time.localtime(self.stop)))
         if attr == 'date':
-            return Unicode(time.strftime(config.TV_DATEFORMAT, time.localtime(self.start)))
+            return Unicode(time.strftime(config.TV_DATE_FORMAT, time.localtime(self.start)))
         if attr == 'time':
             return self.getattr('start') + u' - ' + self.getattr('stop')
         if hasattr(self, attr):

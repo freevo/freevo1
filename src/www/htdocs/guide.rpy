@@ -105,7 +105,7 @@ class GuideResource(FreevoResource):
             retval += '<option value="' + str(myoff) + '"'
             if (abs(gstart - hrinc) < 60):
                 retval += ' SELECTED '
-            retval += '>' + time.strftime(config.TV_TIMEFORMAT, time.localtime(hrinc)) + '\n'
+            retval += '>' + time.strftime(config.TV_TIME_FORMAT, time.localtime(hrinc)) + '\n'
             hrinc += config.WWW_GUIDE_INTERVAL * 60
         retval += '</select>\n'
         return retval
@@ -173,7 +173,7 @@ class GuideResource(FreevoResource):
                 for i in range(n_cols):
                     if i == n_cols-1 or i == 0:
                         dacell = ''
-                        datime = time.strftime(config.TV_TIMEFORMAT, time.localtime(headerstart))
+                        datime = time.strftime(config.TV_TIME_FORMAT, time.localtime(headerstart))
                         if i == n_cols-1:
                             dacell = datime + '&nbsp;&nbsp;<a href="guide.rpy?stime=%i">&raquo;</a>' % mfrnextguide
                         else:
@@ -183,7 +183,7 @@ class GuideResource(FreevoResource):
                                 dacell = datime
                         fv.tableCell(dacell, 'class="guidehead"  colspan="%d"' % cpb)
                     else:
-                        fv.tableCell(time.strftime(config.TV_TIMEFORMAT, time.localtime(headerstart)),
+                        fv.tableCell(time.strftime(config.TV_TIME_FORMAT, time.localtime(headerstart)),
                                      'class="guidehead" colspan="%d"' % cpb)
                     headerstart += INTERVAL
                 fv.tableRowClose()

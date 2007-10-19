@@ -449,7 +449,7 @@ def comingup(items=None, ScheduledRecordings=None):
             result = result + u"- %s%s " % \
                      ( Unicode(m.title), Unicode(sub_title) ) \
                      + _('at') + u" %s\n" % \
-                     Unicode(time.strftime(config.TV_TIMEFORMAT,time.localtime(m.start)))
+                     Unicode(time.strftime(config.TV_TIME_FORMAT,time.localtime(m.start)))
 
     if len(tomorrow) > 0:
         result = result + _('Tomorrow') + u':\n'
@@ -460,7 +460,7 @@ def comingup(items=None, ScheduledRecordings=None):
             result = result + u"- %s%s " % \
                      ( Unicode(m.title), Unicode(sub_title) ) \
                      + _('at') + u" %s\n" % \
-                     Unicode(time.strftime(config.TV_TIMEFORMAT,time.localtime(m.start)))
+                     Unicode(time.strftime(config.TV_TIME_FORMAT,time.localtime(m.start)))
 
     if len(later) > 0:
         result = result + _('This Week') + u':\n'
@@ -471,7 +471,7 @@ def comingup(items=None, ScheduledRecordings=None):
             result = result + u"- %s%s " % \
                      ( Unicode(m.title), Unicode(sub_title) ) \
                      + _('at') + u" %s\n" % \
-                     Unicode(time.strftime(config.TV_DATEFORMAT,time.localtime(m.start)))
+                     Unicode(time.strftime(config.TV_DATE_FORMAT,time.localtime(m.start)))
 
     if not result:
         result = _('No recordings are scheduled')

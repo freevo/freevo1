@@ -95,7 +95,7 @@ class ManualRecordItem(Item):
         self.start_month = self.starttime[1]
         self.disp_start_month = self.months[self.start_month - 1]
         self.start_day   = self.starttime[2]
-        self.start_time  = time.strftime(config.TV_TIMEFORMAT, self.starttime)
+        self.start_time  = time.strftime(config.TV_TIME_FORMAT, self.starttime)
         self.prog.start  = self.startnow
         self.disp_starttime = '%s %s %s' % (self.disp_start_month, self.start_day, self.start_time)
 
@@ -103,7 +103,7 @@ class ManualRecordItem(Item):
         self.stop_month = self.stoptime[1]
         self.disp_stop_month = self.months[self.stop_month - 1]
         self.stop_day   = self.stoptime[2]
-        self.stop_time  = time.strftime(config.TV_TIMEFORMAT, self.stoptime)
+        self.stop_time  = time.strftime(config.TV_TIME_FORMAT, self.stoptime)
         self.prog.stop  = self.stopnow
         self.disp_stoptime = '%s %s %s' % (self.disp_stop_month, self.stop_day, self.stop_time)
 
@@ -206,7 +206,7 @@ class ManualRecordItem(Item):
             minpadding = 0
         for i in range(288):
             mod = (i * 5 + currminutes + minpadding) % 1440
-            showtime = strftime(config.TV_TIMEFORMAT, gmtime(float(mod * 60)))
+            showtime = strftime(config.TV_TIME_FORMAT, gmtime(float(mod * 60)))
             items.append(menu.MenuItem(showtime,
                                        action=self.alter_prop,
                                        arg=('starttime', showtime)))
@@ -268,7 +268,7 @@ class ManualRecordItem(Item):
             minpadding = 0
         for i in range(288):
             mod = (i * 5 + currminutes + minpadding) % 1440
-            showtime = strftime(config.TV_TIMEFORMAT, gmtime(float(mod * 60)))
+            showtime = strftime(config.TV_TIME_FORMAT, gmtime(float(mod * 60)))
             items.append(menu.MenuItem(showtime,
                                        action=self.alter_prop,
                                        arg=('stoptime', showtime)))
@@ -354,9 +354,9 @@ class ManualRecordItem(Item):
         if int(self.start_month) < currentmonth:
             startyear = str(int(startyear) + 1)
         # create utc second start time
-        starttime = time.mktime(strptime.strptime(str(self.start_month)+" "+str(self.start_day)+" "+str(startyear)+" "+str(self.start_time)+":00",'%m %d %Y '+config.TV_TIMEFORMAT+':%S'))
+        starttime = time.mktime(strptime.strptime(str(self.start_month)+" "+str(self.start_day)+" "+str(startyear)+" "+str(self.start_time)+":00",'%m %d %Y '+config.TV_TIME_FORMAT+':%S'))
         # create utc stop time
-        stoptime = time.mktime(strptime.strptime(str(self.stop_month)+" "+str(self.stop_day)+" "+str(stopyear)+" "+str(self.stop_time)+":00",'%m %d %Y '+config.TV_TIMEFORMAT+':%S'))
+        stoptime = time.mktime(strptime.strptime(str(self.stop_month)+" "+str(self.stop_day)+" "+str(stopyear)+" "+str(self.stop_time)+":00",'%m %d %Y '+config.TV_TIME_FORMAT+':%S'))
 
         # so we don't record for more then maxdays (maxdays day * 24hr/day * 60 min/hr * 60 sec/min)
         if not abs(stoptime - starttime) < (self.MAXDAYS * 86400):

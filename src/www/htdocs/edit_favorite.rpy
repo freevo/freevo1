@@ -130,9 +130,9 @@ class EditFavoriteResource(FreevoResource):
         fv.tableCell(_('Channel'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Day of week'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Time of day'), 'class="guidehead" colspan="1"')
-        if config.DUPLICATE_DETECTION:
+        if config.TV_RECORD_DUPLICATE_DETECTION:
             fv.tableCell(_('Duplicates'), 'class="guidehead" colspan="1"')
-        if config.ONLY_NEW_DETECTION:
+        if config.TV_RECORD_ONLY_NEW_DETECTION:
             fv.tableCell(_('Episodes'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Action'), 'class="guidehead" colspan="1"')
         fv.tableRowClose()
@@ -229,7 +229,7 @@ class EditFavoriteResource(FreevoResource):
         """
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
-        if config.DUPLICATE_DETECTION:
+        if config.TV_RECORD_DUPLICATE_DETECTION:
             if hasattr(fav, 'allowDuplicates'):
                 cell = '\n<select name="allowDuplicates" selected="%s">\n' % \
                 fav.allowDuplicates
@@ -240,7 +240,7 @@ class EditFavoriteResource(FreevoResource):
             cell += '</select>\n'
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
-        if config.ONLY_NEW_DETECTION:
+        if config.TV_RECORD_ONLY_NEW_DETECTION:
             if hasattr(fav, 'onlyNew'):
                 cell = '\n<select name="onlyNew" selected="%s">\n' % fav.onlyNew
             else:

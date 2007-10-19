@@ -155,7 +155,7 @@ class FreevoChannels:
         chan = str(chan)
         vg = self.getVideoGroup(chan, isplayer)
 
-        freq = config.TV_FREQUENCY_TABLE.get(chan)
+        freq = config.TV_TV_FREQUENCY_TABLE.get(chan)
         if freq:
             _debug_('Using custom frequency: chan="%s", freq="%s"' % (chan, freq))
         else:
@@ -259,8 +259,8 @@ class FreevoChannels:
 
         if channels and channels[0] and channels[0].programs:
             if showtime:
-                start_s = time.strftime(config.TV_TIMEFORMAT, time.localtime(channels[0].programs[0].start))
-                stop_s = time.strftime(config.TV_TIMEFORMAT, time.localtime(channels[0].programs[0].stop))
+                start_s = time.strftime(config.TV_TIME_FORMAT, time.localtime(channels[0].programs[0].start))
+                stop_s = time.strftime(config.TV_TIME_FORMAT, time.localtime(channels[0].programs[0].stop))
                 ts = '(%s-%s)' % (start_s, stop_s)
                 prog_info = '%s %s' % (ts, channels[0].programs[0].title)
             else:

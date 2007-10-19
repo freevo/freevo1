@@ -76,7 +76,7 @@ class FavoriteItem(Item):
             self.mod = _('ANY TIME')
         else:
             try:
-                self.mod = time.strftime(config.TV_TIMEFORMAT,
+                self.mod = time.strftime(config.TV_TIME_FORMAT,
                                     time.gmtime(float(int(fav.mod) * 60)))
             except:
                 print 'Cannot add "%s" to favorites' % fav.name
@@ -112,7 +112,7 @@ class FavoriteItem(Item):
         items.append(menu.MenuItem(_('Modify time of day'),
                                     action=self.mod_time))
 
-        if config.DUPLICATE_DETECTION:
+        if config.TV_RECORD_DUPLICATE_DETECTION:
             if self.allowDuplicates:
                 items.append(menu.MenuItem(_('Prevent Recording of Duplicates'),
                              action=self.alter_prop, arg=('dup', 'False')))
@@ -121,7 +121,7 @@ class FavoriteItem(Item):
                 action=self.alter_prop, arg=('dup', 'True')))
 
 
-        if config.ONLY_NEW_DETECTION:
+        if config.TV_RECORD_ONLY_NEW_DETECTION:
             if self.onlyNew:
                 items.append(menu.MenuItem(_('Record All Episodes'),
                              action=self.alter_prop, arg=('new', 'False')))
@@ -231,7 +231,7 @@ class FavoriteItem(Item):
 
         for i in range(48):
             mod = i * 30
-            items.append(menu.MenuItem(time.strftime(config.TV_TIMEFORMAT,
+            items.append(menu.MenuItem(time.strftime(config.TV_TIME_FORMAT,
                                                 time.gmtime(float(mod * 60))),
                                        action=self.alter_prop,
                                        arg=('mod', mod)))
@@ -277,7 +277,7 @@ class FavoriteItem(Item):
                 self.fav.mod = 'ANY'
             else:
                 # self.mod = tv_util.minToTOD(val)
-                self.mod = time.strftime(config.TV_TIMEFORMAT,
+                self.mod = time.strftime(config.TV_TIME_FORMAT,
                                     time.gmtime(float(val * 60)))
                 self.fav.mod = val
             if menuw:

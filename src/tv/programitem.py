@@ -91,10 +91,10 @@ class ProgramItem(Item):
         self.favorite = False
 
         # start time
-        self.start = time.strftime(config.TV_DATETIMEFORMAT,
+        self.start = time.strftime(config.TV_DATETIME_FORMAT,
                                    time.localtime(prog.start))
         # stop time
-        self.stop = time.strftime(config.TV_DATETIMEFORMAT,
+        self.stop = time.strftime(config.TV_DATETIME_FORMAT,
                                        time.localtime(prog.stop))
 
     def actions(self):

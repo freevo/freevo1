@@ -320,12 +320,23 @@ LOCAL_CONF_CHANGES = [
         ENABLE_SHUTDOWN_SYS to SHUTDOWN_SYS_ENABLE
         FREQUENCY_TABLE to TV_FREQUENCY_TABLE
         CONFIRM_SHUTDOWN to SHUTDOWN_CONFIRM
+        DUPLICATE_DETECTION to TV_RECORD_DUPLICATE_DETECTION
+        ONLY_NEW_DETECTION to TV_RECORD_ONLY_NEW_DETECTION
+        CONFLICT_RESOLUTION to TV_RECORD_CONFLICT_RESOLUTION
+        REMOVE_COMMERCIALS to TV_RECORD_REMOVE_COMMERCIALS
+        TV_DATEFORMAT to TV_DATE_FORMAT
+        TV_TIMEFORMAT to TV_TIME_FORMAT
+        TV_DATETIMEFORMAT to TV_DATETIME_FORMAT
+        TV_RECORDFILE_MASK to TV_RECORD_FILE_MASK
+        TV_RECORDFILE_SUFFIX to TV_RECORD_FILE_SUFFIX
+        TV_RECORDFILE_OKLETTERS to TV_RECORD_FILE_OKLETTERS
      Added MIXER_VOLUME_STEP to allow the mixer volume change to be specified
      Added for IVTV XINE TV:
         XINE_TV_CONFIRM_STOP
         XINE_TV_PROGRESSIVE_SEEK
         XINE_TV_PROGRESSIVE_SEEK_THRESHOLD
         XINE_TV_PROGRESSIVE_SEEK_INCREMENT
+     Added TV_RECORD_YEAR_FORMAT to allow the from of the year in TV fxd files to be specified
      '''),
 ]
 
@@ -1613,16 +1624,16 @@ XINE_TV_PROGRESSIVE_SEEK_INCREMENT = 5
 TV_RECORD_DIR = None
 
 # This will enable duplicate recording detection
-DUPLICATE_DETECTION = None
+TV_RECORD_DUPLICATE_DETECTION = None
 
 # This will enable only new episodes to be recorded
-ONLY_NEW_DETECTION = None
+TV_RECORD_ONLY_NEW_DETECTION = None
 
 # This will enable the commercial detection. It is quite process intensive.
-REMOVE_COMMERCIALS = None
+TV_RECORD_REMOVE_COMMERCIALS = None
 
 # This will try to resolve scheduling conflicts and re-schedule when needed
-CONFLICT_RESOLUTION = None
+TV_RECORD_CONFLICT_RESOLUTION = None
 
 #
 # Watching TV
@@ -1661,9 +1672,10 @@ TV_OPTS = ''
 
 TV_SETTINGS = '%s television %s %s' % (CONF.tv, CONF.chanlist, TV_DEVICE)
 
-TV_DATEFORMAT = '%e-%b' # Day-Month: 11-Jun
-TV_TIMEFORMAT = '%H:%M' # Hour-Minute 14:05
-TV_DATETIMEFORMAT = '%A %b %d %I:%M %p' # Thursday September 24 8:54 am
+TV_DATE_FORMAT = '%e-%b' # Day-Month: 11-Jun
+TV_TIME_FORMAT = '%H:%M' # Hour-Minute 14:05
+TV_DATETIME_FORMAT = '%A %b %d %I:%M %p' # Thursday September 24 8:54 am
+TV_RECORD_YEAR_FORMAT = '%a, %d %b %Y %H:%M:%S %Z' # Fri, 19 Oct 2007 08:58:56 CEST
 
 # This is the filename format for files recorded using Freevo.
 # You can use any of the strftime variables in it, provided you
@@ -1679,9 +1691,9 @@ TV_DATETIMEFORMAT = '%A %b %d %I:%M %p' # Thursday September 24 8:54 am
 #
 # More can be found at: http://www.python.org/doc/current/lib/module-time.html
 
-TV_RECORDFILE_MASK = '%%m-%%d %%H.%%M %(progname)s - %(title)s'
-TV_RECORDFILE_SUFFIX = '.avi'
-TV_RECORDFILE_OKLETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-:'
+TV_RECORD_FILE_MASK = '%%m-%%d %%H.%%M %(progname)s - %(title)s'
+TV_RECORD_FILE_SUFFIX = '.avi'
+TV_RECORD_FILE_OKLETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-:'
 
 # if using the persitant recordserver
 TV_RECORD_SCHEDULE = FREEVO_STATICDIR + '/record_schedule.xml'

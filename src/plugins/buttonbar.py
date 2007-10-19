@@ -317,8 +317,8 @@ class PluginInterface(plugin.DaemonPlugin):
             return None
 
         if isinstance(menu, TVGuide):
-            dateformat = config.TV_DATEFORMAT
-            timeformat = config.TV_TIMEFORMAT
+            dateformat = config.TV_DATE_FORMAT
+            timeformat = config.TV_TIME_FORMAT
             if not timeformat:
                 timeformat = '%H:%M'
             if not dateformat:

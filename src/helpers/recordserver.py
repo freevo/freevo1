@@ -214,7 +214,7 @@ class RecordServer(xmlrpc.XMLRPC):
                 recording = prog.isRecording
             except:
                 recording = FALSE
-            endtime = time.strftime(config.TV_TIMEFORMAT, time.localtime(prog.stop+config.TV_RECORD_PADDING_POST))
+            endtime = time.strftime(config.TV_TIME_FORMAT, time.localtime(prog.stop+config.TV_RECORD_PADDING_POST))
             _debug_('%s is recording %s stopping at %s' % (prog.title, recording and 'yes' or 'no', endtime), 3)
 
             if now > prog.stop + config.TV_RECORD_PADDING_POST:
@@ -460,7 +460,7 @@ class RecordServer(xmlrpc.XMLRPC):
             scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
         if not inputSchedule:
-            if config.DUPLICATE_DETECTION:
+            if config.TV_RECORD_DUPLICATE_DETECTION:
                 self.addDuplicate(prog)
             self.saveScheduledRecordings(scheduledRecordings)
 
@@ -472,7 +472,7 @@ class RecordServer(xmlrpc.XMLRPC):
             scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.removeProgram(prog, tv_util.getKey(prog))
         if not inputSchedule:
-            if config.DUPLICATE_DETECTION:
+            if config.TV_RECORD_DUPLICATE_DETECTION:
                 self.removeDuplicate(prog)
             self.saveScheduledRecordings(scheduledRecordings)
 
@@ -535,7 +535,7 @@ class RecordServer(xmlrpc.XMLRPC):
                 ratedConflicts.append((rating, conflictedProgs, oneOccurance))
             return (FALSE, ratedConflicts, None)
 
-        if config.CONFLICT_RESOLUTION:
+        if config.TV_RECORD_CONFLICT_RESOLUTION:
             _debug_('Conflict resolution enabled', DINFO)
             ratedConflicts=[]
             myScheduledRecordings = copy.deepcopy(self.getScheduledRecordings())
@@ -650,7 +650,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def checkOnlyNewDetection(self, prog=None):
-        if config.ONLY_NEW_DETECTION:
+        if config.TV_RECORD_ONLY_NEW_DETECTION:
             _debug_('Only new episode detection enabled', DINFO)
             if not self.doesFavoriteRecordOnlyNewEpisodes(prog):
                 return (TRUE, 'Favorite records all episodes, record')
@@ -663,7 +663,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def checkDuplicateDetection(self, prog=None):
-        if config.DUPLICATE_DETECTION:
+        if config.TV_RECORD_DUPLICATE_DETECTION:
             _debug_('Duplicate detection enabled', DINFO)
             if self.doesFavoriteAllowDuplicates(prog):
                 return (TRUE, 'Favorite allows duplicates, record')
@@ -1531,9 +1531,9 @@ class RecordServer(xmlrpc.XMLRPC):
         fxd.info['tagline'] = fxd.str2XML(rec_prog.sub_title)
         fxd.info['plot'] = fxd.str2XML(desc)
         fxd.info['runtime'] = None
-        fxd.info['recording_timestamp'] = str(time.time())
-        fxd.info['year'] = time.strftime('%m-%d ' + config.TV_TIMEFORMAT,
-                                         time.localtime(rec_prog.start))
+        fxd.info['recording_timestamp'] = str(rec_prog.start)
+        # bad use of the movie year field :)
+        fxd.info['year'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(rec_prog.start))
         fxd.title = rec_prog.title
         fxd.writeFxd()
 
@@ -1653,7 +1653,7 @@ class RecordServer(xmlrpc.XMLRPC):
                     pass
                 if config.VCR_POST_REC:
                     util.popen3.Popen3(config.VCR_POST_REC)
-                if config.REMOVE_COMMERCIALS:
+                if config.TV_RECORD_REMOVE_COMMERCIALS:
                     (result, response) = connectionTest('connection test')
                     if result:
                         (status, idnr) = initCommDetectJob(prog.filename)

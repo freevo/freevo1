@@ -196,8 +196,8 @@ class TVListing_Area(Skin_Area):
         h_contents = content.height - 2 * content.spacing
 
         # Print the Date of the current list page
-        dateformat = config.TV_DATEFORMAT
-        timeformat = config.TV_TIMEFORMAT
+        dateformat = config.TV_DATE_FORMAT
+        timeformat = config.TV_TIME_FORMAT
         if not timeformat:
             timeformat = '%H:%M'
         if not dateformat:
