@@ -173,6 +173,7 @@ def change(file, print_name=False):
                 if print_name:
                     print '**** %s **** ' % file
                     print_name = False
+                if out:
                     line = re.sub(repat, change_map[var], line)
                 else:
                     print 'changing config file line:'
