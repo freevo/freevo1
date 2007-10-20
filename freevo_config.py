@@ -330,6 +330,7 @@ LOCAL_CONF_CHANGES = [
         TV_RECORDFILE_MASK to TV_RECORD_FILE_MASK
         TV_RECORDFILE_SUFFIX to TV_RECORD_FILE_SUFFIX
         TV_RECORDFILE_OKLETTERS to TV_RECORD_FILE_OKLETTERS
+        VIDEO_GROUPS to TV_VIDEO_GROUPS
      Added MIXER_VOLUME_STEP to allow the mixer volume change to be specified
      Added for IVTV XINE TV:
         XINE_TV_CONFIRM_STOP
@@ -1831,7 +1832,7 @@ TV_FREQUENCY_TABLE = {
 # for viewing or recording.  It will be possible to have different Freevo
 # channels use different Video Groups.
 
-VIDEO_GROUPS = [
+TV_VIDEO_GROUPS = [
     VideoGroup(vdev=TV_DEVICE,
                adev=AUDIO_DEVICE,
                input_type='tuner',

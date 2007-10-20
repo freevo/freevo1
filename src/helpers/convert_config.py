@@ -117,6 +117,9 @@ change_map = {
     'TV_RECORDFILE_MASK': 'TV_RECORD_FILE_MASK',
     'TV_RECORDFILE_SUFFIX': 'TV_RECORD_FILE_SUFFIX',
     'TV_RECORDFILE_OKLETTERS': 'TV_RECORD_FILE_OKLETTERS',
+    'VIDEO_GROUPS': 'TV_VIDEO_GROUPS',
+    'TV_TV_': 'TV_',
+    'MIXER_MIXER_': 'MIXER_',
 }
 
 def help():
@@ -164,18 +167,17 @@ def change(file, print_name=False):
             continue
 
         for var in change_map:
-            if line.find(var) >= 0 and \
-               (line.startswith(var) or line[line.find(var)-1] in seperator) and \
-               line[line.find(var)+len(var)] in seperator:
+            repat = re.compile(var)
+            match = repat.match(line)
+            if match:
                 if print_name:
                     print '**** %s **** ' % file
                     print_name = False
-                if out:
-                    line = line.replace(var, change_map[var])
+                    line = re.sub(repat, change_map[var], line)
                 else:
                     print 'changing config file line:'
                     print line[:-1]
-                    print line[:-1].replace(var, change_map[var])
+                    print re.sub(repat, change_map[var], line)[:-1]
                     print
         if out:
             out.write(line)

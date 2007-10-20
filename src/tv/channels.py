@@ -38,7 +38,7 @@ import time
 
 # Sample for local_conf.py:
 # Three video cards and one web camera.
-#VIDEO_GROUPS = [
+#TV_VIDEO_GROUPS = [
 #    VideoGroup(vdev='/dev/video0',
 #               adev=None,
 #               input_type='tuner',
@@ -91,18 +91,18 @@ class FreevoChannels:
                     except: # XXX: put a better exception here
                         group = 0
             if not isplayer:
-                record_group = config.VIDEO_GROUPS[group].record_group
+                record_group = config.TV_VIDEO_GROUPS[group].record_group
                 if record_group:
                     try:
                         # some simple checks
                         group = int(record_group)
-                        record_vg = config.VIDEO_GROUPS[group]
+                        record_vg = config.TV_VIDEO_GROUPS[group]
                     except:
-                        print 'VIDEO_GROUPS[%s].record_group=%s is invalid' % (group, record_group)
+                        print 'TV_VIDEO_GROUPS[%s].record_group=%s is invalid' % (group, record_group)
         finally:
             self.lock.release()
 
-        return config.VIDEO_GROUPS[group]
+        return config.TV_VIDEO_GROUPS[group]
 
 
     def chanUp(self, isplayer, app=None, app_cmd=None):

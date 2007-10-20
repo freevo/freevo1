@@ -224,7 +224,7 @@ class PluginInterface(plugin.Plugin):
     PVR 250 card and adds S-VIDEO and Composite Inputs. Note that the
     audio input is selected automatically by ivtv.
 
-    | VIDEO_GROUPS = [
+    | TV_VIDEO_GROUPS = [
     |         VideoGroup(
     |             vdev='/dev/video0',
     |             adev=None,
