@@ -35,6 +35,8 @@ import time
 import thread
 import types
 
+import kaa.notifier
+
 import config
 import evdev
 
@@ -123,21 +125,6 @@ def resume():
     resume the rc
     """
     return get_singleton().resume()
-
-
-def poll():
-    """
-    poll all registered callbacks
-    """
-    return get_singleton().poll()
-
-
-def get_event(blocking=False):
-    """
-    get next event. If blocking is True, this function will block until
-    there is a new event (also call all registered callbacks while waiting)
-    """
-    return get_singleton().get_event(blocking)
 
 
 # --------------------------------------------------------------------------------
@@ -489,8 +476,6 @@ class EventHandler:
 
         self.app                = None
         self.context            = 'menu'
-        self.queue              = []
-        self.event_callback     = None
         self.callbacks          = []
         self.shutdown_callbacks = []
         self.poll_objects       = []
@@ -498,6 +483,7 @@ class EventHandler:
         self.lock               = thread.allocate_lock()
         # last time we stopped sleeping
         self.sleep_timer        = 0
+        kaa.notifier.Timer(self.poll).start(0.01)
 
 
     def set_app(self, app, context):
@@ -526,17 +512,9 @@ class EventHandler:
         """
         add event to the queue
         """
-        self.lock.acquire()
-        try:
-            if not isinstance(e, Event):
-                self.queue += [ Event(e, context=self.context) ]
-            else:
-                self.queue += [ e ]
-        finally:
-            self.lock.release()
-
-        if self.event_callback:
-            self.event_callback()
+        if not isinstance(e, Event):
+            e = Event(e, context=self.context)
+        e.post()
 
 
     def key_event_mapper(self, key):
@@ -622,6 +600,12 @@ class EventHandler:
         """
         poll all registered functions
         """
+        # search all input objects for new events
+        for i in self.inputs:
+            e = i.poll(self)
+            if e:
+                self.post_event(self.key_event_mapper(e))
+
         # run all registered callbacks
         for c in copy.copy(self.callbacks):
             if c[2] == c[3]:
@@ -642,50 +626,6 @@ class EventHandler:
                 c[3] += 1
 
 
-    def get_event(self, blocking=False):
-        """
-        get next event. If blocking is True, this function will block until
-        there is a new event (also call all registered callbacks while waiting)
-        """
-        if blocking:
-            while 1:
-                # get non blocking event
-                event = self.get_event(False)
-                if event:
-                    return event
-                # poll everything
-                self.poll()
-
-                # wait some time
-                duration = 0.01 - (time.time() - self.sleep_timer)
-                if duration > 0:
-                    time.sleep(duration)
-                self.sleep_timer = time.time()
-
-
-        # search for events in the queue
-        if len(self.queue):
-            self.lock.acquire()
-            try:
-                try:
-                    ret = self.queue[0]
-                    del self.queue[0]
-                    return ret
-                except IndexError:
-                    pass
-            finally:
-                self.lock.release()
-
-        # search all input objects for new events
-        for i in self.inputs:
-            e = i.poll(self)
-            if e:
-                return self.key_event_mapper(e)
-
-        return None
-
-
-
     def subscribe(self, event_callback=None):
         """
         subscribe to 'post_event'
@@ -694,3 +634,4 @@ class EventHandler:
             return
 
         self.event_callback = event_callback
+

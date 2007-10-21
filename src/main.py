@@ -56,6 +56,7 @@ try:
 
     import config
     import kaa.metadata as mmpython
+    import kaa.notifier
     import kaa.imlib2 as Image
 
 
@@ -248,7 +249,8 @@ class MainTread:
                 self.eventlistener_plugins.append(p)
             else:
                 self.eventhandler_plugins.append(p)
-
+        kaa.notifier.EventHandler(self.eventhandler).register()
+        
 
     def eventhandler(self, event):
         """
@@ -315,15 +317,6 @@ class MainTread:
                         raise
             else:
                 _debug_('no target for events given')
-
-
-    def run(self):
-        """
-        the real main loop
-        """
-        while 1:
-            self.eventhandler(rc.get_event(True))
-
 
 
 def signal_handler(sig, frame):
@@ -469,7 +462,10 @@ try:
 
     # Kick off the main menu loop
     _debug_('Main loop starting...',2)
-    MainTread().run()
+
+    MainTread()
+    
+    kaa.notifier.loop()
 
 
 except KeyboardInterrupt:
@@ -481,7 +477,7 @@ except SystemExit:
     pass
 
 except:
-    _debug_('Crash!', config.DCRITICAL)
+    _debug_('Crash!', DCRITICAL)
     try:
         tb = sys.exc_info()[2]
         fname, lineno, funcname, text = traceback.extract_tb(tb)[-1]

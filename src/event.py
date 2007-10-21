@@ -28,8 +28,9 @@
 #
 # -----------------------------------------------------------------------
 
+import kaa.notifier
 
-class Event:
+class Event(kaa.notifier.Event):
     """
     an event is passed to the different eventhandlers in Freevo to
     activate some action.
