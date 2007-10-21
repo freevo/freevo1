@@ -40,6 +40,7 @@ import rc
 import glob
 import thread
 import tv.v4l2
+from kaa.notifier import Timer, EventHandler
 from tv.channels import FreevoChannels
 from util.marmalade import jellyToXML, unjellyFromXML
 from gui import AlertBox
@@ -72,11 +73,11 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         _debug_('__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
-        self.lock = thread.allocate_lock()
-        self.poll_interval = 1500 #15 secs
-        self.poll_menu_only = 0
-        self.event_listener = 1
         plugin.register(self, 'upsoon')
+        self.lock = thread.allocate_lock()
+        self.timer = Timer(self.timer_handler).start(15)
+        self.event = EventHandler(self.event_handler)
+        self.event.register(('VIDEO_START', 'VIDEO_END'))
 
         server_string = 'http://%s:%s/' % (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
         _debug_('%s' % server_string)
@@ -173,7 +174,7 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_('close(self)')
 
 
-    def poll(self):
+    def timer_handler(self):
         """
         Sends a poll message to the record server
         """
@@ -190,6 +191,8 @@ class PluginInterface(plugin.DaemonPlugin):
         vdev=self.fc.getVideoGroup(self.next_program.channel_id, False).vdev
         rdev=config.RADIO_DEVICE
 
+        self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.'+vdev.split('/')[-1]
+
         # Remove the pending record lock file when a record lock file is written
         if os.path.exists(self.pending_lockfile):
             if os.path.exists(self.tv_lockfile):
@@ -198,7 +201,6 @@ class PluginInterface(plugin.DaemonPlugin):
             return None
 
         # Check if a recording is in progress
-        self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.'+vdev.split('/')[-1]
         if os.path.exists(self.tv_lockfile):
             return None
 
@@ -252,13 +254,14 @@ class PluginInterface(plugin.DaemonPlugin):
         return None
 
 
-    def eventhandler(self, event, menuw=None):
-        """ Processes events
-        detect the video start and stop events so that the
-        alert box will work correctly """
+    def event_handler(self, event):
+        """
+        Processes events, detect the video start and stop events so that the
+        alert box will work correctly
+        """
         self.lock.acquire()
         try:
-            _debug_('eventhandler(self, %s, %s) name=%s arg=%s context=%s handler=%s' % \
+            _debug_('event_handler(self, %s, %s) name=%s arg=%s context=%s handler=%s' % \
                 (event, menuw, event.name, event.arg, event.context, event.handler), 2)
         finally:
             self.lock.release()
