@@ -62,6 +62,7 @@ class TvProgram:
     advisories = None
     categories = None
     date       = None
+    # this information is added by the recordserver
     scheduled  = None
     overlap    = None
     previouslyRecorded = None

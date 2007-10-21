@@ -55,7 +55,7 @@ class ChildApp:
         """
         Initialise ChildApp
         """
-        _debug_('ChildApp.__init__(app=%r, debugname=%r, doeslogging=%r)' % (app, debugname, doeslogging), 1)
+        _debug_('ChildApp.__init__(app=%r, debugname=%r, doeslogging=%r)' % (app, debugname, doeslogging), 2)
         self.lock = thread.allocate_lock()
 
         prio = 0
@@ -314,7 +314,7 @@ class ChildApp2(ChildApp):
         Initialise ChildApp2
         """
         _debug_('ChildApp2.__init__(app=%r, debugname=%r, doeslogging=%r, stop_osd=%r)' % \
-            (app, debugname, doeslogging, stop_osd), 1)
+            (app, debugname, doeslogging, stop_osd), 2)
         rc.register(self.poll, True, 10)
         rc.register(self.stop, True, rc.SHUTDOWN)
 
@@ -408,7 +408,7 @@ class Read_Thread(threading.Thread):
         Constructor of Read_Thread
         """
         _debug_('Read_Thread.__init__(name=%r, fh=%r, callback=%r, logger=%r, doeslogging=%r' % \
-            (name, fh, callback, logger, doeslogging), 1)
+            (name, fh, callback, logger, doeslogging), 2)
         threading.Thread.__init__(self)
         self.name = name
         self.fh = fh

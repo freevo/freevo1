@@ -13,7 +13,7 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
-== Release 1.7.4 (2007-??-??) ==
+== Release 1.7.4 (2007-11-15) ==
 --------------------------------
 
  * New Afrikaans translation (F#1790781)
@@ -33,7 +33,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated osd overscan to allow different margins for all sides (F#1791026,B#1813244)
  * Updated shopping cart plug-in at allow items to removed as well (F#1807315)
  * Updated submenu selection when there is only one action to execute the action (F#1774569)
- * Updated tv favourite handling and programme item to provide a consistant interface (F#1776909)
+ * Updated tv favourite handling and programme item to provide a consistent interface (F#1776909)
  * Updated video item to include the full description (F#1777187)
  * Fixed audio plug-in albumtree navigating back to the main menu (B#1798462)
  * Fixed music causing a crash when the directory has non-ascii characters and an image (B#1801929)
