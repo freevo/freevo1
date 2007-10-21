@@ -6,7 +6,7 @@
 #
 # Notes:
 #    To activate, put the following line in local_conf.py:
-#       plugin.activate('upsoon')
+#       plugin.activate('tv.upsoon')
 # ToDo:
 #
 # -----------------------------------------------------------------------
@@ -58,7 +58,7 @@ class PluginInterface(plugin.DaemonPlugin):
     To activate this plugin, just put the following line at the end of your
     local_conf.py file:
 
-    | plugin.activate('upsoon')
+    | plugin.activate('tv.upsoon')
     """
     __author__           = 'Duncan Webb'
     __author_email__     = 'duncan@freevo.org'
