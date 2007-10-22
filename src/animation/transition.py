@@ -49,10 +49,10 @@ class Transition(BaseAnimation):
 
     def __init__(self, surf1, surf2, mode=-1, direction='vertical', fps=25):
         """
-        @surf1: Surface to blend with
-        @surf2: New surface
-        @mode: effect to use
-        @direction: vertical/horizontal
+        @param surf1: Surface to blend with
+        @param surf2: New surface
+        @param mode: effect to use
+        @param direction: vertical/horizontal
         """
         BaseAnimation.__init__(self, surf1.get_rect(), fps, bg_update=False)
 

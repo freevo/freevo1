@@ -39,11 +39,11 @@ class BaseAnimation:
     Base class for animations, this should perhaps be changed to use sprites
     in the future (if one decides to go with a RenderGroup model)
 
-    @rectstyle  : the rectangle defining the position on the screen (pygame)
-    @fps        : Desired fps
-    @bg_update  : update the animation with background from screen
-    @bg_wait    : initially wait for updated background before activating
-    @bg_redraw  : set background to original screen bg when finished
+    @param rectstyle : the rectangle defining the position on the screen (pygame)
+    @param fps       : Desired fps
+    @param bg_update : update the animation with background from screen
+    @param bg_wait   : initially wait for updated background before activating
+    @param bg_redraw : set background to original screen bg when finished
     """
 
     background   = None   # Surface Background (screen)

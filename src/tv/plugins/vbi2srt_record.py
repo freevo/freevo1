@@ -32,13 +32,15 @@
 #
 # -----------------------------------------------------------------------
 
-__author__ = 'Duncan Webb <duncan@freevo.org>'
-__doc__ = '''This module requires vbi2srt, see:
+__author__ = "Duncan Webb <duncan@freevo.org>"
+__doc__ = """
+This module requires vbi2srt, see:
 http://www.linuxowl.com/vbi2srt.html
 Currently only ivtv cards and teletext is supported
 To use this plug-in add the following to local_conf.py
 plugin.remove('tv.generic_record')
-plugin_record = plugin.activate('tv.vbi2srt_record')'''
+plugin_record = plugin.activate("tv.vbi2srt_record")
+"""
 
 import sys, string
 import random
@@ -61,6 +63,8 @@ from tv.channels import FreevoChannels
 class PluginInterface(plugin.Plugin):
     """
     Record subtitles from teletext pages (IVTV cards only)
+    Also uses the PDC (Programme Delivery Control) from VPS (Video 
+    Programming Signal) to start and stop the recording.
 
     The teletext page number is taken from TV_CHANNELS, eg:
 
@@ -77,7 +81,7 @@ class PluginInterface(plugin.Plugin):
     |     'S13' : 246250,
     |     'K05' : 175500,
     |     'K10' : 211000,
-    | ]
+    | }
 
     Requirements:
        * vbi2srt: (http://www.linuxowl.com/vbi2srt.html)
@@ -123,6 +127,8 @@ class Recorder:
         rec_prog.filename = os.path.splitext(tv_util.getProgFilename(rec_prog))[0] + '.mpeg'
         _debug_('filename %s' % rec_prog.filename)
 
+        self.vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
+
         cl_options = { 'channel'  : rec_prog.tunerid,
                        'frequency' : frequency,
                        'frequencyMHz' : float(frequency) / 1000,
@@ -135,7 +141,6 @@ class Recorder:
                        'pdc-start'  : rec_prog.pdc_start,
         }
 
-        self.vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
         _debug_('cl_options %s' % cl_options)
         _debug_('chan_index %s' % self.fc.chan_index)
         _debug_('vg.vdev %s' % self.vg.vdev)

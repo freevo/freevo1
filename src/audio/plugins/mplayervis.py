@@ -84,8 +84,8 @@ class mpv_Goom(BaseAnimation):
         """
         Pass a message to the screen.
 
-        @message: text to draw
-        @timeout: how long to display
+        @param message: text to draw
+        @param timeout: how long to display
         """
 
         font = skin.get_font('detachbar')

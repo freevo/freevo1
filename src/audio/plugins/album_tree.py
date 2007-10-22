@@ -107,7 +107,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     Requires:
     * pysqlite.
 
-    Pre Installation
+    === Pre Installation ===
 
     The sqlite-meta-database should be available.
 
@@ -122,16 +122,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     * wait.....
     * The meta database should be available now.
 
-    Installation
-
-    *Download freevo-audio-album-tree-0.x.x.tgz
-    {{{
-        tar -zxvf freevo-audio-album-tree-0.x.x.tgz
-        cd freevo-audio-album-tree0.x.x
-        python setup.py install
-    }}}
-
-    Configuration
+    === Configuration ===
 
     Edit your local_config.py and add this:
 
@@ -176,7 +167,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     |   ,'alt_grouping':[None,None,None,'track']
     | })
 
-    Post Installation
+    === Post Installation ===
+
     New plugins are not immediately visible on the freevo webserver.
 
     You might want to restart the  [wiki:Webserver freevo webserver] after the
