@@ -190,13 +190,25 @@ class FreevoChannels:
             # Lets set the freq ourselves using the V4L device.
             try:
                 vd = tv.v4l2.Videodev(vg.vdev)
+
+                try:
+                    vd.setinputbyname(vg.input_type)
+                except KeyError:
+                    print 'Cannot set input %r, must be one of:\n%r' % (vg.input_type, vd.inputs.keys())
+
+                try:
+                    vd.setstdbyname(vg.tuner_norm)
+                except KeyError:
+                    print 'Cannot set standard %r, must be one of:\n%r' % (vg.tuner_norm, tv.v4l2.NORMS.keys())
+
                 try:
                     vd.setfreq(freq)
                 except:
                     vd.setfreq_old(freq)
+
                 vd.close()
-            except:
-                print 'Failed to set freq for channel %s.' % chan
+            except Exception, e:
+                print 'Cannot set frequency for %s/%s/%s: %s' % (vg.input_type, vg.tuner_norm, chan, e)
 
             if vg.cmd:
                 _debug_("run cmd: %s" % vg.cmd)
@@ -210,8 +222,10 @@ class FreevoChannels:
     def getChannel(self):
         return config.TV_CHANNELS[self.chan_index][2]
 
+
     def getChannelNum(self):
         return (self.chan_index) % len(config.TV_CHANNELS)
+
 
     def getManChannelNum(self, channel=0):
         return (channel-1) % len(config.TV_CHANNELS)
@@ -269,8 +283,6 @@ class FreevoChannels:
             prog_info = 'No info'
 
         return tuner_id, chan_name, prog_info
-
-
 
 
 if __name__ == '__main__':

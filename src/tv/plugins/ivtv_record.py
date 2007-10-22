@@ -124,8 +124,8 @@ class Record_Thread(threading.Thread):
                 v.init_settings()
                 vg = fc.getVideoGroup(self.prog.tunerid, False)
 
-                _debug_('Setting Input to %s' % vg.input_num)
-                v.setinput(vg.input_num)
+                _debug_('Setting Input to %s' % vg.input_type)
+                v.setinputbyname(vg.input_type)
 
                 cur_std = v.getstd()
                 try:

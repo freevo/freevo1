@@ -164,13 +164,22 @@ class VideoGroup:
     cmd:          Command for execute external prog after the channel switched, such as 'sudo /usr/local/bin/setuptuner'
     """
 
-    def __init__(self, vdev='/dev/video', vvbi='/dev/vbi', adev=None, input_type='tuner',
-                 input_num=0, tuner_norm='NTSC', tuner_chanlist='us-cable',
+    def __init__(self, vdev=None, vvbi='/dev/vbi', adev=None, input_type=None,
+                 input_num=0, tuner_norm=None, tuner_chanlist=None,
                  tuner_type='internal', tuner_chan=None,
-                 record_group=None, desc='Freevo default VideoGroup',
+                 record_group=None, desc='Freevo Default Video Group',
                  group_type='normal', cmd=None):
 
-        # XXX: Put checks in here for supplied values.
+        (v_norm, v_input, v_clist, v_dev) = TV_SETTINGS.split()
+        if vdev is None:
+            vdev = v_dev
+        if input_type is None:
+            input_type = v_input
+        if tuner_norm is None:
+            tuner_norm = v_norm
+        if tuner_chanlist is None:
+            tuner_chanlist = v_clist
+
         self.vdev = vdev
         self.vvbi = vvbi
         self.adev = adev

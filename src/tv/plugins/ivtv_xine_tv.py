@@ -228,8 +228,7 @@ class PluginInterface(plugin.Plugin):
     |         VideoGroup(
     |             vdev='/dev/video0',
     |             adev=None,
-    |             input_type='tuner',
-    |             input_num=0,
+    |             input_type='Tuner 1',
     |             tuner_norm='pal',
     |             tuner_chanlist='europe-west',
     |             desc='Regular Cable',
@@ -239,8 +238,7 @@ class PluginInterface(plugin.Plugin):
     |         VideoGroup(
     |             vdev='/dev/video0',
     |             adev=None,
-    |             input_type='svideo',
-    |             input_num=1,
+    |             input_type='S-Video 1',
     |             tuner_type='external',
     |             desc='S-Video Input',
     |             group_type='ivtv',
@@ -249,15 +247,14 @@ class PluginInterface(plugin.Plugin):
     |         VideoGroup(
     |             vdev='/dev/video0',
     |             adev=None,
-    |             input_type='composite',
-    |             input_num=5,
+    |             input_type='Composite 2',
     |             tuner_type='external',
     |             desc='Composite Input',
     |             group_type='ivtv',
     |             record_group = None
     |         ),
     | ]
-    | 
+    |
     | TV_CHANNELS = [
     |     ('ned1',        'NED 1',                'C22', '', 0),
     |     ...

@@ -84,9 +84,9 @@ class MPlayer:
         vg = self.current_vg = self.fc.getVideoGroup(tuner_channel, True)
 
         # Convert to MPlayer TV setting strings
-        norm = 'norm=%s' % vg.tuner_norm
-        input = 'input=%s' % vg.input_num
         device= 'device=%s' % vg.vdev
+        input = 'input=%s' % vg.input_num
+        norm = 'norm=%s' % vg.tuner_norm
 
         w, h = config.TV_VIEW_SIZE
         outfmt = 'outfmt=%s' % config.TV_VIEW_OUTFMT
@@ -99,7 +99,7 @@ class MPlayer:
             if vg.group_type == 'ivtv':
                 ivtv_dev = ivtv.IVTV(vg.vdev)
                 ivtv_dev.init_settings()
-                ivtv_dev.setinput(vg.input_num)
+                ivtv_dev.setinputbyname(vg.input_type)
                 cur_std = ivtv_dev.getstd()
                 import tv.v4l2
                 try:

@@ -63,7 +63,7 @@ from tv.channels import FreevoChannels
 class PluginInterface(plugin.Plugin):
     """
     Record subtitles from teletext pages (IVTV cards only)
-    Also uses the PDC (Programme Delivery Control) from VPS (Video 
+    Also uses the PDC (Programme Delivery Control) from VPS (Video
     Programming Signal) to start and stop the recording.
 
     The teletext page number is taken from TV_CHANNELS, eg:
@@ -220,16 +220,13 @@ class Record_Thread(threading.Thread):
                 fc = FreevoChannels()
                 _debug_('channel %s' % fc.getChannel())
 
-                (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
-
-                v = tv.ivtv.IVTV(v_dev)
-
-                v.init_settings()
                 self.vg = fc.getVideoGroup(self.prog.tunerid, False)
 
+                v = tv.ivtv.IVTV(self.vg.vdev)
+
+                v.init_settings()
+
                 _debug_('Using video device %s' % self.vg.vdev)
-                _debug_('Setting Input to %s' % self.vg.input_num)
-                v.setinput(self.vg.input_num)
 
                 _debug_('Setting Channel to %s' % self.prog.tunerid)
                 fc.chanSet(str(self.prog.tunerid), False)

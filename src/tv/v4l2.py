@@ -64,19 +64,19 @@ _IOC_NONE = 0
 _IOC_WRITE = 1
 _IOC_READ = 2
 
-def _IOC(dir,type,nr,size):
+def _IOC(dir, type, nr, size):
     return (((dir)  << _IOC_DIRSHIFT) | \
            (ord(type) << _IOC_TYPESHIFT) | \
            ((nr)   << _IOC_NRSHIFT) | \
            ((size) << _IOC_SIZESHIFT))
 
-def _IO(type,nr): return _IOC(_IOC_NONE,(type),(nr),0)
+def _IO(type, nr): return _IOC(_IOC_NONE, (type), (nr), 0)
 
-def _IOR(type,nr,size): return _IOC(_IOC_READ,(type),(nr),struct.calcsize(size))
+def _IOR(type, nr, size): return _IOC(_IOC_READ, (type), (nr), struct.calcsize(size))
 
-def _IOW(type,nr,size): return _IOC(_IOC_WRITE,(type),(nr),struct.calcsize(size))
+def _IOW(type, nr, size): return _IOC(_IOC_WRITE, (type), (nr), struct.calcsize(size))
 
-def _IOWR(type,nr,size): return _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),struct.calcsize(size))
+def _IOWR(type, nr, size): return _IOC(_IOC_READ|_IOC_WRITE, (type), (nr), struct.calcsize(size))
 
 # used to decode ioctl numbers..
 def _IOC_DIR(nr): return (((nr) >> _IOC_DIRSHIFT) & _IOC_DIRMASK)
@@ -88,11 +88,11 @@ def _ID2CLASS(id): return ((id) & 0x0fff0000)
 
 
 QUERYCAP_ST      = "<16s32s32sII16x"
-QUERYCAP_NO      = _IOR('V',  0, QUERYCAP_ST)
+QUERYCAP_NO      = _IOR('V', 0, QUERYCAP_ST)
 
 FMT_ST           = bit32 and "<I7I4x168x" or "<Q7I4x168x"
-GET_FMT_NO       = _IOWR('V',  4, FMT_ST)
-SET_FMT_NO       = _IOWR('V',  5, FMT_ST)
+GET_FMT_NO       = _IOWR('V', 4, FMT_ST)
+SET_FMT_NO       = _IOWR('V', 5, FMT_ST)
 
 SETFREQ_NO_V4L   = _IOW('v', 15, "L")
 
@@ -192,12 +192,48 @@ V4L2_CTRL_FLAGS = {
 }
 
 NORMS = {
-    'NTSC'     : 0x00003000,
-    'PAL'      : 0x000000ff,
-    'SECAM'    : 0x007f0000,
-    'SECAM-DK' : 0x00320000,
-}
+    'PAL_B'       : 0x00000001,
+    'PAL_B1'      : 0x00000002,
+    'PAL_G'       : 0x00000004,
+    'PAL_H'       : 0x00000008,
+    'PAL_I'       : 0x00000010,
+    'PAL_D'       : 0x00000020,
+    'PAL_D1'      : 0x00000040,
+    'PAL_K'       : 0x00000080,
+    'PAL_M'       : 0x00000100,
+    'PAL_N'       : 0x00000200,
+    'PAL_Nc'      : 0x00000400,
+    'PAL_60'      : 0x00000800,
+    'NTSC_M'      : 0x00001000,
+    'NTSC_M_JP'   : 0x00002000,
+    'NTSC_443'    : 0x00004000,
+    'NTSC_M_KR'   : 0x00008000,
+    'SECAM_B'     : 0x00010000,
+    'SECAM_D'     : 0x00020000,
+    'SECAM_G'     : 0x00040000,
+    'SECAM_H'     : 0x00080000,
+    'SECAM_K'     : 0x00100000,
+    'SECAM_K1'    : 0x00200000,
+    'SECAM_L'     : 0x00400000,
+    'SECAM_LC'    : 0x00800000,
+    'ATSC_8_VSB'  : 0x01000000,
+    'ATSC_16_VSB' : 0x02000000,
 
+    'PAL_BG'      : 0x00000007,
+    'B'           : 0x00010003,
+    'GH'          : 0x000C000C,
+    'PAL_DK'      : 0x000000E0,
+    'PAL'         : 0x000000FF,
+    'NTSC'        : 0x0000B000,
+    'MN'          : 0x0000B700,
+    'SECAM_DK'    : 0x00320000,
+    'DK'          : 0x003200E0,
+    'SECAM'       : 0x00FF0000,
+    '525_60'      : 0x0000F900,
+    '625_50'      : 0x00FF06FF,
+    'UNKNOWN'     : 0x00000000,
+    'ALL'         : 0x00FFFFFF,
+}
 
 class Videodev:
     def __init__(self, device):
@@ -214,7 +250,12 @@ class Videodev:
         self.bus_info     = results[2]
         self.version      = results[3]
         self.capabilities = results[4]
+        self.inputs       = {}
+        self.standards    = {}
         self.controls     = {}
+        self.inputs       = self.enuminputs()
+        self.standards    = self.enumstds()
+        self.controls     = self.enumcontrols()
 
 
     def getdriver(self):
@@ -237,17 +278,25 @@ class Videodev:
         self.chanlist = freq.CHANLIST[chanlist]
 
 
+    def querycap(self):
+        val = struct.pack(QUERYCAP_ST, "", "", "", 0, 0)
+        r = fcntl.ioctl(self.device, i32(QUERYCAP_NO), val)
+        res = struct.unpack(QUERYCAP_ST, r)
+        _debug_('querycap: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        return res
+
+
     def getfreq(self):
-        val = struct.pack(FREQUENCY_ST, 0,0,0)
+        val = struct.pack(FREQUENCY_ST, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
         res = struct.unpack(FREQUENCY_ST, r)
         _debug_('getfreq: val=%r, r=%r, res=%r' % (val, r, res), 3)
-        (tuner, type, freq,) = res
+        (tuner, type, freq, ) = res
         return freq
 
 
     def getfreq2(self):
-        val = struct.pack(FREQUENCY_ST, 0,0,0)
+        val = struct.pack(FREQUENCY_ST, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
         res = struct.unpack(FREQUENCY_ST, r)
         _debug_('getfreq2: val=%r, r=%s, res=%r' % (val, r, res), 3)
@@ -289,10 +338,38 @@ class Videodev:
         _debug_('setfreq: val=%r, r=%r' % (val, r), 3)
 
 
+    def enuminput(self, num):
+        """
+        Enumerate a video device input
+        @param num is the input number
+        """
+        val = struct.pack(ENUMINPUT_ST, num, "", 0, 0, 0, 0, 0)
+        r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO), val)
+        res = struct.unpack(ENUMINPUT_ST, r)
+        _debug_('enuminput: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        return res
+
+    def enuminputs(self):
+        """
+        Enumerate all inputs
+        @returns a dict of the inputs index by name
+        """
+        res = {}
+        num = 0
+        try:
+            while 1:
+                (index, name, type, audioset, tuner, std, status) = self.enuminput(num)
+                name = name.rstrip('\0')
+                res[name.lower()] = (index, name, type, audioset, tuner, std, status)
+                num += 1
+        except IOError, e:
+            pass
+        return res
+
     def getinput(self):
-        val = struct.pack(INPUT_ST,0)
+        val = struct.pack(INPUT_ST, 0)
         r = fcntl.ioctl(self.device, i32(GETINPUT_NO), val)
-        res = struct.unpack(INPUT_ST,r)
+        res = struct.unpack(INPUT_ST, r)
         _debug_('getinput: val=%r, %d, res=%r' % (val, len(val), res), 3)
         return res[0]
 
@@ -306,23 +383,50 @@ class Videodev:
             raise
 
 
-    def querycap(self):
-        val = struct.pack(QUERYCAP_ST, "", "", "", 0, 0)
-        r = fcntl.ioctl(self.device, i32(QUERYCAP_NO), val)
-        res = struct.unpack(QUERYCAP_ST, r)
-        _debug_('querycap: val=%r, %d, res=%r' % (val, len(val), res), 3)
-        return res
+    def setinputbyname(self, name):
+        """
+        Set the TV input by name, eg: TELEVISION, s-video
+        """
+        v_input = name.lower()
+        try:
+            (index, name, type, audioset, tuner, std, status) = self.inputs[v_input]
+            self.setinput(index)
+        except KeyError, e:
+            _debug_('setinputbyname failed: %s' % (e), DERROR)
+            raise
+        _debug_('setinputbyname: %s->%s set' % (name, index))
 
 
-    def enumstd(self, no):
-        val = struct.pack(ENUMSTD_ST, no, 0, "", 0, 0, 0)
+    def enumstd(self, num):
+        val = struct.pack(ENUMSTD_ST, num, 0, "", 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMSTD_NO), val)
         res = struct.unpack(ENUMSTD_ST, r)
         _debug_('enumstd: val=%r, %d, res=%r' % (val, len(val), res), 3)
         return res
 
 
+    def enumstds(self):
+        """
+        Enumerate the TV standards
+        @returns a dict of the standards index by name
+        """
+        res = {}
+        num = 0
+        try:
+            while 1:
+                (index, id, name, frameperiod, framelines, reserved) = self.enumstd(num)
+                name = name.rstrip('\0')
+                res[name.lower()] = (index, id, name, frameperiod, framelines)
+                num += 1
+        except IOError, e:
+            pass
+        return res
+
+
     def getstd(self):
+        """
+        Get the current TV standard
+        """
         val = struct.pack(STANDARD_ST, 0)
         r = fcntl.ioctl(self.device, i32(GETSTD_NO), val)
         res = struct.unpack(STANDARD_ST, r)
@@ -331,13 +435,29 @@ class Videodev:
 
 
     def setstd(self, value):
+        """
+        Set the TV standard by number
+        """
         val = struct.pack(STANDARD_ST, value)
         r = fcntl.ioctl(self.device, i32(SETSTD_NO), val)
         _debug_('setstd: val=%r, r=%r' % (val, r), 3)
 
 
-    def enuminput(self,index):
-        val = struct.pack(ENUMINPUT_ST, index, "", 0,0,0,0,0)
+    def setstdbyname(self, name):
+        """
+        Set the TV standard by name, eg: PAL-BGH, secam-dk, etc
+        """
+        v_norm = name.upper()
+        try:
+            _debug_('setstdbyname: %s (0x%08X) set' % (name, NORMS[v_norm]))
+            self.setstd(NORMS.get(v_norm))
+        except KeyError, e:
+            _debug_('setstdbyname failed: %s' % (e), DERROR)
+        _debug_('setstdbyname: %s (0x%08X) set' % (name, NORMS[v_norm]))
+
+
+    def enuminput(self, num):
+        val = struct.pack(ENUMINPUT_ST, num, "", 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO), val)
         res = struct.unpack(ENUMINPUT_ST, r)
         _debug_('enuminput: val=%r, %d, res=%r' % (val, len(val), res), 3)
@@ -345,7 +465,7 @@ class Videodev:
 
 
     def getfmt(self):
-        val = struct.pack(FMT_ST, 1,0,0,0,0,0,0,0)
+        val = struct.pack(FMT_ST, 1, 0, 0, 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GET_FMT_NO), val)
         res = struct.unpack(FMT_ST, r)
         _debug_('getfmt: val=%r, %d, res=%r' % (val, len(val), res), 3)
@@ -358,30 +478,30 @@ class Videodev:
         _debug_('setfmt: val=%r, r=%r' % (val, r), 3)
 
 
-    def gettuner(self,index):
-        val = struct.pack(TUNER_ST, index, "", 0,0,0,0,0,0,0,0)
+    def gettuner(self, num):
+        val = struct.pack(TUNER_ST, num, "", 0, 0, 0, 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GET_TUNER_NO), val)
         res = struct.unpack(TUNER_ST, r)
         _debug_('gettuner: val=%r, %d, res=%r' % (val, len(val), res), 3)
         return res
 
 
-    def settuner(self,index,audmode):
-        val = struct.pack(TUNER_ST, index, "", 0,0,0,0,0,audmode,0,0)
+    def settuner(self, num, audmode):
+        val = struct.pack(TUNER_ST, num, "", 0, 0, 0, 0, 0, audmode, 0, 0)
         r = fcntl.ioctl(self.device, i32(SET_TUNER_NO), val)
         _debug_('settuner: val=%r, r=%r' % (val, r), 3)
 
 
-    def getaudio(self,index):
-        val = struct.pack(AUDIO_ST, index, "", 0,0)
+    def getaudio(self, num):
+        val = struct.pack(AUDIO_ST, num, "", 0, 0)
         r = fcntl.ioctl(self.device, i32(GET_AUDIO_NO), val)
         res = struct.unpack(AUDIO_ST, r)
         _debug_('getaudio: val=%r, %d, res=%r' % (val, len(val), res), 3)
         return res
 
 
-    def setaudio(self,index,mode):
-        val = struct.pack(AUDIO_ST, index, "", mode, 0)
+    def setaudio(self, num, mode):
+        val = struct.pack(AUDIO_ST, num, "", mode, 0)
         r = fcntl.ioctl(self.device, i32(SET_AUDIO_NO), val)
         _debug_('setaudio: val=%r, r=%r' % (val, r), 3)
 
@@ -447,8 +567,8 @@ class Videodev:
             _debug_('setextctrl(%s) %r: %s' % (id, self.findcontrol(id), e), DWARNING)
 
 
-    def querymenu(self, id, index):
-        val = struct.pack(QUERYMENU_ST, id, index, "", 0)
+    def querymenu(self, id, num):
+        val = struct.pack(QUERYMENU_ST, id, num, "", 0)
         try:
             r = fcntl.ioctl(self.device, i32(QUERYMENU_NO), val)
             res = struct.unpack(QUERYMENU_ST, r)
@@ -487,7 +607,7 @@ class Videodev:
         print 'id=%08x, type=%s, name=\"%s\", min=%d, max=%d, step=%d, default=%d, flags=%04x value=%d' % \
             (id, V4L2_CTRL_TYPES[type], name, min, max, step, default, flags, value)
         if type == V4L2_CTRL_TYPE_MENU:
-            for i in range(min,max+1):
+            for i in range(min, max+1):
                 (id, index, name, res1) = self.querymenu(id, i)
                 print 'index=%d, name=\"%s\"' % (index, name)
 
@@ -520,7 +640,7 @@ class Videodev:
                 break
 
 
-    def getcontrols(self):
+    def enumcontrols(self):
         self.controls = {}
         id = V4L2_CTRL_FLAG_NEXT_CTRL
         while 1:
@@ -609,10 +729,11 @@ class Videodev:
         ''' initialise the V4L2 setting
         '''
         (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
-        v_norm = string.upper(v_norm)
-        self.setstd(NORMS.get(v_norm))
+        self.inputs = self.enuminputs()
+        self.standards = self.enumstds()
+        self.controls = self.enumcontrols()
+        self.setstdbyname(v_norm)
         self.setchanlist(v_clist)
-        self.getcontrols()
 
         # XXX TODO: make a good way of setting the input
         # self.setinput(....)
@@ -626,8 +747,8 @@ class Videodev:
 
         print "Enumerating supported Standards."
         try:
-            for i in range(0,255):
-                (index,id,name,junk,junk,junk) = self.enumstd(i)
+            for i in range(0, 255):
+                (index, id, name, junk, junk, junk) = self.enumstd(i)
                 print "  %i: 0x%x %s" % (index, id, name.strip('\0'))
         except:
             pass
@@ -635,8 +756,8 @@ class Videodev:
 
         print "Enumerating supported Inputs."
         try:
-            for i in range(0,255):
-                (index,name,type,audioset,tuner,std,status) = self.enuminput(i)
+            for i in range(0, 255):
+                (index, name, type, audioset, tuner, std, status) = self.enuminput(i)
                 print "  %i: %s" % (index, name.strip('\0'))
         except:
             pass
@@ -644,7 +765,7 @@ class Videodev:
 
         (buf_type, width, height, pixelformat, field, bytesperline,
          sizeimage, colorspace) = self.getfmt()
-        print "Width: %i, Height: %i" % (width,height)
+        print "Width: %i, Height: %i" % (width, height)
 
         print "Read Frequency: %i" % self.getfreq()
 
@@ -678,7 +799,7 @@ if __name__ == '__main__':
     print 'Driver = \"%s\"' % viddev.getdriver()
     print 'Driver Version = %02d.%02d' % (viddev.getversion() / 256, viddev.getversion() % 256)
     viddev.print_settings()
-    viddev.getcontrols()
+    viddev.enumcontrols()
     viddev.listcontrols()
     ctrlname = 'Median Luma Filter Minimum'
     ctrlkey = 'median_luma_filter_minimum'
@@ -692,12 +813,53 @@ if __name__ == '__main__':
     viddev.setcontrol(ctrlname, mlfm+1)
     print '%s -> %s %s' % (mlfm, viddev.getcontrol(ctrlname), viddev.getextctrl(ctrlcode))
 
-    #dict = viddev.getcontrols()
+    NORMS['PAL_BG'] = (NORMS['PAL_B']+NORMS['PAL_B1']+NORMS['PAL_G'])
+    NORMS['B'] = (NORMS['PAL_B']+NORMS['PAL_B1']+NORMS['SECAM_B'])
+    NORMS['GH'] = (NORMS['PAL_G']+NORMS['PAL_H']+NORMS['SECAM_G']+NORMS['SECAM_H'])
+    NORMS['PAL_DK'] = (NORMS['PAL_D']+NORMS['PAL_D1']+NORMS['PAL_K'])
+    NORMS['PAL'] = (NORMS['PAL_BG']+NORMS['PAL_DK']+NORMS['PAL_H']+NORMS['PAL_I'])
+    NORMS['NTSC'] = (NORMS['NTSC_M']+NORMS['NTSC_M_JP']+NORMS['NTSC_M_KR'])
+    NORMS['MN'] = (NORMS['PAL_M']+NORMS['PAL_N']+NORMS['PAL_Nc']+NORMS['NTSC'])
+    NORMS['SECAM_DK'] = (NORMS['SECAM_D']+NORMS['SECAM_K']+NORMS['SECAM_K1'])
+    NORMS['DK'] = (NORMS['PAL_DK']+NORMS['SECAM_DK'])
+    NORMS['SECAM'] = (NORMS['SECAM_B']+NORMS['SECAM_G']+NORMS['SECAM_H']+NORMS['SECAM_DK']+NORMS['SECAM_L']+NORMS['SECAM_LC'])
+    NORMS['525_60'] = (NORMS['PAL_M']+NORMS['PAL_60']+NORMS['NTSC']+NORMS['NTSC_443'])
+    NORMS['625_50'] = (NORMS['PAL']+NORMS['PAL_N']+NORMS['PAL_Nc']+NORMS['SECAM'])
+    NORMS['UNKNOWN'] = 0
+    NORMS['ALL'] = (NORMS['525_60']+NORMS['625_50'])
+
+    print '\'%s\'      : 0x%08X, ' % ('PAL_BG', NORMS['PAL_BG'])
+    print '\'%s\'           : 0x%08X, ' % ('B', NORMS['B'])
+    print '\'%s\'          : 0x%08X, ' % ('GH', NORMS['GH'])
+    print '\'%s\'      : 0x%08X, ' % ('PAL_DK', NORMS['PAL_DK'])
+    print '\'%s\'         : 0x%08X, ' % ('PAL', NORMS['PAL'])
+    print '\'%s\'        : 0x%08X, ' % ('NTSC', NORMS['NTSC'])
+    print '\'%s\'          : 0x%08X, ' % ('MN', NORMS['MN'])
+    print '\'%s\'    : 0x%08X, ' % ('SECAM_DK', NORMS['SECAM_DK'])
+    print '\'%s\'          : 0x%08X, ' % ('DK', NORMS['DK'])
+    print '\'%s\'       : 0x%08X, ' % ('SECAM', NORMS['SECAM'])
+    print '\'%s\'      : 0x%08X, ' % ('525_60', NORMS['525_60'])
+    print '\'%s\'      : 0x%08X, ' % ('625_50', NORMS['625_50'])
+    print '\'%s\'     : 0x%08X, ' % ('UNKNOWN', NORMS['UNKNOWN'])
+    print '\'%s\'         : 0x%08X, ' % ('ALL', NORMS['ALL'])
+
+    inputs = viddev.enuminputs()
+    print inputs
+    standards = viddev.enumstds()
+    print standards
+    viddev.setinputbyname('Composite1')
+    print viddev.getinput()
+    viddev.setstdbyname('PAL')
+    print '0x%08X' % viddev.getstd()
+    viddev.setinputbyname('Television')
+    print viddev.getinput()
+
+    #dict = viddev.enumcontrols()
     #keys = list(dict)
     #keys.sort()
     #print keys
     #for ctrl in keys:
-    #    print '%-28s : %r' % (ctrl, dict[ctrl],)
+    #    print '%-28s : %r' % (ctrl, dict[ctrl], )
 
     ##print viddev.querycap()
     #inp = viddev.getinput()
@@ -712,7 +874,7 @@ if __name__ == '__main__':
     #print 'std:', std
     #print 'CONTROLS'
     #viddev.listcontrols()
-    #dict = viddev.getcontrols()
+    #dict = viddev.enumcontrols()
     #viddev.setextctrl(0x009909c9, 2)
     #print '0x009909c9 = %d' % viddev.getextctrl(0x009909c9)
     #viddev.setextctrl(0x009909cf, 7000000)
@@ -747,11 +909,10 @@ if __name__ == '__main__':
     #viddev.setinput(inp)
     #print 'viddev.setinput okay'
     #fmt = viddev.getfmt()
-    #(buf_type, width, height, pixelformat, field, bytesperline,
-         #sizeimage, colorspace) = fmt
+    #(buf_type, width, height, pixelformat, field, bytesperline, #sizeimage, colorspace) = fmt
     #print 'viddev.getfmt=%s' % (buf_type)
     #print viddev.enuminput(inp)
-    #for i in range(0,99):
+    #for i in range(0, 99):
         #try:
             #print viddev.gettuner(i)
         #except IOError:

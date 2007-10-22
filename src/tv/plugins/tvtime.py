@@ -432,14 +432,8 @@ class TVTime:
 
             _debug_('starting channel is %s' % mychan)
 
-            command = '%s %s -k -I %s -n %s -d %s -f %s -c %s -i %s' % (config.TVTIME_CMD,
-                                                                   outputplugin,
-                                                                   w,
-                                                                   s_norm,
-                                                                   cf_device,
-                                                                   'freevo',
-                                                                   mychan,
-                                   cf_input)
+            command = '%s %s -k -I %s -n %s -d %s -f %s -c %s -i %s' % \
+                (config.TVTIME_CMD, outputplugin, w, s_norm, cf_device, 'freevo', mychan, cf_input)
 
             if osd.get_fullscreen() == 1:
                 command += ' -m'

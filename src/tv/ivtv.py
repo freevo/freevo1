@@ -57,19 +57,19 @@ _IOC_NONE = 0
 _IOC_WRITE = 1
 _IOC_READ = 2
 
-def _IOC(dir,type,nr,size):
+def _IOC(dir, type, nr, size):
     return (((dir)  << _IOC_DIRSHIFT) | \
            (ord(type) << _IOC_TYPESHIFT) | \
            ((nr)   << _IOC_NRSHIFT) | \
            ((size) << _IOC_SIZESHIFT))
 
-def _IO(type,nr): return _IOC(_IOC_NONE,(type),(nr),0)
+def _IO(type, nr): return _IOC(_IOC_NONE, (type), (nr), 0)
 
-def _IOR(type,nr,size): return _IOC(_IOC_READ,(type),(nr),struct.calcsize(size))
+def _IOR(type, nr, size): return _IOC(_IOC_READ, (type), (nr), struct.calcsize(size))
 
-def _IOW(type,nr,size): return _IOC(_IOC_WRITE,(type),(nr),struct.calcsize(size))
+def _IOW(type, nr, size): return _IOC(_IOC_WRITE, (type), (nr), struct.calcsize(size))
 
-def _IOWR(type,nr,size): return _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),struct.calcsize(size))
+def _IOWR(type, nr, size): return _IOC(_IOC_READ|_IOC_WRITE, (type), (nr), struct.calcsize(size))
 
 # used to decode ioctl numbers..
 def _IOC_DIR(nr): return (((nr) >> _IOC_DIRSHIFT) & _IOC_DIRMASK)
@@ -129,8 +129,7 @@ class IVTV(tv.v4l2.Videodev):
             0 : 0, 2 : 2, 3 : 10, 4 : 11, 5 : 12,
         }
         try:
-            if config.DEBUG >= 1:
-                print 'streamTypeV4l2ToIVTV %s -> %s' % (stream_type, map_v4l2_to_ivtv[stream_type])
+            _debug_('streamTypeV4l2ToIVTV %s -> %s' % (stream_type, map_v4l2_to_ivtv[stream_type]))
             return map_v4l2_to_ivtv[stream_type]
         except:
             print 'streamTypeV4l2ToIVTV %s failed' % (stream_type)
@@ -162,7 +161,6 @@ class IVTV(tv.v4l2.Videodev):
             framespergop = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Size')
             gop_closure = tv.v4l2.Videodev.getcontrol(self, 'Video GOP Closure')
             pulldown = 0
-            #pulldown = tv.v4l2.Videodev.getcontrol(self, 'Video Pulldown')
             #insert_navigation_packets = tv.v4l2.Videodev.getcontrol(self, 'insert_navigation_packets')
             stream_type = self.streamTypeV4l2ToIVTV(tv.v4l2.Videodev.getcontrol(self, 'Stream Type'))
             codec_list = (aspect, audio_bitmask, bframes, bitrate_mode, bitrate, bitrate_peak,
@@ -170,7 +168,7 @@ class IVTV(tv.v4l2.Videodev):
                 pulldown, stream_type)
             return IVTVCodec(codec_list)
 
-        val = struct.pack( CODEC_ST, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 )
+        val = struct.pack( CODEC_ST, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_G_CODEC), val)
         codec_list = struct.unpack(CODEC_ST, r)
         if config.DEBUG >= 3: print "getCodecInfo: val=%r, r=%r, res=%r" % (val, r, struct.unpack(CODEC_ST, r))
@@ -265,7 +263,6 @@ class IVTV(tv.v4l2.Videodev):
             VIDIOC_S_STD           'framerate'      : 0,
             'Video GOP Size'       'framespergop'   : 12,
             'Video GOP Closure'    'gop_closure'    : 1,
-            'Video Pulldown'       'pulldown'       : 0,
             'Stream Type'          'stream_type'    : 14,
             '''
             tv.v4l2.Videodev.updatecontrol(self, 'Video Aspect', codec.aspect-1)
@@ -287,7 +284,6 @@ class IVTV(tv.v4l2.Videodev):
             tv.v4l2.Videodev.updatecontrol(self, 'Median Filter Type', codec.dnr_type)
             tv.v4l2.Videodev.updatecontrol(self, 'Video GOP Size', codec.framespergop)
             tv.v4l2.Videodev.updatecontrol(self, 'Video GOP Closure', codec.gop_closure)
-            tv.v4l2.Videodev.updatecontrol(self, 'Video Pulldown', codec.pulldown)
             tv.v4l2.Videodev.updatecontrol(self, 'Stream Type', self.streamTypeIvtvToV4l2(codec.stream_type))
             return
 
@@ -302,10 +298,10 @@ class IVTV(tv.v4l2.Videodev):
                            codec.dnr_spatial,
                            codec.dnr_temporal,
                            codec.dnr_type,
-                           codec.framerate,     #read only, ignored on write
-                           codec.framespergop,  #read only, ignored on write
+                           codec.framerate, # read only, ignored on write
+                           codec.framespergop, # read only, ignored on write
                            codec.gop_closure,
-                           codec.pulldown,
+                           codec.pulldown, # removed from ivtv driver
                            codec.stream_type)
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_S_CODEC), val)
         if config.DEBUG >= 3: print "setCodecInfo: val=%r, r=%r" % (val, r)
@@ -324,11 +320,11 @@ class IVTV(tv.v4l2.Videodev):
         if self.version >= 0x800:
             return self.getcontrol('Stream VBI Format')
         try:
-            r = fcntl.ioctl(self.device, i32(GETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST,0))
+            r = fcntl.ioctl(self.device, i32(GETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, 0))
             if config.DEBUG >= 3:
-                print "getvbiembed: val=%r, r=%r, res=%r" % (struct.pack(VBI_EMBED_ST,0), r,
-                    struct.unpack(VBI_EMBED_ST,r))
-            return struct.unpack(VBI_EMBED_ST,r)[0]
+                print "getvbiembed: val=%r, r=%r, res=%r" % (struct.pack(VBI_EMBED_ST, 0), r,
+                    struct.unpack(VBI_EMBED_ST, r))
+            return struct.unpack(VBI_EMBED_ST, r)[0]
         except IOError:
             print 'getvbiembed: failed'
             return 0
@@ -359,8 +355,8 @@ class IVTV(tv.v4l2.Videodev):
         (width, height) = string.split(opts['resolution'], 'x')
         self.setfmt(int(width), int(height))
 
-        if self.version >= 0x800:
-            tv.v4l2.Videodev.getcontrols(self)
+        #if self.version >= 0x800:
+        #    tv.v4l2.Videodev.enumcontrols(self)
 
         codec = self.getCodecInfo()
 
@@ -448,7 +444,7 @@ if __name__ == '__main__':
 
     config.DEBUG = 0
 
-    ivtv_dev = IVTV('/dev/video0')
+    ivtv_dev = IVTV('/dev/video1')
     ivtv_dev.init_settings()
     ivtv_dev.listcontrols()
     x = ivtv_dev.getcontrol('Spatial Luma Filter Type')
