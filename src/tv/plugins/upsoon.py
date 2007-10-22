@@ -261,8 +261,8 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         self.lock.acquire()
         try:
-            _debug_('event_handler(self, %s, %s) name=%s arg=%s context=%s handler=%s' % \
-                (event, menuw, event.name, event.arg, event.context, event.handler), 2)
+            _debug_('event_handler(%s) name=%s arg=%s context=%s handler=%s' % \
+                (event, event.name, event.arg, event.context, event.handler), 2)
         finally:
             self.lock.release()
 

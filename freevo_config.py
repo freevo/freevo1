@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.20
+LOCAL_CONF_VERSION = 5.21
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -338,6 +338,7 @@ LOCAL_CONF_CHANGES = [
         XINE_TV_PROGRESSIVE_SEEK_THRESHOLD
         XINE_TV_PROGRESSIVE_SEEK_INCREMENT
      Added TV_RECORD_YEAR_FORMAT to allow the from of the year in TV fxd files to be specified
+     Moved plug-in "upsoon" to "tv.upsoon"
      '''),
 ]
 

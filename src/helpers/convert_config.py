@@ -118,6 +118,7 @@ change_map = {
     'TV_RECORDFILE_SUFFIX': 'TV_RECORD_FILE_SUFFIX',
     'TV_RECORDFILE_OKLETTERS': 'TV_RECORD_FILE_OKLETTERS',
     'VIDEO_GROUPS': 'TV_VIDEO_GROUPS',
+    'upsoon': 'tv.upsoon',
     'TV_TV_': 'TV_',
     'MIXER_MIXER_': 'MIXER_',
 }
