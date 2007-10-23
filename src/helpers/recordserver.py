@@ -1533,7 +1533,10 @@ class RecordServer(xmlrpc.XMLRPC):
         fxd.info['runtime'] = None
         fxd.info['recording_timestamp'] = str(rec_prog.start)
         # bad use of the movie year field :)
-        fxd.info['year'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(rec_prog.start))
+        try:
+            fxd.info['year'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(rec_prog.start))
+        except:
+            fxd.info['year'] = '2007'
         fxd.title = rec_prog.title
         fxd.writeFxd()
 
@@ -1556,7 +1559,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def eventNotice(self):
-        #print 'RECORDSERVER GOT EVENT NOTICE'
+        print 'RECORDSERVER GOT EVENT NOTICE'
         # Use callLater so that handleEvents will get called the next time
         # through the main loop.
         reactor.callLater(0, self.handleEvents)

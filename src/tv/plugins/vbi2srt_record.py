@@ -84,7 +84,7 @@ class PluginInterface(plugin.Plugin):
     | }
 
     Requirements:
-       * vbi2srt: (http://www.linuxowl.com/vbi2srt.html)
+        * vbi2srt: (http://www.linuxowl.com/vbi2srt.html)
 
     Updates available from http://www.linuxowl.com/software/.
 
