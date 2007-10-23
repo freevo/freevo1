@@ -79,13 +79,14 @@ status_order_methods = ['Unwatched, Keep, Watched',
                         'Unwatched, Watched, Keep',
                         'Keep, Unwatched, Watched']
 
-STATUS_ORDERS = [ ('2', '1', '0'),
-                  ('2', '0', '1'),
-                  ('1', '2', '0')]
+STATUS_ORDERS = [ ('3', '2', '0', '1'),
+                  ('3', '0', '1', '2'),
+                  ('1', '3', '0', '2')]
 
-STATUS_ORDER_UNWATCHED = 0
-STATUS_ORDER_KEEP      = 1
-STATUS_ORDER_WATCHED   = 2
+STATUS_ORDER_UNWATCHED    = 0
+STATUS_ORDER_KEEP         = 1
+STATUS_ORDER_WATCHED      = 2
+STATUS_ORDER_KEEP_WATCHED = 3
 
 sorting = 0
 sorting_reversed = False
@@ -523,7 +524,9 @@ class RecordedProgramItem(VideoItem):
         Set the image displayed next to the menu item text, based on whether
         the program is being kept or has been watched.
         """
-        if self.keep:
+        if self.keep and self.watched:
+            self.icon = config.ICON_DIR + '/status/television_keep_watched.png'
+        elif self.keep:
             self.icon = config.ICON_DIR + '/status/television_keep.png'
         elif self.watched:
             self.icon = config.ICON_DIR + '/status/television_watched.png'
@@ -719,7 +722,9 @@ class Series(Item):
                 keep = False
             if not item.watched:
                 watched = False
-        if keep:
+        if keep and watched:
+            self.icon = config.ICON_DIR + '/status/series_keep_watched.png'
+        elif keep:
             self.icon = config.ICON_DIR + '/status/series_keep.png'
         elif watched:
             self.icon = config.ICON_DIR + '/status/series_watched.png'
@@ -977,7 +982,9 @@ def get_status_sort_order(watched, keep):
     orders = STATUS_ORDERS[status_order]
 
     order = orders[STATUS_ORDER_UNWATCHED]
-    if keep:
+    if keep and watched:
+        order = orders[STATUS_ORDER_KEEP_WATCHED]
+    elif keep:
         order = orders[STATUS_ORDER_KEEP]
     elif watched:
         order = orders[STATUS_ORDER_WATCHED]
