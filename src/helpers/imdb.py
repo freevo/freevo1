@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# imdbp.py - IMDB helper script to generate fxd files
+# IMDB helper script to generate fxd files
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -45,17 +45,17 @@ from util.fxdimdb import FxdImdb, makeVideo
 from random import Random
 
 def usage():
-    print 'imdb.py -s string:   search imdb for string'
+    print 'freevo imdb -s string:   search imdb for string'
     print
-    print 'imdb.py -g filename:   guess imdb for possible filename match'
+    print 'freevo imdb -g filename:   guess imdb for possible filename match'
     print
-    print 'imdb.py [--rom-drive=/path/to/device] nr output files'
-    print '  Generate output.fxd for the movie.'
+    print 'freevo imdb [--rom-drive=/path/to/device] num <output> <files>'
+    print '  Generate <output>.fxd for the movie.'
     print '  Files is a list of files that belongs to this movie.'
     print '  Use [dvd|vcd] to add the whole disc or use [dvd|vcd][title]'
     print '  to add a special DVD or VCD title to the list of files'
     print
-    print 'imdb.py [--rom-drive=/path/to/device] -a fxd-file file'
+    print 'freevo imdb [--rom-drive=/path/to/device] -a <fxd-file> <file>'
     print '  add file to fxd-file.fxd'
     print
     print 'If no rom-drive is given and one is required, /dev/cdrom is assumed'
