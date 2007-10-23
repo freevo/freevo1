@@ -37,6 +37,7 @@ import sys, os, glob, shutil
 from stat import *
 import kaa.metadata as mmpython
 import config
+import util
 
 def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     """
@@ -44,7 +45,6 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     """
     import popen3
     import kaa.imlib2 as Image
-    import util
     import vfs
     import gui.PopupBox
     import osd
