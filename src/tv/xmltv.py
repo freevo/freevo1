@@ -295,35 +295,30 @@ class Writer:
     """
     A class for generating XMLTV data
 
-    **All strings passed to this class must be Unicode, except for dictionary
-    keys**
+    @note All strings passed to this class must be Unicode, except for dictionary keys
     """
     def __init__(self, encoding="utf-8", date=None,
                  source_info_url=None, source_info_name=None,
                  generator_info_url=None, generator_info_name=None):
         """
-        Arguments:
+        @param encoding -- The text encoding that will be used. Defaults to 'utf-8'
 
-          'encoding' -- The text encoding that will be used.
-                        *Defaults to 'utf-8'*
+        @param date The date this data was generated. Optional
 
-          'date' -- The date this data was generated. *Optional*
+        @param source_info_url A URL for information about the source of the data.
+            Optional
 
-          'source_info_url' -- A URL for information about the source of the
-                               data. *Optional*
+        @param source_info_name A human readable description of source_info_url.
+            Optional
 
-          'source_info_name' -- A human readable description of
-                                'source_info_url'. *Optional*
+        @param generator_info_url A URL for information about the program that
+            is generating the XMLTV document. Optional
 
-          'generator_info_url' -- A URL for information about the program
-                                  that is generating the XMLTV document.
-                                  *Optional*
-
-          'generator_info_name' -- A human readable description of
-                                   'generator_info_url'. *Optional*
+        @param generator_info_name A human readable description of
+            generator_info_url. Optional
 
         """
-        if DEBUG >= 0: print "in Writer:__init__"
+        _debug_('in Writer:__init__()', 2)
         self.encoding = encoding
         self.data = {'date': date,
                      'source_info_url': source_info_url,

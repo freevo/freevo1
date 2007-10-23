@@ -416,8 +416,8 @@ def register(plugin, name, multiple_choises=0):
 
 def register_callback(name, *args):
     """
-    register a callback to the callback handler 'name'. The format of
-    *args depends on the callback
+    register a callback to the callback handler 'name'.
+    @note The format of args depends on the callback
     """
     global __callbacks__
     if not __callbacks__.has_key(name):
