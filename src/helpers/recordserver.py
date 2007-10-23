@@ -43,8 +43,8 @@ appconf = appname.upper()
 if __name__ == '__main__':
     config.DEBUG_STDOUT = 0
     lock = threading.Lock()
-    uid='config.'+appconf+'_UID'
-    gid='config.'+appconf+'_GID'
+    uid = 'config.'+appconf+'_UID'
+    gid = 'config.'+appconf+'_GID'
     try:
         if eval(uid) and os.getuid() == 0:
             os.setgid(eval(gid))
@@ -115,7 +115,7 @@ def _debug_func_(s, level=1):
     finally:
         lock.release()
 
-__builtin__.__dict__['_debug_']= _debug_func_
+__builtin__.__dict__['_debug_'] = _debug_func_
 
 
 logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
@@ -342,7 +342,7 @@ class RecordServer(xmlrpc.XMLRPC):
         if not self.previouslyRecordedShows:
             return
 
-        cacheFile=config.FREEVO_CACHEDIR+"/previouslyRecorded.pickle"
+        cacheFile = config.FREEVO_CACHEDIR+"/previouslyRecorded.pickle"
         pickle.dump(self.previouslyRecordedShows, open(cacheFile, "w"))
 
     def newEpisode(self, prog=None):
@@ -351,17 +351,17 @@ class RecordServer(xmlrpc.XMLRPC):
         progStr = str(prog.date)
         _debug_('Program Date: "%s"' % progStr, DINFO)
         _debug_('Todays Date : "%s"' % todayStr, DINFO)
-        if (len(progStr)==8):
+        if (len(progStr) == 8):
             _debug_('Good date format', DINFO)
             #Year
-            todaysYear=(todayStr[0:4])
-            progYear=(progStr[0:4])
+            todaysYear = (todayStr[0:4])
+            progYear = (progStr[0:4])
             #Month
-            todaysMonth=(todayStr[4:-2])
-            progMonth=(progStr[4:-2])
+            todaysMonth = (todayStr[4:-2])
+            progMonth = (progStr[4:-2])
             #Day
-            todaysDay=(todayStr[6:])
-            progDay=(progStr[6:])
+            todaysDay = (todayStr[6:])
+            progprogDay = (progStr[6:])
             if todaysYear > progYear:
                 #program from a previous year
                 return FALSE
@@ -467,7 +467,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def removeRecordingFromSchedule(self, prog=None, inputSchedule=None):
         if inputSchedule:
-            scheduledRecordings=inputSchedule
+            scheduledRecordings = inputSchedule
         else:
             scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.removeProgram(prog, tv_util.getKey(prog))
@@ -480,17 +480,17 @@ class RecordServer(xmlrpc.XMLRPC):
     def conflictResolution(self, prog):
         def exactMatch(self, prog):
             if prog.desc:
-                descResult=FALSE
-                descMatches=None
-                (descResult, descMatches)=self.findMatches(prog.desc)
+                descResult = FALSE
+                descMatches = None
+                (descResult, descMatches) = self.findMatches(prog.desc)
                 if descResult:
                     _debug_('Exact Matches %s' % (len(descMatches)), DINFO)
                     return descMatches
 
             if prog.sub_title:
-                sub_titleResult=FALSE
-                sub_titleMatches=None
-                (sub_titleResult, sub_titleMatches)=self.findMatches(prog.sub_title)
+                sub_titleResult = FALSE
+                sub_titleMatches = None
+                (sub_titleResult, sub_titleMatches) = self.findMatches(prog.sub_title)
                 if sub_titleResult:
                     _debug_('Exact Matches %s' % (len(sub_titleMatches)), DINFO)
                     return sub_titleMatches
@@ -502,33 +502,33 @@ class RecordServer(xmlrpc.XMLRPC):
             progs = myScheduledRecordings.getProgramList()
             proglist = list(progs)
             proglist.sort(self.progsTimeCompare)
-            conflictRating=0
-            conflicts=[]
+            conflictRating = 0
+            conflicts = []
             for i in range(0, len(proglist)-1):
                 thisprog = progs[proglist[i]]
                 nextprog = progs[proglist[i+1]]
                 if thisprog.stop > nextprog.start:
-                    conflictRating=conflictRating+1
-                    if thisprog==prog:
+                    conflictRating = conflictRating+1
+                    if thisprog == prog:
                         conflicts.append(nextprog)
-                    elif nextprog==prog:
+                    elif nextprog == prog:
                         conflicts.append(thisprog)
             self.removeRecordingFromSchedule(prog, myScheduledRecordings)
             _debug_('After mySched recordings; stop ignoring all addProgram lines', DINFO)
             return (conflictRating, conflicts)
 
         def getRatedConflicts(self, prog, myScheduledRecordings):
-            ratedConflicts=[]
+            ratedConflicts = []
             occurances = exactMatch(self, prog)
             if not occurances:
                 #program no longer exists
                 return (FALSE, None, None)
             #Search through all occurances of looking for a non-conflicted occurance
             for oneOccurance in occurances:
-                (rating, conflictedProgs)=getConflicts(self, oneOccurance, myScheduledRecordings)
-                if rating==0:
+                (rating, conflictedProgs) = getConflicts(self, oneOccurance, myScheduledRecordings)
+                if rating == 0:
                     _debug_('No Conflict', DINFO)
-                    programsToChange=[]
+                    programsToChange = []
                     programsToChange.append(('add', oneOccurance))
                     return(TRUE, ratedConflicts, programsToChange)
                 _debug_('Conflict Found', DINFO)
@@ -537,19 +537,19 @@ class RecordServer(xmlrpc.XMLRPC):
 
         if config.TV_RECORD_CONFLICT_RESOLUTION:
             _debug_('Conflict resolution enabled', DINFO)
-            ratedConflicts=[]
+            ratedConflicts = []
             myScheduledRecordings = copy.deepcopy(self.getScheduledRecordings())
 
             #Try to record it at its listed time
-            (rating, conflictedProg)=getConflicts(self, prog, myScheduledRecordings)
-            if rating==0:
+            (rating, conflictedProg) = getConflicts(self, prog, myScheduledRecordings)
+            if rating == 0:
                 #No need to do anything fancy; this will work at its defaul time
-                progsToChange=[]
+                progsToChange = []
                 progsToChange.append(('add', prog))
                 return (TRUE, 'No conflicts, using default time', progsToChange)
 
             #Default time didn't work, let's try all times known
-            (result, ratedConflicts, progsToChange)=getRatedConflicts(self, prog, myScheduledRecordings)
+            (result, ratedConflicts, progsToChange) = getRatedConflicts(self, prog, myScheduledRecordings)
             if result:
                 #No conflicts
                 return (TRUE, 'No conflicts if new program is added', progsToChange)
@@ -560,16 +560,16 @@ class RecordServer(xmlrpc.XMLRPC):
             _debug_('Going into conflict resolution via scheduled program re-scheduling', DINFO)
             # No viable time to schedule the program without a conflict
             # Try and reschedule the already scheduled program
-            atleastOneSingleConflict=FALSE
+            atleastOneSingleConflict = FALSE
             for (scheduledConflictRating, scheduledConflictPrograms, conflictProgram) in ratedConflicts:
                 #Only handle one conflict at the moment
-                if scheduledConflictRating==1:
-                    atleastOneSingleConflict=TRUE
-                    scheduledConflictProgram=scheduledConflictPrograms[0]
+                if scheduledConflictRating == 1:
+                    atleastOneSingleConflict = TRUE
+                    scheduledConflictProgram = scheduledConflictPrograms[0]
                     #remove already scheduled program and try to reschedule it with the new program
                     self.removeRecordingFromSchedule(scheduledConflictProgram, myScheduledRecordings)
                     self.addRecordingToSchedule(conflictProgram, myScheduledRecordings)
-                    (result, ratedConflicts, progsToChange)=getRatedConflicts(self, \
+                    (result, ratedConflicts, progsToChange) = getRatedConflicts(self, \
                         scheduledConflictProgram, myScheduledRecordings)
                     if result:
                         #No conflicts
@@ -591,52 +591,52 @@ class RecordServer(xmlrpc.XMLRPC):
             _debug_('Going into conflict resolution via priority', DINFO)
             # No viable option to reschedule the original program
             # Time to resolve the conflict via priority
-            tempRating=1000
-            tempConflicted=None
-            tempProg=None
+            tempRating = 1000
+            tempConflicted = None
+            tempProg = None
             #Find least conflicted
             for (conflictedRating, conflictedPrograms, tempProgram) in ratedConflicts:
                 #Cannot handle multiple conflicts
-                conflictedProgram=conflictedPrograms[0]
+                conflictedProgram = conflictedPrograms[0]
                 if conflictedRating < tempRating:
-                    tempRating=conflictedRating
-                    tempConflicted=conflictedProgram
-                    tempProg=tempProgram
-            conflictedProgram=tempConflicted
-            prog=tempProgram
+                    tempRating = conflictedRating
+                    tempConflicted = conflictedProgram
+                    tempProg = tempProgram
+            conflictedProgram = tempConflicted
+            prog = tempProgram
 
             #Here is where it gets ugly
             (isProgFav, progFav) = self.getFavoriteObject(prog)
             (isConfFav, confFav) = self.getFavoriteObject(conflictedProgram)
             if not isProgFav and isConfFav:
                 #Regular recording has higher priority then favorite
-                progsToChange=[]
+                progsToChange = []
                 progsToChange.append(('del', conflictedProgram))
                 progsToChange.append(('add', prog))
-                reason='New program is a regular recording(added), scheduled is a Favorite(removed)'
+                reason = 'New program is a regular recording(added), scheduled is a Favorite(removed)'
                 return (TRUE, reason, progsToChange)
             elif isProgFav and not isConfFav:
                 #Regular recording has higher priority then favorite
-                progsToChange=[]
+                progsToChange = []
                 progsToChange.append(('del', prog))
                 progsToChange.append(('add', conflictedProgram))
-                reason='Scheduled program is a regular recording(added), new is a Favorite(removed)'
+                reason = 'Scheduled program is a regular recording(added), new is a Favorite(removed)'
                 return (TRUE, reason, progsToChange)
             elif not isProgFav and not isConfFav:
                 return (FALSE, 'Both are regular programs, not adding new recording', None)
             elif isProgFav and isConfFav:
                 #Both are favorites, go by priority (lower is better)
                 if progFav.priority < confFav.priority:
-                    progsToChange=[]
+                    progsToChange = []
                     progsToChange.append(('del', conflictedProgram))
                     progsToChange.append(('add', prog))
-                    reason='New program is higher rated(added), Scheduled is lower(removed)'
+                    reason = 'New program is higher rated(added), Scheduled is lower(removed)'
                     return (TRUE, reason, progsToChange)
                 elif confFav.priority < progFav.priority:
-                    progsToChange=[]
+                    progsToChange = []
                     progsToChange.append(('del', prog))
                     progsToChange.append(('add', conflictedProgram))
-                    reason='Scheduled program is higher rated(added), New is lower(removed)'
+                    reason = 'Scheduled program is higher rated(added), New is lower(removed)'
                     return (TRUE, reason, progsToChange)
                 else:
                     #Equal priority, not adding new program
@@ -644,7 +644,7 @@ class RecordServer(xmlrpc.XMLRPC):
             else:
                 return (FALSE, 'No viable way to schedule', None)
         else:
-            progsToChange=[]
+            progsToChange = []
             progsToChange.append(('add', prog))
             return (TRUE, 'Conflict resolution disabled', progsToChange)
 
@@ -717,15 +717,15 @@ class RecordServer(xmlrpc.XMLRPC):
 
         if progsToChange:
             for (cmd, prog) in progsToChange:
-                prog=self.setTunerid(prog)
-                if cmd=='add':
+                prog = self.setTunerid(prog)
+                if cmd == 'add':
                     _debug_('adding %s to schedule' % (prog.title), 2)
                     self.addRecordingToSchedule(prog)
-                elif cmd=='del':
+                elif cmd == 'del':
                     _debug_('removed %s from schedule' % (prog.title), 2)
                     self.removeRecordingFromSchedule(prog)
         else:
-            prog=self.setTunerid(prog)
+            prog = self.setTunerid(prog)
             _debug_('added %s to schedule' % (prog.title), DINFO)
             self.addRecordingToSchedule(prog)
 
@@ -960,9 +960,11 @@ class RecordServer(xmlrpc.XMLRPC):
                 return
 
             self.vg = self.fc.getVideoGroup(rec_prog.channel_id, FALSE)
-            suffix=self.vg.vdev.split('/')[-1]
+            suffix = self.vg.vdev.split('/')[-1]
             self.tv_lock_file = config.FREEVO_CACHEDIR + '/record.'+suffix
             self.record_app.Record(rec_prog)
+
+            self.create_fxd(rec_prog)
 
             # Cleanup old recordings (if enabled)
             if config.RECORDSERVER_CLEANUP_THRESHOLD > 0:
@@ -1537,6 +1539,7 @@ class RecordServer(xmlrpc.XMLRPC):
             fxd.info['year'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(rec_prog.start))
         except:
             fxd.info['year'] = '2007'
+            print 'DJW: %r:%r %r' % (config.TV_RECORD_YEAR_FORMAT, time.localtime(rec_prog.start), e)
         fxd.title = rec_prog.title
         fxd.writeFxd()
 
@@ -1545,6 +1548,7 @@ class RecordServer(xmlrpc.XMLRPC):
         next_minute = (int(time.time()/60) * 60 + 60) - int(time.time())
         _debug_('top of the minute in %s seconds' % next_minute, DINFO)
         reactor.callLater(next_minute, self.minuteCheck)
+
 
     def minuteCheck(self):
         next_minute = (int(time.time()/60) * 60 + 60) - int(time.time())
@@ -1679,7 +1683,7 @@ class RecordServer(xmlrpc.XMLRPC):
                     _debug_('start delayed recording: %s' % rec_prog, DINFO)
                     self.record_app = plugin.getbyname('RECORD')
                     self.vg = self.fc.getVideoGroup(rec_prog.channel_id, FALSE)
-                    suffix=self.vg.vdev.split('/')[-1]
+                    suffix = self.vg.vdev.split('/')[-1]
                     self.record_app.Record(rec_prog)
                     self.delay_recording = None
                 else:
@@ -1697,7 +1701,8 @@ def main():
     rs = RecordServer()
     app.listenTCP(config.RECORDSERVER_PORT, server.Site(rs, logPath='/dev/null'))
     rs.startMinuteCheck()
-    rc_object.subscribe(rs.eventNotice)
+    # this doesn't work
+    #rc_object.subscribe(rs.eventNotice)
     app.run(save=0)
 
 
