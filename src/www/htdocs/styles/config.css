@@ -1,373 +1,344 @@
-span.check {
-    display: float;
-	text-align: center;
-	width: 17em;
-	vertical-align: center;
-    //border: #0B1C52 1px solid;
+li.Setting_Line input {
+    border:#0B1C52 1px solid;
+    background:#c9c9ff;
+    color:#FFF;
+    padding-left:.5em;
+    padding-right:.5em;
+    margin-left:1em;
+    margin-right:1em;
 }
 
-span.checkOK {
-    display: inline;
-    color: #00ff00;
-    width: 15em;
-    padding-left: 3em;
-    padding-right: 3em;
-    vertical-align: center;
-    border: #0B1C52 1px solid;
-    background: green;    
+li.Setting_Controls {
+    margin-top:.5em;
+    margin-bottom:.5em;
+    list-style-type:none;
+    margin-left:8em;
 }
 
-span.UpdateOK {
-    color: black;
-    vertical-align: center;
-    border: #0B1C52 1px solid;
+li.Setting_Controls input {
+    border:#0B1C52 1px solid;
+    background:#c9c9ff;
+    color:#000;
+    padding-left:.5em;
+    padding-right:.5em;
 }
 
-span.checkError {    
-    padding-left: 3em;
-    padding-right: 2em;
-    text-align: center;
-    vertical-align: center;
-    color: black;
-    border: #0B1C52 1px solid;
-    background: red;
+a.VarGroupHeaderItem {
+    background-color:#003FB3;
+    display:block;
+    color:#FFF;
+    padding-left:1em;
+    width:12em;
 }
-
-span.UpdateError {   
-    display: inline;
-    color: #00ff00;
-    width: 15em;
-    padding-left: 1em;
-    padding-right: 1em;
-    vertical-align: center;
-    border: #0B1C52 1px solid;
-    background: read;
-}
-
-span.CheckWarning {   display: inline;
-    color: black;
-    width: 15em;
-    padding-left: 1em;
-    padding-right: 1em;
-    vertical-align: center;
-    border: #0B1C52 1px solid;
-    background: orange;
-    
-}
-
-span.disablecontrol {
-    opacity: .4;
-}
-
-
-div.VarGroups {
-    margin-left: 5%;
-    margin-top: 5em;
-}
-
-ul.GroupHeader{
-    background-color: #ffff;
-    //border: #0B1C52 1px solid;
-    //border: red 1px solid;
-    padding: .1em;
-}
-
-div.VarGroups ul {
-    padding: .2em;
-    //padding-left: 2em;
-    list-style-type: none;
-    //    background-color: #c9c9ff;
-}
-
-
-div.VarGroups ul a {
-    margin-right: 10%;
-    color: white;
-    display: block;
-    width: 10em;
-    background-color: #036;
-    padding-left: 1em;
-}
-
-div.VarGroups li {
-    // 
-//    border: #0B1C52 2px solid;
-    //width: 50em;
-    margin-bottom: .5em;
-}
-
-
-div.VarGroups input {
-    border: #0B1C52 1px solid;
-    background:  #c9c9ff;
-    color: #000000;
-    padding-left: .5em;
-    padding-right: .5em;
-    margin-right: 1em;
-}
-
 
 div.VarGroups select {
-    border: #0B1C52 1px solid;
-    background:  #c9c9ff;
-    color: #000000;
-    width: 8em;
-    padding-left: .5em;
-    margin-right: 1em;
+    border:#0B1C52 1px solid;
+    background:#c9c9ff;
+    color:#000;
+    width:8em;
+    padding-left:.5em;
+    margin-right:1em;
 }
 
-div.VarGroups textarea {
-    margin-left: 1em;
-    border: #0B1C52 1px solid;
-    background:  #c9c9ff;
-    vertical-align: text-top;
-    width: 45em;
+a.Help_Link {
+    background-color:#FF0;
+    text-align:center;
+    display:inline-block;
+    display: -moz-inline-box;
+    width:5em;
+    padding-left:1em;
+    border-bottom:1px solid #FFF;
 }
 
-div.VarGroups input:hover {
-    border: #0B1C52 1px solid;
-    background:  #036;
-    color: #ffffff;
+li.Plugin_Level {
+    margin-left:2.5em;
+    list-style-type:none;
 }
 
-ul.ItemList {
-    margin-left: 5%;
+a.Plugin_Group {
+    background-color:#003FB3;
+    display:block;
+    color:#FFF;
+    padding-left:1em;
+    width:10em;
 }
 
+a.Plugin_Name {
+    padding-left:1em;
+    padding-right:1em;
+    text-decoration:none;
+}
 
-ul.ItemList li {
-    margin-left: 1em;
-    margin-bottom:0;
+div.disablecontrol {
+    opacity:.6;
+}
+
+li.File_Line {
+    margin-left:10em;
+    color: #000;
+    opacity:1px;
+}
+
+div.VarGroups {
+    margin-left:2%;
+    margin-top:5em;
+}
+
+ul.GroupHeader {
+    padding-left:0;
+    font-size:12px;
+    width:100em;
+    margin:0;
 }
 
 div.VarGroups ul a:hover {
-    background-color: #c9c9ff;
+    border-bottom:1px solid #FFF;
+    background-color:#002c7d;
+}
+
+li.VarGroupHeaderLine {
+    font-weight:700;
+    color:#FFF;
+    list-style-type:none;
+    cursor:pointer;
+    width:80%;
+    padding:4px 5px 2px 0;
+}
+
+ul.ItemList li {
+    margin:0 0 0 1em;
+}
+
+div.VarGroups input:hover {
+    border:#0B1C52 1px solid;
+    background-color:#036;
+    color:#fff;
+}
+
+div.VarGroups textarea {
+    margin-left:1em;
+    border:#0B1C52 1px solid;
+    background:#c9c9ff;
+    vertical-align:text-top;
+    width:35em;
 }
 
 div.VarGroups ul ul {
-    margin-left: 5px;
- //   margin-bottom: 1em;
-    border: .2em solid #036;
-    display: block;
-background-color: #c9c9ff; 
-    width: 45em;
-}
-
-div.VarGroups ul ul a {
-    display: inline;
-    text-decoration: none;
-    color: black;
-    background-color: #c9c9ff;
-    padding-left: 0em;
-}
-
-div.VarGroups ul ul li {
-    //width: 40em;
-    border: 0px;
+    margin-left:5px;
+    border:.2em solid #036;
+    display:block;
+    background-color:#c9c9ff;
+    width:80%;
 }
 
 div.VarGroups ul ul a:hover {
-    background-color: #036;
-
+    background-color:#036;
 }
 
-div.VarGroups ul ul ul{
-//    margin-left: 15px;
-    border: 0px;
-    margin-bottom: 1em;
-    display: inline;
-//    width: 50em;
+div.VarGroups ul ul ul {
+    border:0;
+    margin-bottom:1em;
+    display:inline;
 }
-
-
 
 div.GroupHeader input {
-    border: #0B1C52 1px solid;
-    background:  #c9c9ff;
-    color: #000000;
+    border:#0B1C52 1px solid;
+    background:#c9c9ff;
+    color:#000;
 }
 
 div.GroupHeader textarea {
-    margin-left: 1em;
-    border: #0B1C52 1px solid;
-    background:  #c9c9ff;
-   vertical-align: text-top;
-}
-
-div.GroupHeader select {
-    margin-left: 1em;
-    border: #0B1C52 1px solid;
-    background:  #c9c9ff;
-    color: #000000;
+    margin-left:1em;
+    border:#0B1C52 1px solid;
+    background:#c9c9ff;
+    vertical-align:text-top;
 }
 
 div.GroupHeader ul {
-    list-style-type: none;
-    padding: 3px;
-    //border: 1px solid #fff;
-    //width: 50em;
-    background-color: #26a;
-    font: 12px verdana,sans-serif;
-    margin-left: 5%;
+    list-style-type:none;
+    background-color:#26a;
+    font:12px verdana,sans-serif;
+    margin-left:5%;
+    padding:3px;
 }
 
 div.GroupHeader a {
-    display: block;
-    background-color: #369;
-    color: #FFF;
-    text-align: center;
-    width: 10em;
-    border: 1px solid #369;
-    padding: 3px;
+    display:block;
+    background-color:#369;
+    color:#FFF;
+    text-align:center;
+    width:10em;
+    border:1px solid #369;
+    padding:3px;
 }
 
 div.GroupHeader a:hover {
-    border: 2px solid #000;
+    border:2px solid #000;
+    border-bottom:1px solid #36C;
+    background-image:url('/image/config/menu_toplevel_hover.png');
 }
 
 div.GroupHeader li {
-    list-style: none;
-    border: 1px solid #fff;
+    list-style:none;
+    border:1px solid #fff;
 }
 
 div.GroupHeader li li {
-    display: block;
-    color: #FFF;
-    background-color: #69C;
-    width: 40em;
-    padding: 3px 12px 3px 8px;
-    text-decoration: none;
-    border-bottom: 1px solid #fff;
+    display:block;
+    color:#FFF;
+    background-color:#69C;
+    width:40em;
+    text-decoration:none;
+    border-bottom:1px solid #fff;
+    padding:3px 12px 3px 8px;
 }
 
 span.VarInputInt input {
-    margin: 5px;
-    width: 5em;
+    width:5em;
+    margin:5px;
 }
 
-
-span.FileList input {
-    margin: 5px;
-    width: 5em;
-}
-
-dev.VarInputStr {
-  width: 80%;
-  margin-left: 20px;
-  background: #ffffff;
+div.VarInputStr {
+    width:80%;
+    margin-left:20px;
+    background:#fff;
 }
 
 div.VarInputStr input {
-    margin: 5px;
-    border: #0B1C52 1px solid;
-    background:  #c9c9ff;
-    color: #000000;
-    width: 17em;
+    border:#0B1C52 1px solid;
+    background:#c9c9ff;
+    color:#000;
+    width:17em;
+    margin:5px;
 }
 
-div.PluginList {
-    margin-top: 4em;
-    margin-left: 2%;
-    margin-right: 2%;
-    background:  #c9c9ff;
-    text-align: left;
+li.Plugin_Info {
+    max-height:200px;
+    border:#0B1C52 1px solid;
+    width:600px;
+    overflow:auto;
+    margin-top:.5em;
+    margin-bottom:1em;
+    padding:1em;
 }
 
-div.PluginList a {
-    display: inline;
-    color: #FFF;
-    background-color: #036;
-    width: 9em;
-    padding: 3px 12px 3px 8px;
-    text-decoration: none;
-    border-bottom: 1px solid #fff;
-    font-weight: bold;
-    text-align: left;
+ul.plugin_vars input {
+    border:#0B1C52 1px solid;
+    background:#c9c9ff;
+    color:#000;
+    margin:0 1em;
+    padding:0 .5em, 0 .5em;
 }
 
-    
-div.PluginList ul {
-    list-style-type: none;
-    display: block;
-    width: 25em;
+a.PluginStatusActive {
+    display:  -moz-inline-stack;
+    display:inline-block;
+    width:10em;
+    background-color:green;
+    text-align:left;
+    color:#0f0;
+    vertical-align:center;
+    border:#0B1C52 1px solid;
+    padding:0 1em;
 }
 
-div.PluginList li a {
-    background-color : red;
-    display: block;
-    width: 23em;
-    text-align: left;
+a.PluginStatusDeactive {
+    display: -moz-inline-stack;
+    display:inline-block;
+    width:10em;
+    background-color:red;
+    text-align:left;
+    color:#000;
+    vertical-align:center;
+    border:#0B1C52 1px solid;
+    padding:0 1em;
 }
 
-span.PluginStatus  a{
-    display: block;
-    color: #FFF;
-    width: 20em;
-    text-decoration: none;
-    font-weight: bold;
-    text-align: left;
-background-color: pink;
-    }
-
-span.PluginStatusActive {
-    display: inline;
-    width: 10em;
-    background-color: green;
-    padding-left: 1em;
-    padding-right: 3em;
-    text-align: left;
-    color: #00ff00;
-    vertical-align: center;
-    border: #0B1C52 1px solid;
-
+a.PluginStatusRemoved {
+    display: -moz-inline-stack;
+    display:inline-block;
+    width:10em;
+    background-color:orange;
+    text-align:left;
+    color:#000;
+    vertical-align:center;
+    border:#0B1C52 1px solid;
+    padding:0 1em;
 }
 
-span.PluginStatusDeactive {
-    display: inline;
-    width: 10em;
-    background-color: red;
-    color: #FFF;
-    padding-left: 1em;
-    padding-right: 2em;
-    text-align: left;
-    color: black;
-    vertical-align: center;
-    border: #0B1C52 1px solid;
+div.file_browse {
+    padding-right:1em;
 }
 
-span.PluginStatusRemoved {
-    display: inline;
-    width: 10em;
-    background-color: orange;
-    color: #FFF;
-    padding-left: 1em;
-    padding-right: 1.5em;
-    text-align: left;
-    color: black;
-    vertical-align: center;
-    border: #0B1C52 1px solid;
+div.file_browse a {
+    border-bottom:none;
+    text-decoration:none;
+    padding-left:1em;
+    padding-right:1em;
+    color:#000;
 }
 
-
-div.plugin_info {
-    max-height: 200px;
-    // width: 300px;
-    overflow: auto;
-    // border: 1px solid #666;
-    // background-color: #ccc;
-    margin-left: 5em;
-    padding: 1em;
+div.filelist {
+    height:200px;
+    overflow:auto;
+    border:1px solid #666;
+    padding-left:1em;
+    padding-right:1em;
+    margin:0 5em;
 }
 
-
-ul.plugin_vars {
-    margin-left: 5em;
+li.file {
+    list-style-type:none;
+    padding-left:2em;
 }
 
-ul.plugin_vars li{
-    margin-left: 5em;
+li.directory {
+    background-image:url(/images/library/folder.png);
+    background-repeat:no-repeat;
+    padding-left:2em;
+    list-style-type:none;
 }
 
-span.config_line {
-    margin-left: 5em;
+span.checkOK {
+    display: -moz-inline-stack;
+    display:inline-block;
+    color:#0f0;
+    width:10em;
+    vertical-align:center;
+    border:#0B1C52 1px solid;
+    text-align:center;
+    background-color:green;
+    padding:0 1em;
+}
+
+span.checkError {
+    display: -moz-inline-stack;
+    display:inline-block;
+    color:#000;
+    width:10em;
+    text-align:center;
+    vertical-align:center;
+    border:#0B1C52 1px solid;
+    background-color:red;
+    padding:0 1em 0 0;
+}
+
+span.CheckWarning {
+    display: -moz-inline-stack;
+    display:inline-block;
+    color:#000;
+    width:10em;
+    vertical-align:center;
+    border:#0B1C52 1px solid;
+    text-align:center;
+    background-color:orange;
+    padding:0 1em;
+}
+
+li.Setting_Line,li.Plugin_Group,li.Plugin_Args,li.Plugin_Line,li.PluginHeader {
+    list-style-type:none;
+}
+
+ul.plugin_vars,ul.plugin_vars li {
+    margin-left:5em;
 }

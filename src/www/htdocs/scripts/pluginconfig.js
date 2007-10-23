@@ -8,6 +8,16 @@ function DisplayList(listname) {
         list.style.display = "none";
 }
 
+function CreateSetting(setting_name) {
+    var configfile,updateurl;
+    
+    configfile =document.getElementById('configfile').value
+
+    updateurl = 'configedit.rpy?configfile=' + configfile + '&cmd=UPDATE&udname=' + setting_name + '&udvalue=New&udenable=FALSE';
+    updateurl = updateurl + '&startline=-1&endline=-1&syntaxcheck=FALSE';
+    makeRequest(updateurl, setting_name);
+}
+
 function GetPluginVars(pname) {
     var vr,cnt,vrctrl;
     var varlist = [];

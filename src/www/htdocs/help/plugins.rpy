@@ -87,15 +87,16 @@ class PluginResource(FreevoResource):
                         fv.res +=  '<a name="%s"></a>' % p[0]
                         fv.res += info_html(p[0], [p])
                         fv.res += '[&nbsp;<a href="#top">'+_('top')+'</a>&nbsp;|&nbsp;'
-                        fv.res += '<a href="plugins.rpy">'+_('index')+'</a>&nbsp;]<hr>\n'
+                        fv.res += '<a href="plugins.rpy">'+_('index')+'</a>&nbsp;|&nbsp\n'
+                        fv.res += '<a href="/pluginconfig.rpy?expAll#%s">configure</a>]<hr>\n' % p[0]
             else:
                 for p in all_plugins:
                     if p[0][:p[0].find('.')] == type:
                         fv.res +=  '<a name="%s"></a>' % p[0]
                         fv.res += info_html(p[0], [p])
                         fv.res += '[&nbsp;<a href="#top">'+_('top')+'</a>&nbsp;|&nbsp;'
-                        fv.res += '<a href="plugins.rpy">'+_('index')+'</a>&nbsp;]<hr>\n'
-
+                        fv.res += '<a href="plugins.rpy">'+_('index')+'</a>&nbsp;|&nbsp\n'
+                        fv.res += '<a href="/pluginconfig.rpy?expAll#%s">configure</a>]<hr>\n' % p[0]
 
         fv.res += '</div>\n'
         fv.res += '<br><br>'

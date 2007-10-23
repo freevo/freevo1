@@ -43,6 +43,43 @@ TRUE = 1
 FALSE = 0
 
 
+def GetConfigFileName(config_file_name):
+    '''
+    '''
+    _debug_('GetConfigFileName(config_file_name=%r)' % config_file_name , 2)
+
+    if not config_file_name:
+        config_file_name = '/etc/freevo/local_conf.py'
+        if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
+            return None
+
+        else:
+            config_file_name = config.CONFIG_EDIT_FILE
+
+    if not os.path.exists(config_file_name):
+        config_file_name = None
+
+    return config_file_name
+
+
+def CreateHTMLinput(control_type, control_id, control_value, size = '',other_opts = ''):
+    '''
+    '''
+    _debug_('CreateHTMLinput(control_type=%r, control_id=%r, value=%r, control_size=%r, other_opts=%r)' % \
+            (control_type, control_id, control_value, size, other_opts ), 2)
+
+    html_input = '<input '
+    html_input += 'type = "%s" ' % control_type
+    html_input += 'id = "%s" ' % control_id
+    html_input += 'value = "%s" ' % control_value
+    html_input += 'size = "%s" ' % size
+    html_input += ' ' +  other_opts
+    html_input += '>\n'
+
+    return html_input
+
+
+
 def ReadConfig(cfile):
     '''
     '''
@@ -141,13 +178,13 @@ def CreateListBox(cname, grps, cvalue, opts):
     '''
     '''
     _debug_('CreateListBox(cname=%r, grps=%r, cvalue=%r, opts=%r)' % (cname, grps, cvalue, opts), 2)
-    ctrl = '\n<select name="%s" value=""  id="%s" %s>' % (cname, cname, opts)
+    ctrl = '<select name="%s" value=""  id="%s" %s>\n' % (cname, cname, opts)
     for grp in grps:
         if grp == cvalue:
-            ctrl += '\n    <option value="' + grp + '" selected="yes">' + grp + '</option>'
+            ctrl += '<option value="' + grp + '" selected="yes">' + grp + '</option>\n'
         else:
-            ctrl += '\n    <option value="' + grp + '">' + grp + '</option>'
-    ctrl += '\n</select>'
+            ctrl += '<option value="' + grp + '">' + grp + '</option>\n'
+    ctrl += '</select>\n'
     return ctrl
 
 
@@ -184,7 +221,9 @@ def plugin_level_control(lconf_line, plugin):
 
     level_ctrl = ''
     if level <> "none":
-        level_ctrl = 'Level: <input  id="%s_level" name="newname" size="2" value="%s">' % (plugin[0], level)
+        level_ctrl = '<li class="Plugin_Level">\n'
+        level_ctrl += 'Level: <input  id="%s_level" name="newname" size="2" value="%s">\n' % (plugin[0], level)
+        level_ctrl += '</li>\n'
 
     return level_ctrl
 
@@ -206,6 +245,7 @@ def get_plugin_status(plugin_name, lconfline):
 
     return status
 
+
 def get_plugin_args(config_line):
     '''
     '''
@@ -218,12 +258,27 @@ def get_plugin_args(config_line):
     return plugin_args
 
 
-def displayplugin(cfile, plugin, lconf, expAll):
+def PluginHelpLink(plugin_group, plugin_name):
     '''
     '''
-    _debug_('displayplugin(cfile=%r, plugin=%r, lconf=%r, expAll=%r)' % (cfile, plugin, lconf, expAll), 2)
-    ctrlopts = ['Active', 'Deactive', 'Remove']
-    html = HTMLResource()
+    _debug_('PluginHelpLink(plugin_group=%r, plugin_name=%r)' % (plugin_group, plugin_name ), 2)
+
+    href = 'help/plugins.rpy?type=%s#%s' % ( plugin_group.lower(),  plugin_name.lower()  )
+    plugin_help = '<a href="%s" class="Help_Link">' % href
+    plugin_help += ' Help '
+    plugin_help += '</a>\n'
+
+    return plugin_help
+
+
+def displayplugin(cfile, plugin, lconf, expAll , plugin_group):
+    '''
+    '''
+    _debug_('displayplugin(cfile=%r, plugin=%r, lconf=%r, expAll=%r, plugin_group=%r)' %  \
+           (cfile, plugin, lconf, expAll, plugin_group), 2)
+
+    ctrlopts = ['Active', 'Deactive', 'Removed']
+    html = ''
 
     # check tos ee fi the plugin has a line in localconf
     lconfline, linenumber = get_config_setting(lconf, plugin[0])
@@ -235,54 +290,78 @@ def displayplugin(cfile, plugin, lconf, expAll):
     status = get_plugin_status(pluginname, lconfline)
     pc_opts = 'onchange=UpdatePlugin("%s")' % pluginname
 
-    spDisable_open = ''
-    spDisable_close = ''
-    if status != "Active":
-        spDisable_open = '<span class="disablecontrol">'
-        spDisable_close = '</span>'
+    if status == 'Active':
+        html = '<div class="enablecontrol">\n'
+    else:
+        html = '<div class="disablecontrol">\n'
 
     dstyle = 'none'
     if expAll:
         dstyle = ''
 
-    html.res += '<li>%s<span class="PluginStatus%s">%s</span>%s' % (spDisable_open, status, status, spDisable_close)
-    html.res += spDisable_open
-    html.res += CreateListBox(pluginname + '_cmd', ctrlopts, status, pc_opts)
-    html.res +=  '<input type="hidden" id="%s_lineno" value="%i">\n' % (pluginname, linenumber)
-    html.res += '<a onclick=DisplayList("%s_info")>%s</a></li>\n' % (pluginname, pluginname)
-    html.res += spDisable_close
-    html.res += '<span id=%s_updateinfo></span>' % pluginname
+    html += '<li class="PluginHeader">\n'
+    html += '<a class="PluginStatus%s">%s</a>\n' % ( status, status )
+    html += CreateListBox(pluginname + '_cmd', ctrlopts, status, pc_opts)
 
-    html.res += '<ul id="%s_info" style="display:%s;")>\n' % (pluginname, dstyle)
-    html.res += '<li><span id="%s_config_line" class="config_line">%i - %s</span></li>' % \
-        (pluginname, linenumber, lconfline)
+    html += CreateHTMLinput('hidden',pluginname + '_lineno', str(linenumber) , '','')
+    html += '<input type="hidden" id="%s_lineno" value="%i">\n' % (pluginname, linenumber)
 
-    html.res += '<li>' + plugin_level_control(lconfline, plugin) + '</li>'
-    html.res += '<li> Plugin Args: <input id="%s_args" name="newname" size="20" value="%s">%s</li>' % \
-        (pluginname, plugin_args, plugin_args)
+    html += PluginHelpLink( plugin_group, pluginname )
 
+    html += '<a class="Plugin_Name" onclick=DisplayList("%s_info") name="%s" >%s</a>\n' % (pluginname, pluginname,  pluginname)
+#    html += '</li>\n'
 
-    html.res += display_vars(plugin, cfile)
-    html.res += '<li><div class="plugin_info">%s</div></li>' % plugin[4].replace('\n', '<br>\n')
-    html.res += '</ul>'
-    return html.res
+    html += '<span id=%s_updateinfo></span>\n' % pluginname
+    html += '<ul id="%s_info" style=display:%s;)>\n' % (pluginname, dstyle)
 
-def display_vars(plugin, cfile):
+    html += plugin_level_control(lconfline, plugin)
+
+    html += '<li class="Plugin_Args">\n'
+    html += 'Plugin Args:'
+    html += CreateHTMLinput('textbox',pluginname + '_args', plugin_args, '20','')
+    html += '</li>\n'
+
+    html += '<li class="Plugin_Line" id="%s_config_line">\n' % pluginname
+    html += '%i - %s' %  ( linenumber, lconfline)
+    html += '</li>\n'
+
+    html += Display_Vars(plugin, cfile)
+    html += '<li class="Plugin_Info">\n'
+    html += plugin[4].replace('\n', '<br>\n')
+    html += '</li>\n'
+
+    html += '</ul>\n'
+    html += '</div>\n'
+    return html
+
+def Display_Vars(plugin, cfile):
     '''
     '''
-    _debug_('display_vars(plugin=%r, cfile=%r)' % (plugin, cfile), 2)
+    _debug_('Display_Vars(plugin=%r, cfile=%r)' % (plugin, cfile), 2)
 
     try:
         clist = GetPlugConfig(plugin)
-        dsp_vars = '<ul class="plugin_vars">'
-        for cnt, vr in enumerate(clist):
-            curvalue = GetConfigSetting(cfile, vr[0])
-            dsp_vars += '<li>\n'
-            dsp_vars += vr[0] + '\n'
-            dsp_vars += curvalue
-            dsp_vars += vr[2]
-            dsp_vars += '</li>\n'
-        dsp_vars += '</ul>\n'
+        dsp_vars = '<ul class="plugin_vars">\n'
+        if clist:
+            for cnt, vr in enumerate(clist):
+                curvalue = GetConfigSetting(cfile, vr[0])
+                dsp_vars += '<li>\n'
+                if not curvalue:
+                    js_newsetting = 'onclick=CreateSetting("%s")' % vr[0]
+                    dsp_vars += CreateHTMLinput('button','','Add','',js_newsetting)
+                    dsp_vars += '<a href="config.rpy?expAll=T#%s">\n' % vr[0]
+                    dsp_vars += vr[0] + '</a>\n'
+                    dsp_vars += '<span id="%s_config_line"></span>\n' % vr[0]
+
+                else:
+                    dsp_vars += '<a href="config.rpy?expAll=T#%s">\n' % vr[0]
+                    dsp_vars += vr[0] + '</a>\n'
+
+
+                dsp_vars += curvalue
+                dsp_vars += vr[2]
+                dsp_vars += '</li>\n'
+            dsp_vars += '</ul>\n'
     except SyntaxError, e:
         dsp_vars = 'plugin=%r %s\n' % (plugin[0], e)
         print plugin[0], e
@@ -295,20 +374,21 @@ def display_group(dsp_group, splugins, configfile, lcplugins, expandAll):
     _debug_('display_group(dsp_group=%r, splugins=%r, configfile=%r, lcplugins=%r, expandAll=%r)' % \
         (dsp_group, splugins, configfile, lcplugins, expandAll), 2)
 
-    grpheader = ''
-    grpheader += '<li><a onclick=DisplayList("%s_list")>%s</a>\n'
-    grouplist = grpheader % (dsp_group, dsp_group)
-    grouplist += '    <ul id="%s_list" class="GroupHeader" >\n' % dsp_group
+    grouplist = ''
+    grouplist += '<a class="Plugin_Group" onclick=DisplayList("%s_list")>\n' %  dsp_group
+    grouplist += dsp_group
+    grouplist += '</a>\n'
+
+    grouplist += '<ul id="%s_list">\n' % dsp_group
     for plugin in splugins:
         if dsp_group == plugin[0]:
             pluginname = plugin[1][0]
-            pluginctrl = displayplugin(configfile, plugin[1], lcplugins, expandAll)
+            pluginctrl = displayplugin(configfile, plugin[1], lcplugins, expandAll, dsp_group)
             grouplist += pluginctrl
-    grouplist += '    </ul>\n'
-    grouplist += '</li>\n'
+    grouplist += '</ul>\n'
+
 
     return grouplist
-
 
 class ConfigurePluginsResource(FreevoResource):
 
@@ -319,25 +399,19 @@ class ConfigurePluginsResource(FreevoResource):
 
         fv = HTMLResource()
         form = request.args
-        fv.printHeader(_('configplugins'), 'styles/main.css', 'scripts/pluginconfig.js', selected=_('Config Plugins'))
+
+
+        configfile = fv.formValue(form, 'configfile')
+        configfile = GetConfigFileName(configfile)
+        title = 'Plugin Setup - %s' % configfile
+        fv.printHeader(_(title), 'styles/main.css', 'scripts/pluginconfig.js', selected=_('Config Plugins'))
 
         if not hasattr(config, 'all_plugins'):
             config.all_plugins = parse_plugins()
 
-        configfile = fv.formValue(form, 'configfile')
-        if configfile:
-            if not os.path.exists(configfile):
-                configfile = None
         if not configfile:
-            if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
-                fv.printMessages(["Unable to find local_conf.py setting CONFIG_EDIT_FILE"])
-                return str(fv.res)
-            else:
-                configfile = config.CONFIG_EDIT_FILE
-
-        if not os.path.exists(configfile):
-            fv.res += "Error unable to find File - %s" % configfile
-            return str(fv.res)
+            fv.printMessages(['Unable to find file - ' + configfile])
+            return fv.res
 
         all_plugins = config.all_plugins
         group_list = ['Global', 'tv', 'video', 'audio', 'image', 'idlebar']
@@ -352,13 +426,15 @@ class ConfigurePluginsResource(FreevoResource):
             expandAll = True
 
         fv.res += '<link rel="stylesheet" href="styles/config.css" type="text/css" />\n'
+        fv.res += CreateHTMLinput('hidden','configfile',configfile,'','')
         fv.res += '<div class="VarGroups">\n'
         fv.res += '<form action="#" class="searchform">\n'
-        fv.res += '<ul class="GroupHeader">\n'
+        fv.res += '<ul>\n'
 
         for grp in group_list:
-            #fv.res += display_group(grp, splugins, configfile, lcplugins, expandAll)
+            fv.res += '<li class="Plugin_Group">\n'
             fv.res += Unicode(display_group(grp, splugins, configfile, lcplugins, expandAll))
+            fv.res += '</li>\n'
 
         fv.res += '</ul>\n'
         fv.res += '</div>\n'

@@ -15,7 +15,7 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc., 
+# with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
@@ -83,10 +83,15 @@ def getStatus(ytfile):
     '''
     _debug_('getStatus(ytfile)', 1)
     fileStatus = {'percent': '-', 'downloaded': 'done' , 'filesize': 'done' , 'speed' : '--', 'eta' : '--:--'}
-    fileStatus['filesize'] = format_bytes(os.path.getsize(config.YOUTUBE_DIR + ytfile))
+
+    youtube_file = os.path.join(config.YOUTUBE_DIR,ytfile)
+    youtube_log_dir = os.path.join(config.YOUTUBE_DIR,'./tmp')
+    youtube_logfile = os.path.join(youtube_log_dir,os.path.splitext(ytfile)[0] + '.log')
+
+    fileStatus['filesize'] = format_bytes(os.path.getsize(youtube_file))
     logfile = config.YOUTUBE_DIR + '.tmp/' + os.path.splitext(ytfile)[0] + '.log'
-    if os.path.exists(logfile):
-        lfhandle = open(logfile, 'r')
+    if os.path.exists(youtube_logfile):
+        lfhandle = open(youtu_logfile, 'r')
         llines = lfhandle.readlines()
         try :
             if len(llines) == 5:
@@ -168,6 +173,7 @@ def startdownload(dlcommand, logfile):
     '''
     '''
     _debug_('startdownload(dlcommand=%r, logfile=%r)' % (dlcommand, logfile), 1)
+    print dlcommand
     pwdcur = os.getcwd()
     os.chdir(config.YOUTUBE_DIR)
     lfile = open (logfile, 'w')
@@ -299,7 +305,7 @@ class YouTubeResource(FreevoResource):
         playfile = fv.formValue(form, 'playfile')
         flow_player = fv.formValue(form, 'flow_player')
         if not flow_player:
-            flow_player = 'FlowPlayerThermo.swf'
+            flow_player = 'FlowPlayerLP.swf'
 
         if cmd == "Play" and playfile:
             flowplayer_html = doFlowPlayer(playfile, flow_player)
@@ -309,7 +315,6 @@ class YouTubeResource(FreevoResource):
             fv.res += doFlowPlayer(playfile, flow_player)
 
         #fv.res += doFlowPlayer('', flow_player)
-
 
         if config.YOUTUBE_DIR == 'MISSING'  or ((config.YOUTUBE_DL == "MISSING") and (config.DOWNLOAD_DL ==  "MISSING")):
             fv.printMessages(yterrors)
@@ -321,13 +326,13 @@ class YouTubeResource(FreevoResource):
             return str(fv.res)
 
         if not os.path.exists(config.YOUTUBE_DL):
-            fv.res += '<div class="youtube_error" Unable to locate youtube-dl script "%s"</b>' % config.YOUTUBE_DL 
+            fv.res += '<div class="youtube_error" Unable to locate youtube-dl script "%s"</b>' % config.YOUTUBE_DL
             fv.res += 'Download scripts from <a href="http://www.arrakis.es/~rggi3/youtube-dl/">' + \
                 'http://www.arrakis.es/~rggi3/youtube-dl/</a>'
             fv.res += '<br>Add YOUTUBE_DL = "path and file name to youtube_dl script" </div>'
 
         if not os.path.exists(config.DOWNLOAD_DL):
-            fv.res += '<div class="youtube_error">Unable to locate downloadurl.py script "%s"</b>' % config.DOWNLOAD_DL 
+            fv.res += '<div class="youtube_error">Unable to locate downloadurl.py script "%s"</b>' % config.DOWNLOAD_DL
             fv.res += '<br>Add DOWNLOAD_DL = "path and file name to downloadurl script"</div>'
 
         if not os.path.isdir(config.YOUTUBE_DIR):
@@ -362,7 +367,6 @@ class YouTubeResource(FreevoResource):
         fv.res  +=  addPageRefresh()
         fv.res  += '\n    </div>'
         fv.res  += '\n</form><br>\n'
-
 
         fv.res  += displaytableheader()
 

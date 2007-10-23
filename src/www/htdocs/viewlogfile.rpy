@@ -93,7 +93,7 @@ class ViewLogFileResource(FreevoResource):
         else:
             logfile_directory = config.LOGDIR
 
-        dfile = os.path.join(logfile_directory, dfile)
+        full_file_name = os.path.join(logfile_directory, dfile)
         update = fv.formValue(form, 'update')
 
         rows = fv.formValue(form, 'rows')
@@ -102,7 +102,7 @@ class ViewLogFileResource(FreevoResource):
         rows = int(rows)
 
         if update:
-            fv.res = ReadFile(dfile, rows)
+            fv.res = ReadFile(full_file_name, rows)
             return String(fv.res)
 
         delayamount = fv.formValue(form, 'delayamount')
@@ -118,6 +118,8 @@ class ViewLogFileResource(FreevoResource):
 
         logfiles = GetLogFiles(logfile_directory)
         js_update = 'onchange=UpdateDisplay()'
+        print "Diplay file = %s " % dfile
+        print logfiles
         fv.res +=  'Log File :  ' + CreateListBox('logfile', logfiles, dfile, js_update)
         fv.res  += '<input type="Button" value="Refresh" onclick=%s >' % js_update
         js_delay = 'onchange = "UpdateDelay()"'

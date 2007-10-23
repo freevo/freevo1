@@ -20,18 +20,27 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+#
+#
+#
+# &syntaxcheck=False - Disable Syntax Check on update.
+
 
 import sys
+import os
 import os.path
 import config
 import string
 import types
 import time
+from stat import *
 from www.web_types import HTMLResource, FreevoResource
 
 
 def LogTransaction(cmd, lineno, line):
-
+    '''
+    '''
+    _debug_('LogTransaction(cmd=%r, lineno=%r, line=%r)' % ( cmd, lineno, line ), 2)
     if config.__dict__.has_key('FREEVO_LOGDIR'):
         logfile_directory = config.FREEVO_LOGDIR
     else:
@@ -45,21 +54,115 @@ def LogTransaction(cmd, lineno, line):
     logfile.close
 
 
-def ReadConfig(cfile):
-    lconf = cfile
-    lconf_hld = open(lconf, 'r')
+def ReadConfig(config_file):
+    '''
+    '''
+    _debug_('ReadConfig(config_file=%r)' % ( config_file ), 2)
+    lconf_hld = open(config_file, 'r')
     fconf = lconf_hld.readlines()
     return fconf
 
 
 def WriteConfigFile(filename, conf):
+    '''
+    '''
+    _debug_('WriteConfigFile(filename=%r, conf=%r)' % ( filename, conf ), 2)
     cfile = open(filename, 'w')
     for ln in conf:
         cfile.write(ln)
     cfile.close
 
 
+def cmdCreateFXDFile(fxd_file, fxd_title, fxd_url):
+    '''
+    '''
+    _debug_('cmdCreateFXDFile(xfd_file=%r, fxd_title=%r, fxd_url=%r)' % ( fxd_file, fxd_title, fxd_url ), 2)
+
+    fxd_file_handle = open(fxd_file, 'w' )
+    fxd_file_handle.write('<freevo>')
+    fxd_file_handle.write('<title>%s</title>' % fxd_title)
+    fxd_file_handle.write('<audio> ')
+    fxd_file_handle.write('<mplayer_options></mplayer_options> ')
+    fxd_file_handle.write('<url>%s</url>' % fxd_url)
+    fxd_file_handle.write('</audio>')
+    fxd_file_handle.write('<info> ')
+    fxd_file_handle.write('<genre>Alternative</genre> ')
+    fxd_file_handle.will('<desc></desc>')
+    fxd_file_handle.write('</info> ')
+    fxd_file_handle.write('</freevo> ')
+    fxd_file_handle.close()
+
+
+def cmdBrowseFiles(browse_dir,browse_area, setting_name,  browse_type =  'F', display_hidden = False):
+    '''
+    '''
+    _debug_('cmdBrowseFiles(browse_dir=%r, browse_area=%r, setting_name=%r, browse_type=%r, dispay_hidden=%r)' % \
+        ( browse_dir, browse_area, setting_name, browse_type, display_hidden ) , 2)
+
+    browse_dir = browse_dir.strip("'")
+    browse_dir = os.path.dirname(browse_dir)
+
+    if not os.path.exists(browse_dir):
+        browse_dir = '/'
+
+    dir_list = os.listdir(browse_dir)
+    dir_list.sort()
+
+    file_list_ctrl = 'Current Directory : %s' % browse_dir
+    file_list_ctrl += '<div class="filelist"><ul>'
+
+    if browse_dir <> "/":
+        parent_dir = os.path.split(browse_dir)[0]
+        file_list_ctrl += '<li class="directory">'
+        file_list_ctrl += '<a onclick=getFileList("%s","%s","%s","F")>..</a>' % (  browse_area , parent_dir, setting_name )
+        file_list_ctrl += '</li>'
+
+    for display_file in dir_list:
+        show_file = True
+        if display_file.startswith('.'):
+            if not display_hidden:
+                show_file = False
+
+        full_file = os.path.join(browse_dir,display_file)
+        cur_type = "F"
+        if os.path.isdir(full_file):
+            cur_type = "D"
+
+        if show_file:
+            if cur_type == "D":
+                file_list_ctrl += '<li class="directory">'
+                file_list_ctrl += '<a onclick=SelectFile("%s","%s")>Select </a>' % (full_file, browse_area)
+                file_list_ctrl += '<a onclick=getFileList("%s","%s/","%s","F")>%s</a>' % ( browse_area, full_file, setting_name, display_file )
+                file_list_ctrl += '</li>'
+
+    if browse_type == 'F':
+        for display_file in dir_list:
+            show_file = True
+            if display_file.startswith('.'):
+                if not display_hidden:
+                    show_file = False
+
+            full_file = os.path.join(browse_dir,display_file)
+
+            cur_type = "F"
+            if os.path.isdir(full_file):
+                cur_type = "D"
+
+            if show_file:
+                if cur_type <> "D":
+                    file_list_ctrl += '<li class="file">'
+                    file_list_ctrl += '<a id="file" onclick=SelectFile("%s","%s","%s")>%s</a>' % (full_file, browse_area, setting_name, display_file )
+                    file_list_ctrl += '</li>'
+
+    file_list_ctrl += '</div></ul>'
+    return file_list_ctrl
+
+
 def cmdCheckValue(varName, varValue):
+    '''
+    '''
+    _debug_('cmdCheckValue(varName=%r, varValue=%r)' % (varName, varValue ) , 2)
+
     retClass = 'checkError'
     status = 'Error'
     blOK = False
@@ -85,7 +188,12 @@ def cmdCheckValue(varName, varValue):
     return blOK, results
 
 
-def UpdateSetting(cfile, varName, varValue, varEnable, sline, eline):
+def UpdateSetting(cfile, varName, varValue, varEnable, sline, eline, syntaxcheck):
+    '''
+    '''
+    _debug_('UpdateSetting(cfile=%r, varName=%r, varValue=%r, varEnable=%r, sline=%r, eline=%r, syntaxcheck=%r)' % \
+            (cfile, varName, varValue, varEnable, sline, eline, syntaxcheck), 2)
+
     llog ='Running Update on Name: %s On Lines : %i - %i' % (varName, sline, eline)
     LogTransaction(llog, 0, '')
     fconf = ReadConfig(cfile)
@@ -95,6 +203,10 @@ def UpdateSetting(cfile, varName, varValue, varEnable, sline, eline):
 
     if not blOK and varEnable == 'FALSE':
         status = 'Updated, Error if Enabled'
+
+    if not syntaxcheck:
+        blOK = True
+        status = newline
 
     if varEnable == 'FALSE':
         newline = '# ' + newline
@@ -116,8 +228,14 @@ def UpdateSetting(cfile, varName, varValue, varEnable, sline, eline):
 
         if blOK:
             LogTransaction('Line update TO : ', sline, fconf[sline])
-            WriteConfigFile(config.CONFIG_EDIT_FILE, fconf)
-            results = '<span class="UpdateOK">Update Done - %s </span>' % newline
+            WriteConfigFile(cfile, fconf)
+            results = '<span class="checkOK">Update Done - %s </span>' % newline
+            
+#            if syntaxcheck and varEnabled:
+#                actual_value = GetItemsArray(varValue)
+#                config.__dict__[varName] = actual_value
+        
+
         else:
             LogTransaction('ERROR Line not UPDATED : ', sline, fconf[sline])
             results = 'Update Error'
@@ -126,6 +244,10 @@ def UpdateSetting(cfile, varName, varValue, varEnable, sline, eline):
 
 
 def DeleteLines(cfile, startline, endline):
+    '''
+    '''
+    _debug_('DeleteLines(cfile=%r, startline=%r, endline=%r)' % (cfile, startline, endline), 2)
+
     rconf = ReadConfig(cfile)
     dellines = '<ul>'
 
@@ -137,11 +259,25 @@ def DeleteLines(cfile, startline, endline):
         dellines += '<li>%s</li>' % rline
     dellines += "</ul><br><br>"
 
-    WriteConfigFile(config.CONFIG_EDIT_FILE, rconf)
+    WriteConfigFile(cfile, rconf)
     return dellines
 
+def GetItemsArray(cvalue):
+    '''
+    '''
+    _debug_('GetItemsArray(cvalue=%r)' % (cvalue), 2)
+    itemlist = None
+    cmd = 'itemlist = ' + cvalue
+    if CheckSyntax(cmd):
+        exec cmd
+    return itemlist
+    
 
 def CheckSyntax(fvsetting):
+    '''
+    '''
+    _debug_('CheckSyntax(fvsetting=%r)' % ( fvsetting ), 2)
+
     status = False
     try :
         exec fvsetting
@@ -152,6 +288,10 @@ def CheckSyntax(fvsetting):
 
 
 def FileTypeVarArray(cname):
+    '''
+    '''
+    _debug_('FileTypeVarArray(cname=%r)' % ( cname ) ,2)
+
     filevars = ['VIDEO_ITEMS', 'AUDIO_ITEMS', 'IMAGE_ITEMS', 'GAME_ITEMS']
 
     if cname in filevars:
@@ -160,6 +300,10 @@ def FileTypeVarArray(cname):
 
 
 def FileTypeVar(cname):
+    '''
+    '''
+    _debug_('FileTypeVar(cname=%r)' % (cname ), 2)
+
     vtype = cname.split('_')[-1]
     filetypes = ['PATH', 'DIR', 'FILE', 'DEV', 'DEVICE']
     filevars = ['XMLTV_GRABBER', 'RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'XMLTV_SORT', 'LIRCRC']
@@ -171,7 +315,7 @@ def FileTypeVar(cname):
     return False
 
 
-def UpdatePlugin(cfile, pcmd, pname, pline, plugin_level):
+def UpdatePlugin(cfile, pcmd, pname, pline, plugin_level, plugin_args):
     lconf = ReadConfig(cfile)
 
     # Check to see if a line exists all ready.
@@ -197,7 +341,7 @@ def UpdatePlugin(cfile, pcmd, pname, pline, plugin_level):
         if pcmd == 'Deactive':
             nline = "# plugin.activate('%s' %s) \n" % ( pname, level )
 
-        elif pcmd == 'Remove':
+        elif pcmd == 'Removed':
             nline = "plugin.remove('%s')\n" % ( pname  )
 
         elif pcmd == 'Active':
@@ -220,7 +364,7 @@ class ConfigEditResource(FreevoResource):
         configfile = fv.formValue(form, 'configfile')
         if configfile:
             if not os.path.exists(configfile):
-                configfile = None
+                configfile = '/etc/freevo/local_conf.py'
         if not configfile:
             if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
                 fv.printMessages(['Unable to find local_conf.py setting CONFIG_EDIT_FILE'])
@@ -242,11 +386,15 @@ class ConfigEditResource(FreevoResource):
         pluginname = fv.formValue(form, 'pluginname')
         pluginline = fv.formValue(form, 'pluginline')
 
+        syntaxcheck = True
+        if fv.formValue(form,'syntaxcheck') == 'FALSE':
+            syntaxcheck = False
+
         if not cmd:
             cmd = 'VIEW'
 
         if cmd == 'UPDATE':
-            fv.res = UpdateSetting(configfile, udname, udvalue, udenable, int(startline), int(endline))
+            fv.res = UpdateSetting(configfile, udname, udvalue, udenable, int(startline), int(endline),syntaxcheck)
             return String( fv.res )
 
         if cmd == 'CHECK' and udname and udvalue:
@@ -267,9 +415,23 @@ class ConfigEditResource(FreevoResource):
 
         if cmd == 'PLUGINUPDATE' and pluginname and pluginline and pluginaction:
             plugin_level = fv.formValue(form, 'level')
-            fv.res = UpdatePlugin(configfile, pluginaction, pluginname, pluginline, plugin_level)
+            plugin_args = fv.formValue(form,'args')
+            fv.res = UpdatePlugin(configfile, pluginaction, pluginname, pluginline, plugin_level,plugin_args)
             return String( fv.res )
 
-        return String( fv.res )
+        browse_file = fv.formValue(form,'browsefile')
+        browse_area = fv.formValue(form,'browsearea')
+        setting_name = fv.formValue(form,'setting_name')
+
+
+        if cmd == 'BROWSEFILE' and browse_file and browse_area:
+            fv.res = cmdBrowseFiles(browse_file,browse_area,setting_name)
+            return str( fv.res )
+
+        if cmd == 'BROWSEDIRECTORY' and browse_file and browse_area:
+            fv.res = cmdBrowseFiles(browse_file,browse_area,setting_name,'D')
+            return str( fv.res )
+
+        return str( fv.res )
 
 resource = ConfigEditResource()

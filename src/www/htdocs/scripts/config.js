@@ -1,3 +1,4 @@
+
 function PrepareFileList(cname) {
     var cvalue,tblabel,tbfile,cnt;
 
@@ -64,7 +65,7 @@ function PrepareChannelList(cname) {
 
 function PrepareItemList(cname) {
     var rcnt,ccnt,cvalue,tblcell,start_char,end_char;
-    var cline;
+    var cline,curcell, column_cnt, tb_value;
     
     cvalue = ""
     tblcell = document.getElementById(cname + "_item00")
@@ -74,7 +75,8 @@ function PrepareItemList(cname) {
     while (tblcell != null ) {
         // Loop throught all of the cols
         ccnt = 0
-        cline = "("
+        cline = ""
+        column_cnt = 0
         while (tblcell != null) {
             if (tblcell.value != "")
                 start_char = "'"
@@ -85,19 +87,25 @@ function PrepareItemList(cname) {
                     start_char = "";
                 if (echar == ")")
                     end_char = "";
-                //if  start_char.charAt(0)
-                cline =  cline + start_char + tblcell.value + end_char + ",";
-            ccnt++;
+
+                tb_value = tblcell.value;
+                curcell = start_char +  tb_value + end_char
+                if (curcell != "''") {
+                    cline =  cline + curcell + ",";
+                    column_cnt++;
+                }
+                ccnt++;
             tblcell = document.getElementById(cname + "_item" + rcnt + ccnt)
         }
         rcnt++;
         ccnt = 0
-        cvalue = cvalue + cline.substring(0,cline.length -1) + '),';
+        if (column_cnt > 0)
+            cvalue = cvalue + '(' + cline.substring(0,cline.length -1) + '),';
         tblcell = document.getElementById(cname + "_item" + rcnt + ccnt);
     }
         
     if (cvalue != "") 
-        cvalue = "[" + cvalue.substring(0,cvalue.length -2) + ")]";
+        cvalue = "[" + cvalue.substring(0,cvalue.length -1) + "]";
 
     return cvalue;
 }
@@ -157,8 +165,10 @@ function makeRequest(url,cname,cstatus) {
 function SaveValue(control_name,type) {
     // Get the Value from the text box. 
     var svalue,tb,chk,updateurl,strenable;
-    var startline,endline, sname;
+    var startline,endline, sname,div_enable;
+    var other_opts;
 
+    other_opts = ''
     sname = document.getElementById(control_name + '_ctrlname').value
     
     if (type == "tv_channels") 
@@ -167,6 +177,11 @@ function SaveValue(control_name,type) {
         svalue =  PrepareFileList(control_name);
     else if (type == "itemlist")
         svalue = PrepareItemList(control_name);
+    else if(type == 'keymap') {
+        other_opts = '&syntaxcheck=FALSE'
+        sname = 'KEYMAP[' + document.getElementById( control_name + '_key').value + ']'
+        svalue = document.getElementById(control_name + '_event').value
+    }
     else {
         tb = document.getElementById(control_name);
         svalue = tb.value;
@@ -175,40 +190,54 @@ function SaveValue(control_name,type) {
     chk  = document.getElementById(control_name + "_chk")
     startline = document.getElementById(control_name + "_startline").value
     endline = document.getElementById(control_name + "_endline").value
+    div_enable = document.getElementById(control_name + '_enable')
     
-    strenable = "FALSE"
-    if (chk.checked) 
+    if (chk.checked) { 
         strenable = "TRUE";
+        div_enable.className = 'enablecontrol'
+    } 
+    else {
+        strenable = "FALSE"        
+        div_enable.className = 'disablecontrol'
+    }
     
     configfile =document.getElementById('configfile').value
     updateurl = 'configedit.rpy?configfile=' + configfile + '&cmd=UPDATE&udname=' + sname + '&udvalue=' + svalue + '&udenable=' + strenable;
-    updateurl = updateurl + "&startline=" + startline + '&endline=' + endline;
+    updateurl = updateurl + "&startline=" + startline + '&endline=' + endline + other_opts;
    
-   makeRequest(updateurl,control_name,control_name + "_check");
+   makeRequest(updateurl,control_name,control_name + "_fileline");
 }
 
 function CheckValue(control_name ,type,row) {
-        // Get the Value from the text box. 
     var svalue,tb,chk,updateurl,strenable;
     
     sname = document.getElementById(control_name + '_ctrlname').value
-
     if (type == "tv_channels") 
         svalue = PrepareChannelList(control_name);
+    
     else if (type == "fileitemlist") 
         svalue =  PrepareFileList(control_name);
+    
     else if (type == "itemlist") 
         svalue = PrepareItemList(control_name);
+
+    else if(type == 'keymap') {
+        document.getElementById(control_name + '_btn_update').style.display = ''
+        
+        sname = 'KEYMAP[' + document.getElementById( control_name + '_key').value + ']'
+        svalue = document.getElementById(control_name + '_event').value
+    }
     else {
         tb = document.getElementById(control_name);
         svalue = tb.value;
     }
-
+    
+    //alert(svalue);
     configfile =document.getElementById('configfile')
     updateurl = 'configedit.rpy?configfile=' + configfile + '&cmd=CHECK&udname=' + sname + '&udvalue=' + svalue
-    makeRequest(updateurl,control_name,control_name + "_check");
+    if (type != 'keymap') 
+        makeRequest(updateurl,control_name,control_name + "_check");
 }
-
 
 
 function DeleteLines(cname, sline,eline) {
@@ -219,5 +248,3 @@ function DeleteLines(cname, sline,eline) {
     makeRequest(url,cname,cname + "_list")
 
 }
-
-
