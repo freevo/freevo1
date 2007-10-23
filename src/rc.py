@@ -142,7 +142,7 @@ class Lirc:
             global pylirc
             import pylirc
         except ImportError:
-            print 'WARNING: PyLirc not found, lirc remote control disabled!'
+            _debug_('PyLirc not found, lirc remote control disabled!', DWARNING)
             raise
         try:
             if os.path.isfile(config.LIRCRC):
@@ -150,10 +150,10 @@ class Lirc:
             else:
                 raise IOError
         except RuntimeError:
-            print 'WARNING: Could not initialize PyLirc!'
+            _debug_('Could not initialize PyLirc!', DWARNING)
             raise
         except IOError:
-            print 'WARNING: %s not found!' % config.LIRCRC
+            _debug_('%r not found!' % (config.LIRCRC), DWARNING)
             raise
 
         self.nextcode = pylirc.nextcode
@@ -630,8 +630,4 @@ class EventHandler:
         """
         subscribe to 'post_event'
         """
-        if not event_callback:
-            return
-
-        self.event_callback = event_callback
-
+        raise "subscribe doesn't work"
