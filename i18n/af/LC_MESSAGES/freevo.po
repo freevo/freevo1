@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-21 22:09+0200\n"
+"POT-Creation-Date: 2007-10-21 21:50+0200\n"
 "PO-Revision-Date:  Fri Oct 05 14:20:00 2006\n"
 "Last-Translator: naudefj\n"
 "Language-Team: Afrikaans http://translate.org.za/\n"
@@ -1491,27 +1491,6 @@ msgstr "Speel Regter Kanaal"
 msgid "Language Menu"
 msgstr "Taal Keuseskerm"
 
-#: video/plugins/fxdarchive.py:93
-msgid "Archive FXD files"
-msgstr "Argiveer FXD lêers"
-
-#: video/plugins/fxdarchive.py:103
-msgid "Finding and copying FXD files..."
-msgstr "Find en kopiëer FXD lêers..."
-
-#: video/plugins/fxdarchive.py:122
-msgid "There was a error while trying to write the fxd file"
-msgstr "Daar was 'n fout met die skryf van die fxd lêer"
-
-#: video/plugins/fxdarchive.py:132
-msgid "But I couldn't copy a cover image file."
-msgstr "Maar ek kon nie 'n omslag lêer kopiëer nie."
-
-#: video/plugins/fxdarchive.py:135
-#, python-format
-msgid "%d fxd files archived. %s"
-msgstr ""
-
 #: video/__init__.py:182
 msgid "Directory Autobuild Thumbnails "
 msgstr "Gids Bou Klinknaals "
@@ -2746,11 +2725,11 @@ msgstr ""
 msgid "Sending data %r attempt=%d"
 msgstr ""
 
-#: plugins/upsoon.py:225 plugins/upsoon.py:243
+#: plugins/upsoon.py:223 plugins/upsoon.py:241
 msgid "A recording will start in a few minutes"
 msgstr "A recording will start in a few minutes"
 
-#: plugins/upsoon.py:274
+#: plugins/upsoon.py:271
 msgid "TV stopped, a recording is about to start!"
 msgstr "TV gestaak, 'n opname gaan begin"
 
@@ -2952,7 +2931,7 @@ msgstr ""
 msgid "SHUTDOWN FREEVO?"
 msgstr ""
 
-#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:310
+#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:308
 msgid "shutting down..."
 msgstr "skakel af..."
 
@@ -3959,15 +3938,15 @@ msgstr "Ja"
 msgid "Settings:"
 msgstr "Stellings:"
 
-#: main.py:171
+#: main.py:170
 msgid "Freevo Main Menu"
 msgstr "Freevo Hoof Keuseskerm"
 
-#: main.py:187
+#: main.py:186
 msgid "Skin Selector"
 msgstr "Skin Selekteerder"
 
-#: main.py:301
+#: main.py:299
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -3980,55 +3959,55 @@ msgid ""
 "\n"
 msgstr ""
 
-#: main.py:311 share/skins/main/mediaportal.fxd:447
+#: main.py:309 share/skins/main/mediaportal.fxd:447
 #: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
 #: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
 #: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
 msgid "Shutdown"
 msgstr "Skakel af"
 
-#: main.py:313
+#: main.py:311
 msgid "Continue"
 msgstr "Gaan voort"
 
-#: main.py:428
+#: main.py:435
 #, python-format
 msgid "Starting Freevo-%s, please wait ..."
 msgstr "Laai Freevo-%s, wag asseblief ..."
 
-#: main.py:437
+#: main.py:444
 msgid "Reading cache, please wait ..."
 msgstr ""
 
-#: main.py:491
+#: main.py:495
 msgid "Freevo crashed!"
 msgstr ""
 
-#: main.py:492
+#: main.py:496
 #, python-format
 msgid "Filename: %s"
 msgstr "Lëernaam: %s"
 
-#: main.py:493
+#: main.py:497
 #, python-format
 msgid "Lineno: %s"
 msgstr "Lynnommer: %s"
 
-#: main.py:494
+#: main.py:498
 #, python-format
 msgid "Function: %s"
 msgstr "Funksie: %s"
 
-#: main.py:495
+#: main.py:499
 #, python-format
 msgid "Text: %s"
 msgstr "Teks: %s"
 
-#: main.py:497
+#: main.py:501
 msgid "Please see the logfiles for more info"
 msgstr ""
 
-#: main.py:499
+#: main.py:503
 #, python-format
 msgid "Exit in %s seconds"
 msgstr ""
@@ -4357,6 +4336,18 @@ msgstr "TV"
 
 #~ msgid "Info as known by the LCD module:"
 #~ msgstr "Info soos gegee deur die LCD module:"
+
+#~ msgid "Archive FXD files"
+#~ msgstr "Argiveer FXD lêers"
+
+#~ msgid "Finding and copying FXD files..."
+#~ msgstr "Find en kopiëer FXD lêers..."
+
+#~ msgid "There was a error while trying to write the fxd file"
+#~ msgstr "Daar was 'n fout met die skryf van die fxd lêer"
+
+#~ msgid "But I couldn't copy a cover image file."
+#~ msgstr "Maar ek kon nie 'n omslag lêer kopiëer nie."
 
 #~ msgid "Info"
 #~ msgstr "Inligting"

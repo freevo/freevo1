@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-21 22:10+0200\n"
+"POT-Creation-Date: 2007-10-21 21:50+0200\n"
 "PO-Revision-Date:  Fri Oct 05 14:20:00 2006\n"
 "Last-Translator: Răzvan T. Coloja <cypresstwist@gmail.com>\n"
 "Language-Team: Romanian\n"
@@ -1514,27 +1514,6 @@ msgstr "Redă canalul din dreapta"
 msgid "Language Menu"
 msgstr "Meniu limbă"
 
-#: video/plugins/fxdarchive.py:93
-msgid "Archive FXD files"
-msgstr "Arhivează fişierele FXD"
-
-#: video/plugins/fxdarchive.py:103
-msgid "Finding and copying FXD files..."
-msgstr "Caut şi copiez fişierele FXD..."
-
-#: video/plugins/fxdarchive.py:122
-msgid "There was a error while trying to write the fxd file"
-msgstr "A avut loc o eroare când am încercat să scriu fişierul fxd"
-
-#: video/plugins/fxdarchive.py:132
-msgid "But I couldn't copy a cover image file."
-msgstr "Dar nu am putut copia un fişier de imagine a coperţii"
-
-#: video/plugins/fxdarchive.py:135
-#, python-format
-msgid "%d fxd files archived. %s"
-msgstr "%d fişiere fxd arhivate. %s"
-
 #: video/__init__.py:182
 msgid "Directory Autobuild Thumbnails "
 msgstr "Director Autogenerare Thumbnail-uri"
@@ -2771,11 +2750,11 @@ msgstr ""
 msgid "Sending data %r attempt=%d"
 msgstr "Trimit datele %r încercare=%d"
 
-#: plugins/upsoon.py:225 plugins/upsoon.py:243
+#: plugins/upsoon.py:223 plugins/upsoon.py:241
 msgid "A recording will start in a few minutes"
 msgstr "O înregistrare va începe în câteva minute"
 
-#: plugins/upsoon.py:274
+#: plugins/upsoon.py:271
 msgid "TV stopped, a recording is about to start!"
 msgstr "TV-ul a fost oprit, o înregistrare este pe cale să înceapă!"
 
@@ -2977,7 +2956,7 @@ msgstr "(wakeup dezactivat)"
 msgid "SHUTDOWN FREEVO?"
 msgstr "ÎNCHID FREEVO?"
 
-#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:310
+#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:308
 msgid "shutting down..."
 msgstr "închid..."
 
@@ -4011,15 +3990,15 @@ msgstr "Da"
 msgid "Settings:"
 msgstr "Setări:"
 
-#: main.py:171
+#: main.py:170
 msgid "Freevo Main Menu"
 msgstr "Meniu Principal Freevo"
 
-#: main.py:187
+#: main.py:186
 msgid "Skin Selector"
 msgstr "Selector de Skin-uri"
 
-#: main.py:301
+#: main.py:299
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -4040,55 +4019,55 @@ msgstr ""
 "Fişier log: %s\n"
 "\n"
 
-#: main.py:311 share/skins/main/mediaportal.fxd:447
+#: main.py:309 share/skins/main/mediaportal.fxd:447
 #: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
 #: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
 #: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
 msgid "Shutdown"
 msgstr "Închidere"
 
-#: main.py:313
+#: main.py:311
 msgid "Continue"
 msgstr "Continuă"
 
-#: main.py:428
+#: main.py:435
 #, python-format
 msgid "Starting Freevo-%s, please wait ..."
 msgstr "Freevo-%s porneşte, vă rugăm aşteptaţi..."
 
-#: main.py:437
+#: main.py:444
 msgid "Reading cache, please wait ..."
 msgstr "Citesc cache-ul, vă rugăm aşteptaţi..."
 
-#: main.py:491
+#: main.py:495
 msgid "Freevo crashed!"
 msgstr "Freevo a crăpat!"
 
-#: main.py:492
+#: main.py:496
 #, python-format
 msgid "Filename: %s"
 msgstr "Nume Fişier: %s"
 
-#: main.py:493
+#: main.py:497
 #, python-format
 msgid "Lineno: %s"
 msgstr "NrLinie: %s"
 
-#: main.py:494
+#: main.py:498
 #, python-format
 msgid "Function: %s"
 msgstr "Funcţie: %s"
 
-#: main.py:495
+#: main.py:499
 #, python-format
 msgid "Text: %s"
 msgstr ""
 
-#: main.py:497
+#: main.py:501
 msgid "Please see the logfiles for more info"
 msgstr "Analizaţi log-urile pentru mai multe informaţii"
 
-#: main.py:499
+#: main.py:503
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Ieşire în %s secunde"
@@ -4425,3 +4404,18 @@ msgstr "TV"
 
 #~ msgid "Time conversion error"
 #~ msgstr "Eroare de conversie a timpului"
+
+#~ msgid "Archive FXD files"
+#~ msgstr "Arhivează fişierele FXD"
+
+#~ msgid "Finding and copying FXD files..."
+#~ msgstr "Caut şi copiez fişierele FXD..."
+
+#~ msgid "There was a error while trying to write the fxd file"
+#~ msgstr "A avut loc o eroare când am încercat să scriu fişierul fxd"
+
+#~ msgid "But I couldn't copy a cover image file."
+#~ msgstr "Dar nu am putut copia un fişier de imagine a coperţii"
+
+#~ msgid "%d fxd files archived. %s"
+#~ msgstr "%d fişiere fxd arhivate. %s"

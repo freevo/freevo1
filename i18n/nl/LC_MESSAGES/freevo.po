@@ -8,23 +8,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-21 22:09+0200\n"
+"POT-Creation-Date: 2007-10-21 21:50+0200\n"
 "PO-Revision-Date: 2007-10-22 00:20+0100\n"
 "Last-Translator: Michel Hoogervorst <michel@highking.nl>\n"
 "Language-Team: Nederlands <none>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Bookmarks: -1,-1,-1,-1,590,-1,-1,-1,-1,-1\n"
 
-#: ../freevo_config.py:1164 ../freevo_config.py:1169
-#: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
-#: www/htdocs/search.rpy:91 tv/edit_favorite.py:111
-#: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
+#: ../freevo_config.py:1164
+#: ../freevo_config.py:1169
+#: www/htdocs/manualrecord.rpy:220
+#: www/htdocs/record.rpy:115
+#: www/htdocs/search.rpy:91
+#: tv/edit_favorite.py:111
+#: share/skins/main/basic.fxd:717
+#: share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Titel"
 
-#: ../freevo_config.py:1165 plugins/lcd.py:84 plugins/lcd.py:86
-#: plugins/lcd.py:263 plugins/vfd.py:108 plugins/vfd.py:110
+#: ../freevo_config.py:1165
+#: plugins/lcd.py:84
+#: plugins/lcd.py:86
+#: plugins/lcd.py:263
+#: plugins/vfd.py:108
+#: plugins/vfd.py:110
 msgid "Description"
 msgstr "Beschrijving"
 
@@ -132,6 +141,7 @@ msgid "Freevo Help"
 msgstr "Freevo Help"
 
 #: www/htdocs/help/index.rpy:41
+#, fuzzy
 msgid "This is the internal Freevo documentation. The documents         are in an early stage of development, if you like to help, please         contact the developers. You find more information like         the <a href=\"http://freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert them if someone deletes         information), feel free to add information there."
 msgstr "Dit is de interne Freevo documentatie. Deze documenten zijn ver van afgewerkt, maar als u wilt helpen kan u best de ontwerpers van Freevo contacteren. U kan nog meer informatie vindenin de <a href=\"http://freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">Freevo Wiki (online)</a> en op de Freevo mail lijsten alsook op de <a href=\"http://www.freevo.org\">Freevo homepagina</a>. Als u wat extra informatie hebt of een tip hebt die andere Freevo gebruikers ook handig zouden kunnen vinden kan u deze gerust toevoegen aan de Freevo Wiki (iedereen kan er, vrij, zonder login, informatie aanpassen)."
 
@@ -160,6 +170,7 @@ msgid "FXD files"
 msgstr "FXD bestanden"
 
 #: www/htdocs/help/index.rpy:57
+#, fuzzy
 msgid "Skinning Information"
 msgstr "Uiterlijk informatie"
 
@@ -1646,27 +1657,6 @@ msgstr "Speel rechter kanaal"
 msgid "Language Menu"
 msgstr "Taal"
 
-#: video/plugins/fxdarchive.py:93
-msgid "Archive FXD files"
-msgstr "FXD bestanden"
-
-#: video/plugins/fxdarchive.py:103
-msgid "Finding and copying FXD files..."
-msgstr "Bezig met kopieren van bestanden."
-
-#: video/plugins/fxdarchive.py:122
-msgid "There was a error while trying to write the fxd file"
-msgstr ""
-
-#: video/plugins/fxdarchive.py:132
-msgid "But I couldn't copy a cover image file."
-msgstr ""
-
-#: video/plugins/fxdarchive.py:135
-#, python-format
-msgid "%d fxd files archived. %s"
-msgstr ""
-
 #: video/__init__.py:182
 msgid "Directory Autobuild Thumbnails "
 msgstr "Maak automatisch pictogrammen voor deze folder"
@@ -3039,11 +3029,12 @@ msgstr "Voor de \"lcd\" plugin is pylcd benodigd"
 msgid "Sending data %r attempt=%d"
 msgstr ""
 
-#: plugins/upsoon.py:225 plugins/upsoon.py:243
+#: plugins/upsoon.py:223
+#: plugins/upsoon.py:241
 msgid "A recording will start in a few minutes"
 msgstr "De opnameserver is niet beschikbaar."
 
-#: plugins/upsoon.py:274
+#: plugins/upsoon.py:271
 msgid "TV stopped, a recording is about to start!"
 msgstr "TV uitgeschakeld, een opname staat op het punt te beginnen!"
 
@@ -3056,12 +3047,11 @@ msgid "Eject drive"
 msgstr "Open lade"
 
 #: plugins/freevused.py:140
-msgid ""
-"You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
-"plugin."
+msgid "You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" plugin."
 msgstr "Voor de \"freevused\" plugin is pybluez benodigd"
 
-#: plugins/freevused.py:287 plugins/freevused.py:290
+#: plugins/freevused.py:287
+#: plugins/freevused.py:290
 msgid "Playing"
 msgstr "Afspelen"
 
@@ -3249,7 +3239,8 @@ msgstr "Systeem afsluiten"
 msgid "Shutdown freevo"
 msgstr "Freevo afsluiten"
 
-#: plugins/autoshutdown.py:191 plugins/autoshutdown.py:219
+#: plugins/autoshutdown.py:191
+#: plugins/autoshutdown.py:219
 msgid "SHUTDOWN SYSTEM?"
 msgstr "SYSTEEM AFSLUITEN?"
 
@@ -3257,7 +3248,8 @@ msgstr "SYSTEEM AFSLUITEN?"
 msgid "RESTART SYSTEM?"
 msgstr "SYSTEEM HERSTARTEN?"
 
-#: plugins/autoshutdown.py:211 plugins/autoshutdown.py:225
+#: plugins/autoshutdown.py:211
+#: plugins/autoshutdown.py:225
 #: plugins/autoshutdown.py:239
 msgid "(wakeup disabled)"
 msgstr ""
@@ -3266,7 +3258,9 @@ msgstr ""
 msgid "SHUTDOWN FREEVO?"
 msgstr "FREEVO AFSLUITEN?"
 
-#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:310
+#: plugins/autoshutdown.py:609
+#: plugins/shutdown.py:63
+#: main.py:308
 msgid "shutting down..."
 msgstr "Bezig met afsluiten..."
 
@@ -3474,6 +3468,7 @@ msgid "Reverse series sort"
 msgstr "Series omgekeerd sorteren"
 
 #: tv/plugins/recordings_manager.py:294
+#, fuzzy
 msgid "Status order"
 msgstr "zaterdag"
 
@@ -4243,6 +4238,7 @@ msgid "Show video, audio and image items in this directory"
 msgstr "Toon video, audio en afbeeldingen in deze directory"
 
 #: setup_freevo.py:76
+#, fuzzy
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -4333,84 +4329,83 @@ msgstr "Ja"
 msgid "Settings:"
 msgstr "Instellingen:"
 
-#: main.py:171
+#: main.py:170
 msgid "Freevo Main Menu"
 msgstr "Freevo Hoofdmenu"
 
-#: main.py:187
+#: main.py:186
 msgid "Skin Selector"
 msgstr "Skin selectie"
 
-#: main.py:301
+#: main.py:299
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
 "\n"
-"Please take a look at the logfile and report the bug to the Freevo mailing "
-"list. The state of Freevo may be corrupt now and this error could cause more "
-"errors until you restart Freevo.\n"
+"Please take a look at the logfile and report the bug to the Freevo mailing list. The state of Freevo may be corrupt now and this error could cause more errors until you restart Freevo.\n"
 "\n"
 "Logfile: %s\n"
 "\n"
 msgstr ""
 "Event '%s' is gecrashed\n"
 "\n"
-"Bekijk de logfile en meld deze fout op de Freevo mailing list. Freevo kan nu "
-"mogelijk instabiel blijven en nog meer fouten veroorzaken tot je Freevo "
-"herstart.\n"
+"Bekijk de logfile en meld deze fout op de Freevo mailing list. Freevo kan nu mogelijk instabiel blijven en nog meer fouten veroorzaken tot je Freevo herstart.\n"
 "\n"
 "Logfile: %s\n"
 "\n"
 
-#: main.py:311 share/skins/main/mediaportal.fxd:447
-#: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
-#: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
-#: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
+#: main.py:309
+#: share/skins/main/mediaportal.fxd:447
+#: share/skins/main/dark.fxd:25
+#: share/skins/main/crystal.fxd:17
+#: share/skins/main/bluestar.fxd:16
+#: share/skins/main/basic.fxd:25
+#: share/skins/main/rain.fxd:17
+#: share/skins/main/Panorama.fxd:474
 msgid "Shutdown"
 msgstr "Afsluiten"
 
-#: main.py:313
+#: main.py:311
 msgid "Continue"
 msgstr "Configureer"
 
-#: main.py:428
-#, python-format
+#: main.py:435
 msgid "Starting Freevo-%s, please wait ..."
 msgstr "Freevo-%s wordt gestart, een ogenblik geduld..."
 
-#: main.py:437
+#: main.py:444
 msgid "Reading cache, please wait ..."
 msgstr "Bezig met inlezen van de cache, een ogenblik geduld..."
 
-#: main.py:491
+#: main.py:495
 msgid "Freevo crashed!"
 msgstr "Freevo is gecrashed!"
 
-#: main.py:492
+#: main.py:496
 #, python-format
 msgid "Filename: %s"
 msgstr "Bestand: %s"
 
-#: main.py:493
+#: main.py:497
 #, python-format
 msgid "Lineno: %s"
 msgstr "Regelnummer: %s"
 
-#: main.py:494
+#: main.py:498
 #, python-format
 msgid "Function: %s"
 msgstr "Functie: %s"
 
-#: main.py:495
+#: main.py:499
 #, python-format
 msgid "Text: %s"
 msgstr "Tekst: %s"
 
-#: main.py:497
+#: main.py:501
 msgid "Please see the logfiles for more info"
 msgstr "Bekijk de logfiles voor meer informatie"
 
-#: main.py:499
+#: main.py:503
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Programma wordt in %s seconden afgesloten"
@@ -4779,3 +4774,219 @@ msgstr "geen volgend item in de afspeellijst"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "TV"
+
+#~ msgid "Add File to Cart"
+#~ msgstr "Voeg bestand toe aan het karretje"
+#~ msgid "Connecting to LCD: %s"
+#~ msgstr "Connecteren met LCD: %s"
+#~ msgid "Info as known by the LCD module:"
+#~ msgstr "Info van de LCD module:"
+#~ msgid "Cannot find tuner channel \"%s\" in the TV channel listing"
+#~ msgstr "Het kanaal \"%s\" komt niet voor in de lijst met TV kanalen."
+#~ msgid "Unable to get channel list for %s."
+#~ msgstr "Het ophalen van de lijst met kanalen voor %s is mislukt."
+#~ msgid "Failed to set freq for channel %s."
+#~ msgstr "Het instellen van de frequentie voor kanaal %s is mislukt."
+#~ msgid "Time conversion error"
+#~ msgstr "Tijd omzettingsfout"
+
+#, fuzzy
+#~ msgid "Archive FXD files"
+#~ msgstr "FXD bestanden"
+
+#, fuzzy
+#~ msgid "Finding and copying FXD files..."
+#~ msgstr "Bezig met kopieren van bestanden."
+
+#, fuzzy
+#~ msgid "View Details"
+#~ msgstr "Details"
+#~ msgid "Program Search"
+#~ msgstr "Programma zoeken"
+#~ msgid "Feel free to implement this function inside the main guide."
+#~ msgstr "Je bent vrij om deze functie in de hoofdgids te implementeren."
+
+#, fuzzy
+#~ msgid "Testing on %s"
+#~ msgstr "Zet %s aan"
+
+#, fuzzy
+#~ msgid "Working on %s"
+#~ msgstr "Zet %s aan"
+#~ msgid "Could not find screens for %d lines LCD!"
+#~ msgstr "Geen schermen gevonden voor %d lijnen LCD!"
+#~ msgid "No screens found for this LCD (%dx%d)!"
+#~ msgstr "Geen schermen gevonden voor deze LCD (%dx%d)!"
+#~ msgid "Could not find screens for %d lines and %d columns LCD!"
+#~ msgstr "Geen schermen gevonden voor %d lijnen en %d colommen LCD!"
+#~ msgid "Could not find screens for %d lines VFD!"
+#~ msgstr "Geen schermen gevonden voor %d lijnen LCD!"
+#~ msgid "No screens found for this VFD (%dx%d)!"
+#~ msgstr "Geen schermen gevonden voor deze LCD (%dx%d)!"
+#~ msgid "Could not find screens for %d lines and %d columns VFD!"
+#~ msgstr "Geen schermen gevonden voor %d lijnen en %d colommen LCD!"
+#~ msgid "logging child to \"%s\""
+#~ msgstr "logging child to \"%s\""
+#~ msgid "Cannot open \"%s\" for logging!"
+#~ msgstr "Kan \"%s\" niet openen voor logging!"
+
+#, fuzzy
+#~ msgid "Set CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
+#~ msgstr "Zet CHILDAPP_DEBUG=0 in local_conf.py, or make %s writable!"
+#~ msgid "Scanning recordings, be patient..."
+#~ msgstr "De schijf wordt geanalyseerd, een ogenblik geduld..."
+#~ msgid "or make %s writable!"
+#~ msgstr "of maak %s beschrijfbaar!"
+#~ msgid "Delete %s?"
+#~ msgstr "Bestand wissen: %s"
+#~ msgid "Error, unable to delete file %s"
+#~ msgstr "niet mogelijk om de html bestanden te laden"
+#~ msgid "Favorite not added yet."
+#~ msgstr "De favoriet is nog niet toegevoegd."
+#~ msgid "No Xm Radio Stations found"
+#~ msgstr "Geen radiostation gevonden"
+#~ msgid "Chapter"
+#~ msgstr "Hoofdstuk"
+#~ msgid " free of %s GB total (%s%% free)"
+#~ msgstr "%i van de in totaal %i Mb"
+#~ msgid "'fbxine' version too old, plugin 'xine' deactivated"
+#~ msgstr "'fbxine' niet recent genoeg, 'xine' plugin gedeactiveerd"
+#~ msgid "Unable to get frequency for channel %s."
+#~ msgstr "Het ophalen van de frequentie voor kanaal %s is niet mogelijk."
+#~ msgid ""
+#~ "This page is generated from the Freevo WiKi. The current Version can be "
+#~ "found <a href=\"%s\">here</a>."
+#~ msgstr ""
+#~ "Deze pagina werd gegenereerd door Freevo WiKi. De recentste versie kan u "
+#~ "<a href=\"%s\">hier</a>vinden."
+#~ msgid "Choose a Directory"
+#~ msgstr "Kies een folder"
+#~ msgid " |+|&|@|/|\\"
+#~ msgstr " |+|&|@|/|\\"
+#~ msgid "-|?|!|,|.|:|;|<|=|>|(|)|_|1"
+#~ msgstr "-|?|!|,|.|:|;|<|=|>|(|)|_|1"
+#~ msgid "a|b|c|2"
+#~ msgstr "a|b|c|2"
+#~ msgid "d|e|f|3"
+#~ msgstr "d|e|f|3"
+#~ msgid "g|h|i|4"
+#~ msgstr "g|h|i|4"
+#~ msgid "j|k|l|5"
+#~ msgstr "j|k|l|5"
+#~ msgid "m|n|o|6"
+#~ msgstr "m|n|o|6"
+#~ msgid "p|q|r|s|7"
+#~ msgstr "p|q|r|s|7"
+#~ msgid "t|u|v|8"
+#~ msgstr "t|u|v|8"
+#~ msgid "w|x|y|z|9"
+#~ msgstr "w|x|y|z|9"
+#~ msgid "Reply to sender"
+#~ msgstr "Reageer naar afzender"
+#~ msgid "Mark as unread"
+#~ msgstr "Markeer als ongelezen"
+#~ msgid "Are you sure you want to delete this email?"
+#~ msgstr "Weet je zeker dat je dit bericht wilt verwijderen?"
+#~ msgid "Open mailbox"
+#~ msgstr "Mailbox openen"
+#~ msgid "Mark all mails read"
+#~ msgstr "Markeer alle berichten als gelezen"
+#~ msgid "Unsubscribe from folder"
+#~ msgstr "Abonnement op folder intrekken"
+#~ msgid "Subscribe to new folder"
+#~ msgstr "Abonneren op nieuwe folder"
+#~ msgid "Are you sure you want to unsubscribe from %s?"
+#~ msgstr "Weet je zeker dat je het abonnement op de folder %s wilt intrekken?"
+#~ msgid "Unsubscribing..."
+#~ msgstr "Bezig met afmelden..."
+#~ msgid "Open mailfolder"
+#~ msgstr "Open folder"
+#~ msgid "Mailfolders"
+#~ msgstr "Folders"
+#~ msgid "Subscribe to folder"
+#~ msgstr "Abonneren op folder"
+#~ msgid "test"
+#~ msgstr "test"
+#~ msgid "no name found"
+#~ msgstr "geen naam gevonden"
+#~ msgid "Attachment %i/%i: %s"
+#~ msgstr "Attachment %i/%i: %s"
+#~ msgid "Right: View image attachment(s). "
+#~ msgstr "Rechts: Bekijk afbeelding attachment(s)."
+#~ msgid "Display: View image attachment(s). "
+#~ msgstr "Display: Bekijk afbeelding attachment(s)."
+#~ msgid "Select: Reply to message."
+#~ msgstr "Select: Reageer op bericht."
+#~ msgid "Error parsing mail"
+#~ msgstr "Fout tijdens inlezen bericht"
+#~ msgid ""
+#~ "\n"
+#~ " \n"
+#~ "::: New text/plain part ::: \n"
+#~ " \n"
+#~ msgstr ""
+#~ "\n"
+#~ " \n"
+#~ "::: New text/plain part ::: \n"
+#~ " \n"
+#~ msgid "Do you want to send this message?"
+#~ msgstr "Wilt u dit bericht versturen?"
+#~ msgid "Sending message..."
+#~ msgstr "Bericht wordt verstuurd..."
+#~ msgid ""
+#~ "%s \n"
+#~ "\n"
+#~ msgstr ""
+#~ "%s \n"
+#~ "\n"
+#~ msgid "On %s %s wrote:\n"
+#~ msgstr "Op %s schreef %s:\n"
+#~ msgid ">%s\n"
+#~ msgstr ">%s\n"
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "%s"
+#~ msgid "Caps"
+#~ msgstr "Hoofdletters"
+#~ msgid "Enter"
+#~ msgstr "Enter"
+#~ msgid "Send message"
+#~ msgstr "Verzend bericht"
+#~ msgid "Display"
+#~ msgstr "Toon"
+#~ msgid "Textmode"
+#~ msgstr "Textmodus"
+#~ msgid "Up"
+#~ msgstr "Omhoog"
+#~ msgid "Erase"
+#~ msgstr "Verwijderen"
+#~ msgid "Down"
+#~ msgstr "Omlaag"
+#~ msgid "Linebreak"
+#~ msgstr "Scheidingslijn"
+#~ msgid "Move caret"
+#~ msgstr "Verplaatst cursor"
+#~ msgid "%i new mail(s) arrived"
+#~ msgstr "%i nieuw(e) bericht(en) ontvangen"
+#~ msgid "Server unavailable. Try again later."
+#~ msgstr "Server onbereikbaar. Probeer het later opnieuw."
+#~ msgid "Server unavailable. Mail may not be up to date."
+#~ msgstr "Server onbereikbaar. Je mail is mogelijk niet bijgewerkt."
+#~ msgid "Server offline. No cache was found."
+#~ msgstr "Server offline. Geen cache beschikbaar."
+#~ msgid "Server offline. Command not available."
+#~ msgstr "Server offline. Het commando is niet beschikbaar."
+#~ msgid "The requested command failed."
+#~ msgstr "De gevraagde actie is mislukt."
+#~ msgid "Initializing folders. Try again later."
+#~ msgstr "Bezig met initialiseren van folders. Probeer het later nogmaals."
+#~ msgid "Undefined error occured"
+#~ msgstr "Er is een onbekende fout opgetreden."
+#~ msgid "Unread message"
+#~ msgstr "Ongelezen bericht"
+

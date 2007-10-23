@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-21 22:09+0200\n"
+"POT-Creation-Date: 2007-10-21 21:50+0200\n"
 "PO-Revision-Date: 2004-05-28 17:10+0200\n"
 "Last-Translator: Viggo Fredriksen <viggo@katatonic.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -1513,28 +1513,6 @@ msgstr ""
 msgid "Language Menu"
 msgstr ""
 
-#: video/plugins/fxdarchive.py:93
-msgid "Archive FXD files"
-msgstr ""
-
-#: video/plugins/fxdarchive.py:103
-#, fuzzy
-msgid "Finding and copying FXD files..."
-msgstr "Kopierer filer..."
-
-#: video/plugins/fxdarchive.py:122
-msgid "There was a error while trying to write the fxd file"
-msgstr ""
-
-#: video/plugins/fxdarchive.py:132
-msgid "But I couldn't copy a cover image file."
-msgstr ""
-
-#: video/plugins/fxdarchive.py:135
-#, python-format
-msgid "%d fxd files archived. %s"
-msgstr ""
-
 #: video/__init__.py:182
 msgid "Directory Autobuild Thumbnails "
 msgstr "Katalog Lag Miniatyrbilder Automatisk"
@@ -2777,11 +2755,11 @@ msgstr "Du trenger pylcd for å kjøre lcd pluginen."
 msgid "Sending data %r attempt=%d"
 msgstr ""
 
-#: plugins/upsoon.py:225 plugins/upsoon.py:243
+#: plugins/upsoon.py:223 plugins/upsoon.py:241
 msgid "A recording will start in a few minutes"
 msgstr "Opptakstjeneren er nede."
 
-#: plugins/upsoon.py:274
+#: plugins/upsoon.py:271
 msgid "TV stopped, a recording is about to start!"
 msgstr ""
 
@@ -2983,7 +2961,7 @@ msgstr ""
 msgid "SHUTDOWN FREEVO?"
 msgstr ""
 
-#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:310
+#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:308
 msgid "shutting down..."
 msgstr "avslutter..."
 
@@ -4030,15 +4008,15 @@ msgstr "Ja"
 msgid "Settings:"
 msgstr "Innstillinger:"
 
-#: main.py:171
+#: main.py:170
 msgid "Freevo Main Menu"
 msgstr "Freevo Hovedmeny"
 
-#: main.py:187
+#: main.py:186
 msgid "Skin Selector"
 msgstr "Skin Velger"
 
-#: main.py:301
+#: main.py:299
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -4058,55 +4036,55 @@ msgstr ""
 "Handling: %s \n"
 "Logfil: %s \n"
 
-#: main.py:311 share/skins/main/mediaportal.fxd:447
+#: main.py:309 share/skins/main/mediaportal.fxd:447
 #: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
 #: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
 #: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
 msgid "Shutdown"
 msgstr "Avslutt"
 
-#: main.py:313
+#: main.py:311
 msgid "Continue"
 msgstr "Konfigurer"
 
-#: main.py:428
+#: main.py:435
 #, fuzzy, python-format
 msgid "Starting Freevo-%s, please wait ..."
 msgstr "Starter Freevo-%s, vennligst vent..."
 
-#: main.py:437
+#: main.py:444
 msgid "Reading cache, please wait ..."
 msgstr "Genererer hurtigbuffer, vennligst vent ..."
 
-#: main.py:491
+#: main.py:495
 msgid "Freevo crashed!"
 msgstr "Freevo krasjet!"
 
-#: main.py:492
+#: main.py:496
 #, python-format
 msgid "Filename: %s"
 msgstr "Filnavn: %s"
 
-#: main.py:493
+#: main.py:497
 #, python-format
 msgid "Lineno: %s"
 msgstr "Linjenr: %s"
 
-#: main.py:494
+#: main.py:498
 #, python-format
 msgid "Function: %s"
 msgstr "Metode: %s"
 
-#: main.py:495
+#: main.py:499
 #, python-format
 msgid "Text: %s"
 msgstr "Tekst: %s"
 
-#: main.py:497
+#: main.py:501
 msgid "Please see the logfiles for more info"
 msgstr "Vennligs se logfilene for mer informasjon"
 
-#: main.py:499
+#: main.py:503
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Avslutter om %s sekunder"
@@ -4448,6 +4426,10 @@ msgstr "TV"
 
 #~ msgid "Time conversion error"
 #~ msgstr "Feil ved konvertering av tid"
+
+#, fuzzy
+#~ msgid "Finding and copying FXD files..."
+#~ msgstr "Kopierer filer..."
 
 #, fuzzy
 #~ msgid "View Details"

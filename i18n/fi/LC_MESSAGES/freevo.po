@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-21 22:09+0200\n"
+"POT-Creation-Date: 2007-10-21 21:50+0200\n"
 "PO-Revision-Date: 2004-08-10 16:44+0300\n"
 "Last-Translator: Petri Damsten <damu@iki.fi>\n"
 "Language-Team: Finnish\n"
@@ -1494,29 +1494,6 @@ msgstr ""
 msgid "Language Menu"
 msgstr "Kieli"
 
-#: video/plugins/fxdarchive.py:93
-#, fuzzy
-msgid "Archive FXD files"
-msgstr "Poista tiedosto"
-
-#: video/plugins/fxdarchive.py:103
-#, fuzzy
-msgid "Finding and copying FXD files..."
-msgstr "Kopioidaan tiedostoja..."
-
-#: video/plugins/fxdarchive.py:122
-msgid "There was a error while trying to write the fxd file"
-msgstr ""
-
-#: video/plugins/fxdarchive.py:132
-msgid "But I couldn't copy a cover image file."
-msgstr ""
-
-#: video/plugins/fxdarchive.py:135
-#, python-format
-msgid "%d fxd files archived. %s"
-msgstr ""
-
 #: video/__init__.py:182
 msgid "Directory Autobuild Thumbnails "
 msgstr "Tee kuvakkeet automaattisesti"
@@ -2757,11 +2734,11 @@ msgstr ""
 msgid "Sending data %r attempt=%d"
 msgstr ""
 
-#: plugins/upsoon.py:225 plugins/upsoon.py:243
+#: plugins/upsoon.py:223 plugins/upsoon.py:241
 msgid "A recording will start in a few minutes"
 msgstr ""
 
-#: plugins/upsoon.py:274
+#: plugins/upsoon.py:271
 msgid "TV stopped, a recording is about to start!"
 msgstr ""
 
@@ -2962,7 +2939,7 @@ msgstr ""
 msgid "SHUTDOWN FREEVO?"
 msgstr ""
 
-#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:310
+#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:308
 msgid "shutting down..."
 msgstr "Sammutetaan..."
 
@@ -3969,15 +3946,15 @@ msgstr ""
 msgid "Settings:"
 msgstr ""
 
-#: main.py:171
+#: main.py:170
 msgid "Freevo Main Menu"
 msgstr "Freevo Päävalikko"
 
-#: main.py:187
+#: main.py:186
 msgid "Skin Selector"
 msgstr "Ulkonäön valinta"
 
-#: main.py:301
+#: main.py:299
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -3990,55 +3967,55 @@ msgid ""
 "\n"
 msgstr ""
 
-#: main.py:311 share/skins/main/mediaportal.fxd:447
+#: main.py:309 share/skins/main/mediaportal.fxd:447
 #: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
 #: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
 #: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
 msgid "Shutdown"
 msgstr "Sammuta"
 
-#: main.py:313
+#: main.py:311
 msgid "Continue"
 msgstr "Asetukset"
 
-#: main.py:428
+#: main.py:435
 #, fuzzy, python-format
 msgid "Starting Freevo-%s, please wait ..."
 msgstr "Freevo-%s käynnistyy, odota..."
 
-#: main.py:437
+#: main.py:444
 msgid "Reading cache, please wait ..."
 msgstr "Luodaan välimuistia, odota..."
 
-#: main.py:491
+#: main.py:495
 msgid "Freevo crashed!"
 msgstr "Freevo kaatui!"
 
-#: main.py:492
+#: main.py:496
 #, python-format
 msgid "Filename: %s"
 msgstr "Tiedosto: %s"
 
-#: main.py:493
+#: main.py:497
 #, python-format
 msgid "Lineno: %s"
 msgstr "Rivi nro: %s"
 
-#: main.py:494
+#: main.py:498
 #, python-format
 msgid "Function: %s"
 msgstr "Toiminto: %s"
 
-#: main.py:495
+#: main.py:499
 #, python-format
 msgid "Text: %s"
 msgstr "Teksti: %s"
 
-#: main.py:497
+#: main.py:501
 msgid "Please see the logfiles for more info"
 msgstr "Katso logi tiedostoista lisätietoja"
 
-#: main.py:499
+#: main.py:503
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Lopetetaan %s sekunnin kuluttua"
@@ -4372,6 +4349,14 @@ msgstr "TV"
 
 #~ msgid "Time conversion error"
 #~ msgstr "Ajan muunnos virhe"
+
+#, fuzzy
+#~ msgid "Archive FXD files"
+#~ msgstr "Poista tiedosto"
+
+#, fuzzy
+#~ msgid "Finding and copying FXD files..."
+#~ msgstr "Kopioidaan tiedostoja..."
 
 #, fuzzy
 #~ msgid "View Details"
