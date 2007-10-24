@@ -81,10 +81,19 @@ class MPlayer:
         1 = possible, but not good
         0 = unplayable
         """
+        try:
+            _debug_('url=%r' % (item.url), 2)
+            _debug_('mode=%r' % (item.mode), 2)
+            _debug_('mimetype=%r' % (item.mimetype), 2)
+        except Exception, e:
+            print e
         if item.url.startswith('radio://'):
+            _debug_('%r unplayable' % (item.url))
             return 0
         if item.url.startswith('cdda://'):
+            _debug_('%r possible' % (item.url))
             return 1
+        _debug_('%r good' % (item.url))
         return 2
 
 

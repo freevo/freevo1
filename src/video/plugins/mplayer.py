@@ -83,20 +83,27 @@ class MPlayer:
         1 = possible, but not good
         0 = unplayable
         """
+        try:
+            _debug_('url=%r' % (item.url), 2)
+            _debug_('mode=%r' % (item.mode), 2)
+            _debug_('mimetype=%r' % (item.mimetype), 2)
+            _debug_('network_play=%r' % (item.network_play), 2)
+        except Exception, e:
+            print e
         # this seems strange that it is 'possible' for dvd:// and 'good' for dvd
         if item.url[:6] in ('dvd://', 'vcd://') and item.url.endswith('/'):
+            _debug_('%r possible' % (item.url))
             return 1
         if item.mode in ('dvd', 'vcd'):
+            _debug_('%r good' % (item.url))
             return 2
         if item.mimetype in config.VIDEO_MPLAYER_SUFFIX:
-            if config.DEBUG >= 4:
-                for d in dir(item):
-                    print '%s: %s' % (d, eval('item.%s' % d))
-                for d in dir(item.info):
-                    print '%s: %s' % (d, eval('item.info.%s' % d))
+            _debug_('%r good' % (item.url))
             return 2
         if item.network_play:
+            _debug_('%r possible' % (item.url))
             return 1
+        _debug_('%r unplayable' % (item.url))
         return 0
 
 
