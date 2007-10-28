@@ -562,6 +562,7 @@ class DirItem(Playlist):
         """
         build the items for the directory
         """
+        self.menuw      = menuw
         self.playlist   = []
         self.play_items = []
         self.dir_items  = []
@@ -758,11 +759,12 @@ class DirItem(Playlist):
                         self.menu.selected = items[pos]
                     else:
                         self.menu.selected = None
-            if self.menu.selected and selected_pos != -1:
-                self.menuw.rebuild_page()
-            else:
-                self.menuw.init_page()
-            self.menuw.refresh()
+            if self.menuw:
+                if self.menu.selected and selected_pos != -1:
+                    self.menuw.rebuild_page()
+                else:
+                    self.menuw.init_page()
+                self.menuw.refresh()
 
 
         elif len(items) == 1 and items[0].actions() and \
