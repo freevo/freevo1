@@ -539,7 +539,7 @@ class VideoItem(Item):
                 self.menuw.show()
                 ConfirmBox(text=(_('No media found for "%s".\n')+
                                  _('Please insert the media.')) % self.url,
-                           handler=self.play).show()
+                    handler=self.play).show()
                 return
         elif self.mode in ('http') and not self.filename and not self.media:
             self.player_rating, self.player = self.possible_player[0]
@@ -633,6 +633,7 @@ class VideoItem(Item):
             i.info.mmdata = self.info.mmdata['tracks'][titlenum]
             i.info.set_variables(self.info.get_variables())
             i.info_type       = 'track'
+            i.possible_player = []
             i.files           = None
             i.name            = Unicode(_('Play Title %d') % (titlenum+1))
             items.append(i)

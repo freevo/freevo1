@@ -339,6 +339,9 @@ LOCAL_CONF_CHANGES = [
         XINE_TV_PROGRESSIVE_SEEK_INCREMENT
      Added TV_RECORD_YEAR_FORMAT to allow the from of the year in TV fxd files to be specified
      Moved plug-in "upsoon" to "tv.upsoon"
+     ''' ),
+    (5.22,
+     '''Added RECORDSERVER_SECRET
      '''),
 ]
 
@@ -1000,9 +1003,9 @@ DIRECTORY_AUTOPLAY_ITEMS      = [ ]
 VIDEO_ITEMS = None
 
 #
-# Directory containing images for tv shows. A tv show maches the regular
+# Directory containing images for TV shows. A TV show matches the regular
 # expression VIDEO_SHOW_REGEXP, e.g. "Name 3x10 - Title". If an image
-# name.(png|jpg) (lowercase) is in this directory, it will be taken as cover
+# name.(png|jpg) (lower-case) is in this directory, it will be taken as cover
 # image
 #
 VIDEO_SHOW_DATA_DIR = None
@@ -1702,6 +1705,7 @@ TV_RECORD_SCHEDULE = FREEVO_STATICDIR + '/record_schedule.xml'
 
 RECORDSERVER_IP = 'localhost'
 RECORDSERVER_PORT = 18001
+RECORDSERVER_SECRET = 'secret1'
 
 # If the recordserver runs as root, set the uid to the given one
 # after startup. The gui must also match one of the users group ids

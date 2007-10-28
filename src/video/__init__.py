@@ -89,7 +89,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
         for file in all_files:
             if parent and parent.type == 'dir' and \
-                   hasattr(parent,'VIDEO_DIRECTORY_AUTOBUILD_THUMBNAILS') and \
+                   hasattr(parent, 'VIDEO_DIRECTORY_AUTOBUILD_THUMBNAILS') and \
                    parent.VIDEO_DIRECTORY_AUTOBUILD_THUMBNAILS:
                 util.videothumb.snapshot(file, update=False, popup=True)
 
@@ -138,7 +138,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
             if parent.media:
                 file_id = String(parent.media.id) + \
-                          file[len(os.path.join(parent.media.mountdir,"")):]
+                          file[len(os.path.join(parent.media.mountdir, "")):]
                 try:
                     x.mplayer_options = discset_information[file_id]
                     _debug_('x.mplayer_options=%r' % x.mplayer_options)
@@ -215,13 +215,13 @@ def hash_fxd_movie_database():
             print
             return 0
 
-    _debug_("Building the xml hash database...",1)
+    _debug_("Building the xml hash database...", 1)
 
     files = []
     if not config.VIDEO_ONLY_SCAN_DATADIR:
         if len(config.VIDEO_ITEMS) == 2:
-            for name,dir in config.VIDEO_ITEMS:
-                files += util.recursefolders(dir,1,'*.fxd',1)
+            for name, dir in config.VIDEO_ITEMS:
+                files += util.recursefolders(dir, 1, '*.fxd', 1)
 
     for subdir in ('disc', 'disc-set'):
         files += util.recursefolders(vfs.join(config.OVERLAY_DIR, subdir), 1, '*.fxd', 1)
@@ -236,7 +236,7 @@ def hash_fxd_movie_database():
                 discset_information[fo['file-id']] = fo['mplayer-options']
 
     if config.VIDEO_SHOW_DATA_DIR:
-        files = util.recursefolders(config.VIDEO_SHOW_DATA_DIR,1, '*.fxd',1)
+        files = util.recursefolders(config.VIDEO_SHOW_DATA_DIR, 1, '*.fxd', 1)
         for info in fxditem.mimetype.parse(None, files, display_type='video'):
             if info.type != 'video':
                 continue
@@ -247,5 +247,5 @@ def hash_fxd_movie_database():
                 for fo in info.__fxd_files_options__:
                     discset_information[fo['file-id']] = fo['mplayer-options']
 
-    _debug_('done',1)
+    _debug_('done', 1)
     return 1

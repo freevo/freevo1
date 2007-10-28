@@ -160,7 +160,7 @@ class BaseAnimation:
         """
         Checks if the screen background has been damaged
 
-        @notes: If the rect passed damages our rect, but no actual blit is done
+        @note: If the rect passed damages our rect, but no actual blit is done
         on osd.screen, we'll end up with a copy of our animation in our bg. This is BAD.
         """
 
