@@ -49,7 +49,9 @@ from re import *
 
 
 class GenericItem(Item):
-    def __init__(self, file, cmd = None, args = None, imgpath = None, parent = None):
+    def __init__(self, file, cmd=None, args=None, imgpath=None, parent=None):
+        _debug_('GenericItem.__init__(file=%r, cmd=%r, args=%r, imgpath=%r, parent=%r)' % \
+            (file, cmd, args, imgpath, parent), 2)
         Item.__init__(self, parent)
         self.type  = 'generic'            # fix value
         self.set_url(file, info=True)
@@ -68,7 +70,7 @@ class GenericItem(Item):
 
         command = ['--prio=%s' % config.GAMES_NICE, cmd]
         command.extend(args.split())
-        command.append(file)
+        #command.append(file)
 
         self.command = command
 
@@ -79,6 +81,7 @@ class GenericItem(Item):
         """
         Returns the string how to sort this item
         """
+        _debug_('sort(mode=%r)' % (mode), 2)
         return self.name
 
 
@@ -87,10 +90,12 @@ class GenericItem(Item):
 
 
     def actions(self):
+        _debug_('actions()', 2)
         return [ ( self.play, 'Play' ) ]
 
 
     def play(self, arg=None, menuw=None):
+        _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 2)
         self.parent.current_item = self
 
         if not self.menuw:
@@ -105,10 +110,12 @@ class GenericItem(Item):
 
 
     def stop(self, menuw=None):
+        _debug_('stop(menuw=%r)' % (menuw), 2)
         self.game_player.stop()
 
 
     def eventhandler(self, event, menuw=None):
+        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
 
         if event == em.STOP:
             self.stop()

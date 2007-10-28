@@ -51,6 +51,7 @@ class PluginInterface(plugin.MimetypePlugin):
     """
 
     def __init__(self):
+        _debug_('PluginInterface.__init__()', 2)
         plugin.MimetypePlugin.__init__(self)
         self.display_type = [ 'games' ]
 
@@ -62,6 +63,7 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         return the list of suffixes this class handles
         """
+        _debug_('suffix()', 2)
         return []
 
 
@@ -69,6 +71,7 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         return a list of items based on the files
         """
+        _debug_('get(parent=%r, files=%r)' % (parent, files), 2)
         items = []
 
         if not hasattr(parent, 'add_args') or type(parent.add_args) is not types.TupleType:
@@ -98,10 +101,12 @@ class PluginInterface(plugin.MimetypePlugin):
                     items += [ GenesisItem(file, cmd, args, imgpath, parent) ]
                     files.remove(file)
             elif gtype == 'GENERIC':
+                _debug_('find_matches=%r files=%r suffixlist=%r' % \
+                    (util.find_matches(files, suffixlist), files, suffixlist), 2)
                 for file in util.find_matches(files, suffixlist):
                     items += [ GenericItem(file, cmd, args, imgpath, parent) ]
                     files.remove(file)
         except UnboundLocalError:
-            print 'Zip file \"%s\" may be corrupt' % file
+            _debug_('Zip file \"%s\" may be corrupt' % file, DWARNING)
 
         return items

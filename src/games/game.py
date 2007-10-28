@@ -54,6 +54,7 @@ osd        = osd.get_singleton()
 _singleton = None
 
 def get_singleton():
+    _debug_('get_singleton()', 2)
     global _singleton
 
     # One-time init
@@ -65,10 +66,12 @@ def get_singleton():
 class Game:
 
     def __init__(self):
+        _debug_('Game.__init__()', 2)
         self.mode = None
         self.app_mode = 'games'
 
     def play(self, item, menuw):
+        _debug_('play(item=%r, menuw=%r)' % (item, menuw), 2)
 
         self.item = item
         self.filename = item.filename
@@ -102,6 +105,7 @@ class Game:
 
 
     def stop(self):
+        _debug_('stop()', 2)
         self.app.stop()
         rc.app(None)
         rc.resume()
@@ -113,10 +117,12 @@ class Game:
 
 
     def eventhandler(self, event, menuw=None):
+        _debug_('eventhandler(event%r, menuw=%r)' % (event, menuw), 2)
         return self.item.eventhandler(event, self.menuw)
 
 
 # ======================================================================
 class GameApp(childapp.ChildApp2):
     def stop_event(self):
+        _debug_('stop_event()', 2)
         return em.STOP
