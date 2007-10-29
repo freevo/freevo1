@@ -31,7 +31,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, os
+import sys, os, pwd
 import config
 
 appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
@@ -50,10 +50,9 @@ if __name__ == '__main__':
     except Exception, e:
         print e
 
-from twisted.internet import app
-from twisted.web import static, server, vhost, script
-from twisted.python import log
-import twisted.web.rewrite as rewrite
+from twisted.application import internet, service
+from twisted.internet import reactor
+from twisted.web import static, server, vhost, script, rewrite
 
 
 if len(sys.argv)>1 and sys.argv[1] == '--help':
@@ -64,12 +63,6 @@ if len(sys.argv)>1 and sys.argv[1] == '--help':
 # No debugging in this module
 DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 
-def _debug_(text, level=1):
-    if DEBUG >= level:
-        try:
-            log.debug(String(text))
-        except:
-            print String(text)
 
 def helpimagesrewrite(request):
     if request.postpath and request.postpath[0]=='help' and request.postpath[1]=='images':
@@ -82,8 +75,8 @@ def helpimagesrewrite(request):
 def main():
     # the start and stop stuff will be handled from the freevo script
 
-    logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
-    log.startLogging(open(logfile, 'a'))
+    #logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
+    #log.startLogging(open(logfile, 'a'))
 
     if os.path.isdir(os.path.join(os.environ['FREEVO_PYTHON'], 'www/htdocs')):
         docRoot = os.path.join(os.environ['FREEVO_PYTHON'], 'www/htdocs')
@@ -106,26 +99,22 @@ def main():
 
     root.putChild('vhost', vhost.VHostMonsterResource())
     rewriter =  rewrite.RewriterResource(root, helpimagesrewrite)
-    if (config.DEBUG == 0):
-        site = server.Site(rewriter, logPath='/dev/null')
-    else:
-        site = server.Site(rewriter)
-
-    application = app.Application('web')
-    application.listenTCP(config.WEBSERVER_PORT, site)
-    application.run(save=0)
+    #Site(self, resource, logPath=None, timeout=60 * 60 * 12)
+    site = server.Site(rewriter)
+    try:
+        application = service.Application('web', uid=eval(uid), gid=eval(gid))
+    except Exception, e:
+        application = service.Application('web')
+        print e
+    reactor.listenTCP(config.WEBSERVER_PORT, site)
+    reactor.run()
 
 
 if __name__ == '__main__':
     import traceback
-    import time
-    while 1:
-        try:
-            start = time.time()
-            main()
-            break
-        except:
-            traceback.print_exc()
-            if start + 10 > time.time():
-                print 'server problem, sleeping 1 min'
-                time.sleep(60)
+    try:
+        _debug_('main() starting')
+        main()
+        _debug_('main() finished')
+    except Exception, e:
+        traceback.print_exc()
