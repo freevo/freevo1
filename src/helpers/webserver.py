@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# webserver.py - start the webserver
+# start the webserver
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -101,6 +101,7 @@ def main():
     rewriter =  rewrite.RewriterResource(root, helpimagesrewrite)
     #Site(self, resource, logPath=None, timeout=60 * 60 * 12)
     site = server.Site(rewriter)
+
     try:
         application = service.Application('web', uid=eval(uid), gid=eval(gid))
     except Exception, e:

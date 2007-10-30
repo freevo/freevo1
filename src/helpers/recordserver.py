@@ -36,6 +36,10 @@ import __builtin__
 import config
 from util import vfs
 
+import kaa.rpc
+import kaa.notifier
+from kaa.notifier import EventHandler, AtTimer
+
 appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 appconf = appname.upper()
 
@@ -53,24 +57,19 @@ if __name__ == '__main__':
             os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
     except Exception, e:
         print e
+        sys.exit(1)
 
+# The twisted modules will go away when all the recordserver clients
+# have been updated to use kaa.rpc
 from twisted.web import xmlrpc, server, sux
-from twisted.internet.app import Application
 from twisted.internet import reactor
-from twisted.python import log
 from util.marmalade import jellyToXML, unjellyFromXML
-from video.commdetectclient import initCommDetectJob
-from video.commdetectclient import queueIt
-from video.commdetectclient import listJobs
-from video.commdetectclient import connectionTest
 
-import rc
-rc_object = rc.get_singleton(use_pylirc=0, use_netremote=0)
-
-from tv.record_types import TYPES_VERSION
-from tv.record_types import ScheduledRecordings
+from video.commdetectclient import initCommDetectJob, queueIt, listJobs, connectionTest
 
 import tv.record_types
+from tv.record_types import TYPES_VERSION
+from tv.record_types import ScheduledRecordings
 import tv.epg_xmltv
 import util.tv_util as tv_util
 import plugin
@@ -83,48 +82,13 @@ from event import *
 DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 LOGGING = hasattr(config, 'LOGGING_'+appconf) and eval('config.LOGGING_'+appconf) or config.LOGGING
 
-def _debug_func_(s, level=1):
-    import traceback
-    if DEBUG < level:
-        return
-    global lock
-    if not lock.acquire():
-        print '%r' % s
-    try:
-        try:
-            # add the current trace to the string
-            where =  traceback.extract_stack(limit = 2)[0]
-            if isinstance(s, unicode):
-                s = s.encode(config.encoding, 'replace')
-            s = '%s %-6s: %s' % (where[0][where[0].rfind('/')+1:], '('+str(where[1])+')', s)
-            # print debug message
-            if level <= DCRITICAL:
-                logging.critical(s)
-            elif level == DERROR:
-                logging.error(s)
-            elif level == DWARNING:
-                logging.warning(s)
-            elif level == DINFO:
-                logging.info(s)
-            else:
-                logging.debug(s)
-        except UnicodeEncodeError:
-            print "_debug_ failed. %r" % s
-        except Exception, e:
-            print "_debug_ failed: %r" % e
-    finally:
-        lock.release()
-
-__builtin__.__dict__['_debug_'] = _debug_func_
-
-
 logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
 sys.stdout = open(logfile, 'a')
 sys.stderr = sys.stdout
 
 logging.getLogger('').setLevel(LOGGING)
 logging.basicConfig(level=LOGGING, \
-    #datefmt='%a, %H:%M:%S',
+    #datefmt='%a, %H:%M:%S', # datefmt does not support msecs :(
     format='%(asctime)s %(levelname)-8s %(message)s', \
     filename=logfile, filemode='a')
 
@@ -140,14 +104,14 @@ _debug_('PLUGIN_RECORD: %s' % config.plugin_record, DINFO)
 plugin.init_special_plugin(config.plugin_record)
 
 def print_plugin_warning():
-    _debug_('''
+    _debug_("""
     *************************************************
     **  Warning: No recording plugin registered.   **
     **           Check your local_conf.py for a    **
     **           bad "plugin_record =" line or     **
     **           this log for a plugin failure.    **
     **           Recordings will fail!             **
-    *************************************************''', DWARNING)
+    *************************************************""", DWARNING)
 
 
 if not plugin.getbyname('RECORD'):
@@ -166,8 +130,9 @@ class RecordServer(xmlrpc.XMLRPC):
         self.delay_recording = None
 
 
+    @kaa.rpc.expose('isRecording')
     def isRecording(self):
-        _debug_('in isRecording', 4)
+        _debug_('isRecording()', 1)
         return glob.glob(config.FREEVO_CACHEDIR + '/record.*') and TRUE or FALSE
 
 
@@ -197,8 +162,9 @@ class RecordServer(xmlrpc.XMLRPC):
                 _debug_('Overlap:\n%s\n%s' % (thisprog, nextprog), DINFO)
 
 
+    @kaa.rpc.expose('findNextProgram')
     def findNextProgram(self):
-        _debug_('in findNextProgram', 4)
+        _debug_('findNextProgram()', 1)
 
         next_program = None
         progs = self.getScheduledRecordings().getProgramList()
@@ -234,19 +200,23 @@ class RecordServer(xmlrpc.XMLRPC):
         return next_program
 
 
+    @kaa.rpc.expose('isPlayerRunning')
     def isPlayerRunning(self):
-        '''
+        """
         returns the state of a player, mplayer, xine, etc.
         TODO:
             real player running test, check /dev/videoX.
             this could go into the upsoon client
-        '''
-        _debug_('in isPlayerRunning', 4)
-        return (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
+        """
+        _debug_('isPlayerRunning()', 1)
+        res = (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
+        _debug_('isPlayerRunning=%r' % (res), 1)
+        return res
 
 
-    # note: add locking and r/rw options to get/save funs
+    @kaa.rpc.expose('getScheduledRecordings')
     def getScheduledRecordings(self):
+        _debug_('getScheduledRecordings()', 1)
         file_ver = None
         scheduledRecordings = None
 
@@ -287,8 +257,7 @@ class RecordServer(xmlrpc.XMLRPC):
             scheduledRecordings = ScheduledRecordings()
             self.saveScheduledRecordings(scheduledRecordings)
 
-        _debug_('ScheduledRecordings has %s items.' % \
-                len(scheduledRecordings.programList), 1)
+        _debug_('ScheduledRecordings has %s items.' % len(scheduledRecordings.programList))
 
         try:
             mod_time = os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME]
@@ -298,8 +267,12 @@ class RecordServer(xmlrpc.XMLRPC):
         return scheduledRecordings
 
 
+    @kaa.rpc.expose('saveScheduledRecordings')
     def saveScheduledRecordings(self, scheduledRecordings=None):
-        ''' function to save the schedule to disk '''
+        """
+        Save the schedule to disk
+        """
+        _debug_('saveScheduledRecordings(scheduledRecordings=%r)' % (scheduledRecordings), 1)
 
         if not scheduledRecordings:
             _debug_('making a new ScheduledRecordings', DINFO)
@@ -326,7 +299,7 @@ class RecordServer(xmlrpc.XMLRPC):
         return TRUE
 
     def loadPreviouslyRecordedShows(self):
-        ''' Load the saved set of recorded shows '''
+        """ Load the saved set of recorded shows """
         if self.previouslyRecordedShows:
             return
 
@@ -338,7 +311,7 @@ class RecordServer(xmlrpc.XMLRPC):
             pass
 
     def savePreviouslyRecordedShows(self):
-        ''' Save the set of recorded shows '''
+        """ Save the set of recorded shows """
         if not self.previouslyRecordedShows:
             return
 
@@ -346,7 +319,7 @@ class RecordServer(xmlrpc.XMLRPC):
         pickle.dump(self.previouslyRecordedShows, open(cacheFile, "w"))
 
     def newEpisode(self, prog=None):
-        ''' Return true if this is a new episode of 'prog' '''
+        """ Return true if this is a new episode of 'prog' """
         todayStr = datetime.date.today().strftime('%Y%m%d')
         progStr = str(prog.date)
         _debug_('Program Date: "%s"' % progStr, DINFO)
@@ -361,7 +334,7 @@ class RecordServer(xmlrpc.XMLRPC):
             progMonth = (progStr[4:-2])
             #Day
             todaysDay = (todayStr[6:])
-            progprogDay = (progStr[6:])
+            progDay = (progStr[6:])
             if todaysYear > progYear:
                 #program from a previous year
                 return FALSE
@@ -392,8 +365,8 @@ class RecordServer(xmlrpc.XMLRPC):
             return TRUE
 
     def shrink(self, text):
-        ''' Shrink a string by removing all spaces and making it
-        lower case and then returning the MD5 digest of it. '''
+        """ Shrink a string by removing all spaces and making it
+        lower case and then returning the MD5 digest of it. """
         if text:
             text = md5.new(text.lower().replace(' ', '')).hexdigest()
         else:
@@ -402,8 +375,8 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def getPreviousRecordingKey(self, prog):
-        '''Return the key to be used for a given prog in the
-        previouslyRecordedShows hashtable.'''
+        """Return the key to be used for a given prog in the
+        previouslyRecordedShows hashtable."""
         shrunkTitle = self.shrink(prog.title)
         shrunkSub   = self.shrink(prog.sub_title)
         shrunkDesc  = self.shrink(prog.desc);
@@ -413,7 +386,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def getPreviousRecording(self, prog):
-        '''Get a previous recording, or None if none.'''
+        """Get a previous recording, or None if none."""
         try:
             return self.previouslyRecordedShows[self.getPreviousRecordingKey(prog)]
         except KeyError:
@@ -421,7 +394,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def removeDuplicate(self, prog=None):
-        '''Remove a duplicate recording'''
+        """Remove a duplicate recording"""
         self.loadPreviouslyRecordedShows()
         previous = self.getPreviousRecording(prog)
         if previous:
@@ -431,7 +404,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def addDuplicate(self, prog=None):
-        '''Add program to duplicates hash'''
+        """Add program to duplicates hash"""
         _debug_('No previous recordings for "%s", "%s", "%s", adding to hash and saving' % \
         (prog.title, prog.sub_title, prog.desc), 5)
         self.loadPreviouslyRecordedShows()
@@ -442,8 +415,8 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def duplicate(self, prog=None):
-        '''Identify if the given programme is a duplicate. If not,
-        record it as previously recorded.'''
+        """Identify if the given programme is a duplicate. If not,
+        record it as previously recorded."""
         self.loadPreviouslyRecordedShows()
         previous = self.getPreviousRecording(prog)
         if previous:
@@ -683,7 +656,9 @@ class RecordServer(xmlrpc.XMLRPC):
         return prog
 
 
+    @kaa.rpc.expose('scheduleRecording')
     def scheduleRecording(self, prog=None):
+        _debug_('scheduleRecording(prog=%r)' % (prog), 1)
         global guide
 
         if not prog:
@@ -735,7 +710,9 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'recording scheduled')
 
 
+    @kaa.rpc.expose('removeScheduledRecording')
     def removeScheduledRecording(self, prog=None):
+        _debug_('removeScheduledRecording(prog=%r)' % (prog), 1)
         if not prog:
             return (FALSE, 'no prog')
 
@@ -768,7 +745,9 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'recording removed')
 
 
+    @kaa.rpc.expose('isProgScheduled')
     def isProgScheduled(self, prog, schedule=None):
+        _debug_('isProgScheduled(proc=%r, schedule=%r)' % (prog, schedule), 1)
 
         if schedule == {}:
             return (FALSE, 'prog not scheduled')
@@ -783,10 +762,10 @@ class RecordServer(xmlrpc.XMLRPC):
         return (FALSE, 'prog not scheduled')
 
 
+    @kaa.rpc.expose('findProg')
     def findProg(self, chan=None, start=None):
+        _debug_('findProg(chan=%r, start=%r' % (chan, start))
         global guide
-
-        _debug_('findProg: %s, %s' % (chan, start), DINFO)
 
         if not chan or not start:
             return (FALSE, 'no chan or no start')
@@ -804,10 +783,10 @@ class RecordServer(xmlrpc.XMLRPC):
         return (FALSE, 'prog not found')
 
 
+    @kaa.rpc.expose('findMatches')
     def findMatches(self, find=None, movies_only=None):
+        _debug_('findMatches(find=%r, movies_only=%r)' % (find, movies_only))
         global guide
-
-        _debug_('findMatches: %s' % find, DINFO)
 
         matches = []
         max_results = 500
@@ -855,7 +834,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def checkToRecord(self):
-        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 2)
+        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 1)
         rec_cmd = None
         rec_prog = None
         cleaned = None
@@ -964,8 +943,6 @@ class RecordServer(xmlrpc.XMLRPC):
             self.tv_lock_file = config.FREEVO_CACHEDIR + '/record.'+suffix
             self.record_app.Record(rec_prog)
 
-            self.create_fxd(rec_prog)
-
             # Cleanup old recordings (if enabled)
             if config.RECORDSERVER_CLEANUP_THRESHOLD > 0:
                 space_threshold = config.RECORDSERVER_CLEANUP_THRESHOLD * 1024 * 1024 * 1024
@@ -986,7 +963,9 @@ class RecordServer(xmlrpc.XMLRPC):
                         freespace = util.freespace(path)
                         i = i + 1
 
+    @kaa.rpc.expose('addFavorite')
     def addFavorite(self, name, prog, exactchan=FALSE, exactdow=FALSE, exacttod=FALSE):
+        _debug_('addFavorite(name=%r)' % (name,))
         if not name:
             return (FALSE, 'no name')
 
@@ -1002,7 +981,9 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'favorite added')
 
 
+    @kaa.rpc.expose('addEditedFavorite')
     def addEditedFavorite(self, name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
+        _debug_('addEditedFavorite(name=%r)' % (name))
         fav = tv.record_types.Favorite()
 
         fav.name = name
@@ -1022,7 +1003,9 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'favorite added')
 
 
+    @kaa.rpc.expose('removeFavorite')
     def removeFavorite(self, name=None):
+        _debug_('removeFavorite(name=%r)' % (name))
         if not name:
             return (FALSE, 'no name')
 
@@ -1035,7 +1018,9 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'favorite removed')
 
 
+    @kaa.rpc.expose('clearFavorites')
     def clearFavorites(self):
+        _debug_('clearFavorites()')
         scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.clearFavorites()
         self.saveScheduledRecordings(scheduledRecordings)
@@ -1043,11 +1028,15 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'favorites cleared')
 
 
+    @kaa.rpc.expose('getFavorites')
     def getFavorites(self):
+        _debug_('getFavorites()')
         return (TRUE, self.getScheduledRecordings().getFavorites())
 
 
+    @kaa.rpc.expose('getFavorite')
     def getFavorite(self, name):
+        _debug_('getFavorite(name=%r)' % (name))
         (status, favs) = self.getFavorites()
 
         if favs.has_key(name):
@@ -1057,7 +1046,9 @@ class RecordServer(xmlrpc.XMLRPC):
             return (FALSE, 'not a favorite')
 
 
+    @kaa.rpc.expose('adjustPriority')
     def adjustPriority(self, favname, mod=0):
+        _debug_('adjustPriority(favname=%r, mod=%r)' % (favname, mod))
         save = []
         mod = int(mod)
         (status, me) = self.getFavorite(favname)
@@ -1098,8 +1089,13 @@ class RecordServer(xmlrpc.XMLRPC):
 
         return (TRUE, 'priorities adjusted')
 
+
+    @kaa.rpc.expose('getFavoriteObject')
     def getFavoriteObject(self, prog, favs=None):
-        """more liberal favorite check that returns an object"""
+        """
+        more liberal favorite check that returns an object
+        """
+        _debug_('getFavoriteObject(prog=%r)' % (prog))
         if not favs:
             (status, favs) = self.getFavorites()
         # first try the strict test
@@ -1114,7 +1110,10 @@ class RecordServer(xmlrpc.XMLRPC):
         # if we get this far prog is not a favorite
         return (FALSE, 'not a favorite')
 
+
+    @kaa.rpc.expose('isProgAFavorite')
     def isProgAFavorite(self, prog, favs=None):
+        _debug_('isProgAFavorite(prog=%r)' % (prog))
         if not favs:
             (status, favs) = self.getFavorites()
 
@@ -1156,7 +1155,10 @@ class RecordServer(xmlrpc.XMLRPC):
                 if fav.allowDuplicates == '1':
                     return TRUE
 
+
+    @kaa.rpc.expose('removeFavoriteFromSchedule')
     def removeFavoriteFromSchedule(self, fav):
+        _debug_('removeFavoriteFromSchedule(fav=%r)' % (fav))
         # TODO: make sure the program we remove is not
         #       covered by another favorite.
 
@@ -1173,7 +1175,9 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'favorite unscheduled')
 
 
+    @kaa.rpc.expose('addFavoriteToSchedule')
     def addFavoriteToSchedule(self, fav):
+        _debug_('addFavoriteToSchedule(fav=%r)' % (fav))
         global guide
         favs = {}
         favs[fav.name] = fav
@@ -1190,9 +1194,11 @@ class RecordServer(xmlrpc.XMLRPC):
         return (TRUE, 'favorite scheduled')
 
 
+    @kaa.rpc.expose('updateFavoritesSchedule')
     def updateFavoritesSchedule(self):
         #  TODO: do not re-add a prog to record if we have
         #        previously decided not to record it.
+        _debug_('updateFavoritesSchedule()')
 
         global guide
 
@@ -1562,15 +1568,7 @@ class RecordServer(xmlrpc.XMLRPC):
         self.checkToRecord()
 
 
-    def eventNotice(self):
-        print 'RECORDSERVER GOT EVENT NOTICE'
-        # Use callLater so that handleEvents will get called the next time
-        # through the main loop.
-        reactor.callLater(0, self.handleEvents)
-
-
-    def handleEvents(self):
-        event = rc_object.get_event()
+    def handleEvents(self, event):
         if event:
             if hasattr(event, 'arg'):
                 _debug_('event=%s arg=%r' % (event, event.arg))
@@ -1696,19 +1694,36 @@ class RecordServer(xmlrpc.XMLRPC):
             _debug_('%s unknown' % (event), DINFO)
 
 
+    def handleTimer(self):
+        #rs.startMinuteCheck()
+        self.checkToRecord()
+
+
 def main():
-    app = Application("RecordServer")
+    kaa.notifier.init('twisted')
+
+    socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT2)
+    secret = config.RECORDSERVER_SECRET
+    _debug_('socket=%r, secret=%r' % (socket, secret))
+
     rs = RecordServer()
-    app.listenTCP(config.RECORDSERVER_PORT, server.Site(rs, logPath='/dev/null'))
+
+    rpc = kaa.rpc.Server(socket, secret)
+    rpc.connect(rs)
+
+    eh = EventHandler(rs.handleEvents)
+    eh.register()
+
+    reactor.listenTCP(config.RECORDSERVER_PORT, server.Site(rs))
     rs.startMinuteCheck()
-    # this doesn't work
-    #rc_object.subscribe(rs.eventNotice)
-    app.run(save=0)
+    reactor.run()
+
+    #kaa.notifier.AtTimer(rs.handleTimer).start(sec=45)
+    #kaa.main()
 
 
 if __name__ == '__main__':
     import traceback
-    import time
     import glob
 
     locks = glob.glob(config.FREEVO_CACHEDIR + '/record.*')
@@ -1716,18 +1731,8 @@ if __name__ == '__main__':
         _debug_('Removed old record lock \"%s\"' % f, DINFO)
         os.remove(f)
 
-    while 1:
+    try:
         main()
-
-        # Don't see the point to this code, errors are system errors or programming errors
-        # Better to exit. May there was a reason
-        #try:
-        #    start = time.time()
-        #    main()
-        #    break
-        #except Exception, e:
-        #    print e
-        #    traceback.print_exc()
-        #    if start + 10 > time.time():
-        #        _debug_('server problem, sleeping 1 min', DINFO)
-        #        time.sleep(60)
+    except Exception, e:
+        traceback.print_exc()
+    print 'done.'
