@@ -21,9 +21,12 @@
 #
 # -----------------------------------------------------------------------
 #
-#
-#
 # &syntaxcheck=False - Disable Syntax Check on update.
+# cmd=DISPLAYCONFIG - Loop throught config and display all config settings.
+# local_conf.py  CONFIG_REALTIME_UPDATE = True , try to setting the var, if kinda sketchy on this one.
+# 
+#  Todo: FIX CONFIG file name STUFF.
+
 
 
 import sys
@@ -33,6 +36,11 @@ import config
 import string
 import types
 import time
+import subprocess
+
+import plugins 
+from configlib import  *
+
 from stat import *
 from www.web_types import HTMLResource, FreevoResource
 
@@ -46,21 +54,14 @@ def LogTransaction(cmd, lineno, line):
     else:
         logfile_directory = config.LOGDIR
 
-    logfile = open (os.path.join(logfile_directory, 'webconfig.log'), 'a')
+    log_filename = os.path.join(config.FREEVO_LOGDIR, 'webconfig-%s.log' % ( os.getuid()))
+
+    logfile = open (log_filename, 'a')
     logtime = time.strftime('%Y-%m-%d %H:%M:%S')
     message = 'Line : %i  %s %s ' % ( lineno, cmd, line)
     mess =  logtime + " -- " + message
     logfile.write (mess)
     logfile.close
-
-
-def ReadConfig(config_file):
-    '''
-    '''
-    _debug_('ReadConfig(config_file=%r)' % ( config_file ), 2)
-    lconf_hld = open(config_file, 'r')
-    fconf = lconf_hld.readlines()
-    return fconf
 
 
 def WriteConfigFile(filename, conf):
@@ -92,6 +93,7 @@ def cmdCreateFXDFile(fxd_file, fxd_title, fxd_url):
     fxd_file_handle.write('</freevo> ')
     fxd_file_handle.close()
 
+ 
 
 def cmdBrowseFiles(browse_dir,browse_area, setting_name,  browse_type =  'F', display_hidden = False):
     '''
@@ -99,6 +101,7 @@ def cmdBrowseFiles(browse_dir,browse_area, setting_name,  browse_type =  'F', di
     _debug_('cmdBrowseFiles(browse_dir=%r, browse_area=%r, setting_name=%r, browse_type=%r, dispay_hidden=%r)' % \
         ( browse_dir, browse_area, setting_name, browse_type, display_hidden ) , 2)
 
+    print "Browing files !!!"
     browse_dir = browse_dir.strip("'")
     browse_dir = os.path.dirname(browse_dir)
 
@@ -131,8 +134,12 @@ def cmdBrowseFiles(browse_dir,browse_area, setting_name,  browse_type =  'F', di
         if show_file:
             if cur_type == "D":
                 file_list_ctrl += '<li class="directory">'
-                file_list_ctrl += '<a onclick=SelectFile("%s","%s")>Select </a>' % (full_file, browse_area)
-                file_list_ctrl += '<a onclick=getFileList("%s","%s/","%s","F")>%s</a>' % ( browse_area, full_file, setting_name, display_file )
+                file_list_ctrl += '<a onclick=SelectFile("%s","%s")>' % (full_file, browse_area)
+                file_list_ctrl += 'Select '
+                file_list_ctrl += '</a>'
+                file_list_ctrl += '<a onclick=getFileList("%s","%s/","%s","F")>' % ( browse_area, full_file, setting_name)
+                file_list_ctrl += display_file
+                file_list_ctrl += '</a>'
                 file_list_ctrl += '</li>'
 
     if browse_type == 'F':
@@ -151,7 +158,9 @@ def cmdBrowseFiles(browse_dir,browse_area, setting_name,  browse_type =  'F', di
             if show_file:
                 if cur_type <> "D":
                     file_list_ctrl += '<li class="file">'
-                    file_list_ctrl += '<a id="file" onclick=SelectFile("%s","%s","%s")>%s</a>' % (full_file, browse_area, setting_name, display_file )
+                    js_onclick = 'onclick=SelectFile("%s","%s","%s")' % (full_file, browse_area, setting_name)
+                    file_list_ctrl += '<a id="file" %s >%s' % (js_onclick, display_file )
+                    file_list_ctrl += '</a>\n'
                     file_list_ctrl += '</li>'
 
     file_list_ctrl += '</div></ul>'
@@ -230,10 +239,6 @@ def UpdateSetting(cfile, varName, varValue, varEnable, sline, eline, syntaxcheck
             LogTransaction('Line update TO : ', sline, fconf[sline])
             WriteConfigFile(cfile, fconf)
             results = '<span class="checkOK">Update Done - %s </span>' % newline
-            
-#            if syntaxcheck and varEnabled:
-#                actual_value = GetItemsArray(varValue)
-#                config.__dict__[varName] = actual_value
         
 
         else:
@@ -271,20 +276,6 @@ def GetItemsArray(cvalue):
     if CheckSyntax(cmd):
         exec cmd
     return itemlist
-    
-
-def CheckSyntax(fvsetting):
-    '''
-    '''
-    _debug_('CheckSyntax(fvsetting=%r)' % ( fvsetting ), 2)
-
-    status = False
-    try :
-        exec fvsetting
-        status = True
-    except :
-        status = False
-    return status
 
 
 def FileTypeVarArray(cname):
@@ -354,6 +345,30 @@ def UpdatePlugin(cfile, pcmd, pname, pline, plugin_level, plugin_args):
 
     return status
 
+def UpdateServer(server_name, server_cmd):
+    print '%s = %s' % ( server_name, server_cmd )
+
+    run_cmd = ['freevo',server_name,server_cmd] 
+    server_pid = subprocess.Popen(run_cmd).pid
+    print 'SERVER PID = %r'  % server_pid
+
+    time.sleep(3)
+
+    server_line = Display_Server(server_name)
+    return server_line
+
+def StartHelper(helper):
+    print 'STARTING HELPER !!! == %s' % helper
+
+    run_cmd = ['freevo',helper] 
+    helper_pid = subprocess.Popen(run_cmd).pid
+    print 'SERVER PID = %r'  % helper_pid
+
+    time.sleep(3)
+
+    helper_line = Display_Helper(helper)
+    return helper_line
+
 
 class ConfigEditResource(FreevoResource):
 
@@ -362,6 +377,7 @@ class ConfigEditResource(FreevoResource):
         form = request.args
 
         configfile = fv.formValue(form, 'configfile')
+        configfile = '/home/dlocke/.freevo/local_conf.py'
         if configfile:
             if not os.path.exists(configfile):
                 configfile = '/etc/freevo/local_conf.py'
@@ -385,16 +401,41 @@ class ConfigEditResource(FreevoResource):
         pluginaction = fv.formValue(form, 'pluginaction')
         pluginname = fv.formValue(form, 'pluginname')
         pluginline = fv.formValue(form, 'pluginline')
-
+        
+        realtime_update = TRUE
+        if config.__dict__.has_key('CONFIG_REALTIME_UPDATE'):
+            realtime_update = config.CONFIG_REALTIME_UPDATE
+   
         syntaxcheck = True
         if fv.formValue(form,'syntaxcheck') == 'FALSE':
             syntaxcheck = False
+    
+        browse_file = fv.formValue(form,'browsefile')
+        browse_area = fv.formValue(form,'browsearea')
+        setting_name = fv.formValue(form,'setting_name')
+
+        # NEED TO MOVE ON CONFIG RELATED STUFF ABOVE THE FILE CHECK !!!
+        if cmd == 'BROWSEDIRECTORY' and browse_file and browse_area:
+            fv.res = cmdBrowseFiles(browse_file,browse_area,setting_name,'D')
+            return str( fv.res )
+
+        if cmd == 'BROWSEFILE' and browse_file and browse_area:
+            fv.res = cmdBrowseFiles(browse_file,browse_area,setting_name)
+            return str( fv.res )
 
         if not cmd:
             cmd = 'VIEW'
 
         if cmd == 'UPDATE':
             fv.res = UpdateSetting(configfile, udname, udvalue, udenable, int(startline), int(endline),syntaxcheck)
+ 
+            if realtime_update:
+                check_value =   '%s = %s' %   (udname, udvalue)
+                if CheckSyntax(check_value) and udenable == 'TRUE':
+                    actual_value = GetItemsArray(udvalue)
+                    print 'Doing Live Update %s = %s ' % ( udname, udvalue )
+                    config.__dict__[udname] = actual_value
+                
             return String( fv.res )
 
         if cmd == 'CHECK' and udname and udvalue:
@@ -419,18 +460,14 @@ class ConfigEditResource(FreevoResource):
             fv.res = UpdatePlugin(configfile, pluginaction, pluginname, pluginline, plugin_level,plugin_args)
             return String( fv.res )
 
-        browse_file = fv.formValue(form,'browsefile')
-        browse_area = fv.formValue(form,'browsearea')
-        setting_name = fv.formValue(form,'setting_name')
+        server_name = fv.formValue(form,'server_name')
+        server_cmd = fv.formValue(form,'server_cmd')
+        if cmd == 'SERVERUPDATE' and server_cmd and server_name:
+            fv.res += UpdateServer(server_name, server_cmd)
 
-
-        if cmd == 'BROWSEFILE' and browse_file and browse_area:
-            fv.res = cmdBrowseFiles(browse_file,browse_area,setting_name)
-            return str( fv.res )
-
-        if cmd == 'BROWSEDIRECTORY' and browse_file and browse_area:
-            fv.res = cmdBrowseFiles(browse_file,browse_area,setting_name,'D')
-            return str( fv.res )
+        helper_name = fv.formValue(form,'helper_name')
+        if cmd == 'STARTHELPER' and helper_name:
+            fv.res += StartHelper(helper_name)
 
         return str( fv.res )
 

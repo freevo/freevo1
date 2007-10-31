@@ -1,3 +1,17 @@
+function ServerUpdate(server, server_cmd,status) {
+    var updateurl;
+    
+    updateurl = 'configedit.rpy?cmd=SERVERUPDATE&server_name=' + server + '&server_cmd=' + server_cmd;
+    makeRequest(updateurl, status);
+}
+
+function StartHelper(helper, status) {
+    var updateurl;
+    
+    updateurl = 'configedit.rpy?cmd=STARTHELPER&helper_name=' + helper;
+    makeRequest(updateurl, status);
+}
+
 function DisplayList(listname) {
     var list;
     

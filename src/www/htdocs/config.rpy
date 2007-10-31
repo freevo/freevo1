@@ -28,6 +28,9 @@
 # config.rpy?configfile=/etc/freevo/local_conf.py - Open other config file.
 #
 # Required configedit.rpy - To write the settings to the local_conf.py
+#
+# Todo : Fix headlines with ? and & messing with url  !!
+#            Fix File Items stuff and the '  single quote, and display update button on edit.
 
 import sys
 import os.path
@@ -35,37 +38,13 @@ import string
 import types
 import time
 import urllib
+import operator
 from www.web_types import HTMLResource, FreevoResource
+#from helpers.convert_config import change, change_map
+
+from configlib import * 
 import config
 import util
-
-
-def GetConfigFileName(config_file_name):
-    '''
-    '''
-    _debug_('GetConfigFileName(config_file_name=%r)' % config_file_name , 2)
-
-
-    if not config_file_name:
-        if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
-            return '/etc/freevo/local_conf.py'
-        else:
-            config_file_name = config.CONFIG_EDIT_FILE
-
-    if not os.path.exists(config_file_name):
-        config_file_name = None
-
-    return config_file_name
-
-
-def ReadConfig(config_file):
-    '''
-    '''
-    _debug_('ReadConfig(config_file=%r)' % (config_file), 2)
-    lconf_hld = open(config_file, 'r')
-    fconf = lconf_hld.readlines()
-    return fconf
-
 
 def ParseConfigFile(rconf):
     '''
@@ -114,9 +93,10 @@ def ParseConfigFile(rconf):
                 fconfig.append(pln)
         cnt += 1
 
+    fconfig.sort(key=operator.itemgetter('control_name'))
     return fconfig
 
-
+    
 def ParseLine(cline):
     '''
     '''
@@ -179,30 +159,13 @@ def GetVarGroup(setting_name):
     _debug_('GetVarGroup(setting_name=%r)' % (setting_name), 2)
 
     group = setting_name.split('_')[0].capitalize()
-
     if setting_name.startswith('KEYMAP'):
         group = 'KeyMap'
 
     if setting_name.endswith('_VOLUME'):
         group = 'Volume'
 
-    if setting_name == "PERSONAL_WWW_PAGE":
-        group = "Www"
-
     return group
-
-
-def CheckSyntax(fvsetting):
-    '''
-    '''
-    _debug_('CheckSyntax(fvsetting=%r)' % (fvsetting), 2)
-    status = False
-    try:
-        exec fvsetting
-        status = True
-    except:
-        status = False
-    return status
 
 
 def GetItemsArray(cvalue):
@@ -288,10 +251,11 @@ def DirTypeVar(cname):
     '''
     _debug_('FileTypeVar(cname)', 2)
     vtype = cname.split('_')[-1]
+    print cname
     filetypes = ['DIR']
-    filevars = ['RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS']
+    filevars = ['RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'FREEVO_LOGDIR']
 
-    if vtype in filetypes:
+    if cname.endswith('DIR'):
         return True
     if cname in filevars:
         return True
@@ -347,50 +311,6 @@ def VarType(setting_name, cvalue):
     return 'Unknow'
 
 
-def CreateNewLineControl():
-    '''
-    '''
-    _debug_('CreateNewLineControl()', 2)
-    ctrl = '<div align="left">'
-    ctrl += '<input  id="newname" name="newname" size="4"> ='
-    ctrl += '<input  id="newvalue" name="newvalue" size="40">'
-    ctrl += '<input type="button" onclick="AddNewLine()" value="New Setting">'
-    ctrl += '<br><br>\n'
-    ctrl += '</div>'
-    return ctrl
-
-
-def CreateHTMLinput(control_type, control_id, control_value, size = '',other_opts = ''):
-    '''
-    '''
-    _debug_('CreateHTMLinput(control_type=%r, control_id=%r, value=%r, control_size=%r, other_opts=%r)' % \
-            (control_type, control_id, control_value, size, other_opts ), 2)
-    html_input = '<input '
-    html_input += 'type = "%s" ' % control_type
-    html_input += 'id = "%s" ' % control_id
-    html_input += 'value = "%s" ' % control_value
-    html_input += 'size = "%s" ' % size
-    html_input += ' ' +  other_opts
-    html_input += '>'
-
-    return html_input
-
-
-def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
-    '''
-    '''
-    _debug_('CreateSelectBoxControl(cname, grps, cvalue, opts="")', 2)
-    ctrl = '<select name="%s" value="%s"  id="%s" %s >\n' % (cname,  cvalue, cname, opts)
-    for grp in grps:
-        if grp == cvalue:
-            ctrl  += '    <option value="%s" selected="yes">%s</option>\n' % (grp, grp)
-        else:
-            ctrl  += '    <option value="%s">%s</option>\n' % (grp, grp)
-    ctrl += '</select>\n'
-    return ctrl
-
-
-
 def CreateFileBrowseControl(cname,setting_name):
     '''
     '''
@@ -410,7 +330,6 @@ def CreateFileBrowseControl(cname,setting_name):
     browse_area = '<div id="%s_filebrowse" class="file_browse" style=%s></div>' % ( cname, style )
     file_browse_control = btn_browse + cancel_button + browse_area
     return file_browse_control
-
 
 
 def CreateTV_Channels_ctrl(cname, cvalue):
@@ -462,7 +381,6 @@ def CreateFileItemList(cname, cvalue,setting_name):
                 browse_file_ctrl = CreateFileBrowseControl(control_id,setting_name)
 
                 ctrl += html_input
-
                 if not os.path.exists(e):
                     filecheck = 'Missing File'
                     chkClass = 'CheckWarning'
@@ -490,16 +408,13 @@ def CreateFileItemList(cname, cvalue,setting_name):
 
         r += 1;
 
+        ctrl += '<li class="Setting_Controls">'
         js_onchange = 'onchange=CheckValue("%s","fileitemlist","%i")' % (cname, r)
         label_ctrl_id = '%s_label%i' % ( cname, r )
-        label_ctrl = CreateHTMLinput('textbox', label_ctrl_id, '', '', '')
+        ctrl += CreateHTMLinput('textbox', label_ctrl_id, '', '', '')
 
         dir_ctrl_id = '%s_file%i' % ( cname, r )
-        dir_ctrl = CreateHTMLinput('textbox', dir_ctrl_id, '', '', js_onchange )
-
-        ctrl += '<li class="Setting_Controls">'
-        ctrl += label_ctrl
-        ctrl += dir_ctrl
+        ctrl += CreateHTMLinput('textbox', dir_ctrl_id, '', '', js_onchange )
         ctrl += '<span class="" id="%s_check_%i"></span' % (cname, r)
         ctrl += '</li>'
 
@@ -510,40 +425,32 @@ def CreateFileItemList(cname, cvalue,setting_name):
 def CreateDictionaryControl(cname, cvalue):
     '''
     '''
-    _debug_('CreateDictionaryControl(cname, cvalue, cenabled)', 2)
+    _debug_('CreateDictionaryControl(cname=%r, cvalue=%r)' % (cname, cvalue), 2)
     ctrl2type = 'textbox'
     if cname.startswith('WWW_USERS'):
         ctrl2type = 'password'
 
     vitems = GetItemsArray(cvalue)
-    ctrl = ''
-    ctrl += '<ul class="ItemList">'
+    ctrl = '<ul class="ItemList">'
 
     if vitems:
         for r, e in enumerate(vitems):
             pword =  vitems[e]
+            ctrl += '<li class="Setting_Controls">'
 
             label_ctrl_id = '%s_item%i%i' % ( cname, r, 0 )
-            label_ctrl = CreateHTMLinput('textbox', label_ctrl_id, e, '15', '')
+            ctrl += CreateHTMLinput('textbox', label_ctrl_id, e, '15', '')
 
             value_ctrl_id = '%s_item%i%i' % ( cname, r , 1 )
-            value_ctrl = CreateHTMLinput(ctrl2type, value_ctrl_id, vitems[e], '15', '')
-
-            ctrl += '<li class="Setting_Controls">'
-            ctrl += label_ctrl
-            ctrl += value_ctrl
+            ctrl += CreateHTMLinput(ctrl2type, value_ctrl_id, vitems[e], '15', '')
             ctrl += '</li>\n'
 
-
+        ctrl += '<li class="Setting_Controls">'
         label_ctrl_id = '%s_item%i%i' % ( cname, r+1, 0 )
-        label_ctrl = CreateHTMLinput('textbox', label_ctrl_id, '', '15', '')
+        ctrl += CreateHTMLinput('textbox', label_ctrl_id, '', '15', '')
 
         value_ctrl_id = '%s_item%i%i' % ( cname, r+1 , 1 )
-        value_ctrl = CreateHTMLinput(ctrl2type, value_ctrl_id, '', '15', '')
-
-        ctrl += '<li class="Setting_Controls">'
-        ctrl += label_ctrl
-        ctrl += value_ctrl
+        ctrl += CreateHTMLinput(ctrl2type, value_ctrl_id, '', '15', '')
         ctrl += '</li>\n'
         ctrl += '</ul>\n'
 
@@ -580,26 +487,23 @@ def CreateListControl(cname, cvalue):
                     html_textbox = CreateHTMLinput('textbox', html_textbox_id, e2, '15', js_onchange)
                     ctrl_line += html_textbox
 
-                if cols > maxcols:
-                    maxcols = cols
+                maxcols = max(cols,maxcols)
 
             ctrl += '<li class="Setting_Controls">'
             ctrl += ctrl_line
             ctrl += '</li>\n'
 
-        ctrl += '<li class="Setting_Controls">\n'
+        if not cvalue.strip().startswith('('):
+            ctrl += '<li class="Setting_Controls">\n'
+            r+= 1;
+            js_onchange = 'onchange=CheckValue("%s","itemlist","%i")' % (cname, r)
+            for c in range(0, maxcols):
+                html_textbox_id = '%s_item%i%i' % ( cname, r, c )
+                html_textbox = CreateHTMLinput('textbox', html_textbox_id, '', '15', js_onchange)
+                ctrl += html_textbox
+            ctrl += '</li>\n'
 
-        r+= 1;
-        js_onchange = 'onchange=CheckValue("%s","itemlist","%i")' % (cname, r)
-        for c in range(0, maxcols):
-            html_textbox_id = '%s_item%i%i' % ( cname, r, c )
-            html_textbox = CreateHTMLinput('textbox', html_textbox_id, '', '15', js_onchange)
-            ctrl += html_textbox
-
-
-        ctrl += '</li>\n'
         ctrl += '</ul>\n'
-#        ctrl += "]</span>\n"
         return ctrl
 
     ctrl = CreateTextArea(cname, cvalue)
@@ -641,7 +545,7 @@ def CreateTextBox(cname, setting_name, cvalue, vtype, plugin_group):
     html_input = CreateHTMLinput('textbox', cname, cvalue, '50', js_onchange)
     ctrl += html_input
 
-    if FileTypeVar(setting_name):
+    if FileTypeVar(setting_name) or DirTypeVar(setting_name):
         browse_file_control = CreateFileBrowseControl(cname,setting_name)
         ctrl += browse_file_control
 
@@ -767,8 +671,7 @@ def DisplayGroups(fconfig, expALL):
     '''
     '''
     _debug_('DisplayGroups(fconfig=%r, expALL=%r)' % (fconfig, expALL), 2)
-    fv = HTMLResource()
-    fv.res +=  '<ul class="GroupHeader">'
+    html =  '<ul class="GroupHeader">'
 
     groups = GetGroupList(fconfig)
     displayStyle = 'none'
@@ -776,21 +679,70 @@ def DisplayGroups(fconfig, expALL):
         displayStyle = ''
 
     for grp in groups:
-        fv.res += '<li class="VarGroupHeaderLine">'
-        fv.res += '<a class="VarGroupHeaderItem" onclick=ShowList("%s")>%s</a>\n'  % (grp, grp)
-        fv.res += '<ul id="%s" style= display:%s>\n' % (grp, displayStyle)
+        html += '<li class="VarGroupHeaderLine">'
+        html += '<a class="VarGroupHeaderItem" onclick=ShowList("%s")>%s</a>\n'  % (grp, grp)
+        html += '<ul id="%s" style= display:%s>\n' % (grp, displayStyle)
         for cctrl in fconfig:
             if cctrl['group'] == grp:
                 lctrl = CreateConfigLine(cctrl, grp, expALL)
-                fv.res += '<li class="Setting_Line">'
-                fv.res += lctrl
-                fv.res += '</li>\n'
-        fv.res += '</ul>\n'
-        fv.res += '</li>\n'
-    fv.res += '</ul>\n'
+                html += '<li class="Setting_Line">'
+                html += lctrl
+                html += '</li>\n'
+        html += '</ul>\n'
+        html += '</li>\n'
+    html += '</ul>\n'
 
-    return fv.res
+    return html
 
+def DisplayConfigChanges(current_version):
+    '''
+    '''
+    _debug_('DisplayConfigChanges(current_version=%r)' % current_version, 2)
+
+    if not current_version:
+        current_version = 0
+
+    cur_version = float(current_version)
+    dsp_change = '<div class="Config_Changes">'
+    dsp_change += 'Warning: freevo_config.py was changed, please check local_conf.py<br>'
+    dsp_change += 'You are using version  %s, changes since then:' % current_version
+    config_outdated = False
+
+    for change in config.LOCAL_CONF_CHANGES:
+         if change[0] > cur_version:
+            dsp_change += '<li>\n'
+            dsp_change += str(change[0]) 
+            change_lines = change[1].split('\n')
+            dsp_change += '<ul>\n'
+            for line in change_lines:
+                if len(line.strip()) > 0:
+                    dsp_change += '<li>' + line + '</li>\n'
+            dsp_change += '</ul>\n'
+            dsp_change += '</li>\n'
+            config_outdated = True
+
+    if config_outdated:
+        dsp_change += 'local_conf.py is out dated'
+        dsp_change += CreateHTMLinput('Button','','Convert Config','','')
+        dsp_change += '</ul>\n'
+        dsp_change += '</div>\n'
+
+    else:
+        dsp_change = ''            
+
+    return dsp_change
+
+
+def GetConfigVersion(conf_data):
+    '''
+    '''  
+    _debug_('GetConfigVersion(conf_data=%r)' % conf_data,2)
+    for setting in conf_data:
+         if setting['ctrlname'] == 'CONFIG_VERSION':
+             return setting['ctrlvalue']
+    return None
+
+    
 class ConfigResource(FreevoResource):
 
     def _render(self, request):
@@ -801,13 +753,9 @@ class ConfigResource(FreevoResource):
         fv = HTMLResource()
         form = request.args
 
-        for celement in config.__dict__:
-            print  "%s =  %s" % (celement, config.__dict__[celement] )
-            print celement
-
-
         configfile = fv.formValue(form, 'configfile')
         configfile = GetConfigFileName(configfile)
+        configfile = '/etc/freevo/local_conf.py'
         title = 'Config %s' %configfile
         fv.printHeader(_(title), 'styles/main.css', 'scripts/config.js', selected=_('Config'))
 
@@ -815,7 +763,7 @@ class ConfigResource(FreevoResource):
         fv.res += '<link rel="stylesheet" href="styles/config.css" type="text/css" />\n'
 
         if not configfile:
-            fv.printMessages(['Unable to find file - ' + configfile])
+            fv.res += 'Unable to find file.'
             return fv.res
 
         rconf = ReadConfig(configfile)
@@ -843,6 +791,11 @@ class ConfigResource(FreevoResource):
 
         fv.res += CreateHTMLinput('hidden','configfile', configfile,'','')
         fv.res += '<div class="VarGroups">\n'
+
+        # Check config version.
+        local_conf_ver = GetConfigVersion(fconfig)
+        fv.res += DisplayConfigChanges(local_conf_ver)
+
         fv.res += '<form id="config" action="config.rpy" method="get">\n'
         fv.res += DisplayGroups(fconfig, expandAll)
         fv.res + '</div>\n'

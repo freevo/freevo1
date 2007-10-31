@@ -7,7 +7,7 @@
 #
 # Notes: viewlogfile.rpy args : displayfile="logfile to display" eg
 #
-# Todo:
+# Todo: Update file list when updating the log viewer.
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
