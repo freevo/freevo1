@@ -29,8 +29,12 @@
 # -----------------------------------------------------------------------
 
 
+import sys
+import time
 import config
 
+import kaa.rpc
+import kaa.notifier
 import time, sys, socket, traceback, string
 import xmlrpclib
 import epg_types
@@ -40,16 +44,39 @@ from util.marmalade import jellyToXML, unjellyFromXML
 TRUE  = 1
 FALSE = 0
 
-server_string = 'http://%s:%s/' % \
-                (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
-print 'server_string=%s'%server_string
-server = xmlrpclib.Server(server_string, allow_none=1)
+xml_rpc_server = 'http://%s:%s/' % (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
+server = xmlrpclib.Server(xml_rpc_server, allow_none=1)
+
+class RecordClient:
+    """
+    recordserver access class using kaa.rpc
+    """
+    def __init__(self):
+        self.socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT2)
+        self.secret = config.RECORDSERVER_SECRET
+        try:
+            self.server = kaa.rpc.Client(self.socket, self.secret)
+        except kaa.rpc.ConnectError, e:
+            print e
+            raise
+
+    @kaa.notifier.execute_in_mainloop()
+    def recordserver_rpc(self, cmd, *args, **kwargs):
+        print 'RecordClient.recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs)
+        return self.server.rpc(cmd, *args, **kwargs)
+
+    def getScheduledRecordings(self):
+        print 'RecordClient.getScheduledRecordings()'
+        inprogress = self.recordserver_rpc('getScheduledRecordings')
+        print 'RecordClient.getScheduledRecordings.inprogress = %r' % (inprogress)
+        return inprogress
+        
+
 
 def returnFromJelly(status, response):
     if status:
         return (status, unjellyFromXML(response))
-    else:
-        return (status, response)
+    return (status, response)
 
 
 def getScheduledRecordings():
@@ -58,7 +85,6 @@ def getScheduledRecordings():
     except Exception, e:
         _debug_('%s' % e)
         return (FALSE, 'record_client: '+_('connection error'))
-
     return returnFromJelly(status, message)
 
 
@@ -67,7 +93,6 @@ def saveScheduledRecordings(scheduledRecordings):
         (status, message) = server.saveScheduledRecordings(scheduledRecordings)
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -78,7 +103,6 @@ def connectionTest(teststr='testing'):
         _debug_('%s' % e)
         traceback.print_exc()
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -106,7 +130,6 @@ def removeScheduledRecording(prog=None):
         (status, message) = server.removeScheduledRecording(jellyToXML(prog))
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -115,7 +138,6 @@ def cleanScheduledRecordings():
         (status, message) = server.cleanScheduledRecordings()
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -143,8 +165,6 @@ def findProg(chan, start):
         (status, response) = server.findProg(chan, start)
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
-
     return returnFromJelly(status, response)
 
 
@@ -154,7 +174,6 @@ def findMatches(find='', movies_only=0):
     except Exception, e:
         _debug_('Search error for \'%s\' %s' % (find, e), DWARNING)
         return (FALSE, 'record_client: '+_('connection error'))
-
     return returnFromJelly(status, response)
 
 
@@ -163,7 +182,6 @@ def addFavorite(name, prog, exactchan, exactdow, exacttod):
         (status, message) = server.addFavorite(name, prog, exactchan, exactdow, exacttod)
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -176,7 +194,6 @@ def addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, on
         _debug_('%s' % e, DERROR)
         traceback.print_exc()
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -185,7 +202,6 @@ def removeFavorite(name):
         (status, message) = server.removeFavorite(name)
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -194,7 +210,6 @@ def clearFavorites():
         (status, message) = server.clearFavorites()
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -203,7 +218,6 @@ def getFavorites():
         (status, response) = server.getFavorites()
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return returnFromJelly(status, response)
 
 
@@ -212,7 +226,6 @@ def getFavorite(name):
         (status, response) = server.getFavorite(name)
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return returnFromJelly(status, response)
 
 
@@ -221,7 +234,6 @@ def getFavoriteObject(prog, favs=None):
         (status, response) = server.getFavoriteObject(jellyToXML(prog), jellyToXML(favs))
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return returnFromJelly(status, response)
 
 
@@ -230,7 +242,6 @@ def adjustPriority(favname, mod):
         (status, message) = server.adjustPriority(favname, mod)
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -239,7 +250,6 @@ def isProgAFavorite(prog, favs=None):
         (status, message) = server.isProgAFavorite(jellyToXML(prog), jellyToXML(favs))
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -248,7 +258,6 @@ def removeFavoriteFromSchedule(fav):
         (status, message) = server.removeFavoriteFromSchedule(fav)
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -257,7 +266,6 @@ def addFavoriteToSchedule(fav):
         (status, message) = server.addFavoriteToSchedule(fav)
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -266,7 +274,6 @@ def updateFavoritesSchedule():
         (status, message) = server.updateFavoritesSchedule()
     except:
         return (FALSE, 'record_client: '+_('connection error'))
-
     return (status, message)
 
 
@@ -276,15 +283,16 @@ if __name__ == '__main__':
     else:
         function = 'none'
 
+    print 'xml_rpc_server at %r' % (xml_rpc_server)
 
     if function == "updateFavoritesSchedule":
         (result, response) = updateFavoritesSchedule()
-        _debug_('%r' % response)
+        print '%r' % response
 
 
     if function == "test":
         (result, response) = connectionTest('connection test')
-        _debug_('result: %s, response: %s ' % (result, response))
+        print 'result: %s, response: %s ' % (result, response)
 
 
     if function == "moviesearch":
@@ -298,7 +306,7 @@ if __name__ == '__main__':
             else:
                 _debug_('result: %s, response: %s ' % (result, response))
         else:
-            _debug_('no data')
+            print 'no data'
 
 
     if function == "addfavorite":
@@ -323,4 +331,4 @@ if __name__ == '__main__':
                 (result, response) = updateFavoritesSchedule()
                 _debug_('%r' % response)
         else:
-            _debug_('no data')
+            print 'no data'
