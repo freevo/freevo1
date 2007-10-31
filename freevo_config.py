@@ -341,7 +341,7 @@ LOCAL_CONF_CHANGES = [
      Moved plug-in "upsoon" to "tv.upsoon"
      ''' ),
     (5.22,
-     '''Added RECORDSERVER_SECRET
+     '''Added RECORDSERVER_SECRET and RECORDSERVER_PORT2=18002 for kaa.rpc
      '''),
 ]
 
@@ -1705,6 +1705,7 @@ TV_RECORD_SCHEDULE = FREEVO_STATICDIR + '/record_schedule.xml'
 
 RECORDSERVER_IP = 'localhost'
 RECORDSERVER_PORT = 18001
+RECORDSERVER_PORT2 = 18002
 RECORDSERVER_SECRET = 'secret1'
 
 # If the recordserver runs as root, set the uid to the given one

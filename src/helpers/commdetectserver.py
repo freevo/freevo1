@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# CommDetectServer.py, part of Commercial Detection Server - for use with Freevo
+# Commercial Detection Server - for use with Freevo
 # -----------------------------------------------------------------------
 #
 # Author: Justin Wetherell
@@ -44,10 +43,8 @@ if __name__ == '__main__':
     except Exception, e:
         print e
 
-from twisted.web import xmlrpc, server
-from twisted.internet.app import Application
+from twisted.web import xmlrpc, server, sux
 from twisted.internet import reactor
-from twisted.python import log
 from util.marmalade import jellyToXML, unjellyFromXML
 import time, random, sys, os
 import logging
@@ -57,16 +54,6 @@ from commdetectcore import CommDetectJob, CommDetectQueue
 
 DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 
-logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
-log.startLogging(open(logfile, 'a'))
-
-def _debug_(text, level=1):
-    if DEBUG >= level:
-        try:
-            log.debug(String(text))
-        except:
-            print String(text)
-
 tmppath = '/tmp/commdetectserver'
 
 jam = jellyToXML
@@ -75,7 +62,7 @@ unjam = unjellyFromXML
 class CommDetectServer(xmlrpc.XMLRPC):
     def __init__(self, debug=False):
         self.jobs = {}
-        self.queue = CommDetectQueue(log, DEBUG)
+        self.queue = CommDetectQueue()
         _debug_("CommDetectServer started...", DINFO)
 
     def xmlrpc_echotest(self, blah):
@@ -124,22 +111,9 @@ def main():
         commdetectcore.DEBUG=True
     else:
         es = CommDetectServer()
-    _debug_('main: DEBUG=%s' % DEBUG, DINFO)
-    if (DEBUG == 0):
-        app.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(es, logPath='/dev/null'))
-    else:
-        app.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(es))
-    app.run(save=0)
+    _debug_('DEBUG=%s' % DEBUG, DINFO)
+    reactor.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(es))
+    reactor.run()
 
 if __name__ == '__main__':
-    import traceback
-    while 1:
-        try:
-            start = time.time()
-            main()
-            break
-        except:
-            traceback.print_exc()
-            if start + 10 > time.time():
-                _debug_('server problem, sleeping 1 min', DINFO)
-                time.sleep(60)
+    main()

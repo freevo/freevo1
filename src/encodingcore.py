@@ -650,14 +650,11 @@ class CommandThread(threading.Thread): # seek to remove data andor crop (not rea
 class EncodingQueue:
     """Class for generating an encoding queue"""
 
-    def __init__(self, logger, debug=0):
+    def __init__(self):
         #we keep a list and a dict because a dict doesn't store an order
-        global DEBUG
-        DEBUG = debug
         self.qlist = []
         self.qdict = {}
         self.running = False
-        self.log = logger
 
         #remove old files
         self._removeTmp()
@@ -793,10 +790,7 @@ if __name__ == '__main__':
     #print cl
     #print conc(cl[0])
     #print conc(cl[1])
-    import logging
-    log = logging.getLogger('EncodingCore')
-    log.setLevel(logging.DEBUG)
 
-    queue = encodingqueue(log, 2)
+    queue = encodingqueue()
     queue.addEncodingJob(encjob)
     queue.startqueue()

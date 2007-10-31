@@ -32,12 +32,6 @@ import kaa.metadata as mmpython
 from copy import copy
 from string import split, join
 
-def _debug_(text, level=1):
-    if DEBUG >= level:
-        try:
-            self.log.debug(String(text))
-        except:
-            print(String(text))
 
 class CommDetectJob:
     """Class for creation & configuration of CommDetectJobs. This generates the mencoder commands"""
@@ -214,14 +208,11 @@ class CommandThread(threading.Thread):
 
 class CommDetectQueue:
     """Class for generating an commdetect queue"""
-    def __init__(self, logger, debug=0):
+    def __init__(self):
         #we keep a list and a dict because a dict doesn't store an order
-        global DEBUG
-        DEBUG = debug
         self.qlist = []
         self.qdict = {}
         self.running = False
-        self.log = logger
 
     def addCommDetectJob(self, encjob):
         """Adds an commdetectjob to the queue"""

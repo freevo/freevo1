@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# rssserver.py - This is the Freevo RSS feed server
+# This is the Freevo RSS feed server
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -28,7 +28,7 @@
 #
 # -----------------------------------------------------------------------
 
-'''
+"""
 In local_conf.py add the following:
 
 # File defining RSS feeds to monitor (see format below).
@@ -53,12 +53,11 @@ http://www.linuxactionshow.com/?feed=rss2&cat=3;30
 http://www.thelinuxlink.net/tllts/tllts.rss;30
 http://www.linux-games.ca/2006/redneck.xml;360
 # End /etc/freevo/rss.feeds
-'''
+"""
 
-import os,sys,threading,time
+import os, sys, threading, time
 import rssperiodic
 import config
-from twisted.python import log
 
 appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 appconf = appname.upper()
@@ -81,9 +80,6 @@ if len(sys.argv)>1 and sys.argv[1] == '--help':
     print 'usage freevo rssserver [ start | stop ]'
     sys.exit(0)
 
-
-logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
-log.startLogging(open(logfile, 'a'))
 
 # check for expired files and delete them
 to = threading.Thread(rssperiodic.checkForExpiration())

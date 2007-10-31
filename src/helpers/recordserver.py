@@ -1717,6 +1717,9 @@ def main():
     reactor.listenTCP(config.RECORDSERVER_PORT, server.Site(rs))
     rs.startMinuteCheck()
     reactor.run()
+    _debug_('reactor stopped.')
+    kaa.notifier.shutdown()
+    _debug_('kaa.notifier stopped.')
 
     #kaa.notifier.AtTimer(rs.handleTimer).start(sec=45)
     #kaa.main()
@@ -1731,8 +1734,5 @@ if __name__ == '__main__':
         _debug_('Removed old record lock \"%s\"' % f, DINFO)
         os.remove(f)
 
-    try:
-        main()
-    except Exception, e:
-        traceback.print_exc()
-    print 'done.'
+    main()
+    _debug_('done.')

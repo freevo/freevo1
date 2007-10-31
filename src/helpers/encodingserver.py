@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# EncodingServer.py, part of EncodingServer - for use with Freevo
+# EncodingServer daemon, manages the encoding queue
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -48,9 +47,7 @@ if __name__ == '__main__':
         print e
 
 from twisted.web import xmlrpc, server
-from twisted.internet.app import Application
 from twisted.internet import reactor
-from twisted.python import log
 from util.marmalade import jellyToXML, unjellyFromXML
 import time, random, sys, os
 import logging
@@ -66,36 +63,15 @@ __license__ = "GPL"
 
 DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 
-logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
-log.startLogging(open(logfile, 'a'))
-
-def _debug_(text, level=1):
-    if DEBUG >= level:
-        try:
-            log.debug(String(text))
-        except:
-            print String(text)
-
 jam = jellyToXML
 unjam = unjellyFromXML
+
 
 class EncodingServer(xmlrpc.XMLRPC):
 
     def __init__(self, debug=False):
         self.jobs = {}
-
-        #setup a logger
-        #if debug: #when debugging, output everything to stdout using the root logging class
-        #    self.log = logging
-        #else: #normally, write nice formatted messages to a logfile)
-        #    self.log = logging.getLogger("EncodingServer")
-        #    self.log.setLevel(logging.INFO)
-        #    FHandler = logging.FileHandler("encodingserver.log")
-        #    FHandler.setFormatter(logging.Formatter("%(asctime)s:%(levelname)s %(message)s"))
-        #    self.log.addHandler(FHandler)
-
-        self.queue = EncodingQueue(log, DEBUG)
-
+        self.queue = EncodingQueue()
         _debug_("EncodingServer started...", DINFO)
 
     def xmlrpc_echotest(self, blah):
@@ -220,7 +196,6 @@ def main():
     tmppath = tempfile.mkdtemp(prefix = 'encodeserver')
     os.chdir(tmppath)
 
-    app = Application("EncodingServer")
     if len(sys.argv) >= 2 and sys.argv[1] == "debug":
         es = EncodingServer(True)
         import encodingcore
@@ -228,22 +203,9 @@ def main():
     else:
         es = EncodingServer()
     _debug_('main: DEBUG=%s' % DEBUG, DINFO)
-    if (DEBUG == 0):
-        app.listenTCP(config.ENCODINGSERVER_PORT, server.Site(es, logPath='/dev/null'))
-    else:
-        app.listenTCP(config.ENCODINGSERVER_PORT, server.Site(es))
-    app.run(save=0)
+    reactor.listenTCP(config.ENCODINGSERVER_PORT, server.Site(es))
+    reactor.run()
 
 
 if __name__ == '__main__':
-    import traceback
-    while 1:
-        try:
-            start = time.time()
-            main()
-            break
-        except:
-            traceback.print_exc()
-            if start + 10 > time.time():
-                _debug_('server problem, sleeping 1 min', DINFO)
-                time.sleep(60)
+    main()

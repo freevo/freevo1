@@ -32,6 +32,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated LCD plug-in to allow a 16x4 mode (F#1776450)
  * Updated alsamixer with event args and synchronous mixer control (F#1767928)
  * Updated osd overscan to allow different margins for all sides (F#1791026,B#1813244)
+ * Updated servers, record, web, etc. to allow Twosted-2.5 to be used (F#1640870)
  * Updated shopping cart plug-in at allow items to removed as well (F#1807315)
  * Updated submenu selection when there is only one action to execute the action (F#1774569)
  * Updated tv favourite handling and programme item to provide a consistent interface (F#1776909)
