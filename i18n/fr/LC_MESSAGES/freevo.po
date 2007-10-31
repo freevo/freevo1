@@ -417,12 +417,11 @@ msgstr "Ajouter à la liste d'enregistrement"
 
 #: www/htdocs/viewlogfile.rpy:112
 msgid "viewlog"
-msgstr ""
+msgstr "Voirlog"
 
 #: www/htdocs/viewlogfile.rpy:112
-#, fuzzy
 msgid "View Logs"
-msgstr "Voir le listing TV"
+msgstr "Voir les Logs"
 
 #: www/htdocs/record.rpy:85 www/htdocs/edit_favorite.rpy:80
 #, python-format
@@ -464,9 +463,8 @@ msgid "configplugins"
 msgstr ""
 
 #: www/htdocs/pluginconfig.rpy:322
-#, fuzzy
 msgid "Config Plugins"
-msgstr "Liste des plugins"
+msgstr "Configuration des plugins"
 
 #: www/htdocs/edit_favorite.rpy:53 www/htdocs/edit_favorite.rpy:114
 #: tv/edit_favorite.py:91
@@ -581,9 +579,8 @@ msgid "Save"
 msgstr "Enregistrer"
 
 #: www/htdocs/youtube.rpy:282
-#, fuzzy
 msgid "YouTube"
-msgstr "Mar"
+msgstr ""
 
 #: www/htdocs/guide.rpy:145 www/web_types.py:198 tv/tvmenu.py:98
 msgid "TV Guide"
@@ -817,9 +814,8 @@ msgid "Play file using VLC"
 msgstr "Lire le fichier en utilisant VLC"
 
 #: www/htdocs/config.rpy:741
-#, fuzzy
 msgid "Config"
-msgstr "Configurer"
+msgstr "Configuration"
 
 #: www/htdocs/search.rpy:51 tv/plugins/search_programs.py:108
 #: tv/program_display.py:255 tv/programitem.py:325
@@ -933,44 +929,36 @@ msgstr ""
 "non trouvé !"
 
 #: audio/plugins/apodcast.py:96
-#, fuzzy
 msgid "Buffering podcast..."
-msgstr "Récupération des données..."
+msgstr "Mise en mémoire tampon du PodCast..."
 
 #: audio/plugins/apodcast.py:110
-#, fuzzy
 msgid "Listen Audio Podcast"
-msgstr "Ecouter une station de radio"
+msgstr "Ecouter un PodCast Audio"
 
 #: audio/plugins/apodcast.py:148
-#, fuzzy
 msgid "Audio Podcast"
-msgstr "Codec Audio"
+msgstr "PodCast Audio"
 
 #: audio/plugins/apodcast.py:159
-#, fuzzy
 msgid "Fetching podcast..."
-msgstr "Récupération des données..."
+msgstr "Récupération du podcast..."
 
 #: audio/plugins/apodcast.py:188
-#, fuzzy
 msgid "No Podcast locations found"
-msgstr "Aucune radio trouvée"
+msgstr "Pas d'emplacement PodCast trouvée"
 
 #: audio/plugins/apodcast.py:190 audio/plugins/apodcast.py:218
 msgid "AUDIO PODCAST"
-msgstr ""
+msgstr "PODCAST AUDIO"
 
 #: audio/plugins/apodcast.py:196
-#, fuzzy
 msgid "Fetching podcasts..."
-msgstr "Récupération des données..."
+msgstr "Récupération des podcasts..."
 
 #: audio/plugins/apodcast.py:213
-#, fuzzy
 msgid "Set APODCAST_DIR in local_conf.py"
-msgstr ""
-"Merci de mettre à jour la variable GAMES_ITEMS dans le fichier local_conf.py"
+msgstr "Renseignez APODCAST_DIR dans local_conf.py"
 
 #: audio/plugins/radio.py:63
 msgid "Listen to Radio Station"
@@ -1037,13 +1025,12 @@ msgid "XM channels"
 msgstr "Canaux XM"
 
 #: audio/plugins/coversearch.py:100
-#, fuzzy
 msgid ""
 "To search for covers you need an Amazon.com Web Services\n"
 "license key. You can get yours from:\n"
 msgstr ""
-"Pour faire des recherches sur une pochette, vous devez avoir un acces web à "
-"Amazon.com\n"
+"Pour faire des recherches sur une pochette, vous devez avoir clef de licence\n"
+"pour les services Web Amazon.com. Vous pouvez obtenir la votre depuis:\n"
 
 #: audio/plugins/coversearch.py:158
 msgid "Find a cover for this music"
@@ -1057,6 +1044,11 @@ msgid ""
 "to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
 "Info. Maybe you must fix this file (%s) tag?"
 msgstr ""
+"Le plugin 'coversearch' a été désactivé pour cet élément! 'coversearch' a besoin "
+"de disposer d'un Artiste et d'un Album (s'il sagit d'un mp3 ou d'un ogg) ou d'un "
+"Titre (s'il s'agit d'une piste CD) pour pouvoir faire une recherche. Votre fichier "
+"doit donc disposer de tag MP3 ou de OGG Info. Vous devriez peut-être fixer les "
+"tags du fichier %s ?"
 
 #: audio/plugins/coversearch.py:178
 msgid "Unknown CD, cover searching is disabled"
@@ -1092,7 +1084,6 @@ msgid "getting data..."
 msgstr "Récupération des données..."
 
 #: audio/plugins/lyrics.py:55
-#, fuzzy
 msgid "Searching lyrics..."
 msgstr "Recherche des paroles..."
 
@@ -1275,9 +1266,8 @@ msgid "[VUX] an audio item, do not select"
 msgstr "[VUX] un élément audio, ne pas sélectionner"
 
 #: audio/plugins/lastfm.py:193
-#, fuzzy
 msgid "Listen Last FM"
-msgstr "Ecouter de la Musique"
+msgstr "Ecouter Last FM"
 
 #: audio/plugins/lastfm.py:218 audio/plugins/lastfm.py:251
 msgid "Last FM"
@@ -1285,7 +1275,7 @@ msgstr ""
 
 #: audio/plugins/lastfm.py:249
 msgid "Invalid LastFM Session!"
-msgstr ""
+msgstr "Session Last FM invalide!"
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -1622,7 +1612,6 @@ msgid "VCD title list"
 msgstr "Liste des VCD"
 
 #: video/videoitem.py:322
-#, fuzzy
 msgid "Full description"
 msgstr "Description Complète"
 
@@ -2343,19 +2332,17 @@ msgid "Full Description"
 msgstr "Description Complète"
 
 #: plugins/buttonbar.py:126
-#, fuzzy
 msgid "Now"
-msgstr "Non"
+msgstr "Maintenant"
 
 #: plugins/buttonbar.py:135
-#, fuzzy
 msgid "WARNING: "
-msgstr "ATTENTION"
+msgstr "ATTENTION: "
 
 #: plugins/buttonbar.py:136
 #, python-format
 msgid "\"%s\" is not a valid argument for the button bar. "
-msgstr ""
+msgstr "\"%s\" n'est pas un argument valide pour la barre de boutons."
 
 #: plugins/buttonbar.py:368
 msgid "More Options"
@@ -2374,14 +2361,12 @@ msgid "Added to Cart"
 msgstr "Ajouté au panier"
 
 #: plugins/shoppingcart.py:111
-#, fuzzy
 msgid "Removed from Cart"
-msgstr "Enlever le favori"
+msgstr "Rétiré du panier"
 
 #: plugins/shoppingcart.py:119
-#, fuzzy
 msgid "Removed Item from Cart"
-msgstr "Elément ajouté au panier"
+msgstr "Elément retiré du panier"
 
 #: plugins/shoppingcart.py:122
 msgid "Added Item to Cart"
@@ -2400,19 +2385,16 @@ msgid "Add Directory to Cart"
 msgstr "Ajouter ce répertoire au panier"
 
 #: plugins/shoppingcart.py:152
-#, fuzzy
 msgid "Remove Directory from Cart"
-msgstr "Ajouter ce répertoire au panier"
+msgstr "Retirer ce répertoire du panier"
 
 #: plugins/shoppingcart.py:156
-#, fuzzy
 msgid "Add to Cart"
-msgstr "Ajouté au panier"
+msgstr "Ajouter au panier"
 
 #: plugins/shoppingcart.py:158
-#, fuzzy
 msgid "Remove from Cart"
-msgstr "Enlever le favori"
+msgstr "Retirer du panier"
 
 #: plugins/shoppingcart.py:161
 msgid "Delete Cart"
@@ -2762,14 +2744,12 @@ msgid "TV stopped, a recording is about to start!"
 msgstr "Télévision arretée, un enregistrement va démarrer !"
 
 #: plugins/ejectromdrives.py:69
-#, fuzzy
 msgid "Close drive"
-msgstr "Fermer la fenêtre"
+msgstr "Fermer le lecteur"
 
 #: plugins/ejectromdrives.py:71
-#, fuzzy
 msgid "Eject drive"
-msgstr "Ejection du disque dans le lecteur %s"
+msgstr "Ejection du lecteur"
 
 #: plugins/freevused.py:140
 msgid ""
@@ -3030,55 +3010,49 @@ msgstr ""
 
 #: plugins/oneclick.py:858
 msgid "for"
-msgstr ""
+msgstr "pour"
 
 #: plugins/oneclick.py:977
 msgid "As of:"
-msgstr ""
+msgstr "A partir de:"
 
 #: plugins/oneclick.py:980
 msgid "Temperature:"
-msgstr ""
+msgstr "Température:"
 
 #: plugins/oneclick.py:981
 msgid "Dew Point:"
-msgstr ""
+msgstr "Point de rosée:"
 
 #: plugins/oneclick.py:982
-#, fuzzy
 msgid "Humidity:"
-msgstr "Humidité"
+msgstr "Humidité:"
 
 #: plugins/oneclick.py:983
-#, fuzzy
 msgid "Visibility:"
-msgstr "Visibilité"
+msgstr "Visibilité:"
 
 #: plugins/oneclick.py:984
-#, fuzzy
 msgid "Pressure:"
-msgstr "Pression"
+msgstr "Pression:"
 
 #: plugins/oneclick.py:985
-#, fuzzy
 msgid "Winds:"
-msgstr "Vent"
+msgstr "Vents:"
 
 #: plugins/oneclick.py:986
 msgid "Tonight:"
-msgstr ""
+msgstr "Cette Nuit:"
 
 #: plugins/oneclick.py:987
-#, fuzzy
 msgid "Sunset:"
-msgstr "Dim"
+msgstr "Crépuscule:"
 
 #: plugins/oneclick.py:988
 msgid "Moon Phase:"
-msgstr ""
+msgstr "Phase de la lune:"
 
 #: plugins/oneclick.py:1064
-#, fuzzy
 msgid "Error encountered while trying to download weather map"
 msgstr "Une erreur est survenue en cherchant la carte météo"
 
@@ -3087,38 +3061,36 @@ msgid "CANCEL"
 msgstr "ABANDONNER"
 
 #: tv/plugins/dvbstreamer/live_pause.py:89
-#, fuzzy
 msgid ""
 "'XINE_COMMAND' not defined, plugin 'DVBStreamer' deactivated.\n"
 "please check the xine section in freevo_config.py"
 msgstr ""
-"'XINE_COMMAND' n'existe pas, le plugin 'xine' donc est désactivé.\n"
+"'XINE_COMMAND' n'existe pas, le plugin 'DVBStreamer' est désactivé.\n"
 "Vérifiez la section xine dans le fichier freevo_config.py"
 
 #: tv/plugins/dvbstreamer/live_pause.py:113
-#, fuzzy
 msgid "'xine-ui' version too old, plugin 'xine' deactivated"
-msgstr "'fbxine' introuvable, le plugin 'xine' est donc désactivé"
+msgstr "Version de 'xine-ui' trop ancienne, le plugin 'xine' est désactivé"
 
 #: tv/plugins/dvbstreamer/live_pause.py:114
 #, python-format
 msgid "You need software %s"
-msgstr ""
+msgstr "Il vous faut le logiciel %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:548
-#, fuzzy, python-format
+#, python-format
 msgid "Tuning to %s"
-msgstr "Activer %s"
+msgstr "Réglage sur %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:551
-#, fuzzy, python-format
+#, python-format
 msgid "Buffering %s"
-msgstr "Etat de la gravure: %s"
+msgstr "Mise en tampon %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:555
-#, fuzzy, python-format
+#, python-format
 msgid "Playing %s"
-msgstr "Lire"
+msgstr "Joue %s"
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"
@@ -3329,9 +3301,8 @@ msgstr ""
 "effectuer les changements. Ajoutez s'il vous plait quelques minutes."
 
 #: tv/plugins/search_programs.py:78
-#, fuzzy
 msgid "Search Programs"
-msgstr "Programme"
+msgstr "Recheche des programmes"
 
 #: tv/plugins/search_programs.py:88 tv/program_display.py:233
 #: tv/programitem.py:298
@@ -3362,9 +3333,8 @@ msgid "Get recordings failed"
 msgstr "Echec de la récupération des enregistrements"
 
 #: tv/plugins/ivtv_xine_tv.py:767
-#, fuzzy
 msgid "This plugin only supports the ivtv video group!"
-msgstr "Ce plugin ne supporte que 'ivtv video group' en mode tv!"
+msgstr "Ce plugin ne supporte que le groupe ivtv video !"
 
 #: tv/program_display.py:110
 msgid "Display program"
@@ -3490,41 +3460,37 @@ msgstr "Note"
 
 #: tv/favoriteitem.py:117 tv/favoriteitem.py:291
 msgid "Prevent Recording of Duplicates"
-msgstr ""
+msgstr "Empécher l'enregistrement de doublons"
 
 #: tv/favoriteitem.py:120
-#, fuzzy
 msgid "Allow Recording of Duplicates"
-msgstr "En cours d'enregistrement de %s."
+msgstr "Autorise l'enregistrement de doublons"
 
 #: tv/favoriteitem.py:126 tv/favoriteitem.py:315
-#, fuzzy
 msgid "Record All Episodes"
-msgstr "Garder tous les épisodes"
+msgstr "Enregistrer tous les épisodes"
 
 #: tv/favoriteitem.py:129 tv/favoriteitem.py:320
 msgid "Record Only New Episodes"
-msgstr ""
+msgstr "N'enregistrer que les nouveaux épisodes"
 
 #: tv/favoriteitem.py:297
 msgid "Allow Recordings of Duplicates"
-msgstr ""
+msgstr "Autorise les enregistrements de doublons"
 
 #: tv/favoriteitem.py:338
 msgid "Saving the changes to this favorite."
-msgstr ""
+msgstr "Enregistrer les changements dans ce favori."
 
 #: tv/favoriteitem.py:339
 msgid "This may take some time."
-msgstr ""
+msgstr "Ceci peut prendre du temps."
 
 #: tv/favoriteitem.py:371
-#, fuzzy
 msgid "Save failed, favorite was lost."
 msgstr "Sauvegarde échouée, le favori a été perdu."
 
 #: tv/favoriteitem.py:391 tv/programitem.py:253
-#, fuzzy
 msgid "Remove failed"
 msgstr "Suppression impossible"
 
@@ -3612,23 +3578,20 @@ msgid "Do you want to remove %s?"
 msgstr "Voulez vous effacer %s ?"
 
 #: tv/programitem.py:165
-#, fuzzy
 msgid "Sorry, you cannot watch this program now. "
-msgstr "Désolé, impossible de regarder la télé pendant un enregistrement."
+msgstr "Désolé, vous ne pouvez regarder ce programme maintenant. "
 
 #: tv/programitem.py:166
 msgid "It starts in the future."
-msgstr ""
+msgstr "Il commence dans le futur."
 
 #: tv/programitem.py:172
-#, fuzzy
 msgid "Sorry, you cannot watch this progam now. "
-msgstr "Désolé, impossible de regarder la télé pendant un enregistrement."
+msgstr "Désolé, vous ne pouvez regarder ce programme maintenant. "
 
 #: tv/programitem.py:173
-#, fuzzy
 msgid "This program is already over."
-msgstr "%i émissions sont programmées pour l'enregistrement"
+msgstr "Ce programme est déjà terminé."
 
 #: tv/programitem.py:187
 msgid "Sorry, you cannot watch TV while recording. "
@@ -3639,28 +3602,24 @@ msgid "If this is not true then remove "
 msgstr "Si ce n'est pas vrai, alors supprimez "
 
 #: tv/programitem.py:233
-#, fuzzy
 msgid "Scheduling failed"
 msgstr "Echec de programmation"
 
 #: tv/programitem.py:287
-#, fuzzy
 msgid "getFavorites failed"
-msgstr "Echec de la récupération des favoris : %s"
+msgstr "Echec de la récupération des favoris"
 
 #: tv/programitem.py:320
-#, fuzzy
 msgid "findMatches failed"
-msgstr "Pas d'équivalences trouvées : %s"
+msgstr "Pas d'équivalences trouvées"
 
 #: skin/widgets/textentry_screen.py:60
-#, fuzzy
 msgid "Left"
-msgstr "Durée"
+msgstr "Gauche"
 
 #: skin/widgets/textentry_screen.py:61
 msgid "Right"
-msgstr ""
+msgstr "Droite"
 
 #: skin/widgets/textentry_screen.py:83
 msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
@@ -3687,9 +3646,8 @@ msgid "Symbls"
 msgstr ""
 
 #: skin/widgets/textentry_screen.py:229
-#, fuzzy
 msgid "Space"
-msgstr "Enregistrer"
+msgstr "Espace"
 
 #: util/misc.py:422
 msgid "The recordserver is down"
@@ -4117,9 +4075,8 @@ msgid "h = Help"
 msgstr "h = Aide"
 
 #: share/skins/main/geexbox.fxd:585
-#, fuzzy
 msgid "Currently recording"
-msgstr "Conditions actuelles"
+msgstr "En cours d'enregistrement"
 
 #: share/skins/main/dark.fxd:496
 msgid "Just one movie in this playlist."
@@ -4160,9 +4117,8 @@ msgid "File name"
 msgstr "Nom du fichier"
 
 #: share/skins/main/geexbox.fxd:593
-#, fuzzy
 msgid "Next recordings"
-msgstr "Echec de la récupération des enregistrements"
+msgstr "Prochains enregistrements"
 
 #: share/skins/main/geexbox.fxd:203 share/skins/main/mediaportal.fxd:197
 #: share/skins/main/dark.fxd:501 share/skins/main/blurr.fxd:195
@@ -4209,9 +4165,8 @@ msgid "From"
 msgstr "De"
 
 #: share/skins/main/geexbox.fxd:603
-#, fuzzy
 msgid "Recordserver not found"
-msgstr "Transcodeur arrêté"
+msgstr "Serveur d'enregistrement non trouvé"
 
 #: share/skins/main/crystal.fxd:318 share/skins/main/bluestar.fxd:338
 #: share/skins/main/rain.fxd:322
@@ -4308,9 +4263,8 @@ msgid "New mail"
 msgstr "Nouveau Message"
 
 #: share/skins/main/geexbox.fxd:599
-#, fuzzy
 msgid "Nothing scheduled"
-msgstr "Aucun enregistrement programmé."
+msgstr "Aucun enregistrement programmé"
 
 #: share/skins/main/geexbox.fxd:199 share/skins/main/mediaportal.fxd:193
 #: share/skins/main/blurr.fxd:191 share/skins/main/info.fxd:419
