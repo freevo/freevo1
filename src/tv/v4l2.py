@@ -707,7 +707,8 @@ class Videodev:
         """
         get the control record by name
         """
-        if not self.controls.has_key(self.ctrlname(name)):
+        key = self.ctrlname(name)
+        if not self.controls.has_key(key):
             _debug_('control \"%s\" does not exists' % (name), DWARNING)
             return None
         (id, type, name, min, max, step, default, flags, value) = self.controls[key]
@@ -718,7 +719,8 @@ class Videodev:
         """
         get the control record by name
         """
-        if not self.controls.has_key(self.ctrlname(name)):
+        key = self.ctrlname(name)
+        if not self.controls.has_key(key):
             _debug_('control \"%s\" does not exists' % (name), DWARNING)
             return None
         (id, type, name, min, max, step, default, flags, oldvalue) = self.controls[key]
