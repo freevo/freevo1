@@ -293,7 +293,7 @@ LOCAL_CONF_CHANGES = [
      XMLTV_FILE, you may also prefer OVERLAY_DIR to be FREEVO_STATICDIR+'/overlay',
      Added a plugin that adds a submenu entry for ejecting rom drives and binds the default action of
      an empty drive to the eject action
-     Replaced OSD_OVERSCAN_X with OSD_OVERSCAN_LEFT and OSD_OVERSCAN_RIGHT and OSD_OVERSCAN_Y with 
+     Replaced OSD_OVERSCAN_X with OSD_OVERSCAN_LEFT and OSD_OVERSCAN_RIGHT and OSD_OVERSCAN_Y with
      OSD_OVERSCAN_TOP and OSD_OVERSCAN_BOTTOM
      Added IMAGEVIEW_ASPECT to show images correctly on non-square pixel displays, it TVs
      For the webserver configuration tool the following have been changed
@@ -374,7 +374,7 @@ AUDIO_INPUT_DEVICE    = '/dev/dsp1'  # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 
 MIXER_MAJOR_CTRL      = 'VOL'        # Freevo takes control over one audio ctrl
                                      # 'VOL', 'PCM' 'OGAIN' etc.
-MIXER_MAJOR_MUTE_CTRL = 'PCM'        # used in alsamixer.py, There are systems where 
+MIXER_MAJOR_MUTE_CTRL = 'PCM'        # used in alsamixer.py, There are systems where
                                      # volume and mute use different controls
 
 MIXER_DEVICE          = '/dev/mixer' # mixer device
@@ -1841,7 +1841,7 @@ TV_FREQUENCY_TABLE = {
 TV_VIDEO_GROUPS = [
     VideoGroup(vdev=TV_DEVICE,
                adev=AUDIO_DEVICE,
-               input_type='tuner',
+               input_num=0,
                tuner_norm=CONF.tv,
                tuner_chanlist=CONF.chanlist,
                desc='Default Video Group',

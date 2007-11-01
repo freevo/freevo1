@@ -39,6 +39,7 @@ import sys
 
 import config
 
+
 # Different formats depending on word size
 bit32 = struct.calcsize('L') == struct.calcsize('I')
 
@@ -238,11 +239,11 @@ NORMS = {
 class Videodev:
     def __init__(self, device):
         self.chanlist = None
-        self.device = os.open (device, os.O_TRUNC)
+        self.device = os.open(device, os.O_TRUNC)
         if self.device < 0:
             sys.exit('Error: %d' % self.device)
         else:
-            _debug_('Video Opened at %s' % device)
+            _debug_('Video opened for %r' % device)
 
         results           = self.querycap()
         self.driver       = results[0]
@@ -250,12 +251,12 @@ class Videodev:
         self.bus_info     = results[2]
         self.version      = results[3]
         self.capabilities = results[4]
-        self.inputs       = {}
-        self.standards    = {}
-        self.controls     = {}
         self.inputs       = self.enuminputs()
         self.standards    = self.enumstds()
         self.controls     = self.enumcontrols()
+        #print 'inputs=%r' % self.inputs
+        #print 'standards=%r' % self.standards
+        #print 'controls=%r' % self.controls
 
 
     def getdriver(self):
@@ -383,6 +384,14 @@ class Videodev:
             raise
 
 
+    def getinputbyname(self, name):
+        """
+        Get the TV input by name, eg: TELEVISION, s-video
+        """
+        v_input = name.lower()
+        return self.inputs[v_input]
+
+
     def setinputbyname(self, name):
         """
         Set the TV input by name, eg: TELEVISION, s-video
@@ -417,7 +426,7 @@ class Videodev:
             while 1:
                 (index, id, name, frameperiod, framelines, reserved) = self.enumstd(num)
                 name = name.rstrip('\0')
-                res[name.lower()] = (index, id, name, frameperiod, framelines)
+                res[name.upper()] = (index, id, name, frameperiod, framelines)
                 num += 1
         except IOError, e:
             pass
@@ -444,6 +453,14 @@ class Videodev:
         _debug_('setstd: val=%r, r=%r' % (val, r), 3)
 
 
+    def getstdbyname(self, name):
+        """
+        Get the TV standard by name, eg: PAL-BGH, secam-dk, etc
+        """
+        v_norm = name.upper()
+        return self.standards[v_norm]
+
+
     def setstdbyname(self, name):
         """
         Set the TV standard by name, eg: PAL-BGH, secam-dk, etc
@@ -451,7 +468,7 @@ class Videodev:
         v_norm = name.upper()
         try:
             _debug_('setstdbyname: %s (0x%08X) set' % (name, NORMS[v_norm]))
-            self.setstd(NORMS.get(v_norm))
+            self.setstd(NORMS[v_norm])
         except KeyError, e:
             _debug_('setstdbyname failed: %s' % (e), DERROR)
             _debug_('possible are: %r' % (NORMS.keys()), DINFO)
@@ -509,9 +526,9 @@ class Videodev:
 
 
     def getctrl(self, id):
-        '''
+        """
         Get the value of a control
-        '''
+        """
         val = struct.pack(CTRL_ST, id, 0)
         r = fcntl.ioctl(self.device, i32(G_CTRL_NO), val)
         res = struct.unpack(CTRL_ST, r)
@@ -520,9 +537,9 @@ class Videodev:
 
 
     def setctrl(self, id, value):
-        '''
+        """
         Set the value of a control
-        '''
+        """
         val = struct.pack(CTRL_ST, id, value)
         r = fcntl.ioctl(self.device, i32(S_CTRL_NO), val)
         res = struct.unpack(CTRL_ST, r)
@@ -530,11 +547,11 @@ class Videodev:
 
 
     def getextctrl(self, id):
-        '''
+        """
         Get the value of an external control
         EXT_CTRL_type->id, res1, res2, value
         EXT_CTRLS_ST->class, count, error_idx, res1, res2, ptr
-        '''
+        """
         extctrl = array.array('B')
         extctrl.fromstring(struct.pack(EXT_CTRL_ST, id, 0, 0, 0))
         extctrl_p = extctrl.buffer_info()[0]
@@ -552,9 +569,9 @@ class Videodev:
 
 
     def setextctrl(self, id, value):
-        '''
+        """
         Set the value of an external control
-        '''
+        """
         extctrl = array.array('B')
         extctrl.fromstring(struct.pack(EXT_CTRL_ST, id, 0, 0, value))
         extctrl_p = extctrl.buffer_info()[0]
@@ -615,12 +632,16 @@ class Videodev:
 
 
     def ctrlname(self, name):
-        ''' converts a control to lowercase and replaces spaces with underscore, like v4l2-ctl
-        '''
+        """
+        converts a control to lowercase and replaces spaces with underscore, like v4l2-ctl
+        """
         return name.replace(' ', '_').lower()
 
 
     def listcontrols(self):
+        """
+        prints all the controls
+        """
         id = V4L2_CTRL_FLAG_NEXT_CTRL
         while 1:
             try:
@@ -643,39 +664,39 @@ class Videodev:
 
 
     def enumcontrols(self):
-        self.controls = {}
+        res = {}
         id = V4L2_CTRL_FLAG_NEXT_CTRL
         while 1:
             try:
-                res = self.queryctrl(id)
-                (id, type, name, min, max, step, default, flags, value) = res
+                ctrl = self.queryctrl(id)
+                (id, type, name, min, max, step, default, flags, value) = ctrl
                 if flags == V4L2_CTRL_FLAG_DISABLED:
-                    id = res[0] | V4L2_CTRL_FLAG_NEXT_CTRL
+                    id = ctrl[0] | V4L2_CTRL_FLAG_NEXT_CTRL
                     continue
-                key = self.ctrlname(name)
-                self.controls[key] = res
-                id = res[0] | V4L2_CTRL_FLAG_NEXT_CTRL
+                res[self.ctrlname(name)] = ctrl
+                id = ctrl[0] | V4L2_CTRL_FLAG_NEXT_CTRL
             except IOError, e:
                 break
         if id != V4L2_CTRL_FLAG_NEXT_CTRL:
-            return self.controls
+            return res
 
         id = V4L2_CID_USER_BASE
         for id in range(V4L2_CID_FIRSTP1, V4L2_CID_LASTP1):
             try:
-                res = self.queryctrl(id)
-                (id, type, name, min, max, step, default, flags, value) = res
+                ctrl = self.queryctrl(id)
+                (id, type, name, min, max, step, default, flags, value) = ctrl
                 if flags & V4L2_CTRL_FLAG_DISABLED:
                     continue
+                res[self.ctrlname(name)] = ctrl
             except IOError, e:
                 break
-        return self.controls
+        return res
 
 
     def findcontrol(self, id):
-        '''
+        """
         find a control by id
-        '''
+        """
         for ctrl in self.controls.keys():
             if self.controls[ctrl][0] == id:
                 return ctrl
@@ -683,11 +704,10 @@ class Videodev:
 
 
     def getcontrol(self, name):
-        '''
+        """
         get the control record by name
-        '''
-        key = self.ctrlname(name)
-        if not self.controls.has_key(key):
+        """
+        if not self.controls.has_key(self.ctrlname(name)):
             _debug_('control \"%s\" does not exists' % (name), DWARNING)
             return None
         (id, type, name, min, max, step, default, flags, value) = self.controls[key]
@@ -695,11 +715,10 @@ class Videodev:
 
 
     def setcontrol(self, name, value):
-        '''
+        """
         get the control record by name
-        '''
-        key = self.ctrlname(name)
-        if not self.controls.has_key(key):
+        """
+        if not self.controls.has_key(self.ctrlname(name)):
             _debug_('control \"%s\" does not exists' % (name), DWARNING)
             return None
         (id, type, name, min, max, step, default, flags, oldvalue) = self.controls[key]
@@ -713,8 +732,8 @@ class Videodev:
 
 
     def updatecontrol(self, name, value):
-        ''' set the control record by name
-        '''
+        """ set the control record by name
+        """
         if self.getcontrol(name) == None:
             return
 
@@ -728,8 +747,8 @@ class Videodev:
 
 
     def init_settings(self):
-        ''' initialise the V4L2 setting
-        '''
+        """ initialise the V4L2 setting
+        """
         (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
         self.inputs = self.enuminputs()
         self.standards = self.enumstds()
@@ -797,7 +816,11 @@ if __name__ == '__main__':
     config.DEBUG = 3
     config.LOGGING = config.logging.DEBUG
 
-    viddev=Videodev('/dev/video0')
+    videodev = '/dev/video0'
+    if len(sys.argv) > 1:
+        videodev = sys.argv[1]
+    viddev=Videodev(videodev)
+    print 'Device = %r' % videodev
     print 'Driver = \"%s\"' % viddev.getdriver()
     print 'Driver Version = %02d.%02d' % (viddev.getversion() / 256, viddev.getversion() % 256)
     viddev.print_settings()
@@ -902,7 +925,7 @@ if __name__ == '__main__':
     #print 'EXT_CTRL_ST=%s %s' % (EXT_CTRL_ST, struct.calcsize(EXT_CTRL_ST))
     #print 'EXT_CTRLS_ST=%s %s' % (EXT_CTRLS_ST, struct.calcsize(EXT_CTRLS_ST))
 
-    #'''
+    #"""
     #viddev=Videodev('/dev/video0')
     #print
     #print viddev.querycap()
@@ -944,11 +967,11 @@ if __name__ == '__main__':
     #print '0x00990900 = %d' % viddev.getextctrl(0x00990900)
     #DEBUG=4
     #print 'getfreq:', viddev.getfreq()
-    #'''
+    #"""
 
     viddev.close()
 
-#'''
+#"""
 #To run this as standalone use the following before running python v4l2.py
 #pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
 #export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
@@ -959,4 +982,4 @@ if __name__ == '__main__':
 #python v4l2.py
 #OR
 #freevo execute v4l2.py
-#'''
+#"""

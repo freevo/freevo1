@@ -61,7 +61,7 @@ DWARNING = -1
 DERROR = -2
 DCRITICAL = -3
 
-locale.setlocale(locale.LC_TIME,'')
+locale.setlocale(locale.LC_TIME, '')
 
 if float(sys.version[0:3]) >= 2.3:
     import warnings
@@ -183,7 +183,7 @@ class VideoGroup:
         self.vdev = vdev
         self.vvbi = vvbi
         self.adev = adev
-        self.input_type = input_type
+        self.input_type = string.lower(input_type)
         self.input_num  = int(input_num)
         self.tuner_type = tuner_type
         self.tuner_norm = string.upper(tuner_norm)
@@ -195,13 +195,47 @@ class VideoGroup:
         self.in_use = FALSE
         self.tuner = None
         self.cmd = None
-        if cmd != None and isinstance(cmd,str) and cmd.strip() != '':
+        if cmd != None and isinstance(cmd, str) and cmd.strip() != '':
             self.cmd = cmd.strip()
 
     def __str__(self):
         s = '<%s: %s %s %s %s %s %s>' % (self.group_type, self.vdev, self.vvbi, self.adev,
             self.input_type, self.tuner_chanlist, self.tuner_chan)
         return s
+
+
+    def checkvdev(self, vdev):
+        """
+        Check if the video device is correctly configured
+        """
+        from tv.v4l2 import Videodev
+        try:
+            dev = Videodev(vdev)
+            try:
+                if input_type != 'webcam':
+                    try:
+                        if input_type:
+                            input_num = dev.getinputbyname(input_type)[0]
+                    except KeyError, e:
+                        print 'cannot find tuner %r for %r\npossible values are: %r' % \
+                            (input_type, vdev, dev.inputs.keys())
+                        sys.exit(1)
+                    try:
+                        if tuner_norm:
+                            tuner_std = dev.getstdbyname(tuner_norm)
+                    except KeyError, e:
+                        print 'cannot find norm %r for %r\npossible values are: %r' % \
+                            (tuner_norm, vdev, dev.standards.keys())
+                        sys.exit(1)
+                    print '%r:%r=%r' % (vdev, input_type, input_num)
+                    print '%r:%r=%r' % (vdev, tuner_norm, tuner_std)
+                else:
+                    print '%r:%r=%r' % (vdev, input_type, dev.inputs.keys())
+                    print '%r:%r=%r' % (vdev, tuner_norm, dev.standards.keys())
+            finally:
+                dev.close()
+        except OSError, e:
+            print 'Video device %r: %s' % (vdev, e)
 
 
 def print_config_changes(conf_version, file_version, changelist):
@@ -401,7 +435,7 @@ def _debug_function_(s, level=1):
     try:
         try:
             # add the current trace to the string
-            if isinstance( s, unicode ):
+            if isinstance(s, unicode):
                 s = s.encode(encoding, 'replace')
             where =  traceback.extract_stack(limit = 2)[0]
             msg = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
@@ -439,8 +473,8 @@ __builtin__.__dict__['DINFO'] = DINFO
 #
 # Config file handling
 #
-cfgfilepath = [ '.', os.path.expanduser('~/.freevo'), '/etc/freevo',
-                '/usr/local/etc/freevo' ]
+cfgfilepath = ['.', os.path.expanduser('~/.freevo'), '/etc/freevo',
+                '/usr/local/etc/freevo']
 
 
 #
@@ -734,13 +768,13 @@ if not VIDEO_SHOW_DATA_DIR and not HELPER:
 if ROM_DRIVES == None:
     ROM_DRIVES = []
     if os.path.isfile('/etc/fstab'):
-        re_cd        = re.compile( '^(/dev/cdrom[0-9]*|/dev/[am]?cd[0-9]+[a-z]?)[ \t]+([^ \t]+)[ \t]+', re.I )
-        re_cdrec     = re.compile( '^(/dev/cdrecorder[0-9]*)[ \t]+([^ \t]+)[ \t]+', re.I )
-        re_dvd       = re.compile( '^(/dev/dvd[0-9]*)[ \t]+([^ \t]+)[ \t]+', re.I )
-        re_iso       = re.compile( '^([^ \t]+)[ \t]+([^ \t]+)[ \t]+(iso|cd)9660', re.I )
-        re_automount = re.compile( '^none[ \t]+([^ \t]+).*supermount.*dev=([^,]+).*', re.I )
-        re_bymountcd = re.compile( '^(/dev/[^ \t]+)[ \t]+([^ ]*cdrom[0-9]*)[ \t]+', re.I )
-        re_bymountdvd= re.compile( '^(/dev/[^ \t]+)[ \t]+([^ ]*dvd[0-9]*)[ \t]+', re.I )
+        re_cd        = re.compile('^(/dev/cdrom[0-9]*|/dev/[am]?cd[0-9]+[a-z]?)[ \t]+([^ \t]+)[ \t]+', re.I)
+        re_cdrec     = re.compile('^(/dev/cdrecorder[0-9]*)[ \t]+([^ \t]+)[ \t]+', re.I)
+        re_dvd       = re.compile('^(/dev/dvd[0-9]*)[ \t]+([^ \t]+)[ \t]+', re.I)
+        re_iso       = re.compile('^([^ \t]+)[ \t]+([^ \t]+)[ \t]+(iso|cd)9660', re.I)
+        re_automount = re.compile('^none[ \t]+([^ \t]+).*supermount.*dev=([^,]+).*', re.I)
+        re_bymountcd = re.compile('^(/dev/[^ \t]+)[ \t]+([^ ]*cdrom[0-9]*)[ \t]+', re.I)
+        re_bymountdvd= re.compile('^(/dev/[^ \t]+)[ \t]+([^ ]*dvd[0-9]*)[ \t]+', re.I)
         fd_fstab = open('/etc/fstab')
         for line in fd_fstab:
             # Match on the devices /dev/cdrom, /dev/dvd, and fstype iso9660
@@ -782,7 +816,7 @@ if ROM_DRIVES == None:
                     print 'Trying to autodetect type of %s' % devname
                     if os.path.exists('/proc/ide/' + re.sub(r'^(/dev/)', '', devname) + '/media'):
                         if open('/proc/ide/'+  re.sub(r'^(/dev/)', '', devname) +\
-                             '/media','r').read().lower().find('cdrom') !=1:
+                             '/media', 'r').read().lower().find('cdrom') !=1:
                             dispname = 'CD-%s' % (len(ROM_DRIVES)+1)
                             print ("%s is a cdrom drive" %devname)
                     else:
@@ -809,7 +843,7 @@ if ROM_DRIVES == None:
             else:
                 # This was not a duplicate of another device
                 if mntdir and devname and dispname:
-                    ROM_DRIVES += [ (mntdir, devname, dispname) ]
+                    ROM_DRIVES += [(mntdir, devname, dispname)]
                     if not HELPER:
                         print 'ROM_DRIVES: Auto-detected and added "%s"' % (ROM_DRIVES[-1], )
         fd_fstab.close()
@@ -832,7 +866,7 @@ def sortchannels(list, key):
     # index for the tunerid and forcing 'int'
     for l in list:
         if len(l[key]) == 1:
-            l[key].append(('0',))
+            l[key].append(('0', ))
     nlist = map(lambda x, key=key: (string.split(x[key][1][0])[0], x), list)
     nlist.sort()
     return map(lambda (key, x): x, nlist)
@@ -852,7 +886,7 @@ def detect_channels():
     path = FREEVO_CACHEDIR
     pfile = 'xmltv_channels.pickle'
 
-    pname = os.path.join(path,pfile)
+    pname = os.path.join(path, pfile)
 
     if not os.path.isfile(file):
         if not HELPER:
@@ -895,7 +929,7 @@ def detect_channels():
         xmltv_channels = xmltv.read_channels(tmp)
         tmp.close()
 
-        xmltv_channels = sortchannels(xmltv_channels,'display-name')
+        xmltv_channels = sortchannels(xmltv_channels, 'display-name')
         chanlist = []
 
         for a in xmltv_channels:
@@ -907,7 +941,7 @@ def detect_channels():
                 tunerid = string.split(a['display-name'][0][0].encode(LOCALE, 'ignore'))[0]
             id = a['id'].encode(LOCALE, 'ignore')
 
-            chanlist += [(id,display_name,tunerid)]
+            chanlist += [(id, display_name, tunerid)]
 
         f = lambda a, b: cmp(int(a[2]), int(b[2]))
         chanlist.sort(f)
@@ -995,11 +1029,11 @@ if HELPER:
 
 encoding = None
 try:
-    encoding = os.environ[ 'LANG' ].split( '.' )[ 1 ]
+    encoding = os.environ['LANG'].split('.')[1]
     ''.encode(encoding)
 except:
     try:
-        encoding = os.environ[ 'LC_ALL' ].split( '.' )[ 1 ]
+        encoding = os.environ['LC_ALL'].split('.')[1]
         ''.encode(encoding)
     except:
         encoding = LOCALE
@@ -1008,9 +1042,9 @@ if not encoding:
     encoding = LOCALE
 
 if not HELPER:
-    _debug_( "Using '%s' encoding" % encoding )
+    _debug_("Using '%s' encoding" % encoding)
 
-for k,v in CONF.__dict__.items():
+for k, v in CONF.__dict__.items():
     _debug_('%r: %r' % (k, v))
 
 # make sure USER and HOME are set
