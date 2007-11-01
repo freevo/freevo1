@@ -42,7 +42,7 @@ import operator
 from www.web_types import HTMLResource, FreevoResource
 #from helpers.convert_config import change, change_map
 
-from configlib import * 
+from www.configlib import * 
 import config
 import util
 

@@ -39,7 +39,7 @@ import time
 import subprocess
 
 import plugins 
-from configlib import  *
+from www.configlib import  *
 
 from stat import *
 from www.web_types import HTMLResource, FreevoResource

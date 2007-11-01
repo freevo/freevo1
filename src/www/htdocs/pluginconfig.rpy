@@ -37,7 +37,7 @@ import popen2
 from signal import *
 
 import config
-from configlib import * 
+from www.configlib import * 
 from www.web_types import HTMLResource, FreevoResource
 import util
 from plugin import is_active, activate, remove
