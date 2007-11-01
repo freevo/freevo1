@@ -788,7 +788,10 @@ class Videodev:
          sizeimage, colorspace) = self.getfmt()
         print "Width: %i, Height: %i" % (width, height)
 
-        print "Read Frequency: %i" % self.getfreq()
+        try:
+            print "Read Frequency: %i" % self.getfreq()
+        except IOError, e:
+            pass
 
 
 class V4LGroup:
@@ -869,105 +872,24 @@ if __name__ == '__main__':
     print '\'%s\'         : 0x%08X, ' % ('ALL', NORMS['ALL'])
 
     inputs = viddev.enuminputs()
-    print inputs
+    print 'inputs = %r' % (inputs.keys())
     standards = viddev.enumstds()
-    print standards
-    viddev.setinputbyname('Composite1')
-    print viddev.getinput()
-    viddev.setstdbyname('PAL')
-    print '0x%08X' % viddev.getstd()
-    viddev.setinputbyname('Television')
-    print viddev.getinput()
-
-    #dict = viddev.enumcontrols()
-    #keys = list(dict)
-    #keys.sort()
-    #print keys
-    #for ctrl in keys:
-    #    print '%-28s : %r' % (ctrl, dict[ctrl], )
-
-    ##print viddev.querycap()
-    #inp = viddev.getinput()
-    #viddev.setinput(inp)
-    #print 'querycap:', viddev.querycap()
-    #fmt = viddev.getstd()
-    #print 'fmt:', fmt
-    #std = viddev.getfmt()
-    #print 'std:', std
-    #viddev.setfmt(720, 576)
-    #std = viddev.getfmt()
-    #print 'std:', std
-    #print 'CONTROLS'
-    #viddev.listcontrols()
-    #dict = viddev.enumcontrols()
-    #viddev.setextctrl(0x009909c9, 2)
-    #print '0x009909c9 = %d' % viddev.getextctrl(0x009909c9)
-    #viddev.setextctrl(0x009909cf, 7000000)
-    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
-    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
-    #try:
-        #bitrate = viddev.getcontrol('Video Bitrate')
-        #viddev.updatecontrol('Video Bitrate', bitrate+1)
-        #print 'Video Bitrate = %d' % viddev.getcontrol('Video Bitrate')
-    #except:
-        #pass
-    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
-    #print 'SIZES'
-    #print 'QUERYCAP_ST=%s %s' % (QUERYCAP_ST, struct.calcsize(QUERYCAP_ST))
-    #print 'FREQUENCY_ST=%s %s' % (FREQUENCY_ST, struct.calcsize(FREQUENCY_ST))
-    #print 'ENUMSTD_ST=%s %s' % (ENUMSTD_ST, struct.calcsize(ENUMSTD_ST))
-    #print 'STANDARD_ST=%s %s' % (STANDARD_ST, struct.calcsize(STANDARD_ST))
-    #print 'ENUMINPUT_ST=%s %s' % (ENUMINPUT_ST, struct.calcsize(ENUMINPUT_ST))
-    #print 'INPUT_ST=%s %s' % (INPUT_ST, struct.calcsize(INPUT_ST))
-    #print 'FMT_ST=%s %s' % (FMT_ST, struct.calcsize(FMT_ST))
-    #print 'TUNER_ST=%s %s' % (TUNER_ST, struct.calcsize(TUNER_ST))
-    #print 'AUDIO_ST=%s %s' % (AUDIO_ST, struct.calcsize(AUDIO_ST))
-    #print 'EXT_CTRL_ST=%s %s' % (EXT_CTRL_ST, struct.calcsize(EXT_CTRL_ST))
-    #print 'EXT_CTRLS_ST=%s %s' % (EXT_CTRLS_ST, struct.calcsize(EXT_CTRLS_ST))
-
-    #"""
-    #viddev=Videodev('/dev/video0')
-    #print
-    #print viddev.querycap()
-    #inp = viddev.getinput()
-    #print 'viddev.getinput=%s' % (inp)
-    #viddev.setinput(inp)
-    #print 'viddev.setinput okay'
-    #fmt = viddev.getfmt()
-    #(buf_type, width, height, pixelformat, field, bytesperline, #sizeimage, colorspace) = fmt
-    #print 'viddev.getfmt=%s' % (buf_type)
-    #print viddev.enuminput(inp)
-    #for i in range(0, 99):
-        #try:
-            #print viddev.gettuner(i)
-        #except IOError:
-            #break
-    #print viddev.getaudio(0)
-    #print viddev.setfreq(2132)
-    #print viddev.getfreq()
-    #print viddev.setfreq(8948)
-    #print viddev.getfreq()
-    #print viddev.getfreq2()
-
-    #DEBUG=0
-    #viddev.setextctrl(0x009909c9, 2)
-    #print '0x009909c9 = %d' % viddev.getextctrl(0x009909c9)
-    #viddev.setextctrl(0x009909cf, 7000000)
-    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
-    #bitrate = viddev.getcontrol('Video Bitrate')
-    #viddev.updatecontrol('Video Bitrate', bitrate+1)
-    #print 'Video Bitrate = %d' % viddev.getcontrol('Video Bitrate')
-    #print '0x009909cf = %d' % viddev.getextctrl(0x009909cf)
-
-    #stream_type = 4
-    #viddev.updatecontrol('Stream Type', stream_type)
-    ##viddev.setcontrol('Stream Type', stream_type)
-    ##viddev.setextctrl(0x00990900, stream_type)
-    #print 'Stream Type = %d' % viddev.getcontrol('Stream Type')
-    #print '0x00990900 = %d' % viddev.getextctrl(0x00990900)
-    #DEBUG=4
-    #print 'getfreq:', viddev.getfreq()
-    #"""
+    print 'standards = %r' % (standards.keys())
+    try:
+        viddev.setinputbyname('Composite1')
+        print viddev.getinput()
+    except KeyError:
+        pass
+    try:
+        viddev.setstdbyname('PAL')
+        print '0x%08X' % viddev.getstd()
+    except (KeyError, IOError):
+        pass
+    try:
+        viddev.setinputbyname('Television')
+        print viddev.getinput()
+    except KeyError:
+        pass
 
     viddev.close()
 
@@ -981,5 +903,5 @@ if __name__ == '__main__':
 #export RUNAPP=""
 #python v4l2.py
 #OR
-#freevo execute v4l2.py
+#freevo execute v4l2.py [<video device>]
 #"""
