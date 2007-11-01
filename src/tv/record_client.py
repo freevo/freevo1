@@ -60,16 +60,37 @@ class RecordClient:
             print e
             raise
 
-    @kaa.notifier.execute_in_mainloop()
+    #@kaa.notifier.execute_in_mainloop()
     def recordserver_rpc(self, cmd, *args, **kwargs):
         print 'RecordClient.recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs)
         return self.server.rpc(cmd, *args, **kwargs)
 
     def getScheduledRecordings(self):
+        """ get the scheduled recordings, returning an in process object """
         print 'RecordClient.getScheduledRecordings()'
         inprogress = self.recordserver_rpc('getScheduledRecordings')
         print 'RecordClient.getScheduledRecordings.inprogress = %r' % (inprogress)
         return inprogress
+
+    # this redefined getScheduledRecordings
+    def getScheduledRecordings(self, callback):
+        """ get the scheduled recordings, using a callback function """
+        print 'RecordClient.getScheduledRecordings(callback=%r)' % (callback)
+        res = self.server.rpc('getScheduledRecordings').connect(callback)
+        print 'RecordClient.getScheduledRecordings().res = %r' % (res)
+        return res
+
+
+    def findNextProgram(self, callback):
+        """ find the next program using a callback function """
+        print 'RecordClient.findNextProgram(callback=%r)' % (callback)
+        self.server.rpc('findNextProgram').connect(callback)
+
+
+    def isPlayerRunning(self, callback):
+        """ is a player running, using a callback function """
+        print 'RecordClient.isPlayerRunning(callback=%r)' % (callback)
+        self.server.rpc('isPlayerRunning').connect(callback)
         
 
 
@@ -278,6 +299,15 @@ def updateFavoritesSchedule():
 
 
 if __name__ == '__main__':
+
+    def handler(result):
+        print 'result = %r' % (result)
+        raise SystemExit
+
+    rc = RecordClient()
+    rc.getScheduledRecordings(handler)
+    kaa.main()
+
     if len(sys.argv) >= 2:
         function = sys.argv[1]
     else:
