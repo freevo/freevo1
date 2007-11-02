@@ -52,55 +52,83 @@ class RecordClient:
     recordserver access class using kaa.rpc
     """
     def __init__(self):
+        """
+        """
+        _debug_('__init__()', 1)
         self.socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT2)
         self.secret = config.RECORDSERVER_SECRET
-        try:
-            self.server = kaa.rpc.Client(self.socket, self.secret)
-        except kaa.rpc.ConnectError, e:
-            print e
-            raise
+        self.server = None
 
-    #@kaa.notifier.execute_in_mainloop()
+
     def recordserver_rpc(self, cmd, *args, **kwargs):
-        print 'RecordClient.recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs)
+        """ call the record server command using kaa rpc """
+        _debug_('recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 1)
         return self.server.rpc(cmd, *args, **kwargs)
 
     def getScheduledRecordings(self):
         """ get the scheduled recordings, returning an in process object """
-        print 'RecordClient.getScheduledRecordings()'
+        _debug_('getScheduledRecordings()', 1)
         inprogress = self.recordserver_rpc('getScheduledRecordings')
         print 'RecordClient.getScheduledRecordings.inprogress = %r' % (inprogress)
         return inprogress
 
-    # this redefined getScheduledRecordings
+
+    def server_rpc(self, cmd, callback, *args, **kwargs):
+        """
+        Call the server with the command the results will be put in the callback
+        Try to reconnect if the connection is down
+        """
+        _debug_('server_rpc(cmd=%r, callback=%r, args=%r, kwargs=%r)' % (cmd, callback, args, kwargs), 1)
+        try:
+            if self.server is None:
+                try:
+                    self.server = kaa.rpc.Client(self.socket, self.secret)
+                    _debug_('%r is up' % (self.socket,))
+                except kaa.rpc.ConnectError, e:
+                    _debug_('%r is down' % (self.socket,))
+                    self.server = None
+                    return False
+            self.server.rpc(cmd, *args, **kwargs).connect(callback)
+            return True
+        except kaa.rpc.ConnectError, e:
+            _debug_('%r is down' % (self.socket,))
+            self.server = None
+            return False
+
+
     def getScheduledRecordings(self, callback):
-        """ get the scheduled recordings, using a callback function """
-        print 'RecordClient.getScheduledRecordings(callback=%r)' % (callback)
-        res = self.server.rpc('getScheduledRecordings').connect(callback)
-        print 'RecordClient.getScheduledRecordings().res = %r' % (res)
-        return res
+        """ Get the scheduled recordings, using a callback function """
+        _debug_('getScheduledRecordings(callback=%r)' % (callback), 1)
+        return self.server_rpc('getScheduledRecordings', callback)
 
 
     def findNextProgram(self, callback):
-        """ find the next program using a callback function """
-        print 'RecordClient.findNextProgram(callback=%r)' % (callback)
-        self.server.rpc('findNextProgram').connect(callback)
+        """ Find the next program using a callback function """
+        _debug_('findNextProgram(callback=%r)' % (callback), 1)
+        return self.server_rpc('findNextProgram', callback)
 
 
     def isPlayerRunning(self, callback):
-        """ is a player running, using a callback function """
-        print 'RecordClient.isPlayerRunning(callback=%r)' % (callback)
-        self.server.rpc('isPlayerRunning').connect(callback)
+        """ Find out if a player is running, using a callback function """
+        _debug_('isPlayerRunning(callback=%r)' % (callback), 1)
+        return self.server_rpc('isPlayerRunning', callback)
         
 
 
+#
+# Deprecated Twisted calls
+#
 def returnFromJelly(status, response):
+    """ Unjelly the xml from the response """
+    _debug_('returnFromJelly(status=%r, response=%r)' % (status, response), 1)
     if status:
         return (status, unjellyFromXML(response))
     return (status, response)
 
 
 def getScheduledRecordings():
+    """ Using Twisted get the scheduled recordings """
+    _debug_('getScheduledRecordings()', 1)
     try:
         (status, message) = server.getScheduledRecordings()
     except Exception, e:
@@ -110,6 +138,8 @@ def getScheduledRecordings():
 
 
 def saveScheduledRecordings(scheduledRecordings):
+    """ Using Twisted save the scheduled recordings """
+    _debug_('saveScheduledRecordings(scheduledRecordings)', 1)
     try:
         (status, message) = server.saveScheduledRecordings(scheduledRecordings)
     except:
@@ -118,6 +148,8 @@ def saveScheduledRecordings(scheduledRecordings):
 
 
 def connectionTest(teststr='testing'):
+    """ Using Twisted check if the record server is running """
+    _debug_('connectionTest(teststr=%r)' % (teststr), 1)
     try:
         (status, message) = server.echotest(teststr)
     except Exception, e:
@@ -128,6 +160,8 @@ def connectionTest(teststr='testing'):
 
 
 def scheduleRecording(prog=None):
+    """ Using Twisted add a programme to recording schedule  """
+    _debug_('scheduleRecording(prog=%r)' % (prog), 1)
     if not prog:
         return (FALSE, _('no program'))
 
@@ -144,6 +178,8 @@ def scheduleRecording(prog=None):
 
 
 def removeScheduledRecording(prog=None):
+    """ Using Twisted remove a programme from the recording schedule """
+    _debug_('removeScheduledRecording(prog=%r)' % (prog), 1)
     if not prog:
         return (FLASE, _('no program'))
 
@@ -155,6 +191,8 @@ def removeScheduledRecording(prog=None):
 
 
 def cleanScheduledRecordings():
+    """ Using Twisted clean the recordings schedule """
+    _debug_('cleanScheduledRecordings()', 1)
     try:
         (status, message) = server.cleanScheduledRecordings()
     except:
@@ -163,6 +201,8 @@ def cleanScheduledRecordings():
 
 
 def isProgScheduled(prog, schedule=None):
+    """ Using Twisted find out if a programme is scheduled to record """
+    _debug_('isProgScheduled(prog=%r, schedule=%r)' % (prog, schedule), 1)
     if schedule or schedule == {}:
         if schedule == {}:
             return (FALSE, _('program not scheduled'))
@@ -182,6 +222,8 @@ def isProgScheduled(prog, schedule=None):
 
 
 def findProg(chan, start):
+    """ Using Twisted find a program using the channel and the start time """
+    _debug_('findProg(chan=%r, start=%r)' % (chan, start), 1)
     try:
         (status, response) = server.findProg(chan, start)
     except:
@@ -190,6 +232,8 @@ def findProg(chan, start):
 
 
 def findMatches(find='', movies_only=0):
+    """ Using Twisted find matching programmes """
+    _debug_('findMatches(find=%r, movies_only=%r)' % (find, movies_only), 1)
     try:
         (status, response) = server.findMatches(find, movies_only)
     except Exception, e:
@@ -199,6 +243,9 @@ def findMatches(find='', movies_only=0):
 
 
 def addFavorite(name, prog, exactchan, exactdow, exacttod):
+    """ Using Twisted add a favourite programme """
+    _debug_('addFavorite(name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r)' % \
+        (name, prog, exactchan, exactdow, exacttod), 1)
     try:
         (status, message) = server.addFavorite(name, prog, exactchan, exactdow, exacttod)
     except:
@@ -207,6 +254,9 @@ def addFavorite(name, prog, exactchan, exactdow, exacttod):
 
 
 def addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
+    """ Using Twisted add an edited favourite programme """
+    _debug_('addEditedFavorite(name=%r, title=%r, chan=%r, dow=%r, mod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % \
+        (name, title, chan, dow, mod, priority, allowDuplicates, onlyNew), 1)
     try:
         (status, message) = \
             server.addEditedFavorite(jellyToXML(name), \
@@ -219,6 +269,8 @@ def addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, on
 
 
 def removeFavorite(name):
+    """ Using Twisted remove a favourite programme """
+    _debug_('removeFavorite(name=%r)' % (name), 1)
     try:
         (status, message) = server.removeFavorite(name)
     except:
@@ -227,6 +279,8 @@ def removeFavorite(name):
 
 
 def clearFavorites():
+    """ Using Twisted clear favourites """
+    _debug_('clearFavorites()', 1)
     try:
         (status, message) = server.clearFavorites()
     except:
@@ -235,6 +289,8 @@ def clearFavorites():
 
 
 def getFavorites():
+    """ Using Twisted get favourites """
+    _debug_('getFavorites()', 1)
     try:
         (status, response) = server.getFavorites()
     except:
@@ -243,6 +299,8 @@ def getFavorites():
 
 
 def getFavorite(name):
+    """ Using Twisted get a favourite """
+    _debug_('getFavorite(name=%r)' % (name), 1)
     try:
         (status, response) = server.getFavorite(name)
     except:
@@ -251,6 +309,8 @@ def getFavorite(name):
 
 
 def getFavoriteObject(prog, favs=None):
+    """ Using Twisted get a favourite object """
+    _debug_('getFavoriteObject(prog=%r, favs=%r)' % (prog, favs), 1)
     try:
         (status, response) = server.getFavoriteObject(jellyToXML(prog), jellyToXML(favs))
     except:
@@ -259,6 +319,8 @@ def getFavoriteObject(prog, favs=None):
 
 
 def adjustPriority(favname, mod):
+    """ Using Twisted adjust the priority of a favourite programme """
+    _debug_('adjustPriority(favname=%r, mod=%r)' % (favname, mod), 1)
     try:
         (status, message) = server.adjustPriority(favname, mod)
     except:
@@ -267,6 +329,8 @@ def adjustPriority(favname, mod):
 
 
 def isProgAFavorite(prog, favs=None):
+    """ Using Twisted find out if a programme is a favourite """
+    _debug_('isProgAFavorite(prog=%r, favs=%r)' % (prog, favs), 1)
     try:
         (status, message) = server.isProgAFavorite(jellyToXML(prog), jellyToXML(favs))
     except:
@@ -275,6 +339,8 @@ def isProgAFavorite(prog, favs=None):
 
 
 def removeFavoriteFromSchedule(fav):
+    """ Using Twisted remove a favourite from the schedule """
+    _debug_('removeFavoriteFromSchedule(fav=%r)' % (fav), 1)
     try:
         (status, message) = server.removeFavoriteFromSchedule(fav)
     except:
@@ -283,6 +349,8 @@ def removeFavoriteFromSchedule(fav):
 
 
 def addFavoriteToSchedule(fav):
+    """ Using Twisted add a favourite to the schedule """
+    _debug_('addFavoriteToSchedule(fav=%r)' % (fav), 1)
     try:
         (status, message) = server.addFavoriteToSchedule(fav)
     except:
@@ -291,6 +359,8 @@ def addFavoriteToSchedule(fav):
 
 
 def updateFavoritesSchedule():
+    """ Using Twisted update the recoding schedule with the favourites """
+    _debug_('updateFavoritesSchedule()', 1)
     try:
         (status, message) = server.updateFavoritesSchedule()
     except:
@@ -301,6 +371,8 @@ def updateFavoritesSchedule():
 if __name__ == '__main__':
 
     def handler(result):
+        """ A callback handler for test functions """
+        _debug_('handler(result)=%r' % (result), 1)
         print 'result = %r' % (result)
         raise SystemExit
 
@@ -309,13 +381,13 @@ if __name__ == '__main__':
     kaa.main()
 
     if len(sys.argv) >= 2:
-        function = sys.argv[1]
+        function = sys.argv[1].lower()
     else:
         function = 'none'
 
     print 'xml_rpc_server at %r' % (xml_rpc_server)
 
-    if function == "updateFavoritesSchedule":
+    if function == "updatefavoritesschedule":
         (result, response) = updateFavoritesSchedule()
         print '%r' % response
 
