@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-21 21:50+0200\n"
-"PO-Revision-Date: 2006-12-10 15:35+0100\n"
+"POT-Creation-Date: 2007-10-21 22:09+0200\n"
+"PO-Revision-Date: 2007-10-28 20:46+0100\n"
 "Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -216,7 +216,7 @@ msgstr "no se pueden cargar los ficheros html"
 #: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
 msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
 msgstr ""
-"Si estás usando una versión del CVS de Freevo ejecuta <b>autogen.sh</b>."
+"Si estás usando una versión del svn de Freevo ejecuta <b>autogen.sh</b>."
 
 #: www/htdocs/help/howto.rpy:86
 msgid "The files are searched in the following locations:"
@@ -288,16 +288,16 @@ msgstr "Grabando %s"
 
 #: www/htdocs/index.rpy:81
 msgid "One program scheduled to record."
-msgstr "Un programa encolado para grabación."
+msgstr "Un programa planificado para grabación."
 
 #: www/htdocs/index.rpy:83
 #, python-format
 msgid "%i programs scheduled to record."
-msgstr "%i programas encolados para grabación."
+msgstr "%i programas planificado para grabación."
 
 #: www/htdocs/index.rpy:85 www/htdocs/index.rpy:87
 msgid "No programs scheduled to record."
-msgstr "No hay programas encolados para grabación."
+msgstr "No hay programas planificados para grabación."
 
 #: www/htdocs/index.rpy:89
 #, python-format
@@ -418,12 +418,11 @@ msgstr "Añadir a la cola de grabación"
 
 #: www/htdocs/viewlogfile.rpy:112
 msgid "viewlog"
-msgstr ""
+msgstr "viewlog"
 
 #: www/htdocs/viewlogfile.rpy:112
-#, fuzzy
 msgid "View Logs"
-msgstr "Ver programación de TV"
+msgstr "Ver logs"
 
 #: www/htdocs/record.rpy:85 www/htdocs/edit_favorite.rpy:80
 #, python-format
@@ -462,12 +461,11 @@ msgstr "Eliminar"
 
 #: www/htdocs/pluginconfig.rpy:322
 msgid "configplugins"
-msgstr ""
+msgstr "configPlugins"
 
 #: www/htdocs/pluginconfig.rpy:322
-#, fuzzy
 msgid "Config Plugins"
-msgstr "Lista de módulos"
+msgstr "Configurar módulos"
 
 #: www/htdocs/edit_favorite.rpy:53 www/htdocs/edit_favorite.rpy:114
 #: tv/edit_favorite.py:91
@@ -582,9 +580,8 @@ msgid "Save"
 msgstr "Grabar"
 
 #: www/htdocs/youtube.rpy:282
-#, fuzzy
 msgid "YouTube"
-msgstr "Mar"
+msgstr "YouTube"
 
 #: www/htdocs/guide.rpy:145 www/web_types.py:198 tv/tvmenu.py:98
 msgid "TV Guide"
@@ -817,7 +814,6 @@ msgid "Play file using VLC"
 msgstr "Reproducir fichero en servidor"
 
 #: www/htdocs/config.rpy:741
-#, fuzzy
 msgid "Config"
 msgstr "Configurar"
 
@@ -932,43 +928,36 @@ msgstr ""
 "¡no encontrado!"
 
 #: audio/plugins/apodcast.py:96
-#, fuzzy
 msgid "Buffering podcast..."
-msgstr "Obteniendo datos..."
+msgstr "Almacenando podcast..."
 
 #: audio/plugins/apodcast.py:110
-#, fuzzy
 msgid "Listen Audio Podcast"
-msgstr "Oir una emisora de radio"
+msgstr "Oir un Podcast"
 
 #: audio/plugins/apodcast.py:148
-#, fuzzy
 msgid "Audio Podcast"
-msgstr "Audio códec"
+msgstr "Audio Podcast"
 
 #: audio/plugins/apodcast.py:159
-#, fuzzy
 msgid "Fetching podcast..."
-msgstr "Obteniendo datos..."
+msgstr "Obteniendo podcast..."
 
 #: audio/plugins/apodcast.py:188
-#, fuzzy
 msgid "No Podcast locations found"
-msgstr "No se han encontrado Emisoras de radio"
+msgstr "No se han encontrado Podcasts"
 
 #: audio/plugins/apodcast.py:190 audio/plugins/apodcast.py:218
 msgid "AUDIO PODCAST"
-msgstr ""
+msgstr "AUDIO PODCAST"
 
 #: audio/plugins/apodcast.py:196
-#, fuzzy
 msgid "Fetching podcasts..."
-msgstr "Obteniendo datos..."
+msgstr "Obteniendo podcasts..."
 
 #: audio/plugins/apodcast.py:213
-#, fuzzy
 msgid "Set APODCAST_DIR in local_conf.py"
-msgstr "Actualiza la variables GAMES_ITEMS en local_conf.py, por favor."
+msgstr "Actualiza la variable APODCAST_DIR en local_conf.py"
 
 #: audio/plugins/radio.py:63
 msgid "Listen to Radio Station"
@@ -1035,14 +1024,12 @@ msgid "XM channels"
 msgstr "Modificar canal"
 
 #: audio/plugins/coversearch.py:100
-#, fuzzy
 msgid ""
 "To search for covers you need an Amazon.com Web Services\n"
 "license key. You can get yours from:\n"
 msgstr ""
-"Para buscar carátulas necesitas una licencia de los servicios web de Amazon."
-"com\n"
-"Puedes tener la tuya en:\n"
+"Para buscar carátulas necesitas una licencia de los servicios web de"
+"Amazon.com. Puedes obtener la tuya en:\n"
 
 #: audio/plugins/coversearch.py:158
 msgid "Find a cover for this music"
@@ -1096,7 +1083,6 @@ msgid "getting data..."
 msgstr "Obteniendo datos..."
 
 #: audio/plugins/lyrics.py:55
-#, fuzzy
 msgid "Searching lyrics..."
 msgstr "Buscando letras..."
 
@@ -1105,9 +1091,8 @@ msgid "Lyrics not found, sorry..."
 msgstr "No se han encontrado letras."
 
 #: audio/plugins/lyrics.py:74
-#, fuzzy
 msgid "Show lyrics"
-msgstr "Mostrar el reproductor"
+msgstr "Mostrar letras"
 
 #: audio/plugins/musicip.py:85
 msgid "MusicIP Mix"
@@ -1182,7 +1167,7 @@ msgstr "La carpeta %s ya existe"
 #: audio/plugins/cdbackup.py:338
 #, python-format
 msgid "Cannot rip to '%s'! (%s)"
-msgstr ""
+msgstr "No se puede extraer a '%s'! (%s)"
 
 #: audio/plugins/cdbackup.py:354 audio/plugins/cdbackup.py:420
 #: audio/plugins/cdbackup.py:479
@@ -1280,17 +1265,16 @@ msgid "[VUX] an audio item, do not select"
 msgstr "[VUX] Has seleccionado una canción"
 
 #: audio/plugins/lastfm.py:193
-#, fuzzy
 msgid "Listen Last FM"
-msgstr "Escuchar música"
+msgstr "Escuchar Last FM"
 
 #: audio/plugins/lastfm.py:218 audio/plugins/lastfm.py:251
 msgid "Last FM"
-msgstr ""
+msgstr "Last FM"
 
 #: audio/plugins/lastfm.py:249
 msgid "Invalid LastFM Session!"
-msgstr ""
+msgstr "¡Sesión de LastFM no válida"
 
 #: audio/audiodiskitem.py:69
 msgid "Browse disc"
@@ -1523,6 +1507,27 @@ msgstr "Reproducir canal derecho"
 msgid "Language Menu"
 msgstr "Idioma"
 
+#: video/plugins/fxdarchive.py:93
+msgid "Archive FXD files"
+msgstr "Archivar ficheros FXD"
+
+#: video/plugins/fxdarchive.py:103
+msgid "Finding and copying FXD files..."
+msgstr "Buscando y copiando ficheros FXD..."
+
+#: video/plugins/fxdarchive.py:122
+msgid "There was a error while trying to write the fxd file"
+msgstr "Se ha producido un error al guardar el fichero fxd"
+
+#: video/plugins/fxdarchive.py:132
+msgid "But I couldn't copy a cover image file."
+msgstr "pero no se ha podido copiar el fichero de carátula."
+
+#: video/plugins/fxdarchive.py:135
+#, python-format
+msgid "%d fxd files archived. %s"
+msgstr "%d ficheros fxd archivados. %s"
+
 #: video/__init__.py:182
 msgid "Directory Autobuild Thumbnails "
 msgstr "Crear miniaturas automáticamente "
@@ -1571,15 +1576,15 @@ msgstr "Activar %s"
 
 #: video/configure.py:239
 msgid "Activate TOP field first"
-msgstr ""
+msgstr "Activa el campo superior primero"
 
 #: video/configure.py:241 video/configure.py:279
 msgid "Activate BOTTOM field first"
-msgstr ""
+msgstr "Activa el campo inferior primero"
 
 #: video/configure.py:243
 msgid "Activate AUTO field first"
-msgstr ""
+msgstr "Activa el campo AUTO primero"
 
 #: video/configure.py:256
 msgid "Audio selection"
@@ -1631,9 +1636,8 @@ msgid "VCD title list"
 msgstr "Lista de títulos del VCD"
 
 #: video/videoitem.py:322
-#, fuzzy
 msgid "Full description"
-msgstr "Descripción"
+msgstr "Descripción completa"
 
 #: video/videoitem.py:324
 msgid "Play with alternate player"
@@ -2352,19 +2356,17 @@ msgid "Full Description"
 msgstr "Descripción"
 
 #: plugins/buttonbar.py:126
-#, fuzzy
 msgid "Now"
-msgstr "No"
+msgstr "Ahora"
 
 #: plugins/buttonbar.py:135
-#, fuzzy
 msgid "WARNING: "
-msgstr "ATENCIÓN"
+msgstr "ATENCIÓN: "
 
 #: plugins/buttonbar.py:136
 #, python-format
 msgid "\"%s\" is not a valid argument for the button bar. "
-msgstr ""
+msgstr "\"%s\" no es un argumento válido para la barra de botones. "
 
 #: plugins/buttonbar.py:368
 msgid "More Options"
@@ -2383,14 +2385,12 @@ msgid "Added to Cart"
 msgstr "Añadido al carrito"
 
 #: plugins/shoppingcart.py:111
-#, fuzzy
 msgid "Removed from Cart"
-msgstr "Eliminar favoritos"
+msgstr "Eliminado del carrito"
 
 #: plugins/shoppingcart.py:119
-#, fuzzy
 msgid "Removed Item from Cart"
-msgstr "Elemento añadido al carrito"
+msgstr "Elemento eliminado del carrito"
 
 #: plugins/shoppingcart.py:122
 msgid "Added Item to Cart"
@@ -2409,19 +2409,16 @@ msgid "Add Directory to Cart"
 msgstr "Añadir carpeta al carrito"
 
 #: plugins/shoppingcart.py:152
-#, fuzzy
 msgid "Remove Directory from Cart"
-msgstr "Añadir carpeta al carrito"
+msgstr "Eliminar carpeta del carrito"
 
 #: plugins/shoppingcart.py:156
-#, fuzzy
 msgid "Add to Cart"
-msgstr "Añadido al carrito"
+msgstr "Añadir al carrito"
 
 #: plugins/shoppingcart.py:158
-#, fuzzy
 msgid "Remove from Cart"
-msgstr "Eliminar favoritos"
+msgstr "Eliminar del carrito"
 
 #: plugins/shoppingcart.py:161
 msgid "Delete Cart"
@@ -2517,7 +2514,7 @@ msgstr ""
 
 #: plugins/itv.py:249
 msgid "Internet TV"
-msgstr ""
+msgstr "TV por Internet"
 
 #: plugins/mediamenu.py:137
 msgid "Media"
@@ -2762,23 +2759,21 @@ msgstr ""
 msgid "Sending data %r attempt=%d"
 msgstr "Enviando dato %r intento=%d"
 
-#: plugins/upsoon.py:223 plugins/upsoon.py:241
+#: plugins/upsoon.py:225 plugins/upsoon.py:243
 msgid "A recording will start in a few minutes"
 msgstr "La grabación empezara en menos de un minuto"
 
-#: plugins/upsoon.py:271
+#: plugins/upsoon.py:274
 msgid "TV stopped, a recording is about to start!"
 msgstr "TV parada. Va a comenzar una grabación"
 
 #: plugins/ejectromdrives.py:69
-#, fuzzy
 msgid "Close drive"
-msgstr "Cerrar ventana"
+msgstr "Cerrar unidad"
 
 #: plugins/ejectromdrives.py:71
-#, fuzzy
 msgid "Eject drive"
-msgstr "Expulsando disco de la unidad %s"
+msgstr "Expulsar unidad"
 
 #: plugins/freevused.py:140
 msgid ""
@@ -2970,7 +2965,7 @@ msgstr "(puesta en marcha desactivada)"
 msgid "SHUTDOWN FREEVO?"
 msgstr "¿CERRAR FREEVO?"
 
-#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:308
+#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:310
 msgid "shutting down..."
 msgstr "Apagando..."
 
@@ -3054,54 +3049,47 @@ msgid "Dew Point:"
 msgstr ""
 
 #: plugins/oneclick.py:982
-#, fuzzy
 msgid "Humidity:"
-msgstr "Humedad"
+msgstr "Humedad:"
 
 #: plugins/oneclick.py:983
-#, fuzzy
 msgid "Visibility:"
-msgstr "Visibilidad"
+msgstr "Visibilidad:"
 
 #: plugins/oneclick.py:984
-#, fuzzy
 msgid "Pressure:"
-msgstr "Presión"
+msgstr "Presión:"
 
 #: plugins/oneclick.py:985
-#, fuzzy
 msgid "Winds:"
-msgstr "Viento"
+msgstr "Viento:"
 
 #: plugins/oneclick.py:986
 msgid "Tonight:"
-msgstr ""
+msgstr "Esta noche:"
 
 #: plugins/oneclick.py:987
-#, fuzzy
 msgid "Sunset:"
-msgstr "Dom"
+msgstr "Puesta de sol:"
 
 #: plugins/oneclick.py:988
 msgid "Moon Phase:"
-msgstr ""
+msgstr "Fase lunar:"
 
 #: plugins/oneclick.py:1064
-#, fuzzy
 msgid "Error encountered while trying to download weather map"
-msgstr "Se ha producido un error al descargar el mapa"
+msgstr "Se ha producido un error al descargar el mapa del tiempo"
 
 #: gui/ConfirmBox.py:75 tv/edit_favorite.py:189
 msgid "CANCEL"
 msgstr "CANCELAR"
 
 #: tv/plugins/dvbstreamer/live_pause.py:89
-#, fuzzy
 msgid ""
 "'XINE_COMMAND' not defined, plugin 'DVBStreamer' deactivated.\n"
 "please check the xine section in freevo_config.py"
 msgstr ""
-"No se ha definido 'XINE_COMMAND'. Se ha desactivado el módulo de tv 'xine'.\n"
+"No se ha definido 'XINE_COMMAND'. Se ha desactivado el módulo 'DVBStreamer'.\n"
 "Comprueba, por favor, la sección xine del fichero de configuración "
 "freevo_config.py"
 
@@ -3117,19 +3105,19 @@ msgid "You need software %s"
 msgstr "Necesitas el software %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:548
-#, fuzzy, python-format
+#, python-format
 msgid "Tuning to %s"
-msgstr "Activar %s"
+msgstr "Sintonizando %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:551
-#, fuzzy, python-format
+#, python-format
 msgid "Buffering %s"
-msgstr "Estado de grabación: %s"
+msgstr "Almacenando %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:555
-#, fuzzy, python-format
+#, python-format
 msgid "Playing %s"
-msgstr "Reproduciendo"
+msgstr "Reproduciendo %s"
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"
@@ -3342,9 +3330,8 @@ msgstr ""
 "más larga, por favor."
 
 #: tv/plugins/search_programs.py:78
-#, fuzzy
 msgid "Search Programs"
-msgstr "Programa"
+msgstr "Buscar programas"
 
 #: tv/plugins/search_programs.py:88 tv/program_display.py:233
 #: tv/programitem.py:298
@@ -3375,9 +3362,8 @@ msgid "Get recordings failed"
 msgstr "La obtención de grabaciones ha fallado."
 
 #: tv/plugins/ivtv_xine_tv.py:767
-#, fuzzy
 msgid "This plugin only supports the ivtv video group!"
-msgstr "Este módulo sólo soporta el grupo de video ivtv en modo tv"
+msgstr "¡Este módulo sólo soporta el grupo de video ivtv!"
 
 #: tv/program_display.py:110
 msgid "Display program"
@@ -3389,7 +3375,7 @@ msgstr "Eliminar del programa"
 
 #: tv/program_display.py:152 tv/programitem.py:129
 msgid "Schedule for recording"
-msgstr "Grabaciones programadas"
+msgstr "Programar para grabación"
 
 #: tv/program_display.py:157 tv/programitem.py:144
 msgid "Search for more of this program"
@@ -3506,38 +3492,34 @@ msgid "Prevent Recording of Duplicates"
 msgstr ""
 
 #: tv/favoriteitem.py:120
-#, fuzzy
 msgid "Allow Recording of Duplicates"
-msgstr "Grabando %s"
+msgstr "Permitir grabación de duplicados"
 
 #: tv/favoriteitem.py:126 tv/favoriteitem.py:315
-#, fuzzy
 msgid "Record All Episodes"
-msgstr "Guardar todos los episodios"
+msgstr "Grabar todos los episodios"
 
 #: tv/favoriteitem.py:129 tv/favoriteitem.py:320
 msgid "Record Only New Episodes"
-msgstr ""
+msgstr "Grabar solo episodios nuevos"
 
 #: tv/favoriteitem.py:297
 msgid "Allow Recordings of Duplicates"
-msgstr ""
+msgstr "Permitir grabación de duplicados"
 
 #: tv/favoriteitem.py:338
 msgid "Saving the changes to this favorite."
-msgstr ""
+msgstr "Guardando los cambios a este favorito."
 
 #: tv/favoriteitem.py:339
 msgid "This may take some time."
-msgstr ""
+msgstr "Esto puede llevar un tiempo."
 
 #: tv/favoriteitem.py:371
-#, fuzzy
 msgid "Save failed, favorite was lost."
 msgstr "La grabación ha fallado. Se ha perdido el favorito"
 
 #: tv/favoriteitem.py:391 tv/programitem.py:253
-#, fuzzy
 msgid "Remove failed"
 msgstr "La eliminación ha fallado"
 
@@ -3626,23 +3608,20 @@ msgid "Do you want to remove %s?"
 msgstr "¿Estás seguro de querer eliminar %s?"
 
 #: tv/programitem.py:165
-#, fuzzy
 msgid "Sorry, you cannot watch this program now. "
-msgstr "Lo siento. No se puede ver la TV mientas se está grabando."
+msgstr "Lo siento. No se puede ver este programa ahora. "
 
 #: tv/programitem.py:166
 msgid "It starts in the future."
-msgstr ""
+msgstr "Comienza en el futuro."
 
 #: tv/programitem.py:172
-#, fuzzy
 msgid "Sorry, you cannot watch this progam now. "
-msgstr "Lo siento. No se puede ver la TV mientas se está grabando."
+msgstr "Lo siento. No se puede ver este programa ahora. "
 
 #: tv/programitem.py:173
-#, fuzzy
 msgid "This program is already over."
-msgstr "%i programas encolados para grabación."
+msgstr "Este programa ya ha finalizado."
 
 #: tv/programitem.py:187
 msgid "Sorry, you cannot watch TV while recording. "
@@ -3653,57 +3632,52 @@ msgid "If this is not true then remove "
 msgstr "Si esto no es verdad eliminar "
 
 #: tv/programitem.py:233
-#, fuzzy
 msgid "Scheduling failed"
 msgstr "La programación ha fallado"
 
 #: tv/programitem.py:287
-#, fuzzy
 msgid "getFavorites failed"
-msgstr "getFavorites ha fallado: %s"
+msgstr "getFavorites ha fallado"
 
 #: tv/programitem.py:320
-#, fuzzy
 msgid "findMatches failed"
-msgstr "findMatches ha fallado: %s"
+msgstr "findMatches ha fallado"
 
 #: skin/widgets/textentry_screen.py:60
-#, fuzzy
 msgid "Left"
-msgstr "Total"
+msgstr "Izquierda"
 
 #: skin/widgets/textentry_screen.py:61
 msgid "Right"
-msgstr ""
+msgstr "Derecha"
 
 #: skin/widgets/textentry_screen.py:83
 msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
-msgstr ""
+msgstr "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ "
 
 #: skin/widgets/textentry_screen.py:88
 msgid "1234567890"
-msgstr ""
+msgstr "1234567890"
 
 #: skin/widgets/textentry_screen.py:93
 msgid "!\"#$%^&*();:'@~?,.<>-=+\\[]{}"
-msgstr ""
+msgstr "!\"#$%^&*();:'@~?,.<>-=+\\[]{"
 
 #: skin/widgets/textentry_screen.py:100
 msgid "ABC"
-msgstr ""
+msgstr "ABC"
 
 #: skin/widgets/textentry_screen.py:108
 msgid "123"
-msgstr ""
+msgstr "123"
 
 #: skin/widgets/textentry_screen.py:116
 msgid "Symbls"
-msgstr ""
+msgstr "Symbls"
 
 #: skin/widgets/textentry_screen.py:229
-#, fuzzy
 msgid "Space"
-msgstr "Grabar"
+msgstr "Espacio"
 
 #: util/misc.py:422
 msgid "The recordserver is down"
@@ -4032,15 +4006,15 @@ msgstr "Sí"
 msgid "Settings:"
 msgstr "Configuración:"
 
-#: main.py:170
+#: main.py:171
 msgid "Freevo Main Menu"
 msgstr "Menú principal de Freevo"
 
-#: main.py:186
+#: main.py:187
 msgid "Skin Selector"
 msgstr "Selector de temas"
 
-#: main.py:299
+#: main.py:301
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -4062,55 +4036,55 @@ msgstr ""
 "Registro: %s\n"
 "\n"
 
-#: main.py:309 share/skins/main/mediaportal.fxd:447
+#: main.py:311 share/skins/main/mediaportal.fxd:447
 #: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
 #: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
 #: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
 msgid "Shutdown"
 msgstr "Apagar"
 
-#: main.py:311
+#: main.py:313
 msgid "Continue"
 msgstr "Continuar"
 
-#: main.py:435
+#: main.py:428
 #, python-format
 msgid "Starting Freevo-%s, please wait ..."
 msgstr "Iniciando Freevo-%s. Espera, por favor..."
 
-#: main.py:444
+#: main.py:437
 msgid "Reading cache, please wait ..."
 msgstr "Generando cache de MAME. Espera, por favor."
 
-#: main.py:495
+#: main.py:491
 msgid "Freevo crashed!"
 msgstr "¡Freevo ha fallado!"
 
-#: main.py:496
+#: main.py:492
 #, python-format
 msgid "Filename: %s"
 msgstr "Fichero: %s"
 
-#: main.py:497
+#: main.py:493
 #, python-format
 msgid "Lineno: %s"
 msgstr "Linea nº: %s"
 
-#: main.py:498
+#: main.py:494
 #, python-format
 msgid "Function: %s"
 msgstr "Función: %s"
 
-#: main.py:499
+#: main.py:495
 #, python-format
 msgid "Text: %s"
 msgstr "Texto: %s"
 
-#: main.py:501
+#: main.py:497
 msgid "Please see the logfiles for more info"
 msgstr "Consulta la información de los ficheros de registro."
 
-#: main.py:503
+#: main.py:499
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Salida en %s segundos"
@@ -4140,9 +4114,8 @@ msgid "h = Help"
 msgstr "h = Ayuda"
 
 #: share/skins/main/geexbox.fxd:585
-#, fuzzy
 msgid "Currently recording"
-msgstr "Condiciones actuales"
+msgstr "Grabando en este momento"
 
 #: share/skins/main/dark.fxd:496
 msgid "Just one movie in this playlist."
@@ -4183,9 +4156,8 @@ msgid "File name"
 msgstr "Fichero"
 
 #: share/skins/main/geexbox.fxd:593
-#, fuzzy
 msgid "Next recordings"
-msgstr "La obtención de grabaciones ha fallado."
+msgstr "Siguiente grabación"
 
 #: share/skins/main/geexbox.fxd:203 share/skins/main/mediaportal.fxd:197
 #: share/skins/main/dark.fxd:501 share/skins/main/blurr.fxd:195
@@ -4232,9 +4204,8 @@ msgid "From"
 msgstr "De"
 
 #: share/skins/main/geexbox.fxd:603
-#, fuzzy
 msgid "Recordserver not found"
-msgstr "Servidor de codificación no activado"
+msgstr "No se ha encontrado el servidor de grabación"
 
 #: share/skins/main/crystal.fxd:318 share/skins/main/bluestar.fxd:338
 #: share/skins/main/rain.fxd:322
@@ -4331,9 +4302,8 @@ msgid "New mail"
 msgstr "Correo nuevo"
 
 #: share/skins/main/geexbox.fxd:599
-#, fuzzy
 msgid "Nothing scheduled"
-msgstr "Nada programado."
+msgstr "Nada programado"
 
 #: share/skins/main/geexbox.fxd:199 share/skins/main/mediaportal.fxd:193
 #: share/skins/main/blurr.fxd:191 share/skins/main/info.fxd:419
@@ -4453,14 +4423,6 @@ msgstr "TV"
 
 #~ msgid "Time conversion error"
 #~ msgstr "Error de conversión de hora"
-
-#, fuzzy
-#~ msgid "Archive FXD files"
-#~ msgstr "Ficheros FXD"
-
-#, fuzzy
-#~ msgid "Finding and copying FXD files..."
-#~ msgstr "Copiando ficheros..."
 
 #~ msgid "Info"
 #~ msgstr "Info"
