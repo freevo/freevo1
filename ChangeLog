@@ -20,6 +20,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * New Romanian translation (F#1809393)
  * Updated Dutch translation (B#1766337)
  * Updated German translation (F#1770195)
+ * Updated Spanish translation (F#1821771,F#1824931)
  * New DVB streamer plug-in, allows pausing and recording DVB/ATSC streams (F#1720288)
  * New eject CD-ROM plug-in, adding a menu item to the drive menu (F#1773418)
  * New internet TV plug-in (F#1811634)
