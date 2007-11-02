@@ -152,6 +152,8 @@ class FreevoChannels:
 
 
     def tunerSetFreq(self, chan, isplayer, app=None, app_cmd=None):
+        print 'DJW:tunerSetFreq(chan=%r, isplayer=%r, app=%r, app_cmd=%r' % \
+            (chan, isplayer, app, app_cmd)
         chan = str(chan)
         vg = self.getVideoGroup(chan, isplayer)
 
@@ -194,12 +196,14 @@ class FreevoChannels:
                 try:
                     vd.setinputbyname(vg.input_type)
                 except KeyError:
-                    print 'Cannot set input %r, must be one of:\n%r' % (vg.input_type, vd.inputs.keys())
+                    print 'Cannot set input %r for %r, must be one of:\n%r' % \
+                        (vg.input_type, vg.vdev, vd.inputs.keys())
 
                 try:
                     vd.setstdbyname(vg.tuner_norm)
                 except KeyError:
-                    print 'Cannot set standard %r, must be one of:\n%r' % (vg.tuner_norm, tv.v4l2.NORMS.keys())
+                    print 'Cannot set standard %r for %r, must be one of:\n%r' % \
+                        (vg.tuner_norm, vg.vdev, vd.standards.keys())
 
                 try:
                     vd.setfreq(freq)
