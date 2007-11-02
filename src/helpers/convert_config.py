@@ -32,7 +32,6 @@
 import sys
 import os
 import re
-import util
 
 change_map = {
     'DIR_MOVIES': 'VIDEO_ITEMS',
@@ -202,6 +201,7 @@ if len(sys.argv) <= 3 and sys.argv[1] == '-s':
     # print
     # print
     # print 'starting scanning all files in detail:'
+    import util
     for f in util.match_files_recursively('src', [ 'py', 'rpy' ]):
         change(f, print_name=True)
     sys.exit(0)
