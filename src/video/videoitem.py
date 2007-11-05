@@ -56,7 +56,7 @@ class VideoItem(Item):
         self.autovars = []
         Item.__init__(self, parent)
         self.type = 'video'
-        
+
         self.variants          = []         # if this item has variants
         self.subitems          = []         # more than one file/track to play
         self.current_subitem   = None
@@ -83,8 +83,8 @@ class VideoItem(Item):
         self.set_url(url, info=parse)
         if info:
             self.info.set_variables(info)
-        
-      
+
+
         # deinterlacing and related things
         video_deinterlace = config.VIDEO_DEINTERLACE != None and config.VIDEO_DEINTERLACE or False
         self['deinterlace'] = video_deinterlace
@@ -94,7 +94,7 @@ class VideoItem(Item):
 
         video_field_dominance = config.VIDEO_FIELD_DOMINANCE != None and config.VIDEO_FIELD_DOMINANCE or False
         self['field-dominance'] = video_field_dominance
-        
+
         # find image for tv show and build new title
         if config.VIDEO_SHOW_REGEXP_MATCH(self.name) and not self.network_play and \
                config.VIDEO_SHOW_DATA_DIR:
@@ -202,7 +202,7 @@ class VideoItem(Item):
         self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
         if len(self.possible_player) > 0:
             self.player_rating, self.player = self.possible_player[0]
-        
+
 
 
     def id(self):
@@ -238,6 +238,19 @@ class VideoItem(Item):
             else:
                 if self.info['width'] and self.info['height']:
                     aspect = util.misc.human_aspect_ratio(self.info['width'], self.info['height'])
+
+            if aspect:
+                return aspect
+
+        if key == 'mplayer_aspect':
+            aspect = None
+            if self.info['aspect']:
+                aspect = str(self.info['aspect'])
+                aspect[:aspect.find(' ')].replace('/', ':')
+            else:
+                if self.info['width'] and self.info['height']:
+                    ratio = float(self.info['width']) / self.info['height']
+                    aspect = "%f" % ratio
 
             if aspect:
                 return aspect
@@ -302,7 +315,7 @@ class VideoItem(Item):
         """
         if not self.possible_player:
             return []
-       
+
         if self.url.startswith('dvd://') and self.url[-1] == '/':
             if self.player_rating >= 20:
                 items = [ (self.play, _('Play DVD')),
@@ -376,7 +389,7 @@ class VideoItem(Item):
         """
         self.play(menuw=menuw, arg='-cache 65536')
 
-    
+
     def play_alternate(self, arg=None, menuw=None):
         """
         play and use maximum cache with mplayer
@@ -445,11 +458,11 @@ class VideoItem(Item):
         """
         if not self.possible_player:
             return
-       
+
         # execute commands if defined
         if config.VIDEO_PRE_PLAY:
             os.system(config.VIDEO_PRE_PLAY)
-        
+
         # FIXME: There could be more than two players available
         if alternateplayer:
             self.possible_player.reverse()
@@ -629,7 +642,7 @@ class VideoItem(Item):
             i.name            = Unicode(_('Play Title %d') % (titlenum+1))
             items.append(i)
 
-        
+
         moviemenu = menu.Menu(self.name, items, umount_all = 1, fxd_file=self.skin_fxd)
         moviemenu.item_types = 'video'
         self.menuw.pushmenu(moviemenu)
