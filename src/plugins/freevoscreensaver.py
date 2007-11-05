@@ -35,6 +35,7 @@ import config
 import plugin
 from playlist import Playlist
 import rc
+import osd
 import event as em
 import fxditem
 
@@ -90,6 +91,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.saver_type = sstype
         self.arg1 = ssarg1
         self.arg2 = ssarg2
+        self.osd  = osd.get_singleton()
 
     def config(self):
         return [ ('SSAVER_DELAY', 300, '# of seconds to wait to start saver.'),
@@ -169,3 +171,6 @@ class PluginInterface(plugin.DaemonPlugin):
             rc.post_event(em.STOP)
         else:
             _debug_("Unknown saver type to stop.")
+
+        time.sleep(1)
+        self.osd.update()
