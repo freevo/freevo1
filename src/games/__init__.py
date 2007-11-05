@@ -51,7 +51,7 @@ class PluginInterface(plugin.MimetypePlugin):
     """
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        _debug_('games.PluginInterface.__init__()', 2)
         plugin.MimetypePlugin.__init__(self)
         self.display_type = [ 'games' ]
 

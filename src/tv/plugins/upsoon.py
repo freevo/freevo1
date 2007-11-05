@@ -72,13 +72,15 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         init the upsoon plugin
         """
-        _debug_('PluginInterface.__init__()', 1)
-        plugin.DaemonPlugin.__init__(self)
+        _debug_('upsoon.PluginInterface.__init__()', 1)
+        plugin.DaemonPlugin.__init__(self, hasgui=True)
         plugin.register(self, 'upsoon')
+        self.hasgui = hasgui
         self.lock = thread.allocate_lock()
         self.timer = Timer(self.timer_handler).start(15)
         self.event = EventHandler(self.event_handler)
-        self.event.register(('VIDEO_START', 'VIDEO_END'))
+        #self.event.register(('VIDEO_START', 'VIDEO_END'))
+        self.event.register()
 
         self.recordclient = RecordClient()
 
@@ -222,7 +224,8 @@ class PluginInterface(plugin.DaemonPlugin):
         if (event.name == 'VIDEO_END'):
             if self.stopped:
                 # upsoon stopped the tv, now display a msgbox
-                AlertBox(text=_('%s stopped, a recording is about to start!') % self.stopped, height=200).show()
+                if self.hasgui:
+                    AlertBox(text=_('%s stopped, a recording is about to start!') % self.stopped, height=200).show()
                 self.stopped = None
         return 0
 
@@ -233,33 +236,35 @@ if __name__ == '__main__':
     function = None
     if len(sys.argv) > 1:
         function = sys.argv[1].lower()
-        rc = RecordClient()
+        server = RecordClient()
 
-    if function == "run":
+    if function == 'run':
+        #import rc as rctrl
+        #rc = rctrl.get_singleton(False)
         pi = PluginInterface()
         kaa.main()
 
-    elif function == "findnextprogram":
+    elif function == 'findnextprogram':
         def handler(result):
             print 'findnextprogram=%r' % (result)
             print result.__dict__
             raise SystemExit
-        rc.findNextProgram(handler)
+        server.findNextProgram(handler)
         kaa.main()
 
-    elif function == "isplayerrunning":
+    elif function == 'isplayerrunning':
         def handler(result):
             print 'isplayerrunning=%r' % (result)
             raise SystemExit
-        rc.isPlayerRunning(handler)
+        server.isPlayerRunning(handler)
         kaa.main()
 
     else:
         fc = FreevoChannels()
         vg=fc.getVideoGroup('K10', False)
-        print "vg=%s" % vg
-        print "dir(%s)" % dir(vg)
+        print 'vg=%s' % vg
+        print 'dir(%s)' % dir(vg)
         for it in dir(vg):
-            print "   %s:%s" % (it, eval('vg.'+it))
+            print '   %s:%s' % (it, eval('vg.'+it))
         vdev=vg.vdev
-        print "vdev=%s" % vdev
+        print 'vdev=%s' % vdev

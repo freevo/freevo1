@@ -48,7 +48,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def __init__(self):
-        _debug_('__init__(self)', 2)
+        _debug_('bilingual.PluginInterface.__init__(self)', 2)
         plugin.ItemPlugin.__init__(self)
         self.item = None
 

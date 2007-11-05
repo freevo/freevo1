@@ -42,8 +42,8 @@ import rc
 
 
 def returnFromJelly(status, response):
-    '''Un-serialize EncodingServer responses'''
-    _debug_('returnFromJelly(status, response)', 2)
+    """Un-serialize EncodingServer responses"""
+    _debug_('returnFromJelly(status, response)', 1)
     if status:
         return (status, unjellyFromXML(response))
     else:
@@ -59,7 +59,8 @@ class PluginInterface(IdleBarPlugin):
     """
 
     def __init__(self):
-        _debug_('__init__(self)', 2)
+        """ Initialise the transcode idlebar plug-in """
+        _debug_('transcode.PluginInterface.__init__()', 1)
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.transcode'
 
@@ -86,15 +87,13 @@ class PluginInterface(IdleBarPlugin):
         self.leftclamp_x = 0
         self.rightclamp_x = 0
 
-
         self.poll_interval = 82 # 82*1/120th seconds (~1sec)
         self.draw_interval = self.poll_interval
         self.last_interval = self.poll_interval
         self.lastdraw  = 0
         self.lastpoll  = 0
         self.drawtime  = 0
-        server_string  = 'http://%s:%s/' % \
-                        (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
+        server_string  = 'http://%s:%s/' % (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
         self.server    = xmlrpclib.Server(server_string, allow_none=1)
 
         self.skin      = skin.get_singleton()
@@ -108,15 +107,20 @@ class PluginInterface(IdleBarPlugin):
         self.font      = self.skin.get_font('small0')
         if self.font == skin.get_font('default'):
             self.font = skin.get_font('info value')
+        _debug_('transcode.PluginInterface.__init__() done.')
 
 
     def config(self):
-        return [ ('ENCODING_IDLEBAR', True, 'Show on the idlebar, otherwise on the main screen'), ]
+        _debug_('config()', 1)
+        return [
+            ('ENCODINGSERVER_IP', 'localhost', 'The host name or IP address of the encoding server'),
+            ('ENCODINGSERVER_PORT', 6666, 'The port of the encoding server'),
+        ]
 
 
     def getprogress(self):
-        _debug_('getprogress(self)', 2)
-        '''Get the progress & pass information of the job currently encoding.
+        """
+        Get the progress & pass information of the job currently encoding.
 
         This call returns False if no job is currently encoding (fx the queue is not active).
         When the queue is active, this call returns a tuple of 4 values:
@@ -132,7 +136,8 @@ class PluginInterface(IdleBarPlugin):
         perc is the percentage completed of the current pass
         timerem is the estimated time remaining of the current pass, formatted as a
             human-readable string.
-        '''
+        """
+        _debug_('getprogress()', 1)
 
         try:
             (status, response) = self.server.getProgress()
@@ -143,27 +148,32 @@ class PluginInterface(IdleBarPlugin):
 
 
     def listjobs(self):
-        _debug_('listjobs(self)', 2)
-        '''Get a list with all jobs in the encoding queue and their current state
+        """
+        Get a list with all jobs in the encoding queue and their current state
 
-        Returns a list of tuples containing all the current queued jobs. When the queue is
-        empty, an empty list is returned.
-        Each job in the list is a tuple containing 3 values (idnr, friendlyname, status)
-        These values have the same meaning as the corresponding values returned by the
-        getProgress call'''
+        Returns a list of tuples containing all the current queued jobs. When the queue
+        is empty, an empty list is returned.  Each job in the list is a tuple
+        containing 3 values (idnr, friendlyname, status) These values have the same
+        meaning as the corresponding values returned by the getProgress call
+        """
+        _debug_('listjobs() server=%r' % self.server, 1)
+        result = (FALSE, [])
 
         try:
             (status, response) = self.server.listJobs()
         except:
             return (False, 'EncodingClient: connection error')
-
-        return returnFromJelly(status, response)
+        result = returnFromJelly(status, response)
+        _debug_('listjobs() result=%r' % (result, ), 1)
+        return result
 
 
     def getimage(self, image, osd, cache=False):
-        '''load the image from the cache when available otherwise load the image
-        and save in the cache'''
-        _debug_('getimage(image=%r, osd=%r, cache=%s)' % (image, osd, cache), 2)
+        """
+        Load the image from the cache when available otherwise load the image and save
+        in the cache.
+        """
+        _debug_('getimage(image=%r, osd=%r, cache=%s)' % (image, osd, cache), 1)
         if image.find(config.ICON_DIR) == 0 and image.find(osd.settings.icon_dir) == -1:
             new_image = os.path.join(osd.settings.icon_dir, image[len(config.ICON_DIR)+1:])
             if os.path.isfile(new_image):
@@ -177,9 +187,8 @@ class PluginInterface(IdleBarPlugin):
 
 
     def set_sprite(self):
-        _debug_('set_sprite(self)', 2)
-        '''set the sprite image name and the drawing interval
-        '''
+        """ set the sprite image name and the drawing interval """
+        _debug_('set_sprite()', 1)
         (status, jobs) = self.listjobs()
         if not status:
             self.sprite = self.notrunning
@@ -239,12 +248,12 @@ class PluginInterface(IdleBarPlugin):
 
 
     def calculatesizes(self, osd, font):
-        '''size calcs is not necessery on every pass
+        """size calcs is not necessery on every pass
         There are some shortcuts here, the left and right clamps are the same with
         all sprites are the same size and the background
         return true when the progress has changed, false otherwise
-        '''
-        _debug_('calculatesizes(self, osd, font)', 2)
+        """
+        _debug_('calculatesizes(osd, font)', 1)
         if self.progress_x == None:
             background = self.getimage(self.background, osd)
             rightclamp = self.getimage(self.rightclamp, osd, True)
@@ -271,12 +280,11 @@ class PluginInterface(IdleBarPlugin):
 
 
     def draw(self, (type, object), x, osd):
-        '''Build the image by blitting sub images on the background and draw the background
-        '''
+        """ Build the image by blitting sub images on the background and draw the background """
         _debug_('draw((type=%r, object=), x=%r, osd=)' % (type, x), 3)
         now = time.time()
         duration = now - self.drawtime
-        _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 2)
+        _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 1)
         self.drawtime = now
         self.lastdraw = now
 
@@ -305,12 +313,12 @@ class PluginInterface(IdleBarPlugin):
 
 
     def poll(self):
-        '''poll function'''
+        """poll function"""
         now = time.time()
         pollduration = now - self.lastpoll
         drawduration = now - self.lastdraw
         self.lastpoll = now
-        _debug_("poll(self): poll=%.2f, draw=%.2f, interval=%s, state=%s" % \
+        _debug_("poll(): poll=%.2f, draw=%.2f, interval=%s, state=%s" % \
             (pollduration, drawduration, self.draw_interval, self.state), 2)
         if drawduration >= self.draw_interval / 100:
             if skin.active():
@@ -325,6 +333,6 @@ class PluginInterface(IdleBarPlugin):
 
 
     def update(self):
-        _debug_('update(self)', 2)
+        _debug_('update()', 1)
         bar = plugin.getbyname('idlebar')
         if bar: bar.poll()

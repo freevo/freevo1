@@ -50,7 +50,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def __init__(self):
-        _debug_('__init__(self)')
+        _debug_('reencode-old.PluginInterface.__init__(self)')
         plugin.ItemPlugin.__init__(self)
 
 

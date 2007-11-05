@@ -46,7 +46,7 @@ class ImageItem(Item):
         """
         Default constructor for an image item
         """
-        #_debug_("__init__(self, url, parent, name=%s, duration=%s)" % (name, duration), 2)
+        #_debug_("imageitem.ImageItem.__init__(url, parent, name=%s, duration=%s)" % (name, duration), 2)
         self.type = 'image'
         self.autovars = [ ( 'rotation', 0 ) ]
         Item.__init__(self, parent)

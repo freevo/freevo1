@@ -54,24 +54,9 @@ class VideoItem(Item):
 
     def __init__(self, url, parent, info=None, parse=True):
         self.autovars = []
-
         Item.__init__(self, parent)
-
         self.type = 'video'
-        self.set_url(url, info=parse)
-
-        if info:
-            self.info.set_variables(info)
-
-        video_deinterlace = config.VIDEO_DEINTERLACE != None and config.VIDEO_DEINTERLACE or False
-        self['deinterlace'] = video_deinterlace
-
-        video_use_xvmc = config.VIDEO_USE_XVMC != None and config.VIDEO_USE_XVMC or False
-        self['xvmc'] = video_use_xvmc
-
-        video_field_dominance = config.VIDEO_FIELD_DOMINANCE != None and config.VIDEO_FIELD_DOMINANCE or False
-        self['field-dominance'] = video_field_dominance
-
+        
         self.variants          = []         # if this item has variants
         self.subitems          = []         # more than one file/track to play
         self.current_subitem   = None
@@ -94,18 +79,22 @@ class VideoItem(Item):
         self.player        = None
         self.player_rating = 0
 
-        for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
-            rating = p.rate(self) * 10
-            if config.VIDEO_PREFERED_PLAYER == p.name:
-                rating += 1
-            if hasattr(self, 'force_player') and p.name == self.force_player:
-                rating += 100
-            self.possible_player.append((rating, p))
-        self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
-        if len(self.possible_player) > 0:
-            self.player_rating, self.player = self.possible_player[0]
+        # set the url (this influences the list of possible players!)
+        self.set_url(url, info=parse)
+        if info:
+            self.info.set_variables(info)
+        
+      
+        # deinterlacing and related things
+        video_deinterlace = config.VIDEO_DEINTERLACE != None and config.VIDEO_DEINTERLACE or False
+        self['deinterlace'] = video_deinterlace
 
+        video_use_xvmc = config.VIDEO_USE_XVMC != None and config.VIDEO_USE_XVMC or False
+        self['xvmc'] = video_use_xvmc
 
+        video_field_dominance = config.VIDEO_FIELD_DOMINANCE != None and config.VIDEO_FIELD_DOMINANCE or False
+        self['field-dominance'] = video_field_dominance
+        
         # find image for tv show and build new title
         if config.VIDEO_SHOW_REGEXP_MATCH(self.name) and not self.network_play and \
                config.VIDEO_SHOW_DATA_DIR:
@@ -169,7 +158,7 @@ class VideoItem(Item):
         """
         Sets a new url to the item. Always use this function and not set 'url'
         directly because this functions also changes other attributes, like
-        filename, mode and network_play
+        filename, mode, network_play and the list of possible players
         """
         Item.set_url(self, url, info)
         if url.startswith('dvd://') or url.startswith('vcd://'):
@@ -200,6 +189,20 @@ class VideoItem(Item):
             if os.path.exists(image):
                 self.image = image
                 self.files.image = image
+
+        # do the player rating based on the new url
+        self.possible_player = []
+        for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
+            rating = p.rate(self) * 10
+            if config.VIDEO_PREFERED_PLAYER == p.name:
+                rating += 1
+            if hasattr(self, 'force_player') and p.name == self.force_player:
+                rating += 100
+            self.possible_player.append((rating, p))
+        self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
+        if len(self.possible_player) > 0:
+            self.player_rating, self.player = self.possible_player[0]
+        
 
 
     def id(self):
@@ -297,11 +300,9 @@ class VideoItem(Item):
         """
         return a list of possible actions on this item.
         """
-
-
         if not self.possible_player:
             return []
-
+       
         if self.url.startswith('dvd://') and self.url[-1] == '/':
             if self.player_rating >= 20:
                 items = [ (self.play, _('Play DVD')),
@@ -319,9 +320,9 @@ class VideoItem(Item):
                           (self.play, _('Play default track')) ]
         else:
             items = [ (self.play, _('Play')) ]
-            items.append((self.show_details, _('Full description')))
-            if len(self.possible_player) > 1:
-                items.append((self.play_alternate, _('Play with alternate player')))
+        items.append((self.show_details, _('Full description')))
+        if len(self.possible_player) > 1:
+            items.append((self.play_alternate, _('Play with alternate player')))
 
         if self.network_play:
             items.append((self.play_max_cache, _('Play with maximum cache')))
@@ -375,6 +376,7 @@ class VideoItem(Item):
         """
         self.play(menuw=menuw, arg='-cache 65536')
 
+    
     def play_alternate(self, arg=None, menuw=None):
         """
         play and use maximum cache with mplayer
@@ -439,29 +441,18 @@ class VideoItem(Item):
 
     def play(self, arg=None, menuw=None, alternateplayer=False):
         """
-        execute commands if defined
-        """
-        if config.VIDEO_PRE_PLAY:
-            os.system(config.VIDEO_PRE_PLAY)
-        """
         play the item.
         """
         if not self.possible_player:
-            for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
-                rating = p.rate(self) * 10
-                if config.VIDEO_PREFERED_PLAYER == p.name:
-                    rating += 1
-                if hasattr(self, 'force_player') and p.name == self.force_player:
-                    rating += 100
-                self.possible_player.append((rating, p))
-
-            self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
-
+            return
+       
+        # execute commands if defined
+        if config.VIDEO_PRE_PLAY:
+            os.system(config.VIDEO_PRE_PLAY)
+        
+        # FIXME: There could be more than two players available
         if alternateplayer:
             self.possible_player.reverse()
-
-        if not self.possible_player:
-            return
 
         self.player_rating, self.player = self.possible_player[0]
         if self.parent:
@@ -638,9 +629,9 @@ class VideoItem(Item):
             i.name            = Unicode(_('Play Title %d') % (titlenum+1))
             items.append(i)
 
+        
         moviemenu = menu.Menu(self.name, items, umount_all = 1, fxd_file=self.skin_fxd)
         moviemenu.item_types = 'video'
-        moviemenu.is_submenu = True
         self.menuw.pushmenu(moviemenu)
 
 

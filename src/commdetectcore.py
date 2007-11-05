@@ -38,7 +38,7 @@ class CommDetectJob:
 
     def __init__(self, source, idnr):
         """Initialize class instance"""
-        _debug_('__init__(self, %s)' % (source))
+        _debug_('commdetectcore.CommDetectJob.__init__(%s)' % (source))
         self.source = source
         self.name = source
         self.idnr = idnr

@@ -58,7 +58,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def __init__(self):
         """initialise the DaemonPlugin interface"""
-        _debug_('__init__(self)', 2)
+        _debug_('detachbar.PluginInterface.__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'audio.detachbar'
         self.update_registered = False

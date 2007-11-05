@@ -56,7 +56,7 @@ else:
 
 class ManualRecordItem(Item):
     def __init__(self, parent):
-        _debug_('__init__(self, parent)', 2)
+        _debug_('manual_record.ManualRecordItem.__init__(parent)', 2)
         Item.__init__(self, parent, skin_type='video')
 
         self.name = _("Manual Record")
@@ -392,7 +392,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
 
     def __init__(self):
-        _debug_('__init__(self)', 2)
+        _debug_('manual_record.PluginInterface.__init__()', 2)
         plugin.MainMenuPlugin.__init__(self)
 
     def items(self, parent):

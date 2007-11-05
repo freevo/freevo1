@@ -53,6 +53,7 @@ class PluginInterface(plugin.MimetypePlugin):
     """
 
     def __init__(self):
+        _debug_('audio.PluginInterface.__init__()')
         plugin.MimetypePlugin.__init__(self)
         self.display_type = [ 'audio' ]
 

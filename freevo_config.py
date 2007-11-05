@@ -423,6 +423,29 @@ SHUTDOWN_SYS_ENABLE = 0  # Performs a whole system shutdown at SHUTDOWN!
 
 
 # ======================================================================
+# Main menu items
+# ======================================================================
+plugin.activate('tv', level=10)
+plugin.activate('video', level=20)
+plugin.activate('audio', level=30)
+plugin.activate('image', level=40)
+
+if CONF.xmame or CONF.snes:
+    plugin.activate('games', level=50)
+
+# Headlines
+plugin.activate('headlines', level=60)
+HEADLINES_LOCATIONS = [
+    ('Freevo news releases', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652'),
+   #('Freevo news releases (full)', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652&rss_fulltext=1'),
+    ('Freevo file releases', 'http://sourceforge.net/export/rss2_projfiles.php?group_id=46652'),
+    ('Freevo summary+stats', 'http://sourceforge.net/export/rss2_projsummary.php?group_id=46652'),
+    ('Freevo donors', 'http://sourceforge.net/export/rss2_projdonors.php?group_id=46652'),
+]
+plugin.activate('shutdown', level=90)
+
+
+# ======================================================================
 # AUTOSHUTDOWN CONFIGURATION
 # ======================================================================
 
@@ -721,17 +744,6 @@ CACHE_CROPDETECT = 0
 #   menus
 
 
-# Items in the main menu.
-plugin.activate('tv', level=10)
-plugin.activate('video', level=20)
-plugin.activate('audio', level=30)
-plugin.activate('image', level=40)
-plugin.activate('shutdown', level=50)
-
-if CONF.xmame or CONF.snes:
-    plugin.activate('games', level=45)
-
-
 # ROM drive support
 
 # autostarter when inserting roms while Freevo is in the MAIN MENU
@@ -847,18 +859,6 @@ DISKFREE_VERY_LOW = 8 # In Gigabytes
 DISKFREE_LOW = 20
 plugin.activate('idlebar.clock', level=50)
 CLOCK_FORMAT = '%a %d %H:%M'
-
-# ======================================================================
-# Headlines
-# ======================================================================
-plugin.activate('headlines', level=45)
-HEADLINES_LOCATIONS = [
-    ('Freevo news releases', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652'),
-   #('Freevo news releases (full)', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652&rss_fulltext=1'),
-    ('Freevo file releases', 'http://sourceforge.net/export/rss2_projfiles.php?group_id=46652'),
-    ('Freevo summary+stats', 'http://sourceforge.net/export/rss2_projsummary.php?group_id=46652'),
-    ('Freevo donors', 'http://sourceforge.net/export/rss2_projdonors.php?group_id=46652'),
-]
 
 # ----------------------------------------------------------------------
 # CD Ripping

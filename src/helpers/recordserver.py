@@ -120,7 +120,15 @@ if not plugin.getbyname('RECORD'):
 
 class RecordServer(xmlrpc.XMLRPC):
 
-    def __init__(self):
+    def __init__(self, debug=False, allowNone=False):
+        """ Initialise the Record Server class """
+        _debug_('RecordServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 1)
+        # Twisted have changed the interface to xmlrpc.XMLRPC.__init__() in 2.5.0
+        try:
+            xmlrpc.XMLRPC.__init__(self, allowNone)
+        except TypeError:
+            xmlrpc.XMLRPC.__init__(self)
+        self.debug = debug
         self.lock = threading.Lock()
         self.fc = FreevoChannels()
         # XXX: In the future we should have one lock per VideoGroup.
@@ -1706,7 +1714,7 @@ def main():
     secret = config.RECORDSERVER_SECRET
     _debug_('socket=%r, secret=%r' % (socket, secret))
 
-    rs = RecordServer()
+    rs = RecordServer(allowNone=True)
 
     rpc = kaa.rpc.Server(socket, secret)
     rpc.connect(rs)

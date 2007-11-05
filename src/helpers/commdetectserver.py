@@ -43,8 +43,7 @@ if __name__ == '__main__':
     except Exception, e:
         print e
 
-from twisted.web import xmlrpc, server, sux
-from twisted.internet import reactor
+from twisted.web import xmlrpc, server
 from util.marmalade import jellyToXML, unjellyFromXML
 import time, random, sys, os
 import logging
@@ -60,7 +59,16 @@ jam = jellyToXML
 unjam = unjellyFromXML
 
 class CommDetectServer(xmlrpc.XMLRPC):
-    def __init__(self, debug=False):
+    """ Commercial detect server class """
+
+    def __init__(self, debug=False, allowNone=False):
+        """ Initialise the Commercial Detection Server class """
+        _debug_('CommDetectServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 1)
+        try:
+            xmlrpc.XMLRPC.__init__(self, allowNone)
+        except TypeError:
+            xmlrpc.XMLRPC.__init__(self)
+        self.debug = debug
         self.jobs = {}
         self.queue = CommDetectQueue()
         _debug_("CommDetectServer started...", DINFO)
@@ -100,19 +108,21 @@ class CommDetectServer(xmlrpc.XMLRPC):
         return (True, jam(jlist))
 
 def main():
+    from twisted.internet import reactor
     global DEBUG
     if not (os.path.exists(tmppath) and os.path.isdir(tmppath)):
         os.mkdir(tmppath)
     os.chdir(tmppath)
-    app = Application("CommDetectServer")
+
+    debug = False
     if len(sys.argv) >= 2 and sys.argv[1] == "debug":
-        es = CommDetectServer(True)
+        debug = True
         import commdetectcore
-        commdetectcore.DEBUG=True
-    else:
-        es = CommDetectServer()
+        commdetectcore.DEBUG=debug
+
     _debug_('DEBUG=%s' % DEBUG, DINFO)
-    reactor.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(es))
+    cds = CommDetectServer(debug=debug, allowNone=True)
+    reactor.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(cds))
     reactor.run()
 
 if __name__ == '__main__':

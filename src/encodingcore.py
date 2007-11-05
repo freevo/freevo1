@@ -102,7 +102,8 @@ class EncodingJob:
 
     def __init__(self, source, output, friendlyname, idnr, chapter=None):
         """Initialize class instance"""
-        _debug_('__init__(self, %s, %s, %s, %s, %s)' % (source, output, friendlyname, idnr, chapter), 2)
+        _debug_('encodingcore.EncodingJob.__init__(%s, %s, %s, %s, %s)' % \
+            (source, output, friendlyname, idnr, chapter), 2)
         #currently only MEncoder can be used, but who knows what will happen in the future :)
         self._generateCL = self._GenerateCLMencoder
 

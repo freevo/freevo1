@@ -43,7 +43,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
 
     def __init__(self):
-        _debug_('__init__(self)', 2)
+        _debug_('detach.PluginInterface.__init__(self)', 2)
         plugin.MainMenuPlugin.__init__(self)
         config.EVENTS['audio'][config.DETACH_KEY] = Event(FUNCTION_CALL, arg=self.detach)
         self.show_item = menu.MenuItem(_('Show player'), action=self.show)

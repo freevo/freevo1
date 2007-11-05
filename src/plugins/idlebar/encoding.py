@@ -58,7 +58,7 @@ class PluginInterface(plugin.DaemonPlugin):
     """
 
     def __init__(self):
-        _debug_('__init__(self)', 2)
+        _debug_('encoding.PluginInterface.__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
         #IdleBarPlugin.__init__(self)
         self.poll_interval = 82 # 82*1/120th seconds (~1sec)

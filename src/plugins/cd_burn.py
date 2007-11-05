@@ -110,7 +110,7 @@ class MyProgressBox(ProgressBox):
 
 class Logger:
     def __init__(self):
-        _debug_('__init__(self)')
+        _debug_('cd_burn.Logger.__init__()')
         self.filename = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, 'burn_cd-helpers', os.getuid())
         self.file     = file(self.filename,"a")
 
@@ -121,7 +121,7 @@ class Logger:
 
 class BurnCDItem:
     def __init__(self,item,filename=None,plugin=None,menu=None,burn_mode="data_cd"):
-        _debug_('__init__(self,item,filename=None,plugin=None,menu=None,burn_mode="data_cd")')
+        _debug_('cd_burn.BurnCDItem.__init__(item,filename=None,plugin=None,menu=None,burn_mode="data_cd")')
         self.item          = item
         self.menuw         = menu
         self.plugin        = plugin
@@ -348,7 +348,7 @@ class BurnCDItem:
 #
 class main_burn_thread(threading.Thread):
     def __init__(self, token=None):
-        _debug_('__init__(self, token=None)')
+        _debug_('cd_burn.main_burn_thread.__init__(token=%r)' % (token))
         threading.Thread.__init__(self)
         self.token  = token
         self.childs = []
@@ -693,7 +693,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def __init__(self):
-        _debug_('__init__(self)')
+        _debug_('cd_burn.PluginInterface.__init__()')
         plugin.ItemPlugin.__init__(self)
         self.device = ''
         self.item   = None

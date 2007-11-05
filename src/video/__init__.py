@@ -241,8 +241,7 @@ def hash_fxd_movie_database():
             if info.type != 'video':
                 continue
             k = vfs.splitext(vfs.basename(info.files.fxd_file))[0]
-            tv_show_information[k] = (info.image, info.info, info.mplayer_options,
-                                       info.skin_fxd)
+            tv_show_information[k] = (info.image, info.info, info.mplayer_options, info.skin_fxd)
             if hasattr(info, '__fxd_rom_info__'):
                 for fo in info.__fxd_files_options__:
                     discset_information[fo['file-id']] = fo['mplayer-options']
