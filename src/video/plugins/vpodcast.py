@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Video Podcast Player
+# Video Podcast Player Plug-in
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -25,18 +25,18 @@
 #
 # -----------------------------------------------------------------------
 
-# __author__ = 'Krasimir Atanasov'
-# __author_email__ = 'atanasov.krasimir@gmail.com'
+__author__ = 'Krasimir Atanasov'
+__author_email__ = 'atanasov.krasimir@gmail.com'
 
 import urllib2, os, threading, urllib, time, re, string
 import config, menu, rc, plugin, util, skin
+import util.feedparser
 from item import Item
 from audio.player import PlayerGUI
 from video.videoitem import VideoItem
 from menu import MenuItem
 from gui import AlertBox, PopupBox, GUIObject
 from event import *
-#import util.feedparser
 #import youtube-dl
 
 MAX_AGE = 3600 * 10
@@ -53,21 +53,20 @@ class PluginInterface(plugin.MainMenuPlugin):
     Add to local_conf.py
     | plugin.activate('video.vpodcast')
     | VPODCAST_LOCATIONS = [
-    |     ('You Tube - Top Viewed','http://youtube.com/rss/global/top_viewed.rss'),
+    |     ('You Tube - Top Viewed', 'http://youtube.com/rss/global/top_viewed.rss'),
     |     ('You Tube - Norah Jones', 'http://www.referd.info/tag/norah_jones/rss.php'),
-    |     ('You Tube - Top Rated','http://youtube.com/rss/global/top_rated.rss'),
-    |     ('Metacafe - Top Videos','http://www.metacafe.com/tags/top_videos/rss.xml'),
-    |     ('Metacafe - Music','http://www.metacafe.com/tags/music/rss.xml'),
-    |     ('Metacafe - Today Videos ','http://www.metacafe.com/rss/today_videos/rss.xml'),
-    |     ('Metacafe - New Videos','http://www.metacafe.com/rss/new_videos.rss'),
-    |     ('CNN - Now in the news','http://rss.cnn.com/services/podcasting/nitn/rss.xml'),
-    |     ('CNN - The Larry King','http://rss.cnn.com/services/podcasting/lkl/rss?format=xml'),
-    |     ('Discovery Chanel','http://www.discovery.com/radio/xml/discovery_video.xml')
+    |     ('You Tube - Top Rated', 'http://youtube.com/rss/global/top_rated.rss'),
+    |     ('Metacafe - Top Videos', 'http://www.metacafe.com/tags/top_videos/rss.xml'),
+    |     ('Metacafe - Music', 'http://www.metacafe.com/tags/music/rss.xml'),
+    |     ('Metacafe - Today Videos ', 'http://www.metacafe.com/rss/today_videos/rss.xml'),
+    |     ('Metacafe - New Videos', 'http://www.metacafe.com/rss/new_videos.rss'),
+    |     ('CNN - Now in the news', 'http://rss.cnn.com/services/podcasting/nitn/rss.xml'),
+    |     ('CNN - The Larry King', 'http://rss.cnn.com/services/podcasting/lkl/rss?format=xml'),
+    |     ('Discovery Chanel', 'http://www.discovery.com/radio/xml/discovery_video.xml')
     | ]
     |
     | VPODCAST_DIR = '/home/user_name/VPODCAST'
     """
-
     def __init__(self):
         """ Initialise the Video postcast plug-in interface """
         plugin.MainMenuPlugin.__init__(self)
@@ -100,7 +99,11 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
 class VPVideoItem(VideoItem):
+    """
+    Video podcast video item
+    """
     def __init__(self, name, url, parent):
+        """ Initialise the VPVideoItem class """
         self.vp_url = url
         url = name
         VideoItem.__init__(self, name, parent)
@@ -108,7 +111,6 @@ class VPVideoItem(VideoItem):
 
     def play(self, arg=None, menuw=None, alternateplayer=False):
         """ execute commands if defined """
-
         if config.VIDEO_PRE_PLAY:
             os.system(config.VIDEO_PRE_PLAY)
 
@@ -125,9 +127,8 @@ class VPVideoItem(VideoItem):
         else:
             self.download_url = self.vp_url
 
-
         if not os.path.exists(self.filename):
-            background = BGDownload(self.download_url,self.filename)
+            background = BGDownload(self.download_url, self.filename)
             background.start()
             popup = PopupBox(text=_('Buffering podcast...'))
             popup.show()
@@ -206,14 +207,13 @@ class VPVideoItem(VideoItem):
         if self.url.startswith('file://'):
             file = self.filename
             if self.media_id:
-                mountdir, file = util.resolve_media_mountdir(self.media_id,file)
+                mountdir, file = util.resolve_media_mountdir(self.media_id, file)
                 if mountdir:
                     util.mount(mountdir)
                 else:
                     self.menuw.show()
                     ConfirmBox(text=(_('No media found for "%s".\n')+
-                                     _('Please insert the media.')) % file,
-                               handler=self.play).show()
+                                     _('Please insert the media.')) % file, handler=self.play).show()
                     return
 
             elif self.media:
@@ -226,8 +226,7 @@ class VPVideoItem(VideoItem):
             else:
                 self.menuw.show()
                 ConfirmBox(text=(_('No media found for "%s".\n')+
-                                 _('Please insert the media.')) % self.url,
-                           handler=self.play).show()
+                                 _('Please insert the media.')) % self.url, handler=self.play).show()
                 return
 
         if self.player_rating < 10:
@@ -280,7 +279,6 @@ class VPVideoItem(VideoItem):
             print 'Error YouTube URL'
 
 
-
     def metacafe(self, url):
         video_url =  url
         const_video_url_re = re.compile(r'(?:http://)?(?:www\.)?metacafe\.com/watch/([^/]+)/([^/]+/)?.*')
@@ -307,8 +305,7 @@ class VPVideoItem(VideoItem):
             print 'Error Metacafe URL'
 
 
-
-    def extract_step(self,step_title, step_error, regexp, data):
+    def extract_step(self, step_title, step_error, regexp, data):
         try:
             match = regexp.search(data)
             if match is None:
@@ -334,13 +331,12 @@ class VPodcastMainMenuItem(MenuItem):
 
 
     def actions(self):
-        """
-        return a list of actions for this item
-        """
+        """ return a list of actions for this item """
         return [ (self.create_podcast_menu, 'stations') ]
 
 
     def create_podcast_submenu(self, arg=None, menuw=None, image=None):
+        """ create the sub-menu for the podcast """
         popup = PopupBox(text=_('Fetching podcast...'))
         popup.show()
         url = arg[1]
@@ -354,7 +350,7 @@ class VPodcastMainMenuItem(MenuItem):
             p.rss_item(pc_location)
             if p.image != None:
                 image = config.VPODCAST_DIR + '/' + arg[0] + '/' + p.title + '.jpg'
-                self.download(p.image,image)
+                self.download(p.image, image)
             else:
                 image = None
             url = p.link
@@ -380,11 +376,12 @@ class VPodcastMainMenuItem(MenuItem):
         menuw.pushmenu(podcast_sub_menu)
         menuw.refresh()
 
-    def create_podcast_menu(self,arg=None, menuw=None):
+
+    def create_podcast_menu(self, arg=None, menuw=None):
+        """ Create the main menu item for the video podcasts """
         popup = PopupBox(text=_('Fetching podcasts...'))
         popup.show()
         podcast_menu_items = []
-
 
         for location in config.VPODCAST_LOCATIONS:
             url = location[1]
@@ -396,7 +393,7 @@ class VPodcastMainMenuItem(MenuItem):
                 name = p.rss_title
                 try:
                     image_url = p.rss_image
-                    self.download(image_url,image_path)
+                    self.download(image_url, image_path)
                 except:
                     print 'No image in RSS'
 
@@ -412,13 +409,17 @@ class VPodcastMainMenuItem(MenuItem):
         menuw.pushmenu(podcast_main_menu)
         menuw.refresh()
 
-    def download(self,url,savefile):
+
+    def download(self, url, savefile):
+        """ Download the url and save it """
         file = urllib2.urlopen(url).read()
         save = open(savefile, 'w')
         print >> save, file
         save.close()
 
-    def check_logo(self,logo_file):
+
+    def check_logo(self, logo_file):
+        """ Check if the logo has changed """
         if os.path.exists(logo_file) == 0 or (abs(time.time() - os.path.getmtime(logo_file)) > MAX_AGE):
             return True
         else:
@@ -426,11 +427,12 @@ class VPodcastMainMenuItem(MenuItem):
 
 
 
-
 class podcast:
-
+    """
+    """
     def __init__(self):
         pass
+
 
     def open_rss(self, url):
         self.rss = util.feedparser.parse(url)
@@ -456,11 +458,12 @@ class podcast:
         except:
             self.rss_image = None
 
+
     def rss_count(self):
         self.rss.count =  len(self.rss.entries)
 
 
-    def rss_item(self,item=0):
+    def rss_item(self, item=0):
 
         try:
             self.title = self.rss.entries[item].title.encode(self.encoding)
@@ -484,11 +487,14 @@ class podcast:
 
 
 class BGDownload(threading.Thread):
-        # Download file in background
+    """
+    Download file in background
+    """
     def __init__(self, url, savefile):
         threading.Thread.__init__(self)
         self.url = url
         self.savefile = savefile
+
 
     def run(self):
         try:
