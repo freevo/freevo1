@@ -13,6 +13,12 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
+== Release 1.8.0 (2007-12-22) ==
+--------------------------------
+
+ * New changed the event and timer handling to use kaa notifier and kaa rpc
+ * New mplayer aspect plug-in to force the aspect ratio (F#1825484)
+
 == Release 1.7.4 (2007-11-15) ==
 --------------------------------
 
@@ -26,6 +32,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * New internet TV plug-in (F#1811634)
  * New lastfm menu plug-in (F#1792494)
  * New RSS audio podcast plug-in (F#1807634)
+ * New RSS video podcast plug-in (F#1825640)
  * New text entry and program search (F#1768790)
  * New youtube plug-in for the webserver (F#1783643,F#1792819)
  * Updated ivtv_xine_tv plug-in for stop confirmation, progressive seek, video group selection and more (F#1814720)
