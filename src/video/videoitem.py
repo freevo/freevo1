@@ -513,9 +513,8 @@ class VideoItem(Item):
 
             elif not result:
                 # No media at all was found: error
-                ConfirmBox(text=(_('No media found for "%s".\n')+
-                                 _('Please insert the media.')) %
-                                 self.name, handler=self.play).show()
+                ConfirmBox(text=(_('No media found for "%s".\nPlease insert the media "%s".')) %
+                     (self.name, self.media_id), handler=self.play).show()
             return
 
         # normal plackback of one file
@@ -527,9 +526,8 @@ class VideoItem(Item):
                     util.mount(mountdir)
                 else:
                     self.menuw.show()
-                    ConfirmBox(text=(_('No media found for "%s".\n')+
-                                     _('Please insert the media.')) % file,
-                               handler=self.play).show()
+                    ConfirmBox(text=(_('No media found for "%s".\nPlease insert the media "%s".')) % \
+                        (file, self.media_id), handler=self.play).show()
                     return
 
             elif self.media:
@@ -541,9 +539,8 @@ class VideoItem(Item):
                 self.media = media
             else:
                 self.menuw.show()
-                ConfirmBox(text=(_('No media found for "%s".\n')+
-                                 _('Please insert the media.')) % self.url,
-                    handler=self.play).show()
+                ConfirmBox(text=(_('No media found for "%s".\nPlease insert the media "%s".')) % \
+                    (self.media_id, self.url), handler=self.play).show()
                 return
         elif self.mode in ('http') and not self.filename and not self.media:
             self.player_rating, self.player = self.possible_player[0]
