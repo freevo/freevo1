@@ -49,6 +49,9 @@ class PluginInterface(IdleBarPlugin):
     """
 
     def __init__(self, zone='CYYZ', units='C'):
+        if not config.USE_NETWORK:
+            self.reason = 'USE_NETWORK not enabled'
+            return
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.weather'
         self.TEMPUNITS = units

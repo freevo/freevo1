@@ -218,7 +218,10 @@ class PluginInterface(plugin.MainMenuPlugin):
         '''
         '''
         _debug_('PluginInterface.__init__()', 2)
-        if not hasattr(config, 'ONECLICK_LOCATIONS'):
+        if not config.USE_NETWORK:
+            self.reason = 'USE_NETWORK not enabled'
+            return
+        if not config.ONECLICK_LOCATIONS:
             self.reason = 'ONECLICK_LOCATIONS not defined'
             return
         plugin.MainMenuPlugin.__init__(self)
@@ -228,7 +231,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         '''
         _debug_('config()', 2)
         return [
-            ('ONECLICK_LOCATIONS', [('USNC0559', 0)], 'Location codes for current conditions and forecasts'),
+            ('ONECLICK_LOCATIONS', None, 'Location codes for current conditions and forecasts'),
             ('ONECLICK_URL_CURC', 'http://ff.1click.weather.com/weather/local/%s?cc=*%s', 'Current Conditions URL'),
             ('ONECLICK_URL_DAYF', 'http://ff.1click.weather.com/weather/local/%s?dayf=5%s', 'Day Forecast URL'),
             ('ONECLICK_URL_ELOC', 'http://ff.1click.weather.com/weather/local/%s?eloc=st', 'Extended Location URL'),

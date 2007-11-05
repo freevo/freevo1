@@ -243,14 +243,17 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
 
     def __init__(self):
-        if not hasattr(config, 'PLUGIN_WEATHER_LOCATIONS'):
+        if not config.USE_NETWORK:
+            self.reason = 'USE_NETWORK not enabled'
+            return
+        if not config.PLUGIN_WEATHER_LOCATIONS:
             self.reason = 'PLUGIN_WEATHER_LOCATIONS not defined'
             return
         plugin.MainMenuPlugin.__init__(self)
 
     def config(self):
         return [
-            ('PLUGIN_WEATHER_LOCATIONS', [("USNC0559", 0)], "Location codes to grab forecasts for"),
+            ('PLUGIN_WEATHER_LOCATIONS', None, "Location codes to grab forecasts for"),
             ('PLUGIN_WEATHER_DATAURL', 'http://www.tpfans.com/rss/weather.php?Citycode=%s&Language=%s', 'Data URL'),
             ('PLUGIN_WEATHER_MAPURL', 'http://www.weather.com/weather/map/%s?from=LAPmaps', 'Radar Map URL')
         ]

@@ -77,7 +77,10 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         make an init func that creates the cache dir if it don't exist
         """
-        if not hasattr(config, 'HEADLINES_LOCATIONS'):
+        if not config.USE_NETWORK:
+            self.reason = 'USE_NETWORK not enabled'
+            return
+        if not config.HEADLINES_LOCATIONS:
             self.reason = 'HEADLINES_LOCATIONS not defined'
             return
         plugin.MainMenuPlugin.__init__(self)

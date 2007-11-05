@@ -89,7 +89,7 @@ class PluginInterface(plugin.ItemPlugin):
 
     def __init__(self, license=None):
         if not config.USE_NETWORK:
-            self.reason = 'no network'
+            self.reason = 'USE_NETWORK not enabled'
             return
 
         if license:
