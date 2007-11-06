@@ -1,6 +1,7 @@
 BODY { 
     background: #638BCA; 
-    font-family: "Trebuchet MS", Helvetica, Verdana, sans-serif; 
+/*    font-family: "Trebuchet MS", Helvetica, Verdana, sans-serif; */
+    font-family: Arial, Helvetica, sans-serif;
     color: navy; 
     margin: 0px 0px 0px 0px;
 }
@@ -44,7 +45,7 @@ img.right { float: right; }
 td { padding: 4px; margin: 0px; border-style: none; }
 
 TD.tablelink { 
-    background: #2A577E; 
+    background: #3366CC; 
     color: white; 
     text-align: left;
     cursor: pointer;
@@ -58,7 +59,7 @@ TD.tablelink:hover {
 }
 
 TD.channel { 
-    background: #0B1C52; 
+    background: #000099; 
     color: white; 
     font-weight: bold; 
     text-align: center;
@@ -75,7 +76,7 @@ td.utilhead {
 }
 
 td.guidehead { 
-    background: #0B1C52; 
+    background: #000099; 
     color: white; 
     font-weight: bold; 
     border: #638BCA 1px solid;
@@ -96,8 +97,9 @@ TD.heading {
 }
 
 TD.basic { 
-    background: #2A577E; 
-    color: white; 
+    background: #3366CC;
+    border: #638BCA 1px solid;
+    color: white;
     text-align: left; 
     border: none;
 }
@@ -106,13 +108,14 @@ img.folder {
     border: none;
 }
 TD.back { 
-    background: #2A577E; 
+    background: #3366CC; 
     color: white; 
     text-align: left 
 }
 
 TD.recording { 
-    background: #993333; 
+    background: #993333;
+    border: #638BCA 1px solid; 
     color: white; 
     text-align: left 
 }
@@ -123,7 +126,7 @@ td.recording a {
 }
 
 TD.scheduled { 
-    background: #996600; 
+    background: #00FF33; 
     color: white; 
     text-align: left 
 }
@@ -135,7 +138,7 @@ TD.tablelink a { text-decoration: none;
                  }
 
 TD.item { 
-    background: #2A577E; 
+    background: #3366CC; 
     color: white; 
     text-align: left 
     border: none;
@@ -179,13 +182,15 @@ td.basic a:hover { color: #cccccc;
 
 
 TD.favorite { 
-    background: #006666; 
+    background: #3366CC;
+    /*#006666;*/
+    border: #638BCA 1px solid; 
     color: white; 
     text-align: left 
 }
 
 TD.program { 
-    background: #2A577E; 
+    background: #3366CC; 
     color: white; 
     text-align: left; 
     border: #638BCA 1px solid;
@@ -199,7 +204,7 @@ TD.program:hover {
 }
 
 TD.programnodata { 
-    background: #2A577E; 
+    background: #3366CC; 
     color: #c9c9ff; 
     text-align: center; 
 }
@@ -225,7 +230,7 @@ table.popup thead {
     background: #0B1C52;
     color: white;
     font-size: 22px;
-    font-family: "Trebuchet MS", Helvetica, Verdana, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     cursor: move;
 }
@@ -247,7 +252,7 @@ table.popup thead td {
 table.popupbuttons tbody td {
     text-indent: 0;
     cursor: pointer;
-    background: #2A577E; 
+    background: #3366CC; 
     color: white; 
     text-align: center;
     /* #border: #2a577e 2px solid; */
@@ -271,7 +276,7 @@ table.popupbuttons td:hover {
     background: #0B1C52;
     color: white;
     font-size: 13px;
-    font-family: "Trebuchet MS", Helvetica, Verdana, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     border: #000 3px solid;
 }
 
@@ -326,12 +331,12 @@ h2 {    margin-top: 3em;
                     height: 101px ; }
 */
 
-#titlebar { background: #666699 url(../images/freevoheader2.jpg) left no-repeat;
+#titlebar { background: #4D77AA url(../images/freevoheader2.png) center no-repeat;
             height: 101px;
             color: #000;
             }
 
-#subtitle { background-image: url(../images/headertxtbg.png);
+#subtitle { background-image: alignurl(../images/headertxtbg.png);
             height: 21px;
             font-size: 14px;
             text-align: center;
@@ -380,11 +385,11 @@ h2.SUBTITLE { padding-left: 0em; }
              width: 70%;
              padding: 0.5em 1em 0.5em 1em; 
              text-align: center;
-             background-color: #2A577E;
+             background-color: #3366CC;
             } 
 
 #navbar a { padding: 0.5em 1em 0.5em 1em;
-            background-color: #2A577E;
+            background-color: #3366CC;
             color: white; }
 
 #navbar a:hover { padding: 0.5em 1em 0.5em 1em;
@@ -406,7 +411,7 @@ h2.SUBTITLE { padding-left: 0em; }
     #header {
       float:left;
       width:100%;
-      background: #666699 url("../images/tab/bg.gif") repeat-x bottom;
+      background: #4D77AA url("../images/tab/bg.gif") repeat-x bottom;
       font-size:93%;
       line-height:normal;
       }

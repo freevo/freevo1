@@ -176,6 +176,7 @@ class HTMLResource:
         self.res += '\t<title>Freevo | '+title+'</title>\n'
         # meta tags, encoding is taken from the users config
         self.res += '\t<meta http-equiv="Content-Type" content= "text/html; charset='+ config.encoding +'"/>\n'
+        self.res += '\t<link rel="shortcut icon" href="/favicon.ico" />\n'
         # css style sheet
         if style != None:
             self.res += '\t<link rel="stylesheet" href="styles/main.css" type="text/css" />\n'
