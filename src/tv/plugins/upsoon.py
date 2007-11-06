@@ -68,14 +68,14 @@ class PluginInterface(plugin.DaemonPlugin):
     __version__          = '$Revision$'
 
 
-    def __init__(self):
+    def __init__(self, standalone=False):
         """
         init the upsoon plugin
         """
         _debug_('upsoon.PluginInterface.__init__()', 1)
-        plugin.DaemonPlugin.__init__(self, hasgui=True)
+        plugin.DaemonPlugin.__init__(self)
         plugin.register(self, 'upsoon')
-        self.hasgui = hasgui
+        self.standalone = standalone
         self.lock = thread.allocate_lock()
         self.timer = Timer(self.timer_handler).start(15)
         self.event = EventHandler(self.event_handler)
@@ -118,6 +118,10 @@ class PluginInterface(plugin.DaemonPlugin):
 
         if (self.seconds_to_next > self.seconds_before_announce):
             return
+        if (self.seconds_to_next <= self.seconds_before_start):
+            if not os.path.exists(self.pending_lockfile):
+                open(self.pending_lockfile, 'w').close()
+                _debug_('%r lockfile created' % (self.pending_lockfile))
 
         _debug_('stopping video or radio player')
         self.stopVideoInUse(self.vdev)
@@ -146,8 +150,7 @@ class PluginInterface(plugin.DaemonPlugin):
                     else:
                         # stop the tv
                         rc.post_event(STOP)
-                        self.stopped = _('Radio')
-                        open(self.pending_lockfile, 'w').close()
+                        self.stopped = _('TV')
                 os.close(dev_fh)
             except Exception, e:
                 print '%r: %s' % (vdev, e)
@@ -168,8 +171,7 @@ class PluginInterface(plugin.DaemonPlugin):
                     else:
                         # stop the radio
                         rc.post_event(STOP)
-                        self.stopped = _('TV')
-                        open(self.pending_lockfile, 'w').close()
+                        self.stopped = _('Radio')
                 os.close(dev_fh)
             except:
                 _debug_('cannot check radio device \"%s\"' % (rdev), 0)
@@ -194,7 +196,7 @@ class PluginInterface(plugin.DaemonPlugin):
             if os.path.exists(self.tv_lockfile):
                 if os.path.exists(self.pending_lockfile):
                     os.remove(self.pending_lockfile)
-                    _debug_("record.soon lockfile removed")
+                    _debug_('%r lockfile removed' % (self.pending_lockfile))
                 return True
             else:
                 self.tv_lockfile = None
@@ -224,7 +226,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if (event.name == 'VIDEO_END'):
             if self.stopped:
                 # upsoon stopped the tv, now display a msgbox
-                if self.hasgui:
+                if not self.standalone:
                     AlertBox(text=_('%s stopped, a recording is about to start!') % self.stopped, height=200).show()
                 self.stopped = None
         return 0
