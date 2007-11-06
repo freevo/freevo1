@@ -152,8 +152,7 @@ class FreevoChannels:
 
 
     def tunerSetFreq(self, chan, isplayer, app=None, app_cmd=None):
-        print 'DJW:tunerSetFreq(chan=%r, isplayer=%r, app=%r, app_cmd=%r' % \
-            (chan, isplayer, app, app_cmd)
+        _debug_('tunerSetFreq(chan=%r, isplayer=%r, app=%r, app_cmd=%r' % (chan, isplayer, app, app_cmd), 2)
         chan = str(chan)
         vg = self.getVideoGroup(chan, isplayer)
 
