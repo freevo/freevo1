@@ -511,20 +511,21 @@ class PluginInterface(plugin.DaemonPlugin):
         # There seem to exist at least two different vendor/product ID
         # combinations for the Shuttle VFD. Thus, we have to check all
         # of them, until a valid one is found.
-        #self.vendorID = 4872    # Shuttle Inc
-        #self.productID = 0003   # VFD Module
+        #self.idVendor = 4872    # Shuttle Inc
+        #self.idProduct = 0003   # VFD Module
 
-        # self.usbIDs is a list of tuples (vendorID, productID)
+        # self.usbIDs is a list of tuples (idVendor, idProduct)
         self.usbIDs = [ (0x1308, 0x0003), (0x051c, 0x0005), (0x1308, 0xc001), ]
         self.maxStringLength = 20
         self.sleepLength = 0.015
         self.vfd = None
         for bus in pyusb.busses():
             for dev in bus.devices:
-                for (self.vendorID, self.productID) in self.usbIDs:
-                    if dev.idVendor == self.vendorID and dev.idProduct == self.productID:
+                for (self.idVendor, self.idProduct) in self.usbIDs:
+                    if dev.idVendor == self.idVendor and dev.idProduct == self.idProduct:
                         self.vfd = dev.open()
                         _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), DINFO)
+                        break
 
         if not self.vfd:
             _debug_("Cannot find VFD device", DERROR)
