@@ -35,7 +35,7 @@
 
 import sys, os, glob, shutil
 from stat import *
-import kaa.metadata as mmpython
+import kaa
 import config
 import util
 
@@ -135,7 +135,7 @@ if __name__ == "__main__":
         position = sys.argv[4]
     except IndexError:
         try:
-            mminfo = mmpython.parse(filename)
+            mminfo = kaa.metadata.parse(filename)
             position = str(int(mminfo.video[0].length / 2.0))
             if hasattr(mminfo, 'type'):
                 if mminfo.type in ('MPEG-TS', 'MPEG-PES'):
