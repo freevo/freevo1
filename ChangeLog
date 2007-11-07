@@ -53,6 +53,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed favourite crashing because of duplicate detection flag (B#1778494,B#1777726)
  * Fixed matching favourites, by initially restricting the search (B#1776072)
  * Fixed mixer plug-ins to allow a configurable volume step size (B#1813088)
+ * Fixed recordserver sometimes corrupting the record schedule (B#1827184)
  * Fixed screensaver crashing after a long run when an event is read (B#1778894)
  * Fixed tvmenu crashing because of the search plug-in (B#1774544)
 

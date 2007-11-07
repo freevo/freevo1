@@ -163,6 +163,12 @@ class DOMUnjellier:
             retval = float(node.getAttribute("value"))
         elif node.tagName == "longint":
             retval = long(node.getAttribute("value"))
+        elif node.tagName == "bool":
+            retval = int(node.getAttribute("value"))
+            if retval:
+                retval = True
+            else:
+                retval = False
         elif node.tagName == "module":
             retval = namedModule(str(node.getAttribute("name")))
         elif node.tagName == "class":
@@ -318,6 +324,9 @@ class DOMJellier:
             # so that the object will show up where it's referenced first NOT
             # by a method.
             node.appendChild(self.jellyToNode(obj.im_self))
+        elif hasattr(types, 'BooleanType') and objType is types.BooleanType:
+            node = self.document.createElement("bool")
+            node.setAttribute("value", str(int(obj)))
         elif objType is types.ModuleType:
             node = self.document.createElement("module")
             node.setAttribute("name", obj.__name__)
@@ -383,8 +392,10 @@ class DOMJellier:
                 else:
                     if hasattr(obj, "__getstate__"):
                         state = obj.__getstate__()
-                    else:
+                    elif hasattr(obj, "__dict__"):
                         state = obj.__dict__
+                    else:
+                        raise "Unsupported type: %s %s" % (objType.__name__, repr(obj))
                     n = self.jellyToNode(state)
                     node.appendChild(n)
             else:
