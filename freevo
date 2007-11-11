@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# vim:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # freevo - the main entry point to the whole suite of applications
@@ -31,9 +32,26 @@
 
 import os
 import sys
+import time
 import popen2
 
 from signal import *
+
+
+debug = 0
+cmdfile = None
+def _debug_(message, level=1):
+    global debug
+    if debug >= level:
+        print message
+
+
+def _gdb_script_(message):
+    global debug
+    global cmdfile
+    if debug < 2:
+        return
+    print >>cmdfile, message
 
 
 def show_help():
@@ -48,9 +66,9 @@ def show_help():
     print '''\
 freevo [ script | options]
 options:
-  -fs            start freevo in a new x session in fullscreen
+  -fs            start freevo in a new x session in full-screen
   -doc           create api documentation (for developers)
-  -trace         activate full trace (usefull for debugging)
+  -trace         activate full trace (useful for debugging)
   setup          run freevo setup to scan your environment
   start          start freevo as daemon in background
   stop           stop the current freevo process
@@ -80,6 +98,7 @@ def get_python(check_freevo):
     """
     get the newest version of python [ with freevo installed ]
     """
+    _debug_('version=%r' % (sys.version)) 
     if float(sys.version[0:3]) >= 2.3:
         # python seems to be ok
         search = ('python', 'python2')
@@ -97,6 +116,7 @@ def get_python(check_freevo):
                 if not check_freevo:
                     # return if we don't check for an installed version
                     # of freevo
+                    _debug_('python=%r' % (python)) 
                     return python
 
                 # try to import freevo with this python and get
@@ -114,6 +134,7 @@ def get_python(check_freevo):
                         if child.childerr:
                             child.childerr.close()
                         child.tochild.close()
+                        _debug_('python=%r data=%r' % (python, data[:-1])) 
                         return python, data[:-1]
 
                 child.wait()
@@ -124,6 +145,7 @@ def get_python(check_freevo):
 
     # nothing found? That's bad!
     if check_freevo:
+        _debug_('python=%r data=%r' % (None, None))
         return None, None
     return None
 
@@ -132,6 +154,7 @@ def getpid(name, arg):
     """
     get pid of running 'name'
     """
+    _debug_('getpid(name=%r, arg=%r)' % (name, arg))
     for fname in ('/var/run/' + name  + '-%s.pid' % os.getuid(),
                   '/tmp/' + name + '-%s.pid' % os.getuid()):
         if os.path.isfile(fname):
@@ -140,6 +163,7 @@ def getpid(name, arg):
                 pid = int(f.readline()[:-1])
             except ValueError:
                 # file does not contain a number
+                _debug_('fname=%r pid=%r' % (fname, 0)) 
                 return fname, 0
             f.close()
 
@@ -152,10 +176,12 @@ def getpid(name, arg):
                     f.close()
                 else:
                     # process not running
+                    _debug_('fname=%r pid=%r' % (fname, 0)) 
                     return fname, 0
 
             except (OSError, IOError):
                 # running, but not freevo (because not mine)
+                _debug_('fname=%r pid=%r' % (fname, 0)) 
                 return fname, 0
 
             if '-OO' in proc_arg:
@@ -169,8 +195,11 @@ def getpid(name, arg):
                     os.unlink(fname)
                 except OSError:
                     pass
+                _debug_('fname=%r pid=%r' % (fname, 0)) 
                 return fname, 0
+            _debug_('fname=%r pid=%r' % (fname, pid)) 
             return fname, pid
+    _debug_('fname=%r pid=%r' % (fname, 0)) 
     return fname, 0
 
 
@@ -180,25 +209,46 @@ def stop(name, arg):
     """
     fname, pid = getpid(name, arg)
     if not pid:
+        _debug_('cannot kill %r no pid' % (name))
         return 0
     try:
+        for signal in (SIGINT, SIGTERM, SIGKILL):
+            try:
+                _debug_('trying to kill %r pid=%r with signal=%r' % (name, pid, signal))
+                os.kill(pid, signal)
+                for i in range(10):
+                    if getpid(name, arg)[1] == 0:
+                        _debug_('killed %r pid=%r with signal=%r (%r)' % (name, pid, signal, i))
+                        break
+                    time.sleep(0.1)
+
+            except OSError, e:
+                _debug_('kill(pid=%r signal=%r): %s' % (pid, signal, e))
+                pass
+            if getpid(name, arg)[1] == 0:
+                return 1
+        return 0
+    finally:
         try:
             os.unlink(fname)
+            _debug_('%s removed' % (fname))
         except OSError, e:
-            pass
-        os.kill(pid, SIGINT)
-        os.kill(pid, SIGTERM)
-        return 1
-    except OSError, e:
-        #print e
-        pass
-    return 0
+            _debug_('%s NOT removed' % (fname))
 
 
 def start(name, arg, bg, store=1):
     """
     start a process
     """
+    global cmdfile
+    _debug_('start(name=%r, arg=%r, bg=%r, store=%r)' % (name, arg, bg, store))
+    _gdb_script_('cat > /tmp/freevo-gdb << _END_')
+    _gdb_script_('b main')
+    _gdb_script_('r %s' % ' '.join(arg[1:]))
+    _gdb_script_('_END_')
+    _gdb_script_('gdb -x /tmp/freevo-gdb %s' % (arg[0]))
+    if cmdfile: cmdfile.close()
+
     pid = os.fork()
     if pid:
         if store:
@@ -227,6 +277,13 @@ def start(name, arg, bg, store=1):
 #--------------------------------------------------------------------------------
 # Main block
 #--------------------------------------------------------------------------------
+while len(sys.argv) > 1 and sys.argv[1] in ('--debug', '-d'):
+    debug += 1
+    sys.argv.pop(1)
+if debug >= 2:
+    cmdfile = open('/tmp/freevo-gdb.sh', 'w')
+    print >>cmdfile,'#!/bin/bash'
+
 freevo_script = os.path.abspath(sys.argv[0])
 if os.path.islink(freevo_script):
     freevo_script = os.readlink(freevo_script)
@@ -293,22 +350,31 @@ else:
 for var in ('freevo_script', 'runapp', 'freevo_python', 'freevo_locale',
             'freevo_share', 'freevo_contrib', 'freevo_config', 'freevo_helpers'):
     os.environ[var.upper()] = eval(var)
+    _debug_('%s=%r' % (var.upper(), os.environ[var.upper()]))
+    _gdb_script_('export %s=%s' % (var.upper(), os.environ[var.upper()]))
 
 # extend PYTHONPATH to freevo
 if os.environ.has_key('PYTHONPATH'):
     os.environ['PYTHONPATH'] = '%s:%s' % (freevo_python, os.environ['PYTHONPATH'])
 else:
     os.environ['PYTHONPATH'] = freevo_python
+_debug_('%s=%r' % ('PYTHONPATH', os.environ['PYTHONPATH']))
+_gdb_script_('export %s=%s' % ('PYTHONPATH', os.environ['PYTHONPATH']))
+
 
 # extend PATH to make sure the basics are there
 os.environ['PATH'] = '%s:/usr/bin:/bin:/usr/local/bin:' % os.environ['PATH'] + \
                      '/usr/X11R6/bin/:/sbin:/usr/sbin'
+_debug_('%s=%r' % ('PATH', os.environ['PATH']))
+_gdb_script_('export %s=%s' % ('PATH', os.environ['PATH']))
 
 # set basic env variables
 if not os.environ.has_key('HOME') or not os.environ['HOME']:
     os.environ['HOME'] = '/root'
 if not os.environ.has_key('USER') or not os.environ['USER']:
     os.environ['USER'] = 'root'
+_debug_('%s=%r' % ('USER', os.environ['USER']))
+_debug_('%s=%r' % ('HOME', os.environ['HOME']))
 
 # now check what and how we should start freevo
 bg    = 0 # start in background
@@ -321,7 +387,7 @@ if len(sys.argv) > 1:
 else:
     arg = ''
 
-# check the arg
+# check the args
 if arg in ('--help', '-h'):
     # show help
     show_help()
