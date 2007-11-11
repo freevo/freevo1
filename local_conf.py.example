@@ -102,11 +102,11 @@ CONFIG_VERSION = 5.21
 # ======================================================================
 
 # replace the default shutdown plugin
-#plugin.remove('shutdown')
-#plugin.activate('autoshutdown', level=90)
+# plugin.remove('shutdown')
+# plugin.activate('autoshutdown', level=90)
 
 # activate the timer
-#plugin.activate('autoshutdown.autoshutdowntimer')
+# plugin.activate('autoshutdown.autoshutdowntimer')
 
 
 # -- autoshutdown menu item configuration --
@@ -114,7 +114,7 @@ CONFIG_VERSION = 5.21
 # SHUTDOWN_CONFIRM
 # Set to True to popup dialog boxes for confirmation.
 # this applies to menu items only.
-#AUTOSHUTDOWN_CONFIRM = True
+# AUTOSHUTDOWN_CONFIRM = True
 
 
 # -- autoshutdown timer configuration --
@@ -125,41 +125,41 @@ CONFIG_VERSION = 5.21
 # processes (see below) are evaluated to determine if
 # a shutdown is allowed. Menu navigation in freevo will
 # reset the timer.
-#AUTOSHUTDOWN_TIMER_TIMEOUT=30
+# AUTOSHUTDOWN_TIMER_TIMEOUT=30
 
 
 # -- autoshutdown behaviour configuration --
 
 # PRETEND
 # Set to True to disable the actual shutdown command.
-#AUTOSHUTDOWN_PRETEND = False
+# AUTOSHUTDOWN_PRETEND = False
 
 # PROCESS_LIST
 # List the processes that will prevent an automatic
 # shutdown. If there are important programs that
 # should not be interrupted, then add them to this
 # list. Set to None if a shutdown is always allowed.
-#AUTOSHUTDOWN_PROCESS_LIST = [
+# AUTOSHUTDOWN_PROCESS_LIST = [
 #    'emerge',
 #    'tvgids',
 #    'transcode',
 #    'cdrecord',
 #    'mplayer',
 #    'top'
-#]
+# ]
 
 # DEFAULT_WAKEUP_TIME
 # Set the default time at which to wakeup if there
 # are no recordings scheduled. The time is specified
 # in localtime 24 hour format. Set to None to disable
 # default wakeup time.
-#AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = "13:00"
+# AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = "13:00"
 
 # FORCE_DEFAULT_WAKEUP
 # Set to True to always wakeup at the default wakeup
 # time. Set to False to only wakeup at the default
 # wakeup time when no recordings are scheduled.
-#AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP = True
+# AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP = True
 
 # ALLOWED_IDLE_TIME
 # The number of minutes that may be spent idle until
@@ -174,13 +174,13 @@ CONFIG_VERSION = 5.21
 # shutdown/boot sequences when many short programs are
 # recorded in a short period of time. Note that this
 # variable is used by both the timer and the menu.
-#AUTOSHUTDOWN_ALLOWED_IDLE_TIME = 45
+# AUTOSHUTDOWN_ALLOWED_IDLE_TIME = 45
 
 # -- Choice of wakeup method
 #
 # The wakeup can be done via acpi-alarm or nvram-wakeup.
-#AUTOSHUTDOWN_METHOD = 'acpi'
-#AUTOSHUTDOWN_METHOD = 'nvram'
+# AUTOSHUTDOWN_METHOD = 'acpi'
+# AUTOSHUTDOWN_METHOD = 'nvram'
 
 # -- autoshutdown acpi-alarm configuration
 
@@ -197,7 +197,7 @@ CONFIG_VERSION = 5.21
 #    echo "$1" >/proc/acpi/alarm
 #
 # You have to be root or use sudo for this to work.
-#AUTOSHUTDOWN_WAKEUP_CMD = sudo /PATH/TO/set_acpi.sh
+# AUTOSHUTDOWN_WAKEUP_CMD = sudo /PATH/TO/set_acpi.sh
 
 
 # -- autoshutdown nvram-wakeup configuration --
@@ -210,42 +210,42 @@ CONFIG_VERSION = 5.21
 # WAKEUP_CMD / NVRAM_OPT
 # Path to nvram-wakeup and options. Options can
 # be used to specify a config file.
-#AUTOSHUTDOWN_WAKEUP_CMD = "/usr/bin/nvram-wakeup"
-#AUTOSHUTDOWN_NVRAM_OPT = "--syslog"
+# AUTOSHUTDOWN_WAKEUP_CMD = "/usr/bin/nvram-wakeup"
+# AUTOSHUTDOWN_NVRAM_OPT = "--syslog"
 
 # WAKEUP_NEEDS_REBOOT
 # Set to True if the bios needs a reboot to catch
 # up with the rtc alarm that nvram-wakeup sets. The
 # boot loader options should be set too. Read the
 # nvram-wakeup documentation about this topic.
-#AUTOSHUTDOWN_BIOS_NEEDS_REBOOT = True
+# AUTOSHUTDOWN_BIOS_NEEDS_REBOOT = True
 
 # -- if the bios needs a reboot --
 
 # BOOT_LOADER
 # Set to "GRUB" or "LILO" Only needed if bios needs
 # a reboot to initialize the RTC wakeup call.
-#AUTOSHUTDOWN_BOOT_LOADER = "GRUB"
+# AUTOSHUTDOWN_BOOT_LOADER = "GRUB"
 
 # REMOUNT_BOOT_CMD / REMOUNT_BOOT_OPT
 # Grub needs to write to /boot/grub/grub.conf. Set
 # the command and options to remount the /boot
 # partition writeable. Set to None if this is not
 # needed.
-#AUTOSHUTDOWN_REMOUNT_BOOT_CMD = "/bin/mount"
-#AUTOSHUTDOWN_REMOUNT_BOOT_OPT = "/boot -o remount,rw"
+# AUTOSHUTDOWN_REMOUNT_BOOT_CMD = "/bin/mount"
+# AUTOSHUTDOWN_REMOUNT_BOOT_OPT = "/boot -o remount,rw"
 
 # GRUB_CMD / GRUB_OPT
 # Grub-set-default command and options that will
 # reboot and poweroff the system.
-#AUTOSHUTDOWN_GRUB_CMD = "/sbin/grub-set-default 0"
-#AUTOSHUTDOWN_GRUB_OPT = "0"
+# AUTOSHUTDOWN_GRUB_CMD = "/sbin/grub-set-default 0"
+# AUTOSHUTDOWN_GRUB_OPT = "0"
 
 # LILO_CMD / LILO_OPT
 # Lilo command with options that will reboot and
 # poweroff the system.
-#AUTOSHUTDOWN_LILO_CMD = "/sbin/lilo"
-#AUTOSHUTDOWN_LILO_OPT = "-R PowerOff"
+# AUTOSHUTDOWN_LILO_CMD = "/sbin/lilo"
+# AUTOSHUTDOWN_LILO_OPT = "-R PowerOff"
 
 # ======================================================================
 # Events
@@ -393,7 +393,7 @@ CACHE_IMAGES = 1
 # These are just working examples for the Freevo feeds.
 # To turn off Headlines add plugin.remove('headlines')
 # ----------------------------------------------------------------------
-#plugin.activate('headlines', level=45)
+# plugin.activate('headlines', level=45)
 # HEADLINES_LOCATIONS = [
 #    ('Freevo news releases', 'http://sourceforge.net/export/rss2_projnews.php?group_id=46652'),
 #    ('Freevo file releases', 'http://sourceforge.net/export/rss2_projfiles.php?group_id=46652'),
@@ -654,16 +654,33 @@ CACHE_IMAGES = 1
 #
 # VIDEO_ONLY_SCAN_DATADIR = 1
 
-# PRE and POST recording commands.  Set these to a runnable command if
-# you wish to have special mixer settings or video post processing.
-# VCR_PRE_REC  = None
-# VCR_POST_REC = None
+#
+# try to detect a movie with more than one file and join them as one
+# item
+#
+# VIDEO_AUTOJOIN = 1
+
+#
+# try to find out if deinterlacing is needed or not
+#
+# VIDEO_DEINTERLACE = None
+
+#
+# Instruct player to use XVMC for playback
+#
+# VIDEO_USE_XVMC = None
+
+#
+# Pass field dominance parameter to MPlayer
+#
+# VIDEO_FIELD_DOMINANCE = None
 
 # PRE and POST playing commands.  Set these to a runnable command if
 # you wish to do something before and after playing a video, like
 # dimming the lights
 # VIDEO_PRE_PLAY  = None
 # VIDEO_POST_PLAY = None
+
 
 # ======================================================================
 # Freevo audio settings:
@@ -971,7 +988,7 @@ CACHE_IMAGES = 1
 # }
 
 # Here are the PS3 joy stick mappings
-#JOY_CMDS = {
+# JOY_CMDS = {
 #     'button 5'       : 'UP',
 #     'button 7'       : 'DOWN',
 #     'button 8'       : 'LEFT',
@@ -993,7 +1010,7 @@ CACHE_IMAGES = 1
 #     'button 4'       : 'PLAY',           # <start>
 #     'button 13'      : 'PLAY',           # <start>
 #     'button 17'      : 'MENU',           # <ps>
-#}
+# }
 
 
 # ======================================================================
@@ -1117,8 +1134,8 @@ CACHE_IMAGES = 1
 
 # -- plugin configuration --
 
-#plugin.remove('tv.mplayer')
-#plugin.activate('tv.ivtv_xine_tv')
+# plugin.remove('tv.mplayer')
+# plugin.activate('tv.ivtv_xine_tv')
 
 # Note: TV_IVTV_OPTIONS must be configured properly
 # Note: TV_FREQUENCY_TABLE must be configured properly
@@ -1289,6 +1306,11 @@ CACHE_IMAGES = 1
 # is the best bet, better a false positive than a false negative.
 # TV_RECORD_FAVORITE_MARGIN = 45
 
+# PRE and POST recording commands.  Set these to a runnable command if
+# you wish to have special mixer settings or video post processing.
+# VCR_PRE_REC  = None
+# VCR_POST_REC = None
+
 # VCR_AUDIO = (':adevice=%s' % AUDIO_DEVICE +
 #              ':audiorate=32000' +         # 44100 for better sound
 #              ':forceaudio:forcechan=1:' + # Forced mono for bug in my driver
@@ -1381,13 +1403,13 @@ CACHE_IMAGES = 1
 # }
 
 
-# VIDEO_GROUPS setting to handles multiple arbitrary groups of devices
+# TV_VIDEO_GROUPS setting to handles multiple arbitrary groups of devices
 # for viewing or recording.  It is possible to have different Freevo
 # channels use different Video Groups.
 # 
 # This example is when you have one IVTV type card installed
 #
-# VIDEO_GROUPS = [
+# TV_VIDEO_GROUPS = [
 #     VideoGroup(vdev=TV_DEVICE,
 #                adev=AUDIO_DEVICE,
 #                input_type='tuner',
@@ -1404,7 +1426,7 @@ CACHE_IMAGES = 1
 #   http://doc.freevo.org/MultiTunerConfig
 #   http://doc.freevo.org/Analoguemulti
 #
-# VIDEO_GROUPS = [
+# TV_VIDEO_GROUPS = [
 #     # Use this group for watching tv
 #     VideoGroup(vdev=TV_DEVICE,
 #                adev=AUDIO_DEVICE,
