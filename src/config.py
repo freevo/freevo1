@@ -75,7 +75,7 @@ try:
     gettext.install('freevo', os.environ['FREEVO_LOCALE'], 1)
 except: # unavailable, define '_' for all modules
     import __builtin__
-    __builtin__.__dict__['_']= lambda m: m
+    __builtin__.__dict__['_'] = lambda m: m
 
 
 # temp solution until this is fixed to True and False
@@ -94,8 +94,8 @@ __builtin__.__dict__['isstring'] = __isstring__
 
 class Logger:
     """
-    Class to create a logger object which will send messages to stdout
-    and log them into a logfile
+    Class to create a logger object which will send messages to stdout and log them
+    into a logfile
     """
     def __init__(self, logtype='(unknown)'):
         self.lineno = 1
@@ -124,7 +124,7 @@ class Logger:
         lock.acquire()
         try:
             if isinstance(msg, unicode):
-                msg = msg.encode(LOCALE)
+                msg = msg.encode(LOCALE, 'replace')
             sys.__stdout__.write(msg)
             sys.__stdout__.flush()
             self.fp.write(msg)
@@ -325,8 +325,9 @@ LOGGING = logging.DEBUG
 
 
 def make_freevodir(envvar, linux_dir, bsd_dir, private_dir):
-    '''Make the freevo specific directory and return it's name
-    '''
+    """
+    Make the freevo specific directory and return it's name
+    """
     if os.environ.has_key('OS_' + envvar):
         os_dirname = os.environ['OS_' + envvar]
     elif os.uname()[0] == 'FreeBSD':
@@ -420,11 +421,11 @@ def _stack_function_(message='', limit=None):
 
 
 def _debug_function_(s, level=1):
-    '''The debug function that is mapped to the _debug_ builtin
-    There are different levels of debugging and logging. Debug messages
-    range from 1 (default) to 9 (most verbose), logging messages range
-    from NOTSET to DCRITICAL
-    '''
+    """
+    The debug function that is mapped to the _debug_ builtin There are different
+    levels of debugging and logging. Debug messages range from 1 (default) to 9
+    (most verbose), logging messages range from NOTSET to DCRITICAL
+    """
     if DEBUG < level:
         return
     if not s:
@@ -501,6 +502,7 @@ IMAGE_DIR = os.path.join(SHARE_DIR, 'images')
 FONT_DIR  = os.path.join(SHARE_DIR, 'fonts')
 
 RUNAPP = os.environ['RUNAPP']
+_debug_('RUNAPP: %s' % (RUNAPP))
 
 _debug_('logdir: %s %s' % (OS_LOGDIR, FREEVO_LOGDIR), DINFO)
 _debug_('staticdir: %s %s' % (OS_STATICDIR, FREEVO_STATICDIR), DINFO)
