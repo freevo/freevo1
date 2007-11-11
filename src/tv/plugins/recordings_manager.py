@@ -422,11 +422,11 @@ class RecordedProgramItem(VideoItem):
         return items
 
 
-    def play(self, arg=None, menuw=None, alternateplayer=False):
+    def play(self, arg=None, menuw=None):
         """
         Play the recorded program, and then mark it as watched.
         """
-        self.video_item.play(menuw=menuw, arg=arg, alternateplayer=alternateplayer)
+        self.video_item.play(menuw=menuw, arg=arg)
 
         # Mark this programme as watched.
         self.update_fxd(True, self.keep)

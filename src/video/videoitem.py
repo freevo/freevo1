@@ -333,9 +333,8 @@ class VideoItem(Item):
                           (self.play, _('Play default track')) ]
         else:
             items = [ (self.play, _('Play')) ]
+        
         items.append((self.show_details, _('Full description')))
-        if len(self.possible_player) > 1:
-            items.append((self.play_alternate, _('Play with alternate player')))
 
         if self.network_play:
             items.append((self.play_max_cache, _('Play with maximum cache')))
@@ -388,13 +387,6 @@ class VideoItem(Item):
         play and use maximum cache with mplayer
         """
         self.play(menuw=menuw, arg='-cache 65536')
-
-
-    def play_alternate(self, arg=None, menuw=None):
-        """
-        play and use maximum cache with mplayer
-        """
-        self.play(menuw=menuw, arg=arg, alternateplayer=True)
 
 
     def set_next_available_subitem(self):
@@ -452,22 +444,20 @@ class VideoItem(Item):
         return not from_start
 
 
-    def play(self, arg=None, menuw=None, alternateplayer=False):
+    def play(self, arg=None, menuw=None):
         """
         play the item.
         """
-        if not self.possible_player:
-            return
+                 
+        if not self.player or self.player_rating < 10:
+            AlertBox(text=_('No player for this item found')).show()
+            return  
+              
 
         # execute commands if defined
         if config.VIDEO_PRE_PLAY:
             os.system(config.VIDEO_PRE_PLAY)
-
-        # FIXME: There could be more than two players available
-        if alternateplayer:
-            self.possible_player.reverse()
-
-        self.player_rating, self.player = self.possible_player[0]
+        
         if self.parent:
             self.parent.current_item = self
 
@@ -533,6 +523,7 @@ class VideoItem(Item):
             elif self.media:
                 util.mount(os.path.dirname(self.filename))
 
+        # dvd and vcd 
         elif self.mode in ('dvd', 'vcd') and not self.filename and not self.media:
             media = util.check_media(self.media_id)
             if media:
@@ -542,18 +533,8 @@ class VideoItem(Item):
                 ConfirmBox(text=(_('No media found for "%s".\nPlease insert the media "%s".')) % \
                     (self.media_id, self.url), handler=self.play).show()
                 return
-        elif self.mode in ('http') and not self.filename and not self.media:
-            self.player_rating, self.player = self.possible_player[0]
-            self.player_rating = 20
-            for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
-                rating = p.rate(self) * 10
-                if p.name == 'mplayer':
-                    self.player = p
-
-        if self.player_rating < 10:
-            AlertBox(text=_('No player for this item found')).show()
-            return
-
+             
+        
         mplayer_options = self.mplayer_options.split(' ')
         if not mplayer_options:
             mplayer_options = []
@@ -618,7 +599,6 @@ class VideoItem(Item):
         # if len(self.info['tracks']) == 1:
         #     i=copy.copy(self)
         #     i.parent = self
-        #     i.possible_player = []
         #     i.set_url(self.url + '1', False)
         #     i.play(menuw = self.menuw)
         #     return
@@ -634,7 +614,6 @@ class VideoItem(Item):
             i.info.mmdata = self.info.mmdata['tracks'][titlenum]
             i.info.set_variables(self.info.get_variables())
             i.info_type       = 'track'
-            i.possible_player = []
             i.files           = None
             i.name            = Unicode(_('Play Title %d') % (titlenum+1))
             items.append(i)

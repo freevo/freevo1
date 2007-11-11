@@ -109,10 +109,8 @@ class VPVideoItem(VideoItem):
         VideoItem.__init__(self, name, parent)
 
 
-    def play(self, arg=None, menuw=None, alternateplayer=False):
-        """ execute commands if defined """
-        if config.VIDEO_PRE_PLAY:
-            os.system(config.VIDEO_PRE_PLAY)
+    def play(self, arg=None, menuw=None):
+        """ Play this Podcast"""
 
         # play the item.
         isYT = self.vp_url.find('youtube.com')  #YouTube podcast
@@ -135,125 +133,8 @@ class VPVideoItem(VideoItem):
             time.sleep(20) # 20s. buffering time
             popup.destroy()
 
-        if not self.possible_player:
-            for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
-                rating = p.rate(self) * 10
-                if config.VIDEO_PREFERED_PLAYER == p.name:
-                    rating += 1
-                if hasattr(self, 'force_player') and p.name == self.force_player:
-                    rating += 100
-                self.possible_player.append((rating, p))
-
-            self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
-
-        if alternateplayer:
-            self.possible_player.reverse()
-
-        if not self.possible_player:
-            return
-
-        self.player_rating, self.player = self.possible_player[0]
-        if self.parent:
-            self.parent.current_item = self
-
-        if not self.menuw:
-            self.menuw = menuw
-
-        # if we have variants, play the first one as default
-        if self.variants:
-            self.variants[0].play(arg, menuw)
-            return
-
-        # if we have subitems (a movie with more than one file),
-        # we start playing the first that is physically available
-        if self.subitems:
-            self.error_in_subitem = 0
-            self.last_error_msg   = ''
-            self.current_subitem  = None
-
-            result = self.set_next_available_subitem()
-            if self.current_subitem: # 'result' is always 1 in this case
-                # The media is available now for playing
-                # Pass along the options, without loosing the subitem's own
-                # options
-                if self.current_subitem.mplayer_options:
-                    if self.mplayer_options:
-                        # With this set the player options are incorrect when there is more than 1 item
-                        #self.current_subitem.mplayer_options += ' ' + self.mplayer_options
-                        pass
-                else:
-                    self.current_subitem.mplayer_options = self.mplayer_options
-                # When playing a subitem, the menu must be hidden. If it is not,
-                # the playing will stop after the first subitem, since the
-                # PLAY_END/USER_END event is not forwarded to the parent
-                # videoitem.
-                # And besides, we don't need the menu between two subitems.
-                self.menuw.hide()
-                self.last_error_msg = self.current_subitem.play(arg, self.menuw)
-                if self.last_error_msg:
-                    self.error_in_subitem = 1
-                    # Go to the next playable subitem, using the loop in
-                    # eventhandler()
-                    self.eventhandler(PLAY_END)
-
-            elif not result:
-                # No media at all was found: error
-                ConfirmBox(text=(_('No media found for "%s".\n')+
-                                 _('Please insert the media.')) %
-                                 self.name, handler=self.play).show()
-            return
-
-        # normal plackback of one file
-        if self.url.startswith('file://'):
-            file = self.filename
-            if self.media_id:
-                mountdir, file = util.resolve_media_mountdir(self.media_id, file)
-                if mountdir:
-                    util.mount(mountdir)
-                else:
-                    self.menuw.show()
-                    ConfirmBox(text=(_('No media found for "%s".\n')+
-                                     _('Please insert the media.')) % file, handler=self.play).show()
-                    return
-
-            elif self.media:
-                util.mount(os.path.dirname(self.filename))
-
-        elif self.mode in ('dvd', 'vcd') and not self.filename and not self.media:
-            media = util.check_media(self.media_id)
-            if media:
-                self.media = media
-            else:
-                self.menuw.show()
-                ConfirmBox(text=(_('No media found for "%s".\n')+
-                                 _('Please insert the media.')) % self.url, handler=self.play).show()
-                return
-
-        if self.player_rating < 10:
-            AlertBox(text=_('No player for this item found')).show()
-            return
-
-        mplayer_options = self.mplayer_options.split(' ')
-        if not mplayer_options:
-            mplayer_options = []
-
-        if arg:
-            mplayer_options += arg.split(' ')
-
-        if self.menuw.visible:
-            self.menuw.hide()
-
-        self.plugin_eventhandler(PLAY, menuw)
-
-        error = self.player.play(mplayer_options, self)
-
-        if error:
-            # If we are a subitem we don't show any error message before
-            # having tried all the subitems
-            if hasattr(self.parent, 'subitems') and self.parent.subitems:
-                return error
-            else:
-                AlertBox(text=error, handler=self.error_handler).show()
+        # call the play funuction of VideoItem
+        VideoItem.play(self, menuw=menuw, arg=arg)
 
 
     def youtube(self, url):
