@@ -168,7 +168,7 @@ def plugin_level_control(lconf_line, plugin):
     level_ctrl = ''
     if level <> "none":
         level_ctrl = '<li class="Plugin_Level">\n'
-        level_ctrl += 'Level: '
+        level_ctrl += '<label for="%s_level">Level:</label>' % plugin[0]
         level_ctrl += CreateHTMLinput('input',plugin[0] + '_level', level, '2', '')  
         level_ctrl += '</li>\n'
 
@@ -246,7 +246,9 @@ def displayplugin(cfile, plugin, lconf, expAll , plugin_group):
         dstyle = ''
 
     html += '<li class="PluginHeader">\n'
+    html += '<span class="PluginStatus" id="%s_status">' % ( pluginname )
     html += '<a class="PluginStatus%s">%s</a>\n' % ( status, status )
+    html += '</span>'
     html += CreateSelectBoxControl(pluginname + '_cmd', ctrlopts, status, pc_opts)
     html += CreateHTMLinput('hidden',pluginname + '_lineno', str(linenumber) , '','')    
 
@@ -257,11 +259,11 @@ def displayplugin(cfile, plugin, lconf, expAll , plugin_group):
     html += '</a>\n'
     
     html += '<span id=%s_updateinfo></span>\n' % pluginname
-    html += '<ul id="%s_info" style=display:%s;)>\n' % (pluginname, dstyle)
+    html += '<ul id="%s_info" class="PluginInfoList" style=display:%s;)>\n' % (pluginname, dstyle)
     html += plugin_level_control(lconfline, plugin)
 
-    html += '<li class="Plugin_Args">\n'
-    html += 'Plugin Args:'
+    html += '<li class="Plugin_Level">\n'
+    html += '<label for="%s_args">Plugin Args:</label>' % pluginname
     html += CreateHTMLinput('textbox',pluginname + '_args', plugin_args, '20','')
     html += '</li>\n'
 
@@ -289,15 +291,19 @@ def Display_Vars(plugin, cfile):
         if clist:
             for cnt, vr in enumerate(clist):
                 curvalue = GetConfigSetting(cfile, vr[0])
-                dsp_vars += '<li>\n'
+                dsp_vars += '<li class="Plugin_Var">\n'
                 if not curvalue:
                     js_newsetting = 'onclick=CreateSetting("%s")' % vr[0]
+                    dsp_vars += '<span class="btnAdd">'
                     dsp_vars += CreateHTMLinput('button','','Add','',js_newsetting)
+                    dsp_vars += '</span>'
                     dsp_vars += '<a href="config.rpy?expAll=T#%s">\n' % vr[0]
                     dsp_vars += vr[0] + '</a>\n'
                     dsp_vars += '<span id="%s_config_line"></span>\n' % vr[0]
 
                 else:
+                    dsp_vars += '<span class="btnAdd">'
+                    dsp_vars += '</span>'
                     dsp_vars += '<a href="config.rpy?expAll=T#%s">\n' % vr[0]
                     dsp_vars += vr[0] + '</a>\n'
 
@@ -357,7 +363,6 @@ class ConfigurePluginsResource(FreevoResource):
 
         configfile = fv.formValue(form, 'configfile')
         configfile = GetConfigFileName(configfile)
-        configfile =  '/etc/freevo/local_conf.py'
         title = 'Plugin Setup - %s' % configfile
         fv.printHeader(_(title), 'styles/main.css', 'scripts/pluginconfig.js', selected=_('Config Plugins'))
 

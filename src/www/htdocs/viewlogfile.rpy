@@ -69,6 +69,8 @@ def GetLogFiles(logfile_directory):
     for l in filelist:
         if not l.endswith('.log'):
             filelist.remove(l)
+            
+    filelist.sort()
     return filelist
 
 
@@ -85,8 +87,14 @@ class ViewLogFileResource(FreevoResource):
         fv = HTMLResource()
         form = request.args
         dfile = fv.formValue(form, 'displayfile')
+
         if not dfile:
-            dfile = 'webserver-0.log'
+            if config.__dict__.has_key('VIEWLOG_FILE'):
+                dfile = config.VIEWLOG_FILE
+            else:
+                dfile = 'webserver-0.log'
+        else:
+            config.VIEWLOG_FILE = dfile
 
         if config.__dict__.has_key('FREEVO_LOGDIR'):
             logfile_directory = config.FREEVO_LOGDIR
@@ -98,16 +106,27 @@ class ViewLogFileResource(FreevoResource):
 
         rows = fv.formValue(form, 'rows')
         if not rows:
-            rows = '20'
+            if config.__dict__.has_key('VIEWLOG_ROWS'):
+                rows = config.VIEWLOG_ROWS
+            else:
+                rows = '20'
+        else:
+            config.VIEWLOG_ROWS = rows
         rows = int(rows)
-
+        
+        delayamount = fv.formValue(form, 'delayamount')
+        print "Delay Amount = %r " % delayamount
+        if not delayamount:
+            if config.__dict__.has_key('VIEWLOGS_DELAY'):
+                delayamount = config.VIEWLOGS_DELAY
+            else:
+                delayamount = 9999
+        else:
+            config.VIEWLOG_DELAY = delayamount
+        
         if update:
             fv.res = ReadFile(full_file_name, rows)
             return String(fv.res)
-
-        delayamount = fv.formValue(form, 'delayamount')
-        if not delayamount:
-            delayamount = 9999
 
         fv.printHeader(_('viewlog'), 'styles/main.css', 'scripts/viewlogfile.js', selected=_('View Logs'))
 
@@ -118,8 +137,7 @@ class ViewLogFileResource(FreevoResource):
 
         logfiles = GetLogFiles(logfile_directory)
         js_update = 'onchange=UpdateDisplay()'
-        print "Diplay file = %s " % dfile
-        print logfiles
+
         fv.res +=  'Log File :  ' + CreateListBox('logfile', logfiles, dfile, js_update)
         fv.res  += '<input type="Button" value="Refresh" onclick=%s >' % js_update
         js_delay = 'onchange = "UpdateDelay()"'

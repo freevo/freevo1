@@ -85,7 +85,7 @@ function SelectFile(full_file_name,update_control) {
     var file_textbox, update_button;
 
     file_textbox = document.getElementById(update_control);
-    file_textbox.value = "'" + full_file_name + "'"; 
+    file_textbox.value = full_file_name; 
     CancelBrowse(update_control)
     
     update_button=  document.getElementById(update_control + "_btn_update") 

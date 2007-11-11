@@ -95,12 +95,92 @@ def getpid(name, arg):
     return fname, 0
 
 
+def GetItemsArray(cvalue):
+    '''
+    '''
+    _debug_('GetItemsArray(cvalue=%r)' % (cvalue), 2)
+    itemlist = None
+    cmd = 'itemlist = ' + cvalue
+    if CheckSyntax(cmd):
+        exec cmd
+    return itemlist
+
+
+def ErrorMessage (setting_name, control_name,  ctrl_value):
+    '''
+    '''
+    chkline = setting_name + ' = ' + ctrl_value
+    lcheck = '<span class="checkOK">OK</span>\n'
+    if setting_name == 'FILE':
+            if not os.path.exists(ctrl_value):
+                lcheck = '<span class = "checkWarning">Missing File</span>\n'
+    else:
+        if not CheckSyntax(chkline):
+            lcheck = '<span class="checkError">Error</span>\n'
+        else:
+            if FileTypeVar(setting_name):
+                filename = ctrl_value.replace("'", '').strip()
+                if not os.path.exists(filename):
+                    lcheck = '<span class = "checkWarning">Missing File</span>\n'
+
+    lcheck =  '<span id="%s_check" class="VarCheck">%s</span>\n' % (control_name, lcheck)
+    return lcheck
+
+    
+def isNumber(s):
+    '''
+    '''
+    _debug_('isNumber(s=%r) % (s)', 2)
+    try:
+        i = int(s)
+        return True
+    except ValueError:
+        return False
+
+
+def DirTypeVar(cname):
+    '''
+    '''
+    _debug_('FileTypeVar(cname)', 2)
+    vtype = cname.split('_')[-1]
+    filevars = ['RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'FREEVO_LOGDIR', 'TV_LOGOS']
+
+    if cname.endswith('DIR') or cname in filevars:
+        return True
+    return False
+
+
+
+def FileTypeVarArray(cname):
+    '''
+    '''
+    _debug_('FileTypeVarArray(cname=%r)' % (cname), 2)
+    filevars = ['VIDEO_ITEMS', 'AUDIO_ITEMS', 'IMAGE_ITEMS', 'GAME_ITEMS']
+
+    if cname in filevars:
+        return True
+    return False
+
+
+def FileTypeVar(cname):
+    '''
+    '''
+    _debug_('FileTypeVar(cname)', 2)
+    vtype = cname.split('_')[-1]
+    filetypes = ['PATH', 'DIR', 'FILE', 'DEVICE', 'CMD']
+    filevars = ['XMLTV_GRABBER', 'RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'XMLTV_SORT', 'LIRCRC']
+
+    if vtype in filetypes:
+        return True
+    if cname in filevars:
+        return True
+    return False
+
+
 def GetConfigFileName(config_file_name):
     '''
     '''
     _debug_('GetConfigFileName(config_file_name=%r)' % config_file_name , 2)
-
-    print 'CALLING CONFIGFILENAME !!!!!!!!!'
     if not config_file_name:
         if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
             return None
@@ -232,8 +312,10 @@ def ReadConfigPlugins(cfile):
 
 def Server_Running(server):
     python = ['python']
-    #FIXME: should detect 
-    proc = [ os.path.join('/usr/lib/python2.5/site-packages/freevo/', 'helpers', server + '.py') ]
+    #FIXME: should detect
+    freevo_path = os.environ['FREEVO_PYTHON']
+    proc = [ os.path.join(freevo_path, 'helpers', server + '.py') ]
+    print "PROC %r" % proc
     
     if getpid(server, python + proc)[1]:
        return True
@@ -259,16 +341,25 @@ def Display_Server(server):
 
     # Check to see if the server is running.
     if Server_Running(server):
-        dserver += '<a class="PluginStatusActive" >Active</a>'
-        js_onclick = 'onclick=ServerUpdate("%s","stop","%s")' % ( server, server )
-        dserver += '<a class= "btnServer" %s >Stop</a>'  % js_onclick
+        sclass = 'Active'
+        sstatus = 'PluginStatusActive'
+        btnlabel = 'Stop'
+        btncmd = 'stop'
     else:
-       dserver += '<a class="PluginStatusDeactive">Deactive</a>'
-       js_onclick = 'onclick=ServerUpdate("%s","start","%s")' % ( server, server ) 
-       dserver += '<a class= "btnServer" %s >Start</a>' % js_onclick 
+        sclass = 'Deactive'
+        sstatus = 'PluginStatusDeactive'
+        btnlabel = 'Start'
+        btncmd = 'start'
+
+    dserver += '<span class="PluginStatus" id="%s_status">' % server 
+    dserver += '<a class="%s" >%s</a>' % ( sstatus, sclass )
+    dserver += '</span>\n'
+    js_onclick = 'onclick=ServerUpdate("%s","%s","%s")' % ( server, btncmd,  server )
+    dserver += '<a class= "btnServer" %s >%s</a>\n'  % ( js_onclick, btnlabel )
+        
     dserver += server 
-    dserver += '</div>'
-    dserver += '</li>'
+    dserver += '</div>\n'
+    dserver += '</li>\n'
 
     return dserver
 
@@ -279,13 +370,14 @@ def Display_Helper(helper):
     # Check to see if the server is running.
     print "SERVER RUNNING ???"
     print Server_Running(helper)
+    dhelper += '<span class="PluginStatus" id="%s_status">' % helper
     if Server_Running(helper):
-        print "SERVER RUNING !!!"
         dhelper += '<a class="PluginStatusDeactive" >Running</a>'
     else:
         js_onclick = 'onclick=StartHelper("%s","%s")' % ( helper, helper ) 
         dhelper += '<a class="PluginStatusActive" %s>Start</a>' % js_onclick
 
+    dhelper += '</span>\n'
     dhelper += helper
     dhelper += '</div>'
     dhelper += '</li>'

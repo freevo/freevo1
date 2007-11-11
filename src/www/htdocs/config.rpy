@@ -31,19 +31,34 @@
 #
 # Todo : Fix headlines with ? and & messing with url  !!
 #            Fix File Items stuff and the '  single quote, and display update button on edit.
+#            Update button on collapsed settigns. eg, enable/disable.
+#            Display logos, move then channels moved up and down.
+#            Items List add new Line, once old new line is outdate.
+#            Remove SKIN_XML_FILE from file types.
+#            Create Directory option ? 
+#            Auto add quotes to strings. 
+#            Inbedding pick list options in local_conf ? 
+#            Fix JOY_CMDS ? 
+#            Keymap syntax checking.
+#            OSD_FONT_PATH should have a browse buttons.
+#            Fix () around MPLAYER SUFFIX.
+#            Weather Location add links to sites to get locations.
+#            Plugins - Problem with not picking up plugin arg when combined with level.
+#            Enabling AUDIO_ALBUM_TREE_SPEC, check span disappears.
+#            Updaet WWW_PERSONNEL_PAGE with Args eg. config.rpy&expAll=T.
+#            Help - Comments , problem with over writing. 
 
-import sys
+#import sys
 import os.path
 import string
 import types
 import time
-import urllib
 import operator
 from www.web_types import HTMLResource, FreevoResource
-#from helpers.convert_config import change, change_map
 
 from www.configlib import * 
 import config
+from event import *
 import util
 
 def ParseConfigFile(rconf):
@@ -83,13 +98,15 @@ def ParseConfigFile(rconf):
         else:
             fln = ln
 
-        if  len(fln.split("=")) > 1:
+        if  len(fln.split("=")) > 1 and not fln.startswith('"'):
             pln = ParseLine(fln)
 
             if pln['type']:
                 pln['startline'] = startline
                 pln['endline'] = cnt
                 pln['control_name'] = pln['ctrlname'] + '_' + str(startline)
+                pln['html_control'] = GetHTMLControl(pln)
+                
                 fconfig.append(pln)
         cnt += 1
 
@@ -111,7 +128,8 @@ def ParseLine(cline):
                'endline':'',
                'fileline':cline,
                'control_name':'',
-               'vartype':''
+               'control_type': '',
+               'html_control': ''
     }
 
     tln = cline.strip()
@@ -126,13 +144,9 @@ def ParseLine(cline):
     lparsed['type'] = 'textbox'
     lparsed['ctrlname'] = fsplit[0].strip()
     lparsed['group'] = GetVarGroup(lparsed['ctrlname'])
-
-
-    if not lparsed['ctrlname'].isupper():
+    
+    if not lparsed['ctrlname'].isupper() and lparsed['group'] <> 'KeyMap':
         lparsed['type'] = ''
-
-    if lparsed['group'] == 'KeyMap':
-        lparsed['type'] = 'keymap'
 
     if (not config.__dict__.has_key(lparsed['ctrlname'])):
         try:
@@ -145,14 +159,46 @@ def ParseLine(cline):
         lparsed['comments'] = ctrlvalue[1]
 
     lparsed['ctrlvalue'] = Unicode(ctrlvalue[0].strip())
-    lparsed['vartype'] = VarType(lparsed['ctrlname'], lparsed['ctrlvalue'])
     lparsed['ctrlvalue'] = lparsed['ctrlvalue'].replace('"', "'")
 
+    lparsed['control_type'] = getCtrlType(lparsed['ctrlname'],lparsed['ctrlvalue'],lparsed['type'])
+    
     if lparsed['ctrlname'].startswith('"'):
         lparsed['type'] = ''
+    
     return lparsed
 
+    
+def GetHTMLControl(fv_setting):
+    cname = fv_setting['ctrlname']
+    control_name = fv_setting['control_name']
+    cvalue = fv_setting['ctrlvalue']
+    ctype = fv_setting['type']
+    ctrltype = getCtrlType(cname,cvalue,ctype)
 
+    htmlctrl = ''
+    if ctrltype == 'textbox':
+        other_opts = 'class = "%s"' % cname
+        htmlctrl = '<span class="DefaultTextBox">\n'
+        htmlctrl += CreateTextBox(control_name, cname, cvalue, other_opts)
+        htmlctrl += '</span>\n'
+    elif ctrltype == 'boolean':
+        js_onchange = ' onchange=CheckValue("%s","textbox",0)' % control_name
+        htmlctrl  = CreateSelectBoxControl(control_name, ['True', 'False'], cvalue, js_onchange)
+    elif ctrltype == 'keymap':
+        htmlctrl = KeyMapControl(control_name, cname, cvalue)
+    elif ctrltype == 'tv_channels':
+        htmlctrl = CreateTV_Channels_ctrl(control_name, cvalue)
+    elif ctrltype == 'fileitemlist':
+        htmlctrl = CreateFileItemList(control_name, cvalue ,cname)
+    elif ctrltype == 'dictionary':
+        htmlctrl = CreateDictionaryControl(control_name, cvalue)
+    elif ctrltype == 'itemlist':
+        htmlctrl = CreateListControl(control_name, cvalue )
+
+    return htmlctrl
+
+    
 def GetVarGroup(setting_name):
     '''
     '''
@@ -166,17 +212,6 @@ def GetVarGroup(setting_name):
         group = 'Volume'
 
     return group
-
-
-def GetItemsArray(cvalue):
-    '''
-    '''
-    _debug_('GetItemsArray(cvalue=%r)' % (cvalue), 2)
-    itemlist = None
-    cmd = 'itemlist = ' + cvalue
-    if CheckSyntax(cmd):
-        exec cmd
-    return itemlist
 
 
 def GetGroupList(cfgvars):
@@ -205,112 +240,23 @@ def getCtrlType(cname, cvalue, vtype):
     '''
     '''
     _debug_('getCtrlType(cname=%r, cvalue=%r, vtype=%r)' % (cname, cvalue, vtype), 2)
-    if vtype == 'boolean':
+    if cvalue == 'True' or cvalue == 'False':
         return 'boolean'
     if cname == 'TV_CHANNELS':
         return 'tv_channels'
-
     if cname.startswith('KEYMAP'):
         return 'keymap'
-
     if FileTypeVarArray(cname):
         return 'fileitemlist'
     if cvalue.startswith('{'):
-        return 'itemlist'
+        return 'dictionary'
     if cvalue.startswith('['):
         return 'itemlist'
     if vtype == 'list':
         return 'itemlist'
     return 'textbox'
 
-
-def isNumber(s):
-    '''
-    '''
-    _debug_('isNumber(s=%r) % (s)', 2)
-    try:
-        i = int(s)
-        return True
-    except ValueError:
-        return False
-
-
-def FileTypeVarArray(cname):
-    '''
-    '''
-    _debug_('FileTypeVarArray(cname=%r)' % (cname), 2)
-    filevars = ['VIDEO_ITEMS', 'AUDIO_ITEMS', 'IMAGE_ITEMS', 'GAME_ITEMS']
-
-    if cname in filevars:
-        return True
-    return False
-
-
-def DirTypeVar(cname):
-    '''
-    '''
-    _debug_('FileTypeVar(cname)', 2)
-    vtype = cname.split('_')[-1]
-    print cname
-    filetypes = ['DIR']
-    filevars = ['RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'FREEVO_LOGDIR']
-
-    if cname.endswith('DIR'):
-        return True
-    if cname in filevars:
-        return True
-    return False
-
-
-def FileTypeVar(cname):
-    '''
-    '''
-    _debug_('FileTypeVar(cname)', 2)
-    vtype = cname.split('_')[-1]
-    filetypes = ['PATH', 'DIR', 'FILE', 'DEVICE', 'CMD']
-    filevars = ['XMLTV_GRABBER', 'RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'XMLTV_SORT', 'LIRCRC']
-
-    if vtype in filetypes:
-        return True
-    if cname in filevars:
-        return True
-    return False
-
-
-def VarType(setting_name, cvalue):
-    '''
-    '''
-    _debug_('VarType(cvalue)', 2)
-    if setting_name == "TV_CHANNELS":
-        return 'tv_channels'
-
-    if setting_name.startswith('KEYMAP'):
-        return 'keymap'
-
-    if setting_name == 'RADIO_STATIONS':
-        return 'tv_channels'
-
-    if FileTypeVarArray(setting_name):
-        return 'filelist'
-
-    if setting_name == 'IMAGEVIEWER_ASPECT':
-        return 'string'
-
-    if cvalue.startswith("'") and cvalue.endswith("'"):
-        return 'string'
-    if isNumber(cvalue):
-        return "number"
-    if cvalue.startswith('[') and cvalue.endswith(']'):
-        return "list"
-    if cvalue.startswith('(') and cvalue.endswith(')'):
-        return "list"
-    if cvalue.startswith('{') and cvalue.endswith('}'):
-        return "dictionary"
-    if cvalue.startswith('True') or cvalue.startswith('False'):
-        return 'boolean'
-    return 'Unknow'
-
-
+    
 def CreateFileBrowseControl(cname,setting_name):
     '''
     '''
@@ -321,17 +267,36 @@ def CreateFileBrowseControl(cname,setting_name):
     else:
         js_browsefiles = 'onclick=BrowseFiles("%s","%s","F")' % ( cname , setting_name )
 
+    
     btn_browse_id = '%s_browse' % cname
-    btn_browse = '<input type="button" id="%s" value="Browse" %s>' % ( btn_browse_id, js_browsefiles )
+    btn_browse = '<input type="button" id="%s" class="BrowseButton" value="" title="Display File Browser" %s>\n' % ( btn_browse_id, js_browsefiles )
+
     js_cancel = 'onclick=CancelBrowse("%s")' % cname
     btn_cancel_id = '%s_cancel' % cname
     style = 'display:none'
-    cancel_button = '<input type="button" value="Cancel" id="%s" %s style=%s>' % (btn_cancel_id , js_cancel, style)
-    browse_area = '<div id="%s_filebrowse" class="file_browse" style=%s></div>' % ( cname, style )
+    cancel_button = '<input type="button" value="" title="Close File Browser" class="CloseBrowseButton"  id="%s" %s style=%s>\n' % (btn_cancel_id , js_cancel, style)
+    browse_area = '<div id="%s_filebrowse" class="file_browse" style=%s></div>\n' % ( cname, style )
     file_browse_control = btn_browse + cancel_button + browse_area
     return file_browse_control
 
+    
+def Display_TV_Logo(channel):
+    station = channel.split(',')[1].strip()
+    station_name =  station.split(' ')[-1].strip("'")
 
+    if os.path.isdir(os.path.join(os.environ['FREEVO_PYTHON'], 'www/htdocs')):
+        docRoot = os.path.join(os.environ['FREEVO_PYTHON'], 'www/htdocs')
+    else:
+        docRoot = os.path.join(config.SHARE_DIR, 'htdocs')
+
+    imgfile = os.path.join(docRoot,'images/logos/',station_name + '.gif')
+    if not os.path.exists(imgfile):
+        station_name = 'BLANK'
+
+    logo = '<img class="TvLogo" src="images/logos/%s.gif" >\n' % station_name
+    return logo
+
+    
 def CreateTV_Channels_ctrl(cname, cvalue):
     '''
     '''
@@ -341,21 +306,27 @@ def CreateTV_Channels_ctrl(cname, cvalue):
 
     if vitems:
         for r, e in enumerate(vitems):
-            ctrl += '<li class="TV_Channels_Line">'
-            js_moveup = 'onclick=MoveTVChannel("%s",%i,%i)' % (cname, r, -11 )
-            ctrl += CreateHTMLinput('button','','Up','10', js_moveup)
+            ctrl += '<li class="TV_Channels_Line">\n'
+            up_title = 'title="Move Channel Up in the List."'
+            js_moveup = 'onclick=MoveTVChannel("%s",%i,%i) class="TV_Button"' % (cname, r, -11 )
+            ctrl += '<a class="ChannelUp" %s %s>Up</a>\n' % (js_moveup, up_title )
 
             control_id = '%s_item%i' % ( cname, r )
             tv_line = unicode(str(e))
-            html_textbox = CreateHTMLinput('textbox', control_id, tv_line, '30',  '' )
+            ctrl += Display_TV_Logo(tv_line)
+            html_textbox = CreateHTMLinput('textbox', control_id, tv_line, '30',  'class="TV_Channel"' )
             ctrl += html_textbox
 
             if r <>  (len(vitems) -1):
-                js_movedown = 'onclick=MoveTVChannel("%s",%i,%i)' % (cname, r, 1 )
-                ctrl += CreateHTMLinput('button','','Down','10', js_movedown )
+                js_movedown = 'onclick=MoveTVChannel("%s",%i,%i) class="TV_Button"' % (cname, r, 1 )
+                down_title = 'title="Move Channel Down in the List."'
+                ctrl += '<a class="ChannelDown" %s %s>Down</a>\n' %  ( js_movedown, down_title)
 
             ctrl += '</li>\n'
-    ctrl += '</span>'
+
+    js_onclick = 'onclick=Detect_Channels("%s")' % cname
+    ctrl += '<a %s>Auto Detect Channels</a>' % js_onclick
+    ctrl += '</span>\n'
     return ctrl
 
 
@@ -372,51 +343,52 @@ def CreateFileItemList(cname, cvalue,setting_name):
         for r, e in enumerate(vitems):
             filecheck = ''
             chkClass = ''
-
-            ctrl += '<li class="Setting_Controls">'
+            lineid = '%s_line_%i' % (cname, r)
+            ctrl += '<li class="Setting_Controls" id="%s">\n' % (lineid)
 
             if type(e) == types.StringType or type(e) ==  types.IntType:
-                control_id = '%s_label%i' % ( cname, r)
-                html_input = CreateHTMLinput('textbox', control_id, e, '', '' )
+                control_id = '%s_file%i' % ( cname, r)
+                html_input = CreateHTMLinput('textbox', control_id, e, '' )
                 browse_file_ctrl = CreateFileBrowseControl(control_id,setting_name)
 
                 ctrl += html_input
-                if not os.path.exists(e):
-                    filecheck = 'Missing File'
-                    chkClass = 'CheckWarning'
+                fcheck = ErrorMessage('FILE',control_id,e)
 
             else:
-                js_onchange = 'onchange=CheckValue("%s","fileitemlist","%i")' % (cname, r)
                 label_ctrl_id = '%s_label%i' % ( cname, r )
-                label_ctrl = CreateHTMLinput('textbox', label_ctrl_id, e[0], '', '')
+                js_onchange = 'onchange=CheckValue("%s","fileitemlist","%i")' % (cname, r)
+                label_ctrl = CreateHTMLinput('textbox', label_ctrl_id, e[0], '', js_onchange)
 
                 dir_ctrl_id = '%s_file%i' % ( cname, r )
+                js_onchange = 'onchange=CheckValue("%s","fileitemlist","%i")' % (cname, r)
                 dir_ctrl = CreateHTMLinput('textbox', dir_ctrl_id, e[1], '', js_onchange )
                 browse_file_ctrl = CreateFileBrowseControl(dir_ctrl_id,setting_name)
 
                 ctrl += label_ctrl
                 ctrl += dir_ctrl
+                fcheck = ErrorMessage('FILE',dir_ctrl_id,e[1])
 
-                if not os.path.exists(e[1]):
-                    filecheck = 'Missing File'
-                    chkClass = 'CheckWarning'
-
-            span_id = '%s_check_%i' % ( cname, r )
+            ctrl += DeleteListItem(lineid,cname + '_btn_update')
+            ctrl += fcheck
             ctrl += browse_file_ctrl
-            ctrl += '<span class="%s" id="%s">%s</span>' % ( chkClass, span_id, filecheck)
-            ctrl += '</li>'
+            ctrl += '</li>\n'
 
         r += 1;
-
-        ctrl += '<li class="Setting_Controls">'
+        ctrl += '<li class="Setting_Controls" id="%s_line_%i">\n' % ( cname, r) 
         js_onchange = 'onchange=CheckValue("%s","fileitemlist","%i")' % (cname, r)
         label_ctrl_id = '%s_label%i' % ( cname, r )
         ctrl += CreateHTMLinput('textbox', label_ctrl_id, '', '', '')
 
         dir_ctrl_id = '%s_file%i' % ( cname, r )
         ctrl += CreateHTMLinput('textbox', dir_ctrl_id, '', '', js_onchange )
-        ctrl += '<span class="" id="%s_check_%i"></span' % (cname, r)
-        ctrl += '</li>'
+
+        dir_ctrl_id = '%s_file%i' % ( cname, r )
+        dir_ctrl = CreateHTMLinput('textbox', dir_ctrl_id, e[1], '', js_onchange )
+        browse_file_ctrl = CreateFileBrowseControl(dir_ctrl_id,setting_name)
+        ctrl += browse_file_ctrl
+
+        ctrl += '<span class="" id="%s_check_%i"></span>\n' % (cname, r)
+        ctrl += '</li>\n'
 
     ctrl += '</span>\n'
     return ctrl
@@ -432,25 +404,31 @@ def CreateDictionaryControl(cname, cvalue):
 
     vitems = GetItemsArray(cvalue)
     ctrl = '<ul class="ItemList">'
+    js_onchange = 'onchange=CheckValue("%s","dictionary","")' % cname
 
     if vitems:
         for r, e in enumerate(vitems):
             pword =  vitems[e]
-            ctrl += '<li class="Setting_Controls">'
+            lineid = '%s_line_%i' % (cname, r)
+            ctrl += '<li class="Setting_Controls" id="%s">\n' % lineid
 
-            label_ctrl_id = '%s_item%i%i' % ( cname, r, 0 )
-            ctrl += CreateHTMLinput('textbox', label_ctrl_id, e, '15', '')
+            label_ctrl_id = '%s_key%i' % ( cname, r)
+            ctrl += CreateHTMLinput('textbox', label_ctrl_id, e, '15', js_onchange)
 
-            value_ctrl_id = '%s_item%i%i' % ( cname, r , 1 )
-            ctrl += CreateHTMLinput(ctrl2type, value_ctrl_id, vitems[e], '15', '')
+            value_ctrl_id = '%s_value%i' % ( cname, r )
+            ctrl += CreateHTMLinput(ctrl2type, value_ctrl_id, vitems[e], '15', js_onchange)
+
+            ctrl += DeleteListItem(lineid,cname + '_btn_update')
             ctrl += '</li>\n'
 
-        ctrl += '<li class="Setting_Controls">'
-        label_ctrl_id = '%s_item%i%i' % ( cname, r+1, 0 )
+        lineid = '%s_line_%i' % (cname, r+1)
+        ctrl += '<li class="Setting_Controls" id="%s">\n' % lineid
+        label_ctrl_id = '%s_key%i' % ( cname, r+1)
         ctrl += CreateHTMLinput('textbox', label_ctrl_id, '', '15', '')
 
-        value_ctrl_id = '%s_item%i%i' % ( cname, r+1 , 1 )
+        value_ctrl_id = '%s_value%i' % ( cname, r+1 )
         ctrl += CreateHTMLinput(ctrl2type, value_ctrl_id, '', '15', '')
+
         ctrl += '</li>\n'
         ctrl += '</ul>\n'
 
@@ -489,13 +467,16 @@ def CreateListControl(cname, cvalue):
 
                 maxcols = max(cols,maxcols)
 
-            ctrl += '<li class="Setting_Controls">'
+            lineid = '%s_line%i' % (cname, r)
+            ctrl += '<li class="Setting_Controls" id="%s">\n' % lineid
             ctrl += ctrl_line
+            ctrl += DeleteListItem(lineid, cname + '_btn_update')
             ctrl += '</li>\n'
 
         if not cvalue.strip().startswith('('):
-            ctrl += '<li class="Setting_Controls">\n'
             r+= 1;
+            lineid = '%s_line%i' % (cname, r)
+            ctrl += '<li class="Setting_Controls" id="%s">\n' % lineid
             js_onchange = 'onchange=CheckValue("%s","itemlist","%i")' % (cname, r)
             for c in range(0, maxcols):
                 html_textbox_id = '%s_item%i%i' % ( cname, r, c )
@@ -521,28 +502,26 @@ def CreateTextArea(cname, cvalue):
     cvalue = cvalue.replace(elemsep, elemsep + "\n")
     js_onchange = 'onchange=CheckValue("%s","textbox",0)' % cname
 
-    ctrl = '<textarea id= "%s" rows="%i" cols="35" wrap="SOFT" %s>'  % (cname, rows, js_onchange)
+    ctrl = '<textarea id= "%s" rows="%i" cols="35" wrap="SOFT" %s>\n'  % (cname, rows, js_onchange)
     ctrl += cvalue
-    ctrl += '</textarea>'
+    ctrl += '</textarea>\n'
     return ctrl
 
 
-def CreateTextBox(cname, setting_name, cvalue, vtype, plugin_group):
+def CreateTextBox(cname, setting_name, cvalue, other_opts = None):
     '''
     '''
-    _debug_('CreateTextBox(cname, cvalue, vtype, plugin_group, cenabled)', 2)
+    _debug_('CreateTextBox(cname, cvalue,  plugin_group, cenabled)', 2)
     cvalue = cvalue.strip()
 
     ctrl = ""
     js_onchange = 'onchange=CheckValue("%s","textbox",0)' % cname
-    if vtype == 'number':
-        control_id = cname
-        ctrl = '<span class="VarInputInt">'
-        ctrl += CreateHTMLinput('textbox', control_id, cvalue, '50', js_onchange)
-        ctrl += '</span>'
-        return ctrl
+    if not other_opts:
+        other_opts = ''
 
-    html_input = CreateHTMLinput('textbox', cname, cvalue, '50', js_onchange)
+    control_value = cvalue.strip("'")
+    ctrl_opts = '%s %s' % (js_onchange, other_opts)
+    html_input = CreateHTMLinput('textbox', cname, control_value, '', ctrl_opts)
     ctrl += html_input
 
     if FileTypeVar(setting_name) or DirTypeVar(setting_name):
@@ -552,10 +531,10 @@ def CreateTextBox(cname, setting_name, cvalue, vtype, plugin_group):
     return ctrl
 
 
-def KeyMapControl(cname, setting_name, cvalue, vtype, plugin_group):
+def KeyMapControl(cname, setting_name, cvalue ):
     '''
     '''
-    _debug_('KeyMapControl(cname, cvalue, vtype, plugin_group, cenabled)', 2)
+    _debug_('KeyMapControl(cname, cvalue,  cenabled)', 2)
     cvalue = cvalue.strip()
     key_name = setting_name.split('[')[1].strip(']')
 
@@ -568,101 +547,120 @@ def KeyMapControl(cname, setting_name, cvalue, vtype, plugin_group):
 
     return ctrl
 
+    
+def DeleteListItem(lineid,updateid):
+    btn_class = 'class="DeleteButton"'
+    btn_title = 'title ="Delete Line from List"'
+    btn_js = 'onclick=DeleteItemLine("%s","%s")' % ( lineid , updateid )
+
+    btn_opts = '%s %s %s' % (btn_title, btn_class, btn_js)
+    btnDelete = CreateHTMLinput('button','delete','','',btn_opts)
+    return btnDelete
 
 
-def CreateConfigLine(nctrl, plugin_group, expALL):
+def StartControlLine(nctrl):
+    _debug_('StartControlLine(%r)' % nctrl ,2)
+    ctrl = ''
+    cname = nctrl['control_name']
+    
+    ctrl += CreateHTMLinput('hidden',cname + "_startline", nctrl['startline'])
+    ctrl += CreateHTMLinput('hidden',cname + "_endline", nctrl['endline'])
+    ctrl += CreateHTMLinput('hidden',cname + "_ctrlname", nctrl['ctrlname'])
+    stringtype = nctrl['ctrlvalue'].startswith("'")
+    ctrl += CreateHTMLinput('hidden',cname + "_string",stringtype)
+
+    return  ctrl
+
+
+def DeleteButton(nctrl):
+
+    js_delete = 'onclick=DeleteLines("%s",%i,%i)' %  (nctrl['control_name'], nctrl['startline'],nctrl['endline'])
+    btn_class = 'class="DeleteButton"'
+    btn_title = 'title="Delete Lines %i to %i from local_conf.py"' % ( nctrl['startline'], nctrl['endline'] )
+    del_opts = '%s %s %s' % (btn_class, js_delete , btn_title)
+    delbtn = CreateHTMLinput('button',nctrl['control_name'] + '_delete','','',del_opts)
+    return delbtn 
+
+def EnableCheckBox(nctrl):
+    if nctrl['checked']:
+        checked = 'checked'
+    else:
+        checked = '' 
+
+    jsonChange = ' onchange=CheckValue("%s","%s",0)'  % (nctrl['control_name'], nctrl['control_type'])
+    chkbox = CreateHTMLinput('checkbox',nctrl['control_name'] + '_chk','' , ''  , jsonChange + " " + checked)
+    return chkbox
+    
+def CreateConfigLine(nctrl,  expALL):
     '''
     '''
-    _debug_('CreateConfigLine(nctrl=%r, plugin_group=%r, expALL=%r)' % (nctrl, plugin_group, expALL), 2)
+    _debug_('CreateConfigLine(nctrl=%r,  expALL=%r)' % (nctrl, expALL), 2)
     htmlctrl = ''
 
     control_name = nctrl['control_name']
     cname = nctrl['ctrlname']
     cvalue = nctrl['ctrlvalue']
-    sline = nctrl['startline']
-    eline = nctrl['endline']
-    vtype = nctrl['type']
-    chkline = cname + ' = ' + cvalue
 
-    checked = ''
+    htmlctrl += StartControlLine(nctrl)
+    complex_ctrls = ['tv_channels','fileitemlist','dictionary','itemlist']
+    simple_controls = ['textbox','boolean']
+    
     if nctrl['checked']:
-        checked = 'checked'
+        htmlctrl += '<div id="%s_enable" clase="enablecontrol">\n' % control_name
         displayvars = ''
-
-    if not nctrl['checked']:
-        htmlctrl += '<div id="%s_enable" class="disablecontrol">' % control_name
     else:
-        htmlctrl += '<div id="%s_enable" clase="enablecontrol">' % control_name
-
+        htmlctrl += '<div id="%s_enable" class="disablecontrol">\n' % control_name
+        
     displayvars = 'none'
     if expALL:
         displayvars = ''
 
-    lcheck = '<span class="checkOK">OK</span>'
-    if not CheckSyntax(chkline):
-        lcheck = '<span class="checkError">Error</span>'
-    else:
-        if FileTypeVar(cname):
-            filename = cvalue.replace("'", '').strip()
-            if not os.path.exists(filename):
-                lcheck = '<span class = "CheckWarning">Missing File</span>'
+    htmlctrl += ErrorMessage(cname,control_name, nctrl['ctrlvalue'])
+    htmlctrl += DeleteButton(nctrl)
+    htmlctrl += EnableCheckBox(nctrl)
+    
+    if nctrl['control_type'] == 'keymap':
+        htmlctrl += nctrl['html_control']
+    
+    setting_class = 'Setting_Line_Close'
+    js_showlist = 'onclick=ShowList("%s")' % control_name
+    anchor_title = 'title="%s (Click to Show / Hide %s value) "' % ( nctrl['comments'] , cname )
 
-    ctrltype = getCtrlType(cname, cvalue, vtype)
-    jsonChange = ' onchange=CheckValue("%s","%s",0)'  % (control_name, ctrltype)
-    chkbox = CreateHTMLinput('checkbox',control_name + '_chk','' , ''  , jsonChange + " " + checked)
-
-    js_delete = 'onclick=DeleteLines("%s",%i,%i)' %  ( control_name, sline, eline)
-    delbtn = CreateHTMLinput('button',control_name + '_delete','Delete','',js_delete)
-
-    htmlctrl += '<span id="%s_check">%s</span>' % (control_name, lcheck)
-    htmlctrl += delbtn
-    htmlctrl += chkbox
-
-    htmlctrl += '<a class="Setting_Line" onclick=ShowList("%s_list") name="%s">' % ( control_name, cname )
-    htmlctrl += cname
-    htmlctrl += '</a>'
-
-    htmlctrl += '<ul style= display:%s id="%s_list">' % (displayvars, control_name)
-    htmlctrl += CreateHTMLinput('hidden',control_name + "_startline", sline)
-    htmlctrl += CreateHTMLinput('hidden',control_name + "_endline", eline)
-    htmlctrl += CreateHTMLinput('hidden',control_name + "_ctrlname", cname)
-
-    jsSave =  'onclick=SaveValue("%s","%s")' % (control_name, ctrltype)
+    if expALL:
+        setting_class = 'Setting_Line_Open'
+    if nctrl['control_type'] in simple_controls:
+        setting_class = 'Setting_Line'
+        js_showlist = '' 
+        anchor_title = 'title="%s"' % nctrl['comments']
+        
+    anchorID = '%s_anchor' % control_name
+    if nctrl['control_type'] <> 'keymap':
+        htmlctrl += '<a class="%s" id="%s" name="%s" %s>' % ( setting_class, anchorID,   cname, js_showlist  + ' ' + anchor_title)
+        htmlctrl += cname
+        htmlctrl += '</a>\n'
+    
+    if  nctrl['control_type'] in simple_controls:
+        htmlctrl += nctrl['html_control']
+        
+    jsSave =  'onclick=SaveValue("%s","%s")' % (control_name, nctrl['control_type'])
     btn_update_id = '%s_btn_update' %  control_name
     htmlctrl += CreateHTMLinput('button',btn_update_id, 'Update','',jsSave + ' style=display:none;')
 
-    htmlctrl += '<li class="Setting_Controls">'
+    if nctrl['control_type'] in complex_ctrls:
+        htmlctrl += '<ul style= display:%s id="%s_list">\n' % (displayvars, control_name)
+        htmlctrl += '<li class="Setting_Controls">\n'
+        htmlctrl += nctrl['html_control']
+        htmlctrl += '</li>\n'
+        htmlctrl += '</ul>\n'
+       
 
-    if nctrl['vartype'] == 'boolean':
-        js_onchange = ' onchange=CheckValue("%s","textbox",0)' % control_name
-        htmlctrl  += CreateSelectBoxControl(control_name, ['True', 'False'], cvalue, js_onchange)
-
-    elif nctrl['vartype'] == 'tv_channels':
-        htmlctrl += CreateTV_Channels_ctrl(cname, cvalue)
-
-    elif nctrl['vartype'] == 'filelist':
-        htmlctrl  += CreateFileItemList(control_name, cvalue ,cname)
-
-    elif nctrl['vartype'] == 'dictionary':
-        htmlctrl += CreateDictionaryControl(cname, cvalue)
-
-    elif nctrl['vartype'] == 'list':
-        htmlctrl += CreateListControl(control_name, cvalue )
-
-    elif nctrl['vartype'] == 'keymap':
-        htmlctrl += KeyMapControl(control_name, cname, cvalue, nctrl['vartype'], plugin_group)
-
-    else:
-        htmlctrl += CreateTextBox(control_name, cname, cvalue, nctrl['vartype'], plugin_group)
-
-    if config.DEBUG == 2:
+    htmlctrl += '<li class="File_Line" id="%s_fileline">' % control_name
+    if config.DEBUG == 3:
         config_line = nctrl['fileline'].replace('\n','')
-        htmlctrl += '<li class="File_Line" id="%s_fileline">' % control_name
-        htmlctrl += '%r' % (  config_line  )
-        htmlctrl += '</li>'
-    htmlctrl += '</li>'
-    htmlctrl += '</ul>'
-    htmlctrl += '</div>'
+        htmlctrl += '%r' % (  config_line   )
+    
+    htmlctrl += '</li>\n'    
+    htmlctrl += '</div>\n'
 
     return htmlctrl
 
@@ -679,13 +677,13 @@ def DisplayGroups(fconfig, expALL):
         displayStyle = ''
 
     for grp in groups:
-        html += '<li class="VarGroupHeaderLine">'
+        html += '<li class="VarGroupHeaderLine">\n'
         html += '<a class="VarGroupHeaderItem" onclick=ShowList("%s")>%s</a>\n'  % (grp, grp)
-        html += '<ul id="%s" style= display:%s>\n' % (grp, displayStyle)
+        html += '<ul id="%s_list" style= display:%s>\n' % (grp, displayStyle)
         for cctrl in fconfig:
             if cctrl['group'] == grp:
-                lctrl = CreateConfigLine(cctrl, grp, expALL)
-                html += '<li class="Setting_Line">'
+                lctrl = CreateConfigLine(cctrl,  expALL)
+                html += '<li class="LineOpen" id="%s_line">\n' % cctrl['control_name']
                 html += lctrl
                 html += '</li>\n'
         html += '</ul>\n'
@@ -694,6 +692,7 @@ def DisplayGroups(fconfig, expALL):
 
     return html
 
+    
 def DisplayConfigChanges(current_version):
     '''
     '''
@@ -703,7 +702,7 @@ def DisplayConfigChanges(current_version):
         current_version = 0
 
     cur_version = float(current_version)
-    dsp_change = '<div class="Config_Changes">'
+    dsp_change = '<div class="Config_Changes">\n'
     dsp_change += 'Warning: freevo_config.py was changed, please check local_conf.py<br>'
     dsp_change += 'You are using version  %s, changes since then:' % current_version
     config_outdated = False
@@ -724,9 +723,7 @@ def DisplayConfigChanges(current_version):
     if config_outdated:
         dsp_change += 'local_conf.py is out dated'
         dsp_change += CreateHTMLinput('Button','','Convert Config','','')
-        dsp_change += '</ul>\n'
         dsp_change += '</div>\n'
-
     else:
         dsp_change = ''            
 
@@ -755,12 +752,11 @@ class ConfigResource(FreevoResource):
 
         configfile = fv.formValue(form, 'configfile')
         configfile = GetConfigFileName(configfile)
-        configfile = '/etc/freevo/local_conf.py'
         title = 'Config %s' %configfile
         fv.printHeader(_(title), 'styles/main.css', 'scripts/config.js', selected=_('Config'))
 
-        fv.res += '<script language="JavaScript" type="text/JavaScript" src="scripts/browsefile.js"></script>'
-        fv.res += '<link rel="stylesheet" href="styles/config.css" type="text/css" />\n'
+        fv.res += '<script language="JavaScript" type="text/JavaScript" src="scripts/browsefile.js"></script>\n'
+        fv.res += '<link rel="stylesheet" href="styles/config.css" type="text/css">\n'
 
         if not configfile:
             fv.res += 'Unable to find file.'
@@ -780,7 +776,8 @@ class ConfigResource(FreevoResource):
                'endline': -1,
                'fileline': '',
                'control_name':'KEYMAP_NEW',
-               'vartype':'keymap'
+               'control_type':'keymap',
+               'html_control': KeyMapControl('KEYMAP_NEW', 'KEYMAP[NEW]', '')
         }
         fconfig.append(add_keymap)
 
@@ -799,7 +796,6 @@ class ConfigResource(FreevoResource):
         fv.res += '<form id="config" action="config.rpy" method="get">\n'
         fv.res += DisplayGroups(fconfig, expandAll)
         fv.res + '</div>\n'
-        fv.res += '</form><br>\n'
 
         return str(fv.res)
 

@@ -36,13 +36,16 @@ import config
 import string
 import types
 import time
-import subprocess
 
+import subprocess
+import plugins 
+
+import subprocess
 import plugins 
 from www.configlib import  *
-
 from stat import *
 from www.web_types import HTMLResource, FreevoResource
+from www.configlib import  *
 
 
 def LogTransaction(cmd, lineno, line):
@@ -185,15 +188,17 @@ def cmdCheckValue(varName, varValue):
 
     if FileTypeVar(varName) and blOK:
         file_name = varValue.replace("'", '').strip()
-
         if os.path.exists(file_name):
             retClass = 'checkOK'
             status = 'OK'
         else:
-            retClass='CheckWarning'
+            retClass='checkWarning'
             status = 'Missing File'
 
     results = '<span class="%s">%s</span>' % (retClass, status)
+    
+    print 'CHECKING %s = %s' %  (varName,varValue)
+    results = ErrorMessage(varName, '',varValue)
     return blOK, results
 
 
@@ -267,45 +272,7 @@ def DeleteLines(cfile, startline, endline):
     WriteConfigFile(cfile, rconf)
     return dellines
 
-def GetItemsArray(cvalue):
-    '''
-    '''
-    _debug_('GetItemsArray(cvalue=%r)' % (cvalue), 2)
-    itemlist = None
-    cmd = 'itemlist = ' + cvalue
-    if CheckSyntax(cmd):
-        exec cmd
-    return itemlist
-
-
-def FileTypeVarArray(cname):
-    '''
-    '''
-    _debug_('FileTypeVarArray(cname=%r)' % ( cname ) ,2)
-
-    filevars = ['VIDEO_ITEMS', 'AUDIO_ITEMS', 'IMAGE_ITEMS', 'GAME_ITEMS']
-
-    if cname in filevars:
-        return True
-    return False
-
-
-def FileTypeVar(cname):
-    '''
-    '''
-    _debug_('FileTypeVar(cname=%r)' % (cname ), 2)
-
-    vtype = cname.split('_')[-1]
-    filetypes = ['PATH', 'DIR', 'FILE', 'DEV', 'DEVICE']
-    filevars = ['XMLTV_GRABBER', 'RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'XMLTV_SORT', 'LIRCRC']
-
-    if vtype in filetypes:
-        return True
-    if cname in filevars:
-        return True
-    return False
-
-
+    
 def UpdatePlugin(cfile, pcmd, pname, pline, plugin_level, plugin_args):
     lconf = ReadConfig(cfile)
 
@@ -345,31 +312,26 @@ def UpdatePlugin(cfile, pcmd, pname, pline, plugin_level, plugin_args):
 
     return status
 
+    
 def UpdateServer(server_name, server_cmd):
-    print '%s = %s' % ( server_name, server_cmd )
-
+    
     run_cmd = ['freevo',server_name,server_cmd] 
     server_pid = subprocess.Popen(run_cmd).pid
-    print 'SERVER PID = %r'  % server_pid
-
+    
     time.sleep(3)
-
     server_line = Display_Server(server_name)
     return server_line
 
 def StartHelper(helper):
-    print 'STARTING HELPER !!! == %s' % helper
 
     run_cmd = ['freevo',helper] 
     helper_pid = subprocess.Popen(run_cmd).pid
-    print 'SERVER PID = %r'  % helper_pid
-
-    time.sleep(3)
+    time.sleep(1)
 
     helper_line = Display_Helper(helper)
     return helper_line
 
-
+    
 class ConfigEditResource(FreevoResource):
 
     def _render(self, request):
@@ -415,7 +377,7 @@ class ConfigEditResource(FreevoResource):
         setting_name = fv.formValue(form,'setting_name')
 
         # NEED TO MOVE ON CONFIG RELATED STUFF ABOVE THE FILE CHECK !!!
-        if cmd == 'BROWSEDIRECTORY' and browse_file and browse_area:
+        if cmd == 'BROWSEDIRECTORY' and browse_area:
             fv.res = cmdBrowseFiles(browse_file,browse_area,setting_name,'D')
             return str( fv.res )
 
@@ -427,6 +389,8 @@ class ConfigEditResource(FreevoResource):
             cmd = 'VIEW'
 
         if cmd == 'UPDATE':
+            print startline
+            print endline
             fv.res = UpdateSetting(configfile, udname, udvalue, udenable, int(startline), int(endline),syntaxcheck)
  
             if realtime_update:
@@ -437,6 +401,11 @@ class ConfigEditResource(FreevoResource):
                     config.__dict__[udname] = actual_value
                 
             return String( fv.res )
+
+        if cmd == 'DETECT_CHANNELS':
+            str_channels = '%r' % config.detect_channels() 
+            UpdateSetting(configfile,'TV_CHANNELS',str_channels,'FALSE',int(startline),int(endline),False)
+            return String ('REFRESH REQUIRED')
 
         if cmd == 'CHECK' and udname and udvalue:
             ok, results = cmdCheckValue(udname, udvalue)

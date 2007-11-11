@@ -10,13 +10,16 @@ function UpdateDelay() {
 
 function UpdateDisplay() {
     var cellObj,displayfile,rows;
+    var updateurl;
 
     cellObj = document.getElementById("refresh");  
     cellObj.childNodes[0].nodeValue="Updating";
     parselimit=document.forms[0].delayamount.value
     displayfile = document.getElementById("logfile").value;
     rows = document.getElementById("rows").value;
-    makeRequest('viewlogfile.rpy?update=TRUE&displayfile=' + displayfile + "&rows=" + rows);    
+    updateurl = 'viewlogfile.rpy?update=TRUE&displayfile=' + displayfile + "&rows=" + rows
+    updateurl = updateurl + '&delayamount=' + parselimit
+    makeRequest(updateurl);    
 }
 
 
