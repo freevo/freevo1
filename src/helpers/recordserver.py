@@ -1553,7 +1553,6 @@ class RecordServer(xmlrpc.XMLRPC):
             fxd.info['year'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(rec_prog.start))
         except:
             fxd.info['year'] = '2007'
-            print 'DJW: %r:%r %r' % (config.TV_RECORD_YEAR_FORMAT, time.localtime(rec_prog.start), e)
         fxd.title = rec_prog.title
         fxd.writeFxd()
 
