@@ -83,6 +83,8 @@ class MPlayer:
         1 = possible, but not good
         0 = unplayable
         """
+        if not item.url:
+            return 0
         try:
             _debug_('url=%r' % (item.url), 2)
             _debug_('mode=%r' % (item.mode), 2)
