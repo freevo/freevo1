@@ -66,7 +66,10 @@ class PluginInterface(plugin.ItemPlugin):
             for cartfile in self.cart:
                 cartfile.files.move(self.item.dir)
         except OSError, e:
-            print 'Mode failed \'%s\'' % e
+            print 'Move failed: %s' % e
+        except AttributeError, e:
+            print 'Move not possible: %s' % e
+            print self.item.__dict__
         popup.destroy()
         self.cart = []
         rc.post_event(em.MENU_BACK_ONE_MENU)
@@ -79,7 +82,10 @@ class PluginInterface(plugin.ItemPlugin):
             for cartfile in self.cart:
                 cartfile.files.copy(self.item.dir)
         except OSError, e:
-            print 'Copy failed \'%s\'' % e
+            print 'Copy failed: %s' % e
+        except AttributeError, e:
+            print 'Copy not possible: %s' % e
+            print self.item.__dict__
         popup.destroy()
         self.cart = []
         rc.post_event(em.MENU_BACK_ONE_MENU)
