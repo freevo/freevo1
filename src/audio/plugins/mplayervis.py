@@ -67,7 +67,9 @@ class mpv_Goom(BaseAnimation):
 
         BaseAnimation.__init__(self, (x, y, width, height), fps=100,
                                bg_update=False, bg_redraw=False)
+        _debug_('pygoom.set_exportfile(mmap_file=%r)' % (mmap_file), 2)
         pygoom.set_exportfile(mmap_file)
+        _debug_('pygoom.set_resolution(width=%r, height=%r, 0)' % (width, height), 2)
         pygoom.set_resolution(width, height, 0)
 
 
@@ -113,6 +115,7 @@ class mpv_Goom(BaseAnimation):
         self.message = None
 
         self.rect = r
+        _debug_('pygoom.set_resolution(width=%r, height=%r, cinemascope=%r)' % (width, height, cinemascope), 2)
         pygoom.set_resolution(width, height, cinemascope)
 
         # change the cover if neceserry
@@ -164,6 +167,7 @@ class mpv_Goom(BaseAnimation):
         if self.next_update < current_time:
 
             self.next_update = current_time + self.interval
+            _debug_('pygoom.get_surface()', 2)
             gooms = pygoom.get_surface()
 
             # draw blending
@@ -188,6 +192,7 @@ class mpv_Goom(BaseAnimation):
                 if self.blend > 0:
                     s, x, y = self.coversurf
                     s.set_alpha(self.blend)
+                    _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
                     gooms.blit(s, (x, y))
 
             # draw message
@@ -198,7 +203,8 @@ class mpv_Goom(BaseAnimation):
                     self.message = False
                     s.fill(0)
 
-                gooms.blit(s, (x,y))
+                _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
+                gooms.blit(s, (x, y))
 
             osd.putsurface(gooms, self.rect.left, self.rect.top)
             osd.update(self.rect)
@@ -394,6 +400,7 @@ class PluginInterface(plugin.Plugin):
         if self.visual:
             self.visual.remove()
             self.visual = None
+            _debug_('pygoom.quit()', 2)
             pygoom.quit()
 
 
