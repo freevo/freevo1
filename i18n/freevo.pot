@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-11 06:53+0100\n"
+"POT-Creation-Date: 2007-11-12 21:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -410,11 +410,11 @@ msgstr ""
 msgid "Add to Recording Schedule"
 msgstr ""
 
-#: www/htdocs/viewlogfile.rpy:112
+#: www/htdocs/viewlogfile.rpy:131
 msgid "viewlog"
 msgstr ""
 
-#: www/htdocs/viewlogfile.rpy:112
+#: www/htdocs/viewlogfile.rpy:131
 msgid "View Logs"
 msgstr ""
 
@@ -453,7 +453,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: www/htdocs/pluginconfig.rpy:362
+#: www/htdocs/pluginconfig.rpy:367
 msgid "Config Plugins"
 msgstr ""
 
@@ -538,8 +538,9 @@ msgstr ""
 msgid "Sat"
 msgstr ""
 
-#: www/htdocs/edit_favorite.rpy:172 tv/program_display.py:324
-#: tv/favoriteitem.py:65 tv/edit_favorite.py:144
+#: www/htdocs/edit_favorite.rpy:172 plugins/weather.py:82
+#: plugins/weather.py:142 tv/program_display.py:324 tv/favoriteitem.py:65
+#: tv/edit_favorite.py:144
 msgid "Sun"
 msgstr ""
 
@@ -816,7 +817,7 @@ msgstr ""
 msgid "Play file using VLC"
 msgstr ""
 
-#: www/htdocs/config.rpy:760
+#: www/htdocs/config.rpy:756
 msgid "Config"
 msgstr ""
 
@@ -928,7 +929,7 @@ msgid ""
 "not found!"
 msgstr ""
 
-#: audio/plugins/apodcast.py:96 video/plugins/vpodcast.py:133
+#: audio/plugins/apodcast.py:96 video/plugins/vpodcast.py:131
 msgid "Buffering podcast..."
 msgstr ""
 
@@ -940,11 +941,11 @@ msgstr ""
 msgid "Audio Podcast"
 msgstr ""
 
-#: audio/plugins/apodcast.py:159 video/plugins/vpodcast.py:340
+#: audio/plugins/apodcast.py:159 video/plugins/vpodcast.py:221
 msgid "Fetching podcast..."
 msgstr ""
 
-#: audio/plugins/apodcast.py:188 video/plugins/vpodcast.py:372
+#: audio/plugins/apodcast.py:188 video/plugins/vpodcast.py:253
 msgid "No Podcast locations found"
 msgstr ""
 
@@ -952,7 +953,7 @@ msgstr ""
 msgid "AUDIO PODCAST"
 msgstr ""
 
-#: audio/plugins/apodcast.py:196 video/plugins/vpodcast.py:382
+#: audio/plugins/apodcast.py:196 video/plugins/vpodcast.py:263
 msgid "Fetching podcasts..."
 msgstr ""
 
@@ -1282,7 +1283,7 @@ msgstr ""
 msgid "Move to [%s]"
 msgstr ""
 
-#: video/plugins/mplayer.py:419
+#: video/plugins/mplayer.py:426
 msgid "Seeking not possible"
 msgstr ""
 
@@ -1513,30 +1514,15 @@ msgstr ""
 msgid "%d fxd files archived. %s"
 msgstr ""
 
-#: video/plugins/vpodcast.py:201 video/plugins/vpodcast.py:215
-#: video/plugins/vpodcast.py:228
-#, python-format
-msgid "No media found for \"%s\".\n"
-msgstr ""
-
-#: video/plugins/vpodcast.py:202 video/plugins/vpodcast.py:216
-#: video/plugins/vpodcast.py:229
-msgid "Please insert the media."
-msgstr ""
-
-#: video/plugins/vpodcast.py:233 video/videoitem.py:554
-msgid "No player for this item found"
-msgstr ""
-
-#: video/plugins/vpodcast.py:330
+#: video/plugins/vpodcast.py:211
 msgid "Video Podcast"
 msgstr ""
 
-#: video/plugins/vpodcast.py:374 video/plugins/vpodcast.py:407
+#: video/plugins/vpodcast.py:255 video/plugins/vpodcast.py:288
 msgid "Video Podcasts"
 msgstr ""
 
-#: video/plugins/vpodcast.py:401
+#: video/plugins/vpodcast.py:282
 msgid "Set VPODCAST_DIR in local_conf.py"
 msgstr ""
 
@@ -1574,54 +1560,67 @@ msgstr ""
 msgid "Chapter Menu"
 msgstr ""
 
-#: video/configure.py:209
+#: video/configure.py:200
+#, python-format
+msgid "Play with \"%s\""
+msgstr ""
+
+#: video/configure.py:203
+msgid "Player Menu"
+msgstr ""
+
+#: video/configure.py:231
 #, python-format
 msgid "Turn off %s"
 msgstr ""
 
-#: video/configure.py:210
+#: video/configure.py:232
 #, python-format
 msgid "Turn on %s"
 msgstr ""
 
-#: video/configure.py:239
+#: video/configure.py:261
 msgid "Activate TOP field first"
 msgstr ""
 
-#: video/configure.py:241 video/configure.py:279
+#: video/configure.py:263 video/configure.py:303
 msgid "Activate BOTTOM field first"
 msgstr ""
 
-#: video/configure.py:243
+#: video/configure.py:265
 msgid "Activate AUTO field first"
 msgstr ""
 
-#: video/configure.py:256
+#: video/configure.py:278
+msgid "Play with alternate player"
+msgstr ""
+
+#: video/configure.py:280
 msgid "Audio selection"
 msgstr ""
 
-#: video/configure.py:258
+#: video/configure.py:282
 msgid "Subtitle selection"
 msgstr ""
 
-#: video/configure.py:261 video/configure.py:265
+#: video/configure.py:285 video/configure.py:289
 msgid "Chapter selection"
 msgstr ""
 
-#: video/configure.py:273
+#: video/configure.py:297
 msgid "de-interlacing"
 msgstr ""
 
-#: video/configure.py:276
+#: video/configure.py:300
 msgid "X-Video Motion Compensation (xvmc)"
 msgstr ""
 
-#: video/configure.py:284 video/videoitem.py:335 tv/program_display.py:133
+#: video/configure.py:308 video/videoitem.py:335 tv/program_display.py:133
 #: tv/programitem.py:110 playlist.py:283
 msgid "Play"
 msgstr ""
 
-#: video/configure.py:285
+#: video/configure.py:309
 msgid "Config Menu"
 msgstr ""
 
@@ -1645,47 +1644,47 @@ msgstr ""
 msgid "VCD title list"
 msgstr ""
 
-#: video/videoitem.py:336
+#: video/videoitem.py:337
 msgid "Full description"
 msgstr ""
 
-#: video/videoitem.py:338
-msgid "Play with alternate player"
-msgstr ""
-
-#: video/videoitem.py:341
+#: video/videoitem.py:340
 msgid "Play with maximum cache"
 msgstr ""
 
-#: video/videoitem.py:346
+#: video/videoitem.py:345
 msgid "Show variants"
 msgstr ""
 
-#: video/videoitem.py:350
+#: video/videoitem.py:349
 msgid "Create Thumbnail"
 msgstr ""
 
-#: video/videoitem.py:378
+#: video/videoitem.py:377
 msgid "Please wait...."
 msgstr ""
 
-#: video/videoitem.py:516 video/videoitem.py:529 video/videoitem.py:542
+#: video/videoitem.py:453
+msgid "No player for this item found"
+msgstr ""
+
+#: video/videoitem.py:506 video/videoitem.py:519 video/videoitem.py:533
 #, python-format
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
 msgstr ""
 
-#: video/videoitem.py:639
+#: video/videoitem.py:618
 #, python-format
 msgid "Play Title %d"
 msgstr ""
 
-#: video/videoitem.py:724 tv/program_display.py:640 tv/programitem.py:356
+#: video/videoitem.py:703 tv/program_display.py:640 tv/programitem.py:356
 msgid "No Information Available"
 msgstr ""
 
-#: video/videoitem.py:740 plugins/lcd.py:221 plugins/freevused.py:517
+#: video/videoitem.py:719 plugins/lcd.py:221 plugins/freevused.py:517
 #: share/skins/main/mediaportal.fxd:692
 #: share/skins/main/dark.fxd:453
 #: share/skins/main/dark.fxd:754
@@ -1695,7 +1694,7 @@ msgstr ""
 msgid "Genre"
 msgstr ""
 
-#: video/videoitem.py:742 plugins/lcd.py:67 plugins/lcd.py:75
+#: video/videoitem.py:721 plugins/lcd.py:67 plugins/lcd.py:75
 #: plugins/vfd.py:91 plugins/vfd.py:99 plugins/freevused.py:531
 #: plugins/freevused.py:547
 #: share/skins/main/geexbox.fxd:729
@@ -1708,7 +1707,7 @@ msgstr ""
 msgid "Length"
 msgstr ""
 
-#: video/videoitem.py:744 plugins/lcd.py:70 plugins/lcd.py:74
+#: video/videoitem.py:723 plugins/lcd.py:70 plugins/lcd.py:74
 #: plugins/vfd.py:94 plugins/vfd.py:98
 #: share/skins/main/geexbox.fxd:712
 #: share/skins/main/mediaportal.fxd:680
@@ -1771,51 +1770,75 @@ msgstr ""
 msgid "No Headlines Sites found"
 msgstr ""
 
-#: plugins/weather.py:69
+#: plugins/weather.py:69 plugins/weather.py:82 plugins/weather.py:89
+#: plugins/weather.py:142
 msgid "Cloudy"
 msgstr ""
 
-#: plugins/weather.py:70
+#: plugins/weather.py:70 plugins/weather.py:91
 msgid "Mostly Cloudy"
 msgstr ""
 
-#: plugins/weather.py:71
+#: plugins/weather.py:71 plugins/weather.py:93 plugins/weather.py:174
 msgid "Partly Cloudy"
 msgstr ""
 
-#: plugins/weather.py:72
+#: plugins/weather.py:72 plugins/weather.py:95 plugins/weather.py:117
+#: plugins/weather.py:118 plugins/weather.py:152 plugins/weather.py:158
+#: plugins/weather.py:167 plugins/weather.py:171
 msgid "Light Rain"
 msgstr ""
 
-#: plugins/weather.py:73
+#: plugins/weather.py:73 plugins/weather.py:76 plugins/weather.py:85
+#: plugins/weather.py:86 plugins/weather.py:96 plugins/weather.py:112
 msgid "Showers"
 msgstr ""
 
-#: plugins/weather.py:74
+#: plugins/weather.py:74 plugins/weather.py:110 plugins/weather.py:114
+#: plugins/weather.py:116 plugins/weather.py:121 plugins/weather.py:122
+#: plugins/weather.py:124 plugins/weather.py:126 plugins/weather.py:128
+#: plugins/weather.py:130 plugins/weather.py:137 plugins/weather.py:143
+#: plugins/weather.py:144 plugins/weather.py:145 plugins/weather.py:147
+#: plugins/weather.py:157 plugins/weather.py:159 plugins/weather.py:160
+#: plugins/weather.py:169
 msgid "Snow"
 msgstr ""
 
-#: plugins/weather.py:75 plugins/weather.py:170
+#: plugins/weather.py:75 plugins/weather.py:87 plugins/weather.py:92
+#: plugins/weather.py:94 plugins/weather.py:101 plugins/weather.py:108
+#: plugins/weather.py:110 plugins/weather.py:116 plugins/weather.py:119
+#: plugins/weather.py:121 plugins/weather.py:122 plugins/weather.py:125
+#: plugins/weather.py:126 plugins/weather.py:127 plugins/weather.py:128
+#: plugins/weather.py:137 plugins/weather.py:138 plugins/weather.py:143
+#: plugins/weather.py:144 plugins/weather.py:147 plugins/weather.py:149
+#: plugins/weather.py:157 plugins/weather.py:168 plugins/weather.py:170
 msgid "Rain"
 msgstr ""
 
-#: plugins/weather.py:76
-msgid "AM Showers"
+#: plugins/weather.py:76 plugins/weather.py:82 plugins/weather.py:94
+#: plugins/weather.py:107 plugins/weather.py:108 plugins/weather.py:112
+#: plugins/weather.py:115 plugins/weather.py:117 plugins/weather.py:134
+#: plugins/weather.py:136 plugins/weather.py:141 plugins/weather.py:142
+#: plugins/weather.py:143 plugins/weather.py:149 plugins/weather.py:150
+#: plugins/weather.py:151 plugins/weather.py:153 plugins/weather.py:159
+#: plugins/weather.py:163 plugins/weather.py:167 plugins/weather.py:168
+#: plugins/weather.py:171
+msgid "AM"
 msgstr ""
 
 #: plugins/weather.py:77
 msgid "Fog"
 msgstr ""
 
-#: plugins/weather.py:78
+#: plugins/weather.py:78 plugins/weather.py:123
 msgid "Few Showers"
 msgstr ""
 
-#: plugins/weather.py:79
+#: plugins/weather.py:79 plugins/weather.py:99
 msgid "Mostly Sunny"
 msgstr ""
 
-#: plugins/weather.py:80
+#: plugins/weather.py:80 plugins/weather.py:106
 msgid "Sunny"
 msgstr ""
 
@@ -1823,8 +1846,14 @@ msgstr ""
 msgid "Scattered Flurries"
 msgstr ""
 
-#: plugins/weather.py:82
-msgid "AM Clouds/PM Sun"
+#: plugins/weather.py:82 plugins/weather.py:85 plugins/weather.py:86
+#: plugins/weather.py:104 plugins/weather.py:118 plugins/weather.py:119
+#: plugins/weather.py:122 plugins/weather.py:125 plugins/weather.py:126
+#: plugins/weather.py:130 plugins/weather.py:137 plugins/weather.py:142
+#: plugins/weather.py:146 plugins/weather.py:152 plugins/weather.py:154
+#: plugins/weather.py:156 plugins/weather.py:158 plugins/weather.py:162
+#: plugins/weather.py:165
+msgid "PM"
 msgstr ""
 
 #: plugins/weather.py:83
@@ -1835,344 +1864,131 @@ msgstr ""
 msgid "Scattered Thunderstorms"
 msgstr ""
 
-#: plugins/weather.py:85
-msgid "PM Showers"
+#: plugins/weather.py:86 plugins/weather.py:89 plugins/weather.py:90
+#: plugins/weather.py:91 plugins/weather.py:93 plugins/weather.py:95
+#: plugins/weather.py:96 plugins/weather.py:99 plugins/weather.py:101
+#: plugins/weather.py:102 plugins/weather.py:106 plugins/weather.py:109
+#: plugins/weather.py:111 plugins/weather.py:112 plugins/weather.py:114
+#: plugins/weather.py:123 plugins/weather.py:124 plugins/weather.py:126
+#: plugins/weather.py:127 plugins/weather.py:128 plugins/weather.py:131
+#: plugins/weather.py:132 plugins/weather.py:137 plugins/weather.py:139
+#: plugins/weather.py:142 plugins/weather.py:143 plugins/weather.py:144
+#: plugins/weather.py:146 plugins/weather.py:150 plugins/weather.py:151
+#: plugins/weather.py:152 plugins/weather.py:154 plugins/weather.py:155
+#: plugins/weather.py:157 plugins/weather.py:161 plugins/weather.py:164
+#: plugins/weather.py:167 plugins/weather.py:168 plugins/weather.py:173
+#: plugins/weather.py:174 plugins/weather.py:182 plugins/weather.py:925
+#: plugins/oneclick.py:941
+msgid "Wind"
 msgstr ""
 
-#: plugins/weather.py:86
-msgid "PM Showers/Wind"
+#: plugins/weather.py:87 plugins/weather.py:94 plugins/weather.py:120
+#: plugins/weather.py:125 plugins/weather.py:127 plugins/weather.py:141
+#: plugins/weather.py:146 plugins/weather.py:150 plugins/weather.py:173
+msgid "Snow Showers"
 msgstr ""
 
-#: plugins/weather.py:87
-msgid "Rain/Snow Showers"
-msgstr ""
-
-#: plugins/weather.py:88
+#: plugins/weather.py:88 plugins/weather.py:131
 msgid "Few Snow Showers"
 msgstr ""
 
-#: plugins/weather.py:89
-msgid "Cloudy/Wind"
-msgstr ""
-
-#: plugins/weather.py:90
-msgid "Flurries/Wind"
-msgstr ""
-
-#: plugins/weather.py:91
-msgid "Mostly Cloudy/Windy"
+#: plugins/weather.py:90 plugins/weather.py:100
+msgid "Flurries"
 msgstr ""
 
 #: plugins/weather.py:92
-msgid "Rain/Thunder"
-msgstr ""
-
-#: plugins/weather.py:93 plugins/weather.py:174
-msgid "Partly Cloudy/Windy"
-msgstr ""
-
-#: plugins/weather.py:94
-msgid "AM Rain/Snow Showers"
-msgstr ""
-
-#: plugins/weather.py:95
-msgid "Light Rain/Wind"
-msgstr ""
-
-#: plugins/weather.py:96
-msgid "Showers/Wind"
+msgid "Thunder"
 msgstr ""
 
 #: plugins/weather.py:97
 msgid "Heavy Snow"
 msgstr ""
 
-#: plugins/weather.py:98 plugins/weather.py:166
+#: plugins/weather.py:98 plugins/weather.py:163 plugins/weather.py:165
+#: plugins/weather.py:166
 msgid "Drizzle"
 msgstr ""
 
-#: plugins/weather.py:99
-msgid "Mostly Sunny/Wind"
-msgstr ""
-
-#: plugins/weather.py:100
-msgid "Flurries"
-msgstr ""
-
-#: plugins/weather.py:101
-msgid "Rain/Wind"
-msgstr ""
-
 #: plugins/weather.py:102
-msgid "Sct Flurries/Wind"
+msgid "Sct Flurries"
 msgstr ""
 
 #: plugins/weather.py:103
 msgid "Sct Strong Storms"
 msgstr ""
 
-#: plugins/weather.py:104
-msgid "PM T-Storms"
-msgstr ""
-
-#: plugins/weather.py:105
+#: plugins/weather.py:104 plugins/weather.py:105 plugins/weather.py:107
 msgid "Thunderstorms"
 msgstr ""
 
-#: plugins/weather.py:106
-msgid "Sunny/Windy"
-msgstr ""
-
-#: plugins/weather.py:107
-msgid "AM Thunderstorms"
-msgstr ""
-
-#: plugins/weather.py:108
-msgid "AM Rain"
-msgstr ""
-
 #: plugins/weather.py:109
-msgid "Iso T-Storms/Wind"
-msgstr ""
-
-#: plugins/weather.py:110
-msgid "Rain/Snow"
+msgid "Iso T-Storms"
 msgstr ""
 
 #: plugins/weather.py:111
-msgid "Sct T-Storms/Wind"
-msgstr ""
-
-#: plugins/weather.py:112
-msgid "AM Showers/Wind"
+msgid "Sct T-Storms"
 msgstr ""
 
 #: plugins/weather.py:113
 msgid "Sct Snow Showers"
 msgstr ""
 
-#: plugins/weather.py:114
-msgid "Snow to Ice/Wind"
+#: plugins/weather.py:114 plugins/weather.py:116 plugins/weather.py:121
+#: plugins/weather.py:144 plugins/weather.py:145 plugins/weather.py:147
+#: plugins/weather.py:157 plugins/weather.py:160 plugins/weather.py:169
+msgid "to"
 msgstr ""
 
-#: plugins/weather.py:115
-msgid "AM Ice"
+#: plugins/weather.py:114 plugins/weather.py:115 plugins/weather.py:147
+#: plugins/weather.py:149 plugins/weather.py:158 plugins/weather.py:160
+#: plugins/weather.py:171
+msgid "Ice"
 msgstr ""
 
-#: plugins/weather.py:116
-msgid "Snow to Rain"
-msgstr ""
-
-#: plugins/weather.py:117
-msgid "AM Light Rain"
-msgstr ""
-
-#: plugins/weather.py:118
-msgid "PM Light Rain"
-msgstr ""
-
-#: plugins/weather.py:119
-msgid "PM Rain"
-msgstr ""
-
-#: plugins/weather.py:120
-msgid "Snow Showers"
-msgstr ""
-
-#: plugins/weather.py:121
-msgid "Rain to Snow"
-msgstr ""
-
-#: plugins/weather.py:122
-msgid "PM Rain/Snow"
-msgstr ""
-
-#: plugins/weather.py:123
-msgid "Few Showers/Wind"
-msgstr ""
-
-#: plugins/weather.py:124
-msgid "Snow/Wind"
-msgstr ""
-
-#: plugins/weather.py:125
-msgid "PM Rain/Snow Showers"
-msgstr ""
-
-#: plugins/weather.py:126 plugins/weather.py:137
-msgid "PM Rain/Snow/Wind"
-msgstr ""
-
-#: plugins/weather.py:127
-msgid "Rain/Snow Showers/Wind"
-msgstr ""
-
-#: plugins/weather.py:128
-msgid "Rain/Snow/Wind"
-msgstr ""
-
-#: plugins/weather.py:129
+#: plugins/weather.py:129 plugins/weather.py:132 plugins/weather.py:136
+#: plugins/weather.py:151 plugins/weather.py:154 plugins/weather.py:162
 msgid "Light Snow"
 msgstr ""
 
-#: plugins/weather.py:130
-msgid "PM Snow"
-msgstr ""
-
-#: plugins/weather.py:131
-msgid "Few Snow Showers/Wind"
-msgstr ""
-
-#: plugins/weather.py:132
-msgid "Light Snow/Wind"
-msgstr ""
-
-#: plugins/weather.py:133
+#: plugins/weather.py:133 plugins/weather.py:134 plugins/weather.py:145
+#: plugins/weather.py:161 plugins/weather.py:169
 msgid "Wintry Mix"
 msgstr ""
 
-#: plugins/weather.py:134
-msgid "AM Wintry Mix"
-msgstr ""
-
 #: plugins/weather.py:135 plugins/weather.py:172
-msgid "Hvy Rain/Freezing Rain"
+msgid "Hvy Rain"
 msgstr ""
 
-#: plugins/weather.py:136
-msgid "AM Light Snow"
-msgstr ""
-
-#: plugins/weather.py:138
-msgid "Rain/Freezing Rain"
+#: plugins/weather.py:135 plugins/weather.py:138 plugins/weather.py:172
+msgid "Freezing Rain"
 msgstr ""
 
 #: plugins/weather.py:139
-msgid "T-Storms/Wind"
+msgid "T-Storms"
 msgstr ""
 
 #: plugins/weather.py:140
 msgid "Sprinkles"
 msgstr ""
 
-#: plugins/weather.py:141
-msgid "AM Snow Showers"
+#: plugins/weather.py:147 plugins/weather.py:995 plugins/oneclick.py:589
+msgid "and"
 msgstr ""
 
-#: plugins/weather.py:142
-msgid "AM Clouds/PM Sun/Wind"
-msgstr ""
-
-#: plugins/weather.py:143
-msgid "AM Rain/Snow/Wind"
-msgstr ""
-
-#: plugins/weather.py:144
-msgid "Rain to Snow/Wind"
-msgstr ""
-
-#: plugins/weather.py:145
-msgid "Snow to Wintry Mix"
-msgstr ""
-
-#: plugins/weather.py:146
-msgid "PM Snow Showers/Wind"
-msgstr ""
-
-#: plugins/weather.py:147
-msgid "Snow and Ice to Rain"
-msgstr ""
-
-#: plugins/weather.py:148
+#: plugins/weather.py:148 plugins/weather.py:155
 msgid "Heavy Rain"
 msgstr ""
 
-#: plugins/weather.py:149
-msgid "AM Rain/Ice"
-msgstr ""
-
-#: plugins/weather.py:150
-msgid "AM Snow Showers/Wind"
-msgstr ""
-
-#: plugins/weather.py:151
-msgid "AM Light Snow/Wind"
-msgstr ""
-
-#: plugins/weather.py:152
-msgid "PM Light Rain/Wind"
-msgstr ""
-
 #: plugins/weather.py:153
-msgid "AM Light Wintry Mix"
-msgstr ""
-
-#: plugins/weather.py:154
-msgid "PM Light Snow/Wind"
-msgstr ""
-
-#: plugins/weather.py:155
-msgid "Heavy Rain/Wind"
+msgid "Light Wintry Mix"
 msgstr ""
 
 #: plugins/weather.py:156
-msgid "PM Snow Shower"
-msgstr ""
-
-#: plugins/weather.py:157
-msgid "Snow to Rain/Wind"
-msgstr ""
-
-#: plugins/weather.py:158
-msgid "PM Light Rain/Ice"
-msgstr ""
-
-#: plugins/weather.py:159
-msgid "AM Snow"
-msgstr ""
-
-#: plugins/weather.py:160
-msgid "Snow to Ice"
-msgstr ""
-
-#: plugins/weather.py:161
-msgid "Wintry Mix/Wind"
-msgstr ""
-
-#: plugins/weather.py:162
-msgid "PM Light Snow"
-msgstr ""
-
-#: plugins/weather.py:163
-msgid "AM Drizzle"
+msgid "Snow Shower"
 msgstr ""
 
 #: plugins/weather.py:164
-msgid "Strong Storms/Wind"
-msgstr ""
-
-#: plugins/weather.py:165
-msgid "PM Drizzle"
-msgstr ""
-
-#: plugins/weather.py:167
-msgid "AM Light Rain/Wind"
-msgstr ""
-
-#: plugins/weather.py:168
-msgid "AM Rain/Wind"
-msgstr ""
-
-#: plugins/weather.py:169
-msgid "Wintry Mix to Snow"
-msgstr ""
-
-#: plugins/weather.py:171
-msgid "AM Light Rain/Ice"
-msgstr ""
-
-#: plugins/weather.py:173
-msgid "Snow Showers/Windy"
+msgid "Strong Storms"
 msgstr ""
 
 #: plugins/weather.py:175
@@ -2199,12 +2015,8 @@ msgstr ""
 msgid "Haze"
 msgstr ""
 
-#: plugins/weather.py:181
+#: plugins/weather.py:181 plugins/weather.py:182
 msgid "Light Snow Shower"
-msgstr ""
-
-#: plugins/weather.py:182
-msgid "Light Snow Shower/ Windy"
 msgstr ""
 
 #: plugins/weather.py:183
@@ -2300,10 +2112,6 @@ msgstr ""
 msgid "Pressure"
 msgstr ""
 
-#: plugins/weather.py:925 plugins/oneclick.py:941
-msgid "Wind"
-msgstr ""
-
 #: plugins/weather.py:933 plugins/oneclick.py:943
 msgid "Wind Chill"
 msgstr ""
@@ -2316,55 +2124,46 @@ msgstr ""
 msgid "UV Index"
 msgstr ""
 
+#: plugins/weather.py:992
+#, python-format
+msgid "Today, a high of %s degrees"
+msgstr ""
+
 #: plugins/weather.py:993
-msgid "Today, a high of"
+#, python-format
+msgid "and a low of %s degrees."
 msgstr ""
 
 #: plugins/weather.py:994
-msgid "and a low of"
-msgstr ""
-
-#: plugins/weather.py:995
 msgid "Currently, there is a humidity of"
 msgstr ""
 
-#: plugins/weather.py:996 plugins/oneclick.py:589
-msgid "and"
-msgstr ""
-
 #: plugins/weather.py:998
-msgid "the winds are "
+msgid "the winds are calm"
 msgstr ""
 
 #: plugins/weather.py:1000
-msgid "calm"
+#, python-format
+msgid "the winds are coming in at %s from the %s"
 msgstr ""
 
-#: plugins/weather.py:1003
-msgid "coming in at"
-msgstr ""
-
-#: plugins/weather.py:1004
-msgid "from the"
-msgstr ""
-
-#: plugins/weather.py:1008
+#: plugins/weather.py:1006
 msgid "Visibility will be unlimited today"
 msgstr ""
 
-#: plugins/weather.py:1011
+#: plugins/weather.py:1009
 msgid "There will be a visibility of"
 msgstr ""
 
-#: plugins/weather.py:1043 plugins/oneclick.py:1044
+#: plugins/weather.py:1041 plugins/oneclick.py:1044
 msgid "LO"
 msgstr ""
 
-#: plugins/weather.py:1051 plugins/oneclick.py:1050
+#: plugins/weather.py:1049 plugins/oneclick.py:1050
 msgid "HI"
 msgstr ""
 
-#: plugins/weather.py:1065
+#: plugins/weather.py:1063
 msgid "Error encountered while trying to download Radar map"
 msgstr ""
 
@@ -2393,51 +2192,51 @@ msgstr ""
 msgid "Moving files..."
 msgstr ""
 
-#: plugins/shoppingcart.py:76
+#: plugins/shoppingcart.py:79
 msgid "Copying files..."
 msgstr ""
 
-#: plugins/shoppingcart.py:98
+#: plugins/shoppingcart.py:104
 msgid "Added to Cart"
 msgstr ""
 
-#: plugins/shoppingcart.py:111
+#: plugins/shoppingcart.py:117
 msgid "Removed from Cart"
 msgstr ""
 
-#: plugins/shoppingcart.py:119
+#: plugins/shoppingcart.py:125
 msgid "Removed Item from Cart"
 msgstr ""
 
-#: plugins/shoppingcart.py:122
+#: plugins/shoppingcart.py:128
 msgid "Added Item to Cart"
 msgstr ""
 
-#: plugins/shoppingcart.py:145
+#: plugins/shoppingcart.py:151
 msgid "Cart: Move Files Here"
 msgstr ""
 
-#: plugins/shoppingcart.py:146
+#: plugins/shoppingcart.py:152
 msgid "Cart: Copy Files Here"
 msgstr ""
 
-#: plugins/shoppingcart.py:150
+#: plugins/shoppingcart.py:156
 msgid "Add Directory to Cart"
 msgstr ""
 
-#: plugins/shoppingcart.py:152
+#: plugins/shoppingcart.py:158
 msgid "Remove Directory from Cart"
 msgstr ""
 
-#: plugins/shoppingcart.py:156
+#: plugins/shoppingcart.py:162
 msgid "Add to Cart"
 msgstr ""
 
-#: plugins/shoppingcart.py:158
+#: plugins/shoppingcart.py:164
 msgid "Remove from Cart"
 msgstr ""
 
-#: plugins/shoppingcart.py:161
+#: plugins/shoppingcart.py:167
 msgid "Delete Cart"
 msgstr ""
 
