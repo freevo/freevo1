@@ -288,7 +288,7 @@ msgstr ""
 #: www/htdocs/index.rpy:75
 #, fuzzy, python-format
 msgid "Now Recording %s."
-msgstr "Εμφάνιση του Προγράμματος Μαγνητοσκοπήσεων"
+msgstr "Εμφάνιση του Προγράμματος Μαγνητοσκοπήσεων %s"
 
 #: www/htdocs/index.rpy:81
 #, fuzzy
@@ -298,7 +298,7 @@ msgstr "%s προγραμματίστηκε για εγγραφή"
 #: www/htdocs/index.rpy:83
 #, fuzzy, python-format
 msgid "%i programs scheduled to record."
-msgstr "%s προγραμματίστηκε για εγγραφή"
+msgstr "%i προγραμματίστηκε για εγγραφή"
 
 #: www/htdocs/index.rpy:85 www/htdocs/index.rpy:87
 #, fuzzy
@@ -767,12 +767,12 @@ msgstr ""
 #: www/htdocs/library.rpy:203 www/htdocs/library.rpy:207
 #, fuzzy, python-format
 msgid "Delete %s."
-msgstr "Διαγραφή"
+msgstr "Διαγραφή %s"
 
 #: www/htdocs/library.rpy:210
 #, fuzzy, python-format
 msgid "Delete %s, failed."
-msgstr "Διαγραφή αρχείου"
+msgstr "Διαγραφή αρχείου %s"
 
 #: www/htdocs/library.rpy:219
 #, python-format
@@ -1772,12 +1772,12 @@ msgstr "Δεν βρέθηκαν Site επικεφαλίδων"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Το μέσο δεν βρέθηκε για το αρχείο \"%s\".\n"
+msgstr "Το μέσο δεν βρέθηκε για το αρχείο \"%s\".\n%s"
 
 #: video/videoitem.py:618
 #, fuzzy, python-format
 msgid "Play Title %d"
-msgstr "Παίξε τον τίτλο %s"
+msgstr "Παίξε τον τίτλο %d"
 
 #: video/videoitem.py:703 tv/program_display.py:640 tv/programitem.py:356
 #, fuzzy
@@ -2174,7 +2174,7 @@ msgstr "Άγνωστος Καλλιτέχνης"
 #: plugins/weather.py:682
 #, fuzzy, python-format
 msgid "%s (type: %s)"
-msgstr "Αναλογία: %s"
+msgstr "Αναλογία: %s (%s)"
 
 #: plugins/weather.py:768 share/skins/main/bluestar.fxd:13
 msgid "Weather"
@@ -2229,12 +2229,12 @@ msgstr "Δείκτης Υπ/δους"
 #: plugins/weather.py:992
 #, fuzzy, python-format
 msgid "Today, a high of %s degrees"
-msgstr "Σήμερα, μέγιστη θερμοκρασία"
+msgstr "Σήμερα, μέγιστη θερμοκρασία %s"
 
 #: plugins/weather.py:993
 #, fuzzy, python-format
 msgid "and a low of %s degrees."
-msgstr "και ελάχιστη"
+msgstr "και ελάχιστη %s"
 
 #: plugins/weather.py:994
 msgid "Currently, there is a humidity of"

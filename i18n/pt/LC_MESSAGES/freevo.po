@@ -1689,12 +1689,12 @@ msgstr "Nenhum site de notícias encontrado"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Mídia não encontrada para arquivo \"%s\".\n"
+msgstr "Mídia não encontrada para arquivo \"%s\".\n %s"
 
 #: video/videoitem.py:618
 #, fuzzy, python-format
 msgid "Play Title %d"
-msgstr "Assistir ao título %s"
+msgstr "Assistir ao título %d"
 
 #: video/videoitem.py:703 tv/program_display.py:640 tv/programitem.py:356
 msgid "No Information Available"
@@ -2939,7 +2939,7 @@ msgstr ""
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "Reproduzir"
+msgstr "Reproduzir %s"
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"

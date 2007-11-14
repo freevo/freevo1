@@ -1557,7 +1557,7 @@ msgstr "Kapitelmeny"
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Spela titel %d"
+msgstr "Spela titel %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1669,7 +1669,7 @@ msgstr ""
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Kan inte hitta media i fil \"%s\".\n"
+msgstr "Kan inte hitta media i fil \"%s\".\n%s"
 
 #: video/videoitem.py:618
 #, fuzzy, python-format
@@ -2896,7 +2896,7 @@ msgstr ""
 #: tv/plugins/dvbstreamer/live_pause.py:548
 #, fuzzy, python-format
 msgid "Tuning to %s"
-msgstr "Beskrivning:"
+msgstr "Beskrivning: %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:551
 #, python-format
@@ -2906,7 +2906,7 @@ msgstr ""
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "Spela VCD"
+msgstr "Spela VCD %s"
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"

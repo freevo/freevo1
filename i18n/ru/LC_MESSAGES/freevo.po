@@ -1560,7 +1560,7 @@ msgstr ""
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Игры %d"
+msgstr "Игры %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -2120,12 +2120,12 @@ msgstr "Индекс UV"
 #: plugins/weather.py:992
 #, fuzzy, python-format
 msgid "Today, a high of %s degrees"
-msgstr "Сегодня максимум"
+msgstr "Сегодня максимум %s"
 
 #: plugins/weather.py:993
 #, fuzzy, python-format
 msgid "and a low of %s degrees."
-msgstr "и минимум"
+msgstr "и минимум %s"
 
 #: plugins/weather.py:994
 #, fuzzy
@@ -2918,7 +2918,7 @@ msgstr ""
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "Список воспроизведения"
+msgstr "Список воспроизведения %s"
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"
@@ -3024,7 +3024,7 @@ msgstr ""
 msgid ""
 "Do you wish to delete the series\n"
 " '%s'?"
-msgstr "Вы хотите удалить<br> \"'%s\"?"
+msgstr "Вы хотите удалить\n \"%s\"?"
 
 #: tv/plugins/recordings_manager.py:742
 #, fuzzy

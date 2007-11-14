@@ -1586,7 +1586,7 @@ msgstr "Meniu capitole"
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Redă titlul %d"
+msgstr "Redă titlul %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1697,7 +1697,7 @@ msgstr "Niciun player nu a fost găsit pentru acest element"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Nu s-a găsit media pentru \"%s\".\n"
+msgstr "Nu s-a găsit media pentru \"%s\".\n%s"
 
 #: video/videoitem.py:618
 #, python-format
@@ -2150,12 +2150,12 @@ msgstr "Index UV"
 #: plugins/weather.py:992
 #, fuzzy, python-format
 msgid "Today, a high of %s degrees"
-msgstr "Astăzi, o maximă de"
+msgstr "Astăzi, o maximă de %s"
 
 #: plugins/weather.py:993
 #, fuzzy, python-format
 msgid "and a low of %s degrees."
-msgstr "şi un minim de"
+msgstr "şi un minim de %s"
 
 #: plugins/weather.py:994
 msgid "Currently, there is a humidity of"
@@ -2953,7 +2953,7 @@ msgstr "Stare inscripţionare: %s"
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "Redau"
+msgstr "Redau %s"
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"

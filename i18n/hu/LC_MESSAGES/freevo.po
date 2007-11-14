@@ -1588,7 +1588,7 @@ msgstr ""
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Lejátszási lista"
+msgstr "Lejátszási lista %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1736,7 +1736,7 @@ msgid "Year"
 msgstr "Év"
 
 #: plugins/idlebar/diskfree.py:103
-#, fuzzy, python-format
+#, python-format
 msgid "%iGB"
 msgstr "%i GB"
 
@@ -2080,7 +2080,7 @@ msgid "Fetching Weather for %s..."
 msgstr "Időjárásjelentés megszerzése a %s-ról..."
 
 #: plugins/weather.py:493 plugins/oneclick.py:438 plugins/oneclick.py:452
-#, fuzzy, python-format
+#, python-format
 msgid "Fetching Radar Map for %s..."
 msgstr "Időjárásjelentés megszerzése a %s-ról..."
 
@@ -2156,12 +2156,12 @@ msgstr "UV Index"
 #: plugins/weather.py:992
 #, fuzzy, python-format
 msgid "Today, a high of %s degrees"
-msgstr "Ma, a magasabban"
+msgstr "Ma, a magasabban %s"
 
 #: plugins/weather.py:993
 #, fuzzy, python-format
 msgid "and a low of %s degrees."
-msgstr "és alacsonyabban"
+msgstr "és alacsonyabban %s"
 
 #: plugins/weather.py:994
 msgid "Currently, there is a humidity of"
@@ -2695,12 +2695,12 @@ msgid "Bad Path"
 msgstr ""
 
 #: plugins/df.py:73
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i GB total (%i%% free)"
 msgstr "%i szabad a teljes %i GB kapacitásból (%i%% szabad)"
 
 #: plugins/df.py:75
-#, fuzzy, python-format
+#, python-format
 msgid "%i free of %i MB total (%i%% free)"
 msgstr "%i szabad a teljes %i MB kapacitásból (%i%% szabad)"
 
@@ -3879,7 +3879,7 @@ msgstr "Folytatás"
 #: main.py:435
 #, fuzzy, python-format
 msgid "Starting Freevo-%s, please wait ..."
-msgstr "A Freevo indul, kérlek várj..."
+msgstr "A Freevo indul-%s, kérlek várj..."
 
 #: main.py:444
 msgid "Reading cache, please wait ..."

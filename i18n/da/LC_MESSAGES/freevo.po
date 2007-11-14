@@ -1706,12 +1706,12 @@ msgstr "Ingen afspiller fundet for dette element"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Mediet for \"%s\" blev ikke fundet.\n"
+msgstr ""
 
 #: video/videoitem.py:618
 #, fuzzy, python-format
 msgid "Play Title %d"
-msgstr "Afspil titel %s"
+msgstr "Afspil titel %d"
 
 #: video/videoitem.py:703 tv/program_display.py:640 tv/programitem.py:356
 msgid "No Information Available"
@@ -2962,7 +2962,7 @@ msgstr ""
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "Afspil"
+msgstr ""
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"

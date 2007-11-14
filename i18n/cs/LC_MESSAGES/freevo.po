@@ -1588,7 +1588,7 @@ msgstr "Kapitoly"
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Pøehrát titul %d"
+msgstr "Pøehrát titul %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1701,7 +1701,7 @@ msgstr "Pro tuto polo¾ku nebyl nalezen ¾ádný pøehrávaè"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Nenalezeno médium \"%s\".\n"
+msgstr ""
 
 #: video/videoitem.py:618
 #, fuzzy, python-format
@@ -2156,12 +2156,12 @@ msgstr "UV index"
 #: plugins/weather.py:992
 #, fuzzy, python-format
 msgid "Today, a high of %s degrees"
-msgstr "Dnes, maximálnì"
+msgstr ""
 
 #: plugins/weather.py:993
 #, fuzzy, python-format
 msgid "and a low of %s degrees."
-msgstr "a minimálnì"
+msgstr ""
 
 #: plugins/weather.py:994
 #, fuzzy
@@ -2970,7 +2970,7 @@ msgstr ""
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "Pøehrát"
+msgstr ""
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"

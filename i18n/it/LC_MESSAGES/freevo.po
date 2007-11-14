@@ -1589,7 +1589,7 @@ msgstr "Menu Capitoli"
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Riproduci Titolo %d"
+msgstr "Riproduci Titolo %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1701,7 +1701,7 @@ msgstr "Nessun lettore per questo elemento"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Media non trovato per \"%s\".\n"
+msgstr "Media non trovato per \"%s\".\n %s"
 
 #: video/videoitem.py:618
 #, python-format
@@ -2956,7 +2956,7 @@ msgstr ""
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "Riproduci"
+msgstr "Riproduci %s"
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"

@@ -1576,7 +1576,7 @@ msgstr "Hoofdstukken menu"
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Speel titel %d af"
+msgstr "Speel titel \"%s\" af"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1687,7 +1687,7 @@ msgstr "Geen afspeler gevonden voor dit element"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Media niet gevonden voor \"%s\".\n"
+msgstr "Media niet gevonden voor \"%s\".\n %s"
 
 #: video/videoitem.py:618
 #, python-format
@@ -2135,12 +2135,12 @@ msgstr "UV Index"
 #: plugins/weather.py:992
 #, fuzzy, python-format
 msgid "Today, a high of %s degrees"
-msgstr "Vandaag een maximum van"
+msgstr "Vandaag een maximum van %s"
 
 #: plugins/weather.py:993
 #, fuzzy, python-format
 msgid "and a low of %s degrees."
-msgstr "en een minimum van"
+msgstr "en een minimum van %s"
 
 #: plugins/weather.py:994
 msgid "Currently, there is a humidity of"

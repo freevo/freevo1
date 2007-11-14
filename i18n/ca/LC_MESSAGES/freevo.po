@@ -1595,7 +1595,7 @@ msgstr "Menú de Capítols"
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Reprodueix el Títol %d"
+msgstr "Reprodueix el Títol %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1711,7 +1711,7 @@ msgstr "No hi ha cap reproductor per aquest element"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "No s'ha trobat cap mitjà per \"%s\".\n"
+msgstr ""
 
 #: video/videoitem.py:618
 #, python-format
@@ -2166,12 +2166,12 @@ msgstr "Índex de UV"
 #: plugins/weather.py:992
 #, fuzzy, python-format
 msgid "Today, a high of %s degrees"
-msgstr "Avui, una màxima de"
+msgstr ""
 
 #: plugins/weather.py:993
 #, fuzzy, python-format
 msgid "and a low of %s degrees."
-msgstr "i una mínima de"
+msgstr ""
 
 #: plugins/weather.py:994
 msgid "Currently, there is a humidity of"
@@ -2985,7 +2985,7 @@ msgstr "Estat de la gravació: %s"
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "Reproduïnt"
+msgstr ""
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"

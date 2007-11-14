@@ -1599,7 +1599,7 @@ msgstr "Menu de Capítulos"
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Assistir ao título %d"
+msgstr "Assistir ao título %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1712,7 +1712,7 @@ msgstr "Nenhum tocador foi encontrado para este ítem"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Mídia não encontrada para \"%s\".\n"
+msgstr "Mídia não encontrada para \"%s\".\n %s"
 
 #: video/videoitem.py:618
 #, fuzzy, python-format
@@ -2969,7 +2969,7 @@ msgstr ""
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "Reproduzir"
+msgstr "Reproduzir %s"
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"

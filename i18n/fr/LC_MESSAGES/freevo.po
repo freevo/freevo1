@@ -1577,7 +1577,7 @@ msgstr "Menu Chapitres"
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Lire le Titre %d"
+msgstr "Lire le Titre %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1688,7 +1688,7 @@ msgstr "Pas de lecteur pour cet élement"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "Aucun média trouvé pour \"%s\".\n"
+msgstr "Aucun média trouvé pour \"%s\".\n %s"
 
 #: video/videoitem.py:618
 #, python-format
@@ -2141,12 +2141,12 @@ msgstr "Index UV"
 #: plugins/weather.py:992
 #, fuzzy, python-format
 msgid "Today, a high of %s degrees"
-msgstr "Aujourd'hui, Température Maxi :"
+msgstr "Aujourd'hui, Température Maxi : %s"
 
 #: plugins/weather.py:993
 #, fuzzy, python-format
 msgid "and a low of %s degrees."
-msgstr "et température Mini :"
+msgstr "et température Mini : %s"
 
 #: plugins/weather.py:994
 msgid "Currently, there is a humidity of"

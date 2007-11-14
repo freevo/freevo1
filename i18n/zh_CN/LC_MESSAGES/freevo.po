@@ -1576,7 +1576,7 @@ msgstr "章节菜单"
 #: video/configure.py:200
 #, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "播放标题 %d"
+msgstr "播放标题 %s"
 
 #: video/configure.py:203
 #, fuzzy
@@ -1688,7 +1688,7 @@ msgstr "没有发现此项的对应播放器"
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
-msgstr "没有发现 \"%s\" 上的媒体文件.\n"
+msgstr "没有发现 \"%s\" 上的媒体文件.\n%s"
 
 #: video/videoitem.py:618
 #, python-format
@@ -2937,7 +2937,7 @@ msgstr "刻录状态：%s"
 #: tv/plugins/dvbstreamer/live_pause.py:555
 #, fuzzy, python-format
 msgid "Playing %s"
-msgstr "播放中..."
+msgstr "播放中... %s"
 
 #: tv/plugins/recordings_manager.py:71
 msgid "Date then Name"
