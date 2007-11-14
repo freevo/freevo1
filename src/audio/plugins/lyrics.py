@@ -33,8 +33,11 @@ import plugin, menu, rc
 import urllib, urllib2
 
 from gui.PopupBox import PopupBox
+from gui.AlertBox import AlertBox
 from event import *
 from skin.widgets import ScrollableTextScreen
+
+from BeautifulSoup import BeautifulStoneSoup
 
 LEOLYRICS_AUTH = "Freevo"
 
@@ -51,66 +54,104 @@ class PluginInterface(plugin.ItemPlugin):
     def __init__(self):
         plugin.ItemPlugin.__init__(self)
 
-    def search_lyrics(self, arg=None, menuw=None):
-        box = PopupBox(text=_('Searching lyrics...'))
-        box.show()
-        lyrics = self.fetch_lyric_leoslyrics()
-
-        if lyrics != False:
-            box.destroy()
-            ShowDetails(menuw, self.item, lyrics)
-        else:
-            box.destroy()
-            box = PopupBox(text=_('Lyrics not found, sorry...'))
-            box.show()
-            time.sleep(3)
-            box.destroy()
-        return
 
     def actions(self, item):
         self.item = item
 
         if item.type == 'audio':
             return [ (self.search_lyrics, _("Show lyrics"), self) ]
-
         return []
 
-    def fetch_lyric_leoslyrics(self):
+
+    def search_lyrics(self, arg=None, menuw=None):
+        box = PopupBox(text=_('Searching lyrics...'))
+        box.show()
+
         result_code = -1
         try:
             url = "http://api.leoslyrics.com/api_search.php?auth=%s&artist=%s&songtitle=%s"%(
                 LEOLYRICS_AUTH,
                 urllib.quote(self.item.info['artist'].encode('utf-8')),
                 urllib.quote(self.item.info['title'].encode('utf-8')))
+            _debug_(url,2)
             info = urllib2.urlopen(url).read()
             result_code = re.search('.+<response code="(\d)">.+',info).group(1)
         except:
             print "Error searching for artist/title."
-            return False
+
+        box.destroy()
 
         if result_code == '0': #ok
             #get the hid
             filter_info = re.search('.+hid="(.+)" exactMatch="true".+', info)
             if filter_info:
-                hid = '"' + filter_info.group(1) + '"'
-
-            #fetch the new url
-            try:
-                url2 =  "http://api.leoslyrics.com/api_lyrics.php?auth=%s&hid=%s"%(
-                        LEOLYRICS_AUTH,
-                        urllib.quote(hid.encode('utf-8')))
-                lyrics_raw = urllib2.urlopen(url2).read()
-                reg_expr = re.compile('.+<text>(.+)</text>.+', re.DOTALL|re.MULTILINE)
-                self.lyrics = re.search(reg_expr, lyrics_raw).group(1)
-                self.lyrics = self.lyrics.replace("&#xD;", os.linesep)
-                self.lyrics = self.lyrics.replace('\r\n','')
-                self.lyrics = self.lyrics.replace('&amp;','&')
-                return Unicode(self.lyrics, encoding='utf-8')
-            except:
-                print "Error fetching lyrics."
-                return False
+                # there is a exact match
+                self.fetch_lyric(arg=filter_info.group(1), menuw=menuw)
+            else:
+                # open a submenu with choices
+                self.show_choices(menuw=menuw, info= info)
         else:
-            return False
+            box = PopupBox(text=_('Lyrics not found, sorry...'))
+            box.show()
+            time.sleep(2)
+            box.destroy()
+
+
+
+    def show_choices(self, menuw, info):
+        items = []
+        soup = BeautifulStoneSoup(info,selfClosingTags=['feat'])
+        results = soup.findAll('result')
+        for result in results[:20]:
+            # for performance reasons show the first possibilities only,
+            # the more sensible hits are at the beginning of the list
+            hid = result['hid']
+            title = result.titleTag.string.replace('&amp;', '&')
+            artist = result.artistTag.nameTag.string.replace('&amp;','&')
+            items.append(menu.MenuItem('%s - %s' % (title, artist),
+                         action=self.fetch_lyric, arg=hid))
+        if len(items) > 0:
+            msgtext = _('No exact match. ')
+            msgtext+= _('Here are some sugestions.')
+            box = PopupBox(text = msgtext)
+            box.show()
+            time.sleep(2)
+            box.destroy()
+            choices_menu = menu.Menu(_('Choices'), items)
+            menuw.pushmenu(choices_menu)
+        else:
+            box = PopupBox(text= _('Lyrics not found, sorry...'))
+            box.show()
+            time.sleep(3)
+            box.destroy()
+
+
+
+    def fetch_lyric(self, arg=None, menuw=None):
+        #fetch the new url
+        try:
+            hid = '"' + arg + '"'
+            url2 =  "http://api.leoslyrics.com/api_lyrics.php?auth=%s&hid=%s"%(
+                    LEOLYRICS_AUTH,
+                    urllib.quote(hid.encode('utf-8')))
+            lyrics_raw = urllib2.urlopen(url2).read()
+            reg_expr = re.compile('.+<text>(.+)</text>.+', re.DOTALL|re.MULTILINE)
+            lyrics = re.search(reg_expr, lyrics_raw).group(1)
+            lyrics = lyrics.replace("&#xD;", os.linesep)
+            lyrics = lyrics.replace('\r\n','')
+            lyrics = lyrics.replace('&amp;','&')
+            lyrics = Unicode(lyrics, encoding='utf-8')
+        except:
+            print "Error fetching lyrics."
+
+        if lyrics:
+            ShowDetails(menuw, self.item, lyrics)
+        else:
+            box = PopupBox(text=_('Lyrics not found, sorry...'))
+            box.show()
+            time.sleep(2)
+            box.destroy()
+
 
 ########################
 # Show Text
