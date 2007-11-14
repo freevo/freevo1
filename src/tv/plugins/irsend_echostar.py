@@ -42,7 +42,7 @@ LIRC_SET_SEND_DUTY_CYCLE = util.ioctl.IOW('i', 0x00000015, 'I')
 
 class PluginInterface(plugin.Plugin):
 
-    """ 
+    """
     Send IR commands to an echostar receiver used by Dish and ExpressVu sattelite
     service. Tested using a homebrew infrared transmitter.
 

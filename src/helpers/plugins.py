@@ -26,7 +26,7 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc., 
+# with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
@@ -70,7 +70,7 @@ def find_plugin_interface(data):
 def parse_plugins2():
     """
     The idea is to extract the PluginInterface class or classes from the source module
-    and then to import it and extract the __doc__ string from the Class and the 
+    and then to import it and extract the __doc__ string from the Class and the
     config() from the class instance.
 
     This does't quite work, neither does import PluginInterface from <m> as <a>
@@ -334,7 +334,7 @@ def wiki_word(s, mode):
             word = '!'+word
         words.append(word)
     return '.'.join(words)
-        
+
 
 def wiki_info(name, file, type, status, desc, config, mode, names=[]):
     """
@@ -343,7 +343,7 @@ def wiki_info(name, file, type, status, desc, config, mode, names=[]):
     #print '%s f=%r t=%s s=%r d=%r c=%r' % (name, file, type, status, desc, config_list)
     ret = ""
     ret += "-----\n"
-    ret += "== %s ==\n" % (wiki_word(name, mode)) 
+    ret += "== %s ==\n" % (wiki_word(name, mode))
     ret += "----\n"
     ret += "'''File: %s'''\n" % (file)
     ret += "\n"

@@ -112,7 +112,7 @@ class RecordClient:
         """ Find out if a player is running, using a callback function """
         _debug_('isPlayerRunning(callback=%r)' % (callback), 2)
         return self.server_rpc('isPlayerRunning', callback)
-        
+
 
 
 #

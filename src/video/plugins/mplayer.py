@@ -102,7 +102,7 @@ class MPlayer:
             return 2
         # moved from videoitem to here (related to "Podcast video viewer plugin")
         if item.mode in ('http') and not item.filename and not item.media:
-            _debug_('%r good' % (item.url))    
+            _debug_('%r good' % (item.url))
             return 2
         if item.mimetype in config.VIDEO_MPLAYER_SUFFIX:
             _debug_('%r good' % (item.url))

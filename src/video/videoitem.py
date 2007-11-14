@@ -333,7 +333,7 @@ class VideoItem(Item):
                           (self.play, _('Play default track')) ]
         else:
             items = [ (self.play, _('Play')) ]
-        
+
         items.append((self.show_details, _('Full description')))
 
         if self.network_play:
@@ -448,16 +448,16 @@ class VideoItem(Item):
         """
         play the item.
         """
-                 
+
         if not self.player or self.player_rating < 10:
             AlertBox(text=_('No player for this item found')).show()
-            return  
-              
+            return
+
 
         # execute commands if defined
         if config.VIDEO_PRE_PLAY:
             os.system(config.VIDEO_PRE_PLAY)
-        
+
         if self.parent:
             self.parent.current_item = self
 
@@ -523,7 +523,7 @@ class VideoItem(Item):
             elif self.media:
                 util.mount(os.path.dirname(self.filename))
 
-        # dvd and vcd 
+        # dvd and vcd
         elif self.mode in ('dvd', 'vcd') and not self.filename and not self.media:
             media = util.check_media(self.media_id)
             if media:
@@ -533,8 +533,8 @@ class VideoItem(Item):
                 ConfirmBox(text=(_('No media found for "%s".\nPlease insert the media "%s".')) % \
                     (self.media_id, self.url), handler=self.play).show()
                 return
-             
-        
+
+
         mplayer_options = self.mplayer_options.split(' ')
         if not mplayer_options:
             mplayer_options = []

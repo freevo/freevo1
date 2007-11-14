@@ -8,12 +8,12 @@
 #
 # Only supports DVBStreamer instance on localhost.
 #
-# Todo:        
+# Todo:
 #
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -67,15 +67,15 @@ class PluginInterface(plugin.Plugin):
         # Create DVBStreamer objects
         username = 'dvbstreamer'
         password = 'control'
-        
+
         try:
             username = config.DVBSTREAMER_USERNAME
             password = config.DVBSTREAMER_PASSWORD
         except:
             pass
- 
+
         manager = DVBStreamerManager(username, password)
-        
+
         # register the DVBStreamer record
         plugin.register(Recorder(manager), plugin.RECORD)
 
@@ -84,8 +84,8 @@ class PluginInterface(plugin.Plugin):
                 ('DVBSTREAMER_USERNAME', 'dvbstreamer', 'Username to use when connecting to a DVBStreamer server'),
                 ('DVBSTREAMER_PASSWORD', 'control', 'Password to use when connecting to a DVBStreamer server')
                 ]
-    
-    
+
+
 ###############################################################################
 # Recorder
 ###############################################################################
@@ -94,7 +94,7 @@ class Recorder:
     """
     Class to record to file using dvbstreamer.
     """
-    
+
     def __init__(self, manager):
         """
         Initialise the recorder passing in the DVBStreamerControl object to use to
@@ -109,7 +109,7 @@ class Recorder:
         self.thread.setDaemon(1)
         self.thread.mode = 'idle'
         self.thread.start()
-        
+
 
     def Record(self, rec_prog):
         """
@@ -118,7 +118,7 @@ class Recorder:
         self.thread.prog = rec_prog
         self.thread.mode = 'record'
         self.thread.mode_flag.set()
-        
+
     def Stop(self):
         """
         Stop recording.
@@ -131,7 +131,7 @@ class Record_Thread(threading.Thread):
     """
     Thread class that actually does the recording.
     """
-    
+
     def __init__(self, manager):
         """
         Initialise the recording thread passing in the DVBStreamerControl object to use to
@@ -155,11 +155,11 @@ class Record_Thread(threading.Thread):
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
-                
+
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
                 if DEBUG: print('Record_Thread::run: started recording')
-                
+
                 prog = self.prog
                 filename = tv_util.getProgFilename(prog)
                 vg = self.fc.getVideoGroup(prog.channel_id, False)
@@ -168,14 +168,14 @@ class Record_Thread(threading.Thread):
                 # Select the channel and start streaming to the file.
                 self.manager.select(adapter, prog.tunerid)
                 self.manager.enable_file_output(adapter,filename)
-                
+
                 while (self.mode == 'record') and (seconds > 0):
                     seconds -= 0.5
                     time.sleep(0.5)
-                    
+
                 # Close the file
                 self.manager.disable_output(adapter)
-                
+
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))
                 if DEBUG: print('Record_Thread::run: finished recording')
 

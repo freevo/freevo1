@@ -6,12 +6,12 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -35,29 +35,29 @@ class DVBStreamerManager:
     """
     Class to control dvbstreamer servers.
     """
-    
+
     def __init__(self, username, password):
         self.username = username
         self.password = password
         self.destip   = 'localhost'
         self.destport = 1234
         self.controllers = {}
-    
 
-    def get_udp_mrl(self): 
+
+    def get_udp_mrl(self):
         """
         Get the mrl to use for dvbstreamer and xine.
         """
         return 'udp://%s:%d' %(self.destip, self.destport)
 
-    
+
     def get_file_mrl(self, filename):
         """
         Get the dvbstreamer mrl to use for saving to a file.
-        """ 
+        """
         return 'file://%s' % filename
-    
-    
+
+
     def enable_udp_output(self, adapter):
         """
         Enable UDP output to localhost:1234
@@ -105,4 +105,3 @@ class DVBStreamerManager:
         controller = comms.Controller('localhost', adapter, self.username, self.password)
         self.controllers[adapter] = controller
         return controller
-    

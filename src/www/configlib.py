@@ -112,8 +112,8 @@ def ErrorMessage (setting_name, control_name,  ctrl_value):
     chkline = setting_name + ' = ' + ctrl_value
     lcheck = '<span class="checkOK">OK</span>\n'
     if setting_name == 'FILE':
-            if not os.path.exists(ctrl_value):
-                lcheck = '<span class = "checkWarning">Missing File</span>\n'
+        if not os.path.exists(ctrl_value):
+            lcheck = '<span class = "checkWarning">Missing File</span>\n'
     else:
         if not CheckSyntax(chkline):
             lcheck = '<span class="checkError">Error</span>\n'
@@ -126,7 +126,7 @@ def ErrorMessage (setting_name, control_name,  ctrl_value):
     lcheck =  '<span id="%s_check" class="VarCheck">%s</span>\n' % (control_name, lcheck)
     return lcheck
 
-    
+
 def isNumber(s):
     '''
     '''
@@ -194,8 +194,8 @@ def GetConfigFileName(config_file_name):
     config_file_name = '/home/dlocke/.freevo/local_conf.py'
     print config_file_name
     return config_file_name
-    
-    
+
+
 def CheckSyntax(fvsetting):
     '''
     '''
@@ -265,7 +265,7 @@ def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
     ctrl += '</select>\n'
     return ctrl
 
-    
+
 def GetConfigSetting(cfile, vname):
     '''
     '''
@@ -316,9 +316,9 @@ def Server_Running(server):
     freevo_path = os.environ['FREEVO_PYTHON']
     proc = [ os.path.join(freevo_path, 'helpers', server + '.py') ]
     print "PROC %r" % proc
-    
+
     if getpid(server, python + proc)[1]:
-       return True
+        return True
     return False
 
 
@@ -333,8 +333,8 @@ def CreateNewLineControl():
     ctrl += '<br><br>\n'
     ctrl += '</div>'
     return ctrl
-    
-    
+
+
 def Display_Server(server):
     dserver = '<div id="%s_config_line">' % server
     dserver += '<li class="ServerList">'
@@ -351,13 +351,13 @@ def Display_Server(server):
         btnlabel = 'Start'
         btncmd = 'start'
 
-    dserver += '<span class="PluginStatus" id="%s_status">' % server 
+    dserver += '<span class="PluginStatus" id="%s_status">' % server
     dserver += '<a class="%s" >%s</a>' % ( sstatus, sclass )
     dserver += '</span>\n'
     js_onclick = 'onclick=ServerUpdate("%s","%s","%s")' % ( server, btncmd,  server )
     dserver += '<a class= "btnServer" %s >%s</a>\n'  % ( js_onclick, btnlabel )
-        
-    dserver += server 
+
+    dserver += server
     dserver += '</div>\n'
     dserver += '</li>\n'
 
@@ -374,7 +374,7 @@ def Display_Helper(helper):
     if Server_Running(helper):
         dhelper += '<a class="PluginStatusDeactive" >Running</a>'
     else:
-        js_onclick = 'onclick=StartHelper("%s","%s")' % ( helper, helper ) 
+        js_onclick = 'onclick=StartHelper("%s","%s")' % ( helper, helper )
         dhelper += '<a class="PluginStatusActive" %s>Start</a>' % js_onclick
 
     dhelper += '</span>\n'
@@ -383,7 +383,3 @@ def Display_Helper(helper):
     dhelper += '</li>'
 
     return dhelper
-
-
-
-

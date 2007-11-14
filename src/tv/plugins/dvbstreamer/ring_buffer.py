@@ -46,10 +46,10 @@ class RingBuffer:
         self.readers = []
         self.rwlock = rwlock.RWLock()
         self.write_event = threading.Condition()
-        
+
         self.size = size
         self.reset()
-        
+
         if path is None:
             self.buffer_fd = os.tmpfile()
         else:
@@ -73,7 +73,7 @@ class RingBuffer:
         """
         self.buffer.close()
         self.buffer_fd.close()
-        
+
 
     def reset(self):
         """
@@ -147,7 +147,7 @@ class RingBuffer:
         else:
             for reader in self.readers:
                 reader.at_end = False
-            
+
         self.rwlock.release()
         self.__notify_data__()
 
@@ -174,7 +174,7 @@ class RingBuffer:
                 if to_end_len >= max:
                     result = self.buffer[pos:(pos + max)]
                 else:
-                    from_start_len = max - to_end_len                    
+                    from_start_len = max - to_end_len
                     if from_start_len > self.end:
                         from_start_len = self.end
                     result = self.buffer[pos:]
@@ -228,8 +228,8 @@ class Reader:
         Close this reader and break its connection to the ring buffer.
         """
         self.ringbuffer.remove_reader(self)
-    
-    
+
+
     def read(self, max):
         """
         Read up to max bytes from the ring buffer.

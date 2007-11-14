@@ -69,7 +69,7 @@ def GetLogFiles(logfile_directory):
     for l in filelist:
         if not l.endswith('.log'):
             filelist.remove(l)
-            
+
     filelist.sort()
     return filelist
 
@@ -113,7 +113,7 @@ class ViewLogFileResource(FreevoResource):
         else:
             config.VIEWLOG_ROWS = rows
         rows = int(rows)
-        
+
         delayamount = fv.formValue(form, 'delayamount')
         print "Delay Amount = %r " % delayamount
         if not delayamount:
@@ -123,7 +123,7 @@ class ViewLogFileResource(FreevoResource):
                 delayamount = 9999
         else:
             config.VIEWLOG_DELAY = delayamount
-        
+
         if update:
             fv.res = ReadFile(full_file_name, rows)
             return String(fv.res)

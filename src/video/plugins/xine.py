@@ -55,7 +55,7 @@ class PluginInterface(plugin.Plugin):
     Xine plugin for the video player.
 
     Activate this plugin by putting in your local_conf.py:
-    | plugin.activate('video.xine') 
+    | plugin.activate('video.xine')
 
     Than xine will be used for DVDs when you SELECT the item.  When
     you select a title directly in the menu, this plugin won't be used and the

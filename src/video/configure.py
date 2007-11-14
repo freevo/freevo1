@@ -199,7 +199,7 @@ def player_selection_menu(arg=None, menuw=None):
     for player in item.possible_player:
         menu_items += [ menu.MenuItem(_('Play with "%s"') % (player[1].name),
                                       player_selection, (arg, player))]
-   
+
     moviemenu = menu.Menu(_('Player Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
 

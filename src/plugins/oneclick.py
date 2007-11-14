@@ -1068,8 +1068,8 @@ class WeatherBaseScreen(skin.Area):
                 self.key_font, self.content, x=x_start, y=y_start,
                 width=self.content.width, height=-1, align_h='left')
         else:
-            self.draw_image(self.parent.weather.mapFile, 
-                (self.content.x-self.xscale(2), self.content.y+self.xscale(10), 
+            self.draw_image(self.parent.weather.mapFile,
+                (self.content.x-self.xscale(2), self.content.y+self.xscale(10),
                 self.content.width, self.content.height))
 
     def update_content(self):

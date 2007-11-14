@@ -43,7 +43,7 @@ import _strptime as strptime
 
 import tv.xmltv as xmltv
 
-# The EPG data types. They need to be in an external module in order for pickling 
+# The EPG data types. They need to be in an external module in order for pickling
 # to work properly when run from inside this module and from the tv.py module.
 import tv.epg_types as epg_types
 

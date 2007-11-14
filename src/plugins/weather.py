@@ -999,7 +999,7 @@ class WeatherBaseScreen(skin.Area):
         else:
             text =_('the winds are coming in at %s from the %s') \
             %(self.parent.weather.getWind(),self.parent.weather.windDir)
-                   
+
         lines.append(text)
 
         if float(self.parent.weather.visibility) == 999.00:

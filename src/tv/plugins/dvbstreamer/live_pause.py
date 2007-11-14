@@ -10,12 +10,12 @@
 # the PAT properly.
 # Only supports DVBStreamer instance on localhost.
 #
-# Todo:        
+# Todo:
 #
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -141,7 +141,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         self.xine.shutdown()
 
-    
+
     def eventhandler(self, event=None, menuw=None):
         if event == PLAY_START and self.xine.state == STATE_IDLE:
             print 'Disabling buffering!'
@@ -193,7 +193,7 @@ class Xine:
         # make it possible to seek quickly.
         self.command = [ '--prio=%s' % config.MPLAYER_NICE ] + \
                        config.XINE_COMMAND.split(' ') + \
-                       [ '--stdctl', 
+                       [ '--stdctl',
                          '-V', config.XINE_VO_DEV,
                          '-A', config.XINE_AO_DEV ] + \
                        config.XINE_ARGS_DEF.split(' ') + \
@@ -223,7 +223,7 @@ class Xine:
         same_channel = self.last_channel == tuner_channel
 
         # If it's the same channel as last time and we have come back to it after
-        # more than 2 minutes start at the end of the buffer, otherwise jump 
+        # more than 2 minutes start at the end of the buffer, otherwise jump
         # straight back in where we left off.
         if same_channel:
             if (time.time() - self.stop_time) > 120.0:
@@ -237,7 +237,7 @@ class Xine:
         if start_at_end:
             self.start_slave_server_at_end = True
             if same_channel:
-                
+
                 self.__change_state(STATE_PLAYING)
         else:
             self.__change_state(STATE_PLAYING)
@@ -269,7 +269,7 @@ class Xine:
             except:
                 _debug_('Failed to disable output! ' + traceback.format_exc())
             self.adapter_in_use = -1
-    
+
     def pause(self):
         """
         Pause Playback.
@@ -304,7 +304,7 @@ class Xine:
 
     def change_channel(self, channel):
         """
-        Select the correct dvbstreamer instance, change the channel 
+        Select the correct dvbstreamer instance, change the channel
         and set the primary mrl.
         """
 
@@ -320,7 +320,7 @@ class Xine:
             except:
                 _debug_('Failed to disable output! ' + traceback.format_exc())
 
-        # We are tuning to a different channel so stop receiving packets and  
+        # We are tuning to a different channel so stop receiving packets and
         # reset the ring buffer
         self.udp_receiver.pause = True
         self.buffer.rwlock.acquire_write()
@@ -396,7 +396,7 @@ class Xine:
         """
         if event == EVENT_DATA_ACQUIRED:
             self.wait_for_data_count -= 1
-            self.__draw_state_screen()            
+            self.__draw_state_screen()
             if self.wait_for_data_count <= 0:
                 self.__change_state(STATE_PLAYING)
             return True
@@ -450,7 +450,7 @@ class Xine:
             return True
         if event == OSD_MESSAGE:
             self.__osd_write(event.arg)
-            return True 
+            return True
         if event == TOGGLE_OSD:
             # Write percent through ringbuffer to OSD
             channel = self.__get_display_channel()
@@ -499,7 +499,7 @@ class Xine:
     def __change_state(self, new_state):
         """
         Internal function to move to a new state.
-        If new_state is different to the current state, set self.state to 
+        If new_state is different to the current state, set self.state to
         new_state and perform any state initialisation for the new state.
         """
         if self.state == new_state:
@@ -534,7 +534,7 @@ class Xine:
     def __osd_write(self, text):
         if self.app:
             self.app.write('OSDWriteText$%s\n' % text)
-    
+
     def __draw_state_screen(self):
         osd_obj = osd.get_singleton()
         percent = 0.0
@@ -543,7 +543,7 @@ class Xine:
 
         if self.state == STATE_IDLE:
             state_string = None
-            
+
         elif self.state == STATE_TUNING:
             state_string = _('Tuning to %s' % self.last_channel)
 
@@ -554,13 +554,13 @@ class Xine:
         elif self.state == STATE_PLAYING:
             state_string = _('Playing %s' % self.last_channel)
             percent = 1.0
-            
+
         osd_obj.clearscreen(color=osd_obj.COL_BLACK)
         if state_string:
             y = (config.CONF.height / 2) - config.OSD_DEFAULT_FONTSIZE
             h = -1
             font = osd_obj.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE)
-            osd_obj.drawstringframed(state_string, 0, y, config.CONF.width, h, font, 
+            osd_obj.drawstringframed(state_string, 0, y, config.CONF.width, h, font,
                 fgcolor=osd_obj.COL_ORANGE, align_h='center')
             x = config.CONF.width / 4
             w = x * 2
@@ -571,15 +571,15 @@ class Xine:
             osd_obj.drawbox(x,y,x + w, y +h , color=osd_obj.COL_ORANGE, fill=1)
 
         osd_obj.update()
-     
-    
+
+
     def __get_display_channel(self):
         channel = self.last_channel
-            
+
         for tv_channel_id, tv_display_name, tv_tuner_id in config.TV_CHANNELS:
             if self.last_channel == tv_tuner_id:
                 channel = tv_display_name
-        
+
         return channel
 
 ###############################################################################
@@ -588,7 +588,7 @@ class Xine:
 
 class UDPReceiver:
     """
-    Class to receive UDP packets sent by DVBStreamer and write them into 
+    Class to receive UDP packets sent by DVBStreamer and write them into
     a ring buffer.
     """
 
@@ -653,7 +653,7 @@ class UDPReceiver:
 
                     if not self.data_received:
                         # We've not had any data yet on the current channel so
-                        # clear some state and send an event to say the data 
+                        # clear some state and send an event to say the data
                         # has started.
 
                         self.data_received = True
@@ -755,23 +755,23 @@ class SlaveServer:
         Thread method to listen for connection from xine slave:// and serve data from the ring buffer.
         """
         reader = ring_buffer.Reader(self.buffer)
-        reader.overtaken = self.overtaken    
+        reader.overtaken = self.overtaken
         self.reader = reader
 
         if self.reader_at_end:
-                reader.pos = self.buffer.end
-                reader.seek( - self.end_offset)
+            reader.pos = self.buffer.end
+            reader.seek( - self.end_offset)
 
         while not self.quit:
             conn, addr = self.socket.accept()
             self.connection = conn
-            
+
             if self.reader_at_end:
                 reader.pos = self.buffer.end
                 reader.seek( - self.end_offset)
                 self.reader_at_end = False
-            
-            _debug_('Connection from %s:%d reader position %d (%d< >%d)'  % ( addr[0], addr[1], 
+
+            _debug_('Connection from %s:%d reader position %d (%d< >%d)'  % ( addr[0], addr[1],
                             reader.pos, reader.available_backward(), reader.available_forward()))
             try:
                 last_time = time.time()
@@ -817,4 +817,3 @@ class SlaveServer:
         # Todo: would be nice to warn the user somehow that they've missed some of the program.
         # print 'Reader was overtaken new position = %d' % reader.pos
         rc.post_event(EVENT_READER_OVERTAKEN)
-

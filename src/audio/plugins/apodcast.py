@@ -4,9 +4,9 @@
 # ----------------------------------------------
 # $id: apodcast.py 2007-10-04 $
 #  -Krasimir Atanasov-
-# 
+#
 
-import urllib2, os, threading 
+import urllib2, os, threading
 import config, menu, rc, plugin, util, time, os.path, re
 from audio.player import PlayerGUI
 from item import Item
@@ -16,15 +16,15 @@ from gui.GUIObject import GUIObject
 from gui.PopupBox import PopupBox
 import skin
 import util.feedparser
-MAX_AGE = 3600 * 10 
+MAX_AGE = 3600 * 10
 
 _player_ = None
 
-            
+
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
-    Audio podcast plugin 
+    Audio podcast plugin
 
     Add to local_conf.py
     | plugin.activate('audio.apodcast')
@@ -44,7 +44,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         plugin.MainMenuPlugin.__init__(self)
         self.plugin_name = 'apodcast'
         self.check_dir()
-    
+
     def items(self, parent):
         return [ ApodcastMainMenuItem(parent) ]
 
@@ -56,14 +56,14 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('APODCAST_LOCATIONS', None, 'List of podcast locations'),
             ('APODCAST_DIR', None, 'Dir for downloaded podcasts')
         ]
-    
+
     def check_dir(self):
         if os.path.exists(config.APODCAST_DIR) and os.path.isdir(config.APODCAST_DIR):
             #print 'APODCAST DIR EXIST !'
             pass
         else:
             os.mkdir(config.APODCAST_DIR)
-        
+
         for pcdir in config.APODCAST_LOCATIONS:
             pc_dir = config.APODCAST_DIR + '/' + pcdir[0]
             if os.path.exists(pc_dir) and os.path.isdir(pc_dir):
@@ -71,8 +71,8 @@ class PluginInterface(plugin.MainMenuPlugin):
                 pass
             else:
                 os.mkdir(pc_dir)
-            
-        
+
+
 
 class PodCastPlayerGUI(PlayerGUI):
     def __init__(self, item, menuw=None):
@@ -81,9 +81,9 @@ class PodCastPlayerGUI(PlayerGUI):
             self.visible = True
         else:
             self.visible = False
-       
+
         self.menuw = menuw
-        self.item = item      
+        self.item = item
         self.player  = None
         self.running = False
         self.item.title = None
@@ -97,12 +97,12 @@ class PodCastPlayerGUI(PlayerGUI):
             popup.show()
             time.sleep(10) # 10s. buffering time
             popup.destroy()
-       
-        
+
+
 
 class ApodcastItem(Item):
-    
-    
+
+
     def actions(self):
         """
         return a list of actions for this item
@@ -117,7 +117,7 @@ class ApodcastItem(Item):
 
         self.player = PodCastPlayerGUI(self, menuw) #LastFM
         error = self.player.play()
-        
+
         if error and menuw:
             AlertBox(text=error).show()
             rc.post_event(rc.PLAY_END)
@@ -127,16 +127,16 @@ class ApodcastItem(Item):
         _debug_('confirm (self, arg=%r, menuw=%r)' % (arg, menuw))
         if menuw:
             menuw.menu_back()
-       
+
 
     def stop(self, arg=None, menuw=None):
         """
         Stop the current playing
         """
         self.player.stop()
-        
-  
- 
+
+
+
 
 class ApodcastMainMenuItem(MenuItem):
     """
@@ -154,7 +154,7 @@ class ApodcastMainMenuItem(MenuItem):
         """
         return [ ( self.create_podcast_menu, 'stations' ) ]
 
-        
+
     def create_podcast_submenu(self, arg=None, menuw=None, image=None):
         popup = PopupBox(text=_('Fetching podcast...'))
         popup.show()
@@ -164,7 +164,7 @@ class ApodcastMainMenuItem(MenuItem):
         p.rss_title()
         p.rss_count()
         image = config.APODCAST_DIR + '/' + arg[0] + '/' + 'cover.jpg'
-       
+
         podcast_items = []
         for pc_location in range(p.rss.count):
             p.rss_item(pc_location)
@@ -182,7 +182,7 @@ class ApodcastMainMenuItem(MenuItem):
             podcast_item.elapsed = 0
             podcast_item.info = {'album':'', 'artist':'', 'trackno': '', 'title': ''}
             podcast_items += [ podcast_item ]
-        
+
         popup.destroy()
         if (len(podcast_items) == 0):
             podcast_items += [menu.MenuItem( _( 'No Podcast locations found' ),
@@ -196,8 +196,8 @@ class ApodcastMainMenuItem(MenuItem):
         popup = PopupBox(text=_('Fetching podcasts...'))
         popup.show()
         podcast_menu_items = []
-        
-            
+
+
         for location in config.APODCAST_LOCATIONS:
             url = location[1]
             image_path = config.APODCAST_DIR + '/' + location[0] + '/' + 'cover.jpg'
@@ -208,44 +208,44 @@ class ApodcastMainMenuItem(MenuItem):
                 name = p.rss_title
                 image_url = p.rss_image
                 self.download(image_url,image_path)
-                
+
             if (len(config.APODCAST_DIR) == 0):
                 podcast_items += [menu.MenuItem( _( 'Set APODCAST_DIR in local_conf.py' ),
-                                             menwu.goto_prev_page, 0)]   
+                                             menwu.goto_prev_page, 0)]
             podcast_menu_items += [menu.MenuItem( _( location[0]), action=self.create_podcast_submenu, arg=location, image=image_path)]
-            
-        popup.destroy()    
+
+        popup.destroy()
         podcast_main_menu = menu.Menu( _( 'AUDIO PODCAST' ), podcast_menu_items)
         rc.app(None)
         menuw.pushmenu(podcast_main_menu)
         menuw.refresh()
-    
+
     def download(self,url,savefile):
-        file = urllib2.urlopen(url).read() 
-	save = open(savefile, 'w')
-	print >> save, file
-	save.close()            
-    
+        file = urllib2.urlopen(url).read()
+        save = open(savefile, 'w')
+        print >> save, file
+        save.close()
+
     def check_logo(self,logo_file):
         if os.path.exists(logo_file) == 0 or (abs(time.time() - os.path.getmtime(logo_file)) > MAX_AGE):
             return True
         else:
             return False
-        
-    
-      
+
+
+
 
 class podcast:
     # extract info from RSS
-    
+
     def __init__(self):
         pass
-    
+
     def open_rss(self, url):
         self.rss = util.feedparser.parse(url)
         self.encoding = self.rss.encoding
-        
-        
+
+
     def rss_title(self):
         self.rss_title = self.rss.feed.title.encode(self.encoding)
         self.rss_description = self.rss.feed.description.encode(self.encoding)
@@ -253,11 +253,11 @@ class podcast:
             self.rss_image = self.rss.feed.image.url
         else:
             self.rss_image = None
-        
+
     def rss_count(self):
         self.rss.count =  len(self.rss.entries)
-        
-        
+
+
     def rss_item(self,item=0):
         try:
             self.title = self.rss.entries[item].title.encode(self.encoding)
@@ -266,32 +266,30 @@ class podcast:
             self.enclosure = self.rss.entries[item].enclosures[0]['href']
         except:
             pass
-        
-        
-    
+
+
+
 class BGDownload(threading.Thread):
     # Download podcast file
-        def __init__(self, url, savefile):
-            threading.Thread.__init__(self)
-            self.url = url
-            self.savefile = savefile
-            
-        def run(self):
-            try:
-                file = urllib2.urlopen(self.url)
-                info = file.info()
-                save = open(self.savefile, 'wb')
-                chunkSize = 25
-                totalBytes = int(info['Content-Length'])
-                downloadBytes = 0
-                bytesLeft = totalBytes
-                while bytesLeft > 0:
-                    chunk = file.read(chunkSize)
-                    readBytes = len(chunk)
-                    downloadBytes += readBytes
-                    bytesLeft -= readBytes
-                    save.write(chunk)
-            except:
-                print 'Download Error !'  
+    def __init__(self, url, savefile):
+        threading.Thread.__init__(self)
+        self.url = url
+        self.savefile = savefile
 
-
+    def run(self):
+        try:
+            file = urllib2.urlopen(self.url)
+            info = file.info()
+            save = open(self.savefile, 'wb')
+            chunkSize = 25
+            totalBytes = int(info['Content-Length'])
+            downloadBytes = 0
+            bytesLeft = totalBytes
+            while bytesLeft > 0:
+                chunk = file.read(chunkSize)
+                readBytes = len(chunk)
+                downloadBytes += readBytes
+                bytesLeft -= readBytes
+                save.write(chunk)
+        except:
+            print 'Download Error !'

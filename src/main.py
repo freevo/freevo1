@@ -250,7 +250,7 @@ class MainTread:
             else:
                 self.eventhandler_plugins.append(p)
         kaa.notifier.EventHandler(self.eventhandler).register()
-        
+
 
     def eventhandler(self, event):
         """
@@ -464,7 +464,7 @@ try:
     _debug_('Main loop starting...',2)
 
     MainTread()
-    
+
     kaa.notifier.loop()
 
 

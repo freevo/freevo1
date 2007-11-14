@@ -24,7 +24,7 @@
 # &syntaxcheck=False - Disable Syntax Check on update.
 # cmd=DISPLAYCONFIG - Loop throught config and display all config settings.
 # local_conf.py  CONFIG_REALTIME_UPDATE = True , try to setting the var, if kinda sketchy on this one.
-# 
+#
 #  Todo: FIX CONFIG file name STUFF.
 
 
@@ -38,10 +38,10 @@ import types
 import time
 
 import subprocess
-import plugins 
+import plugins
 
 import subprocess
-import plugins 
+import plugins
 from www.configlib import  *
 from stat import *
 from www.web_types import HTMLResource, FreevoResource
@@ -96,7 +96,7 @@ def cmdCreateFXDFile(fxd_file, fxd_title, fxd_url):
     fxd_file_handle.write('</freevo> ')
     fxd_file_handle.close()
 
- 
+
 
 def cmdBrowseFiles(browse_dir,browse_area, setting_name,  browse_type =  'F', display_hidden = False):
     '''
@@ -196,7 +196,7 @@ def cmdCheckValue(varName, varValue):
             status = 'Missing File'
 
     results = '<span class="%s">%s</span>' % (retClass, status)
-    
+
     print 'CHECKING %s = %s' %  (varName,varValue)
     results = ErrorMessage(varName, '',varValue)
     return blOK, results
@@ -244,7 +244,7 @@ def UpdateSetting(cfile, varName, varValue, varEnable, sline, eline, syntaxcheck
             LogTransaction('Line update TO : ', sline, fconf[sline])
             WriteConfigFile(cfile, fconf)
             results = '<span class="checkOK">Update Done - %s </span>' % newline
-        
+
 
         else:
             LogTransaction('ERROR Line not UPDATED : ', sline, fconf[sline])
@@ -272,7 +272,7 @@ def DeleteLines(cfile, startline, endline):
     WriteConfigFile(cfile, rconf)
     return dellines
 
-    
+
 def UpdatePlugin(cfile, pcmd, pname, pline, plugin_level, plugin_args):
     lconf = ReadConfig(cfile)
 
@@ -312,26 +312,26 @@ def UpdatePlugin(cfile, pcmd, pname, pline, plugin_level, plugin_args):
 
     return status
 
-    
+
 def UpdateServer(server_name, server_cmd):
-    
-    run_cmd = ['freevo',server_name,server_cmd] 
+
+    run_cmd = ['freevo',server_name,server_cmd]
     server_pid = subprocess.Popen(run_cmd).pid
-    
+
     time.sleep(3)
     server_line = Display_Server(server_name)
     return server_line
 
 def StartHelper(helper):
 
-    run_cmd = ['freevo',helper] 
+    run_cmd = ['freevo',helper]
     helper_pid = subprocess.Popen(run_cmd).pid
     time.sleep(1)
 
     helper_line = Display_Helper(helper)
     return helper_line
 
-    
+
 class ConfigEditResource(FreevoResource):
 
     def _render(self, request):
@@ -363,15 +363,15 @@ class ConfigEditResource(FreevoResource):
         pluginaction = fv.formValue(form, 'pluginaction')
         pluginname = fv.formValue(form, 'pluginname')
         pluginline = fv.formValue(form, 'pluginline')
-        
+
         realtime_update = TRUE
         if config.__dict__.has_key('CONFIG_REALTIME_UPDATE'):
             realtime_update = config.CONFIG_REALTIME_UPDATE
-   
+
         syntaxcheck = True
         if fv.formValue(form,'syntaxcheck') == 'FALSE':
             syntaxcheck = False
-    
+
         browse_file = fv.formValue(form,'browsefile')
         browse_area = fv.formValue(form,'browsearea')
         setting_name = fv.formValue(form,'setting_name')
@@ -392,18 +392,18 @@ class ConfigEditResource(FreevoResource):
             print startline
             print endline
             fv.res = UpdateSetting(configfile, udname, udvalue, udenable, int(startline), int(endline),syntaxcheck)
- 
+
             if realtime_update:
                 check_value =   '%s = %s' %   (udname, udvalue)
                 if CheckSyntax(check_value) and udenable == 'TRUE':
                     actual_value = GetItemsArray(udvalue)
                     print 'Doing Live Update %s = %s ' % ( udname, udvalue )
                     config.__dict__[udname] = actual_value
-                
+
             return String( fv.res )
 
         if cmd == 'DETECT_CHANNELS':
-            str_channels = '%r' % config.detect_channels() 
+            str_channels = '%r' % config.detect_channels()
             UpdateSetting(configfile,'TV_CHANNELS',str_channels,'FALSE',int(startline),int(endline),False)
             return String ('REFRESH REQUIRED')
 

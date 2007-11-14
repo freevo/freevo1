@@ -6,12 +6,12 @@
 #
 # Notes:
 #
-# Todo:        
+# Todo:
 #
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -39,7 +39,7 @@ class Controller:
         self.adapter = adapter
         self.username = username
         self.password = password
-    
+
     def execute_command(self, command, authenticate=False):
         """
         Send a command to the dvbstreamer instance to execute,
@@ -54,7 +54,7 @@ class Controller:
         result = ctrlcon.send_command(command)
         ctrlcon.close()
         return result
-    
+
     def select_service(self, service):
         """
         Select the primary service.
@@ -62,7 +62,7 @@ class Controller:
         (errcode, errmsg, msg) = self.execute_command('select ' + service, True)
         if errcode != 0:
             raise RuntimeError, errmsg
-        
+
     def set_servicefilter_mrl(self, service_filter, mrl):
         """
         Set the MRL (Media Resource Locator) for a given service filter.
@@ -88,16 +88,16 @@ class Controller:
         if errcode != 0:
             return None
         return muxes
-    
+
     def get_stats(self):
         """
-        Get statistics on the number of packets processed by different parts of 
+        Get statistics on the number of packets processed by different parts of
         the dvbstreamer instance.
         """
         (errcode, errmsg, raw_stats) = self.execute_command('stats')
         if errcode != 0:
             return None
-        
+
         index = 2
         processors=[]
         while raw_stats[index] != '':
@@ -106,9 +106,9 @@ class Controller:
             packets = int(parts[1])
             processors.append((name, packets))
             index += 1
-        
+
         index += 3
-        
+
         service_filters=[]
         while raw_stats[index] != '':
             parts = raw_stats[index].split(':')
@@ -116,7 +116,7 @@ class Controller:
             packets = int(parts[1])
             service_filters.append((name, packets))
             index += 1
-        
+
         index += 3
         manual_outputs=[]
         while raw_stats[index] != '':
@@ -129,14 +129,14 @@ class Controller:
         index += 1
         parts = raw_stats[index].split(':')
         total_packets= int(parts[1])
-        
+
         index += 1
         parts = raw_stats[index].split(':')
-        
+
         mbps = float(parts[1][:-3])
-            
+
         return (processors, service_filters, manual_outputs, total_packets, mbps)
-    
+
     def get_frontend_status(self):
         """
         Get the frontend status of the set dvbstreamer instance.
@@ -146,27 +146,27 @@ class Controller:
             return None
 
         locked = status[0].find('Lock,') != -1
-        
+
         line = status[1]
         equalsindex = line.find('= ') + 2
         spaceindex = line.find(' ', equalsindex)
         ber = int(line[equalsindex:spaceindex])
-        
+
         equalsindex = line.find('= ',spaceindex) + 2
         spaceindex = line.find(' ', equalsindex)
         signal = int(line[equalsindex:spaceindex])
-        
+
         equalsindex = line.find('= ',spaceindex) + 2
         snr = int(line[equalsindex:])
-        
+
         return (locked, ber, signal, snr)
-       
+
 class ControlConnection:
     def __init__(self, host, adapter):
         self.host = host
         self.adapter = adapter
         self.opened = False
-        
+
     def open(self):
         if self.opened:
             return
@@ -175,7 +175,7 @@ class ControlConnection:
         self.socket_file = self.socket.makefile('r+')
         self.opened = True
         (error_code, error_message, lines) = self.read_response()
-        
+
         if error_code != 0:
             self.socket.close()
             self.opened = False
@@ -189,14 +189,14 @@ class ControlConnection:
             self.socket_file.close()
             self.socket.close()
             self.opened = False
-    
+
     def send_command(self, command):
         if not self.opened:
             raise RuntimeError, 'not connected'
 
         self.socket_file.write(command + '\n')
         self.socket_file.flush()
-        
+
         return self.read_response()
 
     def read_response(self):
@@ -206,7 +206,7 @@ class ControlConnection:
         error_message = ''
         while more_lines:
             line = self.socket_file.readline()
-        
+
             if line.startswith('DVBStreamer/'):
                 more_lines = False
                 sections = line.split('/')
@@ -223,8 +223,8 @@ class ControlConnection:
                 lines.append(line.strip('\n\r'))
 
         return (error_code, error_message, lines)
-        
-        
+
+
 if __name__ == '__main__':
     ctrl = Controller('localhost',0, 'dvbstreamer', 'control')
     print 'Frontend : ', ctrl.get_frontend_status()

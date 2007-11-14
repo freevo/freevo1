@@ -35,10 +35,10 @@
 #            Display logos, move then channels moved up and down.
 #            Items List add new Line, once old new line is outdate.
 #            Remove SKIN_XML_FILE from file types.
-#            Create Directory option ? 
-#            Auto add quotes to strings. 
-#            Inbedding pick list options in local_conf ? 
-#            Fix JOY_CMDS ? 
+#            Create Directory option ?
+#            Auto add quotes to strings.
+#            Inbedding pick list options in local_conf ?
+#            Fix JOY_CMDS ?
 #            Keymap syntax checking.
 #            OSD_FONT_PATH should have a browse buttons.
 #            Fix () around MPLAYER SUFFIX.
@@ -46,7 +46,7 @@
 #            Plugins - Problem with not picking up plugin arg when combined with level.
 #            Enabling AUDIO_ALBUM_TREE_SPEC, check span disappears.
 #            Updaet WWW_PERSONNEL_PAGE with Args eg. config.rpy&expAll=T.
-#            Help - Comments , problem with over writing. 
+#            Help - Comments , problem with over writing.
 
 #import sys
 import os.path
@@ -56,7 +56,7 @@ import time
 import operator
 from www.web_types import HTMLResource, FreevoResource
 
-from www.configlib import * 
+from www.configlib import *
 import config
 from event import *
 import util
@@ -106,14 +106,14 @@ def ParseConfigFile(rconf):
                 pln['endline'] = cnt
                 pln['control_name'] = pln['ctrlname'] + '_' + str(startline)
                 pln['html_control'] = GetHTMLControl(pln)
-                
+
                 fconfig.append(pln)
         cnt += 1
 
     fconfig.sort(key=operator.itemgetter('control_name'))
     return fconfig
 
-    
+
 def ParseLine(cline):
     '''
     '''
@@ -144,7 +144,7 @@ def ParseLine(cline):
     lparsed['type'] = 'textbox'
     lparsed['ctrlname'] = fsplit[0].strip()
     lparsed['group'] = GetVarGroup(lparsed['ctrlname'])
-    
+
     if not lparsed['ctrlname'].isupper() and lparsed['group'] <> 'KeyMap':
         lparsed['type'] = ''
 
@@ -162,13 +162,13 @@ def ParseLine(cline):
     lparsed['ctrlvalue'] = lparsed['ctrlvalue'].replace('"', "'")
 
     lparsed['control_type'] = getCtrlType(lparsed['ctrlname'],lparsed['ctrlvalue'],lparsed['type'])
-    
+
     if lparsed['ctrlname'].startswith('"'):
         lparsed['type'] = ''
-    
+
     return lparsed
 
-    
+
 def GetHTMLControl(fv_setting):
     cname = fv_setting['ctrlname']
     control_name = fv_setting['control_name']
@@ -198,7 +198,7 @@ def GetHTMLControl(fv_setting):
 
     return htmlctrl
 
-    
+
 def GetVarGroup(setting_name):
     '''
     '''
@@ -256,7 +256,7 @@ def getCtrlType(cname, cvalue, vtype):
         return 'itemlist'
     return 'textbox'
 
-    
+
 def CreateFileBrowseControl(cname,setting_name):
     '''
     '''
@@ -267,7 +267,7 @@ def CreateFileBrowseControl(cname,setting_name):
     else:
         js_browsefiles = 'onclick=BrowseFiles("%s","%s","F")' % ( cname , setting_name )
 
-    
+
     btn_browse_id = '%s_browse' % cname
     btn_browse = '<input type="button" id="%s" class="BrowseButton" value="" title="Display File Browser" %s>\n' % ( btn_browse_id, js_browsefiles )
 
@@ -279,7 +279,7 @@ def CreateFileBrowseControl(cname,setting_name):
     file_browse_control = btn_browse + cancel_button + browse_area
     return file_browse_control
 
-    
+
 def Display_TV_Logo(channel):
     station = channel.split(',')[1].strip()
     station_name =  station.split(' ')[-1].strip("'")
@@ -296,7 +296,7 @@ def Display_TV_Logo(channel):
     logo = '<img class="TvLogo" src="images/logos/%s.gif" >\n' % station_name
     return logo
 
-    
+
 def CreateTV_Channels_ctrl(cname, cvalue):
     '''
     '''
@@ -374,7 +374,7 @@ def CreateFileItemList(cname, cvalue,setting_name):
             ctrl += '</li>\n'
 
         r += 1;
-        ctrl += '<li class="Setting_Controls" id="%s_line_%i">\n' % ( cname, r) 
+        ctrl += '<li class="Setting_Controls" id="%s_line_%i">\n' % ( cname, r)
         js_onchange = 'onchange=CheckValue("%s","fileitemlist","%i")' % (cname, r)
         label_ctrl_id = '%s_label%i' % ( cname, r )
         ctrl += CreateHTMLinput('textbox', label_ctrl_id, '', '', '')
@@ -547,7 +547,7 @@ def KeyMapControl(cname, setting_name, cvalue ):
 
     return ctrl
 
-    
+
 def DeleteListItem(lineid,updateid):
     btn_class = 'class="DeleteButton"'
     btn_title = 'title ="Delete Line from List"'
@@ -562,7 +562,7 @@ def StartControlLine(nctrl):
     _debug_('StartControlLine(%r)' % nctrl ,2)
     ctrl = ''
     cname = nctrl['control_name']
-    
+
     ctrl += CreateHTMLinput('hidden',cname + "_startline", nctrl['startline'])
     ctrl += CreateHTMLinput('hidden',cname + "_endline", nctrl['endline'])
     ctrl += CreateHTMLinput('hidden',cname + "_ctrlname", nctrl['ctrlname'])
@@ -579,18 +579,18 @@ def DeleteButton(nctrl):
     btn_title = 'title="Delete Lines %i to %i from local_conf.py"' % ( nctrl['startline'], nctrl['endline'] )
     del_opts = '%s %s %s' % (btn_class, js_delete , btn_title)
     delbtn = CreateHTMLinput('button',nctrl['control_name'] + '_delete','','',del_opts)
-    return delbtn 
+    return delbtn
 
 def EnableCheckBox(nctrl):
     if nctrl['checked']:
         checked = 'checked'
     else:
-        checked = '' 
+        checked = ''
 
     jsonChange = ' onchange=CheckValue("%s","%s",0)'  % (nctrl['control_name'], nctrl['control_type'])
     chkbox = CreateHTMLinput('checkbox',nctrl['control_name'] + '_chk','' , ''  , jsonChange + " " + checked)
     return chkbox
-    
+
 def CreateConfigLine(nctrl,  expALL):
     '''
     '''
@@ -604,13 +604,13 @@ def CreateConfigLine(nctrl,  expALL):
     htmlctrl += StartControlLine(nctrl)
     complex_ctrls = ['tv_channels','fileitemlist','dictionary','itemlist']
     simple_controls = ['textbox','boolean']
-    
+
     if nctrl['checked']:
         htmlctrl += '<div id="%s_enable" clase="enablecontrol">\n' % control_name
         displayvars = ''
     else:
         htmlctrl += '<div id="%s_enable" class="disablecontrol">\n' % control_name
-        
+
     displayvars = 'none'
     if expALL:
         displayvars = ''
@@ -618,10 +618,10 @@ def CreateConfigLine(nctrl,  expALL):
     htmlctrl += ErrorMessage(cname,control_name, nctrl['ctrlvalue'])
     htmlctrl += DeleteButton(nctrl)
     htmlctrl += EnableCheckBox(nctrl)
-    
+
     if nctrl['control_type'] == 'keymap':
         htmlctrl += nctrl['html_control']
-    
+
     setting_class = 'Setting_Line_Close'
     js_showlist = 'onclick=ShowList("%s")' % control_name
     anchor_title = 'title="%s (Click to Show / Hide %s value) "' % ( nctrl['comments'] , cname )
@@ -630,18 +630,18 @@ def CreateConfigLine(nctrl,  expALL):
         setting_class = 'Setting_Line_Open'
     if nctrl['control_type'] in simple_controls:
         setting_class = 'Setting_Line'
-        js_showlist = '' 
+        js_showlist = ''
         anchor_title = 'title="%s"' % nctrl['comments']
-        
+
     anchorID = '%s_anchor' % control_name
     if nctrl['control_type'] <> 'keymap':
         htmlctrl += '<a class="%s" id="%s" name="%s" %s>' % ( setting_class, anchorID,   cname, js_showlist  + ' ' + anchor_title)
         htmlctrl += cname
         htmlctrl += '</a>\n'
-    
+
     if  nctrl['control_type'] in simple_controls:
         htmlctrl += nctrl['html_control']
-        
+
     jsSave =  'onclick=SaveValue("%s","%s")' % (control_name, nctrl['control_type'])
     btn_update_id = '%s_btn_update' %  control_name
     htmlctrl += CreateHTMLinput('button',btn_update_id, 'Update','',jsSave + ' style=display:none;')
@@ -652,14 +652,14 @@ def CreateConfigLine(nctrl,  expALL):
         htmlctrl += nctrl['html_control']
         htmlctrl += '</li>\n'
         htmlctrl += '</ul>\n'
-       
+
 
     htmlctrl += '<li class="File_Line" id="%s_fileline">' % control_name
     if config.DEBUG == 3:
         config_line = nctrl['fileline'].replace('\n','')
         htmlctrl += '%r' % (  config_line   )
-    
-    htmlctrl += '</li>\n'    
+
+    htmlctrl += '</li>\n'
     htmlctrl += '</div>\n'
 
     return htmlctrl
@@ -692,7 +692,7 @@ def DisplayGroups(fconfig, expALL):
 
     return html
 
-    
+
 def DisplayConfigChanges(current_version):
     '''
     '''
@@ -708,9 +708,9 @@ def DisplayConfigChanges(current_version):
     config_outdated = False
 
     for change in config.LOCAL_CONF_CHANGES:
-         if change[0] > cur_version:
+        if change[0] > cur_version:
             dsp_change += '<li>\n'
-            dsp_change += str(change[0]) 
+            dsp_change += str(change[0])
             change_lines = change[1].split('\n')
             dsp_change += '<ul>\n'
             for line in change_lines:
@@ -725,21 +725,21 @@ def DisplayConfigChanges(current_version):
         dsp_change += CreateHTMLinput('Button','','Convert Config','','')
         dsp_change += '</div>\n'
     else:
-        dsp_change = ''            
+        dsp_change = ''
 
     return dsp_change
 
 
 def GetConfigVersion(conf_data):
     '''
-    '''  
+    '''
     _debug_('GetConfigVersion(conf_data=%r)' % conf_data,2)
     for setting in conf_data:
-         if setting['ctrlname'] == 'CONFIG_VERSION':
-             return setting['ctrlvalue']
+        if setting['ctrlname'] == 'CONFIG_VERSION':
+            return setting['ctrlvalue']
     return None
 
-    
+
 class ConfigResource(FreevoResource):
 
     def _render(self, request):

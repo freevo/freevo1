@@ -37,7 +37,7 @@ import popen2
 from signal import *
 
 import config
-from www.configlib import * 
+from www.configlib import *
 from www.web_types import HTMLResource, FreevoResource
 import util
 from plugin import is_active, activate, remove
@@ -147,7 +147,7 @@ def get_config_setting(lconf, plugin_name):
             confentry = True
     return conf_line, linenumber
 
-    
+
 def plugin_level_control(lconf_line, plugin):
     '''
     '''
@@ -169,7 +169,7 @@ def plugin_level_control(lconf_line, plugin):
     if level <> "none":
         level_ctrl = '<li class="Plugin_Level">\n'
         level_ctrl += '<label for="%s_level">Level:</label>' % plugin[0]
-        level_ctrl += CreateHTMLinput('input',plugin[0] + '_level', level, '2', '')  
+        level_ctrl += CreateHTMLinput('input',plugin[0] + '_level', level, '2', '')
         level_ctrl += '</li>\n'
 
     return level_ctrl
@@ -250,14 +250,14 @@ def displayplugin(cfile, plugin, lconf, expAll , plugin_group):
     html += '<a class="PluginStatus%s">%s</a>\n' % ( status, status )
     html += '</span>'
     html += CreateSelectBoxControl(pluginname + '_cmd', ctrlopts, status, pc_opts)
-    html += CreateHTMLinput('hidden',pluginname + '_lineno', str(linenumber) , '','')    
+    html += CreateHTMLinput('hidden',pluginname + '_lineno', str(linenumber) , '','')
 
     html += PluginHelpLink( plugin_group, pluginname )
     js_onclick = 'onclick=DisplayList("%s_info")' % pluginname
-    html += '<a class="Plugin_Name" %s name="%s" >' % (js_onclick,  pluginname) 
+    html += '<a class="Plugin_Name" %s name="%s" >' % (js_onclick,  pluginname)
     html += pluginname
     html += '</a>\n'
-    
+
     html += '<span id=%s_updateinfo></span>\n' % pluginname
     html += '<ul id="%s_info" class="PluginInfoList" style=display:%s;)>\n' % (pluginname, dstyle)
     html += plugin_level_control(lconfline, plugin)
@@ -340,7 +340,7 @@ def display_group(dsp_group, splugins, configfile, lcplugins, expandAll):
     elif dsp_group == 'helpers':
         for helper in helper_list:
             grouplist += Display_Helper(helper)
-             
+
     else:
         for plugin in splugins:
             if dsp_group == plugin[0]:
@@ -368,9 +368,9 @@ class ConfigurePluginsResource(FreevoResource):
 
         if not hasattr(config, 'all_plugins'):
             config.all_plugins = parse_plugins()
-    
+
         config.all_plugins.sort()
-            
+
         if not configfile:
             fv.printMessages(['Unable to find file - ' + configfile])
             return fv.res

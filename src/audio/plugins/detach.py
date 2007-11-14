@@ -128,7 +128,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         # hide the menu and show the player
         menuw.hide()
         gui.show()
-        
+
         ### TODO: is this plugin still around?
         # maybe we can remove this lines savely
         mpav = plugin.getbyname( 'audio.mpav' )

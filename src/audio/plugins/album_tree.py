@@ -222,7 +222,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         treeSpec('a-z/artist/title-album-track', curs,
             ["lower(substr(artist, 0, 1))", "lower(artist)", "title||'-'||album||'-'||track"]),
         treeSpec('Year/Artist-Album/Track', curs,
-            ["year", "artist||'-'||album", "track||'-'||title"], [None, None, None, 'track']), 
+            ["year", "artist||'-'||album", "track||'-'||title"], [None, None, None, 'track']),
         #demo:
         treeSpec('Dirtitle/Artist/Album/Track', curs,
             ["dirtitle", "artist", "album", "track||'-'||title"], [None, None, None, 'track'])
