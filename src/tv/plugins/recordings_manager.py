@@ -929,7 +929,8 @@ class DiskManager(plugin.DaemonPlugin):
                 candidate = candidates.pop(0)
                 if (not candidate):
                     break
-                candidate.delete()
+                _debug_('deleting %s, because we are running out of space.' % (candidate.name), 2)    
+                candidate.files.delete()
 
 
     def generate_candidates(self):
