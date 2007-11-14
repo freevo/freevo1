@@ -803,7 +803,10 @@ class MenuWidget(GUIObject):
 
         # recalc everything!
         current = menu.selected
-        pos = menu.choices.index(current)
+        try:
+            pos = menu.choices.index(current)
+        except ValueError, e:
+            print 'menu.choices.index(current) failed: %s' % (e)
 
         menu.previous_page_start = []
         menu.previous_page_start.append(0)
