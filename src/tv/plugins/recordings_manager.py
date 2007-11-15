@@ -185,39 +185,41 @@ class RecordingsDirectory(Item):
             AlertBox(text=_('Recordings Directory does not exist')).show()
             return
 
+        items = segregated_recordings
+        items.sort(lambda l, o: cmp(o.sort(sorting).upper(), l.sort(sorting).upper()))
+        if sorting_reversed:
+            items.reverse()
+
+    
         if arg == 'update':
+            # update because of DiskManager
             if not self.menu.choices:
                 selected_pos = -1
             else:
                 # store the current selected item
                 selected_id  = self.menu.selected.id()
                 selected_pos = self.menu.choices.index(self.menu.selected)
-
-        items = segregated_recordings
-        items.sort(lambda l, o: cmp(o.sort(sorting).upper(), l.sort(sorting).upper()))
-        if sorting_reversed:
-            items.reverse()
-
-        if arg == 'update':
-            # update because of DiskManager
+                                   
             self.menu.choices = items
-            if selected_pos != -1:
+            self.menu.selected = None         
+            
+            if selected_pos !=-1 and items:
                 for i in items:
+                    # find the selected item
                     if Unicode(i.id()) == Unicode(selected_id):
+                        # item is still there, select it
                         self.menu.selected = i
                         break
-                    else:
-                        # item is gone now, try to the selection close
-                        # to the old item
-                        pos = max(0, min(selected_pos-1, len(items)-1))
-                        if items:
-                            self.menu.selected = items[pos]
-                        else:
-                            self.menu.selected = None
-                if self.menu.selected and selected_pos != -1:
-                    self.menuw.rebuild_page()
-                else:
-                    self.menuw.init_page()
+                if not self.menu.selected:
+                    # item is gone now, try to the selection close
+                    # to the old item
+                    pos = max(0, min(selected_pos-1, len(items)-1))
+                    self.menu.selected = items[pos]
+                           
+                self.menuw.rebuild_page()
+                self.menuw.refresh()
+            else:
+                self.menuw.init_page()   
                 self.menuw.refresh()
         else:
             # normal menu build
@@ -611,25 +613,23 @@ class Series(Item):
 
             # update because of DiskManager
             self.menu.choices = self.items
+            self.menu.selected = None
             if selected_pos != -1:
                 for i in self.items:
                     if Unicode(i.id()) == Unicode(selected_id):
                         self.menu.selected = i
                         break
-                    else:
-                        # item is gone now, try to the selection close
-                        # to the old item
-                        pos = max(0, min(selected_pos-1, len(self.items)-1))
-                        if self.items:
-                            self.menu.selected = self.items[pos]
-                        else:
-                            self.menu.selected = None
-                if self.menu.selected and selected_pos != -1:
-                    self.menuw.rebuild_page()
-                else:
-                    self.menuw.init_page()
+                
+                if not self.menu.selected:
+                    # item is gone now, try to the selection close 
+                    # to the old item
+                    pos = max(0, min(selected_pos-1, len(self.items)-1))
+                    self.menu.selected = self.items[pos]
+                        
+                self.menuw.rebuild_page()
                 self.menuw.refresh()
-                # Update the icon just incase we were called because a series item updated its watched/keep state.
+                # Update the icon just incase we were called because 
+                # a series item updated its watched/keep state.
                 self.set_icon()
         else:
             # normal menu build
@@ -666,6 +666,7 @@ class Series(Item):
         """
         for item in self.items:
             item.files.delete()
+            del(item)
         if self.menuw:
             self.menuw.delete_submenu(True, True)
 
@@ -931,6 +932,7 @@ class DiskManager(plugin.DaemonPlugin):
                     break
                 _debug_('deleting %s, because we are running out of space.' % (candidate.name), 2)
                 candidate.files.delete()
+                del(candidate)
 
 
     def generate_candidates(self):
