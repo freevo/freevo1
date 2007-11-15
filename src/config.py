@@ -121,7 +121,8 @@ class Logger:
 
     def write(self, msg):
         global lock
-        lock.acquire()
+        if lock:
+            lock.acquire()
         try:
             if isinstance(msg, unicode):
                 msg = msg.encode(LOCALE, 'replace')
@@ -130,7 +131,8 @@ class Logger:
             self.fp.write(msg)
             self.fp.flush()
         finally:
-            lock.release()
+            if lock:
+                lock.release()
         return
 
     def log(self, msg):
@@ -432,7 +434,8 @@ def _debug_function_(s, level=1):
         return
     global lock
     global DEBUG_STDOUT
-    lock.acquire()
+    if lock:
+        lock.acquire()
     try:
         try:
             # add the current trace to the string
@@ -460,7 +463,8 @@ def _debug_function_(s, level=1):
         except Exception, e:
             print "_debug_ failed: %r" % e
     finally:
-        lock.release()
+        if lock:
+            lock.release()
 
 
 __builtin__.__dict__['_debug_'] = _debug_function_

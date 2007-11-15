@@ -99,7 +99,7 @@ class PluginInterface(plugin.ItemPlugin):
         #title = int(self.item.url[6:])
         fname = join(config.VIDEO_ITEMS[0][1], "%s_%s.avi" % (self.item.parent.name, self.title))
         #_debug_('title=%s, fname=%s' % (title, fname))
-        _debug_('arg=%r' % (arg))
+        _debug_('arg=%r' % (arg,))
         #unwrap settings tupple
         vcodecnr, tgtsize, mpass, vbitrate = arg
 
