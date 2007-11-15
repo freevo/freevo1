@@ -122,7 +122,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def __init__(self, debug=False, allowNone=False):
         """ Initialise the Record Server class """
-        _debug_('RecordServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 1)
+        _debug_('RecordServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 2)
         # Twisted have changed the interface to xmlrpc.XMLRPC.__init__() in 2.5.0
         try:
             xmlrpc.XMLRPC.__init__(self, allowNone)
@@ -140,7 +140,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('isRecording')
     def isRecording(self):
-        _debug_('isRecording()', 1)
+        _debug_('isRecording()', 2)
         return glob.glob(config.FREEVO_CACHEDIR + '/record.*') and TRUE or FALSE
 
 
@@ -155,7 +155,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def findOverlaps(self, scheduledRecordings):
-        _debug_('in findOverlaps', 4)
+        _debug_('in findOverlaps', 2)
         progs = scheduledRecordings.getProgramList()
         proglist = list(progs)
         proglist.sort(self.progsTimeCompare)
@@ -172,7 +172,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('findNextProgram')
     def findNextProgram(self):
-        _debug_('findNextProgram()', 1)
+        _debug_('findNextProgram()', 2)
 
         next_program = None
         progs = self.getScheduledRecordings().getProgramList()
@@ -189,7 +189,7 @@ class RecordServer(xmlrpc.XMLRPC):
             except:
                 recording = FALSE
             endtime = time.strftime(config.TV_TIME_FORMAT, time.localtime(prog.stop+config.TV_RECORD_PADDING_POST))
-            _debug_('%s is recording %s stopping at %s' % (prog.title, recording and 'yes' or 'no', endtime), 3)
+            _debug_('%s is recording %s stopping at %s' % (prog.title, recording and 'yes' or 'no', endtime), 2)
 
             if now > prog.stop + config.TV_RECORD_PADDING_POST:
                 _debug_('%s: finished %s > %s' % (prog.title, timenow, endtime), 1)
@@ -201,7 +201,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         self.next_program = next_program
         if next_program == None:
-            _debug_('No program scheduled to record', 3)
+            _debug_('No program scheduled to record', 2)
             return None
 
         _debug_('next is %s' % (next_program), 2)
@@ -216,25 +216,25 @@ class RecordServer(xmlrpc.XMLRPC):
             real player running test, check /dev/videoX.
             this could go into the upsoon client
         """
-        _debug_('isPlayerRunning()', 1)
+        _debug_('isPlayerRunning()', 2)
         res = (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
-        _debug_('isPlayerRunning=%r' % (res), 1)
+        _debug_('isPlayerRunning=%r' % (res), 2)
         return res
 
 
     @kaa.rpc.expose('getScheduledRecordings')
     def getScheduledRecordings(self):
-        _debug_('getScheduledRecordings()', 1)
+        _debug_('getScheduledRecordings()', 2)
         file_ver = None
         scheduledRecordings = None
 
         if os.path.isfile(config.TV_RECORD_SCHEDULE):
-            _debug_('reading cached file (%s)' % config.TV_RECORD_SCHEDULE, 4)
+            _debug_('reading cached file (%s)' % config.TV_RECORD_SCHEDULE, 2)
             if hasattr(self, 'scheduledRecordings_cache'):
                 mod_time, scheduledRecordings = self.scheduledRecordings_cache
                 try:
                     if os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME] == mod_time:
-                        _debug_('Return cached data', 4)
+                        _debug_('Return cached data', 2)
                         return scheduledRecordings
                 except OSError, e:
                     _debug_('exception=%r' % e, DERROR)
@@ -255,7 +255,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
             if file_ver != TYPES_VERSION:
                 _debug_(('ScheduledRecordings version number %s is stale (new is %s), must ' +
-                        'be reloaded') % (file_ver, TYPES_VERSION), 1)
+                        'be reloaded') % (file_ver, TYPES_VERSION), DINFO)
                 scheduledRecordings = None
             else:
                 _debug_('Got ScheduledRecordings (version %s).' % file_ver, DINFO)
@@ -280,7 +280,7 @@ class RecordServer(xmlrpc.XMLRPC):
         """
         Save the schedule to disk
         """
-        _debug_('saveScheduledRecordings(scheduledRecordings=%r)' % (scheduledRecordings), 1)
+        _debug_('saveScheduledRecordings(scheduledRecordings=%r)' % (scheduledRecordings), 2)
 
         if not scheduledRecordings:
             _debug_('making a new ScheduledRecordings', DINFO)
@@ -414,7 +414,7 @@ class RecordServer(xmlrpc.XMLRPC):
     def addDuplicate(self, prog=None):
         """Add program to duplicates hash"""
         _debug_('No previous recordings for "%s", "%s", "%s", adding to hash and saving' % \
-        (prog.title, prog.sub_title, prog.desc), 5)
+        (prog.title, prog.sub_title, prog.desc), 2)
         self.loadPreviouslyRecordedShows()
         self.previouslyRecordedShows[self.getPreviousRecordingKey(prog)] = prog
         for key in self.getPreviousRecordingKey(prog):
@@ -429,7 +429,7 @@ class RecordServer(xmlrpc.XMLRPC):
         previous = self.getPreviousRecording(prog)
         if previous:
             _debug_('Found duplicate for "%s", "%s", "%s", not adding' % \
-            (prog.title, prog.sub_title, prog.desc), 5)
+            (prog.title, prog.sub_title, prog.desc), 2)
             return TRUE
         return FALSE
 
@@ -666,7 +666,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('scheduleRecording')
     def scheduleRecording(self, prog=None):
-        _debug_('scheduleRecording(prog=%r)' % (prog), 1)
+        _debug_('scheduleRecording(prog=%r)' % (prog), 2)
         global guide
 
         if not prog:
@@ -720,7 +720,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('removeScheduledRecording')
     def removeScheduledRecording(self, prog=None):
-        _debug_('removeScheduledRecording(prog=%r)' % (prog), 1)
+        _debug_('removeScheduledRecording(prog=%r)' % (prog), 2)
         if not prog:
             return (FALSE, 'no prog')
 
@@ -755,7 +755,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('isProgScheduled')
     def isProgScheduled(self, prog, schedule=None):
-        _debug_('isProgScheduled(proc=%r, schedule=%r)' % (prog, schedule), 1)
+        _debug_('isProgScheduled(proc=%r, schedule=%r)' % (prog, schedule), 2)
 
         if schedule == {}:
             return (FALSE, 'prog not scheduled')
@@ -772,7 +772,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('findProg')
     def findProg(self, chan=None, start=None):
-        _debug_('findProg(chan=%r, start=%r' % (chan, start))
+        _debug_('findProg(chan=%r, start=%r' % (chan, start), 2)
         global guide
 
         if not chan or not start:
@@ -793,7 +793,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('findMatches')
     def findMatches(self, find=None, movies_only=None):
-        _debug_('findMatches(find=%r, movies_only=%r)' % (find, movies_only))
+        _debug_('findMatches(find=%r, movies_only=%r)' % (find, movies_only), 2)
         global guide
 
         matches = []
@@ -842,7 +842,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     def checkToRecord(self):
-        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 1)
+        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 2)
         rec_cmd = None
         rec_prog = None
         cleaned = None
@@ -862,7 +862,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         now = time.time()
         for prog in progs.values():
-            _debug_('progloop=%s' % prog, 4)
+            _debug_('progloop=%s' % prog, 2)
 
             try:
                 recording = prog.isRecording
@@ -973,7 +973,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('addFavorite')
     def addFavorite(self, name, prog, exactchan=FALSE, exactdow=FALSE, exacttod=FALSE):
-        _debug_('addFavorite(name=%r)' % (name,))
+        _debug_('addFavorite(name=%r)' % (name,), 2)
         if not name:
             return (FALSE, 'no name')
 
@@ -991,7 +991,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('addEditedFavorite')
     def addEditedFavorite(self, name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
-        _debug_('addEditedFavorite(name=%r)' % (name))
+        _debug_('addEditedFavorite(name=%r)' % (name), 2)
         fav = tv.record_types.Favorite()
 
         fav.name = name
@@ -1013,7 +1013,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('removeFavorite')
     def removeFavorite(self, name=None):
-        _debug_('removeFavorite(name=%r)' % (name))
+        _debug_('removeFavorite(name=%r)' % (name), 2)
         if not name:
             return (FALSE, 'no name')
 
@@ -1028,7 +1028,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('clearFavorites')
     def clearFavorites(self):
-        _debug_('clearFavorites()')
+        _debug_('clearFavorites()', 2)
         scheduledRecordings = self.getScheduledRecordings()
         scheduledRecordings.clearFavorites()
         self.saveScheduledRecordings(scheduledRecordings)
@@ -1038,13 +1038,13 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('getFavorites')
     def getFavorites(self):
-        _debug_('getFavorites()')
+        _debug_('getFavorites()', 2)
         return (TRUE, self.getScheduledRecordings().getFavorites())
 
 
     @kaa.rpc.expose('getFavorite')
     def getFavorite(self, name):
-        _debug_('getFavorite(name=%r)' % (name))
+        _debug_('getFavorite(name=%r)' % (name), 2)
         (status, favs) = self.getFavorites()
 
         if favs.has_key(name):
@@ -1056,7 +1056,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('adjustPriority')
     def adjustPriority(self, favname, mod=0):
-        _debug_('adjustPriority(favname=%r, mod=%r)' % (favname, mod))
+        _debug_('adjustPriority(favname=%r, mod=%r)' % (favname, mod), 2)
         save = []
         mod = int(mod)
         (status, me) = self.getFavorite(favname)
@@ -1103,7 +1103,7 @@ class RecordServer(xmlrpc.XMLRPC):
         """
         more liberal favorite check that returns an object
         """
-        _debug_('getFavoriteObject(prog=%r)' % (prog))
+        _debug_('getFavoriteObject(prog=%r)' % (prog), 2)
         if not favs:
             (status, favs) = self.getFavorites()
         # first try the strict test
@@ -1121,7 +1121,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('isProgAFavorite')
     def isProgAFavorite(self, prog, favs=None):
-        _debug_('isProgAFavorite(prog=%r)' % (prog))
+        _debug_('isProgAFavorite(prog=%r)' % (prog), 2)
         if not favs:
             (status, favs) = self.getFavorites()
 
@@ -1166,7 +1166,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('removeFavoriteFromSchedule')
     def removeFavoriteFromSchedule(self, fav):
-        _debug_('removeFavoriteFromSchedule(fav=%r)' % (fav))
+        _debug_('removeFavoriteFromSchedule(fav=%r)' % (fav), 2)
         # TODO: make sure the program we remove is not
         #       covered by another favorite.
 
@@ -1185,7 +1185,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     @kaa.rpc.expose('addFavoriteToSchedule')
     def addFavoriteToSchedule(self, fav):
-        _debug_('addFavoriteToSchedule(fav=%r)' % (fav))
+        _debug_('addFavoriteToSchedule(fav=%r)' % (fav), 2)
         global guide
         favs = {}
         favs[fav.name] = fav
@@ -1206,7 +1206,7 @@ class RecordServer(xmlrpc.XMLRPC):
     def updateFavoritesSchedule(self):
         #  TODO: do not re-add a prog to record if we have
         #        previously decided not to record it.
-        _debug_('updateFavoritesSchedule()')
+        _debug_('updateFavoritesSchedule()', 2)
 
         global guide
 
