@@ -49,37 +49,12 @@ __copyright__ = 'Copyright (C) 2004 den_RDC'
 __license__ = 'GPL'
 
 
-#"hardcoded capabilities" .. these might change or become dynamic in the future, when more capabilities are supported
-#the "container format" will remain hardcoded
-
-ContainerCapList = [ 'avi', 'mkv', 'mp4' ]
-VideoCodecList = [ 'MPEG 4 (lavc)', 'XviD', 'H.264', 'iPodv' ]
-AudioCodecList = [ 'MPEG 1 Layer 3 (mp3)', 'Ogg', 'AAC', 'iPoda' ]
-
-VFDict = {
-    'None' : ['None'],
-    'Deinterlacing' : ['None', 'Linear blend', 'Lavc deinterlacer'],
-    'Inverse Telecine' : ['None', 'On (stateless filter)'],
-    'Denoise' : ['None', 'Normal denoise', 'HQ denoise'],
-    'iPod' : ['iPod'],
-    }
-
-MencoderFilters = {
-    'Linear blend' : 'pp=lb',
-    'Lavc deinterlacer' : 'lavcdeint',
-    'On (stateless filter)' : 'ivtc=1',
-    'Normal denoise' : 'denoise3d',
-    'HQ denoise' : 'hqdn3d',
-    'iPod' : 'scale=320:240'
-    }
-
-MencoderMapping = {
-    'MPEG 4 (lavc)' : ['copy', 'lavc', ['-lavcopts', 'vcodec=mpeg4:vhq:vqmin=2:v4mv:trell:autoaspect:vbitrate=%s%s']],
-    'XviD' : ['copy', 'xvid', ['-xvidencopts', 'bitrate=%s%s']],
-    'MPEG 1 Layer 3 (mp3)' : ['frameno', 'mp3lame', ['-lameopts', 'cbr:br=%s']],
-    'iPodv' : ['lavc', 'lavc', ['-lavcopts', 'vcodec=mpeg4:vbitrate=%s%s:mbd=2:cmp=2:subcmp=2:trell=yes:v4mv=yes:vglobal=1:acodec=aac:abitrate=128:aic=2:aglobal=1'], ['-of', 'lavf'], ['-ffourcc', 'mp4v'], ['-lavfopts', 'format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames']],
-    'iPoda' : ['lavc', 'lavc', ['-lavcopts', 'acodec=aac:abitrate=%s:aic=2:aglobal=1'], ['-lavfopts', 'format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames']]
-    }
+ContainerCapList = config.ENCODINGSERVER_CONTAINER_CAP_LIST
+VideoCodecList   = config.ENCODINGSERVER_VIDEO_CODEC_LIST
+AudioCodecList   = config.ENCODINGSERVER_AUDIO_CODEC_LIST
+VideoFilters     = config.ENCODINGSERVER_VIDEO_FILTERS
+MencoderFilters  = config.ENCODINGSERVER_MENCODER_FILTERS
+MencoderMapping  = config.ENCODINGSERVER_MENCODER_MAPPING
 
 
 #from pytvgrab enum.py, see http://pytvgrab.sourceforge.net
@@ -204,9 +179,9 @@ class EncodingJob:
     def getVideoFiltersList(self):
         """Return a list of possible video filters"""
         if self.ntsc:
-            return VFDict
+            return VideoFilters
         else:
-            non_ivtcdict = VFDict.copy()
+            non_ivtcdict = VideoFilters.copy()
             del non_ivtcdict['Inverse Telecine']
             return non_ivtcdict
 

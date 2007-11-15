@@ -1995,6 +1995,36 @@ ENCODINGSERVER_GID = 0
 ENCODINGSERVER_IP   = 'localhost'
 ENCODINGSERVER_PORT = 6666
 
+# These paramaters are passed to mencoder, beware about changing them
+ENCODINGSERVER_CONTAINER_CAP_LIST = [ 'avi', 'mkv', 'mp4' ]
+ENCODINGSERVER_VIDEO_CODEC_LIST = [ 'MPEG 4 (lavc)', 'XviD', 'H.264', 'iPodv' ]
+ENCODINGSERVER_AUDIO_CODEC_LIST = [ 'MPEG 1 Layer 3 (mp3)', 'Ogg', 'AAC', 'iPoda' ]
+
+ENCODINGSERVER_VIDEO_FILTERS = {
+    'None' : ['None'],
+    'Deinterlacing' : ['None', 'Linear blend', 'Lavc deinterlacer'],
+    'Inverse Telecine' : ['None', 'On (stateless filter)'],
+    'Denoise' : ['None', 'Normal denoise', 'HQ denoise'],
+    'iPod' : ['iPod'],
+}
+
+ENCODINGSERVER_MENCODER_FILTERS = {
+    'Linear blend' : 'pp=lb',
+    'Lavc deinterlacer' : 'lavcdeint',
+    'On (stateless filter)' : 'ivtc=1',
+    'Normal denoise' : 'denoise3d',
+    'HQ denoise' : 'hqdn3d',
+    'iPod' : 'scale=320:240'
+}
+
+ENCODINGSERVER_MENCODER_MAPPING = {
+    'MPEG 4 (lavc)' : ['copy', 'lavc', ['-lavcopts', 'vcodec=mpeg4:vhq:vqmin=2:v4mv:trell:autoaspect:vbitrate=%s%s']],
+    'XviD' : ['copy', 'xvid', ['-xvidencopts', 'bitrate=%s%s']],
+    'MPEG 1 Layer 3 (mp3)' : ['frameno', 'mp3lame', ['-lameopts', 'cbr:br=%s']],
+    'iPodv' : ['lavc', 'lavc', ['-lavcopts', 'vcodec=mpeg4:vbitrate=%s%s:mbd=2:cmp=2:subcmp=2:trell=yes:v4mv=yes:vglobal=1:acodec=aac:abitrate=128:aic=2:aglobal=1'], ['-of', 'lavf'], ['-ffourcc', 'mp4v'], ['-lavfopts', 'format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames']],
+    'iPoda' : ['lavc', 'lavc', ['-lavcopts', 'acodec=aac:abitrate=%s:aic=2:aglobal=1'], ['-lavfopts', 'format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames']]
+}
+
 # ======================================================================
 # Freevo builtin commdetect server settings:
 # ======================================================================
