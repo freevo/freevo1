@@ -706,7 +706,7 @@ class FxdImdb:
             soup = BeautifulSoup(results.read(), convertEntities='xml')
         except UnicodeDecodeError:
             print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
-            pass
+            return (None, None, None)
 
         # The parse tree can be now reduced by, everything outside this is not required:
         main = soup.find('div', {'id': 'tn15main'})
