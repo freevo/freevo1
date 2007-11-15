@@ -335,7 +335,7 @@ class FavoriteItem(Item):
         Save favorite
         """
         # this can take some time, as it means although to update the schedule
-        msgtext = _('Saving the changes to this favorite.')
+        msgtext = _('Saving the changes to this favorite.')+'\n'
         msgtext+= _('This may take some time.')
         pop = PopupBox(text=msgtext)
         pop.show()
@@ -349,13 +349,8 @@ class FavoriteItem(Item):
         if result:
             # create a new edited favorite
             (result, msg) = record_client.addEditedFavorite(self.fav.name,
-                                                           self.fav.title,
-                                                           self.fav.channel,
-                                                           self.fav.dow,
-                                                           self.fav.mod,
-                                                           self.fav.priority,
-                                                           self.fav.allowDuplicates,
-                                                           self.fav.onlyNew)
+                self.fav.title, self.fav.channel, self.fav.dow, self.fav.mod,
+                self.fav.priority, self.fav.allowDuplicates, self.fav.onlyNew)
             if result:
                 if menuw:
                     menuw.delete_submenu()

@@ -47,7 +47,7 @@ class Scrobbler:
         pass
 
     def send_handshake(self):
-        url = URL + '&u=%s' % (self.username, self.md5_pass)
+        url = URL + '&u=%s' % (self.username)
         resp = None
 
         try:
