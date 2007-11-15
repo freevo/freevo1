@@ -95,22 +95,22 @@ class MPlayer:
         # this seems strange that it is 'possible' for dvd:// and 'good' for dvd
         # possible because dvd:// should be played with xine when available!
         if item.url[:6] in ('dvd://', 'vcd://') and item.url.endswith('/'):
-            _debug_('%r possible' % (item.url))
+            _debug_('%r possible' % (item.url), 2)
             return 1
         if item.mode in ('dvd', 'vcd'):
-            _debug_('%r good' % (item.url))
+            _debug_('%r good' % (item.url), 2)
             return 2
         # moved from videoitem to here (related to "Podcast video viewer plugin")
         if item.mode in ('http') and not item.filename and not item.media:
-            _debug_('%r good' % (item.url))
+            _debug_('%r good' % (item.url), 2)
             return 2
         if item.mimetype in config.VIDEO_MPLAYER_SUFFIX:
-            _debug_('%r good' % (item.url))
+            _debug_('%r good' % (item.url), 2)
             return 2
         if item.network_play:
-            _debug_('%r possible' % (item.url))
+            _debug_('%r possible' % (item.url), 2)
             return 1
-        _debug_('%r unplayable' % (item.url))
+        _debug_('%r unplayable' % (item.url), 2)
         return 0
 
 
