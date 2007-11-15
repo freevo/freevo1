@@ -53,7 +53,7 @@ class Scrobbler:
         try:
             resp = urllib2.urlopen(url);
         except Exception,e:
-            print 'Server not responding, handshake failed: %s' % (e)
+            _debug_('Server not responding, handshake failed: %s' % (e))
             return False
 
         # check response
@@ -61,7 +61,7 @@ class Scrobbler:
         status = lines.pop(0)
 
         if status.startswith('UPDATE'):
-            print 'Please update: %s' % status
+            _debug_('Please update: %s' % (status))
 
         if status == 'UPTODATE' or status.startswith('UPDATE'):
             challenge = lines.pop(0)
@@ -72,7 +72,7 @@ class Scrobbler:
             self.password_hash = hasher.hexdigest()
 
             self.submit_url = lines.pop(0)
-            print 'Handshake SUCCESS'
+            _debug_('Handshake SUCCESS')
 
         try: self.interval_time = int(lines.pop(0).split()[1])
         except: pass
@@ -80,10 +80,10 @@ class Scrobbler:
         if status == 'UPTODATE' or status.startswith('UPDATE'):
             return True
         elif status == 'BADUSER':
-            print 'Handshake failed: bad user'
+            _debug_('Handshake failed: bad user %r' % (self.username))
             return False
         else:
-            print 'Handshake failed: %s' % status;
+            _debug_('Handshake failed: %s' % (status))
             return False
 
     def submit_song(self, info):
@@ -110,7 +110,7 @@ class Scrobbler:
                 resp = urllib2.urlopen(url, data_str)
                 resp_save = resp.read()
             except Exception, e:
-                print 'Audioscrobbler server not responding, will try later: %s' % (e)
+                _debug_('Audioscrobbler server not responding, will try later: %s' % (e))
 
             lines = resp_save.rstrip().split('\n')
 
@@ -123,23 +123,20 @@ class Scrobbler:
             else: self.interval_time = int(interval.split()[1])
 
             if status == 'BADAUTH':
-                print 'Authentication failed: invalid username or bad password.'
-                print url
-                print data
+                _debug_('Authentication failed: invalid username or bad password.')
+                _debug_('url=%r, data=%r' % (url, data))
 
             elif status == 'OK':
-                print 'Submit successful'
+                _debug_('Submit successful')
                 return True
 
             elif status.startswith('FAILED'):
-                print 'FAILED response from server: %s' % status
-                print 'Dumping full response:'
-                print resp_save
+                _debug_('FAILED response from server: %s' % status)
+                _debug_('full response:%s' % (resp_save))
             else:
-                print 'Unknown response from server: %s' % status
-                print 'Dumping full response:'
-                print resp_save
+                _debug_('Unknown response from server: %s' % status)
+                _debug_('Dumping full response:%s' % (resp_save))
         else:
-            print 'Song not accepted!'
+            _debug_('Song not accepted!')
 
         return False
