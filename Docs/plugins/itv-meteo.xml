@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+    <channel>
+        <ttl>10</ttl>
+        <title>Meteo France Télévision</title>
+        <link>http://www.france2.fr</link>
+        <language>fr-fr</language>
+        <description>Meteo de France Télévision (France 2 et France 3)</description>
+        <item>
+            <title>Météo France 2</title>
+            <description>Meteo France 2</description>
+            <enclosure url="mms://a988.v101995.c10199.e.vm.akamaistream.net/7/988/10199/3f97c7e6/ftvigrp.download.akamai.com/10199/horsgv/regions/siege/france2/meteo/meteo_GT.wmv"/>
+        </item>
+        <item>
+            <title>Météo France 3</title>
+            <description>Meteo France 3</description>
+            <enclosure url="mms://a988.v101995.c10199.e.vm.akamaistream.net/7/988/10199/3f97c7e6/ftvigrp.download.akamai.com/10199/horsgv/regions/siege/france3/meteo/meteo_GT.wmv"/>
+        </item>            
+    </channel>
+</rss>

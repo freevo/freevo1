@@ -1,0 +1,4641 @@
+# GREEK TRANSLATION FOR FREEVO
+# Copyright (C) 2007 FREEVO
+# Per Wigren <lefteris@kerkyra.gr, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Freevo 1.7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-11-12 21:25+0100\n"
+"PO-Revision-Date: 2007-03-28 03:15+0100\n"
+"Last-Translator: Lefteris F. Sarakinos <lefteris@kerkyra.gr>\n"
+"Language-Team: My Self :)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Translate with: msgfmt freevo.po -o freevo.mo\n"
+
+#: ../freevo_config.py:1165 ../freevo_config.py:1170
+#: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
+#: www/htdocs/search.rpy:91 tv/edit_favorite.py:111
+#: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
+#, fuzzy
+msgid "Title"
+msgstr "Τίτλος:"
+
+#: ../freevo_config.py:1166 plugins/lcd.py:84 plugins/lcd.py:86
+#: plugins/lcd.py:263 plugins/vfd.py:108 plugins/vfd.py:110
+msgid "Description"
+msgstr "Περιγραφή"
+
+#: ../freevo_config.py:1167
+#, fuzzy
+msgid "Author"
+msgstr "αυτόματο"
+
+#: ../freevo_config.py:1171 plugins/lcd.py:83 plugins/vfd.py:107
+#: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
+#: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
+#: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
+#: share/skins/main/rain.fxd:275 share/skins/main/info.fxd:332
+msgid "Date"
+msgstr "Ημ/νια"
+
+#: ../freevo_config.py:1174
+#, fuzzy
+msgid "Model"
+msgstr "Ταινίες"
+
+#: ../freevo_config.py:1175
+#, fuzzy
+msgid "Software"
+msgstr "Έναρξη"
+
+#: image/plugins/gphoto.py:102 image/imageitem.py:102
+msgid "View Image"
+msgstr "Εμφάνιση Φωτογραφίας"
+
+#: image/plugins/gphoto.py:129 tv/plugins/recordings_manager.py:176
+#: directory.py:450
+msgid "Browse directory"
+msgstr "Περιήγηση καταλόγου"
+
+#: image/plugins/apod.py:50 image/plugins/apod.py:51
+msgid "APOD"
+msgstr ""
+
+#: image/plugins/apod.py:61
+#, fuzzy
+msgid "Current Picture"
+msgstr "Παρούσες συνθήκες"
+
+#: image/plugins/apod.py:62
+#, fuzzy
+msgid "Previous Pictures"
+msgstr "Δείτε Φωτογραφίες"
+
+#: image/plugins/apod.py:63 image/plugins/apod.py:78
+#, fuzzy
+msgid "Apod Pictures"
+msgstr "Δείτε Φωτογραφίες"
+
+#: image/plugins/apod.py:76
+#, fuzzy
+msgid "No Images found"
+msgstr "Δεν βρέθηκαν Εντολές"
+
+#: image/plugins/apod.py:96 image/plugins/apod.py:109
+msgid "Unable to open URL"
+msgstr ""
+
+#: image/plugins/apod.py:123
+msgid "Need a directory to store APOD pictures."
+msgstr ""
+
+#: image/plugins/apod.py:127
+#, fuzzy, python-format
+msgid "directory %s does not exist."
+msgstr "Ο Φάκελος [%s] υπάρχει ήδη"
+
+#: image/plugins/apod.py:131
+#, python-format
+msgid ""
+"directory %s must be able to be read, written to and executed by the user "
+"running freevo."
+msgstr ""
+
+#: image/viewer.py:126
+#, python-format
+msgid ""
+"Can't Open Image\n"
+"'%s'"
+msgstr ""
+"Δεν μπορεί να ανοιχτεί η φωτογραφία\n"
+"'%s'"
+
+#: image/viewer.py:344
+msgid "pause"
+msgstr ""
+
+#: image/viewer.py:349
+#, fuzzy
+msgid "play"
+msgstr "Παίξε το VCD"
+
+#: image/viewer.py:451
+msgid "No information available"
+msgstr "Μη διαθέσιμες πληροφορίες"
+
+#: www/htdocs/help/index.rpy:38
+msgid "Freevo Help"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:41
+msgid ""
+"This is the internal Freevo documentation. The documents         are in an "
+"early stage of development, if you like to help, please         contact the "
+"developers. You find more information like         the <a href=\"http://"
+"freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online "
+"manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org"
+"\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
+"them if someone deletes         information), feel free to add information "
+"there."
+msgstr ""
+
+#: www/htdocs/help/index.rpy:50
+#, fuzzy
+msgid "Index"
+msgstr "Δείκτης Υπ/δους"
+
+#: www/htdocs/help/index.rpy:52
+msgid "Freevo Installation Howto"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:53
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:54
+msgid "Recording Information"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:55
+msgid "Plugin List"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:56
+#, fuzzy
+msgid "FXD files"
+msgstr "Διαγραφή αρχείου"
+
+#: www/htdocs/help/index.rpy:57
+msgid "Skinning Information"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:58
+msgid "Plugin Writing Howto"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:45 www/htdocs/help/howto.rpy:46
+msgid "Freevo Installation HOWTO"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:46
+msgid "Build your own media box with Freevo and Linux"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:48 www/htdocs/help/howto.rpy:49
+msgid "Freevo Plugin Writing HOWTO"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:49
+msgid "Writing your own plugins for Freevo"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
+#: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
+#: www/htdocs/record.rpy:84 www/htdocs/edit_favorite.rpy:55
+#: www/htdocs/edit_favorite.rpy:79 www/htdocs/edit_favorite.rpy:103
+#: www/htdocs/guide.rpy:150 www/htdocs/genre.rpy:91
+#: www/htdocs/favorites.rpy:55 www/htdocs/library.rpy:197
+#: www/htdocs/library.rpy:219 www/htdocs/library.rpy:222
+#: www/htdocs/search.rpy:52 skins/main/info_area.py:133
+#: audio/plugins/xine.py:55 audio/plugins/cdbackup.py:195
+#: audio/plugins/cdbackup.py:578 video/plugins/xine.py:71 plugins/lcd.py:48
+#: plugins/vfd.py:52 plugins/freevused.py:140
+#: tv/plugins/dvbstreamer/live_pause.py:88
+#: tv/plugins/dvbstreamer/live_pause.py:112 tv/plugins/xine.py:82
+#: tv/record_client.py:90
+msgid "ERROR"
+msgstr "ΛΑΘΟΣ"
+
+#: www/htdocs/help/howto.rpy:84
+msgid "unable to load html files"
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
+msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
+msgstr ""
+
+#: www/htdocs/help/howto.rpy:86
+msgid "The files are searched in the following locations:"
+msgstr ""
+
+#: www/htdocs/help/plugins.rpy:60 www/htdocs/help/plugins.rpy:79
+msgid "Freevo Plugin List"
+msgstr ""
+
+#: www/htdocs/help/plugins.rpy:89 www/htdocs/help/plugins.rpy:97
+#, fuzzy
+msgid "top"
+msgstr "Τερματισμός"
+
+#: www/htdocs/help/plugins.rpy:90 www/htdocs/help/plugins.rpy:98
+#, fuzzy
+msgid "index"
+msgstr "Άνεμος"
+
+#: www/htdocs/help/doc.rpy:59 www/htdocs/help/doc.rpy:70
+msgid "Freevo Documentation"
+msgstr ""
+
+#: www/htdocs/help/doc.rpy:61
+#, fuzzy, python-format
+msgid "unable to load %s.html"
+msgstr "Αδυναμία στο κατέβασμα του %s"
+
+#: www/htdocs/index.rpy:47
+msgid "Welcome"
+msgstr ""
+
+#: www/htdocs/index.rpy:47 www/web_types.py:197
+msgid "Home"
+msgstr ""
+
+#: www/htdocs/index.rpy:50
+#, python-format
+msgid "Freevo Web Status as of %s"
+msgstr ""
+
+#: www/htdocs/index.rpy:55 www/htdocs/index.rpy:61 www/htdocs/index.rpy:63
+msgid "Notice"
+msgstr ""
+
+#: www/htdocs/index.rpy:55
+#, fuzzy
+msgid "The recording server is down."
+msgstr "Ο διακομιστής βιντοσκοπήσεων είναι κάτω"
+
+#: www/htdocs/index.rpy:57
+#, fuzzy
+msgid "The recording server is up and running."
+msgstr "Ο διακομιστής βιντοσκοπήσεων είναι κάτω"
+
+#: www/htdocs/index.rpy:61
+msgid "Your listings expire in 1 hour."
+msgstr ""
+
+#: www/htdocs/index.rpy:63
+#, python-format
+msgid "Your listings expire in %s hours."
+msgstr ""
+
+#: www/htdocs/index.rpy:65
+msgid "Your listings are up to date."
+msgstr ""
+
+#: www/htdocs/index.rpy:75
+#, fuzzy, python-format
+msgid "Now Recording %s."
+msgstr "Εμφάνιση του Προγράμματος Μαγνητοσκοπήσεων %s"
+
+#: www/htdocs/index.rpy:81
+#, fuzzy
+msgid "One program scheduled to record."
+msgstr "%s προγραμματίστηκε για εγγραφή"
+
+#: www/htdocs/index.rpy:83
+#, fuzzy, python-format
+msgid "%i programs scheduled to record."
+msgstr "%i προγραμματίστηκε για εγγραφή"
+
+#: www/htdocs/index.rpy:85 www/htdocs/index.rpy:87
+#, fuzzy
+msgid "No programs scheduled to record."
+msgstr "%s προγραμματίστηκε για εγγραφή"
+
+#: www/htdocs/index.rpy:89
+#, python-format
+msgid "%i of %i Mb free in %s"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:66 www/htdocs/manualrecord.rpy:200
+#: tv/plugins/manual_record.py:62
+msgid "Manual Record"
+msgstr "Χειροκίνητη Μαγνητοσκόπηση"
+
+#: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
+#: www/htdocs/edit_favorite.rpy:55 www/htdocs/guide.rpy:150
+#: www/htdocs/genre.rpy:91 www/htdocs/favorites.rpy:55
+#: tv/plugins/view_favorites.py:90 tv/plugins/scheduled_recordings.py:91
+msgid "Recording server is unavailable."
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:115
+#, fuzzy
+msgid "Manual Recorded"
+msgstr "Χειροκίνητη Μαγνητοσκόπηση"
+
+#: www/htdocs/manualrecord.rpy:124 tv/plugins/manual_record.py:374
+msgid "start time is not before stop time."
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:127 tv/plugins/manual_record.py:365
+#, python-format
+msgid "Program would record for more than %d days!"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:129 tv/plugins/manual_record.py:369
+msgid "Program would record for more than 1 day!"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Jan"
+msgstr "Ιαν"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Feb"
+msgstr "Φεβ"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Mar"
+msgstr "Μαρ"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Apr"
+msgstr "Απρ"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "May"
+msgstr "Μαι"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Jun"
+msgstr "Ιουν"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Jul"
+msgstr "Ιουλ"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Aug"
+msgstr "Αυγ"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Sep"
+msgstr "Σεπ"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Oct"
+msgstr "Οκτ"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Nov"
+msgstr "Νοε"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Dec"
+msgstr "Δεκ"
+
+#: www/htdocs/manualrecord.rpy:200 www/web_types.py:202
+#, fuzzy
+msgid "Manual Recording"
+msgstr "Χειροκίνητη Μαγνητοσκόπηση"
+
+#: www/htdocs/manualrecord.rpy:206
+msgid "Error Message"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:217 www/htdocs/record.rpy:114
+#: www/htdocs/edit_favorite.rpy:130 www/htdocs/favorites.rpy:107
+#: www/htdocs/search.rpy:90 plugins/lcd.py:254 plugins/lcd.py:688
+#: tv/edit_favorite.py:113 share/skins/main/basic.fxd:590
+#: share/skins/main/basic.fxd:621 share/skins/main/basic.fxd:652
+msgid "Channel"
+msgstr "Κανάλι"
+
+#: www/htdocs/manualrecord.rpy:218 www/htdocs/record.rpy:112
+#: www/htdocs/search.rpy:88
+#, fuzzy
+msgid "Start Time"
+msgstr "Έναρξη"
+
+#: www/htdocs/manualrecord.rpy:219 www/htdocs/record.rpy:113
+#: www/htdocs/search.rpy:89
+#, fuzzy
+msgid "Stop Time"
+msgstr "Τερματισμός"
+
+#: www/htdocs/manualrecord.rpy:221 www/htdocs/record.rpy:117
+#: www/htdocs/search.rpy:93
+#, fuzzy
+msgid "Program Description"
+msgstr "Περιγραφή"
+
+#: www/htdocs/manualrecord.rpy:232
+#, fuzzy
+msgid "Add to Recording Schedule"
+msgstr "Εμφάνιση του Προγράμματος Μαγνητοσκοπήσεων"
+
+#: www/htdocs/viewlogfile.rpy:131
+msgid "viewlog"
+msgstr ""
+
+#: www/htdocs/viewlogfile.rpy:131
+#, fuzzy
+msgid "View Logs"
+msgstr "Εμφάνιση Φωτογραφίας"
+
+#: www/htdocs/record.rpy:85 www/htdocs/edit_favorite.rpy:80
+#, fuzzy, python-format
+msgid "No program found on %s at %s."
+msgstr "Το μέσο δεν βρέθηκε για το %s τμήμα %s"
+
+#: www/htdocs/record.rpy:106 www/web_types.py:199
+#: tv/plugins/scheduled_recordings.py:45 tv/plugins/scheduled_recordings.py:59
+msgid "Scheduled Recordings"
+msgstr "Προγραμματισμένες Μαγνητοσκοπίσεις"
+
+#: www/htdocs/record.rpy:116 www/htdocs/search.rpy:92
+#: share/skins/main/info.fxd:264
+msgid "Episode"
+msgstr ""
+
+#: www/htdocs/record.rpy:118 www/htdocs/favorites.rpy:114
+#: www/htdocs/search.rpy:94
+#, fuzzy
+msgid "Actions"
+msgstr "Καλλιτέχνης"
+
+#: www/htdocs/record.rpy:142
+msgid "UNKNOWN"
+msgstr ""
+
+#: www/htdocs/record.rpy:154 www/htdocs/proginfo.rpy:60
+#: www/htdocs/search.rpy:131
+#, python-format
+msgid "Sorry, the program description for %s is unavailable."
+msgstr ""
+
+#: www/htdocs/record.rpy:159 www/htdocs/favorites.rpy:174
+#: www/htdocs/search.rpy:137 tv/edit_favorite.py:185
+msgid "Remove"
+msgstr ""
+
+#: www/htdocs/pluginconfig.rpy:367
+#, fuzzy
+msgid "Config Plugins"
+msgstr "Μενού Παραμετροποίησης"
+
+#: www/htdocs/edit_favorite.rpy:53 www/htdocs/edit_favorite.rpy:114
+#: tv/edit_favorite.py:91
+#, fuzzy
+msgid "Edit Favorite"
+msgstr "Προβολή Αγαπημένων"
+
+#: www/htdocs/edit_favorite.rpy:104
+#, python-format
+msgid "Favorite %s doesn't exists."
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:128
+#, fuzzy
+msgid "Name of favorite"
+msgstr "Τίποτα αγαπημένο"
+
+#: www/htdocs/edit_favorite.rpy:129 www/htdocs/favorites.rpy:106
+#: plugins/lcd.py:257 plugins/lcd.py:691 share/skins/main/basic.fxd:646
+msgid "Program"
+msgstr "Πρόγραμμα"
+
+#: www/htdocs/edit_favorite.rpy:131 www/htdocs/favorites.rpy:108
+#, fuzzy
+msgid "Day of week"
+msgstr "Αλλαγή ημέρα της εβδομάδας"
+
+#: www/htdocs/edit_favorite.rpy:132 www/htdocs/favorites.rpy:109
+#, fuzzy
+msgid "Time of day"
+msgstr "Αλλαγή ώρα της ημέρας"
+
+#: www/htdocs/edit_favorite.rpy:134 www/htdocs/favorites.rpy:111
+msgid "Duplicates"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
+msgid "Episodes"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:137
+msgid "Action"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:152 tv/program_display.py:327
+#: tv/favoriteitem.py:68
+msgid "ANY CHANNEL"
+msgstr "ΚΑΘΕ ΚΑΝΑΛΙ"
+
+#: www/htdocs/edit_favorite.rpy:165 tv/program_display.py:331
+#: tv/program_display.py:482 tv/favoriteitem.py:72 tv/favoriteitem.py:208
+#: tv/edit_favorite.py:140
+msgid "ANY DAY"
+msgstr "ΚΑΘΕ ΜΕΡΑ"
+
+#: www/htdocs/edit_favorite.rpy:166 tv/program_display.py:323
+#: tv/favoriteitem.py:64 tv/edit_favorite.py:144
+msgid "Mon"
+msgstr "Δευ"
+
+#: www/htdocs/edit_favorite.rpy:167 tv/program_display.py:323
+#: tv/favoriteitem.py:64 tv/edit_favorite.py:144
+msgid "Tue"
+msgstr "Τρι"
+
+#: www/htdocs/edit_favorite.rpy:168 tv/program_display.py:323
+#: tv/favoriteitem.py:64 tv/edit_favorite.py:144
+msgid "Wed"
+msgstr "Τετ"
+
+#: www/htdocs/edit_favorite.rpy:169 tv/program_display.py:323
+#: tv/favoriteitem.py:64 tv/edit_favorite.py:144
+msgid "Thu"
+msgstr "Πεμ"
+
+#: www/htdocs/edit_favorite.rpy:170 tv/program_display.py:324
+#: tv/favoriteitem.py:65 tv/edit_favorite.py:144
+msgid "Fri"
+msgstr "Παρ"
+
+#: www/htdocs/edit_favorite.rpy:171 tv/program_display.py:324
+#: tv/favoriteitem.py:65 tv/edit_favorite.py:144
+msgid "Sat"
+msgstr "Σαβ"
+
+#: www/htdocs/edit_favorite.rpy:172 plugins/weather.py:82
+#: plugins/weather.py:142 tv/program_display.py:324 tv/favoriteitem.py:65
+#: tv/edit_favorite.py:144
+msgid "Sun"
+msgstr "Κυρ"
+
+#: www/htdocs/edit_favorite.rpy:178 tv/program_display.py:335
+#: tv/program_display.py:503 tv/favoriteitem.py:76 tv/favoriteitem.py:229
+#: tv/edit_favorite.py:160
+msgid "ANY TIME"
+msgstr "ΚΑΘΕ ΩΡΑ"
+
+#: www/htdocs/edit_favorite.rpy:238
+msgid "ALLOW"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:239
+msgid "PREVENT"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:248
+msgid "ALL"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:249
+msgid "ONLY NEW"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:262 tv/plugins/manual_record.py:129
+#: tv/edit_favorite.py:182
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: www/htdocs/youtube.rpy:288
+#, fuzzy
+msgid "YouTube"
+msgstr "Τρι"
+
+#: www/htdocs/guide.rpy:145 www/web_types.py:198 tv/tvmenu.py:98
+msgid "TV Guide"
+msgstr "Οδηγός-TV"
+
+#: www/htdocs/guide.rpy:157 plugins/lcd.py:260
+#: share/skins/main/crystal.fxd:273 share/skins/main/bluestar.fxd:293
+#: share/skins/main/basic.fxd:633 share/skins/main/noia.fxd:96
+#: share/skins/main/rain.fxd:278
+msgid "Time"
+msgstr "Ώρα"
+
+#: www/htdocs/guide.rpy:157
+msgid "View"
+msgstr ""
+
+#: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:120
+#, fuzzy
+msgid "Show"
+msgstr "Τερματισμός"
+
+#: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:120
+#, fuzzy
+msgid "Category"
+msgstr " Κεφάλαια"
+
+#: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:121
+#, fuzzy
+msgid "Change"
+msgstr "Κανάλι"
+
+#: www/htdocs/guide.rpy:200 skins/main/tvlisting_area.py:339 tv/tvguide.py:51
+msgid "This channel has no data loaded"
+msgstr "Αυτό το κανάλι δεν έχει πληροφορίες φορτωμένες"
+
+#: www/htdocs/guide.rpy:272 www/htdocs/genre.rpy:204
+#: share/skins/main/basic.fxd:596 share/skins/main/basic.fxd:658
+msgid "Start"
+msgstr "Έναρξη"
+
+#: www/htdocs/guide.rpy:273 www/htdocs/genre.rpy:205
+#: share/skins/main/basic.fxd:602 share/skins/main/basic.fxd:664
+msgid "Stop"
+msgstr "Τερματισμός"
+
+#: www/htdocs/guide.rpy:274 www/htdocs/genre.rpy:206
+#: share/skins/main/dark.fxd:465 share/skins/main/info.fxd:278
+#: share/skins/main/info.fxd:303 share/skins/main/info.fxd:482
+#, fuzzy
+msgid "Runtime"
+msgstr "Χρόνος:"
+
+#: www/htdocs/guide.rpy:285 www/htdocs/genre.rpy:217 www/htdocs/search.rpy:139
+#: www/htdocs/search.rpy:141 plugins/buttonbar.py:119
+#, fuzzy
+msgid "Record"
+msgstr "Μαγνητοσκοπημένα"
+
+#: www/htdocs/guide.rpy:288 www/htdocs/genre.rpy:220
+#, fuzzy
+msgid "Add to Favorites"
+msgstr "Προσθήκη στα αγαπημένα"
+
+#: www/htdocs/guide.rpy:291 www/htdocs/genre.rpy:223
+#: www/htdocs/library.rpy:593
+msgid "Close Window"
+msgstr ""
+
+#: www/htdocs/genre.rpy:87
+#, fuzzy, python-format
+msgid "TV Genre for %s"
+msgstr "Κατηγορία: %s"
+
+#: www/htdocs/genre.rpy:179
+msgid "NO SHOWS MATCHING CATEGORY"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:53 www/htdocs/favorites.rpy:101
+#: www/web_types.py:200
+#, fuzzy
+msgid "Favorites"
+msgstr "Προβολή Αγαπημένων"
+
+#: www/htdocs/favorites.rpy:92
+#, fuzzy
+msgid "Monday"
+msgstr "Μαι"
+
+#: www/htdocs/favorites.rpy:93
+#, fuzzy
+msgid "Tuesday"
+msgstr "Τρι"
+
+#: www/htdocs/favorites.rpy:94
+msgid "Wednesday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:95
+msgid "Thursday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:96
+#, fuzzy
+msgid "Friday"
+msgstr "Παρ"
+
+#: www/htdocs/favorites.rpy:97
+msgid "Saturday"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:98
+#, fuzzy
+msgid "Sunday"
+msgstr "Λιακάδα"
+
+#: www/htdocs/favorites.rpy:105
+msgid "Favorite Name"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:115
+msgid "Priority"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:130 www/htdocs/favorites.rpy:142
+#: www/htdocs/favorites.rpy:148 tv/edit_favorite.py:117
+#, fuzzy
+msgid "ANY"
+msgstr "ΚΑΘΕ ΜΕΡΑ"
+
+#: www/htdocs/favorites.rpy:173
+msgid "Edit"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:181
+msgid "Higher"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:188
+msgid "Lower"
+msgstr ""
+
+#: www/htdocs/library.rpy:186
+#, python-format
+msgid "%s already exists! File not renamed."
+msgstr ""
+
+#: www/htdocs/library.rpy:190
+#, python-format
+msgid "Rename %s to %s."
+msgstr ""
+
+#: www/htdocs/library.rpy:193 www/htdocs/library.rpy:209
+#, python-format
+msgid "<h2>%s</h2>"
+msgstr ""
+
+#: www/htdocs/library.rpy:194
+#, python-format
+msgid "Rename %s to %s, failed."
+msgstr ""
+
+#: www/htdocs/library.rpy:197
+msgid "No new file specified."
+msgstr ""
+
+#: www/htdocs/library.rpy:203 www/htdocs/library.rpy:207
+#, fuzzy, python-format
+msgid "Delete %s."
+msgstr "Διαγραφή %s"
+
+#: www/htdocs/library.rpy:210
+#, fuzzy, python-format
+msgid "Delete %s, failed."
+msgstr "Διαγραφή αρχείου %s"
+
+#: www/htdocs/library.rpy:219
+#, python-format
+msgid "%s does not exist. No action taken."
+msgstr ""
+
+#: www/htdocs/library.rpy:223
+#, python-format
+msgid "I do not process names (%s) with slashes for security reasons."
+msgstr ""
+
+#: www/htdocs/library.rpy:230 www/htdocs/library.rpy:231 www/web_types.py:201
+msgid "Media Library"
+msgstr ""
+
+#: www/htdocs/library.rpy:262 www/web_types.py:371
+msgid "Messages"
+msgstr ""
+
+#: www/htdocs/library.rpy:274 share/skins/main/dark.fxd:18
+#: share/skins/main/crystal.fxd:9 share/skins/main/bluestar.fxd:9
+#: share/skins/main/basic.fxd:21 share/skins/main/rain.fxd:9
+msgid "Movies"
+msgstr "Ταινίες"
+
+#: www/htdocs/library.rpy:278
+msgid "Recorded TV"
+msgstr "Μαγνητοσκοπημένα"
+
+#: www/htdocs/library.rpy:282 plugins/lcd.py:177 plugins/lcd.py:633
+#: share/skins/main/dark.fxd:19 share/skins/main/crystal.fxd:10
+#: share/skins/main/bluestar.fxd:10 share/skins/main/basic.fxd:22
+#: share/skins/main/rain.fxd:10
+msgid "Music"
+msgstr "Μουσική"
+
+#: www/htdocs/library.rpy:286 share/skins/main/dark.fxd:20
+#: share/skins/main/crystal.fxd:12 share/skins/main/basic.fxd:23
+#: share/skins/main/rain.fxd:12
+msgid "Images"
+msgstr "Φωτογραφίες"
+
+#: www/htdocs/library.rpy:303 www/htdocs/library.rpy:376
+#: www/htdocs/library.rpy:378 www/htdocs/library.rpy:382
+#, fuzzy
+msgid "Back"
+msgstr "Κομμάτι"
+
+#: www/htdocs/library.rpy:538
+msgid "Download"
+msgstr ""
+
+#: www/htdocs/library.rpy:539 plugins/file_ops.py:72
+#: skin/widgets/textentry_screen.py:62
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: www/htdocs/library.rpy:541
+#, fuzzy
+msgid "Rename"
+msgstr "Όνομα"
+
+#: www/htdocs/library.rpy:582
+#, fuzzy
+msgid "Play file"
+msgstr "Παίξε τον τίτλο %s"
+
+#: www/htdocs/library.rpy:585
+#, fuzzy
+msgid "Play file using VLC"
+msgstr "Παίξε τον τίτλο %s"
+
+#: www/htdocs/config.rpy:756
+#, fuzzy
+msgid "Config"
+msgstr "Παραμετροποίηση"
+
+#: www/htdocs/search.rpy:51 tv/plugins/search_programs.py:108
+#: tv/program_display.py:255 tv/programitem.py:325
+#, fuzzy
+msgid "Search Results"
+msgstr "Αποτελέσματα Αναζήτησης Εξωφύλλου"
+
+#: www/htdocs/search.rpy:51 www/htdocs/search.rpy:75 www/web_types.py:203
+#: www/web_types.py:346 www/web_types.py:359 tv/plugins/search_programs.py:84
+#, fuzzy
+msgid "Search"
+msgstr "Αναζήτηση Οδηγού"
+
+#: www/htdocs/search.rpy:52
+#, fuzzy
+msgid "recording server is unavailable"
+msgstr "Ο διακομιστής βιντοσκοπήσεων είναι κάτω"
+
+#: www/htdocs/search.rpy:82
+#, fuzzy
+msgid "No matches"
+msgstr "Τίποτα αγαπημένο"
+
+#: www/htdocs/search.rpy:143
+#, fuzzy
+msgid "New favorite"
+msgstr "Τίποτα αγαπημένο"
+
+#: www/web_types.py:198
+msgid "View TV Listings"
+msgstr ""
+
+#: www/web_types.py:199
+#, fuzzy
+msgid "View Scheduled Recordings"
+msgstr "Προγραμματισμένες Μαγνητοσκοπίσεις"
+
+#: www/web_types.py:200 tv/plugins/view_favorites.py:44
+#: tv/plugins/view_favorites.py:49 tv/plugins/view_favorites.py:58
+msgid "View Favorites"
+msgstr "Προβολή Αγαπημένων"
+
+#: www/web_types.py:201
+msgid "View Media Library"
+msgstr ""
+
+#: www/web_types.py:202
+#, fuzzy
+msgid "Schedule a Manual Recording"
+msgstr "Προγραμματισμένες Μαγνητοσκοπίσεις"
+
+#: www/web_types.py:203
+msgid "Advanced Search Page"
+msgstr ""
+
+#: www/web_types.py:204
+#, fuzzy
+msgid "Help"
+msgstr "h = Βοήθεια"
+
+#: www/web_types.py:204
+msgid "View Online Help and Documentation"
+msgstr ""
+
+#: www/web_types.py:210
+msgid "Icecast List"
+msgstr ""
+
+#: www/web_types.py:210
+msgid "Change Icecast List"
+msgstr ""
+
+#: www/web_types.py:360
+#, fuzzy
+msgid "Movies only"
+msgstr "Ταινίες"
+
+#: www/web_types.py:361
+msgid "Go!"
+msgstr ""
+
+#: skins/main/default_areas.py:119
+msgid "TV GUIDE"
+msgstr "Οδηγός-TV"
+
+#: skins/main/listing_area.py:215
+msgid "This directory is empty"
+msgstr "Αυτός ο φάκελος είναι άδειος"
+
+#: skins/main/info_area.py:133
+msgid "missing 'src' attribute in skin tag!"
+msgstr ""
+
+#: games/game.py:84
+#, python-format
+msgid "File \"%s\" not found!"
+msgstr "Το αρχείο \"%s\" δεν βρέθηκε!"
+
+#: games/__init__.py:78
+msgid "please update GAMES_ITEMS in local_conf.py"
+msgstr ""
+
+#: games/mame_cache.py:298
+msgid "Generating MAME cache, please wait."
+msgstr "Δημιουργία MAME-cache, παρακαλώ περιμένετε."
+
+#: audio/plugins/detach.py:49
+msgid "Show player"
+msgstr "Εμφάνιση αναπαραγωγής"
+
+#: audio/plugins/fxmms.py:160 audio/plugins/mplayer.py:114
+#: audio/plugins/mplayervbr.py:122
+#, python-format
+msgid ""
+"%s\n"
+"not found!"
+msgstr ""
+"%s\n"
+"δεν βρέθηκε!"
+
+#: audio/plugins/apodcast.py:96 video/plugins/vpodcast.py:131
+#, fuzzy
+msgid "Buffering podcast..."
+msgstr "ανάκτηση πληροφοριών..."
+
+#: audio/plugins/apodcast.py:110
+#, fuzzy
+msgid "Listen Audio Podcast"
+msgstr "Ακούστε το Ραδιοφωνικό Σταθμό"
+
+#: audio/plugins/apodcast.py:148
+#, fuzzy
+msgid "Audio Podcast"
+msgstr "Άκουσε Μουσική"
+
+#: audio/plugins/apodcast.py:159 video/plugins/vpodcast.py:221
+#, fuzzy
+msgid "Fetching podcast..."
+msgstr "ανάκτηση πληροφοριών..."
+
+#: audio/plugins/apodcast.py:188 video/plugins/vpodcast.py:253
+#, fuzzy
+msgid "No Podcast locations found"
+msgstr "Δεν βρέθηκαν Ραδιοφωνικοί Σταθμοί"
+
+#: audio/plugins/apodcast.py:190 audio/plugins/apodcast.py:218
+msgid "AUDIO PODCAST"
+msgstr ""
+
+#: audio/plugins/apodcast.py:196 video/plugins/vpodcast.py:263
+#, fuzzy
+msgid "Fetching podcasts..."
+msgstr "ανάκτηση πληροφοριών..."
+
+#: audio/plugins/apodcast.py:213
+msgid "Set APODCAST_DIR in local_conf.py"
+msgstr ""
+
+#: audio/plugins/radio.py:63
+msgid "Listen to Radio Station"
+msgstr "Ακούστε το Ραδιοφωνικό Σταθμό"
+
+#: audio/plugins/radio.py:84
+msgid "Cannot play - recording in progress"
+msgstr ""
+
+#: audio/plugins/radio.py:118
+msgid "Radio"
+msgstr "Ράδιο"
+
+#: audio/plugins/radio.py:143
+msgid "No Radio Stations found"
+msgstr "Δεν βρέθηκαν Ραδιοφωνικοί Σταθμοί"
+
+#: audio/plugins/radio.py:145
+msgid "Radio Stations"
+msgstr "Ραδιοφωνικοί Σταθμοί"
+
+#: audio/plugins/playlist.py:82
+msgid "Playlists"
+msgstr "Λίστες Αναπαραγωγής"
+
+#: audio/plugins/playlist.py:98
+msgid "Enqueue this Music in Playlist"
+msgstr "Προσθήκη στην λίστα αναπαραγωγής"
+
+#: audio/plugins/playlist.py:100
+msgid "Make a new Audio Playlist"
+msgstr "Φτιάξε μια νέα λίστα αναπαραγωγής"
+
+#: audio/plugins/playlist.py:118
+#, fuzzy
+msgid "Queued Directory"
+msgstr "Φάκελος"
+
+#: audio/plugins/playlist.py:120
+msgid "Queued Track"
+msgstr ""
+
+#: audio/plugins/playlist.py:128
+#, fuzzy
+msgid "Added New Playlist"
+msgstr "Τυχαία Λίστα Μουσικής"
+
+#: audio/plugins/xine.py:56
+#, fuzzy
+msgid "'fbxine' not found, 'xine' audio plugin deactivated"
+msgstr "δεν βρέθηκε το 'fbxine', το πρόσθετο 'xine' απενεργοποιήθηκε"
+
+#: audio/plugins/xmradio.py:62
+#, fuzzy
+msgid "Listen to XM Station"
+msgstr "Ακούστε το Ραδιοφωνικό Σταθμό"
+
+#: audio/plugins/xmradio.py:95
+#, fuzzy
+msgid "XM Radio"
+msgstr "Ράδιο"
+
+#: audio/plugins/xmradio.py:136
+#, fuzzy
+msgid "No XM channels found"
+msgstr "Δεν βρέθηκαν Επικεφαλίδες"
+
+#: audio/plugins/xmradio.py:137
+#, fuzzy
+msgid "XM channels"
+msgstr "Αλλαγή καναλιού"
+
+#: audio/plugins/coversearch.py:100
+#, fuzzy
+msgid ""
+"To search for covers you need an Amazon.com Web Services\n"
+"license key. You can get yours from:\n"
+msgstr ""
+"Για την αναζήτηση των εξωφύλλων χρειάζεστε ένα κλειδί\n"
+"για την Υπηρεσία Web του Amazon.com. Μπορείται να αποκτήσετε από το:\n"
+
+#: audio/plugins/coversearch.py:158
+msgid "Find a cover for this music"
+msgstr "Βρες ένα εξώφυλλο για αυτή την μουσική"
+
+#: audio/plugins/coversearch.py:162 audio/plugins/coversearch.py:170
+#, python-format
+msgid ""
+"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
+"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
+"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
+"Info. Maybe you must fix this file (%s) tag?"
+msgstr ""
+
+#: audio/plugins/coversearch.py:178
+msgid "Unknown CD, cover searching is disabled"
+msgstr "Άγνωστο Άλμουμ CD, το εξώφυλλο είναι ανενεργό"
+
+#: audio/plugins/coversearch.py:186
+msgid "searching Amazon..."
+msgstr "αναζήτηση Amazon..."
+
+#: audio/plugins/coversearch.py:205
+#, python-format
+msgid "No matches for %(artist)s - %(album)s"
+msgstr "Δεν ταιριάζει κάτι στο %(album)s - %(artist)s"
+
+#: audio/plugins/coversearch.py:213
+#, fuzzy
+msgid "Unknown error while searching."
+msgstr "Άγνωστο σφάλμα καθώς συνδέθηκα στο IMDB"
+
+#: audio/plugins/coversearch.py:249 audio/plugins/coversearch.py:262
+msgid "small"
+msgstr "μικρό"
+
+#: audio/plugins/coversearch.py:273
+msgid "Cover Search Results"
+msgstr "Αποτελέσματα Αναζήτησης Εξωφύλλου"
+
+#: audio/plugins/coversearch.py:277
+msgid "No covers available from Amazon"
+msgstr "Δεν υπαρχουν διαθέσιμα εξώφυλλα από το Amazon IMDB"
+
+#: audio/plugins/coversearch.py:290 video/plugins/imdb.py:216
+msgid "getting data..."
+msgstr "ανάκτηση πληροφοριών..."
+
+#: audio/plugins/lyrics.py:55
+#, fuzzy
+msgid "Searching lyrics..."
+msgstr "αναζήτηση IMDB..."
+
+#: audio/plugins/lyrics.py:64
+msgid "Lyrics not found, sorry..."
+msgstr ""
+
+#: audio/plugins/lyrics.py:74
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Εμφάνιση αναπαραγωγής"
+
+#: audio/plugins/musicip.py:85
+#, fuzzy
+msgid "MusicIP Mix"
+msgstr "Μουσική"
+
+#: audio/plugins/musicip.py:87
+msgid "Songs From Same Album"
+msgstr ""
+
+#: audio/plugins/musicip.py:88
+msgid "Songs From Same Artist"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:186
+msgid "Show CD ripping status"
+msgstr "Εμφάνιση κατάστασης αντιγραφής του CD"
+
+#: audio/plugins/cdbackup.py:187
+msgid "Stop CD ripping"
+msgstr "Τέλος αντιγραφής CD"
+
+#: audio/plugins/cdbackup.py:192
+msgid "Rip the CD to the hard drive"
+msgstr "Αντιγραφή του CD στο σκληρό δίσκο"
+
+#: audio/plugins/cdbackup.py:193
+msgid "Get CDs available for ripping"
+msgstr "Πάρε τα CDs που είναι διαθέσιμα για αντιγραφή"
+
+#: audio/plugins/cdbackup.py:195
+msgid "Item is not an Audio CD"
+msgstr "Το αντικείμενο δεν είναι CD μουσικής"
+
+#: audio/plugins/cdbackup.py:209
+#, python-format
+msgid ""
+"Ripping in progress\n"
+"Track %d of %d"
+msgstr ""
+"Αντιγραφή σε εξέλιξη\n"
+"Κομμάτι %d από %d"
+
+#: audio/plugins/cdbackup.py:224
+msgid "Backup CD to hard drive in mp3 format"
+msgstr "Αντγραφή του CD στο σκληρό δίσκο σε μορφή MP3"
+
+#: audio/plugins/cdbackup.py:227
+msgid "Backup CD to hard drive in Ogg format"
+msgstr "Αντγραφή του CD στο σκληρό δίσκο σε μορφή Ogg"
+
+#: audio/plugins/cdbackup.py:230
+msgid "Backup CD to hard drive in FLAC format"
+msgstr "Αντγραφή του CD στο σκληρό δίσκο σε μορφή FLAC"
+
+#: audio/plugins/cdbackup.py:232
+msgid "Backup CD to hard drive in wav format"
+msgstr "Αντγραφή του CD στο σκληρό δίσκο σε μορφή wav"
+
+#: audio/plugins/cdbackup.py:235
+msgid "CD Backup"
+msgstr "Αντιγραφή CD"
+
+#: audio/plugins/cdbackup.py:248
+msgid "Ripping started"
+msgstr "Η αντιγραφή άρχισε"
+
+#: audio/plugins/cdbackup.py:335
+#, python-format
+msgid "Directory %s already exists"
+msgstr "Ο Φάκελος [%s] υπάρχει ήδη"
+
+#: audio/plugins/cdbackup.py:338
+#, python-format
+msgid "Cannot rip to '%s'! (%s)"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:354 audio/plugins/cdbackup.py:420
+#: audio/plugins/cdbackup.py:479
+msgid "Ripping aborted"
+msgstr "Η αντιγραφή διακόπηκε"
+
+#: audio/plugins/cdbackup.py:492
+#, fuzzy
+msgid "Ripping complete"
+msgstr "Η αντιγραφή διακόπηκε"
+
+#: audio/plugins/cdbackup.py:505
+msgid "WARNING"
+msgstr "ΠΡΟΣΟΧΗ"
+
+#: audio/plugins/cdbackup.py:505
+msgid "No CDDB data available to mmpython"
+msgstr "Δεν υπαρχουν διαθέσιμες πληροφορίες CDDB για το mmpython"
+
+#: audio/plugins/cdbackup.py:508
+msgid "Unknown Artist"
+msgstr "Άγνωστος Καλλιτέχνης"
+
+#: audio/plugins/cdbackup.py:508 audio/plugins/cdbackup.py:509
+msgid "RENAME"
+msgstr "Μετονομασία"
+
+#: audio/plugins/cdbackup.py:509 audio/audiodiskitem.py:52
+msgid "Unknown CD Album"
+msgstr "Άγνωστο Άλμπουμ CD"
+
+#: audio/plugins/cdbackup.py:510
+msgid "Other"
+msgstr "Άλλο"
+
+#: audio/plugins/cdbackup.py:513
+msgid ""
+"CD info not found!\n"
+"Must manually rename files\n"
+"when finished ripping"
+msgstr ""
+"Δεν υπαρχουν πληροφορίες για το CD!\n"
+"πρέπει να μετονομάσετε τα αρχεία\n"
+"οταν τελειώσει η αντιγραφή"
+
+#: audio/plugins/cdbackup.py:578
+msgid "Problem trying to call:"
+msgstr "Πρόβλημα κατά την κλήση του:"
+
+#: audio/plugins/album_tree.py:182 audio/plugins/album_tree.py:272
+#, fuzzy
+msgid "Album Tree"
+msgstr "Άλμπουμ"
+
+#: audio/plugins/album_tree.py:298
+#, fuzzy
+msgid "No Objects found"
+msgstr "Δεν βρέθηκαν Επικεφαλίδες"
+
+#: audio/plugins/album_tree.py:322
+#, fuzzy
+msgid "Generating playlist..."
+msgstr "κενή λίστα αναπαραγωγής"
+
+#: audio/plugins/vux.py:84
+msgid "[VUX] Start playing"
+msgstr "[VUX] Εκκίνηση"
+
+#: audio/plugins/vux.py:85
+msgid "[VUX] Stop playing"
+msgstr "[VUX] Διακοπή"
+
+#: audio/plugins/vux.py:86
+msgid "[VUX] Next (rating down)"
+msgstr "[VUX] Επόμενο (χαμηλότερα)"
+
+#: audio/plugins/vux.py:87
+msgid "[VUX] Next (rating intact)"
+msgstr "[VUX] Επόμενο (ασχέτως βαθμού)"
+
+#: audio/plugins/vux.py:88
+msgid "[VUX] Next (rating up)"
+msgstr "[VUX] Επόμενο (υψηλότερα)"
+
+#: audio/plugins/vux.py:89
+msgid "[VUX] Playing item rating up"
+msgstr "[VUX] Παίζωντας το αντικείμενο προς τα πάνω"
+
+#: audio/plugins/vux.py:90
+msgid "[VUX] Playing item rating down"
+msgstr "[VUX] Παίζωντας το αντικείμενο προς τα κάτω"
+
+#: audio/plugins/vux.py:91
+msgid "[VUX] a dir item do not select"
+msgstr "[VUX] ένας φάκελος δεν επιλεγέται"
+
+#: audio/plugins/vux.py:92
+msgid "[VUX] an audio item, do not select"
+msgstr "[VUX] ένα αντικείμενο ήχου, δεν επιλέγεται"
+
+#: audio/plugins/lastfm.py:193
+#, fuzzy
+msgid "Listen Last FM"
+msgstr "Ακούστε Μουσική"
+
+#: audio/plugins/lastfm.py:218 audio/plugins/lastfm.py:251
+msgid "Last FM"
+msgstr ""
+
+#: audio/plugins/lastfm.py:249
+msgid "Invalid LastFM Session!"
+msgstr ""
+
+#: audio/audiodiskitem.py:69
+msgid "Browse disc"
+msgstr "Περιήγηση δίσκου"
+
+#: audio/audiodiskitem.py:107 directory.py:722
+msgid "Random playlist"
+msgstr "Τυχαία Λίστα Αναπαραγωγής"
+
+#: audio/audiodiskitem.py:115
+#, fuzzy
+msgid "Data files on disc"
+msgstr "Παίξε όλα τα αρχεία του φακέλου"
+
+#: video/plugins/mover.py:99
+#, python-format
+msgid "Move to [%s]"
+msgstr "Μετάβαση στο [%s]"
+
+#: video/plugins/mplayer.py:426
+msgid "Seeking not possible"
+msgstr ""
+
+#: video/plugins/imdb.py:97
+msgid "Search IMDB for this file"
+msgstr "Αναζήτησε IMDB για αυτό το αρχείο"
+
+#: video/plugins/imdb.py:104 video/plugins/imdb.py:111
+#, python-format
+msgid "Search IMDB for [%s]"
+msgstr "Αναζήτησε IMDB για το αρχείο [%s]"
+
+#: video/plugins/imdb.py:122
+msgid "searching IMDB..."
+msgstr "αναζήτηση IMDB..."
+
+#: video/plugins/imdb.py:155
+msgid "Unknown error while connecting to IMDB"
+msgstr "Άγνωστο σφάλμα καθώς συνδέθηκα στο IMDB"
+
+#: video/plugins/imdb.py:173
+msgid "IMDB Query"
+msgstr "IMDB Ερώτημα"
+
+#: video/plugins/imdb.py:177
+msgid "No information available from IMDB"
+msgstr "Δεν υπάρχουν διαθέσιμες πληροφορίες από το IMDB"
+
+#: video/plugins/bookmarker.py:65
+msgid "Resume playback"
+msgstr "Επιστροφή στην ταινία"
+
+#: video/plugins/bookmarker.py:71
+msgid "Bookmarks"
+msgstr "Σελιδοδείκτες"
+
+#: video/plugins/bookmarker.py:136
+#, python-format
+msgid "Jump to %s"
+msgstr "Μεταπίδηση στο %s"
+
+#: video/plugins/dvdimage.py:78
+#, fuzzy
+msgid "Play image as DVD"
+msgstr "Παίξε το DVD"
+
+#: video/plugins/dvdimage.py:103
+msgid "Choose title to play. <1-9>"
+msgstr ""
+
+#: video/plugins/dvdimage.py:127
+#, python-format
+msgid "Choose disc (%i discs available)."
+msgstr ""
+
+#: video/plugins/reencode-old.py:72
+#, fuzzy
+msgid "Re-encode this program..."
+msgstr "Αναζήτηση περισσοτέρων για αυτό το πρόγραμμα"
+
+#: video/plugins/reencode-old.py:88 video/plugins/dvdbackup.py:92
+#: video/plugins/reencode.py:147
+msgid "Choose your encoding profile"
+msgstr ""
+
+#: video/plugins/reencode-old.py:99 video/plugins/dvdbackup.py:108
+#: video/plugins/reencode.py:322
+#, fuzzy
+msgid "Please wait, analyzing video..."
+msgstr "Παρακαλώ περιμένετε...."
+
+#: video/plugins/reencode-old.py:186 video/plugins/dvdbackup.py:177
+#: video/plugins/reencode.py:364
+#, fuzzy
+msgid "Encoding started"
+msgstr "Η αντιγραφή άρχισε"
+
+#: video/plugins/linkbrowser.py:69
+msgid "Browse links (autoplay)"
+msgstr ""
+
+#: video/plugins/linkbrowser.py:70
+msgid "Browse links (autoplay, maximum caching)"
+msgstr ""
+
+#: video/plugins/linkbrowser.py:71
+#, fuzzy
+msgid "Browse links"
+msgstr "Περιήγηση δίσκου"
+
+#: video/plugins/linkbrowser.py:140
+msgid "Downloading link list..."
+msgstr "Κατεβάσμα του καταλόγου συνδέσμων..."
+
+#: video/plugins/linkbrowser.py:147
+#, python-format
+msgid "Failed to download %s"
+msgstr "Αδυναμία στο κατέβασμα του %s"
+
+#: video/plugins/dvdbackup.py:77
+msgid "Backup this dvd title..."
+msgstr ""
+
+#: video/plugins/xine.py:72
+#, fuzzy
+msgid ""
+"'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr "παρακαλώ ελέγξτε το τμήμα του xine στο freevo_config.py"
+
+#: video/plugins/reencode.py:102
+#, fuzzy
+msgid "Transcode this program..."
+msgstr "Αναζήτηση περισσοτέρων για αυτό το πρόγραμμα"
+
+#: video/plugins/reencode.py:137
+msgid "Start Encoding"
+msgstr ""
+
+#: video/plugins/reencode.py:138
+msgid "Select Encoding Profile"
+msgstr ""
+
+#: video/plugins/reencode.py:139 video/plugins/reencode.py:168
+#, fuzzy
+msgid "Modify Container"
+msgstr "Αλλαγή ονόματος"
+
+#: video/plugins/reencode.py:140 video/plugins/reencode.py:178
+#, fuzzy
+msgid "Modify Resolution"
+msgstr "Ανάλυση"
+
+#: video/plugins/reencode.py:141 video/plugins/reencode.py:188
+#: video/plugins/reencode.py:208
+#, fuzzy
+msgid "Modify Video Codec"
+msgstr "Αλλαγή ώρα της ημέρας"
+
+#: video/plugins/reencode.py:142 video/plugins/reencode.py:198
+#, fuzzy
+msgid "Modify Video Bitrate"
+msgstr "Αλλαγή ώρα της ημέρας"
+
+#: video/plugins/reencode.py:143
+#, fuzzy
+msgid "Modify Audio Codec"
+msgstr "Αλλαγή ημέρα της εβδομάδας"
+
+#: video/plugins/reencode.py:144 video/plugins/reencode.py:218
+#, fuzzy
+msgid "Modify Audio Bitrate"
+msgstr "Αλλαγή ώρα τερματισμού"
+
+#: video/plugins/reencode.py:145
+#, fuzzy
+msgid "Modify Number of passes"
+msgstr "Αλλαγή ώρα της ημέρας"
+
+#: video/plugins/reencode.py:146
+msgid "Modify Video Filter (not implemented)"
+msgstr ""
+
+#: video/plugins/reencode.py:155
+msgid "Xvid Low Quality"
+msgstr ""
+
+#: video/plugins/reencode.py:156
+msgid "Xvid High Quality"
+msgstr ""
+
+#: video/plugins/reencode.py:157
+msgid "iPod"
+msgstr ""
+
+#: video/plugins/reencode.py:158
+#, fuzzy
+msgid "Select Profile"
+msgstr "Διαγραφή αρχείου"
+
+#: video/plugins/reencode.py:228
+#, fuzzy
+msgid "Modify Number of Passes"
+msgstr "Αλλαγή ώρα της ημέρας"
+
+#: video/plugins/reencode.py:238
+#, fuzzy
+msgid "Modify Video Filter"
+msgstr "Αλλαγή ώρα τερματισμού"
+
+#: video/plugins/reencode.py:274
+#, fuzzy
+msgid "Unknown Profile"
+msgstr "Άγνωστος Καλλιτέχνης"
+
+#: video/plugins/reencode.py:302
+#, fuzzy
+msgid "Unknown Property"
+msgstr "Άγνωστος Καλλιτέχνης"
+
+#: video/plugins/details.py:66
+#, fuzzy
+msgid "Show details for this item"
+msgstr "Δείξε πληροφορίες για αυτό το αρχείο"
+
+#: video/plugins/details.py:96
+msgid "Details"
+msgstr ""
+
+#: video/plugins/bilingual.py:81
+msgid "Bilingual language selection"
+msgstr ""
+
+#: video/plugins/bilingual.py:88
+msgid "Play Both Channels"
+msgstr ""
+
+#: video/plugins/bilingual.py:89
+msgid "Play Left Channel"
+msgstr ""
+
+#: video/plugins/bilingual.py:90
+msgid "Play Right Channel"
+msgstr ""
+
+#: video/plugins/bilingual.py:91
+msgid "Language Menu"
+msgstr ""
+
+#: video/plugins/fxdarchive.py:93
+#, fuzzy
+msgid "Archive FXD files"
+msgstr "Διαγραφή αρχείου"
+
+#: video/plugins/fxdarchive.py:103
+msgid "Finding and copying FXD files..."
+msgstr ""
+
+#: video/plugins/fxdarchive.py:122
+msgid "There was a error while trying to write the fxd file"
+msgstr ""
+
+#: video/plugins/fxdarchive.py:132
+msgid "But I couldn't copy a cover image file."
+msgstr ""
+
+#: video/plugins/fxdarchive.py:135
+#, python-format
+msgid "%d fxd files archived. %s"
+msgstr ""
+
+#: video/plugins/vpodcast.py:211
+#, fuzzy
+msgid "Video Podcast"
+msgstr "Άκουσε Μουσική"
+
+#: video/plugins/vpodcast.py:255 video/plugins/vpodcast.py:288
+#, fuzzy
+msgid "Video Podcasts"
+msgstr "Άκουσε Μουσική"
+
+#: video/plugins/vpodcast.py:282
+msgid "Set VPODCAST_DIR in local_conf.py"
+msgstr ""
+
+#: video/__init__.py:182
+msgid "Directory Autobuild Thumbnails "
+msgstr "Επαναδόμηση Μικρογραφιών Φακέλου "
+
+#: video/__init__.py:183
+msgid "Build video thumbnails for all items (may take a while when entering)."
+msgstr ""
+"Χτίζει τις μικρογραφίες των βίντεο για όλα  λίγο παραπάνω όταν εισέρχεστε). "
+
+#: video/configure.py:70 video/configure.py:105
+#, python-format
+msgid "Stream %s"
+msgstr "Εκπομπή %s"
+
+#: video/configure.py:81
+msgid "Audio Menu"
+msgstr "Άκουσε Μουσική"
+
+#: video/configure.py:96
+msgid "no subtitles"
+msgstr "χωρίς υπότιτλους"
+
+#: video/configure.py:118
+msgid "Subtitle Menu"
+msgstr "Μενού Υποτίτλων"
+
+#: video/configure.py:135 video/configure.py:177
+#, python-format
+msgid "Play chapter %s"
+msgstr "Παίξε το κεφάλαιο %s"
+
+#: video/configure.py:157 video/configure.py:180
+msgid "Chapter Menu"
+msgstr "Μενού Κεφαλαίων"
+
+#: video/configure.py:200
+#, fuzzy, python-format
+msgid "Play with \"%s\""
+msgstr "Παίξε τον τίτλο %s"
+
+#: video/configure.py:203
+#, fuzzy
+msgid "Player Menu"
+msgstr "Μενού Κεφαλαίων"
+
+#: video/configure.py:231
+#, python-format
+msgid "Turn off %s"
+msgstr "Σβήσε %s"
+
+#: video/configure.py:232
+#, python-format
+msgid "Turn on %s"
+msgstr "Άνοιξε %s"
+
+#: video/configure.py:261
+msgid "Activate TOP field first"
+msgstr ""
+
+#: video/configure.py:263 video/configure.py:303
+msgid "Activate BOTTOM field first"
+msgstr ""
+
+#: video/configure.py:265
+msgid "Activate AUTO field first"
+msgstr ""
+
+#: video/configure.py:278
+msgid "Play with alternate player"
+msgstr "Παίξε με το εναλακτικό πρόγραμμα"
+
+#: video/configure.py:280
+msgid "Audio selection"
+msgstr "Επιλογή ήχου"
+
+#: video/configure.py:282
+msgid "Subtitle selection"
+msgstr "Επιλογή υπότιτλου"
+
+#: video/configure.py:285 video/configure.py:289
+msgid "Chapter selection"
+msgstr "Επιλογή κεφαλαίου"
+
+#: video/configure.py:297
+#, fuzzy
+msgid "de-interlacing"
+msgstr "Επιδίπλωση"
+
+#: video/configure.py:300
+msgid "X-Video Motion Compensation (xvmc)"
+msgstr ""
+
+#: video/configure.py:308 video/videoitem.py:335 tv/program_display.py:133
+#: tv/programitem.py:110 playlist.py:283
+msgid "Play"
+msgstr "Παίξε το VCD"
+
+#: video/configure.py:309
+msgid "Config Menu"
+msgstr "Μενού Παραμετροποίησης"
+
+#: video/videoitem.py:321
+msgid "Play DVD"
+msgstr "Παίξε το DVD"
+
+#: video/videoitem.py:322 video/videoitem.py:324
+msgid "DVD title list"
+msgstr "Λίστα τίτλων του DVD"
+
+#: video/videoitem.py:325 video/videoitem.py:333
+msgid "Play default track"
+msgstr "Παίξε το προεπιλεγμένο κομμάτι"
+
+#: video/videoitem.py:329
+msgid "Play VCD"
+msgstr "Παίξε το VCD"
+
+#: video/videoitem.py:330 video/videoitem.py:332
+msgid "VCD title list"
+msgstr "Λίστα τίτλων του VCD"
+
+#: video/videoitem.py:337
+#, fuzzy
+msgid "Full description"
+msgstr "Περιγραφή"
+
+#: video/videoitem.py:340
+msgid "Play with maximum cache"
+msgstr "Παίξε με το μέγιστο cache"
+
+#: video/videoitem.py:345
+msgid "Show variants"
+msgstr "Εμφάνιση μεταβλητών"
+
+#: video/videoitem.py:349
+msgid "Create Thumbnail"
+msgstr "Δημιουργία μικρογραφίας"
+
+#: video/videoitem.py:377
+msgid "Please wait...."
+msgstr "Παρακαλώ περιμένετε...."
+
+#: video/videoitem.py:453
+#, fuzzy
+msgid "No player for this item found"
+msgstr "Δεν βρέθηκαν Site επικεφαλίδων"
+
+#: video/videoitem.py:506 video/videoitem.py:519 video/videoitem.py:533
+#, fuzzy, python-format
+msgid ""
+"No media found for \"%s\".\n"
+"Please insert the media \"%s\"."
+msgstr "Το μέσο δεν βρέθηκε για το αρχείο \"%s\".\n%s"
+
+#: video/videoitem.py:618
+#, fuzzy, python-format
+msgid "Play Title %d"
+msgstr "Παίξε τον τίτλο %d"
+
+#: video/videoitem.py:703 tv/program_display.py:640 tv/programitem.py:356
+#, fuzzy
+msgid "No Information Available"
+msgstr "Μη διαθέσιμες πληροφορίες"
+
+#: video/videoitem.py:719 plugins/lcd.py:221 plugins/freevused.py:517
+#: share/skins/main/mediaportal.fxd:692 share/skins/main/dark.fxd:453
+#: share/skins/main/dark.fxd:754 share/skins/main/basic.fxd:391
+#: share/skins/main/blurr.fxd:708 share/skins/main/info.fxd:465
+#, fuzzy
+msgid "Genre"
+msgstr "Κατηγορία: %s"
+
+#: video/videoitem.py:721 plugins/lcd.py:67 plugins/lcd.py:75
+#: plugins/vfd.py:91 plugins/vfd.py:99 plugins/freevused.py:531
+#: plugins/freevused.py:547 share/skins/main/geexbox.fxd:729
+#: share/skins/main/mediaportal.fxd:716 share/skins/main/dark.fxd:537
+#: share/skins/main/dark.fxd:774 share/skins/main/basic.fxd:416
+#: share/skins/main/blurr.fxd:724 share/skins/main/info.fxd:219
+msgid "Length"
+msgstr "Διάρκεια"
+
+#: video/videoitem.py:723 plugins/lcd.py:70 plugins/lcd.py:74
+#: plugins/vfd.py:94 plugins/vfd.py:98 share/skins/main/geexbox.fxd:712
+#: share/skins/main/mediaportal.fxd:680 share/skins/main/dark.fxd:447
+#: share/skins/main/blurr.fxd:686 share/skins/main/info.fxd:459
+msgid "Year"
+msgstr "Έτος"
+
+#: plugins/idlebar/diskfree.py:103
+#, python-format
+msgid "%iGB"
+msgstr ""
+
+#: plugins/idlebar/transcode.py:196 plugins/idlebar/encoding.py:173
+msgid "encoding server not running"
+msgstr ""
+
+#: plugins/idlebar/transcode.py:203 plugins/idlebar/encoding.py:179
+msgid "encoding server has no jobs"
+msgstr ""
+
+#: plugins/idlebar/system.py:105
+#, python-format
+msgid "%iM"
+msgstr ""
+
+#: plugins/idlebar/system.py:130
+#, python-format
+msgid "%s%%"
+msgstr ""
+
+#: plugins/headlines.py:116 plugins/itv.py:137
+msgid "Show Sites Headlines"
+msgstr "Εμφάνιση Επικεφαλίδων του Site"
+
+#: plugins/headlines.py:138 plugins/itv.py:159
+msgid "Fetching headlines..."
+msgstr "Ανάκτηση επικεφαλίδων..."
+
+#: plugins/headlines.py:203 plugins/itv.py:234
+msgid "No Headlines found"
+msgstr "Δεν βρέθηκαν Επικεφαλίδες"
+
+#: plugins/headlines.py:205 plugins/headlines.py:218 plugins/itv.py:236
+#: share/skins/main/geexbox.fxd:481 share/skins/main/dark.fxd:22
+#: share/skins/main/crystal.fxd:15 share/skins/main/bluestar.fxd:15
+#: share/skins/main/rain.fxd:15
+msgid "Headlines"
+msgstr "Επικεφαλίδες"
+
+#: plugins/headlines.py:224 plugins/headlines.py:238 plugins/itv.py:255
+#: plugins/itv.py:269
+msgid "Headlines Sites"
+msgstr "Site Επικεφαλίδων"
+
+#: plugins/headlines.py:236 plugins/itv.py:267
+msgid "No Headlines Sites found"
+msgstr "Δεν βρέθηκαν Site επικεφαλίδων"
+
+#: plugins/weather.py:69 plugins/weather.py:82 plugins/weather.py:89
+#: plugins/weather.py:142
+#, fuzzy
+msgid "Cloudy"
+msgstr "Σποραδικές Νεφώσεις"
+
+#: plugins/weather.py:70 plugins/weather.py:91
+#, fuzzy
+msgid "Mostly Cloudy"
+msgstr "Σποραδικές Νεφώσεις"
+
+#: plugins/weather.py:71 plugins/weather.py:93 plugins/weather.py:174
+msgid "Partly Cloudy"
+msgstr "Σποραδικές Νεφώσεις"
+
+#: plugins/weather.py:72 plugins/weather.py:95 plugins/weather.py:117
+#: plugins/weather.py:118 plugins/weather.py:152 plugins/weather.py:158
+#: plugins/weather.py:167 plugins/weather.py:171
+msgid "Light Rain"
+msgstr ""
+
+#: plugins/weather.py:73 plugins/weather.py:76 plugins/weather.py:85
+#: plugins/weather.py:86 plugins/weather.py:96 plugins/weather.py:112
+#, fuzzy
+msgid "Showers"
+msgstr "Εμφάνιση αναπαραγωγής"
+
+#: plugins/weather.py:74 plugins/weather.py:110 plugins/weather.py:114
+#: plugins/weather.py:116 plugins/weather.py:121 plugins/weather.py:122
+#: plugins/weather.py:124 plugins/weather.py:126 plugins/weather.py:128
+#: plugins/weather.py:130 plugins/weather.py:137 plugins/weather.py:143
+#: plugins/weather.py:144 plugins/weather.py:145 plugins/weather.py:147
+#: plugins/weather.py:157 plugins/weather.py:159 plugins/weather.py:160
+#: plugins/weather.py:169
+msgid "Snow"
+msgstr ""
+
+#: plugins/weather.py:75 plugins/weather.py:87 plugins/weather.py:92
+#: plugins/weather.py:94 plugins/weather.py:101 plugins/weather.py:108
+#: plugins/weather.py:110 plugins/weather.py:116 plugins/weather.py:119
+#: plugins/weather.py:121 plugins/weather.py:122 plugins/weather.py:125
+#: plugins/weather.py:126 plugins/weather.py:127 plugins/weather.py:128
+#: plugins/weather.py:137 plugins/weather.py:138 plugins/weather.py:143
+#: plugins/weather.py:144 plugins/weather.py:147 plugins/weather.py:149
+#: plugins/weather.py:157 plugins/weather.py:168 plugins/weather.py:170
+#, fuzzy
+msgid "Rain"
+msgstr "Βαθμολογία:"
+
+#: plugins/weather.py:76 plugins/weather.py:82 plugins/weather.py:94
+#: plugins/weather.py:107 plugins/weather.py:108 plugins/weather.py:112
+#: plugins/weather.py:115 plugins/weather.py:117 plugins/weather.py:134
+#: plugins/weather.py:136 plugins/weather.py:141 plugins/weather.py:142
+#: plugins/weather.py:143 plugins/weather.py:149 plugins/weather.py:150
+#: plugins/weather.py:151 plugins/weather.py:153 plugins/weather.py:159
+#: plugins/weather.py:163 plugins/weather.py:167 plugins/weather.py:168
+#: plugins/weather.py:171
+msgid "AM"
+msgstr ""
+
+#: plugins/weather.py:77
+msgid "Fog"
+msgstr ""
+
+#: plugins/weather.py:78 plugins/weather.py:123
+msgid "Few Showers"
+msgstr ""
+
+#: plugins/weather.py:79 plugins/weather.py:99
+msgid "Mostly Sunny"
+msgstr ""
+
+#: plugins/weather.py:80 plugins/weather.py:106
+msgid "Sunny"
+msgstr "Λιακάδα"
+
+#: plugins/weather.py:81
+msgid "Scattered Flurries"
+msgstr ""
+
+#: plugins/weather.py:82 plugins/weather.py:85 plugins/weather.py:86
+#: plugins/weather.py:104 plugins/weather.py:118 plugins/weather.py:119
+#: plugins/weather.py:122 plugins/weather.py:125 plugins/weather.py:126
+#: plugins/weather.py:130 plugins/weather.py:137 plugins/weather.py:142
+#: plugins/weather.py:146 plugins/weather.py:152 plugins/weather.py:154
+#: plugins/weather.py:156 plugins/weather.py:158 plugins/weather.py:162
+#: plugins/weather.py:165
+msgid "PM"
+msgstr ""
+
+#: plugins/weather.py:83
+msgid "Isolated T-Storms"
+msgstr ""
+
+#: plugins/weather.py:84
+msgid "Scattered Thunderstorms"
+msgstr ""
+
+#: plugins/weather.py:86 plugins/weather.py:89 plugins/weather.py:90
+#: plugins/weather.py:91 plugins/weather.py:93 plugins/weather.py:95
+#: plugins/weather.py:96 plugins/weather.py:99 plugins/weather.py:101
+#: plugins/weather.py:102 plugins/weather.py:106 plugins/weather.py:109
+#: plugins/weather.py:111 plugins/weather.py:112 plugins/weather.py:114
+#: plugins/weather.py:123 plugins/weather.py:124 plugins/weather.py:126
+#: plugins/weather.py:127 plugins/weather.py:128 plugins/weather.py:131
+#: plugins/weather.py:132 plugins/weather.py:137 plugins/weather.py:139
+#: plugins/weather.py:142 plugins/weather.py:143 plugins/weather.py:144
+#: plugins/weather.py:146 plugins/weather.py:150 plugins/weather.py:151
+#: plugins/weather.py:152 plugins/weather.py:154 plugins/weather.py:155
+#: plugins/weather.py:157 plugins/weather.py:161 plugins/weather.py:164
+#: plugins/weather.py:167 plugins/weather.py:168 plugins/weather.py:173
+#: plugins/weather.py:174 plugins/weather.py:182 plugins/weather.py:925
+#: plugins/oneclick.py:941
+msgid "Wind"
+msgstr "Άνεμος"
+
+#: plugins/weather.py:87 plugins/weather.py:94 plugins/weather.py:120
+#: plugins/weather.py:125 plugins/weather.py:127 plugins/weather.py:141
+#: plugins/weather.py:146 plugins/weather.py:150 plugins/weather.py:173
+#, fuzzy
+msgid "Snow Showers"
+msgstr "Εμφάνιση Stderr"
+
+#: plugins/weather.py:88 plugins/weather.py:131
+msgid "Few Snow Showers"
+msgstr ""
+
+#: plugins/weather.py:90 plugins/weather.py:100
+msgid "Flurries"
+msgstr ""
+
+#: plugins/weather.py:92
+#, fuzzy
+msgid "Thunder"
+msgstr "Τρι"
+
+#: plugins/weather.py:97
+msgid "Heavy Snow"
+msgstr ""
+
+#: plugins/weather.py:98 plugins/weather.py:163 plugins/weather.py:165
+#: plugins/weather.py:166
+msgid "Drizzle"
+msgstr ""
+
+#: plugins/weather.py:102
+#, fuzzy
+msgid "Sct Flurries"
+msgstr "Δείτε Φωτογραφίες"
+
+#: plugins/weather.py:103
+msgid "Sct Strong Storms"
+msgstr ""
+
+#: plugins/weather.py:104 plugins/weather.py:105 plugins/weather.py:107
+msgid "Thunderstorms"
+msgstr ""
+
+#: plugins/weather.py:109
+msgid "Iso T-Storms"
+msgstr ""
+
+#: plugins/weather.py:111
+msgid "Sct T-Storms"
+msgstr ""
+
+#: plugins/weather.py:113
+msgid "Sct Snow Showers"
+msgstr ""
+
+#: plugins/weather.py:114 plugins/weather.py:116 plugins/weather.py:121
+#: plugins/weather.py:144 plugins/weather.py:145 plugins/weather.py:147
+#: plugins/weather.py:157 plugins/weather.py:160 plugins/weather.py:169
+#, fuzzy
+msgid "to"
+msgstr "Τερματισμός"
+
+#: plugins/weather.py:114 plugins/weather.py:115 plugins/weather.py:147
+#: plugins/weather.py:149 plugins/weather.py:158 plugins/weather.py:160
+#: plugins/weather.py:171
+msgid "Ice"
+msgstr ""
+
+#: plugins/weather.py:129 plugins/weather.py:132 plugins/weather.py:136
+#: plugins/weather.py:151 plugins/weather.py:154 plugins/weather.py:162
+msgid "Light Snow"
+msgstr ""
+
+#: plugins/weather.py:133 plugins/weather.py:134 plugins/weather.py:145
+#: plugins/weather.py:161 plugins/weather.py:169
+msgid "Wintry Mix"
+msgstr ""
+
+#: plugins/weather.py:135 plugins/weather.py:172
+#, fuzzy
+msgid "Hvy Rain"
+msgstr "Βαθμολογία:"
+
+#: plugins/weather.py:135 plugins/weather.py:138 plugins/weather.py:172
+msgid "Freezing Rain"
+msgstr ""
+
+#: plugins/weather.py:139
+msgid "T-Storms"
+msgstr ""
+
+#: plugins/weather.py:140
+msgid "Sprinkles"
+msgstr ""
+
+#: plugins/weather.py:147 plugins/weather.py:995 plugins/oneclick.py:589
+msgid "and"
+msgstr "και"
+
+#: plugins/weather.py:148 plugins/weather.py:155
+msgid "Heavy Rain"
+msgstr ""
+
+#: plugins/weather.py:153
+msgid "Light Wintry Mix"
+msgstr ""
+
+#: plugins/weather.py:156
+#, fuzzy
+msgid "Snow Shower"
+msgstr "Εμφάνιση Stderr"
+
+#: plugins/weather.py:164
+msgid "Strong Storms"
+msgstr ""
+
+#: plugins/weather.py:175
+msgid "Light Rain Shower"
+msgstr ""
+
+#: plugins/weather.py:176
+msgid "Light Rain with Thunder"
+msgstr ""
+
+#: plugins/weather.py:177
+msgid "Light Drizzle"
+msgstr ""
+
+#: plugins/weather.py:178
+#, fuzzy
+msgid "Mist"
+msgstr "Καλλιτέχνης"
+
+#: plugins/weather.py:179
+msgid "Smoke"
+msgstr ""
+
+#: plugins/weather.py:180
+msgid "Haze"
+msgstr ""
+
+#: plugins/weather.py:181 plugins/weather.py:182
+msgid "Light Snow Shower"
+msgstr ""
+
+#: plugins/weather.py:183
+#, fuzzy
+msgid "Clear"
+msgstr "Έτος"
+
+#: plugins/weather.py:184
+msgid "A Few Clouds"
+msgstr ""
+
+#: plugins/weather.py:185
+msgid "Fair"
+msgstr ""
+
+#: plugins/weather.py:373 plugins/weather.py:376
+#, python-format
+msgid "Last updated: %s"
+msgstr "Τελευταία ενημέρωση: %s"
+
+#: plugins/weather.py:386
+msgid "Unlimited"
+msgstr ""
+
+#: plugins/weather.py:399 plugins/oneclick.py:523
+msgid "Show Weather Details"
+msgstr "Εμφάνιση λεπτομερειών καιρού"
+
+#: plugins/weather.py:479 plugins/oneclick.py:389
+#, python-format
+msgid "Fetching Weather for %s..."
+msgstr "Ανάλυση καιρού για %s..."
+
+#: plugins/weather.py:493 plugins/oneclick.py:438 plugins/oneclick.py:452
+#, python-format
+msgid "Fetching Radar Map for %s..."
+msgstr "Ανάλυση χάρτη ραντάρ για %s..."
+
+#: plugins/weather.py:652 plugins/weather.py:926 plugins/oneclick.py:604
+#: plugins/oneclick.py:605 plugins/oneclick.py:719 plugins/oneclick.py:981
+#: util/misc.py:451 util/misc.py:462 util/misc.py:473
+msgid "at"
+msgstr "στα"
+
+#: plugins/weather.py:674
+#, python-format
+msgid "%s (day: %s)"
+msgstr ""
+
+#: plugins/weather.py:674 plugins/weather.py:682
+#, fuzzy
+msgid "Unknown"
+msgstr "Άγνωστος Καλλιτέχνης"
+
+#: plugins/weather.py:682
+#, fuzzy, python-format
+msgid "%s (type: %s)"
+msgstr "Αναλογία: %s (%s)"
+
+#: plugins/weather.py:768 share/skins/main/bluestar.fxd:13
+msgid "Weather"
+msgstr "Ο Καιρός"
+
+#: plugins/weather.py:774 plugins/weather.py:809 plugins/mpd.py:117
+#: plugins/oneclick.py:773 plugins/oneclick.py:809
+#, fuzzy
+msgid "Locations"
+msgstr "Ραδιοφωνικοί Σταθμοί"
+
+#: plugins/weather.py:801 plugins/freeboxtv.py:114 plugins/oneclick.py:801
+msgid "No locations specified"
+msgstr ""
+
+#: plugins/weather.py:826 plugins/oneclick.py:829
+msgid "Current Conditions"
+msgstr "Παρούσες συνθήκες"
+
+#: plugins/weather.py:826 plugins/oneclick.py:829
+msgid "Today's Forecast"
+msgstr "Σημερινή Πρόγνωση"
+
+#: plugins/weather.py:827 plugins/oneclick.py:830
+msgid "Extended Forecast"
+msgstr "Εκτεταμένη Πρόγνωση"
+
+#: plugins/weather.py:827 plugins/oneclick.py:830
+msgid "Radar Map"
+msgstr "Χάρτης Ραντάρ"
+
+#: plugins/weather.py:905 plugins/oneclick.py:937
+msgid "Humidity"
+msgstr "Υγρασία"
+
+#: plugins/weather.py:918 plugins/oneclick.py:939
+msgid "Pressure"
+msgstr "Πίεση"
+
+#: plugins/weather.py:933 plugins/oneclick.py:943
+msgid "Wind Chill"
+msgstr "Αίσθηση ανέμου"
+
+#: plugins/weather.py:941 plugins/oneclick.py:945
+msgid "Visibility"
+msgstr "Ορατότητα"
+
+#: plugins/weather.py:949 plugins/oneclick.py:947
+msgid "UV Index"
+msgstr "Δείκτης Υπ/δους"
+
+#: plugins/weather.py:992
+#, fuzzy, python-format
+msgid "Today, a high of %s degrees"
+msgstr "Σήμερα, μέγιστη θερμοκρασία %s"
+
+#: plugins/weather.py:993
+#, fuzzy, python-format
+msgid "and a low of %s degrees."
+msgstr "και ελάχιστη %s"
+
+#: plugins/weather.py:994
+msgid "Currently, there is a humidity of"
+msgstr "Αυτή τη στιγμή, υπάρχει υγρασία"
+
+#: plugins/weather.py:998
+#, fuzzy
+msgid "the winds are calm"
+msgstr "οι άνεμοι "
+
+#: plugins/weather.py:1000
+#, python-format
+msgid "the winds are coming in at %s from the %s"
+msgstr ""
+
+#: plugins/weather.py:1006
+msgid "Visibility will be unlimited today"
+msgstr "Η ορατότητα θα είναι απεριόριστη σήμερα"
+
+#: plugins/weather.py:1009
+msgid "There will be a visibility of"
+msgstr "Θα υπάρχει ορατότητα των"
+
+#: plugins/weather.py:1041 plugins/oneclick.py:1044
+msgid "LO"
+msgstr "Ελ"
+
+#: plugins/weather.py:1049 plugins/oneclick.py:1050
+msgid "HI"
+msgstr "Μεγ"
+
+#: plugins/weather.py:1063
+msgid "Error encountered while trying to download Radar map"
+msgstr ""
+
+#: plugins/buttonbar.py:123 tv/program_display.py:135 tv/programitem.py:113
+#, fuzzy
+msgid "Full Description"
+msgstr "Περιγραφή"
+
+#: plugins/buttonbar.py:126
+#, fuzzy
+msgid "Now"
+msgstr "Νοε"
+
+#: plugins/buttonbar.py:135
+#, fuzzy
+msgid "WARNING: "
+msgstr "ΠΡΟΣΟΧΗ"
+
+#: plugins/buttonbar.py:136
+#, python-format
+msgid "\"%s\" is not a valid argument for the button bar. "
+msgstr ""
+
+#: plugins/buttonbar.py:368
+msgid "More Options"
+msgstr ""
+
+#: plugins/shoppingcart.py:63
+msgid "Moving files..."
+msgstr ""
+
+#: plugins/shoppingcart.py:79
+msgid "Copying files..."
+msgstr ""
+
+#: plugins/shoppingcart.py:104
+#, fuzzy
+msgid "Added to Cart"
+msgstr "Προσθήκη στα αγαπημένα"
+
+#: plugins/shoppingcart.py:117
+#, fuzzy
+msgid "Removed from Cart"
+msgstr "Διαγραφή από τα αγαπημένα"
+
+#: plugins/shoppingcart.py:125
+msgid "Removed Item from Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:128
+msgid "Added Item to Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:151
+msgid "Cart: Move Files Here"
+msgstr ""
+
+#: plugins/shoppingcart.py:152
+msgid "Cart: Copy Files Here"
+msgstr ""
+
+#: plugins/shoppingcart.py:156
+#, fuzzy
+msgid "Add Directory to Cart"
+msgstr "Έξυπνη Ταξινόμηση Φακέλου"
+
+#: plugins/shoppingcart.py:158
+#, fuzzy
+msgid "Remove Directory from Cart"
+msgstr "Έξυπνη Ταξινόμηση Φακέλου"
+
+#: plugins/shoppingcart.py:162
+#, fuzzy
+msgid "Add to Cart"
+msgstr "Προσθήκη στα αγαπημένα"
+
+#: plugins/shoppingcart.py:164
+#, fuzzy
+msgid "Remove from Cart"
+msgstr "Διαγραφή από τα αγαπημένα"
+
+#: plugins/shoppingcart.py:167
+#, fuzzy
+msgid "Delete Cart"
+msgstr "Διαγραφή"
+
+#: plugins/lcd.py:48
+msgid "You need pylcd to run \"lcd\" plugin."
+msgstr ""
+
+#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183 plugins/vfd.py:92
+#: plugins/vfd.py:96 plugins/freevused.py:514 share/skins/main/dark.fxd:521
+#: share/skins/main/dark.fxd:734 share/skins/main/info.fxd:202
+#: share/skins/main/info.fxd:357 share/skins/main/info.fxd:397
+msgid "Artist"
+msgstr "Καλλιτέχνης"
+
+#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180 plugins/vfd.py:93
+#: plugins/vfd.py:97 plugins/freevused.py:511 share/skins/main/geexbox.fxd:706
+#: share/skins/main/mediaportal.fxd:674 share/skins/main/dark.fxd:527
+#: share/skins/main/dark.fxd:739 share/skins/main/basic.fxd:374
+#: share/skins/main/blurr.fxd:680 share/skins/main/info.fxd:208
+#: share/skins/main/info.fxd:362
+msgid "Album"
+msgstr "Άλμπουμ"
+
+#: plugins/lcd.py:71 plugins/vfd.py:95 share/skins/main/geexbox.fxd:366
+#: share/skins/main/mediaportal.fxd:331 share/skins/main/blurr.fxd:339
+#: share/skins/main/info.fxd:402 share/skins/main/Panorama.fxd:360
+msgid "Tracks"
+msgstr "Κομμάτια"
+
+#: plugins/lcd.py:76 plugins/vfd.py:100 share/skins/main/dark.fxd:477
+#: share/skins/main/basic.fxd:735 share/skins/main/info.fxd:288
+#: share/skins/main/info.fxd:494
+msgid "Resolution"
+msgstr "Ανάλυση"
+
+#: plugins/lcd.py:77 plugins/vfd.py:101
+msgid "Aspect"
+msgstr "Αναλογία"
+
+#: plugins/lcd.py:78 plugins/lcd.py:81 plugins/lcd.py:218 plugins/vfd.py:102
+#: plugins/vfd.py:105
+msgid "Tagline"
+msgstr "Γραμμές"
+
+#: plugins/lcd.py:79 plugins/lcd.py:80 plugins/vfd.py:103 plugins/vfd.py:104
+msgid "Plot"
+msgstr "Σχέδιο"
+
+#: plugins/lcd.py:82 plugins/vfd.py:106 plugins/freevused.py:539
+#: share/skins/main/dark.fxd:582
+msgid "Geometry"
+msgstr "Γεωμετρία"
+
+#: plugins/lcd.py:85 plugins/vfd.py:109
+#, python-format
+msgid "%s items"
+msgstr "%s αντικείμενα"
+
+#: plugins/lcd.py:140 plugins/lcd.py:288 plugins/lcd.py:385 plugins/vfd.py:164
+#, python-format
+msgid "Today is %s."
+msgstr "Σήμερα είναι %s."
+
+#: plugins/lcd.py:150 plugins/lcd.py:618
+msgid "Menu"
+msgstr ""
+
+#: plugins/lcd.py:153 plugins/lcd.py:621
+msgid "Item"
+msgstr ""
+
+#: plugins/lcd.py:156 share/skins/main/dark.fxd:471
+#: share/skins/main/info.fxd:283 share/skins/main/info.fxd:488
+#, fuzzy
+msgid "Type"
+msgstr "Τύπος:"
+
+#: plugins/lcd.py:159
+msgid "Information"
+msgstr ""
+
+#: plugins/lcd.py:215 plugins/lcd.py:660
+#, fuzzy
+msgid "Video"
+msgstr "Τα βίντεο μου"
+
+#: plugins/lcd.py:787
+msgid ""
+"LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
+msgstr ""
+"Το πρόσθετο για Οθόνη Υγρών Κρυστάλων δεν βρέθηκε! Μπορεί να μη τρέχει το "
+"LCDd (δαίμονας lcdproc)"
+
+#: plugins/itv.py:249
+msgid "Internet TV"
+msgstr ""
+
+#: plugins/mediamenu.py:137
+msgid "Media"
+msgstr "Μέσα"
+
+#: plugins/mediamenu.py:142
+msgid "Movie"
+msgstr "Ταινίες"
+
+#: plugins/mediamenu.py:144
+msgid "Audio"
+msgstr "Μουσική"
+
+#: plugins/mediamenu.py:146
+msgid "Image"
+msgstr "Φωτογραφίες"
+
+#: plugins/mediamenu.py:148 share/skins/main/dark.fxd:21
+#: share/skins/main/crystal.fxd:14 share/skins/main/bluestar.fxd:14
+#: share/skins/main/basic.fxd:24 share/skins/main/rain.fxd:14
+#: share/skins/main/info.fxd:17
+msgid "Games"
+msgstr "Παιχνίδια"
+
+#: plugins/mediamenu.py:150
+#, python-format
+msgid "%s Main Menu"
+msgstr "%s Κεντρικό Μενού"
+
+#: plugins/freeboxtv.py:73
+msgid "Freebox TV"
+msgstr ""
+
+#: plugins/freeboxtv.py:80
+msgid "Freebox TV :: Les chaines"
+msgstr ""
+
+#: plugins/freeboxtv.py:118
+msgid "Freebox TV :: Les chaines Multiposte"
+msgstr ""
+
+#: plugins/ossmixer.py:132 plugins/ossmixer.py:135 plugins/ossmixer.py:141
+#: plugins/ossmixer.py:144 plugins/ossmixer.py:149 plugins/mixer.py:131
+#: plugins/mixer.py:134 plugins/mixer.py:140 plugins/mixer.py:143
+#: plugins/mixer.py:148 plugins/alsamixer.py:164 plugins/alsamixer.py:167
+#: plugins/alsamixer.py:175 plugins/alsamixer.py:178 plugins/alsamixer.py:185
+#, python-format
+msgid "Volume: %s%%"
+msgstr "Ένταση: %s%%"
+
+#: plugins/ossmixer.py:152 plugins/mixer.py:151 plugins/alsamixer.py:188
+msgid "Mute"
+msgstr "Σίγαση"
+
+#: plugins/icecast.py:158
+msgid "Set as icecast playlist"
+msgstr "ορισμός ως λίστας αναπαραγωγής icecast."
+
+#: plugins/cd_burn.py:91 plugins/command.py:153 gui/ConfirmBox.py:71
+#: gui/AlertBox.py:62
+msgid "OK"
+msgstr "OK"
+
+#: plugins/cd_burn.py:152
+msgid "Not Yet implemented :)"
+msgstr ""
+
+#: plugins/cd_burn.py:161
+#, python-format
+msgid "Cannot find %s (%s). "
+msgstr ""
+
+#: plugins/cd_burn.py:179
+#, python-format
+msgid "Start burning %s audio files?"
+msgstr ""
+
+#: plugins/cd_burn.py:209
+msgid "Insert media then click OK"
+msgstr ""
+
+#: plugins/cd_burn.py:234
+#, python-format
+msgid "Start burning %s ?"
+msgstr ""
+
+#: plugins/cd_burn.py:244
+#, python-format
+msgid "Start burning %s entries? ( %d Mb )"
+msgstr ""
+
+#: plugins/cd_burn.py:500
+#, python-format
+msgid "Burning status: %s"
+msgstr ""
+
+#: plugins/cd_burn.py:646
+#, python-format
+msgid "Error : Could not convert %s"
+msgstr ""
+
+#: plugins/cd_burn.py:651
+#, python-format
+msgid "/tmp/burnlist/%s"
+msgstr ""
+
+#: plugins/cd_burn.py:753
+msgid "Interrupting burning process..."
+msgstr ""
+
+#: plugins/cd_burn.py:763
+msgid "Backup interrupted"
+msgstr ""
+
+#: plugins/cd_burn.py:770
+#, python-format
+msgid "Item type is %s"
+msgstr ""
+
+#: plugins/cd_burn.py:778
+#, python-format
+msgid "Should show the menu? %i"
+msgstr ""
+
+#: plugins/cd_burn.py:781
+msgid "Burn CD"
+msgstr ""
+
+#: plugins/cd_burn.py:792
+#, fuzzy
+msgid "CD Burn Menu"
+msgstr "Μενού Παραμετροποίησης"
+
+#: plugins/cd_burn.py:815
+msgid "Copy dir to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:817
+msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
+msgstr ""
+
+#: plugins/cd_burn.py:829
+msgid "Copy this file to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:837
+#, python-format
+msgid "Copy %s to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:851
+#, python-format
+msgid "Copy %s, and related, to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:865
+#, python-format
+msgid "Copy %s, and related, file to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:879
+msgid "Burn as DVD-VIDEO disc"
+msgstr ""
+
+#: plugins/yac.py:69
+#, fuzzy, python-format
+msgid "Call: %s"
+msgstr "Γραμμές: %s"
+
+#: plugins/yac.py:71
+#, fuzzy, python-format
+msgid "Message: %s"
+msgstr "Γραμμές: %s"
+
+#: plugins/remind.py:100
+#, fuzzy
+msgid "Show Reminders"
+msgstr "Εμφάνιση Stderr"
+
+#: plugins/remind.py:111
+#, fuzzy
+msgid "No Reminders Found"
+msgstr "Δεν βρέθηκαν Επικεφαλίδες"
+
+#: plugins/remind.py:113 plugins/remind.py:163
+msgid "Reminders"
+msgstr ""
+
+#: plugins/remind.py:175
+#, fuzzy
+msgid "Reminders types"
+msgstr "Site Επικεφαλίδων"
+
+#: plugins/remind.py:189
+msgid "Remind type"
+msgstr ""
+
+#: plugins/command.py:139
+msgid "Command finished"
+msgstr "Η εντολή ολοκληρώθηκε"
+
+#: plugins/command.py:155
+msgid "Show Stderr"
+msgstr "Εμφάνιση Stderr"
+
+#: plugins/command.py:157
+msgid "Show Stdout"
+msgstr "Εμφάνιση Stdout"
+
+#: plugins/command.py:175
+msgid "Stdout File"
+msgstr "Αρχείο Stdout"
+
+#: plugins/command.py:179
+msgid "Stderr File"
+msgstr "Αρχείο Stderr"
+
+#: plugins/command.py:216 plugins/home_automation.py:113
+msgid "Run Command"
+msgstr "Εκτέλεση Εντολής"
+
+#: plugins/command.py:227
+msgid "Running Command..."
+msgstr "Εκτελείται η εντολή..."
+
+#: plugins/command.py:255
+msgid "Command Failed"
+msgstr "Η εντολή απέτυχε"
+
+#: plugins/command.py:257
+msgid "Command Completed"
+msgstr "Η εντολή ολοκληρώθηκε"
+
+#: plugins/command.py:290 plugins/command.py:328 share/skins/main/dark.fxd:23
+#: share/skins/main/crystal.fxd:16 share/skins/main/rain.fxd:16
+msgid "Commands"
+msgstr "Εντολές"
+
+#: plugins/vfd.py:52
+msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
+msgstr ""
+
+#: plugins/vfd.py:299
+#, python-format
+msgid "Sending data %r attempt=%d"
+msgstr ""
+
+#: plugins/ejectromdrives.py:69
+msgid "Close drive"
+msgstr ""
+
+#: plugins/ejectromdrives.py:71
+#, fuzzy
+msgid "Eject drive"
+msgstr "Αποβολή του δίσκου από τον οδηγό %s"
+
+#: plugins/freevused.py:140
+msgid ""
+"You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
+"plugin."
+msgstr ""
+
+#: plugins/freevused.py:287 plugins/freevused.py:290
+#, fuzzy
+msgid "Playing"
+msgstr "Παίξε το VCD"
+
+#: plugins/freevused.py:419
+#, python-format
+msgid "BT event %s"
+msgstr ""
+
+#: plugins/freevused.py:508 tv/plugins/recordings_manager.py:74
+#: tv/edit_favorite.py:105 share/skins/main/mediaportal.fxd:686
+#: share/skins/main/dark.fxd:749 share/skins/main/basic.fxd:385
+#: share/skins/main/basic.fxd:615 share/skins/main/blurr.fxd:702
+#: share/skins/main/info.fxd:270
+msgid "Name"
+msgstr "Όνομα"
+
+#: plugins/freevused.py:520 share/skins/main/geexbox.fxd:210
+#: share/skins/main/geexbox.fxd:336 share/skins/main/geexbox.fxd:718
+#: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
+#: share/skins/main/dark.fxd:759 share/skins/main/basic.fxd:397
+#: share/skins/main/blurr.fxd:202 share/skins/main/blurr.fxd:309
+#: share/skins/main/blurr.fxd:692 share/skins/main/Panorama.fxd:205
+#: share/skins/main/Panorama.fxd:330 share/skins/main/Panorama.fxd:755
+msgid "Track"
+msgstr "Κομμάτι"
+
+#: plugins/freevused.py:528 share/skins/main/mediaportal.fxd:708
+#: share/skins/main/dark.fxd:768 share/skins/main/basic.fxd:407
+#: share/skins/main/blurr.fxd:714 share/skins/main/info.fxd:225
+msgid "Bitrate"
+msgstr ""
+
+#: plugins/home_automation.py:57
+msgid "Room Items"
+msgstr ""
+
+#: plugins/home_automation.py:67
+msgid "Home Automation Devices"
+msgstr ""
+
+#: plugins/home_automation.py:82 plugins/home_automation.py:98
+#, fuzzy
+msgid "Device Options"
+msgstr "Περιγραφή"
+
+#: plugins/home_automation.py:127 plugins/home_automation.py:134
+#: plugins/home_automation.py:146
+msgid "Home Automation"
+msgstr ""
+
+#: plugins/home_automation.py:145
+#, fuzzy
+msgid "No Home Automation items found"
+msgstr "Δεν βρέθηκαν Site επικεφαλίδων"
+
+#: plugins/df.py:71
+msgid "Bad Path"
+msgstr ""
+
+#: plugins/df.py:73
+#, fuzzy, python-format
+msgid "%i free of %i GB total (%i%% free)"
+msgstr "%i κενά από %i Gb συνολικά (%i%% κενό)"
+
+#: plugins/df.py:75
+#, fuzzy, python-format
+msgid "%i free of %i MB total (%i%% free)"
+msgstr "%i κενά από %i Mb συνολικά (%i%% κενό)"
+
+#: plugins/file_ops.py:66
+msgid "Delete info"
+msgstr "Διαγραφή πληροφοριών"
+
+#: plugins/file_ops.py:68
+#, fuzzy
+msgid "Delete edl"
+msgstr "Διαγραφή αρχείου"
+
+#: plugins/file_ops.py:70
+msgid "Delete image"
+msgstr "Διαγραφή φωτογραφίας"
+
+#: plugins/file_ops.py:78
+#, python-format
+msgid ""
+"Do you wish to delete\n"
+" '%s'?"
+msgstr ""
+"Επιθυμείτε να διαγράψετε το\n"
+" '%s';"
+
+#: plugins/file_ops.py:80 tv/plugins/recordings_manager.py:660
+#, fuzzy
+msgid "Deleting..."
+msgstr "Διαγραφή...."
+
+#: plugins/file_ops.py:84
+#, python-format
+msgid ""
+"Delete info about\n"
+" '%s'?"
+msgstr ""
+"Να διαγραφούν οι πληροφορίες για το\n"
+" '%s';"
+
+#: plugins/file_ops.py:89
+#, fuzzy, python-format
+msgid ""
+"Delete edl about\n"
+" '%s'?"
+msgstr ""
+"Επιθυμείτε να διαγράψετε\n"
+"την φωτογραφία για το\n"
+" '%s';"
+
+#: plugins/file_ops.py:94
+#, python-format
+msgid ""
+"Delete image about\n"
+" '%s'?"
+msgstr ""
+"Επιθυμείτε να διαγράψετε\n"
+"την φωτογραφία για το\n"
+" '%s';"
+
+#: plugins/autoshutdown.py:145
+msgid "A recording is in progress."
+msgstr ""
+
+#: plugins/autoshutdown.py:148
+#, python-format
+msgid "Would wakeup again within %d minutes."
+msgstr ""
+
+#: plugins/autoshutdown.py:152
+msgid "There are important processes running."
+msgstr ""
+
+#: plugins/autoshutdown.py:158
+#, fuzzy
+msgid "No wakeup scheduled."
+msgstr "Τίποτα προγραμματισμένο"
+
+#: plugins/autoshutdown.py:162
+msgid "The next wakeup is scheduled at"
+msgstr ""
+
+#: plugins/autoshutdown.py:173 plugins/autoshutdown.py:257
+msgid "Resume automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:175 plugins/autoshutdown.py:254
+msgid "Pause automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:177
+msgid "Shutdown and wakeup"
+msgstr ""
+
+#: plugins/autoshutdown.py:179 plugins/shutdown.py:137 plugins/shutdown.py:141
+msgid "Restart system"
+msgstr "Επανεκίνηση Συστήματος"
+
+#: plugins/autoshutdown.py:180 plugins/shutdown.py:136 plugins/shutdown.py:140
+msgid "Shutdown system"
+msgstr "Απενεργοποίηση Συστήματος"
+
+#: plugins/autoshutdown.py:181
+#, fuzzy
+msgid "Shutdown freevo"
+msgstr "Απενεργοποίηση του Freevo"
+
+#: plugins/autoshutdown.py:191 plugins/autoshutdown.py:219
+msgid "SHUTDOWN SYSTEM?"
+msgstr ""
+
+#: plugins/autoshutdown.py:205
+msgid "RESTART SYSTEM?"
+msgstr ""
+
+#: plugins/autoshutdown.py:211 plugins/autoshutdown.py:225
+#: plugins/autoshutdown.py:239
+msgid "(wakeup disabled)"
+msgstr ""
+
+#: plugins/autoshutdown.py:233
+msgid "SHUTDOWN FREEVO?"
+msgstr ""
+
+#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:308
+msgid "shutting down..."
+msgstr "Απενεργοποίση..."
+
+#: plugins/rom_drives.py:244
+#, python-format
+msgid "Drive %s (no disc)"
+msgstr "Οδηγός %s (χωρίς δίσκο)"
+
+#: plugins/rom_drives.py:399
+#, python-format
+msgid "Ejecting disc in drive %s"
+msgstr "Αποβολή του δίσκου από τον οδηγό %s"
+
+#: plugins/rom_drives.py:423
+#, python-format
+msgid "Reading disc in drive %s"
+msgstr "Ανάγνωση δίσκου στον οδηγό %s"
+
+#: plugins/shutdown.py:135 plugins/shutdown.py:139
+msgid "Shutdown Freevo"
+msgstr "Απενεργοποίηση του Freevo"
+
+#: plugins/shutdown.py:153
+msgid "Do you really want to shut down Freevo?"
+msgstr "Θελετε πραγματικά να τερματίσετε το Freevo;"
+
+#: plugins/shutdown.py:162
+msgid "Do you really want to shut down the system?"
+msgstr "Θέλετε πραγματικά να απενεργοποιήσετε το σύστημα;"
+
+#: plugins/shutdown.py:170
+msgid "Do you really want to restart the system?"
+msgstr "Θελετε πραγματικά να επανεκκινήσετε το σύστημα;"
+
+#: plugins/mpd.py:99
+msgid "not sure what to do with this"
+msgstr ""
+
+#: plugins/mpd.py:110
+msgid "MPD"
+msgstr ""
+
+#: plugins/mpd.py:153
+msgid "mpd"
+msgstr ""
+
+#: plugins/mpd.py:214
+msgid "Song - "
+msgstr ""
+
+#: plugins/mpd.py:225
+#, fuzzy
+msgid "Artist - "
+msgstr "Καλλιτέχνης"
+
+#: plugins/mpd.py:232
+#, fuzzy
+msgid "Album - "
+msgstr "Άλμπουμ"
+
+#: plugins/mpd.py:240
+msgid "Status - "
+msgstr ""
+
+#: plugins/oneclick.py:604
+msgid "Variable"
+msgstr ""
+
+#: plugins/oneclick.py:861
+msgid "for"
+msgstr ""
+
+#: plugins/oneclick.py:980
+#, fuzzy
+msgid "As of:"
+msgstr " από "
+
+#: plugins/oneclick.py:983
+msgid "Temperature:"
+msgstr ""
+
+#: plugins/oneclick.py:984
+msgid "Dew Point:"
+msgstr ""
+
+#: plugins/oneclick.py:985
+#, fuzzy
+msgid "Humidity:"
+msgstr "Υγρασία"
+
+#: plugins/oneclick.py:986
+#, fuzzy
+msgid "Visibility:"
+msgstr "Ορατότητα"
+
+#: plugins/oneclick.py:987
+#, fuzzy
+msgid "Pressure:"
+msgstr "Πίεση"
+
+#: plugins/oneclick.py:988
+#, fuzzy
+msgid "Winds:"
+msgstr "Άνεμος"
+
+#: plugins/oneclick.py:989
+msgid "Tonight:"
+msgstr ""
+
+#: plugins/oneclick.py:990
+#, fuzzy
+msgid "Sunset:"
+msgstr "Κυρ"
+
+#: plugins/oneclick.py:991
+msgid "Moon Phase:"
+msgstr ""
+
+#: plugins/oneclick.py:1067
+msgid "Error encountered while trying to download weather map"
+msgstr ""
+
+#: gui/ConfirmBox.py:75 tv/edit_favorite.py:189
+msgid "CANCEL"
+msgstr "Άκυρο"
+
+#: tv/plugins/dvbstreamer/live_pause.py:89
+#, fuzzy
+msgid ""
+"'XINE_COMMAND' not defined, plugin 'DVBStreamer' deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr "παρακαλώ ελέγξτε το τμήμα του xine στο freevo_config.py"
+
+#: tv/plugins/dvbstreamer/live_pause.py:113
+#, fuzzy
+msgid "'xine-ui' version too old, plugin 'xine' deactivated"
+msgstr ""
+"η έκδοση του 'fbxine' είναι πολύ παλιά, το πρόσθετο 'xine' απενεργοποιήθηκε"
+
+#: tv/plugins/dvbstreamer/live_pause.py:114
+#, python-format
+msgid "You need software %s"
+msgstr "Χρειάζεστε το λογισμικό %s"
+
+#: tv/plugins/dvbstreamer/live_pause.py:548
+#, fuzzy, python-format
+msgid "Tuning to %s"
+msgstr "Άνοιξε %s"
+
+#: tv/plugins/dvbstreamer/live_pause.py:551
+#, python-format
+msgid "Buffering %s"
+msgstr ""
+
+#: tv/plugins/dvbstreamer/live_pause.py:555
+#, fuzzy, python-format
+msgid "Playing %s"
+msgstr "Παίξε το VCD"
+
+#: tv/plugins/recordings_manager.py:71
+msgid "Date then Name"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:72
+msgid "Status then Name"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:73
+msgid "Status, Date then Name"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:161
+#, fuzzy
+msgid "Manage Recordings"
+msgstr "Χειροκίνητη Μαγνητοσκόπηση"
+
+#: tv/plugins/recordings_manager.py:166 directory.py:464
+msgid "Configure directory"
+msgstr "Παραμετροποίηση Φακέλου"
+
+#: tv/plugins/recordings_manager.py:185
+msgid "Recordings Directory does not exist"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:276 directory.py:820 directory.py:910
+#: directory.py:944
+msgid "on"
+msgstr "Άναψε"
+
+#: tv/plugins/recordings_manager.py:278 directory.py:822 directory.py:825
+#: directory.py:914 directory.py:942
+msgid "off"
+msgstr "Σβήσε"
+
+#: tv/plugins/recordings_manager.py:287
+msgid "Sort by"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:289
+#, fuzzy
+msgid "Reverse sort"
+msgstr "Αντίστροφη Ταξινόμηση Φακέλου"
+
+#: tv/plugins/recordings_manager.py:291
+msgid "Sort series by"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:293
+msgid "Reverse series sort"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:295
+msgid "Status order"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:298 directory.py:951
+msgid "Configure"
+msgstr "Παραμετροποίηση"
+
+#: tv/plugins/recordings_manager.py:419
+msgid "Unmark to Keep"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:419
+msgid "Mark to Keep"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:420
+msgid "Unmark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:420
+msgid "Mark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:488
+msgid "(Unnamed)"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:588
+#, fuzzy
+msgid "Browse episodes"
+msgstr "περιήγηση καταχωρήσεων"
+
+#: tv/plugins/recordings_manager.py:589
+#, fuzzy
+msgid "Delete all episodes"
+msgstr "Διαγραφή αρχείου"
+
+#: tv/plugins/recordings_manager.py:590
+msgid "Keep all episodes"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:591
+#, fuzzy
+msgid "Play all episodes"
+msgstr "Λίστες Αναπαραγωγής"
+
+#: tv/plugins/recordings_manager.py:658
+#, fuzzy, python-format
+msgid ""
+"Do you wish to delete the series\n"
+" '%s'?"
+msgstr ""
+"Επιθυμείτε να διαγράψετε το\n"
+" '%s';"
+
+#: tv/plugins/recordings_manager.py:742
+msgid "episodes"
+msgstr ""
+
+#: tv/plugins/view_recordings.py:48
+msgid "Recorded Shows"
+msgstr "Μαγνητοσκοπημένα"
+
+#: tv/plugins/view_favorites.py:55
+msgid "No favorites."
+msgstr "Τίποτα αγαπημένο"
+
+#: tv/plugins/view_favorites.py:102
+#, fuzzy
+msgid "Get favorites failed"
+msgstr "Προσθήκη στα αγαπημένα"
+
+#: tv/plugins/xine.py:83
+#, fuzzy
+msgid ""
+"'XINE_COMMAND' not defined, 'xine' tv plugin deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr "παρακαλώ ελέγξτε το τμήμα του xine στο freevo_config.py"
+
+#: tv/plugins/view_line_in.py:51
+msgid "View VCR Input"
+msgstr "Δείτε την είσοδο VCR"
+
+#: tv/plugins/manual_record.py:112
+msgid "Display record item"
+msgstr ""
+
+#: tv/plugins/manual_record.py:121 tv/program_display.py:362
+#: tv/favoriteitem.py:106
+msgid "Modify name"
+msgstr "Αλλαγή ονόματος"
+
+#: tv/plugins/manual_record.py:122 tv/program_display.py:364
+#: tv/favoriteitem.py:108
+msgid "Modify channel"
+msgstr "Αλλαγή καναλιού"
+
+#: tv/plugins/manual_record.py:123
+msgid "Modify start month"
+msgstr "Αλλαγή μήνα έναρξης"
+
+#: tv/plugins/manual_record.py:124
+msgid "Modify start day"
+msgstr "Αλλαγή ημέρα έναρξης"
+
+#: tv/plugins/manual_record.py:125
+msgid "Modify start time"
+msgstr "Αλλαγή ώρα έναρξης"
+
+#: tv/plugins/manual_record.py:126
+msgid "Modify stop month"
+msgstr "Αλλαγή μήνα τερματισμού"
+
+#: tv/plugins/manual_record.py:127
+msgid "Modify stop day"
+msgstr "Αλλαγή ημέρα τερματισμού"
+
+#: tv/plugins/manual_record.py:128
+msgid "Modify stop time"
+msgstr "Αλλαγή ώρα τερματισμού"
+
+#: tv/plugins/manual_record.py:131
+msgid "Record Item Menu"
+msgstr ""
+
+#: tv/plugins/manual_record.py:140 tv/program_display.py:408
+#: tv/favoriteitem.py:169
+msgid "Alter Name"
+msgstr ""
+
+#: tv/plugins/manual_record.py:151 tv/program_display.py:467
+#: tv/favoriteitem.py:193
+#, fuzzy
+msgid "Modify Channel"
+msgstr "Αλλαγή καναλιού"
+
+#: tv/plugins/manual_record.py:169 tv/plugins/manual_record.py:192
+#: tv/plugins/manual_record.py:231 tv/plugins/manual_record.py:254
+#: tv/program_display.py:489 tv/favoriteitem.py:215
+#, fuzzy
+msgid "Modify Day"
+msgstr "Αλλαγή ονόματος"
+
+#: tv/plugins/manual_record.py:214 tv/plugins/manual_record.py:276
+#: tv/program_display.py:513 tv/favoriteitem.py:239
+#, fuzzy
+msgid "Modify Time"
+msgstr "Αλλαγή ονόματος"
+
+#: tv/plugins/manual_record.py:336 tv/plugins/manual_record.py:366
+#: tv/plugins/manual_record.py:370 tv/plugins/manual_record.py:375
+#: tv/plugins/manual_record.py:379
+msgid "Save Failed, recording was lost"
+msgstr ""
+
+#: tv/plugins/manual_record.py:378
+msgid ""
+"Sorry, the stop time does not give enough time for scheduler to pickup the "
+"change.  Please set it to record for a few minutes longer."
+msgstr ""
+
+#: tv/plugins/search_programs.py:78
+#, fuzzy
+msgid "Search Programs"
+msgstr "Πρόγραμμα"
+
+#: tv/plugins/search_programs.py:88 tv/program_display.py:233
+#: tv/programitem.py:298
+#, fuzzy
+msgid "Searching, please wait..."
+msgstr "Ξεκινά το Freevo, παρακαλώ περιμένετε..."
+
+#: tv/plugins/search_programs.py:103 tv/program_display.py:249
+#: tv/programitem.py:315
+#, fuzzy, python-format
+msgid "No matches found for %s"
+msgstr "Δεν ταιριάζει κάτι στο %(album)s - %(artist)s"
+
+#: tv/plugins/search_programs.py:106 tv/program_display.py:252
+#, python-format
+msgid "findMatches failed: %s"
+msgstr ""
+
+#: tv/plugins/scheduled_recordings.py:50
+#, fuzzy
+msgid "Display Scheduled Recordings"
+msgstr "Προγραμματισμένες Μαγνητοσκοπίσεις"
+
+#: tv/plugins/scheduled_recordings.py:56
+msgid "Nothing scheduled."
+msgstr "Τίποτα προγραμματισμένο"
+
+#: tv/plugins/scheduled_recordings.py:104
+#, fuzzy
+msgid "Get recordings failed"
+msgstr "Δεν βρέθηκαν προγραμματισμένες μαγνητοσκοπήσεις"
+
+#: tv/plugins/ivtv_xine_tv.py:764
+msgid "This plugin only supports the ivtv video group!"
+msgstr ""
+
+#: tv/plugins/upsoon.py:224 tv/plugins/upsoon.py:242
+msgid "A recording will start in a few minutes"
+msgstr ""
+
+#: tv/plugins/upsoon.py:272
+msgid "TV stopped, a recording is about to start!"
+msgstr ""
+
+#: tv/program_display.py:110
+msgid "Display program"
+msgstr ""
+
+#: tv/program_display.py:149 tv/programitem.py:127
+msgid "Remove from schedule"
+msgstr "Διαγραφή από το πρόγραμμα"
+
+#: tv/program_display.py:152 tv/programitem.py:129
+msgid "Schedule for recording"
+msgstr "Προγραμματισμός για εγγραφή"
+
+#: tv/program_display.py:157 tv/programitem.py:144
+msgid "Search for more of this program"
+msgstr "Αναζήτηση περισσοτέρων για αυτό το πρόγραμμα"
+
+#: tv/program_display.py:169 tv/favoriteitem.py:87 tv/favoriteitem.py:92
+#: tv/programitem.py:138
+#, fuzzy
+msgid "Edit favorite"
+msgstr "Προσθήκη στα αγαπημένα"
+
+#: tv/program_display.py:172 tv/programitem.py:140
+msgid "Add to favorites"
+msgstr "Προσθήκη στα αγαπημένα"
+
+#: tv/program_display.py:176 tv/programitem.py:341
+#, fuzzy
+msgid "Program Menu"
+msgstr "Πρόγραμμα"
+
+#: tv/program_display.py:206 tv/programitem.py:229
+#, fuzzy, python-format
+msgid "\"%s\" has been scheduled for recording"
+msgstr "%s προγραμματίστηκε για εγγραφή"
+
+#: tv/program_display.py:209
+msgid "Scheduling Failed"
+msgstr ""
+
+#: tv/program_display.py:220 tv/programitem.py:249
+#, fuzzy, python-format
+msgid "\"%s\" has been removed from schedule"
+msgstr "Διαγραφή από το πρόγραμμα"
+
+#: tv/program_display.py:223 tv/program_display.py:632 tv/edit_favorite.py:209
+#, fuzzy
+msgid "Remove Failed"
+msgstr "Διαγραφή από τα αγαπημένα"
+
+#: tv/program_display.py:300
+#, python-format
+msgid "getFavorites failed: %s"
+msgstr ""
+
+#: tv/program_display.py:348
+#, fuzzy
+msgid "Display favorite"
+msgstr "Τίποτα αγαπημένο"
+
+#: tv/program_display.py:366 tv/favoriteitem.py:110
+msgid "Modify day of week"
+msgstr "Αλλαγή ημέρα της εβδομάδας"
+
+#: tv/program_display.py:368 tv/favoriteitem.py:112
+msgid "Modify time of day"
+msgstr "Αλλαγή ώρα της ημέρας"
+
+#: tv/program_display.py:372
+#, fuzzy
+msgid "Modify duplicate flag"
+msgstr "Αλλαγή καναλιού"
+
+#: tv/program_display.py:375
+#, fuzzy
+msgid "Modify episodes flag"
+msgstr "Αλλαγή ώρα της ημέρας"
+
+#: tv/program_display.py:381 tv/favoriteitem.py:136
+#, fuzzy
+msgid "Modify priority"
+msgstr "Αλλαγή ημέρα έναρξης"
+
+#: tv/program_display.py:385 tv/favoriteitem.py:141
+msgid "Save changes"
+msgstr "Αποθήκευση αλλαγών"
+
+#: tv/program_display.py:389 tv/favoriteitem.py:88 tv/favoriteitem.py:146
+msgid "Remove favorite"
+msgstr "Διαγραφή από τα αγαπημένα"
+
+#: tv/program_display.py:392 tv/favoriteitem.py:150
+#, fuzzy
+msgid "Favorite Menu"
+msgstr "Μενού Κεφαλαίων"
+
+#: tv/program_display.py:431
+#, fuzzy
+msgid "Modify Duplicate Flag"
+msgstr "Αλλαγή καναλιού"
+
+#: tv/program_display.py:449
+msgid "Modify Only New Flag"
+msgstr ""
+
+#: tv/program_display.py:604
+msgid "Save Failed, favorite was lost"
+msgstr ""
+
+#: tv/program_display.py:613
+#, fuzzy
+msgid "Save Failed"
+msgstr "Η εντολή απέτυχε"
+
+#: tv/program_display.py:628 tv/favoriteitem.py:387
+#, fuzzy, python-format
+msgid "\"%s\" has been removed from favorites"
+msgstr "Διαγραφή από τα αγαπημένα"
+
+#: tv/program_display.py:657 tv/programitem.py:376
+msgid "Category : "
+msgstr ""
+
+#: tv/program_display.py:663 tv/programitem.py:381
+msgid "Advisory : "
+msgstr ""
+
+#: tv/program_display.py:669 tv/programitem.py:386
+#: share/skins/main/dark.fxd:459 share/skins/main/info.fxd:471
+#, fuzzy
+msgid "Rating"
+msgstr "Βαθμολογία:"
+
+#: tv/favoriteitem.py:117 tv/favoriteitem.py:291
+msgid "Prevent Recording of Duplicates"
+msgstr ""
+
+#: tv/favoriteitem.py:120
+#, fuzzy
+msgid "Allow Recording of Duplicates"
+msgstr "Εμφάνιση του Προγράμματος Μαγνητοσκοπήσεων"
+
+#: tv/favoriteitem.py:126 tv/favoriteitem.py:315
+#, fuzzy
+msgid "Record All Episodes"
+msgstr "Διαγραφή αρχείου"
+
+#: tv/favoriteitem.py:129 tv/favoriteitem.py:320
+msgid "Record Only New Episodes"
+msgstr ""
+
+#: tv/favoriteitem.py:297
+msgid "Allow Recordings of Duplicates"
+msgstr ""
+
+#: tv/favoriteitem.py:338
+msgid "Saving the changes to this favorite."
+msgstr ""
+
+#: tv/favoriteitem.py:339
+msgid "This may take some time."
+msgstr ""
+
+#: tv/favoriteitem.py:371
+msgid "Save failed, favorite was lost."
+msgstr ""
+
+#: tv/favoriteitem.py:391 tv/programitem.py:253
+#, fuzzy
+msgid "Remove failed"
+msgstr "Διαγραφή από τα αγαπημένα"
+
+#: tv/epg_xmltv.py:134
+msgid "Couldn't load the TV Guide, got an exception!"
+msgstr ""
+
+#: tv/epg_xmltv.py:225
+#, python-format
+msgid "REPLACE WITH TUNERID FOR %s"
+msgstr ""
+
+#: tv/tvguide.py:66
+msgid "Preparing the program guide"
+msgstr "Προετοιμασία του οδηγού προγράμματος"
+
+#: tv/tvguide.py:71
+msgid "TV Guide is corrupt!"
+msgstr "Ο Οδηγός Τηλεόρασης είναι κατεστραμένος!"
+
+#: tv/record_client.py:60 tv/record_client.py:69 tv/record_client.py:80
+#: tv/record_client.py:96 tv/record_client.py:108 tv/record_client.py:117
+#: tv/record_client.py:136 tv/record_client.py:145 tv/record_client.py:156
+#: tv/record_client.py:165 tv/record_client.py:178 tv/record_client.py:187
+#: tv/record_client.py:196 tv/record_client.py:205 tv/record_client.py:214
+#: tv/record_client.py:223 tv/record_client.py:232 tv/record_client.py:241
+#: tv/record_client.py:250 tv/record_client.py:259 tv/record_client.py:268
+msgid "connection error"
+msgstr ""
+
+#: tv/record_client.py:87 tv/record_client.py:103
+#, fuzzy
+msgid "no program"
+msgstr "Πρόγραμμα"
+
+#: tv/record_client.py:90
+msgid "cannot record it if it is over"
+msgstr ""
+
+#: tv/record_client.py:125 tv/record_client.py:131
+#, fuzzy
+msgid "program not scheduled"
+msgstr "Τίποτα προγραμματισμένο"
+
+#: tv/record_client.py:129
+#, fuzzy
+msgid "program is scheduled"
+msgstr "Δεν βρέθηκαν προγραμματισμένες μαγνητοσκοπήσεις"
+
+#: tv/tvmenu.py:66 tv/tvmenu.py:74
+#, python-format
+msgid "Could not find TV channel %s"
+msgstr "Δεν βρέθκε το κανάλι %s"
+
+#: tv/tvmenu.py:104
+msgid "TV Main Menu"
+msgstr "Βασικό Μενού TV"
+
+#: tv/tvmenu.py:125
+msgid "The list of TV channels is invalid!\n"
+msgstr "Η λίστα με τα κανάλια τηλεόρασης δεν είναι έγκυρη!\n"
+
+#: tv/tvmenu.py:126
+msgid "Please check the config file."
+msgstr "Παρακαλώ ελένξτε το αρχείο παραμετροποίησης!"
+
+#: tv/edit_favorite.py:136
+#, fuzzy
+msgid "Day of Week"
+msgstr "Αλλαγή ημέρα της εβδομάδας"
+
+#: tv/edit_favorite.py:157
+#, fuzzy
+msgid "Time of Day"
+msgstr "Αλλαγή ώρα της ημέρας"
+
+#: tv/edit_favorite.py:321
+#, python-format
+msgid "Favorite %s has been saved"
+msgstr ""
+
+#: tv/edit_favorite.py:323
+#, fuzzy, python-format
+msgid "Failed: %s"
+msgstr "Γραμμές: %s"
+
+#: tv/edit_favorite.py:343
+#, fuzzy, python-format
+msgid "Do you want to remove %s?"
+msgstr ""
+"Επιθυμείτε να διαγράψετε το\n"
+" '%s';"
+
+#: tv/programitem.py:165
+msgid "Sorry, you cannot watch this program now. "
+msgstr ""
+
+#: tv/programitem.py:166
+msgid "It starts in the future."
+msgstr ""
+
+#: tv/programitem.py:172
+msgid "Sorry, you cannot watch this progam now. "
+msgstr ""
+
+#: tv/programitem.py:173
+#, fuzzy
+msgid "This program is already over."
+msgstr "%s προγραμματίστηκε για εγγραφή"
+
+#: tv/programitem.py:187
+msgid "Sorry, you cannot watch TV while recording. "
+msgstr ""
+
+#: tv/programitem.py:188
+msgid "If this is not true then remove "
+msgstr ""
+
+#: tv/programitem.py:233
+#, fuzzy
+msgid "Scheduling failed"
+msgstr "Δεν βρέθηκαν προγραμματισμένες μαγνητοσκοπήσεις"
+
+#: tv/programitem.py:287
+#, fuzzy
+msgid "getFavorites failed"
+msgstr "Προσθήκη στα αγαπημένα"
+
+#: tv/programitem.py:320
+#, fuzzy
+msgid "findMatches failed"
+msgstr "Προσθήκη στα αγαπημένα"
+
+#: skin/widgets/textentry_screen.py:60
+#, fuzzy
+msgid "Left"
+msgstr "Διάρκεια"
+
+#: skin/widgets/textentry_screen.py:61
+msgid "Right"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:83
+msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:88
+msgid "1234567890"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:93
+msgid "!\"#$%^&*();:'@~?,.<>-=+\\[]{}"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:100
+msgid "ABC"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:108
+msgid "123"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:116
+msgid "Symbls"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:229
+#, fuzzy
+msgid "Space"
+msgstr "Αποθήκευση"
+
+#: util/misc.py:422
+msgid "The recordserver is down"
+msgstr "Ο διακομιστής βιντοσκοπήσεων είναι κάτω"
+
+#: util/misc.py:444
+msgid "Today"
+msgstr ""
+
+#: util/misc.py:455
+msgid "Tomorrow"
+msgstr ""
+
+#: util/misc.py:466
+msgid "This Week"
+msgstr ""
+
+#: util/misc.py:477
+msgid "No recordings are scheduled"
+msgstr "Δεν βρέθηκαν προγραμματισμένες μαγνητοσκοπήσεις"
+
+#: util/misc.py:518
+msgid "Widescreen"
+msgstr ""
+
+#: util/mediainfo.py:749
+#, fuzzy
+msgid "Reloading cache files, be patient..."
+msgstr "Ανάλυση δίσκου, υπομονή..."
+
+#: playlist.py:128 playlist.py:168
+#, python-format
+msgid "Cannot open file \"%s\""
+msgstr "Δεν μπορώ να ανοίξω το αρχείο \"%s\"."
+
+#: playlist.py:281
+msgid "Browse Playlist"
+msgstr "Εμφάνιση Λίστας Αναπαραγωγής"
+
+#: playlist.py:291 directory.py:459
+msgid "Random play all items"
+msgstr "Τυχαία Παίξε όλα τα αντικείμενα"
+
+#: playlist.py:337
+msgid "empty playlist"
+msgstr "κενή λίστα αναπαραγωγής"
+
+#: playlist.py:435
+msgid "playlist repeat on"
+msgstr ""
+
+#: playlist.py:437
+msgid "playlist repeat off"
+msgstr ""
+
+#: playlist.py:451
+#, fuzzy
+msgid "no next item in playlist"
+msgstr " αντικείμενα σε αυτή την λίστα αναπαραγωγής"
+
+#: playlist.py:478
+#, fuzzy
+msgid "no previous item in playlist"
+msgstr " αντικείμενα σε αυτή την λίστα αναπαραγωγής"
+
+#: menu.py:706
+msgid "No action defined for this choice!"
+msgstr "Δεν έχει οριστεί ενέργεια για αυτή την επιλογή!"
+
+#: directory.py:57
+msgid "Directory Sort By Date"
+msgstr "Ταξινόμηση Φακέλου κατά Ημ/νια"
+
+#: directory.py:58
+msgid "Sort directory by date and not by name."
+msgstr "Ταξινόμηση Φακέλου κατά ημ/νια και όχι κατά όνομα."
+
+#: directory.py:60
+msgid "Directory Autoplay Single Item"
+msgstr "Αυτόματη Εκκίνηση Μοναδικού αντικείμένου Φακέλου"
+
+#: directory.py:61
+msgid "Don't show directory if only one item exists and auto-select the item."
+msgstr ""
+"Μη δείχνεις το φάκελο αν υπάρχει μόνο ένα αντικείμενο και αυτόματα επέλεξε "
+"το."
+
+#: directory.py:64
+msgid "Force Skin Layout"
+msgstr "Επιβολή Δέρματος Εμφάνισης"
+
+#: directory.py:65
+msgid ""
+"Force skin to a specific layout. This option doesn't work with all skins and "
+"the result may differ based on the skin."
+msgstr ""
+"Επιβολή δέρματος για μια οθόνη. Αυτή η επιλογή δεν λειτουργεί σε όλα τα "
+"δέρματα και το αποτέλεσμα μπορεί να διαφέρει ανα δέρμα."
+
+#: directory.py:68
+msgid "Directory Smart Sort"
+msgstr "Έξυπνη Ταξινόμηση Φακέλου"
+
+#: directory.py:69
+msgid "Use a smarter way to sort the items."
+msgstr ""
+"Χρησιμοποίησε ένα εξυπνότερο τρόπο για την ταξινόμηση των αντικειμένων."
+
+#: directory.py:71
+msgid "Directory Smart Names"
+msgstr "Έξυπνα Ονόματα Φακέλου"
+
+#: directory.py:72
+msgid "Use a smarter way to abbreviate the name of the items."
+msgstr ""
+"Χρησιμοποίησε ένα εξυπνότερο τρόπο για την δημιουργία των ονομάτων των "
+"αντικειμένων."
+
+#: directory.py:74
+msgid "Use MediaID Tag Names"
+msgstr "Χρησιμοποίησε Ταυτότητα Μέσου για Ονόματα"
+
+#: directory.py:75
+msgid "Use the names from the media files tags as display name."
+msgstr "Χρησιμοποιήσε τα ονόματα των αρχείων για εμφανιζόμενα ονόματα."
+
+#: directory.py:77
+msgid "Directory Reverse Sort"
+msgstr "Αντίστροφη Ταξινόμηση Φακέλου"
+
+#: directory.py:78
+msgid "Show the items in the list in reverse order."
+msgstr "Εμφάνισε τα αντικείμενα της λίστας σε αντίστροφη κατάταξη."
+
+#: directory.py:82
+msgid "Directory Create Playlist"
+msgstr "Δημιουργία Λίστας Αναπαραγωγής Φακέλου"
+
+#: directory.py:83
+msgid ""
+"Handle the directory as playlist. After one file is played, the next one "
+"will be started."
+msgstr ""
+"Χειρισμός του φακέλου ως λίστα αναπαραγωγής. Μόλις το αρχείο παίξει, το "
+"επόμενο θα αρχίσει."
+
+#: directory.py:86
+msgid "Directory Add Playlist Files"
+msgstr "Προσθήκη Φακέλου στη Λίστας Αναπαραγωγής"
+
+#: directory.py:87
+msgid "Add playlist files to the list of items"
+msgstr "Προσθήκη των αντικειμένων στην λίστα αναπαραγωγής"
+
+#: directory.py:89
+msgid "Directory Add Random Playlist"
+msgstr "Προσθήκη Φακέλου σε Λίστα Τυχαίας Αναπαραγωγής"
+
+#: directory.py:90
+msgid "Add an item for a random playlist"
+msgstr "Προσθήκη ενός αντικειμένου σε μια Λίστα Τυχαίας Αναπαραγωγής"
+
+#: directory.py:92
+msgid "Directory Autoplay Items"
+msgstr "Αυτόματη Αναπαραγωγή Αντικειμένων Φακέλου"
+
+#: directory.py:93
+msgid ""
+"Autoplay the whole directory (as playlist) when it contains only files and "
+"no directories"
+msgstr ""
+"Αυτόματη αναπαραγωγή ολόκληρου του φακέλου (ως λίστα αναπαραγωγής) όταν "
+"περιέχει μόνο αρχεία και όχι φακέλους"
+
+#: directory.py:316
+#, python-format
+msgid "Directory on disc [%s]"
+msgstr "Φάκελος στο δίσκο [%s]"
+
+#: directory.py:317
+msgid "Directory"
+msgstr "Φάκελος"
+
+#: directory.py:453
+msgid "Play all files in directory"
+msgstr "Παίξε όλα τα αρχεία του φακέλου"
+
+#: directory.py:461
+msgid "Recursive random play all items"
+msgstr "Παρατεταμένα τυχαία παίξε όλα τα αντικείμενα"
+
+#: directory.py:462
+msgid "Recursive play all items"
+msgstr "Παρατεταμένα παίξε όλα τα αντικείμανα"
+
+#: directory.py:531
+msgid "Enter Password"
+msgstr "Δώστε Κωδικό"
+
+#: directory.py:556
+msgid "Password incorrect"
+msgstr "Λάθος Κωδικός"
+
+#: directory.py:590
+#, fuzzy
+msgid "Directory does not exist"
+msgstr "Ο Φάκελος [%s] υπάρχει ήδη"
+
+#: directory.py:620
+msgid "Scanning disc, be patient..."
+msgstr "Ανάλυση δίσκου, υπομονή..."
+
+#: directory.py:622
+msgid "Scanning directory, be patient..."
+msgstr "Ανάλυση φακέλου, υπομονή..."
+
+#: directory.py:827
+msgid "auto"
+msgstr "αυτόματο"
+
+#: directory.py:946
+msgid "Show all kinds of items"
+msgstr "Εμφάνισε τα όλων των ειδών τα αντικείμενα"
+
+#: directory.py:948
+msgid "Show video, audio and image items in this directory"
+msgstr "Εμφάνισε αρχεία βίντεο, μουσικής και φωτογραφιών σε αυτό τον φάκελο"
+
+#: setup_freevo.py:76
+msgid ""
+"Usage: ./freevo setup [OPTION]...\n"
+"Set up Freevo for your specific environment.\n"
+"\n"
+"   --geometry=WIDTHxHEIGHT      set the display size\n"
+"                                  WIDTHxHEIGHT can be 800x600, 768x576 or "
+"640x480\n"
+"\n"
+"   --display=DISP               set the display\n"
+"                                  DISP can be x11, fbdev, dxr3, mga,\n"
+"                                  directfb, dfbmga or dga\n"
+"\n"
+"   --tv=NORM                    set the TV standard\n"
+"                                  NORM can be ntsc, pal or secam\n"
+"\n"
+"   --chanlist=LIST              set the channel list\n"
+"                                  LIST can be us-bcast, us-cable, us-cable-"
+"hrc,\n"
+"                                  japan-bcast, japan-cable, europe-west,\n"
+"                                  europe-east, italy, newzealand, "
+"australia,\n"
+"                                  ireland, france, china-bcast, "
+"southafrica,\n"
+"                                  argentina, canada-cable, switzerland\n"
+"\n"
+"   --help                       display this help and exit\n"
+"\n"
+"The default is \"--geometry=800x600 --display=x11 --tv=ntsc --chanlist=us-"
+"cable\"\n"
+"Please report bugs to <freevo-users@lists.sourceforge.net>.\n"
+msgstr ""
+
+#: setup_freevo.py:180
+#, python-format
+msgid "checking for %-13s"
+msgstr ""
+
+#: setup_freevo.py:193
+#, python-format
+msgid "ERROR: can't find %s"
+msgstr ""
+
+#: setup_freevo.py:194
+msgid "Please install the application respectively put it in your path."
+msgstr ""
+
+#: setup_freevo.py:195
+msgid "Freevo won't work without it."
+msgstr ""
+
+#: setup_freevo.py:201
+#, fuzzy
+msgid "not found (deactivated)"
+msgstr "δεν βρέθηκε το 'fbxine', το πρόσθετο 'xine' απενεργοποιήθηκε"
+
+#: setup_freevo.py:264
+#, python-format
+msgid "System path first=%s"
+msgstr ""
+
+#: setup_freevo.py:264
+#, fuzzy
+msgid "No"
+msgstr "Νοε"
+
+#: setup_freevo.py:264
+msgid "Yes"
+msgstr ""
+
+#: setup_freevo.py:280
+#, fuzzy
+msgid "Settings:"
+msgstr "Βαθμολογία:"
+
+#: main.py:170
+msgid "Freevo Main Menu"
+msgstr "Κεντρικό Μενού του Freevo"
+
+#: main.py:186
+msgid "Skin Selector"
+msgstr ""
+
+#: main.py:299
+#, python-format
+msgid ""
+"Event '%s' crashed\n"
+"\n"
+"Please take a look at the logfile and report the bug to the Freevo mailing "
+"list. The state of Freevo may be corrupt now and this error could cause more "
+"errors until you restart Freevo.\n"
+"\n"
+"Logfile: %s\n"
+"\n"
+msgstr ""
+"Γεγονός '%s' έσπασε \n"
+"\n"
+"Παρακαλώ ελένξτε το αρχείο καταγραφής και κοινοποιήστε το πρόβλημα στις "
+"λίστες του Freevo. Η κατάσταση του Freevo μπορεί να καταστράφηκε τώρα και "
+"αυτό το λάθος μπορεί να δημιουργήσει και άλλα μέχρι να επανεκκινήσετε το "
+"Freevo.\n"
+"Αρχείο καταγραφής: %s\n"
+"\n"
+
+#: main.py:309 share/skins/main/mediaportal.fxd:447
+#: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
+#: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
+#: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
+msgid "Shutdown"
+msgstr "Τερματισμός"
+
+#: main.py:311
+#, fuzzy
+msgid "Continue"
+msgstr "Παραμετροποίηση"
+
+#: main.py:435
+#, python-format
+msgid "Starting Freevo-%s, please wait ..."
+msgstr "Ξεκινά το Freevo-%s, παρακαλώ περιμένετε..."
+
+#: main.py:444
+#, fuzzy
+msgid "Reading cache, please wait ..."
+msgstr "Δημιουργία MAME-cache, παρακαλώ περιμένετε."
+
+#: main.py:495
+msgid "Freevo crashed!"
+msgstr ""
+
+#: main.py:496
+#, fuzzy, python-format
+msgid "Filename: %s"
+msgstr "Κατηγορία: %s"
+
+#: main.py:497
+#, fuzzy, python-format
+msgid "Lineno: %s"
+msgstr "Διάρκεια: %s"
+
+#: main.py:498
+#, fuzzy, python-format
+msgid "Function: %s"
+msgstr "Ανάλυση: %s"
+
+#: main.py:499
+#, fuzzy, python-format
+msgid "Text: %s"
+msgstr "Διάρκεια: %s"
+
+#: main.py:501
+msgid "Please see the logfiles for more info"
+msgstr ""
+
+#: main.py:503
+#, python-format
+msgid "Exit in %s seconds"
+msgstr ""
+
+#: fxditem.py:204
+#, fuzzy
+msgid "Browse list"
+msgstr "Εμφάνιση Λίστας Αναπαραγωγής"
+
+#: osd.py:387
+msgid "z = Toggle Fullscreen"
+msgstr "z = Εναλλαγή Πλήρους Οθόνης"
+
+#: osd.py:388
+msgid "Arrow Keys = Move"
+msgstr "Πλήκτρα Βελών = Κίνηση"
+
+#: osd.py:389
+msgid "Spacebar = Select"
+msgstr "Μπάρα κενού [Space] = Επιλογή"
+
+#: osd.py:390
+msgid "Escape = Stop/Prev. Menu"
+msgstr "Escape = Σταμάτημα/Προηγούμενο Μενού"
+
+#: osd.py:391
+msgid "h = Help"
+msgstr "h = Βοήθεια"
+
+#: share/skins/main/geexbox.fxd:585
+#, fuzzy
+msgid "Currently recording"
+msgstr "Παρούσες συνθήκες"
+
+#: share/skins/main/dark.fxd:496
+msgid "Just one movie in this playlist."
+msgstr "Μόνο μια ταινία σε αυτή την λίστα αναπαραγωγής."
+
+#: share/skins/main/mediaportal.fxd:711 share/skins/main/dark.fxd:770
+#: share/skins/main/basic.fxd:410 share/skins/main/blurr.fxd:717
+#: share/skins/main/info.fxd:228
+msgid "kb/s"
+msgstr ""
+
+#: share/skins/main/dark.fxd:565
+#, fuzzy
+msgid "One song in playlist"
+msgstr "ορισμός ως λίστας αναπαραγωγής icecast."
+
+#: share/skins/main/geexbox.fxd:735 share/skins/main/mediaportal.fxd:722
+#: share/skins/main/dark.fxd:779 share/skins/main/basic.fxd:422
+#: share/skins/main/blurr.fxd:730
+msgid "Elapsed"
+msgstr "Παίζει"
+
+#: share/skins/main/basic.fxd:747
+#, fuzzy
+msgid "Video Rate"
+msgstr "Εμφάνιση Φωτογραφίας"
+
+#: share/skins/main/basic.fxd:627
+msgid "Day"
+msgstr "Ημέρα"
+
+#: share/skins/main/geexbox.fxd:226 share/skins/main/mediaportal.fxd:220
+#: share/skins/main/blurr.fxd:218 share/skins/main/info.fxd:314
+#: share/skins/main/Panorama.fxd:221
+#, fuzzy
+msgid "Subtitles"
+msgstr " Υπότιτλοι, "
+
+#: share/skins/main/basic.fxd:723
+#, fuzzy
+msgid "File name"
+msgstr "Αλλαγή ονόματος"
+
+#: share/skins/main/geexbox.fxd:593
+#, fuzzy
+msgid "Next recordings"
+msgstr "Δεν βρέθηκαν προγραμματισμένες μαγνητοσκοπήσεις"
+
+#: share/skins/main/geexbox.fxd:203 share/skins/main/mediaportal.fxd:197
+#: share/skins/main/dark.fxd:501 share/skins/main/blurr.fxd:195
+#: share/skins/main/info.fxd:428 share/skins/main/info.fxd:551
+#: share/skins/main/Panorama.fxd:198
+msgid "This playlist is empty!"
+msgstr "Αυτή η λίστα αναπαραγωγής είναι κενή!"
+
+#: share/skins/main/dark.fxd:618
+#, fuzzy
+msgid "pictures in this slideshow."
+msgstr " φωτογραφίες σε αυτή την παρουσιάση."
+
+#: share/skins/main/crystal.fxd:369 share/skins/main/bluestar.fxd:389
+#: share/skins/main/rain.fxd:373
+msgid "Message has not been read"
+msgstr ""
+
+#: share/skins/main/geexbox.fxd:231 share/skins/main/mediaportal.fxd:225
+#: share/skins/main/blurr.fxd:223 share/skins/main/info.fxd:318
+#: share/skins/main/Panorama.fxd:226
+#, fuzzy
+msgid "Chapters"
+msgstr " Κεφάλαια"
+
+#: share/skins/main/dark.fxd:561
+#, fuzzy
+msgid "songs in playlist"
+msgstr " μουσικές σε αυτή την λίστα αναπαραγωγής."
+
+#: share/skins/main/basic.fxd:753
+#, fuzzy
+msgid "Audio Codec"
+msgstr "Άκουσε Μουσική"
+
+#: share/skins/main/dark.fxd:653 share/skins/main/dark.fxd:674
+msgid "Subject"
+msgstr ""
+
+#: share/skins/main/geexbox.fxd:195 share/skins/main/mediaportal.fxd:189
+#: share/skins/main/blurr.fxd:187 share/skins/main/info.fxd:543
+#: share/skins/main/Panorama.fxd:190
+#, fuzzy
+msgid "Playlist"
+msgstr "Λίστες Αναπαραγωγής"
+
+#: share/skins/main/dark.fxd:659 share/skins/main/dark.fxd:680
+msgid "From"
+msgstr ""
+
+#: share/skins/main/geexbox.fxd:603
+#, fuzzy
+msgid "Recordserver not found"
+msgstr "Ο διακομιστής βιντοσκοπήσεων είναι κάτω"
+
+#: share/skins/main/crystal.fxd:318 share/skins/main/bluestar.fxd:338
+#: share/skins/main/rain.fxd:322
+msgid "Unread messages"
+msgstr ""
+
+#: share/skins/main/geexbox.fxd:480 share/skins/main/mediaportal.fxd:444
+#: share/skins/main/blurr.fxd:451 share/skins/main/info.fxd:16
+#: share/skins/main/Panorama.fxd:471
+msgid "Look at Pictures"
+msgstr "Δείτε Φωτογραφίες"
+
+#: share/skins/main/geexbox.fxd:457 share/skins/main/mediaportal.fxd:420
+#: share/skins/main/blurr.fxd:428 share/skins/main/Panorama.fxd:448
+msgid "Location"
+msgstr ""
+
+#: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:11
+#: share/skins/main/bluestar.fxd:11 share/skins/main/rain.fxd:11
+#, fuzzy
+msgid "Email"
+msgstr "μικρό"
+
+#: share/skins/main/Panorama.fxd:787
+msgid "Hz"
+msgstr ""
+
+#: share/skins/main/info.fxd:232
+msgid "Link"
+msgstr ""
+
+#: share/skins/main/dark.fxd:623
+msgid "Just one picture in this slideshow."
+msgstr "Μόνο μια φωτογραφία σε αυτή την παρουσίαση."
+
+#: share/skins/main/basic.fxd:765
+msgid "Num Passes"
+msgstr ""
+
+#: share/skins/main/dark.fxd:646
+msgid "Total mails"
+msgstr ""
+
+#: share/skins/main/dark.fxd:628
+msgid "This slideshow is empty!"
+msgstr "Αυτή η παρουσίαση είναι κενή!"
+
+#: share/skins/main/geexbox.fxd:189 share/skins/main/geexbox.fxd:308
+#: share/skins/main/geexbox.fxd:431 share/skins/main/geexbox.fxd:439
+#: share/skins/main/mediaportal.fxd:183 share/skins/main/mediaportal.fxd:287
+#: share/skins/main/mediaportal.fxd:394 share/skins/main/mediaportal.fxd:402
+#: share/skins/main/blurr.fxd:181 share/skins/main/blurr.fxd:285
+#: share/skins/main/blurr.fxd:402 share/skins/main/blurr.fxd:410
+#: share/skins/main/Panorama.fxd:184 share/skins/main/Panorama.fxd:306
+#: share/skins/main/Panorama.fxd:422 share/skins/main/Panorama.fxd:430
+#, fuzzy
+msgid "Items"
+msgstr "%s αντικείμενα"
+
+#: share/skins/main/info.fxd:406
+msgid "Disc ID"
+msgstr ""
+
+#: share/skins/main/info.fxd:350 share/skins/main/info.fxd:537
+#, fuzzy
+msgid "MB free"
+msgstr " MB ελεύθερα"
+
+#: share/skins/main/mediaportal.fxd:440
+#, fuzzy
+msgid "Read Headlines"
+msgstr "Επικεφαλίδες"
+
+#: share/skins/main/dark.fxd:722
+#, fuzzy
+msgid "Now playing"
+msgstr "Εμφάνιση αναπαραγωγής"
+
+#: share/skins/main/Panorama.fxd:777
+msgid "kbps"
+msgstr ""
+
+#: share/skins/main/info.fxd:506
+#, fuzzy
+msgid "Copyright"
+msgstr "Copyright:"
+
+#: share/skins/main/bluestar.fxd:12
+#, fuzzy
+msgid "Pictures"
+msgstr "Δείτε Φωτογραφίες"
+
+#: share/skins/main/geexbox.fxd:482 share/skins/main/mediaportal.fxd:446
+#: share/skins/main/crystal.fxd:13 share/skins/main/blurr.fxd:453
+#: share/skins/main/rain.fxd:13 share/skins/main/Panorama.fxd:473
+#, fuzzy
+msgid "Weather Forecast"
+msgstr "Εκτεταμένη Πρόγνωση"
+
+#: share/skins/main/dark.fxd:671
+msgid "New mail"
+msgstr ""
+
+#: share/skins/main/geexbox.fxd:599
+#, fuzzy
+msgid "Nothing scheduled"
+msgstr "Τίποτα προγραμματισμένο"
+
+#: share/skins/main/geexbox.fxd:199 share/skins/main/mediaportal.fxd:193
+#: share/skins/main/blurr.fxd:191 share/skins/main/info.fxd:419
+#: share/skins/main/info.fxd:424 share/skins/main/info.fxd:547
+#: share/skins/main/Panorama.fxd:194
+#, fuzzy
+msgid "items in this playlist"
+msgstr " αντικείμενα σε αυτή την λίστα αναπαραγωγής"
+
+#: share/skins/main/basic.fxd:741
+msgid "Video Codec"
+msgstr ""
+
+#: share/skins/main/info.fxd:238
+msgid "Language"
+msgstr ""
+
+#: share/skins/main/basic.fxd:772
+msgid "Filter"
+msgstr ""
+
+#: share/skins/main/geexbox.fxd:339 share/skins/main/blurr.fxd:312
+#: share/skins/main/info.fxd:348 share/skins/main/info.fxd:535
+#: share/skins/main/Panorama.fxd:333
+#, fuzzy
+msgid "of"
+msgstr "Σβήσε"
+
+#: share/skins/main/info.fxd:324
+msgid "Size"
+msgstr "Μέγεθος"
+
+#: share/skins/main/geexbox.fxd:221 share/skins/main/mediaportal.fxd:215
+#: share/skins/main/blurr.fxd:213 share/skins/main/info.fxd:310
+#: share/skins/main/Panorama.fxd:216
+#, fuzzy
+msgid "Audio tracks"
+msgstr " ΗχοΤμήματα, "
+
+#: share/skins/main/dark.fxd:640
+msgid "New mails"
+msgstr ""
+
+#: share/skins/main/basic.fxd:729
+msgid "Container"
+msgstr ""
+
+#: share/skins/main/basic.fxd:759
+#, fuzzy
+msgid "Audio Rate"
+msgstr "Άκουσε Μουσική"
+
+#: share/skins/main/mediaportal.fxd:445 share/skins/main/blurr.fxd:452
+#: share/skins/main/Panorama.fxd:472
+msgid "Play a Game"
+msgstr "Παίξτε παιχνίδια"
+
+#: share/skins/main/geexbox.fxd:479 share/skins/main/mediaportal.fxd:443
+#: share/skins/main/blurr.fxd:450 share/skins/main/info.fxd:15
+#: share/skins/main/Panorama.fxd:470
+msgid "Listen to Music"
+msgstr "Ακούστε Μουσική"
+
+#: share/skins/main/crystal.fxd:324 share/skins/main/bluestar.fxd:344
+#: share/skins/main/rain.fxd:328
+msgid "Total messages"
+msgstr ""
+
+#: share/skins/main/geexbox.fxd:478 share/skins/main/mediaportal.fxd:442
+#: share/skins/main/blurr.fxd:449 share/skins/main/info.fxd:14
+#: share/skins/main/Panorama.fxd:469
+msgid "Watch a Movie"
+msgstr "Δείτε μια Ταινία"
+
+#: share/skins/main/dark.fxd:492
+#, fuzzy
+msgid "movies in this playlist."
+msgstr " ταινίες σε αυτή την λίστα αναπαραγωγής."
+
+#: share/skins/main/dark.fxd:17 share/skins/main/crystal.fxd:8
+#: share/skins/main/bluestar.fxd:8 share/skins/main/rain.fxd:8
+msgid "Television"
+msgstr ""
+
+#: share/skins/main/info.fxd:306
+#, fuzzy
+msgid "min."
+msgstr " λεπτά "
+
+#: share/skins/main/geexbox.fxd:477 share/skins/main/mediaportal.fxd:441
+#: share/skins/main/blurr.fxd:448 share/skins/main/info.fxd:13
+#: share/skins/main/Panorama.fxd:468
+msgid "Watch TV"
+msgstr "Δείτε Τηλεόραση"
+
+#: share/skins/main/dark.fxd:569
+#, fuzzy
+msgid "No songs in playlist"
+msgstr " μουσικές σε αυτή την λίστα αναπαραγωγής."
+
+# Manualy added from fxd skin files
+#: share/skins/main/basic.fxd:20
+msgid "TV"
+msgstr "Τηλεόραση"
+
+#, fuzzy
+#~ msgid "No media found for \"%s\".\n"
+#~ msgstr "Το μέσο δεν βρέθηκε για το αρχείο \"%s\".\n"
+
+#~ msgid "Please insert the media."
+#~ msgstr "Παρακαλώ εισάγετε το μέσο."
+
+#, fuzzy
+#~ msgid "Mostly Cloudy/Windy"
+#~ msgstr "Σποραδικές Νεφώσεις"
+
+#, fuzzy
+#~ msgid "Partly Cloudy/Windy"
+#~ msgstr "Σποραδικές Νεφώσεις"
+
+#, fuzzy
+#~ msgid "Rain/Wind"
+#~ msgstr "Άνεμος"
+
+#, fuzzy
+#~ msgid "Sunny/Windy"
+#~ msgstr "Λιακάδα"
+
+#, fuzzy
+#~ msgid "Snow/Wind"
+#~ msgstr "Άνεμος"
+
+#~ msgid "calm"
+#~ msgstr "άπνια"
+
+#~ msgid "coming in at"
+#~ msgstr "πνέουν με ταχύτητα"
+
+#~ msgid "from the"
+#~ msgstr "και διεύθυνση"
+
+#, fuzzy
+#~ msgid "Add File to Cart"
+#~ msgstr "Προσθήκη στα αγαπημένα"
+
+#~ msgid "Connecting to LCD: %s"
+#~ msgstr "Σύνδεση στο LCD: %s"
+
+#, fuzzy
+#~ msgid "Info as known by the LCD module:"
+#~ msgstr "Πληροφορίες όπως γίνονται γνωστές από το πρόσθετο του LCD:"
+
+#, fuzzy
+#~ msgid "Failed to set freq for channel %s."
+#~ msgstr "Δεν βρέθκε το κανάλι %s"
+
+#, fuzzy
+#~ msgid "View Details"
+#~ msgstr "Προβολή Αγαπημένων"
+
+#, fuzzy
+#~ msgid "Program Search"
+#~ msgstr "Πρόγραμμα"
+
+#, fuzzy
+#~ msgid "Testing on %s"
+#~ msgstr "Άνοιξε %s"
+
+#, fuzzy
+#~ msgid "Working on %s"
+#~ msgstr "Άνοιξε %s"
+
+#~ msgid "My Movies"
+#~ msgstr "Οι ταινίες μου"
+
+#~ msgid "Delete Scheduled Item"
+#~ msgstr "Διαγραφή Προγραμματισμένου αντικειμένου"
+
+#~ msgid "RECORDING SCHEDULE"
+#~ msgstr "ΠΡΟΓΡΑΜΜΑ ΜΑΓΝΗΤΟΣΚΟΠΙΣΗΣ"
+
+#~ msgid "VIEW RECORDING SCHEDULE"
+#~ msgstr "ΕΜΦΑΝΙΣΗ ΠΡΟΓΡΑΜΜΑΤΟΣ ΜΑΓΝΗΤΟΣΚΟΠΗΣΕΩΝ"
+
+#~ msgid "DELETE SCHEDULED ITEM"
+#~ msgstr "ΔΙΑΓΡΑΦΗ ΠΡΟΓΡΑΜΜΑΤΙΣΜΕΝΟΥ ΑΝΤΙΚΕΙΜΕΝΟΥ"
+
+#~ msgid "All Currently Recording Items Have Been Killed!"
+#~ msgstr "Όλα τα Τρέχοντα Προγραμματισμένα Αντικείμενα σκοτώθηκαν!"
+
+#~ msgid "Track 1 "
+#~ msgstr "Κομμάτι 1"
+
+#~ msgid "The cover provider returned bad information."
+#~ msgstr "Ο προμηθευτής του Εξωφύλλου επέστρεψε λάθος πληροφορία."
+
+#~ msgid "Webradio"
+#~ msgstr "Ραδιόφωνο"
+
+#~ msgid "Browse genre list"
+#~ msgstr "περιήγηση λίστας"
+
+#~ msgid "Webradio Genre List"
+#~ msgstr "Λίστα Ραδιοφώνου"
+
+#~ msgid "Invalid audio file"
+#~ msgstr "Απαράδεκτο αρχείο ήχου"
+
+#~ msgid "Cannot open \"%s\" and \"%s\" for MPlayer logging!"
+#~ msgstr ""
+#~ "Δεν μπορεί να ανοιχτεί το \"%s\" και \"%s\" για καταγραφή του Maplayer!"
+
+#~ msgid "Description: "
+#~ msgstr "Περιγραφή:"
+
+#~ msgid "INTERNAL ERROR, NO MENU!"
+#~ msgstr "ΕΣΩΤΕΡΙΚΟ ΛΑΘΟΣ, ΔΕΝ ΥΠΑΡΧΕΙ ΜΕΝΟΥ!"
+
+#~ msgid "Wait while detecting media..."
+#~ msgstr "Παρακαλώ περιμένετε καθώς αναλύεται το μέσο..."
+
+#~ msgid "'XINE_COMMAND' not defined, plugin 'xine' deactivated"
+#~ msgstr "Το 'XINE_COMMAND' δεν ορίστηκε, το plugin 'xine' απενεργοποιήθηκε"
+
+#~ msgid "'xine' version too old, plugin in fallback mode"
+#~ msgstr "η έκδοση του 'xine' είναι πολύ παλιά, το plugin θα υπολειτουργεί"
+
+#~ msgid "You need %s to use all features of the '%s' plugin"
+#~ msgstr ""
+#~ "Χρειάζεστε το %s για να εκμεταλευτείτε όλες τις δυνατότητες του '%s' "
+#~ "plugin"
+
+#~ msgid "There is no IMDB information for this file."
+#~ msgstr "Δεν υπάρχουν πληροφορίες IMDB για αυτό το αρχείο."
+
+#~ msgid "Movie Playlists"
+#~ msgstr "Λίστες Ταινιών"
+
+#~ msgid "Use automatic playlist for movie items."
+#~ msgstr "Χρήση αυτόματης λίστας για τις ταινίες."
+
+#~ msgid "Show radom playlist item for audio menus."
+#~ msgstr "Εμφάνιση Τυχαίας Λίστας Αντικειμένων για τα μουσικά μενού."
+
+#~ msgid "Artist: %s"
+#~ msgstr "Καλλιτέχνης: %s"
+
+#~ msgid "Album: %s"
+#~ msgstr "Άλμπουμ: %s"
+
+#~ msgid "Year: %s"
+#~ msgstr "Έτος: %s"
+
+#~ msgid "Tracks: %s"
+#~ msgstr "Κομμάτια: %s"
+
+#~ msgid "Plot: %s"
+#~ msgstr "Σχέδιο: %s"
+
+#~ msgid "Geometry: %s"
+#~ msgstr "Γεωμετρία: %s"
+
+#~ msgid "Date: %s"
+#~ msgstr "Ημ/νια: %s"
+
+#~ msgid "Description: %s"
+#~ msgstr "Περιγραφή: %s"
+
+#~ msgid "MENU"
+#~ msgstr "ΜΕΝΟΥ"
+
+#~ msgid "ITEM"
+#~ msgstr "ΑΝΤΙΚΕΙΜΕΝΟ"
+
+#~ msgid "TYPE"
+#~ msgstr "ΤΥΠΟΣ"
+
+#~ msgid "INFO"
+#~ msgstr "ΠΛΗΡΟΦΟΡΙΕΣ"
+
+#~ msgid " MUSIC"
+#~ msgstr " ΜΟΥΣΙΚΗ"
+
+#~ msgid " ALBUM"
+#~ msgstr " ΑΛΜΠΟΥΜ"
+
+#~ msgid "ARTIST"
+#~ msgstr "ΚΑΛΛΙΤΕΧΝΗΣ"
+
+#~ msgid "VIDEO"
+#~ msgstr "ΟΔΗΓΟΣ-TV"
+
+#~ msgid "  TAG"
+#~ msgstr "  ΣΗΜ"
+
+#~ msgid "GENRE"
+#~ msgstr "ΦΥΛΛΟ"
+
+#~ msgid "CHAN"
+#~ msgstr "ΚΑΝΑ"
+
+#~ msgid "PROG"
+#~ msgstr "ΠΡΟΓ"
+
+#~ msgid "TIME"
+#~ msgstr " ΩΡΑ"
+
+#~ msgid "DESC"
+#~ msgstr "ΠΕΡΙ"
+
+#~ msgid "MUSIC"
+#~ msgstr "ΜΟΥΣΙΚΗ"
+
+#~ msgid "Could not find screens for %d lines LCD!"
+#~ msgstr "Δεν βρέθηκαν οθόνες για %d γραμμές στο LCD!"
+
+#~ msgid "No screens found for this LCD (%dx%d)!"
+#~ msgstr "Δεν βρέθηκαν οθόνες για αυτό το LCD (%dx%d)!"
+
+#~ msgid "Could not find screens for %d lines and %d columns LCD!"
+#~ msgstr "Δεν βρέθηκαν οθόνες για %d γραμμές και %d στήλες στο LCD!"
+
+#~ msgid "Artist:"
+#~ msgstr "Καλλιτέχνης:"
+
+#~ msgid "Album:"
+#~ msgstr "Άλμπουμ:"
+
+#~ msgid "Just one music in this playlist."
+#~ msgstr "Μόνο μια μουσική σε αυτή την λίστας αναπαραγωγής."
+
+#~ msgid "Year:"
+#~ msgstr "Έτος:"
+
+#~ msgid "Resolution:"
+#~ msgstr "Ανάλυση:"
+
+#~ msgid "Geometry:"
+#~ msgstr "Γεωμετρία:"
+
+#~ msgid "Date:"
+#~ msgstr "Ημ/νια:"
+
+# The following is not actually working /usr/lib/python2.3/site-packages/freevo/video/videoitem.py editted instead
+#~ msgid "%s min"
+#~ msgstr "%s λεπτά"
+
+#~ msgid "Show database information for this file"
+#~ msgstr "Δείξε πληροφορίες βάσης για αυτό το αρχείο"
+
+#~ msgid "%s km/h"
+#~ msgstr "%s χλμ/ώρα"
+
+#~ msgid "%s km"
+#~ msgstr "%s χλμ"
