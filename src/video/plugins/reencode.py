@@ -37,7 +37,7 @@ import menu
 import os
 import config
 from video.encodingclient import *
-from encodingcore import ContainerCapList,VideoCodecList,AudioCodecList,VFDict
+from encodingcore import ContainerCapList,VideoCodecList,AudioCodecList,VideoFilters
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
@@ -233,7 +233,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_videofilter(self, arg=None, menuw=None):
         _debug_('mod_videofilter(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
-        for videofilter in VFDict:
+        for videofilter in VideoFilters:
             items.append(menu.MenuItem(videofilter, action=self.alter_prop, arg=('videofilter', videofilter)))
         videofilter_menu = menu.Menu(_('Modify Video Filter'), items, item_types = 'video encoding menu')
         videofilter_menu.infoitem = self
