@@ -449,10 +449,9 @@ class VideoItem(Item):
         play the item.
         """
 
-        if not self.player or self.player_rating < 10:
+        if not self.player:
             AlertBox(text=_('No player for this item found')).show()
             return
-
 
         # execute commands if defined
         if config.VIDEO_PRE_PLAY:
@@ -534,6 +533,17 @@ class VideoItem(Item):
                     (self.media_id, self.url), handler=self.play).show()
                 return
 
+        elif self.mode in ('http') and not self.filename and not self.media:
+            self.player_rating, self.player = self.possible_player[0]
+            self.player_rating = 20
+            for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
+                rating = p.rate(self) * 10
+                if p.name == 'mplayer':
+                    self.player = p
+
+        if self.player_rating < 10:
+            AlertBox(text=_('No player for this item found')).show()
+            return
 
         mplayer_options = self.mplayer_options.split(' ')
         if not mplayer_options:
@@ -550,7 +560,6 @@ class VideoItem(Item):
         self.menuw.delete_submenu()
 
         error = self.player.play(mplayer_options, self)
-
 
         if error:
             # If we are a subitem we don't show any error message before
