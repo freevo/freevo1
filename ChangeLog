@@ -18,6 +18,13 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
  * New changed the event and timer handling to use kaa notifier and kaa rpc
 
+== Release 1.7.5 (2007-??-??) ==
+--------------------------------
+
+ * Updated French translation (F#1832751)
+ * Fixed itv plug-in, having "No player for this item found" (B#1833018)
+ * Fixed helper plugins, not allowing tuples as arguments (B#1832837)
+
 == Release 1.7.4 (2007-11-15) ==
 --------------------------------
 
