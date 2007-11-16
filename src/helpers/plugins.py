@@ -228,7 +228,7 @@ def print_info(plugin_name, all_plugins):
                     print '-------------------------------'
                     for v in config_list:
                         print '%s: %s' % (v[0], v[2])
-                        print 'Default: %s' % v[1]
+                        print 'Default: %r' % (v[1],)
                         print
                     print
             if status == 'active':
