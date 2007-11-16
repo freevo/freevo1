@@ -5,8 +5,6 @@
 # $Id$
 #
 # Notes:
-#    To activate, put the following line in local_conf.py:
-#       plugin.activate('video.reencode')
 # ToDo:
 #
 # -----------------------------------------------------------------------
@@ -48,6 +46,9 @@ class PluginInterface(plugin.ItemPlugin):
 
     This plugin needs a running encodingserver to work properly.
     You can start an encodingserver with 'freevo encodingserver start'.
+
+    To activate, put the following line in local_conf.py:
+    | plugin.activate('video.reencode')
     """
 
     def __init__(self):

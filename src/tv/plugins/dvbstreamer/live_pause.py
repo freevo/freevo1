@@ -154,11 +154,11 @@ class PluginInterface(plugin.DaemonPlugin):
         Gets the required configuration variables
         """
         return [
-                ('DVBSTREAMER_USERNAME', 'dvbstreamer', 'Username to use when connecting to a DVBStreamer server'),
-                ('DVBSTREAMER_PASSWORD', 'control', 'Password to use when connecting to a DVBStreamer server'),
-                ('LIVE_PAUSE_BUFFER_PATH','/tmp/freevo/live.buf', 'Location of the file to use for pausing live TV'),
-                ('LIVE_PAUSE_BUFFER_SIZE', (6.25, 30 *60), 'Size of the live buffer as a tuple of max Mbps of the TV and seconds'),
-                ]
+            ('DVBSTREAMER_USERNAME', 'dvbstreamer', 'Username to use when connecting to a DVBStreamer server'),
+            ('DVBSTREAMER_PASSWORD', 'control', 'Password to use when connecting to a DVBStreamer server'),
+            ('LIVE_PAUSE_BUFFER_PATH','/tmp/freevo/live.buf', 'Location of the file to use for pausing live TV'),
+            ('LIVE_PAUSE_BUFFER_SIZE', (6.25, 30*60), 'Size of the live buffer as a tuple of max Mbps of the TV and seconds'),
+        ]
 
 ###############################################################################
 # Xine Control Class

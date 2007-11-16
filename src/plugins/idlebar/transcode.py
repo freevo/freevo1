@@ -43,7 +43,7 @@ import rc
 
 def returnFromJelly(status, response):
     """Un-serialize EncodingServer responses"""
-    _debug_('returnFromJelly(status, response)', 1)
+    _debug_('returnFromJelly(status, response)', 2)
     if status:
         return (status, unjellyFromXML(response))
     else:
@@ -60,7 +60,7 @@ class PluginInterface(IdleBarPlugin):
 
     def __init__(self):
         """ Initialise the transcode idlebar plug-in """
-        _debug_('transcode.PluginInterface.__init__()', 1)
+        _debug_('transcode.PluginInterface.__init__()', 2)
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.transcode'
 
@@ -111,7 +111,7 @@ class PluginInterface(IdleBarPlugin):
 
 
     def config(self):
-        _debug_('config()', 1)
+        _debug_('config()', 2)
         return [
             ('ENCODINGSERVER_IP', 'localhost', 'The host name or IP address of the encoding server'),
             ('ENCODINGSERVER_PORT', 6666, 'The port of the encoding server'),
@@ -137,7 +137,7 @@ class PluginInterface(IdleBarPlugin):
         timerem is the estimated time remaining of the current pass, formatted as a
             human-readable string.
         """
-        _debug_('getprogress()', 1)
+        _debug_('getprogress()', 2)
 
         try:
             (status, response) = self.server.getProgress()
@@ -156,7 +156,7 @@ class PluginInterface(IdleBarPlugin):
         containing 3 values (idnr, friendlyname, status) These values have the same
         meaning as the corresponding values returned by the getProgress call
         """
-        _debug_('listjobs() server=%r' % self.server, 1)
+        _debug_('listjobs() server=%r' % self.server, 2)
         result = (FALSE, [])
 
         try:
@@ -164,7 +164,7 @@ class PluginInterface(IdleBarPlugin):
         except:
             return (False, 'EncodingClient: connection error')
         result = returnFromJelly(status, response)
-        _debug_('listjobs() result=%r' % (result, ), 1)
+        _debug_('listjobs() result=%r' % (result, ), 2)
         return result
 
 
@@ -173,7 +173,7 @@ class PluginInterface(IdleBarPlugin):
         Load the image from the cache when available otherwise load the image and save
         in the cache.
         """
-        _debug_('getimage(image=%r, osd=%r, cache=%s)' % (image, osd, cache), 1)
+        _debug_('getimage(image=%r, osd=%r, cache=%s)' % (image, osd, cache), 2)
         if image.find(config.ICON_DIR) == 0 and image.find(osd.settings.icon_dir) == -1:
             new_image = os.path.join(osd.settings.icon_dir, image[len(config.ICON_DIR)+1:])
             if os.path.isfile(new_image):
@@ -188,7 +188,7 @@ class PluginInterface(IdleBarPlugin):
 
     def set_sprite(self):
         """ set the sprite image name and the drawing interval """
-        _debug_('set_sprite()', 1)
+        _debug_('set_sprite()', 2)
         (status, jobs) = self.listjobs()
         if not status:
             self.sprite = self.notrunning
@@ -253,7 +253,7 @@ class PluginInterface(IdleBarPlugin):
         all sprites are the same size and the background
         return true when the progress has changed, false otherwise
         """
-        _debug_('calculatesizes(osd, font)', 1)
+        _debug_('calculatesizes(osd, font)', 2)
         if self.progress_x == None:
             background = self.getimage(self.background, osd)
             rightclamp = self.getimage(self.rightclamp, osd, True)
@@ -261,9 +261,9 @@ class PluginInterface(IdleBarPlugin):
             self.background_w, self.background_h = background.get_size()
             self.leftclamp_w, self.leftclamp_h = leftclamp.get_size()
             self.rightclamp_w, self.rightclamp_h = rightclamp.get_size()
-            _debug_('background: w=%s, h=%s' % (self.background_w, self.background_h), 1)
-            _debug_('leftclamp: w=%s, h=%s' % (self.leftclamp_w, self.leftclamp_h), 1)
-            _debug_('rightclamp: w=%s, h=%s' % (self.rightclamp_w, self.rightclamp_h), 1)
+            _debug_('background: w=%s, h=%s' % (self.background_w, self.background_h), 2)
+            _debug_('leftclamp: w=%s, h=%s' % (self.leftclamp_w, self.leftclamp_h), 2)
+            _debug_('rightclamp: w=%s, h=%s' % (self.rightclamp_w, self.rightclamp_h), 2)
 
         progress_x = ((self.background_w - (2 * self.leftclamp_w)) * self.progress) / 200
         _debug_('progress_x=%s, background_w=%s, leftclamp_w=%s, progress=%s' % \
@@ -284,7 +284,7 @@ class PluginInterface(IdleBarPlugin):
         _debug_('draw((type=%r, object=), x=%r, osd=)' % (type, x), 3)
         now = time.time()
         duration = now - self.drawtime
-        _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 1)
+        _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 2)
         self.drawtime = now
         self.lastdraw = now
 
@@ -333,6 +333,6 @@ class PluginInterface(IdleBarPlugin):
 
 
     def update(self):
-        _debug_('update()', 1)
+        _debug_('update()', 2)
         bar = plugin.getbyname('idlebar')
         if bar: bar.poll()
