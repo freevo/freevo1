@@ -38,7 +38,7 @@ from event import *
 from util.dbutil import *
 db = MetaDatabase()
 
-import freevo.playlist as playlist
+import playlist
 from audio import audioitem
 from gui import ProgressBox
 
