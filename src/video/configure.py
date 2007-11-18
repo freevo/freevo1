@@ -4,8 +4,6 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes: Not integrated right now
-# Todo:  Fix some stuff, wait for the mplayer people what they are doing
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -273,9 +271,11 @@ def get_items(item):
     next_start = 0
     items = []
 
+    if len(item.possible_player) >1:
+            items.append(menu.MenuItem(_('Play with alternate player'), 
+                         player_selection_menu, item))
+
     if item.filename or (item.mode in ('dvd', 'vcd') and item.player_rating >= 20):
-        if len(item.possible_player) >1:
-            items.append(menu.MenuItem(_('Play with alternate player'), player_selection_menu, item))
         if item.info.has_key('audio') and len(item.info['audio']) > 1:
             items.append(menu.MenuItem(_('Audio selection'), audio_selection_menu, item))
         if item.info.has_key('subtitles') and len(item.info['subtitles']) >= 1:

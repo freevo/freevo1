@@ -83,7 +83,7 @@ class VideoItem(Item):
         self.set_url(url, info=parse)
         if info:
             self.info.set_variables(info)
-
+        
 
         # deinterlacing and related things
         video_deinterlace = config.VIDEO_DEINTERLACE != None and config.VIDEO_DEINTERLACE or False
@@ -198,11 +198,15 @@ class VideoItem(Item):
                 rating += 1
             if hasattr(self, 'force_player') and p.name == self.force_player:
                 rating += 100
-            self.possible_player.append((rating, p))
+            if rating >10:
+                #exclude players that cannot play this item    
+                self.possible_player.append((rating, p))
+        # sort the players in the order of the rating        
         self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
         if len(self.possible_player) > 0:
+            # choose the best player as default player     
             self.player_rating, self.player = self.possible_player[0]
-
+        _debug_(self.possible_player, 2)       
 
 
     def id(self):
@@ -449,7 +453,7 @@ class VideoItem(Item):
         play the item.
         """
 
-        if not self.player:
+        if not self.player or self.player_rating<10:
             AlertBox(text=_('No player for this item found')).show()
             return
 
@@ -532,18 +536,6 @@ class VideoItem(Item):
                 ConfirmBox(text=(_('No media found for "%s".\nPlease insert the media "%s".')) % \
                     (self.media_id, self.url), handler=self.play).show()
                 return
-
-        elif self.mode in ('http') and not self.filename and not self.media:
-            self.player_rating, self.player = self.possible_player[0]
-            self.player_rating = 20
-            for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
-                rating = p.rate(self) * 10
-                if p.name == 'mplayer':
-                    self.player = p
-
-        if self.player_rating < 10:
-            AlertBox(text=_('No player for this item found')).show()
-            return
 
         mplayer_options = self.mplayer_options.split(' ')
         if not mplayer_options:

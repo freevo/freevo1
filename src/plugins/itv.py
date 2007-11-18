@@ -70,8 +70,6 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     | plugin.activate('itv', level=45)
     |
-    | ITV_PLAYER = 'mplayer'
-    | ITV_ARGS = '-nolirc -nojoystick -autoq 100 -screenw 800 -screenh 600 -fs '
     | ITV_LOCATIONS = [
     |     ('JT LCI 18h', 'http://tf1.lci.fr/xml/rss/0,,14,00.xml'),
     |     ('JT i>Tele', 'http://podcast12.streamakaci.com/iTELE/iTELElejournal.xml'),
@@ -90,16 +88,13 @@ class PluginInterface(plugin.MainMenuPlugin):
         plugin.MainMenuPlugin.__init__(self)
 
     def config(self):
-        return [
-            ('ITV_PLAYER', 'mplayer', 'player for the iTV feed, must support http://'),
-            ('ITV_ARGS', '-nolirc -nojoystick -autoq 100 -screenw 800 -screenh 600 -fs ', 'player options'),
-            ('ITV_LOCATIONS', [
+        return [('ITV_LOCATIONS', [
                 ('JT LCI 18h', 'http://tf1.lci.fr/xml/rss/0,,14,00.xml'),
                 ('JT i>Tele', 'http://podcast12.streamakaci.com/iTELE/iTELElejournal.xml'),
                 ('Flash Equipe', 'http://www.lequipe.fr/Podcast/flashETV_rss.xml'),
                 ('Météo LCI', 'http://tf1.fr/xml/rss/0,,23,00.xml'),
                 ('Météo France 2', 'file:///home/henri2/.freevo/meteo.xml')],
-            'where to get the news')]
+                 'where to get the news')]
 
     def items(self, parent):
         return [ HeadlinesMainMenuItem(parent) ]
@@ -111,34 +106,28 @@ class HeadlinesSiteItem(Item):
     """
     def __init__(self, parent):
         Item.__init__(self, parent)
+        self.parent = parent
         self.url = ''
         self.cachedir = '%s/itv' % config.FREEVO_CACHEDIR
         if not os.path.isdir(self.cachedir):
             os.mkdir(self.cachedir,
                      stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
         self.location_index = None
-        self.player        = ChaineItem(self, "http","file://")
-
-    def eventhandler(self, event, menuw=None):
-        """
-        eventhandler
-        """
-        if event in ('USER_END','PLAY_END','STOP'):
-            self.player.stop()
-            menuw.show()
-            return True
-
-        return False
-
+   
+     
     def actions(self):
         """
         return a list of actions for this item
         """
-        items = [ ( self.getheadlines , _('Show Sites Headlines') ) ]
+        items = [ ( self.getheadlines, _('Show Sites Headlines') ) ]
         return items
 
 
     def getsiteheadlines(self):
+        """
+        this returns the raw headlines (title, link and description tuples),
+        it reads them from the cache file or fetches them from the internet.
+        """
         headlines = []
         pfile = os.path.join(self.cachedir, 'itv-%i' % self.location_index)
         if (os.path.isfile(pfile) == 0 or \
@@ -152,6 +141,10 @@ class HeadlinesSiteItem(Item):
 
 
     def fetchheadlinesfromurl(self):
+        """ 
+        this fetches the headlines (title, link and description) from the url.
+        Here the parsing of the xml is done
+        """
         headlines = []
         # create Reader object
         reader = Sax2.Reader()
@@ -202,22 +195,18 @@ class HeadlinesSiteItem(Item):
         return headlines
 
 
-    def show_details(self, arg=None, menuw=None):
-        self.player.mode = 'http'
-        self.player.url = arg.link
-        lien = arg.link
-        self.player.play(lien, menuw)
-
-
     def getheadlines(self, arg=None, menuw=None):
+        """
+        this returns a menu with VideoItems for each headline
+        """
         headlines = []
         rawheadlines = []
         rawheadlines = self.getsiteheadlines()
         for title, link, description in rawheadlines:
-            mi = menu.MenuItem('%s' % title, self.show_details, 0)
-            mi.arg = mi
-            mi.link = link
-
+            # create a VideoItem for each headline  
+            mi = VideoItem(link, self.parent)
+            mi.name = title
+            
             description = description.replace('\n\n', '&#xxx;').replace('\n', ' ').\
                           replace('&#xxx;', '\n')
             description = description.replace('<p>', '\n').replace('<br>', '\n')
@@ -225,11 +214,11 @@ class HeadlinesSiteItem(Item):
             description = description + '\n \n \nLink: ' + link
             description = util.htmlenties2txt(description)
 
-            mi.description = re.sub('<.*?>', '', description)
+            mi.plot = re.sub('<.*?>', '', description)
 
             headlines.append(mi)
 
-
+        # create the menu
         if (len(headlines) == 0):
             headlines += [menu.MenuItem(_('No Headlines found'), menuw.goto_prev_page, 0)]
 
@@ -270,15 +259,4 @@ class HeadlinesMainMenuItem(Item):
         menuw.pushmenu(headlines_site_menu)
         menuw.refresh()
 
-class ChaineItem(VideoItem):
-    """
-    Item for the menu for one rss feed
-    """
-    def __init__(self, parent, flux_name,flux_location):
-        VideoItem.__init__(self, flux_location, parent)
-        self.network_play = True
-        self.parent       = parent
-        self.location     = flux_location
-        self.name         = '' #parent.name
-        self.type = 'video'
-        self.force_player = 'mplayer'
+

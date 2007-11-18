@@ -131,6 +131,9 @@ class Xine:
         if item.mimetype in config.VIDEO_XINE_SUFFIX:
             _debug_('%r good' % (item.url))
             return 2
+        if item.mode in ('http') and not item.filename and not item.media:
+            _debug_('%r unplayable' % (item.url), 2)
+            return 0   
         if item.network_play:
             _debug_('%r possible' % (item.url))
             return 1
