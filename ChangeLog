@@ -21,6 +21,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 == Release 1.7.5 (2007-??-??) ==
 --------------------------------
 
+ * New Alsa mixer 2 plug-in (F#1832948)
  * Updated French translation (F#1832751)
  * Fixed itv plug-in, having "No player for this item found" (B#1833018,B#1833829)
  * Fixed helper plugins, not allowing tuples as arguments (B#1832837)
