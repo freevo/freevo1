@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# event.py - Global events for Freevo
+# Global events for Freevo
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -93,7 +93,15 @@ MIXER_VOLUP            = Event('MIXER_VOLUP', arg=5)
 MIXER_VOLDOWN          = Event('MIXER_VOLDOWN', arg=5)
 MIXER_MUTE             = Event('MIXER_MUTE')
 
-# To change the step size, but the following code in your
+# Events for 6-channel audio control.
+MIXER_SUR_VOLUP        = Event('SUR_VOLUP', arg=5)
+MIXER_SUR_VOLDOWN      = Event('SUR_VOLDOWN', arg=5)
+MIXER_CTR_VOLUP        = Event('CTR_VOLUP', arg=5)
+MIXER_CTR_VOLDOWN      = Event('CTR_VOLDOWN', arg=5)
+MIXER_LFE_VOLUP        = Event('LFE_VOLUP', arg=5)
+MIXER_LFE_VOLDOWN      = Event('LFE_VOLDOWN', arg=5)
+
+# To change the step size, put the following code in your
 # local_conf.py (setting VOL+ step size to 2)
 #
 # EVENTS['global']['VOL+'] = Event('MIXER_VOLUP', arg=2)
@@ -269,6 +277,10 @@ MENU_EVENTS = {
     'CH+'       : MENU_PAGEUP,
     'CH-'       : MENU_PAGEDOWN,
     'MENU'      : MENU_GOTO_MAINMENU,
+    'TV'        : MENU_GOTO_TV,
+    'MUSIC'     : MENU_GOTO_MUSIC,
+    'VIDEOS'    : MENU_GOTO_VIDEOS,
+    'PICTURES'  : MENU_GOTO_IMAGES,
     'SHUTDOWN'  : MENU_GOTO_SHUTDOWN,
     'EXIT'      : MENU_BACK_ONE_MENU,
     'SELECT'    : MENU_SELECT,
