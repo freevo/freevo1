@@ -83,7 +83,7 @@ class VideoItem(Item):
         self.set_url(url, info=parse)
         if info:
             self.info.set_variables(info)
-        
+
 
         # deinterlacing and related things
         video_deinterlace = config.VIDEO_DEINTERLACE != None and config.VIDEO_DEINTERLACE or False
@@ -199,14 +199,14 @@ class VideoItem(Item):
             if hasattr(self, 'force_player') and p.name == self.force_player:
                 rating += 100
             if rating >10:
-                #exclude players that cannot play this item    
+                #exclude players that cannot play this item
                 self.possible_player.append((rating, p))
-        # sort the players in the order of the rating        
+        # sort the players in the order of the rating
         self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
         if len(self.possible_player) > 0:
-            # choose the best player as default player     
+            # choose the best player as default player
             self.player_rating, self.player = self.possible_player[0]
-        _debug_(self.possible_player, 2)       
+        _debug_(self.possible_player, 2)
 
 
     def id(self):

@@ -113,8 +113,8 @@ class HeadlinesSiteItem(Item):
             os.mkdir(self.cachedir,
                      stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
         self.location_index = None
-   
-     
+
+
     def actions(self):
         """
         return a list of actions for this item
@@ -141,7 +141,7 @@ class HeadlinesSiteItem(Item):
 
 
     def fetchheadlinesfromurl(self):
-        """ 
+        """
         this fetches the headlines (title, link and description) from the url.
         Here the parsing of the xml is done
         """
@@ -203,10 +203,10 @@ class HeadlinesSiteItem(Item):
         rawheadlines = []
         rawheadlines = self.getsiteheadlines()
         for title, link, description in rawheadlines:
-            # create a VideoItem for each headline  
+            # create a VideoItem for each headline
             mi = VideoItem(link, self.parent)
             mi.name = title
-            
+
             description = description.replace('\n\n', '&#xxx;').replace('\n', ' ').\
                           replace('&#xxx;', '\n')
             description = description.replace('<p>', '\n').replace('<br>', '\n')
@@ -258,5 +258,3 @@ class HeadlinesMainMenuItem(Item):
         headlines_site_menu = menu.Menu(_('Headlines Sites'), headlines_sites)
         menuw.pushmenu(headlines_site_menu)
         menuw.refresh()
-
-

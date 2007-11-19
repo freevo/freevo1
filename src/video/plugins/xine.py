@@ -133,7 +133,7 @@ class Xine:
             return 2
         if item.mode in ('http') and not item.filename and not item.media:
             _debug_('%r unplayable' % (item.url), 2)
-            return 0   
+            return 0
         if item.network_play:
             _debug_('%r possible' % (item.url))
             return 1

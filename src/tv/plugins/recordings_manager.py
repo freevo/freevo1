@@ -190,7 +190,7 @@ class RecordingsDirectory(Item):
         if sorting_reversed:
             items.reverse()
 
-    
+
         if arg == 'update':
             # update because of DiskManager
             if not self.menu.choices:
@@ -199,10 +199,10 @@ class RecordingsDirectory(Item):
                 # store the current selected item
                 selected_id  = self.menu.selected.id()
                 selected_pos = self.menu.choices.index(self.menu.selected)
-                                   
+
             self.menu.choices = items
-            self.menu.selected = None         
-            
+            self.menu.selected = None
+
             if selected_pos !=-1 and items:
                 for i in items:
                     # find the selected item
@@ -215,11 +215,11 @@ class RecordingsDirectory(Item):
                     # to the old item
                     pos = max(0, min(selected_pos-1, len(items)-1))
                     self.menu.selected = items[pos]
-                           
+
                 self.menuw.rebuild_page()
                 self.menuw.refresh()
             else:
-                self.menuw.init_page()   
+                self.menuw.init_page()
                 self.menuw.refresh()
         else:
             # normal menu build
@@ -619,16 +619,16 @@ class Series(Item):
                     if Unicode(i.id()) == Unicode(selected_id):
                         self.menu.selected = i
                         break
-                
+
                 if not self.menu.selected:
-                    # item is gone now, try to the selection close 
+                    # item is gone now, try to the selection close
                     # to the old item
                     pos = max(0, min(selected_pos-1, len(self.items)-1))
                     self.menu.selected = self.items[pos]
-                        
+
                 self.menuw.rebuild_page()
                 self.menuw.refresh()
-                # Update the icon just incase we were called because 
+                # Update the icon just incase we were called because
                 # a series item updated its watched/keep state.
                 self.set_icon()
         else:
