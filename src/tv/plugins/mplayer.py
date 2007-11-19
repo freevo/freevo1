@@ -335,4 +335,8 @@ class MPlayer:
             self.app.write(cmd)
             return FALSE
 
+        elif event == em.OSD_MESSAGE:
+            self.app.write('osd_show_text "%s"\n' % event.arg);
+            return TRUE
+
         return FALSE
