@@ -129,9 +129,9 @@ class LastFMPlayerGUI(PlayerGUI):
 
     def download_cover(self,pic_url):
         # Download album Cover to /tmp/freevo
-        os.system("rm /tmp/freevo/cover*.jpg")
+        os.system('rm -f %s/lfmcover_*.jpg' % config.FREEVO_CACHEDIR )
         self.covercount +=1
-        savefile = '/tmp/freevo/cover_' + str(time.time()) + '.jpg'
+        savefile = config.FREEVO_CACHEDIR + '/lfmcover_' + str(time.time()) + '.jpg'
         pic_file = urllib.urlopen(pic_url).read()
         save = open(savefile, 'w')
         print >> save, pic_file
