@@ -736,6 +736,9 @@ class WeatherItem(Item):
         '''obtain the weather icons for multiple day forecast'''
         _debug_('getDayImage()', 2)
 
+        if not WEATHER_ICONS.has_key(num):
+            num = 'na'
+
         icon = os.path.join(WEATHER_SKIN_DIR, WEATHER_ICONS[num][0])
         if not os.path.isfile(icon):
             icon = os.path.join(WEATHER_SKIN_DIR, WEATHER_ICONS[num][1])

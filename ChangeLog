@@ -25,9 +25,10 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated French translation (F#1832751)
  * Updated mplayer to allow the volume events to passed over and shown (F#1834486)
  * Renamed plug-in audio.playlist to audio.playlists (B#1834140)
+ * Fixed helper plugins, not allowing tuples as arguments (B#1832837)
  * Fixed itv plug-in, having "No player for this item found" (B#1833018,B#1833829)
  * Fixed lastfm plug-in path using /tmp to use FREEVO_CACHEDIR (B#1834488)
- * Fixed helper plugins, not allowing tuples as arguments (B#1832837)
+ * Fixed oneclick weather plug-in not handling bad icon data (B#1834275)
 
 == Release 1.7.4 (2007-11-15) ==
 --------------------------------
