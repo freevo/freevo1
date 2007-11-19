@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# playlist.py - Plugin for playlist support
+# Plugin for playlist support
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -52,12 +52,12 @@ class PluginInterface(plugin.ItemPlugin):
     add a "Playlists" submenu to your Audio Folder.
     To activate this plugin, put the following in your local_conf.py.
 
-    | plugin.activate( 'audio.playlist' )
+    | plugin.activate( 'audio.playlists' )
 
     You can also change the physical location of the Playlists folder, or
     specify the naming convention like this:
 
-    | plugin.activate('audio.playlist', args=('/path/to/folder','Freevo %m%d'))
+    | plugin.activate('audio.playlists', args=('/path/to/folder', 'Freevo %m%d'))
 
     where the naming format uses the standard strftime format options.
 
@@ -69,7 +69,7 @@ class PluginInterface(plugin.ItemPlugin):
     | EVENTS['menu']['SAVE'] = Event(MENU_CALL_ITEM_ACTION, arg='close_playlist')
     """
 
-    def __init__(self,playlist_folder=None, naming='Freevo Playlist - %m%d-%I%M'):
+    def __init__(self, playlist_folder=None, naming='Freevo Playlist - %m%d-%I%M'):
         if playlist_folder == None:
             self.playlist_folder = ('%s/playlists' % config.FREEVO_CACHEDIR)
         else:
@@ -97,15 +97,14 @@ class PluginInterface(plugin.ItemPlugin):
 
         items = [ (self.queue_file, _('Enqueue this Music in Playlist'), 'queue_a_track') ]
         if self.playlist_handle:
-            items.append((self.new_playlist, _( 'Make a new Audio Playlist' ),
-                          'close_playlist'))
+            items.append((self.new_playlist, _( 'Make a new Audio Playlist' ), 'close_playlist'))
         return items
 
 
-    def queue_file(self,arg=None, menuw=None):
+    def queue_file(self, arg=None, menuw=None):
         if not self.playlist_handle:
             self.playlist_handle = open(('%s/%s.m3u' % (self.playlist_folder,
-                                                        time.strftime(self.naming))),'w+')
+                time.strftime(self.naming))), 'w+')
         for f in self.item.files.get():
             if os.path.isdir(f):
                 for file in util.match_files_recursively(f, config.AUDIO_SUFFIX, skip_password=True):
