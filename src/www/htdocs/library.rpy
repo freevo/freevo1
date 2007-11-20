@@ -486,8 +486,11 @@ class LibraryResource(FreevoResource):
                             size = (info['width'], info['height'])
                         image_link = self.convert_dir(filepath)
                         scaled_image_link = self.convert_dir(scaled_image_path)
-                        fv.tableCell('<div class="image"><a href="javascript:openfoto(\''+image_link+'\','+str(size[0])+','+str(size[1])+')">'\
-                            +'<img src="'+scaled_image_link+'" /><br />'+Unicode(title)+'</a></div>', 'class="'+status+'" colspan="1"')
+                        fv.tableCell('<div class="image"><a href="javascript:openfoto(\''+\
+                            urllib.quote(image_link)+\
+                            '\','+str(size[0])+','+str(size[1])+')">'+
+                            '<img src="'+scaled_image_link+'" /><br />'+Unicode(title)+'</a></div>', \
+                            'class="'+status+'" colspan="1"')
                     ### show movie
                     elif action_mediatype == "movies":
                         if os.path.exists(jpg_file):
@@ -496,7 +499,8 @@ class LibraryResource(FreevoResource):
                             image_info = metadata.parse(image)
                             size = (image_info['width'], image_info['height'])
                             new_size = self.resize_image(image_link, size)
-                            image = '<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" /><br />'
+                            image = '<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+\
+                                str(new_size[0])+'px" /><br />'
                         else:
                             image = '<img src="images/library/movies.png" height="200px" width="200px" /><br />'
                         fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
