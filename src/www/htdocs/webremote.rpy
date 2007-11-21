@@ -83,7 +83,7 @@ class WebRemoteResource(FreevoResource):
     h3 { color: white; }
     table { width: auto; }
     td    { padding: 1px; }
-    button.remote { width: 60px; height: 18px; background: #eee; font-size: 12px; text-align: center; padding: 0; }
+    button.remote { width: 60px; height: 30px; background: #eee; font-size: 12px; text-align: center; padding: 0; }
     button.remote:hover { background: #fed; }
    </style>
 
@@ -142,49 +142,49 @@ class WebRemoteResource(FreevoResource):
 <table border="0" cellspacing="1" cellpadding="0">
 
 <tr><td>&nbsp;</td>
-    <td><button class="remote" accesskey="8" onClick="send_code('UP');">UP</button></td>
+    <td><button class="remote" accesskey="8" onClick="send_code('UP');"><img src="../icons/up.png"></button></td>
     <td>&nbsp;</td>
 </tr>
-<tr><td><button class="remote" accesskey="4" onClick="send_code('LEFT');">&lt;LEFT</button></td>
-    <td><button class="remote" accesskey="5" onClick="send_code('SELECT');">OK</button></td>
-    <td><button class="remote" accesskey="6" onClick="send_code('RIGHT');">RIGHT&gt;</button></td>
+<tr><td><button class="remote" accesskey="4" onClick="send_code('LEFT');"><img src="../icons/back.png"></button></td>
+    <td><button class="remote" accesskey="5" onClick="send_code('SELECT');"><img src="../icons/button_ok.png"></button></td>
+    <td><button class="remote" accesskey="6" onClick="send_code('RIGHT');"><img src="../icons/forward.png"></button></td>
 </tr>
 <tr><td>&nbsp;</td>
-    <td><button class="remote" accesskey="2" onClick="send_code('DOWN');">DOWN</button></td>
+    <td><button class="remote" accesskey="2" onClick="send_code('DOWN');"><img src="../icons/down.png"></button></td>
     <td>&nbsp;</td>
 </tr>
 
 <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
 
-<tr><td><button class="remote" accesskey="x" onClick="send_code('EXIT');">BACK</button></td>
-    <td><button class="remote" accesskey="e" onClick="send_code('ENTER');">ENTER</button></td>
-    <td><button class="remote" accesskey="d" onClick="send_code('DISPLAY');">DISPLAY</button></td>
+<tr><td><button class="remote" accesskey="x" onClick="send_code('EXIT');"><img src="../icons/previous.png"></button></td>
+    <td><button class="remote" accesskey="e" onClick="send_code('ENTER');"><img src="../icons/button_ok.png"></button></td>
+    <td><button class="remote" accesskey="d" onClick="send_code('DISPLAY');"><img src="../icons/help.png"></button></td>
 </tr>
-<tr><td><button class="remote" accesskey="m" onClick="send_code('MENU');">MENU</button></td>
+<tr><td><button class="remote" accesskey="m" onClick="send_code('MENU');"><img src="../icons/player_playlist.png"></button></td>
     <td><button class="remote" accesskey="c" onClick="send_code('REC');" style="color:red">REC</button></td>
-    <td><button class="remote" accesskey="j" onClick="send_code('EJECT');">EJECT</button></td>
+    <td><button class="remote" accesskey="j" onClick="send_code('EJECT');"><img src="../icons/player_eject.png"></button></td>
 </tr>
 
 
 <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
 
 <tr><td>&nbsp;</td>
-    <td><button class="remote" accesskey="p" onClick="send_code('PLAY');">PLAY</button></td>
+    <td><button class="remote" accesskey="p" onClick="send_code('PLAY');"><img src="../icons/player_play.png"></button></td>
     <td>&nbsp;</td>
 </tr>
-<tr><td><button class="remote" accesskey="r" onClick="send_code('REW');">&lt;&lt;REW</button></td>
-    <td><button class="remote" accesskey="u" onClick="send_code('PAUSE');">PAUSE</button></td>
-    <td><button class="remote" accesskey="f" onClick="send_code('FFWD');">FFWD&gt;&gt;</button></td>
+<tr><td><button class="remote" accesskey="r" onClick="send_code('REW');"><img src="../icons/player_rew.png"></button></td>
+    <td><button class="remote" accesskey="u" onClick="send_code('PAUSE');"><img src="../icons/player_pause.png"></button></td>
+    <td><button class="remote" accesskey="f" onClick="send_code('FFWD');"><img src="../icons/player_fwd.png"></button></td>
 </tr>
 <tr><td>&nbsp;</td>
-    <td><button class="remote" accesskey="s" onClick="send_code('STOP');">STOP</button></td>
+    <td><button class="remote" accesskey="s" onClick="send_code('STOP');"><img src="../icons/player_stop.png"></button></td>
     <td>&nbsp;</td>
 </tr>
 
 <tr style="line-height: 8px;"><td colspan="3">&nbsp;</td></tr>
 
 <tr><td><button class="remote" accesskey="+" onClick="send_code('VOLP');">VOL+</button></td>
-    <td><button class="remote" accesskey="m" onClick="send_code('MUTE');">MUTE</button></td>
+    <td><button class="remote" accesskey="m" onClick="send_code('MUTE');"><img src="../icons/status/volume_mute.png">MUTE</button></td>
     <td><button class="remote" accesskey="c" onClick="send_code('CHP');">CH+</button></td>
 </tr>
 <tr><td><button class="remote" accesskey="-" onClick="send_code('VOLM');">VOL-</button></td>

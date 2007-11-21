@@ -270,19 +270,19 @@ class LibraryResource(FreevoResource):
             movmuslink = '<a href="%s?media=%s&dir=">%s</a>'
             rectvlink = '<a href="%s?media=%s&dir=%s">%s</a>'
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/movies_small.png\" class=\"right\" width=\"60\" height=\"60\">')
+            fv.tableCell('<img src=\"images/library/movies_small.png\" class=\"right\" width=\"80\" height=\"80\">')
             fv.tableCell(movmuslink % (action_script, "movies",_("Movies")), '')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/recorded_small.png\" class=\"right\" width=\"60\" height=\"60\">')
+            fv.tableCell('<img src=\"images/library/recorded_small.png\" class=\"right\" width=\"80\" height=\"80\">')
             fv.tableCell(rectvlink % (action_script, "rectv", config.TV_RECORD_DIR, _("Recorded TV")), '')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/music_small.png\" class=\"right\" width=\"60\" height=\"60\">')
+            fv.tableCell('<img src=\"images/library/music_small.png\" class=\"right\" width=\"80\" height=\"80\">')
             fv.tableCell(movmuslink % (action_script,"music",_("Music")), '')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<img src=\"images/library/images_small.png\" class=\"right\" width=\"60\" height=\"60\">')
+            fv.tableCell('<img src=\"images/library/images_small.png\" class=\"right\" width=\"80\" height=\"80\">')
             fv.tableCell(movmuslink % (action_script,"images",_("Images")), '')
             fv.tableRowClose()
             fv.tableClose()
@@ -402,7 +402,7 @@ class LibraryResource(FreevoResource):
                         else:
                             image_link = "images/library/www-mp-music.png"
                         mydirlink = '<a href="'+ action_script +'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
-                            +'<img src="' + image_link + '" class="folder" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                            +'<img src="' + image_link + '" class="folder" height="100px" width="100px" /><br />'+mydispdir+'</a>'
                     ### show movie cover
                     elif action_mediatype == "movies":
                         y = self.cover_filter(mydir)
@@ -411,7 +411,7 @@ class LibraryResource(FreevoResource):
                         else:
                             image_link = "images/library/www-mp-movies.png"
                         mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
-                            +'<img src="' + image_link + '" class="folder" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                            +'<img src="' + image_link + '" class="folder" height="100px" width="100px" /><br />'+mydispdir+'</a>'
                     ### show recorded shows cover
                     elif action_mediatype == "rectv":
                         y = self.cover_filter(mydir)
@@ -420,12 +420,12 @@ class LibraryResource(FreevoResource):
                         else:
                             image_link = "images/library/www-mp-tv.png"
                         mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
-                            +'<img src="' + image_link + '" class="folder" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                            +'<img src="' + image_link + '" class="folder" height="100px" width="100px" /><br />'+mydispdir+'</a>'
                     ### show image cover
                     elif action_mediatype == "images":
                         image_link = "images/library/www-mp-pictures.png"
                         mydirlink = '<a href="'+action_script+'?media='+action_mediatype+'&dir='+urllib.quote(mydir)+'">'\
-                            +'<img src="'+image_link+'" class="folder" height="200px" width="200px" /><br />'+mydispdir+'</a>'
+                            +'<img src="'+image_link+'" class="folder" height="100px" width="100px" /><br />'+mydispdir+'</a>'
 
                     fv.tableCell(mydirlink, 'class="basic" colspan="1"')
                     if i == 2:
@@ -499,10 +499,9 @@ class LibraryResource(FreevoResource):
                             image_info = metadata.parse(image)
                             size = (image_info['width'], image_info['height'])
                             new_size = self.resize_image(image_link, size)
-                            image = '<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+\
-                                str(new_size[0])+'px" /><br />'
+                            image = '<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" /><br />'
                         else:
-                            image = '<img src="images/library/movies.png" height="200px" width="200px" /><br />'
+                            image = '<img src="images/library/movies.png" height="100px" width="100px" /><br />'
                         fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
                             +image+Unicode(title)+'</a>',\
                             'class="'+status+'" colspan="1"')
@@ -516,7 +515,7 @@ class LibraryResource(FreevoResource):
                             new_size = self.resize_image(image_link, size)
                             image = '<img src="'+image_link+'" height="'+str(new_size[1])+'px" width="'+str(new_size[0])+'px" /><br />'
                         else:
-                            image = '<img src="images/library/recorded_small.png" height="30px" width="30px" />'
+                            image = '<img src="images/library/recorded_small.png" height="80px" width="80px" />'
                         fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
                             +image+Unicode(title)+'</a>',\
                             'class="'+status+'" colspan="1"')
@@ -528,7 +527,7 @@ class LibraryResource(FreevoResource):
                             title = Unicode(file)
                         if len(title) > 45:
                             title = "%s[...]%s" % (title[:20], title[len(title)-20:])
-                        image = '<img src="images/library/music_small.png" height="30px" width="30px" />'
+                        image = '<img src="images/library/music_small.png" height="80px" width="80px" />'
                         fv.tableCell('<a onclick="info_click(this, event)" id="'+filepath+'">'\
                             +image+title+'</a>', 'class="'+status+'" colspan="1"')
                     else:
