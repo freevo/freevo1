@@ -159,7 +159,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         print 'AudioScrobbler plugin: I have shut down'
         plugin.shutdown(plugin_name='audioscrobbler')
-        sys.exit() # Ugly hack to shut down the plugin
+        #sys.exit() # Ugly hack to shut down the plugin
 
 
     def draw(self, ( ttype, object ), osd):
