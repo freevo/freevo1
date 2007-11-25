@@ -47,6 +47,15 @@ FALSE = 0
 xml_rpc_server = 'http://%s:%s/' % (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
 server = xmlrpclib.Server(xml_rpc_server, allow_none=1)
 
+class RecordClientException(Exception):
+    """
+    """
+    def __init__(self):
+        """
+        """
+        pass
+
+
 class RecordClient:
     """
     recordserver access class using kaa.rpc
@@ -78,22 +87,36 @@ class RecordClient:
         Call the server with the command the results will be put in the callback
         Try to reconnect if the connection is down
         """
+        def closed_handler():
+            self.server = None
+
         _debug_('server_rpc(cmd=%r, callback=%r, args=%r, kwargs=%r)' % (cmd, callback, args, kwargs), 2)
         try:
             if self.server is None:
                 try:
                     self.server = kaa.rpc.Client(self.socket, self.secret)
-                    _debug_('%r is up' % (self.socket,))
+                    self.server.signals['closed'].connect(closed_handler)
+                    _debug_('%r is up' % (self.socket,), DINFO)
                 except kaa.rpc.ConnectError, e:
-                    _debug_('%r is down' % (self.socket,))
+                    _debug_('%r is down' % (self.socket,), DINFO)
                     self.server = None
                     return False
             self.server.rpc(cmd, *args, **kwargs).connect(callback)
             return True
         except kaa.rpc.ConnectError, e:
-            _debug_('%r is down' % (self.socket,))
+            _debug_('%r is down' % (self.socket,), DINFO)
             self.server = None
             return False
+        except IOError, e:
+            _debug_('%r is down' % (self.socket,), DINFO)
+            self.server = None
+            return False
+
+
+    def ping(self, callback):
+        """ See if the server is alive """
+        _debug_('ping(callback=%r)' % (callback), 2)
+        return self.server_rpc('ping', callback)
 
 
     def getScheduledRecordings(self, callback):
@@ -106,6 +129,12 @@ class RecordClient:
         """ Find the next program using a callback function """
         _debug_('findNextProgram(callback=%r)' % (callback), 2)
         return self.server_rpc('findNextProgram', callback)
+
+
+    def updateFavoritesSchedule(self, callback):
+        """ Update the favourites using a callback function """
+        _debug_('updateFavoritesSchedule(callback=%r)' % (callback), 2)
+        return self.server_rpc('updateFavoritesSchedule', callback)
 
 
     def isPlayerRunning(self, callback):

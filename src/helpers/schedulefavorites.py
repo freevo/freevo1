@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# schedulefavorites.py - A helper to run in order to schedule any favories
-#                        for recording.  This should be ran after updating
-#                        your program guide.  This step will eventually be
-#                        handled by the recording server.
+# A helper to run in order to schedule any favories for recording.  This
+# should be ran after updating your program guide.  This step will
+# eventually be handled by the recording server.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -34,7 +33,16 @@
 
 
 import config
-import tv.record_client as rc
+import kaa.notifier
+from tv.record_client import RecordClient
 
-(result, response) = rc.updateFavoritesSchedule()
-print response
+def handler(result):
+    print '%s' % (result[1])
+    raise SystemExit
+
+recordclient = RecordClient()
+if not recordclient.updateFavoritesSchedule(handler):
+    print _('recordserver is not running')
+    raise SystemExit
+
+kaa.main()

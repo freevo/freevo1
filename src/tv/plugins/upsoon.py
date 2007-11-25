@@ -97,7 +97,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def findNextProgramHandler(self, result):
         """ Handles the result from the findNextProgram call """
-        _debug_('findNextProgramHandler(result=%r)' % (result), 1)
+        _debug_('findNextProgramHandler(result=%r)' % (result), 2)
         self.next_program = result
 
         if self.next_program == None:
@@ -189,7 +189,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Sends a poll message to the record server
         """
-        _debug_('timer_handler()', 1)
+        _debug_('timer_handler()', 2)
 
         # Remove the pending record lock file when a record lock file is written
         if self.tv_lockfile:
