@@ -32,6 +32,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed itv plug-in, having "No player for this item found" (B#1833018,B#1833829)
  * Fixed lastfm plug-in path using /tmp to use FREEVO_CACHEDIR (B#1834488)
  * Fixed oneclick weather plug-in not handling bad icon data (B#1834275)
+ * Fixed webserver hard coded file path in webconfig (B#1832875,F#1837395)
  * Fixed webserver media library opening images with a '&' in the name (B#1835322)
  * Fixed webserver plugins modules having the incorrect import (B#1835454)
 

@@ -339,7 +339,6 @@ class ConfigEditResource(FreevoResource):
         form = request.args
 
         configfile = fv.formValue(form, 'configfile')
-        configfile = '/home/dlocke/.freevo/local_conf.py'
         if configfile:
             if not os.path.exists(configfile):
                 configfile = '/etc/freevo/local_conf.py'
