@@ -581,28 +581,7 @@
             </background>
             <content x="10" y="10" type="text" height="max-20" width="max-20" spacing="20" font="default">
                 <item type="default">
-                    <if expression="recordserver">
-                        <if expression="running">
-                            <text font="tv title" width="max" height="-1">Currently recording:</text>
-                            <newline/>
-                            <goto_pos y="20" mode="relative"/>
-                            <text font="comingup" width="max" height="max" expression="running" mode="soft"/>
-                            <newline/>
-                            <goto_pos y="30" mode="relative"/>
-                        </if>
-                        <if expression="comingup">
-                            <text font="tv title" width="max" height="-1">Next recordings:</text>
-                            <newline/>
-                            <goto_pos y="20" mode="relative"/>
-                            <text font="comingup" width="max" height="max" expression="comingup" mode="soft"/>
-                        </if>
-                        <if expression="not comingup and not running">
-                            <text font="tv title" width="max" height="-1">Nothing scheduled</text>
-                        </if>
-                    </if>
-                    <if expression="not recordserver">
-                        <text font="tv title" width="max" height="-1">Recordserver not found</text>
-                    </if>
+                    <text font="info tagline" width="max" height="max" expression="function:comingup" mode="soft"/>	
                 </item>
             </content>
         </layout>
