@@ -44,7 +44,7 @@ import imp
 def find_plugin_interface(data):
     """
     Search a source file for the PluginInterface classes
-    @returns a list of classes source code as a string
+    @return: a list of classes source code as a string
     """
 
     has_classes = re.compile('\n\s*(class[^\n]*:.*?)((\n\s*class)|($))', re.DOTALL)
@@ -244,9 +244,10 @@ def print_info(plugin_name, all_plugins):
 
 def iscode(line):
     """
-    Find code lines in the docstring
-    When the line starts with a '|' then is has been marked as a code line
-    @note this does not work too well in all cases
+    Find code lines in the docstring When the line starts with a '|' then is has
+    been marked as a code line
+
+    @note: this does not work too well in all cases
     """
     return line.strip().startswith('|')
     return (len(line) > 2 and line[:2].upper() == line[:2] and \

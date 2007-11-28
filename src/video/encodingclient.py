@@ -105,13 +105,13 @@ def connectionTest(teststr='testing'):
 def initEncodeJob(source, output, friendlyname="", title=None):
     """Initialize the encodingjob.
 
-    source is the source video you want to have encoded
-    output is the name of the resulting encoded file you want
-    friendlyname is a "friendly name" to assign to this encoding job
-    title is obligatory if you have a dvd/dvd-on-disc, in wich case you need
+    @param source: is the source video you want to have encoded
+    @param output: is the name of the resulting encoded file you want
+    @param friendlyname: is a "friendly name" to assign to this encoding job
+    @param title: is obligatory if you have a dvd/dvd-on-disc, in wich case you need
         to specify a title (integer)
 
-    This function returns an idnr (integer) if succesful
+    This function returns an idnr (integer) if successful
 
     This call can take some time (10 seconds on average) before returning, because the
     encodingserver analyzes the video during this call."""
@@ -183,13 +183,13 @@ def getVideoCodecCAP(idnr):
 def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0):
     """Set a video codec
 
-    vcodec is one of the possible video codecs. It should be one of the strings
+    @param vcodec: is one of the possible video codecs. It should be one of the strings
         returned by getVideoCodecCAP.
-    tgtsize is the target size of the encoded file, in megabytes (this includes
+    @param tgtsize: is the target size of the encoded file, in megabytes (this includes
         audio data and container format overhead)
-    multipass is a boolean. Set this to True if you want multipass encoding (1 audio
+    @param multipass: is a boolean. Set this to True if you want multipass encoding (1 audio
         pass, 2 video passes). The default is no multipass (1 audio, 1 video)
-    vbitrate is the video bitrate, if it is not 0 then this value is used instead
+    @param vbitrate: is the video bitrate, if it is not 0 then this value is used instead
         of using the tgtsize.
     """
 
@@ -223,11 +223,12 @@ def getAudioCodecCAP(idnr):
 def setAudioCodec(idnr, acodec, abrate):
     """Set a audio codec
 
-    acodec is one of the possible audio codecs. It should be one of the strings
+    @param acodec: is one of the possible audio codecs. It should be one of the strings
         returned byt getAudioCodecCAP.
-    abrate is the audio bitrate to be set, in kbit/s. Although any integer between 0
-        and 320 is valid, it is advisable to take standard encoding bitrates like
-        32,64,128,160,192,256 and 320.
+
+    @param abrate: is the audio bitrate to be set, in kbit/s. Although any integer
+        between 0 and 320 is valid, it is advisable to take standard encoding bitrates
+        like 32,64,128,160,192,256 and 320.
     """
 
     if not (idnr or acodec or abrate):
@@ -297,19 +298,19 @@ def getProgress():
     """Get the progress & pass information of the job currently encoding.
 
     This call returns False if no job is currently encoding (fx the queue is not active).
-    When the queue is active, this call returns a tuple of 4 values:
+    @returns: When the queue is active, this call returns a tuple of 4 values:
         (friendlyname, status, perc, timerem)
 
     friendlyname is the friendlyname you assigned to the encoding job
     status is the current status of the encoding job, represented by an integer
-        0 - Not set (this job hasn't started encoding). Never used in this context
-        1 - Audio pass in progress
-        2 - First (analyzing) video pass (only used in multipass encoding)
-        3 - Final video pass
-        4 - Postmerge (not used atm). Final merging or similar processing in progress
-    perc is the percentage completed of the current pass
-    timerem is the estimated time remaining of the current pass, formatted as a
-        human-readable string.
+        - 0 Not set (this job hasn't started encoding). Never used in this context
+        - 1 Audio pass in progress
+        - 2 First (analyzing) video pass (only used in multipass encoding)
+        - 3 Final video pass
+        - 4 Postmerge (not used atm). Final merging or similar processing in progress
+
+    perc is the percentage completed of the current pass, timerem is the estimated
+    time remaining of the current pass, formatted as a human-readable string.
     """
 
     try:
@@ -332,12 +333,11 @@ def startQueue():
 def listJobs():
     """Get a list with all jobs in the encoding queue and their current state
 
-    Returns a list of tuples containing all the current queued jobs. When the queue is
-    empty, an empty list is returned.
-    Each job in the list is a tuple containing 3 values
-        (idnr, friendlyname, status)
-    These values have the same meaning as the corresponding values returned by the
-        getProgress call"""
+    @returns: a list of tuples containing all the current queued jobs. When the
+        queue is empty, an empty list is returned.  Each job in the list is a tuple
+        containing 3 values (idnr, friendlyname, status) These values have the same
+        meaning as the corresponding values returned by the getProgress call
+    """
 
     try:
         (status, response) = server.listJobs()

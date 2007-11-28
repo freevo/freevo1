@@ -136,7 +136,8 @@ class PluginInterface(plugin.DaemonPlugin):
 class IdleBarPlugin(plugin.Plugin):
     """
     To activate the idle bar, put the following in your local_conf.py:
-        plugin.activate('idlebar')
+    | plugin.activate('idlebar')
+
     You can then add various plugins. Plugins inside the idlebar are
     sorted based on the level (except the clock, it's always on the
     right side). Use "freevo plugins -l" to see all available plugins,

@@ -104,10 +104,10 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     Plugin to browse songs in a tree-like way.
 
-    Requires:
-        * pysqlite.
+    @requires: pysqlite.
 
-    === Pre Installation ===
+    Pre Installation
+    ----------------
 
     The sqlite-meta-database should be available.
 
@@ -115,14 +115,15 @@ class PluginInterface(plugin.MainMenuPlugin):
     you can skip the rest of the pre-install if those plugins
     are already succesfully installed.
 
-        * install pysqlite, sqlite
-        * edit your local_config.py
+        - install pysqlite, sqlite
+        - edit your local_config.py
           Configure AUDIO_ITEMS ('''AudioConfig''', don't leave it at the default!)
-        * run freevo cache
-        * wait.....
-        * The meta database should be available now.
+        - run freevo cache
+        - wait.....
+        - The meta database should be available now.
 
-    === Configuration ===
+    Configuration
+    -------------
 
     Edit your local_config.py and add this:
 
@@ -167,7 +168,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     |   'alt_grouping':[None, None, None, 'track']
     | })
 
-    === Post Installation ===
+    Post Installation
+    -----------------
 
     New plugins are not immediately visible on the freevo webserver.
 

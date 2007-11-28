@@ -225,15 +225,16 @@ class Info_Area(Skin_Area):
 
 
 
-    def eval_expressions( self, list, index = [ ] ):
+    def eval_expressions( self, list, index=[ ] ):
         """
-        travesse the list evaluating the expressions,
-        return a flat list with valid elements indexes only
-        (false 'if' expressions eliminated). Also, text elements
-        are in the list too in a tuple:
-           ( index, 'text value' )
-        so you can check if it changed just comparing two lists
-        (useful in music player, to update 'elapsed')
+        traverse the list evaluating the expressions,
+
+        @returns: a flat list with valid elements indexes only (false 'if' expressions
+        eliminated). 
+
+        Also, text elements are in the list too in a tuple: ( index, 'text value' ) so
+        you can check if it changed just comparing two lists (useful in music player,
+        to update 'elapsed')
         """
         item = self.infoitem
         ret_list = [ ]

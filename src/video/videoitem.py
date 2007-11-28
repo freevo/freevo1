@@ -395,17 +395,16 @@ class VideoItem(Item):
 
     def set_next_available_subitem(self):
         """
-        select the next available subitem. Loops on each subitem and checks if
-        the needed media is really there.
-        If the media is there, sets self.current_subitem to the given subitem
-        and returns 1.
-        If no media has been found, we set self.current_subitem to None.
-          If the search for the next available subitem did start from the
-            beginning of the list, then we consider that no media at all was
-            available for any subitem: we return 0.
-          If the search for the next available subitem did not start from the
-            beginning of the list, then we consider that at least one media
-            had been found in the past: we return 1.
+        select the next available subitem. Loops on each subitem and checks if the
+        needed media is really there.  If the media is there, sets self.current_subitem
+        to the given subitem and returns 1.
+
+        If no media has been found, we set self.current_subitem to None.  If the search
+        for the next available subitem did start from the beginning of the list, then
+        we consider that no media at all was available for any subitem: we return 0.
+        If the search for the next available subitem did not start from the beginning
+        of the list, then we consider that at least one media had been found in the
+        past: we return 1.
         """
         if hasattr(self, 'conf_select_this_item'):
             # XXX bad hack, clean me up

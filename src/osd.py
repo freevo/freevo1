@@ -873,11 +873,11 @@ class OSD:
                                   ellipses, word_splitter):
         """
         calculate _one_ line for drawstringframed. 
-        @returns a list
+        @returns: a list
             - width used
             - string to draw
             - rest that didn't fit
-            - True if this function stopped because of a \n.
+            - True if this function stopped because of a <nl>.
         """
         c = 0                           # num of chars fitting
         width = 0                       # width needed
@@ -982,18 +982,19 @@ class OSD:
         This is a wrapper to drawstringframedsoft() and -hard()
 
         Parameters:
-            - string: the string to be drawn, supports also '\n'. \t is not supported
-              by pygame, you need to replace it first
-            - x,y: the posistion
-            - width, height: the frame dimensions,
-              height == -1 defaults to the font height size
-            - fgcolor, bgcolor: the color for the foreground and background
-              respectively. (Supports the alpha channel: 0xAARRGGBB)
-            - font, ptsize: font and font point size
-            - align_h: horizontal align. Can be left, center, right, justified
-            - align_v: vertical align. Can be top, bottom, center or middle
-            - mode: the way we should break lines/truncate. Can be 'hard'(based on chars)
-              or 'soft' (based on words)
+        @param string: the string to be drawn, supports also <nl>. <tab> is not supported
+          by pygame, you need to replace it first
+        @param x: horizontal position
+        @param y: vertical position
+        @param width: frame width
+        @param height: frame height == -1 defaults to the font height size
+        @param fgcolor, bgcolor: the color for the foreground and background
+          respectively. (Supports the alpha channel: 0xAARRGGBB)
+        @param font, ptsize: font and font point size
+        @param align_h: horizontal align. Can be left, center, right, justified
+        @param align_v: vertical align. Can be top, bottom, center or middle
+        @param mode: the way we should break lines/truncate. Can be 'hard'(based on chars)
+          or 'soft' (based on words)
 
         font can also be a skin font object. If so, this functions also supports
         shadow and border. fgcolor and bgcolor will also be taken from the skin

@@ -138,6 +138,10 @@ class RecordServer(xmlrpc.XMLRPC):
         self.delay_recording = None
 
 
+    @kaa.rpc.expose('ping')
+    def pingtest(self):
+        return True
+
     @kaa.rpc.expose('isRecording')
     def isRecording(self):
         _debug_('isRecording()', 2)
@@ -212,9 +216,9 @@ class RecordServer(xmlrpc.XMLRPC):
     def isPlayerRunning(self):
         """
         returns the state of a player, mplayer, xine, etc.
-        TODO:
-            real player running test, check /dev/videoX.
-            this could go into the upsoon client
+
+        @todo: real player running test, check /dev/videoX.  This could go into the
+        upsoon client
         """
         _debug_('isPlayerRunning()', 2)
         res = (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))

@@ -355,21 +355,20 @@ class Skin:
         """
         This function returns style information for drawing a popup box.
 
-        return backround, spacing, color, font, button_default, button_selected
+        @returns: backround, spacing, color, font, button_default, button_selected
         background is ('image', Image) or ('rectangle', Rectangle)
 
         Image attributes: filename
-        Rectangle attributes: color (of the border), size (of the border),
-           bgcolor (fill color), radius (round box for the border). There are also
-           x, y, width and height as attributes, but they may not be needed for the
-           popup box
 
-        button_default, button_selected are XML_item
-        attributes: font, rectangle (Rectangle)
+        Rectangle attributes: color (of the border), size (of the border), bgcolor
+        (fill color), radius (round box for the border). There are also x, y, width and
+        height as attributes, but they may not be needed for the popup box
 
-        All fonts are Font objects
-        attributes: name, size, color, shadow
-        shadow attributes: visible, color, x, y
+        button_default, button_selected are XML_item attributes: font, rectangle
+        (Rectangle)
+
+        All fonts are Font objects attributes: name, size, color, shadow shadow
+        attributes: visible, color, x, y
         """
         menu = self.__find_current_menu__(widget)
 

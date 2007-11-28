@@ -101,7 +101,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
     def fxdhandler(self, fxd, node):
         """
-        parse image specific stuff from fxd files
+        parse image specific stuff from fxd files::
 
         <?xml version="1.0" ?>
         <freevo>

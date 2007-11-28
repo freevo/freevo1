@@ -132,7 +132,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
     def fxdhandler(self, fxd, node):
         """
-        parse audio specific stuff from fxd files
+        parse audio specific stuff from fxd files::
 
         <?xml version="1.0" ?>
         <freevo>
@@ -143,20 +143,17 @@ class PluginInterface(plugin.MimetypePlugin):
             <playlist/>
             <reconnect/>
             <url>http://64.236.34.141:80/stream/1005</url>
-
             <info>
               <genre>JAZZ</genre>
               <description>A nice description</description>
             </info>
-
           </audio>
         </freevo>
 
-        Everything except title and url is optional. If <player> is set,
-        this player will be used (possible xine or mplayer). The tag
-        <playlist/> signals that this url is a playlist (mplayer needs that).
-        <reconnect/> sihnals that the player should reconnect when the
-        connection stopps.
+        Everything except title and url is optional. If <player> is set, this player
+        will be used (possible xine or mplayer). The tag <playlist/> signals that this
+        url is a playlist (mplayer needs that).  <reconnect/> sihnals that the player
+        should reconnect when the connection stopps.
         """
         a = AudioItem('', fxd.getattr(None, 'parent', None), scan=False)
 

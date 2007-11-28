@@ -72,7 +72,7 @@ def initCommDetectJob(source):
 def queueIt(idnr, now=False):
     """
     Insert the current job in the commdetectqueue
-        If now is true, the commdetect queue is automatically started
+    If now is true, the commdetect queue is automatically started
     """
     if not idnr:
         return (False, "CommDetectClient: no idnr")

@@ -145,13 +145,13 @@ class HTMLResource:
         """ Header
 
         This produces the header of a freevo page with the navigation bar.
-        Parameter:
-            title    = title of the webpage
-            style    = style sheet to use for this page
-            script   = java script to use  for this page
-            selected = which tab in the tabline should be highlighed
-            prefix   = how many directory levels is this file below the main level
-                       this is needed for the links in the navigation bar.
+
+        @param title:    title of the webpage
+        @param style:    style sheet to use for this page
+        @param script:   java script to use  for this page
+        @param selected: which tab in the tabline should be highlighed
+        @param prefix:   how many directory levels is this file below the main level
+            this is needed for the links in the navigation bar.
         """
 
         # debug print

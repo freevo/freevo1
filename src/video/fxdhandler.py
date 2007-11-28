@@ -35,7 +35,7 @@ import os
 
 def parse_movie(fxd, node):
     """
-    Callback for VideoItem <movie>
+    Callback for VideoItem <movie>::
 
     <movie title>
         <cover-img>file</cover-img>
