@@ -158,11 +158,11 @@ class VideoGroup:
     tuner_norm:   NTSC, PAL, SECAM
     tuner_chanlist:  us-cable,
     tuner_chan:   If using input_type=tuner and tuner_type=external set this to
-                  what channel it needs to be to get the signal, usually 3 or 4.
+    what channel it needs to be to get the signal, usually 3 or 4.
     record_group: VideoGroup that records for this tuner, default is to use the same device for record and play
     desc:         A nice description for this VideoGroup.
     group_type:   Special variable to identify devices like dvb or ivtv.  This
-                  can be left as default, 'normal', or set to 'ivtv', 'dvb', 'webcam', 'tvalsa'.
+                      can be left as default, 'normal', or set to 'ivtv', 'dvb', 'webcam', 'tvalsa'.
     cmd:          Command for execute external prog after the channel switched, such as 'sudo /usr/local/bin/setuptuner'
     """
 
@@ -508,9 +508,9 @@ FONT_DIR  = os.path.join(SHARE_DIR, 'fonts')
 RUNAPP = os.environ['RUNAPP']
 _debug_('RUNAPP: %s' % (RUNAPP))
 
-_debug_('logdir: %s %s' % (OS_LOGDIR, FREEVO_LOGDIR), DINFO)
-_debug_('staticdir: %s %s' % (OS_STATICDIR, FREEVO_STATICDIR), DINFO)
-_debug_('cachedir: %s %s' % (OS_CACHEDIR, FREEVO_CACHEDIR), DINFO)
+_debug_('LOGDIR: %s %s' % (OS_LOGDIR, FREEVO_LOGDIR), DINFO)
+_debug_('STATICDIR: %s %s' % (OS_STATICDIR, FREEVO_STATICDIR), DINFO)
+_debug_('CACHEDIR: %s %s' % (OS_CACHEDIR, FREEVO_CACHEDIR), DINFO)
 
 #
 # Check that freevo_config.py is not found in the config file dirs

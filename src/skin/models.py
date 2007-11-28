@@ -53,8 +53,9 @@ class ScrollableText:
     def __get_line__(self, string, max_width, font, word_splitter, hard):
         """
         calculate _one_ line. Returns a list:
-        string to draw, rest that didn't fit and True if this
-        function stopped because of a \n.
+            - string to draw
+            - rest that didn't fit
+            - True if this function stopped because of a \n.
         """
         c = 0                           # num of chars fitting
         width = 0                       # width needed

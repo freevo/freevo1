@@ -43,14 +43,14 @@ class TextEntryScreen:
         """
         Used to display and control the
 
-        actions - Tuple containing a name and an action function that will be called
+        @param actions: Tuple containing a name and an action function that will be called
                   with the menu widget and the contents of the text entry field when
                   selected.
-        title   - The title to display at the top of the screen.
-        text    - Initial text for the text entry field.
-        alpha   - Whether to display the alphabet character board
-        numeric - Whether to display the number character board.
-        symbol  - Whether to display the symbol character board.
+        @param title:   The title to display at the top of the screen.
+        @param text:    Initial text for the text entry field.
+        @param alpha:   Whether to display the alphabet character board
+        @param numeric: Whether to display the number character board.
+        @param symbol:  Whether to display the symbol character board.
         """
         self.title = title
         self.text_entry = TextEntry(text)

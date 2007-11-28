@@ -232,7 +232,7 @@ class DirItem(Playlist):
 
     def read_folder_fxd(self, fxd, node):
         '''
-        parse the xml file for directory settings
+        parse the xml file for directory settings::
 
         <?xml version="1.0" ?>
         <freevo>
