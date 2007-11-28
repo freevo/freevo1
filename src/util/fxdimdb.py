@@ -125,9 +125,12 @@ class FxdImdb:
 
 
     def searchImdb(self, name):
-        """name (string), returns id list
-        Search for name and returns an id list with tuples:
-            (id , name, year, type)"""
+        """
+        @param name: name to search for
+        @type name: string
+        @returns: id list with tuples:
+            (id , name, year, type)
+        """
 
         _debug_('searching imdb for "%s"' % (name))
         url = 'http://us.imdb.com/Tsearch?title=%s&restrict=Movies+and+TV' % urllib.quote(str(name))

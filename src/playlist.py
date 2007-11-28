@@ -51,12 +51,13 @@ class Playlist(Item):
         """
         Init the playlist
 
-        playlist: a) a filename to a playlist file (e.g. m3u)
-                  b) a list of items to play, this list can include
-                     1) Items
-                     2) filenames
-                     3) a list (directoryname, recursive=0|1)
-        build:    create the playlist. This means unfold the directories
+            1. a filename to a playlist file (e.g. m3u)
+            2. a list of items to play, this list can include
+                - Items
+                - filenames
+                - a list (directoryname, recursive=0|1)
+
+        @param build: create the playlist, this means unfold the directories
         """
         Item.__init__(self, parent)
 
@@ -150,14 +151,14 @@ class Playlist(Item):
         """
         This is the (ssr) slideshow reading function.
 
-        Arguments: ssrname - the slideshow filename
-        Returns:   The list of interesting lines in the slideshow
+        File line format::
 
-        File line format:
-
-            FileName: "image file name"; Caption: "caption text"; Delay: "sec"
+        FileName: "image file name"; Caption: "caption text"; Delay: "sec"
 
         The caption and delay are optional.
+
+        @param ssrname: the slideshow filename
+        @returns: the list of interesting lines in the slideshow
         """
 
         (curdir, playlistname) = os.path.split(ssrname)
@@ -522,7 +523,7 @@ class Mimetype(plugin.MimetypePlugin):
 
     def fxdhandler(self, fxd, node):
         """
-        parse audio specific stuff from fxd files
+        parse audio specific stuff from fxd files::
 
         <?xml version="1.0" ?>
         <freevo>

@@ -270,17 +270,16 @@ class MenuWidget(GUIObject):
 
     def goto_media_menu(self, media='audio'):
         """
-        Go to a main menu item
-        media = 'tv' or 'audio' or 'video' or 'image' or 'games'
+        Go to a main menu item media = 'tv' or 'audio' or 'video' or 'image' or 'games'
         used for events:
-            MENU_GOTO_TVMENU
-            MENU_GOTO_TVGUIDEMENU #doesn't yet work
-            MENU_GOTO_VIDEOMENU
-            MENU_GOTO_AUDIOMENU
-            MENU_GOTO_IMAGEMENU
-            MENU_GOTO_GAMESMENU
-            MENU_GOTO_RADIOMENU
-            MENU_GOTO_SHUTDOWN
+            - MENU_GOTO_TVMENU
+            - MENU_GOTO_TVGUIDEMENU #doesn't yet work
+            - MENU_GOTO_VIDEOMENU
+            - MENU_GOTO_AUDIOMENU
+            - MENU_GOTO_IMAGEMENU
+            - MENU_GOTO_GAMESMENU
+            - MENU_GOTO_RADIOMENU
+            - MENU_GOTO_SHUTDOWN
         """
         self.menustack = [self.menustack[0]]
         menu = self.menustack[0]

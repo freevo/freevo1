@@ -983,22 +983,21 @@ class OSD:
 
         Parameters:
         @param string: the string to be drawn, supports also <nl>. <tab> is not supported
-          by pygame, you need to replace it first
+            by pygame, you need to replace it first
         @param x: horizontal position
         @param y: vertical position
         @param width: frame width
         @param height: frame height == -1 defaults to the font height size
         @param fgcolor, bgcolor: the color for the foreground and background
-          respectively. (Supports the alpha channel: 0xAARRGGBB)
-        @param font, ptsize: font and font point size
+            respectively. (Supports the alpha channel: 0xAARRGGBB)
+        @param font, ptsize: font and font point size font can also be a skin font
+            object. If so, this functions also supports shadow and border. fgcolor and
+            bgcolor will also be taken from the skin font if set to None when calling this
+            function.
         @param align_h: horizontal align. Can be left, center, right, justified
         @param align_v: vertical align. Can be top, bottom, center or middle
         @param mode: the way we should break lines/truncate. Can be 'hard'(based on chars)
-          or 'soft' (based on words)
-
-        font can also be a skin font object. If so, this functions also supports
-        shadow and border. fgcolor and bgcolor will also be taken from the skin
-        font if set to None when calling this function.
+            or 'soft' (based on words)
         """
         if not pygame.display.get_init():
             return '', (x,y,x,y)

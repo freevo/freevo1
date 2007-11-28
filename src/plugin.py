@@ -129,17 +129,20 @@ class DaemonPlugin(Plugin):
     background while Freevo is running
 
     A DaemonPlugin can have the following functions:
+
     def poll(self):
-        this function will be called every poll_intervall*0.1 seconds
+    this function will be called every poll_intervall*0.1 seconds
+
     def draw(self(type, object), osd):
-        this function will be called to update the screen
+    this function will be called to update the screen
+
     def eventhandler(self, event, menuw=None):
-        events no one else wants will be passed to this functions, when
-        you also set the variable event_listener to True, the object will
-        get all events
+    events no one else wants will be passed to this functions, when you also set
+    the variable event_listener to True, the object will get all events
+
     def shutdown(self):
-        this function may be called to shutdown the plugin and will
-        be called on freevo shutdown
+    this function may be called to shutdown the plugin and will be called on freevo
+    shutdown
     """
     def __init__(self):
         Plugin.__init__(self)
@@ -417,7 +420,7 @@ def register(plugin, name, multiple_choises=0):
 def register_callback(name, *args):
     """
     register a callback to the callback handler 'name'.
-    @note The format of args depends on the callback
+    @note: The format of args depends on the callback
     """
     global __callbacks__
     if not __callbacks__.has_key(name):
