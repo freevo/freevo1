@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes: - I'm no fan of all the skin.clear() being done :(
-# Todo:  - Migrate with Gustavos pygoom when done and change name to mpav
+# Todo:  - 
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -51,7 +51,7 @@ skin = skin.get_singleton()
 osd  = osd.get_singleton()
 
 
-class mpv_Goom(BaseAnimation):
+class MpvGoom(BaseAnimation):
     message    = None
     coversurf  = None
 
@@ -73,13 +73,24 @@ class mpv_Goom(BaseAnimation):
         pygoom.set_resolution(width, height, 0)
 
 
-
     def set_cover(self, coverfile):
         """
         Set a blend image to toggle between visual and cover
         Updated when resolution is changed
         """
         self.coverfile = coverfile
+
+
+    def set_title(self, title):
+        """ pass the song title to pygoom """
+        _debug_('pygoom.set_title(title=%r)' % (title), 2)
+        pygoom.set_title(title)
+
+
+    def set_info(self, info):
+        """ pass the song information to pygoom """
+        _debug_('pygoom.set_message(info=%r)' % (info), 2)
+        pygoom.set_message(info)
 
 
     def set_message(self, message, timeout=5):
@@ -98,8 +109,7 @@ class mpv_Goom(BaseAnimation):
 
         s = Surface((w,h), 0, 32)
 
-        osd.drawstringframed(message, 0, 0, w, h, font,
-                             mode='hard', layer=s)
+        osd.drawstringframed(message, 0, 0, w, h, font, mode='hard', layer=s)
 
         self.m_timer   = time.time()
         self.m_timeout = timeout
@@ -237,17 +247,25 @@ class PluginInterface(plugin.Plugin):
         plugin.Plugin.__init__(self)
         self._type    = 'mplayer_audio'
         self.app_mode = 'audio'
+        self.title    = None
+        self.info     = None
 
         # Event for changing between viewmodes
         config.EVENTS['audio']['0'] = Event('CHANGE_MODE')
+        config.EVENTS['audio']['8'] = Event('TOGGLE_TITLE')
+        config.EVENTS['audio']['4'] = Event('TOGGLE_INFO')
 
         self.plugin_name = 'audio.mplayervis'
         plugin.register(self, self.plugin_name)
 
-        self.view_func = [self.dock,
-                          self.fullscreen,
-                          self.noview]
+        self.view = config.MPLAYERVIS_MODE
+        self.view_func = [self.dock, self.fullscreen, self.noview]
 
+
+    def config(self):
+        return [
+            ('MPLAYERVIS_MODE', 0, 'Set the initial mode of the display, 0)DOCK, 1)FULL or 2)NOVI')
+        ]
 
     def play( self, command, player ):
         self.player = player
@@ -278,6 +296,21 @@ class PluginInterface(plugin.Plugin):
         if event == 'CHANGE_MODE':
             self.toggle_view()
             return True
+
+        if event == 'TOGGLE_TITLE':
+            if self.title:
+                self.title = ''
+            else:
+                self.title = self.item.name
+            self.visual.set_title(self.title)
+            return True
+
+        if event == 'TOGGLE_INFO':
+            if self.info:
+                self.info = ''
+            else:
+                self.info = self.item_info()
+            self.visual.set_message(self.info)
 
         if self.visual and self.view == FULL:
 
@@ -387,7 +420,7 @@ class PluginInterface(plugin.Plugin):
 
         if rc.app() == self.player.eventhandler:
 
-            self.visual = mpv_Goom(300, 300, 150, 150, self.item.image)
+            self.visual = MpvGoom(300, 300, 150, 150, self.item.image)
 
             if self.view == FULL:
                 self.visual.set_message(self.item.name, 10)
