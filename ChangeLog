@@ -28,6 +28,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated mplayer to allow the volume events to passed over and shown (F#1834486)
  * Updated webserver media library (F#1835346)
  * Renamed plug-in audio.playlist to audio.playlists (B#1834140)
+ * Fixed audiodiskitem not playing a cd when inserted (B#1830000)
  * Fixed audioscrobbler killing the auto shutdown feature (F#1831371)
  * Fixed geexbox skin TV menu reporting record server status (B#1835256)
  * Fixed helper plugins, not allowing tuples as arguments (B#1832837)

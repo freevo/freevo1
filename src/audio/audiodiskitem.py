@@ -42,7 +42,9 @@ class AudioDiskItem(Playlist):
     """
     class for handling audio disks
     """
-    def __init__(self, disc_id, parent, devicename = None, display_type = None):
+    def __init__(self, disc_id, parent, devicename=None, display_type=None):
+        _debug_('__init__(disc_id=%r, parent=%r, devicename=%r, display_type=%r)' % \
+            (disc_id, parent, devicename, display_type), 2)
 
         Playlist.__init__(self, parent=parent)
         self.type = 'audiocd'
@@ -66,7 +68,8 @@ class AudioDiskItem(Playlist):
         """
         return a list of actions for this item
         """
-        items = [ ( self.cwd, _('Browse disc') ) ]
+        _debug_('actions()', 2)
+        items = [ ( self.cwd(), _('Browse disc') ) ]
         return items
 
 
@@ -74,6 +77,7 @@ class AudioDiskItem(Playlist):
         """
         make a menu item for each file in the directory
         """
+        _debug_('cwd(arg=%r, menuw=%r)' % (arg, menuw), 2)
         play_items = []
         number = len(self.info['tracks'])
         if hasattr(self.info, 'mixed'):
@@ -83,7 +87,7 @@ class AudioDiskItem(Playlist):
             title=self.info['tracks'][i]['title']
             item = AudioItem('cdda://%d' % (i+1), self, title, scan=False)
 
-            # XXX FIXME: set also all the other infos here if AudioInfo
+            # XXX FIXME: set also all the other info here if AudioInfo
             # XXX will be based on mmpython
             #item.set_info('', self.name, title, i+1, self.disc_id[1], '')
             item.info = self.info['tracks'][i]
