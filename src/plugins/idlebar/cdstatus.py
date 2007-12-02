@@ -47,8 +47,9 @@ class PluginInterface(IdleBarPlugin):
         self.plugin_name = 'idlebar.cdstatus'
         icondir = os.path.join(config.ICON_DIR, 'status')
         self.cdimages = {}
-        self.cdimages ['audiocd']     = os.path.join(icondir, 'cd_audio.png')
         self.cdimages ['empty_cdrom'] = os.path.join(icondir, 'cd_inactive.png')
+        self.cdimages ['audiocd']     = os.path.join(icondir, 'cd_audio.png')
+        self.cdimages ['audio']       = os.path.join(icondir, 'cd_audio.png')
         self.cdimages ['images']      = os.path.join(icondir, 'cd_photo.png')
         self.cdimages ['video']       = os.path.join(icondir, 'cd_video.png')
         self.cdimages ['dvd']         = os.path.join(icondir, 'cd_video.png')
