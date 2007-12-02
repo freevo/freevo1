@@ -111,6 +111,7 @@ class MPlayer:
         filename       = item.filename
 
         if filename and not os.path.isfile(filename):
+            self.plugins = ()
             return _('%s\nnot found!') % Unicode(item.url)
 
         if not filename:
