@@ -22,6 +22,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * New Alsa mixer 2 plug-in (F#1832948)
+ * New French movie cover grabber (F#1841768)
  * New gphoto plug-in, in contrib/runtime (F#1838260)
  * New six channel mixer and idlebar plug-in (F#1833749)
  * Updated French translation (F#1832751)
