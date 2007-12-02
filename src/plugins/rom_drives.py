@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# rom_drives.py - the Freevo identifymedia/automount plugin
+# Freevo identify media/automount removable media plugin
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -97,6 +97,7 @@ from directory import DirItem
 from gui import PopupBox
 from item import Item
 from audio import AudioDiskItem
+from audio import AudioItem
 from video import VideoItem
 
 LABEL_REGEXP = re.compile("^(.*[^ ]) *$").match
@@ -116,14 +117,15 @@ def init():
         for i in range(len(config.ROM_DRIVES)):
             (dir, device, name) = config.ROM_DRIVES[i]
             media = RemovableMedia(mountdir=dir, devicename=device, drivename=name)
-            media.get_capabilities()
-            media.get_drive_status()
+            cdc = media.get_capabilities()
+            media.log_capabilities(cdc)
+            cds = media.get_drive_status()
+            media.log_drive_status(cds)
             # close the tray without popup message
-            media.move_tray(dir='close', notify=0)
+            media.close_tray()
             config.REMOVABLE_MEDIA.append(media)
 
-    # Remove the ROM_DRIVES member to make sure it is not used by
-    # legacy code!
+    # Remove the ROM_DRIVES member to make sure it is not used by legacy code!
     del config.ROM_DRIVES
 
     # Start identifymedia thread
@@ -169,9 +171,15 @@ class autostart(plugin.DaemonPlugin):
 
         # if we are at the main menu and there is an IDENTIFY_MEDIA event,
         # try to autorun the media
-        if plugin.isevent(event) == 'IDENTIFY_MEDIA' and menuw and \
-               len(menuw.menustack) == 1 and not event.arg[1]:
-            media = event.arg[0]
+        if plugin.isevent(event) == 'IDENTIFY_MEDIA':
+            (media, state) = event.arg
+            if not menuw:
+                return False
+            if len(menuw.menustack) != 1:
+                return False
+            if state != CDS_DISC_OK:
+                return False
+
             if media.item:
                 media.item.parent = menuw.menustack[0].selected
             if media.item and media.item.actions():
@@ -270,13 +278,19 @@ class RemovableMedia:
     """
     def __init__(self, mountdir='', devicename='', drivename=''):
         # This is read-only stuff for the drive itself
+        _debug_('RemovableMedia.__init__(mountdir=%r, devicename=%r, drivename=%r)' % \
+            (mountdir, devicename, drivename),2)
         self.mountdir = mountdir
         self.devicename = devicename
         self.drivename = drivename
 
         # Dynamic stuff
-        self.tray_open = 0
-        self.drive_status = None  # return code from ioctl for DRIVE_STATUS
+        self.cdc       = 0
+        self.cds       = CDS_NO_INFO
+        self.cds_changed = False
+
+        self.tray_open = False
+        self.drive_status = self.get_drive_status()
 
         self.id        = ''
         self.label     = ''
@@ -297,176 +311,192 @@ class RemovableMedia:
         return self.tray_open
 
 
+    def log_capabilities(self, cdc):
+        """ Write the drive capabilities to the debug log """
+        _debug_('%s cdc=0x%08x ' % (self.devicename, cdc))
+        _debug_('%s CDC_CLOSE_TRAY'     % (cdc & CDC_CLOSE_TRAY     and 'can' or 'can\'t'))
+        _debug_('%s CDC_OPEN_TRAY'      % (cdc & CDC_OPEN_TRAY      and 'can' or 'can\'t'))
+        _debug_('%s CDC_LOCK'           % (cdc & CDC_LOCK           and 'can' or 'can\'t'))
+        _debug_('%s CDC_SELECT_SPEED'   % (cdc & CDC_SELECT_SPEED   and 'can' or 'can\'t'))
+        _debug_('%s CDC_SELECT_DISC'    % (cdc & CDC_SELECT_DISC    and 'can' or 'can\'t'))
+        _debug_('%s CDC_MULTI_SESSION'  % (cdc & CDC_MULTI_SESSION  and 'can' or 'can\'t'))
+        _debug_('%s CDC_MCN'            % (cdc & CDC_MCN            and 'can' or 'can\'t'))
+        _debug_('%s CDC_MEDIA_CHANGED'  % (cdc & CDC_MEDIA_CHANGED  and 'can' or 'can\'t'))
+        _debug_('%s CDC_PLAY_AUDIO'     % (cdc & CDC_PLAY_AUDIO     and 'can' or 'can\'t'))
+        _debug_('%s CDC_RESET'          % (cdc & CDC_RESET          and 'can' or 'can\'t'))
+        _debug_('%s CDC_DRIVE_STATUS'   % (cdc & CDC_DRIVE_STATUS   and 'can' or 'can\'t'))
+        _debug_('%s CDC_GENERIC_PACKET' % (cdc & CDC_GENERIC_PACKET and 'can' or 'can\'t'))
+        _debug_('%s CDC_CD_R'           % (cdc & CDC_CD_R           and 'can' or 'can\'t'))
+        _debug_('%s CDC_CD_RW'          % (cdc & CDC_CD_RW          and 'can' or 'can\'t'))
+        _debug_('%s CDC_DVD'            % (cdc & CDC_DVD            and 'can' or 'can\'t'))
+        _debug_('%s CDC_DVD_R'          % (cdc & CDC_DVD_R          and 'can' or 'can\'t'))
+        _debug_('%s CDC_DVD_RAM'        % (cdc & CDC_DVD_RAM        and 'can' or 'can\'t'))
+        _debug_('%s CDC_MO_DRIVE'       % (cdc & CDC_MO_DRIVE       and 'can' or 'can\'t'))
+        _debug_('%s CDC_MRW'            % (cdc & CDC_MRW            and 'can' or 'can\'t'))
+        _debug_('%s CDC_MRW_W'          % (cdc & CDC_MRW_W          and 'can' or 'can\'t'))
+        _debug_('%s CDC_RAM'            % (cdc & CDC_RAM            and 'can' or 'can\'t'))
+
+
     def get_capabilities(self):
-        """ Open the CD/DVD drive and read its capabilities
-        """
+        """ Open the CD/DVD drive and read its capabilities """
         _debug_('Getting capabilities for %s' % self.drivename, DINFO)
+        cdc = 0
         try:
             fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
             try:
                 if os.uname()[0] == 'FreeBSD':
                     self.can_close = True
                     self.can_eject = True
+                    self.can_select_speed = True
                 else:
                     cdc = ioctl(fd, CDROM_GET_CAPABILITY)
-                    self.cdc = cdc
 
                     if cdc & CDC_CLOSE_TRAY:
                         self.can_close = True
-                        _debug_('Drive %s can close' % self.drivename, DINFO)
+                        _debug_('%r can close' % self.drivename, DINFO)
 
                     if cdc & CDC_OPEN_TRAY:
                         self.can_eject = True
-                        _debug_('Drive %s can open' % self.drivename, DINFO)
+                        _debug_('%r can open' % self.drivename, DINFO)
 
                     if cdc & CDC_SELECT_SPEED:
                         self.can_select_speed = True
-                        _debug_('Drive %s can select speed' % self.drivename, DINFO)
-
-                    if config.DEBUG:
-                        # some code to view the capabilities
-                        _debug_('%s cdc=0x%08x ' % (self.devicename, cdc))
-                        _debug_(cdc & CDC_CLOSE_TRAY     and 'CDC_CLOSE_TRAY'     or 'not CDC_CLOSE_TRAY')
-                        _debug_(cdc & CDC_OPEN_TRAY      and 'CDC_OPEN_TRAY'      or 'not CDC_OPEN_TRAY' )
-                        _debug_(cdc & CDC_LOCK           and 'CDC_LOCK'           or 'not CDC_LOCK')
-                        _debug_(cdc & CDC_SELECT_SPEED   and 'CDC_SELECT_SPEED'   or 'not CDC_SELECT_SPEED')
-                        _debug_(cdc & CDC_SELECT_DISC    and 'CDC_SELECT_DISC'    or 'not CDC_SELECT_DISC')
-                        _debug_(cdc & CDC_MULTI_SESSION  and 'CDC_MULTI_SESSION'  or 'not CDC_MULTI_SESSION')
-                        _debug_(cdc & CDC_MCN            and 'CDC_MCN'            or 'not CDC_MCN')
-                        _debug_(cdc & CDC_MEDIA_CHANGED  and 'CDC_MEDIA_CHANGED'  or 'not CDC_MEDIA_CHANGED')
-                        _debug_(cdc & CDC_PLAY_AUDIO     and 'CDC_PLAY_AUDIO'     or 'not CDC_PLAY_AUDIO')
-                        _debug_(cdc & CDC_RESET          and 'CDC_RESET'          or 'not CDC_RESET')
-                        _debug_(cdc & CDC_DRIVE_STATUS   and 'CDC_DRIVE_STATUS'   or 'not CDC_DRIVE_STATUS')
-                        _debug_(cdc & CDC_GENERIC_PACKET and 'CDC_GENERIC_PACKET' or 'not CDC_GENERIC_PACKET')
-                        _debug_(cdc & CDC_CD_R           and 'CDC_CD_R'           or 'not CDC_CD_R')
-                        _debug_(cdc & CDC_CD_RW          and 'CDC_CD_RW'          or 'not CDC_CD_RW')
-                        _debug_(cdc & CDC_DVD            and 'CDC_DVD'            or 'not CDC_DVD')
-                        _debug_(cdc & CDC_DVD_R          and 'CDC_DVD_R'          or 'not CDC_DVD_R')
-                        _debug_(cdc & CDC_DVD_RAM        and 'CDC_DVD_RAM'        or 'not CDC_DVD_RAM')
-                        _debug_(cdc & CDC_MO_DRIVE       and 'CDC_MO_DRIVE'       or 'not CDC_MO_DRIVE')
-                        _debug_(cdc & CDC_MRW            and 'CDC_MRW'            or 'not CDC_MRW')
-                        _debug_(cdc & CDC_MRW_W          and 'CDC_MRW_W'          or 'not CDC_MRW_W')
-                        _debug_(cdc & CDC_RAM            and 'CDC_RAM'            or 'not CDC_RAM')
+                        _debug_('%r can select speed' % self.drivename, DINFO)
             finally:
                 os.close(fd)
         except Exception, e:
-            _debug_('Cannot open "%s": %s"' % (self.devicename, e), DWARNING)
+            _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
+        self.cdc = cdc
+        return cdc
+
+
+    def drive_status_text(self, cds):
+        """ the drive status as text"""
+        if   cds == CDS_NO_INFO:         return 'CDS_NO_INFO'
+        elif cds == CDS_NO_DISC:         return 'CDS_NO_DISC'
+        elif cds == CDS_TRAY_OPEN:       return 'CDS_TRAY_OPEN'
+        elif cds == CDS_DRIVE_NOT_READY: return 'CDS_DRIVE_NOT_READY'
+        elif cds == CDS_DISC_OK:         return 'CDS_DISC_OK'
+        return 'CDS_UNKNOWN %s' % (cds)
+
+
+    def log_drive_status(self, cds):
+        """ Log the drive status """
+        _debug_('%r %s' % (self.devicename, self.drive_status_text(cds)))
 
 
     def get_drive_status(self):
-        """ Open the CD/DVD drive and read its drive status
-        """
-        _debug_('Getting drive staus for %s' % self.drivename, DINFO)
-        self.cds = 0
+        """ Open the CD/DVD drive and read its drive status """
+        cds = CDS_NO_INFO
         try:
             fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
             try:
                 if os.uname()[0] == 'FreeBSD':
-                    self.can_close = True
-                    self.can_eject = True
+                    try:
+                        data = array.array('c', '\000'*4096)
+                        (address, length) = data.buffer_info()
+                        buf = pack('BBHP', CD_MSF_FORMAT, 0, length, address)
+                        s = ioctl(fd, CDIOREADTOCENTRYS, buf)
+                        cds = CDS_DISC_OK
+                    except Exception, e:
+                        cds = CDS_NO_DISC
                 else:
-                    if self.cdc & CDC_DRIVE_STATUS:
-                        cds = ioctl(fd, CDROM_DRIVE_STATUS)
-                        self.cds = cds
-
-                        if config.DEBUG:
-                            _debug_('%s cds=%s' % (self.devicename, cds))
-                            if   cds == CDS_NO_INFO:         _debug_('CDS_NO_INFO')
-                            elif cds == CDS_NO_DISC:         _debug_('CDS_NO_DISC')
-                            elif cds == CDS_TRAY_OPEN:       _debug_('CDS_TRAY_OPEN')
-                            elif cds == CDS_DRIVE_NOT_READY: _debug_('CDS_DRIVE_NOT_READY')
-                            elif cds == CDS_DISC_OK:         _debug_('CDS_DISC_OK')
+                    try:
+                        if self.cdc & CDC_DRIVE_STATUS:
+                            cds = ioctl(fd, CDROM_DRIVE_STATUS)
+                    except Exception, e:
+                        _debug_('getting drive status for %r failed: %s' % (self.devicename, e), DWARNING)
             finally:
                 os.close(fd)
         except Exception, e:
-            _debug_('Cannot open "%s": %s"' % (self.devicename, e), DWARNING)
+            _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
+        self.cds_changed = self.cds != cds
+        self.cds = cds
+        _debug_('drive status for %s (%r:%s) is %s' % \
+            (self.drivename, self.devicename, fd, self.drive_status_text(cds)), 2)
+        return cds
 
 
-    def move_tray(self, dir='toggle', notify=1):
-        """
-        Move the tray. dir can be toggle/open/close
-        """
-        if dir == 'toggle':
+    def get_drive_status_changed(self):
+        """ has the drive status changed """
+        return self.cds_changed
+
+
+    def open_tray(self):
+        """ Open the drive tray """
+        _debug_('Ejecting disc in drive %s' % self.drivename)
+
+        try:
+            fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
+            try:
+                if os.uname()[0] == 'FreeBSD':
+                    s = ioctl(fd, CDIOCEJECT, 0)
+                else:
+                    s = ioctl(fd, CDROMEJECT)
+                self.tray_open = True
+            finally:
+                os.close(fd)
+        except Exception, e:
+            _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
+
+
+    def close_tray(self):
+        """ Close the drive tray """
+        _debug_('Inserting disc in drive %s' % self.drivename)
+
+        try:
+            fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
+            try:
+                if os.uname()[0] == 'FreeBSD':
+                    s = ioctl(fd, CDIOCCLOSE, 0)
+                else:
+                    s = ioctl(fd, CDROMCLOSETRAY)
+                self.tray_open = False
+            finally:
+                os.close(fd)
+        except Exception, e:
+            _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
+
+
+    def move_tray(self, direction='toggle'):
+        """ Move the tray. direction can be toggle/open/close """
+        global im_thread
+        if direction == 'toggle':
             if self.is_tray_open():
-                dir = 'close'
+                direction = 'close'
             else:
-                dir = 'open'
+                direction = 'open'
 
-        if dir == 'open' and self.can_eject:
-            _debug_('Ejecting disc in drive %s' % self.drivename, 1)
-
-            if notify:
-                pop = PopupBox(text=_('Ejecting disc in drive %s') % self.drivename)
-                pop.show()
-
-            try:
-                fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
-                try:
-                    if os.uname()[0] == 'FreeBSD':
-                        s = ioctl(fd, CDIOCEJECT, 0)
-                    else:
-                        s = ioctl(fd, CDROMEJECT)
-                    self.tray_open = 1
-                finally:
-                    os.close(fd)
-            except Exception, e:
-                _debug_('Cannot open "%s": %s"' % (self.devicename, e), DWARNING)
-
-            if notify:
-                pop.destroy()
-
-
-        elif dir == 'close' and self.can_close:
-            _debug_('Inserting disc in drive %s' % self.drivename, 1)
-
-            if notify:
-                pop = PopupBox(text=_('Reading disc in drive %s') % self.drivename)
-                pop.show()
-
-            # close the tray, identifymedia does the rest,
-            # including refresh screen
-            try:
-                fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
-                try:
-                    if os.uname()[0] == 'FreeBSD':
-                        s = ioctl(fd, CDIOCCLOSE, 0)
-                    else:
-                        s = ioctl(fd, CDROMCLOSETRAY)
-                    self.tray_open = 0
-                finally:
-                    os.close(fd)
-            except Exception, e:
-                _debug_('Cannot open "%s": %s"' % (self.devicename, e), DWARNING)
-
-            global im_thread
+        if direction == 'open' and self.can_eject:
+            pop = PopupBox(text=_('Ejecting disc in drive %s') % self.drivename)
+            pop.show()
+            self.open_tray()
+            pop.destroy()
+        elif direction == 'close' and self.can_close:
+            pop = PopupBox(text=_('Reading disc in drive %s') % self.drivename)
+            pop.show()
+            self.close_tray()
             if im_thread:
                 im_thread.check_all()
-            if notify:
-                pop.destroy()
+            pop.destroy()
 
 
     def mount(self):
-        """
-        Mount the media
-        """
+        """ Mount the media """
         _debug_('Mounting disc in drive %s' % self.drivename, 2)
         util.mount(self.mountdir, force=True)
         return
 
 
     def umount(self):
-        """
-        Mount the media
-        """
+        """ Mount the media """
         _debug_('Unmounting disc in drive %s' % self.drivename, 2)
         util.umount(self.mountdir)
         return
 
 
     def is_mounted(self):
-        """
-        Check if the media is mounted
-        """
+        """ Check if the media is mounted """
         return util.is_mounted(self.mountdir)
 
 
@@ -480,85 +510,80 @@ class Identify_Thread(threading.Thread):
     """
     def identify(self, media, force_rebuild=False):
         """
-        magic!
-        Try to find out as much as possible about the disc in the
-        rom drive: title, image, play options, ...
+        Try to find out as much as possible about the disc in the rom drive: title,
+        image, play options, ...
         """
-        # Check drive status (tray pos, disc ready)
-        try:
-            CDSL_CURRENT = ( (int ) ( ~ 0 >> 1 ) )
-            fd = os.open(media.devicename, os.O_RDONLY | os.O_NONBLOCK)
-            if os.uname()[0] == 'FreeBSD':
-                try:
-                    data = array.array('c', '\000'*4096)
-                    (address, length) = data.buffer_info()
-                    buf = pack('BBHP', CD_MSF_FORMAT, 0, length, address)
-                    s = ioctl(fd, CDIOREADTOCENTRYS, buf)
-                    s = CDS_DISC_OK
-                except:
-                    s = CDS_NO_DISC
-            else:
-                s = ioctl(fd, CDROM_DRIVE_STATUS, CDSL_CURRENT)
-        except:
-            # maybe we need to close the fd if ioctl fails, maybe
-            # open fails and there is no fd
-            try:
-                os.close(fd)
-            except:
-                pass
-            media.drive_status = None
-            return
+        cds = media.get_drive_status()
+        #media.log_drive_status(cds)
 
         # Same as last time? If so we're done
-        if s == media.drive_status:
-            os.close(fd)
+        if media.drive_status == cds:
+            #_debug_('status not changed for drive %r' % (media.devicename))
             return
 
-        media.drive_status = s
+        _debug_('drive_status changed %s -> %s' % (media.drive_status, cds))
+        media.drive_status = cds
+        media.id           = ''
+        media.label        = ''
+        media.type         = 'empty_cdrom'
+        media.item         = None
+        media.videoitem    = None
+        media.cached       = False
 
-        media.id        = ''
-        media.label     = ''
-        media.type      = 'empty_cdrom'
-        media.item      = None
-        media.videoitem = None
-        media.cached    = False
+        # Is there a disc information?
+        if media.drive_status == CDS_NO_INFO:
+            _debug_('cannot get the drive status for drive %r' % (media.devicename))
+            return
 
         # Is there a disc present?
-        if s != CDS_DISC_OK:
-            os.close(fd)
+        if media.drive_status != CDS_DISC_OK:
+            _debug_('disc not ready for drive %r' % (media.devicename))
             return
+
+        # try to set the speed
+        try:
+            fd = os.open(media.devicename, os.O_RDONLY | os.O_NONBLOCK)
+            try:
+                if media.can_select_speed and config.ROM_SPEED:
+                    try:
+                        ioctl(fd, CDROM_SELECT_SPEED, config.ROM_SPEED)
+                    except Exception, e:
+                        _debug_('setting rom speed for %r failed: %s' % (media.devicename, e))
+
+            finally:
+                #_debug_('closing %r drive %r' % (fd, media.devicename))
+                try:
+                    os.close(fd)
+                except Exception, e:
+                    _debug_('closing %r failed: %s' % (media.devicename, e))
+        except Exception, e:
+            _debug_('opening %r failed: %s' % (media.devicename, e))
+            return
+
 
         # if there is a disc, the tray can't be open
         media.tray_open = False
         disc_info = util.mediainfo.disc_info(media, force_rebuild)
         if not disc_info:
-            # bad disc, e.g. blank disc.
-            os.close(fd)
+            _debug_('no disc information for drive %r' % (media.devicename))
             return
 
         data = disc_info.mmdata
+        if not data:
+            _debug_('no data for drive %r' % (media.devicename))
+            return
 
-        # try to set the speed
-        if media.can_select_speed and config.ROM_SPEED and data and not data['mime'] == 'video/dvd':
-            try:
-                ioctl(fd, CDROM_SELECT_SPEED, config.ROM_SPEED)
-            except:
-                pass
-
-        if data and data['mime'] == 'audio/cd':
-            os.close(fd)
-            disc_id = data['id']
-            media.item = AudioDiskItem(disc_id, parent=None,
-                                       devicename=media.devicename,
-                                       display_type='audio')
-            media.type = media.item.type
+        if data['mime'] == 'audio/cd':
+            media.id = disc_id = data['id']
+            media.item = AudioDiskItem(disc_id, parent=None, devicename=media.devicename, display_type='audio')
+            media.type = 'audio'
             media.item.media = media
             if data['title']:
                 media.item.name = data['title']
             media.item.info = disc_info
+            _debug_('playing audio in drive %r' % (media.devicename))
             return
 
-        os.close(fd)
         image = title = movie_info = more_info = fxd_file = None
 
         media.id    = data['id']
@@ -607,19 +632,19 @@ class Identify_Thread(threading.Thread):
                 media.item = copy.copy(movie_info)
             else:
                 media.item = VideoItem('', None)
-                media.item.image = util.getimage(os.path.join(config.OVERLAY_DIR,
-                                                              'disc-set', media.id))
+                media.item.image = util.getimage(os.path.join(config.OVERLAY_DIR, 'disc-set', media.id))
             variables = media.item.info.variables
             media.item.info = disc_info
             media.item.info.set_variables(variables)
 
-            media.item.name  = title
+            media.item.name = title
             media.item.set_url(data['mime'][6:] + '://')
             media.item.media = media
 
-            media.type  = data['mime'][6:]
+            media.type = data['mime'][6:]
 
             media.item.info.mmdata = data
+            _debug_('playing video in drive %r' % (media.devicename))
             return
 
         # Disc is data of some sort. Mount it to get the file info
@@ -641,7 +666,8 @@ class Identify_Thread(threading.Thread):
 
         video_files = util.match_files(media.mountdir, config.VIDEO_SUFFIX)
 
-        _debug_('identifymedia: mplayer = "%s"' % video_files, level = 2)
+        _debug_('video_files="%r"' % (video_files,), 2)
+        _debug_('identify media: video_files="%r"' % (video_files,))
 
         media.item = DirItem(media.mountdir, None, create_metainfo=False)
         media.item.info = disc_info
@@ -778,9 +804,7 @@ class Identify_Thread(threading.Thread):
 
 
     def check_all(self):
-        """
-        check all drives
-        """
+        """ Check all drives """
         if rc.app():
             # Some app is running, do not scan, it's not necessary
             return
@@ -788,24 +812,16 @@ class Identify_Thread(threading.Thread):
         self.lock.acquire()
         try:
             for media in config.REMOVABLE_MEDIA:
-                last_status = media.drive_status
                 self.identify(media)
-
-                if last_status != media.drive_status:
-                    _debug_('MEDIA: Status=%s' % media.drive_status,2)
-                    _debug_('Posting IDENTIFY_MEDIA event',2)
-                    if last_status == None:
-                        rc.post_event(plugin.event('IDENTIFY_MEDIA', arg=(media, True)))
-                    else:
-                        rc.post_event(plugin.event('IDENTIFY_MEDIA', arg=(media, False)))
+                if media.get_drive_status_changed():
+                    _debug_('posting IDENTIFY_MEDIA event %r' % (media.drive_status_text(media.drive_status)))
+                    rc.post_event(plugin.event('IDENTIFY_MEDIA', arg=(media, media.drive_status)))
         finally:
             self.lock.release()
 
 
     def __init__(self):
-        """
-        init the thread
-        """
+        """ Initialize the identify thread """
         threading.Thread.__init__(self)
         self.lock = thread.allocate_lock()
 
@@ -826,7 +842,7 @@ class Identify_Thread(threading.Thread):
                     rebuild_file = '/this/file/should/not/exist'
 
                 for media in config.REMOVABLE_MEDIA:
-                    media.drive_status = None
+                    media.drive_status = media.get_drive_status()
 
             if not rc.app():
                 # check only in the menu
