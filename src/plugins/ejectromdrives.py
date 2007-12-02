@@ -85,7 +85,7 @@ class PluginInterface(plugin.ItemPlugin):
                         # Stop the running video or music in detached mode
             rc.post_event(em.Event(em.BUTTON, arg=em.STOP))
 
-            self.item.media.move_tray(dir='toggle')
+            self.item.media.move_tray(direction='toggle')
 
             if isinstance(menuw.menustack[-1].selected, menu.MenuItem):
                 rc.post_event(em.MENU_BACK_ONE_MENU)
