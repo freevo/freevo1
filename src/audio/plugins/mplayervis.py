@@ -45,6 +45,7 @@ import plugin, config, rc, skin, osd, time
 
 from event          import *
 from animation      import render, BaseAnimation
+from kaa.notifier   import Timer
 
 mmap_file = '/tmp/mpav'
 skin = skin.get_singleton()
@@ -52,25 +53,43 @@ osd  = osd.get_singleton()
 
 
 class MpvGoom(BaseAnimation):
+    """
+    Class to interface with the pygoom module
+    """
     message    = None
     coversurf  = None
 
-    blend      = 255
-    blend_step = -2
-    max_blend  = 250
-    c_timeout  = 8         # seconds on cover
-    v_timeout  = 30        # seconds on visual
-    timeout    = v_timeout # start waiting with cover
-
     def __init__(self, x, y, width, height, coverfile=None):
+        """ Initialise the MPlayer Visualization Goom """
+        _debug_('__init__(x=%r y=%r width=%r height=%r coverfile=%r)' % (x, y, width, height, coverfile))
         self.coverfile = coverfile
 
-        BaseAnimation.__init__(self, (x, y, width, height), fps=100,
-                               bg_update=False, bg_redraw=False)
+        BaseAnimation.__init__(self, (x, y, width, height), fps=100, bg_update=False, bg_redraw=False)
         _debug_('pygoom.set_exportfile(mmap_file=%r)' % (mmap_file), 2)
         pygoom.set_exportfile(mmap_file)
         _debug_('pygoom.set_resolution(width=%r, height=%r, 0)' % (width, height), 2)
         pygoom.set_resolution(width, height, 0)
+
+        self.fade_step = config.MPLAYERVIS_FADE_STEP
+        self.init_counter = self.fade_step * config.MPLAYERVIS_INIT_COUNTER
+        self.fade_in_wait_counter = self.fade_step * config.MPLAYERVIS_FADE_IN_WAIT_COUNTER
+        self.fade_out_wait_counter = self.fade_step * config.MPLAYERVIS_FADE_OUT_WAIT_COUNTER
+        self.fade_counter = self.fade_step * config.MPLAYERVIS_FADE_COUNTER
+        self.fade_machine = {
+            'init': self.init_state,
+            'fade_out_wait': self.fade_out_wait_state,
+            'fade_out': self.fade_out_state,
+            'fade_in_wait': self.fade_in_wait_state,
+            'fade_in': self.fade_in_state,
+        }
+        self.state = self.fade_machine['init']
+        self.counter = self.init_counter
+        self.fader = lambda n, m: int(float(n-m)/float(2))
+        self.alpha = self.fader(self.counter, 0)
+
+        self.running = True
+        Timer(self.timerhandler).start(0.1)
+        self.last_time = 0
 
 
     def set_cover(self, coverfile):
@@ -78,19 +97,26 @@ class MpvGoom(BaseAnimation):
         Set a blend image to toggle between visual and cover
         Updated when resolution is changed
         """
+        _debug_('set_cover(coverfile=%r)' % (coverfile,))
         self.coverfile = coverfile
+
+
+    def set_visual(self, visual):
+        """ pass the visualisation effect to pygoom """
+        _debug_('set_visual(visual=%r)' % (visual,))
+        pygoom.set_visual(visual)
 
 
     def set_title(self, title):
         """ pass the song title to pygoom """
-        _debug_('pygoom.set_title(title=%r)' % (title), 2)
+        _debug_('set_title(title)=%r' % (title,))
         pygoom.set_title(title)
 
 
     def set_info(self, info):
         """ pass the song information to pygoom """
-        _debug_('pygoom.set_message(info=%r)' % (info), 2)
-        pygoom.set_message(info)
+        _debug_('set_info(info=%r)' % (info,))
+        pygoom.set_info(info)
 
 
     def set_message(self, message, timeout=5):
@@ -100,6 +126,7 @@ class MpvGoom(BaseAnimation):
         @param message: text to draw
         @param timeout: how long to display
         """
+        _debug_('set_message(message=%r, timeout==%r)' % (message, timeout))
 
         font = skin.get_font('detachbar')
         w = font.stringsize(message)
@@ -117,6 +144,9 @@ class MpvGoom(BaseAnimation):
 
 
     def set_resolution(self, x, y, width, height, cinemascope=0, clear=False):
+        """ Set the resolution of the pygoom window """
+        _debug_('set_resolution(x=%r, y=%r, width=%r, height=%r, cinemascope=%r, clear=%r)' % \
+            (x, y, width, height, cinemascope, clear))
         r = Rect (x, y, width, height)
         if r == self.rect:
             return
@@ -157,6 +187,8 @@ class MpvGoom(BaseAnimation):
 
 
     def set_fullscreen(self):
+        """ Set the mode to full screen """
+        _debug_('set_fullscreen()')
         t_h = config.CONF.height-(config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM)
         w   = config.CONF.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
 
@@ -169,58 +201,109 @@ class MpvGoom(BaseAnimation):
         self.max_blend = 80
 
 
+    def init_state(self):
+        if self.counter > 0:
+            self.counter -= (self.fade_step * 2)
+        if self.counter < 0:
+            self.counter = 0
+        self.alpha = self.fader(self.counter, 0)
+        if self.alpha > 255:
+            self.alpha = 255
+        if self.counter == 0:
+            self.counter = self.fade_in_wait_counter
+            self.state = self.fade_machine['fade_in_wait']
+
+
+    def fade_in_wait_state(self):
+        if self.counter > 0:
+            self.counter -= self.fade_step
+        if self.counter < 0:
+            self.counter = 0
+        if self.counter == 0:
+            self.counter = self.fade_counter
+            self.state = self.fade_machine['fade_in']
+
+
+    def fade_in_state(self):
+        if self.counter > 0:
+            self.counter -= self.fade_step
+        if self.counter < 0:
+            self.counter = 0
+        self.alpha = self.fader(self.fade_counter, self.counter)
+        if self.counter == 0:
+            self.counter = self.fade_out_wait_counter
+            self.state = self.fade_machine['fade_out_wait']
+
+
+    def fade_out_wait_state(self):
+        if self.counter > 0:
+            self.counter -= self.fade_step
+        if self.counter < 0:
+            self.counter = 0
+        if self.counter == 0:
+            self.counter = self.fade_counter
+            self.state = self.fade_machine['fade_out']
+
+
+    def fade_out_state(self):
+        if self.counter > 0:
+            self.counter -= self.fade_step
+        if self.counter < 0:
+            self.counter = 0
+        self.alpha = self.fader(self.counter, 0)
+        if self.counter == 0:
+            self.counter = self.fade_in_wait_counter
+            self.state = self.fade_machine['fade_in_wait']
+
+
+    def timerhandler(self):
+        """
+        The timer handler
+        Uses a state machine
+        """
+        #_debug_('timerhandler()')
+        # draw the cover
+        self.state()
+        if not self.running:
+            return self.running
+        if self.coversurf:
+            gooms = pygoom.get_surface()
+            if self.alpha > 0:
+                s, x, y = self.coversurf
+                _debug_('self.alpha=%r' % (self.alpha,), 2)
+                s.set_alpha(self.alpha)
+                _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
+                gooms.blit(s, (x, y))
+        
+        # draw the message
+        if not self.running:
+            return self.running
+        if self.message:
+            s, x, y, w, h = self.message
+
+            if time.time() - self.m_timer > self.m_timeout:
+                self.message = False
+                s.fill(0)
+
+            _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
+            gooms.blit(s, (x, y))
+
+        osd.putsurface(gooms, self.rect.left, self.rect.top)
+        osd.update(self.rect)
+
+        return self.running
+
+
     def poll(self, current_time):
         """
         override to get extra performance
         """
+        return
 
-        if self.next_update < current_time:
 
-            self.next_update = current_time + self.interval
-            _debug_('pygoom.get_surface()', 2)
-            gooms = pygoom.get_surface()
-
-            # draw blending
-            if self.coversurf:
-                self.blend += self.blend_step
-
-                if self.blend > self.max_blend:
-                    self.blend = self.max_blend
-                elif self.blend < 0:
-                    self.blend     = 0
-                    self.max_blend = 120
-
-                if time.time() - self.c_timer > self.timeout:
-                    if self.timeout == self.c_timeout:
-                        self.timeout = self.v_timeout
-                    else:
-                        self.timeout = self.c_timeout
-
-                    self.c_timer = time.time()
-                    self.blend_step = - self.blend_step
-
-                if self.blend > 0:
-                    s, x, y = self.coversurf
-                    s.set_alpha(self.blend)
-                    _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
-                    gooms.blit(s, (x, y))
-
-            # draw message
-            if self.message:
-                s, x, y, w, h = self.message
-
-                if time.time() - self.m_timer > self.m_timeout:
-                    self.message = False
-                    s.fill(0)
-
-                _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
-                gooms.blit(s, (x, y))
-
-            osd.putsurface(gooms, self.rect.left, self.rect.top)
-            osd.update(self.rect)
 
 ### MODE definitions
-DOCK = 0 # dock ( default )
+DOCK = 0 # dock (default)
 FULL = 1 # fullscreen
 NOVI = 2 # no view
 
@@ -244,16 +327,30 @@ class PluginInterface(plugin.Plugin):
     detached = False
 
     def __init__(self):
+        """ Initialist the PluginInterface """
+        _debug_('PluginInterface.__init__()')
         plugin.Plugin.__init__(self)
         self._type    = 'mplayer_audio'
         self.app_mode = 'audio'
         self.title    = None
         self.info     = None
+        self.vis_mode = -1
 
         # Event for changing between viewmodes
-        config.EVENTS['audio']['0'] = Event('CHANGE_MODE')
-        config.EVENTS['audio']['8'] = Event('TOGGLE_TITLE')
-        config.EVENTS['audio']['4'] = Event('TOGGLE_INFO')
+        config.EVENTS['audio']['t'] = Event('TOGGLE_TITLE')
+        config.EVENTS['audio']['i'] = Event('TOGGLE_INFO')
+        config.EVENTS['audio']['z'] = Event('CHANGE_MODE')
+        config.EVENTS['audio']['-'] = Event('CHANGE_VISUAL', arg=-1)
+        config.EVENTS['audio']['0'] = Event('CHANGE_VISUAL', arg=0)
+        config.EVENTS['audio']['1'] = Event('CHANGE_VISUAL', arg=1)
+        config.EVENTS['audio']['2'] = Event('CHANGE_VISUAL', arg=2)
+        config.EVENTS['audio']['3'] = Event('CHANGE_VISUAL', arg=3)
+        config.EVENTS['audio']['4'] = Event('CHANGE_VISUAL', arg=4)
+        config.EVENTS['audio']['5'] = Event('CHANGE_VISUAL', arg=5)
+        config.EVENTS['audio']['6'] = Event('CHANGE_VISUAL', arg=6)
+        config.EVENTS['audio']['7'] = Event('CHANGE_VISUAL', arg=7)
+        config.EVENTS['audio']['8'] = Event('CHANGE_VISUAL', arg=8)
+        config.EVENTS['audio']['9'] = Event('CHANGE_VISUAL', arg=9)
 
         self.plugin_name = 'audio.mplayervis'
         plugin.register(self, self.plugin_name)
@@ -263,11 +360,19 @@ class PluginInterface(plugin.Plugin):
 
 
     def config(self):
+        """ """
         return [
-            ('MPLAYERVIS_MODE', 0, 'Set the initial mode of the display, 0)DOCK, 1)FULL or 2)NOVI')
+            ('MPLAYERVIS_MODE', 0, 'Set the initial mode of the display, 0)DOCK, 1)FULL or 2)NOVI'),
+            ('MPLAYERVIS_INIT_COUNTER', 255, 'Counter before the image fades, should be >= 255'),
+            ('MPLAYERVIS_FADE_IN_WAIT_COUNTER', 150, 'Counter to wait before cover image fade in'),
+            ('MPLAYERVIS_FADE_OUT_WAIT_COUNTER', 0, 'Counter to wait before cover image fade out'),
+            ('MPLAYERVIS_FADE_COUNTER', 50, 'Counter for fade transition'),
+            ('MPLAYERVIS_FADE_STEP', 3, 'Number of steps per timer loop'),
         ]
 
-    def play( self, command, player ):
+    def play(self, command, player):
+        """ """
+        _debug_('play(command, player)')
         self.player = player
         self.item   = player.playerGUI.item
 
@@ -278,8 +383,9 @@ class PluginInterface(plugin.Plugin):
         """
         Toggle between view modes
         """
+        _debug_('toggle_view()')
         self.view += 1
-        if self.view > 2:
+        if self.view > NOVI:
             self.view = DOCK
 
         if not self.visual:
@@ -288,29 +394,33 @@ class PluginInterface(plugin.Plugin):
             self.view_func[self.view]()
 
 
-    def eventhandler( self, event=None, arg=None ):
+    def eventhandler(self, event=None, arg=None):
         """
         eventhandler to simulate hide/show of mpav
         """
+        _debug_('eventhandler(event=%r, arg=%r)' % (event, arg))
 
         if event == 'CHANGE_MODE':
             self.toggle_view()
             return True
 
         if event == 'TOGGLE_TITLE':
-            if self.title:
-                self.title = ''
-            else:
-                self.title = self.item.name
+            self.title = not self.title and self.item.name or None
+            _debug_('title=%s' % (self.title))
             self.visual.set_title(self.title)
             return True
 
         if event == 'TOGGLE_INFO':
-            if self.info:
-                self.info = ''
-            else:
-                self.info = self.item_info()
-            self.visual.set_message(self.info)
+            self.info = not self.info and self.item_info() or None
+            _debug_('info=%s' % (self.info))
+            self.visual.set_info(self.info)
+
+        if event == 'CHANGE_VISUAL':
+            self.vis_mode = event.arg
+            if self.vis_mode < -1: self.vis_mode = -1
+            if self.vis_mode > 9: self.vis_mode = 9
+            _debug_('vis_mode=%s' % (self.vis_mode))
+            self.visual.set_visual(self.vis_mode)
 
         if self.visual and self.view == FULL:
 
@@ -334,6 +444,7 @@ class PluginInterface(plugin.Plugin):
         """
         Returns info about the current running song
         """
+        _debug_('item_info(fmt=%r)' % (fmt,))
 
         if not fmt:
             fmt = u'%(a)s : %(l)s  %(n)s.  %(t)s (%(y)s)   [%(s)s]'
@@ -366,6 +477,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def fullscreen(self):
+        _debug_('fullscreen()')
         if self.player.playerGUI.visible:
             self.player.playerGUI.hide()
 
@@ -375,6 +487,7 @@ class PluginInterface(plugin.Plugin):
         rc.app(self)
 
     def noview(self):
+        _debug_('noview()')
 
         if rc.app() != self.player.eventhandler:
             rc.app(self.player)
@@ -387,6 +500,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def dock(self):
+        _debug_('dock()')
         if rc.app() != self.player.eventhandler:
             rc.app(self.player)
 
@@ -415,6 +529,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def start_visual(self):
+        _debug_('start_visual()')
         if self.visual or self.view == NOVI:
             return
 
@@ -430,7 +545,9 @@ class PluginInterface(plugin.Plugin):
 
 
     def stop_visual(self):
+        _debug_('stop_visual()')
         if self.visual:
+            self.visual.running = False
             self.visual.remove()
             self.visual = None
             _debug_('pygoom.quit()', 2)
@@ -438,6 +555,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def stop(self):
+        _debug_('stop()')
         self.stop_visual()
 
 
@@ -448,9 +566,10 @@ class PluginInterface(plugin.Plugin):
         It should be safe to do call start() from here
         since this is now a callback from main.
         """
+        #_debug_('stdout(line=%r)' % (line))
         if self.visual:
             return
 
-        if line.find( "[export] Memory mapped to file: " + mmap_file ) == 0:
-            _debug_( "Detected MPlayer 'export' audio filter! Using MPAV." )
+        if line.find("[export] Memory mapped to file: " + mmap_file) == 0:
+            _debug_("Detected MPlayer 'export' audio filter! Using MPAV.")
             self.start_visual()
