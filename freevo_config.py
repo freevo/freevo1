@@ -745,7 +745,21 @@ CACHE_CROPDETECT = 0
 #   menus
 
 
-# ROM drive support
+# ======================================================================
+# Idlebar plug-ins
+# ======================================================================
+plugin.activate('idlebar')
+plugin.activate('idlebar.tv', level=20)
+plugin.activate('idlebar.cdstatus', level=25)
+plugin.activate('idlebar.diskfree', level=30)
+DISKFREE_VERY_LOW = 8 # In Gigabytes
+DISKFREE_LOW = 20
+plugin.activate('idlebar.clock', level=50)
+CLOCK_FORMAT = '%a %d %H:%M'
+
+# ======================================================================
+# Daemon plug-ins
+# ======================================================================
 
 # autostarter when inserting roms while Freevo is in the MAIN MENU
 plugin.activate('rom_drives.autostart')
@@ -848,18 +862,6 @@ plugin.activate('tv.manual_record')
 #
 # Enable this for joystick support:
 # plugin.activate('joy')
-
-# ======================================================================
-# Idlebar and plugins
-# ======================================================================
-plugin.activate('idlebar')
-plugin.activate('idlebar.tv', level=20)
-plugin.activate('idlebar.cdstatus', level=25)
-plugin.activate('idlebar.diskfree', level=30)
-DISKFREE_VERY_LOW = 8 # In Gigabytes
-DISKFREE_LOW = 20
-plugin.activate('idlebar.clock', level=50)
-CLOCK_FORMAT = '%a %d %H:%M'
 
 # ----------------------------------------------------------------------
 # CD Ripping
