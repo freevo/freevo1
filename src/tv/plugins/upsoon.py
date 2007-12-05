@@ -72,11 +72,12 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         init the upsoon plugin
         """
-        _debug_('upsoon.PluginInterface.__init__()', 1)
+        _debug_('upsoon.PluginInterface.__init__()', 2)
         plugin.DaemonPlugin.__init__(self)
         plugin.register(self, 'upsoon')
         self.standalone = standalone
         self.lock = thread.allocate_lock()
+        self.running = True
         self.timer = Timer(self.timer_handler).start(15)
         self.event = EventHandler(self.event_handler)
         #self.event.register(('VIDEO_START', 'VIDEO_END'))
@@ -111,7 +112,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.tv_lockfile = os.path.join(config.FREEVO_CACHEDIR, 'record.'+self.vdev.split('/')[-1])
 
         self.seconds_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
-        _debug_('next recording in %s secs' % (self.seconds_to_next), 1)
+        _debug_('next recording in %s secs' % (self.seconds_to_next), 2)
 
         # announce 120 seconds before recording is due to start
         # stop the player 60 seconds before recording is due to start
@@ -131,13 +132,13 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def getVideoForChannel(self, channel_id):
         """ get the video device given a channel id """
-        _debug_('getVideoForChannel(channel_id=%r)' % (channel_id), 1)
+        _debug_('getVideoForChannel(channel_id=%r)' % (channel_id), 2)
         return self.fc.getVideoGroup(channel_id, False).vdev
 
 
     def stopVideoInUse(self, vdev):
         """ stop the video device if being used """
-        _debug_('stopVideoInUse(vdev=%r)' % (vdev), 1)
+        _debug_('stopVideoInUse(vdev=%r)' % (vdev), 2)
         if vdev:
             try:
                 dev_fh = os.open(vdev, os.O_TRUNC)
@@ -154,12 +155,12 @@ class PluginInterface(plugin.DaemonPlugin):
                 os.close(dev_fh)
             except Exception, e:
                 print '%r: %s' % (vdev, e)
-                _debug_('cannot check video device \"%s\"' % (vdev), 0)
+                _debug_('cannot check video device \"%s\"' % (vdev), DINFO)
 
 
     def stopRadioInUse(self, rdev):
         """ stop the radio device if being used """
-        _debug_('stopRadioInUse(rdev=%r)' % (rdev), 1)
+        _debug_('stopRadioInUse(rdev=%r)' % (rdev), 2)
         if rdev:
             try:
                 dev_fh = os.open(rdev, os.O_TRUNC)
@@ -174,7 +175,7 @@ class PluginInterface(plugin.DaemonPlugin):
                         self.stopped = _('Radio')
                 os.close(dev_fh)
             except:
-                _debug_('cannot check radio device \"%s\"' % (rdev), 0)
+                _debug_('cannot check radio device \"%s\"' % (rdev), DINFO)
 
 
     def close(self):
@@ -182,13 +183,21 @@ class PluginInterface(plugin.DaemonPlugin):
         to be called before the plugin exists.
         It terminates the connection with the server
         """
-        _debug_('close()', 1)
+        _debug_('close()', 2)
+
+
+    def shutdown(self):
+        """ Showdown handler """
+        _debug_('shutdown()', 2)
+        self.running = False
 
 
     def timer_handler(self):
         """
         Sends a poll message to the record server
         """
+        if not self.running:
+            return self.running
         _debug_('timer_handler()', 2)
 
         # Remove the pending record lock file when a record lock file is written
@@ -197,16 +206,16 @@ class PluginInterface(plugin.DaemonPlugin):
                 if os.path.exists(self.pending_lockfile):
                     os.remove(self.pending_lockfile)
                     _debug_('%r lockfile removed' % (self.pending_lockfile))
-                return True
+                return self.running
             else:
                 self.tv_lockfile = None
 
         # Check if a recording is about to start
         if os.path.exists(self.pending_lockfile):
-            return True
+            return self.running
 
         self.recordclient.findNextProgram(self.findNextProgramHandler)
-        return True
+        return self.running
 
 
     def event_handler(self, event):
