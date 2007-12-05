@@ -88,7 +88,7 @@ class MenuItem(Item):
         """
         call the default acion
         """
-        if self.function:
+        if self.function and not isinstance(self.function, list):
             self.function(arg=self.arg, menuw=menuw)
 
 
