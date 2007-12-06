@@ -208,7 +208,7 @@ class autostart(plugin.DaemonPlugin):
             if config.REMOVABLE_MEDIA:
                 # The default is the first drive in the list
                 media = config.REMOVABLE_MEDIA[0]
-                media.move_tray(dir='toggle')
+                media.move_tray(direction='toggle')
                 return True
 
     def shutdown(self):
@@ -267,7 +267,7 @@ class rom_items(plugin.MainMenuPlugin):
         """
         if event == EJECT and item.media and menuw and \
            menuw.menustack[1] == menuw.menustack[-1]:
-            item.media.move_tray(dir='toggle')
+            item.media.move_tray(direction='toggle')
             return True
         return False
 
