@@ -113,20 +113,20 @@ class MpvGoom(BaseAnimation):
         pygoom.set_title(title)
 
 
-    def set_info(self, info):
+    def set_message(self, info):
         """ pass the song information to pygoom """
-        _debug_('set_info(info=%r)' % (info,))
-        pygoom.set_info(info)
+        _debug_('set_message(info=%r)' % (info,))
+        pygoom.set_message(info)
 
 
-    def set_message(self, message, timeout=5):
+    def set_info(self, message, timeout=5):
         """
         Pass a message to the screen.
 
         @param message: text to draw
         @param timeout: how long to display
         """
-        _debug_('set_message(message=%r, timeout==%r)' % (message, timeout))
+        _debug_('set_info(message=%r, timeout==%r)' % (message, timeout))
 
         font = skin.get_font('detachbar')
         w = font.stringsize(message)
@@ -140,7 +140,7 @@ class MpvGoom(BaseAnimation):
 
         self.m_timer   = time.time()
         self.m_timeout = timeout
-        self.message   = (s, x, y, w, h)
+        self.info      = (s, x, y, w, h)
 
 
     def set_resolution(self, x, y, width, height, cinemascope=0, clear=False):
@@ -152,7 +152,7 @@ class MpvGoom(BaseAnimation):
             return
 
         # clear message
-        self.message = None
+        self.info = None
 
         self.rect = r
         _debug_('pygoom.set_resolution(width=%r, height=%r, cinemascope=%r)' % (width, height, cinemascope), 2)
@@ -278,11 +278,11 @@ class MpvGoom(BaseAnimation):
         # draw the message
         if not self.running:
             return self.running
-        if self.message:
-            s, x, y, w, h = self.message
+        if self.info:
+            s, x, y, w, h = self.info
 
             if time.time() - self.m_timer > self.m_timeout:
-                self.message = False
+                self.info = False
                 s.fill(0)
 
             _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
@@ -333,13 +333,14 @@ class PluginInterface(plugin.Plugin):
         self._type    = 'mplayer_audio'
         self.app_mode = 'audio'
         self.title    = None
-        self.info     = None
+        self.message  = None
         self.vis_mode = -1
 
         # Event for changing between viewmodes
-        config.EVENTS['audio']['t'] = Event('TOGGLE_TITLE')
-        config.EVENTS['audio']['i'] = Event('TOGGLE_INFO')
-        config.EVENTS['audio']['z'] = Event('CHANGE_MODE')
+        config.EVENTS['audio']['LANG'] = Event('TOGGLE_INFO')
+        config.EVENTS['audio']['SUBTITLE'] = Event('TOGGLE_TITLE')
+        config.EVENTS['audio']['DISPLAY'] = Event('CHANGE_MODE')
+        config.EVENTS['audio']['+'] = Event('NEXT_VISUAL')
         config.EVENTS['audio']['-'] = Event('CHANGE_VISUAL', arg=-1)
         config.EVENTS['audio']['0'] = Event('CHANGE_VISUAL', arg=0)
         config.EVENTS['audio']['1'] = Event('CHANGE_VISUAL', arg=1)
@@ -398,22 +399,32 @@ class PluginInterface(plugin.Plugin):
         """
         eventhandler to simulate hide/show of mpav
         """
-        _debug_('eventhandler(event=%r, arg=%r)' % (event, arg))
+        _debug_('eventhandler(event=%r, arg=%r)' % (event.name, arg), 2)
+        print 'DJW:event.__dict__=%r' % (event.__dict__,)
 
         if event == 'CHANGE_MODE':
             self.toggle_view()
             return True
 
         if event == 'TOGGLE_TITLE':
-            self.title = not self.title and self.item.name or None
+            self.title = not self.title and self.item.name or ''
             _debug_('title=%s' % (self.title))
             self.visual.set_title(self.title)
             return True
 
         if event == 'TOGGLE_INFO':
-            self.info = not self.info and self.item_info() or None
-            _debug_('info=%s' % (self.info))
-            self.visual.set_info(self.info)
+            self.message = not self.message and self.item_info() or ''
+            _debug_('info=%s' % (self.message))
+            self.visual.set_message(self.message)
+            return True
+
+        if event == 'NEXT_VISUAL':
+            self.vis_mode += 1
+            if self.vis_mode > 9: self.vis_mode = -1
+            _debug_('vis_mode=%s' % (self.vis_mode))
+            self.visual.set_visual(self.vis_mode)
+            rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % self.vis_mode)))
+            return True
 
         if event == 'CHANGE_VISUAL':
             self.vis_mode = event.arg
@@ -421,11 +432,13 @@ class PluginInterface(plugin.Plugin):
             if self.vis_mode > 9: self.vis_mode = 9
             _debug_('vis_mode=%s' % (self.vis_mode))
             self.visual.set_visual(self.vis_mode)
+            rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % self.vis_mode)))
+            return True
 
         if self.visual and self.view == FULL:
 
             if event == OSD_MESSAGE:
-                self.visual.set_message(event.arg)
+                self.visual.set_info(event.arg)
                 return True
 
             if self.passed_event:
@@ -476,29 +489,6 @@ class PluginInterface(plugin.Plugin):
         return fmt % song
 
 
-    def fullscreen(self):
-        _debug_('fullscreen()')
-        if self.player.playerGUI.visible:
-            self.player.playerGUI.hide()
-
-        self.visual.set_fullscreen()
-        self.visual.set_message(self.item_info())
-        skin.clear()
-        rc.app(self)
-
-    def noview(self):
-        _debug_('noview()')
-
-        if rc.app() != self.player.eventhandler:
-            rc.app(self.player)
-
-        if self.visual:
-            self.stop_visual()
-
-        if not self.player.playerGUI.visible:
-            self.player.playerGUI.show()
-
-
     def dock(self):
         _debug_('dock()')
         if rc.app() != self.player.eventhandler:
@@ -527,6 +517,29 @@ class PluginInterface(plugin.Plugin):
         self.visual.set_resolution(x, y, w, h, 0, False)
 
 
+    def fullscreen(self):
+        _debug_('fullscreen()')
+        if self.player.playerGUI.visible:
+            self.player.playerGUI.hide()
+
+        self.visual.set_fullscreen()
+        self.visual.set_info(self.item_info())
+        skin.clear()
+        rc.app(self)
+
+
+    def noview(self):
+        _debug_('noview()')
+
+        if rc.app() != self.player.eventhandler:
+            rc.app(self.player)
+
+        if self.visual:
+            self.stop_visual()
+
+        if not self.player.playerGUI.visible:
+            self.player.playerGUI.show()
+
 
     def start_visual(self):
         _debug_('start_visual()')
@@ -538,7 +551,7 @@ class PluginInterface(plugin.Plugin):
             self.visual = MpvGoom(300, 300, 150, 150, self.item.image)
 
             if self.view == FULL:
-                self.visual.set_message(self.item.name, 10)
+                self.visual.set_info(self.item.name, 10)
 
             self.view_func[self.view]()
             self.visual.start()
