@@ -17,6 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * New changed the event and timer handling to use kaa notifier and kaa rpc
+ * Updated mplayervis for pygoom-2k4 (F#1846493)
 
 == Release 1.7.5 (2007-??-??) ==
 --------------------------------
@@ -25,6 +26,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * New French DVD trailer grabber (F#1841775)
  * New French movie cover grabber (F#1841768)
  * New gphoto plug-in, in contrib/runtime (F#1838260)
+ * New pygoom module for goom-2k4, in contrib/runtime (F#1846492)
  * New six channel mixer and idlebar plug-in (F#1833749)
  * Updated French translation (F#1832751)
  * Updated mplayer to allow the volume events to passed over and shown (F#1834486)
