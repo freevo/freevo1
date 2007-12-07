@@ -85,7 +85,7 @@ class MpvGoom(BaseAnimation):
         self.state = self.fade_machine['init']
         self.counter = self.init_counter
         self.fader = lambda n, m: int(float(n-m)/float(2))
-        self.alpha = self.fader(self.counter, 0)
+        self.alpha = self.set_alpha(self.counter, 0)
 
         self.running = True
         Timer(self.timerhandler).start(0.1)
@@ -113,34 +113,19 @@ class MpvGoom(BaseAnimation):
         pygoom.set_title(title)
 
 
-    def set_message(self, info):
-        """ pass the song information to pygoom """
-        _debug_('set_message(info=%r)' % (info,))
-        pygoom.set_message(info)
+    def set_message(self, message):
+        """ pass the song message to pygoom """
+        _debug_('set_message(message=%r)' % (message,))
+        pygoom.set_message(message)
 
 
-    def set_info(self, message, timeout=5):
-        """
-        Pass a message to the screen.
-
-        @param message: text to draw
-        @param timeout: how long to display
-        """
-        _debug_('set_info(message=%r, timeout==%r)' % (message, timeout))
-
-        font = skin.get_font('detachbar')
-        w = font.stringsize(message)
-        h = font.height
-        x = 10
-        y = 10
-
-        s = Surface((w,h), 0, 32)
-
-        osd.drawstringframed(message, 0, 0, w, h, font, mode='hard', layer=s)
-
-        self.m_timer   = time.time()
-        self.m_timeout = timeout
-        self.info      = (s, x, y, w, h)
+    def set_alpha(self, high, low):
+        """ Get the alpha level for a count """
+        _debug_('set_alpha(high=%r low=%r)' % (high, low,))
+        alpha = self.fader(high, low)
+        if alpha < 0:   alpha = 0
+        if alpha > 255: alpha = 255
+        return alpha
 
 
     def set_resolution(self, x, y, width, height, cinemascope=0, clear=False):
@@ -151,7 +136,7 @@ class MpvGoom(BaseAnimation):
         if r == self.rect:
             return
 
-        # clear message
+        # clear info
         self.info = None
 
         self.rect = r
@@ -162,7 +147,8 @@ class MpvGoom(BaseAnimation):
         s = None
         if self.coverfile:
             try:
-                s = image.load(self.coverfile)
+                s = image.load(self.coverfile).convert()
+                s.set_colorkey(0) # make black transparent
             except:
                 pass
         if s:
@@ -201,14 +187,37 @@ class MpvGoom(BaseAnimation):
         self.max_blend = 80
 
 
+    def set_info(self, info, timeout=5):
+        """
+        Pass a info message on to the screen.
+
+        @param info: text to draw
+        @param timeout: how long to display
+        """
+        _debug_('set_info(info=%r, timeout==%r)' % (info, timeout))
+
+        font = skin.get_font('detachbar')
+        w = font.stringsize(info)
+        h = font.height
+        x = 10
+        y = 10
+
+        s = Surface((w,h), 0, 32)
+
+        osd.drawstringframed(info, 0, 0, w, h, font, mode='hard', layer=s)
+
+        self.m_timer   = time.time()
+        self.m_timeout = timeout
+        self.info      = (s, x, y, w, h)
+
+
     def init_state(self):
         if self.counter > 0:
+            # Initial fade out is twice as fast as normal
             self.counter -= (self.fade_step * 2)
         if self.counter < 0:
             self.counter = 0
-        self.alpha = self.fader(self.counter, 0)
-        if self.alpha > 255:
-            self.alpha = 255
+        self.alpha = self.set_alpha(self.counter, 0)
         if self.counter == 0:
             self.counter = self.fade_in_wait_counter
             self.state = self.fade_machine['fade_in_wait']
@@ -229,7 +238,7 @@ class MpvGoom(BaseAnimation):
             self.counter -= self.fade_step
         if self.counter < 0:
             self.counter = 0
-        self.alpha = self.fader(self.fade_counter, self.counter)
+        self.alpha = self.set_alpha(self.fade_counter, self.counter)
         if self.counter == 0:
             self.counter = self.fade_out_wait_counter
             self.state = self.fade_machine['fade_out_wait']
@@ -250,7 +259,7 @@ class MpvGoom(BaseAnimation):
             self.counter -= self.fade_step
         if self.counter < 0:
             self.counter = 0
-        self.alpha = self.fader(self.counter, 0)
+        self.alpha = self.set_alpha(self.counter, 0)
         if self.counter == 0:
             self.counter = self.fade_in_wait_counter
             self.state = self.fade_machine['fade_in_wait']
@@ -275,7 +284,7 @@ class MpvGoom(BaseAnimation):
                 _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
                 gooms.blit(s, (x, y))
         
-        # draw the message
+        # draw the info
         if not self.running:
             return self.running
         if self.info:
@@ -310,14 +319,34 @@ NOVI = 2 # no view
 class PluginInterface(plugin.Plugin):
     """
     Native mplayer audiovisualization for Freevo.
-    Dependant on the pygoom module. Available at
-    the freevo addons page.
+    Dependant on the pygoom-2k4 module and goom-2k4
 
     Activate with:
     | plugin.activate('audio.mplayervis')
+    | The following can be set in local_conf.py:
+    |   MPLAYERVIS_MODE Set the initial mode of the display, 0 is DOCK, 1 is FULL or 2 is NONE
+    |   MPLAYERVIS_INIT_COUNTER is the number of steps  before the image fades, should be >= 255
+    |   MPLAYERVIS_FADE_IN_WAIT_COUNTER is the number of steps to wait before cover image fades in
+    |   MPLAYERVIS_FADE_OUT_WAIT_COUNTER is the number of steps to wait before cover image fades out
+    |   MPLAYERVIS_FADE_COUNTER is the number of steps for fade transition
+    |   MPLAYERVIS_FADE_STEP is the number of steps per timer loop
+    |   MPLAYERVIS_MESSAGE_FMT is a string format for a message
+    |     %(a)s : artist
+    |     %(l)s : album
+    |     %(n)s : trackno
+    |     %(t)s : title
+    |     %(e)s : elapsed
+    |     %(i)s : item.image
+    |     %(y)s : year
+    |     %(s)s : length
 
-    When activated one can change between view-modes
-    with the 0 (zero) button.
+    The number of steps is proportional to time of a fade transition, each step if 1/10 sec
+
+    When activated the following events can be used:
+        -  DISPLAY changes the view mode
+        - SUBTITLE toggles the title on and off
+        - LANG toggles the message on and off (not sure if this works)
+        - 0-9 selects the visual effect mode
     """
 
     player = None
@@ -332,14 +361,16 @@ class PluginInterface(plugin.Plugin):
         plugin.Plugin.__init__(self)
         self._type    = 'mplayer_audio'
         self.app_mode = 'audio'
+        self.vis_mode = -1
         self.title    = None
         self.message  = None
-        self.vis_mode = -1
+        self.info     = None
+        self.message_fmt = config.MPLAYERVIS_MESSAGE_FMT
 
         # Event for changing between viewmodes
-        config.EVENTS['audio']['LANG'] = Event('TOGGLE_INFO')
-        config.EVENTS['audio']['SUBTITLE'] = Event('TOGGLE_TITLE')
-        config.EVENTS['audio']['DISPLAY'] = Event('CHANGE_MODE')
+        config.EVENTS['audio']['LANG'] = Event('TOGGLE_MESSAGE')   #'a'
+        config.EVENTS['audio']['SUBTITLE'] = Event('TOGGLE_TITLE') #'l'
+        config.EVENTS['audio']['DISPLAY'] = Event('CHANGE_MODE')   #'d'
         config.EVENTS['audio']['+'] = Event('NEXT_VISUAL')
         config.EVENTS['audio']['-'] = Event('CHANGE_VISUAL', arg=-1)
         config.EVENTS['audio']['0'] = Event('CHANGE_VISUAL', arg=0)
@@ -369,6 +400,8 @@ class PluginInterface(plugin.Plugin):
             ('MPLAYERVIS_FADE_OUT_WAIT_COUNTER', 0, 'Counter to wait before cover image fade out'),
             ('MPLAYERVIS_FADE_COUNTER', 50, 'Counter for fade transition'),
             ('MPLAYERVIS_FADE_STEP', 3, 'Number of steps per timer loop'),
+            ('MPLAYERVIS_MESSAGE_FMT', 'Artist: %(a)s\n Album: %(l)s\n Title: %(t)s\n Track: %(n)s\n', \
+                'Message format for the message'),
         ]
 
     def play(self, command, player):
@@ -400,7 +433,6 @@ class PluginInterface(plugin.Plugin):
         eventhandler to simulate hide/show of mpav
         """
         _debug_('eventhandler(event=%r, arg=%r)' % (event.name, arg), 2)
-        print 'DJW:event.__dict__=%r' % (event.__dict__,)
 
         if event == 'CHANGE_MODE':
             self.toggle_view()
@@ -412,8 +444,8 @@ class PluginInterface(plugin.Plugin):
             self.visual.set_title(self.title)
             return True
 
-        if event == 'TOGGLE_INFO':
-            self.message = not self.message and self.item_info() or ''
+        if event == 'TOGGLE_MESSAGE':
+            self.message = not self.message and self.item_info(self.message_fmt) or ''
             _debug_('info=%s' % (self.message))
             self.visual.set_message(self.message)
             return True
@@ -464,12 +496,12 @@ class PluginInterface(plugin.Plugin):
 
         item    = self.item
         info    = item.info
-        name    = item.name
+        title   = item.name
         length  = None
         elapsed = '0'
 
         if info['title']:
-            name = info['title']
+            title = info['title']
 
         if item.elapsed:
             elapsed = '%i:%02i' % (int(item.elapsed/60), int(item.elapsed%60))
@@ -480,7 +512,7 @@ class PluginInterface(plugin.Plugin):
         song = { 'a' : info['artist'],
                  'l' : info['album'],
                  'n' : info['trackno'],
-                 't' : name,
+                 't' : title,
                  'e' : elapsed,
                  'i' : item.image,
                  'y' : info['year'],
