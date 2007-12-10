@@ -274,9 +274,9 @@ class MpvGoom(BaseAnimation):
         # draw the cover
         if not self.running:
             return self.running
+        gooms = pygoom.get_surface()
         if self.coversurf:
             self.state()
-            gooms = pygoom.get_surface()
             if self.alpha > 0:
                 s, x, y = self.coversurf
                 _debug_('self.alpha=%r' % (self.alpha,), 2)
