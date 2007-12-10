@@ -570,7 +570,7 @@ class TVGuide(Item):
         # calc real changed value
         value = channel_pos - i
 
-        if value < 0 and channel_pos and channel_pos <= start_pos:
+        if value < 0 and channel_pos >= 0 and channel_pos <= start_pos:
             # move start channel up
             start_channel = self.guide.chan_list[start_pos + value].id
 
