@@ -842,7 +842,7 @@ class Identify_Thread(threading.Thread):
                     rebuild_file = '/this/file/should/not/exist'
 
                 for media in config.REMOVABLE_MEDIA:
-                    media.drive_status = media.get_drive_status()
+                    media.drive_status = CDS_NO_INFO #media.get_drive_status()
 
             if not rc.app():
                 # check only in the menu

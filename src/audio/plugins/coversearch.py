@@ -228,9 +228,11 @@ class PluginInterface(plugin.ItemPlugin):
                 if cover[i].ImageUrlLarge:
                     m = urllib2.urlopen(cover[i].ImageUrlLarge)
                     imageFound = True
-            except urllib2.HTTPError:
+            except urllib2.URLError, e:
+                print 'URLError: %s' % (e)
+            except urllib2.HTTPError, e:
                 # Amazon returned a 404
-                pass
+                print 'HTTPError: %s' % (e)
             if imageFound and (m.info()['Content-Length'] != '807'):
                 image = Image.open_from_memory(m.read())
                 items += [ menu.MenuItem('%s' % cover[i].ProductName,

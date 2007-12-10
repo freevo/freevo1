@@ -43,7 +43,7 @@ class AudioDiskItem(Playlist):
     class for handling audio disks
     """
     def __init__(self, disc_id, parent, devicename=None, display_type=None):
-        _debug_('__init__(disc_id=%r, parent=%r, devicename=%r, display_type=%r)' % \
+        _debug_('AudioDiskItem.__init__(disc_id=%r, parent=%r, devicename=%r, display_type=%r)' % \
             (disc_id, parent, devicename, display_type), 2)
 
         Playlist.__init__(self, parent=parent)
@@ -69,7 +69,8 @@ class AudioDiskItem(Playlist):
         return a list of actions for this item
         """
         _debug_('actions()', 2)
-        items = [ ( self.cwd(), _('Browse disc') ) ]
+        self.cwd()
+        items = [ ( self.cwd, _('Browse disc') ) ]
         return items
 
 
