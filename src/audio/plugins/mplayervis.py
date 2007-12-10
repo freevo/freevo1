@@ -61,7 +61,7 @@ class MpvGoom(BaseAnimation):
 
     def __init__(self, x, y, width, height, coverfile=None):
         """ Initialise the MPlayer Visualization Goom """
-        _debug_('__init__(x=%r y=%r width=%r height=%r coverfile=%r)' % (x, y, width, height, coverfile))
+        _debug_('__init__(x=%r y=%r width=%r height=%r coverfile=%r)' % (x, y, width, height, coverfile), 2)
         self.coverfile = coverfile
 
         BaseAnimation.__init__(self, (x, y, width, height), fps=100, bg_update=False, bg_redraw=False)
@@ -97,31 +97,31 @@ class MpvGoom(BaseAnimation):
         Set a blend image to toggle between visual and cover
         Updated when resolution is changed
         """
-        _debug_('set_cover(coverfile=%r)' % (coverfile,))
+        _debug_('set_cover(coverfile=%r)' % (coverfile,), 2)
         self.coverfile = coverfile
 
 
     def set_visual(self, visual):
         """ pass the visualisation effect to pygoom """
-        _debug_('set_visual(visual=%r)' % (visual,))
+        _debug_('set_visual(visual=%r)' % (visual,), 2)
         pygoom.set_visual(visual)
 
 
     def set_title(self, title):
         """ pass the song title to pygoom """
-        _debug_('set_title(title)=%r' % (title,))
+        _debug_('set_title(title)=%r' % (title,), 2)
         pygoom.set_title(title)
 
 
     def set_message(self, message):
         """ pass the song message to pygoom """
-        _debug_('set_message(message=%r)' % (message,))
+        _debug_('set_message(message=%r)' % (message,), 2)
         pygoom.set_message(message)
 
 
     def set_alpha(self, high, low):
         """ Get the alpha level for a count """
-        _debug_('set_alpha(high=%r low=%r)' % (high, low,))
+        _debug_('set_alpha(high=%r low=%r)' % (high, low,), 2)
         alpha = self.fader(high, low)
         if alpha < 0:   alpha = 0
         if alpha > 255: alpha = 255
@@ -272,10 +272,10 @@ class MpvGoom(BaseAnimation):
         """
         #_debug_('timerhandler()')
         # draw the cover
-        self.state()
         if not self.running:
             return self.running
         if self.coversurf:
+            self.state()
             gooms = pygoom.get_surface()
             if self.alpha > 0:
                 s, x, y = self.coversurf
@@ -357,7 +357,7 @@ class PluginInterface(plugin.Plugin):
 
     def __init__(self):
         """ Initialist the PluginInterface """
-        _debug_('PluginInterface.__init__()')
+        _debug_('PluginInterface.__init__()', 2)
         plugin.Plugin.__init__(self)
         self._type    = 'mplayer_audio'
         self.app_mode = 'audio'
@@ -406,7 +406,7 @@ class PluginInterface(plugin.Plugin):
 
     def play(self, command, player):
         """ """
-        _debug_('play(command, player)')
+        _debug_('play(command, player)', 2)
         self.player = player
         self.item   = player.playerGUI.item
 
@@ -417,7 +417,7 @@ class PluginInterface(plugin.Plugin):
         """
         Toggle between view modes
         """
-        _debug_('toggle_view()')
+        _debug_('toggle_view()', 2)
         self.view += 1
         if self.view > NOVI:
             self.view = DOCK
@@ -440,20 +440,20 @@ class PluginInterface(plugin.Plugin):
 
         if event == 'TOGGLE_TITLE':
             self.title = not self.title and self.item.name or ''
-            _debug_('title=%s' % (self.title))
+            _debug_('title=%s' % (self.title), 2)
             self.visual.set_title(self.title)
             return True
 
         if event == 'TOGGLE_MESSAGE':
             self.message = not self.message and self.item_info(self.message_fmt) or ''
-            _debug_('info=%s' % (self.message))
+            _debug_('info=%s' % (self.message), 2)
             self.visual.set_message(self.message)
             return True
 
         if event == 'NEXT_VISUAL':
             self.vis_mode += 1
             if self.vis_mode > 9: self.vis_mode = -1
-            _debug_('vis_mode=%s' % (self.vis_mode))
+            _debug_('vis_mode=%s' % (self.vis_mode), 2)
             self.visual.set_visual(self.vis_mode)
             rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % self.vis_mode)))
             return True
@@ -462,7 +462,7 @@ class PluginInterface(plugin.Plugin):
             self.vis_mode = event.arg
             if self.vis_mode < -1: self.vis_mode = -1
             if self.vis_mode > 9: self.vis_mode = 9
-            _debug_('vis_mode=%s' % (self.vis_mode))
+            _debug_('vis_mode=%s' % (self.vis_mode), 2)
             self.visual.set_visual(self.vis_mode)
             rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % self.vis_mode)))
             return True
@@ -489,7 +489,7 @@ class PluginInterface(plugin.Plugin):
         """
         Returns info about the current running song
         """
-        _debug_('item_info(fmt=%r)' % (fmt,))
+        _debug_('item_info(fmt=%r)' % (fmt,), 2)
 
         if not fmt:
             fmt = u'%(a)s : %(l)s  %(n)s.  %(t)s (%(y)s)   [%(s)s]'
@@ -522,7 +522,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def dock(self):
-        _debug_('dock()')
+        _debug_('dock()', 2)
         if rc.app() != self.player.eventhandler:
             rc.app(self.player)
 
@@ -550,7 +550,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def fullscreen(self):
-        _debug_('fullscreen()')
+        _debug_('fullscreen()', 2)
         if self.player.playerGUI.visible:
             self.player.playerGUI.hide()
 
@@ -561,7 +561,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def noview(self):
-        _debug_('noview()')
+        _debug_('noview()', 2)
 
         if rc.app() != self.player.eventhandler:
             rc.app(self.player)
@@ -574,7 +574,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def start_visual(self):
-        _debug_('start_visual()')
+        _debug_('start_visual()', 2)
         if self.visual or self.view == NOVI:
             return
 
@@ -590,7 +590,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def stop_visual(self):
-        _debug_('stop_visual()')
+        _debug_('stop_visual()', 2)
         if self.visual:
             self.visual.running = False
             self.visual.remove()
@@ -600,7 +600,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def stop(self):
-        _debug_('stop()')
+        _debug_('stop()', 2)
         self.stop_visual()
 
 
