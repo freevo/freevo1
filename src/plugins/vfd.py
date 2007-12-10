@@ -807,17 +807,17 @@ class PluginInterface(plugin.DaemonPlugin):
         elif event == 'SEEK':
             self.set_running((event.arg < 0 and Rewind) or FastForward)
             update_bits = 1
-        elif event == 'PLUGIN_EVENT IDENTIFY_MEDIA':
-            media = event.arg[0]
-            self.set_media((hasattr(media.item, 'type') and Clock) or 0)
-            update_bits = 1
         elif event == 'VIDEO_START':
             self.set_running(Play)
             update_bits = 1
         elif event == 'VIDEO_END':
             self.set_running(Stop)
             update_bits = 1
-        elif event == 'PLUGIN_EVENT USB':
+        elif plugin.isevent(event) == 'IDENTIFY_MEDIA':
+            media = event.arg[0]
+            self.set_media((hasattr(media.item, 'type') and Clock) or 0)
+            update_bits = 1
+        elif plugin.isevent(event) == 'USB':
             pass
         elif event == 'FUNCTION_CALL':
             pass
@@ -826,6 +826,8 @@ class PluginInterface(plugin.DaemonPlugin):
         elif event == 'OSD_MESSAGE':
             pass
         elif event == 'TOGGLE_OSD':
+            pass
+        elif event == 'MENU_PROCESS_END':
             pass
         elif event == 'MENU_UP':
             pass

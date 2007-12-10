@@ -348,7 +348,7 @@ class autoshutdowntimer(plugin.DaemonPlugin):
 
     def eventhandler(self, event=None, menuw=None, arg=None):
         if not self.lock:
-            if not event.name == 'IDENTIFY_MEDIA' and not event.name == 'SCREENSAVER_START':
+            if plugin.isevent(event) != 'IDENTIFY_MEDIA' and event.name != 'SCREENSAVER_START':
                 self.reset()
                 _debug_("timer reset, received event %s" % event.name, 2)
         return FALSE

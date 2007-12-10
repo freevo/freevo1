@@ -93,10 +93,11 @@ class PluginInterface(plugin.DaemonPlugin):
             return True
 
         # gotta ignore these or video screensavers shutoff before they begin
-        if event.name == 'VIDEO_START' or event.name == 'PLAY_START' or event.name == 'VIDEO_END' or event.name == 'PLAY_END':
+        if event.name == 'VIDEO_START' or event.name == 'PLAY_START' or \
+            event.name == 'VIDEO_END' or event.name == 'PLAY_END':
             return False
 
-        if not event.name == 'IDENTIFY_MEDIA':
+        if plugin.isevent(event) != 'IDENTIFY_MEDIA':
             self.last_event = time.time()
 
         if self.screensaver_showing :
