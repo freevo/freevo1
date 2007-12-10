@@ -343,7 +343,7 @@ class PluginInterface(plugin.Plugin):
     The number of steps is proportional to time of a fade transition, each step if 1/10 sec
 
     When activated the following events can be used:
-        -  DISPLAY changes the view mode
+        - DISPLAY changes the view mode
         - SUBTITLE toggles the title on and off
         - LANG toggles the message on and off (not sure if this works)
         - 0-9 selects the visual effect mode

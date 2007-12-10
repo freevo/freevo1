@@ -162,7 +162,7 @@ class VideoGroup:
     record_group: VideoGroup that records for this tuner, default is to use the same device for record and play
     desc:         A nice description for this VideoGroup.
     group_type:   Special variable to identify devices like dvb or ivtv.  This
-                      can be left as default, 'normal', or set to 'ivtv', 'dvb', 'webcam', 'tvalsa'.
+        can be left as default, 'normal', or set to 'ivtv', 'dvb', 'webcam', 'tvalsa'.
     cmd:          Command for execute external prog after the channel switched, such as 'sudo /usr/local/bin/setuptuner'
     """
 

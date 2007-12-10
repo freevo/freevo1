@@ -353,7 +353,7 @@ class Videodev:
     def enuminputs(self):
         """
         Enumerate all inputs
-        @returns a dict of the inputs index by name
+        @returns: a dict of the inputs index by name
         """
         res = {}
         num = 0
@@ -418,7 +418,7 @@ class Videodev:
     def enumstds(self):
         """
         Enumerate the TV standards
-        @returns a dict of the standards index by name
+        @returns: a dict of the standards index by name
         """
         res = {}
         num = 0
