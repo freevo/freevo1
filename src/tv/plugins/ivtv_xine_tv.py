@@ -572,20 +572,17 @@ class TunerControl:
 
     #========================================================================
     # ShowInfo
-    # show channle info
+    # show channel info
     #========================================================================
 
     def ShowInfo(self):
 
-        # show channel info
-        vg = self.fc.getVideoGroup(self.curr_channel, True)
-        if vg.input_type == 'tuner':
+        if self.curr_channel != None:
+            # show channel info
+            vg = self.fc.getVideoGroup(self.curr_channel, True)
             tuner_id, chan_name, prog_info = self.fc.getChannelInfo(showtime=False)
             msg = "%s: %s" % (chan_name, prog_info)
             self.parent.ShowMessage("%s" % msg)
-        else:
-            # show channel info
-            self.parent.ShowMessage(vg.desc)
 
     #========================================================================
     # setParent
