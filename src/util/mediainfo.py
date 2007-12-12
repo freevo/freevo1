@@ -574,8 +574,7 @@ def cache_recursive(dirlist, verbose=False):
     # create a list of all subdirs
     for dir in dirlist:
         for dirname in util.get_subdirs_recursively(dir):
-            if not dirname in all_dirs and \
-               not os.path.basename(dirname) in ('.xvpics', '.thumbnails', '.svn'):
+            if not dirname in all_dirs and os.path.basename(dirname)[0] != '.':
                 all_dirs.append(dirname)
         if not dir in all_dirs:
             all_dirs.append(dir)
