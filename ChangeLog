@@ -19,7 +19,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * New changed the event and timer handling to use kaa notifier and kaa rpc
  * Updated mplayervis for pygoom-2k4 (F#1846493)
 
-== Release 1.7.5 (2007-??-??) ==
+== Release 1.7.5 (2007-12-22) ==
 --------------------------------
 
  * New Alsa mixer 2 plug-in (F#1832948)
@@ -32,6 +32,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated French translation (F#1832751)
  * Updated mplayer to allow the volume events to passed over and shown (F#1834486)
  * Updated webserver media library (F#1835346)
+ * Deleted plug-in audio.mplayervbr (F#1848097)
  * Renamed plug-in audio.playlist to audio.playlists (B#1834140)
  * Fixed audiodiskitem not playing a cd when inserted (B#1830000)
  * Fixed audioscrobbler killing the auto shutdown feature (F#1831371)

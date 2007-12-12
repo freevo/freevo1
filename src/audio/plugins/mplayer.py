@@ -94,7 +94,7 @@ class MPlayer:
         DEMUXER_OGG = 18
         rest, extension     = os.path.splitext(filename)
         if extension.lower() == '.mp3':
-            return "-demuxer " + str(DEMUXER_MP3)
+            return "-hr-mp3-seek -demuxer " + str(DEMUXER_MP3)
         if extension.lower() == '.ogg':
             return "-demuxer " + str(DEMUXER_OGG)
         if extension.lower() == '.ac3':
