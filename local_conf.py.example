@@ -1223,8 +1223,8 @@ CACHE_IMAGES = 1
 #
 # for fmtools
 # RADIO_CMD = 'fm'
-# RADIO_CMD_START = (RADIO_CMD + ' ' + '-q %s 65535')
-# RADIO_CMD_STOP = (RADIO_CMD + ' ' + '-q off')
+# RADIO_CMD_START = (RADIO_CMD + ' -d %s ' % RADIO_DEVICE + ' -q %s 65535')
+# RADIO_CMD_STOP = (RADIO_CMD + ' -d %s ' % RADIO_DEVICE + ' -q off')
 #
 # for ivtv-radio
 # RADIO_CMD = '/usr/bin/ivtv-radio -d /dev/radio0 -i /dev/video24'
