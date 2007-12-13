@@ -30,6 +30,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * New somafm web radio fxd file and images added (F#1845786)
  * New six channel mixer and idlebar plug-in (F#1833749)
  * Updated French translation (F#1832751)
+ * Updated mediainfo to stop caching of hidden directories (F#1849569)
  * Updated mplayer to allow the volume events to passed over and shown (F#1834486)
  * Updated webserver media library (F#1835346)
  * Deleted plug-in audio.mplayervbr (F#1848097)
