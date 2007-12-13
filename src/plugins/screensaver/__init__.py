@@ -70,16 +70,17 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def config(self):
-        return [ ('SCREENSAVER_DELAY', 300, '# of seconds to wait to start saver.'),
-                  ('SCREENSAVER_CYCLE_TIME', 60, '# of seconds to run a screensaver before starting another saver.')
-                ]
+        return [
+            ('SCREENSAVER_DELAY', 300, '# of seconds to wait to start saver.'),
+            ('SCREENSAVER_CYCLE_TIME', 60, '# of seconds to run a screensaver before starting another saver.')
+        ]
 
     def eventhandler(self, event = None, menuw=None, arg=None):
         """
         eventhandler to handle the events. Always return False since we
         are just a listener and really can't send back True.
         """
-        _debug_("Saver saw %s" % event.name)
+        _debug_("Saver saw %s" % (event.name), 2)
         if menuw:
             self.menuw = menuw
 
@@ -112,19 +113,19 @@ class PluginInterface(plugin.DaemonPlugin):
         if not self.screensaver_showing and  time_diff > self.start_delay :
             rc.post_event(Event("SCREENSAVER_START"))
 
-    def start_saver (self):
+    def start_saver(self):
         _debug_("start screensaver")
         self.screensaver_showing = True
         if self.plugins is None:
             self.plugins = plugin.get('screensaver')
-            _debug_('Plugins =', self.plugins)
+            _debug_('plugins=%r' % (self.plugins))
         skin.clear()
         # Start Screensaver thread
         self.stop_screensaver = False
-        self.thread = threading.Thread(target =self.__run__)
+        self.thread = threading.Thread(target=self.__run__)
         self.thread.start()
 
-    def stop_saver (self):
+    def stop_saver(self):
         _debug_("stop screensaver")
         self.stop_screensaver = True
         self.thread.join()

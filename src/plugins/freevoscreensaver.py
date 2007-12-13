@@ -102,7 +102,7 @@ class PluginInterface(plugin.DaemonPlugin):
         eventhandler to handle the events. Always return false since we
         are just a listener and really can't send back true.
         """
-        _debug_("Saver saw %s" % event.name)
+        _debug_('Saver saw %s' % (event.name), 2)
         if menuw:
             self.menuw = menuw
 
@@ -128,12 +128,12 @@ class PluginInterface(plugin.DaemonPlugin):
         return FALSE
 
     def poll(self):
-        _debug_("Saver got polled %f" % time.time())
+        _debug_('Saver got polled %f' % time.time())
         if not self.screensaver_showing and (time.time() - self.last_event) > self.saver_delay :
-            rc.post_event(em.Event("SCREENSAVER_START"))
+            rc.post_event(em.Event('SCREENSAVER_START'))
 
     def start_saver (self):
-        _debug_("start screensaver")
+        _debug_('start screensaver')
         self.screensaver_showing = TRUE
         if self.saver_type == 'xscreensaver':
             os.system('%s -no-splash &' % self.arg1)
@@ -154,13 +154,13 @@ class PluginInterface(plugin.DaemonPlugin):
                     arg = '-nosound -loop 0'
                 self.pl.play(arg=arg, menuw=self.menuw)
             else:
-                _debug_("saver thinks fxd blew up trying to parse?")
+                _debug_('saver thinks fxd blew up trying to parse?')
         else:
-            _debug_("Unknown saver type to start.")
+            _debug_('Unknown saver type to start.')
 
 
-    def stop_saver (self):
-        _debug_("stop screensaver")
+    def stop_saver(self):
+        _debug_('stop screensaver')
         self.screensaver_showing = FALSE
         if self.saver_type == 'xscreensaver':
             os.system('%s -exit' % self.arg2)
@@ -171,7 +171,7 @@ class PluginInterface(plugin.DaemonPlugin):
         elif self.saver_type == 'fxd':
             rc.post_event(em.STOP)
         else:
-            _debug_("Unknown saver type to stop.")
+            _debug_('Unknown saver type to stop.')
 
         time.sleep(1)
         self.osd.update()

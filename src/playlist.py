@@ -330,6 +330,7 @@ class Playlist(Item):
         """
         play the playlist
         """
+        _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if not self.menuw:
             self.menuw = menuw
 
