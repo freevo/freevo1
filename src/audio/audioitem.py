@@ -153,7 +153,13 @@ class AudioItem(Item):
         if key  == 'elapsed':
             return '%d:%02d' % (int(self.elapsed / 60), int(self.elapsed % 60))
 
-        return Item.__getitem__(self, key)
+        res = Item.__getitem__(self, key)
+
+        # workaround for kaa r2818 and newer: 'date' is now named 'userdate'
+        if res == '' and key == 'date':
+            res = Item.__getitem__(self, 'userdate')
+
+        return res
 
 
     # ----------------------------------------------------------------------------
