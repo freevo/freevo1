@@ -65,6 +65,7 @@ class RadioItem(Item):
 
 
     def checktv(self):
+        """ Check if something is recording """
         self.tvlockfile = config.FREEVO_CACHEDIR + '/record.*'
         if len(glob.glob(self.tvlockfile)) > 0:
             return True
@@ -72,7 +73,7 @@ class RadioItem(Item):
 
 
     def play(self, arg=None, menuw=None):
-        print self.station+" "+str(self.station_index)+" "+self.name
+        _debug_('station=%r station_index=%r name=%r' % (self.station, self.station_index, self.name))
         # self.parent.current_item = self
         self.elapsed = 0
 
@@ -80,7 +81,6 @@ class RadioItem(Item):
             self.menuw = menuw
 
         if self.checktv():
-            #AlertBox(text=_('Cannot play - recording in progress')).show()
             AlertBox(text=_('Cannot play - recording in progress'), handler=self.confirm).show()
             return 'Cannot play with RadioPlayer - recording in progress'
 
@@ -103,7 +103,7 @@ class RadioItem(Item):
         """
         Stop the current playing
         """
-        print 'RadioItem stop'
+        _debug_('stop')
         self.player.stop()
 
 

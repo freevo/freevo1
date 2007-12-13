@@ -47,7 +47,7 @@ class MenuItem(Item):
     """
     Default item for the menu. It includes one action
     """
-    def __init__( self, name, action=None, arg=None, type=None, image=None,
+    def __init__(self, name, action=None, arg=None, type=None, image=None,
                   icon=None, parent=None, skin_type=None):
         Item.__init__(self, parent, skin_type = skin_type)
         if name:
@@ -81,14 +81,14 @@ class MenuItem(Item):
         """
         return the default action
         """
-        return [ ( self.select, self.name, 'MENU_SUBMENU' ) ]
+        return [ (self.select, self.name, 'MENU_SUBMENU') ]
 
 
     def select(self, arg=None, menuw=None):
         """
         call the default acion
         """
-        if self.function and not isinstance(self.function, list):
+        if self.function and callable(self.function):
             self.function(arg=self.arg, menuw=menuw)
 
 
@@ -503,7 +503,7 @@ class MenuWidget(GUIObject):
             return
 
         if not self.menu_items:
-            if event in ( MENU_SELECT, MENU_SUBMENU, MENU_PLAY_ITEM):
+            if event in (MENU_SELECT, MENU_SUBMENU, MENU_PLAY_ITEM):
                 self.back_one_menu()
                 return
             menu = self.menustack[-2]
@@ -704,7 +704,7 @@ class MenuWidget(GUIObject):
                 print 'No action.. '
                 AlertBox(text=_('No action defined for this choice!')).show()
             else:
-                action( arg=arg, menuw=self )
+                action(arg=arg, menuw=self)
             return
 
 
@@ -747,10 +747,8 @@ class MenuWidget(GUIObject):
                         arg    = action.arg
                     else:
                         action = action[0]
-                    action( arg=arg, menuw=self )
+                    action(arg=arg, menuw=self)
             return
-
-
 
         elif event == MENU_CALL_ITEM_ACTION:
             _debug_('calling action %s' % event.arg)

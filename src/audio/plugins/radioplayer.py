@@ -73,10 +73,9 @@ class RadioPlayer:
         """
         try:
             _debug_('url=%r' % (item.url), 2)
-            _debug_('mode=%r' % (item.mode), 2)
-            _debug_('mimetype=%r' % (item.mimetype), 2)
+            _debug_('item.__dict__=%r' % (item.__dict__))
         except Exception, e:
-            print e
+            _debug_('%s' % e)
         if item.url.startswith('radio://'):
             _debug_('%r good' % (item.url))
             return 2
@@ -94,7 +93,7 @@ class RadioPlayer:
         self.starttime = time.time()
 
         try:
-            print 'RadioPlayer.play() %s' % self.item.station
+            _debug_('play() %s' % self.item.station)
         except AttributeError:
             return 'Cannot play with RadioPlayer - no station'
 
@@ -110,11 +109,11 @@ class RadioPlayer:
 
         if config.RADIO_CMD.find('ivtv-radio') >= 0:
             # IVTV cards
-            print '%s -f %s &' % (config.RADIO_CMD, self.item.station)
+            _debug_('%s -f %s &' % (config.RADIO_CMD, self.item.station))
             os.system('%s -f %s &' % (config.RADIO_CMD, self.item.station))
         else:
             # BTTV cards
-
+            _debug_('%s' % (config.RADIO_CMD_START % self.item.station))
             os.system('%s' % (config.RADIO_CMD_START % self.item.station))
         thread.start_new_thread(self.__update_thread, ())
 
@@ -141,6 +140,7 @@ class RadioPlayer:
             os.system('killall -9 aplay')
         else:
             # BTTV cards
+            _debug_('%s' % (config.RADIO_CMD_STOP))
             os.system('%s' % config.RADIO_CMD_STOP)
 
         rc.post_event(PLAY_END)
@@ -157,6 +157,7 @@ class RadioPlayer:
         self.item.elapsed = int(time.time() - self.starttime)
         self.playerGUI.refresh()
 
+
     def eventhandler(self, event, menuw=None):
         """
         eventhandler for mplayer control. If an event is not bound in this
@@ -169,6 +170,7 @@ class RadioPlayer:
         else:
             # everything else: give event to the items eventhandler
             return self.item.eventhandler(event)
+
 
     def __update_thread(self):
         """

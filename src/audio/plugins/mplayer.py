@@ -78,7 +78,7 @@ class MPlayer:
             _debug_('mode=%r' % (item.mode), 2)
             _debug_('mimetype=%r' % (item.mimetype), 2)
         except Exception, e:
-            print e
+            pass
         if item.url.startswith('radio://'):
             _debug_('%r unplayable' % (item.url))
             return 0
