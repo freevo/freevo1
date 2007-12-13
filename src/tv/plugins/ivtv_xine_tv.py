@@ -351,7 +351,7 @@ class IVTV_XINE_TV:
         confirmstop_time = int(time.time())
         # note: the OSD msg is displayed for 5 seconds
         if (config.XINE_TV_CONFIRM_STOP == True) and (confirmstop_time - self.confirmstop_time > 4):
-            self.ShowMessage("Please repeat to stop\n")
+            self.ShowMessage(_('Please repeat to stop\n'))
             self.confirmstop_time = confirmstop_time
         else:
             self.mixer.stop()
@@ -369,7 +369,7 @@ class IVTV_XINE_TV:
     def ShowMessage(self, msg):
 
         _debug_("IVTV_XINE_TV: Show OSD Message: '%s'" % msg, DDEBUG)
-        self.xine.write("OSDWriteText$%s\n" % msg)
+        self.xine.write("OSDWriteText$     %s\n" % msg)
 
 
     #========================================================================
