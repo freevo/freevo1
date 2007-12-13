@@ -55,6 +55,7 @@ class Transition(BaseAnimation):
         @param direction: vertical/horizontal
         """
         BaseAnimation.__init__(self, surf1.get_rect(), fps, bg_update=False)
+        _debug_('__init__(surf1=%r, surf2=%r, mode=%r, direction=%r, fps=%r)' % (surf1, surf2, mode, direction, fps), 2)
 
         self.steps     = fps
         self.mode      = mode
@@ -69,11 +70,11 @@ class Transition(BaseAnimation):
 
         self.surf_blend1 = surf1.convert()
         self.surf_blend2 = surf2.convert()
-
         self.prepare()
 
 
     def prepare(self):
+        _debug_('prepare()', 2)
 
         # random effect
         if self.mode == -1:
@@ -117,16 +118,33 @@ class Transition(BaseAnimation):
 
 
     def draw(self):
+        _debug_('draw()', 2)
         if self.finished:
             return
 
         getattr(self, self.drawfuncs[self.mode])()
 
 
+    def draw_blend_alpha(self):
+        _debug_('draw_blend_alpha()', 2)
+
+        alpha = self.blend_alphas[self.index_alpha]
+
+        self.surf_blend2.set_alpha(alpha)
+        self.surface.blit(self.surf_blend1, (0, 0))
+        self.surface.blit(self.surf_blend2, (0, 0))
+
+        self.index_alpha += 1
+
+        if self.index_alpha > len(self.blend_alphas) - 1:
+            self.finished = True
+
+
     def draw_wipe(self):
         """
         Plain wipe
         """
+        _debug_('draw_wipe()', 2)
         if self.offset_x > self.rect.width:
             self.offset_x = self.rect.width
             self.finished = True
@@ -158,7 +176,7 @@ class Transition(BaseAnimation):
 
         XXX not working!
         """
-
+        _debug_('draw_wipe_alpha()', 2)
         if self.line > self.size[0] - 1:
             self.finished = True
 
@@ -197,17 +215,3 @@ class Transition(BaseAnimation):
 
         self.surface.blit(self.surf_blend1, (0, 0))
         self.surface.blit(self.surf_blend2, (0, 0))
-
-
-    def draw_blend_alpha(self):
-
-        alpha = self.blend_alphas[self.index_alpha]
-
-        self.surf_blend2.set_alpha(alpha)
-        self.surface.blit(self.surf_blend1, (0, 0))
-        self.surface.blit(self.surf_blend2, (0, 0))
-
-        self.index_alpha += 1
-
-        if self.index_alpha > len(self.blend_alphas) - 1:
-            self.finished = True

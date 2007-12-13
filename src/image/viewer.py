@@ -42,6 +42,7 @@ from event import *
 
 import time
 from animation import render, Transition
+import pygame
 
 # Module variable that contains an initialized ImageViewer() object
 _singleton = None
@@ -73,6 +74,7 @@ class ImageViewer(GUIObject):
         self.slideshow   = True
         self.app_mode    = 'image'
         self.last_image  = (None, None)
+        self.render      = render.get_singleton()
         self.osd         = osd.get_singleton()
         self.osd_height  = self.osd.height
         self.osd_width   = self.osd.width * float(config.IMAGEVIEWER_ASPECT)
@@ -263,7 +265,7 @@ class ImageViewer(GUIObject):
             bbx += zoom[1]
             bby += zoom[2]
 
-        if (last_image and self.last_image[0] != item and config.IMAGEVIEWER_BLEND_MODE):
+        if (last_image and self.last_image[0] != item and config.IMAGEVIEWER_BLEND_MODE != None):
             screen = self.osd.screen.convert()
             screen.fill((0,0,0,0))
             screen.blit(self.osd.zoomsurface(image, scale, bbx, bby, bbw, bbh,
@@ -272,15 +274,16 @@ class ImageViewer(GUIObject):
             self.drawosd(layer=screen)
 
             blend = Transition(self.osd.screen, screen, config.IMAGEVIEWER_BLEND_MODE)
+            clock = pygame.time.Clock()
             blend.start()
             while not blend.finished:
-                rc.poll()
+                self.render.update()
+                #blend.poll(pygame.time.get_ticks())
             blend.remove()
 
         else:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
-            self.osd.drawsurface(image, x, y, scale, bbx, bby, bbw, bbh,
-                                 rotation=self.rotation)
+            self.osd.drawsurface(image, x, y, scale, bbx, bby, bbw, bbh, rotation=self.rotation)
 
             # update the OSD
             self.drawosd()

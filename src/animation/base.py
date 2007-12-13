@@ -33,6 +33,7 @@ from pygame import Rect, Surface, constants
 
 import pygame.time
 import osd, render
+from kaa.notifier import Timer
 
 class BaseAnimation:
     """
@@ -54,16 +55,16 @@ class BaseAnimation:
     next_update  = 0      # timestamp for next update
 
 
-    def __init__(self, rectstyle, fps=20, bg_update=True,
-                 bg_wait=False, bg_redraw=False):
+    def __init__(self, rectstyle, fps=20, bg_update=True, bg_wait=False, bg_redraw=False):
+        _debug_('__init__(rectstyle=%r, fps=%r, bg_update=%r, bg_wait=%r, bg_redraw=%r)' % \
+            (rectstyle, fps, bg_update, bg_wait, bg_redraw), 2)
 
         self.rect      = Rect(rectstyle)
         self.bg_update = bg_update
         self.bg_wait   = bg_wait
         self.bg_redraw = bg_redraw
 
-        self.surface = Surface( (self.rect.width,
-                                 self.rect.height)).convert()
+        self.surface = Surface((self.rect.width, self.rect.height)).convert()
 
         self.set_fps(fps)
 
@@ -72,6 +73,7 @@ class BaseAnimation:
         """
         Helper for creating surfaces
         """
+        _debug_('get_surface(width=%r, height=%r)' % (width, height), 2)
         return Surface( (width, height), 0, 32)
 
 
@@ -79,6 +81,7 @@ class BaseAnimation:
         """
         Helper for getting osd singleton
         """
+        _debug_('get_osd()', 2)
         return osd.get_singleton()
 
 
@@ -86,6 +89,7 @@ class BaseAnimation:
         """
         Sets the desired fps
         """
+        _debug_('set_fps(fps=%r)' % (fps), 2)
         self.interval  = int(1000.0/float(fps))
 
 
@@ -93,6 +97,7 @@ class BaseAnimation:
         """
         Update the background
         """
+        _debug_('set_screen_background()', 2)
         if not self.background:
             self.background = osd.get_singleton().getsurface(rect=self.rect)
             self.updates = []
@@ -121,6 +126,7 @@ class BaseAnimation:
 
 
     def get_rect(self):
+        _debug_('get_rect()', 2)
         return self.rect
 
 
@@ -128,6 +134,7 @@ class BaseAnimation:
         """
         Starts the animation
         """
+        _debug_('start()', 2)
         render.get_singleton().add_animation(self)
         if not self.bg_wait:
             self.active = True
@@ -137,6 +144,7 @@ class BaseAnimation:
         """
         Stops the animation from being polled
         """
+        _debug_('stop()', 2)
         self.active = False
 
 
@@ -144,14 +152,13 @@ class BaseAnimation:
         """
         Flags the animation to be removed from the animation list
         """
+        _debug_('remove()', 2)
         self.active = False
 
         # set the org. bg if we use this
         if self.bg_update:
-            osd.get_singleton().putsurface(self.background,
-                                           self.rect.left,
-                                           self.rect.top)
-            osd.get_singleton().update( [self.rect] )
+            osd.get_singleton().putsurface(self.background, self.rect.left, self.rect.top)
+            osd.get_singleton().update([self.rect])
 
         self.delete = True
 
@@ -163,7 +170,7 @@ class BaseAnimation:
         @note: If the rect passed damages our rect, but no actual blit is done
         on osd.screen, we'll end up with a copy of our animation in our bg. This is BAD.
         """
-
+        _debug_('damage(rectstyles=%r)' % (rectstyles), 2)
         if not (self.bg_redraw or self.bg_update) or rectstyles == None:
             return
 
@@ -180,7 +187,10 @@ class BaseAnimation:
 
 
     def poll(self, current_time):
-
+        """
+        Poll the animations
+        """
+        _debug_('poll(current_time=%r)' % (current_time), 2)
         if self.next_update < current_time:
             self.next_update = current_time + self.interval
 
@@ -195,4 +205,5 @@ class BaseAnimation:
         """
         Overload to do stuff with the surface
         """
+        _debug_('draw()', 2)
         pass
