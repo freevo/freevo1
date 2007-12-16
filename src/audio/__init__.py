@@ -134,21 +134,21 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         parse audio specific stuff from fxd files::
 
-        <?xml version="1.0" ?>
-        <freevo>
-          <audio title="Smoothjazz">
-            <cover-img>foo.jpg</cover-img>
-            <mplayer_options></mplayer_options>
-            <player>xine</player>
-            <playlist/>
-            <reconnect/>
-            <url>http://64.236.34.141:80/stream/1005</url>
-            <info>
-              <genre>JAZZ</genre>
-              <description>A nice description</description>
-            </info>
-          </audio>
-        </freevo>
+            <?xml version="1.0" ?>
+            <freevo>
+                <audio title="Smoothjazz">
+                    <cover-img>foo.jpg</cover-img>
+                    <mplayer_options></mplayer_options>
+                    <player>xine</player>
+                    <playlist/>
+                    <reconnect/>
+                    <url>http://64.236.34.141:80/stream/1005</url>
+                    <info>
+                        <genre>JAZZ</genre>
+                        <description>A nice description</description>
+                    </info>
+                </audio>
+            </freevo>
 
         Everything except title and url is optional. If <player> is set, this player
         will be used (possible xine or mplayer). The tag <playlist/> signals that this

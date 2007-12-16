@@ -105,16 +105,17 @@ def connectionTest(teststr='testing'):
 def initEncodeJob(source, output, friendlyname="", title=None):
     """Initialize the encodingjob.
 
+    This function returns an idnr (integer) if successful
+
+    This call can take some time (10 seconds on average) before returning, because the
+    encodingserver analyzes the video during this call.
+
     @param source: is the source video you want to have encoded
     @param output: is the name of the resulting encoded file you want
     @param friendlyname: is a "friendly name" to assign to this encoding job
     @param title: is obligatory if you have a dvd/dvd-on-disc, in wich case you need
         to specify a title (integer)
-
-    This function returns an idnr (integer) if successful
-
-    This call can take some time (10 seconds on average) before returning, because the
-    encodingserver analyzes the video during this call."""
+    """
 
     _debug_('initEncodeJob(%s, %s, %s, %s)' % (source, output, friendlyname, title), DINFO)
     if not (source or output):
@@ -298,8 +299,6 @@ def getProgress():
     """Get the progress & pass information of the job currently encoding.
 
     This call returns False if no job is currently encoding (fx the queue is not active).
-    @returns: When the queue is active, this call returns a tuple of 4 values:
-        (friendlyname, status, perc, timerem)
 
     friendlyname is the friendlyname you assigned to the encoding job
     status is the current status of the encoding job, represented by an integer
@@ -311,6 +310,9 @@ def getProgress():
 
     perc is the percentage completed of the current pass, timerem is the estimated
     time remaining of the current pass, formatted as a human-readable string.
+
+    @returns: When the queue is active, this call returns a tuple of 4 values:
+        (friendlyname, status, perc, timerem)
     """
 
     try:

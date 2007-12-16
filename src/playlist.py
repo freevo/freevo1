@@ -153,7 +153,7 @@ class Playlist(Item):
 
         File line format::
 
-        FileName: "image file name"; Caption: "caption text"; Delay: "sec"
+            FileName: "image file name"; Caption: "caption text"; Delay: "sec"
 
         The caption and delay are optional.
 
@@ -526,19 +526,19 @@ class Mimetype(plugin.MimetypePlugin):
         """
         parse audio specific stuff from fxd files::
 
-        <?xml version="1.0" ?>
-        <freevo>
-          <playlist title="foo" random="1|0" repeat="1|0">
-            <cover-img>foo.jpg</cover-img>
-            <files>
-              <directory recursive="1|0">path</directory>
-              <file>filename</file>
-            </files>
-            <info>
-              <description>A nice description</description>
-            </info>
-          </playlist>
-        </freevo>
+            <?xml version="1.0" ?>
+            <freevo>
+                <playlist title="foo" random="1|0" repeat="1|0">
+                    <cover-img>foo.jpg</cover-img>
+                    <files>
+                        <directory recursive="1|0">path</directory>
+                        <file>filename</file>
+                    </files>
+                    <info>
+                        <description>A nice description</description>
+                    </info>
+                </playlist>
+            </freevo>
         """
         children = fxd.get_children(node, 'files')
         dirname  = os.path.dirname(fxd.getattr(None, 'filename', ''))

@@ -166,7 +166,7 @@ class TvChannel:
     id = ''
     displayname = ''
     tunerid = ''
-    logo = ''   # URL or file   Not used yet
+    logo = ''   # URL or file, Not used yet
     programs = None
     times = None
 

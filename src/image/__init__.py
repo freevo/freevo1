@@ -103,23 +103,23 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         parse image specific stuff from fxd files::
 
-        <?xml version="1.0" ?>
-        <freevo>
-          <slideshow title="foo" random="1|0" repeat="1|0">
-            <cover-img>foo.jpg</cover-img>
-            <background-music random="1|0">
-              <directory recursive="1|0">path</directory>
-              <file>filename</file>
-            </background-music>
-            <files>
-              <directory recursive="1|0" duration="10">path</directory>
-              <file duration="0">filename</file>
-            </files>
-            <info>
-              <description>A nice description</description>
-            </info>
-          </slideshow>
-        </freevo>
+            <?xml version="1.0" ?>
+            <freevo>
+                <slideshow title="foo" random="1|0" repeat="1|0">
+                    <cover-img>foo.jpg</cover-img>
+                    <background-music random="1|0">
+                        <directory recursive="1|0">path</directory>
+                        <file>filename</file>
+                    </background-music>
+                    <files>
+                        <directory recursive="1|0" duration="10">path</directory>
+                        <file duration="0">filename</file>
+                    </files>
+                    <info>
+                        <description>A nice description</description>
+                    </info>
+                </slideshow>
+            </freevo>
         """
         items    = []
         dirname  = os.path.dirname(fxd.getattr(None, 'filename', ''))

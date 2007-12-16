@@ -49,12 +49,12 @@ class procstats(IdleBarPlugin):
     in megabytes (calculated approx. as MemFree+Cached?)
 
     Activate with
-       plugin.activate('idlebar.system.procstats',level=20) for defaults or
-       plugin.activate('idlebar.system.procstats',level=20,args=(Mem,Cpu,Prec))
-      where
-       Mem:  Draw memfree  (default=1, -1 to disable)
-       Cpu:  Draw cpuusage (default=1, -1 to disable)
-       Prec: Precision used when drawing cpu usage (default=1)
+    | plugin.activate('idlebar.system.procstats',level=20) for defaults or
+    | plugin.activate('idlebar.system.procstats',level=20,args=(Mem,Cpu,Prec))
+    where
+        - Mem:  Draw memfree  (default=1, -1 to disable)
+        - Cpu:  Draw cpuusage (default=1, -1 to disable)
+        - Prec: Precision used when drawing cpu usage (default=1)
     """
     def __init__(self,Mem=1,Cpu=1,Prec=1):
         IdleBarPlugin.__init__(self)
@@ -164,11 +164,9 @@ class sensors(IdleBarPlugin):
     Displays sensor temperature information (cpu,case) and memory-stats.
 
     Activate with:
-       plugin.activate('idlebar.system.sensors', level=40,
-              args=('cpusensor', 'casesensor', 'meminfo'))
-       plugin.activate('idlebar.system.sensors', level=40,
-              args=(('cpusensor','compute expression'),
-                    ('casesensor','compute_expression'), 'meminfo'))
+    | plugin.activate('idlebar.system.sensors', level=40, args=('cpusensor', 'casesensor', 'meminfo'))
+    | plugin.activate('idlebar.system.sensors', level=40, args=(('cpusensor','compute expression'),
+    |     ('casesensor','compute_expression'), 'meminfo'))
 
     cpu and case sensor are the corresponding lm_sensors : this should be
     temp1, temp2 or temp3. defaults to temp3 for cpu and temp2 for case

@@ -111,8 +111,9 @@ class PluginInterface(plugin.ItemPlugin):
 
     def searchMoviecovers(self, name):
         """name (string), returns id list
+
         Search for name and returns an id list with tuples:
-            (id , name, year, type)"""
+        (id , name, year, type)"""
         # Clean internal variables
         self.initmyself()
         self.moviecovers_id_list = []

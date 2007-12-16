@@ -107,7 +107,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     @requires: pysqlite.
 
     Pre Installation
-    ----------------
+    ================
 
     The sqlite-meta-database should be available.
 
@@ -123,7 +123,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         - The meta database should be available now.
 
     Configuration
-    -------------
+    =============
 
     Edit your local_config.py and add this:
 
@@ -169,7 +169,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     | })
 
     Post Installation
-    -----------------
+    =================
 
     New plugins are not immediately visible on the freevo webserver.
 

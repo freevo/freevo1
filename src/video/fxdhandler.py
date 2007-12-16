@@ -37,20 +37,20 @@ def parse_movie(fxd, node):
     """
     Callback for VideoItem <movie>::
 
-    <movie title>
-        <cover-img>file</cover-img>
-        <video mplayer-options>
-            <dvd|vcd|file id name media_id mplayer-options>file</>+
-        <variants>
-            <variant>
-                <part ref mplayer-options>
-                    <subtitle media_id>file</subtitle>
-                    <audio media_id>file</audio>
-                </part>+
-            </variant>+
-        </variants>
-        <info/>
-    </movie>
+        <movie title>
+            <cover-img>file</cover-img>
+            <video mplayer-options>
+                <dvd|vcd|file id name media_id mplayer-options>file</>+
+            <variants>
+                <variant>
+                    <part ref mplayer-options>
+                        <subtitle media_id>file</subtitle>
+                        <audio media_id>file</audio>
+                    </part>+
+                </variant>+
+            </variants>
+            <info/>
+        </movie>
     """
 
     files = []

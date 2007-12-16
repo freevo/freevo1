@@ -231,19 +231,19 @@ class DirItem(Playlist):
 
 
     def read_folder_fxd(self, fxd, node):
-        '''
+        """
         parse the xml file for directory settings::
 
-        <?xml version="1.0" ?>
-        <freevo>
-          <folder title="Incoming TV Shows" cover-img="foo.jpg">
-            <setvar name="directory_autoplay_single_item" val="0"/>
-            <info>
-              <content>Episodes for current tv shows not seen yet</content>
-            </info>
-          </folder>
-        </freevo>
-        '''
+            <?xml version="1.0" ?>
+            <freevo>
+                <folder title="Incoming TV Shows" cover-img="foo.jpg">
+                    <setvar name="directory_autoplay_single_item" val="0"/>
+                    <info>
+                        <content>Episodes for current tv shows not seen yet</content>
+                    </info>
+                </folder>
+            </freevo>
+        """
         if node.name == 'skin':
             self.skin_fxd = self.folder_fxd
             return
