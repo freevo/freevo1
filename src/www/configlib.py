@@ -96,8 +96,8 @@ def getpid(name, arg):
 
 
 def GetItemsArray(cvalue):
-    '''
-    '''
+    """
+    """
     _debug_('GetItemsArray(cvalue=%r)' % (cvalue), 2)
     itemlist = None
     cmd = 'itemlist = ' + cvalue
@@ -107,8 +107,8 @@ def GetItemsArray(cvalue):
 
 
 def ErrorMessage (setting_name, control_name,  ctrl_value):
-    '''
-    '''
+    """
+    """
     chkline = setting_name + ' = ' + ctrl_value
     lcheck = '<span class="checkOK">OK</span>\n'
     if setting_name == 'FILE':
@@ -128,8 +128,8 @@ def ErrorMessage (setting_name, control_name,  ctrl_value):
 
 
 def isNumber(s):
-    '''
-    '''
+    """
+    """
     _debug_('isNumber(s=%r) % (s)', 2)
     try:
         i = int(s)
@@ -139,8 +139,8 @@ def isNumber(s):
 
 
 def DirTypeVar(cname):
-    '''
-    '''
+    """
+    """
     _debug_('FileTypeVar(cname)', 2)
     vtype = cname.split('_')[-1]
     filevars = ['RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'FREEVO_LOGDIR', 'TV_LOGOS']
@@ -152,8 +152,8 @@ def DirTypeVar(cname):
 
 
 def FileTypeVarArray(cname):
-    '''
-    '''
+    """
+    """
     _debug_('FileTypeVarArray(cname=%r)' % (cname), 2)
     filevars = ['VIDEO_ITEMS', 'AUDIO_ITEMS', 'IMAGE_ITEMS', 'GAME_ITEMS']
 
@@ -163,8 +163,8 @@ def FileTypeVarArray(cname):
 
 
 def FileTypeVar(cname):
-    '''
-    '''
+    """
+    """
     _debug_('FileTypeVar(cname)', 2)
     vtype = cname.split('_')[-1]
     filetypes = ['PATH', 'DIR', 'FILE', 'DEVICE', 'CMD']
@@ -178,8 +178,8 @@ def FileTypeVar(cname):
 
 
 def GetConfigFileName(config_file_name):
-    '''
-    '''
+    """
+    """
     _debug_('GetConfigFileName(config_file_name=%r)' % config_file_name , 2)
     if not config_file_name:
         if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
@@ -191,14 +191,14 @@ def GetConfigFileName(config_file_name):
     if not os.path.exists(config_file_name):
         config_file_name = None
 
-    config_file_name = '/home/dlocke/.freevo/local_conf.py'
+    config_file_name = config.overridefile
     print config_file_name
     return config_file_name
 
 
 def CheckSyntax(fvsetting):
-    '''
-    '''
+    """
+    """
     _debug_('CheckSyntax(fvsetting=%r)' % ( fvsetting ), 2)
 
     status = False
@@ -211,8 +211,8 @@ def CheckSyntax(fvsetting):
 
 
 def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
-    '''
-    '''
+    """
+    """
     _debug_('CreateSelectBoxControl(cname, grps, cvalue, opts="")', 2)
     ctrl = '<select name="%s" value="%s"  id="%s" %s >\n' % (cname,  cvalue, cname, opts)
     for grp in grps:
@@ -225,8 +225,8 @@ def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
 
 
 def CreateHTMLinput(control_type, control_id, control_value, size = '',other_opts = ''):
-    '''
-    '''
+    """
+    """
     _debug_('CreateHTMLinput(control_type=%r, control_id=%r, value=%r, control_size=%r, other_opts=%r)' % \
             (control_type, control_id, control_value, size, other_opts ), 2)
 
@@ -242,8 +242,8 @@ def CreateHTMLinput(control_type, control_id, control_value, size = '',other_opt
 
 
 def ReadConfig(cfile):
-    '''
-    '''
+    """
+    """
     _debug_('ReadConfig(cfile=%r)' % (cfile), 2)
     lconf = cfile
     lconf_hld = open(lconf, 'r')
@@ -253,8 +253,8 @@ def ReadConfig(cfile):
 
 
 def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
-    '''
-    '''
+    """
+    """
     _debug_('CreateSelectBoxControl(cname, grps, cvalue, opts="")', 2)
     ctrl = '<select name="%s" value="%s"  id="%s" %s >\n' % (cname,  cvalue, cname, opts)
     for grp in grps:
@@ -267,8 +267,8 @@ def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
 
 
 def GetConfigSetting(cfile, vname):
-    '''
-    '''
+    """
+    """
     _debug_('GetConfigSetting(cfile=%r, vname=%r)' % (cfile, vname), 2)
 
     lconf = ReadConfig(cfile)
@@ -284,8 +284,8 @@ def GetConfigSetting(cfile, vname):
 
 
 def ReadConfigPlugins(cfile):
-    '''
-    '''
+    """
+    """
     _debug_('ReadConfigPlugins(cfile=%r)' % (cfile), 2)
     rconf = ReadConfig(cfile)
     pluginlines = []
@@ -323,8 +323,8 @@ def Server_Running(server):
 
 
 def CreateNewLineControl():
-    '''
-    '''
+    """
+    """
     _debug_('CreateNewLineControl()', 2)
     ctrl = '<div align="left">'
     ctrl += '<input  id="newname" name="newname" size="4"> ='
