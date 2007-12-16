@@ -45,7 +45,9 @@ class FavoriteItem(Item):
     Item class for favorite items
     """
     def __init__(self, parent, fav, fav_action='edit'):
+        """ """
         Item.__init__(self, parent, skin_type='video')
+        _debug_('FavoriteItem.__init__(parent=%r, fav=%r, fav_action=%r)' % (parent, fav, fav_action), 2)
         self.fav   = fav
         self.name  = self.origname = fav.name
         self.title = fav.title
@@ -89,6 +91,7 @@ class FavoriteItem(Item):
 
 
     def actions(self):
+        _debug_('actions()', 2)
         return [( self.display_submenu , _('Edit favorite'))]
 
 
@@ -99,57 +102,46 @@ class FavoriteItem(Item):
         All attributes of a favorite can be edited here and in the end
         the user must select 'save changes' to finally create the favorite.
         """
-
+        _debug_('display_submenu(arg=%r, menuw=%r)' % (arg, menuw), 2)
         ### create menu items for editing the favorites attributes
         items = []
 
-        items.append(menu.MenuItem(_('Modify name'),
-                                    action=self.mod_name))
-        items.append(menu.MenuItem(_('Modify channel'),
-                                    action=self.mod_channel))
-        items.append(menu.MenuItem(_('Modify day of week'),
-                                    action=self.mod_day))
-        items.append(menu.MenuItem(_('Modify time of day'),
-                                    action=self.mod_time))
+        items.append(menu.MenuItem(_('Modify name'), action=self.mod_name))
+        items.append(menu.MenuItem(_('Modify channel'), action=self.mod_channel))
+        items.append(menu.MenuItem(_('Modify day of week'), action=self.mod_day))
+        items.append(menu.MenuItem(_('Modify time of day'), action=self.mod_time))
 
         if config.TV_RECORD_DUPLICATE_DETECTION:
             if self.allowDuplicates:
-                items.append(menu.MenuItem(_('Prevent Recording of Duplicates'),
-                             action=self.alter_prop, arg=('dup', 'False')))
+                items.append(menu.MenuItem(_('Prevent Recording of Duplicates'), \
+                    action=self.alter_prop, arg=('dup', 'False')))
             else:
                 items.append(menu.MenuItem(_('Allow Recording of Duplicates'),
-                action=self.alter_prop, arg=('dup', 'True')))
+                    action=self.alter_prop, arg=('dup', 'True')))
 
 
         if config.TV_RECORD_ONLY_NEW_DETECTION:
             if self.onlyNew:
-                items.append(menu.MenuItem(_('Record All Episodes'),
-                             action=self.alter_prop, arg=('new', 'False')))
+                items.append(menu.MenuItem(_('Record All Episodes'), action=self.alter_prop, arg=('new', 'False')))
             else:
-                items.append(menu.MenuItem(_('Record Only New Episodes'),
-                             action=self.alter_prop, arg=('new', 'True')))
+                items.append(menu.MenuItem(_('Record Only New Episodes'), action=self.alter_prop, arg=('new', 'True')))
 
         # XXX: priorities aren't quite supported yet
         if 0:
             (got_favs, favs) = record_client.getFavorites()
             if got_favs and len(favs) > 1:
-                items.append(menu.MenuItem(_('Modify priority'),
-                                           action=self.mod_priority))
+                items.append(menu.MenuItem(_('Modify priority'), action=self.mod_priority))
 
 
         ### save favorite
-        items.append(menu.MenuItem(_('Save changes'),
-                                    action=self.save_changes))
+        items.append(menu.MenuItem(_('Save changes'), action=self.save_changes))
 
         ### remove this program from favorites
         if not self.fav_action == 'add':
-            items.append(menu.MenuItem(_('Remove favorite'),
-                                       action=self.rem_favorite))
+            items.append(menu.MenuItem(_('Remove favorite'), action=self.rem_favorite))
 
         ### put the whole menu together
-        favorite_menu = menu.Menu(_('Favorite Menu'), items,
-                                  item_types = 'tv favorite menu')
-
+        favorite_menu = menu.Menu(_('Favorite Menu'), items, item_types='tv favorite menu')
         favorite_menu.infoitem = self
         favorite_menu.is_submenu = True
         menuw.pushmenu(favorite_menu)
@@ -165,14 +157,15 @@ class FavoriteItem(Item):
         This opens a input box to ask the user for a new name for this favorite.
         The default name of a favorite is the name of the program.
         """
+        _debug_('mod_name(arg=%r, menuw=%r)' % (arg, menuw), 2)
         self.menuw = menuw
-        InputBox(text=_('Alter Name'), handler=self.alter_name,
-                 width = osd.get_singleton().width - config.OSD_OVERSCAN_LEFT - 20,
-                 input_text=self.name).show()
+        InputBox(text=_('Alter Name'), handler=self.alter_name, \
+            width=osd.get_singleton().width - config.OSD_OVERSCAN_LEFT - 20, input_text=self.name).show()
 
 
     def alter_name(self, name):
         """ set the new name"""
+        _debug_('alter_name(name=%r)' % (name,), 2)
         if name:
             self.name = self.fav.name = name.strip()
 
@@ -181,21 +174,18 @@ class FavoriteItem(Item):
 
     def mod_channel(self, arg=None, menuw=None):
         """Modify channel"""
+        _debug_('mod_channel(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
 
-        items.append(menu.MenuItem('ANY CHANNEL',
-                     action=self.alter_prop, arg=('channel', 'ANY')))
+        items.append(menu.MenuItem('ANY CHANNEL', action=self.alter_prop, arg=('channel', 'ANY')))
 
         for chanline in config.TV_CHANNELS:
-            items.append(menu.MenuItem(chanline[1],
-                         action=self.alter_prop, arg=('channel', chanline[1])))
+            items.append(menu.MenuItem(chanline[1], action=self.alter_prop, arg=('channel', chanline[1])))
 
-        favorite_menu = menu.Menu(_('Modify Channel'), items,
-                                  item_types = 'tv favorite menu')
+        favorite_menu = menu.Menu(_('Modify Channel'), items, item_types='tv favorite menu')
         favorite_menu.infoitem = self
         menuw.pushmenu(favorite_menu)
         menuw.refresh()
-
 
 
     def mod_day(self, arg=None, menuw=None):
@@ -203,17 +193,15 @@ class FavoriteItem(Item):
 
         Opens a submenu where the day of the week of a favorite can be configured.
         """
+        _debug_('mod_day(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
 
-        items.append(menu.MenuItem(_('ANY DAY'),
-                     action=self.alter_prop, arg=('dow', 'ANY')))
+        items.append(menu.MenuItem(_('ANY DAY'), action=self.alter_prop, arg=('dow', 'ANY')))
 
         for i in range(len(self.week_days)):
-            items.append(menu.MenuItem(self.week_days[i],
-                         action=self.alter_prop, arg=('dow', i)))
+            items.append(menu.MenuItem(self.week_days[i], action=self.alter_prop, arg=('dow', i)))
 
-        favorite_menu = menu.Menu(_('Modify Day'), items,
-                                  item_types = 'tv favorite menu')
+        favorite_menu = menu.Menu(_('Modify Day'), items, item_types = 'tv favorite menu')
         favorite_menu.infoitem = self
         menuw.pushmenu(favorite_menu)
         menuw.refresh()
@@ -224,20 +212,17 @@ class FavoriteItem(Item):
 
         Opens a submenu where the time of a favorite can be configured.
         """
+        _debug_('mod_time(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
 
-        items.append(menu.MenuItem(_('ANY TIME'), action=self.alter_prop,
-                     arg=('mod', 'ANY')))
+        items.append(menu.MenuItem(_('ANY TIME'), action=self.alter_prop, arg=('mod', 'ANY')))
 
         for i in range(48):
             mod = i * 30
-            items.append(menu.MenuItem(time.strftime(config.TV_TIME_FORMAT,
-                                                time.gmtime(float(mod * 60))),
-                                       action=self.alter_prop,
-                                       arg=('mod', mod)))
+            items.append(menu.MenuItem(time.strftime(config.TV_TIME_FORMAT, time.gmtime(float(mod * 60))), \
+                action=self.alter_prop, arg=('mod', mod)))
 
-        favorite_menu = menu.Menu(_('Modify Time'), items,
-                                  item_types = 'tv favorite menu')
+        favorite_menu = menu.Menu(_('Modify Time'), items, item_types = 'tv favorite menu')
         favorite_menu.infoitem = self
         menuw.pushmenu(favorite_menu)
         menuw.refresh()
@@ -249,6 +234,7 @@ class FavoriteItem(Item):
 
         This function is where the properties of a favorite really are changed.
         """
+        _debug_('alter_prop(arg=%r, menuw=%r)' % (arg, menuw), 2)
         (prop, val) = arg
 
         if prop == 'channel':
@@ -306,7 +292,6 @@ class FavoriteItem(Item):
                 menuw.init_page()
                 menuw.refresh()
 
-
         elif prop == 'new':
             # twisted needs FALSE and TRUE, it does not know False and True
             if val == 'True':
@@ -334,6 +319,7 @@ class FavoriteItem(Item):
         """
         Save favorite
         """
+        _debug_('save_changes(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # this can take some time, as it means although to update the schedule
         msgtext = _('Saving the changes to this favorite.')+'\n'
         msgtext+= _('This may take some time.')
@@ -371,6 +357,7 @@ class FavoriteItem(Item):
         """
         Remove favorite
         """
+        _debug_('rem_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
         name = self.origname
         (result, msg) = record_client.removeFavorite(name)
         if result:

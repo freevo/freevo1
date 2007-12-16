@@ -61,9 +61,10 @@ class EditFavorite(PopupBox):
     height    Integer
     context   Context in which the object is instanciated
     """
-
-    def __init__(self, parent=None, subject=None, left=None, top=None, width=500,
-                 height=350, context=None):
+    def __init__(self, parent=None, subject=None, left=None, top=None, width=500, height=350, context=None):
+        """ """
+        _debug_('EditFavorite.__init__(parent=%r, subject=%r, left=%r, top=%r, width=%r, height=%r, context=%r)' % \
+            (parent, subject, left, top, width, height, context), 1)
 
         self.oldname = None
         if context:
@@ -189,7 +190,9 @@ class EditFavorite(PopupBox):
         self.cancel = Button(_('CANCEL'))
         self.add_child(self.cancel)
 
+
     def removeFavorite(self):
+        _debug_('removeFavorite()', 2)
         (result, msg) = record_client.removeFavorite(self.oldname)
         if result:
             searcher = None
@@ -208,7 +211,9 @@ class EditFavorite(PopupBox):
             AlertBox(parent=self,
                      text=_('Remove Failed')+(': %s' % msg)).show()
 
+
     def eventhandler(self, event, menuw=None):
+        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
 
         if self.get_selected_child() == self.name_input:
             if event == em.INPUT_LEFT:

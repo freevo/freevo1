@@ -24,7 +24,7 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
+# with this program; if not, write to the Free Software Foundation, Inc., 
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # ----------------------------------------------------------------------
@@ -57,14 +57,15 @@ class ProgramItem(Item):
     """
     def __init__(self, parent, prog, context='menu'):
         Item.__init__(self, parent, skin_type='video')
+        _debug_('__init__(parent=%r, prog=%r, context=%r)' % (parent, prog, context), 2)
         # prog is a TvProgram object as we get it from the recordserver
         self.prog = prog
         self.context= context
 
         if hasattr(prog, 'name'): self.name = self.title = prog.name
         if hasattr(prog, 'title'): self.title = self.name = prog.title
-        if hasattr(prog,'sub_title'): self.sub_title = prog.sub_title
-        if hasattr(prog,'desc'): self.description = prog.desc
+        if hasattr(prog, 'sub_title'): self.sub_title = prog.sub_title
+        if hasattr(prog, 'desc'): self.description = prog.desc
 
         # categories
         if hasattr(prog, 'categories'):self.categories = prog.categories
@@ -91,14 +92,15 @@ class ProgramItem(Item):
         self.favorite = False
 
         # start time
-        self.start = time.strftime(config.TV_DATETIME_FORMAT,
+        self.start = time.strftime(config.TV_DATETIME_FORMAT, 
                                    time.localtime(prog.start))
         # stop time
-        self.stop = time.strftime(config.TV_DATETIME_FORMAT,
+        self.stop = time.strftime(config.TV_DATETIME_FORMAT, 
                                        time.localtime(prog.stop))
 
     def actions(self):
         """ List of actions """
+        _debug_('actions()', 2)
         #list of entries for the menu
         items = []
 
@@ -116,7 +118,7 @@ class ProgramItem(Item):
         # check if this program is scheduled
         (got_schedule, schedule) = record_client.getScheduledRecordings()
         if got_schedule:
-            (result, message) = record_client.isProgScheduled(self.prog,
+            (result, message) = record_client.isProgScheduled(self.prog, 
                                                schedule.getProgramList())
             if result:
                 self.scheduled = True
@@ -152,6 +154,7 @@ class ProgramItem(Item):
         """
         Start watching TV
         """
+        _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # watching TV should only be possible from the guide
         if not self.context=='guide':
             rc.post_event(MENU_SELECT)
@@ -198,6 +201,7 @@ class ProgramItem(Item):
         """
         View a full scrollable description of the program.
         """
+        _debug_('show_description(arg=%r, menuw=%r)' % (arg, menuw), 2)
         ShowProgramDetails(menuw, self)
 
 
@@ -205,6 +209,7 @@ class ProgramItem(Item):
         """
         schedule or unschedule this program, depending on its current status
         """
+        _debug_('toggle_rec(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if self.scheduled:
             # remove this program from schedule it it is already scheduled
             self.remove_program(menuw=menuw)
@@ -218,6 +223,7 @@ class ProgramItem(Item):
         """
         Add a program to schedule
         """
+        _debug_('schedule_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # schedule the program
         (result, msg) = record_client.scheduleRecording(self.prog)
         if result:
@@ -238,6 +244,7 @@ class ProgramItem(Item):
         """
         Remove a program from schedule
         """
+        _debug_('remove_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # remove the program
         (result, msg) = record_client.removeScheduledRecording(self.prog)
         if result:
@@ -258,11 +265,12 @@ class ProgramItem(Item):
         """
         Add a program to favorites
         """
+        _debug_('add_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if menuw:
             menuw.delete_submenu(refresh=False)
         # create a favorite
-        fav = Favorite(self.title, self.prog,
-                       True, True, True, -1, True, False)
+        fav = Favorite(self.title, self.prog, True, True, True, -1, True, False)
+        _debug_('self.title=%r, self.prog=%r, fav.__dict__=%r)' % (self.title, self.prog, fav.__dict__), 2)
         # and a favorite item which represents the submen
         fav_item = FavoriteItem(self, fav, fav_action='add')
         # and open that submenu
@@ -273,6 +281,7 @@ class ProgramItem(Item):
         """
         Edit the settings of a favorite
         """
+        _debug_('edit_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if menuw:
             menuw.delete_submenu(refresh=False)
 
@@ -292,9 +301,10 @@ class ProgramItem(Item):
         """
         Find more of this program
         """
-        _debug_(String('searching for: %s' % self.title),2)
+        _debug_('find_more(arg=%r, menuw=%r)' % (arg, menuw), 2)
 
         # this might take some time, thus we open a popup messages
+        _debug_(String('searching for: %s' % self.title), 2)
         pop = PopupBox(text=_('Searching, please wait...'))
         pop.show()
         # do the search
@@ -322,8 +332,7 @@ class ProgramItem(Item):
             return
 
         # create a menu from the search result
-        search_menu = menu.Menu(_( 'Search Results' ), items,
-                                item_types = 'tv program menu')
+        search_menu = menu.Menu(_('Search Results'), items, item_types='tv program menu')
         # do not return from the search list to the submenu
         # where the search was initiated
         menuw.delete_submenu(refresh = False)
@@ -335,6 +344,7 @@ class ProgramItem(Item):
         """
         Open the submenu for this item
         """
+        _debug_('display_submenu(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if not menuw:
             return
         # this tries to imitated freevo's internal way of creating submenus
@@ -352,6 +362,7 @@ class ShowProgramDetails(ScrollableTextScreen):
     Screen to show the details of the TV program
     """
     def __init__(self, menuw, prg):
+        _debug_('ShowProgramDetails.__init__(menuw=%r, prg=%r)' % (menuw, prg), 2)
         if prg is None:
             name = _('No Information Available')
             sub_title = ''
@@ -382,7 +393,7 @@ class ShowProgramDetails(ScrollableTextScreen):
 
             if prg.ratings:
                 description += u'\n'
-                for system,value in prg.ratings.items():
+                for system, value in prg.ratings.items():
                     description += u'\n' + _('Rating') + u'(' + system + u') : ' + value
 
         # that's all, we can show this to the user
@@ -394,6 +405,9 @@ class ShowProgramDetails(ScrollableTextScreen):
 
 
     def getattr(self, name):
+        """
+        """
+        _debug_('getattr(name=%r)' % (name,), 2)
         if name == 'title':
             return self.name
 
@@ -407,8 +421,8 @@ class ShowProgramDetails(ScrollableTextScreen):
         """
         eventhandler for the programm description display
         """
+        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
         menuw = self.menuw
-        _debug_('programdescription: %s' % event, 2)
         event_consumed = ScrollableTextScreen.eventhandler(self, event, menuw)
         if not event_consumed:
             if event == PLAY:

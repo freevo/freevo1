@@ -40,24 +40,25 @@ from gui.AlertBox import AlertBox
 
 class ViewFavoritesItem(Item):
     def __init__(self, parent):
+        _debug_('ViewFavoritesItem.__init__(parent=%r)' % (parent,), 2)
         Item.__init__(self, parent, skin_type='tv')
         self.name = _('View Favorites')
         self.menuw = None
 
 
     def actions(self):
+        _debug_('actions()', 2)
         return [ ( self.view_favorites , _('View Favorites') ) ]
 
 
     def view_favorites(self, arg=None, menuw=None):
+        _debug_('view_favorites(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = self.get_items()
         if not len(items):
             AlertBox(_('No favorites.')).show()
             return
 
-        favorite_menu = menu.Menu(_( 'View Favorites'), items,
-                                  reload_func = self.reload,
-                                  item_types = 'tv favorite menu')
+        favorite_menu = menu.Menu(_( 'View Favorites'), items, reload_func=self.reload, item_types='tv favorite menu')
         self.menuw = menuw
         rc.app(None)
         menuw.pushmenu(favorite_menu)
@@ -65,6 +66,7 @@ class ViewFavoritesItem(Item):
 
 
     def reload(self):
+        _debug_('reload()', 2)
         menuw = self.menuw
 
         menu = menuw.menustack[-1]
@@ -83,6 +85,7 @@ class ViewFavoritesItem(Item):
 
 
     def get_items(self):
+        _debug_('get_items()', 2)
         items = []
 
         (server_available, msg) = record_client.connectionTest()
@@ -97,7 +100,6 @@ class ViewFavoritesItem(Item):
             favorites.sort(f)
             for fav in favorites:
                 items.append(FavoriteItem(self, fav))
-
         else:
             AlertBox(_('Get favorites failed')+(': %s' % favorites)).show()
             return []
@@ -114,7 +116,9 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
 
     def __init__(self):
+        _debug_('PluginInterface.__init__()', 2)
         plugin.MainMenuPlugin.__init__(self)
 
     def items(self, parent):
+        _debug_('items(parent=%r)' % (parent,), 2)
         return [ ViewFavoritesItem(parent) ]

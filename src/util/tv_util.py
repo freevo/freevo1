@@ -55,25 +55,26 @@ def progname2favname(progname):
 
     The translation get rid of strange characters as e.g. german umlauts
     """
-    translation_table = \
-                            '                ' \
-                            + '                ' \
-                            + ' !"#$%&' + "'" + '()*+,-./' \
-                            + '0123456789:;<=>?' \
-                            + '@ABCDEFGHIJKLMNO' \
-                            + 'PQRSTUVWXYZ[\]^_' \
-                            + '`abcdefghijklmno' \
-                            + 'pqrstuvwxyz{|}~ ' \
-                            + '                ' \
-                            + '                ' \
-                            + '                ' \
-                            + '                ' \
-                            + 'AAAAAAACEEEEIIII' \
-                            + 'DNOOOOOxOUUUUYPS' \
-                            + 'aaaaaaaceeeeiiii' \
-                            + 'dnooooo/ouuuuypy'
+    translation_table \
+        = '                ' \
+        + '                ' \
+        + ' !"#$%&' + "'" + '()*+,-./' \
+        + '0123456789:;<=>?' \
+        + '@ABCDEFGHIJKLMNO' \
+        + 'PQRSTUVWXYZ[\]^_' \
+        + '`abcdefghijklmno' \
+        + 'pqrstuvwxyz{|}~ ' \
+        + '                ' \
+        + '                ' \
+        + '                ' \
+        + '                ' \
+        + 'AAAAAAACEEEEIIII' \
+        + 'DNOOOOOxOUUUUYPS' \
+        + 'aaaaaaaceeeeiiii' \
+        + 'dnooooo/ouuuuypy'
 
     favname = string.translate(progname,translation_table)
+    _debug_('progname2favname(progname=%r) favname=%r' % (progname, favname), 2)
     return favname
 
 
@@ -99,9 +100,8 @@ def getProgFilename(prog):
 
     filemask = config.TV_RECORD_FILE_MASK % filename_array
     filemask = time.strftime(filemask, time.localtime(prog.start))
-    filename = os.path.join(config.TV_RECORD_DIR,
-                            progname2filename(filemask).rstrip(' -_:') +
-                            config.TV_RECORD_FILE_SUFFIX)
+    filename = os.path.join(config.TV_RECORD_DIR, progname2filename(filemask).rstrip(' -_:') + \
+        config.TV_RECORD_FILE_SUFFIX)
     return filename
 
 

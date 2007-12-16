@@ -61,6 +61,7 @@ class ProgramItem(Item):
     Item class for program items in the tv guide
     """
     def __init__(self, parent, prog, context='guide'):
+        _debug_('ProgramItem.__init__(parent=%r, prog=%r, context=%r)' % (parent, prog, context), 2)
         Item.__init__(self, parent, skin_type='video')
         self.prog = prog
         self.context = context
@@ -107,6 +108,7 @@ class ProgramItem(Item):
 
 
     def actions(self):
+        _debug_('actions()', 2)
         return [( self.display_program , _('Display program') , 'MENU_SUBMENU')]
 
 
@@ -122,6 +124,7 @@ class ProgramItem(Item):
         This function checks if the program is already scheduled or a favorite
         and chooses the appropriate menu entries.
         """
+        _debug_('display_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
 
         #list of entries for the menu
         items = []
@@ -183,6 +186,7 @@ class ProgramItem(Item):
     ### Actions:
     def play_program(self, arg=None, menuw=None):
         """ Play """
+        _debug_('play_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         menuw.delete_menu()
         rc.post_event('PLAY')
 
@@ -190,12 +194,14 @@ class ProgramItem(Item):
         """
         View a full scrollable description of the program.
         """
+        _debug_('view_description(arg=%r, menuw=%r)' % (arg, menuw), 2)
         ShowProgramDetails(menuw, self.prog)
 
     def schedule_program(self, arg=None, menuw=None):
         """
         add a program to schedule
         """
+        _debug_('schedule_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         (result, msg) = record_client.scheduleRecording(self.prog)
         if result:
             if menuw:
@@ -213,6 +219,7 @@ class ProgramItem(Item):
         """
         remove a program from schedule
         """
+        _debug_('remove_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         (result, msg) = record_client.removeScheduledRecording(self.prog)
         if result:
             if menuw:
@@ -227,6 +234,7 @@ class ProgramItem(Item):
         """
         Find more of this program
         """
+        _debug_('find_more(arg=%r, menuw=%r)' % (arg, menuw), 2)
 
         _debug_(String('searching for: %s' % self.prog.title))
 
@@ -263,6 +271,7 @@ class ProgramItem(Item):
         """
         Add a program to favorites
         """
+        _debug_('add_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if menuw:
             # we do not want to return to this menu,
             # if we delete it here, then later back_one_menu
@@ -281,6 +290,7 @@ class ProgramItem(Item):
         """
         Edit the settings of a favorite
         """
+        _debug_('edit_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if menuw:
             # we do not want to return to this menu,
             # if we delete it here, then later back_one_menu
@@ -306,6 +316,7 @@ class FavoriteItem(Item):
     Item class for favorite items
     """
     def __init__(self, parent, fav, fav_action='edit'):
+        _debug_('FavoriteItem.__init__(parent=%r, fav=%r, fav_action=%r)' % (parent, fav, fav_action), 2)
         Item.__init__(self, parent, skin_type='video')
         self.fav   = fav
         self.name  = self.origname = fav.name
@@ -345,6 +356,7 @@ class FavoriteItem(Item):
 
 
     def actions(self):
+        _debug_('actions()', 2)
         return [( self.display_favorite , _('Display favorite') , 'MENU_SUBMENU')]
 
 
@@ -355,6 +367,7 @@ class FavoriteItem(Item):
         All attributes of a favorite can be edited here and in the end
         the user must select 'save changes' to finally create the favorite.
         """
+        _debug_('display_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
 
         ### create menu items for editing the favorites attributes
         items = []
@@ -404,6 +417,7 @@ class FavoriteItem(Item):
         This opens a input box to ask the user for a new name for this favorite.
         The default name of a favorite is the name of the program.
         """
+        _debug_('mod_name(arg=%r, menuw=%r)' % (arg, menuw), 2)
         self.menuw = menuw
         InputBox(text=_('Alter Name'), handler=self.alter_name,
                  width = osd.get_singleton().width - config.OSD_OVERSCAN_RIGHT - 20,
@@ -412,6 +426,7 @@ class FavoriteItem(Item):
 
     def alter_name(self, name):
         """ set the new name"""
+        _debug_('alter_name(name=%r)' % (name), 2)
         if name:
             self.name = self.fav.name = name.strip()
 
@@ -423,6 +438,7 @@ class FavoriteItem(Item):
         This opens a submenu where the user can change the settings for the
         duplication detection.
         """
+        _debug_('mod_dup(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
         items.append(menu.MenuItem('Allow Duplicates', action=self.alter_prop,
                                    arg=('dup', 'True')))
@@ -441,6 +457,7 @@ class FavoriteItem(Item):
         This opens a submenu where the user can choose if all episodes of
         a program should be recorded or only new ones.
         """
+        _debug_('mod_new(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
         items.append(menu.MenuItem('All Episodes', action=self.alter_prop,
                                    arg=('new', 'False')))
@@ -455,6 +472,7 @@ class FavoriteItem(Item):
 
     def mod_channel(self, arg=None, menuw=None):
         """Modify channel"""
+        _debug_('mod_channel(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
 
         items.append(menu.MenuItem('ANY CHANNEL', action=self.alter_prop,
@@ -477,6 +495,7 @@ class FavoriteItem(Item):
 
         Opens a submenu where the day of the week of a favorite can be configured.
         """
+        _debug_('mod_day(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
 
         items.append(menu.MenuItem(_('ANY DAY'), action=self.alter_prop,
@@ -498,6 +517,7 @@ class FavoriteItem(Item):
 
         Opens a submenu where the time of a favorite can be configured.
         """
+        _debug_('mod_time(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
 
         items.append(menu.MenuItem(_('ANY TIME'), action=self.alter_prop,
@@ -523,6 +543,7 @@ class FavoriteItem(Item):
 
         This function is where the properties of a favorite really are changed.
         """
+        _debug_('alter_prop(arg=%r, menuw=%r)' % (arg, menuw), 2)
         (prop, val) = arg
 
         if prop == 'channel':
@@ -575,6 +596,7 @@ class FavoriteItem(Item):
         """
         Save favorite
         """
+        _debug_('save_changes(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if self.fav_action == 'edit':
             # first we remove the old favorite
             (result, msg) = record_client.removeFavorite(self.origname)
@@ -617,6 +639,7 @@ class FavoriteItem(Item):
         """
         Remove favorite
         """
+        _debug_('rem_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
         name = self.origname
         (result, msg) = record_client.removeFavorite(name)
         if result:
@@ -630,12 +653,16 @@ class FavoriteItem(Item):
         else:
             # if all fails then we should show an error
             AlertBox(text=_('Remove Failed')+(': %s' % msg)).show()
+
+
+
 # Program Info screen
 class ShowProgramDetails:
     """
     Screen to show the details of the TV program
     """
     def __init__(self, menuw, prg):
+        _debug_('ShowProgramDetails.__init__(menuw=%r, prg=%r)' % (menuw, prg), 2)
         if prg is None:
             name = _('No Information Available')
             sub_title = ''
@@ -681,6 +708,7 @@ class ShowProgramDetails:
 
 
     def getattr(self, name):
+        _debug_('getattr(name=%r)' % (name,), 2)
         if name == 'title':
             return self.name
 
@@ -694,6 +722,7 @@ class ShowProgramDetails:
         """
         eventhandler
         """
+        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
         if event in ('MENU_SELECT', 'MENU_BACK_ONE_MENU'):
             rc.app(None)
             self.menuw.show()
