@@ -23,6 +23,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * New Alsa mixer 2 plug-in (F#1832948)
+ * New user events plug-in to run commands (F#1852190)
  * New French DVD trailer grabber (F#1841775)
  * New French movie cover grabber (F#1841768)
  * New gphoto plug-in, in contrib/runtime (F#1838260)
