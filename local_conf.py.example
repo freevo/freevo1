@@ -5,17 +5,29 @@
 # $Id$
 #
 # Notes:
-#    This file contains the freevo settings. To change the settings
-#    you can edit this file, or better, put a file named local_conf.py
-#    # in the same directory and add your changes there.  E.g.: when
-#    you # want a alsa as mplayer audio out, just put
-#    "MPLAYER_AO_DEV = # 'alsa9'" in local_conf.py
 #
-#    This is no normal config file, it's Python code. Because of that, you
-#    need to follow some rules to avoid crashes. The examples should explain
-#    the settings, but make sure a line starting with a variable has
-#    NO SPACES OR TABS at the beginning.
-#
+# This file contains your freevo settings, overriding the settings in
+# freevo_config.py. freevo_config.py, which is usually installed in
+# /usr/share/freevo, contains all the core settings.  To change the settings copy
+# this file to ~/.freevo/local_conf.py or /etc/freevo/local_conf.py
+# 
+# It does not contain all the possible settings that you can change, see
+# freevo_config.py for all the possible settings. Also it does not contain
+# settings for the plug-ins, plug-ins contain their configuration information and
+# the can be listed with:
+# | freevo plugins -l
+# and the settings can se shown with
+# | freevo plugins -i <name of plug-in>
+# 
+# E.g.: when you want a alsa as mplayer audio out, just put in local_conf.py:
+# | MPLAYER_AO_DEV = 'alsa9'
+# 
+# The vertical line indicates code.
+# 
+# This is no normal config file, it's Python code. Because of that, you
+# need to follow some rules to avoid crashes. The examples should explain
+# the settings, but make sure a line starting with a variable has NO SPACES OR
+# TABS at the beginning.
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -43,6 +55,8 @@ CONFIG_VERSION = 5.22
 # ======================================================================
 # General freevo settings:
 # ======================================================================
+
+# LOCALE='iso-8859-15'
 
 # AUDIO_DEVICE       = '/dev/dsp'      # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 # AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
@@ -1357,11 +1371,53 @@ CACHE_IMAGES = 1
 #            '-endpos %(seconds)s ' +        # only mencoder uses this so do it here.
 #            '-o %(filename)s')              # Filled in by Freevo
 
+# TV_VIDEO_GROUPS setting to handles multiple arbitrary groups of devices
+# for viewing or recording.  It is possible to have different Freevo
+# channels use different Video Groups.
+# 
+# See the wiki for more details:
+#   http://doc.freevo.org/MultiTunerConfig
+#   http://doc.freevo.org/Analoguemulti
+#
+# This example is when you have one IVTV type card installed
+#
+# TV_VIDEO_GROUPS = [
+#     VideoGroup(vdev=TV_DEVICE,
+#                adev=AUDIO_DEVICE,
+#                input_type='tuner 1',
+#                input_num=0,
+#                tuner_norm=CONF.tv,
+#                tuner_chanlist=CONF.chanlist,
+#                group_type = 'ivtv',
+#                desc='PVR-350 Video Group'),
+# ]
+#
+# This example is for two normal TV cards to allow you to use one card to
+# view a programme and the other card to record at the same time
+#
+# TV_VIDEO_GROUPS = [
+#     # Use this group for watching tv
+#     VideoGroup(vdev='/dev/video0',
+#                adev=None,
+#                input_type='tuner 1',
+#                tuner_norm=CONF.tv,
+#                tuner_chanlist=CONF.chanlist,
+#                desc='Watching Video Group',
+#                record_group=1),
+#     # Use this group for recording tv
+#     VideoGroup(vdev='/dev/video1',
+#                adev=None,
+#                input_type='tuner 1',
+#                tuner_norm=CONF.tv,
+#                tuner_chanlist=CONF.chanlist,
+#                desc='Recording Video Group',
+#                record_group=None),
+# ]
 
 #
 # Settings for ivtv based cards such as the WinTV PVR-250/350.
 #
-# XXX TODO: Add descriptions and valid settings for each option.
+# TODO: Add descriptions and valid settings for each option.
 # bitrate in bps
 # stream type
 # Options are: 0 (mpeg2_ps), 1 (mpeg2_ts), 2 (mpeg1), 3 (mpeg2_pes_av),
@@ -1386,64 +1442,6 @@ CACHE_IMAGES = 1
 #     'pulldown'      : 0,
 #     'stream_type'   : 10,
 # }
-
-#
-# TV_FREQUENCY_TABLE - This is only used when Freevo changes the channel natively.
-# This is only the case if you are using V4L2 and any of the following plugins:
-# timeshift, ivtv_record, ivtv_basic_tv.
-# For the standard frequancy tables see src/tv/freq.py.  To add your own just
-# replace tuner_id in the following example with a valid tuner id (ie: '5' or
-# 'BBC1') and a frequency in KHz.  You may have as many entries as you like,
-# anything here will simply override a corresponding entry in your standard
-# frequency table and you can also have entries here that are not present in
-# there.
-
-# TV_FREQUENCY_TABLE = {
-#     'tuner_id'   :    55250,
-# }
-
-
-# TV_VIDEO_GROUPS setting to handles multiple arbitrary groups of devices
-# for viewing or recording.  It is possible to have different Freevo
-# channels use different Video Groups.
-# 
-# This example is when you have one IVTV type card installed
-#
-# TV_VIDEO_GROUPS = [
-#     VideoGroup(vdev=TV_DEVICE,
-#                adev=AUDIO_DEVICE,
-#                input_type='tuner',
-#                input_num=0,
-#                tuner_norm=CONF.tv,
-#                tuner_chanlist=CONF.chanlist,
-#                group_type = 'ivtv',
-#                desc='PVR-350 Video Group'),
-# ]
-#
-# This example is for two normal TV cards to allow you to use one card to
-# view a programme and the other card to record at the same time
-# See the wiki for more details:
-#   http://doc.freevo.org/MultiTunerConfig
-#   http://doc.freevo.org/Analoguemulti
-#
-# TV_VIDEO_GROUPS = [
-#     # Use this group for watching tv
-#     VideoGroup(vdev=TV_DEVICE,
-#                adev=AUDIO_DEVICE,
-#                input_type='tuner',
-#                tuner_norm=CONF.tv,
-#                tuner_chanlist=CONF.chanlist,
-#                desc='Watching Video Group',
-#                record_group=1),
-#     # Use this group for recording tv
-#     VideoGroup(vdev='/dev/video1',
-#                adev=AUDIO_DEVICE,
-#                input_type='tuner',
-#                tuner_norm=CONF.tv,
-#                tuner_chanlist=CONF.chanlist,
-#                desc='Recording Video Group',
-#                record_group=None),
-# ]
 
 
 #
@@ -1505,6 +1503,22 @@ CACHE_IMAGES = 1
 # TV_CHANNELS = None
 
 #
+# TV_FREQUENCY_TABLE - This is only used when Freevo changes the channel natively.
+# This is only the case if you are using V4L2 and any of the following plugins:
+# timeshift, ivtv_record, ivtv_basic_tv.
+# For the standard frequancy tables see src/tv/freq.py.  To add your own just
+# replace tuner_id in the following example with a valid tuner id (ie: '5' or
+# 'BBC1') and a frequency in KHz.  You may have as many entries as you like,
+# anything here will simply override a corresponding entry in your standard
+# frequency table and you can also have entries here that are not present in
+# there.
+
+# TV_FREQUENCY_TABLE = {
+#     'tuner_id'   :    55250,
+# }
+
+
+#
 # Program to grab xmltv listings. To get a grabber, you need to download
 # xmltv. A possible value for users in the USA is tv_grab_na
 # Use the tv_grab helper to grab the listings and cache them. Start
@@ -1534,22 +1548,6 @@ CACHE_IMAGES = 1
 # COMMDETECTSERVER_IP   = 'localhost'
 # COMMDETECTSERVER_PORT = 6667
 
-# ======================================================================
-# Freevo xmradio plug-in settings:
-# ======================================================================
-# plugin.activate('audio.xmradio')
-# XM_CMD='mplayer'
-# XM_USER='your email address'
-# XM_PASS='your password'
-# XM_RATE='high'
-# XM_STATIONS = [
-#     ('The 60s', '6'),
-#     ('The 70s', '7'),
-#     ('The 80s', '8'),
-#     ('The 90s', '9'),
-#     ...etc...
-#     ('High Voltage', '202')
-# ]
 
 # ======================================================================
 # Freevo builtin rss server settings:
@@ -1659,8 +1657,6 @@ CACHE_IMAGES = 1
 # to those logos here
 # TV_LOGOS = OS_CACHEDIR + '/xmltv/logos'
 
-# LOCALE='iso-8859-15'
-
 # ======================================================================
 # Idlebar and plugins
 #
@@ -1684,43 +1680,17 @@ CACHE_IMAGES = 1
 # %Y - Year with century as a decimal number.
 # ======================================================================
 # plugin.activate('idlebar')
-# plugin.activate('idlebar.tv', level = 20)
-# plugin.activate('idlebar.cdstatus', level = 25)
-# plugin.activate('idlebar.diskfree', level = 30)
-# plugin.activate('idlebar.clock', level = 50)
+# plugin.activate('idlebar.tv', level=20)
+# plugin.activate('idlebar.cdstatus', level=25)
+# plugin.activate('idlebar.diskfree', level=30)
+# plugin.activate('idlebar.clock', level=50)
 # CLOCK_FORMAT = '%a %d %H:%M'
 #
-# settings for the idlebar.diskfree plug-in, in Gigabytes
-# DISKFREE_VERY_LOW = 8 # less than this shows a red bar
-# DISKFREE_LOW = 20     # less than this shows an orange bar
-#
-# display proc-stats, CPU and RAM usage
-# plugin.activate('idlebar.system.procstats',level=20)
-
-# Amazon coversearch seems to request the covers in one locale and get the data
-# in another encoding. Locale must be one of: de, jp, uk, us
-#
-# AMAZON_LOCALE = 'us'
-# AMAZON_QUERY_ENCODING = 'latin-1'
-# plugin.activate('audio.coversearch')
-
-# plugin.activate('audio.album_tree')
-# see http://freevo.sourceforge.net/cgi-bin/doc/PluginAudioAlbumTree
-# AUDIO_ALBUM_TREE_SPEC = []
-# AUDIO_ALBUM_TREE_SPEC.append({'name':'Artist/Album/Track'
-#      ,'spec':["artist","album","track||'-'||title"]
-#      ,'alt_grouping':[None,None,'track']
-#     })
-# AUDIO_ALBUM_TREE_SPEC.append({'name':'(A-Z)/Artist/Album-Year/Track'
-#     ,'spec':["upper(substr(artist,0,1))"
-#             ,"artist","album||'-'||year"
-#             ,"track||'-'||title"]
-#     ,'alt_grouping':[None,None,'year||album','track']
-#     })
 
 #
 # Debugging and logging settings
 #
+
 # logging can be one of:
 # CRITICAL, ERROR, WARNING, INFO, DEBUG or NOTSET
 #
@@ -1735,5 +1705,3 @@ CACHE_IMAGES = 1
 # DEBUG_CHILDAPP = 1
 # timing messages
 # DEBUG_TIME = 0
-
-
