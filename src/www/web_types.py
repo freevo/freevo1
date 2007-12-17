@@ -166,7 +166,7 @@ class HTMLResource:
         # now we can start to create the header:
 
         # doc type
-        self.res += '<?xml version="1.0" encoding="'+ config.encoding +'"?>\n'
+        #self.res += '<?xml version="1.0" encoding="'+ config.encoding +'"?>\n'
         self.res += '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" '
         self.res += '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n'
 
@@ -179,7 +179,7 @@ class HTMLResource:
         self.res += '\t<link rel="shortcut icon" href="/favicon.ico" />\n'
         # css style sheet
         if style != None:
-            self.res += '\t<link rel="stylesheet" href="styles/main.css" type="text/css" />\n'
+            self.res += '\t<link rel="stylesheet" href="styles/main.css" type="text/css" media="screen" />\n'
         # java script
         if script != None:
             self.res += '\t<script language="JavaScript" type="text/JavaScript" src="'+script+'"></script>\n'
@@ -444,7 +444,7 @@ class HTMLResource:
         var width = 0;
         var height = 0;
         var max_width = screen.availWidth;
-        var max_height = screen.availHeight - 100;
+        var max_height = screen.availHeight - 250;
         var client_width = 0;
         var client_height = 0;
 
@@ -456,37 +456,7 @@ class HTMLResource:
                 getNewSize();
             }
             var params="toolbar=no,location=no,status=no,menubar=yes,resizable=no,top=0,left=0,width="+width+",height="+height;
-            foto = window.open("fileinfo.rpy?img="+loc+"&w="+width+"&h="+height,"Images",params);
-
-            // Some funky code here
-            // 1. First we resize the window to the size we want
-            // 2. Calculate the client area of this resized window
-            // 3. Subtract the client area from the actual size
-            // 4. Add the difference to the window size
-
-            // Step 1. First we resize the window to the size we want
-            foto.resizeTo(width, height);
-
-            // Step 2. Calculate the client area of this resized window
-            if (parseInt(navigator.appVersion) > 3) {
-                if (navigator.appName=="Netscape") {
-                    client_width = foto.innerWidth;
-                    client_height = foto.innerHeight;
-                }
-                if (navigator.appName.indexOf("Microsoft") != -1) {
-                    client_width = foto.body.offsetWidth;
-                    client_height = foto.body.offsetHeight;
-                }
-            }
-
-            // Step 3. Subtract the client area from the actual size
-            var diff_width = width - client_width;
-            var diff_height = height - client_height;
-
-            // Step 4. Add the difference to the window size
-            foto.resizeBy(diff_width, diff_height);
-
-            foto.focus();
+	    foto = Lightbox.show(''+loc+'', '', 'width='+width+', height='+height+'');
          }
 
          function getNewSize(){

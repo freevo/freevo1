@@ -93,3 +93,7 @@ function SelectFile(full_file_name,update_control) {
     
 }
 
+
+function FolderChange(browse_folder, browse_area) {
+  getFileList(browse_area,"/home/dlocke")
+}

@@ -1,5 +1,5 @@
+#!/usr/bin/python
 # -*- coding: iso-8859-1 -*-
-# vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
 # proginfo.rpy - Dynamically update program info popup box.
 # -----------------------------------------------------------------------
@@ -112,20 +112,7 @@ class FileInfoResource(FreevoResource):
             ) % ( Unicode(title.replace("'", "\\'")),
                   Unicode(info.replace("'", "\\'")),
                   "function() { window.open(\"%s\"); }" % (urllib.quote(file_link)),
-                  '\
-                  function() { \
-                      vlc_window = window.open(""); \
-                      vlc_window.document.write(\'<html><head><title>VLC Player</title></head><body>\'); \
-                      vlc_window.document.write(\'<embed type="application/x-vlc-plugin" name="video" autoplay="yes" \'); \
-                      vlc_window.document.write(\'width="640" height="480" target="http://\'); \
-                      vlc_window.document.write(location.hostname + \':\' + location.port + \'/' + urllib.quote(file_link) + '"/><br/>\'); \
-                      vlc_window.document.write(\'<a href="javascript:;" onclick="document.video.play()">Play</a>&nbsp\'); \
-                      vlc_window.document.write(\'<a href="javascript:;" onclick="document.video.pause()">Pause</a>&nbsp\'); \
-                      vlc_window.document.write(\'<a href="javascript:;" onclick="document.video.stop()">Stop</a>&nbsp\'); \
-                      vlc_window.document.write(\'<a href="javascript:;" onclick="document.video.fullscreen()">Fullscreen</a>\'); \
-                      vlc_window.document.write(\'</body></html>\'); \
-                  }\
-                  '
+                  "function() { window.open(\"vlcwin.rpy?dir=%s\"); }" % (urllib.quote(file_link))
             )
 
         elif img:

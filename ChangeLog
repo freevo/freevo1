@@ -17,6 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * New changed the event and timer handling to use kaa notifier and kaa rpc
+ * New webserver slimbox interface to media (F#1850404)
  * Updated mplayervis for pygoom-2k4 (F#1846493)
 
 == Release 1.7.5 (2007-12-22) ==
