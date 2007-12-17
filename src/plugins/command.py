@@ -1,8 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# command.py - a simple plugin to run arbitrary commands from a directory.
-#               it determines success or failure of command based on its
-#               exit status.
+# a simple plugin to run arbitrary commands from a directory.
+# it determines success or failure of command based on its exit status.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -361,9 +360,10 @@ class PluginInterface(plugin.MainMenuPlugin):
         return [ CommandMenuItem(parent) ]
 
     def config(self):
-        return [ ('COMMANDS_DIR', '/usr/local/bin', 'The directory to show commands from.'),
-                 ('COMMAND_SPAWN_WM', '', 'command to start window manager.'),
-                 ('COMMAND_KILL_WM', '', 'command to stop window manager.'),
+        return [
+            ('COMMANDS_DIR', '/usr/local/bin', 'The directory to show commands from.'),
+            ('COMMAND_SPAWN_WM', '', 'command to start window manager.'),
+            ('COMMAND_KILL_WM', '', 'command to stop window manager.'),
         ]
 
 
@@ -375,19 +375,20 @@ class fxdhandler(plugin.Plugin):
     to activate it, put the following in your local_conf.py:
     plugin.activate('command.fxdhandler')
 
-    Sample fxd file starting mozilla:
-    <?xml version="1.0" ?>
-    <freevo>
-      <command title="Mozilla">
-        <cmd>/usr/local/bin/mozilla</cmd>
-        <stoposd />  <!-- stop osd before starting -->
-        <spawnwm />  <!-- start windowmanager -->
-        <nostdout /> <!-- do not show stdout on exit -->
-        <info>
-          <description>Unleash mozilla on the www</description>
-        </info>
-      </command>
-    </freevo>
+    Sample fxd file starting mozilla::
+
+        <?xml version="1.0" ?>
+        <freevo>
+          <command title="Mozilla">
+            <cmd>/usr/local/bin/mozilla</cmd>
+            <stoposd />  <!-- stop osd before starting -->
+            <spawnwm />  <!-- start windowmanager -->
+            <nostdout /> <!-- do not show stdout on exit -->
+            <info>
+              <description>Unleash mozilla on the www</description>
+            </info>
+          </command>
+        </freevo>
 
     Putting a <command> in a folder.fxd will add this command to the list of
     item actions for that directory.
@@ -398,6 +399,8 @@ class fxdhandler(plugin.Plugin):
         plugin.register_callback('fxditem', [], 'command', fxdparser)
         plugin.Plugin.__init__(self)
 
+
+
 class CommandMainMenuItem(plugin.MainMenuPlugin):
     """
     A small plugin to put a command in the main menu.
@@ -405,7 +408,7 @@ class CommandMainMenuItem(plugin.MainMenuPlugin):
     All output is logged in the freevo logdir.
     to activate it, put the following in your local_conf.py:
 
-    plugin.activate('command.CommandMainMenuItem', args=(/usr/local/freevo_data/Commands/Mozilla.fxd', ), level=45)
+    | plugin.activate('command.CommandMainMenuItem', args=(/usr/local/freevo_data/Commands/Mozilla.fxd',), level=45)
 
     The level argument is used to influence the placement in the Main Menu.
     consult freevo_config.py for the level of the other Menu Items if you
@@ -415,9 +418,11 @@ class CommandMainMenuItem(plugin.MainMenuPlugin):
         plugin.MainMenuPlugin.__init__(self)
         self.cmd_xml = commandxmlfile
 
+
     def config(self):
         return [ ('COMMAND_SPAWN_WM', '', 'command to start window manager.'),
                  ('COMMAND_KILL_WM', '', 'command to stop window manager.') ]
+
 
     def items(self, parent):
         command_items = []

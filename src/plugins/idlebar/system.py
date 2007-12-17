@@ -65,6 +65,14 @@ class procstats(IdleBarPlugin):
         self.lastused = 0
         self.lastuptime = 0
 
+
+    def config(self):
+        return [
+            ( 'SENSORS_PLATFORM_PATH', '/sys/devices/platform', 'path to the sensor devices' ),
+            ( 'SENSORS_I2CDEV_PATH', '/sys/bus/i2c/devices', 'path to the i2c devices' ),
+        ]
+
+
     def getStats(self):
         """
         Don't get the stats for each update
@@ -197,11 +205,6 @@ class sensors(IdleBarPlugin):
             self.hotstack = hotstack
             self.washot = False
 
-        def config(self):
-            return [
-                ( 'SENSORS_PLATFORM_PATH', '/sys/devices/platform', 'path to the sensor devices' ),
-                ( 'SENSORS_I2CDEV_PATH', '/sys/bus/i2c/devices', 'path to the i2c devices' ),
-            ]
 
         def temp(self):
             def temp_compute (rawvalue):

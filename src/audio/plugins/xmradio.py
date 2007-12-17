@@ -155,5 +155,13 @@ class PluginInterface(plugin.MainMenuPlugin):
     | ]
     """
 
+    def config(self):
+        return [
+            ('XM_USER', None, 'your email address'),
+            ('XM_PASS', None, 'your xmradio password'),
+            ('XM_RATE', 'high', 'rating for xmradio'),
+            ('XM_STATIONS', [], 'Your list of xmradio stations'),
+        ]
+
     def items(self, parent):
         return [ XmRadioMainMenuItem(parent) ]

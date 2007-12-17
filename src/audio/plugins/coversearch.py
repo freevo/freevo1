@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# coverserarch.py - Plugin for album cover support
+# Plugin for album cover support
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -105,6 +105,13 @@ class PluginInterface(plugin.ItemPlugin):
             return
 
         plugin.ItemPlugin.__init__(self)
+
+
+    def config(self):
+        return [
+            ('AMAZON_LOCALE', 'us', 'The location is one of: de, jp, uk, us'),
+            ('AMAZON_QUERY_ENCODING', 'latin-1', 'The character encoding of web pages'),
+        ]
 
 
     def actions(self, item):
@@ -294,8 +301,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         #filename = os.path.splitext(self.item.filename)[0]
         if self.item.type == 'audiocd':
-            filename = '%s/disc/metadata/%s.jpg' % (config.OVERLAY_DIR,
-                                                    self.item.info['id'])
+            filename = '%s/disc/metadata/%s.jpg' % (config.OVERLAY_DIR, self.item.info['id'])
         elif self.item.type == 'dir':
             filename = os.path.join(self.item.dir, 'cover.jpg')
         else:
