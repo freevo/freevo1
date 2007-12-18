@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# oneclick.py - a plugin to obtain detailed weather forecast information
+# A plugin to obtain detailed weather forecast information
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -138,7 +138,7 @@ def wget(url):
     _debug_('wget(%s)' % (url), 2)
     txdata = None
     txheaders = {
-        'User-Agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7'
+        'User-Agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11'
     }
     print 'getting url %r...' % (url)
     req = urllib2.Request(url, txdata, txheaders)

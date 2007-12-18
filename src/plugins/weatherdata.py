@@ -1,5 +1,31 @@
-#!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
+# -----------------------------------------------------------------------
+# weather.py - IdleBarplugin for weather
+# -----------------------------------------------------------------------
+# $Id$
 #
+# -----------------------------------------------------------------------
+# Freevo - A Home Theater PC framework
+# Copyright (C) 2003 Krister Lagerstrom, et al.
+# Please see the file freevo/Docs/CREDITS for a complete list of authors.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+# CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# -----------------------------------------------------------------------
+
+
 # using Firefox 1click weather
 # wget 'http://ff.1click.weather.com/weather/local/SZXX0033?dayf=5&unit=m'
 # wget 'http://ff.1click.weather.com/weather/local/SZXX0033?cc=*&unit=m'
@@ -15,7 +41,8 @@ else:
 
 
 class WeatherData:
-    """Main weather data class
+    """
+    Main weather data class
     """
     def __init__(self, xml):
         self.xml = xml
@@ -40,16 +67,18 @@ class WeatherData:
 
 #391 lines
     class Loc:
-        """ Location information
-        <loc id="SZXX0033">
-          <dnam>Zurich, Switzerland</dnam>
-          <tm>7:46 AM</tm>
-          <lat>47.38</lat>
-          <lon>8.54</lon>
-          <sunr>6:57 AM</sunr>
-          <suns>7:47 PM</suns>
-          <zone>2</zone>
-        </loc>
+        """
+        Location information::
+
+            <loc id="SZXX0033">
+              <dnam>Zurich, Switzerland</dnam>
+              <tm>7:46 AM</tm>
+              <lat>47.38</lat>
+              <lon>8.54</lon>
+              <sunr>6:57 AM</sunr>
+              <suns>7:47 PM</suns>
+              <zone>2</zone>
+            </loc>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -77,16 +106,18 @@ class WeatherData:
             return 'Loc'
 
     class Head:
-        """ Header information
-        <head>
-          <locale>en_US</locale>
-          <form>MEDIUM</form>
-          <ut>C</ut>
-          <ud>km</ud>
-          <us>km/h</us>
-          <up>mb</up>
-          <ur>mm</ur>
-        </head>
+        """
+        Header information::
+
+            <head>
+              <locale>en_US</locale>
+              <form>MEDIUM</form>
+              <ut>C</ut>
+              <ud>km</ud>
+              <us>km/h</us>
+              <up>mb</up>
+              <ur>mm</ur>
+            </head>
         """
 
         def __init__(self, tree):
@@ -114,15 +145,17 @@ class WeatherData:
 
 
     class Eloc:
-        """ Extended location
-        <eloc id="SZXX0033">
-          <dma>N/A</dma>
-          <rgn4>N/A</rgn4>
-          <rgn9>N/A</rgn9>
-          <st>*</st>
-          <ctry>SZ</ctry>
-          <zip>N/A</zip>
-        </eloc>
+        """
+        Extended location::
+
+            <eloc id="SZXX0033">
+              <dma>N/A</dma>
+              <rgn4>N/A</rgn4>
+              <rgn9>N/A</rgn9>
+              <st>*</st>
+              <ctry>SZ</ctry>
+              <zip>N/A</zip>
+            </eloc>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -148,26 +181,28 @@ class WeatherData:
             return 'Eloc'
 
     class Cc:
-        """ Current conditions
-        <cc>
-          <lsup>9/11/07 7:20 AM Local Time</lsup>
-          <obst>Zurich, Switzerland</obst>
-          <tmp>9</tmp>
-          <flik>9</flik>
-          <t>Partly Cloudy</t>
-          <icon>30</icon>
-          <bar>
-          </bar>
-          <wind>
-          </wind>
-          <hmid>93</hmid>
-          <vis>10.0</vis>
-          <uv>
-          </uv>
-          <dewp>8</dewp>
-          <moon>
-          </moon>
-        </cc>
+        """
+        Current conditions::
+
+            <cc>
+              <lsup>9/11/07 7:20 AM Local Time</lsup>
+              <obst>Zurich, Switzerland</obst>
+              <tmp>9</tmp>
+              <flik>9</flik>
+              <t>Partly Cloudy</t>
+              <icon>30</icon>
+              <bar>
+              </bar>
+              <wind>
+              </wind>
+              <hmid>93</hmid>
+              <vis>10.0</vis>
+              <uv>
+              </uv>
+              <dewp>8</dewp>
+              <moon>
+              </moon>
+            </cc>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -207,10 +242,12 @@ class WeatherData:
 
     class Bar:
         """
-        <bar>
-          <r>1020.0</r>
-          <d>rising</d>
-        </bar>
+        Barometer::
+
+            <bar>
+              <r>1020.0</r>
+              <d>rising</d>
+            </bar>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -228,10 +265,12 @@ class WeatherData:
 
     class Uv:
         """
-        <uv>
-          <i>0</i>
-          <t>Low</t>
-        </uv>
+        Ultra-violet::
+
+            <uv>
+              <i>0</i>
+              <t>Low</t>
+            </uv>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -249,10 +288,12 @@ class WeatherData:
 
     class Moon:
         """
-        <moon>
-          <icon>29</icon>
-          <t>New</t>
-        </moon>
+        Moon phase::
+
+            <moon>
+              <icon>29</icon>
+              <t>New</t>
+            </moon>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -269,12 +310,14 @@ class WeatherData:
 
 
     class DayF:
-        """ Day forecast
-        <dayf>
-          <lsup>9/11/07 2:27 AM Local Time</lsup>
-          <day d="0" t="Tuesday" dt="Sep 11">
-          </day>
-        </dayf>
+        """
+        Day forecast::
+
+            <dayf>
+              <lsup>9/11/07 2:27 AM Local Time</lsup>
+              <day d="0" t="Tuesday" dt="Sep 11">
+              </day>
+            </dayf>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -290,15 +333,17 @@ class WeatherData:
             return 'DayF'
 
     class Day:
-        """ Day information
-        <day d="4" t="Saturday" dt="Sep 15">
-          <hi>19</hi>
-          <low>12</low>
-          <sunr>7:03 AM</sunr>
-          <suns>7:39 PM</suns>
-          <part p="d">
-          </part>
-        </day>
+        """
+        Day information::
+
+            <day d="4" t="Saturday" dt="Sep 15">
+              <hi>19</hi>
+              <low>12</low>
+              <sunr>7:03 AM</sunr>
+              <suns>7:39 PM</suns>
+              <part p="d">
+              </part>
+            </day>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -326,16 +371,18 @@ class WeatherData:
             return 'Day'
 
     class Part:
-        """ Part of a day information
-        <part p="n">
-          <icon>29</icon>
-          <t>Partly Cloudy</t>
-          <wind>
-          </wind>
-          <bt>P Cloudy</bt>
-          <ppcp>10</ppcp>
-          <hmid>82</hmid>
-        </part>
+        """
+        Part of a day information::
+
+            <part p="n">
+              <icon>29</icon>
+              <t>Partly Cloudy</t>
+              <wind>
+              </wind>
+              <bt>P Cloudy</bt>
+              <ppcp>10</ppcp>
+              <hmid>82</hmid>
+            </part>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -360,13 +407,15 @@ class WeatherData:
             return 'Part'
 
     class Wind:
-        """ Wind information
-        <wind>
-          <s>6</s>
-          <gust>N/A</gust>
-          <d>109</d>
-          <t>ESE</t>
-        </wind>
+        """
+        Wind information::
+
+            <wind>
+              <s>6</s>
+              <gust>N/A</gust>
+              <d>109</d>
+              <t>ESE</t>
+            </wind>
         """
         def __init__(self, tree):
             self.tree = tree
@@ -387,7 +436,8 @@ class WeatherData:
 
 
 def parse(obj):
-    """ Parse an object using the tree information and build a class hierarchy.
+    """
+    Parse an object using the tree information and build a class hierarchy.
     For list items add to a list of the name with a 's' appended
 
     This code is a little bit complex :)
