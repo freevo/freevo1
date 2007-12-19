@@ -37,6 +37,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated mplayer to allow the volume events to passed over and shown (F#1834486)
  * Updated webserver media library (F#1835346)
  * Deleted plug-in audio.mplayervbr (F#1848097)
+ * Deleted tv.program_display (F#1853488)
  * Renamed plug-in audio.playlist to audio.playlists (B#1834140)
  * Fixed audioitem not displaying the year as a result of new metadata code (B#1838167)
  * Fixed audiodiskitem not playing a cd when inserted (B#1830000)
