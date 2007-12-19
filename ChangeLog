@@ -18,6 +18,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
  * New changed the event and timer handling to use kaa notifier and kaa rpc
  * New webserver slimbox interface to media (F#1850404)
+ * Updated French translation (F#1853455)
  * Updated mplayervis for pygoom-2k4 (F#1846493)
 
 == Release 1.7.5 (2007-12-22) ==
@@ -31,7 +32,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * New pygoom module for goom-2k4, in contrib/runtime (F#1846492)
  * New somafm web radio fxd file and images added (F#1845786)
  * New six channel mixer and idlebar plug-in (F#1833749)
- * Updated French translation (F#1832751)
+ * Updated French translation (F#1832751,F#1853454)
  * Updated idlebar weather plug-in not to block the main loop (F#1821809)
  * Updated mediainfo to stop caching of hidden directories (F#1849569)
  * Updated mplayer to allow the volume events to passed over and shown (F#1834486)
