@@ -147,7 +147,7 @@ class evdev:
         '''
         '''
         buf = ioctl(self._fd, EVIOCGVERSION, "    ")
-        l, =  struct.unpack("L", buf)
+        l, =  struct.unpack("I", buf)
         return (l >> 16, (l >> 8) & 0xff, l & 0xff)
 
     def get_id(self):
@@ -182,7 +182,7 @@ class evdev:
         l = ((keys[-1] + 7) / 8 + 3) & ~0x3
 
         buf = ioctl(self._fd, EVIOCGBIT(0, l), " " * l)
-        array = struct.unpack("L" * (l/4), buf)
+        array = struct.unpack("I" * (l/4), buf)
 
         self._events = {}
 
@@ -203,7 +203,7 @@ class evdev:
             except IOError:
                 # No events for a type results in Errno 22 (EINVAL)
                 break
-            subarray = struct.unpack("L" * (sl/4), buf)
+            subarray = struct.unpack("I" * (sl/4), buf)
 
             for j in xrange(sl * 8):
                 if not subarray[j / 32] & (1 << j % 32):
@@ -224,13 +224,13 @@ class evdev:
         '''
         '''
         try:
-            buf = os.read(self._fd, 16)
+            buf = os.read(self._fd, struct.calcsize("LLHHi"))
         except OSError, (errno, str):
             if errno == 11:
                 return None
             raise
 
-        sec, usec, type, code, value = struct.unpack("LLHHl", buf)
+        sec, usec, type, code, value = struct.unpack("LLHHi", buf)
 
         return (float(sec) + float(usec)/1000000.0, _types[type], _events[type][code], value)
 
