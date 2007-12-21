@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: freevo-1.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-12 21:25+0100\n"
-"PO-Revision-Date: 2007-11-14 21:27+0100\n"
-"Last-Translator: Duncan Webb <duncan@linuxowl.com>\n"
+"PO-Revision-Date: 2007-12-20 19:40+0200\n"
+"Last-Translator: naudefj <naudefj@telkomsa.net>\n"
 "Language-Team: Afrikaans http://translate.org.za/\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -55,7 +55,7 @@ msgstr "Datum"
 
 #: ../freevo_config.py:1174
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: ../freevo_config.py:1175
 msgid "Software"
@@ -75,7 +75,7 @@ msgstr "Verken lêers"
 #: image/plugins/apod.py:50
 #: image/plugins/apod.py:51
 msgid "APOD"
-msgstr ""
+msgstr "APOD"
 
 #: image/plugins/apod.py:61
 msgid "Current Picture"
@@ -111,7 +111,7 @@ msgstr "gids %s bestaan nie."
 #: image/plugins/apod.py:131
 #, python-format
 msgid "directory %s must be able to be read, written to and executed by the user running freevo."
-msgstr "Die reevo gebruiker moet gids %s kan lees, skryf en programme uitvoer"
+msgstr "die freevo gebruiker moet gids %s kan lees, skryf en programme uitvoer"
 
 #: image/viewer.py:126
 #, python-format
@@ -160,28 +160,28 @@ msgstr ""
 
 #: www/htdocs/help/index.rpy:55
 msgid "Plugin List"
-msgstr ""
+msgstr "Plugin Lys"
 
 #: www/htdocs/help/index.rpy:56
 msgid "FXD files"
-msgstr ""
+msgstr "FXD Lêers"
 
 #: www/htdocs/help/index.rpy:57
 msgid "Skinning Information"
-msgstr ""
+msgstr "Skinning Inligting"
 
 #: www/htdocs/help/index.rpy:58
 msgid "Plugin Writing Howto"
-msgstr ""
+msgstr "Skryf Plugins Howto"
 
 #: www/htdocs/help/howto.rpy:45
 #: www/htdocs/help/howto.rpy:46
 msgid "Freevo Installation HOWTO"
-msgstr ""
+msgstr "Freevo Installasie HOWTO"
 
 #: www/htdocs/help/howto.rpy:46
 msgid "Build your own media box with Freevo and Linux"
-msgstr ""
+msgstr "Bou jou eie mediasentrum met Freevo en Linux"
 
 #: www/htdocs/help/howto.rpy:48
 #: www/htdocs/help/howto.rpy:49
@@ -190,7 +190,7 @@ msgstr ""
 
 #: www/htdocs/help/howto.rpy:49
 msgid "Writing your own plugins for Freevo"
-msgstr ""
+msgstr "Skryf jou eie plugins vir Freevo"
 
 #: www/htdocs/help/howto.rpy:84
 #: www/htdocs/help/doc.rpy:61
@@ -224,7 +224,7 @@ msgstr "FOUT"
 
 #: www/htdocs/help/howto.rpy:84
 msgid "unable to load html files"
-msgstr ""
+msgstr "kan nie HTML lêer laai nie"
 
 #: www/htdocs/help/howto.rpy:85
 #: www/htdocs/help/doc.rpy:62
@@ -238,7 +238,7 @@ msgstr ""
 #: www/htdocs/help/plugins.rpy:60
 #: www/htdocs/help/plugins.rpy:79
 msgid "Freevo Plugin List"
-msgstr ""
+msgstr "Freevo Plugin Lys"
 
 #: www/htdocs/help/plugins.rpy:89
 #: www/htdocs/help/plugins.rpy:97
@@ -258,7 +258,7 @@ msgstr "Freevo Dokumentasie"
 #: www/htdocs/help/doc.rpy:61
 #, python-format
 msgid "unable to load %s.html"
-msgstr ""
+msgstr "kan nie %s.html laai nie"
 
 #: www/htdocs/index.rpy:47
 msgid "Welcome"
@@ -344,43 +344,43 @@ msgstr "Record server is unavailable"
 
 #: www/htdocs/manualrecord.rpy:115
 msgid "Manual Recorded"
-msgstr "Handmatige opname"
+msgstr "Handmatige opnames"
 
 #: www/htdocs/manualrecord.rpy:124
 #: tv/plugins/manual_record.py:374
 msgid "start time is not before stop time."
-msgstr ""
+msgstr "begin tyd nie voor eind tyd nie."
 
 #: www/htdocs/manualrecord.rpy:127
 #: tv/plugins/manual_record.py:365
 #, python-format
 msgid "Program would record for more than %d days!"
-msgstr "Program would record for more than %d days!"
+msgstr "Program sal meer as %d dae lang opneem!"
 
 #: www/htdocs/manualrecord.rpy:129
 #: tv/plugins/manual_record.py:369
 msgid "Program would record for more than 1 day!"
-msgstr "Program would record for more than 1 day!"
+msgstr "Program sal meer as 1 dag lank opneem!"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
 msgid "Jan"
-msgstr ""
+msgstr "Jan"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
 msgid "Feb"
-msgstr ""
+msgstr "Feb"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
 msgid "Mar"
-msgstr ""
+msgstr "Mar"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
 msgid "Apr"
-msgstr ""
+msgstr "Apr"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
@@ -390,22 +390,22 @@ msgstr "Mei"
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
 msgid "Jun"
-msgstr ""
+msgstr "Jun"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
 msgid "Jul"
-msgstr ""
+msgstr "Jul"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
 msgid "Aug"
-msgstr ""
+msgstr "Aug"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
 msgid "Sep"
-msgstr ""
+msgstr "Sep"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
@@ -415,7 +415,7 @@ msgstr "Okt"
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
 msgid "Nov"
-msgstr ""
+msgstr "Nov"
 
 #: www/htdocs/manualrecord.rpy:143
 #: tv/plugins/manual_record.py:72
@@ -472,9 +472,8 @@ msgid "viewlog"
 msgstr ""
 
 #: www/htdocs/viewlogfile.rpy:131
-#, fuzzy
 msgid "View Logs"
-msgstr "Wys TV Gids"
+msgstr "Wys Loglêer"
 
 #: www/htdocs/record.rpy:85
 #: www/htdocs/edit_favorite.rpy:80
@@ -521,9 +520,8 @@ msgid "Remove"
 msgstr "Verwyder"
 
 #: www/htdocs/pluginconfig.rpy:367
-#, fuzzy
 msgid "Config Plugins"
-msgstr "Config Menu"
+msgstr "Konfigureer Plugins"
 
 #: www/htdocs/edit_favorite.rpy:53
 #: www/htdocs/edit_favorite.rpy:114
@@ -546,7 +544,7 @@ msgstr "Naam van gunsteling"
 #: plugins/lcd.py:691
 #: share/skins/main/basic.fxd:646
 msgid "Program"
-msgstr ""
+msgstr "Program"
 
 #: www/htdocs/edit_favorite.rpy:131
 #: www/htdocs/favorites.rpy:108
@@ -649,19 +647,19 @@ msgstr "ENIGE TYD"
 
 #: www/htdocs/edit_favorite.rpy:238
 msgid "ALLOW"
-msgstr ""
+msgstr "LAAT TOE"
 
 #: www/htdocs/edit_favorite.rpy:239
 msgid "PREVENT"
-msgstr ""
+msgstr "VOORKOM"
 
 #: www/htdocs/edit_favorite.rpy:248
 msgid "ALL"
-msgstr ""
+msgstr "ALLE"
 
 #: www/htdocs/edit_favorite.rpy:249
 msgid "ONLY NEW"
-msgstr ""
+msgstr "SLEGS NUUT"
 
 #: www/htdocs/edit_favorite.rpy:262
 #: tv/plugins/manual_record.py:129
@@ -670,9 +668,8 @@ msgid "Save"
 msgstr "Stoor"
 
 #: www/htdocs/youtube.rpy:288
-#, fuzzy
 msgid "YouTube"
-msgstr "Di"
+msgstr "YouTube"
 
 #: www/htdocs/guide.rpy:145
 #: www/web_types.py:198
@@ -727,7 +724,7 @@ msgstr "Begin"
 #: share/skins/main/basic.fxd:602
 #: share/skins/main/basic.fxd:664
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: www/htdocs/guide.rpy:274
 #: www/htdocs/genre.rpy:206
@@ -841,16 +838,16 @@ msgstr "Hernoem %s na %s."
 #: www/htdocs/library.rpy:209
 #, python-format
 msgid "<h2>%s</h2>"
-msgstr ""
+msgstr "<h2>%s</h2>"
 
 #: www/htdocs/library.rpy:194
 #, python-format
 msgid "Rename %s to %s, failed."
-msgstr ""
+msgstr "Herbenaming van %s na %s het gefaal."
 
 #: www/htdocs/library.rpy:197
 msgid "No new file specified."
-msgstr ""
+msgstr "Geen nuwe naam gespesifiseer"
 
 #: www/htdocs/library.rpy:203
 #: www/htdocs/library.rpy:207
@@ -866,12 +863,12 @@ msgstr "Skrap %s het gefaal."
 #: www/htdocs/library.rpy:219
 #, python-format
 msgid "%s does not exist. No action taken."
-msgstr "% bestaan nie. Geen aksie geneem."
+msgstr "%s bestaan nie. Geen aksie geneem."
 
 #: www/htdocs/library.rpy:223
 #, python-format
 msgid "I do not process names (%s) with slashes for security reasons."
-msgstr ""
+msgstr "Weens sekuriteitsredes verwerk ek nie name (%s) met slashes in nie."
 
 #: www/htdocs/library.rpy:230
 #: www/htdocs/library.rpy:231
@@ -946,7 +943,6 @@ msgid "Play file using VLC"
 msgstr "Speel lêer met VLC"
 
 #: www/htdocs/config.rpy:756
-#, fuzzy
 msgid "Config"
 msgstr "Opstel"
 
@@ -1044,15 +1040,15 @@ msgstr ""
 #: games/game.py:84
 #, python-format
 msgid "File \"%s\" not found!"
-msgstr ""
+msgstr "Lêer \"%s\" nie gevind!"
 
 #: games/__init__.py:78
 msgid "please update GAMES_ITEMS in local_conf.py"
-msgstr ""
+msgstr "verander asseblief GAMES_ITEMS in local_conf.py"
 
 #: games/mame_cache.py:298
 msgid "Generating MAME cache, please wait."
-msgstr ""
+msgstr "Bou MAME kas. wag asseblief."
 
 #: audio/plugins/detach.py:49
 msgid "Show player"
@@ -1066,49 +1062,45 @@ msgid ""
 "%s\n"
 "not found!"
 msgstr ""
+"%s\n"
+"nie gevind!"
 
 #: audio/plugins/apodcast.py:96
 #: video/plugins/vpodcast.py:131
-#, fuzzy
 msgid "Buffering podcast..."
-msgstr "kry data..."
+msgstr "Buffer podgooi..."
 
 #: audio/plugins/apodcast.py:110
-#, fuzzy
 msgid "Listen Audio Podcast"
-msgstr "Luister na Radio Stasie"
+msgstr "Luister na Oudio Podgooi"
 
 #: audio/plugins/apodcast.py:148
-#, fuzzy
 msgid "Audio Podcast"
-msgstr "Audio Kodeks"
+msgstr "Audio Podgooi"
 
 #: audio/plugins/apodcast.py:159
 #: video/plugins/vpodcast.py:221
-#, fuzzy
 msgid "Fetching podcast..."
-msgstr "kry data..."
+msgstr "Kry podgooi..."
 
 #: audio/plugins/apodcast.py:188
 #: video/plugins/vpodcast.py:253
-#, fuzzy
 msgid "No Podcast locations found"
-msgstr "Geen Radio Stasies gevind"
+msgstr "Geen Podgooi plekke gevind"
 
 #: audio/plugins/apodcast.py:190
 #: audio/plugins/apodcast.py:218
 msgid "AUDIO PODCAST"
-msgstr ""
+msgstr "OUDIO PODGOOI"
 
 #: audio/plugins/apodcast.py:196
 #: video/plugins/vpodcast.py:263
-#, fuzzy
 msgid "Fetching podcasts..."
-msgstr "kry data..."
+msgstr "Kry podgooie..."
 
 #: audio/plugins/apodcast.py:213
 msgid "Set APODCAST_DIR in local_conf.py"
-msgstr ""
+msgstr "Stel APODCAST_DIR in local_conf.py"
 
 #: audio/plugins/radio.py:63
 msgid "Listen to Radio Station"
@@ -1160,15 +1152,15 @@ msgstr "'fbxine' nie gevind, 'xine' oudio speler gedeaktiveer"
 
 #: audio/plugins/xmradio.py:62
 msgid "Listen to XM Station"
-msgstr ""
+msgstr "Luister na XM Stasie"
 
 #: audio/plugins/xmradio.py:95
 msgid "XM Radio"
-msgstr ""
+msgstr "XM Radio"
 
 #: audio/plugins/xmradio.py:136
 msgid "No XM channels found"
-msgstr ""
+msgstr "Geen XM kanale gevind"
 
 #: audio/plugins/xmradio.py:137
 msgid "XM channels"
@@ -1228,7 +1220,6 @@ msgid "getting data..."
 msgstr "kry data..."
 
 #: audio/plugins/lyrics.py:55
-#, fuzzy
 msgid "Searching lyrics..."
 msgstr "soek lirieke..."
 
@@ -1242,7 +1233,7 @@ msgstr "Wys lirieke"
 
 #: audio/plugins/musicip.py:85
 msgid "MusicIP Mix"
-msgstr ""
+msgstr "MusicIP Mix"
 
 #: audio/plugins/musicip.py:87
 msgid "Songs From Same Album"
@@ -1254,23 +1245,23 @@ msgstr "Liedtjies van selfde kunstenaar"
 
 #: audio/plugins/cdbackup.py:186
 msgid "Show CD ripping status"
-msgstr ""
+msgstr "Wys CD rip status"
 
 #: audio/plugins/cdbackup.py:187
 msgid "Stop CD ripping"
-msgstr ""
+msgstr "Stop CD rip"
 
 #: audio/plugins/cdbackup.py:192
 msgid "Rip the CD to the hard drive"
-msgstr ""
+msgstr "Rip die CD na die hardeskyf"
 
 #: audio/plugins/cdbackup.py:193
 msgid "Get CDs available for ripping"
-msgstr ""
+msgstr "Kry CDs beskikbaar vir rip"
 
 #: audio/plugins/cdbackup.py:195
 msgid "Item is not an Audio CD"
-msgstr ""
+msgstr "Item is nie 'n Oudio CD"
 
 #: audio/plugins/cdbackup.py:209
 #, python-format
@@ -1281,37 +1272,37 @@ msgstr "Snit %d van %d"
 
 #: audio/plugins/cdbackup.py:224
 msgid "Backup CD to hard drive in mp3 format"
-msgstr ""
+msgstr "Rugsteun CD na hardeskyf in MP3 formaat"
 
 #: audio/plugins/cdbackup.py:227
 msgid "Backup CD to hard drive in Ogg format"
-msgstr ""
+msgstr "Rugsteun CD na hardeskyf in Ogg formaat"
 
 #: audio/plugins/cdbackup.py:230
 msgid "Backup CD to hard drive in FLAC format"
-msgstr ""
+msgstr "Rugsteun CD na hardeskyf in FLAC formaat"
 
 #: audio/plugins/cdbackup.py:232
 msgid "Backup CD to hard drive in wav format"
-msgstr ""
+msgstr "Rugsteun CD na hardeskyf in WAV formaat"
 
 #: audio/plugins/cdbackup.py:235
 msgid "CD Backup"
-msgstr ""
+msgstr "CD Rugsteun"
 
 #: audio/plugins/cdbackup.py:248
 msgid "Ripping started"
-msgstr ""
+msgstr "RIP het begin"
 
 #: audio/plugins/cdbackup.py:335
 #, python-format
 msgid "Directory %s already exists"
-msgstr "Directory \"%s\" already exists"
+msgstr "Gids \"%s\" bestaan reeds"
 
 #: audio/plugins/cdbackup.py:338
 #, python-format
 msgid "Cannot rip to '%s'! (%s)"
-msgstr ""
+msgstr "Kan nie na '%s'! (%s) rip nie"
 
 #: audio/plugins/cdbackup.py:354
 #: audio/plugins/cdbackup.py:420
@@ -1329,7 +1320,7 @@ msgstr "WAARSKUWING"
 
 #: audio/plugins/cdbackup.py:505
 msgid "No CDDB data available to mmpython"
-msgstr ""
+msgstr "Geen CDDB data beskikbaar vir mmpython"
 
 #: audio/plugins/cdbackup.py:508
 msgid "Unknown Artist"
@@ -1338,7 +1329,7 @@ msgstr "Onbekende Kunstenaar"
 #: audio/plugins/cdbackup.py:508
 #: audio/plugins/cdbackup.py:509
 msgid "RENAME"
-msgstr ""
+msgstr "HERNOEM"
 
 #: audio/plugins/cdbackup.py:509
 #: audio/audiodiskitem.py:52
@@ -1358,7 +1349,7 @@ msgstr ""
 
 #: audio/plugins/cdbackup.py:578
 msgid "Problem trying to call:"
-msgstr ""
+msgstr "Probleem met die roep van:"
 
 #: audio/plugins/album_tree.py:182
 #: audio/plugins/album_tree.py:272
@@ -1410,14 +1401,13 @@ msgid "[VUX] an audio item, do not select"
 msgstr ""
 
 #: audio/plugins/lastfm.py:193
-#, fuzzy
 msgid "Listen Last FM"
-msgstr "Luister Musiek"
+msgstr "Luister Last FM"
 
 #: audio/plugins/lastfm.py:218
 #: audio/plugins/lastfm.py:251
 msgid "Last FM"
-msgstr ""
+msgstr "Last FM"
 
 #: audio/plugins/lastfm.py:249
 msgid "Invalid LastFM Session!"
@@ -1602,15 +1592,15 @@ msgstr ""
 
 #: video/plugins/reencode.py:155
 msgid "Xvid Low Quality"
-msgstr ""
+msgstr "Xvid Laë Kwaliteit"
 
 #: video/plugins/reencode.py:156
 msgid "Xvid High Quality"
-msgstr ""
+msgstr "Xvid Hoë Kwaliteit"
 
 #: video/plugins/reencode.py:157
 msgid "iPod"
-msgstr ""
+msgstr "iPod"
 
 #: video/plugins/reencode.py:158
 msgid "Select Profile"
@@ -1679,22 +1669,20 @@ msgstr "Maar ek kon nie 'n omslag lêer kopiëer nie."
 #: video/plugins/fxdarchive.py:135
 #, python-format
 msgid "%d fxd files archived. %s"
-msgstr ""
+msgstr "%d fxd lêersgeargiveer. %s"
 
 #: video/plugins/vpodcast.py:211
-#, fuzzy
 msgid "Video Podcast"
-msgstr "Audio Kodeks"
+msgstr "Video Podgooi"
 
 #: video/plugins/vpodcast.py:255
 #: video/plugins/vpodcast.py:288
-#, fuzzy
 msgid "Video Podcasts"
-msgstr "Audio Kodeks"
+msgstr "Video Podgooie"
 
 #: video/plugins/vpodcast.py:282
 msgid "Set VPODCAST_DIR in local_conf.py"
-msgstr ""
+msgstr "Stel VPODCAST_DIR in local_conf.py"
 
 #: video/__init__.py:182
 msgid "Directory Autobuild Thumbnails "
@@ -1708,7 +1696,7 @@ msgstr ""
 #: video/configure.py:105
 #, python-format
 msgid "Stream %s"
-msgstr "Stroom"
+msgstr "Stroom %s"
 
 #: video/configure.py:81
 msgid "Audio Menu"
@@ -1734,24 +1722,22 @@ msgid "Chapter Menu"
 msgstr "Hoodstuk keuseskerm"
 
 #: video/configure.py:200
-#, fuzzy, python-format
 msgid "Play with \"%s\""
-msgstr "Speel Titel %s"
+msgstr "Speel met \"%s\""
 
 #: video/configure.py:203
-#, fuzzy
 msgid "Player Menu"
-msgstr "Hoodstuk keuseskerm"
+msgstr "Spelerkeuseskerm"
 
 #: video/configure.py:231
 #, python-format
 msgid "Turn off %s"
-msgstr "Skakel af"
+msgstr "Skakel %s af"
 
 #: video/configure.py:232
 #, python-format
 msgid "Turn on %s"
-msgstr "Skakel aan"
+msgstr "Skakel %s aan"
 
 #: video/configure.py:261
 msgid "Activate TOP field first"
@@ -1827,9 +1813,8 @@ msgid "VCD title list"
 msgstr "VCD titel lys"
 
 #: video/videoitem.py:337
-#, fuzzy
 msgid "Full description"
-msgstr "Volle Beskrywing"
+msgstr "Volle beskrywing"
 
 #: video/videoitem.py:340
 msgid "Play with maximum cache"
@@ -1883,7 +1868,7 @@ msgstr ""
 #: share/skins/main/blurr.fxd:708
 #: share/skins/main/info.fxd:465
 msgid "Genre"
-msgstr ""
+msgstr "Ganre"
 
 #: video/videoitem.py:721
 #: plugins/lcd.py:67
@@ -1918,7 +1903,7 @@ msgstr "Jaar"
 #: plugins/idlebar/diskfree.py:103
 #, python-format
 msgid "%iGB"
-msgstr ""
+msgstr "%iGB"
 
 #: plugins/idlebar/transcode.py:196
 #: plugins/idlebar/encoding.py:173
@@ -1933,12 +1918,12 @@ msgstr "geen werk vir enkodeerder"
 #: plugins/idlebar/system.py:105
 #, python-format
 msgid "%iM"
-msgstr ""
+msgstr "%iM"
 
 #: plugins/idlebar/system.py:130
 #, python-format
 msgid "%s%%"
-msgstr ""
+msgstr "%s%%"
 
 #: plugins/headlines.py:116
 #: plugins/itv.py:137
@@ -2088,7 +2073,7 @@ msgstr "Reen"
 #: plugins/weather.py:168
 #: plugins/weather.py:171
 msgid "AM"
-msgstr ""
+msgstr "AM"
 
 #: plugins/weather.py:77
 msgid "Fog"
@@ -2133,7 +2118,7 @@ msgstr "Verspreide Buie"
 #: plugins/weather.py:162
 #: plugins/weather.py:165
 msgid "PM"
-msgstr ""
+msgstr "PM"
 
 #: plugins/weather.py:83
 msgid "Isolated T-Storms"
@@ -2187,7 +2172,7 @@ msgstr "Verspreide Donderbuie"
 #: plugins/weather.py:925
 #: plugins/oneclick.py:941
 msgid "Wind"
-msgstr ""
+msgstr "Wind"
 
 #: plugins/weather.py:87
 #: plugins/weather.py:94
@@ -2212,9 +2197,8 @@ msgid "Flurries"
 msgstr "Windvlae"
 
 #: plugins/weather.py:92
-#, fuzzy
 msgid "Thunder"
-msgstr "Reen/Donder"
+msgstr "Donder"
 
 #: plugins/weather.py:97
 msgid "Heavy Snow"
@@ -2228,7 +2212,6 @@ msgid "Drizzle"
 msgstr "Motreën"
 
 #: plugins/weather.py:102
-#, fuzzy
 msgid "Sct Flurries"
 msgstr "Versp. Windvlae"
 
@@ -2243,14 +2226,12 @@ msgid "Thunderstorms"
 msgstr "Donderstorms"
 
 #: plugins/weather.py:109
-#, fuzzy
 msgid "Iso T-Storms"
 msgstr "Geisoleerde Donderbuie"
 
 #: plugins/weather.py:111
-#, fuzzy
 msgid "Sct T-Storms"
-msgstr "Versp. Donderstorms/Wind"
+msgstr "Versp. Donderstorms"
 
 #: plugins/weather.py:113
 msgid "Sct Snow Showers"
@@ -2265,9 +2246,8 @@ msgstr "Versp. Sneeu"
 #: plugins/weather.py:157
 #: plugins/weather.py:160
 #: plugins/weather.py:169
-#, fuzzy
 msgid "to"
-msgstr "bo"
+msgstr "na"
 
 #: plugins/weather.py:114
 #: plugins/weather.py:115
@@ -2276,9 +2256,8 @@ msgstr "bo"
 #: plugins/weather.py:158
 #: plugins/weather.py:160
 #: plugins/weather.py:171
-#, fuzzy
 msgid "Ice"
-msgstr "AM Ys"
+msgstr "Ys"
 
 #: plugins/weather.py:129
 #: plugins/weather.py:132
@@ -2299,21 +2278,18 @@ msgstr ""
 
 #: plugins/weather.py:135
 #: plugins/weather.py:172
-#, fuzzy
 msgid "Hvy Rain"
 msgstr "Sterk Reen"
 
 #: plugins/weather.py:135
 #: plugins/weather.py:138
 #: plugins/weather.py:172
-#, fuzzy
 msgid "Freezing Rain"
-msgstr "Reen/Ysreen"
+msgstr "Ysreen"
 
 #: plugins/weather.py:139
-#, fuzzy
 msgid "T-Storms"
-msgstr "PM Donderstorms"
+msgstr "Donderstorms"
 
 #: plugins/weather.py:140
 msgid "Sprinkles"
@@ -2331,19 +2307,16 @@ msgid "Heavy Rain"
 msgstr "Sterk Reen"
 
 #: plugins/weather.py:153
-#, fuzzy
 msgid "Light Wintry Mix"
 msgstr "Ligte Reen"
 
 #: plugins/weather.py:156
-#, fuzzy
 msgid "Snow Shower"
-msgstr "Sneeu"
+msgstr "Sneeubui"
 
 #: plugins/weather.py:164
-#, fuzzy
 msgid "Strong Storms"
-msgstr "Versp. Sterk Storms"
+msgstr "Sterk Storms"
 
 #: plugins/weather.py:175
 msgid "Light Rain Shower"
@@ -2355,7 +2328,7 @@ msgstr "Ligte Reen men Donder"
 
 #: plugins/weather.py:177
 msgid "Light Drizzle"
-msgstr ""
+msgstr "Ligte motreen"
 
 #: plugins/weather.py:178
 msgid "Mist"
@@ -2372,7 +2345,7 @@ msgstr "Dynserig"
 #: plugins/weather.py:181
 #: plugins/weather.py:182
 msgid "Light Snow Shower"
-msgstr ""
+msgstr "Ligte Sneeubuie"
 
 #: plugins/weather.py:183
 msgid "Clear"
@@ -2506,28 +2479,27 @@ msgid "UV Index"
 msgstr "UV Indeks"
 
 #: plugins/weather.py:992
-#, fuzzy, python-format
+#, python-format
 msgid "Today, a high of %s degrees"
-msgstr ""
+msgstr "Vandag, 'n hoog van %s grade"
 
 #: plugins/weather.py:993
-#, fuzzy, python-format
+#, python-format
 msgid "and a low of %s degrees."
-msgstr ""
+msgstr "en 'n laag van %s grade"
 
 #: plugins/weather.py:994
 msgid "Currently, there is a humidity of"
 msgstr "Huidiglik is die humiditeit"
 
 #: plugins/weather.py:998
-#, fuzzy
 msgid "the winds are calm"
-msgstr "die wind "
+msgstr "die wind is kalem"
 
 #: plugins/weather.py:1000
 #, python-format
 msgid "the winds are coming in at %s from the %s"
-msgstr ""
+msgstr "die wind kom in teen %s vanuit die %s"
 
 #: plugins/weather.py:1006
 msgid "Visibility will be unlimited today"
@@ -2540,12 +2512,12 @@ msgstr "Daar is 'n uitsig van"
 #: plugins/weather.py:1041
 #: plugins/oneclick.py:1044
 msgid "LO"
-msgstr ""
+msgstr "LAAG"
 
 #: plugins/weather.py:1049
 #: plugins/oneclick.py:1050
 msgid "HI"
-msgstr ""
+msgstr "HOOG"
 
 #: plugins/weather.py:1063
 msgid "Error encountered while trying to download Radar map"
@@ -2558,14 +2530,12 @@ msgid "Full Description"
 msgstr "Volle Beskrywing"
 
 #: plugins/buttonbar.py:126
-#, fuzzy
 msgid "Now"
-msgstr "Nee"
+msgstr "Nou"
 
 #: plugins/buttonbar.py:135
-#, fuzzy
 msgid "WARNING: "
-msgstr "WAARSKUWING"
+msgstr "WAARSKUWING:"
 
 #: plugins/buttonbar.py:136
 #, python-format
@@ -2589,14 +2559,12 @@ msgid "Added to Cart"
 msgstr "By kaart gevoeg"
 
 #: plugins/shoppingcart.py:117
-#, fuzzy
 msgid "Removed from Cart"
-msgstr "Remove gunsteling"
+msgstr "Verwyder van kaart"
 
 #: plugins/shoppingcart.py:125
-#, fuzzy
 msgid "Removed Item from Cart"
-msgstr "Item by kaart gevoeg"
+msgstr "Verwyder Item van Kaart"
 
 #: plugins/shoppingcart.py:128
 msgid "Added Item to Cart"
@@ -2615,19 +2583,16 @@ msgid "Add Directory to Cart"
 msgstr "Voeg Gids by Kaart"
 
 #: plugins/shoppingcart.py:158
-#, fuzzy
 msgid "Remove Directory from Cart"
-msgstr "Voeg Gids by Kaart"
+msgstr "Verwyder Gids van Kaart"
 
 #: plugins/shoppingcart.py:162
-#, fuzzy
 msgid "Add to Cart"
-msgstr "By kaart gevoeg"
+msgstr "Voeg By Kaart"
 
 #: plugins/shoppingcart.py:164
-#, fuzzy
 msgid "Remove from Cart"
-msgstr "Remove gunsteling"
+msgstr "Verwyder van Kaart"
 
 #: plugins/shoppingcart.py:167
 msgid "Delete Cart"
@@ -2666,7 +2631,7 @@ msgstr "Kunstenaar"
 #: share/skins/main/info.fxd:208
 #: share/skins/main/info.fxd:362
 msgid "Album"
-msgstr ""
+msgstr "Abum"
 
 #: plugins/lcd.py:71
 #: plugins/vfd.py:95
@@ -2690,7 +2655,7 @@ msgstr "Resolusie"
 #: plugins/lcd.py:77
 #: plugins/vfd.py:101
 msgid "Aspect"
-msgstr ""
+msgstr "Aspek"
 
 #: plugins/lcd.py:78
 #: plugins/lcd.py:81
@@ -2718,7 +2683,7 @@ msgstr "Geometrie"
 #: plugins/vfd.py:109
 #, python-format
 msgid "%s items"
-msgstr ""
+msgstr "%s items"
 
 #: plugins/lcd.py:140
 #: plugins/lcd.py:288
@@ -2726,7 +2691,7 @@ msgstr ""
 #: plugins/vfd.py:164
 #, python-format
 msgid "Today is %s."
-msgstr "Vandag is"
+msgstr "Vandag is %s."
 
 #: plugins/lcd.py:150
 #: plugins/lcd.py:618
@@ -2736,7 +2701,7 @@ msgstr "Keuseskerm"
 #: plugins/lcd.py:153
 #: plugins/lcd.py:621
 msgid "Item"
-msgstr ""
+msgstr "Item"
 
 #: plugins/lcd.py:156
 #: share/skins/main/dark.fxd:471
@@ -2752,7 +2717,7 @@ msgstr "Inligting"
 #: plugins/lcd.py:215
 #: plugins/lcd.py:660
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: plugins/lcd.py:787
 msgid "LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
@@ -2760,11 +2725,11 @@ msgstr ""
 
 #: plugins/itv.py:249
 msgid "Internet TV"
-msgstr ""
+msgstr "Internet TV"
 
 #: plugins/mediamenu.py:137
 msgid "Media"
-msgstr ""
+msgstr "Media"
 
 #: plugins/mediamenu.py:142
 msgid "Movie"
@@ -2772,7 +2737,7 @@ msgstr "Fliek"
 
 #: plugins/mediamenu.py:144
 msgid "Audio"
-msgstr ""
+msgstr "Oudio"
 
 #: plugins/mediamenu.py:146
 msgid "Image"
@@ -2795,7 +2760,7 @@ msgstr "%s Hoof Keuseskerm"
 
 #: plugins/freeboxtv.py:73
 msgid "Freebox TV"
-msgstr ""
+msgstr "Freebox TV"
 
 #: plugins/freeboxtv.py:80
 msgid "Freebox TV :: Les chaines"
@@ -2839,7 +2804,7 @@ msgstr "Stel as icecast speellys"
 #: gui/ConfirmBox.py:71
 #: gui/AlertBox.py:62
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: plugins/cd_burn.py:152
 msgid "Not Yet implemented :)"
@@ -2882,7 +2847,7 @@ msgstr "Fout: Kon nie %s omskakel nie"
 #: plugins/cd_burn.py:651
 #, python-format
 msgid "/tmp/burnlist/%s"
-msgstr ""
+msgstr "/tmp/burnlist/%s"
 
 #: plugins/cd_burn.py:753
 msgid "Interrupting burning process..."
@@ -2900,7 +2865,7 @@ msgstr "Item tipe is %s"
 #: plugins/cd_burn.py:778
 #, python-format
 msgid "Should show the menu? %i"
-msgstr "Moet die keuseskerm wys?"
+msgstr "Moet die keuseskerm wys? %i"
 
 #: plugins/cd_burn.py:781
 msgid "Burn CD"
@@ -2944,7 +2909,7 @@ msgstr ""
 #: plugins/yac.py:69
 #, python-format
 msgid "Call: %s"
-msgstr "Roep: "
+msgstr "Roep: %s"
 
 #: plugins/yac.py:71
 #, python-format
@@ -2986,11 +2951,11 @@ msgstr "Wys Stdout"
 
 #: plugins/command.py:175
 msgid "Stdout File"
-msgstr ""
+msgstr "Stdout Lêe"
 
 #: plugins/command.py:179
 msgid "Stderr File"
-msgstr ""
+msgstr "Stderr Lêer"
 
 #: plugins/command.py:216
 #: plugins/home_automation.py:113
@@ -3019,20 +2984,18 @@ msgstr "Opdragte"
 
 #: plugins/vfd.py:52
 msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
-msgstr ""
+msgstr "Jy benodig pyusb (http://pyusb.berlios.de/) vir die \"vfd\" plugin."
 
 #: plugins/vfd.py:299
 #, python-format
 msgid "Sending data %r attempt=%d"
-msgstr ""
+msgstr "Stuur data %r probeerslag=%d"
 
 #: plugins/ejectromdrives.py:69
-#, fuzzy
 msgid "Close drive"
-msgstr "Sluit Venster"
+msgstr "Sluit disket"
 
 #: plugins/ejectromdrives.py:71
-#, fuzzy
 msgid "Eject drive"
 msgstr "Skiet disk uit speler"
 
@@ -3178,24 +3141,24 @@ msgstr ""
 
 #: plugins/autoshutdown.py:145
 msgid "A recording is in progress."
-msgstr "A recording is in progress."
+msgstr "Besig met 'n opname."
 
 #: plugins/autoshutdown.py:148
 #, python-format
 msgid "Would wakeup again within %d minutes."
-msgstr ""
+msgstr "Sal binne %d minuute wakker word."
 
 #: plugins/autoshutdown.py:152
 msgid "There are important processes running."
-msgstr ""
+msgstr "Belangrike prosesse loop nog."
 
 #: plugins/autoshutdown.py:158
 msgid "No wakeup scheduled."
-msgstr "No wakeup scheduled"
+msgstr "Geen wakeup geskeduleer"
 
 #: plugins/autoshutdown.py:162
 msgid "The next wakeup is scheduled at"
-msgstr ""
+msgstr "Die volgende wakeup is geskeduleer vir"
 
 #: plugins/autoshutdown.py:173
 #: plugins/autoshutdown.py:257
@@ -3215,7 +3178,7 @@ msgstr ""
 #: plugins/shutdown.py:137
 #: plugins/shutdown.py:141
 msgid "Restart system"
-msgstr "Herlai die stelsel"
+msgstr "Herlaai die stelsel"
 
 #: plugins/autoshutdown.py:180
 #: plugins/shutdown.py:136
@@ -3225,16 +3188,16 @@ msgstr "Skakel stelsel af"
 
 #: plugins/autoshutdown.py:181
 msgid "Shutdown freevo"
-msgstr ""
+msgstr "Stop freevo"
 
 #: plugins/autoshutdown.py:191
 #: plugins/autoshutdown.py:219
 msgid "SHUTDOWN SYSTEM?"
-msgstr ""
+msgstr "STOP STELSEL?"
 
 #: plugins/autoshutdown.py:205
 msgid "RESTART SYSTEM?"
-msgstr ""
+msgstr "HERLAAI STELSEL?"
 
 #: plugins/autoshutdown.py:211
 #: plugins/autoshutdown.py:225
@@ -3244,7 +3207,7 @@ msgstr ""
 
 #: plugins/autoshutdown.py:233
 msgid "SHUTDOWN FREEVO?"
-msgstr ""
+msgstr "STOP FREEVO?"
 
 #: plugins/autoshutdown.py:609
 #: plugins/shutdown.py:63
@@ -3261,7 +3224,7 @@ msgstr "Skyf %s (geen disk)"
 #: plugins/rom_drives.py:399
 #, python-format
 msgid "Ejecting disc in drive %s"
-msgstr "Skiet disk uit speler"
+msgstr "Skiet disk uit speler %s"
 
 #: plugins/rom_drives.py:423
 #, python-format
@@ -3291,11 +3254,11 @@ msgstr "nie seker wat om hiermee te doen"
 
 #: plugins/mpd.py:110
 msgid "MPD"
-msgstr ""
+msgstr "MPD"
 
 #: plugins/mpd.py:153
 msgid "mpd"
-msgstr ""
+msgstr "mpd"
 
 #: plugins/mpd.py:214
 msgid "Song - "
@@ -3307,11 +3270,11 @@ msgstr "Kunstenaar - "
 
 #: plugins/mpd.py:232
 msgid "Album - "
-msgstr ""
+msgstr "Album -"
 
 #: plugins/mpd.py:240
 msgid "Status - "
-msgstr ""
+msgstr "Status -"
 
 #: plugins/oneclick.py:604
 msgid "Variable"
@@ -3319,54 +3282,49 @@ msgstr ""
 
 #: plugins/oneclick.py:861
 msgid "for"
-msgstr ""
+msgstr "vir"
 
 #: plugins/oneclick.py:980
 msgid "As of:"
-msgstr ""
+msgstr "Vanaf:"
 
 #: plugins/oneclick.py:983
 msgid "Temperature:"
-msgstr ""
+msgstr "Tempratuur:"
 
 #: plugins/oneclick.py:984
 msgid "Dew Point:"
-msgstr ""
+msgstr "Doupunt:"
 
 #: plugins/oneclick.py:985
-#, fuzzy
 msgid "Humidity:"
-msgstr "Humiditeit"
+msgstr "Humiditeit:"
 
 #: plugins/oneclick.py:986
-#, fuzzy
 msgid "Visibility:"
-msgstr "Uitsig"
+msgstr "Uitsig:"
 
 #: plugins/oneclick.py:987
-#, fuzzy
 msgid "Pressure:"
-msgstr "Lugdruk"
+msgstr "Lugdruk:"
 
 #: plugins/oneclick.py:988
 msgid "Winds:"
-msgstr ""
+msgstr "Wind"
 
 #: plugins/oneclick.py:989
 msgid "Tonight:"
-msgstr ""
+msgstr "Vannag:"
 
 #: plugins/oneclick.py:990
-#, fuzzy
 msgid "Sunset:"
-msgstr "So"
+msgstr "Sonsondergang:"
 
 #: plugins/oneclick.py:991
 msgid "Moon Phase:"
-msgstr ""
+msgstr "Maanfase:"
 
 #: plugins/oneclick.py:1067
-#, fuzzy
 msgid "Error encountered while trying to download weather map"
 msgstr "Probleem tydens aflaai van die radarkaart"
 
@@ -3382,27 +3340,23 @@ msgid ""
 msgstr ""
 
 #: tv/plugins/dvbstreamer/live_pause.py:113
-#, fuzzy
 msgid "'xine-ui' version too old, plugin 'xine' deactivated"
-msgstr "'fbxine' nie gevind, 'xine' oudio speler gedeaktiveer"
+msgstr "'xine-ui' weergawe is te oud, 'xine' gedeaktiveer"
 
 #: tv/plugins/dvbstreamer/live_pause.py:114
 #, python-format
 msgid "You need software %s"
-msgstr ""
+msgstr "Jy benodig sagteware %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:548
-#, fuzzy, python-format
 msgid "Tuning to %s"
-msgstr ""
+msgstr "Skakel in na %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:551
-#, fuzzy, python-format
 msgid "Buffering %s"
-msgstr ""
+msgstr "Buffer %s"
 
 #: tv/plugins/dvbstreamer/live_pause.py:555
-#, fuzzy, python-format
 msgid "Playing %s"
 msgstr "Speel %s"
 
@@ -3420,7 +3374,7 @@ msgstr "Status, Datum dan Naam"
 
 #: tv/plugins/recordings_manager.py:161
 msgid "Manage Recordings"
-msgstr ""
+msgstr "Bestuur Opnames"
 
 #: tv/plugins/recordings_manager.py:166
 #: directory.py:464
@@ -3477,19 +3431,19 @@ msgstr ""
 
 #: tv/plugins/recordings_manager.py:419
 msgid "Mark to Keep"
-msgstr ""
+msgstr "Merk om te hou"
 
 #: tv/plugins/recordings_manager.py:420
 msgid "Unmark as Watched"
-msgstr ""
+msgstr "Merk as nie gekyk"
 
 #: tv/plugins/recordings_manager.py:420
 msgid "Mark as Watched"
-msgstr ""
+msgstr "Merk as gekyk"
 
 #: tv/plugins/recordings_manager.py:488
 msgid "(Unnamed)"
-msgstr ""
+msgstr "(geen naam)"
 
 #: tv/plugins/recordings_manager.py:588
 msgid "Browse episodes"
@@ -3513,10 +3467,12 @@ msgid ""
 "Do you wish to delete the series\n"
 " '%s'?"
 msgstr ""
+"Wil jy die series skrap\n"
+" '%s'?"
 
 #: tv/plugins/recordings_manager.py:742
 msgid "episodes"
-msgstr ""
+msgstr "episodes"
 
 #: tv/plugins/view_recordings.py:48
 msgid "Recorded Shows"
@@ -3626,26 +3582,26 @@ msgstr ""
 
 #: tv/plugins/search_programs.py:78
 msgid "Search Programs"
-msgstr ""
+msgstr "Soek Programme"
 
 #: tv/plugins/search_programs.py:88
 #: tv/program_display.py:233
 #: tv/programitem.py:298
 msgid "Searching, please wait..."
-msgstr "Besig om te siek, wag asseblief..."
+msgstr "Besig om te soek, wag asseblief..."
 
 #: tv/plugins/search_programs.py:103
 #: tv/program_display.py:249
 #: tv/programitem.py:315
 #, python-format
 msgid "No matches found for %s"
-msgstr "No matches found for %s"
+msgstr "Niks gevind vir %s"
 
 #: tv/plugins/search_programs.py:106
 #: tv/program_display.py:252
 #, python-format
 msgid "findMatches failed: %s"
-msgstr "findMatches failed: %s"
+msgstr "findMatches het gefaal: %s"
 
 #: tv/plugins/scheduled_recordings.py:50
 msgid "Display Scheduled Recordings"
@@ -3712,7 +3668,7 @@ msgstr "Program Keuseskerm"
 #: tv/programitem.py:229
 #, python-format
 msgid "\"%s\" has been scheduled for recording"
-msgstr "\"%s\" has been scheduled for recording"
+msgstr "\"%s\" is geskeduleer vir opname"
 
 #: tv/program_display.py:209
 msgid "Scheduling Failed"
@@ -3771,7 +3727,7 @@ msgstr "Stoor veranderinge"
 #: tv/favoriteitem.py:88
 #: tv/favoriteitem.py:146
 msgid "Remove favorite"
-msgstr "Remove gunsteling"
+msgstr "Verwyder gunsteling"
 
 #: tv/program_display.py:392
 #: tv/favoriteitem.py:150
@@ -3780,25 +3736,25 @@ msgstr "Gunstelinge Keuseskerm"
 
 #: tv/program_display.py:431
 msgid "Modify Duplicate Flag"
-msgstr ""
+msgstr "Verander Duplikaat Vlag"
 
 #: tv/program_display.py:449
 msgid "Modify Only New Flag"
-msgstr ""
+msgstr "Verander Net Nuut Flag"
 
 #: tv/program_display.py:604
 msgid "Save Failed, favorite was lost"
-msgstr "Save Failed, favourite was lost"
+msgstr "Stoor het gefaal, gunsteling verloor"
 
 #: tv/program_display.py:613
 msgid "Save Failed"
-msgstr ""
+msgstr "Stoor het gefaal"
 
 #: tv/program_display.py:628
 #: tv/favoriteitem.py:387
 #, python-format
 msgid "\"%s\" has been removed from favorites"
-msgstr "\"%s\" has been removed from favourites"
+msgstr "\"%s\" is verwyder van gunstelinge"
 
 #: tv/program_display.py:657
 #: tv/programitem.py:376
@@ -3820,50 +3776,46 @@ msgstr "Ouderdomsperk"
 #: tv/favoriteitem.py:117
 #: tv/favoriteitem.py:291
 msgid "Prevent Recording of Duplicates"
-msgstr ""
+msgstr "Voorkom opname van duplikate"
 
 #: tv/favoriteitem.py:120
-#, fuzzy
 msgid "Allow Recording of Duplicates"
-msgstr "Besig met opname: %s."
+msgstr "Laat duplikaat opnames toe"
 
 #: tv/favoriteitem.py:126
 #: tv/favoriteitem.py:315
-#, fuzzy
 msgid "Record All Episodes"
-msgstr "Hou alle episodes"
+msgstr "Neem alle episodes op"
 
 #: tv/favoriteitem.py:129
 #: tv/favoriteitem.py:320
 msgid "Record Only New Episodes"
-msgstr ""
+msgstr "Neem slegs nuwe episoder op"
 
 #: tv/favoriteitem.py:297
 msgid "Allow Recordings of Duplicates"
-msgstr ""
+msgstr "Laat duplikaat opnames toe"
 
 #: tv/favoriteitem.py:338
 msgid "Saving the changes to this favorite."
-msgstr ""
+msgstr "Stoor veranderings aan gunsteling."
 
 #: tv/favoriteitem.py:339
 msgid "This may take some time."
-msgstr ""
+msgstr "Dit kan tyd vat."
 
 #: tv/favoriteitem.py:371
-#, fuzzy
 msgid "Save failed, favorite was lost."
-msgstr "Save Failed, favourite was lost"
+msgstr "Stoor het gefaal, gunsteling verloor."
 
 #: tv/favoriteitem.py:391
 #: tv/programitem.py:253
-#, fuzzy
 msgid "Remove failed"
-msgstr "Remove Failed"
+msgstr "Verwyder onsuksesvol"
 
 #: tv/epg_xmltv.py:134
 msgid "Couldn't load the TV Guide, got an exception!"
-msgstr ""
+msgstr "Kon nie TV Gids laai nie"
 
 #: tv/epg_xmltv.py:225
 #, python-format
@@ -3876,7 +3828,7 @@ msgstr "Berei program gids voor"
 
 #: tv/tvguide.py:71
 msgid "TV Guide is corrupt!"
-msgstr "TV Gids is korup!"
+msgstr "TV Gids is korrup!"
 
 #: tv/record_client.py:60
 #: tv/record_client.py:69
@@ -3909,12 +3861,12 @@ msgstr "geen programme"
 
 #: tv/record_client.py:90
 msgid "cannot record it if it is over"
-msgstr ""
+msgstr "kan nie opneem as dit reeds verby is nie"
 
 #: tv/record_client.py:125
 #: tv/record_client.py:131
 msgid "program not scheduled"
-msgstr "programme not scheduled"
+msgstr "program nie geskeduleer"
 
 #: tv/record_client.py:129
 msgid "program is scheduled"
@@ -3932,11 +3884,11 @@ msgstr "TV Hoof Keseskerm"
 
 #: tv/tvmenu.py:125
 msgid "The list of TV channels is invalid!\n"
-msgstr ""
+msgstr "Die lys van TV kanale is ongeldig!\n"
 
 #: tv/tvmenu.py:126
 msgid "Please check the config file."
-msgstr ""
+msgstr "Kyk asb. na die konfigurasie Lêer"
 
 #: tv/edit_favorite.py:136
 msgid "Day of Week"
@@ -3949,7 +3901,7 @@ msgstr "Tyd van dag"
 #: tv/edit_favorite.py:321
 #, python-format
 msgid "Favorite %s has been saved"
-msgstr "Favourite %s has been saved"
+msgstr "Gunsteling %s is gestoor"
 
 #: tv/edit_favorite.py:323
 #, python-format
@@ -3959,87 +3911,79 @@ msgstr "Fout: %s"
 #: tv/edit_favorite.py:343
 #, python-format
 msgid "Do you want to remove %s?"
-msgstr ""
+msgstr "Wil jy %s verwyder?"
 
 #: tv/programitem.py:165
-#, fuzzy
 msgid "Sorry, you cannot watch this program now. "
-msgstr "Besig met 'n Opname. Jy kan nie nou TY kyk nie. "
+msgstr "Jammer, jy kan nie nou die program kyk nie. "
 
 #: tv/programitem.py:166
 msgid "It starts in the future."
-msgstr ""
+msgstr "Dit begin in die toekoms."
 
 #: tv/programitem.py:172
-#, fuzzy
 msgid "Sorry, you cannot watch this progam now. "
-msgstr "Besig met 'n Opname. Jy kan nie nou TY kyk nie. "
+msgstr "Jammer, jy kan nie nou die program kyk nie. "
 
 #: tv/programitem.py:173
-#, fuzzy
 msgid "This program is already over."
-msgstr "%i programme geskeduleer vir opname."
+msgstr "Die program is reeds verby."
 
 #: tv/programitem.py:187
 msgid "Sorry, you cannot watch TV while recording. "
-msgstr "Besig met 'n Opname. Jy kan nie nou TY kyk nie. "
+msgstr "Besig met 'n opname. Jy kan nie nou TY kyk nie. "
 
 #: tv/programitem.py:188
 msgid "If this is not true then remove "
-msgstr "As verkeerd, verwyder "
+msgstr "Indien verkeerd, verwyder "
 
 #: tv/programitem.py:233
-#, fuzzy
 msgid "Scheduling failed"
 msgstr "Skeduleering gefaal"
 
 #: tv/programitem.py:287
-#, fuzzy
 msgid "getFavorites failed"
-msgstr "getFavorites failed: %s"
+msgstr "getFavorites faal: %s"
 
 #: tv/programitem.py:320
-#, fuzzy
 msgid "findMatches failed"
-msgstr "findMatches failed: %s"
+msgstr "findMatches faal: %s"
 
 #: skin/widgets/textentry_screen.py:60
-#, fuzzy
 msgid "Left"
-msgstr "Lengte"
+msgstr "Links"
 
 #: skin/widgets/textentry_screen.py:61
 msgid "Right"
-msgstr ""
+msgstr "Regs"
 
 #: skin/widgets/textentry_screen.py:83
 msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
-msgstr ""
+msgstr "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
 
 #: skin/widgets/textentry_screen.py:88
 msgid "1234567890"
-msgstr ""
+msgstr "1234567890"
 
 #: skin/widgets/textentry_screen.py:93
 msgid "!\"#$%^&*();:'@~?,.<>-=+\\[]{}"
-msgstr ""
+msgstr "!\"#$%^&*();:'@~?,.<>-=+\\[]{}"
 
 #: skin/widgets/textentry_screen.py:100
 msgid "ABC"
-msgstr ""
+msgstr "ABC"
 
 #: skin/widgets/textentry_screen.py:108
 msgid "123"
-msgstr ""
+msgstr "123"
 
 #: skin/widgets/textentry_screen.py:116
 msgid "Symbls"
 msgstr ""
 
 #: skin/widgets/textentry_screen.py:229
-#, fuzzy
 msgid "Space"
-msgstr "Stoor"
+msgstr "Spasie"
 
 #: util/misc.py:422
 msgid "The recordserver is down"
@@ -4086,23 +4030,23 @@ msgstr "Speel willekeurig"
 
 #: playlist.py:337
 msgid "empty playlist"
-msgstr "empty play list"
+msgstr "speellys is leeg"
 
 #: playlist.py:435
 msgid "playlist repeat on"
-msgstr "play list repeat on"
+msgstr "speellys herhaal aan"
 
 #: playlist.py:437
 msgid "playlist repeat off"
-msgstr "play list repeat off"
+msgstr "speellys herhaal af"
 
 #: playlist.py:451
 msgid "no next item in playlist"
-msgstr "no next item in play list"
+msgstr "geen volgende item in speellys"
 
 #: playlist.py:478
 msgid "no previous item in playlist"
-msgstr "no previous item in play list"
+msgstr "geen vorige item in speellys"
 
 #: menu.py:706
 msgid "No action defined for this choice!"
@@ -4174,7 +4118,7 @@ msgstr "Handle the directory as playlist. After one file is played, the next one
 
 #: directory.py:86
 msgid "Directory Add Playlist Files"
-msgstr "Directory Add Play list Files"
+msgstr "Gids wys speellys Lêers"
 
 #: directory.py:87
 msgid "Add playlist files to the list of items"
@@ -4182,7 +4126,7 @@ msgstr "Add play list files to the list of items"
 
 #: directory.py:89
 msgid "Directory Add Random Playlist"
-msgstr "Directory Add Random Play list"
+msgstr "Gids wys Willekeurige Speellys"
 
 #: directory.py:90
 msgid "Add an item for a random playlist"
@@ -4357,7 +4301,7 @@ msgstr "Laai Freevo-%s, wag asseblief ..."
 
 #: main.py:444
 msgid "Reading cache, please wait ..."
-msgstr ""
+msgstr "Lees kas, wag asseblief..."
 
 #: main.py:495
 msgid "Freevo crashed!"
@@ -4385,12 +4329,12 @@ msgstr "Teks: %s"
 
 #: main.py:501
 msgid "Please see the logfiles for more info"
-msgstr ""
+msgstr "Kyk asb na loglêers vir meer inligtin"
 
 #: main.py:503
 #, python-format
 msgid "Exit in %s seconds"
-msgstr ""
+msgstr "Exit in %s sekondes"
 
 #: fxditem.py:204
 msgid "Browse list"
@@ -4398,7 +4342,7 @@ msgstr "Verken lys"
 
 #: osd.py:387
 msgid "z = Toggle Fullscreen"
-msgstr ""
+msgstr "z = Stel Volskerm"
 
 #: osd.py:388
 msgid "Arrow Keys = Move"
@@ -4417,9 +4361,8 @@ msgid "h = Help"
 msgstr "h = Hulp"
 
 #: share/skins/main/geexbox.fxd:585
-#, fuzzy
 msgid "Currently recording"
-msgstr "Huidige Kondisies"
+msgstr "Huidige opnames"
 
 #: share/skins/main/dark.fxd:496
 msgid "Just one movie in this playlist."
@@ -4431,11 +4374,11 @@ msgstr "Just one movie in this play list."
 #: share/skins/main/blurr.fxd:717
 #: share/skins/main/info.fxd:228
 msgid "kb/s"
-msgstr ""
+msgstr "kb/s"
 
 #: share/skins/main/dark.fxd:565
 msgid "One song in playlist"
-msgstr "One song in play list"
+msgstr "Een lied in speellys"
 
 #: share/skins/main/geexbox.fxd:735
 #: share/skins/main/mediaportal.fxd:722
@@ -4466,9 +4409,8 @@ msgid "File name"
 msgstr "Lêer naam"
 
 #: share/skins/main/geexbox.fxd:593
-#, fuzzy
 msgid "Next recordings"
-msgstr "Get favourites failed"
+msgstr "Volgende opnames"
 
 #: share/skins/main/geexbox.fxd:203
 #: share/skins/main/mediaportal.fxd:197
@@ -4525,9 +4467,8 @@ msgid "From"
 msgstr "Van"
 
 #: share/skins/main/geexbox.fxd:603
-#, fuzzy
 msgid "Recordserver not found"
-msgstr "enkodeerder loop nie"
+msgstr "Opnamebediener loop nie"
 
 #: share/skins/main/crystal.fxd:318
 #: share/skins/main/bluestar.fxd:338
@@ -4559,7 +4500,7 @@ msgstr "E-pos"
 
 #: share/skins/main/Panorama.fxd:787
 msgid "Hz"
-msgstr ""
+msgstr "Hz"
 
 #: share/skins/main/info.fxd:232
 msgid "Link"
@@ -4571,7 +4512,7 @@ msgstr "Slegs een prent in die vertoning"
 
 #: share/skins/main/basic.fxd:765
 msgid "Num Passes"
-msgstr ""
+msgstr "Aantal deurlope"
 
 #: share/skins/main/dark.fxd:646
 msgid "Total mails"
@@ -4598,7 +4539,7 @@ msgstr "Die skyfievertoning is leeg!"
 #: share/skins/main/Panorama.fxd:422
 #: share/skins/main/Panorama.fxd:430
 msgid "Items"
-msgstr ""
+msgstr "Items"
 
 #: share/skins/main/info.fxd:406
 msgid "Disc ID"
@@ -4619,7 +4560,7 @@ msgstr "Besig om te speel"
 
 #: share/skins/main/Panorama.fxd:777
 msgid "kbps"
-msgstr ""
+msgstr "kbps"
 
 #: share/skins/main/info.fxd:506
 msgid "Copyright"
@@ -4643,7 +4584,6 @@ msgid "New mail"
 msgstr "Nuwe e-pos"
 
 #: share/skins/main/geexbox.fxd:599
-#, fuzzy
 msgid "Nothing scheduled"
 msgstr "Niks geskeduleer"
 
@@ -4759,127 +4699,4 @@ msgstr "Geen leidtjies in spellys"
 #: share/skins/main/basic.fxd:20
 msgid "TV"
 msgstr "TV"
-
-#~ msgid "No media found for \"%s\".\n"
-#~ msgstr "Geen media gevind vir \"%s\".\n"
-#~ msgid "Please insert the media."
-#~ msgstr "Laai asseblief die media."
-#~ msgid "AM Showers"
-#~ msgstr "AM Buie"
-#~ msgid "AM Clouds/PM Sun"
-#~ msgstr "AM Wolke/PS Son"
-#~ msgid "PM Showers"
-#~ msgstr "PM Reen"
-#~ msgid "PM Showers/Wind"
-#~ msgstr "PM Reen/Wind"
-#~ msgid "Rain/Snow Showers"
-#~ msgstr "Reen/Sneeu Buie"
-#~ msgid "Cloudy/Wind"
-#~ msgstr "Bewolk/Winderig"
-#~ msgid "Flurries/Wind"
-#~ msgstr "Windvlae"
-#~ msgid "Mostly Cloudy/Windy"
-#~ msgstr "Meestal Bewolk/Wind"
-#~ msgid "Partly Cloudy/Windy"
-#~ msgstr "Gedeeltelik Bewolk/Wind"
-#~ msgid "AM Rain/Snow Showers"
-#~ msgstr "AM Reen/Sneeubuie"
-#~ msgid "Light Rain/Wind"
-#~ msgstr "Ligte Reen/Wind"
-#~ msgid "Showers/Wind"
-#~ msgstr "Stortbuie/Wind"
-#~ msgid "Mostly Sunny/Wind"
-#~ msgstr "Meestal Sonnig/Wind"
-#~ msgid "Rain/Wind"
-#~ msgstr "Reen/Wind"
-#~ msgid "Sunny/Windy"
-#~ msgstr "Sonnig/Wind"
-#~ msgid "AM Thunderstorms"
-#~ msgstr "AM Donderstorms"
-#~ msgid "AM Rain"
-#~ msgstr "AM Reen"
-#~ msgid "Iso T-Storms/Wind"
-#~ msgstr "Geisoleerde Donderbuie/Wind"
-#~ msgid "Rain/Snow"
-#~ msgstr "Reen/Sneeu"
-#~ msgid "AM Showers/Wind"
-#~ msgstr "AM Buie/Wind"
-#~ msgid "Snow to Ice/Wind"
-#~ msgstr "Sneeu tot Ys/Wind"
-#~ msgid "Snow to Rain"
-#~ msgstr "Sneeu tot Reen"
-#~ msgid "AM Light Rain"
-#~ msgstr "AM Ligte Reen"
-#~ msgid "PM Light Rain"
-#~ msgstr "PM Liste Reen"
-#~ msgid "PM Rain"
-#~ msgstr "RM Reen"
-#~ msgid "Rain to Snow"
-#~ msgstr "Reen tot Sneeu"
-#~ msgid "PM Rain/Snow"
-#~ msgstr "PM Reen/Sneeu"
-#~ msgid "Few Showers/Wind"
-#~ msgstr "Paar Buie/Wind"
-#~ msgid "Snow/Wind"
-#~ msgstr "Sneeu/ Wind"
-#~ msgid "PM Rain/Snow Showers"
-#~ msgstr "PM Reen/Sneeu"
-#~ msgid "PM Rain/Snow/Wind"
-#~ msgstr "OM Ren/Sneeu/Wind"
-#~ msgid "Rain/Snow Showers/Wind"
-#~ msgstr "Reen/Sneeubuie/Wind"
-#~ msgid "Rain/Snow/Wind"
-#~ msgstr "Reen/Sneeu/Wind"
-#~ msgid "PM Snow"
-#~ msgstr "PM Sneeu"
-#~ msgid "Few Snow Showers/Wind"
-#~ msgstr "Paar Sneeubuie/Wind"
-#~ msgid "Light Snow/Wind"
-#~ msgstr "Ligte Sneeu/Wind"
-#~ msgid "AM Light Snow"
-#~ msgstr "AM Ligte Sneeu"
-#~ msgid "T-Storms/Wind"
-#~ msgstr "Donderstorms/Wind"
-#~ msgid "AM Rain/Ice"
-#~ msgstr "AM Reen/Ys"
-#~ msgid "PM Snow Shower"
-#~ msgstr "PM Sneeubui"
-#~ msgid "Snow to Rain/Wind"
-#~ msgstr "Sneeu tot Reen/Wind"
-#~ msgid "PM Light Rain/Ice"
-#~ msgstr "PM Ligte Reen/Ys"
-#~ msgid "AM Snow"
-#~ msgstr "AM Sneeu"
-#~ msgid "Snow to Ice"
-#~ msgstr "Sneeu na Ys"
-#~ msgid "PM Light Snow"
-#~ msgstr "PM Ligte Sneeu"
-#~ msgid "AM Light Rain/Ice"
-#~ msgstr "AM Ligte Reen/Ys"
-#~ msgid "Snow Showers/Windy"
-#~ msgstr "Sneeubuie/Winerig"
-#~ msgid "Light Snow Shower/ Windy"
-#~ msgstr "Ligte Sneeu/ Winderig"
-#~ msgid "calm"
-#~ msgstr "kalm"
-#~ msgid "coming in at"
-#~ msgstr "kom teen"
-#~ msgid "from the"
-#~ msgstr "van"
-#~ msgid "Add File to Cart"
-#~ msgstr "Voeg Lêer by Kaart"
-#~ msgid "Connecting to LCD: %s"
-#~ msgstr "Konnekteer na LCD: %s"
-#~ msgid "Info as known by the LCD module:"
-#~ msgstr "Info soos gegee deur die LCD module:"
-#~ msgid "Info"
-#~ msgstr "Inligting"
-#~ msgid "View Details"
-#~ msgstr "View Details"
-#~ msgid "Program Search"
-#~ msgstr "Program Soek"
-#~ msgid "Feel free to implement this function inside the main guide."
-#~ msgstr "Feel free to implement this function inside the main guide."
-#~ msgid "lyrics"
-#~ msgstr "lirieke"
 
