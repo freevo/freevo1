@@ -456,7 +456,7 @@ class HTMLResource:
                 getNewSize();
             }
             var params="toolbar=no,location=no,status=no,menubar=yes,resizable=no,top=0,left=0,width="+width+",height="+height;
-	    foto = Lightbox.show(''+loc+'', '', 'width='+width+', height='+height+'');
+            foto = Lightbox.show(''+loc+'', '', 'width='+width+', height='+height+'');
          }
 
          function getNewSize(){

@@ -230,7 +230,7 @@ class Info_Area(Skin_Area):
         traverse the list evaluating the expressions,
 
         @returns: a flat list with valid elements indexes only (false 'if' expressions
-        eliminated). 
+        eliminated).
 
         Also, text elements are in the list too in a tuple: ( index, 'text value' ) so
         you can check if it changed just comparing two lists (useful in music player,

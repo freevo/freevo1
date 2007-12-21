@@ -52,7 +52,7 @@ class ScrollableText:
 
     def __get_line__(self, string, max_width, font, word_splitter, hard):
         """
-        calculate _one_ line. 
+        calculate _one_ line.
         @returns: a list
             - string to draw
             - rest that didn't fit

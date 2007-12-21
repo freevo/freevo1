@@ -24,7 +24,7 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc., 
+# with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # ----------------------------------------------------------------------
@@ -92,10 +92,10 @@ class ProgramItem(Item):
         self.favorite = False
 
         # start time
-        self.start = time.strftime(config.TV_DATETIME_FORMAT, 
+        self.start = time.strftime(config.TV_DATETIME_FORMAT,
                                    time.localtime(prog.start))
         # stop time
-        self.stop = time.strftime(config.TV_DATETIME_FORMAT, 
+        self.stop = time.strftime(config.TV_DATETIME_FORMAT,
                                        time.localtime(prog.stop))
 
     def actions(self):
@@ -118,7 +118,7 @@ class ProgramItem(Item):
         # check if this program is scheduled
         (got_schedule, schedule) = record_client.getScheduledRecordings()
         if got_schedule:
-            (result, message) = record_client.isProgScheduled(self.prog, 
+            (result, message) = record_client.isProgScheduled(self.prog,
                                                schedule.getProgramList())
             if result:
                 self.scheduled = True

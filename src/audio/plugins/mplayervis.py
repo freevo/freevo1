@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes: - I'm no fan of all the skin.clear() being done :(
-# Todo:  - 
+# Todo:  -
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -283,7 +283,7 @@ class MpvGoom(BaseAnimation):
                 s.set_alpha(self.alpha)
                 _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
                 gooms.blit(s, (x, y))
-        
+
         # draw the info
         if not self.running:
             return self.running

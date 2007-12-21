@@ -12,8 +12,8 @@
 #          MOVIECOVERS_AUTOACCEPT_SINGLE_HIT = True
 #          It uses also directly the variables:
 #              - ALLOCINE_REMOVE_FROM_LABEL
-#              - ALLOCINE_REMOVE_FROM_SEARCHSTRING 
-#          as the same words shall be removed also for moviecovers. See allocine.py for a desription 
+#              - ALLOCINE_REMOVE_FROM_SEARCHSTRING
+#          as the same words shall be removed also for moviecovers. See allocine.py for a desription
 #          of these variables.
 #        You can also set allocine_search on a key (e.g. '1') by setting
 #        EVENTS['menu']['1'] = Event(MENU_CALL_ITEM_ACTION, arg='moviecovers_search_or_cover_search')
@@ -27,7 +27,7 @@
 # $Log$
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
-# Copyright (C) 2002 Krister Lagerstrom, et al. 
+# Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -145,29 +145,29 @@ class PluginInterface(plugin.ItemPlugin):
         return self.moviecovers_id_list
 
     def guessMoviecovers(self, filename, label=False):
-      """Guess possible Moviecovers movies from filename. Same return as searchMoviecovers"""
-      name = filename
+        """Guess possible Moviecovers movies from filename. Same return as searchMoviecovers"""
+        name = filename
 
-      for r in config.ALLOCINE_REMOVE_FROM_LABEL:
-        name  = re.sub(r, '', name.lower())
+        for r in config.ALLOCINE_REMOVE_FROM_LABEL:
+            name  = re.sub(r, '', name.lower())
 
-      name  = vfs.basename(vfs.splitext(name)[0])
-      name  = re.sub('([a-z])([A-Z])', point_maker, name)
-      name  = re.sub('([a-zA-Z])([0-9])', point_maker, name)
-      name  = re.sub('([0-9])([a-zA-Z])', point_maker, name.lower())
-      name  = re.sub(',', ' ', name)
+        name  = vfs.basename(vfs.splitext(name)[0])
+        name  = re.sub('([a-z])([A-Z])', point_maker, name)
+        name  = re.sub('([a-zA-Z])([0-9])', point_maker, name)
+        name  = re.sub('([0-9])([a-zA-Z])', point_maker, name.lower())
+        name  = re.sub(',', ' ', name)
 
-      parts = re.split("[\._' -]", name)
-      name = ''
+        parts = re.split("[\._' -]", name)
+        name = ''
 
-      for p in parts:
-        if not p.lower() in config.ALLOCINE_REMOVE_FROM_SEARCHSTRING and \
-            not re.search('[^0-9A-Za-z]', p):
-          # originally: not re.search(p, '[A-Za-z]'):
-          # not sure what's meant with that
-          name += '%s ' % p
+        for p in parts:
+            if not p.lower() in config.ALLOCINE_REMOVE_FROM_SEARCHSTRING and \
+                not re.search('[^0-9A-Za-z]', p):
+                # originally: not re.search(p, '[A-Za-z]'):
+                # not sure what's meant with that
+                name += '%s ' % p
 
-      return self.searchMoviecovers(name)
+        return self.searchMoviecovers(name)
 
     def getMoviecoversPage(self, url):
         """url

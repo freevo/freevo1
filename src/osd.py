@@ -872,7 +872,7 @@ class OSD:
     def __drawstringframed_line__(self, string, max_width, font, hard,
                                   ellipses, word_splitter):
         """
-        calculate _one_ line for drawstringframed. 
+        calculate _one_ line for drawstringframed.
         @returns: a list
             - width used
             - string to draw
