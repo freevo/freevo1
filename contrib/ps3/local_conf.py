@@ -48,11 +48,11 @@ CONFIG_VERSION = 5.17
 
 AUDIO_DEVICE       = '/dev/alsa'       # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 # AUDIO_INPUT_DEVICE = '/dev/dsp1'     # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/
-MAJOR_AUDIO_CTRL   = 'PCM'             # Freevo takes control over one audio ctrl
+MIXER_MAJOR_CTRL   = 'PCM'             # Freevo takes control over one audio ctrl
                                        # 'VOL', 'PCM' 'OGAIN' etc.
-CONTROL_ALL_AUDIO  = 1                 # Should Freevo take complete control of audio
-MAX_VOLUME         = 100               # Set what you want maximum volume level to be.
-DEFAULT_VOLUME     = 80                # Set default volume level.
+MIXER_CONTROL_ALL  = 1                 # Should Freevo take complete control of audio
+MIXER_VOLUME_MAX         = 100               # Set what you want maximum volume level to be.
+MIXER_VOLUME_DEFAULT     = 80                # Set default volume level.
 # TV_IN_VOLUME       = 60              # Set this to your preferred level 0-100.
 # VCR_IN_VOLUME      = 90              # If you use different input from TV
 # RADIO_IN_VOLUME    = 80              # Set this to your preferred level 0-100.
@@ -60,7 +60,7 @@ DEFAULT_VOLUME     = 80                # Set default volume level.
 
 # START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 
-CONFIRM_SHUTDOWN   = 0                 # ask before shutdown
+SHUTDOWN_CONFIRM   = 0                 # ask before shutdown
 
 #
 # Physical ROM drives, multiple ones can be specified
@@ -818,8 +818,8 @@ IMAGEVIEWER_BLEND_MODE = -1
 #
 # OSD_BUSYICON_TIMER = (0.7, 200)
 
-# OSD_OVERSCAN_X = 0
-# OSD_OVERSCAN_Y = 0
+# OSD_OVERSCAN_LEFT = OSD_OVERSCAN_RIGHT = 0
+# OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM = 0
 
 #
 # Execute a script on OSD startup.
@@ -1509,10 +1509,10 @@ plugin.remove('tv')
 # %Y - Year with century as a decimal number.
 # ======================================================================
 # plugin.activate('idlebar')
-# plugin.activate('idlebar.tv', level = 20)
-# plugin.activate('idlebar.cdstatus', level = 25)
-# plugin.activate('idlebar.diskfree', level = 30)
-# plugin.activate('idlebar.clock', level = 50)
+# plugin.activate('idlebar.tv', level=20)
+# plugin.activate('idlebar.cdstatus', level=25)
+# plugin.activate('idlebar.diskfree', level=30)
+# plugin.activate('idlebar.clock', level=50)
 # CLOCK_FORMAT = '%a %d %H:%M'
 #
 # settings for the idlebar.diskfree plug-in, in Gigabytes
