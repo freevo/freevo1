@@ -156,11 +156,11 @@ class PluginInterface(plugin.Plugin):
             _debug_('local_conf changed places')
             return 1
 
-        if (long(self.mylocalconf_t) > long(cachelconf_t)):
+        if (float(self.mylocalconf_t) > float(cachelconf_t)):
             _debug_('local_conf modified')
             return 1
 
-        if (long(self.myfconfig_t) > long(cachefconf_t)):
+        if (float(self.myfconfig_t) > float(cachefconf_t)):
             _debug_('fconfig modified')
             return 1
         return 0
