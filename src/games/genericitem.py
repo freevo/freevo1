@@ -60,9 +60,7 @@ class GenericItem(Item):
         self.name = os.path.splitext(os.path.basename(file))[0]
 
         # find image for this file
-        # find image for this file
-        shot = imgpath + '/' + \
-               os.path.splitext(os.path.basename(file))[0] + ".png"
+        shot = imgpath + '/' + os.path.splitext(os.path.basename(file))[0] + ".png"
         if os.path.isfile(shot):
             self.image = shot
         elif os.path.isfile(os.path.splitext(file)[0] + ".png"):
@@ -70,7 +68,8 @@ class GenericItem(Item):
 
         command = ['--prio=%s' % config.GAMES_NICE, cmd]
         command.extend(args.split())
-        #command.append(file)
+        if os.path.getsize(file) > 0:
+            command.append(file)
 
         self.command = command
 
