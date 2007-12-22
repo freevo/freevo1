@@ -1,0 +1,242 @@
+Credits for Freevo
+==================
+
+$Id$
+
+
+
+Packages/external code snippets:
+--------------------------------
+
+o mplayer: http://www.mplayerhq.hu
+o NVrec: http://www.ee.up.ac.za/~justin/v4l2/
+o mp3_id.py: http://id3-py.sourceforge.net/
+o EXIF support from Thierry Bousch <bousch at topo.math.u-psud.fr>
+
+
+People:
+-------
+
+Please email one of the maintainers if your name happens to
+be missing here or the information is wrong!
+
+Maintainers:
+
+Krister Lagerstrom <krister-freevo at kmlager.com>:
+o Initial implementation
+o Core developer
+
+Aubin Paul <aubin at outlyer.org>:
+o Core developer
+o Pseudo Interface Designer
+
+Dirk Meyer <dmeyer at tzi.de>:
+o Core developer
+
+Gustavo Sverzut Barbieri <gsbarbieri at yahoo.com.br>
+o Core developer
+
+Rob Shortt <rob at infointeractive.com>
+o Core developer
+
+Michael Ruelle <mikeruelle at comcast.net>
+o Core developer
+
+Jason Ball <jason.ball at ce.com.au>:
+o SDL support in the OSD
+
+Thomas Malt <thomas at malt.no>
+o Mplayer for Audio support
+o Ogg Vorbis Tag and Playback support
+
+TC Wan <tcwan at cs.usm.my>
+o FC rpm Maintainer
+
+Evan Hisey <ehisey at gmail.com>
+o Slackware Maintainer
+
+John Molohan <john.molohan at gcd.ie>
+o Web Site Maintainer
+
+Duncan Webb <duncan-freevo at linuxowl.com>
+o Maintainer of the stable branch 1.x
+
+
+
+Occasional contributors:
+------------------------
+
+Sylvain FABRE <centraladmin at lahiette.com>
+o French DVD trailer grabber
+o French movie cover grabber
+
+Thorsten Pferdekaemper <thorsten.pferdekaemper at t-online.de>
+o gphoto plug-in
+
+Michel Hoogervorst <michel at highking.nl>
+o Dutch translation
+
+Henri Valeins <senufo at users.sourceforge.net>
+o Internet TV plug-in
+
+Krasimir Atanasov <krasimir_a at users.sourceforge.net>
+o RSS audio podcast plug-in
+o RSS video podcast plug-in
+
+Răzvan T. Coloja <cypresstwist at gmail.com>
+o Romanian translation
+
+Lónyai Gergely <alephlg at gmail.com>
+o Hungarian translation
+
+Lefteris F. Sarakinos <lefteris at kerkyra.gr>
+o Greek translation
+
+Pascal Schirrmann <schirrms at schirrms.net>
+o French translation
+
+Christian Lyra <lyra at pop-pr.rnp.br>
+o Reminder plug-ins
+
+Sami Lechner <h-simpson at users.sourceforge.net>
+o Various bug fixes
+
+Koval Valery <Valery.Koval at innovinn.com>
+o Various mplayer changes
+o Various image viewer and shopping cart changes
+
+Dobes Vandermeer <dobesv at gmail.com>
+o MusicIP Mixer plug-in
+
+Tobi Kars <tobikars at gmail.com>
+o Play Station 3 settings
+
+Martijn Voncken <mvoncken at gmail.com>
+o Album tree audio plug-in
+
+Adam Charrett <ajmcharrett at hotmail.com>
+o Buttonbar plug-in
+o Screensaver plug-in
+o TV Recording Manager plug-in
+
+Andrew Flegg <andrew at bleb.org>
+o Skin additions, anamorphic and past programmes
+
+Don Locke <dlock3 at gmail.com>
+o Music Player Daemon (MPD) plug-in
+o Webserver configuration and plug-in configuration tools
+o Webserver log viewer
+o Webserver YouTube download interface
+
+Frank Naude <naudefj at telkomsa.net>
+o Afrikaans translation
+o Webserver remote plug-in
+o Various bug fixes and patches
+
+Ryan Roth <ryanroth at sbcglobal.net>
+o Various plug-ins and bug fixes
+
+Chandan Pitta <chandan.pitta at gmail.com>
+o Webserver fixes and improvements
+
+Wout Clymans <woutclymans at scarlet.be>
+o Webserver library media player
+
+Tanja Kotthaus <owigera at web.de>
+o German translation
+o idlebar diskfree plug-in
+o tvguide changes for better consistency with other menus
+o Various bug fixes
+
+Hans Meine <hans_meine at gmx.net>
+o Various plug-ins and bug fixes
+
+Richard van Paasen <freevo at t3i.nl>
+o Automated shutdown and wakeup
+o ivtv live tv pause plug-in
+
+James Oakley <jfunk at funktronics.ca>
+o xmltv2 patches
+
+Pierre Ossman <drzeus at drzeus.cx>
+o Linux event device support
+o Apple trailers plug-in
+o Various bug fixes
+
+Gorka Olaizola <gorka at escomposlinux.org>
+o Bluetooth phone plug-in
+o Various bug fixes and patches
+o Spanish translations
+
+Justin Wetherell <phishman3579 at gmail.com>
+o iPod additions to re-encode plug-in
+o RSS feed server
+o record server commerical detection and removal server
+o audio plugin for XM online
+
+Dan Eriksen <eriksen at canada.com>
+o 16-bit pixel support for the X11 OSD server
+o Joystick driver
+
+Jens Oberender <j.obi at troja.net>
+o DXR3 support
+
+Andrew Drummond <adrummond at candw.ky>
+o MAME support
+
+Alex Polite <m2 at plusseven.com>
+o XMMS audio playback support
+o Music playlists support
+
+Per Wigren <wigren at home.se>
+o Various contribs and patches for TV listings
+
+Travis Shirk <travis at pobox.com>
+o ID3v2.x support (now in mmpython)
+
+John M Cooper <john.cooper at yourcommunications.co.uk>
+o Bins support (now in mmpython)
+
+Matthieu Weber <mweber at mit.jyu.fi>
+o DTD and implementation of fxd movie informations
+
+Thomas Schueppel <stain at acm.org>
+o v4l2 python interface
+o video channel frequencies
+o timeshift plugin, pyshift modules and mplayer timefhifting patch
+
+Rob Vandermeulen (rdc at kokosnoot.com)
+o fxdimdb class + rewrite of the plugin & helper
+o the df plugin
+
+
+
+Special Copyright Notice:
+-------------------------
+
+BSD Daemon Copyright 1988 by Marshall Kirk McKusick.
+All Rights Reserved.
+
+Permission to use the daemon may be obtained from:
+	Marshall Kirk McKusick
+	1614 Oxford St
+	Berkeley, CA 94709-1608
+	USA
+or via email at <mckusick at mckusick.com>
+
+BSD Daemon spash screen artwork adapted from an SVG rendition by
+Sergey Akifyev <asa at gascom.ru>, available at
+ftp://ftp.gascom.ru/pub/GNOME2/Bg/beastie.svg.
+
+--------------------------
+
+"GANT" icon set is Copyright 2003 by Paul Davey
+
+The icons are not under the GPL and are granted permission for
+use with Freevo. Redistribution outside of Freevo requires 
+specific permission from the designer. 
+
+Permission to use the icon set may be obtained from:
+http://mattahan.deviantart.com/
+
+---------------------------

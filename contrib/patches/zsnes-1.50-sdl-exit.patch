@@ -1,0 +1,25 @@
+Index: src/linux/sdllink.c
+===================================================================
+--- src/linux/sdllink.c	(revision 4077)
++++ src/linux/sdllink.c	(working copy)
+@@ -428,9 +428,18 @@
+         if (offset >= (256 + 128 + 64)) break;
+         pressed[offset] = 0;
+         break;
+-      case SDL_QUIT:
+-        exit(0);
++
++      case SDL_QUIT: {
++          SDL_Event evtmp;
++          evtmp.type = SDL_KEYDOWN;
++          evtmp.key.state = SDL_PRESSED;
++          evtmp.key.keysym.scancode = 9;
++          evtmp.key.keysym.sym = SDLK_ESCAPE;
++          evtmp.key.keysym.mod = 0;
++          SDL_PushEvent(&evtmp);
++        }
+         break;
++
+ #ifdef __OPENGL__
+       case SDL_VIDEORESIZE:
+         if(!GUIRESIZE[cvidmode])

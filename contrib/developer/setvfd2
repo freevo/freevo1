@@ -1,0 +1,367 @@
+#!/usr/bin/python
+# vim:expandtab:shiftwidth=4:tabstop=4:
+
+# Update a Shuttle's VFD display
+# Jeremy James (jeremy <AT> durge.org) - June 2006
+#
+# Requires python-usb (http://pyusb.berlios.de/)
+#
+# The Cypress CY7C63723C chip has three endpoints - we use EP1 to write to the VFD control chip
+#
+# Messages passed to PT6314 are 8 bytes at a time
+#  4 bits Message Type
+#     Currently Known Types:
+#       0x1  Clear (Data of 0x1 for full clear or 0x2 to just reset the text cursor)
+#       0x3  Display Clock (Data of 0x3)
+#       0x7  Display Icons (Data Icons to display with a byte storing 5 bit flags)
+#       0x9  Display Text (Data is ASCII text to display, starting from current cursor position)
+#       0xd  Set Clock (Data is in zero-padded hex as <secs><mins><hours><dayofweek><day><month><year>)
+#  4 bits Message Length (0-7)
+#  7 Bytes Data (Unused bytes filled with zeros)
+#
+# History:
+# 12/Jun/06  1.0  Initial Version
+# 16/Jun/06  1.1  Added claiming of interface correctly
+
+import time
+import pyusb
+import sys
+
+# Device Constants
+idVendor = 0x1308    # Shuttle Inc
+idProduct = 0x0003   # VFD Module
+usbIDs = [ (0x1308, 0x0003), (0x051c, 0x0005), (0x1308, 0xc001), ]
+maxStringLength = 20
+
+# Program Constants
+sleepLength = 0.01  # Time to wait between sending messages
+debug = 0
+
+def getVFDDevice():
+    "Return the VFD device"
+    
+    for bus in pyusb.busses():
+        for dev in bus.devices:
+            #print "idVendor=%s idProduct=%s" % (dev.idVendor, dev.idProduct)
+            for (idVendor, idProduct) in usbIDs:
+                if dev.idVendor == idVendor and dev.idProduct == idProduct:
+                    if debug:
+                        print >>sys.stderr,"Found VFD on bus %s at device %s"%(bus.dirname,dev.filename)
+                    return dev.open()
+
+    print >>sys.stderr,"Error! Device not found!"
+    raise SystemExit,2
+
+def sendData(dev,data):
+    "Send a piece of data to specified VFD device, retrying if necessary"
+    attempts = 3
+    while attempts > 0:
+        try:
+            if debug:
+                print "Sending data %r"%(data,)
+            dev.controlMsg(0x21,   # Message to Class Interface
+                           0x09,
+                           data,
+                           0x0200,
+                           0x0001) # Endpoint 1
+            return
+        except Exception,e:
+            attempts -= 1
+            if debug:
+                print "Failed to send. Retrying..."
+            time.sleep(sleepLength)
+    
+    raise e
+
+def msg(msgtype, *msgdata):
+    assert msgtype >= 0 and msgtype <= 0xf
+    assert len(msgdata) <= 7
+    
+    print 'msgtype=%s, msgdata=%s, len(msgdata)=%s' % (msgtype, msgdata, len(msgdata))
+
+    retval = chr((msgtype<<4)+len(msgdata))
+    if len(msgdata) == 1 and type(msgdata[0]) == str:
+        retval += msgdata[0]+"\x00"*(7-len(msgdata[0]))
+    else:
+        retval += "".join([type(x) == int and chr(x) or x for x in msgdata])
+        retval += "\x00"*(7-len(msgdata))
+    return retval
+
+def clear(dev):
+    "Clear the display"
+    sendData(dev,msg(1,1))
+
+def reset(dev):
+    "Reset the cursor position"
+    sendData(dev,msg(1,2))
+
+def split(s, length, maxlength):
+    "Split a string into chunks, but no longer than maxlength"
+    if len(s) > maxlength:
+        print >>sys.stderr,"Warning! Truncating string longer than %d characters"%(maxlength,)
+        s = s[:maxlength]
+    s = s.center(maxlength)
+    out = []
+    for x in range(0,len(s),length):
+        out.append(s[x:x+length])
+    return out
+
+def message(dev,msgstring,cls=1):
+    "Update the display with a string, specifying if it should be cleared first"
+    
+    msgparts = split(msgstring, 7, maxStringLength)
+
+    if cls:
+        clear(dev)
+    else:
+        reset(dev)
+
+    for part in msgparts:
+        sendData(dev,msg(9,*part))
+
+def clock(dev,settime=None):
+    "Show the clock, setting the time as necessary"
+    if not settime:
+        settime = time.localtime()
+    
+    sendData(dev,msg(0xd,time.strftime("%S%M%H0%w%d%m%y",settime).decode("hex")))
+    sendData(dev,msg(3,3))
+
+def volume(dev,level):
+    "Update the volume"
+    sendData(dev,msg(7,level))
+
+def splitbitmask(s, length):
+    "Split the bitmask into chunks"
+    out = []
+    for x in range(len(s)-length,-1,-length):
+        out.append(s[x:x+length])
+    return out
+
+def icons(dev,bitmask):
+    "Update icons to be shown"
+    bitmask = bitmask.replace(" ","")
+    assert len(bitmask) == 20,"Bitmask should be 20 characters long"
+    parts = splitbitmask(bitmask,5)
+    sendData(dev,msg(7,*[int(x,2) for x in parts]))
+
+def test7(dev):
+    "Send control codes plus message type 9,11"
+    ty = 0x9
+    ch = ord('!')
+    while True:
+        print "Enter a ctrl code:",
+        s = sys.stdin.readline()
+        if not s:
+            break;
+        s = s[:-1]
+        if s == "b":
+            if ty == 0x9:
+                ty = 0xb
+            else:
+                ty = 0x9
+            print 'ty=%x' % ty
+            continue
+        elif s != "":
+            try:
+                n = int(s)
+            except ValueError:
+                print '"%s" invalid!' % (s)
+                continue
+            print 'n=%s ty=%x c=%s "%s"' % (n, ty, ch, chr(ch))
+            sendData(dev,msg(1,n,1))
+        else:
+            print 'ty=%s, c=%s "%s"' % (ty, ch, chr(ch))
+        time.sleep(sleepLength*3)
+        sendData(dev,msg(ty, ch))
+        ch = ch + 1
+        
+def test6(dev):
+    "Send control codes plus message type 9,11"
+    nr = 0
+    ty = 0x9
+    ch = ord('!')
+    while True:
+        print "Enter a ctrl code:",
+        s = sys.stdin.readline()
+        if not s:
+            break;
+        s = s[:-1]
+        if s == "":
+            print 'nr=%s ty=%x c=%s "%s"' % (nr, ty, ch, chr(ch))
+            sendData(dev,msg(ty, ch))
+            ch = ch + 1
+            if ch >= 127:
+                ch = ord('!')
+        elif s == "b":
+            if ty == 0x9:
+                ty = 0xb
+            else:
+                ty = 0x9
+            print 'ty=%x' % ty
+            continue
+        else:
+            try:
+                nr = int(s)
+            except ValueError:
+                print '"%s" invalid!' % (s)
+                continue
+            print 'nr=%s 0x%x' % (nr, nr)
+            sendData(dev,msg(1,nr))
+        
+def test5(dev):
+    "Just send cursor codes"
+    while True:
+        print "Enter a ctrl code:",
+        s = sys.stdin.readline()
+        if not s:
+            break;
+        s = s[:-1]
+        try:
+            n = int(s)
+        except ValueError:
+            print '"%s" invalid!' % (s)
+            continue
+        print '"%s" n=%s' % (s, n)
+        sendData(dev,msg(1,n,1))
+        
+def test4(dev):
+    "Message type 11 test"
+    # seems to only write 10 characters
+    sendData(dev,msg(11,ord('a'),ord('b'),ord('c'),ord('d'),ord('e'),ord('f'),ord('g')))
+    time.sleep(1)
+    sendData(dev,msg(11,ord('h'),ord('i'),ord('j'),ord('k'),ord('l'),ord('m'),ord('n')))
+
+def test3(dev):
+    "Test to see what other message can display"
+#       0x1  Clear (Data of 0x1 for full clear or 0x2 to just reset the text cursor)
+#       0x3  Display Clock (Data of 0x3)
+#       0x7  Display Icons (Data Icons to display with a byte storing 5 bit flags)
+#       0x9  Display Text (Data is ASCII text to display, starting from current cursor position)
+#       0xd  Set Clock (Data is in zero-padded hex as <secs><mins><hours><dayofweek><day><month><year>)
+#       0x1  does cursor tricks 
+#       0xb  displays text, but in a different way
+
+    # tried with --test and --clear
+    for x in [0x2, 0x4, 0x5, 0x6, 0x8, 0xa, 0xb, 0xc, 0xe, 0xf]:
+        for y in range(32,32+20):
+            print chr(7),
+            sendData(dev,msg(x,y))
+            time.sleep(1)
+
+def test2(dev):
+    "Encoding test seems to be latin1"
+
+    out = []
+    for x in range(208,208+20):
+        out.append(chr(x))
+    msg=''.join(out)
+    message(dev,msg)
+
+def test(dev):
+    "Display everything"
+
+    message(dev,"ABCDEFGHIJKLMNOPQRST")
+    icons(dev,"11111111111111101100")
+
+def usage():
+    "Display command line usage"
+    
+    print "Display information on a Shuttle's VFD"
+    print "Usage: %s [options]"%(sys.argv[0],)
+    print
+    print "Options:"
+    print "   -m <message> : Display a message"
+    print "   -t / --time  : Show the time"
+    print "   -c / --clear : Clear the display"
+    print "   -v <volume>  : Set the volume betwen 0 and 12"
+    print "   --test       : Test display"
+    print "   --test2      : Test display"
+    print "   --test3      : Test display"
+    print "   --test4      : Test display"
+    print "   --test5      : Test display"
+    print "   --test6      : Test display"
+    print "   --test7      : Test display"
+    print "   -i <bitmask> : Set icons to be displayed"
+    print
+    print "Icons (add together to make bitmask):"
+    print "   10000 00000 00000 00000 : Clock"
+    print "   01000 00000 00000 00000 : Radio"
+    print "   00100 00000 00000 00000 : Music"
+    print "   00010 00000 00000 00000 : CD/DVD"
+    print "   00001 00000 00000 00000 : Television"
+    print
+    print "   00000 10000 00000 00000 : Camera"
+    print "   00000 01000 00000 00000 : Rewind"
+    print "   00000 00100 00000 00000 : Record"
+    print "   00000 00010 00000 00000 : Play"
+    print "   00000 00001 00000 00000 : Pause"
+    print
+    print "   00000 00000 10000 00000 : Stop"
+    print "   00000 00000 01000 00000 : Fast Forward"
+    print "   00000 00000 00100 00000 : Reverse"
+    print "   00000 00000 00010 00000 : Repeat"
+    print "   00000 00000 00001 00000 : Mute"
+    print
+    print "Volume:"
+    print "   00000 00000 00000 00000 : Level 0 (Off) "
+    print "   00000 00000 00000 00001 : Level 1"
+    print "   ..."
+    print "   00000 00000 00000 01100 : Level 12 (Maximum)"
+    print
+
+def main():
+    import getopt
+
+    try:
+        opts,args = getopt.getopt(sys.argv[1:],"hm:tcv:i:",
+          ["help","message=","time","clear","volume=","icons=","test","test2","test3","test4","test5","test6","test7"])
+    except getopt.GetoptError:
+        usage()
+        raise SystemExit,1
+
+    if not opts or args:
+        usage()
+        raise SystemExit,1
+
+    dev = getVFDDevice()
+
+    dev.claimInterface(1)
+
+    try:
+        for o, a in opts:
+            if o in ("-h", "--help"):
+                usage()
+                raise SystemExit,1
+            if o in ("-m", "--message"):
+                message(dev,a)
+            if o in ("-t", "--time"):
+                clock(dev)
+            if o in ("-c", "--clear"):
+                clear(dev)
+            if o in ("-v", "--volume"):
+                if not a.isdigit() or int(a) < 0 or int(a) > 12:
+                    print "Error! Invalid volume level %r! (should be between 0 and 12)"%(a,)
+                    raise SystemExit,1
+                volume(dev,int(a))
+            if o in ("-i", "--icons"):
+                icons(dev,a)
+            if o == "--test":
+                test(dev)
+            if o == "--test2":
+                test2(dev)
+            if o == "--test3":
+                test3(dev)
+            if o == "--test4":
+                test4(dev)
+            if o == "--test5":
+                test5(dev)
+            if o == "--test6":
+                test6(dev)
+            if o == "--test7":
+                test7(dev)
+    finally:
+        dev.releaseInterface()
+
+if __name__ == "__main__":
+    main()
