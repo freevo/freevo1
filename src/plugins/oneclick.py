@@ -315,14 +315,14 @@ class WeatherItem(Item):
             if len(location) > 2 and location[2]:
                 self.mapuri = str(location[2])
             if len(location) > 3 and location[3]:
-                self.name = str(location[3])
+                self.name = Unicode(location[3])
         else:
             self.location = location
             self.ismetric = False
 
-        self.popupParam = Unicode(self.location)
+        self.popupParam = self.location
         if self.name:
-            self.popupParam = Unicode(self.name)
+            self.popupParam = self.name
 
         self.units = self.ismetric and '&unit=m' or ''
         self.url_curc = config.ONECLICK_URL_CURC % (urllib.quote(self.location), self.units)
