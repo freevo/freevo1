@@ -286,6 +286,17 @@ class EditFavoriteResource(FreevoResource):
             mod_index = int(fav.mod)/30 + 1
             fv.res += 'document.editfavorite.mod.options[%s].selected=true\n' % mod_index
 
+
+        if config.TV_RECORD_DUPLICATE_DETECTION:
+            (tempStatus, tempFav) = ri.getFavorite(fav.name)
+            if hasattr(tempFav, 'allowDuplicates'):
+                fv.res += 'document.editfavorite.allowDuplicates.options[%s].selected=true\n' % abs(int(tempFav.allowDuplicates)-1)
+
+        if config.TV_RECORD_ONLY_NEW_DETECTION:
+            (tempStatus, tempFav) = ri.getFavorite(fav.name)
+            if hasattr(tempFav, 'onlyNew'):
+                fv.res += 'document.editfavorite.onlyNew.options[%s].selected=true\n' % int(tempFav.onlyNew)
+
         fv.res += '</script>'
 
         fv.printSearchForm()

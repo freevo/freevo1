@@ -149,7 +149,7 @@ class FavoritesResource(FreevoResource):
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             if config.TV_RECORD_DUPLICATE_DETECTION:
-                (tempStatus, tempFav) = ri.getFavorite(fav.title)
+                (tempStatus, tempFav) = ri.getFavorite(fav.name)
                 if hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 1:
                     cell = 'ALLOW'
                 elif hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 0:
@@ -159,7 +159,7 @@ class FavoritesResource(FreevoResource):
                 fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             if config.TV_RECORD_ONLY_NEW_DETECTION:
-                (tempStatus, tempFav) = ri.getFavorite(fav.title)
+                (tempStatus, tempFav) = ri.getFavorite(fav.name)
                 if hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 1:
                     cell = 'ONLY NEW'
                 elif hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 0:
