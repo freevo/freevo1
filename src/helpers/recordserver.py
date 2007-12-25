@@ -1558,6 +1558,9 @@ class RecordServer(xmlrpc.XMLRPC):
         except:
             fxd.info['year'] = '2007'
         fxd.title = rec_prog.title
+        if plugin.is_active('tv.recordings_manager'):
+            fxd.info['watched'] = 'False'
+            fxd.info['keep'] = 'False'
         fxd.writeFxd()
 
 
