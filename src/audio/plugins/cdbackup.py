@@ -169,6 +169,7 @@ class PluginInterface(plugin.ItemPlugin):
                 ('CDPAR_CMD', config.CONF.cdparanoia, ''),
                 ('OGGENC_CMD', config.CONF.oggenc, ''),
                 ('FLAC_CMD', config.CONF.flac, ''),
+                ('CD_RIP_FMT', None, ''),
                 ('CD_RIP_CDPAR_OPTS', '-s', ''),
                 ('CD_RIP_PN_PREF', '%(artist)s/%(album)s/%(song)s', ''),
                 ('CD_RIP_LAME_OPTS', '--preset standard', ''),
@@ -188,9 +189,8 @@ class PluginInterface(plugin.ItemPlugin):
                 else:
                     self.device = self.item.devicename
                     _debug_('devicename = %s' %self.device)
-                    return [ ( self.create_backup_menu,
-                               _('Rip the CD to the hard drive'),
-                               _('Get CDs available for ripping')) ]
+                    return [ ( self.create_backup,
+                               _('Rip the CD to the hard drive')) ]
         except:
             _debug_( _( 'ERROR' ) + ': ' + _( 'Item is not an Audio CD' ) )
         return []
@@ -210,6 +210,12 @@ class PluginInterface(plugin.ItemPlugin):
                            (t.current_track, t.max_track))
             pop.show()
 
+
+    def create_backup(self, arg=None, menuw=None):
+        if config.CD_RIP_FMT:
+            self.cd_backup(arg=(self.device, config.CD_RIP_FMT), menuw=menuw)
+        else:
+            self.create_backup_menu(menuw=menuw)
 
     def create_backup_menu(self, arg=None, menuw=None):
         mm_menu = self.create_backup_items(self.device, menuw=None)
