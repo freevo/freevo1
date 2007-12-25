@@ -151,7 +151,8 @@ class ShutdownItem(Item):
         """
         self.menuw = menuw
         what = _('Do you really want to shut down Freevo?')
-        ConfirmBox(text=what, handler=self.shutdown_freevo, default_choice=1).show()
+        ConfirmBox(text=what, handler=self.shutdown_freevo,
+                   default_choice=config.SHUTDOWN_CONFIRM-1).show()
 
 
     def confirm_system(self, arg=None, menuw=None):
@@ -160,7 +161,9 @@ class ShutdownItem(Item):
         """
         self.menuw = menuw
         what = _('Do you really want to shut down the system?')
-        ConfirmBox(text=what, handler=self.shutdown_system, default_choice=1).show()
+        ConfirmBox(text=what, handler=self.shutdown_system,
+                   default_choice=config.SHUTDOWN_CONFIRM-1).show()
+
 
     def confirm_system_restart(self, arg=None, menuw=None):
         """
@@ -168,8 +171,8 @@ class ShutdownItem(Item):
         """
         self.menuw = menuw
         what = _('Do you really want to restart the system?')
-        ConfirmBox(text=what, handler=self.shutdown_system_restart, default_choice=1).show()
-
+        ConfirmBox(text=what, handler=self.shutdown_system_restart,
+                   default_choice=config.SHUTDOWN_CONFIRM-1).show()
 
     def shutdown_freevo(self, arg=None, menuw=None):
         """

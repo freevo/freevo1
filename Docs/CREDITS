@@ -66,8 +66,11 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
+Michel Lespinasse <walken at zoy.org>
+o Various fixes
+
 James Trietsch <kerosel at yahoo.com>
-o Various webserver fixes
+o Various webserver and recording fixes
 
 Sylvain Fabre <centraladmin at lahiette.com>
 o French DVD trailer grabber
