@@ -401,6 +401,10 @@ class RecordedProgramItem(VideoItem):
             watched = eval(watched)
         self.watched =  watched
 
+        imagefile = vfs.getoverlay(video_item.filename) + '.raw'
+        if os.path.isfile(imagefile):
+            self.image = imagefile
+
         try:
             self.timestamp = float(self.video_item['recording_timestamp'])
         except ValueError:
@@ -534,6 +538,7 @@ class RecordedProgramItem(VideoItem):
             self.icon = config.ICON_DIR + '/status/television_watched.png'
         else:
             self.icon = config.ICON_DIR + '/status/television_unwatched.png'
+        self.outicon = self.icon
 
 
     def __getitem__(self, key):
@@ -697,6 +702,8 @@ class Series(Item):
             self.items.reverse()
 
         self.set_icon()
+        if(self.items[0].image):
+            self.image=self.items[0].image
 
 
     # ======================================================================
