@@ -149,26 +149,29 @@ class Logger:
 
 class VideoGroup:
     """
-    vdev:         The video recording device, such as /dev/video0.
-    vvbi:         The video vbi device, such as /dev/vbi0.
-    adev:         The audio device, such as /dev/dsp.
-    input_type:   tuner, webcam
-    input_num:    The number of this input according to V4L
-    tuner_type:   internal (on a v4l device), or external (cable or sat box)
-    tuner_norm:   NTSC, PAL, SECAM
-    tuner_chanlist:  us-cable,
-    tuner_chan:   If using input_type=tuner and tuner_type=external set this to
-    what channel it needs to be to get the signal, usually 3 or 4.
-    record_group: VideoGroup that records for this tuner, default is to use the same device for record and play
-    desc:         A nice description for this VideoGroup.
-    group_type:   Special variable to identify devices like dvb or ivtv.  This
-        can be left as default, 'normal', or set to 'ivtv', 'dvb', 'webcam', 'tvalsa'.
-    cmd:          Command for execute external prog after the channel switched, such as 'sudo /usr/local/bin/setuptuner'
+    vdev:           The video recording device, such as /dev/video0.
+    vvbi:           The video vbi device, such as /dev/vbi0.
+    adev:           The audio device, such as: None, /dev/dsp.
+    input_type:     tuner, webcam
+    input_num:      The number of this input according to V4L
+    tuner_type:     internal (on a v4l device), or external (cable or sat box)
+    tuner_norm:     NTSC, PAL, SECAM
+    tuner_chanlist: us-cable,
+    tuner_chan:     If using input_type=tuner and tuner_type=external set this to
+                    what channel it needs to be to get the signal, usually 3 or 4.
+    irsend_trans:   IR transmitter to use for multiple external tuners.
+    record_group:   VideoGroup that records for this tuner, default is to use the
+                    same device for record and play
+    desc:           A nice description for this VideoGroup.
+    group_type:     Special variable to identify devices like dvb or ivtv.  This
+                    can be one of: 'normal', 'ivtv', 'dvb', 'tvalsa' or 'webcam'.
+    cmd:            Command for execute external prog after the channel switched,
+                    such as 'sudo /usr/local/bin/setuptuner'
     """
 
     def __init__(self, vdev=None, vvbi='/dev/vbi', adev=None, input_type=None,
                  input_num=0, tuner_norm=None, tuner_chanlist=None,
-                 tuner_type='internal', tuner_chan=None,
+                 tuner_type='internal', tuner_chan=None, irsend_trans=None,
                  record_group=None, desc='Freevo Default Video Group',
                  group_type='normal', cmd=None):
 
@@ -191,6 +194,7 @@ class VideoGroup:
         self.tuner_norm = string.upper(tuner_norm)
         self.tuner_chanlist = tuner_chanlist
         self.tuner_chan = tuner_chan
+        self.irsend_trans = irsend_trans
         self.record_group = record_group
         self.desc = desc
         self.group_type = group_type
