@@ -412,6 +412,11 @@ HIDE_UNUSABLE_DISCS = 1
 #
 ROM_SPEED = 0
 
+#
+# Shutdown confirmation.
+# Set to 0 for no confirmation, set to 1 to show a confirm dialog
+# (OK preselected), set to 2 to show a confirm dialog (Cancel preselected)
+#
 SHUTDOWN_CONFIRM = 1                  # ask before shutdown
 
 SHUTDOWN_SYS_CMD = 'shutdown -h now'  # set this to 'sudo shutdown -h now' if
