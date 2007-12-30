@@ -159,9 +159,9 @@ class ManualRecordItem(Item):
         _debug_('mod_start_month(self, arg=None, menuw=None)', 2)
         items = []
 
-        iter=1
-        while iter < 13:
-            month_name = self.months[(iter + self.starttime[1] - 1) % 12 - 1];
+        iter=0
+        while iter < 12:
+            month_name = self.months[(iter + self.starttime[1] - 1) % 12];
             month_num  = self.months.index(month_name) + 1;
             items.append(menu.MenuItem(month_name, action=self.alter_prop, arg=('startmonth', (month_name, month_num))))
             iter = iter + 1
@@ -222,10 +222,11 @@ class ManualRecordItem(Item):
         _debug_('mod_stop_month(self, arg=None, menuw=None)', 2)
         items = []
 
-        iter=1
-        while iter < 13:
-            items.append(menu.MenuItem(self.months[(iter + self.stoptime[1] - 1) % 12 - 1], action=self.alter_prop,
-                         arg=('stopmonth', (self.months[(iter + self.stoptime[1] - 1) % 12 - 1], (iter + self.stoptime[1] - 1) % 12))))
+        iter=0
+        while iter < 12:
+            month_name = self.months[(iter + self.stoptime[1] - 1) % 12];
+            month_num  = self.months.index(month_name) + 1;
+            items.append(menu.MenuItem(month_name, action=self.alter_prop, arg=('stopmonth', (month_name, month_num))))
             iter = iter + 1
 
         manualrecord_menu = menu.Menu(_('Modify Day'), items,
