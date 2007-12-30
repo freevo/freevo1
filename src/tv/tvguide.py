@@ -567,31 +567,23 @@ class TVGuide(Item):
 
         channel_pos = min(len(self.guide.chan_list)-1, max(0, i+value))
 
-        # calc real changed value
-        value = channel_pos - i
-
-        if value < 0 and channel_pos >= 0 and channel_pos <= start_pos:
-            # move start channel up
+        if value < 0 and channel_pos >= 0 and channel_pos < start_pos:
             start_channel = self.guide.chan_list[start_pos + value].id
 
-        if value > 0 and channel_pos < len(self.guide.chan_list)-1 and \
-               channel_pos + 1 >= end_pos:
-            # move start channel down
+        if value > 0 and channel_pos < len(self.guide.chan_list)-1 and channel_pos+1 >= end_pos:
             start_channel = self.guide.chan_list[start_pos + value].id
 
         channel = self.guide.chan_list[channel_pos]
 
-        programs = self.guide.GetPrograms(start_time+1, stop_time-1,
-                                         [ channel.id ])
-        programs = programs[0].programs
 
+        programs = self.guide.GetPrograms(start_time+1, stop_time-1, [ channel.id ])
+        programs = programs[0].programs
 
         prg = None
         if programs and len(programs) > 0:
             for i in range(len(programs)):
                 if programs[i].stop > self.select_time and programs[i].stop > start_time:
                     break
-
 
             prg = programs[i]
             if prg.sub_title:
