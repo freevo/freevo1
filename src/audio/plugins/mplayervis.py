@@ -131,7 +131,7 @@ class MpvGoom(BaseAnimation):
     def set_resolution(self, x, y, width, height, cinemascope=0, clear=False):
         """ Set the resolution of the pygoom window """
         _debug_('set_resolution(x=%r, y=%r, width=%r, height=%r, cinemascope=%r, clear=%r)' % \
-            (x, y, width, height, cinemascope, clear))
+            (x, y, width, height, cinemascope, clear), 1)
         r = Rect (x, y, width, height)
         if r == self.rect:
             return
@@ -148,7 +148,7 @@ class MpvGoom(BaseAnimation):
         if self.coverfile:
             try:
                 s = image.load(self.coverfile).convert()
-                s.set_colorkey(0) # make black transparent
+                s.set_colorkey(-1) # make top-left pixel transparent
             except:
                 pass
         if s:
@@ -168,23 +168,26 @@ class MpvGoom(BaseAnimation):
                 x = (self.rect.width - w)  / 2
 
             self.coversurf = (transform.scale(s,(w, h)), x, y)
-            self.max_blend = 250
             self.c_timer   = time.time()
 
 
     def set_fullscreen(self):
         """ Set the mode to full screen """
-        _debug_('set_fullscreen()')
-        t_h = config.CONF.height-(config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM)
-        w   = config.CONF.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
+        _debug_('set_fullscreen()', 1)
+        #w = config.CONF.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
+        #w = int(float(w) * config.IMAGEVIEWER_ASPECT)
+        w = config.CONF.width
+        w = int(float(w) / config.IMAGEVIEWER_ASPECT)
 
-        # ~16:9
-        h   = int(9.0*float(w)/16.0)
-        y   = ((t_h-h)/2) + config.OSD_OVERSCAN_TOP
-        x   = config.OSD_OVERSCAN_LEFT
+        #h = config.CONF.height-(config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM)
+        #h = int(float(h) * config.IMAGEVIEWER_ASPECT)
+        h = config.CONF.height
 
+        x = int(config.CONF.width - w) / 2
+        y = int(config.CONF.height - h) / 2
+
+        _debug_('x=%r y=%r w=%r h=%r' % (x, y, w, h), 1)
         self.set_resolution(x, y, w, h, 0)
-        self.max_blend = 80
 
 
     def set_info(self, info, timeout=5):
@@ -194,7 +197,7 @@ class MpvGoom(BaseAnimation):
         @param info: text to draw
         @param timeout: how long to display
         """
-        _debug_('set_info(info=%r, timeout==%r)' % (info, timeout))
+        _debug_('set_info(info=%r, timeout==%r)' % (info, timeout), 1)
 
         font = skin.get_font('detachbar')
         w = font.stringsize(info)
@@ -270,7 +273,7 @@ class MpvGoom(BaseAnimation):
         The timer handler
         Uses a state machine
         """
-        #_debug_('timerhandler()')
+        #_debug_('timerhandler()', 2)
         # draw the cover
         if not self.running:
             return self.running
@@ -611,7 +614,7 @@ class PluginInterface(plugin.Plugin):
         It should be safe to do call start() from here
         since this is now a callback from main.
         """
-        #_debug_('stdout(line=%r)' % (line))
+        #_debug_('stdout(line=%r)' % (line), 2)
         if self.visual:
             return
 
