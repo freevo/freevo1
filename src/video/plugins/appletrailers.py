@@ -122,10 +122,12 @@ class Trailer(Item):
         self.name = name
         self.type = 'video'
 
+        self.mode = ''
+        self.files = ''
         self.image = _fetch_image(title['image'])
-        self.description = "Genres: " + ",".join(title["genres"])
-        self.description += "\nCategories: " + ",".join(trailer["categories"])
-        self.description += "\nDate: " + trailer["date"]
+        self.description = 'Genres: ' + ','.join(title['genres'])
+        self.description += '\nCategories: ' + ','.join(trailer['categories'])
+        self.description += '\nDate: ' + trailer['date']
 
         self._title = title
         self._trailer = trailer
