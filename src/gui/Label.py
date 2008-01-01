@@ -34,6 +34,13 @@ from GUIObject import *
 
 class Label(GUIObject):
     """
+    Displays a single line of text. Really it maintains a surface with a
+    rendered text. If text is updated text is re-rendered and re-blitted to
+    the screen.
+
+    Both text and align can be set using functions. If text is not set when
+    draw is called an exception is raised.
+
     @ivar text:
         String, text to display
     @ivar align:
@@ -41,19 +48,13 @@ class Label(GUIObject):
     @ivar parent:
         GUIObject, Reference to object containing this label.
     @ivar text_prop:
-        A dict of 4 elements composing text proprieties:
+        A dict of 4 elements composing text properties::
+
               { 'align_h': align_h, 'align_v': align_v, 'mode': mode, 'hfill': hfill }
                  align_v = text vertical alignment
                  align_h = text horizontal alignment
                  mode    = hard (break at chars); soft (break at words)
                  hfill   = True (don't shorten width) or False
-
-    Displays a single line of text. Really it maintains a surface with a
-    rendered text. If text is updated text is rerendered and reblitted to
-    the screen.
-
-    Both text and align can be set using functions. If text is not set when
-    draw is called an exception is raised.
     """
 
     def __init__(self, text=None, parent=None, h_align=None, v_align=None,

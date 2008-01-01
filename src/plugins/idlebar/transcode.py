@@ -54,8 +54,9 @@ class PluginInterface(IdleBarPlugin):
     """
     Shows the status of the current encoding job
 
-    Activate with:
-    | plugin.activate('idlebar.transcode')
+    Activate with::
+
+        | plugin.activate('idlebar.transcode')
     """
 
     def __init__(self):
@@ -122,19 +123,24 @@ class PluginInterface(IdleBarPlugin):
         """
         Get the progress & pass information of the job currently encoding.
 
-        This call returns False if no job is currently encoding (fx the queue is not active).
-        When the queue is active, this call returns a tuple of 4 values:
-            (friendlyname, status, perc, timerem)
-
         friendlyname is the friendlyname you assigned to the encoding job
+
         status is the current status of the encoding job, represented by an integer:
             - 0 Not set (this job hasn't started encoding). Never used in this context
             - 1 Audio pass in progress
             - 2 First (analyzing) video pass (only used in multipass encoding)
             - 3 Final video pass
             - 4 Postmerge (not used atm). Final merging or similar processing in progress
+
         perc is the percentage completed of the current pass
+
         timerem is the estimated time remaining of the current pass, formatted as a human-readable string.
+
+        @returns:
+            False if no job is currently encoding (fx the queue is not active).
+            When the queue is active, this call returns a tuple of 4 values::
+
+                (friendlyname, status, perc, timerem)
         """
         _debug_('getprogress()', 2)
 

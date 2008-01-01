@@ -382,7 +382,7 @@ class WeatherItem(Item):
 
     def updateData(self):
         """update the cache data from the 1click service
-        @notes the elocation is not updated as it is static
+        @note: the elocation is not updated as it is static
         """
         _debug_('updateData()', 2)
         if GUI:
@@ -534,7 +534,7 @@ class WeatherItem(Item):
 
     def getLastUpdated(self):
         """ parse the lsup time
-        @notes there seems to be a problem with AM/PM not parsing correctly
+        @note: there seems to be a problem with AM/PM not parsing correctly
         """
         _debug_('getLastUpdated() "%s"' % self.updated, 2)
         if self.zone < 0:

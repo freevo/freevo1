@@ -1,7 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# ConfirmBox.py - a popup box that asks a question and prompts
-#                 for ok/cancel
+# a pop-up box that asks a question and prompts for ok/cancel
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -40,6 +39,14 @@ from Button    import *
 
 class ConfirmBox(PopupBox):
     """
+    @ivar text:
+        String to print.
+    @ivar handler:
+        Handler call-back for the box
+    @ivar handler_message:
+        If 'handler_message' is set, the box will transform into a normal pop-up
+        showing this text while 'handler' is called and will destroy itself after
+        that.
     @ivar x:
         x coordinate. Integer
     @ivar y:
@@ -48,20 +55,16 @@ class ConfirmBox(PopupBox):
         Integer
     @ivar height:
         Integer
-    @ivar text:
-        String to print.
     @ivar icon:
         icon
     @ivar text_prop:
-        A dict of 4 elements composing text proprieties:
+        A dict of 4 elements composing text proprieties::
+
               { 'align_h': align_h, 'align_v': align_v, 'mode': mode, 'hfill': hfill }
                  align_v = text vertical alignment
                  align_h = text horizontal alignment
                  mode    = hard (break at chars); soft (break at words)
                  hfill   = True (don't shorten width) or False
-
-    If 'handler_message' is set, the box will transform into a normal popup
-    showing this text while 'handler' is called and will destry itself after that.
     """
     def __init__(self, text, handler=None, handler_message=None, default_choice=0,
                  x=None, y=None, width=0, height=0, icon=None, vertical_expansion=1,
