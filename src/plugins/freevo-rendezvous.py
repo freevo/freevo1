@@ -44,11 +44,11 @@ class PluginInterface(plugin.DaemonPlugin):
     """
     Rendezvous Broadcaster Plugin
 
-    See: http://www.porchdogsoft.com/products/howl/ (Win32 Plugin/Linux/FreeBSD)
+    U{Win32 Plugin/Linux/FreeBSD <http://www.porchdogsoft.com/products/howl/>}
 
-    This plugin has been tested with
-       * Safari on Mac OS X Panther
-       * IE6 + Howl on Windows XP
+    This plugin has been tested with:
+       - Safari on Mac OS X Panther
+       - IE6 + Howl on Windows XP
 
     To enable this plugin, add to your local_conf.py:
     | plugin.activate('freevo-rendezvous')
@@ -60,8 +60,9 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         desc = {'version':version.__version__}
         myip = self.my_ipaddr('localhost')
-        info = Rendezvous.ServiceInfo("_http._tcp.local.", "Freevo Web._http._tcp.local.", address=socket.inet_aton(myip),
-            port=config.WEBSERVER_PORT, weight=0, priority=0, properties=desc, server=socket.gethostname)
+        info = Rendezvous.ServiceInfo("_http._tcp.local.", "Freevo Web._http._tcp.local.", \
+            address=socket.inet_aton(myip), port=config.WEBSERVER_PORT, \
+            weight=0, priority=0, properties=desc, server=socket.gethostname)
         r.registerService(info)
 
     def my_ipaddr(self,interface_hostname=None):

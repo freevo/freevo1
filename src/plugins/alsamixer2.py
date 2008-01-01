@@ -52,40 +52,40 @@ class PluginInterface(plugin.DaemonPlugin):
     The plugin uses the following configuration variables, which need to be
     defined in local_conf.py:
 
-    ALSAMIXER2_MAIN_CTRL = <control name>
-        This is the mixer control that the plugin will use for handling volume
-        (up and down) events. The control name needs to be a string as returned
-        by 'amixer scontrols', i.e., 'PCM', 'Vol', or such.
-        If this variable is not set, the first entry in the controls list (see
-        below) will be used.
-
-    ALSAMIXER2_MUTE_CTRL = <control name>
-        This is the mixer control that the plugin will use for handling mute
-        events. Some systems use different controls for volume and muting.
-        If this variable is not set, the main control will be used for muting.
-
-    ALSAMIXER2_CTRLS = [
-        ( <control name>, <card name>, <default vol>, <min vol>, <max vol> ),
-        ...
-    ]
+    | ALSAMIXER2_MAIN_CTRL = <control name>
+    |     This is the mixer control that the plugin will use for handling volume
+    |     (up and down) events. The control name needs to be a string as returned
+    |     by 'amixer scontrols', i.e., 'PCM', 'Vol', or such.
+    |     If this variable is not set, the first entry in the controls list (see
+    |     below) will be used.
+    |
+    | ALSAMIXER2_MUTE_CTRL = <control name>
+    |     This is the mixer control that the plugin will use for handling mute
+    |     events. Some systems use different controls for volume and muting.
+    |     If this variable is not set, the main control will be used for muting.
+    |
+    | ALSAMIXER2_CTRLS = [
+    |     ( <control name>, <card name>, <default vol>, <min vol>, <max vol> ),
+    |     ...
+    | ]
 
     This is a list of mixer controls that the plugin will use. Each entry of
     the list represent one control and contains the following items:
-    <control name>  The name of this mixer control.
-    <card name>     The name of the card that this control lives on. Use
-                    something like 'hw:0'. To use the default card, use
-                    'default' or leave it empty ('').
-    <default vol>   Default volume for this control. The plugin will set
-                    this control to this value upon initialization if the
-                    value is >= 0,
-    <min vol>       Minimum volume. This is the minimum volume that can be
-                    reached with 'volume down' events. This item makes only
-                    sense for the main control and can be omitted for other
-                    controls.
-    <max vol>       Maximum volume. This is the maximum volume that can be
-                    reached with 'volume up' events. This item makes only
-                    sense for the main control and can be omitted for other
-                    controls.
+        - <control name>  The name of this mixer control.
+        - <card name>     The name of the card that this control lives on. Use
+                          something like 'hw:0'. To use the default card, use
+                          'default' or leave it empty ('').
+        - <default vol>   Default volume for this control. The plugin will set
+                          this control to this value upon initialization if the
+                          value is >= 0,
+        - <min vol>       Minimum volume. This is the minimum volume that can be
+                          reached with 'volume down' events. This item makes only
+                          sense for the main control and can be omitted for other
+                          controls.
+        - <max vol>       Maximum volume. This is the maximum volume that can be
+                          reached with 'volume up' events. This item makes only
+                          sense for the main control and can be omitted for other
+                          controls.
 
     Example:
     | ALSAMIXER2_MAIN_CTRL = 'PCM'

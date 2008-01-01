@@ -237,9 +237,9 @@ class RecordingsDirectory(Item):
     # ======================================================================
 
     def configure_sorting(self, arg=None, menuw=None):
-        '''
+        """
         document me
-        '''
+        """
         exec('%s += 1' % arg, globals())
 
         if eval('%s >= len(%s_methods)' %(arg, arg), globals()):
@@ -256,9 +256,9 @@ class RecordingsDirectory(Item):
 
 
     def configure_sorting_reversed(self, arg=None, menuw=None):
-        '''
+        """
         document me
-        '''
+        """
         exec('%s = not %s' % (arg,arg), globals())
         self.save_settings()
 
@@ -271,9 +271,9 @@ class RecordingsDirectory(Item):
 
 
     def configure_get_icon(self, value):
-        '''
+        """
         document me
-        '''
+        """
         if value:
             icon = u'ICON_LEFT_ON_' + _('on')
         else:
@@ -282,9 +282,9 @@ class RecordingsDirectory(Item):
 
 
     def configure(self, arg=None, menuw=None):
-        '''
+        """
         document me
-        '''
+        """
         items = [
             MenuItem(_('Sort by') + u'\t' + _(sorting_methods[sorting]),
                 self.configure_sorting, 'sorting'),
@@ -313,9 +313,9 @@ class RecordingsDirectory(Item):
         return None
 
     def load_settings(self):
-        '''
+        """
         document me
-        '''
+        """
         if vfs.isfile(self.settings_fxd):
             try:
                 parser = util.fxdparser.FXD(self.settings_fxd)
@@ -326,9 +326,9 @@ class RecordingsDirectory(Item):
                 traceback.print_exc()
 
     def save_settings(self):
-        '''
+        """
         document me
-        '''
+        """
         try:
             parser = util.fxdparser.FXD(self.settings_fxd)
             parser.set_handler('tvrmsettings', self.write_settings_fxd, 'w', True)
@@ -338,16 +338,16 @@ class RecordingsDirectory(Item):
             traceback.print_exc()
 
     def read_settings_fxd(self, fxd, node):
-        '''
-        parse the xml file for directory settings
+        """
+        parse the xml file for directory settings::
 
-        <?xml version="1.0" ?>
-        <freevo>
-          <tvrmsettings>
-            <setvar name="sorting" val="0"/>
-          </tvrmsettings>
-        </freevo>
-        '''
+            <?xml version="1.0" ?>
+            <freevo>
+                <tvrmsettings>
+                    <setvar name="sorting" val="0"/>
+                </tvrmsettings>
+            </freevo>
+        """
 
         for child in fxd.get_children(node, 'setvar', 1):
             name = child.attrs[('', 'name')]
@@ -970,9 +970,9 @@ class DiskManager(plugin.DaemonPlugin):
 # Helper functions
 # ======================================================================
 def copy_and_replace_menu_item(menuw, item):
-    '''
+    """
     document me
-    '''
+    """
     menu = menuw.menustack[-1]
     # rebuild menu
     try:
@@ -986,9 +986,9 @@ def copy_and_replace_menu_item(menuw, item):
 
 
 def get_status_sort_order(watched, keep):
-    '''
+    """
     document me
-    '''
+    """
     orders = STATUS_ORDERS[status_order]
 
     order = orders[STATUS_ORDER_UNWATCHED]

@@ -127,15 +127,14 @@ class PluginInterface(IdleBarPlugin):
             (friendlyname, status, perc, timerem)
 
         friendlyname is the friendlyname you assigned to the encoding job
-        status is the current status of the encoding job, represented by an integer
-            0 - Not set (this job hasn't started encoding). Never used in this context
-            1 - Audio pass in progress
-            2 - First (analyzing) video pass (only used in multipass encoding)
-            3 - Final video pass
-            4 - Postmerge (not used atm). Final merging or similar processing in progress
+        status is the current status of the encoding job, represented by an integer:
+            - 0 Not set (this job hasn't started encoding). Never used in this context
+            - 1 Audio pass in progress
+            - 2 First (analyzing) video pass (only used in multipass encoding)
+            - 3 Final video pass
+            - 4 Postmerge (not used atm). Final merging or similar processing in progress
         perc is the percentage completed of the current pass
-        timerem is the estimated time remaining of the current pass, formatted as a
-            human-readable string.
+        timerem is the estimated time remaining of the current pass, formatted as a human-readable string.
         """
         _debug_('getprogress()', 2)
 

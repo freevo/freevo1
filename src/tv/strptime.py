@@ -30,12 +30,12 @@
 
 """Strptime-related classes and functions.
 
-CLASSES:
+CLASSES
     LocaleTime -- Discovers and/or stores locale-specific time information
     TimeRE -- Creates regexes for pattern matching a string of text containing
                 time information as is returned by time.strftime()
 
-FUNCTIONS:
+FUNCTIONS
     firstjulian -- Calculates the Julian date up to the first of the specified
                     year
     gregorian -- Calculates the Gregorian date based on the Julian day and

@@ -873,7 +873,7 @@ class OSD:
                                   ellipses, word_splitter):
         """
         calculate _one_ line for drawstringframed.
-        @returns: a list
+        @returns: a tuple containing
             - width used
             - string to draw
             - rest that didn't fit
@@ -981,7 +981,6 @@ class OSD:
         draw the part that fit and returns the other that doesn't.
         This is a wrapper to drawstringframedsoft() and -hard()
 
-        Parameters:
         @param string: the string to be drawn, supports also <nl>. <tab> is not supported
             by pygame, you need to replace it first
         @param x: horizontal position

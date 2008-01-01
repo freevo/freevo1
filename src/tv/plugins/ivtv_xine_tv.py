@@ -126,14 +126,14 @@ class PluginInterface(plugin.Plugin):
     """
     Plugin to watch live tv with xine. The plugin supports:
 
-    - Live TV: pause & continue, seek forward & backward
-    - Multiple digit channel selection: '1', '12, '123'
-    - Channel stack: jump to previously viewed channel
-    - Automatic jump: undo time shift on channel change
-    - OSD messges: volume and channel info
-    - Progressive seek: automatically increase seek speed
-    - Video groups: enable svideo and composite inputs
-    - Stop confirmation: press STOP twice to return to menu
+        - Live TV: pause & continue, seek forward & backward
+        - Multiple digit channel selection: '1', '12, '123'
+        - Channel stack: jump to previously viewed channel
+        - Automatic jump: undo time shift on channel change
+        - OSD messges: volume and channel info
+        - Progressive seek: automatically increase seek speed
+        - Video groups: enable svideo and composite inputs
+        - Stop confirmation: press STOP twice to return to menu
 
     =================================================================
     Requirements:
@@ -141,8 +141,8 @@ class PluginInterface(plugin.Plugin):
 
     The following software must be installed:
 
-    - ivtv (e.g. Haupage x50 series TV card)
-    - xine (built with xvmc / xxmc if available)
+        - ivtv (e.g. Haupage x50 series TV card)
+        - xine (built with xvmc / xxmc if available)
 
     =================================================================
     Configuration:
@@ -151,20 +151,20 @@ class PluginInterface(plugin.Plugin):
     The following items should be configured in local_conf.py:
 
     Freevo General Config Items
-    - TV_CHANNELS
-    - MIXER_VOLUME_TV_IN
-    - MIXER_MAJOR_CTRL
-    - XINE_COMMAND
-    - XINE_ARGS_DEF
+        - TV_CHANNELS
+        - MIXER_VOLUME_TV_IN
+        - MIXER_MAJOR_CTRL
+        - XINE_COMMAND
+        - XINE_ARGS_DEF
 
     Plugin Specific Config Items
-    - XINE_TV_VO_DEV
-    - XINE_TV_AO_DEV
-    - XINE_TV_TIMESHIFT_FILEMASK
-    - XINE_TV_CONFIRM_STOP
-    - XINE_TV_PROGRESSIVE_SEEK
-    - XINE_TV_PROGRESSIVE_SEEK_THRESHOLD
-    - XINE_TV_PROGRESSIVE_SEEK_INCREMENT
+        - XINE_TV_VO_DEV
+        - XINE_TV_AO_DEV
+        - XINE_TV_TIMESHIFT_FILEMASK
+        - XINE_TV_CONFIRM_STOP
+        - XINE_TV_PROGRESSIVE_SEEK
+        - XINE_TV_PROGRESSIVE_SEEK_THRESHOLD
+        - XINE_TV_PROGRESSIVE_SEEK_INCREMENT
 
     =================================================================
     Plugin Specific Events

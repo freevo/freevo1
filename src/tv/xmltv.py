@@ -301,22 +301,21 @@ class Writer:
                  source_info_url=None, source_info_name=None,
                  generator_info_url=None, generator_info_name=None):
         """
-        @param encoding -- The text encoding that will be used. Defaults to 'utf-8'
+        @param encoding: The text encoding that will be used. Defaults to 'utf-8'
 
-        @param date The date this data was generated. Optional
+        @param date: The date this data was generated. Optional
 
-        @param source_info_url A URL for information about the source of the data.
+        @param source_info_url: A URL for information about the source of the data.
             Optional
 
-        @param source_info_name A human readable description of source_info_url.
+        @param source_info_name: A human readable description of source_info_url.
             Optional
 
-        @param generator_info_url A URL for information about the program that
+        @param generator_info_url: A URL for information about the program that
             is generating the XMLTV document. Optional
 
-        @param generator_info_name A human readable description of
+        @param generator_info_name: A human readable description of
             generator_info_url. Optional
-
         """
         _debug_('in Writer:__init__()', 2)
         self.encoding = encoding
@@ -407,9 +406,7 @@ class Writer:
         """
         Add a single XMLTV 'programme'
 
-        Arguments:
-
-          'programme' -- A dict representing XMLTV data
+        @param programme: A dict representing XMLTV data
         """
         if DEBUG >= 0: print "in addProgramme(self, programme)"
         p = SubElement(self.root, 'programme')
@@ -557,9 +554,7 @@ class Writer:
         """
         add a single XMLTV 'channel'
 
-        Arguments:
-
-          'channel' -- A dict representing XMLTV data
+        @param channel: A dict representing XMLTV data
         """
         if DEBUG >= 0: print "in addChannel(self, channel)"
         c = SubElement(self.root, 'channel')

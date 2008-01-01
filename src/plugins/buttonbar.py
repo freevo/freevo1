@@ -75,13 +75,13 @@ class PluginInterface(plugin.DaemonPlugin):
     | plugin.activate('buttonbar')
 
     Where the actions mapped to each of the colors can be one of the following:
-        * info - Brings up a screen displaying more information than can be displayed
+        - info - Brings up a screen displaying more information than can be displayed
           in the few lines available on the TV guide page.
-        * record - Same as the record button.
-        * adv:<number> - Special action to allow navigation of the TV Guide,
+        - record - Same as the record button.
+        - adv:<number> - Special action to allow navigation of the TV Guide,
           <number> can be either positive or negative and is the number of hours
           to go forward/back.
-        * now - jumps back to the currently running program
+        - now - jumps back to the currently running program
 
     You can also map the following actions to unused keys of your keyboard
     (For example):

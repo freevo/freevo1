@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Border - For drawing borders around rectangular objects.
+# For drawing borders around rectangular objects.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -63,13 +63,10 @@ class Border(GUIObject):
 
     def __init__(self, parent, style=None, color=None, width=None):
         """
-        parent  the object to draw border of. use this to get
-                geometry and stuff.
-        style   Border Type. One of 'flat','shadow','raised' or
-                'sunken'
-        color   Color of object, Either a Freevo Color object
-                or a color integer.
-        width   Thickness of border.
+        @param parent:  Object to draw border of; use this to get geometry and stuff.
+        @param style:   Border Type. One of 'flat','shadow','raised' or 'sunken'
+        @param color:   Color of object, Either a Freevo Color object or a color integer.
+        @param width:   Thickness of border.
         """
         if not parent or not isinstance(parent, GUIObject):
             raise TypeError, 'You need to set the parent correctly'

@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Label - A class for text labels
+# A class for text labels
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -34,12 +34,11 @@ from GUIObject import *
 
 class Label(GUIObject):
     """
-    text    String, text to display
-    align   Integer, h_align of text. Label.CENTER, Label.RIGHT,
-            Label, LEFT
-    parent  GUIObject, Reference to object containing this label.
-    text_prop A dict of 4 elements composing text proprieties:
-              { 'align_h' : align_h, 'align_v' : align_v, 'mode' : mode, 'hfill': hfill }
+    @ivar text:    String, text to display
+    @ivar align:   Integer, h_align of text. Label.CENTER, Label.RIGHT, Label, LEFT
+    @ivar parent:  GUIObject, Reference to object containing this label.
+    @ivar text_prop: A dict of 4 elements composing text proprieties:
+              { 'align_h': align_h, 'align_v': align_v, 'mode': mode, 'hfill': hfill }
                  align_v = text vertical alignment
                  align_h = text horizontal alignment
                  mode    = hard (break at chars); soft (break at words)

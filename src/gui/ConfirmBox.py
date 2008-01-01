@@ -40,13 +40,13 @@ from Button    import *
 
 class ConfirmBox(PopupBox):
     """
-    x         x coordinate. Integer
-    y         y coordinate. Integer
-    width     Integer
-    height    Integer
-    text      String to print.
-    icon      icon
-    text_prop A dict of 4 elements composing text proprieties:
+    @ivar x:         x coordinate. Integer
+    @ivar y:         y coordinate. Integer
+    @ivar width:     Integer
+    @ivar height:    Integer
+    @ivar text:      String to print.
+    @ivar icon:      icon
+    @ivar text_prop: A dict of 4 elements composing text proprieties:
               { 'align_h' : align_h, 'align_v' : align_v, 'mode' : mode, 'hfill': hfill }
                  align_v = text vertical alignment
                  align_h = text horizontal alignment

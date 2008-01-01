@@ -205,13 +205,15 @@ class GUIObject:
 
     def move(self, x, y):
         """
-        x Integer, amount to move along x axis.
-        y Integer, amount to move along y axis.
-
         Move the object by a certain amount
 
-        Note: either the user would have to hide and show the object
-              moving, or we do it for him. Not decided yet.
+        @note: Either the user would have to hide and show the object
+               moving, or we do it for him. Not decided yet.
+
+        @param x: amount to move along x axis.
+        @type x: Integer
+        @param y: amount to move along y axis.
+        @type y: Integer
         """
         self.hide()
         self.set_position(self.left+x, self.top+y)

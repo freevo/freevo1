@@ -70,9 +70,10 @@ class PluginInterface(plugin.MainMenuPlugin):
     | REMINDERS = [ ("cmd", "name", <wrap 0|N>, "string") ]
 
     wrap should be the maximum number of columns, and string if defined would be used to
-    indent the output. ("/usr/bin/remind -h", "Today", 47, "Reminders for") should output something like:
-    Reminders for Saturday, 26th May, 2007 (today):
-        Uncle Bob birthday
+    indent the output. ("/usr/bin/remind -h", "Today", 47, "Reminders for") should output something like::
+
+        Reminders for Saturday, 26th May, 2007 (today):
+            Uncle Bob birthday
     """
 
     def __init__(self):
@@ -133,18 +134,19 @@ class RemindItem(Item):
                         pad = ''
                     else:
                         pad = '   '
-                    for tmp in self.wraper(line, int(wrap)).rstrip('\n').split('\n'):
+                    for tmp in self.wrapper(line, int(wrap)).rstrip('\n').split('\n'):
                         output += [ pad + tmp ]
         else:
             output = f
         return output
 
-    # from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/148061
-    def wraper(self, text, width):
+    def wrapper(self, text, width):
         """
         A word-wrap function that preserves existing line breaks
         and most spaces in the text. Expects that existing line
-        breaks are posix newlines (\n).
+        breaks are posix newlines.
+
+        from U{http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/148061}
         """
         return reduce(lambda line, word, width=width: '%s%s%s' %
             (line,

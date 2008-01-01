@@ -47,16 +47,17 @@ for the license key:
     - a file called ".amazonkey" in the same directory as amazon.py
     - a file called "amazonkey.txt" in the same directory as amazon.py
 
-Sample usage:
->>> import amazon
->>> amazon.setLicense('...') # must get your own key!
->>> pythonBooks = amazon.searchByKeyword('Python')
->>> pythonBooks[0].ProductName
-u'Learning Python (Help for Programmers)'
->>> pythonBooks[0].URL
-...
->>> pythonBooks[0].OurPrice
-...
+Sample usage::
+
+    >>> import amazon
+    >>> amazon.setLicense('...') # must get your own key!
+    >>> pythonBooks = amazon.searchByKeyword('Python')
+    >>> pythonBooks[0].ProductName
+    u'Learning Python (Help for Programmers)'
+    >>> pythonBooks[0].URL
+    ...
+    >>> pythonBooks[0].OurPrice
+    ...
 
 Other available functions:
     - browseBestSellers
@@ -248,11 +249,11 @@ def search(search_type, keyword, product_line, type="heavy", page=None,
     this function every time, or set it globally; see the module docs for details.
 
     Parameters:
-    @param keyword - keyword to search
-    @param search_type - in (KeywordSearch, BrowseNodeSearch, AsinSearch,
+    @param keyword: keyword to search
+    @param search_type: in (KeywordSearch, BrowseNodeSearch, AsinSearch,
         UpcSearch, AuthorSearch, ArtistSearch, ActorSearch, DirectorSearch,
         ManufacturerSearch, ListManiaSearch, SimilaritySearch)
-    @param product_line - type of product to search for.  restrictions based on search_type
+    @param product_line: type of product to search for.  restrictions based on search_type
         UpcSearch - in (music, classical)
         AuthorSearch - must be "books"
         ArtistSearch - in (music, classical)
@@ -261,7 +262,7 @@ def search(search_type, keyword, product_line, type="heavy", page=None,
         ManufacturerSearch - in (electronics, kitchen, videogames, software, photo, pc-hardware)
     @param http_proxy: (optional) - address of HTTP proxy to use for sending and receiving SOAP messages
 
-    @eturns: list of Bags, each Bag may contain the following attributes:
+    @returns: list of Bags, each Bag may contain the following attributes:
         Asin - Amazon ID ("ASIN" number) of this item
         Authors - list of authors
         Availability - "available", etc.

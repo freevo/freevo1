@@ -134,7 +134,7 @@ WEATHER_ICONS = {
 
 
 def wget(url):
-    ''' get a file from the url '''
+    """ get a file from the url """
     _debug_('wget(%s)' % (url), 2)
     txdata = None
     txheaders = {
@@ -215,8 +215,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
 
     def __init__(self):
-        '''
-        '''
+        """
+        """
         _debug_('PluginInterface.__init__()', 2)
         if not config.USE_NETWORK:
             self.reason = 'USE_NETWORK not enabled'
@@ -227,8 +227,8 @@ class PluginInterface(plugin.MainMenuPlugin):
         plugin.MainMenuPlugin.__init__(self)
 
     def config(self):
-        '''
-        '''
+        """
+        """
         _debug_('config()', 2)
         return [
             ('ONECLICK_LOCATIONS', None, 'Location codes for current conditions and forecasts'),
@@ -239,16 +239,16 @@ class PluginInterface(plugin.MainMenuPlugin):
         ]
 
     def items(self, parent):
-        '''
-        '''
+        """
+        """
         _debug_('items(self, parent)', 2)
         return [ WeatherMainMenu(parent) ]
 
 
 class WeatherItem(Item):
-    '''
+    """
     Item for the menu for one feed
-    '''
+    """
     def __init__(self, parent, location):
         _debug_('WeatherItem.__init__(parent=%r, location=%r)' % (parent, location), 2)
         Item.__init__(self, parent)
@@ -347,7 +347,7 @@ class WeatherItem(Item):
         self.getForecast()
 
     def getForecast(self, force=0):
-        '''grab the forecast, updating for the website if needed'''
+        """grab the forecast, updating for the website if needed"""
         _debug_('getForecast(force=%s)' % (force), 2)
 
         # check cache
@@ -372,7 +372,7 @@ class WeatherItem(Item):
 
 
     def needsRefresh(self):
-        '''is the cache too old?'''
+        """is the cache too old?"""
         _debug_('needsRefresh()', 2)
         if (os.path.isfile(self.cacheCurrent) == 0 or \
             (abs(time.time() - os.path.getmtime(self.cacheCurrent)) > WEATHER_AGE)):
@@ -381,9 +381,9 @@ class WeatherItem(Item):
             return 0
 
     def updateData(self):
-        '''update the cache data from the 1click service
+        """update the cache data from the 1click service
         @notes the elocation is not updated as it is static
-        '''
+        """
         _debug_('updateData()', 2)
         if GUI:
             popup = PopupBox(text=_('Fetching Weather for %s...') % self.popupParam)
@@ -429,7 +429,7 @@ class WeatherItem(Item):
 
 
     def updateMap(self):
-        ''' Update the weather map '''
+        """ Update the weather map """
         _debug_('updateMap()', 2)
         # obtain radar map
         if self.mapuri:
@@ -491,7 +491,7 @@ class WeatherItem(Item):
         util.save_pickle(self.forecastData, self.cacheForecast)
 
     def saveMapToCache(self):
-        ''' save weather map to the cache '''
+        """ save weather map to the cache """
         try:
             if self.weatherMapData is not None:
                 imgfd = os.open(self.mapFile, os.O_CREAT|os.W_OK)
@@ -501,7 +501,7 @@ class WeatherItem(Item):
             print 'failed saving weather map to cache "%s": %s' % (self.mapFile, error)
 
     def loadFromCache(self):
-        ''' load the data and the map from the cache '''
+        """ load the data and the map from the cache """
         _debug_('loadFromCache()', 2)
         self.elocationData = util.read_pickle(self.cacheElocation)
         self.currentData = util.read_pickle(self.cacheCurrent)
@@ -518,24 +518,24 @@ class WeatherItem(Item):
             os.close(imgfd)
 
     def actions(self):
-        ''' return a list of actions for this item '''
+        """ return a list of actions for this item """
         _debug_('actions()', 2)
         return [ (self.start_detailed_interface, _('Show Weather Details')) ]
 
     def start_detailed_interface(self, arg=None, menuw=None):
-        ''' detail handler '''
+        """ detail handler """
         _debug_('start_detailed_interface(arg=%r, menuw=%r)' % (arg, menuw), 2)
         WeatherDetailHandler(arg, menuw, self)
 
     def isValid(self):
-        ''' reports is an error was detected '''
+        """ reports is an error was detected """
         _debug_('isValid()', 2)
         return not self.error
 
     def getLastUpdated(self):
-        ''' parse the lsup time
+        """ parse the lsup time
         @notes there seems to be a problem with AM/PM not parsing correctly
-        '''
+        """
         _debug_('getLastUpdated() "%s"' % self.updated, 2)
         if self.zone < 0:
             return '%s  (GMT%s)' % (self.updated, self.zone)
@@ -560,7 +560,7 @@ class WeatherItem(Item):
                 return self.updated.replace(' Local Time', '')
 
     def getObservationStation(self):
-        ''' get the observation station '''
+        """ get the observation station """
         _debug_('getObservationStation()', 2)
         return "%s" % (self.observation_station)
 
@@ -573,12 +573,12 @@ class WeatherItem(Item):
         return u"%s\xb0%s" % (self.feeling, self.unit_t)
 
     def getCurrentCondition(self):
-        ''' gets the current conditions '''
+        """ gets the current conditions """
         _debug_('getCurrentCondition()', 2)
         return "%s" % (self.current_conditions)
 
     def getIcon(self):
-        ''' gets the current conditions icon '''
+        """ gets the current conditions icon """
         _debug_('getIcon()', 2)
         return "%s" % (self.icon)
 
@@ -650,9 +650,9 @@ class WeatherItem(Item):
 
 
     def convertWeatherData(self):
-        '''
+        """
         convert the xml weather information for the skin
-        '''
+        """
         _debug_('convertWeatherData()', 2)
         #print self.elocationData
         #print self.currentData
@@ -733,7 +733,7 @@ class WeatherItem(Item):
 
 
     def getDayImage(self, num):
-        '''obtain the weather icons for multiple day forecast'''
+        """obtain the weather icons for multiple day forecast"""
         _debug_('getDayImage()', 2)
 
         if not WEATHER_ICONS.has_key(num):
@@ -751,7 +751,7 @@ class WeatherItem(Item):
 
 
     def getMoonImage(self, num):
-        '''obtain the weather icons for multiple day forecast'''
+        """obtain the weather icons for multiple day forecast"""
         _debug_('getMoonImage()', 2)
 
         icon = os.path.join(WEATHER_DIR, 'moons', '%s.png' % (num))
@@ -760,10 +760,10 @@ class WeatherItem(Item):
 
 
 class WeatherMainMenu(Item):
-    '''
+    """
     this is the item for the main menu and creates the list
     of Weather Locations in a submenu.
-    '''
+    """
     def __init__(self, parent):
         _debug_('WeatherMainMenu.__init__(parent=%r)' % (parent), 2)
         Item.__init__(self, parent, skin_type='weather')
@@ -771,19 +771,19 @@ class WeatherMainMenu(Item):
         #self.name = _('Weather')
 
     def actions(self):
-        ''' return a list of actions for this item '''
+        """ return a list of actions for this item """
         _debug_('actions()', 2)
         items = [ (self.create_locations_menu , _('Locations')) ]
         return items
 
     def __call__(self, arg=None, menuw=None):
-        ''' call first action in the actions list '''
+        """ call first action in the actions list """
         _debug_('__call__(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if self.actions():
             return self.actions()[0][0](arg=arg, menuw=menuw)
 
     def create_locations_menu(self, arg=None, menuw=None):
-        ''' '''
+        """ """
         _debug_('create_locations_menu(arg=%r, menuw=%r)' % (arg, menuw), 2)
         locations = []
         autoselect = 0
@@ -814,11 +814,11 @@ class WeatherMainMenu(Item):
             menuw.refresh()
 
 class WeatherDetailHandler:
-    '''
+    """
     A handler class to display several detailed forecast screens and catch events
-    '''
+    """
     def __init__(self, arg=None, menu=None, weather=None):
-        ''' '''
+        """ """
         _debug_('WeatherDetailHandler.__init__(arg=%r, menu=%r, weather=%r)' % (arg, menu, weather), 2)
         self.arg = arg
         self.menuw = menu
@@ -839,7 +839,7 @@ class WeatherDetailHandler:
         skin.draw('oneclick', self)
 
     def prevSkin(self):
-        '''decrements the skin number round to the last skin'''
+        """decrements the skin number round to the last skin"""
         _debug_('prevSkin()', 2)
         self.skin_num -= 1
 
@@ -849,7 +849,7 @@ class WeatherDetailHandler:
         self.subtitle = self.getSubtitle(self.skin_num)
 
     def nextSkin(self):
-        '''increment the skin number round to the first skin'''
+        """increment the skin number round to the first skin"""
         _debug_('nextSkin()', 2)
         self.skin_num += 1
 
@@ -859,12 +859,12 @@ class WeatherDetailHandler:
         self.subtitle = self.getSubtitle(self.skin_num)
 
     def getSubtitle(self, num):
-        ''' returns the subtitle for a skin number '''
+        """ returns the subtitle for a skin number """
         _debug_('getSubtitle(num=%s)' % (num), 2)
         return '%s %s %s' % (self.subtitles[num], _('for'), self.weather.name)
 
     def eventhandler(self, event, menuw=None):
-        '''eventhandler'''
+        """eventhandler"""
         _debug_('eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
         if event == 'MENU_BACK_ONE_MENU':
             rc.app(None)
@@ -898,7 +898,7 @@ if __name__ == '__main__':
     sys.exit(1)
 
 class WeatherBaseScreen(skin.Area):
-    ''' A base class for weather screens to inherit from, provides common members+methods '''
+    """ A base class for weather screens to inherit from, provides common members+methods """
     def __init__(self):
         _debug_('WeatherBaseScreen.__init__()', 2)
         skin.Area.__init__(self, 'content')
@@ -920,14 +920,14 @@ class WeatherBaseScreen(skin.Area):
                                  self.update_week, self.update_map)
 
     def day_item(self, x1, text, x2, value, y, align='left'):
-        ''' This is helper function for update_day
-        '''
+        """ This is helper function for update_day
+        """
         self.write_text(text, self.key_font, self.content, x=x1, y=y, height=-1, align_h=align)
         self.write_text(value, self.val_font, self.content, x=x2, y=y, height=-1, align_h=align)
 
     def update_day(self):
-        ''' Update the day screen
-        '''
+        """ Update the day screen
+        """
         _debug_('update_day()', 2)
         # display data
 
@@ -970,9 +970,9 @@ class WeatherBaseScreen(skin.Area):
 
 
     def update_forecast(self):
-        ''' this screen is taken from the 1click weather forecast of the firefox plug-in.
+        """ this screen is taken from the 1click weather forecast of the firefox plug-in.
         TODO Switch to night after sunset
-        '''
+        """
         _debug_('update_forecast()', 2)
         x_start = self.content.x + self.xscale(20)
         y_start = self.content.y + self.yscale(30)
@@ -1016,14 +1016,13 @@ class WeatherBaseScreen(skin.Area):
 
 
     def week_item(self, x, y, text, font, width=90, align='center'):
-        ''' This is helper function for update_week
-        '''
+        """ This is helper function for update_week """
         self.write_text(text, font, self.content, x=x, y=y, width=self.xscale(width), height=-1, align_h=align)
 
     def update_week(self):
-        ''' update the weeks forecast
-        @remarks this can be improved
-        '''
+        """ update the weeks forecast
+        @todo: this can be improved
+        """
         _debug_('update_week()', 2)
 
         x_start = self.content.x + self.xscale(10)
@@ -1062,7 +1061,7 @@ class WeatherBaseScreen(skin.Area):
 
 
     def update_map(self):
-        ''' update the contents of the skin's doppler weather map '''
+        """ update the contents of the skin's doppler weather map """
         _debug_('update_map()', 2)
         if not self.parent.weather.weatherMapData:
             x_start = self.content.x + self.xscale(10)
@@ -1076,7 +1075,7 @@ class WeatherBaseScreen(skin.Area):
                 self.content.width, self.content.height))
 
     def update_content(self):
-        ''' update the contents of the skin '''
+        """ update the contents of the skin """
         _debug_('update_content()', 2)
         self.parent = self.menu
         self.content = self.calc_geometry(self.layout.content, copy_object=True)

@@ -306,11 +306,11 @@ def recursefolders(root, recurse=0, pattern='*', return_folders=0):
     os.path.walk is difficult, clunky and doesn't work right in my
     mind.
 
-    Here's how you use this function:
+    Here's how you use this function::
 
-    songs = recursefolders('/media/Music/Guttermouth',1,'*.mp3',1):
-    for song in songs:
-          print song
+        songs = recursefolders('/media/Music/Guttermouth',1,'*.mp3',1)
+        for song in songs:
+              print song
 
     Should be easy to add to the mp3.py app.
     """
