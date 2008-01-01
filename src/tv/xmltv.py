@@ -295,7 +295,7 @@ class Writer:
     """
     A class for generating XMLTV data
 
-    @note All strings passed to this class must be Unicode, except for dictionary keys
+    @note: All strings passed to this class must be Unicode, except for dictionary keys
     """
     def __init__(self, encoding="utf-8", date=None,
                  source_info_url=None, source_info_name=None,

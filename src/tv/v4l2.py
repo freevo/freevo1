@@ -342,7 +342,7 @@ class Videodev:
     def enuminput(self, num):
         """
         Enumerate a video device input
-        @param num is the input number
+        @param num: is the input number
         """
         val = struct.pack(ENUMINPUT_ST, num, "", 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO), val)

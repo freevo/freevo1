@@ -53,12 +53,10 @@ class PluginInterface(plugin.DaemonPlugin):
     plugin to monitor if a recording is about to start and shut down the
     player if the video device is in use
 
-    @requires: nothing
-
     To activate this plugin, just put the following line at the end of your
-    local_conf.py file::
+    local_conf.py file:
 
-        plugin.activate('tv.upsoon')
+    | plugin.activate('tv.upsoon')
     """
     __author__           = 'Duncan Webb'
     __author_email__     = 'duncan@freevo.org'

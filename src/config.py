@@ -149,24 +149,38 @@ class Logger:
 
 class VideoGroup:
     """
-    vdev:           The video recording device, such as /dev/video0.
-    vvbi:           The video vbi device, such as /dev/vbi0.
-    adev:           The audio device, such as: None, /dev/dsp.
-    input_type:     tuner, webcam
-    input_num:      The number of this input according to V4L
-    tuner_type:     internal (on a v4l device), or external (cable or sat box)
-    tuner_norm:     NTSC, PAL, SECAM
-    tuner_chanlist: us-cable,
-    tuner_chan:     If using input_type=tuner and tuner_type=external set this to
-                    what channel it needs to be to get the signal, usually 3 or 4.
-    irsend_trans:   IR transmitter to use for multiple external tuners.
-    record_group:   VideoGroup that records for this tuner, default is to use the
-                    same device for record and play
-    desc:           A nice description for this VideoGroup.
-    group_type:     Special variable to identify devices like dvb or ivtv.  This
-                    can be one of: 'normal', 'ivtv', 'dvb', 'tvalsa' or 'webcam'.
-    cmd:            Command for execute external prog after the channel switched,
-                    such as 'sudo /usr/local/bin/setuptuner'
+    @ivar vdev:
+        The video recording device, such as /dev/video0.
+    @ivar vvbi:
+        The video vbi device, such as /dev/vbi0.
+    @ivar adev:
+        The audio device, such as: None, /dev/dsp.
+    @ivar input_type:
+        tuner, webcam
+    @ivar input_num:
+        The number of this input according to V4L
+    @ivar tuner_type:
+        internal (on a v4l device), or external (cable or sat box)
+    @ivar tuner_norm:
+        NTSC, PAL, SECAM
+    @ivar tuner_chanlist:
+        us-cable,
+    @ivar tuner_chan:
+        If using input_type=tuner and tuner_type=external set this to
+        what channel it needs to be to get the signal, usually 3 or 4.
+    @ivar irsend_trans:
+        IR transmitter to use for multiple external tuners.
+    @ivar record_group:
+        VideoGroup that records for this tuner, default is to use the
+        same device for record and play
+    @ivar desc:
+        A nice description for this VideoGroup.
+    @ivar group_type:
+        Special variable to identify devices like dvb or ivtv.  This
+        can be one of: 'normal', 'ivtv', 'dvb', 'tvalsa' or 'webcam'.
+    @ivar cmd:
+        Command for execute external prog after the channel switched,
+        such as 'sudo /usr/local/bin/setuptuner'
     """
 
     def __init__(self, vdev=None, vvbi='/dev/vbi', adev=None, input_type=None,

@@ -34,10 +34,14 @@ from GUIObject import *
 
 class Label(GUIObject):
     """
-    @ivar text:    String, text to display
-    @ivar align:   Integer, h_align of text. Label.CENTER, Label.RIGHT, Label, LEFT
-    @ivar parent:  GUIObject, Reference to object containing this label.
-    @ivar text_prop: A dict of 4 elements composing text proprieties:
+    @ivar text:
+        String, text to display
+    @ivar align:
+        Integer, h_align of text. Label.CENTER, Label.RIGHT, Label, LEFT
+    @ivar parent:
+        GUIObject, Reference to object containing this label.
+    @ivar text_prop:
+        A dict of 4 elements composing text proprieties:
               { 'align_h': align_h, 'align_v': align_v, 'mode': mode, 'hfill': hfill }
                  align_v = text vertical alignment
                  align_h = text horizontal alignment
