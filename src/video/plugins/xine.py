@@ -105,6 +105,14 @@ class Xine:
             config.XINE_ARGS_DEF.split(' ')
 
 
+    def ShowMessage(self, msg):
+        """
+        Show a message on the OSD
+        """
+        _debug_("XINE: Show OSD Message: '%s'" % msg)
+        self.app.write("OSDWriteText$     %s\n" % msg)
+
+
     def rate(self, item):
         """
         How good can this player play the file:
@@ -381,6 +389,10 @@ class Xine:
         if event == VIDEO_NEXT_ANGLE:
             self.app.write('EventAngleNext\n')
             time.sleep(0.1)
+            return True
+
+        if event == OSD_MESSAGE:
+            self.ShowMessage(event.arg)
             return True
 
         # nothing found? Try the eventhandler of the object who called us
