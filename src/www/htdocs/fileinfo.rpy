@@ -55,47 +55,80 @@ class FileInfoResource(FreevoResource):
         if file:
             medium = metadata.parse(file)
             #print medium
-            title = ""
-            info = "<table>"
+            title = ''
             (basedir, item) = os.path.split(file)
 
-            fxd_file = file[:file.rindex('.')] + ".fxd"
+            fxd_file = file[:file.rindex('.')] + '.fxd'
             if os.path.exists(fxd_file):
                 fxd_info = self.get_fxd_info(fxd_file)
-                i = 0
-                for z in fxd_info:
-                    if z and z != "cover-img":
-                        info += "<tr><td><b>" + fxd_info.keys()[i] + ": </b></td><td>"+fxd_info.values()[i]+"</td></tr>"
-                    i +=1
                 title=fxd_info['title']
                 if not title:
                     title = util.mediainfo.get(item)['title']
                     if not title:
                         title = item
+                info = ''
+                status = ''
+                if fxd_info.has_key('watched'):
+                    if fxd_info['watched'] == 'False':
+                        status='unwatched'
+                    else:
+                        status='watched'
+                if fxd_info.has_key('keep'):
+                    if fxd_info['keep'] == 'True':
+                        status='keep'
+                if status:
+                    info += '<img src="images/library/television_'+status+'.png" width=23 height=23 align="right"/>'
+                if fxd_info.has_key('tagline'):
+                    info += '"'+fxd_info['tagline']+'"<br/>'
+                if fxd_info.has_key('plot'):
+                    info += fxd_info['plot']+'<br/>'
+                if info != '':
+                   info += '<p>'
+                if fxd_info.has_key('year'):
+                    info += '<b>Recorded:</b>&nbsp;'+fxd_info['year']+' '
+                if fxd_info.has_key('runtime'):
+                    info += '<b>Runtime:</b>&nbsp;'+fxd_info['runtime']+' '
+                info += '<b>Size:</b>&nbsp;'+str((os.stat(file)[6]/1024)/1024)+' MB'
             else:
                 media_info = util.mediainfo.get(file)
                 title = Unicode(media_info['title'])
                 if not title:
-                    title = item
+                    title = string.replace(os.path.splitext(item)[0],"_"," ")
                 #audio info
+                info = ""
                 if media_info['artist']:
-                    info+='<tr><td><b>Artist: </b></td><td>'+Unicode(media_info['artist'])+'</td></tr>'
+                    info += Unicode(media_info['artist'])+'<br/>'
                 if media_info['album']:
-                    info+='<tr><td><b>Album: </b></td><td>'+Unicode(media_info['album'])+'</td></tr>'
+                    info += '"'+Unicode(media_info['album'])+'"'
+                if media_info['year']:
+                    info += ' - '+Unicode(media_info['year'])
+                if media_info['album'] or media_info['year']:
+                    info += '<br/>'
                 if media_info['genre']:
-                    info+='<tr><td><b>Genre: </b></td><td>'+Unicode(media_info['genre'])+'</td></tr>'
+                    info += Unicode(media_info['genre'])+'<br/>'
+                if info != '':
+                    info += '<p>'
                 if media_info['length']:
-                    length = str(int(media_info['length']) / 60) + " min."
-                    info+='<tr><td><b>Length: </b></td><td>'+length+'</td></tr>'
+                    min = int(media_info['length'] / 60)
+                    sec = int(media_info['length'] - (min * 60))
+                    info += '<b> Length:&nbsp;</b>'+str(min)+':'+str(sec)
+                info += ' <b>Size:&nbsp;</b>'+str((os.stat(file)[6]/1024)/1024)+' MB'
+                if media_info['track']:
+                    info += ' <b>Track:&nbsp;</b>'+media_info['track']
+                if media_info['bitrate'] or media_info['samplerate']:
+                    info += ' <b>Stream Info:&nbsp;</b>'
+                if media_info['bitrate']:
+                    info += str(media_info['bitrate'])+'Kbps'
+                if media_info['bitrate'] and media_info['samplerate']:
+                    info += '/'
+                if media_info['samplerate']:
+                    info += str(media_info['samplerate']/1000)+'kHz'
+
                 #movie info
                 if media_info['height'] and media_info['width']:
-                    info +='<tr><td><b>Dimensions: </b></td><td>'+str(media_info['height'])+' x '\
-                        +str(media_info['width'])+'</td></tr>'
+                    info += ' <b>Dimensions:&nbsp;</b>'+str(media_info['width'])+' x '+str(media_info['height'])
                 if media_info['type']:
-                    info+='<tr><td><b>Type: </b></td><td>'+media_info['type']+'</td></tr>'
-            #add size
-            info+='<tr><td><b>Size: </b></td><td>'+str((os.stat(file)[6]/1024)/1024)+' MB</td></tr>'
-            info+= "</table>"
+                    info += ' <b>Type:&nbsp;</b>'+media_info['type']+'<br/>'
 
             file_link = self.convert_dir(file)
 
