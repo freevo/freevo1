@@ -637,13 +637,13 @@ EVENTS = {
 #
 # Use arrow keys for back and select (alternate way of navigating)
 #
-MENU_ARROW_NAVIGATION = 0
+MENU_ARROW_NAVIGATION = False
 
 #
 # Process keyboard events from SDL. You want this unless you use only lirc
 # or event devices below.
 #
-USE_SDL_KEYBOARD = 1
+USE_SDL_KEYBOARD = True
 
 #
 # Keymap to map keyboard keys to event strings. You can also add new keys
@@ -731,7 +731,7 @@ CACHE_IMAGES = 1
 #
 # Cache cropdetection. This will take quite a while to run
 #
-CACHE_CROPDETECT = 0
+CACHE_CROPDETECT = False
 
 # ======================================================================
 # Plugins:
