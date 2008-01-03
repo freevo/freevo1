@@ -27,6 +27,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated web server fileinfo module to display watched/keep status (F#1857392)
  * Updated xine tv plug-in to show OSD messages (F#1861772)
  * Updated xine video plug-in to show OSD messages (F#1861770)
+ * Deleted plug-in weather, moved to contrib/plugins (F#1863476)
  * Fixed apple trailers plug-in crashing (B#1861463)
  * Fixed manual record tv plug-in to work in December (B#1858008)
  * Fixed oneclick weather plug-in to allow non-ascii location names (B#1856597)
