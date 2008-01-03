@@ -114,6 +114,14 @@ class Xine:
                        config.XINE_ARGS_DEF.split(' ')
 
 
+    def ShowMessage(self, msg):
+        """
+        Show a message on the OSD
+        """
+        _debug_("XINE: Show OSD Message: '%s'" % msg)
+        self.app.write("OSDWriteText$     %s\n" % msg)
+
+
     def Play(self, mode, tuner_channel=None):
         """
         play with xine
@@ -184,6 +192,10 @@ class Xine:
 
         if event == VIDEO_TOGGLE_INTERLACE:
             self.app.write('ToggleInterleave\n')
+            return True
+
+        if event == OSD_MESSAGE:
+            self.ShowMessage(event.arg)
             return True
 
         # nothing found
