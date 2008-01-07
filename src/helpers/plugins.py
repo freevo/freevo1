@@ -125,7 +125,7 @@ def parse_plugins2():
     return ''
 
 
-def parse_plugins():
+def parse_plugins(plugin_name=None):
     start = re.compile('^class *(.*)\((.*Plugin\s*).:')
     stop  = re.compile('^[\t ]*def.*:')
     comment = re.compile('^[\t ]*"""')
@@ -144,6 +144,10 @@ def parse_plugins():
     for file in util.recursefolders(os.environ['FREEVO_PYTHON'], 1, '*.py', 1):
         if file.find('plugin.py') > 0:
             continue
+        if plugin_name:
+            plugin_shortname = plugin_name.split('.')[-1]+'.py'
+            if file.find(plugin_shortname) < 0:
+                continue
         parse_status = 0
         whitespaces  = 0
         scan_config  = 0
@@ -458,7 +462,7 @@ if len(sys.argv)>1 and sys.argv[1] == '-l':
 
 # show info about a plugin
 elif len(sys.argv)>2 and sys.argv[1] == '-i':
-    print_info(sys.argv[2], parse_plugins())
+    print_info(sys.argv[2], parse_plugins(sys.argv[2]))
 
 # show infos about all plugins (long list)
 elif len(sys.argv)>1 and sys.argv[1] == '-a':
