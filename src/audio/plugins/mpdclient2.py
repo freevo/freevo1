@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
+# -----------------------------------------------------------------------
+# $Id$
+# -----------------------------------------------------------------------
 
 # py-libmpdclient2 is written by Nick Welch <mack@incise.org>, 2005.
 #
@@ -353,7 +357,7 @@ class Thread_MPD_Connection:
     """This is a wrapper around the mpdclient2 library to make it thread safe"""
     #conn
     def __init__ (self, host, port, keepalive=False, pword = None):
-        """create the connection and locks, 
+        """create the connection and locks,
         if keepalive is True the connection will not time out and must be explcitly closed"""
         self.conn = mpd_connection(host, port)
         if (pword is not None):

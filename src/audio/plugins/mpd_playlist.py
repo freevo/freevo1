@@ -1,62 +1,98 @@
-# This is a replacement for the previous mpd plugin
-# By Graham Billiau <graham@geeksinthegong.net> (DrLizAu's code monkey)
-# This code is released under the GPL
-
-# There are two parts to this plugin, an addition to the audio item menu to queue the item in mpd's playlist and a
-# status display in the audio menu
-
-# TODO:
+# -*- coding: iso-8859-1 -*-
+# -----------------------------------------------------------------------
+# This is the mpd playlist plugin.  Using this you can add the currently
+# selected song to the mpd playlist
+# -----------------------------------------------------------------------
+# $Id$
+#
+# Notes:
+#
+# There are two parts to this plugin, an addition to the audio item menu to queue
+# the item in mpd's playlist and a status display in the audio menu
+#
+# This only works if the music to be played is part of the filesystem avalible to
+# mpd and also avalible to freevo so both on the same computer, or exported using
+# samba or nfs
+#
+# Advantages of this over the previous mpd plugin:
+#   The code is a lot cleaner and more robust.
+#   Faster (talks to mpd directly, rather than calling other programs).
+#   Allows you to modify the playlist within freevo.
+#
+# Todo:
+#
 #   add code to cope if the mpd server crashes
 #   add code to enqueue an entire directory & sub-directories
 #   add code to enqueue an existing playlist
 #   modify code to support localisation
 #   investigate having the mpd connection managed by another class
-
-# Advantages of this over the previous mpd plugin:
-#   The code is a lot cleaner and more robust.
-#   Faster (talks to mpd directly, rather than calling other programs).
-#   Allows you to modify the playlist within freevo.
-
-# This only works if the music to be played is part of the filesystem avalible to mpd and also avalible to freevo
-# so both on the same computer, or exported using samba or nfs
-
-# This code uses the following options in local_conf.py:
-#   MPD_SERVER_HOST='localhost'     # the host running the mpd server
-#   MPD_SERVER_PORT='6600'          # the port the server is listening on
-#   MPD_SERVER_PASSWORD=None        # the password to access the mpd server
-#   MPD_MUSIC_BASE_PATH='/mnt/music/'    # the local path to where the music is stored, must have trailing slash
-#   MPD_EXTERNAL_CLIENT='/usr/bin/pympd'    # the location of the external client you want to use, or None
-#   MPD_EXTERNAL_CLIENT_ARGS=''     # arguments to be passed to the external client, or None, obsolete
-
-# This is the mpd playlist plugin.
-# using this you can add the currently selected song to the mpd playlist
+#
+# -----------------------------------------------------------------------
+# Freevo - A Home Theater PC framework
+# Copyright (C) 2002 Krister Lagerstrom, et al.
+# Please see the file freevo/Docs/CREDITS for a complete list of authors.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+# CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# -----------------------------------------------------------------------
 
 import plugin
 import config
-
 import mpdclient2
 
-class PluginInterface (plugin.ItemPlugin):
-    """This plugin adds a 'enqueue in MPD' option to audio files"""
+class PluginInterface(plugin.ItemPlugin):
+    """
+    This plugin adds a 'enqueue in MPD' option to audio files
+
+    To activate this plugin, just put the following line at the end of your
+    local_conf.py file:
+    | plugin.activate('audio.mpd_playlist')
+    """
+    __author__           = 'Graham Billiau (DrLizAu\'s code monkey)'
+    __author_email__     = 'graham@geeksinthegong.net'
+    __maintainer__       = __author__
+    __maintainer_email__ = __author_email__
+    __version__          = '$Revision$'
+    """open the connection to the mpd server and keep it alive
+    assume that the plugin is loaded once, then kept in memory"""
 
 
     def __init__(self):
-        """open the connection to the mpd server and keep it alive
-        assume that the plugin is loaded once, then kept in memory"""
+        if not config.MPD_MUSIC_BASE_PATH:
+            self.reason = 'MPD_MUSIC_BASE_PATH not set in local_conf.py'
+            return
+
         plugin.ItemPlugin.__init__(self)
         self.conn = mpdclient2.Thread_MPD_Connection(config.MPD_SERVER_HOST, config.MPD_SERVER_PORT, True,
                     config.MPD_SERVER_PASSWORD)
-        
+
         # ensure there is a trailing slash on config.MPD_MUSIC_BASE_PATH
         if not config.MPD_MUSIC_BASE_PATH.endswith('/'):
             config.MPD_MUSIC_BASE_PATH = config.MPD_MUSIC_BASE_PATH + '/'
 
 
     def config(self):
-        return [ ('MPD_SERVER_HOST', 'localhost', 'the host running the mpd server'),
-                 ('MPD_SERVER_PORT', 6600, 'the port the server is listening on'),
-                 ('MPD_SERVER_PASSWORD', None, 'the password to access the mpd server'),
-                 ('MPD_MUSIC_BASE_PATH', '/mnt/music/', 'the local path to where the music is stored') ]
+        """returns the config variables used by this plugin"""
+        return [
+            ('MPD_SERVER_HOST', 'localhost', 'the host running the mpd server'),
+            ('MPD_SERVER_PORT', 6600, 'the port the server is listening on'),
+            ('MPD_SERVER_PASSWORD', None, 'the password to access the mpd server'),
+            ('MPD_MUSIC_BASE_PATH', None, 'the local path to where the music is stored'),
+            ('MPD_EXTERNAL_CLIENT', None,'the location of the external client you want to use'),
+           #('MPD_EXTERNAL_CLIENT_ARGS', '','arguments to be passed to the external client'),
+        ]
 
 
     def shutdown(self):
