@@ -30,6 +30,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated xine video plug-in to show OSD messages (F#1861770)
  * Deleted plug-in weather, moved to contrib/plugins (F#1863476)
  * Fixed apple trailers plug-in crashing (B#1861463)
+ * Fixed audio playlists when the the fxd file contains utf-8 characters (B#1865272)
  * Fixed manual record tv plug-in to work in December (B#1858008)
  * Fixed oneclick weather plug-in to allow non-ascii location names (B#1856597)
  * Fixed tv guide not scrolling to last channel from second channel (B#1858010)

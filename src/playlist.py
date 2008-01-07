@@ -547,7 +547,7 @@ class Mimetype(plugin.MimetypePlugin):
 
         items = []
         for child in children:
-            fname  = os.path.join(dirname, fxd.gettext(child))
+            fname  = os.path.join(dirname, String(fxd.gettext(child)))
             if child.name == 'directory':
                 items.append((fname, fxd.getattr(child, 'recursive', 0)))
 
