@@ -193,7 +193,9 @@ class GuideResource(FreevoResource):
             now = mfrguidestart
             # chan.displayname = string.replace(chan.displayname, "&", "SUB")
             rowdata.append("<tr class='chanrow'>")
-            rowdata.append("<td class='channel'>%s</td>" % chan.displayname)
+            channel_link = '<a href="guidechannel.rpy?channel=%s">%s</a>' % (chan.displayname,chan.displayname)
+            rowdata.append("<td class='channel'>%s</td>" % channel_link)
+            #rowdata.append("<td class='channel'>%s</td>" % chan.displayname)
             c_left = n_cols * cpb
 
             if not chan.programs:

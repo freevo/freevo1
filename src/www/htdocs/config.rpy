@@ -692,7 +692,37 @@ def DisplayGroups(fconfig, expALL):
 
     return html
 
+def DisplayGroup(grp,fconfig, expALL,hide_disabled):
+    '''
+    '''
+    _debug_('DisplayGroups(fconfig=%r, expALL=%r)' % (fconfig, expALL), 2)
+ 
+    groups = GetGroupList(fconfig)
+    displayStyle = 'none'
+    if expALL:
+        displayStyle = ''
 
+    html = ''
+ #   html += '<ul id="%s_list" style= display:%s>\n' % (grp, displayStyle)
+    for cctrl in fconfig:
+    
+        if cctrl['group'] == grp:
+            if cctrl['checked']:
+                lctrl = CreateConfigLine(cctrl,  expALL)
+                html += '<li class="LineOpen" id="%s_line">\n' % cctrl['control_name']
+                html += lctrl
+                html += '</li>\n'            
+            else:
+                if  not hide_disabled:
+                    lctrl = CreateConfigLine(cctrl,  expALL)
+                    html += '<li class="LineOpen" id="%s_line">\n' % cctrl['control_name']
+                    html += lctrl
+                    html += '</li>\n'
+   # html += '</ul>\n'
+ 
+    return html
+    
+    
 def DisplayConfigChanges(current_version):
     '''
     '''
@@ -725,7 +755,7 @@ def DisplayConfigChanges(current_version):
         dsp_change += CreateHTMLinput('Button','','Convert Config','','')
         dsp_change += '</div>\n'
     else:
-        dsp_change = ''
+        dsp_change = None
 
     return dsp_change
 
@@ -738,8 +768,7 @@ def GetConfigVersion(conf_data):
         if setting['ctrlname'] == 'CONFIG_VERSION':
             return setting['ctrlvalue']
     return None
-
-
+    
 class ConfigResource(FreevoResource):
 
     def _render(self, request):
@@ -755,13 +784,22 @@ class ConfigResource(FreevoResource):
         title = 'Config %s' %configfile
         fv.printHeader(_(title), 'styles/main.css', 'scripts/config.js', selected=_('Config'))
 
+        hide_disabled = False
         fv.res += '<script language="JavaScript" type="text/JavaScript" src="scripts/browsefile.js"></script>\n'
         fv.res += '<link rel="stylesheet" href="styles/config.css" type="text/css">\n'
 
         if not configfile:
             fv.res += 'Unable to find file.'
             return fv.res
-
+        
+        wizard_groups = ['Tv','Video','Audio','Image','Headline','Www','All','Config Changes']       
+        current_group = fv.formValue(form,"current_group")
+        if not current_group:
+            current_group = "Tv"
+        if not current_group in wizard_groups:
+            current_group = "Tv"
+                    
+            
         rconf = ReadConfig(configfile)
         fconfig = ParseConfigFile(rconf)
 
@@ -789,12 +827,26 @@ class ConfigResource(FreevoResource):
         fv.res += CreateHTMLinput('hidden','configfile', configfile,'','')
         fv.res += '<div class="VarGroups">\n'
 
-        # Check config version.
-        local_conf_ver = GetConfigVersion(fconfig)
-        fv.res += DisplayConfigChanges(local_conf_ver)
-
         fv.res += '<form id="config" action="config.rpy" method="get">\n'
-        fv.res += DisplayGroups(fconfig, expandAll)
+        fv.res += ' <div id="WizardGroup">'
+        fv.res += '<ul id="navlist">'
+        for group in wizard_groups:
+            group_id = ""
+            if current_group == group:
+                group_id = "current"
+            fv.res += '<li id="GroupLabel"><a href="config.rpy?current_group=%s" id="%s">%s</a></li>' % (group, group_id, group)
+        fv.res += '</ul>'
+        fv.res += '</div><br><br>'
+      
+        if current_group == "All":
+            # Check config version.
+            fv.res += DisplayGroups(fconfig, expandAll)
+        elif current_group == 'Config Changes':
+            local_conf_ver = GetConfigVersion(fconfig)
+            fv.res += DisplayConfigChanges(local_conf_ver)            
+        else:
+            fv.res += DisplayGroup(current_group,fconfig,0,hide_disabled)
+        
         fv.res + '</div>\n'
 
         return str(fv.res)
