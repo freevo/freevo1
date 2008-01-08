@@ -134,7 +134,13 @@ class EncodingJob:
             return 'Unknown container format'
 
         self.container = container
-        self.output = ('%s.%s' % (self.output, self.container))
+        if hasattr(config, 'ENCODINGSERVER_SAVE_DIR') and config.ENCODINGSERVER_SAVE_DIR:
+            if not os.path.exists(config.ENCODINGSERVER_SAVE_DIR):
+                os.makedirs(self.ENCODINGSERVER_SAVE_DIR, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
+            self.output = os.path.basename(self.output)
+            self.output = ('%s/%s.%s' % (config.ENCODINGSERVER_SAVE_DIR, self.output, self.container))
+        else: 
+            self.output = ('%s.%s' % (self.output, self.container))
 
     def getContainerList(self):
         """Return a list of possible containers"""

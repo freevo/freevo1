@@ -343,6 +343,7 @@ LOCAL_CONF_CHANGES = [
     (5.22,
      '''Added RECORDSERVER_SECRET and RECORDSERVER_PORT2=18002 for kaa.rpc
      Renamed audio plug-in audio.playlist to audio.playlists
+     Added ENCODINGSERVER_SAVE_DIR for re-encoded DVDs
      '''),
 ]
 
