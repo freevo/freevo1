@@ -467,12 +467,11 @@ class Videodev:
         """
         v_norm = name.upper()
         try:
-            _debug_('setstdbyname: %s (0x%08X) set' % (name, NORMS[v_norm]))
             self.setstd(NORMS[v_norm])
+            _debug_('setstdbyname: %s (0x%08X) set' % (name, NORMS[v_norm]), 3)
         except KeyError, e:
             _debug_('setstdbyname failed: %s' % (e), DERROR)
             _debug_('possible are: %r' % (NORMS.keys()), DINFO)
-        _debug_('setstdbyname: %s (0x%08X) set' % (name, NORMS[v_norm]))
 
 
     def enuminput(self, num):

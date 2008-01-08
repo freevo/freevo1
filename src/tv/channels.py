@@ -124,7 +124,7 @@ class FreevoChannels:
 
         for pos in range(len(config.TV_CHANNELS)):
             chan_cfg = config.TV_CHANNELS[pos]
-            if chan_cfg[2] == chan:
+            if str(chan_cfg[2]) == str(chan):
                 new_chan = chan
                 self.chan_index = pos
 

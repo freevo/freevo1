@@ -116,8 +116,7 @@ class IVTV(tv.v4l2.Videodev):
             10 : 3, 11 : 4, 12 : 5, 13 : 3, 14 : 3
         }
         try:
-            if config.DEBUG >= 1:
-                _debug_('streamTypeIvtvToV4l2 %s -> %s' % (stream_type, map_ivtv_to_v4l2[stream_type]))
+            _debug_('streamTypeIvtvToV4l2 %s -> %s' % (stream_type, map_ivtv_to_v4l2[stream_type]), 2)
             return map_ivtv_to_v4l2[stream_type]
         except:
             print 'streamTypeIvtvToV4l2 %s failed' % (stream_type)
@@ -129,7 +128,7 @@ class IVTV(tv.v4l2.Videodev):
             0 : 0, 2 : 2, 3 : 10, 4 : 11, 5 : 12,
         }
         try:
-            _debug_('streamTypeV4l2ToIVTV %s -> %s' % (stream_type, map_v4l2_to_ivtv[stream_type]))
+            _debug_('streamTypeV4l2ToIVTV %s -> %s' % (stream_type, map_v4l2_to_ivtv[stream_type]), 2)
             return map_v4l2_to_ivtv[stream_type]
         except:
             print 'streamTypeV4l2ToIVTV %s failed' % (stream_type)
