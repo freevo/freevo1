@@ -57,6 +57,7 @@ a {
     text-decoration:none;
 }
 
+
 a.Setting_Line {
     width: 28em;
     height: 16px;
@@ -340,7 +341,7 @@ div.VarGroups textarea {
     border:#0B1C52 1px solid;
     background:#c9c9ff;
     vertical-align:text-top;
-    width:35em;
+    width:100%;
 }
 
 
@@ -443,3 +444,39 @@ div.disablecontrol {
     opacity:.6;
 }
 
+
+
+#WizardGroup {
+  float:left;
+  width:100%;
+  background:  url("../images/tab/bg.gif") repeat-x bottom;
+  font-size:93%;
+  line-height:normal;
+
+  }
+#WizardGroup ul {
+  margin:0;
+  padding:10px 10px 0;
+  list-style:none;
+}
+#WizardGroup li {
+  float:left;
+  background:url("../images/tab/left.gif") no-repeat left top;
+  margin:0;
+  padding:0 0 0 9px;
+  }
+#WizardGroup a {
+  display:block;
+  background:url("../images/tab/right.gif") no-repeat right top;
+  padding:5px 15px 4px 6px;
+  text-decoration:none;
+  font-weight:bold;
+  border: none;
+  color:#888;
+  }
+#WizardGroup a:hover {
+  color:#333;
+  }
+#WizardGroup #current {
+  background:url("../images/tab/left_on.gif") no-repeat  left top;;
+  }

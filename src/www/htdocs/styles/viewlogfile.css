@@ -26,7 +26,8 @@ div.viewlog input {
 div.viewlog textarea {
     z-index:100; 
     left:2%;
-    right:2%; 
+    right:2%;
+    width:96%;
     height: 60%; 
     position:absolute; 
     top:200px;  

@@ -79,18 +79,18 @@ class WebRemoteResource(FreevoResource):
    <link rel="stylesheet" href="styles/main.css" type="text/css" />
 
    <style type="text/css" media="screen">
-    body  { background: #666699; }
-    h3 { color: white; }
-    table { width: auto; }
-    td    { padding: 1px; }
-    button.remote { width: 60px; height: 30px; background: #eee; font-size: 12px; text-align: center; padding: 0; }
-    button.remote:hover { background: #fed; }
+     body  { background: #666699; }
+     h3 { color: white; }
+     table { width: auto; }
+     td    { padding: 1px; }
+     button.remote { width: 60px; height: 30px; background: #eee; font-size: 12px; text-align: center; padding: 0; }
+     button.remote:hover { background: #fed; }
    </style>
 
    <script type="text/javascript">
    <!--
      // Resize window
-     function resizeWindow () {
+     function resizeWindow () {
        window.resizeTo(230, 495)
        window.toolbar.visible     = false
        window.statusbar.visible   = false
@@ -99,9 +99,9 @@ class WebRemoteResource(FreevoResource):
      }
 
      // AJAX Functions
-     var xmlHttp = false;
+     var xmlHttp = false;
 
-     function getXMLHttpObject () {
+     function getXMLHttpObject () {
        if (window.XMLHttpRequest) {
          xmlHttp=new XMLHttpRequest()
        }
@@ -109,27 +109,28 @@ class WebRemoteResource(FreevoResource):
          xmlHttp=new ActiveXObject("Microsoft.XMLHTTP")
        }
        return xmlHttp
-       try {
-         xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");      // Internet Explorer 1st try
-       } catch (e) {
-         try {
-           xmlHttp = new ActiveXObject("Microsoft.XMLHTTP"); // Internet Explorer 2nd try
-         } catch (e2) {
-           xmlHttp = false;
-         }
-       }
-       if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
-         xmlHttp = new XMLHttpRequest();                     // Mozilla, Firefox, Opera
-       }
-     }
+       try {
+         xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");   // Internet Explorer 1st try
+       } catch (e) {
+         try {
+           xmlHttp = new ActiveXObject("Microsoft.XMLHTTP"); // Internet Explorer 2nd try
+         } catch (e2) {
+           xmlHttp = false;
+         }
+       }
+       if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+         xmlHttp = new XMLHttpRequest();                      // Mozilla, Firefox, Opera
+       }
+     }
 
-     function send_code( code ) {
-       if (! xmlHttp)
-         getXMLHttpObject();
-       var url = 'webremote.rpy?code=' + code + '&sid=' + Math.random();
-       xmlHttp.open('GET', url, true);
-       xmlHttp.send(null);
-     }
+     function send_code( code ) {
+       if (! xmlHttp) {
+         getXMLHttpObject();
+       }
+       var url = 'webremote.rpy?code=' + code + '&sid=' + Math.random();
+       xmlHttp.open('GET', url, true);
+       xmlHttp.send(null);
+     }
    -->
    </script>
 </head>
