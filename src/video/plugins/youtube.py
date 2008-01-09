@@ -5,8 +5,10 @@
 # $Id$
 #
 # Notes:
-#    You need to install xxxx from http://
-#    You also need yyyy from http://
+#    You need to install:
+#    youtube-dl from http://www.arrakis.es/~rggi3/youtube-dl/
+#    and
+#    gdata from http://code.google.com/p/gdata-python-client/
 #
 #    thanks to Sylvain Fabre (cinemovies_trailers.py)
 #    and David Sotelo (universal_newlines=1)
@@ -59,7 +61,7 @@ import traceback
 import menu
 import video
 import config
-import string, os, subprocess
+import string, os, subprocess, util
 
 from video.videoitem import VideoItem
 from subprocess import Popen
@@ -78,6 +80,10 @@ except ImportError:
 class PluginInterface(plugin.MainMenuPlugin):
     """
     Download and watch youtube video
+
+    prerequisites are:
+    U(youtube-dl <http://www.arrakis.es/~rggi3/youtube-dl/>
+    U(gdata <http://code.google.com/p/gdata-python-client/>
 
     Activate:
     | plugin.activate('video.youtube')
@@ -98,8 +104,8 @@ class PluginInterface(plugin.MainMenuPlugin):
             return
         plugin.MainMenuPlugin.__init__(self)
 
-        if not os.path.isdir(self.YOUTUBE_DIR):
-            os.mkdir(self.YOUTUBE_DIR, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
+        if not os.path.isdir(config.YOUTUBE_DIR):
+            os.mkdir(config.YOUTUBE_DIR, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
 
 
     def config(self):
@@ -163,7 +169,7 @@ class YoutubeVideo(Item):
         filename =  config.YOUTUBE_DIR + '/' + arg[1].replace('-', '_') + '.flv'
         if not os.path.exists(filename):
             box = PopupBox(text=_('Downloading video'), width=950)
-            cmd = config.YOUTUBE-DL + ' -o ' + config.YOUTUBE_DIR + '/' + arg[1].replace('-', '_')
+            cmd = config.YOUTUBE_DL + ' -o ' + config.YOUTUBE_DIR + '/' + arg[1].replace('-', '_')
             cmd += '.flv "http://www.youtube.com/watch?v=' + arg[1] + '"'
             proceso = Popen(cmd, shell=True, bufsize=1024, stdout=subprocess.PIPE, universal_newlines=1)
             follow = proceso.stdout
@@ -189,8 +195,20 @@ def video_list(parent, title, user):
     feed = 'http://gdata.youtube.com/feeds/users/' + user + '/uploads?orderby=updated'
 
     service = gdata.service.GDataService(server='gdata.youtube.com')
+    box = PopupBox(text=_('Loading video list'))
+    box.show()
     for video in service.GetFeed(feed).entry:
-        date = video.published.text.split('T')
-        id = video.link[1].href.split('watch?v=');
-        items.append(menu.MenuItem(date[0] + ' ' + video.title.text, parent.downloadvideo, (video.title.text, id[1])))
+        date = video.published.text.split("T")
+        id = video.link[1].href.split("watch?v=");
+        mi = menu.MenuItem(date[0] + " " + video.title.text, parent.downloadvideo, id[1])
+        mi.arg = (video.title.text, id[1])
+        text = util.htmlenties2txt(video.content)
+        mi.description = re.search('<span>([^\<]*)<',text).group(1)
+        tempimage = re.search('src="([^\"]*)"',text).group(1)
+        file = config.YOUTUBE_DIR + "/" + id[1].replace("-","_") + ".jpg"
+        if not os.path.exists(file):
+            aimage = urllib.urlretrieve(tempimage,file)
+        mi.image = file
+        items.append(mi)
+    box.destroy()
     return items
