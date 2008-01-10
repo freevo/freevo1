@@ -24,7 +24,6 @@
 #   have status/everything update periodicly
 #   add a playlist browser
 #   code to handle when the mpd server is down
-#   show the currently playing song in the status view
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -71,7 +70,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     __author_email__     = 'graham@geeksinthegong.net'
     __maintainer__       = __author__
     __maintainer_email__ = __author_email__
-    __version__          = '$Revision$'
+    __version__          = '2'
 
 
     def __init__(self):
@@ -82,7 +81,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
         plugin.MainMenuPlugin.__init__(self)
         self.show_item = menu.MenuItem('MPD status', action=self.show_menu)
-        self.show_item.type = 'audio'
+        #self.show_item.type = 'menu'
         plugin.register(self, 'audio.MPD_status')
         # connect to the server
         self.conn = mpdclient2.Thread_MPD_Connection(config.MPD_SERVER_HOST, config.MPD_SERVER_PORT, True,
@@ -252,10 +251,13 @@ class PluginInterface(plugin.MainMenuPlugin):
     def mpd_status(self, arg=None, menuw=None):
         """bring up a dialog showing mpd's current status"""
         stat = self.conn.status()
+        track = self.conn.currentsong()
 
         text = "status:     %s\n" %(stat['state'])
         if (stat['state'] != 'stop'):
-            # how do i get the song name?
+            text += "title:      %s\n" %(track['title'])
+            text += "album:      %s\n" %(track['album'])
+            text += "artist:     %s\n" %(track['artist'])
             text += "track:      %s\\%s\n" %(int(stat['song']) + 1, stat['playlistlength'])
             text += "time:       %s\n" %(stat['time'])
         if (stat['repeat'] == '1'):

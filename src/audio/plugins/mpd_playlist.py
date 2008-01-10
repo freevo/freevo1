@@ -22,7 +22,6 @@
 # Todo:
 #
 #   add code to cope if the mpd server crashes
-#   add code to enqueue an entire directory & sub-directories
 #   add code to enqueue an existing playlist
 #   modify code to support localisation
 #   investigate having the mpd connection managed by another class
@@ -52,6 +51,8 @@ import plugin
 import config
 import mpdclient2
 
+import os.path
+
 class PluginInterface(plugin.ItemPlugin):
     """
     This plugin adds a 'enqueue in MPD' option to audio files
@@ -64,10 +65,7 @@ class PluginInterface(plugin.ItemPlugin):
     __author_email__     = 'graham@geeksinthegong.net'
     __maintainer__       = __author__
     __maintainer_email__ = __author_email__
-    __version__          = '$Revision$'
-    """open the connection to the mpd server and keep it alive
-    assume that the plugin is loaded once, then kept in memory"""
-
+    __version__          = '2'
 
     def __init__(self):
         if not config.MPD_MUSIC_BASE_PATH:
@@ -75,12 +73,17 @@ class PluginInterface(plugin.ItemPlugin):
             return
 
         plugin.ItemPlugin.__init__(self)
+        # open the connection to the mpd server and keep it alive
+        # assume that the plugin is loaded once, then kept in memory
         self.conn = mpdclient2.Thread_MPD_Connection(config.MPD_SERVER_HOST, config.MPD_SERVER_PORT, True,
                     config.MPD_SERVER_PASSWORD)
 
         # ensure there is a trailing slash on config.MPD_MUSIC_BASE_PATH
         if not config.MPD_MUSIC_BASE_PATH.endswith('/'):
             config.MPD_MUSIC_BASE_PATH = config.MPD_MUSIC_BASE_PATH + '/'
+
+        # don't calculate this every time
+        self.path_len = len(config.MPD_MUSIC_BASE_PATH)
 
 
     def config(self):
@@ -108,25 +111,58 @@ class PluginInterface(plugin.ItemPlugin):
     def actions (self, item):
         """add the option for all music that is in the mpd library"""
         self.item = item
-        # check to see if item is a FileItem
-        if (item.type == 'file'):
+
+        # check to see if item is a AudioItem
+        if (item.type == 'audio'):
             # check to see if item is in mpd's library
             if (item.filename.startswith(config.MPD_MUSIC_BASE_PATH)):
                 # can query mpd to see if the file is in it's ibrary
                 return [ (self.enqueue_file, 'Add to MPD playlist') ]
-        #elif (item.type == 'dir'):
+
+        elif (item.type == 'dir'):
+            if (item.dir.startswith(config.MPD_MUSIC_BASE_PATH)):
+                return [
+                    (self.enqueue_dir, 'Add tracks to MPD playlist'),
+                    (self.enqueue_dir_recursive, 'Add tracks to MPD playlist recursively')
+                ]
+
         #elif (item.type == 'playlist'):
         return []
 
 
     def enqueue_file(self, arg=None, menuw=None):
-        self.conn.add(self.item.filename[len(config.MPD_MUSIC_BASE_PATH):])
+        self.conn.add(self.item.filename[self.path_len:])
+
         if menuw is not None:
             menuw.delete_menu(arg, menuw)
+            menuw.refresh()
         return
 
 
-    #def enqueue_dir(self, arg=None, menuw=None):
+    def enqueue_dir(self, arg=None, menuw=None):
+        path = self.item.dir[self.path_len:]
+        # rather than searching the filesystem for files, just search mpd's database
+        for track in self.conn.search('file', path + '/'):
+            # filter out subdirectories
+            if (os.path.dirname(track.file) == path):
+                self.conn.add(track.file)
+
+        if menuw is not None:
+            menuw.delete_menu(arg, menuw)
+            menuw.refresh()
+        return
+
+
+    def enqueue_dir_recursive(self, arg=None, menuw=None):
+        path = self.item.dir[self.path_len:] + '/'
+        # rather than searching the filesystem for files, just search mpd's database
+        for track in self.conn.search('file', path):
+            self.conn.add(track.file)
+
+        if menuw is not None:
+            menuw.delete_menu(arg, menuw)
+            menuw.refresh()
+        return
 
 
     #def enqueue_playlist(self, arg=None, menuw=None):
