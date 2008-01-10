@@ -1,7 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# itv.py - a simple plugin to view rss Video
+# Plugin to view RSS Video
 # -----------------------------------------------------------------------
+# $Id$
 #
 # Notes:
 # Todo:
@@ -71,14 +72,24 @@ class PluginInterface(plugin.MainMenuPlugin):
     | plugin.activate('itv', level=45)
     |
     | ITV_LOCATIONS = [
-    |     ('JT LCI 18h', 'http://tf1.lci.fr/xml/rss/0,,14,00.xml'),
-    |     ('JT i>Tele', 'http://podcast12.streamakaci.com/iTELE/iTELElejournal.xml'),
-    |     ('Flash Equipe', 'http://www.lequipe.fr/Podcast/flashETV_rss.xml'),
-    |     ('Météo LCI', 'http://tf1.fr/xml/rss/0,,23,00.xml'),
-    |     ('Météo France 2', 'file:///home/henri2/.freevo/meteo.xml')
+    |     ('JT LCI 18h', 'http://tf1.lci.fr/xml/rss/0,,14,00.xml',''),
+    |     ('JT i>Tele', 'http://podcast12.streamakaci.com/iTELE/iTELElejournal.xml',''),
+    |     ('Flash Equipe', 'http://www.lequipe.fr/Podcast/flashETV_rss.xml',''),
+    |     ('Météo LCI', 'http://tf1.fr/xml/rss/0,,23,00.xml',''),
+    |     ('Météo France 2', 'file:///home/henri2/.freevo/meteo.xml','')
+    |     ('YouTube - Today most viewed', 'http://youtube.com/rss/global/top_viewed_today.rss', 'youtube')
     | ]
 
+    To see YouTube feeds you must have the script youtube-dl (http://www.arrakis.es/~rggi3/youtube-dl/)
+    on the system path and you can add the following to local_conf.py:
+
+    |
+    | YOUTUBE_USER='your_yuotube_account_name'
+    | YOUTUBE_PASSWORD='yout_youtube_password'
+    |
+
     For a full list of tested sites, see 'Docs/plugins/itv.txt'.
+    For YouTube feeds you shall see http://www.youtube.com/rssls.
     """
 
     def __init__(self):
@@ -89,11 +100,11 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def config(self):
         return [('ITV_LOCATIONS', [
-                ('JT LCI 18h', 'http://tf1.lci.fr/xml/rss/0,,14,00.xml'),
-                ('JT i>Tele', 'http://podcast12.streamakaci.com/iTELE/iTELElejournal.xml'),
-                ('Flash Equipe', 'http://www.lequipe.fr/Podcast/flashETV_rss.xml'),
-                ('Météo LCI', 'http://tf1.fr/xml/rss/0,,23,00.xml'),
-                ('Météo France 2', 'file:///home/henri2/.freevo/meteo.xml')],
+                ('JT LCI 18h', 'http://tf1.lci.fr/xml/rss/0,,14,00.xml',''),
+                ('JT i>Tele', 'http://podcast12.streamakaci.com/iTELE/iTELElejournal.xml',''),
+                ('Flash Equipe', 'http://www.lequipe.fr/Podcast/flashETV_rss.xml',''),
+                ('Météo LCI', 'http://tf1.fr/xml/rss/0,,23,00.xml',''),
+                ('Météo France 2', 'file:///home/henri2/.freevo/meteo.xml','')],
                  'where to get the news')]
 
     def items(self, parent):
@@ -170,13 +181,17 @@ class HeadlinesSiteItem(Item):
                             description = c.firstChild.data
                         #################################
                         # Ajout pour identifier le lien de la video
-                        if c.localName == 'enclosure':
-                            attrs = c.attributes
-                            for attrName in attrs.keys():
-                                attrNode = attrs.get(attrName)
-                                attrValue = attrNode.nodeValue
-                                if 'url' in attrName:
-                                    link = attrValue
+                        if self.mode == 'youtube':
+                            if c.localName == 'link':
+                                link='youtube:'+c.firstChild.data
+                        else:
+                            if c.localName == 'enclosure':
+                                attrs = c.attributes
+                                for attrName in attrs.keys():
+                                    attrNode = attrs.get(attrName)
+                                    attrValue = attrNode.nodeValue
+                                    if 'url' in attrName:
+                                        link = attrValue
 
                 if title:
                     headlines.append((title, link, description))
@@ -250,6 +265,7 @@ class HeadlinesMainMenuItem(Item):
             headlines_site_item = HeadlinesSiteItem(self)
             headlines_site_item.name = location[0]
             headlines_site_item.url = location[1]
+            headlines_site_item.mode = location[2]
             headlines_site_item.location_index = config.ITV_LOCATIONS.index(location)
             headlines_sites += [ headlines_site_item ]
         if (len(headlines_sites) == 0):

@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# videoitem.py - Item for video objects
+# Item for video objects
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -336,6 +336,17 @@ class VideoItem(Item):
                 items = [ (self.dvd_vcd_title_menu, _('VCD title list')),
                           (self.play, _('Play default track')) ]
         else:
+            if self.url.startswith('youtube:'):
+                popup=PopupBox('Resolving YouTube video URL....')
+                popup.show()
+                if hasattr(config,'YOUTUBE_USER'):
+                    cmdline='youtube-dl -g -u '+config.YOUTUBE_USER+' -p '+config.YOUTUBE_PASSWORD+' '
+                else:
+                    cmdline='youtube-dl -g '
+                pipe=os.popen(cmdline+self.url[8:])
+                self.url=pipe.readline()
+                pipe.close()
+                popup.hide()
             items = [ (self.play, _('Play')) ]
 
         items.append((self.show_details, _('Full description')))
