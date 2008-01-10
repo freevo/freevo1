@@ -100,7 +100,7 @@ class ScrollableText:
 
     def layout(self, width, height, font):
         """
-        Layout the text into lines/pages based on the width,height and font
+        Layout the text into lines/pages based on the width, height and font
         supplied.
         """
         self.first_line_index = 0
@@ -303,12 +303,25 @@ class ButtonGroup:
         Select the button above the currently selected button.
         """
         if self.selected_row == 0:
-            return False
-        for r in range(self.selected_row-1, -1,  -1):
+            for r in range(-1, self.rows * -1, -1):
+                if self.buttons[r][self.selected_column]:
+                    self.selected_row = self.rows+r
+                    self.selected_button = self.buttons[r][self.selected_column]
+                    return True
+        for r in range(self.selected_row-1, -1, -1):
             if self.buttons[r][self.selected_column]:
                 self.selected_row = r
                 self.selected_button = self.buttons[r][self.selected_column]
                 return True
+
+        for r in range(-1, self.rows * -1, -1):
+            if self.buttons[r][self.selected_column]:
+                self.selected_row = self.rows+r
+                self.selected_button = self.buttons[r][self.selected_column]
+                return True
+
+
+
         return False
 
 
@@ -317,8 +330,18 @@ class ButtonGroup:
         Select the button below the currently selected button.
         """
         if self.selected_row + 1 == self.rows:
-            return False
+            for r in range(0, self.rows):
+                if self.buttons[r][self.selected_column]:
+                    self.selected_row = r
+                    self.selected_button = self.buttons[r][self.selected_column]
+                    return True
         for r in range(self.selected_row+1, self.rows):
+            if self.buttons[r][self.selected_column]:
+                self.selected_row = r
+                self.selected_button = self.buttons[r][self.selected_column]
+                return True
+
+        for r in range(0, self.rows):
             if self.buttons[r][self.selected_column]:
                 self.selected_row = r
                 self.selected_button = self.buttons[r][self.selected_column]
@@ -331,8 +354,13 @@ class ButtonGroup:
         Select the button to the left of the currently selected button.
         """
         if self.selected_column == 0:
-            return False
-        for c in range(self.selected_column - 1,  -1,  -1):
+            for c in range(-1, self.columns * -1, -1):
+                if self.buttons[self.selected_row][c]:
+                    self.selected_column = self.columns+c
+                    self.selected_button = self.buttons[self.selected_row][c]
+                    return True
+
+        for c in range(self.selected_column - 1, -1, -1):
             if self.buttons[self.selected_row][c]:
                 self.selected_column = c
                 self.selected_button = self.buttons[self.selected_row][c]
@@ -345,9 +373,18 @@ class ButtonGroup:
         Select the button to the right of the currently selected button.
         """
         if self.selected_column + 1 == self.columns:
-            return False
-        for c in range(self.selected_column + 1,  self.columns):
+            for c in range(0, self.columns, 1):
+                if self.buttons[self.selected_row][c]:
+                    self.selected_column = c
+                    self.selected_button = self.buttons[self.selected_row][c]
+                    return True
+        for c in range(self.selected_column + 1, self.columns):
             if self.buttons[self.selected_row][c]:
+                self.selected_column = c
+                self.selected_button = self.buttons[self.selected_row][c]
+                return True
+        for c in range(0, self.columns, 1):
+            if  self.buttons[self.selected_row][c]:
                 self.selected_column = c
                 self.selected_button = self.buttons[self.selected_row][c]
                 return True

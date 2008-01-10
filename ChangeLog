@@ -30,6 +30,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated re-encode plug-in and encoding core with additional features (F#1868764)
  * Updated recordings manager plug-in to add thumbnail support (F#1857397)
  * Updated recordserver to default watched/keep status (F#1857395)
+ * Updated skin code to wrap around when possible (F#1868478)
  * Updated shut down to allow single key confirmation (F#1857456)
  * Updated web server fileinfo module to display watched/keep status (F#1857392)
  * Updated xine tv plug-in to show OSD messages (F#1861772)
