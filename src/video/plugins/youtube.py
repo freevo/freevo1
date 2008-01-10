@@ -46,11 +46,11 @@
 #
 # -----------------------------------------------------------------------
 
-__author__           = 'Author Alberto González'
+__author__           = 'Alberto González Rodríguez'
 __author_email__     = 'alberto@pesadilla.org'
 __maintainer__       = __author__
 __maintainer_email__ = __author_email__
-__version__          = '0.1b'
+__version__          = '0.2'
 
 import os
 import plugin
