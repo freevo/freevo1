@@ -23,6 +23,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * New DirecTV plug-in to send to DirecTV receivers (F#1858775)
  * New flickr plug-in to see photo from www.flickr.com (F#1865290)
  * New web-server modules to show guidechannel and encoding_web (F#1864652)
+ * New wiimote input plug-in (F#1868785)
  * New Youtube video plug-in (F#1864496)
  * Updated cdbackup plug-in with CD_RIP_FMT to set the encoding format (F#1857460)
  * Updated encoding server to save the output to ENCODINGSERVER_SAVE_DIR when set (F#1865522)
