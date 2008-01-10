@@ -66,6 +66,16 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
+Jonathan Isom <jeisom at gmail.com>
+o Updates to the encoding plug-ins
+
+Graham Billiau <graham at geeksinthegong.net>
+o Music Player Daemon (MPD) plug-ins
+
+Alberto González Rodríguez <alberto at pesadilla.org>
+o YouTube video plug-in
+o flickr image plug-in
+
 Michel Lespinasse <walken at zoy.org>
 o Various fixes
 

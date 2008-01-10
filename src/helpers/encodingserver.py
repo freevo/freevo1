@@ -95,7 +95,7 @@ class EncodingServer(xmlrpc.XMLRPC):
             return (False, 'EncodingServer::initEncodeJob:  no source or output given')
 
         # generate a "random" idnr based on the time in p2.3, int() can return long
-        # int's, which is fine, except it makes XMLRPC fail somwhere along the way so we
+        # int's, which is fine, except it makes XMLRPC fail somewhere along the way so we
         # devide or random number by 100 :)
         idnr = int((time.time() / random.random()) / 100)
         _debug_("idnr=%s" % (idnr), 2)
@@ -129,7 +129,7 @@ class EncodingServer(xmlrpc.XMLRPC):
         _debug_('xmlrpc_getVideoCodecCAP(idnr=%r)' % (idnr), 2)
         return (True, jam(self.jobs[idnr].getVideoCodecList()))
 
-    def xmlrpc_setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0):
+    def xmlrpc_setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """ Using Twisted set the video codec """
         _debug_('xmlrpc_setVideoCodec(idnr=%r, vcodec=%r, tgtsize=%r, multipass=%r, vbitrate==%r)' % \
             (idnr, vcodec, tgtsize, multipass, vbitrate), 1)
@@ -137,7 +137,7 @@ class EncodingServer(xmlrpc.XMLRPC):
         if not (vcodec or (tgtsize and vbitrate)):
             return (False, 'EncodingServer::setVideoCodec:  no codec or target size given')
 
-        status = self.jobs[idnr].setVideoCodec(vcodec, tgtsize, multipass, vbitrate)
+        status = self.jobs[idnr].setVideoCodec(vcodec, tgtsize, multipass, vbitrate, altprofile)
 
         if not status:
             return (True, "EncodingServer::setVideoCodec: OK")
@@ -162,6 +162,37 @@ class EncodingServer(xmlrpc.XMLRPC):
             return (True, "EncodingServer::setAudioCodec: OK")
         else:
             return (False, "EncodingServer::setAudioCodec: %s" % status)
+
+
+    def xmlrpc_setVideoRes(self, idnr, videores ):
+        """ Using Twisted set the video resolution """
+        _debug_('xmlrpc_setAudioCodec(idnr=%r, videores=%r)' % (idnr, videores ), 2)
+        #safety checks
+        if not (videores):
+            return (False, 'EncodingServer::setVideoRes:  no video resolution given')
+
+        status = self.jobs[idnr].setVideoRes( videores)
+
+        if not status:
+            return (True, "EncodingServer::setVideoRes: OK")
+        else:
+            return (False, "EncodingServer::setVideoRes: %s" % status)
+
+
+    def xmlrpc_setNumThreads(self, idnr, numthreads ):
+        """ Using Twisted set the number of threads """
+        _debug_('xmlrpc_setAudioCodec(idnr=%r, numthreads=%r)' % (idnr, numthreads ), 2)
+        #safety checks
+        if not (numthreads):
+            return (False, 'EncodingServer::setNumThreads:  no number given')
+
+        status = self.jobs[idnr].setNumThreads( numthreads)
+
+        if not status:
+            return (True, "EncodingServer::setNumThreads: OK")
+        else:
+            return (False, "EncodingServer::setNumThreads: %s" % status)
+
 
     def xmlrpc_getVideoFiltersCAP(self, idnr):
         """ Using Twisted get the video filter capabilities """

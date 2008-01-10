@@ -35,7 +35,7 @@ import menu
 import os
 import config
 from video.encodingclient import *
-from encodingcore import ContainerCapList,VideoCodecList,AudioCodecList,VideoFilters
+from encodingcore import ContainerCapList, VideoCodecList, AudioCodecList, VideoFilters
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
@@ -57,12 +57,17 @@ class PluginInterface(plugin.ItemPlugin):
         self.title = ''
         self.source = ''
         self.output = ''
+        self.resetprofile()
+
+    def resetprofile(self):
         self.profile = {}
         self.profile['container'] = config.REENCODE_CONTAINER
         self.profile['resolution'] = config.REENCODE_RESOLUTION
         self.profile['videocodec'] = config.REENCODE_VIDEOCODEC
+        self.profile['altprofile'] = config.REENCODE_ALTPROFILE
         self.profile['audiocodec'] = config.REENCODE_AUDIOCODEC
         self.profile['numpasses'] = config.REENCODE_NUMPASSES
+        self.profile['numthreads'] = config.REENCODE_NUMTHREADS
         self.profile['videobitrate'] = config.REENCODE_VIDEOBITRATE
         self.profile['audiobitrate'] = config.REENCODE_AUDIOBITRATE
         self.profile['videofilter'] = config.REENCODE_VIDEOFILTER
@@ -77,6 +82,7 @@ class PluginInterface(plugin.ItemPlugin):
             ('REENCODE_CONTAINER', 'avi', 'Container type'),
             ('REENCODE_RESOLUTION', 'Optimal', 'Resolution'),
             ('REENCODE_VIDEOCODEC', 'XviD', 'Video codec'),
+            ('REENCODE_ALTPROFILE', None, 'Alternate Encoding Profile'),
             ('REENCODE_VIDEOBITRATE', '800', 'Video bit rate'),
             ('REENCODE_AUDIOCODEC', 'MPEG 1 Layer 3 (mp3)', 'Audio codec'),
             ('REENCODE_AUDIOBITRATE', '128', 'Audio bit rate'),
@@ -119,6 +125,8 @@ class PluginInterface(plugin.ItemPlugin):
             return '%s' % (self.profile['resolution'])
         elif attr == 'disp_videocodec':
             return '%s' % (self.profile['videocodec'])
+        elif attr == 'altprofile':
+            return '%s' % (self.profile['altprofile'])
         elif attr == 'disp_videobitrate':
             return '%s' % (self.profile['videobitrate'])
         elif attr == 'disp_audiocodec':
@@ -127,6 +135,8 @@ class PluginInterface(plugin.ItemPlugin):
             return '%s' % (self.profile['audiobitrate'])
         elif attr == 'disp_numpasses':
             return '%s' % (self.profile['numpasses'])
+        elif attr == 'disp_numthreads':
+            return '%s' % (self.profile['numthreads'])
         elif attr == 'disp_videofilter':
             return '%s' % (self.profile['videofilter'])
         return '"%s" not defined' % (attr)
@@ -144,6 +154,7 @@ class PluginInterface(plugin.ItemPlugin):
         menu_items += [ menu.MenuItem(_('Modify Audio Codec'), action=self.mod_audiocodec) ]
         menu_items += [ menu.MenuItem(_('Modify Audio Bitrate'), action=self.mod_audiobitrate) ]
         menu_items += [ menu.MenuItem(_('Modify Number of passes'), action=self.mod_numpasses) ]
+        menu_items += [ menu.MenuItem(_('Modify Number of Encoder Threads'), action=self.mod_numthreads) ]
         menu_items += [ menu.MenuItem(_('Modify Video Filter (not implemented)'), action=self.mod_videofilter) ]
         encoding_menu = menu.Menu(_('Choose your encoding profile'), menu_items, item_types = 'video encoding menu')
         encoding_menu.infoitem = self
@@ -156,6 +167,7 @@ class PluginInterface(plugin.ItemPlugin):
         menu_items += [ menu.MenuItem(_('Xvid Low Quality'), action=self.select_encoding_profile, arg='xvid_low') ]
         menu_items += [ menu.MenuItem(_('Xvid High Quality'), action=self.select_encoding_profile, arg='xvid_high') ]
         menu_items += [ menu.MenuItem(_('iPod'), action=self.select_encoding_profile, arg='ipod') ]
+        menu_items += [ menu.MenuItem(_('DVD'), action=self.select_encoding_profile, arg='MPEG 2 (lavc)') ]
         encoding_menu = menu.Menu(_('Select Profile'), menu_items, item_types = 'video encoding menu')
         encoding_menu.infoitem = self
         menuw.pushmenu(encoding_menu)
@@ -174,7 +186,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_resolution(self, arg=None, menuw=None):
         _debug_('mod_resolution(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
-        for resolution in ('Optimal','320:240'):
+        for resolution in ('Optimal', '1920:1080', '1280:720', '852:480', '720:576', '720:480', '320:240'):
             items.append(menu.MenuItem(resolution, action=self.alter_prop, arg=('resolution', resolution)))
         resolution_menu = menu.Menu(_('Modify Resolution'), items, item_types = 'video encoding menu')
         resolution_menu.infoitem = self
@@ -194,7 +206,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_videobitrate(self, arg=None, menuw=None):
         _debug_('mod_videobitrate(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
-        for videobitrate in range(400,2001,200):
+        for videobitrate in range(400, 2001, 200):
             items.append(menu.MenuItem(videobitrate, action=self.alter_prop, arg=('videobitrate', videobitrate)))
         videobitrate_menu = menu.Menu(_('Modify Video Bitrate'), items, item_types = 'video encoding menu')
         videobitrate_menu.infoitem = self
@@ -214,7 +226,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_audiobitrate(self, arg=None, menuw=None):
         _debug_('mod_audiobitrate(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
-        for audiobitrate in (64,128,192,224):
+        for audiobitrate in (64, 128, 192, 224):
             items.append(menu.MenuItem(audiobitrate, action=self.alter_prop, arg=('audiobitrate', audiobitrate)))
         audiobitrate_menu = menu.Menu(_('Modify Audio Bitrate'), items, item_types = 'video encoding menu')
         audiobitrate_menu.infoitem = self
@@ -224,11 +236,21 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_numpasses(self, arg=None, menuw=None):
         _debug_('mod_numpasses(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
-        for numpasses in (1,2,3):
+        for numpasses in (1, 2):
             items.append(menu.MenuItem(numpasses, action=self.alter_prop, arg=('numpasses', numpasses)))
         numpasses_menu = menu.Menu(_('Modify Number of Passes'), items, item_types = 'video encoding menu')
         numpasses_menu.infoitem = self
         menuw.pushmenu(numpasses_menu)
+        menuw.refresh()
+
+    def mod_numthreads(self, arg=None, menuw=None):
+        _debug_('mod_numthreads(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
+        items = []
+        for numthreads in (1, 2, 3, 4, 5, 6, 7, 8):
+            items.append(menu.MenuItem(numthreads, action=self.alter_prop, arg=('numthreads', numthreads)))
+        numthreads_menu = menu.Menu(_('Modify Number of Encoding threads'), items, item_types = 'video encoding menu')
+        numthreads_menu.infoitem = self
+        menuw.pushmenu(numthreads_menu)
         menuw.refresh()
 
     def mod_videofilter(self, arg=None, menuw=None):
@@ -243,10 +265,12 @@ class PluginInterface(plugin.ItemPlugin):
 
     def select_encoding_profile(self, arg=None, menuw=None):
         _debug_('select_encoding_profile(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
+
         if arg == 'xvid_low':
             self.profile['container'] = 'avi'
             self.profile['resolution'] = 'Optimal'
             self.profile['videocodec'] = 'XviD'
+            self.profile['altprofile'] = None
             self.profile['videobitrate'] = 800
             self.profile['audiocodec'] = 'MPEG 1 Layer 3 (mp3)'
             self.profile['audiobitrate'] = 128
@@ -256,6 +280,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.profile['container'] = 'avi'
             self.profile['resolution'] = 'Optimal'
             self.profile['videocodec'] = 'XviD'
+            self.profile['altprofile'] = None
             self.profile['videobitrate'] = 1200
             self.profile['audiocodec'] = 'MPEG 1 Layer 3 (mp3)'
             self.profile['audiobitrate'] = 128
@@ -264,12 +289,23 @@ class PluginInterface(plugin.ItemPlugin):
         elif arg == 'ipod':
             self.profile['container'] = 'mp4'
             self.profile['resolution'] = '320:240'
-            self.profile['videocodec'] = 'iPodv'
+            self.profile['videocodec'] = 'MPEG 4 (lavc)'
+            self.profile['altprofile'] = 'vcodec=mpeg4:mbd=2:cmp=2:subcmp=2:trell=yes:v4mv=yes:vglobal=1'
             self.profile['videobitrate'] = 1200
-            self.profile['audiocodec'] = 'iPoda'
+            self.profile['audiocodec'] = 'aac (iPod)'
             self.profile['audiobitrate'] = 192
             self.profile['numpasses'] = 2
             self.profile['videofilter'] = 'ipod'
+        elif arg == 'MPEG 2 (lavc)':
+            self.profile['container'] = 'mpeg'
+            self.profile['resolution'] = '720:480'
+            self.profile['videocodec'] = 'MPEG 2 (lavc)'
+            self.profile['altprofile'] = None
+            self.profile['videobitrate'] = 5200
+            self.profile['audiocodec'] = 'ac3'
+            self.profile['audiobitrate'] = 224
+            self.profile['numpasses'] = 1
+            self.profile['videofilter'] = 'None'
         else:
             _debug_('Unknown Profile "%s"' % (arg), DERROR)
             self.error(_('Unknown Profile')+(' "%s"' % (arg)))
@@ -278,7 +314,7 @@ class PluginInterface(plugin.ItemPlugin):
         if menuw:
             menuw.back_one_menu(arg='reload')
 
-    def alter_prop(self, arg=(None,None), menuw=None):
+    def alter_prop(self, arg=(None, None), menuw=None):
         _debug_('alter_prop(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         (prop, val) = arg
 
@@ -288,6 +324,8 @@ class PluginInterface(plugin.ItemPlugin):
             self.profile['resolution'] = val
         elif prop == 'videocodec':
             self.profile['videocodec'] = val
+        elif prop == 'altprofile':
+            self.profile['altprofile'] = val
         elif prop == 'videobitrate':
             self.profile['videobitrate'] = val
         elif prop == 'audiocodec':
@@ -296,6 +334,8 @@ class PluginInterface(plugin.ItemPlugin):
             self.profile['audiobitrate'] = val
         elif prop == 'numpasses':
             self.profile['numpasses'] = val
+        elif prop == 'numthreads':
+            self.profile['numthreads'] = val
         elif prop == 'videofilter':
             self.profile['videofilter'] = val
         else:
@@ -338,7 +378,7 @@ class PluginInterface(plugin.ItemPlugin):
             return
 
         multipass = profile['numpasses'] > 1
-        (status, resp) = setVideoCodec(idnr, profile['videocodec'], 0, multipass, profile['videobitrate'])
+        (status, resp) = setVideoCodec(idnr, profile['videocodec'], 0, multipass, profile['videobitrate'], profile['altprofile'])
         _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
@@ -346,6 +386,18 @@ class PluginInterface(plugin.ItemPlugin):
 
         (status, resp) = setAudioCodec(idnr, profile['audiocodec'], profile['audiobitrate'])
         _debug_('setAudioCodec:status:%s resp:%s' % (status, resp))
+        if not status:
+            self.error(resp)
+            return
+
+        (status, resp) = setNumThreads(idnr, profile['numthreads'])
+        _debug_('setNumThreads:status:%s resp:%s' % (status, resp))
+        if not status:
+            self.error(resp)
+            return
+
+        (status, resp) = setVideoRes(idnr, profile['resolution'])
+        _debug_('setVideoRes:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
@@ -364,6 +416,7 @@ class PluginInterface(plugin.ItemPlugin):
         self.menuw = menuw
         AlertBox(width=400, height=200, text=_('Encoding started'), handler=self.mopup).show()
 
+        self.resetprofile()
         _debug_('boe')
         #menuw.delete_menu()
         #menuw.delete_menu()

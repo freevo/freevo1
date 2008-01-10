@@ -181,7 +181,7 @@ def getVideoCodecCAP(idnr):
 
     return returnFromJelly(status, response)
 
-def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0):
+def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
     """Set a video codec
 
     @param vcodec: is one of the possible video codecs. It should be one of the strings
@@ -198,7 +198,7 @@ def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0):
         return (False, "EncodingClient: no idnr and/or videocodec and/or targetsize")
 
     try:
-        (status, response) = server.setVideoCodec(idnr, vcodec, tgtsize, multipass, vbitrate)
+        (status, response) = server.setVideoCodec(idnr, vcodec, tgtsize, multipass, vbitrate, altprofile)
     except:
         return (False, 'EncodingClient: connection error')
 
@@ -208,7 +208,7 @@ def getAudioCodecCAP(idnr):
     """Get a list of possible audio codecs (depending on the input and container format)
 
     This returns a list with plain strings, each identifiyng a audio codec, like
-    MP3, Ogg,  etc. Currently only MP3 is available. The strings are user-readable.
+    MP3, Ogg, etc. Currently only MP3 is available. The strings are user-readable.
     """
 
     if not idnr:
@@ -229,7 +229,7 @@ def setAudioCodec(idnr, acodec, abrate):
 
     @param abrate: is the audio bitrate to be set, in kbit/s. Although any integer
         between 0 and 320 is valid, it is advisable to take standard encoding bitrates
-        like 32,64,128,160,192,256 and 320.
+        like 32, 64, 128, 160, 192, 256 and 320.
     """
 
     if not (idnr or acodec or abrate):
@@ -237,6 +237,40 @@ def setAudioCodec(idnr, acodec, abrate):
 
     try:
         (status, response) = server.setAudioCodec(idnr, acodec, abrate)
+    except:
+        return (False, 'EncodingClient: connection error')
+
+    return (status, response)
+
+def setVideoRes(idnr, videores):
+    """Set the video resolution
+
+    @param vidoeres: is a string in the form of x:y
+
+    """
+
+    if not (idnr or videores):
+        return (False, "EncodingClient: no idnr or no videores")
+
+    try:
+        (status, response) = server.setVideoRes(idnr, videores)
+    except:
+        return (False, 'EncodingClient: connection error')
+
+    return (status, response)
+
+def setNumThreads(idnr, numthreads):
+    """Set the number of encoder threads
+
+    @param numthreads: is a string value from 1-8
+
+    """
+
+    if not (idnr or numthreads):
+        return (False, "EncodingClient: no idnr or no numthreads")
+
+    try:
+        (status, response) = server.setNumThreads(idnr, numthreads)
     except:
         return (False, 'EncodingClient: connection error')
 
@@ -365,8 +399,8 @@ if __name__ == '__main__':
         print getProgress()
 
     if function == "runtest":
-        #(status, idnr) = initEncodeJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'bam.avi','lala', 17)
-        (status, idnr) = initEncodeJob('/dev/cdrom', '/home/rdc/fogu.avi','lala', 1)
+        #(status, idnr) = initEncodeJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'bam.avi', 'lala', 17)
+        (status, idnr) = initEncodeJob('/dev/cdrom', '/home/rdc/fogu.avi', 'lala', 1)
         print "Job has idnr nr : %s" % idnr
         print idnr
         #sleep(5)
