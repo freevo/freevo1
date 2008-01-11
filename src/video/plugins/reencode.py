@@ -88,6 +88,7 @@ class PluginInterface(plugin.ItemPlugin):
             ('REENCODE_AUDIOBITRATE', '128', 'Audio bit rate'),
             ('REENCODE_NUMPASSES', '2', 'Number of passes'),
             ('REENCODE_VIDEOFILTER', 'None', 'Video Filter'),
+            ('REENCODE_NUMTHREADS','1','Number of Encoding Threads'),
         ]
 
 

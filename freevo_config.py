@@ -2029,8 +2029,8 @@ ENCODINGSERVER_MENCODER_FILTERS = {
 ENCODINGSERVER_MENCODER_VIDEO_MAPPING = {
     'MPEG 4 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg4:mbd=2:trell:v4mv:last_pred=2:dia=-1:vmax_b_frames=2:vb_strategy=1:cmp=3:subcmp=3:precmp=0:vqcomp=0.6:vbitrate=%s:threads=%s%s%s'],
     'MPEG 2 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg2video:vhq:vqmin=2:trell:vrc_buf_size=1835:vrc_maxrate=9800:keyint=18:vstrict=0:vbitrate=%s:threads=%s%s%s'],
-    'XviD'          : [ 'xvid', '-xvidencopts', 'chroma_opt:vhq=4:bvhq=1:quant_type=mpeg:bitrate=%s:threads=%s%s%s'],
-    'H.264'         : [ 'lavc', '-lavcopts', 'subq=5:8x8dct:frameref=2:bframes=3:b_pyramid:weight_b:vcodec=libx264:vbitrate=%s:threads=%s%s%s']
+    'XviD'          : [ 'xvid', '-xvidencopts', 'chroma_opt:vhq=4:bvhq=1:bitrate=%s:threads=%s%s%s'],
+    'H.264'         : [ 'x264', '-x264encopts', 'subq=5:8x8dct:frameref=2:bframes=3:b_pyramid:weight_b:bitrate=%s:threads=%s%s%s']
 }
 
 ENCODINGSERVER_MENCODER_FILE_MAPPING = {
@@ -2046,7 +2046,7 @@ ENCODINGSERVER_MENCODER_AUDIO_MAPPING = {
     'ac3'                  : ['lavc', '-lavcopts', 'acodec=ac3:abitrate=%s:aglobal=1'],
     'MPEG 1 Layer 2 (mp2)' : ['lavc', '-lavcopts', 'acodec=mp2:abitrate=%s:aglobal=1'],
     'vorbis'               : ['lavc', '-lavcopts', 'acodec=vorbis:abitrate=%s:aglobal=1'],
-    'copy'                 : ['copy', '' ,'%s']
+    'copy'                 : ['copy']
 }
 
 

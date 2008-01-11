@@ -190,7 +190,7 @@ class EncodingJob:
 
     def getVideoFiltersList(self):
         """Return a list of possible video filters"""
-        if self.fps == 29.970 :
+        if self.fps == 29.970:
             return VideoFilters
         else:
             non_ivtcdict = VideoFilters.copy()
@@ -204,10 +204,10 @@ class EncodingJob:
                 self.vfilters += [ MencoderFilters[option] ]
 
     def setVideoRes(self, videores):
-        if(videores == 'Optimal'):
-            (self.resx, self.resy ) = (0, 0)
+        if videores == 'Optimal':
+            (self.resx, self.resy) = (0, 0)
         else:
-            (self.resx, self.resy ) = videores.split(':')
+            (self.resx, self.resy) = videores.split(':')
 
     def setNumThreads(self, numthreads):
         self.threads = numthreads
@@ -253,7 +253,6 @@ class EncodingJob:
             else:
                 self.length = 600
                 _debug_('Video length not found, using %s' % (self.length))
-        #NI : maybe implement procedure to get resolution, handy for scaling/manual cropping
         self._CropDetect()
 
 
@@ -325,7 +324,7 @@ class EncodingJob:
         apro = ''
         #deinterlacer test vf += ['pp=lb']
         #set appropriate videopass, codec independant (lavc is vpass, xvid is pass)
-        if passnr > 0 :
+        if passnr > 0:
             if self.vcodec == 'XviD':
                 passname = ':pass=%s'
             else:
@@ -333,7 +332,7 @@ class EncodingJob:
 
             vpass = passname % passnr
 
-            if self.vcodec == 'MPEG 4 (lavc)' and passnr == 1 :
+            if self.vcodec == 'MPEG 4 (lavc)' and passnr == 1:
                 vpass = vpass + ':turbo'
 
         #generate videofilters first, NI completly yet
@@ -356,23 +355,24 @@ class EncodingJob:
             #new, calculate ideal res based on BPP
             idealres = self._OptimalRes(self.cropres[0], int(yscaled))
             _debug_('Rescaled, rounded yres is %sx%s' % (idealres[0], idealres[1]))
-            (self.resx, self.resy ) = (idealres[0], idealres[1])
+            (self.resx, self.resy) = (idealres[0], idealres[1])
         # Check to see if generating a dvd complient mpeg
-        elif(self.vcodec == 'MPEG 2 (lavc)' and self.resx == '720' ):
-            if(self.fps == 25.000 or self.fps == 50):
+        elif self.vcodec == 'MPEG 2 (lavc)' and self.resx == '720':
+            if self.fps == 25.000 or self.fps == 50:
                 self.resx=720
                 self.resy=576
             else:
                 self.resx=720
                 self.resy=480
 
-        if(self.resx==0 and self.crop):
-            (self.resx, self.resy ) = self._OptimalRes(self.cropres[0], self.cropres[1])
-        elif(self.resx==0):
-            (self.resx, self.resy ) = self._OptimalRes(self.info.video[0].width, self.info.video[0].height )
+        if self.resx==0 and self.crop:
+            (self.resx, self.resy) = self._OptimalRes(self.cropres[0], self.cropres[1])
+        elif self.resx==0:
+            (self.resx, self.resy) = self._OptimalRes(self.info.video[0].width, self.info.video[0].height )
 
-        vf += [ 'scale=%s:-3'  % self.resx ]
-        vf += [ 'expand=%s:%s'  % (self.resx, self.resy ) ]
+        if self.resx != None:
+            vf += [ 'scale=%s:-3'  % self.resx ]
+            vf += [ 'expand=%s:%s'  % (self.resx, self.resy) ]
 
 
         _debug_('Video filters: %s' % vf)
@@ -380,25 +380,26 @@ class EncodingJob:
         #join vf options
         if len(vf) > 1:
             for vfopt in vf[0:-1]:
-                vfilter += vfopt + ', '
+                vfilter += vfopt + ','
         if len(vf) >= 1:
             vfilter += vf[-1]
 
         output=self.output
 
-        aspect= ':autoaspect'
-        if (self.vcodec=='MPEG 2 (lavc)' and self.cropres[0] != '720' ):
-            if(self.ana == True ):
+        aspect= ''
+        if self.vcodec=='MPEG 2 (lavc)' and self.cropres[0] != '720':
+            if self.ana == True:
                 aspect=':aspect=16/9'
             else:
                 aspect=':aspect=4/3'
+        elif self.vcodec!='H.264':
+            aspect =  'autoaspect'
 
-        if( self.altprofile == None ):
+        if self.altprofile == None:
             args = [
                 '-oac', MencoderAudioMapping[self.acodec][0],
                 '-ovc', MencoderVideoMapping[self.vcodec][0], MencoderVideoMapping[self.vcodec][1],
                         MencoderVideoMapping[self.vcodec][2] % (self.vbrate, self.threads, vpass, aspect ),
-                        MencoderAudioMapping[self.acodec][1], (MencoderAudioMapping[self.acodec][2] % self.abrate),
                 '-o', output]
         else:  # Allow encoder options from client
             apro = '%s:vbitrate=%s:threads=%s%s%s' % (self.altprofile, self.vbrate, self.threads, vpass, aspect)
@@ -406,31 +407,36 @@ class EncodingJob:
                 '-oac', MencoderAudioMapping[self.acodec][0],
                 '-ovc', MencoderVideoMapping[self.vcodec][0], MencoderVideoMapping[self.vcodec][1],
                         apro,
-                        MencoderAudioMapping[self.acodec][1], (MencoderAudioMapping[self.acodec][2] % self.abrate),
                 '-o', output]
+
+        args +=  [ '-oac', MencoderAudioMapping[self.acodec][0] ]
+        if self.acodec != 'copy':
+            args +=  [ MencoderAudioMapping[self.acodec][1], (MencoderAudioMapping[self.acodec][2] % self.abrate)]
+
+
         # don't pass video filter in we have none
 
-        if (len(vfilter) != '') :
+        if len(vfilter) != '':
             args += ['-vf', vfilter ]
 
-        if passnr > 0 :  # Remove when/if mencoder uses the same file name for all codecs
+        if passnr > 0:  # Remove when/if mencoder uses the same file name for all codecs
             args += [ '-passlogfile', 'x264_2pass.log' ]
 
         #if we have a progressive ntsc file, lock the output fps (do this with ivtc too)
-        if ('ivtc=1' in vf) or (self.fps == 23.976):
+        if 'ivtc=1' in vf or self.fps == 23.976:
             args = ['-ofps', '24000/1001'].append(args) # mencoder don't like 23.976
 
-        if (hasattr(config, 'DVD_LANG_PREF') and config.DVD_LANG_PREF):
+        if hasattr(config, 'DVD_LANG_PREF') and config.DVD_LANG_PREF:
             args += ['-alang', config.DVD_LANG_PREF ]
 
-        if (self.vcodec=='MPEG 2 (lavc)'):
-            if (self.fps == 25.000 or self.fps == 50.000):
+        if self.vcodec=='MPEG 2 (lavc)':
+            if self.fps == 25.000 or self.fps == 50.000:
                 args += ['-ofps', '25.000']
             else:
                 args += ['-ofps', '30000/1001'] # mencoder don't like 29.97
 
         # Set output file type
-        if ('mp4' == self.container and 'iPodv' == self.vcodec):
+        if 'mp4' == self.container and 'iPodv' == self.vcodec:
             args += ['-of', MencoderFileMapping[self.container][0], MencoderFileMapping[self.container][1],
                            MencoderFileMapping[self.container][2], MencoderFileMapping[self.container][3],
                            MencoderFileMapping[self.container][4] ]
@@ -513,13 +519,13 @@ class EncodingJob:
                 if re_ana2.search(line):
                     self.ana = False
                 elif re_ana3.search(line):
-                    if not ( (self.info.video[0].haskey('width')/ self.info.video[0].haskey('height')) >1.3334) :
+                    if not (self.info.video[0].haskey('width') / self.info.video[0].haskey('height')) > 1.3334:
                         self.ana = False
                 else:
                     self.ana = True
 
         if hasattr(self.info, 'aspect'):
-            if (int(self.info.aspect*100)==1.33):
+            if int(self.info.aspect*100) == 1.33:
                 self.ana = False
             else:
                 self.ana =  True
@@ -756,7 +762,7 @@ class EncodingQueue:
             _debug_('queue empty, stopping processing...', DINFO)
             return
 
-        _debug_('runQueue callback data : %s' % line)
+        _debug_('runQueue callback data: %s' % line)
         #get the first queued object
         self.currentjob = self.qlist[0]
 
@@ -796,7 +802,7 @@ class EncodingQueue:
         if self.currentjob.status == status.notset:
             #generate cli's
             self.currentjob._generateCL()
-            _debug_('CLIs : %s' % self.currentjob.cls)
+            _debug_('CLIs: %s' % self.currentjob.cls)
 
             #clean out temporary files
             self._removeTmp()
