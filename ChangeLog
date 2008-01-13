@@ -28,6 +28,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated cdbackup plug-in with CD_RIP_FMT to set the encoding format (F#1857460)
  * Updated encoding server to save the output to ENCODINGSERVER_SAVE_DIR when set (F#1865522)
  * Updated itv plug-in for youtube video feeds (F#1868425)
+ * Updated menu osd sounds for more sound events (F#1870321)
  * Updated re-encode plug-in and encoding core with additional features (F#1868764)
  * Updated recordings manager plug-in to add thumbnail support (F#1857397)
  * Updated recordserver to default watched/keep status (F#1857395)

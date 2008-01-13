@@ -317,6 +317,13 @@ class MenuWidget(GUIObject):
                         pass
                 try:
                     if menuitem.arg[0] == mediaitem:
+                        if config.OSD_SOUNDS:
+                            try:
+                                key = "menu." + media
+                                if config.OSD_SOUNDS[key]:
+                                    sounds.play_sound(sounds.load_sound(key))
+                            except:
+                                pass
                         menuitem.select(menuw=self)
                         break
                 except AttributeError: # may have no .arg (no media menu)
@@ -678,6 +685,22 @@ class MenuWidget(GUIObject):
                 # because we'll break some (or all) plugins behavior.
                 # Does that sound correct?
                 #
+                if config.OSD_SOUNDS:
+                    if hasattr(menu.selected, 'arg'):
+                        try:
+                            key = "menu." + menu.selected.arg[0]
+                            if config.OSD_SOUNDS[key]:
+                                sounds.play_sound(sounds.load_sound(key))
+                        except:
+                            pass
+                    else:
+                        try:
+                            key = "menu." + menu.selected.__class__.__name__
+                            if config.OSD_SOUNDS[key]:
+                                sounds.play_sound(sounds.load_sound(key))
+                        except:
+                            pass
+
                 if not hasattr(menu, 'is_submenu'):
                     plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
 
