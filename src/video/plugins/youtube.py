@@ -50,12 +50,12 @@ __author__           = 'Alberto González Rodríguez'
 __author_email__     = 'alberto@pesadilla.org'
 __maintainer__       = __author__
 __maintainer_email__ = __author_email__
-__version__          = '0.2'
+__version__          = '0.3'
 
 import os
 import plugin
 import gdata.service
-import urllib2
+import urllib2,urllib
 import re
 import traceback
 import menu
@@ -63,6 +63,7 @@ import video
 import config
 import string, os, subprocess, util
 
+from skin.widgets import TextEntryScreen
 from video.videoitem import VideoItem
 from subprocess import Popen
 from item import Item
@@ -155,12 +156,16 @@ class YoutubeVideo(Item):
         users = []
         for user, description in config.YOUTUBE_VIDEOS:
             users.append(menu.MenuItem(description, self.videolist, (user, description)))
+        users.append(menu.MenuItem("Search video",self.search_video,0))
         menuw.pushmenu(menu.Menu(_('Choose please'), users))
+    def search_video(self, arg=None, menuw=None):
+        txt = TextEntryScreen((_('Search'),self.search_list),_("Search"))
+        txt.show(menuw)
 
 
     def videolist(self, arg=None, menuw=None):
         """Menu for video"""
-        items = video_list(self, _('Retrieving video list'), arg[0])
+        items = self.video_list(_('Retrieving video list'), arg[0])
         menuw.pushmenu(menu.Menu(_('Videos available'), items))
 
 
@@ -187,28 +192,48 @@ class YoutubeVideo(Item):
         playvideo2.player_rating = 10
         playvideo2.menuw = menuw
         playvideo2.play()
+    def search_list(parent, menuw, text=""):
+        """Get the video list for a specific user"""
+        items = []
+        feed = "http://gdata.youtube.com/feeds/videos/-/" + text
+        service = gdata.service.GDataService(server='gdata.youtube.com')
+        box = PopupBox(text=_('Loading video list'))
+        box.show()
+        for video in service.GetFeed(feed).entry:
+            date = video.published.text.split("T")
+            id = video.link[1].href.split("watch?v=");
+            mi = menu.MenuItem(date[0] + " " + video.title.text, parent.downloadvideo, id[1])
+            mi.arg = (video.title.text, id[1])
+            text = util.htmlenties2txt(video.content)
+            mi.description = re.search('<span>([^\<]*)<',text).group(1)
+            tempimage = re.search('src="([^\"]*)"',text).group(1)
+            file = config.YOUTUBE_DIR + "/" + id[1].replace("-","_") + ".jpg"
+            if not os.path.exists(file):
+                aimage = urllib.urlretrieve(tempimage,file)
+            mi.image = file
+            items.append(mi)
+        box.destroy()
+        menuw.pushmenu(menu.Menu(_('Videos available'), items))
 
-
-def video_list(parent, title, user):
-    """Get the video list for a specific user"""
-    items = []
-    feed = 'http://gdata.youtube.com/feeds/users/' + user + '/uploads?orderby=updated'
-
-    service = gdata.service.GDataService(server='gdata.youtube.com')
-    box = PopupBox(text=_('Loading video list'))
-    box.show()
-    for video in service.GetFeed(feed).entry:
-        date = video.published.text.split("T")
-        id = video.link[1].href.split("watch?v=");
-        mi = menu.MenuItem(date[0] + " " + video.title.text, parent.downloadvideo, id[1])
-        mi.arg = (video.title.text, id[1])
-        text = util.htmlenties2txt(video.content)
-        mi.description = re.search('<span>([^\<]*)<',text).group(1)
-        tempimage = re.search('src="([^\"]*)"',text).group(1)
-        file = config.YOUTUBE_DIR + "/" + id[1].replace("-","_") + ".jpg"
-        if not os.path.exists(file):
-            aimage = urllib.urlretrieve(tempimage,file)
-        mi.image = file
-        items.append(mi)
-    box.destroy()
-    return items
+    def video_list(parent, title, user):
+        """Get the video list for a specific user"""
+        items = []
+        feed = 'http://gdata.youtube.com/feeds/users/' + user + '/uploads?orderby=updated'
+        service = gdata.service.GDataService(server='gdata.youtube.com')
+        box = PopupBox(text=_('Loading video list'))
+        box.show()
+        for video in service.GetFeed(feed).entry:
+            date = video.published.text.split("T")
+            id = video.link[1].href.split("watch?v=");
+            mi = menu.MenuItem(date[0] + " " + video.title.text, parent.downloadvideo, id[1])
+            mi.arg = (video.title.text, id[1])
+            text = util.htmlenties2txt(video.content)
+            mi.description = re.search('<span>([^\<]*)<',text).group(1)
+            tempimage = re.search('src="([^\"]*)"',text).group(1)
+            file = config.YOUTUBE_DIR + "/" + id[1].replace("-","_") + ".jpg"
+            if not os.path.exists(file):
+                aimage = urllib.urlretrieve(tempimage,file)
+            mi.image = file
+            items.append(mi)
+        box.destroy()
+        return items
