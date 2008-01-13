@@ -165,6 +165,9 @@ class MPlayer:
         command += config.MPLAYER_ARGS_DEF.split(' ')
         command += ['-ao'] + config.MPLAYER_AO_DEV.split(' ')
 
+        if config.CONF.x or config.CONF.y:
+            command += ['-geometry', '%d:%d' % (config.CONF.x, config.CONF.y)]
+
         additional_args = []
 
         if mode == 'dvd':
