@@ -669,9 +669,12 @@ class OSD:
                     try:
                         image = pygame.image.load(filename)
                     except pygame.error, e:
-                        _debug_('SDL image load problem: %s - trying Imaging' % e, DINFO)
-                        i = Image.open(filename)
-                        image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
+                        _debug_('SDL image load problem: %s - trying imlib2' % e, DINFO)
+                        try:
+                            i = Image.open(filename)
+                            image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
+                        except IOError, why:
+                            _debug_('imlib2 image load problem: %s' % (why), DERROR)
 
             except:
                 _debug_('Problem while loading image "%s"' % String(url), DWARNING)
