@@ -507,7 +507,6 @@ cfgfilepath = ['.', os.path.expanduser('~/.freevo'), '/etc/freevo',
 CONF = setup_freevo.Struct()
 CONF.geometry = '800x600'
 CONF.width, CONF.height = 800, 600
-CONF.x, CONF.y = 0, 0
 CONF.display = 'x11'
 CONF.tv = 'ntsc'
 CONF.chanlist = 'us-cable'
@@ -569,9 +568,7 @@ for dirname in cfgfilepath:
 
         c.close()
         w, h = CONF.geometry.split('x')
-        x, y = CONF.position.split(',')
         CONF.width, CONF.height = int(w), int(h)
-        CONF.x, CONF.w = int(x), int(y)
         break
 else:
     print
