@@ -199,11 +199,11 @@ class MpvGoom(BaseAnimation):
         """
         _debug_('set_info(info=%r, timeout==%r)' % (info, timeout), 1)
 
-        font = skin.get_font('detachbar')
+        font = skin.get_font('widget')
         w = font.stringsize(info)
         h = font.height
-        x = 10
-        y = 10
+        x = config.OSD_OVERSCAN_LEFT+5
+        y = config.OSD_OVERSCAN_TOP+5
 
         s = Surface((w,h), 0, 32)
 
@@ -558,7 +558,7 @@ class PluginInterface(plugin.Plugin):
             self.player.playerGUI.hide()
 
         self.visual.set_fullscreen()
-        self.visual.set_info(self.item_info())
+        self.visual.set_info(self.item_info(), 10)
         skin.clear()
         rc.app(self)
 
