@@ -38,6 +38,8 @@ import sys, time
 import traceback
 import signal
 
+import rc
+rc.get_singleton(is_plugin=0)
 
 # i18n support
 

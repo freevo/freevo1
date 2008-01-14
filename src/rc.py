@@ -287,12 +287,11 @@ class TcpNetwork:
         """
         init the network event handler
         """
+        _debug_('TcpNetwork.__init__()', 1)
         self.port = config.REMOTE_CONTROL_TCP_PORT
         self.host = config.REMOTE_CONTROL_TCP_HOST
-        self.sock = self.socket.socket(self.socket.AF_INET, \
-                self.socket.SOCK_STREAM)
-        self.sock.setsockopt(self.socket.SOL_SOCKET, \
-                self.socket.SO_REUSEADDR, 1)
+        self.sock = self.socket.socket(self.socket.AF_INET, self.socket.SOCK_STREAM)
+        self.sock.setsockopt(self.socket.SOL_SOCKET, self.socket.SO_REUSEADDR, 1)
         self.sock.setblocking(0)
         self.sock.bind((self.host, self.port))
         self.sock.listen(1)
@@ -344,6 +343,7 @@ class Network:
         """
         init the network event handler
         """
+        _debug_('Network.__init__()', 1)
         import socket
         self.port = config.REMOTE_CONTROL_PORT
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -445,7 +445,9 @@ class EventHandler:
     Class to transform input keys or buttons into events. This class
     also handles the complete event queue (post_event)
     """
-    def __init__(self, use_pylirc=1, use_netremote=1):
+    def __init__(self, use_pylirc=1, use_netremote=1, is_plugin=1):
+        _debug_('EventHandler.__init__(use_pylirc=%r, use_netremote=%r, is_plugin=%r)' % \
+            (use_pylirc, use_netremote, is_plugin), 1)
 
         self.inputs = []
         if use_pylirc:
@@ -465,14 +467,14 @@ class EventHandler:
         except:
             pass
 
-        if use_netremote and config.ENABLE_NETWORK_REMOTE and \
-               config.REMOTE_CONTROL_PORT:
-            self.inputs.append(Network())
+        if not is_plugin:
+            if use_netremote and config.ENABLE_NETWORK_REMOTE and config.REMOTE_CONTROL_PORT:
+                self.inputs.append(Network())
 
-        if use_netremote and config.ENABLE_TCP_NETWORK_REMOTE and \
-               config.REMOTE_CONTROL_TCP_PORT and \
-               config.REMOTE_CONTROL_TCP_HOST:
-            self.inputs.append(TcpNetwork())
+            if use_netremote and config.ENABLE_TCP_NETWORK_REMOTE and \
+                   config.REMOTE_CONTROL_TCP_PORT and \
+                   config.REMOTE_CONTROL_TCP_HOST:
+                self.inputs.append(TcpNetwork())
 
         self.app                = None
         self.context            = 'menu'
