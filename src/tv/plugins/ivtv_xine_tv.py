@@ -69,57 +69,7 @@ from config import *
 from gui.AlertBox import AlertBox
 from tv.channels import FreevoChannels
 
-DEBUG = config.DEBUG
-DDEBUG = 0
-
 # guard important config variables
-
-if not hasattr(config, 'TV_CHANNELS'):
-    _debug_("TV_CHANNELS is not configured!", DERROR)
-
-if not hasattr(config, 'MIXER_MAJOR_CTRL'):
-    _debug_("MIXER_MAJOR_CTRL is not configured!", DERROR)
-
-if not hasattr(config, 'MIXER_VOLUME_TV_IN'):
-    config.MIXER_VOLUME_TV_IN = 50
-    _debug_("MIXER_VOLUME_TV_IN is not configured!", DWARNING)
-
-if not hasattr(config, 'XINE_COMMAND'):
-    config.XINE_COMMAND = "xine"
-    _debug_("XINE_TV_CHANNELS is not configured!", DWARNING)
-
-if not hasattr(config, 'XINE_ARGS_DEF'):
-    config.XINE_ARGS_DEF = ""
-    _debug_("XINE_ARGS_DEF is not configured!", DWARNING)
-
-if not hasattr(config, 'XINE_TV_VO_DEV'):
-    config.XINE_TV_VO_DEV = config.XINE_VO_DEV
-    _debug_("XINE_TV_VO_DEV set to config.XINE_VO_DEV", DWARNING)
-
-if not hasattr(config, 'XINE_TV_AO_DEV'):
-    config.XINE_TV_AO_DEV = config.XINE_AO_DEV
-    _debug_("XINE_TV_AO_DEV set to config.XINE_AO_DEV", DWARNING)
-
-if not hasattr(config, 'XINE_TV_TIMESHIFT_FILEMASK'):
-    config.XINE_TV_TIMESHIFT_FILEMASK = "/tmp/xinebuf"
-    _debug_("XINE_TV_TIMESHIFT_FILEMASK is not configured!", DWARNING)
-
-if not hasattr(config, 'XINE_TV_CONFIRM_STOP'):
-    config.XINE_TV_CONFIRM_STOP = True
-    _debug_("XINE_TV_CONFIRM_STOP is not configured!", DWARNING)
-
-if not hasattr(config, 'XINE_TV_PROGRESSIVE_SEEK'):
-    config.XINE_TV_PROGRESSIVE_SEEK = True
-    _debug_("XINE_TV_PROGRESSIVE_SEEK is not configured!", DWARNING)
-
-if config.XINE_TV_PROGRESSIVE_SEEK == True:
-    if not hasattr(config, 'XINE_TV_PROGRESSIVE_SEEK_THRESHOLD'):
-        config.XINE_TV_PROGRESSIVE_SEEK_THRESHOLD = 2
-        _debug_("XINE_TV_PROGRESSIVE_SEEK_THRESHOLD is not configured!", DWARNING)
-
-    if not hasattr(config, 'XINE_TV_PROGRESSIVE_SEEK_INCREMENT'):
-        config.XINE_TV_PROGRESSIVE_SEEK_INCREMENT = 5
-        _debug_("XINE_TV_PROGRESSIVE_SEEK_INCREMENT is not configured!", DWARNING)
 
 
 class PluginInterface(plugin.Plugin):
@@ -277,6 +227,23 @@ class PluginInterface(plugin.Plugin):
         plugin.register(IVTV_XINE_TV(), plugin.TV)
 
 
+    def config(self):
+        return [
+            ('TV_CHANNELS', None, 'TV Channels'),
+            ('MIXER_MAJOR_CTRL', None, 'Main Mixer control (mandatory)'),
+            ('MIXER_VOLUME_TV_IN', 50, 'TV Line In Volume'),
+            ('XINE_COMMAND', config.CONF.xine, 'xine command'),
+            ('XINE_ARGS_DEF', '', 'xine default arguments'),
+            ('XINE_TV_VO_DEV', config.XINE_VO_DEV, 'xine video output device'),
+            ('XINE_TV_AO_DEV', config.XINE_AO_DEV, 'xine audio output device'),
+            ('XINE_TV_TIMESHIFT_FILEMASK', '/tmp/xinebuf', 'xine time shift buffer directory'),
+            ('XINE_TV_CONFIRM_STOP', True, 'xine needs a stop confirmation'),
+            ('XINE_TV_PROGRESSIVE_SEEK', True, 'xine has progressive seek'),
+            ('XINE_TV_PROGRESSIVE_SEEK_THRESHOLD', 2, 'xine has progressive threshold'),
+            ('XINE_TV_PROGRESSIVE_SEEK_INCREMENT', 5, 'xine has progressive increment'),
+        ]
+
+
 # ======================================================================
 
 
@@ -323,7 +290,7 @@ class IVTV_XINE_TV:
 
     def Play(self, mode, channel=None, channel_change=0):
 
-        _debug_("IVTV_XINE_TV: Play channel = '%s'" % channel, DDEBUG)
+        _debug_("IVTV_XINE_TV: Play channel = '%s'" % channel)
 
         self.mode = mode
 
@@ -338,7 +305,7 @@ class IVTV_XINE_TV:
         time.sleep(0.6)
         self.mixer.start()
 
-        _debug_("IVTV_XINE_TV: Started '%s' app" % self.mode, DDEBUG)
+        _debug_("IVTV_XINE_TV: Started '%s' app" % self.mode)
 
 
     #========================================================================
@@ -358,7 +325,7 @@ class IVTV_XINE_TV:
             self.xine.stop()
             rc.app(self.prev_app)
             rc.post_event(PLAY_END)
-            _debug_("IVTV_XINE_TV: Stopped '%s' app" % self.mode, DDEBUG)
+            _debug_("IVTV_XINE_TV: Stopped '%s' app" % self.mode)
 
 
     #========================================================================
@@ -368,7 +335,7 @@ class IVTV_XINE_TV:
 
     def ShowMessage(self, msg):
 
-        _debug_("IVTV_XINE_TV: Show OSD Message: '%s'" % msg, DDEBUG)
+        _debug_("IVTV_XINE_TV: Show OSD Message: '%s'" % msg)
         self.xine.write("OSDWriteText$     %s\n" % msg)
 
 
@@ -382,13 +349,13 @@ class IVTV_XINE_TV:
     def SeekEnd(self):
 
         if self.notahead == True:
-            _debug_("IVTV_XINE_TV: Executing SeekEnd", DDEBUG)
+            _debug_("IVTV_XINE_TV: Executing SeekEnd")
 
             self.xine.write("SetPosition100%\n")
             self.notahead = False
 
         else:
-            _debug_("IVTV_XINE_TV: SeekEnd not needed", DDEBUG)
+            _debug_("IVTV_XINE_TV: SeekEnd not needed")
 
 
     #========================================================================
@@ -398,7 +365,7 @@ class IVTV_XINE_TV:
 
     def eventhandler(self, event, menuw=None):
 
-        _debug_("IVTV_XINE_TV: '%s' app got '%s' event" % (self.mode, event), DDEBUG)
+        _debug_("IVTV_XINE_TV: '%s' app got '%s' event" % (self.mode, event))
 
         s_event = "%s" % event
 
@@ -457,7 +424,7 @@ class IVTV_XINE_TV:
 
                     self.lastinput_value = newinput_value
                     self.lastinput_time = newinput_time
-                    self.tuner.TuneChannelByIndex(newinput_value)
+                    self.tuner.TuneChannelByNumber(newinput_value)
 
                     if newinput_value > 9:
                         # cancel intermediate channels
@@ -472,7 +439,7 @@ class IVTV_XINE_TV:
 
             if seeksteps == 0:
 
-                _debug_("IVTV_XINE_TV: Ignoring seek 0", DDEBUG)
+                _debug_("IVTV_XINE_TV: Ignoring seek 0")
 
                 return True
 
@@ -515,7 +482,7 @@ class IVTV_XINE_TV:
             # limit seeksteps to [1 ; 120] seconds
             seeksteps = min( max(1, seeksteps), 120 )
 
-            _debug_("IVTV_XINE_TV: Seeking '%s%s' seconds" % (action, seeksteps), DDEBUG)
+            _debug_("IVTV_XINE_TV: Seeking '%s%s' seconds" % (action, seeksteps))
 
             self.xine.write("%s#%s\n" % (action, seeksteps))
 
@@ -604,9 +571,9 @@ class TunerControl:
         if self.curr_channel != None:
 
             self.stack.append(self.curr_channel)
-            _debug_("TunerControl: Pushed channel %s" % self.curr_channel, DDEBUG)
+            _debug_("TunerControl: Pushed channel %s" % self.curr_channel)
 
-        _debug_("TunerControl: Channel stack = %s" % self.stack, DDEBUG)
+        _debug_("TunerControl: Channel stack = %s" % self.stack)
 
 
     #========================================================================
@@ -618,14 +585,14 @@ class TunerControl:
 
         if len(self.stack) == 0:
 
-            _debug_("TunerControl: Channel stack is empty", DDEBUG)
+            _debug_("TunerControl: Channel stack is empty")
 
         else:
 
             channel = self.stack.pop()
-            _debug_("TunerControl: Unpushed channel %s" % channel, DDEBUG)
+            _debug_("TunerControl: Unpushed channel %s" % channel)
 
-        _debug_("TunerControl: Channel stack = %s" % self.stack, DDEBUG)
+        _debug_("TunerControl: Channel stack = %s" % self.stack)
 
 
     #========================================================================
@@ -637,16 +604,16 @@ class TunerControl:
 
         if len(self.stack) == 0:
 
-            _debug_("TunerControl: Channel stack is empty", DDEBUG)
+            _debug_("TunerControl: Channel stack is empty")
 
         else:
 
             channel = self.stack.pop()
-            _debug_("TunerControl: Popped channel %s" % channel, DDEBUG)
+            _debug_("TunerControl: Popped channel %s" % channel)
 
             self.SetVideoGroup(channel)
 
-        _debug_("TunerControl: Channel stack = %s" % self.stack, DDEBUG)
+        _debug_("TunerControl: Channel stack = %s" % self.stack)
 
 
     #========================================================================
@@ -680,7 +647,7 @@ class TunerControl:
 
                 entry = config.TV_CHANNELS[pos]
 
-                if channel == entry[2]:
+                if str(channel) == str(entry[2]):
 
                     channel_index = pos
                     next_channel = channel
@@ -709,10 +676,24 @@ class TunerControl:
 
         # tune channel by index
         next_channel = self.fc.getManChannel(channel)
-        _debug_("TunerControl: Explicit channel selection = '%s'" % next_channel, DDEBUG)
+        _debug_("TunerControl: Explicit channel selection by index = '%s'" % next_channel)
 
         self.PushChannel()
         self.SetVideoGroup(next_channel)
+
+
+    #========================================================================
+    # TuneChannelByNumber
+    # tune to a channel by actual channel number
+    #========================================================================
+
+    def TuneChannelByNumber(self, channel):
+
+        # tune channel by index
+        _debug_("TunerControl: Explicit channel selection by number = '%s'" % channel)
+
+        self.PushChannel()
+        self.SetVideoGroup(channel)
 
 
     #========================================================================
@@ -723,7 +704,7 @@ class TunerControl:
     def NextChannel(self):
 
         next_channel = self.fc.getNextChannel()
-        _debug_("TunerControl: Next channel selection = '%s'" % next_channel, DDEBUG)
+        _debug_("TunerControl: Next channel selection = '%s'" % next_channel)
 
         self.PushChannel()
         self.SetVideoGroup(next_channel)
@@ -737,7 +718,7 @@ class TunerControl:
     def PrevChannel(self):
 
         prev_channel = self.fc.getPrevChannel()
-        _debug_("TunerControl: Previous channel selection = '%s'" % prev_channel, DDEBUG)
+        _debug_("TunerControl: Previous channel selection = '%s'" % prev_channel)
 
         self.PushChannel()
         self.SetVideoGroup(prev_channel)
@@ -750,10 +731,10 @@ class TunerControl:
 
     def SetVideoGroup(self, channel):
 
-        _debug_("TunerControl: Channel: '%s'" % channel, DDEBUG)
+        _debug_("TunerControl: Channel: '%s'" % channel)
         new_vg = self.fc.getVideoGroup(channel, True)
-        _debug_("TunerControl: Group: 'type=%s, desc=%s'" % (new_vg.group_type, new_vg.desc), DDEBUG)
-        _debug_("TunerControl: Input: 'type=%s, num=%s'" % (new_vg.input_type, new_vg.input_num), DDEBUG)
+        _debug_("TunerControl: Group: 'type=%s, desc=%s'" % (new_vg.group_type, new_vg.desc))
+        _debug_("TunerControl: Input: 'type=%s, num=%s'" % (new_vg.input_type, new_vg.input_num))
 
         if (new_vg.group_type != "ivtv"):
 
@@ -878,7 +859,7 @@ class XineApp(childapp.ChildApp2):
     def __init__(self, app, item):
 
         self.item = item
-        _debug_("XineApp: Starting xine, cmd = '%s'" % app, DDEBUG)
+        _debug_("XineApp: Starting xine, cmd = '%s'" % app)
         childapp.ChildApp2.__init__(self, app)
         self.exit_type = None
         self.done = False
@@ -890,7 +871,7 @@ class XineApp(childapp.ChildApp2):
 
     def _kill_(self):
 
-        _debug_("XineApp: Killing xine...", DDEBUG)
+        _debug_("XineApp: Killing xine...")
         childapp.ChildApp2.kill(self,signal.SIGTERM)
         self.done = True
 
@@ -927,15 +908,15 @@ class XineThread(threading.Thread):
             xinecmd = ""
             self.fbxine = False
 
-        _debug_("XineThread: configuration overview", DDEBUG)
-        _debug_("    config.CONF.xine = '%s'" % (config.CONF.xine), DDEBUG)
-        _debug_("    config.XINE_COMMAND = '%s'" % (config.XINE_COMMAND), DDEBUG)
-        _debug_("    config.XINE_ARGS_DEF = '%s'" % (config.XINE_ARGS_DEF), DDEBUG)
-        _debug_("    config.XINE_TV_VO_DEV = '%s'" % (config.XINE_TV_VO_DEV), DDEBUG)
-        _debug_("    config.XINE_TV_AO_DEV = '%s'" % (config.XINE_TV_AO_DEV), DDEBUG)
-        _debug_("    config.XINE_TV_TIMESHIFT_FILEMASK = '%s'" % (config.XINE_TV_TIMESHIFT_FILEMASK), DDEBUG)
-        _debug_("    effective xinecmd = '%s'" % (xinecmd), DDEBUG)
-        _debug_("    effective self.fbxine = '%s'" % (self.fbxine), DDEBUG)
+        _debug_("XineThread: configuration overview")
+        _debug_("    config.CONF.xine = '%s'" % (config.CONF.xine))
+        _debug_("    config.XINE_COMMAND = '%s'" % (config.XINE_COMMAND))
+        _debug_("    config.XINE_ARGS_DEF = '%s'" % (config.XINE_ARGS_DEF))
+        _debug_("    config.XINE_TV_VO_DEV = '%s'" % (config.XINE_TV_VO_DEV))
+        _debug_("    config.XINE_TV_AO_DEV = '%s'" % (config.XINE_TV_AO_DEV))
+        _debug_("    config.XINE_TV_TIMESHIFT_FILEMASK = '%s'" % (config.XINE_TV_TIMESHIFT_FILEMASK))
+        _debug_("    effective xinecmd = '%s'" % (xinecmd))
+        _debug_("    effective self.fbxine = '%s'" % (self.fbxine))
 
         if self.fbxine:
 
@@ -1000,10 +981,10 @@ class XineThread(threading.Thread):
 
                 while not self.app.done:
 
-                    _debug_("XineThread: Waiting for xine to end...", DDEBUG)
+                    _debug_("XineThread: Waiting for xine to end...")
                     time.sleep(0.1)
 
-                _debug_("XineThread: Xine ended", DDEBUG)
+                _debug_("XineThread: Xine ended")
 
 
     #========================================================================
@@ -1033,7 +1014,7 @@ class XineThread(threading.Thread):
 
                 if laststate != self.state:
 
-                    _debug_("XineThread: state '%s' -> '%s'" % (laststate, self.state), DDEBUG)
+                    _debug_("XineThread: state '%s' -> '%s'" % (laststate, self.state))
                     laststate = self.state
 
                 if self.state == "busy":
@@ -1047,7 +1028,7 @@ class XineThread(threading.Thread):
 
                 elif self.state == "stop":
 
-                    _debug_("XineThread: Stoppping xine", DDEBUG)
+                    _debug_("XineThread: Stoppping xine")
                     self.app.stop("quit\n")
 
                     if self.fbxine:
@@ -1057,11 +1038,11 @@ class XineThread(threading.Thread):
                         # and freevo crashes
 
                         time.sleep(1.0)
-                        _debug_("XineThread: Killing xine", DDEBUG)
+                        _debug_("XineThread: Killing xine")
                         self.app._kill_()
 
                     self.state = "busy"
 
-            _debug_("XineThread: Stopped", DDEBUG)
+            _debug_("XineThread: Stopped")
 
             self.state = 'idle'
