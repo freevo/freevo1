@@ -35,7 +35,6 @@ import menu
 import os
 import config
 from video.encodingclient import *
-from encodingcore import ContainerCapList, VideoCodecList, AudioCodecList, VideoFilters
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
@@ -177,7 +176,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_container(self, arg=None, menuw=None):
         _debug_('mod_container(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
-        for container in ContainerCapList:
+        for container in getContainerCAP()[1]:
             items.append(menu.MenuItem(container, action=self.alter_prop, arg=('container', container)))
         container_menu = menu.Menu(_('Modify Container'), items, item_types = 'video encoding menu')
         container_menu.infoitem = self
@@ -197,7 +196,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_videocodec(self, arg=None, menuw=None):
         _debug_('mod_videocodec(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
-        for videocodec in VideoCodecList:
+        for videocodec in getVideoCodecCAP()[1]:
             items.append(menu.MenuItem(videocodec, action=self.alter_prop, arg=('videocodec', videocodec)))
         videocodec_menu = menu.Menu(_('Modify Video Codec'), items, item_types = 'video encoding menu')
         videocodec_menu.infoitem = self
@@ -217,7 +216,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_audiocodec(self, arg=None, menuw=None):
         _debug_('mod_audiocodec(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
-        for audiocodec in AudioCodecList:
+        for audiocodec in getAudioCodecCAP()[1]:
             items.append(menu.MenuItem(audiocodec, action=self.alter_prop, arg=('audiocodec', audiocodec)))
         audiocodec_menu = menu.Menu(_('Modify Video Codec'), items, item_types = 'video encoding menu')
         audiocodec_menu.infoitem = self
@@ -257,7 +256,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_videofilter(self, arg=None, menuw=None):
         _debug_('mod_videofilter(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
-        for videofilter in VideoFilters:
+        for videofilter in getVideoFiltersCAP()[1]:
             items.append(menu.MenuItem(videofilter, action=self.alter_prop, arg=('videofilter', videofilter)))
         videofilter_menu = menu.Menu(_('Modify Video Filter'), items, item_types = 'video encoding menu')
         videofilter_menu.infoitem = self
@@ -293,7 +292,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.profile['videocodec'] = 'MPEG 4 (lavc)'
             self.profile['altprofile'] = 'vcodec=mpeg4:mbd=2:cmp=2:subcmp=2:trell=yes:v4mv=yes:vglobal=1'
             self.profile['videobitrate'] = 1200
-            self.profile['audiocodec'] = 'aac (iPod)'
+            self.profile['audiocodec'] = 'AAC (iPod)'
             self.profile['audiobitrate'] = 192
             self.profile['numpasses'] = 2
             self.profile['videofilter'] = 'ipod'
@@ -303,7 +302,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.profile['videocodec'] = 'MPEG 2 (lavc)'
             self.profile['altprofile'] = None
             self.profile['videobitrate'] = 5200
-            self.profile['audiocodec'] = 'ac3'
+            self.profile['audiocodec'] = 'AC3'
             self.profile['audiobitrate'] = 224
             self.profile['numpasses'] = 1
             self.profile['videofilter'] = 'None'

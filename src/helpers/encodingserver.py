@@ -53,7 +53,7 @@ import time, random, sys, os
 import logging
 import config
 
-from encodingcore import EncodingJob, EncodingQueue
+from encodingcore import EncodingJob, EncodingQueue, EncodingOptions
 
 #some data
 __author__ = "den_RDC (rdc@kokosnoot.com)"
@@ -78,6 +78,7 @@ class EncodingServer(xmlrpc.XMLRPC):
             xmlrpc.XMLRPC.__init__(self)
         self.debug = debug
         self.jobs = {}
+        self.encodingopts = EncodingOptions()
         self.queue = EncodingQueue()
         _debug_("EncodingServer started...", DINFO)
 
@@ -104,15 +105,18 @@ class EncodingServer(xmlrpc.XMLRPC):
         #wait for the analyzing to end
         while not self.jobs[idnr].finishedanalyze:
             time.sleep(0.1)
+        if self.jobs[idnr].finishedanalyze == True and self.jobs[idnr].failed == True:
+                _debug_('Analysis failed')
+                return (False,10)
 
         _debug_("Initialized job %s (idnr : %s)" % (friendlyname, idnr), DINFO)
 
         return (True, idnr)
 
-    def xmlrpc_getContainerCAP(self, idnr):
+    def xmlrpc_getContainerCAP(self):
         """ Using Twisted get the container capabilities """
-        _debug_('xmlrpc_getContainerCAP(idnr=%r)' % (idnr), 2)
-        return (True, jam(self.jobs[idnr].getContainerList()))
+        _debug_('xmlrpc_getContainerCAP()' , 2)
+        return EncodingOptions.getContainerList( self.encodingopts)
 
     def xmlrpc_setContainer(self, idnr, container):
         """ Using Twisted set the container """
@@ -124,10 +128,10 @@ class EncodingServer(xmlrpc.XMLRPC):
         else:
             return (False, "EncodingServer::setContainer: %s" % status)
 
-    def xmlrpc_getVideoCodecCAP(self, idnr):
+    def xmlrpc_getVideoCodecCAP(self):
         """ Using Twisted get the video capabilities """
-        _debug_('xmlrpc_getVideoCodecCAP(idnr=%r)' % (idnr), 2)
-        return (True, jam(self.jobs[idnr].getVideoCodecList()))
+        _debug_('xmlrpc_getVideoCodecCAP()', 2)
+        return EncodingOptions.getVideoCodecList(self.encodingopts)
 
     def xmlrpc_setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """ Using Twisted set the video codec """
@@ -144,10 +148,10 @@ class EncodingServer(xmlrpc.XMLRPC):
         else:
             return (False, "EncodingServer::setVideoCodec: %s" % status)
 
-    def xmlrpc_getAudioCodecCAP(self, idnr):
+    def xmlrpc_getAudioCodecCAP(self):
         """ Using Twisted get the audio capabilities """
-        _debug_('xmlrpc_getAudioCodecCAP(idnr=%r)' % (idnr), 2)
-        return (True, jam(self.jobs[idnr].getAudioCodecList()))
+        _debug_('xmlrpc_getAudioCodecCAP()', 2)
+        return EncodingOptions.getAudioCodecList(self.encodingopts)
 
     def xmlrpc_setAudioCodec(self, idnr, acodec, abrate):
         """ Using Twisted set the audio codec """
@@ -194,10 +198,10 @@ class EncodingServer(xmlrpc.XMLRPC):
             return (False, "EncodingServer::setNumThreads: %s" % status)
 
 
-    def xmlrpc_getVideoFiltersCAP(self, idnr):
+    def xmlrpc_getVideoFiltersCAP(self):
         """ Using Twisted get the video filter capabilities """
-        _debug_('xmlrpc_getVideoFiltersCAP(idnr=%r)' % (idnr), 2)
-        return (True, jam(self.jobs[idnr].getVideoFiltersList()))
+        _debug_('xmlrpc_getVideoFiltersCAP()', 2)
+        return EncodingOptions.getVideoFiltersList(self.encodingopts)
 
 
     def xmlrpc_setVideoFilters(self, idnr, filters):

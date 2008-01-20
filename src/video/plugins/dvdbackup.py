@@ -124,7 +124,7 @@ class PluginInterface(plugin.ItemPlugin):
         idnr = resp
 
         #ask for possible containers and set the first one (should be avi), we will get a list
-        (status, resp) = getContainerCAP(idnr)
+        (status, resp) = getContainerCAP()
 
         if not status:
             self.error(resp)
@@ -139,7 +139,7 @@ class PluginInterface(plugin.ItemPlugin):
             return
 
         #ask for possible videocodec and set the first one (should be mpeg4), we will get a list
-        (status, resp) = getVideoCodecCAP(idnr)
+        (status, resp) = getVideoCodecCAP()
 
         if not status:
             self.error(resp)
@@ -156,7 +156,7 @@ class PluginInterface(plugin.ItemPlugin):
         #ask for possible audiocodec and set the first one (should be mp3), we will get a list
         #Audiocodec call isn't necessary atm, it defaults to 128 kbit mp3, but this might change in the future
         #so we play safe
-        (status, resp) = getAudioCodecCAP(idnr)
+        (status, resp) = getAudioCodecCAP()
 
         if not status:
             self.error(resp)

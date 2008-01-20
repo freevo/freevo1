@@ -49,14 +49,51 @@ __copyright__ = 'Copyright (C) 2004 den_RDC'
 __license__ = 'GPL'
 
 
-ContainerCapList = config.ENCODINGSERVER_CONTAINER_CAP_LIST
-VideoCodecList   = config.ENCODINGSERVER_VIDEO_CODEC_LIST
-AudioCodecList   = config.ENCODINGSERVER_AUDIO_CODEC_LIST
-VideoFilters     = config.ENCODINGSERVER_VIDEO_FILTERS
-MencoderFilters  = config.ENCODINGSERVER_MENCODER_FILTERS
-MencoderFileMapping  = config.ENCODINGSERVER_MENCODER_FILE_MAPPING
-MencoderVideoMapping  = config.ENCODINGSERVER_MENCODER_VIDEO_MAPPING
-MencoderAudioMapping  = config.ENCODINGSERVER_MENCODER_AUDIO_MAPPING
+mappings = {
+    'lists' : {
+        'containers'  : [ 'avi', 'mp4', 'mpeg' ], # add mkv back later
+        'videocodecs' : [ 'MPEG 4 (lavc)','MPEG 2 (lavc)', 'XviD', 'H.264' ],
+        'audiocodecs' : [ 'MPEG 1 Layer 3 (mp3)', 'MPEG 1 Layer 2 (mp2)', 'AAC (iPod)', 'AC3', 'Vorbis', 'WMAv1',' WMAv2', 'copy' ]
+    },
+    'vcodec' : {
+        'MPEG 4 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg4:mbd=2:trell:v4mv:last_pred=2:dia=-1:vmax_b_frames=2:vb_strategy=1:cmp=3:subcmp=3:precmp=0:vqcomp=0.6:vbitrate=%s:threads=%s%s%s'],
+        'MPEG 2 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg2video:vhq:vqmin=2:trell:vrc_buf_size=1835:vrc_maxrate=9800:keyint=18:vstrict=0:vbitrate=%s:threads=%s%s%s'],
+        'XviD'          : [ 'xvid', '-xvidencopts', 'chroma_opt:vhq=4:bvhq=1:bitrate=%s:threads=%s%s%s'],
+        'H.264'         : [ 'x264', '-x264encopts', 'subq=5:8x8dct:frameref=2:bframes=3:b_pyramid:weight_b:bitrate=%s:threads=%s%s%s']
+    },
+    'container' : {
+        'mpeg' : [ 'mpeg', '-mpegopts', 'format=dvd:tsaf'],
+        'mp4' : [ 'lavf' , '-lavfopts', 'format=mp4', '-ffourcc', 'mp4v'    ],
+        'mkv' : [ 'lavf',  '-lavfopts', 'format=avi'],
+        'avi' : [ 'lavf' , '-lavfopts', 'format=avi']
+    },
+    'acodec' : {
+        'MPEG 1 Layer 3 (mp3)' : ['lavc', '-lavcopts', 'acodec=libmp3lame:abitrate=%s:aglobal=1'],
+        'AAC (iPod)'           : ['lavc', '-lavcopts', 'acodec=libfaac:abitrate=%s:aic=2:aglobal=1'],
+        'AC3'                  : ['lavc', '-lavcopts', 'acodec=ac3:abitrate=%s:aglobal=1'],
+        'MPEG 1 Layer 2 (mp2)' : ['lavc', '-lavcopts', 'acodec=mp2:abitrate=%s:aglobal=1'],
+        'Vorbis'               : ['lavc', '-lavcopts', 'acodec=vorbis:abitrate=%s:aglobal=1'],
+        'WMAv1'                : ['lavc', '-lavcopts', 'acodec=wmav1:abitrate=%s:aglobal=1'],
+        'WMAv2'                : ['lavc', '-lavcopts', 'acodec=wmav2:abitrate=%s:aglobal=1'],
+        'copy'                 : ['copy']
+    },
+    'filter' : {
+        'Linear blend' : 'pp=lb',
+        'Lavc deinterlacer' : 'lavcdeint',
+        'On (stateless filter)' : 'ivtc=1',
+        'Normal denoise' : 'denoise3d',
+        'HQ denoise' : 'hqdn3d',
+        'iPod' : 'scale=320:240'
+    },
+    'filtertype' : {
+        'None' : ['None'],
+        'Deinterlacing' : ['None', 'Linear blend', 'Lavc deinterlacer'],
+        'Inverse Telecine' : ['None', 'On (stateless filter)'],
+        'Denoise' : ['None', 'Normal denoise', 'HQ denoise'],
+        'iPod' : ['iPod']
+    }, 
+}
+
 
 
 #from pytvgrab enum.py, see http://pytvgrab.sourceforge.net
@@ -74,6 +111,24 @@ class Enum(dict):
 
 status = Enum(['notset', 'apass', 'vpass1', 'vpassfinal', 'postmerge'])
 
+class EncodingOptions:
+    def getContainerList(self):
+        """Return a list of possible containers"""
+        return mappings['lists']['containers']
+
+    def getVideoCodecList(self):
+        """Return a list of possible video codecs"""
+        return mappings['lists']['videocodecs']
+
+    def getAudioCodecList(self):
+        """Return a possible audio codec list"""
+        return mappings['lists']['audiocodecs']
+
+    def getVideoFiltersList(self):
+        """Return a list of possible video filters"""
+        return mappings['filtertype']
+
+
 class EncodingJob:
     """Class for creation & configuration of EncodingJobs. This generates the mencoder commands"""
 
@@ -83,7 +138,7 @@ class EncodingJob:
             (source, output, friendlyname, idnr, chapter), 2)
         #currently only MEncoder can be used, but who knows what will happen in the future :)
         self._generateCL = self._GenerateCLMencoder
-
+        self.encodingopts = EncodingOptions()
         self.source = source
         self.output = output
         self.name = friendlyname
@@ -102,7 +157,7 @@ class EncodingJob:
         self.crop = None
         self.cropres = None
 
-        self.acodec = AudioCodecList[0]
+        self.acodec = mappings['lists']['audiocodecs'][0]
         self.abrate = 128
         self.afilters = {} # Not used atm, might be used in the future
 
@@ -124,19 +179,26 @@ class EncodingJob:
         self.resy = None
 
         self.threads = 1 # How many threads to use during encoding (multi core systems)
-
+        self.failed=False
         if self.source:
             try:
                 self.info = kaa.metadata.parse(self.source)
-                self._AnalyzeSource()
+                if self.info:
+                    self._AnalyzeSource()
+                else:
+                    print 'Failed to analyse "%s" kaa.metadata.parse()'  % self.source
+                    self.failed=True
+                    self.finishedanalyze = True
             except Exception, e:
                 print 'Failed to analyse "%s": %s' % (self.source, e)
+                self.failed=True
+                self.finishedanalyze = True
 
 
     def setContainer(self, container):
         """Set a container to hold the audio & video streams"""
         #safety checks
-        if container not in ContainerCapList:
+        if container not in self.encodingopts.getContainerList():
             return 'Unknown container format'
 
         self.container = container
@@ -148,21 +210,12 @@ class EncodingJob:
         else:
             self.output = ('%s.%s' % (self.output, self.container))
 
-    def getContainerList(self):
-        """Return a list of possible containers"""
-        return ContainerCapList
-
-
-    def getVideoCodecList(self):
-        """Return a list of possible video codecs"""
-        return VideoCodecList
-
     def setVideoCodec(self, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """Set video codec and target filesize (in MB) or bit rate (in kbits/sec)"""
         _debug_('setVideoCodec(self, vcodec=%s, tgtsize=%s, multipass=%s, vbitrate=%s)' % \
             (vcodec, tgtsize, multipass, vbitrate))
         #safety checks first
-        if vcodec not in self.getVideoCodecList():
+        if vcodec not in self.encodingopts.getVideoCodecList():
             return 'Unknown video codec'
 
         self.vcodec = vcodec
@@ -174,34 +227,21 @@ class EncodingJob:
         self.vbitrate = vbitrate
         self.altprofile = altprofile
 
-    def getAudioCodecList(self):
-        """Return a possible audio codec list"""
-        return AudioCodecList
-
 
     def setAudioCodec(self, acodec, abrate=128):
         """Set audio codec & bitrate"""
         #safety first
-        if acodec not in self.getAudioCodecList():
+        if acodec not in self.encodingopts.getAudioCodecList():
             return 'Unknown audio codec'
 
         self.acodec = acodec
         self.abrate = abrate
 
-    def getVideoFiltersList(self):
-        """Return a list of possible video filters"""
-        if self.fps == 29.970:
-            return VideoFilters
-        else:
-            non_ivtcdict = VideoFilters.copy()
-            del non_ivtcdict['Inverse Telecine']
-            return non_ivtcdict
-
     def setVideoFilters(self, videofilters):
         """Set video filters"""
         for vfilter, option in videofilters:
-            if MencoderFilters.has_key(option):
-                self.vfilters += [ MencoderFilters[option] ]
+            if mappings['filter'].has_key(option):
+                self.vfilters += [ mappings['filter'][option]]
 
     def setVideoRes(self, videores):
         if videores == 'Optimal':
@@ -267,7 +307,7 @@ class EncodingJob:
         else:
             sstep = 60
 
-        arguments = [ '-vf', 'cropdetect=30', '-nosound', '-vo', 'null', '-frames', '10', '-sstep', str(sstep)]
+        arguments = [ '-vf', 'cropdetect=30', '-nosound', '-vo', 'null', '-frames', '10','-fps=540', '-sstep', str(sstep)]
 
         if self.info.mime == 'video/dvd':
             arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.chapter ]
@@ -321,7 +361,6 @@ class EncodingJob:
         vfilter = ''
         vpass = ''
         yscaled = None
-        apro = ''
         #deinterlacer test vf += ['pp=lb']
         #set appropriate videopass, codec independant (lavc is vpass, xvid is pass)
         if passnr > 0:
@@ -393,30 +432,27 @@ class EncodingJob:
             else:
                 aspect=':aspect=4/3'
         elif self.vcodec!='H.264':
-            aspect =  'autoaspect'
+            aspect =  ':autoaspect'
 
+        # set video encoder options
         if self.altprofile == None:
-            args = [
-                '-oac', MencoderAudioMapping[self.acodec][0],
-                '-ovc', MencoderVideoMapping[self.vcodec][0], MencoderVideoMapping[self.vcodec][1],
-                        MencoderVideoMapping[self.vcodec][2] % (self.vbrate, self.threads, vpass, aspect ),
-                '-o', output]
+            args = [ 
+                '-ovc', mappings['vcodec'][self.vcodec][0], mappings['vcodec'][self.vcodec][1],
+                        mappings['vcodec'][self.vcodec][2] % (self.vbrate, self.threads, vpass, aspect ) ]
         else:  # Allow encoder options from client
-            apro = '%s:vbitrate=%s:threads=%s%s%s' % (self.altprofile, self.vbrate, self.threads, vpass, aspect)
-            args = [
-                '-oac', MencoderAudioMapping[self.acodec][0],
-                '-ovc', MencoderVideoMapping[self.vcodec][0], MencoderVideoMapping[self.vcodec][1],
-                        apro,
-                '-o', output]
+            aprofile = '%s:vbitrate=%s:threads=%s%s%s' % (self.altprofile, self.vbrate, self.threads, vpass, aspect)
+            args = ['-ovc', mappings['vcodec'][self.vcodec][0],mappings['vcodec'][self.vcodec][1], aprofile ]
+        
 
-        args +=  [ '-oac', MencoderAudioMapping[self.acodec][0] ]
+        # set audio encoder options
+        args += ['-oac' , mappings['acodec'][self.acodec][0] ] 
         if self.acodec != 'copy':
-            args +=  [ MencoderAudioMapping[self.acodec][1], (MencoderAudioMapping[self.acodec][2] % self.abrate)]
-
+            args += [ mappings['acodec'][self.acodec][1],
+                      mappings['acodec'][self.acodec][2] % self.abrate ]
+        args += [ '-o', output]
 
         # don't pass video filter in we have none
-
-        if len(vfilter) != '':
+        if len(vfilter) != 0:
             args += ['-vf', vfilter ]
 
         if passnr > 0:  # Remove when/if mencoder uses the same file name for all codecs
@@ -435,19 +471,13 @@ class EncodingJob:
             else:
                 args += ['-ofps', '30000/1001'] # mencoder don't like 29.97
 
-        # Set output file type
-        if 'mp4' == self.container and 'iPodv' == self.vcodec:
-            args += ['-of', MencoderFileMapping[self.container][0], MencoderFileMapping[self.container][1],
-                           MencoderFileMapping[self.container][2], MencoderFileMapping[self.container][3],
-                           MencoderFileMapping[self.container][4] ]
-        else:
-            args += ['-of', MencoderFileMapping[self.container][0], MencoderFileMapping[self.container][1],
-                           MencoderFileMapping[self.container][2] ]
+        # Set output file container
+        args += ['-of'] + mappings['container'][self.container]
 
         #if we scale, use the bilinear algorithm
         if yscaled:
             args += ['-sws', '1']
-
+        
         return args
 
 
@@ -475,7 +505,7 @@ class EncodingJob:
         foundrate = False
 
         try:
-            if not self.info.video[0].haskey('width') or not self.info.video[0].haskey('height'):
+            if not self.info.video[0].has_key('width') or not self.info.video[0].has_key('height'):
                 self.finishedanalyze = True
                 return
             crop = str(self.info.video[0].width)+':'+str(self.info.video[0].height)+':0:0'
@@ -519,8 +549,11 @@ class EncodingJob:
                 if re_ana2.search(line):
                     self.ana = False
                 elif re_ana3.search(line):
-                    if not (self.info.video[0].haskey('width') / self.info.video[0].haskey('height')) > 1.3334:
-                        self.ana = False
+                    try:
+                        if not (self.info.video[0].has_key('width') / self.info.video[0].has_key('height')) > 1.3334:
+                            self.ana = False
+                    except:
+                        pass
                 else:
                     self.ana = True
 

@@ -121,7 +121,7 @@ def initEncodeJob(source, output, friendlyname="", title=None):
     if not (source or output):
         return (False, "EncodingClient: no source and/or output")
 
-    try:
+    try: 
         (status, response) = server.initEncodeJob(source, output, friendlyname, title)
     except:
         print "Unexpected error:", sys.exc_info()[0]
@@ -130,22 +130,19 @@ def initEncodeJob(source, output, friendlyname="", title=None):
 
     return (status, response)
 
-def getContainerCAP(idnr):
+def getContainerCAP():
     """Get a list of possible container formats
 
     This returns a list with plain strings, each identifiyng a container format, like
     Avi, MPEG or OGG. Currently only Avi is available. The strings are user-readable.
     """
 
-    if not idnr:
-        return (False, "EncodingClient: no idnr")
-
     try:
-        (status, response) = server.getContainerCAP(idnr)
+        response = server.getContainerCAP()
     except:
-        return (False, 'EncodingClient: connection error')
-
-    return returnFromJelly(status, response)
+        return (False ,'EncodingClient: connection error')
+    
+    return (True, response )
 
 def setContainer(idnr, container):
     """Set a container format
@@ -164,22 +161,19 @@ def setContainer(idnr, container):
 
     return (status, response)
 
-def getVideoCodecCAP(idnr):
+def getVideoCodecCAP():
     """Get a list of possible video codecs (depending on the input and container format)
 
     This returns a list with plain strings, each identifiyng a video codec, like
     MPEG4(divx), Xvid etc. Currently only MPEG4 is available. The strings are user-readable.
     """
 
-    if not idnr:
-        return (False, "EncodingClient: no idnr")
-
     try:
-        (status, response) = server.getVideoCodecCAP(idnr)
+        response = server.getVideoCodecCAP()
     except:
-        return (False, 'EncodingClient: connection error')
+        return (False,'EncodingClient: connection error')
 
-    return returnFromJelly(status, response)
+    return (True,response)
 
 def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
     """Set a video codec
@@ -188,8 +182,8 @@ def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile
         returned by getVideoCodecCAP.
     @param tgtsize: is the target size of the encoded file, in megabytes (this includes
         audio data and container format overhead)
-    @param multipass: is a boolean. Set this to True if you want multipass encoding (1 audio
-        pass, 2 video passes). The default is no multipass (1 audio, 1 video)
+    @param multipass: is a boolean. Set this to True if you want multipass encoding 
+        ( 1 pass, 2 video passes). The default is no multipass ( 1 video)
     @param vbitrate: is the video bitrate, if it is not 0 then this value is used instead
         of using the tgtsize.
     """
@@ -204,22 +198,19 @@ def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile
 
     return (status, response)
 
-def getAudioCodecCAP(idnr):
+def getAudioCodecCAP():
     """Get a list of possible audio codecs (depending on the input and container format)
 
     This returns a list with plain strings, each identifiyng a audio codec, like
     MP3, Ogg, etc. Currently only MP3 is available. The strings are user-readable.
     """
 
-    if not idnr:
-        return (False, "EncodingClient: no idnr")
-
     try:
-        (status, response) = server.getAudioCodecCAP(idnr)
+        response = server.getAudioCodecCAP()
     except:
         return (False, 'EncodingClient: connection error')
 
-    return returnFromJelly(status, response)
+    return (True, response )
 
 def setAudioCodec(idnr, acodec, abrate):
     """Set a audio codec
@@ -276,7 +267,7 @@ def setNumThreads(idnr, numthreads):
 
     return (status, response)
 
-def getVideoFiltersCAP(idnr):
+def getVideoFiltersCAP():
     """Get a dict of possible video filters & processing operations
 
     This returns a dictionary, with the filter (human-readable string) as keyword, and
@@ -284,15 +275,12 @@ def getVideoFiltersCAP(idnr):
     The first option in the list is the default.
     """
 
-    if not idnr:
-        return (False, "EncodingClient: no idnr")
-
     try:
-        (status, response) = server.getVideoFiltersCAP(idnr)
+        response = server.getVideoFiltersCAP()
     except:
         return (False, 'EncodingClient: connection error')
 
-    return returnFromJelly(status, response)
+    return (True ,response)
 
 def setVideoFilters(idnr, filters):
     """Set a number of possible video filters & processing operations

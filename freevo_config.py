@@ -2004,52 +2004,6 @@ ENCODINGSERVER_GID = 0
 ENCODINGSERVER_IP   = 'localhost'
 ENCODINGSERVER_PORT = 6666
 
-# These paramaters are passed to mencoder, beware about changing them
-ENCODINGSERVER_CONTAINER_CAP_LIST = [ 'avi',  'mp4','mpeg' ] # add mkv back later
-ENCODINGSERVER_VIDEO_CODEC_LIST = [ 'MPEG 4 (lavc)','MPEG 2 (lavc)', 'XviD', 'H.264' ]
-ENCODINGSERVER_AUDIO_CODEC_LIST = [ 'MPEG 1 Layer 3 (mp3)','MPEG 1 Layer 2 (mp2)' ,'aac (iPod)', 'ac3', 'vorbis', 'copy' ]
-
-ENCODINGSERVER_VIDEO_FILTERS = {
-    'None' : ['None'],
-    'Deinterlacing' : ['None', 'Linear blend', 'Lavc deinterlacer'],
-    'Inverse Telecine' : ['None', 'On (stateless filter)'],
-    'Denoise' : ['None', 'Normal denoise', 'HQ denoise'],
-    'iPod' : ['iPod'],
-}
-
-ENCODINGSERVER_MENCODER_FILTERS = {
-    'Linear blend' : 'pp=lb',
-    'Lavc deinterlacer' : 'lavcdeint',
-    'On (stateless filter)' : 'ivtc=1',
-    'Normal denoise' : 'denoise3d',
-    'HQ denoise' : 'hqdn3d',
-    'iPod' : 'scale=320:240'
-}
-
-ENCODINGSERVER_MENCODER_VIDEO_MAPPING = {
-    'MPEG 4 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg4:mbd=2:trell:v4mv:last_pred=2:dia=-1:vmax_b_frames=2:vb_strategy=1:cmp=3:subcmp=3:precmp=0:vqcomp=0.6:vbitrate=%s:threads=%s%s%s'],
-    'MPEG 2 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg2video:vhq:vqmin=2:trell:vrc_buf_size=1835:vrc_maxrate=9800:keyint=18:vstrict=0:vbitrate=%s:threads=%s%s%s'],
-    'XviD'          : [ 'xvid', '-xvidencopts', 'chroma_opt:vhq=4:bvhq=1:bitrate=%s:threads=%s%s%s'],
-    'H.264'         : [ 'x264', '-x264encopts', 'subq=5:8x8dct:frameref=2:bframes=3:b_pyramid:weight_b:bitrate=%s:threads=%s%s%s']
-}
-
-ENCODINGSERVER_MENCODER_FILE_MAPPING = {
-    'mpeg' : [ 'mpeg', '-mpegopts', 'format=dvd:tsaf'],
-    'mp4' : [ 'lavf' , '-lavfopts', 'format=mp4', '-ffourcc', 'mp4v'    ],
-    'mkv' : [ 'lavf',  '-lavfopts', 'format=avi'],
-    'avi' : [ 'lavf' , '-lavfopts', 'format=avi']
-}
-
-ENCODINGSERVER_MENCODER_AUDIO_MAPPING = {
-    'MPEG 1 Layer 3 (mp3)' : ['lavc', '-lavcopts', 'acodec=libmp3lame:abitrate=%s:aglobal=1'],
-    'aac (iPod)'           : ['lavc', '-lavcopts', 'acodec=libfaac:abitrate=%s:aic=2:aglobal=1'],
-    'ac3'                  : ['lavc', '-lavcopts', 'acodec=ac3:abitrate=%s:aglobal=1'],
-    'MPEG 1 Layer 2 (mp2)' : ['lavc', '-lavcopts', 'acodec=mp2:abitrate=%s:aglobal=1'],
-    'vorbis'               : ['lavc', '-lavcopts', 'acodec=vorbis:abitrate=%s:aglobal=1'],
-    'copy'                 : ['copy']
-}
-
-
 # ======================================================================
 # Freevo builtin commdetect server settings:
 # ======================================================================
