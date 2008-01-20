@@ -16,6 +16,8 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 == Release 1.8.0rc2 (2008-01-24) ==
 --------------------------------
 
+ * New tv vlc live pause plug-in for DVB (F#1875427)
+
 == Release 1.7.6 (2008-??-??) ==
 --------------------------------
 
