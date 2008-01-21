@@ -110,8 +110,8 @@ class Playlist(Item):
         for line in playlist_lines:
             line = line.replace('\\', '/') # Fix MSDOS slashes
             try:
-                if os.path.exists(os.path.join(curdir,line)):
-                    self.playlist.append(os.path.join(curdir,line))
+                if os.path.exists(os.path.abspath(line)):
+                    self.playlist.append(os.path.abspath(line))
             except TypeError:
                 print 'Bad m3u playlist line in "%s":%r' % (plsname, line)
 
@@ -142,8 +142,8 @@ class Playlist(Item):
         for line in playlist_lines:
             if line.endswith('\r\n'):
                 line = line.replace('\\', '/') # Fix MSDOS slashes
-            if os.path.exists(os.path.join(curdir,line)):
-                self.playlist.append(os.path.join(curdir,line))
+            if os.path.exists(os.path.abspath(line)):
+                self.playlist.append(os.path.abspath(line))
 
 
 
@@ -190,7 +190,7 @@ class Playlist(Item):
                     ss_delay += [5]
 
                 for p in self.get_plugins:
-                    for i in p.get(self, [os.path.join(curdir, ss_name[0])]):
+                    for i in p.get(self, [os.path.abspath(ss_name[0])]):
                         if i.type == 'image':
                             i.name     = Unicode(ss_caption[0])
                             i.duration = int(ss_delay[0])
@@ -323,7 +323,7 @@ class Playlist(Item):
         """
         Playlist(playlist=self.playlist, parent=self.parent,
                  display_type=self.display_type, random=True,
-                 repeat=self.repeat).play(arg,menuw)
+                 repeat=self.repeat).play(arg, menuw)
 
 
     def play(self, arg=None, menuw=None):
@@ -423,9 +423,9 @@ class Playlist(Item):
                 rc.post_event(Event(AUDIO_LOG, arg=self.current_item.filename))
 
         if event in (INPUT_1, INPUT_2, INPUT_3, INPUT_4, INPUT_5) and \
-               event.arg and self.current_item and hasattr(self.current_item,'type'):
+               event.arg and self.current_item and hasattr(self.current_item, 'type'):
             if (self.current_item.type == 'audio'):
-                rc.post_event(Event(RATING,(event.arg,self.current_item.filename)))
+                rc.post_event(Event(RATING, (event.arg, self.current_item.filename)))
 
 
         if not menuw:
