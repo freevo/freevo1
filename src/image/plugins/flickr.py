@@ -95,69 +95,82 @@ class PluginInterface(plugin.MainMenuPlugin):
     |   ("id2", "description2"),
     |    ...
     | ]
-    | FLICKR_DIR = "/tmp/"
     | FLICKR_KEY = "your flickr key"
+    | FLICKR_DIR = "/tmp/"
     | FLICKR_LIMIT = 20
     """
     def __init__(self):
+        _debug_('PluginInterface.__init__()', 2)
         if not config.USE_NETWORK:
             self.reason = 'USE_NETWORK not enabled'
             return
-        if not config.FLICKR_PICTURES:
+        if not hasattr(config, 'FLICKR_PICTURES') or not config.FLICKR_PICTURES:
             self.reason = 'FLICKR_PICTURES not defined'
             return
-        if not config.FLICKR_KEY:
+        if not hasattr(config, 'FLICKR_KEY') or not config.FLICKR_KEY:
             self.reason = 'FLICKR_KEY not defined'
             return
-        if not config.FLICKR_DIR:
-            config.FLICKR_DIR = "/tmp/"
 
         if not os.path.isdir(config.FLICKR_DIR):
             os.mkdir(config.FLICKR_DIR, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
 
         plugin.MainMenuPlugin.__init__(self)
 
+
     def config(self):
         """returns the config variables used by this plugin"""
+        _debug_('config()', 2)
         return [
             ('FLICKR_PICTURES', None, 'id and description to get pictures'),
-            ('FLICKR_DIR', config.FREEVO_CACHEDIR + '/flickr', 'directory to save flickr pictures'),
             ('FLICKR_KEY', None, 'Your flickr key api to access www.flickr.com'),
+            ('FLICKR_DIR', config.FREEVO_CACHEDIR + '/flickr', 'directory to save flickr pictures'),
             ('FLICKR_LIMIT', 20, 'Max number of pictures to show'),
         ]
 
+
     def items(self, parent):
+        _debug_('items(parent=%r)' % (parent), 2)
         return [ FlickImage(parent) ]
+
+
 
 class FlickImage(Item):
     """Main Class"""
 
     def __init__(self, parent):
+        _debug_('FlickImage.__init__(parent=%r)' % (parent), 2)
         Item.__init__(self, parent, skin_type='image')
         self.name = _('Flickr pictures')
         self.title = _('Flickr pictures')
         self.type = 'flickr'
         self.info = { 'name' : 'Flickr', 'description' : 'Flickr pictures', 'title' : 'Flickr' }
 
-    # Only one action, return user list
+
     def actions(self):
         """Only one action, return user list"""
+        _debug_('actions()', 2)
         return [ (self.userlist, 'Flickr pictures') ]
+
 
     def userlist(self, arg=None, menuw=None):
         """Menu for choose user"""
+        _debug_('userlist(arg=%r, menuw=%r)' % (arg, menuw), 2)
         users = []
         for id,description in config.FLICKR_PICTURES:
             users.append(menu.MenuItem(description, self.imagelist, (id, description)))
         menuw.pushmenu(menu.Menu(_("Choose please"), users))
 
+
     def imagelist(self, arg=None, menuw=None):
         """Menu for choose image"""
+        _debug_('imagelist(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = image_list(self, _("Retrieving image list"), arg[0])
         menuw.pushmenu(menu.Menu(_('Images available'), items))
 
-    # Save in file and watch it
+
     def showimage(self, arg=None, menuw=None):
+        """Save in file and watch it"""
+        _debug_('showimage(arg=%r, menuw=%r)' % (arg, menuw), 2)
         file = config.FLICKR_DIR + "/" + arg[2].replace("-","_") + ".jpg"
         if not os.path.exists(file):
             box = PopupBox(_("Downloading picture \"") + arg[0] + '"', width=600)
@@ -170,10 +183,14 @@ class FlickImage(Item):
         #imagen = image.viewer.ImageViewer()
         #image.viewer.ImageViewer.view(imagen,imgitem)
 
+
 def image_list(parent, title, user):
     """Get the image list for a specific user"""
+    _debug_('image_list(parent=%r, title=%r, user=%r)' % (parent, title, user), 2)
     items = []
-    web = 'http://www.flickr.com/services/rest/?method=flickr.people.getPublicPhotos&user_id=' + user + '&format=json&api_key=' + config.FLICKR_KEY + '&per_page=' + str(config.FLICKR_LIMIT) + '&page=1&extras=original_format'
+    web = 'http://www.flickr.com/services/rest/?method=flickr.people.getPublicPhotos&user_id=' + user + \
+        '&format=json&api_key=' + config.FLICKR_KEY + '&per_page=' + str(config.FLICKR_LIMIT) + \
+        '&page=1&extras=original_format'
     url=urllib.urlopen(web)
     flickr=url.read()
     flickr=flickr.replace("jsonFlickrApi(","");
@@ -182,11 +199,12 @@ def image_list(parent, title, user):
             #items.append(ImageItem(y[1],parent,foto["title"]))
 
         mi = menu.MenuItem(foto["title"], parent.showimage, 0)
-        mi.arg = (foto["title"],"http://farm3.static.flickr.com/" + foto["server"] + "/" + foto["id"] + "_" + foto["originalsecret"] +  "_o.jpg",foto["id"])
-        imagen = "http://farm3.static.flickr.com/" + foto["server"] + "/" + foto["id"] + "_" + foto["secret"] +  "_m.jpg"
-        file = config.FLICKR_DIR + "/" + foto["id"].replace("-","_") + "_t.jpg"
+        mi.arg = (foto["title"],"http://farm3.static.flickr.com/" + foto["server"] + "/" + \
+            foto["id"] + "_" + foto["originalsecret"] +  "_o.jpg",foto["id"])
+        imagen = 'http://farm3.static.flickr.com/' + foto['server'] + '/' + foto['id'] + '_' + foto['secret'] + '_m.jpg'
+        file = config.FLICKR_DIR + '/' + foto['id'].replace('-','_') + '_t.jpg'
         if not os.path.exists(file):
-            box = PopupBox(_("Downloading thumbnail for picture \"") + foto["title"] + '"', width=800)
+            box = PopupBox(_('Downloading thumbnail for picture "') + foto['title'] + '"', width=800)
             box.show()
             urllib.urlretrieve(imagen,file)
             box.destroy()

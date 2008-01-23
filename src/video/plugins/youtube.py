@@ -97,10 +97,11 @@ class PluginInterface(plugin.MainMenuPlugin):
     | YOUTUBE_DIR = '/tmp/'
     """
     def __init__(self):
+        _debug_('PluginInterface.__init__()', 2)
         if not config.USE_NETWORK:
             self.reason = 'USE_NETWORK not enabled'
             return
-        if not config.YOUTUBE_VIDEOS:
+        if not hasattr(config, 'YOUTUBE_VIDEOS') or not config.YOUTUBE_VIDEOS:
             self.reason = 'YOUTUBE_VIDEOS not defined'
             return
         plugin.MainMenuPlugin.__init__(self)
@@ -111,6 +112,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def config(self):
         """returns the config variables used by this plugin"""
+        _debug_('config()', 2)
         return [
             ('YOUTUBE_VIDEOS', None, 'id and description to get/watch videos of youtube'),
             ('YOUTUBE_DIR', config.FREEVO_CACHEDIR + '/youtube', 'directory to save youtube videos'),
@@ -119,6 +121,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
+        _debug_('items(parent=%r)' % (parent), 2)
         return [ YoutubeVideo(parent) ]
 
 
@@ -127,6 +130,7 @@ class YoutubeVideoItem(VideoItem):
     """Create a VideoItem for play"""
 
     def __init__(self, name, url, parent):
+        _debug_('YoutubeVideoItem.__init__(name=%r, url=%r, parent=%r)' % (name, url, parent), 2)
         VideoItem.__init__(self, url, parent)
         self.name = name
         self.type = 'youtube'
@@ -137,6 +141,7 @@ class YoutubeVideo(Item):
     """Main Class"""
 
     def __init__(self, parent):
+        _debug_('YoutubeVideo.__init__(parent=%r)' % (parent), 2)
         # look for a default player
         for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
             if config.VIDEO_PREFERED_PLAYER == p.name:
@@ -148,29 +153,36 @@ class YoutubeVideo(Item):
 
     def actions(self):
         """Only one action, return user list"""
+        _debug_('actions()', 2)
         return [ (self.userlist, 'Video youtube') ]
 
 
     def userlist(self, arg=None, menuw=None):
         """Menu for choose user"""
+        _debug_('userlist(arg=%r, menuw=%r)' % (arg, menuw), 2)
         users = []
         for user, description in config.YOUTUBE_VIDEOS:
             users.append(menu.MenuItem(description, self.videolist, (user, description)))
-        users.append(menu.MenuItem("Search video",self.search_video,0))
+        users.append(menu.MenuItem('Search video',self.search_video,0))
         menuw.pushmenu(menu.Menu(_('Choose please'), users))
+
+
     def search_video(self, arg=None, menuw=None):
-        txt = TextEntryScreen((_('Search'),self.search_list),_("Search"))
+        _debug_('search_video(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        txt = TextEntryScreen((_('Search'),self.search_list),_('Search'))
         txt.show(menuw)
 
 
     def videolist(self, arg=None, menuw=None):
         """Menu for video"""
+        _debug_('videolist(arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = self.video_list(_('Retrieving video list'), arg[0])
         menuw.pushmenu(menu.Menu(_('Videos available'), items))
 
 
     def downloadvideo(self, arg=None, menuw=None):
         """Download video (if necessary) and watch it"""
+        _debug_('downloadvideo(arg=%r, menuw=%r)' % (arg, menuw), 2)
         filename =  config.YOUTUBE_DIR + '/' + arg[1].replace('-', '_') + '.flv'
         if not os.path.exists(filename):
             box = PopupBox(text=_('Downloading video'), width=950)
@@ -192,22 +204,25 @@ class YoutubeVideo(Item):
         playvideo2.player_rating = 10
         playvideo2.menuw = menuw
         playvideo2.play()
+
+
     def search_list(parent, menuw, text=""):
         """Get the video list for a specific user"""
+        _debug_('search_list(parent=%r, menuw=%r, text=%r)' % (parent, menuw, text), 2)
         items = []
-        feed = "http://gdata.youtube.com/feeds/videos/-/" + text
+        feed = 'http://gdata.youtube.com/feeds/videos/-/' + text
         service = gdata.service.GDataService(server='gdata.youtube.com')
         box = PopupBox(text=_('Loading video list'))
         box.show()
         for video in service.GetFeed(feed).entry:
-            date = video.published.text.split("T")
-            id = video.link[1].href.split("watch?v=");
-            mi = menu.MenuItem(date[0] + " " + video.title.text, parent.downloadvideo, id[1])
+            date = video.published.text.split('T')
+            id = video.link[1].href.split('watch?v=');
+            mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.downloadvideo, id[1])
             mi.arg = (video.title.text, id[1])
             text = util.htmlenties2txt(video.content)
             mi.description = re.search('<span>([^\<]*)<',text).group(1)
             tempimage = re.search('src="([^\"]*)"',text).group(1)
-            file = config.YOUTUBE_DIR + "/" + id[1].replace("-","_") + ".jpg"
+            file = config.YOUTUBE_DIR + '/' + id[1].replace('-','_') + '.jpg'
             if not os.path.exists(file):
                 aimage = urllib.urlretrieve(tempimage,file)
             mi.image = file
@@ -215,22 +230,24 @@ class YoutubeVideo(Item):
         box.destroy()
         menuw.pushmenu(menu.Menu(_('Videos available'), items))
 
+
     def video_list(parent, title, user):
         """Get the video list for a specific user"""
+        _debug_('video_list(parent=%r, title=%r, user=%r)' % (parent, title, user), 2)
         items = []
         feed = 'http://gdata.youtube.com/feeds/users/' + user + '/uploads?orderby=updated'
         service = gdata.service.GDataService(server='gdata.youtube.com')
         box = PopupBox(text=_('Loading video list'))
         box.show()
         for video in service.GetFeed(feed).entry:
-            date = video.published.text.split("T")
-            id = video.link[1].href.split("watch?v=");
-            mi = menu.MenuItem(date[0] + " " + video.title.text, parent.downloadvideo, id[1])
+            date = video.published.text.split('T')
+            id = video.link[1].href.split('watch?v=');
+            mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.downloadvideo, id[1])
             mi.arg = (video.title.text, id[1])
             text = util.htmlenties2txt(video.content)
             mi.description = re.search('<span>([^\<]*)<',text).group(1)
             tempimage = re.search('src="([^\"]*)"',text).group(1)
-            file = config.YOUTUBE_DIR + "/" + id[1].replace("-","_") + ".jpg"
+            file = config.YOUTUBE_DIR + '/' + id[1].replace('-','_') + '.jpg'
             if not os.path.exists(file):
                 aimage = urllib.urlretrieve(tempimage,file)
             mi.image = file
