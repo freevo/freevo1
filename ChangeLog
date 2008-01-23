@@ -42,6 +42,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Deleted plug-in weather, moved to contrib/plugins (F#1863476)
  * Fixed apple trailers plug-in crashing (B#1861463)
  * Fixed audio playlists when the the fxd file contains utf-8 characters (B#1865272)
+ * Fixed audio cdbackup not showing the alert message when there is no data from freedb (B#1869928)
  * Fixed manual record tv plug-in to work in December (B#1858008)
  * Fixed oneclick weather plug-in to allow non-ascii location names (B#1856597)
  * Fixed play lists not handling absolute paths (B#1872465)

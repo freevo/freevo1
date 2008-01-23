@@ -515,11 +515,9 @@ class main_backup_thread(threading.Thread):
             album = _( 'Unknown CD Album' ) + ' ' + current_time +  ' - ' + _( 'RENAME' )
             genre = _( 'Other' )
 
-           # Flash a popup window indicating copying is done
+            # Flash a popup window indicating copying is done
             popup_string=_( "CD info not found!\nMust manually rename files\nwhen finished ripping" )
-
-            pop = AlertBox(text=popup_string)
-            time.sleep(7)
+            AlertBox(text=popup_string).show()
 
         # If valid data was returned from mmpython/CDDB
         else:
