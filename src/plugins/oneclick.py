@@ -1069,7 +1069,7 @@ class WeatherBaseScreen(skin.Area):
             self.write_text(_("Error encountered while trying to download weather map"),
                 self.key_font, self.content, x=x_start, y=y_start,
                 width=self.content.width, height=-1, align_h='left')
-        else:
+        elif self.parent.weather.mapFile:
             self.draw_image(self.parent.weather.mapFile,
                 (self.content.x-self.xscale(2), self.content.y+self.xscale(10),
                 self.content.width, self.content.height))
