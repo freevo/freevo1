@@ -90,8 +90,8 @@ class Playlist(Item):
         """
         This is the (m3u) playlist reading function.
 
-        Arguments: plsname  - the playlist filename
-        Returns:   The list of interesting lines in the playlist
+        @param plsname: The playlist filename
+        @returns: The list of interesting lines in the playlist
         """
         try:
             lines = util.readfile(plsname)
@@ -107,11 +107,19 @@ class Playlist(Item):
             return 0
 
         (curdir, playlistname) = os.path.split(plsname)
+        #XXX this may not work if the curdir is not accessible
+        os.chdir(curdir)
         for line in playlist_lines:
             line = line.replace('\\', '/') # Fix MSDOS slashes
             try:
-                if os.path.exists(os.path.abspath(line)):
-                    self.playlist.append(os.path.abspath(line))
+                if line.find('://') > 0:
+                    self.playlist.append(line)
+                elif os.path.isabs(line):
+                    if os.path.exists(line):
+                        self.playlist.append(line)
+                else:
+                    if os.path.exists(os.path.abspath(os.path.join(curdir, line))):
+                        self.playlist.append(os.path.abspath(os.path.join(curdir, line)))
             except TypeError:
                 print 'Bad m3u playlist line in "%s":%r' % (plsname, line)
 
@@ -139,11 +147,18 @@ class Playlist(Item):
                                                 line[numchars:]
 
         (curdir, playlistname) = os.path.split(plsname)
+        os.chdir(curdir)
         for line in playlist_lines:
             if line.endswith('\r\n'):
                 line = line.replace('\\', '/') # Fix MSDOS slashes
-            if os.path.exists(os.path.abspath(line)):
-                self.playlist.append(os.path.abspath(line))
+            if line.find('://') > 0:
+                self.playlist.append(line)
+            elif os.path.isabs(line):
+                if os.path.exists(line):
+                    self.playlist.append(line)
+            else:
+                if os.path.exists(os.path.abspath(os.path.join(curdir, line))):
+                    self.playlist.append(os.path.abspath(os.path.join(curdir, line)))
 
 
 
@@ -162,6 +177,7 @@ class Playlist(Item):
         """
 
         (curdir, playlistname) = os.path.split(ssrname)
+        os.chdir(curdir)
         out_lines = []
         try:
             lines = util.readfile(ssrname)
@@ -173,15 +189,12 @@ class Playlist(Item):
         playlist_lines     = filter(lambda l: l[0] != '#', lines)
 
 
-        """
-        Here's where we parse the line.  See the format above.
-        TODO:  Make the search case insensitive
-        """
+        # Here's where we parse the line.  See the format above.
         for line in playlist_lines:
             tmp_list = []
-            ss_name = re.findall('FileName: \"(.*?)\"', line)
-            ss_caption = re.findall('Caption: \"(.*?)\"', line)
-            ss_delay = re.findall('Delay: \"(.*?)\"', line)
+            ss_name = re.findall('FileName: \"(.*?)\"', line, re.I)
+            ss_caption = re.findall('Caption: \"(.*?)\"', line, re.I)
+            ss_delay = re.findall('Delay: \"(.*?)\"', line, re.I)
 
             if ss_name != []:
                 if ss_caption == []:
@@ -190,7 +203,11 @@ class Playlist(Item):
                     ss_delay += [5]
 
                 for p in self.get_plugins:
-                    for i in p.get(self, [os.path.abspath(ss_name[0])]):
+                    if os.path.isabs(ss_name[0]):
+                        curdir = ss_name[0]
+                    else:
+                        curdir = os.path.abspath(os.path.join(curdir, ss_name[0]))
+                    for i in p.get(self, [curdir]):
                         if i.type == 'image':
                             i.name     = Unicode(ss_caption[0])
                             i.duration = int(ss_delay[0])
