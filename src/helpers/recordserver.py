@@ -36,9 +36,10 @@ import __builtin__
 import config
 from util import vfs
 
+import kaa
 import kaa.rpc
-import kaa.notifier
-from kaa.notifier import EventHandler, AtTimer
+from kaa import EventHandler
+from kaa import AtTimer
 
 appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 appconf = appname.upper()
@@ -664,7 +665,7 @@ class RecordServer(xmlrpc.XMLRPC):
         for chan in guide.chan_list:
             if prog.channel_id == chan.id:
                 prog.tunerid = chan.tunerid
-                _debug_('%s tuner: %s' % (prog, prog.tunerid), 1)
+                _debug_('%s tuner: %s' % (prog, prog.tunerid), 2)
         return prog
 
 
@@ -1714,7 +1715,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
 def main():
-    kaa.notifier.init('twisted')
+    kaa.main.select_notifier('twisted_experimental')
 
     socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT2)
     secret = config.RECORDSERVER_SECRET
@@ -1730,12 +1731,15 @@ def main():
 
     reactor.listenTCP(config.RECORDSERVER_PORT, server.Site(rs))
     rs.startMinuteCheck()
-    reactor.run()
-    _debug_('reactor stopped.')
-    kaa.notifier.shutdown()
-    _debug_('kaa.notifier stopped.')
+    #reactor.run()
+    #_debug_('reactor stopped.')
+    #kaa.main.stop()
+    kaa.main.run()
+    _debug_('kaa.main running.')
+    #kaa.main.stop()
+    #_debug_('kaa.main stopped.')
 
-    #kaa.notifier.AtTimer(rs.handleTimer).start(sec=45)
+    #kaa.AtTimer(rs.handleTimer).start(sec=45)
     #kaa.main()
 
 

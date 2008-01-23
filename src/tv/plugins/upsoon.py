@@ -41,7 +41,9 @@ import glob
 import thread
 import tv.v4l2
 from tv.record_client import RecordClient
-from kaa.notifier import Timer, EventHandler
+import kaa
+from kaa import Timer
+from kaa import EventHandler
 from tv.channels import FreevoChannels
 from util.marmalade import jellyToXML, unjellyFromXML
 from gui import AlertBox
@@ -250,7 +252,7 @@ if __name__ == '__main__':
         #import rc as rctrl
         #rc = rctrl.get_singleton(False)
         pi = PluginInterface()
-        kaa.main()
+        kaa.main.run()
 
     elif function == 'findnextprogram':
         def handler(result):
@@ -258,14 +260,14 @@ if __name__ == '__main__':
             print result.__dict__
             raise SystemExit
         server.findNextProgram(handler)
-        kaa.main()
+        kaa.main.run()
 
     elif function == 'isplayerrunning':
         def handler(result):
             print 'isplayerrunning=%r' % (result)
             raise SystemExit
         server.isPlayerRunning(handler)
-        kaa.main()
+        kaa.main.run()
 
     else:
         fc = FreevoChannels()

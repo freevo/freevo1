@@ -57,8 +57,8 @@ try:
     import Numeric
 
     import config
+    import kaa
     import kaa.metadata as mmpython
-    import kaa.notifier
     import kaa.imlib2 as Image
 
 
@@ -251,7 +251,7 @@ class MainTread:
                 self.eventlistener_plugins.append(p)
             else:
                 self.eventhandler_plugins.append(p)
-        kaa.notifier.EventHandler(self.eventhandler).register()
+        kaa.EventHandler(self.eventhandler).register()
 
 
     def eventhandler(self, event):
@@ -467,7 +467,7 @@ try:
 
     MainTread()
 
-    kaa.notifier.loop()
+    kaa.main.run()
 
 
 except KeyboardInterrupt:

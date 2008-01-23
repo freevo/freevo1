@@ -28,7 +28,7 @@
 import bluetooth
 
 # kaa imports
-import kaa.notifier
+import kaa
 
 import time
 
@@ -184,13 +184,13 @@ class PluginInterface(plugin.DaemonPlugin):
         self.cx.settimeout(2)
         self.rx.settimeout(2)
 
-        self.rx_dispatcher = kaa.notifier.SocketDispatcher(self.handle_receive)
+        self.rx_dispatcher = kaa.SocketDispatcher(self.handle_receive)
 
         # start immediately for the first time
-        self.timer = kaa.notifier.Timer(self.onTimer)
+        self.timer = kaa.Timer(self.onTimer)
         self.timer.start(0.1)
 
-        self.acc_timer = kaa.notifier.Timer(self.on_acc_timer)
+        self.acc_timer = kaa.Timer(self.on_acc_timer)
 
         self.active = True
 

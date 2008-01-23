@@ -33,8 +33,8 @@ import sys
 import time
 import config
 
+import kaa
 import kaa.rpc
-import kaa.notifier
 import time, sys, socket, traceback, string
 import xmlrpclib
 import epg_types
@@ -408,7 +408,7 @@ if __name__ == '__main__':
 
     rc = RecordClient()
     rc.getScheduledRecordings(handler)
-    kaa.main()
+    kaa.main.run()
 
     if len(sys.argv) >= 2:
         function = sys.argv[1].lower()

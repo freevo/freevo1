@@ -50,7 +50,7 @@ import rc         # The RemoteControl class.
 import util
 import osd
 import childapp
-import kaa.notifier
+import kaa
 
 from tv.channels import FreevoChannels
 
@@ -172,9 +172,9 @@ class Vlc:
         self.cur_audiodev   = None
         self.lastchan       = None
 
-        self.timer = kaa.notifier.Timer(self.__update_data_from_vlc)
-        self.timer_start = kaa.notifier.OneShotTimer( self.__update_data_from_vlc)
-        self.timer_disablebuffering = kaa.notifier.OneShotTimer( self.disable_buffering)
+        self.timer = kaa.Timer(self.__update_data_from_vlc)
+        self.timer_start = kaa.OneShotTimer( self.__update_data_from_vlc)
+        self.timer_disablebuffering = kaa.OneShotTimer( self.disable_buffering)
 
         if hasattr(config, 'LIVE_PAUSE_BUFFER_TIMEOUT'):
             self. buffering_timeout=config.LIVE_PAUSE_BUFFER_TIMEOUT

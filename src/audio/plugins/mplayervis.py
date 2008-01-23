@@ -43,9 +43,9 @@ from pygame import Rect, image, transform, Surface
 # freevo modules
 import plugin, config, rc, skin, osd, time
 
-from event          import *
-from animation      import render, BaseAnimation
-from kaa.notifier   import Timer
+from event import *
+from animation import render, BaseAnimation
+from kaa import Timer
 
 mmap_file = '/tmp/mpav'
 skin = skin.get_singleton()

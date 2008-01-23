@@ -33,7 +33,7 @@
 
 
 import config
-import kaa.notifier
+import kaa
 from tv.record_client import RecordClient
 
 def handler(result):
@@ -45,4 +45,4 @@ if not recordclient.updateFavoritesSchedule(handler):
     print _('recordserver is not running')
     raise SystemExit
 
-kaa.main()
+kaa.main.run()

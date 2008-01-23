@@ -35,7 +35,7 @@ import time
 import thread
 import types
 
-import kaa.notifier
+import kaa
 
 import config
 import evdev
@@ -485,7 +485,7 @@ class EventHandler:
         self.lock               = thread.allocate_lock()
         # last time we stopped sleeping
         self.sleep_timer        = 0
-        kaa.notifier.Timer(self.poll).start(0.01)
+        kaa.Timer(self.poll).start(0.01)
 
 
     def set_app(self, app, context):
