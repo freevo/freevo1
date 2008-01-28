@@ -621,7 +621,7 @@ def disc_info(media, force=False):
         mmdata = mmpython.parse(media.devicename)
         if not mmdata:
             print '*****************************************'
-            print 'Error detecting the disc'
+            print 'Error detecting the disc in %r' % (media.devicename)
             print 'Please contact the developers'
             print '*****************************************'
             return {}

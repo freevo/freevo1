@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# fxdparser.py - Parser for fxd files
+# Parser for fxd files
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -46,7 +46,7 @@ class XMLnode:
     """
     One node for the FXDtree
     """
-    def __init__(self, name, attr = [], first_cdata=None, following_cdata=None):
+    def __init__(self, name, attr=[], first_cdata=None, following_cdata=None):
         self.name = name
         self.attr_list = []
         for name, val in attr:

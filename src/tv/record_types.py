@@ -53,7 +53,7 @@ class ScheduledRecordings:
 
         if not self.programList.has_key(key):
             self.programList[key] = prog
-            _debug_('added \"%s\" %s"' % (String(key), prog), 1)
+            _debug_('added \"%s\" %s"' % (String(key), prog), 2)
         else:
             _debug_('We already know about this recording \"%s\"' % (key), DINFO)
         _debug_('"%s" items' % len(self.programList), 2)
@@ -66,7 +66,7 @@ class ScheduledRecordings:
 
         if self.programList.has_key(key):
             del self.programList[key]
-            _debug_('removed \"%s\" %s"' % (String(key), prog), 1)
+            _debug_('removed \"%s\" %s"' % (String(key), prog), 2)
         else:
             _debug_('We do not know about this recording \"%s\"' % (prog), DINFO)
 
