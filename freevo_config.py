@@ -344,6 +344,7 @@ LOCAL_CONF_CHANGES = [
      '''Added RECORDSERVER_SECRET and RECORDSERVER_PORT2=18002 for kaa.rpc
      Renamed audio plug-in audio.playlist to audio.playlists
      Added ENCODINGSERVER_SAVE_DIR for re-encoded DVDs
+     Added TV_CHANNELS_COMPARE as a lambda to sort the channels
      '''),
 ]
 
@@ -1914,6 +1915,11 @@ TV_VIDEO_GROUPS = [
 #
 
 TV_CHANNELS = None
+
+#
+# A lambda function to sort the TV_CHANNELS
+#
+TV_CHANNELS_COMPARE = lambda a, b: cmp(int(a[2]), int(b[2]))
 
 
 # Program to grab xmltv listings. To get a grabber, you need to download

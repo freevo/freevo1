@@ -1505,6 +1505,11 @@ CACHE_IMAGES = 1
 # TV_CHANNELS = None
 
 #
+# A lambda function to sort the TV_CHANNELS
+#
+#TV_CHANNELS_COMPARE = lambda a, b: cmp(int(a[2]), int(b[2]))
+
+#
 # TV_FREQUENCY_TABLE - This is only used when Freevo changes the channel natively.
 # This is only the case if you are using V4L2 and any of the following plugins:
 # timeshift, ivtv_record, ivtv_basic_tv.
