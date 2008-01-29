@@ -58,11 +58,12 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def actions(self, item):
+        self.player = None
         for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
             if config.VIDEO_PREFERED_PLAYER == p.name:
                 self.player = p
 
-        if item.type == 'video' and self.player.name == 'mplayer':
+        if item.type == 'video' and self.player and self.player.name == 'mplayer':
 
             self.files = []
             self.item  = item
