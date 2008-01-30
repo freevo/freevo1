@@ -75,6 +75,7 @@ class PluginInterface(plugin.DaemonPlugin):
             ('SCREENSAVER_CYCLE_TIME', 60, '# of seconds to run a screensaver before starting another saver.')
         ]
 
+
     def eventhandler(self, event = None, menuw=None, arg=None):
         """
         eventhandler to handle the events. Always return False since we
@@ -101,17 +102,19 @@ class PluginInterface(plugin.DaemonPlugin):
         if plugin.isevent(event) != 'IDENTIFY_MEDIA':
             self.last_event = time.time()
 
-        if self.screensaver_showing :
+        if self.screensaver_showing:
             self.stop_saver()
             return True
 
         return False
+
 
     def poll(self):
         #_debug_("Saver got polled %f" % time.time())
         time_diff = time.time() - self.last_event
         if not self.screensaver_showing and  time_diff > self.start_delay :
             rc.post_event(Event("SCREENSAVER_START"))
+
 
     def start_saver(self):
         _debug_("start screensaver")
@@ -125,10 +128,12 @@ class PluginInterface(plugin.DaemonPlugin):
         self.thread = threading.Thread(target=self.__run__)
         self.thread.start()
 
+
     def stop_saver(self):
         _debug_("stop screensaver")
         self.stop_screensaver = True
         self.thread.join()
+
 
     def __run__(self):
         _debug_('Screensaver thread started')
@@ -162,6 +167,7 @@ class PluginInterface(plugin.DaemonPlugin):
         skin.redraw()
         osd.update()
         _debug_('Screensaver thread stopped')
+
 
     def __run_screensaver__(self, screensaver):
         _debug_('Running %s' % screensaver.plugin_name)

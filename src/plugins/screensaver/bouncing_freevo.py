@@ -71,27 +71,31 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def draw(self, screen):
-        black = (0,0,0)
-        dirty = []
-        # Clear the old image
-        screen.fill(black, (self.x,self.y, self.image_width, self.image_height))
+        osd.mutex.acquire()
+        try:
+            black = (0,0,0)
+            dirty = []
+            # Clear the old image
+            screen.fill(black, (self.x,self.y, self.image_width, self.image_height))
 
-        # Move the image
-        self.x += self.x_speed
-        if self.x < 0:
-            self.x = 0
-            self.x_speed *= -1
-        if (self.x + self.image_width) > self.width:
-            self.x = self.width - self.image_width
-            self.x_speed *= -1
+            # Move the image
+            self.x += self.x_speed
+            if self.x < 0:
+                self.x = 0
+                self.x_speed *= -1
+            if (self.x + self.image_width) > self.width:
+                self.x = self.width - self.image_width
+                self.x_speed *= -1
 
-        self.y += self.y_speed
-        if self.y < 0:
-            self.y = 0
-            self.y_speed *= -1
+            self.y += self.y_speed
+            if self.y < 0:
+                self.y = 0
+                self.y_speed *= -1
 
-        if (self.y + self.image_height) > self.height:
-            self.y = self.height - self.image_height
-            self.y_speed *= -1
+            if (self.y + self.image_height) > self.height:
+                self.y = self.height - self.image_height
+                self.y_speed *= -1
 
-        screen.blit(self.image, (self.x, self.y))
+            screen.blit(self.image, (self.x, self.y))
+        finally:
+            osd.mutex.release()

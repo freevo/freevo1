@@ -35,8 +35,10 @@ import pygame
 
 # freevo modules
 import config
+import osd
 from plugins.screensaver import ScreenSaverPlugin
 
+osd = osd.get_singleton()
 
 class PluginInterface(ScreenSaverPlugin):
     """
@@ -49,9 +51,11 @@ class PluginInterface(ScreenSaverPlugin):
         self.fps = config.BALLS_FPS
 
     def config(self):
-        return [ ('BALLS_FPS', 25, 'Frames per second'),
-                       ('BALLS_MAX_BALLS', 100, 'Maximum number of balls'),
-                       ('BALLS_MIN_BALLS', 1, 'Minimum number of balls')]
+        return [
+            ('BALLS_FPS', 25, 'Frames per second'),
+            ('BALLS_MAX_BALLS', 100, 'Maximum number of balls'),
+            ('BALLS_MIN_BALLS', 1, 'Minimum number of balls'),
+        ]
 
 
     def start(self, width, height):
@@ -76,19 +80,23 @@ class PluginInterface(ScreenSaverPlugin):
     def draw(self, screen):
         black = (0,0,0)
         dirty = []
-        screen.lock()
-        for ball in self.balls:
-            ball.clear(screen, black)
-            dirty.append(ball.rectangle())
+        osd.mutex.acquire()
+        try:
+            screen.unlock()
+            for ball in self.balls:
+                ball.clear(screen, black)
+                dirty.append(ball.rectangle())
+            for ball in self.balls:
+                ball.update(self.width, self.height, 0.9, 0.9)
+                ball.draw(screen)
+                dirty.append(ball.rectangle())
+            screen.unlock()
+        finally:
+            osd.mutex.release()
 
-        for ball in self.balls:
-            ball.update(self.width, self.height, 0.9, 0.9)
-            ball.draw(screen)
-            dirty.append(ball.rectangle())
-
-        screen.unlock()
 
 class Ball:
+
     def __init__(self):
         self.name = "ball"
         self.x = 100.0
@@ -106,13 +114,16 @@ class Ball:
         self.stopped_count = 0
         self.kick_threshold = 50
 
+
     def draw(self, screen):
         pygame.draw.ellipse(screen, self.color, (int(self.x), int(self.y), self.w, self.h))
         pygame.draw.ellipse(screen, (255,255,255), (int(self.x), int(self.y), self.w, self.h), 1)
 
+
     def clear(self, screen, color):
         pygame.draw.ellipse(screen, color, (int(self.x), int(self.y), self.w, self.h))
         pygame.draw.ellipse(screen, color, (int(self.x), int(self.y), self.w, self.h), 1)
+
 
     def update(self, width, height, walldeccel, floordeccel):
         # Update ball velocity
@@ -165,6 +176,7 @@ class Ball:
                 self.stopped_count = 0
         else:
             self.stopped_count = 0
+
 
     def rectangle(self):
         return (int(self.x), int(self.y), self.w, self.h)
