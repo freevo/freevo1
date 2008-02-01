@@ -25,6 +25,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * New audio MPD plug-in replacement (F#1865008)
  * New DirecTV plug-in to send to DirecTV receivers (F#1858775)
  * New flickr plug-in to see photo from www.flickr.com (F#1865290)
+ * New Gentoo wake-up script in the contrib/gentoo directory (F#1884611)
  * New web-server modules to show guidechannel and encoding_web (F#1864652)
  * New Youtube video plug-in (F#1864496)
  * Updated cdbackup plug-in with CD_RIP_FMT to set the encoding format (F#1857460)
