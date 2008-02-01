@@ -134,12 +134,13 @@ class MPlayer:
         demux = ''
 
         extra_opts = item.mplayer_options
+        ext = str(os.path.splitext(filename))
 
         is_playlist = False
         if hasattr(item, 'is_playlist') and item.is_playlist:
             is_playlist = True
 
-        if item.network_play and (str(filename).endswith('m3u') or str(filename).endswith('pls')):
+        if item.network_play and ext in ('.m3u', '.pls', '.asx'):
             is_playlist = True
 
         if str(filename).find(".jsp?") >= 0:
@@ -151,8 +152,7 @@ class MPlayer:
         if hasattr(item, 'reconnect') and item.reconnect:
             extra_opts += ' -loop 0'
 
-        command = '%s -vo null -ao %s %s %s' % (mpl, config.MPLAYER_AO_DEV, demux,
-                                                extra_opts)
+        command = '%s -vo null -ao %s %s %s' % (mpl, config.MPLAYER_AO_DEV, demux, extra_opts)
 
         if command.find('-playlist') > 0:
             command = command.replace('-playlist', '')
