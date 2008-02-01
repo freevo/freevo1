@@ -101,7 +101,7 @@ class Playlist(Item):
 
         try:
             playlist_lines_dos = map(lambda l: l.strip(), lines)
-            playlist_lines     = filter(lambda l: l[0] != '#', playlist_lines_dos)
+            playlist_lines = filter(lambda l: len(l) > 0 and l[0] != '#', playlist_lines_dos)
         except IndexError:
             print 'Bad m3u playlist file "%s"' % plsname
             return 0
