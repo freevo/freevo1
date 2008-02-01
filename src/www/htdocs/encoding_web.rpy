@@ -129,8 +129,6 @@ def GetFileList(browse_dir,  display_hidden = False):
     file_list_ctrl += '</div>\n</ul>\n'
     return file_list_ctrl
 
-
-
 class CDBurn_WebResource(FreevoResource):
 
     def __init__(self):
@@ -151,7 +149,8 @@ class CDBurn_WebResource(FreevoResource):
         self.VideoFilters     = config.ENCODINGSERVER_VIDEO_FILTERS
         self.ProfileList = ['xvid_low','xvid_high','iPod','Nokia770','gp2','DVD','flv']
         self.MencoderFilters  = config.ENCODINGSERVER_MENCODER_FILTERS
-        self.MencoderMapping  = config.ENCODINGSERVER_MENCODER_MAPPING
+        self.MencoderMappingAudio  = config.ENCODINGSERVER_MENCODER_AUDIO_MAPPING
+        self.MencoderMappingVideo = config.ENCODINGSERVER_MENCODER_VIDEO_MAPPING
         
         server_string  = 'http://%s:%s/' % \
             (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
@@ -195,7 +194,15 @@ class CDBurn_WebResource(FreevoResource):
             self.profile['audiobitrate'] = 96
             self.profile['numpasses'] = 2
             self.profile['videofilter'] = 'None'
-            
+        elif arg == 'DVD':
+            self.profile['container'] = 'avi'
+            self.profile['resolution'] = '240:144'
+            self.profile['videocodec'] = 'mpeg4'
+            self.profile['videobitrate'] = 500
+            self.profile['audiocodec'] = 'MPEG 1 Layer 3 (mp3)'
+            self.profile['audiobitrate'] = 96
+            self.profile['numpasses'] = 2
+            self.profile['videofilter'] = 'None'        
         else:
             _debug_('Unknown Profile "%s"' % (arg), DERROR)
             self.error(_('Unknown Profile')+(' "%s"' % (arg)))

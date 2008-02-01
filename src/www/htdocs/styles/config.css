@@ -346,7 +346,7 @@ div.VarGroups textarea {
 
 
 div.VarGroups ul ul {
-    margin-left:5px;
+#    margin-left:5px;
     border:.2em solid #036;
     display:block;
     background-color:#c9c9ff;
@@ -443,6 +443,44 @@ div.VarGroups {
 div.disablecontrol {
     opacity:.6;
 }
+    
+#ConfigGroup {
+  float:left;
+  width:100%;
+  font-size:93%;
+  line-height:normal;
+  }
+#ConfigGroup ul {
+  margin:0;
+  padding:10px 10px 0;
+  list-style:none;
+  }
+#ConfigGroup li {
+  float:left;
+  background:url("../images/tab/left.gif") no-repeat left top;
+  margin:0;
+  padding:0 0 0 9px;
+  }
+#ConfigGroup a {
+  display:block;
+  background:url("../images/tab/right.gif") no-repeat right top;
+  padding:5px 15px 4px 6px;
+  text-decoration:none;
+  font-weight:bold;
+  border: none;
+  color:#888;
+  }
+#ConfigGroup a:hover {
+  color:#333;
+  }
+#ConfigGroup #current {
+  background-image:url("../images/tab/left_on.gif");
+  }
+#ConfigGroup #current a {
+  background-image:url("../images/tab/right_on.gif");
+  color:#333;
+  padding-bottom:5px;
+  }
 
 
 

@@ -129,8 +129,7 @@ function PrepareChannelList(cname) {
 }
 
 function GetListLine(cname,row) {
-    var tblcell,line;
-
+    var tblcell,line,cline;
 
     // If the current line is hidden then skip it.
     line = document.getElementById(cname + '_line' + row)
@@ -146,20 +145,19 @@ function GetListLine(cname,row) {
             end_char = "'"
             schar = tblcell.value.charAt(0);
             echar = tblcell.value.charAt(tblcell.value.length - 1)
-            if (schar == "(")
-                start_char = "";
-            if (echar == ")")
-                end_char = "";
 
             tb_value = tblcell.value;
-            curcell = start_char +  tb_value + end_char
-            if (curcell != "''") {
-                cline =  cline + curcell + ",";
-                column_cnt++;
-            }
+            //curcell = start_char +  tb_value + end_char
+            curcell = tb_value
             
             ccnt++;
             tblcell = document.getElementById(cname + "_item" + row + ccnt)
+
+            if (curcell != "") 
+                cline =  cline + "'" + curcell + "'" ;
+            if (tblcell != ""  && tblcell != null && curcell != "")
+                cline = cline + ",";
+            column_cnt++;
         }
     }
     return cline
@@ -171,16 +169,17 @@ function PrepareItemList(cname) {
     var cline,curcell, column_cnt, tb_value;
     
     cvalue = ""
+    cline = ""
     tblcell = document.getElementById(cname + "_item00")
     rcnt = 0
     
     // Loop throught all of the rows.
     while (tblcell != null )  {
-        cvalue = cvalue + GetListLine(cname, rcnt)
+        cline =  GetListLine(cname, rcnt)
         rcnt++;
         ccnt = 0
-        if (column_cnt > 0)
-            cvalue = cvalue + '(' + cline.substring(0,cline.length -1) + '),';
+        if (cline != '')
+            cvalue = cvalue + '(' + cline + '),';
         // Get the fist control on the next line.
         tblcell = document.getElementById(cname + "_item" + rcnt + ccnt);
     }
@@ -284,6 +283,7 @@ function SaveValue(control_name,type) {
 }
 
 function GetSettingValue(control_name,type) {
+    var svalue;
     if (type == "tv_channels") 
         svalue = PrepareChannelList(control_name);
     

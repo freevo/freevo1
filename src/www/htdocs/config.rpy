@@ -99,104 +99,95 @@ def ParseConfigFile(rconf):
             fln = ln
 
         if  len(fln.split("=")) > 1 and not fln.startswith('"'):
-            pln = ParseLine(fln)
+            cfg_control = ConfigControl(fln)
 
-            if pln['type']:
-                pln['startline'] = startline
-                pln['endline'] = cnt
-                pln['control_name'] = pln['ctrlname'] + '_' + str(startline)
-                pln['html_control'] = GetHTMLControl(pln)
-
-                fconfig.append(pln)
+            if cfg_control.type:
+                cfg_control.startline = startline
+                cfg_control.endline = cnt
+                cfg_control.control_name = cfg_control.ctrlname + '_' + str(startline)
+                fconfig.append(cfg_control)
+                
         cnt += 1
 
-    fconfig.sort(key=operator.itemgetter('control_name'))
+    #fconfig.sort(key=operator.itemgetter('control_name'))
     return fconfig
 
+class ConfigControl():
 
-def ParseLine(cline):
-    '''
-    '''
-    _debug_('ParseLine(cline=%r)' % (cline), 2)
-    lparsed = {'ctrlname': '',
-               'ctrlvalue': '',
-               'checked': True,
-               'type' : '',
-               'comments' : '',
-               'group' :'',
-               'startline':'',
-               'endline':'',
-               'fileline':cline,
-               'control_name':'',
-               'control_type': '',
-               'html_control': ''
-    }
+    def __init__(self,config_line):
+        print 'Control Contro. _init'
 
-    tln = cline.strip()
-    tln = tln.replace('\n', '')
+        self.type = None
+        self.comments = ''
+        self.startline = -1
+        self.endline = -1
+        self.fileline = None
+        self.control_name = None
+        self.control_type = None
+        
+        tln = config_line.strip()
+        tln = tln.replace('\n', '')
 
-    if tln.startswith('#'):
-        lparsed['checked'] = False
-        tln = tln.lstrip('#')
-        tln = tln.lstrip()
+        self.enabled = True
+        if tln.startswith('#'):
+            self.enabled = False
+            tln = tln.lstrip('#')
+            tln = tln.lstrip()
 
-    fsplit = tln.split('=')
-    lparsed['type'] = 'textbox'
-    lparsed['ctrlname'] = fsplit[0].strip()
-    lparsed['group'] = GetVarGroup(lparsed['ctrlname'])
+        fsplit = tln.split('=')
+        self.type = 'textbox'
+        self.ctrlname  = fsplit[0].strip()
+        self.group = GetVarGroup(self.ctrlname)
 
-    if not lparsed['ctrlname'].isupper() and lparsed['group'] <> 'KeyMap':
-        lparsed['type'] = ''
+        if not self.ctrlname.isupper() and self.group <> 'KeyMap':
+            self.type = ''
 
-    if (not config.__dict__.has_key(lparsed['ctrlname'])):
-        try:
-            fvvalue = eval('config.' + lparsed['ctrlname'])
-        except Exception, e:
-            fvvalue = ''
+        if (not config.__dict__.has_key(self.ctrlname)):
+            try:
+                fvvalue = eval('config.' + self.ctrlname)
+            except Exception, e:
+                fvvalue = ''
 
-    ctrlvalue = fsplit[1].split('#')
-    if len(ctrlvalue) == 2:
-        lparsed['comments'] = ctrlvalue[1]
+        ctrlvalue = fsplit[1].split('#')
+        self.comments = ''
+        if len(ctrlvalue) == 2:
+            self.comments = ctrlvalue[1]
 
-    lparsed['ctrlvalue'] = Unicode(ctrlvalue[0].strip())
-    lparsed['ctrlvalue'] = lparsed['ctrlvalue'].replace('"', "'")
+        self.ctrlvalue = Unicode(ctrlvalue[0].strip())
+        self.ctrlvalue = self.ctrlvalue.replace('"', "'")
 
-    lparsed['control_type'] = getCtrlType(lparsed['ctrlname'],lparsed['ctrlvalue'],lparsed['type'])
+        self.control_type = getCtrlType(self.ctrlname,self.ctrlvalue,self.type)
 
-    if lparsed['ctrlname'].startswith('"'):
-        lparsed['type'] = ''
+        if self.ctrlname.startswith('"'):
+            self.type = ''
 
-    return lparsed
+    def html_control(self):
+        cvalue = self.ctrlvalue
+        ctype = self.type
+        ctrltype = getCtrlType(self.ctrlname,cvalue,ctype)
 
+        htmlctrl = ''
+        if ctrltype == 'textbox':
+            other_opts = 'class = "%s"' % self.ctrlname
+            htmlctrl = '<span class="DefaultTextBox">\n'
+            htmlctrl += CreateTextBox(self.control_name, self.ctrlname, cvalue, other_opts)
+            htmlctrl += '</span>\n'
+        elif ctrltype == 'boolean':
+            js_onchange = ' onchange=CheckValue("%s","textbox",0)' % self.control_name
+            htmlctrl  = CreateSelectBoxControl(self.control_name, ['True', 'False'], cvalue, js_onchange)
+        elif ctrltype == 'keymap':
+            htmlctrl = KeyMapControl(self.control_name,self.control_name, cvalue)
+        elif ctrltype == 'tv_channels':
+            htmlctrl = CreateTV_Channels_ctrl(self.control_name, cvalue)
+        elif ctrltype == 'fileitemlist':
+            htmlctrl = CreateFileItemList(self.control_name, cvalue ,self.ctrlname)
+        elif ctrltype == 'dictionary':
+            htmlctrl = CreateDictionaryControl(self.control_name, cvalue)
+        elif ctrltype == 'itemlist':
+            htmlctrl = CreateListControl(self.control_name, cvalue )
 
-def GetHTMLControl(fv_setting):
-    cname = fv_setting['ctrlname']
-    control_name = fv_setting['control_name']
-    cvalue = fv_setting['ctrlvalue']
-    ctype = fv_setting['type']
-    ctrltype = getCtrlType(cname,cvalue,ctype)
+        return htmlctrl
 
-    htmlctrl = ''
-    if ctrltype == 'textbox':
-        other_opts = 'class = "%s"' % cname
-        htmlctrl = '<span class="DefaultTextBox">\n'
-        htmlctrl += CreateTextBox(control_name, cname, cvalue, other_opts)
-        htmlctrl += '</span>\n'
-    elif ctrltype == 'boolean':
-        js_onchange = ' onchange=CheckValue("%s","textbox",0)' % control_name
-        htmlctrl  = CreateSelectBoxControl(control_name, ['True', 'False'], cvalue, js_onchange)
-    elif ctrltype == 'keymap':
-        htmlctrl = KeyMapControl(control_name, cname, cvalue)
-    elif ctrltype == 'tv_channels':
-        htmlctrl = CreateTV_Channels_ctrl(control_name, cvalue)
-    elif ctrltype == 'fileitemlist':
-        htmlctrl = CreateFileItemList(control_name, cvalue ,cname)
-    elif ctrltype == 'dictionary':
-        htmlctrl = CreateDictionaryControl(control_name, cvalue)
-    elif ctrltype == 'itemlist':
-        htmlctrl = CreateListControl(control_name, cvalue )
-
-    return htmlctrl
 
 
 def GetVarGroup(setting_name):
@@ -221,16 +212,16 @@ def GetGroupList(cfgvars):
     grps = ['Other','KeyMap']
     agrps = []
     for vrs in cfgvars:
-        grp = vrs['group']
+        grp = vrs.group
         agrps.append(grp)
         if not grp in grps:
             grps.append(grp)
 
     for vrs in cfgvars:
-        ngrp = agrps.count(vrs['group'])
+        ngrp = agrps.count(vrs.group)
         if ngrp == 1:
-            grps.remove(vrs['group'])
-            vrs['group'] = 'Other'
+            grps.remove(vrs.group)
+            vrs.group = 'Other'
 
     grps.sort()
     return grps
@@ -267,9 +258,10 @@ def CreateFileBrowseControl(cname,setting_name):
     else:
         js_browsefiles = 'onclick=BrowseFiles("%s","%s","F")' % ( cname , setting_name )
 
-
     btn_browse_id = '%s_browse' % cname
     btn_browse = '<input type="button" id="%s" class="BrowseButton" value="" title="Display File Browser" %s>\n' % ( btn_browse_id, js_browsefiles )
+    btn_opts = 'title="Display File Browser %s' % js_browsefiles
+    btn_browse = CreateHTMLinput('button',btn_browse_id,'', '',other_opts = '')
 
     js_cancel = 'onclick=CancelBrowse("%s")' % cname
     btn_cancel_id = '%s_cancel' % cname
@@ -561,12 +553,12 @@ def DeleteListItem(lineid,updateid):
 def StartControlLine(nctrl):
     _debug_('StartControlLine(%r)' % nctrl ,2)
     ctrl = ''
-    cname = nctrl['control_name']
+    cname = nctrl.control_name
 
-    ctrl += CreateHTMLinput('hidden',cname + "_startline", nctrl['startline'])
-    ctrl += CreateHTMLinput('hidden',cname + "_endline", nctrl['endline'])
-    ctrl += CreateHTMLinput('hidden',cname + "_ctrlname", nctrl['ctrlname'])
-    stringtype = nctrl['ctrlvalue'].startswith("'")
+    ctrl += CreateHTMLinput('hidden',cname + "_startline", nctrl.startline)
+    ctrl += CreateHTMLinput('hidden',cname + "_endline", nctrl.endline)
+    ctrl += CreateHTMLinput('hidden',cname + "_ctrlname", nctrl.ctrlname)
+    stringtype = nctrl.ctrlvalue.startswith("'")
     ctrl += CreateHTMLinput('hidden',cname + "_string",stringtype)
 
     return  ctrl
@@ -574,21 +566,21 @@ def StartControlLine(nctrl):
 
 def DeleteButton(nctrl):
 
-    js_delete = 'onclick=DeleteLines("%s",%i,%i)' %  (nctrl['control_name'], nctrl['startline'],nctrl['endline'])
+    js_delete = 'onclick=DeleteLines("%s",%i,%i)' %  (nctrl.control_name, nctrl.startline,nctrl.endline)
     btn_class = 'class="DeleteButton"'
-    btn_title = 'title="Delete Lines %i to %i from local_conf.py"' % ( nctrl['startline'], nctrl['endline'] )
+    btn_title = 'title="Delete Lines %i to %i from local_conf.py"' % ( nctrl.startline, nctrl.endline )
     del_opts = '%s %s %s' % (btn_class, js_delete , btn_title)
-    delbtn = CreateHTMLinput('button',nctrl['control_name'] + '_delete','','',del_opts)
+    delbtn = CreateHTMLinput('button',nctrl.control_name + '_delete','','',del_opts)
     return delbtn
 
 def EnableCheckBox(nctrl):
-    if nctrl['checked']:
+    if nctrl.enabled:
         checked = 'checked'
     else:
         checked = ''
 
-    jsonChange = ' onchange=CheckValue("%s","%s",0)'  % (nctrl['control_name'], nctrl['control_type'])
-    chkbox = CreateHTMLinput('checkbox',nctrl['control_name'] + '_chk','' , ''  , jsonChange + " " + checked)
+    jsonChange = ' onchange=CheckValue("%s","%s",0)'  % (nctrl.control_name, nctrl.control_type)
+    chkbox = CreateHTMLinput('checkbox',nctrl.control_name + '_chk','' , ''  , jsonChange + " " + checked)
     return chkbox
 
 def CreateConfigLine(nctrl,  expALL):
@@ -597,15 +589,15 @@ def CreateConfigLine(nctrl,  expALL):
     _debug_('CreateConfigLine(nctrl=%r,  expALL=%r)' % (nctrl, expALL), 2)
     htmlctrl = ''
 
-    control_name = nctrl['control_name']
-    cname = nctrl['ctrlname']
-    cvalue = nctrl['ctrlvalue']
+    control_name = nctrl.control_name
+    cname = nctrl.ctrlname
+    cvalue = nctrl.ctrlvalue
 
     htmlctrl += StartControlLine(nctrl)
     complex_ctrls = ['tv_channels','fileitemlist','dictionary','itemlist']
     simple_controls = ['textbox','boolean']
 
-    if nctrl['checked']:
+    if nctrl.enabled:
         htmlctrl += '<div id="%s_enable" clase="enablecontrol">\n' % control_name
         displayvars = ''
     else:
@@ -615,48 +607,47 @@ def CreateConfigLine(nctrl,  expALL):
     if expALL:
         displayvars = ''
 
-    htmlctrl += ErrorMessage(cname,control_name, nctrl['ctrlvalue'])
+    htmlctrl += ErrorMessage(cname,control_name, nctrl.ctrlvalue)
     htmlctrl += DeleteButton(nctrl)
     htmlctrl += EnableCheckBox(nctrl)
 
-    if nctrl['control_type'] == 'keymap':
-        htmlctrl += nctrl['html_control']
+    if nctrl.control_type == 'keymap':
+        htmlctrl += nctrl.html_control()
 
     setting_class = 'Setting_Line_Close'
     js_showlist = 'onclick=ShowList("%s")' % control_name
-    anchor_title = 'title="%s (Click to Show / Hide %s value) "' % ( nctrl['comments'] , cname )
+    anchor_title = 'title="%s (Click to Show / Hide %s value) "' % ( nctrl.comments , cname )
 
     if expALL:
         setting_class = 'Setting_Line_Open'
-    if nctrl['control_type'] in simple_controls:
+    if nctrl.control_type in simple_controls:
         setting_class = 'Setting_Line'
         js_showlist = ''
-        anchor_title = 'title="%s"' % nctrl['comments']
+        anchor_title = 'title="%s"' % nctrl.comments
 
     anchorID = '%s_anchor' % control_name
-    if nctrl['control_type'] <> 'keymap':
+    if nctrl.control_type <> 'keymap':
         htmlctrl += '<a class="%s" id="%s" name="%s" %s>' % ( setting_class, anchorID,   cname, js_showlist  + ' ' + anchor_title)
         htmlctrl += cname
         htmlctrl += '</a>\n'
 
-    if  nctrl['control_type'] in simple_controls:
-        htmlctrl += nctrl['html_control']
+    if  nctrl.control_type in simple_controls:
+        htmlctrl += nctrl.html_control()
 
-    jsSave =  'onclick=SaveValue("%s","%s")' % (control_name, nctrl['control_type'])
+    jsSave =  'onclick=SaveValue("%s","%s")' % (control_name, nctrl.control_type)
     btn_update_id = '%s_btn_update' %  control_name
     htmlctrl += CreateHTMLinput('button',btn_update_id, 'Update','',jsSave + ' style=display:none;')
 
-    if nctrl['control_type'] in complex_ctrls:
+    if nctrl.control_type in complex_ctrls:
         htmlctrl += '<ul style= display:%s id="%s_list">\n' % (displayvars, control_name)
         htmlctrl += '<li class="Setting_Controls">\n'
-        htmlctrl += nctrl['html_control']
+        htmlctrl += nctrl.html_control()
         htmlctrl += '</li>\n'
         htmlctrl += '</ul>\n'
 
-
     htmlctrl += '<li class="File_Line" id="%s_fileline">' % control_name
     if config.DEBUG == 3:
-        config_line = nctrl['fileline'].replace('\n','')
+        config_line = nctrl.fileline.replace('\n','')
         htmlctrl += '%r' % (  config_line   )
 
     htmlctrl += '</li>\n'
@@ -664,65 +655,8 @@ def CreateConfigLine(nctrl,  expALL):
 
     return htmlctrl
 
-
-def DisplayGroups(fconfig, expALL):
-    '''
-    '''
-    _debug_('DisplayGroups(fconfig=%r, expALL=%r)' % (fconfig, expALL), 2)
-    html =  '<ul class="GroupHeader">'
-
-    groups = GetGroupList(fconfig)
-    displayStyle = 'none'
-    if expALL:
-        displayStyle = ''
-
-    for grp in groups:
-        html += '<li class="VarGroupHeaderLine">\n'
-        html += '<a class="VarGroupHeaderItem" onclick=ShowList("%s")>%s</a>\n'  % (grp, grp)
-        html += '<ul id="%s_list" style= display:%s>\n' % (grp, displayStyle)
-        for cctrl in fconfig:
-            if cctrl['group'] == grp:
-                lctrl = CreateConfigLine(cctrl,  expALL)
-                html += '<li class="LineOpen" id="%s_line">\n' % cctrl['control_name']
-                html += lctrl
-                html += '</li>\n'
-        html += '</ul>\n'
-        html += '</li>\n'
-    html += '</ul>\n'
-
-    return html
-
-def DisplayGroup(grp,fconfig, expALL,hide_disabled):
-    '''
-    '''
-    _debug_('DisplayGroups(fconfig=%r, expALL=%r)' % (fconfig, expALL), 2)
- 
-    groups = GetGroupList(fconfig)
-    displayStyle = 'none'
-    if expALL:
-        displayStyle = ''
-
-    html = ''
- #   html += '<ul id="%s_list" style= display:%s>\n' % (grp, displayStyle)
-    for cctrl in fconfig:
     
-        if cctrl['group'] == grp:
-            if cctrl['checked']:
-                lctrl = CreateConfigLine(cctrl,  expALL)
-                html += '<li class="LineOpen" id="%s_line">\n' % cctrl['control_name']
-                html += lctrl
-                html += '</li>\n'            
-            else:
-                if  not hide_disabled:
-                    lctrl = CreateConfigLine(cctrl,  expALL)
-                    html += '<li class="LineOpen" id="%s_line">\n' % cctrl['control_name']
-                    html += lctrl
-                    html += '</li>\n'
-   # html += '</ul>\n'
- 
-    return html
-    
-    
+
 def DisplayConfigChanges(current_version):
     '''
     '''
@@ -765,16 +699,74 @@ def GetConfigVersion(conf_data):
     '''
     _debug_('GetConfigVersion(conf_data=%r)' % conf_data,2)
     for setting in conf_data:
-        if setting['ctrlname'] == 'CONFIG_VERSION':
-            return setting['ctrlvalue']
+        if setting.ctrlname == 'CONFIG_VERSION':
+            return setting.ctrlvalue
     return None
+    
     
 class ConfigResource(FreevoResource):
 
+    def __init__(self):
+        self.hide_disabled = False
+        self.expand_all = False
+        print 'Config Resourese'
+
+    
+    def DisplayGroups(self,fconfig):
+        '''
+        '''
+        _debug_('DisplayGroups(fconfig=%r)' % (fconfig), 2)
+        html =  '<ul class="GroupHeader">'
+
+        groups = GetGroupList(fconfig)
+        displayStyle = 'none'
+        if self.expand_all:
+            displayStyle = ''
+
+        for grp in groups:
+            html += '<li class="VarGroupHeaderLine">\n'
+            html += '<a class="VarGroupHeaderItem" onclick=ShowList("%s")>%s</a>\n'  % (grp, grp)
+            html += '<ul id="%s_list" style= display:%s>\n' % (grp, displayStyle)
+            for cctrl in fconfig:
+                if cctrl.group == grp:
+                    html += '<li class="LineOpen" id="%s_line">\n' % cctrl.control_name
+                    html += CreateConfigLine(cctrl,  self.expand_all)
+                    html += '</li>\n'
+            html += '</ul>\n'
+            html += '</li>\n'
+        html += '</ul>\n'
+
+        return html
+
+    def DisplayGroup(self, grp,fconfig):
+        '''
+        '''
+        _debug_('DisplayGroups(fconfig=%r)' % (fconfig), 2)
+     
+        groups = GetGroupList(fconfig)
+        displayStyle = 'none'
+        if self.expand_all:
+            displayStyle = ''
+
+        html = ''
+        for cctrl in fconfig:
+        
+            if cctrl.group == grp:
+                if cctrl.enabled:
+                    html += '<li class="LineOpen" id="%s_line">\n' % cctrl.control_name
+                    html += CreateConfigLine(cctrl,  self.expand_all)
+                    html += '</li>\n'            
+                else:
+                    if  not self.hide_disabled:
+                        html += '<li class="LineOpen" id="%s_line">\n' % cctrl.control_name
+                        html += CreateConfigLine(cctrl,  self.expand_all)
+                        html += '</li>\n'
+
+        return html
+                
     def _render(self, request):
         '''
         '''
-        config.DEBUG = 2
         _debug_('_render(self, request)', 2)
         fv = HTMLResource()
         form = request.args
@@ -784,7 +776,6 @@ class ConfigResource(FreevoResource):
         title = 'Config %s' %configfile
         fv.printHeader(_(title), 'styles/main.css', 'scripts/config.js', selected=_('Config'))
 
-        hide_disabled = False
         fv.res += '<script language="JavaScript" type="text/JavaScript" src="scripts/browsefile.js"></script>\n'
         fv.res += '<link rel="stylesheet" href="styles/config.css" type="text/css">\n'
 
@@ -792,60 +783,61 @@ class ConfigResource(FreevoResource):
             fv.res += 'Unable to find file.'
             return fv.res
         
-        wizard_groups = ['Tv','Video','Audio','Image','Headline','Www','All','Config Changes']       
+        wizard_groups = ['Tv','Video','Audio','Image','Headline','Www','All','Config Changes','Options']       
         current_group = fv.formValue(form,"current_group")
         if not current_group:
             current_group = "Tv"
         if not current_group in wizard_groups:
             current_group = "Tv"
                     
-            
         rconf = ReadConfig(configfile)
         fconfig = ParseConfigFile(rconf)
 
         # Add Setting for Adding New KEYMAPS
-        add_keymap = {'ctrlname': 'KEYMAP[NEW]',
-               'ctrlvalue': '',
-               'checked': False,
-               'type' : 'keymap',
-               'comments' : 'New Key Map',
-               'group' :'KeyMap',
-               'startline': -1,
-               'endline': -1,
-               'fileline': '',
-               'control_name':'KEYMAP_NEW',
-               'control_type':'keymap',
-               'html_control': KeyMapControl('KEYMAP_NEW', 'KEYMAP[NEW]', '')
-        }
-        fconfig.append(add_keymap)
+#        add_keymap = {'ctrlname': 'KEYMAP[NEW]',
+#               'ctrlvalue': '',
+   #            'checked': False,
+      #         'type' : 'keymap',
+         #      'comments' : 'New Key Map',
+            #   'group' :'KeyMap',
+               #'startline': -1,
+#               'endline': -1,
+   #            'fileline': '',
+      #         'control_name':'KEYMAP_NEW',
+         #      'control_type':'keymap',
+            #   'html_control': KeyMapControl('KEYMAP_NEW', 'KEYMAP[NEW]', '')
+       # }
+        #fconfig.append(add_keymap)
 
         expAll = fv.formValue(form, 'expAll')
-        expandAll = False
         if expAll:
-            expandAll = True
+            self.expand_all = True
 
         fv.res += CreateHTMLinput('hidden','configfile', configfile,'','')
         fv.res += '<div class="VarGroups">\n'
 
         fv.res += '<form id="config" action="config.rpy" method="get">\n'
-        fv.res += ' <div id="WizardGroup">'
-        fv.res += '<ul id="navlist">'
+        fv.res += ' <div id="ConfigGroup">'
+        fv.res += '<ul>'
         for group in wizard_groups:
             group_id = ""
             if current_group == group:
                 group_id = "current"
-            fv.res += '<li id="GroupLabel"><a href="config.rpy?current_group=%s" id="%s">%s</a></li>' % (group, group_id, group)
-        fv.res += '</ul>'
-        fv.res += '</div><br><br>'
+            fv.res += '<li id="%s">\n' % group_id
+            fv.res += '<a href="config.rpy?current_group=%s">%s</a>\n' % (group,  group)
+            fv.res += '</li>\n'
+        fv.res += '</ul>\n'
+        fv.res += '</div>\n<br><br>'
       
         if current_group == "All":
-            # Check config version.
-            fv.res += DisplayGroups(fconfig, expandAll)
+            fv.res += self.DisplayGroups(fconfig)
         elif current_group == 'Config Changes':
             local_conf_ver = GetConfigVersion(fconfig)
-            fv.res += DisplayConfigChanges(local_conf_ver)            
+            fv.res += DisplayConfigChanges(local_conf_ver)   
+        elif current_group == 'Options':
+            fv.res += 'Create Options !!'
         else:
-            fv.res += DisplayGroup(current_group,fconfig,0,hide_disabled)
+            fv.res += self.DisplayGroup(current_group,fconfig)
         
         fv.res + '</div>\n'
 

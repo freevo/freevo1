@@ -34,6 +34,18 @@
     text-decoration: none;
 }
 
+
+#programtimebooked a {
+    display: block;
+    padding: 5px 10px;
+    width: 300px;
+    color: #fff;
+    background-color: orange;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
 #programlinerecord {
     list-style-type: none;
 }
@@ -44,6 +56,17 @@
     width: 300px;
     color: #fff;
     background-color: #00FF33;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+#programlinerecording a {
+    display: block;
+    padding: 5px 10px;
+    width: 300px;
+    color: #fff;
+    background-color: #993333;
     font-weight: bold;
     text-decoration: none;
 }
