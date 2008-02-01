@@ -364,18 +364,18 @@ if len(sys.argv) >= 2:
 
     # force fullscreen mode
     # deactivate screen blanking and set osd to fullscreen
-    if sys.argv[1] == '-force-fs':
+    if sys.argv[1] == '--force-fs':
         os.system('xset -dpms s off')
         config.START_FULLSCREEN_X = 1
 
     # activate a trace function
-    if sys.argv[1] == '-trace':
+    if sys.argv[1] == '--trace':
         tracefd = open(os.path.join(config.FREEVO_LOGDIR, 'trace.txt'), 'w')
         sys.settrace(tracefunc)
         config.DEBUG = 2
 
     # create api doc for Freevo and move it to Docs/api
-    if sys.argv[1] == '-doc':
+    if sys.argv[1] == '--doc':
         import pydoc
         import re
         for file in util.match_files_recursively('src/', ['py' ]):
