@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-22 13:05+0100\n"
+"POT-Creation-Date: 2008-02-03 20:40+0100\n"
 "PO-Revision-Date:  Fri Oct 05 14:20:00 2006\n"
 "Last-Translator: Răzvan T. Coloja <cypresstwist@gmail.com>\n"
 "Language-Team: Romanian\n"
@@ -17,36 +17,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: ../freevo_config.py:1171 ../freevo_config.py:1176
+#: ../freevo_config.py:1175 ../freevo_config.py:1180
 #: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
-#: www/htdocs/search.rpy:91 tv/edit_favorite.py:112
+#: www/htdocs/search.rpy:91 tv/edit_favorite.py:111
 #: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "Titlu"
 
-#: ../freevo_config.py:1172 plugins/lcd.py:84 plugins/lcd.py:86
+#: ../freevo_config.py:1176 plugins/lcd.py:84 plugins/lcd.py:86
 #: plugins/lcd.py:263 plugins/vfd.py:108 plugins/vfd.py:110
 msgid "Description"
 msgstr "Descriere"
 
-#: ../freevo_config.py:1173
+#: ../freevo_config.py:1177
 msgid "Author"
 msgstr "Autor"
 
-#: ../freevo_config.py:1177 plugins/lcd.py:83 plugins/vfd.py:107
+#: ../freevo_config.py:1181 plugins/lcd.py:83 plugins/vfd.py:107
 #: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
 #: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
 #: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
 #: share/skins/main/rain.fxd:275 share/skins/main/info.fxd:332
-#: share/skins/main/Tux'n Tosh TV.fxd:768 TV.fxd:842 TV.fxd:863
 msgid "Date"
 msgstr "Data"
 
-#: ../freevo_config.py:1180
+#: ../freevo_config.py:1184
 msgid "Model"
 msgstr "Model"
 
-#: ../freevo_config.py:1181
+#: ../freevo_config.py:1185
 msgid "Software"
 msgstr "Software"
 
@@ -101,7 +100,34 @@ msgstr ""
 "directorul %s trebuie să poată fi citit, scris şi executat de către "
 "utilizatorul ce rulează freevo."
 
-#: image/viewer.py:128
+#: image/plugins/flickr.py:143 image/plugins/flickr.py:144
+#, fuzzy
+msgid "Flickr pictures"
+msgstr "Imagini"
+
+#: image/plugins/flickr.py:161 video/plugins/youtube.py:167
+msgid "Choose please"
+msgstr ""
+
+#: image/plugins/flickr.py:167
+msgid "Retrieving image list"
+msgstr ""
+
+#: image/plugins/flickr.py:168
+#, fuzzy
+msgid "Images available"
+msgstr "Nicio informaţie disponibilă"
+
+#: image/plugins/flickr.py:176
+#, fuzzy
+msgid "Downloading picture \""
+msgstr "Downloadez lista de link-uri..."
+
+#: image/plugins/flickr.py:207
+msgid "Downloading thumbnail for picture \""
+msgstr ""
+
+#: image/viewer.py:126
 #, python-format
 msgid ""
 "Can't Open Image\n"
@@ -110,15 +136,15 @@ msgstr ""
 "Nu pot deschide imaginea\n"
 "'%s'"
 
-#: image/viewer.py:347
+#: image/viewer.py:344
 msgid "pause"
 msgstr "pauză"
 
-#: image/viewer.py:352
+#: image/viewer.py:349
 msgid "play"
 msgstr "redare"
 
-#: image/viewer.py:454
+#: image/viewer.py:451
 msgid "No information available"
 msgstr "Nicio informaţie disponibilă"
 
@@ -201,13 +227,13 @@ msgstr "Cum să scrii propriile pluginuri pentru Freevo"
 #: www/htdocs/guide.rpy:150 www/htdocs/genre.rpy:91
 #: www/htdocs/favorites.rpy:55 www/htdocs/library.rpy:197
 #: www/htdocs/library.rpy:219 www/htdocs/library.rpy:222
-#: www/htdocs/search.rpy:52 skins/main/info_area.py:133
-#: audio/plugins/xine.py:55 audio/plugins/cdbackup.py:195
-#: audio/plugins/cdbackup.py:578 video/plugins/xine.py:71 plugins/lcd.py:48
-#: plugins/vfd.py:52 plugins/freevused.py:140
-#: tv/plugins/dvbstreamer/live_pause.py:88
+#: www/htdocs/search.rpy:52 www/htdocs/guidechannel.rpy:204
+#: skins/main/info_area.py:133 audio/plugins/xine.py:55
+#: audio/plugins/cdbackup.py:195 audio/plugins/cdbackup.py:582
+#: video/plugins/xine.py:71 plugins/lcd.py:48 plugins/vfd.py:52
+#: plugins/freevused.py:140 tv/plugins/dvbstreamer/live_pause.py:88
 #: tv/plugins/dvbstreamer/live_pause.py:112 tv/plugins/xine.py:82
-#: tv/record_client.py:198
+#: tv/record_client.py:90
 msgid "ERROR"
 msgstr "EROARE"
 
@@ -248,7 +274,7 @@ msgstr "nu pot încărca %s.html"
 msgid "Welcome"
 msgstr "Bine ai venit"
 
-#: www/htdocs/index.rpy:47 www/web_types.py:198
+#: www/htdocs/index.rpy:47 www/web_types.py:197
 msgid "Home"
 msgstr "Acasă"
 
@@ -313,7 +339,8 @@ msgstr "Înregistrare manuală"
 #: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
 #: www/htdocs/edit_favorite.rpy:55 www/htdocs/guide.rpy:150
 #: www/htdocs/genre.rpy:91 www/htdocs/favorites.rpy:55
-#: tv/plugins/view_favorites.py:93 tv/plugins/scheduled_recordings.py:91
+#: www/htdocs/guidechannel.rpy:204 tv/plugins/view_favorites.py:90
+#: tv/plugins/scheduled_recordings.py:91
 msgid "Recording server is unavailable."
 msgstr "Serverul de înregistrare nu este disponibil"
 
@@ -321,16 +348,16 @@ msgstr "Serverul de înregistrare nu este disponibil"
 msgid "Manual Recorded"
 msgstr "Înregistrat manual"
 
-#: www/htdocs/manualrecord.rpy:124 tv/plugins/manual_record.py:374
+#: www/htdocs/manualrecord.rpy:124 tv/plugins/manual_record.py:375
 msgid "start time is not before stop time."
 msgstr "timpul de start nu este înaintea timpului de stop"
 
-#: www/htdocs/manualrecord.rpy:127 tv/plugins/manual_record.py:365
+#: www/htdocs/manualrecord.rpy:127 tv/plugins/manual_record.py:366
 #, python-format
 msgid "Program would record for more than %d days!"
 msgstr "Programul s-ar înregistra pentru mai mult de %d zile!"
 
-#: www/htdocs/manualrecord.rpy:129 tv/plugins/manual_record.py:369
+#: www/htdocs/manualrecord.rpy:129 tv/plugins/manual_record.py:370
 msgid "Program would record for more than 1 day!"
 msgstr "Programul s-ar înregistra pentru mai mult de o zi!"
 
@@ -382,7 +409,7 @@ msgstr "Noi"
 msgid "Dec"
 msgstr "Dec"
 
-#: www/htdocs/manualrecord.rpy:200 www/web_types.py:203
+#: www/htdocs/manualrecord.rpy:200 www/web_types.py:202
 msgid "Manual Recording"
 msgstr "Înregistrare manuală"
 
@@ -393,7 +420,7 @@ msgstr "Mesaj de eroare"
 #: www/htdocs/manualrecord.rpy:217 www/htdocs/record.rpy:114
 #: www/htdocs/edit_favorite.rpy:130 www/htdocs/favorites.rpy:107
 #: www/htdocs/search.rpy:90 plugins/lcd.py:254 plugins/lcd.py:688
-#: tv/edit_favorite.py:114 share/skins/main/basic.fxd:590
+#: tv/edit_favorite.py:113 share/skins/main/basic.fxd:590
 #: share/skins/main/basic.fxd:621 share/skins/main/basic.fxd:652
 msgid "Channel"
 msgstr "Canal"
@@ -430,7 +457,7 @@ msgstr "Vizualizare Log-uri"
 msgid "No program found on %s at %s."
 msgstr "Niciun program nu a fost găsit pe %s la %s"
 
-#: www/htdocs/record.rpy:106 www/web_types.py:200
+#: www/htdocs/record.rpy:106 www/web_types.py:199
 #: tv/plugins/scheduled_recordings.py:45 tv/plugins/scheduled_recordings.py:59
 msgid "Scheduled Recordings"
 msgstr "Înregistrări programate"
@@ -456,17 +483,17 @@ msgid "Sorry, the program description for %s is unavailable."
 msgstr "Scuze, descrierea programului pentru %s nu este disponibilă"
 
 #: www/htdocs/record.rpy:159 www/htdocs/favorites.rpy:174
-#: www/htdocs/search.rpy:137 tv/edit_favorite.py:186
+#: www/htdocs/search.rpy:137 tv/edit_favorite.py:185
 msgid "Remove"
 msgstr "Şterge"
 
-#: www/htdocs/pluginconfig.rpy:367
+#: www/htdocs/pluginconfig.rpy:361
 #, fuzzy
 msgid "Config Plugins"
 msgstr "Plugin-uri"
 
 #: www/htdocs/edit_favorite.rpy:53 www/htdocs/edit_favorite.rpy:114
-#: tv/edit_favorite.py:92
+#: tv/edit_favorite.py:91
 msgid "Edit Favorite"
 msgstr "Editează preferinţa"
 
@@ -504,52 +531,52 @@ msgstr "Episoade"
 msgid "Action"
 msgstr "Acţiune"
 
-#: www/htdocs/edit_favorite.rpy:152 tv/favoriteitem.py:70
+#: www/htdocs/edit_favorite.rpy:152 tv/favoriteitem.py:68
 msgid "ANY CHANNEL"
 msgstr "ORICE CANAL"
 
-#: www/htdocs/edit_favorite.rpy:165 tv/favoriteitem.py:74
-#: tv/favoriteitem.py:199 tv/edit_favorite.py:141
+#: www/htdocs/edit_favorite.rpy:165 tv/favoriteitem.py:72
+#: tv/favoriteitem.py:208 tv/edit_favorite.py:140
 msgid "ANY DAY"
 msgstr "ORICE ZI"
 
-#: www/htdocs/edit_favorite.rpy:166 tv/favoriteitem.py:66
-#: tv/edit_favorite.py:145
+#: www/htdocs/edit_favorite.rpy:166 tv/favoriteitem.py:64
+#: tv/edit_favorite.py:144
 msgid "Mon"
 msgstr "Lun"
 
-#: www/htdocs/edit_favorite.rpy:167 tv/favoriteitem.py:66
-#: tv/edit_favorite.py:145
+#: www/htdocs/edit_favorite.rpy:167 tv/favoriteitem.py:64
+#: tv/edit_favorite.py:144
 msgid "Tue"
 msgstr "Mar"
 
-#: www/htdocs/edit_favorite.rpy:168 tv/favoriteitem.py:66
-#: tv/edit_favorite.py:145
+#: www/htdocs/edit_favorite.rpy:168 tv/favoriteitem.py:64
+#: tv/edit_favorite.py:144
 msgid "Wed"
 msgstr "Mie"
 
-#: www/htdocs/edit_favorite.rpy:169 tv/favoriteitem.py:66
-#: tv/edit_favorite.py:145
+#: www/htdocs/edit_favorite.rpy:169 tv/favoriteitem.py:64
+#: tv/edit_favorite.py:144
 msgid "Thu"
 msgstr "Joi"
 
-#: www/htdocs/edit_favorite.rpy:170 tv/favoriteitem.py:67
-#: tv/edit_favorite.py:145
+#: www/htdocs/edit_favorite.rpy:170 tv/favoriteitem.py:65
+#: tv/edit_favorite.py:144
 msgid "Fri"
 msgstr "Vin"
 
-#: www/htdocs/edit_favorite.rpy:171 tv/favoriteitem.py:67
-#: tv/edit_favorite.py:145
+#: www/htdocs/edit_favorite.rpy:171 tv/favoriteitem.py:65
+#: tv/edit_favorite.py:144
 msgid "Sat"
 msgstr "Sâm"
 
-#: www/htdocs/edit_favorite.rpy:172 plugins/weather.py:82
-#: plugins/weather.py:142 tv/favoriteitem.py:67 tv/edit_favorite.py:145
+#: www/htdocs/edit_favorite.rpy:172 tv/favoriteitem.py:65
+#: tv/edit_favorite.py:144
 msgid "Sun"
 msgstr "Dum"
 
-#: www/htdocs/edit_favorite.rpy:178 tv/favoriteitem.py:78
-#: tv/favoriteitem.py:218 tv/edit_favorite.py:161
+#: www/htdocs/edit_favorite.rpy:178 tv/favoriteitem.py:76
+#: tv/favoriteitem.py:229 tv/edit_favorite.py:160
 msgid "ANY TIME"
 msgstr "ORICE TIMP"
 
@@ -570,7 +597,7 @@ msgid "ONLY NEW"
 msgstr "DOAR NOI"
 
 #: www/htdocs/edit_favorite.rpy:262 tv/plugins/manual_record.py:129
-#: tv/edit_favorite.py:183
+#: tv/edit_favorite.py:182
 msgid "Save"
 msgstr "Salvează"
 
@@ -578,7 +605,8 @@ msgstr "Salvează"
 msgid "YouTube"
 msgstr ""
 
-#: www/htdocs/guide.rpy:145 www/web_types.py:199 tv/tvmenu.py:98
+#: www/htdocs/guide.rpy:145 www/htdocs/guidechannel.rpy:197
+#: www/web_types.py:198 tv/tvmenu.py:98
 msgid "TV Guide"
 msgstr "Ghid TV"
 
@@ -605,38 +633,43 @@ msgstr "Categorie"
 msgid "Change"
 msgstr "Modifică"
 
-#: www/htdocs/guide.rpy:200 skins/main/tvlisting_area.py:339 tv/tvguide.py:51
+#: www/htdocs/guide.rpy:202 skins/main/tvlisting_area.py:339 tv/tvguide.py:51
 msgid "This channel has no data loaded"
 msgstr "Acest canal nu are informaţii despre program"
 
-#: www/htdocs/guide.rpy:272 www/htdocs/genre.rpy:204
+#: www/htdocs/guide.rpy:274 www/htdocs/genre.rpy:204
+#: www/htdocs/guidechannel.rpy:133 www/htdocs/guidechannel.rpy:256
 #: share/skins/main/basic.fxd:596 share/skins/main/basic.fxd:658
 msgid "Start"
 msgstr ""
 
-#: www/htdocs/guide.rpy:273 www/htdocs/genre.rpy:205
+#: www/htdocs/guide.rpy:275 www/htdocs/genre.rpy:205
+#: www/htdocs/guidechannel.rpy:134 www/htdocs/guidechannel.rpy:257
 #: share/skins/main/basic.fxd:602 share/skins/main/basic.fxd:664
 msgid "Stop"
 msgstr ""
 
-#: www/htdocs/guide.rpy:274 www/htdocs/genre.rpy:206
+#: www/htdocs/guide.rpy:276 www/htdocs/genre.rpy:206
+#: www/htdocs/guidechannel.rpy:135 www/htdocs/guidechannel.rpy:258
 #: share/skins/main/dark.fxd:465 share/skins/main/info.fxd:278
 #: share/skins/main/info.fxd:303 share/skins/main/info.fxd:482
-#: share/skins/main/Tux'n Tosh TV.fxd:642
 msgid "Runtime"
 msgstr "Timp de rulare"
 
-#: www/htdocs/guide.rpy:285 www/htdocs/genre.rpy:217 www/htdocs/search.rpy:139
-#: www/htdocs/search.rpy:141 plugins/buttonbar.py:119
+#: www/htdocs/guide.rpy:287 www/htdocs/genre.rpy:217 www/htdocs/search.rpy:139
+#: www/htdocs/search.rpy:141 www/htdocs/guidechannel.rpy:269
+#: plugins/buttonbar.py:119
 msgid "Record"
 msgstr "Înregistrează"
 
-#: www/htdocs/guide.rpy:288 www/htdocs/genre.rpy:220
+#: www/htdocs/guide.rpy:290 www/htdocs/genre.rpy:220
+#: www/htdocs/guidechannel.rpy:272
 msgid "Add to Favorites"
 msgstr "Adaugă la preferinţe"
 
-#: www/htdocs/guide.rpy:291 www/htdocs/genre.rpy:223
-#: www/htdocs/library.rpy:596
+#: www/htdocs/guide.rpy:293 www/htdocs/genre.rpy:223
+#: www/htdocs/library.rpy:596 www/htdocs/guidechannel.rpy:146
+#: www/htdocs/guidechannel.rpy:275
 msgid "Close Window"
 msgstr "Închide fereastra"
 
@@ -650,7 +683,7 @@ msgid "NO SHOWS MATCHING CATEGORY"
 msgstr "NICIUN SHOW POTRIVIT CATEGORIEI"
 
 #: www/htdocs/favorites.rpy:53 www/htdocs/favorites.rpy:101
-#: www/web_types.py:201
+#: www/web_types.py:200
 msgid "Favorites"
 msgstr "Preferinţe"
 
@@ -691,7 +724,7 @@ msgid "Priority"
 msgstr "Prioritate"
 
 #: www/htdocs/favorites.rpy:130 www/htdocs/favorites.rpy:142
-#: www/htdocs/favorites.rpy:148 tv/edit_favorite.py:118
+#: www/htdocs/favorites.rpy:148 tv/edit_favorite.py:117
 msgid "ANY"
 msgstr "ORICE"
 
@@ -751,18 +784,17 @@ msgstr "%s nu există. Nu au fost aplicate acţiuni."
 msgid "I do not process names (%s) with slashes for security reasons."
 msgstr "Nu procesez nume (%s) cu slash-uri din motive de securitate."
 
-#: www/htdocs/library.rpy:230 www/htdocs/library.rpy:231 www/web_types.py:202
+#: www/htdocs/library.rpy:230 www/htdocs/library.rpy:231 www/web_types.py:201
 msgid "Media Library"
 msgstr "Biblioteca Media"
 
-#: www/htdocs/library.rpy:262 www/web_types.py:372
+#: www/htdocs/library.rpy:262 www/web_types.py:371
 msgid "Messages"
 msgstr "Mesaje"
 
 #: www/htdocs/library.rpy:274 share/skins/main/dark.fxd:18
 #: share/skins/main/crystal.fxd:9 share/skins/main/bluestar.fxd:9
 #: share/skins/main/basic.fxd:21 share/skins/main/rain.fxd:9
-#: share/skins/main/Tux'n Tosh TV.fxd:18 TV.fxd:595
 msgid "Movies"
 msgstr "Filme"
 
@@ -773,13 +805,13 @@ msgstr "TV Înregistrat"
 #: www/htdocs/library.rpy:282 plugins/lcd.py:177 plugins/lcd.py:633
 #: share/skins/main/dark.fxd:19 share/skins/main/crystal.fxd:10
 #: share/skins/main/bluestar.fxd:10 share/skins/main/basic.fxd:22
-#: share/skins/main/rain.fxd:10 share/skins/main/Tux'n Tosh TV.fxd:19
+#: share/skins/main/rain.fxd:10
 msgid "Music"
 msgstr "Muzică"
 
 #: www/htdocs/library.rpy:286 share/skins/main/dark.fxd:20
 #: share/skins/main/crystal.fxd:12 share/skins/main/basic.fxd:23
-#: share/skins/main/rain.fxd:12 share/skins/main/Tux'n Tosh TV.fxd:20
+#: share/skins/main/rain.fxd:12
 msgid "Images"
 msgstr "Imagini"
 
@@ -809,18 +841,19 @@ msgstr "Redă fişier"
 msgid "Play file using VLC"
 msgstr "Redă fişier folosind VLC"
 
-#: www/htdocs/config.rpy:756
+#: www/htdocs/config.rpy:777
 #, fuzzy
 msgid "Config"
 msgstr "Configurează"
 
 #: www/htdocs/search.rpy:51 tv/plugins/search_programs.py:108
-#: tv/programitem.py:335
+#: tv/programitem.py:325
 msgid "Search Results"
 msgstr "Rezultatele căutării"
 
-#: www/htdocs/search.rpy:51 www/htdocs/search.rpy:75 www/web_types.py:204
-#: www/web_types.py:347 www/web_types.py:360 tv/plugins/search_programs.py:84
+#: www/htdocs/search.rpy:51 www/htdocs/search.rpy:75 www/web_types.py:203
+#: www/web_types.py:346 www/web_types.py:359 video/plugins/youtube.py:172
+#: tv/plugins/search_programs.py:84
 msgid "Search"
 msgstr "Căutare"
 
@@ -836,52 +869,60 @@ msgstr "Niciun rezultat"
 msgid "New favorite"
 msgstr "Preferinţă nouă"
 
-#: www/web_types.py:199
+#: www/htdocs/encoding_web.rpy:208 video/plugins/reencode.py:311
+msgid "Unknown Profile"
+msgstr "Profil necunoscut"
+
+#: www/htdocs/encoding_web.rpy:370
+msgid "Web Encoder"
+msgstr ""
+
+#: www/web_types.py:198
 msgid "View TV Listings"
 msgstr "Vizualizează Listele TV"
 
-#: www/web_types.py:200
+#: www/web_types.py:199
 msgid "View Scheduled Recordings"
 msgstr "Vizualizează înregistrările programate"
 
-#: www/web_types.py:201 tv/plugins/view_favorites.py:45
-#: tv/plugins/view_favorites.py:51 tv/plugins/view_favorites.py:61
+#: www/web_types.py:200 tv/plugins/view_favorites.py:44
+#: tv/plugins/view_favorites.py:49 tv/plugins/view_favorites.py:58
 msgid "View Favorites"
 msgstr "Vizualizează preferinţele"
 
-#: www/web_types.py:202
+#: www/web_types.py:201
 msgid "View Media Library"
 msgstr "Vizualizează biblioteca media"
 
-#: www/web_types.py:203
+#: www/web_types.py:202
 msgid "Schedule a Manual Recording"
 msgstr "Programează o înregistrare manuală"
 
-#: www/web_types.py:204
+#: www/web_types.py:203
 msgid "Advanced Search Page"
 msgstr "Pagină de căutări avansate"
 
-#: www/web_types.py:205
+#: www/web_types.py:204
 msgid "Help"
 msgstr "Ajutor"
 
-#: www/web_types.py:205
+#: www/web_types.py:204
 msgid "View Online Help and Documentation"
 msgstr "Vizualizează Ajutor Online şi Documentaţia"
 
-#: www/web_types.py:211
+#: www/web_types.py:210
 msgid "Icecast List"
 msgstr "Lista Icecast"
 
-#: www/web_types.py:211
+#: www/web_types.py:210
 msgid "Change Icecast List"
 msgstr "Schimbă lista Icecast"
 
-#: www/web_types.py:361
+#: www/web_types.py:360
 msgid "Movies only"
 msgstr "Doar filme"
 
-#: www/web_types.py:362
+#: www/web_types.py:361
 msgid "Go!"
 msgstr "Start!"
 
@@ -922,11 +963,6 @@ msgid ""
 msgstr ""
 "%s\n"
 "nu a fost găsit!"
-
-#: audio/plugins/mplayervis.py:458 audio/plugins/mplayervis.py:467
-#, python-format
-msgid "FXMODE is %s"
-msgstr ""
 
 #: audio/plugins/apodcast.py:96 video/plugins/vpodcast.py:131
 #, fuzzy
@@ -975,7 +1011,7 @@ msgstr "Ascultă posturi radio"
 msgid "Cannot play - recording in progress"
 msgstr "Nu pot reda - înregistrare în desfăşurare"
 
-#: audio/plugins/radio.py:118 tv/plugins/upsoon.py:175
+#: audio/plugins/radio.py:118
 msgid "Radio"
 msgstr "Radio"
 
@@ -1130,21 +1166,17 @@ msgstr "Melodii de pe acelaşi album"
 msgid "Songs From Same Artist"
 msgstr "Melodii ale aceluiaşi artist"
 
-#: audio/plugins/cdbackup.py:186
+#: audio/plugins/cdbackup.py:187
 msgid "Show CD ripping status"
 msgstr "Afişează starea rip-ului"
 
-#: audio/plugins/cdbackup.py:187
+#: audio/plugins/cdbackup.py:188
 msgid "Stop CD ripping"
 msgstr "Opreste rip-ul CD-ului"
 
-#: audio/plugins/cdbackup.py:192
+#: audio/plugins/cdbackup.py:193
 msgid "Rip the CD to the hard drive"
 msgstr "Fă rip la CD pe harddisk"
-
-#: audio/plugins/cdbackup.py:193
-msgid "Get CDs available for ripping"
-msgstr "Obţine CD-urile disponibile pentru ripping"
 
 #: audio/plugins/cdbackup.py:195
 msgid "Item is not an Audio CD"
@@ -1159,74 +1191,74 @@ msgstr ""
 "Ripping în desfăşurare\n"
 "Track-ul %d din %d"
 
-#: audio/plugins/cdbackup.py:224
+#: audio/plugins/cdbackup.py:230
 msgid "Backup CD to hard drive in mp3 format"
 msgstr "Backup CD pe harddisk în format MP3"
 
-#: audio/plugins/cdbackup.py:227
+#: audio/plugins/cdbackup.py:233
 msgid "Backup CD to hard drive in Ogg format"
 msgstr "Backup CD pe harddisk în format Ogg"
 
-#: audio/plugins/cdbackup.py:230
+#: audio/plugins/cdbackup.py:236
 msgid "Backup CD to hard drive in FLAC format"
 msgstr "Backup CD pe harddisk în format FLAC"
 
-#: audio/plugins/cdbackup.py:232
+#: audio/plugins/cdbackup.py:238
 msgid "Backup CD to hard drive in wav format"
 msgstr "Backup CD pe harddisk în format WAV"
 
-#: audio/plugins/cdbackup.py:235
+#: audio/plugins/cdbackup.py:241
 msgid "CD Backup"
 msgstr "Backup CD"
 
-#: audio/plugins/cdbackup.py:248
+#: audio/plugins/cdbackup.py:254
 msgid "Ripping started"
 msgstr "Ripping-ul a început"
 
-#: audio/plugins/cdbackup.py:335
+#: audio/plugins/cdbackup.py:341
 #, python-format
 msgid "Directory %s already exists"
 msgstr "Directorul \"%s\" există deja"
 
-#: audio/plugins/cdbackup.py:338
+#: audio/plugins/cdbackup.py:344
 #, python-format
 msgid "Cannot rip to '%s'! (%s)"
 msgstr "Nu pot face rip pe '%s'! (%s)"
 
-#: audio/plugins/cdbackup.py:354 audio/plugins/cdbackup.py:420
-#: audio/plugins/cdbackup.py:479
+#: audio/plugins/cdbackup.py:360 audio/plugins/cdbackup.py:426
+#: audio/plugins/cdbackup.py:485
 msgid "Ripping aborted"
 msgstr "Ripping anulat"
 
-#: audio/plugins/cdbackup.py:492
+#: audio/plugins/cdbackup.py:498
 msgid "Ripping complete"
 msgstr "Ripping complet"
 
-#: audio/plugins/cdbackup.py:505
+#: audio/plugins/cdbackup.py:511
 msgid "WARNING"
 msgstr "ATENŢIE"
 
-#: audio/plugins/cdbackup.py:505
+#: audio/plugins/cdbackup.py:511
 msgid "No CDDB data available to mmpython"
 msgstr "Datele CDDB nu sunt disponibile lui mmpython"
 
-#: audio/plugins/cdbackup.py:508
+#: audio/plugins/cdbackup.py:514
 msgid "Unknown Artist"
 msgstr "Artist necunoscut"
 
-#: audio/plugins/cdbackup.py:508 audio/plugins/cdbackup.py:509
+#: audio/plugins/cdbackup.py:514 audio/plugins/cdbackup.py:515
 msgid "RENAME"
 msgstr "REDENUMIRE"
 
-#: audio/plugins/cdbackup.py:509 audio/audiodiskitem.py:54
+#: audio/plugins/cdbackup.py:515 audio/audiodiskitem.py:54
 msgid "Unknown CD Album"
 msgstr "Album CD necunoscut"
 
-#: audio/plugins/cdbackup.py:510
+#: audio/plugins/cdbackup.py:516
 msgid "Other"
 msgstr "Altele"
 
-#: audio/plugins/cdbackup.py:513
+#: audio/plugins/cdbackup.py:519
 msgid ""
 "CD info not found!\n"
 "Must manually rename files\n"
@@ -1236,19 +1268,19 @@ msgstr ""
 "Fişierele trebuie redenumite manual\n"
 "după terminarea ripping-ului"
 
-#: audio/plugins/cdbackup.py:578
+#: audio/plugins/cdbackup.py:582
 msgid "Problem trying to call:"
 msgstr "Problemă încercând să chem:"
 
-#: audio/plugins/album_tree.py:184 audio/plugins/album_tree.py:261
+#: audio/plugins/album_tree.py:182 audio/plugins/album_tree.py:272
 msgid "Album Tree"
 msgstr "Tree Album"
 
-#: audio/plugins/album_tree.py:287
+#: audio/plugins/album_tree.py:298
 msgid "No Objects found"
 msgstr "Nu s-au găsit obiecte"
 
-#: audio/plugins/album_tree.py:307
+#: audio/plugins/album_tree.py:322
 msgid "Generating playlist..."
 msgstr "Generez playlist.."
 
@@ -1304,18 +1336,13 @@ msgstr "Sesiune LastFM nevalidă!"
 msgid "Browse disc"
 msgstr "Navighează pe disc"
 
-#: audio/audiodiskitem.py:112 directory.py:723
+#: audio/audiodiskitem.py:112 directory.py:722
 msgid "Random playlist"
 msgstr "Playlist aleatoriu"
 
 #: audio/audiodiskitem.py:120
 msgid "Data files on disc"
 msgstr "Fişiere de date pe disc"
-
-#: helpers/schedulefavorites.py:45
-#, fuzzy
-msgid "recordserver is not running"
-msgstr "serverul de codare nu rulează"
 
 #: video/plugins/mover.py:99
 #, python-format
@@ -1364,15 +1391,15 @@ msgstr "Bookmark-uri"
 msgid "Jump to %s"
 msgstr "Sari la %s"
 
-#: video/plugins/dvdimage.py:78
+#: video/plugins/dvdimage.py:79
 msgid "Play image as DVD"
 msgstr "Redă imaginea ca DVD"
 
-#: video/plugins/dvdimage.py:103
+#: video/plugins/dvdimage.py:104
 msgid "Choose title to play. <1-9>"
 msgstr "Alege titlu de redat. <1-9>"
 
-#: video/plugins/dvdimage.py:127
+#: video/plugins/dvdimage.py:128
 #, python-format
 msgid "Choose disc (%i discs available)."
 msgstr "Alege disc (%i discuri disponibile)."
@@ -1381,18 +1408,18 @@ msgstr "Alege disc (%i discuri disponibile)."
 msgid "Re-encode this program..."
 msgstr "Recodează acest program..."
 
-#: video/plugins/reencode-old.py:88 video/plugins/dvdbackup.py:92
-#: video/plugins/reencode.py:148
+#: video/plugins/reencode-old.py:88 video/plugins/dvdbackup.py:96
+#: video/plugins/reencode.py:159
 msgid "Choose your encoding profile"
 msgstr "Alegeţi profilul de codare"
 
-#: video/plugins/reencode-old.py:99 video/plugins/dvdbackup.py:108
-#: video/plugins/reencode.py:323
+#: video/plugins/reencode-old.py:99 video/plugins/dvdbackup.py:112
+#: video/plugins/reencode.py:363
 msgid "Please wait, analyzing video..."
 msgstr "Vă rugăm aşteptaţi, analizez video-ul..."
 
-#: video/plugins/reencode-old.py:186 video/plugins/dvdbackup.py:177
-#: video/plugins/reencode.py:365
+#: video/plugins/reencode-old.py:186 video/plugins/dvdbackup.py:181
+#: video/plugins/reencode.py:417
 msgid "Encoding started"
 msgstr "Codarea a început"
 
@@ -1429,80 +1456,90 @@ msgstr ""
 "XINE_COMMAND' nu este definit, pluginul video 'xine' deactivat.\n"
 "verificaţi secţiunea xine din freevo_config.py"
 
-#: video/plugins/reencode.py:103
+#: video/plugins/reencode.py:109
 msgid "Transcode this program..."
 msgstr "Transcodeazăa acest program..."
 
-#: video/plugins/reencode.py:138
+#: video/plugins/reencode.py:148
 msgid "Start Encoding"
 msgstr "Începe codarea"
 
-#: video/plugins/reencode.py:139
+#: video/plugins/reencode.py:149
 msgid "Select Encoding Profile"
 msgstr "Selectează profilul de codare"
 
-#: video/plugins/reencode.py:140 video/plugins/reencode.py:169
+#: video/plugins/reencode.py:150 video/plugins/reencode.py:181
 msgid "Modify Container"
 msgstr "Modifică container-ul"
 
-#: video/plugins/reencode.py:141 video/plugins/reencode.py:179
+#: video/plugins/reencode.py:151 video/plugins/reencode.py:191
 msgid "Modify Resolution"
 msgstr "Modifică rezoluţia"
 
-#: video/plugins/reencode.py:142 video/plugins/reencode.py:189
-#: video/plugins/reencode.py:209
+#: video/plugins/reencode.py:152 video/plugins/reencode.py:201
+#: video/plugins/reencode.py:221
 msgid "Modify Video Codec"
 msgstr "Modifică codecul video"
 
-#: video/plugins/reencode.py:143 video/plugins/reencode.py:199
+#: video/plugins/reencode.py:153 video/plugins/reencode.py:211
 msgid "Modify Video Bitrate"
 msgstr "Modifică bitrate-ul video"
 
-#: video/plugins/reencode.py:144
+#: video/plugins/reencode.py:154
 msgid "Modify Audio Codec"
 msgstr "Modifică codecul audio"
 
-#: video/plugins/reencode.py:145 video/plugins/reencode.py:219
+#: video/plugins/reencode.py:155 video/plugins/reencode.py:231
 msgid "Modify Audio Bitrate"
 msgstr "Modifică bitrate-ul audio"
 
-#: video/plugins/reencode.py:146
+#: video/plugins/reencode.py:156
 msgid "Modify Number of passes"
 msgstr "Modifică numărul de pass-uri"
 
-#: video/plugins/reencode.py:147
+#: video/plugins/reencode.py:157
+#, fuzzy
+msgid "Modify Number of Encoder Threads"
+msgstr "Modifică numărul de pass-uri"
+
+#: video/plugins/reencode.py:158
 msgid "Modify Video Filter (not implemented)"
 msgstr "Modifică filtrul video (funcţie neimplementată)"
 
-#: video/plugins/reencode.py:156
+#: video/plugins/reencode.py:167
 msgid "Xvid Low Quality"
 msgstr "Xvid de calitate slabă"
 
-#: video/plugins/reencode.py:157
+#: video/plugins/reencode.py:168
 msgid "Xvid High Quality"
 msgstr "Xvid de calitate înaltă"
 
-#: video/plugins/reencode.py:158
+#: video/plugins/reencode.py:169
 msgid "iPod"
 msgstr ""
 
-#: video/plugins/reencode.py:159
+#: video/plugins/reencode.py:170
+msgid "DVD"
+msgstr ""
+
+#: video/plugins/reencode.py:171
 msgid "Select Profile"
 msgstr "Selectează profil"
 
-#: video/plugins/reencode.py:229
+#: video/plugins/reencode.py:241
 msgid "Modify Number of Passes"
 msgstr "Modifică numărul de pass-uri"
 
-#: video/plugins/reencode.py:239
+#: video/plugins/reencode.py:251
+#, fuzzy
+msgid "Modify Number of Encoding threads"
+msgstr "Modifică numărul de pass-uri"
+
+#: video/plugins/reencode.py:261
 msgid "Modify Video Filter"
 msgstr "Modifică filtru video"
 
-#: video/plugins/reencode.py:275
-msgid "Unknown Profile"
-msgstr "Profil necunoscut"
-
-#: video/plugins/reencode.py:303
+#: video/plugins/reencode.py:343
 msgid "Unknown Property"
 msgstr "Proprietate necunoscută"
 
@@ -1570,35 +1607,35 @@ msgstr "Codec audio"
 msgid "Set VPODCAST_DIR in local_conf.py"
 msgstr "updataţi GAMES_ITEMS în local_conf.py"
 
-#: video/plugins/moviecovers.py:252
+#: video/plugins/moviecovers.py:251
 #, fuzzy
 msgid "Search Moviecovers.com for this file"
 msgstr "Caută pe IMDB după acest fişier"
 
-#: video/plugins/moviecovers.py:259 video/plugins/moviecovers.py:266
+#: video/plugins/moviecovers.py:258 video/plugins/moviecovers.py:265
 #, fuzzy, python-format
 msgid "Search Moviecovers.com for [%s]"
 msgstr "Caută pe IMDB după [%s]"
 
-#: video/plugins/moviecovers.py:275
+#: video/plugins/moviecovers.py:274
 #, fuzzy
 msgid "Searching Moviecovers.com..."
 msgstr "Caut texte melodii.."
 
-#: video/plugins/moviecovers.py:299
+#: video/plugins/moviecovers.py:298
 msgid "Connection error : Probably connection timeout, try again"
 msgstr ""
 
-#: video/plugins/moviecovers.py:312
+#: video/plugins/moviecovers.py:311
 msgid "MOVIECOVERS Query"
 msgstr ""
 
-#: video/plugins/moviecovers.py:316
+#: video/plugins/moviecovers.py:315
 #, fuzzy
 msgid "No information available from Moviecovers.com"
 msgstr "Nu există informaţii disponibile pe IMDB"
 
-#: video/plugins/moviecovers.py:353
+#: video/plugins/moviecovers.py:352
 msgid "Getting data, it can be long as we download a ZIP file"
 msgstr ""
 
@@ -1627,6 +1664,76 @@ msgstr ""
 #: video/plugins/cinemovies_trailers.py:132
 msgid "Recuperation des types de bande annonces disponibles"
 msgstr ""
+
+#: video/plugins/appletrailers.py:97 video/plugins/appletrailers.py:106
+#, fuzzy
+msgid "Scanning Apple for trailers..."
+msgstr "Scanez directorul, vă rugăm aveţi răbdare..."
+
+#: video/plugins/appletrailers.py:174
+#, fuzzy
+msgid "Browse by Title"
+msgstr "Navighează lista"
+
+#: video/plugins/appletrailers.py:175
+#, fuzzy
+msgid "Trailers"
+msgstr "Titlu"
+
+#: video/plugins/appletrailers.py:214
+#, fuzzy
+msgid "Browse by Genre"
+msgstr "Navighează prin episoade"
+
+#: video/plugins/appletrailers.py:223
+msgid "Choose a genre"
+msgstr ""
+
+#: video/plugins/appletrailers.py:228
+#, fuzzy
+msgid "Browse by Category"
+msgstr "Navighează prin director"
+
+#: video/plugins/appletrailers.py:237
+#, fuzzy
+msgid "Choose a category"
+msgstr "Categorie"
+
+#: video/plugins/appletrailers.py:242
+#, fuzzy
+msgid "Browse by Studio"
+msgstr "Navighează pe disc"
+
+#: video/plugins/appletrailers.py:251
+msgid "Choose a studio"
+msgstr ""
+
+#: video/plugins/youtube.py:150
+msgid "Youtube videos"
+msgstr ""
+
+#: video/plugins/youtube.py:179
+msgid "Retrieving video list"
+msgstr ""
+
+#: video/plugins/youtube.py:180 video/plugins/youtube.py:231
+#, fuzzy
+msgid "Videos available"
+msgstr "Rata video"
+
+#: video/plugins/youtube.py:188
+#, fuzzy
+msgid "Downloading video"
+msgstr "Downloadez lista de link-uri..."
+
+#: video/plugins/youtube.py:202
+msgid "bla"
+msgstr ""
+
+#: video/plugins/youtube.py:215 video/plugins/youtube.py:240
+#, fuzzy
+msgid "Loading video list"
+msgstr "Downloadez lista de link-uri..."
 
 #: video/__init__.py:182
 msgid "Directory Autobuild Thumbnails "
@@ -1720,8 +1827,8 @@ msgstr ""
 msgid "X-Video Motion Compensation (xvmc)"
 msgstr ""
 
-#: video/configure.py:308 video/videoitem.py:339 tv/programitem.py:112
-#: playlist.py:284
+#: video/configure.py:308 video/videoitem.py:350 tv/programitem.py:110
+#: playlist.py:301
 msgid "Play"
 msgstr "Redă"
 
@@ -1749,31 +1856,31 @@ msgstr "Redă VCD"
 msgid "VCD title list"
 msgstr "Listă de titluri VCD"
 
-#: video/videoitem.py:341
+#: video/videoitem.py:352
 msgid "Full description"
 msgstr "Descriere completă"
 
-#: video/videoitem.py:344
+#: video/videoitem.py:355
 msgid "Play with maximum cache"
 msgstr "Redă cu cache maxim"
 
-#: video/videoitem.py:349
+#: video/videoitem.py:360
 msgid "Show variants"
 msgstr "Afişează variante"
 
-#: video/videoitem.py:353
+#: video/videoitem.py:364
 msgid "Create Thumbnail"
 msgstr "Crează thumbnail"
 
-#: video/videoitem.py:381
+#: video/videoitem.py:392
 msgid "Please wait...."
 msgstr "Vă rugăm aşteptaţi..."
 
-#: video/videoitem.py:456
+#: video/videoitem.py:468
 msgid "No player for this item found"
 msgstr "Niciun player nu a fost găsit pentru acest element"
 
-#: video/videoitem.py:508 video/videoitem.py:521 video/videoitem.py:535
+#: video/videoitem.py:520 video/videoitem.py:533 video/videoitem.py:547
 #, fuzzy, python-format
 msgid ""
 "No media found for \"%s\".\n"
@@ -1782,38 +1889,35 @@ msgstr ""
 "Nu s-a găsit media pentru \"%s\".\n"
 "%s"
 
-#: video/videoitem.py:618
+#: video/videoitem.py:630
 #, python-format
 msgid "Play Title %d"
 msgstr "Redă titlul %d"
 
-#: video/videoitem.py:703 tv/programitem.py:367
+#: video/videoitem.py:715 tv/programitem.py:356
 msgid "No Information Available"
 msgstr "Nu există informaţii disponibile"
 
-#: video/videoitem.py:719 plugins/lcd.py:221 plugins/freevused.py:517
+#: video/videoitem.py:731 plugins/lcd.py:221 plugins/freevused.py:517
 #: share/skins/main/mediaportal.fxd:692 share/skins/main/dark.fxd:453
 #: share/skins/main/dark.fxd:754 share/skins/main/basic.fxd:391
 #: share/skins/main/blurr.fxd:708 share/skins/main/info.fxd:465
-#: share/skins/main/Tux'n Tosh TV.fxd:630
 msgid "Genre"
 msgstr "Gen"
 
-#: video/videoitem.py:721 plugins/lcd.py:67 plugins/lcd.py:75
+#: video/videoitem.py:733 plugins/lcd.py:67 plugins/lcd.py:75
 #: plugins/vfd.py:91 plugins/vfd.py:99 plugins/freevused.py:531
 #: plugins/freevused.py:547 share/skins/main/geexbox.fxd:708
 #: share/skins/main/mediaportal.fxd:716 share/skins/main/dark.fxd:537
 #: share/skins/main/dark.fxd:774 share/skins/main/basic.fxd:416
 #: share/skins/main/blurr.fxd:724 share/skins/main/info.fxd:219
-#: share/skins/main/Tux'n Tosh TV.fxd:714 TV.fxd:934
 msgid "Length"
 msgstr "Durată"
 
-#: video/videoitem.py:723 plugins/lcd.py:70 plugins/lcd.py:74
+#: video/videoitem.py:735 plugins/lcd.py:70 plugins/lcd.py:74
 #: plugins/vfd.py:94 plugins/vfd.py:98 share/skins/main/geexbox.fxd:691
 #: share/skins/main/mediaportal.fxd:680 share/skins/main/dark.fxd:447
 #: share/skins/main/blurr.fxd:686 share/skins/main/info.fxd:459
-#: share/skins/main/Tux'n Tosh TV.fxd:624
 msgid "Year"
 msgstr "An"
 
@@ -1840,444 +1944,39 @@ msgstr ""
 msgid "%s%%"
 msgstr ""
 
-#: plugins/headlines.py:116 plugins/itv.py:122
+#: plugins/headlines.py:116 plugins/itv.py:133
 msgid "Show Sites Headlines"
 msgstr "Afişează headline-urile site-urilor"
 
-#: plugins/headlines.py:138 plugins/itv.py:152
+#: plugins/headlines.py:138 plugins/itv.py:163
 msgid "Fetching headlines..."
 msgstr "Downloadez headline-urile..."
 
-#: plugins/headlines.py:203 plugins/itv.py:223
+#: plugins/headlines.py:203 plugins/itv.py:238
 msgid "No Headlines found"
 msgstr "Nu s-au găsit headline-uri"
 
-#: plugins/headlines.py:205 plugins/headlines.py:218 plugins/itv.py:225
+#: plugins/headlines.py:205 plugins/headlines.py:218 plugins/itv.py:240
 #: share/skins/main/geexbox.fxd:481 share/skins/main/dark.fxd:22
 #: share/skins/main/crystal.fxd:15 share/skins/main/bluestar.fxd:15
-#: share/skins/main/rain.fxd:15 share/skins/main/Tux'n Tosh TV.fxd:22
+#: share/skins/main/rain.fxd:15
 msgid "Headlines"
 msgstr "Headline-uri"
 
-#: plugins/headlines.py:224 plugins/headlines.py:238 plugins/itv.py:244
-#: plugins/itv.py:258
+#: plugins/headlines.py:224 plugins/headlines.py:238 plugins/itv.py:259
+#: plugins/itv.py:274
 msgid "Headlines Sites"
 msgstr "Site-uri cu headline-uri"
 
-#: plugins/headlines.py:236 plugins/itv.py:256
+#: plugins/headlines.py:236 plugins/itv.py:272
 msgid "No Headlines Sites found"
 msgstr "Nu s-au găsit site-uri cu headline-uri"
 
-#: plugins/weather.py:69 plugins/weather.py:82 plugins/weather.py:89
-#: plugins/weather.py:142
-msgid "Cloudy"
-msgstr "Noros"
-
-#: plugins/weather.py:70 plugins/weather.py:91
-msgid "Mostly Cloudy"
-msgstr "Mai mult noros"
-
-#: plugins/weather.py:71 plugins/weather.py:93 plugins/weather.py:174
-msgid "Partly Cloudy"
-msgstr "În parte noros"
-
-#: plugins/weather.py:72 plugins/weather.py:95 plugins/weather.py:117
-#: plugins/weather.py:118 plugins/weather.py:152 plugins/weather.py:158
-#: plugins/weather.py:167 plugins/weather.py:171
-msgid "Light Rain"
-msgstr "Ploaie moderată"
-
-#: plugins/weather.py:73 plugins/weather.py:76 plugins/weather.py:85
-#: plugins/weather.py:86 plugins/weather.py:96 plugins/weather.py:112
-msgid "Showers"
-msgstr "Rafale"
-
-#: plugins/weather.py:74 plugins/weather.py:110 plugins/weather.py:114
-#: plugins/weather.py:116 plugins/weather.py:121 plugins/weather.py:122
-#: plugins/weather.py:124 plugins/weather.py:126 plugins/weather.py:128
-#: plugins/weather.py:130 plugins/weather.py:137 plugins/weather.py:143
-#: plugins/weather.py:144 plugins/weather.py:145 plugins/weather.py:147
-#: plugins/weather.py:157 plugins/weather.py:159 plugins/weather.py:160
-#: plugins/weather.py:169
-msgid "Snow"
-msgstr "Zăpadă"
-
-#: plugins/weather.py:75 plugins/weather.py:87 plugins/weather.py:92
-#: plugins/weather.py:94 plugins/weather.py:101 plugins/weather.py:108
-#: plugins/weather.py:110 plugins/weather.py:116 plugins/weather.py:119
-#: plugins/weather.py:121 plugins/weather.py:122 plugins/weather.py:125
-#: plugins/weather.py:126 plugins/weather.py:127 plugins/weather.py:128
-#: plugins/weather.py:137 plugins/weather.py:138 plugins/weather.py:143
-#: plugins/weather.py:144 plugins/weather.py:147 plugins/weather.py:149
-#: plugins/weather.py:157 plugins/weather.py:168 plugins/weather.py:170
-msgid "Rain"
-msgstr "Ploaie"
-
-#: plugins/weather.py:76 plugins/weather.py:82 plugins/weather.py:94
-#: plugins/weather.py:107 plugins/weather.py:108 plugins/weather.py:112
-#: plugins/weather.py:115 plugins/weather.py:117 plugins/weather.py:134
-#: plugins/weather.py:136 plugins/weather.py:141 plugins/weather.py:142
-#: plugins/weather.py:143 plugins/weather.py:149 plugins/weather.py:150
-#: plugins/weather.py:151 plugins/weather.py:153 plugins/weather.py:159
-#: plugins/weather.py:163 plugins/weather.py:167 plugins/weather.py:168
-#: plugins/weather.py:171
-msgid "AM"
+#: plugins/itv.py:253
+msgid "Internet TV"
 msgstr ""
 
-#: plugins/weather.py:77
-msgid "Fog"
-msgstr "Ceaţă"
-
-#: plugins/weather.py:78 plugins/weather.py:123
-msgid "Few Showers"
-msgstr "Rafale puţine"
-
-#: plugins/weather.py:79 plugins/weather.py:99
-msgid "Mostly Sunny"
-msgstr "În mare parte însorit"
-
-#: plugins/weather.py:80 plugins/weather.py:106
-msgid "Sunny"
-msgstr "Însorit"
-
-#: plugins/weather.py:81
-msgid "Scattered Flurries"
-msgstr "Rafale împrăştiate"
-
-#: plugins/weather.py:82 plugins/weather.py:85 plugins/weather.py:86
-#: plugins/weather.py:104 plugins/weather.py:118 plugins/weather.py:119
-#: plugins/weather.py:122 plugins/weather.py:125 plugins/weather.py:126
-#: plugins/weather.py:130 plugins/weather.py:137 plugins/weather.py:142
-#: plugins/weather.py:146 plugins/weather.py:152 plugins/weather.py:154
-#: plugins/weather.py:156 plugins/weather.py:158 plugins/weather.py:162
-#: plugins/weather.py:165
-msgid "PM"
-msgstr ""
-
-#: plugins/weather.py:83
-msgid "Isolated T-Storms"
-msgstr "Furtuni-T izolate"
-
-#: plugins/weather.py:84
-msgid "Scattered Thunderstorms"
-msgstr "Furtuni împrăştiate"
-
-#: plugins/weather.py:86 plugins/weather.py:89 plugins/weather.py:90
-#: plugins/weather.py:91 plugins/weather.py:93 plugins/weather.py:95
-#: plugins/weather.py:96 plugins/weather.py:99 plugins/weather.py:101
-#: plugins/weather.py:102 plugins/weather.py:106 plugins/weather.py:109
-#: plugins/weather.py:111 plugins/weather.py:112 plugins/weather.py:114
-#: plugins/weather.py:123 plugins/weather.py:124 plugins/weather.py:126
-#: plugins/weather.py:127 plugins/weather.py:128 plugins/weather.py:131
-#: plugins/weather.py:132 plugins/weather.py:137 plugins/weather.py:139
-#: plugins/weather.py:142 plugins/weather.py:143 plugins/weather.py:144
-#: plugins/weather.py:146 plugins/weather.py:150 plugins/weather.py:151
-#: plugins/weather.py:152 plugins/weather.py:154 plugins/weather.py:155
-#: plugins/weather.py:157 plugins/weather.py:161 plugins/weather.py:164
-#: plugins/weather.py:167 plugins/weather.py:168 plugins/weather.py:173
-#: plugins/weather.py:174 plugins/weather.py:182 plugins/weather.py:925
-#: plugins/oneclick.py:944
-msgid "Wind"
-msgstr "Vânt"
-
-#: plugins/weather.py:87 plugins/weather.py:94 plugins/weather.py:120
-#: plugins/weather.py:125 plugins/weather.py:127 plugins/weather.py:141
-#: plugins/weather.py:146 plugins/weather.py:150 plugins/weather.py:173
-msgid "Snow Showers"
-msgstr "Averse de zăpadă"
-
-#: plugins/weather.py:88 plugins/weather.py:131
-msgid "Few Snow Showers"
-msgstr "Rafale de zăpadă puţine"
-
-#: plugins/weather.py:90 plugins/weather.py:100
-msgid "Flurries"
-msgstr "Rafale"
-
-#: plugins/weather.py:92
-#, fuzzy
-msgid "Thunder"
-msgstr "Ploaie/Tunete"
-
-#: plugins/weather.py:97
-msgid "Heavy Snow"
-msgstr "Zăpadă abundentă"
-
-#: plugins/weather.py:98 plugins/weather.py:163 plugins/weather.py:165
-#: plugins/weather.py:166
-msgid "Drizzle"
-msgstr "Burniţă"
-
-#: plugins/weather.py:102
-#, fuzzy
-msgid "Sct Flurries"
-msgstr "Rafale Sct/Vânt"
-
-#: plugins/weather.py:103
-msgid "Sct Strong Storms"
-msgstr "Furtuni puternice Sct"
-
-#: plugins/weather.py:104 plugins/weather.py:105 plugins/weather.py:107
-msgid "Thunderstorms"
-msgstr "Furtuni cu tunete"
-
-#: plugins/weather.py:109
-#, fuzzy
-msgid "Iso T-Storms"
-msgstr "Furtuni-T izolate"
-
-#: plugins/weather.py:111
-#, fuzzy
-msgid "Sct T-Storms"
-msgstr "Furtuni-T Sct/Vânt"
-
-#: plugins/weather.py:113
-msgid "Sct Snow Showers"
-msgstr "Averse de zăpadă Sct"
-
-#: plugins/weather.py:114 plugins/weather.py:116 plugins/weather.py:121
-#: plugins/weather.py:144 plugins/weather.py:145 plugins/weather.py:147
-#: plugins/weather.py:157 plugins/weather.py:160 plugins/weather.py:169
-#, fuzzy
-msgid "to"
-msgstr "sus"
-
-#: plugins/weather.py:114 plugins/weather.py:115 plugins/weather.py:147
-#: plugins/weather.py:149 plugins/weather.py:158 plugins/weather.py:160
-#: plugins/weather.py:171
-#, fuzzy
-msgid "Ice"
-msgstr "Gheaţă AM"
-
-#: plugins/weather.py:129 plugins/weather.py:132 plugins/weather.py:136
-#: plugins/weather.py:151 plugins/weather.py:154 plugins/weather.py:162
-msgid "Light Snow"
-msgstr "Zăpadă moderată"
-
-#: plugins/weather.py:133 plugins/weather.py:134 plugins/weather.py:145
-#: plugins/weather.py:161 plugins/weather.py:169
-msgid "Wintry Mix"
-msgstr "Mix rece"
-
-#: plugins/weather.py:135 plugins/weather.py:172
-#, fuzzy
-msgid "Hvy Rain"
-msgstr "Ploaie grea"
-
-#: plugins/weather.py:135 plugins/weather.py:138 plugins/weather.py:172
-#, fuzzy
-msgid "Freezing Rain"
-msgstr "Ploaie/Ploaie încgheţată"
-
-#: plugins/weather.py:139
-#, fuzzy
-msgid "T-Storms"
-msgstr "Furtuni-T PM"
-
-#: plugins/weather.py:140
-msgid "Sprinkles"
-msgstr "Picuri"
-
-#: plugins/weather.py:147 plugins/weather.py:995 plugins/oneclick.py:589
-msgid "and"
-msgstr "şi"
-
-#: plugins/weather.py:148 plugins/weather.py:155
-msgid "Heavy Rain"
-msgstr "Ploaie grea"
-
-#: plugins/weather.py:153
-#, fuzzy
-msgid "Light Wintry Mix"
-msgstr "Mix rece moderat AM"
-
-#: plugins/weather.py:156
-#, fuzzy
-msgid "Snow Shower"
-msgstr "Averse de zăpadă"
-
-#: plugins/weather.py:164
-#, fuzzy
-msgid "Strong Storms"
-msgstr "Furtuni puternice Sct"
-
-#: plugins/weather.py:175
-msgid "Light Rain Shower"
-msgstr "Averse moderate de ploaie"
-
-#: plugins/weather.py:176
-msgid "Light Rain with Thunder"
-msgstr "Ploaie moderată cu tunete"
-
-#: plugins/weather.py:177
-msgid "Light Drizzle"
-msgstr "Burniţă moderată"
-
-#: plugins/weather.py:178
-msgid "Mist"
-msgstr "Ceaţă"
-
-#: plugins/weather.py:179
-msgid "Smoke"
-msgstr "Fum"
-
-#: plugins/weather.py:180
-msgid "Haze"
-msgstr "Ceaţă fină"
-
-#: plugins/weather.py:181 plugins/weather.py:182
-msgid "Light Snow Shower"
-msgstr "Averse moderate de zăpadă"
-
-#: plugins/weather.py:183
-msgid "Clear"
-msgstr "Senin"
-
-#: plugins/weather.py:184
-msgid "A Few Clouds"
-msgstr "Câţiva nori"
-
-#: plugins/weather.py:185
-msgid "Fair"
-msgstr "Potrivită"
-
-#: plugins/weather.py:373 plugins/weather.py:376
-#, python-format
-msgid "Last updated: %s"
-msgstr "Ultimul update: %s"
-
-#: plugins/weather.py:386
-msgid "Unlimited"
-msgstr "Nelimitat"
-
-#: plugins/weather.py:399 plugins/oneclick.py:523
-msgid "Show Weather Details"
-msgstr "Afişează detalii vreme"
-
-#: plugins/weather.py:479 plugins/oneclick.py:389
-#, python-format
-msgid "Fetching Weather for %s..."
-msgstr "Copiez starea vremii pentru %s..."
-
-#: plugins/weather.py:493 plugins/oneclick.py:438 plugins/oneclick.py:452
-#, python-format
-msgid "Fetching Radar Map for %s..."
-msgstr "Copiez hartă radar pentru %s..."
-
-#: plugins/weather.py:652 plugins/weather.py:926 plugins/oneclick.py:604
-#: plugins/oneclick.py:605 plugins/oneclick.py:719 plugins/oneclick.py:984
-#: util/misc.py:451 util/misc.py:462 util/misc.py:473
-msgid "at"
-msgstr "la"
-
-#: plugins/weather.py:674
-#, python-format
-msgid "%s (day: %s)"
-msgstr "%s (zi: %s)"
-
-#: plugins/weather.py:674 plugins/weather.py:682
-msgid "Unknown"
-msgstr "Necunoscut"
-
-#: plugins/weather.py:682
-#, python-format
-msgid "%s (type: %s)"
-msgstr "%s (tip: %s)"
-
-#: plugins/weather.py:768 share/skins/main/bluestar.fxd:13
-msgid "Weather"
-msgstr "Vreme"
-
-#: plugins/weather.py:774 plugins/weather.py:809 plugins/mpd.py:117
-#: plugins/oneclick.py:776 plugins/oneclick.py:812
-msgid "Locations"
-msgstr "Locaţii"
-
-#: plugins/weather.py:801 plugins/freeboxtv.py:114 plugins/oneclick.py:804
-msgid "No locations specified"
-msgstr "Nu s-au specificat locaţii"
-
-#: plugins/weather.py:826 plugins/oneclick.py:832
-msgid "Current Conditions"
-msgstr "Condiţii actuale"
-
-#: plugins/weather.py:826 plugins/oneclick.py:832
-msgid "Today's Forecast"
-msgstr "Prognoza de azi"
-
-#: plugins/weather.py:827 plugins/oneclick.py:833
-msgid "Extended Forecast"
-msgstr "Prognoză extinsă"
-
-#: plugins/weather.py:827 plugins/oneclick.py:833
-msgid "Radar Map"
-msgstr "Hartă radar"
-
-#: plugins/weather.py:905 plugins/oneclick.py:940
-msgid "Humidity"
-msgstr "Umiditate"
-
-#: plugins/weather.py:918 plugins/oneclick.py:942
-msgid "Pressure"
-msgstr "Presiune"
-
-#: plugins/weather.py:933 plugins/oneclick.py:946
-msgid "Wind Chill"
-msgstr ""
-
-#: plugins/weather.py:941 plugins/oneclick.py:948
-msgid "Visibility"
-msgstr "Vizibilitate"
-
-#: plugins/weather.py:949 plugins/oneclick.py:950
-msgid "UV Index"
-msgstr "Index UV"
-
-#: plugins/weather.py:992
-#, fuzzy, python-format
-msgid "Today, a high of %s degrees"
-msgstr "Astăzi, o maximă de %s"
-
-#: plugins/weather.py:993
-#, fuzzy, python-format
-msgid "and a low of %s degrees."
-msgstr "şi un minim de %s"
-
-#: plugins/weather.py:994
-msgid "Currently, there is a humidity of"
-msgstr "În prezent umiditatea este de"
-
-#: plugins/weather.py:998
-#, fuzzy
-msgid "the winds are calm"
-msgstr "vântul este"
-
-#: plugins/weather.py:1000
-#, python-format
-msgid "the winds are coming in at %s from the %s"
-msgstr ""
-
-#: plugins/weather.py:1006
-msgid "Visibility will be unlimited today"
-msgstr "Vizibilitatea va fi nelimitată azi"
-
-#: plugins/weather.py:1009
-msgid "There will be a visibility of"
-msgstr "Va exista o vizibilitate de"
-
-#: plugins/weather.py:1041 plugins/oneclick.py:1047
-msgid "LO"
-msgstr ""
-
-#: plugins/weather.py:1049 plugins/oneclick.py:1053
-msgid "HI"
-msgstr ""
-
-#: plugins/weather.py:1063
-msgid "Error encountered while trying to download Radar map"
-msgstr "Eroare în timp ce încercam să copiez harta radarului"
-
-#: plugins/buttonbar.py:123 tv/programitem.py:115
+#: plugins/buttonbar.py:123 tv/programitem.py:113
 msgid "Full Description"
 msgstr "Descriere completă"
 
@@ -2363,7 +2062,6 @@ msgstr "Aveţi nevoie de pylcd pentru a rula pluginul \"lcd\"."
 #: plugins/vfd.py:96 plugins/freevused.py:514 share/skins/main/dark.fxd:521
 #: share/skins/main/dark.fxd:734 share/skins/main/info.fxd:202
 #: share/skins/main/info.fxd:357 share/skins/main/info.fxd:397
-#: share/skins/main/Tux'n Tosh TV.fxd:698 TV.fxd:914
 msgid "Artist"
 msgstr ""
 
@@ -2372,8 +2070,7 @@ msgstr ""
 #: share/skins/main/mediaportal.fxd:674 share/skins/main/dark.fxd:527
 #: share/skins/main/dark.fxd:739 share/skins/main/basic.fxd:374
 #: share/skins/main/blurr.fxd:680 share/skins/main/info.fxd:208
-#: share/skins/main/info.fxd:362 share/skins/main/Tux'n Tosh TV.fxd:704
-#: TV.fxd:919
+#: share/skins/main/info.fxd:362
 msgid "Album"
 msgstr ""
 
@@ -2385,7 +2082,7 @@ msgstr "Track-uri"
 
 #: plugins/lcd.py:76 plugins/vfd.py:100 share/skins/main/dark.fxd:477
 #: share/skins/main/basic.fxd:735 share/skins/main/info.fxd:288
-#: share/skins/main/info.fxd:494 share/skins/main/Tux'n Tosh TV.fxd:654
+#: share/skins/main/info.fxd:494
 msgid "Resolution"
 msgstr "Rezoluţie"
 
@@ -2403,7 +2100,7 @@ msgid "Plot"
 msgstr "Subiect"
 
 #: plugins/lcd.py:82 plugins/vfd.py:106 plugins/freevused.py:539
-#: share/skins/main/dark.fxd:582 share/skins/main/Tux'n Tosh TV.fxd:759
+#: share/skins/main/dark.fxd:582
 msgid "Geometry"
 msgstr "Geometrie"
 
@@ -2427,7 +2124,6 @@ msgstr "Element"
 
 #: plugins/lcd.py:156 share/skins/main/dark.fxd:471
 #: share/skins/main/info.fxd:283 share/skins/main/info.fxd:488
-#: share/skins/main/Tux'n Tosh TV.fxd:648
 msgid "Type"
 msgstr "Tip"
 
@@ -2444,10 +2140,6 @@ msgid ""
 "LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
 msgstr ""
 "Pluginul LCD nu va fi încărcat! Poate nu rulează LCDd (lcdproc daemon)?"
-
-#: plugins/itv.py:238
-msgid "Internet TV"
-msgstr ""
 
 #: plugins/mediamenu.py:137
 msgid "Media"
@@ -2468,7 +2160,7 @@ msgstr "Imagine"
 #: plugins/mediamenu.py:148 share/skins/main/dark.fxd:21
 #: share/skins/main/crystal.fxd:14 share/skins/main/bluestar.fxd:14
 #: share/skins/main/basic.fxd:24 share/skins/main/rain.fxd:14
-#: share/skins/main/info.fxd:17 share/skins/main/Tux'n Tosh TV.fxd:21
+#: share/skins/main/info.fxd:17
 msgid "Games"
 msgstr "Jocuri"
 
@@ -2485,23 +2177,27 @@ msgstr ""
 msgid "Freebox TV :: Les chaines"
 msgstr ""
 
+#: plugins/freeboxtv.py:114 plugins/oneclick.py:804
+msgid "No locations specified"
+msgstr "Nu s-au specificat locaţii"
+
 #: plugins/freeboxtv.py:118
 msgid "Freebox TV :: Les chaines Multiposte"
 msgstr ""
 
 #: plugins/ossmixer.py:132 plugins/ossmixer.py:135 plugins/ossmixer.py:141
-#: plugins/ossmixer.py:144 plugins/ossmixer.py:149 plugins/sixmixer.py:150
-#: plugins/sixmixer.py:321 plugins/mixer.py:131 plugins/mixer.py:134
-#: plugins/mixer.py:140 plugins/mixer.py:143 plugins/mixer.py:148
-#: plugins/alsamixer.py:164 plugins/alsamixer.py:167 plugins/alsamixer.py:175
-#: plugins/alsamixer.py:178 plugins/alsamixer.py:185 plugins/alsamixer2.py:192
+#: plugins/ossmixer.py:144 plugins/ossmixer.py:149 plugins/mixer.py:131
+#: plugins/mixer.py:134 plugins/mixer.py:140 plugins/mixer.py:143
+#: plugins/mixer.py:148 plugins/alsamixer.py:164 plugins/alsamixer.py:167
+#: plugins/alsamixer.py:175 plugins/alsamixer.py:178 plugins/alsamixer.py:185
+#: plugins/sixmixer.py:150 plugins/sixmixer.py:321 plugins/alsamixer2.py:192
 #: plugins/alsamixer2.py:196 plugins/alsamixer2.py:201
 #, python-format
 msgid "Volume: %s%%"
 msgstr "Volum: %s%%"
 
-#: plugins/ossmixer.py:152 plugins/sixmixer.py:153 plugins/mixer.py:151
-#: plugins/alsamixer.py:188 plugins/alsamixer2.py:204
+#: plugins/ossmixer.py:152 plugins/mixer.py:151 plugins/alsamixer.py:188
+#: plugins/sixmixer.py:153 plugins/alsamixer2.py:204
 msgid "Mute"
 msgstr "Mut"
 
@@ -2682,7 +2378,6 @@ msgstr ""
 
 #: plugins/command.py:289 plugins/command.py:327 share/skins/main/dark.fxd:23
 #: share/skins/main/crystal.fxd:16 share/skins/main/rain.fxd:16
-#: share/skins/main/Tux'n Tosh TV.fxd:23
 msgid "Commands"
 msgstr "Comenzi"
 
@@ -2697,20 +2392,132 @@ msgstr ""
 msgid "Sending data %r attempt=%d"
 msgstr "Trimit datele %r încercare=%d"
 
-#: plugins/sixmixer.py:120 plugins/sixmixer.py:125
-#, fuzzy, python-format
-msgid "Surround: %s%%"
-msgstr "Volum: %s%%"
-
-#: plugins/sixmixer.py:130 plugins/sixmixer.py:135
+#: plugins/oneclick.py:389
 #, python-format
-msgid "Center: %s%%"
+msgid "Fetching Weather for %s..."
+msgstr "Copiez starea vremii pentru %s..."
+
+#: plugins/oneclick.py:438 plugins/oneclick.py:452
+#, python-format
+msgid "Fetching Radar Map for %s..."
+msgstr "Copiez hartă radar pentru %s..."
+
+#: plugins/oneclick.py:523
+msgid "Show Weather Details"
+msgstr "Afişează detalii vreme"
+
+#: plugins/oneclick.py:589
+msgid "and"
+msgstr "şi"
+
+#: plugins/oneclick.py:604
+msgid "Variable"
+msgstr "Variabil"
+
+#: plugins/oneclick.py:604 plugins/oneclick.py:605 plugins/oneclick.py:719
+#: plugins/oneclick.py:984 util/misc.py:451 util/misc.py:462 util/misc.py:473
+msgid "at"
+msgstr "la"
+
+#: plugins/oneclick.py:776 plugins/oneclick.py:812 plugins/mpd.py:117
+msgid "Locations"
+msgstr "Locaţii"
+
+#: plugins/oneclick.py:832
+msgid "Current Conditions"
+msgstr "Condiţii actuale"
+
+#: plugins/oneclick.py:832
+msgid "Today's Forecast"
+msgstr "Prognoza de azi"
+
+#: plugins/oneclick.py:833
+msgid "Extended Forecast"
+msgstr "Prognoză extinsă"
+
+#: plugins/oneclick.py:833
+msgid "Radar Map"
+msgstr "Hartă radar"
+
+#: plugins/oneclick.py:864
+msgid "for"
+msgstr "pentru"
+
+#: plugins/oneclick.py:940
+msgid "Humidity"
+msgstr "Umiditate"
+
+#: plugins/oneclick.py:942
+msgid "Pressure"
+msgstr "Presiune"
+
+#: plugins/oneclick.py:944
+msgid "Wind"
+msgstr "Vânt"
+
+#: plugins/oneclick.py:946
+msgid "Wind Chill"
 msgstr ""
 
-#: plugins/sixmixer.py:140 plugins/sixmixer.py:145
-#, python-format
-msgid "LFE: %s%%"
+#: plugins/oneclick.py:948
+msgid "Visibility"
+msgstr "Vizibilitate"
+
+#: plugins/oneclick.py:950
+msgid "UV Index"
+msgstr "Index UV"
+
+#: plugins/oneclick.py:983
+msgid "As of:"
+msgstr "Începând cu:"
+
+#: plugins/oneclick.py:986
+msgid "Temperature:"
+msgstr "Temperatură:"
+
+#: plugins/oneclick.py:987
+msgid "Dew Point:"
+msgstr "Rouă:"
+
+#: plugins/oneclick.py:988
+msgid "Humidity:"
+msgstr "Umiditate:"
+
+#: plugins/oneclick.py:989
+msgid "Visibility:"
+msgstr "Vizibilitate:"
+
+#: plugins/oneclick.py:990
+msgid "Pressure:"
+msgstr "Presiune:"
+
+#: plugins/oneclick.py:991
+msgid "Winds:"
+msgstr "Vânturi:"
+
+#: plugins/oneclick.py:992
+msgid "Tonight:"
+msgstr "În această noapte:"
+
+#: plugins/oneclick.py:993
+msgid "Sunset:"
+msgstr "Apus:"
+
+#: plugins/oneclick.py:994
+msgid "Moon Phase:"
+msgstr "Faza Lunii:"
+
+#: plugins/oneclick.py:1046
+msgid "LO"
 msgstr ""
+
+#: plugins/oneclick.py:1052
+msgid "HI"
+msgstr ""
+
+#: plugins/oneclick.py:1069
+msgid "Error encountered while trying to download weather map"
+msgstr "A avut loc o eroare la download-ul hărţii vremii"
 
 #: plugins/ejectromdrives.py:69
 msgid "Close drive"
@@ -2738,7 +2545,7 @@ msgid "BT event %s"
 msgstr "BT eveniment %s"
 
 #: plugins/freevused.py:508 tv/plugins/recordings_manager.py:74
-#: tv/edit_favorite.py:106 share/skins/main/mediaportal.fxd:686
+#: tv/edit_favorite.py:105 share/skins/main/mediaportal.fxd:686
 #: share/skins/main/dark.fxd:749 share/skins/main/basic.fxd:385
 #: share/skins/main/basic.fxd:615 share/skins/main/blurr.fxd:702
 #: share/skins/main/info.fxd:270
@@ -2752,7 +2559,6 @@ msgstr "Nume"
 #: share/skins/main/blurr.fxd:202 share/skins/main/blurr.fxd:309
 #: share/skins/main/blurr.fxd:692 share/skins/main/Panorama.fxd:205
 #: share/skins/main/Panorama.fxd:330 share/skins/main/Panorama.fxd:755
-#: share/skins/main/Tux'n Tosh TV.fxd:929
 msgid "Track"
 msgstr ""
 
@@ -2818,7 +2624,7 @@ msgstr ""
 "Doriţi să ştergeţi\n"
 " '%s'?"
 
-#: plugins/file_ops.py:80 tv/plugins/recordings_manager.py:660
+#: plugins/file_ops.py:80 tv/plugins/recordings_manager.py:665
 msgid "Deleting..."
 msgstr "Şterg..."
 
@@ -2911,7 +2717,7 @@ msgstr "(wakeup dezactivat)"
 msgid "SHUTDOWN FREEVO?"
 msgstr "ÎNCHID FREEVO?"
 
-#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:310
+#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:308
 msgid "shutting down..."
 msgstr "închid..."
 
@@ -2938,11 +2744,11 @@ msgstr "Oprire Freevo"
 msgid "Do you really want to shut down Freevo?"
 msgstr "Doriţi cu adevărat să opriţi Freevo?"
 
-#: plugins/shutdown.py:162
+#: plugins/shutdown.py:163
 msgid "Do you really want to shut down the system?"
 msgstr "Doriţi cu adevărat să opriţi sistemul?"
 
-#: plugins/shutdown.py:170
+#: plugins/shutdown.py:173
 msgid "Do you really want to restart the system?"
 msgstr "Doriţi cu adevărat să restartaţi sistemul?"
 
@@ -2974,59 +2780,22 @@ msgstr "Album - "
 msgid "Status - "
 msgstr "Stare - "
 
-#: plugins/oneclick.py:604
-msgid "Variable"
-msgstr "Variabil"
+#: plugins/sixmixer.py:120 plugins/sixmixer.py:125
+#, fuzzy, python-format
+msgid "Surround: %s%%"
+msgstr "Volum: %s%%"
 
-#: plugins/oneclick.py:864
-msgid "for"
-msgstr "pentru"
+#: plugins/sixmixer.py:130 plugins/sixmixer.py:135
+#, python-format
+msgid "Center: %s%%"
+msgstr ""
 
-#: plugins/oneclick.py:983
-msgid "As of:"
-msgstr "Începând cu:"
+#: plugins/sixmixer.py:140 plugins/sixmixer.py:145
+#, python-format
+msgid "LFE: %s%%"
+msgstr ""
 
-#: plugins/oneclick.py:986
-msgid "Temperature:"
-msgstr "Temperatură:"
-
-#: plugins/oneclick.py:987
-msgid "Dew Point:"
-msgstr "Rouă:"
-
-#: plugins/oneclick.py:988
-msgid "Humidity:"
-msgstr "Umiditate:"
-
-#: plugins/oneclick.py:989
-msgid "Visibility:"
-msgstr "Vizibilitate:"
-
-#: plugins/oneclick.py:990
-msgid "Pressure:"
-msgstr "Presiune:"
-
-#: plugins/oneclick.py:991
-msgid "Winds:"
-msgstr "Vânturi:"
-
-#: plugins/oneclick.py:992
-msgid "Tonight:"
-msgstr "În această noapte:"
-
-#: plugins/oneclick.py:993
-msgid "Sunset:"
-msgstr "Apus:"
-
-#: plugins/oneclick.py:994
-msgid "Moon Phase:"
-msgstr "Faza Lunii:"
-
-#: plugins/oneclick.py:1070
-msgid "Error encountered while trying to download weather map"
-msgstr "A avut loc o eroare la download-ul hărţii vremii"
-
-#: gui/ConfirmBox.py:75 tv/edit_favorite.py:190
+#: gui/ConfirmBox.py:75 tv/edit_favorite.py:189
 msgid "CANCEL"
 msgstr "ANULARE"
 
@@ -3088,13 +2857,13 @@ msgstr "Configurează director"
 msgid "Recordings Directory does not exist"
 msgstr "Directorul înregistrărilor nu există"
 
-#: tv/plugins/recordings_manager.py:278 directory.py:822 directory.py:912
-#: directory.py:946
+#: tv/plugins/recordings_manager.py:278 directory.py:820 directory.py:910
+#: directory.py:944
 msgid "on"
 msgstr "activat"
 
-#: tv/plugins/recordings_manager.py:280 directory.py:824 directory.py:827
-#: directory.py:916 directory.py:944
+#: tv/plugins/recordings_manager.py:280 directory.py:822 directory.py:825
+#: directory.py:914 directory.py:942
 msgid "off"
 msgstr "dezactivat"
 
@@ -3118,47 +2887,47 @@ msgstr "Inversează sortarea serialelor"
 msgid "Status order"
 msgstr "Stare comandă"
 
-#: tv/plugins/recordings_manager.py:300 directory.py:953
+#: tv/plugins/recordings_manager.py:300 directory.py:951
 msgid "Configure"
 msgstr "Configurează"
 
-#: tv/plugins/recordings_manager.py:421
+#: tv/plugins/recordings_manager.py:425
 msgid "Unmark to Keep"
 msgstr "Demarchează pentru păstrare"
 
-#: tv/plugins/recordings_manager.py:421
+#: tv/plugins/recordings_manager.py:425
 msgid "Mark to Keep"
 msgstr "Marchează pentru păstrare"
 
-#: tv/plugins/recordings_manager.py:422
+#: tv/plugins/recordings_manager.py:426
 msgid "Unmark as Watched"
 msgstr "Marcheaza ca nevizualizat"
 
-#: tv/plugins/recordings_manager.py:422
+#: tv/plugins/recordings_manager.py:426
 msgid "Mark as Watched"
 msgstr "Marchează ca vizualizat"
 
-#: tv/plugins/recordings_manager.py:490
+#: tv/plugins/recordings_manager.py:494
 msgid "(Unnamed)"
 msgstr "(Nedenumit)"
 
-#: tv/plugins/recordings_manager.py:590
+#: tv/plugins/recordings_manager.py:595
 msgid "Browse episodes"
 msgstr "Navighează prin episoade"
 
-#: tv/plugins/recordings_manager.py:591
+#: tv/plugins/recordings_manager.py:596
 msgid "Delete all episodes"
 msgstr "Şterge toate episoadele"
 
-#: tv/plugins/recordings_manager.py:592
+#: tv/plugins/recordings_manager.py:597
 msgid "Keep all episodes"
 msgstr "Păstrează toate episoadele"
 
-#: tv/plugins/recordings_manager.py:593
+#: tv/plugins/recordings_manager.py:598
 msgid "Play all episodes"
 msgstr "Redă toate episoadele"
 
-#: tv/plugins/recordings_manager.py:658
+#: tv/plugins/recordings_manager.py:663
 #, python-format
 msgid ""
 "Do you wish to delete the series\n"
@@ -3167,7 +2936,7 @@ msgstr ""
 "Doriţi să ştergeşi serialul\n"
 " '%s'?"
 
-#: tv/plugins/recordings_manager.py:743
+#: tv/plugins/recordings_manager.py:750
 msgid "episodes"
 msgstr "episoade"
 
@@ -3175,11 +2944,11 @@ msgstr "episoade"
 msgid "Recorded Shows"
 msgstr "Show-uri înregistrate"
 
-#: tv/plugins/view_favorites.py:58
+#: tv/plugins/view_favorites.py:55
 msgid "No favorites."
 msgstr "Nici o preferinţă"
 
-#: tv/plugins/view_favorites.py:104
+#: tv/plugins/view_favorites.py:102
 msgid "Get favorites failed"
 msgstr "Downloadul preferinţelor a eşuat"
 
@@ -3199,11 +2968,11 @@ msgstr "Vizualizează Input VCR"
 msgid "Display record item"
 msgstr "Afişează element de înregistrat"
 
-#: tv/plugins/manual_record.py:121 tv/favoriteitem.py:109
+#: tv/plugins/manual_record.py:121 tv/favoriteitem.py:106
 msgid "Modify name"
 msgstr "Modifică nume"
 
-#: tv/plugins/manual_record.py:122 tv/favoriteitem.py:110
+#: tv/plugins/manual_record.py:122 tv/favoriteitem.py:108
 msgid "Modify channel"
 msgstr "Modifică canal"
 
@@ -3235,32 +3004,32 @@ msgstr "Modifică stop timp"
 msgid "Record Item Menu"
 msgstr "Meniu înregistrare element"
 
-#: tv/plugins/manual_record.py:140 tv/favoriteitem.py:162
+#: tv/plugins/manual_record.py:140 tv/favoriteitem.py:169
 msgid "Alter Name"
 msgstr "Modifică Numele"
 
-#: tv/plugins/manual_record.py:151 tv/favoriteitem.py:185
+#: tv/plugins/manual_record.py:151 tv/favoriteitem.py:193
 msgid "Modify Channel"
 msgstr "Modifică Canal"
 
 #: tv/plugins/manual_record.py:169 tv/plugins/manual_record.py:192
-#: tv/plugins/manual_record.py:231 tv/plugins/manual_record.py:254
-#: tv/favoriteitem.py:204
+#: tv/plugins/manual_record.py:232 tv/plugins/manual_record.py:255
+#: tv/favoriteitem.py:215
 msgid "Modify Day"
 msgstr "Modifică Zi"
 
-#: tv/plugins/manual_record.py:214 tv/plugins/manual_record.py:276
-#: tv/favoriteitem.py:225
+#: tv/plugins/manual_record.py:214 tv/plugins/manual_record.py:277
+#: tv/favoriteitem.py:239
 msgid "Modify Time"
 msgstr "Modifică Timp"
 
-#: tv/plugins/manual_record.py:336 tv/plugins/manual_record.py:366
-#: tv/plugins/manual_record.py:370 tv/plugins/manual_record.py:375
-#: tv/plugins/manual_record.py:379
+#: tv/plugins/manual_record.py:337 tv/plugins/manual_record.py:367
+#: tv/plugins/manual_record.py:371 tv/plugins/manual_record.py:376
+#: tv/plugins/manual_record.py:380
 msgid "Save Failed, recording was lost"
 msgstr "Salvarea a eşuat, înregistrarea a fost pierdută"
 
-#: tv/plugins/manual_record.py:378
+#: tv/plugins/manual_record.py:379
 msgid ""
 "Sorry, the stop time does not give enough time for scheduler to pickup the "
 "change.  Please set it to record for a few minutes longer."
@@ -3272,11 +3041,11 @@ msgstr ""
 msgid "Search Programs"
 msgstr "Caută programe"
 
-#: tv/plugins/search_programs.py:88 tv/programitem.py:308
+#: tv/plugins/search_programs.py:88 tv/programitem.py:298
 msgid "Searching, please wait..."
 msgstr "Caut, aşteptaţi..."
 
-#: tv/plugins/search_programs.py:103 tv/programitem.py:325
+#: tv/plugins/search_programs.py:103 tv/programitem.py:315
 #, python-format
 msgid "No matches found for %s"
 msgstr "Nu s-au găsit rezultate pentru %s"
@@ -3308,28 +3077,31 @@ msgstr "activare repetare playlist"
 msgid "This plugin only supports the ivtv video group!"
 msgstr "Acest plugin suportă doar grupul video ivtv în modul tv!"
 
-#: tv/plugins/upsoon.py:150 tv/plugins/upsoon.py:171
+#: tv/plugins/upsoon.py:224 tv/plugins/upsoon.py:242
 msgid "A recording will start in a few minutes"
 msgstr "O înregistrare va începe în câteva minute"
 
-#: tv/plugins/upsoon.py:154 share/skins/main/basic.fxd:20
-msgid "TV"
-msgstr "TV"
-
-#: tv/plugins/upsoon.py:239
-#, fuzzy, python-format
-msgid "%s stopped, a recording is about to start!"
+#: tv/plugins/upsoon.py:272
+msgid "TV stopped, a recording is about to start!"
 msgstr "TV-ul a fost oprit, o înregistrare este pe cale să înceapă!"
 
-#: tv/favoriteitem.py:89 tv/favoriteitem.py:95 tv/programitem.py:140
+#: tv/tvguide.py:66
+msgid "Preparing the program guide"
+msgstr "Pregătesc ghidul de programe"
+
+#: tv/tvguide.py:71
+msgid "TV Guide is corrupt!"
+msgstr "Ghidul TV este corupt!"
+
+#: tv/favoriteitem.py:87 tv/favoriteitem.py:92 tv/programitem.py:138
 msgid "Edit favorite"
 msgstr "Editează preferinţă"
 
-#: tv/favoriteitem.py:90 tv/favoriteitem.py:141
+#: tv/favoriteitem.py:88 tv/favoriteitem.py:146
 msgid "Remove favorite"
 msgstr "Şterge preferinţă"
 
-#: tv/favoriteitem.py:111
+#: tv/favoriteitem.py:110
 msgid "Modify day of week"
 msgstr "Modifică ziua săptămânii"
 
@@ -3337,56 +3109,56 @@ msgstr "Modifică ziua săptămânii"
 msgid "Modify time of day"
 msgstr "Modifică ora"
 
-#: tv/favoriteitem.py:116 tv/favoriteitem.py:277
+#: tv/favoriteitem.py:117 tv/favoriteitem.py:291
 msgid "Prevent Recording of Duplicates"
 msgstr "Prevenirea Înregistrării Duplicatelor"
 
-#: tv/favoriteitem.py:119
+#: tv/favoriteitem.py:120
 msgid "Allow Recording of Duplicates"
 msgstr "Permite Înregistrarea Duplicatelor"
 
-#: tv/favoriteitem.py:125 tv/favoriteitem.py:300
+#: tv/favoriteitem.py:126 tv/favoriteitem.py:315
 msgid "Record All Episodes"
 msgstr "Înregistrează toate episoadele"
 
-#: tv/favoriteitem.py:127 tv/favoriteitem.py:305
+#: tv/favoriteitem.py:129 tv/favoriteitem.py:320
 msgid "Record Only New Episodes"
 msgstr "Înregistrează doare episoadele noi"
 
-#: tv/favoriteitem.py:133
+#: tv/favoriteitem.py:136
 msgid "Modify priority"
 msgstr "Modifică prioritate"
 
-#: tv/favoriteitem.py:137
+#: tv/favoriteitem.py:141
 msgid "Save changes"
 msgstr "Salvează modificările"
 
-#: tv/favoriteitem.py:144
+#: tv/favoriteitem.py:150
 msgid "Favorite Menu"
 msgstr "Meniu Preferinţe"
 
-#: tv/favoriteitem.py:283
+#: tv/favoriteitem.py:297
 msgid "Allow Recordings of Duplicates"
 msgstr "Permite Înregistrările Duplicatelor"
 
-#: tv/favoriteitem.py:324
+#: tv/favoriteitem.py:338
 msgid "Saving the changes to this favorite."
 msgstr "Salvez modificările pentru această preferinţă."
 
-#: tv/favoriteitem.py:325
+#: tv/favoriteitem.py:339
 msgid "This may take some time."
 msgstr "Asta ar putea dura o vreme."
 
-#: tv/favoriteitem.py:352
+#: tv/favoriteitem.py:366
 msgid "Save failed, favorite was lost."
 msgstr "Salvarea a eşuat, preferinţa a fost pierdută."
 
-#: tv/favoriteitem.py:369
+#: tv/favoriteitem.py:382
 #, python-format
 msgid "\"%s\" has been removed from favorites"
 msgstr "\"%s\" a fost şters din preferinţe"
 
-#: tv/favoriteitem.py:373 tv/programitem.py:260
+#: tv/favoriteitem.py:386 tv/programitem.py:253
 msgid "Remove failed"
 msgstr "Ştergerea a eşuat"
 
@@ -3399,37 +3171,29 @@ msgstr "Nu am putut încărca Ghidul TV, am primit o excepţie!"
 msgid "REPLACE WITH TUNERID FOR %s"
 msgstr "ÎNLOCUIŢI CU TUNERID PENTRU %s"
 
-#: tv/tvguide.py:66
-msgid "Preparing the program guide"
-msgstr "Pregătesc ghidul de programe"
-
-#: tv/tvguide.py:71
-msgid "TV Guide is corrupt!"
-msgstr "Ghidul TV este corupt!"
-
-#: tv/record_client.py:165 tv/record_client.py:175 tv/record_client.py:187
-#: tv/record_client.py:204 tv/record_client.py:218 tv/record_client.py:228
-#: tv/record_client.py:248 tv/record_client.py:259 tv/record_client.py:270
-#: tv/record_client.py:281 tv/record_client.py:297 tv/record_client.py:307
-#: tv/record_client.py:317 tv/record_client.py:327 tv/record_client.py:337
-#: tv/record_client.py:347 tv/record_client.py:357 tv/record_client.py:367
-#: tv/record_client.py:377 tv/record_client.py:387 tv/record_client.py:397
+#: tv/record_client.py:60 tv/record_client.py:69 tv/record_client.py:80
+#: tv/record_client.py:96 tv/record_client.py:108 tv/record_client.py:117
+#: tv/record_client.py:136 tv/record_client.py:145 tv/record_client.py:156
+#: tv/record_client.py:165 tv/record_client.py:178 tv/record_client.py:187
+#: tv/record_client.py:196 tv/record_client.py:205 tv/record_client.py:214
+#: tv/record_client.py:223 tv/record_client.py:232 tv/record_client.py:241
+#: tv/record_client.py:250 tv/record_client.py:259 tv/record_client.py:268
 msgid "connection error"
 msgstr "eroare de conexiune"
 
-#: tv/record_client.py:195 tv/record_client.py:213
+#: tv/record_client.py:87 tv/record_client.py:103
 msgid "no program"
 msgstr "niciun program"
 
-#: tv/record_client.py:198
+#: tv/record_client.py:90
 msgid "cannot record it if it is over"
 msgstr "nu îl pot înregistra dacă este terminat"
 
-#: tv/record_client.py:237 tv/record_client.py:243
+#: tv/record_client.py:125 tv/record_client.py:131
 msgid "program not scheduled"
 msgstr "programul nu este programat"
 
-#: tv/record_client.py:241
+#: tv/record_client.py:129
 msgid "program is scheduled"
 msgstr "programul este programat"
 
@@ -3450,109 +3214,109 @@ msgstr "Lista de canale TV este nevalidă!\n"
 msgid "Please check the config file."
 msgstr "Verificaţi fişierul de configurare."
 
-#: tv/edit_favorite.py:137
+#: tv/edit_favorite.py:136
 msgid "Day of Week"
 msgstr "Ziua din săptămână"
 
-#: tv/edit_favorite.py:158
+#: tv/edit_favorite.py:157
 msgid "Time of Day"
 msgstr "Ora din zi"
 
-#: tv/edit_favorite.py:212
+#: tv/edit_favorite.py:209
 msgid "Remove Failed"
 msgstr "Ştergerea a eşuat"
 
-#: tv/edit_favorite.py:326
+#: tv/edit_favorite.py:321
 #, python-format
 msgid "Favorite %s has been saved"
 msgstr "%s preferat a fost salvat"
 
-#: tv/edit_favorite.py:328
+#: tv/edit_favorite.py:323
 #, python-format
 msgid "Failed: %s"
 msgstr "Eşec: %s"
 
-#: tv/edit_favorite.py:348
+#: tv/edit_favorite.py:343
 #, python-format
 msgid "Do you want to remove %s?"
 msgstr "Doriţi să ştergeţi %s?"
 
-#: tv/programitem.py:129
+#: tv/programitem.py:127
 msgid "Remove from schedule"
 msgstr "Şters din programare"
 
-#: tv/programitem.py:131
+#: tv/programitem.py:129
 msgid "Schedule for recording"
 msgstr "Programat pentru înregistrare"
 
-#: tv/programitem.py:142
+#: tv/programitem.py:140
 msgid "Add to favorites"
 msgstr "Adaugă la preferinţe"
 
-#: tv/programitem.py:146
+#: tv/programitem.py:144
 msgid "Search for more of this program"
 msgstr "Caută mai multe despre acest program"
 
-#: tv/programitem.py:168
+#: tv/programitem.py:165
 msgid "Sorry, you cannot watch this program now. "
 msgstr "Scuze, nu puteţi să să vă uitaţi la acest program acum. "
 
-#: tv/programitem.py:169
+#: tv/programitem.py:166
 msgid "It starts in the future."
 msgstr "Începe în viitor."
 
-#: tv/programitem.py:175
+#: tv/programitem.py:172
 msgid "Sorry, you cannot watch this progam now. "
 msgstr "Scuze, nu puteţi să să vă uitaţi la acest program acum. "
 
-#: tv/programitem.py:176
+#: tv/programitem.py:173
 msgid "This program is already over."
 msgstr "Acest program este deja gata."
 
-#: tv/programitem.py:190
+#: tv/programitem.py:187
 msgid "Sorry, you cannot watch TV while recording. "
 msgstr "Scuze, nu puteţi să vă uitaţi la TV în timp ce înregistraţi. "
 
-#: tv/programitem.py:191
+#: tv/programitem.py:188
 msgid "If this is not true then remove "
 msgstr "Dacă nu este adevărat atunci înlăturaţi "
 
-#: tv/programitem.py:235
+#: tv/programitem.py:229
 #, python-format
 msgid "\"%s\" has been scheduled for recording"
 msgstr "\"%s\" a fost programat pentru înregistrare"
 
-#: tv/programitem.py:239
+#: tv/programitem.py:233
 msgid "Scheduling failed"
 msgstr "Programarea a eşuat"
 
-#: tv/programitem.py:256
+#: tv/programitem.py:249
 #, python-format
 msgid "\"%s\" has been removed from schedule"
 msgstr "\"%s\" a fost şters din program"
 
-#: tv/programitem.py:296
+#: tv/programitem.py:287
 msgid "getFavorites failed"
 msgstr "getFavorites a eşuat"
 
-#: tv/programitem.py:330
+#: tv/programitem.py:320
 msgid "findMatches failed"
 msgstr "findMatches a eşuat"
 
-#: tv/programitem.py:351
+#: tv/programitem.py:341
 msgid "Program Menu"
 msgstr "Meniu programe"
 
-#: tv/programitem.py:387
+#: tv/programitem.py:376
 msgid "Category : "
 msgstr "Categorie : "
 
-#: tv/programitem.py:392
+#: tv/programitem.py:381
 msgid "Advisory : "
 msgstr "Avertizare: "
 
-#: tv/programitem.py:397 share/skins/main/dark.fxd:459
-#: share/skins/main/info.fxd:471 share/skins/main/Tux'n Tosh TV.fxd:636
+#: tv/programitem.py:386 share/skins/main/dark.fxd:459
+#: share/skins/main/info.fxd:471
 msgid "Rating"
 msgstr "Scor"
 
@@ -3620,40 +3384,40 @@ msgstr "Ecran lat (Widescreen)"
 msgid "Reloading cache files, be patient..."
 msgstr "Reîncarc fişierele cache, aveţi răbdare..."
 
-#: playlist.py:129 playlist.py:169
+#: playlist.py:137 playlist.py:185
 #, python-format
 msgid "Cannot open file \"%s\""
 msgstr "Nu pot deschide fişierul \"%s\""
 
-#: playlist.py:282
+#: playlist.py:299
 msgid "Browse Playlist"
 msgstr "Navighează playlist"
 
-#: playlist.py:292 directory.py:459
+#: playlist.py:309 directory.py:459
 msgid "Random play all items"
 msgstr "Redă toate elementele în mod aleator"
 
-#: playlist.py:339
+#: playlist.py:356
 msgid "empty playlist"
 msgstr "playlist gol"
 
-#: playlist.py:437
+#: playlist.py:454
 msgid "playlist repeat on"
 msgstr "activare repetare playlist"
 
-#: playlist.py:439
+#: playlist.py:456
 msgid "playlist repeat off"
 msgstr "dezactivare repetare playlist"
 
-#: playlist.py:453
+#: playlist.py:470
 msgid "no next item in playlist"
 msgstr "niciun element următor în playlist"
 
-#: playlist.py:480
+#: playlist.py:497
 msgid "no previous item in playlist"
 msgstr "niciun element anterior în playlist"
 
-#: menu.py:705
+#: menu.py:729
 msgid "No action defined for this choice!"
 msgstr "Nicio acţiune definită pentru această alegere!"
 
@@ -3789,27 +3553,27 @@ msgstr "Introduceţi parola"
 msgid "Password incorrect"
 msgstr "Parolă incorectă"
 
-#: directory.py:591
+#: directory.py:590
 msgid "Directory does not exist"
 msgstr "Directorul nu există"
 
-#: directory.py:621
+#: directory.py:620
 msgid "Scanning disc, be patient..."
 msgstr "Scanez discul, vă rugăm aveţi răbdare..."
 
-#: directory.py:623
+#: directory.py:622
 msgid "Scanning directory, be patient..."
 msgstr "Scanez directorul, vă rugăm aveţi răbdare..."
 
-#: directory.py:829
+#: directory.py:827
 msgid "auto"
 msgstr ""
 
-#: directory.py:948
+#: directory.py:946
 msgid "Show all kinds of items"
 msgstr "Afişează toate tipurile de elemente"
 
-#: directory.py:950
+#: directory.py:948
 msgid "Show video, audio and image items in this directory"
 msgstr "Afişează elementele video, audio şi de imagine din acest director"
 
@@ -3915,15 +3679,15 @@ msgstr "Da"
 msgid "Settings:"
 msgstr "Setări:"
 
-#: main.py:171
+#: main.py:170
 msgid "Freevo Main Menu"
 msgstr "Meniu Principal Freevo"
 
-#: main.py:187
+#: main.py:186
 msgid "Skin Selector"
 msgstr "Selector de Skin-uri"
 
-#: main.py:301
+#: main.py:299
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -3944,56 +3708,55 @@ msgstr ""
 "Fişier log: %s\n"
 "\n"
 
-#: main.py:311 share/skins/main/mediaportal.fxd:447
+#: main.py:309 share/skins/main/mediaportal.fxd:447
 #: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
 #: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
 #: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
-#: share/skins/main/Tux'n Tosh TV.fxd:25
 msgid "Shutdown"
 msgstr "Închidere"
 
-#: main.py:313
+#: main.py:311
 msgid "Continue"
 msgstr "Continuă"
 
-#: main.py:428
+#: main.py:435
 #, python-format
 msgid "Starting Freevo-%s, please wait ..."
 msgstr "Freevo-%s porneşte, vă rugăm aşteptaţi..."
 
-#: main.py:437
+#: main.py:444
 msgid "Reading cache, please wait ..."
 msgstr "Citesc cache-ul, vă rugăm aşteptaţi..."
 
-#: main.py:491
+#: main.py:495
 msgid "Freevo crashed!"
 msgstr "Freevo a crăpat!"
 
-#: main.py:492
+#: main.py:496
 #, python-format
 msgid "Filename: %s"
 msgstr "Nume Fişier: %s"
 
-#: main.py:493
+#: main.py:497
 #, python-format
 msgid "Lineno: %s"
 msgstr "NrLinie: %s"
 
-#: main.py:494
+#: main.py:498
 #, python-format
 msgid "Function: %s"
 msgstr "Funcţie: %s"
 
-#: main.py:495
+#: main.py:499
 #, python-format
 msgid "Text: %s"
 msgstr ""
 
-#: main.py:497
+#: main.py:501
 msgid "Please see the logfiles for more info"
 msgstr "Analizaţi log-urile pentru mai multe informaţii"
 
-#: main.py:499
+#: main.py:503
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Ieşire în %s secunde"
@@ -4022,7 +3785,7 @@ msgstr "Esc = Stop/Meniu anterior"
 msgid "h = Help"
 msgstr "h = Ajutor"
 
-#: share/skins/main/dark.fxd:496 share/skins/main/Tux'n Tosh TV.fxd:673
+#: share/skins/main/dark.fxd:496
 msgid "Just one movie in this playlist."
 msgstr "Doar un film în acest playlist"
 
@@ -4032,13 +3795,13 @@ msgstr "Doar un film în acest playlist"
 msgid "kb/s"
 msgstr ""
 
-#: share/skins/main/dark.fxd:565 share/skins/main/Tux'n Tosh TV.fxd:742
+#: share/skins/main/dark.fxd:565
 msgid "One song in playlist"
 msgstr "O melodie în playlist"
 
 #: share/skins/main/geexbox.fxd:714 share/skins/main/mediaportal.fxd:722
 #: share/skins/main/dark.fxd:779 share/skins/main/basic.fxd:422
-#: share/skins/main/blurr.fxd:730 share/skins/main/Tux'n Tosh TV.fxd:939
+#: share/skins/main/blurr.fxd:730
 msgid "Elapsed"
 msgstr "Au trecut"
 
@@ -4063,11 +3826,11 @@ msgstr "Nume fişier"
 #: share/skins/main/geexbox.fxd:203 share/skins/main/mediaportal.fxd:197
 #: share/skins/main/dark.fxd:501 share/skins/main/blurr.fxd:195
 #: share/skins/main/info.fxd:428 share/skins/main/info.fxd:551
-#: share/skins/main/Panorama.fxd:198 share/skins/main/Tux'n Tosh TV.fxd:678
+#: share/skins/main/Panorama.fxd:198
 msgid "This playlist is empty!"
 msgstr "Acest playlist este gol!"
 
-#: share/skins/main/dark.fxd:618 share/skins/main/Tux'n Tosh TV.fxd:795
+#: share/skins/main/dark.fxd:618
 msgid "pictures in this slideshow."
 msgstr "poze în acest slideshow"
 
@@ -4082,7 +3845,7 @@ msgstr "Mesajul nu a fost citit"
 msgid "Chapters"
 msgstr "Capitole"
 
-#: share/skins/main/dark.fxd:561 share/skins/main/Tux'n Tosh TV.fxd:738
+#: share/skins/main/dark.fxd:561
 msgid "songs in playlist"
 msgstr "melodii în playlist"
 
@@ -4091,7 +3854,6 @@ msgid "Audio Codec"
 msgstr "Codec audio"
 
 #: share/skins/main/dark.fxd:653 share/skins/main/dark.fxd:674
-#: share/skins/main/Tux'n Tosh TV.fxd:830 TV.fxd:851
 msgid "Subject"
 msgstr "Subiect"
 
@@ -4102,7 +3864,6 @@ msgid "Playlist"
 msgstr "Playlist"
 
 #: share/skins/main/dark.fxd:659 share/skins/main/dark.fxd:680
-#: share/skins/main/Tux'n Tosh TV.fxd:836 TV.fxd:857
 msgid "From"
 msgstr "De la"
 
@@ -4124,7 +3885,6 @@ msgstr "Locaţie"
 
 #: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:11
 #: share/skins/main/bluestar.fxd:11 share/skins/main/rain.fxd:11
-#: share/skins/main/Tux'n Tosh TV.fxd:24
 msgid "Email"
 msgstr ""
 
@@ -4136,7 +3896,7 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-#: share/skins/main/dark.fxd:623 share/skins/main/Tux'n Tosh TV.fxd:800
+#: share/skins/main/dark.fxd:623
 msgid "Just one picture in this slideshow."
 msgstr "Doar o imagine în acest slideshow"
 
@@ -4144,11 +3904,11 @@ msgstr "Doar o imagine în acest slideshow"
 msgid "Num Passes"
 msgstr "Pass-uri Num"
 
-#: share/skins/main/dark.fxd:646 share/skins/main/Tux'n Tosh TV.fxd:823
+#: share/skins/main/dark.fxd:646
 msgid "Total mails"
 msgstr "Email-uri totale"
 
-#: share/skins/main/dark.fxd:628 share/skins/main/Tux'n Tosh TV.fxd:805
+#: share/skins/main/dark.fxd:628
 msgid "This slideshow is empty!"
 msgstr "Acest slideshow este gol!"
 
@@ -4175,7 +3935,7 @@ msgstr "Uită-te la TV"
 msgid "of"
 msgstr "din"
 
-#: share/skins/main/dark.fxd:722 share/skins/main/Tux'n Tosh TV.fxd:902
+#: share/skins/main/dark.fxd:722
 msgid "Now playing"
 msgstr "Acum redau"
 
@@ -4197,7 +3957,7 @@ msgstr "Imagini"
 msgid "Weather Forecast"
 msgstr "Prognoza meteo"
 
-#: share/skins/main/dark.fxd:671 share/skins/main/Tux'n Tosh TV.fxd:848
+#: share/skins/main/dark.fxd:671
 msgid "New mail"
 msgstr "E-mail nou"
 
@@ -4238,7 +3998,7 @@ msgstr "Mărime"
 msgid "Audio tracks"
 msgstr "Track-uri audio"
 
-#: share/skins/main/dark.fxd:640 share/skins/main/Tux'n Tosh TV.fxd:817
+#: share/skins/main/dark.fxd:640
 msgid "New mails"
 msgstr "E-mail-uri noi"
 
@@ -4272,13 +4032,12 @@ msgstr "Număr total de mesaje"
 msgid "Watch a Movie"
 msgstr "Uită-te la un film"
 
-#: share/skins/main/dark.fxd:492 share/skins/main/Tux'n Tosh TV.fxd:669
+#: share/skins/main/dark.fxd:492
 msgid "movies in this playlist."
 msgstr "filme în acest playlist"
 
 #: share/skins/main/dark.fxd:17 share/skins/main/crystal.fxd:8
 #: share/skins/main/bluestar.fxd:8 share/skins/main/rain.fxd:8
-#: share/skins/main/Tux'n Tosh TV.fxd:17
 msgid "Television"
 msgstr "Televizor"
 
@@ -4290,9 +4049,215 @@ msgstr "min."
 msgid "Disc ID"
 msgstr "ID Disc"
 
-#: share/skins/main/dark.fxd:569 share/skins/main/Tux'n Tosh TV.fxd:746
+#: share/skins/main/dark.fxd:569
 msgid "No songs in playlist"
 msgstr "Nu există melodii în playlist"
+
+#: share/skins/main/basic.fxd:20
+msgid "TV"
+msgstr "TV"
+
+#: share/skins/main/bluestar.fxd:13
+msgid "Weather"
+msgstr "Vreme"
+
+#~ msgid "Get CDs available for ripping"
+#~ msgstr "Obţine CD-urile disponibile pentru ripping"
+
+#~ msgid "Cloudy"
+#~ msgstr "Noros"
+
+#~ msgid "Mostly Cloudy"
+#~ msgstr "Mai mult noros"
+
+#~ msgid "Partly Cloudy"
+#~ msgstr "În parte noros"
+
+#~ msgid "Light Rain"
+#~ msgstr "Ploaie moderată"
+
+#~ msgid "Showers"
+#~ msgstr "Rafale"
+
+#~ msgid "Snow"
+#~ msgstr "Zăpadă"
+
+#~ msgid "Rain"
+#~ msgstr "Ploaie"
+
+#~ msgid "Fog"
+#~ msgstr "Ceaţă"
+
+#~ msgid "Few Showers"
+#~ msgstr "Rafale puţine"
+
+#~ msgid "Mostly Sunny"
+#~ msgstr "În mare parte însorit"
+
+#~ msgid "Sunny"
+#~ msgstr "Însorit"
+
+#~ msgid "Scattered Flurries"
+#~ msgstr "Rafale împrăştiate"
+
+#~ msgid "Isolated T-Storms"
+#~ msgstr "Furtuni-T izolate"
+
+#~ msgid "Scattered Thunderstorms"
+#~ msgstr "Furtuni împrăştiate"
+
+#~ msgid "Snow Showers"
+#~ msgstr "Averse de zăpadă"
+
+#~ msgid "Few Snow Showers"
+#~ msgstr "Rafale de zăpadă puţine"
+
+#~ msgid "Flurries"
+#~ msgstr "Rafale"
+
+#, fuzzy
+#~ msgid "Thunder"
+#~ msgstr "Ploaie/Tunete"
+
+#~ msgid "Heavy Snow"
+#~ msgstr "Zăpadă abundentă"
+
+#~ msgid "Drizzle"
+#~ msgstr "Burniţă"
+
+#, fuzzy
+#~ msgid "Sct Flurries"
+#~ msgstr "Rafale Sct/Vânt"
+
+#~ msgid "Sct Strong Storms"
+#~ msgstr "Furtuni puternice Sct"
+
+#~ msgid "Thunderstorms"
+#~ msgstr "Furtuni cu tunete"
+
+#, fuzzy
+#~ msgid "Iso T-Storms"
+#~ msgstr "Furtuni-T izolate"
+
+#, fuzzy
+#~ msgid "Sct T-Storms"
+#~ msgstr "Furtuni-T Sct/Vânt"
+
+#~ msgid "Sct Snow Showers"
+#~ msgstr "Averse de zăpadă Sct"
+
+#, fuzzy
+#~ msgid "to"
+#~ msgstr "sus"
+
+#, fuzzy
+#~ msgid "Ice"
+#~ msgstr "Gheaţă AM"
+
+#~ msgid "Light Snow"
+#~ msgstr "Zăpadă moderată"
+
+#~ msgid "Wintry Mix"
+#~ msgstr "Mix rece"
+
+#, fuzzy
+#~ msgid "Hvy Rain"
+#~ msgstr "Ploaie grea"
+
+#, fuzzy
+#~ msgid "Freezing Rain"
+#~ msgstr "Ploaie/Ploaie încgheţată"
+
+#, fuzzy
+#~ msgid "T-Storms"
+#~ msgstr "Furtuni-T PM"
+
+#~ msgid "Sprinkles"
+#~ msgstr "Picuri"
+
+#~ msgid "Heavy Rain"
+#~ msgstr "Ploaie grea"
+
+#, fuzzy
+#~ msgid "Light Wintry Mix"
+#~ msgstr "Mix rece moderat AM"
+
+#, fuzzy
+#~ msgid "Snow Shower"
+#~ msgstr "Averse de zăpadă"
+
+#, fuzzy
+#~ msgid "Strong Storms"
+#~ msgstr "Furtuni puternice Sct"
+
+#~ msgid "Light Rain Shower"
+#~ msgstr "Averse moderate de ploaie"
+
+#~ msgid "Light Rain with Thunder"
+#~ msgstr "Ploaie moderată cu tunete"
+
+#~ msgid "Light Drizzle"
+#~ msgstr "Burniţă moderată"
+
+#~ msgid "Mist"
+#~ msgstr "Ceaţă"
+
+#~ msgid "Smoke"
+#~ msgstr "Fum"
+
+#~ msgid "Haze"
+#~ msgstr "Ceaţă fină"
+
+#~ msgid "Light Snow Shower"
+#~ msgstr "Averse moderate de zăpadă"
+
+#~ msgid "Clear"
+#~ msgstr "Senin"
+
+#~ msgid "A Few Clouds"
+#~ msgstr "Câţiva nori"
+
+#~ msgid "Fair"
+#~ msgstr "Potrivită"
+
+#~ msgid "Last updated: %s"
+#~ msgstr "Ultimul update: %s"
+
+#~ msgid "Unlimited"
+#~ msgstr "Nelimitat"
+
+#~ msgid "%s (day: %s)"
+#~ msgstr "%s (zi: %s)"
+
+#~ msgid "Unknown"
+#~ msgstr "Necunoscut"
+
+#~ msgid "%s (type: %s)"
+#~ msgstr "%s (tip: %s)"
+
+#, fuzzy
+#~ msgid "Today, a high of %s degrees"
+#~ msgstr "Astăzi, o maximă de %s"
+
+#, fuzzy
+#~ msgid "and a low of %s degrees."
+#~ msgstr "şi un minim de %s"
+
+#~ msgid "Currently, there is a humidity of"
+#~ msgstr "În prezent umiditatea este de"
+
+#, fuzzy
+#~ msgid "the winds are calm"
+#~ msgstr "vântul este"
+
+#~ msgid "Visibility will be unlimited today"
+#~ msgstr "Vizibilitatea va fi nelimitată azi"
+
+#~ msgid "There will be a visibility of"
+#~ msgstr "Va exista o vizibilitate de"
+
+#~ msgid "Error encountered while trying to download Radar map"
+#~ msgstr "Eroare în timp ce încercam să copiez harta radarului"
 
 #~ msgid "Display program"
 #~ msgstr "Afişează program"
