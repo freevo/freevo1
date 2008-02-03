@@ -1,5 +1,5 @@
-#!/usr/bin/python
 # -*- coding: iso-8859-1 -*-
+# vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
 # proginfo.rpy - Dynamically update program info popup box.
 # -----------------------------------------------------------------------
@@ -83,7 +83,7 @@ class FileInfoResource(FreevoResource):
                 if fxd_info.has_key('plot'):
                     info += fxd_info['plot']+'<br/>'
                 if info != '':
-                   info += '<p>'
+                    info += '<p>'
                 if fxd_info.has_key('year'):
                     info += '<b>Recorded:</b>&nbsp;'+fxd_info['year']+' '
                 if fxd_info.has_key('runtime'):
@@ -133,6 +133,8 @@ class FileInfoResource(FreevoResource):
             file_link = self.convert_dir(file)
 
             fv.res += (
+               u"<html>\n<head>\n" \
+               u'<meta http-equiv="Content-Type" content= "text/html; charset='+ config.encoding +'"/>\n' \
                u"<script>\n" \
                u"var doc = parent.top.document;\n" \
                u"doc.getElementById('file-head').innerHTML = '%s';\n"\
@@ -141,7 +143,8 @@ class FileInfoResource(FreevoResource):
                u"doc.getElementById('file-play-using-vlc').onclick = %s;\n"\
                u"doc.getElementById('program-waiting').style.display = 'none';\n" \
                u"doc.getElementById('program-info').style.visibility = 'visible';\n" \
-               u"</script>\n"
+               u"</script>\n" \
+               u"</head>\n<html>\n"
             ) % ( Unicode(title.replace("'", "\\'")),
                   Unicode(info.replace("'", "\\'")),
                   "function() { window.open(\"%s\"); }" % (urllib.quote(file_link)),

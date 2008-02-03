@@ -52,6 +52,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed play lists not handling absolute paths (B#1872465)
  * Fixed tv guide not scrolling to last channel from second channel (B#1858010)
  * Fixed web server favorites and edit_favorite to use name and duplicate detection (B#1857394)
+ * Fixed web server file info not having an ecoding header (B#1885751)
  * Fixed web server programme info having no content when the title has newlines (B#1885729)
 
 == Release 1.8.0rc1 (2007-12-22) ==
