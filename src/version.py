@@ -1,4 +1,4 @@
-__version__ = '1.8.0rc2'
+__version__ = '1.8.0-svn'
 
 runtime  = '0.3.1'
 mmpython = '0.4.10'
