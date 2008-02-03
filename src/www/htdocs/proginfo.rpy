@@ -54,7 +54,7 @@ class ProgInfoResource(FreevoResource):
             if prog.start == starttime:
                 break
 
-        title = prog.title
+        title = prog.title.strip().replace("'", "\\'").replace("\n", " ")
 
         if prog.desc == '':
             desc = (_('Sorry, the program description for %s is unavailable.')) \
@@ -62,7 +62,7 @@ class ProgInfoResource(FreevoResource):
         else:
             desc = prog.desc
 
-        desc = desc.lstrip()
+        desc = desc.strip().replace("'", "\\'").replace("\n", " ")
         if MAX_DESCRIPTION_CHAR and len(desc) > MAX_DESCRIPTION_CHAR:
             desc=desc[:desc[:MAX_DESCRIPTION_CHAR].rfind('.')] + '. [...]'
 
@@ -78,10 +78,12 @@ class ProgInfoResource(FreevoResource):
         #    desc = desc.encode('ascii', 'ignore')
         start = time.strftime(config.TV_TIME_FORMAT, time.localtime(prog.start))
         stop = time.strftime(config.TV_TIME_FORMAT, time.localtime(prog.stop))
+        fv.res += u"<html>\n<head>\n"
+        fv.res += u'<meta http-equiv="Content-Type" content= "text/html; charset='+ config.encoding +'"/>\n'
         fv.res += u"<script>\n"
         fv.res += u"var doc = parent.top.document;\n"
-        fv.res += u"doc.getElementById('program-title').innerHTML = '"+Unicode(title).replace("'", "\\'")+"';\n"
-        fv.res += u"doc.getElementById('program-desc').innerHTML = '"+Unicode(desc).replace("'", "\\'")+"';\n"
+        fv.res += u"doc.getElementById('program-title').innerHTML = '"+title+"';\n"
+        fv.res += u"doc.getElementById('program-desc').innerHTML = '"+desc+"';\n"
         fv.res += u"doc.getElementById('program-start').innerHTML = '"+start+"';\n"
         fv.res += u"doc.getElementById('program-end').innerHTML = '"+stop+"';\n"
         fv.res += u"doc.getElementById('program-runtime').innerHTML = '%s';\n" % int((prog.stop - prog.start) / 60)
@@ -92,6 +94,7 @@ class ProgInfoResource(FreevoResource):
         fv.res += u"doc.getElementById('program-waiting').style.display = 'none';\n"
         fv.res += u"doc.getElementById('program-info').style.visibility = 'visible';\n"
         fv.res += u"</script>\n"
+        fv.res += u"</head>\n</html>\n"
 
         return String(fv.res)
 
