@@ -160,7 +160,6 @@ class VideoItem(Item):
         directly because this functions also changes other attributes, like
         filename, mode, network_play and the list of possible players
         """
-        print 'set_url(url=%r, info=%r)' % (url, info)
         Item.set_url(self, url, info)
         if url.startswith('dvd://') or url.startswith('vcd://'):
             self.network_play = False
