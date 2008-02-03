@@ -1,0 +1,239 @@
+<!-- DTD for Freevo Skins -->
+<!NOTATION jpeg SYSTEM "image/jpeg">
+<!NOTATION png SYSTEM "image/png">
+<!ENTITY % visible "(yes | no | not-idlebar)">
+<!ENTITY % align "(left | center | right | justified)">
+<!ENTITY % valign "(top | center | bottom)">
+
+<!ELEMENT freevo (skin)>
+
+<!ELEMENT skin ((iconset | setvar | main | menu | menuset | layout | font | color | image | popup | player | tv | splashscreen | headlines)+)>
+<!ATTLIST skin geometry CDATA #REQUIRED>
+<!ATTLIST skin include CDATA #IMPLIED>
+
+<!ELEMENT iconset EMPTY>
+<!ATTLIST iconset theme CDATA #REQUIRED>
+
+<!ELEMENT setvar EMPTY>
+<!ATTLIST setvar name (box_under_icon | anamorphic) #REQUIRED>
+<!ATTLIST setvar val (0 | 1) #REQUIRED>
+
+<!ELEMENT main (item+)>
+<!ATTLIST main imagedir CDATA #IMPLIED>
+
+<!ELEMENT menu (style+)>
+<!ATTLIST menu type CDATA #REQUIRED>
+
+<!ELEMENT menuset ((screen | title | subtitle | view | listing | info)+)>
+<!ATTLIST menuset label CDATA #REQUIRED>
+<!ATTLIST menuset inherits CDATA #IMPLIED>
+
+<!ELEMENT font (shadow?)>
+<!ATTLIST font 
+    label CDATA #REQUIRED
+    name CDATA #IMPLIED
+    size CDATA #IMPLIED
+    color CDATA #IMPLIED
+    bgcolor CDATA #IMPLIED
+>
+
+<!ELEMENT shadow EMPTY>
+<!ATTLIST shadow 
+    border CDATA #IMPLIED
+    color CDATA #REQUIRED
+    visible CDATA #REQUIRED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+>
+
+<!ELEMENT color EMPTY>
+<!ATTLIST color 
+    label CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!ELEMENT image EMPTY>
+<!ATTLIST image 
+    label CDATA #IMPLIED
+    filename CDATA #IMPLIED
+    image CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    visible CDATA #IMPLIED
+>
+
+<!ELEMENT popup EMPTY>
+<!ATTLIST popup
+    layout CDATA #REQUIRED
+    type CDATA #REQUIRED
+>
+
+<!ELEMENT style EMPTY>
+<!ATTLIST style 
+    text CDATA #REQUIRED
+    image CDATA #IMPLIED
+>
+
+<!ELEMENT screen (area?)>
+<!ATTLIST screen
+    layout CDATA #REQUIRED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    visible CDATA #IMPLIED
+>
+
+<!ELEMENT area EMPTY>
+<!ATTLIST area
+    layout CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    visible CDATA #IMPLIED
+>
+
+<!ELEMENT title EMPTY>
+<!ATTLIST title 
+    layout CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    align %align; #IMPLIED
+    visible CDATA #IMPLIED
+>
+
+<!ELEMENT subtitle EMPTY>
+<!ATTLIST subtitle 
+    layout CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    visible CDATA #IMPLIED
+>
+
+<!ELEMENT view EMPTY>
+<!ATTLIST view
+    layout CDATA #IMPLIED
+    align %align; #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    visible CDATA #IMPLIED
+>
+
+<!ELEMENT listing (image*, area*)>
+<!ATTLIST listing
+    layout CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    visible CDATA #IMPLIED
+>
+
+<!ELEMENT info EMPTY>
+<!ATTLIST info
+    layout CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    visible CDATA #IMPLIED
+>
+
+<!ELEMENT layout (background?, content?)>
+<!ATTLIST layout label CDATA #REQUIRED>
+
+<!ELEMENT background (image*, rectangle*, image?)>
+
+<!ELEMENT content (item*)>
+<!ATTLIST content 
+    color CDATA #IMPLIED
+    font CDATA #IMPLIED
+    type CDATA #IMPLIED
+    align %align; #IMPLIED
+    valign %valign; #IMPLIED
+    spacing CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    hours_per_page CDATA #IMPLIED
+    layout CDATA #IMPLIED
+>
+
+<!ELEMENT player (screen, ((view, info)? | (info, view)?), title)>
+
+<!ELEMENT item ((rectangle | if | goto_pos | text | shadow | newline)*)>
+<!ATTLIST item 
+    label CDATA #IMPLIED
+    image CDATA #IMPLIED
+    name CDATA #IMPLIED
+    font CDATA #IMPLIED
+    type CDATA #IMPLIED
+    icon CDATA #IMPLIED
+    outicon CDATA #IMPLIED
+    align %align; #IMPLIED
+    valign %valign; #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+>
+
+<!ELEMENT rectangle EMPTY>
+<!ATTLIST rectangle
+    color CDATA #IMPLIED
+    bgcolor CDATA #IMPLIED
+    radius CDATA #IMPLIED
+    height CDATA #IMPLIED
+    width CDATA #IMPLIED
+    size CDATA #IMPLIED
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+>
+
+<!ELEMENT if ((if | text | newline | goto_pos | img)+)>
+<!ATTLIST if expression CDATA #IMPLIED>
+
+<!ELEMENT text (#PCDATA)>
+<!ATTLIST text
+    expression CDATA #IMPLIED
+    mode (hard | soft) "hard"
+    dim CDATA #IMPLIED
+    align %align; #IMPLIED
+    valign %valign; #IMPLIED
+    height CDATA #IMPLIED
+    width CDATA #IMPLIED
+    font CDATA #IMPLIED
+    ellipses CDATA #IMPLIED
+>
+
+<!ELEMENT newline EMPTY>
+
+<!ELEMENT goto_pos EMPTY>
+<!ATTLIST goto_pos
+    mode (relative | absolute) "relative"
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+>
+
+<!ELEMENT img EMPTY>
+<!ATTLIST img
+    x CDATA #IMPLIED
+    y CDATA #IMPLIED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    src CDATA #IMPLIED
+>
+
+<!ELEMENT splashscreen (screen, content)>
+
+<!ELEMENT tv (style)>
+
+<!ELEMENT headlines (screen, title?, info)>

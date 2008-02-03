@@ -1,0 +1,44 @@
+span.refresh {
+    color: blue;
+    background: inherit;
+    padding-top: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: right;    
+}
+
+div.youtube {
+    color: #333;
+    background: inherit;
+    padding-top: 1em;
+    text-align: left;
+    margin-left: 4%;
+}
+
+div.youtube input {
+    margin-left: 1em;
+    margin-right: 1em;
+    border: #0B1C52 1px solid;
+    background:  #c9c9ff;
+    color: #000000;
+}
+
+div.youtube textarea {
+    z-index:100; 
+    left:2%;
+    right:2%; 
+    height: 60%; 
+    position:absolute; 
+    top:200px;  
+    bottom:2%;  
+    background:  #c9c9ff;
+
+}
+
+div.youtube select {
+    margin-left: 1em;
+    border: #0B1C52 1px solid;
+    background:  #c9c9ff;
+    color: #000000;
+}
+

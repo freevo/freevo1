@@ -1,0 +1,28 @@
+diff -urNad zsnes-1.420~/src/linux/sdllink.c zsnes-1.420/src/linux/sdllink.c
+--- zsnes-1.420~/src/linux/sdllink.c	2006-12-14 21:34:42.000000000 +0100
++++ zsnes-1.420/src/linux/sdllink.c	2006-12-14 21:35:57.000000000 +0100
+@@ -177,7 +177,7 @@
+ 
+ int Main_Proc(void)
+ {
+-	SDL_Event event;
++	SDL_Event event, evtmp;
+ 
+ 	while (SDL_PollEvent(&event))
+ 	{
+@@ -384,7 +384,14 @@
+ 				pressed[offset] = 0;
+ 				break;
+ 			case SDL_QUIT:
+-				LinuxExit();
++
++                                evtmp.type = SDL_KEYDOWN;
++                                evtmp.key.state = SDL_PRESSED;
++                                evtmp.key.keysym.scancode = 9;
++                                evtmp.key.keysym.sym = SDLK_ESCAPE;
++                                evtmp.key.keysym.mod = 0;
++                                SDL_PushEvent(&evtmp);
++
+ 				break;
+ #ifdef __OPENGL__
+ 			case SDL_VIDEORESIZE:
