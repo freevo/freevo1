@@ -1,0 +1,4194 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Freevo-1.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-02-03 20:40+0100\n"
+"PO-Revision-Date: 2007-09-26 11:32+0100\n"
+"Last-Translator: Lónyai Gergely <alephlg@gmail.com>\n"
+"Language-Team: Lonyai Gergely <alephlg@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Hungarian\n"
+"X-Poedit-Country: HUNGARY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ../freevo_config.py:1175 ../freevo_config.py:1180
+#: www/htdocs/manualrecord.rpy:220 www/htdocs/record.rpy:115
+#: www/htdocs/search.rpy:91 tv/edit_favorite.py:111
+#: share/skins/main/basic.fxd:717 share/skins/main/info.fxd:391
+msgid "Title"
+msgstr "Cím"
+
+#: ../freevo_config.py:1176 plugins/lcd.py:84 plugins/lcd.py:86
+#: plugins/lcd.py:263 plugins/vfd.py:108 plugins/vfd.py:110
+msgid "Description"
+msgstr "Meghatározás"
+
+#: ../freevo_config.py:1177
+msgid "Author"
+msgstr "Szerző"
+
+#: ../freevo_config.py:1181 plugins/lcd.py:83 plugins/vfd.py:107
+#: share/skins/main/dark.fxd:591 share/skins/main/dark.fxd:665
+#: share/skins/main/dark.fxd:686 share/skins/main/crystal.fxd:270
+#: share/skins/main/bluestar.fxd:290 share/skins/main/noia.fxd:93
+#: share/skins/main/rain.fxd:275 share/skins/main/info.fxd:332
+msgid "Date"
+msgstr "Dátum"
+
+#: ../freevo_config.py:1184
+msgid "Model"
+msgstr "Modell"
+
+#: ../freevo_config.py:1185
+msgid "Software"
+msgstr "Szoftver"
+
+#: image/plugins/gphoto.py:102 image/imageitem.py:102
+msgid "View Image"
+msgstr "Kép megnézése"
+
+#: image/plugins/gphoto.py:129 tv/plugins/recordings_manager.py:176
+#: directory.py:450
+msgid "Browse directory"
+msgstr "Könyvtár megnézése"
+
+#: image/plugins/apod.py:50 image/plugins/apod.py:51
+msgid "APOD"
+msgstr ""
+
+#: image/plugins/apod.py:61
+msgid "Current Picture"
+msgstr "Jelenlegi kép"
+
+#: image/plugins/apod.py:62
+msgid "Previous Pictures"
+msgstr "Előző képek"
+
+#: image/plugins/apod.py:63 image/plugins/apod.py:78
+msgid "Apod Pictures"
+msgstr "Apod képek"
+
+#: image/plugins/apod.py:76
+msgid "No Images found"
+msgstr "Nem található kép"
+
+#: image/plugins/apod.py:96 image/plugins/apod.py:109
+msgid "Unable to open URL"
+msgstr "Nem lehet megnyitni a hivatkozást"
+
+#: image/plugins/apod.py:123
+msgid "Need a directory to store APOD pictures."
+msgstr "Szükséges egy könyvtár az APOD képek tárolására."
+
+#: image/plugins/apod.py:127
+#, python-format
+msgid "directory %s does not exist."
+msgstr "%s könyvtár nem létezik."
+
+#: image/plugins/apod.py:131
+#, python-format
+msgid ""
+"directory %s must be able to be read, written to and executed by the user "
+"running freevo."
+msgstr ""
+"A %s könyvtárnak muszály írhatónak-olvashatónak lennie annak a "
+"felhysználónak, aki futtatja a Freevot."
+
+#: image/plugins/flickr.py:143 image/plugins/flickr.py:144
+#, fuzzy
+msgid "Flickr pictures"
+msgstr "Képek"
+
+#: image/plugins/flickr.py:161 video/plugins/youtube.py:167
+msgid "Choose please"
+msgstr ""
+
+#: image/plugins/flickr.py:167
+msgid "Retrieving image list"
+msgstr ""
+
+#: image/plugins/flickr.py:168
+#, fuzzy
+msgid "Images available"
+msgstr "Nincs elérhető információ"
+
+#: image/plugins/flickr.py:176
+msgid "Downloading picture \""
+msgstr ""
+
+#: image/plugins/flickr.py:207
+msgid "Downloading thumbnail for picture \""
+msgstr ""
+
+#: image/viewer.py:126
+#, python-format
+msgid ""
+"Can't Open Image\n"
+"'%s'"
+msgstr ""
+"Nem megnyitható a kép\n"
+"'%s'"
+
+#: image/viewer.py:344
+msgid "pause"
+msgstr "szünet"
+
+#: image/viewer.py:349
+msgid "play"
+msgstr "lejátszás"
+
+#: image/viewer.py:451
+msgid "No information available"
+msgstr "Nincs elérhető információ"
+
+#: www/htdocs/help/index.rpy:38
+msgid "Freevo Help"
+msgstr "Freevo segítség"
+
+#: www/htdocs/help/index.rpy:41
+msgid ""
+"This is the internal Freevo documentation. The documents         are in an "
+"early stage of development, if you like to help, please         contact the "
+"developers. You find more information like         the <a href=\"http://"
+"freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online "
+"manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org"
+"\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
+"them if someone deletes         information), feel free to add information "
+"there."
+msgstr ""
+
+#: www/htdocs/help/index.rpy:50
+msgid "Index"
+msgstr "Index"
+
+#: www/htdocs/help/index.rpy:52
+msgid "Freevo Installation Howto"
+msgstr "Freevo telepítési útmutató"
+
+#: www/htdocs/help/index.rpy:53
+msgid "Frequently Asked Questions"
+msgstr "Gyakran Ismételt Kérdések"
+
+#: www/htdocs/help/index.rpy:54
+msgid "Recording Information"
+msgstr "Felvétel információja"
+
+#: www/htdocs/help/index.rpy:55
+msgid "Plugin List"
+msgstr "Plugin lista"
+
+#: www/htdocs/help/index.rpy:56
+msgid "FXD files"
+msgstr "FXV fájlok"
+
+#: www/htdocs/help/index.rpy:57
+#, fuzzy
+msgid "Skinning Information"
+msgstr "Kinézet-információk"
+
+#: www/htdocs/help/index.rpy:58
+msgid "Plugin Writing Howto"
+msgstr "Plugin iróknak Hogyan"
+
+#: www/htdocs/help/howto.rpy:45 www/htdocs/help/howto.rpy:46
+msgid "Freevo Installation HOWTO"
+msgstr "Freevo telepítési HOGYAN"
+
+#: www/htdocs/help/howto.rpy:46
+msgid "Build your own media box with Freevo and Linux"
+msgstr "Építsd meg a saját médiaközpontodat Freevoval és Linuxxal"
+
+#: www/htdocs/help/howto.rpy:48 www/htdocs/help/howto.rpy:49
+msgid "Freevo Plugin Writing HOWTO"
+msgstr "Freevo pluginíró HOGYAN"
+
+#: www/htdocs/help/howto.rpy:49
+msgid "Writing your own plugins for Freevo"
+msgstr "Írj egy saját plugint a Freevoba"
+
+#: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
+#: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
+#: www/htdocs/record.rpy:84 www/htdocs/edit_favorite.rpy:55
+#: www/htdocs/edit_favorite.rpy:79 www/htdocs/edit_favorite.rpy:103
+#: www/htdocs/guide.rpy:150 www/htdocs/genre.rpy:91
+#: www/htdocs/favorites.rpy:55 www/htdocs/library.rpy:197
+#: www/htdocs/library.rpy:219 www/htdocs/library.rpy:222
+#: www/htdocs/search.rpy:52 www/htdocs/guidechannel.rpy:204
+#: skins/main/info_area.py:133 audio/plugins/xine.py:55
+#: audio/plugins/cdbackup.py:195 audio/plugins/cdbackup.py:582
+#: video/plugins/xine.py:71 plugins/lcd.py:48 plugins/vfd.py:52
+#: plugins/freevused.py:140 tv/plugins/dvbstreamer/live_pause.py:88
+#: tv/plugins/dvbstreamer/live_pause.py:112 tv/plugins/xine.py:82
+#: tv/record_client.py:90
+msgid "ERROR"
+msgstr "HIBA"
+
+#: www/htdocs/help/howto.rpy:84
+msgid "unable to load html files"
+msgstr "A html nem betölthető"
+
+#: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
+#, fuzzy
+msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
+msgstr "Ha a Freevo SVN verzióját használod, futtasd az <b>autogen.sh</b>."
+
+#: www/htdocs/help/howto.rpy:86
+msgid "The files are searched in the following locations:"
+msgstr ""
+
+#: www/htdocs/help/plugins.rpy:60 www/htdocs/help/plugins.rpy:79
+msgid "Freevo Plugin List"
+msgstr "Freevo pluginlista"
+
+#: www/htdocs/help/plugins.rpy:89 www/htdocs/help/plugins.rpy:97
+msgid "top"
+msgstr "fel"
+
+#: www/htdocs/help/plugins.rpy:90 www/htdocs/help/plugins.rpy:98
+msgid "index"
+msgstr "index"
+
+#: www/htdocs/help/doc.rpy:59 www/htdocs/help/doc.rpy:70
+msgid "Freevo Documentation"
+msgstr "Freevo Dokumentáció"
+
+#: www/htdocs/help/doc.rpy:61
+#, python-format
+msgid "unable to load %s.html"
+msgstr "nem betölthető a %s.html"
+
+#: www/htdocs/index.rpy:47
+msgid "Welcome"
+msgstr "Üdvözlet"
+
+#: www/htdocs/index.rpy:47 www/web_types.py:197
+msgid "Home"
+msgstr "Otthon"
+
+#: www/htdocs/index.rpy:50
+#, python-format
+msgid "Freevo Web Status as of %s"
+msgstr ""
+
+#: www/htdocs/index.rpy:55 www/htdocs/index.rpy:61 www/htdocs/index.rpy:63
+msgid "Notice"
+msgstr "Értesítés"
+
+#: www/htdocs/index.rpy:55
+msgid "The recording server is down."
+msgstr "A rögzítőszerver leállt"
+
+#: www/htdocs/index.rpy:57
+msgid "The recording server is up and running."
+msgstr "A rögzítőszerver fut"
+
+#: www/htdocs/index.rpy:61
+msgid "Your listings expire in 1 hour."
+msgstr ""
+
+#: www/htdocs/index.rpy:63
+#, python-format
+msgid "Your listings expire in %s hours."
+msgstr ""
+
+#: www/htdocs/index.rpy:65
+msgid "Your listings are up to date."
+msgstr ""
+
+#: www/htdocs/index.rpy:75
+#, python-format
+msgid "Now Recording %s."
+msgstr "Most rögzítem: %s"
+
+#: www/htdocs/index.rpy:81
+msgid "One program scheduled to record."
+msgstr ""
+
+#: www/htdocs/index.rpy:83
+#, python-format
+msgid "%i programs scheduled to record."
+msgstr ""
+
+#: www/htdocs/index.rpy:85 www/htdocs/index.rpy:87
+msgid "No programs scheduled to record."
+msgstr ""
+
+#: www/htdocs/index.rpy:89
+#, python-format
+msgid "%i of %i Mb free in %s"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:66 www/htdocs/manualrecord.rpy:200
+#: tv/plugins/manual_record.py:62
+msgid "Manual Record"
+msgstr "Kézi felvétel"
+
+#: www/htdocs/manualrecord.rpy:68 www/htdocs/record.rpy:61
+#: www/htdocs/edit_favorite.rpy:55 www/htdocs/guide.rpy:150
+#: www/htdocs/genre.rpy:91 www/htdocs/favorites.rpy:55
+#: www/htdocs/guidechannel.rpy:204 tv/plugins/view_favorites.py:90
+#: tv/plugins/scheduled_recordings.py:91
+msgid "Recording server is unavailable."
+msgstr "A rögzítőszerver nem elérhető"
+
+#: www/htdocs/manualrecord.rpy:115
+msgid "Manual Recorded"
+msgstr "Kézzel felvéve"
+
+#: www/htdocs/manualrecord.rpy:124 tv/plugins/manual_record.py:375
+msgid "start time is not before stop time."
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:127 tv/plugins/manual_record.py:366
+#, python-format
+msgid "Program would record for more than %d days!"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:129 tv/plugins/manual_record.py:370
+msgid "Program would record for more than 1 day!"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Jan"
+msgstr "Jan"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Feb"
+msgstr "Feb"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Mar"
+msgstr "Mar"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Apr"
+msgstr "Apr"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "May"
+msgstr "Maj"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Jun"
+msgstr "Jun"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Jul"
+msgstr "Jul"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Aug"
+msgstr "Aug"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Sep"
+msgstr "Sze"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Oct"
+msgstr "Okt"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Nov"
+msgstr "Nov"
+
+#: www/htdocs/manualrecord.rpy:143 tv/plugins/manual_record.py:72
+msgid "Dec"
+msgstr "Dec"
+
+#: www/htdocs/manualrecord.rpy:200 www/web_types.py:202
+msgid "Manual Recording"
+msgstr "Felvétel kézzel"
+
+#: www/htdocs/manualrecord.rpy:206
+msgid "Error Message"
+msgstr "Hibaüzenet"
+
+#: www/htdocs/manualrecord.rpy:217 www/htdocs/record.rpy:114
+#: www/htdocs/edit_favorite.rpy:130 www/htdocs/favorites.rpy:107
+#: www/htdocs/search.rpy:90 plugins/lcd.py:254 plugins/lcd.py:688
+#: tv/edit_favorite.py:113 share/skins/main/basic.fxd:590
+#: share/skins/main/basic.fxd:621 share/skins/main/basic.fxd:652
+msgid "Channel"
+msgstr "Csatorna"
+
+#: www/htdocs/manualrecord.rpy:218 www/htdocs/record.rpy:112
+#: www/htdocs/search.rpy:88
+msgid "Start Time"
+msgstr "Indítási idő"
+
+#: www/htdocs/manualrecord.rpy:219 www/htdocs/record.rpy:113
+#: www/htdocs/search.rpy:89
+msgid "Stop Time"
+msgstr "Leállítási idő"
+
+#: www/htdocs/manualrecord.rpy:221 www/htdocs/record.rpy:117
+#: www/htdocs/search.rpy:93
+msgid "Program Description"
+msgstr "Program meghatározás"
+
+#: www/htdocs/manualrecord.rpy:232
+msgid "Add to Recording Schedule"
+msgstr "Felvétel időpontjának megadása"
+
+#: www/htdocs/viewlogfile.rpy:131
+msgid "viewlog"
+msgstr ""
+
+#: www/htdocs/viewlogfile.rpy:131
+#, fuzzy
+msgid "View Logs"
+msgstr "Tv-műsor megnézése"
+
+#: www/htdocs/record.rpy:85 www/htdocs/edit_favorite.rpy:80
+#, python-format
+msgid "No program found on %s at %s."
+msgstr ""
+
+#: www/htdocs/record.rpy:106 www/web_types.py:199
+#: tv/plugins/scheduled_recordings.py:45 tv/plugins/scheduled_recordings.py:59
+msgid "Scheduled Recordings"
+msgstr "Időzített felvételek"
+
+#: www/htdocs/record.rpy:116 www/htdocs/search.rpy:92
+#: share/skins/main/info.fxd:264
+msgid "Episode"
+msgstr "Epizód"
+
+#: www/htdocs/record.rpy:118 www/htdocs/favorites.rpy:114
+#: www/htdocs/search.rpy:94
+msgid "Actions"
+msgstr "Akciók"
+
+#: www/htdocs/record.rpy:142
+msgid "UNKNOWN"
+msgstr "ISMERETLEN"
+
+#: www/htdocs/record.rpy:154 www/htdocs/proginfo.rpy:60
+#: www/htdocs/search.rpy:131
+#, python-format
+msgid "Sorry, the program description for %s is unavailable."
+msgstr ""
+
+#: www/htdocs/record.rpy:159 www/htdocs/favorites.rpy:174
+#: www/htdocs/search.rpy:137 tv/edit_favorite.py:185
+msgid "Remove"
+msgstr "Eltávolítás"
+
+#: www/htdocs/pluginconfig.rpy:361
+#, fuzzy
+msgid "Config Plugins"
+msgstr "Plugin lista"
+
+#: www/htdocs/edit_favorite.rpy:53 www/htdocs/edit_favorite.rpy:114
+#: tv/edit_favorite.py:91
+msgid "Edit Favorite"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:104
+#, python-format
+msgid "Favorite %s doesn't exists."
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:128
+msgid "Name of favorite"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:129 www/htdocs/favorites.rpy:106
+#: plugins/lcd.py:257 plugins/lcd.py:691 share/skins/main/basic.fxd:646
+msgid "Program"
+msgstr "Program"
+
+#: www/htdocs/edit_favorite.rpy:131 www/htdocs/favorites.rpy:108
+msgid "Day of week"
+msgstr "A hét napja"
+
+#: www/htdocs/edit_favorite.rpy:132 www/htdocs/favorites.rpy:109
+msgid "Time of day"
+msgstr "Mai idő"
+
+#: www/htdocs/edit_favorite.rpy:134 www/htdocs/favorites.rpy:111
+msgid "Duplicates"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:136 www/htdocs/favorites.rpy:113
+#, fuzzy
+msgid "Episodes"
+msgstr "Epizód"
+
+#: www/htdocs/edit_favorite.rpy:137
+msgid "Action"
+msgstr "Akció"
+
+#: www/htdocs/edit_favorite.rpy:152 tv/favoriteitem.py:68
+msgid "ANY CHANNEL"
+msgstr "MINDEN CSATORNA"
+
+#: www/htdocs/edit_favorite.rpy:165 tv/favoriteitem.py:72
+#: tv/favoriteitem.py:208 tv/edit_favorite.py:140
+msgid "ANY DAY"
+msgstr "MINDEN NAP"
+
+#: www/htdocs/edit_favorite.rpy:166 tv/favoriteitem.py:64
+#: tv/edit_favorite.py:144
+msgid "Mon"
+msgstr "Hét"
+
+#: www/htdocs/edit_favorite.rpy:167 tv/favoriteitem.py:64
+#: tv/edit_favorite.py:144
+msgid "Tue"
+msgstr "Ked"
+
+#: www/htdocs/edit_favorite.rpy:168 tv/favoriteitem.py:64
+#: tv/edit_favorite.py:144
+msgid "Wed"
+msgstr "Sze"
+
+#: www/htdocs/edit_favorite.rpy:169 tv/favoriteitem.py:64
+#: tv/edit_favorite.py:144
+msgid "Thu"
+msgstr "Csü"
+
+#: www/htdocs/edit_favorite.rpy:170 tv/favoriteitem.py:65
+#: tv/edit_favorite.py:144
+msgid "Fri"
+msgstr "Pén"
+
+#: www/htdocs/edit_favorite.rpy:171 tv/favoriteitem.py:65
+#: tv/edit_favorite.py:144
+msgid "Sat"
+msgstr "Szo"
+
+#: www/htdocs/edit_favorite.rpy:172 tv/favoriteitem.py:65
+#: tv/edit_favorite.py:144
+msgid "Sun"
+msgstr "Vas"
+
+#: www/htdocs/edit_favorite.rpy:178 tv/favoriteitem.py:76
+#: tv/favoriteitem.py:229 tv/edit_favorite.py:160
+msgid "ANY TIME"
+msgstr "MINDEN IDŐ"
+
+#: www/htdocs/edit_favorite.rpy:238
+msgid "ALLOW"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:239
+msgid "PREVENT"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:248
+msgid "ALL"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:249
+msgid "ONLY NEW"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:262 tv/plugins/manual_record.py:129
+#: tv/edit_favorite.py:182
+msgid "Save"
+msgstr "Mentés"
+
+#: www/htdocs/youtube.rpy:288
+#, fuzzy
+msgid "YouTube"
+msgstr "Ked"
+
+#: www/htdocs/guide.rpy:145 www/htdocs/guidechannel.rpy:197
+#: www/web_types.py:198 tv/tvmenu.py:98
+msgid "TV Guide"
+msgstr "TV Segéd"
+
+#: www/htdocs/guide.rpy:157 plugins/lcd.py:260
+#: share/skins/main/crystal.fxd:273 share/skins/main/bluestar.fxd:293
+#: share/skins/main/basic.fxd:633 share/skins/main/noia.fxd:96
+#: share/skins/main/rain.fxd:278
+msgid "Time"
+msgstr "Idő"
+
+#: www/htdocs/guide.rpy:157
+msgid "View"
+msgstr "Nézet"
+
+#: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:120
+msgid "Show"
+msgstr "Mutat"
+
+#: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:120
+msgid "Category"
+msgstr "Kategória"
+
+#: www/htdocs/guide.rpy:160 www/htdocs/genre.rpy:121
+msgid "Change"
+msgstr "Vált"
+
+#: www/htdocs/guide.rpy:202 skins/main/tvlisting_area.py:339 tv/tvguide.py:51
+msgid "This channel has no data loaded"
+msgstr "Ez a csatorna nem betölthető"
+
+#: www/htdocs/guide.rpy:274 www/htdocs/genre.rpy:204
+#: www/htdocs/guidechannel.rpy:133 www/htdocs/guidechannel.rpy:256
+#: share/skins/main/basic.fxd:596 share/skins/main/basic.fxd:658
+msgid "Start"
+msgstr "Start"
+
+#: www/htdocs/guide.rpy:275 www/htdocs/genre.rpy:205
+#: www/htdocs/guidechannel.rpy:134 www/htdocs/guidechannel.rpy:257
+#: share/skins/main/basic.fxd:602 share/skins/main/basic.fxd:664
+msgid "Stop"
+msgstr "Stop"
+
+#: www/htdocs/guide.rpy:276 www/htdocs/genre.rpy:206
+#: www/htdocs/guidechannel.rpy:135 www/htdocs/guidechannel.rpy:258
+#: share/skins/main/dark.fxd:465 share/skins/main/info.fxd:278
+#: share/skins/main/info.fxd:303 share/skins/main/info.fxd:482
+msgid "Runtime"
+msgstr "Futási idő"
+
+#: www/htdocs/guide.rpy:287 www/htdocs/genre.rpy:217 www/htdocs/search.rpy:139
+#: www/htdocs/search.rpy:141 www/htdocs/guidechannel.rpy:269
+#: plugins/buttonbar.py:119
+msgid "Record"
+msgstr "Felvétel"
+
+#: www/htdocs/guide.rpy:290 www/htdocs/genre.rpy:220
+#: www/htdocs/guidechannel.rpy:272
+msgid "Add to Favorites"
+msgstr "Kedvencekhez ad"
+
+#: www/htdocs/guide.rpy:293 www/htdocs/genre.rpy:223
+#: www/htdocs/library.rpy:596 www/htdocs/guidechannel.rpy:146
+#: www/htdocs/guidechannel.rpy:275
+msgid "Close Window"
+msgstr "Ablak bezárása"
+
+#: www/htdocs/genre.rpy:87
+#, python-format
+msgid "TV Genre for %s"
+msgstr ""
+
+#: www/htdocs/genre.rpy:179
+msgid "NO SHOWS MATCHING CATEGORY"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:53 www/htdocs/favorites.rpy:101
+#: www/web_types.py:200
+msgid "Favorites"
+msgstr "Kedvencek"
+
+#: www/htdocs/favorites.rpy:92
+msgid "Monday"
+msgstr "Hétfő"
+
+#: www/htdocs/favorites.rpy:93
+msgid "Tuesday"
+msgstr "Kedd"
+
+#: www/htdocs/favorites.rpy:94
+msgid "Wednesday"
+msgstr "Szerda"
+
+#: www/htdocs/favorites.rpy:95
+msgid "Thursday"
+msgstr "Csütörtök"
+
+#: www/htdocs/favorites.rpy:96
+msgid "Friday"
+msgstr "Péntek"
+
+#: www/htdocs/favorites.rpy:97
+msgid "Saturday"
+msgstr "Szombat"
+
+#: www/htdocs/favorites.rpy:98
+msgid "Sunday"
+msgstr "Vasárnap"
+
+#: www/htdocs/favorites.rpy:105
+msgid "Favorite Name"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:115
+msgid "Priority"
+msgstr ""
+
+#: www/htdocs/favorites.rpy:130 www/htdocs/favorites.rpy:142
+#: www/htdocs/favorites.rpy:148 tv/edit_favorite.py:117
+msgid "ANY"
+msgstr "BÁRMI"
+
+#: www/htdocs/favorites.rpy:173
+msgid "Edit"
+msgstr "Szerkeszt"
+
+#: www/htdocs/favorites.rpy:181
+msgid "Higher"
+msgstr "Magasabb"
+
+#: www/htdocs/favorites.rpy:188
+msgid "Lower"
+msgstr "Alacsonyabb"
+
+#: www/htdocs/library.rpy:186
+#, python-format
+msgid "%s already exists! File not renamed."
+msgstr ""
+
+#: www/htdocs/library.rpy:190
+#, python-format
+msgid "Rename %s to %s."
+msgstr ""
+
+#: www/htdocs/library.rpy:193 www/htdocs/library.rpy:209
+#, python-format
+msgid "<h2>%s</h2>"
+msgstr ""
+
+#: www/htdocs/library.rpy:194
+#, python-format
+msgid "Rename %s to %s, failed."
+msgstr ""
+
+#: www/htdocs/library.rpy:197
+msgid "No new file specified."
+msgstr ""
+
+#: www/htdocs/library.rpy:203 www/htdocs/library.rpy:207
+#, python-format
+msgid "Delete %s."
+msgstr "%s törlése."
+
+#: www/htdocs/library.rpy:210
+#, python-format
+msgid "Delete %s, failed."
+msgstr "%s törlése nem lehetséges."
+
+#: www/htdocs/library.rpy:219
+#, python-format
+msgid "%s does not exist. No action taken."
+msgstr ""
+
+#: www/htdocs/library.rpy:223
+#, python-format
+msgid "I do not process names (%s) with slashes for security reasons."
+msgstr ""
+
+#: www/htdocs/library.rpy:230 www/htdocs/library.rpy:231 www/web_types.py:201
+msgid "Media Library"
+msgstr "Médiakönyvtár"
+
+#: www/htdocs/library.rpy:262 www/web_types.py:371
+msgid "Messages"
+msgstr "Üzenetek"
+
+#: www/htdocs/library.rpy:274 share/skins/main/dark.fxd:18
+#: share/skins/main/crystal.fxd:9 share/skins/main/bluestar.fxd:9
+#: share/skins/main/basic.fxd:21 share/skins/main/rain.fxd:9
+msgid "Movies"
+msgstr "Filmek"
+
+#: www/htdocs/library.rpy:278
+msgid "Recorded TV"
+msgstr "Felvett műsorok"
+
+#: www/htdocs/library.rpy:282 plugins/lcd.py:177 plugins/lcd.py:633
+#: share/skins/main/dark.fxd:19 share/skins/main/crystal.fxd:10
+#: share/skins/main/bluestar.fxd:10 share/skins/main/basic.fxd:22
+#: share/skins/main/rain.fxd:10
+msgid "Music"
+msgstr "Zene"
+
+#: www/htdocs/library.rpy:286 share/skins/main/dark.fxd:20
+#: share/skins/main/crystal.fxd:12 share/skins/main/basic.fxd:23
+#: share/skins/main/rain.fxd:12
+msgid "Images"
+msgstr "Képek"
+
+#: www/htdocs/library.rpy:303 www/htdocs/library.rpy:376
+#: www/htdocs/library.rpy:378 www/htdocs/library.rpy:382
+msgid "Back"
+msgstr "Vissza"
+
+#: www/htdocs/library.rpy:541
+msgid "Download"
+msgstr "Letöltés"
+
+#: www/htdocs/library.rpy:542 plugins/file_ops.py:72
+#: skin/widgets/textentry_screen.py:62
+msgid "Delete"
+msgstr "Törlés"
+
+#: www/htdocs/library.rpy:544
+msgid "Rename"
+msgstr "Átnevez"
+
+#: www/htdocs/library.rpy:585
+#, fuzzy
+msgid "Play file"
+msgstr "Játék"
+
+#: www/htdocs/library.rpy:588
+msgid "Play file using VLC"
+msgstr ""
+
+#: www/htdocs/config.rpy:777
+#, fuzzy
+msgid "Config"
+msgstr "Beállítás"
+
+#: www/htdocs/search.rpy:51 tv/plugins/search_programs.py:108
+#: tv/programitem.py:325
+msgid "Search Results"
+msgstr "Részletes keresés"
+
+#: www/htdocs/search.rpy:51 www/htdocs/search.rpy:75 www/web_types.py:203
+#: www/web_types.py:346 www/web_types.py:359 video/plugins/youtube.py:172
+#: tv/plugins/search_programs.py:84
+msgid "Search"
+msgstr "Keresés"
+
+#: www/htdocs/search.rpy:52
+msgid "recording server is unavailable"
+msgstr "A rögzítőszerver nem elérhető"
+
+#: www/htdocs/search.rpy:82
+msgid "No matches"
+msgstr "Nincs találat"
+
+#: www/htdocs/search.rpy:143
+msgid "New favorite"
+msgstr "Új kedvenc"
+
+#: www/htdocs/encoding_web.rpy:208 video/plugins/reencode.py:311
+#, fuzzy
+msgid "Unknown Profile"
+msgstr "Ismeretlen"
+
+#: www/htdocs/encoding_web.rpy:370
+msgid "Web Encoder"
+msgstr ""
+
+#: www/web_types.py:198
+msgid "View TV Listings"
+msgstr "Tv-műsor megnézése"
+
+#: www/web_types.py:199
+msgid "View Scheduled Recordings"
+msgstr "Időzített felvételek átnézése"
+
+#: www/web_types.py:200 tv/plugins/view_favorites.py:44
+#: tv/plugins/view_favorites.py:49 tv/plugins/view_favorites.py:58
+msgid "View Favorites"
+msgstr "Kedvencek megnézése"
+
+#: www/web_types.py:201
+msgid "View Media Library"
+msgstr "Médiakönyvtár megnézése"
+
+#: www/web_types.py:202
+msgid "Schedule a Manual Recording"
+msgstr "Egy kézi felvétel időzítése"
+
+#: www/web_types.py:203
+msgid "Advanced Search Page"
+msgstr "Bővített keresési lap"
+
+#: www/web_types.py:204
+msgid "Help"
+msgstr "Segítség"
+
+#: www/web_types.py:204
+msgid "View Online Help and Documentation"
+msgstr "Online segítség és dokumentáció megnézése"
+
+#: www/web_types.py:210
+msgid "Icecast List"
+msgstr "Icecast lista"
+
+#: www/web_types.py:210
+msgid "Change Icecast List"
+msgstr "Icecast lista megváltoztatása"
+
+#: www/web_types.py:360
+msgid "Movies only"
+msgstr "Csak filmek"
+
+#: www/web_types.py:361
+msgid "Go!"
+msgstr "Indulj!"
+
+#: skins/main/default_areas.py:119
+msgid "TV GUIDE"
+msgstr "TV-SEGÉD"
+
+#: skins/main/listing_area.py:215
+msgid "This directory is empty"
+msgstr "Ez a könyvtár üres"
+
+#: skins/main/info_area.py:133
+msgid "missing 'src' attribute in skin tag!"
+msgstr ""
+
+#: games/game.py:84
+#, python-format
+msgid "File \"%s\" not found!"
+msgstr ""
+
+#: games/__init__.py:78
+msgid "please update GAMES_ITEMS in local_conf.py"
+msgstr ""
+
+#: games/mame_cache.py:298
+msgid "Generating MAME cache, please wait."
+msgstr ""
+
+#: audio/plugins/detach.py:49
+msgid "Show player"
+msgstr ""
+
+#: audio/plugins/fxmms.py:160 audio/plugins/mplayer.py:115
+#, python-format
+msgid ""
+"%s\n"
+"not found!"
+msgstr ""
+
+#: audio/plugins/apodcast.py:96 video/plugins/vpodcast.py:131
+#, fuzzy
+msgid "Buffering podcast..."
+msgstr "Egy zene a lejátszási listában"
+
+#: audio/plugins/apodcast.py:110
+msgid "Listen Audio Podcast"
+msgstr ""
+
+#: audio/plugins/apodcast.py:148
+#, fuzzy
+msgid "Audio Podcast"
+msgstr "Hanhok"
+
+#: audio/plugins/apodcast.py:159 video/plugins/vpodcast.py:221
+#, fuzzy
+msgid "Fetching podcast..."
+msgstr "Hírek megszerzése..."
+
+#: audio/plugins/apodcast.py:188 video/plugins/vpodcast.py:253
+#, fuzzy
+msgid "No Podcast locations found"
+msgstr "Nem találok híroldalt"
+
+#: audio/plugins/apodcast.py:190 audio/plugins/apodcast.py:218
+msgid "AUDIO PODCAST"
+msgstr ""
+
+#: audio/plugins/apodcast.py:196 video/plugins/vpodcast.py:263
+#, fuzzy
+msgid "Fetching podcasts..."
+msgstr "Hírek megszerzése..."
+
+#: audio/plugins/apodcast.py:213
+msgid "Set APODCAST_DIR in local_conf.py"
+msgstr ""
+
+#: audio/plugins/radio.py:63
+msgid "Listen to Radio Station"
+msgstr ""
+
+#: audio/plugins/radio.py:84
+#, fuzzy
+msgid "Cannot play - recording in progress"
+msgstr "Felvétel folyamatban."
+
+#: audio/plugins/radio.py:118
+msgid "Radio"
+msgstr ""
+
+#: audio/plugins/radio.py:143
+msgid "No Radio Stations found"
+msgstr ""
+
+#: audio/plugins/radio.py:145
+msgid "Radio Stations"
+msgstr ""
+
+#: audio/plugins/playlists.py:82
+msgid "Playlists"
+msgstr ""
+
+#: audio/plugins/playlists.py:98
+msgid "Enqueue this Music in Playlist"
+msgstr ""
+
+#: audio/plugins/playlists.py:100
+msgid "Make a new Audio Playlist"
+msgstr ""
+
+#: audio/plugins/playlists.py:117
+msgid "Queued Directory"
+msgstr ""
+
+#: audio/plugins/playlists.py:119
+msgid "Queued Track"
+msgstr ""
+
+#: audio/plugins/playlists.py:127
+msgid "Added New Playlist"
+msgstr ""
+
+#: audio/plugins/xine.py:56
+msgid "'fbxine' not found, 'xine' audio plugin deactivated"
+msgstr ""
+
+#: audio/plugins/xmradio.py:62
+#, fuzzy
+msgid "Listen to XM Station"
+msgstr "Zenehallgatás"
+
+#: audio/plugins/xmradio.py:95
+msgid "XM Radio"
+msgstr ""
+
+#: audio/plugins/xmradio.py:136
+#, fuzzy
+msgid "No XM channels found"
+msgstr "Nem található kép"
+
+#: audio/plugins/xmradio.py:137
+#, fuzzy
+msgid "XM channels"
+msgstr "Csatorna módosítása"
+
+#: audio/plugins/coversearch.py:100
+msgid ""
+"To search for covers you need an Amazon.com Web Services\n"
+"license key. You can get yours from:\n"
+msgstr ""
+
+#: audio/plugins/coversearch.py:165
+msgid "Find a cover for this music"
+msgstr ""
+
+#: audio/plugins/coversearch.py:169 audio/plugins/coversearch.py:177
+#, python-format
+msgid ""
+"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
+"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
+"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
+"Info. Maybe you must fix this file (%s) tag?"
+msgstr ""
+
+#: audio/plugins/coversearch.py:185
+msgid "Unknown CD, cover searching is disabled"
+msgstr ""
+
+#: audio/plugins/coversearch.py:193
+msgid "searching Amazon..."
+msgstr ""
+
+#: audio/plugins/coversearch.py:212
+#, python-format
+msgid "No matches for %(artist)s - %(album)s"
+msgstr ""
+
+#: audio/plugins/coversearch.py:220
+msgid "Unknown error while searching."
+msgstr ""
+
+#: audio/plugins/coversearch.py:258 audio/plugins/coversearch.py:271
+msgid "small"
+msgstr ""
+
+#: audio/plugins/coversearch.py:282
+msgid "Cover Search Results"
+msgstr ""
+
+#: audio/plugins/coversearch.py:286
+msgid "No covers available from Amazon"
+msgstr ""
+
+#: audio/plugins/coversearch.py:299 video/plugins/imdb.py:216
+msgid "getting data..."
+msgstr ""
+
+#: audio/plugins/lyrics.py:62
+msgid "Show lyrics"
+msgstr ""
+
+#: audio/plugins/lyrics.py:67
+#, fuzzy
+msgid "Searching lyrics..."
+msgstr "Hírek megszerzése..."
+
+#: audio/plugins/lyrics.py:94 audio/plugins/lyrics.py:123
+#: audio/plugins/lyrics.py:150
+msgid "Lyrics not found, sorry..."
+msgstr ""
+
+#: audio/plugins/lyrics.py:114
+#, fuzzy
+msgid "No exact match. "
+msgstr "Nincs találat"
+
+#: audio/plugins/lyrics.py:115
+msgid "Here are some sugestions."
+msgstr ""
+
+#: audio/plugins/lyrics.py:120
+#, fuzzy
+msgid "Choices"
+msgstr "Értesítés"
+
+#: audio/plugins/musicip.py:85
+#, fuzzy
+msgid "MusicIP Mix"
+msgstr "Zene"
+
+#: audio/plugins/musicip.py:87
+msgid "Songs From Same Album"
+msgstr ""
+
+#: audio/plugins/musicip.py:88
+msgid "Songs From Same Artist"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:187
+msgid "Show CD ripping status"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:188
+msgid "Stop CD ripping"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:193
+msgid "Rip the CD to the hard drive"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:195
+msgid "Item is not an Audio CD"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:209
+#, python-format
+msgid ""
+"Ripping in progress\n"
+"Track %d of %d"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:230
+msgid "Backup CD to hard drive in mp3 format"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:233
+msgid "Backup CD to hard drive in Ogg format"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:236
+msgid "Backup CD to hard drive in FLAC format"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:238
+msgid "Backup CD to hard drive in wav format"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:241
+msgid "CD Backup"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:254
+msgid "Ripping started"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:341
+#, python-format
+msgid "Directory %s already exists"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:344
+#, python-format
+msgid "Cannot rip to '%s'! (%s)"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:360 audio/plugins/cdbackup.py:426
+#: audio/plugins/cdbackup.py:485
+msgid "Ripping aborted"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:498
+msgid "Ripping complete"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:511
+msgid "WARNING"
+msgstr "FIGYELEM"
+
+#: audio/plugins/cdbackup.py:511
+msgid "No CDDB data available to mmpython"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:514
+msgid "Unknown Artist"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:514 audio/plugins/cdbackup.py:515
+msgid "RENAME"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:515 audio/audiodiskitem.py:54
+msgid "Unknown CD Album"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:516
+msgid "Other"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:519
+msgid ""
+"CD info not found!\n"
+"Must manually rename files\n"
+"when finished ripping"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:582
+msgid "Problem trying to call:"
+msgstr ""
+
+#: audio/plugins/album_tree.py:182 audio/plugins/album_tree.py:272
+#, fuzzy
+msgid "Album Tree"
+msgstr "Album"
+
+#: audio/plugins/album_tree.py:298
+#, fuzzy
+msgid "No Objects found"
+msgstr "Nem található kép"
+
+#: audio/plugins/album_tree.py:322
+#, fuzzy
+msgid "Generating playlist..."
+msgstr "Egy zene a lejátszási listában"
+
+#: audio/plugins/vux.py:84
+msgid "[VUX] Start playing"
+msgstr ""
+
+#: audio/plugins/vux.py:85
+msgid "[VUX] Stop playing"
+msgstr ""
+
+#: audio/plugins/vux.py:86
+msgid "[VUX] Next (rating down)"
+msgstr ""
+
+#: audio/plugins/vux.py:87
+msgid "[VUX] Next (rating intact)"
+msgstr ""
+
+#: audio/plugins/vux.py:88
+msgid "[VUX] Next (rating up)"
+msgstr ""
+
+#: audio/plugins/vux.py:89
+msgid "[VUX] Playing item rating up"
+msgstr ""
+
+#: audio/plugins/vux.py:90
+msgid "[VUX] Playing item rating down"
+msgstr ""
+
+#: audio/plugins/vux.py:91
+msgid "[VUX] a dir item do not select"
+msgstr ""
+
+#: audio/plugins/vux.py:92
+msgid "[VUX] an audio item, do not select"
+msgstr ""
+
+#: audio/plugins/lastfm.py:193
+#, fuzzy
+msgid "Listen Last FM"
+msgstr "Zenehallgatás"
+
+#: audio/plugins/lastfm.py:218 audio/plugins/lastfm.py:251
+msgid "Last FM"
+msgstr ""
+
+#: audio/plugins/lastfm.py:249
+msgid "Invalid LastFM Session!"
+msgstr ""
+
+#: audio/audiodiskitem.py:73
+msgid "Browse disc"
+msgstr "Lemez böngészése"
+
+#: audio/audiodiskitem.py:112 directory.py:722
+msgid "Random playlist"
+msgstr ""
+
+#: audio/audiodiskitem.py:120
+msgid "Data files on disc"
+msgstr ""
+
+#: video/plugins/mover.py:99
+#, python-format
+msgid "Move to [%s]"
+msgstr ""
+
+#: video/plugins/mplayer.py:426
+msgid "Seeking not possible"
+msgstr ""
+
+#: video/plugins/imdb.py:97
+msgid "Search IMDB for this file"
+msgstr ""
+
+#: video/plugins/imdb.py:104 video/plugins/imdb.py:111
+#, python-format
+msgid "Search IMDB for [%s]"
+msgstr ""
+
+#: video/plugins/imdb.py:122
+msgid "searching IMDB..."
+msgstr ""
+
+#: video/plugins/imdb.py:155
+msgid "Unknown error while connecting to IMDB"
+msgstr ""
+
+#: video/plugins/imdb.py:173
+msgid "IMDB Query"
+msgstr ""
+
+#: video/plugins/imdb.py:177
+msgid "No information available from IMDB"
+msgstr ""
+
+#: video/plugins/bookmarker.py:65
+msgid "Resume playback"
+msgstr ""
+
+#: video/plugins/bookmarker.py:71
+msgid "Bookmarks"
+msgstr ""
+
+#: video/plugins/bookmarker.py:136
+#, python-format
+msgid "Jump to %s"
+msgstr ""
+
+#: video/plugins/dvdimage.py:79
+msgid "Play image as DVD"
+msgstr ""
+
+#: video/plugins/dvdimage.py:104
+msgid "Choose title to play. <1-9>"
+msgstr ""
+
+#: video/plugins/dvdimage.py:128
+#, python-format
+msgid "Choose disc (%i discs available)."
+msgstr ""
+
+#: video/plugins/reencode-old.py:72
+msgid "Re-encode this program..."
+msgstr ""
+
+#: video/plugins/reencode-old.py:88 video/plugins/dvdbackup.py:96
+#: video/plugins/reencode.py:159
+#, fuzzy
+msgid "Choose your encoding profile"
+msgstr "Felvétel megszerzése nem jött össze"
+
+#: video/plugins/reencode-old.py:99 video/plugins/dvdbackup.py:112
+#: video/plugins/reencode.py:363
+msgid "Please wait, analyzing video..."
+msgstr ""
+
+#: video/plugins/reencode-old.py:186 video/plugins/dvdbackup.py:181
+#: video/plugins/reencode.py:417
+#, fuzzy
+msgid "Encoding started"
+msgstr "Indítás napjának módosítása"
+
+#: video/plugins/linkbrowser.py:69
+msgid "Browse links (autoplay)"
+msgstr "Linkek böngészése (autolejátszás)"
+
+#: video/plugins/linkbrowser.py:70
+msgid "Browse links (autoplay, maximum caching)"
+msgstr "Linkek böngészése (autolejátszás, maximális cachelés)"
+
+#: video/plugins/linkbrowser.py:71
+msgid "Browse links"
+msgstr "Linkek böngészése"
+
+#: video/plugins/linkbrowser.py:140
+msgid "Downloading link list..."
+msgstr ""
+
+#: video/plugins/linkbrowser.py:147
+#, python-format
+msgid "Failed to download %s"
+msgstr ""
+
+#: video/plugins/dvdbackup.py:77
+msgid "Backup this dvd title..."
+msgstr ""
+
+#: video/plugins/xine.py:72
+msgid ""
+"'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+
+#: video/plugins/reencode.py:109
+msgid "Transcode this program..."
+msgstr ""
+
+#: video/plugins/reencode.py:148
+msgid "Start Encoding"
+msgstr ""
+
+#: video/plugins/reencode.py:149
+#, fuzzy
+msgid "Select Encoding Profile"
+msgstr "Felvétel megszerzése nem jött össze"
+
+#: video/plugins/reencode.py:150 video/plugins/reencode.py:181
+#, fuzzy
+msgid "Modify Container"
+msgstr "Név módosítása"
+
+#: video/plugins/reencode.py:151 video/plugins/reencode.py:191
+#, fuzzy
+msgid "Modify Resolution"
+msgstr "Szándék"
+
+#: video/plugins/reencode.py:152 video/plugins/reencode.py:201
+#: video/plugins/reencode.py:221
+#, fuzzy
+msgid "Modify Video Codec"
+msgstr "Idő módosítása"
+
+#: video/plugins/reencode.py:153 video/plugins/reencode.py:211
+#, fuzzy
+msgid "Modify Video Bitrate"
+msgstr "Leállítás idejének módosítása"
+
+#: video/plugins/reencode.py:154
+#, fuzzy
+msgid "Modify Audio Codec"
+msgstr "Idő módosítása"
+
+#: video/plugins/reencode.py:155 video/plugins/reencode.py:231
+#, fuzzy
+msgid "Modify Audio Bitrate"
+msgstr "Leállítás idejének módosítása"
+
+#: video/plugins/reencode.py:156
+msgid "Modify Number of passes"
+msgstr ""
+
+#: video/plugins/reencode.py:157
+msgid "Modify Number of Encoder Threads"
+msgstr ""
+
+#: video/plugins/reencode.py:158
+msgid "Modify Video Filter (not implemented)"
+msgstr ""
+
+#: video/plugins/reencode.py:167
+msgid "Xvid Low Quality"
+msgstr ""
+
+#: video/plugins/reencode.py:168
+msgid "Xvid High Quality"
+msgstr ""
+
+#: video/plugins/reencode.py:169
+msgid "iPod"
+msgstr ""
+
+#: video/plugins/reencode.py:170
+msgid "DVD"
+msgstr ""
+
+#: video/plugins/reencode.py:171
+msgid "Select Profile"
+msgstr ""
+
+#: video/plugins/reencode.py:241
+msgid "Modify Number of Passes"
+msgstr ""
+
+#: video/plugins/reencode.py:251
+msgid "Modify Number of Encoding threads"
+msgstr ""
+
+#: video/plugins/reencode.py:261
+#, fuzzy
+msgid "Modify Video Filter"
+msgstr "Leállítás idejének módosítása"
+
+#: video/plugins/reencode.py:343
+#, fuzzy
+msgid "Unknown Property"
+msgstr "Ismeretlen"
+
+#: video/plugins/details.py:66
+msgid "Show details for this item"
+msgstr ""
+
+#: video/plugins/details.py:96
+msgid "Details"
+msgstr ""
+
+#: video/plugins/bilingual.py:81
+msgid "Bilingual language selection"
+msgstr ""
+
+#: video/plugins/bilingual.py:88
+msgid "Play Both Channels"
+msgstr ""
+
+#: video/plugins/bilingual.py:89
+msgid "Play Left Channel"
+msgstr ""
+
+#: video/plugins/bilingual.py:90
+msgid "Play Right Channel"
+msgstr ""
+
+#: video/plugins/bilingual.py:91
+#, fuzzy
+msgid "Language Menu"
+msgstr "Nyelv"
+
+#: video/plugins/fxdarchive.py:93
+#, fuzzy
+msgid "Archive FXD files"
+msgstr "FXV fájlok"
+
+#: video/plugins/fxdarchive.py:103
+#, fuzzy
+msgid "Finding and copying FXD files..."
+msgstr "Fájlok másolása"
+
+#: video/plugins/fxdarchive.py:122
+msgid "There was a error while trying to write the fxd file"
+msgstr ""
+
+#: video/plugins/fxdarchive.py:132
+msgid "But I couldn't copy a cover image file."
+msgstr ""
+
+#: video/plugins/fxdarchive.py:135
+#, python-format
+msgid "%d fxd files archived. %s"
+msgstr ""
+
+#: video/plugins/vpodcast.py:211
+#, fuzzy
+msgid "Video Podcast"
+msgstr "Hanhok"
+
+#: video/plugins/vpodcast.py:255 video/plugins/vpodcast.py:288
+#, fuzzy
+msgid "Video Podcasts"
+msgstr "Hanhok"
+
+#: video/plugins/vpodcast.py:282
+msgid "Set VPODCAST_DIR in local_conf.py"
+msgstr ""
+
+#: video/plugins/moviecovers.py:251
+msgid "Search Moviecovers.com for this file"
+msgstr ""
+
+#: video/plugins/moviecovers.py:258 video/plugins/moviecovers.py:265
+#, python-format
+msgid "Search Moviecovers.com for [%s]"
+msgstr ""
+
+#: video/plugins/moviecovers.py:274
+#, fuzzy
+msgid "Searching Moviecovers.com..."
+msgstr "Hírek megszerzése..."
+
+#: video/plugins/moviecovers.py:298
+msgid "Connection error : Probably connection timeout, try again"
+msgstr ""
+
+#: video/plugins/moviecovers.py:311
+msgid "MOVIECOVERS Query"
+msgstr ""
+
+#: video/plugins/moviecovers.py:315
+#, fuzzy
+msgid "No information available from Moviecovers.com"
+msgstr "Nincs elérhető információ"
+
+#: video/plugins/moviecovers.py:352
+msgid "Getting data, it can be long as we download a ZIP file"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:66
+msgid "Voir les bandes annonces de film"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:74
+msgid "Bandes annonces disponibles"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:83
+msgid "Voir les sorties DVD"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:91
+msgid "Bandes annonces DVD disponibles"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:114
+msgid ""
+"\n"
+"Semaine du "
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:132
+msgid "Recuperation des types de bande annonces disponibles"
+msgstr ""
+
+#: video/plugins/appletrailers.py:97 video/plugins/appletrailers.py:106
+#, fuzzy
+msgid "Scanning Apple for trailers..."
+msgstr "Könyvtár felderítése, légy türelmes..."
+
+#: video/plugins/appletrailers.py:174
+#, fuzzy
+msgid "Browse by Title"
+msgstr "Lista böngészése"
+
+#: video/plugins/appletrailers.py:175
+#, fuzzy
+msgid "Trailers"
+msgstr "Cím"
+
+#: video/plugins/appletrailers.py:214
+#, fuzzy
+msgid "Browse by Genre"
+msgstr "Lemez böngészése"
+
+#: video/plugins/appletrailers.py:223
+#, fuzzy
+msgid "Choose a genre"
+msgstr "Válassz könyvtárt"
+
+#: video/plugins/appletrailers.py:228
+#, fuzzy
+msgid "Browse by Category"
+msgstr "Könyvtár megnézése"
+
+#: video/plugins/appletrailers.py:237
+#, fuzzy
+msgid "Choose a category"
+msgstr "Válassz könyvtárt"
+
+#: video/plugins/appletrailers.py:242
+#, fuzzy
+msgid "Browse by Studio"
+msgstr "Lemez böngészése"
+
+#: video/plugins/appletrailers.py:251
+#, fuzzy
+msgid "Choose a studio"
+msgstr "Válassz könyvtárt"
+
+#: video/plugins/youtube.py:150
+msgid "Youtube videos"
+msgstr ""
+
+#: video/plugins/youtube.py:179
+msgid "Retrieving video list"
+msgstr ""
+
+#: video/plugins/youtube.py:180 video/plugins/youtube.py:231
+#, fuzzy
+msgid "Videos available"
+msgstr "Videó"
+
+#: video/plugins/youtube.py:188
+#, fuzzy
+msgid "Downloading video"
+msgstr "Letöltés"
+
+#: video/plugins/youtube.py:202
+msgid "bla"
+msgstr ""
+
+#: video/plugins/youtube.py:215 video/plugins/youtube.py:240
+msgid "Loading video list"
+msgstr ""
+
+#: video/__init__.py:182
+msgid "Directory Autobuild Thumbnails "
+msgstr ""
+
+#: video/__init__.py:183
+msgid "Build video thumbnails for all items (may take a while when entering)."
+msgstr ""
+
+#: video/configure.py:68 video/configure.py:103
+#, python-format
+msgid "Stream %s"
+msgstr ""
+
+#: video/configure.py:79
+msgid "Audio Menu"
+msgstr ""
+
+#: video/configure.py:94
+msgid "no subtitles"
+msgstr ""
+
+#: video/configure.py:116
+msgid "Subtitle Menu"
+msgstr ""
+
+#: video/configure.py:133 video/configure.py:175
+#, python-format
+msgid "Play chapter %s"
+msgstr ""
+
+#: video/configure.py:155 video/configure.py:178
+msgid "Chapter Menu"
+msgstr ""
+
+#: video/configure.py:198
+#, fuzzy, python-format
+msgid "Play with \"%s\""
+msgstr "Lejátszási lista %s"
+
+#: video/configure.py:201
+#, fuzzy
+msgid "Player Menu"
+msgstr "Játék"
+
+#: video/configure.py:229
+#, python-format
+msgid "Turn off %s"
+msgstr ""
+
+#: video/configure.py:230
+#, python-format
+msgid "Turn on %s"
+msgstr ""
+
+#: video/configure.py:259
+msgid "Activate TOP field first"
+msgstr ""
+
+#: video/configure.py:261 video/configure.py:303
+msgid "Activate BOTTOM field first"
+msgstr ""
+
+#: video/configure.py:263
+msgid "Activate AUTO field first"
+msgstr ""
+
+#: video/configure.py:275
+msgid "Play with alternate player"
+msgstr ""
+
+#: video/configure.py:280
+msgid "Audio selection"
+msgstr ""
+
+#: video/configure.py:282
+msgid "Subtitle selection"
+msgstr ""
+
+#: video/configure.py:285 video/configure.py:289
+msgid "Chapter selection"
+msgstr ""
+
+#: video/configure.py:297
+msgid "de-interlacing"
+msgstr ""
+
+#: video/configure.py:300
+msgid "X-Video Motion Compensation (xvmc)"
+msgstr ""
+
+#: video/configure.py:308 video/videoitem.py:350 tv/programitem.py:110
+#: playlist.py:301
+msgid "Play"
+msgstr ""
+
+#: video/configure.py:309
+msgid "Config Menu"
+msgstr ""
+
+#: video/videoitem.py:325
+msgid "Play DVD"
+msgstr ""
+
+#: video/videoitem.py:326 video/videoitem.py:328
+msgid "DVD title list"
+msgstr ""
+
+#: video/videoitem.py:329 video/videoitem.py:337
+msgid "Play default track"
+msgstr ""
+
+#: video/videoitem.py:333
+msgid "Play VCD"
+msgstr ""
+
+#: video/videoitem.py:334 video/videoitem.py:336
+msgid "VCD title list"
+msgstr ""
+
+#: video/videoitem.py:352
+#, fuzzy
+msgid "Full description"
+msgstr "Meghatározás"
+
+#: video/videoitem.py:355
+msgid "Play with maximum cache"
+msgstr ""
+
+#: video/videoitem.py:360
+msgid "Show variants"
+msgstr ""
+
+#: video/videoitem.py:364
+msgid "Create Thumbnail"
+msgstr ""
+
+#: video/videoitem.py:392
+msgid "Please wait...."
+msgstr ""
+
+#: video/videoitem.py:468
+msgid "No player for this item found"
+msgstr ""
+
+#: video/videoitem.py:520 video/videoitem.py:533 video/videoitem.py:547
+#, python-format
+msgid ""
+"No media found for \"%s\".\n"
+"Please insert the media \"%s\"."
+msgstr ""
+
+#: video/videoitem.py:630
+#, python-format
+msgid "Play Title %d"
+msgstr ""
+
+#: video/videoitem.py:715 tv/programitem.py:356
+#, fuzzy
+msgid "No Information Available"
+msgstr "Nincs elérhető információ"
+
+#: video/videoitem.py:731 plugins/lcd.py:221 plugins/freevused.py:517
+#: share/skins/main/mediaportal.fxd:692 share/skins/main/dark.fxd:453
+#: share/skins/main/dark.fxd:754 share/skins/main/basic.fxd:391
+#: share/skins/main/blurr.fxd:708 share/skins/main/info.fxd:465
+msgid "Genre"
+msgstr "Műfaj"
+
+#: video/videoitem.py:733 plugins/lcd.py:67 plugins/lcd.py:75
+#: plugins/vfd.py:91 plugins/vfd.py:99 plugins/freevused.py:531
+#: plugins/freevused.py:547 share/skins/main/geexbox.fxd:708
+#: share/skins/main/mediaportal.fxd:716 share/skins/main/dark.fxd:537
+#: share/skins/main/dark.fxd:774 share/skins/main/basic.fxd:416
+#: share/skins/main/blurr.fxd:724 share/skins/main/info.fxd:219
+msgid "Length"
+msgstr "Hossz"
+
+#: video/videoitem.py:735 plugins/lcd.py:70 plugins/lcd.py:74
+#: plugins/vfd.py:94 plugins/vfd.py:98 share/skins/main/geexbox.fxd:691
+#: share/skins/main/mediaportal.fxd:680 share/skins/main/dark.fxd:447
+#: share/skins/main/blurr.fxd:686 share/skins/main/info.fxd:459
+msgid "Year"
+msgstr "Év"
+
+#: plugins/idlebar/diskfree.py:103
+#, python-format
+msgid "%iGB"
+msgstr "%i GB"
+
+#: plugins/idlebar/transcode.py:196 plugins/idlebar/encoding.py:173
+#, fuzzy
+msgid "encoding server not running"
+msgstr "A rögzítőszerver fut"
+
+#: plugins/idlebar/transcode.py:203 plugins/idlebar/encoding.py:179
+#, fuzzy
+msgid "encoding server has no jobs"
+msgstr "A rögzítőszerver nem elérhető"
+
+#: plugins/idlebar/system.py:113
+#, python-format
+msgid "%iM"
+msgstr "%i MB"
+
+#: plugins/idlebar/system.py:138
+#, python-format
+msgid "%s%%"
+msgstr "%s%%"
+
+#: plugins/headlines.py:116 plugins/itv.py:133
+msgid "Show Sites Headlines"
+msgstr "Híroldalak mutatása"
+
+#: plugins/headlines.py:138 plugins/itv.py:163
+msgid "Fetching headlines..."
+msgstr "Hírek megszerzése..."
+
+#: plugins/headlines.py:203 plugins/itv.py:238
+msgid "No Headlines found"
+msgstr "Nincsenek hírek"
+
+#: plugins/headlines.py:205 plugins/headlines.py:218 plugins/itv.py:240
+#: share/skins/main/geexbox.fxd:481 share/skins/main/dark.fxd:22
+#: share/skins/main/crystal.fxd:15 share/skins/main/bluestar.fxd:15
+#: share/skins/main/rain.fxd:15
+msgid "Headlines"
+msgstr "Hírek"
+
+#: plugins/headlines.py:224 plugins/headlines.py:238 plugins/itv.py:259
+#: plugins/itv.py:274
+msgid "Headlines Sites"
+msgstr "Híroldalak"
+
+#: plugins/headlines.py:236 plugins/itv.py:272
+msgid "No Headlines Sites found"
+msgstr "Nem találok híroldalt"
+
+#: plugins/itv.py:253
+msgid "Internet TV"
+msgstr ""
+
+#: plugins/buttonbar.py:123 tv/programitem.py:113
+#, fuzzy
+msgid "Full Description"
+msgstr "Meghatározás"
+
+#: plugins/buttonbar.py:126
+#, fuzzy
+msgid "Now"
+msgstr "Nem"
+
+#: plugins/buttonbar.py:135
+#, fuzzy
+msgid "WARNING: "
+msgstr "FIGYELEM"
+
+#: plugins/buttonbar.py:136
+#, python-format
+msgid "\"%s\" is not a valid argument for the button bar. "
+msgstr ""
+
+#: plugins/buttonbar.py:368
+msgid "More Options"
+msgstr ""
+
+#: plugins/shoppingcart.py:63
+msgid "Moving files..."
+msgstr "Fájlok áthelyezése..."
+
+#: plugins/shoppingcart.py:79
+msgid "Copying files..."
+msgstr "Fájlok másolása"
+
+#: plugins/shoppingcart.py:104
+msgid "Added to Cart"
+msgstr "Raktárba tesz"
+
+#: plugins/shoppingcart.py:117
+#, fuzzy
+msgid "Removed from Cart"
+msgstr "Raktárba tesz"
+
+#: plugins/shoppingcart.py:125
+#, fuzzy
+msgid "Removed Item from Cart"
+msgstr "Raktárba tesz"
+
+#: plugins/shoppingcart.py:128
+#, fuzzy
+msgid "Added Item to Cart"
+msgstr "Raktárba tesz"
+
+#: plugins/shoppingcart.py:151
+msgid "Cart: Move Files Here"
+msgstr "Raktár: tedd ide"
+
+#: plugins/shoppingcart.py:152
+msgid "Cart: Copy Files Here"
+msgstr "Raktár: másold ide"
+
+#: plugins/shoppingcart.py:156
+msgid "Add Directory to Cart"
+msgstr "Egy könyvtárt raktárba tesz"
+
+#: plugins/shoppingcart.py:158
+#, fuzzy
+msgid "Remove Directory from Cart"
+msgstr "Egy könyvtárt raktárba tesz"
+
+#: plugins/shoppingcart.py:162
+#, fuzzy
+msgid "Add to Cart"
+msgstr "Raktárba tesz"
+
+#: plugins/shoppingcart.py:164
+#, fuzzy
+msgid "Remove from Cart"
+msgstr "Eltávolítás"
+
+#: plugins/shoppingcart.py:167
+msgid "Delete Cart"
+msgstr "Raktár törlése"
+
+#: plugins/lcd.py:48
+msgid "You need pylcd to run \"lcd\" plugin."
+msgstr "Szükséged van a pylcd-re az \"lcd\" plugin futtatásához."
+
+#: plugins/lcd.py:68 plugins/lcd.py:72 plugins/lcd.py:183 plugins/vfd.py:92
+#: plugins/vfd.py:96 plugins/freevused.py:514 share/skins/main/dark.fxd:521
+#: share/skins/main/dark.fxd:734 share/skins/main/info.fxd:202
+#: share/skins/main/info.fxd:357 share/skins/main/info.fxd:397
+msgid "Artist"
+msgstr "Előadó"
+
+#: plugins/lcd.py:69 plugins/lcd.py:73 plugins/lcd.py:180 plugins/vfd.py:93
+#: plugins/vfd.py:97 plugins/freevused.py:511 share/skins/main/geexbox.fxd:685
+#: share/skins/main/mediaportal.fxd:674 share/skins/main/dark.fxd:527
+#: share/skins/main/dark.fxd:739 share/skins/main/basic.fxd:374
+#: share/skins/main/blurr.fxd:680 share/skins/main/info.fxd:208
+#: share/skins/main/info.fxd:362
+msgid "Album"
+msgstr "Album"
+
+#: plugins/lcd.py:71 plugins/vfd.py:95 share/skins/main/geexbox.fxd:366
+#: share/skins/main/mediaportal.fxd:331 share/skins/main/blurr.fxd:339
+#: share/skins/main/info.fxd:402 share/skins/main/Panorama.fxd:360
+msgid "Tracks"
+msgstr "Szám"
+
+#: plugins/lcd.py:76 plugins/vfd.py:100 share/skins/main/dark.fxd:477
+#: share/skins/main/basic.fxd:735 share/skins/main/info.fxd:288
+#: share/skins/main/info.fxd:494
+msgid "Resolution"
+msgstr "Szándék"
+
+#: plugins/lcd.py:77 plugins/vfd.py:101
+msgid "Aspect"
+msgstr "Műfaj"
+
+#: plugins/lcd.py:78 plugins/lcd.py:81 plugins/lcd.py:218 plugins/vfd.py:102
+#: plugins/vfd.py:105
+msgid "Tagline"
+msgstr ""
+
+#: plugins/lcd.py:79 plugins/lcd.py:80 plugins/vfd.py:103 plugins/vfd.py:104
+msgid "Plot"
+msgstr "Terv"
+
+#: plugins/lcd.py:82 plugins/vfd.py:106 plugins/freevused.py:539
+#: share/skins/main/dark.fxd:582
+msgid "Geometry"
+msgstr "Forma"
+
+#: plugins/lcd.py:85 plugins/vfd.py:109
+#, python-format
+msgid "%s items"
+msgstr "%s darab"
+
+#: plugins/lcd.py:140 plugins/lcd.py:288 plugins/lcd.py:385 plugins/vfd.py:164
+#, python-format
+msgid "Today is %s."
+msgstr "Ma %s van."
+
+#: plugins/lcd.py:150 plugins/lcd.py:618
+msgid "Menu"
+msgstr "Menü"
+
+#: plugins/lcd.py:153 plugins/lcd.py:621
+msgid "Item"
+msgstr "Tétel"
+
+#: plugins/lcd.py:156 share/skins/main/dark.fxd:471
+#: share/skins/main/info.fxd:283 share/skins/main/info.fxd:488
+msgid "Type"
+msgstr "Típus"
+
+#: plugins/lcd.py:159
+msgid "Information"
+msgstr "Információ"
+
+#: plugins/lcd.py:215 plugins/lcd.py:660
+msgid "Video"
+msgstr "Videó"
+
+#: plugins/lcd.py:787
+msgid ""
+"LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
+msgstr ""
+"Az LCD  plugin nincs betöltve! Fut egyáltalán az LCDd (lcdproc szolgáltatás)?"
+
+#: plugins/mediamenu.py:137
+msgid "Media"
+msgstr "Média"
+
+#: plugins/mediamenu.py:142
+msgid "Movie"
+msgstr "Filmek"
+
+#: plugins/mediamenu.py:144
+msgid "Audio"
+msgstr "Hanhok"
+
+#: plugins/mediamenu.py:146
+msgid "Image"
+msgstr "Képek"
+
+#: plugins/mediamenu.py:148 share/skins/main/dark.fxd:21
+#: share/skins/main/crystal.fxd:14 share/skins/main/bluestar.fxd:14
+#: share/skins/main/basic.fxd:24 share/skins/main/rain.fxd:14
+#: share/skins/main/info.fxd:17
+msgid "Games"
+msgstr "Játékok"
+
+#: plugins/mediamenu.py:150
+#, python-format
+msgid "%s Main Menu"
+msgstr "%s saját menü"
+
+#: plugins/freeboxtv.py:73
+msgid "Freebox TV"
+msgstr ""
+
+#: plugins/freeboxtv.py:80
+msgid "Freebox TV :: Les chaines"
+msgstr ""
+
+#: plugins/freeboxtv.py:114 plugins/oneclick.py:804
+msgid "No locations specified"
+msgstr "Nincs hely meghatározva"
+
+#: plugins/freeboxtv.py:118
+msgid "Freebox TV :: Les chaines Multiposte"
+msgstr ""
+
+#: plugins/ossmixer.py:132 plugins/ossmixer.py:135 plugins/ossmixer.py:141
+#: plugins/ossmixer.py:144 plugins/ossmixer.py:149 plugins/mixer.py:131
+#: plugins/mixer.py:134 plugins/mixer.py:140 plugins/mixer.py:143
+#: plugins/mixer.py:148 plugins/alsamixer.py:164 plugins/alsamixer.py:167
+#: plugins/alsamixer.py:175 plugins/alsamixer.py:178 plugins/alsamixer.py:185
+#: plugins/sixmixer.py:150 plugins/sixmixer.py:321 plugins/alsamixer2.py:192
+#: plugins/alsamixer2.py:196 plugins/alsamixer2.py:201
+#, python-format
+msgid "Volume: %s%%"
+msgstr "Hangerő: %s%%"
+
+#: plugins/ossmixer.py:152 plugins/mixer.py:151 plugins/alsamixer.py:188
+#: plugins/sixmixer.py:153 plugins/alsamixer2.py:204
+msgid "Mute"
+msgstr "Némít"
+
+#: plugins/icecast.py:158
+msgid "Set as icecast playlist"
+msgstr "Az icecast lejátszási lista beállítása"
+
+#: plugins/cd_burn.py:91 plugins/command.py:152 gui/ConfirmBox.py:71
+#: gui/AlertBox.py:62
+msgid "OK"
+msgstr "OK"
+
+#: plugins/cd_burn.py:152
+msgid "Not Yet implemented :)"
+msgstr ""
+
+#: plugins/cd_burn.py:161
+#, python-format
+msgid "Cannot find %s (%s). "
+msgstr ""
+
+#: plugins/cd_burn.py:179
+#, python-format
+msgid "Start burning %s audio files?"
+msgstr ""
+
+#: plugins/cd_burn.py:209
+msgid "Insert media then click OK"
+msgstr ""
+
+#: plugins/cd_burn.py:234
+#, python-format
+msgid "Start burning %s ?"
+msgstr ""
+
+#: plugins/cd_burn.py:244
+#, python-format
+msgid "Start burning %s entries? ( %d Mb )"
+msgstr ""
+
+#: plugins/cd_burn.py:500
+#, python-format
+msgid "Burning status: %s"
+msgstr ""
+
+#: plugins/cd_burn.py:646
+#, python-format
+msgid "Error : Could not convert %s"
+msgstr ""
+
+#: plugins/cd_burn.py:651
+#, python-format
+msgid "/tmp/burnlist/%s"
+msgstr ""
+
+#: plugins/cd_burn.py:753
+msgid "Interrupting burning process..."
+msgstr ""
+
+#: plugins/cd_burn.py:763
+msgid "Backup interrupted"
+msgstr ""
+
+#: plugins/cd_burn.py:770
+#, python-format
+msgid "Item type is %s"
+msgstr ""
+
+#: plugins/cd_burn.py:778
+#, python-format
+msgid "Should show the menu? %i"
+msgstr ""
+
+#: plugins/cd_burn.py:781
+msgid "Burn CD"
+msgstr ""
+
+#: plugins/cd_burn.py:792
+msgid "CD Burn Menu"
+msgstr ""
+
+#: plugins/cd_burn.py:815
+msgid "Copy dir to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:817
+msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
+msgstr ""
+
+#: plugins/cd_burn.py:829
+msgid "Copy this file to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:837
+#, python-format
+msgid "Copy %s to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:851
+#, python-format
+msgid "Copy %s, and related, to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:865
+#, python-format
+msgid "Copy %s, and related, file to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:879
+msgid "Burn as DVD-VIDEO disc"
+msgstr ""
+
+#: plugins/yac.py:69
+#, python-format
+msgid "Call: %s"
+msgstr "Tárcsáz: %s"
+
+#: plugins/yac.py:71
+#, python-format
+msgid "Message: %s"
+msgstr "Üzenet: %s"
+
+#: plugins/remind.py:100
+#, fuzzy
+msgid "Show Reminders"
+msgstr "Stderr mutatása"
+
+#: plugins/remind.py:111
+#, fuzzy
+msgid "No Reminders Found"
+msgstr "Nincsenek hírek"
+
+#: plugins/remind.py:113 plugins/remind.py:163
+msgid "Reminders"
+msgstr ""
+
+#: plugins/remind.py:175
+#, fuzzy
+msgid "Reminders types"
+msgstr "Híroldalak"
+
+#: plugins/remind.py:189
+msgid "Remind type"
+msgstr ""
+
+#: plugins/command.py:138
+msgid "Command finished"
+msgstr "Parancs vége"
+
+#: plugins/command.py:154
+msgid "Show Stderr"
+msgstr "Stderr mutatása"
+
+#: plugins/command.py:156
+msgid "Show Stdout"
+msgstr "Stdout mutatása"
+
+#: plugins/command.py:174
+msgid "Stdout File"
+msgstr "Stdout fájlba"
+
+#: plugins/command.py:178
+msgid "Stderr File"
+msgstr "Stderror fájlba"
+
+#: plugins/command.py:215 plugins/home_automation.py:113
+msgid "Run Command"
+msgstr "Parancs futtatása"
+
+#: plugins/command.py:226
+msgid "Running Command..."
+msgstr "A parancs fut..."
+
+#: plugins/command.py:254
+msgid "Command Failed"
+msgstr "Hibás parancs"
+
+#: plugins/command.py:256
+msgid "Command Completed"
+msgstr "Parancs végrehajtva"
+
+#: plugins/command.py:289 plugins/command.py:327 share/skins/main/dark.fxd:23
+#: share/skins/main/crystal.fxd:16 share/skins/main/rain.fxd:16
+msgid "Commands"
+msgstr "Parancsok"
+
+#: plugins/vfd.py:52
+#, fuzzy
+msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
+msgstr "Szükséged van a pylcd-re az \"lcd\" plugin futtatásához."
+
+#: plugins/vfd.py:299
+#, python-format
+msgid "Sending data %r attempt=%d"
+msgstr ""
+
+#: plugins/oneclick.py:389
+#, python-format
+msgid "Fetching Weather for %s..."
+msgstr "Időjárásjelentés megszerzése a %s-ról..."
+
+#: plugins/oneclick.py:438 plugins/oneclick.py:452
+#, python-format
+msgid "Fetching Radar Map for %s..."
+msgstr "Időjárásjelentés megszerzése a %s-ról..."
+
+#: plugins/oneclick.py:523
+msgid "Show Weather Details"
+msgstr "Időjárásjelentés mutatása"
+
+#: plugins/oneclick.py:589
+msgid "and"
+msgstr "és"
+
+#: plugins/oneclick.py:604
+msgid "Variable"
+msgstr ""
+
+#: plugins/oneclick.py:604 plugins/oneclick.py:605 plugins/oneclick.py:719
+#: plugins/oneclick.py:984 util/misc.py:451 util/misc.py:462 util/misc.py:473
+msgid "at"
+msgstr ""
+
+#: plugins/oneclick.py:776 plugins/oneclick.py:812 plugins/mpd.py:117
+msgid "Locations"
+msgstr "Hely"
+
+#: plugins/oneclick.py:832
+msgid "Current Conditions"
+msgstr "Jelenlegi feltételek"
+
+#: plugins/oneclick.py:832
+msgid "Today's Forecast"
+msgstr "Holnapi előrejelzés"
+
+#: plugins/oneclick.py:833
+msgid "Extended Forecast"
+msgstr "Távoli előrejelzés"
+
+#: plugins/oneclick.py:833
+msgid "Radar Map"
+msgstr "Áttekintő-térkép"
+
+#: plugins/oneclick.py:864
+msgid "for"
+msgstr ""
+
+#: plugins/oneclick.py:940
+msgid "Humidity"
+msgstr "Páratartam"
+
+#: plugins/oneclick.py:942
+msgid "Pressure"
+msgstr "Légnyomás"
+
+#: plugins/oneclick.py:944
+msgid "Wind"
+msgstr "Szél"
+
+#: plugins/oneclick.py:946
+msgid "Wind Chill"
+msgstr "Hideg szél"
+
+#: plugins/oneclick.py:948
+msgid "Visibility"
+msgstr "Látási viszonyok"
+
+#: plugins/oneclick.py:950
+msgid "UV Index"
+msgstr "UV Index"
+
+#: plugins/oneclick.py:983
+msgid "As of:"
+msgstr ""
+
+#: plugins/oneclick.py:986
+msgid "Temperature:"
+msgstr ""
+
+#: plugins/oneclick.py:987
+msgid "Dew Point:"
+msgstr ""
+
+#: plugins/oneclick.py:988
+#, fuzzy
+msgid "Humidity:"
+msgstr "Páratartam"
+
+#: plugins/oneclick.py:989
+#, fuzzy
+msgid "Visibility:"
+msgstr "Látási viszonyok"
+
+#: plugins/oneclick.py:990
+#, fuzzy
+msgid "Pressure:"
+msgstr "Légnyomás"
+
+#: plugins/oneclick.py:991
+#, fuzzy
+msgid "Winds:"
+msgstr "Szél"
+
+#: plugins/oneclick.py:992
+msgid "Tonight:"
+msgstr ""
+
+#: plugins/oneclick.py:993
+#, fuzzy
+msgid "Sunset:"
+msgstr "Vas"
+
+#: plugins/oneclick.py:994
+msgid "Moon Phase:"
+msgstr ""
+
+#: plugins/oneclick.py:1046
+msgid "LO"
+msgstr ""
+
+#: plugins/oneclick.py:1052
+msgid "HI"
+msgstr ""
+
+#: plugins/oneclick.py:1069
+#, fuzzy
+msgid "Error encountered while trying to download weather map"
+msgstr "Megoldhatatlan probléma támadt az áttekintő-térkép megszerzése közben"
+
+#: plugins/ejectromdrives.py:69
+#, fuzzy
+msgid "Close drive"
+msgstr "Ablak bezárása"
+
+#: plugins/ejectromdrives.py:71
+#, fuzzy
+msgid "Eject drive"
+msgstr "Lemez kiadása a %s meghajtóból"
+
+#: plugins/freevused.py:140
+msgid ""
+"You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" "
+"plugin."
+msgstr ""
+
+#: plugins/freevused.py:287 plugins/freevused.py:290
+#, fuzzy
+msgid "Playing"
+msgstr "Lejátszási lista"
+
+#: plugins/freevused.py:419
+#, fuzzy, python-format
+msgid "BT event %s"
+msgstr "Text: %s"
+
+#: plugins/freevused.py:508 tv/plugins/recordings_manager.py:74
+#: tv/edit_favorite.py:105 share/skins/main/mediaportal.fxd:686
+#: share/skins/main/dark.fxd:749 share/skins/main/basic.fxd:385
+#: share/skins/main/basic.fxd:615 share/skins/main/blurr.fxd:702
+#: share/skins/main/info.fxd:270
+msgid "Name"
+msgstr ""
+
+#: plugins/freevused.py:520 share/skins/main/geexbox.fxd:210
+#: share/skins/main/geexbox.fxd:336 share/skins/main/geexbox.fxd:697
+#: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
+#: share/skins/main/dark.fxd:759 share/skins/main/basic.fxd:397
+#: share/skins/main/blurr.fxd:202 share/skins/main/blurr.fxd:309
+#: share/skins/main/blurr.fxd:692 share/skins/main/Panorama.fxd:205
+#: share/skins/main/Panorama.fxd:330 share/skins/main/Panorama.fxd:755
+msgid "Track"
+msgstr "Sáv"
+
+#: plugins/freevused.py:528 share/skins/main/mediaportal.fxd:708
+#: share/skins/main/dark.fxd:768 share/skins/main/basic.fxd:407
+#: share/skins/main/blurr.fxd:714 share/skins/main/info.fxd:225
+msgid "Bitrate"
+msgstr "Bitráta"
+
+#: plugins/home_automation.py:57
+#, fuzzy
+msgid "Room Items"
+msgstr "Dolgok"
+
+#: plugins/home_automation.py:67
+msgid "Home Automation Devices"
+msgstr ""
+
+#: plugins/home_automation.py:82 plugins/home_automation.py:98
+#, fuzzy
+msgid "Device Options"
+msgstr "Meghatározás"
+
+#: plugins/home_automation.py:127 plugins/home_automation.py:134
+#: plugins/home_automation.py:146
+#, fuzzy
+msgid "Home Automation"
+msgstr "Automatikus leállítás visszaállítása"
+
+#: plugins/home_automation.py:145
+#, fuzzy
+msgid "No Home Automation items found"
+msgstr "Nem találok híroldalt"
+
+#: plugins/df.py:71
+msgid "Bad Path"
+msgstr ""
+
+#: plugins/df.py:73
+#, python-format
+msgid "%i free of %i GB total (%i%% free)"
+msgstr "%i szabad a teljes %i GB kapacitásból (%i%% szabad)"
+
+#: plugins/df.py:75
+#, python-format
+msgid "%i free of %i MB total (%i%% free)"
+msgstr "%i szabad a teljes %i MB kapacitásból (%i%% szabad)"
+
+#: plugins/file_ops.py:66
+msgid "Delete info"
+msgstr "Infó törlése"
+
+#: plugins/file_ops.py:68
+#, fuzzy
+msgid "Delete edl"
+msgstr "Törlés"
+
+#: plugins/file_ops.py:70
+msgid "Delete image"
+msgstr "Kép törlése"
+
+#: plugins/file_ops.py:78
+#, python-format
+msgid ""
+"Do you wish to delete\n"
+" '%s'?"
+msgstr ""
+"Törölni akarod:\n"
+"'%s'?"
+
+#: plugins/file_ops.py:80 tv/plugins/recordings_manager.py:665
+msgid "Deleting..."
+msgstr "Törlés..."
+
+#: plugins/file_ops.py:84
+#, python-format
+msgid ""
+"Delete info about\n"
+" '%s'?"
+msgstr ""
+"Törlöd az alábbi infót?\n"
+"'%s'"
+
+#: plugins/file_ops.py:89
+#, fuzzy, python-format
+msgid ""
+"Delete edl about\n"
+" '%s'?"
+msgstr ""
+"Törlöd az alábbi képet?\n"
+"'%s'"
+
+#: plugins/file_ops.py:94
+#, python-format
+msgid ""
+"Delete image about\n"
+" '%s'?"
+msgstr ""
+"Törlöd az alábbi képet?\n"
+"'%s'"
+
+#: plugins/autoshutdown.py:145
+msgid "A recording is in progress."
+msgstr "Felvétel folyamatban."
+
+#: plugins/autoshutdown.py:148
+#, python-format
+msgid "Would wakeup again within %d minutes."
+msgstr "%d percen belül feléledne."
+
+#: plugins/autoshutdown.py:152
+msgid "There are important processes running."
+msgstr "Néhány fontos feladat fut."
+
+#: plugins/autoshutdown.py:158
+msgid "No wakeup scheduled."
+msgstr "Nincs beállítva felélesztés."
+
+#: plugins/autoshutdown.py:162
+msgid "The next wakeup is scheduled at"
+msgstr "A következő felélesztés időpontja: "
+
+#: plugins/autoshutdown.py:173 plugins/autoshutdown.py:257
+msgid "Resume automatic shutdown"
+msgstr "Automatikus leállítás visszaállítása"
+
+#: plugins/autoshutdown.py:175 plugins/autoshutdown.py:254
+msgid "Pause automatic shutdown"
+msgstr "Automatikus leállítás felfüggesztése"
+
+#: plugins/autoshutdown.py:177
+msgid "Shutdown and wakeup"
+msgstr "Leállítás és felélesztés"
+
+#: plugins/autoshutdown.py:179 plugins/shutdown.py:137 plugins/shutdown.py:141
+msgid "Restart system"
+msgstr "Rendszer újraindítása"
+
+#: plugins/autoshutdown.py:180 plugins/shutdown.py:136 plugins/shutdown.py:140
+msgid "Shutdown system"
+msgstr "Rendszer leállítása"
+
+#: plugins/autoshutdown.py:181
+msgid "Shutdown freevo"
+msgstr "Freevo kikapcsolása"
+
+#: plugins/autoshutdown.py:191 plugins/autoshutdown.py:219
+msgid "SHUTDOWN SYSTEM?"
+msgstr "KIKAPCSOLOD A RENDSZERT?"
+
+#: plugins/autoshutdown.py:205
+msgid "RESTART SYSTEM?"
+msgstr "ÚJRAINDÍTOD A RENDSZERT?"
+
+#: plugins/autoshutdown.py:211 plugins/autoshutdown.py:225
+#: plugins/autoshutdown.py:239
+msgid "(wakeup disabled)"
+msgstr "(felélesztés tiltva)"
+
+#: plugins/autoshutdown.py:233
+msgid "SHUTDOWN FREEVO?"
+msgstr "KIKAPCSOLOD A FREEVOT?"
+
+#: plugins/autoshutdown.py:609 plugins/shutdown.py:63 main.py:308
+msgid "shutting down..."
+msgstr "Leállítás..."
+
+#: plugins/rom_drives.py:252
+#, python-format
+msgid "Drive %s (no disc)"
+msgstr "%s meghajtó (üres)"
+
+#: plugins/rom_drives.py:471
+#, python-format
+msgid "Ejecting disc in drive %s"
+msgstr "Lemez kiadása a %s meghajtóból"
+
+#: plugins/rom_drives.py:476
+#, python-format
+msgid "Reading disc in drive %s"
+msgstr "A %s meghajtóban lévő lemez olvasása"
+
+#: plugins/shutdown.py:135 plugins/shutdown.py:139
+msgid "Shutdown Freevo"
+msgstr "Freevo leállítása"
+
+#: plugins/shutdown.py:153
+msgid "Do you really want to shut down Freevo?"
+msgstr "Tényleg leállítod a Freevot?"
+
+#: plugins/shutdown.py:163
+msgid "Do you really want to shut down the system?"
+msgstr "Tényleg leállítod a rendszert?"
+
+#: plugins/shutdown.py:173
+msgid "Do you really want to restart the system?"
+msgstr "Tényleg újraindítod a rendszert?"
+
+#: plugins/mpd.py:99
+msgid "not sure what to do with this"
+msgstr ""
+
+#: plugins/mpd.py:110
+msgid "MPD"
+msgstr ""
+
+#: plugins/mpd.py:153
+msgid "mpd"
+msgstr ""
+
+#: plugins/mpd.py:214
+msgid "Song - "
+msgstr ""
+
+#: plugins/mpd.py:225
+#, fuzzy
+msgid "Artist - "
+msgstr "Előadó"
+
+#: plugins/mpd.py:232
+#, fuzzy
+msgid "Album - "
+msgstr "Album"
+
+#: plugins/mpd.py:240
+msgid "Status - "
+msgstr ""
+
+#: plugins/sixmixer.py:120 plugins/sixmixer.py:125
+#, fuzzy, python-format
+msgid "Surround: %s%%"
+msgstr "Hangerő: %s%%"
+
+#: plugins/sixmixer.py:130 plugins/sixmixer.py:135
+#, fuzzy, python-format
+msgid "Center: %s%%"
+msgstr "Text: %s"
+
+#: plugins/sixmixer.py:140 plugins/sixmixer.py:145
+#, fuzzy, python-format
+msgid "LFE: %s%%"
+msgstr "%s%%"
+
+#: gui/ConfirmBox.py:75 tv/edit_favorite.py:189
+msgid "CANCEL"
+msgstr "MÉGSEM"
+
+#: tv/plugins/dvbstreamer/live_pause.py:89
+msgid ""
+"'XINE_COMMAND' not defined, plugin 'DVBStreamer' deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+
+#: tv/plugins/dvbstreamer/live_pause.py:113
+msgid "'xine-ui' version too old, plugin 'xine' deactivated"
+msgstr ""
+
+#: tv/plugins/dvbstreamer/live_pause.py:114
+#, python-format
+msgid "You need software %s"
+msgstr ""
+
+#: tv/plugins/dvbstreamer/live_pause.py:548
+#, fuzzy, python-format
+msgid "Tuning to %s"
+msgstr "Csatlakoztatott LCD: %s"
+
+#: tv/plugins/dvbstreamer/live_pause.py:551
+#, python-format
+msgid "Buffering %s"
+msgstr ""
+
+#: tv/plugins/dvbstreamer/live_pause.py:555
+#, fuzzy, python-format
+msgid "Playing %s"
+msgstr "Lejátszási lista"
+
+#: tv/plugins/recordings_manager.py:71
+msgid "Date then Name"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:72
+msgid "Status then Name"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:73
+msgid "Status, Date then Name"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:161
+#, fuzzy
+msgid "Manage Recordings"
+msgstr "Felvétel kézzel"
+
+#: tv/plugins/recordings_manager.py:166 directory.py:464
+msgid "Configure directory"
+msgstr "Könyvtár-beállítás"
+
+#: tv/plugins/recordings_manager.py:185
+#, fuzzy
+msgid "Recordings Directory does not exist"
+msgstr "Könyvtár nem létezik"
+
+#: tv/plugins/recordings_manager.py:278 directory.py:820 directory.py:910
+#: directory.py:944
+msgid "on"
+msgstr "be"
+
+#: tv/plugins/recordings_manager.py:280 directory.py:822 directory.py:825
+#: directory.py:914 directory.py:942
+msgid "off"
+msgstr "ki"
+
+#: tv/plugins/recordings_manager.py:289
+msgid "Sort by"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:291
+msgid "Reverse sort"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:293
+msgid "Sort series by"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:295
+msgid "Reverse series sort"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:297
+#, fuzzy
+msgid "Status order"
+msgstr "Szombat"
+
+#: tv/plugins/recordings_manager.py:300 directory.py:951
+msgid "Configure"
+msgstr "Beállítás"
+
+#: tv/plugins/recordings_manager.py:425
+msgid "Unmark to Keep"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:425
+msgid "Mark to Keep"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:426
+msgid "Unmark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:426
+msgid "Mark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:494
+msgid "(Unnamed)"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:595
+#, fuzzy
+msgid "Browse episodes"
+msgstr "Lemez böngészése"
+
+#: tv/plugins/recordings_manager.py:596
+#, fuzzy
+msgid "Delete all episodes"
+msgstr "Infó törlése"
+
+#: tv/plugins/recordings_manager.py:597
+msgid "Keep all episodes"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:598
+msgid "Play all episodes"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:663
+#, fuzzy, python-format
+msgid ""
+"Do you wish to delete the series\n"
+" '%s'?"
+msgstr ""
+"Törölni akarod:\n"
+"'%s'?"
+
+#: tv/plugins/recordings_manager.py:750
+#, fuzzy
+msgid "episodes"
+msgstr "Epizód"
+
+#: tv/plugins/view_recordings.py:48
+msgid "Recorded Shows"
+msgstr "Felvett műsorok"
+
+#: tv/plugins/view_favorites.py:55
+msgid "No favorites."
+msgstr "Nincs kedvenc."
+
+#: tv/plugins/view_favorites.py:102
+msgid "Get favorites failed"
+msgstr ""
+
+#: tv/plugins/xine.py:83
+msgid ""
+"'XINE_COMMAND' not defined, 'xine' tv plugin deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+
+#: tv/plugins/view_line_in.py:51
+msgid "View VCR Input"
+msgstr ""
+
+#: tv/plugins/manual_record.py:112
+msgid "Display record item"
+msgstr ""
+
+#: tv/plugins/manual_record.py:121 tv/favoriteitem.py:106
+msgid "Modify name"
+msgstr "Név módosítása"
+
+#: tv/plugins/manual_record.py:122 tv/favoriteitem.py:108
+msgid "Modify channel"
+msgstr "Csatorna módosítása"
+
+#: tv/plugins/manual_record.py:123
+msgid "Modify start month"
+msgstr "Indítás hónapjának módosítása"
+
+#: tv/plugins/manual_record.py:124
+msgid "Modify start day"
+msgstr "Indítás napjának módosítása"
+
+#: tv/plugins/manual_record.py:125
+msgid "Modify start time"
+msgstr "Indítás idejének módosítása"
+
+#: tv/plugins/manual_record.py:126
+msgid "Modify stop month"
+msgstr "Leállítás hónapjának módosítása"
+
+#: tv/plugins/manual_record.py:127
+msgid "Modify stop day"
+msgstr "Leállítás napjának módosítása"
+
+#: tv/plugins/manual_record.py:128
+msgid "Modify stop time"
+msgstr "Leállítás idejének módosítása"
+
+#: tv/plugins/manual_record.py:131
+msgid "Record Item Menu"
+msgstr "Felvételek menüje"
+
+#: tv/plugins/manual_record.py:140 tv/favoriteitem.py:169
+msgid "Alter Name"
+msgstr "Új név"
+
+#: tv/plugins/manual_record.py:151 tv/favoriteitem.py:193
+msgid "Modify Channel"
+msgstr "Csatorna módosítása"
+
+#: tv/plugins/manual_record.py:169 tv/plugins/manual_record.py:192
+#: tv/plugins/manual_record.py:232 tv/plugins/manual_record.py:255
+#: tv/favoriteitem.py:215
+msgid "Modify Day"
+msgstr "Dátum módosítása"
+
+#: tv/plugins/manual_record.py:214 tv/plugins/manual_record.py:277
+#: tv/favoriteitem.py:239
+msgid "Modify Time"
+msgstr "Idő módosítása"
+
+#: tv/plugins/manual_record.py:337 tv/plugins/manual_record.py:367
+#: tv/plugins/manual_record.py:371 tv/plugins/manual_record.py:376
+#: tv/plugins/manual_record.py:380
+msgid "Save Failed, recording was lost"
+msgstr "A mentés nem sikerült, elvesztetted a felvételt"
+
+#: tv/plugins/manual_record.py:379
+msgid ""
+"Sorry, the stop time does not give enough time for scheduler to pickup the "
+"change.  Please set it to record for a few minutes longer."
+msgstr ""
+
+#: tv/plugins/search_programs.py:78
+#, fuzzy
+msgid "Search Programs"
+msgstr "Program"
+
+#: tv/plugins/search_programs.py:88 tv/programitem.py:298
+msgid "Searching, please wait..."
+msgstr ""
+
+#: tv/plugins/search_programs.py:103 tv/programitem.py:315
+#, python-format
+msgid "No matches found for %s"
+msgstr ""
+
+#: tv/plugins/search_programs.py:106
+#, python-format
+msgid "findMatches failed: %s"
+msgstr ""
+
+#: tv/plugins/scheduled_recordings.py:50
+msgid "Display Scheduled Recordings"
+msgstr "Időzített felvételek kijelzése"
+
+#: tv/plugins/scheduled_recordings.py:56
+msgid "Nothing scheduled."
+msgstr "Nincs semmi időzítve."
+
+#: tv/plugins/scheduled_recordings.py:104
+msgid "Get recordings failed"
+msgstr "Felvétel megszerzése nem jött össze"
+
+#: tv/plugins/ivtv_xine_tv.py:354
+msgid "Please repeat to stop\n"
+msgstr ""
+
+#: tv/plugins/ivtv_xine_tv.py:761
+msgid "This plugin only supports the ivtv video group!"
+msgstr ""
+
+#: tv/plugins/upsoon.py:224 tv/plugins/upsoon.py:242
+#, fuzzy
+msgid "A recording will start in a few minutes"
+msgstr "Felvétel kezdődik: ebben a percben"
+
+#: tv/plugins/upsoon.py:272
+msgid "TV stopped, a recording is about to start!"
+msgstr ""
+
+#: tv/tvguide.py:66
+msgid "Preparing the program guide"
+msgstr ""
+
+#: tv/tvguide.py:71
+msgid "TV Guide is corrupt!"
+msgstr ""
+
+#: tv/favoriteitem.py:87 tv/favoriteitem.py:92 tv/programitem.py:138
+#, fuzzy
+msgid "Edit favorite"
+msgstr "Új kedvenc"
+
+#: tv/favoriteitem.py:88 tv/favoriteitem.py:146
+msgid "Remove favorite"
+msgstr ""
+
+#: tv/favoriteitem.py:110
+msgid "Modify day of week"
+msgstr ""
+
+#: tv/favoriteitem.py:112
+msgid "Modify time of day"
+msgstr ""
+
+#: tv/favoriteitem.py:117 tv/favoriteitem.py:291
+msgid "Prevent Recording of Duplicates"
+msgstr ""
+
+#: tv/favoriteitem.py:120
+#, fuzzy
+msgid "Allow Recording of Duplicates"
+msgstr "Most rögzítem: %s"
+
+#: tv/favoriteitem.py:126 tv/favoriteitem.py:315
+msgid "Record All Episodes"
+msgstr ""
+
+#: tv/favoriteitem.py:129 tv/favoriteitem.py:320
+msgid "Record Only New Episodes"
+msgstr ""
+
+#: tv/favoriteitem.py:136
+msgid "Modify priority"
+msgstr ""
+
+#: tv/favoriteitem.py:141
+msgid "Save changes"
+msgstr ""
+
+#: tv/favoriteitem.py:150
+msgid "Favorite Menu"
+msgstr ""
+
+#: tv/favoriteitem.py:297
+msgid "Allow Recordings of Duplicates"
+msgstr ""
+
+#: tv/favoriteitem.py:338
+msgid "Saving the changes to this favorite."
+msgstr ""
+
+#: tv/favoriteitem.py:339
+msgid "This may take some time."
+msgstr ""
+
+#: tv/favoriteitem.py:366
+#, fuzzy
+msgid "Save failed, favorite was lost."
+msgstr "A mentés nem sikerült, elvesztetted a felvételt"
+
+#: tv/favoriteitem.py:382
+#, python-format
+msgid "\"%s\" has been removed from favorites"
+msgstr ""
+
+#: tv/favoriteitem.py:386 tv/programitem.py:253
+#, fuzzy
+msgid "Remove failed"
+msgstr "Eltávolítás"
+
+#: tv/epg_xmltv.py:134
+msgid "Couldn't load the TV Guide, got an exception!"
+msgstr ""
+
+#: tv/epg_xmltv.py:225
+#, python-format
+msgid "REPLACE WITH TUNERID FOR %s"
+msgstr ""
+
+#: tv/record_client.py:60 tv/record_client.py:69 tv/record_client.py:80
+#: tv/record_client.py:96 tv/record_client.py:108 tv/record_client.py:117
+#: tv/record_client.py:136 tv/record_client.py:145 tv/record_client.py:156
+#: tv/record_client.py:165 tv/record_client.py:178 tv/record_client.py:187
+#: tv/record_client.py:196 tv/record_client.py:205 tv/record_client.py:214
+#: tv/record_client.py:223 tv/record_client.py:232 tv/record_client.py:241
+#: tv/record_client.py:250 tv/record_client.py:259 tv/record_client.py:268
+msgid "connection error"
+msgstr ""
+
+#: tv/record_client.py:87 tv/record_client.py:103
+msgid "no program"
+msgstr ""
+
+#: tv/record_client.py:90
+msgid "cannot record it if it is over"
+msgstr ""
+
+#: tv/record_client.py:125 tv/record_client.py:131
+msgid "program not scheduled"
+msgstr ""
+
+#: tv/record_client.py:129
+msgid "program is scheduled"
+msgstr ""
+
+#: tv/tvmenu.py:66 tv/tvmenu.py:74
+#, python-format
+msgid "Could not find TV channel %s"
+msgstr ""
+
+#: tv/tvmenu.py:104
+msgid "TV Main Menu"
+msgstr ""
+
+#: tv/tvmenu.py:125
+msgid "The list of TV channels is invalid!\n"
+msgstr ""
+
+#: tv/tvmenu.py:126
+msgid "Please check the config file."
+msgstr ""
+
+#: tv/edit_favorite.py:136
+msgid "Day of Week"
+msgstr ""
+
+#: tv/edit_favorite.py:157
+msgid "Time of Day"
+msgstr ""
+
+#: tv/edit_favorite.py:209
+msgid "Remove Failed"
+msgstr ""
+
+#: tv/edit_favorite.py:321
+#, python-format
+msgid "Favorite %s has been saved"
+msgstr ""
+
+#: tv/edit_favorite.py:323
+#, python-format
+msgid "Failed: %s"
+msgstr ""
+
+#: tv/edit_favorite.py:343
+#, python-format
+msgid "Do you want to remove %s?"
+msgstr ""
+
+#: tv/programitem.py:127
+msgid "Remove from schedule"
+msgstr ""
+
+#: tv/programitem.py:129
+msgid "Schedule for recording"
+msgstr "Időzítés felvételhez"
+
+#: tv/programitem.py:140
+msgid "Add to favorites"
+msgstr ""
+
+#: tv/programitem.py:144
+msgid "Search for more of this program"
+msgstr ""
+
+#: tv/programitem.py:165
+#, fuzzy
+msgid "Sorry, you cannot watch this program now. "
+msgstr "Bocsánat, de nem nézheted felvétel közben."
+
+#: tv/programitem.py:166
+msgid "It starts in the future."
+msgstr ""
+
+#: tv/programitem.py:172
+#, fuzzy
+msgid "Sorry, you cannot watch this progam now. "
+msgstr "Bocsánat, de nem nézheted felvétel közben."
+
+#: tv/programitem.py:173
+msgid "This program is already over."
+msgstr ""
+
+#: tv/programitem.py:187
+msgid "Sorry, you cannot watch TV while recording. "
+msgstr "Bocsánat, de nem nézheted felvétel közben."
+
+#: tv/programitem.py:188
+msgid "If this is not true then remove "
+msgstr ""
+
+#: tv/programitem.py:229
+#, python-format
+msgid "\"%s\" has been scheduled for recording"
+msgstr ""
+
+#: tv/programitem.py:233
+#, fuzzy
+msgid "Scheduling failed"
+msgstr "Felvétel megszerzése nem jött össze"
+
+#: tv/programitem.py:249
+#, python-format
+msgid "\"%s\" has been removed from schedule"
+msgstr ""
+
+#: tv/programitem.py:287
+#, fuzzy
+msgid "getFavorites failed"
+msgstr "Felvétel megszerzése nem jött össze"
+
+#: tv/programitem.py:320
+msgid "findMatches failed"
+msgstr ""
+
+#: tv/programitem.py:341
+msgid "Program Menu"
+msgstr ""
+
+#: tv/programitem.py:376
+#, fuzzy
+msgid "Category : "
+msgstr "Kategória"
+
+#: tv/programitem.py:381
+msgid "Advisory : "
+msgstr ""
+
+#: tv/programitem.py:386 share/skins/main/dark.fxd:459
+#: share/skins/main/info.fxd:471
+msgid "Rating"
+msgstr "Rangsor"
+
+#: skin/widgets/textentry_screen.py:60
+#, fuzzy
+msgid "Left"
+msgstr "Hossz"
+
+#: skin/widgets/textentry_screen.py:61
+msgid "Right"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:83
+msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:88
+msgid "1234567890"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:93
+msgid "!\"#$%^&*();:'@~?,.<>-=+\\[]{}"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:100
+msgid "ABC"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:108
+msgid "123"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:116
+msgid "Symbls"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:229
+#, fuzzy
+msgid "Space"
+msgstr "Mentés"
+
+#: util/misc.py:422
+msgid "The recordserver is down"
+msgstr "A rögzítőszerver leállt"
+
+#: util/misc.py:444
+msgid "Today"
+msgstr "Ma"
+
+#: util/misc.py:455
+msgid "Tomorrow"
+msgstr "Holnap"
+
+#: util/misc.py:466
+msgid "This Week"
+msgstr "Ezen a héten"
+
+#: util/misc.py:477
+msgid "No recordings are scheduled"
+msgstr "Nincs felvétel időzítve"
+
+#: util/misc.py:518
+msgid "Widescreen"
+msgstr ""
+
+#: util/mediainfo.py:748
+msgid "Reloading cache files, be patient..."
+msgstr ""
+
+#: playlist.py:137 playlist.py:185
+#, python-format
+msgid "Cannot open file \"%s\""
+msgstr ""
+
+#: playlist.py:299
+msgid "Browse Playlist"
+msgstr "Lejátszási lista böngészése"
+
+#: playlist.py:309 directory.py:459
+msgid "Random play all items"
+msgstr ""
+
+#: playlist.py:356
+msgid "empty playlist"
+msgstr ""
+
+#: playlist.py:454
+msgid "playlist repeat on"
+msgstr ""
+
+#: playlist.py:456
+msgid "playlist repeat off"
+msgstr ""
+
+#: playlist.py:470
+msgid "no next item in playlist"
+msgstr ""
+
+#: playlist.py:497
+msgid "no previous item in playlist"
+msgstr ""
+
+#: menu.py:729
+msgid "No action defined for this choice!"
+msgstr ""
+
+#: directory.py:57
+msgid "Directory Sort By Date"
+msgstr ""
+
+#: directory.py:58
+msgid "Sort directory by date and not by name."
+msgstr ""
+
+#: directory.py:60
+msgid "Directory Autoplay Single Item"
+msgstr ""
+
+#: directory.py:61
+msgid "Don't show directory if only one item exists and auto-select the item."
+msgstr ""
+
+#: directory.py:64
+msgid "Force Skin Layout"
+msgstr ""
+
+#: directory.py:65
+msgid ""
+"Force skin to a specific layout. This option doesn't work with all skins and "
+"the result may differ based on the skin."
+msgstr ""
+
+#: directory.py:68
+msgid "Directory Smart Sort"
+msgstr ""
+
+#: directory.py:69
+msgid "Use a smarter way to sort the items."
+msgstr ""
+
+#: directory.py:71
+#, fuzzy
+msgid "Directory Smart Names"
+msgstr "Lejátszási lista létrehozása a könyvtárból"
+
+#: directory.py:72
+msgid "Use a smarter way to abbreviate the name of the items."
+msgstr ""
+
+#: directory.py:74
+msgid "Use MediaID Tag Names"
+msgstr ""
+
+#: directory.py:75
+msgid "Use the names from the media files tags as display name."
+msgstr ""
+
+#: directory.py:77
+msgid "Directory Reverse Sort"
+msgstr ""
+
+#: directory.py:78
+msgid "Show the items in the list in reverse order."
+msgstr ""
+
+#: directory.py:82
+msgid "Directory Create Playlist"
+msgstr "Lejátszási lista létrehozása a könyvtárból"
+
+#: directory.py:83
+msgid ""
+"Handle the directory as playlist. After one file is played, the next one "
+"will be started."
+msgstr ""
+
+#: directory.py:86
+msgid "Directory Add Playlist Files"
+msgstr "Könyvtár lejátszási listához adása"
+
+#: directory.py:87
+msgid "Add playlist files to the list of items"
+msgstr ""
+
+#: directory.py:89
+msgid "Directory Add Random Playlist"
+msgstr "Könyvtár véletlenszerű lejátszási listához adása"
+
+#: directory.py:90
+msgid "Add an item for a random playlist"
+msgstr "Dolog véletlenszerű lejátszási listához adása"
+
+#: directory.py:92
+msgid "Directory Autoplay Items"
+msgstr "Könyvtár automatikus lejátszása"
+
+#: directory.py:93
+msgid ""
+"Autoplay the whole directory (as playlist) when it contains only files and "
+"no directories"
+msgstr ""
+
+#: directory.py:316
+#, python-format
+msgid "Directory on disc [%s]"
+msgstr "Könyvtár a lemezen [%s]"
+
+#: directory.py:317
+msgid "Directory"
+msgstr "Könyvtár"
+
+#: directory.py:453
+msgid "Play all files in directory"
+msgstr "A könyvtár minden fájljának lejátszása"
+
+#: directory.py:461
+msgid "Recursive random play all items"
+msgstr "Véletlen lejátszás az alkönyvtárak tartalmával"
+
+#: directory.py:462
+msgid "Recursive play all items"
+msgstr "Lejátszás az alkönyvtárak tartalmával"
+
+#: directory.py:531
+msgid "Enter Password"
+msgstr "Add meg a jelszót"
+
+#: directory.py:556
+msgid "Password incorrect"
+msgstr "Helytelen jelszó"
+
+#: directory.py:590
+msgid "Directory does not exist"
+msgstr "Könyvtár nem létezik"
+
+#: directory.py:620
+msgid "Scanning disc, be patient..."
+msgstr "Lemez felderítése, légy türelmes..."
+
+#: directory.py:622
+msgid "Scanning directory, be patient..."
+msgstr "Könyvtár felderítése, légy türelmes..."
+
+#: directory.py:827
+msgid "auto"
+msgstr "auto"
+
+#: directory.py:946
+msgid "Show all kinds of items"
+msgstr ""
+
+#: directory.py:948
+msgid "Show video, audio and image items in this directory"
+msgstr ""
+
+#: setup_freevo.py:76
+msgid ""
+"Usage: ./freevo setup [OPTION]...\n"
+"Set up Freevo for your specific environment.\n"
+"\n"
+"   --geometry=WIDTHxHEIGHT      set the display size\n"
+"                                  WIDTHxHEIGHT can be 800x600, 768x576 or "
+"640x480\n"
+"\n"
+"   --display=DISP               set the display\n"
+"                                  DISP can be x11, fbdev, dxr3, mga,\n"
+"                                  directfb, dfbmga or dga\n"
+"\n"
+"   --tv=NORM                    set the TV standard\n"
+"                                  NORM can be ntsc, pal or secam\n"
+"\n"
+"   --chanlist=LIST              set the channel list\n"
+"                                  LIST can be us-bcast, us-cable, us-cable-"
+"hrc,\n"
+"                                  japan-bcast, japan-cable, europe-west,\n"
+"                                  europe-east, italy, newzealand, "
+"australia,\n"
+"                                  ireland, france, china-bcast, "
+"southafrica,\n"
+"                                  argentina, canada-cable, switzerland\n"
+"\n"
+"   --help                       display this help and exit\n"
+"\n"
+"The default is \"--geometry=800x600 --display=x11 --tv=ntsc --chanlist=us-"
+"cable\"\n"
+"Please report bugs to <freevo-users@lists.sourceforge.net>.\n"
+msgstr ""
+
+#: setup_freevo.py:180
+#, python-format
+msgid "checking for %-13s"
+msgstr ""
+
+#: setup_freevo.py:193
+#, python-format
+msgid "ERROR: can't find %s"
+msgstr ""
+
+#: setup_freevo.py:194
+msgid "Please install the application respectively put it in your path."
+msgstr ""
+
+#: setup_freevo.py:195
+msgid "Freevo won't work without it."
+msgstr ""
+
+#: setup_freevo.py:201
+msgid "not found (deactivated)"
+msgstr ""
+
+#: setup_freevo.py:264
+#, python-format
+msgid "System path first=%s"
+msgstr ""
+
+#: setup_freevo.py:264
+msgid "No"
+msgstr "Nem"
+
+#: setup_freevo.py:264
+msgid "Yes"
+msgstr "Igen"
+
+#: setup_freevo.py:280
+msgid "Settings:"
+msgstr "Beállítások:"
+
+#: main.py:170
+msgid "Freevo Main Menu"
+msgstr "Freevo saját menü"
+
+#: main.py:186
+msgid "Skin Selector"
+msgstr "Kinézetválasztás"
+
+#: main.py:299
+#, python-format
+msgid ""
+"Event '%s' crashed\n"
+"\n"
+"Please take a look at the logfile and report the bug to the Freevo mailing "
+"list. The state of Freevo may be corrupt now and this error could cause more "
+"errors until you restart Freevo.\n"
+"\n"
+"Logfile: %s\n"
+"\n"
+msgstr ""
+
+#: main.py:309 share/skins/main/mediaportal.fxd:447
+#: share/skins/main/dark.fxd:25 share/skins/main/crystal.fxd:17
+#: share/skins/main/bluestar.fxd:16 share/skins/main/basic.fxd:25
+#: share/skins/main/rain.fxd:17 share/skins/main/Panorama.fxd:474
+msgid "Shutdown"
+msgstr "Leállítás"
+
+#: main.py:311
+msgid "Continue"
+msgstr "Folytatás"
+
+#: main.py:435
+#, fuzzy, python-format
+msgid "Starting Freevo-%s, please wait ..."
+msgstr "A Freevo indul-%s, kérlek várj..."
+
+#: main.py:444
+msgid "Reading cache, please wait ..."
+msgstr "Cache olvasása, kérlek várj..."
+
+#: main.py:495
+msgid "Freevo crashed!"
+msgstr "Freevo összeomlott!"
+
+#: main.py:496
+#, python-format
+msgid "Filename: %s"
+msgstr "Fájlnév: %s"
+
+#: main.py:497
+#, python-format
+msgid "Lineno: %s"
+msgstr "Sorszám: %s"
+
+#: main.py:498
+#, python-format
+msgid "Function: %s"
+msgstr "Funkció: %s"
+
+#: main.py:499
+#, python-format
+msgid "Text: %s"
+msgstr "Text: %s"
+
+#: main.py:501
+msgid "Please see the logfiles for more info"
+msgstr "Kérlek nézd meg a naplót további információkért"
+
+#: main.py:503
+#, python-format
+msgid "Exit in %s seconds"
+msgstr "Kilépés %s másodperc múlva"
+
+#: fxditem.py:204
+msgid "Browse list"
+msgstr "Lista böngészése"
+
+#: osd.py:387
+msgid "z = Toggle Fullscreen"
+msgstr "z = Teljes képernő"
+
+#: osd.py:388
+msgid "Arrow Keys = Move"
+msgstr "Nyilak = Mozgás"
+
+#: osd.py:389
+msgid "Spacebar = Select"
+msgstr "Space = Kijelöl"
+
+#: osd.py:390
+msgid "Escape = Stop/Prev. Menu"
+msgstr "Esc = Leállít/Külső menü"
+
+#: osd.py:391
+msgid "h = Help"
+msgstr "h = Segítség"
+
+#: share/skins/main/dark.fxd:496
+msgid "Just one movie in this playlist."
+msgstr "Betettél egy filmet ebbe a lejátszási listába."
+
+#: share/skins/main/mediaportal.fxd:711 share/skins/main/dark.fxd:770
+#: share/skins/main/basic.fxd:410 share/skins/main/blurr.fxd:717
+#: share/skins/main/info.fxd:228
+msgid "kb/s"
+msgstr "kb/s"
+
+#: share/skins/main/dark.fxd:565
+msgid "One song in playlist"
+msgstr "Egy zene a lejátszási listában"
+
+#: share/skins/main/geexbox.fxd:714 share/skins/main/mediaportal.fxd:722
+#: share/skins/main/dark.fxd:779 share/skins/main/basic.fxd:422
+#: share/skins/main/blurr.fxd:730
+msgid "Elapsed"
+msgstr "Eltelt"
+
+#: share/skins/main/basic.fxd:747
+#, fuzzy
+msgid "Video Rate"
+msgstr "Videó"
+
+#: share/skins/main/basic.fxd:627
+msgid "Day"
+msgstr "Nap"
+
+#: share/skins/main/geexbox.fxd:226 share/skins/main/mediaportal.fxd:220
+#: share/skins/main/blurr.fxd:218 share/skins/main/info.fxd:314
+#: share/skins/main/Panorama.fxd:221
+msgid "Subtitles"
+msgstr "Feliratok"
+
+#: share/skins/main/basic.fxd:723
+#, fuzzy
+msgid "File name"
+msgstr "Fájlnév: %s"
+
+#: share/skins/main/geexbox.fxd:203 share/skins/main/mediaportal.fxd:197
+#: share/skins/main/dark.fxd:501 share/skins/main/blurr.fxd:195
+#: share/skins/main/info.fxd:428 share/skins/main/info.fxd:551
+#: share/skins/main/Panorama.fxd:198
+msgid "This playlist is empty!"
+msgstr "Ez a lejátszási lista üres!"
+
+#: share/skins/main/dark.fxd:618
+msgid "pictures in this slideshow."
+msgstr "képek ebben a diavetítésben."
+
+#: share/skins/main/crystal.fxd:369 share/skins/main/bluestar.fxd:389
+#: share/skins/main/rain.fxd:373
+msgid "Message has not been read"
+msgstr "Az üzenet nem olvasható"
+
+#: share/skins/main/geexbox.fxd:231 share/skins/main/mediaportal.fxd:225
+#: share/skins/main/blurr.fxd:223 share/skins/main/info.fxd:318
+#: share/skins/main/Panorama.fxd:226
+msgid "Chapters"
+msgstr "Fejezet"
+
+#: share/skins/main/dark.fxd:561
+msgid "songs in playlist"
+msgstr "Zenék a lejátszási listában"
+
+#: share/skins/main/basic.fxd:753
+#, fuzzy
+msgid "Audio Codec"
+msgstr "Hanhok"
+
+#: share/skins/main/dark.fxd:653 share/skins/main/dark.fxd:674
+msgid "Subject"
+msgstr "Tárgy"
+
+#: share/skins/main/geexbox.fxd:195 share/skins/main/mediaportal.fxd:189
+#: share/skins/main/blurr.fxd:187 share/skins/main/info.fxd:543
+#: share/skins/main/Panorama.fxd:190
+msgid "Playlist"
+msgstr "Lejátszási lista"
+
+#: share/skins/main/dark.fxd:659 share/skins/main/dark.fxd:680
+msgid "From"
+msgstr "Feladó"
+
+#: share/skins/main/crystal.fxd:318 share/skins/main/bluestar.fxd:338
+#: share/skins/main/rain.fxd:322
+msgid "Unread messages"
+msgstr "Olvasatlan üzenet"
+
+#: share/skins/main/geexbox.fxd:480 share/skins/main/mediaportal.fxd:444
+#: share/skins/main/blurr.fxd:451 share/skins/main/info.fxd:16
+#: share/skins/main/Panorama.fxd:471
+msgid "Look at Pictures"
+msgstr "Képnézegetés"
+
+#: share/skins/main/geexbox.fxd:457 share/skins/main/mediaportal.fxd:420
+#: share/skins/main/blurr.fxd:428 share/skins/main/Panorama.fxd:448
+msgid "Location"
+msgstr "Hely"
+
+#: share/skins/main/dark.fxd:24 share/skins/main/crystal.fxd:11
+#: share/skins/main/bluestar.fxd:11 share/skins/main/rain.fxd:11
+msgid "Email"
+msgstr "Email"
+
+#: share/skins/main/Panorama.fxd:787
+msgid "Hz"
+msgstr ""
+
+#: share/skins/main/info.fxd:232
+msgid "Link"
+msgstr "Link"
+
+#: share/skins/main/dark.fxd:623
+msgid "Just one picture in this slideshow."
+msgstr "Betettél egy képet ebbe a diavetítésbe."
+
+#: share/skins/main/basic.fxd:765
+msgid "Num Passes"
+msgstr ""
+
+#: share/skins/main/dark.fxd:646
+msgid "Total mails"
+msgstr "Összes levél"
+
+#: share/skins/main/dark.fxd:628
+msgid "This slideshow is empty!"
+msgstr "Ez a diavetítés üres!"
+
+#: share/skins/main/geexbox.fxd:189 share/skins/main/geexbox.fxd:308
+#: share/skins/main/geexbox.fxd:431 share/skins/main/geexbox.fxd:439
+#: share/skins/main/mediaportal.fxd:183 share/skins/main/mediaportal.fxd:287
+#: share/skins/main/mediaportal.fxd:394 share/skins/main/mediaportal.fxd:402
+#: share/skins/main/blurr.fxd:181 share/skins/main/blurr.fxd:285
+#: share/skins/main/blurr.fxd:402 share/skins/main/blurr.fxd:410
+#: share/skins/main/Panorama.fxd:184 share/skins/main/Panorama.fxd:306
+#: share/skins/main/Panorama.fxd:422 share/skins/main/Panorama.fxd:430
+msgid "Items"
+msgstr "Dolgok"
+
+#: share/skins/main/geexbox.fxd:477 share/skins/main/mediaportal.fxd:441
+#: share/skins/main/blurr.fxd:448 share/skins/main/info.fxd:13
+#: share/skins/main/Panorama.fxd:468
+msgid "Watch TV"
+msgstr "Tévézés"
+
+#: share/skins/main/geexbox.fxd:339 share/skins/main/blurr.fxd:312
+#: share/skins/main/info.fxd:348 share/skins/main/info.fxd:535
+#: share/skins/main/Panorama.fxd:333
+msgid "of"
+msgstr "a"
+
+#: share/skins/main/dark.fxd:722
+msgid "Now playing"
+msgstr "Most játszott"
+
+#: share/skins/main/Panorama.fxd:777
+#, fuzzy
+msgid "kbps"
+msgstr "kb/s"
+
+#: share/skins/main/info.fxd:506
+msgid "Copyright"
+msgstr "Jogvédelem"
+
+#: share/skins/main/bluestar.fxd:12
+msgid "Pictures"
+msgstr "Képek"
+
+#: share/skins/main/geexbox.fxd:482 share/skins/main/mediaportal.fxd:446
+#: share/skins/main/crystal.fxd:13 share/skins/main/blurr.fxd:453
+#: share/skins/main/rain.fxd:13 share/skins/main/Panorama.fxd:473
+msgid "Weather Forecast"
+msgstr "Időjárás előrejelzés"
+
+#: share/skins/main/dark.fxd:671
+msgid "New mail"
+msgstr "Új levél"
+
+#: share/skins/main/geexbox.fxd:199 share/skins/main/mediaportal.fxd:193
+#: share/skins/main/blurr.fxd:191 share/skins/main/info.fxd:419
+#: share/skins/main/info.fxd:424 share/skins/main/info.fxd:547
+#: share/skins/main/Panorama.fxd:194
+msgid "items in this playlist"
+msgstr "dolog ebben a lejátszási listában"
+
+#: share/skins/main/basic.fxd:741
+#, fuzzy
+msgid "Video Codec"
+msgstr "Videó"
+
+#: share/skins/main/info.fxd:238
+msgid "Language"
+msgstr "Nyelv"
+
+#: share/skins/main/basic.fxd:772
+msgid "Filter"
+msgstr ""
+
+#: share/skins/main/info.fxd:350 share/skins/main/info.fxd:537
+msgid "MB free"
+msgstr "MB szabad"
+
+#: share/skins/main/mediaportal.fxd:440
+msgid "Read Headlines"
+msgstr "Hírek olvasása"
+
+#: share/skins/main/info.fxd:324
+msgid "Size"
+msgstr "Méret"
+
+#: share/skins/main/geexbox.fxd:221 share/skins/main/mediaportal.fxd:215
+#: share/skins/main/blurr.fxd:213 share/skins/main/info.fxd:310
+#: share/skins/main/Panorama.fxd:216
+msgid "Audio tracks"
+msgstr "Hangsáv"
+
+#: share/skins/main/dark.fxd:640
+msgid "New mails"
+msgstr "Új levelek"
+
+#: share/skins/main/basic.fxd:729
+#, fuzzy
+msgid "Container"
+msgstr "Folytatás"
+
+#: share/skins/main/basic.fxd:759
+#, fuzzy
+msgid "Audio Rate"
+msgstr "Hanhok"
+
+#: share/skins/main/mediaportal.fxd:445 share/skins/main/blurr.fxd:452
+#: share/skins/main/Panorama.fxd:472
+msgid "Play a Game"
+msgstr "Játék"
+
+#: share/skins/main/geexbox.fxd:479 share/skins/main/mediaportal.fxd:443
+#: share/skins/main/blurr.fxd:450 share/skins/main/info.fxd:15
+#: share/skins/main/Panorama.fxd:470
+msgid "Listen to Music"
+msgstr "Zenehallgatás"
+
+#: share/skins/main/crystal.fxd:324 share/skins/main/bluestar.fxd:344
+#: share/skins/main/rain.fxd:328
+msgid "Total messages"
+msgstr "Összes üzenet"
+
+#: share/skins/main/geexbox.fxd:478 share/skins/main/mediaportal.fxd:442
+#: share/skins/main/blurr.fxd:449 share/skins/main/info.fxd:14
+#: share/skins/main/Panorama.fxd:469
+msgid "Watch a Movie"
+msgstr "Filmnézés"
+
+#: share/skins/main/dark.fxd:492
+msgid "movies in this playlist."
+msgstr "filmet ebbe a lejátszási listába."
+
+#: share/skins/main/dark.fxd:17 share/skins/main/crystal.fxd:8
+#: share/skins/main/bluestar.fxd:8 share/skins/main/rain.fxd:8
+msgid "Television"
+msgstr "Televízió"
+
+#: share/skins/main/info.fxd:306
+msgid "min."
+msgstr "perc"
+
+#: share/skins/main/info.fxd:406
+msgid "Disc ID"
+msgstr "Lemez száma"
+
+#: share/skins/main/dark.fxd:569
+msgid "No songs in playlist"
+msgstr "Nincs zene a lejátszási listában"
+
+#: share/skins/main/basic.fxd:20
+msgid "TV"
+msgstr "TV"
+
+#: share/skins/main/bluestar.fxd:13
+msgid "Weather"
+msgstr "Időjárás"
+
+#, fuzzy
+#~ msgid "Showers"
+#~ msgstr "Mutat"
+
+#, fuzzy
+#~ msgid "Snow"
+#~ msgstr "Mutat"
+
+#, fuzzy
+#~ msgid "Rain"
+#~ msgstr "Rangsor"
+
+#, fuzzy
+#~ msgid "Sunny"
+#~ msgstr "Vas"
+
+#, fuzzy
+#~ msgid "Snow Showers"
+#~ msgstr "Stderr mutatása"
+
+#, fuzzy
+#~ msgid "Thunder"
+#~ msgstr "Ked"
+
+#, fuzzy
+#~ msgid "Sct Flurries"
+#~ msgstr "Képek"
+
+#, fuzzy
+#~ msgid "to"
+#~ msgstr "fel"
+
+#, fuzzy
+#~ msgid "Hvy Rain"
+#~ msgstr "Rangsor"
+
+#, fuzzy
+#~ msgid "Snow Shower"
+#~ msgstr "Stderr mutatása"
+
+#, fuzzy
+#~ msgid "Mist"
+#~ msgstr "Előadó"
+
+#, fuzzy
+#~ msgid "Clear"
+#~ msgstr "Év"
+
+#~ msgid "Unlimited"
+#~ msgstr "Korlátlan"
+
+#~ msgid "Unknown"
+#~ msgstr "Ismeretlen"
+
+#, fuzzy
+#~ msgid "Today, a high of %s degrees"
+#~ msgstr "Ma, a magasabban %s"
+
+#, fuzzy
+#~ msgid "and a low of %s degrees."
+#~ msgstr "és alacsonyabban %s"
+
+#~ msgid "Error encountered while trying to download Radar map"
+#~ msgstr ""
+#~ "Megoldhatatlan probléma támadt az áttekintő-térkép megszerzése közben"
+
+#, fuzzy
+#~ msgid "Modify duplicate flag"
+#~ msgstr "Csatorna módosítása"
+
+#, fuzzy
+#~ msgid "Modify episodes flag"
+#~ msgstr "Leállítás napjának módosítása"
+
+#, fuzzy
+#~ msgid "Modify Duplicate Flag"
+#~ msgstr "Csatorna módosítása"
+
+#, fuzzy
+#~ msgid "Currently recording"
+#~ msgstr "Jelenlegi feltételek"
+
+#, fuzzy
+#~ msgid "Next recordings"
+#~ msgstr "Felvétel megszerzése nem jött össze"
+
+#, fuzzy
+#~ msgid "Recordserver not found"
+#~ msgstr "A rögzítőszerver leállt"
+
+#, fuzzy
+#~ msgid "Nothing scheduled"
+#~ msgstr "Nincs semmi időzítve."
+
+#, fuzzy
+#~ msgid "Cloudy/Wind"
+#~ msgstr "Ablak bezárása"
+
+#, fuzzy
+#~ msgid "Rain/Wind"
+#~ msgstr "Szél"
+
+#, fuzzy
+#~ msgid "AM Rain"
+#~ msgstr "Rangsor"
+
+#, fuzzy
+#~ msgid "PM Rain"
+#~ msgstr "Rangsor"
+
+#, fuzzy
+#~ msgid "Snow/Wind"
+#~ msgstr "Szél"
+
+#~ msgid "calm"
+#~ msgstr "szélcsend"
+
+#~ msgid "coming in at"
+#~ msgstr "érkezik"
+
+#~ msgid "from the"
+#~ msgstr "innen:"
+
+#~ msgid "Add File to Cart"
+#~ msgstr "Egy fájlt raktárba tesz"
+
+#~ msgid "Info as known by the LCD module:"
+#~ msgstr "Információ az LCD modulról:"
+
+#~ msgid "Could not find screens for %d lines LCD!"
+#~ msgstr "Nem találok %d soró LCD-t!"
+
+#~ msgid "No screens found for this LCD (%dx%d)!"
+#~ msgstr "Nem találok LCD-t (%dx%d)!"
+
+#~ msgid "Could not find screens for %d lines and %d columns LCD!"
+#~ msgstr "Nem találok %d sorú és %d oszlopú LCD képernyőt!"
+
+#~ msgid "Chapter"
+#~ msgstr "Fejezet"

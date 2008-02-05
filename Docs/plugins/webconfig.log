@@ -1,0 +1,38 @@
+config.css 
+    just some more styles changes, trying to clean the mess up.
+
+configedit.rpy 
+    moved commonly used functions to  configlib.py.
+    changed logging to include uid in the file name.
+    ReadConing - moved configlib.py
+    CheckSyntax - moved to configlib.py
+    UpdateServer - new commands to start and stop servers .   configedit.rpy?cmd=SERVERUPDATE&server_name=servername&server_cmd=(start  top)
+    StartHelper - for start tv_grab and cache, ?cmd=STARTHELPER&helper_name=(tv_grab cache)
+    RealTimeUpdate - trying to set vars in current running freevo, only seems to work with the webpages.
+     
+pluginconfig.js 
+    New function for Update Server and Start Helper.
+
+pluginconfig.rpy 
+    GetConfigFileaName moved to configlib.py
+    CreateHTMLinput - moved to configlib
+    ReadConfig - moved to configlib
+    CreateListBox - moved to configlib
+    Added Helpers and Servers with options to start and stop.
+    Added Plugin sorting.
+    
+config.py
+    GetConfigFIleName - Moved to configlib
+    ReadConfig - Moved to configlib
+    Added Sorting of settings.  
+    Removed PERSONAL_WWW_PAGE www force grouping.
+    CheckSyntax - moved to configlig
+    Add FREEVO_LOGDIR to allow to directory browse option,
+    CreateNewLine - moved to configlib.py
+    CreateHTMLinput - move to configlib.py
+    CreateSelectBox - move d to configlib.py
+    Added DisplayConfigChanges to display config changes need to get convert_config to work.
+    Added Reading of config version from the local_conf.py
+    
+       
+       

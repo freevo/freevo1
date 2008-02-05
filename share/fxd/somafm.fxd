@@ -1,0 +1,133 @@
+<?xml version="1.0" ?>
+<!DOCTYPE names [
+<!ENTITY imgdir "../images/fxd/webradio/somafm">
+]>
+<freevo>
+    <container title="SomaFM" type="webradio">
+        <cover-img>&imgdir;/250x250sfm.jpg</cover-img>
+
+        <audio title="Groove Salad">
+            <cover-img>&imgdir;/GrooveSaladBox.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/groovesalad48.pls</url>
+            <info>
+                <bitrate>48</bitrate>
+                <description>A nicely chilled plate of ambient beats and grooves.</description>
+            </info>
+        </audio>
+
+        <audio title="Secret Agent">
+            <cover-img>&imgdir;/SecretAgentBox.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/secretagent48.pls</url>
+            <info>
+                <bitrate>48</bitrate>
+                <description>The soundtrack for your stylish, mysterious, dangerous life. For Spies and PIs too!</description>
+            </info>
+        </audio>
+
+        <audio title="Indie Pop Rocks!">
+            <cover-img>&imgdir;/indychick.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/indiepop48.pls</url>
+            <info>
+                <bitrate>48</bitrate>
+                <description>New and your favorite classic indie pop tracks.</description>
+            </info>
+        </audio>
+
+        <audio title="Space Station Soma">
+            <cover-img>&imgdir;/sss.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/spacestation48.pls</url>
+            <info>
+                <bitrate>48</bitrate>
+                <description>Tune in, turn on, space out. Spaced-out ambient and mid-tempo electronica</description>
+            </info>
+        </audio>
+
+        <audio title="Illinois Street Lounge">
+            <cover-img>&imgdir;/illstreet.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/illstreet48.pls</url>
+            <info>
+                <bitrate>48</bitrate>
+                <description>Classic bachelor pad, playful exotica and vintage music of tomorrow.</description>
+            </info>
+        </audio>
+
+        <audio title="Beat Blender">
+            <cover-img>&imgdir;/blender.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/beatblender.pls</url>
+            <info>
+                <bitrate>128</bitrate>
+                <description>A late night blend of deep-house and downtempo chill</description>
+            </info>
+        </audio>
+
+        <audio title="Cliqhop idm">
+            <cover-img>&imgdir;/cliqhop.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/cliqhop.pls</url>
+            <info>
+                <bitrate>128</bitrate>
+                <description>Blips'n'beeps backed mostly w/beats. Intelligent Dance Music..</description>
+            </info>
+        </audio>
+
+        <audio title="Drone Zone">
+            <cover-img>&imgdir;/DroneZoneBox.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/dronezone56.pls</url>
+            <info>
+                <bitrate>56</bitrate>
+                <description>Served best chilled, safe with most medications. Atmospheric textures with minimal beats.</description>
+            </info>
+        </audio>
+
+        <audio title="Boot Liquor">
+            <cover-img>&imgdir;/bootliquor.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/bootliquor.pls</url>
+            <info>
+                <bitrate>128</bitrate>
+                <description>Back on SomaFM! Americana roots music for Cowhands, Cowpokes and Cowtippers.</description>
+            </info>
+        </audio>
+
+        <audio title="Doomed">
+            <cover-img>&imgdir;/doomed.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/doomed56.pls</url>
+            <info>
+                <bitrate>56</bitrate>
+                <description>Dark and scary industrial-inspired music for tortured souls.</description>
+            </info>
+        </audio>
+
+        <audio title="Tag's Trance Trip">
+            <cover-img>&imgdir;/tagstrancefract.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/tagstrance64.pls</url>
+            <info>
+                <bitrate>64</bitrate>
+                <description>Progressive house / trance. Tip top tunes.</description>
+            </info>
+        </audio>
+        <info>
+            <description>11 unique channels of listener-supported, commercial-free, underground/alternative radio broadcasting from San Francisco.</description>
+        </info>
+    </container>
+</freevo>
