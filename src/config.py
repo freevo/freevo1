@@ -967,7 +967,7 @@ def detect_channels():
 
             chanlist += [(id, display_name, tunerid)]
 
-        f = config.TV_CHANNELS_COMPARE
+        f = TV_CHANNELS_COMPARE
         chanlist.sort(f)
 
         try:
