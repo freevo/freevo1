@@ -38,6 +38,7 @@ import sys, time
 import traceback
 import signal
 
+import config
 import rc
 rc.get_singleton(is_plugin=0)
 
@@ -56,7 +57,6 @@ try:
     import twisted
     import Numeric
 
-    import config
     import kaa
     import kaa.metadata as mmpython
     import kaa.imlib2 as Image
