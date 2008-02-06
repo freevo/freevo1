@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Send commands to a DirecTV receiver using a shell command like 
+# Send commands to a DirecTV receiver using a shell command like
 # irsend from Lirc.
 # -----------------------------------------------------------------------
 # $Id$
@@ -26,7 +26,7 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc., 
+# with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
@@ -47,7 +47,7 @@ class PluginInterface(plugin.Plugin):
 
     Example usage (local_conf.py)::
 
-        plugin_external_tuner = plugin.activate('tv.irsend_directv', 
+        plugin_external_tuner = plugin.activate('tv.irsend_directv',
             args=('/usr/bin/irsend SEND_ONCE <remote_name>', '/usr/bin/irsend SET_TRANSMITTER',))
 
     Where <remote_name> is the name of the remote you are using to send codes

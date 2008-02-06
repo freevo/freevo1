@@ -55,7 +55,7 @@ class GuideResource(FreevoResource):
         clist = []
         for dchan in guide.chan_list:
             clist.append(dchan.displayname)
-            
+
         return clist
 
     def TimeBooked(self,prog):
@@ -65,8 +65,8 @@ class GuideResource(FreevoResource):
                 bookedtime = True, schedule_prog
         if not bookedtime:
             schedule_prog = None
-        return bookedtime , schedule_prog 
-        
+        return bookedtime , schedule_prog
+
     def GetChannel(self, display_channel,guide):
         for dchan in guide.chan_list:
             if display_channel == dchan.displayname:
@@ -75,13 +75,13 @@ class GuideResource(FreevoResource):
 
     def CreateChannelLine(self,prog):
         status = "programline"
-        
+
         bookedtime, sch_prog = self.TimeBooked(prog)
         program_tip = ''
         if bookedtime:
             status = 'programtimebooked'
             program_tip = 'Scheduled Program : %s' %  Unicode(sch_prog.sub_title)
-        
+
         if self.got_schedule:
             (result, message) = ri.isProgScheduled(prog, self.schedule)
             if result:
@@ -95,7 +95,7 @@ class GuideResource(FreevoResource):
         popid = '%s:%s' % (prog.channel_id, prog.start)
         pstarttime = time.localtime(prog.start)
         pstart = time.strftime(config.TV_TIME_FORMAT,pstarttime)
-        channel_line += '<li id="%s">\n' % status  
+        channel_line += '<li id="%s">\n' % status
         channel_line += '<a id="%s" name="%s" onclick="guide_click(this, event)"> %s %s </a>\n' % (popid,program_tip,pstart,cell)
         channel_line += '<ul>\n'
         channel_line += '<li id="description">\n'
@@ -156,28 +156,28 @@ class GuideResource(FreevoResource):
         html += "<iframe id='bookedhidden' style='visibility: hidden; width: 1px; height: 1px'></iframe>\n"
         return html
 
-    
+
     def GetChannelPrograms(self,channel):
         channel_programs = '<ul id="daylistcontainer">\n'
         current_day =''
-        
+
         for prog in channel.programs:
-                 
+
             if prog.stop > self.currenttime:
 #                if self.TimeBooked(prog):
-                
+
                 if time.strftime('%b %d (%a)', time.localtime(prog.start)) <> current_day:
                     if current_day <> '':
                         channel_programs += '</ul>\n'
                         channel_programs += '</li>\n'
-                    
+
                     current_day = time.strftime('%b %d (%a)', time.localtime(prog.start))
                     js_onclick = "ShowList('%s')" % current_day
                     channel_programs += '<li id="dayline">\n'
                     channel_programs += '<a onclick="%s" id="current">%s</a>\n' % (js_onclick,current_day)
                     channel_programs += '<ul id="%s" class="subnavlist">\n' % (current_day)
                 channel_programs += self.CreateChannelLine(prog)
-                
+
 
         channel_programs += '</ul>\n'
         return channel_programs
@@ -186,11 +186,11 @@ class GuideResource(FreevoResource):
     def _render(self, request):
         fv = HTMLResource()
         form = request.args
- 
+
         self.guide = tv.epg_xmltv.get_guide()
         (self.got_schedule, self.schedule) = ri.getScheduledRecordings()
         self.currenttime = time.time()
-        
+
         if self.got_schedule:
             self.schedule = self.schedule.getProgramList()
 
@@ -198,34 +198,34 @@ class GuideResource(FreevoResource):
         fv.res += '<link rel="stylesheet" href="styles/guidechannel.css" type="text/css" media="screen">\n'
         fv.res += '<div id="content">\n';
         fv.res += '&nbsp;<br/>\n'
-                
+
         if not self.got_schedule:
             fv.printMessages(
                 [ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ]
                 )
-     
+
         display_channel = fv.formValue(form,'channel')
         if not display_channel:
             display_channel = self.guide.chan_list[0].displayname
         clist = []
-        
+
         getprogramlist = fv.formValue(form,'getprogramlist')
         if getprogramlist:
             chan = self.GetChannel(getprogramlist,self.guide)
             fv.res = self.GetChannelPrograms(chan)
-            
+
             return String(fv.res)
-                
+
         dchan = self.GetChannel(display_channel,self.guide)
         fv.res += '<script language="JavaScript" type="text/JavaScript" src="scripts/guidechannel.js"></script>\n'
         js_onclick = "ChangeChannel(this)"
         ctrl_opts = 'onchange="%s"' % js_onclick
         clist = self.GetChannelList(self.guide)
         fv.res += CreateSelectBoxControl('channel',clist,display_channel,ctrl_opts)
-        
+
         if not dchan.programs:
             fv.res += 'This channel has no data loaded\n'
-        
+
         channel_programs = self.GetChannelPrograms(dchan)
         fv.res += '<div id="ProgramList">\n'
         fv.res += channel_programs

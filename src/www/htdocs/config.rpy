@@ -106,7 +106,7 @@ def ParseConfigFile(rconf):
                 cfg_control.endline = cnt
                 cfg_control.control_name = cfg_control.ctrlname + '_' + str(startline)
                 fconfig.append(cfg_control)
-                
+
         cnt += 1
 
     #fconfig.sort(key=operator.itemgetter('control_name'))
@@ -124,7 +124,7 @@ class ConfigControl():
         self.fileline = None
         self.control_name = None
         self.control_type = None
-        
+
         tln = config_line.strip()
         tln = tln.replace('\n', '')
 
@@ -655,7 +655,7 @@ def CreateConfigLine(nctrl,  expALL):
 
     return htmlctrl
 
-    
+
 
 def DisplayConfigChanges(current_version):
     '''
@@ -702,8 +702,8 @@ def GetConfigVersion(conf_data):
         if setting.ctrlname == 'CONFIG_VERSION':
             return setting.ctrlvalue
     return None
-    
-    
+
+
 class ConfigResource(FreevoResource):
 
     def __init__(self):
@@ -711,7 +711,7 @@ class ConfigResource(FreevoResource):
         self.expand_all = False
         print 'Config Resourese'
 
-    
+
     def DisplayGroups(self,fconfig):
         '''
         '''
@@ -742,7 +742,7 @@ class ConfigResource(FreevoResource):
         '''
         '''
         _debug_('DisplayGroups(fconfig=%r)' % (fconfig), 2)
-     
+
         groups = GetGroupList(fconfig)
         displayStyle = 'none'
         if self.expand_all:
@@ -750,12 +750,12 @@ class ConfigResource(FreevoResource):
 
         html = ''
         for cctrl in fconfig:
-        
+
             if cctrl.group == grp:
                 if cctrl.enabled:
                     html += '<li class="LineOpen" id="%s_line">\n' % cctrl.control_name
                     html += CreateConfigLine(cctrl,  self.expand_all)
-                    html += '</li>\n'            
+                    html += '</li>\n'
                 else:
                     if  not self.hide_disabled:
                         html += '<li class="LineOpen" id="%s_line">\n' % cctrl.control_name
@@ -763,7 +763,7 @@ class ConfigResource(FreevoResource):
                         html += '</li>\n'
 
         return html
-                
+
     def _render(self, request):
         '''
         '''
@@ -782,14 +782,14 @@ class ConfigResource(FreevoResource):
         if not configfile:
             fv.res += 'Unable to find file.'
             return fv.res
-        
-        wizard_groups = ['Tv','Video','Audio','Image','Headline','Www','All','Config Changes','Options']       
+
+        wizard_groups = ['Tv','Video','Audio','Image','Headline','Www','All','Config Changes','Options']
         current_group = fv.formValue(form,"current_group")
         if not current_group:
             current_group = "Tv"
         if not current_group in wizard_groups:
             current_group = "Tv"
-                    
+
         rconf = ReadConfig(configfile)
         fconfig = ParseConfigFile(rconf)
 
@@ -828,17 +828,17 @@ class ConfigResource(FreevoResource):
             fv.res += '</li>\n'
         fv.res += '</ul>\n'
         fv.res += '</div>\n<br><br>'
-      
+
         if current_group == "All":
             fv.res += self.DisplayGroups(fconfig)
         elif current_group == 'Config Changes':
             local_conf_ver = GetConfigVersion(fconfig)
-            fv.res += DisplayConfigChanges(local_conf_ver)   
+            fv.res += DisplayConfigChanges(local_conf_ver)
         elif current_group == 'Options':
             fv.res += 'Create Options !!'
         else:
             fv.res += self.DisplayGroup(current_group,fconfig)
-        
+
         fv.res + '</div>\n'
 
         return str(fv.res)

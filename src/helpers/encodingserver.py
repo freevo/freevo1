@@ -106,8 +106,8 @@ class EncodingServer(xmlrpc.XMLRPC):
         while not self.jobs[idnr].finishedanalyze:
             time.sleep(0.1)
         if self.jobs[idnr].finishedanalyze == True and self.jobs[idnr].failed == True:
-                _debug_('Analysis failed')
-                return (False,10)
+            _debug_('Analysis failed')
+            return (False,10)
 
         _debug_("Initialized job %s (idnr : %s)" % (friendlyname, idnr), DINFO)
 

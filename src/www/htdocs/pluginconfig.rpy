@@ -114,8 +114,8 @@ def get_config_setting(lconf, plugin_name):
             conf_line = lcline['orgline']
             linenumber = lcline['lineno']
             confentry = True
-    return conf_line, linenumber    
-    
+    return conf_line, linenumber
+
 
 def plugin_level_control(lconf_line, plugin):
     '''
@@ -180,7 +180,7 @@ class PluginHTMLControl():
         self.plugin_name = plugin
         self.plugin_args =  get_plugin_args(self.lconfline)
         self.line_control = CreateHTMLinput('hidden',self.plugin_name + '_lineno', str(self.linenumber) , '','')
-        
+
     def status(self):
         '''
         '''
@@ -294,8 +294,8 @@ def Display_Vars(plugin, cfile):
     return dsp_vars
 
 
-    
-    
+
+
 class ConfigurePluginsResource(FreevoResource):
 
     def __init__(self):
@@ -329,7 +329,7 @@ class ConfigurePluginsResource(FreevoResource):
                     pluginname = plugin[1][0]
                     pluginctrl = displayplugin(self.configfile, plugin[1], lcplugins, self.expandAll, self.current_group)
                     grouplist += pluginctrl
-                    
+
         grouplist += '</ul>\n'
 
         return Unicode(grouplist)
@@ -367,7 +367,7 @@ class ConfigurePluginsResource(FreevoResource):
         self.all_plugins = config.all_plugins
         group_list = ['Global', 'tv', 'video', 'audio', 'image', 'idlebar', 'servers','helpers']
         group_list.sort()
-        
+
         self.plugin_grps = group_list
         splugins = self.SortPlugins()
 
@@ -381,14 +381,14 @@ class ConfigurePluginsResource(FreevoResource):
 
         fv.res += '<link rel="stylesheet" href="styles/config.css" type="text/css" />\n'
         fv.res += CreateHTMLinput('hidden','configfile',self.configfile,'','')
-        
+
         fv.res += ' <div id="ConfigGroup">'
         fv.res += '<ul>'
-        
+
         self.current_group = fv.formValue(form,'current_group')
         if not self.current_group:
             self.current_group = 'Global'
-            
+
         for group in self.plugin_grps:
             group_id = ""
             if self.current_group == group:
@@ -398,11 +398,11 @@ class ConfigurePluginsResource(FreevoResource):
             fv.res += '</li>\n'
         fv.res += '</ul>\n'
         fv.res += '</div>\n<br><br>'
-        
+
         fv.res += '<div class="VarGroups">\n'
         fv.res += '<form action="#" class="searchform">\n'
         fv.res += '<ul>\n'
-        fv.res += '<li class="Plugin_Group">\n'        
+        fv.res += '<li class="Plugin_Group">\n'
         fv.res += self.display_group(splugins,  lcplugins)
         fv.res += '</li>\n'
         fv.res += '</div>\n'

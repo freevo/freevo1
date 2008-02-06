@@ -91,7 +91,7 @@ mappings = {
         'Inverse Telecine' : ['None', 'On (stateless filter)'],
         'Denoise' : ['None', 'Normal denoise', 'HQ denoise'],
         'iPod' : ['iPod']
-    }, 
+    },
 }
 
 
@@ -436,16 +436,16 @@ class EncodingJob:
 
         # set video encoder options
         if self.altprofile == None:
-            args = [ 
+            args = [
                 '-ovc', mappings['vcodec'][self.vcodec][0], mappings['vcodec'][self.vcodec][1],
                         mappings['vcodec'][self.vcodec][2] % (self.vbrate, self.threads, vpass, aspect ) ]
         else:  # Allow encoder options from client
             aprofile = '%s:vbitrate=%s:threads=%s%s%s' % (self.altprofile, self.vbrate, self.threads, vpass, aspect)
             args = ['-ovc', mappings['vcodec'][self.vcodec][0],mappings['vcodec'][self.vcodec][1], aprofile ]
-        
+
 
         # set audio encoder options
-        args += ['-oac' , mappings['acodec'][self.acodec][0] ] 
+        args += ['-oac' , mappings['acodec'][self.acodec][0] ]
         if self.acodec != 'copy':
             args += [ mappings['acodec'][self.acodec][1],
                       mappings['acodec'][self.acodec][2] % self.abrate ]
@@ -477,7 +477,7 @@ class EncodingJob:
         #if we scale, use the bilinear algorithm
         if yscaled:
             args += ['-sws', '1']
-        
+
         return args
 
 

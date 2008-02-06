@@ -121,7 +121,7 @@ def initEncodeJob(source, output, friendlyname="", title=None):
     if not (source or output):
         return (False, "EncodingClient: no source and/or output")
 
-    try: 
+    try:
         (status, response) = server.initEncodeJob(source, output, friendlyname, title)
     except:
         print "Unexpected error:", sys.exc_info()[0]
@@ -141,7 +141,7 @@ def getContainerCAP():
         response = server.getContainerCAP()
     except:
         return (False ,'EncodingClient: connection error')
-    
+
     return (True, response )
 
 def setContainer(idnr, container):
@@ -182,7 +182,7 @@ def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile
         returned by getVideoCodecCAP.
     @param tgtsize: is the target size of the encoded file, in megabytes (this includes
         audio data and container format overhead)
-    @param multipass: is a boolean. Set this to True if you want multipass encoding 
+    @param multipass: is a boolean. Set this to True if you want multipass encoding
         ( 1 pass, 2 video passes). The default is no multipass ( 1 video)
     @param vbitrate: is the video bitrate, if it is not 0 then this value is used instead
         of using the tgtsize.
