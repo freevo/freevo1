@@ -547,7 +547,14 @@
             <content x="10" y="10" height="max-20" width="max-20" type="text"
                 spacing="10" font="tv">
                 <item type="default">
-                    <goto_pos x="600" mode="relative"/>
+                    <if expression="scheduled">
+                    	<img src="recording.png" />
+                        <goto_pos x="32" mode="relative"/>
+                    </if>
+                    <if expression="favorite">
+                    	<img src="star.png" />
+                    </if>
+                    <goto_pos x="600" mode="absolute"/>
                     <text font="tv time" valign="center" expression="start"/>
                     <text font="tv time" valign="center">-</text>
                     <text font="tv time" valign="center" expression="stop"/>

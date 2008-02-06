@@ -339,6 +339,7 @@ class Info_Area(Skin_Area):
             # Tag: <img>
             #
             elif isinstance( element, xml_skin.FormatImg ):
+                element = copy.copy( element )
                 # Image is a float object
                 if element.x == None:
                     element.x = x

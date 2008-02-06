@@ -120,17 +120,21 @@ class TVGuide(Item):
         self.last_update = time.time()
         self.scheduled_programs = []
         self.overlap_programs = []
+        self.favorite_programs = []
         (got_schedule, schedule) = ri.getScheduledRecordings()
 
         util.misc.comingup(None, (got_schedule, schedule))
 
         if got_schedule:
             progs = schedule.getProgramList()
+            
             for k in progs:
                 prog = progs[k]
                 self.scheduled_programs.append(prog.str2utf())
                 if prog.overlap:
                     self.overlap_programs.append(prog.str2utf())
+                if hasattr(prog, 'isFavorite' ) and prog.isFavorite:
+                    self.favorite_programs.append(prog.str2utf())
 
 ### event handler
 
@@ -340,6 +344,11 @@ class TVGuide(Item):
                             p.overlap = TRUE
                         else:
                             p.overlap = FALSE
+                            
+                        if p in self.favorite_programs:
+                            p.favorite = TRUE
+                        else:
+                            p.favorite = FALSE
                 except:
                     pass
 
