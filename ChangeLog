@@ -20,6 +20,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * Updated tv guide with scheduled to record and favorite icons (F#1886621)
+ * Updated tv program to stop reporting that a program is over (F#1886568)
  * Fixed the main program to cause a crash when local_conf.py is invalid (B#1886624)
 
 == Release 1.7.6.1 (2008-02-05) ==

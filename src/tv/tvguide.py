@@ -127,7 +127,7 @@ class TVGuide(Item):
 
         if got_schedule:
             progs = schedule.getProgramList()
-            
+
             for k in progs:
                 prog = progs[k]
                 self.scheduled_programs.append(prog.str2utf())
@@ -344,7 +344,7 @@ class TVGuide(Item):
                             p.overlap = TRUE
                         else:
                             p.overlap = FALSE
-                            
+
                         if p in self.favorite_programs:
                             p.favorite = TRUE
                         else:

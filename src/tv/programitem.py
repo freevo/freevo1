@@ -46,7 +46,7 @@ from tv.record_types import Favorite
 
 from gui.PopupBox import PopupBox
 from gui.AlertBox import AlertBox
-
+from gui.ConfirmBox import ConfirmBox
 
 class ProgramItem(Item):
     """
@@ -165,16 +165,12 @@ class ProgramItem(Item):
         if self.prog.start > now + (7*60):
             if menuw: menuw.show()
             # this program is in the future
-            msgtext = _('Sorry, you cannot watch this program now. ')
-            msgtext+= _('It starts in the future.')
-            AlertBox(text=msgtext).show()
-            return
-        elif self.prog.stop < now:
-            if menuw: menuw.show()
-            # this program is already over
-            msgtext = _('Sorry, you cannot watch this progam now. ')
-            msgtext+= _('This program is already over.')
-            AlertBox(text=msgtext).show()
+            if self.scheduled:
+                msgtext= _('Do you want to remove the Program from the record schedule?')
+            else:
+                msgtext = _('This Program is in the future. Do you want to record it?')
+
+            ConfirmBox(text=msgtext, handler=lambda: self.toggle_rec(menuw=menuw), default_choice=1).show()
             return
         else:
             # check if the device is free
@@ -203,7 +199,6 @@ class ProgramItem(Item):
         """
         _debug_('show_description(arg=%r, menuw=%r)' % (arg, menuw), 2)
         ShowProgramDetails(menuw, self)
-
 
     def toggle_rec(self, arg=None, menuw=None):
         """
