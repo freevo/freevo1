@@ -19,6 +19,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 == Release 1.7.7 (2008-??-??) ==
 --------------------------------
 
+ * New placement support when using xrandr (F#1869969)
  * Updated playlist to process "#EXTINF" comments in m3u files (F#1890203)
  * Updated Russian translation (B#1889826)
  * Updated tv guide with scheduled to record and favorite icons (F#1886621)
