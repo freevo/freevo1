@@ -415,8 +415,7 @@ class main_backup_thread(threading.Thread):
 
             # Build the cdparanoia command to be run
             cdparanoia_command = str('%s %s %s' % (config.CDPAR_CMD, config.CD_RIP_CDPAR_OPTS, \
-                                 str(i+1))).split(' ')+\
-                                 [ wav_file ]
+                                 str(i+1))).split(' ')+[ wav_file ]
 
             _debug_('cdparanoia:  %s' % cdparanoia_command)
 
@@ -435,8 +434,8 @@ class main_backup_thread(threading.Thread):
             # Build the lame command to be run if mp3 format is selected
             if string.upper(rip_format) == 'MP3':
                 output = '%s%s.mp3' % (pathname, path_tail)
-                cmd = str('%s %s' % (config.LAME_CMD, config.CD_RIP_LAME_OPTS))
-                cmd = cmd.split(' ') + \
+                cmdstr = str('%s %s' % (config.LAME_CMD, config.CD_RIP_LAME_OPTS))
+                cmd = filter(len, cmdstr.split(' ')) + \
                     [ '--ignore-tag-errors', '--tt', song_names[i], '--ta', artist,
                       '--tl', album, '--tn', '%(track)s,%(tracks)s' % user_rip_path_prefs,
                       '--tg', genre, '--id3v2-only', wav_file, output ]
@@ -447,8 +446,8 @@ class main_backup_thread(threading.Thread):
             # Build the oggenc command to be run if ogg format is selected
             elif string.upper(rip_format) == 'OGG':
                 output = '%s%s.ogg' % (pathname, path_tail)
-                cmd = str('%s %s' % (config.OGGENC_CMD, config.CD_RIP_OGG_OPTS))
-                cmd = cmd.split(' ') + \
+                cmdstr = str('%s %s' % (config.OGGENC_CMD, config.CD_RIP_OGG_OPTS))
+                cmd = filter(len, cmdstr.split(' ')) + \
                       [ '-a', artist, '-G', genre, '-N', track, '-t', song_names[i],
                         '-l', album, wav_file, '-o', output ]
 
@@ -459,8 +458,8 @@ class main_backup_thread(threading.Thread):
             # Build the flacenc command
             elif string.upper(rip_format) == 'FLAC':
                 output = '%s%s.flac' % (pathname, path_tail)
-                cmd = '%s %s' % ( config.FLAC_CMD, config.CD_RIP_FLAC_OPTS )
-                cmd = cmd.split(' ') + [ wav_file, '-o', output ]
+                cmdstr = '%s %s' % ( config.FLAC_CMD, config.CD_RIP_FLAC_OPTS )
+                cmd = filter(len, cmdstr.split(' ')) + [ wav_file, '-o', output ]
 
                 metaflac_command = \
                     'metaflac --set-tag=ARTIST="%s" --set-tag=ALBUM="%s" '\
