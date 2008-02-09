@@ -143,6 +143,12 @@ class RecordClient:
         return self.server_rpc('isPlayerRunning', callback)
 
 
+    def getFavorites(self, callback):
+        """ Get favourites """
+        _debug_('getFavorites(callback=%r)' % (callback), 2)
+        return self.server_rpc('getFavorites', callback)
+
+
 
 #
 # Deprecated Twisted calls
@@ -417,14 +423,19 @@ if __name__ == '__main__':
 
     print 'xml_rpc_server at %r' % (xml_rpc_server)
 
+    if function == "test":
+        (result, response) = connectionTest('connection test')
+        print 'result: %s, response: %s ' % (result, response)
+
+
     if function == "updatefavoritesschedule":
         (result, response) = updateFavoritesSchedule()
         print '%r' % response
 
 
-    if function == "test":
-        (result, response) = connectionTest('connection test')
-        print 'result: %s, response: %s ' % (result, response)
+    if function == "getfavorites":
+        (result, response) = getFavorites()
+        print '%r' % response
 
 
     if function == "moviesearch":
