@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.22
+LOCAL_CONF_VERSION = 5.23
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -345,6 +345,9 @@ LOCAL_CONF_CHANGES = [
      Renamed audio plug-in audio.playlist to audio.playlists
      Added ENCODINGSERVER_SAVE_DIR for re-encoded DVDs
      Added TV_CHANNELS_COMPARE as a lambda to sort the channels
+     '''),
+    (5.23,
+     ''' Added XMLTV_TIMEZONE to allow the time zone to be specified
      '''),
 ]
 
@@ -1938,6 +1941,14 @@ XMLTV_SORT = ''
 # Number of days the grabber should get
 
 XMLTV_DAYS = 3
+
+#
+# GMT offset for XMLTV feeds that don't contain timezone information
+# An example of this is the OzTivo feed which has the timestamps
+# in the XML pre-adjusted for your timezone
+#
+XMLTV_TIMEZONE = None
+
 
 
 # ======================================================================

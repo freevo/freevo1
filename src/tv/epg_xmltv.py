@@ -313,12 +313,21 @@ def timestr2secs_utc(timestr):
     '20020702100000 CDT'
     '200209080000 +0100'
     """
-    # This is either something like 'EDT', or '+1'
-    try:
-        tval, tz = timestr.split()
-    except ValueError:
+
+    # Accounting for feeds that pre-adjust start/finish timestamps in the feed to the
+    # correct timezone and DO NOT provide a timestamp offset (as it would be zero).
+    # An example of this strange behaviour is the OzTivo feed
+
+    if config.XMLTV_TIMEZONE is not None:
         tval = timestr
-        tz   = str(-time.timezone/3600)
+        tz = config.XMLTV_TIMEZONE
+    else:
+        # This is either something like 'EDT', or '+1'
+        try:
+            tval, tz = timestr.split()
+        except ValueError:
+            tval = timestr
+            tz   = str(-time.timezone/3600)
 
     if tz == 'CET':
         tz='+1'

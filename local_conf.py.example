@@ -10,7 +10,7 @@
 # freevo_config.py. freevo_config.py, which is usually installed in
 # /usr/share/freevo, contains all the core settings.  To change the settings copy
 # this file to ~/.freevo/local_conf.py or /etc/freevo/local_conf.py
-# 
+#
 # It does not contain all the possible settings that you can change, see
 # freevo_config.py for all the possible settings. Also it does not contain
 # settings for the plug-ins, plug-ins contain their configuration information and
@@ -18,12 +18,12 @@
 # | freevo plugins -l
 # and the settings can se shown with
 # | freevo plugins -i <name of plug-in>
-# 
+#
 # E.g.: when you want a alsa as mplayer audio out, just put in local_conf.py:
 # | MPLAYER_AO_DEV = 'alsa9'
-# 
+#
 # The vertical line indicates code.
-# 
+#
 # This is no normal config file, it's Python code. Because of that, you
 # need to follow some rules to avoid crashes. The examples should explain
 # the settings, but make sure a line starting with a variable has NO SPACES OR
@@ -50,7 +50,7 @@
 #
 # -----------------------------------------------------------------------
 
-CONFIG_VERSION = 5.22
+CONFIG_VERSION = 5.23
 
 # ======================================================================
 # General freevo settings:
@@ -63,8 +63,8 @@ CONFIG_VERSION = 5.22
 # MIXER_MAJOR_CTRL   = 'VOL'           # Freevo takes control over one audio ctrl
                                        # 'VOL', 'PCM' 'OGAIN' etc.
 
-# MIXER_MAJOR_MUTE_CTRL = 'PCM'        # used in alsamixer.py There are systems where 
-                                       # volume and mute use different controls 
+# MIXER_MAJOR_MUTE_CTRL = 'PCM'        # used in alsamixer.py There are systems where
+                                       # volume and mute use different controls
 
 # MIXER_DEVICE          = '/dev/mixer' # mixer device
 # MIXER_CONTROL_ALL     = 1            # Should Freevo take complete control of audio
@@ -1376,7 +1376,7 @@ CACHE_IMAGES = 1
 # TV_VIDEO_GROUPS setting to handles multiple arbitrary groups of devices
 # for viewing or recording.  It is possible to have different Freevo
 # channels use different Video Groups.
-# 
+#
 # See the wiki for more details:
 #   http://doc.freevo.org/MultiTunerConfig
 #   http://doc.freevo.org/Analoguemulti
@@ -1544,6 +1544,14 @@ CACHE_IMAGES = 1
 # Number of days the grabber should get
 #
 # XMLTV_DAYS = 3
+
+## ONLY ADJUST THIS IF YOUR GUIDE TIMES ARE INCORRECT ##
+#
+# GMT offset for XMLTV feeds that don't contain timezone information
+# An example of this is the OzTivo feed which has the timestamps
+# in the XML pre-adjusted for your timezone
+#
+# XMLTV_TIMEZONE='+0100'
 
 
 # ======================================================================
