@@ -101,7 +101,7 @@ class Playlist(Item):
 
         try:
             playlist_lines_dos = map(lambda l: l.strip(), lines)
-            playlist_lines = filter(lambda l: len(l) > 0 and l[0] != '#', playlist_lines_dos)
+            playlist_lines = filter(lambda l: len(l) > 0, playlist_lines_dos)
         except IndexError:
             print 'Bad m3u playlist file "%s"' % plsname
             return 0
@@ -109,11 +109,17 @@ class Playlist(Item):
         (curdir, playlistname) = os.path.split(plsname)
         #XXX this may not work if the curdir is not accessible
         os.chdir(curdir)
-        for line in playlist_lines:
+        for i in range(0,len(playlist_lines)):
+            if playlist_lines[i][0] == "#":
+                continue
+            line = playlist_lines[i]
             line = line.replace('\\', '/') # Fix MSDOS slashes
             try:
                 if line.find('://') > 0:
-                    self.playlist.append(line)
+                    if playlist_lines[i-1].find('#EXTINF') > -1 and len(playlist_lines[i-1].split(","))>1:
+                        self.playlist.append((line,playlist_lines[i-1].split(",")[1]))
+                    else:
+                        self.playlist.append(line)
                 elif os.path.isabs(line):
                     if os.path.exists(line):
                         self.playlist.append(line)
@@ -321,7 +327,14 @@ class Playlist(Item):
             if not callable(item):
                 # get a real item
                 for p in self.get_plugins:
-                    items += p.get(self, [ item ])
+                    if isinstance(item,(tuple)):
+                        mi = p.get(self, [ item[0] ])
+                        if len(mi) > 0:
+                            mi[0].name=item[1]
+                            mi[0].description=item[1]
+                        items += mi
+                    else:
+                        items += p.get(self, [ item ])
             else:
                 items.append(item)
 
