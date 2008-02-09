@@ -1172,19 +1172,19 @@ msgstr "Копирование<br> Дорожка %d из %d"
 
 #: audio/plugins/cdbackup.py:230
 msgid "Backup CD to hard drive in mp3 format"
-msgstr "Скопировать CD на жёсткий диск в формате MP3"
+msgstr "Скопировать в формате MP3"
 
 #: audio/plugins/cdbackup.py:233
 msgid "Backup CD to hard drive in Ogg format"
-msgstr "Скопировать CD на жёсткий диск в формате OGG"
+msgstr "Скопировать в формате OGG"
 
 #: audio/plugins/cdbackup.py:236
 msgid "Backup CD to hard drive in FLAC format"
-msgstr "Скопировать CD на жёсткий диск в формате FLAC"
+msgstr "Скопировать в формате FLAC"
 
 #: audio/plugins/cdbackup.py:238
 msgid "Backup CD to hard drive in wav format"
-msgstr "Скопировать CD на жёсткий диск в формате WAV"
+msgstr "Скопировать в формате WAV"
 
 #: audio/plugins/cdbackup.py:241
 msgid "CD Backup"
