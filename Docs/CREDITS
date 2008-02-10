@@ -66,6 +66,13 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
+Stephan Roolvink <live_kenny at hotmail.com>
+o Tux n' Tosh TV skin
+
+George Kibardin <george-kibardin at yandex.ru>
+o Russian translation updates
+o Fixes to cdbackup
+
 Michael Beal <mlbeal2003 at yahoo.com>
 o irsend_directv plug-in
 o Various fixes
@@ -82,6 +89,7 @@ o Music Player Daemon (MPD) plug-ins
 Alberto González Rodríguez <alberto at pesadilla.org>
 o YouTube video plug-in
 o flickr image plug-in
+o Various fixes
 
 Michel Lespinasse <walken at zoy.org>
 o Various fixes
