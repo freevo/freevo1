@@ -44,6 +44,12 @@ class PluginInterface(plugin.ItemPlugin):
     and don't forget a dvdrip eats quite a bit of space :)
     """
 
+    def config(self):
+        return [
+            ('DVD_BACKUP_MENU', None, 'A customized menu of encoding parameters'),
+        ]
+
+
     def actions(self, item):
         if config.DEBUG >= 2:
             #testing stuff
