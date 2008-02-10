@@ -243,7 +243,7 @@ class BusyIcon(threading.Thread):
         threading.Thread.start(self)
         self.timer  = 0
         self.active = False
-        self.lock   = thread.allocate_lock()
+        self.lock   = threading.RLock()
         self.rect   = None
 
     def wait(self, timer):
