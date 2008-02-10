@@ -58,19 +58,20 @@ def audio_selection_menu(arg=None, menuw=None):
     for audio in item.info['audio']:
         a = copy.copy(audio)
 
-        if not a.has_key('id') or not a['id']:
+        # set reasonable defaults when attributes are missing or not set
+        if not a.has_key('id') or a['id'] is None:
             a['id'] = int(item.info['audio'].index(audio))+1
 
-        if not a.has_key('title') or not a['title']:
+        if not a.has_key('title') or a['title'] is None:
             a['title'] = ''
 
-        if not a.has_key('language') or not a['language']:
+        if not a.has_key('language') or a['language'] is None:
             a['language'] = _('Stream %s') % a['id']
 
-        if not a.has_key('channels') or not a['channels']:
+        if not a.has_key('channels') or a['channels'] is None:
             a['channels'] = 2 # wild guess :-)
 
-        if not a.has_key('codec') or not a['codec']:
+        if not a.has_key('codec') or a['codec'] is None:
             a['codec'] = '???'
 
         txt = '%(language)s %(title)s (channels=%(channels)s:%(codec)s)' % a
