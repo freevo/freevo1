@@ -349,6 +349,8 @@ def MPD_Ping_Thread(conn):
     while True:
         sleep(10)
         try:
+            if not conn:
+                return
             conn.ping()
         except socket.error:
             return
