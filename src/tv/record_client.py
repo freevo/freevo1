@@ -71,15 +71,41 @@ class RecordClient:
 
     def recordserver_rpc(self, cmd, *args, **kwargs):
         """ call the record server command using kaa rpc """
-        _debug_('recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 2)
-        return self.server.rpc(cmd, *args, **kwargs)
+        def closed_handler():
+            self.server = None
 
-    def getScheduledRecordings(self):
-        """ get the scheduled recordings, returning an in process object """
-        _debug_('getScheduledRecordings()', 2)
-        inprogress = self.recordserver_rpc('getScheduledRecordings')
-        print 'RecordClient.getScheduledRecordings.inprogress = %r' % (inprogress)
-        return inprogress
+        _debug_('recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 2)
+        try:
+            if self.server is None:
+                try:
+                    self.server = kaa.rpc.Client(self.socket, self.secret)
+                    self.server.signals['closed'].connect(closed_handler)
+                    _debug_('%r is up' % (self.socket,), DINFO)
+                except kaa.rpc.ConnectError, e:
+                    _debug_('%r is down' % (self.socket,), DINFO)
+                    self.server = None
+                    return None
+            return self.server.rpc(cmd, *args, **kwargs)
+        except kaa.rpc.ConnectError, e:
+            _debug_('%r is down' % (self.socket,), DINFO)
+            self.server = None
+            return None
+        except IOError, e:
+            _debug_('%r is down' % (self.socket,), DINFO)
+            self.server = None
+            return None
+
+
+    def getScheduledRecordingsNow(self):
+        """ get the scheduled recordings, returning the scheduled recordings object """
+        _debug_('getScheduledRecordingsNow()', 2)
+        progress = self.recordserver_rpc('getScheduledRecordings')
+        if progress is None:
+            return None
+        progress.wait()
+        result = progress.get_result()
+        _debug_('getScheduledRecordingsNow.result=%r' % (result), 2)
+        return result
 
 
     def server_rpc(self, cmd, callback, *args, **kwargs):
@@ -405,16 +431,19 @@ def updateFavoritesSchedule():
 
 
 if __name__ == '__main__':
+    config.DEBUG = 2
+
+    def shutdown(result):
+        print "shutdown.result=%r" % (result)
+        raise SystemExit
 
     def handler(result):
         """ A callback handler for test functions """
         _debug_('handler(result)=%r' % (result), 2)
-        print 'result = %r' % (result)
+        print 'handler.result=%r' % (result)
         raise SystemExit
 
     rc = RecordClient()
-    rc.getScheduledRecordings(handler)
-    kaa.main.run()
 
     if len(sys.argv) >= 2:
         function = sys.argv[1].lower()
@@ -427,6 +456,14 @@ if __name__ == '__main__':
         (result, response) = connectionTest('connection test')
         print 'result: %s, response: %s ' % (result, response)
 
+
+    if function == "getscheduledrecordingsnow":
+        result = rc.getScheduledRecordingsNow()
+        print 'result: %r' % (result)
+
+
+    if function == "getscheduledrecordings":
+        rc.getScheduledRecordings(handler)
 
     if function == "updatefavoritesschedule":
         (result, response) = updateFavoritesSchedule()
@@ -475,3 +512,6 @@ if __name__ == '__main__':
                 _debug_('%r' % response)
         else:
             print 'no data'
+
+    kaa.notifier.OneShotTimer(shutdown, 'bye').start(3)
+    kaa.main.run()

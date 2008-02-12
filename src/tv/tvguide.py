@@ -42,7 +42,7 @@ from programitem import ProgramItem
 from event import *
 
 import epg_xmltv, epg_types
-import record_client as ri
+import record_client
 
 skin = skin.get_singleton()
 skin.register('tv', ('screen', 'title', 'subtitle', 'view',
@@ -79,6 +79,7 @@ class TVGuide(Item):
                 break
 
 
+        self.recordclient = record_client.RecordClient()
         self.col_time = 30      # each col represents 30 minutes
         self.n_cols  = (stop_time - start_time) / 60 / self.col_time
         self.player = player
@@ -99,12 +100,32 @@ class TVGuide(Item):
         menuw.pushmenu(self)
 
 
+    def update_schedules_cb(self, scheduledRecordings):
+        """ """
+        print 'update_schedules_cb(scheduledRecordings=%r)' % (scheduledRecordings)
+        #upsoon = '%s/upsoon' % (config.FREEVO_CACHEDIR)
+        #if os.path.isfile(upsoon):
+        #    os.unlink(upsoon)
+
+        util.misc.comingup(None, (True, scheduledRecordings))
+        progs = scheduledRecordings.getProgramList()
+
+        for k in progs:
+            prog = progs[k]
+            self.scheduled_programs.append(prog.str2utf())
+            if prog.overlap:
+                self.overlap_programs.append(prog.str2utf())
+            if hasattr(prog, 'isFavorite') and prog.isFavorite:
+                self.favorite_programs.append(prog.str2utf())
+
+
     def update_schedules(self, force=False):
         """
         update schedule
 
         reload the list of scheduled programs and check for overlapping
         """
+        print 'update_schedules(force=%r)' % (force)
         if not force and self.last_update + 60 > time.time():
             return
 
@@ -112,31 +133,13 @@ class TVGuide(Item):
         #if self.last_update + 1 > time.time():
         #    return
 
-        upsoon = '%s/upsoon' % (config.FREEVO_CACHEDIR)
-        if os.path.isfile(upsoon):
-            os.unlink(upsoon)
-
-        _debug_('update schedule',2)
+        _debug_('update schedule', 2)
         self.last_update = time.time()
         self.scheduled_programs = []
         self.overlap_programs = []
         self.favorite_programs = []
-        (got_schedule, schedule) = ri.getScheduledRecordings()
+        self.recordclient.getScheduledRecordings(self.update_schedules_cb)
 
-        util.misc.comingup(None, (got_schedule, schedule))
-
-        if got_schedule:
-            progs = schedule.getProgramList()
-
-            for k in progs:
-                prog = progs[k]
-                self.scheduled_programs.append(prog.str2utf())
-                if prog.overlap:
-                    self.overlap_programs.append(prog.str2utf())
-                if hasattr(prog, 'isFavorite' ) and prog.isFavorite:
-                    self.favorite_programs.append(prog.str2utf())
-
-### event handler
 
     def eventhandler(self, event, menuw=None):
         """
@@ -290,7 +293,7 @@ class TVGuide(Item):
 
     def show(self):
         """ show the guide"""
-        _debug_('show',2)
+        _debug_('show', 2)
         if not self.visible:
             self.visible = 1
             self.refresh()
@@ -298,7 +301,7 @@ class TVGuide(Item):
 
     def hide(self):
         """ hide the guide"""
-        _debug_('hide',2)
+        _debug_('hide', 2)
         if self.visible:
             self.visible = 0
             skin.clear()
@@ -310,7 +313,7 @@ class TVGuide(Item):
         This function is called automatically by freevo whenever this menu is
         opened or reopened.
         """
-        _debug_('refresh',2)
+        _debug_('refresh', 2)
         if self.menuw.children:
             return
         _debug_('tvguide: setting context to %s' % self.event_context, 2)
@@ -325,7 +328,7 @@ class TVGuide(Item):
         This function updates the scheduled and overlap flags for
         all currently displayed programs.
         """
-        _debug_('update',2)
+        _debug_('update', 2)
         self.update_schedules(force)
         if self.table:
             for t in self.table:
@@ -395,7 +398,7 @@ class TVGuide(Item):
         else:
             selected = None
 
-        self.rebuild(new_start_time,new_end_time, start_channel, selected)
+        self.rebuild(new_start_time, new_end_time, start_channel, selected)
 
 
     def rebuild(self, start_time, stop_time, start_channel, selected):
@@ -404,7 +407,7 @@ class TVGuide(Item):
         This is neccessary we change the set of programs that have to be
         displayed, this is the case when the user moves around in the menu.
         """
-        _debug_('reload',2)
+        _debug_('reload', 2)
         self.guide = epg_xmltv.get_guide()
         channels = self.guide.GetPrograms(start=start_time+1, stop=stop_time-1)
 

@@ -393,30 +393,30 @@ def htmlenties2txt(string):
     return string
 
 
-#
-# Coming Up for TV schedule
-#
-
-def comingup(items=None, ScheduledRecordings=None):
-    import tv.record_client as ri
+def comingup(items=None, scheduledRecordings=None):
+    """ Coming Up for TV schedule """
+    print 'comingup(items=%r, scheduledRecordings=%r)' % (items, scheduledRecordings)
+    from tv.record_client import RecordClient
     import time
     import codecs
 
     result = u''
 
     cachefile = '%s/upsoon' % (config.FREEVO_CACHEDIR)
-    if not ScheduledRecordings:
-        if (os.path.exists(cachefile) and \
-            (abs(time.time() - os.path.getmtime(cachefile)) < 600)):
+
+    if not scheduledRecordings:
+        if os.path.exists(cachefile) and abs(time.time() - os.path.getmtime(cachefile)) < 600:
             cache = codecs.open(cachefile,'r', config.encoding)
             for a in cache.readlines():
                 result = result + a
             cache.close()
             return result
 
-        (status, recordings) = ri.getScheduledRecordings()
+        (status, recordings) = (True, RecordClient().getScheduledRecordingsNow())
+        if recordings is None:
+            return _('The recordserver is down')
     else:
-        (status, recordings) = ScheduledRecordings
+        (status, recordings) = scheduledRecordings
 
     if not status:
         result = _('The recordserver is down')
