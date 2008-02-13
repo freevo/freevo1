@@ -47,6 +47,7 @@ FALSE = 0
 xml_rpc_server = 'http://%s:%s/' % (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
 server = xmlrpclib.Server(xml_rpc_server, allow_none=1)
 
+
 class RecordClientException(Exception):
     """
     """
@@ -104,8 +105,53 @@ class RecordClient:
             return None
         progress.wait()
         result = progress.get_result()
-        _debug_('getScheduledRecordingsNow.result=%r' % (result), 2)
+        _debug_('getScheduledRecordingsNow.result=%r' % (result,), 2)
         return result
+
+
+    def updateFavoritesScheduleNow(self):
+        """ Update the favorites scbedule, returning the object """
+        _debug_('updateFavoritesScheduleNow()', 2)
+        progress = self.recordserver_rpc('updateFavoritesSchedule')
+        if progress is None:
+            return None
+        progress.wait()
+        result = progress.get_result()
+        _debug_('getScheduledRecordingsNow.result=%r' % (result,), 2)
+        print 'getScheduledRecordingsNow.result=%r' % (result,)
+        return result
+
+
+    def findNextProgramNow(self, isrecording=False):
+        """ Find the next programme to record """
+        _debug_('findNextProgramNow(isrecording=%r)' % (isrecording,), 2)
+        progress = self.recordserver_rpc('findNextProgram', isrecording)
+        if progress is None:
+            return None
+        progress.wait()
+        result = progress.get_result()
+        _debug_('findNextProgramNow.result=%r' % (result,), 2)
+        return result
+
+
+    @kaa.coroutine()
+    def getNextProgramStart(self):
+        """ """
+        global nextstart
+        print 'getNextProgramStart begin'
+        progress = self.recordserver_rpc('updateFavoritesSchedule')
+        print 'getNextProgramStart.progress=%r' % progress
+        #yield kaa.YieldContinue
+        yield progress
+        print 'getNextProgramStart.progress=%r' % progress
+        result = progress.get_result()
+        print 'getNextProgramme.result=%r' % result
+        progress = self.recordserver_rpc('findNextProgram')
+        print 'getNextProgramStart.progress=%r' % progress
+        yield progress
+        print 'getNextProgramStart.progress=%r' % progress
+        nextstart = progress.get_result()
+        print 'getNextProgramme.nextstart=%r' % nextstart
 
 
     def server_rpc(self, cmd, callback, *args, **kwargs):
@@ -151,14 +197,15 @@ class RecordClient:
         return self.server_rpc('getScheduledRecordings', callback)
 
 
-    def findNextProgram(self, callback):
+    def findNextProgram(self, callback, isrecording=False):
         """ Find the next program using a callback function """
-        _debug_('findNextProgram(callback=%r)' % (callback), 2)
-        return self.server_rpc('findNextProgram', callback)
+        _debug_('findNextProgram(callback=%r, isrecording=%r)' % (callback, isrecording), 2)
+        return self.server_rpc('findNextProgram', callback, isrecording)
 
 
     def updateFavoritesSchedule(self, callback):
         """ Update the favourites using a callback function """
+        print 'updateFavoritesSchedule(callback=%r)' % (callback)
         _debug_('updateFavoritesSchedule(callback=%r)' % (callback), 2)
         return self.server_rpc('updateFavoritesSchedule', callback)
 
@@ -420,7 +467,7 @@ def addFavoriteToSchedule(fav):
     return (status, message)
 
 
-def updateFavoritesSchedule():
+def updateFavoritesScheduleT():
     """ Using Twisted update the recoding schedule with the favourites """
     _debug_('updateFavoritesSchedule()', 2)
     try:
@@ -433,14 +480,15 @@ def updateFavoritesSchedule():
 if __name__ == '__main__':
     config.DEBUG = 2
 
-    def shutdown(result):
-        print "shutdown.result=%r" % (result)
+    def shutdown(result,):
+        print "shutdown.result=%r" % (result,)
         raise SystemExit
 
-    def handler(result):
+    def handler(result,):
         """ A callback handler for test functions """
-        _debug_('handler(result)=%r' % (result), 2)
-        print 'handler.result=%r' % (result)
+        _debug_('handler(result=%r)' % (result,), 2)
+        print 'handler.result=%r' % (result,)
+        print 'handler.result=%s' % (result,)
         raise SystemExit
 
     rc = RecordClient()
@@ -456,24 +504,38 @@ if __name__ == '__main__':
         (result, response) = connectionTest('connection test')
         print 'result: %s, response: %s ' % (result, response)
 
+    if function == "getnextprogramstart":
+        rc.getNextProgramStart()
+
+    if function == "findnextprogramnow":
+        result = rc.findNextProgramNow(True)
+        print 'recording:', result
+        result = rc.findNextProgramNow(False)
+        print '         :', result
+
+    if function == "findnextprogramrecording":
+        rc.findNextProgram(handler, True)
+
+    if function == "findnextprogram":
+        rc.findNextProgram(handler)
 
     if function == "getscheduledrecordingsnow":
         result = rc.getScheduledRecordingsNow()
-        print 'result: %r' % (result)
-
+        print 'result: %r' % (result,)
 
     if function == "getscheduledrecordings":
         rc.getScheduledRecordings(handler)
 
-    if function == "updatefavoritesschedule":
-        (result, response) = updateFavoritesSchedule()
-        print '%r' % response
+    if function == "updatefavoritesschedulenow":
+        result = rc.updateFavoritesScheduleNow()
+        print 'result: %r' % (result,)
 
+    if function == "updatefavoritesschedule":
+        rc.updateFavoritesSchedule(handler)
 
     if function == "getfavorites":
         (result, response) = getFavorites()
         print '%r' % response
-
 
     if function == "moviesearch":
         if len(sys.argv) >= 3:
@@ -513,5 +575,5 @@ if __name__ == '__main__':
         else:
             print 'no data'
 
-    kaa.notifier.OneShotTimer(shutdown, 'bye').start(3)
+    kaa.notifier.OneShotTimer(shutdown, 'bye').start(20)
     kaa.main.run()

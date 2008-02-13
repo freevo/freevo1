@@ -42,7 +42,7 @@ import event as em
 from item import Item
 from gui import ConfirmBox
 from gui.AlertBox import AlertBox
-import tv.record_client as record_client
+from tv.record_client import RecordClient
 
 
 # Exception handling classes
@@ -64,9 +64,9 @@ class ExProcessRunning(Exception) : pass
 
 class ExRecordingInProgress(Exception) : pass
 
-# ***************************************************************
-# CLASS PluginInterface
-# ***************************************************************
+record_client = RecordClient()
+
+
 class PluginInterface(plugin.MainMenuPlugin):
     """
     Plugin to shutdown Freevo from the main menu
@@ -123,7 +123,18 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     """
 
+    def config(self):
+        return [
+            ('SHUTDOWN_SYS_ENABLE', 1, 'System shutdown enabled'),
+            ('AUTOSHUTDOWN_METHOD', 'acpi', 'acpi or nvram'),
+            ('AUTOSHUTDOWN_WAKEUP_CMD', None, 'path to the wakeup script'),
+            ('AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME', '13:00', 'Daily wake up time'),
+            ('AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP', True, 'Force daily wake up'),
+        ]
+
+
     def items(self, parent):
+        _debug_('items(parent=%r)' % (parent,), 2)
         return [ ShutdownMenuItem(parent) ]
 
 
@@ -132,6 +143,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 # ***************************************************************
 class ShutdownMenuItem(Item):
     def __init__(self, parent=None):
+        _debug_('ShutdownMenuItem.__init__(parent=%r)' % (parent,), 2)
         Item.__init__(self, parent, skin_type='shutdown')
         self.idletimer = plugin.getbyname('autoshutdowntimer')
 
@@ -139,6 +151,7 @@ class ShutdownMenuItem(Item):
     # TEXT FORMATTING
     # -----------------------------------------------------------
     def message_check(self, wakeup=False):
+        _debug_('message_check(wakeup=%r)' % (wakeup,), 2)
         try:
             is_shutdown_allowed()
         except ExRecordingInProgress:
@@ -169,6 +182,7 @@ class ShutdownMenuItem(Item):
     # ACTIONS
     # -----------------------------------------------------------
     def actions(self):
+        _debug_('actions()', 2)
         if (self.idletimer.ispaused()):
             itemname = _('Resume automatic shutdown')
         else:
@@ -187,6 +201,7 @@ class ShutdownMenuItem(Item):
     # CONFIRMATION
     # -----------------------------------------------------------
     def confirm_shutdown_wakeup(self, arg=None, menuw=None):
+        _debug_('confirm_shutdown_wakeup(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('SHUTDOWN SYSTEM?')
             info = self.message_check(wakeup=True)
@@ -197,10 +212,12 @@ class ShutdownMenuItem(Item):
 
 
     def confirm_toggle_timer(self, arg=None, menuw=None):
+        _debug_('confirm_toggle_timer(arg=%r, menuw=%r)' % (arg, menuw), 2)
         self.toggle_timer(arg, menuw)
 
 
     def confirm_restart_system(self, arg=None, menuw=None):
+        _debug_('confirm_restart_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('RESTART SYSTEM?')
             info = self.message_check(wakeup=False)
@@ -215,6 +232,7 @@ class ShutdownMenuItem(Item):
 
 
     def confirm_shutdown_system(self, arg=None, menuw=None):
+        _debug_('confirm_shutdown_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('SHUTDOWN SYSTEM?')
             info = self.message_check(wakeup=False)
@@ -229,6 +247,7 @@ class ShutdownMenuItem(Item):
 
 
     def confirm_shutdown_freevo(self, arg=None, menuw=None):
+        _debug_('confirm_shutdown_freevo(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('SHUTDOWN FREEVO?')
             info = self.message_check(wakeup=False)
@@ -246,10 +265,12 @@ class ShutdownMenuItem(Item):
     # ACTIONS
     # -----------------------------------------------------------
     def shutdown_wakeup(self, arg=None, menuw=None):
+        _debug_('shutdown_wakeup(arg=%r, menuw=%r)' % (arg, menuw), 2)
         shutdown_action(action=Shutdown.SHUTDOWN_WAKEUP)
 
 
     def toggle_timer(self, arg=None, menuw=None):
+        _debug_('toggle_timer(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if (self.idletimer.ispaused()):
             newname = _('Pause automatic shutdown')
             self.idletimer.resume()
@@ -269,14 +290,17 @@ class ShutdownMenuItem(Item):
 
 
     def restart_system(self, arg=None, menuw=None):
+        _debug_('restart_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
         shutdown_action(action=Shutdown.RESTART_SYSTEM)
 
 
     def shutdown_system(self, arg=None, menuw=None):
+        _debug_('shutdown_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
         shutdown_action(action=Shutdown.SHUTDOWN_SYSTEM)
 
 
     def shutdown_freevo(self, arg=None, menuw=None):
+        _debug_('shutdown_freevo(arg=%r, menuw=%r)' % (arg, menuw), 2)
         shutdown_action(action=Shutdown.SHUTDOWN_FREEVO)
 
 
@@ -315,6 +339,7 @@ class autoshutdowntimer(plugin.DaemonPlugin):
 
 
     def __init__(self):
+        _debug_('autoshutdowntimer.__init__()', 2)
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'autoshutdowntimer'
         self.event_listener = True
@@ -326,27 +351,32 @@ class autoshutdowntimer(plugin.DaemonPlugin):
 
 
     def ispaused(self):
+        _debug_('ispaused()', 2)
         return self.lock
 
 
     def pause(self):
+        _debug_('pause()', 2)
         self.lock = True
         _debug_("autoshutdown timer paused")
 
 
     def resume(self):
+        _debug_('resume()', 2)
         self.lock = False
         self.reset()
         _debug_("autoshutdown timer resumed")
 
 
     def reset(self):
+        _debug_('reset()', 2)
         self.idle_base = time.time()
         self.delay = 0
         _debug_("autoshutdown timer reset", 2)
 
 
     def eventhandler(self, event=None, menuw=None, arg=None):
+        _debug_('eventhandler(event=%r, menuw=%r, arg=%r)' % (event, menuw, arg), 2)
         if not self.lock:
             if plugin.isevent(event) != 'IDENTIFY_MEDIA' and event.name != 'SCREENSAVER_START':
                 self.reset()
@@ -355,6 +385,7 @@ class autoshutdowntimer(plugin.DaemonPlugin):
 
 
     def poll(self):
+        _debug_('poll()', 2)
         if not self.lock:
             # calculate passed and remaining time
             tdif = (time.time() - self.idle_base)
@@ -392,23 +423,24 @@ class autoshutdowntimer(plugin.DaemonPlugin):
 # CLASS SHUTDOWN
 # ***************************************************************
 class Shutdown:
+
     SHUTDOWN_WAKEUP, RESTART_SYSTEM, SHUTDOWN_SYSTEM, SHUTDOWN_FREEVO, IGNORE  = range(5)
 
 
 # ***************************************************************
 # PUBLIC HELPER FUNTIONS
 # ***************************************************************
-# -----------------------------------------------------------
-# is_shutdown_allowed
-# checks if a shutdown is allowed
-# -----------------------------------------------------------
-# Input:    None
-# Result:   True or excetion
-# Raises:   ExRecordingInProgress if there is a recording
-#           ExNextWakeupSoon if the next wakeup is nearby
-#           ExProcessRunning if there is an important process
-# -----------------------------------------------------------
+
 def is_shutdown_allowed():
+    """
+    checks if a shutdown is allowed
+
+    @returns: True or excetion
+    @raises ExRecordingInProgress: if there is a recording
+    @raises ExNextWakeupSoon: if the next wakeup is nearby
+    @raises ExProcessRunning: if there is an important process
+    """
+    _debug_('is_shutdown_allowed()', 2)
     now = time.time()
     try:
         t = __get_scheduled_recording(0)
@@ -436,6 +468,7 @@ def is_shutdown_allowed():
 # Raises:   ExNoWakeupNeeded if no wakeup needed
 # -----------------------------------------------------------
 def get_next_wakeup():
+    _debug_('get_next_wakeup()', 2)
     scheduled_utc_s = 0
     default_utc_s = 0
     now = time.time()
@@ -445,10 +478,10 @@ def get_next_wakeup():
         try:
             scheduled_utc_s = __get_scheduled_recording(i)
         except ExNoRecordServer:
-            _debug_("Record serer is down")
+            _debug_("Record server is down")
             break
         except ExRecordServerRemote:
-            _debug_("Record serer is remote")
+            _debug_("Record server is remote")
             break
         except ExIndexNotAvailable:
             _debug_("No more recordings available")
@@ -488,6 +521,7 @@ def get_next_wakeup():
 # Raises:   -
 # -----------------------------------------------------------
 def shutdown_action(action=None):
+    _debug_('shutdown_action(action=%r)' % (action,), 2)
     if (action == Shutdown.SHUTDOWN_WAKEUP):
         _debug_("shutdown wakeup")
         action = __schedule_wakeup_and_shutdown()
@@ -528,6 +562,7 @@ def shutdown_action(action=None):
 # Raises:   -
 # -----------------------------------------------------------
 def __schedule_wakeup_and_shutdown():
+    _debug_('__schedule_wakeup_and_shutdown()', 2)
     try:
         wakeup_utc_s = get_next_wakeup()
     except ExNoWakeupNeeded:
@@ -584,15 +619,15 @@ def __schedule_wakeup_and_shutdown():
     return next_action
 
 
-# -----------------------------------------------------------
-# __cleanup_freevo
-# Performs necessary actions for freevo shutdown
-# -----------------------------------------------------------
-# Input:    -
-# Result:   -
-# Raises:   -
-# -----------------------------------------------------------
 def __cleanup_freevo():
+    _debug_('__cleanup_freevo()', 2)
+    """
+    # Performs necessary actions for freevo shutdown
+    # -----------------------------------------------------------
+    # Input:    -
+    # Result:   -
+    # Raises:   -
+    """
     import osd
     import plugin
     import rc
@@ -632,6 +667,7 @@ def __cleanup_freevo():
 # Result:   True/False
 # -----------------------------------------------------------
 def __is_recordserver_remote():
+    _debug_('__is_recordserver_remote()', 2)
     if len(glob.glob('/var/run/recordserver*.pid'))>0:
         return False
     elif len(glob.glob('/tmp/recordserver*.pid'))>0:
@@ -640,57 +676,48 @@ def __is_recordserver_remote():
         return True
 
 
-# -----------------------------------------------------------
-# __get_scheduled_recording
-# Get the start time of a recording from the reordserver
-# -----------------------------------------------------------
-# Input:    index 0..n
-# Result:   UTC time of next recording
-# Raises:   ExNoRecordServer if the recordserver is down
-#           ExRecordServerRemote if the recordserver is on
-#                                a different machine
-#           ExIndexNotAvailable
-# -----------------------------------------------------------
+updatedFavoritesSchedule = False
 def __get_scheduled_recording(index):
+    """
+    Get the start time of a recording from the reordserver
+
+    @param index: 0..n
+    @returns: UTC time of next recording
+    @raises ExNoRecordServer: if the recordserver is down
+    @raises ExRecordServerRemote: if the recordserver is on a different machine
+    @raises ExIndexNotAvailable:
+    """
+    _debug_('__get_scheduled_recording(index=%r)' % (index,), 2)
     if __is_recordserver_remote():
         raise ExRecordServerRemote
     try:
-        (result, schedule) = record_client.updateFavoritesSchedule()
-        (result, schedule) = record_client.getScheduledRecordings()
-    except:
+        # updateFavoritesScheduleNow is very expensive
+        if hasattr(config, 'AUTOSHUTDOWN_UPDATE_FAVORITES') and config.AUTOSHUTDOWN_UPDATE_FAVORITES:
+            global updatedFavoritesSchedule
+            if not updatedFavoritesSchedule:
+                updatedFavoritesSchedule = True
+                record_client.updateFavoritesScheduleNow()
+        schedule = record_client.getScheduledRecordingsNow()
+    except Exception, why:
         raise ExNoRecordServer
     else:
         scheduled_programs = []
-        if result > 0:
+        if schedule:
             proglist = schedule.getProgramList().values()
-            if ((index + 1) > len(proglist) ):
+            if (index + 1) > len(proglist):
                 raise ExIndexNotAvailable
             else:
                 f = lambda a, b: cmp(a.start, b.start)
                 proglist.sort(f)
                 wakeup = proglist[index].start
-                _debug_("Scheduled recording %d at %s is %s" % (index, \
-                        time.ctime(wakeup), proglist[index]))
+                _debug_("Scheduled recording %d at %s is %s" % (index, time.ctime(wakeup), proglist[index]))
         else:
             raise ExIndexNotAvailable
 
     # we must take in consideration the TV_RECORD_PADDING_PRE here,
     # otherwise we are to late for the recording
-
-    # try if the user configured some paddings
-    try:
-        pre_padding = config.TV_RECORD_PADDING_PRE
-    except:
-        pre_padding = 0
-    try:
-        padding = config.TV_RECORD_PADDING
-    except:
-        padding = 0
-    # take the longer padding
-    if pre_padding < padding:
-        pre_padding = padding
     # and substract it from the next wakeup time
-    wakeup = wakeup - pre_padding
+    wakeup -= config.TV_RECORD_PADDING_PRE
     return wakeup
 
 
@@ -703,6 +730,7 @@ def __get_scheduled_recording(index):
 # Raises:   ExNoDefaultWakeup if default wakeup not available
 # -----------------------------------------------------------
 def __get_next_default_wakeup():
+    _debug_('__get_next_default_wakeup()', 2)
     if not config.AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME:
         raise ExNoDefaultWakeup
     else:
@@ -742,6 +770,7 @@ def __get_next_default_wakeup():
 # Raises:   -
 # -----------------------------------------------------------
 def __check_processes():
+    _debug_('__check_processes()', 2)
     if not config.AUTOSHUTDOWN_PROCESS_LIST:
         return False
     else:
@@ -766,6 +795,7 @@ def __check_processes():
 # Raises:   -
 # -----------------------------------------------------------
 def __syscall(cmd, pretend=False):
+    _debug_('__syscall(cmd=%r, pretend=%r)' % (cmd, pretend), 2)
     result = 0
     if pretend:
         _debug_("Pretending syscall: %s" % cmd)

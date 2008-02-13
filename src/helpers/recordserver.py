@@ -176,8 +176,8 @@ class RecordServer(xmlrpc.XMLRPC):
 
 
     @kaa.rpc.expose('findNextProgram')
-    def findNextProgram(self):
-        _debug_('findNextProgram()', 2)
+    def findNextProgram(self, isrecording=False):
+        _debug_('findNextProgram(isrecording=%r)' % (isrecording), 2)
 
         next_program = None
         progs = self.getScheduledRecordings().getProgramList()
@@ -189,10 +189,14 @@ class RecordServer(xmlrpc.XMLRPC):
             prog = progs[progitem]
             _debug_('%s' % (prog), 2)
 
-            try:
-                recording = prog.isRecording
-            except:
+            if now >= prog.start-config.TV_RECORD_PADDING_PRE and now < prog.stop+config.TV_RECORD_PADDING_POST:
+                recording = TRUE
+                if isrecording:
+                    _debug_('isrecording is %s' % (prog), 2)
+                    return prog
+            else:
                 recording = FALSE
+
             endtime = time.strftime(config.TV_TIME_FORMAT, time.localtime(prog.stop+config.TV_RECORD_PADDING_POST))
             _debug_('%s is recording %s stopping at %s' % (prog.title, recording and 'yes' or 'no', endtime), 2)
 
@@ -204,8 +208,7 @@ class RecordServer(xmlrpc.XMLRPC):
                 next_program = prog
                 break
 
-        self.next_program = next_program
-        if next_program == None:
+        if next_program is None:
             _debug_('No program scheduled to record', 2)
             return None
 
