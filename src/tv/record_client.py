@@ -140,19 +140,20 @@ class RecordClient:
     def getNextProgramStart(self):
         """ """
         global nextstart
-        print self.timeit()+': getNextProgramStart begin'
+        now = time.time()
+        print self.timeit(now)+': getNextProgramStart begin'
         progress = self.recordserver_rpc('updateFavoritesSchedule')
-        print self.timeit()+': getNextProgramStart.progress=%r' % progress
+        print self.timeit(now)+': getNextProgramStart.progress=%r' % progress
         yield progress
-        print self.timeit()+': getNextProgramStart.progress=%r' % progress
+        print self.timeit(now)+': getNextProgramStart.progress=%r' % progress
         result = progress.get_result()
-        print self.timeit()+': getNextProgramme.result=%r' % result
+        print self.timeit(now)+': getNextProgramme.result=%r' % result
         progress = self.recordserver_rpc('findNextProgram')
-        print self.timeit()+': getNextProgramStart.progress=%r' % progress
+        print self.timeit(now)+': getNextProgramStart.progress=%r' % progress
         yield progress
-        print self.timeit()+': getNextProgramStart.progress=%r' % progress
+        print self.timeit(now)+': getNextProgramStart.progress=%r' % progress
         nextstart = progress.get_result()
-        print self.timeit()+': getNextProgramme.nextstart=%r' % nextstart
+        print self.timeit(now)+': getNextProgramme.nextstart=%r' % nextstart
 
 
     def server_rpc(self, cmd, callback, *args, **kwargs):
@@ -468,7 +469,7 @@ def addFavoriteToSchedule(fav):
     return (status, message)
 
 
-def updateFavoritesScheduleT():
+def updateFavoritesSchedule():
     """ Using Twisted update the recoding schedule with the favourites """
     _debug_('updateFavoritesSchedule()', 2)
     try:
