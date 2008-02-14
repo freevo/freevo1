@@ -49,11 +49,8 @@ server = xmlrpclib.Server(xml_rpc_server, allow_none=1)
 
 
 class RecordClientException(Exception):
-    """
-    """
+    """ RecordClientException """
     def __init__(self):
-        """
-        """
         pass
 
 
@@ -62,12 +59,17 @@ class RecordClient:
     recordserver access class using kaa.rpc
     """
     def __init__(self):
-        """
-        """
+        """ """
         _debug_('RecordClient.__init__()', 2)
         self.socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT2)
         self.secret = config.RECORDSERVER_SECRET
         self.server = None
+
+
+    def timeit(self, start=None):
+        if start is None:
+            return time.strftime("%M:%S", time.localtime(time.time()))
+        return '%.3f' % (time.time() - start)
 
 
     def recordserver_rpc(self, cmd, *args, **kwargs):
@@ -97,6 +99,18 @@ class RecordClient:
             return None
 
 
+    def findNextProgramNow(self, isrecording=False):
+        """ Find the next programme to record """
+        _debug_('findNextProgramNow(isrecording=%r)' % (isrecording,), 2)
+        progress = self.recordserver_rpc('findNextProgram', isrecording)
+        if progress is None:
+            return None
+        progress.wait()
+        result = progress.get_result()
+        _debug_('findNextProgramNow.result=%r' % (result,), 2)
+        return result
+
+
     def getScheduledRecordingsNow(self):
         """ get the scheduled recordings, returning the scheduled recordings object """
         _debug_('getScheduledRecordingsNow()', 2)
@@ -118,40 +132,27 @@ class RecordClient:
         progress.wait()
         result = progress.get_result()
         _debug_('getScheduledRecordingsNow.result=%r' % (result,), 2)
-        print 'getScheduledRecordingsNow.result=%r' % (result,)
         return result
 
 
-    def findNextProgramNow(self, isrecording=False):
-        """ Find the next programme to record """
-        _debug_('findNextProgramNow(isrecording=%r)' % (isrecording,), 2)
-        progress = self.recordserver_rpc('findNextProgram', isrecording)
-        if progress is None:
-            return None
-        progress.wait()
-        result = progress.get_result()
-        _debug_('findNextProgramNow.result=%r' % (result,), 2)
-        return result
-
-
+    #yield kaa.NotFinished
     @kaa.coroutine()
     def getNextProgramStart(self):
         """ """
         global nextstart
-        print 'getNextProgramStart begin'
+        print self.timeit()+': getNextProgramStart begin'
         progress = self.recordserver_rpc('updateFavoritesSchedule')
-        print 'getNextProgramStart.progress=%r' % progress
-        #yield kaa.YieldContinue
+        print self.timeit()+': getNextProgramStart.progress=%r' % progress
         yield progress
-        print 'getNextProgramStart.progress=%r' % progress
+        print self.timeit()+': getNextProgramStart.progress=%r' % progress
         result = progress.get_result()
-        print 'getNextProgramme.result=%r' % result
+        print self.timeit()+': getNextProgramme.result=%r' % result
         progress = self.recordserver_rpc('findNextProgram')
-        print 'getNextProgramStart.progress=%r' % progress
+        print self.timeit()+': getNextProgramStart.progress=%r' % progress
         yield progress
-        print 'getNextProgramStart.progress=%r' % progress
+        print self.timeit()+': getNextProgramStart.progress=%r' % progress
         nextstart = progress.get_result()
-        print 'getNextProgramme.nextstart=%r' % nextstart
+        print self.timeit()+': getNextProgramme.nextstart=%r' % nextstart
 
 
     def server_rpc(self, cmd, callback, *args, **kwargs):
@@ -191,16 +192,16 @@ class RecordClient:
         return self.server_rpc('ping', callback)
 
 
-    def getScheduledRecordings(self, callback):
-        """ Get the scheduled recordings, using a callback function """
-        _debug_('getScheduledRecordings(callback=%r)' % (callback), 2)
-        return self.server_rpc('getScheduledRecordings', callback)
-
-
     def findNextProgram(self, callback, isrecording=False):
         """ Find the next program using a callback function """
         _debug_('findNextProgram(callback=%r, isrecording=%r)' % (callback, isrecording), 2)
         return self.server_rpc('findNextProgram', callback, isrecording)
+
+
+    def getScheduledRecordings(self, callback):
+        """ Get the scheduled recordings, using a callback function """
+        _debug_('getScheduledRecordings(callback=%r)' % (callback), 2)
+        return self.server_rpc('getScheduledRecordings', callback)
 
 
     def updateFavoritesSchedule(self, callback):
@@ -234,6 +235,18 @@ def returnFromJelly(status, response):
     return (status, response)
 
 
+def connectionTest(teststr='testing'):
+    """ Using Twisted check if the record server is running """
+    _debug_('connectionTest(teststr=%r)' % (teststr), 2)
+    try:
+        (status, message) = server.echotest(teststr)
+    except Exception, e:
+        _debug_('%s' % e)
+        traceback.print_exc()
+        return (FALSE, 'record_client: '+_('connection error'))
+    return (status, message)
+
+
 def getScheduledRecordings():
     """ Using Twisted get the scheduled recordings """
     _debug_('getScheduledRecordings()', 2)
@@ -251,18 +264,6 @@ def saveScheduledRecordings(scheduledRecordings):
     try:
         (status, message) = server.saveScheduledRecordings(scheduledRecordings)
     except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def connectionTest(teststr='testing'):
-    """ Using Twisted check if the record server is running """
-    _debug_('connectionTest(teststr=%r)' % (teststr), 2)
-    try:
-        (status, message) = server.echotest(teststr)
-    except Exception, e:
-        _debug_('%s' % e)
-        traceback.print_exc()
         return (FALSE, 'record_client: '+_('connection error'))
     return (status, message)
 
@@ -500,12 +501,16 @@ if __name__ == '__main__':
 
     print 'xml_rpc_server at %r' % (xml_rpc_server)
 
-    if function == "test":
-        (result, response) = connectionTest('connection test')
-        print 'result: %s, response: %s ' % (result, response)
+    #--------------------------------------------------------------------------------
+    # kaa.rpc coroutine tests
+    #--------------------------------------------------------------------------------
 
     if function == "getnextprogramstart":
         rc.getNextProgramStart()
+
+    #--------------------------------------------------------------------------------
+    # kaa.rpc callback tests
+    #--------------------------------------------------------------------------------
 
     if function == "findnextprogramnow":
         result = rc.findNextProgramNow(True)
@@ -513,11 +518,11 @@ if __name__ == '__main__':
         result = rc.findNextProgramNow(False)
         print '         :', result
 
-    if function == "findnextprogramrecording":
-        rc.findNextProgram(handler, True)
-
     if function == "findnextprogram":
         rc.findNextProgram(handler)
+
+    if function == "findnextprogramrecording":
+        rc.findNextProgram(handler, True)
 
     if function == "getscheduledrecordingsnow":
         result = rc.getScheduledRecordingsNow()
@@ -527,11 +532,20 @@ if __name__ == '__main__':
         rc.getScheduledRecordings(handler)
 
     if function == "updatefavoritesschedulenow":
+        start = time.time()
         result = rc.updateFavoritesScheduleNow()
-        print 'result: %r' % (result,)
+        print '%s: result: %r' % (rc.timeit(start), result)
 
     if function == "updatefavoritesschedule":
         rc.updateFavoritesSchedule(handler)
+
+    #--------------------------------------------------------------------------------
+    # Twisted xmlrpc tests
+    #--------------------------------------------------------------------------------
+
+    if function == "test":
+        (result, response) = connectionTest('connection test')
+        print 'result: %s, response: %s ' % (result, response)
 
     if function == "getfavorites":
         (result, response) = getFavorites()
