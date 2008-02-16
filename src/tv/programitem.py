@@ -39,7 +39,7 @@ from item import Item
 from favoriteitem import FavoriteItem
 
 import util.tv_util as tv_util
-import tv.record_client as record_client
+from tv.record_client import RecordClient
 from tv.channels import FreevoChannels
 from tv.record_types import Favorite
 
@@ -91,12 +91,9 @@ class ProgramItem(Item):
         # defaults to not favorite
         self.favorite = False
 
-        # start time
-        self.start = time.strftime(config.TV_DATETIME_FORMAT,
-                                   time.localtime(prog.start))
-        # stop time
-        self.stop = time.strftime(config.TV_DATETIME_FORMAT,
-                                       time.localtime(prog.stop))
+        self.start = time.strftime(config.TV_DATETIME_FORMAT, time.localtime(prog.start))
+        self.stop = time.strftime(config.TV_DATETIME_FORMAT, time.localtime(prog.stop))
+        self.recordclient = RecordClient()
 
     def actions(self):
         """ List of actions """
@@ -116,10 +113,9 @@ class ProgramItem(Item):
 
         ## 'Schedule for recording' OR 'Remove from schedule'
         # check if this program is scheduled
-        (got_schedule, schedule) = record_client.getScheduledRecordings()
-        if got_schedule:
-            (result, message) = record_client.isProgScheduled(self.prog,
-                                               schedule.getProgramList())
+        schedule = self.recordclient.getScheduledRecordingsNow()
+        if schedule:
+            (result, message) = self.recordclient.isProgScheduledNow(self.prog, schedule.getProgramList())
             if result:
                 self.scheduled = True
             else:
@@ -132,7 +128,7 @@ class ProgramItem(Item):
 
         ## 'Add to favorites' OR 'Remove from favorites'
         # check if this program is a favorite
-        (result, message) = record_client.isProgAFavorite(self.prog)
+        (result, message) = self.recordclient.isProgAFavoriteNow(self.prog)
         if result:
             self.favorite = True
 
@@ -200,6 +196,7 @@ class ProgramItem(Item):
         _debug_('show_description(arg=%r, menuw=%r)' % (arg, menuw), 2)
         ShowProgramDetails(menuw, self)
 
+
     def toggle_rec(self, arg=None, menuw=None):
         """
         schedule or unschedule this program, depending on its current status
@@ -214,20 +211,21 @@ class ProgramItem(Item):
             self.schedule_program(menuw=menuw)
             self.scheduled = True
 
+
     def schedule_program(self, arg=None, menuw=None):
         """
         Add a program to schedule
         """
         _debug_('schedule_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # schedule the program
-        (result, msg) = record_client.scheduleRecording(self.prog)
+        (result, msg) = self.recordclient.scheduleRecordingNow(self.prog)
         if result:
             menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
                 self.parent.update(force=True)
             else:
                 menuw.refresh(reload=True)
-            msgtext= _('"%s" has been scheduled for recording') %self.name
+            msgtext= _('"%s" has been scheduled for recording') % self.name
             pop = AlertBox(text=msgtext).show()
         else:
             # something went wrong
@@ -241,7 +239,7 @@ class ProgramItem(Item):
         """
         _debug_('remove_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # remove the program
-        (result, msg) = record_client.removeScheduledRecording(self.prog)
+        (result, msg) = self.recordclient.removeScheduledRecordingNow(self.prog)
         if result:
             menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
@@ -281,7 +279,7 @@ class ProgramItem(Item):
             menuw.delete_submenu(refresh=False)
 
         # get the favorite from the record_client
-        (got_fav, fav) = record_client.getFavoriteObject(self.prog)
+        (got_fav, fav) = self.recordclient.getFavoriteObjectNow(self.prog)
         if got_fav:
             # create a favorite item for the submenu
             fav_item = FavoriteItem(self, fav, fav_action='edit')
@@ -303,7 +301,7 @@ class ProgramItem(Item):
         pop = PopupBox(text=_('Searching, please wait...'))
         pop.show()
         # do the search
-        (result, matches) = record_client.findMatches(self.title)
+        (result, matches) = self.recordclient.findMatchesNow(self.title)
         # we are ready -> kill the popup message
         pop.destroy()
         if result:

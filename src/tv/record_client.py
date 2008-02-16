@@ -37,7 +37,7 @@ import kaa
 import kaa.rpc
 import time, sys, socket, traceback, string
 import xmlrpclib
-import epg_types
+import tv.epg_types
 
 from util.marmalade import jellyToXML, unjellyFromXML
 
@@ -99,14 +99,73 @@ class RecordClient:
             return None
 
 
+    @kaa.coroutine()
+    def pingCo(self):
+        now = time.time()
+        print self.timeit(now)+': pingCo started'
+        inprogress = self.recordserver_rpc('ping')
+        print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
+        yield inprogress
+        print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
+        yield inprogress.get_result()
+        print self.timeit(now)+': pingCo finished' # we never get here
+
+
+    @kaa.coroutine()
+    def findNextProgramCo(self, isrecording=False):
+        """ """
+        now = time.time()
+        print self.timeit(now)+': findNextProgramCo(isrecording=%r) started' % (isrecording,)
+        inprogress = self.recordserver_rpc('findNextProgram', isrecording)
+        print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
+        yield inprogress
+        print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
+        yield inprogress.get_result()
+        print self.timeit(now)+': findNextProgramCo finished'
+
+
+    @kaa.coroutine()
+    def updateFavoritesScheduleCo(self):
+        """ """
+        now = time.time()
+        print self.timeit(now)+': updateFavoritesScheduleCo started'
+        inprogress = self.recordserver_rpc('updateFavoritesSchedule')
+        print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
+        yield inprogress
+        print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
+        yield inprogress.get_result()
+        print self.timeit(now)+': updateFavoritesScheduleCo finished'
+
+
+    @kaa.coroutine()
+    def getNextProgramStart(self):
+        """ """
+        now = time.time()
+        print self.timeit(now)+': getNextProgramStart begin'
+        inprogress = self.recordserver_rpc('updateFavoritesSchedule')
+        print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
+        yield inprogress
+        print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
+        #yield kaa.NotFinished
+        print self.timeit(now)+': getNextProgramStart.NotFinished'
+        yield inprogress.get_result()
+        print self.timeit(now)+': getNextProgramStart.findNextProgram'
+        inprogress = self.recordserver_rpc('findNextProgram')
+        print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
+        yield inprogress
+        print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
+        nextstart = inprogress.get_result()
+        print self.timeit(now)+': getNextProgramStart.nextstart=%r' % nextstart
+
+
     def findNextProgramNow(self, isrecording=False):
         """ Find the next programme to record """
         _debug_('findNextProgramNow(isrecording=%r)' % (isrecording,), 2)
-        progress = self.recordserver_rpc('findNextProgram', isrecording)
-        if progress is None:
+        inprogress = self.recordserver_rpc('findNextProgram', isrecording)
+        if inprogress is None:
             return None
-        progress.wait()
-        result = progress.get_result()
+        inprogress.wait()
+        result = inprogress.get_result()
         _debug_('findNextProgramNow.result=%r' % (result,), 2)
         return result
 
@@ -114,11 +173,11 @@ class RecordClient:
     def getScheduledRecordingsNow(self):
         """ get the scheduled recordings, returning the scheduled recordings object """
         _debug_('getScheduledRecordingsNow()', 2)
-        progress = self.recordserver_rpc('getScheduledRecordings')
-        if progress is None:
+        inprogress = self.recordserver_rpc('getScheduledRecordings')
+        if inprogress is None:
             return None
-        progress.wait()
-        result = progress.get_result()
+        inprogress.wait()
+        result = inprogress.get_result()
         _debug_('getScheduledRecordingsNow.result=%r' % (result,), 2)
         return result
 
@@ -126,34 +185,86 @@ class RecordClient:
     def updateFavoritesScheduleNow(self):
         """ Update the favorites scbedule, returning the object """
         _debug_('updateFavoritesScheduleNow()', 2)
-        progress = self.recordserver_rpc('updateFavoritesSchedule')
-        if progress is None:
+        inprogress = self.recordserver_rpc('updateFavoritesSchedule')
+        if inprogress is None:
             return None
-        progress.wait()
-        result = progress.get_result()
+        inprogress.wait()
+        result = inprogress.get_result()
         _debug_('getScheduledRecordingsNow.result=%r' % (result,), 2)
         return result
 
 
-    #yield kaa.NotFinished
-    @kaa.coroutine()
-    def getNextProgramStart(self):
-        """ """
-        global nextstart
-        now = time.time()
-        print self.timeit(now)+': getNextProgramStart begin'
-        progress = self.recordserver_rpc('updateFavoritesSchedule')
-        print self.timeit(now)+': getNextProgramStart.progress=%r' % progress
-        yield progress
-        print self.timeit(now)+': getNextProgramStart.progress=%r' % progress
-        result = progress.get_result()
-        print self.timeit(now)+': getNextProgramme.result=%r' % result
-        progress = self.recordserver_rpc('findNextProgram')
-        print self.timeit(now)+': getNextProgramStart.progress=%r' % progress
-        yield progress
-        print self.timeit(now)+': getNextProgramStart.progress=%r' % progress
-        nextstart = progress.get_result()
-        print self.timeit(now)+': getNextProgramme.nextstart=%r' % nextstart
+    def findMatchesNow(self, title):
+        """ See if a programme is a favourite """
+        _debug_('findMatchesNow(title=%r)' % (title), 1)
+        inprogress = self.recordserver_rpc('findMatches', title)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('findMatchesNow.result=%r' % (result,), 1)
+        return result
+
+
+    def isProgScheduledNow(self, prog, schedule=None):
+        """ See if a programme is a schedule """
+        _debug_('isProgScheduledNow(prog=%r, schedule=%r)' % (prog, schedule), 1)
+        inprogress = self.recordserver_rpc('isProgScheduled', prog, schedule)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('isProgScheduledNow.result=%r' % (result,), 1)
+        return result
+
+
+    def isProgAFavoriteNow(self, prog, favs=None):
+        """ See if a programme is a favourite """
+        _debug_('isProgAFavoriteNow(prog=%r, favs=%r)' % (prog, favs), 1)
+        inprogress = self.recordserver_rpc('isProgAFavorite', prog, favs)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('isProgAFavoriteNow.result=%r' % (result,), 1)
+        return result
+
+
+    def getFavoriteObjectNow(self, prog):
+        """ See if a programme is a favourite """
+        _debug_('getFavoriteObjectNow(prog=%r)' % (prog), 1)
+        inprogress = self.recordserver_rpc('getFavoriteObject', prog)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('getFavoriteObjectNow.result=%r' % (result,), 1)
+        return result
+
+
+    def scheduleRecordingNow(self, prog):
+        """ See if a programme is a favourite """
+        _debug_('scheduleRecordingNow(prog=%r)' % (prog,), 1)
+        inprogress = self.recordserver_rpc('scheduleRecording', prog)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('scheduleRecordingNow.result=%r' % (result,), 1)
+        return result
+
+
+    def removeScheduledRecordingNow(self, prog):
+        """ See if a programme is a favourite """
+        _debug_('removeScheduledRecordingNow(prog=%r)' % (prog,), 1)
+        inprogress = self.recordserver_rpc('removeScheduledRecording', prog)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('removeScheduledRecordingNow.result=%r' % (result,), 1)
+        return result
+
 
 
     def server_rpc(self, cmd, callback, *args, **kwargs):
@@ -224,10 +335,16 @@ class RecordClient:
         return self.server_rpc('getFavorites', callback)
 
 
+    def isProgAFavorite(self, callback, prog, favs=None):
+        """ See if a programme is a favourite """
+        _debug_('isProgAFavorite(callback=%r, prog=%r, favs=%r)' % (callback, prog, favs), 2)
+        return self.server_rpc('isProgAFavorite', callback, prog, favs)
 
-#
+
+#================================================================================
 # Deprecated Twisted calls
-#
+#================================================================================
+
 def returnFromJelly(status, response):
     """ Unjelly the xml from the response """
     _debug_('returnFromJelly(status=%r, response=%r)' % (status, response), 2)
@@ -482,11 +599,11 @@ def updateFavoritesSchedule():
 if __name__ == '__main__':
     config.DEBUG = 2
 
-    def shutdown(result,):
-        print "shutdown.result=%r" % (result,)
+    def shutdown(message, now):
+        print "shutdown.message=%r after %.3f secs" % (message, time.time()-now)
         raise SystemExit
 
-    def handler(result,):
+    def handler(result):
         """ A callback handler for test functions """
         _debug_('handler(result=%r)' % (result,), 2)
         print 'handler.result=%r' % (result,)
@@ -497,17 +614,33 @@ if __name__ == '__main__':
 
     if len(sys.argv) >= 2:
         function = sys.argv[1].lower()
+        args = sys.argv[2:]
     else:
         function = 'none'
 
+    start = time.time()
     print 'xml_rpc_server at %r' % (xml_rpc_server)
+    print 'function=%r args=%r' % (function, args)
 
     #--------------------------------------------------------------------------------
     # kaa.rpc coroutine tests
     #--------------------------------------------------------------------------------
 
+    if function == "pingco":
+        r = rc.pingCo().wait()
+        print 'pingCo=%r' % (r,)
+
+    if function == "findnextprogramco":
+        r = rc.findNextProgramCo().wait()
+        print 'findNextProgramCo=%r' % (r,)
+
+    if function == "updatefavoritesscheduleco":
+        r = rc.updateFavoritesScheduleCo().wait()
+        print 'updateFavoritesScheduleCo=%r' % (r,)
+
     if function == "getnextprogramstart":
-        rc.getNextProgramStart()
+        r = rc.getNextProgramStart().wait()
+        print 'getNextProgramStart=%r' % (r,)
 
     #--------------------------------------------------------------------------------
     # kaa.rpc callback tests
@@ -533,12 +666,21 @@ if __name__ == '__main__':
         rc.getScheduledRecordings(handler)
 
     if function == "updatefavoritesschedulenow":
-        start = time.time()
         result = rc.updateFavoritesScheduleNow()
         print '%s: result: %r' % (rc.timeit(start), result)
 
     if function == "updatefavoritesschedule":
         rc.updateFavoritesSchedule(handler)
+
+    if function == "findmatchesnow":
+        result = rc.findMatchesNow('King of Queens')
+        print '%s: result: %r' % (rc.timeit(start), result)
+
+    if function == "isprogschedulednow":
+        schedule = rc.getScheduledRecordingsNow()
+        if schedule:
+            pass
+            #message = rc.isProgScheduledNow(prog, schedule.getProgramList())
 
     #--------------------------------------------------------------------------------
     # Twisted xmlrpc tests
@@ -590,5 +732,5 @@ if __name__ == '__main__':
         else:
             print 'no data'
 
-    kaa.notifier.OneShotTimer(shutdown, 'bye').start(20)
+    kaa.notifier.OneShotTimer(shutdown, 'bye', time.time()).start(20)
     kaa.main.run()
