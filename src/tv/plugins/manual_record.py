@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# manual_record.py - A plugin to manually record programs
+# A plugin to manually record programs
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -36,7 +36,7 @@ from time import gmtime, strftime
 import plugin, config, menu
 
 import util.tv_util as tv_util
-import tv.record_client as record_client
+from tv.record_client import RecordClient
 import event as em
 
 from item import Item
@@ -55,11 +55,14 @@ else:
 
 
 class ManualRecordItem(Item):
+
     def __init__(self, parent):
         _debug_('manual_record.ManualRecordItem.__init__(parent)', 2)
         Item.__init__(self, parent, skin_type='video')
 
         self.name = _("Manual Record")
+
+        self.recordclient = RecordClient()
 
         # maxinum number of days we can record
         self.MAXDAYS = 7
@@ -78,6 +81,7 @@ class ManualRecordItem(Item):
         now += 1900
         self.stopnow = now
         self.stoptime = time.localtime(now)
+
 
     def make_newprog(self):
         _debug_('make_newprog(self)', 2)
@@ -106,6 +110,7 @@ class ManualRecordItem(Item):
         self.stop_time  = time.strftime(config.TV_TIME_FORMAT, self.stoptime)
         self.prog.stop  = self.stopnow
         self.disp_stoptime = '%s %s %s' % (self.disp_stop_month, self.stop_day, self.stop_time)
+
 
     def actions(self):
         _debug_('actions(self)', 2)
@@ -331,7 +336,7 @@ class ManualRecordItem(Item):
         _debug_('save_changes(self, arg=None, menuw=None)', 2)
         result = self.check_prog()
         if result:
-            (result, msg) = record_client.scheduleRecording(self.prog)
+            (result, msg) = self.recordclient.scheduleRecordingNow(self.prog)
 
             if not result:
                 AlertBox(text=_('Save Failed, recording was lost')+(': %s' % msg)).show()
@@ -391,10 +396,10 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     | plugin.activate('tv.view_favorites')
     """
-
     def __init__(self):
         _debug_('manual_record.PluginInterface.__init__()', 2)
         plugin.MainMenuPlugin.__init__(self)
+
 
     def items(self, parent):
         _debug_('items(self, parent)', 2)

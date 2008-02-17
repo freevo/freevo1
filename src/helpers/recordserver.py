@@ -768,7 +768,7 @@ class RecordServer(xmlrpc.XMLRPC):
         if schedule == {}:
             return (FALSE, 'prog not scheduled')
 
-        if not schedule:
+        if schedule is None:
             schedule = self.getScheduledRecordings().getProgramList()
 
         for me in schedule.values():

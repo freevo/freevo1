@@ -32,7 +32,7 @@
 
 import os
 import config, plugin, menu, rc
-import tv.record_client as record_client
+from tv.record_client import RecordClient
 
 from gui.AlertBox import AlertBox
 from item import Item
@@ -44,6 +44,7 @@ class ScheduledRecordingsItem(Item):
         Item.__init__(self, parent, skin_type='tv')
         self.name = _('Scheduled Recordings')
         self.menuw = None
+        self.recordclient = RecordClient()
 
 
     def actions(self):
@@ -86,13 +87,13 @@ class ScheduledRecordingsItem(Item):
     def get_items(self):
         items = []
 
-        (server_available, msg) = record_client.connectionTest()
-        if not server_available:
-            AlertBox(_('Recording server is unavailable.')+(': %s' % msg)).show()
-            return []
+        #(server_available, msg) = self.recordclient.connectionTest()
+        #if not server_available:
+        #    AlertBox(_('Recording server is unavailable.')+(': %s' % msg)).show()
+        #    return []
 
-        (result, recordings) = record_client.getScheduledRecordings()
-        if result:
+        recordings = self.recordclient.getScheduledRecordingsNow()
+        if recordings is not None:
             progs = recordings.getProgramList()
 
             f = lambda a, b: cmp(a.start, b.start)

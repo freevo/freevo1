@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# tv_grab.py - wrapper for xmltv
+# wrapper for xmltv
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -88,6 +88,10 @@ def grab():
 
 if __name__ == '__main__':
 
+    def handler(result):
+        print '%s' % (result[1])
+        raise SystemExit
+
     if len(sys.argv)>1 and sys.argv[1] == '--help':
         usage()
 
@@ -110,9 +114,12 @@ if __name__ == '__main__':
 
     grab()
 
-    import tv.record_client as rc
+    import kaa
+    from tv.record_client import RecordClient
 
     print 'Scheduling favorites for recording:  '
+    if not RecordClient().updateFavoritesSchedule(handler):
+        print _('recordserver is not running')
+        raise SystemExit
 
-    (result, response) = rc.updateFavoritesSchedule()
-    print '    %s' % response
+    kaa.main.run()

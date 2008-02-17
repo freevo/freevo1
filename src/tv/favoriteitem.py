@@ -38,7 +38,7 @@ from gui.InputBox import InputBox
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
-import tv.record_client as record_client
+from tv.record_client import RecordClient
 
 class FavoriteItem(Item):
     """
@@ -48,6 +48,7 @@ class FavoriteItem(Item):
         """ """
         Item.__init__(self, parent, skin_type='video')
         _debug_('FavoriteItem.__init__(parent=%r, fav=%r, fav_action=%r)' % (parent, fav, fav_action), 2)
+        self.recordclient = RecordClient()
         self.fav   = fav
         self.name  = self.origname = fav.name
         self.title = fav.title
@@ -63,8 +64,7 @@ class FavoriteItem(Item):
         else:
             self.onlyNew = fav.onlyNew = FALSE
 
-        self.week_days = (_('Mon'), _('Tue'), _('Wed'), _('Thu'),
-                          _('Fri'), _('Sat'), _('Sun'))
+        self.week_days = (_('Mon'), _('Tue'), _('Wed'), _('Thu'), _('Fri'), _('Sat'), _('Sun'))
 
         if fav.channel == 'ANY':
             self.channel = _('ANY CHANNEL')
@@ -78,8 +78,7 @@ class FavoriteItem(Item):
             self.mod = _('ANY TIME')
         else:
             try:
-                self.mod = time.strftime(config.TV_TIME_FORMAT,
-                                    time.gmtime(float(int(fav.mod) * 60)))
+                self.mod = time.strftime(config.TV_TIME_FORMAT, time.gmtime(float(int(fav.mod) * 60)))
             except:
                 print 'Cannot add "%s" to favorites' % fav.name
 
@@ -128,7 +127,7 @@ class FavoriteItem(Item):
 
         # XXX: priorities aren't quite supported yet
         if 0:
-            (got_favs, favs) = record_client.getFavorites()
+            (got_favs, favs) = self.recordclient.getFavoritesNow()
             if got_favs and len(favs) > 1:
                 items.append(menu.MenuItem(_('Modify priority'), action=self.mod_priority))
 
@@ -328,13 +327,13 @@ class FavoriteItem(Item):
 
         if self.fav_action == 'edit':
             # first we remove the old favorite
-            (result, msg) = record_client.removeFavorite(self.origname)
+            (result, msg) = self.recordclient.removeFavoriteNow(self.origname)
         elif self.fav_action =='add':
             result = True
 
         if result:
             # create a new edited favorite
-            (result, msg) = record_client.addEditedFavorite(self.fav.name,
+            (result, msg) = self.recordclient.addEditedFavoriteNow(self.fav.name,
                 self.fav.title, self.fav.channel, self.fav.dow, self.fav.mod,
                 self.fav.priority, self.fav.allowDuplicates, self.fav.onlyNew)
             if result:
@@ -359,7 +358,7 @@ class FavoriteItem(Item):
         """
         _debug_('rem_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
         name = self.origname
-        (result, msg) = record_client.removeFavorite(name)
+        (result, msg) = self.recordclient.removeFavoriteNow(name)
         if result:
             # if this is successfull
             if menuw:

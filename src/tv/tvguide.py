@@ -42,7 +42,7 @@ from programitem import ProgramItem
 from event import *
 
 import epg_xmltv, epg_types
-import record_client
+from tv.record_client import RecordClient
 
 skin = skin.get_singleton()
 skin.register('tv', ('screen', 'title', 'subtitle', 'view',
@@ -79,7 +79,7 @@ class TVGuide(Item):
                 break
 
 
-        self.recordclient = record_client.RecordClient()
+        self.recordclient = RecordClient()
         self.col_time = 30      # each col represents 30 minutes
         self.n_cols  = (stop_time - start_time) / 60 / self.col_time
         self.player = player

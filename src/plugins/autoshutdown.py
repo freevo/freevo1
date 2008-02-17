@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# autoshutdown.py - Automated Shutdown
+# Automated Shutdown
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -44,6 +44,8 @@ from gui import ConfirmBox
 from gui.AlertBox import AlertBox
 from tv.record_client import RecordClient
 
+recordclient = RecordClient()
+
 
 # Exception handling classes
 class ExInternalError : pass
@@ -63,8 +65,6 @@ class ExNextWakeupSoon(Exception) : pass
 class ExProcessRunning(Exception) : pass
 
 class ExRecordingInProgress(Exception) : pass
-
-record_client = RecordClient()
 
 
 class PluginInterface(plugin.MainMenuPlugin):
@@ -696,8 +696,8 @@ def __get_scheduled_recording(index):
             global updatedFavoritesSchedule
             if not updatedFavoritesSchedule:
                 updatedFavoritesSchedule = True
-                record_client.updateFavoritesScheduleNow()
-        schedule = record_client.getScheduledRecordingsNow()
+                recordclient.updateFavoritesScheduleNow()
+        schedule = recordclient.getScheduledRecordingsNow()
     except Exception, why:
         raise ExNoRecordServer
     else:

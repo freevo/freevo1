@@ -32,8 +32,9 @@
 
 from time import gmtime, strftime
 
-import config, epg_xmltv
-import record_client
+import config
+import tv.epg_xmltv
+from tv.record_client import RecordClient
 import event as em
 
 from record_types import Favorite
@@ -72,16 +73,16 @@ class EditFavorite(PopupBox):
         else:
             context = 'guide'
 
+        self.recordclient = RecordClient()
         if isinstance(subject, TvProgram):
-            (result, favs) = record_client.getFavorites()
+            (result, favs) = self.recordclient.getFavorites()
             if result:
                 num_favorites = len(favs)
                 self.priority = num_favorites + 1
             else:
                 self.priority = 1
 
-            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE,
-                                self.priority, TRUE, FALSE)
+            self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE, self.priority, TRUE, FALSE)
 
         else:
             self.fav = subject
@@ -193,7 +194,7 @@ class EditFavorite(PopupBox):
 
     def removeFavorite(self):
         _debug_('removeFavorite()', 2)
-        (result, msg) = record_client.removeFavorite(self.oldname)
+        (result, msg) = self.recordclient.removeFavoriteNow(self.oldname)
         if result:
             searcher = None
             if self.parent and self.context == 'favorites':
@@ -310,8 +311,8 @@ class EditFavorite(PopupBox):
         elif self.get_selected_child() == self.save:
             if event == em.INPUT_ENTER:
                 if self.oldname:
-                    record_client.removeFavorite(self.oldname)
-                (result, msg) = record_client.addEditedFavorite(
+                    self.recordclient.removeFavoriteNow(self.oldname)
+                (result, msg) = self.recordclient.addEditedFavoriteNow(
                              self.name_input.get_word(),
                              self.fav.title,
                              self.chan_box.list.get_selected_item().value,

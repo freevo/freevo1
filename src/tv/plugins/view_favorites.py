@@ -31,7 +31,7 @@
 
 import os
 import config, plugin, menu, rc
-import tv.record_client as record_client
+from tv.record_client import RecordClient
 
 from item import Item
 from tv.favoriteitem import FavoriteItem
@@ -44,6 +44,7 @@ class ViewFavoritesItem(Item):
         Item.__init__(self, parent, skin_type='tv')
         self.name = _('View Favorites')
         self.menuw = None
+        self.recordclient = RecordClient()
 
 
     def actions(self):
@@ -88,12 +89,12 @@ class ViewFavoritesItem(Item):
         _debug_('get_items()', 2)
         items = []
 
-        (server_available, msg) = record_client.connectionTest()
-        if not server_available:
-            AlertBox(_('Recording server is unavailable.')+(': %s' % msg)).show()
-            return []
+        #(server_available, msg) = self.recordclient.connectionTest()
+        #if not server_available:
+        #    AlertBox(_('Recording server is unavailable.')+(': %s' % msg)).show()
+        #    return []
 
-        (result, favorites) = record_client.getFavorites()
+        (result, favorites) = self.recordclient.getFavoritesNow()
         if result:
             f = lambda a, b: cmp(a.priority, b.priority)
             favorites = favorites.values()

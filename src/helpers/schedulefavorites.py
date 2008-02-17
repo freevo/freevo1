@@ -40,8 +40,8 @@ def handler(result):
     print '%s' % (result[1])
     raise SystemExit
 
-recordclient = RecordClient()
-if not recordclient.updateFavoritesSchedule(handler):
+print _('Updating recording schedule')
+if not RecordClient().updateFavoritesSchedule(handler):
     print _('recordserver is not running')
     raise SystemExit
 

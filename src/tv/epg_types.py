@@ -70,14 +70,14 @@ class TvProgram:
     onlyNew = None
 
 
-    def __init__(self):
-        self.channel_id = ''
-        self.title      = ''
+    def __init__(self, title='', channel_id='', start=0, stop=0):
+        self.channel_id = channel_id
+        self.title      = title
         self.desc       = ''
         self.sub_title  = ''
-        self.start      = 0.0
+        self.start      = start
         self.pdc_start  = 0.0
-        self.stop       = 0.0
+        self.stop       = stop
         self.ratings    = {}
         self.advisories = []
         self.categories = []
@@ -109,16 +109,31 @@ class TvProgram:
         return s
 
 
+    def __eq__(self, other):
+        """ equality method """
+        #print 'DJW: __eq__(self=%r, other=%r)' % (self, other)
+        if not isinstance(other, TvProgram):
+            return False
+        return self.start == other.start \
+            and self.stop == other.stop \
+            and self.title == other.title \
+            and self.channel_id == other.channel_id
+
+
     def __cmp__(self, other):
-        """
-        compare function, return 0 if the objects are identical, 1 otherwise
-        """
-        if not other:
+        """ compare function, return 0 if the objects are equal, <0 if less >0 if greater """
+        #print 'DJW: __cmp__(self=%r, other=%r)' % (self, other)
+        if not isinstance(other, TvProgram):
             return 1
-        return self.title != other.title or \
-               self.start != other.start or \
-               self.stop  != other.stop or \
-               self.channel_id != other.channel_id
+        if self.start != other.start:
+            return self.start - other.start
+        if self.stop != other.stop:
+            return self.stop - other.stop
+        if self.title != other.title:
+            return self.title > other.title
+        if self.channel_id != other.channel_id:
+            return self.channel_id > other.channel_id
+        return 0
 
 
     def getattr(self, attr):

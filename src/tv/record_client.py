@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# record_client.py - A client interface to the Freevo recording server.
+# A client interface to the Freevo recording server.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -190,7 +190,7 @@ class RecordClient:
             return None
         inprogress.wait()
         result = inprogress.get_result()
-        _debug_('getScheduledRecordingsNow.result=%r' % (result,), 2)
+        _debug_('updateFavoritesScheduleNow.result=%r' % (result,), 2)
         return result
 
 
@@ -227,6 +227,56 @@ class RecordClient:
         inprogress.wait()
         result = inprogress.get_result()
         _debug_('isProgAFavoriteNow.result=%r' % (result,), 1)
+        return result
+
+
+    def clearFavoritesNow(self):
+        """ See if a programme is a favourite """
+        _debug_('clearFavoritesNow()', 1)
+        inprogress = self.recordserver_rpc('clearFavorites')
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('clearFavoritesNow.result=%r' % (result,), 1)
+        return result
+
+
+    def getFavoritesNow(self):
+        """ See if a programme is a favourite """
+        _debug_('getFavoritesNow()', 1)
+        inprogress = self.recordserver_rpc('getFavorites')
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('getFavoritesNow.result=%r' % (result,), 1)
+        return result
+
+
+    def removeFavoriteNow(self, name):
+        """ See if a programme is a favourite """
+        _debug_('removeFavoriteNow(name=%r)' % (name), 1)
+        inprogress = self.recordserver_rpc('removeFavorite', name)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('removeFavoriteNow.result=%r' % (result,), 1)
+        return result
+
+
+    def addEditedFavoriteNow(self, name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
+        """ See if a programme is a favourite """
+        _debug_('addEditedFavoriteNow(name=%r, title=%r, chan=%r, dow=%r, mod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % \
+            (name, title, chan, dow, mod, priority, allowDuplicates, onlyNew), 1)
+        inprogress = self.recordserver_rpc('addEditedFavorite', \
+            name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('addEditedFavoriteNow.result=%r' % (result,), 1)
         return result
 
 
@@ -606,8 +656,7 @@ if __name__ == '__main__':
     def handler(result):
         """ A callback handler for test functions """
         _debug_('handler(result=%r)' % (result,), 2)
-        print 'handler.result=%r' % (result,)
-        print 'handler.result=%s' % (result,)
+        print 'handler.result=%r\n"%s"' % (result, result)
         raise SystemExit
 
     rc = RecordClient()
@@ -627,20 +676,20 @@ if __name__ == '__main__':
     #--------------------------------------------------------------------------------
 
     if function == "pingco":
-        r = rc.pingCo().wait()
-        print 'pingCo=%r' % (r,)
+        result = rc.pingCo().wait()
+        print 'pingCo=%r\n"%s"' % (result, result)
 
     if function == "findnextprogramco":
-        r = rc.findNextProgramCo().wait()
-        print 'findNextProgramCo=%r' % (r,)
+        result = rc.findNextProgramCo().wait()
+        print 'findNextProgramCo=%r\n"%s"' % (result, result)
 
     if function == "updatefavoritesscheduleco":
-        r = rc.updateFavoritesScheduleCo().wait()
-        print 'updateFavoritesScheduleCo=%r' % (r,)
+        result = rc.updateFavoritesScheduleCo().wait()
+        print 'updateFavoritesScheduleCo=%r' % (result,)
 
     if function == "getnextprogramstart":
-        r = rc.getNextProgramStart().wait()
-        print 'getNextProgramStart=%r' % (r,)
+        result = rc.getNextProgramStart().wait()
+        print 'getNextProgramStart=%r' % (result,)
 
     #--------------------------------------------------------------------------------
     # kaa.rpc callback tests
@@ -648,9 +697,9 @@ if __name__ == '__main__':
 
     if function == "findnextprogramnow":
         result = rc.findNextProgramNow(True)
-        print 'recording:', result
+        print 'recording:%r\n"%s"' % (result, result)
         result = rc.findNextProgramNow(False)
-        print '         :', result
+        print 'next     :%r\n"%s"' % (result, result)
 
     if function == "findnextprogram":
         rc.findNextProgram(handler)
@@ -660,7 +709,7 @@ if __name__ == '__main__':
 
     if function == "getscheduledrecordingsnow":
         result = rc.getScheduledRecordingsNow()
-        print 'result: %r' % (result,)
+        print 'result: %r\n"%s"' % (result, result)
 
     if function == "getscheduledrecordings":
         rc.getScheduledRecordings(handler)
@@ -673,14 +722,17 @@ if __name__ == '__main__':
         rc.updateFavoritesSchedule(handler)
 
     if function == "findmatchesnow":
-        result = rc.findMatchesNow('King of Queens')
+        result = rc.findMatchesNow(args)
         print '%s: result: %r' % (rc.timeit(start), result)
 
-    if function == "isprogschedulednow":
-        schedule = rc.getScheduledRecordingsNow()
-        if schedule:
-            pass
-            #message = rc.isProgScheduledNow(prog, schedule.getProgramList())
+    if function == "getfavoritesnow":
+        result = rc.getFavoritesNow()
+        print '%s: result: %r' % (rc.timeit(start), result)
+
+    if function == "removefavoritenow":
+        result = rc.removeFavoriteNow()
+        print '%s: result: %r' % (rc.timeit(start), result)
+
 
     #--------------------------------------------------------------------------------
     # Twisted xmlrpc tests

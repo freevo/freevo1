@@ -278,7 +278,7 @@ class ProgramItem(Item):
         if menuw:
             menuw.delete_submenu(refresh=False)
 
-        # get the favorite from the record_client
+        # get the favorite from the record client
         (got_fav, fav) = self.recordclient.getFavoriteObjectNow(self.prog)
         if got_fav:
             # create a favorite item for the submenu
