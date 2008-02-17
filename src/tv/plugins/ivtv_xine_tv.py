@@ -336,7 +336,7 @@ class IVTV_XINE_TV:
     def ShowMessage(self, msg):
 
         _debug_("IVTV_XINE_TV: Show OSD Message: '%s'" % msg)
-        self.xine.write("OSDWriteText$     %s\n" % msg)
+        self.xine.write("OSDWriteText$     %s\n" % String(msg))
 
 
     #========================================================================

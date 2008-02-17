@@ -31,6 +31,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated youtube video plug-in to look up two links (F#1890214)
  * Fixed audio selection for the first track for mkv and ogm video files (B#1890498)
  * Fixed cdbackup plug-in to allow empty parameters (B#1889068)
+ * Fixed ivtv_xine_tv plug-in encoding of OSD messages (B#1893373)
  * Fixed the main program to cause a crash when local_conf.py is invalid (B#1886624)
  * Fixed web servers encoding interface (B#1885914)
 
