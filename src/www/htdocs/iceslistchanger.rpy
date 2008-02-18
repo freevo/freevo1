@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# iceslistchanger.rpy - change ices playlist via web interface.
+# Change ices playlist via web interface.
 # -----------------------------------------------------------------------
 # $Id$
 #

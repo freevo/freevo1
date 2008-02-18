@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# search.rpy - Web interface to search the Freevo EPG.
+# Web interface to search the Freevo EPG.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -32,21 +32,24 @@
 import sys, time
 import util.tv_util as tv_util
 
-import tv.record_client as ri
-from www.web_types import HTMLResource, FreevoResource
 import config
+from tv.record_client import RecordClient
+from www.web_types import HTMLResource, FreevoResource
 
 TRUE = 1
 FALSE = 0
 
 
 class SearchResource(FreevoResource):
+    def __init__(self):
+        self.recordclient = RecordClient()
+
 
     def _render(self, request):
         fv = HTMLResource()
         form = request.args
 
-        (server_available, message) = ri.connectionTest()
+        (server_available, message) = self.recordclient.pingNow()
         if not server_available:
             fv.printHeader(_('Search Results'), 'styles/main.css', selected=_('Search'))
             fv.res += '<h4>'+_('ERROR')+': '+_('recording server is unavailable')+'</h4>'
@@ -64,11 +67,11 @@ class SearchResource(FreevoResource):
 
         #print 'DEBUG: movies_only=%s' % movies_only
 
-        (got_matches, progs) = ri.findMatches(find, movies_only)
+        (got_matches, progs) = self.recordclient.findMatchesNow(find, movies_only)
 
         if got_matches:
-            (result, favs) = ri.getFavorites()
-            (result, recordings) = ri.getScheduledRecordings()
+            (result, favs) = self.recordclient.getFavoritesNow()
+            (result, recordings) = self.recordclient.getScheduledRecordingsNow()
             if result:
                 rec_progs = recordings.getProgramList()
 
@@ -108,7 +111,7 @@ class SearchResource(FreevoResource):
                         except:
                             sys.stderr.write('isRecording not set')
 
-                if ri.isProgAFavorite(prog, favs):
+                if self.recordclient.isProgAFavoriteNow(prog, favs):
                     status = 'favorite'
 
 

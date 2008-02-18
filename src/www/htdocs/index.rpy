@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# index.rpy - The main index to the web interface.
+# The main index to the web interface.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -31,7 +31,7 @@
 
 import sys, time
 
-import tv.record_client
+from tv.record_client import RecordClient
 from www.web_types import HTMLResource, FreevoResource
 import util, config
 import util.tv_util as tv_util
@@ -47,11 +47,12 @@ class IndexResource(FreevoResource):
         fv.printHeader(_('Welcome'), 'styles/main.css',selected=_('Home'))
         fv.res += '<div id="contentmain">\n'
 
-        fv.res += '<br/><br/><h2>'+( _('Freevo Web Status as of %s') % \
-                time.strftime('%B %d ' + config.TV_TIME_FORMAT, time.localtime()) ) +'</h2>'
+        fv.res += '<br/><br/><h2>'+_('Freevo Web Status as of %s') % \
+                (time.strftime('%B %d '+config.TV_TIME_FORMAT, time.localtime())) +'</h2>'
 
-        (server_available, schedule) = tv.record_client.connectionTest()
-        if not server_available:
+        recordings = RecordClient().getScheduledRecordingsNow()
+
+        if recordings is None:
             fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('The recording server is down.')+'</p>\n'
         else:
             fv.res += '<p class="normal">'+_('The recording server is up and running.')+'</p>\n'
@@ -60,12 +61,12 @@ class IndexResource(FreevoResource):
         if listexpire == 1:
             fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('Your listings expire in 1 hour.')+'</p>\n'
         elif listexpire < 12:
-            fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+( _('Your listings expire in %s hours.') % listexpire ) +'</p>\n'
+            fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('Your listings expire in %s hours.') % \
+                listexpire+'</p>\n'
         else:
             fv.res += '<p class="normal">'+_('Your listings are up to date.')+'</p>\n'
 
-        (got_schedule, recordings) = tv.record_client.getScheduledRecordings()
-        if got_schedule:
+        if recordings:
             progl = recordings.getProgramList().values()
             f = lambda a, b: cmp(a.start, b.start)
             progl.sort(f)
@@ -80,13 +81,14 @@ class IndexResource(FreevoResource):
             if num_sched_progs == 1:
                 fv.res += '<p class="normal">'+_('One program scheduled to record.')+'</p>\n'
             elif num_sched_progs > 0:
-                fv.res += '<p class="normal">'+(_('%i programs scheduled to record.') % num_sched_progs )+'</p>\n'
+                fv.res += '<p class="normal">'+_('%i programs scheduled to record.') % num_sched_progs+'</p>\n'
             else:
                 fv.res += '<p class="normal">'+_('No programs scheduled to record.')+'</p>\n'
         else:
             fv.res += '<p class="normal">'+_('No programs scheduled to record.')+'</p>\n'
 
-        diskfree = _('%i of %i Mb free in %s')  % ( (( util.freespace(config.TV_RECORD_DIR) / 1024) / 1024), ((util.totalspace(config.TV_RECORD_DIR) /1024) /1024), config.TV_RECORD_DIR)
+        diskfree = _('%i of %i Mb free in %s') % (((util.freespace(config.TV_RECORD_DIR) / 1024) / 1024), \
+            ((util.totalspace(config.TV_RECORD_DIR) /1024) /1024), config.TV_RECORD_DIR)
         fv.res += '<p class="normal">' + diskfree + '</p>\n'
         fv.res += '</div>'
         fv.printWebRemote()
@@ -94,7 +96,7 @@ class IndexResource(FreevoResource):
         #fv.printLinks()
         fv.printFooter()
 
-        return String( fv.res )
+        return String(fv.res)
 
 
 resource = IndexResource()

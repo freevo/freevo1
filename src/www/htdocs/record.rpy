@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# record.rpy - Web interface to your scheduled recordings.
+# Web interface to your scheduled recordings.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -32,7 +32,7 @@
 import sys, time
 import util.tv_util as tv_util
 
-import tv.record_client as ri
+from tv.record_client import RecordClient
 
 from www.web_types import HTMLResource, FreevoResource
 
@@ -42,6 +42,8 @@ TRUE = 1
 FALSE = 0
 
 class RecordResource(FreevoResource):
+    def __init__(self):
+        self.recordclient = RecordClient()
 
     def _render(self, request):
         fv = HTMLResource()
@@ -54,17 +56,14 @@ class RecordResource(FreevoResource):
         start = fv.formValue(form, 'start')
         action = fv.formValue(form, 'action')
 
-        (server_available, message) = ri.connectionTest()
-        if not server_available:
+        server_available = self.recordclient.pingNow()
+        if server_available is None:
             fv.printHeader('Scheduled Recordings', 'styles/main.css')
-            fv.printMessagesFinish(
-                [ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ]
-                )
-
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.')])
             return String( fv.res )
 
         if action == 'remove':
-            (status, recordings) = ri.getScheduledRecordings()
+            recordings = self.recordclient.getScheduledRecordingsNow()
             progs = recordings.getProgramList()
 
             prog = None
@@ -74,34 +73,24 @@ class RecordResource(FreevoResource):
 
             if prog:
                 print 'want to remove prog: %s' % String(prog)
-                ri.removeScheduledRecording(prog)
+                self.recordclient.removeScheduledRecordingNow(prog)
         elif action == 'add':
-            (status, prog) = ri.findProg(chan, start)
+            (status, prog) = self.recordclient.findProgNow(chan, start)
 
             if not status:
                 fv.printHeader('Scheduled Recordings', 'styles/main.css')
                 fv.printMessagesFinish(
-                    [ '<b>'+_('ERROR') + '</b>: ' + \
-                      ( _('No program found on %s at %s.')%\
-                        ( '<b>'+chan+'</b>',
-                          '<b>'+time.strftime('%x %X',
-                                              time.localtime(int(start)))+\
-                          '</b>'
-                          )
-                           )+\
-                      ( ' <i>(%s)</i>' % String(prog) ) ] )
-
+                    ['<b>'+_('ERROR') + '</b>: ' + \
+                      _('No program found on %s at %s.') % \
+                           ('<b>'+chan+'</b>', '<b>'+time.strftime('%x %X', time.localtime(int(start)))+'</b>')+\
+                       (' <i>(%s)</i>' % String(prog))])
                 return String(fv.res)
 
+            self.recordclient.scheduleRecordingNow(prog)
 
-            #print 'RESULT: %s' % status
-            #print 'PROG: %s' % String(prog)
-            ri.scheduleRecording(prog)
-
-
-        (status, recordings) = ri.getScheduledRecordings()
+        recordings = self.recordclient.getScheduledRecordingsNow()
         progs = recordings.getProgramList()
-        (status, favs) = ri.getFavorites()
+        (status, favs) = self.recordclient.getFavoritesNow()
 
         fv.printHeader(_('Scheduled Recordings'), 'styles/main.css', selected=_('Scheduled Recordings'))
 
@@ -124,7 +113,7 @@ class RecordResource(FreevoResource):
         for prog in progl:
             status = 'basic'
 
-            (isFav, junk) = ri.isProgAFavorite(prog, favs)
+            (isFav, message) = self.recordclient.isProgAFavoriteNow(prog, favs)
             if isFav:
                 status = 'favorite'
             try:
@@ -135,8 +124,10 @@ class RecordResource(FreevoResource):
                 pass
 
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell(time.strftime('%b %d ' + config.TV_TIME_FORMAT, time.localtime(prog.start)), 'class="'+status+'" colspan="1"')
-            fv.tableCell(time.strftime('%b %d ' + config.TV_TIME_FORMAT, time.localtime(prog.stop)), 'class="'+status+'" colspan="1"')
+            fv.tableCell(time.strftime('%b %d '+config.TV_TIME_FORMAT, time.localtime(prog.start)),
+                'class="'+status+'" colspan="1"')
+            fv.tableCell(time.strftime('%b %d '+config.TV_TIME_FORMAT, time.localtime(prog.stop)),
+                'class="'+status+'" colspan="1"')
 
             chan = tv_util.get_chan_displayname(prog.channel_id)
             if not chan: chan = _('UNKNOWN')

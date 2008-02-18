@@ -1,7 +1,13 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# proginfo.rpy - Dynamically update program info popup box.
+# Dynamically update program info popup box.
+# -----------------------------------------------------------------------
+# $Id$
+#
+# Notes:
+# Todo:
+#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -33,7 +39,6 @@ import util.tv_util as tv_util
 import util
 import config
 import tv.epg_xmltv
-import tv.record_client as ri
 from twisted.web import static
 
 MAX_DESCRIPTION_CHAR = 1000

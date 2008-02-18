@@ -1,7 +1,13 @@
-#!/usr/bin/python
 # -*- coding: iso-8859-1 -*-
+# vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# proginfo.rpy - Dynamically update program info popup box.
+# Web interface to vlc
+# -----------------------------------------------------------------------
+# $Id$
+#
+# Notes:
+# Todo:
+#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.

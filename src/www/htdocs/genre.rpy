@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# genre.rpy - Show what is on for today for a particular category
+# Show what is on for today for a particular category
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -31,15 +31,18 @@
 
 import sys, time, string
 
-import tv.record_client as ri
+import util, config
+from tv.record_client import RecordClient
 from www.web_types import HTMLResource, FreevoResource
 import tv.epg_xmltv
-import util, config
 
 TRUE = 1
 FALSE = 0
 
 class GenreResource(FreevoResource):
+    def __init__(self):
+        self.recordclient = RecordClient()
+
 
 # need sub to get list of possible categories
 
@@ -80,14 +83,14 @@ class GenreResource(FreevoResource):
         category = fv.formValue(form, 'category')
 
         guide = tv.epg_xmltv.get_guide()
-        (got_schedule, schedule) = ri.getScheduledRecordings()
-        if got_schedule:
+        schedule = self.recordclient.getScheduledRecordingsNow()
+        if schedule is not None:
             schedule = schedule.getProgramList()
 
         fv.printHeader(_('TV Genre for %s') % time.strftime('%a %b %d', time.localtime(mfrguidestart)), \
             config.WWW_STYLESHEET, config.WWW_JAVASCRIPT)
 
-        if not got_schedule:
+        if schedule is None:
             fv.printMessages(['<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.')])
 
         allcategories = []
@@ -155,7 +158,7 @@ class GenreResource(FreevoResource):
                     # use counter to see if we have data
                     gotdata += 1
                     if got_schedule:
-                        (result, message) = ri.isProgScheduled(prog, schedule)
+                        (result, message) = self.recordclient.isProgScheduledNow(prog, schedule)
                         if result:
                             status = 'scheduled'
                             really_now = time.time()

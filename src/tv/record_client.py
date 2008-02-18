@@ -158,6 +158,18 @@ class RecordClient:
         print self.timeit(now)+': getNextProgramStart.nextstart=%r' % nextstart
 
 
+    def pingNow(self):
+        """ Ping the recordserver to see if it is running """
+        _debug_('pingNow', 2)
+        inprogress = self.recordserver_rpc('ping')
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('pingNow.result=%r' % (result,), 2)
+        return result
+
+
     def findNextProgramNow(self, isrecording=False):
         """ Find the next programme to record """
         _debug_('findNextProgramNow(isrecording=%r)' % (isrecording,), 2)
@@ -191,6 +203,18 @@ class RecordClient:
         inprogress.wait()
         result = inprogress.get_result()
         _debug_('updateFavoritesScheduleNow.result=%r' % (result,), 2)
+        return result
+
+
+    def findProgNow(self, chan=None, start=None):
+        """ See if a programme is a favourite """
+        _debug_('findProgNow(chan=%r, start=%r)' % (chan, start), 1)
+        inprogress = self.recordserver_rpc('findProg', chan, start)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('findProgNow.result=%r' % (result,), 1)
         return result
 
 
@@ -254,6 +278,18 @@ class RecordClient:
         return result
 
 
+    def getFavoriteNow(self, name):
+        """ See if a programme is a favourite """
+        _debug_('getFavoriteNow(name=%r)' % (name), 1)
+        inprogress = self.recordserver_rpc('getFavorite', name)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('getFavoriteNow.result=%r' % (result,), 1)
+        return result
+
+
     def removeFavoriteNow(self, name):
         """ See if a programme is a favourite """
         _debug_('removeFavoriteNow(name=%r)' % (name), 1)
@@ -277,6 +313,18 @@ class RecordClient:
         inprogress.wait()
         result = inprogress.get_result()
         _debug_('addEditedFavoriteNow.result=%r' % (result,), 1)
+        return result
+
+
+    def adjustPriorityNow(self, name, mod=0):
+        """ See if a programme is a favourite """
+        _debug_('adjustPriorityNow(name=%r, mod=%r)' % (name, mod), 1)
+        inprogress = self.recordserver_rpc('adjustPriority', name, mod)
+        if inprogress is None:
+            return None
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('adjustPriorityNow.result=%r' % (result,), 1)
         return result
 
 
@@ -364,6 +412,12 @@ class RecordClient:
         """ Get the scheduled recordings, using a callback function """
         _debug_('getScheduledRecordings(callback=%r)' % (callback), 2)
         return self.server_rpc('getScheduledRecordings', callback)
+
+
+    def scheduleRecording(self, callback, prog):
+        """ schedule a programme for recording, using a callback function """
+        _debug_('scheduleRecording(callback=%r, prog=%r)' % (callback, prog), 2)
+        return self.server_rpc('scheduleRecording', callback, prog)
 
 
     def updateFavoritesSchedule(self, callback):
@@ -695,6 +749,10 @@ if __name__ == '__main__':
     # kaa.rpc callback tests
     #--------------------------------------------------------------------------------
 
+    if function == "pingnow":
+        result = rc.pingNow()
+        print 'result: %r\n"%s"' % (result, result)
+
     if function == "findnextprogramnow":
         result = rc.findNextProgramNow(True)
         print 'recording:%r\n"%s"' % (result, result)
@@ -721,6 +779,10 @@ if __name__ == '__main__':
     if function == "updatefavoritesschedule":
         rc.updateFavoritesSchedule(handler)
 
+    if function == "findprognow":
+        result = rc.findProgNow(args)
+        print '%s: result: %r' % (rc.timeit(start), result)
+
     if function == "findmatchesnow":
         result = rc.findMatchesNow(args)
         print '%s: result: %r' % (rc.timeit(start), result)
@@ -729,8 +791,16 @@ if __name__ == '__main__':
         result = rc.getFavoritesNow()
         print '%s: result: %r' % (rc.timeit(start), result)
 
+    if function == "getfavoritenow":
+        result = rc.getFavoriteNow(args)
+        print '%s: result: %r' % (rc.timeit(start), result)
+
     if function == "removefavoritenow":
         result = rc.removeFavoriteNow()
+        print '%s: result: %r' % (rc.timeit(start), result)
+
+    if function == "adjustprioritynow":
+        result = rc.adjustPriorityNow(args)
         print '%s: result: %r' % (rc.timeit(start), result)
 
 

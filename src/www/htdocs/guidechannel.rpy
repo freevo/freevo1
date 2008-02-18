@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# guide.rpy - Web interface to the Freevo EPG.
+# Web interface to the Freevo EPG.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -40,7 +40,7 @@ import util.tv_util as tv_util
 import util
 import config
 import tv.epg_xmltv
-import tv.record_client as ri
+from tv.record_client import RecordClient
 from twisted.web import static
 from www.configlib import *
 
@@ -50,6 +50,9 @@ TRUE = 1
 FALSE = 0
 
 class GuideResource(FreevoResource):
+    def __init__(self):
+        self.recordclient = RecordClient()
+
 
     def GetChannelList(self, guide):
         clist = []
@@ -83,7 +86,7 @@ class GuideResource(FreevoResource):
             program_tip = 'Scheduled Program : %s' %  Unicode(sch_prog.sub_title)
 
         if self.got_schedule:
-            (result, message) = ri.isProgScheduled(prog, self.schedule)
+            (result, message) = self.recordclient.isProgScheduledNow(prog, self.schedule)
             if result:
                 status = 'programlinerecord'
                 if self.currenttime > prog.start  and self.currenttime < prog.stop:
@@ -188,7 +191,7 @@ class GuideResource(FreevoResource):
         form = request.args
 
         self.guide = tv.epg_xmltv.get_guide()
-        (self.got_schedule, self.schedule) = ri.getScheduledRecordings()
+        (self.got_schedule, self.schedule) = self.recordclient.getScheduledRecordingsNow()
         self.currenttime = time.time()
 
         if self.got_schedule:

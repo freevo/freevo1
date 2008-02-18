@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# guide.rpy - Web interface to the Freevo EPG.
+# Web interface to the Freevo EPG.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -35,11 +35,11 @@ import time
 from www.web_types import HTMLResource, FreevoResource
 from twisted.web.woven import page
 
+import config
 import util.tv_util as tv_util
 import util
-import config
 import tv.epg_xmltv
-import tv.record_client as ri
+from tv.record_client import RecordClient
 from twisted.web import static
 
 DEBUG = 0
@@ -48,6 +48,9 @@ TRUE = 1
 FALSE = 0
 
 class GuideResource(FreevoResource):
+    def __init__(self):
+        self.recordclient = RecordClient()
+
 
     def makecategorybox(self, chanlist):
         allcategories = []
@@ -138,31 +141,29 @@ class GuideResource(FreevoResource):
             mfrprevguide = 0
 
         guide = tv.epg_xmltv.get_guide()
-        (got_schedule, schedule) = ri.getScheduledRecordings()
-        if got_schedule:
+        schedule = self.recordclient.getScheduledRecordingsNow()
+        if schedule:
             schedule = schedule.getProgramList()
 
         fv.printHeader(_('TV Guide'), config.WWW_STYLESHEET, config.WWW_JAVASCRIPT, selected=_('TV Guide'))
         fv.res += '<div id="content">\n';
         fv.res += '&nbsp;<br/>\n'
-        if not got_schedule:
-            fv.printMessages(
-                [ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ]
-                )
+        if schedule is None:
+            fv.printMessages([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ])
 
         desc = ''
 
         fv.tableOpen()
         fv.tableRowOpen('class="chanrow"')
-        fv.tableCell('<form>'+_('Time')+':&nbsp;' + self.maketimejumpboxday(now) + self.maketimejumpboxoffset(now) + '<input type=submit value="'+_('View')+'"></form>', 'class="utilhead"')
+        fv.tableCell('<form>'+_('Time')+':&nbsp;' + self.maketimejumpboxday(now) + self.maketimejumpboxoffset(now) +
+            '<input type=submit value="'+_('View')+'"></form>', 'class="utilhead"')
         categorybox =  self.makecategorybox(guide.chan_list)
         if categorybox:
             fv.tableCell('<form action="genre.rpy">'+_('Show')+'&nbsp;'+_('Category')+':&nbsp;'+categorybox+'<input type=submit value="'+_('Change')+'"></form>', 'class="utilhead"')
         fv.tableRowClose()
         fv.tableClose()
 
-        fv.tableOpen('id="guide" cols=\"%d\"' % \
-                     ( n_cols*cpb + 1 ) )
+        fv.tableOpen('id="guide" cols=\"%d\"' % (n_cols * cpb + 1))
         showheader = 0
         for chan in guide.chan_list:
             #put guidehead every X rows
@@ -199,7 +200,8 @@ class GuideResource(FreevoResource):
             c_left = n_cols * cpb
 
             if not chan.programs:
-                rowdata.append('<td class="programnodata" colspan="%s">&laquo; ' % (n_cols*cpb) + _('This channel has no data loaded') + ' &raquo;' )
+                rowdata.append('<td class="programnodata" colspan="%s">&laquo; ' % (n_cols*cpb) + \
+                    _('This channel has no data loaded') + ' &raquo;')
 
             for prog in chan.programs:
                 if prog.stop > mfrguidestart and \
@@ -208,8 +210,8 @@ class GuideResource(FreevoResource):
 
                     status = 'program'
 
-                    if got_schedule:
-                        (result, message) = ri.isProgScheduled(prog, schedule)
+                    if schedule:
+                        (result, message) = self.recordclient.isProgScheduledNow(prog, schedule)
                         if result:
                             status = 'scheduled'
                             really_now = time.time()
@@ -224,7 +226,7 @@ class GuideResource(FreevoResource):
                             # show started earlier than the guide start,
                             # insert left arrows
                             cell += '&laquo; '
-                        showtime_left = int(prog.stop - now + ( now % INTERVAL ) )
+                        showtime_left = int(prog.stop - now + (now % INTERVAL))
                         intervals = showtime_left / PRECISION
                         colspan = intervals
                         # prog.title = string.replace(prog.title, "&", "SUB")
@@ -299,11 +301,11 @@ class GuideResource(FreevoResource):
             u"         </tr>\n"\
             u"      </tfoot>\n"\
             u"   </table>\n"\
-            u"</div>\n" )
+            u"</div>\n")
         fv.res += "<iframe id='hidden' style='visibility: hidden; width: 1px; height: 1px'></iframe>\n"
         fv.printFooter()
 
-        return String( fv.res )
+        return String(fv.res)
 
 
 resource = GuideResource()

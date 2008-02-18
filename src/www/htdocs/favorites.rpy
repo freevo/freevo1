@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# favorites.rpy - Web interface to display your favorite programs.
+# Web interface to display your favorite programs.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -33,7 +33,7 @@ import sys, time, string
 import urllib
 import config
 
-import tv.record_client as ri
+from tv.record_client import RecordClient
 import util.tv_util as tv_util
 
 from www.web_types import HTMLResource, FreevoResource
@@ -43,18 +43,18 @@ FALSE = 0
 
 
 class FavoritesResource(FreevoResource):
+    def __init__(self):
+        self.recordclient = RecordClient()
+
 
     def _render(self, request):
         fv = HTMLResource()
         form = request.args
 
-        (server_available, message) = ri.connectionTest()
+        server_available = self.recordclient.pingNow()
         if not server_available:
             fv.printHeader(_('Favorites'), 'styles/main.css', selected=_('Favorites'))
-            fv.printMessagesFinish(
-                [ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ]
-                )
-
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.')])
             return String( fv.res )
 
         action = fv.formValue(form, 'action')
@@ -74,18 +74,18 @@ class FavoritesResource(FreevoResource):
             onlyNew = fv.formValue(form, 'onlyNew')
 
         if action == 'remove':
-            ri.removeFavorite(name)
+            self.recordclient.removeFavoriteNow(name)
         elif action == 'add':
-            ri.addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
+            self.recordclient.addEditedFavoriteNow(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
         elif action == 'edit':
-            ri.removeFavorite(oldname)
-            ri.addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
+            self.recordclient.removeFavoriteNow(oldname)
+            self.recordclient.addEditedFavoriteNow(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
         elif action == 'bump':
-            ri.adjustPriority(name, priority)
+            self.recordclient.adjustPriorityNow(name, priority)
         else:
             pass
 
-        (status, favorites) = ri.getFavorites()
+        (status, favorites) = self.recordclient.getFavoritesNow()
 
 
         days = {
@@ -149,7 +149,7 @@ class FavoritesResource(FreevoResource):
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             if config.TV_RECORD_DUPLICATE_DETECTION:
-                (tempStatus, tempFav) = ri.getFavorite(fav.name)
+                (tempStatus, tempFav) = self.recordclient.getFavoriteNow(fav.name)
                 if hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 1:
                     cell = 'ALLOW'
                 elif hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 0:
@@ -159,7 +159,7 @@ class FavoritesResource(FreevoResource):
                 fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             if config.TV_RECORD_ONLY_NEW_DETECTION:
-                (tempStatus, tempFav) = ri.getFavorite(fav.name)
+                (tempStatus, tempFav) = self.recordclient.getFavoriteNow(fav.name)
                 if hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 1:
                     cell = 'ONLY NEW'
                 elif hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 0:

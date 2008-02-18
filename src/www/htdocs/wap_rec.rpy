@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# wap_rec.rpy - Wap shedule recording page.
+# Wap shedule recording page.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -33,21 +33,17 @@ import sys, time
 
 import tv.epg_xmltv
 import tv.epg_types
-import tv.record_client as ri
+from tv.record_client import RecordClient
 from www.wap_types import WapResource, FreevoWapResource
-
-# Use the alternate strptime module which seems to handle time zones
-#
-# XXX Remove when we are ready to require Python 2.3
-if float(sys.version[0:3]) < 2.3:
-    import tv.strptime as strptime
-else:
-    import _strptime as strptime
+import _strptime as strptime
 
 class WRecResource(FreevoWapResource):
+    def __init__(self):
+        self.recordclient = RecordClient()
+
 
     def _render(self, request):
-
+        """ Render the page """
         fv = WapResource()
         form = request.args
         fv.session = request.getSession()
@@ -77,7 +73,7 @@ class WRecResource(FreevoWapResource):
                 prog.title = "Wap Recorded"
                 prog.start = starttime
                 prog.stop = stoptime
-                ri.scheduleRecording(prog)
+                self.recordclient.scheduleRecordingNow(prog)
                 fv.res += '  <card id="card3" title="Freevo">\n'
                 fv.res += '   <p><strong>Rec. Sheduled</strong><br/>\n'
                 fv.res += '          Date : %s<br/>\n' % startdate
@@ -102,7 +98,7 @@ class WRecResource(FreevoWapResource):
                 fv.res += '  <timer value="30"/>\n'
                 fv.res += '   <p><big><strong>Freevo WAP Sheduler</strong></big></p>\n'
 
-                (server_available, message) = ri.connectionTest()
+                server_available = self.recordclient.pingNow()
                 if not server_available:
                     fv.res += '<p>ERROR: Record Server offline</p>\n'
                 else:
@@ -110,9 +106,12 @@ class WRecResource(FreevoWapResource):
 
                 fv.res += '  </card>\n'
                 fv.res += '  <card id="card2" title="Freevo">\n'
-                fv.res += '       <p>Date: <input  name="date" title="Date (dd/mm/yy)" format="NN/NN/NN" size="6" value="%s" /><br/>\n' % time.strftime("%d/%m/%y", time.localtime(time.time()))
-                fv.res += '          Start Time: <input  name="start" title="Start Time (hh:mm)" format="NN:NN" size="4" value="%s" /><br/>\n' % time.strftime("%H:%M", time.localtime(time.time()))
-                fv.res += '          Stop Time: <input  name="stop" title="Stop Time (hh:mm)" format="NN:NN" size="4" value="%s" /><br/>\n' % time.strftime("%H:%M", time.localtime(time.time() + 3600))
+                fv.res += '       <p>Date: <input  name="date" title="Date (dd/mm/yy)" format="NN/NN/NN" '+\
+                    'size="6" value="%s" /><br/>\n' % time.strftime("%d/%m/%y", time.localtime(time.time()))
+                fv.res += '          Start Time: <input  name="start" title="Start Time (hh:mm)" format="NN:NN" '+\
+                    'size="4" value="%s" /><br/>\n' % time.strftime("%H:%M", time.localtime(time.time()))
+                fv.res += '          Stop Time: <input  name="stop" title="Stop Time (hh:mm)" format="NN:NN" '+\
+                    'size="4" value="%s" /><br/>\n' % time.strftime("%H:%M", time.localtime(time.time() + 3600))
                 fv.res += '          Channel: <select  name="channel">\n'
                 for ch in guide.chan_list:
                     fv.res += '                   <option value="'+ch.id+'">'+ch.displayname+"</option>\n"

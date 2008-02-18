@@ -1,13 +1,14 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# library.rpy - a script to display and modify your video library
+# Web interface to display and modify your video library
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:
 # Todo: -allow for an imdb popup
 #       -stream tv, video and music somehow
+#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -37,7 +38,7 @@ import config, util
 import util.tv_util as tv_util
 import util.fxdparser as fxdparser
 import util.mediainfo
-import tv.record_client as ri
+from tv.record_client import RecordClient
 import kaa.imlib2 as imlib2
 import kaa.metadata as metadata
 
@@ -58,6 +59,8 @@ class LibraryResource(FreevoResource):
         self.allowed_dirs.extend(config.AUDIO_ITEMS)
         self.allowed_dirs.extend( [ ('Recorded TV', config.TV_RECORD_DIR) ])
         self.allowed_dirs.extend(config.IMAGE_ITEMS)
+        self.recordclient = RecordClient()
+
 
     def is_access_allowed(self, dir_str):
         print 'is_access_allowed(self, dir_str=%r)' % (dir_str)
@@ -330,9 +333,9 @@ class LibraryResource(FreevoResource):
             favre = ''
             favs = []
             if action_mediatype == 'movies' or action_mediatype == 'rectv':
-                (got_schedule, recordings) = ri.getScheduledRecordings()
-                if got_schedule:
-                    progs = recordings.getProgramList()
+                schedule = self.recordclient.getScheduledRecordingsNow()
+                if schedule:
+                    progs = schedule.getProgramList()
                     f = lambda a, b: cmp(a.start, b.start)
                     progl = progs.values()
                     progl.sort(f)
@@ -350,7 +353,7 @@ class LibraryResource(FreevoResource):
 
                 #generate our favorites regular expression
                 favre = ''
-                (result, favorites) = ri.getFavorites()
+                (result, favorites) = self.recordclient.getFavoritesNow()
                 if result:
                     favs = favorites.values()
                 else:

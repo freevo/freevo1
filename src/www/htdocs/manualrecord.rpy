@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# manualrecord.rpy - Web interface to manually schedule recordings.
+# Web interface to manually schedule recordings.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -31,7 +31,7 @@
 import sys, time
 
 import tv.epg_xmltv, tv.epg_types
-import tv.record_client as ri
+from tv.record_client import RecordClient
 
 # Use the alternate strptime module which seems to handle time zones
 #
@@ -56,18 +56,24 @@ MINPICKUP = 70
 
 
 class ManualRecordResource(FreevoResource):
+    def __init__(self):
+        self.recordclient = RecordClient()
+
+
+    def rc_handler(self, result):
+        """ Handler for record client callbacks """
+        print 'result=%r' % (result,)
+
 
     def _render(self, request):
         fv = HTMLResource()
         form = request.args
 
-        (server_available, message) = ri.connectionTest()
+        server_available = self.recordclient.pingNow()
         if not server_available:
             fv.printHeader(_('Manual Record'), 'styles/main.css',selected=_("Manual Record"))
-            fv.printMessagesFinish(
-                [ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ]
-                )
-            return String( fv.res )
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.')])
+            return String(fv.res)
 
         curtime_epoch = time.time()
         curtime = time.localtime(curtime_epoch)
@@ -97,14 +103,17 @@ class ManualRecordResource(FreevoResource):
                 if int(startmonth) < currentmonth:
                     startyear = str(int(startyear) + 1)
                 # create utc second start time
-                starttime = time.mktime(strptime.strptime(str(startmonth)+" "+str(startday)+" "+str(startyear)+" "+str(starthour)+":"+str(startminute)+":00",'%m %d %Y %H:%M:%S'))
+                starttime = time.mktime(strptime.strptime(str(startmonth)+' '+str(startday)+' '+str(startyear)+\
+                    ' '+str(starthour)+':'+str(startminute)+':00','%m %d %Y %H:%M:%S'))
                 # create utc stop time
-                stoptime = time.mktime(strptime.strptime(str(stopmonth)+" "+str(stopday)+" "+str(stopyear)+" "+str(stophour)+":"+str(stopminute)+":00",'%m %d %Y %H:%M:%S'))
+                stoptime = time.mktime(strptime.strptime(str(stopmonth)+' '+str(stopday)+' '+str(stopyear)+\
+                    ' '+str(stophour)+':'+str(stopminute)+':00','%m %d %Y %H:%M:%S'))
                 # so we don't record for more then maxdays (maxdays day * 24hr/day * 60 min/hr * 60 sec/min)
                 if abs(stoptime - starttime) < (MAXDAYS * 86400):
                     if starttime < stoptime:
                         if stoptime < curtime_epoch + MINPICKUP:
-                            errormsg = "Sorry, the stop time does not give enough time for cron to pickup the change.  Please set it to record for a few minutes longer."
+                            errormsg = 'Sorry, the stop time does not give enough time for cron to pickup the change.'\
+                                +' Please set it to record for a few minutes longer.'
                         else:
                             # assign attributes to object
                             prog = tv.epg_types.TvProgram()
@@ -118,7 +127,7 @@ class ManualRecordResource(FreevoResource):
                             prog.start = starttime
                             prog.stop = stoptime
                             # use ri to add to schedule
-                            ri.scheduleRecording(prog)
+                            self.recordclient.scheduleRecording(self.rc_handler, prog)
                             return '<html><head><meta HTTP-EQUIV="REFRESH" CONTENT="0;URL=record.rpy"></head></html>'
                     else:
                         errormsg = _("start time is not before stop time.")
@@ -140,7 +149,9 @@ class ManualRecordResource(FreevoResource):
             #build some reusable date inputs
             #month
             monthselect = '<select name="%s" %s >'
-            months = [ _('Jan'), _('Feb'), _('Mar'), _('Apr'), _('May'), _('Jun'), _('Jul'), _('Aug'), _('Sep'), _('Oct'), _('Nov'), _('Dec') ]
+            months = [
+                _('Jan'), _('Feb'), _('Mar'), _('Apr'), _('May'), _('Jun'),
+                _('Jul'), _('Aug'), _('Sep'), _('Oct'), _('Nov'), _('Dec') ]
             iter=1
             for m in months:
                 if curtime[1] == iter:
@@ -183,12 +194,16 @@ class ManualRecordResource(FreevoResource):
                 iter = iter + 5
             minuteselect = minuteselect + "</select>\n"
 
-            startcell = monthselect % ("startmonth", 'onChange="document.manrec.stopmonth.selectedIndex=document.manrec.startmonth.selectedIndex"')
-            startcell = startcell + dayselect % ("startday", 'onChange="document.manrec.stopday.selectedIndex=document.manrec.startday.selectedIndex"')
+            startcell = monthselect % ("startmonth",
+                'onChange="document.manrec.stopmonth.selectedIndex=document.manrec.startmonth.selectedIndex"')
+            startcell = startcell + dayselect % ("startday",
+                'onChange="document.manrec.stopday.selectedIndex=document.manrec.startday.selectedIndex"')
             startcell = startcell + '@'
-            startcell = startcell + hourselect % ("starthour", 'onChange="document.manrec.stophour.selectedIndex=document.manrec.starthour.selectedIndex"')
+            startcell = startcell + hourselect % ("starthour",
+                'onChange="document.manrec.stophour.selectedIndex=document.manrec.starthour.selectedIndex"')
             startcell = startcell + ':'
-            startcell = startcell + minuteselect % ("startminute", 'onChange="document.manrec.stopminute.selectedIndex=document.manrec.startminute.selectedIndex"')
+            startcell = startcell + minuteselect % ("startminute",
+                'onChange="document.manrec.stopminute.selectedIndex=document.manrec.startminute.selectedIndex"')
 
             stopcell = monthselect % ("stopmonth", " ")
             stopcell = stopcell + dayselect % ("stopday", " ")
@@ -226,10 +241,12 @@ class ManualRecordResource(FreevoResource):
             fv.tableCell(startcell, 'class="basic" colspan="1" nowrap')
             fv.tableCell(stopcell, 'class="basic" colspan="1" nowrap')
             fv.tableCell('<input name="title" size="20">', 'class="basic" colspan="1"')
-            fv.tableCell('<textarea name="desc" rows="1" cols="20" wrap="soft"></textarea>', 'class="basic" colspan="1"')
+            fv.tableCell('<textarea name="desc" rows="1" cols="20" wrap="soft"></textarea>',
+                'class="basic" colspan="1"')
             fv.tableRowClose()
             fv.tableRowOpen('class="chanrow"')
-            fv.tableCell('<center><input type="hidden" name="action" value="add" /><input type="submit" value="'+_('Add to Recording Schedule')+'" /></center>', 'class="basic" colspan="5"')
+            fv.tableCell('<center><input type="hidden" name="action" value="add" /><input type="submit" value="'+
+                _('Add to Recording Schedule')+'" /></center>', 'class="basic" colspan="5"')
             fv.tableRowClose()
 
             fv.tableClose()
@@ -239,6 +256,6 @@ class ManualRecordResource(FreevoResource):
             fv.printLinks()
             fv.printFooter()
 
-        return String( fv.res )
+        return String(fv.res)
 
 resource = ManualRecordResource()
