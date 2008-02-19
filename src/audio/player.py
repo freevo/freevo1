@@ -72,7 +72,7 @@ class PlayerGUI(GUIObject):
             self.player = player
 
         else:
-            self.possible_player = []
+            self.possible_players = []
             for p in plugin.getbyname(plugin.AUDIO_PLAYER, True):
                 rating = p.rate(self.item) * 10
                 if config.AUDIO_PREFERED_PLAYER == p.name:
@@ -81,9 +81,9 @@ class PlayerGUI(GUIObject):
                 if hasattr(self.item, 'force_player') and p.name == self.item.force_player:
                     rating += 100
 
-                self.possible_player.append((rating, p))
-            self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
-            self.player = self.possible_player[0][1]
+                self.possible_players.append((rating, p))
+            self.possible_players.sort(lambda l, o: -cmp(l[0], o[0]))
+            self.player = self.possible_players[0][1]
 
         if self.menuw and self.menuw.visible:
             self.menuw.hide(clear=False)
@@ -108,7 +108,7 @@ class PlayerGUI(GUIObject):
         _debug_('error, try next player')
         player = None
         next   = False
-        for r, p in self.possible_player:
+        for r, p in self.possible_players:
             if next:
                 player = p
                 break

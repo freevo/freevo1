@@ -195,9 +195,8 @@ def player_selection_menu(arg=None, menuw=None):
     item  = arg
     menu_items = []
 
-    for player in item.possible_player:
-        menu_items += [ menu.MenuItem(_('Play with "%s"') % (player[1].name),
-                                      player_selection, (arg, player))]
+    for player in item.possible_players:
+        menu_items += [ menu.MenuItem(_('Play with "%s"') % (player[1].name), player_selection, (arg, player))]
 
     moviemenu = menu.Menu(_('Player Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
@@ -272,19 +271,15 @@ def get_items(item):
     next_start = 0
     items = []
 
-    if len(item.possible_player) >1:
-        items.append(menu.MenuItem(_('Play with alternate player'),
-                     player_selection_menu, item))
-
     if item.filename or (item.mode in ('dvd', 'vcd') and item.player_rating >= 20):
+        if len(item.possible_players) > 1:
+            items.append(menu.MenuItem(_('Play with alternate player'), player_selection_menu, item))
         if item.info.has_key('audio') and len(item.info['audio']) > 1:
             items.append(menu.MenuItem(_('Audio selection'), audio_selection_menu, item))
         if item.info.has_key('subtitles') and len(item.info['subtitles']) >= 1:
-            items.append(menu.MenuItem(_('Subtitle selection'),
-                                       subtitle_selection_menu, item))
+            items.append(menu.MenuItem(_('Subtitle selection'), subtitle_selection_menu, item))
         if item.info.has_key('chapters') and item.info['chapters'] > 1:
-            items.append(menu.MenuItem(_('Chapter selection'),
-                                       chapter_selection_menu, item))
+            items.append(menu.MenuItem(_('Chapter selection'), chapter_selection_menu, item))
     if item.subitems:
         # show subitems as chapter
         items.append(menu.MenuItem(_('Chapter selection'),
