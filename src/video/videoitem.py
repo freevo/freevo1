@@ -75,7 +75,7 @@ class VideoItem(Item):
         self.selected_audio    = None
         self.elapsed           = 0
 
-        self.possible_player   = []
+        self.possible_players  = []
         self.player        = None
         self.player_rating = 0
 
@@ -191,22 +191,20 @@ class VideoItem(Item):
                 self.files.image = image
 
         # do the player rating based on the new url
-        self.possible_player = []
         for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
             rating = p.rate(self) * 10
             if config.VIDEO_PREFERED_PLAYER == p.name:
                 rating += 1
             if hasattr(self, 'force_player') and p.name == self.force_player:
                 rating += 100
-            if rating >10:
-                #exclude players that cannot play this item
-                self.possible_player.append((rating, p))
+            if (rating, p) not in self.possible_players:
+                self.possible_players.append((rating, p))
         # sort the players in the order of the rating
-        self.possible_player.sort(lambda l, o: -cmp(l[0], o[0]))
-        if len(self.possible_player) > 0:
+        self.possible_players.sort(lambda l, o: -cmp(l[0], o[0]))
+        if len(self.possible_players) > 0:
             # choose the best player as default player
-            self.player_rating, self.player = self.possible_player[0]
-        _debug_(self.possible_player, 2)
+            self.player_rating, self.player = self.possible_players[0]
+        _debug_("url=%r possible_players=%r" % (self.url, self.possible_players,), 2)
 
 
     def id(self):
@@ -317,36 +315,47 @@ class VideoItem(Item):
         """
         return a list of possible actions on this item.
         """
-        if not self.possible_player:
+        if not self.possible_players:
             return []
 
         if self.url.startswith('dvd://') and self.url[-1] == '/':
             if self.player_rating >= 20:
-                items = [ (self.play, _('Play DVD')),
-                          (self.dvd_vcd_title_menu, _('DVD title list')) ]
+                items = [
+                    (self.play, _('Play DVD')),
+                    (self.dvd_vcd_title_menu, _('DVD title list'))
+                ]
             else:
-                items = [ (self.dvd_vcd_title_menu, _('DVD title list')),
-                          (self.play, _('Play default track')) ]
+                items = [
+                    (self.dvd_vcd_title_menu, _('DVD title list')),
+                    (self.play, _('Play default track'))
+                ]
 
         elif self.url == 'vcd://':
             if self.player_rating >= 20:
-                items = [ (self.play, _('Play VCD')),
-                          (self.dvd_vcd_title_menu, _('VCD title list')) ]
+                items = [
+                    (self.play, _('Play VCD')),
+                    (self.dvd_vcd_title_menu, _('VCD title list'))
+                ]
             else:
-                items = [ (self.dvd_vcd_title_menu, _('VCD title list')),
-                          (self.play, _('Play default track')) ]
+                items = [
+                    (self.dvd_vcd_title_menu, _('VCD title list')),
+                    (self.play, _('Play default track'))
+                ]
+
+        elif self.url.startswith('youtube:'):
+            popup=PopupBox('Resolving YouTube video URL....')
+            popup.show()
+            if hasattr(config,'YOUTUBE_USER'):
+                cmdline='youtube-dl -g -u '+config.YOUTUBE_USER+' -p '+config.YOUTUBE_PASSWORD+' '
+            else:
+                cmdline='youtube-dl -g '
+            pipe=os.popen(cmdline+self.url[8:])
+            self.url=pipe.readline()
+            pipe.close()
+            popup.hide()
+            items = [ (self.play, _('Play')) ]
+
         else:
-            if self.url.startswith('youtube:'):
-                popup=PopupBox('Resolving YouTube video URL....')
-                popup.show()
-                if hasattr(config,'YOUTUBE_USER'):
-                    cmdline='youtube-dl -g -u '+config.YOUTUBE_USER+' -p '+config.YOUTUBE_PASSWORD+' '
-                else:
-                    cmdline='youtube-dl -g '
-                pipe=os.popen(cmdline+self.url[8:])
-                self.url=pipe.readline()
-                pipe.close()
-                popup.hide()
             items = [ (self.play, _('Play')) ]
 
         items.append((self.show_details, _('Full description')))
@@ -359,8 +368,7 @@ class VideoItem(Item):
         if self.variants and len(self.variants) > 1:
             items = [ (self.show_variants, _('Show variants')) ] + items
 
-        if self.mode == 'file' and not self.variants and \
-               (not self.image or not self.image.endswith('raw')):
+        if self.mode == 'file' and not self.variants and (not self.image or not self.image.endswith('raw')):
             items.append((self.create_thumbnail, _('Create Thumbnail'), 'create_thumbnail'))
 
         return items
@@ -463,7 +471,7 @@ class VideoItem(Item):
         play the item.
         """
 
-        if not self.player or self.player_rating<10:
+        if not self.player or self.player_rating < 10:
             AlertBox(text=_('No player for this item found')).show()
             return
 
