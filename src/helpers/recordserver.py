@@ -298,7 +298,7 @@ class RecordServer:
             os.unlink(config.TV_RECORD_SCHEDULE)
             f = open(config.TV_RECORD_SCHEDULE, 'w')
 
-        print 'scheduledRecordings=%r' % (scheduledRecordings,)
+        #print 'scheduledRecordings=%r' % (scheduledRecordings,)
         jellyToXML(scheduledRecordings, f)
         f.close()
 
@@ -1128,6 +1128,9 @@ class RecordServer:
         if not favs:
             favs = self.getFavorites()
 
+        if favs is None:
+            return (False, _('no favorites'))
+
         lt = time.localtime(prog.start)
         dow = '%s' % lt[6]
         mod = '%s' % ((lt[3]*60)+lt[4])
@@ -1142,7 +1145,7 @@ class RecordServer:
                             return (TRUE, fav.name)
 
         # if we get this far prog is not a favorite
-        return (FALSE, 'not a favorite')
+        return (False, ('not a favorite'))
 
     def doesFavoriteRecordOnlyNewEpisodes(self, prog, favs=None):
         if not favs:
