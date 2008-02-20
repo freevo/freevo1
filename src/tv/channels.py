@@ -288,6 +288,27 @@ class FreevoChannels:
         return tuner_id, chan_name, prog_info
 
 
+    def getChannelInfoRaw(self):
+        '''Get program info for the current channel'''
+
+        tuner_id = self.getChannel()
+        chan_name = config.TV_CHANNELS[self.chan_index][1]
+        chan_id = config.TV_CHANNELS[self.chan_index][0]
+
+        channels = epg_xmltv.get_guide().GetPrograms(start=time.time(), stop=time.time(), chanids=[chan_id])
+
+        if channels and channels[0] and channels[0].programs:
+            start_t = channels[0].programs[0].start
+            stop_t = channels[0].programs[0].stop
+            prog_s = channels[0].programs[0].title
+        else:
+            start_t = 0
+            stop_t = 0
+            prog_s = 'No info'
+
+        return tuner_id, chan_id, chan_name, start_t, stop_t, prog_s
+
+
 if __name__ == '__main__':
     fc = FreevoChannels()
     print 'CHAN: %s' % fc.getChannel()
