@@ -115,11 +115,7 @@ class ProgramItem(Item):
         # check if this program is scheduled
         schedule = self.recordclient.getScheduledRecordingsNow()
         if schedule:
-            (result, message) = self.recordclient.isProgScheduledNow(self.prog, schedule.getProgramList())
-            if result:
-                self.scheduled = True
-            else:
-                self.scheduled = False
+            self.scheduled = self.recordclient.isProgScheduledNow(self.prog, schedule.getProgramList())
 
         if self.scheduled:
             items.append((self.remove_program, _('Remove from schedule')))
@@ -218,7 +214,7 @@ class ProgramItem(Item):
         """
         _debug_('schedule_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # schedule the program
-        (result, msg) = self.recordclient.scheduleRecordingNow(self.prog)
+        (result, reason) = self.recordclient.scheduleRecordingNow(self.prog)
         if result:
             menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
@@ -229,7 +225,7 @@ class ProgramItem(Item):
             pop = AlertBox(text=msgtext).show()
         else:
             # something went wrong
-            msgtext = _('Scheduling failed')+(': %s' % msg)
+            msgtext = _('Scheduling failed')+(': %s' % reason)
             AlertBox(text=msgtext).show()
 
 
@@ -239,7 +235,7 @@ class ProgramItem(Item):
         """
         _debug_('remove_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # remove the program
-        (result, msg) = self.recordclient.removeScheduledRecordingNow(self.prog)
+        (result, reason) = self.recordclient.removeScheduledRecordingNow(self.prog)
         if result:
             menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
@@ -250,7 +246,7 @@ class ProgramItem(Item):
             AlertBox(text=msgtext).show()
         else:
             # something went wrong
-            msgtext = _('Remove failed')+(': %s' % msg)
+            msgtext = _('Remove failed')+(': %s' % reason)
             AlertBox(text=msgtext).show()
 
 
@@ -286,7 +282,7 @@ class ProgramItem(Item):
             # and open the submenu
             fav_item.display_submenu(menuw=menuw)
         else:
-            msgtext=_('getFavorites failed')+(':%s' % self.name)
+            msgtext=_('Cannot edit favorite %s' % self.name)
             AlertBox(text=msgtext).show()
 
 
