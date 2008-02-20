@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# plugin.py - Plugin interface
+# Plug-in interface
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -133,7 +133,7 @@ class DaemonPlugin(Plugin):
     def poll(self):
     this function will be called every poll_intervall*0.1 seconds
 
-    def draw(self(type, object), osd):
+    def draw(self, type, object), x, osd):
     this function will be called to update the screen
 
     def eventhandler(self, event, menuw=None):
