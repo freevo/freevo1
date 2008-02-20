@@ -1,10 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# diskfree.py - IdleBarplugin for showing the freedisk space for recording
+# IdleBar plug-in for showing the freedisk space for recording
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Author: Tanja Kotthaus <owigera@web.de>
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.
@@ -26,6 +24,7 @@
 #
 # -----------------------------------------------------------------------
 
+__author__ = 'Tanja Kotthaus <owigera@web.de>'
 
 # python modules
 import time
@@ -109,20 +108,20 @@ class PluginInterface(IdleBarPlugin):
             self.percent = (self.totalspace - self.freespace) * 1.0 / self.totalspace
 
 
-    def draw(self, (type,object),x,osd):
+    def draw(self, (type, object), x, osd):
         """
         Drawing to idlebar
         """
         self.getDiskFree()
         diskimg = self.getimage(self.diskimg, osd)
-        w,h = diskimg.get_size()
+        w, h = diskimg.get_size()
         if self.freespace < config.DISKFREE_VERY_LOW:
             diskbar = self.getimage(self.badimg, osd, True)
         elif self.freespace < config.DISKFREE_LOW:
             diskbar = self.getimage(self.poorimg, osd, True)
         else:
             diskbar = self.getimage(self.goodimg, osd, True)
-        diskimg.blit(diskbar, (0,0), (0, 0, (w * self.percent), h))
+        diskimg.blit(diskbar, (0, 0), (0, 0, (w * self.percent), h))
         self.cacheimg['cached'] = diskimg
         font = osd.get_font('small0')
         widthdf = font.stringsize(self.diskfree)
