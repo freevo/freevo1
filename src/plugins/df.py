@@ -1,7 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# df.py - really simple diskfree plugin for freevo
-# created by den_RDC
+# Simple diskfree plugin for freevo
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -31,6 +30,7 @@
 #
 # -----------------------------------------------------------------------
 
+__author__ = 'den_RDC (rdc@kokosnoot.com)'
 
 import plugin
 import util
