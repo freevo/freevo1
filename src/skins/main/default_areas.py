@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# default_areas.py - Some areas for the skin
+# Some areas for the skin
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -172,6 +172,9 @@ class Plugin_Area(Skin_Area):
         """
         there is no content in this area
         """
+        if not osd.active:
+            return
+
         if self.plugins == None:
             self.plugins = plugin.get('daemon_draw')
 
