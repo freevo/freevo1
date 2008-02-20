@@ -346,6 +346,7 @@ TV_EVENTS = {
     'REW'       : Event(SEEK, arg=-10),
     'FFWD'      : Event(SEEK, arg=10),
     'DISPLAY'   : TOGGLE_OSD,
+    'REC'       : TV_START_RECORDING,
     '0'         : INPUT_0,
     '1'         : INPUT_1,
     '2'         : INPUT_2,
