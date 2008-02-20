@@ -44,9 +44,6 @@ from util.marmalade import jellyToXML, unjellyFromXML
 TRUE  = 1
 FALSE = 0
 
-xml_rpc_server = 'http://%s:%s/' % (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
-server = xmlrpclib.Server(xml_rpc_server, allow_none=1)
-
 
 class RecordClientException(Exception):
     """ RecordClientException """
@@ -68,7 +65,7 @@ class RecordClient:
 
     def timeit(self, start=None):
         if start is None:
-            return time.strftime("%M:%S", time.localtime(time.time()))
+            return time.strftime("%H:%M:%S", time.localtime(time.time()))
         return '%.3f' % (time.time() - start)
 
 
@@ -445,261 +442,6 @@ class RecordClient:
         return self.server_rpc('isProgAFavorite', callback, prog, favs)
 
 
-#================================================================================
-# Deprecated Twisted calls
-#================================================================================
-
-def returnFromJelly(status, response):
-    """ Unjelly the xml from the response """
-    _debug_('returnFromJelly(status=%r, response=%r)' % (status, response), 2)
-    if status:
-        return (status, unjellyFromXML(response))
-    return (status, response)
-
-
-def connectionTest(teststr='testing'):
-    """ Using Twisted check if the record server is running """
-    _debug_('connectionTest(teststr=%r)' % (teststr), 2)
-    try:
-        (status, message) = server.echotest(teststr)
-    except Exception, e:
-        _debug_('%s' % e)
-        traceback.print_exc()
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def getScheduledRecordings():
-    """ Using Twisted get the scheduled recordings """
-    _debug_('getScheduledRecordings()', 2)
-    try:
-        (status, message) = server.getScheduledRecordings()
-    except Exception, e:
-        _debug_('%s' % e)
-        return (FALSE, 'record_client: '+_('connection error'))
-    return returnFromJelly(status, message)
-
-
-def saveScheduledRecordings(scheduledRecordings):
-    """ Using Twisted save the scheduled recordings """
-    _debug_('saveScheduledRecordings(scheduledRecordings)', 2)
-    try:
-        (status, message) = server.saveScheduledRecordings(scheduledRecordings)
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def scheduleRecording(prog=None):
-    """ Using Twisted add a programme to recording schedule  """
-    _debug_('scheduleRecording(prog=%r)' % (prog), 2)
-    if not prog:
-        return (FALSE, _('no program'))
-
-    if prog.stop < time.time():
-        return (FALSE, _('ERROR')+': '+_('cannot record it if it is over'))
-
-    try:
-        (status, message) = server.scheduleRecording(jellyToXML(prog))
-    except:
-        traceback.print_exc()
-        return (FALSE, 'record_client: '+_('connection error'))
-
-    return (status, message)
-
-
-def removeScheduledRecording(prog=None):
-    """ Using Twisted remove a programme from the recording schedule """
-    _debug_('removeScheduledRecording(prog=%r)' % (prog), 2)
-    if not prog:
-        return (FLASE, _('no program'))
-
-    try:
-        (status, message) = server.removeScheduledRecording(jellyToXML(prog))
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def cleanScheduledRecordings():
-    """ Using Twisted clean the recordings schedule """
-    _debug_('cleanScheduledRecordings()', 2)
-    try:
-        (status, message) = server.cleanScheduledRecordings()
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def isProgScheduled(prog, schedule=None):
-    """ Using Twisted find out if a programme is scheduled to record """
-    _debug_('isProgScheduled(prog=%r, schedule=%r)' % (prog, schedule), 2)
-    if schedule or schedule == {}:
-        if schedule == {}:
-            return (FALSE, _('program not scheduled'))
-
-        for me in schedule.values():
-            if me.start == prog.start and me.channel_id == prog.channel_id:
-                return (TRUE, _('program is scheduled'))
-
-        return (FALSE, _('program not scheduled'))
-    else:
-        try:
-            (status, message) = server.isProgScheduled(jellyToXML(prog), schedule)
-        except:
-            return (FALSE, 'record_client: '+_('connection error'))
-
-        return (status, message)
-
-
-def findProg(chan, start):
-    """ Using Twisted find a program using the channel and the start time """
-    _debug_('findProg(chan=%r, start=%r)' % (chan, start), 2)
-    try:
-        (status, response) = server.findProg(chan, start)
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return returnFromJelly(status, response)
-
-
-def findMatches(find='', movies_only=0):
-    """ Using Twisted find matching programmes """
-    _debug_('findMatches(find=%r, movies_only=%r)' % (find, movies_only), 2)
-    try:
-        (status, response) = server.findMatches(find, movies_only)
-    except Exception, e:
-        _debug_('Search error for \'%s\' %s' % (find, e), DWARNING)
-        return (FALSE, 'record_client: '+_('connection error'))
-    return returnFromJelly(status, response)
-
-
-def addFavorite(name, prog, exactchan, exactdow, exacttod):
-    """ Using Twisted add a favourite programme """
-    _debug_('addFavorite(name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r)' % \
-        (name, prog, exactchan, exactdow, exacttod), 2)
-    try:
-        (status, message) = server.addFavorite(name, prog, exactchan, exactdow, exacttod)
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def addEditedFavorite(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
-    """ Using Twisted add an edited favourite programme """
-    _debug_( \
-        'addEditedFavorite(name=%r, title=%r, chan=%r, dow=%r, mod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % \
-        (name, title, chan, dow, mod, priority, allowDuplicates, onlyNew), 2)
-    try:
-        (status, message) = \
-            server.addEditedFavorite(jellyToXML(name), \
-            jellyToXML(title), chan, dow, mod, priority, allowDuplicates, onlyNew)
-    except Exception, e:
-        _debug_('%s' % e, DERROR)
-        traceback.print_exc()
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def removeFavorite(name):
-    """ Using Twisted remove a favourite programme """
-    _debug_('removeFavorite(name=%r)' % (name), 2)
-    try:
-        (status, message) = server.removeFavorite(name)
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def clearFavorites():
-    """ Using Twisted clear favourites """
-    _debug_('clearFavorites()', 2)
-    try:
-        (status, message) = server.clearFavorites()
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def getFavorites():
-    """ Using Twisted get favourites """
-    _debug_('getFavorites()', 2)
-    try:
-        (status, response) = server.getFavorites()
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return returnFromJelly(status, response)
-
-
-def getFavorite(name):
-    """ Using Twisted get a favourite """
-    _debug_('getFavorite(name=%r)' % (name), 2)
-    try:
-        (status, response) = server.getFavorite(name)
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return returnFromJelly(status, response)
-
-
-def getFavoriteObject(prog, favs=None):
-    """ Using Twisted get a favourite object """
-    _debug_('getFavoriteObject(prog=%r, favs=%r)' % (prog, favs), 2)
-    try:
-        (status, response) = server.getFavoriteObject(jellyToXML(prog), jellyToXML(favs))
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return returnFromJelly(status, response)
-
-
-def adjustPriority(favname, mod):
-    """ Using Twisted adjust the priority of a favourite programme """
-    _debug_('adjustPriority(favname=%r, mod=%r)' % (favname, mod), 2)
-    try:
-        (status, message) = server.adjustPriority(favname, mod)
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def isProgAFavorite(prog, favs=None):
-    """ Using Twisted find out if a programme is a favourite """
-    _debug_('isProgAFavorite(prog=%r, favs=%r)' % (prog, favs), 2)
-    try:
-        (status, message) = server.isProgAFavorite(jellyToXML(prog), jellyToXML(favs))
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def removeFavoriteFromSchedule(fav):
-    """ Using Twisted remove a favourite from the schedule """
-    _debug_('removeFavoriteFromSchedule(fav=%r)' % (fav), 2)
-    try:
-        (status, message) = server.removeFavoriteFromSchedule(fav)
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def addFavoriteToSchedule(fav):
-    """ Using Twisted add a favourite to the schedule """
-    _debug_('addFavoriteToSchedule(fav=%r)' % (fav), 2)
-    try:
-        (status, message) = server.addFavoriteToSchedule(fav)
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
-def updateFavoritesSchedule():
-    """ Using Twisted update the recoding schedule with the favourites """
-    _debug_('updateFavoritesSchedule()', 2)
-    try:
-        (status, message) = server.updateFavoritesSchedule()
-    except:
-        return (FALSE, 'record_client: '+_('connection error'))
-    return (status, message)
-
-
 if __name__ == '__main__':
     config.DEBUG = 2
 
@@ -722,7 +464,6 @@ if __name__ == '__main__':
         function = 'none'
 
     start = time.time()
-    print 'xml_rpc_server at %r' % (xml_rpc_server)
     print 'function=%r args=%r' % (function, args)
 
     #--------------------------------------------------------------------------------
@@ -753,70 +494,61 @@ if __name__ == '__main__':
         result = rc.pingNow()
         print 'result: %r\n"%s"' % (result, result)
 
-    if function == "findnextprogramnow":
+    elif function == "findnextprogramnow":
         result = rc.findNextProgramNow(True)
         print 'recording:%r\n"%s"' % (result, result)
         result = rc.findNextProgramNow(False)
         print 'next     :%r\n"%s"' % (result, result)
 
-    if function == "findnextprogram":
+    elif function == "findnextprogram":
         rc.findNextProgram(handler)
 
-    if function == "findnextprogramrecording":
+    elif function == "findnextprogramrecording":
         rc.findNextProgram(handler, True)
 
-    if function == "getscheduledrecordingsnow":
+    elif function == "getscheduledrecordingsnow":
         result = rc.getScheduledRecordingsNow()
         print 'result: %r\n"%s"' % (result, result)
 
-    if function == "getscheduledrecordings":
+    elif function == "getscheduledrecordings":
         rc.getScheduledRecordings(handler)
 
-    if function == "updatefavoritesschedulenow":
+    elif function == "updatefavoritesschedulenow":
         result = rc.updateFavoritesScheduleNow()
         print '%s: result: %r' % (rc.timeit(start), result)
 
-    if function == "updatefavoritesschedule":
-        rc.updateFavoritesSchedule(handler)
-
-    if function == "findprognow":
+    elif function == "findprognow":
         result = rc.findProgNow(args)
         print '%s: result: %r' % (rc.timeit(start), result)
 
-    if function == "findmatchesnow":
+    elif function == "findmatchesnow":
         result = rc.findMatchesNow(args)
         print '%s: result: %r' % (rc.timeit(start), result)
 
-    if function == "getfavoritesnow":
+    elif function == "getfavoritesnow":
         result = rc.getFavoritesNow()
         print '%s: result: %r' % (rc.timeit(start), result)
 
-    if function == "getfavoritenow":
+    elif function == "getfavoritenow":
         result = rc.getFavoriteNow(args)
         print '%s: result: %r' % (rc.timeit(start), result)
 
-    if function == "removefavoritenow":
+    elif function == "removefavoritenow":
         result = rc.removeFavoriteNow()
         print '%s: result: %r' % (rc.timeit(start), result)
 
-    if function == "adjustprioritynow":
+    elif function == "adjustprioritynow":
         result = rc.adjustPriorityNow(args)
         print '%s: result: %r' % (rc.timeit(start), result)
 
+    elif function == "updatefavoritesschedule":
+        rc.updateFavoritesSchedule(handler)
 
-    #--------------------------------------------------------------------------------
-    # Twisted xmlrpc tests
-    #--------------------------------------------------------------------------------
+    elif function == "getfavorites":
+        rc.getFavorites(handler)
 
-    if function == "test":
-        (result, response) = connectionTest('connection test')
-        print 'result: %s, response: %s ' % (result, response)
-
-    if function == "getfavorites":
-        (result, response) = getFavorites()
-        print '%r' % response
-
-    if function == "moviesearch":
+    #FIXME the following two calls need fixing
+    elif function == "moviesearch":
         if len(sys.argv) >= 3:
             find = Unicode(sys.argv[2])
 
@@ -830,7 +562,7 @@ if __name__ == '__main__':
             print 'no data'
 
 
-    if function == "addfavorite":
+    elif function == "addfavorite":
         if len(sys.argv) >= 3:
             name=Unicode(string.join(sys.argv[2:]))
             title=name
@@ -853,6 +585,9 @@ if __name__ == '__main__':
                 _debug_('%r' % response)
         else:
             print 'no data'
+
+    else:
+        print '%r not found' % (function)
 
     kaa.notifier.OneShotTimer(shutdown, 'bye', time.time()).start(20)
     kaa.main.run()

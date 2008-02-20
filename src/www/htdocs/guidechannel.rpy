@@ -86,7 +86,7 @@ class GuideResource(FreevoResource):
             program_tip = 'Scheduled Program : %s' %  Unicode(sch_prog.sub_title)
 
         if self.got_schedule:
-            (result, message) = self.recordclient.isProgScheduledNow(prog, self.schedule)
+            result = self.recordclient.isProgScheduledNow(prog, self.schedule)
             if result:
                 status = 'programlinerecord'
                 if self.currenttime > prog.start  and self.currenttime < prog.stop:

@@ -75,9 +75,6 @@ class ProgInfoResource(FreevoResource):
             desc = '"%s"<br/>%s' % (prog.sub_title,desc)
         desc = desc.replace("\n", "<br/>")
 
-        #print 'type(title)=%s, title=%r' % (type(title), title)
-        #print "type(desc)=%s, desc=%r" % (type(desc), desc)
-
         #if config.LOCALE.lower() != 'utf8' and config.LOCALE.lower() != 'utf-8':
         #    title = title.encode('ascii', 'ignore')
         #    desc = desc.encode('ascii', 'ignore')

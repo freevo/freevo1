@@ -44,7 +44,6 @@ MAX_DESCRIPTION_CHAR = 1000
 class FileInfoResource(FreevoResource):
 
     def __init__(self):
-        print '__init__(self)'
         self.allowed_dirs = []
         self.allowed_dirs.extend(config.VIDEO_ITEMS)
         self.allowed_dirs.extend(config.AUDIO_ITEMS)
@@ -52,7 +51,6 @@ class FileInfoResource(FreevoResource):
         self.allowed_dirs.extend(config.IMAGE_ITEMS)
 
     def _render(self, request):
-        print '_render(self, %s)' % (request)
         fv = HTMLResource()
         form = request.args
         file = fv.formValue(form, 'dir')
@@ -60,7 +58,6 @@ class FileInfoResource(FreevoResource):
 
         if file:
             medium = metadata.parse(file)
-            #print medium
             title = ''
             (basedir, item) = os.path.split(file)
 
@@ -174,7 +171,7 @@ class FileInfoResource(FreevoResource):
         return String(fv.res)
 
     def get_fxd_info(self, fxd_file):
-        print 'get_fxd_info(self, %r)' % (fxd_file)
+        #print 'get_fxd_info(self, %r)' % (fxd_file)
         fxd_info = {}
         parser = util.fxdparser.FXD(fxd_file)
         parser.parse()
@@ -195,7 +192,7 @@ class FileInfoResource(FreevoResource):
         return fxd_info
 
     def convert_dir(self, dir_str):
-        print 'convert_dir(self, dir_str=%r)' % (dir_str)
+        #print 'convert_dir(self, dir_str=%r)' % (dir_str)
         for i in range(len(self.allowed_dirs)):
             val = self.allowed_dirs[i][1]
             if dir_str.startswith(val):

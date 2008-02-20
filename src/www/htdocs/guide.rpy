@@ -211,7 +211,7 @@ class GuideResource(FreevoResource):
                     status = 'program'
 
                     if schedule:
-                        (result, message) = self.recordclient.isProgScheduledNow(prog, schedule)
+                        result = self.recordclient.isProgScheduledNow(prog, schedule)
                         if result:
                             status = 'scheduled'
                             really_now = time.time()

@@ -46,7 +46,7 @@ FALSE = 0
 class FreevoPage(page.Page):
 
     def __init__(self, model=None, template=None):
-        print '__init__(self, model=\"%s\", template=\"%s\")' % (model, template)
+        #print 'FreevoPage.__init__(model=%r, template=%r)' % (model, template)
 
         if not model:
             model = {'foo': 'bar'}
@@ -105,7 +105,7 @@ class FreevoResource(Resource):
         This methode validates username and password.
         If authentication is successfull it returns True otherwise False.
         """
-        print 'auth_user(self, username=\"%s\", password=\"%s\")' % (username, '******')
+        #print 'auth_user(username=%r, password=%r)' % (username, '******')
         cryptpass = config.WWW_USERS.get(username)
         if not cryptpass:
             return False
@@ -136,7 +136,7 @@ class HTMLResource:
     def printContentType(self, content_type='text/html'):
         """ Content"""
         # debug print
-        print 'printContentType(self, content_type=\"%s\")' % (content_type)
+        #print 'printContentType(content_type=%r)' % (content_type)
         # adding new text
         self.res += 'Content-type: %s\n\n' % content_type
 
@@ -155,8 +155,8 @@ class HTMLResource:
         """
 
         # debug print
-        print 'printHeader(self, title=\"%s\", style=\"%s\", script=\"%s\", selected=\"%s\", prefix=\"%s\")' % \
-            (title, style, script, selected, prefix)
+        #print 'printHeader(title=%r, style=%r, script=%r, selected=%r, prefix=%r)' % \
+        #    (title, style, script, selected, prefix)
 
         # we are prefix level below the main directory thus we must go prefix times up,
         # before we are in the same directory than those pages that are in the navigation bar.
@@ -228,7 +228,7 @@ class HTMLResource:
 
         opts are additional parameters for the <table> tag.
         """
-        print 'tableOpen(self, opts=\"%s\")' % (opts)
+        #print 'tableOpen(opts=%r)' % (opts)
         self.res += "<table "+opts+">\n"
 
 
@@ -236,7 +236,7 @@ class HTMLResource:
         """
         Close a table
         """
-        print 'tableClose(self)'
+        #print 'tableClose()'
         self.res += "</table>\n"
 
 
@@ -245,7 +245,7 @@ class HTMLResource:
 
         opts are additional parameters for the <thead> tag.
         """
-        print 'tableHeadOpen(self, opts=\"%s\")' % (opts)
+        #print 'tableHeadOpen(opts=%r)' % (opts)
         self.res += "  <thead "+opts+">\n"
 
 
@@ -253,7 +253,7 @@ class HTMLResource:
         """
         Closes a table header line
         """
-        print 'tableHeadClose(self, opts=\"%s\")' % (opts)
+        #print 'tableHeadClose(opts=%r)' % (opts)
         self.res += "  </thead>\n"
 
 
@@ -262,7 +262,7 @@ class HTMLResource:
 
         opts are additional parameter for the <tbody> tag
         """
-        print 'tableBodyOpen(self, opts=\"%s\")' % (opts)
+        #print 'tableBodyOpen(opts=%r)' % (opts)
         self.res += "  <tbody "+opts+">\n"
 
 
@@ -270,7 +270,7 @@ class HTMLResource:
         """
         Closes a table body
         """
-        print 'tableBodyClose(self, opts=\"%s\")' % (opts)
+        #print 'tableBodyClose(opts=%r)' % (opts)
         self.res += "  </tbody>\n"
 
 
@@ -279,7 +279,7 @@ class HTMLResource:
 
         opts are additional parameters for the <tfoot> tag.
         """
-        print 'tableFootOpen(self, opts=\"%s\")' % (opts)
+        #print 'tableFootOpen(opts=%r)' % (opts)
         self.res += "  <tfoot "+opts+">\n"
 
 
@@ -287,7 +287,7 @@ class HTMLResource:
         """
         Closes a table footer.
         """
-        print 'tableFootClose(self, opts=\"%s\")' % (opts)
+        #print 'tableFootClose(opts=%r)' % (opts)
         self.res += "  </tfoot>\n"
 
 
@@ -296,7 +296,7 @@ class HTMLResource:
 
         opts are additonal parameters for the <tr> tag
         """
-        print 'tableRowOpen(self, opts=\"%s\")' % (opts)
+        #print 'tableRowOpen(opts=%r)' % (opts)
         self.res += "     <tr "+opts+">\n"
 
 
@@ -304,7 +304,7 @@ class HTMLResource:
         """
         Closes a table row
         """
-        print 'tableRowClose(self)'
+        #print 'tableRowClose()'
         self.res += "     </tr>\n"
 
 
@@ -314,12 +314,12 @@ class HTMLResource:
         opts are additonal parameters for the <td>.
         data is the content of this table cell.
         """
-        print 'tableCell(self, data=\"%s\", opts=\"%s\")' % (data, opts)
+        #print 'tableCell(data=%r, opts=%r)' % (data, opts)
         self.res += "       <td "+opts+">"+data+"</td>\n"
 
 
     def formValue(self, form=None, key=None):
-        print 'formValue(self, form=\"%s\", key=\"%s\")' % (form, key)
+        #print 'formValue(form=%r, key=%r)' % (form, key)
         if not form or not key:
             return None
         try:
@@ -334,14 +334,14 @@ class HTMLResource:
         """
         Closes the html document
         """
-        print 'printFooter(self)'
+        #print 'printFooter()'
         self.res += '</body>\n</html>\n'
 
 
     def printSearchForm(self):
         """ Creates the simple search form"""
 
-        print 'printSearchForm(self)'
+        #print 'printSearchForm()'
         self.res += """
     <form id="SearchForm" action="search.rpy" method="get">
     <div class="searchform"><b>"""+_('Search')+""":</b><input type="text" name="find" size="20" /></div>
@@ -354,7 +354,7 @@ class HTMLResource:
         This search form has an additonal checkbox and a go button
         """
 
-        print 'printAdvancedSearchForm(self)'
+        #print 'printAdvancedSearchForm()'
         self.res += """
     <form id="SearchForm" action="search.rpy" method="get">
     <div class="searchform"><b>"""+_('Search')+""":</b><input type="text" name="find" size="20" />
@@ -368,7 +368,7 @@ class HTMLResource:
         """
         Prints a message
         """
-        print 'printMessages(self, messages=\"%s\")' % (messages)
+        #print 'printMessages(messages=%r)' % (messages)
         self.res += "<h4>"+_("Messages")+":</h4>\n"
         self.res += "<ul>\n"
         for m in messages:
@@ -379,7 +379,7 @@ class HTMLResource:
         """
         Print messages and add the search form, links and footer.
         """
-        print 'printMessagesFinish(self, messages=\"%s\")' % (messages)
+        #print 'printMessagesFinish(messages=%r)' % (messages)
         self.printMessages( messages )
         self.printSearchForm()
         self.printLinks()
@@ -390,7 +390,7 @@ class HTMLResource:
         Print Link
         """
         # seems to do nothing at the moment ????
-        print 'printLinks(self, prefix=\"%s\")' % (prefix)
+        #print 'printLinks(prefix=%r)' % (prefix)
         #
         #try:
         #    if config.ICECAST_WWW_PAGE:
@@ -403,7 +403,7 @@ class HTMLResource:
         """
         ???
         """
-        print 'printBreadcrumb(self, media=\"%s\", mediadirs=\"%s\", dir=%r)' % (media, mediadirs, dir)
+        #print 'printBreadcrumb(media=%r, mediadirs=%r, dir=%r)' % (media, mediadirs, dir)
         breadcrumb='<a href="library.rpy">Home: </a><a href="library.rpy?media='+media+'&dir=">'+media+'</a>'
         _url = ""
         url = dir.split("/")
@@ -419,7 +419,7 @@ class HTMLResource:
         """
         ???
         """
-        print 'printPassword(self, password=\"%s\")' % (password)
+        #print 'printPassword(password=%r)' % (password)
         self.res += """<script language="JavaScript"> <!--
 
         var password;
@@ -439,7 +439,7 @@ class HTMLResource:
         """
         Opens a Popup to display an image
         """
-        print 'printImagePopup(self)'
+        #print 'printImagePopup()'
         self.res += """<script language="JavaScript" type="text/javascript" style="display:none;">
         var width = 0;
         var height = 0;
@@ -479,7 +479,7 @@ class HTMLResource:
         then this displays a remote to control freevo
         via the web browser
         """
-        print 'printWebRemote(self)'
+        #print 'printWebRemote()'
         if not (config.ENABLE_NETWORK_REMOTE == 1 and config.REMOTE_CONTROL_PORT):
             self.res += "no remote enabled"
 

@@ -158,6 +158,7 @@ class Recorder:
             self.rec_command = []
             for arg in config.VCR_CMD:
                 self.rec_command.append(arg % cl_options)
+        _debug_('rec_command=%r' % (self.rec_command,))
 
         if pagenum:
             # there is a bug in vbi2srt that causes out of sync subtitles when VPS is used
@@ -168,6 +169,7 @@ class Recorder:
             self.rec_command = \
                 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s' % \
                 (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.pdc_start)
+        _debug_('rec_command=%r' % (self.rec_command,))
 
         self.thread.mode     = 'record'
         self.thread.prog     = rec_prog

@@ -123,8 +123,6 @@ def main():
         print "fName - " + fName
         print "fileName - " + fileName
 
-#               try:
-
         outfile=open(fileName, "wb")
         url, length=createDownload(url, proxies)
         if not length:

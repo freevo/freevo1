@@ -107,11 +107,9 @@ class SearchPrograms(Item):
                 msgtext = _('No matches found for %s') % text
                 AlertBox(text=msgtext).show()
                 return
-            AlertBox(text=_('findMatches failed: %s') % matches).show()
+            AlertBox(text=_('Cannot find program: %s') % matches).show()
             return
-        search_menu = Menu(_( 'Search Results' ), items,
-                           item_types = 'tv program menu')
-
+        search_menu = Menu(_('Search Results'), items, item_types='tv program menu')
         menuw.pushmenu(search_menu)
         menuw.refresh()
 

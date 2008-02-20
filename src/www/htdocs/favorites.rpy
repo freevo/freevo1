@@ -85,7 +85,7 @@ class FavoritesResource(FreevoResource):
         else:
             pass
 
-        (status, favorites) = self.recordclient.getFavoritesNow()
+        favorites = self.recordclient.getFavoritesNow()
 
 
         days = {
@@ -98,7 +98,7 @@ class FavoritesResource(FreevoResource):
             '6' : _('Sunday')
         }
 
-        fv.printHeader(_('Favorites'), 'styles/main.css',selected=_('Favorites'))
+        fv.printHeader(_('Favorites'), 'styles/main.css', selected=_('Favorites'))
         fv.res +='&nbsp;'
         fv.tableOpen('')
         fv.tableRowOpen('class="chanrow"')

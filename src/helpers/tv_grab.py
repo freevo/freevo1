@@ -89,8 +89,12 @@ def grab():
 if __name__ == '__main__':
 
     def handler(result):
-        print '%s' % (result[1])
+        if result:
+            print _('Updated recording schedule')
+        else:
+            print _('Not updated recording schedule')
         raise SystemExit
+
 
     if len(sys.argv)>1 and sys.argv[1] == '--help':
         usage()

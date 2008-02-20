@@ -53,7 +53,7 @@ class LibraryResource(FreevoResource):
     isLeaf=1
 
     def __init__(self):
-        print '__init__(self)'
+        #print '__init__(self)'
         self.allowed_dirs = []
         self.allowed_dirs.extend(config.VIDEO_ITEMS)
         self.allowed_dirs.extend(config.AUDIO_ITEMS)
@@ -63,7 +63,7 @@ class LibraryResource(FreevoResource):
 
 
     def is_access_allowed(self, dir_str):
-        print 'is_access_allowed(self, dir_str=%r)' % (dir_str)
+        #print 'is_access_allowed(self, dir_str=%r)' % (dir_str)
         for i in range(len(self.allowed_dirs)):
             val = self.allowed_dirs[i][1]
             if dir_str.startswith(val):
@@ -78,7 +78,7 @@ class LibraryResource(FreevoResource):
         twiseted knows about.
         If above case fails, the original file link will be returned.
         '''
-        print 'convert_dir(self, dir_str=%r)' % (dir_str)
+        #print 'convert_dir(self, dir_str=%r)' % (dir_str)
         child_res = ""
         ### if the file starts with WEBSERVER_CACHEDIR return converted file
         if dir_str.startswith(config.WEBSERVER_CACHEDIR):
@@ -96,7 +96,7 @@ class LibraryResource(FreevoResource):
         return child_res + location
 
     def get_suffixes (self, media):
-        print 'get_suffixes (self, media=\"%s\")' % (media)
+        #print 'get_suffixes (self, media=\"%s\")' % (media)
         suffixes = []
         if media == 'music':
             suffixes.extend(config.AUDIO_SUFFIX)
@@ -110,7 +110,7 @@ class LibraryResource(FreevoResource):
         return suffixes
 
     def get_dirlist(self, media):
-        print 'get_dirlist(self, media=\"%s\")' % (media)
+        #print 'get_dirlist(self, media=\"%s\")' % (media)
         dirs = []
         dirs2 = []
 
@@ -136,7 +136,7 @@ class LibraryResource(FreevoResource):
         return dirs
 
     def check_dir(self, media, dir):
-        print 'check_dir(self, media=\"%s\", dir=%r)' % (media, dir)
+        #print 'check_dir(self, media=\"%s\", dir=%r)' % (media, dir)
         dirs2 = []
         dirs2 = self.get_dirlist(media)
         for d in dirs2:
@@ -146,7 +146,7 @@ class LibraryResource(FreevoResource):
         return FALSE
 
     def _render(self, request):
-        print '_render(self, request=\"%s\")' % (request)
+        #print '_render(self, request=\"%s\")' % (request)
         fv = HTMLResource()
         messages = []
         form = request.args
@@ -353,7 +353,7 @@ class LibraryResource(FreevoResource):
 
                 #generate our favorites regular expression
                 favre = ''
-                (result, favorites) = self.recordclient.getFavoritesNow()
+                favorites = self.recordclient.getFavoritesNow()
                 if result:
                     favs = favorites.values()
                 else:
@@ -613,7 +613,7 @@ class LibraryResource(FreevoResource):
 
 
     def cover_filter(self, x):
-        print 'cover_filter(self, x=%r)' % (x)
+        #print 'cover_filter(self, x=%r)' % (x)
         for i in os.listdir(x):
             cover = re.search(config.AUDIO_COVER_REGEXP, i, re.IGNORECASE)
             if cover:
@@ -631,7 +631,7 @@ class LibraryResource(FreevoResource):
 
 
     def get_fxd_cover(self, fxd_file):
-        print 'get_fxd_cover(self, fxd_file=\"%s\")' % (fxd_file)
+        #print 'get_fxd_cover(self, fxd_file=\"%s\")' % (fxd_file)
         cover = ''
         fxd_info = {}
         parser = util.fxdparser.FXD(fxd_file)
@@ -643,7 +643,7 @@ class LibraryResource(FreevoResource):
         return cover
 
     def resize_image(self, image, size):
-        print 'resize_image(self, image=%r, size=%s)' % (image, size)
+        #print 'resize_image(self, image=%r, size=%s)' % (image, size)
         (width, height) = size
         new_width = 200
         try:
@@ -653,7 +653,7 @@ class LibraryResource(FreevoResource):
         return (int(new_width), int(new_height + 0.5))
 
     def get_fxd_title(self, fxd_file):
-        print 'get_fxd_title(self, fxd_file=%r)', (fxd_file)
+        #print 'get_fxd_title(self, fxd_file=%r)', (fxd_file)
         fxd_info = ""
         parser = util.fxdparser.FXD(fxd_file)
         parser.parse()

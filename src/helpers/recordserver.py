@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# record_server.py - A network aware TV recording server.
+# A network aware TV recording server.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -33,6 +33,7 @@ except ImportError:
     import pickle
 import logging
 import __builtin__
+
 import config
 from util import vfs
 
@@ -47,7 +48,6 @@ appconf = appname.upper()
 # change uid
 if __name__ == '__main__':
     config.DEBUG_STDOUT = 0
-    lock = threading.Lock()
     uid = 'config.'+appconf+'_UID'
     gid = 'config.'+appconf+'_GID'
     try:
@@ -62,11 +62,10 @@ if __name__ == '__main__':
 
 # The twisted modules will go away when all the recordserver clients
 # have been updated to use kaa.rpc
-from twisted.web import xmlrpc, server, sux
-from twisted.internet import reactor
-from util.marmalade import jellyToXML, unjellyFromXML
 
 from video.commdetectclient import initCommDetectJob, queueIt, listJobs, connectionTest
+from util.marmalade import jellyToXML, unjellyFromXML
+from twisted.web import sux
 
 import tv.record_types
 from tv.record_types import TYPES_VERSION
@@ -119,18 +118,14 @@ if not plugin.getbyname('RECORD'):
     print_plugin_warning()
 
 
-class RecordServer(xmlrpc.XMLRPC):
+class RecordServer:
 
-    def __init__(self, debug=False, allowNone=False):
+    def __init__(self, debug=False):
         """ Initialise the Record Server class """
-        _debug_('RecordServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 2)
-        # Twisted have changed the interface to xmlrpc.XMLRPC.__init__() in 2.5.0
-        try:
-            xmlrpc.XMLRPC.__init__(self, allowNone)
-        except TypeError:
-            xmlrpc.XMLRPC.__init__(self)
+        _debug_('RecordServer.__init__(debug=%r)' % (debug), 2)
         self.debug = debug
-        self.lock = threading.Lock()
+        self.lock = threading.RLock()
+        self.schedule_lock = threading.Lock()
         self.fc = FreevoChannels()
         # XXX: In the future we should have one lock per VideoGroup.
         self.tv_lock_file = None
@@ -303,6 +298,7 @@ class RecordServer(xmlrpc.XMLRPC):
             os.unlink(config.TV_RECORD_SCHEDULE)
             f = open(config.TV_RECORD_SCHEDULE, 'w')
 
+        print 'scheduledRecordings=%r' % (scheduledRecordings,)
         jellyToXML(scheduledRecordings, f)
         f.close()
 
@@ -312,7 +308,7 @@ class RecordServer(xmlrpc.XMLRPC):
         except OSError:
             pass
 
-        return TRUE
+        return True
 
     def loadPreviouslyRecordedShows(self):
         """ Load the saved set of recorded shows """
@@ -677,12 +673,12 @@ class RecordServer(xmlrpc.XMLRPC):
         _debug_('scheduleRecording(prog=%r)' % (prog), 2)
         global guide
 
-        if not prog:
-            return (FALSE, 'no prog')
+        if prog is None:
+            return (False, _('program is not set'))
 
         now = time.time()
         if now > prog.stop:
-            return (FALSE, 'cannot record it if it is over')
+            return (False, _('program cannot record as it is over'))
 
         self.updateGuide()
 
@@ -692,19 +688,19 @@ class RecordServer(xmlrpc.XMLRPC):
             _debug_('Only new episode detection: %s reason %s' % (onlyNewBool, onlyNewReason), 2)
             if not onlyNewBool:
                 #failed only new episode check (old episode, etc)
-                return (FALSE, onlyNewReason)
+                return (False, onlyNewReason)
 
             (duplicateBool, duplicateReason) = self.checkDuplicateDetection(prog)
             _debug_('Duplicate detection: %s reason %s' % (duplicateBool, duplicateReason), 2)
             if not duplicateBool:
                 #failed duplicate check (duplicate, etc)
-                return (FALSE, duplicateReason)
+                return (False, duplicateReason)
 
         (ableToResolveBool, resolutionReason, progsToChange) = self.conflictResolution(prog)
         _debug_('Conflict resolution: %s reason %s' % (ableToResolveBool, resolutionReason), 2)
         if not ableToResolveBool:
             #No viable solution was found
-            return (FALSE, resolutionReason)
+            return (False, resolutionReason)
 
         if progsToChange:
             for (cmd, prog) in progsToChange:
@@ -723,14 +719,14 @@ class RecordServer(xmlrpc.XMLRPC):
         # check, maybe we need to start right now
         self.checkToRecord()
 
-        return (TRUE, 'recording scheduled')
+        return (True, _('program scheduled to record'))
 
 
     @kaa.rpc.expose('removeScheduledRecording')
     def removeScheduledRecording(self, prog=None):
         _debug_('removeScheduledRecording(prog=%r)' % (prog), 2)
-        if not prog:
-            return (FALSE, 'no prog')
+        if prog is None:
+            return (False, _('program is not set'))
 
         # get our version of 'prog'
         # It's a bad hack, but we can use isRecording than
@@ -758,24 +754,23 @@ class RecordServer(xmlrpc.XMLRPC):
             if rec_plugin:
                 rec_plugin.Stop()
 
-        return (TRUE, 'recording removed')
+        return (True, _('program removed from record schedule'))
 
 
     @kaa.rpc.expose('isProgScheduled')
     def isProgScheduled(self, prog, schedule=None):
         _debug_('isProgScheduled(proc=%r, schedule=%r)' % (prog, schedule), 2)
 
-        if schedule == {}:
-            return (FALSE, 'prog not scheduled')
-
         if schedule is None:
             schedule = self.getScheduledRecordings().getProgramList()
 
+        if schedule == {}:
+            return False
+
         for me in schedule.values():
             if me.start == prog.start and me.channel_id == prog.channel_id:
-                return (TRUE, 'prog is scheduled')
-
-        return (FALSE, 'prog not scheduled')
+                return True
+        return False
 
 
     @kaa.rpc.expose('findProg')
@@ -783,8 +778,8 @@ class RecordServer(xmlrpc.XMLRPC):
         _debug_('findProg(chan=%r, start=%r' % (chan, start), 2)
         global guide
 
-        if not chan or not start:
-            return (FALSE, 'no chan or no start')
+        if chan is None or start is None:
+            return (False, None)
 
         self.updateGuide()
 
@@ -794,9 +789,9 @@ class RecordServer(xmlrpc.XMLRPC):
                 for prog in ch.programs:
                     if start == '%s' % prog.start:
                         _debug_('PROGRAM MATCH 1: %s' % prog, DINFO)
-                        return (TRUE, prog.utf2str())
+                        return (True, prog.utf2str())
 
-        return (FALSE, 'prog not found')
+        return (False, None)
 
 
     @kaa.rpc.expose('findMatches')
@@ -809,7 +804,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
         if not find and not movies_only:
             _debug_('nothing to find', DINFO)
-            return (FALSE, 'no search string')
+            return (False, _('nothing to find'))
 
         self.updateGuide()
 
@@ -840,8 +835,8 @@ class RecordServer(xmlrpc.XMLRPC):
         _debug_('Found %d matches.' % len(matches), DINFO)
 
         if matches:
-            return (TRUE, matches)
-        return (FALSE, 'no matches')
+            return (True, matches)
+        return (False, _('no programs match'))
 
 
     def updateGuide(self):
@@ -983,9 +978,9 @@ class RecordServer(xmlrpc.XMLRPC):
     def addFavorite(self, name, prog, exactchan=FALSE, exactdow=FALSE, exacttod=FALSE):
         _debug_('addFavorite(name=%r)' % (name,), 2)
         if not name:
-            return (FALSE, 'no name')
+            return (False, _('no favorite name'))
 
-        (status, favs) = self.getFavorites()
+        favs = self.getFavorites()
         priority = len(favs) + 1
         fav = tv.record_types.Favorite(name, prog, exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew)
 
@@ -994,7 +989,7 @@ class RecordServer(xmlrpc.XMLRPC):
         self.saveScheduledRecordings(scheduledRecordings)
         self.addFavoriteToSchedule(fav)
 
-        return (TRUE, 'favorite added')
+        return (True, _('favorite added'))
 
 
     @kaa.rpc.expose('addEditedFavorite')
@@ -1016,14 +1011,14 @@ class RecordServer(xmlrpc.XMLRPC):
         self.saveScheduledRecordings(scheduledRecordings)
         self.addFavoriteToSchedule(fav)
 
-        return (TRUE, 'favorite added')
+        return (True, 'favorite added')
 
 
     @kaa.rpc.expose('removeFavorite')
     def removeFavorite(self, name=None):
         _debug_('removeFavorite(name=%r)' % (name), 2)
-        if not name:
-            return (FALSE, 'no name')
+        if name is None:
+            return (False, _('name is not set'))
 
         (status, fav) = self.getFavorite(name)
         self.removeFavoriteFromSchedule(fav)
@@ -1031,7 +1026,7 @@ class RecordServer(xmlrpc.XMLRPC):
         scheduledRecordings.removeFavorite(name)
         self.saveScheduledRecordings(scheduledRecordings)
 
-        return (TRUE, 'favorite removed')
+        return (True, _('favorite removed'))
 
 
     @kaa.rpc.expose('clearFavorites')
@@ -1041,25 +1036,25 @@ class RecordServer(xmlrpc.XMLRPC):
         scheduledRecordings.clearFavorites()
         self.saveScheduledRecordings(scheduledRecordings)
 
-        return (TRUE, 'favorites cleared')
+        return (True, _('favorites cleared'))
 
 
     @kaa.rpc.expose('getFavorites')
     def getFavorites(self):
         _debug_('getFavorites()', 2)
-        return (TRUE, self.getScheduledRecordings().getFavorites())
+        return self.getScheduledRecordings().getFavorites()
 
 
     @kaa.rpc.expose('getFavorite')
     def getFavorite(self, name):
         _debug_('getFavorite(name=%r)' % (name), 2)
-        (status, favs) = self.getFavorites()
+        favs = self.getFavorites()
 
         if favs.has_key(name):
             fav = favs[name]
-            return (TRUE, fav)
+            return (True, fav)
         else:
-            return (FALSE, 'not a favorite')
+            return (False, _('not a favorite'))
 
 
     @kaa.rpc.expose('adjustPriority')
@@ -1103,7 +1098,7 @@ class RecordServer(xmlrpc.XMLRPC):
         sr.setFavoritesList(favs)
         self.saveScheduledRecordings(sr)
 
-        return (TRUE, 'priorities adjusted')
+        return (True, _('priority adjusted'))
 
 
     @kaa.rpc.expose('getFavoriteObject')
@@ -1113,25 +1108,25 @@ class RecordServer(xmlrpc.XMLRPC):
         """
         _debug_('getFavoriteObject(prog=%r)' % (prog), 2)
         if not favs:
-            (status, favs) = self.getFavorites()
+            favs = self.getFavorites()
         # first try the strict test
         name = tv_util.progname2favname(prog.title)
         if favs.has_key(name):
             fav = favs[name]
-            return (TRUE, fav)
+            return (True, fav)
         # try harder to find this favorite in a more liberal search
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
-                return (TRUE, fav)
+                return (True, fav)
         # if we get this far prog is not a favorite
-        return (FALSE, 'not a favorite')
+        return (False, _('not a favorite'))
 
 
     @kaa.rpc.expose('isProgAFavorite')
     def isProgAFavorite(self, prog, favs=None):
         _debug_('isProgAFavorite(prog=%r)' % (prog), 2)
         if not favs:
-            (status, favs) = self.getFavorites()
+            favs = self.getFavorites()
 
         lt = time.localtime(prog.start)
         dow = '%s' % lt[6]
@@ -1151,7 +1146,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def doesFavoriteRecordOnlyNewEpisodes(self, prog, favs=None):
         if not favs:
-            (status, favs) = self.getFavorites()
+            favs = self.getFavorites()
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
                 if not hasattr(fav, 'onlyNew'):
@@ -1162,7 +1157,7 @@ class RecordServer(xmlrpc.XMLRPC):
 
     def doesFavoriteAllowDuplicates(self, prog, favs=None):
         if not favs:
-            (status, favs) = self.getFavorites()
+            favs = self.getFavorites()
         for fav in favs.values():
             if Unicode(prog.title).lower().find(Unicode(fav.title).lower()) >= 0:
                 if not hasattr(fav, 'allowDuplicates'):
@@ -1228,10 +1223,10 @@ class RecordServer(xmlrpc.XMLRPC):
 
         scheduledRecordings = self.getScheduledRecordings()
 
-        (status, favs) = self.getFavorites()
+        favs = self.getFavorites()
 
         if not len(favs):
-            return (FALSE, 'there are no favorites to update')
+            return False
 
 
         # Then remove all scheduled favorites in that timeframe to
@@ -1260,286 +1255,8 @@ class RecordServer(xmlrpc.XMLRPC):
                     prog.isFavorite = favorite
                     self.scheduleRecording(prog)
 
-        return (TRUE, 'favorites schedule updated')
+        return True
 
-
-    #################################################################
-    #  Start XML-RPC published methods.                             #
-    #################################################################
-
-    def xmlrpc_isPlayerRunning(self):
-        (status, message) = (FALSE, 'RecordServer::isPlayerRunning: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            status = self.isPlayerRunning()
-            message = status and 'player is running' or 'player is not running'
-        finally:
-            self.lock.release()
-        return (status, message)
-
-    def xmlrpc_isRecording(self):
-        (status, message) = (FALSE, 'RecordServer::isRecording: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            status = self.isRecording()
-            message = status and 'is recording' or 'is not recording'
-        finally:
-            self.lock.release()
-        return (status, message)
-
-    def xmlrpc_findNextProgram(self):
-        (status, message) = (FALSE, 'RecordServer::findNextProgram: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            response = self.findNextProgram()
-            status = response != None
-            return (status, jellyToXML(response))
-        finally:
-            self.lock.release()
-        return (status, message)
-
-    def xmlrpc_getScheduledRecordings(self):
-        (status, message) = (FALSE, 'RecordServer::getScheduledRecordings: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            return (TRUE, jellyToXML(self.getScheduledRecordings()))
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_saveScheduledRecordings(self, scheduledRecordings=None):
-        (status, message) = (FALSE, 'RecordServer::saveScheduledRecordings: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            status = self.saveScheduledRecordings(scheduledRecordings)
-            message = status and 'saveScheduledRecordings::success' or 'saveScheduledRecordings::failure'
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_scheduleRecording(self, prog=None):
-        if not prog:
-            return (FALSE, 'RecordServer::scheduleRecording:  no prog')
-
-        (status, message) = (FALSE, 'RecordServer::scheduleRecording: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            prog = unjellyFromXML(prog)
-            (status, response) = self.scheduleRecording(prog)
-            message = 'RecordServer::scheduleRecording: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_removeScheduledRecording(self, prog=None):
-        if not prog:
-            return (FALSE, 'RecordServer::removeScheduledRecording:  no prog')
-
-        (status, message) = (FALSE, 'RecordServer::removeScheduledRecording: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            prog = unjellyFromXML(prog)
-            (status, response) = self.removeScheduledRecording(prog)
-            message = 'RecordServer::removeScheduledRecording: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_isProgScheduled(self, prog=None, schedule=None):
-        if not prog:
-            return (FALSE, 'removeScheduledRecording::failure:  no prog')
-
-        (status, message) = (FALSE, 'RecordServer::removeScheduledRecording: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            prog = unjellyFromXML(prog)
-            if schedule:
-                schedule = unjellyFromXML(schedule)
-            (status, response) = self.isProgScheduled(prog, schedule)
-            message = 'RecordServer::isProgScheduled: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_findProg(self, chan, start):
-        (status, message) = (FALSE, 'RecordServer::findProg: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.findProg(chan, start)
-            message = status and jellyToXML(response) or ('RecordServer::findProg: %s' % response)
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_findMatches(self, find, movies_only):
-        (status, message) = (FALSE, 'RecordServer::findMatches: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.findMatches(find, movies_only)
-            message = status and jellyToXML(response) or ('RecordServer::findMatches: %s' % response)
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_echotest(self, blah):
-        (status, message) = (FALSE, 'RecordServer::echotest: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, message) = (TRUE, 'RecordServer::echotest: %s' % blah)
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_addFavorite(self, name, prog, exactchan=FALSE, exactdow=FALSE, exacttod=FALSE):
-        (status, message) = (FALSE, 'RecordServer::addFavorite: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            prog = unjellyFromXML(prog)
-            (status, response) = self.addFavorite(name, prog, exactchan, exactdow, exacttod)
-            message = 'RecordServer::addFavorite: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_addEditedFavorite(self, name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
-        (status, message) = (FALSE, 'RecordServer::addEditedFavorite: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.addEditedFavorite(unjellyFromXML(name), \
-            unjellyFromXML(title), chan, dow, mod, priority, allowDuplicates, onlyNew)
-            message = 'RecordServer::addEditedFavorite: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_removeFavorite(self, name=None):
-        (status, message) = (FALSE, 'RecordServer::removeFavorite: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.removeFavorite(name)
-            message = 'RecordServer::removeFavorite: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_clearFavorites(self):
-        (status, message) = (FALSE, 'RecordServer::clearFavorites: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.clearFavorites()
-            message = 'RecordServer::clearFavorites: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_getFavorites(self):
-        (status, message) = (FALSE, 'RecordServer::getFavorites: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, message) = (TRUE, jellyToXML(self.getScheduledRecordings().getFavorites()))
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_getFavorite(self, name):
-        (status, message) = (FALSE, 'RecordServer::getFavorite: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.getFavorite(name)
-            message = status and jellyToXML(response) or 'RecordServer::getFavorite: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_getFavoriteObject(self, prog, favs=None):
-        (status, message) = (FALSE, 'RecordServer::getFavoriteObject: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            prog = unjellyFromXML(prog)
-            if favs:
-                favs = unjellyFromXML(favs)
-            (status, response) = self.getFavoriteObject(prog, favs)
-            message = status and jellyToXML(response) or 'RecordServer::getFavoriteObject: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_adjustPriority(self, favname, mod=0):
-        (status, message) = (FALSE, 'RecordServer::adjustPriority: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.adjustPriority(favname, mod)
-            message = 'RecordServer::adjustPriority: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_isProgAFavorite(self, prog, favs=None):
-        (status, message) = (FALSE, 'RecordServer::isProgAFavorite: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            prog = unjellyFromXML(prog)
-            if favs:
-                favs = unjellyFromXML(favs)
-            (status, response) = self.isProgAFavorite(prog, favs)
-            message = 'RecordServer::isProgAFavorite: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_removeFavoriteFromSchedule(self, fav):
-        (status, message) = (FALSE, 'RecordServer::removeFavoriteFromSchedule: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.removeFavoriteFromSchedule(fav)
-            message = 'RecordServer::removeFavoriteFromSchedule: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_addFavoriteToSchedule(self, fav):
-        (status, message) = (FALSE, 'RecordServer::addFavoriteToSchedule: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.addFavoriteToSchedule(fav)
-            message = 'RecordServer::addFavoriteToSchedule: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    def xmlrpc_updateFavoritesSchedule(self):
-        (status, message) = (FALSE, 'updateFavoritesSchedule: cannot acquire lock')
-        self.lock.acquire()
-        try:
-            (status, response) = self.updateFavoritesSchedule()
-            message = 'RecordServer::updateFavoritesSchedule: %s' % response
-        finally:
-            self.lock.release()
-        return (status, message)
-
-
-    #################################################################
-    #  End XML-RPC published methods.                               #
-    #################################################################
 
 
     def create_fxd(self, rec_prog):
@@ -1712,38 +1429,30 @@ class RecordServer(xmlrpc.XMLRPC):
             _debug_('%s unknown' % (event), DINFO)
 
 
-    def handleTimer(self):
-        #rs.startMinuteCheck()
+    def handleAtTimer(self):
+        _debug_('DJW:time=%s' % (time.strftime("%H:%M:%S", time.localtime(time.time()))))
         self.checkToRecord()
 
 
 def main():
-    kaa.main.select_notifier('twisted_experimental')
+    #kaa.main.select_notifier('twisted_experimental')
 
     socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT2)
     secret = config.RECORDSERVER_SECRET
     _debug_('socket=%r, secret=%r' % (socket, secret))
 
-    rs = RecordServer(allowNone=True)
+    recordserver = RecordServer()
 
     rpc = kaa.rpc.Server(socket, secret)
-    rpc.connect(rs)
+    rpc.connect(recordserver)
 
-    eh = EventHandler(rs.handleEvents)
+    eh = EventHandler(recordserver.handleEvents)
     eh.register()
 
-    reactor.listenTCP(config.RECORDSERVER_PORT, server.Site(rs))
-    rs.startMinuteCheck()
-    #reactor.run()
-    #_debug_('reactor stopped.')
-    #kaa.main.stop()
-    kaa.main.run()
     _debug_('kaa.main running.')
-    #kaa.main.stop()
-    #_debug_('kaa.main stopped.')
 
-    #kaa.AtTimer(rs.handleTimer).start(sec=45)
-    #kaa.main()
+    kaa.AtTimer(recordserver.handleAtTimer).start(sec=45)
+    kaa.main.run()
 
 
 if __name__ == '__main__':

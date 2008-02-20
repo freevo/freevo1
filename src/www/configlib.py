@@ -192,7 +192,6 @@ def GetConfigFileName(config_file_name):
         config_file_name = None
 
     config_file_name = config.overridefile
-    print config_file_name
     return config_file_name
 
 
@@ -315,7 +314,6 @@ def Server_Running(server):
     #FIXME: should detect
     freevo_path = os.environ['FREEVO_PYTHON']
     proc = [ os.path.join(freevo_path, 'helpers', server + '.py') ]
-    print "PROC %r" % proc
 
     if getpid(server, python + proc)[1]:
         return True
@@ -368,7 +366,6 @@ def Display_Helper(helper):
     dhelper += '<li class="ServerList">'
 
     # Check to see if the server is running.
-    print "SERVER RUNNING ???"
     print Server_Running(helper)
     dhelper += '<span class="PluginStatus" id="%s_status">' % helper
     if Server_Running(helper):

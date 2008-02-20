@@ -158,7 +158,7 @@ class GenreResource(FreevoResource):
                     # use counter to see if we have data
                     gotdata += 1
                     if got_schedule:
-                        (result, message) = self.recordclient.isProgScheduledNow(prog, schedule)
+                        result = self.recordclient.isProgScheduledNow(prog, schedule)
                         if result:
                             status = 'scheduled'
                             really_now = time.time()

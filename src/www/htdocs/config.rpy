@@ -122,8 +122,8 @@ def ParseConfigFile(rconf):
 
 class ConfigControl():
 
-    def __init__(self,config_line):
-        print 'Control Contro. _init'
+    def __init__(self, config_line):
+        #print 'ConfigControl.__init__(config_line=%r)' % (config_line,)
 
         self.type = None
         self.comments = ''
@@ -717,7 +717,7 @@ class ConfigResource(FreevoResource):
     def __init__(self):
         self.hide_disabled = False
         self.expand_all = False
-        print 'Config Resourese'
+        #print 'Config Resourese'
 
 
     def DisplayGroups(self,fconfig):

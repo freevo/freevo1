@@ -115,7 +115,6 @@ class ViewLogFileResource(FreevoResource):
         rows = int(rows)
 
         delayamount = fv.formValue(form, 'delayamount')
-        print "Delay Amount = %r " % delayamount
         if not delayamount:
             if config.__dict__.has_key('VIEWLOGS_DELAY'):
                 delayamount = config.VIEWLOGS_DELAY

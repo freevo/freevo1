@@ -65,8 +65,6 @@ class SearchResource(FreevoResource):
         else:
             movies_only = 0
 
-        #print 'DEBUG: movies_only=%s' % movies_only
-
         (got_matches, progs) = self.recordclient.findMatchesNow(find, movies_only)
 
         if got_matches:
@@ -83,7 +81,6 @@ class SearchResource(FreevoResource):
         if not got_matches:
             if find or movies_only:
                 fv.res += '<h3>'+_('No matches')+'</h3>'
-
         else:
             fv.res += '<div id="content"><br>'
             fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')

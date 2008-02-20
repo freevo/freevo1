@@ -173,8 +173,6 @@ def PluginHelpLink(plugin_group, plugin_name):
 class PluginHTMLControl():
     def __init__(self,lconf,plugin):
         self.expand_all = False
-        print 'Config Resourese'
-
         self.lconfline, self.linenumber = get_config_setting(lconf, plugin)
         self.level = 'N/A'
         self.plugin_name = plugin

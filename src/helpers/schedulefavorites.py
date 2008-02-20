@@ -37,7 +37,10 @@ import kaa
 from tv.record_client import RecordClient
 
 def handler(result):
-    print '%s' % (result[1])
+    if result:
+        print _('Updated recording schedule')
+    else:
+        print _('Not updated recording schedule')
     raise SystemExit
 
 print _('Updating recording schedule')

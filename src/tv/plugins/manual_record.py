@@ -336,10 +336,10 @@ class ManualRecordItem(Item):
         _debug_('save_changes(self, arg=None, menuw=None)', 2)
         result = self.check_prog()
         if result:
-            (result, msg) = self.recordclient.scheduleRecordingNow(self.prog)
+            (result, reason) = self.recordclient.scheduleRecordingNow(self.prog)
 
             if not result:
-                AlertBox(text=_('Save Failed, recording was lost')+(': %s' % msg)).show()
+                AlertBox(text=_('Save Failed, recording was lost')+(': %s' % reason)).show()
             else:
                 if menuw:
                     menuw.back_one_menu(arg='reload')

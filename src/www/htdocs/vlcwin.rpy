@@ -42,7 +42,7 @@ from twisted.web import static
 class VlcWinResource(FreevoResource):
 
     def __init__(self):
-        print '__init__(self)'
+        #print 'VlcWinResource.__init__(self)'
         self.allowed_dirs = []
         self.allowed_dirs.extend(config.VIDEO_ITEMS)
         self.allowed_dirs.extend(config.AUDIO_ITEMS)
@@ -50,14 +50,14 @@ class VlcWinResource(FreevoResource):
         self.allowed_dirs.extend(config.IMAGE_ITEMS)
 
     def _render(self, request):
-        print '_render(self, %s)' % (request)
+        #print '_render(self, %s)' % (request)
         fv = HTMLResource()
         form = request.args
         file = fv.formValue(form, 'dir')
 
         if file:
             file_link = self.convert_dir(file)
-            print 'file_link=%s' % (file_link)
+            #print 'file_link=%s' % (file_link)
 
             fv.res += (
                u"<STYLE> .inputTrackerInput { height:20; width:30; font-family : Arial, Helvetica, sans-serif; font-size : 12px; } </STYLE>\n" \
@@ -115,10 +115,9 @@ class VlcWinResource(FreevoResource):
         return String(fv.res)
 
     def convert_dir(self, dir_str):
-        print 'convert_dir(self, dir_str=%r)' % (dir_str)
+        #print 'convert_dir(self, dir_str=%r)' % (dir_str)
         for i in range(len(self.allowed_dirs)):
             val = self.allowed_dirs[i][1]
-            print 'val=%r)' % (val)
             if dir_str.startswith(val):
                 child_res = val.replace("/", "_")
                 location = dir_str[len(val):]

@@ -68,7 +68,7 @@ class EditFavoriteResource(FreevoResource):
         if isinstance( name, str ):
             name = Unicode( name, 'latin-1' )
 
-        (result, favs) = self.recordclient.getFavoritesNow()
+        favs = self.recordclient.getFavoritesNow()
         num_favorites = len(favs)
 
         if action == 'add' and chan and start:
@@ -78,17 +78,11 @@ class EditFavoriteResource(FreevoResource):
                 fv.printHeader('Edit Favorite', 'styles/main.css')
                 fv.printMessagesFinish(
                     [ '<b>'+_('ERROR') + '</b>: ' + \
-                      ( _('No program found on %s at %s.')%\
-                        ( '<b>'+chan+'</b>',
-                          '<b>'+time.strftime('%x %X',
-                                              time.localtime(int(start))) + \
-                          '</b>'
-                         )
-                        ) + (' <i>(%s)</i>' % String(prog)) ] )
+                      ( _('No program found on %s at %s.') % \
+                        ('<b>'+chan+'</b>', '<b>'+time.strftime('%x %X', time.localtime(int(start))) + '</b>')
+                      ) + ' <i>(%s)</i>' % String(prog)
+                    ])
                 return String(fv.res)
-
-            if prog:
-                print 'PROG: %s' % String(prog)
 
             priority = num_favorites + 1
 
@@ -101,14 +95,10 @@ class EditFavoriteResource(FreevoResource):
         if not result:
             fv.printHeader('Edit Favorite', 'styles/main.css')
             fv.printMessagesFinish(
-                [ '<b>'+_('ERROR') + '</b>: ' + \
-                  ( _('Favorite %s doesn\'t exists.') % \
-                    ( '<b>'+name+'</b>' )
-                    )+\
-                  ( ' <i>(%s)</i>' % fav )
-                  ] )
+                ['<b>'+_('ERROR') + '</b>: ' + _('Favorite %s doesn\'t exists.') % ('<b>'+name+'</b>')+\
+                  (' <i>(%s)</i>' % fav)
+                ])
             return String(fv.res)
-
 
         guide = tv.epg_xmltv.get_guide()
 
@@ -291,7 +281,8 @@ class EditFavoriteResource(FreevoResource):
         if config.TV_RECORD_DUPLICATE_DETECTION:
             (tempStatus, tempFav) = self.recordclient.getFavoriteNow(fav.name)
             if hasattr(tempFav, 'allowDuplicates'):
-                fv.res += 'document.editfavorite.allowDuplicates.options[%s].selected=true\n' % abs(int(tempFav.allowDuplicates)-1)
+                fv.res += 'document.editfavorite.allowDuplicates.options[%s].selected=true\n' % \
+                    abs(int(tempFav.allowDuplicates)-1)
 
         if config.TV_RECORD_ONLY_NEW_DETECTION:
             (tempStatus, tempFav) = self.recordclient.getFavoriteNow(fav.name)
@@ -301,11 +292,8 @@ class EditFavoriteResource(FreevoResource):
         fv.res += '</script>'
 
         fv.printSearchForm()
-
         fv.printLinks()
-
         fv.printFooter()
-
-        return String( fv.res )
+        return String(fv.res)
 
 resource = EditFavoriteResource()
