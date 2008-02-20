@@ -4,12 +4,14 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Author:
+# Author: Adam Charrett
 # Todo:
-# niceness & pausing queue
 #
 # -----------------------------------------------------------------------
-# Copyright (C) 2004 den_RDC (RVDM)
+# Freevo - A Home Theater PC framework
+# Copyright (C) 2002 Krister Lagerstrom, et al.
+# Please see the file freevo/Docs/CREDITS for a complete list of authors.
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -43,51 +45,49 @@ for media in config.REMOVABLE_MEDIA:
 
 class PluginInterface(plugin.ItemPlugin):
     """
-    Copy a  DVD to HDD using dvdbackup.
+    Allows copying a DVD to HDD using dvdbackup.
+
+    This plugin allows you to 'enter' a DVD and choose from copying the whole
+    DVD, just the feature or a title.
+
+    While the DVD is being copied an icon is placed in the idlebar and removed
+    when the copy process finishes.
+
+    If you decided you want to stop the copying process for any reason,
+    simply  enter the DVD again and select the cancel DVD copy.
+
+    To activate use:
+    | plugin.activate('video.dvdcopy')
     """
     def __init__(self):
-        plugin.ItemPlugin.__init__(self)
         if not config.DVDCOPY_DIR:
             self.reason = 'DVDCOPY_DIR not set'
             return
+        if not config.CONF.dvdbackup:
+            self.reason = 'dvdbackup not detected'
+            return
+        plugin.ItemPlugin.__init__(self)
 
         #Activate IdleBar monitor plugin.
         if config.DVDCOPY_IDLEBAR:
-            idlebar_plugin = DVDCopyIdleBar() 
+            idlebar_plugin = DVDCopyIdleBar()
             plugin.activate(idlebar_plugin, level=40)
-            
-            
+
+
 
     def config(self):
         return [ ('DVDCOPY_IDLEBAR', True, 'Use the idlebar to display status'),
                  ('DVDCOPY_DIR', None, 'Directory to copy DVDs to.')]
 
     def actions(self, item):
-        if config.DEBUG >= 2:
-            #testing stuff
-            if hasattr(item, 'type'):
-                _debug_('item.type=\"%s\"' % (item.type))
-            if hasattr(item, 'mode'):
-                _debug_('item.mode=\"%s\"' % (item.mode))
-            if hasattr(item, 'info_type'):
-                _debug_('item.info_type=\"%s\"' % (item.info_type))
-            if hasattr(item, 'name'):
-                _debug_('item.name=\"%s\"' % (item.name))
-            if hasattr(item, 'filename'):
-                _debug_('item.filename=\"%s\"' % (item.filename))
-            if hasattr(item, 'parentname'):
-                _debug_('item.parentname=\"%s\"' % (item.parentname))
-            if hasattr(item, 'media') and hasattr(item.media, 'devicename'):
-                _debug_('item.media.devicename=\"%s\"' % (item.media.devicename))
-
         if item.type == 'video' and item.mode == 'dvd' and \
              hasattr(item, 'media') and hasattr(item.media, 'devicename'):
             self.dvdsource = item.media.devicename
             if self.dvdsource in drive_jobs and drive_jobs[self.dvdsource]:
                 return [ (self.cancel_copy, _('Cancel DVD copy'))]
             else:
-                if hasattr(item, 'info_type') and item.info_type == "track": #and item.media and item.media.devicename:
-                    self.title = int(item.url[6:])
+                if hasattr(item, 'info_type') and item.info_type == "track":
+                    self.title = item.url[6:]
 
                     self.item = item
                     return [ (self.copy_title, _('Copy this title to HDD')) ]
@@ -119,14 +119,11 @@ class PluginInterface(plugin.ItemPlugin):
     def add_job(self, type, source, title=None):
         global drive_jobs
         drive_jobs[source] = DVDCopyJob(type, source, title)
-        self.jobtype = type
+
         AlertBox(width=400, height=200, text=_("Copy started"), handler=self.mopup).show()
 
     def mopup(self):
         self.menuw.back_one_menu()
-        if self.jobtype == JOB_TYPE_TITLE:
-            self.menuw.back_one_menu()
-        
 
 
 JOB_TYPE_ENTIRE_DISC='Disc'
@@ -143,15 +140,17 @@ class DVDCopyJob:
 
     def __copy(self):
         global drive_jobs
-        option = '-M'
-        if self.type == JOB_TYPE_FEATURE:
-            option = '-F'
-        elif self.type == JOB_TYPE_TITLE:
-            option = '-t %d' % self.title
+        args = [config.CONF.dvdbackup, '-i', self.source, '-o', config.DVDCOPY_DIR]
 
+        if self.type == JOB_TYPE_FEATURE:
+            args.append('-F')
+        elif self.type == JOB_TYPE_TITLE:
+            args.append('-t')
+            args.append(self.title)
+        else:
+            args.append('-M')
         # Do the copy
-        cmd = 'dvdbackup -i %s -o %s %s' % (self.source, config.DVDCOPY_DIR, option)
-        self.childapp = ChildApp(cmd)
+        self.childapp = ChildApp(args)
 
         while self.childapp.isAlive():
             time.sleep(0.2)

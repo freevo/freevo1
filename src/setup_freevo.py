@@ -37,7 +37,7 @@ import os
 import getopt
 import string
 
-CONFIG_VERSION = 2.1
+CONFIG_VERSION = 2.2
 
 # For Internationalization purpose
 # an exception is raised with Python 2.1 if LANG is unavailable.
@@ -59,17 +59,18 @@ EXTERNAL_PROGRAMS = (("mplayer", "mplayer", 1),
                      ("jpegtran", "jpegtran", 0),
                      ("xmame.x11", "xmame", 0),
                      ("xmame.SDL", "xmame", 0),
-                     ("xmame","xmame",0),
+                     ("xmame", "xmame", 0),
                      ("ssnes9x", "snes", 0),
                      ("zsnes", "snes", 0 ),
-                     ("lame", "lame",0),
-                     ("flac","flac",0),
-                     ("cdparanoia","cdparanoia",0),
-                     ("oggenc","oggenc",0),
-                     ("renice","renice",0),
+                     ("lame", "lame", 0),
+                     ("flac", "flac", 0),
+                     ("cdparanoia", "cdparanoia", 0),
+                     ("oggenc", "oggenc", 0),
+                     ("renice", "renice", 0),
                      ("setterm", "setterm", 0),
                      ("mpav", "mpav", 0),
-                     ("vlc", "vlc", 0))
+                     ("vlc", "vlc", 0),
+                     ("dvdbackup", "dvdbackup", 0))
 
 # Help text
 def print_usage():
@@ -249,15 +250,14 @@ if __name__ == '__main__':
             # Compile python files:
             import distutils.util
             try:
-                optimize=min(int(a[0]),2)
+                optimize=min(int(a[0]), 2)
                 prefix=a[2:]
             except:
                 sys.exit(1)
 
             files = []
             os.path.walk('.', match_files_recursively_helper, files)
-            distutils.util.byte_compile(files, prefix='.', base_dir=prefix,
-                                        optimize=optimize)
+            distutils.util.byte_compile(files, prefix='.', base_dir=prefix, optimize=optimize)
             sys.exit(0)
 
 
