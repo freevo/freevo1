@@ -45,13 +45,13 @@ class PluginInterface( plugin.DaemonPlugin ):
     """
     Controls Freevo over a UDP Connection
 
-    This is already done by the built-in funcitionality in rc.py, but
+    This is already done by the built-in functionality in rc.py, but
     this doesn't come with a connection back to the remote.
 
     With UDPRemote you can use any other computer who can create
     a udp connection to control freevo.
 
-    In my case, i use a HP HX4700 to control my freevobox.
+    In my case, I use a HP HX4700 to control my Freevo box.
 
     Now enjoy and have fun!
     """
@@ -91,7 +91,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
 
     def config(self):
-        return [ ('UDPREMOTE_CLIENTS', "192.168.0.10", 'IP Adresses strings are send to. You can define more than one IP, seperated by spaces'),
+        return [ ('UDPREMOTE_CLIENTS', "192.168.0.10", 'IP Addresses strings are send to. You can define more than one IP, separated by spaces'),
                  ('UDPREMOTE_PORTS', '5555', 'PORT strings are send to. If you define more than one client IP, please define exactly the same number of ports here')
                ]
 
@@ -103,7 +103,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
     def create_network_connection(self):
         """
-        Creates Networksocket
+        Creates network socket
         """
         try:
             self.sock = socket(AF_INET, SOCK_DGRAM)
@@ -116,7 +116,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
     def close(self):
         """
-        to be called before the plugin exists.
+        to be called before the plug-in exists.
         It terminates the connection with the server
         """
         print "closing"
@@ -135,7 +135,7 @@ class PluginInterface( plugin.DaemonPlugin ):
 
         write = ""
         if type == "menu":
-            # we defenitly play no media...
+            # we definitely play no media...
             self.playitem = ""
 
             menu = object.menustack[ -1 ]
