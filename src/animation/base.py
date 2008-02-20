@@ -33,7 +33,6 @@ from pygame import Rect, Surface, constants
 
 import pygame.time
 import osd, render
-from kaa import Timer
 
 class BaseAnimation:
     """
