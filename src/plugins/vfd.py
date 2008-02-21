@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# vfd.py - use pyusb to display menus and items for Shuttles VFD
+# Shuttles VFD interface plug-in
 # -----------------------------------------------------------------------
 # $Id$
 #
