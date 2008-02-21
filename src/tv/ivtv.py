@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# ivtv.py - Python interface to ivtv based capture cards.
+# Python interface to ivtv based capture cards.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -297,10 +297,10 @@ class IVTV(tv.v4l2.Videodev):
                            codec.dnr_spatial,
                            codec.dnr_temporal,
                            codec.dnr_type,
-                           codec.framerate, # read only, ignored on write
+                           codec.framerate,    # read only, ignored on write
                            codec.framespergop, # read only, ignored on write
                            codec.gop_closure,
-                           codec.pulldown, # removed from ivtv driver
+                           codec.pulldown,     # removed from ivtv driver
                            codec.stream_type)
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_S_CODEC), val)
         if config.DEBUG >= 3: print "setCodecInfo: val=%r, r=%r" % (val, r)

@@ -34,7 +34,6 @@
 
 import os, sys, time, string
 import plugin
-#import irsend_core
 
 
 class PluginInterface(plugin.Plugin):

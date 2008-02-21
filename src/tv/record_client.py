@@ -32,13 +32,12 @@
 import sys
 import time
 import config
+import socket, traceback, string
+import xmlrpclib
 
 import kaa
 import kaa.rpc
-import time, sys, socket, traceback, string
-import xmlrpclib
 import tv.epg_types
-
 from util.marmalade import jellyToXML, unjellyFromXML
 
 TRUE  = 1

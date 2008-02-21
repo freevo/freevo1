@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# xmltv.py - Python interface to XMLTV format, based on XMLTV.pm
+# Python interface to XMLTV format, based on XMLTV.pm
 # -----------------------------------------------------------------------
 # $Id$
 #

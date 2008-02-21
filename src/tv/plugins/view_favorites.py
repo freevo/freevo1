@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# view_favorites.py - A plugin to view your list of favorites.
+# A plugin to view your list of favorites.
 # -----------------------------------------------------------------------
 # $Id$
 #

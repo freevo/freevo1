@@ -1,7 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# epg_types.py - This file contains the types for the Freevo Electronic
-#                Program Guide module.
+# Types for the Freevo Electronic Program Guide module.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -111,7 +110,6 @@ class TvProgram:
 
     def __eq__(self, other):
         """ equality method """
-        #print 'DJW: __eq__(self=%r, other=%r)' % (self, other)
         if not isinstance(other, TvProgram):
             return False
         return self.start == other.start \
@@ -122,7 +120,6 @@ class TvProgram:
 
     def __cmp__(self, other):
         """ compare function, return 0 if the objects are equal, <0 if less >0 if greater """
-        #print 'DJW: __cmp__(self=%r, other=%r)' % (self, other)
         if not isinstance(other, TvProgram):
             return 1
         if self.start != other.start:
@@ -256,21 +253,18 @@ class TvGuide:
     # all channels are returned otherwise
     #
     # The return value is a list of channels (TvChannel)
-    def GetPrograms(self, start = None, stop = None, chanids = None):
+    def GetPrograms(self, start=None, stop=None, chanids=None):
+        _debug_('GetPrograms(start=%r, stop=%r, chanids=%r)' % (start, stop, chanids))
         if start == None:
             start = 0
         if stop == None:
             stop = 2147483647   # Year 2038
 
         # Return a cached version?
-        global cache_last_start, cache_last_stop, cache_last_chanids
-        global cache_last_time, cache_last_result
+        global cache_last_start, cache_last_stop, cache_last_chanids, cache_last_time, cache_last_result
         if (cache_last_start == start and cache_last_stop == stop and
-            cache_last_chanids == chanids and
-            time.time() < cache_last_time):
-            if config.DEBUG > 1:
-                a = cache_last_time - time.time()
-                _debug_('epg: Returning cached results, valid for %1.1f secs.' % a)
+            cache_last_chanids == chanids and time.time() < cache_last_time):
+            _debug_('GetPrograms: Return cached results, valid for %1.1f secs.' % cache_last_time - time.time())
             return cache_last_result[:]  # Return a copy
 
         channels = []
@@ -300,8 +294,8 @@ class TvGuide:
             cache_last_chanids = None
         cache_last_timeout = time.time() + 20
         cache_last_result = channels[:] # Make a copy in case the caller modifies it
-        _debug_('epg: Returning new results')
 
+        _debug_('GetPrograms: channels=%r' % (channels,))
         return channels
 
 

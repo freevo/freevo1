@@ -1,7 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# scheduled_recordings.py - A plugin to view your list of scheduled
-#                           recordings.
+# A plugin to view your list of scheduled recordings.
 # -----------------------------------------------------------------------
 # $Id$
 #

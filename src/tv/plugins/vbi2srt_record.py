@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# vbi2srt_record.py - A plugin to record tv and extract the subtitles
+# A plugin to record tv and extract the subtitles
 # -----------------------------------------------------------------------
 # $Id$
 #

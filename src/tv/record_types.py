@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# record_types.py - Some classes that are important to recording.
+# Some classes that are important to recording.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -29,7 +29,12 @@
 # -----------------------------------------------------------------------
 
 
-import sys, time, os, string
+import sys, time, os, string, threading
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 import config
 import util.tv_util as tv_util
 
@@ -37,13 +42,16 @@ import util.tv_util as tv_util
 # changes are made to the file format.
 TYPES_VERSION = 2
 
+critical_section = threading.Lock()
 
 class ScheduledRecordings:
 
     def __init__(self):
-        self.programList = {}
-        self.favorites = {}
         self.TYPES_VERSION = TYPES_VERSION
+        self.favorites_file_name = os.path.join(config.FREEVO_STATICDIR, 'favorites.pickle')
+        self.schedule_file_name = os.path.join(config.FREEVO_STATICDIR, 'schedule.pickle')
+        self.programList = {}
+        self.favorites = self.loadFavorites()
 
 
     def addProgram(self, prog, key=None):
@@ -79,20 +87,48 @@ class ScheduledRecordings:
         self.programList = pl
 
 
+    def loadFavorites(self):
+        """ """
+        # may need to use a critical section here
+        try:
+            favorites_fh = open(self.favorites_file_name, 'rb')
+            self.favorites = pickle.load(favorites_fh)
+            favorites_fh.close()
+        except IOError, why:
+            self.favorites = {}
+
+
+    def saveFavorites(self):
+        """ """
+        favorites_fh = open(self.favorites_file_name, 'wb')
+        pickle.dump(self.favorites, favorites_fh)
+        favorites_fh.close()
+        print 'DJW:self.favorites=%r' % (self.favorites,)
+        for favorite in self.favorites:
+            print 'DJW:favorite=%r' % (favorite,)
+            #print 'exactchan=%r, exactdow=%r, exacttod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r' % \
+            #    (exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew)
+
+
     def addFavorite(self, fav):
-        if not self.favorites.has_key(fav.name):
-            _debug_('added favorite "%s"' % String(fav.name), 1)
-            self.favorites[fav.name] = fav
-        else:
+        print 'self.favorites=%r' % (self.favorites,)
+        if self.favorites and self.favorites.has_key(fav.name):
             _debug_('We already have a favorite called "%s"' % String(fav.name), DINFO)
+        else:
+            _debug_('added favorite "%s"' % String(fav.name), 1)
+            if self.favorites is None:
+                self.favorites = {}
+            self.favorites[fav.name] = fav
+            self.saveFavorites()
 
 
     def removeFavorite(self, name):
-        if self.favorites.has_key(name):
-            del self.favorites[name]
-            _debug_('removed favorite: %s' % String(name), 1)
+        if not self.favorites.has_key(name):
+            _debug_('We do not have a favorite called "%s"' % String(name), DINFO)
         else:
-            _debug_('We do not have a favorite called "%s".' % String(name), DINFO)
+            _debug_('removed favorite: %s' % String(name), 1)
+            del self.favorites[name]
+            self.saveFavorites()
 
 
     def getFavorites(self):

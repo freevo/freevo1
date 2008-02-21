@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# channels.py - Freevo module to handle channel changing.
+# Freevo module to handle channel changing.
 # -----------------------------------------------------------------------
 # $Id$
 #

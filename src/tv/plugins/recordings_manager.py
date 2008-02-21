@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# view_recordings.py - Directory handling
+# Plug-in to browse the TV recordings directory based on series
 # -----------------------------------------------------------------------
 # $Id$
 #
