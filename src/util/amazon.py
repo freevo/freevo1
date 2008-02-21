@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# strptime.py - This is the Freevo module
+# This is the Freevo module for processing Amazon data
 # -----------------------------------------------------------------------
 # $Id$
 #

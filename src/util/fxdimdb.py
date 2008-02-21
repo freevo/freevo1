@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# fxdimdb.py - class and helpers for fxd/imdb generation
+# class and helpers for fxd/imdb generation
 # -----------------------------------------------------------------------
 # $Id$
 #

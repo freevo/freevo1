@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# util/mediainfo.py - media info storage/parsing
+# media information for storage/parsing
 # -----------------------------------------------------------------------
 # $Id$
 #

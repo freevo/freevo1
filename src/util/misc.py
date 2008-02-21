@@ -403,7 +403,6 @@ def comingup(items=None, scheduledRecordings=None):
     result = u''
 
     cachefile = '%s/upsoon' % (config.FREEVO_CACHEDIR)
-
     if not scheduledRecordings:
         if os.path.exists(cachefile) and abs(time.time() - os.path.getmtime(cachefile)) < 600:
             cache = codecs.open(cachefile,'r', config.encoding)
