@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# album_tree.py 0.5.1 plugin for the audio player
+# plugin for the audio player
 # -----------------------------------------------------------------------
 # $Id$
 # Author:      Martijn Voncken(2005)
