@@ -1,6 +1,6 @@
-#if 0 /*
+# -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# moviecovers.py - Plugin for MOVIECOVERS support
+# Plugin for MOVIECOVERS support
 # -----------------------------------------------------------------------
 # $Id$
 # Version: 080607_01
@@ -24,8 +24,6 @@
 # Author : S. FABRE for Biboobox, http://www.lahiette.com/biboobox
 #
 # -----------------------------------------------------------------------
-# $Log$
-# -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
 # Please see the file freevo/Docs/CREDITS for a complete list of authors.
@@ -45,7 +43,6 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # ----------------------------------------------------------------------- */
-#endif
 
 import re
 import socket

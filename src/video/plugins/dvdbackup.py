@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# dvdbackup.py - Plugin for encoding DVD's with the EncodingServer
+# Plugin for encoding DVD's with the EncodingServer
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -83,6 +83,7 @@ class PluginInterface(plugin.ItemPlugin):
                 return [ (self.encoding_profile_menu, _('Backup this dvd title...')) ]
         return []
 
+
     def encoding_profile_menu(self, menuw=None, arg=None):
         if config.DVD_BACKUP_MENU:
             menu_items = []
@@ -106,6 +107,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         encoding_menu = menu.Menu(_('Choose your encoding profile'), menu_items)
         menuw.pushmenu(encoding_menu)
+
 
     def create_job(self, menuw=None, arg=None):
         '''
@@ -194,7 +196,6 @@ class PluginInterface(plugin.ItemPlugin):
         _debug_("boe")
         #menuw.delete_menu()
         #menuw.delete_menu()
-
 
 
     def error(self, text=""):

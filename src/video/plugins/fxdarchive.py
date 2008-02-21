@@ -149,7 +149,6 @@ class PluginInterface(plugin.ItemPlugin):
         Parse the fxd file, and discover the cover image file,
         also, discover if this is a movie fxd or not
         """
-
         coverimg = fxd.childcontent(node, 'cover-img')
         if coverimg:
             self.coverimg = coverimg

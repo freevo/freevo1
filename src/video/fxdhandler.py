@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# fxdhandler - handler for <movie> and <disc-set> tags in a fxd file
+# Handler for <movie> and <disc-set> tags in a fxd file
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -226,12 +226,12 @@ def parse_movie(fxd, node):
                     v.force_player = player
                 if is_playlist:
                     item.is_playlist = True
-                # global <video> mplayer_options
+                # global <movie> mplayer_options
                 if mplayer_options:
                     v.mplayer_options += ' ' + mplayer_options
                 item.subitems.append(v)
 
-    if not item.files:
+    if not hasattr(item, 'files') or not item.files:
         item.files = FileInformation()
     item.files.files     = files
 
@@ -308,3 +308,52 @@ def parse_disc_set(fxd, node):
     if fxd.is_skin_fxd:
         item.skin_fxd = fxd.filename
     fxd.getattr(None, 'items', []).append(item)
+
+
+def parse_mplayer_add_option(fxd, node):
+    """
+    """
+    pass
+
+
+def parse_mplayer_options(fxd, node):
+    """
+    Callback for VideoItem <mplayer-options>::
+
+        <freevo>
+          <movie title="Batman: Dead End">
+            <cover-img>foo.jpg</cover-img>
+            <video>
+              <file id="f1">Batman_Dead_End.mpg
+                <mplayer>
+                  <option name="vf" crop="704:272:8:102"/>
+                  <option name="vf" scale="720:576"/>
+                </mplayer>
+              </file>
+            </video>
+          </movie>
+        </freevo>
+
+    @returns: a dictionary of mplayer options
+    """
+    mplayer_options = {}
+    _debug_('parse_mplayer_mplayer_options(fxd=%r, node=%r)' % (fxd, node), 1)
+    item = VideoItem('', fxd.getattr(None, 'parent', None), parse=False)
+    print 'item=%r' % (item.__dict__)
+
+    dirname  = os.path.dirname(fxd.filename)
+
+    print fxd.get_children(node, '*')
+    video_nodes = fxd.get_children(node, 'video')
+    for video_node in fxd.get_children(node, 'video'):
+        for file_node in fxd.get_children(video_node, 'file'):
+            for mplayer_node in fxd.get_children(file_node, 'mplayer'):
+                for option_node in fxd.get_children(mplayer_node, 'option'):
+                    name = option_node.attrs[('', 'name')]
+                    value = option_node.attrs[('', 'value')]
+                    if mplayer_options.has_key(name):
+                        mplayer_options[name].append(value)
+                    else:
+                        mplayer_options[name] = [value]
+    print 'mplayer_options=%r' % (mplayer_options)
+    return mplayer_options
