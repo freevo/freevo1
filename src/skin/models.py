@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# models.py - This is the Freevo top-level skin model code.
+# This is the Freevo top-level skin model code.
 # -----------------------------------------------------------------------
 # $Id$
 #
