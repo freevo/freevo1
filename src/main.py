@@ -478,8 +478,8 @@ except KeyboardInterrupt:
 except SystemExit:
     pass
 
-except:
-    _debug_('Crash!', DCRITICAL)
+except Exception, e:
+    _debug_('Crash!: %s' % (e), config.DCRITICAL)
     try:
         tb = sys.exc_info()[2]
         fname, lineno, funcname, text = traceback.extract_tb(tb)[-1]

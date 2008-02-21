@@ -480,6 +480,8 @@ class OSD:
             if event.type == NOEVENT:
                 return
 
+            #print 'DJW:event=%s' % event
+
             if event.type == KEYDOWN:
                 _debug_('KEYDOWN: type=%s key=%s' % (event.type, event.key), 2)
 
