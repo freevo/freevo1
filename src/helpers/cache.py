@@ -266,6 +266,12 @@ def cache_cropdetect():
     """
     import encodingcore
     import kaa.metadata
+    # load the fxd part of video
+    import fxdhandler
+
+    plugin.register_callback('fxditem', ['video'], 'movie', fxdhandler.parse_movie)
+    plugin.register_callback('fxditem', ['video'], 'disc-set', fxdhandler.parse_disc_set)
+
     print 'checking cropdetect...................................',
     print
     sys.__stdout__.flush()

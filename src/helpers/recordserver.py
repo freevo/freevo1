@@ -1145,7 +1145,7 @@ class RecordServer:
                             return (TRUE, fav.name)
 
         # if we get this far prog is not a favorite
-        return (False, ('not a favorite'))
+        return (False, _('not a favorite'))
 
     def doesFavoriteRecordOnlyNewEpisodes(self, prog, favs=None):
         if not favs:
