@@ -272,7 +272,6 @@ def start(name, arg, bg, store=1):
                 if store and os.path.isfile(f.name):
                     os.unlink(f.name)
     else:
-        #print 'os.execvp(arg[0]=%r, arg=%r)' % (arg[0], arg)
         os.execvp(arg[0], arg)
 
 #--------------------------------------------------------------------------------
