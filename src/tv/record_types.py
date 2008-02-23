@@ -102,9 +102,12 @@ class ScheduledRecordings:
 
     def saveFavorites(self):
         """ """
-        favorites_fh = open(self.favorites_file_name, 'wb')
-        pickle.dump(self.favorites, favorites_fh)
-        favorites_fh.close()
+        try:
+            favorites_fh = open(self.favorites_file_name, 'wb')
+            pickle.dump(self.favorites, favorites_fh)
+            favorites_fh.close()
+        except Exception, why:
+            print Exception, why
         print 'DJW:self.favorites=%r' % (self.favorites,)
         for favorite in self.favorites:
             print 'DJW:favorite=%r' % (favorite,)

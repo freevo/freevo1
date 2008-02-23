@@ -143,11 +143,11 @@ class PluginInterface(plugin.ItemPlugin):
             return []
 
         if item.type in ('audio', 'audiocd', 'dir'):
-            _debug_('type=\"%s\"' % item.type)
-            _debug_('name=\"%s\"' % item['name'])
-            _debug_(hasattr(item, 'artist') and 'artist="%s"' % item.getattr('artist') or 'NO artist')
-            _debug_(hasattr(item, 'album')  and 'album="%s"'  % item.getattr('album')  or 'NO album')
-            _debug_(hasattr(item, 'title')  and 'title="%s"'  % item.getattr('title')  or 'NO title')
+            _debug_('type=%r' % item.type)
+            _debug_('name=%r' % item['name'])
+            _debug_(hasattr(item, 'artist') and 'artist=%r' % item.getattr('artist') or 'NO artist')
+            _debug_(hasattr(item, 'album')  and 'album=%r'  % item.getattr('album')  or 'NO album')
+            _debug_(hasattr(item, 'title')  and 'title=%r'  % item.getattr('title')  or 'NO title')
             try:
                 if not hasattr(item, 'artist'):
                     if item.type in ('audio', 'dir') and not hasattr(item, 'album'):
