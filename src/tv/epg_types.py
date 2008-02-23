@@ -95,7 +95,7 @@ class TvProgram:
         st = time.localtime(self.pdc_start) # PDC start time
         bt = time.localtime(self.start)   # Beginning time tuple
         et = time.localtime(self.stop)    # End time tuple
-        begins = time.strftime('%a %Y-%m-%d %H:%M', bt)
+        begins = time.strftime('%a %b %d %H:%M', bt)
         starts = time.strftime('%H:%M', st)
         ends = time.strftime('%H:%M', et)
         overlaps = self.overlap and '*' or ' '

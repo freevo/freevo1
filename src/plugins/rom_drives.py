@@ -339,7 +339,7 @@ class RemovableMedia:
 
     def get_capabilities(self):
         """ Open the CD/DVD drive and read its capabilities """
-        _debug_('Getting capabilities for %s' % self.drivename, DINFO)
+        _debug_('Getting capabilities for %s (%s)' % (self.drivename, self.devicename), DINFO)
         cdc = 0
         try:
             fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
@@ -353,15 +353,15 @@ class RemovableMedia:
 
                     if cdc & CDC_CLOSE_TRAY:
                         self.can_close = True
-                        _debug_('%r can close' % self.drivename, DINFO)
+                        _debug_('%s can close' % self.drivename, DINFO)
 
                     if cdc & CDC_OPEN_TRAY:
                         self.can_eject = True
-                        _debug_('%r can open' % self.drivename, DINFO)
+                        _debug_('%s can open' % self.drivename, DINFO)
 
                     if cdc & CDC_SELECT_SPEED:
                         self.can_select_speed = True
-                        _debug_('%r can select speed' % self.drivename, DINFO)
+                        _debug_('%s can select speed' % self.drivename, DINFO)
             finally:
                 os.close(fd)
         except Exception, e:

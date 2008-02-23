@@ -90,12 +90,14 @@ class ScheduledRecordings:
     def loadFavorites(self):
         """ """
         # may need to use a critical section here
+        self.favorites = {}
         try:
             favorites_fh = open(self.favorites_file_name, 'rb')
             self.favorites = pickle.load(favorites_fh)
             favorites_fh.close()
         except IOError, why:
-            self.favorites = {}
+            return {}
+        return self.favorites
 
 
     def saveFavorites(self):
