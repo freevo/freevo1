@@ -54,7 +54,7 @@ class FavoritesResource(FreevoResource):
         server_available = self.recordclient.pingNow()
         if not server_available:
             fv.printHeader(_('Favorites'), 'styles/main.css', selected=_('Favorites'))
-            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.')])
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+_('Recording server is not available')])
             return String( fv.res )
 
         action = fv.formValue(form, 'action')

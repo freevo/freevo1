@@ -54,7 +54,7 @@ class EditFavoriteResource(FreevoResource):
         server_available = self.recordclient.pingNow()
         if not server_available:
             fv.printHeader(_('Edit Favorite'), 'styles/main.css')
-            fv.printMessagesFinish([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ])
+            fv.printMessagesFinish([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is not available') ])
             return String( fv.res )
 
         chan = Unicode(fv.formValue(form, 'chan'))

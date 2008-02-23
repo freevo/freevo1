@@ -91,7 +91,7 @@ class GenreResource(FreevoResource):
             config.WWW_STYLESHEET, config.WWW_JAVASCRIPT)
 
         if schedule is None:
-            fv.printMessages(['<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.')])
+            fv.printMessages(['<b>'+_('ERROR')+'</b>: '+_('Recording server is not available')])
 
         allcategories = []
         for chan in guide.chan_list:

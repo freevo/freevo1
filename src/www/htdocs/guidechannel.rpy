@@ -203,9 +203,7 @@ class GuideResource(FreevoResource):
         fv.res += '&nbsp;<br/>\n'
 
         if not self.got_schedule:
-            fv.printMessages(
-                [ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ]
-                )
+            fv.printMessages([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is not available') ])
 
         display_channel = fv.formValue(form,'channel')
         if not display_channel:

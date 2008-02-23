@@ -149,7 +149,7 @@ class GuideResource(FreevoResource):
         fv.res += '<div id="content">\n';
         fv.res += '&nbsp;<br/>\n'
         if schedule is None:
-            fv.printMessages([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is unavailable.') ])
+            fv.printMessages([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is not available') ])
 
         desc = ''
 

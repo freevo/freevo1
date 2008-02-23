@@ -52,7 +52,7 @@ class SearchResource(FreevoResource):
         (server_available, message) = self.recordclient.pingNow()
         if not server_available:
             fv.printHeader(_('Search Results'), 'styles/main.css', selected=_('Search'))
-            fv.res += '<h4>'+_('ERROR')+': '+_('recording server is unavailable')+'</h4>'
+            fv.res += '<h4>'+_('ERROR')+': '+_('Recording server is not available')+'</h4>'
             fv.printAdvancedSearchForm()
             fv.printLinks()
             fv.printFooter()

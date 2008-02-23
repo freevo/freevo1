@@ -53,18 +53,18 @@ class IndexResource(FreevoResource):
         recordings = RecordClient().getScheduledRecordingsNow()
 
         if recordings is None:
-            fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('The recording server is down.')+'</p>\n'
+            fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('Recording server is not available')+'</p>\n'
         else:
-            fv.res += '<p class="normal">'+_('The recording server is up and running.')+'</p>\n'
+            fv.res += '<p class="normal">'+_('Recording server is up and running')+'</p>\n'
 
         listexpire = tv_util.when_listings_expire()
         if listexpire == 1:
-            fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('Your listings expire in 1 hour.')+'</p>\n'
+            fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('Your listings expire in 1 hour')+'</p>\n'
         elif listexpire < 12:
-            fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('Your listings expire in %s hours.') % \
+            fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('Your listings expire in %s hours') % \
                 listexpire+'</p>\n'
         else:
-            fv.res += '<p class="normal">'+_('Your listings are up to date.')+'</p>\n'
+            fv.res += '<p class="normal">'+_('Your listings are up to date')+'</p>\n'
 
         if recordings:
             progl = recordings.getProgramList().values()

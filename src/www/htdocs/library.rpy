@@ -349,7 +349,7 @@ class LibraryResource(FreevoResource):
                             # sorry, have to pass without doing anything.
                             pass
                 else:
-                    fv.res += '<h4>The recording server is down, recording information is unavailable.</h4>'
+                    fv.res += '<h4>Recording server is not available, recording information is unavailable.</h4>'
 
                 #generate our favorites regular expression
                 favre = ''
