@@ -162,6 +162,7 @@ class FileInfoResource(FreevoResource):
             fv.res += (
                u"<html>" \
                u"<head><title>%s</title>" \
+               u'<meta http-equiv="Content-Type" content= "text/html; charset='+ config.encoding +'"/>\n' \
                u"<link href=\"styles/main.css\" rel=\"stylesheet\" type=\"text/css\" /></head>" \
                u"<body>"\
                u"<img src=\"%s\" height=\"%s\" width=\"%s\" />"\
