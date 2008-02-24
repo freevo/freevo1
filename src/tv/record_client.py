@@ -243,7 +243,7 @@ class RecordClient:
         _debug_('isProgAFavoriteNow(prog=%r, favs=%r)' % (prog, favs), 1)
         inprogress = self.recordserver_rpc('isProgAFavorite', prog, favs)
         if inprogress is None:
-            return None
+            return (None, _('Recording server is not available'))
         inprogress.wait()
         result = inprogress.get_result()
         _debug_('isProgAFavoriteNow.result=%r' % (result,), 1)
@@ -305,7 +305,7 @@ class RecordClient:
         inprogress = self.recordserver_rpc('addEditedFavorite', \
             name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
         if inprogress is None:
-            return None
+            return (None, _('Recording server is not available'))
         inprogress.wait()
         result = inprogress.get_result()
         _debug_('addEditedFavoriteNow.result=%r' % (result,), 1)
@@ -341,7 +341,7 @@ class RecordClient:
         _debug_('scheduleRecordingNow(prog=%r)' % (prog,), 1)
         inprogress = self.recordserver_rpc('scheduleRecording', prog)
         if inprogress is None:
-            return None
+            return (None, _('Recording server is not available'))
         inprogress.wait()
         result = inprogress.get_result()
         _debug_('scheduleRecordingNow.result=%r' % (result,), 1)
