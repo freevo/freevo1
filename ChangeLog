@@ -35,6 +35,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed the main program to cause a crash when local_conf.py is invalid (B#1886624)
  * Fixed web servers encoding interface (B#1885914)
  * Fixed web servers image popup encoding (B#1895302)
+ * Fixed web servers remote image locations (B#1900736)
 
 == Release 1.7.6.1 (2008-02-05) ==
 ----------------------------------
