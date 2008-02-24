@@ -413,12 +413,12 @@ def comingup(items=None, scheduledRecordings=None):
 
         (status, recordings) = (True, RecordClient().getScheduledRecordingsNow())
         if recordings is None:
-            return _('The recordserver is down')
+            return _('Recording server is not available')
     else:
         (status, recordings) = scheduledRecordings
 
     if not status:
-        result = _('The recordserver is down')
+        result = _('Recording server is not available')
         return result
 
     progs = recordings.getProgramList()
