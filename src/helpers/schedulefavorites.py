@@ -45,7 +45,7 @@ def handler(result):
 
 print _('Updating recording schedule')
 if not RecordClient().updateFavoritesSchedule(handler):
-    print _('recordserver is not running')
+    print _('Recording server is not available')
     raise SystemExit
 
 kaa.main.run()

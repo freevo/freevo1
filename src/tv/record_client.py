@@ -418,7 +418,6 @@ class RecordClient:
 
     def updateFavoritesSchedule(self, callback):
         """ Update the favourites using a callback function """
-        print 'updateFavoritesSchedule(callback=%r)' % (callback)
         _debug_('updateFavoritesSchedule(callback=%r)' % (callback), 2)
         return self.server_rpc('updateFavoritesSchedule', callback)
 

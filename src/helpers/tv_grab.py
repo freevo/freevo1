@@ -123,7 +123,7 @@ if __name__ == '__main__':
 
     print 'Scheduling favorites for recording:  '
     if not RecordClient().updateFavoritesSchedule(handler):
-        print _('recordserver is not running')
+        print _('Recording server is not available')
         raise SystemExit
 
     kaa.main.run()
