@@ -127,7 +127,7 @@ class PluginInterface(plugin.DaemonPlugin):
         else:
             print "AudioScrobbler plugin: Didn't find submit url, retrying"
             self.failed_retries += 1
-            return # If we didn't get this we ass-ume that their server is down and try to re-login
+            return # If we didn't get this we assume that their server is down and try to re-login
 
 
         self.challenge_reply = md5.md5( md5.md5(self.PASSWORD).hexdigest() + self.challenge ).hexdigest()
