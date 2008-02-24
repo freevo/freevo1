@@ -44,7 +44,10 @@ class socket_talker(object):
 
     def putline(self, line):
         self.file.write("%s\n" % line)
-        self.file.flush()
+        try:
+            self.file.flush()
+        except:
+            pass
         self.done = False
 
     def get_pair(self):
