@@ -209,8 +209,7 @@ class EditFavorite(PopupBox):
                     searcher.draw()
                     self.osd.update()
         else:
-            AlertBox(parent=self,
-                     text=_('Remove Failed')+(': %s' % msg)).show()
+            AlertBox(parent=self, text=_('Remove favorite failed')+(':\n%s' % msg)).show()
 
 
     def eventhandler(self, event, menuw=None):
@@ -326,7 +325,7 @@ class EditFavorite(PopupBox):
                     self.destroy()
                     AlertBox(parent='osd', text=_('Favorite %s has been saved') % self.name_input.get_word()).show()
                 else:
-                    AlertBox(parent=self, text=_('Failed: %s') % msg).show()
+                    AlertBox(parent=self, text=_('Add favorite failed')+(':\n%s' % msg)).show()
                 return True
             elif event in (em.INPUT_LEFT, em.MENU_PAGEUP):
                 self.save.toggle_selected()

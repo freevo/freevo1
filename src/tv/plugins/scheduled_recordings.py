@@ -88,7 +88,7 @@ class ScheduledRecordingsItem(Item):
 
         #(server_available, msg) = self.recordclient.connectionTest()
         #if not server_available:
-        #    AlertBox(_('Recording server is unavailable.')+(': %s' % msg)).show()
+        #    AlertBox(_('Recording server is not available')+(':\n%s' % msg)).show()
         #    return []
 
         recordings = self.recordclient.getScheduledRecordingsNow()
@@ -101,7 +101,7 @@ class ScheduledRecordingsItem(Item):
             for prog in progs:
                 items.append(ProgramItem(self, prog, context='schedule'))
         else:
-            AlertBox(_('Get recordings failed')+(': %s' % recordings)).show()
+            AlertBox(_('Get recordings failed')+(':\n%s' % recordings)).show()
             return []
 
         return items

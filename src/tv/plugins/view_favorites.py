@@ -89,21 +89,18 @@ class ViewFavoritesItem(Item):
         _debug_('get_items()', 2)
         items = []
 
-        #(server_available, msg) = self.recordclient.connectionTest()
-        #if not server_available:
-        #    AlertBox(_('Recording server is unavailable.')+(': %s' % msg)).show()
-        #    return []
-
-        (result, favorites) = self.recordclient.getFavoritesNow()
-        if result:
-            f = lambda a, b: cmp(a.priority, b.priority)
-            favorites = favorites.values()
-            favorites.sort(f)
-            for fav in favorites:
-                items.append(FavoriteItem(self, fav))
-        else:
-            AlertBox(_('Get favorites failed')+(': %s' % favorites)).show()
+        server_available = self.recordclient.pingNow()
+        if not server_available:
+            AlertBox(_('Recording server is not available')+(':\n%s' % msg)).show()
             return []
+
+        favorites = self.recordclient.getFavoritesNow()
+        if favorites:
+            f = lambda a, b: cmp(a.priority, b.priority)
+            favs = favorites.values()
+            favs.sort(f)
+            for fav in favs:
+                items.append(FavoriteItem(self, fav))
 
         return items
 

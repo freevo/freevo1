@@ -225,7 +225,7 @@ class ProgramItem(Item):
             pop = AlertBox(text=msgtext).show()
         else:
             # something went wrong
-            msgtext = _('Scheduling failed')+(': %s' % reason)
+            msgtext = _('Scheduling failed')+(':\n%s' % reason)
             AlertBox(text=msgtext).show()
 
 
@@ -246,7 +246,7 @@ class ProgramItem(Item):
             AlertBox(text=msgtext).show()
         else:
             # something went wrong
-            msgtext = _('Remove failed')+(': %s' % reason)
+            msgtext = _('Remove failed')+(':\n%s' % reason)
             AlertBox(text=msgtext).show()
 
 
@@ -316,7 +316,7 @@ class ProgramItem(Item):
             return
         else:
             # something else went wrong
-            msgtext = _('findMatches failed') +(': %s' % matches)
+            msgtext = _('Search failed') +(':\n%s' % matches)
             AlertBox(text=msgtext).show()
             return
 

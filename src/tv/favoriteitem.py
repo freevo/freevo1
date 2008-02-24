@@ -348,7 +348,7 @@ class FavoriteItem(Item):
                 # it is important to show the user this error,
                 # because that means the favorite is removed,
                 # and must be created again
-                msgtext=_('Save failed, favorite was lost.')+(': %s' % msg)
+                msgtext=_('Save failed, favorite was lost')+(':\n%s' % msg)
                 AlertBox(text=msgtext).show()
 
 
@@ -369,5 +369,5 @@ class FavoriteItem(Item):
             AlertBox(text=msgtext).show()
         else:
             # if all fails then we should show an error
-            msgtext = _('Remove failed')+(': %s' % msg)
+            msgtext = _('Remove failed')+(':\n%s' % msg)
             AlertBox(text=msgtext).show()

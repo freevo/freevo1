@@ -339,7 +339,7 @@ class ManualRecordItem(Item):
             (result, reason) = self.recordclient.scheduleRecordingNow(self.prog)
 
             if not result:
-                AlertBox(text=_('Save Failed, recording was lost')+(': %s' % reason)).show()
+                AlertBox(text=_('Save Failed, recording was lost')+(':\n%s' % reason)).show()
             else:
                 if menuw:
                     menuw.back_one_menu(arg='reload')
@@ -369,20 +369,20 @@ class ManualRecordItem(Item):
             if self.MAXDAYS > 1:
                 isgood = False
                 msg = _("Program would record for more than %d days!") % self.MAXDAYS
-                AlertBox(text=_('Save Failed, recording was lost')+(': %s' % msg)).show()
+                AlertBox(text=_('Save Failed, recording was lost')+(':\n%s' % msg)).show()
             else:
                 isgood = False
                 msg = _("Program would record for more than 1 day!") % self.MAXDAYS
-                AlertBox(text=_('Save Failed, recording was lost')+(': %s' % msg)).show()
+                AlertBox(text=_('Save Failed, recording was lost')+(':\n%s' % msg)).show()
 
         elif not starttime < stoptime:
             isgood = False
             msg = _("start time is not before stop time." )
-            AlertBox(text=_('Save Failed, recording was lost')+(': %s' % msg)).show()
+            AlertBox(text=_('Save Failed, recording was lost')+(':\n%s' % msg)).show()
         elif stoptime < curtime_epoch + self.MINPICKUP:
             isgood = False
             msg = _("Sorry, the stop time does not give enough time for scheduler to pickup the change.  Please set it to record for a few minutes longer.")
-            AlertBox(text=_('Save Failed, recording was lost')+(': %s' % msg)).show()
+            AlertBox(text=_('Save Failed, recording was lost')+(':\n%s' % msg)).show()
         else:
             self.prog.start = starttime
             self.prog.stop = stoptime
