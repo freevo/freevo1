@@ -60,7 +60,10 @@ def audio_selection_menu(arg=None, menuw=None):
 
         # set reasonable defaults when attributes are missing or not set
         if not a.has_key('id') or a['id'] is None:
-            a['id'] = int(item.info['audio'].index(audio))+1
+            # workaround for kaa.metadata not having audio ids for ogm and avi files
+            a['id'] = int(item.info['audio'].index(audio))
+            if a.has_key('mime') and a['mime'] == 'video/avi':
+                a['id'] += 1
 
         if not a.has_key('title') or a['title'] is None:
             a['title'] = ''
@@ -72,7 +75,7 @@ def audio_selection_menu(arg=None, menuw=None):
             a['channels'] = 2 # wild guess :-)
 
         if not a.has_key('codec') or a['codec'] is None:
-            a['codec'] = '???'
+            a['codec'] = _('Unknown')
 
         txt = '%(language)s %(title)s (channels=%(channels)s:%(codec)s)' % a
         menu_items.append(menu.MenuItem(txt, audio_selection, (item, a['id'])))
