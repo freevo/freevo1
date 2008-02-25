@@ -68,9 +68,9 @@ class PluginInterface(plugin.Plugin):
         try:
             config.XINE_COMMAND
         except:
-            print String(_( 'ERROR' )) + ': ' + \
-                  String(_("'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n" \
-                           'please check the xine section in freevo_config.py' ))
+            print _('\'XINE_COMMAND\' not defined, \'xine\' video plugin deactivated.\n' \
+                           'please check the xine section in freevo_config.py')
+            reason = '\'XINE_COMMAND\' not defined, \'xine\' video plugin deactivated'
             return
 
         if config.XINE_COMMAND.find('fbxine') >= 0:
@@ -258,10 +258,11 @@ class Xine:
         eventhandler for xine control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
+        _debug_('Xine.eventhandler event=%r' % (event.__dict__,), 1)
         if not self.app:
             return self.item.eventhandler(event)
 
-        if event in ( PLAY_END, USER_END ):
+        if event in (PLAY_END, USER_END):
             self.stop(event)
             return self.item.eventhandler(event)
 
