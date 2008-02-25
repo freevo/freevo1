@@ -43,7 +43,8 @@ import config
 # Different formats depending on word size
 bit32 = struct.calcsize('L') == struct.calcsize('I')
 
-def i32(x): return (x&0x80000000L and -2*0x40000000 or 0) + int(x&0x7fffffff)
+def i32(x):
+    return (x&0x80000000L and -2*0x40000000 or 0) + int(x&0x7fffffff)
 
 _IOC_NRBITS = 8
 _IOC_TYPEBITS = 8
@@ -71,21 +72,30 @@ def _IOC(dir, type, nr, size):
            ((nr)   << _IOC_NRSHIFT) | \
            ((size) << _IOC_SIZESHIFT))
 
-def _IO(type, nr): return _IOC(_IOC_NONE, (type), (nr), 0)
+def _IO(type, nr):
+    return _IOC(_IOC_NONE, (type), (nr), 0)
 
-def _IOR(type, nr, size): return _IOC(_IOC_READ, (type), (nr), struct.calcsize(size))
+def _IOR(type, nr, size):
+    return _IOC(_IOC_READ, (type), (nr), struct.calcsize(size))
 
-def _IOW(type, nr, size): return _IOC(_IOC_WRITE, (type), (nr), struct.calcsize(size))
+def _IOW(type, nr, size):
+    return _IOC(_IOC_WRITE, (type), (nr), struct.calcsize(size))
 
-def _IOWR(type, nr, size): return _IOC(_IOC_READ|_IOC_WRITE, (type), (nr), struct.calcsize(size))
+def _IOWR(type, nr, size):
+    return _IOC(_IOC_READ|_IOC_WRITE, (type), (nr), struct.calcsize(size))
 
 # used to decode ioctl numbers..
-def _IOC_DIR(nr): return (((nr) >> _IOC_DIRSHIFT) & _IOC_DIRMASK)
-def _IOC_TYPE(nr): return (((nr) >> _IOC_TYPESHIFT) & _IOC_TYPEMASK)
-def _IOC_NR(nr): return (((nr) >> _IOC_NRSHIFT) & _IOC_NRMASK)
-def _IOC_SIZE(nr): return (((nr) >> _IOC_SIZESHIFT) & _IOC_SIZEMASK)
+def _IOC_DIR(nr):
+    return (((nr) >> _IOC_DIRSHIFT) & _IOC_DIRMASK)
+def _IOC_TYPE(nr):
+    return (((nr) >> _IOC_TYPESHIFT) & _IOC_TYPEMASK)
+def _IOC_NR(nr):
+    return (((nr) >> _IOC_NRSHIFT) & _IOC_NRMASK)
+def _IOC_SIZE(nr):
+    return (((nr) >> _IOC_SIZESHIFT) & _IOC_SIZEMASK)
 
-def _ID2CLASS(id): return ((id) & 0x0fff0000)
+def _ID2CLASS(id):
+    return ((id) & 0x0fff0000)
 
 
 QUERYCAP_ST      = "<16s32s32sII16x"
@@ -238,6 +248,7 @@ NORMS = {
 
 class Videodev:
     def __init__(self, device):
+        _debug_('Videodev.__init__(device=%r)' % (device,), 1)
         self.chanlist = None
         self.device = os.open(device, os.O_TRUNC)
         if self.device < 0:
@@ -260,26 +271,32 @@ class Videodev:
 
 
     def getdriver(self):
+        _debug_('getdriver()', 1)
         return self.driver.strip('\0')
 
 
     def getversion(self):
+        _debug_('getversion()', 1)
         return self.version
 
 
     def getdevice(self):
+        _debug_('getdevice()', 1)
         return self.device
 
 
     def close(self):
+        _debug_('close()', 1)
         os.close(self.device)
 
 
     def setchanlist(self, chanlist):
+        _debug_('setchanlist(chanlist=%r)' % (chanlist,), 1)
         self.chanlist = freq.CHANLIST[chanlist]
 
 
     def querycap(self):
+        _debug_('querycap()', 1)
         val = struct.pack(QUERYCAP_ST, "", "", "", 0, 0)
         r = fcntl.ioctl(self.device, i32(QUERYCAP_NO), val)
         res = struct.unpack(QUERYCAP_ST, r)
@@ -288,6 +305,7 @@ class Videodev:
 
 
     def getfreq(self):
+        _debug_('getfreq()', 1)
         val = struct.pack(FREQUENCY_ST, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
         res = struct.unpack(FREQUENCY_ST, r)
@@ -297,6 +315,7 @@ class Videodev:
 
 
     def getfreq2(self):
+        _debug_('getfreq2()', 1)
         val = struct.pack(FREQUENCY_ST, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
         res = struct.unpack(FREQUENCY_ST, r)
@@ -305,6 +324,7 @@ class Videodev:
 
 
     def setchannel(self, channel):
+        _debug_('setchannel(channel=%r)' % (channel,), 1)
         freq = config.TV_FREQUENCY_TABLE.get(channel)
         if freq:
             _debug_('Using custom frequency: chan="%s", freq="%s"' % (channel, freq))
@@ -328,12 +348,14 @@ class Videodev:
 
 
     def setfreq_old(self, freq):
+        _debug_('setfreq_old(freq=%r)' % (freq,), 1)
         val = struct.pack("L", freq)
         r = fcntl.ioctl(self.device, i32(SETFREQ_NO_V4L), val)
         _debug_('setfreq_old: val=%r, r=%r' % (val, r), 3)
 
 
     def setfreq(self, freq):
+        _debug_('setfreq(freq=%r)' % (freq,), 1)
         val = struct.pack(FREQUENCY_ST, long(0), long(2), freq)
         r = fcntl.ioctl(self.device, i32(SETFREQ_NO), val)
         _debug_('setfreq: val=%r, r=%r' % (val, r), 3)
@@ -344,6 +366,7 @@ class Videodev:
         Enumerate a video device input
         @param num: is the input number
         """
+        _debug_('enuminput(num=%r)' % (num), 1)
         val = struct.pack(ENUMINPUT_ST, num, "", 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO), val)
         res = struct.unpack(ENUMINPUT_ST, r)
@@ -355,6 +378,7 @@ class Videodev:
         Enumerate all inputs
         @returns: a dict of the inputs index by name
         """
+        _debug_('enuminputs()', 1)
         res = {}
         num = 0
         try:
@@ -368,6 +392,7 @@ class Videodev:
         return res
 
     def getinput(self):
+        _debug_('getinput()', 1)
         val = struct.pack(INPUT_ST, 0)
         r = fcntl.ioctl(self.device, i32(GETINPUT_NO), val)
         res = struct.unpack(INPUT_ST, r)
@@ -376,6 +401,7 @@ class Videodev:
 
 
     def setinput(self, value):
+        _debug_('setinput(value=%r)' % (value,), 1)
         try:
             r = fcntl.ioctl(self.device, i32(SETINPUT_NO), struct.pack(INPUT_ST, value))
             _debug_('setinput: val=%r, res=%r' % (struct.pack(INPUT_ST, value), r), 3)
@@ -388,6 +414,7 @@ class Videodev:
         """
         Get the TV input by name, eg: TELEVISION, s-video
         """
+        _debug_('getinputbyname(name=%r)' % (name,), 1)
         v_input = name.lower()
         return self.inputs[v_input]
 
@@ -396,6 +423,7 @@ class Videodev:
         """
         Set the TV input by name, eg: TELEVISION, s-video
         """
+        _debug_('setinputbyname(name=%r)' % (name,), 1)
         v_input = name.lower()
         try:
             (index, name, type, audioset, tuner, std, status) = self.inputs[v_input]
@@ -408,6 +436,7 @@ class Videodev:
 
 
     def enumstd(self, num):
+        _debug_('enumstd(num=%r)' % (num,), 1)
         val = struct.pack(ENUMSTD_ST, num, 0, "", 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMSTD_NO), val)
         res = struct.unpack(ENUMSTD_ST, r)
@@ -420,6 +449,7 @@ class Videodev:
         Enumerate the TV standards
         @returns: a dict of the standards index by name
         """
+        _debug_('enumstds()', 1)
         res = {}
         num = 0
         try:
@@ -437,6 +467,7 @@ class Videodev:
         """
         Get the current TV standard
         """
+        _debug_('getstd()', 1)
         val = struct.pack(STANDARD_ST, 0)
         r = fcntl.ioctl(self.device, i32(GETSTD_NO), val)
         res = struct.unpack(STANDARD_ST, r)
@@ -448,6 +479,7 @@ class Videodev:
         """
         Set the TV standard by number
         """
+        _debug_('setstd(value=%r)' % (value,), 1)
         val = struct.pack(STANDARD_ST, value)
         r = fcntl.ioctl(self.device, i32(SETSTD_NO), val)
         _debug_('setstd: val=%r, r=%r' % (val, r), 3)
@@ -457,6 +489,7 @@ class Videodev:
         """
         Get the TV standard by name, eg: PAL-BGH, secam-dk, etc
         """
+        _debug_('getstdbyname(name=%r)' % (name,), 1)
         v_norm = name.upper()
         return self.standards[v_norm]
 
@@ -465,7 +498,10 @@ class Videodev:
         """
         Set the TV standard by name, eg: PAL-BGH, secam-dk, etc
         """
+        _debug_('setstdbyname(name=%r)' % (name,), 1)
         v_norm = name.upper()
+        tmp = self.getstd()
+        print 'DJW:getstd=%r' % (tmp,)
         try:
             self.setstd(NORMS[v_norm])
             _debug_('setstdbyname: %s (0x%08X) set' % (name, NORMS[v_norm]), 3)
@@ -475,6 +511,7 @@ class Videodev:
 
 
     def enuminput(self, num):
+        _debug_('enuminput(num=%r)' % (num,), 1)
         val = struct.pack(ENUMINPUT_ST, num, "", 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO), val)
         res = struct.unpack(ENUMINPUT_ST, r)
@@ -483,6 +520,7 @@ class Videodev:
 
 
     def getfmt(self):
+        _debug_('getfmt()', 1)
         val = struct.pack(FMT_ST, 1, 0, 0, 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GET_FMT_NO), val)
         res = struct.unpack(FMT_ST, r)
@@ -491,12 +529,14 @@ class Videodev:
 
 
     def setfmt(self, width, height):
+        _debug_('setfmt(width=%r, height=%r)' % (width, height), 1)
         val = struct.pack(FMT_ST, 1L, width, height, 0L, 4L, 0L, 131072L, 0L)
         r = fcntl.ioctl(self.device, i32(SET_FMT_NO), val)
         _debug_('setfmt: val=%r, r=%r' % (val, r), 3)
 
 
     def gettuner(self, num):
+        _debug_('gettuner(num=%r)' % (num,), 1)
         val = struct.pack(TUNER_ST, num, "", 0, 0, 0, 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GET_TUNER_NO), val)
         res = struct.unpack(TUNER_ST, r)
@@ -505,12 +545,14 @@ class Videodev:
 
 
     def settuner(self, num, audmode):
+        _debug_('settuner(num=%r, audmode=%r)' % (num, audmode), 1)
         val = struct.pack(TUNER_ST, num, "", 0, 0, 0, 0, 0, audmode, 0, 0)
         r = fcntl.ioctl(self.device, i32(SET_TUNER_NO), val)
         _debug_('settuner: val=%r, r=%r' % (val, r), 3)
 
 
     def getaudio(self, num):
+        _debug_('getaudio(num=%r)' % (num,), 1)
         val = struct.pack(AUDIO_ST, num, "", 0, 0)
         r = fcntl.ioctl(self.device, i32(GET_AUDIO_NO), val)
         res = struct.unpack(AUDIO_ST, r)
@@ -519,6 +561,7 @@ class Videodev:
 
 
     def setaudio(self, num, mode):
+        _debug_('setaudio(num=%r, mode=%r)' % (num, mode), 1)
         val = struct.pack(AUDIO_ST, num, "", mode, 0)
         r = fcntl.ioctl(self.device, i32(SET_AUDIO_NO), val)
         _debug_('setaudio: val=%r, r=%r' % (val, r), 3)
@@ -528,6 +571,7 @@ class Videodev:
         """
         Get the value of a control
         """
+        _debug_('getctrl(id=0x%08x)' % (id,), 1)
         val = struct.pack(CTRL_ST, id, 0)
         r = fcntl.ioctl(self.device, i32(G_CTRL_NO), val)
         res = struct.unpack(CTRL_ST, r)
@@ -539,6 +583,7 @@ class Videodev:
         """
         Set the value of a control
         """
+        _debug_('setctrl(id=0x%08x, value=%r)' % (id, value), 1)
         val = struct.pack(CTRL_ST, id, value)
         r = fcntl.ioctl(self.device, i32(S_CTRL_NO), val)
         res = struct.unpack(CTRL_ST, r)
@@ -551,6 +596,7 @@ class Videodev:
         EXT_CTRL_type->id, res1, res2, value
         EXT_CTRLS_ST->class, count, error_idx, res1, res2, ptr
         """
+        _debug_('getextctrl(id=0x%08x)' % (id,), 1)
         extctrl = array.array('B')
         extctrl.fromstring(struct.pack(EXT_CTRL_ST, id, 0, 0, 0))
         extctrl_p = extctrl.buffer_info()[0]
@@ -571,6 +617,7 @@ class Videodev:
         """
         Set the value of an external control
         """
+        _debug_('setextctrl(id=0x%08x, value=%r)' % (id, value), 1)
         extctrl = array.array('B')
         extctrl.fromstring(struct.pack(EXT_CTRL_ST, id, 0, 0, value))
         extctrl_p = extctrl.buffer_info()[0]
@@ -586,6 +633,7 @@ class Videodev:
 
 
     def querymenu(self, id, num):
+        _debug_('querymenu(id=0x%08x, num=%r)' % (id, num), 1)
         val = struct.pack(QUERYMENU_ST, id, num, "", 0)
         try:
             r = fcntl.ioctl(self.device, i32(QUERYMENU_NO), val)
@@ -597,6 +645,7 @@ class Videodev:
 
 
     def queryctrl(self, id):
+        _debug_('queryctrl(id=0x%08x)' % (id,), 1)
         val = struct.pack(QUERYCTRL_ST, id, 0, "", 0, 0, 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(QUERYCTRL_NO), val)
         res = struct.unpack(QUERYCTRL_ST, r)
@@ -615,6 +664,7 @@ class Videodev:
 
 
     def printcontrol(self, res):
+        _debug_('printcontrol(res=%r)' % (res,), 1)
         (id, type, name, min, max, step, default, flags, value) = res
         if flags & 0x0001:
             return
@@ -634,6 +684,7 @@ class Videodev:
         """
         converts a control to lowercase and replaces spaces with underscore, like v4l2-ctl
         """
+        _debug_('ctrlname(name=%r)' % (name,), 1)
         return name.replace(' ', '_').lower()
 
 
@@ -641,6 +692,7 @@ class Videodev:
         """
         prints all the controls
         """
+        _debug_('listcontrols()', 1)
         id = V4L2_CTRL_FLAG_NEXT_CTRL
         while 1:
             try:
@@ -663,6 +715,7 @@ class Videodev:
 
 
     def enumcontrols(self):
+        _debug_('enumcontrols()', 1)
         res = {}
         id = V4L2_CTRL_FLAG_NEXT_CTRL
         while 1:
@@ -696,6 +749,7 @@ class Videodev:
         """
         find a control by id
         """
+        _debug_('findcontrol(id=0x%08x)' % (id,), 1)
         for ctrl in self.controls.keys():
             if self.controls[ctrl][0] == id:
                 return ctrl
@@ -706,6 +760,7 @@ class Videodev:
         """
         get the control record by name
         """
+        _debug_('getcontrol(name=%r)' % (name,), 1)
         key = self.ctrlname(name)
         if not self.controls.has_key(key):
             _debug_('control \"%s\" does not exists' % (name), DWARNING)
@@ -718,6 +773,7 @@ class Videodev:
         """
         get the control record by name
         """
+        _debug_('setcontrol(name=%r, value=%r)' % (name, value), 1)
         key = self.ctrlname(name)
         if not self.controls.has_key(key):
             _debug_('control \"%s\" does not exists' % (name), DWARNING)
@@ -735,6 +791,7 @@ class Videodev:
     def updatecontrol(self, name, value):
         """ set the control record by name
         """
+        _debug_('updatecontrol(name=%r, value=%r)' % (name, value), 1)
         if self.getcontrol(name) == None:
             return
 
@@ -750,6 +807,7 @@ class Videodev:
     def init_settings(self):
         """ initialise the V4L2 setting
         """
+        _debug_('init_settings()', 1)
         (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
         self.inputs = self.enuminputs()
         self.standards = self.enumstds()
@@ -762,6 +820,7 @@ class Videodev:
 
 
     def print_settings(self):
+        _debug_('print_settings()', 1)
         print 'Driver: %s' % self.driver.strip('\0')
         print 'Card: %s' % self.card.strip('\0')
         print 'Version: %02d.%02d' % (self.version / 256, self.version % 256)
@@ -797,6 +856,7 @@ class Videodev:
 
 class V4LGroup:
     def __init__(self):
+        _debug_('V4LGroup.__init__()', 1)
         # Types:
         #   tv-v4l1 - video capture card with a tv tuner using v4l1
         #   tv-v4l2 - video capture card with a tv tuner using v4l2
