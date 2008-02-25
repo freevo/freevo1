@@ -413,7 +413,7 @@ class RemovableMedia:
         self.cds_changed = self.cds != cds
         self.cds = cds
         _debug_('drive status for %s (%r:%s) is %s' % \
-            (self.drivename, self.devicename, fd, self.drive_status_text(cds)), 2)
+            (self.drivename, self.devicename, fd, self.drive_status_text(cds)), 3)
         return cds
 
 
