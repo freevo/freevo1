@@ -76,7 +76,7 @@ class PluginInterface(plugin.DaemonPlugin):
         ]
 
 
-    def eventhandler(self, event = None, menuw=None, arg=None):
+    def eventhandler(self, event=None, menuw=None, arg=None):
         """
         eventhandler to handle the events. Always return False since we
         are just a listener and really can't send back True.
