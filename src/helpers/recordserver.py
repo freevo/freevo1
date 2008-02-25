@@ -1433,7 +1433,6 @@ class RecordServer:
 
 
     def handleAtTimer(self):
-        _debug_('DJW:time=%s' % (time.strftime("%H:%M:%S", time.localtime(time.time()))))
         self.checkToRecord()
 
 
