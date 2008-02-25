@@ -62,23 +62,24 @@ def get_tunerid(channel_id):
         tv_channel_id, tv_display_name, tv_tuner_id = vals[:3]
         if tv_channel_id == channel_id:
             return tv_tuner_id
-
     AlertBox(text=_('Could not find TV channel %s') % channel_id).show()
     return None
 
 
 def get_friendly_channel(channel_id):
     channel_name = tv_util.get_chan_displayname(channel_id)
-
     if not channel_name:
         AlertBox(text=_('Could not find TV channel %s') % channel_id).show()
-
     return channel_name
 
 
 def start_tv(mode=None, channel_id=None):
     tuner_id = get_tunerid(channel_id)
-    plugin.getbyname(plugin.TV).Play(mode, tuner_id)
+    p = plugin.getbyname(plugin.TV)
+    if p is None:
+        AlertBox(text=_('Cannot get TV plug-in')).show()
+        return
+    p.Play(mode, tuner_id)
 
 
 
