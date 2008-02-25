@@ -480,11 +480,9 @@ class OSD:
             if event.type == NOEVENT:
                 return
 
-            #print 'DJW:event=%s' % event
+            _debug_('pygame event=%s' % (event), 2)
 
             if event.type == KEYDOWN:
-                _debug_('KEYDOWN: type=%s key=%s' % (event.type, event.key), 2)
-
                 if not map and event.key > 30:
                     try:
                         if event.unicode != u'':
