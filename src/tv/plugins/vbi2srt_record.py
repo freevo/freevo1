@@ -95,8 +95,12 @@ class PluginInterface(plugin.Plugin):
     """
 
     def __init__(self):
+        _debug_('PluginInterface.__init__()', 1)
         plugin.Plugin.__init__(self)
         plugin.register(Recorder(), plugin.RECORD)
+
+    def shutdown(self):
+        _debug_('PluginInterface.shutdown()')
 
 
 class Recorder:
@@ -120,11 +124,12 @@ class Recorder:
 
 
     def Record(self, rec_prog):
+        _debug_('Record(rec_prog=%r)' % (rec_prog,), 1)
         frequency = self.fc.chanSet(str(rec_prog.tunerid), False, 'record plugin')
 
         rec_prog.filename = tv_util.getProgFilename(rec_prog)
         rec_prog.filename = os.path.splitext(tv_util.getProgFilename(rec_prog))[0] + '.mpeg'
-        _debug_('filename %s' % rec_prog.filename)
+        _debug_('filename=%r' % rec_prog.filename)
 
         self.vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
 
@@ -140,25 +145,16 @@ class Recorder:
                        'pdc-start'  : rec_prog.pdc_start,
         }
 
-        _debug_('cl_options %s' % cl_options)
-        _debug_('chan_index %s' % self.fc.chan_index)
-        _debug_('vg.vdev %s' % self.vg.vdev)
-        _debug_('vg.vvbi %s' % self.vg.vvbi)
+        _debug_('cl_options=%r' % cl_options)
+        _debug_('chan_index=%r' % self.fc.chan_index)
+        _debug_('vg.vdev=%r' % self.vg.vdev)
+        _debug_('vg.vvbi=%r' % self.vg.vvbi)
         pagenum = None;
         try:
             pagenum = int(config.TV_CHANNELS[self.fc.chan_index][5])
         except:
             pagenum = None;
-        _debug_('pagenum "%s"' % pagenum)
-
-        # this is not used
-        if isinstance(config.VCR_CMD, str) or isinstance(config.VCR_CMD, unicode):
-            self.rec_command = config.VCR_CMD % cl_options
-        elif isinstance(config.VCR_CMD, list) or isinstance(config.VCR_CMD, tuple):
-            self.rec_command = []
-            for arg in config.VCR_CMD:
-                self.rec_command.append(arg % cl_options)
-        _debug_('rec_command=%r' % (self.rec_command,))
+        _debug_('pagenum=%r' % pagenum)
 
         if pagenum:
             # there is a bug in vbi2srt that causes out of sync subtitles when VPS is used
@@ -179,23 +175,27 @@ class Recorder:
 
 
     def Stop(self):
+        _debug_('Stop()', 1)
         self.thread.mode = 'stop'
         self.thread.mode_flag.set()
 
 
 class RecordApp(childapp.ChildApp):
     """
+    Class to 
     """
     def __init__(self, app):
         _debug_('RecordApp.__init__(app=%r)' % (app), 1)
         childapp.ChildApp.__init__(self, app, doeslogging=1)
 
     def kill(self):
+        _debug_('kill()', 1)
         childapp.ChildApp.kill(self, signal.SIGINT)
 
 
 class Record_Thread(threading.Thread):
     """
+    Class to
     """
     def __init__(self):
         _debug_('Record_Thread.__init__()', 1)
@@ -209,6 +209,7 @@ class Record_Thread(threading.Thread):
         self.app = None
 
     def run(self):
+        _debug_('Record_Thread.run()', 1)
         while 1:
             _debug_('mode=%s' % self.mode)
             if self.mode == 'idle':
@@ -227,9 +228,9 @@ class Record_Thread(threading.Thread):
 
                 v.init_settings()
 
-                _debug_('Using video device %s' % self.vg.vdev)
+                _debug_('Using video device=%r' % self.vg.vdev)
 
-                _debug_('Setting Channel to %s' % self.prog.tunerid)
+                _debug_('Setting Channel to %r' % self.prog.tunerid)
                 fc.chanSet(str(self.prog.tunerid), False)
 
                 _debug_('command %r' % self.command)
