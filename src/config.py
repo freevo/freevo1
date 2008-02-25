@@ -415,7 +415,7 @@ OS_CACHEDIR, FREEVO_CACHEDIR = make_freevodir('CACHEDIR', '/var/cache', '/var/db
 #
 #if not HELPER:
 lock = thread.allocate_lock()
-sys.stdout = Logger(sys.argv[0] + ':stdin')
+sys.stdout = Logger(sys.argv[0] + ':stdout')
 sys.stderr = Logger(sys.argv[0] + ':stderr')
 ts = time.asctime(time.localtime(time.time()))
 sys.stdout.log('=' * 80)
