@@ -108,9 +108,8 @@ class ScheduledRecordings:
             favorites_fh.close()
         except Exception, why:
             print Exception, why
-        print 'DJW:self.favorites=%r' % (self.favorites,)
         for favorite in self.favorites:
-            print 'DJW:favorite=%r' % (favorite,)
+            pass
             #print 'exactchan=%r, exactdow=%r, exacttod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r' % \
             #    (exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew)
 

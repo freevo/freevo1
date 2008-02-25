@@ -501,7 +501,6 @@ class Videodev:
         _debug_('setstdbyname(name=%r)' % (name,), 1)
         v_norm = name.upper()
         tmp = self.getstd()
-        print 'DJW:getstd=%r' % (tmp,)
         try:
             self.setstd(NORMS[v_norm])
             _debug_('setstdbyname: %s (0x%08X) set' % (name, NORMS[v_norm]), 3)

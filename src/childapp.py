@@ -81,7 +81,6 @@ class ChildApp:
 
             command = ('%s %s' % (config.RUNAPP, app)).strip()
             debug_name = app[:app.find(' ')]
-            _debug_('DJW:command=%r debug_name=%r' % (command, debug_name))
 
         else:
             while '' in app:
@@ -141,7 +140,6 @@ class ChildApp:
             command_str = ' '.join(command)
         self.child = None
         try:
-            _debug_('DJW:going to run %r' % command)
             self.child = Popen(command, shell=command_shell, stdin=PIPE, stdout=PIPE, stderr=PIPE, \
                 universal_newlines=True)
             try:
@@ -405,7 +403,7 @@ class ChildApp2(ChildApp):
         """
         stop everything when child is dead
         """
-        _debug_('ChildApp2.poll()', 1)
+        _debug_('ChildApp2.poll()', 3)
         if not self.isAlive():
             rc.post_event(self.stop_event())
             self.stop()
