@@ -55,8 +55,9 @@ class ChildApp:
         """
         Initialise ChildApp
         """
-        _debug_('ChildApp.__init__(app=%r, debugname=%r, doeslogging=%r)' % (app, debugname, doeslogging), 2)
-        self.lock = thread.allocate_lock()
+        _debug_('ChildApp.__init__(app=%r, debugname=%r, doeslogging=%r)' % (app, debugname, doeslogging), 1)
+        # Use a non reentrant lock, stops kill being called twice
+        self.lock = threading.Lock()
 
         prio = 0
 
@@ -78,8 +79,9 @@ class ChildApp:
             else:
                 self.binary = app.lstrip()
 
-            command = '%s %s' % (config.RUNAPP, app)
+            command = ('%s %s' % (config.RUNAPP, app)).strip()
             debug_name = app[:app.find(' ')]
+            _debug_('DJW:command=%r debug_name=%r' % (command, debug_name))
 
         else:
             while '' in app:
@@ -100,7 +102,6 @@ class ChildApp:
                 command = app
 
             debug_name = app[0]
-
 
         if debug_name.rfind('/') > 0:
             debug_name = debug_name[debug_name.rfind('/')+1:]
@@ -134,19 +135,23 @@ class ChildApp:
         command_isstr = isinstance(command, str)
         if command_isstr:
             command_shell = True
-            command_str = command.strip()
+            command_str = command
         else:
             command_shell = False
             command_str = ' '.join(command)
         self.child = None
         try:
+            _debug_('DJW:going to run %r' % command)
             self.child = Popen(command, shell=command_shell, stdin=PIPE, stdout=PIPE, stderr=PIPE, \
                 universal_newlines=True)
-            _debug_('Running (%s) "%s"%s with pid %s priority %s' % (\
-                command_isstr and 'str' or 'list', command_str, command_shell and ' in shell' or '', \
-                self.child.pid, prio), 1)
+            try:
+                _debug_('Running (%s) %r%s with pid %s priority %s' % (\
+                    command_isstr and 'str' or 'list', command_str, command_shell and ' in shell' or '', \
+                    self.child.pid, prio), 1)
+            except Exception, why:
+                print why
         except OSError, e:
-            _debug_('Cannot run "%s": %s' % (command_str, e), DERROR)
+            _debug_('Cannot run %r: %s' % (command_str, e), DERROR)
             self.ready = False
             return
 
@@ -168,25 +173,28 @@ class ChildApp:
 
     # Write a string to the app.
     def write(self, line):
-        _debug_('sending "%s" to pid %s' % (line.strip('\n'), self.child.pid))
+        _debug_('ChildApp.write(line=%r) to pid %s' % (line.strip('\n'), self.child.pid), 1)
         #self.shild.communicate(line)
         self.child.stdin.write(line)
         self.child.stdin.flush()
 
 
     def stdout_cb(self, line):
-        '''Override this method to receive stdout from the child app
-        The function receives complete lines'''
+        """Override this method to receive stdout from the child app
+        The function receives complete lines"""
+        _debug_('ChildApp.stdout_cb(line=%r)' % (line,), 1)
         pass
 
 
     def stderr_cb(self, line):
-        '''Override this method to receive stderr from the child app
-        The function receives complete lines'''
+        """Override this method to receive stderr from the child app
+        The function receives complete lines"""
+        _debug_('ChildApp.stderr_cb(line=%r)' % (line,), 1)
         pass
 
 
     def isAlive(self):
+        _debug_('ChildApp.isAlive()', 3)
         if not self.child:
             return False
         if not self.ready: # return true if constructor has not finished yet
@@ -199,6 +207,7 @@ class ChildApp:
         wait for the child process to stop
         returns the (pid, status) tuple
         """
+        _debug_('ChildApp.wait()', 1)
         #self.child.wait()
         #self.status = self.child.returncode
         #return (self.child.pid, self.status)
@@ -216,10 +225,10 @@ class ChildApp:
 
 
     def kill(self, signal=15):
-        '''
+        """
         Kill the application
-        '''
-
+        """
+        _debug_('ChildApp.kill(signal=%r)' % (signal), 1)
         # killed already
         if not hasattr(self, 'child'):
             _debug_('This should never happen!')
@@ -231,7 +240,7 @@ class ChildApp:
             #raise 'already dead'
             return
 
-        self.lock.acquire()
+        locked = self.lock.acquire(blocking=0)
         try:
             # maybe child is dead and only waiting?
             if self.child.poll() is not None:
@@ -314,7 +323,7 @@ class ChildApp2(ChildApp):
         Initialise ChildApp2
         """
         _debug_('ChildApp2.__init__(app=%r, debugname=%r, doeslogging=%r, stop_osd=%r)' % \
-            (app, debugname, doeslogging, stop_osd), 2)
+            (app, debugname, doeslogging, stop_osd), 1)
         rc.register(self.poll, True, 10)
         rc.register(self.stop, True, rc.SHUTDOWN)
 
@@ -342,6 +351,7 @@ class ChildApp2(ChildApp):
         """
         event to send on stop
         """
+        _debug_('ChildApp2.stop_event()', 1)
         return PLAY_END
 
 
@@ -349,6 +359,7 @@ class ChildApp2(ChildApp):
         """
         wait for the child process to stop
         """
+        _debug_('ChildApp2.wait()', 1)
         try:
             self.child.poll()
             pid, status = os.waitpid(self.child.pid, os.WNOHANG)
@@ -366,6 +377,7 @@ class ChildApp2(ChildApp):
         """
         stop the child
         """
+        _debug_('ChildApp2.stop(cmd=%r)' % (cmd), 1)
         rc.unregister(self.poll)
         rc.unregister(self.stop)
 
@@ -393,6 +405,7 @@ class ChildApp2(ChildApp):
         """
         stop everything when child is dead
         """
+        _debug_('ChildApp2.poll()', 1)
         if not self.isAlive():
             rc.post_event(self.stop_event())
             self.stop()
@@ -408,7 +421,7 @@ class Read_Thread(threading.Thread):
         Constructor of Read_Thread
         """
         _debug_('Read_Thread.__init__(name=%r, fh=%r, callback=%r, logger=%r, doeslogging=%r' % \
-            (name, fh, callback, logger, doeslogging), 2)
+            (name, fh, callback, logger, doeslogging), 1)
         threading.Thread.__init__(self)
         self.name = name
         self.fh = fh
@@ -428,6 +441,7 @@ class Read_Thread(threading.Thread):
 
 
     def run(self):
+        _debug_('Read_Thread.run()', 1)
         try:
             self._handle_input()
         except (IOError, ValueError):
@@ -435,6 +449,7 @@ class Read_Thread(threading.Thread):
 
 
     def _handle_input(self):
+        _debug_('Read_Thread._handle_input()', 1)
         saved = ''
         while 1:
             data = self.fh.readline(300)
