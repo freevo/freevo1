@@ -196,7 +196,7 @@ class RecordServer:
             _debug_('%s is recording %s stopping at %s' % (prog.title, recording and 'yes' or 'no', endtime), 2)
 
             if now > prog.stop + config.TV_RECORD_PADDING_POST:
-                _debug_('%s: finished %s > %s' % (prog.title, timenow, endtime), 1)
+                _debug_('%s: finished %s > %s' % (prog.title, time.strftime('%H:%M:%S', timenow), endtime), 1)
                 continue
 
             if not recording:
@@ -1446,7 +1446,11 @@ def main():
 
     recordserver = RecordServer()
 
-    rpc = kaa.rpc.Server(socket, secret)
+    try:
+        rpc = kaa.rpc.Server(socket, secret)
+    except Exception:
+        raise
+
     rpc.connect(recordserver)
 
     eh = EventHandler(recordserver.handleEvents)
@@ -1460,12 +1464,20 @@ def main():
 
 if __name__ == '__main__':
     import traceback
+    import socket
     import glob
+
+    sys.stdout = config.Logger(sys.argv[0] + ':stdout')
+    sys.stderr = config.Logger(sys.argv[0] + ':stderr')
 
     locks = glob.glob(config.FREEVO_CACHEDIR + '/record.*')
     for f in locks:
         _debug_('Removed old record lock \"%s\"' % f, DINFO)
         os.remove(f)
 
-    main()
-    _debug_('done.')
+    try:
+        main()
+    except Exception, why:
+        traceback.print_exc()
+        print why
+    print 'done.'
