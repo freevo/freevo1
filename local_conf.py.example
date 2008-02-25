@@ -924,6 +924,12 @@ CACHE_IMAGES = 1
 # OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM = 0
 
 #
+# Setting the cursors when freevo is run in fullscreen mode
+#
+# OSD_X11_CURSORS = '/usr/lib/X11/cursors/black.cursor /usr/lib/X11/cursors/blank.cursor'
+
+
+#
 # Execute a script on OSD startup.
 #
 # OSD_SDL_EXEC_AFTER_STARTUP = ""

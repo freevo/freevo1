@@ -365,7 +365,11 @@ if len(sys.argv) >= 2:
     # force fullscreen mode
     # deactivate screen blanking and set osd to fullscreen
     if sys.argv[1] == '--force-fs':
+        _debug_('os.system(\'xset -dpms s off\')')
         os.system('xset -dpms s off')
+        if config.OSD_X11_CURSORS is not None:
+            _debug_('os.system(\'xsetroot -cursor %s\')' % config.OSD_X11_CURSORS)
+            os.system('xsetroot -cursor %s' % config.OSD_X11_CURSORS)
         config.START_FULLSCREEN_X = 1
 
     # activate a trace function

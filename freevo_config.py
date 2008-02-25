@@ -348,6 +348,7 @@ LOCAL_CONF_CHANGES = [
      '''),
     (5.23,
      ''' Added XMLTV_TIMEZONE to allow the time zone to be specified
+     Added OSD_X11_CURSORS to allow custom cursor to be set, stops xine showing a cursor
      '''),
 ]
 
@@ -1353,8 +1354,16 @@ OSD_SDL_EXEC_AFTER_STARTUP = ""
 #
 OSD_SDL_EXEC_AFTER_CLOSE = ""
 
+#
+# Number of pixels to move the display to centre the OSD on the display
+#
 OSD_OVERSCAN_LEFT = OSD_OVERSCAN_RIGHT = 0
 OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM = 0
+
+#
+# Setting the cursors when freevo is run in fullscreen mode
+#
+OSD_X11_CURSORS = None
 
 
 # Exec a script after the osd startup. Matrox G400 users who wants to
