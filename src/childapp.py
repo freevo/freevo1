@@ -238,7 +238,7 @@ class ChildApp:
             #raise 'already dead'
             return
 
-        locked = self.lock.acquire(blocking=0)
+        locked = self.lock.acquire()
         try:
             # maybe child is dead and only waiting?
             if self.child.poll() is not None:
