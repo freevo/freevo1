@@ -91,7 +91,7 @@ class Scrobbler:
             'u': self.username,
             's': self.password_hash
         }
-        if info['length'] > 30*1000 and info['title'] and info['artist']:
+        if info['length'] > 30 and info['title'] and info['artist']:
             _debug_('Sending song: %r - %r' % (info['artist'], info['title']))
             i = 0
             stamp = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
