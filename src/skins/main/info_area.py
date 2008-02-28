@@ -59,7 +59,7 @@ class Info_Area(Skin_Area):
         self.i18n_re = re.compile('^( ?)(.*?)([:,]?)( ?)$')
         self.do_i18n_re = re.compile('\w{2}')
 
-    def update_content_needed( self ):
+    def update_content_needed(self):
         """
         check if the content needs an update
         """
@@ -75,7 +75,7 @@ class Info_Area(Skin_Area):
         update += self.set_list(update) # set self.list
 
         try:
-            list = self.eval_expressions( self.list )
+            list = self.eval_expressions(self.list)
         except:
             print "skin error: unable to parse expression in info_area"
             traceback.print_exc()
@@ -90,14 +90,14 @@ class Info_Area(Skin_Area):
         return update
 
 
-    def update_content( self ):
+    def update_content(self):
         """
         update the info area
         """
         if not self.updated: # entered a menu for the first time
             self.set_list(self.set_content())
             try:
-                self.sellist = self.eval_expressions( self.list )
+                self.sellist = self.eval_expressions(self.list)
             except:
                 print "skin error: unable to parse expression in info_area"
                 traceback.print_exc()
@@ -109,28 +109,28 @@ class Info_Area(Skin_Area):
             return
 
         # get items to be draw
-        list = self.return_formatedtext( self.sellist )
+        list = self.return_formatedtext(self.sellist)
 
         for i in list:
-            if isinstance( i, xml_skin.FormatText ):
+            if isinstance(i, xml_skin.FormatText):
                 if i.y + i.height > self.content.height:
                     break
-                self.drawstring( i.text,
+                self.drawstring(i.text,
                                  i.font, self.content,
-                                 ( self.content.x + i.x), ( self.content.y + i.y ),
+                                 (self.content.x + i.x), (self.content.y + i.y),
                                  i.width , i.height,
                                  align_v = i.valign, align_h = i.align,
                                  mode = i.mode,
                                  ellipses = i.ellipses,
-                                 dim = i.dim )
+                                 dim = i.dim)
 
-            elif isinstance( i, xml_skin.FormatImg ):
+            elif isinstance(i, xml_skin.FormatImg):
                 if i.src:
-                    tmp = ( self.content.x + i.x, self.content.y + i.y,
-                            i.width, i.height )
-                    self.drawimage( i.src, tmp )
+                    tmp = (self.content.x + i.x, self.content.y + i.y,
+                            i.width, i.height)
+                    self.drawimage(i.src, tmp)
                 else:
-                    print String(_( "ERROR" )) + ": " + String(_("missing 'src' attribute in skin tag!"))
+                    print String(_("ERROR")) + ": " + String(_("missing 'src' attribute in skin tag!"))
 
 
         self.last_item = self.infoitem
@@ -140,7 +140,7 @@ class Info_Area(Skin_Area):
         self.updated = 0
 
 
-    def set_content( self ):
+    def set_content(self):
         """
         set self.content and self.layout_content if they need to be set (return 1)
         or does nothing (return 0)
@@ -155,7 +155,7 @@ class Info_Area(Skin_Area):
 
         if self.layout_content is not self.layout.content or update:
             types = self.layout.content.types
-            self.content = self.calc_geometry( self.layout.content, copy_object=True )
+            self.content = self.calc_geometry(self.layout.content, copy_object=True)
             # backup types, which have the previously calculated fcontent
             self.content.types = types
             self.layout_content = self.layout.content
@@ -163,16 +163,16 @@ class Info_Area(Skin_Area):
         return 0
 
 
-    def set_list( self, force = 0 ):
+    def set_list(self, force = 0):
         """
         set self.list if need (return 1) or does nothing (return 0)
         """
         if force or self.infoitem is not self.last_item or self.infoitem != self.last_item:
             key = 'default'
-            if hasattr( self.infoitem, 'info_type'):
+            if hasattr(self.infoitem, 'info_type'):
                 key = self.infoitem.info_type or key
 
-            elif hasattr( self.infoitem, 'type' ):
+            elif hasattr(self.infoitem, 'type'):
                 key = self.infoitem.type or key
 
             if self.content.types.has_key(key):
@@ -180,7 +180,7 @@ class Info_Area(Skin_Area):
             else:
                 val = self.content.types[ 'default' ]
 
-            if not hasattr( val, 'fcontent' ):
+            if not hasattr(val, 'fcontent'):
                 self.list = None
                 return 1
 
@@ -191,7 +191,7 @@ class Info_Area(Skin_Area):
 
 
 
-    def get_expression( self, expression ):
+    def get_expression(self, expression):
         """
         create the python expression
         """
@@ -199,23 +199,22 @@ class Info_Area(Skin_Area):
         if expression.startswith('python:'):
             return expression.replace('python:', '', 1)
 
-        for b in expression.split( ' ' ):
-            if b in ( 'and', 'or', 'not', '==', '!=' ):
+        for b in expression.split(' '):
+            if b in ('and', 'or', 'not', '==', '!='):
                 # valid operator
-                exp += ' %s' % ( b )
+                exp += ' %s' % (b)
 
             elif b.startswith('\'') and b.endswith('\''):
                 # string
-                exp += ' %s' % ( b )
+                exp += ' %s' % (b)
 
             elif b.startswith('function:'):
                 exp += ' %s()' % b[9:]
 
-            elif b[ :4 ] == 'len(' and b.find( ')' ) > 0 and \
+            elif b[ :4 ] == 'len(' and b.find(')') > 0 and \
                      len(b) - b.find(')') < 5:
                 # lenght of something
-                exp += ' attr("%s") %s' % ( b[ : ( b.find(')') + 1 ) ],
-                                                    b[ ( b.find(')') + 1 ) : ])
+                exp += ' attr("%s") %s' % (b[ : (b.find(')') + 1) ], b[ (b.find(')') + 1) : ])
             else:
                 # an attribute
                 exp += ' attr("%s")' % b
@@ -225,14 +224,14 @@ class Info_Area(Skin_Area):
 
 
 
-    def eval_expressions( self, list, index=[ ] ):
+    def eval_expressions(self, list, index=[ ]):
         """
         traverse the list evaluating the expressions,
 
         @returns: a flat list with valid elements indexes only (false 'if' expressions
         eliminated).
 
-        Also, text elements are in the list too in a tuple: ( index, 'text value' ) so
+        Also, text elements are in the list too in a tuple: (index, 'text value') so
         you can check if it changed just comparing two lists (useful in music player,
         to update 'elapsed')
         """
@@ -242,12 +241,12 @@ class Info_Area(Skin_Area):
         if not list:
             return
 
-        rg = range( len( list ) )
+        rg = range(len(list))
         for i in rg:
-            if isinstance( list[ i ], xml_skin.FormatIf ):
+            if isinstance(list[ i ], xml_skin.FormatIf):
                 if list[ i ].expression_analized == 0:
                     list[ i ].expression_analized = 1
-                    exp = self.get_expression( list[ i ].expression )
+                    exp = self.get_expression(list[ i ].expression)
                     list[ i ].expression = exp
                 else:
                     exp = list[ i ].expression
@@ -255,15 +254,15 @@ class Info_Area(Skin_Area):
                 # Evaluate the expression:
                 if exp and eval(exp, {'attr': item.getattr}, function_calls):
                     # It's true, we should recurse into children
-                    ret_list += self.eval_expressions( list[ i ].content, index + [ i ] )
+                    ret_list += self.eval_expressions(list[ i ].content, index + [ i ])
                 continue
 
-            elif isinstance( list[ i ], xml_skin.FormatText ):
+            elif isinstance(list[ i ], xml_skin.FormatText):
                 exp = None
                 if list[ i ].expression:
                     if list[ i ].expression_analized == 0:
                         list[ i ].expression_analized = 1
-                        exp = self.get_expression( list[ i ].expression )
+                        exp = self.get_expression(list[ i ].expression)
                         list[ i ].expression = exp
                     else:
                         exp = list[ i ].expression
@@ -271,7 +270,7 @@ class Info_Area(Skin_Area):
                     if exp:
                         exp = eval(exp, {'attr': item.getattr}, function_calls)
                         if not isstring(exp):
-                            exp = str( exp )
+                            exp = str(exp)
                         if exp:
                             list[ i ].text = exp
                 else:
@@ -285,7 +284,7 @@ class Info_Area(Skin_Area):
                             list[i].text = m[0] + _(m[1]) + m[2] + m[3]
                 # I add a tuple here to be able to compare lists and know if we need to
                 # update, this is useful in the mp3 player
-                ret_list += [ index + [ ( i, list[ i ].text ) ] ]
+                ret_list += [ index + [ (i, list[ i ].text) ] ]
             else:
                 ret_list += [ index + [ i ] ]
 
@@ -295,7 +294,7 @@ class Info_Area(Skin_Area):
 
 
 
-    def return_formatedtext( self, sel_list ):
+    def return_formatedtext(self, sel_list):
         """
         receives a list of indexex of elements to be used and
         returns a array with FormatText ready to print (with its elements
@@ -313,9 +312,9 @@ class Info_Area(Skin_Area):
 
             # find the element
             element = self.list
-            for j in range( len( i ) - 1 ):
+            for j in range(len(i) - 1):
                 element = element[ i[ j ] ].content
-            if isinstance( i[ -1 ], tuple ):
+            if isinstance(i[ -1 ], tuple):
                 element = element[ i[ -1 ][ 0 ] ]
             else:
                 element = element[ i[ -1 ] ]
@@ -323,7 +322,7 @@ class Info_Area(Skin_Area):
             #
             # Tag: <goto_pos>
             #
-            if isinstance( element, xml_skin.FormatGotopos ):
+            if isinstance(element, xml_skin.FormatGotopos):
                 # move to pos
                 if element.mode == 'absolute':
                     if element.x != None:
@@ -338,8 +337,8 @@ class Info_Area(Skin_Area):
             #
             # Tag: <img>
             #
-            elif isinstance( element, xml_skin.FormatImg ):
-                element = copy.copy( element )
+            elif isinstance(element, xml_skin.FormatImg):
+                element = copy.copy(element)
                 # Image is a float object
                 if element.x == None:
                     element.x = x
@@ -350,7 +349,7 @@ class Info_Area(Skin_Area):
                     my_y = y
 
                 if element.width == None or element.height == None:
-                    image = osd.loadbitmap( element.src, True )
+                    image = osd.loadbitmap(element.src, True)
                     size = image.get_size()
 
                     if element.width == None:
@@ -364,50 +363,50 @@ class Info_Area(Skin_Area):
             #
             # Tag: <newline>
             #
-            elif isinstance( element, xml_skin.FormatNewline ):
+            elif isinstance(element, xml_skin.FormatNewline):
                 newline = 1 # newline height will be added later
                 x = 0
 
             #
             # Tag: <text>
             #
-            elif isinstance( element, xml_skin.FormatText ):
-                element = copy.copy( element )
+            elif isinstance(element, xml_skin.FormatText):
+                element = copy.copy(element)
                 # text position is the current position:
                 element.x = x
                 element.y = y
 
                 # Calculate the geometry
-                r = Geometry( x, y, element.width, element.height)
+                r = Geometry(x, y, element.width, element.height)
                 r = self.get_item_rectangle(r, self.content.width - x,
-                                            self.content.height - y )[ 2 ]
+                                            self.content.height - y)[ 2 ]
                 if element.height > 0:
                     height = min(r.height, element.height)
                 else:
                     height = -1
 
-                size = osd.drawstringframed( element.text, 0, 0,
+                size = osd.drawstringframed(element.text, 0, 0,
                                              r.width, r.height,
                                              element.font, None, None,
                                              element.align, element.valign,
                                              element.mode, ellipses=element.ellipses,
-                                             dim=element.dim, layer='' )[ 1 ]
+                                             dim=element.dim, layer='')[ 1 ]
                 m_width  = size[ 2 ] - size[ 0 ]
                 m_height = size[ 3 ] - size[ 1 ]
 
-                if isinstance( element.width, int ):
+                if isinstance(element.width, int):
                     if element.width <= 0:
-                        element.width = min( m_width, r.width )
+                        element.width = min(m_width, r.width)
                 elif element.align == 'left':
-                    element.width = min( m_width, r.width )
+                    element.width = min(m_width, r.width)
                 else:
                     element.width = r.width
 
-                if isinstance( element.height, int ) or element.height == 'line_height':
+                if isinstance(element.height, int) or element.height == 'line_height':
                     if element.height <= 0 or element.height == 'line_height':
                         element.height = m_height
                 else:
-                    element.height = min( m_height, r.height )
+                    element.height = min(m_height, r.height)
 
                 x += element.width
                 ret_list.append(element)
@@ -424,10 +423,10 @@ class Info_Area(Skin_Area):
             if newline and ret_list:
                 newline_height = 0
                 # find the tallest string
-                new_last_newline = len( ret_list )
+                new_last_newline = len(ret_list)
                 last_line = ret_list[ last_newline : new_last_newline ]
                 for j in last_line:
-                    if isinstance( j, xml_skin.FormatText ):
+                    if isinstance(j, xml_skin.FormatText):
                         font = j.font
                         if j.text and j.height > newline_height:
                             newline_height = j.height
