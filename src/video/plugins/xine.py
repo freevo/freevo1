@@ -61,17 +61,17 @@ class PluginInterface(plugin.Plugin):
     you select a title directly in the menu, this plugin won't be used and the
     default player (mplayer) will be used. You need xine-ui >= 0.9.22 to use this.
     """
-
     def __init__(self):
-        plugin.Plugin.__init__(self)
-
+        _debug_('PluginInterface.__init__()', 2)
         try:
             config.XINE_COMMAND
         except:
             print _('\'XINE_COMMAND\' not defined, \'xine\' video plugin deactivated.\n' \
                            'please check the xine section in freevo_config.py')
-            reason = '\'XINE_COMMAND\' not defined, \'xine\' video plugin deactivated'
+            self.reason = '\'XINE_COMMAND\' not defined, \'xine\' video plugin deactivated'
             return
+
+        plugin.Plugin.__init__(self)
 
         if config.XINE_COMMAND.find('fbxine') >= 0:
             type = 'fb'
@@ -86,12 +86,12 @@ class PluginInterface(plugin.Plugin):
 
 
 class Xine:
-    """the main class to control xine
+    """
+    the main class to control xine
     """
     def __init__(self, type):
-        """
-        Xine contructor
-        """
+        """ Xine contructor """
+        _debug_('Xine.__init__(type=%r)' % (type,), 2)
         self.name      = 'xine'
 
         self.app_mode  = 'video'
@@ -106,10 +106,8 @@ class Xine:
 
 
     def ShowMessage(self, msg):
-        """
-        Show a message on the OSD
-        """
-        _debug_("XINE: Show OSD Message: '%s'" % msg)
+        """ Show a message on the OSD """
+        _debug_('ShowMessage(msg=%r)' % (msg,), 2)
         self.app.write("OSDWriteText$     %s\n" % msg)
 
 
@@ -120,6 +118,7 @@ class Xine:
         1 = possible, but not good
         0 = unplayable
         """
+        _debug_('rate(item=%r)' % (item,), 2)
         try:
             _debug_('url=%r' % (item.url), 2)
             _debug_('mode=%r' % (item.mode), 2)
@@ -128,31 +127,30 @@ class Xine:
         except Exception, e:
             print e
         if item.url.startswith('dvd://'):
-            _debug_('%r good' % (item.url))
+            _debug_('%r good' % (item.url), 2)
             return 2
         if item.url.startswith('vcd://'):
             if item.url == 'vcd://':
-                _debug_('%r good' % (item.url))
+                _debug_('%r good' % (item.url), 2)
                 return 2
-            _debug_('%r unplayable' % (item.url))
+            _debug_('%r unplayable' % (item.url), 2)
             return 0
         if item.mimetype in config.VIDEO_XINE_SUFFIX:
-            _debug_('%r good' % (item.url))
+            _debug_('%r good' % (item.url), 2)
             return 2
         if item.mode in ('http') and not item.filename and not item.media:
             _debug_('%r unplayable' % (item.url), 2)
             return 0
         if item.network_play:
-            _debug_('%r possible' % (item.url))
+            _debug_('%r possible' % (item.url), 2)
             return 1
-        _debug_('%r unplayable' % (item.url))
+        _debug_('%r unplayable' % (item.url), 2)
         return 0
 
 
     def play(self, options, item):
-        """
-        play a dvd with xine
-        """
+        """ play video media with xine """
+        _debug_('play(options=%r, item=%r)' % (options, item), 2)
         self.item = item
         self.options = options
         self.item.elapsed = 0
@@ -224,10 +222,8 @@ class Xine:
 
 
     def stop(self, event=None):
-        """
-        Stop xine
-        """
-
+        """ Stop xine """
+        _debug_('stop(event=%r)' % (event,), 2)
         if not self.app:
             return
 
@@ -258,7 +254,7 @@ class Xine:
         eventhandler for xine control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-        _debug_('Xine.eventhandler event=%r' % (event.__dict__,), 1)
+        _debug_('eventhandler(event=%r, menuw=%r)' % (event.name, menuw), 2)
         if not self.app:
             return self.item.eventhandler(event)
 
@@ -406,7 +402,7 @@ class XineApp(childapp.ChildApp2):
     class controlling the in and output from the xine process
     """
     def __init__(self, command, player):
-        _debug_('XineApp.__init__(command=%r, player=%r)' % (command, player), 3)
+        _debug_('XineApp.__init__(command=%r, player=%r)' % (command, player), 2)
         self.item = player.item
         self.player = player
 
@@ -416,6 +412,7 @@ class XineApp(childapp.ChildApp2):
         """
         parse the stdout of the xine process
         """
+        _debug_('stdout_cb(line=%r)' % (line,), 2)
         # show connection status for network play
         if self.item.network_play:
             pass
@@ -424,7 +421,7 @@ class XineApp(childapp.ChildApp2):
         """
         parse the stderr of the xine process
         """
-        _debug_('%r' % line, 2)
+        _debug_('stderr_cb(line=%r)' % (line,), 2)
         # Has it started?
         if line.find('playing mrl') >= 0:
             _debug_('playback started')
