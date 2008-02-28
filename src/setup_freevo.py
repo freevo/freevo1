@@ -49,28 +49,31 @@ except: # unavailable, define '_' for all modules
     __builtin__.__dict__['_']= lambda m: m
 
 
-EXTERNAL_PROGRAMS = (("mplayer", "mplayer", 1),
-                     ("mencoder", "mencoder", 0),
-                     ("tvtime", "tvtime", 0),
-                     ("xine", "xine", 0),
-                     ("fbxine", "fbxine", 0),
-                     ("df_xine", "df_xine", 0),
-                     ("lsdvd", "lsdvd", 0),
-                     ("jpegtran", "jpegtran", 0),
-                     ("xmame.x11", "xmame", 0),
-                     ("xmame.SDL", "xmame", 0),
-                     ("xmame", "xmame", 0),
-                     ("ssnes9x", "snes", 0),
-                     ("zsnes", "snes", 0 ),
-                     ("lame", "lame", 0),
-                     ("flac", "flac", 0),
-                     ("cdparanoia", "cdparanoia", 0),
-                     ("oggenc", "oggenc", 0),
-                     ("renice", "renice", 0),
-                     ("setterm", "setterm", 0),
-                     ("mpav", "mpav", 0),
-                     ("vlc", "vlc", 0),
-                     ("dvdbackup", "dvdbackup", 0))
+EXTERNAL_PROGRAMS = (
+    ("mplayer", "mplayer", 1),
+    ("mencoder", "mencoder", 0),
+    ("tvtime", "tvtime", 0),
+    ("xine", "xine", 0),
+    ("fbxine", "fbxine", 0),
+    ("df_xine", "df_xine", 0),
+    ("lsdvd", "lsdvd", 0),
+    ("jpegtran", "jpegtran", 0),
+    ("xmame.x11", "xmame", 0),
+    ("xmame.SDL", "xmame", 0),
+    ("xmame", "xmame", 0),
+    ("ssnes9x", "snes", 0),
+    ("zsnes", "snes", 0 ),
+    ("lame", "lame", 0),
+    ("flac", "flac", 0),
+    ("cdparanoia", "cdparanoia", 0),
+    ("oggenc", "oggenc", 0),
+    ("renice", "renice", 0),
+    ("setterm", "setterm", 0),
+    ("mpav", "mpav", 0),
+    ("vlc", "vlc", 0),
+    ("dvdbackup", "dvdbackup", 0),
+    ("unzip", "unzip", 0),
+)
 
 # Help text
 def print_usage():

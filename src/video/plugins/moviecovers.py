@@ -78,6 +78,9 @@ class PluginInterface(plugin.ItemPlugin):
         if not config.USE_NETWORK:
             self.reason = 'no network'
             return
+        if not config.CONF.unzip:
+            self.reason = 'unzip is not installed'
+            return
         plugin.ItemPlugin.__init__(self)
 
     def initmyself(self):
@@ -87,7 +90,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         self.image = None # full path image filename
         self.image_urls = [] # possible image url list
-        self.image_url  = None # final image url
+        self.image_url = None # final image url
 
         self.fxdfile = None # filename, full path, WITHOUT extension
 
@@ -127,7 +130,7 @@ class PluginInterface(plugin.ItemPlugin):
             raise FxdMoviecovers_Net_Error("Moviecovers unreachable : " + error)
             exit
 
-        regexp_getall   = re.compile('.*<LI><A href="(/film/titre_.*)">(.*?)</A>.*([0-9]{4}).*', re.I)
+        regexp_getall = re.compile('.*<LI><A href="(/film/titre_.*)">(.*?)</A>.*([0-9]{4}).*', re.I)
 
         for line in response.read().split("\n"):
             #print line
@@ -137,7 +140,7 @@ class PluginInterface(plugin.ItemPlugin):
                 link = m.group(1)
                 name = m.group(2)
                 year = m.group(3)
-                self.moviecovers_id_list += [ ( link, name, year, 'Movies' ) ]
+                self.moviecovers_id_list += [ (link, name, year, 'Movies') ]
 
         return self.moviecovers_id_list
 
@@ -146,13 +149,13 @@ class PluginInterface(plugin.ItemPlugin):
         name = filename
 
         for r in config.ALLOCINE_REMOVE_FROM_LABEL:
-            name  = re.sub(r, '', name.lower())
+            name = re.sub(r, '', name.lower())
 
-        name  = vfs.basename(vfs.splitext(name)[0])
-        name  = re.sub('([a-z])([A-Z])', point_maker, name)
-        name  = re.sub('([a-zA-Z])([0-9])', point_maker, name)
-        name  = re.sub('([0-9])([a-zA-Z])', point_maker, name.lower())
-        name  = re.sub(',', ' ', name)
+        name = vfs.basename(vfs.splitext(name)[0])
+        name = re.sub('([a-z])([A-Z])', point_maker, name)
+        name = re.sub('([a-zA-Z])([0-9])', point_maker, name)
+        name = re.sub('([0-9])([a-zA-Z])', point_maker, name.lower())
+        name = re.sub(',', ' ', name)
 
         parts = re.split("[\._' -]", name)
         name = ''
@@ -222,10 +225,10 @@ class PluginInterface(plugin.ItemPlugin):
                 os.makedirs(vfs.dirname(self.fxdfile))
 
     def moviecovers_get_disc_searchstring(self, item):
-        name  = item.media.label
-        name  = re.sub('([a-z])([A-Z])', point_maker, name)
-        name  = re.sub('([a-zA-Z])([0-9])', point_maker, name)
-        name  = re.sub('([0-9])([a-zA-Z])', point_maker, name.lower())
+        name = item.media.label
+        name = re.sub('([a-z])([A-Z])', point_maker, name)
+        name = re.sub('([a-zA-Z])([0-9])', point_maker, name)
+        name = re.sub('([0-9])([a-zA-Z])', point_maker, name.lower())
         parts = re.split("[\._' -]", name)
 
         name = ''
@@ -242,26 +245,25 @@ class PluginInterface(plugin.ItemPlugin):
         self.item = item
 
         if item.type == 'video' and (not item.files or not item.files.fxd_file):
-            if item.mode == 'file' or (item.mode in ('dvd', 'vcd') and \
-                                       item.info.has_key('tracks') and not \
-                                       item.media):
+            if item.mode == 'file' or (item.mode in ('dvd', 'vcd') and item.info.has_key('tracks')
+                    and not item.media):
                 self.disc_set = False
-                return [ ( self.moviecovers_search , _('Search Moviecovers.com for this file'),
-                           'moviecovers_search_or_cover_search') ]
+                return [ (self.moviecovers_search , _('Search Moviecovers.com for this file'),
+                    'moviecovers_search_or_cover_search') ]
 
             elif item.mode in ('dvd', 'vcd') and item.info.has_key('tracks'):
                 self.disc_set = True
                 s = self.moviecovers_get_disc_searchstring(self.item)
                 if s:
-                    return [ ( self.moviecovers_search , _('Search Moviecovers.com for [%s]') % s,
-                               'moviecovers_search_or_cover_search') ]
+                    return [ (self.moviecovers_search , _('Search Moviecovers.com for [%s]') % s,
+                        'moviecovers_search_or_cover_search') ]
 
         if item.type == 'dir' and item.media and item.media.mountdir.find(item.dir) == 0:
             self.disc_set = True
             s = self.moviecovers_get_disc_searchstring(self.item)
             if s:
-                return [ ( self.moviecovers_search , _('Search Moviecovers.com for [%s]') % s,
-                           'moviecovers_search_or_cover_search') ]
+                return [ (self.moviecovers_search , _('Search Moviecovers.com for [%s]') % s,
+                    'moviecovers_search_or_cover_search') ]
         return []
 
 
@@ -290,7 +292,7 @@ class PluginInterface(plugin.ItemPlugin):
                 except:
                     pass
                 items.append(menu.MenuItem('%s (%s, %s)' % (htmlenties2txt(name), year, type),
-                                           self.moviecovers_create_fxd, (id, year)))
+                    self.moviecovers_create_fxd, (id, year)))
         except:
             box.destroy()
             box = PopupBox(text=_('Connection error : Probably connection timeout, try again'))
@@ -473,14 +475,14 @@ class PluginInterface(plugin.ItemPlugin):
     def write_fxd_copyright(self, fxd, node):
         fxd.setcdata(node, "The information in this file are from Moviecovers.com.\n"+
                            "Please visit http://www.moviecovers.com for more informations.\n")
-        fxd.add(fxd.XMLnode('source', [('url', "%s" % self.myurl)] ), node, 0)
+        fxd.add(fxd.XMLnode('source', [('url', "%s" % self.myurl)]), node, 0)
 
     def write_fxd_video(self, fxd, node):
-        fxd.setattr(node, 'title', self.title )
-        fxd.add(fxd.XMLnode('cover-img', (('source', self.image_url), ("test", "test")), self.image ), node, 0)
+        fxd.setattr(node, 'title', self.title)
+        fxd.add(fxd.XMLnode('cover-img', (('source', self.image_url), ("test", "test")), self.image), node, 0)
         videonode = fxd.XMLnode('video')
         fxd.add(videonode, node)
-        fxd.add(fxd.XMLnode('file', [('id', 'f1')], os.path.basename(self.item.filename) ), videonode, 0)
+        fxd.add(fxd.XMLnode('file', [('id', 'f1')], os.path.basename(self.item.filename)), videonode, 0)
         infonode = fxd.XMLnode('info')
         fxd.add(infonode, node)
         if self.info:
@@ -524,10 +526,10 @@ class PluginInterface(plugin.ItemPlugin):
         self.tmppath = '/tmp/moviecovers/'
         self.tmpfile = self.tmppath + 'file.zip'
         commands.getstatusoutput('rm -r -f ' + self.tmppath)
-        commands.getstatusoutput('mkdir '+ self.tmppath )
+        commands.getstatusoutput('mkdir '+ self.tmppath)
         #print "Get : %s " % urllib.quote(urllib.unquote(myurl2))
-        commands.getstatusoutput('wget ' + urllib.quote(urllib.unquote(myurl2)) + ' -O ' + self.tmpfile )
-        (status, output) = commands.getstatusoutput('cd '+ self.tmppath+'; unzip -o '+ self.tmpfile )
+        commands.getstatusoutput('wget '+urllib.quote(urllib.unquote(myurl2))+' -O '+self.tmpfile)
+        (status, output) = commands.getstatusoutput('cd '+self.tmppath+'; '+config.CONF.unzip+' -o '+self.tmpfile)
 
         # Now copy
         regexp_jpegfile = re.compile('.*jpg', re.I)
@@ -544,7 +546,7 @@ class PluginInterface(plugin.ItemPlugin):
                 self.filmfile = self.tmppath + vfs.basename(file)
 
         # Now parse the film file
-        file = open(self.filmfile )
+        file = open(self.filmfile)
         # File format is :
             #Title
             #Real
@@ -560,9 +562,9 @@ class PluginInterface(plugin.ItemPlugin):
             if lineno == 0: self.title = line
             if lineno == 1: self.info['director'] = line
             if lineno == 2: self.info['year'] = line
-            if lineno == 3: self.info['country']   = line
+            if lineno == 3: self.info['country'] = line
             if lineno == 4: self.info['genre'] = line
-            if lineno == 5: self.info['runtime']  = line
+            if lineno == 5: self.info['runtime'] = line
             if lineno == 6: self.info['actor']= line
             if lineno > 6:
                 self.info['plot'] += line
