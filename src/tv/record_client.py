@@ -40,8 +40,18 @@ import kaa.rpc
 import tv.epg_types
 from util.marmalade import jellyToXML, unjellyFromXML
 
-TRUE  = 1
-FALSE = 0
+# Module variable that contains an initialized RecordClient() object
+_singleton = None
+
+def RecordClientSingleton():
+    global _singleton
+
+    # One-time init
+    if _singleton == None:
+        _singleton = RecordClient()
+
+    return _singleton
+
 
 
 class RecordClientException(Exception):
@@ -95,7 +105,7 @@ class RecordClient:
             return None
 
 
-    @kaa.coroutine()
+    #@kaa.coroutine()
     def pingCo(self):
         now = time.time()
         print self.timeit(now)+': pingCo started'
@@ -107,7 +117,7 @@ class RecordClient:
         print self.timeit(now)+': pingCo finished' # we never get here
 
 
-    @kaa.coroutine()
+    #@kaa.coroutine()
     def findNextProgramCo(self, isrecording=False):
         """ """
         now = time.time()
@@ -120,7 +130,7 @@ class RecordClient:
         print self.timeit(now)+': findNextProgramCo finished'
 
 
-    @kaa.coroutine()
+    #@kaa.coroutine()
     def updateFavoritesScheduleCo(self):
         """ """
         now = time.time()
@@ -133,7 +143,7 @@ class RecordClient:
         print self.timeit(now)+': updateFavoritesScheduleCo finished'
 
 
-    @kaa.coroutine()
+    #@kaa.coroutine()
     def getNextProgramStart(self):
         """ """
         now = time.time()
@@ -453,7 +463,7 @@ if __name__ == '__main__':
         print 'handler.result=%r\n"%s"' % (result, result)
         raise SystemExit
 
-    rc = RecordClient()
+    rc = RecordClientSingleton()
 
     if len(sys.argv) >= 2:
         function = sys.argv[1].lower()
@@ -568,8 +578,8 @@ if __name__ == '__main__':
             dow="ANY"
             mod="ANY"
             priority=0
-            allowDuplicates=FALSE
-            onlyNew=TRUE
+            allowDuplicates=False
+            onlyNew=True
 
             (result, msg) = addEditedFavorite(name,title,channel,dow,mod,priority,allowDuplicates,onlyNew)
             if not result:
