@@ -206,7 +206,7 @@ class YoutubeVideo(Item):
         playvideo2.play()
 
 
-    def search_list(parent, menuw, text=""):
+    def search_list(parent, menuw, text=''):
         """Get the video list for a specific user"""
         _debug_('search_list(parent=%r, menuw=%r, text=%r)' % (parent, menuw, text), 2)
         items = []
@@ -216,7 +216,12 @@ class YoutubeVideo(Item):
         box.show()
         for video in service.GetFeed(feed).entry:
             date = video.published.text.split('T')
-            id = video.link[1].href.split('watch?v=');
+            if video.link[1].href.find('watch?v=') >= 0:
+                id = video.link[1].href.split('watch?v=');
+            elif video.link[0].href.find('watch?v=') >= 0:
+                id = video.link[0].href.split('watch?v=');
+            else:
+                continue   
             mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.downloadvideo, id[1])
             mi.arg = (video.title.text, id[1])
             text = util.htmlenties2txt(video.content)
@@ -241,10 +246,10 @@ class YoutubeVideo(Item):
         box.show()
         for video in service.GetFeed(feed).entry:
             date = video.published.text.split('T')
-            if video.link[1].href.find("watch?v=") >= 0:
-                id = video.link[1].href.split("watch?v=");
-            elif video.link[0].href.find("watch?v=") >= 0:
-                id = video.link[0].href.split("watch?v=");
+            if video.link[1].href.find('watch?v=') >= 0:
+                id = video.link[1].href.split('watch?v=');
+            elif video.link[0].href.find('watch?v=') >= 0:
+                id = video.link[0].href.split('watch?v=');
             else:
                 continue
             mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.downloadvideo, id[1])
