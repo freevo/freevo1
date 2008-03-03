@@ -37,9 +37,9 @@ import tv.epg_xmltv
 from tv.record_client import RecordClient
 import event as em
 
-from record_types import Favorite
-from epg_types import TvProgram
-from view_favorites import ViewFavorites
+from tv.epg_types import TvProgram
+from tv.record_types import Favorite, ScheduledRecordings
+from tv.view_favorites import ViewFavorites
 
 from gui.GUIObject      import *
 from gui.Border         import *
@@ -55,12 +55,12 @@ FALSE = 0
 
 class EditFavorite(PopupBox):
     """
-    prog      the program to record
-    left      x coordinate. Integer
-    top       y coordinate. Integer
-    width     Integer
-    height    Integer
-    context   Context in which the object is instanciated
+    @param prog:    the program to record
+    @param left:    x coordinate, Integer
+    @param top:     y coordinate, Integer
+    @param width:   width in pixels, Integer
+    @param height:  height in pixels, Integer
+    @param context: context in which the object is instantiated
     """
     def __init__(self, parent=None, subject=None, left=None, top=None, width=500, height=350, context=None):
         """ """
@@ -81,17 +81,13 @@ class EditFavorite(PopupBox):
                 self.priority = num_favorites + 1
             else:
                 self.priority = 1
-
             self.fav = Favorite(subject.title, subject, TRUE, TRUE, TRUE, self.priority, TRUE, FALSE)
 
         else:
             self.fav = subject
             self.oldname = self.fav.name
 
-
-
-        PopupBox.__init__(self, text=_('Edit Favorite'), x=left, y=top, width=width,
-                          height=height)
+        PopupBox.__init__(self, text=_('Edit Favorite'), x=left, y=top, width=width, height=height)
 
         self.v_spacing = 15
         self.h_margin = 20
@@ -129,9 +125,8 @@ class EditFavorite(PopupBox):
 
 
         self.chan_box.toggle_selected_index(chan_index)
-        # This is a hack for setting the OptionBox's label to the current
-        # value. It should be done by OptionBox when drawing, but it doesn't
-        # work :(
+        # This is a hack for setting the OptionBox's label to the current value.
+        # It should be done by OptionBox when drawing, but it doesn't work :(
         self.chan_box.change_item(None)
         self.add_child(self.chan_box)
 
@@ -150,9 +145,8 @@ class EditFavorite(PopupBox):
                 dow_index = i
             i += 1
         self.dow_box.toggle_selected_index(dow_index)
-        # This is a hack for setting the OptionBox's label to the current
-        # value. It should be done by OptionBox when drawing, but it doesn't
-        # work :(
+        # This is a hack for setting the OptionBox's label to the current value.
+        # It should be done by OptionBox when drawing, but it doesn't work :(
         self.dow_box.change_item(None)
         self.add_child(self.dow_box)
 
@@ -164,7 +158,7 @@ class EditFavorite(PopupBox):
         i = 0
         tod_index = 0
 
-        for h in range(0,24):
+        for h in range(0, 24):
             for m in (00, 30):
                 val = i*30
                 # Little hack: we calculate the hours from Jan 1st, 1970 GMT,
@@ -193,8 +187,8 @@ class EditFavorite(PopupBox):
 
 
     def removeFavorite(self):
-        _debug_('removeFavorite()', 2)
-        (result, msg) = self.recordclient.removeFavoriteNow(self.oldname)
+        _debug_('removeFavorite()', 1)
+        (result, reason) = self.recordclient.removeFavoriteNow(self.oldname)
         if result:
             searcher = None
             if self.parent and self.context == 'favorites':
@@ -209,11 +203,11 @@ class EditFavorite(PopupBox):
                     searcher.draw()
                     self.osd.update()
         else:
-            AlertBox(parent=self, text=_('Remove favorite failed')+(':\n%s' % msg)).show()
+            AlertBox(parent=self, text=_('Remove favorite failed')+(':\n%s' % reason)).show()
 
 
     def eventhandler(self, event, menuw=None):
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
+        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 1)
 
         if self.get_selected_child() == self.name_input:
             if event == em.INPUT_LEFT:
@@ -309,23 +303,22 @@ class EditFavorite(PopupBox):
 
         elif self.get_selected_child() == self.save:
             if event == em.INPUT_ENTER:
+                # remove the old favourite
                 if self.oldname:
-                    self.recordclient.removeFavoriteNow(self.oldname)
-                (result, msg) = self.recordclient.addEditedFavoriteNow(
-                             self.name_input.get_word(),
-                             self.fav.title,
-                             self.chan_box.list.get_selected_item().value,
-                             self.dow_box.list.get_selected_item().value,
-                             self.tod_box.list.get_selected_item().value,
-                             self.fav.priority,
-                             self.fav.allowDuplicates,
-                             self.fav.onlyNew)
+                    (result, reason) = self.recordclient.removeFavoriteNow(self.oldname)
+                    if not result:
+                        AlertBox(parent=self, text=_('Add favorite failed')+(':\n%s' % reason)).show()
+                # add the new favourite
+                (result, reason) = self.recordclient.addEditedFavoriteNow(self.name_input.get_word(), self.fav.title,
+                    self.chan_box.list.get_selected_item().value, self.dow_box.list.get_selected_item().value,
+                    self.tod_box.list.get_selected_item().value, self.fav.priority, self.fav.allowDuplicates,
+                    self.fav.onlyNew)
                 if result:
                     #tv.view_favorites.ViewFavorites(parent=self.parent, text='Favorites').show()
                     self.destroy()
                     AlertBox(parent='osd', text=_('Favorite %s has been saved') % self.name_input.get_word()).show()
                 else:
-                    AlertBox(parent=self, text=_('Add favorite failed')+(':\n%s' % msg)).show()
+                    AlertBox(parent=self, text=_('Add favorite failed')+(':\n%s' % reason)).show()
                 return True
             elif event in (em.INPUT_LEFT, em.MENU_PAGEUP):
                 self.save.toggle_selected()

@@ -51,7 +51,6 @@ from item import Item
 
 from menu import MenuItem, Menu
 from tv.programitem import ProgramItem
-#from tv.record_client import RecordClient
 from skin.widgets import TextEntryScreen
 
 

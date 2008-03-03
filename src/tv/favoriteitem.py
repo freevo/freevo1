@@ -38,6 +38,8 @@ from gui.InputBox import InputBox
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
+from tv.record_types import Favorite, ScheduledRecordings
+from tv.epg_types import TvProgram
 from tv.record_client import RecordClient
 
 class FavoriteItem(Item):
@@ -47,7 +49,7 @@ class FavoriteItem(Item):
     def __init__(self, parent, fav, fav_action='edit'):
         """ """
         Item.__init__(self, parent, skin_type='video')
-        _debug_('FavoriteItem.__init__(parent=%r, fav=%r, fav_action=%r)' % (parent, fav, fav_action), 2)
+        _debug_('FavoriteItem.__init__(parent=%r, fav=%r, fav_action=%r)' % (parent, fav, fav_action), 1)
         self.recordclient = RecordClient()
         self.fav   = fav
         self.name  = self.origname = fav.name
@@ -90,7 +92,7 @@ class FavoriteItem(Item):
 
 
     def actions(self):
-        _debug_('actions()', 2)
+        _debug_('actions()', 1)
         return [( self.display_submenu , _('Edit favorite'))]
 
 
@@ -101,7 +103,7 @@ class FavoriteItem(Item):
         All attributes of a favorite can be edited here and in the end
         the user must select 'save changes' to finally create the favorite.
         """
-        _debug_('display_submenu(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('display_submenu(arg=%r, menuw=%r)' % (arg, menuw), 1)
         ### create menu items for editing the favorites attributes
         items = []
 
@@ -156,7 +158,7 @@ class FavoriteItem(Item):
         This opens a input box to ask the user for a new name for this favorite.
         The default name of a favorite is the name of the program.
         """
-        _debug_('mod_name(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('mod_name(arg=%r, menuw=%r)' % (arg, menuw), 1)
         self.menuw = menuw
         InputBox(text=_('Alter Name'), handler=self.alter_name, \
             width=osd.get_singleton().width - config.OSD_OVERSCAN_LEFT - 20, input_text=self.name).show()
@@ -164,7 +166,7 @@ class FavoriteItem(Item):
 
     def alter_name(self, name):
         """ set the new name"""
-        _debug_('alter_name(name=%r)' % (name,), 2)
+        _debug_('alter_name(name=%r)' % (name,), 1)
         if name:
             self.name = self.fav.name = name.strip()
 
@@ -173,7 +175,7 @@ class FavoriteItem(Item):
 
     def mod_channel(self, arg=None, menuw=None):
         """Modify channel"""
-        _debug_('mod_channel(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('mod_channel(arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
 
         items.append(menu.MenuItem('ANY CHANNEL', action=self.alter_prop, arg=('channel', 'ANY')))
@@ -192,7 +194,7 @@ class FavoriteItem(Item):
 
         Opens a submenu where the day of the week of a favorite can be configured.
         """
-        _debug_('mod_day(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('mod_day(arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
 
         items.append(menu.MenuItem(_('ANY DAY'), action=self.alter_prop, arg=('dow', 'ANY')))
@@ -211,7 +213,7 @@ class FavoriteItem(Item):
 
         Opens a submenu where the time of a favorite can be configured.
         """
-        _debug_('mod_time(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('mod_time(arg=%r, menuw=%r)' % (arg, menuw), 1)
         items = []
 
         items.append(menu.MenuItem(_('ANY TIME'), action=self.alter_prop, arg=('mod', 'ANY')))
@@ -227,13 +229,12 @@ class FavoriteItem(Item):
         menuw.refresh()
 
 
-
     def alter_prop(self, arg=(None,None), menuw=None):
         """ Alter a favorites property
 
         This function is where the properties of a favorite really are changed.
         """
-        _debug_('alter_prop(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('alter_prop(arg=%r, menuw=%r)' % (arg, menuw), 1)
         (prop, val) = arg
 
         if prop == 'channel':
@@ -262,8 +263,7 @@ class FavoriteItem(Item):
                 self.fav.mod = 'ANY'
             else:
                 # self.mod = tv_util.minToTOD(val)
-                self.mod = time.strftime(config.TV_TIME_FORMAT,
-                                    time.gmtime(float(val * 60)))
+                self.mod = time.strftime(config.TV_TIME_FORMAT, time.gmtime(float(val * 60)))
                 self.fav.mod = val
             if menuw:
                 menuw.back_one_menu(arg='reload')
@@ -284,8 +284,7 @@ class FavoriteItem(Item):
             if menuw:
                 menustack = menuw.menustack[-1]
                 pos = menustack.choices.index(menustack.selected)
-                new = menu.MenuItem(newname, action=self.alter_prop,
-                                             arg=('dup', val))
+                new = menu.MenuItem(newname, action=self.alter_prop, arg=('dup', val))
                 menustack.choices[pos] = new
                 menustack.selected = menustack.choices[pos]
                 menuw.init_page()
@@ -306,8 +305,7 @@ class FavoriteItem(Item):
             if menuw:
                 menustack = menuw.menustack[-1]
                 pos = menustack.choices.index(menustack.selected)
-                new = menu.MenuItem(newname, action=self.alter_prop,
-                                             arg=('new', val))
+                new = menu.MenuItem(newname, action=self.alter_prop, arg=('new', val))
                 menustack.choices[pos] = new
                 menustack.selected = menustack.choices[pos]
                 menuw.init_page()
@@ -318,10 +316,9 @@ class FavoriteItem(Item):
         """
         Save favorite
         """
-        _debug_('save_changes(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('save_changes(arg=%r, menuw=%r)' % (arg, menuw), 1)
         # this can take some time, as it means although to update the schedule
-        msgtext = _('Saving the changes to this favorite.')+'\n'
-        msgtext+= _('This may take some time.')
+        msgtext = _('Saving the changes to this favorite.')+'\n'+_('This may take some time.')
         pop = PopupBox(text=msgtext)
         pop.show()
 
@@ -332,6 +329,10 @@ class FavoriteItem(Item):
             result = True
 
         if result:
+            print 'DJW:self.fav.__dict__=%r' % (self.fav.__dict__)
+            f = Favorite(self.fav.name, TvProgram(self.fav.title, self.fav.channel), self.fav.dow, self.fav.mod,
+                self.fav.priority, self.fav.allowDuplicates, self.fav.onlyNew)
+            print 'DJW:f.__dict__=%r' % (f.__dict__,)
             # create a new edited favorite
             (result, msg) = self.recordclient.addEditedFavoriteNow(self.fav.name,
                 self.fav.title, self.fav.channel, self.fav.dow, self.fav.mod,
@@ -356,7 +357,7 @@ class FavoriteItem(Item):
         """
         Remove favorite
         """
-        _debug_('rem_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('rem_favorite(arg=%r, menuw=%r)' % (arg, menuw), 1)
         name = self.origname
         (result, msg) = self.recordclient.removeFavoriteNow(name)
         if result:

@@ -72,7 +72,10 @@ class ManualRecordItem(Item):
         # a few seconds just in case
         self.MINPICKUP = 70
 
-        self.months = [ _('Jan'), _('Feb'), _('Mar'), _('Apr'), _('May'), _('Jun'), _('Jul'), _('Aug'), _('Sep'), _('Oct'), _('Nov'), _('Dec') ]
+        self.months = [
+            _('Jan'), _('Feb'), _('Mar'), _('Apr'), _('May'), _('Jun'),
+            _('Jul'), _('Aug'), _('Sep'), _('Oct'), _('Nov'), _('Dec')
+        ]
 
         now = time.time()
         now += 300

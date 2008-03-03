@@ -44,10 +44,9 @@ class PluginInterface(plugin.Plugin):
     Since MCEUSB transceivers can have 2 transmitters, the chosen
     transmitter must be set in local_conf.py.
 
-    Example usage (local_conf.py)::
-
-        plugin_external_tuner = plugin.activate('tv.irsend_directv',
-            args=('/usr/bin/irsend SEND_ONCE <remote_name>', '/usr/bin/irsend SET_TRANSMITTER',))
+    Example usage (local_conf.py):
+    |   plugin_external_tuner = plugin.activate('tv.irsend_directv',
+    |       args=('/usr/bin/irsend SEND_ONCE <remote_name>', '/usr/bin/irsend SET_TRANSMITTER',))
 
     Where <remote_name> is the name of the remote you are using to send codes
     with in lircd.conf.

@@ -91,9 +91,9 @@ class ScheduledRecordingsItem(Item):
         #    AlertBox(_('Recording server is not available')+(':\n%s' % msg)).show()
         #    return []
 
-        recordings = self.recordclient.getScheduledRecordingsNow()
-        if recordings is not None:
-            progs = recordings.getProgramList()
+        (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+        if schedule is not None:
+            progs = schedule.getProgramList()
 
             f = lambda a, b: cmp(a.start, b.start)
             progs = progs.values()
@@ -101,7 +101,7 @@ class ScheduledRecordingsItem(Item):
             for prog in progs:
                 items.append(ProgramItem(self, prog, context='schedule'))
         else:
-            AlertBox(_('Get recordings failed')+(':\n%s' % recordings)).show()
+            AlertBox(_('Get scheduled recordings failed')+(':\n%s' % schedule)).show()
             return []
 
         return items

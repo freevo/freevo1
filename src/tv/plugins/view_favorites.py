@@ -91,7 +91,7 @@ class ViewFavoritesItem(Item):
 
         server_available = self.recordclient.pingNow()
         if not server_available:
-            AlertBox(_('Recording server is not available')+(':\n%s' % msg)).show()
+            AlertBox(_('Recording server is not available')).show()
             return []
 
         favorites = self.recordclient.getFavoritesNow()

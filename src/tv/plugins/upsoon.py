@@ -97,10 +97,10 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def findNextProgramHandler(self, result):
         """ Handles the result from the findNextProgram call """
-        _debug_('findNextProgramHandler(result=%r)' % (result), 2)
-        self.next_program = result
+        _debug_('findNextProgramHandler(result=%r)' % (result,), 2)
+        (status, self.next_program) = result
 
-        if self.next_program == None:
+        if not status:
             return
 
         now = time.time()
@@ -213,7 +213,10 @@ class PluginInterface(plugin.DaemonPlugin):
         if os.path.exists(self.pending_lockfile):
             return self.running
 
-        self.recordclient.findNextProgram(self.findNextProgramHandler)
+        try:
+            self.recordclient.findNextProgram(self.findNextProgramHandler)
+        except Exception, why:
+            _debug_('findNextProgram: %s' % (why), DERROR)
         return self.running
 
 
@@ -222,7 +225,7 @@ class PluginInterface(plugin.DaemonPlugin):
         Processes events, detect the video start and stop events so that the
         alert box will work correctly
         """
-        _debug_('event_handler(event=%r)' % (event), 1)
+        _debug_('event_handler(event=%r)' % (event.name), 1)
         try:
             _debug_('event_handler(%s) name=%s arg=%s context=%s handler=%s' % \
                 (event, event.name, event.arg, event.context, event.handler), 2)
@@ -256,7 +259,7 @@ if __name__ == '__main__':
 
     elif function == 'findnextprogram':
         def handler(result):
-            print 'findnextprogram=%r' % (result)
+            print 'findnextprogram=%r' % (result,)
             print result.__dict__
             raise SystemExit
         server.findNextProgram(handler)
@@ -264,7 +267,7 @@ if __name__ == '__main__':
 
     elif function == 'isplayerrunning':
         def handler(result):
-            print 'isplayerrunning=%r' % (result)
+            print 'isplayerrunning=%r' % (result,)
             raise SystemExit
         server.isPlayerRunning(handler)
         kaa.main.run()

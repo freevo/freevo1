@@ -58,6 +58,7 @@ class ChildApp:
         _debug_('ChildApp.__init__(app=%r, debugname=%r, doeslogging=%r)' % (app, debugname, doeslogging), 1)
         # Use a non reentrant lock, stops kill being called twice
         self.lock = threading.Lock()
+        self.status = None
 
         prio = 0
 
@@ -117,15 +118,15 @@ class ChildApp:
             stdout_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stdout-%s.log' % (debug_name, os.getuid()))
             try:
                 self.stdout_log = open(stdout_logger, 'w')
-            except OSError, e:
-                _debug_('Cannot open "%s": %s' % (stdout_logger, e), DWARNING)
+            except OSError, why:
+                _debug_('Cannot open "%s": %s' % (stdout_logger, why), DWARNING)
                 self.stdout_log = None
 
             stderr_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stderr-%s.log' % (debug_name, os.getuid()))
             try:
                 self.stderr_log = open(stderr_logger, 'w')
-            except OSError, e:
-                _debug_('Cannot open "%s": %s' % (stderr_logger, e), DWARNING)
+            except OSError, why:
+                _debug_('Cannot open "%s": %s' % (stderr_logger, why), DWARNING)
                 self.stderr_log = None
         else:
             self.stdout_log = None
@@ -148,7 +149,7 @@ class ChildApp:
                     self.child.pid, prio), 1)
             except Exception, why:
                 print why
-        except OSError, e:
+        except OSError, why:
             _debug_('Cannot run %r: %s' % (command_str, e), DERROR)
             self.ready = False
             return
@@ -178,48 +179,30 @@ class ChildApp:
 
 
     def stdout_cb(self, line):
-        """Override this method to receive stdout from the child app
-        The function receives complete lines"""
-        _debug_('ChildApp.stdout_cb(line=%r)' % (line,), 1)
+        """
+        Override this method to receive stdout from the child app
+        The function receives complete lines
+        """
+        _debug_('ChildApp.stdout_cb(line=%r)' % (line,), 2)
         pass
 
 
     def stderr_cb(self, line):
-        """Override this method to receive stderr from the child app
-        The function receives complete lines"""
-        _debug_('ChildApp.stderr_cb(line=%r)' % (line,), 1)
+        """
+        Override this method to receive stderr from the child app
+        The function receives complete lines
+        """
+        _debug_('ChildApp.stderr_cb(line=%r)' % (line,), 2)
         pass
 
 
     def isAlive(self):
         _debug_('ChildApp.isAlive()', 3)
-        if not self.child:
+        if self.child is None:
             return False
         if not self.ready: # return true if constructor has not finished yet
             return True
-        return self.child.poll() == None
-
-
-    def wait(self):
-        """
-        wait for the child process to stop
-        returns the (pid, status) tuple
-        """
-        _debug_('ChildApp.wait()', 1)
-        #self.child.wait()
-        #self.status = self.child.returncode
-        #return (self.child.pid, self.status)
-        # this is the wait in ChildApp2
-        try:
-            pid, status = os.waitpid(self.child.pid, os.WNOHANG)
-        except OSError:
-            # strange, no child? So it is finished
-            return True
-
-        if pid == self.child.pid:
-            self.status = self.child.returncode
-            return True
-        return False
+        return self.child.poll() is None
 
 
     def kill(self, signal=15):
@@ -229,20 +212,19 @@ class ChildApp:
         _debug_('ChildApp.kill(signal=%r)' % (signal), 1)
         # killed already
         if not hasattr(self, 'child'):
-            _debug_('This should never happen!')
-            #raise 'no child attribute'
+            _debug_('This should never happen!', DERROR)
             return
 
         if not self.child:
-            _debug_('already dead')
-            #raise 'already dead'
+            _debug_('Already dead', DINFO)
             return
 
         locked = self.lock.acquire()
         try:
             # maybe child is dead and only waiting?
-            if self.child.poll() is not None:
-                _debug_('killed the easy way, status %s' % (self.child.returncode))
+            self.status = self.child.poll()
+            if self.status is not None:
+                _debug_('killed %s the easy way, status %s' % (self.child.pid, self.status))
                 if not self.child.stdin.closed: self.child.stdin.close()
                 if self.stdout_log: self.stdout_log.close()
                 if self.stderr_log: self.stderr_log.close()
@@ -253,56 +235,57 @@ class ChildApp:
                 _debug_('killing pid %s signal %s' % (self.child.pid, signal))
                 try:
                     os.kill(self.child.pid, signal)
-                except OSError, e:
+                except OSError, why:
                     _debug_('OSError killing pid %s: %s' % (self.child.pid, e))
 
             for i in range(60):
-                if self.wait():
+                self.status = self.child.poll()
+                if self.status is not None:
+                    _debug_('killed %s with signal %s, status %s' % (self.child.pid, signal, self.status))
                     break
                 time.sleep(0.1)
             else:
                 signal = 9
-                _debug_('killing pid %s signal %s' % (self.child.pid, signal))
+                _debug_('zapping %s signal %s' % (self.child.pid, signal))
                 try:
                     os.kill(self.child.pid, signal)
-                except OSError, e:
-                    _debug_('OSError killing pid %s: %s' % (self.child.pid, e))
+                except OSError, why:
+                    _debug_('OSError zapping pid %s: %s' % (self.child.pid, why))
                 for i in range(20):
-                    if self.wait():
-                        break
-                    time.sleep(0.1)
-
-
-            # now check if the app is really dead. If it is, poll()
-            # will return the status code
-            for i in range(5):
-                if self.child.poll() is not None:
-                    break
-                time.sleep(0.1)
-            else:
-                # Problem: the program had more than one thread, each thread has a
-                # pid. We killed only a part of the program. The filehandles are
-                # still open, the program still lives. If we try to close the infile
-                # now, Freevo will die.
-                # Solution: there is no good one, let's try killall on the binary. It's
-                # ugly but it's the _only_ way to stop this nasty app
-                _debug_('Oops, command refuses to die, try bad hack....')
-                util.killall(self.binary, sig=15)
-                for i in range(20):
-                    if self.child.poll() != None:
+                    self.status = self.child.poll()
+                    if self.status is not None:
+                        _debug_('zapped %s with signal %s, status %s' % (self.child.pid, signal, self.status))
                         break
                     time.sleep(0.1)
                 else:
-                    # still not dead. Puh, something is realy broekn here.
-                    # Try killall -9 as last chance
-                    _debug_('Try harder to kill the app....')
-                    util.killall(self.binary, sig=9)
+                    # Problem: the program had more than one thread, each thread has a
+                    # pid. We killed only a part of the program. The file handles are
+                    # still open, the program still lives. If we try to close the infile
+                    # now, Freevo will die.
+                    # Solution: there is no good one, let's try killall on the binary. It's
+                    # ugly but it's the _only_ way to stop this nasty app
+                    signal = 15
+                    _debug_('killing all %r signal %s' % (self.binary, signal))
+                    util.killall(self.binary, sig=signal)
                     for i in range(20):
-                        if self.child.poll() != None:
+                        self.status = self.child.poll()
+                        if self.status is not None:
+                            _debug_('killed all %r with signal %s, status %s' % (self.binary, signal, self.status))
                             break
                         time.sleep(0.1)
                     else:
-                        _debug_('PANIC can\'t kill program', DERROR)
+                        # Still not dead. Puh, something is really broken here.
+                        signal = 9
+                        _debug_('zapping all %r signal %s' % (self.binary, signal))
+                        util.killall(self.binary, sig=signal)
+                        for i in range(20):
+                            self.status = self.child.poll()
+                            if self.status is not None:
+                                _debug_('zapped all %r with signal %s, status %s' % (self.binary, signal, self.status))
+                                break
+                            time.sleep(0.1)
+                        else:
+                            _debug_('PANIC can\'t kill program', DERROR)
         finally:
             self.lock.release()
         if not self.child.stdin.closed: self.child.stdin.close()
@@ -353,24 +336,6 @@ class ChildApp2(ChildApp):
         return PLAY_END
 
 
-    def wait(self):
-        """
-        wait for the child process to stop
-        """
-        _debug_('ChildApp2.wait()', 1)
-        try:
-            self.child.poll()
-            pid, status = os.waitpid(self.child.pid, os.WNOHANG)
-        except OSError, e:
-            #print 'OSError: %s' % (e)
-            return True
-
-        if pid == self.child.pid:
-            self.status = status
-            return True
-        return False
-
-
     def stop(self, cmd=''):
         """
         stop the child
@@ -419,7 +384,7 @@ class Read_Thread(threading.Thread):
         Constructor of Read_Thread
         """
         _debug_('Read_Thread.__init__(name=%r, fh=%r, callback=%r, logger=%r, doeslogging=%r' % \
-            (name, fh, callback, logger, doeslogging), 1)
+            (name, fh, callback, logger, doeslogging), 2)
         threading.Thread.__init__(self)
         self.name = name
         self.fh = fh

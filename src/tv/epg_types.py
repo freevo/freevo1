@@ -175,6 +175,8 @@ class TvProgram:
 
 
 class TvChannel:
+    """
+    """
     id = ''
     displayname = ''
     tunerid = ''
@@ -195,22 +197,26 @@ class TvChannel:
 
     def __str__(self):
         s = 'CHANNEL ID   %-20s' % self.id
-
         if self.programs:
             s += '\n'
             for program in self.programs:
                 s += '   ' + String(program) + '\n'
         else:
             s += '     NO DATA\n'
-
         return s
 
 
+    def __repr__(self):
+        return '<TvChannel %(id)r>' % (self.__dict__)
+
+
+
 class TvGuide:
+    """
+    """
     chan_dict = None
     chan_list = None
     timestamp = 0.0
-
 
     def __init__(self):
         # These two types map to the same channel objects
@@ -254,17 +260,23 @@ class TvGuide:
     #
     # The return value is a list of channels (TvChannel)
     def GetPrograms(self, start=None, stop=None, chanids=None):
-        _debug_('GetPrograms(start=%r, stop=%r, chanids=%r)' % (start, stop, chanids))
         if start == None:
             start = 0
         if stop == None:
             stop = 2147483647   # Year 2038
+        _debug_('GetPrograms(start=%r, stop=%r, chanids=%r)' % (time.strftime('%H:%M', time.localtime(start)),
+            time.strftime('%H:%M', time.localtime(stop)), chanids))
 
         # Return a cached version?
         global cache_last_start, cache_last_stop, cache_last_chanids, cache_last_time, cache_last_result
+
+        print 'DJW:start:', cache_last_start, start, 'stop:', cache_last_stop, stop, 'chanids:', cache_last_chanids, chanids, 'time:', time.time(), cache_last_time, time.time() < cache_last_time
+        #import traceback
+        #traceback.print_stack()
+
         if (cache_last_start == start and cache_last_stop == stop and
             cache_last_chanids == chanids and time.time() < cache_last_time):
-            _debug_('GetPrograms: Return cached results, valid for %1.1f secs.' % cache_last_time - time.time())
+            _debug_('GetPrograms: return cached results, valid for %1.1f secs.' % cache_last_time - time.time())
             return cache_last_result[:]  # Return a copy
 
         channels = []
@@ -307,8 +319,6 @@ class TvGuide:
 
     def __str__(self):
         s = 'XML TV Guide\n'
-
         for chan in self.chan_list:
             s += String(chan)
-
         return s
