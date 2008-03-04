@@ -32,11 +32,10 @@
 import sys, time
 import util.tv_util as tv_util
 
+import config
 from tv.record_client import RecordClient
 
 from www.web_types import HTMLResource, FreevoResource
-
-import config
 
 TRUE = 1
 FALSE = 0
@@ -63,8 +62,8 @@ class RecordResource(FreevoResource):
             return String( fv.res )
 
         if action == 'remove':
-            recordings = self.recordclient.getScheduledRecordingsNow()
-            progs = recordings.getProgramList()
+            (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+            progs = schedule.getProgramList()
 
             prog = None
             for what in progs.values():
@@ -87,8 +86,8 @@ class RecordResource(FreevoResource):
 
             self.recordclient.scheduleRecordingNow(prog)
 
-        recordings = self.recordclient.getScheduledRecordingsNow()
-        progs = recordings.getProgramList()
+        (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+        progs = schedule.getProgramList()
         favs = self.recordclient.getFavoritesNow()
 
         fv.printHeader(_('Scheduled Recordings'), 'styles/main.css', selected=_('Scheduled Recordings'))

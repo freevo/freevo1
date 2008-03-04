@@ -141,7 +141,7 @@ class GuideResource(FreevoResource):
             mfrprevguide = 0
 
         guide = tv.epg_xmltv.get_guide()
-        schedule = self.recordclient.getScheduledRecordingsNow()
+        (status, schedule) = self.recordclient.getScheduledRecordingsNow()
         if schedule:
             schedule = schedule.getProgramList()
 
@@ -211,7 +211,7 @@ class GuideResource(FreevoResource):
                     status = 'program'
 
                     if schedule:
-                        result = self.recordclient.isProgScheduledNow(prog, schedule)
+                        (result, reason) = self.recordclient.isProgScheduledNow(prog, schedule)
                         if result:
                             status = 'scheduled'
                             really_now = time.time()

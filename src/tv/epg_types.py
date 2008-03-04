@@ -270,10 +270,6 @@ class TvGuide:
         # Return a cached version?
         global cache_last_start, cache_last_stop, cache_last_chanids, cache_last_time, cache_last_result
 
-        print 'DJW:start:', cache_last_start, start, 'stop:', cache_last_stop, stop, 'chanids:', cache_last_chanids, chanids, 'time:', time.time(), cache_last_time, time.time() < cache_last_time
-        #import traceback
-        #traceback.print_stack()
-
         if (cache_last_start == start and cache_last_stop == stop and
             cache_last_chanids == chanids and time.time() < cache_last_time):
             _debug_('GetPrograms: return cached results, valid for %1.1f secs.' % cache_last_time - time.time())

@@ -64,8 +64,6 @@ if __name__ == '__main__':
 # have been updated to use kaa.rpc
 
 from video.commdetectclient import initCommDetectJob, queueIt, listJobs, connectionTest
-from util.marmalade import jellyToXML, unjellyFromXML
-from twisted.web import sux
 
 import tv.record_types
 from tv.record_types import TYPES_VERSION
@@ -104,14 +102,15 @@ _debug_('PLUGIN_RECORD: %s' % config.plugin_record, DINFO)
 plugin.init_special_plugin(config.plugin_record)
 
 def print_plugin_warning():
-    _debug_("""
+    warning = """
     *************************************************
     **  Warning: No recording plugin registered.   **
     **           Check your local_conf.py for a    **
     **           bad "plugin_record =" line or     **
     **           this log for a plugin failure.    **
     **           Recordings will fail!             **
-    *************************************************""", DWARNING)
+    *************************************************"""
+    _debug_(warning, DWARNING)
 
 
 if not plugin.getbyname('RECORD'):
@@ -132,11 +131,15 @@ class RecordServer:
         self.vg = None
         self.previouslyRecordedShows = None
         self.delay_recording = None
+        self.schedule = ScheduledRecordings()
+        self.updateFavoritesSchedule()
 
 
     @kaa.rpc.expose('ping')
     def pingtest(self):
+        _debug_('pingtest()', 2)
         return True
+
 
     @kaa.rpc.expose('isRecording')
     def isRecording(self):
@@ -155,9 +158,9 @@ class RecordServer:
         return 0
 
 
-    def findOverlaps(self, scheduledRecordings):
-        _debug_('in findOverlaps', 2)
-        progs = scheduledRecordings.getProgramList()
+    def findOverlaps(self, schedule):
+        _debug_('findOverlaps(schedule=%r)' % (schedule,), 2)
+        progs = schedule.getProgramList()
         proglist = list(progs)
         proglist.sort(self.progsTimeCompare)
         for progitem in proglist:
@@ -228,94 +231,77 @@ class RecordServer:
 
     @kaa.rpc.expose('getScheduledRecordings')
     def getScheduledRecordings(self):
-        _debug_('getScheduledRecordings()', 2)
+        _debug_('getScheduledRecordings()', 1)
         file_ver = None
-        scheduledRecordings = None
+        schedule = None
 
         if os.path.isfile(config.TV_RECORD_SCHEDULE):
             _debug_('reading cache (%r)' % config.TV_RECORD_SCHEDULE, 2)
-            if hasattr(self, 'scheduledRecordings_cache'):
-                mod_time, scheduledRecordings = self.scheduledRecordings_cache
+            if hasattr(self, 'schedule_cache'):
+                mod_time, schedule = self.schedule_cache
                 try:
                     if os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME] == mod_time:
                         _debug_('using cached schedule', 2)
-                        return scheduledRecordings
+                        return schedule
                 except OSError, why:
                     _debug_('Failed to stat %r: %s' % (config.TV_RECORD_SCHEDULE, why), DERROR)
                     pass
 
-            try:
-                f = open(config.TV_RECORD_SCHEDULE, 'r')
-                scheduledRecordings = unjellyFromXML(f)
-                f.close()
-            except sux.ParseError, e:
-                _debug_('%r is corrupt, removed' % (config.TV_RECORD_SCHEDULE), DWARNING)
-                os.unlink(config.TV_RECORD_SCHEDULE)
+            schedule = self.schedule.loadRecordSchedule()
 
             try:
-                file_ver = scheduledRecordings.TYPES_VERSION
+                file_ver = schedule.TYPES_VERSION
             except AttributeError:
                 _debug_('The cache does not have a version and must be recreated', DWARNING)
 
             if file_ver != TYPES_VERSION:
                 _debug_(('ScheduledRecordings version number %s is stale (new is %s), must be reloaded') % \
                     (file_ver, TYPES_VERSION), DINFO)
-                scheduledRecordings = None
+                schedule = None
             else:
                 _debug_('Got ScheduledRecordings (version %s).' % file_ver, DINFO)
 
-            #FIXME This should be removed when the xml is not used
-            scheduledRecordings.initialize()
-
-        if not scheduledRecordings:
+        if not schedule:
             _debug_('Created a new ScheduledRecordings', DINFO)
-            scheduledRecordings = ScheduledRecordings()
-            self.saveScheduledRecordings(scheduledRecordings)
+            schedule = ScheduledRecordings()
+            self.saveScheduledRecordings(schedule)
 
-        _debug_('ScheduledRecordings has %s items.' % len(scheduledRecordings.program_list))
+        _debug_('ScheduledRecordings has %s items.' % len(schedule.program_list))
 
         try:
             mod_time = os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME]
-            self.scheduledRecordings_cache = mod_time, scheduledRecordings
+            self.schedule_cache = mod_time, schedule
         except OSError:
             pass
-        return scheduledRecordings
+        return schedule
 
 
-    @kaa.rpc.expose('saveScheduledRecordings')
-    def saveScheduledRecordings(self, scheduledRecordings=None):
+    #@kaa.rpc.expose('saveScheduledRecordings')
+    def saveScheduledRecordings(self, schedule=None):
         """ Save the schedule to disk """
-        _debug_('saveScheduledRecordings(scheduledRecordings=%r)' % (scheduledRecordings), 1)
+        _debug_('saveScheduledRecordings(schedule=%r)' % (schedule), 1)
 
-        if not scheduledRecordings:
+        if not schedule:
             _debug_('making a new ScheduledRecordings', DINFO)
-            scheduledRecordings = ScheduledRecordings()
+            schedule = ScheduledRecordings()
 
-        scheduledRecordings.saveRecordSchedule()
+        self.findOverlaps(schedule)
+        _debug_('saving cached file %r with %s items' % (config.TV_RECORD_SCHEDULE, len(schedule.program_list)), 1)
 
-        self.findOverlaps(scheduledRecordings)
-        _debug_('saving cached file %r with %s items' % \
-            (config.TV_RECORD_SCHEDULE, len(scheduledRecordings.program_list)), 2)
-        try:
-            f = open(config.TV_RECORD_SCHEDULE, 'w')
-        except IOError:
-            os.unlink(config.TV_RECORD_SCHEDULE)
-            f = open(config.TV_RECORD_SCHEDULE, 'w')
-
-        #print 'scheduledRecordings=%r' % (scheduledRecordings,)
-        jellyToXML(scheduledRecordings, f)
-        f.close()
+        schedule.saveRecordSchedule()
 
         try:
             mod_time = os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME]
-            self.scheduledRecordings_cache = mod_time, scheduledRecordings
+            self.schedule_cache = mod_time, schedule
         except OSError:
             pass
 
-        return True
+        return (True, _('scheduled recordings saved'))
+
 
     def loadPreviouslyRecordedShows(self):
         """ Load the saved set of recorded shows """
+        _debug_('loadPreviouslyRecordedShows()', 1)
         if self.previouslyRecordedShows:
             return
 
@@ -326,16 +312,20 @@ class RecordServer:
             self.previouslyRecordedShows = {}
             pass
 
+
     def savePreviouslyRecordedShows(self):
         """ Save the set of recorded shows """
+        _debug_('savePreviouslyRecordedShows()', 1)
         if not self.previouslyRecordedShows:
             return
 
         cacheFile = config.FREEVO_CACHEDIR+"/previouslyRecorded.pickle"
         pickle.dump(self.previouslyRecordedShows, open(cacheFile, "w"))
 
+
     def newEpisode(self, prog=None):
         """ Return true if this is a new episode of 'prog' """
+        _debug_('newEpisode(prog=%r)' % (prog,), 1)
         todayStr = datetime.date.today().strftime('%Y%m%d')
         progStr = str(prog.date)
         _debug_('Program Date: "%s"' % progStr, DINFO)
@@ -380,9 +370,11 @@ class RecordServer:
             _debug_('No good date format, assuming new Episode to be on the safe side', DINFO)
             return True
 
+
     def shrink(self, text):
         """ Shrink a string by removing all spaces and making it
         lower case and then returning the MD5 digest of it. """
+        _debug_('shrink(text=%r)' % (text,), 2)
         if text:
             text = md5.new(text.lower().replace(' ', '')).hexdigest()
         else:
@@ -393,6 +385,7 @@ class RecordServer:
     def getPreviousRecordingKey(self, prog):
         """Return the key to be used for a given prog in the
         previouslyRecordedShows hashtable."""
+        _debug_('getPreviousRecordingKey(prog=%r)' % (prog,), 2)
         shrunkTitle = self.shrink(prog.title)
         shrunkSub   = self.shrink(prog.sub_title)
         shrunkDesc  = self.shrink(prog.desc);
@@ -403,6 +396,7 @@ class RecordServer:
 
     def getPreviousRecording(self, prog):
         """Get a previous recording, or None if none."""
+        _debug_('getPreviousRecording(prog=%r)' % (prog,), 2)
         try:
             return self.previouslyRecordedShows[self.getPreviousRecordingKey(prog)]
         except KeyError:
@@ -411,6 +405,7 @@ class RecordServer:
 
     def removeDuplicate(self, prog=None):
         """Remove a duplicate recording"""
+        _debug_('removeDuplicate(prog=%r)' % (prog,), 2)
         self.loadPreviouslyRecordedShows()
         previous = self.getPreviousRecording(prog)
         if previous:
@@ -421,8 +416,7 @@ class RecordServer:
 
     def addDuplicate(self, prog=None):
         """Add program to duplicates hash"""
-        _debug_('No previous recordings for "%s", "%s", "%s", adding to hash and saving' % \
-        (prog.title, prog.sub_title, prog.desc), 2)
+        _debug_('addDuplicate(prog=%r)' % (prog,), 2)
         self.loadPreviouslyRecordedShows()
         self.previouslyRecordedShows[self.getPreviousRecordingKey(prog)] = prog
         for key in self.getPreviousRecordingKey(prog):
@@ -433,6 +427,7 @@ class RecordServer:
     def duplicate(self, prog=None):
         """Identify if the given programme is a duplicate. If not,
         record it as previously recorded."""
+        _debug_('duplicate(prog=%r)' % (prog,), 2)
         self.loadPreviouslyRecordedShows()
         previous = self.getPreviousRecording(prog)
         if previous:
@@ -443,31 +438,35 @@ class RecordServer:
 
 
     def addRecordingToSchedule(self, prog=None, inputSchedule=None):
+        _debug_('addRecordingToSchedule(%s, inputSchedule=%r)' % (prog, inputSchedule), 1)
         if inputSchedule:
-            scheduledRecordings=inputSchedule
+            schedule = inputSchedule
         else:
-            scheduledRecordings = self.getScheduledRecordings()
-        scheduledRecordings.addProgram(prog, tv_util.getKey(prog))
+            schedule = self.getScheduledRecordings()
+        schedule.addProgram(prog, tv_util.getKey(prog))
         if not inputSchedule:
             if config.TV_RECORD_DUPLICATE_DETECTION:
                 self.addDuplicate(prog)
-            self.saveScheduledRecordings(scheduledRecordings)
+            self.saveScheduledRecordings(schedule)
 
 
     def removeRecordingFromSchedule(self, prog=None, inputSchedule=None):
+        _debug_('removeRecordingFromSchedule(%s, inputSchedule=%r)' % (prog, inputSchedule), 1)
         if inputSchedule:
-            scheduledRecordings = inputSchedule
+            schedule = inputSchedule
         else:
-            scheduledRecordings = self.getScheduledRecordings()
-        scheduledRecordings.removeProgram(prog, tv_util.getKey(prog))
+            schedule = self.getScheduledRecordings()
+        schedule.removeProgram(prog, tv_util.getKey(prog))
         if not inputSchedule:
             if config.TV_RECORD_DUPLICATE_DETECTION:
                 self.removeDuplicate(prog)
-            self.saveScheduledRecordings(scheduledRecordings)
+            self.saveScheduledRecordings(schedule)
 
 
     def conflictResolution(self, prog):
+        _debug_('conflictResolution(prog=%r)' % (prog,), 2)
         def exactMatch(self, prog):
+            _debug_('exactMatch(prog=%r)' % (prog,), 2)
             if prog.desc:
                 descResult = False
                 descMatches = None
@@ -485,8 +484,9 @@ class RecordServer:
                     return sub_titleMatches
             return None
 
+
         def getConflicts(self, prog, myScheduledRecordings):
-            _debug_('Before mySched recordings; ignore all addProgram lines', DINFO)
+            _debug_('getConflicts(prog=%r, myScheduledRecordings=%r)' % (prog, myScheduledRecordings), 2)
             self.addRecordingToSchedule(prog, myScheduledRecordings)
             progs = myScheduledRecordings.getProgramList()
             proglist = list(progs)
@@ -503,10 +503,11 @@ class RecordServer:
                     elif nextprog == prog:
                         conflicts.append(thisprog)
             self.removeRecordingFromSchedule(prog, myScheduledRecordings)
-            _debug_('After mySched recordings; stop ignoring all addProgram lines', DINFO)
             return (conflictRating, conflicts)
 
+
         def getRatedConflicts(self, prog, myScheduledRecordings):
+            _debug_('getRatedConflicts(prog=%r, myScheduledRecordings=%r)' % (prog, myScheduledRecordings), 2)
             ratedConflicts = []
             occurances = exactMatch(self, prog)
             if not occurances:
@@ -639,8 +640,8 @@ class RecordServer:
 
 
     def checkOnlyNewDetection(self, prog=None):
+        _debug_('checkOnlyNewDetection(prog=%r)' % (prog,), 2)
         if config.TV_RECORD_ONLY_NEW_DETECTION:
-            _debug_('Only new episode detection enabled', DINFO)
             if not self.doesFavoriteRecordOnlyNewEpisodes(prog):
                 return (True, 'Favorite records all episodes, record')
             if self.newEpisode(prog):
@@ -652,8 +653,8 @@ class RecordServer:
 
 
     def checkDuplicateDetection(self, prog=None):
+        _debug_('checkDuplicateDetection(prog=%r)' % (prog,), 2)
         if config.TV_RECORD_DUPLICATE_DETECTION:
-            _debug_('Duplicate detection enabled', DINFO)
             if self.doesFavoriteAllowDuplicates(prog):
                 return (True, 'Favorite allows duplicates, record')
             if not self.duplicate(prog):
@@ -665,6 +666,7 @@ class RecordServer:
 
 
     def setTunerid(self, prog):
+        _debug_('setTunerid(prog=%r)' % (prog,), 2)
         for chan in guide.chan_list:
             if prog.channel_id == chan.id:
                 prog.tunerid = chan.tunerid
@@ -674,7 +676,7 @@ class RecordServer:
 
     @kaa.rpc.expose('scheduleRecording')
     def scheduleRecording(self, prog=None):
-        _debug_('scheduleRecording(prog=%r)' % (prog), 1)
+        _debug_('scheduleRecording(%s)' % (prog,), 1)
         global guide
 
         if prog is None:
@@ -728,14 +730,12 @@ class RecordServer:
 
     @kaa.rpc.expose('removeScheduledRecording')
     def removeScheduledRecording(self, prog=None):
-        _debug_('removeScheduledRecording(prog=%r)' % (prog), 1)
+        _debug_('removeScheduledRecording(prog=%r)' % (prog,), 1)
         if prog is None:
             return (False, _('program is not set'))
 
-        # get our version of 'prog'
-        # It's a bad hack, but we can use isRecording than
-        sr = self.getScheduledRecordings()
-        progs = sr.getProgramList()
+        schedule = self.getScheduledRecordings()
+        progs = schedule.getProgramList()
 
         for saved_prog in progs.values():
             if String(saved_prog) == String(prog):
@@ -769,12 +769,12 @@ class RecordServer:
             schedule = self.getScheduledRecordings().getProgramList()
 
         if schedule == {}:
-            return False
+            return (False, _('program list is empty'))
 
         for me in schedule.values():
             if me.start == prog.start and me.channel_id == prog.channel_id:
-                return True
-        return False
+                return (True, _('program is scheduled'))
+        return (False, _('program is not scheduled'))
 
 
     @kaa.rpc.expose('findProg')
@@ -844,18 +844,28 @@ class RecordServer:
 
 
     def updateGuide(self):
+        _debug_('updateGuide()', 2)
         global guide
         guide = tv.epg_xmltv.get_guide()
 
 
+    def addFavoritesToSchedule(self):
+        _debug_('addFavoritesToSchedule()', 1)
+        pass
+
+
     def checkToRecord(self):
-        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 2)
+        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 1)
         rec_cmd = None
         rec_prog = None
         cleaned = None
 
-        sr = self.getScheduledRecordings()
-        progs = sr.getProgramList()
+        schedule = self.getScheduledRecordings()
+        if schedule is None:
+            _debug_('no scheduled recordings')
+            return
+
+        progs = schedule.getProgramList()
 
         currently_recording = None
         for prog in progs.values():
@@ -902,7 +912,7 @@ class RecordServer:
                             and now < (prog.stop + config.TV_RECORD_PADDING_POST):
                             _debug_('Ignoring %s' % prog, DINFO)
                             continue
-                        sr.removeProgram(currently_recording,
+                        schedule.removeProgram(currently_recording,
                                          tv_util.getKey(currently_recording))
                         plugin.getbyname('RECORD').Stop()
                         _debug_('CALLED RECORD STOP 1: %s' % currently_recording, DINFO)
@@ -913,10 +923,9 @@ class RecordServer:
                             # Therefore we have overlapping paddings but not real stop / start times.
                             overlap = (currently_recording.stop + config.TV_RECORD_PADDING_POST) - \
                                       (prog.start - config.TV_RECORD_PADDING_PRE)
-                            if overlap <= ((config.TV_RECORD_PADDING_PRE +
-                                            config.TV_RECORD_PADDING_POST)/4):
-                                sr.removeProgram(currently_recording,
-                                                 tv_util.getKey(currently_recording))
+                            if overlap <= ((config.TV_RECORD_PADDING_PRE + config.TV_RECORD_PADDING_POST)/4):
+                                schedule.removeProgram(currently_recording,
+                                    tv_util.getKey(currently_recording))
                                 plugin.getbyname('RECORD').Stop()
                                 _debug_('CALLED RECORD STOP 2: %s' % currently_recording, DINFO)
                     self.delay_recording = prog
@@ -940,8 +949,8 @@ class RecordServer:
                 del progs[tv_util.getKey(prog)]
 
         if rec_prog or cleaned:
-            sr.setProgramList(progs)
-            self.saveScheduledRecordings(sr)
+            schedule.setProgramList(progs)
+            self.saveScheduledRecordings(schedule)
 
         if rec_prog:
             _debug_('start recording: %s' % rec_prog, DINFO)
@@ -978,9 +987,10 @@ class RecordServer:
                         freespace = util.freespace(path)
                         i = i + 1
 
+
     @kaa.rpc.expose('addFavorite')
     def addFavorite(self, name, prog, exactchan=False, exactdow=False, exacttod=False):
-        _debug_('addFavorite(name=%r)' % (name,), 1)
+        _debug_('addFavorite(name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r)' % (name, prog, exactchan, exactdow, exacttod), 1)
         if not name:
             return (False, _('no favorite name'))
 
@@ -988,9 +998,9 @@ class RecordServer:
         priority = len(favs) + 1
         fav = tv.record_types.Favorite(name, prog, exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew)
 
-        scheduledRecordings = self.getScheduledRecordings()
-        scheduledRecordings.addFavorite(fav)
-        self.saveScheduledRecordings(scheduledRecordings)
+        schedule = self.getScheduledRecordings()
+        schedule.addFavorite(fav)
+        self.saveScheduledRecordings(schedule)
         self.addFavoriteToSchedule(fav)
 
         return (True, _('favorite added'))
@@ -998,7 +1008,7 @@ class RecordServer:
 
     @kaa.rpc.expose('addEditedFavorite')
     def addEditedFavorite(self, name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
-        _debug_('addEditedFavorite(name=%r)' % (name), 1)
+        _debug_('addEditedFavorite(name=%r, title=%r, chan=%r, dow=%r, mod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % (name, title, chan, dow, mod, priority, allowDuplicates, onlyNew), 1)
         fav = tv.record_types.Favorite()
 
         fav.name = name
@@ -1010,9 +1020,9 @@ class RecordServer:
         fav.allowDuplicates = allowDuplicates
         fav.onlyNew = onlyNew
 
-        scheduledRecordings = self.getScheduledRecordings()
-        scheduledRecordings.addFavorite(fav)
-        self.saveScheduledRecordings(scheduledRecordings)
+        schedule = self.getScheduledRecordings()
+        schedule.addFavorite(fav)
+        self.saveScheduledRecordings(schedule)
         self.addFavoriteToSchedule(fav)
 
         return (True, _('favorite added'))
@@ -1026,9 +1036,9 @@ class RecordServer:
 
         (status, fav) = self.getFavorite(name)
         self.removeFavoriteFromSchedule(fav)
-        scheduledRecordings = self.getScheduledRecordings()
-        scheduledRecordings.removeFavorite(name)
-        self.saveScheduledRecordings(scheduledRecordings)
+        schedule = self.getScheduledRecordings()
+        schedule.removeFavorite(name)
+        self.saveScheduledRecordings(schedule)
 
         return (True, _('favorite removed'))
 
@@ -1036,9 +1046,9 @@ class RecordServer:
     @kaa.rpc.expose('clearFavorites')
     def clearFavorites(self):
         _debug_('clearFavorites()', 1)
-        scheduledRecordings = self.getScheduledRecordings()
-        scheduledRecordings.clearFavorites()
-        self.saveScheduledRecordings(scheduledRecordings)
+        schedule = self.getScheduledRecordings()
+        schedule.clearFavorites()
+        self.saveScheduledRecordings(schedule)
 
         return (True, _('favorites cleared'))
 
@@ -1072,10 +1082,10 @@ class RecordServer:
 
         _debug_('ap: mod=%s' % mod, DINFO)
 
-        sr = self.getScheduledRecordings()
-        favs = sr.getFavorites().values()
+        schedule = self.getScheduledRecordings()
+        favs = schedule.getFavorites().values()
 
-        _debug_('adjusting prio of '+favname, DINFO)
+        _debug_('adjusting prio of %r' % (favname,), DINFO)
         for fav in favs:
             fav.priority = int(fav.priority)
 
@@ -1099,8 +1109,8 @@ class RecordServer:
                 fav.priority = fav.priority - 1
                 _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority+1, fav.priority), DINFO)
 
-        sr.setFavoritesList(favs)
-        self.saveScheduledRecordings(sr)
+        schedule.setFavoritesList(favs)
+        self.saveScheduledRecordings(schedule)
 
         return (True, _('priority adjusted'))
 
@@ -1108,7 +1118,7 @@ class RecordServer:
     @kaa.rpc.expose('getFavoriteObject')
     def getFavoriteObject(self, prog, favs=None):
         """ more liberal favorite check that returns an object """
-        _debug_('getFavoriteObject(prog=%r)' % (prog), 1)
+        _debug_('getFavoriteObject(prog=%r, favs=%r)' % (prog, favs), 1)
         if not favs:
             favs = self.getFavorites()
         # first try the strict test
@@ -1126,7 +1136,8 @@ class RecordServer:
 
     @kaa.rpc.expose('isProgAFavorite')
     def isProgAFavorite(self, prog, favs=None):
-        _debug_('isProgAFavorite(prog=%r)' % (prog), 2)
+        #_debug_('isProgAFavorite(prog=%s, favs=%r)' % (prog, favs), 1)
+        _debug_('isProgAFavorite(%s)' % (prog,), 2)
         if not favs:
             favs = self.getFavorites()
 
@@ -1151,6 +1162,7 @@ class RecordServer:
 
 
     def doesFavoriteRecordOnlyNewEpisodes(self, prog, favs=None):
+        _debug_('doesFavoriteRecordOnlyNewEpisodes(prog=%r, favs=%r)' % (prog, favs), 1)
         if not favs:
             favs = self.getFavorites()
         for fav in favs.values():
@@ -1163,6 +1175,7 @@ class RecordServer:
 
 
     def doesFavoriteAllowDuplicates(self, prog, favs=None):
+        _debug_('doesFavoriteAllowDuplicates(prog=%r, favs=%r)' % (prog, favs), 1)
         if not favs:
             favs = self.getFavorites()
         for fav in favs.values():
@@ -1183,8 +1196,8 @@ class RecordServer:
         tmp = {}
         tmp[fav.name] = fav
 
-        scheduledRecordings = self.getScheduledRecordings()
-        progs = scheduledRecordings.getProgramList()
+        schedule = self.getScheduledRecordings()
+        progs = schedule.getProgramList()
         for prog in progs.values():
             (isFav, favorite) = self.isProgAFavorite(prog, tmp)
             if isFav:
@@ -1228,7 +1241,7 @@ class RecordServer:
             for prog in ch.programs:
                 if prog.start > last: last = prog.start
 
-        scheduledRecordings = self.getScheduledRecordings()
+        schedule = self.getScheduledRecordings()
 
         favs = self.getFavorites()
 
@@ -1238,7 +1251,7 @@ class RecordServer:
 
         # Then remove all scheduled favorites in that timeframe to
         # make up for schedule changes.
-        progs = scheduledRecordings.getProgramList()
+        progs = schedule.getProgramList()
         for prog in progs.values():
 
             # try:
@@ -1266,6 +1279,7 @@ class RecordServer:
 
 
     def create_fxd(self, rec_prog):
+        _debug_('create_fxd(rec_prog=%r)' % (rec_prog,), 1)
         from util.fxdimdb import FxdImdb, makeVideo
         fxd = FxdImdb()
 
@@ -1291,30 +1305,12 @@ class RecordServer:
         fxd.writeFxd()
 
 
-    def startMinuteCheck(self):
-        next_minute = (int(time.time()/60) * 60 + 60) - int(time.time())
-        _debug_('top of the minute in %s seconds' % next_minute, DINFO)
-        reactor.callLater(next_minute, self.minuteCheck)
-
-
-    def minuteCheck(self):
-        next_minute = (int(time.time()/60) * 60 + 60) - int(time.time())
-        if next_minute != 60:
-            # Compensate for timer drift
-            _debug_('top of the minute in %s seconds' % next_minute, DINFO)
-            reactor.callLater(next_minute, self.minuteCheck)
-        else:
-            reactor.callLater(60, self.minuteCheck)
-
-        self.checkToRecord()
-
-
     def handleEvents(self, event):
         if event:
             if hasattr(event, 'arg'):
-                _debug_('event=%s arg=%r' % (event, event.arg))
+                _debug_('handleEvents(event=%s arg=%r)' % (event, event.arg))
             else:
-                _debug_('event=%s' % (event))
+                _debug_('handleEvents(event=%s)' % (event))
 
             if event == OS_EVENT_KILL:
                 pass
@@ -1353,8 +1349,8 @@ class RecordServer:
                 # This is a really nasty hack but if it fixes the problem then great
                 if self.delay_recording:
                     prog = self.delay_recording
-                    #sr.setProgramList(progs)
-                    #self.saveScheduledRecordings(sr)
+                    #schedule.setProgramList(progs)
+                    #self.saveScheduledRecordings(schedule)
                     prog.isRecording = True
                     duration = int(prog.stop) - int(time.time())
                     prog.rec_duration = duration + config.TV_RECORD_PADDING_POST - 10
@@ -1376,6 +1372,7 @@ class RecordServer:
 
 
     def handleAtTimer(self):
+        _debug_('handleAtTimer()', 2)
         self.checkToRecord()
 
 

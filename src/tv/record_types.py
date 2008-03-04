@@ -40,9 +40,10 @@ import util.tv_util as tv_util
 
 # The file format version number. It must be updated when incompatible
 # changes are made to the file format.
-TYPES_VERSION = 2
+TYPES_VERSION = 3
 
 critical_section = threading.Lock()
+
 
 class ScheduledRecordings:
     """
@@ -51,48 +52,40 @@ class ScheduledRecordings:
         """ """
         _debug_('ScheduledRecordings.__init__()', 1)
         self.TYPES_VERSION = TYPES_VERSION
-        self.favorites_file_name = os.path.join(config.FREEVO_STATICDIR, 'favorites.pickle')
-        self.favorites_text_name = os.path.join(config.FREEVO_STATICDIR, 'favorites.txt')
-        self.schedule_file_name = os.path.join(config.FREEVO_STATICDIR, 'schedule.pickle')
         self.program_list = {}
+        self.manual_recordings = self.loadManualRecordings()
         self.favorites = self.loadFavorites()
 
 
-    def initialize(self):
-        if not hasattr(self, 'favorites_file_name'):
-            self.favorites_file_name = os.path.join(config.FREEVO_STATICDIR, 'favorites.pickle')
-        if not hasattr(self, 'favorites_text_name'):
-            self.favorites_text_name = os.path.join(config.FREEVO_STATICDIR, 'favorites.txt')
-        if not hasattr(self, 'schedule_file_name'):
-            self.schedule_file_name = os.path.join(config.FREEVO_STATICDIR, 'schedule.pickle')
-        if not hasattr(self, 'program_list'):
-            self.program_list = {}
-        if not hasattr(self, 'favorites'):
-            self.favorites = self.loadFavorites()
-
-
     def loadRecordSchedule(self):
-        """ Load the recording schedule from a file """
+        """ Load the tv recording schedule from a pickle file """
         _debug_('loadRecordSchedule()', 1)
         # may need to use a critical section here
-        self.schedules = {}
+        recordSchedule = None
         try:
-            schedules_fh = open(self.schedule_file_name, 'rb')
-            self.program_list = pickle.load(schedules_fh)
-            schedules_fh.close()
+            schedule_fh = open(config.TV_RECORD_SCHEDULE, 'rb')
+            recordSchedule = pickle.load(schedule_fh)
+            schedule_fh.close()
         except IOError, why:
-            return {}
-        return self.schedules
+            _debug_('loadRecordSchedule: %s' % why, DWARNING)
+            return None
+        except Exception, why:
+            import traceback
+            traceback.print_stack()
+            print why
+        return recordSchedule
 
 
     def saveRecordSchedule(self):
-        """ Save the recording schedule to a file """
+        """ Save the tv recording schedule to a pickle file """
         _debug_('saveRecordSchedule()', 1)
-        # save the favourites as a pickle file
         try:
-            schedules_fh = open(self.schedule_file_name, 'wb')
-            pickle.dump(self.program_list, schedules_fh)
-            schedules_fh.close()
+            schedule_fh = open(config.TV_RECORD_SCHEDULE, 'wb')
+            pickle.dump(self, schedule_fh)
+            schedule_fh.close()
+        except IOError, why:
+            _debug_('saveRecordSchedule: %s' % why, DWARNING)
+            return None
         except Exception, why:
             import traceback
             traceback.print_stack()
@@ -101,31 +94,32 @@ class ScheduledRecordings:
 
     def addProgram(self, prog, key=None):
         """ """
-        _debug_('addProgram(prog=%r, key=%r)' % (prog, key), 1)
+        _debug_('addProgram(%s, key=%r)' % (prog, key), 1)
         if not key:
             # key = rec_interface.getKey(prog)
             pass
 
         if not self.program_list.has_key(key):
             self.program_list[key] = prog
-            _debug_('added \"%s\" %s"' % (String(key), prog), 2)
+            _debug_('%s "%s" added' % (key, prog), 1)
         else:
             _debug_('We already know about this recording \"%s\"' % (key), DINFO)
-        _debug_('"%s" items' % len(self.program_list), 2)
+        _debug_('"%s" items' % len(self.program_list), 1)
 
 
     def removeProgram(self, prog, key=None):
         """ """
-        _debug_('removeProgram(prog=%r, key=%r)' % (prog, key), 1)
+        _debug_('removeProgram(%s, key=%r)' % (prog, key), 1)
         if not key:
             # key = rec_interface.getKey(prog)
             pass
 
         if self.program_list.has_key(key):
             del self.program_list[key]
-            _debug_('removed %r %s"' % (key, prog), 2)
+            _debug_('%s "%s" removed' % (key, prog), 1)
         else:
             _debug_('We do not know about this recording \"%s\"' % (prog), DINFO)
+        _debug_('"%s" items' % len(self.program_list), 1)
 
 
     def getProgramList(self):
@@ -140,13 +134,25 @@ class ScheduledRecordings:
         self.program_list = pl
 
 
+    def loadManualRecordings(self):
+        """ Load the manual recordings from a file """
+        _debug_('loadManualRecordings()', 1)
+        return {}
+
+
+    def saveManualRecordings(self):
+        """ Save the manual recordings to a file """
+        _debug_('saveManualRecordings()', 1)
+        pass
+
+
     def loadFavorites(self):
         """ Load the favourites from a file """
         _debug_('loadFavorites()', 1)
         # may need to use a critical section here
         self.favorites = {}
         try:
-            favorites_fh = open(self.favorites_file_name, 'rb')
+            favorites_fh = open(config.TV_RECORD_FAVORITES, 'rb')
             self.favorites = pickle.load(favorites_fh)
             favorites_fh.close()
         except IOError, why:
@@ -159,7 +165,7 @@ class ScheduledRecordings:
         _debug_('saveFavorites()', 1)
         # save the favourites as a pickle file
         try:
-            favorites_fh = open(self.favorites_file_name, 'wb')
+            favorites_fh = open(config.TV_RECORD_FAVORITES, 'wb')
             pickle.dump(self.favorites, favorites_fh)
             favorites_fh.close()
         except Exception, why:
@@ -168,7 +174,7 @@ class ScheduledRecordings:
             print why
         # save the favourites as a text file
         try:
-            favorites_fh = open(self.favorites_text_name, 'w')
+            favorites_fh = open(config.TV_RECORD_FAVORITES_LIST, 'w')
             print >>favorites_fh, TYPES_VERSION
             for favourite in self.favorites.keys():
                 f = self.favorites[favourite]
@@ -185,7 +191,6 @@ class ScheduledRecordings:
     def addFavorite(self, fav):
         """ """
         _debug_('addFavorite(fav=%r)' % (fav,), 1)
-        print 'DJW:self.favorites=%r' % (self.favorites,)
         if self.favorites and self.favorites.has_key(fav.name):
             _debug_('We already have a favorite called "%s"' % String(fav.name), DINFO)
             return

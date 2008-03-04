@@ -121,13 +121,12 @@ class TVGuide(Item):
 
 
     def update_schedules(self, force=False):
-        _debug_('update_schedules(force=False)', 2)
         """
         update schedule
 
         reload the list of scheduled programs and check for overlapping
         """
-        print 'DJW:update_schedules(force=%r)' % (force)
+        _debug_('update_schedules(force=%r)' % (force,), 1)
         if not force and self.last_update + 60 > time.time():
             return
 

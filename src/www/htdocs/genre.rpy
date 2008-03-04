@@ -31,7 +31,8 @@
 
 import sys, time, string
 
-import util, config
+import config
+import util
 from tv.record_client import RecordClient
 from www.web_types import HTMLResource, FreevoResource
 import tv.epg_xmltv
@@ -83,7 +84,7 @@ class GenreResource(FreevoResource):
         category = fv.formValue(form, 'category')
 
         guide = tv.epg_xmltv.get_guide()
-        schedule = self.recordclient.getScheduledRecordingsNow()
+        (status, schedule) = self.recordclient.getScheduledRecordingsNow()
         if schedule is not None:
             schedule = schedule.getProgramList()
 
@@ -158,7 +159,7 @@ class GenreResource(FreevoResource):
                     # use counter to see if we have data
                     gotdata += 1
                     if got_schedule:
-                        result = self.recordclient.isProgScheduledNow(prog, schedule)
+                        (result, reason) = self.recordclient.isProgScheduledNow(prog, schedule)
                         if result:
                             status = 'scheduled'
                             really_now = time.time()

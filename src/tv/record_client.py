@@ -209,7 +209,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('getScheduledRecordings')
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('getScheduledRecordingsNow.result=%r' % (result,), 1)
@@ -225,7 +225,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('updateFavoritesSchedule')
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('updateFavoritesScheduleNow.result=%r' % (result,), 1)
@@ -241,7 +241,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('findProg', chan, start)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('findProgNow.result=%r' % (result,), 1)
@@ -257,7 +257,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('findMatches', title)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('findMatchesNow.result=%r' % (result,), 1)
@@ -273,7 +273,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('isProgScheduled', prog, schedule)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('isProgScheduledNow.result=%r' % (result,), 1)
@@ -289,7 +289,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('isProgAFavorite', prog, favs)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('isProgAFavoriteNow.result=%r' % (result,), 1)
@@ -305,7 +305,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('clearFavorites')
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('clearFavoritesNow.result=%r' % (result,), 1)
@@ -321,7 +321,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('getFavorites')
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('getFavoritesNow.result=%r' % (result,), 1)
@@ -337,7 +337,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('getFavorite', name)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('getFavoriteNow.result=%r' % (result,), 1)
@@ -353,7 +353,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('removeFavorite', name)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('removeFavoriteNow.result=%r' % (result,), 1)
@@ -372,7 +372,7 @@ class RecordClientActions:
             inprogress = self.recordserver_rpc('addEditedFavorite', \
                 name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('addEditedFavoriteNow.result=%r' % (result,), 1)
@@ -388,7 +388,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('adjustPriority', name, mod)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('adjustPriorityNow.result=%r' % (result,), 1)
@@ -404,7 +404,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('getFavoriteObject', prog)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('getFavoriteObjectNow.result=%r' % (result,), 1)
@@ -420,7 +420,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('scheduleRecording', prog)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('scheduleRecordingNow.result=%r' % (result,), 1)
@@ -436,7 +436,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('removeScheduledRecording', prog)
             if inprogress is None:
-                return (None, recordserverdown)
+                return (None, self.recordserverdown)
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('removeScheduledRecordingNow.result=%r' % (result,), 1)
@@ -601,7 +601,11 @@ if __name__ == '__main__':
 
     elif function == "getscheduledrecordingsnow":
         result = rc.getScheduledRecordingsNow()
-        print 'result: %r\n"%s"' % (result, result)
+        status, schedule = result
+        if status:
+            print 'result: %r\n"%s"' % (schedule.__dict__, result)
+        else:
+            print 'result: %r' % (result,)
         raise SystemExit
 
     elif function == "getscheduledrecordings":

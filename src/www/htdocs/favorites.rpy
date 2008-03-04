@@ -31,8 +31,8 @@
 
 import sys, time, string
 import urllib
-import config
 
+import config
 from tv.record_client import RecordClient
 import util.tv_util as tv_util
 

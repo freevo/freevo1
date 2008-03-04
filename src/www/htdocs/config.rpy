@@ -664,7 +664,6 @@ def CreateConfigLine(nctrl,  expALL):
     return htmlctrl
 
 
-
 def DisplayConfigChanges(current_version):
     '''
     '''
@@ -710,6 +709,7 @@ def GetConfigVersion(conf_data):
         if setting.ctrlname == 'CONFIG_VERSION':
             return setting.ctrlvalue
     return None
+
 
 
 class ConfigResource(FreevoResource):

@@ -329,10 +329,6 @@ class FavoriteItem(Item):
             result = True
 
         if result:
-            print 'DJW:self.fav.__dict__=%r' % (self.fav.__dict__)
-            f = Favorite(self.fav.name, TvProgram(self.fav.title, self.fav.channel), self.fav.dow, self.fav.mod,
-                self.fav.priority, self.fav.allowDuplicates, self.fav.onlyNew)
-            print 'DJW:f.__dict__=%r' % (f.__dict__,)
             # create a new edited favorite
             (result, msg) = self.recordclient.addEditedFavoriteNow(self.fav.name,
                 self.fav.title, self.fav.channel, self.fav.dow, self.fav.mod,

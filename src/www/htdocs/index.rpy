@@ -31,9 +31,10 @@
 
 import sys, time
 
+import config
+import util
 from tv.record_client import RecordClient
 from www.web_types import HTMLResource, FreevoResource
-import util, config
 import util.tv_util as tv_util
 
 TRUE = 1
@@ -50,9 +51,9 @@ class IndexResource(FreevoResource):
         fv.res += '<br/><br/><h2>'+_('Freevo Web Status as of %s') % \
                 (time.strftime('%B %d '+config.TV_TIME_FORMAT, time.localtime())) +'</h2>'
 
-        recordings = RecordClient().getScheduledRecordingsNow()
+        (status, schedule) = RecordClient().getScheduledRecordingsNow()
 
-        if recordings is None:
+        if schedule is None:
             fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('Recording server is not available')+'</p>\n'
         else:
             fv.res += '<p class="normal">'+_('Recording server is up and running')+'</p>\n'
@@ -66,8 +67,8 @@ class IndexResource(FreevoResource):
         else:
             fv.res += '<p class="normal">'+_('Your listings are up to date')+'</p>\n'
 
-        if recordings:
-            progl = recordings.getProgramList().values()
+        if schedule:
+            progl = schedule.getProgramList().values()
             f = lambda a, b: cmp(a.start, b.start)
             progl.sort(f)
             for prog in progl:

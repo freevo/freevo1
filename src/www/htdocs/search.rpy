@@ -68,10 +68,10 @@ class SearchResource(FreevoResource):
         (got_matches, progs) = self.recordclient.findMatchesNow(find, movies_only)
 
         if got_matches:
-            (result, favs) = self.recordclient.getFavoritesNow()
-            (result, recordings) = self.recordclient.getScheduledRecordingsNow()
-            if result:
-                rec_progs = recordings.getProgramList()
+            (status, favs) = self.recordclient.getFavoritesNow()
+            (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+            if status:
+                rec_progs = schedule.getProgramList()
 
         fv.printHeader(_('Search'), 'styles/main.css', selected=_('Search'))
 
