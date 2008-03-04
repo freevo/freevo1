@@ -395,7 +395,6 @@ def htmlenties2txt(string):
 
 def comingup(items=None, scheduledRecordings=None):
     """ Coming Up for TV schedule """
-    print 'comingup(items=%r, scheduledRecordings=%r)' % (items, scheduledRecordings)
     from tv.record_client import RecordClient
     import time
     import codecs
@@ -411,17 +410,17 @@ def comingup(items=None, scheduledRecordings=None):
             cache.close()
             return result
 
-        (status, recordings) = (True, RecordClient().getScheduledRecordingsNow())
-        if recordings is None:
-            return _('Recording server is not available')
+        (status, schedule) = RecordClient().getScheduledRecordingsNow()
+        if not status:
+            return schedule
     else:
-        (status, recordings) = scheduledRecordings
+        (status, schedule) = scheduledRecordings
 
     if not status:
         result = _('Recording server is not available')
         return result
 
-    progs = recordings.getProgramList()
+    progs = schedule.getProgramList()
 
     f = lambda a, b: cmp(a.start, b.start)
     progl = progs.values()
