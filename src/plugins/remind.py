@@ -1,10 +1,12 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# remind.py - a simple plugin show reminders, or the output of a command
+# A simple plugin show reminders, or the output of a command
 # -----------------------------------------------------------------------
-# activate:
-# plugin.activate('reminders', level=45)
-# REMINDERS = [ ("cmd", "name", <wrap 0|N >, "string") ]
+# $Id$
+#
+# Notes:
+# Todo:
+#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2003 Krister Lagerstrom, et al.

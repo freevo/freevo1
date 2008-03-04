@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# shutdown.py  -  shutdown plugin / handling
+# shutdown plug-in and handling
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -46,6 +46,7 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     shut down when argshutdown is True, restarted when argrestart is true,
     else only Freevo will be stopped.
     """
+    _debug_('shutdown(menuw=%r, argshutdown=%r, argrestart=%r, exit=%r)' % (menuw, argshutdown, argrestart, exit), 1)
     import osd
     import plugin
     import rc
