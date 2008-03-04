@@ -1723,7 +1723,9 @@ TV_RECORD_FILE_SUFFIX = '.avi'
 TV_RECORD_FILE_OKLETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-:'
 
 # if using the persitant recordserver
-TV_RECORD_SCHEDULE = FREEVO_STATICDIR + '/record_schedule.xml'
+TV_RECORD_SCHEDULE = FREEVO_STATICDIR + '/schedule.pickle'
+TV_RECORD_FAVORITES = FREEVO_STATICDIR + '/favorites.pickle'
+TV_RECORD_FAVORITES_LIST = FREEVO_STATICDIR + '/favorites.txt'
 
 RECORDSERVER_IP = 'localhost'
 RECORDSERVER_PORT = 18001
@@ -1863,6 +1865,7 @@ TV_FREQUENCY_TABLE = {
 TV_VIDEO_GROUPS = [
     VideoGroup(vdev=TV_DEVICE,
                adev=AUDIO_DEVICE,
+               input_type='tuner 1',
                input_num=0,
                tuner_norm=CONF.tv,
                tuner_chanlist=CONF.chanlist,
@@ -1957,8 +1960,6 @@ XMLTV_DAYS = 3
 # in the XML pre-adjusted for your timezone
 #
 XMLTV_TIMEZONE = None
-
-
 
 # ======================================================================
 # Freevo builtin WWW server settings:

@@ -928,7 +928,6 @@ CACHE_IMAGES = 1
 #
 # OSD_X11_CURSORS = '/usr/lib/X11/cursors/black.cursor /usr/lib/X11/cursors/blank.cursor'
 
-
 #
 # Execute a script on OSD startup.
 #
@@ -1257,7 +1256,10 @@ CACHE_IMAGES = 1
 # TV_RECORD_FILE_MASK = '%%m-%%d %%H:%%M %(progname)s - %(title)s'
 
 # If using the persistent recordserver
-# TV_RECORD_SCHEDULE = '%s/record_schedule.xml' % FREEVO_CACHEDIR
+# TV_RECORD_SCHEDULE = FREEVO_STATICDIR + '/schedule.pickle'
+# TV_RECORD_FAVORITES = FREEVO_STATICDIR + '/favorites.pickle'
+# TV_RECORD_FAVORITES_LIST = FREEVO_STATICDIR + '/favorites.txt'
+
 
 # RECORDSERVER_IP = 'localhost'
 # RECORDSERVER_PORT = 18001
