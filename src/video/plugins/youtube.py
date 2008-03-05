@@ -62,6 +62,7 @@ import menu
 import video
 import config
 import string, os, subprocess, util
+from stat import *
 
 from skin.widgets import TextEntryScreen
 from video.videoitem import VideoItem
@@ -104,10 +105,13 @@ class PluginInterface(plugin.MainMenuPlugin):
         if not hasattr(config, 'YOUTUBE_VIDEOS') or not config.YOUTUBE_VIDEOS:
             self.reason = 'YOUTUBE_VIDEOS not defined'
             return
+        if not hasattr(config, 'YOUTUBE_DIR') or not config.YOUTUBE_DIR:
+            self.reason = 'YOUTUBE_DIR not defined'
+            return
         plugin.MainMenuPlugin.__init__(self)
 
         if not os.path.isdir(config.YOUTUBE_DIR):
-            os.mkdir(config.YOUTUBE_DIR, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
+            os.mkdir(config.YOUTUBE_DIR, S_IMODE(os.stat(config.FREEVO_CACHEDIR)[ST_MODE]))
 
 
     def config(self):
