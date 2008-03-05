@@ -37,16 +37,16 @@ import config, skin, util, rc
 from gui.PopupBox import PopupBox
 from gui.AlertBox import AlertBox
 
+from event import *
 from item import Item
 from programitem import ProgramItem
-from event import *
 
-import epg_xmltv, epg_types
+import tv.epg_xmltv
+from tv.epg_types import TvProgram
 from tv.record_client import RecordClient
 
 skin = skin.get_singleton()
-skin.register('tv', ('screen', 'title', 'subtitle', 'view',
-                     'tvlisting', 'info', 'plugin'))
+skin.register('tv', ('screen', 'title', 'subtitle', 'view', 'tvlisting', 'info', 'plugin'))
 
 CHAN_NO_DATA = _('This channel has no data loaded')
 
@@ -65,9 +65,9 @@ class TVGuide(Item):
 
         # constructing the guide takes some time
         msgtext = _('Preparing the program guide')
-        guide = epg_xmltv.get_guide(PopupBox(text=msgtext))
+        guide = tv.epg_xmltv.get_guide(PopupBox(text=msgtext))
         # getting channels
-        channels = guide.GetPrograms(start=start_time+1, stop=stop_time-1)
+        channels = guide.get_programs(start=start_time+1, stop=stop_time-1)
         if not channels:
             AlertBox(text=_('TV Guide is corrupt!')).show()
             return
@@ -147,7 +147,6 @@ class TVGuide(Item):
         Handles events in the tv guide
         """
         _debug_('eventhandler(event=%r, menuw=%r)' % (event.name, menuw), 2)
-        event_consumed = False
 
         ## MENU_CHANGE_STYLE
         if event == MENU_CHANGE_STYLE:
@@ -185,37 +184,37 @@ class TVGuide(Item):
 
                 self.n_cols  = (stop_time - start_time) / 60 / self.col_time
                 self.rebuild(start_time, stop_time, start_channel, selected)
-            event_consumed = True
+            return True
 
         ## MENU_UP: Move one channel up in the guide
-        if event == MENU_UP:
+        elif event == MENU_UP:
             self.change_channel(-1)
-            event_consumed = True
+            return True
 
         ## MENU_DOWN: Move one channel down in the guide
         elif event == MENU_DOWN:
             self.change_channel(1)
-            event_consumed = True
+            return True
 
         ## MENU_LEFT: Move to the next program on this channel
         elif event == MENU_LEFT:
             self.change_program(-1)
-            event_consumed = True
+            return True
 
         ## MENU_RIGHT: Move to previous programm on this channel
         elif event == MENU_RIGHT:
             self.change_program(1)
-            event_consumed = True
+            return True
 
         ## MENU_PAGEUP: Moves to the first of the currently displayed channels
         elif event == MENU_PAGEUP:
             self.change_channel(-self.n_items)
-            event_consumed = True
+            return True
 
         ## MENU_PAGEDOWN: Move to the last of the currently displayed channels
         elif event == MENU_PAGEDOWN:
             self.change_channel(self.n_items)
-            event_consumed = True
+            return True
 
 
         ## MENU_SUBMENU: Open a submenu for the selected program
@@ -224,7 +223,7 @@ class TVGuide(Item):
             pi = ProgramItem(self, prog=self.selected, context='guide')
             #and show its submenu
             pi.display_submenu(menuw=self.menuw)
-            event_consumed = True
+            return True
 
         ## MENU_SELECT: Show the description
         elif event == MENU_SELECT:
@@ -232,13 +231,13 @@ class TVGuide(Item):
             pi = ProgramItem(self, prog=self.selected, context='guide')
             #and show selecte the first action in the actions list
             pi.actions()[0][0](menuw=self.menuw)
-            event_consumed = True
+            return True
 
         ## TV_START_RECORDING: add or remove this program from schedule
         elif event == TV_START_RECORDING:
             pi = ProgramItem(self, prog=self.selected, context='guide')
             pi.toggle_rec(menuw=self.menuw)
-            event_consumed = True
+            return True
 
         ## PLAY: Start to watch the selected channel (if it is possible)
         elif event == PLAY:
@@ -246,48 +245,38 @@ class TVGuide(Item):
             pi = ProgramItem(self, prog=self.selected, context='guide')
             #and show its submenu
             pi.play(menuw=self.menuw)
-            event_consumed = True
+            return True
 
         ## PLAY_END: Show the guide again
         elif event == PLAY_END:
             self.show()
-            event_consumed = True
+            return True
 
         # FIX or REMOVE:
         # the numerical INPUT events are not available in the tvmenu context
         ## numerical INPUT: Jump to a specific channel number
-        if str(event).startswith("INPUT_"):
-            # tune explicit channel
-            eventInput=str(event)[6]
-            isNumeric=TRUE
-            try:
-                newinput_value = int(eventInput)
-            except:
-                #Protected against INPUT_UP, INPUT_DOWN, etc
-                isNumeric=FALSE
-            if isNumeric:
-                newinput_time = int(time.time())
-                if (self.lastinput_value != None):
-                    # allow 1 seconds delay for multiple digit channels
-                    if (newinput_time - self.lastinput_time < 1):
-                        # this enables multiple (max 3) digit channel selection
-                        if (self.lastinput_value >= 100):
-                            self.lastinput_value = (self.lastinput_value % 100)
-                        newinput_value += self.lastinput_value * 10
-                self.lastinput_value = newinput_value
-                self.lastinput_time = newinput_time
+        elif event in INPUT_ALL_NUMBERS:
+            newinput_time = time.time()
+            if self.lastinput_value is not None:
+                # allow 1.2 seconds delay for multiple digit channels
+                if newinput_time - self.lastinput_time < 1.2:
+                    # this enables multiple (max 3) digit channel selection
+                    if self.lastinput_value >= 100:
+                        self.lastinput_value = (self.lastinput_value % 100)
+                    newinput_value = self.lastinput_value * 10 + int(event)
+            self.lastinput_value = newinput_value
+            self.lastinput_time = newinput_time
 
-                channel_no = int(newinput_value)-1
-                if channel_no < len(self.guide.chan_list):
-                    self.start_channel = self.guide.chan_list[channel_no].id
-                else:
-                    self.lastinput_value = None
+            channel_no = int(newinput_value)-1
+            if channel_no < len(self.guide.chan_list):
+                self.start_channel = self.guide.chan_list[channel_no].id
+            else:
+                self.lastinput_value = None
 
-                self.rebuild(self.start_time, self.stop_time,
-                             self.start_channel, self.selected)
-                event_consumed = True
+            self.rebuild(self.start_time, self.stop_time, self.start_channel, self.selected)
+            return True
 
-        return event_consumed
+        return False
 
 
     ### gui functions
@@ -336,23 +325,23 @@ class TVGuide(Item):
                 try:
                     for p in t.programs:
                         if p in self.scheduled_programs:
-                            p.scheduled = TRUE
+                            p.scheduled = True
                             # DO NOT change this to 'True' Twisted
                             # does not support boolean objects and
                             # it will break under Python 2.3
                         else:
-                            p.scheduled = FALSE
-                            # Same as above; leave as 'FALSE' until
+                            p.scheduled = False
+                            # Same as above; leave as 'False' until
                             # Twisted includes Boolean
                         if p in self.overlap_programs:
-                            p.overlap = TRUE
+                            p.overlap = True
                         else:
-                            p.overlap = FALSE
+                            p.overlap = False
 
                         if p in self.favorite_programs:
-                            p.favorite = TRUE
+                            p.favorite = True
                         else:
-                            p.favorite = FALSE
+                            p.favorite = False
                 except:
                     pass
 
@@ -370,9 +359,9 @@ class TVGuide(Item):
 
         # we need to determine the program,
         # that is running now at the selected channel
-        programs = self.guide.GetPrograms(start=start_time+1, stop=stop_time-1, chanids=old_selected.channel_id)
+        programs = self.guide.get_programs(start=start_time+1, stop=stop_time-1, chanids=old_selected.channel_id)
 
-        if (len(programs) > 0) and (len(programs[0].programs) > 0):
+        if len(programs) > 0 and len(programs[0].programs) > 0:
             selected = programs[0].programs[0]
         else:
             selected = None
@@ -390,9 +379,9 @@ class TVGuide(Item):
         start_channel = self.start_channel
 
         # we need to determine the new selected program
-        programs = self.guide.GetPrograms(start=new_start_time+1, stop=new_end_time-1, chanids=self.start_channel)
+        programs = self.guide.get_programs(start=new_start_time+1, stop=new_end_time-1, chanids=self.start_channel)
 
-        if (len(programs) > 0) and (len(programs[0].programs) > 0):
+        if len(programs) > 0 and len(programs[0].programs) > 0:
             selected = programs[0].programs[0]
         else:
             selected = None
@@ -407,8 +396,9 @@ class TVGuide(Item):
         displayed, this is the case when the user moves around in the menu.
         """
         _debug_('rebuild(start_time=%r, stop_time=%r, start_channel=%r, selected=%r)' % (start_time, stop_time, start_channel, selected), 1)
-        self.guide = epg_xmltv.get_guide()
-        channels = self.guide.GetPrograms(start=start_time+1, stop=stop_time-1)
+        self.guide = tv.epg_xmltv.get_guide()
+        #channels = self.guide.get_programs(start=start_time+1, stop=stop_time-1, chanids=[start_channel])
+        channels = self.guide.get_programs(start=start_time+1, stop=stop_time-1, chanids=None)
 
         table = [ ]
 
@@ -417,8 +407,8 @@ class TVGuide(Item):
         self.start_channel = start_channel
         self.selected      = selected
 
-        self.display_up_arrow   = FALSE
-        self.display_down_arrow = FALSE
+        self.display_up_arrow   = False
+        self.display_down_arrow = False
 
         # table header
         table += [ ['Chan'] ]
@@ -436,25 +426,19 @@ class TVGuide(Item):
         n = 0
         for chan in channels:
             if n >= self.n_items:
-                self.display_down_arrow = TRUE
+                self.display_down_arrow = True
                 break
 
             if start_channel != None and chan.id == start_channel:
                 found_1stchannel = 1
 
             if not found_1stchannel:
-                self.display_up_arrow = TRUE
+                self.display_up_arrow = True
 
             if found_1stchannel:
                 if not chan.programs:
-                    prg = epg_types.TvProgram()
-                    prg.channel_id = chan.id
-                    prg.start = 0
-                    prg.stop = 2147483647   # Year 2038
-                    prg.title = CHAN_NO_DATA
-                    prg.desc = ''
+                    prg = TvProgram(CHAN_NO_DATA, chan.id, 0, 2147483647, desc='')
                     chan.programs = [ prg ]
-
 
                 for i in range(len(chan.programs)):
                     if selected:
@@ -495,9 +479,9 @@ class TVGuide(Item):
 
         channel = self.guide.chan_dict[last_prg.channel_id]
         if full_scan:
-            all_programs = self.guide.GetPrograms(start_time-24*60*60, stop_time+24*60*60, [ channel.id ])
+            all_programs = self.guide.get_programs(start_time-24*60*60, stop_time+24*60*60, [ channel.id ])
         else:
-            all_programs = self.guide.GetPrograms(start_time+1, stop_time-1, [ channel.id ])
+            all_programs = self.guide.get_programs(start_time+1, stop_time-1, [ channel.id ])
 
         # Current channel programs
         programs = all_programs[0].programs
@@ -546,12 +530,7 @@ class TVGuide(Item):
                 start_time -= (self.col_time * 60)
                 stop_time -= (self.col_time * 60)
         else:
-            prg = epg_types.TvProgram()
-            prg.channel_id = channel.id
-            prg.start = 0
-            prg.stop = 2147483647   # Year 2038
-            prg.title = CHAN_NO_DATA
-            prg.desc = ''
+            prg = TvProgram(CHAN_NO_DATA, channel.id, 0, 2147483647, '')
             to_info = CHAN_NO_DATA
 
         self.rebuild(start_time, stop_time, start_channel, prg)
@@ -585,7 +564,7 @@ class TVGuide(Item):
         channel = self.guide.chan_list[channel_pos]
 
 
-        programs = self.guide.GetPrograms(start_time+1, stop_time-1, [ channel.id ])
+        programs = self.guide.get_programs(start_time+1, stop_time-1, [ channel.id ])
         programs = programs[0].programs
 
         prg = None
@@ -602,12 +581,7 @@ class TVGuide(Item):
 
             to_info = (prg.title, procdesc)
         else:
-            prg = epg_types.TvProgram()
-            prg.channel_id = channel.id
-            prg.start = 0
-            prg.stop = 2147483647   # Year 2038
-            prg.title = CHAN_NO_DATA
-            prg.desc = ''
+            prg = TvProgram(CHAN_NO_DATA, channel.id, 0, 2147483647, '')
             to_info = CHAN_NO_DATA
 
         self.rebuild(start_time, stop_time, start_channel, prg)

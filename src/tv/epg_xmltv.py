@@ -45,7 +45,7 @@ import tv.xmltv as xmltv
 
 # The EPG data types. They need to be in an external module in order for pickling
 # to work properly when run from inside this module and from the tv.py module.
-import tv.epg_types as epg_types
+from tv.epg_types import EPG_VERSION, TvGuide, TvChannel, TvProgram
 
 class EpgException(Exception):
     """
@@ -101,7 +101,7 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
                     _debug_('EPG does not have a version number, must be reloaded')
                     print dir(cached_guide)
 
-            if epg_ver != epg_types.EPG_VERSION:
+            if epg_ver != EPG_VERSION:
                 if verbose:
                     _debug_('EPG version missmatch, must be reloaded')
 
@@ -147,7 +147,7 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
 
     if not cached_guide:
         # An error occurred, return an empty guide
-        cached_guide = epg_types.TvGuide()
+        cached_guide = TvGuide()
 
     if popup:
         popup.destroy()
@@ -164,7 +164,7 @@ def load_guide(verbose=True, XMLTV_FILE=None):
         XMLTV_FILE = config.XMLTV_FILE
 
     # Create a new guide
-    guide = epg_types.TvGuide()
+    guide = TvGuide()
 
     # Is there a file to read from?
     if os.path.isfile(XMLTV_FILE):
@@ -181,18 +181,15 @@ def load_guide(verbose=True, XMLTV_FILE=None):
             _debug_('epg_xmltv.py: Only adding channels in list')
 
         for data in config.TV_CHANNELS:
-            (id, disp, tunerid) = data[:3]
-            c = epg_types.TvChannel()
-            c.id = id
-            c.displayname = disp
-            c.tunerid = tunerid
+            (id, displayname, tunerid) = data[:3]
+            c = TvChannel(id, displayname, tunerid)
 
             # Handle the optional time-dependent station info
             c.times = []
             if len(data) > 3 and len(data[3:4]) == 3:
                 for (days, start_time, stop_time) in data[3:4]:
                     c.times.append((days, int(start_time), int(stop_time)))
-            guide.AddChannel(c)
+            guide.add_channel(c)
 
 
     else: # Add all channels in the XMLTV file
@@ -209,22 +206,21 @@ def load_guide(verbose=True, XMLTV_FILE=None):
 
         for chan in xmltv_channels:
             id = chan['id'].encode(config.LOCALE, 'ignore')
-            c = epg_types.TvChannel()
-            c.id = id
             if ' ' in id:
                 # Assume the format is "TUNERID CHANNELNAME"
-                c.displayname = id.split()[1]   # XXX Educated guess
-                c.tunerid = id.split()[0]       # XXX Educated guess
+                displayname = id.split()[1]   # XXX Educated guess
+                tunerid = id.split()[0]       # XXX Educated guess
             else:
                 displayname = chan['display-name'][0][0]
                 if ' ' in displayname:
-                    c.displayname = displayname.split()[1]
-                    c.tunerid = displayname.split()[0]
+                    displayname = displayname.split()[1]
+                    tunerid = displayname.split()[0]
                 else:
-                    c.displayname = displayname
-                    c.tunerid = _('REPLACE WITH TUNERID FOR %s') % displayname
+                    displayname = displayname
+                    tunerid = _('REPLACE WITH TUNERID FOR %s') % displayname
+            c = TvChannel(id, displayname, tunerid)
 
-            guide.AddChannel(c)
+            guide.add_channel(c)
 
     xmltv_programs = None
     if gotfile:
@@ -250,7 +246,7 @@ def load_guide(verbose=True, XMLTV_FILE=None):
         if not p['channel'] in needed_ids:
             continue
         try:
-            prog = epg_types.TvProgram()
+            prog = TvProgram()
             prog.channel_id = p['channel']
             prog.title = Unicode(p['title'][0][0])
             if p.has_key('date'):
@@ -296,12 +292,12 @@ def load_guide(verbose=True, XMLTV_FILE=None):
                     except Exception, e:
                         print 'Teil:', e
 
-            guide.AddProgram(prog)
+            guide.add_program(prog)
         except:
             traceback.print_exc()
             print 'Error in tv guide, skipping'
 
-    guide.Sort()
+    guide.sort()
     return guide
 
 

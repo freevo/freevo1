@@ -93,33 +93,33 @@ class ProgramItem(Item):
         items = []
 
         #'Play', if this programm is currently running or starts soon
-        if self.context=='guide':
-            now = time.time()
-            if self.prog.start <= now+(7*60) and self.prog.stop > now:
-                items.append((self.play, _('Play')))
+        if self.context == 'guide':
+            items.append((self.play, _('Play')))
+            #now = time.time()
+            #if self.prog.start <= now+(7*60) and self.prog.stop > now:
+            #    items.append((self.play, _('Play')))
 
         # 'Show full description'
         items.append((self.show_description, _('Full Description')))
 
-        # 'Schedule for recording' OR 'Remove from schedule'
-        (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-        if schedule:
-            (self.scheduled, reason) = self.recordclient.isProgScheduledNow(self.prog, schedule.getProgramList())
+        if self.recordclient.pingNow():
 
-        if status:
-            items.append((self.remove_program, _('Remove from schedule')))
-        else:
-            items.append((self.schedule_program, _('Schedule for recording')))
+            # 'Schedule for recording' OR 'Remove from schedule'
+            (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+            (status, reason) = self.recordclient.isProgScheduledNow(self.prog, schedule.getProgramList())
+            self.scheduled = status
+            if self.scheduled:
+                items.append((self.remove_program, _('Remove from schedule')))
+            else:
+                items.append((self.schedule_program, _('Schedule for recording')))
 
-        # 'Add to favorites' OR 'Remove from favorites'
-        (result, message) = self.recordclient.isProgAFavoriteNow(self.prog)
-        if result:
-            self.favorite = True
-
-        if self.favorite:
-            items.append((self.edit_favorite, _('Edit favorite')))
-        else:
-            items.append((self.add_favorite, _('Add to favorites')))
+            # 'Add to favorites' OR 'Remove from favorites'
+            (status, reason) = self.recordclient.isProgAFavoriteNow(self.prog)
+            self.favorite = status
+            if self.favorite:
+                items.append((self.edit_favorite, _('Edit favorite')))
+            else:
+                items.append((self.add_favorite, _('Add to favorites')))
 
         # 'Seach for more of this'
         if not self.context == 'search':
@@ -134,7 +134,7 @@ class ProgramItem(Item):
         """ Start watching TV """
         _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 1)
         # watching TV should only be possible from the guide
-        if not self.context=='guide':
+        if not self.context == 'guide':
             rc.post_event(MENU_SELECT)
             return
         now = time.time()
@@ -194,8 +194,8 @@ class ProgramItem(Item):
         """ Add a program to schedule """
         _debug_('schedule_program(arg=%r, menuw=%r)' % (arg, menuw), 1)
         # schedule the program
-        (result, reason) = self.recordclient.scheduleRecordingNow(self.prog)
-        if result:
+        (status, reason) = self.recordclient.scheduleRecordingNow(self.prog)
+        if status:
             menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
                 self.parent.update(force=True)
@@ -213,8 +213,8 @@ class ProgramItem(Item):
         """ Remove a program from schedule """
         _debug_('remove_program(arg=%r, menuw=%r)' % (arg, menuw), 1)
         # remove the program
-        (result, reason) = self.recordclient.removeScheduledRecordingNow(self.prog)
-        if result:
+        (status, reason) = self.recordclient.removeScheduledRecordingNow(self.prog)
+        if status:
             menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
                 self.parent.update(force=True)
@@ -273,10 +273,10 @@ class ProgramItem(Item):
         pop = PopupBox(text=_('Searching, please wait...'))
         pop.show()
         # do the search
-        (result, matches) = self.recordclient.findMatchesNow(self.title)
+        (status, matches) = self.recordclient.findMatchesNow(self.title)
         # we are ready -> kill the popup message
         pop.destroy()
-        if result:
+        if status:
             # we have been successful!
             items = []
             _debug_('search found %s matches' % len(matches), 1)

@@ -39,15 +39,6 @@ import config
 EPG_VERSION = 6
 
 
-# Cache variables for last GetPrograms()
-cache_last_start = None
-cache_last_stop = None
-cache_last_chanids = None
-cache_last_result = None
-cache_last_time = 0
-
-
-
 class TvProgram:
 
     channel_id = None
@@ -69,10 +60,10 @@ class TvProgram:
     onlyNew = None
 
 
-    def __init__(self, title='', channel_id='', start=0, stop=0):
-        self.channel_id = channel_id
+    def __init__(self, title='', channel_id='', start=0, stop=0, desc=''):
         self.title      = title
-        self.desc       = ''
+        self.channel_id = channel_id
+        self.desc       = desc
         self.sub_title  = ''
         self.start      = start
         self.pdc_start  = 0.0
@@ -106,6 +97,12 @@ class TvProgram:
         except UnicodeEncodeError: #just in case
             s = '%s->%s [%s]%s %3s %s' % (begins, ends, starts, overlaps, self.channel_id, self.title)
         return s
+
+
+    def __repr__(self):
+        bt = time.localtime(self.start)
+        et = time.localtime(self.stop)
+        return '<TvProgram %r %s->%s>' % (self.channel_id, time.strftime('%H:%M', bt), time.strftime('%H:%M', et))
 
 
     def __eq__(self, other):
@@ -177,19 +174,18 @@ class TvProgram:
 class TvChannel:
     """
     """
-    id = ''
-    displayname = ''
-    tunerid = ''
-    logo = ''   # URL or file, Not used yet
-    programs = None
-    times = None
+    logo = None
+    def __init__(self, id, displayname, tunerid, logo='', times=[], programs=[]):
+        """ Copy the programs that are inside the indicated time bracket """
+        self.id = id
+        self.displayname = displayname
+        self.tunerid = tunerid
+        self.logo = logo
+        self.times = times
+        self.programs = programs
 
 
-    def __init__(self):
-        self.programs = []
-
-
-    def Sort(self):
+    def sort(self):
         # Sort the programs so that the earliest is first in the list
         f = lambda a, b: cmp(a.start, b.start)
         self.programs.sort(f)
@@ -207,7 +203,7 @@ class TvChannel:
 
 
     def __repr__(self):
-        return '<TvChannel %(id)r>' % (self.__dict__)
+        return '<TvChannel %r>' % (self.id)
 
 
 
@@ -225,7 +221,7 @@ class TvGuide:
         self.EPG_VERSION = EPG_VERSION
 
 
-    def AddChannel(self, channel):
+    def add_channel(self, channel):
         if not self.chan_dict.has_key(channel.id):
             # Add the channel to both the dictionary and the list. This works
             # well in Python since they will both point to the same object!
@@ -233,7 +229,7 @@ class TvGuide:
             self.chan_list += [channel]
 
 
-    def AddProgram(self, program):
+    def add_program(self, program):
         # The channel must be present, or the program is
         # silently dropped
         if self.chan_dict.has_key(program.channel_id):
@@ -251,66 +247,39 @@ class TvGuide:
             self.chan_dict[program.channel_id].programs += [program]
 
 
-    # Get all programs that occur at least partially between
-    # the start and stop timeframe.
-    # If start is None, get all programs from the start.
-    # If stop is None, get all programs until the end.
-    # The chanids can be used to select only certain channel id's,
-    # all channels are returned otherwise
-    #
-    # The return value is a list of channels (TvChannel)
-    def GetPrograms(self, start=None, stop=None, chanids=None):
-        if start == None:
-            start = 0
-        if stop == None:
-            stop = 2147483647   # Year 2038
-        _debug_('GetPrograms(start=%r, stop=%r, chanids=%r)' % (time.strftime('%H:%M', time.localtime(start)),
+    def get_programs(self, start=0, stop=2147483647, chanids=None):
+        """
+        Get all programs that occur at least partially between the start and stop
+        timeframe.
+        
+        @param start: is 0, get all programs from the start.
+        @param stop: is 2147483647, get all programs until the end.
+        @param chanids: can be used to select only certain channel id's, all channels are returned otherwise.
+        @returns: a list of channels (TvChannel)
+        """
+        _debug_('get_programs(start=%r, stop=%r, chanids=%r)' % (time.strftime('%H:%M', time.localtime(start)),
             time.strftime('%H:%M', time.localtime(stop)), chanids))
-
-        # Return a cached version?
-        global cache_last_start, cache_last_stop, cache_last_chanids, cache_last_time, cache_last_result
-
-        if (cache_last_start == start and cache_last_stop == stop and
-            cache_last_chanids == chanids and time.time() < cache_last_time):
-            _debug_('GetPrograms: return cached results, valid for %1.1f secs.' % cache_last_time - time.time())
-            return cache_last_result[:]  # Return a copy
 
         channels = []
         for chan in self.chan_list:
             if chanids and (not chan.id in chanids):
                 continue
 
-            # Copy the channel info
-            c = TvChannel()
-            c.id = chan.id
-            c.displayname = chan.displayname
-            c.tunerid = chan.tunerid
-            c.logo = chan.logo
-            c.times = chan.times
+            c = TvChannel(chan.id, chan.displayname, chan.tunerid, chan.logo, chan.times)
             # Copy the programs that are inside the indicated time bracket
             f = lambda p, a=start, b=stop: not (p.start > b or p.stop < a)
             c.programs = filter(f, chan.programs)
 
             channels.append(c)
 
-        # Update cache variables
-        cache_last_start = start
-        cache_last_stop = stop
-        if chanids:
-            cache_last_chanids = chanids[:]
-        else:
-            cache_last_chanids = None
-        cache_last_timeout = time.time() + 20
-        cache_last_result = channels[:] # Make a copy in case the caller modifies it
-
-        _debug_('GetPrograms: channels=%r' % (channels,))
+        _debug_('get_programs: channels=%r' % (channels,))
         return channels
 
 
-    def Sort(self):
-        # Sort all channel programs in time order
+    def sort(self):
+        """ Sort all channel programs in time order """
         for chan in self.chan_list:
-            chan.Sort()
+            chan.sort()
 
 
     def __str__(self):
@@ -318,3 +287,7 @@ class TvGuide:
         for chan in self.chan_list:
             s += String(chan)
         return s
+
+
+    def __repr__(self):
+        return '<TvGuide %r>' % (self.EPG_VERSION)

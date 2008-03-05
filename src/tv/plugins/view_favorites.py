@@ -54,6 +54,10 @@ class ViewFavoritesItem(Item):
 
     def view_favorites(self, arg=None, menuw=None):
         _debug_('view_favorites(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        if not self.recordclient.pingNow():
+            AlertBox(self.recordclient.recordserverdown).show()
+            return
+
         items = self.get_items()
         if not len(items):
             AlertBox(_('No favorites.')).show()
@@ -88,11 +92,6 @@ class ViewFavoritesItem(Item):
     def get_items(self):
         _debug_('get_items()', 2)
         items = []
-
-        server_available = self.recordclient.pingNow()
-        if not server_available:
-            AlertBox(_('Recording server is not available')).show()
-            return []
 
         favorites = self.recordclient.getFavoritesNow()
         if favorites:

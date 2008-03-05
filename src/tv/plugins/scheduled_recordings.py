@@ -51,14 +51,17 @@ class ScheduledRecordingsItem(Item):
 
 
     def display_schedule(self, arg=None, menuw=None):
+        if not self.recordclient.pingNow():
+            AlertBox(self.recordclient.recordserverdown).show()
+            return
+
         items = self.get_items()
         if not len(items):
             AlertBox(_('Nothing scheduled.')).show()
             return
 
-        schedule_menu = menu.Menu(_( 'Scheduled Recordings'), items,
-                                  reload_func = self.reload,
-                                  item_types = 'tv program menu')
+        schedule_menu = menu.Menu(_('Scheduled Recordings'), items,
+            reload_func=self.reload, item_types='tv program menu')
         self.menuw = menuw
         rc.app(None)
         menuw.pushmenu(schedule_menu)
@@ -86,13 +89,12 @@ class ScheduledRecordingsItem(Item):
     def get_items(self):
         items = []
 
-        #(server_available, msg) = self.recordclient.connectionTest()
-        #if not server_available:
-        #    AlertBox(_('Recording server is not available')+(':\n%s' % msg)).show()
-        #    return []
+        if not self.recordclient.pingNow():
+            AlertBox(self.recordclient.recordserverdown).show()
+            return []
 
         (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-        if schedule is not None:
+        if status:
             progs = schedule.getProgramList()
 
             f = lambda a, b: cmp(a.start, b.start)

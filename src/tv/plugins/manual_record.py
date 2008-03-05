@@ -122,6 +122,10 @@ class ManualRecordItem(Item):
 
     def display_recitem(self, arg=None, menuw=None):
         _debug_('display_recitem(self, arg=None, menuw=None)', 2)
+        if not self.recordclient.pingNow():
+            AlertBox(self.recordclient.recordserverdown).show()
+            return
+
         self.make_newprog()
 
         items = []

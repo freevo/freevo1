@@ -97,11 +97,12 @@ class RecordClientActions:
                     return None
                 except Exception, why:
                     _debug_('%s' % (why,), DERROR)
-            try:
-                return self.server.rpc(cmd, *args, **kwargs)
-            except Exception, why:
-                _debug_('%s' % (why,), DERROR)
-                return None
+            return self.server.rpc(cmd, *args, **kwargs)
+            #try:
+            #    return self.server.rpc(cmd, *args, **kwargs)
+            #except Exception, why:
+            #    _debug_('%s' % (why,), DERROR)
+            #    return None
         except kaa.rpc.ConnectError, e:
             _debug_('%r is down' % (self.socket,), DINFO)
             self.server = None
@@ -462,16 +463,11 @@ class RecordClientActions:
                     self.server = kaa.rpc.Client(self.socket, self.secret)
                     self.server.signals['closed'].connect(closed_handler)
                     _debug_('%r is up' % (self.socket,), DINFO)
-                    return True
                 except kaa.rpc.ConnectError:
                     _debug_('%r is down' % (self.socket,), DINFO)
                     self.server = None
                     return False
-            try:
-                return self.server.rpc(cmd, *args, **kwargs).connect(callback)
-            except Exception, why:
-                _debug_('%s' % (why,), DERROR)
-                return False
+            self.server.rpc(cmd, *args, **kwargs).connect(callback)
             return True
         except kaa.rpc.ConnectError, e:
             _debug_('%r is down' % (self.socket,), DINFO)
@@ -585,6 +581,10 @@ if __name__ == '__main__':
 
     if function == "pingnow":
         result = rc.pingNow()
+        print 'result: %r\n"%s"' % (result, result)
+
+    elif function == "ping":
+        result = rc.ping(handler)
         print 'result: %r\n"%s"' % (result, result)
 
     elif function == "findnextprogramnow":

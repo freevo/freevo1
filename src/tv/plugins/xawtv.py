@@ -99,8 +99,7 @@ class Xawtv:
         chan_name = config.TV_CHANNELS[self.tuner_chidx][1]
         chan_id = config.TV_CHANNELS[self.tuner_chidx][0]
 
-        channels = epg.get_guide().GetPrograms(start=time.time(),
-                                               stop=time.time(), chanids=[chan_id])
+        channels = epg.get_guide().get_programs(start=time.time(), stop=time.time(), chanids=[chan_id])
 
         if channels and channels[0] and channels[0].programs:
             start_s = time.strftime(config.TV_TIME_FORMAT, time.localtime(channels[0].programs[0].start))
