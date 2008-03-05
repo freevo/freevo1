@@ -58,9 +58,9 @@ class Vlc:
         except Exception, e:
             print e
         if item.url[:7] == 'rtsp://':
-            _debug_('%r good' % (item.url))
+            _debug_('%r good' % (item.url), 2)
             return 2
-        _debug_('%r unplayable' % (item.url))
+        _debug_('%r unplayable' % (item.url), 2)
         return 0
 
 

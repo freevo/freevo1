@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Plugin for encoding DVD's with the EncodingServer
+# Plug-in for encoding DVD's with the EncodingServer
 # -----------------------------------------------------------------------
 # $Id$
 #
