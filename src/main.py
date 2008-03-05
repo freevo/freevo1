@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# main.py - This is the Freevo main application code
+# This is the Freevo main application code
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -40,7 +40,7 @@ import signal
 
 import config
 import rc
-rc.get_singleton(is_plugin=0)
+rc.get_singleton(is_helper=0)
 
 # i18n support
 
@@ -321,11 +321,18 @@ class MainTread:
                 _debug_('no target for events given')
 
 
+_shutting_down = False
 def signal_handler(sig, frame):
     """
     the signal handler to shut down freevo
     """
+    _debug_('signal_handler(sig, frame)', 1)
+    global _shutting_down
     if sig in (signal.SIGTERM, signal.SIGINT):
+        if _shutting_down:
+            return
+        _shutting_down = True
+        traceback.print_stack()
         shutdown(exit=True)
 
 
@@ -406,8 +413,7 @@ if len(sys.argv) >= 2:
 
 try:
     # signal handler
-    signal.signal(signal.SIGTERM, signal_handler)
-    signal.signal(signal.SIGINT, signal_handler)
+    kaa.main.signals['shutdown'].connect(signal_handler)
 
     # load the fxditem to make sure it's the first in the
     # mimetypes list
@@ -480,10 +486,12 @@ except KeyboardInterrupt:
     shutdown()
 
 except SystemExit:
+    dfb_int_handler()
+    dfb_term_handler()
     pass
 
-except Exception, e:
-    _debug_('Crash!: %s' % (e), config.DCRITICAL)
+except Exception, why:
+    _debug_('Crash!: %s' % (why), config.DCRITICAL)
     try:
         tb = sys.exc_info()[2]
         fname, lineno, funcname, text = traceback.extract_tb(tb)[-1]

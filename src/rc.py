@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# rc.py - Remote control / Event and Callback handling
+# Remote control / Event and Callback handling
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -32,8 +32,9 @@
 import os
 import copy
 import time
-import thread
+import threading
 import types
+import traceback
 
 import kaa
 
@@ -52,6 +53,7 @@ def get_singleton(**kwargs):
     """
     get the global rc object
     """
+    _debug_('rc.get_singleton(kwargs=%r)' % (kwargs,), 4)
     global _singleton
 
     # One-time init
@@ -65,6 +67,7 @@ def post_event(event):
     """
     add an event to the event queue
     """
+    _debug_('rc.post_event(event=%r)' % (event.name,), 2)
     return get_singleton().post_event(event)
 
 
@@ -72,6 +75,7 @@ def app(application=0):
     """
     set or get the current app/eventhandler
     """
+    _debug_('rc.app(application=%r)' % (application,), 4)
     if not application == 0:
         context = 'menu'
         if hasattr(application, 'app_mode'):
@@ -87,6 +91,7 @@ def set_context(context):
     """
     set the context (map with button->event transformation
     """
+    _debug_('rc.set_context(context=%r)' % (context,), 2)
     return get_singleton().set_context(context)
 
 
@@ -96,6 +101,7 @@ def register(function, repeat, timer, *arg):
     repeat: if true, call the function later again
     timer:  timer * 0.01 seconds when to call the function
     """
+    _debug_('rc.register(function=%r, repeat=%r, timer=%r, arg=%r)' % (function, repeat, timer, arg), 3)
     return get_singleton().register(function, repeat, timer, *arg)
 
 
@@ -103,6 +109,7 @@ def unregister(object):
     """
     unregister an object from the main loop
     """
+    _debug_('rc.unregister(object=%r)' % (object,), 2)
     return get_singleton().unregister(object)
 
 
@@ -110,6 +117,7 @@ def shutdown():
     """
     shutdown the rc
     """
+    _debug_('rc.shutdown()', 2)
     return get_singleton().shutdown()
 
 
@@ -117,6 +125,7 @@ def suspend():
     """
     suspend the rc
     """
+    _debug_('rc.suspend()', 2)
     return get_singleton().suspend()
 
 
@@ -124,6 +133,7 @@ def resume():
     """
     resume the rc
     """
+    _debug_('rc.resume()', 2)
     return get_singleton().resume()
 
 
@@ -138,6 +148,7 @@ class Lirc:
     Class to handle lirc events
     """
     def __init__(self):
+        _debug_('Lirc.__init__()', 2)
         try:
             global pylirc
             import pylirc
@@ -174,7 +185,7 @@ class Lirc:
         """
         (re-)initialize pylirc, e.g. after calling close()
         """
-        _debug_('PyLirc resumed!')
+        _debug_('Lirc.resume()', 2)
         pylirc.init('freevo', config.LIRCRC)
         pylirc.blocking(0)
 
@@ -183,7 +194,7 @@ class Lirc:
         """
         cleanup pylirc, close devices
         """
-        _debug_('PyLirc suspended!')
+        _debug_('Lirc.suspend()', 2)
         pylirc.exit()
 
 
@@ -191,6 +202,7 @@ class Lirc:
         """
         read the lirc interface
         """
+        _debug_('Lirc.get_last_code()', 5)
         result = None
 
         if self.previous_code != None:
@@ -217,13 +229,13 @@ class Lirc:
         """
         return next event
         """
+        _debug_('Lirc.poll(rc=%r)' % (rc,), 5)
         list = self.get_last_code()
 
         if list == None:
             nowtime = 0.0
             nowtime = time.time()
-            if (self.lastkeystroke + self.default_keystroke_delay2 < nowtime) and \
-                   (self.firstkeystroke != 0.0):
+            if (self.lastkeystroke + self.default_keystroke_delay2 < nowtime) and (self.firstkeystroke != 0.0):
                 self.firstkeystroke = 0.0
                 self.lastkeystroke = 0.0
                 self.repeat_count = 0
@@ -264,6 +276,7 @@ class Keyboard:
         """
         init the keyboard event handler
         """
+        _debug_('Keyboard.__init__()', 2)
         import osd
         self.callback = osd.get_singleton()._cb
 
@@ -272,6 +285,7 @@ class Keyboard:
         """
         return next event
         """
+        _debug_('Keyboard.poll(rc=%r)' % (rc,), 5)
         return self.callback(rc.context != 'input')
 
 
@@ -287,7 +301,7 @@ class TcpNetwork:
         """
         init the network event handler
         """
-        _debug_('TcpNetwork.__init__()', 1)
+        _debug_('TcpNetwork.__init__()', 2)
         self.port = config.REMOTE_CONTROL_TCP_PORT
         self.host = config.REMOTE_CONTROL_TCP_HOST
         self.sock = self.socket.socket(self.socket.AF_INET, self.socket.SOCK_STREAM)
@@ -301,6 +315,7 @@ class TcpNetwork:
         """
         return next event
         """
+        _debug_('TcpNetwork.poll(rc=%r)' % (rc,), 5)
         self._getNewConnections()
 
         throwout = []
@@ -325,6 +340,7 @@ class TcpNetwork:
         """
         accept new connections from the socket
         """
+        _debug_('TcpNetwork._getNewConnections()', 2)
         try:
             conn, addr = self.sock.accept()
             conn.setblocking(0)
@@ -343,7 +359,7 @@ class Network:
         """
         init the network event handler
         """
-        _debug_('Network.__init__()', 1)
+        _debug_('Network.__init__()', 2)
         import socket
         self.port = config.REMOTE_CONTROL_PORT
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -356,6 +372,7 @@ class Network:
         """
         return next event
         """
+        _debug_('Network.poll(rc=%r)' % (rc,), 5)
         try:
             return self.sock.recv(100)
         except:
@@ -372,6 +389,7 @@ class Evdev:
         """
         init all specified devices
         """
+        _debug_('Evdev.__init__()', 2)
         self._devs = []
 
         for dev in config.EVENT_DEVS:
@@ -410,6 +428,7 @@ class Evdev:
         """
         return next event
         """
+        _debug_('Evdev.poll(rc=%r)' % (rc,), 5)
         for dev in self._devs:
             event = dev.read()
             if event is None:
@@ -445,35 +464,37 @@ class EventHandler:
     Class to transform input keys or buttons into events. This class
     also handles the complete event queue (post_event)
     """
-    def __init__(self, use_pylirc=1, use_netremote=1, is_plugin=1):
-        _debug_('EventHandler.__init__(use_pylirc=%r, use_netremote=%r, is_plugin=%r)' % \
-            (use_pylirc, use_netremote, is_plugin), 1)
+    def __init__(self, use_pylirc=1, use_netremote=1, is_helper=1):
+        _debug_('EventHandler.__init__(use_pylirc=%r, use_netremote=%r, is_helper=%r)' % \
+            (use_pylirc, use_netremote, is_helper), 1)
+
+        _debug_('config.HELPER=%r' % (config.HELPER,))
 
         self.inputs = []
-        if use_pylirc:
+        if use_pylirc and not config.HELPER:
             try:
                 self.inputs.append(Lirc())
             except:
                 pass
 
-        if config.USE_SDL_KEYBOARD:
+        if config.USE_SDL_KEYBOARD and not config.HELPER:
             try:
                 self.inputs.append(Keyboard())
             except:
                 pass
 
-        try:
-            self.inputs.append(Evdev())
-        except:
-            pass
+        if not config.HELPER:
+            try:
+                self.inputs.append(Evdev())
+            except:
+                pass
 
-        if not is_plugin:
+        if not is_helper:
             if use_netremote and config.ENABLE_NETWORK_REMOTE and config.REMOTE_CONTROL_PORT:
                 self.inputs.append(Network())
 
             if use_netremote and config.ENABLE_TCP_NETWORK_REMOTE and \
-                   config.REMOTE_CONTROL_TCP_PORT and \
-                   config.REMOTE_CONTROL_TCP_HOST:
+                    config.REMOTE_CONTROL_TCP_HOST and config.REMOTE_CONTROL_TCP_PORT:
                 self.inputs.append(TcpNetwork())
 
         self.app                = None
@@ -482,16 +503,19 @@ class EventHandler:
         self.shutdown_callbacks = []
         self.poll_objects       = []
         # lock all critical parts
-        self.lock               = thread.allocate_lock()
+        #self.lock               = thread.allocate_lock()
+        self.lock               = threading.RLock()
         # last time we stopped sleeping
         self.sleep_timer        = 0
         kaa.Timer(self.poll).start(0.01)
+        _debug_('EventHandler.self.inputs=%r' % (self.inputs,), 2)
 
 
     def set_app(self, app, context):
         """
         set default eventhandler and context
         """
+        _debug_('EventHandler.set_app(app=%r, context=%r)' % (app, context), 2)
         self.app     = app
         self.context = context
 
@@ -500,6 +524,7 @@ class EventHandler:
         """
         get current eventhandler (app)
         """
+        _debug_('EventHandler.get_app()', 4)
         return self.app
 
 
@@ -507,22 +532,25 @@ class EventHandler:
         """
         set context for key mapping
         """
+        _debug_('EventHandler.set_context(context=%r)' % (context,), 2)
         self.context = context
 
 
-    def post_event(self, e):
+    def post_event(self, event):
         """
         add event to the queue
         """
-        if not isinstance(e, Event):
-            e = Event(e, context=self.context)
-        e.post()
+        _debug_('EventHandler.post_event(event=%r)' % (event.name,), 2)
+        if not isinstance(event, Event):
+            event = Event(event, context=self.context)
+        event.post()
 
 
     def key_event_mapper(self, key):
         """
         map key to event based on current context
         """
+        _debug_('EventHandler.key_event_mapper(key=%r)' % (key,), 2)
         if not key:
             return None
 
@@ -546,6 +574,7 @@ class EventHandler:
         repeat: if true, call the function later again
         timer:  timer * 0.01 seconds when to call the function
         """
+        _debug_('EventHandler.register(function=%r, repeat=%r, timer=%r, arg=%r)' % (function, repeat, timer, arg), 3)
         self.lock.acquire()
         try:
             if timer == SHUTDOWN:
@@ -563,6 +592,7 @@ class EventHandler:
         """
         unregister an object from the main loop
         """
+        _debug_('EventHandler.unregister(function=%r)' % (function,), 2)
         self.lock.acquire()
         try:
             for c in copy.copy(self.callbacks):
@@ -578,12 +608,14 @@ class EventHandler:
 
 
     def suspend(self):
+        _debug_('EventHandler.suspend()', 2)
         for i in self.inputs:
             if hasattr(i, 'suspend'):
                 i.suspend()
 
 
     def resume(self):
+        _debug_('EventHandler.resume()', 2)
         for i in self.inputs:
             if hasattr(i, 'resume'):
                 i.resume()
@@ -593,6 +625,7 @@ class EventHandler:
         """
         shutdown the rc
         """
+        _debug_('EventHandler.shutdown()', 2)
         for c in copy.copy(self.shutdown_callbacks):
             _debug_('shutting down %s' % c[0], 2)
             c[0](*c[1])
@@ -602,6 +635,7 @@ class EventHandler:
         """
         poll all registered functions
         """
+        _debug_('EventHandler.poll()', 5)
         # search all input objects for new events
         for i in self.inputs:
             e = i.poll(self)
@@ -632,4 +666,5 @@ class EventHandler:
         """
         subscribe to 'post_event'
         """
+        _debug_('EventHandler.subscribe(event_callback=%r)' % (event_callback,), 2)
         raise "subscribe doesn't work"
