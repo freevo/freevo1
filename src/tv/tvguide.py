@@ -67,7 +67,7 @@ class TVGuide(Item):
         msgtext = _('Preparing the program guide')
         guide = tv.epg_xmltv.get_guide(PopupBox(text=msgtext))
         # getting channels
-        channels = guide.get_programs(start=start_time+1, stop=stop_time-1)
+        channels = guide.get_programs(start_time+1, stop_time-1)
         if not channels:
             AlertBox(text=_('TV Guide is corrupt!')).show()
             return
@@ -359,7 +359,7 @@ class TVGuide(Item):
 
         # we need to determine the program,
         # that is running now at the selected channel
-        programs = self.guide.get_programs(start=start_time+1, stop=stop_time-1, chanids=old_selected.channel_id)
+        programs = self.guide.get_programs(start_time+1, stop_time-1, old_selected.channel_id)
 
         if len(programs) > 0 and len(programs[0].programs) > 0:
             selected = programs[0].programs[0]
@@ -379,7 +379,7 @@ class TVGuide(Item):
         start_channel = self.start_channel
 
         # we need to determine the new selected program
-        programs = self.guide.get_programs(start=new_start_time+1, stop=new_end_time-1, chanids=self.start_channel)
+        programs = self.guide.get_programs(new_start_time+1, new_end_time-1, self.start_channel)
 
         if len(programs) > 0 and len(programs[0].programs) > 0:
             selected = programs[0].programs[0]
@@ -397,8 +397,7 @@ class TVGuide(Item):
         """
         _debug_('rebuild(start_time=%r, stop_time=%r, start_channel=%r, selected=%r)' % (start_time, stop_time, start_channel, selected), 1)
         self.guide = tv.epg_xmltv.get_guide()
-        #channels = self.guide.get_programs(start=start_time+1, stop=stop_time-1, chanids=[start_channel])
-        channels = self.guide.get_programs(start=start_time+1, stop=stop_time-1, chanids=None)
+        channels = self.guide.get_programs(start_time+1, stop_time-1)
 
         table = [ ]
 
@@ -413,7 +412,7 @@ class TVGuide(Item):
         # table header
         table += [ ['Chan'] ]
         for i in range(int(self.n_cols)):
-            table[0] += [ start_time + self.col_time * i* 60 ]
+            table[0] += [ start_time + self.col_time * i * 60 ]
 
         table += [ self.selected ] # the selected program
 
@@ -479,9 +478,9 @@ class TVGuide(Item):
 
         channel = self.guide.chan_dict[last_prg.channel_id]
         if full_scan:
-            all_programs = self.guide.get_programs(start_time-24*60*60, stop_time+24*60*60, [ channel.id ])
+            all_programs = self.guide.get_programs(start_time-24*60*60, stop_time+24*60*60, channel.id)
         else:
-            all_programs = self.guide.get_programs(start_time+1, stop_time-1, [ channel.id ])
+            all_programs = self.guide.get_programs(start_time+1, stop_time-1, channel.id)
 
         # Current channel programs
         programs = all_programs[0].programs
@@ -503,7 +502,7 @@ class TVGuide(Item):
                 else:
                     return self.change_program(value, True)
             else:
-                if i+value >= 0:
+                if i + value >= 0:
                     prg = programs[i+value]
                 elif full_scan:
                     prg = programs[0]
@@ -564,7 +563,7 @@ class TVGuide(Item):
         channel = self.guide.chan_list[channel_pos]
 
 
-        programs = self.guide.get_programs(start_time+1, stop_time-1, [ channel.id ])
+        programs = self.guide.get_programs(start_time+1, stop_time-1, channel.id)
         programs = programs[0].programs
 
         prg = None

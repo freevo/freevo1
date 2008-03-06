@@ -272,7 +272,7 @@ class FreevoChannels:
         chan_name = config.TV_CHANNELS[self.chan_index][1]
         chan_id = config.TV_CHANNELS[self.chan_index][0]
 
-        channels = epg_xmltv.get_guide().get_programs(start=time.time(), stop=time.time(), chanids=[chan_id])
+        channels = epg_xmltv.get_guide().get_programs(time.time(), time.time(), chan_id)
 
         if channels and channels[0] and channels[0].programs:
             if showtime:
@@ -295,7 +295,7 @@ class FreevoChannels:
         chan_name = config.TV_CHANNELS[self.chan_index][1]
         chan_id = config.TV_CHANNELS[self.chan_index][0]
 
-        channels = epg_xmltv.get_guide().get_programs(start=time.time(), stop=time.time(), chanids=[chan_id])
+        channels = epg_xmltv.get_guide().get_programs(time.time(), time.time(), chan_id)
 
         if channels and channels[0] and channels[0].programs:
             start_t = channels[0].programs[0].start

@@ -38,7 +38,6 @@ import config
 # changes are made to the file format.
 EPG_VERSION = 6
 
-
 class TvProgram:
 
     channel_id = None
@@ -247,22 +246,29 @@ class TvGuide:
             self.chan_dict[program.channel_id].programs += [program]
 
 
-    def get_programs(self, start=0, stop=2147483647, chanids=None):
+    def get_programs(self, start=0, stop=2147483647, channel_id=None):
         """
         Get all programs that occur at least partially between the start and stop
         timeframe.
         
         @param start: is 0, get all programs from the start.
         @param stop: is 2147483647, get all programs until the end.
-        @param chanids: can be used to select only certain channel id's, all channels are returned otherwise.
+        @param channel_id: can be used to select a channel id, all channels are returned otherwise.
         @returns: a list of channels (TvChannel)
         """
-        _debug_('get_programs(start=%r, stop=%r, chanids=%r)' % (time.strftime('%H:%M', time.localtime(start)),
-            time.strftime('%H:%M', time.localtime(stop)), chanids))
+        _debug_('get_programs(start=%r, stop=%r, channel_id=%r)' % (time.strftime('%H:%M', time.localtime(start)),
+            time.strftime('%H:%M', time.localtime(stop)), channel_id))
 
+        global channel_cache
+        channels = channel_cache.cached(start, stop, channel_id)
+        if channels is not None:
+            _debug_('cached channels=%r' % (channels,))
+            return channels
+
+        channel_cache.reset(start, stop, channel_id)
         channels = []
         for chan in self.chan_list:
-            if chanids and (not chan.id in chanids):
+            if channel_id and chan.id != channel_id:
                 continue
 
             c = TvChannel(chan.id, chan.displayname, chan.tunerid, chan.logo, chan.times)
@@ -271,8 +277,10 @@ class TvGuide:
             c.programs = filter(f, chan.programs)
 
             channels.append(c)
+            channel_cache.add(chan.id, c)
 
-        _debug_('get_programs: channels=%r' % (channels,))
+        _debug_('channels=%r' % (channels,))
+        #print 'channels=%r' % (channels,)
         return channels
 
 
@@ -291,3 +299,72 @@ class TvGuide:
 
     def __repr__(self):
         return '<TvGuide %r>' % (self.EPG_VERSION)
+
+
+
+class ChannelCache:
+    """
+    This class caches the list of channels for get_programs
+    """
+    def __init__(self):
+        self.channel_id = None
+        self.timestamp = float(0)
+        self.start = None
+        self.stop = None
+        self.channel_ids = []
+        self.channels = []
+
+
+    def reset(self, start, stop, channel_id):
+        """
+        Reset the cache to empty
+        """
+        self.channel_id = channel_id
+        if self.channel_id is None:
+            self.timestamp = float(time.time())
+            self.start = start
+            self.stop = stop
+            self.channel_ids = []
+            self.channels = []
+
+
+    def add(self, channel_id, channel):
+        """
+        Add a channel to the cache
+        """
+        if self.channel_id is None:
+            self.channel_ids.append(channel_id)
+            self.channels.append(channel)
+
+
+    def cached(self, start, stop, channel_id):
+        """
+        get the cached channel list for the channel_id
+
+        @param start: start time of the channels
+        @param channel_id: the channel to fetch from the cache
+        @returns: None if the cache is out of date otherwise the list of channels
+        """
+        if time.time() - self.timestamp > 20:
+            #print 'cache is out of date: %r' % int(time.time() - self.timestamp)
+            return None
+        if start != self.start:
+            #print 'cache has a different start time: %r != %r' % (start, self.start)
+            return None
+        if stop != self.stop:
+            #print 'cache has a different stop time: %r != %r' % (stop, self.stop)
+            return None
+        if len(self.channels) == 0:
+            #print 'cache is empty'
+            return None
+        if channel_id is not None:
+            if channel_id not in self.channel_ids:
+                #print 'cache does not contain channel %r' % (channel_id,)
+                return None
+            n = self.channel_ids.index(channel_id)
+            #print 'cached channel=%r' % (self.channels[n:n+1],)
+            return self.channels[n:n+1]
+        #print 'cached channels=%r' % (self.channels[:],)
+        return self.channels[:]
+
+channel_cache = ChannelCache()

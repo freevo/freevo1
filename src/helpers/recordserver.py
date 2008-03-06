@@ -231,7 +231,7 @@ class RecordServer:
 
     @kaa.rpc.expose('getScheduledRecordings')
     def getScheduledRecordings(self):
-        _debug_('getScheduledRecordings()', 1)
+        _debug_('getScheduledRecordings()', 2)
         file_ver = None
         schedule = None
 
