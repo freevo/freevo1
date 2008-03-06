@@ -43,6 +43,7 @@ import util.tv_util as tv_util
 TYPES_VERSION = 3
 
 critical_section = threading.Lock()
+schedule_locked = False
 
 
 class ScheduledRecordings:
@@ -55,6 +56,25 @@ class ScheduledRecordings:
         self.program_list = {}
         self.manual_recordings = self.loadManualRecordings()
         self.favorites = self.loadFavorites()
+        global schedule_locked
+        schedule_locked = False
+
+
+    def lock(self):
+        global schedule_locked
+        schedule_locked = True
+
+
+    def unlock(self):
+        global schedule_locked
+        if schedule_locked:
+            schedule_locked = False
+            self.saveRecordSchedule()
+
+
+    def get_locked(self):
+        global schedule_locked
+        return schedule_locked
 
 
     def loadRecordSchedule(self):
@@ -78,6 +98,9 @@ class ScheduledRecordings:
 
     def saveRecordSchedule(self):
         """ Save the tv recording schedule to a pickle file """
+        global schedule_locked
+        if schedule_locked:
+            return
         _debug_('saveRecordSchedule()', 1)
         try:
             schedule_fh = open(config.TV_RECORD_SCHEDULE, 'wb')
@@ -94,11 +117,7 @@ class ScheduledRecordings:
 
     def addProgram(self, prog, key=None):
         """ """
-        _debug_('addProgram(%s, key=%r)' % (prog, key), 1)
-        if not key:
-            # key = rec_interface.getKey(prog)
-            pass
-
+        _debug_('addProgram(%r, key=%r)' % (prog, key), 1)
         if not self.program_list.has_key(key):
             self.program_list[key] = prog
             _debug_('%s "%s" added' % (key, prog), 1)
@@ -109,11 +128,7 @@ class ScheduledRecordings:
 
     def removeProgram(self, prog, key=None):
         """ """
-        _debug_('removeProgram(%s, key=%r)' % (prog, key), 1)
-        if not key:
-            # key = rec_interface.getKey(prog)
-            pass
-
+        _debug_('removeProgram(%r, key=%r)' % (prog, key), 1)
         if self.program_list.has_key(key):
             del self.program_list[key]
             _debug_('%s "%s" removed' % (key, prog), 1)

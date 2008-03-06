@@ -286,7 +286,6 @@ class RecordServer:
             schedule = ScheduledRecordings()
 
         self.findOverlaps(schedule)
-        _debug_('saving cached file %r with %s items' % (config.TV_RECORD_SCHEDULE, len(schedule.program_list)), 1)
 
         schedule.saveRecordSchedule()
 
@@ -438,7 +437,7 @@ class RecordServer:
 
 
     def addRecordingToSchedule(self, prog=None, inputSchedule=None):
-        _debug_('addRecordingToSchedule(%s, inputSchedule=%r)' % (prog, inputSchedule), 1)
+        _debug_('addRecordingToSchedule(%r, inputSchedule=%r)' % (prog, inputSchedule), 1)
         if inputSchedule:
             schedule = inputSchedule
         else:
@@ -451,7 +450,7 @@ class RecordServer:
 
 
     def removeRecordingFromSchedule(self, prog=None, inputSchedule=None):
-        _debug_('removeRecordingFromSchedule(%s, inputSchedule=%r)' % (prog, inputSchedule), 1)
+        _debug_('removeRecordingFromSchedule(%r, inputSchedule=%r)' % (prog, inputSchedule), 1)
         if inputSchedule:
             schedule = inputSchedule
         else:
@@ -676,7 +675,7 @@ class RecordServer:
 
     @kaa.rpc.expose('scheduleRecording')
     def scheduleRecording(self, prog=None):
-        _debug_('scheduleRecording(%s)' % (prog,), 1)
+        _debug_('scheduleRecording(%r)' % (prog,), 1)
         global guide
 
         if prog is None:
@@ -1197,12 +1196,14 @@ class RecordServer:
         tmp[fav.name] = fav
 
         schedule = self.getScheduledRecordings()
+        schedule.lock()
         progs = schedule.getProgramList()
         for prog in progs.values():
             (isFav, favorite) = self.isProgAFavorite(prog, tmp)
             if isFav:
                 self.removeScheduledRecording(prog)
 
+        schedule.unlock()
         return (True, 'favorite unscheduled')
 
 
@@ -1244,10 +1245,10 @@ class RecordServer:
         schedule = self.getScheduledRecordings()
 
         favs = self.getFavorites()
-
         if not len(favs):
             return False
 
+        schedule.lock()
 
         # Then remove all scheduled favorites in that timeframe to
         # make up for schedule changes.
@@ -1275,6 +1276,7 @@ class RecordServer:
                     prog.isFavorite = favorite
                     self.scheduleRecording(prog)
 
+        schedule.unlock()
         return True
 
 

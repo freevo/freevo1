@@ -349,6 +349,8 @@ LOCAL_CONF_CHANGES = [
     (5.23,
      ''' Added XMLTV_TIMEZONE to allow the time zone to be specified
      Added OSD_X11_CURSORS to allow custom cursor to be set, stops xine showing a cursor
+     Changes TV_RECORD_SCHEDULE to be a pickle file, this will delete existing favorites
+     Added TV_RECORD_FAVORITES and TV_RECORD_FAVORITES_LIST to keep favorites separate
      '''),
 ]
 
