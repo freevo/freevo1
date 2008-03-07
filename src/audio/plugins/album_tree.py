@@ -42,6 +42,7 @@ import playlist
 from audio import audioitem
 from gui import ProgressBox
 
+
 class treeSpec(object):
     """
     see: PluginInterface() below for freevo plugin doc.
@@ -58,6 +59,7 @@ class treeSpec(object):
         self.name = name
         self.alt_grouping = alt_grouping
         self.cursor = cursor
+
 
     def get_query(self, data):
         """
@@ -94,11 +96,14 @@ class treeSpec(object):
 
         return query
 
+
     def execute(self, data):
         self.cursor.execute(self.get_query(data))
         return list(self.cursor)
         #should return an iterator/generator instead of a list?
         #dont confuse others/need count for progress -->return list
+
+
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -188,12 +193,14 @@ class PluginInterface(plugin.MainMenuPlugin):
         else:
             self.load_spec(config.AUDIO_ALBUM_TREE_SPEC)
 
+
     def shutdown(self):
         """
         shut down the sqlite database
         """
         _debug_('shutdown', 2)
         db.close()
+
 
     def load_spec(self, spec_list):
         """
@@ -206,6 +213,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             if specdef.has_key('alt_grouping'):
                 tree.alt_grouping = specdef['alt_grouping']
             self.album_tree_list.append(tree)
+
 
     def load_demo(self):
         """
@@ -241,15 +249,16 @@ class PluginInterface(plugin.MainMenuPlugin):
     def items(self, parent):
         return [ self.show_item ]
 
+
     def actions(self):
         #todo: add random 10 etc..
         return []
+
 
     def onchoose_main(self, arg=None, menuw=None):
         """
         main menu
         """
-        #
         items = []
         for tree in self.album_tree_list:
             items.append(menu.MenuItem(tree.name, action=self.onchoose_node, arg=[tree, []]))
@@ -259,6 +268,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         rc.app(None)
         menuw.pushmenu(myobjectmenu)
         menuw.refresh()
+
 
     def onchoose_node(self, arg=None, menuw=None):
         """
@@ -289,6 +299,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         rc.app(None)
         menuw.pushmenu(myobjectmenu)
         menuw.refresh()
+
 
     def onchoose_last_node(self, tree, data, menuw):
         """

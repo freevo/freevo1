@@ -72,7 +72,6 @@ class PluginInterface(plugin.MainMenuPlugin):
     __maintainer_email__ = __author_email__
     __version__          = '2'
 
-
     def __init__(self):
         """Initilise the plugin"""
         if not config.MPD_MUSIC_BASE_PATH:
@@ -115,6 +114,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def shutdown(self):
         """close the connection to the MPD server"""
+        self.conn.join()
         try:
             self.conn.close()
         except EOFError:

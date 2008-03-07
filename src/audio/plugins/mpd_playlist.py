@@ -100,6 +100,7 @@ class PluginInterface(plugin.ItemPlugin):
 
     def shutdown(self):
         """close the connection to the mpd server"""
+        self.conn.join()
         try:
             # this always throws EOFError, even though there isn't really an error
             self.conn.close()
