@@ -2615,7 +2615,6 @@ def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, refer
         except Exception, e:
             if _debug:
                 import traceback
-                traceback.print_stack()
                 traceback.print_exc()
                 sys.stderr.write('xml parsing failed\n')
             result['bozo'] = 1
