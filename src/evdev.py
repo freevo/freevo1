@@ -104,7 +104,7 @@ class evdev:
     def __init__(self, dev, blocking=False):
         """
         """
-        print 'evdev.__init__(dev, blocking=False)'
+        #print 'evdev.__init__(dev, blocking=False)'
         self._fd = None
         if blocking:
             self._fd = os.open(dev, os.O_RDONLY)
@@ -112,25 +112,30 @@ class evdev:
             self._fd = os.open(dev, os.O_RDONLY | os.O_NDELAY)
         self.get_events()
 
+
     def __del__(self):
         """
         """
-        print '__del__(self=%r)' % (self.__dict__)
-        #if self is not None:
-        #    self.close()
+        #print '__del__(self=%r)' % (self.__dict__)
+        try:
+            self.close()
+        except Exception, why:
+            pass
+
 
     def close(self):
         """
         """
-        print 'close(self=%r)' % (self,)
+        #print 'close(self=%r)' % (self,)
         if self._fd is not None:
             os.close(self._fd)
             self._fd = None
 
+
     def print_info(self):
         """
         """
-        print 'print_info()'
+        #print 'print_info()'
         print 'Input driver version %d.%d.%d' % self.get_version()
 
         devid = self.get_id()
@@ -138,10 +143,11 @@ class evdev:
         print 'Device name: "' + self.get_name() + '"'
         print 'Device location: "' + self.get_location() + '"'
 
+
     def print_events(self):
         """
         """
-        print 'print_events()'
+        #print 'print_events()'
         print 'Supported events:'
 
         keys = self._events.keys()
@@ -156,42 +162,47 @@ class evdev:
                 except KeyError:
                     print '        Event ??? (%d)' % event
 
+
     def get_version(self):
         """
         """
-        print 'get_version()'
+        #print 'get_version()'
         buf = ioctl(self._fd, EVIOCGVERSION, '    ')
         l, =  struct.unpack('I', buf)
         return (l >> 16, (l >> 8) & 0xff, l & 0xff)
 
+
     def get_id(self):
         """
         """
-        print 'get_id()'
+        #print 'get_id()'
         buf = ioctl(self._fd, EVIOCGID, ' ' * 8)
         bus, vendor, product, version = struct.unpack('HHHH', buf)
         return { 'bus':_buses[bus], 'vendor':vendor, 'product':product, 'version':version }
 
+
     def get_name(self):
         """
         """
-        print 'get_name()'
+        #print 'get_name()'
         buf = ioctl(self._fd, EVIOCGNAME(1024), ' ' * 1024)
         null = buf.find('\0')
         return buf[:null]
 
+
     def get_location(self):
         """
         """
-        print 'get_location()'
+        #print 'get_location()'
         buf = ioctl(self._fd, EVIOCGPHYS(1024), ' ' * 1024)
         null = buf.find('\0')
         return buf[:null]
 
+
     def get_events(self):
         """
         """
-        print 'get_events()'
+        #print 'get_events()'
         keys = _types.keys()
         keys.sort()
 
@@ -228,15 +239,17 @@ class evdev:
 
                 self._events[i].append(j)
 
+
     def has_event(self, test_event):
         """
         """
-        print 'has_event(test_event)'
+        #print 'has_event(test_event)'
         for type in self._events.keys():
             for event in self._events[type]:
                 if _events[type][event] == test_event:
                     return True
         return False
+
 
     def read(self):
         """
@@ -256,13 +269,14 @@ class evdev:
 if __name__ == '__main__':
 
     def _convert_value(s):
-        print '_convert_value(s)'
+        #print '_convert_value(s)'
         if s.startswith('0x'):
             return int(s, 16)
         return int(s, 10)
 
+
     def parse_input_h(path):
-        print 'parse_input_h(path)'
+        #print 'parse_input_h(path)'
         global _types, _events, _ids, _buses
 
         f = file(path)
@@ -315,8 +329,9 @@ if __name__ == '__main__':
         _ids = ids
         _buses = buses
 
+
     def _print_tables():
-        print '_print_tables()'
+        #print '_print_tables()'
         print '_types = {'
 
         keys = _types.keys()
