@@ -324,15 +324,13 @@ class MainTread:
 _shutting_down = False
 def unix_signal_handler(sig, frame):
     """
-    the signal handler to shut down freevo
+    Unix signal handler to shut down freevo
     """
     _debug_('unix_signal_handler(sig=%r, frame=%r)' % (sig, frame), 1)
     global _shutting_down
-    if sig in (signal.SIGTERM, signal.SIGINT):
-        if _shutting_down:
-            return
-        _shutting_down = True
-        shutdown(exit=True)
+    if _shutting_down:
+        return
+    raise SystemExit
 
 
 def signal_handler():
@@ -424,6 +422,8 @@ if len(sys.argv) >= 2:
 
 try:
     # signal handler
+    signal.signal(signal.SIGTERM, unix_signal_handler) 
+    signal.signal(signal.SIGINT, unix_signal_handler) 
     kaa.main.signals['shutdown'].connect(signal_handler)
 
     # load the fxditem to make sure it's the first in the
@@ -436,6 +436,7 @@ try:
     # prepare the skin
     skin.prepare()
 
+    _version = ''
     try:
         try:
             import freevo.version as version
@@ -443,8 +444,8 @@ try:
         except ImportError:
             import version
             import revision
-        v = '%s' % version.__version__
-        v = v.replace('-svn', ' r%s' % revision.__revision__)
+        _version = '%s' % version.__version__
+        _version = _version.replace('-svn', ' r%s' % revision.__revision__)
     except ImportError:
         pass
     # Fire up splashscreen and load the plugins
@@ -488,18 +489,14 @@ try:
 
     MainTread()
 
+    print 'Freevo %s ready' % (_version,)
     kaa.main.run()
+    print 'Freevo %s finished' % (_version,)
 
-
-except KeyboardInterrupt:
-    print 'Shutdown by keyboard interrupt'
-    # Shutdown the application
-    shutdown()
-
-except SystemExit:
-    dfb_int_handler()
-    dfb_term_handler()
-    pass
+#except KeyboardInterrupt:
+#    print 'Shutdown by keyboard interrupt'
+#    # Shutdown the application
+#    shutdown()
 
 except Exception, why:
     _debug_('Crash!: %s' % (why), config.DCRITICAL)
