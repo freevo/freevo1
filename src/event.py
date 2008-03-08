@@ -254,8 +254,7 @@ INPUT_8                = Event('INPUT_8', arg=8)
 INPUT_9                = Event('INPUT_9', arg=9)
 INPUT_0                = Event('INPUT_0', arg=0)
 
-INPUT_ALL_NUMBERS = (INPUT_0, INPUT_1, INPUT_2, INPUT_3, INPUT_4, INPUT_5,
-                     INPUT_6, INPUT_7, INPUT_8, INPUT_9, INPUT_0 )
+INPUT_ALL_NUMBERS = (INPUT_0, INPUT_1, INPUT_2, INPUT_3, INPUT_4, INPUT_5, INPUT_6, INPUT_7, INPUT_8, INPUT_9)
 
 
 # Call the function specified in event.arg
@@ -532,7 +531,6 @@ DEFAULT_KEYMAP = {
     key.K_SPACE       : 'SELECT',
     key.K_RETURN      : 'SELECT',
     key.K_F2          : 'POWER',
-    key.K_F3          : 'MUTE',
     key.K_KP_MINUS    : 'VOL-',
     key.K_n           : 'VOL-',
     key.K_KP_PLUS     : 'VOL+',
@@ -563,6 +561,7 @@ DEFAULT_KEYMAP = {
     key.K_s           : 'STOP',
     key.K_F6          : 'REC',
     key.K_PERIOD      : 'EJECT',
+    key.K_F3          : 'EJECT',
     key.K_l           : 'SUBTITLE',
     key.K_a           : 'LANG',
     key.K_RIGHTBRACKET: 'NEXT',

@@ -417,8 +417,7 @@ def comingup(items=None, scheduledRecordings=None):
         (status, schedule) = scheduledRecordings
 
     if not status:
-        result = _('Recording server is not available')
-        return result
+        return schedule # in this case the schedule is the reason
 
     progs = schedule.getProgramList()
 
