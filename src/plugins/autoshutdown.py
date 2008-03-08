@@ -81,7 +81,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     | plugin.activate('autoshutdown',level=90)
 
     Configuration:
-    | SHUTDOWN_SYS_ENABLE = 1
+    | SYS_SHUTDOWN_ENABLE = 1
     | AUTOSHUTDOWN_METHOD = 'acpi|nvram'
     | AUTOSHUTDOWN_WAKEUP_CMD = PATH/TO/THE/WAKEUP_SCRIPT
     | AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = '13:00'
@@ -123,7 +123,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def config(self):
         return [
-            ('SHUTDOWN_SYS_ENABLE', 1, 'System shutdown enabled'),
+            ('SYS_SHUTDOWN_ENABLE', 1, 'System shutdown enabled'),
             ('AUTOSHUTDOWN_METHOD', 'acpi', 'acpi or nvram'),
             ('AUTOSHUTDOWN_WAKEUP_CMD', None, 'path to the wakeup script'),
             ('AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME', '13:00', 'Daily wake up time'),
@@ -504,14 +504,14 @@ def shutdown_action(action=None):
     if (action == Shutdown.RESTART_SYSTEM):
         _debug_('restart system')
         __cleanup_freevo()
-        __syscall(config.RESTART_SYS_CMD, config.AUTOSHUTDOWN_PRETEND)
+        __syscall(config.SYS_RESTART_CMD, config.AUTOSHUTDOWN_PRETEND)
         # wait until the system halts/reboots
         while 1:
             time.sleep(1)
     elif (action == Shutdown.SHUTDOWN_SYSTEM):
         _debug_('shutdown system')
         __cleanup_freevo()
-        __syscall(config.SHUTDOWN_SYS_CMD, config.AUTOSHUTDOWN_PRETEND)
+        __syscall(config.SYS_SHUTDOWN_CMD, config.AUTOSHUTDOWN_PRETEND)
         # wait until the system halts/reboots
         while 1:
             time.sleep(1)
@@ -593,7 +593,7 @@ def __cleanup_freevo():
     """
     Performs necessary actions for freevo shutdown
     """
-    _debug_('__cleanup_freevo()', 2)
+    _debug_('__cleanup_freevo()', 1)
     import osd
     import plugin
     import rc
@@ -606,24 +606,24 @@ def __cleanup_freevo():
             # handler, but we are dead already.
             sys.exit(0)
         osd.clearscreen(color=osd.COL_BLACK)
-        osd.drawstringframed(
-            _('shutting down...'),
-            0, 0, osd.width, osd.height,
-            osd.getfont(config.OSD_DEFAULT_FONTNAME,
-            config.OSD_DEFAULT_FONTSIZE),
-            fgcolor=osd.COL_ORANGE,
-            align_h='center', align_v='center'
-        )
+        osd.drawstringframed(_('shutting down...'), 0, 0, osd.width, osd.height,
+            osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE),
+            fgcolor=osd.COL_ORANGE, align_h='center', align_v='center')
         osd.update()
         time.sleep(0.5)
     # shutdown all daemon plugins
+    _debug_('plugin.shutdown()', 1)
     plugin.shutdown()
     # shutdown registered callbacks
+    _debug_('rc.shutdown()', 1)
     rc.shutdown()
     if not config.HELPER:
         # shutdown the screen
+        _debug_('osd.clearscreen(color=osd.COL_BLACK)', 1)
         osd.clearscreen(color=osd.COL_BLACK)
+        _debug_('osd.shutdown()', 1)
         osd.shutdown()
+        _debug_('raise SystemExit', 1)
         raise SystemExit
 
 
@@ -634,9 +634,9 @@ def __is_recordserver_remote():
     @returns: True/False
     """
     _debug_('__is_recordserver_remote()', 2)
-    if len(glob.glob('/var/run/recordserver*.pid'))>0:
+    if len(glob.glob('/var/run/recordserver*.pid')) > 0:
         return False
-    elif len(glob.glob('/tmp/recordserver*.pid'))>0:
+    elif len(glob.glob('/tmp/recordserver*.pid')) > 0:
         return False
     else:
         return True
@@ -668,7 +668,7 @@ def __get_scheduled_recording(index):
         raise ExNoRecordServer
     else:
         scheduled_programs = []
-        if schedule:
+        if status:
             proglist = schedule.getProgramList().values()
             if (index + 1) > len(proglist):
                 raise ExIndexNotAvailable

@@ -62,30 +62,30 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
 
     osd.clearscreen(color=osd.COL_BLACK)
     osd.drawstringframed(_('shutting down...'), 0, 0, osd.width, osd.height,
-                         osd.getfont(config.OSD_DEFAULT_FONTNAME,
-                                     config.OSD_DEFAULT_FONTSIZE),
-                         fgcolor=osd.COL_ORANGE, align_h='center', align_v='center')
+        osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE),
+        fgcolor=osd.COL_ORANGE, align_h='center', align_v='center')
     osd.update()
     time.sleep(0.5)
 
     if argshutdown or argrestart:
         # shutdown dual head for mga
         if config.CONF.display == 'mga':
-            os.system('%s runapp matroxset -f /dev/fb1 -m 0' % \
-                      os.environ['FREEVO_SCRIPT'])
+            os.system('%s runapp matroxset -f /dev/fb1 -m 0' % os.environ['FREEVO_SCRIPT'])
             time.sleep(1)
-            os.system('%s runapp matroxset -f /dev/fb0 -m 1' % \
-                      os.environ['FREEVO_SCRIPT'])
+            os.system('%s runapp matroxset -f /dev/fb0 -m 1' % os.environ['FREEVO_SCRIPT'])
             time.sleep(1)
 
+        _debug_('mga:plugin.shutdown()', 1)
         plugin.shutdown()
+        _debug_('mga:rc.shutdown()', 1)
         rc.shutdown()
+        _debug_('mga:osd.shutdown()', 1)
         osd.shutdown()
 
         if argshutdown and not argrestart:
-            os.system(config.SHUTDOWN_SYS_CMD)
+            os.system(config.SYS_SHUTDOWN_CMD)
         elif argrestart and not argshutdown:
-            os.system(config.RESTART_SYS_CMD)
+            os.system(config.SYS_RESTART_CMD)
         # let freevo be killed by init, looks nicer for mga
         while 1:
             time.sleep(1)
@@ -96,21 +96,27 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     #
 
     # Shutdown any daemon plugins that need it.
+    _debug_('plugin.shutdown()', 1)
     plugin.shutdown()
 
     # Shutdown all children still running
+    _debug_('rc.shutdown()', 1)
     rc.shutdown()
 
     # SDL must be shutdown to restore video modes etc
+    _debug_('osd.clearscreen(color=osd.COL_BLACK)', 1)
     osd.clearscreen(color=osd.COL_BLACK)
+    _debug_('osd.shutdown()', 1)
     osd.shutdown()
 
+    _debug_('config.shutdown()', 1)
     config.shutdown()
 
     if exit:
         # realy exit, we are called by the signal handler
         sys.exit(0)
 
+    _debug_('%s stop' % os.environ['FREEVO_SCRIPT'], 1)
     os.system('%s stop' % os.environ['FREEVO_SCRIPT'])
 
     # Just wait until we're dead. SDL cannot be polled here anyway.
@@ -124,6 +130,7 @@ class ShutdownItem(Item):
     Item for shutdown
     """
     def __init__(self, parent=None):
+        _debug_('ShutdownItem.__init__(parent=%r)' % (parent,), 1)
         Item.__init__(self, parent, skin_type='shutdown')
         self.menuw = None
 
@@ -132,7 +139,8 @@ class ShutdownItem(Item):
         """
         return a list of actions for this item
         """
-        if config.SHUTDOWN_CONFIRM:
+        _debug_('ShutdownItem.actions()', 1)
+        if config.SYS_SHUTDOWN_CONFIRM:
             items = [ (self.confirm_freevo, _('Shutdown Freevo') ),
                           (self.confirm_system, _('Shutdown system') ),
                           (self.confirm_system_restart, _('Restart system') ) ]
@@ -140,7 +148,7 @@ class ShutdownItem(Item):
             items = [ (self.shutdown_freevo, _('Shutdown Freevo') ),
                           (self.shutdown_system, _('Shutdown system') ),
                           (self.shutdown_system_restart, _('Restart system') ) ]
-        if config.SHUTDOWN_SYS_ENABLE:
+        if config.SYS_SHUTDOWN_ENABLE:
             items = [ items[1], items[0], items[2] ]
 
         return items
@@ -150,35 +158,40 @@ class ShutdownItem(Item):
         """
         Pops up a ConfirmBox.
         """
+        _debug_('confirm_freevo(arg=%r, menuw=%r)' % (arg, menuw), 1)
         self.menuw = menuw
         what = _('Do you really want to shut down Freevo?')
         ConfirmBox(text=what, handler=self.shutdown_freevo,
-                   default_choice=config.SHUTDOWN_CONFIRM-1).show()
+                   default_choice=config.SYS_SHUTDOWN_CONFIRM-1).show()
 
 
     def confirm_system(self, arg=None, menuw=None):
         """
         Pops up a ConfirmBox.
         """
+        _debug_('confirm_system(arg=%r, menuw=%r)' % (arg, menuw), 1)
         self.menuw = menuw
         what = _('Do you really want to shut down the system?')
         ConfirmBox(text=what, handler=self.shutdown_system,
-                   default_choice=config.SHUTDOWN_CONFIRM-1).show()
+                   default_choice=config.SYS_SHUTDOWN_CONFIRM-1).show()
 
 
     def confirm_system_restart(self, arg=None, menuw=None):
         """
         Pops up a ConfirmBox.
         """
+        _debug_('confirm_system_restart(arg=%r, menuw=%r)' % (arg, menuw), 1)
         self.menuw = menuw
         what = _('Do you really want to restart the system?')
         ConfirmBox(text=what, handler=self.shutdown_system_restart,
-                   default_choice=config.SHUTDOWN_CONFIRM-1).show()
+                   default_choice=config.SYS_SHUTDOWN_CONFIRM-1).show()
+
 
     def shutdown_freevo(self, arg=None, menuw=None):
         """
         shutdown freevo, don't shutdown the system
         """
+        _debug_('shutdown_freevo(arg=%r, menuw=%r)' % (arg, menuw), 1)
         shutdown(menuw=menuw, argshutdown=False, argrestart=False)
 
 
@@ -186,21 +199,18 @@ class ShutdownItem(Item):
         """
         shutdown the complete system
         """
+        _debug_('shutdown_system(arg=%r, menuw=%r)' % (arg, menuw), 1)
         shutdown(menuw=menuw, argshutdown=True, argrestart=False)
+
 
     def shutdown_system_restart(self, arg=None, menuw=None):
         """
         restart the complete system
         """
+        _debug_('shutdown_system_restart(arg=%r, menuw=%r)' % (arg, menuw), 1)
         shutdown(menuw=menuw, argshutdown=False, argrestart=True)
 
 
-
-
-
-#
-# the plugins defined here
-#
 
 class PluginInterface(MainMenuPlugin):
     """
@@ -208,4 +218,5 @@ class PluginInterface(MainMenuPlugin):
     """
 
     def items(self, parent):
+        _debug_('items(parent=%r)' % (parent,), 1)
         return [ ShutdownItem(parent) ]

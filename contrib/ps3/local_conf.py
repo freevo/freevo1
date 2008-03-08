@@ -60,7 +60,7 @@ MIXER_VOLUME_DEFAULT     = 80                # Set default volume level.
 
 # START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or xv.
 
-SHUTDOWN_CONFIRM   = 0                 # ask before shutdown
+SYS_SHUTDOWN_CONFIRM   = 0                 # ask before shutdown
 
 #
 # Physical ROM drives, multiple ones can be specified
@@ -91,12 +91,12 @@ HIDE_UNUSABLE_DISCS = 1
 #
 # Perform a whole system shutdown at SHUTDOWN! Useful for standalone boxes.
 #
-# ENABLE_SHUTDOWN_SYS = 0
+# SYS_SHUTDOWN_ENABLE = 0
 #
 # Command to execute to shutdown the system
 #
-# SHUTDOWN_SYS_CMD = "sudo shutdown -h now"
-# RESTART_SYS_CMD = "sudo shutdown -r now"
+# SYS_SHUTDOWN_CMD = "sudo shutdown -h now"
+# SYS_RESTART_CMD = "sudo shutdown -r now"
 
 # ======================================================================
 # AUTOSHUTDOWN CONFIGURATION

@@ -121,6 +121,11 @@ change_map = {
     'audio\.playlist': 'audio.playlists',
     'TV_TV_': 'TV_',
     'MIXER_MIXER_': 'MIXER_',
+    'SHUTDOWN_CONFIRM': 'SYS_SHUTDOWN_CONFIRM',
+    'SHUTDOWN_SYS_CMD': 'SYS_SHUTDOWN_CMD',
+    'RESTART_SYS_CMD': 'SYS_RESTART_CMD',
+    'SHUTDOWN_SYS_ENABLE': 'SYS_SHUTDOWN_ENABLE',
+    'AUTOSYS_SHUTDOWN_CONFIRM': 'AUTOSHUTDOWN_CONFIRM',
 }
 
 def help():

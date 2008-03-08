@@ -74,9 +74,9 @@ ROM_SPEED              = @ROM_SPEED.text
 
 ### ShutDown and Reboot
 CONFIRM_SHUTDOWN       = @CONFIRM_SHUTDOWN.checked
-ENABLE_SHUTDOWN_SYS    = @ENABLE_SHUTDOWN_SYS.checked
-SHUTDOWN_SYS_CMD = '@SHUTDOWN_SYS_CMD.text'
-RESTART_SYS_CMD  = '@RESTART_SYS_CMD.text'
+SYS_SHUTDOWN_ENABLE    = @SYS_SHUTDOWN_ENABLE.checked
+SYS_SHUTDOWN_CMD = '@SYS_SHUTDOWN_CMD.text'
+SYS_RESTART_CMD  = '@SYS_RESTART_CMD.text'
 
 ### Network-Remote
 REMOTE_CONTROL_HOST    = '@REMOTE_CONTROL_HOST.text'
@@ -1635,7 +1635,7 @@ EOFCOVERCFG
                 </widget>
                 <widget class="LineEdit">
                     <property name="name">
-                        <cstring>RESTART_SYS_CMD</cstring>
+                        <cstring>SYS_RESTART_CMD</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -1651,7 +1651,7 @@ EOFCOVERCFG
                 </widget>
                 <widget class="LineEdit">
                     <property name="name">
-                        <cstring>SHUTDOWN_SYS_CMD</cstring>
+                        <cstring>SYS_SHUTDOWN_CMD</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -1667,7 +1667,7 @@ EOFCOVERCFG
                 </widget>
                 <widget class="CheckBox">
                     <property name="name">
-                        <cstring>ENABLE_SHUTDOWN_SYS</cstring>
+                        <cstring>SYS_SHUTDOWN_ENABLE</cstring>
                     </property>
                     <property name="geometry">
                         <rect>

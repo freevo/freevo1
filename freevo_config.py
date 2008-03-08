@@ -349,8 +349,12 @@ LOCAL_CONF_CHANGES = [
     (5.23,
      ''' Added XMLTV_TIMEZONE to allow the time zone to be specified
      Added OSD_X11_CURSORS to allow custom cursor to be set, stops xine showing a cursor
-     Changes TV_RECORD_SCHEDULE to be a pickle file, this will delete existing favorites
+     Changed TV_RECORD_SCHEDULE to be a pickle file, this will delete existing favorites
      Added TV_RECORD_FAVORITES and TV_RECORD_FAVORITES_LIST to keep favorites separate
+     Changed SHUTDOWN_CONFIRM to SYS_SHUTDOWN_CONFIRM for consistency
+     Changed SHUTDOWN_SYS_CMD to SYS_SHUTDOWN_CMD for consistency
+     Changed RESTART_SYS_CMD to SYS_RESTART_CMD for consistency
+     Changed SHUTDOWN_SYS_ENABLE to SYS_SHUTDOWN_ENABLE for consistency
      '''),
 ]
 
@@ -425,14 +429,14 @@ ROM_SPEED = 0
 # Set to 0 for no confirmation, set to 1 to show a confirm dialog
 # (OK preselected), set to 2 to show a confirm dialog (Cancel preselected)
 #
-SHUTDOWN_CONFIRM = 1                  # ask before shutdown
+SYS_SHUTDOWN_CONFIRM = 1                  # ask before shutdown
 
-SHUTDOWN_SYS_CMD = 'shutdown -h now'  # set this to 'sudo shutdown -h now' if
+SYS_SHUTDOWN_CMD = 'shutdown -h now'  # set this to 'sudo shutdown -h now' if
                                       # you don't have the permissions to shutdown
 
-RESTART_SYS_CMD  = 'shutdown -r now'  # like SHUTDOWN_SYS_CMD, only for reboot
+SYS_RESTART_CMD  = 'shutdown -r now'  # like SYS_SHUTDOWN_CMD, only for reboot
 
-SHUTDOWN_SYS_ENABLE = 0  # Performs a whole system shutdown at SHUTDOWN!
+SYS_SHUTDOWN_ENABLE = 0  # Performs a whole system shutdown at SHUTDOWN!
                          # For standalone boxes.
 
 
@@ -472,7 +476,7 @@ plugin.activate('shutdown', level=90)
 
 # -- autoshutdown menu item configuration --
 
-# SHUTDOWN_CONFIRM
+# SYS_SHUTDOWN_CONFIRM
 # Set to True to popup dialog boxes for confirmation.
 # this applies to menu items only.
 AUTOSHUTDOWN_CONFIRM=True
