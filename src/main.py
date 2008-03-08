@@ -322,18 +322,29 @@ class MainTread:
 
 
 _shutting_down = False
-def signal_handler(sig, frame):
+def unix_signal_handler(sig, frame):
     """
     the signal handler to shut down freevo
     """
-    _debug_('signal_handler(sig, frame)', 1)
+    _debug_('unix_signal_handler(sig=%r, frame=%r)' % (sig, frame), 1)
     global _shutting_down
     if sig in (signal.SIGTERM, signal.SIGINT):
         if _shutting_down:
             return
         _shutting_down = True
-        traceback.print_stack()
         shutdown(exit=True)
+
+
+def signal_handler():
+    """
+    the signal handler to shut down freevo
+    """
+    _debug_('signal_handler()', 1)
+    global _shutting_down
+    if _shutting_down:
+        return
+    _shutting_down = True
+    shutdown(exit=True)
 
 
 def tracefunc(frame, event, arg, _indent=[0]):
