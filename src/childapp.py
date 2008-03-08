@@ -419,9 +419,9 @@ class Read_Thread(threading.Thread):
             if not data:
                 _debug_('%s: no data, closing log' % (self.name))
                 self.fh.close()
-                if saved:
-                    self.logger.write(saved+'\n')
                 if self.logger:
+                    if saved:
+                        self.logger.write(saved+'\n')
                     self.logger.close()
                 break
             else:
