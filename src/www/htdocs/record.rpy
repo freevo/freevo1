@@ -63,15 +63,16 @@ class RecordResource(FreevoResource):
 
         if action == 'remove':
             (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-            progs = schedule.getProgramList()
+            if status:
+                progs = schedule.getProgramList()
 
-            prog = None
-            for what in progs.values():
-                if start == '%s' % what.start and chan == '%s' % what.channel_id:
-                    prog = what
+                prog = None
+                for what in progs.values():
+                    if start == '%s' % what.start and chan == '%s' % what.channel_id:
+                        prog = what
 
-            if prog:
-                self.recordclient.removeScheduledRecordingNow(prog)
+                if prog:
+                    self.recordclient.removeScheduledRecordingNow(prog)
         elif action == 'add':
             (status, prog) = self.recordclient.findProgNow(chan, start)
 
@@ -87,8 +88,9 @@ class RecordResource(FreevoResource):
             self.recordclient.scheduleRecordingNow(prog)
 
         (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-        progs = schedule.getProgramList()
-        favs = self.recordclient.getFavoritesNow()
+        if status:
+            progs = schedule.getProgramList()
+            favs = self.recordclient.getFavoritesNow()
 
         fv.printHeader(_('Scheduled Recordings'), 'styles/main.css', selected=_('Scheduled Recordings'))
 

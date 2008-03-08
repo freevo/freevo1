@@ -106,12 +106,13 @@ class ProgramItem(Item):
 
             # 'Schedule for recording' OR 'Remove from schedule'
             (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-            (status, reason) = self.recordclient.isProgScheduledNow(self.prog, schedule.getProgramList())
-            self.scheduled = status
-            if self.scheduled:
-                items.append((self.remove_program, _('Remove from schedule')))
-            else:
-                items.append((self.schedule_program, _('Schedule for recording')))
+            if status:
+                (status, reason) = self.recordclient.isProgScheduledNow(self.prog, schedule.getProgramList())
+                self.scheduled = status
+                if self.scheduled:
+                    items.append((self.remove_program, _('Remove from schedule')))
+                else:
+                    items.append((self.schedule_program, _('Schedule for recording')))
 
             # 'Add to favorites' OR 'Remove from favorites'
             (status, reason) = self.recordclient.isProgAFavoriteNow(self.prog)

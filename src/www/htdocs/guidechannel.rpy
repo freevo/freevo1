@@ -64,11 +64,11 @@ class GuideResource(FreevoResource):
     def TimeBooked(self,prog):
         bookedtime = False
         for schedule_prog in self.schedule.values():
-            if  prog.start >=schedule_prog.start  and prog.start < schedule_prog.stop:
+            if  prog.start >= schedule_prog.start and prog.start < schedule_prog.stop:
                 bookedtime = True, schedule_prog
         if not bookedtime:
             schedule_prog = None
-        return bookedtime , schedule_prog
+        return bookedtime, schedule_prog
 
     def GetChannel(self, display_channel,guide):
         for dchan in guide.chan_list:

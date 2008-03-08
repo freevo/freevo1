@@ -53,7 +53,7 @@ class IndexResource(FreevoResource):
 
         (status, schedule) = RecordClient().getScheduledRecordingsNow()
 
-        if schedule is None:
+        if status is None:
             fv.res += '<p class="alert"><b>'+_('Notice')+'</b>: '+_('Recording server is not available')+'</p>\n'
         else:
             fv.res += '<p class="normal">'+_('Recording server is up and running')+'</p>\n'
@@ -67,7 +67,7 @@ class IndexResource(FreevoResource):
         else:
             fv.res += '<p class="normal">'+_('Your listings are up to date')+'</p>\n'
 
-        if schedule:
+        if status:
             progl = schedule.getProgramList().values()
             f = lambda a, b: cmp(a.start, b.start)
             progl.sort(f)

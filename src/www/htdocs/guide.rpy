@@ -142,8 +142,8 @@ class GuideResource(FreevoResource):
 
         guide = tv.epg_xmltv.get_guide()
         (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-        if schedule:
-            schedule = schedule.getProgramList()
+        if status:
+            program_list = schedule.getProgramList()
 
         fv.printHeader(_('TV Guide'), config.WWW_STYLESHEET, config.WWW_JAVASCRIPT, selected=_('TV Guide'))
         fv.res += '<div id="content">\n';
@@ -204,13 +204,11 @@ class GuideResource(FreevoResource):
                     _('This channel has no data loaded') + ' &raquo;')
 
             for prog in chan.programs:
-                if prog.stop > mfrguidestart and \
-                   prog.start < mfrnextguide and \
-                   c_left > 0:
+                if prog.stop > mfrguidestart and prog.start < mfrnextguide and c_left > 0:
 
                     status = 'program'
 
-                    if schedule:
+                    if status:
                         (result, reason) = self.recordclient.isProgScheduledNow(prog, schedule)
                         if result:
                             status = 'scheduled'

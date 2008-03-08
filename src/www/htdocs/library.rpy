@@ -334,7 +334,7 @@ class LibraryResource(FreevoResource):
             favs = []
             if action_mediatype == 'movies' or action_mediatype == 'rectv':
                 (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-                if schedule:
+                if status:
                     progs = schedule.getProgramList()
                     f = lambda a, b: cmp(a.start, b.start)
                     progl = progs.values()

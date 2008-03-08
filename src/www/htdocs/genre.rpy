@@ -85,8 +85,8 @@ class GenreResource(FreevoResource):
 
         guide = tv.epg_xmltv.get_guide()
         (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-        if schedule is not None:
-            schedule = schedule.getProgramList()
+        if status:
+            program_list = schedule.getProgramList()
 
         fv.printHeader(_('TV Genre for %s') % time.strftime('%a %b %d', time.localtime(mfrguidestart)), \
             config.WWW_STYLESHEET, config.WWW_JAVASCRIPT)

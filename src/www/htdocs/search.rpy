@@ -134,13 +134,17 @@ class SearchResource(FreevoResource):
                 fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
                 if status == 'scheduled':
-                    cell = ('<a href="record.rpy?chan=%s&start=%s&action=remove">'+_('Remove')+'</a>') % (prog.channel_id, prog.start)
+                    cell = ('<a href="record.rpy?chan=%s&start=%s&action=remove">'+_('Remove')+'</a>') % \
+                        (prog.channel_id, prog.start)
                 elif status == 'recording':
-                    cell = ('<a href="record.rpy?chan=%s&start=%s&action=add">'+_('Record')+'</a>') % (prog.channel_id, prog.start)
+                    cell = ('<a href="record.rpy?chan=%s&start=%s&action=add">'+_('Record')+'</a>') % \
+                        (prog.channel_id, prog.start)
                 else:
-                    cell = ('<a href="record.rpy?chan=%s&start=%s&action=add">'+_('Record')+'</a>') % (prog.channel_id, prog.start)
+                    cell = ('<a href="record.rpy?chan=%s&start=%s&action=add">'+_('Record')+'</a>') % \
+                        (prog.channel_id, prog.start)
 
-                cell += (' | <a href="edit_favorite.rpy?chan=%s&start=%s&action=add">'+_('New favorite')+'</a>') % (prog.channel_id, prog.start)
+                cell += (' | <a href="edit_favorite.rpy?chan=%s&start=%s&action=add">'+_('New favorite')+'</a>') % \
+                    (prog.channel_id, prog.start)
                 fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
                 fv.tableRowClose()
