@@ -449,7 +449,7 @@ try:
     except ImportError:
         pass
     # Fire up splashscreen and load the plugins
-    splash = Splashscreen(_('Starting Freevo-%s, please wait ...') % v)
+    splash = Splashscreen(_('Starting Freevo-%s, please wait ...') % _version)
     skin.register('splashscreen', ('screen', splash))
     plugin.init(splash.progress)
     skin.delete('splashscreen')
@@ -516,8 +516,7 @@ except Exception, why:
             osd.drawstring(_('Function: %s') % funcname, 70, 190, fgcolor=osd.COL_ORANGE)
             osd.drawstring(_('Text: %s') % text, 70, 220, fgcolor=osd.COL_ORANGE)
             osd.drawstring(str(sys.exc_info()[1]), 70, 280, fgcolor=osd.COL_ORANGE)
-            osd.drawstring(_('Please see the logfiles for more info'), 70, 350,
-                           fgcolor=osd.COL_ORANGE)
+            osd.drawstring(_('Please see the logfiles for more info'), 70, 350, fgcolor=osd.COL_ORANGE)
             osd.drawstring(_('Exit in %s seconds') % i, 70, 410, fgcolor=osd.COL_ORANGE)
             osd.update()
             time.sleep(1)
