@@ -105,7 +105,7 @@ class PluginInterface(plugin.DaemonPlugin):
         Initialise the Alsa Mixer 2 plug-in
         """
         plugin.DaemonPlugin.__init__(self)
-        self.plugin_name = 'ALSAMIXER2'
+        self.plugin_name = 'MIXER'
 
         #
         # Set the main and mute mixer control names
