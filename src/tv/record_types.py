@@ -91,7 +91,7 @@ class ScheduledRecordings:
             return None
         except Exception, why:
             import traceback
-            traceback.print_exp()
+            traceback.print_exc()
         return recordSchedule
 
 
@@ -110,7 +110,7 @@ class ScheduledRecordings:
             return None
         except Exception, why:
             import traceback
-            traceback.print_exp()
+            traceback.print_exc()
 
 
     def addProgram(self, prog, key=None):
@@ -183,7 +183,7 @@ class ScheduledRecordings:
             favorites_fh.close()
         except Exception, why:
             import traceback
-            traceback.print_exp()
+            traceback.print_exc()
         # save the favourites as a text file
         try:
             favorites_fh = open(config.TV_RECORD_FAVORITES_LIST, 'w')
@@ -196,7 +196,7 @@ class ScheduledRecordings:
             favorites_fh.close()
         except Exception, why:
             import traceback
-            traceback.print_exp()
+            traceback.print_exc()
 
 
     def addFavorite(self, fav):
