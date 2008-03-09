@@ -550,7 +550,7 @@ class EventHandler:
         """
         map key to event based on current context
         """
-        _debug_('EventHandler.key_event_mapper(key=%r)' % (key,), 2)
+        _debug_('EventHandler.key_event_mapper(key=%r)' % (key,), 1)
         if not key:
             return None
 
@@ -563,8 +563,8 @@ class EventHandler:
                 pass
 
         if self.context != 'input':
-            print 'no event mapping for key %s in context %s' % (key, self.context)
-            print 'send button event BUTTON arg=%s' % key
+            _debug_('no event mapping for key %r in context %r' % (key, self.context), DINFO)
+            _debug_('send button event BUTTON arg=%r' % (key,))
         return Event(BUTTON, arg=key)
 
 
