@@ -113,7 +113,7 @@ class RecordClientActions:
             return None
 
 
-    #@kaa.coroutine()
+    @kaa.coroutine()
     def pingCo(self):
         now = time.time()
         print self.timeit(now)+': pingCo started'
@@ -125,7 +125,7 @@ class RecordClientActions:
         print self.timeit(now)+': pingCo finished' # we never get here
 
 
-    #@kaa.coroutine()
+    @kaa.coroutine()
     def findNextProgramCo(self, isrecording=False):
         """ """
         now = time.time()
@@ -138,7 +138,7 @@ class RecordClientActions:
         print self.timeit(now)+': findNextProgramCo finished'
 
 
-    #@kaa.coroutine()
+    @kaa.coroutine()
     def updateFavoritesScheduleCo(self):
         """ """
         now = time.time()
@@ -151,7 +151,7 @@ class RecordClientActions:
         print self.timeit(now)+': updateFavoritesScheduleCo finished'
 
 
-    #@kaa.coroutine()
+    @kaa.coroutine()
     def getNextProgramStart(self):
         """ """
         now = time.time()
@@ -561,19 +561,23 @@ if __name__ == '__main__':
 
     if function == "pingco":
         result = rc.pingCo().wait()
-        print 'pingCo=%r\n"%s"' % (result, result)
+        print 'pingCo=%r"' % (result,)
+        raise SystemExit
 
     if function == "findnextprogramco":
         result = rc.findNextProgramCo().wait()
         print 'findNextProgramCo=%r\n"%s"' % (result, result)
+        raise SystemExit
 
     if function == "updatefavoritesscheduleco":
         result = rc.updateFavoritesScheduleCo().wait()
         print 'updateFavoritesScheduleCo=%r' % (result,)
+        raise SystemExit
 
     if function == "getnextprogramstart":
         result = rc.getNextProgramStart().wait()
         print 'getNextProgramStart=%r' % (result,)
+        raise SystemExit
 
     #--------------------------------------------------------------------------------
     # kaa.rpc callback tests
@@ -582,6 +586,7 @@ if __name__ == '__main__':
     if function == "pingnow":
         result = rc.pingNow()
         print 'result: %r\n"%s"' % (result, result)
+        raise SystemExit
 
     elif function == "ping":
         result = rc.ping(handler)
@@ -592,6 +597,7 @@ if __name__ == '__main__':
         print 'recording:%r\n"%s"' % (result, result)
         result = rc.findNextProgramNow(False)
         print 'next     :%r\n"%s"' % (result, result)
+        raise SystemExit
 
     elif function == "findnextprogram":
         rc.findNextProgram(handler)
