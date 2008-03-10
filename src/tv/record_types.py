@@ -89,9 +89,13 @@ class ScheduledRecordings:
         except IOError, why:
             _debug_('loadRecordSchedule: %s' % why, DWARNING)
             return None
+        except EOFError, why:
+            _debug_('loadRecordSchedule: %s' % why, DWARNING)
+            return None
         except Exception, why:
             import traceback
             traceback.print_exc()
+            return None
         return recordSchedule
 
 
@@ -169,6 +173,14 @@ class ScheduledRecordings:
             self.favorites = pickle.load(favorites_fh)
             favorites_fh.close()
         except IOError, why:
+            _debug_('loadFavorites: %s' % why, DWARNING)
+            return {}
+        except EOFError, why:
+            _debug_('loadFavorites: %s' % why, DWARNING)
+            return {}
+        except Exception, why:
+            import traceback
+            traceback.print_exc()
             return {}
         return self.favorites
 
