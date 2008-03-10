@@ -56,8 +56,8 @@ if __name__ == '__main__':
             os.setuid(eval(uid))
             os.environ['USER'] = pwd.getpwuid(os.getuid())[0]
             os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
-    except Exception, e:
-        print e
+    except Exception, why:
+        print why
         sys.exit(1)
 
 # The twisted modules will go away when all the recordserver clients
@@ -1418,6 +1418,6 @@ if __name__ == '__main__':
         _debug_('Removed old record lock \"%s\"' % f, DINFO)
         os.remove(f)
 
-    print 'main() starting'
+    _debug_('main() starting')
     main()
-    print 'main() finished'
+    _debug_('main() finished')
