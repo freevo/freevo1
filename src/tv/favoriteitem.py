@@ -129,8 +129,8 @@ class FavoriteItem(Item):
 
         # XXX: priorities aren't quite supported yet
         if 0:
-            (got_favs, favs) = self.recordclient.getFavoritesNow()
-            if got_favs and len(favs) > 1:
+            (status, favorites) = self.recordclient.getFavoritesNow()
+            if status and len(favorites) > 1:
                 items.append(menu.MenuItem(_('Modify priority'), action=self.mod_priority))
 
 

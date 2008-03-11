@@ -276,8 +276,8 @@ class Favorite:
     """
     A favourite TV programme
     """
-    def __init__(self, name=None, prog=None, exactchan=FALSE, exactdow=FALSE, exacttod=FALSE, priority=0,
-        allowDuplicates=TRUE, onlyNew=FALSE):
+    def __init__(self, name=None, prog=None, exactchan=False, exactdow=False, exacttod=False, priority=0,
+        allowDuplicates=True, onlyNew=False):
         """ """
         _debug_('Favorite.__init__(self, name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % (name, prog, exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew), 1)
         self.TYPES_VERSION = TYPES_VERSION
@@ -327,8 +327,8 @@ class ScheduledTvProgram:
         """ """
         _debug_('ScheduledTvProgram.__init__()', 1)
         self.tunerid      = None
-        self.isRecording  = FALSE
-        self.isFavorite   = FALSE
+        self.isRecording  = False
+        self.isFavorite   = False
         self.favoriteName = None
-        self.removed      = FALSE
+        self.removed      = False
         self.quality      = self.HIGH_QUALITY

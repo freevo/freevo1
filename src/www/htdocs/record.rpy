@@ -90,7 +90,7 @@ class RecordResource(FreevoResource):
         (status, schedule) = self.recordclient.getScheduledRecordingsNow()
         if status:
             progs = schedule.getProgramList()
-            favs = self.recordclient.getFavoritesNow()
+            (status, favorites) = self.recordclient.getFavoritesNow()
 
         fv.printHeader(_('Scheduled Recordings'), 'styles/main.css', selected=_('Scheduled Recordings'))
 
@@ -113,15 +113,11 @@ class RecordResource(FreevoResource):
         for prog in progl:
             status = 'basic'
 
-            (isFav, message) = self.recordclient.isProgAFavoriteNow(prog, favs)
+            (isFav, message) = self.recordclient.isProgAFavoriteNow(prog, favorites)
             if isFav:
                 status = 'favorite'
-            try:
-                if prog.isRecording == TRUE:
-                    status = 'recording'
-            except:
-                # sorry, have to pass without doing anything.
-                pass
+            if hasattr(prog, 'isRecording') and prog.isRecording:
+                status = 'recording'
 
             fv.tableRowOpen('class="chanrow"')
             fv.tableCell(time.strftime('%b %d '+config.TV_TIME_FORMAT, time.localtime(prog.start)),

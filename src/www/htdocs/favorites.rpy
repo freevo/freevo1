@@ -85,7 +85,7 @@ class FavoritesResource(FreevoResource):
         else:
             pass
 
-        favorites = self.recordclient.getFavoritesNow()
+        (status, favorites) = self.recordclient.getFavoritesNow()
 
 
         days = {

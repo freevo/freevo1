@@ -353,8 +353,8 @@ class LibraryResource(FreevoResource):
 
                 #generate our favorites regular expression
                 favre = ''
-                favorites = self.recordclient.getFavoritesNow()
-                if result:
+                (status, favorites) = self.recordclient.getFavoritesNow()
+                if status:
                     favs = favorites.values()
                 else:
                     favs = []

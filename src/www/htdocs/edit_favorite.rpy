@@ -68,8 +68,11 @@ class EditFavoriteResource(FreevoResource):
         if isinstance( name, str ):
             name = Unicode( name, 'latin-1' )
 
-        favs = self.recordclient.getFavoritesNow()
-        num_favorites = len(favs)
+        (status, favorites) = self.recordclient.getFavoritesNow()
+        if status:
+            num_favorites = len(favorites)
+        else:
+            num_favorites = 0
 
         if action == 'add' and chan and start:
             (result, prog) = self.recordclient.findProgNow(chan, start)

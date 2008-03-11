@@ -64,7 +64,7 @@ class SearchResource(FreevoResource):
         (got_matches, progs) = self.recordclient.findMatchesNow(find, movies_only)
 
         if got_matches:
-            (status, favs) = self.recordclient.getFavoritesNow()
+            (status, favorites) = self.recordclient.getFavoritesNow()
             (status, schedule) = self.recordclient.getScheduledRecordingsNow()
             if status:
                 rec_progs = schedule.getProgramList()
@@ -95,22 +95,20 @@ class SearchResource(FreevoResource):
                 status = 'basic'
 
                 for rp in rec_progs.values():
-
                     if rp.start == prog.start and rp.channel_id == prog.channel_id:
                         status = 'scheduled'
-                        try:
-                            if rp.isRecording == TRUE:
-                                status = 'recording'
-                        except:
-                            sys.stderr.write('isRecording not set')
+                        if hasattr(rp, 'isRecording') and rp.isRecording:
+                            status = 'recording'
 
-                if self.recordclient.isProgAFavoriteNow(prog, favs):
+                if self.recordclient.isProgAFavoriteNow(prog, favorites):
                     status = 'favorite'
 
 
                 fv.tableRowOpen('class="chanrow"')
-                fv.tableCell(time.strftime('%b %d ' + config.TV_TIME_FORMAT, time.localtime(prog.start)), 'class="'+status+'" colspan="1"')
-                fv.tableCell(time.strftime('%b %d ' + config.TV_TIME_FORMAT, time.localtime(prog.stop)), 'class="'+status+'" colspan="1"')
+                fv.tableCell(time.strftime('%b %d ' + config.TV_TIME_FORMAT, time.localtime(prog.start)),\
+                    'class="'+status+'" colspan="1"')
+                fv.tableCell(time.strftime('%b %d ' + config.TV_TIME_FORMAT, time.localtime(prog.stop)),\
+                    'class="'+status+'" colspan="1"')
 
                 chan = tv_util.get_chan_displayname(prog.channel_id)
                 if not chan: chan = 'UNKNOWN'

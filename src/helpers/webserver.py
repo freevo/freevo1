@@ -72,6 +72,7 @@ def helpimagesrewrite(request):
         request.postpath.pop(0)
         request.path = '/'+'/'.join(request.prepath+request.postpath)
 
+
 def main():
     # the start and stop stuff will be handled from the freevo script
 
@@ -96,7 +97,6 @@ def main():
 
     root.putChild('vhost', vhost.VHostMonsterResource())
     rewriter =  rewrite.RewriterResource(root, helpimagesrewrite)
-    #Site(self, resource, logPath=None, timeout=60 * 60 * 12)
     site = server.Site(rewriter)
 
     try:
@@ -114,5 +114,7 @@ if __name__ == '__main__':
         _debug_('main() starting')
         main()
         _debug_('main() finished')
+    except SystemExit:
+        pass
     except Exception, e:
         traceback.print_exc()

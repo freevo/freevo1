@@ -798,7 +798,7 @@ class RecordServer:
 
 
     @kaa.rpc.expose('findMatches')
-    def findMatches(self, find=None, movies_only=None):
+    def findMatches(self, find=None, movies_only=False):
         _debug_('findMatches(find=%r, movies_only=%r)' % (find, movies_only), 1)
         global guide
 

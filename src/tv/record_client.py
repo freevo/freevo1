@@ -252,11 +252,11 @@ class RecordClientActions:
             return (None, why)
 
 
-    def findMatchesNow(self, title):
+    def findMatchesNow(self, title=None, movies_only=None):
         """ See if a programme is a favourite """
-        _debug_('findMatchesNow(title=%r)' % (title), 1)
+        _debug_('findMatchesNow(title=%r, movies_only=%r)' % (title, movies_only), 1)
         try:
-            inprogress = self.recordserver_rpc('findMatches', title)
+            inprogress = self.recordserver_rpc('findMatches', title, movies_only)
             if inprogress is None:
                 return (None, self.recordserverdown)
             inprogress.wait()
@@ -326,7 +326,7 @@ class RecordClientActions:
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('getFavoritesNow.result=%r' % (result,), 1)
-            return result
+            return (True, result)
         except Exception, why:
             _debug_('getFavoritesNow: %s' % (why), DERROR)
             return (None, why)
@@ -623,12 +623,17 @@ if __name__ == '__main__':
         raise SystemExit
 
     elif function == "findprognow":
-        result = rc.findProgNow(args)
+        result = rc.findProgNow(args[0], args[1])
         print '%s: result: %r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "findmatchesnow":
-        result = rc.findMatchesNow(args)
+        if len(args) == 1:
+            result = rc.findMatchesNow(args[0])
+        elif len(args) == 2:
+            result = rc.findMatchesNow(args[0], args[1])
+        else:
+            result = rc.findMatchesNow()
         print '%s: result: %r' % (rc.timeit(start), result)
         raise SystemExit
 

@@ -93,8 +93,8 @@ class ViewFavoritesItem(Item):
         _debug_('get_items()', 2)
         items = []
 
-        favorites = self.recordclient.getFavoritesNow()
-        if favorites:
+        (status, favorites) = self.recordclient.getFavoritesNow()
+        if status:
             f = lambda a, b: cmp(a.priority, b.priority)
             favs = favorites.values()
             favs.sort(f)
