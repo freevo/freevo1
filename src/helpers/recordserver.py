@@ -1379,9 +1379,7 @@ class RecordServer:
 
 
 def main():
-    #kaa.main.select_notifier('twisted_experimental')
-
-    socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT2)
+    socket = ('', config.RECORDSERVER_PORT2)
     secret = config.RECORDSERVER_SECRET
     _debug_('socket=%r, secret=%r' % (socket, secret))
 
