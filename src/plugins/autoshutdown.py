@@ -623,8 +623,6 @@ def __cleanup_freevo():
         osd.clearscreen(color=osd.COL_BLACK)
         _debug_('osd.shutdown()', 1)
         osd.shutdown()
-        _debug_('raise SystemExit', 1)
-        raise SystemExit
 
 
 def __is_recordserver_remote():
