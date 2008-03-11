@@ -146,11 +146,12 @@ class EditFavoriteResource(FreevoResource):
         cell += '  <option value=ANY>'+_('ANY CHANNEL')+'</option>\n'
 
         i=1
+        chan_index = 0
         for ch in guide.chan_list:
             if ch.displayname == fav.channel:
                 chan_index = i
             cell += '  <option value="%s">%s</option>\n' % (ch.displayname, ch.displayname)
-            i = i +1
+            i = i + 1
 
         cell += '</select>\n'
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
