@@ -926,15 +926,15 @@ def detect_channels():
             print
         return []
 
-    elif os.path.isfile(pname) and (os.path.getmtime(pname) >
-                                    os.path.getmtime(file)):
+    elif os.path.isfile(pname) and (os.path.getmtime(pname) > os.path.getmtime(file)):
         try:
             f = open(pname, 'r')
             data = pickle.load(f)
             f.close()
             return data
         except:
-            print 'Error: unable to read cachefile %s' % pname
+            if not HELPER:
+                print 'Error: unable to read cachefile %s' % pname
             return []
 
     else:
@@ -981,7 +981,8 @@ def detect_channels():
             pickle.dump(chanlist, f, 1)
             f.close()
         except IOError:
-            print 'Error: unable to save to cachefile %s' % pname
+            if not HELPER:
+                print 'Error: unable to save to cachefile %s' % pname
 
         for c in chanlist:
             if c[2] == 0:
@@ -995,7 +996,8 @@ def detect_channels():
                     print
                 break
         else:
-            print 'XMTV: Auto-detected channel list'
+            if not HELPER:
+                print 'XMTV: Auto-detected channel list'
 
         return chanlist
 
