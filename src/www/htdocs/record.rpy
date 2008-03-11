@@ -56,10 +56,10 @@ class RecordResource(FreevoResource):
         action = fv.formValue(form, 'action')
 
         server_available = self.recordclient.pingNow()
-        if server_available is None:
-            fv.printHeader('Scheduled Recordings', 'styles/main.css')
-            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+_('Recording server is not available')])
-            return String( fv.res )
+        if not server_available:
+            fv.printHeader(_('Scheduled Recordings'), 'styles/main.css')
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient.recordserverdown])
+            return String(fv.res)
 
         if action == 'remove':
             (status, schedule) = self.recordclient.getScheduledRecordingsNow()

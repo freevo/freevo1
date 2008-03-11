@@ -100,7 +100,7 @@ class WRecResource(FreevoWapResource):
 
                 server_available = self.recordclient.pingNow()
                 if not server_available:
-                    fv.res += '<p>ERROR: Record Server offline</p>\n'
+                    fv.res += '<p>'+_('ERROR')+': '+self.recordclient.recordserverdown+'</p>\n'
                 else:
                     fv.res += '   <p>Record Server online!</p>\n'
 

@@ -49,15 +49,11 @@ class SearchResource(FreevoResource):
         fv = HTMLResource()
         form = request.args
 
-        (server_available, message) = self.recordclient.pingNow()
+        server_available = self.recordclient.pingNow()
         if not server_available:
             fv.printHeader(_('Search Results'), 'styles/main.css', selected=_('Search'))
-            fv.res += '<h4>'+_('ERROR')+': '+_('Recording server is not available')+'</h4>'
-            fv.printAdvancedSearchForm()
-            fv.printLinks()
-            fv.printFooter()
-
-            return String( fv.res )
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient.recordserverdown])
+            return String(fv.res)
 
         find = fv.formValue(form, 'find')
         if fv.formValue(form, 'movies_only'):

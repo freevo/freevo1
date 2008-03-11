@@ -178,7 +178,7 @@ class RecordClientActions:
         try:
             inprogress = self.recordserver_rpc('ping')
             if inprogress is None:
-                return None
+                return False
             inprogress.wait()
             result = inprogress.get_result()
             _debug_('pingNow.result=%r' % (result,), 1)
