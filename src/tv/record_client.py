@@ -97,12 +97,8 @@ class RecordClientActions:
                     return None
                 except Exception, why:
                     _debug_('%s' % (why,), DERROR)
+                    return None
             return self.server.rpc(cmd, *args, **kwargs)
-            #try:
-            #    return self.server.rpc(cmd, *args, **kwargs)
-            #except Exception, why:
-            #    _debug_('%s' % (why,), DERROR)
-            #    return None
         except kaa.rpc.ConnectError, e:
             _debug_('%r is down' % (self.socket,), DINFO)
             self.server = None
