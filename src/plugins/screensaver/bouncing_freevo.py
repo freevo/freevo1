@@ -46,6 +46,7 @@ class PluginInterface(ScreenSaverPlugin):
     """
 
     def __init__(self):
+        _debug_('PluginInterface.__init__()', 1)
         ScreenSaverPlugin.__init__(self)
         self.plugin_name = 'screensaver.bouncing_freevo'
         self.fps = config.BOUNCING_FREEVO_FPS
@@ -55,10 +56,12 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def config(self):
+        _debug_('config()', 1)
         return [ ('BOUNCING_FREEVO_FPS', 25, 'Frames per second')]
 
 
     def start(self, width, height):
+        _debug_('start(width=%r, height=%r)' % (width, height), 1)
         self.width = width
         self.height = height
 
@@ -71,6 +74,7 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def draw(self, screen):
+        _debug_('draw(screen=%r)' % (screen,), 1)
         osd.mutex.acquire()
         try:
             black = (0,0,0)

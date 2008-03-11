@@ -44,13 +44,14 @@ class PluginInterface(ScreenSaverPlugin):
     """
     A bouncing balls screensaver
     """
-
     def __init__(self):
+        _debug_('PluginInterface.__init__()', 1)
         ScreenSaverPlugin.__init__(self)
         self.plugin_name = 'screensaver.balls'
         self.fps = config.BALLS_FPS
 
     def config(self):
+        _debug_('config()', 1)
         return [
             ('BALLS_FPS', 25, 'Frames per second'),
             ('BALLS_MAX_BALLS', 100, 'Maximum number of balls'),
@@ -59,6 +60,7 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def start(self, width, height):
+        _debug_('start(width=%r, height=%r)' % (width, height), 1)
         self.width = width
         self.height = height
         ballcount = randint(1, 100)
@@ -67,7 +69,7 @@ class PluginInterface(ScreenSaverPlugin):
         for i in range(0,ballcount):
             ball = Ball()
 
-            ball.name = "ball " + str(i)
+            ball.name = 'ball ' + str(i)
             ball.color = (randint(5, 255), randint(5,255), randint(5,255))
             ball.x = randint(0, width - ball.w)
             ball.y = randint(0, height - ball.h)
@@ -77,7 +79,9 @@ class PluginInterface(ScreenSaverPlugin):
 
         return self.fps
 
+
     def draw(self, screen):
+        _debug_('draw(screen=%r)' % (screen,), 1)
         black = (0,0,0)
         dirty = []
         osd.mutex.acquire()
@@ -98,7 +102,8 @@ class PluginInterface(ScreenSaverPlugin):
 class Ball:
 
     def __init__(self):
-        self.name = "ball"
+        _debug_('Ball.__init__()', 1)
+        self.name = 'ball'
         self.x = 100.0
         self.y = 100.0
         self.w = 40
@@ -116,16 +121,19 @@ class Ball:
 
 
     def draw(self, screen):
+        _debug_('draw(screen=%r)' % (screen,), 1)
         pygame.draw.ellipse(screen, self.color, (int(self.x), int(self.y), self.w, self.h))
         pygame.draw.ellipse(screen, (255,255,255), (int(self.x), int(self.y), self.w, self.h), 1)
 
 
     def clear(self, screen, color):
+        _debug_('clear(screen=%r, color=%r)' % (screen, color), 1)
         pygame.draw.ellipse(screen, color, (int(self.x), int(self.y), self.w, self.h))
         pygame.draw.ellipse(screen, color, (int(self.x), int(self.y), self.w, self.h), 1)
 
 
     def update(self, width, height, walldeccel, floordeccel):
+        _debug_('update(width=%r, height=%r, walldeccel=%r, floordeccel=%r)' % (width, height, walldeccel, floordeccel), 1)
         # Update ball velocity
         self.hspeed = self.hspeed + self.haccel
         self.vspeed = self.vspeed + self.vaccel
@@ -179,4 +187,5 @@ class Ball:
 
 
     def rectangle(self):
+        _debug_('rectangle()', 1)
         return (int(self.x), int(self.y), self.w, self.h)
