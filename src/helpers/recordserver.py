@@ -1379,7 +1379,7 @@ class RecordServer:
 
 
 def main():
-    socket = ('', config.RECORDSERVER_PORT2)
+    socket = ('', config.RECORDSERVER_PORT)
     secret = config.RECORDSERVER_SECRET
     _debug_('socket=%r, secret=%r' % (socket, secret))
 

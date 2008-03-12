@@ -1263,7 +1263,6 @@ CACHE_IMAGES = 1
 
 # RECORDSERVER_IP = 'localhost'
 # RECORDSERVER_PORT = 18001
-# RECORDSERVER_PORT2 = 18002
 # RECORDSERVER_SECRET = 'secret1'
 
 # If the recordserver runs as root, set the uid to the given one

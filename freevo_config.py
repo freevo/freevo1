@@ -355,6 +355,7 @@ LOCAL_CONF_CHANGES = [
      Changed SHUTDOWN_SYS_CMD to SYS_SHUTDOWN_CMD for consistency
      Changed RESTART_SYS_CMD to SYS_RESTART_CMD for consistency
      Changed SHUTDOWN_SYS_ENABLE to SYS_SHUTDOWN_ENABLE for consistency
+     Removed RECORDSERVER_PORT2 as it is no longer needed, using RECORDSERVER_PORT instead
      '''),
 ]
 
@@ -1735,7 +1736,6 @@ TV_RECORD_FAVORITES_LIST = FREEVO_STATICDIR + '/favorites.txt'
 
 RECORDSERVER_IP = 'localhost'
 RECORDSERVER_PORT = 18001
-RECORDSERVER_PORT2 = 18002
 RECORDSERVER_SECRET = 'secret1'
 
 # If the recordserver runs as root, set the uid to the given one

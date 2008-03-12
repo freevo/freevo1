@@ -68,7 +68,7 @@ class RecordClientActions:
     def __init__(self):
         """ """
         _debug_('RecordClient.__init__()', 1)
-        self.socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT2)
+        self.socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
         self.secret = config.RECORDSERVER_SECRET
         self.server = None
 
