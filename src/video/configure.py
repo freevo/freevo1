@@ -55,14 +55,14 @@ def audio_selection_menu(arg=None, menuw=None):
     item       = arg
     menu_items = []
 
-    for audio in item.info['audio']:
-        a = copy.copy(audio)
-
+    for i in range(len(item.info['audio'])):
+        a = copy.copy(item.info['audio'][i])
         # set reasonable defaults when attributes are missing or not set
+
         if not a.has_key('id') or a['id'] is None:
             # workaround for kaa.metadata not having audio ids for ogm and avi files
-            a['id'] = int(item.info['audio'].index(audio))
-            if a.has_key('mime') and a['mime'] == 'video/avi':
+            a['id'] = i
+            if item.info.has_key('mime') and item.info['mime'] == 'video/avi':
                 a['id'] += 1
 
         if not a.has_key('title') or a['title'] is None:

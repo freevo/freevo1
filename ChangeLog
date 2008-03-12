@@ -30,6 +30,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated tv program to stop reporting that a program is over (F#1886568)
  * Updated xml tv epg to allow a timezone to be specified (F#1889376)
  * Updated youtube video plug-in to look up two links (F#1890214)
+ * Fixed audio selection for avi video files with more than one audio (B#1911247)
  * Fixed audio selection for the first track for mkv and ogm video files (B#1890498)
  * Fixed audioscrobbler plug-in not sending songs to last.fm (B#1902461)
  * Fixed cdbackup plug-in to allow empty parameters (B#1889068)
