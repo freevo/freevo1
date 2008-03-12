@@ -114,6 +114,9 @@ class RecordClientActions:
         now = time.time()
         print self.timeit(now)+': pingCo started'
         inprogress = self.recordserver_rpc('ping')
+        if not inprogress:
+            print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
+            return
         print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
@@ -127,6 +130,9 @@ class RecordClientActions:
         now = time.time()
         print self.timeit(now)+': findNextProgramCo(isrecording=%r) started' % (isrecording,)
         inprogress = self.recordserver_rpc('findNextProgram', isrecording)
+        if not inprogress:
+            print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
+            return
         print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
@@ -135,11 +141,30 @@ class RecordClientActions:
 
 
     @kaa.coroutine()
+    def getScheduledRecordingsCo(self):
+        """ """
+        now = time.time()
+        print self.timeit(now)+': getScheduledRecordingsCo() started'
+        inprogress = self.recordserver_rpc('getScheduledRecordings')
+        if not inprogress:
+            print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
+            return
+        print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
+        yield inprogress
+        print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
+        yield inprogress.get_result()
+        print self.timeit(now)+': getScheduledRecordingsCo finished'
+
+
+    @kaa.coroutine()
     def updateFavoritesScheduleCo(self):
         """ """
         now = time.time()
         print self.timeit(now)+': updateFavoritesScheduleCo started'
         inprogress = self.recordserver_rpc('updateFavoritesSchedule')
+        if not inprogress:
+            print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
+            return
         print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
@@ -153,6 +178,9 @@ class RecordClientActions:
         now = time.time()
         print self.timeit(now)+': getNextProgramStart begin'
         inprogress = self.recordserver_rpc('updateFavoritesSchedule')
+        if not inprogress:
+            print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
+            return
         print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
@@ -161,6 +189,9 @@ class RecordClientActions:
         yield inprogress.get_result()
         print self.timeit(now)+': getNextProgramStart.findNextProgram'
         inprogress = self.recordserver_rpc('findNextProgram')
+        if not inprogress:
+            print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
+            return
         print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
@@ -557,12 +588,17 @@ if __name__ == '__main__':
 
     if function == "pingco":
         result = rc.pingCo().wait()
-        print 'pingCo=%r"' % (result,)
+        print 'pingCo=%r' % (result,)
         raise SystemExit
 
     if function == "findnextprogramco":
         result = rc.findNextProgramCo().wait()
         print 'findNextProgramCo=%r\n"%s"' % (result, result)
+        raise SystemExit
+
+    if function == "getscheduledrecordingsco":
+        result = rc.getScheduledRecordingsCo().wait()
+        print 'getScheduledRecordingsCo=%r' % (result,)
         raise SystemExit
 
     if function == "updatefavoritesscheduleco":
@@ -603,11 +639,13 @@ if __name__ == '__main__':
 
     elif function == "getscheduledrecordingsnow":
         result = rc.getScheduledRecordingsNow()
-        status, schedule = result
-        if status:
-            print 'result: %r\n"%s"' % (schedule.__dict__, result)
-        else:
-            print 'result: %r' % (result,)
+        print 'result=%r\n"%s"' % (result, result)
+        if config.DEBUG > 2:
+            status, schedule = result
+            if status:
+                print 'result: %r\n"%s"' % (schedule.__dict__, result)
+            else:
+                print 'result: %r' % (result,)
         raise SystemExit
 
     elif function == "getscheduledrecordings":
@@ -700,6 +738,7 @@ if __name__ == '__main__':
 
     else:
         print '%r not found' % (function)
+        raise SystemExit
 
     kaa.notifier.OneShotTimer(shutdown, 'bye', time.time()).start(20)
     kaa.main.run()
