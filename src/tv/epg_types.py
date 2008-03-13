@@ -172,6 +172,7 @@ class TvProgram:
 
 class TvChannel:
     """
+    Holds information about a TV channel
     """
     logo = None
     def __init__(self, id, displayname, tunerid, logo='', times=[], programs=[]):
@@ -184,8 +185,13 @@ class TvChannel:
         self.programs = programs
 
 
+    def set_programs(self, programs):
+        """ Sets the programs list """
+        self.programs = programs
+
+
     def sort(self):
-        # Sort the programs so that the earliest is first in the list
+        """ Sort the programs so that the earliest is first in the list """
         f = lambda a, b: cmp(a.start, b.start)
         self.programs.sort(f)
 
@@ -254,7 +260,7 @@ class TvGuide:
         @param start: is 0, get all programs from the start.
         @param stop: is 2147483647, get all programs until the end.
         @param channel_id: can be used to select a channel id, all channels are returned otherwise.
-        @returns: a list of channels (TvChannel)
+        @returns: a list of TV channels
         """
         _debug_('get_programs(start=%r, stop=%r, channel_id=%r)' % (time.strftime('%H:%M', time.localtime(start)),
             time.strftime('%H:%M', time.localtime(stop)), channel_id))
@@ -271,16 +277,15 @@ class TvGuide:
             if channel_id and chan.id != channel_id:
                 continue
 
-            c = TvChannel(chan.id, chan.displayname, chan.tunerid, chan.logo, chan.times)
+            c = TvChannel(chan.id, chan.displayname, chan.tunerid, chan.logo, chan.times, programs=[])
             # Copy the programs that are inside the indicated time bracket
             f = lambda p, a=start, b=stop: not (p.start > b or p.stop < a)
-            c.programs = filter(f, chan.programs)
+            c.set_programs(filter(f, chan.programs))
 
             channels.append(c)
             channel_cache.add(chan.id, c)
 
         _debug_('channels=%r' % (channels,))
-        #print 'channels=%r' % (channels,)
         return channels
 
 
