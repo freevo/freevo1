@@ -62,7 +62,7 @@ class ManualRecordResource(FreevoResource):
 
     def rc_handler(self, result):
         """ Handler for record client callbacks """
-        print 'result=%r' % (result,)
+        #print 'result=%r' % (result,)
 
 
     def _render(self, request):

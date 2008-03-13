@@ -182,7 +182,6 @@ def startdownload(dlcommand, logfile):
     '''
     '''
     _debug_('startdownload(dlcommand=%r, logfile=%r)' % (dlcommand, logfile), 1)
-    print dlcommand
     pwdcur = os.getcwd()
     os.chdir(config.YOUTUBE_DIR)
     lfile = open (logfile, 'w')

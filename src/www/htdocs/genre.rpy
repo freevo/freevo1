@@ -149,9 +149,7 @@ class GenreResource(FreevoResource):
                     status = 'program'
 
                     # match the category
-                    if category in prog.categories:
-                        print 'found it'
-                    else:
+                    if category not in prog.categories:
                         continue
 
                     # figure out if in progress
