@@ -502,7 +502,7 @@ if __name__ == '__main__':
     def handler(result):
         """ A callback handler for test functions """
         _debug_('handler(result=%r)' % (result,), 1)
-        print 'handler.result=%r\n"%s"' % (result, result)
+        print '%s: handler.result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     rc = RecordClient()
@@ -522,27 +522,27 @@ if __name__ == '__main__':
 
     if function == "pingco":
         result = rc.pingCo().wait()
-        print 'pingCo=%r' % (result,)
+        print '%s: pingCo=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     if function == "findnextprogramco":
         result = rc.findNextProgramCo().wait()
-        print 'findNextProgramCo=%r\n"%s"' % (result, result)
+        print '%s: findNextProgramCo=%r\n"%s"' % (rc.timeit(start), result)
         raise SystemExit
 
     if function == "getscheduledrecordingsco":
         result = rc.getScheduledRecordingsCo().wait()
-        print 'getScheduledRecordingsCo=%r' % (result,)
+        print '%s: getScheduledRecordingsCo=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     if function == "updatefavoritesscheduleco":
         result = rc.updateFavoritesScheduleCo().wait()
-        print 'updateFavoritesScheduleCo=%r' % (result,)
+        print '%s: updateFavoritesScheduleCo=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     if function == "getnextprogramstart":
         result = rc.getNextProgramStart().wait()
-        print 'getNextProgramStart=%r' % (result,)
+        print '%s: getNextProgramStart=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     #--------------------------------------------------------------------------------
@@ -551,55 +551,61 @@ if __name__ == '__main__':
 
     if function == "pingnow":
         result = rc.pingNow()
-        print 'result: %r\n"%s"' % (result, result)
+        print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "ping":
         result = rc.ping(handler)
-        print 'result: %r\n"%s"' % (result, result)
-        raise SystemExit
+        if not result:
+            print '%s: result=%r' % (rc.timeit(start), result)
+            raise SystemExit
 
     elif function == "findnextprogramnow":
         result = rc.findNextProgramNow(True)
-        print 'recording:%r\n"%s"' % (result, result)
+        print '%s: result=%r' % (rc.timeit(start), result)
+        #print 'recording: "%s"' % (result,)
         result = rc.findNextProgramNow(False)
-        print 'next     :%r\n"%s"' % (result, result)
+        print '%s: result=%r' % (rc.timeit(start), result)
+        #print 'next     : "%s"' % (result,)
         raise SystemExit
 
     elif function == "findnextprogram":
         result = rc.findNextProgram(handler)
-        print 'result: %r\n"%s"' % (result, result)
-        raise SystemExit
+        if not result:
+            print '%s: result=%r' % (rc.timeit(start), result)
+            raise SystemExit
 
     elif function == "findnextprogramrecording":
         result = rc.findNextProgram(handler, True)
-        print 'result: %r\n"%s"' % (result, result)
-        raise SystemExit
+        if not result:
+            print '%s: result=%r' % (rc.timeit(start), result)
+            raise SystemExit
 
     elif function == "getscheduledrecordingsnow":
         result = rc.getScheduledRecordingsNow()
-        print 'result=%r\n"%s"' % (result, result)
+        print '%s: result=%r' % (rc.timeit(start), result)
         if config.DEBUG > 2:
             status, schedule = result
             if status:
-                print 'result: %r\n"%s"' % (schedule.__dict__, result)
+                print '%s: result=%r' % (schedule.__dict__, result)
             else:
-                print 'result: %r' % (result,)
+                print 'result=%r' % (result,)
         raise SystemExit
 
     elif function == "getscheduledrecordings":
         result = rc.getScheduledRecordings(handler)
-        print 'result: %r\n"%s"' % (result, result)
-        raise SystemExit
+        if not result:
+            print '%s: result=%r' % (rc.timeit(start), result)
+            raise SystemExit
 
     elif function == "updatefavoritesschedulenow":
         result = rc.updateFavoritesScheduleNow()
-        print '%s: result: %r' % (rc.timeit(start), result)
+        print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "findprognow":
         result = rc.findProgNow(args[0], args[1])
-        print '%s: result: %r' % (rc.timeit(start), result)
+        print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "findmatchesnow":
@@ -609,38 +615,40 @@ if __name__ == '__main__':
             result = rc.findMatchesNow(args[0], args[1])
         else:
             result = rc.findMatchesNow()
-        print '%s: result: %r' % (rc.timeit(start), result)
+        print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "getfavoritesnow":
         result = rc.getFavoritesNow()
-        print '%s: result: %r' % (rc.timeit(start), result)
+        print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "getfavoritenow":
         result = rc.getFavoriteNow(args)
-        print '%s: result: %r' % (rc.timeit(start), result)
+        print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "removefavoritenow":
         result = rc.removeFavoriteNow()
-        print '%s: result: %r' % (rc.timeit(start), result)
+        print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "adjustprioritynow":
         result = rc.adjustPriorityNow(args)
-        print '%s: result: %r' % (rc.timeit(start), result)
+        print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "updatefavoritesschedule":
         result = rc.updateFavoritesSchedule(handler)
-        print 'result: %r\n"%s"' % (result, result)
-        raise SystemExit
+        if not result:
+            print '%s: result=%r' % (rc.timeit(start), result)
+            raise SystemExit
 
     elif function == "getfavorites":
         result = rc.getFavorites(handler)
-        print 'result: %r\n"%s"' % (result, result)
-        raise SystemExit
+        if not result:
+            print '%s: result=%r' % (rc.timeit(start), result)
+            raise SystemExit
 
     #FIXME the following two calls need fixing
     elif function == "moviesearch":
@@ -652,7 +660,7 @@ if __name__ == '__main__':
                 for prog in response:
                     _debug_('Prog: %s' % prog.title)
             else:
-                _debug_('result: %s, response: %s ' % (result, response))
+                _debug_('result=%s, response: %s ' % (result, response))
         else:
             print 'no data'
 
