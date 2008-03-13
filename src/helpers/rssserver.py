@@ -75,7 +75,7 @@ if __name__ == '__main__':
     except Exception, e:
         print e
 
-if len(sys.argv)>1 and sys.argv[1] == '--help':
+if len(sys.argv) > 1 and sys.argv[1] == '--help':
     print 'start or stop the internal rssserver'
     print 'usage freevo rssserver [ start | stop ]'
     sys.exit(0)
