@@ -762,7 +762,7 @@ class RecordServer:
 
     @kaa.rpc.expose('isProgScheduled')
     def isProgScheduled(self, prog, schedule=None):
-        _debug_('isProgScheduled(proc=%r, schedule=%r)' % (prog, schedule), 1)
+        _debug_('isProgScheduled(prog=%r, schedule=%r)' % (prog, schedule), 1)
 
         if schedule is None:
             schedule = self.getScheduledRecordings()
@@ -1406,7 +1406,6 @@ def main():
 
 
 if __name__ == '__main__':
-    import traceback
     import socket
     import glob
 
