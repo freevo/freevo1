@@ -58,25 +58,27 @@ class GuideResource(FreevoResource):
         clist = []
         for dchan in guide.chan_list:
             clist.append(dchan.displayname)
-
         return clist
 
-    def TimeBooked(self,prog):
+
+    def TimeBooked(self, prog):
         bookedtime = False
-        for schedule_prog in self.schedule.values():
+        for schedule_prog in self.schedule.getProgramList().values():
             if  prog.start >= schedule_prog.start and prog.start < schedule_prog.stop:
                 bookedtime = True, schedule_prog
         if not bookedtime:
             schedule_prog = None
         return bookedtime, schedule_prog
 
-    def GetChannel(self, display_channel,guide):
+
+    def GetChannel(self, display_channel, guide):
         for dchan in guide.chan_list:
             if display_channel == dchan.displayname:
                 chan = dchan
         return chan
 
-    def CreateChannelLine(self,prog):
+
+    def CreateChannelLine(self, prog):
         status = "programline"
 
         bookedtime, sch_prog = self.TimeBooked(prog)
@@ -97,9 +99,10 @@ class GuideResource(FreevoResource):
         cell += '%s' % prog.title
         popid = '%s:%s' % (prog.channel_id, prog.start)
         pstarttime = time.localtime(prog.start)
-        pstart = time.strftime(config.TV_TIME_FORMAT,pstarttime)
+        pstart = time.strftime(config.TV_TIME_FORMAT, pstarttime)
         channel_line += '<li id="%s">\n' % status
-        channel_line += '<a id="%s" name="%s" onclick="guide_click(this, event)"> %s %s </a>\n' % (popid,program_tip,pstart,cell)
+        channel_line += '<a id="%s" name="%s" onclick="guide_click(this, event)"> %s %s </a>\n' % \
+            (popid, program_tip, pstart, cell)
         channel_line += '<ul>\n'
         channel_line += '<li id="description">\n'
         if not prog.desc:
@@ -111,6 +114,7 @@ class GuideResource(FreevoResource):
         channel_line += '</ul>\n'
         channel_line += '</li>\n'
         return channel_line
+
 
     def BookTimeDiv():
         html = ''
@@ -160,7 +164,7 @@ class GuideResource(FreevoResource):
         return html
 
 
-    def GetChannelPrograms(self,channel):
+    def GetChannelPrograms(self, channel):
         channel_programs = '<ul id="daylistcontainer">\n'
         current_day =''
 
@@ -177,7 +181,7 @@ class GuideResource(FreevoResource):
                     current_day = time.strftime('%b %d (%a)', time.localtime(prog.start))
                     js_onclick = "ShowList('%s')" % current_day
                     channel_programs += '<li id="dayline">\n'
-                    channel_programs += '<a onclick="%s" id="current">%s</a>\n' % (js_onclick,current_day)
+                    channel_programs += '<a onclick="%s" id="current">%s</a>\n' % (js_onclick, current_day)
                     channel_programs += '<ul id="%s" class="subnavlist">\n' % (current_day)
                 channel_programs += self.CreateChannelLine(prog)
 
@@ -194,9 +198,6 @@ class GuideResource(FreevoResource):
         (self.got_schedule, self.schedule) = self.recordclient.getScheduledRecordingsNow()
         self.currenttime = time.time()
 
-        if self.got_schedule:
-            self.schedule = self.schedule.getProgramList()
-
         fv.printHeader(_('TV Guide'), config.WWW_STYLESHEET, config.WWW_JAVASCRIPT, selected=_('TV Guide'))
         fv.res += '<link rel="stylesheet" href="styles/guidechannel.css" type="text/css" media="screen">\n'
         fv.res += '<div id="content">\n';
@@ -205,23 +206,23 @@ class GuideResource(FreevoResource):
         if not self.got_schedule:
             fv.printMessages([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is not available') ])
 
-        display_channel = fv.formValue(form,'channel')
+        display_channel = fv.formValue(form, 'channel')
         if not display_channel:
             display_channel = self.guide.chan_list[0].displayname
         clist = []
 
-        getprogramlist = fv.formValue(form,'getprogramlist')
+        getprogramlist = fv.formValue(form, 'getprogramlist')
         if getprogramlist:
-            chan = self.GetChannel(getprogramlist,self.guide)
+            chan = self.GetChannel(getprogramlist, self.guide)
             fv.res = self.GetChannelPrograms(chan)
             return String(fv.res)
 
-        dchan = self.GetChannel(display_channel,self.guide)
+        dchan = self.GetChannel(display_channel, self.guide)
         fv.res += '<script language="JavaScript" type="text/JavaScript" src="scripts/guidechannel.js"></script>\n'
         js_onclick = "ChangeChannel(this)"
         ctrl_opts = 'onchange="%s"' % js_onclick
         clist = self.GetChannelList(self.guide)
-        fv.res += CreateSelectBoxControl('channel',clist,display_channel,ctrl_opts)
+        fv.res += CreateSelectBoxControl('channel', clist, display_channel, ctrl_opts)
 
         if not dchan.programs:
             fv.res += 'This channel has no data loaded\n'
@@ -253,8 +254,8 @@ class GuideResource(FreevoResource):
             u"         </tr>\n"\
             u"         <tr>\n"\
             u"         <td class=\"progtime\">\n"\
-            u"            <b>"+_('Start')+u":</b> <span id=\"program-start\"></span>, \n"\
-            u"            <b>"+_('Stop')+u":</b> <span id=\"program-end\"></span>, \n"\
+            u"            <b>"+_('Start')+u":</b> <span id=\"program-start\"></span>,\n"\
+            u"            <b>"+_('Stop')+u":</b> <span id=\"program-end\"></span>,\n"\
             u"            <b>"+_('Runtime')+u":</b> <span id=\"program-runtime\"></span> min\n"\
             u"            </td>\n"\
             u"         </td>\n"\
