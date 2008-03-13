@@ -765,12 +765,14 @@ class RecordServer:
         _debug_('isProgScheduled(proc=%r, schedule=%r)' % (prog, schedule), 1)
 
         if schedule is None:
-            schedule = self.getScheduledRecordings().getProgramList()
+            schedule = self.getScheduledRecordings()
+            if schedule is None:
+                return (False, _('scheduled programs is empty'))
 
-        if schedule == {}:
+        if schedule.getProgramList() == {}:
             return (False, _('program list is empty'))
 
-        for me in schedule.values():
+        for me in schedule.getProgramList().values():
             if me.start == prog.start and me.channel_id == prog.channel_id:
                 return (True, _('program is scheduled'))
         return (False, _('program is not scheduled'))
