@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# This is the Freevo TV Guide module.
+# This is decorator class to time function calls
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -36,37 +36,42 @@ class timed:
     A decorator class to time function calls
     http://wiki.python.org/moin/PythonDecoratorLibrary
     """
-    def __init__(self, func):
-        self.__name__ = func.__name__
-        self.__doc__ = func.__doc__
-        self.__dict__.update(func.__dict__)
-        self.func = func
-        self.last = self.start = time.time()
+    def __init__(self, reset=True):
+        """ Contructs the timed class
+        @param reset: resets the timer a each call
+        """
+        self.reset = reset
+        self.start = time.time()
+        self.level = 0
 
 
-    def __call__(self, *args, **kwargs):
-        self.last = self.start = time.time()
-        value = self.func(*args, **kwargs)
-        self.last = time.time()
-        print '%.3f' % (self.last - self.start)
-        return value
-
-
-    def __repr__(self):
-        """Return the function's docstring."""
-        return self.func.__doc__
+    def __call__(self, func):
+        def newfunc(*args, **kwargs):
+            pre = '  ' * self.level
+            self.level += 1
+            if self.reset:
+                self.start = time.time()
+            print '%s-> %s' % (pre, func.__name__)
+            result = func(*args, **kwargs)
+            print '%s<- %s: %.3f' % (pre, func.__name__, time.time() - self.start)
+            self.level -= 1
+            return result
+        newfunc.__name__ = func.__name__
+        newfunc.__doc__ = func.__doc__
+        return newfunc
 
 
 
 if __name__ == '__main__':
 
-    @timed
+    @timed(False)
     def longrunning(n):
         """Wait for n * 100ms"""
         for i in range(n):
             time.sleep(0.1)
 
-    longrunning(2)
     longrunning(12)
-    print longrunning
-    print longrunning.__name__
+    longrunning(2)
+    print '__repr__:', longrunning
+    print '__name__:', longrunning.__name__
+    print '__doc__:', longrunning.__doc__
