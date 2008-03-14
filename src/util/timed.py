@@ -31,6 +31,28 @@
 
 import time
 
+_singleton = None
+
+def level():
+    global _singleton
+    if _singleton is None:
+        _singleton = Level()
+    return _singleton
+
+
+class Level:
+    level = 0
+    def __call__(self):
+        return self.level
+
+    def __incr__(self):
+        self.level += 1
+
+    def __decr__(self):
+        self.level -= 1
+
+
+
 class timed:
     """
     A decorator class to time function calls
@@ -42,19 +64,19 @@ class timed:
         """
         self.reset = reset
         self.start = time.time()
-        self.level = 0
+        self.level = level()
 
 
     def __call__(self, func):
         def newfunc(*args, **kwargs):
-            pre = '  ' * self.level
-            self.level += 1
+            pre = '  ' * self.level()
+            self.level.__incr__()
             if self.reset:
                 self.start = time.time()
             print '%s-> %s' % (pre, func.__name__)
             result = func(*args, **kwargs)
             print '%s<- %s: %.3f' % (pre, func.__name__, time.time() - self.start)
-            self.level -= 1
+            self.level.__decr__()
             return result
         newfunc.__name__ = func.__name__
         newfunc.__doc__ = func.__doc__
