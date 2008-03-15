@@ -84,13 +84,13 @@ class PluginInterface(plugin.ItemPlugin):
     Directory that you want to backup your audio CD to.
     | AUDIO_BACKUP_DIR = '/music/MP3'
 
-    You can use any combination of the 4 variables below to create subdirectories,
+    You can use any combination of the 5 variables below to create subdirectories,
     and filename of songs.
 
-    The four variables are: genre, artist,album, and song.
+    The five variables are: genre, artist, album, year and song.
     Whatever follows the last slash indicates how to create the filename.
     Everything before the last slash indicates the directory structure you would
-    like to use -which will be appended to AUDIO_BACKUP_DIR.
+    like to use - which will be appended to AUDIO_BACKUP_DIR.
     | CD_RIP_PN_PREF= '%(genre)s/%(artist)s/%(album)s/%(song)s'
 
     This would give you something like:
@@ -106,7 +106,7 @@ class PluginInterface(plugin.ItemPlugin):
     | CDPAR_CMD = 'cdparanoia'
 
     For ripping the wav from the CD, we use cdparanoia. You can specify the options
-    used. For error pertection, you the following:
+    used. For error detection/correction, set the following:
     | CD_RIP_CDPAR_OPTS = '-s'
     For a quick rip (about an eight of the time as the line above) use:
     | CD_RIP_CDPAR_OPTS = '-s -Z'
@@ -284,6 +284,7 @@ class main_backup_thread(threading.Thread):
         album      = 'default_album'
         artist     = 'default_artist'
         genre      = 'default_genre'
+        year       = 'default_year'
         dir_audio_default = "dir_audio_default"
         path_head = ''
         for media in config.REMOVABLE_MEDIA:
@@ -291,13 +292,14 @@ class main_backup_thread(threading.Thread):
                 media.type = 'cdrip'
 
         # Get the artist, album and song_names
-        (discid, artist, album, genre, song_names) = self.get_formatted_cd_info(device)
+        (discid, artist, album, genre, year, song_names) = self.get_formatted_cd_info(device)
 
         dir_audio = config.AUDIO_BACKUP_DIR
 
         user_rip_path_prefs = {  'artist': artist,
                                  'album': album,
-                                 'genre': genre }
+                                 'genre': genre,
+                                 'year': year }
 
         if config.CD_RIP_CASE:
             if config.CD_RIP_CASE.lower() == 'lower':
@@ -375,6 +377,7 @@ class main_backup_thread(threading.Thread):
             user_rip_path_prefs = { 'artist': artist,
                                     'album': album,
                                     'genre': genre,
+                                    'year': year,
                                     'track': track,
                                     'tracks': len(song_names),
                                     'song': song_names[i] }
@@ -438,7 +441,7 @@ class main_backup_thread(threading.Thread):
                 cmd = filter(len, cmdstr.split(' ')) + \
                     [ '--ignore-tag-errors', '--tt', song_names[i], '--ta', artist,
                       '--tl', album, '--tn', '%(track)s,%(tracks)s' % user_rip_path_prefs,
-                      '--tg', genre, '--id3v2-only', wav_file, output ]
+                      '--tg', genre, '--ty', year, '--id3v2-only', wav_file, output ]
 
                 _debug_('lame: %s' % cmd)
                 popen3.run(cmd, self, 9)
@@ -449,7 +452,7 @@ class main_backup_thread(threading.Thread):
                 cmdstr = str('%s %s' % (config.OGGENC_CMD, config.CD_RIP_OGG_OPTS))
                 cmd = filter(len, cmdstr.split(' ')) + \
                       [ '-a', artist, '-G', genre, '-N', track, '-t', song_names[i],
-                        '-l', album, wav_file, '-o', output ]
+                        '-l', album, '-d', year, wav_file, '-o', output ]
 
                 _debug_('oggenc_command: %s' % cmd)
                 popen3.run(cmd, self, 9)
@@ -464,8 +467,8 @@ class main_backup_thread(threading.Thread):
                 metaflac_command = \
                     'metaflac --set-tag=ARTIST="%s" --set-tag=ALBUM="%s" '\
                     '--set-tag=TITLE="%s" --set-tag=TRACKNUMBER="%s/%s" '\
-                    '"%s%s.flac"' % (artist, album, song_names[i], track,
-                                     len(song_names), pathname, path_tail)
+                    '--set-tag=DATE="%s" "%s%s.flac"' % (artist, album, song_names[i], track,
+                                     len(song_names), year, pathname, path_tail)
 
                 _debug_('flac_command: %s' % (cmd))
                 _debug_('metaflac    : %s' % (metaflac_command))
@@ -523,6 +526,7 @@ class main_backup_thread(threading.Thread):
             album  = self.fix_case(self.replace_special_char(cd_info.title, '-'))
             artist = self.fix_case(self.replace_special_char(cd_info.artist, '-'))
             genre  = self.replace_special_char(cd_info.tracks[0].genre, '-')
+            year   = cd_info.year
 
         song_names = []
         for track in cd_info.tracks:
@@ -532,7 +536,7 @@ class main_backup_thread(threading.Thread):
             # remove last tracks if it's a mixed cd
             song_names = song_names[:-1]
 
-        return [cd_info.id, artist, album, genre, song_names]
+        return [cd_info.id, artist, album, genre, year, song_names]
 
 
     # This function gets rid of the slash, '/', in a string, and replaces it

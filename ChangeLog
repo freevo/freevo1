@@ -13,22 +13,25 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 
-== Release 1.8.0rc3 (2008-03-23) ==
+== Release 1.8.0 (2008-03-23) ==
 --------------------------------
+
+ * New ivtv_xine_tv plug-in to allow instant record, plus much more (F#1891595)
 
 == Release 1.7.7 (2008-03-23) ==
 --------------------------------
 
  * New DVD to disk back-up plug-in (F#1892278)
- * New PDA control with freeback client and upd plug-in (F#1890855)
+ * New PDA control with feedback client and upd plug-in (F#1890855)
  * New placement support when using xrandr (F#1869969)
+ * Updated cdbackup plug-in to add the year from cddb (F#1907065)
  * Updated cd_burn plug-in to support play lists (F#1901175)
  * Updated dvdbackup to allow customized menus (F#1890499)
  * Updated playlist to process "#EXTINF" comments in m3u files (F#1890203)
  * Updated Russian translation (B#1889826)
  * Updated tv guide with scheduled to record and favorite icons (F#1886621)
  * Updated tv program to stop reporting that a program is over (F#1886568)
- * Updated xml tv epg to allow a timezone to be specified (F#1889376)
+ * Updated xml tv epg to allow a time zone to be specified (F#1889376)
  * Updated youtube video plug-in to look up two links (F#1890214)
  * Fixed audio selection for avi video files with more than one audio (B#1911247)
  * Fixed audio selection for the first track for mkv and ogm video files (B#1890498)
@@ -38,7 +41,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed moviecovers plug-in proceeding when unzip is not installed (B#1903519)
  * Fixed the main program to cause a crash when local_conf.py is invalid (B#1886624)
  * Fixed web servers encoding interface (B#1885914)
- * Fixed web servers image popup encoding (B#1895302)
+ * Fixed web servers image pop-up encoding (B#1895302)
  * Fixed web servers remote image locations (B#1900736)
 
 == Release 1.7.6.1 (2008-02-05) ==
@@ -59,13 +62,13 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * New DirecTV plug-in to send to DirecTV receivers (F#1858775)
  * New flickr plug-in to see photo from www.flickr.com (F#1865290)
  * New Gentoo wake-up script in the contrib/gentoo directory (F#1884611)
- * New web-server modules to show guidechannel and encoding_web (F#1864652)
+ * New web-server modules to show guide channel and encoding_web (F#1864652)
  * New Youtube video plug-in (F#1864496)
  * Updated cdbackup plug-in with CD_RIP_FMT to set the encoding format (F#1857460)
  * Updated encoding server to save the output to ENCODINGSERVER_SAVE_DIR when set (F#1865522)
  * Updated itv plug-in for youtube video feeds (F#1868425)
  * Updated menu osd sounds for more sound events (F#1870321)
- * Updated mplayer audio plug-in to allow .asx playlists (F#1884550)
+ * Updated mplayer audio plug-in to allow .asx play-lists (F#1884550)
  * Updated re-encode plug-in and encoding core with additional features (F#1868764)
  * Updated recordings manager plug-in to add thumbnail support (F#1857397)
  * Updated record server to default watched/keep status (F#1857395)
@@ -85,7 +88,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Fixed play lists not handling absolute paths (B#1872465)
  * Fixed tv guide not scrolling to last channel from second channel (B#1858010)
  * Fixed web server favorites and edit_favorite to use name and duplicate detection (B#1857394)
- * Fixed web server file info not having an ecoding header (B#1885751)
+ * Fixed web server file info not having an encoding header (B#1885751)
  * Fixed web server programme info having no content when the title has newlines (B#1885729)
 
 == Release 1.8.0rc1 (2007-12-22) ==
@@ -118,7 +121,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Renamed plug-in audio.playlist to audio.playlists (B#1834140)
  * Fixed audioitem not displaying the year as a result of new metadata code (B#1838167)
  * Fixed audiodiskitem not playing a cd when inserted (B#1830000)
- * Fixed audioscrobbler killing the auto shutdown feature (F#1831371)
+ * Fixed audioscrobbler killing the auto shut down feature (F#1831371)
  * Fixed evdev for 64bit machines (B#1853790)
  * Fixed geexbox skin TV menu reporting record server status (B#1835256)
  * Fixed helper plugins, not allowing tuples as arguments (B#1832837)
@@ -156,14 +159,14 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated servers, record, web, etc. to allow Twosted-2.5 to be used (F#1640870)
  * Updated shopping cart plug-in at allow items to removed as well (F#1807315)
  * Updated submenu selection when there is only one action to execute the action (F#1774569)
- * Updated tv favourite handling and programme item to provide a consistent interface (F#1776909)
+ * Updated tv favorite handling and programme item to provide a consistent interface (F#1776909)
  * Updated video item to include the full description (F#1777187)
  * Fixed audio plug-in albumtree navigating back to the main menu (B#1798462)
  * Fixed music causing a crash when the directory has non-ascii characters and an image (B#1801929)
  * Fixed cd-rom drives eject causing a crash (B#1775892)
  * Fixed df plug-in crashing when totalspace is zero (B#1812877)
- * Fixed favourite crashing because of duplicate detection flag (B#1778494,B#1777726)
- * Fixed matching favourites, by initially restricting the search (B#1776072)
+ * Fixed favorite crashing because of duplicate detection flag (B#1778494,B#1777726)
+ * Fixed matching favorites, by initially restricting the search (B#1776072)
  * Fixed mixer plug-ins to allow a configurable volume step size (B#1813088)
  * Fixed recordserver sometimes corrupting the record schedule (B#1827184)
  * Fixed screensaver crashing after a long run when an event is read (B#1778894)
@@ -187,7 +190,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated headlines to allow the window to be scrolled (F#1752971)
  * Updated local_conf.py.example with MPLAYER_HAS_FIELD_DOMINANCE (F#1729404)
  * Updated mplayer to allow av sync to be adjusted during playback (F#1762273)
- * Updated record_client to allow favourites to be added from the command line (F#1734781)
+ * Updated record_client to allow favorites to be added from the command line (F#1734781)
  * Updated recordings manager to show full scrollable description (F#1759171)
  * Updated skins to adjust the window heights when the button bar is active (F#1733061)
  * Updated system sensors for a configurable path (B#1731892)
@@ -197,7 +200,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated xmltv's use of element tree for Python-2.5 (F#1731775)
  * Fixed apple trailers after web site update (B#1762274)
  * Fixed audio channel selection for AVI files, when no id is present (B#1731232)
- * Fixed auto shutdown when the record server is running remotely (B#1721638)
+ * Fixed autoshutdown when the record server is running remotely (B#1721638)
  * Fixed button bar raising an exception when using colour actions (B#1732378)
  * Fixed CD cover image search because of changes to Amazon developer services (B#1731835)
  * Fixed fxd parser's setattr not working correctly in all cases (B#1728421)
@@ -223,7 +226,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated image viewer to exclude certain types of images be a regex (F#1719613)
  * Updated mplayer to allow multiple crop points (F#1712397)
  * Updated mplayer to allow previous channel selection (F#1720667)
- * Updated recordserver to allow a tolerance for a favourite (F#1725823)
+ * Updated recordserver to allow a tolerance for a favorite (F#1725823)
  * Updated vlc plug-in for better integration in freevo (F#1721808)
  * Fixed alsamixer choose mute control (B#1717659)
  * Fixed CD burn plug-in's incorrect internationalization strings (B#1722295)
