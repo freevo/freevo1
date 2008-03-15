@@ -31,52 +31,35 @@
 
 import time
 
-_singleton = None
-
-def level():
-    global _singleton
-    if _singleton is None:
-        _singleton = Level()
-    return _singleton
+_indentation = 0
 
 
-class Level:
-    level = 0
-    def __call__(self):
-        return self.level
-
-    def __incr__(self):
-        self.level += 1
-
-    def __decr__(self):
-        self.level -= 1
-
-
-
-class timed:
+class benchmark:
     """
     A decorator class to time function calls
     http://wiki.python.org/moin/PythonDecoratorLibrary
     """
     def __init__(self, reset=True):
-        """ Contructs the timed class
+        """ Contructs the benchmark class
         @param reset: resets the timer a each call
         """
         self.reset = reset
         self.start = time.time()
-        self.level = level()
 
 
     def __call__(self, func):
         def newfunc(*args, **kwargs):
-            pre = '  ' * self.level()
-            self.level.__incr__()
+            global _indentation
+            indentation = '  ' * _indentation
+            _indentation += 1
             if self.reset:
                 self.start = time.time()
-            print '%s-> %s' % (pre, func.__name__)
-            result = func(*args, **kwargs)
-            print '%s<- %s: %.3f' % (pre, func.__name__, time.time() - self.start)
-            self.level.__decr__()
+            print '%s-> %s' % (indentation, func.__name__)
+            try:
+                result = func(*args, **kwargs)
+            finally:
+                print '%s<- %s: %.3f' % (indentation, func.__name__, time.time() - self.start)
+                _indentation -= 1
             return result
         newfunc.__name__ = func.__name__
         newfunc.__doc__ = func.__doc__
@@ -86,14 +69,29 @@ class timed:
 
 if __name__ == '__main__':
 
-    @timed(False)
+    @benchmark(False)
+    def quickrunning(n):
+        """Wait for n * 1us"""
+        for i in range(n):
+            time.sleep(0.000001)
+
+
+    @benchmark(False)
     def longrunning(n):
         """Wait for n * 100ms"""
+        quickrunning(n)
         for i in range(n):
             time.sleep(0.1)
+
+
+    @benchmark(False)
+    def failure():
+        """Generate an exception"""
+        return 1/0
 
     longrunning(12)
     longrunning(2)
     print '__repr__:', longrunning
     print '__name__:', longrunning.__name__
     print '__doc__:', longrunning.__doc__
+    failure()
