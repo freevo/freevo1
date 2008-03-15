@@ -173,6 +173,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.mute_ctrl is None:
             self.mute_ctrl = self.main_ctrl
 
+
     def config(self):
         """
         Config is called automatically. For default settings run:
@@ -183,6 +184,7 @@ class PluginInterface(plugin.DaemonPlugin):
             ('ALSAMIXER2_MUTE_CTRL', 'PCM', 'Alsa mute mixer control'),
             ('ALSAMIXER2_CTRLS', [('PCM', 'default', 50, 0, 100)], 'Alsa mixer control list'),
         ]
+
 
     def eventhandler(self, event=None, menuw=None, arg=None):
         """
@@ -207,9 +209,11 @@ class PluginInterface(plugin.DaemonPlugin):
 
         return False
 
+
     def getVolume(self):
         """ Get the volume level of a control """
         return self.main_ctrl.getvolume()[0]
+
 
     def setVolume(self, val=0):
         """ Set the volume level of a control (default 0) """
@@ -219,20 +223,29 @@ class PluginInterface(plugin.DaemonPlugin):
             val = self.main_ctrl_max
         self.main_ctrl.setvolume(val)
 
+
     def incVolume(self, step=5):
         """ Increase the volume level by the step (default 5) """
         self.setVolume(self.getVolume() + step)
         return self.getVolume()
+
 
     def decVolume(self, step=5):
         """ Decrease the volume level by the step (default 5) """
         self.setVolume(self.getVolume() - step)
         return self.getVolume()
 
+
     def getMute(self):
         """ Get the muting of a control """
         return self.mute_ctrl.getmute()[0]
 
+
     def setMute(self, val=0):
         """ Set the muting of a control (default 0) """
         self.mute_ctrl.setmute(val)
+
+
+    def reset(self):
+        """ Resets the audio to defaults """
+        pass
