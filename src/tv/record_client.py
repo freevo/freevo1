@@ -46,7 +46,7 @@ def RecordClient():
     global _singleton
 
     # One-time init
-    if _singleton == None:
+    if _singleton is None:
         _singleton = RecordClientActions()
 
     return _singleton
@@ -80,16 +80,16 @@ class RecordClientActions:
 
 
     #--------------------------------------------------------------------------------
-    # record server calls using a coroutine and the wait method
+    # record server calls using a coroutine
     #--------------------------------------------------------------------------------
 
-    def recordserver_rpc(self, cmd, *args, **kwargs):
+    def _recordserver_rpc(self, cmd, *args, **kwargs):
         """ call the record server command using kaa rpc """
         def closed_handler():
             _debug_('%r has closed' % (self.socket,), DINFO)
             self.server = None
 
-        _debug_('recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 1)
+        _debug_('_recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 1)
         try:
             if self.server is None:
                 try:
@@ -115,7 +115,7 @@ class RecordClientActions:
     def pingCo(self):
         now = time.time()
         print self.timeit(now)+': pingCo started'
-        inprogress = self.recordserver_rpc('ping')
+        inprogress = self._recordserver_rpc('ping')
         if not inprogress:
             print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
             return
@@ -131,7 +131,7 @@ class RecordClientActions:
         """ """
         now = time.time()
         print self.timeit(now)+': findNextProgramCo(isrecording=%r) started' % (isrecording,)
-        inprogress = self.recordserver_rpc('findNextProgram', isrecording)
+        inprogress = self._recordserver_rpc('findNextProgram', isrecording)
         if not inprogress:
             print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
             return
@@ -147,7 +147,7 @@ class RecordClientActions:
         """ """
         now = time.time()
         print self.timeit(now)+': getScheduledRecordingsCo() started'
-        inprogress = self.recordserver_rpc('getScheduledRecordings')
+        inprogress = self._recordserver_rpc('getScheduledRecordings')
         if not inprogress:
             print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
             return
@@ -163,7 +163,7 @@ class RecordClientActions:
         """ """
         now = time.time()
         print self.timeit(now)+': updateFavoritesScheduleCo started'
-        inprogress = self.recordserver_rpc('updateFavoritesSchedule')
+        inprogress = self._recordserver_rpc('updateFavoritesSchedule')
         if not inprogress:
             print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
             return
@@ -179,7 +179,7 @@ class RecordClientActions:
         """ """
         now = time.time()
         print self.timeit(now)+': getNextProgramStart begin'
-        inprogress = self.recordserver_rpc('updateFavoritesSchedule')
+        inprogress = self._recordserver_rpc('updateFavoritesSchedule')
         if not inprogress:
             print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
             return
@@ -190,7 +190,7 @@ class RecordClientActions:
         print self.timeit(now)+': getNextProgramStart.NotFinished'
         yield inprogress.get_result()
         print self.timeit(now)+': getNextProgramStart.findNextProgram'
-        inprogress = self.recordserver_rpc('findNextProgram')
+        inprogress = self._recordserver_rpc('findNextProgram')
         if not inprogress:
             print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
             return
@@ -201,148 +201,94 @@ class RecordClientActions:
         print self.timeit(now)+': getNextProgramStart.nextstart=%r' % nextstart
 
 
+    #--------------------------------------------------------------------------------
+    # record server calls using the wait method
+    #--------------------------------------------------------------------------------
+
+    def _rpc_wait(self, rpc_name, *args):
+       inprogress = self._recordserver_rpc(rpc_name, *args)
+       if inprogress is None:
+          return None
+       # wait() already does get_result() for you.  Note that it can
+       # raise an exception if the remote end raised an exception.
+       result = inprogress.wait()
+       _debug_('%s.result=%r' % (rpc_name, result), 1)
+       return result
+
+
     def pingNow(self):
         """ Ping the recordserver to see if it is running """
         _debug_('pingNow', 1)
-        inprogress = self.recordserver_rpc('ping')
-        if inprogress is None:
+        result = self._rpc_wait('ping')
+        if result is None:
             return False
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('pingNow.result=%r' % (result,), 1)
         return result
 
 
     def findNextProgramNow(self, isrecording=False):
         """ Find the next programme to record """
         _debug_('findNextProgramNow(isrecording=%r)' % (isrecording,), 1)
-        inprogress = self.recordserver_rpc('findNextProgram', isrecording)
-        if inprogress is None:
-            return None
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('findNextProgramNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('findNextProgram', isrecording)
 
 
     def getScheduledRecordingsNow(self):
         """ get the scheduled recordings, returning the scheduled recordings object """
         _debug_('getScheduledRecordingsNow()', 1)
-        inprogress = self.recordserver_rpc('getScheduledRecordings')
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('getScheduledRecordingsNow.result=%r' % (result,), 1)
-        return (True, result)
+        return self._rpc_wait('getScheduledRecordings')
 
 
     def updateFavoritesScheduleNow(self):
         """ Update the favorites scbedule, returning the object """
         _debug_('updateFavoritesScheduleNow()', 1)
-        inprogress = self.recordserver_rpc('updateFavoritesSchedule')
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('updateFavoritesScheduleNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('updateFavoritesSchedule')
 
 
     def findProgNow(self, chan=None, start=None):
         """ See if a programme is a favourite """
         _debug_('findProgNow(chan=%r, start=%r)' % (chan, start), 1)
-        inprogress = self.recordserver_rpc('findProg', chan, start)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('findProgNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('findProg', chan, start)
 
 
     def findMatchesNow(self, title=None, movies_only=None):
         """ See if a programme is a favourite """
         _debug_('findMatchesNow(title=%r, movies_only=%r)' % (title, movies_only), 1)
-        inprogress = self.recordserver_rpc('findMatches', title, movies_only)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('findMatchesNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('findMatches', title, movies_only)
 
 
     def isProgScheduledNow(self, prog, schedule=None):
         """ See if a programme is a schedule """
         _debug_('isProgScheduledNow(prog=%r, schedule=%r)' % (prog, schedule), 1)
-        inprogress = self.recordserver_rpc('isProgScheduled', prog, schedule)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('isProgScheduledNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('isProgScheduled', prog, schedule)
 
 
     def isProgAFavoriteNow(self, prog, favs=None):
         """ See if a programme is a favourite """
         _debug_('isProgAFavoriteNow(prog=%r, favs=%r)' % (prog, favs), 1)
-        inprogress = self.recordserver_rpc('isProgAFavorite', prog, favs)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('isProgAFavoriteNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('isProgAFavorite', prog, favs)
 
 
     def clearFavoritesNow(self):
         """ See if a programme is a favourite """
         _debug_('clearFavoritesNow()', 1)
-        inprogress = self.recordserver_rpc('clearFavorites')
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('clearFavoritesNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('clearFavorites')
 
 
     def getFavoritesNow(self):
         """ See if a programme is a favourite """
         _debug_('getFavoritesNow()', 1)
-        inprogress = self.recordserver_rpc('getFavorites')
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('getFavoritesNow.result=%r' % (result,), 1)
-        return (True, result)
+        return self._rpc_wait('getFavorites')
 
 
     def getFavoriteNow(self, name):
         """ See if a programme is a favourite """
         _debug_('getFavoriteNow(name=%r)' % (name), 1)
-        inprogress = self.recordserver_rpc('getFavorite', name)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('getFavoriteNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('getFavorite', name)
 
 
     def removeFavoriteNow(self, name):
         """ See if a programme is a favourite """
         _debug_('removeFavoriteNow(name=%r)' % (name), 1)
-        inprogress = self.recordserver_rpc('removeFavorite', name)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('removeFavoriteNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('removeFavorite', name)
 
 
     def addEditedFavoriteNow(self, name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
@@ -350,69 +296,38 @@ class RecordClientActions:
         _debug_('addEditedFavoriteNow('+ \
             'name=%r, title=%r, chan=%r, dow=%r, mod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % \
             (name, title, chan, dow, mod, priority, allowDuplicates, onlyNew), 1)
-        inprogress = self.recordserver_rpc('addEditedFavorite', \
-            name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('addEditedFavoriteNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('addEditedFavorite', name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
 
 
     def adjustPriorityNow(self, name, mod=0):
         """ See if a programme is a favourite """
         _debug_('adjustPriorityNow(name=%r, mod=%r)' % (name, mod), 1)
-        inprogress = self.recordserver_rpc('adjustPriority', name, mod)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('adjustPriorityNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('adjustPriority', name, mod)
 
 
     def getFavoriteObjectNow(self, prog):
         """ See if a programme is a favourite """
         _debug_('getFavoriteObjectNow(prog=%r)' % (prog), 1)
-        inprogress = self.recordserver_rpc('getFavoriteObject', prog)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('getFavoriteObjectNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('getFavoriteObject', prog)
 
 
     def scheduleRecordingNow(self, prog):
         """ See if a programme is a favourite """
         _debug_('scheduleRecordingNow(prog=%r)' % (prog,), 1)
-        inprogress = self.recordserver_rpc('scheduleRecording', prog)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('scheduleRecordingNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('scheduleRecording', prog)
 
 
     def removeScheduledRecordingNow(self, prog):
         """ See if a programme is a favourite """
         _debug_('removeScheduledRecordingNow(prog=%r)' % (prog,), 1)
-        inprogress = self.recordserver_rpc('removeScheduledRecording', prog)
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.get_result()
-        _debug_('removeScheduledRecordingNow.result=%r' % (result,), 1)
-        return result
+        return self._rpc_wait('removeScheduledRecording', prog)
 
 
     #--------------------------------------------------------------------------------
     # record server calls using a callback
     #--------------------------------------------------------------------------------
 
-    def server_rpc(self, cmd, callback, *args, **kwargs):
+    def _server_rpc(self, cmd, callback, *args, **kwargs):
         """
         Call the server with the command the results will be put in the callback
         Try to reconnect if the connection is down
@@ -421,7 +336,7 @@ class RecordClientActions:
             _debug_('%r has closed' % (self.socket,), DINFO)
             self.server = None
 
-        _debug_('server_rpc(cmd=%r, callback=%r, args=%r, kwargs=%r)' % (cmd, callback, args, kwargs), 1)
+        _debug_('_server_rpc(cmd=%r, callback=%r, args=%r, kwargs=%r)' % (cmd, callback, args, kwargs), 1)
         try:
             if self.server is None:
                 try:
@@ -447,49 +362,49 @@ class RecordClientActions:
     def ping(self, callback):
         """ See if the server is alive """
         _debug_('ping(callback=%r)' % (callback), 1)
-        return self.server_rpc('ping', callback)
+        return self._server_rpc('ping', callback)
 
 
     def findNextProgram(self, callback, isrecording=False):
         """ Find the next program using a callback function """
         _debug_('findNextProgram(callback=%r, isrecording=%r)' % (callback, isrecording), 1)
-        return self.server_rpc('findNextProgram', callback, isrecording)
+        return self._server_rpc('findNextProgram', callback, isrecording)
 
 
     def getScheduledRecordings(self, callback):
         """ Get the scheduled recordings, using a callback function """
         _debug_('getScheduledRecordings(callback=%r)' % (callback), 1)
-        return self.server_rpc('getScheduledRecordings', callback)
+        return self._server_rpc('getScheduledRecordings', callback)
 
 
     def scheduleRecording(self, callback, prog):
         """ schedule a programme for recording, using a callback function """
         _debug_('scheduleRecording(callback=%r, prog=%r)' % (callback, prog), 1)
-        return self.server_rpc('scheduleRecording', callback, prog)
+        return self._server_rpc('scheduleRecording', callback, prog)
 
 
     def updateFavoritesSchedule(self, callback):
         """ Update the favourites using a callback function """
         _debug_('updateFavoritesSchedule(callback=%r)' % (callback), 1)
-        return self.server_rpc('updateFavoritesSchedule', callback)
+        return self._server_rpc('updateFavoritesSchedule', callback)
 
 
     def isPlayerRunning(self, callback):
         """ Find out if a player is running, using a callback function """
         _debug_('isPlayerRunning(callback=%r)' % (callback), 1)
-        return self.server_rpc('isPlayerRunning', callback)
+        return self._server_rpc('isPlayerRunning', callback)
 
 
     def getFavorites(self, callback):
         """ Get favourites """
         _debug_('getFavorites(callback=%r)' % (callback), 1)
-        return self.server_rpc('getFavorites', callback)
+        return self._server_rpc('getFavorites', callback)
 
 
     def isProgAFavorite(self, callback, prog, favs=None):
         """ See if a programme is a favourite """
         _debug_('isProgAFavorite(callback=%r, prog=%r, favs=%r)' % (callback, prog, favs), 1)
-        return self.server_rpc('isProgAFavorite', callback, prog, favs)
+        return self._server_rpc('isProgAFavorite', callback, prog, favs)
 
 
 if __name__ == '__main__':
@@ -549,25 +464,11 @@ if __name__ == '__main__':
     # kaa.rpc callback tests
     #--------------------------------------------------------------------------------
 
-    if function == "pingnow":
-        result = rc.pingNow()
-        print '%s: result=%r' % (rc.timeit(start), result)
-        raise SystemExit
-
-    elif function == "ping":
+    if function == "ping":
         result = rc.ping(handler)
         if not result:
             print '%s: result=%r' % (rc.timeit(start), result)
             raise SystemExit
-
-    elif function == "findnextprogramnow":
-        result = rc.findNextProgramNow(True)
-        print '%s: result=%r' % (rc.timeit(start), result)
-        #print 'recording: "%s"' % (result,)
-        result = rc.findNextProgramNow(False)
-        print '%s: result=%r' % (rc.timeit(start), result)
-        #print 'next     : "%s"' % (result,)
-        raise SystemExit
 
     elif function == "findnextprogram":
         result = rc.findNextProgram(handler)
@@ -575,14 +476,34 @@ if __name__ == '__main__':
             print '%s: result=%r' % (rc.timeit(start), result)
             raise SystemExit
 
-    elif function == "findnextprogramrecording":
-        result = rc.findNextProgram(handler, True)
+    elif function == "getscheduledrecordings":
+        result = rc.getScheduledRecordings(handler)
         if not result:
             print '%s: result=%r' % (rc.timeit(start), result)
             raise SystemExit
 
+    elif function == "getfavorites":
+        result = rc.getFavorites(handler)
+        if not result:
+            print '%s: result=%r' % (rc.timeit(start), result)
+            raise SystemExit
+
+    #--------------------------------------------------------------------------------
+    # kaa.rpc wait on in-progress tests
+    #--------------------------------------------------------------------------------
+
+    if function == "pingnow":
+        result = rc.pingNow(*args)
+        print '%s: result=%r' % (rc.timeit(start), result)
+        raise SystemExit
+
+    elif function == "findnextprogramnow":
+        result = rc.findNextProgramNow(*args)
+        print '%s: result=%r' % (rc.timeit(start), result)
+        raise SystemExit
+
     elif function == "getscheduledrecordingsnow":
-        result = rc.getScheduledRecordingsNow()
+        result = rc.getScheduledRecordingsNow(*args)
         print '%s: result=%r' % (rc.timeit(start), result)
         if config.DEBUG > 2:
             status, schedule = result
@@ -592,34 +513,23 @@ if __name__ == '__main__':
                 print 'result=%r' % (result,)
         raise SystemExit
 
-    elif function == "getscheduledrecordings":
-        result = rc.getScheduledRecordings(handler)
-        if not result:
-            print '%s: result=%r' % (rc.timeit(start), result)
-            raise SystemExit
-
     elif function == "updatefavoritesschedulenow":
-        result = rc.updateFavoritesScheduleNow()
+        result = rc.updateFavoritesScheduleNow(*args)
         print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "findprognow":
-        result = rc.findProgNow(args[0], args[1])
+        result = rc.findProgNow(*args)
         print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "findmatchesnow":
-        if len(args) == 1:
-            result = rc.findMatchesNow(args[0])
-        elif len(args) == 2:
-            result = rc.findMatchesNow(args[0], args[1])
-        else:
-            result = rc.findMatchesNow()
+        result = rc.findMatchesNow(*args)
         print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "getfavoritesnow":
-        result = rc.getFavoritesNow()
+        result = rc.getFavoritesNow(*args)
         print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
@@ -629,7 +539,7 @@ if __name__ == '__main__':
         raise SystemExit
 
     elif function == "removefavoritenow":
-        result = rc.removeFavoriteNow()
+        result = rc.removeFavoriteNow(*args)
         print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
@@ -640,12 +550,6 @@ if __name__ == '__main__':
 
     elif function == "updatefavoritesschedule":
         result = rc.updateFavoritesSchedule(handler)
-        if not result:
-            print '%s: result=%r' % (rc.timeit(start), result)
-            raise SystemExit
-
-    elif function == "getfavorites":
-        result = rc.getFavorites(handler)
         if not result:
             print '%s: result=%r' % (rc.timeit(start), result)
             raise SystemExit
