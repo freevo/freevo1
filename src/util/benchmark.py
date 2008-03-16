@@ -31,14 +31,14 @@
 
 import time
 
-_indentation = 0
-
 
 class benchmark:
     """
     A decorator class to time function calls
     http://wiki.python.org/moin/PythonDecoratorLibrary
     """
+    _indentation = 0
+
     def __init__(self, reset=True):
         """ Contructs the benchmark class
         @param reset: resets the timer a each call
@@ -49,9 +49,8 @@ class benchmark:
 
     def __call__(self, func):
         def newfunc(*args, **kwargs):
-            global _indentation
-            indentation = '  ' * _indentation
-            _indentation += 1
+            indentation = '  ' * benchmark._indentation
+            benchmark._indentation += 1
             if self.reset:
                 self.start = time.time()
             print '%s-> %s' % (indentation, func.__name__)
@@ -59,7 +58,7 @@ class benchmark:
                 result = func(*args, **kwargs)
             finally:
                 print '%s<- %s: %.3f' % (indentation, func.__name__, time.time() - self.start)
-                _indentation -= 1
+                benchmark._indentation -= 1
             return result
         newfunc.__name__ = func.__name__
         newfunc.__doc__ = func.__doc__
@@ -94,4 +93,10 @@ if __name__ == '__main__':
     print '__repr__:', longrunning
     print '__name__:', longrunning.__name__
     print '__doc__:', longrunning.__doc__
-    failure()
+    try:
+        failure()
+    except:
+        import traceback
+        traceback.print_exc()
+    print '__name__:', failure.__name__
+    print '__doc__:', failure.__doc__
