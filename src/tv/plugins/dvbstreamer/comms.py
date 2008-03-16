@@ -30,38 +30,73 @@
 #
 # ----------------------------------------------------------------------- */
 from socket import *
+import re
 
 PRIMARY_SERVICE_FILTER='<Primary>'
+lssfs_re = re.compile(' (.*?) : (.*?) \((.*)\)')
 
 class Controller:
-    def __init__(self, host, adapter, username=None, password=None):
+    """
+    High level connection to a DVBStreamer daemon, uses a transitory connection
+    to process commands/requests.
+    """
+    def __init__(self, host, adapter, username=None, password=None, transitory=True):
         self.host = host
         self.adapter = adapter
         self.username = username
         self.password = password
+        self.transitory = transitory
+        self.connection = None
+        self.my_ip = None
 
     def execute_command(self, command, authenticate=False):
         """
         Send a command to the dvbstreamer instance to execute,
         first authorising if required.
         """
-        ctrlcon = ControlConnection(self.host, self.adapter)
-        ctrlcon.open()
-        if authenticate:
-            (ec, em, lines) = ctrlcon.send_command('auth %s %s' % (self.username, self.password))
-            if ec != 0:
-                raise RuntimeError, 'failed to authenticate'
-        result = ctrlcon.send_command(command)
-        ctrlcon.close()
+        if self.transitory or self.connection is None:
+            ctrlcon = ControlConnection(self.host, self.adapter)
+            ctrlcon.open()
+        else:
+            ctrlcon = self.connection
+        try:
+            if authenticate:
+                (ec, em, lines) = ctrlcon.send_command('auth %s %s' % (self.username, self.password))
+                if ec != 0:
+                    raise RuntimeError, 'failed to authenticate'
+            result = ctrlcon.send_command(command)
+            self.my_ip = ctrlcon.my_ip
+        finally:
+            if self.transitory:
+                ctrlcon.close()
+            else:
+                self.connection = ctrlcon
         return result
 
-    def select_service(self, service):
+    def set_current_service(self, service):
         """
         Select the primary service.
         """
         (errcode, errmsg, msg) = self.execute_command('select ' + service, True)
         if errcode != 0:
             raise RuntimeError, errmsg
+
+
+    def get_current_service(self):
+        """
+        Retrieve the current primary service.
+        Returns a tuple containing service name and multiplex.
+        """
+        (errcode, errmsg, msg) = self.execute_command('current')
+        if errcode != 0:
+            raise RuntimeError, errmsg
+
+        m = re.match('Current Service : "(.+?)" \(.+?\) Multiplex: (.+)', msg[0])
+        if m:
+            return (m.group(1), m.group(2))
+
+        return None
+
 
     def set_servicefilter_mrl(self, service_filter, mrl):
         """
@@ -70,6 +105,22 @@ class Controller:
         (errcode, errmsg, msg) = self.execute_command('setsfmrl %s %s' % (service_filter, mrl), True)
         if errcode != 0:
             raise RuntimeError, errmsg
+
+    def get_servicefilters(self):
+        """
+        Get a dictionary containing tuples of service and mrl for each
+        service filter.
+        """
+        (errcode, errmsg, msg) = self.execute_command('lssfs')
+        if errcode != 0:
+            raise RuntimeError, errmsg
+        result = {}
+        for line in msg:
+            m = lssfs_re.match(line)
+            if m:
+                result[m.group(1)] = (m.group(2), m.group(3))
+        return result
+
 
     def get_services(self, mux=''):
         """
@@ -140,38 +191,64 @@ class Controller:
     def get_frontend_status(self):
         """
         Get the frontend status of the set dvbstreamer instance.
+        Returns a tuple contain locked state, ber, signal strength %, snr % and
+        uncorrected block count.
         """
         (errcode, errmsg, status) = self.execute_command('festatus')
         if errcode != 0:
             return None
 
-        locked = status[0].find('Lock,') != -1
+        locked = status[0].find('Lock') != -1
 
         line = status[1]
-        equalsindex = line.find('= ') + 2
-        spaceindex = line.find(' ', equalsindex)
-        ber = int(line[equalsindex:spaceindex])
+        m = re.match('Signal Strength = ([0-9]+)% SNR = ([0-9]+)% BER = ([0-9a-f]+?) Uncorrected Blocks = ([0-9a-f]+)', line)
+        if m:
+            signal = int(m.group(1))
+            snr = int(m.group(2))
+            ber = int(m.group(3),16)
+            ucb = int(m.group(4),16)
+        else:
+            # Should we raise an exception?
+            signal = 0
+            snr    = 0
+            ber    = 0
+            ucb    = 0
 
-        equalsindex = line.find('= ',spaceindex) + 2
-        spaceindex = line.find(' ', equalsindex)
-        signal = int(line[equalsindex:spaceindex])
+        return (locked, ber, signal, snr, ucb)
 
-        equalsindex = line.find('= ',spaceindex) + 2
-        snr = int(line[equalsindex:])
+    def get_variable(self, var):
+        (errcode, errmsg, value) = self.execute_command('get ' + var)
+        if errcode != 0:
+            return None
+        return value
 
-        return (locked, ber, signal, snr)
 
 class ControlConnection:
+    """
+    Class implementing a connection to a DVBStreamer daemon.
+    """
     def __init__(self, host, adapter):
+        """
+        Create a connection object to communicate with a DVBStreamer daemon.
+        """
         self.host = host
         self.adapter = adapter
         self.opened = False
+        self.version = None
+        self.welcome_message = None
+        self.my_ip = None
 
     def open(self):
+        """
+        Open the connection to the DVBStreamer daemon.
+        """
         if self.opened:
             return
         self.socket = socket(AF_INET,SOCK_STREAM)
         self.socket.connect((self.host, self.adapter + 54197))
+
+        self.my_ip = self.socket.getsockname()[0]
+
         self.socket_file = self.socket.makefile('r+')
         self.opened = True
         (error_code, error_message, lines) = self.read_response()
@@ -185,12 +262,18 @@ class ControlConnection:
         return self.opened
 
     def close(self):
+        """
+        Close the connection to the DVBStreamer daemon.
+        """
         if self.opened:
             self.socket_file.close()
             self.socket.close()
             self.opened = False
 
     def send_command(self, command):
+        """
+        Send a command to the connection DVBStreamer daemon.
+        """
         if not self.opened:
             raise RuntimeError, 'not connected'
 
@@ -200,6 +283,11 @@ class ControlConnection:
         return self.read_response()
 
     def read_response(self):
+        """
+        Read a response from the DVBStreamer deamon after a command has been
+        sent.
+        Returns a tuple of error code, error message and response lines.
+        """
         more_lines = True
         lines = []
         error_code = -1

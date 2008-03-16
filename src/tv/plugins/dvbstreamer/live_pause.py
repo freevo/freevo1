@@ -331,7 +331,12 @@ class Xine:
         if self.adapter_in_use != adapter:
             self.adapter_in_use = adapter
             try:
-                self.manager.enable_udp_output(self.adapter_in_use)
+                if adapter.find(':') != -1:
+                    my_ip = self.manager.controllers[adapter].my_ip
+                else:
+                    my_ip = 'localhost'
+
+                self.manager.enable_udp_output(self.adapter_in_use, my_ip, 1234)
             except:
                 _debug_('Failed to enable output! ' + traceback.format_exc())
 
@@ -533,7 +538,7 @@ class Xine:
 
     def __osd_write(self, text):
         if self.app:
-            self.app.write('OSDWriteText$%s\n' % text)
+            self.app.write('OSDWriteText$    %s\n' % text)
 
     def __draw_state_screen(self):
         osd_obj = osd.get_singleton()

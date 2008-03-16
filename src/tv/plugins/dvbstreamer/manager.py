@@ -39,16 +39,14 @@ class DVBStreamerManager:
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.destip   = 'localhost'
-        self.destport = 1234
         self.controllers = {}
 
 
-    def get_udp_mrl(self):
+    def get_udp_mrl(self, ip_address, port):
         """
         Get the mrl to use for dvbstreamer and xine.
         """
-        return 'udp://%s:%d' %(self.destip, self.destport)
+        return 'udp://%s:%d' %(ip_address, port)
 
 
     def get_file_mrl(self, filename):
@@ -58,11 +56,11 @@ class DVBStreamerManager:
         return 'file://%s' % filename
 
 
-    def enable_udp_output(self, adapter):
+    def enable_udp_output(self, adapter, ip_address, port):
         """
         Enable UDP output to localhost:1234
         """
-        self.set_mrl(adapter, self.get_udp_mrl())
+        self.set_mrl(adapter, self.get_udp_mrl(ip_address,port))
 
 
     def enable_file_output(self, adapter, filename):
@@ -75,7 +73,7 @@ class DVBStreamerManager:
         """
         Disable output from the specified dvbstreamer instance.
         """
-        _debug_('Disabling output on adapter %d' % adapter)
+        _debug_('Disabling output on adapter %s' % adapter)
         self.set_mrl(adapter,  'null://')
 
 
@@ -83,9 +81,9 @@ class DVBStreamerManager:
         """
         Select a channel on the specified dvbstreamer instance.
         """
-        _debug_('Selecting channel %s on adapter %d'%(channel, adapter))
+        _debug_('Selecting channel %s on adapter %s'%(channel, adapter))
         controller = self.get_controller(adapter)
-        controller.select_service(channel)
+        controller.set_current_service(channel)
 
 
     def set_mrl(self, adapter, mrl):
@@ -102,6 +100,12 @@ class DVBStreamerManager:
         """
         if adapter in self.controllers:
             return self.controllers[adapter]
-        controller = comms.Controller('localhost', adapter, self.username, self.password)
+        if adapter.find(':') != -1:
+            ip_address,dvb_adapter = adapter.split(':',2)
+            dvb_adapter = int(dvb_adapter)
+        else:
+            ip_address = 'localhost'
+            dvb_adapter = int(adapter)
+        controller = comms.Controller(ip_address, dvb_adapter, self.username, self.password)
         self.controllers[adapter] = controller
         return controller
