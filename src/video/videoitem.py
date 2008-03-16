@@ -198,13 +198,14 @@ class VideoItem(Item):
             if hasattr(self, 'force_player') and p.name == self.force_player:
                 rating += 100
             if (rating, p) not in self.possible_players:
-                self.possible_players.append((rating, p))
+                self.possible_players += [(rating, p)]
+        self.possible_players = filter(lambda l: l[0] > 0, self.possible_players)
         # sort the players in the order of the rating
         self.possible_players.sort(lambda l, o: -cmp(l[0], o[0]))
         if len(self.possible_players) > 0:
             # choose the best player as default player
             self.player_rating, self.player = self.possible_players[0]
-        _debug_("url=%r possible_players=%r" % (self.url, self.possible_players,), 2)
+        _debug_("url=%r possible_players=%r" % (self.url, self.possible_players,), 1)
 
 
     def id(self):

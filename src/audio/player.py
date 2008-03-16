@@ -81,9 +81,12 @@ class PlayerGUI(GUIObject):
                 if hasattr(self.item, 'force_player') and p.name == self.item.force_player:
                     rating += 100
 
-                self.possible_players.append((rating, p))
+                if (rating, p) not in self.possible_players:
+                    self.possible_players += [(rating, p)]
+            self.possible_players = filter(lambda l: l[0] > 0, self.possible_players)
             self.possible_players.sort(lambda l, o: -cmp(l[0], o[0]))
-            self.player = self.possible_players[0][1]
+            if len(self.possible_players) > 0:
+                self.player_rating, self.player = self.possible_players[0]
 
         if self.menuw and self.menuw.visible:
             self.menuw.hide(clear=False)
