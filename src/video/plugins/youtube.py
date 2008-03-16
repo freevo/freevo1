@@ -225,7 +225,7 @@ class YoutubeVideo(Item):
             elif video.link[0].href.find('watch?v=') >= 0:
                 id = video.link[0].href.split('watch?v=');
             else:
-                continue   
+                continue
             mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.downloadvideo, id[1])
             mi.arg = (video.title.text, id[1])
             text = util.htmlenties2txt(video.content)

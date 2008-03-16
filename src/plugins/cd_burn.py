@@ -830,7 +830,7 @@ class PluginInterface(plugin.ItemPlugin):
             except Exception, e:
                 print 'fill_menu:', e
                 pass
-        
+
         if item.type == 'playlist':
             #playlist burn
             _debug_('Playlist item has media : %s ' % item.media)

@@ -77,7 +77,7 @@ class WebRemoteResource(FreevoResource):
     <title>Freevo | WebRemote</title>
     <meta http-equiv="Content-Type" content= "text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="styles/main.css" type="text/css" />
-  
+
     <style type="text/css" media="screen">
       body  { background: #666699; }
       h3 { color: white; }
@@ -86,7 +86,7 @@ class WebRemoteResource(FreevoResource):
       button.remote { width: 60px; height: 30px; background: #eee; font-size: 12px; text-align: center; padding: 0; }
       button.remote:hover { background: #fed; }
     </style>
-  
+
     <script type="text/javascript">
     <!--
       // Resize window
@@ -97,10 +97,10 @@ class WebRemoteResource(FreevoResource):
         window.scrollbars.visible  = false
         window.personalbar.visible = false
       }
-  
+
       // AJAX Functions
       var xmlHttp = false;
-  
+
       function getXMLHttpObject () {
         if (window.XMLHttpRequest) {
           xmlHttp=new XMLHttpRequest()
@@ -122,7 +122,7 @@ class WebRemoteResource(FreevoResource):
           xmlHttp = new XMLHttpRequest();                      // Mozilla, Firefox, Opera
         }
       }
-  
+
       function send_code( code ) {
         if (! xmlHttp) {
           getXMLHttpObject();
@@ -134,14 +134,14 @@ class WebRemoteResource(FreevoResource):
     -->
     </script>
   </head>
-  
+
   <body onLoad="resizeWindow();">
-  
+
     <center>
       <h3>Freevo WebRemote</h3>
-      
+
       <table border="0" cellspacing="1" cellpadding="0">
-      
+
         <tr>
           <td align="center">
             &nbsp;
@@ -154,7 +154,7 @@ class WebRemoteResource(FreevoResource):
             &nbsp;
           </td>
         </tr>
-      
+
         <tr>
           <td align="center">
             <button class="remote" accesskey="4" onClick="send_code('LEFT');">
@@ -169,7 +169,7 @@ class WebRemoteResource(FreevoResource):
               <img src="/icons/forward.png"></button>
           </td>
         </tr>
-      
+
         <tr>
           <td align="center">
             &nbsp;
@@ -182,13 +182,13 @@ class WebRemoteResource(FreevoResource):
             &nbsp;
           </td>
         </tr>
-        
+
         <tr style="line-height: 8px;">
           <td colspan="3">
             &nbsp;
           </td>
         </tr>
-        
+
         <tr>
           <td align="center">
             <button class="remote" accesskey="x" onClick="send_code('EXIT');">
@@ -203,7 +203,7 @@ class WebRemoteResource(FreevoResource):
               <img src="/icons/help.png"></button>
           </td>
         </tr>
-      
+
         <tr>
           <td align="center">
             <button class="remote" accesskey="m" onClick="send_code('MENU');">
@@ -217,13 +217,13 @@ class WebRemoteResource(FreevoResource):
               <img src="/icons/player_eject.png"></button>
           </td>
         </tr>
-        
+
         <tr style="line-height: 8px;">
           <td colspan="3">
             &nbsp;
           </td>
         </tr>
-        
+
         <tr>
           <td align="center">
             &nbsp;
@@ -236,7 +236,7 @@ class WebRemoteResource(FreevoResource):
             &nbsp;
           </td>
         </tr>
-        
+
         <tr>
           <td align="center">
             <button class="remote" accesskey="r" onClick="send_code('REW');">
@@ -251,7 +251,7 @@ class WebRemoteResource(FreevoResource):
               <img src="/icons/player_fwd.png"></button>
           </td>
         </tr>
-        
+
         <tr>
           <td align="center">
             &nbsp;
@@ -264,13 +264,13 @@ class WebRemoteResource(FreevoResource):
             &nbsp;
           </td>
         </tr>
-        
+
         <tr style="line-height: 8px;">
           <td colspan="3">
             &nbsp;
           </td>
         </tr>
-        
+
         <tr>
           <td align="center">
             <button class="remote" accesskey="+" onClick="send_code('VOLP');">VOL+</button>
@@ -294,12 +294,12 @@ class WebRemoteResource(FreevoResource):
             <button class="remote" accesskey="v" onClick="send_code('CHM');">CH-</button>
           </td>
         </tr>
-        
+
       </table>
     </center>
   </body>
 </html>
 """
         return String(fv.res)
-        
+
 resource = WebRemoteResource()

@@ -6,7 +6,7 @@
 # $Id$
 #
 # Notes:
-# Todo: 
+# Todo:
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework

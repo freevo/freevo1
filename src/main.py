@@ -422,8 +422,8 @@ if len(sys.argv) >= 2:
 
 try:
     # signal handler
-    signal.signal(signal.SIGTERM, unix_signal_handler) 
-    signal.signal(signal.SIGINT, unix_signal_handler) 
+    signal.signal(signal.SIGTERM, unix_signal_handler)
+    signal.signal(signal.SIGINT, unix_signal_handler)
     kaa.main.signals['shutdown'].connect(signal_handler)
 
     # load the fxditem to make sure it's the first in the
