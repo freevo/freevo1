@@ -41,6 +41,9 @@ from event import *
 from item import Item
 from programitem import ProgramItem
 
+from util.benchmark import benchmark
+benchmarking = False
+
 import tv.epg_xmltv
 from tv.epg_types import TvProgram
 from tv.record_client import RecordClient
@@ -120,6 +123,7 @@ class TVGuide(Item):
                 self.favorite_programs.append(prog.str2utf())
 
 
+    @benchmark(benchmarking)
     def update_schedules(self, force=False):
         """
         update schedule
@@ -130,11 +134,7 @@ class TVGuide(Item):
         if not force and self.last_update + 60 > time.time():
             return
 
-        # less than one second? Do not belive the force update
-        #if self.last_update + 1 > time.time():
-        #    return
-
-        _debug_('update schedule', 2)
+        _debug_('update schedule', 1)
         self.last_update = time.time()
         self.scheduled_programs = []
         self.overlap_programs = []
@@ -142,6 +142,7 @@ class TVGuide(Item):
         self.recordclient.getScheduledRecordings(self.update_schedules_cb)
 
 
+    @benchmark(benchmarking)
     def eventhandler(self, event, menuw=None):
         """
         Handles events in the tv guide
@@ -297,6 +298,7 @@ class TVGuide(Item):
             skin.clear()
 
 
+    @benchmark(benchmarking)
     def refresh(self, force_update=True):
         """refresh the guide
 
@@ -312,6 +314,7 @@ class TVGuide(Item):
         skin.draw(self.type, self)
 
 
+    @benchmark(benchmarking)
     def update(self, force=False):
         """ update the guide
 
@@ -389,6 +392,7 @@ class TVGuide(Item):
         self.rebuild(new_start_time, new_end_time, start_channel, selected)
 
 
+    @benchmark(benchmarking)
     def rebuild(self, start_time, stop_time, start_channel, selected):
         """ rebuild the guide
 
@@ -444,7 +448,7 @@ class TVGuide(Item):
                         if chan.programs[i] == selected:
                             flag_selected = 1
 
-                table += [  chan  ]
+                table += [ chan ]
                 n += 1
 
         if flag_selected == 0:
@@ -466,6 +470,7 @@ class TVGuide(Item):
         self.refresh(force_update=False)
 
 
+    @benchmark(benchmarking)
     def change_program(self, value, full_scan=False):
         """
         Move to the next program
@@ -535,6 +540,7 @@ class TVGuide(Item):
         self.rebuild(start_time, stop_time, start_channel, prg)
 
 
+    @benchmark(benchmarking)
     def change_channel(self, value):
         """
         Move to the next channel

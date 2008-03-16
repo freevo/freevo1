@@ -39,7 +39,9 @@ import config
 EPG_VERSION = 6
 
 class TvProgram:
-
+    """
+    Holds information about a TV programme
+    """
     channel_id = None
     title      = None
     desc       = None
@@ -58,19 +60,18 @@ class TvProgram:
     allowDuplicates = None
     onlyNew = None
 
-
-    def __init__(self, title='', channel_id='', start=0, stop=0, desc=''):
-        _debug_('TvProgram.__init__(title=%r, channel_id=%r, start=%r, stop=%r, desc=%r)' % (title, channel_id, start, stop, desc), 1)
+    def __init__(self, channel_id='', start=0, pdc_start=0, stop=0, title='', sub_title='', desc='', categories=[], ratings={}):
+        _debug_('TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)' % (channel_id, start, stop, title), 1)
         self.title      = title
         self.channel_id = channel_id
         self.desc       = desc
-        self.sub_title  = ''
+        self.sub_title  = sub_title
         self.start      = start
-        self.pdc_start  = 0.0
+        self.pdc_start  = pdc_start
         self.stop       = stop
-        self.ratings    = {}
+        self.ratings    = ratings
         self.advisories = []
-        self.categories = []
+        self.categories = categories
         self.date       = None
 
         # Due to problems with Twisted's marmalade this should not be changed
@@ -134,7 +135,7 @@ class TvProgram:
         """
         return the specific attribute as string or an empty string
         """
-        _debug_('getattr(attr=%r)' % (attr,), 1)
+        _debug_('getattr(attr=%r)' % (attr,), 3)
         if attr == 'start':
             return Unicode(time.strftime(config.TV_TIME_FORMAT, time.localtime(self.start)))
         if attr == 'pdc_start':
@@ -154,7 +155,7 @@ class TvProgram:
         """
         Decode all internal strings from Unicode to String
         """
-        _debug_('utf2str()', 1)
+        _debug_('utf2str()', 3)
         ret = copy.copy(self)
         for var in dir(ret):
             if not var.startswith('_') and isinstance(getattr(ret, var), unicode):
@@ -166,7 +167,7 @@ class TvProgram:
         """
         Encode all internal strings from String to Unicode
         """
-        _debug_('str2utf()', 1)
+        _debug_('str2utf()', 3)
         ret = copy.copy(self)
         for var in dir(ret):
             if not var.startswith('_') and isinstance(getattr(ret, var), str):
@@ -178,7 +179,13 @@ class TvChannel:
     """
     Holds information about a TV channel
     """
-    logo = None
+    id = '' 
+    displayname = '' 
+    tunerid = '' 
+    logo = ''
+    times = None 
+    programs = None 
+
     def __init__(self, id, displayname, tunerid, logo='', times=[], programs=[]):
         """ Copy the programs that are inside the indicated time bracket """
         _debug_('TvChannel.__init__(id=%r, displayname=%r, tunerid=%r, logo=%r, times=%r, programs=%r)' % (id, displayname, tunerid, logo, times, programs), 1)
@@ -198,7 +205,7 @@ class TvChannel:
 
     def sort(self):
         """ Sort the programs so that the earliest is first in the list """
-        _debug_('TvChannel.sort()', 1)
+        _debug_('TvChannel.sort(), displayname=%r' % (self.displayname,), 1)
         f = lambda a, b: cmp(a.start, b.start)
         self.programs.sort(f)
 
@@ -215,7 +222,7 @@ class TvChannel:
 
 
     def __repr__(self):
-        return '<TvChannel %r>' % (self.id)
+        return '<TvChannel %r %r>' % (self.id, self.displayname)
 
 
 
@@ -236,29 +243,32 @@ class TvGuide:
 
     def add_channel(self, channel):
         _debug_('add_channel(channel=%r)' % (channel,), 1)
-        if not self.chan_dict.has_key(channel.id):
-            # Add the channel to both the dictionary and the list. This works
-            # well in Python since they will both point to the same object!
-            self.chan_dict[channel.id] = channel
-            self.chan_list += [channel]
+        if channel.id in self.chan_dict:
+            return
+        # Add the channel to both the dictionary and the list. This works
+        # well in Python since they will both point to the same object!
+        self.chan_dict[channel.id] = channel
+        self.chan_list += [channel]
 
 
     def add_program(self, program):
         """ The channel must be present, or the program is silently dropped """
         _debug_('add_program(program=%r)' % (program,), 1)
-        if self.chan_dict.has_key(program.channel_id):
-            p = self.chan_dict[program.channel_id].programs
-            if len(p) and p[-1].start < program.stop and p[-1].stop > program.start:
+        if program.channel_id not in self.chan_dict:
+            return
+        programs = self.chan_dict[program.channel_id].programs
+        if len(programs) > 0:
+            if programs[-1].start < program.stop and programs[-1].stop > program.start:
+                _debug_('invalid stop time: %r' % self.chan_dict[program.channel_id].programs[-1])
                 # the tv guide is corrupt, the last entry has a stop time higher than
                 # the next start time. Correct that by reducing the stop time of
                 # the last entry
-                _debug_('wrong stop time: %s' % String(self.chan_dict[program.channel_id].programs[-1]))
                 self.chan_dict[program.channel_id].programs[-1].stop = program.start
-
-            if len(p) and p[-1].start == p[-1].stop:
+            if programs[-1].start == programs[-1].stop:
+                _debug_('program has no duration %r' % self.chan_dict[program.channel_id].programs[-1])
                 # Oops, something is broken here
-                self.chan_dict[program.channel_id].programs = p[:-1]
-            self.chan_dict[program.channel_id].programs += [program]
+                self.chan_dict[program.channel_id].programs = programs[:-1]
+        self.chan_dict[program.channel_id].programs += [program]
 
 
     def get_programs(self, start=0, stop=2147483647, channel_id=None):

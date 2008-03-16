@@ -246,52 +246,53 @@ def load_guide(verbose=True, XMLTV_FILE=None):
         if not p['channel'] in needed_ids:
             continue
         try:
-            prog = TvProgram()
-            prog.channel_id = p['channel']
-            prog.title = Unicode(p['title'][0][0])
-            if p.has_key('date'):
-                prog.date = Unicode(p['date'])
-            if p.has_key('category'):
-                prog.categories = [ cat[0] for cat in p['category'] ]
-            if p.has_key('rating'):
+            channel_id = p['channel']
+            date = 'date' in p and Unicode(p['date']) or None
+            start = None
+            pdc_start = None
+            stop = None
+            title = Unicode(p['title'][0][0])
+            desc = 'desc' in p and Unicode(util.format_text(p['desc'][0][0])) or None
+            sub_title = 'sub-title' in p and Unicode(p['sub-title'][0][0]) or None
+            categories = 'category' in p and [ cat[0] for cat in p['category'] ] or None
+            advisories = []
+            ratings = {}
+
+            if 'rating' in p:
                 for r in p['rating']:
                     if r.get('system') == 'advisory':
-                        prog.advisories.append(String(r.get('value')))
+                        advisories.append(String(r.get('value')))
                         continue
-                    prog.ratings[String(r.get('system'))] = String(r.get('value'))
-            if p.has_key('desc'):
-                prog.desc = Unicode(util.format_text(p['desc'][0][0]))
-            if p.has_key('sub-title'):
-                prog.sub_title = p['sub-title'][0][0]
+                    ratings[String(r.get('system'))] = String(r.get('value'))
             try:
-                prog.start = timestr2secs_utc(p['start'])
-                if p.has_key('pdc_start'):
-                    prog.pdc_start = timestr2secs_utc(p['pdc_start'])
-                else:
-                    prog.pdc_start = prog.start
+                start = timestr2secs_utc(p['start'])
+                pdc_start = 'pdc_start' in p and timestr2secs_utc(p['pdc_start']) or start
                 try:
-                    prog.stop = timestr2secs_utc(p['stop'])
+                    stop = timestr2secs_utc(p['stop'])
                 except:
                     # Fudging end time
-                    prog.stop = timestr2secs_utc(p['start'][0:8] + '235900' + \
-                                                 p['start'][14:18])
-            # Don't think that this is ever raised
-            except EpgException:
+                    stop = timestr2secs_utc(p['start'][0:8] + '235900' + p['start'][14:18])
+            except EpgException, why:
+                _debug_('EpgException: %s' % (why,), DWARNING)
                 continue
-            # fix bad German titles to make favorites working
-            if prog.title.endswith('. Teil'):
-                prog.title = prog.title[:-6]
-                if prog.title.rfind(' ') > 0:
+
+            # fix bad German titles to make favorites work
+            if title.endswith('. Teil'):
+                title = title[:-6]
+                if title.rfind(' ') > 0:
                     try:
-                        part = int(prog.title[prog.title.rfind(' ')+1:])
-                        prog.title = prog.title[:prog.title.rfind(' ')].rstrip()
-                        if prog.sub_title:
-                            prog.sub_title = u'Teil %s: %s' % (part, prog.sub_title)
+                        part = int(title[title.rfind(' ')+1:])
+                        title = title[:title.rfind(' ')].rstrip()
+                        if sub_title:
+                            sub_title = u'Teil %s: %s' % (part, sub_title)
                         else:
-                            prog.sub_title = u'Teil %s' % part
+                            sub_title = u'Teil %s' % part
                     except Exception, e:
                         print 'Teil:', e
 
+            prog = TvProgram(channel_id, start, pdc_start, stop, title, sub_title, desc, categories, ratings)
+            prog.advisories = advisories
+            prog.date = date
             guide.add_program(prog)
         except:
             traceback.print_exc()
@@ -360,3 +361,15 @@ def timestr2secs_utc(timestr):
             timestr = timestr.replace('EST', '')
             secs    = time.mktime(strptime.strptime(timestr, xmltv.date_format))
     return secs
+
+
+if __name__ == '__main__':
+    xmltv_file = config.XMLTV_FILE
+    if len(sys.argv) > 1:
+        xmltv_file = sys.argv[1]
+    import pdb
+    pdb.set_trace()
+    guide = load_guide(True, xmltv_file)
+    print '%r' % (guide,)
+    print '%r' % (dir(guide),)
+    print '%r' % (guide.__dict__,)
