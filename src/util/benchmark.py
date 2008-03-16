@@ -39,43 +39,54 @@ class benchmark:
     """
     _indentation = 0
 
-    def __init__(self, reset=True):
+    def __init__(self, enabled=True):
         """ Contructs the benchmark class
-        @param reset: resets the timer a each call
+        @param enabled: enabledd the benchmark timings
         """
-        self.reset = reset
+        self.enabled = enabled
         self.start = time.time()
 
 
     def __call__(self, func):
-        def newfunc(*args, **kwargs):
-            indentation = '  ' * benchmark._indentation
-            benchmark._indentation += 1
-            if self.reset:
+        if self.enabled:
+            def newfunc(*args, **kwargs):
+                indentation = '  ' * benchmark._indentation
+                benchmark._indentation += 1
+                print '%s-> %s' % (indentation, func.__name__)
                 self.start = time.time()
-            print '%s-> %s' % (indentation, func.__name__)
-            try:
-                result = func(*args, **kwargs)
-            finally:
-                print '%s<- %s: %.3f' % (indentation, func.__name__, time.time() - self.start)
-                benchmark._indentation -= 1
-            return result
-        newfunc.__name__ = func.__name__
-        newfunc.__doc__ = func.__doc__
-        return newfunc
+                try:
+                    result = func(*args, **kwargs)
+                finally:
+                    print '%s<- %s: %.4f' % (indentation, func.__name__, time.time() - self.start)
+                    benchmark._indentation -= 1
+                return result
+            newfunc.__name__ = func.__name__
+            newfunc.__doc__ = func.__doc__
+            return newfunc
 
+        def origfunc(*args, **kwargs):
+            func(*args, **kwargs)
+        origfunc.__name__ = func.__name__
+        origfunc.__doc__ = func.__doc__
+        return origfunc
 
 
 if __name__ == '__main__':
 
     @benchmark(False)
+    def not_benchmarked():
+        """print a message"""
+        print 'not benchmarked'
+
+
+    @benchmark()
     def quickrunning(n):
         """Wait for n * 1us"""
         for i in range(n):
             time.sleep(0.000001)
 
 
-    @benchmark(False)
+    @benchmark()
     def longrunning(n):
         """Wait for n * 100ms"""
         quickrunning(n)
@@ -83,11 +94,13 @@ if __name__ == '__main__':
             time.sleep(0.1)
 
 
-    @benchmark(False)
+    @benchmark()
     def failure():
         """Generate an exception"""
         return 1/0
 
+    not_benchmarked()
+    print '__name__:', not_benchmarked.__name__
     longrunning(12)
     longrunning(2)
     print '__repr__:', longrunning
