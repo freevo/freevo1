@@ -138,12 +138,9 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def stop_saver(self):
         _debug_('stop_saver()', 1)
-        osd.mutex.acquire()
-        try:
-            self.stop_screensaver = True
+        self.stop_screensaver = True
+        if self.thread:
             self.thread.join()
-        finally:
-            osd.mutex.release()
 
 
     def __run__(self):

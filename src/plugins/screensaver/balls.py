@@ -81,12 +81,11 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def draw(self, screen):
-        _debug_('draw(screen=%r)' % (screen,), 1)
         black = (0,0,0)
         dirty = []
         osd.mutex.acquire()
         try:
-            screen.unlock()
+            screen.lock()
             for ball in self.balls:
                 ball.clear(screen, black)
                 dirty.append(ball.rectangle())
@@ -121,19 +120,16 @@ class Ball:
 
 
     def draw(self, screen):
-        _debug_('draw(screen=%r)' % (screen,), 1)
         pygame.draw.ellipse(screen, self.color, (int(self.x), int(self.y), self.w, self.h))
         pygame.draw.ellipse(screen, (255,255,255), (int(self.x), int(self.y), self.w, self.h), 1)
 
 
     def clear(self, screen, color):
-        _debug_('clear(screen=%r, color=%r)' % (screen, color), 1)
         pygame.draw.ellipse(screen, color, (int(self.x), int(self.y), self.w, self.h))
         pygame.draw.ellipse(screen, color, (int(self.x), int(self.y), self.w, self.h), 1)
 
 
     def update(self, width, height, walldeccel, floordeccel):
-        _debug_('update(width=%r, height=%r, walldeccel=%r, floordeccel=%r)' % (width, height, walldeccel, floordeccel), 1)
         # Update ball velocity
         self.hspeed = self.hspeed + self.haccel
         self.vspeed = self.vspeed + self.vaccel
@@ -187,5 +183,4 @@ class Ball:
 
 
     def rectangle(self):
-        _debug_('rectangle()', 1)
         return (int(self.x), int(self.y), self.w, self.h)
