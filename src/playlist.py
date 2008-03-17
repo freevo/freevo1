@@ -468,10 +468,12 @@ class Playlist(Item):
             else:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('playlist repeat off')))
 
-        if event in ( PLAYLIST_NEXT, PLAY_END, USER_END) \
-               and self.current_item and self.playlist:
-            pos = self.playlist.index(self.current_item)
-            pos = (pos+1) % len(self.playlist)
+        if event in (PLAYLIST_NEXT, PLAY_END, USER_END) and self.current_item and self.playlist:
+            try:
+                pos = self.playlist.index(self.current_item)
+                pos = (pos+1) % len(self.playlist)
+            except ValueError:
+                return True
 
             if pos or self.repeat:
                 if hasattr(self.current_item, 'stop'):
