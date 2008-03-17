@@ -807,7 +807,9 @@ class RecordServer:
         matches = []
         max_results = 500
 
-        if not find and not movies_only:
+        if find:
+            find = Unicode(find)
+        elif not movies_only:
             _debug_('nothing to find', DINFO)
             return (False, _('nothing to find'))
 
@@ -821,17 +823,14 @@ class RecordServer:
             for prog in ch.programs:
                 if now >= prog.stop:
                     continue
-                if not find or regex.match(prog.title) or regex.match(prog.desc) \
-                   or regex.match(prog.sub_title):
+                if not find or regex.match(prog.title) or regex.match(prog.desc) or regex.match(prog.sub_title):
                     if movies_only:
-                        # We can do better here than just look for the MPAA
-                        # rating.  Suggestions are welcome.
+                        # We can do better here than just look for the MPAA rating.
+                        # Suggestions are welcome.
                         if 'MPAA' in prog.utf2str().getattr('ratings').keys():
                             matches.append(prog.utf2str())
                             _debug_('PROGRAM MATCH 2: %s' % prog, DINFO)
                     else:
-                        # We should never get here if not find and not
-                        # movies_only.
                         matches.append(prog.utf2str())
                         _debug_('PROGRAM MATCH 3: %s' % prog, DINFO)
                 if len(matches) >= max_results:
@@ -839,9 +838,9 @@ class RecordServer:
 
         _debug_('Found %d matches.' % len(matches), DINFO)
 
-        if matches:
-            return (True, matches)
-        return (False, _('no programs match'))
+        if len(matches) == 0:
+            return (False, _('no programs match'))
+        return (True, matches)
 
 
     def updateGuide(self):

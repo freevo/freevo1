@@ -63,6 +63,13 @@ class GenreResource(FreevoResource):
         fv = HTMLResource()
         form = request.args
 
+        server_available = self.recordclient.pingNow()
+        if not server_available:
+            fv.printHeader(_('TV Genre for %s') % time.strftime('%a %b %d', time.localtime(mfrguidestart)), \
+                config.WWW_STYLESHEET, config.WWW_JAVASCRIPT)
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient.recordserverdown])
+            return String(fv.res)
+
         mfrguidestart = time.time()
         mfrguideinput = fv.formValue(form, 'stime')
         if mfrguideinput:
@@ -85,14 +92,9 @@ class GenreResource(FreevoResource):
 
         guide = tv.epg_xmltv.get_guide()
         (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-        if status:
-            program_list = schedule.getProgramList()
-
-        fv.printHeader(_('TV Genre for %s') % time.strftime('%a %b %d', time.localtime(mfrguidestart)), \
-            config.WWW_STYLESHEET, config.WWW_JAVASCRIPT)
-
-        if schedule is None:
-            fv.printMessages(['<b>'+_('ERROR')+'</b>: '+_('Recording server is not available')])
+        if not status:
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+_('No program schedule')])
+            return String(fv.res)
 
         allcategories = []
         for chan in guide.chan_list:
@@ -131,7 +133,7 @@ class GenreResource(FreevoResource):
             fv.printSearchForm()
             fv.printLinks()
             fv.printFooter()
-            return String( fv.res )
+            return String(fv.res)
 
         fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
         fv.tableRowOpen('class="chanrow"')
@@ -156,15 +158,14 @@ class GenreResource(FreevoResource):
 
                     # use counter to see if we have data
                     gotdata += 1
-                    if got_schedule:
-                        (result, reason) = self.recordclient.isProgScheduledNow(prog, schedule)
-                        if result:
-                            status = 'scheduled'
-                            really_now = time.time()
-                            if prog.start <= really_now and prog.stop >= really_now:
-                                # in the future we should REALLY see if it is
-                                # recording instead of just guessing
-                                status = 'recording'
+                    (result, reason) = self.recordclient.isProgScheduledNow(prog, schedule)
+                    if result:
+                        status = 'scheduled'
+                        really_now = time.time()
+                        if prog.start <= really_now and prog.stop >= really_now:
+                            # in the future we should REALLY see if it is
+                            # recording instead of just guessing
+                            status = 'recording'
 
                     fv.tableRowOpen('class="chanrow"')
                     fv.tableCell(chan.displayname, 'class="channel"')
@@ -235,7 +236,7 @@ class GenreResource(FreevoResource):
         fv.res += "<iframe id='hidden' style='visibility: hidden; width: 1px; height: 1px'></iframe>\n"
         fv.printFooter()
 
-        return String( fv.res )
+        return String(fv.res)
 
 
 resource = GenreResource()

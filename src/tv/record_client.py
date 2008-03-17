@@ -261,7 +261,7 @@ class RecordClientActions:
         return result
 
 
-    def findMatchesNow(self, title=None, movies_only=None):
+    def findMatchesNow(self, title=None, movies_only=False):
         """ See if a programme is a favourite """
         _debug_('findMatchesNow(title=%r, movies_only=%r)' % (title, movies_only), 1)
         inprogress = self._recordserver_rpc('findMatches', title, movies_only)

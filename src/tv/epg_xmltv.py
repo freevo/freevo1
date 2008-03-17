@@ -235,14 +235,14 @@ def load_guide(XMLTV_FILE=None):
             continue
         try:
             channel_id = p['channel']
-            date = 'date' in p and Unicode(p['date']) or None
-            start = None
-            pdc_start = None
-            stop = None
+            date = 'date' in p and Unicode(p['date']) or ''
+            start = ''
+            pdc_start = ''
+            stop = ''
             title = Unicode(p['title'][0][0])
-            desc = 'desc' in p and Unicode(util.format_text(p['desc'][0][0])) or None
-            sub_title = 'sub-title' in p and Unicode(p['sub-title'][0][0]) or None
-            categories = 'category' in p and [ cat[0] for cat in p['category'] ] or None
+            desc = 'desc' in p and Unicode(util.format_text(p['desc'][0][0])) or ''
+            sub_title = 'sub-title' in p and Unicode(p['sub-title'][0][0]) or ''
+            categories = 'category' in p and [ cat[0] for cat in p['category'] ] or ''
             advisories = []
             ratings = {}
 

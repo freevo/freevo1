@@ -287,7 +287,7 @@ class ProgramItem(Item):
             for prog in matches:
                 items.append(ProgramItem(self.parent, prog, context='search'))
         elif matches == 'no matches':
-                # there have been no matches
+            # there have been no matches
             msgtext = _('No matches found for %s') % self.title
             AlertBox(text=msgtext).show()
             return
