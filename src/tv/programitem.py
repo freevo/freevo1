@@ -1,8 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# guide_ProgramItem - Information and actions for TvPrograms.
+# Information and actions for TvPrograms.
 # -----------------------------------------------------------------------
-# $Id:
+# $Id$
 #
 # Todo:
 # Notes:
@@ -63,7 +63,7 @@ class ProgramItem(Item):
         self.context= context
 
         if hasattr(prog, 'name'): self.name = self.title = prog.name
-        if hasattr(prog, 'title'): self.title = self.name = prog.title
+        if hasattr(prog, 'title'): self.title = self.name = Unicode(prog.title)
         if hasattr(prog, 'sub_title'): self.sub_title = prog.sub_title
         if hasattr(prog, 'desc'): self.description = prog.desc
         if hasattr(prog, 'categories'):self.categories = prog.categories
@@ -275,10 +275,8 @@ class ProgramItem(Item):
         pop.show()
         # do the search
         (status, matches) = self.recordclient.findMatchesNow(self.title)
-        # we are ready -> kill the popup message
         pop.destroy()
         if status:
-            # we have been successful!
             items = []
             _debug_('search found %s matches' % len(matches), 1)
             # sort by start times

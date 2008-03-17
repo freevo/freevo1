@@ -44,13 +44,13 @@ class TvProgram:
     """
     def __init__(self, channel_id='', start=0, pdc_start=0, stop=0, title='', sub_title='', desc='', categories=[], ratings={}):
         _debug_('TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)' % (channel_id, start, stop, title), 1)
-        self.title      = title
         self.channel_id = channel_id
-        self.desc       = desc
-        self.sub_title  = sub_title
         self.start      = start
         self.pdc_start  = pdc_start
         self.stop       = stop
+        self.title      = title
+        self.desc       = desc
+        self.sub_title  = sub_title
         self.ratings    = ratings
         self.advisories = []
         self.categories = categories
