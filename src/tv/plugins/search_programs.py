@@ -65,7 +65,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         self._type = 'mainmenu_tv'
         self.parent = None
 
-    
+
     def items(self, parent):
         self.parent = parent
         return [SearchPrograms(parent)]

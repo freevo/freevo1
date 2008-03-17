@@ -182,7 +182,7 @@ class Recorder:
 
 class RecordApp(childapp.ChildApp):
     """
-    Class to 
+    Record application class
     """
     def __init__(self, app):
         _debug_('RecordApp.__init__(app=%r)' % (app), 1)
@@ -195,7 +195,7 @@ class RecordApp(childapp.ChildApp):
 
 class Record_Thread(threading.Thread):
     """
-    Class to
+    Record thread to handle the recording states
     """
     def __init__(self):
         _debug_('Record_Thread.__init__()', 1)
