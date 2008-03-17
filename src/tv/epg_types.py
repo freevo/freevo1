@@ -160,22 +160,27 @@ class TvChannel:
     """
     Holds information about a TV channel
     """
-    #id = ''
-    #displayname = ''
-    #tunerid = ''
-    #logo = ''
-    #times = None
-    #programs = None
-
-    def __init__(self, id, displayname, tunerid, logo='', times=[]):
+    def __init__(self, id, displayname, tunerid):
         """ Copy the programs that are inside the indicated time bracket """
-        _debug_('TvChannel.__init__(id=%r, displayname=%r, tunerid=%r, logo=%r, times=%r)' % (id, displayname, tunerid, logo, times), 1)
+        _debug_('TvChannel.__init__(id=%r, displayname=%r, tunerid=%r)' % (id, displayname, tunerid), 1)
         self.id = id
         self.displayname = displayname
         self.tunerid = tunerid
-        self.logo = logo
-        self.times = times
+        self.logo = ''
+        self.times = []
         self.programs = []
+
+
+    def set_logo(self, logo):
+        """ Sets the channels logo """
+        _debug_('TvChannel.set_logo(logo=%r)' % (logo,), 1)
+        self.logo = logo
+
+
+    def set_times(self, times):
+        """ Sets the times list """
+        _debug_('TvChannel.set_times(times=%r)' % (times,), 1)
+        self.times = times
 
 
     def set_programs(self, programs):
@@ -203,7 +208,7 @@ class TvChannel:
 
 
     def __repr__(self):
-        return '<TvChannel %r %r>' % (self.id, self.displayname)
+        return '<TvChannel %r %r %r>' % (self.id, self.displayname, self.tunerid)
 
 
 
@@ -274,8 +279,10 @@ class TvGuide:
             if channel_id and chan.id != channel_id:
                 continue
 
-            c = TvChannel(chan.id, chan.displayname, chan.tunerid, chan.logo, chan.times)
+            c = TvChannel(chan.id, chan.displayname, chan.tunerid)
             # Copy the programs that are inside the indicated time bracket
+            c.set_logo(chan.logo)
+            c.set_times(chan.times)
             f = lambda p, a=start, b=stop: not (p.start > b or p.stop < a)
             c.set_programs(filter(f, chan.programs))
 
