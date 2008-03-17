@@ -443,7 +443,7 @@ def create_tv_pickle():
     sys.__stdout__.flush()
 
     import tv.epg_xmltv
-    tv.epg_xmltv.get_guide(verbose=False)
+    tv.epg_xmltv.get_guide()
     print 'done'
 
 def print_help():

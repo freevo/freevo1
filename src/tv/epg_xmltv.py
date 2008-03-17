@@ -62,7 +62,7 @@ class EpgException(Exception):
 cached_guide = None
 
 
-def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
+def get_guide(popup=None, XMLTV_FILE=None):
     """
     Get a TV guide from memory cache, file cache or raw XMLTV file.
     Tries to return at least the channels from the config file if there
@@ -83,10 +83,8 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
 
         got_cached_guide = False
         if (os.path.isfile(XMLTV_FILE) and
-            os.path.isfile(pname) and (os.path.getmtime(pname) >
-                                       os.path.getmtime(XMLTV_FILE))):
-            if verbose:
-                _debug_('XMLTV, reading cached file (%s)' % pname)
+            os.path.isfile(pname) and (os.path.getmtime(pname) > os.path.getmtime(XMLTV_FILE))):
+            _debug_('XMLTV, reading cached file (%s)' % pname)
 
             if popup:
                 popup.show()
@@ -97,24 +95,19 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
             try:
                 epg_ver = cached_guide.EPG_VERSION
             except AttributeError:
-                if verbose:
-                    _debug_('EPG does not have a version number, must be reloaded')
-                    print dir(cached_guide)
+                _debug_('EPG does not have a version number, must be reloaded')
 
             if epg_ver != EPG_VERSION:
-                if verbose:
-                    _debug_('EPG version missmatch, must be reloaded')
+                _debug_('EPG version missmatch, must be reloaded')
 
             elif cached_guide.timestamp != os.path.getmtime(XMLTV_FILE):
                 # Hmmm, weird, there is a pickled file newer than the TV.xml
                 # file, but the timestamp in it does not match the TV.xml
                 # timestamp. We need to reload!
-                if verbose:
-                    _debug_('EPG: Pickled file timestamp mismatch, reloading!')
+                _debug_('EPG: Pickled file timestamp mismatch, reloading!')
 
             else:
-                if verbose:
-                    _debug_('XMLTV, got cached guide (version %s).' % epg_ver)
+                _debug_('XMLTV, got cached guide (version %s).' % epg_ver)
                 got_cached_guide = True
 
         if not got_cached_guide:
@@ -123,10 +116,9 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
             if popup:
                 popup.show()
 
-            if verbose:
-                _debug_('XMLTV, trying to read raw file (%s)' % XMLTV_FILE)
+            _debug_('XMLTV, trying to read raw file (%s)' % XMLTV_FILE)
             try:
-                cached_guide = load_guide(verbose, XMLTV_FILE)
+                cached_guide = load_guide(XMLTV_FILE)
             except:
                 # Don't violently crash on a incomplete or empty TV.xml please.
                 cached_guide = None
@@ -138,6 +130,7 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
                 # Replace config.XMLTV_FILE before we save the pickle in order
                 # to avoid timestamp confision.
                 if XMLTV_FILE != config.XMLTV_FILE:
+                    _debug_('copying %r -> %r' % (XMLTV_FILE, config.XMLTV_FILE), DINFO)
                     shutil.copyfile(XMLTV_FILE, config.XMLTV_FILE)
                     os.unlink(XMLTV_FILE)
                     cached_guide.timestamp = os.path.getmtime(config.XMLTV_FILE)
@@ -155,7 +148,7 @@ def get_guide(popup=None, verbose=True, XMLTV_FILE=None):
     return cached_guide
 
 
-def load_guide(verbose=True, XMLTV_FILE=None):
+def load_guide(XMLTV_FILE=None):
     """
     Load a guide from the raw XMLTV file using the xmltv.py support lib.
     Returns a TvGuide or None if an error occurred
@@ -177,8 +170,7 @@ def load_guide(verbose=True, XMLTV_FILE=None):
     # Add the channels that are in the config list, or all if the
     # list is empty
     if config.TV_CHANNELS:
-        if verbose:
-            _debug_('epg_xmltv.py: Only adding channels in list')
+        _debug_('Only adding channels in TV_CHANNELS to TvGuide')
 
         for data in config.TV_CHANNELS:
             (id, displayname, tunerid) = data[:3]
@@ -193,8 +185,8 @@ def load_guide(verbose=True, XMLTV_FILE=None):
 
 
     else: # Add all channels in the XMLTV file
-        if verbose:
-            _debug_('epg_xmltv.py: Adding all channels')
+        _debug_('Adding all channels to TvGuide')
+
         xmltv_channels = None
         if gotfile:
             # Don't read the channel info unless we have to, takes a long time!
@@ -208,24 +200,22 @@ def load_guide(verbose=True, XMLTV_FILE=None):
             id = chan['id'].encode(config.LOCALE, 'ignore')
             if ' ' in id:
                 # Assume the format is "TUNERID CHANNELNAME"
-                displayname = id.split()[1]   # XXX Educated guess
                 tunerid = id.split()[0]       # XXX Educated guess
+                displayname = id.split()[1]   # XXX Educated guess
             else:
-                displayname = chan['display-name'][0][0]
-                if ' ' in displayname:
-                    displayname = displayname.split()[1]
-                    tunerid = displayname.split()[0]
+                display_name = chan['display-name'][0][0]
+                if ' ' in display_name:
+                    tunerid = display_name.split()[0]
+                    displayname = display_name.split()[1]
                 else:
-                    displayname = displayname
-                    tunerid = _('REPLACE WITH TUNERID FOR %s') % displayname
-            c = TvChannel(id, displayname, tunerid)
+                    tunerid = _('REPLACE WITH TUNERID FOR %s') % display_name
 
+            c = TvChannel(id, displayname, tunerid)
             guide.add_channel(c)
 
     xmltv_programs = None
     if gotfile:
-        if verbose:
-            _debug_('reading \"%s\" xmltv data' % XMLTV_FILE)
+        _debug_('reading \"%s\" xmltv data' % XMLTV_FILE)
         f = util.gzopen(XMLTV_FILE)
         xmltv_programs = xmltv.read_programmes(f)
         f.close()
@@ -234,13 +224,11 @@ def load_guide(verbose=True, XMLTV_FILE=None):
     if not xmltv_programs:
         return guide    # Return the guide, it has the channels at least...
 
-
     needed_ids = []
     for chan in guide.chan_dict:
         needed_ids.append(chan)
 
-    if verbose:
-        _debug_('creating guide for %s' % needed_ids)
+    _debug_('creating guide for %s' % needed_ids)
 
     for p in xmltv_programs:
         if not p['channel'] in needed_ids:
@@ -367,9 +355,12 @@ if __name__ == '__main__':
     xmltv_file = config.XMLTV_FILE
     if len(sys.argv) > 1:
         xmltv_file = sys.argv[1]
+    print '%r' % xmltv_file
     import pdb
     pdb.set_trace()
-    guide = load_guide(True, xmltv_file)
+    guide = load_guide(xmltv_file)
     print '%r' % (guide,)
-    print '%r' % (dir(guide),)
-    print '%r' % (guide.__dict__,)
+    for channel in guide.chan_list:
+        print '  %r' % channel
+        for program in channel.programs:
+            print '    %r' % program

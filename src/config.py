@@ -911,10 +911,8 @@ def detect_channels():
         import pickle
 
     file = XMLTV_FILE
-    path = FREEVO_CACHEDIR
-    pfile = 'xmltv_channels.pickle'
 
-    pname = os.path.join(path, pfile)
+    pname = os.path.join(FREEVO_CACHEDIR, 'xmltv_channels.pickle')
 
     if not os.path.isfile(file):
         if not HELPER:

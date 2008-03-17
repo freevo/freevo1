@@ -42,24 +42,6 @@ class TvProgram:
     """
     Holds information about a TV programme
     """
-    channel_id = None
-    title      = None
-    desc       = None
-    sub_title  = None
-    start      = None
-    pdc_start  = None
-    stop       = None
-    ratings    = None
-    advisories = None
-    categories = None
-    date       = None
-    # this information is added by the recordserver
-    scheduled  = None
-    overlap    = None
-    previouslyRecorded = None
-    allowDuplicates = None
-    onlyNew = None
-
     def __init__(self, channel_id='', start=0, pdc_start=0, stop=0, title='', sub_title='', desc='', categories=[], ratings={}):
         _debug_('TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)' % (channel_id, start, stop, title), 1)
         self.title      = title
@@ -74,8 +56,7 @@ class TvProgram:
         self.categories = categories
         self.date       = None
 
-        # Due to problems with Twisted's marmalade this should not be changed
-        # to a boolean type.
+        # this information is added by the recordserver
         self.scheduled  = 0
         self.overlap    = 0
         self.previouslyRecorded = 0
@@ -179,22 +160,22 @@ class TvChannel:
     """
     Holds information about a TV channel
     """
-    id = '' 
-    displayname = '' 
-    tunerid = '' 
-    logo = ''
-    times = None 
-    programs = None 
+    #id = ''
+    #displayname = ''
+    #tunerid = ''
+    #logo = ''
+    #times = None
+    #programs = None
 
-    def __init__(self, id, displayname, tunerid, logo='', times=[], programs=[]):
+    def __init__(self, id, displayname, tunerid, logo='', times=[]):
         """ Copy the programs that are inside the indicated time bracket """
-        _debug_('TvChannel.__init__(id=%r, displayname=%r, tunerid=%r, logo=%r, times=%r, programs=%r)' % (id, displayname, tunerid, logo, times, programs), 1)
+        _debug_('TvChannel.__init__(id=%r, displayname=%r, tunerid=%r, logo=%r, times=%r)' % (id, displayname, tunerid, logo, times), 1)
         self.id = id
         self.displayname = displayname
         self.tunerid = tunerid
         self.logo = logo
         self.times = times
-        self.programs = programs
+        self.programs = []
 
 
     def set_programs(self, programs):
@@ -229,13 +210,10 @@ class TvChannel:
 class TvGuide:
     """
     """
-    chan_dict = None
-    chan_list = None
-    timestamp = 0.0
-
     def __init__(self):
         _debug_('TvGuide.__init__()', 1)
         # These two types map to the same channel objects
+        timestamp = 0.0
         self.chan_dict = {}   # Channels mapped using the id
         self.chan_list = []   # Channels, ordered
         self.EPG_VERSION = EPG_VERSION
@@ -275,7 +253,7 @@ class TvGuide:
         """
         Get all programs that occur at least partially between the start and stop
         timeframe.
-        
+
         @param start: is 0, get all programs from the start.
         @param stop: is 2147483647, get all programs until the end.
         @param channel_id: can be used to select a channel id, all channels are returned otherwise.
@@ -296,7 +274,7 @@ class TvGuide:
             if channel_id and chan.id != channel_id:
                 continue
 
-            c = TvChannel(chan.id, chan.displayname, chan.tunerid, chan.logo, chan.times, programs=[])
+            c = TvChannel(chan.id, chan.displayname, chan.tunerid, chan.logo, chan.times)
             # Copy the programs that are inside the indicated time bracket
             f = lambda p, a=start, b=stop: not (p.start > b or p.stop < a)
             c.set_programs(filter(f, chan.programs))
