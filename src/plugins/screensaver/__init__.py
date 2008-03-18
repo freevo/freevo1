@@ -139,7 +139,7 @@ class PluginInterface(plugin.DaemonPlugin):
     def stop_saver(self):
         _debug_('stop_saver()', 1)
         self.stop_screensaver = True
-        if self.thread:
+        if hasattr(self, 'thread') and self.thread:
             self.thread.join()
 
 

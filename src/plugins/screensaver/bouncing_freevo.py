@@ -74,7 +74,6 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def draw(self, screen):
-        _debug_('draw(screen=%r)' % (screen,), 1)
         osd.mutex.acquire()
         try:
             black = (0,0,0)
