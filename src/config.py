@@ -63,7 +63,7 @@ DCRITICAL = -3
 
 locale.setlocale(locale.LC_TIME, '')
 
-if float(sys.version[0:3]) >= 2.3:
+if sys.hexversion >= 0x02030000:
     import warnings
     warnings.simplefilter("ignore", category=FutureWarning)
     warnings.simplefilter("ignore", category=DeprecationWarning)
@@ -319,15 +319,21 @@ def print_help():
 HELPER          = 0
 IS_RECORDSERVER = 0
 IS_WEBSERVER    = 0
+IS_ENCODINGSERVER = 0
+IS_RSSSERVER = 0
 
 __builtin__.__dict__['__freevo_app__'] = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 
 if sys.argv[0].find('main.py') == -1:
     HELPER=1
-if sys.argv[0].find('recordserver.py') != -1:
-    IS_RECORDSERVER = 1
-elif sys.argv[0].find('webserver.py') != -1:
-    IS_WEBSERVER = 1
+    if sys.argv[0].find('recordserver.py') != -1:
+        IS_RECORDSERVER = 1
+    elif sys.argv[0].find('webserver.py') != -1:
+        IS_WEBSERVER = 1
+    elif sys.argv[0].find('encodingserver.py') != -1:
+        IS_ENCODINGSERVER = 1
+    elif sys.argv[0].find('rssserver.py') != -1:
+        IS_RSSSERVER = 1
 
 #
 # Send debug to stdout as well as to the logfile?
@@ -496,8 +502,7 @@ __builtin__.__dict__['DINFO'] = DINFO
 #
 # Config file handling
 #
-cfgfilepath = ['.', os.path.expanduser('~/.freevo'), '/etc/freevo',
-                '/usr/local/etc/freevo']
+cfgfilepath = ['.', os.path.expanduser('~/.freevo'), '/etc/freevo', '/usr/local/etc/freevo']
 
 
 #

@@ -38,16 +38,6 @@ import sys, time
 import traceback
 import signal
 
-import config
-import rc
-rc.get_singleton(is_helper=0)
-
-# i18n support
-
-# First load the xml module. It's not needed here but it will mess
-# up with the domain we set (set it from freevo 4Suite). By loading it
-# first, Freevo will override the 4Suite setting to freevo
-
 try:
     from xml.utils import qp_xml
     from xml.dom import minidom
@@ -61,11 +51,14 @@ try:
     import kaa.metadata as mmpython
     import kaa.imlib2 as Image
 
+    import config
+    import rc
+    rc.get_singleton(is_helper=0)
 
-except ImportError, i:
+except ImportError, why:
     print 'Can\'t find all Python dependencies:'
-    print i
-    if str(i)[-7:] == 'Numeric':
+    print why
+    if str(why)[-7:] == 'Numeric':
         print 'You need to recompile pygame after installing Numeric!'
     print
     print 'Not all requirements of Freevo are installed on your system.'
