@@ -21,6 +21,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 == Release 1.7.7 (2008-03-23) ==
 --------------------------------
 
+ * New Polish translation (F#1919792)
  * New atlantice skin (F#1907139)
  * New DVD to disk back-up plug-in (F#1892278)
  * New PDA control with feedback client and upd plug-in (F#1890855)
