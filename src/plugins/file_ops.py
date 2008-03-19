@@ -97,8 +97,8 @@ class PluginInterface(plugin.ItemPlugin):
     def safe_unlink(self, filename):
         try:
             os.unlink(filename)
-        except:
-            print 'can\'t delete %s' % filename
+        except Exception, why:
+            print 'can\'t delete %r: %s' % (filename, why)
 
     def delete_file(self):
         self.item.files.delete()

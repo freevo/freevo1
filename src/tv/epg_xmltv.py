@@ -356,8 +356,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         xmltv_file = sys.argv[1]
     print '%r' % xmltv_file
-    import pdb
-    pdb.set_trace()
+    # To break in the debugger uncomment the following two lines
+    #import pdb
+    #pdb.set_trace()
     guide = load_guide(xmltv_file)
     print '%r' % (guide,)
     for channel in guide.chan_list:
