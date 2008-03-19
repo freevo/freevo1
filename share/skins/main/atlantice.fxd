@@ -172,9 +172,9 @@
 
         <menuset label="text with info style" inherits="normal text style">
             <!-- 4. listing area: the list of all items -->
-            <view layout="view no border" x="45" y="125" width="260" height="230" align="left"/>
-            <listing x="30" y="350" width="710" height="200"/>
-            <info layout="video info" x="320" y="105" width="430" height="240"/>
+            <view layout="view no border" x="25" y="105" width="260" height="230" align="left"/>
+            <listing x="30" y="350" width="410" height="200"/>
+            <info layout="video info" x="280" y="90" width="550" height="230"/>
             <title visible="no"/>
         </menuset>
 
@@ -1029,13 +1029,13 @@
         <font label="white" name="Sansumi-DemiBold.ttf" size="16" color="0xAAAAAA"/>
         <font label="grey big" name="Sansumi-DemiBold.ttfd" size="18" color="0xdddddd"/>
         <font label="white big" name="Sansumi-DemiBold.ttf" size="18" color="0xAAAAAA"/>
-        <font label="list" name="Sansumi-DemiBold.ttf" size="12" color="0xAAAAAA"/>
-        <font label="list selected" name="Sansumi-DemiBold.ttf" size="13" color="0xfddf80"/>
+        <font label="list" name="Sansumi-DemiBold.ttf" size="13" color="0xAAAAAA"/>
+        <font label="list selected" name="Sansumi-DemiBold.ttf" size="15" color="0xfddf80"/>
         
         <!-- info area -->
         <font label="info plot"    name="Sansumi-DemiBold.ttf" size="13" color="0xAAAAAA"/>
-        <font label="video plot"   name="Sansumi-DemiBold.ttf" size="10" color="0xAAAAAA"/>
-        <font label="info tagline" name="Sansumi-DemiBold.ttf" size="16" color="0xFFFFFF"/>
+        <font label="video plot"   name="Sansumi-DemiBold.ttf" size="13" color="0xAAAAAA"/>
+        <font label="info tagline" name="Sansumi-DemiBold.ttf" size="15" color="0xFFFFFF"/>
         <font label="image tagline" name="Sansumi-DemiBold.ttf" size="12" color="0xfddf80"/>
         <font label="video tagline" name="Sansumi-DemiBold.ttf" size="16" color="0xfddf80"/>
         <font label="info label"   name="Sansumi-DemiBold.ttf" size="14" color="0xAAAAAA"/>
