@@ -124,7 +124,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] in ('-h', '--help'):
             help(sys.argv)
-            exit(0)
+            sys.exit(0)
         config.TV_RECORD_SCHEDULE = sys.argv[1]
     if len(sys.argv) > 2:
         config.TV_RECORD_FAVORITES = sys.argv[2]
