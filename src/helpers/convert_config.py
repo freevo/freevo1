@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# convert_config.py - This is the Freevo helper module
+# Helper modules to convert a local_conf.py to the latest standard
 # -----------------------------------------------------------------------
 # $Id$
 #

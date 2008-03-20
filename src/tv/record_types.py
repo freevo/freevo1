@@ -173,10 +173,10 @@ class ScheduledRecordings:
             self.favorites = pickle.load(favorites_fh)
             favorites_fh.close()
         except IOError, why:
-            _debug_('loadFavorites: %s' % why, DWARNING)
+            _debug_('%s' % (why,), DWARNING)
             return {}
         except EOFError, why:
-            _debug_('loadFavorites: %s' % why, DWARNING)
+            _debug_('%s' % (why,), DWARNING)
             return {}
         except Exception, why:
             import traceback
