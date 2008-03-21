@@ -30,6 +30,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
  * Updated cd_burn plug-in to support play lists (F#1901175)
  * Updated dvbstreamer to allow the live pause to use a remote server (F#1915730)
  * Updated dvdbackup to allow customized menus (F#1890499)
+ * Updated makelircrc helper to allow include files (F#1922045)
  * Updated playlist to process "#EXTINF" comments in m3u files (F#1890203)
  * Updated Russian translation (B#1889826)
  * Updated tv guide with scheduled to record and favorite icons (F#1886621)
