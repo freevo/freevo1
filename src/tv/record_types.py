@@ -51,7 +51,7 @@ class ScheduledRecordings:
     """
     def __init__(self):
         """ """
-        _debug_('ScheduledRecordings.__init__()', 1)
+        _debug_('ScheduledRecordings.__init__()', 2)
         self.TYPES_VERSION = TYPES_VERSION
         self.program_list = {}
         self.manual_recordings = self.loadManualRecordings()
@@ -79,7 +79,7 @@ class ScheduledRecordings:
 
     def loadRecordSchedule(self):
         """ Load the tv recording schedule from a pickle file """
-        _debug_('loadRecordSchedule()', 1)
+        _debug_('loadRecordSchedule()', 2)
         # may need to use a critical section here
         recordSchedule = None
         try:
@@ -104,7 +104,7 @@ class ScheduledRecordings:
         global schedule_locked
         if schedule_locked:
             return
-        _debug_('saveRecordSchedule()', 1)
+        _debug_('saveRecordSchedule()', 2)
         try:
             schedule_fh = open(config.TV_RECORD_SCHEDULE, 'wb')
             pickle.dump(self, schedule_fh)
@@ -119,24 +119,24 @@ class ScheduledRecordings:
 
     def addProgram(self, prog, key=None):
         """ """
-        _debug_('addProgram(%r, key=%r)' % (prog, key), 1)
+        _debug_('addProgram(%r, key=%r)' % (prog, key), 2)
         if not self.program_list.has_key(key):
             self.program_list[key] = prog
-            _debug_('%s "%s" added' % (key, prog), 1)
+            _debug_('%s "%s" added' % (key, prog), 2)
         else:
             _debug_('We already know about this recording \"%s\"' % (key), DINFO)
-        _debug_('"%s" items' % len(self.program_list), 1)
+        _debug_('"%s" items' % len(self.program_list), 2)
 
 
     def removeProgram(self, prog, key=None):
         """ """
-        _debug_('removeProgram(%r, key=%r)' % (prog, key), 1)
+        _debug_('removeProgram(%r, key=%r)' % (prog, key), 2)
         if self.program_list.has_key(key):
             del self.program_list[key]
-            _debug_('%s "%s" removed' % (key, prog), 1)
+            _debug_('%s "%s" removed' % (key, prog), 2)
         else:
             _debug_('We do not know about this recording \"%s\"' % (prog), DINFO)
-        _debug_('"%s" items' % len(self.program_list), 1)
+        _debug_('"%s" items' % len(self.program_list), 2)
 
 
     def getProgramList(self):
@@ -147,25 +147,25 @@ class ScheduledRecordings:
 
     def setProgramList(self, pl):
         """ """
-        _debug_('setProgramList(pl=%r)' % (pl,), 1)
+        _debug_('setProgramList(pl=%r)' % (pl,), 2)
         self.program_list = pl
 
 
     def loadManualRecordings(self):
         """ Load the manual recordings from a file """
-        _debug_('loadManualRecordings()', 1)
+        _debug_('loadManualRecordings()', 2)
         return {}
 
 
     def saveManualRecordings(self):
         """ Save the manual recordings to a file """
-        _debug_('saveManualRecordings()', 1)
+        _debug_('saveManualRecordings()', 2)
         pass
 
 
     def loadFavorites(self):
         """ Load the favourites from a file """
-        _debug_('loadFavorites()', 1)
+        _debug_('loadFavorites()', 2)
         # may need to use a critical section here
         self.favorites = {}
         try:
@@ -187,7 +187,7 @@ class ScheduledRecordings:
 
     def saveFavorites(self):
         """ Save the favourties to a file """
-        _debug_('saveFavorites()', 1)
+        _debug_('saveFavorites()', 2)
         # save the favourites as a pickle file
         try:
             favorites_fh = open(config.TV_RECORD_FAVORITES, 'wb')
@@ -213,11 +213,11 @@ class ScheduledRecordings:
 
     def addFavorite(self, fav):
         """ """
-        _debug_('addFavorite(fav=%r)' % (fav,), 1)
+        _debug_('addFavorite(fav=%r)' % (fav,), 2)
         if self.favorites and self.favorites.has_key(fav.name):
             _debug_('We already have a favorite called "%s"' % String(fav.name), DINFO)
             return
-        _debug_('added favorite "%s"' % String(fav.name), 1)
+        _debug_('added favorite "%s"' % String(fav.name), 2)
         if self.favorites is None:
             self.favorites = {}
         self.favorites[fav.name] = fav
@@ -226,11 +226,11 @@ class ScheduledRecordings:
 
     def removeFavorite(self, name):
         """ """
-        _debug_('removeFavorite(name=%r)' % (name,), 1)
+        _debug_('removeFavorite(name=%r)' % (name,), 2)
         if not self.favorites.has_key(name):
             _debug_('We do not have a favorite called "%s"' % String(name), DINFO)
             return
-        _debug_('removed favorite: %s' % String(name), 1)
+        _debug_('removed favorite: %s' % String(name), 2)
         del self.favorites[name]
         self.saveFavorites()
 
@@ -238,7 +238,7 @@ class ScheduledRecordings:
     def updateFavorite(self, oldname, fav):
         """ Remove old favourite if exists and add new favourite
         """
-        _debug_('updateFavorite(oldname=%r, fav=%r)' % (oldname, fav), 1)
+        _debug_('updateFavorite(oldname=%r, fav=%r)' % (oldname, fav), 2)
         if oldname:
             self.removeFavorite(name)
         self.addFavourite(fav)
@@ -246,19 +246,19 @@ class ScheduledRecordings:
 
     def getFavorites(self):
         """ """
-        _debug_('getFavorites()', 1)
+        _debug_('getFavorites()', 2)
         return self.favorites
 
 
     def setFavorites(self, favs):
         """ """
-        _debug_('setFavorites(favs=%r)' % (favs,), 1)
+        _debug_('setFavorites(favs=%r)' % (favs,), 2)
         self.favorites = favs
 
 
     def setFavoritesList(self, favs):
         """ """
-        _debug_('setFavoritesList(favs=%r)' % (favs,), 1)
+        _debug_('setFavoritesList(favs=%r)' % (favs,), 2)
         newfavs = {}
         for fav in favs:
             if not newfavs.has_key(fav.name):
@@ -268,7 +268,7 @@ class ScheduledRecordings:
 
     def clearFavorites(self):
         """ """
-        _debug_('clearFavorites()', 1)
+        _debug_('clearFavorites()', 2)
         self.favorites = {}
 
 
@@ -279,7 +279,7 @@ class Favorite:
     def __init__(self, name=None, prog=None, exactchan=False, exactdow=False, exacttod=False, priority=0,
         allowDuplicates=True, onlyNew=False):
         """ """
-        _debug_('Favorite.__init__(self, name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % (name, prog, exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew), 1)
+        _debug_('Favorite.__init__(self, name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % (name, prog, exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew), 2)
         self.TYPES_VERSION = TYPES_VERSION
 
         self.name = name
@@ -325,7 +325,7 @@ class ScheduledTvProgram:
 
     def __init__(self):
         """ """
-        _debug_('ScheduledTvProgram.__init__()', 1)
+        _debug_('ScheduledTvProgram.__init__()', 2)
         self.tunerid      = None
         self.isRecording  = False
         self.isFavorite   = False

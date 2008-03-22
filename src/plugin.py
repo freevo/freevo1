@@ -351,9 +351,9 @@ def shutdown(plugin_name=None):
     for key in __plugin_type_list__:
         for p in __plugin_type_list__[key]:
             if (not plugin_name or p.plugin_name == plugin_name) and hasattr(p, 'shutdown'):
-                _debug_('shutting down plugin %r %r' % (p.plugin_name, key), 1)
+                _debug_('shutting down plugin %r %r' % (p.plugin_name, key), 2)
                 p.shutdown()
-                _debug_('shut down plugin %r' % p.plugin_name, 1)
+                _debug_('shut down plugin %r' % p.plugin_name, 2)
 
 
 def get(type):

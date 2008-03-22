@@ -331,7 +331,7 @@ def unix_signal_handler(sig, frame):
     """
     Unix signal handler to shut down freevo
     """
-    _debug_('unix_signal_handler(sig=%r, frame=%r)' % (sig, frame), 1)
+    _debug_('unix_signal_handler(sig=%r, frame=%r)' % (sig, frame), 2)
     global _shutting_down
     if _shutting_down:
         return
@@ -342,7 +342,7 @@ def signal_handler():
     """
     the signal handler to shut down freevo
     """
-    _debug_('signal_handler()', 1)
+    _debug_('signal_handler()', 2)
     global _shutting_down
     if _shutting_down:
         return

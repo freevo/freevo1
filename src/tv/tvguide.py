@@ -58,7 +58,7 @@ class TVGuide(Item):
     Class for TVGuide
     """
     def __init__(self, start_time, player, menuw):
-        _debug_('TVGuide.__init__(start_time=%r, player=%r, menuw=%r)' % (start_time, player, menuw), 1)
+        _debug_('TVGuide.__init__(start_time=%r, player=%r, menuw=%r)' % (start_time, player, menuw), 2)
         Item.__init__(self)
 
         # get skin definitions of the TVGuide
@@ -130,11 +130,11 @@ class TVGuide(Item):
 
         reload the list of scheduled programs and check for overlapping
         """
-        _debug_('update_schedules(force=%r)' % (force,), 1)
+        _debug_('update_schedules(force=%r)' % (force,), 2)
         if not force and self.last_update + 60 > time.time():
             return
 
-        _debug_('update schedule', 1)
+        _debug_('update schedule', 2)
         self.last_update = time.time()
         self.scheduled_programs = []
         self.overlap_programs = []
@@ -355,7 +355,7 @@ class TVGuide(Item):
         """
         jump to now in the tv guide.
         """
-        _debug_('jump_to_now(old_selected=%r)' % (old_selected,), 1)
+        _debug_('jump_to_now(old_selected=%r)' % (old_selected,), 2)
         start_time = time.time()
         stop_time = start_time + self.hours_per_page * 60 * 60
         start_channel = self.start_channel
@@ -376,7 +376,7 @@ class TVGuide(Item):
         """
         advance the tv guide by the number of hours that is passed in arg.
         """
-        _debug_('advance_tv_guide(hours=%r)' % (hours,), 1)
+        _debug_('advance_tv_guide(hours=%r)' % (hours,), 2)
         new_start_time = self.start_time + (hours * 60 * 60)
         new_end_time =  self.stop_time + (hours * 60 * 60)
         start_channel = self.start_channel
@@ -399,7 +399,7 @@ class TVGuide(Item):
         This is neccessary we change the set of programs that have to be
         displayed, this is the case when the user moves around in the menu.
         """
-        _debug_('rebuild(start_time=%r, stop_time=%r, start_channel=%r, selected=%r)' % (start_time, stop_time, start_channel, selected), 1)
+        _debug_('rebuild(start_time=%r, stop_time=%r, start_channel=%r, selected=%r)' % (start_time, stop_time, start_channel, selected), 2)
         self.guide = tv.epg_xmltv.get_guide()
         channels = self.guide.get_programs(start_time+1, stop_time-1)
 
@@ -475,7 +475,7 @@ class TVGuide(Item):
         """
         Move to the next program
         """
-        _debug_('change_program(value=%r, full_scan=%r)' % (value, full_scan), 1)
+        _debug_('change_program(value=%r, full_scan=%r)' % (value, full_scan), 2)
         start_time    = self.start_time
         stop_time     = self.stop_time
         start_channel = self.start_channel
@@ -545,7 +545,7 @@ class TVGuide(Item):
         """
         Move to the next channel
         """
-        _debug_('change_channel(value=%r)' % (value,), 1)
+        _debug_('change_channel(value=%r)' % (value,), 2)
         start_time    = self.start_time
         stop_time     = self.stop_time
         start_channel = self.start_channel

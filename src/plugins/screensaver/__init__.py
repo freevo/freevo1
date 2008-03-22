@@ -56,7 +56,7 @@ class PluginInterface(plugin.DaemonPlugin):
     """
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 1)
+        _debug_('PluginInterface.__init__()', 2)
         plugin.DaemonPlugin.__init__(self)
         self.event_listener = True
         self.poll_menu_only = True
@@ -71,7 +71,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def config(self):
-        _debug_('config()', 1)
+        _debug_('config()', 2)
         return [
             ('SCREENSAVER_DELAY', 300, '# of seconds to wait to start saver.'),
             ('SCREENSAVER_CYCLE_TIME', 60, '# of seconds to run a screensaver before starting another saver.')
@@ -83,7 +83,7 @@ class PluginInterface(plugin.DaemonPlugin):
         eventhandler to handle the events. Always return False since we
         are just a listener and really can't send back True.
         """
-        _debug_('eventhandler(event=%r, menuw=%r, arg=%r)' % (event.name, menuw, arg), 1)
+        _debug_('eventhandler(event=%r, menuw=%r, arg=%r)' % (event.name, menuw, arg), 2)
         if menuw:
             self.menuw = menuw
 
@@ -119,12 +119,12 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def shutdown(self):
-        _debug_('shutdown()', 1)
+        _debug_('shutdown()', 2)
         self.stop_saver()
 
 
     def start_saver(self):
-        _debug_('start_saver()', 1)
+        _debug_('start_saver()', 2)
         self.screensaver_showing = True
         if self.plugins is None:
             self.plugins = plugin.get('screensaver')
@@ -137,14 +137,14 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def stop_saver(self):
-        _debug_('stop_saver()', 1)
+        _debug_('stop_saver()', 2)
         self.stop_screensaver = True
         if hasattr(self, 'thread') and self.thread:
             self.thread.join()
 
 
     def __run__(self):
-        _debug_('__run__()', 1)
+        _debug_('__run__()', 2)
         current_saver = None
         index = 0
         plugins_count = len(self.plugins)
@@ -178,7 +178,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def __run_screensaver__(self, screensaver):
-        _debug_('__run_screensaver__(screensaver=%r)' % (screensaver.plugin_name,), 1)
+        _debug_('__run_screensaver__(screensaver=%r)' % (screensaver.plugin_name,), 2)
         try:
             fps = screensaver.start(osd.width, osd.height)
 
@@ -208,13 +208,13 @@ class PluginInterface(plugin.DaemonPlugin):
 
 class ScreenSaverPlugin(plugin.Plugin):
     def __init__(self):
-        _debug_('ScreenSaverPlugin.__init__()', 1)
+        _debug_('ScreenSaverPlugin.__init__()', 2)
         plugin.Plugin.__init__(self)
         self._type = 'screensaver'
 
 
     def start(self, width, height):
-        _debug_('start(width=%r, height=%r)' % (width, height), 1)
+        _debug_('start(width=%r, height=%r)' % (width, height), 2)
         """
         Initialise the screensaver before each run.
         Returns the number of frames per second the saver
@@ -224,7 +224,7 @@ class ScreenSaverPlugin(plugin.Plugin):
 
 
     def stop(self):
-        _debug_('stop()', 1)
+        _debug_('stop()', 2)
         """
         Deinitialise the screensaver after each run.
         """
@@ -236,5 +236,5 @@ class ScreenSaverPlugin(plugin.Plugin):
         Draw a frame onto the supplied surface called
         every 1/fps seconds (where fps was returned by start())
         """
-        _debug_('draw(surface=%r)' % (surface,), 1)
+        _debug_('draw(surface=%r)' % (surface,), 2)
         pass

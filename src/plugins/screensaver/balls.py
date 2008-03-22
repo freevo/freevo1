@@ -45,13 +45,13 @@ class PluginInterface(ScreenSaverPlugin):
     A bouncing balls screensaver
     """
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 1)
+        _debug_('PluginInterface.__init__()', 2)
         ScreenSaverPlugin.__init__(self)
         self.plugin_name = 'screensaver.balls'
         self.fps = config.BALLS_FPS
 
     def config(self):
-        _debug_('config()', 1)
+        _debug_('config()', 2)
         return [
             ('BALLS_FPS', 25, 'Frames per second'),
             ('BALLS_MAX_BALLS', 100, 'Maximum number of balls'),
@@ -60,7 +60,7 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def start(self, width, height):
-        _debug_('start(width=%r, height=%r)' % (width, height), 1)
+        _debug_('start(width=%r, height=%r)' % (width, height), 2)
         self.width = width
         self.height = height
         ballcount = randint(1, 100)
@@ -101,7 +101,7 @@ class PluginInterface(ScreenSaverPlugin):
 class Ball:
 
     def __init__(self):
-        _debug_('Ball.__init__()', 1)
+        _debug_('Ball.__init__()', 2)
         self.name = 'ball'
         self.x = 100.0
         self.y = 100.0

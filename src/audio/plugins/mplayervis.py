@@ -173,7 +173,7 @@ class MpvGoom(BaseAnimation):
 
     def set_fullscreen(self):
         """ Set the mode to full screen """
-        _debug_('set_fullscreen()', 1)
+        _debug_('set_fullscreen()', 2)
         #w = config.CONF.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
         #w = int(float(w) * config.IMAGEVIEWER_ASPECT)
         w = config.CONF.width
@@ -186,7 +186,7 @@ class MpvGoom(BaseAnimation):
         x = int(config.CONF.width - w) / 2
         y = int(config.CONF.height - h) / 2
 
-        _debug_('x=%r y=%r w=%r h=%r' % (x, y, w, h), 1)
+        _debug_('x=%r y=%r w=%r h=%r' % (x, y, w, h), 2)
         self.set_resolution(x, y, w, h, 0)
 
 
@@ -197,7 +197,7 @@ class MpvGoom(BaseAnimation):
         @param info: text to draw
         @param timeout: how long to display
         """
-        _debug_('set_info(info=%r, timeout==%r)' % (info, timeout), 1)
+        _debug_('set_info(info=%r, timeout==%r)' % (info, timeout), 2)
 
         font = skin.get_font('widget')
         w = font.stringsize(info)

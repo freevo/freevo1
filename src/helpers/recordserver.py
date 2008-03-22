@@ -143,7 +143,7 @@ class RecordServer:
 
     @kaa.rpc.expose('isRecording')
     def isRecording(self):
-        _debug_('isRecording()', 1)
+        _debug_('isRecording()', 2)
         recording = glob.glob(config.FREEVO_CACHEDIR + '/record.*')
         return (len(recording) > 0, recording)
 
@@ -200,7 +200,7 @@ class RecordServer:
             _debug_('%s is recording %s stopping at %s' % (prog.title, recording and 'yes' or 'no', endtime), 2)
 
             if now > prog.stop + config.TV_RECORD_PADDING_POST:
-                _debug_('%s: finished %s > %s' % (prog.title, time.strftime('%H:%M:%S', timenow), endtime), 1)
+                _debug_('%s: finished %s > %s' % (prog.title, time.strftime('%H:%M:%S', timenow), endtime), 2)
                 continue
 
             if not recording:
@@ -223,7 +223,7 @@ class RecordServer:
         @todo: real player running test, check /dev/videoX.  This could go into the
         upsoon client
         """
-        _debug_('isPlayerRunning()', 1)
+        _debug_('isPlayerRunning()', 2)
         res = (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
         _debug_('isPlayerRunning=%r' % (res), 2)
         return res
@@ -279,7 +279,7 @@ class RecordServer:
     #@kaa.rpc.expose('saveScheduledRecordings')
     def saveScheduledRecordings(self, schedule=None):
         """ Save the schedule to disk """
-        _debug_('saveScheduledRecordings(schedule=%r)' % (schedule), 1)
+        _debug_('saveScheduledRecordings(schedule=%r)' % (schedule), 2)
 
         if not schedule:
             _debug_('making a new ScheduledRecordings', DINFO)
@@ -300,7 +300,7 @@ class RecordServer:
 
     def loadPreviouslyRecordedShows(self):
         """ Load the saved set of recorded shows """
-        _debug_('loadPreviouslyRecordedShows()', 1)
+        _debug_('loadPreviouslyRecordedShows()', 2)
         if self.previouslyRecordedShows:
             return
 
@@ -314,7 +314,7 @@ class RecordServer:
 
     def savePreviouslyRecordedShows(self):
         """ Save the set of recorded shows """
-        _debug_('savePreviouslyRecordedShows()', 1)
+        _debug_('savePreviouslyRecordedShows()', 2)
         if not self.previouslyRecordedShows:
             return
 
@@ -324,7 +324,7 @@ class RecordServer:
 
     def newEpisode(self, prog=None):
         """ Return true if this is a new episode of 'prog' """
-        _debug_('newEpisode(prog=%r)' % (prog,), 1)
+        _debug_('newEpisode(prog=%r)' % (prog,), 2)
         todayStr = datetime.date.today().strftime('%Y%m%d')
         progStr = str(prog.date)
         _debug_('Program Date: "%s"' % progStr, DINFO)
@@ -437,7 +437,7 @@ class RecordServer:
 
 
     def addRecordingToSchedule(self, prog=None, inputSchedule=None):
-        _debug_('addRecordingToSchedule(%r, inputSchedule=%r)' % (prog, inputSchedule), 1)
+        _debug_('addRecordingToSchedule(%r, inputSchedule=%r)' % (prog, inputSchedule), 2)
         if inputSchedule:
             schedule = inputSchedule
         else:
@@ -450,7 +450,7 @@ class RecordServer:
 
 
     def removeRecordingFromSchedule(self, prog=None, inputSchedule=None):
-        _debug_('removeRecordingFromSchedule(%r, inputSchedule=%r)' % (prog, inputSchedule), 1)
+        _debug_('removeRecordingFromSchedule(%r, inputSchedule=%r)' % (prog, inputSchedule), 2)
         if inputSchedule:
             schedule = inputSchedule
         else:
@@ -675,7 +675,7 @@ class RecordServer:
 
     @kaa.rpc.expose('scheduleRecording')
     def scheduleRecording(self, prog=None):
-        _debug_('scheduleRecording(%r)' % (prog,), 1)
+        _debug_('scheduleRecording(%r)' % (prog,), 2)
         global guide
 
         if prog is None:
@@ -729,7 +729,7 @@ class RecordServer:
 
     @kaa.rpc.expose('removeScheduledRecording')
     def removeScheduledRecording(self, prog=None):
-        _debug_('removeScheduledRecording(prog=%r)' % (prog,), 1)
+        _debug_('removeScheduledRecording(prog=%r)' % (prog,), 2)
         if prog is None:
             return (False, _('program is not set'))
 
@@ -762,7 +762,7 @@ class RecordServer:
 
     @kaa.rpc.expose('isProgScheduled')
     def isProgScheduled(self, prog, schedule=None):
-        _debug_('isProgScheduled(prog=%r, schedule=%r)' % (prog, schedule), 1)
+        _debug_('isProgScheduled(prog=%r, schedule=%r)' % (prog, schedule), 2)
 
         if schedule is None:
             schedule = self.getScheduledRecordings()
@@ -780,7 +780,7 @@ class RecordServer:
 
     @kaa.rpc.expose('findProg')
     def findProg(self, chan=None, start=None):
-        _debug_('findProg(chan=%r, start=%r' % (chan, start), 1)
+        _debug_('findProg(chan=%r, start=%r' % (chan, start), 2)
         global guide
 
         if chan is None or start is None:
@@ -801,7 +801,7 @@ class RecordServer:
 
     @kaa.rpc.expose('findMatches')
     def findMatches(self, find=None, movies_only=False):
-        _debug_('findMatches(find=%r, movies_only=%r)' % (find, movies_only), 1)
+        _debug_('findMatches(find=%r, movies_only=%r)' % (find, movies_only), 2)
         global guide
 
         matches = []
@@ -850,12 +850,12 @@ class RecordServer:
 
 
     def addFavoritesToSchedule(self):
-        _debug_('addFavoritesToSchedule()', 1)
+        _debug_('addFavoritesToSchedule()', 2)
         pass
 
 
     def checkToRecord(self):
-        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 1)
+        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 2)
         rec_cmd = None
         rec_prog = None
         cleaned = None
@@ -990,7 +990,7 @@ class RecordServer:
 
     @kaa.rpc.expose('addFavorite')
     def addFavorite(self, name, prog, exactchan=False, exactdow=False, exacttod=False):
-        _debug_('addFavorite(name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r)' % (name, prog, exactchan, exactdow, exacttod), 1)
+        _debug_('addFavorite(name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r)' % (name, prog, exactchan, exactdow, exacttod), 2)
         if not name:
             return (False, _('no favorite name'))
 
@@ -1008,7 +1008,7 @@ class RecordServer:
 
     @kaa.rpc.expose('addEditedFavorite')
     def addEditedFavorite(self, name, title, chan, dow, mod, priority, allowDuplicates, onlyNew):
-        _debug_('addEditedFavorite(name=%r, title=%r, chan=%r, dow=%r, mod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % (name, title, chan, dow, mod, priority, allowDuplicates, onlyNew), 1)
+        _debug_('addEditedFavorite(name=%r, title=%r, chan=%r, dow=%r, mod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % (name, title, chan, dow, mod, priority, allowDuplicates, onlyNew), 2)
         fav = tv.record_types.Favorite()
 
         fav.name = name
@@ -1030,7 +1030,7 @@ class RecordServer:
 
     @kaa.rpc.expose('removeFavorite')
     def removeFavorite(self, name=None):
-        _debug_('removeFavorite(name=%r)' % (name), 1)
+        _debug_('removeFavorite(name=%r)' % (name), 2)
         if name is None:
             return (False, _('name is not set'))
 
@@ -1045,7 +1045,7 @@ class RecordServer:
 
     @kaa.rpc.expose('clearFavorites')
     def clearFavorites(self):
-        _debug_('clearFavorites()', 1)
+        _debug_('clearFavorites()', 2)
         schedule = self.getScheduledRecordings()
         schedule.clearFavorites()
         self.saveScheduledRecordings(schedule)
@@ -1055,13 +1055,13 @@ class RecordServer:
 
     @kaa.rpc.expose('getFavorites')
     def getFavorites(self):
-        _debug_('getFavorites()', 1)
+        _debug_('getFavorites()', 2)
         return self.getScheduledRecordings().getFavorites()
 
 
     @kaa.rpc.expose('getFavorite')
     def getFavorite(self, name):
-        _debug_('getFavorite(name=%r)' % (name), 1)
+        _debug_('getFavorite(name=%r)' % (name), 2)
         favs = self.getFavorites()
 
         if favs.has_key(name):
@@ -1073,7 +1073,7 @@ class RecordServer:
 
     @kaa.rpc.expose('adjustPriority')
     def adjustPriority(self, favname, mod=0):
-        _debug_('adjustPriority(favname=%r, mod=%r)' % (favname, mod), 1)
+        _debug_('adjustPriority(favname=%r, mod=%r)' % (favname, mod), 2)
         save = []
         mod = int(mod)
         (status, me) = self.getFavorite(favname)
@@ -1118,7 +1118,7 @@ class RecordServer:
     @kaa.rpc.expose('getFavoriteObject')
     def getFavoriteObject(self, prog, favs=None):
         """ more liberal favorite check that returns an object """
-        _debug_('getFavoriteObject(prog=%r, favs=%r)' % (prog, favs), 1)
+        _debug_('getFavoriteObject(prog=%r, favs=%r)' % (prog, favs), 2)
         if not favs:
             favs = self.getFavorites()
         # first try the strict test
@@ -1136,7 +1136,7 @@ class RecordServer:
 
     @kaa.rpc.expose('isProgAFavorite')
     def isProgAFavorite(self, prog, favs=None):
-        #_debug_('isProgAFavorite(prog=%s, favs=%r)' % (prog, favs), 1)
+        #_debug_('isProgAFavorite(prog=%s, favs=%r)' % (prog, favs), 2)
         _debug_('isProgAFavorite(%s)' % (prog,), 2)
         if not favs:
             favs = self.getFavorites()
@@ -1162,7 +1162,7 @@ class RecordServer:
 
 
     def doesFavoriteRecordOnlyNewEpisodes(self, prog, favs=None):
-        _debug_('doesFavoriteRecordOnlyNewEpisodes(prog=%r, favs=%r)' % (prog, favs), 1)
+        _debug_('doesFavoriteRecordOnlyNewEpisodes(prog=%r, favs=%r)' % (prog, favs), 2)
         if not favs:
             favs = self.getFavorites()
         for fav in favs.values():
@@ -1175,7 +1175,7 @@ class RecordServer:
 
 
     def doesFavoriteAllowDuplicates(self, prog, favs=None):
-        _debug_('doesFavoriteAllowDuplicates(prog=%r, favs=%r)' % (prog, favs), 1)
+        _debug_('doesFavoriteAllowDuplicates(prog=%r, favs=%r)' % (prog, favs), 2)
         if not favs:
             favs = self.getFavorites()
         for fav in favs.values():
@@ -1189,7 +1189,7 @@ class RecordServer:
 
     @kaa.rpc.expose('removeFavoriteFromSchedule')
     def removeFavoriteFromSchedule(self, fav):
-        _debug_('removeFavoriteFromSchedule(fav=%r)' % (fav), 1)
+        _debug_('removeFavoriteFromSchedule(fav=%r)' % (fav), 2)
         # TODO: make sure the program we remove is not
         #       covered by another favorite.
 
@@ -1210,7 +1210,7 @@ class RecordServer:
 
     @kaa.rpc.expose('addFavoriteToSchedule')
     def addFavoriteToSchedule(self, fav):
-        _debug_('addFavoriteToSchedule(fav=%r)' % (fav), 1)
+        _debug_('addFavoriteToSchedule(fav=%r)' % (fav), 2)
         global guide
         favs = {}
         favs[fav.name] = fav
@@ -1231,7 +1231,7 @@ class RecordServer:
     def updateFavoritesSchedule(self):
         #  TODO: do not re-add a prog to record if we have
         #        previously decided not to record it.
-        _debug_('updateFavoritesSchedule()', 1)
+        _debug_('updateFavoritesSchedule()', 2)
 
         global guide
 
@@ -1282,7 +1282,7 @@ class RecordServer:
 
 
     def create_fxd(self, rec_prog):
-        _debug_('create_fxd(rec_prog=%r)' % (rec_prog,), 1)
+        _debug_('create_fxd(rec_prog=%r)' % (rec_prog,), 2)
         from util.fxdimdb import FxdImdb, makeVideo
         fxd = FxdImdb()
 

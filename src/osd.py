@@ -1402,7 +1402,7 @@ class OSD:
                 try:
                     pygame.display.update(rect)
                 except:
-                    _debug_('osd.update(rect) failed, bad rect? - %s' % str(rect), 1)
+                    _debug_('osd.update(rect) failed, bad rect? - %s' % str(rect), 2)
                     _debug_('updating whole screen')
                     pygame.display.flip()
             else:

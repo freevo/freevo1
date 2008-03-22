@@ -225,7 +225,7 @@ class PluginInterface(plugin.DaemonPlugin):
         Processes events, detect the video start and stop events so that the
         alert box will work correctly
         """
-        _debug_('event_handler(event=%r)' % (event.name), 1)
+        _debug_('event_handler(event=%r)' % (event.name), 2)
         try:
             _debug_('event_handler(%s) name=%s arg=%s context=%s handler=%s' % \
                 (event, event.name, event.arg, event.context, event.handler), 2)

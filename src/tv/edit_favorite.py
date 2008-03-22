@@ -187,7 +187,7 @@ class EditFavorite(PopupBox):
 
 
     def removeFavorite(self):
-        _debug_('removeFavorite()', 1)
+        _debug_('removeFavorite()', 2)
         (result, reason) = self.recordclient.removeFavoriteNow(self.oldname)
         if result:
             searcher = None
@@ -207,7 +207,7 @@ class EditFavorite(PopupBox):
 
 
     def eventhandler(self, event, menuw=None):
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 1)
+        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
 
         if self.get_selected_child() == self.name_input:
             if event == em.INPUT_LEFT:

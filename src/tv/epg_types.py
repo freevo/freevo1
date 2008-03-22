@@ -43,7 +43,7 @@ class TvProgram:
     Holds information about a TV programme
     """
     def __init__(self, channel_id='', start=0, pdc_start=0, stop=0, title='', sub_title='', desc='', categories=[], ratings={}):
-        _debug_('TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)' % (channel_id, start, stop, title), 1)
+        _debug_('TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)' % (channel_id, start, stop, title), 2)
         self.channel_id = channel_id
         self.start      = start
         self.pdc_start  = pdc_start
@@ -162,7 +162,7 @@ class TvChannel:
     """
     def __init__(self, id, displayname, tunerid):
         """ Copy the programs that are inside the indicated time bracket """
-        _debug_('TvChannel.__init__(id=%r, displayname=%r, tunerid=%r)' % (id, displayname, tunerid), 1)
+        _debug_('TvChannel.__init__(id=%r, displayname=%r, tunerid=%r)' % (id, displayname, tunerid), 2)
         self.id = id
         self.displayname = displayname
         self.tunerid = tunerid
@@ -173,25 +173,25 @@ class TvChannel:
 
     def set_logo(self, logo):
         """ Sets the channels logo """
-        _debug_('TvChannel.set_logo(logo=%r)' % (logo,), 1)
+        _debug_('TvChannel.set_logo(logo=%r)' % (logo,), 2)
         self.logo = logo
 
 
     def set_times(self, times):
         """ Sets the times list """
-        _debug_('TvChannel.set_times(times=%r)' % (times,), 1)
+        _debug_('TvChannel.set_times(times=%r)' % (times,), 2)
         self.times = times
 
 
     def set_programs(self, programs):
         """ Sets the programs list """
-        _debug_('TvChannel.set_programs(programs=%r)' % (programs,), 1)
+        _debug_('TvChannel.set_programs(programs=%r)' % (programs,), 2)
         self.programs = programs
 
 
     def sort(self):
         """ Sort the programs so that the earliest is first in the list """
-        _debug_('TvChannel.sort(), displayname=%r' % (self.displayname,), 1)
+        _debug_('TvChannel.sort(), displayname=%r' % (self.displayname,), 2)
         f = lambda a, b: cmp(a.start, b.start)
         self.programs.sort(f)
 
@@ -216,7 +216,7 @@ class TvGuide:
     """
     """
     def __init__(self):
-        _debug_('TvGuide.__init__()', 1)
+        _debug_('TvGuide.__init__()', 2)
         # These two types map to the same channel objects
         timestamp = 0.0
         self.chan_dict = {}   # Channels mapped using the id
@@ -225,7 +225,7 @@ class TvGuide:
 
 
     def add_channel(self, channel):
-        _debug_('add_channel(channel=%r)' % (channel,), 1)
+        _debug_('add_channel(channel=%r)' % (channel,), 2)
         if channel.id in self.chan_dict:
             return
         # Add the channel to both the dictionary and the list. This works
@@ -236,7 +236,7 @@ class TvGuide:
 
     def add_program(self, program):
         """ The channel must be present, or the program is silently dropped """
-        _debug_('add_program(program=%r)' % (program,), 1)
+        _debug_('add_program(program=%r)' % (program,), 2)
         if program.channel_id not in self.chan_dict:
             return
         programs = self.chan_dict[program.channel_id].programs
@@ -295,7 +295,7 @@ class TvGuide:
 
     def sort(self):
         """ Sort all channel programs in time order """
-        _debug_('TvGuide.sort()', 1)
+        _debug_('TvGuide.sort()', 2)
         for chan in self.chan_list:
             chan.sort()
 
@@ -317,7 +317,7 @@ class ChannelCache:
     This class caches the list of channels for get_programs
     """
     def __init__(self):
-        _debug_('ChannelCache.__init__()', 1)
+        _debug_('ChannelCache.__init__()', 2)
         self.channel_id = None
         self.timestamp = float(0)
         self.start = None
@@ -330,7 +330,7 @@ class ChannelCache:
         """
         Reset the cache to empty
         """
-        _debug_('reset(start=%r, stop=%r, channel_id=%r)' % (start, stop, channel_id), 1)
+        _debug_('reset(start=%r, stop=%r, channel_id=%r)' % (start, stop, channel_id), 2)
         self.channel_id = channel_id
         if self.channel_id is None:
             self.timestamp = float(time.time())
@@ -344,7 +344,7 @@ class ChannelCache:
         """
         Add a channel to the cache
         """
-        _debug_('add(channel_id=%r, channel=%r)' % (channel_id, channel), 1)
+        _debug_('add(channel_id=%r, channel=%r)' % (channel_id, channel), 2)
         if self.channel_id is None:
             self.channel_ids.append(channel_id)
             self.channels.append(channel)
@@ -358,7 +358,7 @@ class ChannelCache:
         @param channel_id: the channel to fetch from the cache
         @returns: None if the cache is out of date otherwise the list of channels
         """
-        _debug_('cached(start=%r, stop=%r, channel_id=%r)' % (start, stop, channel_id), 1)
+        _debug_('cached(start=%r, stop=%r, channel_id=%r)' % (start, stop, channel_id), 2)
         if time.time() - self.timestamp > 20:
             #print 'cache is out of date: %r' % int(time.time() - self.timestamp)
             return None

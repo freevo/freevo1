@@ -215,7 +215,7 @@ def hash_fxd_movie_database():
             print
             return 0
 
-    _debug_("Building the xml hash database...", 1)
+    _debug_("Building the xml hash database...", 2)
 
     files = []
     if not config.VIDEO_ONLY_SCAN_DATADIR:
@@ -246,5 +246,5 @@ def hash_fxd_movie_database():
                 for fo in info.__fxd_files_options__:
                     discset_information[fo['file-id']] = fo['mplayer-options']
 
-    _debug_('done', 1)
+    _debug_('done', 2)
     return 1

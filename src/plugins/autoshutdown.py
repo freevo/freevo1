@@ -593,7 +593,7 @@ def __cleanup_freevo():
     """
     Performs necessary actions for freevo shutdown
     """
-    _debug_('__cleanup_freevo()', 1)
+    _debug_('__cleanup_freevo()', 2)
     import osd
     import plugin
     import rc
@@ -612,16 +612,16 @@ def __cleanup_freevo():
         osd.update()
         time.sleep(0.5)
     # shutdown all daemon plugins
-    _debug_('plugin.shutdown()', 1)
+    _debug_('plugin.shutdown()', 2)
     plugin.shutdown()
     # shutdown registered callbacks
-    _debug_('rc.shutdown()', 1)
+    _debug_('rc.shutdown()', 2)
     rc.shutdown()
     if not config.HELPER:
         # shutdown the screen
-        _debug_('osd.clearscreen(color=osd.COL_BLACK)', 1)
+        _debug_('osd.clearscreen(color=osd.COL_BLACK)', 2)
         osd.clearscreen(color=osd.COL_BLACK)
-        _debug_('osd.shutdown()', 1)
+        _debug_('osd.shutdown()', 2)
         osd.shutdown()
 
 

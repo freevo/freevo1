@@ -205,7 +205,7 @@ class VideoItem(Item):
         if len(self.possible_players) > 0:
             # choose the best player as default player
             self.player_rating, self.player = self.possible_players[0]
-        _debug_("url=%r possible_players=%r" % (self.url, self.possible_players,), 1)
+        _debug_("url=%r possible_players=%r" % (self.url, self.possible_players,), 2)
 
 
     def id(self):

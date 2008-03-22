@@ -55,7 +55,7 @@ class ChildApp:
         """
         Initialise ChildApp
         """
-        _debug_('ChildApp.__init__(app=%r, debugname=%r, doeslogging=%r)' % (app, debugname, doeslogging), 1)
+        _debug_('ChildApp.__init__(app=%r, debugname=%r, doeslogging=%r)' % (app, debugname, doeslogging), 2)
         # Use a non reentrant lock, stops kill being called twice
         self.lock = threading.Lock()
         self.status = None
@@ -172,7 +172,7 @@ class ChildApp:
 
     # Write a string to the app.
     def write(self, line):
-        _debug_('ChildApp.write(line=%r) to pid %s' % (line.strip('\n'), self.child.pid), 1)
+        _debug_('ChildApp.write(line=%r) to pid %s' % (line.strip('\n'), self.child.pid), 2)
         #self.shild.communicate(line)
         self.child.stdin.write(line)
         self.child.stdin.flush()
@@ -209,7 +209,7 @@ class ChildApp:
         """
         Kill the application
         """
-        _debug_('ChildApp.kill(signal=%r)' % (signal), 1)
+        _debug_('ChildApp.kill(signal=%r)' % (signal), 2)
         # killed already
         if not hasattr(self, 'child'):
             _debug_('This should never happen!', DERROR)
@@ -332,7 +332,7 @@ class ChildApp2(ChildApp):
         """
         event to send on stop
         """
-        _debug_('ChildApp2.stop_event()', 1)
+        _debug_('ChildApp2.stop_event()', 2)
         return PLAY_END
 
 
@@ -340,7 +340,7 @@ class ChildApp2(ChildApp):
         """
         stop the child
         """
-        _debug_('ChildApp2.stop(cmd=%r)' % (cmd), 1)
+        _debug_('ChildApp2.stop(cmd=%r)' % (cmd), 2)
         rc.unregister(self.poll)
         rc.unregister(self.stop)
 
@@ -404,7 +404,7 @@ class Read_Thread(threading.Thread):
 
 
     def run(self):
-        _debug_('Read_Thread.run()', 1)
+        _debug_('Read_Thread.run()', 2)
         try:
             self._handle_input()
         except (IOError, ValueError):
@@ -412,7 +412,7 @@ class Read_Thread(threading.Thread):
 
 
     def _handle_input(self):
-        _debug_('Read_Thread._handle_input()', 1)
+        _debug_('Read_Thread._handle_input()', 2)
         saved = ''
         while 1:
             data = self.fh.readline(300)

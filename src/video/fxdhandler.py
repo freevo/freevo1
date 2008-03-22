@@ -337,7 +337,7 @@ def parse_mplayer_options(fxd, node):
     @returns: a dictionary of mplayer options
     """
     mplayer_options = {}
-    _debug_('parse_mplayer_mplayer_options(fxd=%r, node=%r)' % (fxd, node), 1)
+    _debug_('parse_mplayer_mplayer_options(fxd=%r, node=%r)' % (fxd, node), 2)
     item = VideoItem('', fxd.getattr(None, 'parent', None), parse=False)
     print 'item=%r' % (item.__dict__)
 

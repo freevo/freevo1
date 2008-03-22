@@ -502,7 +502,7 @@ class Playlist(Item):
                     try:
                         self.current_item.stop()
                     except OSError:
-                        _debug_('ignore playlist event', 1)
+                        _debug_('ignore playlist event', 2)
                         return True
                 pos = (pos-1) % len(self.playlist)
                 self.current_item = self.playlist[pos]

@@ -335,7 +335,7 @@ class ConfigurePluginsResource(FreevoResource):
     def SortPlugins(self):
         '''
         '''
-        _debug_('SortPlugins(self=%r)' % (self), 1)
+        _debug_('SortPlugins(self=%r)' % (self), 2)
         sorted = []
         for plugin in self.all_plugins:
             pgrp = plugin[0].split('.')[0]

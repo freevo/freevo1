@@ -57,7 +57,7 @@ class ProgramItem(Item):
     """
     def __init__(self, parent, prog, context='menu'):
         Item.__init__(self, parent, skin_type='video')
-        _debug_('__init__(parent=%r, prog=%r, context=%r)' % (parent, prog, context), 1)
+        _debug_('__init__(parent=%r, prog=%r, context=%r)' % (parent, prog, context), 2)
         # prog is a TvProgram object as we get it from the recordserver
         self.prog = prog
         self.context= context
@@ -88,7 +88,7 @@ class ProgramItem(Item):
 
     def actions(self):
         """ List of actions """
-        _debug_('actions()', 1)
+        _debug_('actions()', 2)
         #list of entries for the menu
         items = []
 
@@ -133,7 +133,7 @@ class ProgramItem(Item):
 
     def play(self, arg=None, menuw=None):
         """ Start watching TV """
-        _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # watching TV should only be possible from the guide
         if not self.context == 'guide':
             rc.post_event(MENU_SELECT)
@@ -174,13 +174,13 @@ class ProgramItem(Item):
 
     def show_description(self, arg=None, menuw=None):
         """ View a full scrollable description of the program.  """
-        _debug_('show_description(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('show_description(arg=%r, menuw=%r)' % (arg, menuw), 2)
         ShowProgramDetails(menuw, self)
 
 
     def toggle_rec(self, arg=None, menuw=None):
         """ Schedule or unschedule this program, depending on its current status """
-        _debug_('toggle_rec(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('toggle_rec(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if self.scheduled:
             # remove this program from schedule it it is already scheduled
             self.remove_program(menuw=menuw)
@@ -193,7 +193,7 @@ class ProgramItem(Item):
 
     def schedule_program(self, arg=None, menuw=None):
         """ Add a program to schedule """
-        _debug_('schedule_program(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('schedule_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # schedule the program
         (status, reason) = self.recordclient.scheduleRecordingNow(self.prog)
         if status:
@@ -212,7 +212,7 @@ class ProgramItem(Item):
 
     def remove_program(self, arg=None, menuw=None):
         """ Remove a program from schedule """
-        _debug_('remove_program(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('remove_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # remove the program
         (status, reason) = self.recordclient.removeScheduledRecordingNow(self.prog)
         if status:
@@ -231,12 +231,12 @@ class ProgramItem(Item):
 
     def add_favorite(self, arg=None, menuw=None):
         """ Add a program to favorites """
-        _debug_('add_favorite(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('add_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if menuw:
             menuw.delete_submenu(refresh=False)
         # create a favorite
         fav = Favorite(self.title, self.prog, True, True, True, -1, True, False)
-        _debug_('self.title=%r, self.prog=%r, fav.__dict__=%r)' % (self.title, self.prog, fav.__dict__), 1)
+        _debug_('self.title=%r, self.prog=%r, fav.__dict__=%r)' % (self.title, self.prog, fav.__dict__), 2)
         # and a favorite item which represents the submen
         fav_item = FavoriteItem(self, fav, fav_action='add')
         # and open that submenu
@@ -247,7 +247,7 @@ class ProgramItem(Item):
         """
         Edit the settings of a favorite
         """
-        _debug_('edit_favorite(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('edit_favorite(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if menuw:
             menuw.delete_submenu(refresh=False)
 
@@ -267,10 +267,10 @@ class ProgramItem(Item):
         """
         Find more of this program
         """
-        _debug_('find_more(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('find_more(arg=%r, menuw=%r)' % (arg, menuw), 2)
 
         # this might take some time, thus we open a popup messages
-        _debug_(String('searching for: %s' % self.title), 1)
+        _debug_(String('searching for: %s' % self.title), 2)
         pop = PopupBox(text=_('Searching, please wait...'))
         pop.show()
         # do the search
@@ -278,7 +278,7 @@ class ProgramItem(Item):
         pop.destroy()
         if status:
             items = []
-            _debug_('search found %s matches' % len(matches), 1)
+            _debug_('search found %s matches' % len(matches), 2)
             # sort by start times
             f = lambda a, b: cmp(a.start, b.start)
             matches.sort(f)
@@ -308,7 +308,7 @@ class ProgramItem(Item):
         """
         Open the submenu for this item
         """
-        _debug_('display_submenu(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('display_submenu(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if not menuw:
             return
         # this tries to imitated freevo's internal way of creating submenus
@@ -327,7 +327,7 @@ class ShowProgramDetails(ScrollableTextScreen):
     Screen to show the details of the TV programme
     """
     def __init__(self, menuw, prg):
-        _debug_('ShowProgramDetails.__init__(menuw=%r, prg=%r)' % (menuw, prg), 1)
+        _debug_('ShowProgramDetails.__init__(menuw=%r, prg=%r)' % (menuw, prg), 2)
         if prg is None:
             name = _('No Information Available')
             sub_title = ''
@@ -370,7 +370,7 @@ class ShowProgramDetails(ScrollableTextScreen):
 
     def getattr(self, name):
         """ get programme attributes """
-        _debug_('getattr(name=%r)' % (name,), 1)
+        _debug_('getattr(name=%r)' % (name,), 2)
         if name == 'title':
             return self.name
         if self.program:
@@ -380,7 +380,7 @@ class ShowProgramDetails(ScrollableTextScreen):
 
     def eventhandler(self, event, menuw=None):
         """ event handler for the programme description display """
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 1)
+        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
         menuw = self.menuw
         event_consumed = ScrollableTextScreen.eventhandler(self, event, menuw)
         if not event_consumed:

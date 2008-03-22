@@ -95,7 +95,7 @@ class PluginInterface(plugin.Plugin):
     """
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 1)
+        _debug_('PluginInterface.__init__()', 2)
         plugin.Plugin.__init__(self)
         plugin.register(Recorder(), plugin.RECORD)
 
@@ -107,7 +107,7 @@ class Recorder:
     """
     """
     def __init__(self):
-        _debug_('Recorder.__init__()', 1)
+        _debug_('Recorder.__init__()', 2)
         # Disable this plugin if not loaded by record_server.
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
@@ -124,7 +124,7 @@ class Recorder:
 
 
     def Record(self, rec_prog):
-        _debug_('Record(rec_prog=%r)' % (rec_prog,), 1)
+        _debug_('Record(rec_prog=%r)' % (rec_prog,), 2)
         frequency = self.fc.chanSet(str(rec_prog.tunerid), False, 'record plugin')
 
         rec_prog.filename = tv_util.getProgFilename(rec_prog)
@@ -175,7 +175,7 @@ class Recorder:
 
 
     def Stop(self):
-        _debug_('Stop()', 1)
+        _debug_('Stop()', 2)
         self.thread.mode = 'stop'
         self.thread.mode_flag.set()
 
@@ -185,11 +185,11 @@ class RecordApp(childapp.ChildApp):
     Record application class
     """
     def __init__(self, app):
-        _debug_('RecordApp.__init__(app=%r)' % (app), 1)
+        _debug_('RecordApp.__init__(app=%r)' % (app), 2)
         childapp.ChildApp.__init__(self, app, doeslogging=1)
 
     def kill(self):
-        _debug_('kill()', 1)
+        _debug_('kill()', 2)
         childapp.ChildApp.kill(self, signal.SIGINT)
 
 
@@ -198,7 +198,7 @@ class Record_Thread(threading.Thread):
     Record thread to handle the recording states
     """
     def __init__(self):
-        _debug_('Record_Thread.__init__()', 1)
+        _debug_('Record_Thread.__init__()', 2)
         threading.Thread.__init__(self)
 
         self.mode = 'idle'
@@ -209,7 +209,7 @@ class Record_Thread(threading.Thread):
         self.app = None
 
     def run(self):
-        _debug_('Record_Thread.run()', 1)
+        _debug_('Record_Thread.run()', 2)
         while 1:
             _debug_('mode=%s' % self.mode)
             if self.mode == 'idle':

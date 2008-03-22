@@ -550,7 +550,7 @@ class EventHandler:
         """
         map key to event based on current context
         """
-        _debug_('EventHandler.key_event_mapper(key=%r)' % (key,), 1)
+        _debug_('EventHandler.key_event_mapper(key=%r)' % (key,), 2)
         if not key:
             return None
 

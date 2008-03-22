@@ -46,7 +46,7 @@ class PluginInterface(ScreenSaverPlugin):
     """
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 1)
+        _debug_('PluginInterface.__init__()', 2)
         ScreenSaverPlugin.__init__(self)
         self.plugin_name = 'screensaver.bouncing_freevo'
         self.fps = config.BOUNCING_FREEVO_FPS
@@ -56,12 +56,12 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def config(self):
-        _debug_('config()', 1)
+        _debug_('config()', 2)
         return [ ('BOUNCING_FREEVO_FPS', 25, 'Frames per second')]
 
 
     def start(self, width, height):
-        _debug_('start(width=%r, height=%r)' % (width, height), 1)
+        _debug_('start(width=%r, height=%r)' % (width, height), 2)
         self.width = width
         self.height = height
 

@@ -61,7 +61,7 @@ def addPageRefresh(display_timer = True):
     display_style = 'display:none'
     if display_timer:
         display_style = 'display:""'
-    _debug_('addPageRefresh()', 1)
+    _debug_('addPageRefresh()', 2)
     prhtml = '<script type="text/JavaScript" src="scripts/encoding_web.js">window.onload=beginrefresh</script>\n'
     prhtml += '<span class="refresh" style=%s id="refresh" >Refresh In : ??</span>\n' % display_style
     return prhtml
@@ -163,7 +163,7 @@ class CDBurn_WebResource(FreevoResource):
         self.server    = xmlrpclib.Server(server_string, allow_none=1)
 
     def select_encoding_profile(self, arg=None, menuw=None):
-        _debug_('select_encoding_profile(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('select_encoding_profile(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         if arg == 'xvid_low':
             self.profile['container'] = 'avi'
             self.profile['resolution'] = 'Optimal'
@@ -260,7 +260,7 @@ class CDBurn_WebResource(FreevoResource):
         return coding_parameters
 
     def create_job(self, menuw=None, arg=None):
-        _debug_('create_job(self, arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('create_job(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
 
         profile = arg
         job_status = 'Job Status'
@@ -376,7 +376,7 @@ class CDBurn_WebResource(FreevoResource):
     def _render(self, request):
         '''
         '''
-        _debug_('_render(request)', 1)
+        _debug_('_render(request)', 2)
         fv = HTMLResource()
         form = request.args
 

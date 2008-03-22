@@ -63,7 +63,7 @@ class CommDetectServer(xmlrpc.XMLRPC):
 
     def __init__(self, debug=False, allowNone=False):
         """ Initialise the Commercial Detection Server class """
-        _debug_('CommDetectServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 1)
+        _debug_('CommDetectServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 2)
         try:
             xmlrpc.XMLRPC.__init__(self, allowNone)
         except TypeError:
