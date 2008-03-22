@@ -1,12 +1,12 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# util/distribution.py - Freevo distribution for installing plugins
+# Freevo distribution for installing plug-ins
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:
-#  If you want to create a package with a plugin, you have to rebuild
-#  the freevo directory structure. E.g. if you have a video plugin and
+#  If you want to create a package with a plug-in, you have to rebuild
+#  the freevo directory structure. E.g. if you have a video plug-in and
 #  an image for it, you should have the following structure:
 #
 #  root
@@ -27,7 +27,7 @@
 #
 #  |   #!/usr/bin/env python
 #  |
-#  |   """Setup script for my freevo plugin."""
+#  |   """Setup script for my freevo plug-in."""
 #  |
 #  |
 #  |   __revision__ = "$Id$"
@@ -46,7 +46,7 @@
 #  |          )
 #
 #
-#  To auto-build distribution packages, a MANIFEST.in is helpfull. You should
+#  To auto-build distribution packages, a MANIFEST.in is helpful. You should
 #  create one, e.g.
 #
 #  |   recursive-include src *.py
@@ -98,7 +98,7 @@ except ImportError:
 
 # Get the real distutils (not the Freevo stuff)
 # This is a bad hack and will be removed when the distutils.py
-# is deleted inthis tree
+# is deleted in this tree
 import imp
 
 fp, pathname, description = imp.find_module('distutils' , sys.path[1:])
@@ -253,7 +253,7 @@ class i18n (core.Command):
                             if not text.strip(' /():-_"\'') or text == 'x':
                                 continue
 
-                            # strip ' ' at the beginnig and ' ', ': ', ':',
+                            # strip ' ' at the beginning and ' ', ': ', ':',
                             # ',' or ', ' at the end
                             text = text.strip(' ').rstrip(' :,')
 
@@ -272,7 +272,7 @@ class i18n (core.Command):
 
             # for freevo main package: check skin
             if i18n_application == 'freevo':
-                # load pot file into mem
+                # load pot file into memory
                 f = open('i18n/freevo.pot')
                 data = f.readlines()
                 f.close()

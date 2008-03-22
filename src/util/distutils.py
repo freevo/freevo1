@@ -1,12 +1,12 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# util/distutils.py - Freevo distutils for installing plugins
+# Freevo distutils for installing plug-ins
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:
-#  If you want to create a package with a plugin, you have to rebuild
-#  the freevo directory structure. E.g. if you have a video plugin and
+#  If you want to create a package with a plug-in, you have to rebuild
+#  the freevo directory structure. E.g. if you have a video plug-in and
 #  an image for it, you should have the following structure:
 #
 #  root
@@ -27,7 +27,7 @@
 #
 #  |   #!/usr/bin/env python
 #  |
-#  |   """Setup script for my freevo plugin."""
+#  |   """Setup script for my freevo plug-in."""
 #  |
 #  |
 #  |   __revision__ = "$Id$"
@@ -39,7 +39,7 @@
 #  |   # now start the python magic
 #  |   setup (name = "nice_plugin",
 #  |          version = '0.1',
-#  |          description = "My first plugin",
+#  |          description = "My first plug-in",
 #  |          author = "me",
 #  |          author_email = "my@mail.address",
 #  |          url = "http://i-also-have-a-web.address",
@@ -51,7 +51,7 @@
 #  |   finalize()
 #
 #
-#  To auto-build distribution packages, a MANIFEST.in is helpfull. You should
+#  To auto-build distribution packages, a MANIFEST.in is helpful. You should
 #  create one, e.g.
 #
 #  |   recursive-include src *.py
@@ -239,7 +239,7 @@ def i18n(application):
 
 def finalize():
     """
-    some stuff after setup is finished
+    some stuff after set-up is finished
     """
     global use_i18n
     if use_i18n and len(sys.argv) > 1 and sys.argv[1].lower() == '--help-commands':
