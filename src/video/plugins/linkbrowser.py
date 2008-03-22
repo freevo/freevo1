@@ -325,8 +325,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     | plugin.activate('video.linkbrowser', args=('name', 'url', image', ...)
     """
 
-    def __init__(self, name, url, image=None, blacklist_regexp = [],
-                 autoplay = False, all_links = True):
+    def __init__(self, name, url, image=None, blacklist_regexp=None, autoplay=False, all_links=True):
         plugin.MainMenuPlugin.__init__(self)
         self.name = name
         self.url  = url
@@ -335,6 +334,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         self.autoplay = autoplay
         self.all_links = all_links
         self.type = 'linkbrowser'
+        blacklist_regexp = blacklist_regexp or []
         for b in blacklist_regexp:
             self.blacklist_regexp.append(re.compile(b).match)
 

@@ -339,7 +339,7 @@ class XML_data:
             for c in self.ints_to_prepare:
                 try:
                     value,scale = getattr(self, c)
-                    result = int(round(scale * eval_attr(value) ))
+                    result = int(round(scale * eval_attr(value)))
                     setattr(self, c,  result)
                 except:
                     pass
@@ -393,7 +393,7 @@ class MenuSet:
     the complete menu with the areas screen, title, subtitle, view, listing and info in it
     """
     def __init__(self):
-        self.content = ( 'screen', 'title', 'subtitle', 'view', 'listing', 'info' )
+        self.content = ('screen', 'title', 'subtitle', 'view', 'listing', 'info')
         for c in self.content:
             setattr(self, c, Area(c))
 
@@ -534,7 +534,7 @@ class Content(XML_data):
                 type = attr_str(subnode, "type", '')
                 if type and not self.types.has_key(type):
                     self.types[type] = XML_data(('font', 'align', 'valign', 'height',
-                                                 'width', 'icon' ))
+                                                 'width', 'icon'))
                     self.types[type].rectangle = None
                     self.types[type].shadow    = None
                     self.types[type].cdata     = ''
@@ -550,9 +550,9 @@ class Content(XML_data):
                             self.types[type].shadow = XML_data(('visible', 'color', 'x', 'y'))
                             self.types[type].shadow.parse(rnode, scale, current_dir)
 
-                        elif rnode.name in ( u'if', u'text', u'newline',
-                                             u'goto_pos', u'img' ):
-                            if (not hasattr( self.types[ type ], 'fcontent' )) or \
+                        elif rnode.name in (u'if', u'text', u'newline',
+                                             u'goto_pos', u'img'):
+                            if (not hasattr(self.types[ type ], 'fcontent')) or \
                                    delete_fcontent:
                                 self.types[ type ].fcontent = [ ]
                             delete_fcontent = False
@@ -601,18 +601,18 @@ class Content(XML_data):
             if self.types[type].rectangle:
                 self.types[type].rectangle.prepare(color)
 
-            if hasattr( self.types[type], 'fcontent' ):
+            if hasattr(self.types[type], 'fcontent'):
                 for i in self.types[type].fcontent:
-                    i.prepare( font, color, search_dirs )
+                    i.prepare(font, color, search_dirs)
 
 
 
 # ======================================================================
 # Formating
 class FormatText(XML_data):
-    def __init__( self ):
-        XML_data.__init__( self, ( 'align', 'valign', 'font', 'width', 'height',
-                                   'ellipses', 'dim') )
+    def __init__(self):
+        XML_data.__init__(self, ('align', 'valign', 'font', 'width', 'height',
+                                   'ellipses', 'dim'))
         self.mode     = 'hard'
         self.align    = 'left'
         self.ellipses = '...'
@@ -624,22 +624,22 @@ class FormatText(XML_data):
         self.x = 0
         self.y = 0
 
-    def __str__( self ):
-        str = "FormatText( Text: '%s', Expression: '%s', "+\
+    def __str__(self):
+        str = "FormatText(Text: '%s', Expression: '%s', "+\
               "Expression Analized: %s, Mode: %s, Font: %s, Width: %s, "+\
-              "Height: %s, x: %s, y: %s ) "
-        str = str % ( self.text, self.expression, self.expression_analized,
-                      self.mode, self.font, self.width, self.height, self.x, self.y )
+              "Height: %s, x: %s, y: %s) "
+        str = str % (self.text, self.expression, self.expression_analized,
+                      self.mode, self.font, self.width, self.height, self.x, self.y)
         return str
 
 
-    def parse( self, node, scale, c_dir = '' ):
-        XML_data.parse( self, node, scale, c_dir )
+    def parse(self, node, scale, c_dir=''):
+        XML_data.parse(self, node, scale, c_dir)
         self.text = node.textof()
-        self.mode = attr_str( node, 'mode', self.mode )
+        self.mode = attr_str(node, 'mode', self.mode)
         if self.mode != 'hard' and self.mode != 'soft':
             self.mode = 'hard'
-        self.expression = attr_str( node, 'expression', self.expression )
+        self.expression = attr_str(node, 'expression', self.expression)
         if self.expression: self.expression = self.expression.strip()
 
 
@@ -657,15 +657,15 @@ class FormatText(XML_data):
 
 
 class FormatGotopos(XML_data):
-    def __init__( self ):
-        XML_data.__init__( self, ( 'x', 'y' ) )
+    def __init__(self):
+        XML_data.__init__(self, ('x', 'y'))
         self.mode = 'relative'
         self.x = None
         self.y = None
 
-    def parse( self, node, scale, c_dir = '' ):
-        XML_data.parse( self, node, scale, c_dir )
-        self.mode = attr_str( node, 'mode', self.mode )
+    def parse(self, node, scale, c_dir=''):
+        XML_data.parse(self, node, scale, c_dir)
+        self.mode = attr_str(node, 'mode', self.mode)
         if self.mode != 'relative' and self.mode != 'absolute':
             self.mode = 'relative'
 
@@ -674,41 +674,41 @@ class FormatGotopos(XML_data):
 
 
 class FormatNewline:
-    def __init__( self ):
+    def __init__(self):
         pass
 
-    def parse( self, node, scale, c_dir = '' ):
+    def parse(self, node, scale, c_dir=''):
         pass
 
     def prepare(self, font, color, search_dirs):
         pass
 
-class FormatImg( XML_data ):
-    def __init__( self ):
-        XML_data.__init__( self, ( 'x', 'y', 'width', 'height' ) )
+class FormatImg(XML_data):
+    def __init__(self):
+        XML_data.__init__(self, ('x', 'y', 'width', 'height'))
         self.x = None
         self.y = None
         self.width = None
         self.height = None
         self.src = ''
 
-    def parse( self, node, scale, c_dir = '' ):
-        XML_data.parse( self, node, scale, c_dir )
-        self.src = attr_str( node, 'src', self.src )
+    def parse(self, node, scale, c_dir=''):
+        XML_data.parse(self, node, scale, c_dir)
+        self.src = attr_str(node, 'src', self.src)
 
-    def prepare(self, font, color, search_dirs ):
-        self.src = search_file( self.src, search_dirs )
+    def prepare(self, font, color, search_dirs):
+        self.src = search_file(self.src, search_dirs)
 
 
 
 class FormatIf:
-    def __init__( self ):
+    def __init__(self):
         self.expression = ''
         self.content = [ ]
         self.expression_analized = 0
 
-    def parse( self, node, scale, c_dir = '' ):
-        self.expression = attr_str( node, 'expression', self.expression )
+    def parse(self, node, scale, c_dir=''):
+        self.expression = attr_str(node, 'expression', self.expression)
         for subnode in node.children:
             if subnode.name == u'if':
                 child = FormatIf()
@@ -721,12 +721,12 @@ class FormatIf:
             elif subnode.name == u'img':
                 child = FormatImg()
 
-            child.parse( subnode, scale, c_dir )
+            child.parse(subnode, scale, c_dir)
             self.content += [ child ]
 
     def prepare(self, font, color, search_dirs):
         for i in self.content:
-            i.prepare( font, color, search_dirs )
+            i.prepare(font, color, search_dirs)
 
 
 
@@ -763,9 +763,8 @@ class Rectangle(XML_data):
     """
     a Rectangle
     """
-    def __init__(self, color=None, bgcolor=None, size=None, radius = None):
-        XML_data.__init__(self, ('x', 'y', 'width', 'height', 'color',
-                                 'bgcolor', 'size', 'radius' ))
+    def __init__(self, color=None, bgcolor=None, size=None, radius=None):
+        XML_data.__init__(self, ('x', 'y', 'width', 'height', 'color', 'bgcolor', 'size', 'radius'))
         if not color == None:
             self.color = color
         if not bgcolor == None:
@@ -873,7 +872,7 @@ class XMLSkin:
         self.fxd_files        = []
 
         # variables set by set_var
-        self.all_variables    = ('box_under_icon', 'anamorphic', )
+        self.all_variables    = ('box_under_icon', 'anamorphic',)
         self.box_under_icon   = 0
         self.anamorphic       = 0
 

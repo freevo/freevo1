@@ -97,8 +97,8 @@ class Menu:
     """
     a Menu with Items for the MenuWidget
     """
-    def __init__(self, heading, choices, fxd_file=None, umount_all = 0,
-                 reload_func = None, item_types = None, force_skin_layout = -1):
+    def __init__(self, heading, choices, fxd_file=None, umount_all=0, reload_func=None,
+            item_types=None, force_skin_layout=-1):
 
         self.heading = heading
         self.choices = choices          # List of MenuItems

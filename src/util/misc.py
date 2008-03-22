@@ -538,11 +538,12 @@ class _SynchronizedMethod:
 
 class SynchronizedObject:
 
-    def __init__ (self, obj, ignore=[], lock=None):
+    def __init__ (self, obj, ignore=None, lock=None):
         import threading
 
         self.__methods = {}
         self.__obj = obj
+        ignore = ignore or []
         lock = lock and lock or threading.RLock()
         for name, method in _get_method_names(obj):
             if not name in ignore:

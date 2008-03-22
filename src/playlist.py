@@ -46,7 +46,7 @@ from item import Item
 
 class Playlist(Item):
 
-    def __init__(self, name='', playlist=[], parent=None, display_type=None,
+    def __init__(self, name='', playlist=None, parent=None, display_type=None,
                  random=False, build=False, autoplay=False, repeat=False):
         """
         Init the playlist
@@ -70,7 +70,7 @@ class Playlist(Item):
 
         # variables only for Playlist
         self.current_item = None
-        self.playlist     = playlist
+        self.playlist     = playlist or []
         self.autoplay     = autoplay
         self.repeat       = repeat
         self.display_type = display_type

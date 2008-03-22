@@ -39,7 +39,7 @@ class ObjectCache:
     been accessed for the longest time get deleted first.'''
 
 
-    def __init__(self, cachesize = 30, desc='noname'):
+    def __init__(self, cachesize=30, desc='noname'):
         self.cache = {}
         self.lru = []  # Least recently used (lru) list, index 0 is lru
         self.cachesize = cachesize

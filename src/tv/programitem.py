@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Information and actions for TvPrograms.
+# Information and actions for TV Programmes.
 # -----------------------------------------------------------------------
 # $Id$
 #

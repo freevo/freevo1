@@ -195,7 +195,7 @@ snesromLicences = {  0: 'Unknown',
         255: 'Hudson Soft'                           }
 
 class SnesItem(Item):
-    def __init__(self, file, cmd = None, args = None, imgpath = None, parent = None):
+    def __init__(self, file, cmd=None, args=None, imgpath=None, parent=None):
         # set autovars
         self.autovars = [ ('romName', 'unknown'),
                           ('romHL', 0),

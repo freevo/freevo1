@@ -50,7 +50,7 @@ from item import Item
 
 
 class MameItem(Item):
-    def __init__(self, title, file, image = None, cmd = None, args = None, imgpath = None, parent = None, info = None):
+    def __init__(self, title, file, image=None, cmd=None, args=None, imgpath=None, parent=None, info=None):
         Item.__init__(self, parent)
         self.type  = 'mame'            # fix value
         self.set_url(file, info=True)

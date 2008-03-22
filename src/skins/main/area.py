@@ -195,7 +195,6 @@ class Skin_Area:
 
         self.update_content()
 
-
         # check which parts need an update
         bg_rect = ( osd.width, osd.height, 0, 0 )
         a_rect  = ( osd.width, osd.height, 0, 0 )

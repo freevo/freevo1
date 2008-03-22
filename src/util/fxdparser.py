@@ -46,9 +46,10 @@ class XMLnode:
     """
     One node for the FXDtree
     """
-    def __init__(self, name, attr=[], first_cdata=None, following_cdata=None):
+    def __init__(self, name, attr=None, first_cdata=None, following_cdata=None):
         self.name = name
         self.attr_list = []
+        attr = attr or []
         for name, val in attr:
             self.attr_list.append(((None, name), val))
         self.attrs = self

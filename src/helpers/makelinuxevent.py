@@ -234,7 +234,7 @@ def EVIOCGABS(abs):   return _IOR('E', 0x40 + abs, 20) # get abs value/limits
 def EVIOCSABS(abs):   return _IOW('E', 0xc0 + abs, 20) # set abs value/limits
 
 class evdev:
-    def __init__(self, dev, blocking = False):
+    def __init__(self, dev, blocking=False):
         self._fd = None
         if blocking:
             self._fd = os.open(dev, os.O_RDONLY)

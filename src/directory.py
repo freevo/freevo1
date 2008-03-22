@@ -98,8 +98,7 @@ class DirItem(Playlist):
     """
     class for handling directories
     """
-    def __init__(self, directory, parent, name = '', display_type = None,
-                 add_args = None, create_metainfo = True):
+    def __init__(self, directory, parent, name='', display_type=None, add_args=None, create_metainfo=True):
         self.autovars = [ ('num_dir_items', 0), ('show_all_items', False) ]
         Playlist.__init__(self, parent=parent, display_type=display_type)
         self.type = 'dir'

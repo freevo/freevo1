@@ -52,7 +52,7 @@ from zipped_rom import unzip_rom
 genesisromExtensions = ['smd', 'bin']
 
 class GenesisItem(Item):
-    def __init__(self, file, cmd = None, args = None, imgpath = None, parent = None):
+    def __init__(self, file, cmd=None, args=None, imgpath=None, parent=None):
         Item.__init__(self, parent)
         self.type  = 'genesis'            # fix value
         self.set_url(file, info=True)
