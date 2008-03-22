@@ -471,25 +471,25 @@ class EventHandler:
         _debug_('config.HELPER=%r' % (config.HELPER,))
 
         self.inputs = []
-        if use_pylirc and not config.HELPER:
-            try:
-                self.inputs.append(Lirc())
-            except:
-                pass
-
-        if config.USE_SDL_KEYBOARD and not config.HELPER:
-            try:
-                self.inputs.append(Keyboard())
-            except:
-                pass
-
         if not config.HELPER:
-            try:
-                self.inputs.append(Evdev())
-            except:
-                pass
+            if use_pylirc:
+                try:
+                    self.inputs.append(Lirc())
+                except:
+                    pass
 
-        if not is_helper:
+            if config.USE_SDL_KEYBOARD:
+                try:
+                    self.inputs.append(Keyboard())
+                except:
+                    pass
+
+            if config.EVENT_DEVS:
+                try:
+                    self.inputs.append(Evdev())
+                except:
+                    pass
+
             if use_netremote and config.ENABLE_NETWORK_REMOTE and config.REMOTE_CONTROL_PORT:
                 self.inputs.append(Network())
 
@@ -508,7 +508,7 @@ class EventHandler:
         # last time we stopped sleeping
         self.sleep_timer        = 0
         kaa.Timer(self.poll).start(0.01)
-        _debug_('EventHandler.self.inputs=%r' % (self.inputs,), 2)
+        _debug_('EventHandler.self.inputs=%r' % (self.inputs,), 1)
 
 
     def set_app(self, app, context):
