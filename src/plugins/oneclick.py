@@ -601,8 +601,8 @@ class WeatherItem(Item):
         if self.wind_direction == 'CALM':
             return "%s" % (self.wind_speed)
         elif self.wind_direction == 'VAR':
-            return "%s %s %s %s" % (_('Variable'), _('at'), self.wind_speed, self.unit_s)
-        return "%s %s %s %s" % (self.wind_direction, _('at'), self.wind_speed, self.unit_s)
+            return "%s %s %s %s" % (_('Variable'), _('at a rate of'), self.wind_speed, self.unit_s)
+        return "%s %s %s %s" % (self.wind_direction, _('at a rate of'), self.wind_speed, self.unit_s)
 
     def getWindDir(self):
         _debug_('getWindDir()', 2)
