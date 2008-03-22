@@ -42,7 +42,8 @@ class TvProgram:
     """
     Holds information about a TV programme
     """
-    def __init__(self, channel_id='', start=0, pdc_start=0, stop=0, title='', sub_title='', desc='', categories=[], ratings={}):
+    def __init__(self, channel_id='', start=0, pdc_start=0, stop=2147483647, title='', sub_title='', desc='',
+            categories=None, ratings=None):
         _debug_('TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)' % (channel_id, start, stop, title), 2)
         self.channel_id = channel_id
         self.start      = start
@@ -51,9 +52,9 @@ class TvProgram:
         self.title      = title
         self.desc       = desc
         self.sub_title  = sub_title
-        self.ratings    = ratings
+        self.ratings    = ratings or {}
         self.advisories = []
-        self.categories = categories
+        self.categories = categories or []
         self.date       = None
 
         # this information is added by the recordserver
@@ -265,7 +266,7 @@ class TvGuide:
         @returns: a list of TV channels
         """
         _debug_('get_programs(start=%r, stop=%r, channel_id=%r)' % (time.strftime('%H:%M', time.localtime(start)),
-            time.strftime('%H:%M', time.localtime(stop)), channel_id))
+            time.strftime('%H:%M', time.localtime(stop)), channel_id), 2)
 
         global channel_cache
         channels = channel_cache.cached(start, stop, channel_id)
@@ -289,7 +290,7 @@ class TvGuide:
             channels.append(c)
             channel_cache.add(chan.id, c)
 
-        _debug_('channels=%r' % (channels,))
+        _debug_('channels=%r' % (channels,), 2)
         return channels
 
 

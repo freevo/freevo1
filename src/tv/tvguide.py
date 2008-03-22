@@ -440,7 +440,7 @@ class TVGuide(Item):
 
             if found_1stchannel:
                 if not chan.programs:
-                    prg = TvProgram(CHAN_NO_DATA, chan.id, 0, 2147483647, desc='')
+                    prg = TvProgram(chan.id, 0, 0, 2147483647, CHAN_NO_DATA, desc='')
                     chan.programs = [ prg ]
 
                 for i in range(len(chan.programs)):
@@ -534,7 +534,7 @@ class TVGuide(Item):
                 start_time -= (self.col_time * 60)
                 stop_time -= (self.col_time * 60)
         else:
-            prg = TvProgram(CHAN_NO_DATA, channel.id, 0, 2147483647, '')
+            prg = TvProgram(channel.id, 0, 0, 2147483647, CHAN_NO_DATA, desc='')
             to_info = CHAN_NO_DATA
 
         self.rebuild(start_time, stop_time, start_channel, prg)
@@ -586,7 +586,7 @@ class TVGuide(Item):
 
             to_info = (prg.title, procdesc)
         else:
-            prg = TvProgram(CHAN_NO_DATA, channel.id, 0, 2147483647, '')
+            prg = TvProgram(channel.id, 0, 0, 2147483647, CHAN_NO_DATA, desc='')
             to_info = CHAN_NO_DATA
 
         self.rebuild(start_time, stop_time, start_channel, prg)
