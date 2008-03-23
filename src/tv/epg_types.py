@@ -198,7 +198,7 @@ class TvChannel:
 
 
     def __str__(self):
-        s = 'CHANNEL ID   %-20s' % self.id
+        s = 'CHANNEL ID   %-20s %-20s' % (self.id, '"'+self.displayname+'"')
         if self.programs:
             s += '\n'
             for program in self.programs:
