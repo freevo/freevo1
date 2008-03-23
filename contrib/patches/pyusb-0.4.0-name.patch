@@ -1,0 +1,87 @@
+diff -Naur pyusb-0.4.0.orig/pyusb.c pyusb-0.4.0/pyusb.c
+--- pyusb-0.4.0.orig/pyusb.c	2007-05-15 23:20:55.000000000 +0200
++++ pyusb-0.4.0/pyusb.c	2007-08-01 13:51:11.000000000 +0200
+@@ -347,7 +347,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Endpoint_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Endpoint",  /*tp_name*/
++    "pyusb.Endpoint",  /*tp_name*/
+     sizeof(Py_usb_Endpoint), /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     0,                         /*tp_dealloc*/
+@@ -480,7 +480,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Interface_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Interface",    	   /*tp_name*/
++    "pyusb.Interface",    	   /*tp_name*/
+     sizeof(Py_usb_Interface),   /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_Interface_del,     /*tp_dealloc*/
+@@ -639,7 +639,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Configuration_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Configuration",   	   /*tp_name*/
++    "pyusb.Configuration",   	   /*tp_name*/
+     sizeof(Py_usb_Configuration),   /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_Configuration_del,  /*tp_dealloc*/
+@@ -858,7 +858,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Device_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Device",   	   	   /*tp_name*/
++    "pyusb.Device",   	   	   /*tp_name*/
+     sizeof(Py_usb_Device),     /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_Device_del,         /*tp_dealloc*/
+@@ -1009,7 +1009,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Bus_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Bus",   	   	   	   /*tp_name*/
++    "pyusb.Bus",   	   	   	   /*tp_name*/
+     sizeof(Py_usb_Bus),        /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_Bus_del,            /*tp_dealloc*/
+@@ -1979,7 +1979,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_DeviceHandle_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.DeviceHandle",   	   /*tp_name*/
++    "pyusb.DeviceHandle",   	   /*tp_name*/
+     sizeof(Py_usb_DeviceHandle), /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_DeviceHandle_del,   /*tp_dealloc*/
+@@ -2108,14 +2108,14 @@
+ /*
+  * Entry point for the module
+  */
+-PyMODINIT_FUNC initusb(void)
++PyMODINIT_FUNC initpyusb(void)
+ {
+ 	PyObject *module;
+ 
+-	module = Py_InitModule3("usb", usb_Methods,"USB access module");
++	module = Py_InitModule3("pyusb", usb_Methods,"USB access module");
+ 	if (!module) return;
+ 
+-	PyExc_USBError = PyErr_NewException("usb.USBError", PyExc_IOError, NULL);
++	PyExc_USBError = PyErr_NewException("pyusb.USBError", PyExc_IOError, NULL);
+ 	if (!PyExc_USBError) return;
+ 	PyModule_AddObject(module, "USBError", PyExc_USBError);
+ 	Py_INCREF(PyExc_USBError);
+diff -Naur pyusb-0.4.0.orig/setup.py pyusb-0.4.0/setup.py
+--- pyusb-0.4.0.orig/setup.py	2007-05-16 19:18:01.000000000 +0200
++++ pyusb-0.4.0/setup.py	2007-08-01 13:49:05.000000000 +0200
+@@ -39,7 +39,7 @@
+ 	extra_compile_args = ['-I/usr/local/include']
+ 																											
+ 
+-usbmodule = Extension(name = 'usb',
++usbmodule = Extension(name = 'pyusb',
+ 					libraries = libraries,
+ 					sources = ['pyusb.c'],
+ 					extra_link_args = extra_link_args,

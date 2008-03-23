@@ -1,0 +1,50 @@
+--- src/image.c.old	2005-03-13 02:12:35.000000000 +0100
++++ src/image.c	2007-03-14 21:09:30.000000000 +0100
+@@ -291,7 +291,8 @@
+ 	PyObject *surfobj, *string=NULL;
+ 	char *format, *data, *pixels;
+ 	SDL_Surface *surf, *temp=NULL;
+-	int w, h, color, len, flipped=0;
++	int w, h, color, flipped=0;
++	Py_ssize_t len;
+ 	int Rmask, Gmask, Bmask, Amask, Rshift, Gshift, Bshift, Ashift, Rloss, Gloss, Bloss, Aloss;
+ 	int hascolorkey, colorkey;
+ 
+@@ -331,7 +332,7 @@
+ 	}
+ 	else if(!strcmp(format, "RGB"))
+ 	{
+-		string = PyString_FromStringAndSize(NULL, surf->w*surf->h*3);
++		string = PyString_FromStringAndSize(NULL, (Py_ssize_t)surf->w*surf->h*3);
+ 		if(!string)
+ 			return NULL;
+ 		PyString_AsStringAndSize(string, &data, &len);
+@@ -407,7 +408,7 @@
+ 		if(strcmp(format, "RGBA"))
+ 			hascolorkey = 0;
+ 
+-		string = PyString_FromStringAndSize(NULL, surf->w*surf->h*4);
++		string = PyString_FromStringAndSize(NULL, (Py_ssize_t)surf->w*surf->h*4);
+ 		if(!string)
+ 			return NULL;
+ 		PyString_AsStringAndSize(string, &data, &len);
+@@ -605,7 +606,8 @@
+ 	PyObject *string;
+ 	char *format, *data;
+ 	SDL_Surface *surf = NULL;
+-	int w, h, len, flipped=0;
++	int w, h, flipped=0;
++	Py_ssize_t len;
+ 	int loopw, looph;
+ 
+ 	if(!PyArg_ParseTuple(arg, "O!(ii)s|i", &PyString_Type, &string, &w, &h, &format, &flipped))
+@@ -729,7 +731,8 @@
+ 	PyObject *buffer;
+ 	char *format, *data;
+ 	SDL_Surface *surf = NULL;
+-	int w, h, len;
++	int w, h;
++	Py_ssize_t len;
+         PyObject *surfobj;
+ 
+ 	if(!PyArg_ParseTuple(arg, "O(ii)s|i", &buffer, &w, &h, &format))

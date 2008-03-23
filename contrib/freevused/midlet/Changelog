@@ -1,0 +1,41 @@
+Sat Jan 27 12:18:29 CET 2007
+
+ * Version 1.5
+
+ * Added internacionalización to the midlet
+ * Added information of the current playing element
+ * The file name of the midlet changed because I want to add support for
+   differente screen resolution graphics.
+
+Mon Dec 25 16:42:11 CET 2006
+
+ * Version 1.3
+
+ * Cosmetic improvements
+ * Send posted event message to OSD
+ * Added more Freevo events to the j2me client. It supports now a
+   numeric keyboard and display, eject, guide, rec and channel up and down.
+
+Sun Dec 10 10:51:29 CET 2006
+
+ * Version 1.2
+
+ * Stop advertising only if isBinded. It seems that pyBluez changed its
+   behavior and now raises an error if using stop_advertising when it's not
+   advertising.
+ * Chris Lombardi reported that the newer phones require to set rfcomm
+   sockets to be advertised as a serial port class using the serial port
+   profile
+ * The rfcomm socket now it is not hardcoded 
+
+Sun Feb 26 15:05:28 CET 2006
+
+ * Version 1.1
+
+ * Added support for entering TEXT event from client
+ * Added support for volume mixer events
+ * Remove polling. Now process_data is made in the bluetooth thread
+
+Sat Feb 11 11:36:44 CET 2006
+
+  * First Public Version
