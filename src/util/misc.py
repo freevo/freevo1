@@ -275,7 +275,7 @@ def is_usb_storage_device():
     return -1
 
 
-def smartsort(x,y): # A compare function for use in list.sort()
+def smartsort(x, y): # A compare function for use in list.sort()
     """
     Compares strings after stripping off 'The' and 'A' to be 'smarter'
     Also obviously ignores the full path when looking for 'The' and 'A'
@@ -290,7 +290,7 @@ def smartsort(x,y): # A compare function for use in list.sort()
         if n.find(word) == 0:
             n = n.replace(word, '', 1)
 
-    return cmp(m.upper(),n.upper()) # be case insensitive
+    return cmp(m.upper(), n.upper()) # be case insensitive
 
 
 def find_start_string(s1, s2):
@@ -341,7 +341,7 @@ def tagmp3 (filename, title=None, artist=None, album=None, track=None,
         if artist: tag.setArtist(String(artist))
         if album:  tag.setAlbum(String(album))
         if title:  tag.setTitle(String(title))
-        if track:  tag.setTrackNum((track,tracktotal))   # eyed3 accepts None for tracktotal
+        if track:  tag.setTrackNum((track, tracktotal))   # eyed3 accepts None for tracktotal
         if year:   tag.setDate(year)
         tag.update()
     except:
@@ -404,7 +404,7 @@ def comingup(items=None, scheduledRecordings=None):
     cachefile = '%s/upsoon' % (config.FREEVO_CACHEDIR)
     if not scheduledRecordings:
         if os.path.exists(cachefile) and abs(time.time() - os.path.getmtime(cachefile)) < 600:
-            cache = codecs.open(cachefile,'r', config.encoding)
+            cache = codecs.open(cachefile, 'r', config.encoding)
             for a in cache.readlines():
                 result = result + a
             cache.close()
@@ -441,41 +441,39 @@ def comingup(items=None, scheduledRecordings=None):
         result = result + _('Today') + u':\n'
         for m in today:
             sub_title = ''
-            if hasattr(m,'sub_title') and m.sub_title:
+            if hasattr(m, 'sub_title') and m.sub_title:
                 sub_title = u' "' + Unicode(m.sub_title) + u'" '
             result = result + u"- %s%s " % \
                      ( Unicode(m.title), Unicode(sub_title) ) \
                      + _('at') + u" %s\n" % \
-                     Unicode(time.strftime(config.TV_TIME_FORMAT,time.localtime(m.start)))
+                     Unicode(time.strftime(config.TV_TIME_FORMAT, time.localtime(m.start)))
 
     if len(tomorrow) > 0:
         result = result + _('Tomorrow') + u':\n'
         for m in tomorrow:
             sub_title = ''
-            if hasattr(m,'sub_title') and m.sub_title:
+            if hasattr(m, 'sub_title') and m.sub_title:
                 sub_title = ' "' + m.sub_title + '" '
             result = result + u"- %s%s " % \
                      ( Unicode(m.title), Unicode(sub_title) ) \
                      + _('at') + u" %s\n" % \
-                     Unicode(time.strftime(config.TV_TIME_FORMAT,time.localtime(m.start)))
+                     Unicode(time.strftime(config.TV_TIME_FORMAT, time.localtime(m.start)))
 
     if len(later) > 0:
         result = result + _('This Week') + u':\n'
         for m in later:
             sub_title = ''
-            if hasattr(m,'sub_title') and m.sub_title:
+            if hasattr(m, 'sub_title') and m.sub_title:
                 sub_title = ' "' + m.sub_title + '" '
-            result = result + u"- %s%s " % \
-                     ( Unicode(m.title), Unicode(sub_title) ) \
-                     + _('at') + u" %s\n" % \
-                     Unicode(time.strftime(config.TV_DATE_FORMAT,time.localtime(m.start)))
+            result = result + u"- %s%s " % ( Unicode(m.title), Unicode(sub_title) ) \
+                    + _('at') + u" %s\n" % Unicode(time.strftime(config.TV_DATE_FORMAT, time.localtime(m.start)))
 
     if not result:
         result = _('No recordings are scheduled')
 
     if os.path.isfile(cachefile):
         os.unlink(cachefile)
-    cache = codecs.open(cachefile,'w', config.encoding)
+    cache = codecs.open(cachefile, 'w', config.encoding)
     cache.write(result)
     cache.close()
 
