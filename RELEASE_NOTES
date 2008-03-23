@@ -1,0 +1,27 @@
+Release Notes for 1.8.0
+=======================
+
+In this release Twisted has been removed from the recordserver and now we use
+kaa.rpc. kaa.rpc is faster than Twisted's xml-rpc calls and so the TV guide is
+more responsive.
+
+
+A significant change to the TV recording has been the replacement of the
+record_schedule.xml with two files, schedule.pickle and favorites.pickle. This
+means that unless the record_schedule.xml has been saved to a safe place during
+the installation then you will lose you favorites.
+
+To convert the favorites to the new format do the following:
+
+cp /var/lib/freevo/record_schedule.xml ~ (or cp ~/.freevo/lib/record_schedule.xml ~)
+freevo recordserver stop
+freevo convert_favorites ~/record_schedule.xml
+freevo schedulefavorites
+freevo recordserver start
+
+
+Other changes include the renaming of configuration variables, to correct these
+do the following:
+
+freevo convert_config /etc/freevo/local_config
+freevo convert_config /etc/freevo/local_config -w

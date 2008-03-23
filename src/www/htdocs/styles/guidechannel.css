@@ -1,0 +1,122 @@
+ #navcontainer { margin-left: 30px; }
+
+#daylistcontainer
+{
+    margin: 0% 5% 5% 0%;
+    padding: 0% 5%;
+    padding: 0;
+    list-style-type: none;
+    font-family: verdana, arial, Helvetica, sans-serif;
+}
+
+#daylistcontainer a {
+    display: block;
+    padding: 5px 10px;
+    width: 140px;
+    color: #fff;
+    background-color:  #000099;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+#programline {
+    list-style-type: none;
+}
+
+#programline a {
+    display: block;
+    padding: 5px 10px;
+    width: 300px;
+    color: #fff;
+    background-color: #3366CC;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+#programtimebooked a {
+    display: block;
+    padding: 5px 10px;
+    width: 300px;
+    color: #fff;
+    background-color: orange;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+#programlinerecord {
+    list-style-type: none;
+}
+
+#programlinerecord a {
+    display: block;
+    padding: 5px 10px;
+    width: 300px;
+    color: #fff;
+    background-color: #00FF33;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+#programlinerecording a {
+    display: block;
+    padding: 5px 10px;
+    width: 300px;
+    color: #fff;
+    background-color: #993333;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#description {
+    display: block;
+    padding: 5px 10px 10px 10px;
+    border: medium  solid black;
+#    margin: 0px 10px 10px 10px;
+    width: 600px;
+    color: #0000;
+#    background-color: #3366CC;
+    text-decoration: none;
+}
+
+#navcontainer li { margin: 0 0 1px 0; }
+
+#navcontainer a
+{
+display: block;
+padding: 5px 10px;
+width: 140px;
+color: #fff;
+background-color:  #000099;
+font-weight: bold;
+text-decoration: none;
+}
+
+#navcontainer a:hover
+{
+color: #fff;
+background-color: #69C;
+text-decoration: none;
+}
+
+#navcontainer ul ul li { margin: 0 0 1px 0; }
+
+#navcontainer ul ul a
+{
+display: block;
+padding: 5px 5px 5px 30px;
+width: 125px;
+color: #fff;
+background-color: #369;
+text-decoration: none;
+}
+
+#navcontainer ul ul a:hover
+{
+color: #fff;
+background-color: #69C;
+text-decoration: none;
+}
