@@ -113,7 +113,7 @@ def init():
     """
     # Add the drives to the config.removable_media list. There doesn't have
     # to be any drives defined.
-    if config.ROM_DRIVES != None:
+    if config.ROM_DRIVES is not None:
         for i in range(len(config.ROM_DRIVES)):
             (dir, device, name) = config.ROM_DRIVES[i]
             media = RemovableMedia(mountdir=dir, devicename=device, drivename=name)
@@ -406,14 +406,14 @@ class RemovableMedia:
                             cds = ioctl(fd, CDROM_DRIVE_STATUS)
                     except Exception, e:
                         _debug_('getting drive status for %r failed: %s' % (self.devicename, e), DWARNING)
+                _debug_('drive status for %s (%r:%s) is %s' % \
+                    (self.drivename, self.devicename, fd, self.drive_status_text(cds)), 3)
             finally:
                 os.close(fd)
         except Exception, e:
             _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
         self.cds_changed = self.cds != cds
         self.cds = cds
-        _debug_('drive status for %s (%r:%s) is %s' % \
-            (self.drivename, self.devicename, fd, self.drive_status_text(cds)), 3)
         return cds
 
 

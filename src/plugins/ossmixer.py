@@ -80,7 +80,7 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 self.mixfd = ossaudiodev.openmixer(config.MIXER_DEVICE)
             except IOError:
-                print 'Couldn\'t open mixer "%s"' % config.MIXER_DEVICE
+                self.reason = 'Couldn\'t open mixer "%s"' % config.MIXER_DEVICE
                 return
 
         # init here
