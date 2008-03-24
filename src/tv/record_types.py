@@ -48,9 +48,10 @@ schedule_locked = False
 
 class ScheduledRecordings:
     """
+    The schedule recordings class
     """
     def __init__(self):
-        """ """
+        """ Construct the scheduled TV recordings """
         _debug_('ScheduledRecordings.__init__()', 2)
         self.TYPES_VERSION = TYPES_VERSION
         self.program_list = {}
@@ -60,6 +61,27 @@ class ScheduledRecordings:
         schedule_locked = False
 
 
+    def __str__(self):
+        s = 'Scheduled Recordings v%s\n' % (self.TYPES_VERSION)
+        s += 'Program List:\n'
+        program_list = self.program_list.keys()
+        if program_list:
+            program_list.sort()
+            for p in program_list:
+                s += '  '+String(self.program_list[p])+'\n'
+        else:
+            s += 'No programs scheduled to record\n'
+        s += 'Favorites List:\n'
+        favorite_list = self.favorites.keys()
+        if favorite_list:
+            favorite_list.sort()
+            for f in favorite_list:
+                s += '  '+String(self.favorites[f])+'\n'
+        else:
+            s += 'No Favorites\n'
+        return s
+
+            
     def lock(self):
         global schedule_locked
         schedule_locked = True
@@ -118,7 +140,7 @@ class ScheduledRecordings:
 
 
     def addProgram(self, prog, key=None):
-        """ """
+        """ Add a program to the scheduled recordings list """
         _debug_('addProgram(%r, key=%r)' % (prog, key), 2)
         if not self.program_list.has_key(key):
             self.program_list[key] = prog
@@ -129,7 +151,7 @@ class ScheduledRecordings:
 
 
     def removeProgram(self, prog, key=None):
-        """ """
+        """ Remove a program from the scheduled recordings list """
         _debug_('removeProgram(%r, key=%r)' % (prog, key), 2)
         if self.program_list.has_key(key):
             del self.program_list[key]
@@ -140,13 +162,13 @@ class ScheduledRecordings:
 
 
     def getProgramList(self):
-        """ """
+        """ Get the scheduled recordings list """
         _debug_('getProgramList()', 3)
         return self.program_list
 
 
     def setProgramList(self, pl):
-        """ """
+        """ Set the scheduled recordings list """
         _debug_('setProgramList(pl=%r)' % (pl,), 2)
         self.program_list = pl
 
@@ -212,7 +234,7 @@ class ScheduledRecordings:
 
 
     def addFavorite(self, fav):
-        """ """
+        """ Add a favorite to the favorites dictonary """
         _debug_('addFavorite(fav=%r)' % (fav,), 2)
         if self.favorites and self.favorites.has_key(fav.name):
             _debug_('We already have a favorite called "%s"' % String(fav.name), DINFO)
@@ -225,7 +247,7 @@ class ScheduledRecordings:
 
 
     def removeFavorite(self, name):
-        """ """
+        """ Remove a favorite from the favorites dictonary """
         _debug_('removeFavorite(name=%r)' % (name,), 2)
         if not self.favorites.has_key(name):
             _debug_('We do not have a favorite called "%s"' % String(name), DINFO)
@@ -236,8 +258,7 @@ class ScheduledRecordings:
 
 
     def updateFavorite(self, oldname, fav):
-        """ Remove old favourite if exists and add new favourite
-        """
+        """ Remove old favourite if exists and add new favourite """
         _debug_('updateFavorite(oldname=%r, fav=%r)' % (oldname, fav), 2)
         if oldname:
             self.removeFavorite(name)
@@ -245,19 +266,19 @@ class ScheduledRecordings:
 
 
     def getFavorites(self):
-        """ """
+        """ Get the favorites dictonary """
         _debug_('getFavorites()', 2)
         return self.favorites
 
 
     def setFavorites(self, favs):
-        """ """
+        """ Set the favorites dictonary """
         _debug_('setFavorites(favs=%r)' % (favs,), 2)
         self.favorites = favs
 
 
     def setFavoritesList(self, favs):
-        """ """
+        """ Add a list of favorites to the favorites dictonary """
         _debug_('setFavoritesList(favs=%r)' % (favs,), 2)
         newfavs = {}
         for fav in favs:
@@ -267,7 +288,7 @@ class ScheduledRecordings:
 
 
     def clearFavorites(self):
-        """ """
+        """ Delete all favorites from the favorites dictonary """
         _debug_('clearFavorites()', 2)
         self.favorites = {}
 
@@ -278,8 +299,9 @@ class Favorite:
     """
     def __init__(self, name=None, prog=None, exactchan=False, exactdow=False, exacttod=False, priority=0,
         allowDuplicates=True, onlyNew=False):
-        """ """
-        _debug_('Favorite.__init__(self, name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r, priority=%r, allowDuplicates=%r, onlyNew=%r)' % (name, prog, exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew), 2)
+        """ Construct a TV favorite recording """
+        _debug_('Favorite.__init__(name=%r, prog=%r, chan=%r, dow=%r, tod=%r, priority=%r, duplicates=%r, new=%r)' % \
+            (name, prog, exactchan, exactdow, exacttod, priority, allowDuplicates, onlyNew), 2)
         self.TYPES_VERSION = TYPES_VERSION
 
         self.name = name
@@ -316,15 +338,35 @@ class Favorite:
             self.mod = 'NONE'
 
 
+    def __str__(self):
+        week_days = (_('Mon'), _('Tue'), _('Wed'), _('Thu'), _('Fri'), _('Sat'), _('Sun'))
+        s = '%-20s' % (String(self.name),)
+        s += '%-20s' % ('"'+String(self.title)+'"',)
+        s += '%-12s' % (String(self.channel),)
+        if isinstance(self.dow, int):
+            s += '%-4s ' % (week_days[self.dow],)
+        else:
+            s += '%-4s ' % (String(self.dow),)
+        if isinstance(self.mod, int):
+            s += '%02d:%02d  ' % (self.mod / 60, self.mod % 60)
+        else:
+            s += '%-6s ' % (String(self.mod),)
+        s += '%-8s' % (self.allowDuplicates and 'dups' or 'no-dups')
+        s += '%-9s' % (self.onlyNew and 'only-new' or 'all-shows')
+        return s
+
+
+
 class ScheduledTvProgram:
     """
+    A scheduled TV programme (Not used)
     """
     LOW_QUALTY  = 1
     MED_QUALTY  = 2
     HIGH_QUALTY = 3
 
     def __init__(self):
-        """ """
+        """ Construct a ScheduledTvProgram instance """
         _debug_('ScheduledTvProgram.__init__()', 2)
         self.tunerid      = None
         self.isRecording  = False
