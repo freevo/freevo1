@@ -16,8 +16,12 @@ To convert the favorites to the new format do the following:
 cp /var/lib/freevo/record_schedule.xml ~ (or cp ~/.freevo/lib/record_schedule.xml ~)
 freevo recordserver stop
 freevo convert_favorites ~/record_schedule.xml
-freevo schedulefavorites
 freevo recordserver start
+
+If you get an error that says:
+    "AttributeError: TvChannel instance has no attribute 'logo'"
+try updating the schedule.pickle file by:
+freevo schedulefavorites
 
 
 Other changes include the renaming of configuration variables, to correct these

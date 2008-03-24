@@ -57,6 +57,8 @@ o Slackware Maintainer
 
 John Molohan <john.molohan at gcd.ie>
 o Web Site Maintainer
+o Slimbox web page
+o VLC web page
 
 Duncan Webb <duncan-freevo at linuxowl.com>
 o Maintainer of the stable branch 1.x
@@ -66,8 +68,20 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
-Stephan Roolvink <live_kenny at hotmail.com>
-o Tux n' Tosh TV skin
+Grzegorz Patron <rurus9 at gmail.com>
+o Polish translation
+
+CinPoU <cinpou at free.fr>
+o Alantice skin
+
+Andreas Fürtig <mail at andieh.de>
+o UDP remote
+
+Florian Demmer <florian at demmer.org>
+o Fixes to makelircrc helper
+
+Douglas A. Seifert <doug at dseifert.net>
+o Fixes to cd_burn for play lists
 
 George Kibardin <george-kibardin at yandex.ru>
 o Russian translation updates
@@ -149,6 +163,8 @@ Adam Charrett <ajmcharrett at hotmail.com>
 o Buttonbar plug-in
 o Screensaver plug-in
 o TV Recording Manager plug-in
+o DVB streamer plug-in
+o DVD copy plug-in
 
 Andrew Flegg <andrew at bleb.org>
 o Skin additions, anamorphic and past programmes
@@ -190,6 +206,7 @@ James Oakley <jfunk at funktronics.ca>
 o xmltv2 patches
 
 Pierre Ossman <drzeus at drzeus.cx>
+o xrandr placement support
 o Linux event device support
 o Apple trailers plug-in
 o Various bug fixes

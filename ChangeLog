@@ -17,6 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.x
 --------------------------------
 
  * New ivtv_xine_tv plug-in to allow instant record, plus much more (F#1891595)
+ * Updated record server and clients replacing Twisted with kaa.rpc (F#1923565)
 
 == Release 1.7.7 (2008-03-23) ==
 --------------------------------
