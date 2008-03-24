@@ -20,8 +20,11 @@ freevo recordserver start
 
 If you get an error that says:
     "AttributeError: TvChannel instance has no attribute 'logo'"
-try updating the schedule.pickle file by:
-freevo schedulefavorites
+try:
+
+freevo recordserver stop
+rm /var/cache/freevo/TV.xml.pickled (or ~/.freevo/cache/TV.xml.pickled)
+freevo recordserver start
 
 
 Other changes include the renaming of configuration variables, to correct these
