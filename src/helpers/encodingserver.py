@@ -56,10 +56,10 @@ import config
 from encodingcore import EncodingJob, EncodingQueue, EncodingOptions
 
 #some data
-__author__ = "den_RDC (rdc@kokosnoot.com)"
-__revision__ = "$Rev$"
-__copyright__ = "Copyright (C) 2004 den_RDC"
-__license__ = "GPL"
+__author__ = 'den_RDC (rdc@kokosnoot.com)'
+__revision__ = '$Rev$'
+__copyright__ = 'Copyright (C) 2004 den_RDC'
+__license__ = 'GPL'
 
 DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 
@@ -68,7 +68,6 @@ unjam = unjellyFromXML
 
 
 class EncodingServer(xmlrpc.XMLRPC):
-
     def __init__(self, debug=False, allowNone=False):
         """ Initialise the EncodingServer class """
         _debug_('EncodingServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 2)
@@ -80,14 +79,16 @@ class EncodingServer(xmlrpc.XMLRPC):
         self.jobs = {}
         self.encodingopts = EncodingOptions()
         self.queue = EncodingQueue()
-        _debug_("EncodingServer started...", DINFO)
+        _debug_('EncodingServer started...', DINFO)
+
 
     def xmlrpc_echotest(self, blah):
         """ Using Twisted check the connection """
         _debug_('xmlrpc_echotest(blah=%r)' % (blah), 2)
         return (True, 'EncodingServer::echotest: %s' % blah)
 
-    def xmlrpc_initEncodeJob(self, source, output, friendlyname="", chapter=None):
+
+    def xmlrpc_initEncodeJob(self, source, output, friendlyname='', chapter=None):
         """ Using Twisted initialise an encoding job """
         _debug_('xmlrpc_initEncodeJob(source=%r, output=%r, friendlyname=%r, chapter=%r)' % \
             (source, output, friendlyname, chapter), 1)
@@ -95,11 +96,11 @@ class EncodingServer(xmlrpc.XMLRPC):
         if not (source or output):
             return (False, 'EncodingServer::initEncodeJob:  no source or output given')
 
-        # generate a "random" idnr based on the time in p2.3, int() can return long
+        # generate a 'random' idnr based on the time in p2.3, int() can return long
         # int's, which is fine, except it makes XMLRPC fail somewhere along the way so we
         # devide or random number by 100 :)
         idnr = int((time.time() / random.random()) / 100)
-        _debug_("idnr=%s" % (idnr), 2)
+        _debug_('idnr=%s' % (idnr), 2)
         self.jobs[idnr] = EncodingJob(source, output, friendlyname, idnr, chapter)
 
         #wait for the analyzing to end
@@ -109,14 +110,16 @@ class EncodingServer(xmlrpc.XMLRPC):
             _debug_('Analysis failed')
             return (False,10)
 
-        _debug_("Initialized job %s (idnr : %s)" % (friendlyname, idnr), DINFO)
+        _debug_('Initialized job %s (idnr: %s)' % (friendlyname, idnr), DINFO)
 
         return (True, idnr)
+
 
     def xmlrpc_getContainerCAP(self):
         """ Using Twisted get the container capabilities """
         _debug_('xmlrpc_getContainerCAP()' , 2)
         return EncodingOptions.getContainerList( self.encodingopts)
+
 
     def xmlrpc_setContainer(self, idnr, container):
         """ Using Twisted set the container """
@@ -124,14 +127,25 @@ class EncodingServer(xmlrpc.XMLRPC):
         status = self.jobs[idnr].setContainer(container)
 
         if not status:
-            return (True, "EncodingServer::setContainer: OK")
+            return (True, 'EncodingServer::setContainer: OK')
         else:
-            return (False, "EncodingServer::setContainer: %s" % status)
+            return (False, 'EncodingServer::setContainer: %s' % status)
+
+
+    def xmlrpc_setTimeslice(self,idnr,timeslice):
+        _debug_('xmlrpc_setTimeslice(self, %s, %s)' % (idnr, timeslice), 3)
+        status = self.jobs[idnr].setTimeslice(timeslice)
+        if not status:
+            return (True, 'EncodingServer::setTimeslice: OK')
+        else:
+            return (False, 'EncodingServer::setTimeslice: %s' % status)
+
 
     def xmlrpc_getVideoCodecCAP(self):
         """ Using Twisted get the video capabilities """
         _debug_('xmlrpc_getVideoCodecCAP()', 2)
         return EncodingOptions.getVideoCodecList(self.encodingopts)
+
 
     def xmlrpc_setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """ Using Twisted set the video codec """
@@ -144,14 +158,16 @@ class EncodingServer(xmlrpc.XMLRPC):
         status = self.jobs[idnr].setVideoCodec(vcodec, tgtsize, multipass, vbitrate, altprofile)
 
         if not status:
-            return (True, "EncodingServer::setVideoCodec: OK")
+            return (True, 'EncodingServer::setVideoCodec: OK')
         else:
-            return (False, "EncodingServer::setVideoCodec: %s" % status)
+            return (False, 'EncodingServer::setVideoCodec: %s' % status)
+
 
     def xmlrpc_getAudioCodecCAP(self):
         """ Using Twisted get the audio capabilities """
         _debug_('xmlrpc_getAudioCodecCAP()', 2)
         return EncodingOptions.getAudioCodecList(self.encodingopts)
+
 
     def xmlrpc_setAudioCodec(self, idnr, acodec, abrate):
         """ Using Twisted set the audio codec """
@@ -163,9 +179,9 @@ class EncodingServer(xmlrpc.XMLRPC):
         status = self.jobs[idnr].setAudioCodec(acodec, abrate)
 
         if not status:
-            return (True, "EncodingServer::setAudioCodec: OK")
+            return (True, 'EncodingServer::setAudioCodec: OK')
         else:
-            return (False, "EncodingServer::setAudioCodec: %s" % status)
+            return (False, 'EncodingServer::setAudioCodec: %s' % status)
 
 
     def xmlrpc_setVideoRes(self, idnr, videores ):
@@ -178,9 +194,9 @@ class EncodingServer(xmlrpc.XMLRPC):
         status = self.jobs[idnr].setVideoRes( videores)
 
         if not status:
-            return (True, "EncodingServer::setVideoRes: OK")
+            return (True, 'EncodingServer::setVideoRes: OK')
         else:
-            return (False, "EncodingServer::setVideoRes: %s" % status)
+            return (False, 'EncodingServer::setVideoRes: %s' % status)
 
 
     def xmlrpc_setNumThreads(self, idnr, numthreads ):
@@ -193,9 +209,9 @@ class EncodingServer(xmlrpc.XMLRPC):
         status = self.jobs[idnr].setNumThreads( numthreads)
 
         if not status:
-            return (True, "EncodingServer::setNumThreads: OK")
+            return (True, 'EncodingServer::setNumThreads: OK')
         else:
-            return (False, "EncodingServer::setNumThreads: %s" % status)
+            return (False, 'EncodingServer::setNumThreads: %s' % status)
 
 
     def xmlrpc_getVideoFiltersCAP(self):
@@ -214,33 +230,37 @@ class EncodingServer(xmlrpc.XMLRPC):
         status = self.jobs[idnr].setVideoFilters(unjam(filters))
 
         if not status:
-            return (True, "EncodingServer::setVideoFilters: OK")
+            return (True, 'EncodingServer::setVideoFilters: OK')
         else:
-            return (False, "EncodingServer::setVideoFilters: %s" % status)
+            return (False, 'EncodingServer::setVideoFilters: %s' % status)
+
 
     def xmlrpc_queueIt(self, idnr, now=False):
         """ Using Twisted queue a job to run """
         _debug_('xmlrpc_queueIt(idnr=%r, now=%r)' % (idnr, now), 2)
         self.queue.addEncodingJob(self.jobs[idnr])
         del self.jobs[idnr]
-        _debug_("Added job %s to the queue" % idnr, DINFO)
+        _debug_('Added job %s to the queue' % idnr, DINFO)
         if now:
             self.queue.startQueue()
-        return (True, "EncodingServer::queueIt: OK")
+        return (True, 'EncodingServer::queueIt: OK')
+
 
     def xmlrpc_getProgress(self):
         """ Using Twisted get the progress status of the current job """
         _debug_('xmlrpc_getProgress()', 2)
         prog = self.queue.getProgress()
         if type(prog) is str:
-            return (False, "EncodingServer::getProgress: %s" % prog)
+            return (False, 'EncodingServer::getProgress: %s' % prog)
         return (True, jam(prog))
+
 
     def xmlrpc_startQueue(self):
         """ Using Twisted start the job queue """
         _debug_('xmlrpc_startQueue()', 2)
         self.queue.startQueue()
-        return (True, "EncodingServer::startqueue: OK")
+        return (True, 'EncodingServer::startqueue: OK')
+
 
     def xmlrpc_listJobs(self):
         """ List the current jobs """
@@ -257,7 +277,7 @@ def main():
     os.chdir(tmppath)
 
     debug = False
-    if len(sys.argv) >= 2 and sys.argv[1] == "debug":
+    if len(sys.argv) >= 2 and sys.argv[1] == 'debug':
         debug = True
         import encodingcore
         encodingcore.DEBUG = debug

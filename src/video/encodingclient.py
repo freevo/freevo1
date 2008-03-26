@@ -81,8 +81,6 @@ __doc__="""EncodingClient, an interface to EncodingServer
 
 """
 
-
-
 def returnFromJelly(status, response):
     """Un-serialize EncodingServer responses"""
     if status:
@@ -90,17 +88,18 @@ def returnFromJelly(status, response):
     else:
         return (status, response)
 
+
 def connectionTest(teststr='testing'):
     """Test connectivity
 
     Returns false if the EncodingServer cannot be reached"""
-
     try:
         (status, response) = server.echotest(teststr)
     except:
         return (False, 'EncodingClient: connection error')
 
     return (status, response)
+
 
 def initEncodeJob(source, output, friendlyname="", title=None):
     """Initialize the encodingjob.
@@ -116,7 +115,6 @@ def initEncodeJob(source, output, friendlyname="", title=None):
     @param title: is obligatory if you have a dvd/dvd-on-disc, in wich case you need
         to specify a title (integer)
     """
-
     _debug_('initEncodeJob(%s, %s, %s, %s)' % (source, output, friendlyname, title), DINFO)
     if not (source or output):
         return (False, "EncodingClient: no source and/or output")
@@ -130,19 +128,29 @@ def initEncodeJob(source, output, friendlyname="", title=None):
 
     return (status, response)
 
+
 def getContainerCAP():
     """Get a list of possible container formats
 
     This returns a list with plain strings, each identifiyng a container format, like
     Avi, MPEG or OGG. Currently only Avi is available. The strings are user-readable.
     """
-
     try:
         response = server.getContainerCAP()
     except:
-        return (False ,'EncodingClient: connection error')
+        return (False, 'EncodingClient: connection error')
 
     return (True, response )
+
+
+def setTimeslice(idnr, timeslice):
+    """Set """
+    try:
+        (status, response) = server.setTimeslice(idnr, timeslice)
+    except:
+        return (False, 'EncodingClient: connection error')
+    return (status, response)
+
 
 def setContainer(idnr, container):
     """Set a container format
@@ -150,7 +158,6 @@ def setContainer(idnr, container):
     container is one of the possible container formats. It should be one of the strings
     returned by getContainerCAP.
     """
-
     if not (idnr or container):
         return (False, "EncodingClient: no idnr and/or container")
 
@@ -161,19 +168,20 @@ def setContainer(idnr, container):
 
     return (status, response)
 
+
 def getVideoCodecCAP():
     """Get a list of possible video codecs (depending on the input and container format)
 
     This returns a list with plain strings, each identifiyng a video codec, like
     MPEG4(divx), Xvid etc. Currently only MPEG4 is available. The strings are user-readable.
     """
-
     try:
         response = server.getVideoCodecCAP()
     except:
-        return (False,'EncodingClient: connection error')
+        return (False, 'EncodingClient: connection error')
 
-    return (True,response)
+    return (True, response)
+
 
 def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
     """Set a video codec
@@ -187,7 +195,6 @@ def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile
     @param vbitrate: is the video bitrate, if it is not 0 then this value is used instead
         of using the tgtsize.
     """
-
     if not (idnr or vcodec or tgtsize or vbitrate):
         return (False, "EncodingClient: no idnr and/or videocodec and/or targetsize")
 
@@ -198,19 +205,20 @@ def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile
 
     return (status, response)
 
+
 def getAudioCodecCAP():
     """Get a list of possible audio codecs (depending on the input and container format)
 
     This returns a list with plain strings, each identifiyng a audio codec, like
     MP3, Ogg, etc. Currently only MP3 is available. The strings are user-readable.
     """
-
     try:
         response = server.getAudioCodecCAP()
     except:
         return (False, 'EncodingClient: connection error')
 
     return (True, response )
+
 
 def setAudioCodec(idnr, acodec, abrate):
     """Set a audio codec
@@ -222,7 +230,6 @@ def setAudioCodec(idnr, acodec, abrate):
         between 0 and 320 is valid, it is advisable to take standard encoding bitrates
         like 32, 64, 128, 160, 192, 256 and 320.
     """
-
     if not (idnr or acodec or abrate):
         return (False, "EncodingClient: no idnr and/or audiocodec and/or audiobitrate")
 
@@ -233,13 +240,13 @@ def setAudioCodec(idnr, acodec, abrate):
 
     return (status, response)
 
+
 def setVideoRes(idnr, videores):
     """Set the video resolution
 
     @param vidoeres: is a string in the form of x:y
 
     """
-
     if not (idnr or videores):
         return (False, "EncodingClient: no idnr or no videores")
 
@@ -250,13 +257,13 @@ def setVideoRes(idnr, videores):
 
     return (status, response)
 
+
 def setNumThreads(idnr, numthreads):
     """Set the number of encoder threads
 
     @param numthreads: is a string value from 1-8
 
     """
-
     if not (idnr or numthreads):
         return (False, "EncodingClient: no idnr or no numthreads")
 
@@ -267,6 +274,7 @@ def setNumThreads(idnr, numthreads):
 
     return (status, response)
 
+
 def getVideoFiltersCAP():
     """Get a dict of possible video filters & processing operations
 
@@ -274,13 +282,13 @@ def getVideoFiltersCAP():
     a list of options (also human-readable strings) as possible settings for each filter.
     The first option in the list is the default.
     """
-
     try:
         response = server.getVideoFiltersCAP()
     except:
         return (False, 'EncodingClient: connection error')
 
-    return (True ,response)
+    return (True, response)
+
 
 def setVideoFilters(idnr, filters):
     """Set a number of possible video filters & processing operations
@@ -291,7 +299,6 @@ def setVideoFilters(idnr, filters):
     to each keyword is thus a string (wich means you cannot choose more then 1 option/setting) per
     video filter.
     """
-
     if not (idnr or filters):
         return (False, "EncodingClient: no idnr or filter dictionary")
 
@@ -302,11 +309,11 @@ def setVideoFilters(idnr, filters):
 
     return (status, response)
 
+
 def queueIt(idnr, now=False):
     """Insert the current job in the encodingqueue
         If now is true, the encoding queue is automatically started
     """
-
     if not idnr:
         return (False, "EncodingClient: no idnr")
 
@@ -316,6 +323,7 @@ def queueIt(idnr, now=False):
         return (False, 'EncodingClient: connection error')
 
     return (status, response)
+
 
 def getProgress():
     """Get the progress & pass information of the job currently encoding.
@@ -336,7 +344,6 @@ def getProgress():
     @returns: When the queue is active, this call returns a tuple of 4 values:
         (friendlyname, status, perc, timerem)
     """
-
     try:
         (status, response) = server.getProgress()
     except:
@@ -344,15 +351,16 @@ def getProgress():
 
     return returnFromJelly(status, response)
 
+
 def startQueue():
     """Start the encoding queue"""
-
     try:
         (status, response) = server.startQueue()
     except:
         return (False, 'EncodingClient: connection error')
 
     return (status, response)
+
 
 def listJobs():
     """Get a list with all jobs in the encoding queue and their current state
@@ -362,7 +370,6 @@ def listJobs():
         containing 3 values (idnr, friendlyname, status) These values have the same
         meaning as the corresponding values returned by the getProgress call
     """
-
     try:
         (status, response) = server.listJobs()
     except:
@@ -389,14 +396,14 @@ if __name__ == '__main__':
     if function == "runtest":
         #(status, idnr) = initEncodeJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'bam.avi', 'lala', 17)
         (status, idnr) = initEncodeJob('/dev/cdrom', '/home/rdc/fogu.avi', 'lala', 1)
-        print "Job has idnr nr : %s" % idnr
+        print "Job has idnr num: %s" % idnr
         print idnr
         #sleep(5)
         (status, codec) = getVideoCodecCAP(idnr)
         print codec[0]
         print codec[1]
         print setVideoCodec(idnr, codec[1], 1400, True, 0)
-        #print setVideoFilters(idnr, {'Denoise' : 'HQ denoise'})
+        #print setVideoFilters(idnr, {'Denoise': 'HQ denoise'})
         #sleep(5)
         print queueIt(idnr, True)
         sleep(5)

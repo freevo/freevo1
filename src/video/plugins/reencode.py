@@ -29,11 +29,12 @@
 # -----------------------------------------------------------------------
 
 
+import os
 from os.path import join, split
+import config
 import plugin
 import menu
-import os
-import config
+import util
 from video.encodingclient import *
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
@@ -57,9 +58,11 @@ class PluginInterface(plugin.ItemPlugin):
         self.source = ''
         self.output = ''
         self.resetprofile()
+        self.timeslice = [ None, None ]
 
     def resetprofile(self):
         self.profile = {}
+        self.timeslice = [ None, None ]
         self.profile['container'] = config.REENCODE_CONTAINER
         self.profile['resolution'] = config.REENCODE_RESOLUTION
         self.profile['videocodec'] = config.REENCODE_VIDEOCODEC
@@ -148,6 +151,8 @@ class PluginInterface(plugin.ItemPlugin):
         menu_items += [ menu.MenuItem(_('Start Encoding'), self.create_job, self.profile) ]
         menu_items += [ menu.MenuItem(_('Select Encoding Profile'), action=self.select_profile) ]
         menu_items += [ menu.MenuItem(_('Modify Container'), action=self.mod_container) ]
+        menu_items += [ menu.MenuItem(_('Modify Start Time'), action=self.mod_start_time) ]
+        menu_items += [ menu.MenuItem(_('Modify End Time'), action=self.mod_end_time) ]
         menu_items += [ menu.MenuItem(_('Modify Resolution'), action=self.mod_resolution) ]
         menu_items += [ menu.MenuItem(_('Modify Video Codec'), action=self.mod_videocodec) ]
         menu_items += [ menu.MenuItem(_('Modify Video Bitrate'), action=self.mod_videobitrate) ]
@@ -161,6 +166,7 @@ class PluginInterface(plugin.ItemPlugin):
         menuw.pushmenu(encoding_menu)
         menuw.refresh()
 
+
     def select_profile(self, arg=None, menuw=None):
         _debug_('select_profile(self, arg=None, menuw=None)', 2)
         menu_items = []
@@ -173,6 +179,46 @@ class PluginInterface(plugin.ItemPlugin):
         menuw.pushmenu(encoding_menu)
         menuw.refresh()
 
+
+    def set_start_time(self, arg=None, menuw=None):
+        self.timeslice[0] = arg
+        if menuw:
+            menuw.back_one_menu(arg='reload')
+
+
+    def set_end_time(self, arg=None, menuw=None):
+        self.timeslice[1] = arg
+        if menuw:
+            menuw.back_one_menu(arg='reload')
+
+
+    def _select_time(self, arg=None, menuw=None, which=None):
+        bookmarkfile = util.get_bookmarkfile(self.item.filename)
+        if not os.path.exists(bookmarkfile):
+            self.error(_('No bookmarks are set for this video'))
+            return
+        menu_items = []
+        menu_items = [ menu.MenuItem(_('Do not set'), action=which, arg=None),]
+        for line in util.readfile(bookmarkfile):
+            sec = int(line)
+            hour = int(sec/3600)
+            min = int((sec-(hour*3600))/60)
+            time = '%0.2d:%0.2d:%0.2d' % (hour,min,sec % 60)
+            menu_items.append(menu.MenuItem(time, action=which, arg=sec))
+        encoding_menu = menu.Menu(_('Select Time'), menu_items, item_types = 'video encoding menu')
+        encoding_menu.infoitem = self
+        menuw.pushmenu(encoding_menu)
+        menuw.refresh()
+
+
+    def mod_start_time(self, arg=None, menuw=None):
+        self._select_time(arg, menuw, self.set_start_time)
+
+
+    def mod_end_time(self, arg=None, menuw=None):
+        self._select_time(arg, menuw, self.set_end_time)
+
+
     def mod_container(self, arg=None, menuw=None):
         _debug_('mod_container(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
@@ -182,6 +228,7 @@ class PluginInterface(plugin.ItemPlugin):
         container_menu.infoitem = self
         menuw.pushmenu(container_menu)
         menuw.refresh()
+
 
     def mod_resolution(self, arg=None, menuw=None):
         _debug_('mod_resolution(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
@@ -193,6 +240,7 @@ class PluginInterface(plugin.ItemPlugin):
         menuw.pushmenu(resolution_menu)
         menuw.refresh()
 
+
     def mod_videocodec(self, arg=None, menuw=None):
         _debug_('mod_videocodec(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
@@ -202,6 +250,7 @@ class PluginInterface(plugin.ItemPlugin):
         videocodec_menu.infoitem = self
         menuw.pushmenu(videocodec_menu)
         menuw.refresh()
+
 
     def mod_videobitrate(self, arg=None, menuw=None):
         _debug_('mod_videobitrate(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
@@ -213,6 +262,7 @@ class PluginInterface(plugin.ItemPlugin):
         menuw.pushmenu(videobitrate_menu)
         menuw.refresh()
 
+
     def mod_audiocodec(self, arg=None, menuw=None):
         _debug_('mod_audiocodec(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
@@ -222,6 +272,7 @@ class PluginInterface(plugin.ItemPlugin):
         audiocodec_menu.infoitem = self
         menuw.pushmenu(audiocodec_menu)
         menuw.refresh()
+
 
     def mod_audiobitrate(self, arg=None, menuw=None):
         _debug_('mod_audiobitrate(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
@@ -233,6 +284,7 @@ class PluginInterface(plugin.ItemPlugin):
         menuw.pushmenu(audiobitrate_menu)
         menuw.refresh()
 
+
     def mod_numpasses(self, arg=None, menuw=None):
         _debug_('mod_numpasses(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
@@ -242,6 +294,7 @@ class PluginInterface(plugin.ItemPlugin):
         numpasses_menu.infoitem = self
         menuw.pushmenu(numpasses_menu)
         menuw.refresh()
+
 
     def mod_numthreads(self, arg=None, menuw=None):
         _debug_('mod_numthreads(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
@@ -253,6 +306,7 @@ class PluginInterface(plugin.ItemPlugin):
         menuw.pushmenu(numthreads_menu)
         menuw.refresh()
 
+
     def mod_videofilter(self, arg=None, menuw=None):
         _debug_('mod_videofilter(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
@@ -262,6 +316,7 @@ class PluginInterface(plugin.ItemPlugin):
         videofilter_menu.infoitem = self
         menuw.pushmenu(videofilter_menu)
         menuw.refresh()
+
 
     def select_encoding_profile(self, arg=None, menuw=None):
         _debug_('select_encoding_profile(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
@@ -313,6 +368,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         if menuw:
             menuw.back_one_menu(arg='reload')
+
 
     def alter_prop(self, arg=(None, None), menuw=None):
         _debug_('alter_prop(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
@@ -371,6 +427,12 @@ class PluginInterface(plugin.ItemPlugin):
 
         idnr = resp
 
+        (status, resp) = setTimeslice(idnr, self.timeslice)
+        _debug_('setTimeslice:status:%s resp:%s' % (status, resp))
+        if not status:
+            self.error(resp)
+            return
+
         (status, resp) = setContainer(idnr, profile['container'])
         _debug_('setContainer:status:%s resp:%s' % (status, resp))
         if not status:
@@ -378,7 +440,8 @@ class PluginInterface(plugin.ItemPlugin):
             return
 
         multipass = profile['numpasses'] > 1
-        (status, resp) = setVideoCodec(idnr, profile['videocodec'], 0, multipass, profile['videobitrate'], profile['altprofile'])
+        (status, resp) = setVideoCodec(idnr, profile['videocodec'], 0, multipass,
+            profile['videobitrate'], profile['altprofile'])
         _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)

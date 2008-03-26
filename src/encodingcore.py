@@ -96,42 +96,45 @@ mappings = {
 
 
 
-#from pytvgrab enum.py, see http://pytvgrab.sourceforge.net
 class Enum(dict):
     """Enum
+    from pytvgrab enum.py, see http://pytvgrab.sourceforge.net
 
     Enum(names, x=0)"""
-
     def __init__(self, names, x=0):
         for i in range(x, x+len(names)):
             self.__dict__[names[i-x]]=i
             self[i]=names[i-x]
     # __init__()
 
-
 status = Enum(['notset', 'apass', 'vpass1', 'vpassfinal', 'postmerge'])
+
+
 
 class EncodingOptions:
     def getContainerList(self):
         """Return a list of possible containers"""
         return mappings['lists']['containers']
 
+
     def getVideoCodecList(self):
         """Return a list of possible video codecs"""
         return mappings['lists']['videocodecs']
 
+
     def getAudioCodecList(self):
         """Return a possible audio codec list"""
         return mappings['lists']['audiocodecs']
+
 
     def getVideoFiltersList(self):
         """Return a list of possible video filters"""
         return mappings['filtertype']
 
 
+
 class EncodingJob:
     """Class for creation & configuration of EncodingJobs. This generates the mencoder commands"""
-
     def __init__(self, source, output, friendlyname, idnr, chapter=None):
         """Initialize class instance"""
         _debug_('encodingcore.EncodingJob.__init__(%s, %s, %s, %s, %s)' % \
@@ -156,6 +159,11 @@ class EncodingJob:
         self.vfilters = []
         self.crop = None
         self.cropres = None
+
+        # list of initial and end point of slice to encode
+        self.timeslice = [ None , None ]
+        # corresponding arguments for mencoder
+        self.timeslice_mencoder = []
 
         self.acodec = mappings['lists']['audiocodecs'][0]
         self.abrate = 128
@@ -195,6 +203,24 @@ class EncodingJob:
                 self.finishedanalyze = True
 
 
+    def setTimeslice(self, timeslice):
+        "Set the encoding timeslice"
+        self.timeslice = timeslice
+        assert(type(timeslice) == type([]))
+        assert(len(timeslice) == 2)
+        self.timeslice_mencoder = []
+        start=0
+        if timeslice[0]:
+            self.timeslice_mencoder += [ '-ss', str(timeslice[0])]
+            start = timeslice[0]
+        if timeslice[1]:
+            self.timeslice_mencoder += ['-endpos', str(timeslice[1]-start)]
+            if timeslice[1] < start:
+                self.timeslice_mencoder = []
+                self.timeslice = [ None , None ]
+                return 'Invalid slice of times: end is before start ??'
+
+
     def setContainer(self, container):
         """Set a container to hold the audio & video streams"""
         #safety checks
@@ -209,6 +235,7 @@ class EncodingJob:
             self.output = ('%s/%s.%s' % (config.ENCODINGSERVER_SAVE_DIR, self.output, self.container))
         else:
             self.output = ('%s.%s' % (self.output, self.container))
+
 
     def setVideoCodec(self, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """Set video codec and target filesize (in MB) or bit rate (in kbits/sec)"""
@@ -237,11 +264,13 @@ class EncodingJob:
         self.acodec = acodec
         self.abrate = abrate
 
+
     def setVideoFilters(self, videofilters):
         """Set video filters"""
         for vfilter, option in videofilters:
             if mappings['filter'].has_key(option):
                 self.vfilters += [ mappings['filter'][option]]
+
 
     def setVideoRes(self, videores):
         if videores == 'Optimal':
@@ -249,8 +278,10 @@ class EncodingJob:
         else:
             (self.resx, self.resy) = videores.split(':')
 
+
     def setNumThreads(self, numthreads):
         self.threads = numthreads
+
 
     def _CalcVideoBR(self):
         """Calculates the video bitrate"""
@@ -296,18 +327,25 @@ class EncodingJob:
         self._CropDetect()
 
 
-    def _CropDetect(self): #contains pieces of QuickRip
-        """Detect cropping
+    def _CropDetect(self):
+        """Detect cropping, contains pieces of QuickRip
 
         Function is always called because cropping is a good thing, and we can pass our ideal values
         back to the client wich can verify them visually if needed.""" #not true atm
         #build mplayer parameters
-        if hasattr(self, 'length'):
-            sstep = int(self.length / 27)
+        start = 0
+        if self.timeslice[0]:
+            start = self.timeslice[0]
+        if self.timeslice[1]:
+            sstep = int( (self.timeslice[1] - start) / 27)
+        elif hasattr(self, "length"):
+            sstep = int( (self.length - start) / 27)
         else:
             sstep = 60
 
-        arguments = [ '-vf', 'cropdetect=30', '-nosound', '-vo', 'null', '-frames', '10','-fps=540', '-sstep', str(sstep)]
+        arguments = self.timeslice_mencoder + [ "-vf", "cropdetect=30", "-nosound", "-vo", "null", "-fps", "540"]
+        if sstep > 0:
+            arguments +=  [ "-sstep", str(sstep)]
 
         if self.info.mime == 'video/dvd':
             arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.chapter ]
@@ -318,6 +356,7 @@ class EncodingJob:
         _debug_(' '.join([mplayer]+arguments))
         #print (' '.join([mplayer]+arguments))
         self._run(mplayer, arguments, self._CropDetectParse, None, 0, None)
+
 
     def _GenerateCLMencoder(self):
         """Generate the command line(s) to be executed, using MEncoder for encoding"""
@@ -344,6 +383,7 @@ class EncodingJob:
 
             self.cls = [ videopass1, videopass2 ]
 
+
     def _GCLMSource(self):
         """Returns source part of mencoder"""
         if self.info.mime == 'video/dvd':
@@ -354,6 +394,7 @@ class EncodingJob:
             return audio+[ '-dvd-device', self.source, 'dvd://%s' % self.chapter]
         else:
             return [ self.source ]
+
 
     def _GCLMVideopass(self, passnr):
         """Returns video pass specefic part of mencoder cl"""
@@ -478,13 +519,16 @@ class EncodingJob:
         if yscaled:
             args += ['-sws', '1']
 
+        args = self.timeslice_mencoder + args
+
         return args
 
 
-    #from QuickRip, heavily adapted, new algo
-    #TODO give this another name, it does more then crop detection only
     def _CropDetectParse(self, lines, data): #seek to remove data
-        """Parses Mplayer output to obtain ideal cropping parameters, and do PAL/NTSC detection"""
+        """Parses Mplayer output to obtain ideal cropping parameters, and do PAL/NTSC detection
+        from QuickRip, heavily adapted, new algo
+        TODO give this another name, it does more then crop detection only
+        """
         #print '_CropDetectParse(self, lines=%r, data=%r)' % (lines, data)
 
         re_crop = re.compile('.*-vf crop=(\d*:\d*:\d*:\d*).*')
@@ -613,11 +657,13 @@ class EncodingJob:
         #end analyzing
         self.finishedanalyze = True
 
+
     def _CalcBPP(self, x, y):
         """Perform a BPP (Bits per Pixel calculation)"""
         bpp = (self.vbrate * 1000) / (x * y * self.fps)
         _debug_('_CalcBPP() = %s, fps=%s' % (bpp, self.fps))
         return bpp
+
 
     def _OptimalRes(self, x, y):
         """Using BPP calculations, try to find out the ideal resolution for this movie"""
@@ -639,9 +685,12 @@ class EncodingJob:
 
         return ( int(optx), int (opty) )
 
-    #from Quickrip, adapted
-    def _MencoderParse(self, line, data): #seek to remove data
-        """Parses mencoder stdout to get progress and trem"""
+
+    def _MencoderParse(self, line, data):
+        """Parses mencoder stdout to get progress and them
+        from Quickrip, adapted
+        seek to remove data
+        """
         #(passtype, title) = data
 
         re_progress = re.compile('(\d+)\%\) .*Trem:\s*(\d+\w+)\s+')
@@ -650,22 +699,23 @@ class EncodingJob:
             self.trem = re_progress.search(line).group(2)
             #self.ui_updateProgress(perc, trem, passtype)
 
-    #from QuickRip, adapted
-    def _run(self, program, arguments, finalfunc, updatefunc=None,
-                flushbuffer=0, data=None, lock=None): # seek to remove data and/or crop (not really used)
-        """Runs a program; supply program name (string) and arguments (list)"""
+
+    def _run(self, program, arguments, finalfunc, updatefunc=None, flushbuffer=0, data=None, lock=None):
+        """Runs a program; supply program name (string) and arguments (list)
+        seek to remove data and/or crop (not really used)
+        """
         command = [program]
         command += arguments
 
-        self.thread = CommandThread(self, command, updatefunc, finalfunc,
-                                    flushbuffer, data, None) #self.lock)
+        self.thread = CommandThread(self, command, updatefunc, finalfunc, flushbuffer, data, None)
         self.thread.start()
 
 
 
-#command executing class - Taken from Quickrip & adapted.
 class CommandThread(threading.Thread): # seek to remove data andor crop (not really used)
-    """Handle threading of external commands"""
+    """Handle threading of external commands
+    command executing class - Taken from Quickrip & adapted.
+    """
     def __init__(self, parent, command, updatefunc, finalfunc, flushbuffer, data, lock):
         threading.Thread.__init__(self)
         self.parent = parent
@@ -676,6 +726,7 @@ class CommandThread(threading.Thread): # seek to remove data andor crop (not rea
         self.data = data
         self.lock = lock
         _debug_('command=\"%s\"' % ' '.join(command))
+
 
     def run(self):
         #self.lock.acquire()
@@ -736,7 +787,6 @@ class CommandThread(threading.Thread): # seek to remove data andor crop (not rea
 
 class EncodingQueue:
     """Class for generating an encoding queue"""
-
     def __init__(self):
         #we keep a list and a dict because a dict doesn't store an order
         self.qlist = []
@@ -746,11 +796,13 @@ class EncodingQueue:
         #remove old files
         self._removeTmp()
 
+
     def addEncodingJob(self, encjob):
         """Adds an encodingjob to the queue"""
 
         self.qlist += [encjob]
         self.qdict[encjob.idnr] = encjob
+
 
     def getProgress(self):
         """Gets progress on the current job"""
@@ -760,12 +812,14 @@ class EncodingQueue:
         else:
             return 'No job currently running'
 
+
     def startQueue(self):
         """Start the queue"""
         if not self.running:
             self.running = True
             _debug_('queue started', DINFO)
             self._runQueue()
+
 
     def listJobs(self):
         """Returns a list of queue'ed jobs"""
@@ -777,6 +831,7 @@ class EncodingQueue:
                 jlist += [ (idnr, job.name, job.status) ]
             return jlist
 
+
     def _removeTmp(self):
         """Removes possible temporary files created during encoding"""
         tmpfiles = ['frameno.avi', 'divx2pass.log', 'xvid-twopass.stats', 'x264_2pass.log' ]
@@ -784,6 +839,7 @@ class EncodingQueue:
         for tmpfile in tmpfiles:
             if os.path.exists(tmpfile):
                 os.remove(tmpfile)
+
 
     def _runQueue(self, line='', data=''):
         """Executes the jobs in the queue, and gets called after every mencoder run is completed"""
