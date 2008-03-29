@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.23
+LOCAL_CONF_VERSION = 5.24
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -357,6 +357,9 @@ LOCAL_CONF_CHANGES = [
      Changed SHUTDOWN_SYS_ENABLE to SYS_SHUTDOWN_ENABLE for consistency
      Removed RECORDSERVER_PORT2 as it is no longer needed, using RECORDSERVER_PORT instead
      '''),
+    (5.24,
+     ''' Added POLL_TIME to allow custom poll rates to be set, default 0.01 seconds
+     '''),
 ]
 
 
@@ -382,6 +385,10 @@ if int(str(CONF.version).split('.')[1]) != \
 # ======================================================================
 # General freevo settings:
 # ======================================================================
+
+POLL_TIME             = 0.01         # time in seconds that the poll handlers are called
+                                     # a lower rate of 0.05 is less demanding for less
+                                     # powerful processors
 
 AUDIO_DEVICE          = '/dev/dsp'   # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 AUDIO_INPUT_DEVICE    = '/dev/dsp1'  # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?

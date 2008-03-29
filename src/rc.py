@@ -507,7 +507,7 @@ class EventHandler:
         self.lock               = threading.RLock()
         # last time we stopped sleeping
         self.sleep_timer        = 0
-        kaa.Timer(self.poll).start(0.01)
+        kaa.Timer(self.poll).start(config.POLL_TIME)
         _debug_('EventHandler.self.inputs=%r' % (self.inputs,), 1)
 
 
