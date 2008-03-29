@@ -239,12 +239,13 @@ class BusyIcon(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.setDaemon(1)
-        self.mode_flag   = threading.Event()
-        threading.Thread.start(self)
+        self.lock = threading.RLock()
+        self.mode_flag = threading.Event()
         self.timer  = 0
         self.active = False
-        self.lock   = threading.RLock()
         self.rect   = None
+        threading.Thread.start(self)
+
 
     def wait(self, timer):
         self.lock.acquire()
@@ -255,10 +256,13 @@ class BusyIcon(threading.Thread):
         finally:
             self.lock.release()
 
+
     def stop(self):
+        print 'DJW:self.rect=%r' % (self.rect,)
         self.lock.acquire()
         self.active = False
         self.lock.release()
+
 
     def run(self):
         while (1):
@@ -280,16 +284,16 @@ class BusyIcon(threading.Thread):
                         x = osd.width  - config.OSD_OVERSCAN_RIGHT - 20 - width
                         y = osd.height - config.OSD_OVERSCAN_BOTTOM - 20 - height
 
-                        self.rect = (x,y,width,height)
+                        self.rect = (x, y, width, height)
                         # backup the screen
-                        screen = pygame.Surface((width,height))
-                        screen.blit(osd.screen, (0,0), self.rect)
+                        screen = pygame.Surface((width, height))
+                        screen.blit(osd.screen, (0, 0), self.rect)
                         # draw the icon
                         osd.drawbitmap(image, x, y)
                         osd.update(rect=self.rect, stop_busyicon=False)
 
                         # restore the screen
-                        osd.screen.blit(screen, (x,y))
+                        osd.screen.blit(screen, (x, y))
                 finally:
                     self.lock.release()
 
@@ -345,18 +349,19 @@ class OSD:
         # disable term blanking for mga and fbcon and restore the
         # tty so that sdl can use it
         if config.CONF.display in ('mga', 'fbcon'):
-            for i in range(0,7):
+            for i in range(0, 7):
                 try:
-                    fd = os.open('/dev/tty%s' % i, os.O_RDONLY | os.O_NONBLOCK)
+                    device = '/dev/tty%s' % i
+                    fd = os.open(device, os.O_RDONLY | os.O_NONBLOCK)
                     try:
                         # set ioctl (tty, KDSETMODE, KD_TEXT)
                         ioctl(fd, 0x4B3A, 0)
-                    except:
-                        pass
+                    except Exception, why:
+                        print 'Cannot set KD_TEXT on term %s: %s' % (device, why)
                     os.close(fd)
                     os.system('%s -term linux -cursor off -blank 0 -clear -powerdown 0 ' \
                               '-powersave off </dev/tty%s > /dev/tty%s 2>/dev/null' % \
-                              (config.CONF.setterm, i,i))
+                              (config.CONF.setterm, i, i))
                 except:
                     pass
 
@@ -376,8 +381,7 @@ class OSD:
             os.putenv('SDL_VIDEO_WINDOW_POS', '%d,%d' % (config.CONF.x, config.CONF.y))
 
         try:
-            self.screen = pygame.display.set_mode((self.width, self.height),
-                                                  self.hw, self.depth)
+            self.screen = pygame.display.set_mode((self.width, self.height), self.hw, self.depth)
         except:
             self.screen = pygame.display.set_mode((self.width, self.height))
 
@@ -407,7 +411,7 @@ class OSD:
             os.system(config.OSD_SDL_EXEC_AFTER_STARTUP)
 
         self.sdl_driver = pygame.display.get_driver()
-        _debug_('SDL Driver: %s' % (str(self.sdl_driver)),2)
+        _debug_('SDL Driver: %s' % (str(self.sdl_driver)), 2)
 
         pygame.mouse.set_visible(0)
         pygame.key.set_repeat(500, 30)
@@ -429,8 +433,7 @@ class OSD:
         # starts the render and it's thread
         self.render = animation.render.get_singleton()
 
-        pygame.time.delay(10)   # pygame.time.get_ticks don't seem to
-                                # work otherwise
+        pygame.time.delay(10)   # pygame.time.get_ticks don't seem to work otherwise
 
 
     def focused_app(self):
@@ -449,8 +452,8 @@ class OSD:
         for _time in range(_times):
             self.app_list.remove(app)
         if _times and hasattr(self.focused_app(), 'event_context'):
-            _debug_('app is %s' % self.focused_app(),2)
-            _debug_('osd: Setting context to %s' % self.focused_app().get_event_context(),2)
+            _debug_('app is %s' % self.focused_app(), 2)
+            _debug_('osd: Setting context to %s' % self.focused_app().get_event_context(), 2)
             rc.set_context(self.focused_app().get_event_context())
 
 
@@ -540,7 +543,7 @@ class OSD:
 
             # backup the screen
             self.__stop_screen__ = pygame.Surface((self.width, self.height))
-            self.__stop_screen__.blit(self.screen, (0,0))
+            self.__stop_screen__.blit(self.screen, (0, 0))
             pygame.display.quit()
         finally:
             self.mutex.release()
@@ -561,7 +564,7 @@ class OSD:
             self.screen = pygame.display.set_mode((self.width, self.height), self.hw,
                                                   self.depth)
             if hasattr(self, '__stop_screen__'):
-                self.screen.blit(self.__stop_screen__, (0,0))
+                self.screen.blit(self.__stop_screen__, (0, 0))
                 del self.__stop_screen__
 
             # We need to go back to fullscreen mode if that was the mode before the shutdown
@@ -793,11 +796,11 @@ class OSD:
                 width = 1
 
             if width == -1 or fill:
-                r,g,b,a = self._sdlcol(color)
+                r, g, b, a = self._sdlcol(color)
                 w = x1 - x0
                 h = y1 - y0
                 box = pygame.Surface((int(w), int(h)))
-                box.fill((r,g,b))
+                box.fill((r, g, b))
                 box.set_alpha(a)
                 if layer:
                     layer.blit(box, (x0, y0))
@@ -875,8 +878,7 @@ class OSD:
             return fi
 
 
-    def __drawstringframed_line__(self, string, max_width, font, hard,
-                                  ellipses, word_splitter):
+    def __drawstringframed_line__(self, string, max_width, font, hard, ellipses, word_splitter):
         """
         calculate _one_ line for drawstringframed.
         @returns: a tuple containing
@@ -967,20 +969,19 @@ class OSD:
             w, h       = surface.get_size()
             alpha      = pygame.surfarray.pixels_alpha(surface)
 
-            # transform all the alpha values in x,y range
+            # transform all the alpha values in x, y range
             # any speedup could help alot
             for x in range(max(w-pixels, 1), w):
                 for y in range(1, h):
-                    if alpha[x,y][0] != 0:
-                        alpha[x,y] = int(alpha[x,y][0]*opaque_mod)
+                    if alpha[x, y][0] != 0:
+                        alpha[x, y] = int(alpha[x, y][0]*opaque_mod)
                 opaque_mod -= opaque_stp
         except Exception, e:
             _debug_('__draw_transparent_text__: %s' % e, DERROR)
 
 
-    def drawstringframed(self, string, x, y, width, height, font, fgcolor=None,
-                         bgcolor=None, align_h='left', align_v='top', mode='hard',
-                         layer=None, ellipses='...', dim=True):
+    def drawstringframed(self, string, x, y, width, height, font, fgcolor=None, bgcolor=None,
+        align_h='left', align_v='top', mode='hard', layer=None, ellipses='...', dim=True):
         """
         draws a string (text) in a frame. This tries to fit the
         string in lines, if it can't, it truncates the text,
@@ -1005,10 +1006,10 @@ class OSD:
             or 'soft' (based on words)
         """
         if not pygame.display.get_init():
-            return '', (x,y,x,y)
+            return '', (x, y, x, y)
 
         if not string:
-            return '', (x,y,x,y)
+            return '', (x, y, x, y)
 
         shadow_x      = 0
         shadow_y      = 0
@@ -1055,7 +1056,7 @@ class OSD:
             line_height = int(line_height) + 1
 
         if width <= 0 or height < font.height:
-            return string, (x,y,x,y)
+            return string, (x, y, x, y)
 
         num_lines_left   = int((height+line_height-font.height) / line_height)
         lines            = []
@@ -1078,16 +1079,13 @@ class OSD:
             # rest that does not fit (r) and True if the breaking was because
             # of a \n (n)
             #
-            (w, s, r, n) = self.__drawstringframed_line__(string, width, font, hard,
-                                                          current_ellipses, ' ')
+            (w, s, r, n) = self.__drawstringframed_line__(string, width, font, hard, current_ellipses, ' ')
             if s == '' and not hard:
                 # nothing fits? Try to break words at ' -_' and no ellipses
-                (w, s, r, n) = self.__drawstringframed_line__(string, width, font, hard,
-                                                              None, ' -_')
+                (w, s, r, n) = self.__drawstringframed_line__(string, width, font, hard, None, ' -_')
                 if s == '':
                     # still nothing? Use the 'hard' way
-                    (w, s, r, n) = self.__drawstringframed_line__(string, width, font,
-                                                                  'hard', None, ' ')
+                    (w, s, r, n) = self.__drawstringframed_line__(string, width, font, 'hard', None, ' ')
             lines.append((w, s))
             while r and r[0] == '\n':
                 lines.append((0, ' '))
@@ -1149,9 +1147,8 @@ class OSD:
 
                     if bgcolor:
                         # draw a box around the text if we have a bgcolor
-                        self.drawbox(x0, y0, x0+render.get_size()[0],
-                                     y0+render.get_size()[1], color=bgcolor, fill=1,
-                                     layer=layer)
+                        self.drawbox(x0, y0, x0+render.get_size()[0], y0+render.get_size()[1],
+                            color=bgcolor, fill=1, layer=layer)
 
                     if border_color:
                         # draw the text 8 times with the border_color to get
@@ -1160,10 +1157,8 @@ class OSD:
                         if dim:
                             # draw on a tmp surface if we need to dim. It looks
                             # bad if we don't do that
-                            tmp = pygame.Surface((render.get_size()[0] + \
-                                                  2 * border_radius,
-                                                  render.get_size()[1] + \
-                                                  2 * border_radius)).convert_alpha()
+                            tmp = pygame.Surface((render.get_size()[0] + 2 * border_radius,
+                                                  render.get_size()[1] + 2 * border_radius)).convert_alpha()
                             tmp.fill((255, 0, 0, 0))
 
                             for ox in (0, border_radius, border_radius*2):
@@ -1171,7 +1166,7 @@ class OSD:
                                     if ox or oy:
                                         tmp.blit(re, (ox, oy))
                             tmp.blit(render, (border_radius, border_radius))
-                            self.__draw_transparent_text__(tmp,dim_size)
+                            self.__draw_transparent_text__(tmp, dim_size)
                             layer.blit(tmp, (x0-border_radius, y0-border_radius))
 
                         else:
@@ -1259,9 +1254,8 @@ class OSD:
         elif align == 'right':
             tx -= width
 
-        self.drawstringframed(string, x, y, width, -1, self.getfont(font, ptsize),
-                              fgcolor, bgcolor, align_h = align, layer=layer,
-                              ellipses='')
+        self.drawstringframed(string, x, y, width, -1, self.getfont(font, ptsize), fgcolor, bgcolor,
+            align_h=align, layer=layer, ellipses='')
 
 
     def _savepixel(self, x, y, s):
@@ -1270,7 +1264,7 @@ class OSD:
         for drawcircle
         """
         try:
-            return (x, y, s.get_at((x,y)))
+            return (x, y, s.get_at((x, y)))
         except:
             return None
 
@@ -1279,7 +1273,7 @@ class OSD:
         restore the saved pixel
         """
         if save:
-            s.set_at((save[0],save[1]), save[2])
+            s.set_at((save[0], save[1]), save[2])
 
 
     def drawcircle(self, s, color, x, y, radius):
@@ -1307,8 +1301,7 @@ class OSD:
         self._restorepixel(p6, s)
 
 
-    def drawroundbox(self, x0, y0, x1, y1, color=None, border_size=0, border_color=None,
-                     radius=0, layer=None):
+    def drawroundbox(self, x0, y0, x1, y1, color=None, border_size=0, border_color=None, radius=0, layer=None):
         """
         draw a round box
         """
@@ -1346,11 +1339,11 @@ class OSD:
                 box = pygame.Surface((w, h), SRCALPHA)
 
                 # clear surface
-                box.fill((0,0,0,0))
+                box.fill((0, 0, 0, 0))
             else:
                 box = layer
 
-            r,g,b,a = self._sdlcol(color)
+            r, g, b, a = self._sdlcol(color)
 
             if border_size:
                 if radius >= 1:
@@ -1402,8 +1395,7 @@ class OSD:
                 try:
                     pygame.display.update(rect)
                 except:
-                    _debug_('osd.update(rect) failed, bad rect? - %s' % str(rect), 2)
-                    _debug_('updating whole screen')
+                    _debug_('osd.update(rect=%r) failed, bad rect?' % (rect,), DERROR)
                     pygame.display.flip()
             else:
                 pygame.display.flip()
@@ -1455,7 +1447,7 @@ class OSD:
     # Convert a 32-bit TRGB color to a 4 element tuple for SDL
     def _sdlcol(self, col):
         if col==None:
-            return (0,0,0,255)
+            return (0, 0, 0, 255)
         a = 255 - ((col >> 24) & 0xff)
         r = (col >> 16) & 0xff
         g = (col >> 8) & 0xff
