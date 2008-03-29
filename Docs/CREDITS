@@ -68,6 +68,9 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
+Andrea Mennucc <mennucc1 at debian.org>
+o Slice reencoding
+
 Grzegorz Patron <rurus9 at gmail.com>
 o Polish translation
 
@@ -163,6 +166,7 @@ Adam Charrett <ajmcharrett at hotmail.com>
 o Buttonbar plug-in
 o Screensaver plug-in
 o TV Recording Manager plug-in
+o DVB live pause plug-in
 o DVB streamer plug-in
 o DVD copy plug-in
 

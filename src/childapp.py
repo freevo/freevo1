@@ -51,7 +51,7 @@ class ChildApp:
     """
     ready = False
 
-    def __init__(self, app, debugname=None, doeslogging=0):
+    def __init__(self, app, debugname=None, doeslogging=0, callback_use_rc=True):
         """
         Initialise ChildApp
         """
@@ -154,11 +154,11 @@ class ChildApp:
             self.ready = False
             return
 
-        self.so = Read_Thread('stdout', self.child.stdout, self.stdout_cb, debug_name, doeslogging)
+        self.so = Read_Thread('stdout', self.child.stdout, self.stdout_cb, debug_name, doeslogging, callback_use_rc)
         self.so.setDaemon(1)
         self.so.start()
 
-        self.se = Read_Thread('stderr', self.child.stderr, self.stderr_cb, debug_name, doeslogging)
+        self.se = Read_Thread('stderr', self.child.stderr, self.stderr_cb, debug_name, doeslogging, callback_use_rc)
         self.se.setDaemon(1)
         self.se.start()
 
@@ -174,8 +174,11 @@ class ChildApp:
     def write(self, line):
         _debug_('ChildApp.write(line=%r) to pid %s' % (line.strip('\n'), self.child.pid), 2)
         #self.shild.communicate(line)
-        self.child.stdin.write(line)
-        self.child.stdin.flush()
+        try:
+            self.child.stdin.write(line)
+            self.child.stdin.flush()
+        except IOError:
+            _debug_('ChildApp.write(line=%r): failed' % (line.strip('\n'),), DWARNING)
 
 
     def stdout_cb(self, line):
@@ -299,7 +302,7 @@ class ChildApp2(ChildApp):
     """
     Enhanced version of ChildApp handling most playing stuff
     """
-    def __init__(self, app, debugname=None, doeslogging=0, stop_osd=2):
+    def __init__(self, app, debugname=None, doeslogging=0, stop_osd=2, callback_use_rc=True):
         """
         Initialise ChildApp2
         """
@@ -325,7 +328,7 @@ class ChildApp2(ChildApp):
         self.status = 0
 
         # start the child
-        ChildApp.__init__(self, app, debugname, doeslogging)
+        ChildApp.__init__(self, app, debugname, doeslogging, callback_use_rc)
 
 
     def stop_event(self):
@@ -379,7 +382,7 @@ class Read_Thread(threading.Thread):
     """
     Thread for reading stdout or stderr from the child
     """
-    def __init__(self, name, fh, callback, logger=None, doeslogging=0):
+    def __init__(self, name, fh, callback, logger=None, doeslogging=0, callback_use_rc=True):
         """
         Constructor of Read_Thread
         """
@@ -389,6 +392,7 @@ class Read_Thread(threading.Thread):
         self.name = name
         self.fh = fh
         self.callback = callback
+        self.callback_use_rc = callback_use_rc
         self.logger = None
         if logger and doeslogging:
             logfile = os.path.join(config.FREEVO_LOGDIR, '%s-%s-%s.log' % (logger, name, os.getuid()))
@@ -444,4 +448,7 @@ class Read_Thread(threading.Thread):
                     if self.logger:
                         self.logger.write(line+'\n')
                         self.logger.flush()
-                    rc.register(self.callback, False, 0, line)
+                    if self.callback_use_rc:
+                        rc.register(self.callback, False, 0, line)
+                    else:
+                        self.callback(line)
