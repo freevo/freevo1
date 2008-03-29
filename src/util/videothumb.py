@@ -60,8 +60,7 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
         imagefile += '.tmp'
 
     if popup:
-        pop = gui.PopupBox(text='Creating thumbnail for \'%s\'...' % \
-            Unicode(os.path.basename(videofile)),
+        pop = gui.PopupBox(text='Creating thumbnail for "%s"...' % Unicode(os.path.basename(videofile)),
             width=osd.get_singleton().width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)-80)
         pop.show()
 
@@ -70,11 +69,11 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     if pos != None:
         args.append(str(pos))
 
-    _debug_("%r" % ([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args))
+    _debug_('%r' % ([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args))
     out = popen3.stdout([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args)
     if out:
         for line in out:
-            print line
+            _debug_('%s' % line, 2)
     if vfs.isfile(imagefile):
         try:
             image = Image.open(imagefile)
@@ -110,11 +109,11 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
                 os.unlink(imagefile)
             else:
                 image.save(imagefile)
-        except (OSError, IOError), e:
-            print 'snapshot:', e
+        except (OSError, IOError), why:
+            _debug_('snapshot: %s' % why, DERROR)
     else:
-        print 'no imagefile found'
-        print imagefile
+        _debug_('no imagefile found for "%s"' % (Unicode(videofile)), DWARNING)
+        _debug_('%r' % imagefile, 2)
 
     if popup:
         pop.destroy()
@@ -124,18 +123,21 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
 # args: mplayer, videofile, imagefile, [ pos ]
 #
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import popen2
 
     mplayer   = os.path.abspath(sys.argv[1])
     filename  = os.path.abspath(sys.argv[2])
     imagefile = os.path.abspath(sys.argv[3])
-
-    try:
+    if len(sys.argv) > 4:
         position = sys.argv[4]
-    except IndexError:
+    else:
         try:
             mminfo = kaa.metadata.parse(filename)
+            if mminfo is None:
+                print 'No metadata for "%s"' % (Unicode(filename))
+                sys.exit(1)
+
             position = str(int(mminfo.video[0].length / 2.0))
             if hasattr(mminfo, 'type'):
                 if mminfo.type in ('MPEG-TS', 'MPEG-PES'):
@@ -152,9 +154,9 @@ if __name__ == "__main__":
     os.chdir('/tmp')
 
     # call mplayer to get the image
-    _debug_("%r" % ((mplayer, '-nosound', '-vo', 'png', '-frames', '8', '-ss', position, '-zoom', filename),))
-    child = popen2.Popen3((mplayer, '-nosound', '-vo', 'png', '-frames', '8',
-                           '-ss', position, '-zoom', filename), 1, 100)
+    _debug_('%r' % ((mplayer, '-nosound', '-vo', 'png', '-frames', '8', '-ss', position, '-zoom', filename),))
+    child = popen2.Popen3((mplayer, '-nosound', '-vo', 'png', '-frames', '8', '-ss', position, '-zoom', filename),
+        1, 100)
     while(1):
         data = child.fromchild.readline()
         if not data:
@@ -165,25 +167,25 @@ if __name__ == "__main__":
     child.tochild.close()
     # store the correct thumbnail
     captures = glob.glob('000000??.png')
-    _debug_("%r" % (captures,))
     if captures:
+        _debug_('%r' % (captures,))
         capture = captures[-1]
         try:
             shutil.copy(capture, imagefile)
-            _debug_("copied %r to %r" % (capture, imagefile))
+            _debug_('copied %r to %r' % (capture, imagefile))
         except:
             try:
                 import config
                 import vfs
                 shutil.copy(capture, vfs.getoverlay(imagefile[1:]))
-                _debug_("copied %r to %r" % (capture, vfs.getoverlay(imagefile[1:])))
+                _debug_('copied %r to %r' % (capture, vfs.getoverlay(imagefile[1:])))
             except:
-                print 'unable to write file %s' % Unicode(filename)
+                _debug_('unable to write file "%s"' % Unicode(filename), DWARNING)
     else:
-        print "error creating capture for %s" % Unicode(filename)
+        _debug_('error creating capture for "%s"' % Unicode(filename), DWARNING)
 
     for capture in captures:
         try:
             os.remove(capture)
         except:
-            print "error removing temporary captures for %s" % Unicode(filename)
+            _debug_('error removing temporary captures for "%s"' % Unicode(filename), 1)

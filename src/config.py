@@ -338,7 +338,7 @@ if sys.argv[0].find('main.py') == -1:
 #
 # Send debug to stdout as well as to the logfile?
 #
-DEBUG_STDOUT = 1
+DEBUG_STDOUT = 0
 
 #
 # debugging messages are set by the logging level
@@ -467,25 +467,31 @@ def _debug_function_(s, level=1):
                 s = s.encode(encoding, 'replace')
             where =  traceback.extract_stack(limit = 2)[0]
             msg = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
+            prefix = ''
             # log all the messages
             if level <= DCRITICAL:
                 logging.critical(msg)
+                prefix = _('CRITICAL')
             elif level == DERROR:
                 logging.error(msg)
+                prefix = _('ERROR')
             elif level == DWARNING:
                 logging.warning(msg)
+                prefix = _('WARNING')
             elif level == DINFO:
                 logging.info(msg)
+                prefix = _('INFO')
             else:
                 logging.debug(msg)
+                prefix = _('DEBUG')
             # print the message for info, warning, error and critical
-            if level <= DWARNING and DEBUG_STDOUT:
-                sys.__stdout__.write('%s\n' % (s))
+            if level <= DWARNING or DEBUG_STDOUT:
+                sys.__stdout__.write('%s: %s\n' % (prefix, s))
                 sys.__stdout__.flush()
         except UnicodeEncodeError:
-            print "_debug_ failed. %r" % msg
-        except Exception, e:
-            print "_debug_ failed: %r" % e
+            print "_debug_ failed: %r" % msg
+        except Exception, why:
+            print "_debug_ failed: %r" % why
     finally:
         if lock:
             lock.release()
@@ -644,7 +650,11 @@ for dirname in cfgfilepath:
     _debug_('Trying local configuration file "%s"...' % overridefile)
     if os.path.isfile(overridefile):
         _debug_('Loading local configuration file "%s"' % overridefile, DINFO)
-        execfile(overridefile, globals(), locals())
+        #new_globals = {}
+        new_locals = {}
+        execfile(overridefile, globals(), new_locals)
+        #globals().update(new_globals)
+        locals().update(new_locals)
 
         try:
             CONFIG_VERSION
