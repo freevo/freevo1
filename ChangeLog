@@ -19,6 +19,11 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 
  * New DVB/ATSC live pause plug-in (F#1927555)
 
+== Release 1.7.8 (2008-05-26) ==
+--------------------------------
+
+ * New video menu plug-in to remove commercials
+
 == Release 1.8.0 (2008-03-23) ==
 --------------------------------
 

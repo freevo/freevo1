@@ -68,6 +68,9 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
+Andrew Jeffery <short_rz at internode.on.net>
+o Remove commerials video plug-in
+
 Andrea Mennucc <mennucc1 at debian.org>
 o Slice reencoding
 
@@ -85,6 +88,9 @@ o Fixes to makelircrc helper
 
 Douglas A. Seifert <doug at dseifert.net>
 o Fixes to cd_burn for play lists
+
+Stephan Roolvink <live_kenny at hotmail.com>
+o Tux n' Tosh TV skin
 
 George Kibardin <george-kibardin at yandex.ru>
 o Russian translation updates
