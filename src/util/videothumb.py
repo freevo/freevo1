@@ -171,16 +171,21 @@ if __name__ == '__main__':
         _debug_('%r' % (captures,))
         capture = captures[-1]
         try:
+            vfsdir = os.path.dirname(imagefile)
+            if not os.path.exists(vfsdir):
+                os.makedirs(vfsdir)
+            _debug_('copying %r->%r' % (capture, imagefile))
             shutil.copy(capture, imagefile)
-            _debug_('copied %r to %r' % (capture, imagefile))
-        except:
+        except Exception, why:
+            _debug_('%s' % why, DINFO)
             try:
                 import config
                 import vfs
                 shutil.copy(capture, vfs.getoverlay(imagefile[1:]))
                 _debug_('copied %r to %r' % (capture, vfs.getoverlay(imagefile[1:])))
-            except:
-                _debug_('unable to write file "%s"' % Unicode(filename), DWARNING)
+            except Exception, why:
+                _debug_('%s' % why, DINFO)
+                _debug_('unable to write file "%s"' % Unicode(imagefile[1:]), DWARNING)
     else:
         _debug_('error creating capture for "%s"' % Unicode(filename), DWARNING)
 
