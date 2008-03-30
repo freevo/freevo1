@@ -60,16 +60,17 @@ def make_query(filename,dirtitle):
 
     a = mediainfo.get(filename)
     t = tracknum(a['trackno'])
+    ext = filename.split('.')[-1]
 
     VALUES = "(null,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',%i,%i,%i,\'%s\',%f,%i,\'%s\',\'%s\',%i,\'%s\')" \
         % (util.escape(dirtitle),util.escape(os.path.dirname(filename)),util.escape(os.path.basename(filename)), \
-           'mp3',util.escape(a['artist']),util.escape(a['title']),util.escape(a['album']),inti(a['date']),t[0], \
+           ext,util.escape(a['artist']),util.escape(a['title']),util.escape(a['album']),inti(a['date']),t[0], \
            t[1], 100,0,0,'0',inti(a['length']),0,'null')
 
     SQL = 'INSERT OR IGNORE INTO music VALUES ' + VALUES
     return SQL
 
-def addPathDB(path, dirtitle, type='*.mp3', verbose=True):
+def addPathDB(path, dirtitle, type='*.mp3;*.ogg', verbose=True):
 
     # Get some stuff ready
     count = 0
