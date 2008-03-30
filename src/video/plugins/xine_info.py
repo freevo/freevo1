@@ -66,7 +66,7 @@ class PluginInterface(plugin.DaemonPlugin):
             return
         else:
             passwd_file = '%s/.xine/passwd' % os.environ['HOME']
-            if not os.path.exists(passwd_file)
+            if not os.path.exists(passwd_file):
                 self.reason = 'xine passwd file is missing: %s it should at least contain ALL:ALLOW' % (passwd_file)
                 return
         plugin.DaemonPlugin.__init__(self)
