@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# plugins.py - list all plugins and prints help about them
+# A helper to list all plugins and prints help about them
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -125,7 +125,7 @@ def parse_plugins2():
     return ''
 
 
-def parse_plugins(plugin_name=None):
+def parse_plugins(plugin_name=''):
     start = re.compile('^class *(.*)\((.*Plugin\s*).:')
     stop  = re.compile('^[\t ]*def.*:')
     comment = re.compile('^[\t ]*"""')
@@ -141,12 +141,13 @@ def parse_plugins(plugin_name=None):
     for p in plugin.__all_plugins__:
         active.append(p[0])
 
+    plugin_shortname = plugin_name.split('.')[-1]+'.py'
+    plugin_init_name = os.path.join(plugin_name.split('.')[-1], '__init__.py')
     for file in util.recursefolders(os.environ['FREEVO_PYTHON'], 1, '*.py', 1):
         if file.find('plugin.py') > 0:
             continue
         if plugin_name:
-            plugin_shortname = plugin_name.split('.')[-1]+'.py'
-            if file.find(plugin_shortname) < 0:
+            if file.find(plugin_shortname) < 0 and file.find(plugin_init_name) < 0:
                 continue
         parse_status = 0
         whitespaces  = 0
@@ -163,8 +164,7 @@ def parse_plugins(plugin_name=None):
                 config      = 'def return_config():\n'
                 scan_config = line.find('def')
 
-            if (comment.match(line) and parse_status == 2) or \
-                   (stop.match(line) and parse_status == 1):
+            if (comment.match(line) and parse_status == 2) or (stop.match(line) and parse_status == 1):
                 parse_status = 0
                 all_plugins[-1][-2] = desc
 
@@ -254,9 +254,8 @@ def iscode(line):
     @note: this does not work too well in all cases
     """
     return line.strip().startswith('|')
-    return (len(line) > 2 and line[:2].upper() == line[:2] and \
-            line.find('=') > 0) or \
-            (line and line[0] in ('#', ' ', '[', '(')) or (line.find('plugin.') == 0)
+    return (len(line) > 2 and line[:2].upper() == line[:2] and line.find('=') > 0) or \
+        (line and line[0] in ('#', ' ', '[', '(')) or (line.find('plugin.') == 0)
 
 
 def html_info(plugin_name, all_plugins):
@@ -291,8 +290,7 @@ def html_info(plugin_name, all_plugins):
                         code = 1
 
                         try:
-                            if (desc[i+1] and not iscode(desc[i+1])) or \
-                                   (desc[i+2] and not iscode(desc[i+2])):
+                            if (desc[i+1] and not iscode(desc[i+1])) or (desc[i+2] and not iscode(desc[i+2])):
                                 ret += '</pre>'
                                 code = 0
                         except IndexError:

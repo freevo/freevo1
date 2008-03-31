@@ -25,6 +25,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * New video menu plug-in to remove commercials (F#1920654)
  * New video plug-in to supply video information from xine (F#1929333)
  * Updated audio albumtree plug-in with support for ogg files (F#1928509)
+ * Updated plugins helper to work with __init__.py modules (F#1930102)
  * Fixed "freevo cache --thumbnail --recursive" when path has spaces (B#1929635)
 
 == Release 1.8.0 (2008-03-23) ==
