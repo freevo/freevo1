@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# mplayer.py - implementation of a TV function using MPlayer
+# Plug-in to watch tv with mplayer.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -29,11 +29,9 @@
 # -----------------------------------------------------------------------
 
 
-# Configuration file. Determines where to look for AVI/MP3 files, etc
-import config
-
 import time, os
 
+import config
 import util    # Various utilities
 import osd     # The OSD class, used to communicate with the OSD daemon
 import rc      # The RemoteControl class.
@@ -56,7 +54,6 @@ class PluginInterface(plugin.Plugin):
     """
     Plugin to watch tv with mplayer.
     """
-
     def __init__(self):
         plugin.Plugin.__init__(self)
 
@@ -65,7 +62,6 @@ class PluginInterface(plugin.Plugin):
 
 
 class MPlayer:
-
     __muted    = 0
     __igainvol = 0
 
@@ -77,14 +73,21 @@ class MPlayer:
 
 
     def Play(self, mode, tuner_channel=None):
+        """ """
+        _debug_('MPlayer.Play(mode=%r, tuner_channel=%r)' % (mode, tuner_channel), 2)
+        # Try to see if the channel is not tunable
+        try:
+            channel = int(tuner_channel)
+        except ValueError:
+            channel = 0
+
+        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel, True)
 
         if not tuner_channel:
             tuner_channel = self.fc.getChannel()
 
-        vg = self.current_vg = self.fc.getVideoGroup(tuner_channel, True)
-
         # Convert to MPlayer TV setting strings
-        device= 'device=%s' % vg.vdev
+        device = 'device=%s' % vg.vdev
         input = 'input=%s' % vg.input_num
         norm = 'norm=%s' % vg.tuner_norm
 
@@ -107,11 +110,13 @@ class MPlayer:
                     if cur_std != new_std:
                         ivtv_dev.setstd(new_std)
                 except:
-                    print "Error! Videogroup norm value '%s' not from NORMS: %s" \
-                        % (vg.tuner_norm,tv.v4l2.NORMS.keys())
-                #ivtv_dev.print_settings()
+                    _debug_('Error! Videogroup norm value "%s" not from NORMS: %s' \
+                        % (vg.tuner_norm,tv.v4l2.NORMS.keys()), DERROR)
                 ivtv_dev.close()
-                self.fc.chanSet(tuner_channel, True)
+
+                # Do not set the channel if negative
+                if channel >= 0:
+                    self.fc.chanSet(tuner_channel, True)
 
                 tvcmd = vg.vdev
 
@@ -164,7 +169,7 @@ class MPlayer:
                 args += (config.MPLAYER_ARGS['tv'],)
 
         else:
-            print 'Mode "%s" is not implemented' % mode  # XXX ui.message()
+            _debug_('Mode "%s" is not implemented' % mode, DERROR)
             return
 
         args += (tvcmd,)

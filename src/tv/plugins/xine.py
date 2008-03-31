@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# xine.py - the Freevo XINE module for tv
+# Plug-in to watch tv with xine.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -79,9 +79,8 @@ class PluginInterface(plugin.Plugin):
         try:
             config.XINE_COMMAND
         except:
-            print String(_( 'ERROR' )) + ': ' + \
-                  String(_("'XINE_COMMAND' not defined, 'xine' tv plugin deactivated.\n" \
-                           'please check the xine section in freevo_config.py' ))
+            self.reason = _("'XINE_COMMAND' not defined, 'xine' tv plugin deactivated.\n" \
+                'please check the xine section in freevo_config.py')
             return
 
         if config.XINE_COMMAND.find('fbxine') >= 0:
@@ -139,7 +138,7 @@ class Xine:
 
         command.append('dvb://' + tuner_channel)
 
-        _debug_('Xine.play(): Starting cmd=%s' % command)
+        _debug_('Starting cmd=%s' % command)
 
         rc.app(self)
 
