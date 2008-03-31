@@ -29,7 +29,8 @@
 # -----------------------------------------------------------------------
 
 
-"""For manipulating the mixer.
+"""
+For manipulating the mixer.
 """
 
 import fcntl
@@ -86,12 +87,11 @@ class PluginInterface(plugin.DaemonPlugin):
             self.ogainVolume  = 0 # XXX Ditto
 
             if self.mixfd:
-                data = struct.pack( 'L', self.SOUND_MASK_LINE )
+                data = struct.pack('L', self.SOUND_MASK_LINE)
                 try:
-                    fcntl.ioctl( self.mixfd.fileno(), i32(self.SOUND_MIXER_WRITE_RECSRC), data )
-                except IOError:
-                    _debug_('IOError for ioctl')
-                    pass
+                    fcntl.ioctl(self.mixfd.fileno(), i32(self.SOUND_MIXER_WRITE_RECSRC), data)
+                except IOError, why:
+                    _debug_('Cannot set mixer "%s" line mask: %s' % (config.MIXER_DEVICE, why), DWARNING)
 
         if config.MIXER_MAJOR_CTRL == 'VOL':
             self.setMainVolume(config.MIXER_VOLUME_DEFAULT)
@@ -108,7 +108,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 # XXX Please tell if you have problems with this.
                 self.setOgainVolume(config.MIXER_VOLUME_MAX)
         else:
-            _debug_("No appropriate audio channel found for mixer")
+            _debug_('No appropriate audio channel found for mixer', DWARNING)
 
         if config.MIXER_CONTROL_ALL:
             self.setLineinVolume(0)
@@ -122,7 +122,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if event in (MIXER_VOLUP, MIXER_VOLDOWN):
             step = event.arg
             if not isinstance(step, int):
-                _debug_("%s event type '%s' is not 'int'" % (event, step), DWARNING)
+                _debug_('%s event type "%s" is not "int"' % (event, step), DWARNING)
                 step = self.default_step
 
         if event == MIXER_VOLUP:
@@ -138,7 +138,7 @@ class PluginInterface(plugin.DaemonPlugin):
             if config.MIXER_MAJOR_CTRL == 'VOL':
                 self.decMainVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
-            elif( config.MIXER_MAJOR_CTRL == 'PCM' ):
+            elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.decPcmVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             return True
@@ -166,9 +166,8 @@ class PluginInterface(plugin.DaemonPlugin):
             data = struct.pack('L', vol)
             try:
                 fcntl.ioctl(self.mixfd.fileno(), i32(request), data)
-            except IOError:
-                _debug_('IOError for ioctl')
-                pass
+            except IOError, why:
+                _debug_('Cannot set mixer "%s" volume: %s' % (config.MIXER_DEVICE, why), DWARNING)
 
     def getMuted(self):
         return(self.muted)
@@ -222,13 +221,13 @@ class PluginInterface(plugin.DaemonPlugin):
         self.pcmVolume += step
         if self.pcmVolume > 100:
             self.pcmVolume = 100
-        self._setVolume( self.SOUND_MIXER_WRITE_PCM, self.pcmVolume )
+        self._setVolume(self.SOUND_MIXER_WRITE_PCM, self.pcmVolume)
 
     def decPcmVolume(self, step=5):
         self.pcmVolume -= step
         if self.pcmVolume < 0:
             self.pcmVolume = 0
-        self._setVolume( self.SOUND_MIXER_WRITE_PCM, self.pcmVolume )
+        self._setVolume(self.SOUND_MIXER_WRITE_PCM, self.pcmVolume)
 
     def setLineinVolume(self, volume):
         if config.MIXER_CONTROL_ALL:
