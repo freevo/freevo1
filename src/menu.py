@@ -47,9 +47,8 @@ class MenuItem(Item):
     """
     Default item for the menu. It includes one action
     """
-    def __init__(self, name, action=None, arg=None, type=None, image=None,
-                  icon=None, parent=None, skin_type=None):
-        Item.__init__(self, parent, skin_type = skin_type)
+    def __init__(self, name='', action=None, arg=None, type=None, image=None, icon=None, parent=None, skin_type=None):
+        Item.__init__(self, parent, skin_type=skin_type)
         if name:
             self.name  = Unicode(name)
         if icon:
@@ -77,6 +76,14 @@ class MenuItem(Item):
         return s
 
 
+    def __repr__(self):
+        """
+        return the menu item as a raw string
+        """
+        s = '<class %s %r>' % (self.__class__, self.name)
+        return s
+
+
     def actions(self):
         """
         return the default action
@@ -97,8 +104,8 @@ class Menu:
     """
     a Menu with Items for the MenuWidget
     """
-    def __init__(self, heading, choices, fxd_file=None, umount_all=0, reload_func=None,
-            item_types=None, force_skin_layout=-1):
+    def __init__(self, heading, choices, fxd_file=None, umount_all=0, reload_func=None, item_types=None,
+        force_skin_layout=-1):
 
         self.heading = heading
         self.choices = choices          # List of MenuItems
@@ -166,8 +173,8 @@ class MenuWidget(GUIObject):
         """
         return the class as string
         """
-        s = '%s' % self.label
-        s += ', top=%s left=%s' % (self.top, self.left)
+        s = '%s' % (self.label,)
+        s += ', rect=%s' % (self.rect,)
         return s
 
 
@@ -437,6 +444,262 @@ class MenuWidget(GUIObject):
         self.pushmenu(s)
 
 
+    def _handle_up(self, menu, event):
+        curr_selected = self.all_items.index(menu.selected)
+        sounds.play_sound(sounds.MENU_NAVIGATE)
+        if curr_selected-self.cols < 0 and \
+               menu.selected != menu.choices[0]:
+            self.goto_prev_page(arg='no_refresh')
+            try:
+                if self.cols == 1:
+                    curr_selected = self.rows - 1
+                elif self.rows != 1:
+                    curr_selected = self.all_items.index(menu.selected)
+                else:
+                    curr_selected+=self.cols
+            except ValueError:
+                curr_selected += self.cols
+        curr_selected = max(curr_selected-self.cols, 0)
+        menu.selected = self.all_items[curr_selected]
+        self.refresh()
+        return
+
+
+    def _handle_down(self, menu, event):
+        curr_selected = self.all_items.index(menu.selected)
+        sounds.play_sound(sounds.MENU_NAVIGATE)
+        if curr_selected+self.cols > len(self.all_items)-1 and \
+               menu.page_start + len(self.all_items) < len(menu.choices):
+
+            self.goto_next_page(arg='no_refresh')
+            try:
+                if self.cols == 1:
+                    curr_selected = 0
+                elif self.rows != 1:
+                    curr_selected = self.all_items.index(menu.selected)
+                else:
+                    curr_selected-=self.cols
+            except ValueError:
+                curr_selected -= self.cols
+        curr_selected = min(curr_selected+self.cols, len(self.all_items)-1)
+        menu.selected = self.all_items[curr_selected]
+        self.refresh()
+        return
+
+
+    def _handle_pageup(self, menu, event):
+        # Do nothing for an empty file list
+        if not len(self.menu_items):
+            return
+
+        curr_selected = self.all_items.index(menu.selected)
+
+        # Move to the previous page if the current position is at the
+        # top of the list, otherwise move to the top of the list.
+        if curr_selected == 0:
+            self.goto_prev_page()
+        else:
+            curr_selected = 0
+            menu.selected = self.all_items[curr_selected]
+            self.refresh()
+        return
+
+
+    def _handle_pagedown(self, menu, event):
+        # Do nothing for an empty file list
+        if not len(self.menu_items):
+            return
+
+        if menu.selected == menu.choices[-1]:
+            return
+
+        curr_selected = self.all_items.index(menu.selected)
+        bottom_index = self.menu_items.index(self.menu_items[-1])
+
+        # Move to the next page if the current position is at the
+        # bottom of the list, otherwise move to the bottom of the list.
+        if curr_selected >= bottom_index:
+            self.goto_next_page()
+        else:
+            curr_selected = bottom_index
+            menu.selected = self.all_items[curr_selected]
+            self.refresh()
+        return
+
+    def _handle_left(self, menu, event):
+        # Do nothing for an empty file list
+        if not len(self.menu_items):
+            return
+
+        sounds.play_sound(sounds.MENU_NAVIGATE)
+        curr_selected = self.all_items.index(menu.selected)
+        if curr_selected == 0:
+            self.goto_prev_page(arg='no_refresh')
+            try:
+                curr_selected = self.all_items.index(menu.selected)
+                if self.rows == 1:
+                    curr_selected = len(self.all_items)
+            except ValueError:
+                curr_selected += self.cols
+        curr_selected = max(curr_selected-1, 0)
+        menu.selected = self.all_items[curr_selected]
+        self.refresh()
+        return
+
+
+    def _handle_right(self, menu, event):
+        # Do nothing for an empty file list
+        if not len(self.menu_items):
+            return
+
+        sounds.play_sound(sounds.MENU_NAVIGATE)
+        curr_selected = self.all_items.index(menu.selected)
+        if curr_selected == len(self.all_items)-1:
+            self.goto_next_page(arg='no_refresh')
+            try:
+                curr_selected = self.all_items.index(menu.selected)
+                if self.rows == 1:
+                    curr_selected -= 1
+            except ValueError:
+                curr_selected -= self.cols
+
+        curr_selected = min(curr_selected+1, len(self.all_items)-1)
+        menu.selected = self.all_items[curr_selected]
+        self.refresh()
+        return
+
+
+    def _handle_play_item(self, menu, event):
+        action = None
+        arg    = None
+
+        sounds.play_sound(sounds.MENU_SELECT)
+        try:
+            action = menu.selected.action
+        except AttributeError:
+            actions = menu.selected.actions()
+            if not actions:
+                actions = []
+
+            # Add the actions of the plugins to the list of actions.  This is needed when a
+            # Item class has no actions but plugins provides them. This case happens with an
+            # empty disc.
+            #
+            # FIXME The event MENU_SELECT is called when selecting a submenu entry too. The
+            # item passed to the plugin is then the submenu entry instead its parent item. So
+            # if we are in a submenu we don't want to call the actions of the plugins.
+            # because we'll break some (or all) plugins behavior.  Does that sound correct?
+
+            if config.OSD_SOUNDS:
+                if hasattr(menu.selected, 'arg'):
+                    try:
+                        key = "menu." + menu.selected.arg[0]
+                        if config.OSD_SOUNDS[key]:
+                            sounds.play_sound(sounds.load_sound(key))
+                    except:
+                        pass
+                else:
+                    try:
+                        key = "menu." + menu.selected.__class__.__name__
+                        if config.OSD_SOUNDS[key]:
+                            sounds.play_sound(sounds.load_sound(key))
+                    except:
+                        pass
+
+            if not hasattr(menu, 'is_submenu'):
+                plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
+
+                if hasattr(menu.selected, 'display_type'):
+                    plugins += plugin.get('item_%s' % menu.selected.display_type)
+
+                plugins.sort(lambda l, o: cmp(l._level, o._level))
+
+                for p in plugins:
+                    for a in p.actions(menu.selected):
+                        if isinstance(a, MenuItem):
+                            actions.append(a)
+                        else:
+                            actions.append(a[:2])
+
+            if actions:
+                action = actions[0]
+                if isinstance(action, MenuItem):
+                    action = action.function
+                    arg    = action.arg
+                else:
+                    action = action[0]
+        if not action:
+            AlertBox(text=_('No action defined for this choice!')).show()
+        else:
+            action(arg=arg, menuw=self)
+        return
+
+
+    def _handle_submenu(self, menu, event):
+        if hasattr(menu, 'is_submenu'):
+            self._handle_play_item(menu, event)
+            return
+
+        actions = menu.selected.actions()
+        force   = False
+        if not actions:
+            actions = []
+            force   = True
+
+        plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
+
+        if hasattr(menu.selected, 'display_type'):
+            plugins += plugin.get('item_%s' % menu.selected.display_type)
+
+        plugins.sort(lambda l, o: cmp(l._level, o._level))
+
+        for p in plugins:
+            for a in p.actions(menu.selected):
+                if isinstance(a, MenuItem):
+                    actions.append(a)
+                else:
+                    actions.append(a[:2])
+                    if len(a) == 3 and a[2] == 'MENU_SUBMENU':
+                        a[0](menuw=self)
+                        return
+
+        if actions:
+            if len(actions) > 1 or force:
+                self.make_submenu(menu.selected.name, actions, menu.selected)
+            elif len(actions) == 1:
+                # if there is only one action, call it!
+                action = actions[0]
+                arg = None
+                if isinstance(action, MenuItem):
+                    action = action.function
+                    arg    = action.arg
+                else:
+                    action = action[0]
+                action(arg=arg, menuw=self)
+        return
+
+
+    def _handle_call_item_action(self, menu, event):
+        _debug_('calling action %s' % event.arg)
+
+        for a in menu.selected.actions():
+            if not isinstance(a, Item) and len(a) > 2 and a[2] == event.arg:
+                a[0](arg=None, menuw=self)
+                return
+
+        plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
+
+        if hasattr(menu.selected, 'display_type'):
+            plugins += plugin.get('item_%s' % menu.selected.display_type)
+
+        for p in plugins:
+            for a in p.actions(menu.selected):
+                if not isinstance(a, MenuItem) and len(a) > 2 and a[2] == event.arg:
+                    a[0](arg=None, menuw=self)
+                    return
+        _debug_('action %s not found' % event.arg)
+
+
     def eventhandler(self, event):
         menu = self.menustack[-1]
 
@@ -454,7 +717,7 @@ class MenuWidget(GUIObject):
                     event = MENU_PAGEDOWN
 
         if self.eventhandler_plugins == None:
-            self.eventhandler_plugins = plugin.get('daemon_eventhandler')
+            self.eventhandler_plugins = plugin.get('daemon_handle')
 
         if event == MENU_GOTO_MAINMENU:
             self.goto_main_menu()
@@ -515,7 +778,7 @@ class MenuWidget(GUIObject):
                 return
             menu = self.menustack[-2]
             if hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
-                if menu.selected.eventhandler(event = event, menuw=self):
+                if menu.selected.eventhandler(event=event, menuw=self):
                     return
             for p in self.eventhandler_plugins:
                 if p.eventhandler(event=event, menuw=self):
@@ -524,7 +787,7 @@ class MenuWidget(GUIObject):
 
         if not isinstance(menu, Menu):
             if self.eventhandler_plugins == None:
-                self.eventhandler_plugins = plugin.get('daemon_eventhandler')
+                self.eventhandler_plugins = plugin.get('daemon_handle')
 
             for p in self.eventhandler_plugins:
                 if p.eventhandler(event=event, menuw=self):
@@ -534,265 +797,34 @@ class MenuWidget(GUIObject):
             return
 
         if event == MENU_UP:
-            curr_selected = self.all_items.index(menu.selected)
-            sounds.play_sound(sounds.MENU_NAVIGATE)
-            if curr_selected-self.cols < 0 and \
-                   menu.selected != menu.choices[0]:
-                self.goto_prev_page(arg='no_refresh')
-                try:
-                    if self.cols == 1:
-                        curr_selected = self.rows - 1
-                    elif self.rows != 1:
-                        curr_selected = self.all_items.index(menu.selected)
-                    else:
-                        curr_selected+=self.cols
-                except ValueError:
-                    curr_selected += self.cols
-            curr_selected = max(curr_selected-self.cols, 0)
-            menu.selected = self.all_items[curr_selected]
-            self.refresh()
-            return
-
+            self._handle_up(menu, event)
 
         elif event == MENU_DOWN:
-            curr_selected = self.all_items.index(menu.selected)
-            sounds.play_sound(sounds.MENU_NAVIGATE)
-            if curr_selected+self.cols > len(self.all_items)-1 and \
-                   menu.page_start + len(self.all_items) < len(menu.choices):
-
-                self.goto_next_page(arg='no_refresh')
-                try:
-                    if self.cols == 1:
-                        curr_selected = 0
-                    elif self.rows != 1:
-                        curr_selected = self.all_items.index(menu.selected)
-                    else:
-                        curr_selected-=self.cols
-                except ValueError:
-                    curr_selected -= self.cols
-            curr_selected = min(curr_selected+self.cols, len(self.all_items)-1)
-            menu.selected = self.all_items[curr_selected]
-            self.refresh()
-            return
-
+            self._handle_down(menu, event)
 
         elif event == MENU_PAGEUP:
-            # Do nothing for an empty file list
-            if not len(self.menu_items):
-                return
-
-            curr_selected = self.all_items.index(menu.selected)
-
-            # Move to the previous page if the current position is at the
-            # top of the list, otherwise move to the top of the list.
-            if curr_selected == 0:
-                self.goto_prev_page()
-            else:
-                curr_selected = 0
-                menu.selected = self.all_items[curr_selected]
-                self.refresh()
-            return
-
+            self._handle_pageup(menu, event)
 
         elif event == MENU_PAGEDOWN:
-            # Do nothing for an empty file list
-            if not len(self.menu_items):
-                return
-
-            if menu.selected == menu.choices[-1]:
-                return
-
-            curr_selected = self.all_items.index(menu.selected)
-            bottom_index = self.menu_items.index(self.menu_items[-1])
-
-            # Move to the next page if the current position is at the
-            # bottom of the list, otherwise move to the bottom of the list.
-            if curr_selected >= bottom_index:
-                self.goto_next_page()
-            else:
-                curr_selected = bottom_index
-                menu.selected = self.all_items[curr_selected]
-                self.refresh()
-            return
-
+            self._handle_pagedown(menu, event)
 
         elif event == MENU_LEFT:
-            # Do nothing for an empty file list
-            if not len(self.menu_items):
-                return
-
-            sounds.play_sound(sounds.MENU_NAVIGATE)
-            curr_selected = self.all_items.index(menu.selected)
-            if curr_selected == 0:
-                self.goto_prev_page(arg='no_refresh')
-                try:
-                    curr_selected = self.all_items.index(menu.selected)
-                    if self.rows == 1:
-                        curr_selected = len(self.all_items)
-                except ValueError:
-                    curr_selected += self.cols
-            curr_selected = max(curr_selected-1, 0)
-            menu.selected = self.all_items[curr_selected]
-            self.refresh()
-            return
-
+            self._handle_left(menu, event)
 
         elif event == MENU_RIGHT:
-            # Do nothing for an empty file list
-            if not len(self.menu_items):
-                return
-
-            sounds.play_sound(sounds.MENU_NAVIGATE)
-            curr_selected = self.all_items.index(menu.selected)
-            if curr_selected == len(self.all_items)-1:
-                self.goto_next_page(arg='no_refresh')
-                try:
-                    curr_selected = self.all_items.index(menu.selected)
-                    if self.rows == 1:
-                        curr_selected -= 1
-                except ValueError:
-                    curr_selected -= self.cols
-
-            curr_selected = min(curr_selected+1, len(self.all_items)-1)
-            menu.selected = self.all_items[curr_selected]
-            self.refresh()
-            return
-
+            self._handle_right(menu, event)
 
         elif event == MENU_PLAY_ITEM and hasattr(menu.selected, 'play'):
             menu.selected.play(menuw=self)
 
-        elif event == MENU_SELECT or event == MENU_PLAY_ITEM:
-            action = None
-            arg    = None
-
-            sounds.play_sound(sounds.MENU_SELECT)
-            try:
-                action = menu.selected.action
-            except AttributeError:
-                actions = menu.selected.actions()
-                if not actions:
-                    actions = []
-
-                # Add the actions of the plugins to the list of actions.
-                # This is needed when a Item class has no actions but plugins
-                # provides them. This case happens with an empty disc.
-                #
-                # FIXME The event MENU_SELECT is called when selecting
-                # a submenu entry too. The item passed to the plugin is then
-                # the submenu entry instead its parent item. So if we are in
-                # a submenu we don't want to call the actions of the plugins.
-                # because we'll break some (or all) plugins behavior.
-                # Does that sound correct?
-                #
-                if config.OSD_SOUNDS:
-                    if hasattr(menu.selected, 'arg'):
-                        try:
-                            key = "menu." + menu.selected.arg[0]
-                            if config.OSD_SOUNDS[key]:
-                                sounds.play_sound(sounds.load_sound(key))
-                        except:
-                            pass
-                    else:
-                        try:
-                            key = "menu." + menu.selected.__class__.__name__
-                            if config.OSD_SOUNDS[key]:
-                                sounds.play_sound(sounds.load_sound(key))
-                        except:
-                            pass
-
-                if not hasattr(menu, 'is_submenu'):
-                    plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
-
-                    if hasattr(menu.selected, 'display_type'):
-                        plugins += plugin.get('item_%s' % menu.selected.display_type)
-
-                    plugins.sort(lambda l, o: cmp(l._level, o._level))
-
-                    for p in plugins:
-                        for a in p.actions(menu.selected):
-                            if isinstance(a, MenuItem):
-                                actions.append(a)
-                            else:
-                                actions.append(a[:2])
-
-                if actions:
-                    action = actions[0]
-                    if isinstance(action, MenuItem):
-                        action = action.function
-                        arg    = action.arg
-                    else:
-                        action = action[0]
-            if not action:
-                print 'No action.. '
-                AlertBox(text=_('No action defined for this choice!')).show()
-            else:
-                action(arg=arg, menuw=self)
-            return
-
+        elif event == MENU_PLAY_ITEM or event == MENU_SELECT:
+            self._handle_play_item(menu, event)
 
         elif event == MENU_SUBMENU:
-            if hasattr(menu, 'is_submenu'):
-                return
-
-            actions = menu.selected.actions()
-            force   = False
-            if not actions:
-                actions = []
-                force   = True
-
-            plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
-
-            if hasattr(menu.selected, 'display_type'):
-                plugins += plugin.get('item_%s' % menu.selected.display_type)
-
-            plugins.sort(lambda l, o: cmp(l._level, o._level))
-
-            for p in plugins:
-                for a in p.actions(menu.selected):
-                    if isinstance(a, MenuItem):
-                        actions.append(a)
-                    else:
-                        actions.append(a[:2])
-                        if len(a) == 3 and a[2] == 'MENU_SUBMENU':
-                            a[0](menuw=self)
-                            return
-
-            if actions:
-                if len(actions) > 1 or force:
-                    self.make_submenu(menu.selected.name, actions, menu.selected)
-                elif len(actions) == 1:
-                    # if there is only one action, call it!
-                    action = actions[0]
-                    arg = None
-                    if isinstance(action, MenuItem):
-                        action = action.function
-                        arg    = action.arg
-                    else:
-                        action = action[0]
-                    action(arg=arg, menuw=self)
-            return
+            self._handle_submenu(menu, event)
 
         elif event == MENU_CALL_ITEM_ACTION:
-            _debug_('calling action %s' % event.arg)
-
-            for a in menu.selected.actions():
-                if not isinstance(a, Item) and len(a) > 2 and a[2] == event.arg:
-                    a[0](arg=None, menuw=self)
-                    return
-
-            plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
-
-            if hasattr(menu.selected, 'display_type'):
-                plugins += plugin.get('item_%s' % menu.selected.display_type)
-
-            for p in plugins:
-                for a in p.actions(menu.selected):
-                    if not isinstance(a, MenuItem) and len(a) > 2 and a[2] == event.arg:
-                        a[0](arg=None, menuw=self)
-                        return
-            _debug_('action %s not found' % event.arg)
-
+            self._handle_call_item_action(menu, event)
 
         elif event == MENU_CHANGE_STYLE and len(self.menustack) > 1:
             # did the menu change?
@@ -800,7 +832,6 @@ class MenuWidget(GUIObject):
                 self.rebuild_page()
                 self.refresh()
                 return
-
 
         elif hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
             if menu.selected.eventhandler(event=event, menuw=self):
