@@ -119,7 +119,7 @@ class IVTV(tv.v4l2.Videodev):
             _debug_('streamTypeIvtvToV4l2 %s -> %s' % (stream_type, map_ivtv_to_v4l2[stream_type]), 2)
             return map_ivtv_to_v4l2[stream_type]
         except:
-            print 'streamTypeIvtvToV4l2 %s failed' % (stream_type)
+            _debug_('streamTypeIvtvToV4l2 %s failed' % (stream_type), DWARNING)
         return 0
 
 
@@ -131,7 +131,7 @@ class IVTV(tv.v4l2.Videodev):
             _debug_('streamTypeV4l2ToIVTV %s -> %s' % (stream_type, map_v4l2_to_ivtv[stream_type]), 2)
             return map_v4l2_to_ivtv[stream_type]
         except:
-            print 'streamTypeV4l2ToIVTV %s failed' % (stream_type)
+            _debug_('streamTypeV4l2ToIVTV %s failed' % (stream_type), DWARNING)
         return 0
 
 
@@ -170,13 +170,13 @@ class IVTV(tv.v4l2.Videodev):
         val = struct.pack( CODEC_ST, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_G_CODEC), val)
         codec_list = struct.unpack(CODEC_ST, r)
-        if config.DEBUG >= 3: print "getCodecInfo: val=%r, r=%r, res=%r" % (val, r, struct.unpack(CODEC_ST, r))
+        _debug_("getCodecInfo: val=%r, r=%r, res=%r" % (val, r, struct.unpack(CODEC_ST, r)), 3)
         return IVTVCodec(codec_list)
 
 
     def setCodecInfo(self, codec):
         if self.version >= 0x800:
-            '''
+            """
             'audio_bitmask' : 0xE9,
             NOTE: doesn't quite map to firmware api
             0:1 'Audio Sampling Frequency':
@@ -263,7 +263,7 @@ class IVTV(tv.v4l2.Videodev):
             'Video GOP Size'       'framespergop'   : 12,
             'Video GOP Closure'    'gop_closure'    : 1,
             'Stream Type'          'stream_type'    : 14,
-            '''
+            """
             tv.v4l2.Videodev.updatecontrol(self, 'Video Aspect', codec.aspect-1)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Sampling Frequency', (codec.audio_bitmask >> 0) & 0x03)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Layer II Bitrate', (codec.audio_bitmask >> 2) & 0x0F)
@@ -303,7 +303,7 @@ class IVTV(tv.v4l2.Videodev):
                            codec.pulldown,     # removed from ivtv driver
                            codec.stream_type)
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_S_CODEC), val)
-        if config.DEBUG >= 3: print "setCodecInfo: val=%r, r=%r" % (val, r)
+        _debug_("setCodecInfo: val=%r, r=%r" % (val, r), 3)
 
 
     def mspSetMatrix(self, input=None, output=None):
@@ -312,7 +312,7 @@ class IVTV(tv.v4l2.Videodev):
 
         val = struct.pack(MSP_MATRIX_ST, input, output)
         r = fcntl.ioctl(self.device, i32(MSP_SET_MATRIX), val)
-        if config.DEBUG >= 3: print "mspSetMatrix: val=%r, r=%r" % (val, r)
+        _debug_("mspSetMatrix: val=%r, r=%r" % (val, r), 3)
 
 
     def getvbiembed(self):
@@ -320,12 +320,11 @@ class IVTV(tv.v4l2.Videodev):
             return self.getcontrol('Stream VBI Format')
         try:
             r = fcntl.ioctl(self.device, i32(GETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, 0))
-            if config.DEBUG >= 3:
-                print "getvbiembed: val=%r, r=%r, res=%r" % (struct.pack(VBI_EMBED_ST, 0), r,
-                    struct.unpack(VBI_EMBED_ST, r))
+            _debug_("getvbiembed: val=%r, r=%r, res=%r" % (struct.pack(VBI_EMBED_ST, 0), r,
+                    struct.unpack(VBI_EMBED_ST, r)), 3)
             return struct.unpack(VBI_EMBED_ST, r)[0]
         except IOError:
-            print 'getvbiembed: failed'
+            _debug_('getvbiembed: failed', DWARNING)
             return 0
 
 
@@ -335,21 +334,22 @@ class IVTV(tv.v4l2.Videodev):
             return
         try:
             r = fcntl.ioctl(self.device, i32(SETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, value))
-            if config.DEBUG >= 3: print "setvbiembed: val=%r, res=%r" % (struct.pack(VBI_EMBED_ST, value), r)
+            wdebug_("setvbiembed: val=%r, res=%r" % (struct.pack(VBI_EMBED_ST, value), r), 3)
         except IOError:
-            print 'setvbiembed: failed'
+            _debug_('setvbiembed: failed', DWARNING)
 
 
     def gopend(self, value):
         r = fcntl.ioctl(self.device, i32(GOP_END_NO), struct.pack(GOP_END_ST, value))
-        if config.DEBUG: print "gopend: val=%r, res=%r" % (struct.pack(GOP_END_ST, value), r)
+        _debug_("gopend: val=%r, res=%r" % (struct.pack(GOP_END_ST, value), r), 1)
 
 
     def init_settings(self, opts=None):
         if not opts:
             opts = config.TV_IVTV_OPTIONS
 
-        tv.v4l2.Videodev.init_settings(self)
+        if not tv.v4l2.Videodev.init_settings(self):
+            return False
 
         (width, height) = string.split(opts['resolution'], 'x')
         self.setfmt(int(width), int(height))
@@ -377,6 +377,7 @@ class IVTV(tv.v4l2.Videodev):
         codec.stream_type   = opts['stream_type']
 
         self.setCodecInfo(codec)
+        return True
 
 
     def print_settings(self):
@@ -441,10 +442,12 @@ class IVTVCodec:
 
 if __name__ == '__main__':
 
-    config.DEBUG = 0
+    config.DEBUG = 2
 
-    ivtv_dev = IVTV('/dev/video1')
-    ivtv_dev.init_settings()
+    ivtv_dev = IVTV('/dev/video2')
+    if not ivtv_dev.init_settings():
+        import sys
+        sys.exit(1)
     ivtv_dev.listcontrols()
     x = ivtv_dev.getcontrol('Spatial Luma Filter Type')
     print x
@@ -471,7 +474,7 @@ if __name__ == '__main__':
     #ivtv_dev.setCodecInfo(codec)
     #print ivtv_dev.getCodecInfo()
 
-'''
+"""
 To run this as standalone use the following before running python ivtv.py
 pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
 export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
@@ -480,4 +483,4 @@ export FREEVO_CONFIG=/usr/share/freevo/freevo_config.py
 export FREEVO_CONTRIB=/usr/share/freevo/contrib
 export RUNAPP=""
 python ivtv.py
-'''
+"""

@@ -271,7 +271,7 @@ class TvGuide:
         global channel_cache
         channels = channel_cache.cached(start, stop, channel_id)
         if channels is not None:
-            _debug_('cached channels=%r' % (channels,))
+            _debug_('cached channels=%r' % (channels,), 2)
             return channels
 
         channel_cache.reset(start, stop, channel_id)

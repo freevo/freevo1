@@ -43,10 +43,6 @@ import tv.ivtv as ivtv
 import plugin
 
 
-TRUE = 1
-FALSE = 0
-
-
 # Create the OSD object
 osd = osd.get_singleton()
 
@@ -253,12 +249,12 @@ class MPlayer:
         if event == em.STOP or event == em.PLAY_END:
             self.Stop()
             rc.post_event(em.PLAY_END)
-            return TRUE
+            return True
 
         elif event == em.PAUSE or event == em.PLAY:
             self.app.write('pause\n')
             _debug_('%s: sending pause to mplayer' % (time.time()))
-            return TRUE
+            return True
 
         elif event in [ em.TV_CHANNEL_UP, em.TV_CHANNEL_DOWN, em.TV_CHANNEL_LAST ] or s_event.startswith('INPUT_'):
             chan = None
@@ -283,9 +279,9 @@ class MPlayer:
                         nextchan = self.fc.getChannel()
                         nextchannum = self.fc.getChannelNum()
                 else:
-                    return TRUE
+                    return True
             else:
-                chan = int( s_event[6] )
+                chan = int(s_event[6])
                 nextchan = self.fc.getManChannel(chan)
                 nextchannum = self.fc.getManChannelNum(chan)
 
@@ -295,7 +291,7 @@ class MPlayer:
             if self.current_vg != nextvg:
                 self.Stop(channel_change=1)
                 self.Play('tv', nextchan)
-                return TRUE
+                return True
 
             if self.mode == 'vcr':
                 return
@@ -310,7 +306,7 @@ class MPlayer:
                 else:
                     self.Stop(channel_change=1)
                     self.Play('tv', nextchan)
-                return TRUE
+                return True
 
             elif self.current_vg.group_type == 'ivtv':
                 self.fc.chanSet(nextchan, True)
@@ -329,7 +325,7 @@ class MPlayer:
             msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
             cmd = 'osd_show_text "%s"\n' % msg
             self.app.write(cmd)
-            return TRUE
+            return True
 
         elif event == em.TOGGLE_OSD:
             # Display the channel info message
@@ -338,10 +334,10 @@ class MPlayer:
             msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
             cmd = 'osd_show_text "%s"\n' % msg
             self.app.write(cmd)
-            return FALSE
+            return False
 
         elif event == em.OSD_MESSAGE:
             self.app.write('osd_show_text "%s"\n' % event.arg);
-            return TRUE
+            return True
 
-        return FALSE
+        return False

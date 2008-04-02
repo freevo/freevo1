@@ -107,7 +107,7 @@ def get_guide(popup=None, XMLTV_FILE=None):
                 _debug_('EPG: Pickled file timestamp mismatch, reloading!')
 
             else:
-                _debug_('XMLTV, got cached guide (version %s).' % epg_ver)
+                _debug_('XMLTV, got cached guide (version %s).' % epg_ver, DINFO)
                 got_cached_guide = True
 
         if not got_cached_guide:

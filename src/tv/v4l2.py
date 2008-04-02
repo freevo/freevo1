@@ -250,12 +250,14 @@ class Videodev:
     def __init__(self, device):
         _debug_('Videodev.__init__(device=%r)' % (device,), 2)
         self.chanlist = None
-        self.device = os.open(device, os.O_TRUNC)
-        if self.device < 0:
-            sys.exit('Error: %d' % self.device)
-        else:
-            _debug_('Video opened for %r' % device)
+        self.device = -1
+        try:
+            self.device = os.open(device, os.O_TRUNC)
+        except OSError, why:
+            _debug_('Cannot open video device %r: %s' % (device, why), DERROR)
+            return
 
+        _debug_('Video opened for %r' % device)
         results           = self.querycap()
         self.driver       = results[0]
         self.card         = results[1]
@@ -440,6 +442,9 @@ class Videodev:
         val = struct.pack(ENUMSTD_ST, num, 0, "", 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMSTD_NO), val)
         res = struct.unpack(ENUMSTD_ST, r)
+        (index, id, name, numerator, denominator, framelines) = res
+        _debug_('enumstd: index=%r, id=0x%08x, name=%r, numerator=%r, denominator=%r, framelines=%r' % \
+            (index, id, name.strip('\0'), numerator, denominator, framelines), 2)
         _debug_('enumstd: val=%r, %d, res=%r' % (val, len(val), res), 3)
         return res
 
@@ -804,9 +809,10 @@ class Videodev:
 
 
     def init_settings(self):
-        """ initialise the V4L2 setting
-        """
+        """ initialise the V4L2 setting """
         _debug_('init_settings()', 2)
+        if self.device < 0:
+            return False
         (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
         self.inputs = self.enuminputs()
         self.standards = self.enumstds()
@@ -814,8 +820,9 @@ class Videodev:
         self.setstdbyname(v_norm)
         self.setchanlist(v_clist)
 
-        # XXX TODO: make a good way of setting the input
-        # self.setinput(....)
+        # TODO: make a good way of setting the input
+        # self.setinput(...)
+        return True
 
 
     def print_settings(self):
