@@ -239,7 +239,7 @@ class BusyIcon(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.setDaemon(1)
-        self.lock = threading.RLock()
+        self.lock = threading.Lock()
         self.mode_flag = threading.Event()
         self.timer  = 0
         self.active = False
@@ -258,7 +258,6 @@ class BusyIcon(threading.Thread):
 
 
     def stop(self):
-        print 'DJW:self.rect=%r' % (self.rect,)
         self.lock.acquire()
         self.active = False
         self.lock.release()
@@ -484,6 +483,7 @@ class OSD:
                 return
 
             _debug_('pygame event=%s' % (event), 2)
+            #print 'pygame event=%s' % (event)
 
             if event.type == KEYDOWN:
                 if not map and event.key > 30:

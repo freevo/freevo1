@@ -46,7 +46,8 @@ if len(sys.argv)>1 and sys.argv[1] == '--help':
 
 for i in range(1,7):
     try:
-        fd = os.open('/dev/tty%s' % i, os.O_RDONLY | os.O_NONBLOCK)
+        tty_device = '/dev/tty%s' % i
+        fd = os.open(tty_device, os.O_RDONLY | os.O_NONBLOCK)
         # set ioctl (tty, KDSETMODE, KD_TEXT)
         ioctl(fd, 0x4B3A, 0)
         os.close(fd)

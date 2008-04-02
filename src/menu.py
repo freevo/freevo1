@@ -174,7 +174,7 @@ class MenuWidget(GUIObject):
         return the class as string
         """
         s = '%s' % (self.label,)
-        s += ', rect=%s' % (self.rect,)
+        #s += ', rect=%s' % (self.rect,)
         return s
 
 
