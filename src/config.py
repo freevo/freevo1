@@ -219,8 +219,7 @@ class VideoGroup:
             self.cmd = cmd.strip()
 
     def __str__(self):
-        s = '<%s: %s %s %s %s %s %s>' % (self.group_type, self.vdev, self.vvbi, self.adev,
-            self.input_type, self.tuner_chanlist, self.tuner_chan)
+        s = '<%s: %s %s:%r %r>' % (self.group_type, self.vdev, self.input_num, self.input_type, self.tuner_norm)
         return s
 
 

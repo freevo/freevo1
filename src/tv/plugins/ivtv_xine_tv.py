@@ -651,13 +651,17 @@ class TunerControl:
 
     def SetVideoGroup(self, channel):
         """ select a channel's video group and tune to that channel """
+        try:
+            channel_num = int(channel)
+        except ValueError:
+            channel_num = 0
         _debug_('TunerControl: Channel: %r' % channel)
         new_vg = self.fc.getVideoGroup(channel, True)
         _debug_('TunerControl: Group: type=%r, desc=%r' % (new_vg.group_type, new_vg.desc))
         _debug_('TunerControl: Input: type=%r, num=%r' % (new_vg.input_type, new_vg.input_num))
 
         if new_vg.group_type != 'ivtv':
-            _debug_('TunerControl: Video group %r is not supported' % new_vg.group_type, DERROR)
+            _debug_('TunerControl: VideoGroup %s is not supported' % new_vg, DERROR)
             pop = AlertBox(text=_('This plugin only supports the ivtv video group!'))
             pop.show()
             return
@@ -668,19 +672,19 @@ class TunerControl:
 
         if switch_vg:
             # switch to a different video group
-            _debug_('TunerControl: Set video group: %s' % new_vg.vdev, DINFO)
+            _debug_('TunerControl: Set VideoGroup: %s' % new_vg, DINFO)
             ivtv_dev = ivtv.IVTV(new_vg.vdev)
             ivtv_dev.init_settings()
             self.xine.SetInput(new_vg.input_num)
-
             # disable embedded vbi data
             self.embed = ivtv_dev.getvbiembed()
             ivtv_dev.setvbiembed(0)
 
         if not self.ivtv_init:
-            # set channel directly on v4l device
             self.ivtv_init = True
-            self.fc.chanSet(channel, True)
+            # set channel directly on v4l device, if channel is not negative
+            if channel_num >= 0:
+                self.fc.chanSet(channel, True)
             self.curr_channel = channel
 
             if config.XINE_TV_LIVE_RECORD:
