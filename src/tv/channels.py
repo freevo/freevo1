@@ -87,7 +87,7 @@ class FreevoChannels:
                 group = -int(chan)
             except ValueError:
                 group = 0
-            if group == 0:
+            if group <= 0:
                 for i in range(len(config.TV_CHANNELS)):
                     chan_info = config.TV_CHANNELS[i]
                     if chan_info[2] == chan:
