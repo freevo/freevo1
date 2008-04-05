@@ -49,7 +49,6 @@ import time
 import re
 
 # rdf modules
-from xml.dom.ext.reader import Sax2
 import urllib, urllib2
 
 #freevo modules
@@ -138,7 +137,7 @@ def wget(url):
     _debug_('wget(%s)' % (url), 2)
     txdata = None
     txheaders = {
-        'User-Agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11'
+        'User-Agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'
     }
     print 'getting url %r...' % (url)
     req = urllib2.Request(url, txdata, txheaders)
