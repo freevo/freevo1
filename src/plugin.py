@@ -39,9 +39,6 @@ import rc
 
 DEBUG = 0
 
-if float(sys.version[0:3]) < 2.3:
-    True  = 1
-    False = 0
 
 #
 # Some basic plugins known to Freevo.
@@ -78,8 +75,7 @@ class Plugin:
         of the global _().
         """
         try:
-            self._ = gettext.translation(application, os.environ['FREEVO_LOCALE'],
-                                         fallback=1).gettext
+            self._ = gettext.translation(application, os.environ['FREEVO_LOCALE'], fallback=1).gettext
         except:
             self._ = lambda m: m
 
