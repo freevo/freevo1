@@ -301,8 +301,10 @@ class MPlayer:
                     card = 0 # May be this should come from video groups or TV_CHANNELS
                     if em.TV_CHANNEL_UP:
                         self.app.write('dvb_set_channel %s %s\n' % (nextchannum, card))
+                        self.fc.chanSet(nextchan, True)
                     elif em.TV_CHANNEL_DOWN:
                         self.app.write('dvb_set_channel %s %s\n' % (nextchannum, card))
+                        self.fc.chanSet(nextchan, True)
                 else:
                     self.Stop(channel_change=1)
                     self.Play('tv', nextchan)
