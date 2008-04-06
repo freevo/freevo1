@@ -717,7 +717,7 @@ class MenuWidget(GUIObject):
                     event = MENU_PAGEDOWN
 
         if self.eventhandler_plugins == None:
-            self.eventhandler_plugins = plugin.get('daemon_handle')
+            self.eventhandler_plugins = plugin.get('daemon_eventhandler')
 
         if event == MENU_GOTO_MAINMENU:
             self.goto_main_menu()
@@ -787,7 +787,7 @@ class MenuWidget(GUIObject):
 
         if not isinstance(menu, Menu):
             if self.eventhandler_plugins == None:
-                self.eventhandler_plugins = plugin.get('daemon_handle')
+                self.eventhandler_plugins = plugin.get('daemon_eventhandler')
 
             for p in self.eventhandler_plugins:
                 if p.eventhandler(event=event, menuw=self):
