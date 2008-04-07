@@ -235,10 +235,8 @@ def checkForUpdates():
             continue
         _debug_('Check %s for updates' % url)
         try:
-            sock = urllib.urlopen(url)
-            feedSource = sock.read()
-            sock.close()
-            for item in rssfeed.Feed(feedSource).items:
+            feed = rssfeed.Feed(urllib.urlopen(url))
+            for item in feed.items:
                 diff = datetime.date.today() - convertDate(item.date)
                 goodUntil = datetime.date.today() + datetime.timedelta(days=int(numberOfDays))
                 if int(diff.days) <= int(numberOfDays) and not re.search('None', item.url):
@@ -285,5 +283,7 @@ def checkForUpdates():
                                 _debug_('Cannot move %s as cannot determine its media type', (filename))
                             addFileToCache(item.url)
                             addFileToExpiration(filename, goodUntil)
+        except SyntaxError:
+            _debug_('Unable to parse %s. May not be a RSS feed' % (url), DERROR)
         except IOError:
-            _debug_('Unable to download %s. Connection may be down.' % (url), DERROR)
+            _debug_('Unable to download %s. Connection may be down.' % (url), DWARNING)

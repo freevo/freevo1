@@ -29,6 +29,15 @@
 # -----------------------------------------------------------------------
 
 import re
+import sys
+if sys.hexversion >= 0x2050000:
+    import xml.etree.cElementTree as ET
+else:
+    try:
+        import cElementTree as ET
+    except ImportError:
+        import elementtree.ElementTree as ET
+
 import config
 
 __all__ = ["Feed"]
@@ -44,76 +53,47 @@ class Feed:
     class Item:
         "Feed Item"
         title="None"
-        url="None"
-        date="None"
         description="None"
+        date="None"
+        url="None"
         type="None"
+        length="None"
+
+        def __str__(self):
+            return '%r @ %r' % (self.title, self.url)
+
+        def __repr__(self):
+            return '%r @ %r' % (self.title, self.url)
 
     def parseFeed(self, feed):
-        headerPattern = re.compile('<channel>.*?</channel>',re.DOTALL)
-        itemPattern = re.compile('<item>.*?</item>',re.DOTALL)
-        titlePattern = re.compile('<title>.*?</title>',re.DOTALL)
-        descriptionPattern = re.compile('<description>.*?</description>',re.DOTALL)
-        urlPattern = re.compile('enclosure url=".*?"',re.DOTALL)
-        btPattern = re.compile('<link>.*?torrent</link>',re.DOTALL)
-        httpPattern = re.compile('http',re.DOTALL )
-        datePattern = re.compile('<pubDate>.*?</pubDate>',re.DOTALL)
-
-        def removeExcessSpaces(string):
-            string = re.sub('^\s+', '', string)
-            return re.sub('\s+',' ',string)
-        def removeTags(string):
-            string = removeExcessSpaces(string)
-            return re.sub('<\S+?>', '', string)
-        def removeUrlTag(string):
-            string = removeExcessSpaces(string)
-            array = re.split('"',string)
-            for part in array:
-                if httpPattern.search(part):
-                    return part
-        def removeDesTag(string):
-            string = re.sub('<img src=.*?>','',string)
-            string = re.sub('&lt.*?&gt;','',string)
-            string = re.sub('&amp;','and',string)
-            string = removeTags(string)
-            return re.sub('<a href="\S+">','',string)
-        def getType(string):
-            for type in config.AUDIO_SUFFIX:
-                if string in type:
-                    return "audio"
-            return "video"
-
-        #PROCESS HEADER
-        header = headerPattern.search(feed)
-        if header:
-            header = header.group()
-            title = titlePattern.search(header)
-            if title:
-                self.title = removeTags(title.group())
-            description = descriptionPattern.search(header)
-            if description:
-                self.description = removeDesTag(description.group())
-            #PROCESS ALL ITEMS
-            itemList = itemPattern.findall(feed)
-            for item in itemList:
+        root = ET.parse(feed)
+        channel = root.find('.//channel')
+        if channel:
+            title = channel.find('title')
+            self.title = ET.iselement(title) and title.text or 'None'
+            description = channel.find('description')
+            self.description = ET.iselement(description) and description.text or 'None'
+            pubDate = channel.find('pubDate')
+            self.pubDate = ET.iselement(pubDate) and pubDate.text or 'None'
+            items = channel.findall('item')
+            for item in items:
                 newItem = self.Item()
-                title = titlePattern.search(item)
-                if title:
-                    newItem.title = removeTags(title.group())
-                description = descriptionPattern.search(item)
-                if description:
-                    newItem.description = removeDesTag(description.group())
-                url = urlPattern.search(item)
-                if url:
-                    newItem.url = removeUrlTag(url.group())
-                    newItem.type = getType(re.split('"',re.split("\.",newItem.url)[-1])[0])
-                    if re.search("^$",newItem.title) or re.search("None",newItem.title):
-                        newItem.title = newItem.url
-                else:
-                    url = btPattern.search(item)
-                    if url:
-                        newItem.url = removeTags(url.group())
-                date = datePattern.search(item)
-                if date:
-                    newItem.date = removeTags(date.group())
+                element = item.find('title')
+                newItem.title = element.text or 'None'
+                element = item.find('description')
+                newItem.description = element.text or 'None'
+                element = item.find('pubDate')
+                newItem.date = element.text or 'None'
+                enclosure = item.find('enclosure')
+                if enclosure is not None:
+                    newItem.url = 'url' in enclosure.attrib and enclosure.attrib['url'] or 'None'
+                    newItem.type = 'type' in enclosure.attrib and enclosure.attrib['type'] or 'None'
+                    newItem.length = 'length' in enclosure.attrib and enclosure.attrib['length'] or 'None'
                 self.items.append(newItem)
+
+
+if __name__ == '__main__':
+    import urllib
+
+    feed = Feed(urllib.urlopen('http://www.la7.it/rss/barbariche.xml'))
+    print feed.__dict__
