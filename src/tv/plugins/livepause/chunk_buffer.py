@@ -67,7 +67,7 @@ class ChunkBuffer(object):
     def get_reader(self):
         """
         Retrieve a chunk reader for this buffer.
-        @return A ChunkBufferReader instance.
+        @returns: A ChunkBufferReader instance.
         """
         return ChunkBufferReader(Reader(self.buffer))
 

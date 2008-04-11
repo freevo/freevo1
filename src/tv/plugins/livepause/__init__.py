@@ -118,18 +118,18 @@ class PluginInterface(plugin.DaemonPlugin):
 
     For DVBStreamer:
         vdev = for local DVBStreamer '<dvb adapter number>'
-                ie. for DVBStreamer running on adapter 0
-                    vdev='0'
-               for remote DVBStreamer '<remote ip>:<dvb adapter number>'
-                ie. for DVBStreamer running on host 192.168.1.5 dvb adapter 1
-                    vdev='192.168.1.5:1'
+            ie. for DVBStreamer running on adapter 0
+            vdev='0'
+        for remote DVBStreamer '<remote ip>:<dvb adapter number>'
+            ie. for DVBStreamer running on host 192.168.1.5 dvb adapter 1
+            vdev='192.168.1.5:1'
 
         group_type = 'dvb'
 
     For HDHomeRun:
         vdev = '<HDHomeRun id>:<tuner id>'
-                The HDHomeRun id and tuner id are the same as those passed to
-                hdhomerun_config.
+        The HDHomeRun id and tuner id are the same as those passed to
+        hdhomerun_config.
 
         group_type = 'hdhomerun'
     """

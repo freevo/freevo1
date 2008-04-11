@@ -48,13 +48,15 @@ import rc
 
 def get_player():
     """
-    Returns the best Player object available.
+    Find the best Player object available.
 
     This is based the following criteria in order of precedence:
-    1. LIVE_PAUSE2_PREFERRED_PLAYER if not None
-    2. Vlc if available
-    3. Xine if available
-    4. Mplayer
+        1. LIVE_PAUSE2_PREFERRED_PLAYER if not None
+        2. Vlc if available
+        3. Xine if available
+        4. Mplayer
+
+    @returns: the best Player object available.
     """
     player = config.LIVE_PAUSE2_PREFERRED_PLAYER
     if not player in ['vlc', 'xine', 'mplayer']:
