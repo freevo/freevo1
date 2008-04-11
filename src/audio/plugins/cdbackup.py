@@ -165,7 +165,7 @@ class PluginInterface(plugin.ItemPlugin):
         """
         return (('AUDIO_BACKUP_DIR', config.AUDIO_ITEMS[ 0 ][ 1 ],
                  'directory where to put the encoded files'),
-                ('LAME_CMD', config.CONF.lame , '' ),
+                ('LAME_CMD', config.CONF.lame , ''),
                 ('CDPAR_CMD', config.CONF.cdparanoia, ''),
                 ('OGGENC_CMD', config.CONF.oggenc, ''),
                 ('FLAC_CMD', config.CONF.flac, ''),
@@ -182,17 +182,16 @@ class PluginInterface(plugin.ItemPlugin):
         self.item = item
 
         try:
-            if (self.item.type == 'audiocd'):
+            if self.item.type == 'audiocd':
                 if self.rip_thread and self.rip_thread.current_track != -1:
-                    return [ ( self.show_status, _( 'Show CD ripping status' ) ),
-                             ( self.stop_ripping, _( 'Stop CD ripping') ) ]
+                    return [ (self.show_status, _('Show CD ripping status')),
+                             (self.stop_ripping, _('Stop CD ripping')) ]
                 else:
                     self.device = self.item.devicename
                     _debug_('devicename = %s' %self.device)
-                    return [ ( self.create_backup,
-                               _('Rip the CD to the hard drive')) ]
+                    return [ (self.create_backup, _('Rip the CD to the hard drive')) ]
         except:
-            _debug_( _( 'ERROR' ) + ': ' + _( 'Item is not an Audio CD' ) )
+            _debug_(_('Item is not an Audio CD'), DERROR)
         return []
 
 
@@ -206,8 +205,7 @@ class PluginInterface(plugin.ItemPlugin):
     def show_status(self, arg=None, menuw=None):
         t = self.rip_thread
         if t.current_track != -1:
-            pop = AlertBox(text=_( 'Ripping in progress\nTrack %d of %d' ) % \
-                           (t.current_track, t.max_track))
+            pop = AlertBox(text=_('Ripping in progress\nTrack %d of %d') % (t.current_track, t.max_track))
             pop.show()
 
 
@@ -251,7 +249,7 @@ class PluginInterface(plugin.ItemPlugin):
         # delete submenu
         menuw.delete_submenu()
         # show message
-        rc.post_event(Event(OSD_MESSAGE, _( 'Ripping started' )))
+        rc.post_event(Event(OSD_MESSAGE, _('Ripping started')))
 
 
 
@@ -285,7 +283,7 @@ class main_backup_thread(threading.Thread):
         artist     = 'default_artist'
         genre      = 'default_genre'
         year       = 'default_year'
-        dir_audio_default = "dir_audio_default"
+        dir_audio_default = 'dir_audio_default'
         path_head = ''
         for media in config.REMOVABLE_MEDIA:
             if media.devicename == device:
@@ -320,17 +318,17 @@ class main_backup_thread(threading.Thread):
             user_rip_path_prefs['album'] = user_rip_path_prefs['album'].replace(' ', config.CD_RIP_REPLACE_SPACE)
             user_rip_path_prefs['genre'] = user_rip_path_prefs['genre'].replace(' ', config.CD_RIP_REPLACE_SPACE)
 
-        path_list = re.split("\\/", config.CD_RIP_PN_PREF)
+        path_list = re.split('\\/', config.CD_RIP_PN_PREF)
 
-        # Get everything up to the last "/"
+        # Get everything up to the last '/'
         if len(path_list) != 0:
-            for i in range (0, len(path_list)-1 ):
+            for i in range (0, len(path_list)-1):
                 path_head +=  '/' + path_list[i]
         path_tail_temp = '/' + path_list[len(path_list)-1]
 
         # If no directory structure preferences were given use default dir structure
         if len(path_list) == 0:
-            pathname = dir_audio + "/" + artists + "/" + album + "/"
+            pathname = dir_audio + '/' + artists + '/' + album + '/'
         # Else use the preferences given by user
         else:
             path_temp  =  dir_audio + path_head
@@ -340,10 +338,10 @@ class main_backup_thread(threading.Thread):
             os.makedirs(pathname, 0777)
         except OSError, e:
             if e.errno == errno.EEXIST:
-                _debug_(_( 'Directory %s already exists' ) % pathname)
+                _debug_(_('Directory %s already exists') % pathname)
             else:
                 # FIXME: popup
-                _debug_(_( "Cannot rip to '%s'! (%s)") % (pathname, e.strerror))
+                _debug_(_('Cannot rip to "%s"! (%s)') % (pathname, e.strerror))
 
         try:
             mycoverart = '%s/mmpython/disc/%s.jpg' % (config.FREEVO_CACHEDIR, discid)
@@ -397,9 +395,7 @@ class main_backup_thread(threading.Thread):
 
             # If rip_format is mp3 or ogg, then copy the file to
             # /tmp/track_being_ripped.wav
-            if (string.upper(rip_format) == 'MP3') or \
-                   (string.upper(rip_format) == 'OGG') or \
-                   (string.upper(rip_format) == 'FLAC'):
+            if rip_format.upper() in ('MP3', 'OGG', 'FLAC'):
                 pathname_cdparanoia = config.CD_RIP_TMP_DIR
                 path_tail_cdparanoia = config.CD_RIP_TMP_NAME % user_rip_path_prefs
                 keep_wav = False
@@ -435,7 +431,7 @@ class main_backup_thread(threading.Thread):
 
 
             # Build the lame command to be run if mp3 format is selected
-            if string.upper(rip_format) == 'MP3':
+            if rip_format.upper() == 'MP3':
                 output = '%s%s.mp3' % (pathname, path_tail)
                 cmdstr = str('%s %s' % (config.LAME_CMD, config.CD_RIP_LAME_OPTS))
                 cmd = filter(len, cmdstr.split(' ')) + \
@@ -447,7 +443,7 @@ class main_backup_thread(threading.Thread):
                 popen3.run(cmd, self, 9)
 
             # Build the oggenc command to be run if ogg format is selected
-            elif string.upper(rip_format) == 'OGG':
+            elif rip_format.upper() == 'OGG':
                 output = '%s%s.ogg' % (pathname, path_tail)
                 cmdstr = str('%s %s' % (config.OGGENC_CMD, config.CD_RIP_OGG_OPTS))
                 cmd = filter(len, cmdstr.split(' ')) + \
@@ -459,9 +455,9 @@ class main_backup_thread(threading.Thread):
 
 
             # Build the flacenc command
-            elif string.upper(rip_format) == 'FLAC':
+            elif rip_format.upper() == 'FLAC':
                 output = '%s%s.flac' % (pathname, path_tail)
-                cmdstr = '%s %s' % ( config.FLAC_CMD, config.CD_RIP_FLAC_OPTS )
+                cmdstr = '%s %s' % (config.FLAC_CMD, config.CD_RIP_FLAC_OPTS)
                 cmd = filter(len, cmdstr.split(' ')) + [ wav_file, '-o', output ]
 
                 metaflac_command = \
@@ -504,21 +500,26 @@ class main_backup_thread(threading.Thread):
 
     def get_formatted_cd_info(self, device):
         cd_info = mmpython.parse(device)
+        if cd_info is None:
+            _debug_(_('No CD medadata available'), DERROR)
+            popup_string=_('CD info not found!')
+            AlertBox(text=popup_string).show()
+            return [ 'unknown', 'unknown', 'unknown', 'unknown', 'unknown', 'unknown' ]
 
         # Check if getting CDDB data failed -is there a better way to do this?
         # Give some defaults with a timestamp to uniqueify artist and album names.
         # So that subsequent CDs with no CDDB data found don't overwrite each other.
-        if ((cd_info.title == None) and (cd_info.artist == None)):
+        if cd_info.title is None and cd_info.artist is None:
 
-            _debug_( _( 'WARNING' ) + ': ' + _( 'No CDDB data available to mmpython' ) ,2)
+            _debug_(_('No CDDB information available'), DWARNING)
             current_time = time.strftime('%d-%b-%y-%I:%M%P')
 
-            artist = _( 'Unknown Artist' ) + ' ' + current_time + ' - ' + _( 'RENAME' )
-            album = _( 'Unknown CD Album' ) + ' ' + current_time +  ' - ' + _( 'RENAME' )
-            genre = _( 'Other' )
+            artist = _('Unknown Artist') + ' ' + current_time + ' - ' + _('RENAME')
+            album = _('Unknown CD Album') + ' ' + current_time +  ' - ' + _('RENAME')
+            genre = _('Other')
 
             # Flash a popup window indicating copying is done
-            popup_string=_( "CD info not found!\nMust manually rename files\nwhen finished ripping" )
+            popup_string=_('CD info not found!\nMust manually rename files\nwhen finished ripping')
             AlertBox(text=popup_string).show()
 
         # If valid data was returned from mmpython/CDDB
@@ -542,13 +543,13 @@ class main_backup_thread(threading.Thread):
     # This function gets rid of the slash, '/', in a string, and replaces it
     # with join_string
     def slash_split(self, string, join_string = '-'):
-        split_string= re.split(" \\/ ", string)
+        split_string= re.split(' \\/ ', string)
         rejoined_string = ''
         # Were there any splits on '/'?
         if len(split_string) > 1:
             for  i in range (0, len(split_string)):
                 # Are we at the last slash
-                if (i == (len(split_string) - 1)):
+                if i == (len(split_string) - 1):
                     rejoined_string += split_string[i]
                 # if not at the last slash, keep adding to string the join_string
                 else :
@@ -566,7 +567,7 @@ class main_backup_thread(threading.Thread):
     # This list of special_chars probably contains some characters that are okay.
     def replace_special_char(self, string, repl='-'):
         # Regular Expression Special Chars =  . ^ $ * + ? { [ ] \ | ( )
-        special_chars = [ '\"',  '\`', '\\\\', '/','~' ]
+        special_chars = [ '"', '\`', '\\\\', '/', '~' ]
         new_string = string
         num = 0
 
@@ -575,14 +576,14 @@ class main_backup_thread(threading.Thread):
             try:
                 # A few of the special characters get automatically converted to a
                 # different char, rather than what is passed in as repl
-                if (pattern == "\'"):
-                    (new_string, num) = re.subn(pattern, "\\\'", new_string, count=0)
-                elif (pattern == '/'):
+                if pattern == '\'':
+                    (new_string, num) = re.subn(pattern, '\\\'', new_string, count=0)
+                elif pattern == '/':
                     (new_string, num) = re.subn(pattern, '\\\\', new_string, count=0)
                 else:
                     (new_string, num) = re.subn(pattern, repl, new_string, count=0)
             except:
-                _debug_( _( 'ERROR' ) + ': ' + _( 'Problem trying to call:' ) + ' re.subn' )
+                _debug_(_('Problem trying to call:') + ' re.subn', DERROR)
         return new_string
 
     def fix_case(self, string):
