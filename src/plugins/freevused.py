@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# freevused.py - Get events from a Bemused like client
+# Get events from a Bemused like client
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -131,13 +131,14 @@ import video.videoitem as vitem
 
 import audio.player as player
 
+import kaa
 
 import plugin
 
 try:
     import bluetooth
 except:
-    print String(_("ERROR")+": "+_("You need pybluez (http://org.csail.mit.edu/pybluez/) to run \"freevused\" plugin."))
+    print String(_("ERROR")+": "+_("You need pybluetooth (http://org.csail.mit.edu/pybluetooth/) to run \"freevused\" plugin."))
 
 import thread, time
 
@@ -153,7 +154,7 @@ class PluginInterface(plugin.DaemonPlugin):
     ones by adding in /etc/freevo/local.conf:
 
     | # if RFCOMM port is already binded wait this seconds to retry binding
-    | FVUSED_BIND_TIMEOUT = 30
+    | FVUSED_BIND_TIMEOUT = 5
     |
     | # Send received event to OSD
     | FVUSED_OSD_MESSAGE = True
@@ -195,6 +196,10 @@ class PluginInterface(plugin.DaemonPlugin):
     |   'STAT': 'FVUSED_ITEM_INFO'
     | }
     """
+    __author__           = 'Gorka Olaizola'
+    __author_email__     = 'gorka@escomposlinux.org'
+    __maintainer__       = __author__
+    __maintainer_email__ = __author_email__
 
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
@@ -202,26 +207,31 @@ class PluginInterface(plugin.DaemonPlugin):
 
         self.event_listener = True
 
-        self.isbinded    = False
-        self.isconnected = False
+        self.shutdown_plugin = False
+
+        self.connected   = False
         self.server_sock = None
-        self.client_sock = None
+        self.tx          = None
         self.address     = 0
         self.port        = 0
         self.data        = ''
-        self.osd_message_status = None
         self.menuw       = None
 
-        self.menu_isfresh = False
-        self.menu_client_waiting = False
-        self.playing = False
+        self.timer       = None
+        self.conn_timer  = None
 
-        self.audioplayer = None
+        self.osd_message_status = None
+
+        self.menu_isfresh = False
+        self.playing      = False
+        self.menu_client_waiting = False
+
+        self.audioplayer  = None
 
         if hasattr(config, 'FVUSED_BIND_TIMEOUT'):
             self.bind_timeout = config.FVUSED_BIND_TIMEOUT
         else:
-            self.bind_timeout = 30
+            self.bind_timeout = 5
 
         if hasattr(config, 'FVUSED_OSD_MESSAGE'):
             self.osd_message = config.FVUSED_OSD_MESSAGE
@@ -267,17 +277,19 @@ class PluginInterface(plugin.DaemonPlugin):
                   'STAT': 'FVUSED_ITEM_INFO'
         }
 
-        self.poll_menu_only = False
+#        self.poll_menu_only = False
+
+        self.timer = kaa.Timer(self.timer_handler)
+        self.timer.start(config.POLL_TIME)
 
         self.rc = rc.get_singleton()
 
         self.FVUSED_ITEM_INFO = em.Event('FVUSED_ITEM_INFO')
 
-        self.mixer_default_step = config.MIXER_VOLUME_STEP
+        self.connection_thread()
+        
 
-        thread.start_new_thread(self.bluetoothListener, ())
-
-    def poll(self):
+    def timer_handler(self):
         if self.menu_client_waiting:
             if self.playing:
                 if self.menuw:
@@ -291,6 +303,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
                     self.menu_client_waiting = False
             else:
+                _debug_('About to send menu to client')
                 self.sendMenu()
                 self.menu_client_waiting = False
             self.menu_isfresh = False
@@ -331,40 +344,6 @@ class PluginInterface(plugin.DaemonPlugin):
 
         return False
 
-    def shutdown(self):
-        if self.server_sock:
-            if not self.isbinded:
-                bluetooth.stop_advertising(self.server_sock)
-            self.server_sock.close()
-
-        if self.client_sock:
-            self.client_sock.close()
-
-
-    def advertise_service(self):
-        # Create the sever socket
-        self.server_sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
-
-        # bind the socket to the first available port
-        self.port = bluetooth.get_available_port( bluetooth.RFCOMM )
-        try:
-            err = self.server_sock.bind(("", self.port))
-            err = self.server_sock.listen(1)
-
-            # advertise our service
-            bluetooth.advertise_service( self.server_sock, "Freevused",
-                                  service_classes = [ bluetooth.SERIAL_PORT_CLASS ],
-                                  profiles = [ bluetooth.SERIAL_PORT_PROFILE ] )
-
-            self.isbinded = True
-            _debug_("Advertising server to the world")
-
-        except bluetooth.BluetoothError, e:
-            self.isbinded = False
-            _debug_("broken tooth: %s" % str(e))
-            time.sleep(self.bind_timeout)
-
-
     def process_data(self):
         str_arg = ''
         command = None
@@ -376,7 +355,7 @@ class PluginInterface(plugin.DaemonPlugin):
             if command:
                 _debug_('Event Translation: "%s" -> "%s"' % (str_cmd, command))
                 if str_cmd in ('VOL-', 'VOL+'):
-                    self.rc.post_event(em.Event(command, arg=self.mixer_default_step))
+                    self.rc.post_event(em.Event(command, arg=config.MIXER_VOLUME_STEP))
                 else:
                     self.rc.post_event(em.Event(command))
 
@@ -390,6 +369,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         elif str_cmd == 'MSND':
             self.menu_client_waiting = True
+            _debug_('Client asked for menu')
 
         elif str_cmd == 'MITM':
             str_arg = self.data[4:]
@@ -420,39 +400,21 @@ class PluginInterface(plugin.DaemonPlugin):
 
         self.data=''
 
+    def disconnect(self):
+        if self.connected:
+            if self.server_sock:
+                bluetooth.stop_advertising(self.server_sock)
+                self.server_sock.close()
+            if self.tx:
+                self.tx.close()
+                self.tx_dispatcher.unregister()
 
-    def bluetoothListener(self):
-
-        while True:
-
-            # accept an incoming connection
-            if not self.isbinded:
-                self.advertise_service()
-            elif not self.isconnected:
-                _debug_("Waiting for connection on RFCOMM channel %d" % self.port)
-                try:
-                    self.client_sock, self.address = self.server_sock.accept()
-                except bluetooth.BluetoothError, e:
-                    _debug_("broken tooth: %s" % str(e))
-
-                self.isconnected = True
-                _debug_("Accepted connection from ", self.address)
-
-            else:
-            # get data from socket
-
-                try:
-                    self.data = self.client_sock.recv(1024)
-                except bluetooth.BluetoothError, e:
-                    self.isconnected = False
-                    _debug_("broken tooth: %s" % str(e))
-                self.process_data()
-
+            self.connected = False
 
     def btSend(self, data=None):
         try:
-            if self.client_sock and data:
-                bytes = self.client_sock.send(data)
+            if self.tx and data:
+                bytes = self.tx.send(data)
                 if data == '\0':
                     _debug_("Data sent: EOS", 2)
                 else:
@@ -461,8 +423,8 @@ class PluginInterface(plugin.DaemonPlugin):
                 _debug_("Bytes sent: %s" % bytes, 2)
 
         except bluetooth.BluetoothError, e:
-            self.isconnected = False
-            _debug_("broken tooth: %s" % str(e))
+            self.disconnect()
+            _debug_("broken tooth (btSend): %s" % str(e))
 
 
     def sendMenu(self):
@@ -474,8 +436,6 @@ class PluginInterface(plugin.DaemonPlugin):
         self.btSend('\0')
 
     def sendItemStats(self):
-        print "PLAYING: %s" % self.playing
-        print "MENU: %s" % self.menuw
         if self.playing and self.menuw:
             menuitem = self.menuw.menustack[-1]
             if hasattr(menuitem, 'is_submenu') and menuitem.is_submenu:
@@ -547,4 +507,66 @@ class PluginInterface(plugin.DaemonPlugin):
             self.btSend(_('Length') + ': ' + item['runtime'] + '\n')
 
     def sendMessage(self, msg):
+
         self.btSend(msg + '\n\0')
+
+    def shutdown(self):
+
+        self.shutdown_plugin = True
+
+
+    @kaa.threaded()
+    def connection_thread(self):
+
+        self.tx_dispatcher = kaa.IOMonitor(self.handle_receive)
+
+        self.connection_timer()
+
+    def connection_timer(self):
+
+        while not self.shutdown_plugin:
+            self.try_connect()
+            time.sleep(self.bind_timeout)
+
+    def try_connect(self):
+
+        try:
+            self.server_sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
+
+            err = self.server_sock.bind(("", bluetooth.PORT_ANY))
+            err = self.server_sock.listen(1)
+            self.port = self.server_sock.getsockname()[1]
+
+            # advertise our service
+            bluetooth.advertise_service( self.server_sock, "Freevused",
+                                  service_classes = [ bluetooth.SERIAL_PORT_CLASS ],
+                                  profiles = [ bluetooth.SERIAL_PORT_PROFILE ] )
+
+            _debug_("Waiting for connection on RFCOMM channel %d" % self.port)
+
+            self.tx, self.address = self.server_sock.accept()
+
+            _debug_("Accepted connection")
+
+            self.connected = True
+
+            self.tx_dispatcher.register(self.tx.fileno(), kaa.IO_READ)
+
+
+        except bluetooth.BluetoothError, e:
+            self.connected = False
+            _debug_("broken tooth (try_connect): %s" % str(e))
+
+            if self.server_sock:
+                self.server_sock.close()
+
+            self.server_sock = None
+
+    def handle_receive(self):
+
+        try:
+            self.data = self.tx.recv(1024)
+            self.process_data()
+        except bluetooth.BluetoothError, e:
+            self.disconnect()
+            _debug_("broken tooth (handle_receive): %s" % str(e))
