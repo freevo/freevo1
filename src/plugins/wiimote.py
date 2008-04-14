@@ -184,7 +184,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.cx.settimeout(2)
         self.rx.settimeout(2)
 
-        self.rx_dispatcher = kaa.SocketDispatcher(self.handle_receive)
+        self.rx_dispatcher = kaa.IOMonitor(self.handle_receive)
 
         # start immediately for the first time
         self.timer = kaa.Timer(self.onTimer)

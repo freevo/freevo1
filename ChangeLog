@@ -18,6 +18,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 --------------------------------
 
  * New DVB/ATSC live pause plug-in (F#1927555)
+ * Fixed Wiimote plugin for latest kaa SocketDispatcher changes (B#1941224)
 
 == Release 1.7.8 (2008-05-26) ==
 --------------------------------
