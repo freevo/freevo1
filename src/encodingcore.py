@@ -318,7 +318,7 @@ class EncodingJob:
             if config.DEBUG >= 2:
                 for f in dir(data):
                     _debug_('%s: %s' % (f, eval('data["%s"]' % f)), 2)
-            if data.has_key('length'):
+            if data.has_key('length') and data['length'] is not None:
                 self.length = data['length']
                 _debug_('Video length is %s' % self.length)
             else:
