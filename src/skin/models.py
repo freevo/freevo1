@@ -92,9 +92,11 @@ class ScrollableText:
         if not hard:
             # go one word back, than it fits
             c = space
+            rest_start = c
             if string[c] == ' ':
-                rest_start = c + 1
-
+                # leave out real spaces
+                rest_start = c+1 
+           
         # calc the matching and rest string and return all this
         return (string[:c], string[rest_start:], False)
 
@@ -109,10 +111,12 @@ class ScrollableText:
         rest = self.text
         while rest:
             line, rest, nl = self.__get_line__(rest, width, font.font, ' ', False)
+            # there is an unbreakable rest, we try with more possible line breaks
             if not line and rest and not nl:
-                line, rest, nl = self.__get_line__(rest, width, font.font, ' -_', False)
+                line, rest, nl = self.__get_line__(rest, width, font.font, ' -_:=?', False)
+                # still an unbreakable rest, we have to accept hard line break
                 if not line and rest and not nl:
-                    line, rest, nl = self.__get_line__(rest, width, font.font, ' -_', True)
+                    line, rest, nl = self.__get_line__(rest, width, font.font, ' -_:=?', True)
 
             self.lines.append(line)
 
