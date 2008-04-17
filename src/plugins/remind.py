@@ -31,8 +31,8 @@
 
 __author__ = "Christian Lyra"
 __version__ = "0.1"
-__svnversion__ = "$Revision$"[11:-2]
-__date__ = "$Date$"[7:-2]
+__svnversion__ = "$Revision$".split()[1]
+__date__ = "$Date$".split()[1]
 __copyright__ = "Copyright (c) 2007 Christian Lyra"
 __license__ = "GPL"
 __doc__ = """A plugin to list reminders, but can be used to
