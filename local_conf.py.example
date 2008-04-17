@@ -1163,6 +1163,15 @@ CACHE_IMAGES = 1
 # This will enable only new episodes to be recorded
 # TV_RECORD_ONLY_NEW_DETECTION = True
 
+# If true, this will automatically re-encode shows after they finish recording
+# NOTE: You need to set up the REENCODE_* variables as for the reencode.py plugin -
+# these default values will be used to re-encode the recordings
+# TV_RECORD_REENCODE = False
+
+# If true, this will remove the original recording after automatic re-encoding is done
+# TV_RECORD_REENCODE_REMOVE_SOURCE = False
+
+
 # ================================================================================
 # Watching TV
 # ================================================================================

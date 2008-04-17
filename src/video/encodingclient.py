@@ -101,7 +101,7 @@ def connectionTest(teststr='testing'):
     return (status, response)
 
 
-def initEncodeJob(source, output, friendlyname="", title=None):
+def initEncodeJob(source, output, friendlyname="", title=None, rmsource=False):
     """Initialize the encodingjob.
 
     This function returns an idnr (integer) if successful
@@ -114,13 +114,14 @@ def initEncodeJob(source, output, friendlyname="", title=None):
     @param friendlyname: is a "friendly name" to assign to this encoding job
     @param title: is obligatory if you have a dvd/dvd-on-disc, in wich case you need
         to specify a title (integer)
+    @param rmsource: sets whether to remove the source video on completion (boolean)
     """
-    _debug_('initEncodeJob(%s, %s, %s, %s)' % (source, output, friendlyname, title), DINFO)
+    _debug_('initEncodeJob(%s, %s, %s, %s, %s)' % (source, output, friendlyname, title, rmsource), DINFO)
     if not (source or output):
         return (False, "EncodingClient: no source and/or output")
 
     try:
-        (status, response) = server.initEncodeJob(source, output, friendlyname, title)
+        (status, response) = server.initEncodeJob(source, output, friendlyname, title, rmsource)
     except:
         print "Unexpected error:", sys.exc_info()[0]
         raise

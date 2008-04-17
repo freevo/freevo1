@@ -1676,6 +1676,23 @@ TV_RECORD_REMOVE_COMMERCIALS = None
 # This will try to resolve scheduling conflicts and re-schedule when needed
 TV_RECORD_CONFLICT_RESOLUTION = None
 
+# This will automatically re-encode recordings with the default REENCODE settings
+# using the encoding server
+TV_RECORD_REENCODE = False
+TV_RECORD_REENCODE_REMOVE_SOURCE = False
+
+# Some default re-encode values
+REENCODE_CONTAINER = 'avi'
+REENCODE_RESOLUTION = 'Optimal'
+REENCODE_VIDEOCODEC = 'XviD'
+REENCODE_VIDEOBITRATE = 1000
+REENCODE_AUDIOCODEC = 'MPEG 1 Layer 3 (mp3)'
+REENCODE_AUDIOBITRATE = 128
+REENCODE_NUMPASSES = 1
+REENCODE_VIDEOFILTER = None
+REENCODE_NUMTHREADS = 1
+REENCODE_ALTPROFILE = None
+
 #
 # Watching TV
 #

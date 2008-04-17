@@ -135,10 +135,10 @@ class EncodingOptions:
 
 class EncodingJob:
     """Class for creation & configuration of EncodingJobs. This generates the mencoder commands"""
-    def __init__(self, source, output, friendlyname, idnr, chapter=None):
+    def __init__(self, source, output, friendlyname, idnr, chapter=None, rmsource=False):
         """Initialize class instance"""
-        _debug_('encodingcore.EncodingJob.__init__(%s, %s, %s, %s, %s)' % \
-            (source, output, friendlyname, idnr, chapter), 2)
+        _debug_('encodingcore.EncodingJob.__init__(%s, %s, %s, %s, %s, %s)' % \
+            (source, output, friendlyname, idnr, chapter, rmsource), 2)
         #currently only MEncoder can be used, but who knows what will happen in the future :)
         self._generateCL = self._GenerateCLMencoder
         self.encodingopts = EncodingOptions()
@@ -147,6 +147,7 @@ class EncodingJob:
         self.name = friendlyname
         self.idnr = idnr
         self.chapter = chapter
+        self.rmsource = rmsource
 
         self.container = 'avi'
         self.tgtsize = None
@@ -859,6 +860,9 @@ class EncodingQueue:
 
         if self.currentjob.status == status.vpassfinal:
             _debug_('Job %s finished' % self.currentjob.idnr, DINFO)
+            if self.currentjob.rmsource is True:
+                _debug_('Removing source: %s' % self.currentjob.source)
+                os.remove(self.currentjob.source)
             #we are done with this job, remove it
             del self.qlist[0]
             del self.qdict[self.currentjob.idnr]

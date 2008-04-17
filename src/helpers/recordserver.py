@@ -63,7 +63,16 @@ if __name__ == '__main__':
 # The twisted modules will go away when all the recordserver clients
 # have been updated to use kaa.rpc
 
-from video.commdetectclient import initCommDetectJob, queueIt, listJobs, connectionTest
+from video.commdetectclient import initCommDetectJob
+from video.commdetectclient import queueIt as queueCommdetectJob
+from video.commdetectclient import listJobs as listCommdetectJobs
+from video.commdetectclient import connectionTest as commdetectConnectionTest
+
+from video.encodingclient import initEncodeJob
+from video.encodingclient import queueIt as queueEncodeJob
+from video.encodingclient import listJobs as listEncodeJobs
+from video.encodingclient import connectionTest as encodeConnectionTest
+from video.encodingclient import setContainer, setVideoCodec, setAudioCodec, setVideoRes, setNumThreads, setVideoFilters
 
 import tv.record_types
 from tv.record_types import TYPES_VERSION
@@ -1340,15 +1349,51 @@ class RecordServer:
                 if config.VCR_POST_REC:
                     util.popen3.Popen3(config.VCR_POST_REC)
                 if config.TV_RECORD_REMOVE_COMMERCIALS:
-                    (result, response) = connectionTest('connection test')
+                    (result, response) = commdetectConnectionTest('connection test')
                     if result:
                         (status, idnr) = initCommDetectJob(prog.filename)
-                        (status, output) = listJobs()
+                        (status, output) = listCommdetectJobs()
                         _debug_(output, DINFO)
-                        (status, output) = queueIt(idnr, True)
+                        (status, output) = queueCommdetectJob(idnr, True)
                         _debug_(output, DINFO)
                     else:
                         _debug_('commdetect server not running', DINFO)
+                if config.TV_RECORD_REENCODE:
+                    (result, response) = encodeConnectionTest('connection test')
+                    if result:
+                        source = prog.filename
+                        output = prog.filename
+                        multipass = config.REENCODE_NUMPASSES > 1
+
+                        (status, resp) = initEncodeJob(source, output, '', None, config.TV_RECORD_REENCODE_REMOVE_SOURCE)
+                        _debug_('initEncodeJob:status:%s resp:%s' % (status, resp))
+
+                        idnr = resp
+
+                        (status, resp) = setContainer(idnr, config.REENCODE_CONTAINER)
+                        _debug_('setContainer:status:%s resp:%s' % (status, resp))
+
+                        (status, resp) = setVideoCodec(idnr, config.REENCODE_VIDEOCODEC, 0, multipass,
+                            config.REENCODE_VIDEOBITRATE, config.REENCODE_ALTPROFILE)
+                        _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
+
+                        (status, resp) = setAudioCodec(idnr, config.REENCODE_AUDIOCODEC, config.REENCODE_AUDIOBITRATE)
+                        _debug_('setAudioCodec:status:%s resp:%s' % (status, resp))
+
+                        (status, resp) = setNumThreads(idnr, config.REENCODE_NUMTHREADS)
+                        _debug_('setNumThreads:status:%s resp:%s' % (status, resp))
+
+                        (status, resp) = setVideoRes(idnr, config.REENCODE_RESOLUTION)
+                        _debug_('setVideoRes:status:%s resp:%s' % (status, resp))
+
+                        (status, resp) = listEncodeJobs()
+                        _debug_('listEncodeJobs:status:%s resp:%s' % (status, resp))
+
+                        (status, resp) = queueEncodeJob(idnr, True)
+                        _debug_('queueEncodeJob:status:%s resp:%s' % (status, resp))
+                    else:
+                        _debug_('encoding server not running', DINFO)
+
                 # This is a really nasty hack but if it fixes the problem then great
                 if self.delay_recording:
                     prog = self.delay_recording

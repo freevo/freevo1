@@ -88,10 +88,10 @@ class EncodingServer(xmlrpc.XMLRPC):
         return (True, 'EncodingServer::echotest: %s' % blah)
 
 
-    def xmlrpc_initEncodeJob(self, source, output, friendlyname='', chapter=None):
+    def xmlrpc_initEncodeJob(self, source, output, friendlyname='', chapter=None, rmsource=False):
         """ Using Twisted initialise an encoding job """
-        _debug_('xmlrpc_initEncodeJob(source=%r, output=%r, friendlyname=%r, chapter=%r)' % \
-            (source, output, friendlyname, chapter), 1)
+        _debug_('xmlrpc_initEncodeJob(source=%r, output=%r, friendlyname=%r, chapter=%r, rmsource=%s)' % \
+            (source, output, friendlyname, chapter, rmsource), 1)
         #safety checks
         if not (source or output):
             return (False, 'EncodingServer::initEncodeJob:  no source or output given')
@@ -101,7 +101,7 @@ class EncodingServer(xmlrpc.XMLRPC):
         # devide or random number by 100 :)
         idnr = int((time.time() / random.random()) / 100)
         _debug_('idnr=%s' % (idnr), 2)
-        self.jobs[idnr] = EncodingJob(source, output, friendlyname, idnr, chapter)
+        self.jobs[idnr] = EncodingJob(source, output, friendlyname, idnr, chapter, rmsource)
 
         #wait for the analyzing to end
         while not self.jobs[idnr].finishedanalyze:
