@@ -225,16 +225,12 @@ class PluginInterface(plugin.ItemPlugin):
         items = []
 
         if config.LAME_CMD:
-            items.append(menu.MenuItem(_('Backup CD to hard drive in mp3 format'),
-                                       self.cd_backup, arg=(arg, 'mp3')))
+            items.append(menu.MenuItem(_('Backup CD to hard drive in mp3 format'), self.cd_backup, arg=(arg, 'mp3')))
         if config.OGGENC_CMD:
-            items.append(menu.MenuItem(_('Backup CD to hard drive in Ogg format'),
-                                       self.cd_backup, arg=(arg, 'ogg')))
+            items.append(menu.MenuItem(_('Backup CD to hard drive in Ogg format'), self.cd_backup, arg=(arg, 'ogg')))
         if config.FLAC_CMD:
-            items.append(menu.MenuItem(_('Backup CD to hard drive in FLAC format'),
-                                       self.cd_backup, arg=(arg, 'flac')))
-        items.append(menu.MenuItem(_('Backup CD to hard drive in wav format'),
-                                   self.cd_backup, arg=(arg, 'wav')))
+            items.append(menu.MenuItem(_('Backup CD to hard drive in FLAC format'), self.cd_backup, arg=(arg, 'flac')))
+        items.append(menu.MenuItem(_('Backup CD to hard drive in wav format'), self.cd_backup, arg=(arg, 'wav')))
 
         backupmenu = menu.Menu(_('CD Backup'), items, reload_func=self.create_backup_menu)
         return backupmenu
@@ -267,13 +263,13 @@ class main_backup_thread(threading.Thread):
     def run(self, rip_format='mp3'):
         self.abort = False
 
-        if self.rip_format == 'mp3' :
+        if self.rip_format == 'mp3':
             self.cd_backup_threaded(self.device, rip_format='mp3')
-        elif self.rip_format == 'ogg' :
+        elif self.rip_format == 'ogg':
             self.cd_backup_threaded(self.device, rip_format='ogg')
-        elif self.rip_format == 'wav' :
+        elif self.rip_format == 'wav':
             self.cd_backup_threaded(self.device, rip_format='wav')
-        elif self.rip_format == 'flac' :
+        elif self.rip_format == 'flac':
             self.cd_backup_threaded(self.device, rip_format='flac')
 
 
@@ -506,24 +502,21 @@ class main_backup_thread(threading.Thread):
             AlertBox(text=popup_string).show()
             return [ 'unknown', 'unknown', 'unknown', 'unknown', 'unknown', 'unknown' ]
 
+        current_time = time.strftime('%d-%b-%y-%I:%M%P')
+        artist = _('Unknown Artist') + ' ' + current_time + ' - ' + _('RENAME')
+        album  = _('Unknown CD Album') + ' ' + current_time +  ' - ' + _('RENAME')
+        genre  = _('Other')
+        year   = time.strftime('%Y')
+
         # Check if getting CDDB data failed -is there a better way to do this?
         # Give some defaults with a timestamp to uniqueify artist and album names.
         # So that subsequent CDs with no CDDB data found don't overwrite each other.
         if cd_info.title is None and cd_info.artist is None:
-
-            _debug_(_('No CDDB information available'), DWARNING)
-            current_time = time.strftime('%d-%b-%y-%I:%M%P')
-
-            artist = _('Unknown Artist') + ' ' + current_time + ' - ' + _('RENAME')
-            album = _('Unknown CD Album') + ' ' + current_time +  ' - ' + _('RENAME')
-            genre = _('Other')
-
-            # Flash a popup window indicating copying is done
+            _debug_(_('No CDDB data available to mmpython'), DWARNING)
             popup_string=_('CD info not found!\nMust manually rename files\nwhen finished ripping')
             AlertBox(text=popup_string).show()
-
-        # If valid data was returned from mmpython/CDDB
         else:
+            # If valid data was returned from mmpython/CDDB
             album  = self.fix_case(self.replace_special_char(cd_info.title, '-'))
             artist = self.fix_case(self.replace_special_char(cd_info.artist, '-'))
             genre  = self.replace_special_char(cd_info.tracks[0].genre, '-')
@@ -552,7 +545,7 @@ class main_backup_thread(threading.Thread):
                 if i == (len(split_string) - 1):
                     rejoined_string += split_string[i]
                 # if not at the last slash, keep adding to string the join_string
-                else :
+                else:
                     rejoined_string += split_string[i] + join_string
         # If there are no slashes , then the list is only 1 element long and there
         # is nothing to do.
