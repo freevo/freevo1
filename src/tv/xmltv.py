@@ -32,6 +32,7 @@
 import types, re
 import sys
 
+
 if sys.hexversion >= 0x2050000:
     from xml.etree.cElementTree import ElementTree, Element, SubElement, tostring
 else:
@@ -40,10 +41,11 @@ else:
     except ImportError:
         from elementtree.ElementTree import ElementTree, Element, SubElement, tostring
 
+import config
+
+
 # The Python-XMLTV version
 VERSION = "1.2"
-
-DEBUG = 1
 
 # The date format used in XMLTV (the %Z will go away in 0.6)
 date_format = '%Y%m%d%H%M%S %Z'
@@ -56,10 +58,11 @@ def set_attrs(dict, elem, attrs):
 
     Add any attributes in 'attrs' found in 'elem' to 'dict'
     """
-    if DEBUG >= 2: print "in set_attrs(dict, elem, attrs)"
+    _debug_('set_attrs(dict=%r, elem=%r, attrs=%r)' % (dict, elem, attrs), 2)
     for attr in attrs:
         if attr in elem.keys():
             dict[attr] = elem.get(attr)
+
 
 def set_boolean(dict, name, elem):
     """
@@ -68,13 +71,14 @@ def set_boolean(dict, name, elem):
     If element, 'name' is found in 'elem', set 'dict'['name'] to a boolean
     from the 'yes' or 'no' content of the node
     """
-    if DEBUG >= 2: print "in set_boolean(dict, name, elem)"
+    _debug_('set_boolean(dict=%r, name=%r, elem=%r)' % (dict, name, elem), 2)
     node = elem.find(name)
     if node is not None:
         if node.text.lower() == 'yes':
             dict[name] = True
         elif node.text.lower() == 'no':
             dict[name] = False
+
 
 def append_text(dict, name, elem, with_lang=True):
     """
@@ -83,7 +87,7 @@ def append_text(dict, name, elem, with_lang=True):
     Append any text nodes with 'name' found in 'elem' to 'dict'['name']. If
     'with_lang' is 'True', a tuple of ('text', 'lang') is appended
     """
-    if DEBUG >= 2: print "in append_text(dict, name, elem, with_lang=True)"
+    _debug_('append_text(dict=%r, name=%r, elem=%r, with_lang=%r)' % (dict, name, elem, with_lang), 2)
     for node in elem.findall(name):
         if not dict.has_key(name):
             dict[name] = []
@@ -92,6 +96,7 @@ def append_text(dict, name, elem, with_lang=True):
         else:
             dict[name].append(node.text)
 
+
 def set_text(dict, name, elem, with_lang=True):
     """
     set_text(dict, name, elem, with_lang=True) -> None
@@ -99,7 +104,7 @@ def set_text(dict, name, elem, with_lang=True):
     Set 'dict'['name'] to the text found in 'name', if found under 'elem'. If
     'with_lang' is 'True', a tuple of ('text', 'lang') is set
     """
-    if DEBUG >= 2: print "in set_text(dict, name, elem, with_lang=True)"
+    _debug_('set_text(dict=%r, name=%r, elem=%r, with_lang=%r)' % (dict, name, elem, with_lang), 2)
     node = elem.find(name)
     if node is not None:
         if with_lang:
@@ -107,13 +112,14 @@ def set_text(dict, name, elem, with_lang=True):
         else:
             dict[name] = node.text
 
+
 def append_icons(dict, elem):
     """
     append_icons(dict, elem) -> None
 
     Append any icons found under 'elem' to 'dict'
     """
-    if DEBUG >= 2: print "in append_icons(dict, elem)"
+    _debug_('append_icons(dict=%r, elem=%r)' % (dict, elem), 2)
     for iconnode in elem.findall('icon'):
         if not dict.has_key('icon'):
             dict['icon'] = []
@@ -128,15 +134,15 @@ def elem_to_channel(elem):
 
     Convert channel element to dictionary
     """
-    if DEBUG >= 2: print "in elem_to_channel(elem)"
+    _debug_('elem_to_channel(elem=%r)' % (elem,), 2)
     d = {'id': elem.get('id'),
          'display-name': []}
 
     append_text(d, 'display-name', elem)
     append_icons(d, elem)
     append_text(d, 'url', elem, with_lang=False)
-
     return d
+
 
 def read_channels(fp=None, tree=None):
     """
@@ -145,7 +151,7 @@ def read_channels(fp=None, tree=None):
     Return a list of channel dictionaries from file object 'fp' or the
     ElementTree 'tree'
     """
-    if DEBUG >= 2: print "in read_channels(fp=None, tree=None)"
+    _debug_('read_channels(fp=%r, tree=%r)' % (fp, tree), 2)
     if fp:
         et = ElementTree()
         tree = et.parse(fp)
@@ -158,13 +164,12 @@ def elem_to_programme(elem):
 
     Convert programme element to dictionary
     """
-    if DEBUG >= 2: print "in elem_to_programme(elem)"
+    _debug_('elem_to_programme(elem=%r)' % (elem,), 2)
     d = {'start': elem.get('start'),
          'channel': elem.get('channel'),
          'title': []}
 
-    set_attrs(d, elem, ('stop', 'pdc-start', 'vps-start', 'showview',
-                        'videoplus', 'clumpidx'))
+    set_attrs(d, elem, ('stop', 'pdc-start', 'vps-start', 'showview', 'videoplus', 'clumpidx'))
 
     append_text(d, 'title', elem)
     append_text(d, 'sub-title', elem)
@@ -185,8 +190,7 @@ def elem_to_programme(elem):
 
     lennode = elem.find('length')
     if lennode is not None:
-        lend = {'units': lennode.get('units'),
-                'length': lennode.text}
+        lend = {'units': lennode.get('units'), 'length': lennode.text}
         d['length'] = lend
 
     append_icons(d, elem)
@@ -257,6 +261,7 @@ def elem_to_programme(elem):
 
     return d
 
+
 def read_programmes(fp=None, tree=None):
     """
     read_programmes(fp=None, tree=None) -> list
@@ -264,7 +269,7 @@ def read_programmes(fp=None, tree=None):
     Return a list of programme dictionaries from file object 'fp' or the
     ElementTree 'tree'
     """
-    if DEBUG >= 2: print "in read_programmes(fp=None, tree=None)"
+    _debug_('read_programmes(fp=%r, tree=%r)' % (fp, tree), 2)
     if fp:
         et = ElementTree()
         tree = et.parse(fp)
@@ -278,7 +283,7 @@ def read_data(fp=None, tree=None):
     Get the source and other info from file object fp or the ElementTree
     'tree'
     """
-    if DEBUG >= 2: print "in read_data(fp=None, tree=None)"
+    _debug_('read_data(fp=%r, tree=%r)' % (fp, tree), 2)
     if fp:
         et = ElementTree()
         tree = et.parse(fp)
@@ -297,9 +302,8 @@ class Writer:
 
     @note: All strings passed to this class must be Unicode, except for dictionary keys
     """
-    def __init__(self, encoding="utf-8", date=None,
-                 source_info_url=None, source_info_name=None,
-                 generator_info_url=None, generator_info_name=None):
+    def __init__(self, encoding="utf-8", date=None, source_info_url=None, source_info_name=None,
+        generator_info_url=None, generator_info_name=None):
         """
         @param encoding: The text encoding that will be used. Defaults to 'utf-8'
 
@@ -317,7 +321,8 @@ class Writer:
         @param generator_info_name: A human readable description of
             generator_info_url. Optional
         """
-        _debug_('in Writer:__init__()', 2)
+        _debug_('Writer.__init__(encoding=%r, date=%r, source_info_url=%r, source_info_name=%r, generator_info_url=%r, generator_info_name=%r)' % \
+            (encoding, date, source_info_url, source_info_name, generator_info_url, generator_info_name), 2)
         self.encoding = encoding
         self.data = {'date': date,
                      'source_info_url': source_info_url,
@@ -330,14 +335,16 @@ class Writer:
             if self.data[attr]:
                 self.root.set(attr, self.data[attr])
 
+
     def setattr(self, node, attr, value):
         """
         setattr(node, attr, value) -> None
 
         Set 'attr' in 'node' to 'value'
         """
-        if DEBUG >= 0: print "in setattr(self, node, attr, value)"
+        _debug_('setattr(node=%r, attr=%r, value=%r)' % (node, attr, value), 2)
         node.set(attr, value.encode(self.encoding))
+
 
     def settext(self, node, text, with_lang=True):
         """
@@ -345,7 +352,7 @@ class Writer:
 
         Set 'node's text content to 'text'
         """
-        if DEBUG >= 0: print "in settext(self, node, text, with_lang=True)"
+        _debug_('settext(node=%r, text=%r, with_lang=%r)' % (node, text, with_lang), 2)
         if with_lang:
             if text[0] == None:
                 node.text = None
@@ -366,7 +373,7 @@ class Writer:
 
         Create 'icons' under 'node'
         """
-        if DEBUG >= 0: print "in seticons(self, node, icons)"
+        _debug_('seticons(node=%r, icons=%r)' % (node, icons), 2)
         for icon in icons:
             if not icon.has_key('src'):
                 raise ValueError("'icon' element requires 'src' attribute")
@@ -383,11 +390,12 @@ class Writer:
         Add nodes under p for the element 'element', which occurs zero
         or more times with PCDATA and a 'lang' attribute
         """
-        if DEBUG >= 0: print "in set_zero_ormore(self, programme, element, p)"
+        _debug_('set_zero_ormore(programme=%r, element=%r, p=%r)' % (programme, element, p), 2)
         if programme.has_key(element):
             for item in programme[element]:
                 e = SubElement(p, element)
                 self.settext(e, item)
+
 
     def set_zero_orone(self, programme, element, p):
         """
@@ -396,7 +404,7 @@ class Writer:
         Add nodes under p for the element 'element', which occurs zero
         times or once with PCDATA and a 'lang' attribute
         """
-        if DEBUG >= 0: print "in set_zero_orone(self, programme, element, p)"
+        _debug_('set_zero_orone(programme=%r, element=%r, p=%r)' % (programme, element, p), 2)
         if programme.has_key(element):
             e = SubElement(p, element)
             self.settext(e, programme[element])
@@ -408,7 +416,7 @@ class Writer:
 
         @param programme: A dict representing XMLTV data
         """
-        if DEBUG >= 0: print "in addProgramme(self, programme)"
+        _debug_('addProgramme(programme=%r)' % (programme,), 2)
         p = SubElement(self.root, 'programme')
 
         # programme attributes
@@ -550,13 +558,14 @@ class Writer:
             if programme['star-rating'].has_key('icon'):
                 self.seticons(sr, programme['star-rating']['icon'])
 
+
     def addChannel(self, channel):
         """
         add a single XMLTV 'channel'
 
         @param channel: A dict representing XMLTV data
         """
-        if DEBUG >= 0: print "in addChannel(self, channel)"
+        _debug_('addChannel(channel=%r)' % (channel,), 2)
         c = SubElement(self.root, 'channel')
         self.setattr(c, 'id', channel['id'])
 
@@ -575,18 +584,21 @@ class Writer:
                 u = SubElement(c, 'url')
                 self.settext(u, url, with_lang=False)
 
+
     def write(self, file):
         """
         write(file) -> None
 
         Write XML to filename of file object in 'file'
         """
-        if DEBUG >= 0: print "in write(self, file)"
+        _debug_('write(file=%r)' % (file,), 2)
         et = ElementTree(self.root)
         et.write(file)
 
+
+
 if __name__ == '__main__':
-# Tests
+    # Tests
     from pprint import pprint
     from StringIO import StringIO
     import sys
