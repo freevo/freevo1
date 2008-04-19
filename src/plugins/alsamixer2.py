@@ -192,18 +192,22 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         if event == MIXER_VOLUP:
             rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.incVolume()))
+            rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             return True
 
         elif event == MIXER_VOLDOWN:
             rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.decVolume()))
+            rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             return True
 
         elif event == MIXER_MUTE:
             if self.getMute() == 1:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
                 self.setMute(0)
             else:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Mute')))
+                rc.post_event(Event('MIXER_MUTE_INFO'))
                 self.setMute(1)
             return True
 

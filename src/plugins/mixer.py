@@ -129,26 +129,32 @@ class PluginInterface(plugin.DaemonPlugin):
             if config.MIXER_MAJOR_CTRL == 'VOL':
                 self.incMainVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.incPcmVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             return True
 
         elif event == MIXER_VOLDOWN:
             if config.MIXER_MAJOR_CTRL == 'VOL':
                 self.decMainVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.decPcmVolume(step)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             return True
 
         elif event == MIXER_MUTE:
             if self.getMuted() == 1:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
                 self.setMuted(0)
             else:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('Mute')))
+                rc.post_event(Event('MIXER_MUTE_INFO'))
                 self.setMuted(1)
             return True
 
