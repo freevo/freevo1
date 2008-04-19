@@ -1358,14 +1358,14 @@ class RecordServer:
                         _debug_(output, DINFO)
                     else:
                         _debug_('commdetect server not running', DINFO)
-                if config.TV_RECORD_REENCODE:
+                if config.TV_REENCODE:
                     (result, response) = encodeConnectionTest('connection test')
                     if result:
                         source = prog.filename
                         output = prog.filename
                         multipass = config.REENCODE_NUMPASSES > 1
 
-                        (status, resp) = initEncodeJob(source, output, '', None, config.TV_RECORD_REENCODE_REMOVE_SOURCE)
+                        (status, resp) = initEncodeJob(source, output, '', None, config.TV_REENCODE_REMOVE_SOURCE)
                         _debug_('initEncodeJob:status:%s resp:%s' % (status, resp))
 
                         idnr = resp

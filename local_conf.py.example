@@ -1166,10 +1166,10 @@ CACHE_IMAGES = 1
 # If true, this will automatically re-encode shows after they finish recording
 # NOTE: You need to set up the REENCODE_* variables as for the reencode.py plugin -
 # these default values will be used to re-encode the recordings
-# TV_RECORD_REENCODE = False
+# TV_REENCODE = False
 
 # If true, this will remove the original recording after automatic re-encoding is done
-# TV_RECORD_REENCODE_REMOVE_SOURCE = False
+# TV_REENCODE_REMOVE_SOURCE = False
 
 
 # ================================================================================

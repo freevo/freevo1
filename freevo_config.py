@@ -1678,8 +1678,8 @@ TV_RECORD_CONFLICT_RESOLUTION = None
 
 # This will automatically re-encode recordings with the default REENCODE settings
 # using the encoding server
-TV_RECORD_REENCODE = False
-TV_RECORD_REENCODE_REMOVE_SOURCE = False
+TV_REENCODE = False
+TV_REENCODE_REMOVE_SOURCE = False
 
 # Some default re-encode values
 REENCODE_CONTAINER = 'avi'
