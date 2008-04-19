@@ -787,6 +787,17 @@ CACHE_IMAGES = 1
 # IMAGEVIEWER_BLEND_MODE = -1
 
 #
+# Duration to wait in the slideshow:
+#
+# IMAGEVIEWER_DURATION = 3
+
+#
+# If set to False, the slideshow must be started
+# manualy with the play button:
+#
+# IMAGEVIEWER_AUTOPLAY = True
+
+#
 # When viewing images on a TV screen where the pixels are not square
 # the images need to be scaled according to the aspect ratio of the TV
 # Use this setting for 16x9 TVs

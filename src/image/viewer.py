@@ -71,7 +71,8 @@ class ImageViewer(GUIObject):
                            str(IMAGE_ZOOM_GRID6):6, str(IMAGE_ZOOM_GRID7):7,
                            str(IMAGE_ZOOM_GRID8):8, str(IMAGE_ZOOM_GRID9):9 }
 
-        self.slideshow   = True
+        self.slideshow   = config.IMAGEVIEWER_AUTOPLAY
+        self.duration    = config.IMAGEVIEWER_DURATION
         self.app_mode    = 'image'
         self.last_image  = (None, None)
         self.render      = render.get_singleton()
@@ -296,13 +297,20 @@ class ImageViewer(GUIObject):
         self.osd.update()
 
         # start timer
-        if self.fileitem.duration and self.slideshow and not self.signal_registered:
-            rc.register(self.signalhandler, False, self.fileitem.duration*100)
+        if self.duration and self.slideshow and not self.signal_registered:
+            rc.register(self.signalhandler, False, self.duration*100)
             self.signal_registered = True
 
         self.last_image  = (item, (image, x, y, scale, bbx, bby, bbw, bbh,
                                    self.rotation))
 
+        # stop slideshow at the end if configured
+        index = item.parent.play_items.index(item)+1
+        length = len(item.parent.play_items)
+        if (index == length): self.slideshow = config.IMAGEVIEWER_AUTOPLAY
+
+        # send information event to LCD2
+        rc.post_event(Event('IMAGE_VIEW_INFO', arg=(index, length, item.name)))
 
         # XXX Hack to move the selected item to the current showing image
         # XXX TODO: find a way to add it to directory.py or playlist.py
@@ -342,14 +350,17 @@ class ImageViewer(GUIObject):
 
     def eventhandler(self, event, menuw=None):
         _debug_('eventhandler(event=%s, menuw=%s)' % (event, menuw), 2)
-        if event == PAUSE or event == PLAY:
+        # SELECT also should act as PLAY/PAUSE (-> could be done with event rerouting!?)
+        if event == PAUSE or event == PLAY or (event == BUTTON and event.arg == 'SELECT'):
             if self.slideshow:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('pause')))
+                rc.post_event(Event('IMAGE_PAUSE_INFO', arg=''))
                 self.slideshow = False
                 rc.unregister(self.signalhandler)
                 self.signal_registered = False
             else:
-                rc.post_event(Event(OSD_MESSAGE, arg=_('play')))
+                rc.post_event(Event(OSD_MESSAGE, arg=_('play')+(' %ss'%self.duration)))
+                rc.post_event(Event('IMAGE_PLAY_INFO', arg='%s' % self.duration))
                 self.slideshow = True
                 rc.register(self.signalhandler, False, 100)
                 self.signal_registered = True
@@ -358,6 +369,7 @@ class ImageViewer(GUIObject):
         elif event == STOP:
             self.last_image  = None, None
             self.signal_registered = False
+            self.slideshow = config.IMAGEVIEWER_PLAY_AT_START
             rc.unregister(self.signalhandler)
             rc.app(None)
             self.fileitem.eventhandler(event)
@@ -431,6 +443,20 @@ class ImageViewer(GUIObject):
                     return True
                 except Exception, e:
                     print 'getbyname(\'shoppingcart\')', e
+
+        # change slideshow duration and send event to OSD and LCD2
+        elif (event == BUTTON) and (event.arg == 'REW'):
+            if self.duration > 7: self.duration -= 2
+            elif self.duration > 1: self.duration -= 1
+            rc.post_event(Event(OSD_MESSAGE, arg="Timer %ss" % self.duration)) # not yet internationalised
+            rc.post_event(Event('IMAGE_PLAY_INFO', arg='%s' % self.duration))
+            return True
+        elif (event == BUTTON) and (event.arg == 'FFWD'):
+            if self.duration < 6: self.duration += 1
+            elif self.duration < 11: self.duration += 2
+            rc.post_event(Event(OSD_MESSAGE, arg="Timer %ss" % self.duration)) # not yet internationalised
+            rc.post_event(Event('IMAGE_PLAY_INFO', arg='%s' % self.duration))
+            return True
 
         else:
             return self.fileitem.eventhandler(event)

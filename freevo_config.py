@@ -1211,7 +1211,13 @@ IMAGEVIEWER_OSD = [
 # to press a button to get to the next image, a value > 0 is the time
 # in seconds for an auto slideshow
 #
-IMAGEVIEWER_DURATION = 0
+IMAGEVIEWER_DURATION = 3
+
+#
+# If set to True, the slideshow starts automaticaly entering the image viewer,
+# if set to False, it must be started manually with the play button:
+#
+IMAGEVIEWER_AUTOPLAY = True
 
 #
 # When viewing images on a TV screen where the pixels are not square
