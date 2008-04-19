@@ -163,7 +163,7 @@ class Record_Thread(threading.Thread):
                 prog = self.prog
                 filename = tv_util.getProgFilename(prog)
                 vg = self.fc.getVideoGroup(prog.channel_id, False)
-                adapter = int(vg.vdev)
+                adapter = vg.vdev
                 seconds = prog.rec_duration
                 # Select the channel and start streaming to the file.
                 self.manager.select(adapter, prog.tunerid)
