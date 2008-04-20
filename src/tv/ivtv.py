@@ -334,7 +334,7 @@ class IVTV(tv.v4l2.Videodev):
             return
         try:
             r = fcntl.ioctl(self.device, i32(SETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, value))
-            wdebug_("setvbiembed: val=%r, res=%r" % (struct.pack(VBI_EMBED_ST, value), r), 3)
+            _debug_("setvbiembed: val=%r, res=%r" % (struct.pack(VBI_EMBED_ST, value), r), 3)
         except IOError:
             _debug_('setvbiembed: failed', DWARNING)
 
