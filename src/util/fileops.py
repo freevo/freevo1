@@ -210,10 +210,9 @@ def match_files(dirname, suffix_list):
     """
 
     try:
-        files = [ vfs.join(dirname, fname) for fname in os.listdir(dirname) if
-                  vfs.isfile(vfs.join(dirname, fname)) ]
-    except OSError:
-        print 'util:match_files(): Got error on dir = "%s"' % dirname
+        files = [ vfs.join(dirname, fname) for fname in os.listdir(dirname) if vfs.isfile(vfs.join(dirname, fname)) ]
+    except OSError, why:
+        print 'Cannot match files in "%s": %s' % (dirname, why)
         return []
 
     matches = [ fname for fname in files if match_suffix(fname, suffix_list) ]
