@@ -38,7 +38,7 @@ try:
 except:
     _debug_(_('You need pylcd to run "lcd2x16" plugin.'), DERROR)
 
-class LcdFrame():
+class LcdFrame(object):
     def __init__(self, lcd, name, col, start, end):
         """
         Class to provide LCD-frames with priorities and timers.
@@ -108,7 +108,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lcd.screen_add('s')
             self.lcd.screen_set('s', '-priority foreground -heartbeat off')
         except:
-            _debug_(_('LCD plugin will not load! Maybe you don\'t have LCDd (lcdproc daemon) running?')), DERROR)
+            _debug_(_('LCD plugin will not load! Maybe you don\'t have LCDd (lcdproc daemon) running?'), DERROR)
             return
 
         # prepare the lcd frames for different types
@@ -134,7 +134,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lcd_title = self.lcd_menu_add[0] # use third line for titles, share with additional menu line
             self.lcd_player = self.lcd_menu_add[1] # use last line for player, share with additional menu line
         else:
-            _debug_(_('LCD not supported yet!')), DERROR)
+            _debug_(_('LCD not supported yet!'), DERROR)
 
         # updating menu head
         self.lcd_head.draw('Freevo')
