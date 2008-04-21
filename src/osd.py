@@ -290,7 +290,6 @@ class BusyIcon(threading.Thread):
                         # draw the icon
                         osd.drawbitmap(image, x, y)
                         osd.update(rect=self.rect, stop_busyicon=False)
-
                         # restore the screen
                         osd.screen.blit(screen, (x, y))
                 finally:
@@ -701,8 +700,7 @@ class OSD:
         return image
 
 
-    def drawbitmap(self, image, x=0, y=0, scaling=None,
-                   bbx=0, bby=0, bbw=0, bbh=0, rotation = 0, layer=None):
+    def drawbitmap(self, image, x=0, y=0, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation=0, layer=None):
         """
         Draw a bitmap on the OSD. It is automatically loaded into the cache
         if not already there.
@@ -714,8 +712,7 @@ class OSD:
         self.drawsurface(image, x, y, scaling, bbx, bby, bbw, bbh, rotation, layer)
 
 
-    def drawsurface(self, image, x=0, y=0, scaling=None,
-                   bbx=0, bby=0, bbw=0, bbh=0, rotation=0, layer=None):
+    def drawsurface(self, image, x=0, y=0, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation=0, layer=None):
         """
         scales and rotates a surface and then draws it to the screen.
         """
