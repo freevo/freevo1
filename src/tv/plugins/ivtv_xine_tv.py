@@ -284,7 +284,7 @@ class PluginInterface(plugin.Plugin):
             ('MIXER_MAJOR_CTRL', None, 'Main Mixer control (mandatory)'),
             ('MIXER_VOLUME_TV_IN', 50, 'TV Line In Volume'),
             ('XINE_COMMAND', config.CONF.xine, 'xine command'),
-            ('XINE_ARGS_DEF', '', 'xine default arguments'),
+            ('XINE_ARGS_DEF', config.XINE_ARGS_DEF, 'xine default arguments'),
             ('XINE_TV_VO_DEV', config.XINE_VO_DEV, 'xine video output device'),
             ('XINE_TV_AO_DEV', config.XINE_AO_DEV, 'xine audio output device'),
             ('XINE_TV_TIMESHIFT_FILEMASK', '/tmp/xinebuf', 'xine time shift parameters'),
