@@ -139,8 +139,9 @@ class VPVideoItem(VideoItem):
 
     def youtube(self, url):
         const_video_url_str = 'http://www.youtube.com/watch?v=%s'
-        const_video_url_re = re.compile(r'^((?:http://)?(?:\w+\.)?youtube\.com/(?:v/|(?:watch(?:\.php)?)?\?(?:.+&)?v=))?([0-9A-Za-z_-]+)(?(1)[&/].*)?$')
-        const_url_t_param_re = re.compile(r'[,{]t:\'([^\']*)\'')
+        const_video_url_re = re.compile(
+        r'^((?:http://)?(?:\w+\.)?youtube\.com/(?:v/|(?:watch(?:\.php)?)?\?(?:.+&)?v=))?([0-9A-Za-z_-]+)(?(1)[&/].*)?$')
+        const_url_t_param_re = re.compile(r', "t": "([^"]+)"')
         const_video_url_real_str = 'http://www.youtube.com/get_video?video_id=%s&t=%s'
         const_video_title_re = re.compile(r'<title>YouTube - ([^<]*)</title>', re.M | re.I)
         try:
@@ -151,13 +152,13 @@ class VPVideoItem(VideoItem):
             video_webpage = urllib.urlopen(video_url).read()
             match = const_url_t_param_re.search(video_webpage)
             if match is None:
-                print 'step_error'
+                _debug_('No matches found for youtube', DWARNING)
             video_url_t_param = match.group(1)
             # Retrieve real video URL
             video_url_real = const_video_url_real_str % (video_url_id, video_url_t_param)
             return video_url_real
-        except:
-            print 'Error YouTube URL'
+        except Exception, why:
+            _debug_('Cannot read youtube URL: %s' (why,), DWARNING)
 
 
     def metacafe(self, url):
@@ -171,7 +172,7 @@ class VPVideoItem(VideoItem):
             # Verify video URL format and extract URL data to normalize URL
             video_url_mo = const_video_url_re.match(video_url)
             if video_url_mo is None:
-                sys.exit('Error: URL does not seem to be a metacafe video URL. If it is, report a bug.')
+                _debug_('No matches found for metacafe', DWARNING)
             video_url_id = video_url_mo.group(1)
             video_url_title = (video_url_mo.group(2) is not None) and video_url_mo.group(2)[:-1] or None
             video_url = const_normalized_url_str % video_url_id
@@ -182,8 +183,8 @@ class VPVideoItem(VideoItem):
             video_url_real = self.extract_step('Extracting real video URL', 'unable to extract real video URL', \
                 const_video_mediaurl_re, video_webpage)
             return video_url_real
-        except:
-            print 'Error Metacafe URL'
+        except Exception, why:
+            _debug_('Cannot read metacafe URL: %s' (why,), DWARNING)
 
 
     def extract_step(self, step_title, step_error, regexp, data):
@@ -276,7 +277,7 @@ class VPodcastMainMenuItem(MenuItem):
                     image_url = p.rss_image
                     self.download(image_url, image_path)
                 except:
-                    print 'No image in RSS'
+                    _debug_('No image in RSS', DINFO)
 
             if (len(config.VPODCAST_DIR) == 0):
                 podcast_items += [menu.MenuItem(_('Set VPODCAST_DIR in local_conf.py'), menwu.goto_prev_page, 0)]
@@ -326,13 +327,13 @@ class podcast:
 
             #self.rss_date = self.rss.feed.date
         except:
-            print 'Error rss_title'
+            _debug_('No title in rss feed', DINFO)
             self.rss_title = None
 
         try:
             self.rss_description = self.rss.feed.description.encode(self.encoding)
         except:
-            print 'Error rss_description'
+            _debug_('No description in rss feed', DINFO)
 
         try:
             self.rss_image = self.rss.feed.image.url
@@ -392,5 +393,5 @@ class BGDownload(threading.Thread):
                 downloadBytes += readBytes
                 bytesLeft -= readBytes
                 save.write(chunk)
-        except:
-            print 'Download Error !'
+        except Exception, why:
+            _debug_('Cannot download "%s": %s' % (self.url, why), DWARNING)
