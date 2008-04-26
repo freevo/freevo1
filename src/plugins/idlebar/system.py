@@ -199,8 +199,8 @@ class sensors(IdleBarPlugin):
             self.pathform_path = config.SENSORS_PLATFORM_PATH
             self.i2cdev_path = config.SENSORS_I2CDEV_PATH
             self.kernel26 = False
-            self.senspath = self.getSensorPath()
             self.sensor = sensor
+            self.senspath = self.getSensorPath()
             self.compute_expression = compute_expression
             self.hotstack = hotstack
             self.washot = False
@@ -281,7 +281,8 @@ class sensors(IdleBarPlugin):
             for senspath in os.listdir(self.pathform_path):
                 testpath = os.path.join(self.pathform_path , senspath)
                 if os.path.isdir(testpath):
-                    return testpath
+                    if os.path.exists(os.path.join(testpath, '%s_max' % self.sensor)):
+                        return testpath
 
 
 
