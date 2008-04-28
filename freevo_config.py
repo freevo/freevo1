@@ -113,120 +113,125 @@ LOCAL_CONF_VERSION = 5.24
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
     (2.0,
-     '''Changed xmame_SDL to just xmame'''), ]
+     """Changed xmame_SDL to just xmame"""),
+    (2.1,
+     """Added vlc"""),
+    (2.2,
+     """Added unzip"""),
+]
 
 LOCAL_CONF_CHANGES = [
     (1.1,
-     '''ROM_DRIVES are autodetected if left empty.
+     """ROM_DRIVES are autodetected if left empty.
     Added AUDIO_RANDOM_PLAYLIST (default on).
     Added COVER_DIR for covers for files on CDs etc.
     Added AUDIO_COVER_REGEXP for selection of covers for music files.
     Changed MPlayer default args.
-    Changed TV_SETTINGS to /dev/video0.'''),
+    Changed TV_SETTINGS to /dev/video0."""),
     (2.0,
-     '''Remote control config has changed from Freevo Python files to the
+     """Remote control config has changed from Freevo Python files to the
      standard Lirc program config files, see freevo_config.py for
-     more info.'''),
+     more info."""),
     (2.1,
-     '''Added MPLAYER_ARGS_AUDIOCD for audio cd playback settings.'''),
+     """Added MPLAYER_ARGS_AUDIOCD for audio cd playback settings."""),
     (3.0,
-     '''New skin engine. The new engine has no automatic TV overscan support,
+     """New skin engine. The new engine has no automatic TV overscan support,
      you need to set OSD_OVERSCAN_X and OSD_OVERSCAN_Y. There are also new variables
      for this engine: MAIN_MENU_ITEMS and FORCE_SKIN_LAYOUT. The games menu
-     will be activated automaticly if setup.py found mame or snes'''),
+     will be activated automaticly if setup.py found mame or snes"""),
     (3.1,
-     '''Renamed TV_SHOW_IMAGE_DIR to TV_SHOW_DATA_DIR. This directory now can
-     also contain fxd files with gloabl informations and mplayer options'''),
+     """Renamed TV_SHOW_IMAGE_DIR to TV_SHOW_DATA_DIR. This directory now can
+     also contain fxd files with gloabl informations and mplayer options"""),
     (3.2,
-     '''Removed MPLAYER_ARGS_* and added a hash MPLAYER_ARGS to set args for
+     """Removed MPLAYER_ARGS_* and added a hash MPLAYER_ARGS to set args for
      all different kinds of files. Also added MPLAYER_SOFTWARE_SCALER to use
-     the software scaler for fast CPUs'''),
+     the software scaler for fast CPUs"""),
     (3.3,
-     '''Added AUDIO_FORMAT_STRING to customize the audio item title generation'''),
+     """Added AUDIO_FORMAT_STRING to customize the audio item title generation"""),
     (3.4,
-     '''Removed RC_MPLAYER_CMDS for video and audio. Set special handling (and
+     """Removed RC_MPLAYER_CMDS for video and audio. Set special handling (and
      other key mappings with the variable EVENTS. See event.py for possible
-     events'''),
+     events"""),
     (3.5,
-     '''Added xine support (see xine section in freevo_config.py),
+     """Added xine support (see xine section in freevo_config.py),
      MPLAYER_AUTOCROP for 16:9 tv sets, ONLY_SCAN_DATADIR to make freevo start
-     faster and TVGUIDE_HOURS_PER_PAGE customize the tv guide'''),
+     faster and TVGUIDE_HOURS_PER_PAGE customize the tv guide"""),
     (3.7,
-     '''Added USE_MEDIAID_TAG_NAMES as directory based variable and
-     HIDE_UNUSABLE_DISCS to hide discs in the wrong menus and empty drives'''),
+     """Added USE_MEDIAID_TAG_NAMES as directory based variable and
+     HIDE_UNUSABLE_DISCS to hide discs in the wrong menus and empty drives"""),
     (3.8,
-     '''Restructured GAMES_ITEMS and added XMLTV_GRABBER and XMLTV_DAYS for the
+     """Restructured GAMES_ITEMS and added XMLTV_GRABBER and XMLTV_DAYS for the
      tv_grab helper script. Also added USE_NETWORK to deactivate everything
-     that needs a network connection.'''),
+     that needs a network connection."""),
     (3.9,
-     '''Add MPLAYER_SET_AUDIO_DELAY to correct AV sync problems'''),
+     """Add MPLAYER_SET_AUDIO_DELAY to correct AV sync problems"""),
     (3.91,
-     '''Add SKIN_FORCE_TEXTVIEW_STYLE and SKIN_MEDIAMENU_FORCE_TEXTVIEW to add
-     more control when to switch to text view.'''),
+     """Add SKIN_FORCE_TEXTVIEW_STYLE and SKIN_MEDIAMENU_FORCE_TEXTVIEW to add
+     more control when to switch to text view."""),
     (4.00,
-     '''Reworked the directory settings: MOVIE_PLAYLISTS and AUDIO_RANDOM_PLAYLIST
+     """Reworked the directory settings: MOVIE_PLAYLISTS and AUDIO_RANDOM_PLAYLIST
      are removed, the new variables to control a directory style are
      DIRECTORY_CREATE_PLAYLIST, DIRECTORY_ADD_PLAYLIST_FILES,
      DIRECTORY_ADD_RANDOM_PLAYLIST and DIRECTORY_AUTOPLAY_ITEMS. The directory
      updated now uses stat, set DIRECTORY_USE_STAT_FOR_CHANGES = 0 if you have
-     problems with it.'''),
+     problems with it."""),
     (4.01,
-     '''Removed SUFFIX_VIDEO_FILES and replaced it with SUFFIX_VIDEO_MPLAYER_FILES
+     """Removed SUFFIX_VIDEO_FILES and replaced it with SUFFIX_VIDEO_MPLAYER_FILES
      and SUFFIX_VIDEO_XINE_FILES. Use PREFERED_VIDEO_PLAYER to choose a prefered
-     player.'''),
+     player."""),
     (4.02,
-     '''Added CHILDAPP_DEBUG to debug all kinds of childapps. MPLAYER_DEBUG will be
+     """Added CHILDAPP_DEBUG to debug all kinds of childapps. MPLAYER_DEBUG will be
      removed soon. Renamed PREFERED_VIDEO_PLAYER to VIDEO_PREFERED_PLAYER and
-     added AUDIO_PREFERED_PLAYER.'''),
+     added AUDIO_PREFERED_PLAYER."""),
     (4.03,
-     '''Removed MOVIE_DATA_DIR and COVER_DIR. It has been replaved by the new
-     virtual filesystem controlled by OVERLAY_DIR'''),
+     """Removed MOVIE_DATA_DIR and COVER_DIR. It has been replaved by the new
+     virtual filesystem controlled by OVERLAY_DIR"""),
     (5.00,
-     '''Changed some config variables. Use \'./freevo convert_config\' to convert
-     your local_conf.py to change the variable names'''),
+     """Changed some config variables. Use \'./freevo convert_config\' to convert
+     your local_conf.py to change the variable names"""),
     (5.01,
-     '''Add AUDIO_SHOW_VIDEOFILES to enable video files in the audio menu'''),
+     """Add AUDIO_SHOW_VIDEOFILES to enable video files in the audio menu"""),
     (5.02,
-     '''Add XINE_ARGS_DEF to set xine arguments and OSD_BUSYICON_TIMER to show
-     a busy icon when the menu takes too much time building'''),
+     """Add XINE_ARGS_DEF to set xine arguments and OSD_BUSYICON_TIMER to show
+     a busy icon when the menu takes too much time building"""),
     (5.03,
-     '''Add UMASK to set umask for files in vfs''' ),
+     """Add UMASK to set umask for files in vfs""" ),
     (5.04,
-     '''SKIN_XML_FILE set to nothing as default, SKIN_START_LAYOUT is removed.
-     When SKIN_XML_FILE is not set, the skin will remember the last settings'''),
+     """SKIN_XML_FILE set to nothing as default, SKIN_START_LAYOUT is removed.
+     When SKIN_XML_FILE is not set, the skin will remember the last settings"""),
     (5.05,
-     '''Use MMPYTHON_CREATE_MD5_ID with current mmpython cvs to have a second
-     way to generate the disc ids in case they are not unique on your system'''),
+     """Use MMPYTHON_CREATE_MD5_ID with current mmpython cvs to have a second
+     way to generate the disc ids in case they are not unique on your system"""),
     (5.06,
-     '''Add MEDIAINFO_USE_MEMORY. Setting this variable will keep all cache
+     """Add MEDIAINFO_USE_MEMORY. Setting this variable will keep all cache
      files in memory. Startup will be slower, but for large directories, this
-     will speed up entering the dir'''),
+     will speed up entering the dir"""),
     (5.07,
-     '''Add MENU_ARROW_NAVIGATION to change navigation style. New one is default
-     now. Also added OSD_EXTRA_FONT_PATH to search for fonts'''),
+     """Add MENU_ARROW_NAVIGATION to change navigation style. New one is default
+     now. Also added OSD_EXTRA_FONT_PATH to search for fonts"""),
     (5.08,
-     '''Change MENU_ARROW_NAVIGATION to old style and make blurr the new default
-     skin. Also added RESTART_SYS_CMD, OSD_DIM_TEXT and OSD_UPDATE_COMPLETE_REDRAW.'''),
+     """Change MENU_ARROW_NAVIGATION to old style and make blurr the new default
+     skin. Also added RESTART_SYS_CMD, OSD_DIM_TEXT and OSD_UPDATE_COMPLETE_REDRAW."""),
     (5.09,
-     '''Add CACHE_IMAGES to turn off image caching. A new variable is
-     IMAGEVIEWER_BLEND_MODE to control the blending effect in the image viewer'''),
+     """Add CACHE_IMAGES to turn off image caching. A new variable is
+     IMAGEVIEWER_BLEND_MODE to control the blending effect in the image viewer"""),
     (5.11,
-     '''Add IMAGEVIEWER_OSD to customize the osd and VIDEO_AUTOJOIN to auto join
-     movies with more than one file'''),
+     """Add IMAGEVIEWER_OSD to customize the osd and VIDEO_AUTOJOIN to auto join
+     movies with more than one file"""),
     (5.12,
-     '''Added TV_RECORD_SERVER_UID to set the uid for the recordserver and
+     """Added TV_RECORD_SERVER_UID to set the uid for the recordserver and
      TV_RECORDFILE_SUFFIX for the suffix. If your TV_RECORDFILE_MASK contains
-     the suffix, please remove it here'''),
+     the suffix, please remove it here"""),
     (5.13,
-     '''Added TV_RECORD_SERVER_GID to set the gid for the recordserver. If you
-     use TV_RECORD_SERVER_UID, the gui _must_ match one of the users gids''' ),
+     """Added TV_RECORD_SERVER_GID to set the gid for the recordserver. If you
+     use TV_RECORD_SERVER_UID, the gui _must_ match one of the users gids""" ),
     (5.14,
-     '''Add IMAGEVIEWER_DURATION for auto slideshows''' ),
+     """Add IMAGEVIEWER_DURATION for auto slideshows""" ),
     (5.15,
-     '''Add two variables for mplayer post processing: MPLAYER_VF_INTERLACED and
-     MPLAYER_VF_PROGRESSIVE''' ),
+     """Add two variables for mplayer post processing: MPLAYER_VF_INTERLACED and
+     MPLAYER_VF_PROGRESSIVE""" ),
     (5.16,
-     '''Removed the recordable setting in VIDEO_GROUPS, please remove this setting.
+     """Removed the recordable setting in VIDEO_GROUPS, please remove this setting.
      Added xmltv-1.2 this requires elementtree
      Added XINE_HAS_NO_LIRC to see if '--no-lirc' should be passed to xine
      Added XINE_TV_VO_DEV, XINE_TV_AO_DEV, and XINE_TV_TIMESHIFT_FILEMASK for the
@@ -238,9 +243,9 @@ LOCAL_CONF_CHANGES = [
      Added AUTOSHUTDOWN_ settings to turn off and on the machine automatically
      Added Multi-tuner support to allow recording and watching at the same time
      Added plug-in "upsoon" to stop the player when a recording is about to start
-     Added OSD_FORCE_FONTNAME and OSD_FORCE_FONTSIZE for asian fonts''' ),
+     Added OSD_FORCE_FONTNAME and OSD_FORCE_FONTSIZE for asian fonts""" ),
     (5.17,
-     '''Using the name of the helper in local_conf.py
+     """Using the name of the helper in local_conf.py
      Changed the TV_RECORD_SERVER_* to RECORDSERVER_*,
      Added optional RECORDSERVER_DEBUG, if not defined uses DEBUG
      Changed WWW_PORT to WEBSERVER_PORT = 80
@@ -258,13 +263,13 @@ LOCAL_CONF_CHANGES = [
      Added EVENT_DEVS and EVENTMAP for the new Linux event device handler
      Added VIDEO_PRE_PLAY and VIDEO_POST_PLAY to allow external commands to be run
      Added CD_RIP_ for the cd backup plug-in
-     ''' ),
+     """ ),
     (5.18,
-     '''Added tv.recodings_manager plug-in to show what has been watched, TVRM_*,
+     """Added tv.recodings_manager plug-in to show what has been watched, TVRM_*,
      Removed TV_RECORD_PADDING, use TV_RECORD_PADDING_PRE and TV_RECORD_PADDING_POST
-     ''' ),
+     """ ),
     (5.19,
-     '''Changed rss.feeds field separator to use a ';' instead of a ','
+     """Changed rss.feeds field separator to use a ';' instead of a ','
      Changed weather locations to add a language code as the third parameter
      Moved video.reencode to video.reencode-old and video.reencode2 to video.reencode
      Added MAJOR_AUDIO_CTRL_MUTE to be able to choose a differente control for mute in the Alsa mixer plugin
@@ -273,9 +278,9 @@ LOCAL_CONF_CHANGES = [
      Added RSS_DOWNLOAD for a place to save downloaded data
      Added IMAGE_EXCLUDE as a regular expression to exclude images such as thumbnails
      Added TV_RECORD_FAVORITE_MARGIN to allow favourites to be added to the schedule within a tolerance value
-     ''' ),
+     """ ),
     (5.20,
-     '''Added PERSONAL_WWW_PAGE config item to allow private web pages in the webserver
+     """Added PERSONAL_WWW_PAGE config item to allow private web pages in the webserver
      Added LOGGING, can be one of CRITICAL, ERROR, WARNING, INFO, DEBUG or NOTSET
      Added RECORDSERVER_LOGGING to allow different levels of errors to be reported
      Changed VIDEO_INTERLACING to VIDEO_DEINTERLACE to be more consistent with autovars
@@ -286,9 +291,9 @@ LOCAL_CONF_CHANGES = [
      Added SHOPPINGCART_CLOBBER to allow a move to clobber an existing file
      Added XINE_BOOKMARK to enable the resume function to work with xine
      Added CACHE_CROPDETECT to enable caching of crop detection using encodingcode
-     ''' ),
+     """ ),
     (5.21,
-     '''Added OS_STATICDIR, FREEVO_STATICDIR, OS_LOGDIR and FREEVO_LOGDIR
+     """Added OS_STATICDIR, FREEVO_STATICDIR, OS_LOGDIR and FREEVO_LOGDIR
      Change static data to use /var/lib/freevo or ~/.freevo, including TV_RECORD_SCHEDULE, TV_LOGOS,
      XMLTV_FILE, you may also prefer OVERLAY_DIR to be FREEVO_STATICDIR+'/overlay',
      Added a plugin that adds a submenu entry for ejecting rom drives and binds the default action of
@@ -339,15 +344,15 @@ LOCAL_CONF_CHANGES = [
         XINE_TV_PROGRESSIVE_SEEK_INCREMENT
      Added TV_RECORD_YEAR_FORMAT to allow the from of the year in TV fxd files to be specified
      Moved plug-in "upsoon" to "tv.upsoon"
-     '''),
+     """),
     (5.22,
-     '''Added RECORDSERVER_SECRET and RECORDSERVER_PORT2=18002 for kaa.rpc
+     """Added RECORDSERVER_SECRET and RECORDSERVER_PORT2=18002 for kaa.rpc
      Renamed audio plug-in audio.playlist to audio.playlists
      Added ENCODINGSERVER_SAVE_DIR for re-encoded DVDs
      Added TV_CHANNELS_COMPARE as a lambda to sort the channels
-     '''),
+     """),
     (5.23,
-     ''' Added XMLTV_TIMEZONE to allow the time zone to be specified
+     """ Added XMLTV_TIMEZONE to allow the time zone to be specified
      Added OSD_X11_CURSORS to allow custom cursor to be set, stops xine showing a cursor
      Changed TV_RECORD_SCHEDULE to be a pickle file, this will delete existing favorites
      Added TV_RECORD_FAVORITES and TV_RECORD_FAVORITES_LIST to keep favorites separate
@@ -356,10 +361,10 @@ LOCAL_CONF_CHANGES = [
      Changed RESTART_SYS_CMD to SYS_RESTART_CMD for consistency
      Changed SHUTDOWN_SYS_ENABLE to SYS_SHUTDOWN_ENABLE for consistency
      Removed RECORDSERVER_PORT2 as it is no longer needed, using RECORDSERVER_PORT instead
-     '''),
+     """),
     (5.24,
-     ''' Added POLL_TIME to allow custom poll rates to be set, default 0.01 seconds
-     '''),
+     """ Added POLL_TIME to allow custom poll rates to be set, default 0.01 seconds
+     """),
 ]
 
 
