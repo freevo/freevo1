@@ -6,6 +6,40 @@
     <container title="SomaFM" type="webradio">
         <cover-img>&imgdir;/250x250sfm.jpg</cover-img>
 
+        <audio title="Digitalis">
+            <cover-img>&imgdir;/digitalis.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/startstream=digitalis.pls</url>
+            <info>
+                <bitrate>128</bitrate>
+                <description>Digitally affected analog rock with a DIY mentality.</description>
+            </info>
+        </audio>
+
+        <audio title="Sonic universe">
+            <cover-img>&imgdir;/sonicuniverse.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/startstream=sonicuniverse.pls</url>
+            <info>
+                <bitrate>128</bitrate>
+                <description>NuJazz + avant-garde EuroJazz. Transcending the world of jazz with experimental takes on tradition.</description>
+            </info>
+        </audio>
+
+        <audio title="Lush">
+            <cover-img>&imgdir;/lush.jpg</cover-img>
+            <playlist/>
+            <reconnect/>
+            <url>http://somafm.com/startstream=lush.pls</url>
+            <info>
+                <bitrate>128</bitrate>
+                <description>Sensuous and mellow vocals, mostly female, with an electronic influence.</description>
+            </info>
+        </audio>
+
+
         <audio title="Groove Salad">
             <cover-img>&imgdir;/GrooveSaladBox.jpg</cover-img>
             <playlist/>
