@@ -49,14 +49,14 @@ class procstats(IdleBarPlugin):
     in megabytes (calculated approx. as MemFree+Cached?)
 
     Activate with
-    | plugin.activate('idlebar.system.procstats',level=20) for defaults or
-    | plugin.activate('idlebar.system.procstats',level=20,args=(Mem,Cpu,Prec))
+    | plugin.activate('idlebar.system.procstats', level=20) for defaults or
+    | plugin.activate('idlebar.system.procstats', level=20, args=(Mem, Cpu, Prec))
     where
         - Mem:  Draw memfree  (default=1, -1 to disable)
         - Cpu:  Draw cpuusage (default=1, -1 to disable)
         - Prec: Precision used when drawing cpu usage (default=1)
     """
-    def __init__(self,Mem=1,Cpu=1,Prec=1):
+    def __init__(self, Mem=1, Cpu=1, Prec=1):
         IdleBarPlugin.__init__(self)
         self.drawCpu = Cpu
         self.drawMem = Mem
@@ -135,7 +135,7 @@ class procstats(IdleBarPlugin):
         usage = (float(used-self.lastused)/float(uptime-self.lastuptime))*100
         self.lastuptime = uptime
         self.lastused = used
-        self.currentCpu = _('%s%%') % round(usage,self.precision)
+        self.currentCpu = _('%s%%') % round(usage, self.precision)
 
     def draw(self, (type, object), x, osd):
         try:
@@ -169,12 +169,12 @@ class procstats(IdleBarPlugin):
 
 class sensors(IdleBarPlugin):
     """
-    Displays sensor temperature information (cpu,case) and memory-stats.
+    Displays sensor temperature information (cpu, case) and memory-stats.
 
     Activate with:
     | plugin.activate('idlebar.system.sensors', level=40, args=('cpusensor', 'casesensor', 'meminfo'))
-    | plugin.activate('idlebar.system.sensors', level=40, args=(('cpusensor','compute expression'),
-    |     ('casesensor','compute_expression'), 'meminfo'))
+    | plugin.activate('idlebar.system.sensors', level=40, args=(('cpusensor', 'compute expression'),
+    |     ('casesensor', 'compute_expression'), 'meminfo'))
 
     cpu and case sensor are the corresponding lm_sensors : this should be
     temp1, temp2 or temp3. defaults to temp3 for cpu and temp2 for case
@@ -188,7 +188,7 @@ class sensors(IdleBarPlugin):
     Search in the corresponding section for your chipset, and search the
     compute statement, e.g. "compute temp3 @*2, @/2". Only the third
     argument is of interest. Insert this into the plugin activation line, e.g.:
-    "[...] args=(('temp3','@*2'),[...]". The @ stands for the raw value.
+    "[...] args=(('temp3', '@*2'), [...]". The @ stands for the raw value.
     The compute expression  works for the cpu- and casesensor.
     """
     class sensor:
@@ -210,14 +210,14 @@ class sensors(IdleBarPlugin):
         def temp(self):
             def temp_compute (rawvalue):
                 try:
-                    temperature = eval(self.compute_expression.replace ("@",str(rawvalue)))
+                    temperature = eval(self.compute_expression.replace ('@', str(rawvalue)))
                 except:
-                    _debug_("Compute expression does not evaluate", DERROR)
+                    _debug_('Compute expression does not evaluate', DERROR)
                     temperature = rawvalue
                 return int(temperature)
 
             if self.senspath == -1 or not self.senspath:
-                return "?"
+                return '?'
 
             if self.kernel26:
                 file = os.path.join(self.senspath, 'temp_input' + self.sensor[-1])
@@ -253,7 +253,7 @@ class sensors(IdleBarPlugin):
                     self.hotstack = self.hotstack - 1
                     self.washot = False
 
-            return "%s°" % temp
+            return '%s°' % temp
 
         def getSensorPath(self):
             #let's try if we find a sys filesystem (and kernel2.6 style sensors)
@@ -262,27 +262,27 @@ class sensors(IdleBarPlugin):
                 # search the i2cdev_path for the temp sensor
                 for senspath in os.listdir(self.i2cdev_path):
                     testpath = os.path.join(self.i2cdev_path, senspath)
-                    if senspath == "temp1_input":
+                    if senspath == 'temp1_input':
                         return self.i2cdev_path
 
                 # search the sub-directories of i2cdev_path for the temp sensor
                 for senspath in os.listdir(self.i2cdev_path):
                     testpath = os.path.join(self.i2cdev_path, senspath)
                     for pos_sensors in os.listdir(testpath):
-                        if pos_sensors == "temp_input1":
+                        if pos_sensors == 'temp_input1':
                             return testpath
-                        if pos_sensors == "temp1_input":
+                        if pos_sensors == 'temp1_input':
                             return testpath
 
             if not os.path.exists(self.pathform_path):
                 if self.kernel26:
-                    print "Kernel 2.5/2.6 detected, but no i2c sensors found"
-                    print "Did you load (or compile) the necessary bus driver"
-                    print "and sensor chip modules"
+                    print 'Kernel 2.5/2.6 detected, but no i2c sensors found'
+                    print 'Did you load (or compile) the necessary bus driver'
+                    print 'and sensor chip modules'
                 else:
-                    print "LM_Sensors data not available? Did you load i2c-proc"
-                    print "and configured lm_sensors?"
-                    print "temperatures will be bogus"
+                    print 'LM_Sensors data not available? Did you load i2c-proc'
+                    print 'and configured lm_sensors?'
+                    print 'temperatures will be bogus'
                 return -1 #failure
 
             for senspath in os.listdir(self.pathform_path):
@@ -304,7 +304,7 @@ class sensors(IdleBarPlugin):
             self.cpu = self.sensor(cpu[0], cpu[1], self.hotstack)
 
         if case:
-            if isinstance (case,types.StringType):
+            if isinstance (case, types.StringType):
                 self.case = self.sensor(case, '@', self.hotstack)
             else:
                 self.case = self.sensor(case[0], case[1], self.hotstack)
@@ -321,10 +321,10 @@ class sensors(IdleBarPlugin):
         f.close()
         rxp_ram = re.compile('^%s' % self.ram)
 
-        for line in data.split("\n"):
+        for line in data.split('\n'):
             m = rxp_ram.match(line)
             if m :
-                return "%sM" % (int(string.split(line)[1])/1024)
+                return '%sM' % (int(string.split(line)[1])/1024)
 
 
     def draw(self, (type, object), x, osd):
@@ -375,5 +375,236 @@ class sensors(IdleBarPlugin):
                 self.retwidth = self.retwidth + widthcase + 12
             if self.ram:
                 self.retwidth = self.retwidth + 15 + widthram
+
+        return self.retwidth
+
+
+#----------------------------------- SENSOR2 -------------------------------
+
+class sensors2(IdleBarPlugin):
+    """
+    Displays sensor temperature information (cpu, system) and memory-stats.
+
+    Activate with:
+    | plugin.activate('idlebar.system.sensors2', level=40, args=(
+    |     ('sensorname', 'sensorpath', 'sensortype'),
+    |     ..., 'meminfo', 'meminfo',
+    |     ...))
+    | plugin.activate('idlebar.system.sensors2', level=40, args=(
+    |     ('sensorname', 'sensorpath', 'sensortype', 'compute_expression'),
+    |     ..., 'meminfo', 'meminfo',
+    |     ...))
+
+    sensorname is the corresponding lm_sensors name, this should be: temp1,
+    temp2, temp3, etc.
+
+    sensorpath is the path, where the data files corresponding to sensorname
+    can be found. For Linux 2.6, this is usually
+    /sys/class/hwmon/hwmon[X]/device/, with [X] := 0, 1, 2, etc.
+
+    sensortype is one of 'sys' or 'cpu', with 'sys' designating a case sensor.
+    This value only changes the displayed icon.
+
+    compute_expression: Some sensors return raw-values, which have to be
+    computed in order to get correct values. This is normally stored in your
+    /etc/sensors.conf.  Search in the corresponding section for your chipset,
+    and search the compute statement, e.g. "compute temp3 @*2, @/2". Only the
+    third argument is of interest. Insert this into the plugin activation line,
+    e.g.:
+
+    | [...] args=(('temp3', '/sys/class/hwmon/hwmon0/device/', 'sys', '@*2'), [...]
+
+    The @ stands for the raw value.  The compute expression works for cpu and
+    sys type sensors.
+
+    meminfo[X] is the memory info u want, types ar the same as in
+    /proc/meminfo: MemTotal -> SwapFree.
+
+    There are no default values for any sensors whatsoever. If you provide only
+    one sensor tuple, be sure to append a comma for the interpreter to
+    understand it, e.g.:
+
+    | plugin.activate('idlebar.system.sensors2', level=70, args=(
+    |     ('temp1', '/sys/class/hwmon/hwmon1/device/', 'cpu'),
+    | ))
+
+    The plugin requires a properly configured lm_sensors package! If the standard
+    sensors frontend delivered with lm_sensors works you are most probably OK.
+
+    Also note that the sensor and meminfo arguments can be given in arbitrary
+    order and will be displayed respectively, thus the following example:
+
+    | plugin.activate('idlebar.system.sensors2', level=70, args=(
+    |     ('temp1', '/sys/class/hwmon/hwmon1/device/', 'cpu'),
+    |     'MemTotal',
+    |     ('temp2', '/sys/class/hwmon/hwmon0/device/', 'sys', '@*2'),
+    |     ('temp1', '/sys/class/hwmon/hwmon2/device/', 'cpu'),
+    |     'MemFree'))
+
+    works as expected and displays::
+
+        [CPU] [MemTotal] [Case] [CPU] [MemFree]
+
+    with their corresponding icons.
+    """
+    class sensor:
+        """
+        small class defining a temperature sensor
+        """
+        def __init__(self, sensor, senspath, senstype, compute_expression, hotstack):
+            self.sensor = sensor
+            self.senspath = senspath
+            self.senstype = senstype
+            self.compute_expression = compute_expression
+            self.hotstack = hotstack
+            self.washot = False
+            self.kernel26 = self.isKernel26()
+
+        def temp(self):
+            # Compute and return the temperature value of the sensor
+            def temp_compute (rawvalue):
+                try:
+                    temperature = eval(self.compute_expression.replace('@', str(rawvalue)))
+                except:
+                    _debug_('Cannot compute expression %r' % (self.compute_expression,), DERROR)
+                    temperature = rawvalue
+                return int(temperature)
+
+            hotdata = None
+
+            if self.kernel26:
+                # Several flavours of files can be found in senspath, find the right ones
+                file = os.path.join( self.senspath, 'temp_input' + self.sensor[-1] )
+                fhot = os.path.join( self.senspath, 'temp_max' + self.sensor[-1] )
+                if not os.path.exists(file):
+                    file = os.path.join( self.senspath, 'temp' + self.sensor[-1] + '_input')
+                if not os.path.exists(fhot):
+                    fhot = os.path.join( self.senspath, 'temp' + self.sensor[-1] + '_max')
+                if not os.path.exists(fhot):
+                    fhot = os.path.join( self.senspath, 'temp' + self.sensor[-1] + '_crit')
+                if os.path.exists(fhot):
+                    f = open(fhot)
+                    hotdata = f.read()
+                    f.close()
+
+            else:
+                file = os.path.join( self.senspath, self.sensor )
+
+            f = open(file)
+            data = f.read()
+            f.close()
+
+            if self.kernel26 and hotdata is not None:
+                temp = int(temp_compute(float(data[0:2])))
+                hot = int(temp_compute(float(hotdata[0:2])))
+            else:
+                temp = int(temp_compute (float(string.split(data)[2])))
+                hot = int(temp_compute (float(string.split(data)[0])))
+
+            if temp > hot:
+                if self.washot == False:
+                    self.hotstack = self.hotstack + 1
+                    self.washot == True
+            else:
+                if self.washot == True:
+                    self.hotstack = self.hotstack - 1
+                    self.washot = False
+
+            return '%s°' % temp
+
+        def isKernel26(self):
+            # Are we on Linux 2.6?
+            if re.compile('^2\.6').match(os.uname()[2]) is not None:
+                return True
+            return False
+
+
+    def __init__(self, *sensors):
+        """ Initialize the plug-in """
+        _debug_('sensor.__init__(sensors=%r)' % (sensors,), 2)
+        for sens in sensors:
+            if len(sens) < 3 or len(sens) > 4:
+                self.reason = _('Sensors must have three or four values:') + ' %r' % sens
+                return
+            if not os.path.exists(sens[1]):
+                self.reason = _('Sensor')+(' %s ' % sens[1])+_('does not exist')
+                return
+        IdleBarPlugin.__init__(self)
+
+        self.sens = []
+        self.hotstack = 0
+
+        # Get the parameters
+        for sens in sensors:
+            if isinstance (sens, types.TupleType):
+                # We probably have a temperature sensor here
+                if len(sens) == 4:
+                    # Temperature with compute_expression...
+                    self.sens.append(self.sensor(sens[0], sens[1], sens[2], sens[3], self.hotstack))
+                elif len(sens) == 3:
+                    # ... and without
+                    self.sens.append(self.sensor(sens[0], sens[1], sens[2], '@', self.hotstack))
+
+            elif isinstance (sens, types.StringType):
+                # This will be treated as meminfo
+                self.sens.append(sens)
+            # XXX: Do we need an else here (to designate a config error)
+
+        self.retwidth = 0
+
+
+    def getRamStat(self, ram):
+        # Get the status of the given meminfo argument
+        f = open('/proc/meminfo')
+        data = f.read()
+        f.close()
+        rxp_ram = re.compile('^%s' % ram)
+
+        for line in data.split('\n'):
+            m = rxp_ram.match(line)
+            if m :
+                return '%sM' % (int(string.split(line)[1])/1024)
+
+
+    def draw(self, (type, object), x, osd):
+        # draw the icons and values
+        senswidth = 0
+        img_width = x + 15
+
+        font  = osd.get_font('small0')
+        if self.hotstack != 0:
+            font.color = 0xff0000
+        elif font.color == 0xff0000 and self.hotstack == 0:
+            font.color = 0xffffff
+
+        for sens in self.sens:
+            icon = None
+            if isinstance(sens, self.sensor):
+                # temperature sensors
+                if sens.senstype.lower().startswith('c'):
+                    # CPU sensor
+                    icon = 'misc/cpu.png'
+                if sens.senstype.lower().startswith('s'):
+                    # case sensor
+                    icon = 'misc/case.png'
+                # XXX: Do we need an else here (to designate a config error)
+                text = sens.temp()
+            else:
+                # meminfo
+                icon = 'misc/memory.png'
+                text = self.getRamStat(sens)
+
+            if icon is not None:
+                # draw everything
+                senswidth = font.stringsize(text)
+                osd.draw_image(os.path.join(config.ICON_DIR, icon),
+                           (img_width, osd.y + 8, -1, -1))
+                osd.write_text(text, font, None, img_width + 15, osd.y + 55 - font.h, senswidth, font.h,
+                               'left', 'top')
+                # img_width is the calculated x coordinate for the next icon
+                img_width = img_width + senswidth + 30
+                # We only need to calculate self.retwidth,
+                # if we actually drew sensor icons
+                self.retwidth = img_width - x - 15
 
         return self.retwidth
