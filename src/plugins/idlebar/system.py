@@ -68,8 +68,8 @@ class procstats(IdleBarPlugin):
 
     def config(self):
         return [
-            ( 'SENSORS_PLATFORM_PATH', '/sys/devices/platform', 'path to the sensor devices' ),
-            ( 'SENSORS_I2CDEV_PATH', '/sys/bus/i2c/devices', 'path to the i2c devices' ),
+            ('SENSORS_PLATFORM_PATH', '/sys/devices/platform', 'path to the sensor devices'),
+            ('SENSORS_I2CDEV_PATH', '/sys/bus/i2c/devices', 'path to the i2c devices'),
         ]
 
 
@@ -196,6 +196,7 @@ class sensors(IdleBarPlugin):
         small class defining a temperature sensor
         """
         def __init__(self, sensor, compute_expression, hotstack):
+            _debug_('__init__(sensor=%r, compute_expression=%r, hotstack=%r)' % (sensor, compute_expression, hotstack))
             self.pathform_path = config.SENSORS_PLATFORM_PATH
             self.i2cdev_path = config.SENSORS_I2CDEV_PATH
             self.kernel26 = False
@@ -211,7 +212,7 @@ class sensors(IdleBarPlugin):
                 try:
                     temperature = eval(self.compute_expression.replace ("@",str(rawvalue)))
                 except:
-                    print "ERROR in idlebar.sensors: Compute expression does not evaluate"
+                    _debug_("Compute expression does not evaluate", DERROR)
                     temperature = rawvalue
                 return int(temperature)
 
@@ -219,17 +220,17 @@ class sensors(IdleBarPlugin):
                 return "?"
 
             if self.kernel26:
-                file = os.path.join( self.senspath, 'temp_input' + self.sensor[-1] )
-                fhot = os.path.join( self.senspath, 'temp_max' + self.sensor[-1] )
+                file = os.path.join(self.senspath, 'temp_input' + self.sensor[-1])
+                fhot = os.path.join(self.senspath, 'temp_max' + self.sensor[-1])
                 if not os.path.exists(file):
-                    file = os.path.join( self.senspath, 'temp' + self.sensor[-1] + '_input')
-                    fhot = os.path.join( self.senspath, 'temp' + self.sensor[-1] + '_max')
+                    file = os.path.join(self.senspath, 'temp' + self.sensor[-1] + '_input')
+                    fhot = os.path.join(self.senspath, 'temp' + self.sensor[-1] + '_max')
                 f = open(fhot)
                 hotdata = f.read()
                 f.close()
 
             else:
-                file = os.path.join( self.senspath, self.sensor )
+                file = os.path.join(self.senspath, self.sensor)
 
             f = open(file)
             data = f.read()
@@ -258,9 +259,15 @@ class sensors(IdleBarPlugin):
             #let's try if we find a sys filesystem (and kernel2.6 style sensors)
             if os.path.exists(self.i2cdev_path):
                 self.kernel26 = True
-                #print "Detected kernel 2.6 sys fs"
+                # search the i2cdev_path for the temp sensor
                 for senspath in os.listdir(self.i2cdev_path):
-                    testpath = os.path.join(self.i2cdev_path , senspath)
+                    testpath = os.path.join(self.i2cdev_path, senspath)
+                    if senspath == "temp1_input":
+                        return self.i2cdev_path
+
+                # search the sub-directories of i2cdev_path for the temp sensor
+                for senspath in os.listdir(self.i2cdev_path):
+                    testpath = os.path.join(self.i2cdev_path, senspath)
                     for pos_sensors in os.listdir(testpath):
                         if pos_sensors == "temp_input1":
                             return testpath
@@ -279,21 +286,19 @@ class sensors(IdleBarPlugin):
                 return -1 #failure
 
             for senspath in os.listdir(self.pathform_path):
-                testpath = os.path.join(self.pathform_path , senspath)
+                testpath = os.path.join(self.pathform_path, senspath)
                 if os.path.isdir(testpath):
                     if os.path.exists(os.path.join(testpath, '%s_max' % self.sensor)):
                         return testpath
 
 
 
-    def __init__(self, cpu='temp3', case='temp2' , ram='MemTotal'):
+    def __init__(self, cpu='temp3', case='temp2', ram='MemTotal'):
         IdleBarPlugin.__init__(self)
-
-
         self.hotstack = 0
         self.case = None
 
-        if isinstance (cpu,types.StringType):
+        if isinstance (cpu, types.StringType):
             self.cpu = self.sensor(cpu, '@', self.hotstack)
         else:
             self.cpu = self.sensor(cpu[0], cpu[1], self.hotstack)

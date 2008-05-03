@@ -66,8 +66,7 @@ class PopupBox(Window):
                  mode    = hard (break at chars); soft (break at words)
                  hfill   = True (don't shorten width) or False
     """
-
-    def __init__(self, text, handler=None, x=None, y=None, width=0, height=0,
+    def __init__(self, text, handler=None, x=0, y=0, width=0, height=0,
                  icon=None, vertical_expansion=1, text_prop=None, parent='osd'):
 
         self.handler = handler
@@ -79,12 +78,9 @@ class PopupBox(Window):
 
         self.font = None
         if self.skin_info_font:
-            self.set_font(self.skin_info_font.name,
-                          self.skin_info_font.size,
-                          Color(self.skin_info_font.color))
+            self.set_font(self.skin_info_font.name, self.skin_info_font.size, Color(self.skin_info_font.color))
         else:
-            self.set_font(config.OSD_DEFAULT_FONTNAME,
-                          config.OSD_DEFAULT_FONTSIZE)
+            self.set_font(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE)
 
         if not width:
             tw = self.font.stringsize(text) + self.h_margin*2
@@ -94,8 +90,7 @@ class PopupBox(Window):
         self.__init__content__()
 
         if type(text) in StringTypes:
-            self.label = Label(text, self, Align.CENTER, Align.CENTER,
-                               text_prop=self.text_prop)
+            self.label = Label(text, self, Align.CENTER, Align.CENTER, text_prop=self.text_prop)
         else:
             raise TypeError, text
 

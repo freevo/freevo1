@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# mplayer.py - the Freevo MPlayer module for video
+# Freevo video module for MPlayer
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -573,10 +573,9 @@ class MPlayerApp(childapp.ChildApp2):
                 if line.startswith('Connecting to server'):
                     line = 'Connecting to server'
                 self.osd.clearscreen(self.osd.COL_BLACK)
-                self.osd.drawstringframed(line, config.OSD_OVERSCAN_LEFT+10,
-                                          config.OSD_OVERSCAN_TOP+10,
-                                          self.osd.width - (config.OSD_OVERSCAN_LEFT+10 + config.OSD_OVERSCAN_RIGHT+10),
-                                          -1, self.osdfont, self.osd.COL_WHITE)
+                self.osd.drawstringframed(line, config.OSD_OVERSCAN_LEFT+10, config.OSD_OVERSCAN_TOP+10,
+                    self.osd.width - (config.OSD_OVERSCAN_LEFT+10 + config.OSD_OVERSCAN_RIGHT+10),
+                    -1, self.osdfont, self.osd.COL_WHITE)
                 self.osd.update()
 
 

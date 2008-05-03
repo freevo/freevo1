@@ -45,7 +45,7 @@ import locale
 import config
 import plugin
 import skin
-from pygame import image,transform
+from pygame import image, transform
 
 
 
@@ -95,7 +95,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.barfile != f:
             self.barfile = f
             try:
-                self.bar = transform.scale(image.load(f).convert_alpha(), (w,h))
+                self.bar = transform.scale(image.load(f).convert_alpha(), (w, h))
             except:
                 self.bar = None
 
@@ -157,7 +157,7 @@ class clock(IdleBarPlugin):
     Shows the current time.
 
     Activate with:
-    plugin.activate('idlebar.clock',   level=50)
+    plugin.activate('idlebar.clock', level=50)
     Note: The clock will always be displayed on the right side of
     the idlebar.
     """
@@ -179,14 +179,12 @@ class clock(IdleBarPlugin):
         pad_x = 10
         idlebar_height = 60
 
-        w = font.stringsize( clock )
+        w = font.stringsize(clock)
         h = font.font.height
         if h > idlebar_height:
             h = idlebar_height
-        osd.write_text( clock, font, None,
-                       ( osd.x + osd.width - w -pad_x ),
-                       ( osd.y + ( idlebar_height - h ) / 2 ),
-                       ( w + 1 ), h , 'right', 'center')
+        osd.write_text(clock, font, None, (osd.x + osd.width - w -pad_x), (osd.y + (idlebar_height - h) / 2),
+            (w + 1), h , 'right', 'center')
         self.clock_left_position = osd.x + osd.width - w - pad_x
         return 0
 

@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Plug-in to use XINE for video
+# Freevo video modules for Xine
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -93,7 +93,6 @@ class Xine:
         """ Xine contructor """
         _debug_('Xine.__init__(type=%r)' % (type,), 2)
         self.name      = 'xine'
-
         self.app_mode  = 'video'
         self.xine_type = type
         self.app       = None
@@ -347,7 +346,6 @@ class Xine:
             self.app.write('TitleMenu\n')
             return True
 
-
         # DVD/VCD language settings
         if event == VIDEO_NEXT_AUDIOLANG and self.max_audio:
             if self.current_audio < self.max_audio - 1:
@@ -405,8 +403,8 @@ class XineApp(childapp.ChildApp2):
         _debug_('XineApp.__init__(command=%r, player=%r)' % (command, player), 2)
         self.item = player.item
         self.player = player
-
         childapp.ChildApp2.__init__(self, command)
+
 
     def stdout_cb(self, line):
         """
@@ -417,6 +415,7 @@ class XineApp(childapp.ChildApp2):
         if self.item.network_play:
             pass
 
+
     def stderr_cb(self, line):
         """
         parse the stderr of the xine process
@@ -425,7 +424,6 @@ class XineApp(childapp.ChildApp2):
         # Has it started?
         if line.find('playing mrl') >= 0:
             _debug_('playback started')
-
         # Has it finished?
         if line.find('playback finished for mrl') >= 0 or line.find('xine_exit: bye!') > 0:
             _debug_('playback finished')

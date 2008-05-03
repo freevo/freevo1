@@ -122,7 +122,7 @@ class client:
         line = string.strip(self.readl())
 
         try:
-            (self.state, self.server, self.s_version, c, self.proto, self.type, c, 
+            (self.state, self.server, self.s_version, c, self.proto, self.type, c,
                 self.ds_width, c, self.ds_height, c, self.cs_width, c, self.cs_height) = string.split(line, ' ')
         except ValueError:
             self.ds_width = '0'

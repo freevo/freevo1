@@ -56,10 +56,10 @@ class PluginInterface(plugin.ItemPlugin):
         video_suffixes = mplayer_suffixes | (mplayer_suffixes - Set(config.VIDEO_XINE_SUFFIX))
 
         # DirItems have a 'type' attribute rather than a 'mode' so fail gracefully
-        try: 
+        try:
             # Checking if it's a video file
             if item.mode == 'file' and os.path.splitext(item.filename)[1][1:] in video_suffixes:
-                return [ (self.comm_detect, 'Remove Commercials') ] 
+                return [ (self.comm_detect, 'Remove Commercials') ]
         except AttributeError:
             pass
 

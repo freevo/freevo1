@@ -42,8 +42,8 @@ Currently not many classes are in place, but hopefully we will add more
 in time.
 """
 __date__    = "$Date$"
-__version__ = "$Revision$"
-__author__  = """Thomas Malt <thomas@malt.no>"""
+__version__ = "$Revision$".split()[1]
+__author__  = "Thomas Malt <thomas@malt.no>"
 
 
 import rc
@@ -52,17 +52,20 @@ import config
 import skin
 import traceback
 
+from pygame import Rect
 from Color import *
 
 class GUIObject:
     """
-    Common parent class of all GUI objects. You can override this to make
-    new Widgets.
+    Common parent class of all GUI objects. You can override this to make new
+    Widgets.
     """
-
-
-    def __init__(self, left=0, top=0, width=0, height=0,
-                 bg_color=None, fg_color=None):
+    def __init__(self, left=0, top=0, width=0, height=0, bg_color=None, fg_color=None):
+        try:
+            self.rect = Rect(left, top, width, height)
+            print 'DJW:GUI:rect=%r' % (self.rect,)
+        except TypeError:
+            print 'DJW:left=%r, top=%r, width=%r, height=%r' % (left, top, width, height)
 
         self.osd  = osd.get_singleton()
 
