@@ -420,6 +420,7 @@ class MenuWidget(GUIObject):
 
 
     def make_submenu(self, menu_name, actions, item):
+        #print 'make_submenu(menu_name=%r, actions=%r, item=%r)' % (menu_name, actions, item)
         items = []
         for a in actions:
             if isinstance(a, Item):
@@ -636,9 +637,9 @@ class MenuWidget(GUIObject):
 
 
     def _handle_submenu(self, menu, event):
-        if hasattr(menu, 'is_submenu'):
-            self._handle_play_item(menu, event)
-            return
+        #if hasattr(menu, 'is_submenu'):
+        #    self._handle_play_item(menu, event)
+        #    return
 
         actions = menu.selected.actions()
         force   = False

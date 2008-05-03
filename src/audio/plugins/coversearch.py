@@ -50,6 +50,7 @@ import plugin
 import re
 import urllib2
 import time
+import traceback
 import config
 import kaa.imlib2 as Image
 from xml.dom import minidom # ParseError used by amazon module
@@ -151,11 +152,27 @@ class PluginInterface(plugin.ItemPlugin):
             try:
                 if not hasattr(item, 'artist'):
                     if item.type in ('audio', 'dir') and not hasattr(item, 'album'):
-                        item.artist, item.album = item.name.split(' - ')
+                        split_name = item.name.split(' - ')
+                        if len(split_name) == 2:
+                            item.artist, item.album = item.name.split(' - ')
+                        else:
+                            import util, kaa.metadata
+                            files = util.match_files_recursively(item.dir, ['mp3', 'ogg', 'flac'])
+                            for file in files:
+                                metadata = kaa.metadata.parse(file)
+                                item.artist = metadata.artist
+                                item.album = metadata.album
+                                item.title = metadata.title
+                                if item.artist and item.album:
+                                    _debug_('%r - %r' % (item.artist, item.album))
+                                    break
+                            else:
+                                _debug_('No files in %r' % (item.dir,), DINFO)
                     if item.type in ('audiocd',) and not hasattr(item, 'title'):
                         item.title = item.name
-            except Exception, e:
-                _debug_('%s: %s' % (item.name, e))
+            except Exception, why:
+                _debug_('%s: %s' % (item.name, why))
+                traceback.print_exc()
 
             try:
                 # use title for audio cds and album for normal data
