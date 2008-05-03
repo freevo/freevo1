@@ -30,7 +30,6 @@
 
 
 import string
-import freq
 import os
 import struct
 import array
@@ -38,6 +37,7 @@ import fcntl
 import sys
 
 import config
+import freq
 
 
 # Different formats depending on word size
@@ -270,6 +270,12 @@ class Videodev:
         #print 'inputs=%r' % self.inputs
         #print 'standards=%r' % self.standards
         #print 'controls=%r' % self.controls
+        import re
+        pat = re.compile('([\w ]+)')
+        mat = pat.match(results[0])
+        self.driver = mat.group()
+        mat = pat.match(results[1])
+        self.card = mat.group()
 
 
     def getdriver(self):
@@ -829,7 +835,7 @@ class Videodev:
         _debug_('print_settings()', 2)
         print 'Driver: %s' % self.driver.strip('\0')
         print 'Card: %s' % self.card.strip('\0')
-        print 'Version: %02d.%02d' % (self.version / 256, self.version % 256)
+        print 'Version: %08x (%02u.%02u)' % (self.version, self.version / 256, self.version % 256)
         print 'Capabilities: 0x%08x' % int(self.capabilities)
 
         print "Enumerating supported Standards."

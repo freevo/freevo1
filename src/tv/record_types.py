@@ -81,7 +81,7 @@ class ScheduledRecordings:
             s += 'No Favorites\n'
         return s
 
-            
+
     def lock(self):
         global schedule_locked
         schedule_locked = True
