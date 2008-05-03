@@ -120,16 +120,19 @@ if __name__ == '__main__':
     v4ldevices = analyser.v4ldevices()
 
     # Print out the sorted results and the details
-    print 
+    print
     for v4ldevice in v4ldevices:
-        uevent = open(os.path.join(video4linux_path, v4ldevice['device'], 'uevent')).readlines()
-        bus = driver = ''
-        for line in uevent:
-            if 'PHYSDEVBUS=' in line:
-                bus = line.split('=')[1].strip()
-            if 'PHYSDEVDRIVER=' in line:
-                driver = line.split('=')[1].strip()
-        print '%s (%s) %s' % (v4ldevice['device'], bus, driver)
+        try:
+            uevent = open(os.path.join(video4linux_path, v4ldevice['device'], 'uevent')).readlines()
+            bus = driver = ''
+            for line in uevent:
+                if 'PHYSDEVBUS=' in line:
+                    bus = line.split('=')[1].strip()
+                if 'PHYSDEVDRIVER=' in line:
+                    driver = line.split('=')[1].strip()
+            print '%s (%s) %s' % (v4ldevice['device'], bus, driver)
+        except IOError:
+            print '%s' % (v4ldevice['device'],)
         print '%s' % ('-' * 41)
         for v4ldev in v4ldevice['family']:
             name = open(os.path.join(video4linux_path, v4ldev, 'name')).read().strip()
@@ -138,7 +141,7 @@ if __name__ == '__main__':
         if freevo:
             v = tv.v4l2.Videodev(os.path.join('/dev', v4ldevice['device']))
             v.print_settings()
-        print 
+        print
 
     if len(analyser.devices) > 0:
         print 'Devices not checked'
