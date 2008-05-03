@@ -287,7 +287,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.FVUSED_ITEM_INFO = em.Event('FVUSED_ITEM_INFO')
 
         self.connection_thread()
-        
+
 
     def timer_handler(self):
         if self.menu_client_waiting:

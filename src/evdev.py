@@ -254,6 +254,7 @@ class evdev:
     def read(self):
         """
         """
+        #print 'read()'
         try:
             buf = os.read(self._fd, struct.calcsize('LLHHi'))
         except OSError, (errno, str):
@@ -264,6 +265,7 @@ class evdev:
         sec, usec, type, code, value = struct.unpack('LLHHi', buf)
 
         return (float(sec) + float(usec)/1000000.0, _types[type], _events[type][code], value)
+
 
 
 if __name__ == '__main__':

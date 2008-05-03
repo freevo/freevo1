@@ -665,23 +665,19 @@ for dirname in cfgfilepath:
             print
             sys.exit(1)
 
-        if int(str(CONFIG_VERSION).split('.')[0]) != \
-           int(str(LOCAL_CONF_VERSION).split('.')[0]):
+        if int(str(CONFIG_VERSION).split('.')[0]) != int(str(LOCAL_CONF_VERSION).split('.')[0]):
             print
             print 'Error: The version information in freevo_config.py doesn\'t'
             print 'match the version in your local_conf.py.'
             print 'Please check freevo_config.py for changes and set CONFIG_VERSION'
             print 'in %s to %s' % (overridefile, LOCAL_CONF_VERSION)
-            print_config_changes(LOCAL_CONF_VERSION, CONFIG_VERSION,
-                                 LOCAL_CONF_CHANGES)
+            print_config_changes(LOCAL_CONF_VERSION, CONFIG_VERSION, LOCAL_CONF_CHANGES)
             sys.exit(1)
 
-        if int(str(CONFIG_VERSION).split('.')[1]) != \
-           int(str(LOCAL_CONF_VERSION).split('.')[1]):
+        if int(str(CONFIG_VERSION).split('.')[1]) != int(str(LOCAL_CONF_VERSION).split('.')[1]):
             print
             print 'Warning: freevo_config.py was changed, please check local_conf.py'
-            print_config_changes(LOCAL_CONF_VERSION, CONFIG_VERSION,
-                                 LOCAL_CONF_CHANGES)
+            print_config_changes(LOCAL_CONF_VERSION, CONFIG_VERSION, LOCAL_CONF_CHANGES)
         break
 
 else:

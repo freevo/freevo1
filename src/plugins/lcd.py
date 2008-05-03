@@ -27,7 +27,7 @@
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc., 
+# with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
@@ -60,57 +60,57 @@ def rjust(s, n):
 # Structure:
 #
 # menu_info = {
-#     <TYPE> : [(<ATTRIBUTE>, <FORMAT_STRING>), ...], 
+#     <TYPE> : [(<ATTRIBUTE>, <FORMAT_STRING>), ...],
 #    }
 # <ATTRIBUTE> is some valid attribute to item.getattr()
 menu_info = {
-    'main' : [], 
+    'main' : [],
     'audio' : [
-        ('length', _('Length') + ': %s'), 
-        ('artist', _('Artist') + ': %s'), 
-        ('album', _('Album')   + ': %s'), 
-        ('year', _('Year')     + ': %s'), 
-    ], 
+        ('length', _('Length') + ': %s'),
+        ('artist', _('Artist') + ': %s'),
+        ('album', _('Album')   + ': %s'),
+        ('year', _('Year')     + ': %s'),
+    ],
     'audiocd' : [
-        ('len(tracks)', _('Tracks') + ': %s'), 
-        ('artist', _('Artist') + ': %s'), 
-        ('album', _('Album')   + ': %s'), 
-        ('year', _('Year')     + ': %s'), 
-    ], 
+        ('len(tracks)', _('Tracks') + ': %s'),
+        ('artist', _('Artist') + ': %s'),
+        ('album', _('Album')   + ': %s'),
+        ('year', _('Year')     + ': %s'),
+    ],
     'video' : [
-        ('length', _('Length') + ': %s'), 
-        ('geometry', _('Resolution') + ': %s'), 
-        ('aspect', _('Aspect') + ': %s'), 
-        ('tagline', _('Tagline') + ': %s'), 
-        ('plot', _('Plot')       + ': %s'), 
-    ], 
+        ('length', _('Length') + ': %s'),
+        ('geometry', _('Resolution') + ': %s'),
+        ('aspect', _('Aspect') + ': %s'),
+        ('tagline', _('Tagline') + ': %s'),
+        ('plot', _('Plot')       + ': %s'),
+    ],
     'dir' : [
-        ('plot', _('Plot') + ': %s'), 
-        ('tagline', _('Tagline') + ': %s'), 
-    ], 
+        ('plot', _('Plot') + ': %s'),
+        ('tagline', _('Tagline') + ': %s'),
+    ],
     'image' : [
-        ('geometry', _('Geometry') + ': %s'), 
-        ('date', _('Date') + ': %s'), 
-        ('description', _('Description') + ': %s'), 
-    ], 
+        ('geometry', _('Geometry') + ': %s'),
+        ('date', _('Date') + ': %s'),
+        ('description', _('Description') + ': %s'),
+    ],
     'playlist' : [
-        ('len(playlist)', _('%s items')), 
-    ], 
+        ('len(playlist)', _('%s items')),
+    ],
     'mame' : [
-        ('description', _('Description') + ': %s'), 
-    ], 
+        ('description', _('Description') + ': %s'),
+    ],
     'unknow' : []
 }
 # menu_strinfo: will be passed to time.strinfo() and added to the end of info (after menu_info)
 menu_strinfo = {
     'main' : '%H:%M - %a, %d-%b', # I like time in main menu
-    'audio' : None, 
-    'audiocd' : None, 
-    'video' : None, 
-    'image' : None, 
-    'dir' : None, 
-    'playlist' : None, 
-    'mame' : None, 
+    'audio' : None,
+    'audiocd' : None,
+    'video' : None,
+    'image' : None,
+    'dir' : None,
+    'playlist' : None,
+    'mame' : None,
     'unknow' : None
     }
 
@@ -122,9 +122,9 @@ menu_strinfo = {
 #     <#_OF_LINES_IN_DISPLAY> : {
 #         <#_OF_CHARS_IN_LINES> : {
 #             <SCREEN_NAME> :
-#                 <WIDGET_NAME> : (<WIDGET_TYPE>, <WIDGET_PARAMETERS>, <PARAMETERS_VALUES>), 
+#                 <WIDGET_NAME> : (<WIDGET_TYPE>, <WIDGET_PARAMETERS>, <PARAMETERS_VALUES>),
 #                 <MORE_WIDGETS>...
-#         }, 
+#         },
 #         <MORE_SCREENS>...
 #     }
 # }
@@ -141,186 +141,186 @@ layouts = {
     4 : { # 4 lines display
         40 : { # 40 chars per line
             'welcome'        : {
-                'title'      : ('title', 'Freevo', None), 
-                'calendar'   : ('scroller', '1 2 %d 2 m 3 "' + _('Today is %s.') + '%s"', 
-                    '(self.width, time.strftime("%A, %d-%B"), self.get_sepstrmscroll(time.strftime("%A, %d-%B")))'), 
-                'clock'      : ('string', '%d 3 "%s"', 
+                'title'      : ('title', 'Freevo', None),
+                'calendar'   : ('scroller', '1 2 %d 2 m 3 "' + _('Today is %s.') + '%s"',
+                    '(self.width, time.strftime("%A, %d-%B"), self.get_sepstrmscroll(time.strftime("%A, %d-%B")))'),
+                'clock'      : ('string', '%d 3 "%s"',
                     '((self.width - len(time.strftime("%T"))) / 2 + 1, time.strftime("%T"))')
-            }, 
+            },
             'menu'           : {
-                'title_l'    : ('string', '1 1 "' + rjust(_('Menu'), 4) + ': "', None), 
-                'item_l'     : ('string', '1 2 "' + rjust(_('Item'), 4) + ': "', None), 
-                'type_l'     : ('string', '1 3 "' + rjust(_('Type'), 4) + ': "', None), 
-                'info_l'     : ('string', '1 4 "' + rjust(_('Information'), 4) + ': "', None), 
-                'title_v'    : ('scroller', '7 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'), 
-                'item_v'     : ('scroller', '7 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'type_v'     : ('scroller', '7 3 %d 3 m 3 "%s%s"', 
-                    '(self.width, typeinfo, self.get_sepstrmscroll(typeinfo))'), 
+                'title_l'    : ('string', '1 1 "' + rjust(_('Menu'), 4) + ': "', None),
+                'item_l'     : ('string', '1 2 "' + rjust(_('Item'), 4) + ': "', None),
+                'type_l'     : ('string', '1 3 "' + rjust(_('Type'), 4) + ': "', None),
+                'info_l'     : ('string', '1 4 "' + rjust(_('Information'), 4) + ': "', None),
+                'title_v'    : ('scroller', '7 1 %d 1 m 3 "%s%s"',
+                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'),
+                'item_v'     : ('scroller', '7 2 %d 2 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'type_v'     : ('scroller', '7 3 %d 3 m 3 "%s%s"',
+                    '(self.width, typeinfo, self.get_sepstrmscroll(typeinfo))'),
                 'info_v'     : ('scroller', '7 4 %d 1 m 3 "%s%s"', '(self.width, info, self.get_sepstrmscroll(info))')
-            }, 
+            },
             'audio_player'   : {
-                'music_l'    : ('string', '1 1 "' + rjust(_('Music'), 5) + ': "', None), 
-                'album_l'    : ('string', '1 2 "' + rjust(_('Album'), 5) + ': "', None), 
-                'artist_l'   : ('string', '1 3 "' + rjust(_('Artist'), 5) + ': "', None), 
-                'music_v'    : ('scroller', '9 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'album_v'    : ('scroller', '9 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, player.getattr("album"), self.get_sepstrmscroll(player.getattr("album")))'), 
-                'artist_v'   : ('scroller', '9 3 %d 3 m 3 "%s%s"', 
-                    '(self.width, player.getattr("artist"), self.get_sepstrmscroll(player.getattr("artist")))'), 
-                'time_v1'    : ('string', '2 4 "%2d:%02d"', '(int(player.length / 60), int(player.length % 60))'), 
-                'time_v2'    : ('string', '8 4 "%2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'), 
-                'time_v3'    : ('string', '14 4 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'), 
-                'timebar1_v' : ('string', '21 4 "["', None), 
-                'timebar2_v' : ('string', '40 4 "]"', None), 
-                'timebar3_v' : ('hbar', '22 4 "%d"', '(int(player.elapsed * 90 / player.length))'), 
-                'animation_v': ('string', '1 4 "%s"', 
+                'music_l'    : ('string', '1 1 "' + rjust(_('Music'), 5) + ': "', None),
+                'album_l'    : ('string', '1 2 "' + rjust(_('Album'), 5) + ': "', None),
+                'artist_l'   : ('string', '1 3 "' + rjust(_('Artist'), 5) + ': "', None),
+                'music_v'    : ('scroller', '9 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'album_v'    : ('scroller', '9 2 %d 2 m 3 "%s%s"',
+                    '(self.width, player.getattr("album"), self.get_sepstrmscroll(player.getattr("album")))'),
+                'artist_v'   : ('scroller', '9 3 %d 3 m 3 "%s%s"',
+                    '(self.width, player.getattr("artist"), self.get_sepstrmscroll(player.getattr("artist")))'),
+                'time_v1'    : ('string', '2 4 "%2d:%02d"', '(int(player.length / 60), int(player.length % 60))'),
+                'time_v2'    : ('string', '8 4 "%2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'),
+                'time_v3'    : ('string', '14 4 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'),
+                'timebar1_v' : ('string', '21 4 "["', None),
+                'timebar2_v' : ('string', '40 4 "]"', None),
+                'timebar3_v' : ('hbar', '22 4 "%d"', '(int(player.elapsed * 90 / player.length))'),
+                'animation_v': ('string', '1 4 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'video_player'   : {
-                'video_l'    : ('string', '2 1 "' + rjust(_('Video'), 5) + ': "', None), 
-                'tag_l'      : ('string', '2 2 "' + rjust(_('Tagline'), 5) + ': "', None), 
-                'genre_l'    : ('string', '1 3 "' + rjust(_('Genre'), 5) + ': "', None), 
-                'video_v'    : ('scroller', '9 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'tag_v'      : ('scroller', '9 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, player.getattr("tagline"), self.get_sepstrmscroll(player.getattr("tagline")))'), 
-                'genre_v'    : ('scroller', '9 3 %d 3 m 3 "%s%s"', 
-                    '(self.width, player.getattr("genre"), self.get_sepstrmscroll(player.getattr("genre")))'), 
-                'time_v1'    : ('string', '2 4 "%s/"', '(length)'), 
-                'time_v2'    : ('string', '10 4 "%s"', '(elapsed)'), 
-                'time_v3'    : ('string', '18 4 "(%2d%%)"', '(int(percentage * 100))'), 
-                'timebar1_v' : ('string', '26 4 "["', None), 
-                'timebar2_v' : ('string', '40 4 "]"', None), 
-                'timebar3_v' : ('hbar', '27 4 "%d"', '(int(percentage * 70))'), 
+                'video_l'    : ('string', '2 1 "' + rjust(_('Video'), 5) + ': "', None),
+                'tag_l'      : ('string', '2 2 "' + rjust(_('Tagline'), 5) + ': "', None),
+                'genre_l'    : ('string', '1 3 "' + rjust(_('Genre'), 5) + ': "', None),
+                'video_v'    : ('scroller', '9 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'tag_v'      : ('scroller', '9 2 %d 2 m 3 "%s%s"',
+                    '(self.width, player.getattr("tagline"), self.get_sepstrmscroll(player.getattr("tagline")))'),
+                'genre_v'    : ('scroller', '9 3 %d 3 m 3 "%s%s"',
+                    '(self.width, player.getattr("genre"), self.get_sepstrmscroll(player.getattr("genre")))'),
+                'time_v1'    : ('string', '2 4 "%s/"', '(length)'),
+                'time_v2'    : ('string', '10 4 "%s"', '(elapsed)'),
+                'time_v3'    : ('string', '18 4 "(%2d%%)"', '(int(percentage * 100))'),
+                'timebar1_v' : ('string', '26 4 "["', None),
+                'timebar2_v' : ('string', '40 4 "]"', None),
+                'timebar3_v' : ('hbar', '27 4 "%d"', '(int(percentage * 70))'),
                 'animation_v': ('string', '1 4 "%s"', 'self.animation_audioplayer_chars[' +
                     ' player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'tv'             : {
-                'chan_l'     : ('string', '1 1 "' + rjust(_('Channel'), 4) + ': "', None), 
-                'prog_l'     : ('string', '1 2 "' + rjust(_('Program'), 4) + ': "', None), 
-                'time_l'     : ('string', '1 3 "' + rjust(_('Time'), 4) + ': "', None), 
-                'desc_l'     : ('string', '1 4 "' + rjust(_('Description'), 4) + ': "', None), 
-                'chan_v'     : ('scroller', '7 1 %d 1 m 3 "%s%s"', 
+                'chan_l'     : ('string', '1 1 "' + rjust(_('Channel'), 4) + ': "', None),
+                'prog_l'     : ('string', '1 2 "' + rjust(_('Program'), 4) + ': "', None),
+                'time_l'     : ('string', '1 3 "' + rjust(_('Time'), 4) + ': "', None),
+                'desc_l'     : ('string', '1 4 "' + rjust(_('Description'), 4) + ': "', None),
+                'chan_v'     : ('scroller', '7 1 %d 1 m 3 "%s%s"',
                     '(self.width, get_chan_displayname(tv.channel_id), '+
-                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'), 
-                'prog_v'     : ('scroller', '7 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, tv.title, self.get_sepstrmscroll(tv.title))'), 
-                'time_v'     : ('scroller', '7 3 %d 3 m 3 "%s-%s%s"', 
-                    '(self.width, tv.start, tv.stop, self.get_sepstrmscroll(tv.start+"-"+tv.stop))'), 
-                'desc_v'     : ('scroller', '7 4 %d 4 m 3 "%s%s"', 
+                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'),
+                'prog_v'     : ('scroller', '7 2 %d 2 m 3 "%s%s"',
+                    '(self.width, tv.title, self.get_sepstrmscroll(tv.title))'),
+                'time_v'     : ('scroller', '7 3 %d 3 m 3 "%s-%s%s"',
+                    '(self.width, tv.start, tv.stop, self.get_sepstrmscroll(tv.start+"-"+tv.stop))'),
+                'desc_v'     : ('scroller', '7 4 %d 4 m 3 "%s%s"',
                     '(self.width, tv.desc, self.get_sepstrmscroll(tv.desc))')
             }
         }, # 40 chars per line
 
         20 : { # 20 chars per line
             'welcome'        : {
-                'title'      : ('title', 'Freevo', None), 
-                'calendar'   : ('scroller', '1 2 %d 2 m 3 "' + _('Today is %s.') + '%s"', 
-                '(self.width, time.strftime("%A, %d-%B"), self.get_sepstrmscroll(time.strftime("%A, %d-%B")))'), 
-                'clock'      : ('string', '%d 3 "%s"', 
+                'title'      : ('title', 'Freevo', None),
+                'calendar'   : ('scroller', '1 2 %d 2 m 3 "' + _('Today is %s.') + '%s"',
+                '(self.width, time.strftime("%A, %d-%B"), self.get_sepstrmscroll(time.strftime("%A, %d-%B")))'),
+                'clock'      : ('string', '%d 3 "%s"',
                 '((self.width - len(time.strftime("%T"))) / 2 + 1, time.strftime("%T"))')
-            }, 
+            },
             'menu'           : {
-                'title_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'), 
-                'item_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'type_v'     : ('scroller', '1 3 %d 3 m 3 "%s%s"', 
-                    '(self.width, typeinfo, self.get_sepstrmscroll(typeinfo))'), 
-                'info_v'     : ('scroller', '1 4 %d 1 m 3 "%s%s"', 
+                'title_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"',
+                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'),
+                'item_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'type_v'     : ('scroller', '1 3 %d 3 m 3 "%s%s"',
+                    '(self.width, typeinfo, self.get_sepstrmscroll(typeinfo))'),
+                'info_v'     : ('scroller', '1 4 %d 1 m 3 "%s%s"',
                     '(self.width, info, self.get_sepstrmscroll(info))')
-            }, 
+            },
             'audio_player'   : {
-                'music_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'album_v'    : ('scroller', '1 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, player.getattr("album"), self.get_sepstrmscroll(player.getattr("album")))'), 
-                'artist_v'   : ('scroller', '1 3 %d 3 m 3 "%s%s"', 
-                    '(self.width, player.getattr("artist"), self.get_sepstrmscroll(player.getattr("artist")))'), 
-                'time_v1'    : ('string', '2 4 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'), 
-                'time_v2'    : ('string', '8 4 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'), 
-                'time_v3'    : ('string', '14 4 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'), 
-                'animation_v': ('string', '1 4 "%s"', 
+                'music_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'album_v'    : ('scroller', '1 2 %d 2 m 3 "%s%s"',
+                    '(self.width, player.getattr("album"), self.get_sepstrmscroll(player.getattr("album")))'),
+                'artist_v'   : ('scroller', '1 3 %d 3 m 3 "%s%s"',
+                    '(self.width, player.getattr("artist"), self.get_sepstrmscroll(player.getattr("artist")))'),
+                'time_v1'    : ('string', '2 4 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'),
+                'time_v2'    : ('string', '8 4 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'),
+                'time_v3'    : ('string', '14 4 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'),
+                'animation_v': ('string', '1 4 "%s"',
                      'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
                #'animation_v': ('hbar', '1 4 "%d"', '(int(player.elapsed *90 / player.length))')
-            }, 
+            },
             'video_player'   : {
-                'video_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'tag_v'      : ('scroller', '1 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, player.getattr("tagline"), self.get_sepstrmscroll(player.getattr("tagline")))'), 
-                'genre_v'    : ('scroller', '1 3 %d 3 m 3 "%s%s"', 
-                    '(self.width, player.getattr("genre"), self.get_sepstrmscroll(player.getattr("genre")))'), 
-                'time_v1'    : ('string', '3 4 "%s /"', '(length)'), 
-                'time_v2'    : ('string', '12 4 "%s"', '(elapsed)'), 
-                'animation_v': ('string', '1 4 "%s"', 
+                'video_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'tag_v'      : ('scroller', '1 2 %d 2 m 3 "%s%s"',
+                    '(self.width, player.getattr("tagline"), self.get_sepstrmscroll(player.getattr("tagline")))'),
+                'genre_v'    : ('scroller', '1 3 %d 3 m 3 "%s%s"',
+                    '(self.width, player.getattr("genre"), self.get_sepstrmscroll(player.getattr("genre")))'),
+                'time_v1'    : ('string', '3 4 "%s /"', '(length)'),
+                'time_v2'    : ('string', '12 4 "%s"', '(elapsed)'),
+                'animation_v': ('string', '1 4 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'tv'             : {
-                'chan_v'     : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
+                'chan_v'     : ('scroller', '1 1 %d 1 m 3 "%s%s"',
                     '(self.width, get_chan_displayname(tv.channel_id), '+\
-                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'), 
-                'prog_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, tv.title, self.get_sepstrmscroll(tv.title))'), 
-                'time_v'     : ('scroller', '1 3 %d 3 m 3 "%s-%s%s"', 
-                    '(self.width, tv.start, tv.stop, self.get_sepstrmscroll(tv.start+"-"+tv.stop))'), 
-                'desc_v'     : ('scroller', '1 4 %d 4 m 3 "%s%s"', 
+                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'),
+                'prog_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"',
+                    '(self.width, tv.title, self.get_sepstrmscroll(tv.title))'),
+                'time_v'     : ('scroller', '1 3 %d 3 m 3 "%s-%s%s"',
+                    '(self.width, tv.start, tv.stop, self.get_sepstrmscroll(tv.start+"-"+tv.stop))'),
+                'desc_v'     : ('scroller', '1 4 %d 4 m 3 "%s%s"',
                     '(self.width, tv.desc, self.get_sepstrmscroll(tv.desc))')
             }
         }, # 20 chars per line
 
         16 : { # 16 chars per line
             'welcome'        : {
-                'title'      : ('title', 'Freevo', None), 
-                'calendar'   : ('scroller', '1 2 %d 2 m 3 "' + _('Today is %s.') + '%s"', 
-                    '(self.width, time.strftime("%A, %d-%B"), self.get_sepstrmscroll(time.strftime("%A, %d-%B")))'), 
-                'clock'      : ('string', '%d 3 "%s"', 
+                'title'      : ('title', 'Freevo', None),
+                'calendar'   : ('scroller', '1 2 %d 2 m 3 "' + _('Today is %s.') + '%s"',
+                    '(self.width, time.strftime("%A, %d-%B"), self.get_sepstrmscroll(time.strftime("%A, %d-%B")))'),
+                'clock'      : ('string', '%d 3 "%s"',
                     '((self.width - len(time.strftime("%T"))) / 2 + 1, time.strftime("%T"))')
-            }, 
+            },
             'menu'           : {
-                'title_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'), 
-                'item_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'type_v'     : ('scroller', '1 3 %d 3 m 3 "%s%s"', 
-                    '(self.width, typeinfo, self.get_sepstrmscroll(typeinfo))'), 
+                'title_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"',
+                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'),
+                'item_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'type_v'     : ('scroller', '1 3 %d 3 m 3 "%s%s"',
+                    '(self.width, typeinfo, self.get_sepstrmscroll(typeinfo))'),
                 'info_v'     : ('scroller', '1 4 %d 1 m 3 "%s%s"', '(self.width, info, self.get_sepstrmscroll(info))')
-            }, 
+            },
             'audio_player'   : {
-                'music_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'album_v'    : ('scroller', '1 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, player.getattr("album"), self.get_sepstrmscroll(player.getattr("album")))'), 
-                'artist_v'   : ('scroller', '1 3 %d 3 m 3 "%s%s"', 
-                    '(self.width, player.getattr("artist"), self.get_sepstrmscroll(player.getattr("artist")))'), 
-                'time_v1'    : ('string', '2 4 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'), 
-                'time_v2'    : ('string', '8 4 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'), 
-                'time_v3'    : ('string', '14 4 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'), 
-                'animation_v': ('string', '1 4 "%s"', 
+                'music_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'album_v'    : ('scroller', '1 2 %d 2 m 3 "%s%s"',
+                    '(self.width, player.getattr("album"), self.get_sepstrmscroll(player.getattr("album")))'),
+                'artist_v'   : ('scroller', '1 3 %d 3 m 3 "%s%s"',
+                    '(self.width, player.getattr("artist"), self.get_sepstrmscroll(player.getattr("artist")))'),
+                'time_v1'    : ('string', '2 4 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'),
+                'time_v2'    : ('string', '8 4 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'),
+                'time_v3'    : ('string', '14 4 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'),
+                'animation_v': ('string', '1 4 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'video_player'   : {
-                'video_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'time_v1'    : ('string', '9 2 "%s"', '(length)'), 
-                'time_v2'    : ('string', '1 2 "%s"', '(elapsed.rjust(7))'), 
-                'time_v3'    : ('hbar', '1 3 "%d"', '((float(player.elapsed) / float(get_lengthsecs(length))) * 80)'), 
-                'clock'      : ('string', '3 4 "%s"', ' time.strftime("%I:%M  %b-%d") '), 
-                'animation_v': ('string', '1 4 "%s"', 
+                'video_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'time_v1'    : ('string', '9 2 "%s"', '(length)'),
+                'time_v2'    : ('string', '1 2 "%s"', '(elapsed.rjust(7))'),
+                'time_v3'    : ('hbar', '1 3 "%d"', '((float(player.elapsed) / float(get_lengthsecs(length))) * 80)'),
+                'clock'      : ('string', '3 4 "%s"', ' time.strftime("%I:%M  %b-%d") '),
+                'animation_v': ('string', '1 4 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'tv'             : {
-                'chan_v'     : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
+                'chan_v'     : ('scroller', '1 1 %d 1 m 3 "%s%s"',
                     '(self.width, get_chan_displayname(tv.channel_id), '+
-                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'), 
-                'prog_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, tv.title, self.get_sepstrmscroll(tv.title))'), 
-                'time_v'     : ('scroller', '1 3 %d 3 m 3 "%s-%s%s"', 
-                    '(self.width, tv.start, tv.stop, self.get_sepstrmscroll(tv.start+"-"+tv.stop))'), 
-                'desc_v'     : ('scroller', '1 4 %d 4 m 3 "%s%s"', 
+                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'),
+                'prog_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"',
+                    '(self.width, tv.title, self.get_sepstrmscroll(tv.title))'),
+                'time_v'     : ('scroller', '1 3 %d 3 m 3 "%s-%s%s"',
+                    '(self.width, tv.start, tv.stop, self.get_sepstrmscroll(tv.start+"-"+tv.stop))'),
+                'desc_v'     : ('scroller', '1 4 %d 4 m 3 "%s%s"',
                     '(self.width, tv.desc, self.get_sepstrmscroll(tv.desc))')
             }
         } # 16 chars per line
@@ -330,121 +330,121 @@ layouts = {
         40 : { # 40 chars per line
             'welcome': {
                 'title'      : ('title', '1 1 Freevo', None)
-            }, 
+            },
             'menu'           : {
-                'title_l'    : ('string', '1 1 "' + rjust(_('Menu'), 4) + ': "', None), 
-                'item_l'     : ('string', '1 2 "' + rjust(_('Item'), 4) + ': "', None), 
-                'title_v'    : ('scroller', '7 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'), 
-                'item_v'     : ('scroller', '7 2 %d 2 m 3 "%s%s"', 
+                'title_l'    : ('string', '1 1 "' + rjust(_('Menu'), 4) + ': "', None),
+                'item_l'     : ('string', '1 2 "' + rjust(_('Item'), 4) + ': "', None),
+                'title_v'    : ('scroller', '7 1 %d 1 m 3 "%s%s"',
+                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'),
+                'item_v'     : ('scroller', '7 2 %d 2 m 3 "%s%s"',
                     '(self.width, title, self.get_sepstrmscroll(title))')
-            }, 
+            },
             'audio_player'   : {
-                'music_l'    : ('string', '1 1 "' + rjust(_('Music'), 5) + ': "', None), 
-                'music_v'    : ('scroller', '8 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'time_v1'    : ('string', '2 2 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'), 
-                'time_v2'    : ('string', '8 2 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'), 
-                'time_v3'    : ('string', '14 2 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'), 
-                'timebar1_v' : ('string', '21 2 "["', None), 
-                'timebar2_v' : ('string', '40 2 "]"', None), 
-                'timebar3_v' : ('hbar', '22 2 "%d"', '(int(player.elapsed * 90 / player.length))'), 
-                'animation_v': ('string', '1 2 "%s"', 
+                'music_l'    : ('string', '1 1 "' + rjust(_('Music'), 5) + ': "', None),
+                'music_v'    : ('scroller', '8 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'time_v1'    : ('string', '2 2 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'),
+                'time_v2'    : ('string', '8 2 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'),
+                'time_v3'    : ('string', '14 2 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'),
+                'timebar1_v' : ('string', '21 2 "["', None),
+                'timebar2_v' : ('string', '40 2 "]"', None),
+                'timebar3_v' : ('hbar', '22 2 "%d"', '(int(player.elapsed * 90 / player.length))'),
+                'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'video_player'   : {
-                'video_l'    : ('string', '2 1 "' + rjust(_('Video'), 5) + ': "', None), 
-                'video_v'    : ('scroller', '9 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'time_v1'    : ('string', '2 2 "%s/"', '(length)'), 
-                'time_v2'    : ('string', '10 2 "%s"', '(elapsed)'), 
-                'time_v3'    : ('string', '18 2 "(%2d%%)"', '(int(percentage * 100))'), 
-                'timebar1_v' : ('string', '26 2 "["', None), 
-                'timebar2_v' : ('string', '40 2 "]"', None), 
-                'timebar3_v' : ('hbar', '27 2 "%d"', '(int(percentage * 70))'), 
-                'animation_v': ('string', '1 2 "%s"', 
+                'video_l'    : ('string', '2 1 "' + rjust(_('Video'), 5) + ': "', None),
+                'video_v'    : ('scroller', '9 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'time_v1'    : ('string', '2 2 "%s/"', '(length)'),
+                'time_v2'    : ('string', '10 2 "%s"', '(elapsed)'),
+                'time_v3'    : ('string', '18 2 "(%2d%%)"', '(int(percentage * 100))'),
+                'timebar1_v' : ('string', '26 2 "["', None),
+                'timebar2_v' : ('string', '40 2 "]"', None),
+                'timebar3_v' : ('hbar', '27 2 "%d"', '(int(percentage * 70))'),
+                'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'tv': {
-                'chan_l'     : ('string', '1 1 "' + rjust(_('Channel'), 4) + ': "', None), 
-                'prog_l'     : ('string', '1 2 "' + rjust(_('Program'), 4) + ': "', None), 
-                'chan_v'     : ('scroller', '7 1 %d 1 m 3 "%s%s"', 
+                'chan_l'     : ('string', '1 1 "' + rjust(_('Channel'), 4) + ': "', None),
+                'prog_l'     : ('string', '1 2 "' + rjust(_('Program'), 4) + ': "', None),
+                'chan_v'     : ('scroller', '7 1 %d 1 m 3 "%s%s"',
                     '(self.width, get_chan_displayname(tv.channel_id), '+
-                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'), 
-                'prog_v'     : ('scroller', '7 2 %d 2 m 3 "%s%s"', 
-                    '(self.width, tv.title, self.get_sepstrmscroll(tv.title))'), 
-                'time_v'     : ('scroller', '%d 1 %d 3 m 3 "[%s-%s%s]"', 
-                    '(self.width - 13, 13, tv.start, tv.stop, self.get_sepstrmscroll(tv.start+"-"+tv.stop))'), 
+                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'),
+                'prog_v'     : ('scroller', '7 2 %d 2 m 3 "%s%s"',
+                    '(self.width, tv.title, self.get_sepstrmscroll(tv.title))'),
+                'time_v'     : ('scroller', '%d 1 %d 3 m 3 "[%s-%s%s]"',
+                    '(self.width - 13, 13, tv.start, tv.stop, self.get_sepstrmscroll(tv.start+"-"+tv.stop))'),
             }
-        }, 
+        },
 
         20 : { # 20 chars per line
             'welcome'        : {
                 'title'      : ('title', '1 1 Freevo', None)
-            }, 
+            },
             'menu'           : {
-                'title_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'), 
-                'item_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"', 
+                'title_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"',
+                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'),
+                'item_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"',
                     '(self.width, title, self.get_sepstrmscroll(title))')
-            }, 
+            },
             'audio_player'   : {
-                'music_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'time_v1'    : ('string', '2 2 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'), 
-                'time_v2'    : ('string', '8 2 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'), 
-                'time_v3'    : ('string', '14 2 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'), 
-                'animation_v': ('string', '1 2 "%s"', 
+                'music_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'time_v1'    : ('string', '2 2 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'),
+                'time_v2'    : ('string', '8 2 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'),
+                'time_v3'    : ('string', '14 2 "(%2d%%)"', '(int(player.elapsed * 100 / player.length))'),
+                'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'video_player'   : {
-                'video_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'time_v1'    : ('string', '3 2 "%s /"', '(length)'), 
-                'time_v2'    : ('string', '12 2 "%s"', '(elapsed)'), 
-                'animation_v': ('string', '1 2 "%s"', 
+                'video_v'    : ('scroller', '1 1 %d 1 m 3 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'time_v1'    : ('string', '3 2 "%s /"', '(length)'),
+                'time_v2'    : ('string', '12 2 "%s"', '(elapsed)'),
+                'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'tv': {
-                'chan_v'     : ('scroller', '1 1 %d 1 m 3 "%s%s"', 
+                'chan_v'     : ('scroller', '1 1 %d 1 m 3 "%s%s"',
                     '(self.width, get_chan_displayname(tv.channel_id), '+
-                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'), 
-                'prog_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"', 
+                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'),
+                'prog_v'     : ('scroller', '1 2 %d 2 m 3 "%s%s"',
                     '(self.width, tv.title, self.get_sepstrmscroll(tv.title))')
             }
-        }, 
+        },
 
         16 : { # 16 chars per line
             'welcome'        : {
                 'title'      : ('title', '1 1 Freevo', None)
-            }, 
+            },
             'menu'           : {
-                'title_v'    : ('scroller', '1 1 %d 1 m 8 "%s%s"', 
-                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'), 
-                'item_v'     : ('scroller', '1 2 %d 2 m 8 "%s%s"', 
+                'title_v'    : ('scroller', '1 1 %d 1 m 8 "%s%s"',
+                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'),
+                'item_v'     : ('scroller', '1 2 %d 2 m 8 "%s%s"',
                     '(self.width, title, self.get_sepstrmscroll(title))')
-            }, 
+            },
             'audio_player'   : {
-                'music_v'    : ('scroller', '1 1 %d 1 m 8 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'time_v1'    : ('string', '2 2 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'), 
-                'time_v2'    : ('string', '8 2 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'), 
-                'animation_v': ('string', '1 2 "%s"', 
+                'music_v'    : ('scroller', '1 1 %d 1 m 8 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'time_v1'    : ('string', '2 2 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'),
+                'time_v2'    : ('string', '8 2 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'),
+                'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'video_player'   : {
-                'video_v'    : ('scroller', '1 1 %d 1 m 8 "%s%s"', 
-                    '(self.width, title, self.get_sepstrmscroll(title))'), 
-                'time_v2'    : ('string', '2 2 "%s"', '(elapsed)'), 
-                'time_v3'    : ('string', '11 2 "(%2d%%)"', '(int(percentage * 100))'), 
-                'animation_v': ('string', '1 2 "%s"', 
+                'video_v'    : ('scroller', '1 1 %d 1 m 8 "%s%s"',
+                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'time_v2'    : ('string', '2 2 "%s"', '(elapsed)'),
+                'time_v3'    : ('string', '11 2 "(%2d%%)"', '(int(percentage * 100))'),
+                'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'tv'             : {
-                'chan_v'     : ('scroller', '1 1 %d 1 m 8 "%s%s"', 
+                'chan_v'     : ('scroller', '1 1 %d 1 m 8 "%s%s"',
                     '(self.width, get_chan_displayname(tv.channel_id), '+
-                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'), 
-                'prog_v'     : ('scroller', '1 2 %d 2 m 8 "%s%s"', 
+                    'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'),
+                'prog_v'     : ('scroller', '1 2 %d 2 m 8 "%s%s"',
                     '(self.width, tv.title, self.get_sepstrmscroll(tv.title))')
             }
         }, # 2 lines, 16 chars per line
@@ -452,27 +452,27 @@ layouts = {
         100 : { # No scroller
             'welcome'        : {
                 'title'      : ('title', '1 1 Freevo', None)
-            }, 
+            },
             'menu'           : {
-                'title_v'    : ('string', '1 1 "%s%s"', '(menu.heading, self.get_sepstrmscroll(menu.heading))'), 
+                'title_v'    : ('string', '1 1 "%s%s"', '(menu.heading, self.get_sepstrmscroll(menu.heading))'),
                 'item_v'     : ('string', '1 2 "%s"', '(title)')
-            }, 
+            },
             'audio_player'   : {
-                'music_v'    : ('string', '1 1 "%s"', '(title)'), 
-                'time_v1'    : ('string', '2 2 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'), 
-                'time_v2'    : ('string', '8 2 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'), 
-                'animation_v': ('string', '1 2 "%s"', 
+                'music_v'    : ('string', '1 1 "%s"', '(title)'),
+                'time_v1'    : ('string', '2 2 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'),
+                'time_v2'    : ('string', '8 2 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'),
+                'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'video_player'   : {
-                'video_v'    : ('string', '1 1 "%s"', '(title)'), 
-                'time_v2'    : ('string', '2 2 "%s"', '(elapsed)'), 
-                'time_v3'    : ('string', '11 2 "(%2d%%)"', '(int(percentage * 100))'), 
-                'animation_v': ('string', '1 2 "%s"', 
+                'video_v'    : ('string', '1 1 "%s"', '(title)'),
+                'time_v2'    : ('string', '2 2 "%s"', '(elapsed)'),
+                'time_v3'    : ('string', '11 2 "(%2d%%)"', '(int(percentage * 100))'),
+                'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
-            }, 
+            },
             'tv'             : {
-                'chan_v'     : ('string', '1 1 "%s"', '(get_chan_displayname(tv.channel_id))'), 
+                'chan_v'     : ('string', '1 1 "%s"', '(get_chan_displayname(tv.channel_id))'),
                 'prog_v'     : ('string', '1 2 "%s"', '(tv.title)')
             }
         }, # No scroller
@@ -486,15 +486,15 @@ layouts = {
 #     <#_OF_LINES_IN_DISPLAY> : {
 #         <#_OF_COLUMNS_IN_DISPLAY> : {
 #             <SCREEN_NAME> : (<WIDGET_NAME>, ...)
-#         }, 
-#         ..., 
+#         },
+#         ...,
 #     }
 # }
 poll_widgets = {
     4 : {
-        40 : { 'welcome' : ['clock'] }, 
-        20 : { 'welcome' : ['clock'] }, 
-    }, 
+        40 : { 'welcome' : ['clock'] },
+        20 : { 'welcome' : ['clock'] },
+    },
 }
 
 
@@ -532,7 +532,7 @@ class PluginInterface(plugin.DaemonPlugin):
        - lcdproc: installed and LCDd running. U{http://lcdproc.sourceforge.net/}
        - pylcd: installed U{http://www.schwarzvogel.de/software-pylcd.shtml}
 
-    Also, your LCD dimensions must be supported. Right now it support: 4x20, 
+    Also, your LCD dimensions must be supported. Right now it support: 4x20,
     4x40, 2x16, 2x20, 2x40. If you have one with different dimension, it will
     try to fit a smaller one, if none was find, then it will be disabled.
 
@@ -701,7 +701,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 length = player.getattr('length')
                 elapsed = player.elapsed
                 if elapsed / 3600:
-                    elapsed ='%d:%02d:%02d' % (elapsed / 3600, (elapsed % 3600) / 60, 
+                    elapsed ='%d:%02d:%02d' % (elapsed / 3600, (elapsed % 3600) / 60,
                                                 elapsed % 60)
                 else:
                     elapsed = '%d:%02d' % (elapsed / 60, elapsed % 60)

@@ -49,11 +49,11 @@ class LcdFrame(object):
         self.text = ''
         self.prio = 0
         self.timer = 0
-        
+
         lcd.widget_add('s','f_'+name,'frame')
         lcd.widget_set('s','f_'+name,'%d %d %d %d %d 1 h 0' % (start, col, end, col, self.width))
         lcd.widget_add('s','w_'+name,'string -in f_'+name)
-        
+
     def draw(self, text, prio=0, timer=0):
         if (prio >= self.prio) or (self.timer == 0):
             self.prio = prio
@@ -95,11 +95,11 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         plugin.DaemonPlugin.__init__(self)
 
-        self.poll_interval = 20		# timer resolution is 200ms
-        self.poll_menu_only = 0		# lcd even if player is on
-        self.event_listener = 1		# listening to events
+        self.poll_interval = 20         # timer resolution is 200ms
+        self.poll_menu_only = 0         # lcd even if player is on
+        self.event_listener = 1         # listening to events
 
-        self.menu_pos = (0, 1)		# to detect menu position changes
+        self.menu_pos = (0, 1)          # to detect menu position changes
 
         # use pylcd to connect to LCDd
         try:
@@ -152,7 +152,7 @@ class PluginInterface(plugin.DaemonPlugin):
             for lcd_menu_add in self.lcd_menu_add:
                 lcd_menu_add.draw('')
             self.menu_pos = (0, 0)
-    
+
 
     def draw(self, (type, object), osd):
         """
@@ -215,15 +215,15 @@ class PluginInterface(plugin.DaemonPlugin):
 
             # update additional menu lines
             for lcd_menu_add in self.lcd_menu_add:
-                try:	line = object.menustack[-1].choices[index].name
-                except:	line = ''
+                try:    line = object.menustack[-1].choices[index].name
+                except: line = ''
                 lcd_menu_add.draw(line)
                 index += 1
-    
+
         elif type == 'player':
             # clear menu lines before playing
             self.menu_clear()
-            
+
             player = object
             if player.type == 'audio':
                 # prepare player infos
@@ -245,7 +245,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 else:
                     # audio streams like Radio
                     if time > 0: self.lcd_title.draw(title)
-                    else:	 self.lcd_title.draw('...')
+                    else:        self.lcd_title.draw('...')
 
 #            elif player.type == 'video':
                 # not yet!
@@ -292,7 +292,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lcd_info.draw('TIME%2ss' % event.arg, 5, 12)
         elif event == 'IMAGE_PAUSE_INFO':
             self.lcd_info.draw('PAUSE', 5, 12)
-        
+
         # show LIRC status in the info area (lirc button that changes the meaning of the iMON button)
         elif event.arg == 'LIRC_MODE_VOLUME':
             self.lcd_info.draw('VOLUME', 5, 12)
@@ -300,6 +300,5 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lcd_info.draw('MENU', 5, 12)
         elif event.arg == 'LIRC_MODE_PLAYER':
             self.lcd_info.draw('PLAYER', 5, 12)
-        
+
         return 0
-        
