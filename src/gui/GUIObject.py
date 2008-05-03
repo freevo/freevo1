@@ -63,9 +63,8 @@ class GUIObject:
     def __init__(self, left=0, top=0, width=0, height=0, bg_color=None, fg_color=None):
         try:
             self.rect = Rect(left, top, width, height)
-            print 'DJW:GUI:rect=%r' % (self.rect,)
         except TypeError:
-            print 'DJW:left=%r, top=%r, width=%r, height=%r' % (left, top, width, height)
+            _debug_('Invalid Rect: left=%r, top=%r, width=%r, height=%r' % (left, top, width, height))
 
         self.osd  = osd.get_singleton()
 
