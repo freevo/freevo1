@@ -817,7 +817,7 @@ class RecordServer:
         max_results = 500
 
         if find:
-            find = Unicode(find)
+            find = Unicode(find).replace('(','\(').replace(')','\)').replace('.','\.')
         elif not movies_only:
             _debug_('nothing to find', DINFO)
             return (False, _('nothing to find'))
