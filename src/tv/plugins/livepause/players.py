@@ -106,17 +106,62 @@ class Player(object):
     def get_subtitles(self):
         """
         Return the available subtitles.
+        @return: An array of subtitle options or None if not supported.
         """
         return None
 
     def set_subtitles(self, index):
         """
         Set displayed subtitles.
-        -1 Disables
-        Any other index selects a subtitle language.
+        @param index: The index of the subtitle options to select, based on
+        the array returned by get_subtitles() or -1 to disable subtitles.
         """
         pass
 
+    def get_audio_modes(self):
+        """
+        Return the available audio modes.
+        @return: An array of audio modes or None if not supported.
+        """
+        return None
+
+    def set_audio_mode(self, index):
+        """
+        Set the audio mode.
+        @param index: The index of the audio mode to select based on the array
+        returned by get_audio_modes.
+        """
+        pass
+
+    def get_audio_langs(self):
+        """
+        Return the available audio languages.
+        @return: An array of available audio languages or None if not supported.
+        """
+        return None
+
+    def set_audio_lang(self, index):
+        """
+        Set the audio language to play.
+        @param index: The index of the audio language to select based on the array
+        returned by get_audio_langs.
+        """
+        pass
+
+    def get_video_fill_modes(self):
+        """
+        Returns a list of video fill modes.
+        @return: An array of available video fill mode options or None if not supported.
+        """
+        return None
+
+    def set_video_fill_mode(self, index):
+        """
+        Set the video fill mode.
+        @param index: The index of the video fill mode to select based on the array
+        returned by get_video_fill_modes.
+        """
+        pass
 
     def pause(self):
         """
@@ -142,14 +187,14 @@ class Player(object):
         """
         pass
 
-    def show_graphics(self, surface, x, y):
+    def show_graphics(self, surface, position):
         """
         Show the graphics on the specified surface using the players graphics
         OSD.
         NOTE: Only supported if supports_graphics is True.
 
-        surface - pygame.Surface to display.
-        x,y - Position on screen to display the graphics.
+        surface - pygame.Surface to display
+        position - (x,y) position to display the image.
         """
         pass
 
@@ -407,6 +452,8 @@ class Vlc(Player):
         self.command = command
         self.current_sub_index = -1
         self.sub_pids = []
+        self.current_audio_index = -1
+        self.audio_pids = []
 
 
     def start(self, port):
@@ -440,6 +487,9 @@ class Vlc(Player):
         if self.current_sub_index > 0:
             self.set_subtitles(self.current_sub_index)
 
+        if self.current_audio_index > 0:
+            self.set_audio_lang(self.current_audio_index)
+
 
     def get_subtitles(self):
         """
@@ -471,7 +521,67 @@ class Vlc(Player):
         self.app.send_command('strack %s' % sub_pid)
         self.current_sub_index = index
 
+    def get_audio_modes(self):
+        """
+        Return the available audio modes.
+        @return: An array of audio modes or None if not supported.
+        """
+        return None
 
+    def set_audio_mode(self, index):
+        """
+        Set the audio mode.
+        @param index: The index of the audio mode to select based on the array
+        returned by get_audio_mode.
+        """
+        pass
+
+    def get_audio_langs(self):
+        """
+        Return the available audio languages.
+        @return: An array of available audio languages or None if not supported.
+        """
+        audio_tracks = []
+
+        if self.app:
+            self.app.send_command_wait_for_output('atrack')
+            self.audio_pids = []
+            for pid, lang in self.app.audio_tracks:
+                audio_tracks.append(lang)
+                self.audio_pids.append(pid)
+        return audio_tracks
+
+    def set_audio_lang(self, index):
+        """
+        Set the audio language to play.
+        @param index: The index of the audio language to select based on the array
+        returned by get_audio_lang.
+        """
+        if not self.app:
+            return
+
+        if index >= 0 and index <= len(self.audio_pids):
+            audio_pid = self.audio_pids[index]
+        else:
+            audio_pid = index
+        _debug_('Setting audio track %d (pid %s)' % (index, audio_pid))
+        self.app.send_command('atrack %s' % audio_pid)
+        self.current_audio_index = index
+
+    def get_video_fill_modes(self):
+        """
+        Returns a list of video fill modes.
+        @return: An array of available video fill mode options or None if not supported.
+        """
+        return None
+
+    def set_video_fill_mode(self, index):
+        """
+        Set the video fill mode.
+        @param index: The index of the video fill mode to select based on the array
+        returned by get_video_fill_modes.
+        """
+        pass
 
     def pause(self):
         """

@@ -53,7 +53,7 @@ from tv.plugins.livepause.chunk_buffer import ChunkBuffer
 from tv.plugins.livepause import display
 from tv.plugins.livepause import players
 from tv.plugins.livepause import controllers
-
+from tv.plugins.livepause.display.dialogs import xml
 WAIT_FOR_DATA_COUNT   = 3
 WAIT_FOR_DATA_TIMEOUT = 20 # Seconds
 
@@ -145,6 +145,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         self.livepause = LivePauseController(path, size, players.get_player())
         plugin.register(self.livepause, plugin.TV, False)
+        xml.load('share/skins/osd/base.fxd')
 
 
     def shutdown(self):
@@ -174,7 +175,8 @@ class PluginInterface(plugin.DaemonPlugin):
                 ('LIVE_PAUSE2_BUFFER_SIZE', 2048, 'Maximum size of the pause buffer in MB. (Default 2GB)'),
                 ('LIVE_PAUSE2_BUFFER_TIMEOUT', 5*60, 'Timeout to disable buffering after exiting watching tv'),
                 ('LIVE_PAUSE2_INSTANT_RECORD_LENGTH', 2*60*60, 'Length of time to record, in seconds, if no program data is available. (Default: 2Hours)'),
-                ('LIVE_PAUSE2_PREFERRED_PLAYER', None, 'Preferred player to use (one of vlc,xine,mplayer) or None to select the best one available.')
+                ('LIVE_PAUSE2_PREFERRED_PLAYER', None, 'Preferred player to use (one of vlc,xine,mplayer) or None to select the best one available.'),
+                ('LIVE_PAUSE2_OSD_SKIN', 'base', 'Name of the OSD skin to use for graphics OSDs.')
                 ]
 
 ###############################################################################
@@ -215,6 +217,9 @@ class LivePauseController:
         self.subtitles = None
         self.subtitle_index = -1
 
+        self.audio_langs = None
+        self.audio_lang_index = -1
+
         # Setup Event Maps
         self.event_maps = {}
         self.event_maps[State.IDLE] = {}
@@ -236,34 +241,38 @@ class LivePauseController:
             }
 
         self.event_maps[State.PLAYING] = {
-            'PLAY'              : self.__playing_play_pause,
-            'PAUSE'             : self.__playing_play_pause,
-            'PLAY_END'          : self.__handle_stop,
-            'USER_END'          : self.__handle_stop,
-            'STOP'              : self.__handle_stop,
-            'TV_CHANNEL_UP'     : self.__playing_tv_channel_up,
-            'TV_CHANNEL_DOWN'   : self.__playing_tv_channel_down,
-            'TV_CHANNEL_NUMBER' : self.__playing_tv_channel_number,
-            'TV_START_RECORDING': self.__playing_tv_record,
-            'RECORD_START'      : self.__playing_tv_record_start,
-            'RECORD_STOP'       : self.__playing_tv_record_stop,
-            'BUTTON'            : self.__playing_button_pressed,
-            'OSD_MESSAGE'       : self.__playing_osd_message,
-            'TOGGLE_OSD'        : self.__playing_display_info,
-            'SEEK'              : self.__playing_seek,
-            'READER_OVERTAKEN'  : self.__playing_reader_overtaken,
-            'DATA_ACQUIRED'     : None,
-            'DATA_TIMEDOUT'     : None,
-            'INPUT_1'           : self.__playing_handle_number,
-            'INPUT_2'           : self.__playing_handle_number,
-            'INPUT_3'           : self.__playing_handle_number,
-            'INPUT_4'           : self.__playing_handle_number,
-            'INPUT_5'           : self.__playing_handle_number,
-            'INPUT_6'           : self.__playing_handle_number,
-            'INPUT_7'           : self.__playing_handle_number,
-            'INPUT_8'           : self.__playing_handle_number,
-            'INPUT_9'           : self.__playing_handle_number,
-            'INPUT_0'           : self.__playing_handle_number,
+            'PLAY'                : self.__playing_play_pause,
+            'PAUSE'               : self.__playing_play_pause,
+            'PLAY_END'            : self.__handle_stop,
+            'USER_END'            : self.__handle_stop,
+            'STOP'                : self.__handle_stop,
+            'TV_CHANNEL_UP'       : self.__playing_tv_channel_up,
+            'TV_CHANNEL_DOWN'     : self.__playing_tv_channel_down,
+            'TV_CHANNEL_NUMBER'   : self.__playing_tv_channel_number,
+            'TV_START_RECORDING'  : self.__playing_tv_record,
+            'RECORD_START'        : self.__playing_tv_record_start,
+            'RECORD_STOP'         : self.__playing_tv_record_stop,
+            'BUTTON'              : self.__playing_button_pressed,
+            'OSD_MESSAGE'         : self.__playing_osd_message,
+            'TOGGLE_OSD'          : self.__playing_display_info,
+            'SEEK'                : self.__playing_seek,
+            'READER_OVERTAKEN'    : self.__playing_reader_overtaken,
+            'DATA_ACQUIRED'       : None,
+            'DATA_TIMEDOUT'       : None,
+            'INPUT_1'             : self.__playing_handle_number,
+            'INPUT_2'             : self.__playing_handle_number,
+            'INPUT_3'             : self.__playing_handle_number,
+            'INPUT_4'             : self.__playing_handle_number,
+            'INPUT_5'             : self.__playing_handle_number,
+            'INPUT_6'             : self.__playing_handle_number,
+            'INPUT_7'             : self.__playing_handle_number,
+            'INPUT_8'             : self.__playing_handle_number,
+            'INPUT_9'             : self.__playing_handle_number,
+            'INPUT_0'             : self.__playing_handle_number,
+            'VIDEO_NEXT_FILLMODE' : None,
+            'VIDEO_NEXT_AUDIOMODE': None,
+            'VIDEO_NEXT_AUDIOLANG': None, #self.__playing_toggle_audo_lang,
+            'VIDEO_NEXT_SUBTITLE' : self.__playing_toggle_subtitles,
             }
 
         self.current_event_map = self.event_maps[self.state]
@@ -341,9 +350,7 @@ class LivePauseController:
         if self.slave_server:
             self.slave_server.stop()
             self.slave_server = None
-        
-        if self.osd:
-            self.osd.shutdown()
+
 
     def change_channel(self, channel):
         """
@@ -403,6 +410,7 @@ class LivePauseController:
         return event_consumed
 
     def __handle_stop(self, event, menuw):
+        self.osd.hide_dialog()
         if self.changing_channel:
             self.changing_channel = False
         else:
@@ -490,26 +498,7 @@ class LivePauseController:
         consumed = False
 
         if event.arg == 'SUBTITLE':
-            # Enable/Disable subtitles
-            if self.subtitles:
-                self.subtitle_index += 1
-
-            else:
-                self.subtitles = self.player.get_subtitles()
-                self.subtitle_index = 0
-
-            if self.subtitles:
-                if self.subtitle_index >= len(self.subtitles):
-                    self.subtitle_index = -1
-
-                self.player.set_subtitles(self.subtitle_index)
-                if self.subtitle_index == -1:
-                    subtitle_text = _('Disabled')
-                else:
-                    subtitle_text = self.subtitles[self.subtitle_index]
-                self.osd.display_message(_('Subtitles: %s') % subtitle_text)
-            else:
-                self.osd.display_message(_('Subtitles not supported'))
+            self.__playing_toggle_subtitles(event, menuw)
             consumed = True
 
         elif event.arg == 'ENTER' and self.channel_number:
@@ -518,6 +507,53 @@ class LivePauseController:
             consumed = True
 
         return consumed
+
+    def __playing_toggle_subtitles(self, event, menuw):
+        # Enable/Disable subtitles
+        if self.subtitles:
+            self.subtitle_index += 1
+
+        else:
+            self.subtitles = self.player.get_subtitles()
+            self.subtitle_index = 0
+
+        if self.subtitles:
+            if self.subtitle_index >= len(self.subtitles):
+                self.subtitle_index = -1
+
+            self.player.set_subtitles(self.subtitle_index)
+            if self.subtitle_index == -1:
+                subtitle_text = _('Disabled')
+            else:
+                subtitle_text = self.subtitles[self.subtitle_index]
+            self.osd.display_message(_('Subtitles: %s') % subtitle_text)
+        else:
+            self.osd.display_message(_('Subtitles not supported'))
+
+        return True
+
+    def __playing_toggle_audio_lang(self, event, menuw):
+        if self.audio_langs:
+            self.audio_lang_index += 1
+
+        else:
+            self.audio_langs = self.player.get_audio_langs()
+            self.audio_lang_index = 0
+
+        if self.audio_langs:
+            if self.audio_lang_index >= len(self.audio_langs):
+                self.audio_lang_index = -1
+
+            self.player.set_audio_lang(self.audio_lang_index)
+            if self.audio_lang_index == -1:
+                audio_lang_text = _('Default')
+            else:
+                audio_lang_text = self.subtitles[self.subtitle_index]
+            self.osd.display_message(_('Audio language: %s') % audio_lang_text)
+        else:
+            self.osd.display_message(_('Audio language selection not supported'))
+
+        return True
 
     def __playing_osd_message(self, event, menuw):
         # Filter out the volume messages so the osd can do something nice with the level
@@ -534,6 +570,10 @@ class LivePauseController:
         return True
 
     def __playing_display_info(self, event, menuw):
+        self.osd.display_info(self.__get_display_info)
+        return True
+
+    def __get_display_info(self):
         info_dict = {}
         info_dict['channel'] = self.__get_display_channel()
         info_dict['current_time'] = self.reader.get_current_chunk_time()
@@ -548,10 +588,11 @@ class LivePauseController:
         info_dict['percent_through_buffer'] = float(cb) / float(ct)
         chunk_reader.close()
 
+        info_dict['percent_buffer_full'] = len(self.buffer.buffer)/ self.buffer.buffer.size
+
         del chunk_reader
 
-        self.osd.display_info(info_dict)
-        return True
+        return info_dict
 
     def __playing_seek(self, event, menuw):
         steps = int(event.arg)
@@ -678,7 +719,7 @@ class LivePauseController:
 ###############################################################################
 class SlaveServer:
     """
-    Class to serve data from the ring buffer over HTTP (very simple no paths, 
+    Class to serve data from the ring buffer over HTTP (very simple no paths,
     only 1 connection).
     """
 
@@ -748,11 +789,11 @@ class SlaveServer:
         """
         self.connection = connection
         reader = self.reader
-        
+
         connection.send('HTTP/1.0 200 OK\n')
         connection.send('Content-type: application/octet-stream\n')
         connection.send('Cache-Control: no-cache\n\n')
-        
+
         if self.start_at_end:
             reader.seek( reader.available_forward())
             reader.seek_seconds(- WAIT_FOR_DATA_COUNT)

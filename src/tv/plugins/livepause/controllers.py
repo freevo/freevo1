@@ -225,5 +225,3 @@ class HDHomeRunController(Controller):
         """
         if self.receiver:
             self.receiver.send_events = enable
-
-

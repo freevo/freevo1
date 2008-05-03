@@ -130,7 +130,7 @@ class Recorder(object):
         for tv_channel_id, tv_display_name, tv_tuner_id in config.TV_CHANNELS:
             if tv_tuner_id == channel_id:
                 channel_id = tv_channel_id
-                
+
         channels = epg_xmltv.get_guide().GetPrograms(start=current_time,
                                                      stop=current_time,
                                                      chanids=[channel_id])

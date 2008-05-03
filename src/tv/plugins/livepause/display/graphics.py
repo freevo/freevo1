@@ -30,7 +30,9 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # ----------------------------------------------------------------------- */
-import threading
+import config
+
+import kaa
 
 from tv.plugins.livepause.display.base import OSD
 from tv.plugins.livepause.display import dialogs
@@ -38,105 +40,59 @@ from tv.plugins.livepause.display import dialogs
 class GraphicsOSD(OSD):
     def __init__(self, player):
         OSD.__init__(self, player)
-        self.thread = threading.Thread(target=self.run)
-        self.thread.setDaemon(True)
-        self.thread.start()
-        self.new_dialog_event = threading.Event()
-        self.new_dialog_mutex = threading.Lock()
-        self.new_dialog = None
+        self.current_dialog = None
+        self.hide_dialog_timer = kaa.OneShotTimer(self.hide_dialog)
 
+    def handle_event(self, event):
+        if self.current_dialog:
+            return self.current_dialog.handle_event(event)
+        return False
 
     def display_volume(self, level):
-        # TODO: Implement
-        self.__send_dialog('volume', {'volume':level}, 3.0)
+        dialog = dialogs.VolumeDialog(level)
+        dialog.set_display(self)
+        dialog.show()
 
     def display_message(self, message):
-        # TODO: Implement
-        self.__send_dialog('message', {'text':message}, 3.0)
+        dialog = dialogs.MessageDialog(message)
+        dialog.set_display(self)
+        dialog.show()
 
     def display_info(self, info_function):
-        # TODO: Implement
-        pass
+        dialog = dialogs.InfoDialog(info_function)
+        dialog.set_display(self)
+        dialog.show()
 
-    def hide(self):
-        self.__send_dialog(None, None, 0.0)
+    def hide_dialog(self):
+        if self.current_dialog:
+            self.hide_dialog_timer.stop()
+            self.current_dialog.finish()
+            self.current_dialog = None
+            self.hide_image()
 
-    def __send_dialog(self, name, info, time):
-        self.new_dialog_mutex.acquire()
-        self.new_dialog = (name, info, time)
-        self.new_dialog_event.set()
-        self.new_dialog_mutex.release()
+    #===============================================================================
+    # Helper methods
+    #===============================================================================
 
-    def run(self):
-        current_dialog_name = None
-        current_dialog_info = None
-        current_dialog_time = 0.0
-        current_dialog_definition = None
+    def show_dialog(self, dialog, duration):
+        #Stop any pending hide timers
+        self.hide_dialog_timer.stop()
 
-        wait_time = None
-        while True:
-            self.new_dialog_event.wait(wait_time)
-            if self.new_dialog_event.isSet():
-                self.new_dialog_mutex.acquire()
+        if self.current_dialog and self.current_dialog != dialog:
+            self.hide_dialog()
 
-                # Close any current dialog if not the same as the one to be displayed.
-                if current_dialog_name and current_dialog_name != self.new_dialog[0]:
-                    self.hide_surface()
-                    current_dialog_definition.finish()
+        if not self.current_dialog:
+            self.current_dialog = dialog
+            dialog.prepare()
 
-                if current_dialog_name != self.new_dialog[0]:
-                    current_dialog_name = self.new_dialog[0]
-                    current_dialog_definition = dialogs.get_definition(current_dialog_name)
-                    current_dialog_definition.prepare()
+        self.show_image(dialog.render(), dialog.skin.position)
+        self.hide_dialog_timer.start(duration)
 
-                current_dialog_info = self.new_dialog[1]
-                wait_time = self.new_dialog[2]
+    #===============================================================================
+    #  Methods that should be overriden by subclasses
+    #===============================================================================
+    def show_image(self, image, position):
+        self.player.show_graphics(image, position)
 
-                if callable(current_dialog_info):
-                    info = current_dialog_info()
-                else:
-                    info = current_dialog_info
-
-                self.__render_dialog(current_dialog_definition, info)
-
-                self.new_dialog = None
-                self.new_dialog_event.clear()
-                self.new_dialog_mutex.release()
-
-            else:
-                self.hide_surface()
-                current_dialog_name = None
-                current_dialog_definition.finish()
-                current_dialog_definition = None
-                wait_time = None
-
-    def __render_dialog(self, dialog_def, info):
-        surface = dialog_def.render(info)
-        location = dialog_def.location
-
-        os_l = config.OSD_OVERSCAN_LEFT
-        os_r = config.OSD_OVERSCAN_RIGHT
-        os_t = config.OSD_OVERSCAN_TOP
-        os_b = config.OSD_OVERSCAN_BOTTOM
-
-        if location and 1:
-            x = os_l
-        elif location and 2:
-            x = config.CONF.width - (w + os_r)
-        else:
-            x = ((config.CONF.width - (w + os_l + os_r)) / 2) + os_l
-
-        if location and 4:
-            y = os_t
-        elif location and 8:
-            y = config.CONF.height - (h + os_b)
-        else:
-            y = ((config.CONF.height - (h + os_t + os_b)) / 2) + os_t
-
-        self.show_surface(surface, x, y)
-
-    def show_surface(self, surface, x, y):
-        self.player.show_graphics(surface, x, y)
-
-    def hide_surface(self):
+    def hide_image(self):
         self.player.hide_graphics()

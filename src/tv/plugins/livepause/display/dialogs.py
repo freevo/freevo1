@@ -162,4 +162,3 @@ class PercentOSDObject(ImageOSDObject):
         osd.get_singleton().drawsurface(self.image_surface,x=im_x, y=im_y,
                                         bbx=x, bby=y, bbw=w, bbh=h,
                                         layer=surface)
-

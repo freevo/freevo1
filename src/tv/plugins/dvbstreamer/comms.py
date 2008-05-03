@@ -49,6 +49,14 @@ class Controller:
         self.connection = None
         self.my_ip = None
 
+    def close(self):
+        """
+        Close the connection to the DVBStreamer daemon.
+        """
+        if self.connection:
+            self.connection.close()
+            self.connection = None
+
     def execute_command(self, command, authenticate=False):
         """
         Send a command to the dvbstreamer instance to execute,
@@ -266,6 +274,7 @@ class ControlConnection:
         Close the connection to the DVBStreamer daemon.
         """
         if self.opened:
+            self.send_command('logout')
             self.socket_file.close()
             self.socket.close()
             self.opened = False

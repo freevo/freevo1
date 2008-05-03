@@ -50,15 +50,10 @@ if config.CONF.display == 'x11':
                 self.window.signals['expose_event'].connect(self.__redraw)
                 self.image = None
 
-            def shutdown(self):
-                pass
-
-            def show_surface(self, surface, x, y):
-                format = 'RGBA'
-                surface_data = pygame.image.tostring(surface, format)
-                self.image = imlib2.new(surface.get_size(), surface_data, format)
-                self.window.set_geometry((x,y), surface.get_size())
-                self.window.set_shape_mask_from_imlib2_image(self.image)
+            def show_image(self, image, position):
+                self.image = image
+                self.window.set_geometry( position, image.size)
+                self.window.set_shape_mask_from_imlib2_image(self.image, (0, 0))
 
                 if self.window.get_visible():
                     self.window.raise_window()
@@ -67,11 +62,11 @@ if config.CONF.display == 'x11':
                     self.window.show()
 
 
-            def hide_surface(self):
+            def hide_image(self):
                 self.window.hide()
                 self.image = None
 
-            def __redraw(self):
+            def __redraw(self, regions):
                 if self.image:
                     self.window.render_imlib2_image(self.image)
 

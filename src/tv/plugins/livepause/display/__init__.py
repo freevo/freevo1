@@ -39,22 +39,19 @@ import pygame.image
 
 from tv.plugins.livepause.display.base import OSD
 from tv.plugins.livepause.display.text import TextOSD
-# TODO: Implement graphics OSD
-#from tv.plugins.livepause.display.graphics import GraphicsOSD
-#from tv.plugins.livepause.display import x11graphics
+from tv.plugins.livepause.display.graphics import GraphicsOSD
+from tv.plugins.livepause.display import x11graphics
 
 def get_osd(player):
     """
     Get the best supported OSD available.
     @return: An OSD object
     """
-    #if player.supports_graphics:
-    #    return GraphicsOSD(player)
-    #elif x11graphics.available:
-    #    return x11graphics.X11GraphicsOSD(player)
+    if player.supports_graphics:
+        return GraphicsOSD(player)
+    elif x11graphics.available:
+        return x11graphics.X11GraphicsOSD(player)
     if player.supports_text:
         return TextOSD(player)
     else:
         return OSD(player) # Dummy OSD does nothing
-
-

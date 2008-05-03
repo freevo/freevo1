@@ -49,7 +49,9 @@ class TextOSD(OSD):
     def display_message(self, message):
         self.player.display_message(message)
 
-    def display_info(self, info_dict):
+    def display_info(self, info_function):
+        info_dict = info_function()
+
         info_message = '%s ' % info_dict['channel']
         info_message += time.strftime('%H:%M', time.localtime(info_dict['start_time']))
         info_message += '<-'
@@ -57,4 +59,3 @@ class TextOSD(OSD):
         info_message += '->'
         info_message += time.strftime('%H:%M', time.localtime(info_dict['end_time']))
         self.player.display_message(info_message)
-

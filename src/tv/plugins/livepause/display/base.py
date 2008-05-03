@@ -39,15 +39,11 @@ class OSD(object):
     def handle_event(self, event):
         return False
 
-    
-    def shutdown(self):
-        pass
-    
-    
+
     def hide(self):
         pass
-    
-    
+
+
     def display_volume(self, level):
         pass
 

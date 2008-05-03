@@ -1,0 +1,67 @@
+<!ENTITY % align "(left | center | right | justified)">
+<!ENTITY % valign "(top | center | bottom)">
+
+<!ELEMENT freevo (osds)>
+
+<!ELEMENT osds ( font*, color*, osd*)>
+<!ATTLIST osds geometry CDATA #REQUIRED>
+<!ATTLIST osds include CDATA #IMPLIED>
+
+<!ELEMENT osd ((text|image|percent)*)>
+<!ATTLIST osd
+	name ID #REQUIRED
+	width CDATA #REQUIRED
+	height CDATA #REQUIRED
+	location (center|top|bottom|left|right|topright|topleft|bottomright|bottomleft) #REQUIRED
+>
+
+
+
+<!ELEMENT font EMPTY>
+<!ATTLIST font
+    label CDATA #REQUIRED
+    name CDATA #IMPLIED
+    size CDATA #IMPLIED
+    color CDATA #IMPLIED
+>
+
+<!ELEMENT color EMPTY>
+<!ATTLIST color
+    label CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!ELEMENT text EMPTY>
+<!ATTLIST text
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+	font CDATA #REQUIRED
+	align %align; "left"
+	valign %valign; "top"
+	fgcolor CDATA #IMPLIED
+	bgcolor CDATA #IMPLIED
+	expression CDATA #REQUIRED
+>
+
+<!ELEMENT image EMPTY>
+<!ATTLIST image
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    src CDATA #REQUIRED
+	expression CDATA #REQUIRED
+>
+
+<!ELEMENT percent EMPTY>
+<!ATTLIST percent
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+	vertical CDATA #IMPLIED
+    src CDATA #REQUIRED
+	expression CDATA #REQUIRED
+>
