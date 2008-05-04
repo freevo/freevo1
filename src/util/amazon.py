@@ -386,5 +386,11 @@ def searchByPower(keyword, product_line='Books', type='Large', page=1, license_k
 
 
 if __name__ == '__main__':
-    covers = searchByKeyword('The Who', product_line='Music', type='Images')
-    print covers
+    #covers = searchByKeyword('The Who', product_line='Music', type='Images')
+    covers = searchByKeyword('The Who', product_line='Music', type='Medium')
+    print covers.__dict__
+    if hasattr(covers, 'Item'):
+        for item in covers.Item:
+            print item.__dict__
+            if hasattr(item, 'LargeImage'):
+                print item.LargeImage.__dict__

@@ -82,10 +82,10 @@ class PluginInterface(plugin.ItemPlugin):
     To activate this plugin, put the following in your local_conf.py.
 
     If you have the key in ~/.amazonkey
-    | plugin.activate( 'audio.coversearch' )
+    | plugin.activate('audio.coversearch')
 
     Or this one if you want to pass the key to the plugin directly:
-    | plugin.activate( 'audio.coversearch', args=('YOUR_KEY',) )
+    | plugin.activate('audio.coversearch', args=('YOUR_KEY',))
     """
 
     def __init__(self, license=None):
@@ -98,8 +98,8 @@ class PluginInterface(plugin.ItemPlugin):
         try:
             amazon.getLicense()
         except amazon.NoLicenseKey:
-            print String(_( 'To search for covers you need an Amazon.com Web Services\n' \
-                     'license key. You can get yours from:\n' ))
+            print String(_('To search for covers you need an Amazon.com Web Services\n' \
+                     'license key. You can get yours from:\n'))
             print 'https://associates.amazon.com/exec/panama/associates/join/'\
                   'developer/application.html'
             self.reason = 'no amazon key'
@@ -152,22 +152,24 @@ class PluginInterface(plugin.ItemPlugin):
             try:
                 if not hasattr(item, 'artist'):
                     if item.type in ('audio', 'dir') and not hasattr(item, 'album'):
+                        # This is very iffy code
                         split_name = item.name.split(' - ')
-                        if len(split_name) == 2:
-                            item.artist, item.album = item.name.split(' - ')
-                        else:
-                            import util, kaa.metadata
-                            files = util.match_files_recursively(item.dir, ['mp3', 'ogg', 'flac'])
-                            for file in files:
-                                metadata = kaa.metadata.parse(file)
-                                item.artist = metadata.artist
-                                item.album = metadata.album
-                                item.title = metadata.title
-                                if item.artist and item.album:
-                                    _debug_('%r - %r' % (item.artist, item.album))
-                                    break
-                            else:
-                                _debug_('No files in %r' % (item.dir,), DINFO)
+                        if len(split_name) < 2:
+                            split_name.append('')
+                        item.artist, item.album = split_name
+                        #else:
+                        #    import util, kaa.metadata
+                        #    files = util.match_files_recursively(item.dir, ['mp3', 'ogg', 'flac'])
+                        #    for file in files:
+                        #        metadata = kaa.metadata.parse(file)
+                        #        item.artist = metadata.artist
+                        #        item.album = metadata.album
+                        #        item.title = metadata.title
+                        #        if item.artist and item.album:
+                        #            _debug_('%r - %r' % (item.artist, item.album))
+                        #            break
+                        #    else:
+                        #        _debug_('No files in %r' % (item.dir,), DINFO)
                     if item.type in ('audiocd',) and not hasattr(item, 'title'):
                         item.title = item.name
             except Exception, why:
@@ -176,38 +178,36 @@ class PluginInterface(plugin.ItemPlugin):
 
             try:
                 # use title for audio cds and album for normal data
-                if self.item.getattr('artist') and \
-                   ((self.item.getattr('album') and item.type in ('audio', 'dir')) or \
-                    (self.item.getattr('title') and item.type == 'audiocd')):
+                if self.item.getattr('artist') and (
+                    (item.type in ('audio', 'dir')) or #and self.item.getattr('album') or
+                    (item.type in ('audiocd',) and self.item.getattr('title'))):
                     return [ (self.cover_search_file, _('Find a cover for this music'),
                                'imdb_search_or_cover_search') ]
                 else:
-                    if config.DEBUG > 1:
-                        print String(_( "Plugin 'coversearch' was disabled for this item! " \
-                                 "'coversearch' needs an item with " \
-                                 "Artist and Album (if it's a mp3 or ogg) or " \
-                                 "Title (if it's a cd track) to be able to search. "  \
-                                 "So you need a file with a ID3 tag (mp3) or an Ogg Info. "  \
-                                 "Maybe you must fix this file (%s) tag?" )) % item.filename
+                    _debug_(_("'coversearch' was disabled for this item! " \
+                        "'coversearch' needs an item with " \
+                        "Artist and Album (if it's a mp3 or ogg) or " \
+                        "Title (if it's a cd track) to be able to search. "  \
+                        "So you need a file with a ID3 tag (mp3) or an Ogg Info. "  \
+                        "Maybe you must fix this file (%s) tag?") % item.filename)
             except KeyError:
-                if config.DEBUG > 1:
-                    print String(_( "Plugin 'coversearch' was disabled for this item! " \
-                             "'coversearch' needs an item with " \
-                             "Artist and Album (if it's a mp3 or ogg) or " \
-                             "Title (if it's a cd track) to be able to search. " \
-                             "So you need a file with a ID3 tag (mp3) or an Ogg Info. " \
-                             "Maybe you must fix this file (%s) tag?" )) % item.filename
+                _debug_(_("Plugin 'coversearch' was disabled for this item! " \
+                    "'coversearch' needs an item with " \
+                    "Artist and Album (if it's a mp3 or ogg) or " \
+                    "Title (if it's a cd track) to be able to search. " \
+                    "So you need a file with a ID3 tag (mp3) or an Ogg Info. " \
+                    "Maybe you must fix this file (%s) tag?") % item.filename)
             except AttributeError:
-                if config.DEBUG > 1:
-                    print String(_( "Unknown CD, cover searching is disabled" ))
+                _debug_(_("Unknown CD, cover searching is disabled"))
         return []
 
 
     def cover_search_file(self, arg=None, menuw=None):
         """
-        search imdb for this item
+        search Amazon for this item
         """
-        box = PopupBox(text=_( 'searching Amazon...' ) )
+        _debug_('cover_search_file(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        box = PopupBox(text=_('searching Amazon...'))
         box.show()
 
         album = self.item.getattr('album')
@@ -219,22 +219,20 @@ class PluginInterface(plugin.ItemPlugin):
         # Maybe the search string need encoding to config.LOCALE
         search_string = '%s %s' % (artist.encode(query_encoding), album.encode(query_encoding))
         search_string = re.sub('[\(\[].*[\)\]]', '', search_string)
-        if config.DEBUG > 1:
-            print "search_string=%r" % search_string
+        _debug_('search_string=%r' % search_string)
         try:
-            cover = amazon.searchByKeyword(search_string , product_line="music")
+            cover = amazon.searchByKeyword(search_string, product_line='Music', type='Medium')
         except amazon.AmazonError:
             box.destroy()
             dict_tmp = { 'artist': artist, 'album': album }
-            box = PopupBox(text=_( 'No matches for %(artist)s - %(album)s' ) % dict_tmp )
+            box = PopupBox(text=_('No matches for %(artist)s - %(album)s') % dict_tmp)
             box.show()
             time.sleep(2)
             box.destroy()
             return
-
         except:
             box.destroy()
-            box = PopupBox(text=_( 'Unknown error while searching.' ) )
+            box = PopupBox(text=_('Unknown error while searching.'))
             box.show()
             time.sleep(2)
             box.destroy()
@@ -245,62 +243,65 @@ class PluginInterface(plugin.ItemPlugin):
         # Check if they're valid before presenting the list to the user
         # Grrr I wish Amazon wouldn't return an empty gif (807b)
 
-        for i in range(len(cover)):
-            m = None
-            imageFound = False
-            try:
-                if cover[i].ImageUrlLarge:
-                    m = urllib2.urlopen(cover[i].ImageUrlLarge)
-                    imageFound = True
-            except urllib2.URLError, e:
-                print 'URLError: %s' % (e)
-            except urllib2.HTTPError, e:
-                # Amazon returned a 404
-                print 'HTTPError: %s' % (e)
-            if imageFound and (m.info()['Content-Length'] != '807'):
-                image = Image.open_from_memory(m.read())
-                items += [ menu.MenuItem('%s' % cover[i].ProductName,
-                    self.cover_create, cover[i].ImageUrlLarge, image=image) ]
-            else:
-                # see if a small one is available
+        for item in cover.Item:
+            title = 'Unknown'
+            if hasattr(item, 'ItemAttributes'):
+                if hasattr(item.ItemAttributes, 'Title'):
+                    title = item.ItemAttributes.Title
+            url = None
+            width = 0
+            height = 0
+            if hasattr(item, 'LargeImage'):
+                url = item.LargeImage.URL
+                width = item.LargeImage.Width
+                height = item.LargeImage.Height
+            elif hasattr(item, 'MediumImage'):
+                url = item.MediumImage.URL
+                width = item.LargeImage.Width
+                height = item.LargeImage.Height
+            if url is not None:
+                imageFound = False
+                m = None
                 try:
-                    if cover[i].ImageUrlMedium:
-                        if m: m.close()
-                        m = urllib2.urlopen(cover[i].ImageUrlMedium)
-                        imageFound = True
-                except urllib2.HTTPError:
-                    pass
+                    m = urllib2.urlopen(item.LargeImage.URL)
+                    imageFound = True
+                except urllib2.URLError, e:
+                    _debug_('URLError: %s' % (e), DINFO)
+                except urllib2.HTTPError, e:
+                    # Amazon returned a 404
+                    _debug_('HTTPError: %s' % (e), DINFO)
                 if imageFound and (m.info()['Content-Length'] != '807'):
                     image = Image.open_from_memory(m.read())
-                    items += [ menu.MenuItem( ('%s [' + _( 'small' ) + ']') % cover[i].ProductName,
-                        self.cover_create, cover[i].ImageUrlMedium) ]
+                    items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url, 
+                        image=image) ]
                 else:
                     # maybe the url is wrong, try to change '.01.' to '.03.'
-                    cover[i].ImageUrlLarge = cover[i].ImageUrlLarge.replace('.01.', '.03.')
+                    url = url.replace('.01.', '.03.')
                     try:
-                        if cover[i].ImageUrlLarge:
-                            if m: m.close()
-                            m = urllib2.urlopen(cover[i].ImageUrlLarge)
-                            imageFound = True
-
-                        if imageFound and (m.info()['Content-Length'] != '807'):
-                            image = Image.open_from_memory(m.read())
-                            items += [ menu.MenuItem( ('%s [' + _( 'small' ) + ']' ) % cover[i].ProductName,
-                                self.cover_create, cover[i].ImageUrlLarge) ]
-                    except urllib2.HTTPError:
-                        pass
-            if m: m.close()
+                        m = urllib2.urlopen(item.LargeImage.URL)
+                        imageFound = True
+                    except urllib2.URLError, e:
+                        _debug_('URLError: %s' % (e), DINFO)
+                    except urllib2.HTTPError, e:
+                        # Amazon returned a 404
+                        _debug_('HTTPError: %s' % (e), DINFO)
+                    if imageFound and (m.info()['Content-Length'] != '807'):
+                        image = Image.open_from_memory(m.read())
+                        items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url, 
+                            image=image) ]
+                if m is not None:
+                    m.close()
 
         box.destroy()
         if len(items) == 1:
             self.cover_create(arg=items[0].arg, menuw=menuw)
             return
         if items:
-            moviemenu = menu.Menu( _( 'Cover Search Results' ), items)
+            moviemenu = menu.Menu(_('Cover Search Results'), items)
             menuw.pushmenu(moviemenu)
             return
 
-        box = PopupBox(text= _( 'No covers available from Amazon' ) )
+        box = PopupBox(text= _('No covers available from Amazon'))
         box.show()
         time.sleep(2)
         box.destroy()
@@ -313,7 +314,7 @@ class PluginInterface(plugin.ItemPlugin):
         """
         import directory
 
-        box = PopupBox(text= _( 'getting data...' ) )
+        box = PopupBox(text= _('getting data...'))
         box.show()
 
         #filename = os.path.splitext(self.item.filename)[0]
