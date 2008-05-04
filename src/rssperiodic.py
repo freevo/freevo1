@@ -197,6 +197,7 @@ def checkForExpiration():
 
 
 def createFxd(item, filename):
+    plot = item.description.replace('&', '&amp;').replace('>', '&gt;').replace('<', '&lt;')
     ofile = os.path.splitext(filename)[0]+'.fxd'
     try:
         file = open(ofile, 'w')
@@ -207,7 +208,7 @@ def createFxd(item, filename):
         file.write('         <file id=\'f1\'>%s</file>\n' % filename)
         file.write('      </video>\n')
         file.write('      <info>\n')
-        file.write('         <plot>%s</plot>\n' % item.description)
+        file.write('         <plot>%s</plot>\n' % (plot))
         file.write('      </info>\n')
         file.write('   </movie>\n')
         file.write('</freevo>\n')
