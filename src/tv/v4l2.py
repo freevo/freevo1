@@ -276,6 +276,9 @@ class Videodev:
         self.driver = mat.group()
         mat = pat.match(results[1])
         self.card = mat.group()
+        pat = re.compile('([\w.: ]+)')
+        mat = pat.match(results[2])
+        self.bus_info = mat.group()
 
 
     def getdriver(self):
