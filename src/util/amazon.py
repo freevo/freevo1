@@ -315,25 +315,34 @@ def search(operation, search_type, keyword, product_line, type="Large", page=Non
     reply = usock.read()
     usock.close()
 
-    # remove
-    open(os.path.join('/tmp', 'amazon.reply'), 'w').write(reply)
+    # XXX remove begin
+    open(os.path.join('/tmp', 'amazon.reply.xml'), 'w').write(reply)
+    from BeautifulSoup import BeautifulStoneSoup
+    x = BeautifulStoneSoup(open('/tmp/amazon.reply.xml').read())
+    f = open('/tmp/reply.xml','w')
+    print >>f,x.prettify()
+    f.close()
+    # XXX remove end
 
     try:
-        #xmldoc = minidom.parse(usock)
         xmldoc = minidom.parseString(reply)
     except expat.ExpatError, why:
         print why
         raise AmazonError, why
 
-    PrettyPrint(xmldoc)
+    # XXX remove begin
+    f = open('/tmp/%s-%s-%s-%s.xml' % (operation, search_type, keyword, product_line),'w')
+    PrettyPrint(xmldoc, f)
+    f.close()
+    # XXX remove end
 
     usock.close()
     data = unmarshal(xmldoc)
     if hasattr(data, 'Errors'):
         raise AmazonError, data.Errors.Error.Message
-    if hasattr(data, 'ItemSearchResponse.Items.Request.Errors'):
+    if hasattr(data, '%sResponse.Items.Request.Errors' % operation):
         raise AmazonError, data.Items.Request.Errors.Message
-    return data.ItemSearchResponse.Items
+    return eval('data.%sResponse.Items' % operation)
 
 def searchByKeyword(keyword, product_line="Books", type="Large", page=1, license_key=None, http_proxy=None):
     return search('ItemSearch', 'Keywords', keyword, product_line, type, page, license_key, http_proxy)
@@ -342,10 +351,10 @@ def browseBestSellers(browse_node, product_line="Books", type="Large", page=1, l
     return search('ItemLookup', 'BrowseNode', browse_node, product_line, type, page, license_key, http_proxy)
 
 def searchByASIN(ASIN, type="Large", license_key=None, http_proxy=None):
-    return search('AsinSearch', ASIN, None, type, None, license_key, http_proxy)
+    return search('ItemLookup', 'ItemId', ASIN, None, type, None, license_key, http_proxy)
 
 def searchByUPC(UPC, type="Large", license_key=None, http_proxy=None):
-    return search('UpcSearch', UPC, None, type, None, license_key, http_proxy)
+    return search('ItemLookup', 'ItemId', UPC, None, type, None, license_key, http_proxy)
 
 def searchByAuthor(author, type="Large", page=1, license_key=None, http_proxy=None):
     return search('AuthorSearch', author, 'Books', type, page, license_key, http_proxy)
@@ -386,11 +395,17 @@ def searchByPower(keyword, product_line='Books', type='Large', page=1, license_k
 
 
 if __name__ == '__main__':
-    #covers = searchByKeyword('The Who', product_line='Music', type='Images')
-    covers = searchByKeyword('The Who', product_line='Music', type='Medium')
-    print covers.__dict__
-    if hasattr(covers, 'Item'):
-        for item in covers.Item:
+    response = searchByASIN('B000Q9OD5I', type='Medium')
+    print response.__dict__
+    if hasattr(response, 'Item'):
+        print response.Item.__dict__
+    print
+
+    response = searchByKeyword('The Who', product_line='Music', type='Medium')
+    print response.__dict__
+    if hasattr(response, 'Item'):
+        for item in response.Item:
             print item.__dict__
             if hasattr(item, 'LargeImage'):
                 print item.LargeImage.__dict__
+    print
