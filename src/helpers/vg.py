@@ -2,6 +2,13 @@
 # TV analyser
 #
 import sys, os, glob, re, copy
+try:
+    import config
+    import tv.v4l2
+    freevo = True
+except ImportError:
+    freevo = False
+
 
 class AnalyseVideo4Linux(object):
     def __init__(self, path):
@@ -73,11 +80,11 @@ class AnalyseVideo4Linux(object):
     def _analyse(self):
         """ Try different methods to determine the video families """
         self.devices = os.listdir(self.path)
-        print 'devices:1:', self.devices
+        print 'DEBUG: devices:1:', self.devices
         self.devices = self._method1(self.devices)
-        print 'devices:2:', self.devices
+        print 'DEBUG: devices:2:', self.devices
         self.devices = self._method2(self.devices)
-        print 'devices:3:', self.devices
+        print 'DEBUG: devices:3:', self.devices
         return self.v4l2_devmap
 
     def v4ldevices(self):
@@ -91,19 +98,77 @@ class AnalyseVideo4Linux(object):
         return self.v4l2_devices
 
 
-if __name__ == '__main__':
-    try:
-        import config
-        import tv.v4l2
-        freevo = True
-    except ImportError:
-        freevo = False
 
+class VideoGroupBuilder(object):
+    DVB = ('saa7133',)
+    IVTV = ('ivtv', 'cx88')
+    SAA = ('saa7134',)
+    WEBCAM = ('webcam',)
+
+    def __init__(self, devices):
+        self.devices = devices
+
+
+    def build(self):
+        number = 0
+        print 'TV_VIDEO_GROUPS = ['
+        for device in self.devices:
+            videodev = tv.v4l2.Videodev(os.path.join('/dev', device['device']))
+            #print videodev.__dict__
+            if videodev.driver in self.DVB:
+                print '  # DVB device, group %s' % (number)
+            elif videodev.driver in self.IVTV:
+                print '  # IVTV device, group %s' % (number)
+            elif videodev.driver in self.SAA:
+                print '  # SAA device, group %s' % (number)
+            elif videodev.driver in self.WEBCAM:
+                print '  # WEBCAM device, group %s' % (number)
+            else:
+                continue
+            print '  VideoGroup('
+            print '    vdev = %r' % (os.path.join('/dev', device['device']),)
+            for input, values in videodev.inputs.items():
+                if values[0] == 0:
+                    print '    Tuner Number %r' % values[0]
+                    print '    Tuner is %r' % values[1]
+            print '  ),'
+            number += 1
+        print ']'
+
+
+    def dump(self):
+        """ Print out the sorted results and the details """
+        print
+        for device in self.devices:
+            try:
+                uevent = open(os.path.join(video4linux_path, device['device'], 'uevent')).readlines()
+                bus = driver = ''
+                for line in uevent:
+                    if 'PHYSDEVBUS=' in line:
+                        bus = line.split('=')[1].strip()
+                    if 'PHYSDEVDRIVER=' in line:
+                        driver = line.split('=')[1].strip()
+                print '%s (%s) %s' % (device['device'], bus, driver)
+            except IOError:
+                print '%s' % (device['device'],)
+            print '%s' % ('-' * 41)
+            for v4ldev in device['family']:
+                name = open(os.path.join(video4linux_path, v4ldev, 'name')).read().strip()
+                print '%-8s: %s' % (v4ldev, name)
+            print '%s' % ('-' * 41)
+            if freevo:
+                v = tv.v4l2.Videodev(os.path.join('/dev', device['device']))
+                v.print_settings()
+            print
+
+
+
+if __name__ == '__main__':
     # this won't work if procfs is mounted somewhere else
     f = open('/proc/mounts')
     for line in f.readlines():
-        if line.startswith('sysfs'):
-            fields = line.split()
+        fields = line.split()
+        if fields[2] == 'sysfs':
             break
     else:
         print 'Cannot find mounted sysfs'
@@ -119,32 +184,13 @@ if __name__ == '__main__':
     analyser = AnalyseVideo4Linux(video4linux_path)
     v4ldevices = analyser.v4ldevices()
 
-    # Print out the sorted results and the details
-    print
-    for v4ldevice in v4ldevices:
-        try:
-            uevent = open(os.path.join(video4linux_path, v4ldevice['device'], 'uevent')).readlines()
-            bus = driver = ''
-            for line in uevent:
-                if 'PHYSDEVBUS=' in line:
-                    bus = line.split('=')[1].strip()
-                if 'PHYSDEVDRIVER=' in line:
-                    driver = line.split('=')[1].strip()
-            print '%s (%s) %s' % (v4ldevice['device'], bus, driver)
-        except IOError:
-            print '%s' % (v4ldevice['device'],)
-        print '%s' % ('-' * 41)
-        for v4ldev in v4ldevice['family']:
-            name = open(os.path.join(video4linux_path, v4ldev, 'name')).read().strip()
-            print '%-8s: %s' % (v4ldev, name)
-        print '%s' % ('-' * 41)
-        if freevo:
-            v = tv.v4l2.Videodev(os.path.join('/dev', v4ldevice['device']))
-            v.print_settings()
-        print
-
     if len(analyser.devices) > 0:
         print 'Devices not checked'
         print '%s' % ('-' * 41)
         for device in analyser.devices:
             print device
+
+    builder = VideoGroupBuilder(v4ldevices)
+    builder.dump()
+    if freevo:
+        builder.build()
