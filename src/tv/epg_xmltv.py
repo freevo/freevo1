@@ -209,6 +209,7 @@ def load_guide(XMLTV_FILE=None):
                     displayname = display_name.split()[1]
                 else:
                     tunerid = _('REPLACE WITH TUNERID FOR %s') % display_name
+                    displayname = display_name
 
             c = TvChannel(id, displayname, tunerid)
             guide.add_channel(c)

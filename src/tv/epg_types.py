@@ -218,8 +218,8 @@ class TvGuide:
     """
     def __init__(self):
         _debug_('TvGuide.__init__()', 2)
+        self.timestamp = float(0)
         # These two types map to the same channel objects
-        timestamp = 0.0
         self.chan_dict = {}   # Channels mapped using the id
         self.chan_list = []   # Channels, ordered
         self.EPG_VERSION = EPG_VERSION
