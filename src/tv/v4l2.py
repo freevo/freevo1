@@ -254,31 +254,20 @@ class Videodev:
         try:
             self.device = os.open(device, os.O_TRUNC)
         except OSError, why:
+            #self.device = os.open(device, os.O_RDONLY)
             _debug_('Cannot open video device %r: %s' % (device, why), DERROR)
             return
 
         _debug_('Video opened for %r' % device)
         results           = self.querycap()
-        self.driver       = results[0]
-        self.card         = results[1]
-        self.bus_info     = results[2]
+        self.driver       = results[0][:results[0].find('\0')]
+        self.card         = results[1][:results[1].find('\0')]
+        self.bus_info     = results[2][:results[2].find('\0')]
         self.version      = results[3]
         self.capabilities = results[4]
         self.inputs       = self.enuminputs()
         self.standards    = self.enumstds()
         self.controls     = self.enumcontrols()
-        #print 'inputs=%r' % self.inputs
-        #print 'standards=%r' % self.standards
-        #print 'controls=%r' % self.controls
-        import re
-        pat = re.compile('([\w ]+)')
-        mat = pat.match(results[0])
-        self.driver = mat.group()
-        mat = pat.match(results[1])
-        self.card = mat.group()
-        pat = re.compile('([\w.: ]+)')
-        mat = pat.match(results[2])
-        self.bus_info = mat.group()
 
 
     def getdriver(self):

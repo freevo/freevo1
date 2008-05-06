@@ -4,6 +4,7 @@
 import sys, os, glob, re, copy
 try:
     import config
+    from config import VideoGroup
     import tv.v4l2
     freevo = True
 except ImportError:
@@ -102,37 +103,90 @@ class AnalyseVideo4Linux(object):
 class VideoGroupBuilder(object):
     DVB = ('saa7133',)
     IVTV = ('ivtv', 'cx88')
-    SAA = ('saa7134',)
-    WEBCAM = ('webcam',)
+    TVALSA = ('saa7134',)
+    WEBCAM = ('pwc',)
+    NORMAL = ('bttv',)
 
     def __init__(self, devices):
         self.devices = devices
+        self.groups = []
 
 
     def build(self):
-        number = 0
-        print 'TV_VIDEO_GROUPS = ['
         for device in self.devices:
-            videodev = tv.v4l2.Videodev(os.path.join('/dev', device['device']))
-            #print videodev.__dict__
-            if videodev.driver in self.DVB:
-                print '  # DVB device, group %s' % (number)
-            elif videodev.driver in self.IVTV:
-                print '  # IVTV device, group %s' % (number)
-            elif videodev.driver in self.SAA:
-                print '  # SAA device, group %s' % (number)
-            elif videodev.driver in self.WEBCAM:
-                print '  # WEBCAM device, group %s' % (number)
-            else:
+            #print device
+            vdev = os.path.join('/dev', device['device'])
+            if not os.path.exists(vdev):
+                print '%r does not exist' % vdev
                 continue
-            print '  VideoGroup('
-            print '    vdev = %r' % (os.path.join('/dev', device['device']),)
-            for input, values in videodev.inputs.items():
-                if values[0] == 0:
-                    print '    Tuner Number %r' % values[0]
-                    print '    Tuner is %r' % values[1]
+            try:
+                videodev = tv.v4l2.Videodev(vdev)
+            except Exception, why:
+                print why
+                continue
+            #print videodev.__dict__
+            group_type = 'unknown'
+            adev = None
+            if videodev.driver in self.DVB:
+                group_type = 'dvb'
+            elif videodev.driver in self.IVTV:
+                group_type = 'ivtv'
+            elif videodev.driver in self.TVALSA:
+                group_type = 'tvalsa'
+                adev = 'alsa:adevice=hw.1,0:amode=1:audiorate=32000:forceaudio:immediatemode=0'
+            elif videodev.driver in self.WEBCAM:
+                group_type = 'webcam'
+            elif videodev.driver in self.NORMAL:
+                group_type = 'normal'
+            else:
+                print '%r is an unknown driver' % videodev.driver
+                continue
+
+            vvbi = None
+            for member in device['family']:
+                if member.startswith('vbi'):
+                    vvbi = os.path.join('/dev', member)
+                    break
+
+            desc = 'unknown'
+            if hasattr(videodev, 'card'):
+                desc = videodev.card
+            vg = VideoGroup(desc=desc, group_type=group_type, vdev=vdev, vvbi=vvbi, adev=adev)
+            self.groups.append(vg)
+
+            if hasattr(videodev, 'inputs'):
+                for input, values in videodev.inputs.items():
+                    # Asuming the the first device is the tuner
+                    if values[0] == 0:
+                        vg.input_num = values[0]
+                        vg.input_type = values[1]
+
+            tuner_norm = []
+            if hasattr(videodev, 'inputs'):
+                for standard, values in videodev.standards.items():
+                    tuner_norm.append(values[2])
+            vg.tuner_norm = ','.join(tuner_norm)
+            vg.tuner_chanlist = 'FixMe'
+
+
+    def write(self):
+        #for vg in self.groups:
+        #    print vg.__dict__
+        print 'TV_VIDEO_GROUPS = ['
+        for num in range(len(self.groups)):
+            vg = self.groups[num]
+            print '  VideoGroup( # %s device, group %s' % (vg.group_type, num)
+            print '    desc=%r,' % vg.desc
+            print '    group_type=%r,' % vg.group_type
+            print '    vdev=%r,' % vg.vdev
+            print '    vvbi=%r,' % vg.vvbi
+            print '    adev=%r,' % vg.adev
+            print '    input_type=%r,' % vg.input_type
+            print '    input_num=%r,' % vg.input_num
+            print '    tuner_norm=%r,' % vg.tuner_norm
+            print '    tuner_chanlist=%r,' % vg.tuner_chanlist
+            print '    record_group=%r' % vg.record_group
             print '  ),'
-            number += 1
         print ']'
 
 
@@ -159,6 +213,8 @@ class VideoGroupBuilder(object):
             if freevo:
                 v = tv.v4l2.Videodev(os.path.join('/dev', device['device']))
                 v.print_settings()
+                v.close()
+                pass
             print
 
 
@@ -194,3 +250,4 @@ if __name__ == '__main__':
     builder.dump()
     if freevo:
         builder.build()
+        builder.write()
