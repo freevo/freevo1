@@ -221,18 +221,21 @@ class PluginInterface(plugin.ItemPlugin):
         search_string = re.sub('[\(\[].*[\)\]]', '', search_string)
         _debug_('search_string=%r' % search_string)
         try:
-            cover = amazon.searchByKeyword(search_string, product_line='Music', type='Medium')
-        except amazon.AmazonError:
+            cover = amazon.searchByKeyword(search_string, product_line='Music', type='Images,ItemAttributes')
+        except amazon.AmazonError, why:
             box.destroy()
+            title = '\n'.join([artist, album])
             dict_tmp = { 'artist': artist, 'album': album }
-            box = PopupBox(text=_('No matches for %(artist)s - %(album)s') % dict_tmp)
+            print '%(artist)s - %(album)s' % (dict_tmp)
+            print '%r' % why
+            box = PopupBox(text=artist+'\n'+album+'\n'+str(why[:40]))
             box.show()
             time.sleep(2)
             box.destroy()
             return
-        except:
+        except Exception, why:
             box.destroy()
-            box = PopupBox(text=_('Unknown error while searching.'))
+            box = PopupBox(text=_('Unknown error while searching.')+'\n'+str(why[:40]))
             box.show()
             time.sleep(2)
             box.destroy()
@@ -240,43 +243,28 @@ class PluginInterface(plugin.ItemPlugin):
 
         items = []
 
-        # Check if they're valid before presenting the list to the user
-        # Grrr I wish Amazon wouldn't return an empty gif (807b)
-
-        for item in cover.Item:
-            title = 'Unknown'
-            if hasattr(item, 'ItemAttributes'):
-                if hasattr(item.ItemAttributes, 'Title'):
-                    title = item.ItemAttributes.Title
-            url = None
-            width = 0
-            height = 0
-            if hasattr(item, 'LargeImage'):
-                url = item.LargeImage.URL
-                width = item.LargeImage.Width
-                height = item.LargeImage.Height
-            elif hasattr(item, 'MediumImage'):
-                url = item.MediumImage.URL
-                width = item.LargeImage.Width
-                height = item.LargeImage.Height
-            if url is not None:
-                imageFound = False
-                m = None
-                try:
-                    m = urllib2.urlopen(item.LargeImage.URL)
-                    imageFound = True
-                except urllib2.URLError, e:
-                    _debug_('URLError: %s' % (e), DINFO)
-                except urllib2.HTTPError, e:
-                    # Amazon returned a 404
-                    _debug_('HTTPError: %s' % (e), DINFO)
-                if imageFound and (m.info()['Content-Length'] != '807'):
-                    image = Image.open_from_memory(m.read())
-                    items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url, 
-                        image=image) ]
-                else:
-                    # maybe the url is wrong, try to change '.01.' to '.03.'
-                    url = url.replace('.01.', '.03.')
+        try:
+            # Check if they're valid before presenting the list to the user
+            # Grrr I wish Amazon wouldn't return an empty gif (807b)
+            for item in cover.Items.Item:
+                title = 'Unknown'
+                if hasattr(item, 'ItemAttributes'):
+                    if hasattr(item.ItemAttributes, 'Title'):
+                        title = item.ItemAttributes.Title
+                url = None
+                width = 0
+                height = 0
+                if hasattr(item, 'LargeImage'):
+                    url = item.LargeImage.URL
+                    width = item.LargeImage.Width
+                    height = item.LargeImage.Height
+                elif hasattr(item, 'MediumImage'):
+                    url = item.MediumImage.URL
+                    width = item.LargeImage.Width
+                    height = item.LargeImage.Height
+                if url is not None:
+                    imageFound = False
+                    m = None
                     try:
                         m = urllib2.urlopen(item.LargeImage.URL)
                         imageFound = True
@@ -289,22 +277,39 @@ class PluginInterface(plugin.ItemPlugin):
                         image = Image.open_from_memory(m.read())
                         items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url, 
                             image=image) ]
-                if m is not None:
-                    m.close()
+                    else:
+                        # maybe the url is wrong, try to change '.01.' to '.03.'
+                        url = url.replace('.01.', '.03.')
+                        try:
+                            m = urllib2.urlopen(item.LargeImage.URL)
+                            imageFound = True
+                        except urllib2.URLError, e:
+                            _debug_('URLError: %s' % (e), DINFO)
+                        except urllib2.HTTPError, e:
+                            # Amazon returned a 404
+                            _debug_('HTTPError: %s' % (e), DINFO)
+                        if imageFound and (m.info()['Content-Length'] != '807'):
+                            image = Image.open_from_memory(m.read())
+                            items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url, 
+                                image=image) ]
+                    if m is not None:
+                        m.close()
 
-        box.destroy()
-        if len(items) == 1:
-            self.cover_create(arg=items[0].arg, menuw=menuw)
-            return
-        if items:
-            moviemenu = menu.Menu(_('Cover Search Results'), items)
-            menuw.pushmenu(moviemenu)
-            return
+            box.destroy()
+            if len(items) == 1:
+                self.cover_create(arg=items[0].arg, menuw=menuw)
+                return
+            if items:
+                moviemenu = menu.Menu(_('Cover Search Results'), items)
+                menuw.pushmenu(moviemenu)
+                return
 
-        box = PopupBox(text= _('No covers available from Amazon'))
-        box.show()
-        time.sleep(2)
-        box.destroy()
+        except Exception, why:
+            print traceback.print_exc()
+            box = PopupBox(text= _('No covers available from Amazon'))
+            box.show()
+            time.sleep(2)
+            box.destroy()
         return
 
 

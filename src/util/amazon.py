@@ -305,11 +305,10 @@ def search(operation, search_type, keyword, product_line, type="Large", page=Non
     """
     license_key = getLicense(license_key)
     url = buildURL(operation, search_type, keyword, product_line, type, page, license_key)
-    print 'url=%r ' % (url,)
-    print 'buildURL(operation=%r, search_type=%r, keyword=%r, product_line=%r, type=%r, page=%r, license_key=%r)' % \
-        (operation, search_type, keyword, product_line, type, page, license_key)
+    #print 'url=%r ' % (url,)
+    #print 'buildURL(operation=%r, search_type=%r, keyword=%r, product_line=%r, type=%r, page=%r, license_key=%r)' % \
+    #    (operation, search_type, keyword, product_line, type, page, license_key)
     proxies = getProxies(http_proxy)
-    print 'proxies=%r = getProxies(http_proxy=%r)' % (proxies, http_proxy)
     u = urllib.FancyURLopener(proxies)
     usock = u.open(url)
     reply = usock.read()
@@ -338,22 +337,33 @@ def search(operation, search_type, keyword, product_line, type="Large", page=Non
 
     usock.close()
     data = unmarshal(xmldoc)
-    #print data.__dict__
-    response = eval('data.%sResponse' % operation)
-    if hasattr(data, 'Errors'):
-        raise AmazonError, response.Errors.Error.Message
+
+    # Check for operation response
+    operation_response = '%sResponse' % operation
+    if not hasattr(data, operation_response):
+        raise AmazonError, data.Errors.Error.Message
+    response = eval('data.'+operation_response)
+
     if not hasattr(response, 'Items'):
-        raise AmazonError, 'No Items element'
+        raise AmazonError, response.OperationRequest.Errors.Error.Message
     items = response.Items
-    if items.TotalResults == '0':
-        raise AmazonError, items.Request.Errors.Error.Message
+
+    if hasattr(items, 'Errors'):
+        raise AmazonError, items.Errors.Error.Message
     if not hasattr(items, 'Request'):
         raise AmazonError, 'No Request element'
     request = items.Request
+    if hasattr(request, 'Errors'):
+        raise AmazonError, request.Errors.Error.Message
     is_valid = request.IsValid == 'True'
     if not is_valid:
         raise AmazonError, request.Errors.Error.Message
+    if items.TotalResults == '0':
+        raise AmazonError, request.Errors.Error.Message
     return response
+
+def itemSearch(keyword, product_line="Books", type="Large", page=1, license_key=None, http_proxy=None):
+    return search('ItemSearch', 'Keywords', keyword, product_line, type, page, license_key, http_proxy)
 
 def searchByKeyword(keyword, product_line="Books", type="Large", page=1, license_key=None, http_proxy=None):
     return search('ItemSearch', 'Keywords', keyword, product_line, type, page, license_key, http_proxy)
@@ -406,17 +416,60 @@ def searchByPower(keyword, product_line='Books', type='Large', page=1, license_k
 
 
 if __name__ == '__main__':
+    import time
+
+    try:
+        pass
+        #result = search('', 'Keywords', 'The Who', 'Music', type='Images,ItemAttributes')
+    except AmazonError, why:
+        print why
+    print
+    #time.sleep(1)
+
+    try:
+        pass
+        #result = search('ItemSearch', 'Keywords', 'The Who', 'Music', 'Images,ItemAttributes', license_key='invalid')
+    except AmazonError, why:
+        print why
+    print
+    #time.sleep(1)
+
+    try:
+        pass
+        #result = searchByKeyword('Veronique Sanson Petits moments choisis CD1 En Studio', product_line='Music', type='Medium')
+    except AmazonError, why:
+        print why
+    print
+    #time.sleep(1)
+
+    
+    response = searchByKeyword('michael jackson number ones', product_line='Music', type='Images,ItemAttributes')
+    for k, v in response.__dict__.items():
+        print '%s' % k
+        if not hasattr(v, '__dict__'):
+            print '= %s' % v
+            continue
+        for k1, v1 in v.__dict__.items():
+            print '  %s' % k1
+            if not hasattr(v1, '__dict__'):
+                print '  = %s' % v1
+                continue
+            for k2, v2 in v1.__dict__.items():
+                print '    %s' % k2
+                if not hasattr(v2, '__dict__'):
+                    print '    = %s' % v2
+                    continue
+                for k3, v3 in v2.__dict__.items():
+                    print '      %s' % k3
+                    if not hasattr(v3, '__dict__'):
+                        print '      = %s' % v3
+                        continue
+    print
+    sys.exit(1)
+
     response = searchByASIN('B000Q9OD5I', type='Medium')
     print response.__dict__
     if hasattr(response, 'Item'):
         print response.Item.__dict__
     print
 
-    response = searchByKeyword('The Who', product_line='Music', type='Medium')
-    print response.__dict__
-    if hasattr(response, 'Item'):
-        for item in response.Item:
-            print item.__dict__
-            if hasattr(item, 'LargeImage'):
-                print item.LargeImage.__dict__
-    print
