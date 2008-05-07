@@ -338,11 +338,22 @@ def search(operation, search_type, keyword, product_line, type="Large", page=Non
 
     usock.close()
     data = unmarshal(xmldoc)
+    #print data.__dict__
+    response = eval('data.%sResponse' % operation)
     if hasattr(data, 'Errors'):
-        raise AmazonError, data.Errors.Error.Message
-    if hasattr(data, '%sResponse.Items.Request.Errors' % operation):
-        raise AmazonError, data.Items.Request.Errors.Message
-    return eval('data.%sResponse.Items' % operation)
+        raise AmazonError, response.Errors.Error.Message
+    if not hasattr(response, 'Items'):
+        raise AmazonError, 'No Items element'
+    items = response.Items
+    if items.TotalResults == '0':
+        raise AmazonError, items.Request.Errors.Error.Message
+    if not hasattr(items, 'Request'):
+        raise AmazonError, 'No Request element'
+    request = items.Request
+    is_valid = request.IsValid == 'True'
+    if not is_valid:
+        raise AmazonError, request.Errors.Error.Message
+    return response
 
 def searchByKeyword(keyword, product_line="Books", type="Large", page=1, license_key=None, http_proxy=None):
     return search('ItemSearch', 'Keywords', keyword, product_line, type, page, license_key, http_proxy)
