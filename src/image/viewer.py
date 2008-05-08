@@ -301,13 +301,15 @@ class ImageViewer(GUIObject):
             rc.register(self.signalhandler, False, self.duration*100)
             self.signal_registered = True
 
-        self.last_image  = (item, (image, x, y, scale, bbx, bby, bbw, bbh,
-                                   self.rotation))
+        self.last_image  = (item, (image, x, y, scale, bbx, bby, bbw, bbh, self.rotation))
 
         # stop slideshow at the end if configured
-        index = item.parent.play_items.index(item)+1
-        length = len(item.parent.play_items)
-        if (index == length): self.slideshow = config.IMAGEVIEWER_AUTOPLAY
+        try:
+            index = item.parent.play_items.index(item)+1
+            length = len(item.parent.play_items)
+            if (index == length): self.slideshow = config.IMAGEVIEWER_AUTOPLAY
+        except:
+            _debug_('Invalid parent item', DWARNING)
 
         # send information event to LCD2
         rc.post_event(Event('IMAGE_VIEW_INFO', arg=(index, length, item.name)))
@@ -369,7 +371,7 @@ class ImageViewer(GUIObject):
         elif event == STOP:
             self.last_image  = None, None
             self.signal_registered = False
-            self.slideshow = config.IMAGEVIEWER_PLAY_AT_START
+            self.slideshow = config.IMAGEVIEWER_AUTOPLAY
             rc.unregister(self.signalhandler)
             rc.app(None)
             self.fileitem.eventhandler(event)
