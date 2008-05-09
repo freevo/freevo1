@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# transition.py - A transition animation, intended use: imageviewer
+# A transition animation, intended use: imageviewer
 # Author: Viggo Fredriksen <viggo@katatonic.org>
 # -----------------------------------------------------------------------
 # $Id$
@@ -53,6 +53,7 @@ class Transition(BaseAnimation):
         @param surf2: New surface
         @param mode: effect to use
         @param direction: vertical/horizontal
+        @param fps: frames per second
         """
         BaseAnimation.__init__(self, surf1.get_rect(), fps, bg_update=False)
         _debug_('__init__(surf1=%r, surf2=%r, mode=%r, direction=%r, fps=%r)' % (surf1, surf2, mode, direction, fps), 2)

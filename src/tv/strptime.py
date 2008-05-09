@@ -31,22 +31,22 @@
 """Strptime-related classes and functions.
 
 CLASSES
-    LocaleTime -- Discovers and/or stores locale-specific time information
-    TimeRE -- Creates regexes for pattern matching a string of text containing
+
+LocaleTime -- Discovers and/or stores locale-specific time information
+TimeRE -- Creates regexes for pattern matching a string of text containing
                 time information as is returned by time.strftime()
 
 FUNCTIONS
-    firstjulian -- Calculates the Julian date up to the first of the specified
-                    year
-    gregorian -- Calculates the Gregorian date based on the Julian day and
-                    year
-    julianday -- Calculates the Julian day since the first of the year based
-                    on the Gregorian date
-    dayofweek -- Calculates the day of the week from the Gregorian date.
-    strptime -- Calculates the time struct represented by the passed-in string
+
+firstjulian -- Calculates the Julian date up to the first of the specified year
+gregorian -- Calculates the Gregorian date based on the Julian day and year
+julianday -- Calculates the Julian day since the first of the year based on the Gregorian date
+dayofweek -- Calculates the day of the week from the Gregorian date.
+strptime -- Calculates the time struct represented by the passed-in string
 
 Requires Python 2.2.1 or higher as-is.
 Can be used in Python 2.2, though, if the following line is added:
+
     >>> True = 1; False = 0
 
 """

@@ -63,7 +63,7 @@ class EditFavorite(PopupBox):
     @param context: context in which the object is instantiated
     """
     def __init__(self, parent=None, subject=None, left=None, top=None, width=500, height=350, context=None):
-        """ """
+        """ Initialise EditFavorite instance """
         _debug_('EditFavorite.__init__(parent=%r, subject=%r, left=%r, top=%r, width=%r, height=%r, context=%r)' % \
             (parent, subject, left, top, width, height, context), 1)
 

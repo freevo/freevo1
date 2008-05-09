@@ -57,7 +57,9 @@ class ChunkBuffer(object):
     def __init__(self, path, size):
         """
         @param path: Location to create the ring buffer file.
-        @param size: Size of the ring buffer.
+        @type path: C(string}
+        @param size: Size of the ring buffer
+        @type size: C{integer}
         """
         self.buffer = RingBuffer(path, (size / RB_CHUNK_SIZE) * RB_CHUNK_SIZE)
         self.last_time = 0
