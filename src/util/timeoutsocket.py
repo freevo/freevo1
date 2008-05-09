@@ -34,7 +34,7 @@ result, every TCP connection will support a timeout.
 The beauty of this method is that it immediately and transparently
 enables the entire python library to support timeouts on TCP sockets.
 As an example, if you wanted to SMTP connections to have a 20 second
-timeout:
+timeout::
 
     import timeoutsocket
     import smtplib
@@ -63,14 +63,14 @@ The TimeoutFile class defines a file-like object that uses the TimeoutSocket
 class.  When the makefile() method of TimeoutSocket is called, it returns
 an instance of a TimeoutFile.
 
-Each of these objects adds two methods to manage the timeout value:
+Each of these objects adds two methods to manage the timeout value::
 
     get_timeout()   -->  returns the timeout of the socket or file
     set_timeout()   -->  sets the timeout of the socket or file
 
 
 As an example, one might use the timeout feature to create httplib
-connections that will timeout after 30 seconds:
+connections that will timeout after 30 seconds::
 
     import timeoutsocket
     import httplib

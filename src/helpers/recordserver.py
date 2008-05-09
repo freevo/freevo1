@@ -227,10 +227,10 @@ class RecordServer:
     @kaa.rpc.expose('isPlayerRunning')
     def isPlayerRunning(self):
         """
-        returns the state of a player, mplayer, xine, etc.
+        Test is the player is running
 
-        @todo: real player running test, check /dev/videoX.  This could go into the
-        upsoon client
+        @todo: real player running test, check /dev/videoX.  This could go into the upsoon client
+        @returns: the state of a player, mplayer, xine, etc.
         """
         _debug_('isPlayerRunning()', 2)
         res = (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))

@@ -272,11 +272,10 @@ class PluginInterface(plugin.DaemonPlugin):
     """
     Display context info on Shuttle's VFD (Versatile Front-panel Display)
 
-    @requires:
-        - pyusb: installed (http://pyusb.berlios.de/) with name patch as
+    @requires: pyusb installed U{http://pyusb.berlios.de/} with name patch as
                 the default module is called usb and conflicts with freevo's
                 usb plugin.
-        -  pyusb-0.X.X-name.patch contrib/patches
+    @requires: pyusb-0.X.X-name.patch contrib/patches
 
     To activate this plugin, just put the following line at the end of your
     local_conf.py file:

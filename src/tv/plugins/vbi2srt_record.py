@@ -34,8 +34,7 @@
 
 __author__ = "Duncan Webb <duncan@freevo.org>"
 __doc__ = """
-This module requires vbi2srt, see:
-http://www.linuxowl.com/vbi2srt.html
+This module requires vbi2srt, U{http://www.linuxowl.com/vbi2srt.html}
 Currently only ivtv cards and teletext is supported
 To use this plug-in add the following to local_conf.py
 plugin.remove('tv.generic_record')
@@ -83,7 +82,7 @@ class PluginInterface(plugin.Plugin):
     |     'K10' : 211000,
     | }
 
-    @requires: vbi2srt (http://www.linuxowl.com/vbi2srt.html)
+    @requires: vbi2srt U{http://www.linuxowl.com/vbi2srt.html}
 
     Updates available from http://www.linuxowl.com/software/.
 

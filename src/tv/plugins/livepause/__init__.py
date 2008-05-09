@@ -72,10 +72,10 @@ class PluginInterface(plugin.DaemonPlugin):
     This plugin supports the following features:
         - Live TV: pause & continue, seek forward & backward
         - Subtitles: Allows you to toggle though the available languages
-            (Requires either vlc or xine)
+          (Requires either vlc or xine)
         - Instant recording of the current program being viewed.
         - Buffers current channel even when you exit back to the guide
-            (Buffers up to a configurable number of minutes while in guide)
+          (Buffers up to a configurable number of minutes while in guide)
         - Multiple digit channel selection: '1', '12, '123'
         - OSD messges: volume, channel info and position within the buffer.
         - Streaming from a remote computer using:
@@ -116,7 +116,8 @@ class PluginInterface(plugin.DaemonPlugin):
     Configure your video groups as you would normally (see freevo wiki for more
     details) then follow the instructions below:
 
-    For DVBStreamer:
+    For DVBStreamer::
+
         vdev = for local DVBStreamer '<dvb adapter number>'
             ie. for DVBStreamer running on adapter 0
             vdev='0'
@@ -126,7 +127,8 @@ class PluginInterface(plugin.DaemonPlugin):
 
         group_type = 'dvb'
 
-    For HDHomeRun:
+    For HDHomeRun::
+
         vdev = '<HDHomeRun id>:<tuner id>'
         The HDHomeRun id and tuner id are the same as those passed to
         hdhomerun_config.

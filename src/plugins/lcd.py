@@ -528,9 +528,8 @@ class PluginInterface(plugin.DaemonPlugin):
     """
     Display context info in LCD using lcdproc daemon.
 
-    @requires:
-       - lcdproc: installed and LCDd running. U{http://lcdproc.sourceforge.net/}
-       - pylcd: installed U{http://www.schwarzvogel.de/software-pylcd.shtml}
+    @requires: lcdproc installed and LCDd running. U{http://lcdproc.sourceforge.net/}
+    @requires: pylcd installed U{http://www.schwarzvogel.de/software-pylcd.shtml}
 
     Also, your LCD dimensions must be supported. Right now it support: 4x20,
     4x40, 2x16, 2x20, 2x40. If you have one with different dimension, it will
