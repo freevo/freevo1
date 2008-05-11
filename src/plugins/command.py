@@ -53,6 +53,7 @@ from gui.ListBox import ListBox
 from gui.RegionScroller import RegionScroller
 from gui.PopupBox import PopupBox
 
+
 def islog(name):
     f = open(os.path.join(config.FREEVO_LOGDIR, 'command-std%s-%s.log' % (name, os.getuid())))
     data = f.readline()
@@ -64,36 +65,38 @@ def islog(name):
 
 class LogScroll(PopupBox):
     """
-    left      x coordinate. Integer
-    top       y coordinate. Integer
-    width     Integer
-    height    Integer
-    text      String to print.
-    bg_color  Background color (Color)
-    fg_color  Foreground color (Color)
-    icon      icon
-    border    Border
-    bd_color  Border color (Color)
-    bd_width  Border width Integer
+    Display the log in a scrollable pop-up box
     """
 
     def __init__(self, file, parent='osd', text=' ', left=None, top=None, width=500,
                  height=350, bg_color=None, fg_color=None, icon=None,
                  border=None, bd_color=None, bd_width=None):
+        """
+        Initialise a LogScroll instance
+
+        @param left:      x coordinate. Integer
+        @param top:       y coordinate. Integer
+        @param width:     Integer
+        @param height:    Integer
+        @param text:      String to print.
+        @param bg_color:  Background color (Color)
+        @param fg_color:  Foreground color (Color)
+        @param icon:      icon
+        @param border:    Border
+        @param bd_color:  Border color (Color)
+        @param bd_width:  Border width Integer
+        """
 
         handler = None
         self.file = file
         self.filetext = open(self.file, 'rb').read()
 
-        PopupBox.__init__(self, text, handler, top, left, width, height,
-                          icon, None, None, parent)
+        PopupBox.__init__(self, text, handler, top, left, width, height, icon, None, None, parent)
 
         myfont = self.osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE)
         surf_w = myfont.stringsize('AAAAAAAAAA'*8)
-        data = self.osd.drawstringframed(self.filetext, 0, 0, surf_w, 1000000,
-                                         myfont, align_h='left', align_v='top',
-                                         fgcolor=self.osd.COL_BLACK,
-                                         mode='hard', layer='')[1]
+        data = self.osd.drawstringframed(self.filetext, 0, 0, surf_w, 1000000, myfont, align_h='left', align_v='top',
+            fgcolor=self.osd.COL_BLACK, mode='hard', layer='')[1]
         (ret_x0,ret_y0, ret_x1, ret_y1) = data
         surf_h = ret_y1 - ret_y0
         if height>surf_h:
@@ -101,13 +104,8 @@ class LogScroll(PopupBox):
         surf = pygame.Surface((surf_w, surf_h), 0, 32)
         bg_c = self.bg_color.get_color_sdl()
         surf.fill(bg_c)
-        self.osd.drawstringframed(self.filetext, 0, 0, surf_w, surf_h,
-                                  myfont,
-                                  align_h='left',
-                                  align_v='top',
-                                  fgcolor=self.osd.COL_BLACK,
-                                  mode='hard',
-                                  layer=surf)
+        self.osd.drawstringframed(self.filetext, 0, 0, surf_w, surf_h, myfont, align_h='left', align_v='top',
+            fgcolor=self.osd.COL_BLACK, mode='hard', layer=surf)
         self.pb = RegionScroller(surf, 50,50, width=width, height=height)
         self.add_child(self.pb)
 
@@ -116,10 +114,8 @@ class LogScroll(PopupBox):
 
         if event in (INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT):
             return self.pb.eventhandler(event)
-
         elif event == INPUT_ENTER or event == INPUT_EXIT:
             self.destroy()
-
         else:
             return self.parent.eventhandler(event)
 
@@ -174,7 +170,7 @@ class CommandOptions(PopupBox):
                           text=_('Stdout File')).show()
                 return
             elif selection == 'err':
-                LogScroll(os.path.join(config.FREEVO_LOGDIR,'command-stderr.log'),
+                LogScroll(os.path.join(config.FREEVO_LOGDIR, 'command-stderr-%s.log' % os.getuid()),
                           text=_('Stderr File')).show()
                 return
         elif event == INPUT_EXIT:
