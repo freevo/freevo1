@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# A transition animation, intended use: imageviewer
+# transition.py - A transition animation, intended use: imageviewer
 # Author: Viggo Fredriksen <viggo@katatonic.org>
 # -----------------------------------------------------------------------
 # $Id$
@@ -44,16 +44,18 @@ class Transition(BaseAnimation):
     finished     = False  # flag for finished animation
 
     surf_blend1  = None
+    """@cvar: first surface"""
     surf_blend2  = None
+    """@cvar: second surface"""
 
 
     def __init__(self, surf1, surf2, mode=-1, direction='vertical', fps=25):
         """
-        @param surf1: Surface to blend with
-        @param surf2: New surface
-        @param mode: effect to use
-        @param direction: vertical/horizontal
-        @param fps: frames per second
+        Initialise an instance of the Transition class
+        @ivar surf1: Surface to blend with
+        @ivar surf2: New surface
+        @ivar mode: effect to use
+        @ivar direction: vertical/horizontal
         """
         BaseAnimation.__init__(self, surf1.get_rect(), fps, bg_update=False)
         _debug_('__init__(surf1=%r, surf2=%r, mode=%r, direction=%r, fps=%r)' % (surf1, surf2, mode, direction, fps), 2)

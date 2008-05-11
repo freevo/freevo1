@@ -54,16 +54,19 @@ FALSE = 0
 
 
 class EditFavorite(PopupBox):
-    """
-    @param prog:    the program to record
-    @param left:    x coordinate, Integer
-    @param top:     y coordinate, Integer
-    @param width:   width in pixels, Integer
-    @param height:  height in pixels, Integer
-    @param context: context in which the object is instantiated
-    """
+    """ """
     def __init__(self, parent=None, subject=None, left=None, top=None, width=500, height=350, context=None):
-        """ Initialise EditFavorite instance """
+        """
+        Initialise an instance of EditFavorite
+
+        @ivar parent:  parent of the class
+        @ivar subject: the title of the program
+        @ivar left:    x coordinate, Integer
+        @ivar top:     y coordinate, Integer
+        @ivar width:   width in pixels, Integer
+        @ivar height:  height in pixels, Integer
+        @ivar context: context in which the object is instantiated
+        """
         _debug_('EditFavorite.__init__(parent=%r, subject=%r, left=%r, top=%r, width=%r, height=%r, context=%r)' % \
             (parent, subject, left, top, width, height, context), 1)
 

@@ -63,10 +63,12 @@ class Border(GUIObject):
 
     def __init__(self, parent, style=None, color=None, width=None):
         """
-        @param parent: Object to draw border of; use this to get geometry and stuff.
-        @param style:  Border Type. One of 'flat','shadow','raised' or 'sunken'
-        @param color:  Color of object, Either a Freevo Color object or a color integer.
-        @param width:  Thickness of border.
+        Initialise an instance of a Border
+
+        @ivar parent:  object to draw border of; use this to get geometry and stuff.
+        @ivar style:   border Type. One of 'flat','shadow','raised' or 'sunken'
+        @ivar color:   color of object, Either a Freevo Color object or a color integer.
+        @ivar width:   thickness of border.
         """
         if not parent or not isinstance(parent, GUIObject):
             raise TypeError, 'You need to set the parent correctly'

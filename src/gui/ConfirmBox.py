@@ -39,32 +39,33 @@ from Button    import *
 
 class ConfirmBox(PopupBox):
     """
-    @ivar text: String to print.
-    @ivar handler: Handler call-back for the box
-    @ivar handler_message: If 'handler_message' is set, the box will transform into
-        a normal pop-up showing this text while 'handler' is called and will destroy
-        itself after that.
-    @ivar x: x coordinate. Integer
-    @ivar y: y coordinate. Integer
-    @ivar width: width of box
-    @type width: integer
-    @ivar height: height of box
-    @type height: integer
-    @ivar icon: icon
-    @ivar text_prop: A dict of 4 elements composing text proprieties::
-
-              { 'align_h': align_h, 'align_v': align_v, 'mode': mode, 'hfill': hfill }
-                 align_v = text vertical alignment
-                 align_h = text horizontal alignment
-                 mode    = hard (break at chars); soft (break at words)
-                 hfill   = True (don't shorten width) or False
     """
     def __init__(self, text, handler=None, handler_message=None, default_choice=0,
                  x=None, y=None, width=0, height=0, icon=None, vertical_expansion=1,
                  text_prop=None, parent='osd'):
+        """
+        Initialise an instance of a ConfirmBox
 
-        PopupBox.__init__(self, text, handler, x, y, width, height,
-                          icon, vertical_expansion, text_prop, parent)
+        @ivar text: String to print.
+        @ivar handler: Handler call-back for the box
+        @ivar handler_message: If 'handler_message' is set, the box will transform
+          into a normal pop-up showing this text while 'handler' is called and will
+          destroy itself after that.
+        @ivar x: x coordinate. Integer
+        @ivar y: y coordinate. Integer
+        @ivar width: Integer
+        @ivar height: Integer
+        @ivar icon: icon
+        @ivar text_prop: A dict of 4 elements composing text proprieties::
+
+                  { 'align_h': align_h, 'align_v': align_v, 'mode': mode, 'hfill': hfill }
+                     align_v = text vertical alignment
+                     align_h = text horizontal alignment
+                     mode    = hard (break at chars); soft (break at words)
+                     hfill   = True (don't shorten width) or False
+        """
+
+        PopupBox.__init__(self, text, handler, x, y, width, height, icon, vertical_expansion, text_prop, parent)
 
         self.handler_message = handler_message
 

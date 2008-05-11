@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# __init__.py - the Freevo Live Pause module for tv
+# Freevo Live Pause module for tv
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -56,10 +56,10 @@ class ChunkBuffer(object):
 
     def __init__(self, path, size):
         """
-        @param path: Location to create the ring buffer file.
-        @type path: C(string}
-        @param size: Size of the ring buffer
-        @type size: C{integer}
+        Initialise an instance of ChunkBuffer
+
+        @ivar path: Location to create the ring buffer file.
+        @ivar size: Size of the ring buffer.
         """
         self.buffer = RingBuffer(path, (size / RB_CHUNK_SIZE) * RB_CHUNK_SIZE)
         self.last_time = 0

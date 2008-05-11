@@ -42,32 +42,27 @@ from Label     import *
 
 
 class PopupBox(Window):
-    """
-    Trying to make a standard popup/dialog box for various usages.
-
-    @ivar x:
-        x coordinate. Integer
-    @ivar y:
-        y coordinate. Integer
-    @ivar width:
-        Integer
-    @ivar height:
-        Integer
-    @ivar text:
-        String to print.
-    @ivar icon:
-        icon
-    @ivar text_prop:
-
-        A dict of 4 elements composing text proprieties::
-              { 'align_h': align_h, 'align_v': align_v, 'mode': mode, 'hfill': hfill }
-                 align_v = text vertical alignment
-                 align_h = text horizontal alignment
-                 mode    = hard (break at chars); soft (break at words)
-                 hfill   = True (don't shorten width) or False
-    """
+        """
+        Trying to make a standard popup/dialog box for various usages.
+        """
     def __init__(self, text, handler=None, x=0, y=0, width=0, height=0,
                  icon=None, vertical_expansion=1, text_prop=None, parent='osd'):
+        """
+        Initialise an instance of a PopupBox
+
+        @ivar x: x coordinate. Integer
+        @ivar y: y coordinate. Integer
+        @ivar width: Integer
+        @ivar height: Integer
+        @ivar text: String to print.
+        @ivar icon: icon
+        @ivar text_prop: A dict of 4 elements composing text proprieties
+          { 'align_h': align_h, 'align_v': align_v, 'mode': mode, 'hfill': hfill }:
+            - align_v = text vertical alignment
+            - align_h = text horizontal alignment
+            - mode    = hard (break at chars); soft (break at words)
+            - hfill   = True (don't shorten width) or False
+        """
 
         self.handler = handler
         Window.__init__(self, parent, x, y, width, height)

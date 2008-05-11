@@ -39,11 +39,12 @@ class BaseAnimation:
     Base class for animations, this should perhaps be changed to use sprites
     in the future (if one decides to go with a RenderGroup model)
 
-    @param rectstyle : the rectangle defining the position on the screen (pygame)
-    @param fps       : Desired fps
-    @param bg_update : update the animation with background from screen
-    @param bg_wait   : initially wait for updated background before activating
-    @param bg_redraw : set background to original screen bg when finished
+    @cvar background: Surface Background (screen)
+    @cvar surface   : The Surface obj. to work with
+    @cvar active    : Should it be updated in the poll
+    @cvar delete    : Delete from list on next poll
+    @cvar updates   : list of updates from screen
+    @cvar next_updat: timestamp for next update
     """
 
     background   = None   # Surface Background (screen)
@@ -55,6 +56,15 @@ class BaseAnimation:
 
 
     def __init__(self, rectstyle, fps=20, bg_update=True, bg_wait=False, bg_redraw=False):
+        """
+        Initialise an instance of BaseAnimation
+
+        @ivar rectstyle : the rectangle defining the position on the screen (pygame)
+        @ivar fps       : Desired fps
+        @ivar bg_update : update the animation with background from screen
+        @ivar bg_wait   : initially wait for updated background before activating
+        @ivar bg_redraw : set background to original screen bg when finished
+        """
         _debug_('__init__(rectstyle=%r, fps=%r, bg_update=%r, bg_wait=%r, bg_redraw=%r)' % \
             (rectstyle, fps, bg_update, bg_wait, bg_redraw), 2)
 
@@ -69,33 +79,25 @@ class BaseAnimation:
 
 
     def get_surface(self, width, height):
-        """
-        Helper for creating surfaces
-        """
+        """ Helper for creating surfaces """
         _debug_('get_surface(width=%r, height=%r)' % (width, height), 2)
         return Surface( (width, height), 0, 32)
 
 
     def get_osd(self):
-        """
-        Helper for getting osd singleton
-        """
+        """ Helper for getting osd singleton """
         _debug_('get_osd()', 2)
         return osd.get_singleton()
 
 
     def set_fps(self, fps):
-        """
-        Sets the desired fps
-        """
+        """ Sets the desired fps """
         _debug_('set_fps(fps=%r)' % (fps), 2)
         self.interval  = int(1000.0/float(fps))
 
 
     def set_screen_background(self):
-        """
-        Update the background
-        """
+        """ Update the background """
         _debug_('set_screen_background()', 2)
         if not self.background:
             self.background = osd.get_singleton().getsurface(rect=self.rect)
@@ -125,14 +127,15 @@ class BaseAnimation:
 
 
     def get_rect(self):
+        """ Get the rectangle of the current object
+        @returns: the rectangle tuple
+        """
         _debug_('get_rect()', 2)
         return self.rect
 
 
     def start(self):
-        """
-        Starts the animation
-        """
+        """ Starts the animation """
         _debug_('start()', 2)
         render.get_singleton().add_animation(self)
         if not self.bg_wait:
@@ -140,17 +143,13 @@ class BaseAnimation:
 
 
     def stop(self):
-        """
-        Stops the animation from being polled
-        """
+        """ Stops the animation from being polled """
         _debug_('stop()', 2)
         self.active = False
 
 
     def remove(self):
-        """
-        Flags the animation to be removed from the animation list
-        """
+        """ Flags the animation to be removed from the animation list """
         _debug_('remove()', 2)
         self.active = False
 
@@ -163,8 +162,7 @@ class BaseAnimation:
 
 
     def damage(self, rectstyles=[]):
-        """
-        Checks if the screen background has been damaged
+        """ Checks if the screen background has been damaged
 
         @note: If the rect passed damages our rect, but no actual blit is done
         on osd.screen, we'll end up with a copy of our animation in our bg. This is BAD.
@@ -186,9 +184,7 @@ class BaseAnimation:
 
 
     def poll(self, current_time):
-        """
-        Poll the animations
-        """
+        """ Poll the animations """
         _debug_('poll(current_time=%r)' % (current_time), 2)
         if self.next_update < current_time:
             self.next_update = current_time + self.interval
@@ -201,8 +197,6 @@ class BaseAnimation:
 
 
     def draw(self):
-        """
-        Overload to do stuff with the surface
-        """
+        """ Overload to do stuff with the surface """
         _debug_('draw()', 2)
         pass

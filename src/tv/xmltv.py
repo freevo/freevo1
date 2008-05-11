@@ -305,21 +305,18 @@ class Writer:
     def __init__(self, encoding="utf-8", date=None, source_info_url=None, source_info_name=None,
         generator_info_url=None, generator_info_name=None):
         """
-        @param encoding: The text encoding that will be used. Defaults to 'utf-8'
+        Initialise an instance of Writer
 
-        @param date: The date this data was generated. Optional
-
-        @param source_info_url: A URL for information about the source of the data.
-            Optional
-
-        @param source_info_name: A human readable description of source_info_url.
-            Optional
-
-        @param generator_info_url: A URL for information about the program that
-            is generating the XMLTV document. Optional
-
-        @param generator_info_name: A human readable description of
-            generator_info_url. Optional
+        @ivar encoding: The text encoding that will be used. Defaults to 'utf-8'
+        @ivar date: The date this data was generated. Optional
+        @ivar source_info_url: A URL for information about the source of the
+          data.  Optional
+        @ivar source_info_name: A human readable description of source_info_url.
+          Optional
+        @ivar generator_info_url:  A URL for information about the program that
+          is generating the XMLTV document. Optional
+        @ivar generator_info_name: A human readable description of
+          generator_info_url. Optional
         """
         _debug_('Writer.__init__(encoding=%r, date=%r, source_info_url=%r, source_info_name=%r, generator_info_url=%r, generator_info_name=%r)' % \
             (encoding, date, source_info_url, source_info_name, generator_info_url, generator_info_name), 2)
