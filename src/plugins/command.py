@@ -114,7 +114,7 @@ class LogScroll(PopupBox):
 
     def eventhandler(self, event, menuw=None):
 
-        if event in (INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT ):
+        if event in (INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT):
             return self.pb.eventhandler(event)
 
         elif event == INPUT_ENTER or event == INPUT_EXIT:
@@ -190,9 +190,17 @@ class CommandChild(childapp.ChildApp2):
 
 class CommandItem(Item):
     """
-    This is the class that actually runs the commands. Eventually
-    hope to add actions for different ways of running commands
-    and for displaying stdout and stderr of last command run.
+    This is the class that actually runs the commands. Eventually hope to add
+    actions for different ways of running commands and for displaying stdout
+    and stderr of last command run.
+
+    @ivar display_type: 'commands'
+    @ivar stoposd: stop the OSD, False if running under X11
+    @ivar use_wm: use the window manager
+    @ivar spawnwm: command to start the window manager
+    @ivar killwm: command to stop the window manager
+    @ivar stdout: log to stdout
+    @ivar rc: remote control singleton
     """
     def __init__(self, command=None, directory=None):
         Item.__init__(self, skin_type='commands')
@@ -202,9 +210,10 @@ class CommandItem(Item):
         self.spawnwm = config.COMMAND_SPAWN_WM
         self.killwm  = config.COMMAND_KILL_WM
         self.stdout  = True
+        self.rc      = rc.get_singleton()
         if command and directory:
-            self.name = command
-            self.cmd  = os.path.join(directory, command)
+            self.name  = command
+            self.cmd   = os.path.join(directory, command)
             self.image = util.getimage(self.cmd)
 
 
@@ -212,7 +221,7 @@ class CommandItem(Item):
         """
         return a list of actions for this item
         """
-        return [ ( self.flashpopup , _('Run Command') ) ]
+        return [ (self.flashpopup , _('Run Command')) ]
 
 
     def flashpopup(self, arg=None, menuw=None):
@@ -228,13 +237,13 @@ class CommandItem(Item):
             pop.show()
 
         if self.stoposd:
-            rc.suspend()
+            self.rc.suspend()
 
         workapp = CommandChild(self.cmd, 'command', 1, self.stoposd)
         while workapp.isAlive():
             # make sure all callbacks in rc are running
             if not self.stoposd:
-                rc.poll()
+                self.rc.poll()
             # wait some time
             time.sleep(0.5)
 
@@ -247,7 +256,7 @@ class CommandItem(Item):
         workapp.stop()
 
         if self.stoposd:
-            rc.resume()
+            self.rc.resume()
 
         message = ''
         if workapp.status:
@@ -293,7 +302,7 @@ class CommandMenuItem(Item):
         """
         return a list of actions for this item
         """
-        items = [ ( self.create_commands_menu , 'commands' ) ]
+        items = [ (self.create_commands_menu , 'commands') ]
         return items
 
 
