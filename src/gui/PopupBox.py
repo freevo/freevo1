@@ -42,9 +42,9 @@ from Label     import *
 
 
 class PopupBox(Window):
-        """
-        Trying to make a standard popup/dialog box for various usages.
-        """
+    """
+    Trying to make a standard popup/dialog box for various usages.
+    """
     def __init__(self, text, handler=None, x=0, y=0, width=0, height=0,
                  icon=None, vertical_expansion=1, text_prop=None, parent='osd'):
         """
