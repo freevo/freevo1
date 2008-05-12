@@ -50,8 +50,8 @@ TRUE = 1
 FALSE = 0
 
 def ParsePluginName(line):
-    '''
-    '''
+    """
+    """
     _debug_('ParsePluginName(line=%r)' % (line), 2)
     sline = line.replace('"', "'")
     sline = sline.split("'")
@@ -62,8 +62,8 @@ def ParsePluginName(line):
     return pname
 
 def ReadConfigPlugins(cfile):
-    '''
-    '''
+    """
+    """
     _debug_('ReadConfigPlugins(cfile=%r)' % (cfile), 2)
     rconf = ReadConfig(cfile)
     pluginlines = []
@@ -90,8 +90,8 @@ def ReadConfigPlugins(cfile):
 
 
 def GetPlugConfig(plugin):
-    '''
-    '''
+    """
+    """
     _debug_('GetPlugConfig(plugin=%r)' % (plugin), 2)
 
     config_list = []
@@ -103,8 +103,8 @@ def GetPlugConfig(plugin):
 
 
 def get_config_setting(lconf, plugin_name):
-    '''
-    '''
+    """
+    """
     _debug_('get_config_setting(lconf=%r, plugin_name=%r)' % (lconf, plugin_name), 2)
     conf_line = 'None'
     confentry = False
@@ -118,8 +118,8 @@ def get_config_setting(lconf, plugin_name):
 
 
 def plugin_level_control(lconf_line, plugin):
-    '''
-    '''
+    """
+    """
     _debug_('plugin_level_control(lconf_line=%r, plugin=%r)' % (lconf_line, plugin), 2)
 
     # check to see if the plugin supports levels.
@@ -146,8 +146,8 @@ def plugin_level_control(lconf_line, plugin):
 
 
 def get_plugin_args(config_line):
-    '''
-    '''
+    """
+    """
     _debug_('get_plugin_args(config_line=%r)' % (config_line), 2)
 
     plugin_args = ''
@@ -158,8 +158,8 @@ def get_plugin_args(config_line):
 
 
 def PluginHelpLink(plugin_group, plugin_name):
-    '''
-    '''
+    """
+    """
     _debug_('PluginHelpLink(plugin_group=%r, plugin_name=%r)' % (plugin_group, plugin_name ), 2)
 
     href = 'help/plugins.rpy?type=%s#%s' % ( plugin_group.lower(),  plugin_name.lower()  )
@@ -170,7 +170,7 @@ def PluginHelpLink(plugin_group, plugin_name):
     return plugin_help
 
 
-class PluginHTMLControl():
+class PluginHTMLControl(object):
     def __init__(self,lconf,plugin):
         self.expand_all = False
         self.lconfline, self.linenumber = get_config_setting(lconf, plugin)
@@ -180,8 +180,8 @@ class PluginHTMLControl():
         self.line_control = CreateHTMLinput('hidden',self.plugin_name + '_lineno', str(self.linenumber) , '','')
 
     def status(self):
-        '''
-        '''
+        """
+        """
         _debug_('get_plugin_status(self=%r)' % (self), 2)
         status = 'Deactive'
 
@@ -198,8 +198,8 @@ class PluginHTMLControl():
 
 
 def displayplugin(cfile, plugin, lconf, expAll , plugin_group):
-    '''
-    '''
+    """
+    """
     _debug_('displayplugin(cfile=%r, plugin=%r, lconf=%r, expAll=%r, plugin_group=%r)' %  \
            (cfile, plugin, lconf, expAll, plugin_group), 2)
 
@@ -255,8 +255,8 @@ def displayplugin(cfile, plugin, lconf, expAll , plugin_group):
     return html
 
 def Display_Vars(plugin, cfile):
-    '''
-    '''
+    """
+    """
     _debug_('Display_Vars(plugin=%r, cfile=%r)' % (plugin, cfile), 2)
 
     try:
@@ -303,8 +303,8 @@ class ConfigurePluginsResource(FreevoResource):
         config.all_plugins.sort()
 
     def display_group(self,  splugins,  lcplugins):
-        '''
-        '''
+        """
+        """
         _debug_('display_group(dsp_group=%r, splugins=%r, lcplugins=%r)' % \
             (self, splugins,  lcplugins), 2)
 
@@ -333,8 +333,8 @@ class ConfigurePluginsResource(FreevoResource):
         return Unicode(grouplist)
 
     def SortPlugins(self):
-        '''
-        '''
+        """
+        """
         _debug_('SortPlugins(self=%r)' % (self), 2)
         sorted = []
         for plugin in self.all_plugins:
@@ -346,8 +346,8 @@ class ConfigurePluginsResource(FreevoResource):
 
 
     def _render(self, request):
-        '''
-        '''
+        """
+        """
         _debug_('_render(request)', 2)
 
         fv = HTMLResource()

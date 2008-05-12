@@ -70,8 +70,8 @@ from event import *
 import util
 
 def ParseConfigFile(rconf):
-    '''
-    '''
+    """
+    """
     _debug_('ParseConfigFile(rconf=%r)' % (rconf), 2)
     cnt = 0
     fconfig = []
@@ -120,7 +120,9 @@ def ParseConfigFile(rconf):
     #fconfig.sort(key=operator.itemgetter('control_name'))
     return fconfig
 
-class ConfigControl():
+
+
+class ConfigControl(object):
 
     def __init__(self, config_line):
         #print 'ConfigControl.__init__(config_line=%r)' % (config_line,)
@@ -199,8 +201,8 @@ class ConfigControl():
 
 
 def GetVarGroup(setting_name):
-    '''
-    '''
+    """
+    """
     _debug_('GetVarGroup(setting_name=%r)' % (setting_name), 2)
 
     group = setting_name.split('_')[0].capitalize()
@@ -214,8 +216,8 @@ def GetVarGroup(setting_name):
 
 
 def GetGroupList(cfgvars):
-    '''
-    '''
+    """
+    """
     _debug_('GetGroupList(cfgvars=%r)' % (cfgvars), 2)
     grps = ['Other','KeyMap']
     agrps = []
@@ -236,8 +238,8 @@ def GetGroupList(cfgvars):
 
 
 def getCtrlType(cname, cvalue, vtype):
-    '''
-    '''
+    """
+    """
     _debug_('getCtrlType(cname=%r, cvalue=%r, vtype=%r)' % (cname, cvalue, vtype), 2)
     if cvalue == 'True' or cvalue == 'False':
         return 'boolean'
@@ -257,8 +259,8 @@ def getCtrlType(cname, cvalue, vtype):
 
 
 def CreateFileBrowseControl(cname,setting_name):
-    '''
-    '''
+    """
+    """
     _debug_('CreateFileBrowseControl(cname, setting_name)', 2)
 
     if DirTypeVar(setting_name) or FileTypeVarArray(setting_name) :
@@ -298,8 +300,8 @@ def Display_TV_Logo(channel):
 
 
 def CreateTV_Channels_ctrl(cname, cvalue):
-    '''
-    '''
+    """
+    """
     _debug_('CreateTV_Channels_ctrl(cname, cvalue)', 2)
     vitems = GetItemsArray(cvalue)
     ctrl = ''
@@ -331,8 +333,8 @@ def CreateTV_Channels_ctrl(cname, cvalue):
 
 
 def CreateFileItemList(cname, cvalue,setting_name):
-    '''
-    '''
+    """
+    """
     _debug_('CreateFileItemList(cname, cvalue, cenabled), setting_name)', 2)
     vitems = GetItemsArray(cvalue)
     ctrl = ''
@@ -395,8 +397,8 @@ def CreateFileItemList(cname, cvalue,setting_name):
 
 
 def CreateDictionaryControl(cname, cvalue):
-    '''
-    '''
+    """
+    """
     _debug_('CreateDictionaryControl(cname=%r, cvalue=%r)' % (cname, cvalue), 2)
     ctrl2type = 'textbox'
     if cname.startswith('WWW_USERS'):
@@ -436,8 +438,8 @@ def CreateDictionaryControl(cname, cvalue):
 
 
 def CreateListControl(cname, cvalue):
-    '''
-    '''
+    """
+    """
     _debug_('CreateListControl(cname=%r, cvalue=%r )' % (cname, cvalue ), 2)
 
     ctrl = '<ul class="ItemList">\n'
@@ -492,8 +494,8 @@ def CreateListControl(cname, cvalue):
 
 
 def CreateTextArea(cname, cvalue):
-    '''
-    '''
+    """
+    """
     _debug_('CreateTextArea(cname, cvalue)', 2)
     elemsep = ')'
     rows = cvalue.count(elemsep) + 1
@@ -509,8 +511,8 @@ def CreateTextArea(cname, cvalue):
 
 
 def CreateTextBox(cname, setting_name, cvalue, other_opts = None):
-    '''
-    '''
+    """
+    """
     _debug_('CreateTextBox(cname, cvalue,  plugin_group, cenabled)', 2)
     cvalue = cvalue.strip()
 
@@ -532,8 +534,8 @@ def CreateTextBox(cname, setting_name, cvalue, other_opts = None):
 
 
 def KeyMapControl(cname, setting_name, cvalue ):
-    '''
-    '''
+    """
+    """
     _debug_('KeyMapControl(cname, cvalue,  cenabled)', 2)
     cvalue = cvalue.strip()
     key_name = setting_name.split('[')[1].strip(']')
@@ -592,8 +594,8 @@ def EnableCheckBox(nctrl):
     return chkbox
 
 def CreateConfigLine(nctrl,  expALL):
-    '''
-    '''
+    """
+    """
     _debug_('CreateConfigLine(nctrl=%r,  expALL=%r)' % (nctrl, expALL), 2)
     htmlctrl = ''
 
@@ -665,8 +667,8 @@ def CreateConfigLine(nctrl,  expALL):
 
 
 def DisplayConfigChanges(current_version):
-    '''
-    '''
+    """
+    """
     _debug_('DisplayConfigChanges(current_version=%r)' % current_version, 2)
 
     if not current_version:
@@ -702,8 +704,8 @@ def DisplayConfigChanges(current_version):
 
 
 def GetConfigVersion(conf_data):
-    '''
-    '''
+    """
+    """
     _debug_('GetConfigVersion(conf_data=%r)' % conf_data,2)
     for setting in conf_data:
         if setting.ctrlname == 'CONFIG_VERSION':
@@ -721,8 +723,8 @@ class ConfigResource(FreevoResource):
 
 
     def DisplayGroups(self,fconfig):
-        '''
-        '''
+        """
+        """
         _debug_('DisplayGroups(fconfig=%r)' % (fconfig), 2)
         html =  '<ul class="GroupHeader">'
 
@@ -747,8 +749,8 @@ class ConfigResource(FreevoResource):
         return html
 
     def DisplayGroup(self, grp,fconfig):
-        '''
-        '''
+        """
+        """
         _debug_('DisplayGroups(fconfig=%r)' % (fconfig), 2)
 
         groups = GetGroupList(fconfig)
@@ -773,8 +775,8 @@ class ConfigResource(FreevoResource):
         return html
 
     def _render(self, request):
-        '''
-        '''
+        """
+        """
         _debug_('_render(self, request)', 2)
         fv = HTMLResource()
         form = request.args
@@ -802,19 +804,19 @@ class ConfigResource(FreevoResource):
         fconfig = ParseConfigFile(rconf)
 
         # Add Setting for Adding New KEYMAPS
-#        add_keymap = {'ctrlname': 'KEYMAP[NEW]',
-#               'ctrlvalue': '',
-   #            'checked': False,
-      #         'type' : 'keymap',
-         #      'comments' : 'New Key Map',
-            #   'group' :'KeyMap',
-               #'startline': -1,
-#               'endline': -1,
-   #            'fileline': '',
-      #         'control_name':'KEYMAP_NEW',
-         #      'control_type':'keymap',
-            #   'html_control': KeyMapControl('KEYMAP_NEW', 'KEYMAP[NEW]', '')
-       # }
+        #add_keymap = {'ctrlname': 'KEYMAP[NEW]',
+        #       'ctrlvalue': '',
+        #       'checked': False,
+        #       'type' : 'keymap',
+        #       'comments' : 'New Key Map',
+        #       'group' :'KeyMap',
+        #       'startline': -1,
+        #       'endline': -1,
+        #       'fileline': '',
+        #       'control_name':'KEYMAP_NEW',
+        #       'control_type':'keymap',
+        #       'html_control': KeyMapControl('KEYMAP_NEW', 'KEYMAP[NEW]', '')
+        #}
         #fconfig.append(add_keymap)
 
         expAll = fv.formValue(form, 'expAll')
