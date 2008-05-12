@@ -32,6 +32,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * New video menu plug-in to remove commercials (F#1920654)
  * New video plug-in to supply video information from xine (F#1929333)
  * Updated audio albumtree plug-in with support for ogg files (F#1928509)
+ * Updated fxd audio to allow radio tuner to be mixed with web radio (F#1962450)
  * Updated image viewer to allow a configuration variable of autostart (F#1929319)
  * Updated plugins helper to work with __init__.py modules (F#1930102)
  * Updated somafm with new stations (F#1954313)

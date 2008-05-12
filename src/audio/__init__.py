@@ -143,6 +143,7 @@ class PluginInterface(plugin.MimetypePlugin):
                     <playlist/>
                     <reconnect/>
                     <url>http://64.236.34.141:80/stream/1005</url>
+                    <station>105.3</station>
                     <info>
                         <genre>JAZZ</genre>
                         <description>A nice description</description>
@@ -151,15 +152,18 @@ class PluginInterface(plugin.MimetypePlugin):
             </freevo>
 
         Everything except title and url is optional. If <player> is set, this player
-        will be used (possible xine or mplayer). The tag <playlist/> signals that this
-        url is a playlist (mplayer needs that).  <reconnect/> sihnals that the player
+        will be used (possible xine, mplayer or radioplayer). The tag <playlist/> signals that this
+        url is a playlist (mplayer needs that).  <reconnect/> signals that the player
         should reconnect when the connection stopps.
+        If <player> is radioplayer also the radioplayer (not radio) plugin must be activated.
+        In this case, <station> defines the frequency used as '%s' in RADIO_CMD.
         """
         a = AudioItem('', fxd.getattr(None, 'parent', None), scan=False)
 
         a.name     = fxd.getattr(node, 'title', a.name)
         a.image    = fxd.childcontent(node, 'cover-img')
         a.url      = fxd.childcontent(node, 'url')
+        a.station  = fxd.childcontent(node, 'station')
         if a.image:
             a.image = vfs.join(vfs.dirname(fxd.filename), a.image)
 
