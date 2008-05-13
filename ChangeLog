@@ -23,6 +23,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Fixed command plug-in crashing when polling the event handler (B#1959045, B#1962010)
  * Fixed Wiimote plug-in for latest kaa SocketDispatcher changes (B#1941224)
  * Fixed TV guide exceptions (B#1958916)
+ * Fixed TV guide Unicode errors (B#1962665)
 
 == Release 1.7.8 (2008-05-26) ==
 --------------------------------
