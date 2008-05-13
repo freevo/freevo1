@@ -2027,6 +2027,19 @@ WEBSERVER_GID = 0
 #
 WEBSERVER_CACHEDIR = FREEVO_CACHEDIR
 
+# items to include on the web pages
+WWW_PAGES = [
+    #   Label                      Title                                  Page
+    (_('Home'),                 _('Home'),                               'index.rpy'), 
+    (_('TV Guide'),             _('View TV Listings'),                   'guide.rpy'), 
+    (_('Scheduled Recordings'), _('View Scheduled Recordings'),          'record.rpy'), 
+    (_('Favorites'),            _('View Favorites'),                     'favorites.rpy'), 
+    (_('Media Library'),        _('View Media Library'),                 'library.rpy'), 
+    (_('Manual Recording'),     _('Schedule a Manual Recording'),        'manualrecord.rpy'), 
+    (_('Search'),               _('Advanced Search Page'),               'search.rpy'), 
+    (_('Help'),                 _('View Online Help and Documentation'), 'help/')
+]
+
 #
 # Some sizes for the images in the web library
 #

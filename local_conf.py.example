@@ -1589,6 +1589,25 @@ CACHE_IMAGES = 1
 # }
 #
 
+# items to include on the web pages
+# WWW_PAGES = [
+#     #   Label                      Title                                  Page
+#     (_('Home'),                 _('Home'),                               'index.rpy'), 
+#     (_('TV Guide'),             _('View TV Listings'),                   'guide.rpy'), 
+#     (_('Scheduled Recordings'), _('View Scheduled Recordings'),          'record.rpy'), 
+#     (_('Favorites'),            _('View Favorites'),                     'favorites.rpy'), 
+#     (_('Media Library'),        _('View Media Library'),                 'library.rpy'), 
+#     (_('Manual Recording'),     _('Schedule a Manual Recording'),        'manualrecord.rpy'), 
+#     ('Config',                    'Configuration Information',           'config.rpy'),
+#     ('Plugins',                   'Plug-in Configuration Information',   'pluginconfig.rpy'),
+#     ('YouTube',                   'YouTube',                             'youtube.rpy'),
+#     ('Logs',                      'Logs',                                'viewlogfile.rpy'),
+#     ('My Page',                   'My Page Title'                        'mypage.html'),
+#     ('My Site',                   'My Site Title'                        'mysite/'),
+#     (_('Search'),               _('Advanced Search Page'),               'search.rpy'), 
+#     (_('Help'),                 _('View Online Help and Documentation'), 'help/')
+# ]
+
 #
 # Divide the TV guide into intervals of this length (in minutes)
 #

@@ -195,19 +195,14 @@ class HTMLResource:
         # start the bar, it is build as a list
         self.res += '<div id="header">\n<ul>'
         # this items should be shown in the tab bar
-        items = [(_('Home'),_('Home'),'%sindex.rpy' % str(strprefix)),
-                 (_('TV Guide'),_('View TV Listings'),'%sguide.rpy' % str(strprefix)),
-                 (_('Scheduled Recordings'),_('View Scheduled Recordings'),'%srecord.rpy' % str(strprefix)),
-                 (_('Favorites'),_('View Favorites'),'%sfavorites.rpy' % str(strprefix)),
-                 (_('Media Library'),_('View Media Library'),'%slibrary.rpy' % str(strprefix)),
-                 (_('Manual Recording'),_('Schedule a Manual Recording'),'%smanualrecord.rpy' % str(strprefix)),
-                 (_('Search'),_('Advanced Search Page'),'%ssearch.rpy' % str(strprefix)),
-                 (_('Help'),_('View Online Help and Documentation'),'%shelp/' % str(strprefix))]
+        items = []
+        for label, title, link in config.WWW_PAGES:
+            items.append((label, title, os.path.join(str(strprefix), link)))
         # maybe also a personal web pages
         if hasattr(config, 'WWW_PERSONAL_PAGE'):
             for page in config.WWW_PERSONAL_PAGE:
-                items.append((page[0], page[1], '%s%s' % (str(strprefix), page[2])))
-        if hasattr(config, 'ICECAST_WWW_PAGE') and config.ICECAST_WWW_PAGE:
+                items.append((page[0], page[1], os.path.join(str(strprefix), page[2])))
+        if hasattr(config, 'WWW_ICECAST_PAGE') and config.WWW_ICECAST_PAGE:
             items.append((_('Icecast List'),_('Change Icecast List'),'%siceslistchanger.rpy' % (strprefix)))
         # go through the items and create the bar
         for i in items:
@@ -393,7 +388,7 @@ class HTMLResource:
         #print 'printLinks(prefix=%r)' % (prefix)
         #
         #try:
-        #    if config.ICECAST_WWW_PAGE:
+        #    if config.WWW_ICECAST_PAGE:
         #        self.res += '<a href="%siceslistchanger.rpy">Change Icecast List</a>' % strprefix
         #except AttributeError:
         #    pass
