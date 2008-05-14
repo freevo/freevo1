@@ -847,6 +847,16 @@
         
         <!-- Basic Fonts -->
         
+        <font label="tiny0"  name="Arial_Bold" size="10" color="default0">
+            <shadow visible="yes" color="0x000000" border="yes"/>
+        </font>
+        <font label="tiny1"  name="Arial_Bold" size="10" color="default1">
+            <shadow visible="yes" color="0x000000" border="yes"/>
+        </font>
+        <font label="tiny2"  name="Arial_Bold" size="10" color="default2">
+            <shadow visible="yes" color="0x000000" border="yes"/>
+        </font>
+        
         <font label="small0"  name="Arial_Bold" size="12" color="default0">
             <shadow visible="yes" color="0x000000" border="yes"/>
         </font>

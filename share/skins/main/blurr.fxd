@@ -871,9 +871,22 @@
         </font>
         -->
 
-        <font label="clock"   name="Arial_Bold" size="16" color="0xffffff"/>
+        <!--<font label="clock"   name="Arial_Bold" size="16" color="0xffffff"/>-->
+        <font label="medium0" name="Arial_Bold" size="14" color="default0">
+            <shadow visible="yes" color="0x000000" border="yes"/>
+        </font>
 
         <!-- Basic Fonts -->
+
+        <font label="tiny0"  name="Arial_Bold" size="8" color="default0">
+            <shadow visible="yes" color="0x000000" border="yes"/>
+        </font>
+        <font label="tiny1"  name="Arial_Bold" size="8" color="default1">
+            <shadow visible="yes" color="0x000000" border="yes"/>
+        </font>
+        <font label="tiny2"  name="Arial_Bold" size="8" color="default2">
+            <shadow visible="yes" color="0x000000" border="yes"/>
+        </font>
 
         <font label="small0"  name="Arial_Bold" size="12" color="default0">
             <shadow visible="yes" color="0x000000" border="yes"/>

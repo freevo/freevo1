@@ -903,6 +903,13 @@
         
         <!-- Basic Fonts -->
         
+        <font label="tiny0"  name="DejaVuSansCondensed" size="10" color="default0">
+        </font>
+        <font label="tiny1"  name="DejaVuSansCondensed" size="10" color="default1">
+        </font>
+        <font label="tiny2"  name="DejaVuSansCondensed" size="10" color="default2">
+        </font>
+        
         <font label="small0"  name="DejaVuSansCondensed" size="12" color="default0">
         </font>
         <font label="small1"  name="DejaVuSansCondensed" size="12" color="default1">

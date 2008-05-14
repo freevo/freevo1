@@ -1047,6 +1047,10 @@
         
         <!-- Basic Fonts -->
         
+        <font label="tiny0"  name="Sansumi-DemiBold.ttf" size="10" color="default0"/>
+        <font label="tiny1"  name="Sansumi-DemiBold.ttf" size="10" color="default1"/>
+        <font label="tiny2"  name="Sansumi-DemiBold.ttf" size="10" color="default2"/>
+        
         <font label="small0"  name="Sansumi-DemiBold.ttf" size="12" color="default0"/>
         <font label="small1"  name="Sansumi-DemiBold.ttf" size="12" color="default1"/>
         <font label="small2"  name="Sansumi-DemiBold.ttf" size="12" color="default2"/>

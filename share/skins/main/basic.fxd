@@ -248,6 +248,10 @@
 
         <font label="default" name="VeraBd.ttf" size="16" color="0xffffff"/>
 
+        <font label="tiny0"  name="VeraBd.ttf" size="10" color="default0"/>
+        <font label="tiny1"  name="VeraBd.ttf" size="10" color="default1"/>
+        <font label="tiny2"  name="VeraBd.ttf" size="10" color="default2"/>
+
         <font label="small0"  name="VeraBd.ttf" size="12" color="default0"/>
         <font label="small1"  name="VeraBd.ttf" size="12" color="default1"/>
         <font label="small2"  name="VeraBd.ttf" size="12" color="default2"/>
