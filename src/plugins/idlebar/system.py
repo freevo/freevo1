@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# idlebar/system - IdleBar plugins for monitoring the system
+# IdleBar plugins for monitoring the system
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -9,6 +9,7 @@
 # Available plugins:
 #       idlebar.system.procstats
 #       idlebar.system.sensors
+#       idlebar.system.sensors2
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -96,11 +97,9 @@ class procstats(IdleBarPlugin):
         free    = 0
         meminfo = None
         try:
-            f = file('/proc/meminfo', 'r')
-            meminfo = f.read()
-            f.close()
+            meminfo = file('/proc/meminfo', 'r').read().strip()
         except OSError:
-            _debug_('[procstats]: The file /proc/meminfo is not available')
+            _debug_('[procstats]: The file /proc/meminfo is not available', DWARNING)
 
         if meminfo:
             i = 0
@@ -125,12 +124,10 @@ class procstats(IdleBarPlugin):
         uptime = 0
         used = 0
         f = open('/proc/stat')
-
         if f:
             stat = string.split(f.readline())
             used = long(stat[1])+long(stat[2])+long(stat[3])
             uptime = used + long(stat[4])
-
         f.close()
         usage = (float(used-self.lastused)/float(uptime-self.lastuptime))*100
         self.lastuptime = uptime
@@ -149,18 +146,15 @@ class procstats(IdleBarPlugin):
 
         if self.drawCpu == 1:
             widthcpu = font.stringsize(self.currentCpu)
-            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/cpu.png'),
-                          (x, osd.y + 7, -1, -1))
-            osd.write_text(self.currentCpu, font, None, x + 15, osd.y + 55 - font.h,
-                           widthcpu, font.h, 'left', 'top')
+            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/cpu.png'), (x, osd.y + 7, -1, -1))
+            osd.write_text(self.currentCpu, font, None, x + 15, osd.y + 55 - font.h, widthcpu, font.h, 'left', 'top')
 
         if self.drawMem == 1:
             widthmem = font.stringsize(self.currentMem)
 
-            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/memory.png'),
-                          (x + 15 + widthcpu, osd.y + 7, -1, -1))
-            osd.write_text(self.currentMem, font, None, x + 40 + widthcpu,
-                           osd.y + 55 - font.h, widthmem, font.h, 'left', 'top')
+            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/memory.png'), (x + 15 + widthcpu, osd.y + 7, -1, -1))
+            osd.write_text(self.currentMem, font, None, x + 40 + widthcpu, osd.y + 55 - font.h, widthmem, font.h,
+                'left', 'top')
 
         return widthmem + widthcpu + 15
 
@@ -176,9 +170,9 @@ class sensors(IdleBarPlugin):
     | plugin.activate('idlebar.system.sensors', level=40, args=(('cpusensor', 'compute expression'),
     |     ('casesensor', 'compute_expression'), 'meminfo'))
 
-    cpu and case sensor are the corresponding lm_sensors : this should be
+    cpu and case sensor are the corresponding lm_sensors: this should be
     temp1, temp2 or temp3. defaults to temp3 for cpu and temp2 for case
-    meminfo is the memory info u want, types ar the same as in /proc/meminfo :
+    meminfo is the memory info u want, types ar the same as in /proc/meminfo:
     MemTotal -> SwapFree.
     casesensor and meminfo can be set to None if u don't want them
     This requires a properly configure lm_sensors! If the standard sensors frontend
@@ -225,21 +219,15 @@ class sensors(IdleBarPlugin):
                 if not os.path.exists(file):
                     file = os.path.join(self.senspath, 'temp' + self.sensor[-1] + '_input')
                     fhot = os.path.join(self.senspath, 'temp' + self.sensor[-1] + '_max')
-                f = open(fhot)
-                hotdata = f.read()
-                f.close()
-
+                hotdata = open(fhot).read().strip()
             else:
                 file = os.path.join(self.senspath, self.sensor)
 
-            f = open(file)
-            data = f.read()
-            f.close()
+            data = open(file).read().strip()
 
             if self.kernel26:
                 temp = int(temp_compute(float(data[0:2])))
                 hot = int(temp_compute(float(hotdata[0:2])))
-
             else:
                 temp = int(temp_compute (float(string.split(data)[2])))
                 hot = int(temp_compute (float(string.split(data)[0])))
@@ -316,14 +304,12 @@ class sensors(IdleBarPlugin):
 
     def getRamStat(self):
 
-        f = open('/proc/meminfo')
-        data = f.read()
-        f.close()
+        data = open('/proc/meminfo').read().strip()
         rxp_ram = re.compile('^%s' % self.ram)
 
         for line in data.split('\n'):
             m = rxp_ram.match(line)
-            if m :
+            if m:
                 return '%sM' % (int(string.split(line)[1])/1024)
 
 
@@ -340,21 +326,17 @@ class sensors(IdleBarPlugin):
 
         cputemp = self.cpu.temp()
         widthcpu = font.stringsize(cputemp)
-        osd.draw_image(os.path.join(config.ICON_DIR, 'misc/cpu.png'),
-                       (x, osd.y + 8, -1, -1))
-        osd.write_text(cputemp, font, None, x + 15, osd.y + 55 - font.h, widthcpu, font.h,
-                       'left', 'top')
+        osd.draw_image(os.path.join(config.ICON_DIR, 'misc/cpu.png'), (x, osd.y + 8, -1, -1))
+        osd.write_text(cputemp, font, None, x + 15, osd.y + 55 - font.h, widthcpu, font.h, 'left', 'top')
         widthcpu = max(widthcpu, 32) + 10
 
         if self.case:
             casetemp = self.case.temp()
 
             widthcase = font.stringsize(casetemp)
-            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/case.png'),
-                                        (x + 15 + widthcpu, osd.y + 7, -1, -1))
-            osd.write_text(casetemp, font, None, x + 40 + widthcpu,
-                           osd.y + 55 - font.h, widthcase, font.h,
-                           'left', 'top')
+            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/case.png'), (x + 15 + widthcpu, osd.y + 7, -1, -1))
+            osd.write_text(casetemp, font, None, x + 40 + widthcpu, osd.y + 55 - font.h, widthcase, font.h,
+                'left', 'top')
             widthcase = max(widthcase, 32) + 10
 
         if self.ram:
@@ -364,10 +346,8 @@ class sensors(IdleBarPlugin):
                 img_width = x + 15 + widthcpu + widthcase + 15
             else:
                 img_width = x + 15 + widthcpu
-            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/memory.png'),
-                           (img_width, osd.y + 7, -1, -1))
-            osd.write_text(text, font, None, img_width + 15, osd.y + 55 - font.h,
-                           widthram, font.h, 'left', 'top')
+            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/memory.png'), (img_width, osd.y + 7, -1, -1))
+            osd.write_text(text, font, None, img_width + 15, osd.y + 55 - font.h, widthram, font.h, 'left', 'top')
 
         if self.retwidth == 0:
             self.retwidth = widthcpu + 15
@@ -400,7 +380,7 @@ class sensors2(IdleBarPlugin):
 
     sensorpath is the path, where the data files corresponding to sensorname
     can be found. For Linux 2.6, this is usually
-    /sys/class/hwmon/hwmon[X]/device/, with [X] := 0, 1, 2, etc.
+    /sys/class/hwmon/hwmon[X]/device/, with [X] = 0, 1, 2, etc.
 
     sensortype is one of 'sys' or 'cpu', with 'sys' designating a case sensor.
     This value only changes the displayed icon.
@@ -460,8 +440,9 @@ class sensors2(IdleBarPlugin):
             self.washot = False
             self.kernel26 = self.isKernel26()
 
+
         def temp(self):
-            # Compute and return the temperature value of the sensor
+            """ Compute and return the temperature value of the sensor """
             def temp_compute (rawvalue):
                 try:
                     temperature = eval(self.compute_expression.replace('@', str(rawvalue)))
@@ -474,32 +455,30 @@ class sensors2(IdleBarPlugin):
 
             if self.kernel26:
                 # Several flavours of files can be found in senspath, find the right ones
-                file = os.path.join( self.senspath, 'temp_input' + self.sensor[-1] )
-                fhot = os.path.join( self.senspath, 'temp_max' + self.sensor[-1] )
+                file = os.path.join(self.senspath, 'temp_input' + self.sensor[-1])
+                fhot = os.path.join(self.senspath, 'temp_max' + self.sensor[-1])
                 if not os.path.exists(file):
-                    file = os.path.join( self.senspath, 'temp' + self.sensor[-1] + '_input')
+                    file = os.path.join(self.senspath, 'temp' + self.sensor[-1] + '_input')
                 if not os.path.exists(fhot):
-                    fhot = os.path.join( self.senspath, 'temp' + self.sensor[-1] + '_max')
+                    fhot = os.path.join(self.senspath, 'temp' + self.sensor[-1] + '_max')
                 if not os.path.exists(fhot):
-                    fhot = os.path.join( self.senspath, 'temp' + self.sensor[-1] + '_crit')
+                    fhot = os.path.join(self.senspath, 'temp' + self.sensor[-1] + '_crit')
                 if os.path.exists(fhot):
-                    f = open(fhot)
-                    hotdata = f.read()
-                    f.close()
-
+                    hotdata = open(fhot).read().strip()
             else:
-                file = os.path.join( self.senspath, self.sensor )
+                file = os.path.join(self.senspath, self.sensor)
 
-            f = open(file)
-            data = f.read()
-            f.close()
+            data = open(file).read().strip()
 
             if self.kernel26 and hotdata is not None:
                 temp = int(temp_compute(float(data[0:2])))
                 hot = int(temp_compute(float(hotdata[0:2])))
+            elif len(data.split()) > 2:
+                temp = int(temp_compute (float(data.split()[2])))
+                hot = int(temp_compute (float(data.split()[0])))
             else:
-                temp = int(temp_compute (float(string.split(data)[2])))
-                hot = int(temp_compute (float(string.split(data)[0])))
+                temp = int(temp_compute (float(data)))
+                hot = temp + 1
 
             if temp > hot:
                 if self.washot == False:
@@ -511,6 +490,7 @@ class sensors2(IdleBarPlugin):
                     self.washot = False
 
             return '%s°' % temp
+
 
         def isKernel26(self):
             # Are we on Linux 2.6?
@@ -555,14 +535,12 @@ class sensors2(IdleBarPlugin):
 
     def getRamStat(self, ram):
         # Get the status of the given meminfo argument
-        f = open('/proc/meminfo')
-        data = f.read()
-        f.close()
+        data = open('/proc/meminfo').read().strip()
         rxp_ram = re.compile('^%s' % ram)
 
         for line in data.split('\n'):
             m = rxp_ram.match(line)
-            if m :
+            if m:
                 return '%sM' % (int(string.split(line)[1])/1024)
 
 
@@ -597,10 +575,8 @@ class sensors2(IdleBarPlugin):
             if icon is not None:
                 # draw everything
                 senswidth = font.stringsize(text)
-                osd.draw_image(os.path.join(config.ICON_DIR, icon),
-                           (img_width, osd.y + 8, -1, -1))
-                osd.write_text(text, font, None, img_width + 15, osd.y + 55 - font.h, senswidth, font.h,
-                               'left', 'top')
+                osd.draw_image(os.path.join(config.ICON_DIR, icon), (img_width, osd.y + 8, -1, -1))
+                osd.write_text(text, font, None, img_width + 15, osd.y + 55 - font.h, senswidth, font.h, 'left', 'top')
                 # img_width is the calculated x coordinate for the next icon
                 img_width = img_width + senswidth + 30
                 # We only need to calculate self.retwidth,
