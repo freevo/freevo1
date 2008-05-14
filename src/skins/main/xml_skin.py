@@ -794,6 +794,10 @@ class Font(XML_data):
         self.shadow.visible = False
         self.shadow.border  = False
 
+    def __repr__(self):
+        s = '<%s %s>' % (self.__class__, self.label)
+        return s
+
     def parse(self, node, scale, current_dir):
         XML_data.parse(self, node, scale, current_dir)
         for subnode in node.children:
