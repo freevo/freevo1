@@ -420,6 +420,15 @@ if __name__ == '__main__':
 
     try:
         pass
+        result = search('ItemSearch', 'Keywords', 'Nacho Libre', 'DVD', type='Images,ItemAttributes')
+    except AmazonError, why:
+        print why
+    print
+    sys.exit(0)
+    #time.sleep(1)
+
+    try:
+        pass
         #result = search('', 'Keywords', 'The Who', 'Music', type='Images,ItemAttributes')
     except AmazonError, why:
         print why

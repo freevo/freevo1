@@ -1113,7 +1113,7 @@ AUDIO_ITEMS = None
 # The list of filename suffixes that are used to match the files that
 # are played as audio.
 #
-AUDIO_SUFFIX = [ 'mp3', 'ogg', 'wav','m4a', 'wma', 'aac', 'flac', 'mka','ac3' ]
+AUDIO_SUFFIX = [ 'mp3', 'ogg', 'wav', 'm4a', 'wma', 'aac', 'flac', 'mka', 'ac3' ]
 
 #
 # Regular expression used to recognize filenames which are likely to be
@@ -1156,7 +1156,7 @@ IMAGE_ITEMS = None
 # The list of filename suffixes that are used to match the files that
 # are used for the image viewer.
 #
-IMAGE_SUFFIX = [ 'jpg','gif','png', 'jpeg','bmp','tiff','psd' ]
+IMAGE_SUFFIX = [ 'jpg', 'gif', 'png', 'jpeg', 'bmp', 'tiff', 'psd' ]
 
 # The viewer now supports a new type of menu entry, a slideshow file.
 # It also has the slideshow alarm signal handler for automated shows.
@@ -1165,7 +1165,7 @@ IMAGE_SUFFIX = [ 'jpg','gif','png', 'jpeg','bmp','tiff','psd' ]
 IMAGE_SSHOW_SUFFIX = [ 'ssr' ]
 
 # The viewer can exclude certain types of images based on the regular expression list
-# eg IMAGE_EXCLUDE = [('thm','tn_')]
+# eg IMAGE_EXCLUDE = [('thm', 'tn_')]
 
 IMAGE_EXCLUDE = None
 
@@ -1196,18 +1196,19 @@ IMAGEVIEWER_REVERSED_IMAGES = 0
 #
 IMAGEVIEWER_OSD = [
     # First OSD info
-    [ (_('Title')+': ',      'name'),
-      (_('Description')+': ','description'),
-      (_('Author')+': ',     'author') ],
-
+    [ (_('Title')+': ',       'name'),
+      (_('Description')+': ', 'description'),
+      (_('Author')+': ',      'author')
+    ],
     # Second OSD info
     [ (_('Title')+': ',    'name'),
-      (_('Date')+': ' ,    'date'),
+      (_('Date')+': ',     'date'),
       ('W:',               'width'),
       ('H:',               'height'),
       (_('Model')+': ',    'hardware'),
-      (_('Software')+': ', 'software') ]
-    ]
+      (_('Software')+': ', 'software')
+    ],
+]
 
 #
 # Default duration for images in a playlist. If set to 0, you need
@@ -1959,13 +1960,13 @@ TV_VIDEO_GROUPS = [
 #                ('26', 'TV3',               'E10'),
 #                ('27', 'TV4',               'E6'),
 #                ('10', 'Kanal 5',           'E7'),
-#                ('60', 'Fox Kids',          'E8', ('1234567','0600','1659')),
-#                ('16', 'TV6',               'E8', ('1234567','1700','2359'),
-#                                                  ('1234567','0000','0300')),
+#                ('60', 'Fox Kids',          'E8', ('1234567', '0600', '1659')),
+#                ('16', 'TV6',               'E8', ('1234567', '1700', '2359'),
+#                                                  ('1234567', '0000', '0300')),
 #                ('14', 'MTV Europe',        'E11') ]
 #
 # As you can see the list takes optional tuples:
-# ( 'DAYS', 'START','END')
+# ( 'DAYS', 'START', 'END')
 #
 # 1234567 in days means all days.
 # 12345 would mean monday to friday.

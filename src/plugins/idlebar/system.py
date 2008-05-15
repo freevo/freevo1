@@ -165,18 +165,26 @@ class sensors(IdleBarPlugin):
     """
     Displays sensor temperature information (cpu, case) and memory-stats.
 
-    Activate with:
-    | plugin.activate('idlebar.system.sensors', level=40, args=('cpusensor', 'casesensor', 'meminfo'))
-    | plugin.activate('idlebar.system.sensors', level=40, args=(('cpusensor', 'compute expression'),
-    |     ('casesensor', 'compute_expression'), 'meminfo'))
+    Activate with::
 
-    cpu and case sensor are the corresponding lm_sensors: this should be
-    temp1, temp2 or temp3. defaults to temp3 for cpu and temp2 for case
-    meminfo is the memory info u want, types ar the same as in /proc/meminfo:
+        plugin.activate('idlebar.system.sensors', level=40, args=(<cpusensor>, <casesensor>, <meminfo>))
+        plugin.activate('idlebar.system.sensors', level=40, args=((<cpusensor>, <compute expression>),
+            (<casesensor>, <compute_expression>), <meminfo>))
+
+    cpu and case sensor are the corresponding lm_sensors, they should be:
+
+        temp1,
+        temp2, default for case
+        temp3, default for cpu and temp2 for case
+
+    meminfo is the memory info you want, types are the same as in /proc/meminfo,
     MemTotal -> SwapFree.
-    casesensor and meminfo can be set to None if u don't want them
+
+    casesensor and meminfo can be set to None if you don't want them
+
     This requires a properly configure lm_sensors! If the standard sensors frontend
     delivered with lm_sensors works your OK.
+
     Some sensors return raw-values, which have to be computed in order
     to get correct values. This is normally stored in your /etc/sensors.conf.
     Search in the corresponding section for your chipset, and search the
@@ -184,6 +192,9 @@ class sensors(IdleBarPlugin):
     argument is of interest. Insert this into the plugin activation line, e.g.:
     "[...] args=(('temp3', '@*2'), [...]". The @ stands for the raw value.
     The compute expression  works for the cpu- and casesensor.
+
+    eg: plugin.activate('idlebar.system.sensors', args=(('temp2', '(@*30/43)+25'), 'temp1'))
+
     """
     class sensor:
         """
@@ -256,11 +267,14 @@ class sensors(IdleBarPlugin):
                 # search the sub-directories of i2cdev_path for the temp sensor
                 for senspath in os.listdir(self.i2cdev_path):
                     testpath = os.path.join(self.i2cdev_path, senspath)
-                    for pos_sensors in os.listdir(testpath):
-                        if pos_sensors == 'temp_input1':
-                            return testpath
-                        if pos_sensors == 'temp1_input':
-                            return testpath
+                    try:
+                        for pos_sensors in os.listdir(testpath):
+                            if pos_sensors == 'temp_input1':
+                                return testpath
+                            if pos_sensors == 'temp1_input':
+                                return testpath
+                    except OSError:
+                        pass
 
             if not os.path.exists(self.pathform_path):
                 if self.kernel26:

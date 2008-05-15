@@ -540,12 +540,12 @@ def __load_plugin__(name, type, level, args, number):
             if module:
                 object = module + '.%s' % name[name.rfind('.')+1:]
             else:
-                print 'can\'t locate plugin %s' % name
-                print 'start \'freevo plugins -l\' to get a list of plugins'
+                print 'can\'t locate plugin %r' % name
+                print 'start "freevo plugins -l" to get a list of plugins'
                 return
         else:
-            print 'can\'t locate plugin %s' % name
-            print 'start \'freevo plugins -l\' to get a list of plugins'
+            print 'can\'t locate plugin %r' % name
+            print 'start "freevo plugins -l" to get a list of plugins'
             return
 
     try:

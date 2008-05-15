@@ -213,7 +213,6 @@ class clock(IdleBarPlugin):
         h = font.font.height
         if h > idlebar_height:
             h = idlebar_height
-
         x = osd.x + osd.width - w - pad_x
         y = osd.y + (idlebar_height - h) / 2
         osd.write_text(clock, font, None, x, y, w + 1, h, 'right', 'center')
