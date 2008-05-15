@@ -373,16 +373,14 @@ LOCAL_CONF_CHANGES = [
 
 FREEVO_CONF_VERSION = setup_freevo.CONFIG_VERSION
 
-if int(str(CONF.version).split('.')[0]) != \
-   int(str(FREEVO_CONF_VERSION).split('.')[0]):
-    print "\nERROR: The version information in freevo_config.py does't"
+if int(str(CONF.version).split('.')[0]) != int(str(FREEVO_CONF_VERSION).split('.')[0]):
+    print "ERROR: The version information in freevo_config.py does't"
     print 'match the version in %s.' % freevoconf
     print 'please rerun "freevo setup" to generate a new freevo.conf'
     print_config_changes(FREEVO_CONF_VERSION, CONF.version, FREEVO_CONF_CHANGES)
     sys.exit(1)
 
-if int(str(CONF.version).split('.')[1]) != \
-   int(str(FREEVO_CONF_VERSION).split('.')[1]):
+if int(str(CONF.version).split('.')[1]) != int(str(FREEVO_CONF_VERSION).split('.')[1]):
     print 'WARNING: freevo_config.py was changed, please rerun "freevo setup"'
     print_config_changes(FREEVO_CONF_VERSION, CONF.version, FREEVO_CONF_CHANGES)
 
@@ -1441,6 +1439,12 @@ OSD_SOUNDS= {
     'menu.select'  : None
 }
 
+#
+# Padding between icons
+#
+OSD_IDLEBAR_PADDING = 20
+
+
 # ======================================================================
 # Freevo remote control settings:
 # ======================================================================
@@ -2172,6 +2176,11 @@ DIRECTORY_USE_STAT_FOR_CHANGES = True
 # Debug the current skin, display boxes around each area.
 #
 DEBUG_SKIN = 0
+
+#
+# Debug the idlebar, display boxes around each area.
+#
+DEBUG_IDLEBAR = 0
 
 #
 # store output of started processes for debug

@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# area.py - An area for the Freevo skin
+# An area for the Freevo skin
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -53,8 +53,8 @@ import pygame
 import stat
 import types
 
-import osd
 import config
+import osd
 import util
 
 from skin_utils import *
@@ -94,8 +94,7 @@ class Skin_Area:
         self.screen    = screen.get_singleton()
         self.objects   = SkinObjects()
 
-        self.imagecache = util.objectcache.ObjectCache(imagecachesize,
-                                                       desc='%s_image' % self.name)
+        self.imagecache = util.objectcache.ObjectCache(imagecachesize, desc='%s_image' % self.name)
 
     def __str__(self):
         return 'area_name=%s area_val=%s redraw=%s layout=%s name=%s' % \
@@ -116,8 +115,7 @@ class Skin_Area:
         pass
 
 
-    def draw(self, settings, obj, menu, display_style=0, widget_type='menu',
-             force_redraw=False):
+    def draw(self, settings, obj, menu, display_style=0, widget_type='menu', force_redraw=False):
         """
         this is the main draw function. This function draws the background,
         checks if redraws are needed and calls the two update functions
@@ -212,7 +210,6 @@ class Skin_Area:
                         max(bg_rect[2], b[2]), max(bg_rect[3], b[3]) )
 
 
-
         for b in self.tmp_objects.rectangles:
             try:
                 self.objects.rectangles.remove(b)
@@ -223,7 +220,6 @@ class Skin_Area:
         for b in self.objects.rectangles:
             a_rect = ( min(a_rect[0], b[0]), min(a_rect[1], b[1]),
                        max(a_rect[2], b[2]), max(a_rect[3], b[3]) )
-
 
 
         for b in self.tmp_objects.images:
@@ -238,7 +234,6 @@ class Skin_Area:
                        max(c_rect[2], b[2]), max(c_rect[3], b[3]) )
 
 
-
         for b in self.tmp_objects.text:
             try:
                 self.objects.text.remove(b)
@@ -249,7 +244,6 @@ class Skin_Area:
         for b in self.objects.text:
             c_rect = ( min(c_rect[0], b[0]), min(c_rect[1], b[1]),
                        max(c_rect[2], b[2]), max(c_rect[3], b[3]) )
-
 
 
         # send the update information to the screen object
@@ -269,11 +263,8 @@ class Skin_Area:
         if config.DEBUG_SKIN:
             if self.layout:
                 name = self.area_name + u':' + self.layout.label
-
                 content = self.calc_geometry(self.layout.content, copy_object=1)
-                self.tmp_objects.skin_area = (content.x, content.y,
-                        content.width, content.height,
-                        name)
+                self.tmp_objects.skin_area = (content.x, content.y, content.width, content.height, name)
 
         # save and exit
         self.objects = self.tmp_objects
@@ -465,7 +456,7 @@ class Skin_Area:
                 try:
                     area = area.style[0]
                 except IndexError:
-                    print 'index error for %s %s' % (self.display_style, widget_type)
+                    _debug_('index error for %s %s' % (self.display_style, widget_type), DWARNING)
                     raise
 
             if area[0] and (not self.use_text_view):
@@ -473,7 +464,7 @@ class Skin_Area:
             elif area[1]:
                 area = area[1]
             else:
-                print 'want to fall back, but no text view defined'
+                _debug_('want to fall back, but no text view defined', DWARNING)
                 area = area[0]
 
         else:
@@ -498,7 +489,7 @@ class Skin_Area:
                 try:
                     area = area.areas[self.area_name]
                 except (KeyError, AttributeError):
-                    print 'no skin information for %s:%s' % (widget_type, self.area_name)
+                    _debug_('no skin information for %s:%s' % (widget_type, self.area_name), DWARNING)
                     area = xml_skin.Area(self.area_name)
                     area.visible = False
 
@@ -607,13 +598,19 @@ class Skin_Area:
         """
         draw a round box ... or better stores the information about this call
         in a variable. The real drawing is done inside draw()
+
+        @param x: x position
+        @param y: y position
+        @param width: width of box
+        @param height: height of box
+        @param rect: a rectangle
+        @param redraw: redraw
         """
         try:
-            self.tmp_objects.rectangles.append(( x, y, x + width, y + height, rect.bgcolor,
-                                                 rect.size, rect.color, rect.radius ))
-        except AttributeError:
-            self.tmp_objects.rectangles.append(( x, y, x + width, y + height, rect[0],
-                                                 rect[1], rect[2], rect[3] ))
+            self.tmp_objects.rectangles.append((x, y, x + width, y + height, rect.bgcolor, rect.size, rect.color,
+                rect.radius))
+        except AttributeError, why:
+            self.tmp_objects.rectangles.append((x, y, x + width, y + height, rect[0], rect[1], rect[2], rect[3]))
 
 
 
@@ -633,12 +630,12 @@ class Skin_Area:
             if hasattr(content, 'x'):
                 x = content.x
             else:
-                print 'No content.x for %s' % (self.name)
+                _debug_('No content.x for %s' % (self.name), DWARNING)
         if y == -1:
             if hasattr(content, 'y'):
                 y = content.y
             else:
-                print 'No content.y for %s' % (self.name)
+                _debug_('No content.y for %s' % (self.name), DWARNING)
 
         if width == None:
             width  = content.width

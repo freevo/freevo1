@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# idlebar.py - IdleBar plugin
+# IdleBar plug-in
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -48,16 +48,15 @@ import skin
 from pygame import image, transform
 
 
-
 class PluginInterface(plugin.DaemonPlugin):
     """
     global idlebar plugin.
     """
-
     def __init__(self):
         """
-        init the idlebar
+        initialise an instance of the PluginInterface
         """
+        _debug_('PluginInterface.__init__()', 1)
         plugin.DaemonPlugin.__init__(self)
         self.poll_interval  = 3000
         self.poll_menu_only = False
@@ -77,9 +76,10 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def take_space(self, space):
-        '''
+        """
         reserve some space from the idlebar, this is for DaemonPlugins
-        '''
+        """
+        _debug_('PluginInterface.take_space(space=%r)' % (space,), 1)
         self.used_space = space
 
 
@@ -87,6 +87,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         draw a background and all idlebar plugins
         """
+        _debug_('PluginInterface.draw(type=%r, object=%r, osd=%r)' % (type, object, osd), 1)
         w = osd.width + 2 * osd.x
         h = osd.y + 60
 
@@ -109,8 +110,17 @@ class PluginInterface(plugin.DaemonPlugin):
         x = osd.x + 10
         for p in self.plugins:
             add_x = p.draw((type, object), x, osd)
+            if config.DEBUG_IDLEBAR and add_x is not None:
+                import skins.main.xml_skin
+                r = skins.main.xml_skin.Rectangle(0xffffff, bgcolor=None, size=1, radius=1)
+                osd.drawroundbox(x, osd.y, add_x, 15, r)
+                font  = osd.get_font('tiny0')
+                name = p.plugin_name.split('.')[-1]
+                w = font.stringsize(name)
+                h = font.font.height
+                osd.write_text(name, font, None, x, osd.y, add_x, h, 'left', 'center')
             if add_x:
-                x += add_x + 20
+                x += add_x + config.OSD_IDLEBAR_PADDING
         self.free_space = x - self.used_space
 
 
@@ -119,7 +129,8 @@ class PluginInterface(plugin.DaemonPlugin):
         catch the IDENTIFY_MEDIA event to redraw the skin (maybe the cd status
         plugin wants to redraw)
         """
-        if plugin.isevent(event) == 'IDENTIFY_MEDIA' and skin.active():
+        _debug_('PluginInterface.eventhandler(event=%r, menuw=%r)' % (event, menuw), 1)
+        if skin.active() and plugin.isevent(event) == 'IDENTIFY_MEDIA':
             skin.redraw()
         return False
 
@@ -128,6 +139,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         update the idlebar every 30 secs even if nothing happens
         """
+        _debug_('PluginInterface.poll()', 1)
         if skin.active():
             skin.redraw()
 
@@ -135,8 +147,9 @@ class PluginInterface(plugin.DaemonPlugin):
 
 class IdleBarPlugin(plugin.Plugin):
     """
-    To activate the idle bar, put the following in your local_conf.py:
-    | plugin.activate('idlebar')
+    To activate the idle bar, put the following in your local_conf.py::
+
+        plugin.activate('idlebar')
 
     You can then add various plugins. Plugins inside the idlebar are
     sorted based on the level (except the clock, it's always on the
@@ -144,10 +157,16 @@ class IdleBarPlugin(plugin.Plugin):
     and "freevo plugins -i idlebar.<plugin>" for a specific plugin.
     """
     def __init__(self):
+        """
+        Initialise an instance of the IdleBarPlugin
+        """
+        _debug_('IdleBarPlugin.__init__()', 1)
         plugin.Plugin.__init__(self)
         self._type = 'idlebar'
 
+
     def draw(self, (type, object), x, osd):
+        _debug_('IdleBarPlugin.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 1)
         return
 
 
@@ -156,12 +175,18 @@ class clock(IdleBarPlugin):
     """
     Shows the current time.
 
-    Activate with:
-    plugin.activate('idlebar.clock', level=50)
-    Note: The clock will always be displayed on the right side of
+    Activate with::
+
+        plugin.activate('idlebar.clock', level=50)
+
+    @note: The clock will always be displayed on the right side of
     the idlebar.
     """
     def __init__(self, format=''):
+        """
+        Initialise an instance of the idlebar clock class
+        """
+        _debug_('clock.__init__(format=%r)' % (format,), 1)
         IdleBarPlugin.__init__(self)
         if config.CLOCK_FORMAT:
             format = config.CLOCK_FORMAT
@@ -173,7 +198,12 @@ class clock(IdleBarPlugin):
                 format ='%a %I:%M %P'
         self.timeformat = format
 
+
     def draw(self, (type, object), x, osd):
+        """
+        Draw the clock
+        """
+        _debug_('clock.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 1)
         clock = Unicode(time.strftime(self.timeformat))
         font  = osd.get_font('clock')
         pad_x = 10
@@ -183,9 +213,20 @@ class clock(IdleBarPlugin):
         h = font.font.height
         if h > idlebar_height:
             h = idlebar_height
-        osd.write_text(clock, font, None, (osd.x + osd.width - w -pad_x), (osd.y + (idlebar_height - h) / 2),
-            (w + 1), h , 'right', 'center')
-        self.clock_left_position = osd.x + osd.width - w - pad_x
+
+        x = osd.x + osd.width - w - pad_x
+        y = osd.y + (idlebar_height - h) / 2
+        osd.write_text(clock, font, None, x, y, w + 1, h, 'right', 'center')
+        self.clock_left_position = x
+        if config.DEBUG_IDLEBAR:
+            import skins.main.xml_skin
+            name = 'clock'
+            tfont = osd.get_font('tiny0')
+            cw = tfont.stringsize(name)
+            ch = tfont.font.height
+            r = skins.main.xml_skin.Rectangle(0xffffff, bgcolor=None, size=1, radius=1)
+            osd.drawroundbox(x, y, w, h, r)
+            osd.write_text(name, font, None, x, y, cw, ch, 'left', 'center')
         return 0
 
 
@@ -195,10 +236,16 @@ class logo(IdleBarPlugin):
     Display the freevo logo in the idlebar
     """
     def __init__(self, image=None):
+        """
+        Initialise an instance of the idlebar logo class
+        """
+        _debug_('logo.__init__(image=%r)' % (image,), 1)
         IdleBarPlugin.__init__(self)
         self.image = image
 
+
     def draw(self, (type, object), x, osd):
+        _debug_('logo.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 1)
         if not self.image:
             image = osd.settings.images['logo']
         else:

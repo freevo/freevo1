@@ -140,7 +140,7 @@ def attr_visible(node, attr, default):
     return True or False based in the attribute values 'yes' or 'no'
     """
     if node.attrs.has_key(('', attr)):
-        if node.attrs[('', attr)] == "no":
+        if node.attrs[('', attr)] == 'no':
             return ''
         return node.attrs[('', attr)].encode(config.LOCALE)
     return default
@@ -180,7 +180,7 @@ def attr_font(node, attr, default):
                 if font: break
 
         if not font:
-            print "skin error: can find font \"%s\"" % font
+            _debug_('can\'t find font "%s"' % font, DWARNING)
             font = config.OSD_DEFAULT_FONTNAME
         return font
     return default
@@ -193,13 +193,13 @@ def search_file(file, search_dirs):
         if vfs.isfile(dfile):
             return vfs.abspath(dfile)
 
-        if vfs.isfile("%s.png" % dfile):
-            return vfs.abspath("%s.png" % dfile)
+        if vfs.isfile('%s.png' % dfile):
+            return vfs.abspath('%s.png' % dfile)
 
-        if vfs.isfile("%s.jpg" % dfile):
-            return vfs.abspath("%s.jpg" % dfile)
+        if vfs.isfile('%s.jpg' % dfile):
+            return vfs.abspath('%s.jpg' % dfile)
 
-    print 'skin error: can\'t find image \"%s\"' % file
+    _debug_('can\'t find image "%s"' % file, DWARNING)
     if config.DEBUG:
         print 'image search path is:'
         for s in search_dirs:
@@ -227,11 +227,11 @@ class MainMenuItem:
         self.outicon = ''
 
     def parse(self, node, scale, c_dir=''):
-        self.label    = attr_str(node, "label", self.label)
-        self.name     = attr_str(node, "name",  self.name)
-        self.icon     = attr_str(node, "icon",  self.icon)
-        self.image    = attr_str(node, "image", self.image)
-        self.outicon  = attr_str(node, "outicon",  self.outicon)
+        self.label    = attr_str(node, 'label', self.label)
+        self.name     = attr_str(node, 'name',  self.name)
+        self.icon     = attr_str(node, 'icon',  self.icon)
+        self.image    = attr_str(node, 'image', self.image)
+        self.outicon  = attr_str(node, 'outicon',  self.outicon)
 
     def prepare(self, search_dirs, image_names):
         if self.image:
@@ -246,7 +246,7 @@ class MainMenu:
         self.imagedir = ''
 
     def parse(self, menu_node, scale, c_dir=''):
-        self.imagedir = attr_str(menu_node, "imagedir", self.imagedir)
+        self.imagedir = attr_str(menu_node, 'imagedir', self.imagedir)
         for node in menu_node.children:
             if node.name == u'item':
                 item = MainMenuItem()
@@ -531,7 +531,7 @@ class Content(XML_data):
         self.cdata = node.textof()
         for subnode in node.children:
             if subnode.name == u'item':
-                type = attr_str(subnode, "type", '')
+                type = attr_str(subnode, 'type', '')
                 if type and not self.types.has_key(type):
                     self.types[type] = XML_data(('font', 'align', 'valign', 'height',
                                                  'width', 'icon'))
@@ -584,8 +584,7 @@ class Content(XML_data):
             if font.has_key(self.font):
                 self.font = font[self.font]
             else:
-                print 'skin error: can\'t find font \"%s\"' % self.font
-                print font
+                _debug_('can\'t find font "%s"' % self.font, DWARNING)
                 self.font = font['default']
         else:
             self.font = font['default']
@@ -648,7 +647,7 @@ class FormatText(XML_data):
             if font.has_key(self.font):
                 self.font = font[self.font]
             else:
-                print 'skin error: can\'t find font \"%s\"' % self.font
+                _debug_('can\'t find font "%s"' % self.font, DWARNING)
                 self.font = font['default']
         else:
             self.font = font['default']
@@ -752,7 +751,7 @@ class Image(XML_data):
             if image_names.has_key(self.image):
                 self.filename = image_names[self.image]
             else:
-                print 'skin error: can\'t find image definition \"%s\"' % self.image
+                _debug_('can\'t find image definition "%s"' % self.image, DWARNING)
 
         if self.filename:
             self.filename = search_file(self.filename, search_dirs)
@@ -1052,8 +1051,8 @@ class XMLSkin:
         # get args back
         (clear, file, prepare) = fxd.getattr(None, 'args')
 
-        font_scale    = attr_float(node, "fontscale", 1.0)
-        file_geometry = attr_str(node, "geometry", '')
+        font_scale    = attr_float(node, 'fontscale', 1.0)
+        file_geometry = attr_str(node, 'geometry', '')
 
         if file_geometry:
             w, h = file_geometry.split('x')
@@ -1107,16 +1106,16 @@ class XMLSkin:
         self.prepared     = False
 
         if not vfs.isfile(file):
-            if vfs.isfile(file+".fxd"):
-                file += ".fxd"
+            if vfs.isfile(file+'.fxd'):
+                file += '.fxd'
 
             elif vfs.isfile(vfs.join(config.SKIN_DIR, '%s/%s.fxd' % (file, file))):
                 file = vfs.join(config.SKIN_DIR, '%s/%s.fxd' % (file, file))
 
             else:
                 file = vfs.join(config.SKIN_DIR, 'main/%s' % file)
-                if vfs.isfile(file+".fxd"):
-                    file += ".fxd"
+                if vfs.isfile(file+'.fxd'):
+                    file += '.fxd'
 
         if not vfs.isfile(file):
             return 0
@@ -1130,6 +1129,6 @@ class XMLSkin:
             return 1
 
         except:
-            print "ERROR: XML file corrupt"
+            _debug_('XML file "%s" corrupt' % (file,), DERROR)
             traceback.print_exc()
             return 0
