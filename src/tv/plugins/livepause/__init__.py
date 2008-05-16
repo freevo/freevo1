@@ -147,8 +147,6 @@ class PluginInterface(plugin.DaemonPlugin):
 
         self.livepause = LivePauseController(path, size, players.get_player())
         plugin.register(self.livepause, plugin.TV, False)
-        xml.load('share/skins/osd/base.fxd')
-
 
     def shutdown(self):
         """

@@ -32,6 +32,8 @@
 # ----------------------------------------------------------------------- */
 import config
 
+import os.path
+
 import kaa
 
 from tv.plugins.livepause.display.base import OSD
@@ -40,6 +42,7 @@ from tv.plugins.livepause.display import dialogs
 class GraphicsOSD(OSD):
     def __init__(self, player):
         OSD.__init__(self, player)
+        dialogs.xml.load(os.path.join(config.SKIN_DIR, 'osd', config.LIVE_PAUSE2_OSD_SKIN + '.fxd'))
         self.current_dialog = None
         self.hide_dialog_timer = kaa.OneShotTimer(self.hide_dialog)
 
