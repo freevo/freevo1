@@ -37,12 +37,15 @@ import skin
 skin_object = skin.get_singleton()
 
 class ScrollableTextScreen:
+    """
+    A scrollable text screen
+    """
     def __init__(self, layout, text):
         """
         Used to display and control the position of text in a scrollable area.
 
-        layout - Skin layout to use.
-        text - This is the text to scroll.
+        @param layout: Skin layout to use.
+        @param text: This is the text to scroll.
         """
         self.layout = layout
         self.scrollable_text = ScrollableText(text)
@@ -50,7 +53,8 @@ class ScrollableTextScreen:
     def show(self, menuw):
         """
         Display the screen and make it the active 'menu'.
-        menuw - The menu widget to push this screen onto.
+
+        @param menuw: The menu widget to push this screen onto.
         """
         self.menuw = menuw
         menuw.pushmenu(self)
@@ -73,8 +77,8 @@ class ScrollableTextScreen:
         Any events not directly handled here are passed to the registered
         client_eventhandler.
 
-        event - The event to handle.
-        menuw - The Menu Widget that called this handler.
+        @param event: The event to handle.
+        @param menuw: The Menu Widget that called this handler.
         """
         event_consumed = False
         if event == MENU_UP:

@@ -89,6 +89,7 @@ def active():
     """
     return not _singleton.force_redraw
 
+
 def eval_attr(attr_value, max):
     """
     Returns attr_value if it is not a string or evaluates it substituting max

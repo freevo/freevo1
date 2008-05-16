@@ -173,9 +173,9 @@ class sensors(IdleBarPlugin):
 
     cpu and case sensor are the corresponding lm_sensors, they should be:
 
-        temp1,
-        temp2, default for case
-        temp3, default for cpu and temp2 for case
+        - temp1,
+        - temp2, default for case
+        - temp3, default for cpu and temp2 for case
 
     meminfo is the memory info you want, types are the same as in /proc/meminfo,
     MemTotal -> SwapFree.
@@ -198,10 +198,17 @@ class sensors(IdleBarPlugin):
     """
     class sensor:
         """
-        small class defining a temperature sensor
+        class defining a temperature sensors and memory sensors
         """
         def __init__(self, sensor, compute_expression, hotstack):
-            _debug_('__init__(sensor=%r, compute_expression=%r, hotstack=%r)' % (sensor, compute_expression, hotstack))
+            """
+            Initialise an instance of a sensor
+            @param sensor: the name of the sensor
+            @param compute_expression: the expression to convert a raw value to a real value
+            @param hotstack: is true when the sensor is above the max
+            """
+            _debug_('__init__(sensor=%r, compute_expression=%r, hotstack=%r)' % 
+                (sensor, compute_expression, hotstack), 2)
             self.pathform_path = config.SENSORS_PLATFORM_PATH
             self.i2cdev_path = config.SENSORS_I2CDEV_PATH
             self.kernel26 = False
@@ -244,17 +251,20 @@ class sensors(IdleBarPlugin):
                 hot = int(temp_compute (float(string.split(data)[0])))
 
             if temp > hot:
-                if self.washot == False:
+                if not self.washot:
                     self.hotstack = self.hotstack + 1
-                    self.washot == True
+                    self.washot = True
             else:
-                if self.washot == True:
+                if self.washot:
                     self.hotstack = self.hotstack - 1
                     self.washot = False
 
             return '%s°' % temp
 
         def getSensorPath(self):
+            """
+            Find the subdirectory with the sensors, searches upto two levels
+            """
             #let's try if we find a sys filesystem (and kernel2.6 style sensors)
             if os.path.exists(self.i2cdev_path):
                 self.kernel26 = True
@@ -296,6 +306,12 @@ class sensors(IdleBarPlugin):
 
 
     def __init__(self, cpu='temp3', case='temp2', ram='MemTotal'):
+        """
+        Initialise an instance of the IdleBarPlugin.
+        @param cpu: name of the cpu sensor
+        @param case: name of the case (chip set) sensor
+        @param ram: name of the memory to be monitored
+        """
         IdleBarPlugin.__init__(self)
         self.hotstack = 0
         self.case = None
@@ -317,7 +333,9 @@ class sensors(IdleBarPlugin):
 
 
     def getRamStat(self):
-
+        """
+        Get the memory information from /proc/meminfo
+        """
         data = open('/proc/meminfo').read().strip()
         rxp_ram = re.compile('^%s' % self.ram)
 
@@ -328,6 +346,11 @@ class sensors(IdleBarPlugin):
 
 
     def draw(self, (type, object), x, osd):
+        """
+        Draw the sensors in the idlebar
+        @returns: the space taken by the images
+        @rtype: int
+        """
         casetemp = None
         widthcase = 0
         widthram  = 0
