@@ -21,6 +21,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * New DVB/ATSC live pause plug-in video overlay (F#1927555)
  * New helper module (vg) to generate TV_VIDEO_GROUPS (analogue only) (F#1963294)
  * New webserver old media library module (from freevo-1.6) (F#1963299)
+ * Updated French translation (F#1967346)
  * Updated TV record post processing to automatically re-encode the recording (F#1944888)
  * Fixed command plug-in crashing when polling the event handler (B#1959045, B#1962010)
  * Fixed Wiimote plug-in for latest kaa SocketDispatcher changes (B#1941224)
