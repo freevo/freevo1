@@ -30,6 +30,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 == Release 1.7.8 (2008-05-26) ==
 --------------------------------
 
+ * New autostart plug-in to send events at start up (F#1966434)
  * New lcd plug-in (lcd2) (F#1910530)
  * New idlebar sensors plug-in (sensors2) (F#1953007)
  * New video menu plug-in to remove commercials (F#1920654)
