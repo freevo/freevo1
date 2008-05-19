@@ -40,6 +40,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Updated image viewer to allow a configuration variable of autostart (F#1929319)
  * Updated plugins helper to work with __init__.py modules (F#1930102)
  * Updated somafm with new stations (F#1954313)
+ * Updated tv guide to jump to now at the end of watching TV (F#1965480)
  * Fixed audio coversearch plug-in for changed Amazon REST interface (B#1952372)
  * Fixed encodingserver when video has a length of 'None' (B#1942301)
  * Fixed freevused for latest kaa changes (B#1941223)

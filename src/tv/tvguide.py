@@ -251,6 +251,7 @@ class TVGuide(Item):
         ## PLAY_END: Show the guide again
         elif event == PLAY_END:
             self.show()
+            self.jump_to_now(self.selected)
             return True
 
         # FIX or REMOVE:
@@ -356,7 +357,9 @@ class TVGuide(Item):
         jump to now in the tv guide.
         """
         _debug_('jump_to_now(old_selected=%r)' % (old_selected,), 2)
-        start_time = time.time()
+        localtime = time.localtime()
+        localtime[4] = localtime[4] > 30 and 30 or 0 #localtime[4] = minutes
+        start_time = time.mktime(localtime)
         stop_time = start_time + self.hours_per_page * 60 * 60
         start_channel = self.start_channel
 
