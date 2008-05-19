@@ -115,32 +115,32 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.ShowVolume(event.arg)
             return True
 
-        elif event == SUR_VOLUP:
+        elif event == MIXER_SUR_VOLUP:
             self.incSurVolume(event.arg)
             rc.post_event(Event(OSD_MESSAGE, arg=_('Surround: %s%%') % self.getSurVolume()))
             return True
 
-        elif event == SUR_VOLDOWN:
+        elif event == MIXER_SUR_VOLDOWN:
             self.decSurVolume(event.arg)
             rc.post_event(Event(OSD_MESSAGE, arg=_('Surround: %s%%') % self.getSurVolume()))
             return True
 
-        elif event == CTR_VOLUP:
+        elif event == MIXER_CTR_VOLUP:
             self.incCtrVolume(event.arg)
             rc.post_event(Event(OSD_MESSAGE, arg=_('Center: %s%%') % self.getCtrVolume()))
             return True
 
-        elif event == CTR_VOLDOWN:
+        elif event == MIXER_CTR_VOLDOWN:
             self.decCtrVolume(event.arg)
             rc.post_event(Event(OSD_MESSAGE, arg=_('Center: %s%%') % self.getCtrVolume()))
             return True
 
-        elif event == LFE_VOLUP:
+        elif event == MIXER_LFE_VOLUP:
             self.incLfeVolume(event.arg)
             rc.post_event(Event(OSD_MESSAGE, arg=_('LFE: %s%%') % self.getLfeVolume()))
             return True
 
-        elif event == LFE_VOLDOWN:
+        elif event == MIXER_LFE_VOLDOWN:
             self.decLfeVolume(event.arg)
             rc.post_event(Event(OSD_MESSAGE, arg=_('LFE: %s%%') % self.getLfeVolume()))
             return True

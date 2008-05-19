@@ -43,6 +43,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Updated somafm with new stations (F#1954313)
  * Updated tv guide to jump to now at the end of watching TV (F#1965480)
  * Fixed audio coversearch plug-in for changed Amazon REST interface (B#1952372)
+ * Fixed audio plug-in six mixer's event named (B#1966739)
  * Fixed encodingserver when video has a length of 'None' (B#1942301)
  * Fixed freevused for latest kaa changes (B#1941223)
  * Fixed "freevo cache --thumbnail --recursive" when path has spaces (B#1929635)

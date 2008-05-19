@@ -94,12 +94,12 @@ MIXER_VOLDOWN          = Event('MIXER_VOLDOWN', arg=5)
 MIXER_MUTE             = Event('MIXER_MUTE')
 
 # Events for 6-channel audio control.
-MIXER_SUR_VOLUP        = Event('SUR_VOLUP', arg=5)
-MIXER_SUR_VOLDOWN      = Event('SUR_VOLDOWN', arg=5)
-MIXER_CTR_VOLUP        = Event('CTR_VOLUP', arg=5)
-MIXER_CTR_VOLDOWN      = Event('CTR_VOLDOWN', arg=5)
-MIXER_LFE_VOLUP        = Event('LFE_VOLUP', arg=5)
-MIXER_LFE_VOLDOWN      = Event('LFE_VOLDOWN', arg=5)
+MIXER_SUR_VOLUP        = Event('MIXER_SUR_VOLUP', arg=5)
+MIXER_SUR_VOLDOWN      = Event('MIXER_SUR_VOLDOWN', arg=5)
+MIXER_CTR_VOLUP        = Event('MIXER_CTR_VOLUP', arg=5)
+MIXER_CTR_VOLDOWN      = Event('MIXER_CTR_VOLDOWN', arg=5)
+MIXER_LFE_VOLUP        = Event('MIXER_LFE_VOLUP', arg=5)
+MIXER_LFE_VOLDOWN      = Event('MIXER_LFE_VOLDOWN', arg=5)
 
 # To change the step size, put the following code in your
 # local_conf.py (setting VOL+ step size to 2)
