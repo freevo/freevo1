@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# lastfm.py - Last FM player
+# Last FM player
 # -----------------------------------------------------------------------
 # $Id$
 
@@ -28,54 +28,55 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     Last FM player client
 
-    To activate this plugin, put the following in your local_conf.py:
+    To activate this plugin, put the following in your local_conf.py::
 
-    | plugin.activate('audio.lastfm')
-    | LASTFM_USER = '<last fm user name>'
-    | LASTFM_PASS = '<last fm password>'
-    | LASTFM_SESSION = ' '
-    |
-    | LASTFM_LOCATIONS = [
-    |      ('Last Fm - Neighbours','lastfm://user/<lastfm user name>/neighbours'),
-    |      ('Last FM - Jazz', 'lastfm://globaltags/jazz'),
-    |      ('Last FM - Rock', 'lastfm://globaltags/rock'),
-    |      ('Last FM - Oldies', 'lastfm://globaltags/oldies'),
-    |      ('Las FM - Pop', 'lastfm://globaltags/pop'),
-    |      ('Las FM - Norah Jones', 'lastfm://artist/norah jones')
-    |      ]
+        plugin.activate('audio.lastfm')
+        LASTFM_USER = '<last fm user name>'
+        LASTFM_PASS = '<last fm password>'
+        LASTFM_SESSION = ''
+        LASTFM_LOCATIONS = [
+             ('Last Fm - Neighbours','lastfm://user/<lastfm user name>/neighbours'),
+             ('Last FM - Jazz', 'lastfm://globaltags/jazz'),
+             ('Last FM - Rock', 'lastfm://globaltags/rock'),
+             ('Last FM - Oldies', 'lastfm://globaltags/oldies'),
+             ('Last FM - Pop', 'lastfm://globaltags/pop'),
+             ('Last FM - Norah Jones', 'lastfm://artist/norah jones')
+        ]
 
     RIGHT - skip song
     1     - send to last.fm LOVE song
     9     - send to last.fm BAN song
     """
-
     def __init__(self):
+        if not config.LASTFM_USER or not LASTFM_PASS:
+            self.reason = 'LASTFM_USER or LASTFM_PASS not set'
+            return
         plugin.MainMenuPlugin.__init__(self)
         self.plugin_name = 'lastfm'
 
-    def items(self, parent):
-        return [ LastFMMainMenuItem(parent) ]
 
     def config(self):
         '''
         freevo plugins -i audio.freevo returns the info
         '''
         return [
-            ('LASTFM_USER', '<last fm user name', 'User name from www.last.fm'),
-            ('LASTFM_PASS', '<last fm password', 'Password from www.last.fm'),
+            ('LASTFM_USER', None, 'User name for www.last.fm'),
+            ('LASTFM_PASS', None, 'Password for www.last.fm'),
             ('LASTFM_SESSION', '', 'Last fm session')
         ]
+
+
+    def items(self, parent):
+        return [ LastFMMainMenuItem(parent) ]
+
+
 
 class LastFMPlayerGUI(PlayerGUI):
     def __init__(self, item, menuw=None):
 
         self.tune_lastfm(item.station)
         GUIObject.__init__(self)
-        if menuw:
-            self.visible = True
-        else:
-            self.visible = False
-
+        self.visible = menuw is not None
         self.menuw = menuw
         self.item = item
         self.player  = None
@@ -90,22 +91,24 @@ class LastFMPlayerGUI(PlayerGUI):
         config.EVENTS['audio']['9'] = Event(FUNCTION_CALL, arg=self.ban)
 
     def tune_lastfm(self,station):
-        #Change Last FM Station
-        tune_url = 'http://ws.audioscrobbler.com/radio/adjust.php?session=' + config.LASTFM_SESSION + '&url=' + station + '&debug=0'
+        """Change Last FM Station"""
+        tune_url = 'http://ws.audioscrobbler.com/radio/adjust.php?session=%s&url=%s&debug=0' % \
+            (config.LASTFM_SESSION, station)
         f = urllib.urlopen(tune_url)
         page = f.readlines()
         for x in page:
             if re.search('response=OK',x):
                 print 'Station is OK'
 
+
     def song_info(self):
-        #Return Song Info and album Cover
-        info_url = 'http://ws.audioscrobbler.com/radio/np.php?session=' + config.LASTFM_SESSION + '&debug=0'
+        """Return Song Info and album Cover"""
+        info_url = 'http://ws.audioscrobbler.com/radio/np.php?session=%s&debug=0' % (config.LASTFM_SESSION,)
         try:
             f = urllib2.urlopen(info_url)
             lines = f.read().rstrip().split("\n")
         except:
-            print 'Last FM Info site not responding !'
+            _debug_(_('Last FM Info site not responding !'), DWARNING)
             return
         try:
             if lines[0].split("=")[1] != 'false':
@@ -125,10 +128,11 @@ class LastFMPlayerGUI(PlayerGUI):
                 print lines[0].split("=")[1]
                 return
         except:
-            print 'Error parsing Info page !'
+            print 'Error parsing Info page!'
+
 
     def download_cover(self,pic_url):
-        # Download album Cover to /tmp/freevo
+        """Download album Cover to freevo cache directory"""
         os.system('rm -f %s/lfmcover_*.jpg' % config.FREEVO_CACHEDIR )
         self.covercount +=1
         savefile = config.FREEVO_CACHEDIR + '/lfmcover_' + str(time.time()) + '.jpg'
@@ -139,30 +143,33 @@ class LastFMPlayerGUI(PlayerGUI):
         self.item.image = savefile
 
     def skip(self):
-        # Skip song
+        """Skip song"""
         print "Skip " + self.item.title
-        skip_url = 'http://ws.audioscrobbler.com/radio/control.php?session=' + config.LASTFM_SESSION +'&command=skip&debug=0'
+        skip_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=skip&debug=0' % \
+            (config.LASTFM_SESSION)
         urllib.urlopen(skip_url).read()
         self.info_time = self.item.elapsed + 8
         self.song_info()
 
+
     def love(self):
-        # Send "Love" information to audioscrobbler
+        """Send "Love" information to audioscrobbler"""
         print 'Love ' + self.item.title
-        love_url = 'http://ws.audioscrobbler.com/radio/control.php?session=' + config.LASTFM_SESSION +'&command=love&debug=0'
+        love_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=love&debug=0' % \
+            (config.LASTFM_SESSION)
         urllib.urlopen(love_url).read()
 
+
     def ban(self):
-        # Send "Ban" information to audioscrobbler
+        """Send "Ban" information to audioscrobbler"""
         print 'Ban'
-        ban_url = 'http://ws.audioscrobbler.com/radio/control.php?session=' + config.LASTFM_SESSION +'&command=ban&debug=0'
+        ban_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=ban&debug=0' % \
+            (config.LASTFM_SESSION)
         urllib.urlopen(ban_url).read()
-        print 'Ban!'
+
 
     def refresh(self):
-        """
-        Give information to the skin..
-        """
+        """Give information to the skin."""
         if not self.visible:
             return
 
@@ -185,11 +192,8 @@ class LastFMPlayerGUI(PlayerGUI):
 
 class LastFMItem(Item):
 
-
     def actions(self):
-        """
-        return a list of actions for this item
-        """
+        """return a list of actions for this item"""
         items = [ ( self.play , _( 'Listen Last FM' ) ) ]
         return items
 
@@ -220,9 +224,7 @@ class LastFMMainMenuItem(MenuItem):
 
 
     def actions(self):
-        """
-        return a list of actions for this item
-        """
+        """return a list of actions for this item"""
         return [ ( self.create_stations_menu , 'stations' ) ]
 
 
@@ -253,12 +255,14 @@ class LastFMMainMenuItem(MenuItem):
         menuw.pushmenu(lfm_menu)
         menuw.refresh()
 
+
     def login(self , arg=None):
-        # Read session and stream url from ws.audioscrobbler.com
+        """Read session and stream url from ws.audioscrobbler.com"""
         username = config.LASTFM_USER
         password_txt = config.LASTFM_PASS
         password = md5.new(config.LASTFM_PASS)
-        login_url='http://ws.audioscrobbler.com/radio/handshake.php?version=1.1.1&platform=linux&username=' + config.LASTFM_USER + '&passwordmd5=' + password.hexdigest() + '&debug=0&partner='
+        login_url='http://ws.audioscrobbler.com/radio/handshake.php?version=1.1.1&platform=linux' + \
+            '&username=%s&passwordmd5=%s&debug=0&partner=' % (config.LASTFM_USER, password.hexdigest())
         stream_url = ' '
 
         try:

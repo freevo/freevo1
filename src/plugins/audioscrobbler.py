@@ -1,3 +1,37 @@
+# -*- coding: iso-8859-1 -*-
+# -----------------------------------------------------------------------
+# Audio scrobbler plug-in
+# -----------------------------------------------------------------------
+# $Id$
+#
+# Notes:
+# Todo:
+#   replace prints with _debug_s
+#
+# -----------------------------------------------------------------------
+# Freevo - A Home Theater PC framework
+# Copyright (C) 2002 Krister Lagerstrom, et al.
+# Please see the file freevo/Docs/CREDITS for a complete list of authors.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+# CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# -----------------------------------------------------------------------
+
+import string
+import copy
+
 #From Python
 import os, re, sys, re, urllib, md5, time, locale, math
 
@@ -27,16 +61,20 @@ from event import *
 class PluginInterface(plugin.DaemonPlugin):
     """
     Submit information to the AudioScrobbler project about tracks played
-    Written by Erik Pettersson, petterson.erik@gmail.com
-    plugin.activate('audioscrobbler')
-    AS_USER = 'username'
-    AS_PASSWORD = 'password'
+    Written by Erik Pettersson, petterson.erik@gmail.com, activation::
+
+        plugin.activate('audioscrobbler')
+        AS_USER = 'username'
+        AS_PASSWORD = 'password'
     """
 
     def __init__(self):
         """
         Set up the basics, register with Freevo and connect
         """
+        if not config.AS_USER or not AS_PASSWORD:
+            self.reason = 'AS_USER or AS_PASSWORD have not been set'
+            return
 
         plugin.DaemonPlugin.__init__(self)
 
@@ -46,7 +84,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.event_listener = 1
 
         # Register ourselves
-        plugin.register( self, "audioscrobbler" )
+        plugin.register(self, "audioscrobbler")
 
         # Internal Plugin Setting
         self.playitem = False
@@ -56,32 +94,27 @@ class PluginInterface(plugin.DaemonPlugin):
         self.sleep_timeout = 0
         self.elapsed = 0
 
-        # Read configuration
-        self.read_conf()
+        self.USER = self.utf8(config.AS_USER)
+        self.PASSWORD = config.AS_PASSWORD
+        self.debug = config.AS_DEBUG
+
+        # Login
         self.login()
 
-    def read_conf(self):
-        """
-        Read from config file, if everything isn't set we die. (I get less email this way:)
-        """
-        d = self.utf8(config.AS_USER)
-        try:
-            self.USER =                 self.utf8(config.AS_USER)
-            self.PASSWORD =             config.AS_PASSWORD
 
-        except:
-            print 'AudioScrobbler Plugin: You did not enter account information in the configuration file: Exiting (AS_USER and AS_PASSWORD is required)'
-            self.shutdown()
-
-        try:
-            self.debug = config.AS_DEBUG
-        except:
-            self.debug = False
+    def config(self):
+        return [
+            ('AS_USER', None, 'User name for last FM'),
+            ('AS_PASSWORD', None, 'Password for Last FM'),
+            ('AS_DEBUG', 0, 'Enable debugging information'),
+        ]
 
 
-    def login(self): #TODO If we fail we shouldn't not retry right away, but can we really sleep like this?
+    def login(self):
         """
         Login, each session is ok for 30 mins or something like that
+
+        @todo: If we fail we shouldn't not retry right away, but can we really sleep like this?
         """
         if self.failed_retries > 15:
             print "AudioScrobbler plugin: Tried to login 15 times and failed on 15 occasions: Exiting"
@@ -121,7 +154,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.failed_retries += 1
             return
 
-        match = re.match( u'.*?\n.*?\n(.*?)\n.*', lo)
+        match = re.match(u'.*?\n.*?\n(.*?)\n.*', lo)
         if match:
             self.submiturl = match.groups(1)[0]
         else:
@@ -129,8 +162,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.failed_retries += 1
             return # If we didn't get this we assume that their server is down and try to re-login
 
-
-        self.challenge_reply = md5.md5( md5.md5(self.PASSWORD).hexdigest() + self.challenge ).hexdigest()
+        self.challenge_reply = md5.md5(md5.md5(self.PASSWORD).hexdigest() + self.challenge).hexdigest()
         self.challenge_reply = self.utf8(self.challenge_reply)
         self.logged_in = True
         self.failed_reties = 0
@@ -140,7 +172,6 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Run this code every self.poll_interval seconds
         """
-
         if self.sleep_timeout:
             if math.ceil(time.time() - self.sleep_timeout) > 30*60:
                 self.sleep_timeout = False
@@ -150,7 +181,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.login()
 
         if self.playitem and self.logged_in:
-            self.draw( ( 'player', self.playitem ), None)
+            self.draw(('player', self.playitem), None)
 
 
     def shutdown(self):
@@ -162,7 +193,7 @@ class PluginInterface(plugin.DaemonPlugin):
         #sys.exit() # Ugly hack to shut down the plugin
 
 
-    def draw(self, ( ttype, object ), osd):
+    def draw(self, (ttype, object), osd):
         """
         This is from the LCD plugin. With some modification.
         I don't know what this does, or how it does it so I'll just let it be for now.
@@ -172,27 +203,28 @@ class PluginInterface(plugin.DaemonPlugin):
         if ttype != 'player':
             return
         player = object
-        title  = player.getattr( 'title' )
+        title  = player.getattr('title')
         album = None
         if not title:
-            title = player.getattr( 'name' )
-
+            title = player.getattr('name')
 
         if player.type == 'audio':
             playing = '__audio'
-            if player.getattr( 'trackno' ):
-                song    = player.getattr( 'trackno' )
-                artist  = player.getattr( 'artist' )
-                length  = player.getattr( 'length' )
-                album   = player.getattr( 'album' )
+            if player.getattr('trackno'):
+                song    = player.getattr('trackno')
+                artist  = player.getattr('artist')
+                length  = player.getattr('length')
+                album   = player.getattr('album')
                 elapsed = int(player.elapsed)
                 length = str(int(length.split(":")[0])*60 + int(length.split(":")[1]))
-                self.elapsed += 1 # Erm. This function gets called every second altho' it shouldn't be. Let's build on a bug :>
+                # Erm. This function gets called every second altho' it shouldn't be. Let's build on a bug :>
+                self.elapsed += 1
 
-                if length > 30:         # We do not send unless the song is longer than 30 seconds
-                    if self.elapsed > 240 or self.elapsed > int(length)/2:   # We send only when 240 seconds or 50% have elapsed. Adhering to Audioscrobbler rules
+                # We do not send unless the song is longer than 30 seconds
+                if length > 30:
+                    # We send only when 240 seconds or 50% have elapsed. Adhering to Audioscrobbler rules
+                    if self.elapsed > 240 or self.elapsed > int(length)/2:
                         self.submit_song(artist, title, length, album)
-
 
 
     def submit_song(self, artist, track, length, album=''):
@@ -214,15 +246,15 @@ class PluginInterface(plugin.DaemonPlugin):
                 album = ''
 
             params = {
-                                        'u': self.urlenc(self.USER),
-                                        's': self.urlenc(self.challenge_reply),
-                                        'a[0]': self.urlenc(artist),
-                                        't[0]': self.urlenc(track),
-                                        'b[0]': self.urlenc(album),
-                                        'm[0]': '', #TODO Who got this for their mp3's? Add support some day
-                                        'l[0]': length,
-                                        'i[0]': self.urlenc( time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime()) )
-                      }
+                'u': self.urlenc(self.USER),
+                's': self.urlenc(self.challenge_reply),
+                'a[0]': self.urlenc(artist),
+                't[0]': self.urlenc(track),
+                'b[0]': self.urlenc(album),
+                'm[0]': '', #TODO Who got this for their mp3's? Add support some day
+                'l[0]': length,
+                'i[0]': self.urlenc(time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime()))
+            }
             cparams = ''
             for n in params:
                 cparams += n + '=' + params[n] + '&'
@@ -257,14 +289,15 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.interval = int(match.group(1))
 
                 if self.interval > self.poll_interval: # Can we really sleep here?
-                    print 'AudioScrobbler plugin: SORRY, ugly hack, have to sleep here. Locks up Freevo but adheres the Last FM rules. Again, Im sorry.'
+                    print 'AudioScrobbler plugin: SORRY, ugly hack, have to sleep here.'
+                    print 'Locks up Freevo but adheres the Last FM rules. Again, Im sorry.'
                     time.sleep(self.interval-self.poll_interval)
 
             self.lastsong = artist + track
 
 
     def urlenc(self, s):
-        return urllib.urlencode( {'':s} ).lstrip('=')
+        return urllib.urlencode({'':s}).lstrip('=')
 
 
     def eventhandler(self, event, menuw=None):
@@ -288,7 +321,6 @@ class PluginInterface(plugin.DaemonPlugin):
 
         if event == SEEK:
             self.elapsed = 0
-
 
         return 0
 

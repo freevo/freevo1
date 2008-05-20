@@ -43,12 +43,9 @@ class PluginInterface(plugin.DaemonPlugin):
     the user do not interact in the first few seconds.  With this it is possible to
     define a default action e.g. starting radio if there is no other activity.
 
-    Uncomment this to activate the autostart plugin::
+    To activate the autostart plugin add to local_conf.py::
 
         plugin.activate('autostart')
-
-    You can send a list of events as string, eg::
-
         AUTOSTART_EVENTS = (
             'MENU_DOWN', 'MENU_DOWN', 'MENU_SELECT', 'MENU_SELECT',
         )
@@ -71,6 +68,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.timeout = time.time() + config.AUTOSTART_TIMEOUT
 
         plugin.register(self, 'autostart')
+        self.plug = plugin.getbyname('autostart')
 
 
     def config(self):
@@ -85,17 +83,18 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         plugin polling
         """
-        #print "POLL(%.1f): polling" % (self.timeout - time.time())
-        if self.active:
-            if (self.timeout - time.time()) < 0:
-                _debug_('Timeout (%ss) reached without an event, posting events now.' %
-                    self.timeout, DINFO)
-                for e in config.AUTOSTART_EVENTS:
-                    rc.post_event(Event(e))
+        print "POLL(%.1f): polling" % (self.timeout - time.time())
+        if not self.active:
+            return
+        if (self.timeout - time.time()) < 0:
+            _debug_('Timeout (%ss) reached without an event, posting events now.' %
+                self.timeout, DINFO)
+            for e in config.AUTOSTART_EVENTS:
+                rc.post_event(Event(e))
 
-                self.poll_interval = 0
-                self.event_listener = False
-                self.active = False
+            self.poll_interval = 0
+            self.event_listener = False
+            self.active = False
 
 
     def eventhandler(self, event, menuw=None):
@@ -103,9 +102,11 @@ class PluginInterface(plugin.DaemonPlugin):
         called when an event occurs
         """
         #print "EVENT(%.1f): %s" % ((self.timeout - time.time()), event.name)
+        if not self.active:
+            return 0
         if event == MENU_PROCESS_END:
             return 0
-        if self.active and config.AUTOSTART_TIMEOUT:
+        if config.AUTOSTART_TIMEOUT:
             _debug_('Another event is closing the autostart plugin.', DINFO)
             self.poll_interval = 0
             self.event_listener = False
