@@ -93,8 +93,8 @@ class Game:
         if plugin.is_active('joy'):
             try:
                 plugin.getbyname('JOY').enable(FALSE)
-            except Exception, e:
-                _debug_('getbyname(\'JOY\')', e, DWARNING)
+            except Exception, why:
+                _debug_('getbyname(\'JOY\'): %s' % why, DWARNING)
 
         _debug_('Game.play(): Starting thread, cmd=%s' % self.command)
 

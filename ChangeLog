@@ -47,6 +47,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Fixed encodingserver when video has a length of 'None' (B#1942301)
  * Fixed freevused for latest kaa changes (B#1941223)
  * Fixed "freevo cache --thumbnail --recursive" when path has spaces (B#1929635)
+ * Fixed games crashing when there is no working joystick (B#1968114)
  * Fixed record client's find matches when title includes '().' (B#1955745)
  * Fixed rss server crashing on valid RSS feeds (B#1834529)
  * Fixed scrollable text widget when word is longer than line (B#1941573)
