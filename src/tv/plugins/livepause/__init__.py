@@ -588,7 +588,7 @@ class LivePauseController:
         info_dict['percent_through_buffer'] = float(cb) / float(ct)
         chunk_reader.close()
 
-        info_dict['percent_buffer_full'] = len(self.buffer.buffer)/ self.buffer.buffer.size
+        info_dict['percent_buffer_full'] = float(len(self.buffer.buffer))/ float(self.buffer.buffer.size)
 
         del chunk_reader
 
