@@ -34,6 +34,7 @@ import config
 import os.path
 
 import skin
+import util.vfs as vfs
 import util.fxdparser
 from kaa import imlib2
 
@@ -330,6 +331,20 @@ def osds_callback(fxd, node):
 
 
 def parse(filename):
+    if not vfs.isfile(filename):
+        if vfs.isfile(filename+'.fxd'):
+            filename += '.fxd'
+
+        elif vfs.isfile(vfs.join(config.SKIN_DIR, 'osd', '%s.fxd' % filename)):
+            filename = vfs.join(config.SKIN_DIR, 'osd', '%s.fxd' % filename)
+
+        else:
+            filename = vfs.join(config.SKIN_DIR, 'osd', filename)
+
+    if not vfs.isfile(filename):
+        _debug_('Failed to load OSD skin file: %s' % filename)
+        return
+
     parser = util.fxdparser.FXD(filename)
     parser.set_handler('osds', osds_callback)
     parser.parse()
