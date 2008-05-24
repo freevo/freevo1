@@ -83,7 +83,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         plugin polling
         """
-        print "POLL(%.1f): polling" % (self.timeout - time.time())
+        #print "POLL(%.1f): polling" % (self.timeout - time.time())
         if not self.active:
             return
         if (self.timeout - time.time()) < 0:
