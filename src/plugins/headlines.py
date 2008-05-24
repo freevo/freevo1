@@ -39,7 +39,7 @@
 import os, time, stat, re, copy
 
 # rdf modules
-from xml.dom.ext.reader import Sax2
+import util.feedparser
 import urllib
 
 #freevo modules
@@ -48,6 +48,8 @@ from gui.PopupBox import PopupBox
 from item import Item
 from skin.widgets import ScrollableTextScreen
 
+# to decode html entities
+from BeautifulSoup import BeautifulStoneSoup
 
 #get the singletons so we get skin info and access the osd
 skin_object = skin.get_singleton()
@@ -113,7 +115,7 @@ class HeadlinesSiteItem(Item):
         """
         return a list of actions for this item
         """
-        items = [ ( self.getheadlines , _('Show Sites Headlines') ) ]
+        items = [ (self.getheadlines, _('Show Sites Headlines')) ]
         return items
 
 
@@ -132,33 +134,21 @@ class HeadlinesSiteItem(Item):
 
     def fetchheadlinesfromurl(self):
         headlines = []
-        # create Reader object
-        reader = Sax2.Reader()
 
         popup = PopupBox(text=_('Fetching headlines...'))
         popup.show()
 
         # parse the document
         try:
-            myfile=urllib.urlopen(self.url)
-            doc = reader.fromStream(myfile)
-            items = doc.getElementsByTagName('item')
-            for item in items:
-                title = ''
-                link  = ''
-                description = ''
-
-                if item.hasChildNodes():
-                    for c in item.childNodes:
-                        if c.localName == 'title':
-                            title = c.firstChild.data
-                        if c.localName == 'link':
-                            link = c.firstChild.data
-                        if c.localName == 'description':
-                            description = c.firstChild.data
-                if title:
-                    headlines.append((title, link, description))
-
+            doc = util.feedparser.parse(self.url)
+            entcount = len(doc['entries'])
+            count = 0
+            while count < entcount:
+                title = doc.entries[count].title.encode(doc.encoding)
+                link  = doc.entries[count].link.encode(doc.encoding)
+                description = doc.entries[count].content[0].value.encode(doc.encoding)
+                headlines.append((title, link, description))
+                count = count + 1
         except:
             #unreachable or url error
             _debug_('could not open %s' % self.url, DERROR)
@@ -192,6 +182,7 @@ class HeadlinesSiteItem(Item):
             description = description.replace('<p>', '\n').replace('<br>', '\n')
             description = description.replace('<p>', '\n').replace('<br/>', '\n')
             description = description + '\n \n \nLink: ' + link
+            description = unicode(BeautifulStoneSoup(description, convertEntities=BeautifulStoneSoup.HTML_ENTITIES))
             description = util.htmlenties2txt(description)
 
             mi.description = re.sub('<.*?>', '', description)
@@ -221,7 +212,7 @@ class HeadlinesMainMenuItem(Item):
         """
         return a list of actions for this item
         """
-        items = [ ( self.create_locations_menu , _('Headlines Sites' )) ]
+        items = [ (self.create_locations_menu, _('Headlines Sites')) ]
         return items
 
     def create_locations_menu(self, arg=None, menuw=None):
