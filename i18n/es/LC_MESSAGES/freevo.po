@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-23 15:36+0100\n"
-"PO-Revision-Date: 2007-10-28 20:46+0100\n"
+"PO-Revision-Date: 2008-05-24 08:46+0100\n"
 "Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -49,31 +49,28 @@ msgid "Software"
 msgstr "Software"
 
 #: image/plugins/flickr.py:143 image/plugins/flickr.py:144
-#, fuzzy
 msgid "Flickr pictures"
-msgstr "Fotografías"
+msgstr "Fotografías de Flickr"
 
 #: image/plugins/flickr.py:161 video/plugins/youtube.py:171
 msgid "Choose please"
-msgstr ""
+msgstr "Elige, por favor"
 
 #: image/plugins/flickr.py:167
 msgid "Retrieving image list"
-msgstr ""
+msgstr "Obteniendo lista de imágenes"
 
 #: image/plugins/flickr.py:168
-#, fuzzy
 msgid "Images available"
-msgstr "No hay información disponible"
+msgstr "Imágenes disponibles"
 
 #: image/plugins/flickr.py:176
-#, fuzzy
 msgid "Downloading picture \""
-msgstr "Descargando lista de enlaces..."
+msgstr "Descargando imagen \""
 
 #: image/plugins/flickr.py:207
 msgid "Downloading thumbnail for picture \""
-msgstr ""
+msgstr "Descargando miniatura de la imagen \""
 
 #: image/plugins/apod.py:50 image/plugins/apod.py:51
 msgid "APOD"
@@ -156,116 +153,97 @@ msgid "No action defined for this choice!"
 msgstr "¡No hay una acción definida para esta elección!"
 
 #: helpers/tv_grab.py:93 helpers/schedulefavorites.py:41
-#, fuzzy
 msgid "Updated recording schedule"
-msgstr "Añadir a la cola de grabación"
+msgstr "Actualizadas grabaciones programadas"
 
 #: helpers/tv_grab.py:95 helpers/schedulefavorites.py:43
-#, fuzzy
 msgid "Not updated recording schedule"
-msgstr "No hay grabaciones programadas"
+msgstr "No actualizadas grabaciones programadas"
 
 #: helpers/schedulefavorites.py:46
-#, fuzzy
 msgid "Updating recording schedule"
-msgstr "Añadir a la cola de grabación"
+msgstr "Actualizando grabaciones programadas"
 
 #: helpers/recordserver.py:298
-#, fuzzy
 msgid "scheduled recordings saved"
-msgstr "Grabaciones programadas"
+msgstr "Guardadas grabaciones programadas"
 
 #: helpers/recordserver.py:682 helpers/recordserver.py:734
-#, fuzzy
 msgid "program is not set"
 msgstr "programa no programado"
 
 #: helpers/recordserver.py:686
-#, fuzzy
 msgid "program cannot record as it is over"
-msgstr "no se puede grabar si se ha terminado"
+msgstr "no se puede grabar si ya ha terminado el programa"
 
 #: helpers/recordserver.py:727
-#, fuzzy
 msgid "program scheduled to record"
-msgstr "Un programa planificado para grabación."
+msgstr "Programa planificado para grabación"
 
 #: helpers/recordserver.py:760
-#, fuzzy
 msgid "program removed from record schedule"
-msgstr "Eliminar del programa"
+msgstr "Programa eliminado de la programación"
 
 #: helpers/recordserver.py:770
 msgid "scheduled programs is empty"
-msgstr ""
+msgstr "La lista de programación está vacía"
 
 #: helpers/recordserver.py:773
-#, fuzzy
 msgid "program list is empty"
-msgstr "¡Esta lista de reproducción está vacía!"
+msgstr "La lista de programas está vacía"
 
 #: helpers/recordserver.py:777
 msgid "program is scheduled"
 msgstr "el programa ha sido programado"
 
 #: helpers/recordserver.py:778
-#, fuzzy
 msgid "program is not scheduled"
 msgstr "programa no programado"
 
 #: helpers/recordserver.py:814
 msgid "nothing to find"
-msgstr ""
+msgstr "Nada que buscar"
 
 #: helpers/recordserver.py:842
-#, fuzzy
 msgid "no programs match"
-msgstr "no hay programas"
+msgstr "ningún programa concuerda con la búsqueda"
 
 #: helpers/recordserver.py:995
-#, fuzzy
 msgid "no favorite name"
-msgstr "Nombre del Favorito"
+msgstr "Falta nombre del favorito"
 
 #: helpers/recordserver.py:1006 helpers/recordserver.py:1028
-#, fuzzy
 msgid "favorite added"
-msgstr "Nombre del Favorito"
+msgstr "Favorito añadido"
 
 #: helpers/recordserver.py:1035
-#, fuzzy
 msgid "name is not set"
-msgstr "Renombrar %s a %s."
+msgstr "No se ha grabado el nombre"
 
 #: helpers/recordserver.py:1043
-#, fuzzy
 msgid "favorite removed"
-msgstr "Nombre del Favorito"
+msgstr "Favorito eliminado"
 
 #: helpers/recordserver.py:1053
-#, fuzzy
 msgid "favorites cleared"
-msgstr "La obtención de favoritos ha fallado."
+msgstr "Todos los favoritos eliminados"
 
 #: helpers/recordserver.py:1071 helpers/recordserver.py:1134
 #: helpers/recordserver.py:1161
-#, fuzzy
 msgid "not a favorite"
-msgstr "No hay favoritos."
+msgstr "No es un favorito"
 
 #: helpers/recordserver.py:1115
 msgid "priority adjusted"
-msgstr ""
+msgstr "Prioridad ajustada"
 
 #: helpers/recordserver.py:1145
-#, fuzzy
 msgid "no favorites"
-msgstr "No hay favoritos."
+msgstr "No hay favoritos"
 
 #: helpers/recordserver.py:1227
-#, fuzzy
 msgid "favorite scheduled"
-msgstr "Nada programado"
+msgstr "Favorito programado"
 
 #: setup_freevo.py:80
 msgid ""
@@ -663,7 +641,6 @@ msgstr "ERROR"
 
 #: www/htdocs/guidechannel.rpy:207 www/htdocs/index.rpy:57
 #: www/htdocs/guide.rpy:152 www/htdocs/edit_favorite.rpy:57
-#, fuzzy
 msgid "Recording server is not available"
 msgstr "El servidor de grabación no está disponible"
 
@@ -754,22 +731,19 @@ msgid "Notice"
 msgstr "Atención"
 
 #: www/htdocs/index.rpy:59
-#, fuzzy
 msgid "Recording server is up and running"
 msgstr "El servidor de grabación está activado"
 
 #: www/htdocs/index.rpy:63
-#, fuzzy
 msgid "Your listings expire in 1 hour"
 msgstr "Tus listados caducan en una hora."
 
 #: www/htdocs/index.rpy:65
-#, fuzzy, python-format
+#, python-format
 msgid "Your listings expire in %s hours"
 msgstr "Tus listados caducan en %s horas."
 
 #: www/htdocs/index.rpy:68
-#, fuzzy
 msgid "Your listings are up to date"
 msgstr "Tus listados están actualizados."
 
@@ -806,9 +780,8 @@ msgid "TV Genre for %s"
 msgstr "Tipo de programa de TV para %s"
 
 #: www/htdocs/genre.rpy:96
-#, fuzzy
 msgid "No program schedule"
-msgstr "el programa ha sido programado"
+msgstr "Sin programar"
 
 #: www/htdocs/genre.rpy:126 www/htdocs/guide.rpy:162
 msgid "Show"
@@ -1427,18 +1400,16 @@ msgid "Lyrics not found, sorry..."
 msgstr "No se han encontrado letras."
 
 #: audio/plugins/lyrics.py:114
-#, fuzzy
 msgid "No exact match. "
-msgstr "No se encuentra el término buscado"
+msgstr "No se encuentra el término exacto"
 
 #: audio/plugins/lyrics.py:115
 msgid "Here are some sugestions."
-msgstr ""
+msgstr "Aquí tienes algunas sugerencias"
 
 #: audio/plugins/lyrics.py:120
-#, fuzzy
 msgid "Choices"
-msgstr "Atención"
+msgstr "Opciones"
 
 #: audio/plugins/apodcast.py:96 video/plugins/vpodcast.py:131
 msgid "Buffering podcast..."
@@ -1487,7 +1458,7 @@ msgstr "Canciones del mismo artista"
 #: audio/plugins/mplayervis.py:461 audio/plugins/mplayervis.py:470
 #, python-format
 msgid "FXMODE is %s"
-msgstr ""
+msgstr "FXMODE es %s"
 
 #: audio/plugins/fxmms.py:160 audio/plugins/mplayer.py:115
 #, python-format
@@ -1986,19 +1957,19 @@ msgid "No Headlines Sites found"
 msgstr "No se han encontrado sitios de titulares."
 
 #: plugins/sixmixer.py:120 plugins/sixmixer.py:125
-#, fuzzy, python-format
+#, python-format
 msgid "Surround: %s%%"
-msgstr "Volumen: %s%%"
+msgstr "Surround: %s%%"
 
 #: plugins/sixmixer.py:130 plugins/sixmixer.py:135
-#, fuzzy, python-format
+#, python-format
 msgid "Center: %s%%"
-msgstr "Texto: %s"
+msgstr "Central: %s"
 
 #: plugins/sixmixer.py:140 plugins/sixmixer.py:145
-#, fuzzy, python-format
+#, python-format
 msgid "LFE: %s%%"
-msgstr "%s%%"
+msgstr "LFE: %s%%"
 
 #: plugins/icecast.py:158
 msgid "Set as icecast playlist"
@@ -2381,11 +2352,11 @@ msgstr "y"
 
 #: plugins/oneclick.py:604
 msgid "Variable"
-msgstr ""
+msgstr "Variables"
 
 #: plugins/oneclick.py:604 plugins/oneclick.py:605
 msgid "at a rate of"
-msgstr ""
+msgstr "a una velocidad de"
 
 #: plugins/oneclick.py:719 plugins/oneclick.py:984 util/misc.py:448
 #: util/misc.py:459 util/misc.py:469
@@ -2410,7 +2381,7 @@ msgstr "Mapa"
 
 #: plugins/oneclick.py:864
 msgid "for"
-msgstr ""
+msgstr "para"
 
 #: plugins/oneclick.py:940
 msgid "Humidity"
@@ -2438,15 +2409,15 @@ msgstr "Índice UV"
 
 #: plugins/oneclick.py:983
 msgid "As of:"
-msgstr ""
+msgstr "A las:"
 
 #: plugins/oneclick.py:986
 msgid "Temperature:"
-msgstr ""
+msgstr "Temperatura:"
 
 #: plugins/oneclick.py:987
 msgid "Dew Point:"
-msgstr ""
+msgstr "Punto de rocío:"
 
 #: plugins/oneclick.py:988
 msgid "Humidity:"
@@ -2490,7 +2461,7 @@ msgstr "Se ha producido un error al descargar el mapa del tiempo"
 
 #: plugins/df.py:71
 msgid "Bad Path"
-msgstr ""
+msgstr "Ruta incorrecta"
 
 #: plugins/df.py:73
 #, python-format
@@ -2582,7 +2553,7 @@ msgstr "Grabar ficheros de audio (MP3, Wav y Ogg) como CD-Audio"
 #: plugins/cd_burn.py:841
 #, python-format
 msgid "Burn audio playlist to CD, %d files"
-msgstr ""
+msgstr "Grabar lista de reproducción a CD. %d ficheros"
 
 #: plugins/cd_burn.py:853
 msgid "Copy this file to CD"
@@ -2698,7 +2669,7 @@ msgstr "No puedo encontrar el canal de TV %s"
 
 #: tv/tvmenu.py:80
 msgid "Cannot get TV plug-in"
-msgstr ""
+msgstr "No se ha podido obtener un plugin de TV"
 
 #: tv/tvmenu.py:105
 msgid "TV Main Menu"
@@ -2880,14 +2851,12 @@ msgstr ""
 "más larga, por favor."
 
 #: tv/plugins/ivtv_xine_tv.py:353
-#, fuzzy
 msgid "Please repeat to stop\n"
-msgstr "Repetición de lista activada"
+msgstr "Por favor, repite para parar\n"
 
 #: tv/plugins/ivtv_xine_tv.py:386
-#, fuzzy
 msgid "Recording started\n"
-msgstr "Comienza la codificación"
+msgstr "Comienza la grabación\n"
 
 #: tv/plugins/ivtv_xine_tv.py:663
 msgid "This plugin only supports the ivtv video group!"
@@ -2911,9 +2880,9 @@ msgid "No matches found for %s"
 msgstr "No se han encontrado coincidencias para %s"
 
 #: tv/plugins/search_programs.py:109
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot find program: %s"
-msgstr "No se encuenta %s (%s)."
+msgstr "No se encuenta el programa: %s"
 
 #: tv/plugins/scheduled_recordings.py:50
 msgid "Display Scheduled Recordings"
@@ -2924,23 +2893,21 @@ msgid "Nothing scheduled."
 msgstr "Nada programado."
 
 #: tv/plugins/scheduled_recordings.py:106
-#, fuzzy
 msgid "Get scheduled recordings failed"
-msgstr "La obtención de grabaciones ha fallado."
+msgstr "La obtención de la programación ha fallado."
 
 #: tv/plugins/view_favorites.py:63
 msgid "No favorites."
 msgstr "No hay favoritos."
 
 #: tv/plugins/dvbstreamer/vlc_live_pause.py:90
-#, fuzzy
 msgid ""
 "'VLC_COMMAND' not defined, plugin 'DVBStreamer' deactivated.\n"
 "please check the vlc section in freevo_config.py"
 msgstr ""
-"No se ha definido 'XINE_COMMAND'. Se ha desactivado el módulo "
+"No se ha definido 'VLC_COMMAND'. Se ha desactivado el módulo "
 "'DVBStreamer'.\n"
-"Comprueba, por favor, la sección xine del fichero de configuración "
+"Comprueba, por favor, la sección vlc del fichero de configuración "
 "freevo_config.py"
 
 #: tv/plugins/dvbstreamer/vlc_live_pause.py:577
@@ -2992,9 +2959,9 @@ msgid "TV"
 msgstr "TV"
 
 #: tv/plugins/upsoon.py:241
-#, fuzzy, python-format
+#, python-format
 msgid "%s stopped, a recording is about to start!"
-msgstr "TV parada. Va a comenzar una grabación"
+msgstr "%s parada. Va a comenzar una grabación"
 
 #: tv/plugins/xine.py:83
 msgid ""
@@ -3018,14 +2985,12 @@ msgid "CANCEL"
 msgstr "CANCELAR"
 
 #: tv/edit_favorite.py:206
-#, fuzzy
 msgid "Remove favorite failed"
-msgstr "Eliminar favoritos"
+msgstr "No se ha podido eliminar el favorito"
 
 #: tv/edit_favorite.py:310 tv/edit_favorite.py:321
-#, fuzzy
 msgid "Add favorite failed"
-msgstr "La obtención de favoritos ha fallado."
+msgstr "No se ha podido añadir el favorito"
 
 #: tv/edit_favorite.py:319
 #, python-format
@@ -3038,9 +3003,8 @@ msgid "Do you want to remove %s?"
 msgstr "¿Estás seguro de querer eliminar %s?"
 
 #: tv/record_client.py:66
-#, fuzzy
 msgid "TV record server is not available"
-msgstr "El servidor de grabación no está disponible"
+msgstr "El servidor de grabación de TV no está disponible"
 
 #: tv/favoriteitem.py:90 tv/favoriteitem.py:96 tv/programitem.py:121
 msgid "Edit favorite"
@@ -3060,7 +3024,7 @@ msgstr "Modificar hora del día"
 
 #: tv/favoriteitem.py:117 tv/favoriteitem.py:276
 msgid "Prevent Recording of Duplicates"
-msgstr ""
+msgstr "Impedir grabación de duplicados"
 
 #: tv/favoriteitem.py:120
 msgid "Allow Recording of Duplicates"
@@ -3099,14 +3063,13 @@ msgid "This may take some time."
 msgstr "Esto puede llevar un tiempo."
 
 #: tv/favoriteitem.py:348
-#, fuzzy
 msgid "Save failed, favorite was lost"
 msgstr "La grabación ha fallado. Se ha perdido el favorito"
 
 #: tv/favoriteitem.py:365
 #, python-format
 msgid "\"%s\" has been removed from favorites"
-msgstr "Eliminar de favoritos"
+msgstr "\"%s\" ha sido eliminado de favoritos"
 
 #: tv/favoriteitem.py:369 tv/programitem.py:228
 msgid "Remove failed"
@@ -3123,7 +3086,7 @@ msgstr "¡La Guía de TV está corrupta!"
 #: tv/epg_xmltv.py:126
 msgid "Couldn't load the TV Guide, got an exception!"
 msgstr ""
-"No se puede carga la guía de Televisión. ¡Se ha producido una excepción!"
+"No se puede carga la guía de TV. ¡Se ha producido una excepción!"
 
 #: tv/epg_xmltv.py:211
 #, python-format
@@ -3148,11 +3111,11 @@ msgstr "Buscar este programa"
 
 #: tv/programitem.py:148
 msgid "Do you want to remove the Program from the record schedule?"
-msgstr ""
+msgstr "¿Quieres eliminar el programa de la lista?"
 
 #: tv/programitem.py:150
 msgid "This Program is in the future. Do you want to record it?"
-msgstr ""
+msgstr "Este programa se emite en el futuro. ¿Estás seguro de querer grabarlo?"
 
 #: tv/programitem.py:165
 msgid "Sorry, you cannot watch TV while recording. "
@@ -3177,14 +3140,13 @@ msgid "\"%s\" has been removed from schedule"
 msgstr "Eliminar del programa"
 
 #: tv/programitem.py:262
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot edit favorite %s"
-msgstr "No se puede abrir el fichero \"%s\""
+msgstr "No se puede editar el favorito %s"
 
 #: tv/programitem.py:294
-#, fuzzy
 msgid "Search failed"
-msgstr "La programación ha fallado"
+msgstr "La búsqueda ha fallado"
 
 #: tv/programitem.py:315
 msgid "Program Menu"
@@ -3271,9 +3233,8 @@ msgid "Modify Number of passes"
 msgstr "Modificar número de pasadas"
 
 #: video/plugins/reencode.py:157
-#, fuzzy
 msgid "Modify Number of Encoder Threads"
-msgstr "Modificar número de pasadas"
+msgstr "Modificar número de hilos de codificación"
 
 #: video/plugins/reencode.py:158
 msgid "Modify Video Filter (not implemented)"
@@ -3298,7 +3259,7 @@ msgstr "iPod"
 
 #: video/plugins/reencode.py:170
 msgid "DVD"
-msgstr ""
+msgstr "DVD"
 
 #: video/plugins/reencode.py:171
 msgid "Select Profile"
@@ -3309,9 +3270,8 @@ msgid "Modify Number of Passes"
 msgstr "Modificar número de pasadas"
 
 #: video/plugins/reencode.py:251
-#, fuzzy
 msgid "Modify Number of Encoding threads"
-msgstr "Modificar número de pasadas"
+msgstr "Modificar número de hilos de codificación"
 
 #: video/plugins/reencode.py:261
 msgid "Modify Video Filter"
@@ -3361,51 +3321,40 @@ msgid "Failed to download %s"
 msgstr "La descarga de %s ha fallado"
 
 #: video/plugins/appletrailers.py:97 video/plugins/appletrailers.py:106
-#, fuzzy
 msgid "Scanning Apple for trailers..."
-msgstr ""
-"Escaneando carpeta.\n"
-"Ten paciencia, por favor..."
+msgstr "Buscando trailers en Apple..."
 
 #: video/plugins/appletrailers.py:174
-#, fuzzy
 msgid "Browse by Title"
-msgstr "Navegar por la lista"
+msgstr "Navegar por título"
 
 #: video/plugins/appletrailers.py:175
-#, fuzzy
 msgid "Trailers"
-msgstr "Título"
+msgstr "Trailers"
 
 #: video/plugins/appletrailers.py:214
-#, fuzzy
 msgid "Browse by Genre"
-msgstr "Hojear episodios"
+msgstr "Navegar por géneros"
 
 #: video/plugins/appletrailers.py:223
-#, fuzzy
 msgid "Choose a genre"
-msgstr "Elegir una carpeta"
+msgstr "Elegir un género"
 
 #: video/plugins/appletrailers.py:228
-#, fuzzy
 msgid "Browse by Category"
-msgstr "Entrar a la carpeta"
+msgstr "Navegar por categoría"
 
 #: video/plugins/appletrailers.py:237
-#, fuzzy
 msgid "Choose a category"
 msgstr "Elegir una carpeta"
 
 #: video/plugins/appletrailers.py:242
-#, fuzzy
 msgid "Browse by Studio"
-msgstr "Hojear disco"
+msgstr "Navegar por productora"
 
 #: video/plugins/appletrailers.py:251
-#, fuzzy
 msgid "Choose a studio"
-msgstr "Elegir una carpeta"
+msgstr "Elegir productora"
 
 #: video/plugins/bilingual.py:81
 msgid "Bilingual language selection"
@@ -3433,19 +3382,16 @@ msgid "Move to [%s]"
 msgstr "Mover a [%s]"
 
 #: video/plugins/vpodcast.py:211
-#, fuzzy
 msgid "Video Podcast"
-msgstr "Audio Podcast"
+msgstr "Video Podcast"
 
 #: video/plugins/vpodcast.py:255 video/plugins/vpodcast.py:288
-#, fuzzy
 msgid "Video Podcasts"
-msgstr "Audio Podcast"
+msgstr "Video Podcast"
 
 #: video/plugins/vpodcast.py:282
-#, fuzzy
 msgid "Set VPODCAST_DIR in local_conf.py"
-msgstr "Actualiza la variable APODCAST_DIR en local_conf.py"
+msgstr "Actualiza la variable VPODCAST_DIR en local_conf.py"
 
 #: video/plugins/dvdimage.py:79
 msgid "Play image as DVD"
@@ -3462,86 +3408,76 @@ msgstr "Elije disco (%i discos disponibles)."
 
 #: video/plugins/youtube.py:154
 msgid "Youtube videos"
-msgstr ""
+msgstr "Videos de Youtube"
 
 #: video/plugins/youtube.py:183
 msgid "Retrieving video list"
-msgstr ""
+msgstr "Obteniendo lista de videos"
 
 #: video/plugins/youtube.py:184 video/plugins/youtube.py:240
-#, fuzzy
 msgid "Videos available"
-msgstr "Video bitrate"
+msgstr "Videos disponibles"
 
 #: video/plugins/youtube.py:192
-#, fuzzy
 msgid "Downloading video"
-msgstr "Descargar"
+msgstr "Descargando video"
 
 #: video/plugins/youtube.py:206
 msgid "bla"
-msgstr ""
+msgstr "bla"
 
 #: video/plugins/youtube.py:219 video/plugins/youtube.py:249
-#, fuzzy
 msgid "Loading video list"
-msgstr "Descargando lista de enlaces..."
+msgstr "Cargando lista de videos"
 
 #: video/plugins/dvdcopy.py:87
 msgid "Cancel DVD copy"
-msgstr ""
+msgstr "Cancelar copia de DVD"
 
 #: video/plugins/dvdcopy.py:93
-#, fuzzy
 msgid "Copy this title to HDD"
-msgstr "Grabar este elemento en disco"
+msgstr "Copiar título al disco duro"
 
 #: video/plugins/dvdcopy.py:96
-#, fuzzy
 msgid "Copy the entire disc to HDD"
-msgstr "Grabar este elemento en disco"
+msgstr "Copiar disco entero al disco duro"
 
 #: video/plugins/dvdcopy.py:97
-#, fuzzy
 msgid "Copy the feature to HDD"
-msgstr "Grabar este elemento en disco"
+msgstr "Copiar característica al disco duro"
 
 #: video/plugins/dvdcopy.py:123
-#, fuzzy
 msgid "Copy started"
-msgstr "Extracción comenzada"
+msgstr "Comenzando la copia"
 
 #: video/plugins/moviecovers.py:251
-#, fuzzy
 msgid "Search Moviecovers.com for this file"
-msgstr "Buscar en IMDB sobre este elemento"
+msgstr "Buscar en Moviecovers.com sobre este elemento"
 
 #: video/plugins/moviecovers.py:258 video/plugins/moviecovers.py:265
-#, fuzzy, python-format
+#, python-format
 msgid "Search Moviecovers.com for [%s]"
-msgstr "Buscar en IMDB sobre [%s]"
+msgstr "Buscar Moviecovers.com sobre [%s]"
 
 #: video/plugins/moviecovers.py:274
-#, fuzzy
 msgid "Searching Moviecovers.com..."
-msgstr "Buscando letras..."
+msgstr "Buscando en Moviecovers.com..."
 
 #: video/plugins/moviecovers.py:298
 msgid "Connection error : Probably connection timeout, try again"
-msgstr ""
+msgstr "Error de conexión: Probablemente se superó el tiempo de espera."
 
 #: video/plugins/moviecovers.py:311
 msgid "MOVIECOVERS Query"
-msgstr ""
+msgstr "MOVIECOVERS Query"
 
 #: video/plugins/moviecovers.py:315
-#, fuzzy
 msgid "No information available from Moviecovers.com"
-msgstr "No hay información disponible en IMDB"
+msgstr "No hay información disponible en Moviecovers.com"
 
 #: video/plugins/moviecovers.py:352
 msgid "Getting data, it can be long as we download a ZIP file"
-msgstr ""
+msgstr "Obteniendo datos. Puede tardar ya que se descarga un fichero ZIP"
 
 #: video/plugins/imdb.py:97
 msgid "Search IMDB for this file"
@@ -3695,13 +3631,13 @@ msgid "No player for this item found"
 msgstr "No se ha encontrado un reproductor válido para este tipo de elemento."
 
 #: video/videoitem.py:528 video/videoitem.py:541 video/videoitem.py:555
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "No media found for \"%s\".\n"
 "Please insert the media \"%s\"."
 msgstr ""
-"No se han encontrado elementos multimedia en \"%s\".\n"
-"%s"
+"No se ha encontrado elementos multimedia en \"%s\".\n"
+"Por favor, inserta el elemento en \"%s\""
 
 #: video/videoitem.py:638
 #, python-format
@@ -3739,14 +3675,13 @@ msgid "Chapter Menu"
 msgstr "Menu de capítulos"
 
 #: video/configure.py:202
-#, fuzzy, python-format
+#, python-format
 msgid "Play with \"%s\""
-msgstr "Reproducir título %s"
+msgstr "Reproducir con \"%s\""
 
 #: video/configure.py:204
-#, fuzzy
 msgid "Player Menu"
-msgstr "Menu de capítulos"
+msgstr "Menu de reproducción"
 
 #: video/configure.py:232
 #, python-format
@@ -3936,7 +3871,7 @@ msgstr "No hay grabaciones programadas"
 
 #: util/misc.py:513
 msgid "Widescreen"
-msgstr ""
+msgstr "Formato cine"
 
 #: util/mediainfo.py:748
 msgid "Reloading cache files, be patient..."
@@ -3988,7 +3923,7 @@ msgstr "Video bitrate"
 
 #: share/skins/main/atlantice.fxd:281
 msgid "By"
-msgstr ""
+msgstr "Por"
 
 #: share/skins/main/atlantice.fxd:376 share/skins/main/info.fxd:314
 #: share/skins/main/geexbox.fxd:226 share/skins/main/blurr.fxd:218
@@ -4014,7 +3949,7 @@ msgstr "fotos en este carrusel de diapositivas."
 
 #: share/skins/main/atlantice.fxd:287
 msgid "With"
-msgstr ""
+msgstr "Con"
 
 #: share/skins/main/info.fxd:16 share/skins/main/geexbox.fxd:480
 #: share/skins/main/blurr.fxd:451 share/skins/main/Panorama.fxd:471
@@ -4235,9 +4170,8 @@ msgid "min."
 msgstr "min."
 
 #: share/skins/main/atlantice.fxd:299
-#, fuzzy
 msgid "Country"
-msgstr "Contenedor"
+msgstr "País"
 
 #: share/skins/main/info.fxd:406
 msgid "Disc ID"
