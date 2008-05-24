@@ -14,6 +14,7 @@
 
 import md5, urllib, urllib2, re, os
 import config, menu, rc, plugin, util, time, socket
+from util.audioscrobbler import *
 from event import *
 from audio.player import PlayerGUI
 from item import Item
@@ -24,6 +25,10 @@ import skin
 
 _player_ = None
 
+logincachefilename = os.path.join(config.FREEVO_CACHEDIR, 'audioscrobbler.session')
+audioscrobbler = Audioscrobbler(config.LASTFM_USER, config.LASTFM_PASS, logincachefilename)
+DEBUG = config.DEBUG
+
 class PluginInterface(plugin.MainMenuPlugin):
     """
     Last FM player client
@@ -33,14 +38,13 @@ class PluginInterface(plugin.MainMenuPlugin):
         plugin.activate('audio.lastfm')
         LASTFM_USER = '<last fm user name>'
         LASTFM_PASS = '<last fm password>'
-        LASTFM_SESSION = ''
         LASTFM_LOCATIONS = [
-             ('Last Fm - Neighbours','lastfm://user/<lastfm user name>/neighbours'),
-             ('Last FM - Jazz', 'lastfm://globaltags/jazz'),
-             ('Last FM - Rock', 'lastfm://globaltags/rock'),
-             ('Last FM - Oldies', 'lastfm://globaltags/oldies'),
-             ('Last FM - Pop', 'lastfm://globaltags/pop'),
-             ('Last FM - Norah Jones', 'lastfm://artist/norah jones')
+            ('Last Fm - Neighbours', 'lastfm://user/<lastfm user name>/neighbours'),
+            ('Last FM - Jazz', 'lastfm://globaltags/jazz'),
+            ('Last FM - Rock', 'lastfm://globaltags/rock'),
+            ('Last FM - Oldies', 'lastfm://globaltags/oldies'),
+            ('Last FM - Pop', 'lastfm://globaltags/pop'),
+            ('Last FM - Norah Jones', 'lastfm://artist/norah jones')
         ]
 
     RIGHT - skip song
@@ -48,7 +52,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     9     - send to last.fm BAN song
     """
     def __init__(self):
-        if not config.LASTFM_USER or not LASTFM_PASS:
+        _debug_('PluginInterface.__init__()', 1)
+        if not config.LASTFM_USER or not config.LASTFM_PASS:
             self.reason = 'LASTFM_USER or LASTFM_PASS not set'
             return
         plugin.MainMenuPlugin.__init__(self)
@@ -56,24 +61,28 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def config(self):
-        '''
+        """
         freevo plugins -i audio.freevo returns the info
-        '''
+        """
+        _debug_('config()', 1)
         return [
             ('LASTFM_USER', None, 'User name for www.last.fm'),
             ('LASTFM_PASS', None, 'Password for www.last.fm'),
-            ('LASTFM_SESSION', '', 'Last fm session')
+            ('LASTFM_LOCATIONS', [], 'LastFM locations')
         ]
 
 
     def items(self, parent):
+        _debug_('items(parent=%r)' % (parent,), 1)
         return [ LastFMMainMenuItem(parent) ]
 
 
 
 class LastFMPlayerGUI(PlayerGUI):
+    """
+    """
     def __init__(self, item, menuw=None):
-
+        _debug_('LastFMPlayerGUI.__init__(item=%r, menuw=%r)' % (item, menu), 1)
         self.tune_lastfm(item.station)
         GUIObject.__init__(self)
         self.visible = menuw is not None
@@ -90,86 +99,107 @@ class LastFMPlayerGUI(PlayerGUI):
         config.EVENTS['audio']['1'] = Event(FUNCTION_CALL, arg=self.love)
         config.EVENTS['audio']['9'] = Event(FUNCTION_CALL, arg=self.ban)
 
-    def tune_lastfm(self,station):
+
+    def tune_lastfm(self, station):
         """Change Last FM Station"""
+        _debug_('tune_lastfm(station=%r)' % (station,), 1)
+        if not Audioscrobbler.sessionid:
+            audioscrobbler._login()
         tune_url = 'http://ws.audioscrobbler.com/radio/adjust.php?session=%s&url=%s&debug=0' % \
-            (config.LASTFM_SESSION, station)
-        f = urllib.urlopen(tune_url)
-        page = f.readlines()
-        for x in page:
-            if re.search('response=OK',x):
+            (Audioscrobbler.sessionid, station)
+        for x in audioscrobbler._urlopen(tune_url):
+            if re.search('response=OK', x):
                 print 'Station is OK'
 
 
     def song_info(self):
         """Return Song Info and album Cover"""
-        info_url = 'http://ws.audioscrobbler.com/radio/np.php?session=%s&debug=0' % (config.LASTFM_SESSION,)
-        try:
-            f = urllib2.urlopen(info_url)
-            lines = f.read().rstrip().split("\n")
-        except:
-            _debug_(_('Last FM Info site not responding !'), DWARNING)
+        _debug_('song_info()', 1)
+        if not Audioscrobbler.sessionid:
+            audioscrobbler._login()
+        info_url = 'http://ws.audioscrobbler.com/radio/np.php?session=%s&debug=0' % (Audioscrobbler.sessionid,)
+        lines = audioscrobbler._urlopen(info_url)
+        if not lines:
             return
         try:
-            if lines[0].split("=")[1] != 'false':
-                if self.item.title != lines[8].split("=")[1] and self.item.artist != lines[6].split("=")[1]:
-                    self.item.artist = lines[6].split("=")[1]
-                    self.item.title = lines[8].split("=")[1]
-                    self.item.album = lines[10].split("=")[1]
-                    self.item.length = int(lines[15].split("=")[1])
-                    self.info_time += self.item.length - 10
-                    pic_url = lines[14].split("=")[1]
-                    self.download_cover(pic_url)
-                    return
-                else:
-                    self.info_time += 2
-            else:
-                print 'Stream Error'
-                print lines[0].split("=")[1]
-                return
-        except:
-            print 'Error parsing Info page!'
+            for line in lines:
+                k, v = line.split("=")
+                if v:
+                    exec('self.item.%s = %r' % (k, v))
+            #self.info_time += self.item.length - 10
+            pic_url = None
+            if hasattr(self.item, 'albumcover_large'):
+                pic_url = self.item.albumcover_large
+            elif hasattr(self.item, 'albumcover_medium'):
+                pic_url = self.item.albumcover_medium
+            elif hasattr(self.item, 'albumcover_small'):
+                pic_url = self.item.albumcover_small
+            if pic_url is not None:
+                self.download_cover(pic_url)
+            #else:
+            #    self.info_time += 2
+            #else:
+            #    print 'Stream Error'
+            #    print lines[0].split("=")[1]
+            #    return
+        except Exception, why:
+            import traceback
+            traceback.print_exc()
 
 
-    def download_cover(self,pic_url):
+    def download_cover(self, pic_url):
         """Download album Cover to freevo cache directory"""
-        os.system('rm -f %s/lfmcover_*.jpg' % config.FREEVO_CACHEDIR )
-        self.covercount +=1
+        _debug_('download_cover(pic_url=%r)' % (pic_url,), 1)
+        os.system('rm -f %s/lfmcover_*.jpg' % config.FREEVO_CACHEDIR)
+        self.covercount += 1
         savefile = config.FREEVO_CACHEDIR + '/lfmcover_' + str(time.time()) + '.jpg'
-        pic_file = urllib.urlopen(pic_url).read()
+        if not Audioscrobbler.sessionid:
+            audioscrobbler._login()
+        pic_file = audioscrobbler._urlopen(pic_url, lines=False)
         save = open(savefile, 'w')
-        print >> save, pic_file
+        print >>save, pic_file
         save.close()
         self.item.image = savefile
 
+
     def skip(self):
         """Skip song"""
+        _debug_('skip()', 1)
         print "Skip " + self.item.title
+        if not Audioscrobbler.sessionid:
+            audioscrobbler._login()
         skip_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=skip&debug=0' % \
-            (config.LASTFM_SESSION)
-        urllib.urlopen(skip_url).read()
+            (Audioscrobbler.sessionid)
+        audioscrobbler._urlopen(skip_url)
         self.info_time = self.item.elapsed + 8
         self.song_info()
 
 
     def love(self):
         """Send "Love" information to audioscrobbler"""
+        _debug_('love()', 1)
         print 'Love ' + self.item.title
+        if not Audioscrobbler.sessionid:
+            audioscrobbler._login()
         love_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=love&debug=0' % \
-            (config.LASTFM_SESSION)
-        urllib.urlopen(love_url).read()
+            (Audioscrobbler.sessionid)
+        audioscrobbler._urlopen(love_url)
 
 
     def ban(self):
         """Send "Ban" information to audioscrobbler"""
+        _debug_('ban()', 1)
         print 'Ban'
+        if not Audioscrobbler.sessionid:
+            audioscrobbler._login()
         ban_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=ban&debug=0' % \
-            (config.LASTFM_SESSION)
-        urllib.urlopen(ban_url).read()
+            (Audioscrobbler.sessionid)
+        audioscrobbler._urlopen(ban_url)
 
 
     def refresh(self):
         """Give information to the skin."""
+        _debug_('refresh()', 1)
         if not self.visible:
             return
 
@@ -191,14 +221,17 @@ class LastFMPlayerGUI(PlayerGUI):
 
 
 class LastFMItem(Item):
-
+    """
+    """
     def actions(self):
         """return a list of actions for this item"""
-        items = [ ( self.play , _( 'Listen Last FM' ) ) ]
+        _debug_('actions()', 1)
+        items = [ (self.play, _('Listen Last FM')) ]
         return items
 
 
     def play(self, arg=None, menuw=None):
+        _debug_('play(arg=%r, menuw=%r)' % (arg, menu), 1)
         self.elapsed = 0
         if not self.menuw:
             self.menuw = menuw
@@ -218,62 +251,63 @@ class LastFMMainMenuItem(MenuItem):
     of commands in a submenu.
     """
     def __init__(self, parent):
+        _debug_('LastFMMainMenuItem.__init__(parent)=%r' % (parent,), 1)
         MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
-        self.name = _( 'Last FM' )
+        self.name = _('Last FM')
+
         self.login()
 
 
-    def actions(self):
-        """return a list of actions for this item"""
-        return [ ( self.create_stations_menu , 'stations' ) ]
-
-
-    def create_stations_menu(self, arg=None, menuw=None):
-        lfm_items = []
-        if len(config.LASTFM_SESSION) > 5:
-            for lfm_station in config.LASTFM_LOCATIONS:
-                lfm_item = LastFMItem()
-                lfm_item.name = lfm_station[0]
-                lfm_item.station = urllib.quote_plus(lfm_station[1])
-                lfm_item.url = self.stream_url
-                lfm_item.type = 'audio'
-                lfm_item.mplayer_options = ''
-                lfm_item.filename = ''
-                lfm_item.network_play = 1
-                lfm_item.station_index = config.LASTFM_LOCATIONS.index(lfm_station)
-                lfm_item.length = 0
-                lfm_item.remain = 0
-                lfm_item.elapsed = 0
-                lfm_item.info = {'album':'', 'artist':'', 'trackno': '', 'title': ''}
-                lfm_items += [ lfm_item ]
-
-        if (len(lfm_items) == 0):
-            lfm_items += [menu.MenuItem( _( 'Invalid LastFM Session!' ),
-                                             menuw.goto_prev_page, 0)]
-        lfm_menu = menu.Menu( _( 'Last FM' ), lfm_items)
-        rc.app(None)
-        menuw.pushmenu(lfm_menu)
-        menuw.refresh()
-
-
-    def login(self , arg=None):
+    def login(self, arg=None):
         """Read session and stream url from ws.audioscrobbler.com"""
+        _debug_('login(arg=%r)' % (arg,), 1)
         username = config.LASTFM_USER
         password_txt = config.LASTFM_PASS
         password = md5.new(config.LASTFM_PASS)
         login_url='http://ws.audioscrobbler.com/radio/handshake.php?version=1.1.1&platform=linux' + \
             '&username=%s&passwordmd5=%s&debug=0&partner=' % (config.LASTFM_USER, password.hexdigest())
         stream_url = ' '
+    
+        page = audioscrobbler._urlopen(login_url)
+        for x in page:
+            if re.search('session', x):
+                Audioscrobbler.sessionid = x[8:40]
+    
+            if re.search('stream_url', x):
+                self.stream_url = x[11:]
+                print self.stream_url
 
-        try:
-            f = urllib.urlopen(login_url)
-            page = f.readlines()
-            for x in page:
-                if re.search('session',x):
-                    config.LASTFM_SESSION = x[8:40]
 
-                if re.search('stream_url',x):
-                    self.stream_url = x[11:]
-                    print self.stream_url
-        except:
-            print "Socket Error"
+    def actions(self):
+        """return a list of actions for this item"""
+        _debug_('actions()', 1)
+        return [ (self.create_stations_menu, 'stations') ]
+
+
+    def create_stations_menu(self, arg=None, menuw=None):
+        _debug_('create_stations_menu(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        lfm_items = []
+        if not Audioscrobbler.sessionid:
+            audioscrobbler._login()
+        for lfm_station in config.LASTFM_LOCATIONS:
+            lfm_item = LastFMItem()
+            lfm_item.name = lfm_station[0]
+            lfm_item.station = urllib.quote_plus(lfm_station[1])
+            lfm_item.url = self.stream_url
+            lfm_item.type = 'audio'
+            lfm_item.mplayer_options = ''
+            lfm_item.filename = ''
+            lfm_item.network_play = 1
+            lfm_item.station_index = config.LASTFM_LOCATIONS.index(lfm_station)
+            lfm_item.length = 0
+            lfm_item.remain = 0
+            lfm_item.elapsed = 0
+            lfm_item.info = {'album':'', 'artist':'', 'trackno': '', 'title': ''}
+            lfm_items += [ lfm_item ]
+
+        if len(lfm_items) == 0:
+            lfm_items += [menu.MenuItem(_('Invalid LastFM Session!'), menuw.goto_prev_page, 0)]
+        lfm_menu = menu.Menu(_('Last FM'), lfm_items)
+        rc.app(None)
+        menuw.pushmenu(lfm_menu)
+        menuw.refresh()
