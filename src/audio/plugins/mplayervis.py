@@ -61,7 +61,7 @@ class MpvGoom(BaseAnimation):
 
     def __init__(self, x, y, width, height, coverfile=None):
         """ Initialise the MPlayer Visualization Goom """
-        _debug_('__init__(x=%r y=%r width=%r height=%r coverfile=%r)' % (x, y, width, height, coverfile), 2)
+        _debug_('MpvGoom.__init__(x=%r y=%r width=%r height=%r coverfile=%r)' % (x, y, width, height, coverfile), 2)
         self.coverfile = coverfile
 
         BaseAnimation.__init__(self, (x, y, width, height), fps=100, bg_update=False, bg_redraw=False)
@@ -174,14 +174,15 @@ class MpvGoom(BaseAnimation):
     def set_fullscreen(self):
         """ Set the mode to full screen """
         _debug_('set_fullscreen()', 2)
+        w, h = MPLAYERVIS_FULL_GEOMETRY.split('x')
         #w = config.CONF.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
         #w = int(float(w) * config.IMAGEVIEWER_ASPECT)
-        w = config.CONF.width
+        #w = config.CONF.width
         w = int(float(w) / config.IMAGEVIEWER_ASPECT)
 
         #h = config.CONF.height-(config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM)
         #h = int(float(h) * config.IMAGEVIEWER_ASPECT)
-        h = config.CONF.height
+        #h = config.CONF.height
 
         x = int(config.CONF.width - w) / 2
         y = int(config.CONF.height - h) / 2
@@ -405,7 +406,9 @@ class PluginInterface(plugin.Plugin):
             ('MPLAYERVIS_FADE_STEP', 3, 'Number of steps per timer loop'),
             ('MPLAYERVIS_MESSAGE_FMT', 'Artist: %(a)s\n Album: %(l)s\n Title: %(t)s\n Track: %(n)s\n', \
                 'Message format for the message'),
+            ('MPLAYERVIS_FULL_GEOMETRY', '%dx%d' % (config.CONF.width, config.CONF.height), 'Full screen geometry'),
         ]
+
 
     def play(self, command, player):
         """ """
@@ -512,14 +515,19 @@ class PluginInterface(plugin.Plugin):
         if item.length:
             length = '%i:%02i' % (int(item.length/60), int(item.length%60))
 
-        song = { 'a' : info['artist'],
-                 'l' : info['album'],
-                 'n' : info['trackno'],
-                 't' : title,
-                 'e' : elapsed,
-                 'i' : item.image,
-                 'y' : info['year'],
-                 's' : length }
+        if 'year' not in info:
+            info['year'] = ''
+
+        song = {
+            'a' : info['artist'],
+            'l' : info['album'],
+            'n' : info['trackno'],
+            'y' : info['year'],
+            't' : title,
+            'e' : elapsed,
+            'i' : item.image,
+            's' : length,
+        }
 
         return fmt % song
 
