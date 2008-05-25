@@ -357,9 +357,9 @@ class TVGuide(Item):
         jump to now in the tv guide.
         """
         _debug_('jump_to_now(old_selected=%r)' % (old_selected,), 2)
-        localtime = time.localtime()
-        localtime[4] = localtime[4] > 30 and 30 or 0 #localtime[4] = minutes
-        start_time = time.mktime(localtime)
+        (year, mon, mday, hour, min, sec, wday, yday, isdst) = time.localtime()
+        min = min > 30 and 30 or 0
+        start_time = time.mktime((year, mon, mday, hour, min, sec, wday, yday, isdst))
         stop_time = start_time + self.hours_per_page * 60 * 60
         start_channel = self.start_channel
 
