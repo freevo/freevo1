@@ -111,6 +111,7 @@ class Scrobbler:
                 resp_save = resp.read()
             except Exception, e:
                 _debug_('Audioscrobbler server not responding, will try later: %s' % (e))
+                return False
 
             lines = resp_save.rstrip().split('\n')
 
