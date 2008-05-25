@@ -307,12 +307,13 @@ class ImageViewer(GUIObject):
         try:
             index = item.parent.play_items.index(item)+1
             length = len(item.parent.play_items)
-            if (index == length): self.slideshow = config.IMAGEVIEWER_AUTOPLAY
-        except:
-            _debug_('Invalid parent item', DWARNING)
+            if index == length:
+                self.slideshow = config.IMAGEVIEWER_AUTOPLAY
 
-        # send information event to LCD2
-        rc.post_event(Event('IMAGE_VIEW_INFO', arg=(index, length, item.name)))
+            # send information event to LCD2
+            rc.post_event(Event('IMAGE_VIEW_INFO', arg=(index, length, item.name)))
+        except Exception, why:
+            _debug_('Invalid parent item: %s' % (why,), DWARNING)
 
         # XXX Hack to move the selected item to the current showing image
         # XXX TODO: find a way to add it to directory.py or playlist.py
