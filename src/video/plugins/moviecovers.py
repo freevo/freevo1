@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Plug-in for MOVIECOVERS support
+# Plugin for MOVIECOVERS support
 # -----------------------------------------------------------------------
 # $Id$
 # Version: 080607_01
@@ -22,6 +22,7 @@
 #        - DVD/VCD support (discset ??)
 #
 # Author : S. FABRE for Biboobox, http://www.lahiette.com/biboobox
+#          V. GIACOMINI for the forum searching feature
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -140,7 +141,33 @@ class PluginInterface(plugin.ItemPlugin):
                 link = m.group(1)
                 name = m.group(2)
                 year = m.group(3)
-                self.moviecovers_id_list += [ (link, name, year, 'Movies') ]
+                self.moviecovers_id_list += [ (link, name, year, 'Movies', 'main') ]
+
+	if self.moviecovers_id_list: 
+	   return self.moviecovers_id_list
+
+	print 'no data for main request, try forum request'
+	url = 'http://www.moviecovers.com/forum/search-mysql.html?forum=MovieCovers&query=%s' % (urllib.quote(name))
+	req = urllib2.Request(url, txdata, txheaders)
+	
+	try:
+            response = urllib2.urlopen(req)
+        except urllib2.HTTPError, error:
+            raise FxdMoviecovers_Net_Error("Moviecovers unreachable : " + error)
+            exit
+
+	regexp_getall = re.compile('.*<TD><A href="(fil.html\?query=.*)">(.*?)</A>.*', re.I)
+
+        for line in response.read().split("\n"):
+            #print ">>>%s" % line
+            m = regexp_getall.match(line)
+            if m:
+                #print "Found film in line : %s" % line
+                link = m.group(1)
+                name = m.group(2)
+                year = 'unknown'
+                self.moviecovers_id_list += [ (link, name, year, 'Movies', 'forum') ]
+
 
         return self.moviecovers_id_list
 
@@ -169,10 +196,19 @@ class PluginInterface(plugin.ItemPlugin):
 
         return self.searchMoviecovers(name)
 
-    def getMoviecoversPage(self, url):
+    def getMoviecoversPage(self, url, origin):
         """url
         Set an moviecovers number for object, and fetch data"""
-        self.myurl = 'http://www.moviecovers.com/' + urllib.quote(urllib.unquote(url))
+        if origin == 'main':
+            self.myurl = 'http://www.moviecovers.com/' + urllib.quote(urllib.unquote(url))
+            id=""
+        else:
+            p = re.compile('.*#mid([0-9]*)')
+            m = p.match(url)
+            id = m.group(1)
+            print "film id is %s" % id
+            self.myurl = 'http://www.moviecovers.com/forum/' + url
+
         #print "Now trying to get %s" % self.myurl
         req = urllib2.Request(self.myurl, txdata, txheaders)
 
@@ -283,7 +319,7 @@ class PluginInterface(plugin.ItemPlugin):
             else:
                 self.searchstring = self.item.name
 
-            for id,name,year,type in self.guessMoviecovers(self.searchstring, self.disc_set):
+            for id,name,year,type,origin in self.guessMoviecovers(self.searchstring, self.disc_set):
                 try:
                     for i in self.item.parent.play_items:
                         if i.name == name:
@@ -292,7 +328,7 @@ class PluginInterface(plugin.ItemPlugin):
                 except:
                     pass
                 items.append(menu.MenuItem('%s (%s, %s)' % (htmlenties2txt(name), year, type),
-                    self.moviecovers_create_fxd, (id, year)))
+                    self.moviecovers_create_fxd, (id, origin)))
         except:
             box.destroy()
             box = PopupBox(text=_('Connection error : Probably connection timeout, try again'))
@@ -358,7 +394,7 @@ class PluginInterface(plugin.ItemPlugin):
         else:
             devicename = None
 
-        self.getMoviecoversPage(arg[0])
+        self.getMoviecoversPage(arg[0],arg[1])
 
         if self.disc_set:
             self.setDiscset(devicename, None)
@@ -508,14 +544,18 @@ class PluginInterface(plugin.ItemPlugin):
         """Updates an existing file, adds extra disc in discset"""
         print "Update not supported for the moment... Sorry"
 
-    def parsedata(self, results, id=0):
+    def parsedata(self, results, id=""):
         """results (moviecovers html page), allocine_id
         Returns tuple of (title, info(dict), image_urls)"""
 
         dvd = 0
         inside_plot = None
 
-        regexp_zipfile = re.compile('.*<A href="(/getzip.html/.*?)">.*', re.I)
+	if id:
+	    regexp_zipfile = re.compile('.*<A href="(/getzip.html/.*-%s-.*?)">.*' % id, re.I)
+	else:
+            regexp_zipfile = re.compile('.*<A href="(/getzip.html/.*?)">.*', re.I)
+
         for line in results.read().split("\n"):
             m = regexp_zipfile.match(line)
             if m:
@@ -540,12 +580,14 @@ class PluginInterface(plugin.ItemPlugin):
             if m:
                 #print "Found JPEG file : %s" % file
                 self.imagefile = self.tmppath + vfs.basename(file)
-            m = regexp_filmfile.match(file)
-            if m:
-                #print "Found FILM file : %s" % file
-                self.filmfile = self.tmppath + vfs.basename(file)
+            else:
+                m = regexp_filmfile.match(file)
+                if m:
+                    #print "Found FILM file : %s" % file
+                    self.filmfile = self.tmppath + vfs.basename(file)
 
         # Now parse the film file
+	#print "filmfile is %s" % self.filmfile
         file = open(self.filmfile)
         # File format is :
             #Title
@@ -559,6 +601,7 @@ class PluginInterface(plugin.ItemPlugin):
         lineno = 0
         self.info['plot'] = ''
         for line in file.read().split("\n"):
+	    #print line
             if lineno == 0: self.title = line
             if lineno == 1: self.info['director'] = line
             if lineno == 2: self.info['year'] = line
@@ -570,6 +613,7 @@ class PluginInterface(plugin.ItemPlugin):
                 self.info['plot'] += line
             lineno += 1
 
+	#print self.info
         return (self.title, self.info, self.imagefile)
 
     def fetch_image(self):
