@@ -38,6 +38,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * New idlebar sensors plug-in (sensors2) (F#1953007)
  * New video menu plug-in to remove commercials (F#1920654)
  * New video plug-in to supply video information from xine (F#1929333)
+ * New video wwitv plug-in for streaming TV from wwitv.com (F#1971765)
  * Updated audio albumtree plug-in with support for ogg files (F#1928509)
  * Updated fxd audio to allow radio tuner to be mixed with web radio (F#1962450)
  * Updated French moviecovers for additionnal search in the forum (F#1971466)
