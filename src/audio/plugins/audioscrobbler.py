@@ -72,7 +72,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Set up the basics, register with Freevo and connect
         """
-        if not config.AS_USER or not AS_PASSWORD:
+        if not config.AS_USER or not config.AS_PASSWORD:
             self.reason = 'AS_USER or AS_PASSWORD have not been set'
             return
 
