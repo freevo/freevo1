@@ -56,7 +56,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         initialise an instance of the PluginInterface
         """
-        _debug_('PluginInterface.__init__()', 1)
+        _debug_('PluginInterface.__init__()', 2)
         plugin.DaemonPlugin.__init__(self)
         self.poll_interval  = 3000
         self.poll_menu_only = False
@@ -79,7 +79,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         reserve some space from the idlebar, this is for DaemonPlugins
         """
-        _debug_('PluginInterface.take_space(space=%r)' % (space,), 1)
+        _debug_('PluginInterface.take_space(space=%r)' % (space,), 2)
         self.used_space = space
 
 
@@ -87,7 +87,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         draw a background and all idlebar plugins
         """
-        _debug_('PluginInterface.draw(type=%r, object=%r, osd=%r)' % (type, object, osd), 1)
+        _debug_('PluginInterface.draw(type=%r, object=%r, osd=%r)' % (type, object, osd), 2)
         w = osd.width + 2 * osd.x
         h = osd.y + 60
 
@@ -129,7 +129,7 @@ class PluginInterface(plugin.DaemonPlugin):
         catch the IDENTIFY_MEDIA event to redraw the skin (maybe the cd status
         plugin wants to redraw)
         """
-        _debug_('PluginInterface.eventhandler(event=%r, menuw=%r)' % (event, menuw), 1)
+        _debug_('PluginInterface.eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
         if skin.active() and plugin.isevent(event) == 'IDENTIFY_MEDIA':
             skin.redraw()
         return False
@@ -139,7 +139,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         update the idlebar every 30 secs even if nothing happens
         """
-        _debug_('PluginInterface.poll()', 1)
+        _debug_('PluginInterface.poll()', 2)
         if skin.active():
             skin.redraw()
 
@@ -160,13 +160,13 @@ class IdleBarPlugin(plugin.Plugin):
         """
         Initialise an instance of the IdleBarPlugin
         """
-        _debug_('IdleBarPlugin.__init__()', 1)
+        _debug_('IdleBarPlugin.__init__()', 2)
         plugin.Plugin.__init__(self)
         self._type = 'idlebar'
 
 
     def draw(self, (type, object), x, osd):
-        _debug_('IdleBarPlugin.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 1)
+        _debug_('IdleBarPlugin.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 2)
         return
 
 
@@ -186,7 +186,7 @@ class clock(IdleBarPlugin):
         """
         Initialise an instance of the idlebar clock class
         """
-        _debug_('clock.__init__(format=%r)' % (format,), 1)
+        _debug_('clock.__init__(format=%r)' % (format,), 2)
         IdleBarPlugin.__init__(self)
         if config.CLOCK_FORMAT:
             format = config.CLOCK_FORMAT
@@ -203,7 +203,7 @@ class clock(IdleBarPlugin):
         """
         Draw the clock
         """
-        _debug_('clock.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 1)
+        _debug_('clock.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 2)
         clock = Unicode(time.strftime(self.timeformat))
         font  = osd.get_font('clock')
         pad_x = 10
@@ -238,13 +238,13 @@ class logo(IdleBarPlugin):
         """
         Initialise an instance of the idlebar logo class
         """
-        _debug_('logo.__init__(image=%r)' % (image,), 1)
+        _debug_('logo.__init__(image=%r)' % (image,), 2)
         IdleBarPlugin.__init__(self)
         self.image = image
 
 
     def draw(self, (type, object), x, osd):
-        _debug_('logo.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 1)
+        _debug_('logo.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 2)
         if not self.image:
             image = osd.settings.images['logo']
         else:
