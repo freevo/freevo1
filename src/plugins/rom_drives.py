@@ -638,7 +638,7 @@ class Identify_Thread(threading.Thread):
             media.item.info.set_variables(variables)
 
             media.item.name = title
-            media.item.set_url(data['mime'][6:] + '://')
+            media.item.url = data['mime'][6:] + '://'
             media.item.media = media
 
             media.type = data['mime'][6:]

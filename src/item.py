@@ -157,10 +157,6 @@ class Item:
     for MenuItem and for other info items like VideoItem, AudioItem and ImageItem
     """
     def __init__(self, parent=None, info=None, skin_type=None):
-        """
-        Init the item. Sets all needed variables, if parent is given also inherit
-        some settings from there. Set self.info to info if given.
-        """
         if not hasattr(self, 'type'):
             self.type     = None            # e.g. video, audio, dir, playlist
 
@@ -173,6 +169,15 @@ class Item:
             self.info     = mediainfo.Info(None, None, info)
         self.menuw        = None
         self.description  = ''
+        self.image        = None            # imagefile
+        self.skin_fxd     = None            # skin informationes etc.
+        self.media        = None
+        self.fxd_file     = None 
+        self.network_play = True            # network url, like http
+        self.filename     = ''              # filename if it's a file:// url
+        self.mode         = ''              # the type of the url (file, http, dvd...)
+        self.files        = None            # FileInformation
+        self.mimetype     = ''              # extention or mode
 
         self.eventhandler_plugins = []
 
@@ -191,13 +196,6 @@ class Item:
             self.media       = parent.media
             if hasattr(parent, '_'):
                 self._ = parent._
-        else:
-            self.image        = None            # imagefile
-            self.skin_fxd     = None            # skin informationes etc.
-            self.media        = None
-
-
-        self.fxd_file = None
 
         if skin_type:
             import skin
@@ -228,43 +226,63 @@ class Item:
             s = '%r' % (self.__class__)
         return s
 
+    def __setattr__(self, key, value):
+        # force the setting of the url item through the function set_url
+        if key=='url':
+           self.set_url(value)
+        else:
+            # use all other values as they are
+            self.__dict__[key] = value
 
     def set_url(self, url, info=True, search_image=True):
         """
         Set a new url to the item and adjust all attributes depending
-        on the url.
+        on the url. 
+        WARNING: This is called whenever self.url is set, therefor it is
+        strictly forbidden to set self.url directly in this function, 
+        (infinit recursion!). Use self.__dict__['url'] instead!
         """
-        self.url              = url     # the url itself
-
-        if not url:
-            self.network_play = True    # network url, like http
-            self.filename     = ''      # filename if it's a file:// url
-            self.mode         = ''      # the type of the url (file, http, dvd...)
-            self.files        = None    # FileInformation
-            self.mimetype     = ''      # extention or mode
+        # set the url itself
+        if url and url.find('://') == -1:
+            # local url
+            self.__dict__['url'] = 'file://' + url
+        else:
+            # some other kind of url
+            self.__dict__['url'] = url
+         
+        if self.url==None:
+            # reset everything to default values
+            self.network_play = True    
+            self.filename     = ''      
+            self.mode         = ''      
+            self.files        = None    
+            self.mimetype     = ''      
             return
-
-        if url.find('://') == -1:
-            self.url = 'file://' + url
-
+        
+        # add additional info files
         self.files = FileInformation()
         if self.media:
             self.files.read_only = True
 
+        # determine the mode of this item
         self.mode = self.url[:self.url.find('://')]
-
+         
         if self.mode == 'file':
             self.network_play = False
             self.filename     = self.url[7:]
             self.files.append(self.filename)
+            self.mimetype = os.path.splitext(self.filename)[1][1:].lower()
+        
             if search_image:
                 image = util.getimage(self.filename[:self.filename.rfind('.')])
                 if image:
                     self.image = image
                     self.files.image = image
                 elif self.parent and self.parent.type != 'dir':
-                    self.image = util.getimage(os.path.dirname(self.filename)+\
-                                               '/cover', self.image)
+                    imagepath= os.path.dirname(self.filename)
+                    imagepath= os.path.join(imagepath, 'cover')
+                    self.image = util.getimage(imagepath, self.image)
+            # TODO: is this the right place for this?
             if config.TV_RECORD_REMOVE_COMMERCIALS:
                 edlBase=self.filename[:self.filename.rfind('.')]
                 edlFile=edlBase+".edl"
@@ -273,7 +291,7 @@ class Item:
                     self.files.edl_file=edlFile
                 else:
                     self.files.edl_file=None
-            self.mimetype = self.filename[self.filename.rfind('.')+1:].lower()
+
             if info:
                 self.info = mediainfo.get(self.filename)
                 try:
@@ -283,31 +301,16 @@ class Item:
                     pass
                 if not self.name:
                     self.name = self.info['title:filename']
-
-            if self.type == 'audio' and info:
-                # Look for audio cover image by ID3 tags
-                filename_array = { 'album'  : self.info['album'],
-                                   'artist' : self.info['artist'] }
-                for format_string in config.AUDIO_COVER_FORMAT_STRINGS:
-                    filemask = format_string % filename_array
-                    if format_string.startswith('/'):
-                        audiocover = util.getimage(filemask)
-                    else:
-                        audiocover = util.getimage(os.path.join(os.path.dirname(self.filename), String(filemask)))
-                    if audiocover:
-                        self.image = audiocover
-                        self.files.image = audiocover
-                        break;
-
+            
             if not self.name:
                 self.name = util.getname(self.filename)
         else:
+            # some defaults for other url types
             self.network_play = True
             self.filename     = ''
             self.mimetype     = self.type
             if not self.name:
                 self.name     = Unicode(self.url)
-
 
     def __setitem__(self, key, value):
         """

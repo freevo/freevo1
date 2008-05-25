@@ -156,11 +156,15 @@ class VideoItem(Item):
 
     def set_url(self, url, info=True):
         """
-        Sets a new url to the item. Always use this function and not set 'url'
-        directly because this functions also changes other attributes, like
-        filename, mode, network_play and the list of possible players
+        Sets a new url to the item. This functions also changes other attributes, 
+        like filename, mode, network_play and the list of possible players.
+        WARNING: This is called whenever self.url is set, therefor it is
+        strictly forbidden to set self.url directly in this function, 
+        (infinit recursion!). Use self.__dict__['url'] instead!
         """
         Item.set_url(self, url, info)
+        
+        # additional types of urls
         if url.startswith('dvd://') or url.startswith('vcd://'):
             self.network_play = False
             self.mimetype = self.url[:self.url.find('://')].lower()
@@ -182,30 +186,75 @@ class VideoItem(Item):
         elif url.endswith('.iso') and self.info['mime'] == 'video/dvd':
             self.mimetype = 'dvd'
             self.mode     = 'dvd'
-            self.url      = 'dvd' + self.url[4:] + '/'
+            self.__dict__['url'] = 'dvd' + self.url[4:] + '/'
 
+        # cover image 
         if not self.image or (self.parent and self.image == self.parent.image):
             image = vfs.getoverlay(self.filename + '.raw')
             if os.path.exists(image):
                 self.image = image
                 self.files.image = image
 
-        # do the player rating based on the new url
+        # do a new player rating based on the new url
+        self.rating()
+        
+
+    def rating(self):
+        """
+        Calculate a new player rating for this item
+        
+        The decision which player to use for a VideoItem is based on this rating.
+        First each player plugins is asked for a rate, on how good it can play
+        this VideoItem. There are three possible rates: good (=2), possible (=1)
+        and unplayable(=0). This rate is then weighted by a factor of ten.
+        Next the user's choice of prefered players is checked. The user can 
+        define a rank list of players with the variable VIDEO_PREFERED_PLAYER
+        in local_conf.py. The rank that is calculated from this config variable
+        is then added to the current rate. Last but not least there is the 
+        possibility that for some reason the use of a special player is forced.
+        In that case a value of 100 is added to the rate. 
+        In the end a sorted list of possible_players is created. All players
+        in this list have a rating for this special VideoItem of not less than
+        10. The first one is the default one, the others are offered to the user
+        as choices in the "Alternate Player" menu.
+        """
+        # create a new player rating
+        self.possible_players =[]
+        self.player = None
+        self.player_rating = 0
+        # some debug infos
+        try:
+            _debug_('rating: url=%r' % (self.url), 2)
+            _debug_('rating: mode=%r' % (self.mode), 2)
+            _debug_('rating: mimetype=%r' % (self.mimetype), 2)
+            _debug_('rating: network_play=%r' % (self.network_play), 2)
+        except Exception, e:
+            print 'videoitem.py: %s' %e
         for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
             rating = p.rate(self) * 10
-            if config.VIDEO_PREFERED_PLAYER == p.name:
-                rating += 1
+            if p.name in config.VIDEO_PREFERED_PLAYER:
+                # do we have a rank list for all possible players?
+                if type(config.VIDEO_PREFERED_PLAYER) in [list, tuple]:
+                    # get the rank of this player
+                    rank = config.VIDEO_PREFERED_PLAYER.index(p.name)
+                    # lower index means higher rank, therefor more calculations
+                    rank = len(config.VIDEO_PREFERED_PLAYER)-rank
+                    # finally increade the rating
+                    rating += rank
+                else: # it is more simple if just one player is prefered 
+                    rating +=1
             if hasattr(self, 'force_player') and p.name == self.force_player:
                 rating += 100
             if (rating, p) not in self.possible_players:
                 self.possible_players += [(rating, p)]
-        self.possible_players = filter(lambda l: l[0] > 0, self.possible_players)
+        # just use players with a rating of at last 10
+        self.possible_players = filter(lambda l: l[0] >= 10, self.possible_players)
         # sort the players in the order of the rating
         self.possible_players.sort(lambda l, o: -cmp(l[0], o[0]))
         if len(self.possible_players) > 0:
             # choose the best player as default player
             self.player_rating, self.player = self.possible_players[0]
-        _debug_("url=%r possible_players=%r" % (self.url, self.possible_players,), 2)
+        _debug_("rating: url=%r possible_players=%r" % (self.url, self.possible_players,), 2)
 
 
     def id(self):
@@ -319,6 +368,7 @@ class VideoItem(Item):
         if not self.possible_players:
             return []
 
+        # DVD actions
         if self.url.startswith('dvd://') and self.url[-1] == '/':
             if self.player_rating >= 20:
                 items = [
@@ -326,11 +376,13 @@ class VideoItem(Item):
                     (self.dvd_vcd_title_menu, _('DVD title list'))
                 ]
             else:
+                # this player is not able to deal with menus
                 items = [
                     (self.dvd_vcd_title_menu, _('DVD title list')),
                     (self.play, _('Play default track'))
                 ]
 
+        # VCD actions
         elif self.url == 'vcd://':
             if self.player_rating >= 20:
                 items = [
@@ -343,6 +395,7 @@ class VideoItem(Item):
                     (self.play, _('Play default track'))
                 ]
 
+        # youtube
         elif self.url.startswith('youtube:'):
             popup=PopupBox('Resolving YouTube video URL....')
             popup.show()
@@ -734,7 +787,7 @@ class ShowDetails(ScrollableTextScreen):
             else:
                 # or just the description, if there is no subtitle
                 description = desc + u'\n\n'
-            # add some additional inofs if they are available
+            # add some additional infos if they are available
             if movie['genre']:
                 description += _('Genre') + u' : '+movie['genre'] + u'\n'
             if movie['length']:

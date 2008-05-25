@@ -134,8 +134,7 @@ def chapter_selection_menu(arg=None, menuw=None):
     menu_items = []
     if isinstance(arg.info['chapters'], int):
         for c in range(1, arg.info['chapters']):
-            menu_items += [ menu.MenuItem(_('Play chapter %s') % c, chapter_selection,
-                                          (arg, ' -chapter %s' % c)) ]
+            menu_items += [ menu.MenuItem(_('Play chapter %s') % c, chapter_selection, (arg, ' -chapter %s' % c)) ]
     elif arg.info['chapters']:
         for chapter in arg.info['chapters']:
             c = copy.copy(chapter)
@@ -176,8 +175,7 @@ def subitem_selection_menu(arg=None, menuw=None):
     menu_items = []
 
     for pos in range(len(item.subitems)):
-        menu_items += [ menu.MenuItem(_('Play chapter %s') % (pos+1),
-                                      subitem_selection, (arg, pos)) ]
+        menu_items += [ menu.MenuItem(_('Play chapter %s') % (pos+1), subitem_selection, (arg, pos)) ]
 
     moviemenu = menu.Menu(_('Chapter Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
@@ -273,20 +271,21 @@ def add_toogle3(name, item, var):
 def get_items(item):
     next_start = 0
     items = []
+    
+    if len(item.possible_players) > 1:
+            items.append(menu.MenuItem(_('Play with alternate player'), player_selection_menu, item))
 
     if item.filename or (item.mode in ('dvd', 'vcd') and item.player_rating >= 20):
-        if len(item.possible_players) > 1:
-            items.append(menu.MenuItem(_('Play with alternate player'), player_selection_menu, item))
         if item.info.has_key('audio') and len(item.info['audio']) > 1:
             items.append(menu.MenuItem(_('Audio selection'), audio_selection_menu, item))
         if item.info.has_key('subtitles') and len(item.info['subtitles']) >= 1:
             items.append(menu.MenuItem(_('Subtitle selection'), subtitle_selection_menu, item))
         if item.info.has_key('chapters') and item.info['chapters'] > 1:
             items.append(menu.MenuItem(_('Chapter selection'), chapter_selection_menu, item))
+    
     if item.subitems:
         # show subitems as chapter
-        items.append(menu.MenuItem(_('Chapter selection'),
-                                   subitem_selection_menu, item))
+        items.append(menu.MenuItem(_('Chapter selection'), subitem_selection_menu, item))
 
     if item.mode in ('dvd', 'vcd') or \
            (item.filename and item.info.has_key('type') and \

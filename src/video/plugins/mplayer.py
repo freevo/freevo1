@@ -85,32 +85,24 @@ class MPlayer:
         """
         if not item.url:
             return 0
-        try:
-            _debug_('url=%r' % (item.url), 2)
-            _debug_('mode=%r' % (item.mode), 2)
-            _debug_('mimetype=%r' % (item.mimetype), 2)
-            _debug_('network_play=%r' % (item.network_play), 2)
-        except Exception, e:
-            print e
         # this seems strange that it is 'possible' for dvd:// and 'good' for dvd
         # possible because dvd:// should be played with xine when available!
         if item.url[:6] in ('dvd://', 'vcd://') and item.url.endswith('/'):
-            _debug_('%r possible' % (item.url), 2)
+            _debug_('mplayer rating: %r possible' % (item.url), 2)
             return 1
         if item.mode in ('dvd', 'vcd'):
-            _debug_('%r good' % (item.url), 2)
+            _debug_('mplayer rating: %r good' % (item.url), 2)
             return 2
-        # moved from videoitem to here (related to "Podcast video viewer plugin")
         if item.mode in ('http') and not item.filename and not item.media:
-            _debug_('%r good' % (item.url), 2)
+            _debug_('mplayer rating: %r good' % (item.url), 2)
             return 2
         if item.mimetype in config.VIDEO_MPLAYER_SUFFIX:
-            _debug_('%r good' % (item.url), 2)
+            _debug_('mplayer rating: %r good' % (item.url), 2)
             return 2
         if item.network_play:
-            _debug_('%r possible' % (item.url), 2)
+            _debug_('mplayer rating: %r possible' % (item.url), 2)
             return 1
-        _debug_('%r unplayable' % (item.url), 2)
+        _debug_('mplayer rating: %r unplayable' % (item.url), 2)
         return 0
 
 

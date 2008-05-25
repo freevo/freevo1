@@ -1059,9 +1059,9 @@ VIDEO_XINE_SUFFIX = [ 'avi', 'mpg', 'mpeg', 'rm', 'divx', 'ogm',
                       'ts', 'iso', 'vob' ]
 
 #
-# Preferred video player
+# Preferred video player (ranking, first one is most wanted!)
 #
-VIDEO_PREFERED_PLAYER = 'mplayer'
+VIDEO_PREFERED_PLAYER = ['mplayer', 'xine', 'vlc']
 
 #
 # Only scan OVERLAY_DIR and VIDEO_SHOW_DATA_DIR for fxd files containing

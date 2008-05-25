@@ -17,7 +17,9 @@ from event import *
 
 class PluginInterface(plugin.Plugin):
     """
-    VLC plugin for the video player, for RTSP streams
+    VLC plugin for the video player
+    
+    originally only used for RTSP streams
     """
 
     def __init__(self):
@@ -25,7 +27,10 @@ class PluginInterface(plugin.Plugin):
         plugin.register(Vlc(), plugin.VIDEO_PLAYER, True)
 
     def config(self):
-        return [ ('VLC_OPTIONS', 'None', 'Add your specific VLC options here'), ]
+        return [('VLC_CMD', '/usr/bin/vlc', 'Path to your vlc executable'),
+                ('VLC_OPTIONS', 'None', 'Add your specific VLC options here'), 
+                ('VIDEO_VLC_SUFFIX', '[]', 'List of suffixes to be played with vlc'),
+               ]
 
 
 class Vlc:
@@ -50,17 +55,24 @@ class Vlc:
         1 = possible, but not good
         0 = unplayable
         """
-        try:
-            _debug_('url=%r' % (item.url), 2)
-            _debug_('mode=%r' % (item.mode), 2)
-            _debug_('mimetype=%r' % (item.mimetype), 2)
-            _debug_('network_play=%r' % (item.network_play), 2)
-        except Exception, e:
-            print e
+        if not item.url:
+            return 0
         if item.url[:7] == 'rtsp://':
-            _debug_('%r good' % (item.url), 2)
+            _debug_('vlc rating: %r good' % (item.url), 2)
             return 2
-        _debug_('%r unplayable' % (item.url), 2)
+        # dvd with menu
+        if item.url.startswith('dvd://') and item.url.endswith('/'):
+            _debug_('vlc rating: %r good' % (item.url), 2)
+            return 2
+        # mimetype list from config (user's wishes)
+        if item.mimetype in config.VIDEO_VLC_SUFFIX:
+            _debug_('vlc rating: %r good' % (item.url), 2)
+            return 2
+        # network stream
+        if item.network_play:
+            _debug_('vlc rating: %r possible' % (item.url), 2)
+            return 1
+        _debug_('vlc rating: %r unplayable' % (item.url), 2)
         return 0
 
 

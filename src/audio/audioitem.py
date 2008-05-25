@@ -132,11 +132,34 @@ class AudioItem(Item):
         """
         Sets a new url to the item. Always use this function and not set 'url'
         directly because this functions also changes other attributes, like
-        filename, mode and network_play
+        filename, mode and network_play.
+        WARNING: This is called whenever self.url is set, therefor it is
+        strictly forbidden to set self.url directly in this function 
+        (infinit recursion!). Use self.__dict__['url'] instead!
         """
         Item.set_url(self, url, info)
+        
+        # Look for audio cover image by ID3 tags
+        if info:
+            filename_array = { 'album'  : self.info['album'],
+                               'artist' : self.info['artist'] }
+            for format_string in config.AUDIO_COVER_FORMAT_STRINGS:
+                filemask = format_string % filename_array
+                if format_string.startswith('/'):
+                    audiocover = util.getimage(filemask)
+                else:
+                   audiocover = os.path.dirname(self.filename)
+                   audiocover = os.path.join(audiocover, String(filemask))
+                   audiocover = util.getimage(audiocover)
+                if audiocover:
+                   self.image = audiocover
+                   self.files.image = audiocover
+                   break;
+                   
+        # additional url types
         if url.startswith('cdda://'):
             self.network_play = False
+            self.mode = 'cdda'
             self.mimetype = 'cdda'
 
 

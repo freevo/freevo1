@@ -117,33 +117,30 @@ class Xine:
         1 = possible, but not good
         0 = unplayable
         """
-        _debug_('rate(item=%r)' % (item,), 2)
-        try:
-            _debug_('url=%r' % (item.url), 2)
-            _debug_('mode=%r' % (item.mode), 2)
-            _debug_('mimetype=%r' % (item.mimetype), 2)
-            _debug_('network_play=%r' % (item.network_play), 2)
-        except Exception, e:
-            print e
+        if not item.url:
+            return 0
+        # dvd with menu
         if item.url.startswith('dvd://'):
-            _debug_('%r good' % (item.url), 2)
+            _debug_('xine rating: %r good' % (item.url), 2)
             return 2
+        # vcd
         if item.url.startswith('vcd://'):
             if item.url == 'vcd://':
-                _debug_('%r good' % (item.url), 2)
+                _debug_('xine rating: %r good' % (item.url), 2)
                 return 2
-            _debug_('%r unplayable' % (item.url), 2)
+            _debug_('xine rating: %r unplayable' % (item.url), 2)
             return 0
+        # mimetypes from config (user's wishes!)
         if item.mimetype in config.VIDEO_XINE_SUFFIX:
-            _debug_('%r good' % (item.url), 2)
+            _debug_('xine rating: %r good' % (item.url), 2)
             return 2
         if item.mode in ('http') and not item.filename and not item.media:
-            _debug_('%r unplayable' % (item.url), 2)
+            _debug_('xine rating: %r unplayable' % (item.url), 2)
             return 0
         if item.network_play:
-            _debug_('%r possible' % (item.url), 2)
+            _debug_('xine rating: %r possible' % (item.url), 2)
             return 1
-        _debug_('%r unplayable' % (item.url), 2)
+        _debug_('xine rating: %r unplayable' % (item.url), 2)
         return 0
 
 
