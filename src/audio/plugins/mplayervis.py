@@ -175,17 +175,19 @@ class MpvGoom(BaseAnimation):
         """ Set the mode to full screen """
         _debug_('set_fullscreen()', 2)
         w, h = config.MPLAYERVIS_FULL_GEOMETRY.split('x')
-        w = float(w)
-        h = float(h)
         #w = config.CONF.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)
         #w = int(float(w) * config.IMAGEVIEWER_ASPECT)
         #w = config.CONF.width
-        w = int(w / config.IMAGEVIEWER_ASPECT)
+
+        w = float(w) / config.IMAGEVIEWER_ASPECT
+        w = int(w)
+        h = int(h)
 
         #h = config.CONF.height-(config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM)
         #h = int(float(h) * config.IMAGEVIEWER_ASPECT)
         #h = config.CONF.height
 
+        # Centre on display
         x = int(config.CONF.width - w) / 2
         y = int(config.CONF.height - h) / 2
 

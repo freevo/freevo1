@@ -72,9 +72,14 @@ class Audioscrobbler(object):
         @ivar timestamp: Is the current UNIX Timestamp, in seconds.
         @ivar auth: md5(md5(password) + timestamp)
         """
+        if DEBUG:
+            print 'Audioscrobbler.__init__(user=%r, password=%r, cachefilename=%r' % \
+                (user, '*' * len(password), cachefilename)
+
         #self.handshake = 'true'
-        self.clientid = 'tst'
-        self.clientver = '1.0'
+        #self.clientid = 'tst'
+        self.clientid = 'fvo'
+        self.clientver = '1.1'
         self.user = user
         self.password = password
         self.timestamp = None
@@ -89,7 +94,7 @@ class Audioscrobbler(object):
             for line in self.cachefd.readlines():
                 self.cachedlines += line.strip()
         except IOError, why:
-            pass
+            self._login()
 
 
     def _urlopen(self, url, data=None, lines=True):
@@ -106,14 +111,17 @@ class Audioscrobbler(object):
         if lines:
             reply = []
             try:
-                for line in urllib.urlopen(url, data).readlines():
+                lines = urllib.urlopen(url, data).readlines()
+                if lines is None:
+                    return []
+                for line in lines:
                     reply.append(line.strip('\n'))
             except Exception, why:
                 if DEBUG:
                     print why
                 raise
             if DEBUG:
-                print reply
+                print 'reply=%r' % (reply,)
             return reply
         else:
             reply = ''
@@ -124,7 +132,7 @@ class Audioscrobbler(object):
                     print why
                 raise
             if DEBUG:
-                print reply
+                print 'reply=%r' % (reply,)
             return reply
 
 
@@ -213,7 +221,7 @@ class Audioscrobbler(object):
         if source == 'P' and secs < 30:
             raise AudioscrobblerException('FAILED track too short')
         played = int(time.time() - starttime)
-        if played < 240 and played < int(secs / 2):
+        if played < 240 and played < int(secs) / 2:
             raise AudioscrobblerException('FAILED too early to submit')
         data = {}
         data['a[%d]' % num] = artist
@@ -221,7 +229,7 @@ class Audioscrobbler(object):
         data['i[%d]' % num] = time.strftime('%s', time.gmtime(starttime))
         data['o[%d]' % num] = source
         data['r[%d]' % num] = rating or 'L'
-        data['l[%d]' % num] = secs or ''
+        data['l[%d]' % num] = int(secs) or ''
         data['b[%d]' % num] = album or ''
         data['n[%d]' % num] = tracknumber or ''
         data['m[%d]' % num] = mbtrackid or ''
