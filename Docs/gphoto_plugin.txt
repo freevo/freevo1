@@ -1,0 +1,32 @@
+Installation
+------------
+Make sure libgphoto2 is installed.
+
+Copy pygphoto_lowlevel.py, _pygphoto_lowlevel.so and pygphoto.py to a place
+where python can find it (e.g. /usr/lib/python2.4/site-packages)
+
+Copy gphoto.py to the image/plugins directory of your freevo installation.
+(e.g.  /usr/share/pycentral/python-freevo/site-packages/freevo/image/plugins)
+
+Add to your local_conf.py
+| plugin.activate('image.gphoto')
+
+
+Usage
+-----
+Plugin digicam in USB port (or whichever port it needs to be plugged in) (and
+switch it on...)
+
+Go to "Look at pictures". Wait up to 10 seconds. Then, there should be a new
+entry now which you can just use like an ordinary directory.
+
+
+Why?
+----
+Some digicams do not implement the usb-storage protocol
+There is a gphotofs, but using this was far too slow. 
+
+Author
+------
+Thorsten Pferdekaemper 
+Nov 2007
