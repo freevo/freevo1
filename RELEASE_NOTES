@@ -1,0 +1,14 @@
+Release Notes for 1.7.7
+-----------------------
+
+Changes include the renaming of configuration variables, to correct these
+do the following:
+
+freevo convert_config /etc/freevo/local_config
+freevo convert_config /etc/freevo/local_config -w
+
+
+While the changes to favorites have been back ported from the rel-1 branch,
+they are currently disabled, if you would like to try the favorites pickle file
+you can do this by uncommenting (remove the '#') on line 58 in
+tv/record_types.py.

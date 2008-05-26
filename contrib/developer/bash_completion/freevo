@@ -1,0 +1,98 @@
+# Programmable completion for the freevo command under bash. Source
+# this file (or on some systems add it to ~/.bash_completion and start a new
+# shell) and bash's completion mechanism will know all about freevo's options!
+# Who wants to read man pages/help text... afterall there aren't any
+
+# Known to work with bash 2.05a with programmable completion and extended
+# pattern matching enabled (use 'shopt -s extglob progcomp' to enable
+# these if they are not already enabled).
+
+shopt -s extglob
+
+_freevo()
+{
+	local cur cmds cmdOpts pOpts mOpts rOpts qOpts nOpts optsParam opt
+	local helpCmds optBase i
+
+	COMPREPLY=()
+	cur=${COMP_WORDS[COMP_CWORD]}
+
+	# Possible expansions, without pure-prefix abbreviations such as "up".
+	cmds='recordserver vtrelease remote daemon cache webserver \
+              makelinuxevent encodingserver install makestationlist \
+              imdb makelircrc schedulefavorites plugins makelogos \
+              tv_grab passwd rssserver commdetectserver convert_config \
+              recordserver2 prompt execute -h'
+
+	if [[ $COMP_CWORD -eq 1 ]] ; then
+		COMPREPLY=( $( compgen -W "$cmds" -- $cur ) )
+		return 0
+	fi
+
+	# options that require a parameter
+	# note: continued lines must end '|' continuing lines must start '|'
+	optsParam="-l|-i"
+
+	# if not typing an option, or if the previous option required a
+	# parameter, then fallback on ordinary filename expansion
+	helpCmds='help|--help|h|\?'
+	if [[ ${COMP_WORDS[1]} != @($helpCmds) ]] && \
+	   [[ "$cur" != -* ]] || \
+	   [[ ${COMP_WORDS[COMP_CWORD-1]} == @($optsParam) ]] ; then
+		return 0
+	fi
+
+	sOpts="start stop"
+
+	# possible options for the command
+	cmdOpts=
+	case ${COMP_WORDS[1]} in
+
+	plugins)
+		cmdOpts="-l -i"
+		;;
+	webserver|recordserver|recordserver2|encodingserver|rssserver|commdetectserver)
+		cmdOpts="$sOpts"
+		;;
+	*)
+		;;
+	esac
+
+	cmdOpts="$cmdOpts"
+
+	# take out options already given
+	for (( i=2; i<=$COMP_CWORD-1; ++i )) ; do
+		opt=${COMP_WORDS[$i]}
+
+		case $opt in
+		--*)    optBase=${opt/=*/} ;;
+		-*)     optBase=${opt:0:2} ;;
+		esac
+
+		cmdOpts=" $cmdOpts "
+		cmdOpts=${cmdOpts/ ${optBase} / }
+
+		# take out alternatives and mutually exclusives
+		case $optBase in
+		-l)              cmdOpts=${cmdOpts/ -i / } ;;
+		-i)              cmdOpts=${cmdOpts/ -l / } ;;
+
+		-m|--message|-F|--file)
+			cmdOpts=${cmdOpts/ --message / }
+			cmdOpts=${cmdOpts/ -m / }
+			cmdOpts=${cmdOpts/ --file / }
+			cmdOpts=${cmdOpts/ -F / }
+			;;
+		esac
+
+		# skip next option if this one requires a parameter
+		if [[ $opt == @($optsParam) ]] ; then
+			((++i))
+		fi
+	done
+
+	COMPREPLY=( $( compgen -W "$cmdOpts" -- $cur ) )
+
+	return 0
+}
+complete -F _freevo -o default freevo
