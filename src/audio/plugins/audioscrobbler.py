@@ -31,6 +31,10 @@
 import string
 import copy
 import os, re, sys, re, urllib, md5, time, locale, math
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 # From Freevo
 import config, plugin, rc
@@ -92,11 +96,30 @@ class PluginInterface(plugin.DaemonPlugin):
         self.lastsong = ''
         self.sleep_timeout = 0
         self.starttime = time.time()
-        self.elapsed = 0
+        self.failed = []
+        self.logincachefilename = os.path.join(config.FREEVO_CACHEDIR, 'audioscrobbler.session')
+        self.failedcachefilename = os.path.join(config.FREEVO_CACHEDIR, 'audioscrobbler.pickle')
+        self.nowplaying = False
+        self.submitted = None
 
         util.audioscrobbler.DEBUG = config.LASTFM_DEBUG
-        logincachefilename = os.path.join(config.FREEVO_CACHEDIR, 'audioscrobbler.session')
-        self.lastfm = Audioscrobbler(config.LASTFM_USER, config.LASTFM_PASS, logincachefilename)
+        self.lastfm = Audioscrobbler(config.LASTFM_USER, config.LASTFM_PASS, self.logincachefilename)
+        try:
+            f = open(self.failedcachefilename, 'r')
+            self.failed = pickle.load(f)
+            f.close()
+        except IOError:
+            pass
+
+
+    def shutdown(self):
+        _debug_('shutdown()', 2)
+        try:
+            f = open(self.failedcachefilename, 'w')
+            pickle.dump(self.failed, f, 1)
+            f.close()
+        except IOError:
+            pass
 
 
     def config(self):
@@ -132,54 +155,74 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_('draw((ttype=%r, object=%r), osd=%r)' % (ttype, object, osd), 2)
         if ttype != 'player':
             return
-        player = object
-        title  = player.getattr('title')
-        album = None
-        if not title:
-            title = player.getattr('name')
 
+        player = object
         if player.type == 'audio':
             playing = '__audio'
             if player.getattr('trackno'):
-                starttime = self.starttime
-                song    = player.getattr('trackno')
-                artist  = player.getattr('artist')
-                length  = player.getattr('length')
-                album   = player.getattr('album')
-                elapsed = int(player.elapsed)
-                length = str(int(length.split(":")[0])*60 + int(length.split(":")[1]))
-                self.elapsed = time.time() - self.starttime
-
-                # We do not send unless the song is longer than 30 seconds
-                if length > 30:
-                    # We send only when 240 seconds or 50% have elapsed. Adhering to Audioscrobbler rules
-                    if self.elapsed > 240 or self.elapsed > int(length)/2:
-                        try:
-                            self.lastfm.submit(artist, title, starttime, 'P', 'L', length, album, song)
-                        except AudioscrobblerException, why:
-                            _debug_('%s' % why, DERROR)
+                self.submit_song(player)
 
 
     def eventhandler(self, event, menuw=None):
         """
         Get events from Freevo
         """
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event.name, menuw), 2)
+        _debug_('eventhandler(event=%r:%r, menuw=%r)' % (event.name, event.arg, menuw), 2)
         if event == PLAY_START:
             self.playitem = event.arg
             self.starttime = time.time()
+            self.nowplaying = True
 
         if event == PLAY_END:
             self.playitem = False
 
         if event == STOP:
-            self.playitem =  False
-            self.elapsed = 0
+            self.playitem = False
 
         if event == PLAYLIST_NEXT:
             self.starttime = time.time()
 
         if event == SEEK:
-            self.elapsed = 0
+            self.starttime = time.time()
 
         return 0
+
+
+    def submit_song(self, player):
+        artist    = player.getattr('artist')
+        track     = player.getattr('title') or player.getattr('name')
+        starttime = self.starttime
+        length    = player.getattr('length')
+        secs      = int(length.split(":")[0])*60 + int(length.split(":")[1])
+        album     = player.getattr('album')
+        trackno   = player.getattr('trackno')
+        elapsed   = time.time() - self.starttime
+        keystr = track+'|'+artist+'|'+str(int(starttime))+'|'+length+'|'+album+'|'+trackno
+        key = md5.new(keystr).hexdigest()
+
+        if self.nowplaying:
+            self.nowplaying = False
+            try:
+                self.lastfm.nowplaying(artist, track, album)
+            except:
+                pass
+
+        # We don't submit the same song instance more than once
+        if self.submitted == key:
+            return
+        # We do not send unless the song is longer than 30 seconds
+        if secs <= 30:
+            return
+        # We send only when 240 seconds or 50% have elapsed. Adhering to Audioscrobbler rules
+        if elapsed <= 240 and elapsed <= secs/2:
+            return
+
+        self.submitted = key
+        try:
+            self.lastfm.submit(artist, track, starttime, 'P', 'L', secs, album, trackno)
+        except AudioscrobblerException, why:
+            self.failed.append(('AE', artist, track, starttime, 'P', 'L', secs, album, trackno))
+            _debug_('%s' % why, DERROR)
+        except IOError, why:
+            self.failed.append(('IO', artist, track, starttime, 'P', 'L', secs, album, trackno))
+            _debug_('%s' % why, DWARNING)
