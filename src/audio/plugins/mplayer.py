@@ -134,14 +134,15 @@ class MPlayer:
         demux = ''
 
         extra_opts = item.mplayer_options
-        ext = str(os.path.splitext(filename))
+        ext = os.path.splitext(filename)[1]
 
         is_playlist = False
         if hasattr(item, 'is_playlist') and item.is_playlist:
             is_playlist = True
 
-        if item.network_play and ext in ('.m3u', '.pls', '.asx'):
-            is_playlist = True
+        if item.network_play:
+            if str(ext) in ('.m3u', '.pls', '.asx'):
+                is_playlist = True
 
         if str(filename).find(".jsp?") >= 0:
             is_playlist = True

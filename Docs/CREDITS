@@ -68,6 +68,12 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
+Henne Vogelsang <hvogel at hennevogel.de>
+o Updates to headlines
+
+Fabrizio Regondi <fabrintosh at gmail.com>
+o TV streaming plug-in for wwitv.com
+
 Andreas Dick <andudi at gmx.ch>
 o lcd2 plug-in
 o Auto start plug-in
@@ -75,6 +81,9 @@ o Improved slide show
 
 Andrew Jeffery <short_rz at internode.on.net>
 o Remove commerials video plug-in
+
+Torsten Kurbad <freevo at tk-webart.de>
+o Sensors 2 idlebar plug-in
 
 Andrea Mennucc <mennucc1 at debian.org>
 o Slice reencoding
