@@ -143,7 +143,9 @@ class Audioscrobbler(object):
         @raise AudioscrobblerException: when a problem has been detected.
         """
         #self.timestamp = time.strftime('%s')
-        self.timestamp = time.strftime('%s', time.gmtime())
+        gmtime = time.gmtime()
+        self.timestamp = time.strftime('%s', gmtime)
+        print 'DJW:login %s' % (time.strftime('%d.%m.%Y %H:%M:%S', gmtime))
         self.auth = md5.new(md5.new(self.password).hexdigest()+self.timestamp).hexdigest()
         url = 'http://post.audioscrobbler.com/?hs=true&p=1.2&c=%(clientid)s&v=%(clientver)s' % self.__dict__ + \
             '&u=%(user)s&t=%(timestamp)s&a=%(auth)s' % self.__dict__
@@ -233,6 +235,8 @@ class Audioscrobbler(object):
         data['b[%d]' % num] = album or ''
         data['n[%d]' % num] = tracknumber or ''
         data['m[%d]' % num] = mbtrackid or ''
+        print 'DJW:%s %r %s' % (track, starttime, time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(float(starttime))))
+        print 'DJW:[%s] %s %s' % (num, track, time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(float(starttime))))
         return data
 
 
@@ -379,4 +383,4 @@ if __name__ == '__main__':
 
     artisttrackurl = "http://ws.audioscrobbler.com/1.0/artist/%s/toptracks.xml"
     url = artisttrackurl % (urllib.quote(np_artist))
-    print as._urlopen(url)
+    #print as._urlopen(url)

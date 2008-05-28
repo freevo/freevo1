@@ -90,11 +90,7 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.register(self, "audioscrobbler")
 
         # Internal Plugin Setting
-        self.playitem = False
-        self.failed_retries = 0
-        self.logged_in = False
-        self.lastsong = ''
-        self.sleep_timeout = 0
+        self.playitem = None
         self.starttime = time.time()
         self.failed = []
         self.logincachefilename = os.path.join(config.FREEVO_CACHEDIR, 'audioscrobbler.session')
@@ -136,12 +132,7 @@ class PluginInterface(plugin.DaemonPlugin):
         Run this code every self.poll_interval seconds
         """
         _debug_('poll()', 2)
-        if self.sleep_timeout:
-            if math.ceil(time.time() - self.sleep_timeout) > 30*60:
-                self.sleep_timeout = False
-                return
-
-        if self.playitem and self.logged_in:
+        if self.playitem is not None:
             self.draw(('player', self.playitem), None)
 
 
@@ -174,10 +165,10 @@ class PluginInterface(plugin.DaemonPlugin):
             self.nowplaying = True
 
         if event == PLAY_END:
-            self.playitem = False
+            self.playitem = None
 
         if event == STOP:
-            self.playitem = False
+            self.playitem = None
 
         if event == PLAYLIST_NEXT:
             self.starttime = time.time()
