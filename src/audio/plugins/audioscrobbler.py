@@ -212,8 +212,8 @@ class PluginInterface(plugin.DaemonPlugin):
         try:
             self.lastfm.submit(artist, track, starttime, 'P', 'L', secs, album, trackno)
         except AudioscrobblerException, why:
-            self.failed.append(('AE', artist, track, starttime, 'P', 'L', secs, album, trackno))
+            self.failed.append(('AE', artist, track, starttime, 'P', 'L', secs, album, trackno, why))
             _debug_('%s' % why, DERROR)
         except IOError, why:
-            self.failed.append(('IO', artist, track, starttime, 'P', 'L', secs, album, trackno))
+            self.failed.append(('IO', artist, track, starttime, 'P', 'L', secs, album, trackno, why))
             _debug_('%s' % why, DWARNING)

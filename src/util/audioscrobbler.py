@@ -118,7 +118,7 @@ class Audioscrobbler(object):
                     reply.append(line.strip('\n'))
             except Exception, why:
                 if DEBUG:
-                    print why
+                    print '%s: %s' % (url, why)
                 raise
             if DEBUG:
                 print 'reply=%r' % (reply,)
@@ -143,9 +143,13 @@ class Audioscrobbler(object):
         @raise AudioscrobblerException: when a problem has been detected.
         """
         #self.timestamp = time.strftime('%s')
-        gmtime = time.gmtime()
-        self.timestamp = time.strftime('%s', gmtime)
-        print 'DJW:login %s' % (time.strftime('%d.%m.%Y %H:%M:%S', gmtime))
+        now = time.time()
+        if DEBUG:
+            print 'login: lt=%r gm=%s' % (
+                time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(now)),
+                time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(now)))
+        self.timestamp = time.strftime('%s', time.gmtime(now))
+        #self.timestamp = time.strftime('%s', time.localtime(now))
         self.auth = md5.new(md5.new(self.password).hexdigest()+self.timestamp).hexdigest()
         url = 'http://post.audioscrobbler.com/?hs=true&p=1.2&c=%(clientid)s&v=%(clientver)s' % self.__dict__ + \
             '&u=%(user)s&t=%(timestamp)s&a=%(auth)s' % self.__dict__
@@ -235,8 +239,10 @@ class Audioscrobbler(object):
         data['b[%d]' % num] = album or ''
         data['n[%d]' % num] = tracknumber or ''
         data['m[%d]' % num] = mbtrackid or ''
-        print 'DJW:%s %r %s' % (track, starttime, time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(float(starttime))))
-        print 'DJW:[%s] %s %s' % (num, track, time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(float(starttime))))
+        if DEBUG:
+            print '%s: lt=%r gm=%s' % (track, 
+                time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(float(starttime))),
+                time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(float(starttime))))
         return data
 
 

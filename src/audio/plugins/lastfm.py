@@ -103,10 +103,10 @@ class LastFMPlayerGUI(PlayerGUI):
     def tune_lastfm(self, station):
         """Change Last FM Station"""
         _debug_('tune_lastfm(station=%r)' % (station,), 2)
-        if not Audioscrobbler.sessionid:
-            audioscrobbler._login()
+        if not self.sessionid:
+            self.login()
         tune_url = 'http://ws.audioscrobbler.com/radio/adjust.php?session=%s&url=%s&debug=0' % \
-            (Audioscrobbler.sessionid, station)
+            (self.sessionid, station)
         try:
             for x in audioscrobbler._urlopen(tune_url):
                 if re.search('response=OK', x):
@@ -139,9 +139,9 @@ class LastFMPlayerGUI(PlayerGUI):
         'recordtoprofile'=''
         """
         _debug_('song_info()', 2)
-        if not Audioscrobbler.sessionid:
-            audioscrobbler._login()
-        info_url = 'http://ws.audioscrobbler.com/radio/np.php?session=%s&debug=0' % (Audioscrobbler.sessionid,)
+        if not self.sessionid:
+            self.login()
+        info_url = 'http://ws.audioscrobbler.com/radio/np.php?session=%s&debug=0' % (self.sessionid,)
         lines = audioscrobbler._urlopen(info_url)
         if not lines:
             return
@@ -183,8 +183,8 @@ class LastFMPlayerGUI(PlayerGUI):
         os.system('rm -f %s/lfmcover_*.jpg' % config.FREEVO_CACHEDIR)
         self.covercount += 1
         savefile = config.FREEVO_CACHEDIR + '/lfmcover_' + str(time.time()) + '.jpg'
-        if not Audioscrobbler.sessionid:
-            audioscrobbler._login()
+        if not self.sessionid:
+            self.login()
         pic_file = audioscrobbler._urlopen(pic_url, lines=False)
         save = open(savefile, 'w')
         print >>save, pic_file
@@ -195,10 +195,10 @@ class LastFMPlayerGUI(PlayerGUI):
     def skip(self):
         """Skip song"""
         _debug_('skip()', 2)
-        if not Audioscrobbler.sessionid:
-            audioscrobbler._login()
+        if not self.sessionid:
+            self.login()
         skip_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=skip&debug=0' % \
-            (Audioscrobbler.sessionid)
+            (self.sessionid)
         audioscrobbler._urlopen(skip_url)
         self.info_time = self.item.elapsed + 8
         self.song_info()
@@ -207,20 +207,20 @@ class LastFMPlayerGUI(PlayerGUI):
     def love(self):
         """Send "Love" information to audioscrobbler"""
         _debug_('love()', 2)
-        if not Audioscrobbler.sessionid:
-            audioscrobbler._login()
+        if not self.sessionid:
+            self.login()
         love_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=love&debug=0' % \
-            (Audioscrobbler.sessionid)
+            (self.sessionid)
         audioscrobbler._urlopen(love_url)
 
 
     def ban(self):
         """Send "Ban" information to audioscrobbler"""
         _debug_('ban()', 2)
-        if not Audioscrobbler.sessionid:
-            audioscrobbler._login()
+        if not self.sessionid:
+            self.login()
         ban_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=ban&debug=0' % \
-            (Audioscrobbler.sessionid)
+            (self.sessionid)
         audioscrobbler._urlopen(ban_url)
 
 
@@ -295,14 +295,18 @@ class LastFMMainMenuItem(MenuItem):
             '&username=%s&passwordmd5=%s&debug=0&partner=' % (config.LASTFM_USER, password.hexdigest())
         stream_url = ' '
     
-        page = audioscrobbler._urlopen(login_url)
-        for x in page:
-            if re.search('session', x):
-                Audioscrobbler.sessionid = x[8:40]
-    
-            if re.search('stream_url', x):
-                self.stream_url = x[11:]
-                print self.stream_url
+        try:
+            page = audioscrobbler._urlopen(login_url)
+            for x in page:
+                if re.search('session', x):
+                    self.sessionid = x[8:40]
+        
+                if re.search('stream_url', x):
+                    self.stream_url = x[11:]
+                    print self.stream_url
+        except IOError, why:
+            self.sessionid = ''
+            self.stream_url = ''
 
 
     def actions(self):
@@ -314,8 +318,10 @@ class LastFMMainMenuItem(MenuItem):
     def create_stations_menu(self, arg=None, menuw=None):
         _debug_('create_stations_menu(arg=%r, menuw=%r)' % (arg, menuw), 2)
         lfm_items = []
-        if not Audioscrobbler.sessionid:
-            audioscrobbler._login()
+        if not self.sessionid:
+            self.login()
+        if not self.stream_url:
+            return
         for lfm_station in config.LASTFM_LOCATIONS:
             lfm_item = LastFMItem()
             lfm_item.name = lfm_station[0]
