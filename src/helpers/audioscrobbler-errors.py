@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
 # Audio scrobbler Helper to dump errors
@@ -28,10 +29,16 @@
 #
 # -----------------------------------------------------------------------
 
-import os
+try:
+    import os
+    import config
+    f = os.path.join(config.FREEVO_CACHEDIR, 'audioscrobbler.pickle')
+except ImportError:
+    f = '/var/cache/freevo/audioscrobbler.pickle'
+import sys
 import pickle
-import config
-f = os.path.join(config.FREEVO_CACHEDIR, 'audioscrobbler.pickle')
+
+
 try:
     data = pickle.load(open(f))
     for i in data:

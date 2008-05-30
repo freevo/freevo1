@@ -407,8 +407,8 @@ OS_CACHEDIR, FREEVO_CACHEDIR = make_freevodir('CACHEDIR', '/var/cache', '/var/db
 #
 # Redirect stdout and stderr to stdout and /tmp/freevo.log
 #
-#if not HELPER:
 lock = thread.allocate_lock()
+#if not HELPER:
 sys.stdout = Logger(sys.argv[0] + ':stdout')
 sys.stderr = Logger(sys.argv[0] + ':stderr')
 ts = time.asctime(time.localtime(time.time()))
