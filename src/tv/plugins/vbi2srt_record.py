@@ -82,7 +82,7 @@ class PluginInterface(plugin.Plugin):
     |     'K10' : 211000,
     | }
 
-    @requires: vbi2srt U{http://www.linuxowl.com/vbi2srt.html}
+    Requires: vbi2srt U{http://www.linuxowl.com/vbi2srt.html}
 
     Updates available from http://www.linuxowl.com/software/.
 

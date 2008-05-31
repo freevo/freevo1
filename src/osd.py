@@ -1,13 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# osd.py - Low level graphics routines
+# Low level graphics routines
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes: do not use the OSD object inside a thread
-#
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -29,6 +24,11 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Low level OSD (On Screen Display) graphics routines
+
+B{NOTE} Do not use the OSD object inside a thread.
+"""
 
 # Python modules
 import time
@@ -55,8 +55,6 @@ if __freevo_app__ == 'main':
 
     # import animations
     import animation
-
-
 
 
 help_text = """\

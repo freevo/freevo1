@@ -74,8 +74,8 @@ class PluginInterface(plugin.DaemonPlugin):
     """
     This plugin is a customized version of lcd.py, which fits not well for 2x16 lcds.
 
-    @requires: lcdproc installed and LCDd running. U{http://lcdproc.sourceforge.net/}
-    @requires: pylcd installed U{http://www.schwarzvogel.de/software-pylcd.shtml}
+    Requires: lcdproc installed and LCDd running. U{http://lcdproc.sourceforge.net/}
+    Requires: pylcd installed U{http://www.schwarzvogel.de/software-pylcd.shtml}
 
     To activate this plugin, just put the following line at the end of your
     local_conf.py file:

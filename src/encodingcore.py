@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# encodingcore.py, part of EncodingServer - for use with Freevo
+# Interface to the encoding server
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -27,6 +27,10 @@
 # with this program; if not, write to the Free Software Foundation
 #
 # -----------------------------------------------------------------------
+
+"""
+Interface to the encoding server, to re-encode video to a different format.
+"""
 
 #Import statements
 import threading
@@ -102,6 +106,7 @@ class Enum(dict):
 
     Enum(names, x=0)"""
     def __init__(self, names, x=0):
+        """ Initialize an Enum """
         for i in range(x, x+len(names)):
             self.__dict__[names[i-x]]=i
             self[i]=names[i-x]
@@ -112,6 +117,9 @@ status = Enum(['notset', 'apass', 'vpass1', 'vpassfinal', 'postmerge'])
 
 
 class EncodingOptions:
+    """
+    Encoding options
+    """
     def getContainerList(self):
         """Return a list of possible containers"""
         return mappings['lists']['containers']
@@ -134,9 +142,57 @@ class EncodingOptions:
 
 
 class EncodingJob:
-    """Class for creation & configuration of EncodingJobs. This generates the mencoder commands"""
+    """
+    Class for creation & configuration of EncodingJobs. This generates the mencoder commands
+
+    @ivar _generateCL: function to generate the command line
+    @ivar encodingopts: options for the different encoding steps
+    @ivar source: source file to encode
+    @ivar output: output file after encoding
+    @ivar name: friendly name of the job
+    @ivar idnr: job id number
+    @ivar chapter: chapter number to re-encode
+    @ivar rmsource: remove the source when done
+    @type rmsource: boolean
+    @ivar container: type of video container
+    @ivar tgtsize: target size for video
+    @ivar length: length of source video in seconds
+    @ivar vcodec: video codec to use
+    @ivar altprofile: user defined encoding profile
+    @ivar vbrate: video bit rate
+    @ivar multipass: number of encoding passes
+    @ivar vfilters: list of video filters to apply
+    @ivar crop: crop settings
+    @ivar cropres: crop settings
+    @ivar timeslice: start and end positions to encode
+    @ivar timeslice_mencoder: mencoder options for start and end
+    @ivar acodec: audio codec to use
+    @ivar abrate: audio bit rate
+    @ivar afilters: list of audio filters
+    @ivar cls: codec job list
+    @ivar percentage: mencoders current percentage
+    @ivar trem: mencoders current trem
+    @ivar status: current job status
+    @ivar pid: job process id
+    @ivar ana: is the source anamorphic?
+    @ivar fps: frames per second of the source
+    @ivar finishedanalyze: has the analysis finished?
+    @ivar info: Meta data of the source
+    @ivar resx: target video width
+    @ivar resy: target video height
+    @ivar threads: number of threads
+    @ivar failed: has the job failed?
+    """
     def __init__(self, source, output, friendlyname, idnr, chapter=None, rmsource=False):
-        """Initialize class instance"""
+        """
+        Initialize an instance of an EncodingJob
+        @param source: input source name
+        @param output: output file name
+        @param friendlyname: name of the job
+        @param idnr: job id number
+        @param chapter: chapter number to reencode
+        @param rmsource: remove the source
+        """
         _debug_('encodingcore.EncodingJob.__init__(%s, %s, %s, %s, %s, %s)' % \
             (source, output, friendlyname, idnr, chapter, rmsource), 2)
         #currently only MEncoder can be used, but who knows what will happen in the future :)
@@ -188,7 +244,7 @@ class EncodingJob:
         self.resy = None
 
         self.threads = 1 # How many threads to use during encoding (multi core systems)
-        self.failed=False
+        self.failed = False
         if self.source:
             try:
                 self.info = kaa.metadata.parse(self.source)
@@ -274,6 +330,7 @@ class EncodingJob:
 
 
     def setVideoRes(self, videores):
+        """Set video resolution"""
         if videores == 'Optimal':
             (self.resx, self.resy) = (0, 0)
         else:
@@ -281,6 +338,7 @@ class EncodingJob:
 
 
     def setNumThreads(self, numthreads):
+        """Set the number of threads to use"""
         self.threads = numthreads
 
 
@@ -308,7 +366,7 @@ class EncodingJob:
 
         if self.chapter:
             #check some things, like length
-            _debug_('source=\"%s\" chapter=%s' % (self.source, self.chapter))
+            _debug_('source=%r" chapter=%s' % (self.source, self.chapter))
             dvddata = self.info
             dvdtitle = dvddata.tracks[self.chapter - 1]
             self.length = dvdtitle['length']
@@ -469,7 +527,7 @@ class EncodingJob:
 
         aspect= ''
         if self.vcodec=='MPEG 2 (lavc)' and self.cropres[0] != '720':
-            if self.ana == True:
+            if self.ana:
                 aspect=':aspect=16/9'
             else:
                 aspect=':aspect=4/3'
@@ -477,7 +535,7 @@ class EncodingJob:
             aspect =  ':autoaspect'
 
         # set video encoder options
-        if self.altprofile == None:
+        if self.altprofile is None:
             args = [
                 '-ovc', mappings['vcodec'][self.vcodec][0], mappings['vcodec'][self.vcodec][1],
                         mappings['vcodec'][self.vcodec][2] % (self.vbrate, self.threads, vpass, aspect ) ]

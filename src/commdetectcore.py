@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# commdetectcore.py, part of CommDetectServer - for use with Freevo
+# Interface to CommDetectServer
 # -----------------------------------------------------------------------
 #
 # Author: Justin Wetherell
@@ -22,6 +22,10 @@
 # with this program; if not, write to the Free Software Foundation
 #
 # -----------------------------------------------------------------------
+
+"""
+Interface to Commercial Detection Server
+"""
 
 #Import statements
 import threading

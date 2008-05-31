@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# encodingclient.py - A client interface to the Freevo encoding server.
+# A client interface to the Freevo encoding server.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -25,6 +24,10 @@
 # with this program; if not, write to the Free Software Foundation
 #
 # -----------------------------------------------------------------------
+
+"""
+A client interface to the Freevo encoding server.
+"""
 
 import xmlrpclib, sys
 from util.marmalade import jellyToXML, unjellyFromXML

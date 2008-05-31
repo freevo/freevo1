@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# item.py - Template for an item
+# Base class of a media item
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -28,6 +28,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Base class of a media item
+"""
 
 import os
 import gettext
@@ -48,6 +51,15 @@ class FileInformation:
     file operations for an item
     """
     def __init__(self):
+        """
+        Create an instance of a FileInformation object.
+
+        @ivar files: a list of files.
+        @ivar fxd_file: the FXD (freevo extended data) file.
+        @ivar edl_file: the EDL (edit decision list) file.
+        @ivar image: the image for the item.
+        @ivar read_only: Is the item read only.
+        """
         self.files     = []
         self.fxd_file  = ''
         self.edl_file  = ''
@@ -153,10 +165,36 @@ class FileInformation:
 
 class Item:
     """
-    Item class. This is the base class for all items in the menu. It's a template
-    for MenuItem and for other info items like VideoItem, AudioItem and ImageItem
+    Item class. This is the base class for all items in the menu.
+
+    It's a template for MenuItem and for other info items like VideoItem,
+    AudioItem and ImageItem
+
+    @ivar type: the type of the media item.
+    @ivar name: the name of the media item.
+    @ivar parent: the parent of the media item.
+    @ivar icon: the icon of the media item.
+    @ivar info: get the information of the media item.
+    @ivar menuw: the menu widget of the media item.
+    @ivar description: the description of the media item.
+    @ivar image: the image of the media item.
+    @ivar skin_fxd: the skin FXD for the media item.
+    @ivar media: the media of the item.
+    @ivar fxd_file: the FXD file for the media item.
+    @ivar network_play: is the item on the network?
+    @ivar filename: the file name of the media item.
+    @ivar mode: the type of the URL: file, http, dvd, etc.
+    @ivar files: list of files for the media item.
+    @ivar mimetype: the mime-type of the mdeia item.
+    @ivar eventhandler_plugins: the event handler for the media item.
     """
     def __init__(self, parent=None, info=None, skin_type=None):
+        """
+        Create an instance of an Item.
+        @param parent: parent of the Item.
+        @param info: info item of the Item.
+        @param skin_type: skin type of the Item.
+        """
         if not hasattr(self, 'type'):
             self.type     = None            # e.g. video, audio, dir, playlist
 
@@ -170,7 +208,7 @@ class Item:
         self.menuw        = None
         self.description  = ''
         self.image        = None            # imagefile
-        self.skin_fxd     = None            # skin informationes etc.
+        self.skin_fxd     = None            # skin information etc.
         self.media        = None
         self.fxd_file     = None 
         self.network_play = True            # network url, like http
@@ -215,24 +253,39 @@ class Item:
 
 
     def __str__(self):
+        """
+        Create a string representation of an Item
+        @returns: a string
+        """
         s = pformat(self, depth=2)
         return s
 
 
     def __repr__(self):
+        """
+        Create a raw string representation of an Item
+        @returns: a string
+        """
         if hasattr(self, 'name'):
             s = '%s: %r' % (self.name, self.__class__)
         else:
             s = '%r' % (self.__class__)
         return s
 
+
     def __setattr__(self, key, value):
+        """
+        Set the attribute of an Item.
+        @param key: name of attribute
+        @param value: new value of the attribute
+        """
         # force the setting of the url item through the function set_url
         if key=='url':
            self.set_url(value)
         else:
             # use all other values as they are
             self.__dict__[key] = value
+
 
     def set_url(self, url, info=True, search_image=True):
         """

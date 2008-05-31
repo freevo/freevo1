@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# __init__.py - Animation support
+# Animation support
 # Author: Viggo Fredriksen <viggo@katatonic.org>
 # -----------------------------------------------------------------------
 # $Id$
@@ -29,6 +29,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Animation support
+"""
 
 from render     import *
 from base       import *

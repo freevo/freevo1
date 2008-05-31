@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# evfallback.py - Default mappings for event interface module
+# Default mappings for event interface module
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -27,6 +27,10 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+
+"""
+Default mappings for Linux event interface module
+"""
 
 _types = {
      0:'EV_SYN',

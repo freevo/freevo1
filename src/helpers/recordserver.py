@@ -229,7 +229,7 @@ class RecordServer:
         """
         Test is the player is running
 
-        @todo: real player running test, check /dev/videoX.  This could go into the upsoon client
+        TODO: real player running test, check /dev/videoX.  This could go into the upsoon client
         @returns: the state of a player, mplayer, xine, etc.
         """
         _debug_('isPlayerRunning()', 2)

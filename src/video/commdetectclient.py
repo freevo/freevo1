@@ -31,6 +31,10 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+A client interface to the commercial detecting server.
+"""
+
 import xmlrpclib, sys
 from util.marmalade import jellyToXML, unjellyFromXML
 import config

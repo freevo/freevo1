@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# __init__.py - interface between mediamenu and audio
+# interface between mediamenu and audio
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -28,6 +28,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Interface between mediamenu and audio
+"""
 
 import os
 import re

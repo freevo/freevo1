@@ -1,12 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# rssperiodic.py - This is the Freevo RSS feed module
+# This is the Freevo RSS feed module
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -27,6 +23,10 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+
+"""
+RSS feed module feed grabber
+"""
 
 import re, os, sys, glob, urllib, datetime, time, shutil
 from subprocess import Popen

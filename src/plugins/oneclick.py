@@ -915,8 +915,7 @@ class WeatherBaseScreen(skin.Area):
         self.xscale = lambda x: int(x * self.xmult)
         self.yscale = lambda y: int(y * self.ymult)
 
-        self.update_functions = (self.update_day, self.update_forecast,
-                                 self.update_week, self.update_map)
+        self.update_functions = (self.update_day, self.update_forecast, self.update_week, self.update_map)
 
     def day_item(self, x1, text, x2, value, y, align='left'):
         """ This is helper function for update_day
@@ -1020,7 +1019,7 @@ class WeatherBaseScreen(skin.Area):
 
     def update_week(self):
         """ update the weeks forecast
-        @todo: this can be improved
+        TODO this can be improved
         """
         _debug_('update_week()', 2)
 

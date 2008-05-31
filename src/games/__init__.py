@@ -1,12 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# __init__.py - interface between mediamenu and games
+# Interface between mediamenu and games
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -28,6 +24,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Interface between media menu and games
+"""
 
 import config
 import util

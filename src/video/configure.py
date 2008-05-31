@@ -26,6 +26,11 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Process actions for a video item's configuration menu.
+
+A collection of menu items and actions.
+"""
 
 import re
 import copy
@@ -35,23 +40,27 @@ import config
 import menu
 import plugin
 
-#
-# Dummy for playing the movie
-#
 
 def play_movie(arg=None, menuw=None):
+    """
+    Dummy for playing the movie
+    """
     menuw.delete_menu()
     arg[0].play(menuw=menuw, arg=arg[1])
 
-#
-# Audio menu and selection
-#
 
 def audio_selection(arg=None, menuw=None):
+    """
+    Audio selection menu action
+    """
     arg[0].selected_audio = arg[1]
     menuw.back_one_menu()
 
+
 def audio_selection_menu(arg=None, menuw=None):
+    """
+    Audio selection menu list
+    """
     item       = arg
     menu_items = []
 
@@ -84,15 +93,18 @@ def audio_selection_menu(arg=None, menuw=None):
     menuw.pushmenu(moviemenu)
 
 
-#
-# Subtitle menu and selection
-#
-
 def subtitle_selection(arg=None, menuw=None):
+    """
+    Subtitle selection menu action
+    """
     arg[0].selected_subtitle = arg[1]
     menuw.back_one_menu()
 
+
 def subtitle_selection_menu(arg=None, menuw=None):
+    """
+    Subtitle selection menu list
+    """
     item = arg
 
     menu_items = [ menu.MenuItem(_('no subtitles'), subtitle_selection, (item, -1)) ]
@@ -121,15 +133,18 @@ def subtitle_selection_menu(arg=None, menuw=None):
     menuw.pushmenu(moviemenu)
 
 
-#
-# Chapter selection
-#
-
 def chapter_selection(menuw=None, arg=None):
+    """
+    Chapter selection menu action
+    """
     menuw.delete_menu()
     play_movie(menuw=menuw, arg=arg)
 
+
 def chapter_selection_menu(arg=None, menuw=None):
+    """
+    Chapter selection menu list
+    """
     item = arg
     menu_items = []
     if isinstance(arg.info['chapters'], int):
@@ -159,11 +174,10 @@ def chapter_selection_menu(arg=None, menuw=None):
     menuw.pushmenu(moviemenu)
 
 
-#
-# Chapter selection
-#
-
 def subitem_selection(menuw=None, arg=None):
+    """
+    Sub-item selection menu action
+    """
     item, pos = arg
     item.conf_select_this_item = item.subitems[pos]
     menuw.delete_menu()
@@ -171,6 +185,9 @@ def subitem_selection(menuw=None, arg=None):
 
 
 def subitem_selection_menu(arg=None, menuw=None):
+    """
+    Sub-item selection menu list
+    """
     item  = arg
     menu_items = []
 
@@ -180,11 +197,11 @@ def subitem_selection_menu(arg=None, menuw=None):
     moviemenu = menu.Menu(_('Chapter Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
 
-#
-# Player selection
-#
 
 def player_selection(menuw=None, arg=None):
+    """
+    Player selection menu action
+    """
     item, player = arg
     item.player = player[1]
     item.player_rating= player[0]
@@ -193,6 +210,9 @@ def player_selection(menuw=None, arg=None):
 
 
 def player_selection_menu(arg=None, menuw=None):
+    """
+    Player selection menu list
+    """
     item  = arg
     menu_items = []
 
@@ -202,11 +222,11 @@ def player_selection_menu(arg=None, menuw=None):
     moviemenu = menu.Menu(_('Player Menu'), menu_items, fxd_file=item.skin_fxd)
     menuw.pushmenu(moviemenu)
 
-#
-# De-interlacer
-#
 
 def toggle(arg=None, menuw=None):
+    """
+    Toggle a menu item over two choices action
+    """
     arg[1][arg[2]] = not arg[1][arg[2]]
 
     old = menuw.menustack[-1].selected
@@ -226,16 +246,18 @@ def toggle(arg=None, menuw=None):
 
 
 def add_toogle(name, item, var):
+    """
+    Toggle a menu item over two choices menu
+    """
     if item[var]:
         return menu.MenuItem(_('Turn off %s') % name, toggle, (name, item, var))
     return menu.MenuItem(_('Turn on %s') % name, toggle, (name, item, var))
 
 
-#
-# Field_dominance
-#
-
 def toggle3(arg=None, menuw=None):
+    """
+    Toggle a menu item over three choices
+    """
     arg[1][arg[2]] += 1
     if arg[1][arg[2]] > 1:
         arg[1][arg[2]] = -1
@@ -255,7 +277,11 @@ def toggle3(arg=None, menuw=None):
     menuw.init_page()
     menuw.refresh()
 
+
 def add_toogle3(name, item, var):
+    """
+    Toggle a menu item over three choices field dominance
+    """
     if item[var] == -1:
         return menu.MenuItem(_('Activate TOP field first'), toggle3, (name, item, var))
     elif item[var] == 0:
@@ -264,11 +290,12 @@ def add_toogle3(name, item, var):
         return menu.MenuItem(_('Activate AUTO field first'), toggle3, (name, item, var))
 
 
-#
-# config main menu
-#
-
 def get_items(item):
+    """
+    Build a list of menu items for a video item
+
+    @returns: a list of menu items
+    """
     next_start = 0
     items = []
     
@@ -303,5 +330,10 @@ def get_items(item):
 
 
 def get_menu(item, menuw):
+    """
+    Build a menu for video items
+
+    @returns: a list of menu items
+    """
     items = get_items(item) + [ menu.MenuItem(_('Play'), play_movie, (item, '')) ]
     return menu.Menu(_('Config Menu'), items, fxd_file=item.skin_fxd)

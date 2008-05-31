@@ -21,7 +21,8 @@ import string
 
 __version__ = '0.2'
 __author__ = 'klausman-spam@schwarzvogel.de'
-__doc__ = """PyLCD v%s (c) 2002, 2003 Tobias Klausman
+"""
+PyLCD v%s (c) 2002, 2003 Tobias Klausman
 
 PyLCD is a Library that interfaces with the LCDproc daemon. It abstracts the
 network connection handling and provides a remap function for special

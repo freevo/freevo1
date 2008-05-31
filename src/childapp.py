@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# childapp.py - Runs an application in a child process
+# Runs an application in a child process
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -28,6 +28,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Runs an application in a child process
+"""
 
 import sys
 import time

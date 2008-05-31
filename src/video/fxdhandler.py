@@ -28,6 +28,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Handle FXD (Freevo Extended Data) files.
+"""
 
 from videoitem import VideoItem
 from item import FileInformation

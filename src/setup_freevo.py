@@ -1,15 +1,11 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# setup_freevo.py - Autoconfigure Freevo
+# Autoconfigure Freevo
 #
 # This is an application that is executed by the "./freevo" script
 # after checking for python.
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -31,6 +27,12 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Autoconfigure Freevo
+
+This is an application that is executed by the "./freevo" script
+after checking for python.
+"""
 
 import sys
 import os

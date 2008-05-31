@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# evdev.py - Linux /dev/input/event interface library
+# Linux /dev/input/event interface library
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -27,6 +27,10 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+
+"""
+Linux /dev/input/event interface library
+"""
 
 import sys
 import os
@@ -101,8 +105,14 @@ def EVIOCSABS(abs):
     return _IOW('E', 0xc0 + abs, 20) # set abs value/limits
 
 class evdev:
+    """
+    Interface to the Linux event device
+    @ivar _fd: file descriptor of the event device
+    @type _fd: open file descriptor
+    """
     def __init__(self, dev, blocking=False):
         """
+        Initialize an instance of evdev.
         """
         #print 'evdev.__init__(dev, blocking=False)'
         self._fd = None
@@ -115,6 +125,7 @@ class evdev:
 
     def __del__(self):
         """
+        Delete an instance of evdev.
         """
         #print '__del__(self=%r)' % (self.__dict__)
         try:
@@ -125,6 +136,7 @@ class evdev:
 
     def close(self):
         """
+        Close the open resouces of an instance of evdev.
         """
         #print 'close(self=%r)' % (self,)
         if self._fd is not None:
@@ -134,6 +146,7 @@ class evdev:
 
     def print_info(self):
         """
+        Print the information about an event device
         """
         #print 'print_info()'
         print 'Input driver version %d.%d.%d' % self.get_version()

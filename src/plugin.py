@@ -3,10 +3,6 @@
 # Plug-in interface
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes: This file handles the Freevo plugin interface
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -28,6 +24,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Plug-in interface
+"""
 
 import os, sys
 import traceback
@@ -38,7 +37,6 @@ from event import Event
 import rc
 
 DEBUG = 0
-
 
 #
 # Some basic plugins known to Freevo.

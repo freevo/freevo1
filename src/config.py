@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# config.py - Handle the configuration file init. Also start logging.
+# Handle the configuration file init. Also start logging.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -41,6 +41,15 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Handle the configuration file initialization
+and start logging.
+
+Try to find the freevo_config.py config file in the following places:
+    1. ~/.freevo/freevo_config.py       The user's private config
+    2. /etc/freevo/freevo_config.py     Systemwide config
+    3. ./freevo_config.py               Defaults from the freevo dist
+"""
 
 import sys, os, time, re, string, pwd, thread
 import setup_freevo

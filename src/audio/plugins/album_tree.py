@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# plugin for the audio player
+# Represents audio items as different views
 # -----------------------------------------------------------------------
 # $Id$
 # Author:      Martijn Voncken(2005)
@@ -27,6 +27,10 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+
+"""
+Represents audio items as different views
+"""
 
 import config
 import plugin
@@ -109,7 +113,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     Plugin to browse songs in a tree-like way.
 
-    @requires: pysqlite.
+    Requires: pysqlite U{http://oss.itsystementwicklung.de/trac/pysqlite/}
 
     B{Pre-Installation}
 

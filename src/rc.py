@@ -3,10 +3,6 @@
 # Remote control / Event and Callback handling
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes: This is the only class to be thread safe!
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -28,6 +24,11 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Remote control / Event and Callback handling
+
+This module is thread safe
+"""
 
 import os
 import copy

@@ -30,6 +30,10 @@
 # -----------------------------------------------------------------------
 
 
+"""
+Item for video objects.
+"""
+
 import os
 import re
 import md5
@@ -51,19 +55,51 @@ from event import *
 from skin.widgets import ScrollableTextScreen
 
 class VideoItem(Item):
+    """
+    A class describing a video item.
+
+    @ivar autovars: a list of variables.
+    @ivar type: the item type, video for this item.
+    @ivar variants: a list of audio variants.
+    @ivar subitems: a list of files or tracks to play.
+    @ivar current_subitem: the current video item.
+    @ivar media_id: media id when the item is on removable media
+    @ivar subtitle_file: file name of a file containing subtitles.
+    @ivar audio_file: file name of a file containing audio.
+    @ivar mplayer_options: additional options for mplayer.
+    @ivar tv_show: if the item is a tv programme.
+    @ivar video_width: width of the video.
+    @ivar video_height: height of the video.
+    @ivar selected_subtitle: current subtitle track.
+    @ivar selected_audio: current audio track.
+    @ivar elapsed: seconds that the item has played.
+    @ivar possible_players: a list of possible players.
+    @ivar player: current player.
+    @ivar player_rating: rating of the current player.
+    """
 
     def __init__(self, url, parent, info=None, parse=True):
+        """
+        Create an instance of a VideoItem
+
+        @param url: the pysudo URL for the VideoItem
+        @param parent: the parent of the VideoItem
+        @param info: controls if additional information is found
+        @type info: boolean
+        @param parse: controls if the url is parsed
+        @type parse: boolean
+        """
         self.autovars = []
         Item.__init__(self, parent)
         self.type = 'video'
 
-        self.variants          = []         # if this item has variants
-        self.subitems          = []         # more than one file/track to play
+        self.variants          = []
+        self.subitems          = []
         self.current_subitem   = None
         self.media_id          = ''
 
-        self.subtitle_file     = {}         # text subtitles
-        self.audio_file        = {}         # audio dubbing
+        self.subtitle_file     = {}
+        self.audio_file        = {}
 
         self.mplayer_options   = ''
         self.tv_show           = False
@@ -83,7 +119,6 @@ class VideoItem(Item):
         self.set_url(url, info=parse)
         if info:
             self.info.set_variables(info)
-
 
         # deinterlacing and related things
         video_deinterlace = config.VIDEO_DEINTERLACE != None and config.VIDEO_DEINTERLACE or False
@@ -142,11 +177,19 @@ class VideoItem(Item):
             self['deinterlace'] = False
 
     def __str__(self):
+        """
+        Create a string for a VideoItem instance.
+        @returns: string representation
+        """
         s = pformat(self, depth=2)
         return s
 
 
     def __repr__(self):
+        """
+        Create a raw string for a VideoItem instance.
+        @returns: string representation
+        """
         if hasattr(self, 'name'):
             s = '%s: %r' % (self.name, self.__class__)
         else:
@@ -156,14 +199,16 @@ class VideoItem(Item):
 
     def set_url(self, url, info=True):
         """
-        Sets a new url to the item. This functions also changes other attributes, 
-        like filename, mode, network_play and the list of possible players.
-        WARNING: This is called whenever self.url is set, therefor it is
-        strictly forbidden to set self.url directly in this function, 
-        (infinit recursion!). Use self.__dict__['url'] instead!
+        Sets a new url to the item. This functions also changes other
+        attributes, like file name, mode, network_play and the list of possible
+        players.
+
+        B{WARNING}: This is called whenever self.url is set, therefore it is
+        strictly forbidden to set self.url directly in this function, (infinite
+        recursion!). Use self.__dict__['url'] instead!
         """
         Item.set_url(self, url, info)
-        
+
         # additional types of urls
         if url.startswith('dvd://') or url.startswith('vcd://'):
             self.network_play = False
@@ -188,7 +233,7 @@ class VideoItem(Item):
             self.mode     = 'dvd'
             self.__dict__['url'] = 'dvd' + self.url[4:] + '/'
 
-        # cover image 
+        # cover image
         if not self.image or (self.parent and self.image == self.parent.image):
             image = vfs.getoverlay(self.filename + '.raw')
             if os.path.exists(image):
@@ -197,32 +242,34 @@ class VideoItem(Item):
 
         # do a new player rating based on the new url
         self.rating()
-        
+
 
     def rating(self):
         """
-        Calculate a new player rating for this item
-        
-        The decision which player to use for a VideoItem is based on this rating.
-        First each player plugins is asked for a rate, on how good it can play
-        this VideoItem. There are three possible rates: good (=2), possible (=1)
-        and unplayable(=0). This rate is then weighted by a factor of ten.
-        Next the user's choice of prefered players is checked. The user can 
-        define a rank list of players with the variable VIDEO_PREFERED_PLAYER
-        in local_conf.py. The rank that is calculated from this config variable
-        is then added to the current rate. Last but not least there is the 
-        possibility that for some reason the use of a special player is forced.
-        In that case a value of 100 is added to the rate. 
-        In the end a sorted list of possible_players is created. All players
-        in this list have a rating for this special VideoItem of not less than
-        10. The first one is the default one, the others are offered to the user
-        as choices in the "Alternate Player" menu.
+        Calculate a new player rating for this item.
+
+        The decision which player to use for a VideoItem is based on this
+        rating.  First each player plugins is asked for a rate, on how good it
+        can play this VideoItem. There are three possible rates: good (=2),
+        possible (=1) and unplayable(=0). This rate is then weighted by a
+        factor of ten.  Next the user's choice of prefered players is checked.
+        The user can define a rank list of players with the variable
+        VIDEO_PREFERED_PLAYER in local_conf.py. The rank that is calculated
+        from this config variable is then added to the current rate. Last but
+        not least there is the possibility that for some reason the use of a
+        special player is forced.  In that case a value of 100 is added to the
+        rate.
+
+        In the end a sorted list of possible_players is created. All players in
+        this list have a rating for this special VideoItem of not less than 10.
+        The first one is the default one, the others are offered to the user as
+        choices in the "Alternate Player" menu.
         """
         # create a new player rating
         self.possible_players =[]
         self.player = None
         self.player_rating = 0
-        # some debug infos
+        # some debug info
         try:
             _debug_('rating: url=%r' % (self.url), 2)
             _debug_('rating: mode=%r' % (self.mode), 2)
@@ -241,7 +288,7 @@ class VideoItem(Item):
                     rank = len(config.VIDEO_PREFERED_PLAYER)-rank
                     # finally increade the rating
                     rating += rank
-                else: # it is more simple if just one player is prefered 
+                else: # it is more simple if just one player is prefered
                     rating +=1
             if hasattr(self, 'force_player') and p.name == self.force_player:
                 rating += 100
@@ -259,8 +306,10 @@ class VideoItem(Item):
 
     def id(self):
         """
-        Return a unique id of the item. This id should be the same when the
-        item is rebuild later with the same information
+        This id should be the same when the item is rebuild later with the same
+        information.
+
+        @returns: a unique id of the item.
         """
         ret = self.url
         if self.subitems:
@@ -274,7 +323,9 @@ class VideoItem(Item):
 
     def __getitem__(self, key):
         """
-        return the specific attribute
+        Get the item's attribute.
+
+        @returns: the specific attribute
         """
         if not self.info:
             return ''
@@ -325,7 +376,6 @@ class VideoItem(Item):
                         continue
                     total += length
                 total = '%s min' % str(int(total) / 60)
-
             else:
                 if self.info['length']:
                     total = self.info['length']
@@ -347,7 +397,9 @@ class VideoItem(Item):
 
     def sort(self, mode=None):
         """
-        Returns the string how to sort this item
+        Sort the video items.
+
+        @returns: the string how to sort this item
         """
         if mode == 'date' and self.mode == 'file' and os.path.isfile(self.filename):
             return u'%s%s' % (os.stat(self.filename).st_ctime, Unicode(self.filename))
@@ -363,7 +415,9 @@ class VideoItem(Item):
 
     def actions(self):
         """
-        return a list of possible actions on this item.
+        Menu actions for a video item.
+
+        @returns: a list of possible actions on this item.
         """
         if not self.possible_players:
             return []
@@ -437,7 +491,7 @@ class VideoItem(Item):
 
     def show_variants(self, arg=None, menuw=None):
         """
-        show a list of variants in a menu
+        Show a list of variants in a menu
         """
         if not self.menuw:
             self.menuw = menuw
@@ -448,7 +502,7 @@ class VideoItem(Item):
 
     def create_thumbnail(self, arg=None, menuw=None):
         """
-        create a thumbnail as image icon
+        Create a thumbnail as image icon
         """
         import util.videothumb
         pop = PopupBox(text=_('Please wait....'))
@@ -461,23 +515,23 @@ class VideoItem(Item):
 
     def play_max_cache(self, arg=None, menuw=None):
         """
-        play and use maximum cache with mplayer
+        Play and use maximum cache with mplayer
         """
         self.play(menuw=menuw, arg='-cache 65536')
 
 
     def set_next_available_subitem(self):
         """
-        select the next available subitem. Loops on each subitem and checks if the
-        needed media is really there.  If the media is there, sets self.current_subitem
-        to the given subitem and returns 1.
+        Select the next available subitem. Loops on each subitem and checks if
+        the needed media is really there.  If the media is there, sets
+        self.current_subitem to the given subitem and returns 1.
 
-        If no media has been found, we set self.current_subitem to None.  If the search
-        for the next available subitem did start from the beginning of the list, then
-        we consider that no media at all was available for any subitem: we return 0.
-        If the search for the next available subitem did not start from the beginning
-        of the list, then we consider that at least one media had been found in the
-        past: we return 1.
+        If no media has been found, we set self.current_subitem to None.  If
+        the search for the next available subitem did start from the beginning
+        of the list, then we consider that no media at all was available for
+        any subitem: we return 0.  If the search for the next available subitem
+        did not start from the beginning of the list, then we consider that at
+        least one media had been found in the past: we return 1.
         """
         if hasattr(self, 'conf_select_this_item'):
             # XXX bad hack, clean me up
@@ -522,9 +576,8 @@ class VideoItem(Item):
 
     def play(self, arg=None, menuw=None):
         """
-        play the item.
+        Play the item.
         """
-
         if not self.player or self.player_rating < 10:
             AlertBox(text=_('No player for this item found')).show()
             return
@@ -650,9 +703,6 @@ class VideoItem(Item):
         if config.VIDEO_POST_PLAY:
             os.system(config.VIDEO_POST_PLAY)
 
-        """
-        stop playing
-        """
         if self.player:
             self.player.stop()
 
@@ -699,7 +749,7 @@ class VideoItem(Item):
 
     def settings(self, arg=None, menuw=None):
         """
-        create a menu with 'settings'
+        Create a menu with 'settings'
         """
         if not self.menuw:
             self.menuw = menuw
@@ -709,7 +759,7 @@ class VideoItem(Item):
 
     def eventhandler(self, event, menuw=None):
         """
-        eventhandler for this item
+        Eventhandler for this item
         """
         # when called from mplayer.py, there is no menuw
         if not menuw:

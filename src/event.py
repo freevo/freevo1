@@ -28,6 +28,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Global events for Freevo
+"""
 import kaa
 
 class Event(kaa.Event):
