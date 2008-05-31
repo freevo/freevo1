@@ -122,6 +122,10 @@ if (len(sys.argv) < 2 or sys.argv[1].lower() not in ('i18n', '--help', '--help-c
             revision = p2.communicate()[0]
             fh = open('src/revision.py', 'w')
             try:
+                fh.write('"""\n')
+                fh.write('Freevo revision number\n')
+                fh.write('"""\n')
+                fh.write('\n')
                 fh.write('__revision__ = \'%s\'\n' % revision.strip('\n'))
             finally:
                 fh.close()

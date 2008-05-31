@@ -8,7 +8,11 @@
 revision() {
     echo -n generating revision.py
     rev=$(LC_ALL=C svn info --revision=BASE | sed -n '/Revision:/s/Revision: *\([0-9]*\)/\1/p')
-    echo "__revision__ = ${rev}" > src/revision.py
+    echo '"""' > src/revision.py
+    echo 'Freevo revision number' >> src/revision.py
+    echo '"""' >> src/revision.py
+    echo '' >> src/revision.py
+    echo "__revision__ = ${rev}" >> src/revision.py
     echo " ${rev}"
 }
 
