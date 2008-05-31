@@ -3,23 +3,6 @@
 # Handle the configuration file init. Also start logging.
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-#
-#   Try to find the freevo_config.py config file in the following places:
-#   1) ~/.freevo/freevo_config.py       The user's private config
-#   2) /etc/freevo/freevo_config.py     Systemwide config
-#   3) ./freevo_config.py               Defaults from the freevo dist
-#
-#   Customize freevo_config.py from the freevo dist and copy it to one
-#   of the other places where it will not get overwritten by new
-#   checkouts/installs of freevo.
-#
-#   The format of freevo_config.py might change, in that case you'll
-#   have to update your customized version.
-#
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.

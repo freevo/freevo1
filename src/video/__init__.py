@@ -3,10 +3,6 @@
 # __init__.py - interface between mediamenu and video
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -29,7 +25,7 @@
 # -----------------------------------------------------------------------
 
 """
-Video items.
+Interface between media menu and video items.
 """
 
 import os

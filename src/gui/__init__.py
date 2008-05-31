@@ -4,22 +4,6 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# The goal is to make a OO GUI library for use with freevo. The main
-# idea is that skins can use or inherit from this class and override
-# when needed.
-#
-# A Object Oriented GUI Widget library for Freevo
-#
-# This is aimed at being a general library for GUI programming with Freevo.
-# It is built directly on top of SDL with pygame, and it's aimed at being
-# fairly fast.
-#
-# Event though the library is built from the ground the design is heavy
-# influenced by other GUI toolkits, such as Java JDK and QT.
-#
-# Currently not many classes are in place, but hopefully we will add more
-# in time.
-#
 # Initial version: Thomas Malt <thomas@malt.no>
 #
 # -----------------------------------------------------------------------
@@ -43,6 +27,25 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # ----------------------------------------------------------------------
+
+"""
+Freevo GUI library module
+
+The goal is to make a OO GUI library for use with freevo. The main idea is that
+skins can use or inherit from this class and override when needed.
+
+A Object Oriented GUI Widget library for Freevo
+
+This is aimed at being a general library for GUI programming with Freevo.  It
+is built directly on top of SDL with pygame, and it's aimed at being fairly
+fast.
+
+Event though the library is built from the ground the design is heavy
+influenced by other GUI toolkits, such as Java JDK and QT.
+
+Currently not many classes are in place, but hopefully we will add more in
+time.
+"""
 
 from Border            import *
 from Color             import *

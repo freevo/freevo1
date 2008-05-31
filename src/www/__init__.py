@@ -1,13 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# __init__.py - web init function
+# web initialization module
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-#
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -29,6 +24,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+web initialization module
+"""
 
 import os
 import config

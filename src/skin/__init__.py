@@ -1,25 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# skin.py - This is the Freevo top-level skin code.
+# This is the Freevo top-level skin code.
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-#    Works as a middle layer between the users preferred skin and rest of
-#    the system.
-#
-#    Which skin you want to use is set in freevo_config.py. This small
-#    module gets your skin preferences from the configuration file and loads
-#    the correct skin implementation into the system.
-#
-#    The path to the skin implementation is also added to the system path.
-#
-#    get_singleton() returns an initialized skin object which is kept unique
-#    and consistent throughout.
-#
-#
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -41,6 +24,21 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Freevo top-level skin module.
+
+Works as a middle layer between the users preferred skin and rest of the
+system.
+
+Which skin you want to use is set in freevo_config.py. This small module gets
+your skin preferences from the configuration file and loads the correct skin
+implementation into the system.
+
+The path to the skin implementation is also added to the system path.
+
+get_singleton() returns an initialized skin object which is kept unique and
+consistent throughout.
+"""
 
 import plugin
 import config

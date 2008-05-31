@@ -21,6 +21,7 @@ import string
 
 __version__ = '0.2'
 __author__ = 'klausman-spam@schwarzvogel.de'
+
 """
 PyLCD v%s (c) 2002, 2003 Tobias Klausman
 
