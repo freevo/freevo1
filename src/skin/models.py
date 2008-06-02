@@ -95,8 +95,8 @@ class ScrollableText:
             rest_start = c
             if string[c] == ' ':
                 # leave out real spaces
-                rest_start = c+1 
-           
+                rest_start = c+1
+
         # calc the matching and rest string and return all this
         return (string[:c], string[rest_start:], False)
 

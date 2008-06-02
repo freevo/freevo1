@@ -207,7 +207,7 @@ class sensors(IdleBarPlugin):
             @param compute_expression: the expression to convert a raw value to a real value
             @param hotstack: is true when the sensor is above the max
             """
-            _debug_('__init__(sensor=%r, compute_expression=%r, hotstack=%r)' % 
+            _debug_('__init__(sensor=%r, compute_expression=%r, hotstack=%r)' %
                 (sensor, compute_expression, hotstack), 2)
             self.pathform_path = config.SENSORS_PLATFORM_PATH
             self.i2cdev_path = config.SENSORS_I2CDEV_PATH

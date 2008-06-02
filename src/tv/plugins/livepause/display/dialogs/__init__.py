@@ -83,11 +83,11 @@ class InputDialog(Dialog):
         self.context = rc.get_singleton().context
         rc.set_context('input')
         super(InputDialog,self).prepare()
-    
+
     def finish(self):
         rc.set_context(self.context)
         super(InputDialog, self).finish()
-        
+
 class MessageDialog(Dialog):
     def __init__(self, message):
         super(MessageDialog, self).__init__('message', 3.0)
@@ -242,4 +242,3 @@ class InfoDialog(InputDialog):
                 return_next_channel = True
 
         return result
-

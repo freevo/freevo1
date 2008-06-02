@@ -210,7 +210,7 @@ class Item:
         self.image        = None            # imagefile
         self.skin_fxd     = None            # skin information etc.
         self.media        = None
-        self.fxd_file     = None 
+        self.fxd_file     = None
         self.network_play = True            # network url, like http
         self.filename     = ''              # filename if it's a file:// url
         self.mode         = ''              # the type of the url (file, http, dvd...)
@@ -281,7 +281,7 @@ class Item:
         """
         # force the setting of the url item through the function set_url
         if key=='url':
-           self.set_url(value)
+            self.set_url(value)
         else:
             # use all other values as they are
             self.__dict__[key] = value
@@ -290,9 +290,9 @@ class Item:
     def set_url(self, url, info=True, search_image=True):
         """
         Set a new url to the item and adjust all attributes depending
-        on the url. 
+        on the url.
         WARNING: This is called whenever self.url is set, therefor it is
-        strictly forbidden to set self.url directly in this function, 
+        strictly forbidden to set self.url directly in this function,
         (infinit recursion!). Use self.__dict__['url'] instead!
         """
         # set the url itself
@@ -302,16 +302,16 @@ class Item:
         else:
             # some other kind of url
             self.__dict__['url'] = url
-         
+
         if self.url==None:
             # reset everything to default values
-            self.network_play = True    
-            self.filename     = ''      
-            self.mode         = ''      
-            self.files        = None    
-            self.mimetype     = ''      
+            self.network_play = True
+            self.filename     = ''
+            self.mode         = ''
+            self.files        = None
+            self.mimetype     = ''
             return
-        
+
         # add additional info files
         self.files = FileInformation()
         if self.media:
@@ -319,13 +319,13 @@ class Item:
 
         # determine the mode of this item
         self.mode = self.url[:self.url.find('://')]
-         
+
         if self.mode == 'file':
             self.network_play = False
             self.filename     = self.url[7:]
             self.files.append(self.filename)
             self.mimetype = os.path.splitext(self.filename)[1][1:].lower()
-        
+
             if search_image:
                 image = util.getimage(self.filename[:self.filename.rfind('.')])
                 if image:
@@ -354,7 +354,7 @@ class Item:
                     pass
                 if not self.name:
                     self.name = self.info['title:filename']
-            
+
             if not self.name:
                 self.name = util.getname(self.filename)
         else:

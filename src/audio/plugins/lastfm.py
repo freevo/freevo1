@@ -294,13 +294,13 @@ class LastFMMainMenuItem(MenuItem):
         login_url='http://ws.audioscrobbler.com/radio/handshake.php?version=1.1.1&platform=linux' + \
             '&username=%s&passwordmd5=%s&debug=0&partner=' % (config.LASTFM_USER, password.hexdigest())
         stream_url = ' '
-    
+
         try:
             page = audioscrobbler._urlopen(login_url)
             for x in page:
                 if re.search('session', x):
                     self.sessionid = x[8:40]
-        
+
                 if re.search('stream_url', x):
                     self.stream_url = x[11:]
                     print self.stream_url

@@ -143,20 +143,20 @@ class PluginInterface(plugin.ItemPlugin):
                 year = m.group(3)
                 self.moviecovers_id_list += [ (link, name, year, 'Movies', 'main') ]
 
-	if self.moviecovers_id_list: 
-	   return self.moviecovers_id_list
+        if self.moviecovers_id_list:
+            return self.moviecovers_id_list
 
-	print 'no data for main request, try forum request'
-	url = 'http://www.moviecovers.com/forum/search-mysql.html?forum=MovieCovers&query=%s' % (urllib.quote(name))
-	req = urllib2.Request(url, txdata, txheaders)
-	
-	try:
+        print 'no data for main request, try forum request'
+        url = 'http://www.moviecovers.com/forum/search-mysql.html?forum=MovieCovers&query=%s' % (urllib.quote(name))
+        req = urllib2.Request(url, txdata, txheaders)
+
+        try:
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, error:
             raise FxdMoviecovers_Net_Error("Moviecovers unreachable : " + error)
             exit
 
-	regexp_getall = re.compile('.*<TD><A href="(fil.html\?query=.*)">(.*?)</A>.*', re.I)
+        regexp_getall = re.compile('.*<TD><A href="(fil.html\?query=.*)">(.*?)</A>.*', re.I)
 
         for line in response.read().split("\n"):
             #print ">>>%s" % line
@@ -551,9 +551,9 @@ class PluginInterface(plugin.ItemPlugin):
         dvd = 0
         inside_plot = None
 
-	if id:
-	    regexp_zipfile = re.compile('.*<A href="(/getzip.html/.*-%s-.*?)">.*' % id, re.I)
-	else:
+        if id:
+            regexp_zipfile = re.compile('.*<A href="(/getzip.html/.*-%s-.*?)">.*' % id, re.I)
+        else:
             regexp_zipfile = re.compile('.*<A href="(/getzip.html/.*?)">.*', re.I)
 
         for line in results.read().split("\n"):
@@ -587,7 +587,7 @@ class PluginInterface(plugin.ItemPlugin):
                     self.filmfile = self.tmppath + vfs.basename(file)
 
         # Now parse the film file
-	#print "filmfile is %s" % self.filmfile
+        #print "filmfile is %s" % self.filmfile
         file = open(self.filmfile)
         # File format is :
             #Title
@@ -601,7 +601,7 @@ class PluginInterface(plugin.ItemPlugin):
         lineno = 0
         self.info['plot'] = ''
         for line in file.read().split("\n"):
-	    #print line
+            #print line
             if lineno == 0: self.title = line
             if lineno == 1: self.info['director'] = line
             if lineno == 2: self.info['year'] = line
@@ -613,7 +613,7 @@ class PluginInterface(plugin.ItemPlugin):
                 self.info['plot'] += line
             lineno += 1
 
-	#print self.info
+        #print self.info
         return (self.title, self.info, self.imagefile)
 
     def fetch_image(self):

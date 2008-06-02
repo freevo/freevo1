@@ -451,7 +451,7 @@ if __name__ == '__main__':
     print
     #time.sleep(1)
 
-    
+
     response = searchByKeyword('michael jackson number ones', product_line='Music', type='Images,ItemAttributes')
     for k, v in response.__dict__.items():
         print '%s' % k
@@ -481,4 +481,3 @@ if __name__ == '__main__':
     if hasattr(response, 'Item'):
         print response.Item.__dict__
     print
-

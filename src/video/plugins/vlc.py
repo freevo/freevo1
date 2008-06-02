@@ -18,7 +18,7 @@ from event import *
 class PluginInterface(plugin.Plugin):
     """
     VLC plugin for the video player
-    
+
     originally only used for RTSP streams
     """
 
@@ -28,7 +28,7 @@ class PluginInterface(plugin.Plugin):
 
     def config(self):
         return [('VLC_CMD', '/usr/bin/vlc', 'Path to your vlc executable'),
-                ('VLC_OPTIONS', 'None', 'Add your specific VLC options here'), 
+                ('VLC_OPTIONS', 'None', 'Add your specific VLC options here'),
                 ('VIDEO_VLC_SUFFIX', '[]', 'List of suffixes to be played with vlc'),
                ]
 

@@ -298,9 +298,9 @@ def get_items(item):
     """
     next_start = 0
     items = []
-    
+
     if len(item.possible_players) > 1:
-            items.append(menu.MenuItem(_('Play with alternate player'), player_selection_menu, item))
+        items.append(menu.MenuItem(_('Play with alternate player'), player_selection_menu, item))
 
     if item.filename or (item.mode in ('dvd', 'vcd') and item.player_rating >= 20):
         if item.info.has_key('audio') and len(item.info['audio']) > 1:
@@ -309,7 +309,7 @@ def get_items(item):
             items.append(menu.MenuItem(_('Subtitle selection'), subtitle_selection_menu, item))
         if item.info.has_key('chapters') and item.info['chapters'] > 1:
             items.append(menu.MenuItem(_('Chapter selection'), chapter_selection_menu, item))
-    
+
     if item.subitems:
         # show subitems as chapter
         items.append(menu.MenuItem(_('Chapter selection'), subitem_selection_menu, item))

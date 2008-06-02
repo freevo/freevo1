@@ -275,7 +275,7 @@ class PluginInterface(plugin.ItemPlugin):
                         _debug_('HTTPError: %s' % (e), DINFO)
                     if imageFound and (m.info()['Content-Length'] != '807'):
                         image = Image.open_from_memory(m.read())
-                        items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url, 
+                        items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url,
                             image=image) ]
                     else:
                         # maybe the url is wrong, try to change '.01.' to '.03.'
@@ -290,7 +290,7 @@ class PluginInterface(plugin.ItemPlugin):
                             _debug_('HTTPError: %s' % (e), DINFO)
                         if imageFound and (m.info()['Content-Length'] != '807'):
                             image = Image.open_from_memory(m.read())
-                            items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url, 
+                            items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url,
                                 image=image) ]
                     if m is not None:
                         m.close()

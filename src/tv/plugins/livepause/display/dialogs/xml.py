@@ -361,5 +361,3 @@ def load(filename):
 
     for dialog in dialog_definitions.values():
         dialog.instantiate()
-
-

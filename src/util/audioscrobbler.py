@@ -165,7 +165,7 @@ class Audioscrobbler(object):
         print >>fd, Audioscrobbler.nowplayingurl
         print >>fd, Audioscrobbler.submissionurl
         fd.close()
-        
+
 
     def nowplaying(self, artist, track, album=None, secs=None, tracknumber=None, mbtrackid=None):
         """
@@ -240,7 +240,7 @@ class Audioscrobbler(object):
         data['n[%d]' % num] = tracknumber or ''
         data['m[%d]' % num] = mbtrackid or ''
         if DEBUG:
-            print '%s: lt=%r gm=%s' % (track, 
+            print '%s: lt=%r gm=%s' % (track,
                 time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(float(starttime))),
                 time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(float(starttime))))
         return data
