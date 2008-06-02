@@ -38,7 +38,7 @@ try:
 except:
     _debug_(_('You need pylcd to run "lcd2x16" plugin.'), DERROR)
 
-class LcdFrame(object):
+class LcdFrame():
     def __init__(self, lcd, name, col, start, end):
         """
         Class to provide LCD-frames with priorities and timers.
@@ -74,13 +74,14 @@ class PluginInterface(plugin.DaemonPlugin):
     """
     This plugin is a customized version of lcd.py, which fits not well for 2x16 lcds.
 
-    Requires: lcdproc installed and LCDd running. U{http://lcdproc.sourceforge.net/}
-    Requires: pylcd installed U{http://www.schwarzvogel.de/software-pylcd.shtml}
+    Requirements:
+       * lcdproc: installed and LCDd running. (http://lcdproc.sourceforge.net/)
+       * pylcd: installed (http://www.schwarzvogel.de/software-pylcd.shtml)
 
     To activate this plugin, just put the following line at the end of your
-    local_conf.py file:
+    local_conf.py file::
 
-    | plugin.activate('lcd2x16')
+        plugin.activate('lcd2x16')
     """
     __author__           = 'Andreas Dick'
     __author_email__     = 'andudi@gmx.ch'
@@ -246,9 +247,8 @@ class PluginInterface(plugin.DaemonPlugin):
                     if time > 0: self.lcd_title.draw(title)
                     else:        self.lcd_title.draw('...')
 
-#            elif player.type == 'video':
+            #elif player.type == 'video':
                 # not yet!
-
 
 
     def poll(self):
@@ -262,8 +262,8 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def eventhandler(self, event, menuw=None):
         """
-        called from plugin.py if an event occure
-        -> to be done: define events in event.py
+        called from plugin.py if an event occur
+        TODO define events in event.py
         """
         # show player infos while playing
         if event == VIDEO_START:
