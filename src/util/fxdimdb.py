@@ -762,10 +762,12 @@ class FxdImdb:
 
         # Find Plot Outline/Summary:
         # Normally the tag is named "Plot Outline:" - however sometimes
-        # the tag is "Plot Summary:". Search for both strings.
+        # the tag is "Plot Summary:" or just "Plot:". Search for all strings.
         imdb_result = soup.find(text='Plot Outline:')
         if not imdb_result:
             imdb_result = soup.find(text='Plot Summary:')
+        if not imdb_result:
+            imdb_result = soup.find(text='Plot:')
         if imdb_result:
             self.info['plot'] = imdb_result.next.strip()
         else:
