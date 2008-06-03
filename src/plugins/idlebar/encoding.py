@@ -92,9 +92,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.polltime  = 0
         self.state     = 'noserver'
         self.laststate = None
-        self.font      = self.skin.get_font('detachbar')
-        if self.font == skin.get_font('default'):
-            self.font = skin.get_font('info value')
+        self.font      = self.skin.get_font(config.OSD_IDLEBAR_FONT)
 
 
     def config(self):

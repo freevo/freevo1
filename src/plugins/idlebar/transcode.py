@@ -105,9 +105,7 @@ class PluginInterface(IdleBarPlugin):
         self.laststate = None
         self.percent   = 0.0
         self.running   = False
-        self.font      = self.skin.get_font('small0')
-        if self.font == skin.get_font('default'):
-            self.font = skin.get_font('info value')
+        self.font      = self.skin.get_font(config.OSD_IDLEBAR_FONT)
         _debug_('transcode.PluginInterface.__init__() done.')
 
 
@@ -306,7 +304,7 @@ class PluginInterface(IdleBarPlugin):
         background.blit(rightclamp, (self.rightclamp_x, 1), (0, 0, self.rightclamp_w, self.rightclamp_h))
         osd.drawimage(background, (x, osd.y, -1, -1) )[0]
         if self.remaining:
-            font = osd.get_font('small0')
+            font = osd.get_font(config.OSD_IDLEBAR_FONT)
             widthdf = font.stringsize(self.remaining)
             remaining_x = x + ((self.background_w - widthdf) / 2)
             remaining_y = osd.y + self.background_h - font.h + 10

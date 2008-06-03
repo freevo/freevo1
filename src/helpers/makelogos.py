@@ -34,7 +34,7 @@ import os
 import sys
 import urllib2
 import cStringIO
-import kaa.imlib2 as Image
+import kaa.imlib2 as imlib2
 
 import config
 from tv import xmltv
@@ -58,7 +58,7 @@ for i in x:
     #print '%s - %s' % (imgsrc, channel)
     if imgsrc:
         try:
-            img = Image.open_from_memory(urllib2.urlopen(str(imgsrc)).read())
+            img = imlib2.open_from_memory(urllib2.urlopen(str(imgsrc)).read())
             # Convert the image into a PNG and save to logos directory
             output_file = config.TV_LOGOS + '/' + channel + '.png'
             try:

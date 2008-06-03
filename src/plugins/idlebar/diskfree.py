@@ -123,15 +123,15 @@ class PluginInterface(IdleBarPlugin):
             diskbar = self.getimage(self.goodimg, osd, True)
         diskimg.blit(diskbar, (0, 0), (0, 0, (w * self.percent), h))
         self.cacheimg['cached'] = diskimg
-        font = osd.get_font('tiny0')
-        widthdf = font.stringsize(self.diskfree)
-        if w >= widthdf:
+        font = osd.get_font(config.OSD_IDLEBAR_FONT)
+        widthtxt = font.stringsize(self.diskfree)
+        if w >= widthtxt:
             image_x = x
-            diskfree_x = x + ((w - widthdf) / 2)
+            text_x = x + ((w - widthtxt) / 2)
         else:
-            image_x = x + ((widthdf - w) / 2)
-            diskfree_x = x
-        diskfree_y = osd.y + 55 - font.h
+            image_x = x + ((widthtxt - w) / 2)
+            text_x = x
+        text_y = osd.y + 55 - font.h
         w = osd.drawimage(diskimg, (image_x, osd.y + 7, -1, -1) )[0]
-        osd.write_text(self.diskfree, font, None, diskfree_x, diskfree_y, widthdf, font.h, 'center', 'top')
-        return w > widthdf and w or widthdf
+        osd.write_text(self.diskfree, font, None, text_x, text_y, widthtxt, font.h, 'center', 'top')
+        return w > widthtxt and w or widthtxt

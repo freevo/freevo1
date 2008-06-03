@@ -39,9 +39,23 @@ import string
 import types
 import re
 
-import config
+import kaa.imlib2 as imlib2
 
+import config
 from plugins.idlebar import IdleBarPlugin
+
+def calc_positions(osd, image_w, image_h, text_w, text_h):
+    if image_w >= text_w:
+        image_x = 0
+        text_x = ((image_w - text_w) / 2)
+    else:
+        image_x = ((text_w - image_w) / 2)
+        text_x = 0 
+    image_y = osd.y + 7
+    text_y = osd.y + 55 - text_h
+    width = image_w > text_w and image_w or text_w
+    return (image_x, image_y, text_x, text_y, width)
+
 
 class procstats(IdleBarPlugin):
     """
@@ -134,29 +148,37 @@ class procstats(IdleBarPlugin):
         self.lastused = used
         self.currentCpu = _('%s%%') % round(usage, self.precision)
 
+
     def draw(self, (type, object), x, osd):
         try:
             self.getStats()
         except:
             _debug_('[procstats]: Not working, this plugin is only tested with 2.4 and 2.6 kernels')
 
-        font = osd.get_font('small0')
-        widthmem = 0
-        widthcpu = 0
+        font = osd.get_font(config.OSD_IDLEBAR_FONT)
+        widthtot = 0
 
         if self.drawCpu == 1:
-            widthcpu = font.stringsize(self.currentCpu)
-            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/cpu.png'), (x, osd.y + 7, -1, -1))
-            osd.write_text(self.currentCpu, font, None, x + 15, osd.y + 55 - font.h, widthcpu, font.h, 'left', 'top')
+            image_file = os.path.join(config.ICON_DIR, 'misc', 'cpu.png')
+            w, h = imlib2.open(image_file).size
+            text_w = font.stringsize(self.currentCpu)
+            (image_x, image_y, text_x, text_y, width) = calc_positions(osd, w, h, text_w, font.h)
+            osd.draw_image(image_file, (x+image_x, image_y, -1, -1))
+            osd.write_text(self.currentCpu, font, None, x+text_x, text_y, text_w, font.h, 'center', 'top')
+            widthtot += width + 5
+            x += width + 5
 
         if self.drawMem == 1:
-            widthmem = font.stringsize(self.currentMem)
+            image_file = os.path.join(config.ICON_DIR, 'misc', 'memory.png')
+            w, h = imlib2.open(image_file).size
+            text_w = font.stringsize(self.currentMem)
+            (image_x, image_y, text_x, text_y, width) = calc_positions(osd, w, h, text_w, font.h)
+            osd.draw_image(image_file, (x+image_x, image_y, -1, -1))
+            osd.write_text(self.currentMem, font, None, x+text_x, text_y, text_w, font.h, 'center', 'top')
+            widthtot += width + 5
+            x += width + 5
 
-            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/memory.png'), (x + 15 + widthcpu, osd.y + 7, -1, -1))
-            osd.write_text(self.currentMem, font, None, x + 40 + widthcpu, osd.y + 55 - font.h, widthmem, font.h,
-                'left', 'top')
-
-        return widthmem + widthcpu + 15
+        return widthtot - 5
 
 
 #----------------------------------- SENSOR --------------------------------
@@ -261,6 +283,7 @@ class sensors(IdleBarPlugin):
 
             return '%s°' % temp
 
+
         def getSensorPath(self):
             """
             Find the subdirectory with the sensors, searches upto two levels
@@ -351,49 +374,47 @@ class sensors(IdleBarPlugin):
         @returns: the space taken by the images
         @rtype: int
         """
-        casetemp = None
-        widthcase = 0
-        widthram  = 0
+        widthtot  = 0
 
-        font  = osd.get_font('small0')
-        if self.hotstack != 0:
+        font = osd.get_font(config.OSD_IDLEBAR_FONT)
+        if self.hotstack:
             font.color = 0xff0000
-        elif font.color == 0xff0000 and self.hotstack == 0:
+        elif not self.hotstack and font.color == 0xff0000:
             font.color = 0xffffff
 
-        cputemp = self.cpu.temp()
-        widthcpu = font.stringsize(cputemp)
-        osd.draw_image(os.path.join(config.ICON_DIR, 'misc/cpu.png'), (x, osd.y + 8, -1, -1))
-        osd.write_text(cputemp, font, None, x + 15, osd.y + 55 - font.h, widthcpu, font.h, 'left', 'top')
-        widthcpu = max(widthcpu, 32) + 10
+        text = self.cpu.temp()
+        image_file = os.path.join(config.ICON_DIR, 'misc', 'cpu.png')
+        w, h = imlib2.open(image_file).size
+        text_w = font.stringsize(text)
+        (image_x, image_y, text_x, text_y, width) = calc_positions(osd, w, h, text_w, font.h)
+        osd.draw_image(image_file, (x+image_x, image_y, -1, -1))
+        osd.write_text(text, font, None, x+text_x, text_y, text_w, font.h, 'center', 'top')
+        widthtot += width + 5
+        x += width + 5
 
         if self.case:
-            casetemp = self.case.temp()
-
-            widthcase = font.stringsize(casetemp)
-            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/case.png'), (x + 15 + widthcpu, osd.y + 7, -1, -1))
-            osd.write_text(casetemp, font, None, x + 40 + widthcpu, osd.y + 55 - font.h, widthcase, font.h,
-                'left', 'top')
-            widthcase = max(widthcase, 32) + 10
+            text = self.case.temp()
+            image_file = os.path.join(config.ICON_DIR, 'misc', 'case.png')
+            w, h = imlib2.open(image_file).size
+            text_w = font.stringsize(text)
+            (image_x, image_y, text_x, text_y, width) = calc_positions(osd, w, h, text_w, font.h)
+            osd.draw_image(image_file, (x+image_x, image_y, -1, -1))
+            osd.write_text(text, font, None, x+text_x, text_y, text_w, font.h, 'center', 'top')
+            widthtot += width + 5
+            x += width + 5
 
         if self.ram:
             text = self.getRamStat()
-            widthram = font.stringsize(text)
-            if casetemp:
-                img_width = x + 15 + widthcpu + widthcase + 15
-            else:
-                img_width = x + 15 + widthcpu
-            osd.draw_image(os.path.join(config.ICON_DIR, 'misc/memory.png'), (img_width, osd.y + 7, -1, -1))
-            osd.write_text(text, font, None, img_width + 15, osd.y + 55 - font.h, widthram, font.h, 'left', 'top')
+            image_file = os.path.join(config.ICON_DIR, 'misc', 'memory.png')
+            w, h = imlib2.open(image_file).size
+            text_w = font.stringsize(text)
+            (image_x, image_y, text_x, text_y, width) = calc_positions(osd, w, h, text_w, font.h)
+            osd.draw_image(image_file, (x+image_x, image_y, -1, -1))
+            osd.write_text(text, font, None, x+text_x, text_y, text_w, font.h, 'center', 'top')
+            widthtot += width + 5
+            x += width + 5
 
-        if self.retwidth == 0:
-            self.retwidth = widthcpu + 15
-            if self.case:
-                self.retwidth = self.retwidth + widthcase + 12
-            if self.ram:
-                self.retwidth = self.retwidth + 15 + widthram
-
-        return self.retwidth
+        return widthtot - 5
 
 
 #----------------------------------- SENSOR2 -------------------------------
@@ -586,7 +607,7 @@ class sensors2(IdleBarPlugin):
         senswidth = 0
         img_width = x + 15
 
-        font  = osd.get_font('small0')
+        font  = osd.get_font(config.OSD_IDLEBAR_FONT)
         if self.hotstack != 0:
             font.color = 0xff0000
         elif font.color == 0xff0000 and self.hotstack == 0:

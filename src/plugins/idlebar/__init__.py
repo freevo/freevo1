@@ -114,7 +114,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 import skins.main.xml_skin
                 r = skins.main.xml_skin.Rectangle(0xffffff, bgcolor=None, size=1, radius=1)
                 osd.drawroundbox(x, osd.y, add_x, 15, r)
-                font  = osd.get_font('tiny0')
+                font  = osd.get_font(config.OSD_IDLEBAR_FONT)
                 name = p.plugin_name.split('.')[-1]
                 w = font.stringsize(name)
                 h = font.font.height
@@ -205,7 +205,7 @@ class clock(IdleBarPlugin):
         """
         _debug_('clock.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 2)
         clock = Unicode(time.strftime(self.timeformat))
-        font  = osd.get_font('clock')
+        font  = osd.get_font(config.OSD_IDLEBAR_CLOCK_FONT)
         pad_x = 10
         idlebar_height = 60
 
@@ -220,7 +220,7 @@ class clock(IdleBarPlugin):
         if config.DEBUG_IDLEBAR:
             import skins.main.xml_skin
             name = 'clock'
-            tfont = osd.get_font('tiny0')
+            tfont = osd.get_font(config.OSD_IDLEBAR_FONT)
             cw = tfont.stringsize(name)
             ch = tfont.font.height
             r = skins.main.xml_skin.Rectangle(0xffffff, bgcolor=None, size=1, radius=1)

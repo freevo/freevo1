@@ -567,13 +567,13 @@ class Skin_Area:
                         if os.path.isfile(cache) and \
                                os.stat(cache)[stat.ST_MTIME] > \
                                os.stat(imagefile)[stat.ST_MTIME]:
-                            image = pygame.image.fromstring(file(cache).read(), (bg.width,bg.height), 'RGBA')
+                            image = pygame.image.fromstring(file(cache).read(), (bg.width, bg.height), 'RGBA')
                             self.imagecache[cname] = image
 
                     if not image:
                         image = osd.loadbitmap(imagefile)
                         if image:
-                            image = pygamesurface_imlib2_scale(image, (bg.width,bg.height))
+                            image = pygamesurface_imlib2_scale(image, (bg.width, bg.height))
                             f = vfs.open(cache, 'w')
                             f.write(pygame.image.tostring(image, 'RGBA'))
                             f.close()
@@ -615,15 +615,14 @@ class Skin_Area:
 
 
     def drawstring(self, text, font, content, x=-1, y=-1, width=None, height=None,
-                   align_h = None, align_v = None, mode='hard', ellipses='...',
-                   dim=True):
+                   align_h=None, align_v=None, mode='hard', ellipses='...', dim=True):
         """
         writes a text ... or better stores the information about this call
         in a variable. The real drawing is done inside draw()
         """
 
         if not text:
-            return (0,0,0,0)
+            return (0, 0, 0, 0)
 
         # set default values from 'content'
         if x == -1:
@@ -657,7 +656,7 @@ class Skin_Area:
             height2 = font.h + 2
 
         self.tmp_objects.text.append((x, y, x+width, y+height2, text, font, height,
-                                            align_h, align_v, mode, ellipses, dim))
+            align_h, align_v, mode, ellipses, dim))
 
 
     def loadimage(self, image, val, redraw=True):
@@ -681,7 +680,7 @@ class Skin_Area:
         if not cimage:
             cimage = osd.loadbitmap(image)
             if not cimage:
-                return
+                return None, 0, 0
             if w == -1:
                 w = h  * cimage.get_width() / cimage.get_height()
             if h == -1:
@@ -691,7 +690,7 @@ class Skin_Area:
             if w > 0 and h > 0:
                 cimage = pygamesurface_imlib2_scale(cimage, (w, h))
             self.imagecache[cname] = cimage
-        return cimage
+        return cimage, w, h
 
 
     def drawimage(self, image, val, background=False):
@@ -699,18 +698,17 @@ class Skin_Area:
         draws an image ... or better stores the information about this call
         in a variable. The real drawing is done inside draw()
         """
-
         if not image:
-            return 0,0
+            return 0, 0
 
         if isstring(image):
             if isinstance(val, tuple):
-                image = self.loadimage(String(image), val[2:])
+                image, w, h = self.loadimage(String(image), val[2:])
             else:
-                image = self.loadimage(String(image), val)
+                image, w, h = self.loadimage(String(image), val)
 
         if not image:
-            return 0,0
+            return 0, 0
 
         if isinstance(val, tuple):
             if background:

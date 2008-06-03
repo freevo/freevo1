@@ -38,7 +38,7 @@ try:
 except:
     _debug_(_('You need pylcd to run "lcd2x16" plugin.'), DERROR)
 
-class LcdFrame():
+class LcdFrame(object):
     def __init__(self, lcd, name, col, start, end):
         """
         Class to provide LCD-frames with priorities and timers.

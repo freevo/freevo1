@@ -970,6 +970,13 @@ CACHE_IMAGES = 1
 #     'menu.select'  : None
 # }
 
+#
+# Padding between icons
+#
+# OSD_IDLEBAR_PADDING = 20
+# OSD_IDLEBAR_FONT = 'small0'
+# OSD_IDLEBAR_CLOCK_FONT = 'clock'
+
 # ======================================================================
 # Freevo remote control settings:
 # ======================================================================

@@ -78,7 +78,7 @@ class PluginInterface(IdleBarPlugin):
 
     def draw(self, (type, object), x, osd):
         self.getstatus()
-        font = osd.get_font('small0')
+        font = osd.get_font(config.OSD_IDLEBAR_FONT)
         widthmt = font.stringsize(config.PROGACTIVE_PROGRAM)
         osd.write_text(config.PROGACTIVE_PROGRAM, font, None, x + 15, osd.y + 55 - font.h, \
             widthmt, font.h, 'left', 'top')

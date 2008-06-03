@@ -71,7 +71,7 @@ class MultiMail(IdleBarPlugin):
     def draw(self, (type, object), x, osd):
         if self.unread > 0:
             image_width = osd.draw_image(self.MAILIMAGE, (x, osd.y + 2, -1, -1))[0]
-            font  = osd.get_font('weather')
+            font  = osd.get_font(config.OSD_IDLEBAR_FONT)
             unread_str = '%3s' % self.unread
             text_width = font.stringsize(unread_str)
             osd.write_text(unread_str, font, None, x, osd.y + 55 - font.h, text_width, font.h, 'left', 'top')

@@ -32,9 +32,11 @@ import time
 import string
 from threading import Thread, Condition
 
-# freevo modules
+import kaa.imlib2 as imlib2
+
+import config
+import plugin
 from plugins.idlebar import IdleBarPlugin
-import plugin, config
 import util.pymetar as pymetar
 
 
@@ -169,9 +171,9 @@ class PluginInterface(IdleBarPlugin):
                 # First time around or when there is no network there may be no weather cache file
                 _debug_('cachetime=%r diff=%s' % (cachetime, cachetime - self.cachetime), 2)
                 if cachetime:
-                    cachefile = open(self.WEATHERCACHE,'r')
+                    cachefile = open(self.WEATHERCACHE, 'r')
                     newlist = map(string.rstrip, cachefile.readlines())
-                    temperature,icon = newlist
+                    temperature, icon = newlist
                     cachefile.close()
                     self.cachetime = cachetime
                     _debug_('checkweather returning %r' % ((temperature, icon),), 2)
@@ -186,12 +188,28 @@ class PluginInterface(IdleBarPlugin):
             _debug_('checkweather condition.released', 2)
 
 
+    def calc_positions(self, osd, image_w, image_h, text_w, text_h):
+        if image_w >= text_w:
+            image_x = 0
+            text_x = ((image_w - text_w) / 2)
+        else:
+            image_x = ((text_w - image_w) / 2)
+            text_x = 0 
+        image_y = osd.y + 7
+        text_y = osd.y + 55 - text_h
+        width = image_w > text_w and image_w or text_w
+        return (image_x, image_y, text_x, text_y, width)
+
+
     def draw(self, (type, object), x, osd):
         _debug_('draw((type=%r, object=%r), x=%r, osd=%r)' % (type, object, x, osd), 2)
-        temp,icon = self.checkweather()
-        font  = osd.get_font('small0')
-        osd.draw_image(os.path.join(config.ICON_DIR, 'weather/' + icon), (x, osd.y + 15, -1, -1))
-        temp = u'%s\xb0' % temp
-        width = font.stringsize(temp)
-        osd.write_text(temp, font, None, x + 15, osd.y + 55 - font.h, width, font.h, 'left', 'top')
-        return width + 15
+        temp, icon = self.checkweather()
+        image_file = os.path.join(config.ICON_DIR, 'weather', icon)
+        w, h = imlib2.open(image_file).size
+        temperature = u'%s\xb0' % temp
+        font = osd.get_font(config.OSD_IDLEBAR_FONT)
+        widthtxt = font.stringsize(temperature)
+        (image_x, image_y, text_x, text_y, width) = self.calc_positions(osd, w, h, widthtxt, font.h)
+        osd.draw_image(image_file, (x+image_x, image_y, -1, -1))
+        osd.write_text(temperature, font, None, x+text_x, text_y, widthtxt, font.h, 'center', 'top')
+        return width

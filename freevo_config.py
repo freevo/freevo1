@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.24
+LOCAL_CONF_VERSION = 5.25
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -364,6 +364,10 @@ LOCAL_CONF_CHANGES = [
      """),
     (5.24,
      """ Added POLL_TIME to allow custom poll rates to be set, default 0.01 seconds
+     """),
+    (5.25,
+     """ Added OSD_IDLEBAR_PADDING to allow the space between idlebar items to be set
+     Added OSD_IDLEBAR_FONT and OSD_IDLEBAR_CLOCK_FONT to allow idlebar fonts to be set
      """),
 ]
 
@@ -1444,6 +1448,8 @@ OSD_SOUNDS= {
 # Padding between icons
 #
 OSD_IDLEBAR_PADDING = 20
+OSD_IDLEBAR_FONT = 'small0'
+OSD_IDLEBAR_CLOCK_FONT = 'clock'
 
 
 # ======================================================================

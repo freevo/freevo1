@@ -871,12 +871,13 @@
         </font>
         -->
 
-        <font label="clock" name="Arial_Bold" size="12" color="default0"/>
+        <font label="clock" name="Arial_Bold" size="16" color="0xffffff"/>
         <!-- for some reason shadow doesn't work when the screen is wide
         <font label="clock" name="Arial_Bold" size="10" color="default0">
             <shadow visible="yes" color="0x000000" border="yes"/>
         </font>
         -->
+        <font label="clock12" name="Arial_Bold" size="12" color="default0"/>
 
         <!-- Basic Fonts -->
 
