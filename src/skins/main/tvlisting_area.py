@@ -177,14 +177,14 @@ class TVListing_Area(Skin_Area):
         leftarrow = None
         if area.images['leftarrow']:
             i = area.images['leftarrow']
-            leftarrow = self.loadimage(i.filename, i)
+            leftarrow, w, h = self.loadimage(i.filename, i)
             if leftarrow:
                 leftarrow_size = (leftarrow.get_width(), leftarrow.get_height())
 
         rightarrow = None
         if area.images['rightarrow']:
             i = area.images['rightarrow']
-            rightarrow = self.loadimage(i.filename, i)
+            rightarrow, w, h = self.loadimage(i.filename, i)
             if rightarrow:
                 rightarrow_size = (rightarrow.get_width(), rightarrow.get_height())
 
@@ -283,8 +283,7 @@ class TVListing_Area(Skin_Area):
 
             channel_logo = config.TV_LOGOS + '/' + to_listing[i].id + '.png'
             if os.path.isfile(channel_logo):
-                channel_logo = self.loadimage(channel_logo, (r.width+1-2*r.size,
-                                                              item_h-2*r.size))
+                channel_logo, w, h = self.loadimage(channel_logo, (r.width+1-2*r.size, item_h-2*r.size))
             else:
                 channel_logo = None
 

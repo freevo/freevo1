@@ -44,7 +44,7 @@ class Listing_Area(Skin_Area):
 
     def __init__(self):
         Skin_Area.__init__(self, 'listing')
-        self.last_choices = ( None, None )
+        self.last_choices = (None, None)
         self.last_get_items_geometry = [ None, None ]
 
 
@@ -58,12 +58,12 @@ class Listing_Area(Skin_Area):
         if not len(menu.choices):
             return self.last_get_items_geometry[1]
 
-        if self.last_get_items_geometry[0] == ( menu, settings, display_style ) and \
+        if self.last_get_items_geometry[0] == (menu, settings, display_style) and \
                hasattr(menu, 'skin_force_text_view'):
             return self.last_get_items_geometry[1]
 
         # store the old values in case we are called by ItemsPerMenuPage
-        backup = ( self.area_val, self.layout)
+        backup = (self.area_val, self.layout)
 
         self.display_style = display_style
         if menu.force_skin_layout != -1:
@@ -74,7 +74,7 @@ class Listing_Area(Skin_Area):
 
         content   = self.calc_geometry(self.layout.content, copy_object=True)
 
-        self.last_get_items_geometry[0] = ( menu, settings, display_style )
+        self.last_get_items_geometry[0] = (menu, settings, display_style)
 
         if content.type == 'text':
             items_w = content.width
@@ -235,12 +235,12 @@ class Listing_Area(Skin_Area):
         tvs_shortname = True
 
         for choice in menuw.menu_items:
-            if content.types.has_key( '%s selected' % choice.type ):
+            if content.types.has_key('%s selected' % choice.type):
                 s_val = content.types[ '%s selected' % choice.type ]
             else:
                 s_val = content.types[ 'selected' ]
 
-            if content.types.has_key( choice.type ):
+            if content.types.has_key(choice.type):
                 n_val = content.types[ choice.type ]
             else:
                 n_val = content.types['default']
@@ -256,7 +256,7 @@ class Listing_Area(Skin_Area):
                 text = "unknown"
 
             type_image = None
-            if hasattr( val, 'icon' ):
+            if hasattr(val, 'icon'):
                 type_image = val.icon
 
             if not choice.icon and not type_image:
@@ -274,17 +274,14 @@ class Listing_Area(Skin_Area):
                 image = None
                 align = val.align or content.align
 
-                if choice != menu.selected and hasattr( choice, 'outicon' ) and \
+                if choice != menu.selected and hasattr(choice, 'outicon') and \
                        choice.outicon:
-                    image = self.loadimage(choice.outicon, (vspace-content.spacing,
-                                                            vspace-content.spacing))
+                    image, w, h = self.loadimage(choice.outicon, (vspace-content.spacing, vspace-content.spacing))
                 elif choice.icon:
-                    image = self.loadimage(choice.icon, (vspace-content.spacing,
-                                                         vspace-content.spacing))
+                    image, w, h = self.loadimage(choice.icon, (vspace-content.spacing, vspace-content.spacing))
                 if not image and type_image:
-                    image = self.loadimage( settings.icon_dir + '/' + type_image,
-                                             ( vspace-content.spacing,
-                                               vspace-content.spacing ) )
+                    image, w, h = self.loadimage(settings.icon_dir + '/' + type_image,
+                        (vspace-content.spacing, vspace-content.spacing))
                 x_icon = 0
                 if image:
                     mx = x0
@@ -303,13 +300,13 @@ class Listing_Area(Skin_Area):
                         min_rx = 0
                         max_rw = width
                         if r1:
-                            min_rx = min( min_rx, r1.x )
-                            max_rw = max( max_rw, r1.width )
+                            min_rx = min(min_rx, r1.x)
+                            max_rw = max(max_rw, r1.width)
                         if r2:
-                            min_rx = min( min_rx, r2.x )
-                            max_rw = max( max_rw, r2.width )
+                            min_rx = min(min_rx, r2.x)
+                            max_rw = max(max_rw, r2.width)
 
-                        mx = x0 + width + hskip + ( max_rw + min_rx - width ) - icon_x
+                        mx = x0 + width + hskip + (max_rw + min_rx - width) - icon_x
                         x_icon = 0
                     self.drawimage(image, (mx, y0))
 

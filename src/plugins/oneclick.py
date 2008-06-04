@@ -947,7 +947,6 @@ class WeatherBaseScreen(skin.Area):
         y += y_inc
         self.day_item(x_col1, _('UV Index'), x_col2, self.parent.weather.getUvType(), y)
 
-
         # draw current condition image
         x_start = self.content.x + self.xscale(480)
         y_start = self.content.y + self.yscale(40)

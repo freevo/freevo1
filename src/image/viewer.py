@@ -120,13 +120,13 @@ class ImageViewer(GUIObject):
             image = self.osd.loadbitmap(filename, cache=self.bitmapcache)
         else:
             # Using Container-Image
-            image = item.loadimage()
+            image, w, h = item.loadimage()
 
         rc.app(self)
 
         if not image:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
-            self.osd.drawstringframed(_('Can\'t Open Image\n\'%s\'') % Unicode(filename),
+            self.osd.drawstringframed(_('Can\'t Open Image\n"%s"') % Unicode(filename),
                 config.OSD_OVERSCAN_LEFT + 20, config.OSD_OVERSCAN_TOP + 20,
                 self.osd.width - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT) - 40,
                 self.osd.height - (config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM) - 40,
