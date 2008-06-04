@@ -17,7 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 == Release 1.8.2 (2008-08-25) ==
 --------------------------------
 
- * Nothing different from 1.7.9
+ * Fixed idlebar fonts for wide-screen TVs (B#1981503)
 
 == Release 1.7.9 (2008-08-25) ==
 --------------------------------
@@ -26,6 +26,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Fixed audio scrobbler for protocol 1.2 (B#1967805)
  * Fixed audio last.fm typo (B#1981236)
  * Fixed IMDB to use new Plot (B#1982159)
+ * Fixed webserver help plugins module to allow non-ascii characters (B#1983965)
 
 == Release 1.8.1 (2008-05-26) ==
 --------------------------------

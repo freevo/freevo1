@@ -273,7 +273,7 @@ def html_info(plugin_name, all_plugins):
             else:
                 ret += '<br><b>Description</b>:'
                 ret += '<p>'
-                tmp  = desc
+                tmp  = Unicode(desc)
                 desc = []
                 for block in tmp.split('\n\n'):
                     for line in block.split('\n'):
@@ -325,9 +325,9 @@ def html_info(plugin_name, all_plugins):
 
 
 def wiki_word(s, mode):
-    '''
+    """
     Need to escape mixed case words for the wiki
-    '''
+    """
     if mode == 'moin':
         return s
     needs_pling=re.compile('^([A-Z]+[^.]*[A-Z]+[^.]*)')
@@ -475,7 +475,7 @@ if __name__ == '__main__':
     elif len(sys.argv)>1 and sys.argv[1] == '-html':
         all_plugins = parse_plugins()
 
-        print '''<html>
+        print """<html>
       <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=iso-8859-1">
         <title>Freevo Plugins</title>
@@ -483,7 +483,7 @@ if __name__ == '__main__':
       </head>
       <body>
         <font class="headline" size="+3">Freevo Plugin List</font>
-        <p><b>Index</b><ol>'''
+        <p><b>Index</b><ol>"""
 
         for p in all_plugins:
             print '<li><a href="#%s">%s</a></li>' % (p[0], p[0])
