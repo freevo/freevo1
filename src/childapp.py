@@ -153,7 +153,7 @@ class ChildApp:
             except Exception, why:
                 print why
         except OSError, why:
-            _debug_('Cannot run %r: %s' % (command_str, e), DERROR)
+            _debug_('Cannot run %r: %s' % (command_str, why), DERROR)
             self.ready = False
             return
 
