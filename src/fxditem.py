@@ -28,9 +28,9 @@
 Create items out of fxd (Freevo eXtended Data) files
 
 If you want to expand the fxd file with a new tag below <freevo>, you can
-register a callback here. Create a class based on FXDItem (same __init__
-signature). The 'parser' is something from util.fxdparser, which gets the real
-callback. After parsing, the variable 'items' from the objects will be
+register a callback here. Create a class based on FXDItem, with the same
+__init__ signature. The 'parser' is something from util.fxdparser, which gets
+the real callback. After parsing, the variable 'items' from the objects will be
 returned.
 
 Register your handler with the register function. 'types' is a list of display
@@ -39,8 +39,8 @@ this class) which is a subclass of FXDItem.
 
 If the fxd files 'covers' a real item like the movie information cover
 real movie files, please do:
-    a) add the fxd file as 'fxd_file' memeber variable to the new item
-    b) add the files as list _fxd_covered_ to the item
+    1. add the fxd file as 'fxd_file' memeber variable to the new item
+    2. add the files as list _fxd_covered_ to the item
 """
 
 import copy

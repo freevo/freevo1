@@ -1,11 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# lcd2.py - use PyLCD to display menus and players on a display
+# Use PyLCD to display menus and players on a LCD display
 # -----------------------------------------------------------------------
-#
-# Notes:
-#    To activate, put the following line in local_conf.py:
-#       plugin.activate('lcd2')
+# $Id$
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -26,6 +23,14 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+
+"""
+Plug-in to display menus and players on a LCD display
+
+To activate, put the following line in local_conf.py::
+
+    plugin.activate('lcd2')
+"""
 
 import config
 import plugin
@@ -75,8 +80,8 @@ class PluginInterface(plugin.DaemonPlugin):
     This plugin is a customized version of lcd.py, which fits not well for 2x16 lcds.
 
     Requirements:
-       * lcdproc: installed and LCDd running. (http://lcdproc.sourceforge.net/)
-       * pylcd: installed (http://www.schwarzvogel.de/software-pylcd.shtml)
+       - lcdproc: installed and LCDd running. (http://lcdproc.sourceforge.net/)
+       - pylcd: installed (http://www.schwarzvogel.de/software-pylcd.shtml)
 
     To activate this plugin, just put the following line at the end of your
     local_conf.py file::

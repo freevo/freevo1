@@ -3,14 +3,6 @@
 # Use PyLCD to display menus and players
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-#    To activate, put the following line in local_conf.py:
-#       plugin.activate('lcd')
-# Todo:
-#    1) Use Threads. PyLCD is too blocking!
-#    2) Have Movie Player, TV Player and Image viewer to use LCD
-#    3) Better (and more) LCD screens.
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -32,6 +24,18 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Plug-in to display menus and players on a LCD display
+
+To activate, put the following line in local_conf.py::
+
+    plugin.activate('lcd')
+
+Todo:
+    1. Use Threads. PyLCD is too blocking!
+    2. Have Movie Player, TV Player and Image viewer to use LCD
+    3. Better (and more) LCD screens.
+"""
 
 from menu import MenuItem
 import copy

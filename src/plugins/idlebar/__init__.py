@@ -3,18 +3,6 @@
 # IdleBar plug-in
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Documentation moved to the corresponding classes, so that the help
-# interface returns something usefull.
-# Available plugins:
-#       idlebar
-#       idlebar.clock
-#       idlebar.cdstatus
-#       idlebar.mail
-#       idlebar.tv
-#       idlebar.weather
-#       idlebar.holidays
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -36,6 +24,21 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Idlebar plug-in modules.
+
+Documentation moved to the corresponding classes, so that the help interface
+returns something useful.
+
+Available plugins:
+    - idlebar
+    - idlebar.clock
+    - idlebar.cdstatus
+    - idlebar.mail
+    - idlebar.tv
+    - idlebar.weather
+    - idlebar.holidays
+"""
 # python modules
 import time
 import os
@@ -147,6 +150,8 @@ class PluginInterface(plugin.DaemonPlugin):
 
 class IdleBarPlugin(plugin.Plugin):
     """
+    Idlebar activaton plug-in.
+
     To activate the idle bar, put the following in your local_conf.py::
 
         plugin.activate('idlebar')
@@ -166,8 +171,8 @@ class IdleBarPlugin(plugin.Plugin):
 
 
     def draw(self, (type, object), x, osd):
-        _debug_('IdleBarPlugin.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 2)
-        return
+        """ Abstract method to draw the idlebar instance"""
+        pass
 
 
 
@@ -244,6 +249,7 @@ class logo(IdleBarPlugin):
 
 
     def draw(self, (type, object), x, osd):
+        """ Draw the logo """
         _debug_('logo.draw(type=%r, object=%r, x=%r, osd=%r)' % (type, object, x, osd), 2)
         if not self.image:
             image = osd.settings.images['logo']
