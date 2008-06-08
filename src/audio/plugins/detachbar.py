@@ -1,13 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# detachbar.py - AudioBar plugin
-# by: Viggo Fredriksen <viggo@katatonic.org>
+# Audio DetachBar plug-in
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -30,11 +25,18 @@
 # -----------------------------------------------------------------------
 
 
+"""
+Audio DetachBar plug-in
+
+Author: Viggo Fredriksen <viggo@katatonic.org>
+"""
+
 # python specific
 import time
 import rc
 
 # freevo specific
+import config
 import skin
 import audio.player
 import plugin
@@ -62,7 +64,6 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'audio.detachbar'
         self.update_registered = False
-
         # tunables
         self.TimeOut  = 3  # 3 seconds till we hide the bar
         self.hide()
@@ -177,36 +178,36 @@ class PluginInterface(plugin.DaemonPlugin):
                 font = osd.get_font('info value')
 
             self.calculatesizes(osd, font)
+            print 'DJW:y=%s x=%s w=%s t_y=%s t_x=%s t_w=%s' % (self.y, self.x, self.w, self.t_y, self.t_x, self.t_w)
 
             if self.image:
-                origin = self.x-70
-                width  = self.w+60
+                x = self.x - self.h
+                width  = self.w + 70 - 10
             else:
-                origin = self.x
-                width  = self.w
+                x = self.x
+                width = self.w
 
             if not self.idlebar:
-                osd.drawroundbox(origin, self.y, width, osd.height,
-                    (0xf0ffffffL, 5, 0xb0000000L, 10))
+                y = self.y - 10
+                height = self.h
+                osd.drawroundbox(x, y, width, height, (0xf0ffffffL, 5, 0xb0000000L, 10))
 
             if self.image:
-                osd.draw_image(self.image, (origin+5, self.y, 50, 50))
+                osd.draw_image(self.image, (x+5, self.y, 50, 50))
 
             y = self.t_y
 
             for r in self.render:
-                osd.write_text( r, font, None, self.t_x, y, self.t_w,
-                                self.font_h, 'center', 'center')
-                y+=self.font_h
+                osd.write_text(r, font, None, self.t_x, y, self.t_w, self.font_h, 'center', 'center')
+                y += self.font_h
 
             if self.player.item.length:
-                progress = '%s/%s' % ( self.formattime(self.player.item.elapsed),
-                                       self.formattime(self.player.item.length))
+                progress = '%s/%s' % (self.formattime(self.player.item.elapsed),
+                    self.formattime(self.player.item.length))
             else:
                 progress = '%s' % self.formattime(self.player.item.elapsed)
 
-            osd.write_text( progress, font, None, self.t_x, y,
-                            self.t_w, self.font_h , 'center', 'center')
+            osd.write_text(progress, font, None, self.t_x, y, self.t_w, self.font_h, 'center', 'center')
         return 0
 
 
@@ -222,7 +223,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.image =  self.player.item.image
         # artist : album
         if info['artist'] and info['album']:
-            self.render += [ '%s : %s' % ( info['artist'], info['album']) ]
+            self.render += [ '%s : %s' % (info['artist'], info['album']) ]
         elif info['album']:
             self.render += [ info['album'] ]
         elif info['artist']:
@@ -230,7 +231,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         # trackno - title
         if info['trackno'] and info['title']:
-            self.render += [ '%s - %s' % ( info['trackno'], info['title'] ) ]
+            self.render += [ '%s - %s' % (info['trackno'], info['title'] ) ]
         elif info['title']:
             self.render += [ info['title'] ]
 
@@ -243,7 +244,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         sizecalcs is not necessery on every pass
         """
-        _debug_('calculatesizes(self, osd, font)', 3)
+        _debug_('calculatesizes(osd, font)', 3)
         if not hasattr(self, 'idlebar'):
             self.idlebar = plugin.getbyname('idlebar')
             if self.idlebar:
@@ -273,20 +274,20 @@ class PluginInterface(plugin.DaemonPlugin):
                 bar_height += self.font_h
                 bar_width = max(bar_width, font.font.stringsize(r))
 
-            self.y = (total_height - bar_height) - osd.y - pad - pad_internal
-            self.x = (total_width - bar_width) - osd.x - pad - pad_internal
+            y = total_height - bar_height - config.OSD_OVERSCAN_BOTTOM - skin.attr_global_dict['buttonbar_height']
+            x = total_width - bar_width - config.OSD_OVERSCAN_RIGHT
+            self.y = y - osd.y - pad - pad_internal
+            self.x = x - osd.x - pad - pad_internal
             self.w = bar_width + pad + pad_internal + 10
+            self.h = 70
             self.t_y = self.y + pad_internal
             self.t_x = self.x + pad_internal
-            self.t_w = bar_width + 5 # incase of shadow
+            self.t_w = bar_width + 5 # in case of shadow
 
         if self.idlebar:
             self.y = osd.y + 5
+            self.x = self.image and self.idlebar.free_space + 70 or self.idlebar.free_space
             self.t_y = self.y
-            if self.image:
-                self.x = self.idlebar.free_space + 70
-            else:
-                self.x = self.idlebar.free_space
             self.t_x = self.x
             self.t_w = min(self.t_w, self.idlebar_max - self.x - 30)
 

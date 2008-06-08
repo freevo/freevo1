@@ -388,6 +388,7 @@ def umount_all():
     """
     umount all mounted directories
     """
+    _debug_('umount_all()', 2)
     global mounted_dirs
     for d in copy.copy(mounted_dirs):
         umount(d)

@@ -105,13 +105,18 @@ class Audioscrobbler(object):
         @param data: Is the POST data.
         @param lines: return a list of lines, otherwise data block.
         @returns: reply from request
+        @raise AudioscrobblerException: when a problem has been detected.
         """
         if DEBUG:
             print 'url=%r, data=%r' % (url, data)
         if lines:
             reply = []
             try:
-                lines = urllib.urlopen(url, data).readlines()
+                f = urllib.urlopen(url, data)
+                if f is None:
+                    raise AudioscrobblerException('Cannot open url', url)
+                lines = f.readlines()
+                f.close()
                 if lines is None:
                     return []
                 for line in lines:

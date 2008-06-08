@@ -184,7 +184,7 @@ class PluginInterface(plugin.DaemonPlugin):
         track     = player.getattr('title') or player.getattr('name')
         starttime = self.starttime
         length    = player.getattr('length')
-        secs      = int(length.split(":")[0])*60 + int(length.split(":")[1])
+        secs      = length and int(length.split(":")[0])*60 + int(length.split(":")[1]) or 0
         album     = player.getattr('album')
         trackno   = player.getattr('trackno')
         elapsed   = time.time() - self.starttime

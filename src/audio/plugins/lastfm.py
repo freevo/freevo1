@@ -143,7 +143,7 @@ class LastFMItem(Item):
 
     def play(self, arg=None, menuw=None):
         _debug_('play(arg=%r, menuw=%r)' % (arg, menu), 2)
-        self.elapsed = 0
+        self.start_time = time.time()
         if not self.menuw:
             self.menuw = menuw
 
@@ -158,7 +158,37 @@ class LastFMItem(Item):
 
 class LastFMPlayerGUI(PlayerGUI):
     """
+    LastFM Player
     """
+    class WSItem:
+        """
+        LastFM web-services item
+        """
+        def __init__(self):
+            """
+            Create an instance of LastFM web-services item
+            """
+            self.price = ''
+            self.shopname = ''
+            self.clickthrulink = ''
+            self.streaming = False
+            self.discovery = 0
+            self.station =  ''
+            self.artist = ''
+            self.artist_url = ''
+            self.track = ''
+            self.track_url = ''
+            self.album = ''
+            self.album_url = ''
+            self.albumcover_small = ''
+            self.albumcover_medium = ''
+            self.albumcover_large = ''
+            self.trackduration = 0
+            self.tracknumber = 0
+            self.radiomode = 0
+            self.recordtoprofile = ''
+
+
     def __init__(self, item, webservices, menuw=None):
         _debug_('LastFMPlayerGUI.__init__(item=%r, menuw=%r)' % (item, menu), 2)
         PlayerGUI.__init__(self, item, menuw)
@@ -166,12 +196,14 @@ class LastFMPlayerGUI(PlayerGUI):
         self.webservices.tune_lastfm(item.station_url)
         self.visible = menuw is not None
         self.menuw = menuw
+        self.wsitem = LastFMPlayerGUI.WSItem()
         self.item = item
         self.player  = None
         self.running = False
         self.info_time = 2
         self.pic_url = None
         self.track_url = None
+        self.start_time = time.time()
         config.EVENTS['audio']['RIGHT'] = Event(FUNCTION_CALL, arg=self.skip)
         config.EVENTS['audio']['1'] = Event(FUNCTION_CALL, arg=self.love)
         config.EVENTS['audio']['9'] = Event(FUNCTION_CALL, arg=self.ban)
@@ -204,6 +236,8 @@ class LastFMPlayerGUI(PlayerGUI):
             return
         if not self.running:
             return
+        elapsed = int(time.time() - self.start_time + 0.5)
+        self.item.elapsed = '%d:%02d' % (elapsed / 60, elapsed % 60)
 
         if time.time() > self.info_time:
             self.song_info()
@@ -216,33 +250,30 @@ class LastFMPlayerGUI(PlayerGUI):
         lines = self.webservices.song_info()
         try:
             for line in lines:
-                exec('self.item.%s = "%s"' % tuple(line.split('=', 1)))
+                exec('self.wsitem.%s = "%s"' % tuple(line.split('=', 1)))
             # Adjust items to match freevo's
-            if hasattr(self.item, 'track'):
-                self.item.title = self.item.track
-            if hasattr(self.item, 'tracknumber'):
-                self.item.trackno = self.item.tracknumber
-            if hasattr(self.item, 'trackduration'):
-                self.item.length = int(self.item.trackduration)
-            else:
-                self.item.length = 0
+            self.item.title = self.wsitem.track
+            self.item.artist = self.wsitem.artist
+            self.item.album = self.wsitem.album
+            self.item.trackno = int(self.wsitem.tracknumber)
+            self.item.length = int(self.wsitem.trackduration)
 
-            if hasattr(self.item, 'track_url'):
-                if self.track_url != self.item.track_url:
-                    self.track_url = self.item.track_url
-                    # check song info again 12 seconds before the end of the track
-                    self.info_time = time.time() + self.item.length - 12
-                    self.item.image = None
-                else:
-                    self.info_time = time.time() + 2
+            if self.track_url != self.wsitem.track_url:
+                self.track_url = self.wsitem.track_url
+                self.start_time = time.time()
+                # check song info again 2 seconds before the end of the track
+                self.info_time = self.start_time + self.item.length - 2
+                self.item.image = None
+            else:
+                self.info_time = time.time() + 2
 
             if self.item.image is None:
                 pic_url = None
-                if hasattr(self.item, 'albumcover_large'):
-                    pic_url = self.item.albumcover_large
-                elif hasattr(self.item, 'albumcover_medium'):
-                    pic_url = self.item.albumcover_medium
-                elif hasattr(self.item, 'albumcover_small'):
+                if self.wsitem.albumcover_large:
+                    pic_url = self.wsitem.albumcover_large
+                elif self.wsitem.albumcover_medium:
+                    pic_url = self.wsitem.albumcover_medium
+                elif self.wsitem.albumcover_small:
                     pic_url = self.item.albumcover_small
                 if self.pic_url != pic_url:
                     self.pic_url = pic_url
@@ -318,6 +349,7 @@ class LastFMWebServices:
         try:
             lines = self._urlopen(login_url)
             for line in lines:
+                print line
                 # this is a bit dangerous if a variable clashes
                 exec('self.%s = "%s"' % tuple(line.split('=', 1)))
             # Save the lastfm session information
@@ -349,25 +381,6 @@ class LastFMWebServices:
     def song_info(self):
         """
         Return Song Info and album Cover
-
-        'price'=''
-        'shopname'=''
-        'clickthrulink'=''
-        'streaming'='true'
-        'discovery'='0'
-        'station'=' oldies Tag Radio'
-        'artist'='The Foundations'
-        'artist_url'='http://www.last.fm/music/The+Foundations'
-        'track'='Build Me Up Buttercup'
-        'track_url'='http://www.last.fm/music/The+Foundations/_/Build+Me+Up+Buttercup'
-        'album'='Sitting on the Dock of the Bay'
-        'album_url'='http://www.last.fm/music/The+Foundations/Sitting+on+the+Dock+of+the+Bay'
-        'albumcover_small'='http://cdn.last.fm/coverart/50x50/20997.jpg'
-        'albumcover_medium'='http://cdn.last.fm/coverart/50x50/20997.jpg'
-        'albumcover_large'='http://cdn.last.fm/coverart/50x50/20997.jpg'
-        'trackduration'='172'
-        'radiomode'='1'
-        'recordtoprofile'=''
         """
         _debug_('song_info()', 2)
         if not self.session:
