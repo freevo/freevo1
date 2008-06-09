@@ -90,6 +90,13 @@ class RadioMainMenuItem(MenuItem):
         self.name = _('Radio')
 
 
+    def config(self):
+        return [
+            ('RADIO_CMD', None, 'Command to play the radio'),
+            ('RADIO_STATIONS', None, 'List of radio stations'),
+        ]
+
+
     def actions(self):
         """
         Get a list of actions for this menu item
@@ -126,6 +133,15 @@ class RadioItem(Item):
     actions for different ways of running commands and for displaying stdout
     and stderr of last command run.
     """
+    def __init__(self):
+        Item.__init__(self)
+        self.title = None
+        self.artist = None
+        self.album = None
+        self.image = None
+        self.length = 0
+
+
     def actions(self):
         """ Get a list of actions for this item """
         items = [ (self.play, _('Listen to Radio Station')) ]
@@ -182,6 +198,8 @@ class RadioPlayerGUI(PlayerGUI):
         _debug_('RadioPlayerGUI.__init__(item=%r, menuw=%r)' % (item, menu), 2)
         PlayerGUI.__init__(self, item, menuw)
         self.start_time = time.time()
+        self.item = item
+        #self.item.image = skin.get_icon('radio')
 
 
     def refresh(self):

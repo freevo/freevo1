@@ -178,7 +178,6 @@ class PluginInterface(plugin.DaemonPlugin):
                 font = osd.get_font('info value')
 
             self.calculatesizes(osd, font)
-            print 'DJW:y=%s x=%s w=%s t_y=%s t_x=%s t_w=%s' % (self.y, self.x, self.w, self.t_y, self.t_x, self.t_w)
 
             if self.image:
                 x = self.x - self.h

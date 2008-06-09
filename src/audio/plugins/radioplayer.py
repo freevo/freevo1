@@ -33,8 +33,8 @@ import string
 import re
 import thread
 
-import rc         # To post events
 import config     # Configuration handler. reads config file.
+import rc         # To post events
 import util       # Various utilities
 import plugin
 from event import *
@@ -83,13 +83,13 @@ class RadioPlayer:
         """
         try:
             _debug_('url=%r' % (item.url), 2)
-            _debug_('item.__dict__=%r' % (item.__dict__))
-        except Exception, e:
-            _debug_('%s' % e)
+            _debug_('item.__dict__=%r' % (item.__dict__), 3)
+        except Exception, why:
+            _debug_('%s' % why)
         if item.url.startswith('radio://'):
-            _debug_('%r good' % (item.url))
+            _debug_('%r good' % (item.url), 2)
             return 2
-        _debug_('%r unplayable' % (item.url))
+        _debug_('%r unplayable' % (item.url), 2)
         return 0
 
 
@@ -103,7 +103,7 @@ class RadioPlayer:
         self.starttime = time.time()
 
         try:
-            _debug_('play() %s' % self.item.station)
+            _debug_('play %r' % self.item.station)
         except AttributeError:
             return 'Cannot play with RadioPlayer - no station'
 
@@ -115,15 +115,15 @@ class RadioPlayer:
             mixer.setLineinVolume(mixer_vol)
             mixer.setIgainVolume(mixer_vol)
             mixer.setMicVolume(mixer_vol)
-        #print 'RadioPlayer mixer is %s' % mixer
+        _debug_('RadioPlayer mixer is %s' % mixer, 1)
 
         if config.RADIO_CMD.find('ivtv-radio') >= 0:
             # IVTV cards
-            _debug_('%s -f %s &' % (config.RADIO_CMD, self.item.station))
+            _debug_('%s -f %s &' % (config.RADIO_CMD, self.item.station), 1)
             os.system('%s -f %s &' % (config.RADIO_CMD, self.item.station))
         else:
             # BTTV cards
-            _debug_('%s' % (config.RADIO_CMD_START % self.item.station))
+            _debug_('%s' % (config.RADIO_CMD_START % self.item.station), 1)
             os.system('%s' % (config.RADIO_CMD_START % self.item.station))
         thread.start_new_thread(self.__update_thread, ())
 
@@ -136,15 +136,16 @@ class RadioPlayer:
         """
         Stop mplayer and set thread to idle
         """
-        print 'Radio Player Stop'
+        _debug_('Radio Player Stop', 1)
         self.mode = 'stop'
         mixer = plugin.getbyname('MIXER')
         if mixer:
             mixer.setLineinVolume(0)
             mixer.setMicVolume(0)
             mixer.setIgainVolume(0) # Input on emu10k cards.
-        #else:
-        #    print 'Radio Player failed to find a mixer'
+        else:
+            _debug_('Radio Player failed to find a mixer', DWARNING)
+
         if config.RADIO_CMD.find('ivtv-radio') >= 0:
             # IVTV cards
             os.system('killall -9 aplay')
@@ -158,12 +159,12 @@ class RadioPlayer:
 
 
     def is_playing(self):
-        #print 'Radio Player IS PLAYING?'
+        _debug_('Radio Player IS PLAYING?', 2)
         return self.mode == 'play'
 
 
     def refresh(self):
-        #print 'Radio Player refresh'
+        _debug_('Radio Player refresh', 3)
         self.item.elapsed = int(time.time() - self.starttime)
         self.playerGUI.refresh()
 
@@ -173,7 +174,7 @@ class RadioPlayer:
         eventhandler for mplayer control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-        print 'Radio Player event handler %s' % event
+        _debug_('Radio Player event handler %s' % event, 1)
         if event in (STOP, PLAY_END, USER_END):
             self.playerGUI.stop()
             return self.item.eventhandler(event)
