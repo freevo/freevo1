@@ -1,12 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# radioplayer.py - the Freevo Radioplayer plugin for radio
+# Radio player plugin for radio
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -28,6 +24,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Radio player plugin for radio
+"""
 
 import time, os
 import string
@@ -55,14 +54,25 @@ class PluginInterface(plugin.Plugin):
         # register it as the object to play audio
         plugin.register(RadioPlayer(), plugin.AUDIO_PLAYER, True)
 
-class RadioPlayer:
 
+
+class RadioPlayer:
+    """
+    Radio player control class
+
+    @ivar mode: current mode of the radio
+    @ivar name: name if the plug-in
+    @ivar app_mode: mode of the application
+    @ivar app: None
+    @ivar starttime: counter
+    """
     def __init__(self):
         self.mode = 'idle'
         self.name = 'radioplayer'
         self.app_mode = 'audio'
         self.app = None
         self.starttime = 0
+
 
     def rate(self, item):
         """
@@ -164,7 +174,7 @@ class RadioPlayer:
         function it will be passed over to the items eventhandler
         """
         print 'Radio Player event handler %s' % event
-        if event in ( STOP, PLAY_END, USER_END ):
+        if event in (STOP, PLAY_END, USER_END):
             self.playerGUI.stop()
             return self.item.eventhandler(event)
         else:

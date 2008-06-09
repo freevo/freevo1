@@ -21,7 +21,9 @@ from menu import MenuItem
 from gui import AlertBox
 import skin
 
-DEBUG = config.LASTFM_DEBUG
+"""
+Last FM player
+"""
 
 _player_ = None
 
@@ -159,6 +161,18 @@ class LastFMItem(Item):
 class LastFMPlayerGUI(PlayerGUI):
     """
     LastFM Player
+
+    @ivar webservices: Instance of the a Audioscrobbler web-services interface
+    @ivar visible: Is the player visible
+    @ivar menuw: Menu window of the player
+    @ivar wsitem: Instance of a LastFM item
+    @ivar item: Instance of a Freevo item
+    @ivar player: The player
+    @ivar running: Is the player running
+    @ivar info_time: Get the information from LastFM at this time
+    @ivar pic_url: URL to the picture of the current song
+    @ivar track_url: URL to the track of the current song
+    @ivar start_time: Time the track started playing
     """
     class WSItem:
         """
@@ -190,6 +204,7 @@ class LastFMPlayerGUI(PlayerGUI):
 
 
     def __init__(self, item, webservices, menuw=None):
+        """Initialize an instance of the LastFMPlayerGUI"""
         _debug_('LastFMPlayerGUI.__init__(item=%r, menuw=%r)' % (item, menu), 2)
         PlayerGUI.__init__(self, item, menuw)
         self.webservices = webservices
