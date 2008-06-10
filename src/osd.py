@@ -298,7 +298,9 @@ class BusyIcon(threading.Thread):
 
 
 class OSD:
-
+    """
+    On-screen display class
+    """
     # Some default colors
     COL_RED = 0xff0000
     COL_GREEN = 0x00ff00
@@ -315,7 +317,7 @@ class OSD:
 
     def __init__(self):
         """
-        init the osd
+        Initialize an instance of OSD
         """
         self.fullscreen = 0 # Keep track of fullscreen state
         self.app_list = []
@@ -337,8 +339,7 @@ class OSD:
             os.environ['SDL_VIDEODRIVER'] = 'directfb'
 
         # sometimes this fails
-        if not os.environ.has_key('SDL_VIDEODRIVER') and \
-               config.CONF.display == 'x11':
+        if not os.environ.has_key('SDL_VIDEODRIVER') and config.CONF.display == 'x11':
             os.environ['SDL_VIDEODRIVER'] = 'x11'
 
 
@@ -356,8 +357,7 @@ class OSD:
                         print 'Cannot set KD_TEXT on term %s: %s' % (device, why)
                     os.close(fd)
                     os.system('%s -term linux -cursor off -blank 0 -clear -powerdown 0 ' \
-                              '-powersave off </dev/tty%s > /dev/tty%s 2>/dev/null' % \
-                              (config.CONF.setterm, i, i))
+                        '-powersave off </dev/tty%s > /dev/tty%s 2>/dev/null' %  (config.CONF.setterm, i, i))
                 except:
                     pass
 
@@ -387,11 +387,13 @@ class OSD:
         if config.CONF.display == 'x11' and config.START_FULLSCREEN_X == 1:
             self.toggle_fullscreen()
 
-        help = [ _('z = Toggle Fullscreen'),
-                 _('Arrow Keys = Move'),
-                 _('Spacebar = Select'),
-                 _('Escape = Stop/Prev. Menu'),
-                 _('h = Help') ]
+        help = [
+            _('z = Toggle Fullscreen'),
+            _('Arrow Keys = Move'),
+            _('Spacebar = Select'),
+            _('Escape = Stop/Prev. Menu'),
+            _('h = Help')
+        ]
 
         help_str = '    '.join(help)
 
@@ -516,6 +518,7 @@ class OSD:
                     except:
                         return None
 
+
     def shutdown(self):
         """
         shutdown the display
@@ -632,7 +635,7 @@ class OSD:
                 url.mode = 'RGBA'
             image = pygame.image.fromstring(str(url.get_raw_data(format=url.mode)), url.size, url.mode)
         except AttributeError:
-            pass
+            image = None
 
             if url[:8] == 'thumb://':
                 filename = os.path.abspath(url[8:])
@@ -642,9 +645,8 @@ class OSD:
                 thumbnail = False
 
             if not os.path.isfile(filename):
+                print 'DJW:url:', url
                 filename = os.path.join(config.IMAGE_DIR, url[8:])
-
-            if not os.path.isfile(filename):
                 _debug_('Bitmap file "%s" doesn\'t exist!' % filename, DWARNING)
                 #raise 'Bitmap file'
                 return None
@@ -859,7 +861,6 @@ class OSD:
         return ret
 
 
-
     def getfont(self, font, ptsize):
         """
         return cached font
@@ -950,7 +951,6 @@ class OSD:
 
         # calc the matching and rest string and return all this
         return (width+ellipses_size, string[:c]+ellipses, string[c:], False)
-
 
 
     def __draw_transparent_text__(self, surface, pixels=30):
@@ -1219,8 +1219,6 @@ class OSD:
         return r, (min_x, y, max_x, y+height_needed)
 
 
-
-
     def drawstring(self, string, x, y, fgcolor=None, bgcolor=None,
                    font=None, ptsize=0, align='left', layer=None):
         """
@@ -1262,6 +1260,7 @@ class OSD:
             return (x, y, s.get_at((x, y)))
         except:
             return None
+
 
     def _restorepixel(self, save, s):
         """
@@ -1369,9 +1368,7 @@ class OSD:
             self.mutex.release()
 
 
-
-    def update(self, rect=None, blend_surface=None, blend_speed=0,
-               blend_steps=0, blend_time=None, stop_busyicon=True):
+    def update(self, rect=None, blend_surface=None, blend_speed=0, blend_steps=0, blend_time=None, stop_busyicon=True):
         """
         update the screen
         """
@@ -1403,10 +1400,9 @@ class OSD:
 
     def _helpscreen(self):
         if not pygame.display.get_init():
-            return None
+            return
 
         self._help = {0:1, 1:0}[self._help]
-
         if self._help:
             _debug_('Help on')
             # Save current display
@@ -1431,7 +1427,6 @@ class OSD:
                 if row >= 15:
                     row = 0
                     col += 1
-
             self.update()
         else:
             _debug_('Help off')
@@ -1439,8 +1434,8 @@ class OSD:
             self.update()
 
 
-    # Convert a 32-bit TRGB color to a 4 element tuple for SDL
     def _sdlcol(self, col):
+        """ Convert a 32-bit TRGB color to a 4 element tuple for SDL """
         if col==None:
             return (0, 0, 0, 255)
         a = 255 - ((col >> 24) & 0xff)
