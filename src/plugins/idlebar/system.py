@@ -50,7 +50,7 @@ def calc_positions(osd, image_w, image_h, text_w, text_h):
         text_x = ((image_w - text_w) / 2)
     else:
         image_x = ((text_w - image_w) / 2)
-        text_x = 0 
+        text_x = 0
     image_y = osd.y + 7
     text_y = osd.y + 55 - text_h
     width = image_w > text_w and image_w or text_w
@@ -339,13 +339,13 @@ class sensors(IdleBarPlugin):
         self.hotstack = 0
         self.case = None
 
-        if isinstance (cpu, types.StringType):
+        if isinstance(cpu, basestring):
             self.cpu = self.sensor(cpu, '@', self.hotstack)
         else:
             self.cpu = self.sensor(cpu[0], cpu[1], self.hotstack)
 
         if case:
-            if isinstance (case, types.StringType):
+            if isinstance(case, basestring):
                 self.case = self.sensor(case, '@', self.hotstack)
             else:
                 self.case = self.sensor(case[0], case[1], self.hotstack)
@@ -561,11 +561,18 @@ class sensors2(IdleBarPlugin):
         """ Initialize the plug-in """
         _debug_('sensor.__init__(sensors=%r)' % (sensors,), 2)
         for sens in sensors:
-            if len(sens) < 3 or len(sens) > 4:
-                self.reason = _('Sensors must have three or four values:') + ' %r' % sens
-                return
-            if not os.path.exists(sens[1]):
-                self.reason = _('Sensor')+(' %s ' % sens[1])+_('does not exist')
+            if isinstance(sens, (tuple, list)):
+                if len(sens) < 3 or len(sens) > 4:
+                    self.reason = _('Sensors must have three or four values:') + ' %r' % sens
+                    return
+                if not os.path.exists(sens[1]):
+                    self.reason = _('Sensor')+(' %s ' % sens[1])+_('does not exist')
+                    return
+            elif isinstance(sens, basestring):
+                if self.getRamStat(sens) is None:
+                    self.reason = _('%s ' % sens)+_('is not a valid meminfo entry')
+                    return
+            else:
                 return
         IdleBarPlugin.__init__(self)
 
@@ -574,7 +581,7 @@ class sensors2(IdleBarPlugin):
 
         # Get the parameters
         for sens in sensors:
-            if isinstance (sens, types.TupleType):
+            if isinstance(sens, (tuple, list)):
                 # We probably have a temperature sensor here
                 if len(sens) == 4:
                     # Temperature with compute_expression...
@@ -583,7 +590,7 @@ class sensors2(IdleBarPlugin):
                     # ... and without
                     self.sens.append(self.sensor(sens[0], sens[1], sens[2], '@', self.hotstack))
 
-            elif isinstance (sens, types.StringType):
+            elif isinstance(sens, basestring):
                 # This will be treated as meminfo
                 self.sens.append(sens)
             # XXX: Do we need an else here (to designate a config error)
