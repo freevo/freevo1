@@ -24,6 +24,10 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+IdleBar plug-in for showing the freedisk space for recording
+"""
+
 __author__ = 'Tanja Kotthaus <owigera@web.de>'
 
 # python modules
@@ -55,11 +59,14 @@ class PluginInterface(IdleBarPlugin):
             return
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.diskfree'
+        self.poll_interval = 500 # five seconds
+        self.poll_menu_only = True
         self.time = 0
         self.diskfree = 0
         self.freespace = 0
         self.totalspace = 0
         self.percent = 0.0
+        self.lastpoll = self.lastdraw = time.time()
 
         self.diskimg = os.path.join(config.ICON_DIR, 'status/diskfree.png')
         self.goodimg = os.path.join(config.ICON_DIR, 'status/diskfree-good.png')
@@ -75,6 +82,7 @@ class PluginInterface(IdleBarPlugin):
             ('DISKFREE_VERY_LOW', 8, 'Amount of space in GB to show the very low warning icon'),
         ]
 
+
     def getimage(self, image, osd, cache=False):
         if image.find(config.ICON_DIR) == 0 and image.find(osd.settings.icon_dir) == -1:
             new_image = os.path.join(osd.settings.icon_dir, image[len(config.ICON_DIR)+1:])
@@ -86,6 +94,7 @@ class PluginInterface(IdleBarPlugin):
             return self.cacheimg[image]
 
         return pygame.image.load(image)
+
 
     def getDiskFree(self):
         """
@@ -108,10 +117,18 @@ class PluginInterface(IdleBarPlugin):
             self.percent = (self.totalspace - self.freespace) * 1.0 / self.totalspace
 
 
+    def poll(self):
+        print 'time=%.1f' % (time.time() - self.lastpoll)
+        self.lastpoll = time.time()
+
+
     def draw(self, (type, object), x, osd):
         """
         Drawing to idlebar
         """
+        print 'drawtime=%.1f' % (time.time() - self.lastdraw)
+        self.lastdraw = time.time()
+
         self.getDiskFree()
         diskimg = self.getimage(self.diskimg, osd)
         w, h = diskimg.get_size()
