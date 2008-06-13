@@ -99,7 +99,7 @@ class RadioPlayer:
         """
         self.playerGUI = playerGUI
         self.item = item
-        self.item.elapsed = 0
+        #self.item.elapsed = 0
         self.starttime = time.time()
 
         try:
@@ -125,7 +125,7 @@ class RadioPlayer:
             # BTTV cards
             _debug_('%s' % (config.RADIO_CMD_START % self.item.station), 1)
             os.system('%s' % (config.RADIO_CMD_START % self.item.station))
-        thread.start_new_thread(self.__update_thread, ())
+        #thread.start_new_thread(self.__update_thread, ())
 
         rc.app(self)
         rc.post_event(PLAY_START)
@@ -165,7 +165,8 @@ class RadioPlayer:
 
     def refresh(self):
         _debug_('Radio Player refresh', 3)
-        self.item.elapsed = int(time.time() - self.starttime)
+        #self.item.elapsed = int(time.time() - self.starttime)
+        #self.item.elapsed = ''
         self.playerGUI.refresh()
 
 

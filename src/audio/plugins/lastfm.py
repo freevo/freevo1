@@ -84,7 +84,7 @@ class LastFMMainMenuItem(MenuItem):
     of commands in a submenu.
     """
     def __init__(self, parent):
-        _debug_('LastFMMainMenuItem.__init__(parent)=%r' % (parent,), 2)
+        _debug_('LastFMMainMenuItem.__init__(parent=%r)' % (parent,), 2)
         MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
         self.name = _('Last FM')
         self.webservices = LastFMWebServices()
@@ -126,6 +126,7 @@ class LastFMMainMenuItem(MenuItem):
 
 class LastFMItem(Item):
     """
+    LastFM Item
     """
     def __init__(self, webservices):
         Item.__init__(self)
@@ -252,6 +253,7 @@ class LastFMPlayerGUI(PlayerGUI):
             return
         if not self.running:
             return
+
         elapsed = int(time.time() - self.start_time + 0.5)
         self.item.elapsed = '%d:%02d' % (elapsed / 60, elapsed % 60)
 

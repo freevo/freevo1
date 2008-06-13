@@ -1,7 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# mplayervis.py - Native Freevo MPlayer Audio Visualization Plugin
-# Author: Viggo Fredriksen <viggo@katatonic.org>
+# Native Freevo MPlayer Audio Visualization Plugin
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -29,6 +28,11 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Native Freevo MPlayer Audio Visualization Plugin
+"""
+
+__author__ = 'Viggo Fredriksen <viggo@katatonic.org>'
 
 try:
     import pygoom

@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Simple plugin to listen to radio
+# Simple plug-in to listen to radio
 # -----------------------------------------------------------------------
 # $Id$
 # -----------------------------------------------------------------------
@@ -45,6 +45,8 @@ following in your local_conf.py::
 import os, popen2, fcntl, select, time
 import glob
 
+import kaa.imlib2 as imlib2
+
 #freevo modules
 import config, menu, rc, plugin, util
 from audio.player import PlayerGUI
@@ -53,6 +55,8 @@ from menu import MenuItem
 from gui import AlertBox, ConfirmBox
 import skin
 
+from util.benchmark import benchmark
+benchmarking = False
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -75,6 +79,25 @@ class PluginInterface(plugin.MainMenuPlugin):
     |     ('Magic 106', '106.7')
     | ]
     """
+    @benchmark(benchmarking)
+    def __init__(self):
+        _debug_('PluginInterface.__init__()', 2)
+        if not config.RADIO_CMD or not config.RADIO_STATIONS:
+            self.reason = 'RADIO_CMD or RADIO_STATIONS not set'
+            return
+        plugin.MainMenuPlugin.__init__(self)
+        self.plugin_name = 'radio'
+
+
+    @benchmark(benchmarking)
+    def config(self):
+        return [
+            ('RADIO_CMD', None, 'Command to play the radio'),
+            ('RADIO_STATIONS', None, 'List of radio stations'),
+        ]
+
+
+    @benchmark(benchmarking)
     def items(self, parent):
         return [ RadioMainMenuItem(parent) ]
 
@@ -85,18 +108,14 @@ class RadioMainMenuItem(MenuItem):
     this is the item for the main menu and creates the list
     of commands in a submenu.
     """
+    @benchmark(benchmarking)
     def __init__(self, parent):
-        MenuItem.__init__(self, parent, arg='radio', skin_type='radio')
+        _debug_('RadioMainMenuItem.__init__(parent=%r)' % (parent,), 2)
+        MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
         self.name = _('Radio')
 
 
-    def config(self):
-        return [
-            ('RADIO_CMD', None, 'Command to play the radio'),
-            ('RADIO_STATIONS', None, 'List of radio stations'),
-        ]
-
-
+    @benchmark(benchmarking)
     def actions(self):
         """
         Get a list of actions for this menu item
@@ -104,6 +123,7 @@ class RadioMainMenuItem(MenuItem):
         return [ (self.create_stations_menu, 'stations') ]
 
 
+    @benchmark(benchmarking)
     def create_stations_menu(self, arg=None, menuw=None):
         station_items = []
         for rstation in config.RADIO_STATIONS:
@@ -111,11 +131,11 @@ class RadioMainMenuItem(MenuItem):
             radio_item.name = rstation[0]
             radio_item.station = rstation[1]
             radio_item.url = 'radio://' + str(rstation[1])
-            radio_item.type = 'radio'
+            radio_item.type = 'audio'
             radio_item.station_index = config.RADIO_STATIONS.index(rstation)
             radio_item.length = 0
             radio_item.remain = 0
-            radio_item.elapsed = 0
+            #radio_item.elapsed = 0
             radio_item.info = {'album':'', 'artist':'', 'trackno': '', 'title':''}
             station_items += [ radio_item ]
         if (len(station_items) == 0):
@@ -133,6 +153,7 @@ class RadioItem(Item):
     actions for different ways of running commands and for displaying stdout
     and stderr of last command run.
     """
+    @benchmark(benchmarking)
     def __init__(self):
         Item.__init__(self)
         self.title = None
@@ -142,22 +163,25 @@ class RadioItem(Item):
         self.length = 0
 
 
+    @benchmark(benchmarking)
     def actions(self):
         """ Get a list of actions for this item """
         items = [ (self.play, _('Listen to Radio Station')) ]
         return items
 
 
+    @benchmark(benchmarking)
     def checktv(self):
         """ Check if something is recording """
         self.tvlockfile = config.FREEVO_CACHEDIR + '/record.*'
         return len(glob.glob(self.tvlockfile)) > 0
 
 
+    @benchmark(benchmarking)
     def play(self, arg=None, menuw=None):
         _debug_('station=%r station_index=%r name=%r' % (self.station, self.station_index, self.name))
         # self.parent.current_item = self
-        self.elapsed = 0
+        #self.elapsed = 0
 
         if not self.menuw:
             self.menuw = menuw
@@ -174,6 +198,7 @@ class RadioItem(Item):
             rc.post_event(rc.PLAY_END)
 
 
+    @benchmark(benchmarking)
     def confirm (self, arg=None, menuw=None):
         """ Confirm that the player should be stopped """
         _debug_('confirm (self, arg=%r, menuw=%r)' % (arg, menuw))
@@ -182,6 +207,7 @@ class RadioItem(Item):
             #menuw.refresh()
 
 
+    @benchmark(benchmarking)
     def stop(self, arg=None, menuw=None):
         """ Stop the current playing """
         _debug_('stop')
@@ -193,15 +219,19 @@ class RadioPlayerGUI(PlayerGUI):
     """
     Radio Player user interface
     """
+    @benchmark(benchmarking)
     def __init__(self, item, menuw=None):
         """ Create an instance of a RadioPlayerGUI """
         _debug_('RadioPlayerGUI.__init__(item=%r, menuw=%r)' % (item, menu), 2)
         PlayerGUI.__init__(self, item, menuw)
         self.start_time = time.time()
         self.item = item
-        #self.item.image = skin.get_icon('radio')
+        self.image = skin.get_icon('misc/radio')
+        #self.item.image = imlib2.open(self.image)
+        self.item.image = self.image
 
 
+    @benchmark(benchmarking)
     def refresh(self):
         """ Give information to the skin """
         _debug_('refresh()', 2)
@@ -209,13 +239,15 @@ class RadioPlayerGUI(PlayerGUI):
             return
         if not self.running:
             return
+
         elapsed = int(time.time() - self.start_time + 0.5)
         hr = elapsed / (60 * 60)
         mn = elapsed % (60 * 60) / 60
         sc = elapsed % (60 * 60) % 60
-        if hr > 0:
-            self.item.elapsed = '%d:%02d:%02d' % (hr, mn, sc)
-        else:
-            self.item.elapsed = '%d:%02d' % (mn, sc)
+        # Is there any point is having elapsed?
+        #if hr > 0:
+        #    self.item.elapsed = '%d:%02d:%02d' % (hr, mn, sc)
+        #else:
+        #    self.item.elapsed = '%d:%02d' % (mn, sc)
 
         skin.draw('player', self.item)

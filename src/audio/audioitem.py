@@ -72,8 +72,7 @@ class AudioItem(Item):
 
         # Let's try to find if there is any image in the current directory
         # that could be used as a cover
-        if self.filename and not self.image and not \
-           (self.parent and self.parent.type == 'dir'):
+        if self.filename and not self.image and not (self.parent and self.parent.type == 'dir'):
             images = ()
             covers = ()
             files =()

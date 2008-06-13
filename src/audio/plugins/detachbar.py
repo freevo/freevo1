@@ -200,11 +200,14 @@ class PluginInterface(plugin.DaemonPlugin):
                 osd.write_text(r, font, None, self.t_x, y, self.t_w, self.font_h, 'center', 'center')
                 y += self.font_h
 
-            if self.player.item.length:
-                progress = '%s/%s' % (self.formattime(self.player.item.elapsed),
-                    self.formattime(self.player.item.length))
-            else:
-                progress = '%s' % self.formattime(self.player.item.elapsed)
+            try:
+                if self.player.item.length:
+                    progress = '%s/%s' % (self.formattime(self.player.item.elapsed),
+                        self.formattime(self.player.item.length))
+                else:
+                    progress = '%s' % self.formattime(self.player.item.elapsed)
+            except AttributeError:
+                progress = ''
 
             osd.write_text(progress, font, None, self.t_x, y, self.t_w, self.font_h, 'center', 'center')
         return 0
@@ -296,9 +299,12 @@ class PluginInterface(plugin.DaemonPlugin):
         returns string formatted as mins:seconds
         """
         _debug_('formattime(self, seconds)', 3)
-        mins = 0
-        mins = seconds / 60
-        secs = seconds % 60
+        try:
+            mins = 0
+            mins = int(seconds) / 60
+            secs = int(seconds) % 60
+        except ValueError:
+            return ''
 
         if secs<10:
             secs = '0%s' % secs
