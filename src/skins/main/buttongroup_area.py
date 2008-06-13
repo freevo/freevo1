@@ -45,6 +45,7 @@ class Buttongroup_Area(Skin_Area):
         Skin_Area.__init__(self, 'buttongroup')
         self.button_group = None
 
+
     def update_content_needed(self):
         """
         check if the content needs an update
@@ -56,7 +57,6 @@ class Buttongroup_Area(Skin_Area):
         """
         update the listing area
         """
-
         menuw     = self.menuw
         settings  = self.settings
         layout    = self.layout

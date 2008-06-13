@@ -197,7 +197,6 @@ class Listing_Area(Skin_Area):
         """
         update the listing area
         """
-
         menuw     = self.menuw
         menu      = self.menu
         settings  = self.settings

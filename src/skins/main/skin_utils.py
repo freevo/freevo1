@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# skin_utils.py - some utils for the skin
+# Some utils for the skin
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -27,6 +27,10 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+
+"""
+Some utils for the skin
+"""
 
 import config
 import pygame
@@ -56,6 +60,7 @@ def pygamesurface_imlib2_scale(image, newsize):
 
 
 def format_image(settings, item, width, height, force=0, anamorphic=0):
+    #print 'format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r)' % (settings, item, width, height, force, anamorphic)
     try:
         type = item.display_type
     except:
@@ -70,8 +75,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     else:
         item_image=item.image
 
-    cname = '%s-%s-%s-%s-%s-%s-%s' % (settings.icon_dir, item_image, type,
-                                      item.type, width, height, force)
+    cname = '%s-%s-%s-%s-%s-%s-%s' % (settings.icon_dir, item_image, type, item.type, width, height, force)
 
     if hasattr(item, 'rotation') and item['rotation']:
         cname = '%s-%s' % (cname, item['rotation'])
@@ -91,7 +95,6 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
         if isinstance(item.image, imlib2.Image):
             image = osd.loadbitmap(item.image)
         else:
-            #print 'thumb://%r %r' % (item.image, item_image)
             image = load_imagecache['thumb://%s' % item.image]
             if not image:
                 image = osd.loadbitmap('thumb://%s' % item.image)

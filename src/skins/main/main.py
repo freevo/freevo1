@@ -1,12 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# skin_main1.py - Freevo default skin
+# Freevo default skin
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -28,6 +24,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Freevo default skin
+"""
 
 import os, copy
 import stat
@@ -55,7 +54,6 @@ class Skin:
     """
     main skin class
     """
-
     Rectange = xml_skin.Rectangle
     Image    = xml_skin.Image
     Area     = Skin_Area
@@ -83,8 +81,8 @@ class Skin:
         from textentry_area import Textentry_Area
         from buttongroup_area import Buttongroup_Area
 
-        for a in ( 'screen', 'title', 'subtitle', 'view', 'listing', 'info',
-                        'plugin', 'scrollabletext', 'textentry',  'buttongroup'):
+        for a in ('screen', 'title', 'subtitle', 'view', 'listing', 'info',
+                'plugin', 'scrollabletext', 'textentry',  'buttongroup'):
             self.areas[a] = eval('%s_Area()' % a.capitalize())
         self.areas['tvlisting'] = TVListing_Area()
 
@@ -109,8 +107,7 @@ class Skin:
         """
         create cache name
         """
-        geo  = '%sx%s-%s-%s' % (osd.width, osd.height, config.OSD_OVERSCAN_LEFT,
-                                config.OSD_OVERSCAN_TOP)
+        geo  = '%sx%s-%s-%s' % (osd.width, osd.height, config.OSD_OVERSCAN_LEFT, config.OSD_OVERSCAN_TOP)
         return vfs.getoverlay('%s.skin-%s-%s' % (filename, config.SKIN_XML_FILE, geo))
 
 
@@ -128,8 +125,7 @@ class Skin:
             util.save_pickle((xml_skin.FXD_FORMAT_VERSION, settings), cache)
             # restore font object
             for f in settings.font:
-                settings.font[f].font = osd.getfont(settings.font[f].name,
-                                                    settings.font[f].size)
+                settings.font[f].font = osd.getfont(settings.font[f].name, settings.font[f].size)
 
 
     def load_cache(self, filename):
@@ -172,8 +168,7 @@ class Skin:
 
         # restore the font objects
         for f in settings.font:
-            settings.font[f].font = osd.getfont(settings.font[f].name,
-                                                settings.font[f].size)
+            settings.font[f].font = osd.getfont(settings.font[f].name, settings.font[f].size)
         self.__last_load_cache__ = filename, settings
         return settings
 
@@ -284,7 +279,7 @@ class Skin:
                 image = '%s.jpg' % os.path.splitext(skin)[0]
             else:
                 image = None
-            ret += [ ( name, image, skin ) ]
+            ret += [ (name, image, skin) ]
         return ret
 
 
@@ -302,8 +297,7 @@ class Skin:
         if isinstance(menu, str):
             if not self.display_style.has_key(menu):
                 self.display_style[menu] = 0
-            self.display_style[menu] = (self.display_style[menu] + 1) % \
-                                       len(self.settings.sets[menu].style)
+            self.display_style[menu] = (self.display_style[menu] + 1) % len(self.settings.sets[menu].style)
             return 1
 
         if menu.force_skin_layout != -1:
@@ -382,9 +376,9 @@ class Skin:
         background = []
         for bg in layout.background:
             if isinstance(bg, xml_skin.Image):
-                background.append(( 'image', bg))
+                background.append(('image', bg))
             elif isinstance(bg, xml_skin.Rectangle):
-                background.append(( 'rectangle', bg))
+                background.append(('rectangle', bg))
 
         return layout.content, background
 
@@ -424,14 +418,13 @@ class Skin:
 
     def items_per_page(self, (type, object)):
         """
-        returns the number of items per menu page
+        Get the number of items per menu page
         (cols, rows) for normal menu and
         rows         for the tv menu
         """
         if type == 'tv':
             info = self.areas['tvlisting']
-            info = info.get_items_geometry(self.settings, object,
-                                           self.get_display_style('tv'))
+            info = info.get_items_geometry(self.settings, object, self.get_display_style('tv'))
             return (info[4], info[-1])
 
         if object.skin_settings:
@@ -444,15 +437,14 @@ class Skin:
             menu = object
 
         info = self.areas['listing']
-        rows, cols = info.get_items_geometry(settings, object,
-                                             self.get_display_style( menu ))[:2]
+        rows, cols = info.get_items_geometry(settings, object, self.get_display_style(menu))[:2]
         return (cols, rows)
 
 
 
     def clear(self, osd_update=True):
         """
-        clean the screen
+        Clean the screen
         """
         _debug_('clear: %s' % osd_update, 2)
         self.force_redraw = True
@@ -463,7 +455,7 @@ class Skin:
 
     def redraw(self):
         """
-        redraw the current screen
+        Redraw the current screen
         """
         _debug_('redraw', 2)
         if self.last_draw[0] and self.last_draw[1]:
@@ -472,17 +464,17 @@ class Skin:
 
     def prepare(self):
         """
-        prepare the skin
+        Prepare the skin
         """
         self.settings.prepare()
 
 
     def draw(self, type, object, menu=None):
         """
-        draw the object.
-        object may be a menu widget, a table for the tv menu are an audio item for
-        the audio player
+        Draw the object.  object may be a menu widget, a table for the tv menu
+        or an audio item for the audio player.
         """
+        _debug_('Skin.draw(type=%r, object=%r, menu=%r)' % (type, object, menu), 3)
         if isinstance(object, GUIObject):
             # handling for gui objects: are they visible? what about children?
             if not object.visible:
@@ -506,7 +498,6 @@ class Skin:
             if len(object.menustack) == 1:
                 menu.item_types = 'main'
             style = self.get_display_style(menu)
-
         else:
             try:
                 if not object.visible:
@@ -515,11 +506,9 @@ class Skin:
                 pass
             style = self.get_display_style(type)
 
-
         if self.last_draw[0] != type:
             self.force_redraw = True
             self.all_areas    = getattr(self, '%s_areas' % type)
-
 
         self.last_draw = type, object, menu
 

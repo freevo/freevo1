@@ -48,11 +48,13 @@ class Screen_Area(Skin_Area):
     def __init__(self):
         Skin_Area.__init__(self, 'screen', imagecachesize=3)
 
+
     def update_content_needed(self):
         """
         this area needs never a content update
         """
         return False
+
 
     def update_content(self):
         """

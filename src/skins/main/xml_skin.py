@@ -880,6 +880,12 @@ class XMLSkin:
         self.anamorphic       = 0
 
 
+    def __getattribute__(self, name):
+        global attr_global_dict
+        print '__getattribute__(name=%r)' % name
+        pass
+
+
     def parse(self, freevo_type, scale, c_dir):
         for node in freevo_type.children:
             if node.name == u'main':

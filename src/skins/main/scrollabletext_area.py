@@ -58,7 +58,6 @@ class Scrollabletext_Area(Skin_Area):
         """
         update the listing area
         """
-
         menuw     = self.menuw
         settings  = self.settings
         layout    = self.layout

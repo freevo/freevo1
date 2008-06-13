@@ -98,7 +98,7 @@ class Skin_Area:
 
     def __str__(self):
         return 'area_name=%s area_val=%s redraw=%s layout=%s name=%s' % \
-            ( self.area_name, self.area_val, self.redraw, self.layout, self.name)
+            (self.area_name, self.area_val, self.redraw, self.layout, self.name)
 
 
     def update_content_needed(self):
@@ -121,6 +121,9 @@ class Skin_Area:
         checks if redraws are needed and calls the two update functions
         for the different types of areas
         """
+        _debug_('Skin_Area.draw(settings=%r, obj=%r, menu=%r, display_style=%r, widget_type=%r, force_redraw=%r)' % \
+            (settings, obj, menu, display_style, widget_type, force_redraw), 3)
+
         self.display_style = display_style
         self.xml_settings  = settings
         self.widget_type   = widget_type
@@ -172,15 +175,13 @@ class Skin_Area:
         # maybe we are NOW invisible
         if visible and not area.visible and old_area:
             self.screen.update('background', (old_area.x, old_area.y,
-                                              old_area.x + old_area.width,
-                                              old_area.y + old_area.height))
+                old_area.x + old_area.width, old_area.y + old_area.height))
             self.objects = SkinObjects()
 
         if not self.area_name == 'plugin':
             if not area.visible or not self.layout:
                 self.objects = SkinObjects()
                 return
-
             self.tmp_objects = SkinObjects()
             self.__draw_background__()
         else:
@@ -194,57 +195,53 @@ class Skin_Area:
         self.update_content()
 
         # check which parts need an update
-        bg_rect = ( osd.width, osd.height, 0, 0 )
-        a_rect  = ( osd.width, osd.height, 0, 0 )
-        c_rect  = ( osd.width, osd.height, 0, 0 )
+        bg_rect = (osd.width, osd.height, 0, 0)
+        a_rect  = (osd.width, osd.height, 0, 0)
+        c_rect  = (osd.width, osd.height, 0, 0)
 
         for b in self.tmp_objects.bgimages:
             try:
                 self.objects.bgimages.remove(b)
             except ValueError:
-                bg_rect = ( min(bg_rect[0], b[0]), min(bg_rect[1], b[1]),
-                            max(bg_rect[2], b[2]), max(bg_rect[3], b[3]) )
+                bg_rect = (min(bg_rect[0], b[0]), min(bg_rect[1], b[1]),
+                           max(bg_rect[2], b[2]), max(bg_rect[3], b[3]))
 
         for b in self.objects.bgimages:
-            bg_rect = ( min(bg_rect[0], b[0]), min(bg_rect[1], b[1]),
-                        max(bg_rect[2], b[2]), max(bg_rect[3], b[3]) )
-
+            bg_rect = (min(bg_rect[0], b[0]), min(bg_rect[1], b[1]),
+                       max(bg_rect[2], b[2]), max(bg_rect[3], b[3]))
 
         for b in self.tmp_objects.rectangles:
             try:
                 self.objects.rectangles.remove(b)
             except ValueError:
-                a_rect = ( min(a_rect[0], b[0]), min(a_rect[1], b[1]),
-                           max(a_rect[2], b[2]), max(a_rect[3], b[3]) )
+                a_rect = (min(a_rect[0], b[0]), min(a_rect[1], b[1]),
+                          max(a_rect[2], b[2]), max(a_rect[3], b[3]))
 
         for b in self.objects.rectangles:
-            a_rect = ( min(a_rect[0], b[0]), min(a_rect[1], b[1]),
-                       max(a_rect[2], b[2]), max(a_rect[3], b[3]) )
-
+            a_rect = (min(a_rect[0], b[0]), min(a_rect[1], b[1]),
+                      max(a_rect[2], b[2]), max(a_rect[3], b[3]))
 
         for b in self.tmp_objects.images:
             try:
                 self.objects.images.remove(b)
             except ValueError:
-                c_rect = ( min(c_rect[0], b[0]), min(c_rect[1], b[1]),
-                           max(c_rect[2], b[2]), max(c_rect[3], b[3]) )
+                c_rect = (min(c_rect[0], b[0]), min(c_rect[1], b[1]),
+                          max(c_rect[2], b[2]), max(c_rect[3], b[3]))
 
         for b in self.objects.images:
-            c_rect = ( min(c_rect[0], b[0]), min(c_rect[1], b[1]),
-                       max(c_rect[2], b[2]), max(c_rect[3], b[3]) )
-
+            c_rect = (min(c_rect[0], b[0]), min(c_rect[1], b[1]),
+                      max(c_rect[2], b[2]), max(c_rect[3], b[3]))
 
         for b in self.tmp_objects.text:
             try:
                 self.objects.text.remove(b)
             except ValueError:
-                c_rect = ( min(c_rect[0], b[0]), min(c_rect[1], b[1]),
-                           max(c_rect[2], b[2]), max(c_rect[3], b[3]) )
+                c_rect = (min(c_rect[0], b[0]), min(c_rect[1], b[1]),
+                          max(c_rect[2], b[2]), max(c_rect[3], b[3]))
 
         for b in self.objects.text:
-            c_rect = ( min(c_rect[0], b[0]), min(c_rect[1], b[1]),
-                       max(c_rect[2], b[2]), max(c_rect[3], b[3]) )
-
+            c_rect = (min(c_rect[0], b[0]), min(c_rect[1], b[1]),
+                      max(c_rect[2], b[2]), max(c_rect[3], b[3]))
 
         # send the update information to the screen object
         if bg_rect[0] < bg_rect[2]:
@@ -562,11 +559,8 @@ class Skin_Area:
                     cname = '%s-%s-%s' % (imagefile, bg.width, bg.height)
                     image = self.imagecache[cname]
                     if not image:
-                        cache = vfs.getoverlay('%s.raw-%sx%s' % (imagefile, bg.width,
-                                                                 bg.height))
-                        if os.path.isfile(cache) and \
-                               os.stat(cache)[stat.ST_MTIME] > \
-                               os.stat(imagefile)[stat.ST_MTIME]:
+                        cache = vfs.getoverlay('%s.raw-%sx%s' % (imagefile, bg.width, bg.height))
+                        if os.path.isfile(cache) and os.stat(cache)[stat.ST_MTIME] > os.stat(imagefile)[stat.ST_MTIME]:
                             image = pygame.image.fromstring(file(cache).read(), (bg.width, bg.height), 'RGBA')
                             self.imagecache[cname] = image
 
@@ -715,20 +709,17 @@ class Skin_Area:
                 o = self.tmp_objects.bgimages
             else:
                 o = self.tmp_objects.images
-            o.append((val[0], val[1], val[0] + image.get_width(),
-                      val[1] + image.get_height(), image))
+            o.append((val[0], val[1], val[0] + image.get_width(), val[1] + image.get_height(), image))
             return image.get_width(), image.get_height()
 
         try:
             if background or val.label == 'background':
-                self.tmp_objects.bgimages.append((val.x, val.y, val.x + val.width,
-                                                  val.y + val.height, image))
+                self.tmp_objects.bgimages.append((val.x, val.y, val.x + val.width, val.y + val.height, image))
                 return val.width, val.height
         except:
             pass
 
-        self.tmp_objects.images.append((val.x, val.y, val.x + val.width,
-                                        val.y + val.height, image))
+        self.tmp_objects.images.append((val.x, val.y, val.x + val.width, val.y + val.height, image))
         return val.width, val.height
 
 

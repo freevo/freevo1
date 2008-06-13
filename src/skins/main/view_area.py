@@ -59,7 +59,6 @@ class View_Area(Skin_Area):
         """
         update the view area
         """
-
         item = self.viewitem
 
         layout    = self.layout
@@ -82,7 +81,6 @@ class View_Area(Skin_Area):
 
         width  = content.width - 2*content.spacing
         height = content.height - 2*content.spacing
-
 
         if val.rectangle:
             r = self.get_item_rectangle(val.rectangle, width, height)[2]
