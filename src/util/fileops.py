@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# util/fileops.py - Some File Operation Utilities
+# Some File Operation Utilities
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -28,6 +28,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Some File Operation Utilities
+"""
 
 import os
 import sys
@@ -43,9 +46,11 @@ import fnmatch
 import traceback
 
 # image stuff
-import kaa.imlib2 as imlib2
+import kaa.imlib2
 from kaa.metadata.image import EXIF as exif
 
+from util.benchmark import benchmark
+benchmarking = False
 
 if float(sys.version[0:3]) < 2.3:
     PICKLE_PROTOCOL = 1
@@ -66,6 +71,7 @@ if traceback.extract_stack()[0][0].find('install.py') == -1:
 #
 #
 
+@benchmark(benchmarking)
 def getdirnames(dirname, softlinks=True, sort=True):
     """
     Get all subdirectories in the given directory.
@@ -86,6 +92,7 @@ def getdirnames(dirname, softlinks=True, sort=True):
 
 
 
+@benchmark(benchmarking)
 def gzopen(file):
     """
     open a gzip file and return the fd. If it's not a gzip file, try
@@ -102,6 +109,7 @@ def gzopen(file):
     return f
 
 
+@benchmark(benchmarking)
 def readfile(filename):
     """
     return the complete file as list
@@ -112,6 +120,7 @@ def readfile(filename):
     return ret
 
 
+#@benchmark(benchmarking)
 def freespace(path):
     """
     freespace(path) -> integer
@@ -126,6 +135,7 @@ def freespace(path):
     return 0
 
 
+@benchmark(benchmarking)
 def totalspace(path):
     """
     totalspace(path) -> integer
@@ -140,6 +150,7 @@ def totalspace(path):
     return 0
 
 
+@benchmark(benchmarking)
 def touch(file):
     """
     touch a file (maybe create it)
@@ -152,6 +163,7 @@ def touch(file):
     return 0
 
 
+@benchmark(benchmarking)
 def rmrf_helper(result, dirname, names):
     """
     help function for rm -rf
@@ -164,6 +176,7 @@ def rmrf_helper(result, dirname, names):
     return result
 
 
+@benchmark(benchmarking)
 def rmrf(top=None):
     """
     Pure python version of 'rm -rf'
@@ -189,6 +202,7 @@ def rmrf(top=None):
 #
 #
 
+@benchmark(benchmarking)
 def match_suffix(filename, suffixlist):
     """
     Check if a filename ends in a given suffix, case is ignored.
@@ -203,6 +217,7 @@ def match_suffix(filename, suffixlist):
     return 0
 
 
+@benchmark(benchmarking)
 def match_files(dirname, suffix_list):
     """
     Find all files in a directory that has matches a list of suffixes.
@@ -222,6 +237,7 @@ def match_files(dirname, suffix_list):
     return matches
 
 
+@benchmark(benchmarking)
 def find_matches(files, suffix_list):
     """
     return all files in 'files' that match one of the suffixes in 'suffix_list'
@@ -233,6 +249,7 @@ def find_matches(files, suffix_list):
     return filter(lambda x: x[x.rfind('.')+1:].lower() in suffix_list, files)
 
 
+@benchmark(benchmarking)
 def match_files_recursively_helper(result, dirname, names):
     """
     help function for match_files_recursively
@@ -250,6 +267,7 @@ def match_files_recursively_helper(result, dirname, names):
     return result
 
 
+@benchmark(benchmarking)
 def match_files_recursively_skip_protected(result, dirname, names):
     """
     help function for match_files_recursively_skip_protected, skipping directories with a .password file
@@ -268,6 +286,7 @@ def match_files_recursively_skip_protected(result, dirname, names):
     return result
 
 
+@benchmark(benchmarking)
 def match_files_recursively(dir, suffix_list, skip_password=False):
     """
     get all files matching suffix_list in the dir and in it's subdirectories
@@ -285,6 +304,7 @@ def match_files_recursively(dir, suffix_list, skip_password=False):
     return matches
 
 
+@benchmark(benchmarking)
 def get_subdirs_recursively(dir):
     """
     get all subdirectories recursively in the given directory
@@ -299,6 +319,7 @@ def get_subdirs_recursively(dir):
     return matches
 
 
+@benchmark(benchmarking)
 def recursefolders(root, recurse=0, pattern='*', return_folders=0):
     """
     Before anyone asks why I didn't use os.path.walk; it's simple,
@@ -356,6 +377,7 @@ def recursefolders(root, recurse=0, pattern='*', return_folders=0):
 
 mounted_dirs = []
 
+@benchmark(benchmarking)
 def umount(dir):
     """
     umount a directory
@@ -369,6 +391,7 @@ def umount(dir):
             mounted_dirs.remove(dir)
 
 
+@benchmark(benchmarking)
 def mount(dir, force=0):
     """
     mount a directory
@@ -384,6 +407,7 @@ def mount(dir, force=0):
         mounted_dirs.append(dir)
 
 
+@benchmark(benchmarking)
 def umount_all():
     """
     umount all mounted directories
@@ -394,6 +418,7 @@ def umount_all():
         umount(d)
 
 
+@benchmark(benchmarking)
 def is_mounted(dir):
     """
     return if the dir is mounted
@@ -402,6 +427,7 @@ def is_mounted(dir):
     return dir in mounted_dirs
 
 
+@benchmark(benchmarking)
 def resolve_media_mountdir(*arg):
     """
     get the mount point of the media with media_id
@@ -427,6 +453,7 @@ def resolve_media_mountdir(*arg):
     return mountdir, file
 
 
+@benchmark(benchmarking)
 def check_media(media_id):
     """
     check if media_id is a valid media in one of the drives
@@ -444,6 +471,7 @@ def check_media(media_id):
 #
 #
 
+@benchmark(benchmarking)
 def read_pickle(file):
     """
     read a file with pickle
@@ -457,6 +485,7 @@ def read_pickle(file):
         return None
 
 
+@benchmark(benchmarking)
 def save_pickle(data, file):
     """
     save the data with pickle to the given file
@@ -475,6 +504,7 @@ def save_pickle(data, file):
 # cache utils
 #
 
+@benchmark(benchmarking)
 def read_thumbnail(filename):
     """
     return image cached inside filename
@@ -488,50 +518,40 @@ def read_thumbnail(filename):
     return data
 
 
+@benchmark(benchmarking)
 def create_thumbnail(filename, thumbnail=None):
     """
     cache image for faster access
     """
+    _debug_('create_thumbnail(filename=%r, thumbnail=%r)' % (filename, thumbnail), 2)
     thumb = vfs.getoverlay(filename + '.raw')
     image = None
 
     if thumbnail:
         try:
-            image = imlib2.open_from_memory(thumbnail)
-        except Exception, e:
-            print 'Invalid thumbnail for %s' % filename
-            if config.DEBUG:
-                print 'invalid thumbnail:', e
+            image = kaa.imlib2.open_from_memory(thumbnail)
+        except Exception, why:
+            _debug_('invalid thumbnail %r: %s', (filename, why), DINFO)
 
     if not image:
         if __freevo_app__ == 'main':
             try:
-                f=open(filename, 'rb')
-                tags=exif.process_file(f)
-                f.close()
-
+                tags = exif.process_file(open(filename, 'rb'))
                 if tags.has_key('JPEGThumbnail'):
-                    image = imlib2.open_from_memory(tags['JPEGThumbnail'])
-            except Exception, e:
-                print 'Error loading thumbnail %s' % filename
-                if config.DEBUG:
-                    print 'create_thumbnail:', e
+                    image = kaa.imlib2.open_from_memory(tags['JPEGThumbnail'])
+            except Exception, why:
+                _debug_('Error loading thumbnail %r: %s' % (filename, why), DINFO)
 
         if not image or image.width < 100 or image.height < 100:
             try:
-                image = imlib2.open(filename)
-            except Exception, e:
-                print 'error caching image %s' % filename
-                if config.DEBUG:
-                    print 'caching image:', e
+                image = kaa.imlib2.open(filename)
+            except Exception, why:
+                _debug_('Cannot cache image %r: %s' % (filename, why), DINFO)
                 return None
 
     try:
         if image.width > 255 or image.height > 255:
             image.thumbnail((255,255))
-
-        #print 'thumb:', thumb
-        #print 'image.mode:', image.mode
 
         if image.mode == 'P':
             image.mode = 'RGB'
@@ -545,11 +565,12 @@ def create_thumbnail(filename, thumbnail=None):
         f.write(data[0])
         f.close()
         return data
-    except Exception, e:
-        print 'error caching image %s: %s' % (filename, e)
+    except Exception, why:
+        _debug_('Cannot cache image %r: %s' % (filename, why), DWARNING)
         return None
 
 
+@benchmark(benchmarking)
 def cache_image(filename, thumbnail=None, use_exif=False):
     """
     cache image for faster access, return cached image
@@ -566,12 +587,13 @@ def cache_image(filename, thumbnail=None, use_exif=False):
     return create_thumbnail(filename, thumbnail)
 
 
+@benchmark(benchmarking)
 def scale_rectangle_to_max(size, max_size):
-    '''
+    """
     returns a scaled rectangle size fitting the size to max_size
     this can be used to scale images for viewing in a browser and
     retaining the aspect ratio
-    '''
+    """
     try:
         scaled_width = max_size[0]
         scaled_height = max_size[1]
@@ -585,9 +607,11 @@ def scale_rectangle_to_max(size, max_size):
     return (scaled_width, scaled_height)
 
 
+@benchmark(benchmarking)
 def www_thumbnail_path(filename):
-    '''returns the path to the thumbnail image for a given filename
-    '''
+    """
+    returns the path to the thumbnail image for a given filename
+    """
     file_ext_index = filename.rindex(".")
     file_ext = filename[file_ext_index:].lower()
     if file_ext == ".gif":
@@ -599,9 +623,11 @@ def www_thumbnail_path(filename):
     return thumb_path
 
 
+@benchmark(benchmarking)
 def create_www_thumbnail(filename):
-    '''creates a webserver thumbnail image and returns its size.
-    '''
+    """
+    creates a webserver thumbnail image and returns its size.
+    """
     thumb_path = www_thumbnail_path(filename)
     try:
         try:
@@ -610,7 +636,7 @@ def create_www_thumbnail(filename):
         except IOError:
             print 'error creating dir %s' % os.path.dirname(thumb_path)
             raise IOError
-        image = imlib2.open(filename)
+        image = kaa.imlib2.open(filename)
         thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
         thumb.save(thumb_path)
     except IOError, e:
