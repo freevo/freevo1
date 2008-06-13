@@ -47,8 +47,8 @@ try:
     import Numeric
 
     import kaa
-    import kaa.metadata as mmpython
-    import kaa.imlib2 as Image
+    import kaa.metadata as metadata
+    import kaa.imlib2 as imlib2
 
     import config
     import rc

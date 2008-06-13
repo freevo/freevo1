@@ -1,12 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# viewer.py - Freevo image viewer
+# Freevo image viewer
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:        Change the signal stuff for slideshows
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -28,6 +24,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Freevo image viewer
+"""
 
 import os
 
@@ -96,9 +95,9 @@ class ImageViewer(GUIObject):
 
 
     def view(self, item, zoom=0, rotation=0):
-        '''
+        """
         view an image
-        '''
+        """
         _debug_('view(item, zoom=%s, rotation=%s)' % (zoom, rotation), 2)
         if zoom:
             self.app_mode    = 'image_zoom'

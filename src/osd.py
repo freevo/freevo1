@@ -619,7 +619,15 @@ class OSD:
     def loadbitmap(self, url, cache=False):
         """
         Load a bitmap and return the pygame image object.
+
+        @param url: is the image to load
+        @type url: kaa.image, url or str
+        @param cache: Cache the image?
+        @type cache: bool
+        @returns: pygame surface
+        @rtype: Surface or None
         """
+        _debug_('loadbitmap(url=%r, cache=%r)' % (url, cache), 2)
         if cache:
             if cache == True:
                 cache = self.bitmapcache
@@ -645,14 +653,13 @@ class OSD:
                 thumbnail = False
 
             if not os.path.isfile(filename):
-                print 'DJW:url:', url
                 filename = os.path.join(config.IMAGE_DIR, url[8:])
                 _debug_('Bitmap file "%s" doesn\'t exist!' % filename, DWARNING)
                 #raise 'Bitmap file'
                 return None
 
             try:
-                if isstring(filename) and filename.endswith('.raw'):
+                if isinstance(filename, basestring) and filename.endswith('.raw'):
                     # load cache
                     data  = util.read_thumbnail(filename)
                     #self.printdata(data)
@@ -668,8 +675,8 @@ class OSD:
                         image = pygame.image.fromstring(data[0], data[1], data[2])
                     except:
                         data = util.create_thumbnail(filename)
-                        #self.printdata(data)
                         image = pygame.image.fromstring(data[0], data[1], data[2])
+
                 else:
                     try:
                         image = pygame.image.load(filename)
@@ -687,13 +694,18 @@ class OSD:
                     traceback.print_exc()
                 return None
 
-        except Exception, e:
-            _debug_('image.fromstring: %r' % e)
+        except Exception, why:
+            _debug_('image.fromstring: %s' % why)
             return None
 
         # convert the surface to speed up blitting later
-        if image and image.get_alpha():
-            image.set_alpha(image.get_alpha(), RLEACCEL)
+        if image:
+            if image.get_alpha():
+                image.set_alpha(image.get_alpha(), RLEACCEL)
+            else:
+                if image.get_alpha() is None:
+                    image.set_colorkey(-1)
+                image = image.convert()
 
         if cache:
             cache[url] = image
