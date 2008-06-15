@@ -3,10 +3,6 @@
 # Some File Operation Utilities
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -328,7 +324,7 @@ def recursefolders(root, recurse=0, pattern='*', return_folders=0):
 
     Here's how you use this function::
 
-        songs = recursefolders('/media/Music/Guttermouth',1,'*.mp3',1)
+        songs = recursefolders('/media/Music/Guttermouth', 1, '*.mp3', 1)
         for song in songs:
               print song
 
@@ -346,7 +342,7 @@ def recursefolders(root, recurse=0, pattern='*', return_folders=0):
 
     # expand pattern
     pattern = pattern or '*'
-    pat_list = string.splitfields( pattern , ';' )
+    pat_list = string.splitfields(pattern, ';')
 
     # check each file
     for name in names:
@@ -355,16 +351,14 @@ def recursefolders(root, recurse=0, pattern='*', return_folders=0):
         # grab if it matches our pattern and entry type
         for pat in pat_list:
             if fnmatch.fnmatch(name, pat):
-                if vfs.isfile(fullname) or \
-                   (return_folders and vfs.isdir(fullname)):
+                if vfs.isfile(fullname) or (return_folders and vfs.isdir(fullname)):
                     result.append(fullname)
                 continue
 
         # recursively scan other folders, appending results
         if recurse:
             if vfs.isdir(fullname) and not vfs.islink(fullname):
-                result = result + recursefolders( fullname, recurse,
-                                                  pattern, return_folders )
+                result += recursefolders(fullname, recurse, pattern, return_folders)
 
     return result
 

@@ -28,6 +28,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+This is decorator class to time function calls
+"""
 
 import time
 
@@ -40,14 +43,22 @@ class benchmark:
     _indentation = 0
 
     def __init__(self, enabled=True):
-        """ Contructs the benchmark class
-        @param enabled: enabledd the benchmark timings
+        """
+        Contructs an instance of benchmark.
+        @param enabled: enables the benchmark timings
+        @type enabled: bool
         """
         self.enabled = enabled
         self.start = time.time()
 
 
     def __call__(self, func):
+        """
+        Call the benchmarking code, when enabled otherwise call the old
+        function.
+        @param func: enables the benchmark timings
+        @type func: function
+        """
         if self.enabled:
             def newfunc(*args, **kwargs):
                 indentation = '  ' * benchmark._indentation
@@ -65,7 +76,7 @@ class benchmark:
             return newfunc
 
         def origfunc(*args, **kwargs):
-            func(*args, **kwargs)
+            return func(*args, **kwargs)
         origfunc.__name__ = func.__name__
         origfunc.__doc__ = func.__doc__
         return origfunc

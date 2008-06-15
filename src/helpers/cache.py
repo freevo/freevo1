@@ -1,14 +1,8 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# cache.py - delete old cache files and update the cache
+# Delete old cache files and update the cache
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-#
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -30,6 +24,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Delete old cache files and update the cache
+"""
 
 import sys
 import os
@@ -64,7 +61,7 @@ def delete_old_files_1():
         if os.path.exists(os.path.join(config.FREEVO_CACHEDIR, name)):
             del_list.append(os.path.join(config.FREEVO_CACHEDIR, name))
 
-    del_list += util.recursefolders(config.OVERLAY_DIR,1,'mmpython',1)
+    del_list += util.recursefolders(config.OVERLAY_DIR, 1, 'mmpython', 1)
     del_list += util.match_files(config.OVERLAY_DIR+'/disc', ['mmpython', 'freevo'])
 
     for file in util.match_files_recursively(config.OVERLAY_DIR, ['png']):
@@ -119,7 +116,7 @@ def delete_old_files_2():
 
     print 'deleting old entries in metainfo......................',
     sys.__stdout__.flush()
-    for filename in util.recursefolders(config.OVERLAY_DIR,1,'freevo.cache',1):
+    for filename in util.recursefolders(config.OVERLAY_DIR, 1, 'freevo.cache', 1):
         if filename.startswith(config.OVERLAY_DIR + '/disc'):
             continue
         sinfo = os.stat(filename)
