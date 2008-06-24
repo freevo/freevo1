@@ -854,7 +854,7 @@ class XineControl:
 
     def Seek(self, direction, steps):
         """ Skip in stream """
-        _debug_('XineControl.Seek(direction=%r, steps=%r)' % (direction * steps))
+        _debug_('XineControl.Seek(direction=%r, steps=%r)' % (direction, steps))
         if direction < 0:
             self.app.write('%s#%s\n' % ('SeekRelative-', steps))
         if direction > 0:
