@@ -137,29 +137,27 @@ class HeadlinesSiteItem(Item):
 
         popup = PopupBox(text=_('Fetching headlines...'))
         popup.show()
-
-        # parse the document
         try:
+
+            # parse the document
+            print 'DJW:self.url:', self.url
             doc = util.feedparser.parse(self.url)
-            entcount = len(doc['entries'])
-            count = 0
-            while count < entcount:
-                title = doc.entries[count].title.encode(doc.encoding)
-                link  = doc.entries[count].link.encode(doc.encoding)
-                description = doc.entries[count].content[0].value.encode(doc.encoding)
-                headlines.append((title, link, description))
-                count = count + 1
-        except:
-            #unreachable or url error
-            _debug_('could not open %s' % self.url, DERROR)
-            pass
+            if doc.status < 400:
+                for entry in doc['entries']:
+                    title = Unicode(entry.title)
+                    link  = Unicode(entry.link)
+                    description = Unicode(entry['summary_detail'].value)
+                    headlines.append((title, link, description))
+            else:
+                _debug_('Error %s, getting %r' % (doc.status, self.url))
 
-        #write the file
-        if len(headlines) > 0:
-            pfile = os.path.join(self.cachedir, 'headlines-%i' % self.location_index)
-            util.save_pickle(headlines, pfile)
+            #write the file
+            if len(headlines) > 0:
+                pfile = os.path.join(self.cachedir, 'headlines-%i' % self.location_index)
+                util.save_pickle(headlines, pfile)
+        finally:
+            popup.destroy()
 
-        popup.destroy()
         return headlines
 
 
