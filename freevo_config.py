@@ -368,6 +368,8 @@ LOCAL_CONF_CHANGES = [
     (5.25,
      """ Added OSD_IDLEBAR_PADDING to allow the space between idlebar items to be set
      Added OSD_IDLEBAR_FONT and OSD_IDLEBAR_CLOCK_FONT to allow idlebar fonts to be set
+     Added MPLAYER_AO_DEV_OPTS for audio device options
+     Changed MPLAYER_VO_DEV_OPTS, removed need for leading ':'
      """),
 ]
 
@@ -1514,14 +1516,14 @@ TVTIME_CMD = CONF.tvtime
 MPLAYER_CMD = CONF.mplayer
 
 MPLAYER_AO_DEV = 'oss:/dev/dsp'    # e.g.: oss,sdl,alsa, see mplayer docs
-MPLAYER_AO_DEV_OPTS = ''           # e.g.: ':some_var=vcal'
+MPLAYER_AO_DEV_OPTS = ''           # e.g.: 'some_var=vcal'
 
 if CONF.display == 'x11':
     MPLAYER_VO_DEV = 'xv,sdl,x11,' # X11 drivers in order of preference
 else:
     MPLAYER_VO_DEV = CONF.display  # e.g.: x11,mga,fbdev, see mplayer docs
 
-MPLAYER_VO_DEV_OPTS = ''           # e.g.: ':some_var=vcal'
+MPLAYER_VO_DEV_OPTS = ''           # e.g.: 'some_var=vcal'
 
 DVD_LANG_PREF = 'en,se,no'         # Order of preferred languages on DVD.
 DVD_SUBTITLE_PREF = ''             # Order of preferred subtitles on DVD.

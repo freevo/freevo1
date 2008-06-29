@@ -154,7 +154,7 @@ class MPlayer:
 
         mode = item.mimetype
         if not config.MPLAYER_ARGS.has_key(mode):
-            mode = 'default'
+            mode = 'default_args'
 
         # Build the MPlayer command
         args = {
@@ -165,7 +165,8 @@ class MPlayer:
             'vc': '',
             'ao': '-ao %s' % config.MPLAYER_AO_DEV,
             'ao_opts': config.MPLAYER_AO_DEV_OPTS,
-            'args': config.MPLAYER_ARGS[mode].split(),
+            'default_args': config.MPLAYER_ARGS_DEF.split(),
+            'mode_args': config.MPLAYER_ARGS[mode].split(),
             'geometry': '',
             'verbose': '',
             'dvd-device': '',
@@ -181,9 +182,9 @@ class MPlayer:
             'delay': '',
             'sub': '',
             'audiofile': '',
-            'default': config.MPLAYER_ARGS_DEF.split(' '),
             'af': [],
             'vf': [],
+            'url': url,
         }
 
         if config.CONF.x or config.CONF.y:
@@ -210,7 +211,7 @@ class MPlayer:
         if mode == 'dvd':
             # dvd on harddisc
             args['dvd-device'] = '-dvd-device %s' % item.filename
-            url = url[:6] + url[url.rfind('/')+1:]
+            args['url'] = url[:6] + url[url.rfind('/')+1:]
         elif mode != 'file' and hasattr(item.media, 'devicename'):
             args['dvd-device'] = '-dvd-device %s' % item.media.devicename
 
@@ -312,7 +313,8 @@ class MPlayer:
         command += vo.split()
         command += str('%(vc)s' % args).split()
         command += ao.split()
-        command += args['default']
+        command += args['default_args']
+        command += args['mode_args']
         command += str('%(dvd-device)s' % args).split()
         command += str('%(cdrom-device)s' % args).split()
         command += str('%(alang)s' % args).split()
@@ -325,7 +327,6 @@ class MPlayer:
         command += str('%(edl)s' % args).split()
         command += str('%(mc)s' % args).split()
         command += str('%(delay)s' % args).split()
-        command += args['args']
         if args['af']:
             command += ['-af', '%s' % ','.join(args['af'])]
         if args['vf']:
@@ -345,7 +346,7 @@ class MPlayer:
 
         command = self.sort_filter(command)
 
-        command += [url]
+        command += ['%(url)s' % args]
 
         _debug_(' '.join(command[1:]))
 

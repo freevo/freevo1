@@ -71,6 +71,7 @@ class MPlayer:
     def Play(self, mode, tuner_channel=None):
         """ """
         _debug_('MPlayer.Play(mode=%r, tuner_channel=%r)' % (mode, tuner_channel), 2)
+        print 'DJW:MPlayer.Play(mode=%r, tuner_channel=%r)' % (mode, tuner_channel)
         # Try to see if the channel is not tunable
         try:
             channel = int(tuner_channel)
@@ -94,11 +95,31 @@ class MPlayer:
         args = {
             'nice': config.MPLAYER_NICE,
             'cmd': config.MPLAYER_CMD,
-            'vo': config.MPLAYER_VO_DEV,
+            'vo': '-vo %s' % config.MPLAYER_VO_DEV,
             'vo_opts': config.MPLAYER_VO_DEV_OPTS,
-            'ao': config.MPLAYER_AO_DEV,
+            'vc': '',
+            'ao': '-ao %s' % config.MPLAYER_AO_DEV,
             'ao_opts': config.MPLAYER_AO_DEV_OPTS,
-            'def': config.MPLAYER_ARGS_DEF,
+            'default_args': config.MPLAYER_ARGS_DEF.split(),
+            'mode_args': config.MPLAYER_ARGS[mode].split(),
+            'geometry': '',
+            'verbose': '',
+            'dvd-device': '',
+            'cdrom-device': '',
+            'alang': '',
+            'aid': '',
+            'slang': '',
+            'sid': '',
+            'playlist': '',
+            'field-dominance': '',
+            'edl': '',
+            'mc': '',
+            'delay': '',
+            'sub': '',
+            'audiofile': '',
+            'af': [],
+            'vf': [],
+            'url': '',
         }
 
         if mode == 'tv':
@@ -121,60 +142,109 @@ class MPlayer:
                 if channel >= 0:
                     self.fc.chanSet(tuner_channel, True)
 
-                args['tvcmd'] = vg.vdev
+                args['url'] = vg.vdev
 
                 if config.MPLAYER_ARGS.has_key('ivtv'):
-                    args['args'] = config.MPLAYER_ARGS['ivtv']
+                    args['mode_args'] = config.MPLAYER_ARGS['ivtv'].split()
 
             elif vg.group_type == 'webcam':
                 self.fc.chanSet(tuner_channel, True, app='mplayer')
-                args['tvcmd'] = ''
+                args['url'] = ''
 
                 if config.MPLAYER_ARGS.has_key('webcam'):
-                    args['args'] = config.MPLAYER_ARGS['webcam']
+                    args['mode_args'] = config.MPLAYER_ARGS['webcam'].split()
 
             elif vg.group_type == 'dvb':
                 self.fc.chanSet(tuner_channel, True, app='mplayer')
-                args['tvcmd'] = ''
-                args['args'] = '"dvb://%s" %s' % (tuner_channel, config.MPLAYER_ARGS['dvb'])
+                args['url'] = ''
+                args['mode_args'] = str('"dvb://%s" %s' % (tuner_channel, config.MPLAYER_ARGS['dvb'])).split()
 
             elif vg.group_type == 'tvalsa':
                 freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tuner_freq = '%1.3f' % (freq_khz / 1000.0)
 
-                args['tvcmd'] = ('tv:// -tv driver=%s:%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
+                args['url'] = ('tv:// -tv driver=%s:%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
                     (config.TV_DRIVER, vg.adev, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS))
 
                 if config.MPLAYER_ARGS.has_key('tv'):
-                    args['args'] = config.MPLAYER_ARGS['tv']
+                    args['mode_args'] = config.MPLAYER_ARGS['tv'].split()
 
             else: # group_type == 'normal'
                 freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tuner_freq = '%1.3f' % (freq_khz / 1000.0)
 
-                args['tvcmd'] = ('tv:// -tv driver=%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
+                args['url'] = ('tv:// -tv driver=%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
                     (config.TV_DRIVER, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS))
 
                 if config.MPLAYER_ARGS.has_key('tv'):
-                    args['args'] = config.MPLAYER_ARGS['tv']
+                    args['mode_args'] = config.MPLAYER_ARGS['tv'].split()
 
         elif mode == 'vcr':
-            args['tvcmd'] = ('tv:// -tv driver=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
+            args['url'] = ('tv:// -tv driver=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
                 (config.TV_DRIVER, device, input, norm, w, h, outfmt, config.TV_OPTS))
 
             if config.MPLAYER_ARGS.has_key('tv'):
-                args['args'] = config.MPLAYER_ARGS['tv']
+                args['mode_args'] = config.MPLAYER_ARGS['tv'].split()
 
         else:
             _debug_('Mode "%s" is not implemented' % mode, DERROR)
             return
 
-        _debug_('mplayer args = %r' % (args,)
-        mpl = '--prio=%(nice)s %(cmd)s -slave -vo %(vo)s%(vo_opts)s -ao %(ao)s%(ao_opts)s %(def)s %(args)s %(tvcmd)s' \
-            % args
+        _debug_('mplayer args = %r' % (args,))
 
-        command = mpl
-        _debug_('\"%s\"', command)
+        vo = ['%(vo)s' % args, '%(vo_opts)s' % args]
+        vo.remove('')
+        vo = ':'.join(vo)
+
+        ao = ['%(ao)s' % args, '%(ao_opts)s' % args]
+        ao.remove('')
+        ao = ':'.join(ao)
+
+        command = ['--prio=%(nice)s' % args]
+        command += ['%(cmd)s' % args]
+        command += ['-slave']
+        command += str('%(verbose)s' % args).split()
+        command += str('%(geometry)s' % args).split()
+        command += vo.split()
+        command += str('%(vc)s' % args).split()
+        command += ao.split()
+        command += args['default_args']
+        command += args['mode_args']
+        command += str('%(dvd-device)s' % args).split()
+        command += str('%(cdrom-device)s' % args).split()
+        command += str('%(alang)s' % args).split()
+        command += str('%(aid)s' % args).split()
+        command += str('%(audiofile)s' % args).split()
+        command += str('%(slang)s' % args).split()
+        command += str('%(sid)s' % args).split()
+        command += str('%(sub)s' % args).split()
+        command += str('%(field-dominance)s' % args).split()
+        command += str('%(edl)s' % args).split()
+        command += str('%(mc)s' % args).split()
+        command += str('%(delay)s' % args).split()
+        if args['af']:
+            command += ['-af', '%s' % ','.join(args['af'])]
+        if args['vf']:
+            command += ['-vf', '%s' % ','.join(args['vf'])]
+
+        # use software scaler?
+        if '-nosws' in command:
+            command.remove('-nosws')
+        elif '-framedrop' not in command:
+            command += config.MPLAYER_SOFTWARE_SCALER.split()
+
+        #if options:
+        #    command += options
+
+        while '' in command:
+            command.remove('')
+
+        #command = self.sort_filter(command)
+
+        command += ['%(url)s' % args]
+
+        _debug_(' '.join(command[1:]))
+
         self.mode = mode
 
 
