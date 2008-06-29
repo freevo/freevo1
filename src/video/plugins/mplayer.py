@@ -3,10 +3,6 @@
 # Freevo video module for MPlayer
 # -----------------------------------------------------------------------
 # $Id$
-#
-# Notes:
-# Todo:
-#
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -28,6 +24,9 @@
 #
 # -----------------------------------------------------------------------
 
+"""
+Freevo video module for MPlayer
+"""
 
 import os, re
 import threading
@@ -50,7 +49,6 @@ class PluginInterface(plugin.Plugin):
     With this plugin Freevo can play all video files defined in
     VIDEO_MPLAYER_SUFFIX. This is the default video player for Freevo.
     """
-
     def __init__(self):
         # create plugin structure
         plugin.Plugin.__init__(self)
@@ -110,12 +108,15 @@ class MPlayer:
         """
         play a videoitem with mplayer
         """
-        self.options = options
-        self.item    = item
+        _debug_('options=%r' % (options,), 2)
+        for k,v in item.__dict__.items():
+            _debug_('item[%s]=%r' % (k, v), 2)
 
         mode         = item.mode
         url          = item.url
 
+        self.options = options
+        self.item    = item
         self.item_info    = None
         self.item_length  = -1
         self.item.elapsed = 0
@@ -151,16 +152,45 @@ class MPlayer:
         if item['xvmc'] and item['type'][:6] in ['MPEG-1','MPEG-2','MPEG-T']:
             set_vcodec = True
 
+        mode = item.mimetype
+        if not config.MPLAYER_ARGS.has_key(mode):
+            mode = 'default'
+
         # Build the MPlayer command
-        command = ['--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD]
-        command += ['-slave']
-        command += config.MPLAYER_ARGS_DEF.split(' ')
-        command += ['-ao'] + config.MPLAYER_AO_DEV.split(' ')
+        args = {
+            'nice': config.MPLAYER_NICE,
+            'cmd': config.MPLAYER_CMD,
+            'vo': '-vo %s' % config.MPLAYER_VO_DEV,
+            'vo_opts': config.MPLAYER_VO_DEV_OPTS,
+            'vc': '',
+            'ao': '-ao %s' % config.MPLAYER_AO_DEV,
+            'ao_opts': config.MPLAYER_AO_DEV_OPTS,
+            'args': config.MPLAYER_ARGS[mode].split(),
+            'geometry': '',
+            'verbose': '',
+            'dvd-device': '',
+            'cdrom-device': '',
+            'alang': '',
+            'aid': '',
+            'slang': '',
+            'sid': '',
+            'playlist': '',
+            'field-dominance': '',
+            'edl': '',
+            'mc': '',
+            'delay': '',
+            'sub': '',
+            'audiofile': '',
+            'default': config.MPLAYER_ARGS_DEF.split(' '),
+            'af': [],
+            'vf': [],
+        }
 
         if config.CONF.x or config.CONF.y:
-            command += ['-geometry', '%d:%d' % (config.CONF.x, config.CONF.y)]
+            args['geometry'] = '-geometry %d:%d' % (config.CONF.x, config.CONF.y)
 
-        additional_args = []
+        if config.DEBUG_CHILDAPP:
+            args['verbose'] = '-v'
 
         if mode == 'dvd':
             if config.DVD_LANG_PREF:
@@ -171,62 +201,54 @@ class MPlayer:
                 if hasattr(item, 'mplayer_audio_broken') and item.mplayer_audio_broken:
                     print '*** dvd audio broken, try without alang ***'
                 else:
-                    additional_args += ['-alang', config.DVD_LANG_PREF]
+                    args['alang'] = '-alang %s' % config.DVD_LANG_PREF
 
             if config.DVD_SUBTITLE_PREF:
-                # Only use if defined since it will always turn on subtitles
-                # if defined
-                additional_args += ['-slang', config.DVD_SUBTITLE_PREF]
+                # Only use if defined since it will always turn on subtitles when defined
+                args['slang'] = '-slang %s' % config.DVD_SUBTITLE_PREF
 
-        if hasattr(item.media, 'devicename') and mode != 'file':
-            additional_args += ['-dvd-device', item.media.devicename]
-        elif mode == 'dvd':
+        if mode == 'dvd':
             # dvd on harddisc
-            additional_args += ['-dvd-device', item.filename]
+            args['dvd-device'] = '-dvd-device %s' % item.filename
             url = url[:6] + url[url.rfind('/')+1:]
+        elif mode != 'file' and hasattr(item.media, 'devicename'):
+            args['dvd-device'] = '-dvd-device %s' % item.media.devicename
 
         if item.media and hasattr(item.media,'devicename'):
-            additional_args += ['-cdrom-device', item.media.devicename]
+            args['cdrom-device'] = '-cdrom-device' % item.media.devicename
 
         if item.selected_subtitle == -1:
-            additional_args += ['-noautosub']
-        elif item.selected_subtitle != None:
+            args['sid'] = '-noautosub'
+        elif item.selected_subtitle is not None:
             if mode == 'file':
                 if os.path.isfile(os.path.splitext(item.filename)[0]+'.idx'):
-                    additional_args += ['-vobsubid', str(item.selected_subtitle)]
+                    args['sid'] = '-vobsubid %s' % str(item.selected_subtitle)
                 else:
-                    additional_args += ['-sid', str(item.selected_subtitle)]
+                    args['sid'] = '-sid %s' % str(item.selected_subtitle)
             else:
-                additional_args += ['-sid', str(item.selected_subtitle)]
+                args['sid'] = '-sid %s' % str(item.selected_subtitle)
 
-        if item.selected_audio != None:
-            additional_args += ['-aid', str(item.selected_audio)]
+        if item.selected_audio is not None:
+            args['aid'] = '-aid %s' % str(item.selected_audio)
 
         # This comes from the bilingual language selection menu
         if hasattr(item, 'selected_language') and item.selected_language:
             if item.selected_language == 'left':
-                additional_args += ['-af', 'pan=2:1:1:0:0']
+                args['af'].append('pan=2:1:1:0:0')
             elif item.selected_language == 'right':
-                additional_args += ['-af', 'pan=2:0:0:1:1']
+                args['af'].append('pan=2:0:0:1:1')
 
         if not set_vcodec:
             if item['deinterlace'] and config.MPLAYER_VF_INTERLACED:
-                additional_args += ['-vf', config.MPLAYER_VF_INTERLACED]
+                args['vf'].append(config.MPLAYER_VF_INTERLACED)
             elif config.MPLAYER_VF_PROGRESSIVE:
-                additional_args += ['-vf', config.MPLAYER_VF_PROGRESSIVE]
+                args['vf'].append(config.MPLAYER_VF_PROGRESSIVE)
 
-        if hasattr(config, 'VIDEO_FIELD_DOMINANCE') and config.VIDEO_FIELD_DOMINANCE != None:
-            additional_args += ['-field-dominance', '%d' % int(item['field-dominance'])]
+        if config.VIDEO_FIELD_DOMINANCE is not None:
+            args['field-dominance'] = '-field-dominance %d' % int(item['field-dominance'])
 
         if os.path.isfile(os.path.splitext(item.filename)[0]+'.edl'):
-            additional_args += ['-edl', str(os.path.splitext(item.filename)[0]+'.edl')]
-
-        mode = item.mimetype
-        if not config.MPLAYER_ARGS.has_key(mode):
-            mode = 'default'
-
-        if config.DEBUG_CHILDAPP:
-            command += ['-v']
+            args['edl'] = '-edl %s' % str(os.path.splitext(item.filename)[0]+'.edl')
 
         # Mplayer command and standard arguments
         if set_vcodec:
@@ -234,40 +256,16 @@ class MPlayer:
                 bobdeint='bobdeint'
             else:
                 bobdeint='nobobdeint'
-            command += ['-vo', 'xvmc:%s' % bobdeint, '-vc', 'ffmpeg12mc']
-        else:
-            command += ['-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS]
-
-        # mode specific args
-        command += config.MPLAYER_ARGS[mode].split(' ')
-
-        # make the options a list
-        command += additional_args
+            args['vo'] = '-vo xvmc:%s' % bobdeint
+            args['vc'] = 'ffmpeg12mc'
 
         if hasattr(item, 'is_playlist') and item.is_playlist:
-            command.append('-playlist')
-
-        # add the file to play
-        command.append(url)
-
-        if options:
-            command += options
-
-        # use software scaler?
-        if '-nosws' in command:
-            command.remove('-nosws')
-
-        elif not '-framedrop' in command:
-            command += config.MPLAYER_SOFTWARE_SCALER.split(' ')
+            args['playlist'] = '-playlist'
 
         # correct avi delay based on kaa.metadata settings
-        if config.MPLAYER_SET_AUDIO_DELAY and item.info.has_key('delay') and \
-               item.info['delay'] > 0:
-            command += ['-mc', str(int(item.info['delay'])+1), '-delay',
-                         '-' + str(item.info['delay'])]
-
-        while '' in command:
-            command.remove('')
+        if config.MPLAYER_SET_AUDIO_DELAY and item.info.has_key('delay') and item.info['delay'] > 0:
+            args['mc'] = '-mc %s' % str(int(item.info['delay'])+1)
+            args['delay'] = '-delay -%s' % str(item.info['delay'])
 
         # autocrop
         if config.MPLAYER_AUTOCROP and not item.network_play and str(' ').join(command).find('crop=') == -1:
@@ -281,34 +279,80 @@ class MPlayer:
                 (x1, y1, x2, y2) = self.get_crop(crop_point, x1, y1, x2, y2)
 
             if x1 < 1000 and x2 < 1000:
-                command = command + ['-vf' , 'crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1)]
+                args['vf'].append('crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1))
                 _debug_('crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1))
-
 
         if item.subtitle_file:
             d, f = util.resolve_media_mountdir(item.subtitle_file)
             util.mount(d)
-            command += ['-sub', f]
+            args['sub'] = '-sub %s' % f
 
         if item.audio_file:
             d, f = util.resolve_media_mountdir(item.audio_file)
             util.mount(d)
-            command += ['-audiofile', f]
+            args['audiofile'] = '-audiofile %s' % f
 
         self.plugins = plugin.get('mplayer_video')
-
         for p in self.plugins:
             command = p.play(command, self)
 
-        command=self.sort_filter(command)
+        vo = ['%(vo)s' % args, '%(vo_opts)s' % args]
+        vo.remove('')
+        vo = ':'.join(vo)
 
-        #_debug_(' '.join(command))
+        ao = ['%(ao)s' % args, '%(ao_opts)s' % args]
+        ao.remove('')
+        ao = ':'.join(ao)
+
+        command = ['--prio=%(nice)s' % args]
+        command += ['%(cmd)s' % args]
+        command += ['-slave']
+        command += str('%(verbose)s' % args).split()
+        command += str('%(geometry)s' % args).split()
+        command += vo.split()
+        command += str('%(vc)s' % args).split()
+        command += ao.split()
+        command += args['default']
+        command += str('%(dvd-device)s' % args).split()
+        command += str('%(cdrom-device)s' % args).split()
+        command += str('%(alang)s' % args).split()
+        command += str('%(aid)s' % args).split()
+        command += str('%(audiofile)s' % args).split()
+        command += str('%(slang)s' % args).split()
+        command += str('%(sid)s' % args).split()
+        command += str('%(sub)s' % args).split()
+        command += str('%(field-dominance)s' % args).split()
+        command += str('%(edl)s' % args).split()
+        command += str('%(mc)s' % args).split()
+        command += str('%(delay)s' % args).split()
+        command += args['args']
+        if args['af']:
+            command += ['-af', '%s' % ','.join(args['af'])]
+        if args['vf']:
+            command += ['-vf', '%s' % ','.join(args['vf'])]
+
+        # use software scaler?
+        if '-nosws' in command:
+            command.remove('-nosws')
+        elif '-framedrop' not in command:
+            command += config.MPLAYER_SOFTWARE_SCALER.split()
+
+        if options:
+            command += options
+
+        while '' in command:
+            command.remove('')
+
+        command = self.sort_filter(command)
+
+        command += [url]
+
+        _debug_(' '.join(command[1:]))
 
         #if plugin.getbyname('MIXER'):
             #plugin.getbyname('MIXER').reset()
 
         rc.app(self)
-
         self.app = MPlayerApp(command, self)
         return None
 
@@ -450,9 +494,9 @@ class MPlayer:
 
     def sort_filter(self, command):
         """
-        Change a mplayer command to support more than one -vf
-        parameter. This function will grep all -vf parameter from
-        the command and add it at the end as one vf argument
+        Change a mplayer command to support more than one -vf parameter. This
+        function will grep all -vf parameter from the command and add it at the
+        end as one vf argument
         """
         ret = []
         vf = ''
@@ -470,6 +514,7 @@ class MPlayer:
         if vf:
             return ret + ['-vf', vf[1:]]
         return ret
+
 
     def get_crop(self, pos, x1, y1, x2, y2):
         crop_cmd = [config.MPLAYER_CMD, '-ao', 'null', '-vo', 'null', '-slave', '-nolirc',
@@ -519,9 +564,8 @@ class MPlayerApp(childapp.ChildApp2):
             self.check_audio = 1
 
         import osd
-        self.osd       = osd.get_singleton()
-        self.osdfont   = self.osd.getfont(config.OSD_DEFAULT_FONTNAME,
-                                          config.OSD_DEFAULT_FONTSIZE)
+        self.osd     = osd.get_singleton()
+        self.osdfont = self.osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE)
 
         # check for mplayer plugins
         self.stdout_plugins  = []

@@ -1514,6 +1514,7 @@ TVTIME_CMD = CONF.tvtime
 MPLAYER_CMD = CONF.mplayer
 
 MPLAYER_AO_DEV = 'oss:/dev/dsp'    # e.g.: oss,sdl,alsa, see mplayer docs
+MPLAYER_AO_DEV_OPTS = ''           # e.g.: ':some_var=vcal'
 
 if CONF.display == 'x11':
     MPLAYER_VO_DEV = 'xv,sdl,x11,' # X11 drivers in order of preference

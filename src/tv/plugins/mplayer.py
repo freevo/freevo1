@@ -90,9 +90,16 @@ class MPlayer:
         w, h = config.TV_VIEW_SIZE
         outfmt = 'outfmt=%s' % config.TV_VIEW_OUTFMT
 
-        # Build the MPlayer command
-        args = (config.MPLAYER_NICE, config.MPLAYER_CMD, config.MPLAYER_VO_DEV,
-                config.MPLAYER_VO_DEV_OPTS, config.MPLAYER_AO_DEV, config.MPLAYER_ARGS_DEF)
+        # Build the MPlayer command line
+        args = {
+            'nice': config.MPLAYER_NICE,
+            'cmd': config.MPLAYER_CMD,
+            'vo': config.MPLAYER_VO_DEV,
+            'vo_opts': config.MPLAYER_VO_DEV_OPTS,
+            'ao': config.MPLAYER_AO_DEV,
+            'ao_opts': config.MPLAYER_AO_DEV_OPTS,
+            'def': config.MPLAYER_ARGS_DEF,
+        }
 
         if mode == 'tv':
             if vg.group_type == 'ivtv':
@@ -114,66 +121,60 @@ class MPlayer:
                 if channel >= 0:
                     self.fc.chanSet(tuner_channel, True)
 
-                tvcmd = vg.vdev
+                args['tvcmd'] = vg.vdev
 
                 if config.MPLAYER_ARGS.has_key('ivtv'):
-                    args += (config.MPLAYER_ARGS['ivtv'],)
+                    args['args'] = config.MPLAYER_ARGS['ivtv']
 
             elif vg.group_type == 'webcam':
                 self.fc.chanSet(tuner_channel, True, app='mplayer')
-                tvcmd = ''
+                args['tvcmd'] = ''
 
                 if config.MPLAYER_ARGS.has_key('webcam'):
-                    args += (config.MPLAYER_ARGS['webcam'],)
+                    args['args'] = config.MPLAYER_ARGS['webcam']
 
             elif vg.group_type == 'dvb':
                 self.fc.chanSet(tuner_channel, True, app='mplayer')
-                tvcmd = ''
-                args += ('"dvb://%s" %s' % (tuner_channel, config.MPLAYER_ARGS['dvb']),)
+                args['tvcmd'] = ''
+                args['args'] = '"dvb://%s" %s' % (tuner_channel, config.MPLAYER_ARGS['dvb'])
 
             elif vg.group_type == 'tvalsa':
                 freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tuner_freq = '%1.3f' % (freq_khz / 1000.0)
 
-                tvcmd = ('tv:// -tv driver=%s:%s:freq=%s:%s:%s:'
-                         '%s:width=%s:height=%s:%s %s' %
-                         (config.TV_DRIVER, vg.adev, tuner_freq, device, input, norm,
-                          w, h, outfmt, config.TV_OPTS))
+                args['tvcmd'] = ('tv:// -tv driver=%s:%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
+                    (config.TV_DRIVER, vg.adev, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS))
 
                 if config.MPLAYER_ARGS.has_key('tv'):
-                    args += (config.MPLAYER_ARGS['tv'],)
+                    args['args'] = config.MPLAYER_ARGS['tv']
 
             else: # group_type == 'normal'
                 freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tuner_freq = '%1.3f' % (freq_khz / 1000.0)
 
-                tvcmd = ('tv:// -tv driver=%s:freq=%s:%s:%s:'
-                         '%s:width=%s:height=%s:%s %s' %
-                         (config.TV_DRIVER, tuner_freq, device, input, norm,
-                          w, h, outfmt, config.TV_OPTS))
+                args['tvcmd'] = ('tv:// -tv driver=%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
+                    (config.TV_DRIVER, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS))
 
                 if config.MPLAYER_ARGS.has_key('tv'):
-                    args += (config.MPLAYER_ARGS['tv'],)
+                    args['args'] = config.MPLAYER_ARGS['tv']
 
         elif mode == 'vcr':
-            tvcmd = ('tv:// -tv driver=%s:%s:%s:'
-                     '%s:width=%s:height=%s:%s %s' %
-                     (config.TV_DRIVER, device, input, norm,
-                      w, h, outfmt, config.TV_OPTS))
+            args['tvcmd'] = ('tv:// -tv driver=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
+                (config.TV_DRIVER, device, input, norm, w, h, outfmt, config.TV_OPTS))
 
             if config.MPLAYER_ARGS.has_key('tv'):
-                args += (config.MPLAYER_ARGS['tv'],)
+                args['args'] = config.MPLAYER_ARGS['tv']
 
         else:
             _debug_('Mode "%s" is not implemented' % mode, DERROR)
             return
 
-        args += (tvcmd,)
-
-        mpl = '--prio=%s %s -vo %s %s -ao %s %s -slave %s %s' % args
+        _debug_('mplayer args = %r' % (args,)
+        mpl = '--prio=%(nice)s %(cmd)s -slave -vo %(vo)s%(vo_opts)s -ao %(ao)s%(ao_opts)s %(def)s %(args)s %(tvcmd)s' \
+            % args
 
         command = mpl
-        _debug_('command=\"%s\"', ' '.join(command))
+        _debug_('\"%s\"', command)
         self.mode = mode
 
 
