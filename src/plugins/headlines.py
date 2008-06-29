@@ -140,13 +140,15 @@ class HeadlinesSiteItem(Item):
         try:
 
             # parse the document
-            print 'DJW:self.url:', self.url
             doc = util.feedparser.parse(self.url)
             if doc.status < 400:
                 for entry in doc['entries']:
                     title = Unicode(entry.title)
                     link  = Unicode(entry.link)
-                    description = Unicode(entry['summary_detail'].value)
+                    if entry.has_key('content') and len(entry['content']) >= 1:
+                        description = Unicode(entry['content'][0].value)
+                    else:
+                        description = Unicode(entry['summary_detail'].value)
                     headlines.append((title, link, description))
             else:
                 _debug_('Error %s, getting %r' % (doc.status, self.url))
