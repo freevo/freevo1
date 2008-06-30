@@ -109,7 +109,7 @@ class MPlayer:
         play a videoitem with mplayer
         """
         _debug_('options=%r' % (options,), 2)
-        for k,v in item.__dict__.items():
+        for k, v in item.__dict__.items():
             _debug_('item[%s]=%r' % (k, v), 2)
 
         mode         = item.mode
@@ -149,12 +149,13 @@ class MPlayer:
             return '%s\nnot found' % os.path.basename(url)
 
         set_vcodec = False
-        if item['xvmc'] and item['type'][:6] in ['MPEG-1','MPEG-2','MPEG-T']:
+        if item['xvmc'] and item['type'][:6] in ['MPEG-1', 'MPEG-2', 'MPEG-T']:
             set_vcodec = True
 
         mode = item.mimetype
         if not config.MPLAYER_ARGS.has_key(mode):
-            mode = 'default_args'
+            _debug_('MPLAYER_ARGS not defined for %r, using default' % mode, DINFO)
+            mode = 'default'
 
         # Build the MPlayer command
         args = {
@@ -215,8 +216,8 @@ class MPlayer:
         elif mode != 'file' and hasattr(item.media, 'devicename'):
             args['dvd-device'] = '-dvd-device %s' % item.media.devicename
 
-        if item.media and hasattr(item.media,'devicename'):
-            args['cdrom-device'] = '-cdrom-device' % item.media.devicename
+        if item.media and hasattr(item.media, 'devicename'):
+            args['cdrom-device'] = '-cdrom-device %s' % item.media.devicename
 
         if item.selected_subtitle == -1:
             args['sid'] = '-noautosub'
@@ -619,7 +620,7 @@ class MPlayerApp(childapp.ChildApp2):
         # current elapsed time
         if line.find("A:") == 0:
             m = self.RE_TIME(line)
-            if hasattr(m,'group') and self.item.elapsed != int(m.group(1))+1:
+            if hasattr(m, 'group') and self.item.elapsed != int(m.group(1))+1:
                 self.item.elapsed = int(m.group(1))+1
                 for p in self.elapsed_plugins:
                     p.elapsed(self.item.elapsed)
