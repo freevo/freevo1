@@ -59,14 +59,15 @@ class PluginInterface(IdleBarPlugin):
             return
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.diskfree'
-        self.poll_interval = 500 # five seconds
+        self.poll_interval = 50 # about 15 secs
         self.poll_menu_only = True
         self.time = 0
         self.diskfree = 0
         self.freespace = 0
         self.totalspace = 0
         self.percent = 0.0
-        self.lastpoll = self.lastdraw = time.time()
+        self.lastpoll = time.time()
+        self.lastdraw = None
 
         self.diskimg = os.path.join(config.ICON_DIR, 'status/diskfree.png')
         self.goodimg = os.path.join(config.ICON_DIR, 'status/diskfree-good.png')
@@ -80,6 +81,7 @@ class PluginInterface(IdleBarPlugin):
             ('TV_RECORD_DIR', None, 'Directory for TV recordings'),
             ('DISKFREE_LOW', 20, 'Amount of space in GB to show the low warning icon'),
             ('DISKFREE_VERY_LOW', 8, 'Amount of space in GB to show the very low warning icon'),
+            ('DISKFREE_REFRESH', 60, 'Duration between refresh rates of the disc statistics'),
         ]
 
 
@@ -99,26 +101,17 @@ class PluginInterface(IdleBarPlugin):
     def getDiskFree(self):
         """
         Determine amount of freedisk space
-        Update maximum every 30 seconds
-
         """
-        if not os.path.isdir(config.TV_RECORD_DIR):
-            return
-
         self.time = time.time()
         freespace = util.freespace(config.TV_RECORD_DIR)
         totalspace = util.totalspace(config.TV_RECORD_DIR)
         self.diskfree = _('%iGB') % (((freespace / 1024) / 1024) / 1024)
         self.freespace = (((freespace / 1024) / 1024) / 1024)
         self.totalspace = (((totalspace / 1024) / 1024) / 1024)
-        if self.totalspace == 0:
-            self.percent = 0
-        else:
-            self.percent = (self.totalspace - self.freespace) * 1.0 / self.totalspace
+        self.percent = self.totalspace and (self.totalspace - self.freespace) * 1.0 / self.totalspace or 0.0
 
 
     def poll(self):
-        print 'time=%.1f' % (time.time() - self.lastpoll)
         self.lastpoll = time.time()
 
 
@@ -126,10 +119,10 @@ class PluginInterface(IdleBarPlugin):
         """
         Drawing to idlebar
         """
-        print 'drawtime=%.1f' % (time.time() - self.lastdraw)
-        self.lastdraw = time.time()
+        if self.lastdraw is None or (time.time() - self.lastdraw) >= config.DISKFREE_REFRESH:
+            self.lastdraw = time.time()
+            self.getDiskFree()
 
-        self.getDiskFree()
         diskimg = self.getimage(self.diskimg, osd)
         w, h = diskimg.get_size()
         if self.freespace < config.DISKFREE_VERY_LOW:
