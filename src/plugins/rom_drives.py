@@ -60,30 +60,43 @@ except:
         CDS_DISC_OK = 4
     else:
         # see linux/cdrom.h and Documentation/ioctl/cdrom.txt
-        CDROMEJECT = 0x5309
-        CDROMCLOSETRAY = 0x5319
-        CDROM_DRIVE_STATUS = 0x5326
-        CDROM_SELECT_SPEED = 0x5322
-        CDROM_LOCKDOOR = 0x5329  # lock or unlock door
+        CDROMEJECT           = 0x5309
         CDROM_GET_CAPABILITY = 0x5331
+        CDROMCLOSETRAY       = 0x5319  # pendant of CDROMEJECT
+        CDROM_SET_OPTIONS    = 0x5320  # Set behavior options
+        CDROM_CLEAR_OPTIONS  = 0x5321  # Clear behavior options
+        CDROM_SELECT_SPEED   = 0x5322  # Set the CD-ROM speed
+        CDROM_SELECT_DISC    = 0x5323  # Select disc (for juke-boxes)
+        CDROM_MEDIA_CHANGED  = 0x5325  # Check is media changed 
+        CDROM_DRIVE_STATUS   = 0x5326  # Get tray position, etc.
+        CDROM_DISC_STATUS    = 0x5327  # Get disc type, etc.
+        CDROM_CHANGER_NSLOTS = 0x5328  # Get number of slots
+        CDROM_LOCKDOOR       = 0x5329  # lock or unlock door
+        CDROM_DEBUG          = 0x5330  # Turn debug messages on/off
+        CDROM_GET_CAPABILITY = 0x5331  # get capabilities
+        # CDROM_DRIVE_STATUS
         CDS_NO_INFO = 0
         CDS_NO_DISC = 1
         CDS_TRAY_OPEN = 2
         CDS_DRIVE_NOT_READY = 3
         CDS_DISC_OK = 4
-        CDS_AUDIO = 100
-        CDS_DATA_1 = 101
-        CDS_DATA_2 = 102
-        CDS_XA_2_1 = 103
-        CDS_XA_2_2 = 104
-        CDS_MIXED = 105
-        CDC_CLOSE_TRAY = 0x1
-        CDC_OPEN_TRAY = 0x2
-        CDC_SELECT_SPEED = 0x8
-CDC_MO_DRIVE = 0x40000
-CDC_MRW = 0x80000
-CDC_MRW_W = 0x100000
-CDC_RAM = 0x200000
+        # capability flags
+        CDC_CLOSE_TRAY       = 0x1     # caddy systems _can't_ close
+        CDC_OPEN_TRAY        = 0x2     # but _can_ eject. 
+        CDC_LOCK             = 0x4     # disable manual eject
+        CDC_SELECT_SPEED     = 0x8     # programmable speed
+        CDC_SELECT_DISC      = 0x10    # select disc from juke-box
+CDC_MO_DRIVE         = 0x40000
+CDC_MRW              = 0x80000
+CDC_MRW_W            = 0x100000
+CDC_RAM              = 0x200000
+# CDROM_DISC_STATUS
+CDS_AUDIO = 100
+CDS_DATA_1 = 101
+CDS_DATA_2 = 102
+CDS_XA_2_1 = 103
+CDS_XA_2_2 = 104
+CDS_MIXED = 105
 
 
 import config
@@ -121,6 +134,7 @@ def init():
             media.log_capabilities(cdc)
             cds = media.get_drive_status()
             media.log_drive_status(cds)
+            media.log_disc_status(media.cis)
             # close the tray without popup message
             media.close_tray()
             config.REMOVABLE_MEDIA.append(media)
@@ -286,11 +300,13 @@ class RemovableMedia:
 
         # Dynamic stuff
         self.cdc       = 0
+        self.cis       = CDS_NO_INFO
         self.cds       = CDS_NO_INFO
         self.cds_changed = False
 
         self.tray_open = False
         self.drive_status = self.get_drive_status()
+        self.disc_status = self.cis
 
         self.id        = ''
         self.label     = ''
@@ -377,17 +393,35 @@ class RemovableMedia:
         elif cds == CDS_TRAY_OPEN:       return 'CDS_TRAY_OPEN'
         elif cds == CDS_DRIVE_NOT_READY: return 'CDS_DRIVE_NOT_READY'
         elif cds == CDS_DISC_OK:         return 'CDS_DISC_OK'
-        return 'CDS_UNKNOWN %s' % (cds)
+        return 'CDS_UNKNOWN %r' % (cds)
+
+
+    def disc_status_text(self, cds):
+        """ the disc status as text"""
+        if   cds == CDS_NO_INFO:         return 'CDS_NO_INFO'
+        elif cds == CDS_AUDIO:           return 'CDS_NO_DISC'
+        elif cds == CDS_DATA_1:          return 'CDS_DATA_1'
+        elif cds == CDS_DATA_2:          return 'CDS_DATA_2'
+        elif cds == CDS_XA_2_1:          return 'CDS_XA_2_1'
+        elif cds == CDS_XA_2_2:          return 'CDS_XA_2_2'
+        elif cds == CDS_MIXED:           return 'CDS_MIXED'
+        return 'CDS_UNKNOWN %r' % (cds)
+
+
+    def log_disc_status(self, cds):
+        """ Log the disc status """
+        _debug_('%r %s' % (self.devicename, self.disc_status_text(cds)), DINFO)
 
 
     def log_drive_status(self, cds):
         """ Log the drive status """
-        _debug_('%r %s' % (self.devicename, self.drive_status_text(cds)))
+        _debug_('%r %s' % (self.devicename, self.drive_status_text(cds)), DINFO)
 
 
     def get_drive_status(self):
         """ Open the CD/DVD drive and read its drive status """
         cds = CDS_NO_INFO
+        cis = CDS_NO_INFO
         try:
             fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
             try:
@@ -404,6 +438,7 @@ class RemovableMedia:
                     try:
                         if self.cdc & CDC_DRIVE_STATUS:
                             cds = ioctl(fd, CDROM_DRIVE_STATUS)
+                            cis = ioctl(fd, CDROM_DISC_STATUS)
                     except Exception, e:
                         _debug_('getting drive status for %r failed: %s' % (self.devicename, e), DWARNING)
                 _debug_('drive status for %s (%r:%s) is %s' % \
@@ -414,6 +449,7 @@ class RemovableMedia:
             _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
         self.cds_changed = self.cds != cds
         self.cds = cds
+        self.cis = cis
         return cds
 
 
@@ -485,14 +521,12 @@ class RemovableMedia:
         """ Mount the media """
         _debug_('Mounting disc in drive %s' % self.drivename, 2)
         util.mount(self.mountdir, force=True)
-        return
 
 
     def umount(self):
         """ Mount the media """
         _debug_('Unmounting disc in drive %s' % self.drivename, 2)
         util.umount(self.mountdir)
-        return
 
 
     def is_mounted(self):
@@ -568,38 +602,36 @@ class Identify_Thread(threading.Thread):
             _debug_('no disc information for drive %r' % (media.devicename))
             return
 
-        data = disc_info.mmdata
-        if not data:
-            _debug_('no data for drive %r' % (media.devicename))
+        info = disc_info.discinfo
+        if not info:
+            _debug_('no info for drive %r' % (media.devicename))
             return
 
-        if data['mime'] == 'audio/cd':
-            media.id = disc_id = data['id']
+        if info['mime'] == 'audio/cd':
+            media.id = disc_id = info['id']
             media.item = AudioDiskItem(disc_id, parent=None, devicename=media.devicename, display_type='audio')
             media.type = 'audio'
             media.item.media = media
-            if data['title']:
-                media.item.name = data['title']
+            if info['title']:
+                media.item.name = info['title']
             media.item.info = disc_info
             _debug_('playing audio in drive %r' % (media.devicename))
             return
 
         image = title = movie_info = more_info = fxd_file = None
 
-        media.id    = data['id']
-        media.label = data['label']
+        media.id    = info['id']
+        media.label = info['label']
         media.type  = 'cdrom'
 
-        label = data['label']
+        label = info['label']
 
         # is the id in the database?
         if media.id in video.fxd_database['id']:
             movie_info = video.fxd_database['id'][media.id]
             if movie_info:
                 title = movie_info.name
-
-        # no? Maybe we can find a label regexp match
-        else:
+        else: # no? Maybe we can find a label regexp match
             for (re_label, movie_info_t) in video.fxd_database['label']:
                 if re_label.match(media.label):
                     movie_info = movie_info_t
@@ -622,11 +654,10 @@ class Identify_Thread(threading.Thread):
 
 
         # DVD/VCD/SVCD:
-        # There is data from mmpython for these three types
-        if data['mime'] in ('video/vcd', 'video/dvd'):
+        if info['mime'] in ('video/vcd', 'video/dvd'):
             if not title:
                 title = media.label.replace('_', ' ').lstrip().rstrip()
-                title = '%s [%s]' % (data['mime'][6:].upper(), title)
+                title = '%s [%s]' % (info['mime'][6:].upper(), title)
 
             if movie_info:
                 media.item = copy.copy(movie_info)
@@ -638,12 +669,12 @@ class Identify_Thread(threading.Thread):
             media.item.info.set_variables(variables)
 
             media.item.name = title
-            media.item.url = data['mime'][6:] + '://'
+            media.item.url = info['mime'][6:] + '://'
             media.item.media = media
 
-            media.type = data['mime'][6:]
+            media.type = info['mime'][6:]
 
-            media.item.info.mmdata = data
+            media.item.info.mmdata = info
             _debug_('playing video in drive %r' % (media.devicename))
             return
 
@@ -666,8 +697,7 @@ class Identify_Thread(threading.Thread):
 
         video_files = util.match_files(media.mountdir, config.VIDEO_SUFFIX)
 
-        _debug_('video_files="%r"' % (video_files,), 2)
-        _debug_('identify media: video_files="%r"' % (video_files,))
+        _debug_('video_files=%r' % (video_files,))
 
         media.item = DirItem(media.mountdir, None, create_metainfo=False)
         media.item.info = disc_info

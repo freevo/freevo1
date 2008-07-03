@@ -417,30 +417,25 @@ meta_cache      = MetaCache()
 class Info:
     """
     Container for all kind of information. This information includes
-    mmpython parsed information and some user stored stuff.
+    kaa.metadata parsed information and some user stored stuff.
     """
-    def __init__(self, filename, mmdata, metadata):
+    def __init__(self, filename, discinfo, metadata):
         self.filename  = filename
-        self.disc      = False
+        self.discinfo  = discinfo or {}
+        self.metadata  = metadata or {}
         self.variables = {}
-        if mmdata:
-            self.mmdata = mmdata
-        else:
-            self.mmdata = {}
-        if metadata:
-            self.metadata = metadata
-        else:
-            self.metadata = {}
-        self.dicts = ( self.mmdata, self.variables, self.metadata )
+        self.disc      = False
+        self.dicts = ( self.discinfo, self.variables, self.metadata )
 
 
     def __str__(self):
-        s = pformat(self, depth=2)
+        s = ', '.join([ self.filename, str(self.disc), self.discinfo.id, self.discinfo.type ])
         return s
 
 
     def __repr__(self):
-        if hasattr(self, 'filename'):
+        #if hasattr(self, 'filename') and self.filename:
+        if self.filename:
             s = '%s: %r' % (self.filename, self.__class__)
         else:
             s = '%r' % (self.__class__)
@@ -492,7 +487,7 @@ class Info:
             return False
         else:
             meta_cache.set(os.path.basename(self.filename), os.path.dirname(self.filename),
-                           self.filename, self.metadata)
+                self.filename, self.metadata)
             return True
 
 
@@ -510,7 +505,7 @@ class Info:
         if self.metadata.has_key(key):
             del self.metadata[key]
             meta_cache.set(os.path.basename(self.filename), os.path.dirname(self.filename),
-                           self.filename, self.metadata)
+                self.filename, self.metadata)
             return True
 
 
@@ -519,7 +514,7 @@ class Info:
         set personal user variables (not to storage) to 'variables'
         """
         self.variables = variables
-        self.dicts     = ( self.mmdata, self.variables, self.metadata )
+        self.dicts     = ( self.discinfo, self.variables, self.metadata )
 
 
     def get_variables(self):
@@ -607,35 +602,20 @@ def disc_info(media, force=False):
     """
     return kaa metadata disc information for the media
     """
-    type, id = mmpython.cdrom.status(media.devicename)
-    if not id:
+    discinfo = mmpython.parse(media.devicename)
+    if not discinfo.id:
         # bad disc, e.g. blank disc
         return {}
 
     cachedir  = os.path.join(config.OVERLAY_DIR, 'disc/metadata')
-    cachefile = os.path.join(cachedir, id + '.mmpython')
-
-    if os.path.isfile(cachefile) and not force:
-        mmdata = util.read_pickle(cachefile)
-    else:
-        mmdata = mmpython.parse(media.devicename)
-        if not mmdata:
-            print '*****************************************'
-            print 'Error detecting the disc in %r' % (media.devicename)
-            print 'Please contact the developers'
-            print '*****************************************'
-            return {}
-        else:
-            util.save_pickle(mmdata, cachefile)
-
-    cachefile = os.path.join(cachedir, id + '.freevo')
+    cachefile = os.path.join(cachedir, discinfo.id + '.freevo')
 
     if os.path.isfile(cachefile):
         metainfo = util.read_pickle(cachefile)
     else:
         metainfo = {}
 
-    if mmdata.mime == 'unknown/unknown' and not metainfo.has_key('disc_num_video'):
+    if force or discinfo.mime == 'unknown/unknown' and not metainfo.has_key('disc_num_video'):
         media.mount()
         for type in ('video', 'audio', 'image'):
             items = getattr(config, '%s_SUFFIX' % type.upper())
@@ -644,7 +624,7 @@ def disc_info(media, force=False):
         media.umount()
         util.save_pickle(metainfo, cachefile)
 
-    info = Info(cachefile, mmdata, metainfo)
+    info = Info(cachefile, discinfo, metainfo)
     info.disc = True
     return info
 

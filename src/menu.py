@@ -42,11 +42,15 @@ from event import *
 from item import Item
 from gui import GUIObject, AlertBox
 
+from util.benchmark import benchmark
+benchmarking = False
+
 
 class MenuItem(Item):
     """
     Default item for the menu. It includes one action
     """
+    @benchmark(benchmarking)
     def __init__(self, name='', action=None, arg=None, type=None, image=None, icon=None, parent=None, skin_type=None):
         Item.__init__(self, parent, skin_type=skin_type)
         if name:
@@ -80,10 +84,11 @@ class MenuItem(Item):
         """
         return the menu item as a raw string
         """
-        s = '<class %s %r>' % (self.__class__, self.name)
+        s = '<%-.16s: %r>' % (self.name, self.__class__)
         return s
 
 
+    @benchmark(benchmarking)
     def actions(self):
         """
         return the default action
@@ -91,6 +96,7 @@ class MenuItem(Item):
         return [ (self.select, self.name, 'MENU_SUBMENU') ]
 
 
+    @benchmark(benchmarking)
     def select(self, arg=None, menuw=None):
         """
         call the default acion
@@ -145,6 +151,14 @@ class Menu:
         return s
 
 
+    def __repr__(self):
+        """
+        return the class as string
+        """
+        return '<%-.16s: %r>' % (self.heading, self.__class__)
+
+
+    @benchmark(benchmarking)
     def items_per_page(self):
         """
         return the number of items per page for this skin
@@ -157,6 +171,7 @@ class MenuWidget(GUIObject):
     """
     The MenuWidget handles a stack of Menus
     """
+    @benchmark(benchmarking)
     def __init__(self):
         GUIObject.__init__(self)
         self.menustack = []
@@ -178,6 +193,13 @@ class MenuWidget(GUIObject):
         return s
 
 
+    def __repr__(self):
+        if self.label:
+            return '<%-.16s: %r>' % (self.label, self.__class__)
+        return '%r' % (self.__class__)
+
+
+    @benchmark(benchmarking)
     def get_event_context(self):
         """
         return the event context
@@ -187,6 +209,7 @@ class MenuWidget(GUIObject):
         return self.event_context
 
 
+    @benchmark(benchmarking)
     def show(self):
         if not self.visible:
             self.visible = 1
@@ -196,6 +219,7 @@ class MenuWidget(GUIObject):
         rc.app(None)
 
 
+    @benchmark(benchmarking)
     def hide(self, clear=True):
         if self.visible:
             self.visible = 0
@@ -203,6 +227,7 @@ class MenuWidget(GUIObject):
                 skin.clear(osd_update=clear)
 
 
+    @benchmark(benchmarking)
     def delete_menu(self, arg=None, menuw=None, allow_reload=True):
         if len(self.menustack) > 1:
             self.menustack = self.menustack[:-1]
@@ -219,6 +244,7 @@ class MenuWidget(GUIObject):
             self.init_page()
 
 
+    @benchmark(benchmarking)
     def delete_submenu(self, refresh=True, reload=False, osd_message=''):
         """
         Delete the last menu if it is a submenu. Also refresh or reload the
@@ -237,6 +263,7 @@ class MenuWidget(GUIObject):
             rc.post_event(Event(OSD_MESSAGE, arg=osd_message))
 
 
+    @benchmark(benchmarking)
     def back_one_menu(self, arg=None, menuw=None):
         if len(self.menustack) > 1:
             try:
@@ -268,6 +295,7 @@ class MenuWidget(GUIObject):
                 self.refresh()
 
 
+    @benchmark(benchmarking)
     def goto_main_menu(self, arg=None, menuw=None):
         self.menustack = [self.menustack[0]]
         menu = self.menustack[0]
@@ -275,6 +303,7 @@ class MenuWidget(GUIObject):
         self.refresh()
 
 
+    @benchmark(benchmarking)
     def goto_media_menu(self, media='audio'):
         """
         Go to a main menu item media = 'tv' or 'audio' or 'video' or 'image' or 'games'
@@ -340,6 +369,7 @@ class MenuWidget(GUIObject):
             level += 1
 
 
+    @benchmark(benchmarking)
     def goto_prev_page(self, arg=None, menuw=None):
         menu = self.menustack[-1]
 
@@ -357,6 +387,7 @@ class MenuWidget(GUIObject):
             self.refresh()
 
 
+    @benchmark(benchmarking)
     def goto_next_page(self, arg=None, menuw=None):
         menu = self.menustack[-1]
         self.rows, self.cols = menu.items_per_page()
@@ -382,6 +413,7 @@ class MenuWidget(GUIObject):
             self.refresh()
 
 
+    @benchmark(benchmarking)
     def pushmenu(self, menu):
         self.menustack.append(menu)
         if isinstance(menu, Menu):
@@ -393,6 +425,7 @@ class MenuWidget(GUIObject):
             menu.refresh()
 
 
+    @benchmark(benchmarking)
     def refresh(self, reload=0):
         menu = self.menustack[-1]
 
@@ -400,11 +433,11 @@ class MenuWidget(GUIObject):
             # Do not draw if there are any children
             if self.children:
                 return False
-
             return menu.refresh()
 
-        if self.menustack[-1].umount_all == 1:
-            util.umount_all()
+        #DJW: why do we do this?
+        #if self.menustack[-1].umount_all == 1:
+        #    util.umount_all()
 
         if reload:
             if menu.reload_func:
@@ -419,6 +452,7 @@ class MenuWidget(GUIObject):
         skin.draw('menu', self, self.menustack[-1])
 
 
+    @benchmark(benchmarking)
     def make_submenu(self, menu_name, actions, item):
         #print 'make_submenu(menu_name=%r, actions=%r, item=%r)' % (menu_name, actions, item)
         items = []
@@ -445,6 +479,7 @@ class MenuWidget(GUIObject):
         self.pushmenu(s)
 
 
+    @benchmark(benchmarking)
     def _handle_up(self, menu, event):
         curr_selected = self.all_items.index(menu.selected)
         sounds.play_sound(sounds.MENU_NAVIGATE)
@@ -466,6 +501,7 @@ class MenuWidget(GUIObject):
         return
 
 
+    @benchmark(benchmarking)
     def _handle_down(self, menu, event):
         curr_selected = self.all_items.index(menu.selected)
         sounds.play_sound(sounds.MENU_NAVIGATE)
@@ -488,6 +524,7 @@ class MenuWidget(GUIObject):
         return
 
 
+    @benchmark(benchmarking)
     def _handle_pageup(self, menu, event):
         # Do nothing for an empty file list
         if not len(self.menu_items):
@@ -506,6 +543,7 @@ class MenuWidget(GUIObject):
         return
 
 
+    @benchmark(benchmarking)
     def _handle_pagedown(self, menu, event):
         # Do nothing for an empty file list
         if not len(self.menu_items):
@@ -527,6 +565,7 @@ class MenuWidget(GUIObject):
             self.refresh()
         return
 
+    @benchmark(benchmarking)
     def _handle_left(self, menu, event):
         # Do nothing for an empty file list
         if not len(self.menu_items):
@@ -548,6 +587,7 @@ class MenuWidget(GUIObject):
         return
 
 
+    @benchmark(benchmarking)
     def _handle_right(self, menu, event):
         # Do nothing for an empty file list
         if not len(self.menu_items):
@@ -570,6 +610,7 @@ class MenuWidget(GUIObject):
         return
 
 
+    @benchmark(benchmarking)
     def _handle_play_item(self, menu, event):
         action = None
         arg    = None
@@ -578,9 +619,7 @@ class MenuWidget(GUIObject):
         try:
             action = menu.selected.action
         except AttributeError:
-            actions = menu.selected.actions()
-            if not actions:
-                actions = []
+            actions = menu.selected.actions() or []
 
             # Add the actions of the plugins to the list of actions.  This is needed when a
             # Item class has no actions but plugins provides them. This case happens with an
@@ -631,11 +670,11 @@ class MenuWidget(GUIObject):
                     action = action[0]
         if not action:
             AlertBox(text=_('No action defined for this choice!')).show()
-        else:
-            action(arg=arg, menuw=self)
-        return
+            return
+        action(arg=arg, menuw=self)
 
 
+    @benchmark(benchmarking)
     def _handle_submenu(self, menu, event):
         #if hasattr(menu, 'is_submenu'):
         #    self._handle_play_item(menu, event)
@@ -680,6 +719,7 @@ class MenuWidget(GUIObject):
         return
 
 
+    @benchmark(benchmarking)
     def _handle_call_item_action(self, menu, event):
         _debug_('calling action %s' % event.arg)
 
@@ -701,6 +741,7 @@ class MenuWidget(GUIObject):
         _debug_('action %s not found' % event.arg)
 
 
+    @benchmark(benchmarking)
     def eventhandler(self, event):
         menu = self.menustack[-1]
 
@@ -847,6 +888,7 @@ class MenuWidget(GUIObject):
 
 
 
+    @benchmark(benchmarking)
     def rebuild_page(self):
         menu = self.menustack[-1]
 
@@ -875,6 +917,7 @@ class MenuWidget(GUIObject):
         menu.display_style = skin.get_display_style(menu)
 
 
+    @benchmark(benchmarking)
     def init_page(self):
 
         menu = self.menustack[-1]

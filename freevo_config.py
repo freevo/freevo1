@@ -370,6 +370,7 @@ LOCAL_CONF_CHANGES = [
      Added OSD_IDLEBAR_FONT and OSD_IDLEBAR_CLOCK_FONT to allow idlebar fonts to be set
      Added MPLAYER_AO_DEV_OPTS for audio device options
      Changed MPLAYER_VO_DEV_OPTS, removed need for leading ':'
+     Added ROM_DRIVES_AUTOFS to allow an autmounter to be used for ROM drives
      """),
 ]
 
@@ -430,6 +431,9 @@ START_FULLSCREEN_X = 0               # Start in fullscreen mode if using x11 or 
 #
 ROM_DRIVES = None
 
+ROM_DRIVES_AUTOFS = False  # Indicates that an automounter daemon is being used.
+                           # Does not try to mount/umount the media.
+
 #
 # hide discs from the wrong menu (e.g. VCDs in audio menu) and empty discs
 #
@@ -455,7 +459,6 @@ SYS_RESTART_CMD  = 'shutdown -r now'  # like SYS_SHUTDOWN_CMD, only for reboot
 
 SYS_SHUTDOWN_ENABLE = 0  # Performs a whole system shutdown at SHUTDOWN!
                          # For standalone boxes.
-
 
 # ======================================================================
 # Main menu items

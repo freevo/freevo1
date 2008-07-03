@@ -34,6 +34,8 @@ import stat
 import statvfs
 import string
 import copy
+import subprocess
+from subprocess import PIPE
 try:
     import cPickle as pickle
 except ImportError:
@@ -372,33 +374,61 @@ def recursefolders(root, recurse=0, pattern='*', return_folders=0):
 mounted_dirs = []
 
 @benchmark(benchmarking)
-def umount(dir):
+def is_mounted(dir):
     """
-    umount a directory
+    return if the dir is mounted
     """
-    if not dir:
-        return
+    _debug_('is_mounted(dir=%r)' % (dir,), 2)
     global mounted_dirs
-    if os.path.ismount(dir):
-        os.system("umount %s" % dir)
-        if not os.path.ismount(dir) and dir in mounted_dirs:
-            mounted_dirs.remove(dir)
+    return dir in mounted_dirs
 
 
 @benchmark(benchmarking)
-def mount(dir, force=0):
+def mount(dir, force=False):
     """
     mount a directory
     """
+    if config.ROM_DRIVES_AUTOFS:
+        return
+    _debug_('mount(dir=%r, force=%r)' % (dir, force), 2)
     if not dir:
         return
     global mounted_dirs
     if not os.path.ismount(dir):
-        os.system("mount %s 2>/dev/null" % dir)
+        p = subprocess.Popen(['mount', dir], stdout=PIPE, stderr=PIPE)
+        rc = p.wait()
+        so, se = p.communicate()
+        if rc:
+            if rc in (1,):
+                _debug_('mounting %r: %s' % (dir, se), DWARNING)
+            elif rc == (32,):
+                _debug_('mounting %r: %s' % (dir, se), DWARNING)
         if os.path.ismount(dir) and not dir in mounted_dirs:
             mounted_dirs.append(dir)
     if force and not dir in mounted_dirs:
         mounted_dirs.append(dir)
+
+
+@benchmark(benchmarking)
+def umount(dir):
+    """
+    umount a directory
+    """
+    if config.ROM_DRIVES_AUTOFS:
+        return
+    _debug_('umount(dir=%r)' % (dir,), 2)
+    if not dir:
+        return
+    global mounted_dirs
+    if os.path.ismount(dir):
+        p = subprocess.Popen(['mount', dir], stdout=PIPE, stderr=PIPE)
+        rc = p.wait()
+        so, se = p.communicate()
+        if rc:
+            if rc in (1,):
+                _debug_('unmounting %r: %s' % (dir, se), DWARNING)
+        if not os.path.ismount(dir) and dir in mounted_dirs:
+            mounted_dirs.remove(dir)
 
 
 @benchmark(benchmarking)
@@ -413,19 +443,11 @@ def umount_all():
 
 
 @benchmark(benchmarking)
-def is_mounted(dir):
-    """
-    return if the dir is mounted
-    """
-    global mounted_dirs
-    return dir in mounted_dirs
-
-
-@benchmark(benchmarking)
 def resolve_media_mountdir(*arg):
     """
     get the mount point of the media with media_id
     """
+    _debug_('resolve_media_mountdir(arg=%r)' % (arg,), 2)
     if len(arg) == 1 and isinstance(arg[0], dict):
         media_id = arg[0]['media_id']
         file     = arg[0]['file']
@@ -452,6 +474,7 @@ def check_media(media_id):
     """
     check if media_id is a valid media in one of the drives
     """
+    _debug_('check_media(media_id=%r)' % (media_id,), 2)
     for media in config.REMOVABLE_MEDIA:
         if media_id == media.id:
             return media

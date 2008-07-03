@@ -181,25 +181,21 @@ def codecs_open(name, mode, encoding):
             raise IOError, e
 
 
-def listdir(directory, handle_exception=True, include_dot_files=False,
-            include_overlay=False):
+def listdir(directory, handle_exception=True, include_dot_files=False, include_overlay=False):
     """
     get a directory listing (including OVERLAY_DIR)
     """
     try:
-        if not directory.endswith('/'):
-            directory = directory + '/'
-
         files = []
 
         if include_dot_files:
             for f in os.listdir(directory):
                 if not f in ('.svn', '.xvpics', '.thumbnails', '.pics', 'folder.fxd'):
-                    files.append(directory + f)
+                    files.append(os.path.join(directory, f))
         else:
             for f in os.listdir(directory):
                 if not f.startswith('.') and not f in ('folder.fxd',):
-                    files.append(directory + f)
+                    files.append(os.path.join(directory, f))
 
         if not include_overlay:
             return files
@@ -210,13 +206,13 @@ def listdir(directory, handle_exception=True, include_dot_files=False,
                 if fname.endswith('.raw') or fname.startswith('.') or \
                        fname == 'folder.fxd' or fname.find('.thumb.') > 0:
                     continue
-                f = overlay + fname
+                f = os.path.join(overlay, fname)
                 if not os.path.isdir(f):
                     files.append(f)
         return files
 
-    except OSError:
-        _debug_('Error in dir %s' % directory)
+    except OSError, why:
+        _debug_('Cannot list dir %r: %s' % (directory, why), DWARNING)
         traceback.print_exc()
         if not handle_exception:
             raise OSError

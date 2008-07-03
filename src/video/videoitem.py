@@ -734,7 +734,7 @@ class VideoItem(Item):
             i.set_url(self.url + str(titlenum+1), False)
             i.info = copy.copy(self.info)
             # copy the attributes from mmpython about this track
-            i.info.mmdata = self.info.mmdata['tracks'][titlenum]
+            i.info.discinfo = self.info.discinfo['tracks'][titlenum]
             i.info.set_variables(self.info.get_variables())
             i.info_type       = 'track'
             i.files           = None

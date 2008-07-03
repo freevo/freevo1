@@ -90,6 +90,9 @@ CONFIG_VERSION = 5.23
 #
 # ROM_DRIVES = None
 
+# ROM_DRIVES_AUTOFS = False  # Indicates that an automounter daemon is being used.
+#                              Does not try to mount/umount the media.
+
 #
 # Hide discs from the wrong menu (e.g. VCDs in audio menu) and empty discs.
 #

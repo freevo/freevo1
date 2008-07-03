@@ -67,6 +67,13 @@ class Event(kaa.Event):
         return self.name
 
 
+    def __repr__(self):
+        """
+        return the offical representation of the object as string
+        """
+        return '%s: %r' % (self.name, self.__class__)
+
+
     def __int__(self):
         """
         return the event as int (the last char of the name will be returned

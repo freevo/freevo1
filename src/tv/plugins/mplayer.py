@@ -71,7 +71,6 @@ class MPlayer:
     def Play(self, mode, tuner_channel=None):
         """ """
         _debug_('MPlayer.Play(mode=%r, tuner_channel=%r)' % (mode, tuner_channel), 2)
-        print 'DJW:MPlayer.Play(mode=%r, tuner_channel=%r)' % (mode, tuner_channel)
         # Try to see if the channel is not tunable
         try:
             channel = int(tuner_channel)
