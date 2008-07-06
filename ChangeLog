@@ -28,6 +28,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Fixed IMDB to use new Plot (B#1982159)
  * Fixed OSD not to crash when viewing non-supported images (B#1989196)
  * Fixed webserver help plugins module to allow non-ascii characters (B#1983965)
+ * Updated mplayer to handle subtitle and audio cycling using the SUBTITLE and LANG events (F#2010109)
 
 == Release 1.8.1 (2008-05-26) ==
 --------------------------------

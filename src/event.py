@@ -385,6 +385,8 @@ VIDEO_EVENTS = {
     'DISPLAY'   : TOGGLE_OSD,
     'REC'       : STORE_BOOKMARK,
     '0'         : VIDEO_MANUAL_SEEK,
+    'LANG'      : VIDEO_NEXT_AUDIOLANG,
+    'SUBTITLE'  : VIDEO_NEXT_SUBTITLE,
     'AVSYNC+'   : Event(VIDEO_AVSYNC, arg=0.100),
     'AVSYNC-'   : Event(VIDEO_AVSYNC, arg=-0.100),
     }

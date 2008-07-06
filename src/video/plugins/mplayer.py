@@ -474,6 +474,14 @@ class MPlayer:
             self.app.write('audio_delay %g\n' % event.arg);
             return True
 
+        if event == VIDEO_NEXT_AUDIOLANG:
+	    self.app.write('switch_audio\n')
+	    return True
+
+        if event == VIDEO_NEXT_SUBTITLE:
+	    self.app.write('sub_select\n')
+	    return True
+
         if event == OSD_MESSAGE:
             self.app.write('osd_show_text "%s"\n' % event.arg);
             return True
