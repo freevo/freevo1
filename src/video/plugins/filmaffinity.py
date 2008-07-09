@@ -74,14 +74,13 @@ txheaders = {
 
 class PluginInterface(plugin.ItemPlugin):
     """
-       Este plugin obtiene la informacion de la pelicula consultado
-       la pagina de FilmAffinity.
+       This plugins obtain movie information in Spanish from the FilmAffinity website
 
-       Configuracion:
+       Configuration:
        plugin.activate('video.filmaffinity')
        FILMAFFINITY_REMOVE_FROM_LABEL = ('\(.*?\)','\[.*?\]')
        FILMAFFINITY_REMOVE_FROM_SEARCHSTRING = ('spanish','xvid','dvdrip','parte','[0-9]*','dvdscreener','mp3')
-       FILMAFFINITY_AUTOACCEPT_SINGLE_HIT = True 
+       FILMAFFINITY_AUTOACCEPT_SINGLE_HIT = True
     """
 
     def __init__(self, license=None):
@@ -146,7 +145,7 @@ class PluginInterface(plugin.ItemPlugin):
         regexp_getsingle = re.compile('^<meta name="keywords" content="movie', re.I)
         regexp_geturl = re.compile('.*<a href="/es/.*\.php\?movie_id=([0-9]*)',re.I)
         multiple = True
-        
+
         for line in response.read().split("\n"):
             #print line
             if multiple:
@@ -160,11 +159,11 @@ class PluginInterface(plugin.ItemPlugin):
                 ms = regexp_getsingle.match(line)
                 if ms: multiple = False
             else:
-            	mu = regexp_geturl.match(line)
-            	if mu:
-            		link = "/es/film" + mu.group(1) + ".html"
-            		self.filmaffinity_id_list += [ (link, name, '') ]
-            		break
+                mu = regexp_geturl.match(line)
+                if mu:
+                    link = "/es/film" + mu.group(1) + ".html"
+                    self.filmaffinity_id_list += [ (link, name, '') ]
+                    break
 
         return self.filmaffinity_id_list
 
@@ -211,7 +210,7 @@ class PluginInterface(plugin.ItemPlugin):
         idpage.close()
 
 
-    def setFxdFile(self, fxdfilename = None, overwrite = False):
+    def setFxdFile(self, fxdfilename=None, overwrite=False):
         """
         setFxdFile (string, full path)
         Set fxd file to write to, may be omitted, may be an existing file
@@ -294,7 +293,7 @@ class PluginInterface(plugin.ItemPlugin):
         """
         search filmaffinity for this item
         """
-        box = PopupBox(text=_('Buscando en FilmAffinity...'))
+        box = PopupBox(text=_('Searching in FilmAffinity...'))
         box.show()
 
         items = []
@@ -335,7 +334,7 @@ class PluginInterface(plugin.ItemPlugin):
             menuw.pushmenu(moviemenu)
             return
 
-        box = PopupBox(text=_('No hay informacion disponible'))
+        box = PopupBox(text=_('No info available'))
         box.show()
         time.sleep(2)
         box.destroy()
@@ -372,7 +371,7 @@ class PluginInterface(plugin.ItemPlugin):
         """
         create fxd file for the item
         """
-        box = PopupBox(text=_('Obteniendo descripción de la película'))
+        box = PopupBox(text=_('Fetching movie information'))
         box.show()
 
         #if this exists we got a cdrom/dvdrom
@@ -488,7 +487,7 @@ class PluginInterface(plugin.ItemPlugin):
         fxd.add(videonode, node)
         if self.item.subitems:
             for i in range(len(self.item.subitems)):
-                fxd.add(fxd.XMLnode('file', [('id', 'f%s' % i)], os.path.basename(self.item.subitems[i].filename)), videonode, 0) 
+                fxd.add(fxd.XMLnode('file', [('id', 'f%s' % i)], os.path.basename(self.item.subitems[i].filename)), videonode, 0)
         else:
             fxd.add(fxd.XMLnode('file', [('id', 'f1')], os.path.basename(self.item.filename)), videonode, 0)
         infonode = fxd.XMLnode('info')
@@ -537,19 +536,19 @@ class PluginInterface(plugin.ItemPlugin):
         self.info['tagline'] = soup.find(text='TITULO ORIGINAL').parent.parent.parent.td.nextSibling.nextSibling.b.string.strip().encode('latin-1')
         self.info['actor']= stripTags(soup.find(text='REPARTO').parent.parent.nextSibling.nextSibling.contents).strip()
 
-        sinopsis = None       # suele existir la palabra SINOPSIS
-        generoCritica = None  # pero si no existe buscamos GENERO Y CRITICA
+        sinopsis = None       # Usually the word SINOPSIS exits
+        generoCritica = None  # but if it doesn't we look for GENERO Y CRITICA
         try:
-             sinopsis = soup.find(text=re.compile('SINOPSIS')).string
+            sinopsis = soup.find(text=re.compile('SINOPSIS')).string
         except:
-             generoCritica = soup.find(text=re.compile('NERO Y CR')).parent.parent.nextSibling.nextSibling.string
+            generoCritica = soup.find(text=re.compile('NERO Y CR')).parent.parent.nextSibling.nextSibling.string
 
         if sinopsis:
-             self.info['plot'] = sinopsis[sinopsis.find('SINOPSIS')+10:].strip()
-             self.info['genre'] = sinopsis[:sinopsis.find('SINOPSIS')-3].strip()
+            self.info['plot'] = sinopsis[sinopsis.find('SINOPSIS')+10:].strip()
+            self.info['genre'] = sinopsis[:sinopsis.find('SINOPSIS')-3].strip()
         elif generoCritica:
-             self.info['plot'] = generoCritica[generoCritica.find('/')+2:].strip()
-             self.info['genre'] = generoCritica[:generoCritica.find('/')-3].strip()
+            self.info['plot'] = generoCritica[generoCritica.find('/')+2:].strip()
+            self.info['genre'] = generoCritica[:generoCritica.find('/')-3].strip()
 
         #self.imagefile = self.tmppath + vfs.basename(self.title)
         self.image_url = img['src']
@@ -594,7 +593,7 @@ class PluginInterface(plugin.ItemPlugin):
         if mplayer_opt and 'mplayer_opt' in mpl_global_opt:
             self.mpl_global_opt = mplayer_opt['mplayer_opt']
 
-        
+
 class Error(Exception):
     """Base class for exceptions in Filmaffinity_Fxd"""
     def __str__(self):
@@ -623,5 +622,3 @@ def stripTags(c):
     for num in xrange(len(c)):
         str_list.append(c[num].string)
     return ''.join(str_list)
-
- 	  	 
