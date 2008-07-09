@@ -74,6 +74,7 @@ class Window(GUIObject):
         self.internal_h_align = Align.CENTER
         self.internal_v_align = Align.CENTER
 
+        self.refresh_abs_position()
 
     def add_child(self, child):
         if self.content:

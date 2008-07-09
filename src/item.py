@@ -35,6 +35,7 @@ Base class of a media item
 import os
 import gettext
 import shutil
+import pygame
 from pprint import pformat
 
 import config
@@ -207,6 +208,7 @@ class Item:
             self.info     = mediainfo.Info(None, None, info)
         self.menuw        = None
         self.description  = ''
+        self.rect         = pygame.Rect(0,0,0,0)
         self.image        = None            # imagefile
         self.skin_fxd     = None            # skin information etc.
         self.media        = None

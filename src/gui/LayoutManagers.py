@@ -155,7 +155,10 @@ class FlowLayout(LayoutManager):
                 if child.h_align == Align.CENTER:
                     x_offset = self.container.width / 2 - \
                                (child.left + child.width / 2)
-                    child.left += x_offset
+                    if child.left:
+                        child.set_position(child.left + x_offset, child.top)
+                    else:
+                        child.set_position(x_offset, child.top)
                     _debug_('            moved right by %s' % x_offset, 2)
 
                 if child.h_align == Align.LEFT:
@@ -165,7 +168,10 @@ class FlowLayout(LayoutManager):
 
                 if child.v_align == Align.CENTER:
                     y_offset = self.container.height / 2 - (child.top + child.height / 2)
-                    child.top += y_offset
+                    if child.top:
+                        child.set_position(child.left, child.top + y_offset)
+                    else:
+                        child.set_position(child.left, y_offset)
 
                 # If there is really just one visible child inside this
                 # container then we are done.
@@ -192,12 +198,18 @@ class FlowLayout(LayoutManager):
                 x_offset = self.container.width / 2 - row_center
 
                 for child in row:
-                    child.left += x_offset
+                    if child.left:
+                        child.set_position(child.left + x_offset, child.top)
+                    else:
+                        child.set_position(x_offset, child.top)
 
             elif len(row) == 1 and row[0].h_align == Align.CENTER:
                 x_offset = self.container.width / 2 - (row[0].left + row[0].width / 2)
-                row[0].left += x_offset
 
+                if row[0].left:
+                    row[0].set_position(child.left + x_offset, child.top)
+                else:
+                    row[0].set_position(x_offset, child.top)
 
         if len(self.table) > 1:
             space = self.container.height - self.container.v_spacing - global_height
@@ -206,7 +218,10 @@ class FlowLayout(LayoutManager):
                 current = 2 * shift
                 for row in self.table:
                     for child in row:
-                        child.top += current
+                        if child.top:
+                            child.set_position(child.left, child.top + current)
+                        else:
+                            child.set_position(child.left, current)
                     current += shift
 
         self.needed_space = global_height

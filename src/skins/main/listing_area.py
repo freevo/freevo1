@@ -234,6 +234,15 @@ class Listing_Area(Skin_Area):
         tvs_shortname = True
 
         for choice in menuw.menu_items:
+
+            items_geometry = self.last_get_items_geometry[1]
+
+            # Widget Sizes
+            wdg_x = 0
+            wdg_y = 0
+            wdg_w = items_geometry[2]
+            wdg_h = items_geometry[3]
+
             if content.types.has_key('%s selected' % choice.type):
                 s_val = content.types[ '%s selected' % choice.type ]
             else:
@@ -311,6 +320,8 @@ class Listing_Area(Skin_Area):
 
                 if val.rectangle:
                     r = self.get_item_rectangle(val.rectangle, width, val.font.h)[2]
+                    wdg_x = x0 + hskip + r.x + x_icon - BOX_UNDER_ICON * x_icon
+                    wdg_y = y0 + vskip + r.y
                     self.drawroundbox(x0 + hskip + r.x + x_icon - BOX_UNDER_ICON * x_icon,
                                       y0 + vskip + r.y,
                                       r.width - icon_x + BOX_UNDER_ICON * icon_x,
@@ -350,6 +361,8 @@ class Listing_Area(Skin_Area):
                             tvs_w = val.font.stringsize('%s x' % sn[0]) + season + episode
                         last_tvs = (sn[0], tvs_w)
 
+                    wdg_x = x0 + hskip + icon_x + tvs_w
+                    wdg_y = y0 + vskip
                     self.drawstring(' - %s' % sn[3], val.font, content,
                                     x=x0 + hskip + icon_x + tvs_w,
                                     y=y0 + vskip, width=width-icon_x-tvs_w, height=-1,
@@ -381,6 +394,8 @@ class Listing_Area(Skin_Area):
                                 table_text[i] = ''
 
                         if table_text[i]:
+                            wdg_x = table_x + x_mod
+                            wdg_y = y0 + vskip
                             self.drawstring(table_text[i], val.font, content,
                                             x=table_x + x_mod,
                                             y=y0 + vskip, width=table_w, height=-1,
@@ -388,6 +403,8 @@ class Listing_Area(Skin_Area):
                         table_x += table_w + 5
 
                 else:
+                    wdg_x = x0 + hskip + x_icon
+                    wdg_y = y0 + vskip
                     self.drawstring(text, val.font, content, x=x0 + hskip + x_icon,
                                     y=y0 + vskip, width=width-icon_x, height=-1,
                                     align_h=val.align, mode='hard', dim=True)
@@ -433,14 +450,21 @@ class Listing_Area(Skin_Area):
                     if val.valign == 'bottom' and i_h < val.height:
                         addy = val.height - i_h
 
+                    wdg_x = x0 + addx
+                    wdg_y = y0 + addy
+
                     self.drawimage(image, (x0 + addx, y0 + addy))
                     if val.shadow and val.shadow.visible and image.get_alpha() == None:
+                        wdg_x = x0 + addx + val.shadow.x
+                        wdg_y = y0 + addy + val.shadow.y
                         self.drawroundbox(x0 + addx + val.shadow.x,
                                           y0 + addy + val.shadow.y,
                                           image.get_width(), image.get_height(),
                                           (val.shadow.color, 0, 0, 0))
 
                 if content.type == 'image+text':
+                    wdg_x = x0
+                    wdg_y = y0 + val.height
                     self.drawstring(choice.name, val.font, content, x=x0,
                                     y=y0 + val.height, width=val.width, height=-1,
                                     align_h=val.align, mode='hard', ellipses='', dim=False)
@@ -458,6 +482,8 @@ class Listing_Area(Skin_Area):
             else:
                 item_x0 += hspace
                 current_col += 1
+
+            choice.rect = pygame.Rect(wdg_x, wdg_y, wdg_w, wdg_h)
 
         # print arrow:
         try:

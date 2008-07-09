@@ -888,6 +888,31 @@ class MenuWidget(GUIObject):
 
 
 
+    def highlight_menuitem(self, clicked_menu):
+        i = 0
+        menu = self.menustack[-1]
+        _debug_('clicked_menu=%s, self.all_item=%s' % (clicked_menu, self.all_items[0]))
+        for menuitem in self.all_items:
+            if clicked_menu == menuitem:
+                sounds.play_sound(sounds.MENU_NAVIGATE)
+                curr_selected = i
+                menu.selected = self.all_items[curr_selected]
+                self.refresh()
+                return
+            i += 1
+
+    def select_menuitem(self, clicked_menu):
+        self.eventhandler(MENU_SELECT)
+
+    def submenu_menuitem(self):
+        self.eventhandler(MENU_SUBMENU)
+
+    def up_menuitem(self):
+        self.eventhandler(MENU_UP)
+
+    def down_menuitem(self):
+        self.eventhandler(MENU_DOWN)
+
     @benchmark(benchmarking)
     def rebuild_page(self):
         menu = self.menustack[-1]

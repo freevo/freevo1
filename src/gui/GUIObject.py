@@ -51,6 +51,7 @@ import osd
 import config
 import skin
 import traceback
+import pygame
 
 from pygame import Rect
 from Color import *
@@ -81,10 +82,16 @@ class GUIObject:
         self.visible     = 1
         self.selected    = 0
 
+        self.rect        = pygame.Rect(0, 0, 0, 0)
+
         self.left        = left
         self.top         = top
+        self.refresh_abs_position()
+
         self.width       = width
         self.height      = height
+        self.rect.width  = width
+        self.rect.height = height
         self.bg_color    = bg_color
         self.fg_color    = fg_color
 
@@ -145,6 +152,28 @@ class GUIObject:
             self.left = left
             self.top  = top
 
+        self.refresh_abs_position()
+
+
+    def refresh_abs_position(self):
+        if self.parent is not None:
+            if self.top is not None and self.left is not None:
+                self.rect.left    = self.parent.rect.left + self.left
+                self.rect.top     = self.parent.rect.top + self.top
+            else:
+                self.rect.left    = self.parent.rect.left
+                self.rect.top     = self.parent.rect.top
+        else:
+            if self.top is not None and self.left is not None:
+                self.rect.left    = self.left
+                self.rect.top     = self.top
+            else:
+                self.rect.left    = 0
+                self.rect.top     = 0
+
+        for child in self.children:
+            child.refresh_abs_position()
+
 
     def get_size(self):
         """
@@ -162,9 +191,12 @@ class GUIObject:
         """
         if type(width) is ListType or TupleType:
             self.width, self.height = width
+            self.rect.width, self.rect.height = width
         else:
             self.width  = width
             self.height = height
+            self.rect.width  = width
+            self.rect.height = height
 
 
     def toggle_selected(self):
@@ -382,6 +414,7 @@ class GUIObject:
             self.parent.children.remove(self)
 
         self.parent = parent
+        self.refresh_abs_position()
 
 
     def get_parent(self):

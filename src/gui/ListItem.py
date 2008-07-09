@@ -56,6 +56,7 @@ class ListItem(Button):
         handler = None
         left = 0
         top = 0
+        rect = pygame.Rect((left, top), (width, height))
 
         Button.__init__(self, text, handler, left, top, width, height, bg_color,
                         fg_color, selected_bg_color, selected_fg_color,

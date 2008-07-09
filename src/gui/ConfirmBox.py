@@ -82,6 +82,8 @@ class ConfirmBox(PopupBox):
         select = 'self.b%s.toggle_selected()' % default_choice
         eval(select)
 
+    def send_enter_event(self):
+        self.eventhandler(INPUT_ENTER)
 
     def eventhandler(self, event):
         if event in (INPUT_LEFT, INPUT_RIGHT, INPUT_UP, INPUT_DOWN):
