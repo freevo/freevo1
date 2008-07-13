@@ -12,6 +12,7 @@
 #
 #    thanks to Sylvain Fabre (cinemovies_trailers.py)
 #    and David Sotelo (universal_newlines=1)
+#    thanks to Ryan Colp for streaming idea
 #
 #    To activate, put the following line in local_conf.py:
 #       plugin.activate('video.youtube')
@@ -50,7 +51,7 @@ __author__           = 'Alberto González Rodríguez'
 __author_email__     = 'alberto@pesadilla.org'
 __maintainer__       = __author__
 __maintainer_email__ = __author_email__
-__version__          = '0.3'
+__version__          = '0.4'
 
 import os
 import plugin
@@ -184,27 +185,17 @@ class YoutubeVideo(Item):
         menuw.pushmenu(menu.Menu(_('Videos available'), items))
 
 
-    def downloadvideo(self, arg=None, menuw=None):
-        """Download video (if necessary) and watch it"""
-        _debug_('downloadvideo(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        filename =  config.YOUTUBE_DIR + '/' + arg[1].replace('-', '_') + '.flv'
-        if not os.path.exists(filename):
-            box = PopupBox(text=_('Downloading video'), width=950)
-            cmd = config.YOUTUBE_DL + ' -o ' + config.YOUTUBE_DIR + '/' + arg[1].replace('-', '_')
-            cmd += '.flv "http://www.youtube.com/watch?v=' + arg[1] + '"'
-            proceso = Popen(cmd, shell=True, bufsize=1024, stdout=subprocess.PIPE, universal_newlines=1)
-            follow = proceso.stdout
-            while proceso.poll() == None:
-                mess = follow.readline()
-                if mess:
-                    if len(mess.strip()) > 0:
-                        box.label.text=mess.strip()
-                        box.show()
-            box.destroy()
-
+    def watchvideo(self, arg=None, menuw=None):
+        """Watch it"""
+        cmd = config.YOUTUBE_DL + ' -g "http://www.youtube.com/watch?v=' + arg[1] + '"'
+        proceso = Popen(cmd, shell=True, bufsize=1024, stdout=subprocess.PIPE, universal_newlines=1)
+        follow = proceso.stdout
+        while proceso.poll() == None:
+            mess = follow.readline()
+            if mess:
+                stream =  mess.strip()
         # Create a fake VideoItem
-        playvideo2 = YoutubeVideoItem(_('bla'), filename, self)
-        playvideo2.player = self.player
+        playvideo2 = YoutubeVideoItem(_('bla'), stream, self)
         playvideo2.player_rating = 10
         playvideo2.menuw = menuw
         playvideo2.play()
@@ -214,6 +205,7 @@ class YoutubeVideo(Item):
         """Get the video list for a specific user"""
         _debug_('search_list(parent=%r, menuw=%r, text=%r)' % (parent, menuw, text), 2)
         items = []
+        text=text.replace(" ","/")
         feed = 'http://gdata.youtube.com/feeds/videos/-/' + text
         service = gdata.service.GDataService(server='gdata.youtube.com')
         box = PopupBox(text=_('Loading video list'))
@@ -226,7 +218,7 @@ class YoutubeVideo(Item):
                 id = video.link[0].href.split('watch?v=');
             else:
                 continue
-            mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.downloadvideo, id[1])
+            mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.watchvideo, id[1])
             mi.arg = (video.title.text, id[1])
             text = util.htmlenties2txt(video.content)
             mi.description = re.search('<span>([^\<]*)<',text).group(1)
@@ -256,7 +248,7 @@ class YoutubeVideo(Item):
                 id = video.link[0].href.split('watch?v=');
             else:
                 continue
-            mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.downloadvideo, id[1])
+            mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.watchvideo, id[1])
             mi.arg = (video.title.text, id[1])
             text = util.htmlenties2txt(video.content)
             mi.description = re.search('<span>([^\<]*)<',text).group(1)
