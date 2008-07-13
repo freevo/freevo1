@@ -131,9 +131,9 @@ class Recorder(object):
             if tv_tuner_id == channel_id:
                 channel_id = tv_channel_id
 
-        channels = epg_xmltv.get_guide().GetPrograms(start=current_time,
+        channels = epg_xmltv.get_guide().get_programs(start=current_time,
                                                      stop=current_time,
-                                                     chanids=[channel_id])
+                                                     channel_id=[channel_id])
 
         if channels and channels[0] and channels[0].programs:
             return channels[0].programs[0]
