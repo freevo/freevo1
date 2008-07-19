@@ -563,7 +563,7 @@ for dirname in cfgfilepath:
         w, h = CONF.geometry.split('x')
         x, y = CONF.position.split(',')
         CONF.width, CONF.height = int(w), int(h)
-        CONF.x, CONF.w = int(x), int(y)
+        CONF.x, CONF.y = int(x), int(y)
         break
 else:
     print
