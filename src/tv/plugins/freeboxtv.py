@@ -30,7 +30,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     To activate, put the following lines in local_conf.py:
 
-    | plugin.activate('freeboxtv', level=45)
+    | plugin.activate('tv.freeboxtv', level=45)
     | PLUGIN_FREEBOXTV_LOCATION = "http://mafreebox.freebox.fr/freeboxtv/playlist.m3u"
     | plugin.activate('video.vlc')
     |
@@ -44,11 +44,11 @@ class PluginInterface(plugin.MainMenuPlugin):
     rajouter
     vlc = /usr/bin/vlc
     """
-
     def __init__(self):
         if not hasattr(config, 'PLUGIN_FREEBOXTV_LOCATION'):
             PLUGIN_FREEBOXTV_LOCATION = "http://mafreebox.freebox.fr/freeboxtv/playlist.m3u"
         plugin.MainMenuPlugin.__init__(self)
+
 
 
     def config(self):
@@ -58,11 +58,11 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
-        return [ FreeboxTVMainMenu(parent) ]
+        return [ FreeboxTVItem(parent) ]
 
 
 
-class FreeboxTVMainMenu(Item):
+class FreeboxTVItem(Item):
     """
     this is the item for the main menu and creates the list
     of TV channels in a submenu.
@@ -126,9 +126,13 @@ class FreeboxTVMainMenu(Item):
         d = {}
         while i <> "":
             if re.search ( '#EXTINF', i ):
-                result = re.match('#EXTINF:.* - (.*)',i)
-                i=filehandle.readline()
-                d[result.group(1)] = i[0:len(i)-1]
+                result = re.match('#EXTINF:0,([0-9]*) - (.*)',i)
+                chan = "%05s" % result.group(1)
+                # Get line with rtsp
+                i = filehandle.readline()
+                while not re.search('rtsp://', i):
+                    i = filehandle.readline()
+                d[chan + ' - ' + result.group(2)] = i[0:len(i)-1]
             i=filehandle.readline()
 
         return d
@@ -139,15 +143,14 @@ class ChaineItem(VideoItem):
     """
     Item for the menu for one rss feed
     """
-    def __init__(self, parent, flux_name,flux_location):
+    def __init__(self, parent, flux_name, flux_location):
         VideoItem.__init__(self, flux_location, parent)
         self.network_play = True
         self.parent       = parent
         self.location     = flux_location
         self.name         = flux_name.decode('utf8')
-        self.type = 'video'
+        self.type         = 'video'
         self.force_player = 'vlc'
-
 
 
 if __name__ == '__main__':
