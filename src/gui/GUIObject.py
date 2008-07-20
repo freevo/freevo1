@@ -156,20 +156,18 @@ class GUIObject:
 
 
     def refresh_abs_position(self):
-        if self.parent is not None:
-            if self.top is not None and self.left is not None:
-                self.rect.left    = self.parent.rect.left + self.left
-                self.rect.top     = self.parent.rect.top + self.top
+        if self.rect is not None:
+            if self.parent is not None and self.parent.rect is not None:
+                if self.top is not None and self.left is not None:
+                    self.rect.left = self.parent.rect.left + self.left
+                    self.rect.top  = self.parent.rect.top + self.top
+                else:
+                    self.rect.left = self.parent.rect.left
+                    self.rect.top  = self.parent.rect.top
             else:
-                self.rect.left    = self.parent.rect.left
-                self.rect.top     = self.parent.rect.top
-        else:
-            if self.top is not None and self.left is not None:
-                self.rect.left    = self.left
-                self.rect.top     = self.top
-            else:
-                self.rect.left    = 0
-                self.rect.top     = 0
+                if self.top is not None and self.left is not None:
+                    self.rect.left = self.left
+                    self.rect.top  = self.top
 
         for child in self.children:
             child.refresh_abs_position()
