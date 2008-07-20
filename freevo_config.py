@@ -371,6 +371,7 @@ LOCAL_CONF_CHANGES = [
      Added MPLAYER_AO_DEV_OPTS for audio device options
      Changed MPLAYER_VO_DEV_OPTS, removed need for leading ':'
      Added ROM_DRIVES_AUTOFS to allow an autmounter to be used for ROM drives
+     Moved freeboxtv to tv plug-ins
      """),
 ]
 
