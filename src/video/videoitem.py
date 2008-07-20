@@ -742,7 +742,7 @@ class VideoItem(Item):
             items.append(i)
 
 
-        moviemenu = menu.Menu(self.name, items, umount_all = 1, fxd_file=self.skin_fxd)
+        moviemenu = menu.Menu(self.name, items, umount_all=1, fxd_file=self.skin_fxd)
         moviemenu.item_types = 'video'
         self.menuw.pushmenu(moviemenu)
 
