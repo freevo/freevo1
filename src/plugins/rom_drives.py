@@ -680,28 +680,29 @@ class Identify_Thread(threading.Thread):
 
         # Disc is data of some sort. Mount it to get the file info
         util.mount(media.mountdir, force=True)
-        if os.path.isdir(os.path.join(media.mountdir, 'VIDEO_TS')) or \
-               os.path.isdir(os.path.join(media.mountdir, 'video_ts')):
-            if force_rebuild:
-                _debug_('Double check without success')
-            else:
-                _debug_('Undetected DVD, checking again')
-                media.drive_status = CDS_NO_DISC
-                util.umount(media.mountdir)
-                return self.identify(media, True)
+        try:
+            if os.path.isdir(os.path.join(media.mountdir, 'VIDEO_TS')) or \
+                   os.path.isdir(os.path.join(media.mountdir, 'video_ts')):
+                if force_rebuild:
+                    _debug_('Double check without success')
+                else:
+                    _debug_('Undetected DVD, checking again')
+                    media.drive_status = CDS_NO_DISC
+                    return self.identify(media, True)
 
-        # Check for movies/audio/images on the disc
-        num_video = disc_info['disc_num_video']
-        num_audio = disc_info['disc_num_audio']
-        num_image = disc_info['disc_num_image']
+            # Check for movies/audio/images on the disc
+            num_video = disc_info['disc_num_video']
+            num_audio = disc_info['disc_num_audio']
+            num_image = disc_info['disc_num_image']
 
-        video_files = util.match_files(media.mountdir, config.VIDEO_SUFFIX)
+            video_files = util.match_files(media.mountdir, config.VIDEO_SUFFIX)
 
-        _debug_('video_files=%r' % (video_files,))
+            _debug_('video_files=%r' % (video_files,))
 
-        media.item = DirItem(media.mountdir, None, create_metainfo=False)
-        media.item.info = disc_info
-        util.umount(media.mountdir)
+            media.item = DirItem(media.mountdir, None, create_metainfo=False)
+            media.item.info = disc_info
+        finally:
+            util.umount(media.mountdir)
 
         # if there is a video file on the root dir of the disc, we guess
         # it's a video disc. There may also be audio files and images, but
@@ -808,11 +809,13 @@ class Identify_Thread(threading.Thread):
         # play this.
         if len(video_files) == 1 and media.item['num_dir_items'] == 0:
             util.mount(media.mountdir)
-            if movie_info:
-                media.videoitem = copy.deepcopy(movie_info)
-            else:
-                media.videoitem = VideoItem(video_files[0], None)
-            util.umount(media.mountdir)
+            try:
+                if movie_info:
+                    media.videoitem = copy.deepcopy(movie_info)
+                else:
+                    media.videoitem = VideoItem(video_files[0], None)
+            finally:
+                util.umount(media.mountdir)
             media.videoitem.media    = media
             media.videoitem.media_id = media.id
 
