@@ -383,11 +383,14 @@ def is_mounted(dir):
     return dir in mounted_dirs
 
 
+mount_count = 0
+
 @benchmark(benchmarking)
 def mount(dir, force=False):
     """
     mount a directory
     """
+    global mount_count
     if config.ROM_DRIVES_AUTOFS:
         return
     _debug_('mount(dir=%r, force=%r)' % (dir, force), 2)
@@ -403,6 +406,8 @@ def mount(dir, force=False):
                 _debug_('mounting %r: %s' % (dir, se), DWARNING)
             elif rc == (32,):
                 _debug_('mounting %r: %s' % (dir, se), DWARNING)
+        else:
+            mount_count += 1
         if os.path.ismount(dir) and not dir in mounted_dirs:
             mounted_dirs.append(dir)
     if force and not dir in mounted_dirs:
@@ -414,6 +419,7 @@ def umount(dir):
     """
     umount a directory
     """
+    global mount_count
     if config.ROM_DRIVES_AUTOFS:
         return
     _debug_('umount(dir=%r)' % (dir,), 2)
@@ -427,6 +433,8 @@ def umount(dir):
         if rc:
             if rc in (1,):
                 _debug_('unmounting %r: %s' % (dir, se), DWARNING)
+        else:
+            mount_count -= 1
         if not os.path.ismount(dir) and dir in mounted_dirs:
             mounted_dirs.remove(dir)
 
