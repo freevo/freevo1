@@ -259,7 +259,7 @@ class MPlayer:
             else:
                 bobdeint='nobobdeint'
             args['vo'] = '-vo xvmc:%s' % bobdeint
-            args['vc'] = 'ffmpeg12mc'
+            args['vc'] = '-vc ffmpeg12mc'
 
         if hasattr(item, 'is_playlist') and item.is_playlist:
             args['playlist'] = '-playlist'
