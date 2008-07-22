@@ -476,7 +476,10 @@ class ImageViewer(GUIObject):
             i = self.fileitem.getattr(strtag[1])
             if i:
                 osdstring.append('%s %s' % (strtag[0], i))
-
+            else:
+                if strtag[1] == 'date' and self.fileitem['timestamp']:
+                    osdstring.append('%s %s' % (strtag[0], datetime.datetime.fromtimestamp(self.fileitem['timestamp'])))
+                    
         # If after all that there is nothing then tell the users that
         if osdstring == []:
             osdstring = [_('No information available')]

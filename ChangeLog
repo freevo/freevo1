@@ -30,6 +30,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Fixed audio network items for mplayer plug-in (B#1972914)
  * Fixed audio scrobbler for protocol 1.2 (B#1967805)
  * Fixed audio last.fm typo (B#1981236)
+ * Fixed image viewer to show the date and time of the picture (B#2022946)
  * Fixed IMDB to use new Plot (B#1982159)
  * Fixed OSD not to crash when viewing non-supported images (B#1989196)
  * Fixed OSD to always set the SDL_VIDEO_WINDOW_POS for the new pygame (B#2010111)
