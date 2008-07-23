@@ -71,11 +71,13 @@ class InputBox(PopupBox):
 
 
     def eventhandler(self, event):
-        if self.lbg.eventhandler(event):
+        if hasattr(self, 'lbg') and self.lbg.eventhandler(event):
             self.draw()
             return True
 
         if event == INPUT_ENTER:
+            if hasattr(self, 'lbg'):
+                return False
             txt = self.lbg.get_word()
             self.destroy()
             if self.handler:

@@ -204,6 +204,8 @@ class ChildApp:
 
     def isAlive(self):
         _debug_('ChildApp.isAlive()', 3)
+        if not hasattr(self, 'child'):
+            return False
         if self.child is None:
             return False
         if not self.ready: # return true if constructor has not finished yet

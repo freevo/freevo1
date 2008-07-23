@@ -62,8 +62,12 @@ class GUIObject:
     Widgets.
     """
     def __init__(self, left=0, top=0, width=0, height=0, bg_color=None, fg_color=None):
+        self.left = left or 0
+        self.top = top or 0
+        self.width = width or 0
+        self.height = height or 0
         try:
-            self.rect = Rect(left, top, width, height)
+            self.rect = Rect(self.left, self.top, self.width, self.height)
         except TypeError:
             _debug_('Invalid Rect: left=%r, top=%r, width=%r, height=%r' % (left, top, width, height))
 
@@ -84,14 +88,10 @@ class GUIObject:
 
         self.rect        = pygame.Rect(0, 0, 0, 0)
 
-        self.left        = left
-        self.top         = top
         self.refresh_abs_position()
 
-        self.width       = width
-        self.height      = height
-        self.rect.width  = width
-        self.rect.height = height
+        self.rect.width  = self.width
+        self.rect.height = self.height
         self.bg_color    = bg_color
         self.fg_color    = fg_color
 

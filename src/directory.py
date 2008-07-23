@@ -553,11 +553,10 @@ class DirItem(Playlist):
                 self.media = media
 
         if vfs.isfile(self.dir + '/.password'):
-            print 'password protected dir'
+            _debug_('password protected dir', DINFO)
             self.arg   = arg
             self.menuw = menuw
-            pb = InputBox(text=_('Enter Password'), handler=self.pass_cmp_cb,
-                          type='password')
+            pb = InputBox(text=_('Enter Password'), handler=self.pass_cmp_cb, type='password')
             pb.show()
         else:
             self.build(arg=arg, menuw=menuw)
