@@ -76,8 +76,8 @@ class InputBox(PopupBox):
             return True
 
         if event == INPUT_ENTER:
-            if hasattr(self, 'lbg'):
-                return False
+            if not hasattr(self, 'lbg'):
+                return True
             txt = self.lbg.get_word()
             self.destroy()
             if self.handler:
