@@ -47,7 +47,7 @@
 import re
 import socket
 socket.setdefaulttimeout(30.0)
-import urllib, urllib2, urlparse, commands
+import urllib2, urlparse, commands
 import sys
 import codecs
 import os
@@ -74,13 +74,14 @@ txheaders = {
 
 class PluginInterface(plugin.ItemPlugin):
     """
-       This plugins obtain movie information in Spanish from the FilmAffinity website
+       This plugin obtains movie information in Spanish from the FilmAffinity
+       website
 
        Configuration:
-       plugin.activate('video.filmaffinity')
-       FILMAFFINITY_REMOVE_FROM_LABEL = ('\(.*?\)','\[.*?\]')
-       FILMAFFINITY_REMOVE_FROM_SEARCHSTRING = ('spanish','xvid','dvdrip','parte','[0-9]*','dvdscreener','mp3')
-       FILMAFFINITY_AUTOACCEPT_SINGLE_HIT = True
+           plugin.activate('video.filmaffinity')
+           FILMAFFINITY_REMOVE_FROM_LABEL = ('\(.*?\)', '\[.*?\]', 'cd[0-9]+(-[0-9])?', 'title[0-9]+', 'by .*$')
+           FILMAFFINITY_REMOVE_FROM_SEARCHSTRING = ('spanish','xvid','dvdrip','parte','[0-9]*','dvdscreener','mp3')
+           FILMAFFINITY_AUTOACCEPT_SINGLE_HIT = True
     """
 
     def __init__(self, license=None):
@@ -93,6 +94,13 @@ class PluginInterface(plugin.ItemPlugin):
             self.reason = 'no network'
             return
         plugin.ItemPlugin.__init__(self)
+
+    def config(self):
+        return [
+            ('FILMAFFINITY_REMOVE_FROM_LABEL', ('\(.*?\)', '\[.*?\]', 'cd[0-9]+(-[0-9])?', 'title[0-9]+', 'by .*$'), _('Remove matching of this regexps from item name')),
+            ('FILMAFFINITY_REMOVE_FROM_SEARCHSTRING', ('spanish','xvid','dvdrip','parte','[0-9]*','dvdscreener','mp3'), _('Remove matching of this regexps from search string')),
+            ('FILMAFFINITY_AUTOACCEPT_SINGLE_HIT', True, _('Accept search automatically if it has only one result'))
+            ]
 
     def initmyself(self):
         self.isdiscset = False
@@ -129,16 +137,18 @@ class PluginInterface(plugin.ItemPlugin):
         self.initmyself()
         self.filmaffinity_id_list = []
 
+        quoted_name = urllib2.quote(name.strip())
+
         regexp_tag = re.compile('<[^>]+>', re.I)
-        print "Request with: %s" % urllib.quote(name)
-        url = 'http://www.filmaffinity.com/es/search.php?stext=%s&stype=title' % (urllib.quote(name))
+        _debug_('Request with: %s' % quoted_name)
+        url = 'http://www.filmaffinity.com/es/search.php?stext=%s&stype=title' % quoted_name
         req = urllib2.Request(url, txdata, txheaders)
         searchstring = name
 
         try:
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, error:
-            raise FxdFilmaffinity_Net_Error("Error de conexin: " + error)
+            raise FxdFilmaffinity_Net_Error(_('Connection error: ') + error)
             exit
 
         regexp_getmultiple = re.compile('.*<b><a href="(/es/film.*\.html)">(.*?)</a></b>\s*\(([0-9]{4})\)\s*', re.I)
@@ -195,14 +205,14 @@ class PluginInterface(plugin.ItemPlugin):
     def getFilmAffinityPage(self, url):
         """url
         Set an filmaffinity number for object, and fetch data"""
-        self.myurl = 'http://www.filmaffinity.com/' + urllib.quote(urllib.unquote(url))
+        self.myurl = 'http://www.filmaffinity.com/' + urllib2.quote(urllib2.unquote(url))
         #print "Now trying to get %s" % self.myurl
         req = urllib2.Request(self.myurl, txdata, txheaders)
 
         try:
             idpage = urllib2.urlopen(req)
         except urllib2.HTTPError, error:
-            raise FxdAllocine_Net_Error("Error de conexion" + error)
+            raise FxdAllocine_Net_Error(_('Connection error: ') + error)
             return None
 
         #print "Response: %s" % idpage.read()
@@ -270,21 +280,21 @@ class PluginInterface(plugin.ItemPlugin):
             if item.mode == 'file' or (item.mode in ('dvd', 'vcd') and item.info.has_key('tracks')
                     and not item.media):
                 self.disc_set = False
-                return [ (self.filmaffinity_search , _('Buscar en FilmAffinity'),
+                return [ (self.filmaffinity_search , _('Search in FilmAffinity'),
                     'filmaffinity_search_or_cover_search') ]
 
             elif item.mode in ('dvd', 'vcd') and item.info.has_key('tracks'):
                 self.disc_set = True
                 s = self.filmaffinity_get_disc_searchstring(self.item)
                 if s:
-                    return [ (self.filmaffinity_search , _('Buscar en FilmAffinity [%s]') % s,
+                    return [ (self.filmaffinity_search , _('Search in FilmAffinity [%s]') % s,
                         'filmaffinity_search_or_cover_search') ]
 
         if item.type == 'dir' and item.media and item.media.mountdir.find(item.dir) == 0:
             self.disc_set = True
             s = self.filmaffinity_get_disc_searchstring(self.item)
             if s:
-                return [ (self.filmaffinity_search , _('Buscar en FilmAffinity [%s]') % s,
+                return [ (self.filmaffinity_search , _('Search in FilmAffinity [%s]') % s,
                     'filmaffinity_search_or_cover_search') ]
         return []
 
@@ -478,23 +488,23 @@ class PluginInterface(plugin.ItemPlugin):
     def write_fxd_copyright(self, fxd, node):
         fxd.setcdata(node, "The information in this file are from Filmaffinity.com.\n"+
                            "Please visit http://www.filmaffinity.com for more informations.\n")
-        fxd.add(fxd.XMLnode('source', [('url', "%s" % self.myurl)]), node, 0)
+        fxd.add(fxd.XMLnode('source', [('url', "%s" % self.myurl)]), node, None)
 
     def write_fxd_video(self, fxd, node):
         fxd.setattr(node, 'title', self.title)
-        fxd.add(fxd.XMLnode('cover-img', (('source', self.image_url), ("test", "test")), self.image), node, 0)
+        fxd.add(fxd.XMLnode('cover-img', (('source', self.image_url), ("test", "test")), self.image), node, None)
         videonode = fxd.XMLnode('video')
         fxd.add(videonode, node)
         if self.item.subitems:
             for i in range(len(self.item.subitems)):
-                fxd.add(fxd.XMLnode('file', [('id', 'f%s' % i)], os.path.basename(self.item.subitems[i].filename)), videonode, 0)
+                fxd.add(fxd.XMLnode('file', [('id', 'f%s' % i)], os.path.basename(self.item.subitems[i].filename)), videonode, None)
         else:
-            fxd.add(fxd.XMLnode('file', [('id', 'f1')], os.path.basename(self.item.filename)), videonode, 0)
+            fxd.add(fxd.XMLnode('file', [('id', 'f1')], os.path.basename(self.item.filename)), videonode, None)
         infonode = fxd.XMLnode('info')
         fxd.add(infonode, node)
         if self.info:
             for k in self.info.keys():
-                fxd.add(fxd.XMLnode(k, [], self.info[k]), infonode, 0)
+                fxd.add(fxd.XMLnode(k, [], self.info[k]), infonode, None)
 
     def write_movie(self):
         """Write <movie> to fxd file"""
