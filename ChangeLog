@@ -18,6 +18,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 --------------------------------
 
  * Updated mplayer tv and video plug-ins to correct MPLAYER_VO_DEV_OPTS handling (B#1989738)
+ * Updated mplayervis plug-in to be able to set the frame rate (F#2027953)
  * Fixed new arguments to mplayer for the video codec (B#2022949)
  * Fixed idlebar fonts for wide-screen TVs (B#1981503)
 

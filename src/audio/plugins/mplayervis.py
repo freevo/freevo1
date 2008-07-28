@@ -73,6 +73,7 @@ class MpvGoom(BaseAnimation):
         pygoom.set_exportfile(mmap_file)
         _debug_('pygoom.set_resolution(width=%r, height=%r, 0)' % (width, height), 2)
         pygoom.set_resolution(width, height, 0)
+        pygoom.set_fps(config.MPLAYERVIS_FPS)
 
         self.fade_step = config.MPLAYERVIS_FADE_STEP
         self.init_counter = self.fade_step * config.MPLAYERVIS_INIT_COUNTER
@@ -415,6 +416,7 @@ class PluginInterface(plugin.Plugin):
             ('MPLAYERVIS_MESSAGE_FMT', 'Artist: %(a)s\n Album: %(l)s\n Title: %(t)s\n Track: %(n)s\n', \
                 'Message format for the message'),
             ('MPLAYERVIS_FULL_GEOMETRY', '%dx%d' % (config.CONF.width, config.CONF.height), 'Full screen geometry'),
+            ('MPLAYERVIS_FPS', 25, 'Max FPS of visualization')
         ]
 
 
