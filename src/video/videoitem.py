@@ -358,6 +358,13 @@ class VideoItem(Item):
             if aspect:
                 return aspect
 
+        if key == 'rating':
+
+            if self.info['rating']:
+                return self.info['rating']
+            else:
+                return ''
+
         if key == 'runtime':
 
             if self.info['runtime']:
@@ -844,6 +851,8 @@ class ShowDetails(ScrollableTextScreen):
                 description +=  _('Length')+ u' : '+movie['length'] + u'\n'
             if movie['year']:
                 description +=  _('Year')+u' : '+movie['year'] + u'\n'
+            if movie['rating']:
+                description +=  _('Rating')+u' : '+movie['rating'] + u'\n'
 
         # that's all, we can show this to the user
         ScrollableTextScreen.__init__(self, 'tvguideinfo', description)
