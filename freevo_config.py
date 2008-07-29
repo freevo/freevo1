@@ -372,6 +372,8 @@ LOCAL_CONF_CHANGES = [
      Changed MPLAYER_VO_DEV_OPTS, removed need for leading ':'
      Added ROM_DRIVES_AUTOFS to allow an autmounter to be used for ROM drives
      Moved freeboxtv to tv plug-ins
+     Added MPLAYER_AUDIO_CACHE_KB, MPLAYER_AUDIO_CACHE_MIN_PERCENT and MPLAYER_AUDIO_NETWORK_OPTS to allow changing the default cache amount
+     Added SPEAK_WELCOME and SPEAK_SHUTDOWN for customized welcome and shutdown messages in speak plugin
      """),
 ]
 
@@ -900,6 +902,11 @@ plugin.activate('tv.manual_record')
 #
 # Enable this for joystick support:
 # plugin.activate('joy')
+
+# Speak plugin to output menu items via festival
+# plugin.activate('speak')
+SPEAK_WELCOME = ''
+SPEAK_SHUTDOWN = ''
 
 # ----------------------------------------------------------------------
 # CD Ripping
@@ -1528,6 +1535,10 @@ else:
     MPLAYER_VO_DEV = CONF.display  # e.g.: x11,mga,fbdev, see mplayer docs
 
 MPLAYER_VO_DEV_OPTS = ''           # e.g.: 'some_var=vcal'
+
+MPLAYER_AUDIO_CACHE_KB = 256
+MPLAYER_AUDIO_CACHE_MIN_PERCENT = 25
+MPLAYER_AUDIO_NETWORK_OPTS = '-cache %d -cache-min %d' % (MPLAYER_AUDIO_CACHE_KB, MPLAYER_AUDIO_CACHE_MIN_PERCENT)
 
 DVD_LANG_PREF = 'en,se,no'         # Order of preferred languages on DVD.
 DVD_SUBTITLE_PREF = ''             # Order of preferred subtitles on DVD.
