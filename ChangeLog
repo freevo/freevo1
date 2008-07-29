@@ -27,8 +27,9 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 == Release 1.7.9 (2008-08-25) ==
 --------------------------------
 
- * New FilmAffinity video information grabber (F#2013250)
  * New mouse support for Freevo (F#2013847)
+ * New video Spanish information grabber, FilmAffinity for movies (F#2013250)
+ * New video plug-in, fillscreen, to crop, scale and change monitor aspect for video items (F#2018044)
  * Updated freeboxtv to  be in the tv plug-ins (B#2022158)
  * Updated mplayer audio plug-in to show a pop-up when caching (F#2026124)
  * Updated mplayer to handle subtitle and audio cycling using the SUBTITLE and LANG events (F#2010109)
