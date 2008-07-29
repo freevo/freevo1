@@ -31,6 +31,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * New mouse support for Freevo (F#2013847)
  * Updated freeboxtv to  be in the tv plug-ins (B#2022158)
  * Updated mplayer to handle subtitle and audio cycling using the SUBTITLE and LANG events (F#2010109)
+ * Updated recordings manager to improve its performance (F#2031616)
  * Fixed audio network items for mplayer plug-in (B#1972914)
  * Fixed audio scrobbler for protocol 1.2 (B#1967805)
  * Fixed audio last.fm typo (B#1981236)

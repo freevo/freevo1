@@ -385,7 +385,6 @@ class RecordedProgramItem(VideoItem):
         self.video_item = video_item
         self.name = name
         self.files = video_item.files
-        self.parent = DirItem(config.TV_RECORD_DIR, None)
 
         keep = self.video_item['keep']
         if not keep:
@@ -817,8 +816,10 @@ class DiskManager(plugin.DaemonPlugin):
         self.menu = None
         self.menuw = None
         self.interested_series = None
-
+        self.files = []
+        self.recordings_dir_item = DirItem(config.TV_RECORD_DIR, None)
         self.update_recordings()
+
 
 
     def poll(self):
@@ -870,29 +871,76 @@ class DiskManager(plugin.DaemonPlugin):
         """
         Update the list of recordings.
         """
+        import time
         global all_recordings, segregated_recordings, series_table
         files       = vfs.listdir(config.TV_RECORD_DIR, include_overlay=True)
         num_changes = mediainfo.check_cache(config.TV_RECORD_DIR)
-
+        cache_time = time.time()
         if num_changes > 0:
             mediainfo.cache_dir(config.TV_RECORD_DIR, callback=None)
-
+        cache_time = time.time() - cache_time
         series = {}
 
+        orig_files_set = set(self.files)
+        new_files_set = set(files)
 
-        recordings = fxditem.mimetype.get(None, files)
-        for recorded_item in recordings:
+        added_files = new_files_set - orig_files_set
+        deleted_files = orig_files_set - new_files_set
+
+        # Store list of files for comparison the next time the directory changes.
+        self.files = files
+
+        rpitems = []
+
+        # Copy all the items into the new array, excluding deleted items.
+        for rpitem in all_recordings:
+            deleted = False
+            for filename in deleted_files:
+                if filename in rpitem.files.files or \
+                    filename == rpitem.files.fxd_file or \
+                    filename == rpitem.files.edl_file or \
+                    filename == rpitem.files.image:
+                    # just in case only some of the item files have been deleted, add the 
+                    # existing ones back into the added files so a new item is created for 
+                    # those files.
+                    for itemfile in rpitem.files.files + [rpitem.files.fxd_file, rpitem.files.edl_file, rpitem.files.image]:
+                        if itemfile in files:
+                            added_files.append(itemfile)
+                    deleted = True
+                    break
+            if not deleted:
+                rpitems.append(rpitem)
+
+        # Parse only the added files.
+        parse_time = time.time()
+        added_recordings = fxditem.mimetype.get(self.recordings_dir_item, added_files)
+        parse_time = time.time() - parse_time
+
+        rpitem_time = time.time()
+        
+        # Add the new recordings
+        for recorded_item in added_recordings:
             rpitem = RecordedProgramItem(recorded_item.name, recorded_item)
+            rpitems.append(rpitem)
+        rpitem_time = time.time() - rpitem_time
 
-            if series.has_key(recorded_item.name):
-                series_items = series[recorded_item.name]
+        # Put all the shows into their correct series hashtable.
+        series_time = time.time()
+        for rpitem in rpitems:
+            # NOTE: We use the video_item name not the rpitem name as that will be
+            # updated if the rpitem is in a series.
+            show_name = rpitem.video_item.name
+            if series.has_key(show_name):
+                series_items = series[show_name]
             else:
                 series_items = []
-                series[recorded_item.name] = series_items
+                series[show_name] = series_items
             series_items.append(rpitem)
+        series_time = time.time() - series_time
 
+        # Create the series items
+        segregate_time = time.time()
         items = []
-        all_items = []
         for name,programs in series.iteritems():
             if len(programs) == 1:
                 # Just one program in so don't bother to add it to a series menu.
@@ -911,16 +959,27 @@ class DiskManager(plugin.DaemonPlugin):
                     series_table[name] = item
 
             items.append(item)
-            all_items += programs
+        segregate_time = time.time() - segregate_time
 
+        clean_time = time.time()
         # Clean the series table of series that no longer exist
         for name,series_item in series_table.items():
             if not series_item in items:
                 series_item.items = None
                 del series_table[name]
+        clean_time = time.time() - clean_time
+
+        # For benchmarking:
+        _debug_('Recordings Manager update_recordings times')
+        _debug_('cache_time     ', cache_time)
+        _debug_('parse_time     ', parse_time)
+        _debug_('rpitem_time    ', rpitem_time)
+        _debug_('series_time    ', series_time)
+        _debug_('segregate_time ', segregate_time)
+        _debug_('clean_time     ', clean_time)
 
         segregated_recordings = items
-        all_recordings = all_items
+        all_recordings = rpitems
 
         self.last_time = vfs.mtime(config.TV_RECORD_DIR)
 
