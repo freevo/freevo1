@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-26 19:07+0200\n"
+"POT-Creation-Date: 2008-07-28 02:15+0200\n"
 "PO-Revision-Date:  Tue Jul 12 13:08:00 2007\n"
 "Last-Translator: Yuki He <yuki.he@gmail.com>\n"
 "Language-Team: Simplified Chinese <yuki.he@gmail.com>\n"
@@ -164,14 +164,13 @@ msgstr "编辑收藏夹"
 #: www/htdocs/record.rpy:82 www/htdocs/library.rpy:200
 #: www/htdocs/library.rpy:222 www/htdocs/library.rpy:225
 #: www/htdocs/manualrecord.rpy:75 www/htdocs/genre.rpy:70
-#: www/htdocs/genre.rpy:96 www/htdocs/library1.rpy:174
-#: www/htdocs/library1.rpy:196 www/htdocs/library1.rpy:199
-#: www/htdocs/guide.rpy:152 www/htdocs/wap_rec.rpy:103
+#: www/htdocs/genre.rpy:96 www/htdocs/guide.rpy:152 www/htdocs/wap_rec.rpy:103
 #: www/htdocs/favorites.rpy:57 www/htdocs/guidechannel.rpy:207
 #: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
 #: www/htdocs/search.rpy:55 skins/main/info_area.py:133 config.py:465
 #: audio/plugins/xine.py:55 plugins/lcd.py:48 plugins/vfd.py:52
-#: plugins/freevused.py:141 tv/plugins/dvbstreamer/live_pause.py:88
+#: plugins/freevused.py:141 plugins/speak.py:34
+#: tv/plugins/dvbstreamer/live_pause.py:88
 #: tv/plugins/dvbstreamer/live_pause.py:112
 #: tv/plugins/dvbstreamer/vlc_live_pause.py:89
 msgid "ERROR"
@@ -340,100 +339,96 @@ msgstr "对不去，暂时没有节目 %s 的描述。"
 msgid "Remove"
 msgstr "移除"
 
-#: www/htdocs/library.rpy:189 www/htdocs/library1.rpy:163
+#: www/htdocs/library.rpy:189
 #, python-format
 msgid "%s already exists! File not renamed."
 msgstr "%s 已存在! 文件. 文件没有被重命名"
 
-#: www/htdocs/library.rpy:193 www/htdocs/library1.rpy:167
+#: www/htdocs/library.rpy:193
 #, python-format
 msgid "Rename %s to %s."
 msgstr "重命名 %s 到 %s."
 
 #: www/htdocs/library.rpy:196 www/htdocs/library.rpy:212
-#: www/htdocs/library1.rpy:170 www/htdocs/library1.rpy:186
 #, python-format
 msgid "<h2>%s</h2>"
 msgstr ""
 
-#: www/htdocs/library.rpy:197 www/htdocs/library1.rpy:171
+#: www/htdocs/library.rpy:197
 #, python-format
 msgid "Rename %s to %s, failed."
 msgstr "重命名 %s 到 %s, 失败"
 
-#: www/htdocs/library.rpy:200 www/htdocs/library1.rpy:174
+#: www/htdocs/library.rpy:200
 msgid "No new file specified."
 msgstr "没有指定新文件"
 
 #: www/htdocs/library.rpy:206 www/htdocs/library.rpy:210
-#: www/htdocs/library1.rpy:180 www/htdocs/library1.rpy:184
 #, python-format
 msgid "Delete %s."
 msgstr "删除 %s."
 
-#: www/htdocs/library.rpy:213 www/htdocs/library1.rpy:187
+#: www/htdocs/library.rpy:213
 #, python-format
 msgid "Delete %s, failed."
 msgstr "删除 %s, 失败"
 
-#: www/htdocs/library.rpy:222 www/htdocs/library1.rpy:197
+#: www/htdocs/library.rpy:222
 #, python-format
 msgid "%s does not exist. No action taken."
 msgstr "%s 不存在。没有可以执行的动作。"
 
-#: www/htdocs/library.rpy:226 www/htdocs/library1.rpy:200
+#: www/htdocs/library.rpy:226
 #, python-format
 msgid "I do not process names (%s) with slashes for security reasons."
 msgstr ""
 
-#: www/htdocs/library.rpy:265 www/htdocs/library1.rpy:229 www/web_types.py:367
+#: www/htdocs/library.rpy:265 www/web_types.py:367
 msgid "Messages"
 msgstr "消息"
 
-#: www/htdocs/library.rpy:277 www/htdocs/library1.rpy:242
-#: share/skins/main/crystal.fxd:9 share/skins/main/dark.fxd:18
-#: share/skins/main/atlantice.fxd:720 share/skins/main/Tux'n Tosh TV.fxd:18
-#: TV.fxd:595 share/skins/main/bluestar.fxd:9 share/skins/main/rain.fxd:9
+#: www/htdocs/library.rpy:277 share/skins/main/crystal.fxd:9
+#: share/skins/main/dark.fxd:18 share/skins/main/atlantice.fxd:720
+#: share/skins/main/Tux'n Tosh TV.fxd:18 TV.fxd:595
+#: share/skins/main/bluestar.fxd:9 share/skins/main/rain.fxd:9
 #: share/skins/main/basic.fxd:21
 msgid "Movies"
 msgstr "电影"
 
-#: www/htdocs/library.rpy:281 www/htdocs/library1.rpy:246
+#: www/htdocs/library.rpy:281
 msgid "Recorded TV"
 msgstr "录制 TV"
 
-#: www/htdocs/library.rpy:285 www/htdocs/library1.rpy:250 plugins/lcd.py:164
-#: plugins/lcd.py:343 share/skins/main/crystal.fxd:10
-#: share/skins/main/dark.fxd:19 share/skins/main/atlantice.fxd:721
-#: share/skins/main/Tux'n Tosh TV.fxd:19 share/skins/main/bluestar.fxd:10
-#: share/skins/main/rain.fxd:10 share/skins/main/basic.fxd:22
+#: www/htdocs/library.rpy:285 plugins/lcd.py:164 plugins/lcd.py:343
+#: share/skins/main/crystal.fxd:10 share/skins/main/dark.fxd:19
+#: share/skins/main/atlantice.fxd:721 share/skins/main/Tux'n Tosh TV.fxd:19
+#: share/skins/main/bluestar.fxd:10 share/skins/main/rain.fxd:10
+#: share/skins/main/basic.fxd:22
 msgid "Music"
 msgstr "音乐"
 
-#: www/htdocs/library.rpy:289 www/htdocs/library1.rpy:254
-#: share/skins/main/crystal.fxd:12 share/skins/main/dark.fxd:20
-#: share/skins/main/atlantice.fxd:722 share/skins/main/Tux'n Tosh TV.fxd:20
-#: share/skins/main/rain.fxd:12 share/skins/main/basic.fxd:23
+#: www/htdocs/library.rpy:289 share/skins/main/crystal.fxd:12
+#: share/skins/main/dark.fxd:20 share/skins/main/atlantice.fxd:722
+#: share/skins/main/Tux'n Tosh TV.fxd:20 share/skins/main/rain.fxd:12
+#: share/skins/main/basic.fxd:23
 msgid "Images"
 msgstr "图片"
 
 #: www/htdocs/library.rpy:306 www/htdocs/library.rpy:379
 #: www/htdocs/library.rpy:381 www/htdocs/library.rpy:385
-#: www/htdocs/library1.rpy:269 www/htdocs/library1.rpy:340
-#: www/htdocs/library1.rpy:342 www/htdocs/library1.rpy:346
 msgid "Back"
 msgstr "回退"
 
-#: www/htdocs/library.rpy:544 www/htdocs/library1.rpy:388
+#: www/htdocs/library.rpy:544
 msgid "Download"
 msgstr "下载"
 
-#: www/htdocs/library.rpy:545 www/htdocs/library1.rpy:389
-#: skin/widgets/textentry_screen.py:62 plugins/file_ops.py:72
+#: www/htdocs/library.rpy:545 skin/widgets/textentry_screen.py:62
+#: plugins/file_ops.py:72
 msgid "Delete"
 msgstr "删除"
 
-#: www/htdocs/library.rpy:547 www/htdocs/library1.rpy:390
+#: www/htdocs/library.rpy:547
 msgid "Rename"
 msgstr "重命名"
 
@@ -604,16 +599,6 @@ msgstr ""
 #, fuzzy
 msgid "View Logs"
 msgstr "查看电视列表"
-
-#: www/htdocs/library1.rpy:208
-#, fuzzy
-msgid "Media Library 1"
-msgstr "媒体库"
-
-#: www/htdocs/library1.rpy:266
-#, fuzzy
-msgid "Choose a Directory"
-msgstr "浏览目录"
 
 #: www/htdocs/guide.rpy:158 plugins/lcd.py:204
 #: share/skins/main/crystal.fxd:273 share/skins/main/bluestar.fxd:293
@@ -1306,7 +1291,6 @@ msgid "Choices"
 msgstr "注意"
 
 #: audio/plugins/mplayervis.py:468 audio/plugins/mplayervis.py:477
-#: audio/plugins/mpdvis.py:461 audio/plugins/mpdvis.py:470
 #, python-format
 msgid "FXMODE is %s"
 msgstr ""
@@ -1629,19 +1613,28 @@ msgstr ""
 msgid "%s%%"
 msgstr ""
 
-#: plugins/idlebar/system.py:544
+#: plugins/idlebar/system.py:545
 msgid "Sensors must have three or four values:"
 msgstr ""
 
-#: plugins/idlebar/system.py:547
+#: plugins/idlebar/system.py:548
 #, fuzzy
 msgid "Sensor"
 msgstr "雪"
 
-#: plugins/idlebar/system.py:547
+#: plugins/idlebar/system.py:548
 #, fuzzy
 msgid "does not exist"
 msgstr "目录不存在"
+
+#: plugins/idlebar/system.py:552
+#, python-format
+msgid "%s "
+msgstr ""
+
+#: plugins/idlebar/system.py:552
+msgid "is not a valid meminfo entry"
+msgstr ""
 
 #: plugins/icecast.py:160
 msgid "Set as icecast playlist"
@@ -2426,6 +2419,32 @@ msgstr "命令执行完成"
 #: share/skins/main/Tux'n Tosh TV.fxd:23 share/skins/main/rain.fxd:16
 msgid "Commands"
 msgstr "命令"
+
+#: plugins/speak.py:34
+msgid "You need PyFest"
+msgstr ""
+
+#: plugins/speak.py:34
+msgid "to run the speak plugin."
+msgstr ""
+
+#: plugins/speak.py:83
+msgid "Welcome to Freevo!"
+msgstr ""
+
+#: plugins/speak.py:87
+msgid "Good bye!"
+msgstr ""
+
+#: plugins/speak.py:114
+#, fuzzy
+msgid "channel"
+msgstr "频道"
+
+#: plugins/speak.py:114
+#, fuzzy
+msgid "program"
+msgstr "节目"
 
 #: setup_freevo.py:80
 msgid ""
@@ -4401,6 +4420,22 @@ msgstr "播放列表中没有歌曲"
 #: share/skins/main/bluestar.fxd:13
 msgid "Weather"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "You need PyFest (http://users.wpi.edu/~squirrel/programs/others/) to run "
+#~ "freefest plugin."
+#~ msgstr ""
+#~ "你需要 pybluez (http://org.csail.mit.edu/pybluez/) 去运行 \"freevused\" 插"
+#~ "件。"
+
+#, fuzzy
+#~ msgid "Media Library 1"
+#~ msgstr "媒体库"
+
+#, fuzzy
+#~ msgid "Choose a Directory"
+#~ msgstr "浏览目录"
 
 #~ msgid "No matches for %(artist)s - %(album)s"
 #~ msgstr "没有发现 %(艺术家)s - %(专辑)s 的匹配信息"

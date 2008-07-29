@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-26 19:22+0200\n"
+"POT-Creation-Date: 2008-07-28 02:15+0200\n"
 "PO-Revision-Date: 2007-11-14 21:25+0100\n"
 "Last-Translator: Duncan Webb <duncan@linuxowl.com>\n"
 "Language-Team: British English <LL@li.org>\n"
@@ -164,14 +164,13 @@ msgstr "Edit Favourite"
 #: www/htdocs/record.rpy:82 www/htdocs/library.rpy:200
 #: www/htdocs/library.rpy:222 www/htdocs/library.rpy:225
 #: www/htdocs/manualrecord.rpy:75 www/htdocs/genre.rpy:70
-#: www/htdocs/genre.rpy:96 www/htdocs/library1.rpy:174
-#: www/htdocs/library1.rpy:196 www/htdocs/library1.rpy:199
-#: www/htdocs/guide.rpy:152 www/htdocs/wap_rec.rpy:103
+#: www/htdocs/genre.rpy:96 www/htdocs/guide.rpy:152 www/htdocs/wap_rec.rpy:103
 #: www/htdocs/favorites.rpy:57 www/htdocs/guidechannel.rpy:207
 #: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
 #: www/htdocs/search.rpy:55 skins/main/info_area.py:133 config.py:465
 #: audio/plugins/xine.py:55 plugins/lcd.py:48 plugins/vfd.py:52
-#: plugins/freevused.py:141 tv/plugins/dvbstreamer/live_pause.py:88
+#: plugins/freevused.py:141 plugins/speak.py:34
+#: tv/plugins/dvbstreamer/live_pause.py:88
 #: tv/plugins/dvbstreamer/live_pause.py:112
 #: tv/plugins/dvbstreamer/vlc_live_pause.py:89
 msgid "ERROR"
@@ -339,100 +338,96 @@ msgstr "Sorry, the programme description for %s is unavailable"
 msgid "Remove"
 msgstr "Remove"
 
-#: www/htdocs/library.rpy:189 www/htdocs/library1.rpy:163
+#: www/htdocs/library.rpy:189
 #, python-format
 msgid "%s already exists! File not renamed."
 msgstr "%s already exists! File not renamed."
 
-#: www/htdocs/library.rpy:193 www/htdocs/library1.rpy:167
+#: www/htdocs/library.rpy:193
 #, python-format
 msgid "Rename %s to %s."
 msgstr "Rename %s to %s."
 
 #: www/htdocs/library.rpy:196 www/htdocs/library.rpy:212
-#: www/htdocs/library1.rpy:170 www/htdocs/library1.rpy:186
 #, python-format
 msgid "<h2>%s</h2>"
 msgstr "<h2>%s</h2>"
 
-#: www/htdocs/library.rpy:197 www/htdocs/library1.rpy:171
+#: www/htdocs/library.rpy:197
 #, python-format
 msgid "Rename %s to %s, failed."
 msgstr "Rename %s to %s, failed."
 
-#: www/htdocs/library.rpy:200 www/htdocs/library1.rpy:174
+#: www/htdocs/library.rpy:200
 msgid "No new file specified."
 msgstr "No new file specified."
 
 #: www/htdocs/library.rpy:206 www/htdocs/library.rpy:210
-#: www/htdocs/library1.rpy:180 www/htdocs/library1.rpy:184
 #, python-format
 msgid "Delete %s."
 msgstr "Delete %s."
 
-#: www/htdocs/library.rpy:213 www/htdocs/library1.rpy:187
+#: www/htdocs/library.rpy:213
 #, python-format
 msgid "Delete %s, failed."
 msgstr "Delete %s, failed."
 
-#: www/htdocs/library.rpy:222 www/htdocs/library1.rpy:197
+#: www/htdocs/library.rpy:222
 #, python-format
 msgid "%s does not exist. No action taken."
 msgstr "%s does not exist. No action taken."
 
-#: www/htdocs/library.rpy:226 www/htdocs/library1.rpy:200
+#: www/htdocs/library.rpy:226
 #, python-format
 msgid "I do not process names (%s) with slashes for security reasons."
 msgstr "I do not process names (%s) with slashes for security reasons."
 
-#: www/htdocs/library.rpy:265 www/htdocs/library1.rpy:229 www/web_types.py:367
+#: www/htdocs/library.rpy:265 www/web_types.py:367
 msgid "Messages"
 msgstr "Messages"
 
-#: www/htdocs/library.rpy:277 www/htdocs/library1.rpy:242
-#: share/skins/main/crystal.fxd:9 share/skins/main/dark.fxd:18
-#: share/skins/main/atlantice.fxd:720 share/skins/main/Tux'n Tosh TV.fxd:18
-#: TV.fxd:595 share/skins/main/bluestar.fxd:9 share/skins/main/rain.fxd:9
+#: www/htdocs/library.rpy:277 share/skins/main/crystal.fxd:9
+#: share/skins/main/dark.fxd:18 share/skins/main/atlantice.fxd:720
+#: share/skins/main/Tux'n Tosh TV.fxd:18 TV.fxd:595
+#: share/skins/main/bluestar.fxd:9 share/skins/main/rain.fxd:9
 #: share/skins/main/basic.fxd:21
 msgid "Movies"
 msgstr "Movies"
 
-#: www/htdocs/library.rpy:281 www/htdocs/library1.rpy:246
+#: www/htdocs/library.rpy:281
 msgid "Recorded TV"
 msgstr "Recorded TV"
 
-#: www/htdocs/library.rpy:285 www/htdocs/library1.rpy:250 plugins/lcd.py:164
-#: plugins/lcd.py:343 share/skins/main/crystal.fxd:10
-#: share/skins/main/dark.fxd:19 share/skins/main/atlantice.fxd:721
-#: share/skins/main/Tux'n Tosh TV.fxd:19 share/skins/main/bluestar.fxd:10
-#: share/skins/main/rain.fxd:10 share/skins/main/basic.fxd:22
+#: www/htdocs/library.rpy:285 plugins/lcd.py:164 plugins/lcd.py:343
+#: share/skins/main/crystal.fxd:10 share/skins/main/dark.fxd:19
+#: share/skins/main/atlantice.fxd:721 share/skins/main/Tux'n Tosh TV.fxd:19
+#: share/skins/main/bluestar.fxd:10 share/skins/main/rain.fxd:10
+#: share/skins/main/basic.fxd:22
 msgid "Music"
 msgstr "Music"
 
-#: www/htdocs/library.rpy:289 www/htdocs/library1.rpy:254
-#: share/skins/main/crystal.fxd:12 share/skins/main/dark.fxd:20
-#: share/skins/main/atlantice.fxd:722 share/skins/main/Tux'n Tosh TV.fxd:20
-#: share/skins/main/rain.fxd:12 share/skins/main/basic.fxd:23
+#: www/htdocs/library.rpy:289 share/skins/main/crystal.fxd:12
+#: share/skins/main/dark.fxd:20 share/skins/main/atlantice.fxd:722
+#: share/skins/main/Tux'n Tosh TV.fxd:20 share/skins/main/rain.fxd:12
+#: share/skins/main/basic.fxd:23
 msgid "Images"
 msgstr "Images"
 
 #: www/htdocs/library.rpy:306 www/htdocs/library.rpy:379
 #: www/htdocs/library.rpy:381 www/htdocs/library.rpy:385
-#: www/htdocs/library1.rpy:269 www/htdocs/library1.rpy:340
-#: www/htdocs/library1.rpy:342 www/htdocs/library1.rpy:346
 msgid "Back"
 msgstr "Back"
 
-#: www/htdocs/library.rpy:544 www/htdocs/library1.rpy:388
+#: www/htdocs/library.rpy:544
 msgid "Download"
 msgstr "Download"
 
-#: www/htdocs/library.rpy:545 www/htdocs/library1.rpy:389
-#: skin/widgets/textentry_screen.py:62 plugins/file_ops.py:72
+#: www/htdocs/library.rpy:545 skin/widgets/textentry_screen.py:62
+#: plugins/file_ops.py:72
 msgid "Delete"
 msgstr "Delete"
 
-#: www/htdocs/library.rpy:547 www/htdocs/library1.rpy:390
+#: www/htdocs/library.rpy:547
 msgid "Rename"
 msgstr "Rename"
 
@@ -599,14 +594,6 @@ msgstr "viewlog"
 #: www/htdocs/viewlogfile.rpy:130
 msgid "View Logs"
 msgstr "View Logs"
-
-#: www/htdocs/library1.rpy:208
-msgid "Media Library 1"
-msgstr "Media Library 1"
-
-#: www/htdocs/library1.rpy:266
-msgid "Choose a Directory"
-msgstr "Choose a Directory"
 
 #: www/htdocs/guide.rpy:158 plugins/lcd.py:204
 #: share/skins/main/crystal.fxd:273 share/skins/main/bluestar.fxd:293
@@ -1286,7 +1273,6 @@ msgid "Choices"
 msgstr "Choices"
 
 #: audio/plugins/mplayervis.py:468 audio/plugins/mplayervis.py:477
-#: audio/plugins/mpdvis.py:461 audio/plugins/mpdvis.py:470
 #, python-format
 msgid "FXMODE is %s"
 msgstr ""
@@ -1607,17 +1593,27 @@ msgstr "%iM"
 msgid "%s%%"
 msgstr "%s%%"
 
-#: plugins/idlebar/system.py:544
+#: plugins/idlebar/system.py:545
 msgid "Sensors must have three or four values:"
 msgstr ""
 
-#: plugins/idlebar/system.py:547
+#: plugins/idlebar/system.py:548
 msgid "Sensor"
 msgstr "Sensor"
 
-#: plugins/idlebar/system.py:547
+#: plugins/idlebar/system.py:548
 msgid "does not exist"
 msgstr "does not exist"
+
+#: plugins/idlebar/system.py:552
+#, python-format
+msgid "%s "
+msgstr ""
+
+#: plugins/idlebar/system.py:552
+#, fuzzy
+msgid "is not a valid meminfo entry"
+msgstr "\"%s\" is not a valid argument for the button bar. "
 
 #: plugins/icecast.py:160
 msgid "Set as icecast playlist"
@@ -2398,6 +2394,33 @@ msgstr "Command Completed"
 #: share/skins/main/Tux'n Tosh TV.fxd:23 share/skins/main/rain.fxd:16
 msgid "Commands"
 msgstr "Commands"
+
+#: plugins/speak.py:34
+#, fuzzy
+msgid "You need PyFest"
+msgstr "You need software %s"
+
+#: plugins/speak.py:34
+msgid "to run the speak plugin."
+msgstr ""
+
+#: plugins/speak.py:83
+msgid "Welcome to Freevo!"
+msgstr ""
+
+#: plugins/speak.py:87
+msgid "Good bye!"
+msgstr ""
+
+#: plugins/speak.py:114
+#, fuzzy
+msgid "channel"
+msgstr "Channel"
+
+#: plugins/speak.py:114
+#, fuzzy
+msgid "program"
+msgstr "Programme"
 
 #: setup_freevo.py:80
 msgid ""
@@ -4341,6 +4364,20 @@ msgstr "No songs in play list"
 #: share/skins/main/bluestar.fxd:13
 msgid "Weather"
 msgstr "Weather"
+
+#, fuzzy
+#~ msgid ""
+#~ "You need PyFest (http://users.wpi.edu/~squirrel/programs/others/) to run "
+#~ "freefest plugin."
+#~ msgstr ""
+#~ "You need pybluetooth (http://org.csail.mit.edu/pybluetooth/) to run "
+#~ "\"freevused\" plugin."
+
+#~ msgid "Media Library 1"
+#~ msgstr "Media Library 1"
+
+#~ msgid "Choose a Directory"
+#~ msgstr "Choose a Directory"
 
 #~ msgid "No matches for %(artist)s - %(album)s"
 #~ msgstr "No matches for %(artist)s - %(album)s"
