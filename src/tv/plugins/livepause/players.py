@@ -72,6 +72,7 @@ def get_player():
     return eval('%s()' % player.capitalize())
 
 
+
 class Player(object):
     def __init__(self, supports_text, supports_graphics):
         """
@@ -212,6 +213,8 @@ class Player(object):
         """
         pass
 
+
+
 class Xine(Player):
     """
     the main class to control xine
@@ -277,6 +280,7 @@ class Xine(Player):
                 self.subtitles = False
                 self.set_subtitles(0)
 
+
     def get_subtitles(self):
         """
         Return the available subtitles.
@@ -332,6 +336,7 @@ class Xine(Player):
             self.app.write('OSDWriteText$    %s\n' % message)
 
 
+
 class Mplayer(Player):
     """
     The main class to control MPlayer
@@ -379,8 +384,7 @@ class Mplayer(Player):
         # them, this allows use to effectively reset mplayer's rendering pipeline and
         # make it possible to seek quickly.
         mrl = 'http://localhost:%d' % port
-        self.app = childapp.ChildApp2(self.command + \
-                       [mrl, mrl])
+        self.app = childapp.ChildApp2(self.command + [mrl, mrl])
 
 
     def stop(self):
@@ -434,19 +438,21 @@ class Mplayer(Player):
             self.app.write('osd_show_text "%s"\n' % message)
 
 
+
 class Vlc(Player):
     """
     The main class to control VLC
+    if you plan to use GraphicOSD : logo sub-filter works in vlc 0.8.6i or older
     """
     def __init__(self):
-        Player.__init__(self, True, False)
+        Player.__init__(self, True, True)
         self.app = None
         self.paused = False
         command = ['--prio=%s' % config.MPLAYER_NICE, config.CONF.vlc]
         command += ['-I', 'rc', '--rc-fake-tty',
                     '--width', str(config.CONF.width),
                     '--height', str(config.CONF.height),
-                    '--sub-filter', 'marq', '--marq-marquee', 'Playing', '--marq-timeout', '3000'
+                    '--sub-filter', 'marq:logo', '--marq-timeout', '3000', '--marq-marquee', 'Playing', '--logo-file', 'dummy'
                    ]
         command += config.VLC_OPTIONS.split(' ')
         self.command = command
@@ -521,12 +527,14 @@ class Vlc(Player):
         self.app.send_command('strack %s' % sub_pid)
         self.current_sub_index = index
 
+
     def get_audio_modes(self):
         """
         Return the available audio modes.
         @return: An array of audio modes or None if not supported.
         """
         return None
+
 
     def set_audio_mode(self, index):
         """
@@ -535,6 +543,7 @@ class Vlc(Player):
         returned by get_audio_mode.
         """
         pass
+
 
     def get_audio_langs(self):
         """
@@ -550,6 +559,7 @@ class Vlc(Player):
                 audio_tracks.append(lang)
                 self.audio_pids.append(pid)
         return audio_tracks
+
 
     def set_audio_lang(self, index):
         """
@@ -568,12 +578,14 @@ class Vlc(Player):
         self.app.send_command('atrack %s' % audio_pid)
         self.current_audio_index = index
 
+
     def get_video_fill_modes(self):
         """
         Returns a list of video fill modes.
         @return: An array of available video fill mode options or None if not supported.
         """
         return None
+
 
     def set_video_fill_mode(self, index):
         """
@@ -582,6 +594,7 @@ class Vlc(Player):
         returned by get_video_fill_modes.
         """
         pass
+
 
     def pause(self):
         """
@@ -602,6 +615,7 @@ class Vlc(Player):
             self.app.send_command('pause 0')
             self.paused = False
 
+
     def display_message(self, message):
         """
         Function to tell mplayer to display the specified text.
@@ -611,6 +625,33 @@ class Vlc(Player):
             self.app.send_command('marq-marquee %s' % message)
 
 
+    def show_graphics(self, surface, position):
+        """
+        Show the graphics on the specified surface using the players graphics
+        OSD.
+        NOTE: Only supported if supports_graphics is True.
+
+        surface - pygame.Surface to display
+        position - (x,y) position to display the image.
+        """
+        if self.app:
+            surface.save ('/tmp/vlcosd.png')
+            self.app.send_command('logo-file /tmp/vlcosd.png')
+            self.app.send_command('logo-transparency 220')
+            self.app.send_command('logo-position %d' % position[0])
+            self.app.send_command('logo-position %d' % position[1])
+            #self.app.send_command('logo-position 8')   # to use built-in smart positioning of vlc (8 = bottom center)
+
+
+    def hide_graphics(self):
+        """
+        Hide the players graphics OSD.
+        NOTE: Only supported if supports_graphics is True.
+        """
+
+        if self.app:
+            self.app.send_command('logo-file dummy')
+
 # Regular Expression for parsing VLC output
 VLC_RE_EXIT              = re.compile("status change: \( quit \)")
 VLC_RE_PARSE_HEAD_AUDIO  = re.compile('^\+----\[ Audio Track \]')
@@ -619,6 +660,8 @@ VLC_RE_PARSE_HEAD_ACHAN  = re.compile('^\+----\[ Audio Device \]')
 VLC_RE_PARSE_FOOT        = re.compile('^\+----\[ end of')
 VLC_RE_PARSE_ACHAN       = re.compile('^\| ([0-9]+) - (.*?)')
 VLC_RE_PARSE_TRACK       = re.compile('^\| ([0-9]+) - .*? - \[(.*?)\]')
+
+
 
 class VlcApp(childapp.ChildApp2):
     """
@@ -640,11 +683,13 @@ class VlcApp(childapp.ChildApp2):
         self.output_event = threading.Event()
         childapp.ChildApp2.__init__(self, command, callback_use_rc=False)
 
+
     def send_command(self, cmd):
         """
         Send a command to vlc.
         """
         self.write('%s\n' % cmd)
+
 
     def send_command_wait_for_output(self, cmd):
         """
@@ -653,6 +698,7 @@ class VlcApp(childapp.ChildApp2):
         self.output_event.clear()
         self.send_command(cmd)
         self.output_event.wait()
+
 
     def stdout_cb(self, line):
         """
