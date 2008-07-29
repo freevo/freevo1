@@ -29,7 +29,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     Add to local_conf.py
     | plugin.activate('audio.apodcast')
     | APODCAST_LOCATIONS = [
-    |     ('TWIT','http://leo.am/podcasts/twit'),
+    |     ('TWIT', 'http://leo.am/podcasts/twit'),
     |     ('NPR: Science Friday', 'http://www.sciencefriday.com/audio/scifriaudio.xml'),
     |     ('NPR: Story of the Day', 'http://www.npr.org/rss/podcast.php?id=1090'),
     |     ('PodTech.net: Technology and Entertainment Video Network', 'http://www.podtech.net/?feed=rss2'),
@@ -39,14 +39,15 @@ class PluginInterface(plugin.MainMenuPlugin):
     |
     | APODCAST_DIR = '/home/user_name/apodcast'
     """
-
     def __init__(self):
         plugin.MainMenuPlugin.__init__(self)
         self.plugin_name = 'apodcast'
         self.check_dir()
 
+
     def items(self, parent):
         return [ ApodcastMainMenuItem(parent) ]
+
 
     def config(self):
         '''
@@ -57,6 +58,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('APODCAST_DIR', None, 'Dir for downloaded podcasts')
         ]
 
+
     def check_dir(self):
         if os.path.exists(config.APODCAST_DIR) and os.path.isdir(config.APODCAST_DIR):
             #print 'APODCAST DIR EXIST !'
@@ -65,7 +67,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             os.mkdir(config.APODCAST_DIR)
 
         for pcdir in config.APODCAST_LOCATIONS:
-            pc_dir = config.APODCAST_DIR + '/' + pcdir[0]
+            pc_dir = os.path.join(config.APODCAST_DIR, pcdir[0])
             if os.path.exists(pc_dir) and os.path.isdir(pc_dir):
                 #print 'Podcast dir ' + pc_dir + ' exist !'
                 pass
@@ -75,6 +77,8 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
 class PodCastPlayerGUI(PlayerGUI):
+    """
+    """
     def __init__(self, item, menuw=None):
         GUIObject.__init__(self)
         if menuw:
@@ -91,7 +95,7 @@ class PodCastPlayerGUI(PlayerGUI):
         self.box = None
         self.downl_time = 30
         if not os.path.exists(self.item.filename):
-            background = BGDownload(self.item.url,self.item.filename)
+            background = BGDownload(self.item.url, self.item.filename)
             background.start()
             popup = PopupBox(text=_('Buffering podcast...'))
             popup.show()
@@ -101,14 +105,15 @@ class PodCastPlayerGUI(PlayerGUI):
 
 
 class ApodcastItem(Item):
-
-
+    """
+    """
     def actions(self):
         """
         return a list of actions for this item
         """
-        items = [ ( self.play, _( 'Listen Audio Podcast' ) ) ]
+        items = [ (self.play, _('Listen Audio Podcast')) ]
         return items
+
 
     def play(self, arg=None, menuw=None):
         self.elapsed = 0
@@ -145,14 +150,14 @@ class ApodcastMainMenuItem(MenuItem):
     """
     def __init__(self, parent):
         MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
-        self.name = _( 'Audio Podcast' )
+        self.name = _('Audio Podcast')
 
 
     def actions(self):
         """
         return a list of actions for this item
         """
-        return [ ( self.create_podcast_menu, 'stations' ) ]
+        return [ (self.create_podcast_menu, 'stations') ]
 
 
     def create_podcast_submenu(self, arg=None, menuw=None, image=None):
@@ -163,7 +168,7 @@ class ApodcastMainMenuItem(MenuItem):
         p.open_rss(url)
         p.rss_title()
         p.rss_count()
-        image = config.APODCAST_DIR + '/' + arg[0] + '/' + 'cover.jpg'
+        image = os.path.join(config.APODCAST_DIR, arg[0], 'cover.jpg')
 
         podcast_items = []
         for pc_location in range(p.rss.count):
@@ -175,7 +180,7 @@ class ApodcastMainMenuItem(MenuItem):
             podcast_item.description = p.description
             podcast_item.image = image
             podcast_item.mplayer_options = ''
-            podcast_item.filename = config.APODCAST_DIR + '/' + arg[0] + '/' + os.path.split(p.enclosure)[1]
+            podcast_item.filename = os.path.join(config.APODCAST_DIR, arg[0], os.path.split(p.enclosure)[1])
             podcast_item.network_play = 1
             podcast_item.length = 0
             podcast_item.remain = 0
@@ -185,48 +190,52 @@ class ApodcastMainMenuItem(MenuItem):
 
         popup.destroy()
         if (len(podcast_items) == 0):
-            podcast_items += [menu.MenuItem( _( 'No Podcast locations found' ),
-                                             menwu.goto_prev_page, 0)]
-        podcast_sub_menu = menu.Menu( _( 'AUDIO PODCAST' ), podcast_items)
+            podcast_items += [ menu.MenuItem(_('No Podcast locations found'), menwu.goto_prev_page, 0) ]
+        podcast_sub_menu = menu.Menu(_('AUDIO PODCAST'), podcast_items)
         rc.app(None)
         menuw.pushmenu(podcast_sub_menu)
         menuw.refresh()
 
-    def create_podcast_menu(self,arg=None, menuw=None):
+
+    def create_podcast_menu(self, arg=None, menuw=None):
         popup = PopupBox(text=_('Fetching podcasts...'))
         popup.show()
         podcast_menu_items = []
 
-
         for location in config.APODCAST_LOCATIONS:
             url = location[1]
-            image_path = config.APODCAST_DIR + '/' + location[0] + '/' + 'cover.jpg'
+            image_path = os.path.join(config.APODCAST_DIR, location[0], 'cover.jpg')
             if self.check_logo(image_path):
                 p = podcast()
                 p.open_rss(url)
                 p.rss_title()
                 name = p.rss_title
                 image_url = p.rss_image
-                self.download(image_url,image_path)
+                self.download(image_url, image_path)
 
             if (len(config.APODCAST_DIR) == 0):
-                podcast_items += [menu.MenuItem( _( 'Set APODCAST_DIR in local_conf.py' ),
-                                             menwu.goto_prev_page, 0)]
-            podcast_menu_items += [menu.MenuItem( _( location[0]), action=self.create_podcast_submenu, arg=location, image=image_path)]
+                podcast_items += [ menu.MenuItem(_('Set APODCAST_DIR in local_conf.py'), menwu.goto_prev_page, 0) ]
+            podcast_menu_items += [ menu.MenuItem(_(location[0]), action=self.create_podcast_submenu, arg=location,
+                image=image_path) ]
 
         popup.destroy()
-        podcast_main_menu = menu.Menu( _( 'AUDIO PODCAST' ), podcast_menu_items)
+        podcast_main_menu = menu.Menu(_('AUDIO PODCAST'), podcast_menu_items)
         rc.app(None)
         menuw.pushmenu(podcast_main_menu)
         menuw.refresh()
 
-    def download(self,url,savefile):
-        file = urllib2.urlopen(url).read()
-        save = open(savefile, 'w')
-        print >> save, file
-        save.close()
 
-    def check_logo(self,logo_file):
+    def download(self, url, savefile):
+        try:
+            file = urllib2.urlopen(url).read()
+            save = open(savefile, 'w')
+            print >> save, file
+            save.close()
+        except Exception, why:
+            _debug_('Cannot read url %r: %s' % (url, why), DWARNING)
+
+
+    def check_logo(self, logo_file):
         if os.path.exists(logo_file) == 0 or (abs(time.time() - os.path.getmtime(logo_file)) > MAX_AGE):
             return True
         else:
@@ -236,10 +245,12 @@ class ApodcastMainMenuItem(MenuItem):
 
 
 class podcast:
-    # extract info from RSS
-
+    """
+    extract info from RSS
+    """
     def __init__(self):
         pass
+
 
     def open_rss(self, url):
         self.rss = util.feedparser.parse(url)
@@ -254,11 +265,12 @@ class podcast:
         else:
             self.rss_image = None
 
+
     def rss_count(self):
         self.rss.count =  len(self.rss.entries)
 
 
-    def rss_item(self,item=0):
+    def rss_item(self, item=0):
         try:
             self.title = self.rss.entries[item].title.encode(self.encoding)
             self.description = self.rss.entries[item].description.encode(self.encoding)
@@ -270,11 +282,14 @@ class podcast:
 
 
 class BGDownload(threading.Thread):
-    # Download podcast file
+    """
+    Download podcast file
+    """
     def __init__(self, url, savefile):
         threading.Thread.__init__(self)
         self.url = url
         self.savefile = savefile
+
 
     def run(self):
         try:
