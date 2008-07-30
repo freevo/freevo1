@@ -54,12 +54,9 @@ if config.CONF.display == 'x11':
                 self.image = image
                 self.window.set_geometry( position, image.size)
                 self.window.set_shape_mask_from_imlib2_image(self.image, (0, 0))
-
-                if self.window.get_visible():
-                    self.window.raise_window()
-                    self.window.render_imlib2_image(self.image)
-                else:
-                    self.window.show()
+                self.window.show()
+                self.window.raise_window()
+                self.window.render_imlib2_image(self.image)
 
 
             def hide_image(self):

@@ -23,6 +23,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Updated mplayervis plug-in to be able to set the frame rate (F#2027953)
  * Fixed new arguments to mplayer for the video codec (B#2022949)
  * Fixed idlebar fonts for wide-screen TVs (B#1981503)
+ * Fixed livepause plug-in to display OSD over fullscreen video in X11 (B#2031911)
 
 == Release 1.7.9 (2008-08-25) ==
 --------------------------------
