@@ -155,8 +155,8 @@ class MPlayer:
 
             elif vg.group_type == 'dvb':
                 self.fc.chanSet(tuner_channel, True, app='mplayer')
-                args['url'] = ''
-                args['mode_args'] = str('"dvb://%s" %s' % (tuner_channel, config.MPLAYER_ARGS['dvb'])).split()
+                args['url'] = ('dvb://%s' % (tuner_channel,))
+                args['mode_args'] = config.MPLAYER_ARGS['dvb'].split()
 
             elif vg.group_type == 'tvalsa':
                 freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
