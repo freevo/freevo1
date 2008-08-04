@@ -125,12 +125,12 @@ class CategoryListItem(Item):
             for prog in ch.programs:
                 if now >= prog.stop:
                     continue
-        query_data = prog.categories
-        for genre in query_data:
-            if genre and genre.lower() not in EXCLUDE_GENRES:
-                if genre not in categories:
-                    categories.append(genre)
-                    items.append(GenreItem(self.parent, genre))
+                query_data = prog.categories
+                for genre in query_data:
+                    if genre and genre.lower() not in EXCLUDE_GENRES:
+                        if genre not in categories:
+                            categories.append(genre)
+                            items.append(GenreItem(self.parent, genre))
          
         # create menu
         menu = Menu(self.name, items, item_types='tv listing')
