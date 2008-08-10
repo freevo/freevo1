@@ -132,8 +132,8 @@ def init():
             media = RemovableMedia(mountdir=dir, devicename=device, drivename=name)
             cdc = media.get_capabilities()
             media.log_capabilities(cdc)
-            cds = media.get_drive_status()
-            media.log_drive_status(cds)
+            media.get_drive_status()
+            media.log_drive_status(media.cds)
             media.log_disc_status(media.cis)
             # close the tray without popup message
             media.close_tray()
@@ -324,33 +324,40 @@ class RemovableMedia:
         """
         return tray status
         """
-        return self.tray_open
+        return self.get_drive_status() == CDS_TRAY_OPEN
+
+
+    def capabilities_text(self, cdc):
+        """ the drive capabilities as text"""
+        result = []
+        result.append('%s CDC_CLOSE_TRAY'     % (cdc & CDC_CLOSE_TRAY     and 'can' or 'can\'t'))
+        result.append('%s CDC_OPEN_TRAY'      % (cdc & CDC_OPEN_TRAY      and 'can' or 'can\'t'))
+        result.append('%s CDC_LOCK'           % (cdc & CDC_LOCK           and 'can' or 'can\'t'))
+        result.append('%s CDC_SELECT_SPEED'   % (cdc & CDC_SELECT_SPEED   and 'can' or 'can\'t'))
+        result.append('%s CDC_SELECT_DISC'    % (cdc & CDC_SELECT_DISC    and 'can' or 'can\'t'))
+        result.append('%s CDC_MULTI_SESSION'  % (cdc & CDC_MULTI_SESSION  and 'can' or 'can\'t'))
+        result.append('%s CDC_MCN'            % (cdc & CDC_MCN            and 'can' or 'can\'t'))
+        result.append('%s CDC_MEDIA_CHANGED'  % (cdc & CDC_MEDIA_CHANGED  and 'can' or 'can\'t'))
+        result.append('%s CDC_PLAY_AUDIO'     % (cdc & CDC_PLAY_AUDIO     and 'can' or 'can\'t'))
+        result.append('%s CDC_RESET'          % (cdc & CDC_RESET          and 'can' or 'can\'t'))
+        result.append('%s CDC_DRIVE_STATUS'   % (cdc & CDC_DRIVE_STATUS   and 'can' or 'can\'t'))
+        result.append('%s CDC_GENERIC_PACKET' % (cdc & CDC_GENERIC_PACKET and 'can' or 'can\'t'))
+        result.append('%s CDC_CD_R'           % (cdc & CDC_CD_R           and 'can' or 'can\'t'))
+        result.append('%s CDC_CD_RW'          % (cdc & CDC_CD_RW          and 'can' or 'can\'t'))
+        result.append('%s CDC_DVD'            % (cdc & CDC_DVD            and 'can' or 'can\'t'))
+        result.append('%s CDC_DVD_R'          % (cdc & CDC_DVD_R          and 'can' or 'can\'t'))
+        result.append('%s CDC_DVD_RAM'        % (cdc & CDC_DVD_RAM        and 'can' or 'can\'t'))
+        result.append('%s CDC_MO_DRIVE'       % (cdc & CDC_MO_DRIVE       and 'can' or 'can\'t'))
+        result.append('%s CDC_MRW'            % (cdc & CDC_MRW            and 'can' or 'can\'t'))
+        result.append('%s CDC_MRW_W'          % (cdc & CDC_MRW_W          and 'can' or 'can\'t'))
+        result.append('%s CDC_RAM'            % (cdc & CDC_RAM            and 'can' or 'can\'t'))
+        return result
 
 
     def log_capabilities(self, cdc):
         """ Write the drive capabilities to the debug log """
-        _debug_('%s cdc=0x%08x ' % (self.devicename, cdc))
-        _debug_('%s CDC_CLOSE_TRAY'     % (cdc & CDC_CLOSE_TRAY     and 'can' or 'can\'t'))
-        _debug_('%s CDC_OPEN_TRAY'      % (cdc & CDC_OPEN_TRAY      and 'can' or 'can\'t'))
-        _debug_('%s CDC_LOCK'           % (cdc & CDC_LOCK           and 'can' or 'can\'t'))
-        _debug_('%s CDC_SELECT_SPEED'   % (cdc & CDC_SELECT_SPEED   and 'can' or 'can\'t'))
-        _debug_('%s CDC_SELECT_DISC'    % (cdc & CDC_SELECT_DISC    and 'can' or 'can\'t'))
-        _debug_('%s CDC_MULTI_SESSION'  % (cdc & CDC_MULTI_SESSION  and 'can' or 'can\'t'))
-        _debug_('%s CDC_MCN'            % (cdc & CDC_MCN            and 'can' or 'can\'t'))
-        _debug_('%s CDC_MEDIA_CHANGED'  % (cdc & CDC_MEDIA_CHANGED  and 'can' or 'can\'t'))
-        _debug_('%s CDC_PLAY_AUDIO'     % (cdc & CDC_PLAY_AUDIO     and 'can' or 'can\'t'))
-        _debug_('%s CDC_RESET'          % (cdc & CDC_RESET          and 'can' or 'can\'t'))
-        _debug_('%s CDC_DRIVE_STATUS'   % (cdc & CDC_DRIVE_STATUS   and 'can' or 'can\'t'))
-        _debug_('%s CDC_GENERIC_PACKET' % (cdc & CDC_GENERIC_PACKET and 'can' or 'can\'t'))
-        _debug_('%s CDC_CD_R'           % (cdc & CDC_CD_R           and 'can' or 'can\'t'))
-        _debug_('%s CDC_CD_RW'          % (cdc & CDC_CD_RW          and 'can' or 'can\'t'))
-        _debug_('%s CDC_DVD'            % (cdc & CDC_DVD            and 'can' or 'can\'t'))
-        _debug_('%s CDC_DVD_R'          % (cdc & CDC_DVD_R          and 'can' or 'can\'t'))
-        _debug_('%s CDC_DVD_RAM'        % (cdc & CDC_DVD_RAM        and 'can' or 'can\'t'))
-        _debug_('%s CDC_MO_DRIVE'       % (cdc & CDC_MO_DRIVE       and 'can' or 'can\'t'))
-        _debug_('%s CDC_MRW'            % (cdc & CDC_MRW            and 'can' or 'can\'t'))
-        _debug_('%s CDC_MRW_W'          % (cdc & CDC_MRW_W          and 'can' or 'can\'t'))
-        _debug_('%s CDC_RAM'            % (cdc & CDC_RAM            and 'can' or 'can\'t'))
+        for capability in self.capabilities_text(cdc):
+            _debug_('%r %s' % (self.devicename, capability), DINFO)
 
 
     def get_capabilities(self):
@@ -408,14 +415,14 @@ class RemovableMedia:
         return 'CDS_UNKNOWN %r' % (cds)
 
 
-    def log_disc_status(self, cds):
+    def log_disc_status(self, status):
         """ Log the disc status """
-        _debug_('%r %s' % (self.devicename, self.disc_status_text(cds)), DINFO)
+        _debug_('%r %s' % (self.devicename, self.disc_status_text(status)), DINFO)
 
 
-    def log_drive_status(self, cds):
+    def log_drive_status(self, status):
         """ Log the drive status """
-        _debug_('%r %s' % (self.devicename, self.drive_status_text(cds)), DINFO)
+        _debug_('%r %s' % (self.devicename, self.drive_status_text(status)), DINFO)
 
 
     def get_drive_status(self):
@@ -888,3 +895,20 @@ class Identify_Thread(threading.Thread):
                 # check if we need to stop
                 if hasattr(self, 'stop'):
                     return
+
+
+if __name__ == '__main__':
+    if config.ROM_DRIVES is not None:
+        for i in range(len(config.ROM_DRIVES)):
+            (dir, device, name) = config.ROM_DRIVES[i]
+            media = RemovableMedia(mountdir=dir, devicename=device, drivename=name)
+            print '-' * len('%r' % (media.devicename,))
+            print '%r' % (media.devicename,)
+            print '-' * len('%r' % (media.devicename,))
+            cdc = media.get_capabilities()
+            for capability in media.capabilities_text(media.cdc):
+                print '%s' % (capability)
+            media.get_drive_status()
+            print '%s' % (media.drive_status_text(media.cds))
+            print '%s' % (media.disc_status_text(media.cis))
+            print '%s is %s' % (name, media.is_tray_open() and 'OPEN' or 'CLOSED')
