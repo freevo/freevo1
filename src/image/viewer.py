@@ -40,6 +40,7 @@ from gui import GUIObject
 from event import *
 
 import time
+import datetime
 from animation import render, Transition
 import pygame
 
