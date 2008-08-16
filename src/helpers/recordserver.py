@@ -261,7 +261,7 @@ class RecordServer:
             try:
                 file_ver = schedule.TYPES_VERSION
             except AttributeError:
-                _debug_('The cache does not have a version and must be recreated', DWARNING)
+                _debug_('The cache does not have a version and must be recreated', DINFO)
 
             if file_ver != TYPES_VERSION:
                 _debug_(('ScheduledRecordings version number %s is stale (new is %s), must be reloaded') % \
@@ -942,7 +942,7 @@ class RecordServer:
                     self.delay_recording = None
 
                 if self.delay_recording:
-                    _debug_('delaying: %s' % prog, DWARNING)
+                    _debug_('delaying: %s' % prog, DINFO)
                 else:
                     _debug_('going to record: %s' % prog, DINFO)
                     prog.isRecording = True
