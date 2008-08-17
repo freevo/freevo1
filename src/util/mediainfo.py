@@ -429,7 +429,16 @@ class Info:
 
 
     def __str__(self):
-        s = ', '.join([ self.filename, str(self.disc), self.discinfo.id, self.discinfo.type ])
+        l = [self.filename]
+        if self.disc:
+            if hasattr(self, 'disc'):
+                l.append(self.disc)
+            if hasattr(self, 'discinfo'):
+                if hasattr(self.discinfo, 'id'):
+                    l.append(self.discinfo.id)
+                if hasattr(self.discinfo, 'type'):
+                    l.append(self.discinfo.type)
+        s = ', '.join(l)
         return s
 
 
@@ -447,13 +456,17 @@ class Info:
         get the value of 'key'
         """
         result = ''
+        if key == 'year':
+            key = 'userdate'
         for var in self.dicts:
             if var and var.has_key(key):
                 val = var[key]
                 if not var == self.metadata or not val in bad_info:
                     result = val
-                if result != None and result != '':
+                if result is not None and result != '':
+                    _debug_('__getitem__(key=%r)=%r' % (key, result), 3)
                     return result
+        _debug_('__getitem__(key=%r)=%r' % (key, result), 3)
         return result
 
 
