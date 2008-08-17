@@ -49,7 +49,7 @@ class Transition(BaseAnimation):
     """@cvar: second surface"""
 
 
-    def __init__(self, surf1, surf2, mode=-1, direction='vertical', fps=25):
+    def __init__(self, surf1, surf2, mode=-1, direction='vertical', fps=25, speed=1):
         """
         Initialise an instance of the Transition class
         @ivar surf1: Surface to blend with
@@ -63,6 +63,8 @@ class Transition(BaseAnimation):
         self.steps     = fps
         self.mode      = mode
         self.direction = direction
+
+        self.speed     = speed
 
         # WARNING: self.drawfuncs should not contain links to it's member
         # functions because this results in circular dependencies and the
@@ -137,7 +139,7 @@ class Transition(BaseAnimation):
         self.surface.blit(self.surf_blend1, (0, 0))
         self.surface.blit(self.surf_blend2, (0, 0))
 
-        self.index_alpha += 1
+        self.index_alpha += self.speed
 
         if self.index_alpha > len(self.blend_alphas) - 1:
             self.finished = True

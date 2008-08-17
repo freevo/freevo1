@@ -62,6 +62,8 @@ class PlayerGUI(GUIObject):
         self.progressbox = None
         self.last_progress = 0
 
+        self.first_drawing = True
+
     def play(self, player=None):
         global _player_
         if _player_ and _player_.player and _player_.player.is_playing():
@@ -171,7 +173,16 @@ class PlayerGUI(GUIObject):
             self.item.remain = 0
         else:
             self.item.remain = self.item.length - self.item.elapsed
-        self.skin.draw('player', self.item)
+
+        if config.FREEVO_USE_ALPHABLENDING and self.first_drawing:
+            do_blend = True
+        else:
+            do_blend = False
+
+        self.skin.draw('player', self.item, blend=do_blend)
+
+        self.first_drawing = False
+
         return
 
     def popup_show(self, line, width=0, height=0):

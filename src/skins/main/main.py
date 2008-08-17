@@ -42,8 +42,12 @@ from gui  import GUIObject
 import xml_skin
 import screen
 
+from animation import render, Transition
+import pygame
+
 # Create the OSD object
 osd = osd.get_singleton()
+render = render.get_singleton()
 
 ###############################################################################
 # Skin main functions
@@ -469,7 +473,7 @@ class Skin:
         self.settings.prepare()
 
 
-    def draw(self, type, object, menu=None):
+    def draw(self, type, object, menu=None, blend=False):
         """
         Draw the object.  object may be a menu widget, a table for the tv menu
         or an audio item for the audio player.
@@ -490,6 +494,7 @@ class Skin:
 
         settings = self.settings
 
+        old_screen = None
         if type == 'menu':
             menu = object.menustack[-1]
             if menu.skin_settings:
@@ -516,7 +521,12 @@ class Skin:
             self.screen.clear()
             for a in self.all_areas:
                 a.draw(settings, object, menu, style, type, self.force_redraw)
-            osd.update([self.screen.show(self.force_redraw)])
+
+            if blend:
+                self.do_blending()
+            else:
+                osd.update([self.screen.show(self.force_redraw)])
+
             self.force_redraw = False
         except UnicodeError, e:
             print '******************************************************************'
@@ -532,3 +542,19 @@ class Skin:
                     print i
             print
             raise UnicodeError, e
+
+    def do_blending(self):
+        screen = osd.screen.convert()
+
+        self.screen.show(True)
+        
+        blend = Transition(screen, osd.screen, 0, speed=4)
+
+        clock = pygame.time.Clock()
+        blend.start()
+
+        while not blend.finished:
+            render.update()
+            clock.tick(blend.steps)
+
+        blend.remove()

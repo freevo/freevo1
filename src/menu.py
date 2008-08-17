@@ -183,6 +183,8 @@ class MenuWidget(GUIObject):
         self.show_callbacks = []
         self.force_page_rebuild = False
 
+        self.first_drawing = False
+
 
     def __str__(self):
         """
@@ -449,7 +451,14 @@ class MenuWidget(GUIObject):
                 self.rebuild_page()
             self.init_page()
 
-        skin.draw('menu', self, self.menustack[-1])
+        if config.FREEVO_USE_ALPHABLENDING and self.first_drawing:
+            blend = True
+        else:
+            blend = False
+ 
+        skin.draw('menu', self, self.menustack[-1], blend)
+
+        self.first_drawing = False
 
 
     @benchmark(benchmarking)
@@ -944,6 +953,8 @@ class MenuWidget(GUIObject):
 
     @benchmark(benchmarking)
     def init_page(self):
+
+        self.first_drawing = True
 
         menu = self.menustack[-1]
         if not menu:
