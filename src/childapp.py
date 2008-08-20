@@ -173,15 +173,19 @@ class ChildApp:
         self.ready = True
 
 
-    # Write a string to the app.
     def write(self, line):
-        _debug_('ChildApp.write(line=%r) to pid %s' % (line.strip('\n'), self.child.pid), 2)
-        #self.shild.communicate(line)
-        try:
-            self.child.stdin.write(line)
-            self.child.stdin.flush()
-        except IOError:
-            _debug_('ChildApp.write(line=%r): failed' % (line.strip('\n'),), DWARNING)
+        """
+        Send a string to the app.
+        if the child is already dead, there is nothing to do
+        """
+        if self.child:
+            _debug_('ChildApp.write(line=%r) to pid %s' % (line.strip('\n'), self.child.pid), 2)
+            #self.child.communicate(line)
+            try:
+                self.child.stdin.write(line)
+                self.child.stdin.flush()
+            except IOError:
+                _debug_('ChildApp.write(line=%r): failed' % (line.strip('\n'),), DWARNING)
 
 
     def stdout_cb(self, line):
