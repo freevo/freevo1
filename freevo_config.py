@@ -375,6 +375,7 @@ LOCAL_CONF_CHANGES = [
      Added MPLAYER_AUDIO_CACHE_KB, MPLAYER_AUDIO_CACHE_MIN_PERCENT and MPLAYER_AUDIO_NETWORK_OPTS to allow changing the default cache amount
      Added SPEAK_WELCOME and SPEAK_SHUTDOWN for customized welcome and shutdown messages in speak plugin
      Added FREEVO_USE_ALPHABLENDING to enable alpha blending transitions between screen changes. False by default
+     Renamed audio.mplayervis to audio.mplayervis1, so that audio.mplayervis2 will get noticed
      """),
 ]
 

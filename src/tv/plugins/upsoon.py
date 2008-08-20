@@ -132,7 +132,7 @@ class PluginInterface(plugin.DaemonPlugin):
     def getVideoForChannel(self, channel_id):
         """ get the video device given a channel id """
         _debug_('getVideoForChannel(channel_id=%r)' % (channel_id), 2)
-        return self.fc.getVideoGroup(channel_id, False).vdev
+        return self.fc.getVideoGroup(channel_id, False, 0).vdev
 
 
     def stopVideoInUse(self, vdev):

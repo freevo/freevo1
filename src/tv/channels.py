@@ -76,11 +76,11 @@ class FreevoChannels:
             plugin.init_special_plugin(config.plugin_external_tuner)
 
 
-    def getVideoGroup(self, chan, isplayer):
+    def getVideoGroup(self, chan, isplayer, chan_index=2):
         """
         Gets the VideoGroup object used by this Freevo channel.
         """
-        _debug_('getVideoGroup(chan=%r, isplayer=%r)' % (chan, isplayer), 1)
+        _debug_('getVideoGroup(chan=%r, isplayer=%r, chan_index=%r)' % (chan, isplayer, chan_index), 1)
         self.lock.acquire()
         try:
             try:
@@ -90,12 +90,17 @@ class FreevoChannels:
             if group <= 0:
                 for i in range(len(config.TV_CHANNELS)):
                     chan_info = config.TV_CHANNELS[i]
-                    if chan_info[2] == chan:
+                    if chan_info[chan_index] == chan:
                         try:
                             group = int(chan_info[4])
                         except IndexError:
                             group = 0
                         break
+                else: # Channel not found
+                    #DJW this should be noticed
+                    import traceback
+                    traceback.print_stack()
+                    #DJW
             if not isplayer:
                 record_group = config.TV_VIDEO_GROUPS[group].record_group
                 if record_group:

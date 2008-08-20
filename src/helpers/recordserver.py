@@ -971,7 +971,7 @@ class RecordServer:
                 self.removeScheduledRecording(rec_prog)
                 return
 
-            self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False)
+            self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False, 0)
             suffix = self.vg.vdev.split('/')[-1]
             self.tv_lock_file = config.FREEVO_CACHEDIR + '/record.'+suffix
             self.record_app.Record(rec_prog)

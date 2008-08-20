@@ -155,7 +155,7 @@ class ProgramItem(Item):
             # check if the device is free
             fc = FreevoChannels()
             # for that we need the name of the lock file
-            suffix = fc.getVideoGroup(self.prog.channel_id, True).vdev
+            suffix = fc.getVideoGroup(self.prog.channel_id, True, 0).vdev
             suffix = suffix.split('/')[-1]
             tvlockfile = config.FREEVO_CACHEDIR + '/record.'+suffix
             if os.path.exists(tvlockfile):
