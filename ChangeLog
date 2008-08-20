@@ -18,7 +18,9 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 --------------------------------
 
  * New speak plug-in (F#2030738)
- * Updated livepause for graphic OSD fir vlc (F#2028707)
+ * New mplayer visualization plug-in for audio (F#2046827)
+ * Updated livepause for graphic OSD for vlc (F#2028707)
+ * Updated OSD for alhpa blending between screen updates (F#2052947)
  * Updated mplayer tv and video plug-ins to correct MPLAYER_VO_DEV_OPTS handling (B#1989738)
  * Updated mplayervis plug-in to be able to set the frame rate (F#2027953)
  * Fixed new arguments to mplayer for the video codec (B#2022949)
