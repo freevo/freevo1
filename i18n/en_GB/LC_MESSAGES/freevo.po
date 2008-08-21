@@ -909,9 +909,8 @@ msgid "DEBUG"
 msgstr ""
 
 #: audio/player.py:213
-#, fuzzy
 msgid "Cache fill"
-msgstr "Search failed"
+msgstr "Cache fill"
 
 #: audio/plugins/playlists.py:82
 msgid "Playlists"
@@ -1299,9 +1298,8 @@ msgid "Choices"
 msgstr "Choices"
 
 #: audio/plugins/mplayer.py:344
-#, fuzzy
 msgid "Connecting to"
-msgstr "connection error"
+msgstr "Connecting to"
 
 #: audio/audiodiskitem.py:73
 msgid "Browse disc"
@@ -1316,7 +1314,7 @@ msgid "Data files on disc"
 msgstr "Data files on disc"
 
 #: image/viewer.py:129
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Can't Open Image\n"
 "\"%s\""
@@ -1621,9 +1619,8 @@ msgid "%s "
 msgstr ""
 
 #: plugins/idlebar/system.py:573
-#, fuzzy
 msgid "is not a valid meminfo entry"
-msgstr "\"%s\" is not a valid argument for the button bar. "
+msgstr "is not a valid meminfo entry"
 
 #: plugins/icecast.py:160
 msgid "Set as icecast playlist"
@@ -2410,9 +2407,8 @@ msgid "Commands"
 msgstr "Commands"
 
 #: plugins/speak.py:34
-#, fuzzy
 msgid "You need PyFest"
-msgstr "You need software %s"
+msgstr "You need PyFest"
 
 #: plugins/speak.py:34
 msgid "to run the speak plugin."
@@ -2427,12 +2423,10 @@ msgid "Good bye!"
 msgstr ""
 
 #: plugins/speak.py:117
-#, fuzzy
 msgid "channel"
-msgstr "Channel"
+msgstr "channel"
 
 #: plugins/speak.py:117
-#, fuzzy
 msgid "program"
 msgstr "Programme"
 
@@ -2812,7 +2806,6 @@ msgid "Accept search automatically if it has only one result"
 msgstr ""
 
 #: video/plugins/filmaffinity.py:151 video/plugins/filmaffinity.py:215
-#, fuzzy
 msgid "Connection error: "
 msgstr "connection error"
 
@@ -2823,31 +2816,27 @@ msgstr ""
 #: video/plugins/filmaffinity.py:290 video/plugins/filmaffinity.py:297
 #, python-format
 msgid "Search in FilmAffinity [%s]"
-msgstr ""
+msgstr "Search in FilmAffinity [%s]"
 
 #: video/plugins/filmaffinity.py:306
-#, fuzzy
 msgid "Searching in FilmAffinity..."
-msgstr "Searching lyrics.."
+msgstr "Searching in FilmAffinity..."
 
 #: video/plugins/filmaffinity.py:330
-#, fuzzy
 msgid "Connection error: Probably connection timeout, try again"
 msgstr "Connection error : Probably connection timed out, try again"
 
 #: video/plugins/filmaffinity.py:343
 msgid "FILMAFFINITY Query"
-msgstr ""
+msgstr "FILMAFFINITY Query"
 
 #: video/plugins/filmaffinity.py:347
-#, fuzzy
 msgid "No info available"
 msgstr "No information available"
 
 #: video/plugins/filmaffinity.py:384
-#, fuzzy
 msgid "Fetching movie information"
-msgstr "Recording Information"
+msgstr "Fetching movie information"
 
 #: video/plugins/vpodcast.py:212
 msgid "Video Podcast"
@@ -2956,47 +2945,44 @@ msgid "Backup this dvd title..."
 msgstr "Backup this DVD title..."
 
 #: video/plugins/fillscreen.py:149
-#, fuzzy
 msgid "Fill screen"
-msgstr "Widescreen"
+msgstr "Fill screen"
 
 #: video/plugins/fillscreen.py:169
 msgid "pixels cropped up and down"
-msgstr ""
+msgstr "pixels cropped up and down"
 
 #: video/plugins/fillscreen.py:171
 msgid "pixels cropped left and right"
-msgstr ""
+msgstr "pixels cropped left and right"
 
 #: video/plugins/fillscreen.py:173
 msgid "no loss"
-msgstr ""
+msgstr "no loss"
 
 #: video/plugins/fillscreen.py:179
 msgid "widens"
-msgstr ""
+msgstr "widens"
 
 #: video/plugins/fillscreen.py:181
 msgid "narrows"
-msgstr ""
+msgstr "narrows"
 
 #: video/plugins/fillscreen.py:183
 msgid "ratio unchanged"
-msgstr ""
+msgstr "ratio unchanged"
 
 #: video/plugins/fillscreen.py:187
-#, fuzzy
 msgid "Fill at"
-msgstr "File name"
+msgstr "Fill at"
 
 #: video/plugins/fillscreen.py:190
 msgid "Dont't fill (keep original ratio)"
-msgstr ""
+msgstr "Dont't fill (keep original ratio)"
 
 #: video/plugins/fillscreen.py:192
-#, fuzzy
 msgid "Fill Screen Menu"
-msgstr "Freevo Main Menu"
+msgstr "Fill Screen Menu"
 
 #: video/plugins/bookmarker.py:65
 msgid "Resume playback"
@@ -3477,9 +3463,9 @@ msgid "Password incorrect"
 msgstr "Password incorrect"
 
 #: directory.py:621
-#, fuzzy, python-format
+#, python-format
 msgid "Directory %r does not exist"
-msgstr "Directory does not exist"
+msgstr "Directory %r does not exist"
 
 #: directory.py:651
 msgid "Scanning disc, be patient..."
@@ -3914,9 +3900,8 @@ msgstr ""
 "please check the xine section in freevo_config.py"
 
 #: tv/plugins/genre.py:77 tv/plugins/genre.py:117
-#, fuzzy
 msgid "TVServer not running"
-msgstr "encoding server not running"
+msgstr "TVServer not running"
 
 #: tv/plugins/view_line_in.py:51
 msgid "View VCR Input"
@@ -3928,7 +3913,7 @@ msgstr "Recorded Shows"
 
 #: tv/plugins/livepause/players.py:288
 msgid "Enabled"
-msgstr ""
+msgstr "Enabled"
 
 #: tv/plugins/livepause/display/dialogs/__init__.py:107
 #: tv/plugins/livepause/display/text.py:39
@@ -4489,7 +4474,6 @@ msgstr "Weather"
 #~ msgid "Downloading video"
 #~ msgstr "Downloading video"
 
-#, fuzzy
 #~ msgid ""
 #~ "You need PyFest (http://users.wpi.edu/~squirrel/programs/others/) to run "
 #~ "freefest plugin."
