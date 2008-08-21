@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-28 02:15+0200\n"
+"POT-Creation-Date: 2008-08-21 18:24+0200\n"
 "PO-Revision-Date:  Tue Jul 12 13:08:00 2007\n"
 "Last-Translator: Yuki He <yuki.he@gmail.com>\n"
 "Language-Team: Simplified Chinese <yuki.he@gmail.com>\n"
@@ -15,23 +15,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: ../freevo_config.py:1199 ../freevo_config.py:1204 www/htdocs/record.rpy:104
+#: ../freevo_config.py:1218 ../freevo_config.py:1223 www/htdocs/record.rpy:104
 #: www/htdocs/manualrecord.rpy:235 www/htdocs/search.rpy:87
 #: tv/edit_favorite.py:112 share/skins/main/basic.fxd:728
 #: share/skins/main/info.fxd:391
 msgid "Title"
 msgstr "标题"
 
-#: ../freevo_config.py:1200 plugins/lcd.py:94 plugins/lcd.py:100
-#: plugins/lcd.py:205 plugins/vfd.py:108 plugins/vfd.py:110
+#: ../freevo_config.py:1219 plugins/lcd.py:98 plugins/lcd.py:104
+#: plugins/lcd.py:209 plugins/vfd.py:108 plugins/vfd.py:110
 msgid "Description"
 msgstr "描述"
 
-#: ../freevo_config.py:1201
+#: ../freevo_config.py:1220
 msgid "Author"
 msgstr "作者"
 
-#: ../freevo_config.py:1205 plugins/lcd.py:93 plugins/vfd.py:107
+#: ../freevo_config.py:1224 plugins/lcd.py:97 plugins/vfd.py:107
 #: share/skins/main/crystal.fxd:270 share/skins/main/dark.fxd:591
 #: share/skins/main/dark.fxd:665 share/skins/main/dark.fxd:686
 #: share/skins/main/Tux'n Tosh TV.fxd:768 TV.fxd:842 TV.fxd:863
@@ -40,79 +40,79 @@ msgstr "作者"
 msgid "Date"
 msgstr "日期"
 
-#: ../freevo_config.py:1208
+#: ../freevo_config.py:1227
 msgid "Model"
 msgstr "Model（型号）"
 
-#: ../freevo_config.py:1209
+#: ../freevo_config.py:1228
 msgid "Software"
 msgstr "软件"
 
-#: ../freevo_config.py:2038 www/htdocs/index.rpy:48
+#: ../freevo_config.py:2064 www/htdocs/index.rpy:48
 msgid "Home"
 msgstr ""
 
-#: ../freevo_config.py:2039 www/htdocs/guide.rpy:148
+#: ../freevo_config.py:2065 www/htdocs/guide.rpy:148
 #: www/htdocs/guidechannel.rpy:201 tv/tvmenu.py:99
 msgid "TV Guide"
 msgstr "TV 指南"
 
-#: ../freevo_config.py:2039
+#: ../freevo_config.py:2065
 msgid "View TV Listings"
 msgstr "查看电视列表"
 
-#: ../freevo_config.py:2040 www/htdocs/record.rpy:60 www/htdocs/record.rpy:95
+#: ../freevo_config.py:2066 www/htdocs/record.rpy:60 www/htdocs/record.rpy:95
 #: tv/plugins/scheduled_recordings.py:44 tv/plugins/scheduled_recordings.py:63
 msgid "Scheduled Recordings"
 msgstr "计划的录制任务"
 
-#: ../freevo_config.py:2040
+#: ../freevo_config.py:2066
 msgid "View Scheduled Recordings"
 msgstr "查看计划任务重的录制任务"
 
-#: ../freevo_config.py:2041 www/htdocs/favorites.rpy:56
+#: ../freevo_config.py:2067 www/htdocs/favorites.rpy:56
 #: www/htdocs/favorites.rpy:101
 msgid "Favorites"
 msgstr "收藏夹"
 
-#: ../freevo_config.py:2041 tv/plugins/view_favorites.py:45
+#: ../freevo_config.py:2067 tv/plugins/view_favorites.py:45
 #: tv/plugins/view_favorites.py:52 tv/plugins/view_favorites.py:66
 msgid "View Favorites"
 msgstr "查看收藏夹"
 
-#: ../freevo_config.py:2042 www/htdocs/library.rpy:233
+#: ../freevo_config.py:2068 www/htdocs/library.rpy:233
 #: www/htdocs/library.rpy:234
 msgid "Media Library"
 msgstr "媒体库"
 
-#: ../freevo_config.py:2042
+#: ../freevo_config.py:2068
 msgid "View Media Library"
 msgstr "查看媒体库"
 
-#: ../freevo_config.py:2043 www/htdocs/manualrecord.rpy:215
+#: ../freevo_config.py:2069 www/htdocs/manualrecord.rpy:215
 #: tv/plugins/livepause/record.py:160
 msgid "Manual Recording"
 msgstr "手工录制中..."
 
-#: ../freevo_config.py:2043
+#: ../freevo_config.py:2069
 msgid "Schedule a Manual Recording"
 msgstr "计划一个手工录制任务"
 
-#: ../freevo_config.py:2044 www/htdocs/search.rpy:54 www/htdocs/search.rpy:72
-#: www/web_types.py:342 www/web_types.py:355 video/plugins/youtube.py:176
+#: ../freevo_config.py:2070 www/htdocs/search.rpy:54 www/htdocs/search.rpy:72
+#: www/web_types.py:342 www/web_types.py:355 video/plugins/youtube.py:177
 #: tv/plugins/search_programs.py:86
 msgid "Search"
 msgstr "搜索"
 
-#: ../freevo_config.py:2044
+#: ../freevo_config.py:2070
 msgid "Advanced Search Page"
 msgstr "高级搜索页面"
 
-#: ../freevo_config.py:2045
+#: ../freevo_config.py:2071
 msgid "Help"
 msgstr "帮助"
 
-#: ../freevo_config.py:2045
+#: ../freevo_config.py:2071
 msgid "View Online Help and Documentation"
 msgstr "查看在线帮助及文档"
 
@@ -125,7 +125,7 @@ msgstr ""
 msgid "CANCEL"
 msgstr "取消"
 
-#: util/mediainfo.py:748
+#: util/mediainfo.py:741
 msgid "Reloading cache files, be patient..."
 msgstr "重载缓存文件，请稍等..."
 
@@ -134,7 +134,7 @@ msgid "Today"
 msgstr "今天"
 
 #: util/misc.py:448 util/misc.py:459 util/misc.py:469 plugins/oneclick.py:718
-#: plugins/oneclick.py:983
+#: plugins/oneclick.py:981
 msgid "at"
 msgstr ""
 
@@ -164,11 +164,13 @@ msgstr "编辑收藏夹"
 #: www/htdocs/record.rpy:82 www/htdocs/library.rpy:200
 #: www/htdocs/library.rpy:222 www/htdocs/library.rpy:225
 #: www/htdocs/manualrecord.rpy:75 www/htdocs/genre.rpy:70
-#: www/htdocs/genre.rpy:96 www/htdocs/guide.rpy:152 www/htdocs/wap_rec.rpy:103
+#: www/htdocs/genre.rpy:96 www/htdocs/library1.rpy:174
+#: www/htdocs/library1.rpy:196 www/htdocs/library1.rpy:199
+#: www/htdocs/guide.rpy:152 www/htdocs/wap_rec.rpy:103
 #: www/htdocs/favorites.rpy:57 www/htdocs/guidechannel.rpy:207
 #: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
-#: www/htdocs/search.rpy:55 skins/main/info_area.py:133 config.py:465
-#: audio/plugins/xine.py:55 plugins/lcd.py:48 plugins/vfd.py:52
+#: www/htdocs/search.rpy:55 skins/main/info_area.py:133 config.py:457
+#: audio/plugins/xine.py:55 plugins/lcd.py:52 plugins/vfd.py:52
 #: plugins/freevused.py:141 plugins/speak.py:34
 #: tv/plugins/dvbstreamer/live_pause.py:88
 #: tv/plugins/dvbstreamer/live_pause.py:112
@@ -197,13 +199,13 @@ msgid "Name of favorite"
 msgstr "收藏夹名字"
 
 #: www/htdocs/edit_favorite.rpy:123 www/htdocs/favorites.rpy:106
-#: plugins/lcd.py:203 plugins/lcd.py:370 share/skins/main/basic.fxd:657
+#: plugins/lcd.py:207 plugins/lcd.py:374 share/skins/main/basic.fxd:657
 msgid "Program"
 msgstr "节目"
 
 #: www/htdocs/edit_favorite.rpy:124 www/htdocs/record.rpy:103
 #: www/htdocs/manualrecord.rpy:232 www/htdocs/favorites.rpy:107
-#: www/htdocs/search.rpy:86 plugins/lcd.py:202 plugins/lcd.py:369
+#: www/htdocs/search.rpy:86 plugins/lcd.py:206 plugins/lcd.py:373
 #: tv/edit_favorite.py:114 share/skins/main/basic.fxd:601
 #: share/skins/main/basic.fxd:632 share/skins/main/basic.fxd:663
 msgid "Channel"
@@ -339,96 +341,100 @@ msgstr "对不去，暂时没有节目 %s 的描述。"
 msgid "Remove"
 msgstr "移除"
 
-#: www/htdocs/library.rpy:189
+#: www/htdocs/library.rpy:189 www/htdocs/library1.rpy:163
 #, python-format
 msgid "%s already exists! File not renamed."
 msgstr "%s 已存在! 文件. 文件没有被重命名"
 
-#: www/htdocs/library.rpy:193
+#: www/htdocs/library.rpy:193 www/htdocs/library1.rpy:167
 #, python-format
 msgid "Rename %s to %s."
 msgstr "重命名 %s 到 %s."
 
 #: www/htdocs/library.rpy:196 www/htdocs/library.rpy:212
+#: www/htdocs/library1.rpy:170 www/htdocs/library1.rpy:186
 #, python-format
 msgid "<h2>%s</h2>"
 msgstr ""
 
-#: www/htdocs/library.rpy:197
+#: www/htdocs/library.rpy:197 www/htdocs/library1.rpy:171
 #, python-format
 msgid "Rename %s to %s, failed."
 msgstr "重命名 %s 到 %s, 失败"
 
-#: www/htdocs/library.rpy:200
+#: www/htdocs/library.rpy:200 www/htdocs/library1.rpy:174
 msgid "No new file specified."
 msgstr "没有指定新文件"
 
 #: www/htdocs/library.rpy:206 www/htdocs/library.rpy:210
+#: www/htdocs/library1.rpy:180 www/htdocs/library1.rpy:184
 #, python-format
 msgid "Delete %s."
 msgstr "删除 %s."
 
-#: www/htdocs/library.rpy:213
+#: www/htdocs/library.rpy:213 www/htdocs/library1.rpy:187
 #, python-format
 msgid "Delete %s, failed."
 msgstr "删除 %s, 失败"
 
-#: www/htdocs/library.rpy:222
+#: www/htdocs/library.rpy:222 www/htdocs/library1.rpy:197
 #, python-format
 msgid "%s does not exist. No action taken."
 msgstr "%s 不存在。没有可以执行的动作。"
 
-#: www/htdocs/library.rpy:226
+#: www/htdocs/library.rpy:226 www/htdocs/library1.rpy:200
 #, python-format
 msgid "I do not process names (%s) with slashes for security reasons."
 msgstr ""
 
-#: www/htdocs/library.rpy:265 www/web_types.py:367
+#: www/htdocs/library.rpy:265 www/htdocs/library1.rpy:229 www/web_types.py:367
 msgid "Messages"
 msgstr "消息"
 
-#: www/htdocs/library.rpy:277 share/skins/main/crystal.fxd:9
-#: share/skins/main/dark.fxd:18 share/skins/main/atlantice.fxd:720
-#: share/skins/main/Tux'n Tosh TV.fxd:18 TV.fxd:595
-#: share/skins/main/bluestar.fxd:9 share/skins/main/rain.fxd:9
+#: www/htdocs/library.rpy:277 www/htdocs/library1.rpy:242
+#: share/skins/main/crystal.fxd:9 share/skins/main/dark.fxd:18
+#: share/skins/main/atlantice.fxd:720 share/skins/main/Tux'n Tosh TV.fxd:18
+#: TV.fxd:595 share/skins/main/bluestar.fxd:9 share/skins/main/rain.fxd:9
 #: share/skins/main/basic.fxd:21
 msgid "Movies"
 msgstr "电影"
 
-#: www/htdocs/library.rpy:281
+#: www/htdocs/library.rpy:281 www/htdocs/library1.rpy:246
 msgid "Recorded TV"
 msgstr "录制 TV"
 
-#: www/htdocs/library.rpy:285 plugins/lcd.py:164 plugins/lcd.py:343
-#: share/skins/main/crystal.fxd:10 share/skins/main/dark.fxd:19
-#: share/skins/main/atlantice.fxd:721 share/skins/main/Tux'n Tosh TV.fxd:19
-#: share/skins/main/bluestar.fxd:10 share/skins/main/rain.fxd:10
-#: share/skins/main/basic.fxd:22
+#: www/htdocs/library.rpy:285 www/htdocs/library1.rpy:250 plugins/lcd.py:168
+#: plugins/lcd.py:347 share/skins/main/crystal.fxd:10
+#: share/skins/main/dark.fxd:19 share/skins/main/atlantice.fxd:721
+#: share/skins/main/Tux'n Tosh TV.fxd:19 share/skins/main/bluestar.fxd:10
+#: share/skins/main/rain.fxd:10 share/skins/main/basic.fxd:22
 msgid "Music"
 msgstr "音乐"
 
-#: www/htdocs/library.rpy:289 share/skins/main/crystal.fxd:12
-#: share/skins/main/dark.fxd:20 share/skins/main/atlantice.fxd:722
-#: share/skins/main/Tux'n Tosh TV.fxd:20 share/skins/main/rain.fxd:12
-#: share/skins/main/basic.fxd:23
+#: www/htdocs/library.rpy:289 www/htdocs/library1.rpy:254
+#: share/skins/main/crystal.fxd:12 share/skins/main/dark.fxd:20
+#: share/skins/main/atlantice.fxd:722 share/skins/main/Tux'n Tosh TV.fxd:20
+#: share/skins/main/rain.fxd:12 share/skins/main/basic.fxd:23
 msgid "Images"
 msgstr "图片"
 
 #: www/htdocs/library.rpy:306 www/htdocs/library.rpy:379
 #: www/htdocs/library.rpy:381 www/htdocs/library.rpy:385
+#: www/htdocs/library1.rpy:269 www/htdocs/library1.rpy:340
+#: www/htdocs/library1.rpy:342 www/htdocs/library1.rpy:346
 msgid "Back"
 msgstr "回退"
 
-#: www/htdocs/library.rpy:544
+#: www/htdocs/library.rpy:544 www/htdocs/library1.rpy:388
 msgid "Download"
 msgstr "下载"
 
-#: www/htdocs/library.rpy:545 skin/widgets/textentry_screen.py:62
-#: plugins/file_ops.py:72
+#: www/htdocs/library.rpy:545 www/htdocs/library1.rpy:389
+#: skin/widgets/textentry_screen.py:62 plugins/file_ops.py:72
 msgid "Delete"
 msgstr "删除"
 
-#: www/htdocs/library.rpy:547
+#: www/htdocs/library.rpy:547 www/htdocs/library1.rpy:390
 msgid "Rename"
 msgstr "重命名"
 
@@ -600,7 +606,17 @@ msgstr ""
 msgid "View Logs"
 msgstr "查看电视列表"
 
-#: www/htdocs/guide.rpy:158 plugins/lcd.py:204
+#: www/htdocs/library1.rpy:208
+#, fuzzy
+msgid "Media Library 1"
+msgstr "媒体库"
+
+#: www/htdocs/library1.rpy:266
+#, fuzzy
+msgid "Choose a Directory"
+msgstr "浏览目录"
+
+#: www/htdocs/guide.rpy:158 plugins/lcd.py:208
 #: share/skins/main/crystal.fxd:273 share/skins/main/bluestar.fxd:293
 #: share/skins/main/rain.fxd:278 share/skins/main/basic.fxd:644
 #: share/skins/main/noia.fxd:96
@@ -611,7 +627,7 @@ msgstr "时间"
 msgid "View"
 msgstr "查看"
 
-#: www/htdocs/guide.rpy:204 skins/main/tvlisting_area.py:339 tv/tvguide.py:54
+#: www/htdocs/guide.rpy:204 skins/main/tvlisting_area.py:337 tv/tvguide.py:54
 msgid "This channel has no data loaded"
 msgstr "这个频道没有节目信息"
 
@@ -867,33 +883,38 @@ msgstr ""
 msgid "missing 'src' attribute in skin tag!"
 msgstr "在皮肤tag中丢失了 'src' 属性"
 
-#: skins/main/listing_area.py:215
+#: skins/main/listing_area.py:214
 msgid "This directory is empty"
 msgstr "目录为空!"
 
-#: skins/main/default_areas.py:119
+#: skins/main/default_areas.py:121
 msgid "TV GUIDE"
 msgstr "TV 指南"
 
-#: fxditem.py:204
+#: fxditem.py:201 tv/plugins/genre.py:67 tv/plugins/genre.py:107
 msgid "Browse list"
 msgstr "浏览列表"
 
-#: config.py:462
+#: config.py:454
 msgid "CRITICAL"
 msgstr ""
 
-#: config.py:468
+#: config.py:460
 msgid "WARNING"
 msgstr ""
 
-#: config.py:471
+#: config.py:463
 msgid "INFO"
 msgstr ""
 
-#: config.py:474
+#: config.py:466
 msgid "DEBUG"
 msgstr ""
+
+#: audio/player.py:213
+#, fuzzy
+msgid "Cache fill"
+msgstr "加入计划任务失败"
 
 #: audio/plugins/playlists.py:82
 msgid "Playlists"
@@ -940,41 +961,41 @@ msgstr ""
 "%s\n"
 "没有发现!"
 
-#: audio/plugins/apodcast.py:96 video/plugins/vpodcast.py:131
+#: audio/plugins/apodcast.py:100 video/plugins/vpodcast.py:131
 #, fuzzy
 msgid "Buffering podcast..."
 msgstr "获取数据中..."
 
-#: audio/plugins/apodcast.py:110
+#: audio/plugins/apodcast.py:114
 #, fuzzy
 msgid "Listen Audio Podcast"
 msgstr "听广播"
 
-#: audio/plugins/apodcast.py:148
+#: audio/plugins/apodcast.py:153
 #, fuzzy
 msgid "Audio Podcast"
 msgstr "音频编码"
 
-#: audio/plugins/apodcast.py:159 video/plugins/vpodcast.py:222
+#: audio/plugins/apodcast.py:164 video/plugins/vpodcast.py:222
 #, fuzzy
 msgid "Fetching podcast..."
 msgstr "获取数据中..."
 
-#: audio/plugins/apodcast.py:188 video/plugins/vpodcast.py:254
+#: audio/plugins/apodcast.py:193 video/plugins/vpodcast.py:254
 #, fuzzy
 msgid "No Podcast locations found"
 msgstr "没有发现广播电台"
 
-#: audio/plugins/apodcast.py:190 audio/plugins/apodcast.py:218
+#: audio/plugins/apodcast.py:194 audio/plugins/apodcast.py:222
 msgid "AUDIO PODCAST"
 msgstr ""
 
-#: audio/plugins/apodcast.py:196 video/plugins/vpodcast.py:264
+#: audio/plugins/apodcast.py:201 video/plugins/vpodcast.py:264
 #, fuzzy
 msgid "Fetching podcasts..."
 msgstr "获取数据中..."
 
-#: audio/plugins/apodcast.py:213
+#: audio/plugins/apodcast.py:217
 #, fuzzy
 msgid "Set APODCAST_DIR in local_conf.py"
 msgstr "请更新 local_conf.py 的 GAMES_ITEMS "
@@ -1149,15 +1170,15 @@ msgstr ""
 msgid "[VUX] an audio item, do not select"
 msgstr ""
 
-#: audio/plugins/album_tree.py:186 audio/plugins/album_tree.py:267
+#: audio/plugins/album_tree.py:190 audio/plugins/album_tree.py:271
 msgid "Album Tree"
 msgstr "专辑树"
 
-#: audio/plugins/album_tree.py:294
+#: audio/plugins/album_tree.py:298
 msgid "No Objects found"
 msgstr "没有对象发现"
 
-#: audio/plugins/album_tree.py:315
+#: audio/plugins/album_tree.py:319
 msgid "Generating playlist..."
 msgstr "驱动播放列表..."
 
@@ -1224,42 +1245,49 @@ msgstr "没有从亚马逊Amazon发现封面"
 msgid "getting data..."
 msgstr "获取数据中..."
 
-#: audio/plugins/lastfm.py:256
+#: audio/plugins/lastfm.py:89 audio/plugins/lastfm.py:120
+msgid "Last FM"
+msgstr ""
+
+#: audio/plugins/lastfm.py:119
+msgid "Invalid LastFM Session!"
+msgstr ""
+
+#: audio/plugins/lastfm.py:144
 #, fuzzy
 msgid "Listen Last FM"
 msgstr "听音乐"
 
-#: audio/plugins/lastfm.py:283 audio/plugins/lastfm.py:337
-msgid "Last FM"
-msgstr ""
-
-#: audio/plugins/lastfm.py:336
-msgid "Invalid LastFM Session!"
-msgstr ""
-
-#: audio/plugins/radio.py:63
-msgid "Listen to Radio Station"
-msgstr "听广播"
-
-#: audio/plugins/radio.py:84
-msgid "Cannot play - recording in progress"
-msgstr "不能播放 - 录制进行中"
-
-#: audio/plugins/radio.py:118 tv/plugins/upsoon.py:174
+#: audio/plugins/radio.py:115 tv/plugins/upsoon.py:174
 msgid "Radio"
 msgstr "广播"
 
-#: audio/plugins/radio.py:143
+#: audio/plugins/radio.py:142
 msgid "No Radio Stations found"
 msgstr "没有发现广播电台"
 
-#: audio/plugins/radio.py:145
+#: audio/plugins/radio.py:143
 msgid "Radio Stations"
 msgstr "电台状态"
+
+#: audio/plugins/radio.py:169
+msgid "Listen to Radio Station"
+msgstr "听广播"
+
+#: audio/plugins/radio.py:190
+msgid "Cannot play - recording in progress"
+msgstr "不能播放 - 录制进行中"
 
 #: audio/plugins/detach.py:49
 msgid "Show player"
 msgstr "显示播放器"
+
+#: audio/plugins/mplayervis2.py:704 audio/plugins/mplayervis2.py:713
+#: audio/plugins/mplayervis1.py:495 audio/plugins/mplayervis1.py:504
+#: audio/plugins/mpdvis.py:461 audio/plugins/mpdvis.py:470
+#, python-format
+msgid "FXMODE is %s"
+msgstr ""
 
 #: audio/plugins/lyrics.py:62
 #, fuzzy
@@ -1290,16 +1318,16 @@ msgstr ""
 msgid "Choices"
 msgstr "注意"
 
-#: audio/plugins/mplayervis.py:468 audio/plugins/mplayervis.py:477
-#, python-format
-msgid "FXMODE is %s"
-msgstr ""
+#: audio/plugins/mplayer.py:344
+#, fuzzy
+msgid "Connecting to"
+msgstr "连接错误"
 
 #: audio/audiodiskitem.py:73
 msgid "Browse disc"
 msgstr "浏览碟片"
 
-#: audio/audiodiskitem.py:112 directory.py:722
+#: audio/audiodiskitem.py:112 directory.py:744
 msgid "Random playlist"
 msgstr "随机播放列表"
 
@@ -1308,11 +1336,11 @@ msgid "Data files on disc"
 msgstr "盘片上的数据文件"
 
 #: image/viewer.py:129
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Can't Open Image\n"
-"'%s'"
-msgstr ""
+"\"%s\""
+msgstr "不能打开文件 \"%s\""
 
 #: image/viewer.py:359
 msgid "pause"
@@ -1322,7 +1350,7 @@ msgstr "暂停"
 msgid "play"
 msgstr "播放"
 
-#: image/viewer.py:483
+#: image/viewer.py:486
 msgid "No information available"
 msgstr "没有有效信息"
 
@@ -1331,7 +1359,7 @@ msgstr "没有有效信息"
 msgid "Flickr pictures"
 msgstr "图片"
 
-#: image/plugins/flickr.py:161 video/plugins/youtube.py:171
+#: image/plugins/flickr.py:161 video/plugins/youtube.py:172
 msgid "Choose please"
 msgstr ""
 
@@ -1357,7 +1385,7 @@ msgstr ""
 msgid "View Image"
 msgstr "查看图片"
 
-#: image/plugins/gphoto.py:129 directory.py:449
+#: image/plugins/gphoto.py:129 directory.py:465
 #: tv/plugins/recordings_manager.py:176
 msgid "Browse directory"
 msgstr "浏览目录"
@@ -1402,23 +1430,23 @@ msgid ""
 "running freevo."
 msgstr ""
 
-#: osd.py:392
+#: osd.py:390
 msgid "z = Toggle Fullscreen"
 msgstr "z = 撑到全屏"
 
-#: osd.py:393
+#: osd.py:391
 msgid "Arrow Keys = Move"
 msgstr "箭头键 = 移动"
 
-#: osd.py:394
+#: osd.py:392
 msgid "Spacebar = Select"
 msgstr "空格 = 选取"
 
-#: osd.py:395
+#: osd.py:393
 msgid "Escape = Stop/Prev. Menu"
 msgstr "Esc键 = 停止/上一级菜单"
 
-#: osd.py:396
+#: osd.py:394
 msgid "h = Help"
 msgstr "h键 = 帮助"
 
@@ -1431,7 +1459,7 @@ msgstr "文件 \"%s\" 没有发现"
 msgid "Generating MAME cache, please wait."
 msgstr "驱动 MAME 缓存，请等待。"
 
-#: games/__init__.py:78
+#: games/__init__.py:77
 msgid "please update GAMES_ITEMS in local_conf.py"
 msgstr "请更新 local_conf.py 的 GAMES_ITEMS "
 
@@ -1520,17 +1548,17 @@ msgstr "专辑 - "
 msgid "Status - "
 msgstr "装态 -"
 
-#: plugins/rom_drives.py:252
+#: plugins/rom_drives.py:266
 #, python-format
 msgid "Drive %s (no disc)"
 msgstr "驱动器 %s （没有碟片）"
 
-#: plugins/rom_drives.py:471
+#: plugins/rom_drives.py:514
 #, python-format
 msgid "Ejecting disc in drive %s"
 msgstr "弹出驱动器 %s 中的碟片"
 
-#: plugins/rom_drives.py:476
+#: plugins/rom_drives.py:519
 #, python-format
 msgid "Reading disc in drive %s"
 msgstr "读取驱动器 %s 的碟片中"
@@ -1559,22 +1587,6 @@ msgstr ""
 msgid "More Options"
 msgstr "更多选项"
 
-#: plugins/freeboxtv.py:73
-msgid "Freebox TV"
-msgstr ""
-
-#: plugins/freeboxtv.py:80
-msgid "Freebox TV :: Les chaines"
-msgstr ""
-
-#: plugins/freeboxtv.py:114 plugins/oneclick.py:803
-msgid "No locations specified"
-msgstr "没有指定位置"
-
-#: plugins/freeboxtv.py:118
-msgid "Freebox TV :: Les chaines Multiposte"
-msgstr ""
-
 #: plugins/sixmixer.py:120 plugins/sixmixer.py:125
 #, fuzzy, python-format
 msgid "Surround: %s%%"
@@ -1590,49 +1602,49 @@ msgstr "文本：%s"
 msgid "LFE: %s%%"
 msgstr ""
 
-#: plugins/idlebar/transcode.py:201 plugins/idlebar/encoding.py:173
+#: plugins/idlebar/transcode.py:199 plugins/idlebar/encoding.py:171
 msgid "encoding server not running"
 msgstr "编码服务器没有在运行"
 
-#: plugins/idlebar/transcode.py:208 plugins/idlebar/encoding.py:179
+#: plugins/idlebar/transcode.py:206 plugins/idlebar/encoding.py:177
 msgid "encoding server has no jobs"
 msgstr "编码服务器没有需要执行的任务"
 
-#: plugins/idlebar/diskfree.py:102
+#: plugins/idlebar/diskfree.py:108
 #, python-format
 msgid "%iGB"
 msgstr ""
 
-#: plugins/idlebar/system.py:112
+#: plugins/idlebar/system.py:126
 #, python-format
 msgid "%iM"
 msgstr ""
 
-#: plugins/idlebar/system.py:135
+#: plugins/idlebar/system.py:149
 #, python-format
 msgid "%s%%"
 msgstr ""
 
-#: plugins/idlebar/system.py:545
+#: plugins/idlebar/system.py:566
 msgid "Sensors must have three or four values:"
 msgstr ""
 
-#: plugins/idlebar/system.py:548
+#: plugins/idlebar/system.py:569
 #, fuzzy
 msgid "Sensor"
 msgstr "雪"
 
-#: plugins/idlebar/system.py:548
+#: plugins/idlebar/system.py:569
 #, fuzzy
 msgid "does not exist"
 msgstr "目录不存在"
 
-#: plugins/idlebar/system.py:552
+#: plugins/idlebar/system.py:573
 #, python-format
 msgid "%s "
 msgstr ""
 
-#: plugins/idlebar/system.py:552
+#: plugins/idlebar/system.py:573
 msgid "is not a valid meminfo entry"
 msgstr ""
 
@@ -1722,17 +1734,17 @@ msgstr "家用自动化"
 msgid "No Home Automation items found"
 msgstr "没有家用自动化设备发现"
 
-#: plugins/lcd2.py:39
+#: plugins/lcd2.py:44
 #, fuzzy
 msgid "You need pylcd to run \"lcd2x16\" plugin."
 msgstr "你需要 pyusb (http://pyusb.berlios.de/) to run \"vfd\" 插件。"
 
-#: plugins/lcd2.py:110
+#: plugins/lcd2.py:116
 msgid ""
 "LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
 msgstr ""
 
-#: plugins/lcd2.py:136
+#: plugins/lcd2.py:142
 msgid "LCD not supported yet!"
 msgstr ""
 
@@ -1755,7 +1767,7 @@ msgid ""
 " '%s'?"
 msgstr ""
 
-#: plugins/file_ops.py:80 tv/plugins/recordings_manager.py:665
+#: plugins/file_ops.py:80 tv/plugins/recordings_manager.py:664
 msgid "Deleting..."
 msgstr "删除中..."
 
@@ -1909,7 +1921,7 @@ msgstr "头条"
 msgid "Internet TV"
 msgstr ""
 
-#: plugins/itv.py:259 plugins/itv.py:274 plugins/headlines.py:215
+#: plugins/itv.py:259 plugins/itv.py:273 plugins/headlines.py:215
 #: plugins/headlines.py:229
 msgid "Headlines Sites"
 msgstr ""
@@ -1918,7 +1930,7 @@ msgstr ""
 msgid "No Headlines Sites found"
 msgstr ""
 
-#: plugins/shutdown.py:64 plugins/autoshutdown.py:609 main.py:317
+#: plugins/shutdown.py:64 plugins/autoshutdown.py:609 main.py:316
 msgid "shutting down..."
 msgstr "关闭中..."
 
@@ -1946,12 +1958,12 @@ msgstr "您确定关闭系统吗？"
 msgid "Do you really want to restart the system?"
 msgstr "您确定重起系统吗？"
 
-#: plugins/lcd.py:48
+#: plugins/lcd.py:52
 msgid "You need pylcd to run \"lcd\" plugin."
 msgstr ""
 
-#: plugins/lcd.py:69 plugins/lcd.py:81 plugins/vfd.py:91 plugins/vfd.py:99
-#: plugins/freevused.py:491 plugins/freevused.py:507 video/videoitem.py:794
+#: plugins/lcd.py:73 plugins/lcd.py:85 plugins/vfd.py:91 plugins/vfd.py:99
+#: plugins/freevused.py:491 plugins/freevused.py:507 video/videoitem.py:851
 #: share/skins/main/dark.fxd:537 share/skins/main/dark.fxd:774
 #: share/skins/main/atlantice.fxd:310 share/skins/main/atlantice.fxd:944
 #: share/skins/main/Tux'n Tosh TV.fxd:714 TV.fxd:934
@@ -1961,7 +1973,7 @@ msgstr ""
 msgid "Length"
 msgstr ""
 
-#: plugins/lcd.py:70 plugins/lcd.py:76 plugins/lcd.py:166 plugins/vfd.py:92
+#: plugins/lcd.py:74 plugins/lcd.py:80 plugins/lcd.py:170 plugins/vfd.py:92
 #: plugins/vfd.py:96 plugins/freevused.py:474 share/skins/main/dark.fxd:521
 #: share/skins/main/dark.fxd:734 share/skins/main/Tux'n Tosh TV.fxd:698
 #: TV.fxd:914 share/skins/main/info.fxd:202 share/skins/main/info.fxd:357
@@ -1969,7 +1981,7 @@ msgstr ""
 msgid "Artist"
 msgstr "艺术家"
 
-#: plugins/lcd.py:71 plugins/lcd.py:77 plugins/lcd.py:165 plugins/vfd.py:93
+#: plugins/lcd.py:75 plugins/lcd.py:81 plugins/lcd.py:169 plugins/vfd.py:93
 #: plugins/vfd.py:97 plugins/freevused.py:471 share/skins/main/dark.fxd:527
 #: share/skins/main/dark.fxd:739 share/skins/main/atlantice.fxd:918
 #: share/skins/main/Tux'n Tosh TV.fxd:704 TV.fxd:919
@@ -1979,8 +1991,8 @@ msgstr "艺术家"
 msgid "Album"
 msgstr "专辑"
 
-#: plugins/lcd.py:72 plugins/lcd.py:78 plugins/vfd.py:94 plugins/vfd.py:98
-#: video/videoitem.py:796 share/skins/main/dark.fxd:447
+#: plugins/lcd.py:76 plugins/lcd.py:82 plugins/vfd.py:94 plugins/vfd.py:98
+#: video/videoitem.py:853 share/skins/main/dark.fxd:447
 #: share/skins/main/atlantice.fxd:305 share/skins/main/atlantice.fxd:925
 #: share/skins/main/Tux'n Tosh TV.fxd:624 share/skins/main/blurr.fxd:686
 #: share/skins/main/info.fxd:459 share/skins/main/geexbox.fxd:691
@@ -1988,70 +2000,70 @@ msgstr "专辑"
 msgid "Year"
 msgstr "年"
 
-#: plugins/lcd.py:75 plugins/vfd.py:95 share/skins/main/atlantice.fxd:611
+#: plugins/lcd.py:79 plugins/vfd.py:95 share/skins/main/atlantice.fxd:611
 #: share/skins/main/Panorama.fxd:360 share/skins/main/blurr.fxd:339
 #: share/skins/main/info.fxd:402 share/skins/main/geexbox.fxd:366
 #: share/skins/main/mediaportal.fxd:331
 msgid "Tracks"
 msgstr ""
 
-#: plugins/lcd.py:82 plugins/vfd.py:100 share/skins/main/dark.fxd:477
+#: plugins/lcd.py:86 plugins/vfd.py:100 share/skins/main/dark.fxd:477
 #: share/skins/main/Tux'n Tosh TV.fxd:654 share/skins/main/basic.fxd:746
 #: share/skins/main/info.fxd:288 share/skins/main/info.fxd:494
 msgid "Resolution"
 msgstr "分辨率"
 
-#: plugins/lcd.py:83 plugins/vfd.py:101
+#: plugins/lcd.py:87 plugins/vfd.py:101
 msgid "Aspect"
 msgstr ""
 
-#: plugins/lcd.py:84 plugins/lcd.py:89 plugins/lcd.py:184 plugins/vfd.py:102
+#: plugins/lcd.py:88 plugins/lcd.py:93 plugins/lcd.py:188 plugins/vfd.py:102
 #: plugins/vfd.py:105
 msgid "Tagline"
 msgstr ""
 
-#: plugins/lcd.py:85 plugins/lcd.py:88 plugins/vfd.py:103 plugins/vfd.py:104
+#: plugins/lcd.py:89 plugins/lcd.py:92 plugins/vfd.py:103 plugins/vfd.py:104
 msgid "Plot"
 msgstr ""
 
-#: plugins/lcd.py:92 plugins/vfd.py:106 plugins/freevused.py:499
+#: plugins/lcd.py:96 plugins/vfd.py:106 plugins/freevused.py:499
 #: share/skins/main/dark.fxd:582 share/skins/main/Tux'n Tosh TV.fxd:759
 msgid "Geometry"
 msgstr ""
 
-#: plugins/lcd.py:97 plugins/vfd.py:109
+#: plugins/lcd.py:101 plugins/vfd.py:109
 #, python-format
 msgid "%s items"
 msgstr ""
 
-#: plugins/lcd.py:145 plugins/lcd.py:221 plugins/lcd.py:278 plugins/vfd.py:164
+#: plugins/lcd.py:149 plugins/lcd.py:225 plugins/lcd.py:282 plugins/vfd.py:164
 #, python-format
 msgid "Today is %s."
 msgstr ""
 
-#: plugins/lcd.py:151 plugins/lcd.py:335
+#: plugins/lcd.py:155 plugins/lcd.py:339
 msgid "Menu"
 msgstr ""
 
-#: plugins/lcd.py:152 plugins/lcd.py:336
+#: plugins/lcd.py:156 plugins/lcd.py:340
 msgid "Item"
 msgstr ""
 
-#: plugins/lcd.py:153 share/skins/main/dark.fxd:471
+#: plugins/lcd.py:157 share/skins/main/dark.fxd:471
 #: share/skins/main/atlantice.fxd:293 share/skins/main/Tux'n Tosh TV.fxd:648
 #: share/skins/main/info.fxd:283 share/skins/main/info.fxd:488
 msgid "Type"
 msgstr ""
 
-#: plugins/lcd.py:154
+#: plugins/lcd.py:158
 msgid "Information"
 msgstr ""
 
-#: plugins/lcd.py:183 plugins/lcd.py:356
+#: plugins/lcd.py:187 plugins/lcd.py:360
 msgid "Video"
 msgstr "视频"
 
-#: plugins/lcd.py:185 plugins/freevused.py:477 video/videoitem.py:792
+#: plugins/lcd.py:189 plugins/freevused.py:477 video/videoitem.py:849
 #: share/skins/main/dark.fxd:453 share/skins/main/dark.fxd:754
 #: share/skins/main/Tux'n Tosh TV.fxd:630 share/skins/main/basic.fxd:395
 #: share/skins/main/blurr.fxd:708 share/skins/main/info.fxd:465
@@ -2059,7 +2071,7 @@ msgstr "视频"
 msgid "Genre"
 msgstr ""
 
-#: plugins/lcd.py:567
+#: plugins/lcd.py:571
 msgid ""
 "LCD plugin will not load! Maybe you don\"t have LCDd (lcdproc daemon) "
 "running?"
@@ -2174,6 +2186,10 @@ msgstr ""
 msgid "at a rate of"
 msgstr ""
 
+#: plugins/oneclick.py:803 tv/plugins/freeboxtv.py:114
+msgid "No locations specified"
+msgstr "没有指定位置"
+
 #: plugins/oneclick.py:831
 msgid "Current Conditions"
 msgstr ""
@@ -2194,84 +2210,84 @@ msgstr "雷达图"
 msgid "for"
 msgstr ""
 
-#: plugins/oneclick.py:939
+#: plugins/oneclick.py:938
 msgid "Humidity"
 msgstr "湿度"
 
-#: plugins/oneclick.py:941
+#: plugins/oneclick.py:940
 msgid "Pressure"
 msgstr "压力"
 
-#: plugins/oneclick.py:943
+#: plugins/oneclick.py:942
 msgid "Wind"
 msgstr "风"
 
-#: plugins/oneclick.py:945
+#: plugins/oneclick.py:944
 msgid "Wind Chill"
 msgstr ""
 
-#: plugins/oneclick.py:947
+#: plugins/oneclick.py:946
 msgid "Visibility"
 msgstr "能见度"
 
-#: plugins/oneclick.py:949
+#: plugins/oneclick.py:948
 msgid "UV Index"
 msgstr "UV 指数"
 
-#: plugins/oneclick.py:982
+#: plugins/oneclick.py:980
 msgid "As of:"
 msgstr ""
 
-#: plugins/oneclick.py:985
+#: plugins/oneclick.py:983
 msgid "Temperature:"
 msgstr ""
 
-#: plugins/oneclick.py:986
+#: plugins/oneclick.py:984
 msgid "Dew Point:"
 msgstr ""
 
-#: plugins/oneclick.py:987
+#: plugins/oneclick.py:985
 #, fuzzy
 msgid "Humidity:"
 msgstr "湿度"
 
-#: plugins/oneclick.py:988
+#: plugins/oneclick.py:986
 #, fuzzy
 msgid "Visibility:"
 msgstr "能见度"
 
-#: plugins/oneclick.py:989
+#: plugins/oneclick.py:987
 #, fuzzy
 msgid "Pressure:"
 msgstr "压力"
 
-#: plugins/oneclick.py:990
+#: plugins/oneclick.py:988
 #, fuzzy
 msgid "Winds:"
 msgstr "风"
 
-#: plugins/oneclick.py:991
+#: plugins/oneclick.py:989
 msgid "Tonight:"
 msgstr ""
 
-#: plugins/oneclick.py:992
+#: plugins/oneclick.py:990
 #, fuzzy
 msgid "Sunset:"
 msgstr "星期日"
 
-#: plugins/oneclick.py:993
+#: plugins/oneclick.py:991
 msgid "Moon Phase:"
 msgstr ""
 
-#: plugins/oneclick.py:1045
+#: plugins/oneclick.py:1043
 msgid "LO"
 msgstr ""
 
-#: plugins/oneclick.py:1051
+#: plugins/oneclick.py:1049
 msgid "HI"
 msgstr ""
 
-#: plugins/oneclick.py:1068
+#: plugins/oneclick.py:1066
 #, fuzzy
 msgid "Error encountered while trying to download weather map"
 msgstr "下载雷达云图是发生错误"
@@ -2428,25 +2444,25 @@ msgstr ""
 msgid "to run the speak plugin."
 msgstr ""
 
-#: plugins/speak.py:83
+#: plugins/speak.py:82
 msgid "Welcome to Freevo!"
 msgstr ""
 
-#: plugins/speak.py:87
+#: plugins/speak.py:86
 msgid "Good bye!"
 msgstr ""
 
-#: plugins/speak.py:114
+#: plugins/speak.py:117
 #, fuzzy
 msgid "channel"
 msgstr "频道"
 
-#: plugins/speak.py:114
+#: plugins/speak.py:117
 #, fuzzy
 msgid "program"
 msgstr "节目"
 
-#: setup_freevo.py:80
+#: setup_freevo.py:82
 msgid ""
 "Usage: ./freevo setup [OPTION]...\n"
 "Set up Freevo for your specific environment.\n"
@@ -2479,42 +2495,42 @@ msgid ""
 "Please report bugs to <freevo-users@lists.sourceforge.net>.\n"
 msgstr ""
 
-#: setup_freevo.py:184
+#: setup_freevo.py:186
 #, python-format
 msgid "checking for %-13s"
 msgstr "检查 %-13s"
 
-#: setup_freevo.py:197
+#: setup_freevo.py:199
 #, python-format
 msgid "ERROR: can't find %s"
 msgstr "错误：不能发现 %s"
 
-#: setup_freevo.py:198
+#: setup_freevo.py:200
 msgid "Please install the application respectively put it in your path."
 msgstr ""
 
-#: setup_freevo.py:199
+#: setup_freevo.py:201
 msgid "Freevo won't work without it."
 msgstr "没有它Freevo将不能工作."
 
-#: setup_freevo.py:205
+#: setup_freevo.py:207
 msgid "not found (deactivated)"
 msgstr "没有发现 (未激活)"
 
-#: setup_freevo.py:267
+#: setup_freevo.py:269
 #, python-format
 msgid "System path first=%s"
 msgstr "系统路径 首先=%s"
 
-#: setup_freevo.py:267
+#: setup_freevo.py:269
 msgid "No"
 msgstr ""
 
-#: setup_freevo.py:267
+#: setup_freevo.py:269
 msgid "Yes"
 msgstr ""
 
-#: setup_freevo.py:283
+#: setup_freevo.py:285
 msgid "Settings:"
 msgstr "设置"
 
@@ -2630,99 +2646,99 @@ msgstr "没有录制计划任务"
 msgid "Updating recording schedule"
 msgstr "加入录制计划列表"
 
-#: video/configure.py:72 video/configure.py:107
+#: video/configure.py:81 video/configure.py:119
 #, python-format
 msgid "Stream %s"
 msgstr "流 %s"
 
-#: video/configure.py:78
+#: video/configure.py:87
 #, fuzzy
 msgid "Unknown"
 msgstr "未知艺术家"
 
-#: video/configure.py:83
+#: video/configure.py:92
 msgid "Audio Menu"
 msgstr "音频菜单"
 
-#: video/configure.py:98
+#: video/configure.py:110
 msgid "no subtitles"
 msgstr "没有字幕文件"
 
-#: video/configure.py:120
+#: video/configure.py:132
 msgid "Subtitle Menu"
 msgstr "字幕菜单"
 
-#: video/configure.py:137 video/configure.py:178
+#: video/configure.py:152 video/configure.py:195
 #, python-format
 msgid "Play chapter %s"
 msgstr "播放章节 %s"
 
-#: video/configure.py:158 video/configure.py:180
+#: video/configure.py:173 video/configure.py:197
 msgid "Chapter Menu"
 msgstr "章节菜单"
 
-#: video/configure.py:200
+#: video/configure.py:220
 #, fuzzy, python-format
 msgid "Play with \"%s\""
 msgstr "播放标题 %s"
 
-#: video/configure.py:202
+#: video/configure.py:222
 #, fuzzy
 msgid "Player Menu"
 msgstr "章节菜单"
 
-#: video/configure.py:230
+#: video/configure.py:253
 #, python-format
 msgid "Turn off %s"
 msgstr "关闭 %s"
 
-#: video/configure.py:231
+#: video/configure.py:254
 #, python-format
 msgid "Turn on %s"
 msgstr "打开 %s"
 
-#: video/configure.py:260
+#: video/configure.py:286
 msgid "Activate TOP field first"
 msgstr ""
 
-#: video/configure.py:262 video/configure.py:301
+#: video/configure.py:288 video/configure.py:328
 msgid "Activate BOTTOM field first"
 msgstr ""
 
-#: video/configure.py:264
+#: video/configure.py:290
 msgid "Activate AUTO field first"
 msgstr ""
 
-#: video/configure.py:276
+#: video/configure.py:303
 msgid "Play with alternate player"
 msgstr "用替换播放器播放"
 
-#: video/configure.py:280
+#: video/configure.py:307
 msgid "Audio selection"
 msgstr "音频选择"
 
-#: video/configure.py:282
+#: video/configure.py:309
 msgid "Subtitle selection"
 msgstr "字幕选择"
 
-#: video/configure.py:284 video/configure.py:288
+#: video/configure.py:311 video/configure.py:315
 msgid "Chapter selection"
 msgstr "章节选择"
 
-#: video/configure.py:295
+#: video/configure.py:322
 msgid "de-interlacing"
 msgstr ""
 
-#: video/configure.py:298
+#: video/configure.py:325
 msgid "X-Video Motion Compensation (xvmc)"
 msgstr ""
 
-#: video/configure.py:306 video/videoitem.py:410 video/videoitem.py:413
-#: playlist.py:307 tv/programitem.py:97
+#: video/configure.py:338 video/videoitem.py:471 video/videoitem.py:474
+#: playlist.py:306 tv/programitem.py:97
 msgid "Play"
 msgstr "播放"
 
-#: video/configure.py:307
+#: video/configure.py:339
 msgid "Config Menu"
 msgstr "配置菜单"
 
@@ -2813,6 +2829,55 @@ msgstr "章节"
 msgid "Choose a Category"
 msgstr "浏览目录"
 
+#: video/plugins/filmaffinity.py:100
+msgid "Remove matching of this regexps from item name"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:101
+msgid "Remove matching of this regexps from search string"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:102
+msgid "Accept search automatically if it has only one result"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:151 video/plugins/filmaffinity.py:215
+#, fuzzy
+msgid "Connection error: "
+msgstr "连接错误"
+
+#: video/plugins/filmaffinity.py:283
+msgid "Search in FilmAffinity"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:290 video/plugins/filmaffinity.py:297
+#, python-format
+msgid "Search in FilmAffinity [%s]"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:306
+#, fuzzy
+msgid "Searching in FilmAffinity..."
+msgstr "搜索 IMDB 中..."
+
+#: video/plugins/filmaffinity.py:330
+msgid "Connection error: Probably connection timeout, try again"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:343
+msgid "FILMAFFINITY Query"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:347
+#, fuzzy
+msgid "No info available"
+msgstr "没有有效信息"
+
+#: video/plugins/filmaffinity.py:384
+#, fuzzy
+msgid "Fetching movie information"
+msgstr "皮肤信息"
+
 #: video/plugins/vpodcast.py:212
 #, fuzzy
 msgid "Video Podcast"
@@ -2872,7 +2937,7 @@ msgstr "浏览列表"
 msgid "Trailers"
 msgstr "标题"
 
-#: video/plugins/appletrailers.py:214
+#: video/plugins/appletrailers.py:214 tv/plugins/genre.py:103
 #, fuzzy
 msgid "Browse by Genre"
 msgstr "查看集"
@@ -2929,6 +2994,49 @@ msgstr ""
 #: video/plugins/dvdbackup.py:83
 msgid "Backup this dvd title..."
 msgstr "备份此DVD的内容(title)..."
+
+#: video/plugins/fillscreen.py:149
+#, fuzzy
+msgid "Fill screen"
+msgstr "宽屏"
+
+#: video/plugins/fillscreen.py:169
+msgid "pixels cropped up and down"
+msgstr ""
+
+#: video/plugins/fillscreen.py:171
+msgid "pixels cropped left and right"
+msgstr ""
+
+#: video/plugins/fillscreen.py:173
+msgid "no loss"
+msgstr ""
+
+#: video/plugins/fillscreen.py:179
+msgid "widens"
+msgstr ""
+
+#: video/plugins/fillscreen.py:181
+msgid "narrows"
+msgstr ""
+
+#: video/plugins/fillscreen.py:183
+msgid "ratio unchanged"
+msgstr ""
+
+#: video/plugins/fillscreen.py:187
+#, fuzzy
+msgid "Fill at"
+msgstr "文件名"
+
+#: video/plugins/fillscreen.py:190
+msgid "Dont't fill (keep original ratio)"
+msgstr ""
+
+#: video/plugins/fillscreen.py:192
+#, fuzzy
+msgid "Fill Screen Menu"
+msgstr "Freevo 主菜单"
 
 #: video/plugins/bookmarker.py:65
 msgid "Resume playback"
@@ -3117,29 +3225,24 @@ msgstr "播放右声道"
 msgid "Language Menu"
 msgstr "语言菜单"
 
-#: video/plugins/youtube.py:154
+#: video/plugins/youtube.py:155
 msgid "Youtube videos"
 msgstr ""
 
-#: video/plugins/youtube.py:183
+#: video/plugins/youtube.py:184
 msgid "Retrieving video list"
 msgstr ""
 
-#: video/plugins/youtube.py:184 video/plugins/youtube.py:240
+#: video/plugins/youtube.py:185 video/plugins/youtube.py:232
 #, fuzzy
 msgid "Videos available"
 msgstr "视频码率"
 
-#: video/plugins/youtube.py:192
-#, fuzzy
-msgid "Downloading video"
-msgstr "下载"
-
-#: video/plugins/youtube.py:206
+#: video/plugins/youtube.py:198
 msgid "bla"
 msgstr ""
 
-#: video/plugins/youtube.py:219 video/plugins/youtube.py:249
+#: video/plugins/youtube.py:211 video/plugins/youtube.py:241
 #, fuzzy
 msgid "Loading video list"
 msgstr "下载链接列表..."
@@ -3201,64 +3304,64 @@ msgstr "显示此项目的细节"
 msgid "Details"
 msgstr "细节"
 
-#: video/plugins/mplayer.py:421
+#: video/plugins/mplayer.py:467
 msgid "Seeking not possible"
 msgstr "随机读取不可能"
 
-#: video/__init__.py:182
+#: video/__init__.py:181
 msgid "Directory Autobuild Thumbnails "
 msgstr "自动建立目录的缩略图"
 
-#: video/__init__.py:183
+#: video/__init__.py:182
 msgid "Build video thumbnails for all items (may take a while when entering)."
 msgstr "为所有项目建立视频缩略图 (可能需要一些时间)"
 
-#: video/videoitem.py:375
+#: video/videoitem.py:436
 msgid "Play DVD"
 msgstr "播放DVD"
 
-#: video/videoitem.py:376 video/videoitem.py:381
+#: video/videoitem.py:437 video/videoitem.py:442
 msgid "DVD title list"
 msgstr "DVD 标题列表"
 
-#: video/videoitem.py:382 video/videoitem.py:395
+#: video/videoitem.py:443 video/videoitem.py:456
 msgid "Play default track"
 msgstr "播放缺省轨道"
 
-#: video/videoitem.py:389
+#: video/videoitem.py:450
 msgid "Play VCD"
 msgstr "播放VCD"
 
-#: video/videoitem.py:390 video/videoitem.py:394
+#: video/videoitem.py:451 video/videoitem.py:455
 msgid "VCD title list"
 msgstr "VCD 标题列表"
 
-#: video/videoitem.py:415
+#: video/videoitem.py:476
 #, fuzzy
 msgid "Full description"
 msgstr "描述"
 
-#: video/videoitem.py:418
+#: video/videoitem.py:479
 msgid "Play with maximum cache"
 msgstr "用最大缓存播放"
 
-#: video/videoitem.py:423
+#: video/videoitem.py:484
 msgid "Show variants"
 msgstr ""
 
-#: video/videoitem.py:426
+#: video/videoitem.py:487
 msgid "Create Thumbnail"
 msgstr "建立缩略图"
 
-#: video/videoitem.py:454
+#: video/videoitem.py:515
 msgid "Please wait...."
 msgstr "请等待..."
 
-#: video/videoitem.py:529
+#: video/videoitem.py:589
 msgid "No player for this item found"
 msgstr "没有发现此项的对应播放器"
 
-#: video/videoitem.py:581 video/videoitem.py:594 video/videoitem.py:608
+#: video/videoitem.py:641 video/videoitem.py:654 video/videoitem.py:668
 #, fuzzy, python-format
 msgid ""
 "No media found for \"%s\".\n"
@@ -3267,215 +3370,221 @@ msgstr ""
 "没有发现 \"%s\" 上的媒体文件.\n"
 "%s"
 
-#: video/videoitem.py:691
+#: video/videoitem.py:748
 #, python-format
 msgid "Play Title %d"
 msgstr "播放标题 %d"
 
-#: video/videoitem.py:776 tv/programitem.py:332
+#: video/videoitem.py:833 tv/programitem.py:332
 msgid "No Information Available"
 msgstr "没有有效信息"
 
-#: menu.py:633
+#: video/videoitem.py:855 tv/programitem.py:362 share/skins/main/dark.fxd:459
+#: share/skins/main/Tux'n Tosh TV.fxd:636 share/skins/main/info.fxd:471
+msgid "Rating"
+msgstr "评级"
+
+#: menu.py:681
 msgid "No action defined for this choice!"
 msgstr "此选项没有定义动作"
 
-#: directory.py:57
+#: directory.py:64
 msgid "Directory Sort By Date"
 msgstr "按日期排序目录"
 
-#: directory.py:58
+#: directory.py:65
 msgid "Sort directory by date and not by name."
 msgstr "按日期而不是名称排序目录"
 
-#: directory.py:60
+#: directory.py:67
 msgid "Directory Autoplay Single Item"
 msgstr "如果只有一个项目时自动播放"
 
-#: directory.py:61
+#: directory.py:68
 msgid "Don't show directory if only one item exists and auto-select the item."
 msgstr "如果只有一个项目时不显示目录而是自动播放"
 
-#: directory.py:64
+#: directory.py:70
 msgid "Force Skin Layout"
 msgstr "强制皮肤布局"
 
-#: directory.py:65
+#: directory.py:71
 msgid ""
 "Force skin to a specific layout. This option doesn't work with all skins and "
 "the result may differ based on the skin."
 msgstr ""
 "强制皮肤到特定布局.这个选项不是所有的皮肤都可用并且效果可能因皮肤而不同."
 
-#: directory.py:68
+#: directory.py:74
 msgid "Directory Smart Sort"
 msgstr "目录智能排序"
 
-#: directory.py:69
+#: directory.py:75
 msgid "Use a smarter way to sort the items."
 msgstr "智能排序这些项目"
 
-#: directory.py:71
+#: directory.py:77
 msgid "Directory Smart Names"
 msgstr ""
 
-#: directory.py:72
+#: directory.py:78
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr ""
 
-#: directory.py:74
+#: directory.py:80
 msgid "Use MediaID Tag Names"
 msgstr ""
 
-#: directory.py:75
+#: directory.py:81
 msgid "Use the names from the media files tags as display name."
 msgstr "用媒体文件的tags作为显示名"
 
-#: directory.py:77
+#: directory.py:83
 msgid "Directory Reverse Sort"
 msgstr "目录反向排序"
 
-#: directory.py:78
+#: directory.py:84
 msgid "Show the items in the list in reverse order."
 msgstr "以反向顺序显示列表中的项目"
 
-#: directory.py:82
+#: directory.py:88
 msgid "Directory Create Playlist"
 msgstr "用此目录创建播放列表"
 
-#: directory.py:83
+#: directory.py:89
 msgid ""
 "Handle the directory as playlist. After one file is played, the next one "
 "will be started."
 msgstr "处理目录作为播放列表. 一个项目播放完后, 下一个 将自动开始."
 
-#: directory.py:86
+#: directory.py:91
 msgid "Directory Add Playlist Files"
 msgstr "目录加播放列表文件"
 
-#: directory.py:87
+#: directory.py:92
 msgid "Add playlist files to the list of items"
 msgstr "加播放列表文件到列表中"
 
-#: directory.py:89
+#: directory.py:94
 msgid "Directory Add Random Playlist"
 msgstr "目录加随机播放列表"
 
-#: directory.py:90
+#: directory.py:95
 msgid "Add an item for a random playlist"
 msgstr "加一个项目到随机播放列表"
 
-#: directory.py:92
+#: directory.py:97
 msgid "Directory Autoplay Items"
 msgstr "目录自动播放项目"
 
-#: directory.py:93
+#: directory.py:98
 msgid ""
 "Autoplay the whole directory (as playlist) when it contains only files and "
 "no directories"
 msgstr "当目录仅仅包含文件时自动播放整个目录 (作为播放列表) "
 
-#: directory.py:315
+#: directory.py:329
 #, python-format
 msgid "Directory on disc [%s]"
 msgstr "碟片 [%s] 上的目录"
 
-#: directory.py:316
+#: directory.py:330
 msgid "Directory"
 msgstr "目录"
 
-#: directory.py:452
+#: directory.py:468
 msgid "Play all files in directory"
 msgstr "播放目录下的所有文件"
 
-#: directory.py:458 playlist.py:315
+#: directory.py:474 playlist.py:314
 msgid "Random play all items"
 msgstr "随机播放所有项目"
 
-#: directory.py:460
+#: directory.py:477
 msgid "Recursive random play all items"
 msgstr "递归随机播放所有项目"
 
-#: directory.py:461
+#: directory.py:478
 msgid "Recursive play all items"
 msgstr "递归播放所有项目"
 
-#: directory.py:463 tv/plugins/recordings_manager.py:166
+#: directory.py:480 tv/plugins/recordings_manager.py:166
 msgid "Configure directory"
 msgstr "配置目录"
 
-#: directory.py:530
+#: directory.py:559
 msgid "Enter Password"
 msgstr "输入口令"
 
-#: directory.py:555
+#: directory.py:584
 msgid "Password incorrect"
 msgstr "口令不正确"
 
-#: directory.py:590
-msgid "Directory does not exist"
+#: directory.py:621
+#, fuzzy, python-format
+msgid "Directory %r does not exist"
 msgstr "目录不存在"
 
-#: directory.py:620
+#: directory.py:651
 msgid "Scanning disc, be patient..."
 msgstr "扫描碟片中，请稍等..."
 
-#: directory.py:622
+#: directory.py:653
 msgid "Scanning directory, be patient..."
 msgstr "扫描目录中，请稍等..."
 
-#: directory.py:821 directory.py:911 directory.py:945
+#: directory.py:842 directory.py:935 directory.py:970
 #: tv/plugins/recordings_manager.py:278
 msgid "on"
 msgstr ""
 
-#: directory.py:823 directory.py:826 directory.py:915 directory.py:943
+#: directory.py:844 directory.py:847 directory.py:939 directory.py:968
 #: tv/plugins/recordings_manager.py:280
 msgid "off"
 msgstr ""
 
-#: directory.py:828
+#: directory.py:849
 msgid "auto"
 msgstr "自动"
 
-#: directory.py:947
+#: directory.py:972
 msgid "Show all kinds of items"
 msgstr "显示所有种类"
 
-#: directory.py:949
+#: directory.py:973
 msgid "Show video, audio and image items in this directory"
 msgstr "显示目录中的视频、音频和图片"
 
-#: directory.py:952 tv/plugins/recordings_manager.py:300
+#: directory.py:976 tv/plugins/recordings_manager.py:300
 msgid "Configure"
 msgstr "配置"
 
-#: playlist.py:143 playlist.py:191
+#: playlist.py:142 playlist.py:190
 #, python-format
 msgid "Cannot open file \"%s\""
 msgstr "不能打开文件 \"%s\""
 
-#: playlist.py:305
+#: playlist.py:304
 msgid "Browse Playlist"
 msgstr "浏览播放列表"
 
-#: playlist.py:369
+#: playlist.py:368
 msgid "empty playlist"
 msgstr "清空播放列表"
 
-#: playlist.py:467
+#: playlist.py:466
 msgid "playlist repeat on"
 msgstr "打开重复播放播放列表"
 
-#: playlist.py:469
+#: playlist.py:468
 msgid "playlist repeat off"
 msgstr "关闭重复播放播放列表"
 
-#: playlist.py:485
+#: playlist.py:484
 msgid "no next item in playlist"
 msgstr "播放列表已到最后面"
 
-#: playlist.py:512
+#: playlist.py:511
 msgid "no previous item in playlist"
 msgstr "播放列表已到最前面"
 
@@ -3593,11 +3702,6 @@ msgstr ""
 #: tv/programitem.py:357
 msgid "Advisory : "
 msgstr ""
-
-#: tv/programitem.py:362 share/skins/main/dark.fxd:459 share/skins/main/Tux'n
-#: Tosh TV.fxd:636 share/skins/main/info.fxd:471
-msgid "Rating"
-msgstr "评级"
 
 #: tv/record_client.py:66
 #, fuzzy
@@ -3749,50 +3853,50 @@ msgstr ""
 msgid "Status order"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:425
+#: tv/plugins/recordings_manager.py:424
 msgid "Unmark to Keep"
 msgstr "不标记为保留的"
 
-#: tv/plugins/recordings_manager.py:425
+#: tv/plugins/recordings_manager.py:424
 msgid "Mark to Keep"
 msgstr "标记为保留"
 
-#: tv/plugins/recordings_manager.py:426
+#: tv/plugins/recordings_manager.py:425
 msgid "Unmark as Watched"
 msgstr "不标记为看过的"
 
-#: tv/plugins/recordings_manager.py:426
+#: tv/plugins/recordings_manager.py:425
 msgid "Mark as Watched"
 msgstr "标记为看过"
 
-#: tv/plugins/recordings_manager.py:494
+#: tv/plugins/recordings_manager.py:493
 msgid "(Unnamed)"
 msgstr ""
 
-#: tv/plugins/recordings_manager.py:595
+#: tv/plugins/recordings_manager.py:594
 msgid "Browse episodes"
 msgstr "查看集"
 
-#: tv/plugins/recordings_manager.py:596
+#: tv/plugins/recordings_manager.py:595
 msgid "Delete all episodes"
 msgstr "删除所有集"
 
-#: tv/plugins/recordings_manager.py:597
+#: tv/plugins/recordings_manager.py:596
 msgid "Keep all episodes"
 msgstr "保留所有集"
 
-#: tv/plugins/recordings_manager.py:598
+#: tv/plugins/recordings_manager.py:597
 msgid "Play all episodes"
 msgstr "播放所有集"
 
-#: tv/plugins/recordings_manager.py:663
+#: tv/plugins/recordings_manager.py:662
 #, python-format
 msgid ""
 "Do you wish to delete the series\n"
 " '%s'?"
 msgstr "你希望删除 '%s' 系列吗？"
 
-#: tv/plugins/recordings_manager.py:750
+#: tv/plugins/recordings_manager.py:749
 msgid "episodes"
 msgstr "集"
 
@@ -3845,11 +3949,28 @@ msgstr ""
 "'XINE_COMMAND' 没有被定义, 'xine' 视频插件未激活.\n"
 "请检查 freevo_config.py 中的 xine 部分"
 
+#: tv/plugins/freeboxtv.py:73
+msgid "Freebox TV"
+msgstr ""
+
+#: tv/plugins/freeboxtv.py:80
+msgid "Freebox TV :: Les chaines"
+msgstr ""
+
+#: tv/plugins/freeboxtv.py:118
+msgid "Freebox TV :: Les chaines Multiposte"
+msgstr ""
+
 #: tv/plugins/xine.py:82
 msgid ""
 "'XINE_COMMAND' not defined, 'xine' tv plugin deactivated.\n"
 "please check the xine section in freevo_config.py"
 msgstr ""
+
+#: tv/plugins/genre.py:77 tv/plugins/genre.py:117
+#, fuzzy
+msgid "TVServer not running"
+msgstr "编码服务器没有在运行"
 
 #: tv/plugins/view_line_in.py:51
 msgid "View VCR Input"
@@ -3859,7 +3980,7 @@ msgstr "查看 VCR 输入"
 msgid "Recorded Shows"
 msgstr ""
 
-#: tv/plugins/livepause/players.py:284
+#: tv/plugins/livepause/players.py:288
 msgid "Enabled"
 msgstr ""
 
@@ -4048,15 +4169,15 @@ msgstr "遇到一个异常，不能加载TV指南"
 msgid "REPLACE WITH TUNERID FOR %s"
 msgstr ""
 
-#: main.py:178
+#: main.py:177
 msgid "Freevo Main Menu"
 msgstr "Freevo 主菜单"
 
-#: main.py:194
+#: main.py:193
 msgid "Skin Selector"
 msgstr "皮肤选择器"
 
-#: main.py:308
+#: main.py:307
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -4069,7 +4190,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: main.py:318 share/skins/main/crystal.fxd:17 share/skins/main/dark.fxd:25
+#: main.py:317 share/skins/main/crystal.fxd:17 share/skins/main/dark.fxd:25
 #: share/skins/main/atlantice.fxd:725 share/skins/main/Tux'n Tosh TV.fxd:25
 #: share/skins/main/bluestar.fxd:16 share/skins/main/Panorama.fxd:474
 #: share/skins/main/rain.fxd:17 share/skins/main/basic.fxd:25
@@ -4078,49 +4199,49 @@ msgstr ""
 msgid "Shutdown"
 msgstr "关闭系统"
 
-#: main.py:320
+#: main.py:319
 #, fuzzy
 msgid "Continue"
 msgstr "容器"
 
-#: main.py:457
+#: main.py:456
 #, python-format
 msgid "Starting Freevo-%s, please wait ..."
 msgstr "启动 Freevo-%s, 请稍等 ..."
 
-#: main.py:466
+#: main.py:465
 msgid "Reading cache, please wait ..."
 msgstr "读取缓存中，请稍等..."
 
-#: main.py:518
+#: main.py:517
 msgid "Freevo crashed!"
 msgstr ""
 
-#: main.py:519
+#: main.py:518
 #, python-format
 msgid "Filename: %s"
 msgstr "文件名：%s"
 
-#: main.py:520
+#: main.py:519
 #, python-format
 msgid "Lineno: %s"
 msgstr "行号：%s"
 
-#: main.py:521
+#: main.py:520
 #, python-format
 msgid "Function: %s"
 msgstr "函数：%s"
 
-#: main.py:522
+#: main.py:521
 #, python-format
 msgid "Text: %s"
 msgstr "文本：%s"
 
-#: main.py:524
+#: main.py:523
 msgid "Please see the logfiles for more info"
 msgstr "更多信息请见log文件"
 
-#: main.py:525
+#: main.py:524
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "在 %s 秒后退出"
@@ -4422,20 +4543,16 @@ msgid "Weather"
 msgstr ""
 
 #, fuzzy
+#~ msgid "Downloading video"
+#~ msgstr "下载"
+
+#, fuzzy
 #~ msgid ""
 #~ "You need PyFest (http://users.wpi.edu/~squirrel/programs/others/) to run "
 #~ "freefest plugin."
 #~ msgstr ""
 #~ "你需要 pybluez (http://org.csail.mit.edu/pybluez/) 去运行 \"freevused\" 插"
 #~ "件。"
-
-#, fuzzy
-#~ msgid "Media Library 1"
-#~ msgstr "媒体库"
-
-#, fuzzy
-#~ msgid "Choose a Directory"
-#~ msgstr "浏览目录"
 
 #~ msgid "No matches for %(artist)s - %(album)s"
 #~ msgstr "没有发现 %(艺术家)s - %(专辑)s 的匹配信息"
@@ -4445,9 +4562,6 @@ msgstr ""
 
 #~ msgid "recording server is unavailable"
 #~ msgstr "录制服务器暂时不可用"
-
-#~ msgid "connection error"
-#~ msgstr "连接错误"
 
 #~ msgid "Remove Failed"
 #~ msgstr "移除失败"
