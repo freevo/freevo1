@@ -1406,7 +1406,7 @@ class RecordServer:
                     rec_prog = prog
                     _debug_('start delayed recording: %s' % rec_prog, DINFO)
                     self.record_app = plugin.getbyname('RECORD')
-                    self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False)
+                    self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False, 0)
                     suffix = self.vg.vdev.split('/')[-1]
                     self.record_app.Record(rec_prog)
                     self.delay_recording = None
