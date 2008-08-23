@@ -1,0 +1,123 @@
+diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
+--- pyusb-0.4.1.orig/pyusb.c	2007-09-28 23:46:58.000000000 +0200
++++ pyusb-0.4.1/pyusb.c	2008-08-23 17:39:34.000000000 +0200
+@@ -126,7 +126,7 @@
+  */
+ PYUSB_STATIC char *getBuffer(
+ 	PyObject *obj,
+-	int *size
++	Py_ssize_t *size
+ 	)
+ {
+ 	char *p = NULL;
+@@ -342,7 +342,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Endpoint_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Endpoint",  /*tp_name*/
++    "pyusb.Endpoint",  /*tp_name*/
+     sizeof(Py_usb_Endpoint), /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     0,                         /*tp_dealloc*/
+@@ -475,7 +475,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Interface_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Interface",    	   /*tp_name*/
++    "pyusb.Interface",    	   /*tp_name*/
+     sizeof(Py_usb_Interface),   /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_Interface_del,     /*tp_dealloc*/
+@@ -634,7 +634,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Configuration_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Configuration",   	   /*tp_name*/
++    "pyusb.Configuration",   	   /*tp_name*/
+     sizeof(Py_usb_Configuration),   /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_Configuration_del,  /*tp_dealloc*/
+@@ -853,7 +853,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Device_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Device",   	   	   /*tp_name*/
++    "pyusb.Device",   	   	   /*tp_name*/
+     sizeof(Py_usb_Device),     /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_Device_del,         /*tp_dealloc*/
+@@ -1004,7 +1004,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_Bus_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.Bus",   	   	   	   /*tp_name*/
++    "pyusb.Bus",   	   	   	   /*tp_name*/
+     sizeof(Py_usb_Bus),        /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_Bus_del,            /*tp_dealloc*/
+@@ -1104,7 +1104,7 @@
+ 	int index = 0;
+ 	char *bytes;
+ 	PyObject *data;
+-	int size;
++	Py_ssize_t size;
+ 	int timeout = DEFAULT_TIMEOUT;
+ 	int ret;
+ 	int as_read = 0;
+@@ -1386,7 +1386,7 @@
+ 	int endpoint;
+ 	int timeout = DEFAULT_TIMEOUT;
+ 	char *data;
+-	int size;
++	Py_ssize_t size;
+ 	PyObject *bytes;
+ 	int ret;
+ 	PyObject *retObj;
+@@ -1493,7 +1493,7 @@
+ 	int endpoint;
+ 	int timeout = DEFAULT_TIMEOUT;
+ 	char *data;
+-	int size;
++	Py_ssize_t size;
+ 	PyObject *bytes;
+ 	int ret;
+ 	PyObject *retObj;
+@@ -1974,7 +1974,7 @@
+ PYUSB_STATIC PyTypeObject Py_usb_DeviceHandle_Type = {
+     PyObject_HEAD_INIT(NULL)
+     0,                         /*ob_size*/
+-    "usb.DeviceHandle",   	   /*tp_name*/
++    "pyusb.DeviceHandle",   	   /*tp_name*/
+     sizeof(Py_usb_DeviceHandle), /*tp_basicsize*/
+     0,                         /*tp_itemsize*/
+     Py_usb_DeviceHandle_del,   /*tp_dealloc*/
+@@ -2103,14 +2103,14 @@
+ /*
+  * Entry point for the module
+  */
+-PyMODINIT_FUNC initusb(void)
++PyMODINIT_FUNC initpyusb(void)
+ {
+ 	PyObject *module;
+ 
+-	module = Py_InitModule3("usb", usb_Methods,"USB access module");
++	module = Py_InitModule3("pyusb", usb_Methods,"USB access module");
+ 	if (!module) return;
+ 
+-	PyExc_USBError = PyErr_NewException("usb.USBError", PyExc_IOError, NULL);
++	PyExc_USBError = PyErr_NewException("pyusb.USBError", PyExc_IOError, NULL);
+ 	if (!PyExc_USBError) return;
+ 	PyModule_AddObject(module, "USBError", PyExc_USBError);
+ 	Py_INCREF(PyExc_USBError);
+diff -Naur pyusb-0.4.1.orig/setup.py pyusb-0.4.1/setup.py
+--- pyusb-0.4.1.orig/setup.py	2007-09-29 00:05:00.000000000 +0200
++++ pyusb-0.4.1/setup.py	2008-08-23 17:36:14.000000000 +0200
+@@ -39,7 +39,7 @@
+ 	extra_compile_args = ['-I/usr/local/include']
+ 																											
+ 
+-usbmodule = Extension(name = 'usb',
++usbmodule = Extension(name = 'pyusb',
+ 					libraries = libraries,
+ 					sources = ['pyusb.c'],
+ 					extra_link_args = extra_link_args,
