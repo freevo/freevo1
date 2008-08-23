@@ -40,7 +40,7 @@ from favoriteitem import FavoriteItem
 
 import util.tv_util as tv_util
 from tv.record_client import RecordClient
-from tv.channels import FreevoChannels
+from tv.channels import FreevoChannels, CHANNEL_ID
 from tv.record_types import Favorite
 
 
@@ -155,7 +155,7 @@ class ProgramItem(Item):
             # check if the device is free
             fc = FreevoChannels()
             # for that we need the name of the lock file
-            suffix = fc.getVideoGroup(self.prog.channel_id, True, 0).vdev
+            suffix = fc.getVideoGroup(self.prog.channel_id, True, CHANNEL_ID).vdev
             suffix = suffix.split('/')[-1]
             tvlockfile = config.FREEVO_CACHEDIR + '/record.'+suffix
             if os.path.exists(tvlockfile):

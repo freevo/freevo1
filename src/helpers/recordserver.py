@@ -81,7 +81,7 @@ import tv.epg_xmltv
 import util.tv_util as tv_util
 import plugin
 import util.popen3
-from tv.channels import FreevoChannels
+from tv.channels import FreevoChannels, CHANNEL_ID
 from util.videothumb import snapshot
 from event import *
 
@@ -971,7 +971,7 @@ class RecordServer:
                 self.removeScheduledRecording(rec_prog)
                 return
 
-            self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False, 0)
+            self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False, CHANNEL_ID)
             suffix = self.vg.vdev.split('/')[-1]
             self.tv_lock_file = config.FREEVO_CACHEDIR + '/record.'+suffix
             self.record_app.Record(rec_prog)
@@ -1406,7 +1406,7 @@ class RecordServer:
                     rec_prog = prog
                     _debug_('start delayed recording: %s' % rec_prog, DINFO)
                     self.record_app = plugin.getbyname('RECORD')
-                    self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False, 0)
+                    self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False, CHANNEL_ID)
                     suffix = self.vg.vdev.split('/')[-1]
                     self.record_app.Record(rec_prog)
                     self.delay_recording = None

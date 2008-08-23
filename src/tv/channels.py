@@ -35,6 +35,10 @@ import epg_xmltv
 import threading
 import time
 
+CHANNEL_ID = 0
+DISPLAY_NAME = 1
+TUNER_ID = 2
+
 
 # Sample for local_conf.py:
 # Three video cards and one web camera.
@@ -76,7 +80,7 @@ class FreevoChannels:
             plugin.init_special_plugin(config.plugin_external_tuner)
 
 
-    def getVideoGroup(self, chan, isplayer, chan_index=2):
+    def getVideoGroup(self, chan, isplayer, chan_index=TUNER_ID):
         """
         Gets the VideoGroup object used by this Freevo channel.
         """

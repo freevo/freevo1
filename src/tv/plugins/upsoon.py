@@ -44,7 +44,7 @@ from tv.record_client import RecordClient
 import kaa
 from kaa import Timer
 from kaa import EventHandler
-from tv.channels import FreevoChannels
+from tv.channels import FreevoChannels, CHANNEL_ID
 from util.marmalade import jellyToXML, unjellyFromXML
 from gui import AlertBox
 from event import *
@@ -132,7 +132,7 @@ class PluginInterface(plugin.DaemonPlugin):
     def getVideoForChannel(self, channel_id):
         """ get the video device given a channel id """
         _debug_('getVideoForChannel(channel_id=%r)' % (channel_id), 2)
-        return self.fc.getVideoGroup(channel_id, False, 0).vdev
+        return self.fc.getVideoGroup(channel_id, False, CHANNEL_ID).vdev
 
 
     def stopVideoInUse(self, vdev):
