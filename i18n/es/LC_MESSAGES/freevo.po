@@ -1,13 +1,13 @@
 # Spanish strings in freevo
 # Copyright (C) 2003
 # Pedro Gracia <pedro@neuroomante.com>, 2003
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 18:24+0200\n"
-"PO-Revision-Date: 2008-05-24 08:46+0100\n"
+"POT-Creation-Date: 2008-08-23 19:26+0200\n"
+"PO-Revision-Date: 2008-08-20 22:48+0100\n"
 "Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -603,14 +603,12 @@ msgid "View Logs"
 msgstr "Ver logs"
 
 #: www/htdocs/library1.rpy:208
-#, fuzzy
 msgid "Media Library 1"
-msgstr "Librería multimedia"
+msgstr "Librería multimedia 1"
 
 #: www/htdocs/library1.rpy:266
-#, fuzzy
 msgid "Choose a Directory"
-msgstr "Elegir una carpeta"
+msgstr "Elije una carpeta"
 
 #: www/htdocs/guide.rpy:158 plugins/lcd.py:208
 #: share/skins/main/crystal.fxd:273 share/skins/main/bluestar.fxd:293
@@ -850,7 +848,7 @@ msgstr "Perfil desconocido"
 
 #: www/htdocs/encoding_web.rpy:390
 msgid "Web Encoder"
-msgstr ""
+msgstr "Codificador web"
 
 #: www/htdocs/search.rpy:54 tv/programitem.py:299
 #: tv/plugins/search_programs.py:111
@@ -899,7 +897,7 @@ msgstr "Navegar por la lista"
 
 #: config.py:454
 msgid "CRITICAL"
-msgstr ""
+msgstr "CRÍTICO"
 
 #: config.py:460
 msgid "WARNING"
@@ -907,16 +905,15 @@ msgstr "ATENCIÓN"
 
 #: config.py:463
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 #: config.py:466
 msgid "DEBUG"
-msgstr ""
+msgstr "DEBUG"
 
 #: audio/player.py:213
-#, fuzzy
 msgid "Cache fill"
-msgstr "La búsqueda ha fallado"
+msgstr "Llenando memoria caché"
 
 #: audio/plugins/playlists.py:82
 msgid "Playlists"
@@ -1070,9 +1067,9 @@ msgid "Directory %s already exists"
 msgstr "La carpeta %s ya existe"
 
 #: audio/plugins/cdbackup.py:340
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot rip to \"%s\"! (%s)"
-msgstr "No se puede extraer a '%s'! (%s)"
+msgstr "No se puede extraer a \"%s\"! (%s)"
 
 #: audio/plugins/cdbackup.py:356 audio/plugins/cdbackup.py:420
 #: audio/plugins/cdbackup.py:479
@@ -1084,16 +1081,12 @@ msgid "Ripping complete"
 msgstr "Extracción completa"
 
 #: audio/plugins/cdbackup.py:500
-#, fuzzy
 msgid "No CD medadata available"
-msgstr "No hay datos de CDDB disponibles"
+msgstr "No hay disponible información sobre el CD"
 
 #: audio/plugins/cdbackup.py:501
-#, fuzzy
 msgid "CD info not found!"
-msgstr ""
-"%s\n"
-"¡no encontrado!"
+msgstr "¡No encontrada info del CD!"
 
 #: audio/plugins/cdbackup.py:506
 msgid "Unknown Artist"
@@ -1182,7 +1175,7 @@ msgid ""
 "To search for covers you need an Amazon.com Web Services\n"
 "license key. You can get yours from:\n"
 msgstr ""
-"Para buscar carátulas necesitas una licencia de los servicios web deAmazon."
+"Para buscar carátulas necesitas una licencia de los servicios web de Amazon."
 "com. Puedes obtener la tuya en:\n"
 
 #: audio/plugins/coversearch.py:184
@@ -1190,7 +1183,7 @@ msgid "Find a cover for this music"
 msgstr "Buscar una carátula para esta música"
 
 #: audio/plugins/coversearch.py:187
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "'coversearch' was disabled for this item! 'coversearch' needs an item with "
 "Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) to be "
@@ -1201,7 +1194,7 @@ msgstr ""
 "este elemento. Este módulo necesita un elemento con Artista y Álbum (si es "
 "un fichero mp3 u ogg) o Título (si es una pista de CD) para poder realizar "
 "la búsqueda. Se necesita un fichero mp3 con etiquetas ID3 u Ogg info para "
-"los ficheros Ogg. Quizás necesites arreglar la etiqueta de este fichero %s."
+"los ficheros Ogg. Quizás necesites arreglar la etiqueta del fichero (%s)."
 
 #: audio/plugins/coversearch.py:194
 #, python-format
@@ -1310,9 +1303,8 @@ msgid "Choices"
 msgstr "Opciones"
 
 #: audio/plugins/mplayer.py:344
-#, fuzzy
 msgid "Connecting to"
-msgstr "Conectando al LCD: %s"
+msgstr "Conectando a"
 
 #: audio/audiodiskitem.py:73
 msgid "Browse disc"
@@ -1327,13 +1319,13 @@ msgid "Data files on disc"
 msgstr "Ficheros de datos en el disco"
 
 #: image/viewer.py:129
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Can't Open Image\n"
 "\"%s\""
 msgstr ""
-"No puedo abrir la fotografía\n"
-"'%s'"
+"No se puede abrir la fotografía\n"
+"\"%s\""
 
 #: image/viewer.py:359
 msgid "pause"
@@ -1616,27 +1608,24 @@ msgstr "%s%%"
 
 #: plugins/idlebar/system.py:566
 msgid "Sensors must have three or four values:"
-msgstr ""
+msgstr "Los sensores deben tener tres o cuatro valores:"
 
 #: plugins/idlebar/system.py:569
-#, fuzzy
 msgid "Sensor"
-msgstr "Nieve"
+msgstr "Sensor"
 
 #: plugins/idlebar/system.py:569
-#, fuzzy
 msgid "does not exist"
-msgstr "La carpeta no existe"
+msgstr "no existe"
 
 #: plugins/idlebar/system.py:573
 #, python-format
 msgid "%s "
-msgstr ""
+msgstr "%s "
 
 #: plugins/idlebar/system.py:573
-#, fuzzy
 msgid "is not a valid meminfo entry"
-msgstr "\"%s\" no es un argumento válido para la barra de botones. "
+msgstr "no es una entrada de meminfo válida"
 
 #: plugins/icecast.py:160
 msgid "Set as icecast playlist"
@@ -1720,9 +1709,8 @@ msgid "No Home Automation items found"
 msgstr "No se han encontrado elementos domóticos"
 
 #: plugins/lcd2.py:44
-#, fuzzy
 msgid "You need pylcd to run \"lcd2x16\" plugin."
-msgstr "Necesitas pylcd para cargar el módulo \"lcd\"."
+msgstr "Necesitas pylcd para cargar el módulo \"lcd2x16\"."
 
 #: plugins/lcd2.py:116
 msgid ""
@@ -1733,7 +1721,7 @@ msgstr ""
 
 #: plugins/lcd2.py:142
 msgid "LCD not supported yet!"
-msgstr ""
+msgstr "¡LCD todavía no soportado!"
 
 #: plugins/file_ops.py:66
 msgid "Delete info"
@@ -2067,7 +2055,6 @@ msgid "Genre"
 msgstr "Género"
 
 #: plugins/lcd.py:571
-#, fuzzy
 msgid ""
 "LCD plugin will not load! Maybe you don\"t have LCDd (lcdproc daemon) "
 "running?"
@@ -2286,13 +2273,12 @@ msgid "Error encountered while trying to download weather map"
 msgstr "Se ha producido un error al descargar el mapa del tiempo"
 
 #: plugins/freevused.py:141
-#, fuzzy
 msgid ""
 "You need pybluetooth (http://org.csail.mit.edu/pybluetooth/) to run "
 "\"freevused\" plugin."
 msgstr ""
-"Necesitas pybluez (http://org.csail.mit.edu/pybluez/) para cargar el módulo "
-"\"freevused\"."
+"Necesitas pybluetooth (http://org.csail.mit.edu/pybluez/) para cargar el "
+"módulo \"freevused\"."
 
 #: plugins/freevused.py:299 plugins/freevused.py:302
 msgid "Playing"
@@ -2428,31 +2414,28 @@ msgid "Commands"
 msgstr "Mandatos"
 
 #: plugins/speak.py:34
-#, fuzzy
 msgid "You need PyFest"
-msgstr "Necesitas el software %s"
+msgstr "Necesitas pyFest"
 
 #: plugins/speak.py:34
 msgid "to run the speak plugin."
-msgstr ""
+msgstr "para cargar el módulo speak"
 
 #: plugins/speak.py:82
 msgid "Welcome to Freevo!"
-msgstr ""
+msgstr "¡Bienvenido a Freevo!"
 
 #: plugins/speak.py:86
 msgid "Good bye!"
-msgstr ""
+msgstr "!Adiós!"
 
 #: plugins/speak.py:117
-#, fuzzy
 msgid "channel"
-msgstr "Canal"
+msgstr "canal"
 
 #: plugins/speak.py:117
-#, fuzzy
 msgid "program"
-msgstr "Programa"
+msgstr "programa"
 
 #: setup_freevo.py:82
 msgid ""
@@ -2782,82 +2765,71 @@ msgid "Encoding started"
 msgstr "Comienza la codificación"
 
 #: video/plugins/wwitv.py:136 video/plugins/wwitv.py:144
-#, fuzzy
 msgid "Downloading stream links"
-msgstr "Descargando imagen \""
+msgstr "Descargando enlaces"
 
 #: video/plugins/wwitv.py:162
-#, fuzzy
 msgid "Failed to download channel list"
-msgstr "La descarga de %s ha fallado"
+msgstr "La descarga de la lista de canales ha fallado"
 
 #: video/plugins/wwitv.py:224
-#, fuzzy
 msgid "Failed to download categories list"
-msgstr "La descarga de %s ha fallado"
+msgstr "La descarga de categorías ha fallado"
 
 #: video/plugins/wwitv.py:314
-#, fuzzy
 msgid "Browse by Nations"
-msgstr "Navegar por productora"
+msgstr "Navegar por países"
 
 #: video/plugins/wwitv.py:315
-#, fuzzy
 msgid "Nations"
-msgstr "Lugares"
+msgstr "Países"
 
 #: video/plugins/wwitv.py:331
-#, fuzzy
 msgid "Choose a Nation"
-msgstr "Elegir productora"
+msgstr "Elije un país"
 
 #: video/plugins/wwitv.py:336 video/plugins/appletrailers.py:228
 msgid "Browse by Category"
 msgstr "Navegar por categoría"
 
 #: video/plugins/wwitv.py:337
-#, fuzzy
 msgid "Categories"
-msgstr " Categoría"
+msgstr "Categorías"
 
 #: video/plugins/wwitv.py:348
-#, fuzzy
 msgid "Choose a Category"
-msgstr "Elegir una carpeta"
+msgstr "Elije una carpeta"
 
 #: video/plugins/filmaffinity.py:100
 msgid "Remove matching of this regexps from item name"
-msgstr ""
+msgstr "Eliminar coincidencias de estas regexps en el nombre"
 
 #: video/plugins/filmaffinity.py:101
 msgid "Remove matching of this regexps from search string"
-msgstr ""
+msgstr "Eliminar coincidencias de estar regexps en la cadena a buscar"
 
 #: video/plugins/filmaffinity.py:102
 msgid "Accept search automatically if it has only one result"
-msgstr ""
+msgstr "Aceptar resultado automáticamente si sólo hay un resultado"
 
 #: video/plugins/filmaffinity.py:151 video/plugins/filmaffinity.py:215
-#, fuzzy
 msgid "Connection error: "
-msgstr "error de conexión"
+msgstr "Error de conexión: "
 
 #: video/plugins/filmaffinity.py:283
 msgid "Search in FilmAffinity"
-msgstr ""
+msgstr "Buscar en FilmAffinity"
 
 #: video/plugins/filmaffinity.py:290 video/plugins/filmaffinity.py:297
 #, python-format
 msgid "Search in FilmAffinity [%s]"
-msgstr ""
+msgstr "Buscar en FilmAffinity [%s]"
 
 #: video/plugins/filmaffinity.py:306
-#, fuzzy
 msgid "Searching in FilmAffinity..."
-msgstr "Buscando letras..."
+msgstr "Buscando en FilmAffinity..."
 
 #: video/plugins/filmaffinity.py:330
-#, fuzzy
 msgid "Connection error: Probably connection timeout, try again"
 msgstr "Error de conexión: Probablemente se superó el tiempo de espera."
 
@@ -2866,14 +2838,12 @@ msgid "FILMAFFINITY Query"
 msgstr ""
 
 #: video/plugins/filmaffinity.py:347
-#, fuzzy
 msgid "No info available"
 msgstr "No hay información disponible"
 
 #: video/plugins/filmaffinity.py:384
-#, fuzzy
 msgid "Fetching movie information"
-msgstr "Información sobre grabaciones"
+msgstr "Descargando información de la película"
 
 #: video/plugins/vpodcast.py:212
 msgid "Video Podcast"
@@ -2952,7 +2922,7 @@ msgstr "Elegir productora"
 
 #: video/plugins/moviecovers.py:287
 msgid "Search Moviecovers.com for this file"
-msgstr "Buscar en Moviecovers.com sobre este elemento"
+msgstr "Buscar en Moviecovers.com"
 
 #: video/plugins/moviecovers.py:294 video/plugins/moviecovers.py:301
 #, python-format
@@ -2984,47 +2954,44 @@ msgid "Backup this dvd title..."
 msgstr "Hacer copia de seguridad de este título"
 
 #: video/plugins/fillscreen.py:149
-#, fuzzy
 msgid "Fill screen"
-msgstr "Formato cine"
+msgstr "Llenar pantalla"
 
 #: video/plugins/fillscreen.py:169
 msgid "pixels cropped up and down"
-msgstr ""
+msgstr "cortar pixels arriba y abajo"
 
 #: video/plugins/fillscreen.py:171
 msgid "pixels cropped left and right"
-msgstr ""
+msgstr "cortar pixels a derecha e izquierda"
 
 #: video/plugins/fillscreen.py:173
 msgid "no loss"
-msgstr ""
+msgstr "sin pérdida"
 
 #: video/plugins/fillscreen.py:179
 msgid "widens"
-msgstr ""
+msgstr "ensancha"
 
 #: video/plugins/fillscreen.py:181
 msgid "narrows"
-msgstr ""
+msgstr "encoge"
 
 #: video/plugins/fillscreen.py:183
 msgid "ratio unchanged"
-msgstr ""
+msgstr "no cambiar ratio"
 
 #: video/plugins/fillscreen.py:187
-#, fuzzy
 msgid "Fill at"
-msgstr "Fichero"
+msgstr "Llenar a"
 
 #: video/plugins/fillscreen.py:190
 msgid "Dont't fill (keep original ratio)"
-msgstr ""
+msgstr "No llenar (mantener ratio original)"
 
 #: video/plugins/fillscreen.py:192
-#, fuzzy
 msgid "Fill Screen Menu"
-msgstr "Menú principal de Freevo"
+msgstr "Menu de llenado de pantalla"
 
 #: video/plugins/bookmarker.py:65
 msgid "Resume playback"
@@ -3050,7 +3017,7 @@ msgstr "Reproducir imagen como DVD"
 
 #: video/plugins/dvdimage.py:104
 msgid "Choose title to play. <1-9>"
-msgstr "Elije el título a reproducir. <1-9>"
+msgstr "Elegir el título a reproducir. <1-9>"
 
 #: video/plugins/dvdimage.py:128
 #, python-format
@@ -3059,7 +3026,7 @@ msgstr "Elije disco (%i discos disponibles)."
 
 #: video/plugins/imdb.py:97
 msgid "Search IMDB for this file"
-msgstr "Buscar en IMDB sobre este elemento"
+msgstr "Buscar en IMDB"
 
 #: video/plugins/imdb.py:104 video/plugins/imdb.py:111
 #, python-format
@@ -3099,47 +3066,45 @@ msgid "Modify Container"
 msgstr "Modificar contenedor"
 
 #: video/plugins/reencode.py:154
-#, fuzzy
 msgid "Modify Start Time"
-msgstr "Modificar hora de inicio"
+msgstr "Modificar inicio"
 
 #: video/plugins/reencode.py:155
-#, fuzzy
 msgid "Modify End Time"
-msgstr "Modificar hora"
+msgstr "Modificar fin"
 
 #: video/plugins/reencode.py:156 video/plugins/reencode.py:238
 msgid "Modify Resolution"
-msgstr "Modificar resolución"
+msgstr "Modif. resolución"
 
 #: video/plugins/reencode.py:157 video/plugins/reencode.py:249
 #: video/plugins/reencode.py:271
 msgid "Modify Video Codec"
-msgstr "Modificar códec de video"
+msgstr "Modif. video códec"
 
 #: video/plugins/reencode.py:158 video/plugins/reencode.py:260
 msgid "Modify Video Bitrate"
-msgstr "Modificar bitrate de video"
+msgstr "Modif. video bitrate"
 
 #: video/plugins/reencode.py:159
 msgid "Modify Audio Codec"
-msgstr "Modificar códec de audio"
+msgstr "Modif. audio códec"
 
 #: video/plugins/reencode.py:160 video/plugins/reencode.py:282
 msgid "Modify Audio Bitrate"
-msgstr "Modificar bitrate de audio"
+msgstr "Modif. audio bitrate"
 
 #: video/plugins/reencode.py:161
 msgid "Modify Number of passes"
-msgstr "Modificar número de pasadas"
+msgstr "Modif. número de pasadas"
 
 #: video/plugins/reencode.py:162
 msgid "Modify Number of Encoder Threads"
-msgstr "Modificar número de hilos de codificación"
+msgstr "Modif. hilos de codificación"
 
 #: video/plugins/reencode.py:163
 msgid "Modify Video Filter (not implemented)"
-msgstr "Modificar filtro de video (no implementado)"
+msgstr "Modif. filtro de video (no implementado)"
 
 #: video/plugins/reencode.py:173
 msgid "Xvid Low Quality"
@@ -3163,17 +3128,15 @@ msgstr "Seleccionar perfil"
 
 #: video/plugins/reencode.py:198
 msgid "No bookmarks are set for this video"
-msgstr ""
+msgstr "Este video no tiene marcadores"
 
 #: video/plugins/reencode.py:201
-#, fuzzy
 msgid "Do not set"
-msgstr "programa no programado"
+msgstr "No aplicar"
 
 #: video/plugins/reencode.py:208
-#, fuzzy
 msgid "Select Time"
-msgstr "Seleccionar perfil"
+msgstr "Seleccionar tiempo"
 
 #: video/plugins/reencode.py:293
 msgid "Modify Number of Passes"
@@ -3280,7 +3243,7 @@ msgstr ""
 
 #: video/plugins/details.py:66
 msgid "Show details for this item"
-msgstr "Mostrar información sobre este elemento"
+msgstr "Mostrar información detallada"
 
 #: video/plugins/details.py:96
 msgid "Details"
@@ -3513,9 +3476,9 @@ msgid "Password incorrect"
 msgstr "Contraseña incorrecta"
 
 #: directory.py:621
-#, fuzzy, python-format
+#, python-format
 msgid "Directory %r does not exist"
-msgstr "La carpeta no existe"
+msgstr "La carpeta %r no existe"
 
 #: directory.py:651
 msgid "Scanning disc, be patient..."
@@ -3960,9 +3923,8 @@ msgstr ""
 "freevo_config.py"
 
 #: tv/plugins/genre.py:77 tv/plugins/genre.py:117
-#, fuzzy
 msgid "TVServer not running"
-msgstr "Servidor de codificación no activado"
+msgstr "Servidor de TV no activado"
 
 #: tv/plugins/view_line_in.py:51
 msgid "View VCR Input"
@@ -3974,71 +3936,63 @@ msgstr "Programas grabados"
 
 #: tv/plugins/livepause/players.py:288
 msgid "Enabled"
-msgstr ""
+msgstr "Activado"
 
 #: tv/plugins/livepause/display/dialogs/__init__.py:107
 #: tv/plugins/livepause/display/text.py:39
-#, fuzzy
 msgid "Volume"
-msgstr "Volumen: %s%%"
+msgstr "Volumen"
 
 #: tv/plugins/livepause/display/dialogs/__init__.py:167
-#, fuzzy
 msgid "Current"
-msgstr "Descargar fotografía de Internet"
+msgstr "Actual"
 
 #: tv/plugins/livepause/display/dialogs/__init__.py:181
 msgid "Next"
-msgstr ""
+msgstr "Siguiente"
 
 #: tv/plugins/livepause/__init__.py:486
-#, fuzzy
 msgid "Recording started"
-msgstr "Comienza la grabación\n"
+msgstr "Comienza la grabación"
 
 #: tv/plugins/livepause/__init__.py:489
-#, fuzzy
 msgid "Recording stopped"
-msgstr "Comienza la grabación\n"
+msgstr "Grabación parada"
 
 #: tv/plugins/livepause/__init__.py:494
 msgid "Out of buffer space"
-msgstr ""
+msgstr "Espacio del buffer terminado"
 
 #: tv/plugins/livepause/__init__.py:526
-#, fuzzy
 msgid "Disabled"
-msgstr "Variables"
+msgstr "Desactivado"
 
 #: tv/plugins/livepause/__init__.py:529
-#, fuzzy, python-format
+#, python-format
 msgid "Subtitles: %s"
-msgstr "Subtítulos"
+msgstr "Subtítulos: %s"
 
 #: tv/plugins/livepause/__init__.py:531
-#, fuzzy
 msgid "Subtitles not supported"
-msgstr "Menú de subtítulos"
+msgstr "Subtítulos no soportados"
 
 #: tv/plugins/livepause/__init__.py:549
-#, fuzzy
 msgid "Default"
-msgstr "Eliminar este elemento"
+msgstr "Por omisión"
 
 #: tv/plugins/livepause/__init__.py:552
-#, fuzzy, python-format
+#, python-format
 msgid "Audio language: %s"
-msgstr "Fichero: %s"
+msgstr "Idioma de audio: %s"
 
 #: tv/plugins/livepause/__init__.py:554
-#, fuzzy
 msgid "Audio language selection not supported"
-msgstr "Selección de idioma"
+msgstr "Selección de idioma de audio no soportada"
 
 #: tv/plugins/livepause/__init__.py:560
-#, fuzzy, python-format
+#, python-format
 msgid "Volume: %d%%"
-msgstr "Volumen: %s%%"
+msgstr "Volumen: %d%%"
 
 #: tv/plugins/manual_record.py:120
 msgid "Display record item"
@@ -4129,7 +4083,7 @@ msgstr "No se encuenta el programa: %s"
 #: tv/tvmenu.py:65 tv/tvmenu.py:72
 #, python-format
 msgid "Could not find TV channel %s"
-msgstr "No puedo encontrar el canal de TV %s"
+msgstr "No se ha encontrado el canal de TV %s"
 
 #: tv/tvmenu.py:80
 msgid "Cannot get TV plug-in"
@@ -4157,7 +4111,7 @@ msgstr "¡La Guía de TV está corrupta!"
 
 #: tv/epg_xmltv.py:126
 msgid "Couldn't load the TV Guide, got an exception!"
-msgstr "No se puede carga la guía de TV. ¡Se ha producido una excepción!"
+msgstr "No se ha podido cargar la guía de TV. ¡Se ha producido una excepción!"
 
 #: tv/epg_xmltv.py:211
 #, python-format
