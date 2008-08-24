@@ -157,7 +157,7 @@ class MpvGoom(BaseAnimation):
 
     def set_alpha(self, high, low):
         """ Get the alpha level for a count """
-        _debug_('set_alpha(high=%r low=%r)' % (high, low,), 1)
+        _debug_('set_alpha(high=%r low=%r)' % (high, low,), 2)
         alpha = self.fader(high, low)
         if alpha < 0:   alpha = 0
         if alpha > 255: alpha = 255
