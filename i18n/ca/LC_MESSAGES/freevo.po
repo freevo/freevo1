@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freevo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 18:24+0200\n"
+"POT-Creation-Date: 2008-08-25 17:10+0200\n"
 "PO-Revision-Date: 2007-04-30 03:26+0100\n"
 "Last-Translator: Paco Rivière <friviere@palmcat.cat>\n"
 "Language-Team: PacoRivière <web AT pacoriviere POINT cat>\n"
@@ -3147,6 +3147,39 @@ msgstr "Tria el títol que vols reproduir. <1-9>"
 #, python-format
 msgid "Choose disc (%i discs available)."
 msgstr "Tria un disc (Hi ha %i discs disponibles)."
+
+#: video/plugins/rtve.py:106 video/plugins/rtve.py:115
+msgid "Escaneando la web de RTVE..."
+msgstr ""
+
+#: video/plugins/rtve.py:133
+msgid "Reproducir a pantalla completa (16:9)"
+msgstr ""
+
+#: video/plugins/rtve.py:168
+msgid "Reproducir"
+msgstr ""
+
+#: video/plugins/rtve.py:169
+msgid "Reproducir a pantalla completa"
+msgstr ""
+
+#: video/plugins/rtve.py:195
+msgid "Elegir por Nombre del Programa"
+msgstr ""
+
+#: video/plugins/rtve.py:196
+#, fuzzy
+msgid "Programas"
+msgstr "Programa"
+
+#: video/plugins/rtve.py:224
+msgid "Elegir por Canal"
+msgstr ""
+
+#: video/plugins/rtve.py:233
+msgid "Elige un canal"
+msgstr ""
 
 #: video/plugins/imdb.py:97
 msgid "Search IMDB for this file"

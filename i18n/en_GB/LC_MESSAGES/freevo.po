@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: freevo-1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 18:24+0200\n"
+"POT-Creation-Date: 2008-08-25 17:10+0200\n"
 "PO-Revision-Date: 2007-11-14 21:25+0100\n"
 "Last-Translator: Duncan Webb <duncan@linuxowl.com>\n"
 "Language-Team: British English <LL@li.org>\n"
@@ -845,7 +845,7 @@ msgstr "Unknown Profile"
 
 #: www/htdocs/encoding_web.rpy:390
 msgid "Web Encoder"
-msgstr ""
+msgstr "Web Encoder"
 
 #: www/htdocs/search.rpy:54 tv/programitem.py:299
 #: tv/plugins/search_programs.py:111
@@ -894,7 +894,7 @@ msgstr "Browse list"
 
 #: config.py:454
 msgid "CRITICAL"
-msgstr ""
+msgstr "CRITICAL"
 
 #: config.py:460
 msgid "WARNING"
@@ -902,11 +902,11 @@ msgstr "WARNING"
 
 #: config.py:463
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 #: config.py:466
 msgid "DEBUG"
-msgstr ""
+msgstr "DEBUG"
 
 #: audio/player.py:213
 msgid "Cache fill"
@@ -1270,7 +1270,7 @@ msgstr "Show player"
 #: audio/plugins/mpdvis.py:461 audio/plugins/mpdvis.py:470
 #, python-format
 msgid "FXMODE is %s"
-msgstr ""
+msgstr "FXMODE is %s"
 
 #: audio/plugins/lyrics.py:62
 msgid "Show lyrics"
@@ -1291,7 +1291,7 @@ msgstr "No exact match. "
 
 #: audio/plugins/lyrics.py:115
 msgid "Here are some sugestions."
-msgstr ""
+msgstr "Here are some sugestions."
 
 #: audio/plugins/lyrics.py:120
 msgid "Choices"
@@ -1603,7 +1603,7 @@ msgstr "%s%%"
 
 #: plugins/idlebar/system.py:566
 msgid "Sensors must have three or four values:"
-msgstr ""
+msgstr "Sensors must have three or four values:"
 
 #: plugins/idlebar/system.py:569
 msgid "Sensor"
@@ -1616,7 +1616,7 @@ msgstr "does not exist"
 #: plugins/idlebar/system.py:573
 #, python-format
 msgid "%s "
-msgstr ""
+msgstr "%s "
 
 #: plugins/idlebar/system.py:573
 msgid "is not a valid meminfo entry"
@@ -1715,7 +1715,7 @@ msgstr ""
 
 #: plugins/lcd2.py:142
 msgid "LCD not supported yet!"
-msgstr ""
+msgstr "LCD not supported yet!"
 
 #: plugins/file_ops.py:66
 msgid "Delete info"
@@ -1849,7 +1849,7 @@ msgstr "Burn audio files (MP3, Wav and Ogg) as Audio CD"
 #: plugins/cd_burn.py:841
 #, python-format
 msgid "Burn audio playlist to CD, %d files"
-msgstr ""
+msgstr "Burn audio playlist to CD, %d files"
 
 #: plugins/cd_burn.py:853
 msgid "Copy this file to CD"
@@ -2163,7 +2163,7 @@ msgstr "Variable"
 
 #: plugins/oneclick.py:603 plugins/oneclick.py:604
 msgid "at a rate of"
-msgstr ""
+msgstr "at a rate of"
 
 #: plugins/oneclick.py:803 tv/plugins/freeboxtv.py:114
 msgid "No locations specified"
@@ -2412,15 +2412,15 @@ msgstr "You need PyFest"
 
 #: plugins/speak.py:34
 msgid "to run the speak plugin."
-msgstr ""
+msgstr "to run the speak plugin."
 
 #: plugins/speak.py:82
 msgid "Welcome to Freevo!"
-msgstr ""
+msgstr "Welcome to Freevo!"
 
 #: plugins/speak.py:86
 msgid "Good bye!"
-msgstr ""
+msgstr "Good bye!"
 
 #: plugins/speak.py:117
 msgid "channel"
@@ -2795,15 +2795,15 @@ msgstr "Choose a Category"
 
 #: video/plugins/filmaffinity.py:100
 msgid "Remove matching of this regexps from item name"
-msgstr ""
+msgstr "Remove matching of this regexps from item name"
 
 #: video/plugins/filmaffinity.py:101
 msgid "Remove matching of this regexps from search string"
-msgstr ""
+msgstr "Remove matching of this regexps from search string"
 
 #: video/plugins/filmaffinity.py:102
 msgid "Accept search automatically if it has only one result"
-msgstr ""
+msgstr "Accept search automatically if it has only one result"
 
 #: video/plugins/filmaffinity.py:151 video/plugins/filmaffinity.py:215
 msgid "Connection error: "
@@ -2811,7 +2811,7 @@ msgstr "connection error"
 
 #: video/plugins/filmaffinity.py:283
 msgid "Search in FilmAffinity"
-msgstr ""
+msgstr "Search in FilmAffinity"
 
 #: video/plugins/filmaffinity.py:290 video/plugins/filmaffinity.py:297
 #, python-format
@@ -3015,6 +3015,38 @@ msgstr "Choose title to play. <1-9>"
 msgid "Choose disc (%i discs available)."
 msgstr "Choose disc (%i discs available)."
 
+#: video/plugins/rtve.py:106 video/plugins/rtve.py:115
+msgid "Escaneando la web de RTVE..."
+msgstr ""
+
+#: video/plugins/rtve.py:133
+msgid "Reproducir a pantalla completa (16:9)"
+msgstr ""
+
+#: video/plugins/rtve.py:168
+msgid "Reproducir"
+msgstr ""
+
+#: video/plugins/rtve.py:169
+msgid "Reproducir a pantalla completa"
+msgstr ""
+
+#: video/plugins/rtve.py:195
+msgid "Elegir por Nombre del Programa"
+msgstr ""
+
+#: video/plugins/rtve.py:196
+msgid "Programas"
+msgstr "Programmes"
+
+#: video/plugins/rtve.py:224
+msgid "Elegir por Canal"
+msgstr ""
+
+#: video/plugins/rtve.py:233
+msgid "Elige un canal"
+msgstr ""
+
 #: video/plugins/imdb.py:97
 msgid "Search IMDB for this file"
 msgstr "Search IMDB for this file"
@@ -3119,7 +3151,7 @@ msgstr "Select Profile"
 
 #: video/plugins/reencode.py:198
 msgid "No bookmarks are set for this video"
-msgstr ""
+msgstr "No bookmarks are set for this video"
 
 #: video/plugins/reencode.py:201
 msgid "Do not set"
@@ -3926,7 +3958,7 @@ msgstr "Current"
 
 #: tv/plugins/livepause/display/dialogs/__init__.py:181
 msgid "Next"
-msgstr ""
+msgstr "Next"
 
 #: tv/plugins/livepause/__init__.py:486
 msgid "Recording started"
@@ -3938,7 +3970,7 @@ msgstr "Recording stopped"
 
 #: tv/plugins/livepause/__init__.py:494
 msgid "Out of buffer space"
-msgstr ""
+msgstr "Out of buffer space"
 
 #: tv/plugins/livepause/__init__.py:526
 msgid "Disabled"
@@ -4062,7 +4094,7 @@ msgstr "Could not find TV channel %s"
 
 #: tv/tvmenu.py:80
 msgid "Cannot get TV plug-in"
-msgstr ""
+msgstr "Cannot get TV plug-in"
 
 #: tv/tvmenu.py:105
 msgid "TV Main Menu"

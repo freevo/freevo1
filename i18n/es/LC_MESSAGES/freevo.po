@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-23 19:26+0200\n"
+"POT-Creation-Date: 2008-08-25 17:10+0200\n"
 "PO-Revision-Date: 2008-08-20 22:48+0100\n"
 "Last-Translator: Gorka Olaizola <gorka@escomposlinux.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3023,6 +3023,39 @@ msgstr "Elegir el título a reproducir. <1-9>"
 #, python-format
 msgid "Choose disc (%i discs available)."
 msgstr "Elije disco (%i discos disponibles)."
+
+#: video/plugins/rtve.py:106 video/plugins/rtve.py:115
+msgid "Escaneando la web de RTVE..."
+msgstr ""
+
+#: video/plugins/rtve.py:133
+msgid "Reproducir a pantalla completa (16:9)"
+msgstr ""
+
+#: video/plugins/rtve.py:168
+msgid "Reproducir"
+msgstr ""
+
+#: video/plugins/rtve.py:169
+msgid "Reproducir a pantalla completa"
+msgstr ""
+
+#: video/plugins/rtve.py:195
+msgid "Elegir por Nombre del Programa"
+msgstr ""
+
+#: video/plugins/rtve.py:196
+#, fuzzy
+msgid "Programas"
+msgstr "Programa"
+
+#: video/plugins/rtve.py:224
+msgid "Elegir por Canal"
+msgstr ""
+
+#: video/plugins/rtve.py:233
+msgid "Elige un canal"
+msgstr ""
 
 #: video/plugins/imdb.py:97
 msgid "Search IMDB for this file"
