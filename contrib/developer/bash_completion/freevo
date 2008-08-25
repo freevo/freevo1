@@ -1,0 +1,50 @@
+# vim:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=shell:
+# Programmable completion for the freevo command under bash. Source
+# this file (or on some systems add it to ~/.bash_completion and start a new
+# shell) and bash's completion mechanism will know all about freevo's options!
+# Who wants to read man pages/help text... afterall there aren't any
+
+# Known to work with bash 2.05a with programmable completion and extended
+# pattern matching enabled (use 'shopt -s extglob progcomp' to enable
+# these if they are not already enabled).
+
+shopt -s extglob
+
+_freevo()
+{
+    local cur cmds cmdOpts pOpts mOpts rOpts qOpts nOpts optsParam opt
+    local helpCmds optBase i
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    helper=${COMP_WORDS[1]}
+
+    # could be cleaver about helpers by searching the helpers directory
+    # same goes for plygins by searching the plugins directories
+    cmds='cache commdetectserver convert_config convert_favorites daemon \
+          encodingserver imdb install makelinuxevent makelircrc \
+          makelogos makestationlist passwd plugins recordserver remote \
+          rssserver schedulefavorites tv_grab vtrelease webserver \
+          runapp setup start stop prompt execute'
+    opts='-d --debug --doc -fs --force-fs -h --help --trace --profile'
+    startstop='start stop'
+
+    if [[ $COMP_CWORD -eq 1 ]] ; then
+        COMPREPLY=( $( compgen -W "$cmds $opts" -- $cur ) )
+        return 0
+    fi
+
+    case "${helper}" in
+        *server)
+            COMPREPLY=( $(compgen -W "${startstop}" -- ${cur}) )
+            return 0
+            ;;
+        plugins)
+            opts='-i -l -a -html -wiki'
+            COMPREPLY=( $(compgen -W "-i -l -a -html -wiki" -- ${cur}) )
+            return 0
+            ;;
+    esac
+}
+complete -F _freevo -o default freevo
