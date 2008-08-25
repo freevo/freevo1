@@ -1,0 +1,41 @@
+Installation notes for freevused midlet
+---------------------------------------
+
+Upload the .jar and .jad files to the phone.
+
+In the install section of the Makefile is an example of what I use.
+I just copy the files to a machine that has bluetooth access and I upload
+the .jar to the phone with gammu[1]
+
+[1] http://www.gammu.net/
+
+
+About the binary provided
+-------------------------
+
+The compilation of this midlet has been only tested with a Nokia 6230 phone.
+I have used the j2me classes provided with an SDK from Nokia but the midlet
+has no Nokia especific code.
+It could work with other phones but I don't have any way to test it.
+
+If there is someone that knows better about j2me and can provide a better
+method to compile the midlet I will apreciate it very much.
+
+
+CREDITS
+-------
+
+Based on the Bemused j2me client coded by
+
+  Fred Schättgen <bemused.sch(ät)ttgen.net> (inactive)
+  Johan Köhne <kohne(ät)ch.tudelft.nl> (active)
+
+It can be downloaded from http://elektron.its.tudelft.nl/~jkohne76/
+
+
+LICENSE
+-------
+
+The original code had no explicit license but a link was provided from the
+web page. I assume that the code is under public domain as are my small
+changes to the code.
