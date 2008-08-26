@@ -100,7 +100,7 @@ class MPlayer:
             'ao': '-ao %s' % config.MPLAYER_AO_DEV,
             'ao_opts': config.MPLAYER_AO_DEV_OPTS,
             'default_args': config.MPLAYER_ARGS_DEF.split(),
-            'mode_args': config.MPLAYER_ARGS[mode].split(),
+            'mode_args': config.MPLAYER_ARGS.has_key(mode) and config.MPLAYER_ARGS[mode].split() or [],
             'geometry': '',
             'verbose': '',
             'dvd-device': '',
