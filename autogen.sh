@@ -40,6 +40,10 @@ howto() {
     docbook plugin_writing
 }
 
+mkhtmldir() {
+    if [ ! -e Docs/installation/html ]; then mkdir Docs/installation/html; fi
+}
+
 # main
 case "$1" in
     revision)
@@ -48,11 +52,12 @@ case "$1" in
     nodocs)
         revision
         gen_i18n
+        mkhtmldir
         ;;
     howto)
         howto
         ;;
-    help)
+    -h|--help|help)
         echo -n "usage:   "
         echo $0
         echo "          revision   -  just generate svn revision module"
