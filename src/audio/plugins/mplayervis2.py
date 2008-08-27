@@ -511,7 +511,7 @@ class MpvGoom(BaseAnimation):
             args['verbose'] = '-v'
 
         vo = ['%(vo)s' % args, '%(vo_opts)s' % args]
-        vo.remove('')
+        vo = filter(len, vo)
         vo = ':'.join(vo)
 
         command = ['%(cmd)s' % args]
@@ -531,8 +531,7 @@ class MpvGoom(BaseAnimation):
         elif '-framedrop' not in command:
             command += config.MPLAYER_SOFTWARE_SCALER.split()
 
-        while '' in command:
-            command.remove('')
+        command = filter(len, command)
 
         command += ['%(url)s' % args]
 

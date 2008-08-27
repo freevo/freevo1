@@ -87,8 +87,7 @@ class ChildApp:
             debug_name = app[:app.find(' ')]
 
         else:
-            while '' in app:
-                app.remove('')
+            app = filter(len, app)
 
             if app[0].find('--prio=') == 0 and not config.RUNAPP:
                 try:

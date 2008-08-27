@@ -299,11 +299,11 @@ class MPlayer:
             command = p.play(command, self)
 
         vo = ['%(vo)s' % args, '%(vo_opts)s' % args]
-        vo.remove('')
+        vo = filter(len, vo)
         vo = ':'.join(vo)
 
         ao = ['%(ao)s' % args, '%(ao_opts)s' % args]
-        ao.remove('')
+        ao = filter(len, ao)
         ao = ':'.join(ao)
 
         command = ['--prio=%(nice)s' % args]
@@ -342,8 +342,7 @@ class MPlayer:
         if options:
             command += options
 
-        while '' in command:
-            command.remove('')
+        command = filter(len, command)
 
         command = self.sort_filter(command)
 
