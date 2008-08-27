@@ -410,7 +410,6 @@ class LivePauseController:
         return event_consumed
 
     def __handle_stop(self, event, menuw):
-        self.osd.hide_dialog()
         if self.changing_channel:
             self.changing_channel = False
         else:
