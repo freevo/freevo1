@@ -80,12 +80,8 @@ class PodCastPlayerGUI(PlayerGUI):
     """
     """
     def __init__(self, item, menuw=None):
-        GUIObject.__init__(self)
-        if menuw:
-            self.visible = True
-        else:
-            self.visible = False
-
+        PlayerGUI.__init__(self, item, menuw)
+        self.visible = menuw and True or False
         self.menuw = menuw
         self.item = item
         self.player  = None
