@@ -47,14 +47,14 @@ threads = []
 def dl(url):
     #print url
     for i in range(2): #n intentos
+        conexiones.acquire()
         try:
-            conexiones.acquire()
-            f = urllib2.urlopen(url)
-            html = f.read()
-            return html
-        except IOError:
-            print "retrying wget '%s'" % (url,)
-            pass
+            try:
+                f = urllib2.urlopen(url)
+                html = f.read()
+                return html
+            except IOError:
+                print "retrying wget '%s'" % (url,)
         finally:
             conexiones.release()
 
