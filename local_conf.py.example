@@ -1108,17 +1108,17 @@ CACHE_IMAGES = 1
 # Mplayer arguments for different media formats. (eg DVDs, CDs, AVI files, etc)
 # Uses a default value if nothing else matches.
 #
-# MPLAYER_ARGS = { 'dvd'    : '-cache 8192',
-#                  'vcd'    : '-cache 4096',
-#                  'cd'     : '-cache 1024 -cdda speed=2',
-#                  'tv'     : '-nocache',
-#                  'ivtv'   : '-cache 8192',
-#                  'avi'    : '-cache 5000 -idx',
-#                  'rm'     : '-cache 5000 -forceidx',
-#                  'rmvb'   : '-cache 5000 -forceidx',
-#                  'webcam' : 'tv:// -tv driver=v4l:width=352:height=288:outfmt=yuy2:device=/dev/video2',
-#                  'default': '-cache 5000'
-#                  }
+# MPLAYER_ARGS['dvd']     = '-cache 8192'
+# MPLAYER_ARGS['vcd']     = '-cache 4096'
+# MPLAYER_ARGS['cd']      = '-cache 1024 -cdda speed=2'
+# MPLAYER_ARGS['tv']      = '-nocache'
+# MPLAYER_ARGS['ivtv']    = '-cache 8192'
+# MPLAYER_ARGS['avi']     = '-cache 5000 -idx'
+# MPLAYER_ARGS['flv']     = '-nocache -forceidx'
+# MPLAYER_ARGS['rm']      = '-cache 5000 -forceidx'
+# MPLAYER_ARGS['rmvb']    = '-cache 5000 -forceidx'
+# MPLAYER_ARGS['webcam']  = 'tv:// -tv driver=v4l:width=352:height=288:outfmt=yuy2:device=/dev/video2'
+# MPLAYER_ARGS['default'] = '-cache 5000'
 
 #
 # Number of seconds before seek value times out. This is used when

@@ -1573,18 +1573,20 @@ MPLAYER_SOFTWARE_SCALER = ''
 # Mplayer arguments for different media formats. (eg DVDs, CDs, AVI files, etc)
 # Uses a default value if nothing else matches.
 #
-MPLAYER_ARGS = { 'dvd'    : '-cache 8192',
-                 'vcd'    : '-cache 4096',
-                 'cd'     : '-cache 1024 -cdda speed=2',
-                 'tv'     : '-nocache',
-                 'ivtv'   : '-cache 8192',
-                 'dvb'    : '-cache 1024',
-                 'avi'    : '-cache 5000 -idx',
-                 'rm'     : '-cache 5000 -forceidx',
-                 'rmvb'   : '-cache 5000 -forceidx',
-                 'webcam' : 'tv:// -tv driver=v4l:width=352:height=288:outfmt=yuy2:device=/dev/video2',
-                 'default': '-cache 5000'
-                 }
+MPLAYER_ARGS = {
+    'dvd'    : '-cache 8192',
+    'vcd'    : '-cache 4096',
+    'cd'     : '-cache 1024 -cdda speed=2',
+    'tv'     : '-nocache',
+    'ivtv'   : '-cache 8192',
+    'dvb'    : '-cache 1024',
+    'avi'    : '-cache 5000 -idx',
+    'flv'    : '-nocache -forceidx',
+    'rm'     : '-cache 5000 -forceidx',
+    'rmvb'   : '-cache 5000 -forceidx',
+    'webcam' : 'tv:// -tv driver=v4l:width=352:height=288:outfmt=yuy2:device=/dev/video2',
+    'default': '-cache 5000'
+}
 
 #
 # Number of seconds before seek value times out. This is used when
