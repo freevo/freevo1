@@ -18,6 +18,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 --------------------------------
 
  * Updated mouse susport so that it is optional (F#2089306)
+ * Fixed automatic CD-ROM drive detection to ignore comments (B#2085387)
 
 == Release 1.8.2 (2008-08-25) ==
 --------------------------------

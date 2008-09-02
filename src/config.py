@@ -447,6 +447,10 @@ def _debug_function_(s, level=1):
                 s = s.encode(encoding, 'replace')
             where =  traceback.extract_stack(limit = 2)[0]
             msg = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
+            if level == DWARNING:
+                print 'DJW:WARNING'
+                print 'DJW:WARNING:msg:', msg
+                print 'DJW:WARNING:s:', s
             prefix = ''
             # log all the messages
             if level <= DCRITICAL:
@@ -790,7 +794,7 @@ if ROM_DRIVES == None:
         re_cd        = re.compile('^(/dev/cdrom[0-9]*|/dev/[am]?cd[0-9]+[a-z]?)[ \t]+([^ \t]+)[ \t]+', re.I)
         re_cdrec     = re.compile('^(/dev/cdrecorder[0-9]*)[ \t]+([^ \t]+)[ \t]+', re.I)
         re_dvd       = re.compile('^(/dev/dvd[0-9]*)[ \t]+([^ \t]+)[ \t]+', re.I)
-        re_iso       = re.compile('^([^ \t]+)[ \t]+([^ \t]+)[ \t]+(iso|cd)9660', re.I)
+        re_iso       = re.compile('^([^ \t#]+)[ \t]+([^ \t]+)[ \t]+(iso|cd)9660', re.I)
         re_automount = re.compile('^none[ \t]+([^ \t]+).*supermount.*dev=([^,]+).*', re.I)
         re_bymountcd = re.compile('^(/dev/[^ \t]+)[ \t]+([^ ]*cdrom[0-9]*)[ \t]+', re.I)
         re_bymountdvd= re.compile('^(/dev/[^ \t]+)[ \t]+([^ ]*dvd[0-9]*)[ \t]+', re.I)
