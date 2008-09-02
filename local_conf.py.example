@@ -299,6 +299,12 @@ CONFIG_VERSION = 5.23
 # USE_SDL_KEYBOARD = True
 
 #
+# Process mouse events from SDL/Pygame. You want this to control Freevo
+# with a mouse
+#
+# SYS_USE_MOUSE = False
+
+#
 # Keymap to map keyboard keys to event strings. You can also add new keys
 # here, e.g. KEYMAP[key.K_x] = 'SUBTITLE'. The K_-names are defined by pygame.
 #

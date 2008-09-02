@@ -376,6 +376,7 @@ LOCAL_CONF_CHANGES = [
      Added SPEAK_WELCOME and SPEAK_SHUTDOWN for customized welcome and shutdown messages in speak plugin
      Added FREEVO_USE_ALPHABLENDING to enable alpha blending transitions between screen changes. False by default
      Renamed audio.mplayervis to audio.mplayervis1, so that audio.mplayervis2 will get noticed
+     Added SYS_USE_MOUSE option for enabling mouse support if needed. False by default
      """),
 ]
 
@@ -501,7 +502,6 @@ plugin.activate('shutdown', level=90)
 
 # -- autoshutdown menu item configuration --
 
-# SYS_SHUTDOWN_CONFIRM
 # Set to True to popup dialog boxes for confirmation.
 # this applies to menu items only.
 AUTOSHUTDOWN_CONFIRM=True
@@ -509,7 +509,6 @@ AUTOSHUTDOWN_CONFIRM=True
 
 # -- autoshutdown timer configuration --
 
-# TIMER_TIMEOUT
 # Set the timeout in minutes after which the system
 # is shutdown. The allowed idle time and the running
 # processes (see below) are evaluated to determine if
@@ -681,6 +680,12 @@ MENU_ARROW_NAVIGATION = False
 # or event devices below.
 #
 USE_SDL_KEYBOARD = True
+
+#
+# Process mouse events from SDL/Pygame. You want this to control Freevo
+# with a mouse
+#
+SYS_USE_MOUSE = False
 
 #
 # Keymap to map keyboard keys to event strings. You can also add new keys

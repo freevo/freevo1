@@ -489,75 +489,76 @@ class OSD:
             _debug_('pygame event=%s' % (event), 2)
             #print 'pygame event=%s' % (event)
 
-            if event.type == MOUSEMOTION:
-                app = self.focused_app()
-                # Menu
-                if app and hasattr(app, 'menustack'):
-                    menu = app.menustack[-1]
-                    if menu and hasattr(menu, 'choices'):
-                        for menuitem in menu.choices:
-                            if menuitem.rect.collidepoint(event.pos):
-                                app.highlight_menuitem(menuitem)
-                # Box with 2 buttons
-                elif app and hasattr(app, 'b0') and hasattr(app, 'b1'):
-                    if app.b0.rect.collidepoint(event.pos):
-                        if not app.b0.selected:
-                            app.b0.toggle_selected()
-                            app.b1.toggle_selected()
-                            app.draw()
-                    elif app.b1.rect.collidepoint(event.pos):
-                        if not app.b1.selected:
-                            app.b0.toggle_selected()
-                            app.b1.toggle_selected()
-                            app.draw()
-
-
-            if event.type == MOUSEBUTTONDOWN:
-                app = self.focused_app()
-                # Menu
-                if app and hasattr(app, 'back_one_menu'):
-                    # Left click = Enter
-                    if event.button == 1:
+            if config.SYS_USE_MOUSE:
+                if event.type == MOUSEMOTION:
+                    app = self.focused_app()
+                    # Menu
+                    if app and hasattr(app, 'menustack'):
                         menu = app.menustack[-1]
                         if menu and hasattr(menu, 'choices'):
                             for menuitem in menu.choices:
                                 if menuitem.rect.collidepoint(event.pos):
                                     app.highlight_menuitem(menuitem)
-                                    app.select_menuitem(menuitem)
-                    # Middle click
-                    elif event.button == 2:
-                        app.submenu_menuitem()
-                    # Right click = Esc
-                    elif event.button == 3:
-                        app.back_one_menu()
-                    # Wheel up
-                    elif event.button == 4:
-                        app.up_menuitem()
-                    # Wheel down
-                    elif event.button == 5:
-                        app.down_menuitem()
+                    # Box with 2 buttons
+                    elif app and hasattr(app, 'b0') and hasattr(app, 'b1'):
+                        if app.b0.rect.collidepoint(event.pos):
+                            if not app.b0.selected:
+                                app.b0.toggle_selected()
+                                app.b1.toggle_selected()
+                                app.draw()
+                        elif app.b1.rect.collidepoint(event.pos):
+                            if not app.b1.selected:
+                                app.b0.toggle_selected()
+                                app.b1.toggle_selected()
+                                app.draw()
 
-                # Box
-                elif app and hasattr(app, 'destroy'):
-                    # Left click = Enter
-                    if event.button == 1:
-                        # Box with 2 buttons
-                        if app and hasattr(app, 'b0') and hasattr(app, 'b1'):
-                            if app.b0.rect.collidepoint(event.pos):
-                                if not app.b0.selected:
-                                    app.b0.toggle_selected()
-                                    app.b1.toggle_selected()
-                                    app.draw()
-                                app.send_enter_event()
-                            elif app.b1.rect.collidepoint(event.pos):
-                                if not app.b1.selected:
-                                    app.b0.toggle_selected()
-                                    app.b1.toggle_selected()
-                                    app.draw()
-                                app.send_enter_event()
-                    # Right click = Esc
-                    elif event.button == 3:
-                        app.destroy()
+
+                if event.type == MOUSEBUTTONDOWN:
+                    app = self.focused_app()
+                    # Menu
+                    if app and hasattr(app, 'back_one_menu'):
+                        # Left click = Enter
+                        if event.button == 1:
+                            menu = app.menustack[-1]
+                            if menu and hasattr(menu, 'choices'):
+                                for menuitem in menu.choices:
+                                    if menuitem.rect.collidepoint(event.pos):
+                                        app.highlight_menuitem(menuitem)
+                                        app.select_menuitem(menuitem)
+                        # Middle click
+                        elif event.button == 2:
+                            app.submenu_menuitem()
+                        # Right click = Esc
+                        elif event.button == 3:
+                            app.back_one_menu()
+                        # Wheel up
+                        elif event.button == 4:
+                            app.up_menuitem()
+                        # Wheel down
+                        elif event.button == 5:
+                            app.down_menuitem()
+
+                    # Box
+                    elif app and hasattr(app, 'destroy'):
+                        # Left click = Enter
+                        if event.button == 1:
+                            # Box with 2 buttons
+                            if app and hasattr(app, 'b0') and hasattr(app, 'b1'):
+                                if app.b0.rect.collidepoint(event.pos):
+                                    if not app.b0.selected:
+                                        app.b0.toggle_selected()
+                                        app.b1.toggle_selected()
+                                        app.draw()
+                                    app.send_enter_event()
+                                elif app.b1.rect.collidepoint(event.pos):
+                                    if not app.b1.selected:
+                                        app.b0.toggle_selected()
+                                        app.b1.toggle_selected()
+                                        app.draw()
+                                    app.send_enter_event()
+                        # Right click = Esc
+                        elif event.button == 3:
+                            app.destroy()
 
             if event.type == KEYDOWN:
                 if not map and event.key > 30:
