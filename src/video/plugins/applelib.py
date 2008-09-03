@@ -75,7 +75,8 @@ _stream_link_res = (
         re.compile(r'''<param[^>]+name="href"[^>]+value="(?P<url>[^"]+)"[^>]*>''', re.IGNORECASE),
         re.compile(r'''<param[^>]*name="src"[^>]*value="(?P<url>[^"]*)"[^>]*>''', re.IGNORECASE),
         re.compile(r'''XHTML[(]([^)]*\'href\',)?\'(?P<url>[^\']*)\'''', re.IGNORECASE),
-        re.compile(r'''\'(?P<url>http[^\']*mov)\'''', re.IGNORECASE)
+        re.compile(r'''\'(?P<url>http[^\']*mov)\'''', re.IGNORECASE),
+        re.compile(r'''<a[^>]+href="(?P<url>http[^\"]*.mov)\?width=[0-9]+&amp;height=[0-9]+"[^>]*>''', re.IGNORECASE)
         )
 # Stream exclude regexps
 _stream_excl_res = (
@@ -170,8 +171,10 @@ class Trailers:
             if genre is not None and genre not in t["genres"]:
                 t["genres"].append(genre)
 
-        for trailer in title["trailers"]:
-            self.add_trailer(t, trailer["postdate"], trailer["url"], category)
+        # It seems apple is posting bogus data these days. Mistake,
+        # or are they starting to get annoyed by us? The "trailers"
+        # list contains useless URI:s in any case...
+        self.add_trailer(t, title["trailers"][0]["postdate"], title["location"], category)
 
     def add_trailer(self, t, date = None, url = None, category = None):
         if url is not None:
@@ -280,8 +283,8 @@ class Trailers:
         streams = []
 
         for expr in _stream_link_res:
-            m = expr.search(line)
-            if m:
+            iterator = expr.finditer(line)
+            for m in iterator:
                 stream_url = urlparse.urljoin(baseurl, m.group("url"))
 
                 size = None
@@ -293,6 +296,12 @@ class Trailers:
                     size = "1080p"
                 elif stream_url.find("1080i") != -1:
                     size = "1080i"
+                elif stream_url.find(".320.mov") != -1:
+                    size = "small"
+                elif stream_url.find(".480.mov") != -1:
+                    size = "medium"
+                elif stream_url.find(".640.mov") != -1:
+                    size = "large"
 
                 for excl in _stream_excl_res:
                     if excl.search(stream_url):
@@ -387,7 +396,7 @@ if __name__ == '__main__':
     if 1:
         t = Trailers()
         title = {"trailers":[]}
-        t._parse_trailer_page(title, "http://www.apple.com/trailers/weinstein/doadeadoralive/", None, None)
+        t._parse_trailer_page(title, "http://www.apple.com/trailers/independent/8mileshigh/", None, None)
         print title
         sys.exit(0)
 
