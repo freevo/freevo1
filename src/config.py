@@ -34,7 +34,8 @@ Try to find the freevo_config.py config file in the following places:
     3. ./freevo_config.py               Defaults from the freevo dist
 """
 
-import sys, os, time, re, string, pwd, thread
+import sys, os, time, re, string, pwd
+from threading import RLock
 import setup_freevo
 import traceback
 import __builtin__
@@ -399,7 +400,7 @@ OS_CACHEDIR, FREEVO_CACHEDIR = make_freevodir('CACHEDIR', '/var/cache', '/var/db
 #
 # Redirect stdout and stderr to stdout and /tmp/freevo.log
 #
-lock = thread.allocate_lock()
+lock = RLock()
 #if not HELPER:
 sys.stdout = Logger(sys.argv[0] + ':stdout')
 sys.stderr = Logger(sys.argv[0] + ':stderr')
@@ -447,10 +448,6 @@ def _debug_function_(s, level=1):
                 s = s.encode(encoding, 'replace')
             where =  traceback.extract_stack(limit = 2)[0]
             msg = '%s (%s): %s' % (where[0][where[0].rfind('/')+1:], where[1], s)
-            if level == DWARNING:
-                print 'DJW:WARNING'
-                print 'DJW:WARNING:msg:', msg
-                print 'DJW:WARNING:s:', s
             prefix = ''
             # log all the messages
             if level <= DCRITICAL:
