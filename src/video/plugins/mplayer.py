@@ -138,6 +138,7 @@ class MPlayer:
                     c_len = item.info.tracks[i].length
                     url = item.url + str(i+1)
 
+        url=Unicode(url)
         try:
             _debug_('MPlayer.play(): mode=%s, url=%s' % (mode, url))
         except UnicodeError:
@@ -157,6 +158,7 @@ class MPlayer:
             _debug_('MPLAYER_ARGS not defined for %r, using default' % mode, DINFO)
             mode = 'default'
 
+        _debug_('mode=%s args=%s'% (mode, config.MPLAYER_ARGS[mode]))
         # Build the MPlayer command
         args = {
             'nice': config.MPLAYER_NICE,
@@ -166,8 +168,9 @@ class MPlayer:
             'vc': '',
             'ao': '-ao %s' % config.MPLAYER_AO_DEV,
             'ao_opts': config.MPLAYER_AO_DEV_OPTS,
-            'default_args': config.MPLAYER_ARGS_DEF.split(),
-            'mode_args': config.MPLAYER_ARGS[mode].split(),
+            'default_args': config.MPLAYER_ARGS_DEF,
+            'mode_args': config.MPLAYER_ARGS[mode],
+            'fxd_args': ' '.join(options),
             'geometry': '',
             'verbose': '',
             'dvd-device': '',
@@ -270,7 +273,7 @@ class MPlayer:
             args['delay'] = '-delay -%s' % str(item.info['delay'])
 
         # autocrop
-        if config.MPLAYER_AUTOCROP and not item.network_play and str(' ').join(command).find('crop=') == -1:
+        if config.MPLAYER_AUTOCROP and not item.network_play and args['fxd_args'].find('crop=') == -1:
             _debug_('starting autocrop')
             (x1, y1, x2, y2) = (1000, 1000, 0, 0)
             crop_points = config.MPLAYER_AUTOCROP_START
@@ -306,6 +309,11 @@ class MPlayer:
         ao = filter(len, ao)
         ao = ':'.join(ao)
 
+        # process the mplayer options extracting video and audio filters
+        args['default_args'], args = self.find_filters(args['default_args'], args)
+        args['mode_args'], args = self.find_filters(args['mode_args'], args)
+        args['fxd_args'], args = self.find_filters(args['fxd_args'], args)
+
         command = ['--prio=%(nice)s' % args]
         command += ['%(cmd)s' % args]
         command += ['-slave']
@@ -314,8 +322,6 @@ class MPlayer:
         command += vo.split()
         command += str('%(vc)s' % args).split()
         command += ao.split()
-        command += args['default_args']
-        command += args['mode_args']
         command += str('%(dvd-device)s' % args).split()
         command += str('%(cdrom-device)s' % args).split()
         command += str('%(alang)s' % args).split()
@@ -328,23 +334,22 @@ class MPlayer:
         command += str('%(edl)s' % args).split()
         command += str('%(mc)s' % args).split()
         command += str('%(delay)s' % args).split()
+        command += args['default_args'].split()
+        command += args['mode_args'].split()
+        command += args['fxd_args'].split()
         if args['af']:
             command += ['-af', '%s' % ','.join(args['af'])]
         if args['vf']:
             command += ['-vf', '%s' % ','.join(args['vf'])]
 
         # use software scaler?
+        #XXX these need to be in the arg list as the scaler will add vf args
         if '-nosws' in command:
             command.remove('-nosws')
         elif '-framedrop' not in command:
             command += config.MPLAYER_SOFTWARE_SCALER.split()
 
-        if options:
-            command += options
-
         command = filter(len, command)
-
-        command = self.sort_filter(command)
 
         command += ['%(url)s' % args]
 
@@ -499,6 +504,23 @@ class MPlayer:
         self.seek_timer.cancel()
         self.seek_timer = threading.Timer(config.MPLAYER_SEEK_TIMEOUT, self.reset_seek)
         self.seek_timer.start()
+
+
+    def find_filters(self, arg, args):
+        old_options = arg.split('-')
+        new_options = []
+        for i in range(len(old_options)):
+            pair = old_options[i].split()
+            if len(pair) == 2:
+                if pair[0] == 'vf':
+                    args['vf'].append(pair[1])
+                    continue
+                elif pair[0] == 'af':
+                    args['af'].append(pair[1])
+                    continue
+            new_options.append(old_options[i])
+        arg = '-'.join(new_options)
+        return arg, args
 
 
     def sort_filter(self, command):
