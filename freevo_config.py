@@ -1069,18 +1069,20 @@ VIDEO_SHOW_DATA_DIR = None
 # The list of filename suffixes that are used to match the files that
 # are played wih MPlayer.
 #
-VIDEO_MPLAYER_SUFFIX = [ 'avi', 'mpg', 'mpeg', 'wmv', 'bin', 'rm',
-                         'divx', 'ogm', 'vob', 'asf', 'm2v', 'm2p',
-                         'mp4', 'viv', 'nuv', 'mov', 'iso',
-                         'nsv', 'mkv', 'ts', 'flv' ]
+VIDEO_MPLAYER_SUFFIX = [
+    'avi', 'mpg', 'mpeg', 'wmv', 'bin', 'rm', 'divx', 'ogm', 'vob', 'asf',
+    'm2v', 'm2p', 'mp4', 'viv', 'nuv', 'mov', 'iso', 'nsv', 'mkv', 'ogg',
+    'ts', 'flv',
+]
 
 #
 # The list of filename suffixes that are used to match the files that
 # are played wih Xine.
 #
-VIDEO_XINE_SUFFIX = [ 'avi', 'mpg', 'mpeg', 'rm', 'divx', 'ogm',
-                      'asf', 'm2v', 'm2p', 'mp4', 'mov', 'cue',
-                      'ts', 'iso', 'vob' ]
+VIDEO_XINE_SUFFIX = [
+    'avi', 'mpg', 'mpeg', 'rm', 'divx', 'ogm', 'asf', 'm2v', 'm2p', 'mp4',
+    'mov', 'cue', 'ts', 'iso', 'vob',
+]
 
 #
 # Preferred video player (ranking, first one is most wanted!)
@@ -1137,7 +1139,9 @@ AUDIO_ITEMS = None
 # The list of filename suffixes that are used to match the files that
 # are played as audio.
 #
-AUDIO_SUFFIX = [ 'mp3', 'ogg', 'wav', 'm4a', 'wma', 'aac', 'flac', 'mka', 'ac3' ]
+AUDIO_SUFFIX = [
+    'mp3', 'ogg', 'wav', 'm4a', 'wma', 'aac', 'flac', 'mka', 'ac3',
+]
 
 #
 # Regular expression used to recognize filenames which are likely to be
@@ -2222,7 +2226,12 @@ DEBUG_IDLEBAR = 0
 #
 DEBUG_CHILDAPP = 0
 
+# Enable the timing of the event handler
 DEBUG_TIME = 0
+
+# Enable the benchmarking wrapper, when active prints the duration of a function call
+# We could be more specific and use a bit pattern to enable certain parts, like skins, tv, etc.
+DEBUG_BENCHMARKING = 0
 
 # The default logging level
 # can be one of CRITICAL (FATAL), ERROR, WARNING (WARN), INFO, DEBUG, NOTSET
