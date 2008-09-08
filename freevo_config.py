@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.25
+LOCAL_CONF_VERSION = 5.26
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -377,6 +377,9 @@ LOCAL_CONF_CHANGES = [
      Added FREEVO_USE_ALPHABLENDING to enable alpha blending transitions between screen changes. False by default
      Renamed audio.mplayervis to audio.mplayervis1, so that audio.mplayervis2 will get noticed
      Added SYS_USE_MOUSE option for enabling mouse support if needed. False by default
+     """),
+    (5.26,
+     """
      """),
 ]
 
@@ -1591,6 +1594,7 @@ MPLAYER_ARGS = {
     'dvb'    : '-cache 1024',
     'avi'    : '-cache 5000 -idx',
     'flv'    : '-nocache -forceidx',
+    'mp4'    : '-nocache -forceidx',
     'rm'     : '-cache 5000 -forceidx',
     'rmvb'   : '-cache 5000 -forceidx',
     'webcam' : 'tv:// -tv driver=v4l:width=352:height=288:outfmt=yuy2:device=/dev/video2',

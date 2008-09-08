@@ -50,7 +50,7 @@
 #
 # -----------------------------------------------------------------------
 
-CONFIG_VERSION = 5.23
+CONFIG_VERSION = 5.26
 
 # ======================================================================
 # General freevo settings:
@@ -1126,6 +1126,7 @@ CACHE_IMAGES = 1
 # MPLAYER_ARGS['ivtv']    = '-cache 8192'
 # MPLAYER_ARGS['avi']     = '-cache 5000 -idx'
 # MPLAYER_ARGS['flv']     = '-nocache -forceidx'
+# MPLAYER_ARGS['mp4']     = '-nocache -forceidx'
 # MPLAYER_ARGS['rm']      = '-cache 5000 -forceidx'
 # MPLAYER_ARGS['rmvb']    = '-cache 5000 -forceidx'
 # MPLAYER_ARGS['webcam']  = 'tv:// -tv driver=v4l:width=352:height=288:outfmt=yuy2:device=/dev/video2'
