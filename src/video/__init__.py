@@ -86,6 +86,7 @@ class PluginInterface(plugin.MimetypePlugin):
 
         hidden_files = []
 
+        pat = re.compile(config.VIDEO_AUTOJOIN_REGEX)
         for file in all_files:
             if parent and parent.type == 'dir' and \
                    hasattr(parent, 'VIDEO_DIRECTORY_AUTOBUILD_THUMBNAILS') and \
@@ -99,45 +100,35 @@ class PluginInterface(plugin.MimetypePlugin):
             x = VideoItem(file, parent)
 
             # join video files
-            if config.VIDEO_AUTOJOIN and file.find('1') > 0:
-                pos = 0
-                for count in range(file.count('1')):
-                    # only count single digests
-                    if file[pos+file[pos:].find('1')-1] in string.digits or \
-                           file[pos+file[pos:].find('1')+1] in string.digits:
-                        pos += file[pos:].find('1') + 1
-                        continue
+            if config.VIDEO_AUTOJOIN:
+                mat = pat.search(file)
+                if mat is not None:
                     add_file = []
-                    missing  = 0
-                    for i in range(2, 6):
-                        current = file[:pos] + file[pos:].replace('1', str(i), 1)
-                        if current in all_files:
-                            add_file.append(current)
-                            end = i
-                        elif not missing:
-                            # one file missing, stop searching
-                            missing = i
-
-                    if add_file and missing > end:
-                        if len(add_file) > 3:
-                            # more than 4 files, I don't belive it
+                    start = mat.start()
+                    end = mat.end() - 1
+                    stem = file[:start]
+                    tail = file[end:]
+                    next = 2
+                    for f in all_files:
+                        next_str = '%0*d' % (end-start, next)
+                        filename = stem+next_str+tail
+                        if filename in all_files:
+                            add_file.append(filename)
+                        else:
                             break
-                        # create new name
-                        name = file[:pos] + file[pos:].replace('1', '1-%s' % end, 1)
+                        next += 1
+                    if len(add_file) > 0:
+                        name = stem+tail
                         x = VideoItem(name, parent)
                         x.files = FileInformation()
                         x.set_url(file, True)
-                        for f in [ file ] + add_file:
-                            x.files.append(f)
-                            x.subitems.append(VideoItem(f, x))
-                            hidden_files.append(f)
-                        break
-                    else:
-                        pos += file[pos:].find('1') + 1
-
+                        for filename in add_file:
+                            x.files.append(filename)
+                            x.subitems.append(VideoItem(filename, x))
+                            hidden_files.append(filename)
+                        
             if parent.media:
-                file_id = String(parent.media.id) + \
-                          file[len(os.path.join(parent.media.mountdir, "")):]
+                file_id = String(parent.media.id) + file[len(os.path.join(parent.media.mountdir, "")):]
                 try:
                     x.mplayer_options = discset_information[file_id]
                     _debug_('x.mplayer_options=%r' % x.mplayer_options)

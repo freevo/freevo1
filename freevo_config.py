@@ -379,7 +379,7 @@ LOCAL_CONF_CHANGES = [
      Added SYS_USE_MOUSE option for enabling mouse support if needed. False by default
      """),
     (5.26,
-     """
+     """ Added VIDEO_AUTOJOIN_REGEX to allow joining video files based on a regular expression
      """),
 ]
 
@@ -1106,6 +1106,11 @@ VIDEO_ONLY_SCAN_DATADIR = 1
 # item
 #
 VIDEO_AUTOJOIN = 1
+#
+# join files based on the regular expression
+# seaches for 1, 01, 001, etc before a '.'; possibly too simple
+#
+VIDEO_AUTOJOIN_REGEX='(0*1)\.'
 
 #
 # try to find out if deinterlacing is needed or not

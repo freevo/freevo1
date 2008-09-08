@@ -693,6 +693,11 @@ CACHE_IMAGES = 1
 # item
 #
 # VIDEO_AUTOJOIN = 1
+#
+# join files based on the regular expression
+# seaches for 1, 01, 001, etc before a '.'; possibly too simple
+#
+# VIDEO_AUTOJOIN_REGEX='(0*1)\.'
 
 #
 # try to find out if deinterlacing is needed or not
