@@ -104,8 +104,8 @@ class PluginInterface(plugin.MimetypePlugin):
                 mat = pat.search(file)
                 if mat is not None:
                     add_file = []
-                    start = mat.start()
-                    end = mat.end() - 1
+                    start = file.find(mat.group(1), mat.start())
+                    end = start + len(mat.group(1))
                     stem = file[:start]
                     tail = file[end:]
                     next = 2
