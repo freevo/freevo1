@@ -33,6 +33,7 @@
 
 import sys
 import os
+from optparse import OptionParser
 
 try:
     import config
@@ -44,23 +45,37 @@ except ImportError:
 from util.fxdimdb import FxdImdb, makeVideo
 from random import Random
 
-def usage():
-    print 'freevo imdb -s string:   search imdb for string'
-    print
-    print 'freevo imdb -g filename:   guess imdb for possible filename match'
-    print
-    print 'freevo imdb [--rom-drive=/path/to/device] num <output> <files>'
-    print '  Generate <output>.fxd for the movie.'
-    print '  Files is a list of files that belongs to this movie.'
-    print '  Use [dvd|vcd] to add the whole disc or use [dvd|vcd][title]'
-    print '  to add a special DVD or VCD title to the list of files'
-    print
-    print 'freevo imdb [--rom-drive=/path/to/device] -a <fxd-file> <file>'
-    print '  add file to fxd-file.fxd'
-    print
-    print 'If no rom-drive is given and one is required, /dev/cdrom is assumed'
-    print
-    sys.exit(1)
+
+def parse_options(defaults):
+    """
+    Parse command line options
+    """
+    parser = OptionParser(version='%prog 1.0', conflict_handler='resolve', usage="""
+Search IMDB for a movie
+
+Usage: %prog imdb [options] <search> [<output> <video file> [<video file>]]
+
+Generate <output>.fxd for the movie.  Files is a list of files that belongs to
+this movie.  Use [dvd|vcd] to add the whole disc or use [dvd|vcd][title] to add
+a special DVD or VCD title to the list of files""")
+    parser.add_option('-v', '--verbose', action='count', default=0,
+        help='set the level of verbosity [default:%default]')
+    parser.add_option('-s', '--search', action='store_true', dest='search', default=False,
+        help='search imdb for string [default:%default]')
+    parser.add_option('-g', '--guess', action='store_true', dest='guess', default=False,
+        help='search imdb for possible filename match [default:%default]')
+    parser.add_option('--tv', action='store_true', dest='tv', default=False,
+        help='specify the search is a tv programme [default:%default]')
+    parser.add_option('--season', dest='season', default=None,
+        help='specify the season in the search [default:%default]')
+    parser.add_option('--episode', dest='episode', default=None,
+        help='specify the episode in the search [default:%default]')
+    parser.add_option('-d', '--rom-drive', action='store', dest='rom_drive',
+        help='specify the CD/DVD device [default:%default]')
+    parser.add_option('-a', '--add', action='store_true', dest='add', default=False,
+        help='add a video file to the fxd file [default:%default]')
+    return parser.parse_args()
+
 
 def parse_file_args(input):
     files = []
@@ -73,127 +88,108 @@ def parse_file_args(input):
     return files, cdid
 
 
+
 #
 # Main function
 #
 if __name__ == "__main__":
-    import getopt
-
     drive = '/dev/cdrom'
-    driveset = FALSE
+    driveset = False
 
     task = ''
     search_arg = ''
 
+    (opts, args) = parse_options({})
 
+    # check the aruments
+    if opts.search and opts.guess:
+        sys.exit(u'--search and --guess are mutually exclusive')
+    elif opts.add and len(args != 2):
+        sys.exit(u'--add requires <fxd filename> <video file>')
+    elif opts.search and len(args) < 1:
+        sys.exit(u'--search requires <search pattern>')
+    elif opts.guess and len(args) < 1:
+        sys.exit(u'--guess requires <guess pattern>')
+    tv_marker = (opts.tv or opts.season or opts.episode) and '"' or ''
 
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], 'ag:s:', ('rom-drive=','list-guess='))
-    except getopt.GetoptError:
-        usage()
-        pass
-
-    for o, a in opts:
-        if o == '-a':
-            if task:
-                usage()
-            task = 'add'
-
-        if o == '-s':
-            if task:
-                usage()
-            task = 'search'
-            search_arg = a
-
-        if o == '-g':
-            if task:
-                usage()
-            task = 'guess'
-            search_arg = a
-
-        if o == '--rom-drive':
-            drive=a
-            driveset = TRUE
+    if opts.rom_drive is not None:
+        driveset = True
 
     fxd = FxdImdb()
 
-    if task == 'add':
-        if len(args) == 2:
-            usage()
+    if opts.add:
+        fxd.setFxdFile(args[0])
         fxd.setFxdFile(arg[0])
-        if fxd.isDiscset() == TRUE:
-            fxd.setDiscset(drive, None)
-        elif fxd.isDiscset() == FALSE:
+        if fxd.isDiscset() is None:
+            sys.exit(u'Fxd file is not valid, updating failed')
+        elif fxd.isDiscset():
+            fxd.setDiscset(opts.rom_drive, None)
+        else:
             type = 'file'
             if arg[1].find('[dvd]') != -1: type = 'dvd'
             if arg[1].find('[vcd]') != -1: type = 'vcd'
 
             id = abs( Random() * 100 )
-            if driveset == TRUE:
-                video = makeVideo(type, 'f' + str(id), arg[1], device=drive)
-            else : video = makeVideo(type, 'f' + str(id), arg[1])
+            if driveset:
+                video = makeVideo(type, 'f'+str(id), arg[1], device=opts.rom_drive)
+            else:
+                video = makeVideo(type, 'f'+str(id), arg[1])
             fxd.setVideo(video)
-        else:
-            print 'Fxd file is not valid, updating failed'
-            sys.exit(1)
         fxd.writeFxd()
         sys.exit(0)
 
-    if task == 'search':
-        if len(args) != 0:
-            usage()
-
-        filename = search_arg
-        print "Searching IMDB for '%s'..." % filename
-        results = fxd.searchImdb(filename)
-        _debug_('%r' % results)
+    if opts.search:
+        title = tv_marker+' '.join(args)+tv_marker
+        print "Searching IMDB for '%s'..." % title
+        results = fxd.searchImdb(title, opts.season, opts.episode)
         if len(results) == 0:
             print 'No results'
         for result in results:
             if result[3]:
-                print '%s   %s (%s) %s' % result
+                print 'http://www.imdb.com/title/tt%s/  %s  %s (%s) %s' % (result[:1] + result[:4])
+            elif result[2]:
+                print 'http://www.imdb.com/title/tt%s/  %s  %s (%s)' % (result[:1] + result[:3])
             else:
-                print '%s   %s (%s)' % (result[0], result[1], result[2])
+                print 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
         sys.exit(0)
 
-
-    if task == 'guess':
-        filename = search_arg
+    if opts.guess:
+        filename = ' '.join(args)
         print "Searching IMDB for '%s'..." % filename
         results = fxd.guessImdb(filename)
         if len(results) == 0:
             print 'No results'
-        _debug_('%r' % results)
         for result in results:
             if result[3]:
-                print '%s   %s (%s) %s' % result
+                print 'http://www.imdb.com/title/tt%s/  %s  %s (%s) %s' % (result[:1] + result[:4])
+            elif result[2]:
+                print 'http://www.imdb.com/title/tt%s/  %s  %s (%s)' % (result[:1] + result[:3])
             else:
-                print '%s   %s (%s)' % (result[0], result[1], result[2])
+                print 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
         sys.exit(0)
 
     # normal usage
-    if len(args) < 2:
-        usage()
-
+    if len(args) < 3:
+        sys.exit(u'requires <imdb id> <fxd filename> <video file>|<cd id>')
     imdb_number = args[0]
     filename = args[1]
 
-
     files, cdid = parse_file_args(args[2:])
-
     if not (files or cdid):
-        usage()
+        sys.exit(u'no files or CDID specified')
 
-    fxd.setImdbId(imdb_number)
-    fxd.setFxdFile(filename)
+    fxd.getIMDBid(imdb_number, opts.season, opts.episode)
+    fxd.setFxdFile(filename, overwrite=True)
 
     x=0
     for file in files:
         type = 'file'
         if file.find('[dvd]') != -1: type = 'dvd'
         if file.find('[vcd]') != -1: type = 'vcd'
-        if driveset == TRUE: video = makeVideo(type, 'f' + str(x) , file, device=drive)
-        else: video = makeVideo(type, 'f' + str(x), file)
+        if driveset:
+            video = makeVideo(type, 'f'+str(x), file, device=drive)
+        else:
+            video = makeVideo(type, 'f'+str(x), file)
         fxd.setVideo(video)
         x = x+1
 
