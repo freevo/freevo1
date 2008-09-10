@@ -20,6 +20,8 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Updated mouse susport so that it is optional (F#2089306)
  * Updated apple trailers (F#2089598)
  * Fixed automatic CD-ROM drive detection to ignore comments (B#2085387)
+ * Fixed imdb helper to currectly handle dates when available (B#2075291)
+ * Fixed joy plug-in to remove any pending events when enabled (B#1916407)
  * Fixed mplayer crash when auto cropping is enabled (B#2089592)
 
 == Release 1.8.2 (2008-08-25) ==

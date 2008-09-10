@@ -92,7 +92,7 @@ class Game:
 
         if plugin.is_active('joy'):
             try:
-                plugin.getbyname('JOY').enable(FALSE)
+                plugin.getbyname('JOY').disable()
             except Exception, why:
                 _debug_('getbyname("JOY"): %s' % why, DWARNING)
 
@@ -111,7 +111,7 @@ class Game:
         rc.resume()
         if plugin.is_active('joy'):
             try:
-                plugin.getbyname('JOY').enable(TRUE)
+                plugin.getbyname('JOY').enable()
             except Exception, why:
                 _debug_('getbyname("JOY"): %s' % why, DWARNING)
 
