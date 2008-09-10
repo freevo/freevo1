@@ -19,9 +19,13 @@
 #       YOUTUBE_VIDEOS = [
 #           ('user1', 'description1'),
 #           ('user2', 'description2'),
+#           ('standardfeed_1', 'description'),
+#           ('standardfeed_2', 'description'),
 #           ...
 #       ]
+#       Standard feeds as http://code.google.com/apis/youtube/reference.html#Standard_feeds
 #       YOUTUBE_DIR = '/tmp/'
+#       YOUTUBE_REGION_CODE as http://code.google.com/apis/youtube/reference.html#Region_specific_feeds
 #
 # ToDo:
 #
@@ -71,6 +75,8 @@ from subprocess import Popen
 from item import Item
 from gui.PopupBox import PopupBox
 
+standardfeeds=['top_rated', 'top_favorites', 'most_viewed', 'most_popular', 'most_recent', 'most_discussed', 'most_linked', 'most_responded', 'recently_featured', 'watch_on_mobile']
+
 try:
     from xml.etree import cElementTree as ElementTree
 except ImportError:
@@ -94,9 +100,13 @@ class PluginInterface(plugin.MainMenuPlugin):
     | YOUTUBE_VIDEOS = [
     |     ('user1', 'description1'),
     |     ('user2', 'description2'),
+    |     ('standardfeed_1', 'description'),
+    |     ('standardfeed_2', 'description'),
     |     ...
     | ]
+    | Standard feeds as http://code.google.com/apis/youtube/reference.html#Standard_feeds
     | YOUTUBE_DIR = '/tmp/'
+    | YOUTUBE_REGION_CODE as http://code.google.com/apis/youtube/reference.html#Region_specific_feeds
     """
     def __init__(self):
         _debug_('PluginInterface.__init__()', 2)
@@ -120,8 +130,9 @@ class PluginInterface(plugin.MainMenuPlugin):
         _debug_('config()', 2)
         return [
             ('YOUTUBE_VIDEOS', None, 'id and description to get/watch videos of youtube'),
-            ('YOUTUBE_DIR', config.FREEVO_CACHEDIR + '/youtube', 'directory to save youtube videos'),
-            ('YOUTUBE-DL', 'youtube-dl', 'The you tube downloader'),
+            ('YOUTUBE_DIR', config.FREEVO_CACHEDIR + '/youtube', 'directory to save youtube files'),
+            ('YOUTUBE-DL', 'youtube-dl', 'The youtube downloader'),
+            ('YOUTUBE_REGION_CODE', None, 'To retrieve region-specific standard feeds'),
         ]
 
 
@@ -236,7 +247,14 @@ class YoutubeVideo(Item):
         """Get the video list for a specific user"""
         _debug_('video_list(parent=%r, title=%r, user=%r)' % (parent, title, user), 2)
         items = []
-        feed = 'http://gdata.youtube.com/feeds/users/' + user + '/uploads?orderby=updated'
+        if user in standardfeeds:
+            feed  = 'http://gdata.youtube.com/feeds/base/standardfeeds/'
+            if config.YOUTUBE_REGION_CODE:
+                feed += config.YOUTUBE_REGION_CODE + '/'
+            feed += user + '?time=today'
+        else:
+            feed = 'http://gdata.youtube.com/feeds/users/' + user + '/uploads?orderby=updated'
+        feed += '&max-results=50'
         service = gdata.service.GDataService(server='gdata.youtube.com')
         box = PopupBox(text=_('Loading video list'))
         box.show()
