@@ -47,7 +47,7 @@ import urllib, urllib2, urlparse
 import sys
 import codecs
 import os
-from BeautifulSoup import BeautifulSoup
+from BeautifulSoup import BeautifulSoup, NavigableString
 
 import config
 import util
@@ -126,6 +126,7 @@ class FxdImdb:
     @benchmark(benchmarking)
     def guessImdb(self, filename, label=False):
         """Guess possible imdb movies from file name. Same return as searchImdb"""
+        _debug_('guessImdb(filename=%r, label=%r)' % (filename, label))
 
         # Special name rule for the encoding server
         m = re.compile('DVD \[([^]]*).*')
@@ -192,12 +193,13 @@ class FxdImdb:
         @type name: string
         @returns: id list with tuples (id, name, year, type)
         """
+        _debug_('searchImdb(name=%r, season=%r, episode=%r)' % (name, season, episode))
         tv_marker = (season and episode) and '"' or ''
         name = tv_marker+name.strip().strip(tv_marker)+tv_marker
         _debug_('searching imdb for "%s"' % (name))
         url = 'http://us.imdb.com/Tsearch?title=%s&restrict=Movies+and+TV' % urllib.quote(str(name))
         url = 'http://www.imdb.com/find?s=tt;site=aka;q=%s' % urllib.quote(str(name))
-        _debug_('url="%s"' % (url))
+        _debug_('url="%s"' % (url,))
 
         req = urllib2.Request(url, txdata, txheaders)
         searchstring = name
@@ -776,7 +778,9 @@ class FxdImdb:
     @benchmark(benchmarking)
     def parsesearchdata(self, results, id=0):
         """results (imdb html page), imdb_id
-        Returns tuple of (title, info(dict), image_urls)"""
+        @returns: tuple of (title, info(dict), image_urls)
+        """
+        _debug_('parsesearchdata(results=%r, id=%r)' % (results, id))
 
         self.id_list = []
         m = re.compile('/title/tt([0-9]*)/')
@@ -788,8 +792,8 @@ class FxdImdb:
             idm = m.search(item['href'])
             if not idm:
                 continue
-            yrm = y.findall(item.next.next)
-            #print yrm
+            if isinstance(item.next.next, NavigableString):
+                yrm = y.findall(item.next.next)
 
             id = idm.group(1)
             name = item.string
