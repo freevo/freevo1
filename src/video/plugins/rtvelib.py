@@ -100,8 +100,10 @@ class ParsePrograma(Thread):
             progHTML = progHTML[progHTML.find('h2'):]
             if progHTML.find('. La 1. ')>0:
                 canal = 'La Primera'
-            else:
+            elif progHTML.find('. La 2. ')>0:
                 canal = 'La 2'
+            else:
+                canal = 'Archivo'
 
             #description
             if progHTML.find('<p>')>0:
@@ -134,7 +136,7 @@ class ParsePrograma(Thread):
                 }
             finally:
                 lockProgs.release()
-            
+
         finally:
 
             global progsAnalizados,totalProgramas
@@ -161,8 +163,11 @@ class ParseLetra(Thread):
 
         for numero in range(1,99):
 
-            try: 
-                url = 'http://www.rtve.es/alacarta/todos/abecedario/%s.html?page=%s' % (self.letra,numero)
+            try:
+                if self.letra == '!':
+                    url = 'http://www.rtve.es/alacarta/archivo/index.html?page=%s' % numero
+                else:
+                    url = 'http://www.rtve.es/alacarta/todos/abecedario/%s.html?page=%s' % (self.letra,numero)
                 pagina = dl(url)
             except:
                 continue
@@ -180,9 +185,9 @@ class ParseLetra(Thread):
                 break
 
             while pagina.find('<li id="video-')>=0:
- 
+
                 pagina = pagina[pagina.find('<li id="video-')+14:]
-                
+
                 if self.blackList:
                     pTitulo = pagina[pagina.find('<h3>')+4:pagina.find('</h3>')]
                     pTitulo = decodeAcute(pTitulo).lower()
@@ -193,25 +198,25 @@ class ParseLetra(Thread):
                             encontrado = True
                             progsAnalizados += 1
                     if encontrado: continue
-                    
+
                 idProg = pagina[:pagina.find('"')]
- 
+
                 pagina = pagina[pagina.find('<img src="')+10:]
                 image = 'http://www.rtve.es/' + pagina[:pagina.find('"')]
- 
+
                 pagina = pagina[pagina.find('<p>')+3:]
                 descripcion = pagina[:pagina.find('</p>')]
- 
+
                 pagina = pagina[pagina.find('<span>')+6:]
                 fecha = pagina[:pagina.find('<br>')].replace('\n','').replace('\t','').replace(' ','')[8:].replace('[',' [')
-                
+
                 #parses program pages
                 t = ParsePrograma(self.callback,idProg,image,descripcion,fecha)
                 t.start()
                 threads.append(t)
-                
+
             if actual == total:
-                break 
+                break
 
 
 class Programacion:
@@ -224,18 +229,18 @@ class Programacion:
         threads = []
 
     def parse(self, callback = None, blackList = None):
-        
+
         #iterate thru letters
-        letras = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-        #letras = ['B']
+        letras = ['!','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+        #letras = ['!']
         for letra in letras:
             t = ParseLetra(callback,letra,blackList)
             t.start()
             threads.append(t)
-        
+
         for thread in threads:
             thread.join()
-        
+
         self.programas = progs
 
     def sort_by_title(self):
@@ -257,5 +262,5 @@ if __name__ == '__main__':
     programacion = Programacion()
     programacion.parse(progress,['berni'])
     print "Programas parseados: %s " % len(programacion.programas.keys())
- 
+
     pickle.dump(programacion.programas, file("rtve.dump", "w"))

@@ -93,12 +93,12 @@ class RtveItem(Item):
             self.__last_perc = percent
 
     def __load(self):
-        
+
         if hasattr(config, 'RTVE_BLACKLIST'):
             blackList = config.RTVE_BLACKLIST
         else:
             blackList = None
-                    
+
         pfile = os.path.join(cachedir, 'data')
 
         if (os.path.isfile(pfile) == 0):
@@ -120,21 +120,21 @@ class RtveItem(Item):
                 util.fileops.save_pickle(self.programacion, pfile)
             else:
                 self.programacion = util.fileops.read_pickle(pfile)
-        
+
 
 class ProgramaVideoItem(VideoItem):
     def __init__(self, menu_entry, programa, parent):
         VideoItem.__init__(self, programa["flv"], parent)
-        
+
         self.mode = ''
         self.files = ''
         self.image = _fetch_image(programa['image'])
-        
+
         if menu_entry == _("Reproducir a pantalla completa (16:9)"):
             self.mplayer_options = "-vf crop=624:351:0:58"
-        
+
         self.name = menu_entry
-        
+
 
 class MenuPrograma(Item):
     def __init__(self, programa, parent):
@@ -230,6 +230,7 @@ class BrowseByCanal(RtveItem):
         canales = []
         canales.append(Canal('La Primera',self))
         canales.append(Canal('La 2',self))
+        canales.append(Canal('Archivo',self))
         menuw.pushmenu(menu.Menu(_('Elige un canal'), canales))
 
 class BrowseBy(Item):
