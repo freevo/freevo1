@@ -445,7 +445,8 @@ class RemovableMedia:
                     try:
                         if self.cdc & CDC_DRIVE_STATUS:
                             cds = ioctl(fd, CDROM_DRIVE_STATUS)
-                            cis = ioctl(fd, CDROM_DISC_STATUS)
+                            if cds == CDS_DISC_OK:
+                                cis = ioctl(fd, CDROM_DISC_STATUS)
                     except Exception, e:
                         _debug_('getting drive status for %r failed: %s' % (self.devicename, e), DWARNING)
                 _debug_('drive status for %s (%r:%s) is %s' % \
@@ -796,8 +797,7 @@ class Identify_Thread(threading.Thread):
             media.type = None
             title = '%s [%s]' % (media.drivename, label)
 
-
-        # set the infos we have now
+        # set the info we have now
         if title:
             media.item.name = title
 
@@ -809,7 +809,6 @@ class Identify_Thread(threading.Thread):
 
         if fxd_file and not media.item.fxd_file:
             media.item.set_fxd_file(fxd_file)
-
 
         # One video in the root dir. This sounds like a disc with one
         # movie on it. Save the information about it and autostart will
