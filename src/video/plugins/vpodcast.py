@@ -72,6 +72,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     | ]
     |
     | VPODCAST_DIR = '/path/to/vpodcasts'
+    | for other options type: "freevo plugins -i video.vpodcast"
     """
     @benchmark(benchmarking)
     def __init__(self):
@@ -91,7 +92,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('YOUTUBE_PASSWORD', None, 'YouTube password (optional)'),
             ('YOUTUBE_FORMAT', '18', 'YouTube format 18=high 17=mobile (optional)'),
             ('VPODCAST_BUFFERING_TIME', 20, 'Length of time to wait while fetching the poscast'),
-            ('VPODCAST_BUFFERING_SIZE', 512*1024, 'size of fetched file before starting to play it'),
+            ('VPODCAST_BUFFERING_SIZE', 512*1024, 'Size of fetched file before starting to play it'),
         ]
 
 
