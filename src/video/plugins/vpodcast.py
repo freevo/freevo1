@@ -28,7 +28,7 @@
 __author__ = 'Krasimir Atanasov'
 __author_email__ = 'atanasov.krasimir@gmail.com'
 
-import urllib2, os, threading, urllib, time, re, string
+import urllib2, os, stat, threading, urllib, time, re, string
 import config, menu, rc, plugin, util, skin
 import util.feedparser
 from item import Item
@@ -76,9 +76,6 @@ class PluginInterface(plugin.MainMenuPlugin):
     @benchmark(benchmarking)
     def __init__(self):
         """ Initialise the Video postcast plug-in interface """
-        if config.VPODCAST_DIR is None:
-            self.reason = 'VPODCAST_DIR not set'
-            return
         plugin.MainMenuPlugin.__init__(self)
         self.plugin_name = 'vpodcast'
         self.check_dir()
@@ -93,8 +90,8 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('YOUTUBE_USERNAME', None, 'YouTube user name (optional)'),
             ('YOUTUBE_PASSWORD', None, 'YouTube password (optional)'),
             ('YOUTUBE_FORMAT', '18', 'YouTube format 18=high 17=mobile (optional)'),
-            ('VPODCAST_BUFFERING_TIME', 20, 'Length of time to wait while buffering the poscast'),
-            ('VPODCAST_BUFFERING_SIZE', 20*1024, 'size of downloaded file to start playing'),
+            ('VPODCAST_BUFFERING_TIME', 20, 'Length of time to wait while fetching the poscast'),
+            ('VPODCAST_BUFFERING_SIZE', 2*1024*1024, 'size of fetched file before starting to play it'),
         ]
 
 
@@ -110,8 +107,8 @@ class PluginInterface(plugin.MainMenuPlugin):
             _debug_('%r does not exist, directory created' % (config.VPODCAST_DIR))
             os.makedirs(config.VPODCAST_DIR)
 
-        for pcdir in config.VPODCAST_LOCATIONS:
-            podcastdir = os.path.join(config.VPODCAST_DIR, pcdir[0].strip().replace(' ', '_').lower())
+        for name, rss_url in config.VPODCAST_LOCATIONS:
+            podcastdir = os.path.join(config.VPODCAST_DIR, _name_to_filename(name))
             if not os.path.isdir(podcastdir):
                 os.makedirs(podcastdir)
 
@@ -135,43 +132,92 @@ class VPodcastMainMenuItem(MenuItem):
 
 
     @benchmark(benchmarking)
+    def create_podcast_menu(self, arg=None, menuw=None):
+        """ Create the main menu item for the video podcasts """
+        podcast_menu_items = []
+
+        for name, rss_url in config.VPODCAST_LOCATIONS:
+            podcastdir = _name_to_filename(name)
+            image_path = os.path.join(config.VPODCAST_DIR, podcastdir, 'cover.jpg')
+
+            podcast_menu_items += [ menu.MenuItem(name, action=self.create_podcast_submenu,
+                arg=(name, rss_url), image=image_path) ]
+
+        podcast_main_menu = menu.Menu(_('Video Podcasts'), podcast_menu_items)
+        rc.app(None)
+        menuw.pushmenu(podcast_main_menu)
+        menuw.refresh()
+
+
+    @benchmark(benchmarking)
     def create_podcast_submenu(self, arg=None, menuw=None, image=None):
         """ create the sub-menu for the podcast """
-        dir, url = arg
-        podcastdir = dir.strip().replace(' ', '_').lower()
+        name, rss_url = arg
+        podcastdir = _name_to_filename(name)
 
-        popup = PopupBox(text=_('Fetching podcast...'))
+        popup = PopupBox(text=_('Fetching podcast items...'))
         popup.show()
         try:
-            p = Podcast(url)
+            p = Podcast(rss_url)
             feed = p.feed()
             rss_title = p.rss_title()
+            rss_stitle = _name_to_filename(rss_title)
             rss_description = p.rss_description()
             rss_imageurl = p.rss_image()
             if rss_imageurl:
-                filename = rss_title.strip().replace(' ', '_').lower()
-                image = os.path.join(config.VPODCAST_DIR, podcastdir, filename+'.jpg')
-                self.download(rss_imageurl, image)
+                image_path = os.path.join(config.VPODCAST_DIR, podcastdir, 'cover.jpg')
+                if not os.path.exists(image_path):
+                    self.download(rss_imageurl, image_path)
             else:
-                image = None
+                image_path = None
 
             podcast_items = []
             for item in feed.entries:
-                #pprint(item) #DJW
                 try:
-                    item_title = p.rss_item_title(item)
-                    item_image = p.rss_item_image(item)
                     item_link = p.rss_item_link(item)
+                    if item_link is None:
+                        raise PodcastException
+                    item_title = p.rss_item_title(item)
+                    item_stitle = _name_to_filename(item_title)
+                    item_image_url = p.rss_item_image(item)
+                    if item_image_url is None:
+                        item_image_url = rss_imageurl
+                    item_mimetype = p.rss_item_mimetype(item)
+                    item_updated = p.rss_item_updated(item)
                     isYT = item_link.find('youtube.com')
                     isMC = item_link.find('metacafe.com')
-                    name = item_title.strip().replace(' ', '_').lower()
-                    file_ext = isYT >= 0 and config.YOUTUBE_FORMAT == '18' and '.mp4' \
-                            or isYT >= 0 and config.YOUTUBE_FORMAT == '17' and '.3gp' \
-                            or isMC >= 0 and '.flv' \
-                            or '.avi'
-                    filename = os.path.join(config.VPODCAST_DIR, podcastdir, name+file_ext)
-                    podcast_items += [ menu.MenuItem(item_title, action=VPVideoItem(filename, item_link, self),
-                        arg=None, image=image) ]
+                    item_ext = isYT >= 0 and config.YOUTUBE_FORMAT == '18' and 'mp4' \
+                            or isYT >= 0 and config.YOUTUBE_FORMAT == '17' and '3gp' \
+                            or item_mimetype == 'video/mpeg' and 'mpeg' \
+                            or item_mimetype == 'video/quicktime' and 'mov' \
+                            or item_mimetype == 'video/x-la-asf' and 'asf' \
+                            or item_mimetype == 'video/x-ms-asf' and 'asf' \
+                            or item_mimetype == 'video/x-msvideo' and 'avi' \
+                            or item_mimetype == 'video/x-m4v' and 'mp4' \
+                            or item_mimetype == 'application/x-shockwave-flash' and 'flv' \
+                            or ''
+                    if not item_ext:
+                        item_ext = 'avi'
+                    results = [{
+                        'id':       u'1',
+                        'url':      item_link.decode('utf-8'),
+                        'uploader': u'',
+                        'title':    item_title.decode('utf-8'),
+                        'stitle':   item_stitle.decode('utf-8'),
+                        'ext':      item_ext.decode('utf-8'),
+                        }]
+                    item_path = os.path.join(config.VPODCAST_DIR, podcastdir, item_stitle+'.'+item_ext)
+                    if item_image_url is not None:
+                        image_path = os.path.join(config.VPODCAST_DIR, podcastdir, item_stitle+'.jpg')
+                        if not os.path.exists(image_path):
+                            self.download(item_image_url, image_path)
+                    podcast_items += [ menu.MenuItem(item_title,
+                        action=VPVideoItem(item_path, self, item_link, results), arg=None, image=image_path) ]
+                    if os.path.exists(item_path):
+                        if item_updated > os.stat(item_path)[stat.ST_MTIME]:
+                            os.remove(item_path)
+                            _debug_('%r removed updated %r > %r' % (item_path, item_updated,
+                                os.stat(item_path)[stat.ST_MTIME]), DINFO)
                 except PodcastException:
                     pass
             if not podcast_items:
@@ -186,45 +232,13 @@ class VPodcastMainMenuItem(MenuItem):
 
 
     @benchmark(benchmarking)
-    def create_podcast_menu(self, arg=None, menuw=None):
-        """ Create the main menu item for the video podcasts """
-        popup = PopupBox(text=_('Fetching podcast list...'))
-        popup.show()
-        podcast_menu_items = []
-
-        for dir, url in config.VPODCAST_LOCATIONS:
-            podcastdir = dir.strip().replace(' ', '_').lower()
-            image_path = os.path.join(config.VPODCAST_DIR, podcastdir, 'cover.jpg')
-            #XXX here we are only downloading the images, but this slows down the plug-in lots
-            #if self.check_logo(image_path):
-            #    p = Podcast()
-            #    p.open_rss(url)
-            #    p.rss_title()
-            #    #XXX name = p.rss_title
-            #    if p.rss_imageurl:
-            #        try:
-            #            image_url = p.rss_imageurl
-            #            self.download(image_url, image_path)
-            #        except Exception, why:
-            #            _debug_(why, DWARNING)
-
-            podcast_menu_items += [ menu.MenuItem(dir, action=self.create_podcast_submenu,
-                arg=(dir, url), image=image_path) ]
-
-        popup.destroy()
-        podcast_main_menu = menu.Menu(_('Video Podcasts'), podcast_menu_items)
-        rc.app(None)
-        menuw.pushmenu(podcast_main_menu)
-        menuw.refresh()
-
-
-    @benchmark(benchmarking)
-    def download(self, url, savefile):
+    def download(self, url, filename):
         """ Download the url and save it """
-        file = urllib2.urlopen(url).read()
-        save = open(savefile, 'w')
-        print >> save, file
-        save.close()
+        if url is not None:
+            data = urllib2.urlopen(url).read()
+            save = open(filename, 'w')
+            print >>save, data
+            save.close()
 
 
     @benchmark(benchmarking)
@@ -239,7 +253,7 @@ class VPodcastMainMenuItem(MenuItem):
 
 class Podcast:
     """
-    This bit of code really needs fixing, it's really bad
+    Extract information from the rss item
     """
     @benchmark(benchmarking)
     def __init__(self, url):
@@ -297,14 +311,39 @@ class Podcast:
     @benchmark(benchmarking)
     def rss_item_image(self, item):
         """ get the item's image """
-        # Search for image
-        #img_pattern = '<img src="(.*?)" align='
         img_pattern = 'img src="(.*?)"'
         try:
             self.image = re.search(img_pattern, item.description).group(1)
         except Exception, why:
+            #try:
+            #    self.image = re.search(img_pattern, item.summary).group(1)
+            #except Exception, why:
+            #    self.image = None
             self.image = None
         return self.image
+
+
+    @benchmark(benchmarking)
+    def rss_item_mimetype(self, item):
+        """ get the item's mime type """
+        try:
+            self.type = item.enclosures[0].type.encode(self.encoding)
+        except Exception, why:
+            self.type = 'video/x-msvideo'
+            print why
+        return self.type
+
+
+
+    @benchmark(benchmarking)
+    def rss_item_updated(self, item):
+        """ get the item's mime type """
+        try:
+            self.updated = time.mktime(item.updated_parsed)
+        except Exception, why:
+            self.updated = None
+            print why
+        return self.updated
 
 
 
@@ -313,11 +352,13 @@ class VPVideoItem(VideoItem):
     Video podcast video item
     """
     @benchmark(benchmarking)
-    def __init__(self, name, url, parent):
+    def __init__(self, filename, parent, item_url, results):
         """ Initialise the VPVideoItem class """
-        _debug_('VPVideoItem.__init__(name=%r, url=%r, parent=%r)' % (name, url, parent), 2)
-        VideoItem.__init__(self, name, parent)
-        self.vp_url = url
+        _debug_('VPVideoItem.__init__(filename=%r, parent=%r, item_url=%r, results=%r)' % \
+            (filename, parent, item_url, results), 2)
+        VideoItem.__init__(self, filename, parent)
+        self.item_url = item_url
+        self.results = results
 
 
     @benchmark(benchmarking)
@@ -325,28 +366,59 @@ class VPVideoItem(VideoItem):
         """
         Play this Podcast
         """
-        self.download_url = self.vp_url
+        download_failed = False
+        self.download_url = self.item_url
         if not os.path.exists(self.filename):
-            background = BGDownload(self.download_url, self.filename)
+            background = BGDownload(self.download_url, self.filename, self.results)
             background.start()
-            popup = PopupBox(text=_('Buffering podcast...'))
+            popup = PopupBox(text=_('Fetching "%s" podcast...' % self.name))
             popup.show()
-            size = 0
-            for i in range(int(config.VPODCAST_BUFFERING_TIME)):
-                if os.path.exists(self.filename):
-                    mode, ino, dev, nlink, uid, gui, size, atime, mtime, ctime = os.stat(self.filename)
-                    if size > config.VPODCAST_BUFFERING_SIZE:
-                        break
-                time.sleep(0.5)
-            else:
-                if size < 120 * 1024: # a bit arbitary, needs to be bigger than a web page
-                    popup.destroy()
-                    AlertBox(text=_('Cannot download %s') % self.filename).show()
-                    return
-            popup.destroy()
+            try:
+                size = 0
+                for i in range(int(config.VPODCAST_BUFFERING_TIME)):
+                    if os.path.exists(self.filename):
+                        size = os.stat(self.filename)[stat.ST_SIZE]
+                        if size > config.VPODCAST_BUFFERING_SIZE:
+                            break
+                    time.sleep(1.0)
+                else:
+                    if size < config.VPODCAST_BUFFERING_SIZE:
+                        download_failed = True
+            finally:
+                popup.destroy()
+            if download_failed:
+                AlertBox(text=_('Fetching "%s" failed') % self.filename).show()
+                return
 
         # call the play funuction of VideoItem
         VideoItem.play(self, menuw=menuw, arg=arg)
+
+
+
+class OtherIE(youtube.InfoExtractor):
+    """Information extractor for cnn.com."""
+    _VALID_URL = r'(?:http://)?(?:\w+\.)?cnn\.com/'
+
+    def __init__(self, downloader=None, results=None):
+        youtube.InfoExtractor.__init__(self, downloader)
+        self.results = results
+
+
+    @staticmethod
+    def suitable(url):
+        """Receives a URL and returns True if suitable for this IE."""
+        #return (re.match(OtherIE._VALID_URL, url) is not None)
+        return True
+
+
+    def _real_initialize(self):
+        """Real initialization process. Already done."""
+        pass
+
+
+    def _real_extract(self, url):
+        """Real extraction process. Return the results."""
+        return self.results
 
 
 
@@ -355,13 +427,14 @@ class BGDownload(threading.Thread):
     Download file in background
     """
     @benchmark(benchmarking)
-    def __init__(self, url, savefile):
+    def __init__(self, url, filename, results):
         threading.Thread.__init__(self)
         self.url = url
-        self.savefile = savefile
+        self.filename = filename
         self.youtube_ie = youtube.YoutubeIE()
         self.metacafe_ie = youtube.MetacafeIE(self.youtube_ie)
         self.youtube_pl_ie = youtube.YoutubePlaylistIE(self.youtube_ie)
+        self.other_ie = OtherIE(self.youtube_ie, results)
 
 
     @benchmark(benchmarking)
@@ -377,30 +450,40 @@ class BGDownload(threading.Thread):
                 'simulate': False,
                 'format': config.YOUTUBE_FORMAT,
                 #'outtmpl': u'%(stitle)s-%(id)s.%(ext)s',
-                'outtmpl': self.savefile,
+                'outtmpl': self.filename,
                 'ignoreerrors': False,
                 'ratelimit': None,
                 })
             fd.add_info_extractor(self.youtube_pl_ie)
             fd.add_info_extractor(self.metacafe_ie)
             fd.add_info_extractor(self.youtube_ie)
+            fd.add_info_extractor(self.other_ie)
             retcode = fd.download([self.url])
-            _debug_('youtube download "%s": %s' % (self.url, retcode), DINFO)
-        except youtube.DownloadError:
-            # Not sure about this code
-            try:
-                file = urllib2.urlopen(self.url)
-                info = file.info()
-                save = open(self.savefile, 'wb')
-                chunkSize = 25
-                totalBytes = int(info['Content-Length'])
-                downloadBytes = 0
-                bytesLeft = totalBytes
-                while bytesLeft > 0:
-                    chunk = file.read(chunkSize)
-                    readBytes = len(chunk)
-                    downloadBytes += readBytes
-                    bytesLeft -= readBytes
-                    save.write(chunk)
-            except Exception, why:
-                _debug_('Cannot download "%s": %s' % (self.url, why), DWARNING)
+            _debug_('youtube download "%s": %s' % (self.url, retcode), retcode and DWARNING or DINFO)
+        except youtube.DownloadError, why:
+            _debug_('Cannot download "%s": %s' % (self.url, why), DWARNING)
+
+
+def _name_to_filename(name):
+    """ Convert a name to a file system name """
+    translation_table \
+        = '                ' \
+        + '                ' \
+        + '   # %     + -. ' \
+        + '0123456789:;<=>?' \
+        + '@ABCDEFGHIJKLMNO' \
+        + 'PQRSTUVWXYZ[\]^_' \
+        + '`abcdefghijklmno' \
+        + 'pqrstuvwxyz{|}~ ' \
+        + '                ' \
+        + '                ' \
+        + '                ' \
+        + '                ' \
+        + 'AAAAAAACEEEEIIII' \
+        + 'DNOOOOOxOUUUUYPS' \
+        + 'aaaaaaaceeeeiiii' \
+        + 'dnooooo/ouuuuypy'
+
+    #newname = name.translate(translation_table).strip().replace(' ', '_').lower()
+    newname = name.replace(':', '').strip().replace(' ', '_').lower()
+    return re.sub('__+', '_', newname)
