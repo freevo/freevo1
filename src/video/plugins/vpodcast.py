@@ -91,7 +91,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('YOUTUBE_PASSWORD', None, 'YouTube password (optional)'),
             ('YOUTUBE_FORMAT', '18', 'YouTube format 18=high 17=mobile (optional)'),
             ('VPODCAST_BUFFERING_TIME', 20, 'Length of time to wait while fetching the poscast'),
-            ('VPODCAST_BUFFERING_SIZE', 2*1024*1024, 'size of fetched file before starting to play it'),
+            ('VPODCAST_BUFFERING_SIZE', 512*1024, 'size of fetched file before starting to play it'),
         ]
 
 
@@ -188,6 +188,7 @@ class VPodcastMainMenuItem(MenuItem):
                     isMC = item_link.find('metacafe.com')
                     item_ext = isYT >= 0 and config.YOUTUBE_FORMAT == '18' and 'mp4' \
                             or isYT >= 0 and config.YOUTUBE_FORMAT == '17' and '3gp' \
+                            or isMC >= 0 and 'flv' \
                             or item_mimetype == 'video/mpeg' and 'mpeg' \
                             or item_mimetype == 'video/quicktime' and 'mov' \
                             or item_mimetype == 'video/x-la-asf' and 'asf' \
@@ -199,7 +200,7 @@ class VPodcastMainMenuItem(MenuItem):
                     if not item_ext:
                         item_ext = 'avi'
                     results = [{
-                        'id':       u'1',
+                        'id':       time.strftime('%s').decode('utf-8'),
                         'url':      item_link.decode('utf-8'),
                         'uploader': u'',
                         'title':    item_title.decode('utf-8'),
@@ -330,9 +331,7 @@ class Podcast:
             self.type = item.enclosures[0].type.encode(self.encoding)
         except Exception, why:
             self.type = 'video/x-msvideo'
-            print why
         return self.type
-
 
 
     @benchmark(benchmarking)
@@ -342,7 +341,6 @@ class Podcast:
             self.updated = time.mktime(item.updated_parsed)
         except Exception, why:
             self.updated = None
-            print why
         return self.updated
 
 

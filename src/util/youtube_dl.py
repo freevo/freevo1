@@ -629,18 +629,18 @@ class MetacafeIE(InfoExtractor):
 			self.to_stderr(u'ERROR: unable to retrieve disclaimer: %s' % str(err))
 			return
 
-		# Confirm age
-		disclaimer_form = {
-			'allowAdultContent': '1',
-			'submit': "Continue - I'm over 18",
-			}
-		request = urllib2.Request('http://www.metacafe.com/watch/', urllib.urlencode(disclaimer_form), std_headers)
-		try:
-			self.report_age_confirmation()
-			disclaimer = urllib2.urlopen(request).read()
-		except (urllib2.URLError, httplib.HTTPException, socket.error), err:
-			self.to_stderr(u'ERROR: unable to confirm age: %s' % str(err))
-			return
+		## Confirm age
+		#disclaimer_form = {
+		#	'allowAdultContent': '1',
+		#	'submit': "Continue - I'm over 18",
+		#	}
+		#request = urllib2.Request('http://www.metacafe.com/watch/', urllib.urlencode(disclaimer_form), std_headers)
+		#try:
+		#	self.report_age_confirmation()
+		#	disclaimer = urllib2.urlopen(request).read()
+		#except (urllib2.URLError, httplib.HTTPException, socket.error), err:
+		#	self.to_stderr(u'ERROR: unable to confirm age: %s' % str(err))
+		#	return
 	
 	def _real_extract(self, url):
 		# Extract id and simplified title from URL
@@ -661,6 +661,7 @@ class MetacafeIE(InfoExtractor):
 
 		# Retrieve video webpage to extract further information
 		request = urllib2.Request('http://www.metacafe.com/watch/%s/' % video_id)
+		print 'DJW:request:', request
 		try:
 			self.report_download_webpage(video_id)
 			webpage = urllib2.urlopen(request).read()
@@ -684,7 +685,8 @@ class MetacafeIE(InfoExtractor):
 
 		video_url = '%s?__gda__=%s' % (mediaURL, gdaKey)
 
-		mobj = re.search(r'(?im)<meta name="title" content="Metacafe - ([^"]+)"', webpage)
+		#mobj = re.search(r'(?im)<meta name="title" content="Metacafe - ([^"]+)"', webpage)
+		mobj = re.search(r'(?im)<title>(.+)</title>', webpage)
 		if mobj is None:
 			self.to_stderr(u'ERROR: unable to extract title')
 			return [None]
