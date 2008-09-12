@@ -32,16 +32,21 @@
 from area import Skin_Area
 from skin_utils import *
 
+from util.benchmark import benchmark
+benchmarking = False
+
 class View_Area(Skin_Area):
     """
     this call defines the view area
     """
 
+    @benchmark(benchmarking)
     def __init__(self):
         Skin_Area.__init__(self, 'view')
         self.image = None
 
 
+    @benchmark(benchmarking)
     def update_content_needed(self):
         """
         check if the content needs an update
@@ -55,6 +60,7 @@ class View_Area(Skin_Area):
         return Unicode(image) != Unicode(self.image)
 
 
+    @benchmark(benchmarking)
     def update_content(self):
         """
         update the view area

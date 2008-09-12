@@ -69,7 +69,7 @@ SKIN_XML_FILE          = '@SKIN_XML_FILE.text'
 START_FULLSCREEN_X     = @START_FULLSCREEN_X.checked
 HIDE_UNUSABLE_DISCS    = @HIDE_UNUSABLE_DISCS.checked
 MENU_ARROW_NAVIGATION  = @MENU_ARROW_NAVIGATION.checked
-USE_NETWORK            = @USE_NETWORK.checked
+SYS_USE_NETWORK            = @SYS_USE_NETWORK.checked
 ROM_SPEED              = @ROM_SPEED.text
 
 ### ShutDown and Reboot
@@ -1203,7 +1203,7 @@ EOFCOVERCFG
                     </widget>
                     <widget class="CheckBox" row="2" column="0">
                         <property name="name">
-                            <cstring>USE_NETWORK</cstring>
+                            <cstring>SYS_USE_NETWORK</cstring>
                         </property>
                         <property name="text">
                             <string>Use Networ&amp;k-Support</string>

@@ -458,6 +458,11 @@ class Info:
         result = ''
         if key == 'year':
             key = 'userdate'
+        #DJW
+        if key == 'userdate':
+            import traceback
+            #traceback.print_stack()
+        #DJW
         for var in self.dicts:
             if var and var.has_key(key):
                 val = var[key]
@@ -757,7 +762,7 @@ if config.DEBUG > 2:
 else:
     mmpython.factory.DEBUG = 0
 
-mmpython.USE_NETWORK = config.USE_NETWORK
+mmpython.USE_NETWORK = config.SYS_USE_NETWORK
 mmpython.cdrom.CREATE_MD5_ID = config.MMPYTHON_CREATE_MD5_ID
 
 

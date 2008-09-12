@@ -243,8 +243,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
 
     def __init__(self):
-        if not config.USE_NETWORK:
-            self.reason = 'USE_NETWORK not enabled'
+        if not config.SYS_USE_NETWORK:
+            self.reason = 'SYS_USE_NETWORK not enabled'
             return
         if not config.PLUGIN_WEATHER_LOCATIONS:
             self.reason = 'PLUGIN_WEATHER_LOCATIONS not defined'

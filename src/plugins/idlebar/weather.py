@@ -117,8 +117,8 @@ class PluginInterface(IdleBarPlugin):
         """
         """
         _debug_('PluginInterface.__init__(zone=%r, units=%r)' % (zone, units), 2)
-        if not config.USE_NETWORK:
-            self.reason = 'USE_NETWORK not enabled'
+        if not config.SYS_USE_NETWORK:
+            self.reason = 'SYS_USE_NETWORK not enabled'
             return
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.weather'

@@ -280,7 +280,7 @@ HIDE_UNUSABLE_DISCS = 1
 # Process keyboard events from SDL. You want this unless you use only lirc
 # or event devices below.
 #
-# USE_SDL_KEYBOARD = 1
+# SYS_USE_KEYBOARD = True
 
 #
 # Keymap to map keyboard keys to event strings. You can also add new keys
@@ -291,7 +291,7 @@ HIDE_UNUSABLE_DISCS = 1
 # List of /dev/input/event# devices to monitor. You can specify either the
 # device node (e.g. '/dev/input/event1') or the name of the device (e.g.
 # 'ATI Remote Wonder II'). If you monitor your keyboard both here and with
-# USE_SDL_KEYBOARD, then you will get duplicate events.
+# SYS_USE_KEYBOARD, then you will get duplicate events.
 #
 EVENT_DEVS = []
 
@@ -307,7 +307,7 @@ EVENT_DEVS = []
 # the IMDB movie database for movie info, and Amazon for cover searches.
 # Set this to 0 if your computer isn't connected to a network.
 #
-USE_NETWORK = 1
+SYS_USE_NETWORK = True
 
 #
 # Directory location to save files when the normal filesystem

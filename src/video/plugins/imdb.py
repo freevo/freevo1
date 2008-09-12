@@ -59,8 +59,8 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def __init__(self, license=None):
-        if not config.USE_NETWORK:
-            self.reason = 'USE_NETWORK not enabled'
+        if not config.SYS_USE_NETWORK:
+            self.reason = 'SYS_USE_NETWORK not enabled'
             return
         self.season = None
         self.episode = None
@@ -223,7 +223,7 @@ class PluginInterface(plugin.ItemPlugin):
             devicename = None
 
         # restore season/episode if we have it
-        fxd.setImdbId(arg[0], self.season, self.episode)
+        fxd.getIMDBid(arg[0], self.season, self.episode)
 
         if self.disc_set:
             fxd.setDiscset(devicename, None)

@@ -76,8 +76,8 @@ class PluginInterface(plugin.ItemPlugin):
         # these are considered as private variables - don't mess with them unless
         # no other choise is given
         # fyi, the other choice always exists : add a subroutine or ask :)
-        if not config.USE_NETWORK:
-            self.reason = 'no network'
+        if not config.SYS_USE_NETWORK:
+            self.reason = 'SYS_USE_NETWORK not enabled'
             return
         if not config.CONF.unzip:
             self.reason = 'unzip is not installed'

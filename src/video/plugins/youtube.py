@@ -110,8 +110,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     def __init__(self):
         _debug_('PluginInterface.__init__()', 2)
-        if not config.USE_NETWORK:
-            self.reason = 'USE_NETWORK not enabled'
+        if not config.SYS_USE_NETWORK:
+            self.reason = 'SYS_USE_NETWORK not enabled'
             return
         if not hasattr(config, 'YOUTUBE_VIDEOS') or not config.YOUTUBE_VIDEOS:
             self.reason = 'YOUTUBE_VIDEOS not defined'
