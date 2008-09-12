@@ -51,6 +51,9 @@ class PluginInterface(plugin.DaemonPlugin):
     To use this plugin make sure that your joystick is already working properly and
     then configure JOY_DEV and JOY_CMDS in your local_conf.py.  You will also need
     to have plugin.activate('joy') in your config as well.
+
+    If you are using the /dev/input/eventX you can use the linux event driver
+    instead.
     """
 
     def __init__(self):
@@ -67,21 +70,17 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.reason = 'Joystick input module disabled'
                 return
 
-            print 'JOY_DEV is deprecated, use JOY_DEVICE instead'
+            _debug_('JOY_DEV is deprecated, use JOY_DEVICE instead', DWARNING)
             self.device_name = '/dev/input/js' + str((config.JOY_DEV - 1))
             try:
                 self.joyfd = os.open(self.device_name, os.O_RDONLY|os.O_NONBLOCK)
                 _debug_('self.joyfd = %s' % self.joyfd, level=5)
             except OSError:
-
-                print 'Unable to open %s, trying /dev/js%s...' % (self.device_name, str((config.JOY_DEV - 1)))
                 self.device_name = '/dev/js' + str((config.JOY_DEV - 1))
-
                 try:
                     self.joyfd = os.open(self.device_name, os.O_RDONLY|os.O_NONBLOCK)
                     _debug_('self.joyfd = %s' % self.joyfd, level=5)
                 except OSError:
-                    print 'Unable to open %s, check modules and/or permissions' % self.device_name
                     self.reason = 'unable to open device %r' % (self.device_name,)
                     return
 
@@ -89,7 +88,7 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'JOY'
 
-        print 'Using joystick %s (%s) (sensitivity %s)' % (config.JOY_DEV, self.device_name, config.JOY_SENS)
+        _debug_('Using joystick %s (%s) (sensitivity %s)' % (config.JOY_DEV, self.device_name, config.JOY_SENS), DINFO)
 
         self.poll_interval  = 1
         self.poll_menu_only = False
@@ -97,7 +96,6 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def config(self):
-        #print 'config'
         return [
             ('JOY_DEV', 1, 'Joystick number, 1 is "/dev/js0" or "/dev/input/js0"'),
             ('JOY_DEVICE', None, 'Joystick device, i.e. "/dev/js0" or "/dev/input/js0"'),
@@ -116,7 +114,6 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def poll(self):
         if not self.enabled:
-            #print 'not enabled'
             return
 
         command = ''
@@ -131,7 +128,6 @@ class PluginInterface(plugin.DaemonPlugin):
         c = os.read(self.joyfd, 8)
         data = struct.unpack('IhBB', c)
         _debug_('data=%r' % (data,), 2)
-        #print 'data=%r' % (data,)
         if data[2] == 1 & data[1] == 1:
             button = 'button '+str((data[3] + 1))
             command = config.JOY_CMDS.get(button, '')
@@ -161,12 +157,11 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def enable(self):
-        #print 'enable'
+        """ enable the joystick """
         # remove any pending events
         while 1:
             (r, w, e) = select.select([self.joyfd], [], [], 0)
             _debug_('r=%r, w=%r, e=%r' % (r, w, e), 1)
-            #print 'r=%r, w=%r, e=%r' % (r, w, e)
             if not r:
                 break
             c = os.read(self.joyfd, 8)
@@ -175,6 +170,6 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def disable(self):
-        #print 'disable'
+        """ disable the joystick """
         self.enabled = False
         return

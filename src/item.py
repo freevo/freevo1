@@ -160,8 +160,7 @@ class FileInformation:
                 try:
                     os.unlink(f)
                 except:
-                    print 'can\'t delete %s' % f
-
+                    _debug_('can\'t delete %r' % (f,), DWARNING)
 
 
 class Item:

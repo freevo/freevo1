@@ -83,7 +83,8 @@ class Feed:
                 element = item.find('description')
                 newItem.description = element.text or 'None'
                 element = item.find('pubDate')
-                newItem.date = element.text or 'None'
+                if element is not None:
+                    newItem.date = element.text or 'None'
                 enclosure = item.find('enclosure')
                 if enclosure is not None:
                     newItem.url = 'url' in enclosure.attrib and enclosure.attrib['url'] or 'None'

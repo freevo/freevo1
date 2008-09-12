@@ -458,11 +458,6 @@ class Info:
         result = ''
         if key == 'year':
             key = 'userdate'
-        #DJW
-        if key == 'userdate':
-            import traceback
-            #traceback.print_stack()
-        #DJW
         for var in self.dicts:
             if var and var.has_key(key):
                 val = var[key]
