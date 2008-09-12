@@ -225,7 +225,6 @@ class Lirc:
         return result
 
 
-
     def poll(self, rc):
         """
         return next event
@@ -246,7 +245,7 @@ class Lirc:
 
             if list:
                 for code in list:
-                    if ( self.lastkeycode != code ):
+                    if self.lastkeycode != code:
                         self.lastkeycode = code
                         self.lastkeystroke = nowtime
                         self.firstkeystoke = nowtime
@@ -292,6 +291,119 @@ class Keyboard:
 
 # --------------------------------------------------------------------------------
 
+class Joystick:
+    """
+    Class to handle joystick input
+    """
+    def __init__(self):
+        _debug_('Joystick.__init__()', 2)
+        import pygame
+        pygame.joystick.init()
+        if pygame.joystick.get_count() < 1:
+            pygame.joystick.quit()
+        if pygame.joystick.get_count() == 1:
+            config.JOYSTICK_ID = 0
+        self.joystick = pygame.joystick.joystick(config.JOYSTICK_ID)
+        self.joystick.init()
+        print self.joystick.name()
+        print self.joystick.get_numaxes()
+        print self.joystick.get_numbuttons()
+        print self.joystick.get_numhats()
+        print self.joystick.get_numballs()
+
+
+    def poll(self, rc):
+        """
+        return next event
+        """
+        _debug_('Joystick.poll(rc=%r)' % (rc,), 5)
+
+
+# --------------------------------------------------------------------------------
+
+class Evdev:
+    """
+    Class to handle evdev events
+    """
+    def __init__(self):
+        """
+        init all specified devices
+        """
+        _debug_('Evdev.__init__()', 2)
+        self._devs = []
+
+        for dev in config.EVENT_DEVS:
+            e = None
+
+            if os.path.exists(dev):
+                try:
+                    e = evdev.evdev(dev)
+                except:
+                    print "Problem opening event device '%s'" % dev
+            else:
+                names = []
+                name = dev
+                for dev in os.listdir('/dev/input'):
+                    if not dev.startswith('event'):
+                        continue
+
+                    try:
+                        dev = '/dev/input/' + dev
+                        e = evdev.evdev(dev)
+                    except:
+                        continue
+
+                    names.append(e.get_name())
+                    if e.get_name() == name:
+                        break
+                else:
+                    e = None
+                    _debug_("Could not find device named '%s', possible are:\n  - %s" % \
+                        (name, '\n  - '.join(names)), DWARNING)
+
+            if e is not None:
+                _debug_("Added input device '%s': %s" % (dev, e.get_name()), DINFO)
+                self._devs.append(e)
+
+        self._movements = {}
+
+
+    def poll(self, rc):
+        """
+        return next event
+        """
+        _debug_('Evdev.poll(rc=%r)' % (rc,), 5)
+        for dev in self._devs:
+            event = dev.read()
+            if event is None:
+                continue
+
+            time, type, code, value = event
+
+            if type == 'EV_KEY':
+                self._movements = {}
+
+                if config.EVENTMAP.has_key(code):
+                    # 0 = release, 1 = press, 2 = repeat
+                    if value > 0:
+                        return config.EVENTMAP[code]
+            elif type == 'EV_REL':
+                if config.EVENTMAP.has_key(code):
+                    if self._movements.has_key(code):
+                        self._movements[code] += value
+                    else:
+                        self._movements[code] = value
+
+                    if self._movements[code] < -10:
+                        self._movements = {}
+                        return config.EVENTMAP[code][0]
+                    elif self._movements[code] > 10:
+                        self._movements = {}
+                        return config.EVENTMAP[code][1]
+
+
+# --------------------------------------------------------------------------------
+
 class TcpNetwork:
     """
     Class to handle network control via TCP connection instead of UDP.
@@ -311,6 +423,7 @@ class TcpNetwork:
         self.sock.bind((self.host, self.port))
         self.sock.listen(1)
         self.connections = []
+
 
     def poll(self, rc):
         """
@@ -336,6 +449,7 @@ class TcpNetwork:
         throwout.reverse()
         for index in throwout:
             self.connections.pop(index)
+
 
     def _getNewConnections(self):
         """
@@ -380,83 +494,6 @@ class Network:
             # No data available
             return None
 
-# --------------------------------------------------------------------------------
-
-class Evdev:
-    """
-    Class to handle evdev events
-    """
-    def __init__(self):
-        """
-        init all specified devices
-        """
-        _debug_('Evdev.__init__()', 2)
-        self._devs = []
-
-        for dev in config.EVENT_DEVS:
-            e = None
-
-            if os.path.exists(dev):
-                try:
-                    e = evdev.evdev(dev)
-                except:
-                    print "Problem opening event device '%s'" % dev
-            else:
-                name = dev
-                for dev in os.listdir('/dev/input'):
-                    if not dev.startswith('event'):
-                        continue
-
-                    try:
-                        dev = '/dev/input/' + dev
-                        e = evdev.evdev(dev)
-                    except:
-                        continue
-
-                    if e.get_name() == name:
-                        break
-                else:
-                    e = None
-                    print "Could not find any device named '%s'" % name
-
-            if e is not None:
-                print "Added input device '%s': %s" % (dev, e.get_name())
-                self._devs.append(e)
-
-        self._movements = {}
-
-    def poll(self, rc):
-        """
-        return next event
-        """
-        _debug_('Evdev.poll(rc=%r)' % (rc,), 5)
-        for dev in self._devs:
-            event = dev.read()
-            if event is None:
-                continue
-
-            time, type, code, value = event
-
-            if type == 'EV_KEY':
-                self._movements = {}
-
-                if config.EVENTMAP.has_key(code):
-                    # 0 = release, 1 = press, 2 = repeat
-                    if value > 0:
-                        return config.EVENTMAP[code]
-            elif type == 'EV_REL':
-                if config.EVENTMAP.has_key(code):
-                    if self._movements.has_key(code):
-                        self._movements[code] += value
-                    else:
-                        self._movements[code] = value
-
-                    if self._movements[code] < -10:
-                        self._movements = {}
-                        return config.EVENTMAP[code][0]
-                    elif self._movements[code] > 10:
-                        self._movements = {}
-                        return config.EVENTMAP[code][1]
 
 # --------------------------------------------------------------------------------
 
@@ -479,9 +516,15 @@ class EventHandler:
                 except:
                     pass
 
-            if config.USE_SDL_KEYBOARD:
+            if config.SYS_USE_KEYBOARD:
                 try:
                     self.inputs.append(Keyboard())
+                except:
+                    pass
+
+            if config.SYS_USE_JOYSTICK:
+                try:
+                    self.inputs.append(Joystick())
                 except:
                     pass
 
@@ -504,7 +547,6 @@ class EventHandler:
         self.shutdown_callbacks = []
         self.poll_objects       = []
         # lock all critical parts
-        #self.lock               = thread.allocate_lock()
         self.lock               = threading.RLock()
         # last time we stopped sleeping
         self.sleep_timer        = 0
