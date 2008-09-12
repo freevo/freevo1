@@ -56,7 +56,7 @@ from gui import AlertBox, ConfirmBox
 import skin
 
 from util.benchmark import benchmark
-benchmarking = False
+benchmarking = config.DEBUG_BENCHMARKING
 
 class PluginInterface(plugin.MainMenuPlugin):
     """

@@ -62,6 +62,9 @@ from skin import eval_attr
 import xml_skin
 import screen
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+
 SkinObjects = screen.SkinObjects
 
 
@@ -70,6 +73,7 @@ class Geometry:
     """
     Simple object with x, y, with, height values
     """
+    @benchmark(benchmarking)
     def __init__(self, x, y, width, height):
         self.x = x
         self.y = y
@@ -85,6 +89,7 @@ class Skin_Area:
     def update_content_needed
     def update_content
     """
+    @benchmark(benchmarking)
     def __init__(self, name, imagecachesize=5):
         self.area_name = name
         self.area_val  = None
@@ -101,6 +106,7 @@ class Skin_Area:
             (self.area_name, self.area_val, self.redraw, self.layout, self.name)
 
 
+    @benchmark(benchmarking)
     def update_content_needed(self):
         """
         this area needs a content update
@@ -108,6 +114,7 @@ class Skin_Area:
         return True
 
 
+    @benchmark(benchmarking)
     def update_content(self):
         """
         there is no content in this area
@@ -115,6 +122,7 @@ class Skin_Area:
         pass
 
 
+    @benchmark(benchmarking)
     def draw(self, settings, obj, menu, display_style=0, widget_type='menu', force_redraw=False):
         """
         this is the main draw function. This function draws the background,
@@ -268,6 +276,7 @@ class Skin_Area:
         self.screen.draw(self.objects)
 
 
+    @benchmark(benchmarking)
     def scan_for_text_view(self, menu):
         """
         scan if we have to fall back to text view. This will be done if some
@@ -353,6 +362,7 @@ class Skin_Area:
         self.use_text_view        = True
 
 
+    @benchmark(benchmarking)
     def calc_geometry(self, object, copy_object=0):
         """
         calculate the real values of the object (e.g. content) based
@@ -387,6 +397,7 @@ class Skin_Area:
         return object
 
 
+    @benchmark(benchmarking)
     def get_item_rectangle(self, rectangle, item_w, item_h):
         """
         calculates the values for a rectangle to fit item_w and item_h
@@ -427,6 +438,7 @@ class Skin_Area:
         return max(item_w, r.width), max(item_h, r.height), r
 
 
+    @benchmark(benchmarking)
     def init_vars(self, settings, display_type, widget_type = 'menu'):
         """
         check which layout is used and set variables for the object
@@ -508,6 +520,7 @@ class Skin_Area:
         return redraw
 
 
+    @benchmark(benchmarking)
     def __draw_background__(self):
         """
         draw the <background> of the area
@@ -588,6 +601,7 @@ class Skin_Area:
     # drawimage
     # drawstring
 
+    @benchmark(benchmarking)
     def drawroundbox(self, x, y, width, height, rect, redraw=True):
         """
         draw a round box ... or better stores the information about this call
@@ -607,7 +621,7 @@ class Skin_Area:
             self.tmp_objects.rectangles.append((x, y, x + width, y + height, rect[0], rect[1], rect[2], rect[3]))
 
 
-
+    @benchmark(benchmarking)
     def drawstring(self, text, font, content, x=-1, y=-1, width=None, height=None,
                    align_h=None, align_v=None, mode='hard', ellipses='...', dim=True):
         """
@@ -653,6 +667,7 @@ class Skin_Area:
             align_h, align_v, mode, ellipses, dim))
 
 
+    @benchmark(benchmarking)
     def loadimage(self, image, val, redraw=True):
         """
         load an image (use self.imagecache)
@@ -687,6 +702,7 @@ class Skin_Area:
         return cimage, w, h
 
 
+    @benchmark(benchmarking)
     def drawimage(self, image, val, background=False):
         """
         draws an image ... or better stores the information about this call

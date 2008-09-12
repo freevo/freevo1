@@ -58,7 +58,7 @@ from event import *
 from gui import InputBox, AlertBox, ProgressBox
 
 from util.benchmark import benchmark
-benchmarking = False
+benchmarking = config.DEBUG_BENCHMARKING
 
 all_variables = [
     ('DIRECTORY_SORT_BY_DATE', _('Directory Sort By Date'),

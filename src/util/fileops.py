@@ -62,6 +62,7 @@ if traceback.extract_stack()[0][0].find('install.py') == -1:
     # import stuff from util.misc
     import misc
 
+    benchmarking = config.DEBUG_BENCHMARKING
 
 #
 #

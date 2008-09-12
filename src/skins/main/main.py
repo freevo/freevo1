@@ -45,6 +45,9 @@ import screen
 from animation import render, Transition
 import pygame
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+
 # Create the OSD object
 osd = osd.get_singleton()
 render = render.get_singleton()
@@ -107,6 +110,7 @@ class Skin:
         self.set_base_fxd(config.SKIN_XML_FILE)
 
 
+    @benchmark(benchmarking)
     def cachename(self, filename):
         """
         create cache name
@@ -115,6 +119,7 @@ class Skin:
         return vfs.getoverlay('%s.skin-%s-%s' % (filename, config.SKIN_XML_FILE, geo))
 
 
+    @benchmark(benchmarking)
     def save_cache(self, settings, filename):
         """
         cache the fxd skin settings in 'settings' to the OVERLAY_DIR cachfile
@@ -132,6 +137,7 @@ class Skin:
                 settings.font[f].font = osd.getfont(settings.font[f].name, settings.font[f].size)
 
 
+    @benchmark(benchmarking)
     def load_cache(self, filename):
         """
         load a skin cache file
@@ -177,6 +183,7 @@ class Skin:
         return settings
 
 
+    @benchmark(benchmarking)
     def register(self, type, areas):
         """
         register a new type objects to the skin
@@ -189,6 +196,7 @@ class Skin:
                 getattr(self, '%s_areas' % type).append(a)
 
 
+    @benchmark(benchmarking)
     def delete(self, type):
         """
         delete information about a special skin type
@@ -197,6 +205,7 @@ class Skin:
         self.last_draw = None, None, None
 
 
+    @benchmark(benchmarking)
     def change_area(self, name, module, object):
         """
         replace an area with the code from module.object() from skins/plugins
@@ -205,6 +214,7 @@ class Skin:
         self.areas[name] = eval('skins.plugins.%s.%s()' % (module, object))
 
 
+    @benchmark(benchmarking)
     def set_base_fxd(self, name):
         """
         set the basic skin fxd file
@@ -233,6 +243,7 @@ class Skin:
             self.display_style['menu'] = 0
 
 
+    @benchmark(benchmarking)
     def load(self, filename, copy_content = 1):
         """
         return an object with new skin settings
@@ -264,6 +275,7 @@ class Skin:
 
 
 
+    @benchmark(benchmarking)
     def get_skins(self):
         """
         return a list of all possible skins with name, image and filename
@@ -457,6 +469,7 @@ class Skin:
             osd.update()
 
 
+    @benchmark(benchmarking)
     def redraw(self):
         """
         Redraw the current screen
@@ -473,6 +486,7 @@ class Skin:
         self.settings.prepare()
 
 
+    @benchmark(benchmarking)
     def draw(self, type, object, menu=None, blend=False):
         """
         Draw the object.  object may be a menu widget, a table for the tv menu
@@ -543,6 +557,8 @@ class Skin:
             print
             raise UnicodeError, e
 
+
+    @benchmark(benchmarking)
     def do_blending(self):
         screen = osd.screen.convert()
 

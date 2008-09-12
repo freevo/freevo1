@@ -42,7 +42,7 @@ from item import Item
 from programitem import ProgramItem
 
 from util.benchmark import benchmark
-benchmarking = False
+benchmarking = config.DEBUG_BENCHMARKING
 
 import tv.epg_xmltv
 from tv.epg_types import TvProgram

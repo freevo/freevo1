@@ -43,7 +43,7 @@ from item import Item
 from gui import GUIObject, AlertBox
 
 from util.benchmark import benchmark
-benchmarking = False
+benchmarking = config.DEBUG_BENCHMARKING
 
 
 class MenuItem(Item):
@@ -84,8 +84,9 @@ class MenuItem(Item):
         """
         return the menu item as a raw string
         """
-        s = '<%-.16s: %r>' % (self.name, self.__class__)
-        return s
+        if hasattr(self, 'name'):
+            return '<%-.16s: %r>' % (self.name, self.__class__)
+        return '<%r>' % (self.__class__,)
 
 
     @benchmark(benchmarking)
@@ -110,6 +111,7 @@ class Menu:
     """
     a Menu with Items for the MenuWidget
     """
+    @benchmark(benchmarking)
     def __init__(self, heading, choices, fxd_file=None, umount_all=0, reload_func=None, item_types=None,
         force_skin_layout=-1):
 
@@ -350,7 +352,7 @@ class MenuWidget(GUIObject):
             for menuitem in self.menustack[level].choices:
                 if config.DEBUG:
                     try:
-                        print 'menuitem=%s' % menuitem
+                        print 'DJW:menuitem=%s' % menuitem
                     except:
                         pass
                 try:
@@ -451,11 +453,7 @@ class MenuWidget(GUIObject):
                 self.rebuild_page()
             self.init_page()
 
-        if config.FREEVO_USE_ALPHABLENDING and self.first_drawing:
-            blend = True
-        else:
-            blend = False
- 
+        blend = config.FREEVO_USE_ALPHABLENDING and self.first_drawing
         skin.draw('menu', self, self.menustack[-1], blend)
 
         self.first_drawing = False
@@ -507,7 +505,6 @@ class MenuWidget(GUIObject):
         curr_selected = max(curr_selected-self.cols, 0)
         menu.selected = self.all_items[curr_selected]
         self.refresh()
-        return
 
 
     @benchmark(benchmarking)
@@ -530,7 +527,6 @@ class MenuWidget(GUIObject):
         curr_selected = min(curr_selected+self.cols, len(self.all_items)-1)
         menu.selected = self.all_items[curr_selected]
         self.refresh()
-        return
 
 
     @benchmark(benchmarking)

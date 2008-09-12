@@ -1462,5 +1462,8 @@ if __name__ == '__main__':
         os.remove(f)
 
     _debug_('main() starting')
-    main()
+    try:
+        main()
+    except Exception, why:
+        _debug_(why, DWARNING)
     _debug_('main() finished')

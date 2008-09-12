@@ -51,9 +51,9 @@ def parse_options(defaults):
     Parse command line options
     """
     parser = OptionParser(version='%prog 1.0', conflict_handler='resolve', usage="""
-Search IMDB for a movie
+Search IMDB for a movie or a TV show
 
-Usage: %prog imdb [options] <search> [<output> <video file> [<video file>]]
+freevo imdb [options] <search> [<output> <video file> [<video file>]]
 
 Generate <output>.fxd for the movie.  Files is a list of files that belongs to
 this movie.  Use [dvd|vcd] to add the whole disc or use [dvd|vcd][title] to add

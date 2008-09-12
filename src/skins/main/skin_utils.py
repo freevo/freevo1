@@ -42,12 +42,16 @@ import os
 import util
 from kaa.metadata.image import EXIF as exif
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+
 osd = osd.get_singleton()
 
 format_imagecache = util.objectcache.ObjectCache(30, desc='format_image')
 load_imagecache   = util.objectcache.ObjectCache(20, desc='load_image')
 
 
+@benchmark(benchmarking)
 def pygamesurface_imlib2_scale(image, newsize):
 
     buf = pygame.image.tostring(image, 'RGBA')
@@ -59,21 +63,22 @@ def pygamesurface_imlib2_scale(image, newsize):
     return pygame.image.frombuffer(buf, newsize, 'RGBA')
 
 
+@benchmark(benchmarking)
 def format_image(settings, item, width, height, force=0, anamorphic=0):
     #print 'format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r)' % (settings, item, width, height, force, anamorphic)
+
     try:
         type = item.display_type
-    except:
+    except AttributeError:
         try:
             type = item.info['mime'].replace('/', '_')
         except:
             type = item.type
+    if type is None:
+        type = ''
 
 
-    if isinstance(item.image, str):
-        item_image=Unicode(item.image)
-    else:
-        item_image=item.image
+    item_image=Unicode(item.image)
 
     cname = '%s-%s-%s-%s-%s-%s-%s' % (settings.icon_dir, item_image, type, item.type, width, height, force)
 
@@ -92,12 +97,19 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     imagefile = None
 
     if item.image:
+        if not os.path.exists(item.image):
+            #print 'DJW: item.image:2', item.image
+            return None, 0, 0
+        #print 'DJW: item.image:', item.image, isinstance(item.image, imlib2.Image)
         if isinstance(item.image, imlib2.Image):
             image = osd.loadbitmap(item.image)
         else:
+            #print 'DJW:thumb://%s' % item.image
             image = load_imagecache['thumb://%s' % item.image]
+            #print 'DJW: image1:', image
             if not image:
                 image = osd.loadbitmap('thumb://%s' % item.image)
+                #print 'DJW: image2:', image
                 load_imagecache['thumb://%s' % item.image] = image
 
         if not item['rotation']:
@@ -130,23 +142,19 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
             return None, 0, 0
 
         if hasattr(item, 'media') and item.media and item.media.item == item and \
-           os.path.isfile('%s/mimetypes/%s.png' % (settings.icon_dir, item.media.type)):
+                os.path.isfile('%s/mimetypes/%s.png' % (settings.icon_dir, item.media.type)):
             imagefile = '%s/mimetypes/%s.png' % (settings.icon_dir, item.media.type)
 
-
         elif item.type == 'dir':
-            if os.path.isfile('%s/mimetypes/folder_%s.png' % \
-                              (settings.icon_dir, item.display_type)):
-                imagefile = '%s/mimetypes/folder_%s.png' % \
-                            (settings.icon_dir, item.display_type)
+            if os.path.isfile('%s/mimetypes/folder_%s.png' % (settings.icon_dir, item.display_type)):
+                imagefile = '%s/mimetypes/folder_%s.png' % (settings.icon_dir, item.display_type)
             else:
                 imagefile = '%s/mimetypes/folder.png' % settings.icon_dir
 
         elif item.type == 'playlist':
             if item.parent and os.path.isfile('%s/mimetypes/playlist_%s.png' % \
                                               (settings.icon_dir, item.parent.display_type)):
-                imagefile = '%s/mimetypes/playlist_%s.png' % \
-                            (settings.icon_dir, item.parent.display_type)
+                imagefile = '%s/mimetypes/playlist_%s.png' % (settings.icon_dir, item.parent.display_type)
             else:
                 imagefile = '%s/mimetypes/playlist.png' % settings.icon_dir
 
@@ -205,6 +213,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     return cimage, width, height
 
 
+@benchmark(benchmarking)
 def text_or_icon(settings, string, x, width, font):
     l = string.split('_')
     if len(l) != 4:
