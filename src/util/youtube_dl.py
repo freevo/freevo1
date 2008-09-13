@@ -4,6 +4,7 @@
 # License: Public domain code
 import htmlentitydefs
 import httplib
+import locale
 import math
 import netrc
 import os
@@ -592,7 +593,7 @@ class MetacafeIE(InfoExtractor):
 	"""Information Extractor for metacafe.com."""
 
 	_VALID_URL = r'(?:http://)?(?:www\.)?metacafe\.com/watch/([^/]+)/([^/]+)/.*'
-	_DISCLAIMER = 'http://www.metacafe.com/disclaimer'
+	_DISCLAIMER = 'http://www.metacafe.com/family_filter/'
 	_youtube_ie = None
 
 	def __init__(self, youtube_ie, downloader=None):
@@ -629,18 +630,18 @@ class MetacafeIE(InfoExtractor):
 			self.to_stderr(u'ERROR: unable to retrieve disclaimer: %s' % str(err))
 			return
 
-		## Confirm age
-		#disclaimer_form = {
-		#	'allowAdultContent': '1',
-		#	'submit': "Continue - I'm over 18",
-		#	}
-		#request = urllib2.Request('http://www.metacafe.com/watch/', urllib.urlencode(disclaimer_form), std_headers)
-		#try:
-		#	self.report_age_confirmation()
-		#	disclaimer = urllib2.urlopen(request).read()
-		#except (urllib2.URLError, httplib.HTTPException, socket.error), err:
-		#	self.to_stderr(u'ERROR: unable to confirm age: %s' % str(err))
-		#	return
+		# Confirm age
+		disclaimer_form = {
+			'filters': '0',
+			'submit': "Continue - I'm over 18",
+			}
+		request = urllib2.Request('http://www.metacafe.com/', urllib.urlencode(disclaimer_form), std_headers)
+		try:
+			self.report_age_confirmation()
+			disclaimer = urllib2.urlopen(request).read()
+		except (urllib2.URLError, httplib.HTTPException, socket.error), err:
+			self.to_stderr(u'ERROR: unable to confirm age: %s' % str(err))
+			return
 	
 	def _real_extract(self, url):
 		# Extract id and simplified title from URL
@@ -684,12 +685,10 @@ class MetacafeIE(InfoExtractor):
 
 		video_url = '%s?__gda__=%s' % (mediaURL, gdaKey)
 
-		mobj = re.search(r'(?im)<meta name="title" content="Metacafe - ([^"]+)"', webpage)
+		mobj = re.search(r'(?im)<title>(.*) - Video</title>', webpage)
 		if mobj is None:
-			mobj = re.search(r'(?im)<title>(.+)</title>', webpage)
-			if mobj is None:
-				self.to_stderr(u'ERROR: unable to extract title')
-				return [None]
+			self.to_stderr(u'ERROR: unable to extract title')
+			return [None]
 		video_title = mobj.group(1).decode('utf-8')
 
 		mobj = re.search(r'(?m)<li id="ChnlUsr">.*?Submitter:<br />(.*?)</li>', webpage)
@@ -911,7 +910,7 @@ if __name__ == '__main__':
 			'forcetitle': opts.gettitle,
 			'simulate': (opts.simulate or opts.geturl or opts.gettitle),
 			'format': opts.format,
-			'outtmpl': ((opts.outtmpl is not None and opts.outtmpl.decode())
+			'outtmpl': ((opts.outtmpl is not None and opts.outtmpl.decode(locale.getdefaultlocale()[1]))
 				or (opts.usetitle and u'%(stitle)s-%(id)s.%(ext)s')
 				or (opts.useliteral and u'%(title)s-%(id)s.%(ext)s')
 				or u'%(id)s.%(ext)s'),
