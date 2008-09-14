@@ -28,7 +28,7 @@
 __author__ = 'Krasimir Atanasov'
 __author_email__ = 'atanasov.krasimir@gmail.com'
 
-import urllib2, os, stat, threading, urllib, time, re, string
+import urllib2, os, stat, threading, urllib, time, re, string, sys
 import config, menu, rc, plugin, util, skin
 import util.feedparser
 from item import Item
@@ -41,10 +41,24 @@ import util.youtube_dl as youtube
 from util.benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 from pprint import pformat, pprint
+if sys.hexversion >= 0x2050000:
+    from xml.etree.cElementTree import ElementTree, Element
+else:
+    try:
+        from cElementTree import ElementTree, Element
+    except ImportError:
+        from elementtree.ElementTree import ElementTree, Element
 
 MAX_AGE = 3600 * 10
 
 _player_ = None
+
+std_headers = { 
+    'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1',
+    'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+    'Accept': 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
+    'Accept-Language': 'en-us,en;q=0.5',
+}
 
 
 
@@ -68,7 +82,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     |     ('Metacafe - New Videos', 'http://www.metacafe.com/rss/new_videos.rss'),
     |     ('CNN - Now in the news', 'http://rss.cnn.com/services/podcasting/nitn/rss.xml'),
     |     ('CNN - The Larry King', 'http://rss.cnn.com/services/podcasting/lkl/rss?format=xml'),
-    |     ('Discovery Chanel', 'http://www.discovery.com/radio/xml/discovery_video.xml')
+    |     ('Discovery Channel', 'http://www.discovery.com/radio/xml/discovery_video.xml')
+    |     (u'TV Markíza - Spravodajstvo', 'http://www.markiza.sk/xml/video/feed.rss?section=spravodajstvo', 'mrss'),
     | ]
     |
     | VPODCAST_DIR = '/path/to/vpodcasts'
@@ -108,7 +123,16 @@ class PluginInterface(plugin.MainMenuPlugin):
             _debug_('%r does not exist, directory created' % (config.VPODCAST_DIR))
             os.makedirs(config.VPODCAST_DIR)
 
-        for name, rss_url in config.VPODCAST_LOCATIONS:
+        feed_type = None
+        for location in config.VPODCAST_LOCATIONS:
+            if len(location) == 3:
+                name, rss_url, feed_type = location
+            elif len(location) == 2:
+                name, rss_url = location
+            else:
+                _debug_('Invalid VPODCAST_LOCATIONS %r' % (location,), DWARNING)
+                continue
+
             podcastdir = os.path.join(config.VPODCAST_DIR, _name_to_filename(name))
             if not os.path.isdir(podcastdir):
                 os.makedirs(podcastdir)
@@ -137,12 +161,20 @@ class VPodcastMainMenuItem(MenuItem):
         """ Create the main menu item for the video podcasts """
         podcast_menu_items = []
 
-        for name, rss_url in config.VPODCAST_LOCATIONS:
+        feed_type = None
+        for location in config.VPODCAST_LOCATIONS:
+            if len(location) == 3:
+                name, rss_url, feed_type = location
+            elif len(location) == 2:
+                name, rss_url = location
+            else:
+                continue
+
             podcastdir = _name_to_filename(name)
             image_path = os.path.join(config.VPODCAST_DIR, podcastdir, 'cover.jpg')
 
             podcast_menu_items += [ menu.MenuItem(name, action=self.create_podcast_submenu,
-                arg=(name, rss_url), image=image_path) ]
+                arg=(name, rss_url, feed_type), image=image_path) ]
 
         podcast_main_menu = menu.Menu(_('Video Podcasts'), podcast_menu_items)
         rc.app(None)
@@ -153,13 +185,13 @@ class VPodcastMainMenuItem(MenuItem):
     @benchmark(benchmarking)
     def create_podcast_submenu(self, arg=None, menuw=None, image=None):
         """ create the sub-menu for the podcast """
-        name, rss_url = arg
+        name, rss_url, feed_type = arg
         podcastdir = _name_to_filename(name)
 
         popup = PopupBox(text=_('Fetching podcast items...'))
         popup.show()
         try:
-            p = Podcast(rss_url)
+            p = Podcast(rss_url, feed_type)
             feed = p.feed()
             rss_title = p.rss_title()
             rss_stitle = _name_to_filename(rss_title)
@@ -196,6 +228,7 @@ class VPodcastMainMenuItem(MenuItem):
                             or item_mimetype == 'video/x-ms-asf' and 'asf' \
                             or item_mimetype == 'video/x-msvideo' and 'avi' \
                             or item_mimetype == 'video/x-m4v' and 'mp4' \
+                            or item_mimetype == 'video/x-flv' and 'flv' \
                             or item_mimetype == 'application/x-shockwave-flash' and 'flv' \
                             or ''
                     if not item_ext:
@@ -258,20 +291,37 @@ class Podcast:
     Extract information from the rss item
     """
     @benchmark(benchmarking)
-    def __init__(self, url):
-        self.url = url
-        self.encoding = 'latin-1'
+    def __init__(self, rss_url, feed_type):
+        self.rss = None
+        self.rss_url = rss_url
+        self.feed_type = feed_type
+        self.encoding = 'utf-8'
 
 
     @benchmark(benchmarking)
     def feed(self):
         try:
-            self.rss = util.feedparser.parse(self.url)
-            self.encoding = self.rss.encoding
-            return self.rss
+            request = urllib2.Request(self.rss_url, None, youtube.std_headers)
+            data = urllib2.urlopen(request)
+            try:
+                data_len = data.info().get('Content-length', None)
+                #print 'DJW:Content-length', data.info().get('Content-length', None)
+                #print 'DJW:Content-type', data.info().get('Content-type', None)
+
+                if self.feed_type is None:
+                    self.rss = util.feedparser.parse(data)
+                    self.encoding = self.rss.encoding
+                    return self.rss
+                if self.feed_type == 'mrss':
+                    feed = FeedTypeMRSS()
+                    self.rss = feed.parse(data)
+                    self.encoding = 'utf-8'
+                    return self.rss
+            finally:
+                data.close()
         except Exception, why:
-            _debug_('Cannot parse feed "%s": %s' % (self.url, why), DWARNING)
-            return None
+            _debug_('Cannot parse feed "%s": %s' % (self.rss_url, why), DWARNING)
+            return self.rss = None
 
 
     @benchmark(benchmarking)
@@ -298,8 +348,8 @@ class Podcast:
     @benchmark(benchmarking)
     def rss_item_title(self, item):
         """ get the item's title """
-        self.title = item.title.encode(self.encoding)
-        self.title = re.sub('(/)', '_', self.title)
+        title = item.title.encode(self.encoding)
+        self.title = re.sub('(/)', '_', title)
         return self.title
 
 
@@ -313,6 +363,8 @@ class Podcast:
     @benchmark(benchmarking)
     def rss_item_image(self, item):
         """ get the item's image """
+        if item.has_key('image'):
+            return item.image.url
         img_pattern = 'img src="(.*?)"'
         try:
             self.image = re.search(img_pattern, item.description).group(1)
@@ -328,8 +380,10 @@ class Podcast:
     @benchmark(benchmarking)
     def rss_item_mimetype(self, item):
         """ get the item's mime type """
+        if item.has_key('mimetype'):
+            return item.mimetype
         try:
-            self.type = item.enclosures[0].type.encode(self.encoding)
+            self.type = item.enclosures[0].type
         except Exception, why:
             self.type = 'video/x-msvideo'
         return self.type
@@ -343,6 +397,68 @@ class Podcast:
         except Exception, why:
             self.updated = None
         return self.updated
+
+
+
+class FeedTypeMRSS:
+    """
+    Analyse the media RSS feed using ElementTree
+
+    FeedParser is a great bit of code but does not seem to be able to handle all feeds
+    This feed type extracts the media information using elementtree XML parser.
+
+    Media RSS is documented at http://search.yahoo.com/mrss/
+    """
+    _MEDIA_NS = 'http://search.yahoo.com/mrss/'
+    _CONTENT_NS = 'http://purl.org/rss/1.0/modules/content/'
+
+    def __init__(self):
+        self.feed = util.feedparser.FeedParserDict()
+        self.entries = []
+
+
+    def parse(self, feed):
+        """
+        Parse the feed
+        """
+        et = ElementTree()
+        tree = et.parse(feed)
+        channel = tree.find('channel')
+        if channel:
+            title = channel.find('title')
+            self.feed.title = title is not None and title.text or u''
+            description = channel.find('description')
+            self.feed.description = description is not None and description.text or u''
+            image = channel.find('image')
+            if image:
+                self.feed.image = util.feedparser.FeedParserDict()
+                image_url = image.find('url')
+                self.feed.image.url = image_url is not None and image_url.text or None
+            for item_elem in channel.findall('item'):
+                item = util.feedparser.FeedParserDict()
+                title = item_elem.find('title')
+                item.title = title is not None and title.text or u''
+                description = item_elem.find('description')
+                item.description = description is not None and description.text or u''
+                pub_date = item_elem.find('pubDate')
+                item.updated = pub_date is not None and pub_date.text or None
+                item.updated_parsed = None
+                if pub_date is not None:
+                    try:
+                        from tv.strptime import strptime
+                        item.updated_parsed = strptime(pub_date.text, '%a, %d %b %Y %H:%M: %Z')
+                    except ValueError:
+                        pass
+                image_url = item_elem.find('image/url')
+                item.image_url = image_url is not None and image_url.text or None
+                content = item_elem.find('.//{%s}content' % FeedTypeMRSS._MEDIA_NS)
+                if content:
+                    item.link = content.get('url')
+                    item.mimetype = content.get('type')
+                    if item.link is not None:
+                        self.entries.append(item)
+        pprint(self.__dict__)
+        return self
 
 
 
@@ -395,19 +511,19 @@ class VPVideoItem(VideoItem):
 
 
 class OtherIE(youtube.InfoExtractor):
-    """Information extractor for cnn.com."""
-    _VALID_URL = r'(?:http://)?(?:\w+\.)?cnn\.com/'
+    """
+    Information extractor for other feeds, where the results are extracted from
+    feedparser and passed directly it.
+    """
 
     def __init__(self, downloader=None, results=None):
         youtube.InfoExtractor.__init__(self, downloader)
         self.results = results
 
 
-    @staticmethod
-    def suitable(url):
+    def suitable(self, url):
         """Receives a URL and returns True if suitable for this IE."""
-        #return (re.match(OtherIE._VALID_URL, url) is not None)
-        return True
+        return self.results is not None
 
 
     def _real_initialize(self):
@@ -483,6 +599,8 @@ def _name_to_filename(name):
         + 'aaaaaaaceeeeiiii' \
         + 'dnooooo/ouuuuypy'
 
+    if name is None:
+        return None
     #newname = name.translate(translation_table).strip().replace(' ', '_').lower()
     newname = name.replace(':', '').strip().replace(' ', '_').lower()
     return re.sub('__+', '_', newname)
