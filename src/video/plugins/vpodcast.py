@@ -321,7 +321,8 @@ class Podcast:
                 data.close()
         except Exception, why:
             _debug_('Cannot parse feed "%s": %s' % (self.rss_url, why), DWARNING)
-            return self.rss = None
+            self.rss = None
+            return self.rss
 
 
     @benchmark(benchmarking)
