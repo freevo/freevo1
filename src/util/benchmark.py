@@ -42,13 +42,14 @@ class benchmark:
     """
     _indentation = 0
 
-    def __init__(self, enabled=True):
+    def __init__(self, enabled=True, dumpcall=False):
         """
         Contructs an instance of benchmark.
         @param enabled: enables the benchmark timings
         @type enabled: bool
         """
         self.enabled = enabled
+        self.dumpcall = dumpcall
         self.start = time.time()
 
 
@@ -60,25 +61,37 @@ class benchmark:
         @type func: function
         """
         if self.enabled:
+            fname = func.func_name
+            argnames = func.func_code.co_varnames[:func.func_code.co_argcount]
             def newfunc(*args, **kwargs):
                 indentation = '  ' * benchmark._indentation
                 benchmark._indentation += 1
-                print '%s-> %s' % (indentation, func.__name__)
+                argstr = ''
+                resstr = ''
+                if self.dumpcall:
+                    argstr = '('+', '.join('%s=%r' % entry for entry in zip(argnames,args) + kwargs.items())+')'
+                print '%s-> %s%s' % (indentation, func.__name__, argstr)
                 self.start = time.time()
                 try:
                     result = func(*args, **kwargs)
+                    if self.dumpcall:
+                        resstr = ' => '+'%r' % (result,)
                 finally:
-                    print '%s<- %s: %.4f' % (indentation, func.__name__, time.time() - self.start)
+                    print '%s<- %s%s: %.4f' % (indentation, func.__name__, resstr, time.time() - self.start)
                     benchmark._indentation -= 1
                 return result
             newfunc.__name__ = func.__name__
             newfunc.__doc__ = func.__doc__
+            newfunc.__module__ = func.__module__
+            newfunc.__dict__.update(func.__dict__)
             return newfunc
 
         def origfunc(*args, **kwargs):
             return func(*args, **kwargs)
         origfunc.__name__ = func.__name__
         origfunc.__doc__ = func.__doc__
+        origfunc.__module__ = func.__module__
+        origfunc.__dict__.update(func.__dict__)
         return origfunc
 
 
@@ -97,12 +110,13 @@ if __name__ == '__main__':
             time.sleep(0.000001)
 
 
-    @benchmark()
+    @benchmark(dumpcall=True)
     def longrunning(n):
         """Wait for n * 100ms"""
         quickrunning(n)
         for i in range(n):
             time.sleep(0.1)
+        return n,
 
 
     @benchmark()
@@ -117,6 +131,8 @@ if __name__ == '__main__':
     print '__repr__:', longrunning
     print '__name__:', longrunning.__name__
     print '__doc__:', longrunning.__doc__
+    print '__module__:', longrunning.__module__
+    print '__dict__:', longrunning.__dict__
     try:
         failure()
     except:
@@ -124,3 +140,12 @@ if __name__ == '__main__':
         traceback.print_exc()
     print '__name__:', failure.__name__
     print '__doc__:', failure.__doc__
+
+    class MyClass:
+        @benchmark(dumpcall=True)
+        def myfunc(*args):
+            pass
+
+    myclass = MyClass()
+    print myclass
+    myclass.myfunc(100, 200)
