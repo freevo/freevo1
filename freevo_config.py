@@ -2250,6 +2250,7 @@ DEBUG_TIME = 0
 # Enable the benchmarking wrapper, when active prints the duration of a function call
 # We could be more specific and use a bit pattern to enable certain parts, like skins, tv, etc.
 DEBUG_BENCHMARKING = 0
+DEBUG_BENCHMARKCALL = False
 
 # The default logging level
 # can be one of CRITICAL (FATAL), ERROR, WARNING (WARN), INFO, DEBUG, NOTSET

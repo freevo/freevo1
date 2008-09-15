@@ -28,7 +28,7 @@
 __author__ = 'Krasimir Atanasov'
 __author_email__ = 'atanasov.krasimir@gmail.com'
 
-import urllib2, os, stat, threading, urllib, time, re, string, sys
+import urllib2, os, stat, threading, urllib, time, re, string, sys, pprint
 import config, menu, rc, plugin, util, skin
 import util.feedparser
 from item import Item
@@ -40,7 +40,7 @@ from event import *
 import util.youtube_dl as youtube
 from util.benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
-from pprint import pformat, pprint
+benchmarkcall = config.DEBUG_BENCHMARKCALL
 if sys.hexversion >= 0x2050000:
     from xml.etree.cElementTree import ElementTree, Element
 else:
@@ -49,16 +49,10 @@ else:
     except ImportError:
         from elementtree.ElementTree import ElementTree, Element
 
-MAX_AGE = 3600 * 10
+import socket
+socket.setdefaulttimeout(300)
 
 _player_ = None
-
-std_headers = { 
-    'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1',
-    'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
-    'Accept': 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
-    'Accept-Language': 'en-us,en;q=0.5',
-}
 
 
 
@@ -73,11 +67,11 @@ class PluginInterface(plugin.MainMenuPlugin):
     Add to local_conf.py
     | plugin.activate('video.vpodcast')
     | VPODCAST_LOCATIONS = [
-    |     ('You Tube - Top Viewed', 'http://youtube.com/rss/global/top_viewed.rss'),
-    |     ('You Tube - Norah Jones', 'http://www.referd.info/tag/norah_jones/rss.php'),
+    |     ('You Tube - Top Viewed', 'http://youtube.com/rss/global/top_viewed.rss', 'mrss'),
+    |     ('You Tube - Norah Jones', 'http://www.referd.info/tag/norah_jones/rss.php', 'mrss'),
     |     ('You Tube - Top Rated', 'http://youtube.com/rss/global/top_rated.rss'),
     |     ('Metacafe - Top Videos', 'http://www.metacafe.com/tags/top_videos/rss.xml'),
-    |     ('Metacafe - Music', 'http://www.metacafe.com/tags/music/rss.xml'),
+    |     ('Metacafe - Music', 'http://www.metacafe.com/tags/music/rss.xml', 'mrss'),
     |     ('Metacafe - Today Videos ', 'http://www.metacafe.com/rss/today_videos/rss.xml'),
     |     ('Metacafe - New Videos', 'http://www.metacafe.com/rss/new_videos.rss'),
     |     ('CNN - Now in the news', 'http://rss.cnn.com/services/podcasting/nitn/rss.xml'),
@@ -87,9 +81,13 @@ class PluginInterface(plugin.MainMenuPlugin):
     | ]
     |
     | VPODCAST_DIR = '/path/to/vpodcasts'
-    | for other options type: "freevo plugins -i video.vpodcast"
+
+    VPODCAST_LOCATIONS is a list of items, (<menu name>, <feed url>, <parser>)
+    <parser> is optional can be 'mrss' or None. The mrss parser may not work in all cases
+
+    other options type: "freevo plugins -i video.vpodcast"
     """
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         """ Initialise the Video postcast plug-in interface """
         plugin.MainMenuPlugin.__init__(self)
@@ -97,7 +95,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         self.check_dir()
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def config(self):
         """ freevo plugins -i video.vpodcast returns the info """
         return [
@@ -111,24 +109,23 @@ class PluginInterface(plugin.MainMenuPlugin):
         ]
 
 
-    @benchmark(benchmarking)
     def items(self, parent):
         return [ VPodcastMainMenuItem(parent) ]
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def check_dir(self):
         """ Check that the VPODCAST_DIR directories exist, if not create them """
         if not os.path.isdir(config.VPODCAST_DIR):
             _debug_('%r does not exist, directory created' % (config.VPODCAST_DIR))
             os.makedirs(config.VPODCAST_DIR)
 
-        feed_type = None
         for location in config.VPODCAST_LOCATIONS:
             if len(location) == 3:
                 name, rss_url, feed_type = location
             elif len(location) == 2:
                 name, rss_url = location
+                feed_type = None
             else:
                 _debug_('Invalid VPODCAST_LOCATIONS %r' % (location,), DWARNING)
                 continue
@@ -144,29 +141,29 @@ class VPodcastMainMenuItem(MenuItem):
     this is the item for the main menu and creates the list
     of commands in a submenu.
     """
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, parent):
         MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
         self.name = _('Video Podcast')
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """ return a list of actions for this item """
         return [ (self.create_podcast_menu, 'stations') ]
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def create_podcast_menu(self, arg=None, menuw=None):
         """ Create the main menu item for the video podcasts """
         podcast_menu_items = []
 
-        feed_type = None
         for location in config.VPODCAST_LOCATIONS:
             if len(location) == 3:
                 name, rss_url, feed_type = location
             elif len(location) == 2:
                 name, rss_url = location
+                feed_type = None
             else:
                 continue
 
@@ -182,7 +179,7 @@ class VPodcastMainMenuItem(MenuItem):
         menuw.refresh()
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def create_podcast_submenu(self, arg=None, menuw=None, image=None):
         """ create the sub-menu for the podcast """
         name, rss_url, feed_type = arg
@@ -266,23 +263,20 @@ class VPodcastMainMenuItem(MenuItem):
         rc.app(None)
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def download(self, url, filename):
         """ Download the url and save it """
         if url is not None:
-            data = urllib2.urlopen(url).read()
-            save = open(filename, 'w')
-            print >>save, data
-            save.close()
-
-
-    @benchmark(benchmarking)
-    def check_logo(self, logo_file):
-        """
-        Check if the logo has changed
-        @returns: True if the logo does not exist or is too old
-        """
-        return not os.path.exists(logo_file) or (time.time() - os.path.getmtime(logo_file)) > MAX_AGE
+            request = urllib2.Request(url, None, youtube.std_headers)
+            data = urllib2.urlopen(request)
+            #print 'DJW:Content-length', data.info().get('Content-length', None)
+            #print 'DJW:Content-type', data.info().get('Content-type', None)
+            try:
+                save = open(filename, 'w')
+                print >>save, data.read()
+                save.close()
+            finally:
+                data.close()
 
 
 
@@ -290,7 +284,7 @@ class Podcast:
     """
     Extract information from the rss item
     """
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, rss_url, feed_type):
         self.rss = None
         self.rss_url = rss_url
@@ -298,16 +292,14 @@ class Podcast:
         self.encoding = 'utf-8'
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def feed(self):
         try:
             request = urllib2.Request(self.rss_url, None, youtube.std_headers)
             data = urllib2.urlopen(request)
             try:
-                data_len = data.info().get('Content-length', None)
                 #print 'DJW:Content-length', data.info().get('Content-length', None)
                 #print 'DJW:Content-type', data.info().get('Content-type', None)
-
                 if self.feed_type is None:
                     self.rss = util.feedparser.parse(data)
                     self.encoding = self.rss.encoding
@@ -321,32 +313,33 @@ class Podcast:
                 data.close()
         except Exception, why:
             _debug_('Cannot parse feed "%s": %s' % (self.rss_url, why), DWARNING)
+            raise
             self.rss = None
             return self.rss
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def rss_title(self):
         if self.rss.feed.has_key('title'):
             return self.rss.feed.title.encode(self.encoding)
         return None
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def rss_description(self):
         if self.rss.feed.has_key('description'):
             return self.rss.feed.description.encode(self.encoding)
         return None
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def rss_image(self):
         if self.rss.feed.has_key('image') and self.rss.feed.image.has_key('url'):
             return self.rss.feed.image.url
         return None
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def rss_item_title(self, item):
         """ get the item's title """
         title = item.title.encode(self.encoding)
@@ -354,31 +347,27 @@ class Podcast:
         return self.title
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def rss_item_link(self, item):
         """ get the item's link """
         self.link = item.link.encode(self.encoding)
         return self.link
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def rss_item_image(self, item):
         """ get the item's image """
-        if item.has_key('image'):
+        if item.has_key('image') and item.image.has_key('url'):
             return item.image.url
         img_pattern = 'img src="(.*?)"'
         try:
             self.image = re.search(img_pattern, item.description).group(1)
         except Exception, why:
-            #try:
-            #    self.image = re.search(img_pattern, item.summary).group(1)
-            #except Exception, why:
-            #    self.image = None
             self.image = None
         return self.image
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def rss_item_mimetype(self, item):
         """ get the item's mime type """
         if item.has_key('mimetype'):
@@ -390,7 +379,7 @@ class Podcast:
         return self.type
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def rss_item_updated(self, item):
         """ get the item's mime type """
         try:
@@ -437,6 +426,7 @@ class FeedTypeMRSS:
                 self.feed.image.url = image_url is not None and image_url.text or None
             for item_elem in channel.findall('item'):
                 item = util.feedparser.FeedParserDict()
+                item.image = util.feedparser.FeedParserDict()
                 title = item_elem.find('title')
                 item.title = title is not None and title.text or u''
                 description = item_elem.find('description')
@@ -445,20 +435,44 @@ class FeedTypeMRSS:
                 item.updated = pub_date is not None and pub_date.text or None
                 item.updated_parsed = None
                 if pub_date is not None:
-                    try:
-                        from tv.strptime import strptime
+                    from tv.strptime import strptime
+                    try: # used by
                         item.updated_parsed = strptime(pub_date.text, '%a, %d %b %Y %H:%M: %Z')
                     except ValueError:
-                        pass
+                        try: # used by referd
+                            item.updated_parsed = strptime(pub_date.text, '%a, %d %b %Y %H:%M:%S')
+                        except ValueError:
+                            try: # used by metacafe
+                                item.updated_parsed = strptime(pub_date.text, '%d-%b-%y')
+                            except ValueError:
+                                pass
                 image_url = item_elem.find('image/url')
-                item.image_url = image_url is not None and image_url.text or None
+                item.image.url = image_url is not None and image_url.text or None
                 content = item_elem.find('.//{%s}content' % FeedTypeMRSS._MEDIA_NS)
-                if content:
-                    item.link = content.get('url')
-                    item.mimetype = content.get('type')
-                    if item.link is not None:
-                        self.entries.append(item)
-        pprint(self.__dict__)
+                if content is None:
+                    content = item
+                item.link = content.get('url')
+                item.mimetype = content.get('type')
+                title_tag = '{%s}title' % FeedTypeMRSS._MEDIA_NS
+                title = item_elem.find(title_tag)
+                if title is not None:
+                    item.title = title.text
+                description_tag = '{%s}description' % FeedTypeMRSS._MEDIA_NS
+                description = item_elem.find(description_tag)
+                if description is not None:
+                    item.description = description.text
+                player_tag = '{%s}player' % FeedTypeMRSS._MEDIA_NS
+                player = item_elem.find(player_tag)
+                if player is not None:
+                    item.link = player.get('url')
+                thumbnail_tag = '{%s}thumbnail' % FeedTypeMRSS._MEDIA_NS
+                thumbnail = item_elem.find(thumbnail_tag)
+                if thumbnail is not None:
+                    image_url = thumbnail.get('url')
+                    if image_url is not None:
+                        item.image.url = image_url
+                if item.link is not None:
+                    self.entries.append(item)
         return self
 
 
@@ -467,7 +481,7 @@ class VPVideoItem(VideoItem):
     """
     Video podcast video item
     """
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, filename, parent, item_url, results):
         """ Initialise the VPVideoItem class """
         _debug_('VPVideoItem.__init__(filename=%r, parent=%r, item_url=%r, results=%r)' % \
@@ -477,33 +491,37 @@ class VPVideoItem(VideoItem):
         self.results = results
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def play(self, arg=None, menuw=None):
         """
         Play this Podcast
         """
         download_failed = False
         self.download_url = self.item_url
-        if not os.path.exists(self.filename):
-            background = BGDownload(self.download_url, self.filename, self.results)
-            background.start()
-            popup = PopupBox(text=_('Fetching "%s" podcast...' % self.name))
-            popup.show()
+        if not os.path.exists(self.filename) or os.path.getsize(self.filename) < 1024:
             try:
-                size = 0
-                for i in range(int(config.VPODCAST_BUFFERING_TIME)):
-                    if os.path.exists(self.filename):
-                        size = os.stat(self.filename)[stat.ST_SIZE]
-                        if size > config.VPODCAST_BUFFERING_SIZE:
-                            break
-                    time.sleep(1.0)
-                else:
-                    if size < config.VPODCAST_BUFFERING_SIZE:
-                        download_failed = True
-            finally:
-                popup.destroy()
-            if download_failed:
-                AlertBox(text=_('Fetching "%s" failed') % self.filename).show()
+                background = BGDownload(self.download_url, self.filename, self.results)
+                background.start()
+                popup = PopupBox(text=_('Fetching "%s"...' % self.name))
+                popup.show()
+                try:
+                    size = 0
+                    for i in range(int(config.VPODCAST_BUFFERING_TIME)):
+                        if os.path.exists(self.filename):
+                            size = os.stat(self.filename)[stat.ST_SIZE]
+                            if size > config.VPODCAST_BUFFERING_SIZE:
+                                break
+                        time.sleep(1.0)
+                    else:
+                        if size < config.VPODCAST_BUFFERING_SIZE:
+                            download_failed = True
+                finally:
+                    popup.destroy()
+                if download_failed:
+                    AlertBox(text=_('Fetching "%s" failed\nNo data') % self.filename).show()
+                    return
+            except youtube.DownloadError, why:
+                AlertBox(text=_('Fetching "%s" failed:\n%s') % (self.filename, why)).show()
                 return
 
         # call the play funuction of VideoItem
@@ -542,7 +560,7 @@ class BGDownload(threading.Thread):
     """
     Download file in background
     """
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, url, filename, results):
         threading.Thread.__init__(self)
         self.url = url
@@ -553,7 +571,7 @@ class BGDownload(threading.Thread):
         self.other_ie = OtherIE(self.youtube_ie, results)
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking, benchmarkcall)
     def run(self):
         try:
             fd = youtube.FileDownloader({
@@ -578,6 +596,7 @@ class BGDownload(threading.Thread):
             _debug_('youtube download "%s": %s' % (self.url, retcode), retcode and DWARNING or DINFO)
         except youtube.DownloadError, why:
             _debug_('Cannot download "%s": %s' % (self.url, why), DWARNING)
+            raise
 
 
 def _name_to_filename(name):
