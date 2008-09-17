@@ -17,8 +17,8 @@
 #    To activate, put the following line in local_conf.py:
 #       plugin.activate('video.youtube')
 #       YOUTUBE_VIDEOS = [
-#           ('user1', 'description1'),
-#           ('user2', 'description2'),
+#           ('user1', 'description'),
+#           ('user2', 'description'),
 #           ('standardfeed_1', 'description'),
 #           ('standardfeed_2', 'description'),
 #           ...
@@ -60,7 +60,7 @@ __version__          = '0.4'
 import os
 import plugin
 import gdata.service
-import urllib2,urllib
+import urllib2, urllib
 import re
 import traceback
 import menu
@@ -75,7 +75,24 @@ from subprocess import Popen
 from item import Item
 from gui.PopupBox import PopupBox
 
+
 standardfeeds=['top_rated', 'top_favorites', 'most_viewed', 'most_popular', 'most_recent', 'most_discussed', 'most_linked', 'most_responded', 'recently_featured', 'watch_on_mobile']
+
+def decodeAcute(chain):
+    return chain.replace('&aacute;', 'á') \
+                .replace('&eacute;', 'é') \
+                .replace('&iacute;', 'í') \
+                .replace('&oacute;', 'ó') \
+                .replace('&uacute;', 'ú') \
+                .replace('&ordf;'  , 'º') \
+                .replace('&ntilde;', 'ñ') \
+                .replace('&iexcl;' , '¡') \
+                .replace('&Aacute;', 'A') \
+                .replace('&Eacute;', 'E') \
+                .replace('&Iacute;', 'I') \
+                .replace('&Oacute;', 'O') \
+                .replace('&Uacute;', 'U') \
+                .replace('&Ntilde;', 'ñ')
 
 try:
     from xml.etree import cElementTree as ElementTree
@@ -179,13 +196,13 @@ class YoutubeVideo(Item):
         users = []
         for user, description in config.YOUTUBE_VIDEOS:
             users.append(menu.MenuItem(description, self.videolist, (user, description)))
-        users.append(menu.MenuItem('Search video',self.search_video,0))
+        users.append(menu.MenuItem('Search video', self.search_video, 0))
         menuw.pushmenu(menu.Menu(_('Choose please'), users))
 
 
     def search_video(self, arg=None, menuw=None):
         _debug_('search_video(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        txt = TextEntryScreen((_('Search'),self.search_list),_('Search'))
+        txt = TextEntryScreen((_('Search'), self.search_list), _('Search'))
         txt.show(menuw)
 
 
@@ -212,16 +229,15 @@ class YoutubeVideo(Item):
         playvideo2.play()
 
 
-    def search_list(parent, menuw, text=''):
-        """Get the video list for a specific user"""
-        _debug_('search_list(parent=%r, menuw=%r, text=%r)' % (parent, menuw, text), 2)
+    def build_list(self, arg, menuw=None):
+        """Build the video list"""
+        _debug_('build_list(self=%r, arg=%r)' % (self, arg), 2)
+        service=arg[0]
+        gfeed=arg[1]
         items = []
-        text=text.replace(" ","/")
-        feed = 'http://gdata.youtube.com/feeds/videos/-/' + text
-        service = gdata.service.GDataService(server='gdata.youtube.com')
         box = PopupBox(text=_('Loading video list'))
         box.show()
-        for video in service.GetFeed(feed).entry:
+        for video in gfeed.entry:
             date = video.published.text.split('T')
             if video.link[1].href.find('watch?v=') >= 0:
                 id = video.link[1].href.split('watch?v=');
@@ -229,52 +245,56 @@ class YoutubeVideo(Item):
                 id = video.link[0].href.split('watch?v=');
             else:
                 continue
-            mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.watchvideo, id[1])
+            mi = menu.MenuItem(video.title.text, self.watchvideo, id[1])
             mi.arg = (video.title.text, id[1])
             text = util.htmlenties2txt(video.content)
-            mi.description = re.search('<span>([^\<]*)<',text).group(1)
-            tempimage = re.search('src="([^\"]*)"',text).group(1)
-            file = config.YOUTUBE_DIR + '/' + id[1].replace('-','_') + '.jpg'
+            mi.description = decodeAcute(re.search('<span>([^\<]*)<', text).group(1))
+            mi.description += '\n' + _('User') + ': ' + video.author[0].name.text
+            mi.description += '. ' + date[0]
+            tempimage = re.search('src="([^\"]*)"', text).group(1)
+            file = config.YOUTUBE_DIR + '/' + id[1].replace('-', '_') + '.jpg'
             if not os.path.exists(file):
-                aimage = urllib.urlretrieve(tempimage,file)
+                aimage = urllib.urlretrieve(tempimage, file)
             mi.image = file
             items.append(mi)
+        nfeed = service.GetNext(gfeed)
+        if nfeed:
+            mi = menu.MenuItem(_('More videos...'), self.build_list, (service, nfeed))
+            items.append(mi)
         box.destroy()
+        if menuw:
+            menuw.pushmenu(menu.Menu(_('Videos available'), items))
+        else:
+            return items
+
+    def get_and_build_list(self, feed):
+        """Get and build the video list"""
+        _debug_('build_list(self=%r, feed=%r)' % (self, feed), 2)
+        service = gdata.service.GDataService(server='gdata.youtube.com')
+        gfeed = service.GetFeed(feed)
+        items=self.build_list((service, gfeed))
+        return items
+
+    def search_list(self, menuw, text=''):
+        """Get the video list for a specific search"""
+        _debug_('search_list(self=%r, menuw=%r, text=%r)' % (self, menuw, text), 2)
+        text=text.replace(' ', '/')
+        feed = 'http://gdata.youtube.com/feeds/videos/-/' + text
+        items = self.get_and_build_list(feed)
         menuw.pushmenu(menu.Menu(_('Videos available'), items))
 
 
-    def video_list(parent, title, user):
+    def video_list(self, title, user):
         """Get the video list for a specific user"""
-        _debug_('video_list(parent=%r, title=%r, user=%r)' % (parent, title, user), 2)
-        items = []
+        _debug_('video_list(self=%r, title=%r, user=%r)' % (self, title, user), 2)
         if user in standardfeeds:
             feed  = 'http://gdata.youtube.com/feeds/base/standardfeeds/'
-            if config.YOUTUBE_REGION_CODE:
+            if config.YOUTUBE_REGION_CODE and user != 'watch_on_mobile':
                 feed += config.YOUTUBE_REGION_CODE + '/'
-            feed += user + '?time=today'
+            feed += user
+            if user not in ('most_recent', 'recently_featured', 'watch_on_mobile'):
+                feed += '?time=today'
         else:
             feed = 'http://gdata.youtube.com/feeds/users/' + user + '/uploads?orderby=updated'
-        feed += '&max-results=50'
-        service = gdata.service.GDataService(server='gdata.youtube.com')
-        box = PopupBox(text=_('Loading video list'))
-        box.show()
-        for video in service.GetFeed(feed).entry:
-            date = video.published.text.split('T')
-            if video.link[1].href.find('watch?v=') >= 0:
-                id = video.link[1].href.split('watch?v=');
-            elif video.link[0].href.find('watch?v=') >= 0:
-                id = video.link[0].href.split('watch?v=');
-            else:
-                continue
-            mi = menu.MenuItem(date[0] + ' ' + video.title.text, parent.watchvideo, id[1])
-            mi.arg = (video.title.text, id[1])
-            text = util.htmlenties2txt(video.content)
-            mi.description = re.search('<span>([^\<]*)<',text).group(1)
-            tempimage = re.search('src="([^\"]*)"',text).group(1)
-            file = config.YOUTUBE_DIR + '/' + id[1].replace('-','_') + '.jpg'
-            if not os.path.exists(file):
-                aimage = urllib.urlretrieve(tempimage,file)
-            mi.image = file
-            items.append(mi)
-        box.destroy()
+        items = self.get_and_build_list(feed)
         return items
