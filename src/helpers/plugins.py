@@ -130,7 +130,7 @@ def parse_plugins(plugin_name=''):
     stop  = re.compile('^[\t ]*def.*:')
     comment = re.compile('^[\t ]*"""')
     config_start = re.compile('^[ \t]+def +config *\( *self *\) *:')
-    config_end   = re.compile(' *(class|def)')
+    config_end   = re.compile(' *(class|def|@)')
 
     print_line = 0
     ptypes = {}
