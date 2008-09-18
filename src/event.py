@@ -656,15 +656,17 @@ DEFAULT_EVENTMAP = {
 # Internal events, don't map any button on them
 #
 
-PLAY_END         = Event('PLAY_END')
-USER_END         = Event('USER_END')
-DVD_PROTECTED    = Event('DVD_PROTECTED')
-PLAY_START       = Event('PLAY_START')
-
-OSD_MESSAGE      = Event('OSD_MESSAGE')
+FREEVO_READY     = Event('FREEVO_READY')
 
 VIDEO_START      = Event('VIDEO_START')
 VIDEO_END        = Event('VIDEO_END')
+PLAY_START       = Event('PLAY_START')
+PLAY_END         = Event('PLAY_END')
+USER_END         = Event('USER_END')
+
+DVD_PROTECTED    = Event('DVD_PROTECTED')
+
+OSD_MESSAGE      = Event('OSD_MESSAGE')
 
 OS_EVENT_POPEN2  = Event('OS_EVENT_POPEN2')
 OS_EVENT_WAITPID = Event('OS_EVENT_WAITPID')

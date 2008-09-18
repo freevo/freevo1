@@ -494,6 +494,7 @@ try:
     MainTread()
 
     print 'Freevo %s ready' % (_version,)
+    rc.post_event(FREEVO_READY)
     kaa.main.run()
     print 'Freevo %s finished' % (_version,)
 

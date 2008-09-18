@@ -31,9 +31,10 @@
 #
 # -----------------------------------------------------------------------
 
+from kaa import OneShotTimer
+from kaa import EventHandler
 import config
 import plugin
-import time
 import rc
 from event import *
 
@@ -61,54 +62,39 @@ class PluginInterface(plugin.DaemonPlugin):
         Init the autostart timeout and the plugin variables
         """
         plugin.DaemonPlugin.__init__(self)
-
         self.active = True
-        self.event_listener = True
-        self.poll_interval = config.AUTOSTART_POLL_INTERVAL
-        self.timeout = time.time() + config.AUTOSTART_TIMEOUT
-
-        plugin.register(self, 'autostart')
-        self.plug = plugin.getbyname('autostart')
+        self.timer = OneShotTimer(self._timer_handler)
+        self.event = EventHandler(self._event_handler)
+        self.event.register()
 
 
     def config(self):
         return [
             ('AUTOSTART_EVENTS', [], 'list of events to send to freevo at start up'),
             ('AUTOSTART_TIMEOUT', 5, 'Numbers of seconds to time out if there is no action'),
-            ('AUTOSTART_POLL_INTERVAL', 100, 'Frequency that poll is called'),
         ]
 
 
-    def poll(self):
-        """
-        plugin polling
-        """
-        #print "POLL(%.1f): polling" % (self.timeout - time.time())
-        if not self.active:
-            return
-        if (self.timeout - time.time()) < 0:
-            _debug_('Timeout (%ss) reached without an event, posting events now.' %
-                self.timeout, DINFO)
+    def _event_handler(self, event):
+        if self.active:
+            if event == FREEVO_READY:
+                self.active = True
+                self.timer.start(config.AUTOSTART_TIMEOUT)
+            elif event == MENU_PROCESS_END:
+                if not self.active:
+                    self.timer.start(config.AUTOSTART_TIMEOUT)
+            elif config.AUTOSTART_TIMEOUT:
+                _debug_('Another event is closing the autostart plugin.', DINFO)
+                self.event.unregister()
+                self.timer.stop()
+                self.active = False
+
+
+    def _timer_handler(self):
+        if self.active:
+            _debug_('Timeout reached without an event, posting events now.', DINFO)
             for e in config.AUTOSTART_EVENTS:
                 rc.post_event(Event(e))
-
-            self.poll_interval = 0
-            self.event_listener = False
+            self.event.unregister()
+            self.timer.stop()
             self.active = False
-
-
-    def eventhandler(self, event, menuw=None):
-        """
-        called when an event occurs
-        """
-        #print "EVENT(%.1f): %s" % ((self.timeout - time.time()), event.name)
-        if not self.active:
-            return 0
-        if event == MENU_PROCESS_END:
-            return 0
-        if config.AUTOSTART_TIMEOUT:
-            _debug_('Another event is closing the autostart plugin.', DINFO)
-            self.poll_interval = 0
-            self.event_listener = False
-            self.active = False
-        return 0
