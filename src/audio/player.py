@@ -29,16 +29,12 @@ Freevo audio player GUI
 """
 
 from gui.GUIObject import GUIObject
-from gui.PopupBox import PopupBox
-from gui.ProgressBox import ProgressBox
 
 import config
-import osd
 import skin
 import rc
 import plugin
 import event
-import math
 
 _player_ = None
 
@@ -49,10 +45,6 @@ def get():
 class PlayerGUI(GUIObject):
     def __init__(self, item, menuw):
         GUIObject.__init__(self)
-
-        self.skin = skin.get_singleton()
-        self.osd = osd.get_singleton()
-
         self.visible = menuw and True or False
         self.menuw = menuw
         self.item = item
@@ -63,6 +55,7 @@ class PlayerGUI(GUIObject):
         self.last_progress = 0
 
         self.first_drawing = True
+
 
     def play(self, player=None):
         global _player_
@@ -151,7 +144,7 @@ class PlayerGUI(GUIObject):
     def hide(self):
         if self.visible:
             self.visible = 0
-            self.skin.clear()
+            skin.clear()
             rc.app(None)
 
 
@@ -165,63 +158,17 @@ class PlayerGUI(GUIObject):
         if not self.running:
             return
 
-        if self.progressbox or self.pbox:
-            return
-
         # Calculate some new values
         if not self.item.length:
             self.item.remain = 0
         else:
             self.item.remain = self.item.length - self.item.elapsed
 
-        if config.FREEVO_USE_ALPHABLENDING and self.first_drawing:
-            do_blend = True
-        else:
-            do_blend = False
-
-        self.skin.draw('player', self.item, blend=do_blend)
+        do_blend = config.FREEVO_USE_ALPHABLENDING and self.first_drawing:
 
         self.first_drawing = False
+        skin.draw('player', self.item)
 
-        return
-
-    def popup_show(self, line, width=0, height=0):
-        if isinstance(self.pbox, PopupBox):
-            self.pbox.set_text(line)
-            self.pbox.draw(True)
-        else:
-            self.pbox = PopupBox(text=line, parent=self, width=width, height=height)
-            self.pbox.show()
-
-    def popup_destroy(self):
-        if isinstance(self.pbox, PopupBox):
-            self.pbox.destroy()
-            self.pbox = None
-
-    def progressbox_show(self, curr_progress=0, width=0, height=0):
-        if isinstance(self.progressbox, ProgressBox):
-            curr_progress = int(math.ceil(curr_progress))
-            new_ticks =  curr_progress - self.last_progress
-            _debug_('New ticks: %d - %d = %d' % (curr_progress, self.last_progress, new_ticks))
-            self.last_progress = curr_progress
-
-            while new_ticks > 0:
-                self.progressbox.tick()
-                new_ticks = new_ticks - 1
-
-        else:
-            self.progressbox = ProgressBox(text=_('Cache fill'), full=config.MPLAYER_AUDIO_CACHE_MIN_PERCENT, parent=self, width=width, height=height)
-            self.progressbox.show()
-
-    def progressbox_destroy(self):
-        if isinstance(self.progressbox, ProgressBox):
-            new_ticks = config.MPLAYER_AUDIO_CACHE_MIN_PERCENT - self.last_progress
-            while new_ticks > 0:
-                self.progressbox.tick()
-                new_ticks = new_ticks - 1
-
-            self.progressbox.destroy()
-            self.progressbox = None
 
 # register player to the skin
 skin.register('player', ('screen', 'title', 'view', 'info', 'plugin'))

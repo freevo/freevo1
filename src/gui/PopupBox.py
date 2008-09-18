@@ -101,15 +101,6 @@ class PopupBox(Window):
         """
         return self.label.text
 
-    def set_text(self, text):
-        """
-        Sets the text to display
-        """
-        if type(text) in StringTypes:
-            self.label.text = text
-        else:
-            raise TypeError, text
-
 
     def get_font(self):
         """

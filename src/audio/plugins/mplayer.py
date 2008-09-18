@@ -148,7 +148,7 @@ class MPlayer:
             is_playlist = True
 
         if item.network_play:
-            extra_opts += ' ' + config.MPLAYER_AUDIO_NETWORK_OPTS
+            extra_opts += ' -cache 100'
 
         if hasattr(item, 'reconnect') and item.reconnect:
             extra_opts += ' -loop 0'
@@ -246,8 +246,6 @@ class MPlayerApp(childapp.ChildApp2):
         self.stop_reason = 0 # 0 = ok, 1 = error
         self.RE_TIME     = re.compile("^A: *([0-9]+)").match
         self.RE_TIME_NEW = re.compile("^A: *([0-9]+):([0-9]+)").match
-        self.RE_CONNECT  = re.compile("^Connecting to server *(.*?)\[").match
-        self.RE_CACHE    = re.compile("^Cache fill: (.*?)%").match
 
         # [0] -> start of line to check with mplayer output
         # [1] -> keyword to store info in self.item.info
@@ -276,8 +274,6 @@ class MPlayerApp(childapp.ChildApp2):
 
 
     def stop_event(self):
-        self.destroy_popups()
-
         return Event(PLAY_END, self.stop_reason, handler=self.player.eventhandler)
 
 
@@ -337,23 +333,6 @@ class MPlayerApp(childapp.ChildApp2):
                     self.item.info[ keywords[1] ] = line[titleStart:]
                     break
 
-            if self.item.network_play:
-                if line.startswith("Connecting to server"):
-                    m = self.RE_CONNECT(line)
-                    if m:
-                        str = _('Connecting to') + ' ' + m.group(1)
-                        self.player.playerGUI.popup_show(str, width=600)
-
-                elif line.startswith("Cache fill:"):
-                    m = self.RE_CACHE(line)
-                    if m:
-                        curr_progress = float(m.group(1))
-                        self.player.playerGUI.progressbox_show(curr_progress, width=600)
-
-                elif line.find("Starting playback") != -1:
-                    self.destroy_popups()
-
-
     def stderr_cb(self, line):
         if line.startswith('Failed to open') and \
                (not self.item or not self.item.elapsed):
@@ -361,8 +340,3 @@ class MPlayerApp(childapp.ChildApp2):
 
         for p in self.stdout_plugins:
             p.stdout(line)
-
-    def destroy_popups(self):
-        self.player.playerGUI.progressbox_destroy()
-        self.player.playerGUI.popup_destroy()
-        rc.app(self.player)
