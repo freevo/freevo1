@@ -33,20 +33,41 @@ Author: Viggo Fredriksen <viggo@katatonic.org>
 
 # python specific
 import time
-import rc
+
+from kaa import Timer
+from kaa import EventHandler
 
 # freevo specific
 import config
 import skin
 import audio.player
 import plugin
+import rc
 from event import *
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+benchmarking = 0
+benchmarkcall = False
 
 # barstates
-BAR_HIDE=0              # timedout, reset and change poll interval
-BAR_SHOW=1              # show the bar
-BAR_IDLE=2              # wait for new track
+BAR_NOTSET=0            # state not set
+BAR_HIDE=1              # timedout, reset and change poll interval
+BAR_SHOW=2              # show the bar
+BAR_WAIT=3              # wait for new track
+
+def formatstate(state):
+    """
+    returns state formatted as a string
+    """
+    return state is None     and 'BAR_NONE' \
+        or state == BAR_HIDE and 'BAR_HIDE' \
+        or state == BAR_SHOW and 'BAR_SHOW' \
+        or state == BAR_WAIT and 'BAR_WAIT' \
+        or 'BAR_NOTSET'
+
+
 
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -58,171 +79,183 @@ class PluginInterface(plugin.DaemonPlugin):
     screen.
     """
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         """initialise the DaemonPlugin interface"""
-        _debug_('detachbar.PluginInterface.__init__(self)', 2)
+        _debug_('detachbar.PluginInterface.__init__()', 2)
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'audio.detachbar'
-        self.update_registered = False
-        # tunables
-        self.TimeOut  = 3  # 3 seconds till we hide the bar
-        self.hide()
-
-
-    def timer(self):
-        """
-        internal timer
-        returns status based on idletime
-        """
-        _debug_('timer(self)', 3)
-        if self.Timer:
-            diff = time.time() - self.Timer
-            if diff > self.TimeOut:
-                return BAR_HIDE
-            else:
-                return BAR_IDLE
-
-
-    def eventhandler(self, event, menuw=None):
-        """
-        Needed to catch the plugin DETACH event
-        """
-        _debug_('eventhandler(self, event, menuw=None)', 2)
-        if plugin.isevent(event) == 'DETACH':
-            self.show()
-            return True
-        return False
-
-
-    def hide(self):
-        """
-        used when hiding the bar
-        """
-        _debug_('hide(self)', 2)
-        self.status = BAR_HIDE
-        self.render = []
         self.player = None
-        self.Timer  = None
-        self.bar    = None
-        if self.update_registered:
-            rc.unregister(self.update)
-            self.update_registered = False
+        self.timer = Timer(self._timer_handler)
+        self.event = EventHandler(self._event_handler)
+        self.event.register()
+        self.state = BAR_NOTSET
+        self.update(BAR_HIDE)
+        # tunables
+        self.wait_timeout = 3  # 3 seconds till we hide the bar
 
 
+    @benchmark(benchmarking, benchmarkcall)
+    def _event_handler(self, event):
+        _debug_('_event_handler(event=%s)' % (event,), 2)
+        if plugin.isevent(event) == 'DETACH':
+            self.update(BAR_SHOW)
+        elif plugin.isevent(event) == 'ATTACH':
+            self.update(BAR_HIDE)
+        elif event == STOP:
+            self.update(BAR_HIDE)
+        elif event == BUTTON and event.arg == 'STOP':
+            self.update(BAR_HIDE)
+        elif event == PLAY_START and self.state != BAR_HIDE:
+            self.update(BAR_SHOW)
+        elif event == PLAY_END:
+            self.update(BAR_WAIT)
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def _timer_handler(self):
+        _debug_('_timer_handler()', 2)
+        self.update()
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def update(self, state=None):
+        """
+        update the bar according to bar state
+        """
+        _debug_('update()', 3)
+        if state is not None:
+            if state == BAR_SHOW:
+                self.show()
+                self.timer.start(1.0)
+            elif state == BAR_HIDE:
+                self.timer.stop()
+                self.hide()
+            elif state == BAR_WAIT:
+                self.time = time.time()
+            self.state = state
+
+        if self.state == BAR_SHOW:
+            skin.redraw()
+        elif self.state == BAR_HIDE:
+            skin.redraw()
+        elif self.state == BAR_WAIT:
+            if self.time and (time.time() - self.time) > self.wait_timeout:
+                self.update(BAR_HIDE)
+
+
+    @benchmark(benchmarking, benchmarkcall)
     def show(self):
         """
         used when showing for the first time
         """
-        _debug_('show(self)', 2)
+        _debug_('show()', 2)
         self.player = audio.player.get()
-        if not self.update_registered:
-            rc.register(self.update, True, 10)
-            self.update_registered = True
-        self.getInfo()
-        self.status = BAR_SHOW
+        self.getinfo()
 
 
+    @benchmark(benchmarking, benchmarkcall)
+    def hide(self):
+        """
+        used when hiding the bar
+        """
+        _debug_('hide()', 2)
+        self.render = []
+        self.player = None
+        self.time   = None
+        self.bar    = None
+
+
+    @benchmark(benchmarking, benchmarkcall)
     def stop(self):
         """
         stops the player, waiting for timeout
         """
-        _debug_('stop(self)', 2)
-        self.status = BAR_IDLE
-        self.Timer  = time.time()
+        _debug_('stop()', 2)
+        #self.state = BAR_WAIT
+        #self.time  = time.time()
 
 
-    def update(self):
-        """
-        update the bar according to showstatus
-        """
-        _debug_('update(self)', 3)
-        if self.status == BAR_SHOW:
-            if skin.active():
-                skin.redraw()
-
-        elif self.status == BAR_IDLE:
-            self.status = self.timer()
-            if self.status == BAR_HIDE:
-                self.hide()
-            if skin.active():
-                skin.redraw()
-
-
+    @benchmark(benchmarking, benchmarkcall)
     def draw(self, (type, object), osd):
         """
         draws the bar
+        called from the skin's redraw method
         """
-        _debug_('draw(self, (type, object), osd)', 3)
-        if self.status == BAR_IDLE:
-            # when idle, wait for a new player
-            if audio.player.get():
-                self.show()
+        _debug_('draw((type=%r, object=%r), osd=%r)' % (type, object, osd), 3)
+        if self.player is None:
+            return
 
-        if self.status == BAR_SHOW:
-            if not self.player.running:
-                # player stopped, we also stop
-                # and wait for a new one
-                self.player = None
-                self.stop()
-                return
+        #if self.state == BAR_WAIT:
+        #    # when idle, wait for a new player
+        #    if audio.player.get():
+        #        self.show()
 
-            if type == 'player':
-                # Oops, showing the player again, stop me
-                self.stop()
-                self.hide()
-                return
+        #elif self.state == BAR_SHOW:
+        #    if self.player and not self.player.running:
+        #        # player stopped, we also stop
+        #        # and wait for a new one
+        #        self.player = None
+        #        self.stop()
+        #        return
 
-            font = osd.get_font('detachbar')
+        #    if type == 'player':
+        #        # Oops, showing the player again, stop me
+        #        self.stop()
+        #        self.hide()
+        #        return
 
-            if font == osd.get_font('default'):
-                font = osd.get_font('info value')
+        font = osd.get_font('detachbar')
 
-            self.calculatesizes(osd, font)
+        if font == osd.get_font('default'):
+            font = osd.get_font('info value')
 
-            if self.image:
-                x = self.x - self.h
-                width  = self.w + 70 - 10
+        self.calculatesizes(osd, font)
+
+        if self.image:
+            x = self.x - self.h
+            width  = self.w + 70 - 10
+        else:
+            x = self.x
+            width = self.w
+
+        if not self.idlebar:
+            y = self.y - 10
+            height = self.h
+            osd.drawroundbox(x, y, width, height, (0xf0ffffffL, 5, 0xb0000000L, 10))
+
+        if self.image:
+            osd.draw_image(self.image, (x+5, self.y, 50, 50))
+
+        y = self.t_y
+
+        for r in self.render:
+            osd.write_text(r, font, None, self.t_x, y, self.t_w, self.font_h, 'center', 'center')
+            y += self.font_h
+
+        try:
+            if self.player.item.length:
+                progress = '%s/%s' % (self.formattime(self.player.item.elapsed),
+                    self.formattime(self.player.item.length))
             else:
-                x = self.x
-                width = self.w
+                progress = '%s' % self.formattime(self.player.item.elapsed)
+        except AttributeError:
+            progress = ''
 
-            if not self.idlebar:
-                y = self.y - 10
-                height = self.h
-                osd.drawroundbox(x, y, width, height, (0xf0ffffffL, 5, 0xb0000000L, 10))
-
-            if self.image:
-                osd.draw_image(self.image, (x+5, self.y, 50, 50))
-
-            y = self.t_y
-
-            for r in self.render:
-                osd.write_text(r, font, None, self.t_x, y, self.t_w, self.font_h, 'center', 'center')
-                y += self.font_h
-
-            try:
-                if self.player.item.length:
-                    progress = '%s/%s' % (self.formattime(self.player.item.elapsed),
-                        self.formattime(self.player.item.length))
-                else:
-                    progress = '%s' % self.formattime(self.player.item.elapsed)
-            except AttributeError:
-                progress = ''
-
-            osd.write_text(progress, font, None, self.t_x, y, self.t_w, self.font_h, 'center', 'center')
-        return 0
+        osd.write_text(progress, font, None, self.t_x, y, self.t_w, self.font_h, 'center', 'center')
 
 
-    def getInfo(self):
+    @benchmark(benchmarking, benchmarkcall)
+    def getinfo(self):
         """
         sets an array of things to draw
         """
-        _debug_('getInfo(self)', 2)
+        _debug_('getinfo()', 2)
         self.render = []
         self.calculate = True
         info = self.player.item.info
 
-        self.image =  self.player.item.image
+        self.image = self.player.item.image
         # artist : album
         if info['artist'] and info['album']:
             self.render += [ '%s : %s' % (info['artist'], info['album']) ]
@@ -238,15 +271,16 @@ class PluginInterface(plugin.DaemonPlugin):
             self.render += [ info['title'] ]
 
         # no info available
-        if len(self.render)==0:
+        if len(self.render) == 0:
             self.render += [ self.player.item.name ]
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def calculatesizes(self, osd, font):
         """
         sizecalcs is not necessery on every pass
         """
-        _debug_('calculatesizes(osd, font)', 3)
+        _debug_('calculatesizes(osd=%r, font=%r)' % (osd, font), 3)
         if not hasattr(self, 'idlebar'):
             self.idlebar = plugin.getbyname('idlebar')
             if self.idlebar:
@@ -256,7 +290,7 @@ class PluginInterface(plugin.DaemonPlugin):
                         self.idlebar_max = p.clock_left_position
 
                 if self.idlebar_max - self.idlebar.free_space < 250:
-                    _debug_('free space in idlebar to small, using normal detach')
+                    _debug_('free space in idlebar to small, using normal detach', DINFO)
                     self.idlebar = None
 
 
@@ -294,11 +328,12 @@ class PluginInterface(plugin.DaemonPlugin):
             self.t_w = min(self.t_w, self.idlebar_max - self.x - 30)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def formattime(self, seconds):
         """
         returns string formatted as mins:seconds
         """
-        _debug_('formattime(self, seconds)', 3)
+        _debug_('formattime(seconds=%r)' % (seconds,), 3)
         try:
             mins = 0
             mins = int(seconds) / 60

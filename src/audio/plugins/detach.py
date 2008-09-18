@@ -1,5 +1,6 @@
+# -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# detach.py - Detach plugin for the audio player
+# Detach plugin for the audio player
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -28,13 +29,20 @@
 # -----------------------------------------------------------------------
 
 
+from kaa import Timer
+from kaa import EventHandler
+
 import config
 import plugin
 import menu
 import rc
 import audio.player
-
 from event import *
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+benchmarking = 0
+benchmarkcall = False
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -42,34 +50,38 @@ class PluginInterface(plugin.MainMenuPlugin):
     to music
     """
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
-        _debug_('detach.PluginInterface.__init__(self)', 2)
+        _debug_('detach.PluginInterface.__init__()', 2)
         plugin.MainMenuPlugin.__init__(self)
         config.EVENTS['audio'][config.DETACH_KEY] = Event(FUNCTION_CALL, arg=self.detach)
         self.show_item = menu.MenuItem(_('Show player'), action=self.show)
         self.show_item.type = 'detached_player'
+        self.event = EventHandler(self._event_handler)
+        self.event.register()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def config(self):
-        '''config is called automatically,
+        """
+        config is called automatically,
         freevo plugins -i audio.detach returns the info
-        '''
+        """
         return [
             ('DETACH_KEY', 'DISPLAY', 'Event to activate the detach bar, DISPLAY, ENTER, EXIT'),
         ]
 
+
+    @benchmark(benchmarking, benchmarkcall)
     def detach(self):
-        _debug_('detach(self)', 2)
-        gui  = audio.player.get()
+        _debug_('detach()', 1)
+        gui = audio.player.get()
 
         # hide the player and show the menu
-        mpav = plugin.getbyname( 'audio.mpav' )
-        if mpav:
-            mpav.stop_mpav()
-
-        mplvis = plugin.getbyname( 'audio.mplayervis' )
-        if mplvis:
-            mplvis.stop_visual()
+        mplayervis = plugin.getbyname('audio.mplayervis')
+        if mplayervis:
+            mplayervis.stop_visual()
+            mplayervis.detach()
 
         gui.hide()
         gui.menuw.show()
@@ -82,8 +94,21 @@ class PluginInterface(plugin.MainMenuPlugin):
             gui.item.parent.menuw = None
         rc.post_event(plugin.event('DETACH'))
 
-    def eventhandler(self, event, menuw=None):
-        _debug_('eventhandler(self, event, menuw=None)', 2)
+
+    @benchmark(benchmarking, benchmarkcall)
+    def attach(self):
+        _debug_('attach()', 1)
+        # hide the player and show the menu
+        rc.post_event(plugin.event('ATTACH'))
+        mplayervis = plugin.getbyname('audio.mplayervis')
+        if mplayervis:
+            mplayervis.attach()
+            #mplayervis.start_visual()
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def _event_handler(self, event):
+        _debug_('_event_handler(event=%s)' % (event,), 2)
         if event == BUTTON:
             gui = audio.player.get()
             if gui:
@@ -95,6 +120,7 @@ class PluginInterface(plugin.MainMenuPlugin):
                 elif event.arg=='PAUSE':
                     p.eventhandler(Event('PLAY', context='audio'))
                 elif event.arg=='STOP':
+                    rc.post_event(plugin.event('ATTACH'))
                     p.eventhandler(Event('STOP'))
                 elif event.arg=='NEXT':
                     p.eventhandler(Event('PLAYLIST_NEXT', context='audio'))
@@ -106,8 +132,9 @@ class PluginInterface(plugin.MainMenuPlugin):
                 gui.player.eventhandler(Event('STOP'))
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def items(self, parent):
-        _debug_('items(self, parent)', 2)
+        _debug_('items(parent=%r)' % (parent,), 2)
         gui = audio.player.get()
         if gui and gui.player.is_playing():
             self.show_item.parent = parent
@@ -115,8 +142,9 @@ class PluginInterface(plugin.MainMenuPlugin):
         return []
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def show(self, arg=None, menuw=None):
-        _debug_('show(self, arg=None, menuw=None)', 2)
+        _debug_('show(arg=%r, menuw=%r)' % (arg, menuw), 1)
         gui = audio.player.get()
 
         # restore the menuw's
@@ -129,13 +157,8 @@ class PluginInterface(plugin.MainMenuPlugin):
         menuw.hide()
         gui.show()
 
-        ### TODO: is this plugin still around?
-        # maybe we can remove this lines savely
-        mpav = plugin.getbyname( 'audio.mpav' )
-        if mpav:
-            mpav.start_mpav()
-
-        mplvis = plugin.getbyname( 'audio.mplayervis' )
-        if mplvis:
-            mplvis.stop_visual()
-            mplvis.start_visual()
+        mplayervis = plugin.getbyname('audio.mplayervis')
+        if mplayervis:
+            mplayervis.attach()
+            mplayervis.stop_visual()
+            mplayervis.start_visual()
