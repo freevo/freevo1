@@ -350,11 +350,6 @@ class MenuWidget(GUIObject):
         level = 0
         for mediaitem in media.split('.'):
             for menuitem in self.menustack[level].choices:
-                if config.DEBUG:
-                    try:
-                        print 'DJW:menuitem=%s' % menuitem
-                    except:
-                        pass
                 try:
                     if menuitem.arg[0] == mediaitem:
                         if config.OSD_SOUNDS:

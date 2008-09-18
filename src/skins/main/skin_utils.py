@@ -98,18 +98,13 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
 
     if item.image:
         if not os.path.exists(item.image):
-            #print 'DJW: item.image:2', item.image
             return None, 0, 0
-        #print 'DJW: item.image:', item.image, isinstance(item.image, imlib2.Image)
         if isinstance(item.image, imlib2.Image):
             image = osd.loadbitmap(item.image)
         else:
-            #print 'DJW:thumb://%s' % item.image
             image = load_imagecache['thumb://%s' % item.image]
-            #print 'DJW: image1:', image
             if not image:
                 image = osd.loadbitmap('thumb://%s' % item.image)
-                #print 'DJW: image2:', image
                 load_imagecache['thumb://%s' % item.image] = image
 
         if not item['rotation']:

@@ -81,6 +81,7 @@ def app(application=0):
         context = 'menu'
         if hasattr(application, 'app_mode'):
             context = application.app_mode
+        # XXX Hmm this will make life difficult converting to kaa EventHandler
         if hasattr(application, 'eventhandler'):
             application = application.eventhandler
         get_singleton().set_app(application, context)
