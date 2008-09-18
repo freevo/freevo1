@@ -164,7 +164,7 @@ class PlayerGUI(GUIObject):
         else:
             self.item.remain = self.item.length - self.item.elapsed
 
-        do_blend = config.FREEVO_USE_ALPHABLENDING and self.first_drawing:
+        do_blend = config.FREEVO_USE_ALPHABLENDING and self.first_drawing
 
         self.first_drawing = False
         skin.draw('player', self.item)
