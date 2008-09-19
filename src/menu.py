@@ -84,9 +84,11 @@ class MenuItem(Item):
         """
         return the menu item as a raw string
         """
-        if hasattr(self, 'name'):
+        if hasattr(self, 'name') and self.name:
             return '<%-.16s: %r>' % (self.name, self.__class__)
-        return '<%r>' % (self.__class__,)
+        if hasattr(self, 'type') and self.type:
+            return '<%r: %r>' % (self.type, self.__class__)
+        return '<%r: %r>' % (self.__class__,)
 
 
     @benchmark(benchmarking)

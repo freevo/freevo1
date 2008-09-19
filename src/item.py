@@ -470,7 +470,6 @@ class Item:
         # give the event to the next eventhandler in the list
         if self.parent:
             return self.parent.eventhandler(event, menuw)
-
         else:
             if event in (STOP, PLAY_END, USER_END) and menuw:
                 if menuw.visible:
@@ -484,8 +483,9 @@ class Item:
 
     def plugin_eventhandler(self, event, menuw=None):
         """
-        eventhandler for special pligins for this item
+        eventhandler for special plug-ins for this item
         """
+        print 'DJW:plugin_eventhandler(event=%s, menuw=%r)' % (event, menuw)
         if not hasattr(self, '__plugin_eventhandler__'):
             self.__plugin_eventhandler__ = []
             for p in plugin.get('item') + plugin.get('item_%s' % self.type):
@@ -517,7 +517,6 @@ class Item:
                 return '%d:%02d:%02d' % ( length / 3600, (length % 3600) / 60, length % 60)
             else:
                 return '%d:%02d' % (length / 60, length % 60)
-
 
         if attr == 'length:min':
             try:

@@ -474,7 +474,7 @@ class Skin:
         """
         Redraw the current screen
         """
-        _debug_('redraw', 2)
+        _debug_('redraw()', 2)
         if self.last_draw[0] and self.last_draw[1]:
             self.draw(self.last_draw[0], self.last_draw[1], self.last_draw[2])
 
