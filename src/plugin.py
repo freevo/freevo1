@@ -444,9 +444,9 @@ def isevent(event):
     """
     plugin event parsing
     """
-    event = str(event)
-    if event[:12] == 'PLUGIN_EVENT':
-        return event[13:]
+    event = str(event).split('PLUGIN_EVENT ')
+    if len(event) == 2:
+        return event[1]
     else:
         return None
 
