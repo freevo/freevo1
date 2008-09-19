@@ -34,7 +34,7 @@ B{NOTE} Do not use the OSD object inside a thread.
 import time
 import os
 import stat
-import kaa.imlib2 as Image
+import kaa.imlib2
 import re
 import traceback
 import threading, thread
@@ -487,7 +487,7 @@ class OSD:
                 return
 
             _debug_('pygame event=%s' % (event), 2)
-            #print 'pygame event=%s' % (event)
+            print 'pygame event=%s' % (event)
 
             if config.SYS_USE_MOUSE:
                 if event.type == MOUSEMOTION:
@@ -582,8 +582,7 @@ class OSD:
 
                 elif event.key == K_F10:
                     # Take a screenshot
-                    pygame.image.save(self.screen,
-                                      '/tmp/freevo_ss%s.bmp' % self._screenshotnum)
+                    pygame.image.save(self.screen, '/tmp/freevo_ss%s.bmp' % self._screenshotnum)
                     self._screenshotnum += 1
 
                 else:
@@ -692,6 +691,76 @@ class OSD:
         print 'mode=%s %s' % (type(data[2]), data[2])
 
 
+    def _load_image_imlib2(self, data):
+        """
+        Load an image from an imlib2 image object
+        """
+        _debug_('_load_image_imlib2(data=%r)' % (data,), 2)
+        if data.mode == 'BGRA':
+            data.mode = 'RGBA'
+        image = pygame.image.fromstring(str(data.get_raw_data(format=data.mode)), data.size, data.mode)
+        return image
+
+
+    def _load_image_filename(self, url):
+        """
+        Load an image from a file name
+        """
+        _debug_('_load_image_filename(url=%r)' % (url,), 2)
+        if url[:8] == 'thumb://':
+            filename = os.path.abspath(url[8:])
+            thumbnail = True
+        else:
+            filename = os.path.abspath(url)
+            thumbnail = False
+
+        if not os.path.isfile(filename):
+            fname = os.path.join(config.IMAGE_DIR, filename)
+            _debug_('Bitmap file "%s" doesn\'t exist!' % filename, DWARNING)
+            if config.DEBUG:
+                traceback.print_stack()
+            return None
+
+        try:
+            if filename.endswith('.raw'):
+                # load cache
+                data  = util.read_thumbnail(filename)
+                #self.printdata(data)
+                # convert to pygame image
+                image = pygame.image.fromstring(data[0], data[1], data[2])
+
+            elif thumbnail:
+                # load cache or create it
+                data = util.cache_image(filename)
+                #self.printdata(data)
+                # convert to pygame image
+                try:
+                    image = pygame.image.fromstring(data[0], data[1], data[2])
+                except:
+                    data = util.create_thumbnail(filename)
+                    image = pygame.image.fromstring(data[0], data[1], data[2])
+
+            else:
+                try:
+                    image = pygame.image.load(filename)
+                except pygame.error, e:
+                    _debug_('SDL image load problem: %s - trying imlib2' % e, DINFO)
+                    try:
+                        i = kaa.imlib2.open(filename)
+                        image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
+                    except IOError, why:
+                        _debug_('imlib2 image load problem: %s' % (why), DERROR)
+                        return None
+
+        except Exception, why:
+            _debug_('Problem while loading image %r: %r' % (url, why), DWARNING)
+            if config.DEBUG:
+                traceback.print_exc()
+            return None
+
+        return image
+
+
     def loadbitmap(self, url, cache=False):
         """
         Load a bitmap and return the pygame image object.
@@ -699,92 +768,39 @@ class OSD:
         @param url: is the image to load
         @type url: kaa.image, url or str
         @param cache: Cache the image?
-        @type cache: bool
-        @returns: pygame surface
+        @type cache: bool or bitmapcache
+        @returns: pygame surfaceloadbitmap
         @rtype: Surface or None
         """
         _debug_('loadbitmap(url=%r, cache=%r)' % (url, cache), 2)
-        if cache:
-            if cache == True:
-                cache = self.bitmapcache
-            s = cache[url]
-            if s:
-                return s
 
         if not pygame.display.get_init():
             return None
 
-        try:
-            if url.mode == 'BGRA':
-                url.mode = 'RGBA'
-            image = pygame.image.fromstring(str(url.get_raw_data(format=url.mode)), url.size, url.mode)
-        except AttributeError:
-            image = None
-
-            if url[:8] == 'thumb://':
-                filename = os.path.abspath(url[8:])
-                thumbnail = True
-            else:
-                filename = os.path.abspath(url)
-                thumbnail = False
-
-            if not os.path.isfile(filename):
-                filename = os.path.join(config.IMAGE_DIR, url[8:])
-                _debug_('Bitmap file "%s" doesn\'t exist!' % filename, DWARNING)
-                #raise 'Bitmap file'
-                return None
-
-            try:
-                if isinstance(filename, basestring) and filename.endswith('.raw'):
-                    # load cache
-                    data  = util.read_thumbnail(filename)
-                    #self.printdata(data)
-                    # convert to pygame image
-                    image = pygame.image.fromstring(data[0], data[1], data[2])
-
-                elif thumbnail:
-                    # load cache or create it
-                    data = util.cache_image(filename)
-                    #self.printdata(data)
-                    # convert to pygame image
-                    try:
-                        image = pygame.image.fromstring(data[0], data[1], data[2])
-                    except:
-                        data = util.create_thumbnail(filename)
-                        image = pygame.image.fromstring(data[0], data[1], data[2])
-
-                else:
-                    try:
-                        image = pygame.image.load(filename)
-                    except pygame.error, e:
-                        _debug_('SDL image load problem: %s - trying imlib2' % e, DINFO)
-                        try:
-                            i = Image.open(filename)
-                            image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
-                        except IOError, why:
-                            _debug_('imlib2 image load problem: %s' % (why), DERROR)
-
-            except:
-                _debug_('Problem while loading image "%s"' % String(url), DWARNING)
-                if config.DEBUG:
-                    traceback.print_exc()
-                return None
-
-        except Exception, why:
-            _debug_('image.fromstring: %s' % why)
-            return None
+        if isinstance(url, kaa.imlib2.Image):
+            image = self._load_image_imlib2(url)
+        elif isinstance(url, basestring):
+            if cache:
+                if cache == True:
+                    cache = self.bitmapcache
+                s = cache[url]
+                if s:
+                    return s
+            image = self._load_image_filename(url)
+            if image:
+                if cache:
+                    cache[url] = image
+        else:
+            raise 'wrong image type%r' % url
 
         # convert the surface to speed up blitting later
         if image:
             if image.get_alpha():
                 image.set_alpha(image.get_alpha(), RLEACCEL)
             else:
-                if image.get_alpha() is None:
-                    image.set_colorkey(-1)
+                #if image.get_alpha() is None:
+                #    image.set_colorkey(-1)
                 image = image.convert()
-
-        if cache:
-            cache[url] = image
         return image
 
 
