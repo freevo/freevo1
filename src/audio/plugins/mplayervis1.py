@@ -381,10 +381,10 @@ class PluginInterface(plugin.Plugin):
         - LANG toggles the message on and off (not sure if this works)
         - 0-9 selects the visual effect mode
     """
-
     player = None
     visual = None
     view   = DOCK
+    vis_mode = -1
     passed_event = False
     detached = False
 
@@ -394,7 +394,6 @@ class PluginInterface(plugin.Plugin):
         plugin.Plugin.__init__(self)
         self._type    = 'mplayer_audio'
         self.app_mode = 'audio'
-        self.vis_mode = -1
         self.title    = None
         self.message  = None
         self.info     = None
@@ -442,7 +441,9 @@ class PluginInterface(plugin.Plugin):
 
 
     def play(self, command, player):
-        """ """
+        """
+        Play it
+        """
         _debug_('play(command, player)', 1)
         self.player = player
         self.item   = player.playerGUI.item
@@ -471,6 +472,14 @@ class PluginInterface(plugin.Plugin):
         """
         _debug_('eventhandler(event=%r, arg=%r)' % (event.name, arg), 1)
 
+        if plugin.isevent(event) == 'DETACH':
+            PluginInterface.detached = True
+            self.stop_visual()
+        elif plugin.isevent(event) == 'ATTACH':
+            PluginInterface.detached = False
+        elif event == STOP:
+            PluginInterface.detached = False
+
         if event == 'CHANGE_MODE':
             self.toggle_view()
             return True
@@ -488,24 +497,23 @@ class PluginInterface(plugin.Plugin):
             return True
 
         if event == 'NEXT_VISUAL':
-            self.vis_mode += 1
-            if self.vis_mode > 9: self.vis_mode = -1
-            _debug_('vis_mode=%s' % (self.vis_mode), 1)
-            self.visual.set_visual(self.vis_mode)
-            rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % self.vis_mode)))
+            PluginInterface.vis_mode += 1
+            if PluginInterface.vis_mode > 9: PluginInterface.vis_mode = -1
+            _debug_('vis_mode=%s' % (PluginInterface.vis_mode), 1)
+            self.visual.set_visual(PluginInterface.vis_mode)
+            rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
             return True
 
         if event == 'CHANGE_VISUAL':
-            self.vis_mode = event.arg
-            if self.vis_mode < -1: self.vis_mode = -1
-            if self.vis_mode > 9: self.vis_mode = 9
-            _debug_('vis_mode=%s' % (self.vis_mode), 1)
-            self.visual.set_visual(self.vis_mode)
-            rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % self.vis_mode)))
+            PluginInterface.vis_mode = event.arg
+            if PluginInterface.vis_mode < -1: PluginInterface.vis_mode = -1
+            if PluginInterface.vis_mode > 9: PluginInterface.vis_mode = 9
+            _debug_('vis_mode=%s' % (PluginInterface.vis_mode), 1)
+            self.visual.set_visual(PluginInterface.vis_mode)
+            rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
             return True
 
         if self.visual and self.view == FULL:
-
             if event == OSD_MESSAGE:
                 self.visual.set_info(event.arg)
                 return True
@@ -661,6 +669,9 @@ class PluginInterface(plugin.Plugin):
         """
         #_debug_('stdout(line=%r)' % (line), 1)
         if self.visual:
+            return
+
+        if PluginInterface.detached:
             return
 
         if line.find("[export] Memory mapped to file: " + mmap_file) == 0:

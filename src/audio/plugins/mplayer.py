@@ -202,7 +202,6 @@ class MPlayer:
         eventhandler for mplayer control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-
         for p in self.plugins:
             if p.eventhandler(event):
                 return True

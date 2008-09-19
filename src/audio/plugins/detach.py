@@ -75,13 +75,14 @@ class PluginInterface(plugin.MainMenuPlugin):
     @benchmark(benchmarking, benchmarkcall)
     def detach(self):
         _debug_('detach()', 1)
+        rc.post_event(plugin.event('DETACH'))
         gui = audio.player.get()
 
         # hide the player and show the menu
-        mplayervis = plugin.getbyname('audio.mplayervis')
-        if mplayervis:
-            mplayervis.stop_visual()
-            mplayervis.detach()
+        #mplayervis = plugin.getbyname('audio.mplayervis')
+        #if mplayervis:
+        #    mplayervis.stop_visual()
+        #    #mplayervis.detach()
 
         gui.hide()
         gui.menuw.show()
@@ -92,44 +93,42 @@ class PluginInterface(plugin.MainMenuPlugin):
         gui.item.menuw = None
         if gui.item.parent:
             gui.item.parent.menuw = None
-        rc.post_event(plugin.event('DETACH'))
 
 
     @benchmark(benchmarking, benchmarkcall)
     def attach(self):
         _debug_('attach()', 1)
-        # hide the player and show the menu
         rc.post_event(plugin.event('ATTACH'))
-        mplayervis = plugin.getbyname('audio.mplayervis')
-        if mplayervis:
-            mplayervis.attach()
-            #mplayervis.start_visual()
+        # hide the player and show the menu
+        #mplayervis = plugin.getbyname('audio.mplayervis')
+        #if mplayervis:
+        #    mplayervis.attach()
+        #    mplayervis.start_visual()
 
 
     @benchmark(benchmarking, benchmarkcall)
     def _event_handler(self, event):
         _debug_('_event_handler(event=%s)' % (event,), 2)
-        if event == BUTTON:
-            gui = audio.player.get()
-            if gui:
-                p = gui.player
-                if event.arg=='FFWD':
+        gui = audio.player.get()
+        if gui:
+            p = gui.player
+            if event == BUTTON:
+                if event.arg == 'FFWD':
                     p.eventhandler(Event('SEEK', arg='10', context='audio'))
-                elif event.arg=='REW':
+                elif event.arg == 'REW':
                     p.eventhandler(Event('SEEK', arg='-10', context='audio'))
-                elif event.arg=='PAUSE':
+                elif event.arg == 'PAUSE':
                     p.eventhandler(Event('PLAY', context='audio'))
-                elif event.arg=='STOP':
-                    rc.post_event(plugin.event('ATTACH'))
+                elif event.arg == 'STOP':
                     p.eventhandler(Event('STOP'))
-                elif event.arg=='NEXT':
+                elif event.arg == 'NEXT':
                     p.eventhandler(Event('PLAYLIST_NEXT', context='audio'))
-                elif event.arg=='PREV':
+                elif event.arg == 'PREV':
                     p.eventhandler(Event('PLAYLIST_PREV', context='audio'))
-        elif event == VIDEO_START:
-            gui = audio.player.get()
-            if gui:
-                gui.player.eventhandler(Event('STOP'))
+            elif plugin.isevent(event) in ('DETACH', 'ATTACH'):
+                p.eventhandler(event)
+            elif event == VIDEO_START:
+                p.eventhandler(Event('STOP'))
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -157,8 +156,4 @@ class PluginInterface(plugin.MainMenuPlugin):
         menuw.hide()
         gui.show()
 
-        mplayervis = plugin.getbyname('audio.mplayervis')
-        if mplayervis:
-            mplayervis.attach()
-            mplayervis.stop_visual()
-            mplayervis.start_visual()
+        rc.post_event(plugin.event('ATTACH'))
