@@ -109,12 +109,14 @@ def main():
 
 
 if __name__ == '__main__':
-    import traceback
     try:
         _debug_('main() starting')
         main()
         _debug_('main() finished')
     except SystemExit:
+        _debug_('main() stopped')
         pass
-    except Exception, e:
+    except Exception, why:
+        import traceback
         traceback.print_exc()
+        _debug_(why, DWARNING)

@@ -288,4 +288,14 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        _debug_('main() starting')
+        main()
+        _debug_('main() finished')
+    except SystemExit:
+        _debug_('main() stopped')
+        pass
+    except Exception, why:
+        import traceback
+        traceback.print_exc()
+        _debug_(why, DWARNING)
