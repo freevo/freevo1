@@ -129,9 +129,10 @@ class PluginInterface( plugin.DaemonPlugin ):
         """
         if self.disable: return
 
-        if plugin.getbyname('audio.detachbar'):
-            if type == 'player' and plugin.getbyname('audio.detachbar').status != 0:
-                return
+        if type == 'player': 
+            if plugin.getbyname('audio.detachbar'):
+                if plugin.getbyname('audio.detachbar').state != 1: #BAR_HIDE
+                    return
 
         write = ""
         if type == "menu":
