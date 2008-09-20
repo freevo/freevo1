@@ -766,7 +766,7 @@ class Videodev:
         key = self.ctrlname(name)
         if not self.controls.has_key(key):
             _debug_('control \"%s\" does not exists' % (name), DWARNING)
-            return None
+            return 0
         (id, type, name, min, max, step, default, flags, value) = self.controls[key]
         return value
 
