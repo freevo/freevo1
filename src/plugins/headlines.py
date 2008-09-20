@@ -138,7 +138,6 @@ class HeadlinesSiteItem(Item):
         popup = PopupBox(text=_('Fetching headlines...'))
         popup.show()
         try:
-
             # parse the document
             doc = util.feedparser.parse(self.url)
             if doc.status < 400:
