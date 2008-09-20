@@ -477,6 +477,7 @@ class PluginInterface(plugin.Plugin):
             self.stop_visual()
         elif plugin.isevent(event) == 'ATTACH':
             PluginInterface.detached = False
+            self.start_visual()
         elif event == STOP:
             PluginInterface.detached = False
 

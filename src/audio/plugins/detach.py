@@ -49,6 +49,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     plugin to detach the audio player to e.g. view pictures while listening
     to music
     """
+    detached = False
 
     @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
@@ -76,34 +77,12 @@ class PluginInterface(plugin.MainMenuPlugin):
     def detach(self):
         _debug_('detach()', 1)
         rc.post_event(plugin.event('DETACH'))
-        gui = audio.player.get()
-
-        # hide the player and show the menu
-        #mplayervis = plugin.getbyname('audio.mplayervis')
-        #if mplayervis:
-        #    mplayervis.stop_visual()
-        #    #mplayervis.detach()
-
-        gui.hide()
-        gui.menuw.show()
-
-        # set all menuw's to None to prevent the next title to be
-        # visible again
-        gui.menuw = None
-        gui.item.menuw = None
-        if gui.item.parent:
-            gui.item.parent.menuw = None
 
 
     @benchmark(benchmarking, benchmarkcall)
     def attach(self):
         _debug_('attach()', 1)
         rc.post_event(plugin.event('ATTACH'))
-        # hide the player and show the menu
-        #mplayervis = plugin.getbyname('audio.mplayervis')
-        #if mplayervis:
-        #    mplayervis.attach()
-        #    mplayervis.start_visual()
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -120,15 +99,59 @@ class PluginInterface(plugin.MainMenuPlugin):
                 elif event.arg == 'PAUSE':
                     p.eventhandler(Event('PLAY', context='audio'))
                 elif event.arg == 'STOP':
+                    PluginInterface.detached = False
                     p.eventhandler(Event('STOP'))
                 elif event.arg == 'NEXT':
                     p.eventhandler(Event('PLAYLIST_NEXT', context='audio'))
                 elif event.arg == 'PREV':
                     p.eventhandler(Event('PLAYLIST_PREV', context='audio'))
-            elif plugin.isevent(event) in ('DETACH', 'ATTACH'):
+            elif plugin.isevent(event) == 'DETACH':
+                p.eventhandler(event)
+                self._detach()
+            elif plugin.isevent(event) == 'ATTACH':
+                PluginInterface.detached = False
                 p.eventhandler(event)
             elif event == VIDEO_START:
+                PluginInterface.detached = False
                 p.eventhandler(Event('STOP'))
+            elif event == MENU_PLAY_ITEM:
+                rc.post_event(plugin.event('ATTACH'))
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def _detach(self, menuw=None):
+        _debug_('_detach()', 1)
+        if PluginInterface.detached:
+            return
+        PluginInterface.detached = True
+
+        gui = audio.player.get()
+        # hide the menuw's
+        gui.hide()
+        gui.menuw.show()
+        # set all menuw's to None to prevent the next title to be visible again
+        gui.menuw = None
+        gui.item.menuw = None
+        if gui.item.parent:
+            gui.item.parent.menuw = None
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def _attach(self, menuw=None):
+        _debug_('_attach()', 1)
+        if not PluginInterface.detached:
+            return
+        PluginInterface.detached = False
+
+        gui = audio.player.get()
+        # restore the menuw's
+        gui.menuw = menuw
+        gui.item.menuw = menuw
+        if gui.item.parent:
+            gui.item.parent.menuw = menuw
+        # hide the menu and show the player
+        menuw.hide()
+        gui.show()
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -144,16 +167,5 @@ class PluginInterface(plugin.MainMenuPlugin):
     @benchmark(benchmarking, benchmarkcall)
     def show(self, arg=None, menuw=None):
         _debug_('show(arg=%r, menuw=%r)' % (arg, menuw), 1)
-        gui = audio.player.get()
-
-        # restore the menuw's
-        gui.menuw = menuw
-        gui.item.menuw = menuw
-        if gui.item.parent:
-            gui.item.parent.menuw = menuw
-
-        # hide the menu and show the player
-        menuw.hide()
-        gui.show()
-
         rc.post_event(plugin.event('ATTACH'))
+        self._attach(menuw)
