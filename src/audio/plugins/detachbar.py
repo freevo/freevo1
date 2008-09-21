@@ -96,6 +96,7 @@ class PluginInterface(plugin.DaemonPlugin):
     | 	Wait -> Hide [ label = "timeout(stop timer)" ];
     | }
     """
+    detached = False
 
     @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
@@ -117,17 +118,22 @@ class PluginInterface(plugin.DaemonPlugin):
     def _event_handler(self, event):
         _debug_('_event_handler(event=%s)' % (event,), 2)
         if plugin.isevent(event) == 'DETACH':
+            PluginInterface.detached = True
             self.update(BAR_SHOW)
         elif plugin.isevent(event) == 'ATTACH':
+            PluginInterface.detached = False
             self.update(BAR_HIDE)
         elif event == STOP:
+            PluginInterface.detached = False
             self.update(BAR_HIDE)
         elif event == BUTTON and event.arg == 'STOP':
+            PluginInterface.detached = False
             self.update(BAR_HIDE)
-        elif event == PLAY_START and self.state != BAR_HIDE:
-            self.update(BAR_SHOW)
-        elif event == PLAY_END:
-            self.update(BAR_WAIT)
+        elif PluginInterface.detached:
+            if event == PLAY_START:
+                self.update(BAR_SHOW)
+            elif event == PLAY_END:
+                self.update(BAR_WAIT)
 
 
     @benchmark(benchmarking, benchmarkcall)
