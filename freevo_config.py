@@ -383,6 +383,9 @@ LOCAL_CONF_CHANGES = [
      Renamed USE_NETWORK to SYS_USE_NETWORK 
      Renamed USE_SDL_KEYBOARD to SYS_USE_KEYBOARD
      Added SYS_USE_JOYSTICK to allow a joystick device to be used
+     Added DEBUG_BENCHMARKING can be used to time and trace function calls
+     Added DEBUG_BENCHMARKCALL can be used to print the arguments and results of function calls
+     Removed MPLAYER_AUDIO_CACHE_KB, MPLAYER_AUDIO_CACHE_MIN_PERCENT and MPLAYER_AUDIO_NETWORK_OPTS, it broke detach 
      """),
 ]
 
