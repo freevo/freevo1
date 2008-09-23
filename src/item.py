@@ -485,7 +485,7 @@ class Item:
         """
         eventhandler for special plug-ins for this item
         """
-        print 'DJW:plugin_eventhandler(event=%s, menuw=%r)' % (event, menuw)
+        _debug_('plugin_eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
         if not hasattr(self, '__plugin_eventhandler__'):
             self.__plugin_eventhandler__ = []
             for p in plugin.get('item') + plugin.get('item_%s' % self.type):
