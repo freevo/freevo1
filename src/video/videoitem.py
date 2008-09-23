@@ -54,6 +54,10 @@ from item  import Item, FileInformation
 from event import *
 from skin.widgets import ScrollableTextScreen
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 class VideoItem(Item):
     """
     A class describing a video item.
@@ -78,6 +82,7 @@ class VideoItem(Item):
     @ivar player_rating: rating of the current player.
     """
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, url, parent, info=None, parse=True):
         """
         Create an instance of a VideoItem
@@ -176,6 +181,8 @@ class VideoItem(Item):
         else:
             self['deinterlace'] = False
 
+
+    #@benchmark(benchmarking, benchmarkcall)
     def __str__(self):
         """
         Create a string for a VideoItem instance.
@@ -185,6 +192,7 @@ class VideoItem(Item):
         return s
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def __repr__(self):
         """
         Create a raw string for a VideoItem instance.
@@ -197,6 +205,7 @@ class VideoItem(Item):
         return s
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_url(self, url, info=True):
         """
         Sets a new url to the item. This functions also changes other
@@ -244,6 +253,7 @@ class VideoItem(Item):
         self.rating()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def rating(self):
         """
         Calculate a new player rating for this item.
@@ -304,6 +314,7 @@ class VideoItem(Item):
         _debug_("rating: url=%r possible_players=%r" % (self.url, self.possible_players,), 2)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def id(self):
         """
         This id should be the same when the item is rebuild later with the same
@@ -321,6 +332,7 @@ class VideoItem(Item):
         return ret
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def __getitem__(self, key):
         """
         Get the item's attribute.
@@ -359,14 +371,12 @@ class VideoItem(Item):
                 return aspect
 
         if key == 'rating':
-
             if self.info['rating']:
                 return self.info['rating']
             else:
                 return ''
 
         if key == 'runtime':
-
             if self.info['runtime']:
                 if self.info['runtime'] != 'None':
                     return self.info['runtime']
@@ -402,6 +412,7 @@ class VideoItem(Item):
         return Item.__getitem__(self, key)
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def sort(self, mode=None):
         """
         Sort the video items.
@@ -420,6 +431,7 @@ class VideoItem(Item):
     # actions:
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """
         Menu actions for a video item.
@@ -489,6 +501,7 @@ class VideoItem(Item):
         return items
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def show_details(self, arg=None, menuw=None):
         """
         Show more details
@@ -496,6 +509,7 @@ class VideoItem(Item):
         ShowDetails(menuw, self)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def show_variants(self, arg=None, menuw=None):
         """
         Show a list of variants in a menu
@@ -507,6 +521,7 @@ class VideoItem(Item):
         self.menuw.pushmenu(m)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def create_thumbnail(self, arg=None, menuw=None):
         """
         Create a thumbnail as image icon
@@ -520,6 +535,7 @@ class VideoItem(Item):
         menuw.delete_submenu()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def play_max_cache(self, arg=None, menuw=None):
         """
         Play and use maximum cache with mplayer
@@ -527,18 +543,19 @@ class VideoItem(Item):
         self.play(menuw=menuw, arg='-cache 65536')
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_next_available_subitem(self):
         """
         Select the next available subitem. Loops on each subitem and checks if
         the needed media is really there.  If the media is there, sets
-        self.current_subitem to the given subitem and returns 1.
+        self.current_subitem to the given subitem and returns True.
 
         If no media has been found, we set self.current_subitem to None.  If
         the search for the next available subitem did start from the beginning
         of the list, then we consider that no media at all was available for
-        any subitem: we return 0.  If the search for the next available subitem
+        any subitem: we return False.  If the search for the next available subitem
         did not start from the beginning of the list, then we consider that at
-        least one media had been found in the past: we return 1.
+        least one media had been found in the past: we return True.
         """
         if hasattr(self, 'conf_select_this_item'):
             # XXX bad hack, clean me up
@@ -546,14 +563,14 @@ class VideoItem(Item):
             del self.conf_select_this_item
             return True
 
-        cont = 1
-        from_start = 0
         si = self.current_subitem
+        from_start = False
+        cont = True
         while cont:
             if not si:
                 # No subitem selected yet: take the first one
                 si = self.subitems[0]
-                from_start = 1
+                from_start = True
             else:
                 pos = self.subitems.index(si)
                 # Else take the next one
@@ -563,24 +580,26 @@ class VideoItem(Item):
                 else:
                     # No next subitem
                     si = None
-                    cont = 0
+                    cont = False
             if si:
                 if (si.media_id or si.media):
                     # If the file is on a removeable media
                     if util.check_media(si.media_id):
                         self.current_subitem = si
-                        return 1
+                        return True
                     elif si.media and util.check_media(si.media.id):
                         self.current_subitem = si
-                        return 1
+                        return True
                 else:
                     # if not, it is always available
                     self.current_subitem = si
-                    return 1
+                    return True
+
         self.current_subitem = None
         return not from_start
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def play(self, arg=None, menuw=None):
         """
         Play the item.
@@ -694,6 +713,7 @@ class VideoItem(Item):
                 AlertBox(text=error, handler=self.error_handler).show()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def error_handler(self):
         """
         error handler if play doesn't work to send the end event and stop
@@ -703,6 +723,7 @@ class VideoItem(Item):
         self.stop()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def stop(self, arg=None, menuw=None):
         """
         execute commands if defined
@@ -714,6 +735,7 @@ class VideoItem(Item):
             self.player.stop()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def dvd_vcd_title_menu(self, arg=None, menuw=None):
         """
         Generate special menu for DVD/VCD/SVCD content
@@ -754,6 +776,7 @@ class VideoItem(Item):
         self.menuw.pushmenu(moviemenu)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def settings(self, arg=None, menuw=None):
         """
         Create a menu with 'settings'
@@ -764,6 +787,7 @@ class VideoItem(Item):
         self.menuw.pushmenu(confmenu)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         """
         Eventhandler for this item
@@ -828,6 +852,7 @@ class ShowDetails(ScrollableTextScreen):
     """
     Screen to show more details
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, menuw, movie):
         if movie is None:
             name = _('No Information Available')
@@ -862,6 +887,7 @@ class ShowDetails(ScrollableTextScreen):
         self.show(menuw)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def getattr(self, name):
         if name == 'title':
             return self.name
@@ -872,6 +898,7 @@ class ShowDetails(ScrollableTextScreen):
         return u''
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         """
         eventhandler for the programm description display

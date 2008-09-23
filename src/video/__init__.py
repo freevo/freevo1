@@ -121,6 +121,7 @@ class PluginInterface(plugin.MimetypePlugin):
                         name = stem+tail
                         x = VideoItem(name, parent)
                         x.files = FileInformation()
+                        x.subitems.append(VideoItem(file, x))
                         x.set_url(file, True)
                         for filename in add_file:
                             x.files.append(filename)

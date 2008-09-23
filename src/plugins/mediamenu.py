@@ -60,9 +60,8 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
-        return [ menu.MenuItem('', action=MediaMenu().main_menu,
-                               arg=(self.type,self.force_text_view), type='main',
-                               parent=parent, skin_type = self.type) ]
+        return [ menu.MenuItem('', action=MediaMenu().main_menu, arg=(self.type,self.force_text_view),
+            type='main', parent=parent, skin_type=self.type) ]
 
 
 
