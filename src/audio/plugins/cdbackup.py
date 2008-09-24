@@ -163,10 +163,10 @@ class PluginInterface(plugin.ItemPlugin):
         """
         list of config variables this plugin needs
         """
-        return (('AUDIO_BACKUP_DIR', config.AUDIO_ITEMS[ 0 ][ 1 ],
-                 'directory where to put the encoded files'),
+        return (('AUDIO_BACKUP_DIR', config.AUDIO_ITEMS[ 0 ][ 1 ], 'directory where to put the encoded files'),
                 ('LAME_CMD', config.CONF.lame , ''),
                 ('CDPAR_CMD', config.CONF.cdparanoia, ''),
+                ('CDPAR_CMD_DEVICE_OPT', '-d', 'flag for the device name'),
                 ('OGGENC_CMD', config.CONF.oggenc, ''),
                 ('FLAC_CMD', config.CONF.flac, ''),
                 ('CD_RIP_FMT', None, ''),
@@ -175,8 +175,7 @@ class PluginInterface(plugin.ItemPlugin):
                 ('CD_RIP_LAME_OPTS', '--preset standard', ''),
                 ('CD_RIP_OGG_OPTS', '-m 128', ''),
                 ('CD_RIP_FLAC_OPTS', '-8', '8==Best, but slowest compression'),
-                ('RIP_TITLE_CASE','0',
-                 'Autoconvert all track/album/artist names to title case'))
+                ('RIP_TITLE_CASE','0', 'Autoconvert all track/album/artist names to title case'))
 
     def actions(self, item):
         self.item = item
@@ -188,7 +187,7 @@ class PluginInterface(plugin.ItemPlugin):
                              (self.stop_ripping, _('Stop CD ripping')) ]
                 else:
                     self.device = self.item.devicename
-                    _debug_('devicename = %s' %self.device)
+                    _debug_('devicename = %s' % self.device)
                     return [ (self.create_backup, _('Rip the CD to the hard drive')) ]
         except:
             _debug_(_('Item is not an Audio CD'), DERROR)
@@ -236,7 +235,7 @@ class PluginInterface(plugin.ItemPlugin):
         return backupmenu
 
 
-    def cd_backup(self, arg,  menuw=None):
+    def cd_backup(self, arg, menuw=None):
         device, type = arg
         self.rip_thread = main_backup_thread(device=device, rip_format=type)
         self.rip_thread.start()
@@ -409,8 +408,9 @@ class main_backup_thread(threading.Thread):
             output   = ''
 
             # Build the cdparanoia command to be run
-            cdparanoia_command = str('%s %s %s' % (config.CDPAR_CMD, config.CD_RIP_CDPAR_OPTS, \
-                                 str(i+1))).split(' ')+[ wav_file ]
+            device_opt = self.device and '%s %s' % (config.CDPAR_CMD_DEVICE_OPT, self.device) or ''
+            cdparanoia_command = str('%s %s %s %s' % (config.CDPAR_CMD, device_opt, config.CD_RIP_CDPAR_OPTS,
+                str(i+1))).split(' ')+[ wav_file ]
 
             _debug_('cdparanoia:  %s' % cdparanoia_command)
 
