@@ -217,20 +217,23 @@ class LastFMPlayerGUI(PlayerGUI):
         self.item = item
         self.player  = None
         self.running = False
-        self.info_time = 2
+        self.info_index = 0  #XXX
+        self.info_times = [] #XXX
         self.pic_url = None
         self.track_url = None
         self.start_time = time.time()
+        self.check_pts = ( 32, 16, 8, 4, 2, 0, -2, -4, -8, -16, -32 )
         config.EVENTS['audio']['RIGHT'] = Event(FUNCTION_CALL, arg=self.skip)
         config.EVENTS['audio']['1'] = Event(FUNCTION_CALL, arg=self.love)
         config.EVENTS['audio']['9'] = Event(FUNCTION_CALL, arg=self.ban)
+        config.EVENTS['audio']['SELECT'] = Event(FUNCTION_CALL, arg=self.song_info)
 
 
     def skip(self):
         """Skip song"""
         _debug_('skip()', 2)
         self.webservices.skip()
-        self.info_time = time.time() + 8
+        self.info_index += 1
         self.song_info()
 
 
@@ -257,7 +260,11 @@ class LastFMPlayerGUI(PlayerGUI):
         elapsed = int(time.time() - self.start_time + 0.5)
         self.item.elapsed = '%d:%02d' % (elapsed / 60, elapsed % 60)
 
-        if time.time() > self.info_time:
+        if self.info_index >= len(self.info_times):
+            info_time = self.start_time + (self.info_index + 1 - len(self.info_times)) * 64
+        else:
+            info_time = self.info_times[self.info_index]
+        if time.time() > info_time:
             self.song_info()
 
         skin.draw('player', self.item)
@@ -277,13 +284,49 @@ class LastFMPlayerGUI(PlayerGUI):
             self.item.length = int(self.wsitem.trackduration)
 
             if self.track_url != self.wsitem.track_url:
+                if self.track_url is not None:
+                    self.start_time = time.time()
                 self.track_url = self.wsitem.track_url
-                self.start_time = time.time()
-                # check song info again 2 seconds before the end of the track
-                self.info_time = self.start_time + self.item.length - 2
                 self.item.image = None
+
+                # check song info at intervals, the idea way is to write a
+                # mplayer plug-in that detects the squeek at the end of a
+                # track, squelches it and writes to the output a message. The
+                # message could then be detected and the url read.
+
+                # the following code block is a bit complex, the idea is to
+                # check at intervals if the track has changed, checking more
+                # frequently near the end of the track.  Easier to explain with
+                # an example, if a track is 200 seconds long then we check from
+                # the start time at [72, 136, 168, 184, 192, 196, 198, 200,
+                # 202, 204, 208, 216, 232] and every 64 seconds after the time.
+
+                self.info_index = 0
+                num_cpts = self.item.length / 64
+                cpts = range(num_cpts-1, 0, -1)
+                check_at = []
+                for i in cpts:
+                    check_at.append(self.item.length - (i * 64))
+                for i in self.check_pts:
+                    check_at.append(self.item.length - i)
+                self.info_times = []
+                for i in check_at:
+                    self.info_times.append(self.start_time + i)
+                #DJW#
+                print 'DJW:', time.strftime('%H:%M:%S', time.localtime(self.start_time))
+                for i in self.info_times:
+                    print 'DJW:', time.strftime('%H:%M:%S', time.localtime(i))
+                import pprint
+                pprint.pprint(self.wsitem.__dict__)
+                #DJW#
             else:
-                self.info_time = time.time() + 2
+                self.info_index += 1
+            #DJW#
+            if self.info_index >= len(self.info_times):
+                print 'DJW:index:', self.info_index, 'check:', time.strftime('%H:%M:%S', time.localtime(self.start_time + (self.info_index - len(self.info_times) + 1) * 64))
+            else:
+                print 'DJW:index:', self.info_index, 'check:', time.strftime('%H:%M:%S', time.localtime(self.info_times[self.info_index]))
+            #DJW#
 
             if self.item.image is None:
                 pic_url = None
@@ -330,6 +373,7 @@ class LastFMWebServices:
         @returns: reply from request
         """
         _debug_('url=%r, data=%r' % (url, data), 1)
+        print 'DJW:url=%r, data=%r' % (url, data)
         if lines:
             reply = []
             try:
