@@ -1,0 +1,257 @@
+Index: Makefile
+===================================================================
+--- Makefile	(revision 27667)
++++ Makefile	(working copy)
+@@ -71,6 +71,7 @@
+               libaf/af_surround.c \
+               libaf/af_sweep.c \
+               libaf/af_tools.c \
++              libaf/af_track.c \
+               libaf/af_volnorm.c \
+               libaf/af_volume.c \
+               libaf/filter.c \
+Index: libaf/control.h
+===================================================================
+--- libaf/control.h	(revision 27667)
++++ libaf/control.h	(working copy)
+@@ -236,4 +236,9 @@
+ #define AF_CONTROL_PLAYBACK_SPEED	0x00002500 | AF_CONTROL_FILTER_SPECIFIC
+ #define AF_CONTROL_SCALETEMPO_AMOUNT	0x00002600 | AF_CONTROL_FILTER_SPECIFIC
+ 
++// Track
++#define AF_CONTROL_TRACK_ON_OFF		0x00002700 | AF_CONTROL_FILTER_SPECIFIC
++#define AF_CONTROL_TRACK_THRESHOLD	0x00002800 | AF_CONTROL_FILTER_SPECIFIC
++#define AF_CONTROL_TRACK_TIMEOUT	0x00002900 | AF_CONTROL_FILTER_SPECIFIC
++
+ #endif /* MPLAYER_CONTROL_H */
+Index: libaf/af_track.c
+===================================================================
+--- libaf/af_track.c	(revision 0)
++++ libaf/af_track.c	(revision 0)
+@@ -0,0 +1,206 @@
++/*=============================================================================
++   //
++   //  This software has been released under the terms of the GNU General Public
++   //  license. See http://www.gnu.org/copyleft/gpl.html for details.
++   //
++   //  Copyright 2008 Duncan Webb duncan@freevo.org
++   //
++   //=============================================================================
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include <inttypes.h>
++#include <math.h>
++#include <limits.h>
++#include <time.h>
++
++#include "af.h"
++#include "mp_msg.h"
++
++#define MS(n) ((n) * 1000 * 1000)
++
++enum states { SLOUD, SQUIET };
++
++// Data for specific instances of this filter
++typedef struct af_track_s {
++	float time[AF_NCH];             // Forgetting factor for power estimate
++	float pow[AF_NCH];              // Estimated power level [dB]
++	float tresh[AF_NCH];            // Threshold [dB]
++	int attack[AF_NCH];             // Attack time [ms]
++	int release[AF_NCH];            // Release time [ms]
++	float range[AF_NCH];            // Range level [dB]
++	struct timespec start;          // Start time of detected quiet
++	enum states state;              // state of audio
++	float threshold;                // power level for quiet audio
++	long timeout;                   // number of seconds of quite audio
++} af_track_t;
++
++// Initialization and runtime control
++static int control(struct af_instance_s *af, int cmd, void *arg)
++{
++	af_track_t *s = (af_track_t *)af->setup;
++
++	switch (cmd) {
++	case AF_CONTROL_REINIT:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_REINIT\n");
++		// Sanity check
++		if (!arg) return AF_ERROR;
++		{
++			af_data_t *data = (af_data_t *)arg;
++			//void *audio = data->audio;      // data buffer
++			int        len = data->len;             // buffer length
++			int        rate = data->rate;           // sample rate
++			int        nch = data->nch;             // number of channels
++			int        format = data->format;       // format
++			int        bps = data->bps;             // bytes per sample
++			mp_msg(MSGT_AFILTER, MSGL_INFO, "len=%d, rate=%d, nch=%d, format=%d, bps=%d\n", len, rate, nch, format, bps);
++		}
++
++		af->data->rate   = ((af_data_t *)arg)->rate;
++		af->data->nch    = ((af_data_t *)arg)->nch;
++		af->data->format = AF_FORMAT_FLOAT_NE;
++		af->data->bps    = 4;
++
++		clock_gettime(CLOCK_REALTIME, &s->start);
++		s->start.tv_sec  = 0;
++		s->start.tv_nsec = 0;
++		s->state = SLOUD;
++		s->threshold = 0.01;
++		s->timeout = 2;
++		// Time constant set to 0.1s
++		//    s->alpha = (1.0/0.2)/(2.0*M_PI*(float)((af_data_t*)arg)->rate);
++		return af_test_output(af, (af_data_t *)arg);
++
++	case AF_CONTROL_COMMAND_LINE: {
++		float thr = -10.0;
++		int   tim = 2;
++		int   n;
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_COMMAND_LINE '%s'\n", (char *)arg);
++		n = sscanf((char *)arg, "%f:%d", &thr, &tim);
++        s->threshold = thr;
++        s->timeout = tim;
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] %d threshold %.8f, timeout %ld\n", n, s->threshold, s->timeout);
++		return AF_OK;
++	}
++
++	case AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_SET:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_SET %d\n", *(int *)arg);
++		//memcpy(s->enable, (int *)arg, AF_NCH * sizeof(int));
++		return AF_OK;
++
++	case AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_GET:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_GET %d\n", *(int *)arg);
++		//memcpy((int *)arg, s->enable, AF_NCH * sizeof(int));
++		return AF_OK;
++
++	case AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_SET:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_SET %f\n", *(float *)arg);
++		//return af_from_dB(AF_NCH, (float *)arg, s->threshold, 0.0, 60.0, -1.0);
++		return AF_OK;
++
++	case AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_GET:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_GET %f\n", *(float *)arg);
++		//return af_to_dB(AF_NCH, s->threshold, (float *)arg, 10.0);
++		return AF_OK;
++
++	case AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_SET:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_SET %ld\n", *(long *)arg);
++		//return af_from_ms(AF_NCH, (int *)arg, s->timeout, af->data->rate, 500.0, 0.1);
++		return AF_OK;
++
++	case AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_GET:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_GET %ld\n", *(long *)arg);
++		//return af_to_ms(AF_NCH, s->timeout, (int *)arg, af->data->rate);
++		return AF_OK;
++	}
++	return AF_UNKNOWN;
++}
++
++// Deallocate memory
++static void uninit(struct af_instance_s *af)
++{
++	if (af->data)
++		free(af->data);
++	if (af->setup)
++		free(af->setup);
++}
++
++// Filter data through filter
++static af_data_t *play(struct af_instance_s *af, af_data_t *data)
++{
++	af_data_t      *c   = data;                             // Current working data
++	af_track_t     *s   = (af_track_t *)af->setup;          // Setup for this instance
++	float          *a   = (float *)c->audio;                // Audio data
++	int             len = c->len / 4;                       // Number of samples
++	int             ch  = 0;                                // Channel counter
++	register int    nch = c->nch;                           // Number of channels
++	register int    i   = 0;
++	float           totpow = 0;
++	struct timespec now;
++	long            sc, ms;
++
++	clock_gettime(CLOCK_REALTIME, &now);
++
++	// Noise track
++	for (ch = 0; ch < nch ; ch++) {
++		//float t   = 1.0 - s->time[ch];
++		for (i = ch; i < len; i += nch) {
++			register float x        = a[i];
++			register float pow      = x * x;
++			totpow += pow;
++			//s->pow[ch] = t * s->pow[ch] + pow * s->time[ch]; // LP filter
++			//if (pow < s->pow[ch])
++			//	;
++			//else
++			//	;
++			//a[i] = x;
++		}
++	}
++	if (s->state == SLOUD) {
++		if (totpow < s->threshold) {
++			s->state = SQUIET;
++			clock_gettime(CLOCK_REALTIME, &s->start);
++		}
++	} else {
++		if (totpow >= s->threshold) {
++			s->state = SLOUD;
++			clock_gettime(CLOCK_REALTIME, &now);
++			sc = now.tv_sec - s->start.tv_sec;
++			ms = (now.tv_nsec - s->start.tv_nsec) / MS(1);
++			if (ms < 0) {
++				sc -= 1;
++				ms += 1000;
++			}
++			if (sc > s->timeout)
++				mp_msg(MSGT_AFILTER, MSGL_INFO, "\r[track] quiet for %ld,%03ld secs\n", sc, ms);
++		}
++	}
++	return c;
++}
++
++// Allocate memory and set function pointers
++static int af_open(af_instance_t *af)
++{
++	af->control = control;
++	af->uninit = uninit;
++	af->play = play;
++	af->mul = 1;
++	af->data = calloc(1, sizeof(af_data_t));
++	af->setup = calloc(1, sizeof(af_track_t));
++	if (af->data == NULL || af->setup == NULL)
++		return AF_ERROR;
++	return AF_OK;
++}
++
++// Description of this filter
++af_info_t af_info_track = {
++	"Track detect filter",
++	"track",
++	"Duncan",
++	"",
++	AF_FLAGS_NOT_REENTRANT,
++	af_open
++};
+Index: libaf/af.c
+===================================================================
+--- libaf/af.c	(revision 27667)
++++ libaf/af.c	(working copy)
+@@ -33,6 +33,7 @@
+ extern af_info_t af_info_sinesuppress;
+ extern af_info_t af_info_karaoke;
+ extern af_info_t af_info_scaletempo;
++extern af_info_t af_info_track;
+ 
+ static af_info_t* filter_list[]={ 
+    &af_info_dummy,
+@@ -67,6 +68,7 @@
+    &af_info_sinesuppress,
+    &af_info_karaoke,
+    &af_info_scaletempo,
++   &af_info_track,
+    NULL 
+ };
+ 
