@@ -140,6 +140,9 @@ class PluginInterface(plugin.DaemonPlugin):
     | # This is the time in seconds after that the UP and DOWN event
     | # is fired again.
     | WII_ACC_UD_REPEAT = 0.2
+    |
+    | # This is the time in seconds between "pinging" the wiimote.
+    | WII_PING_INTERVAL = 600.0
 
     So these options can be overwritten in the local_conf.py file. I'm using
     debian and needed the following deb-packages:
@@ -174,6 +177,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.acc_ud_repeat   = config.WII_ACC_UD_REPEAT
         self.acc_button      = config.WII_ACC_BUTTON
         self.acc_button_time = config.WII_ACC_BUTTON_TIME
+        self.ping_interval   = config.WII_PING_INTERVAL
 
         for mapping in config.WII_CMDS:
             self.KEYMAP[mapping] = config.WII_CMDS.get(mapping, '')
@@ -198,6 +202,11 @@ class PluginInterface(plugin.DaemonPlugin):
     def onTimer(self):
         self.timer.stop()
 
+        # (Re)set the leds every WII_PING_INTERVAL seconds. This will also trigger disconnects if the wiimote is unavailable.
+        if self.connected and (time.time() - self.last_ping) > self.ping_interval:
+            self.setled(LED1_ON | LED4_ON)
+            self.last_ping = time.time()
+
         if not self.connected:
             self.tryConnect()
 
@@ -216,6 +225,7 @@ class PluginInterface(plugin.DaemonPlugin):
             ('WII_ACC_BUTTON', 'A', 'This button enables the acceleration mode'),
             ('WII_ACC_BUTTON_TIME', '0.3', 'This is the time in seconds after that the acceleration mode'),
             ('WII_ACC_RL_REPEAT', '0.4', 'This is the time in seconds after that the RIGHT and LEFT event is repeated'),
+            ('WII_PING_INTERVAL', '600.0', 'This is the time in seconds between "pinging" the wiimote.')
         ]
 
 
@@ -367,6 +377,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.setled(0)
         time.sleep(0.8)
         self.setled(LED1_ON | LED4_ON)
+        self.last_ping = time.time()
 
         self.connected = True
 
@@ -386,7 +397,10 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         send the command to the wiimote
         """
-        self.cx.send(chr(command) + chr(report) + "".join([chr(d) for d in data]))
+        try:
+            self.cx.send(chr(command) + chr(report) + ''.join([chr(d) for d in data]))
+        except bluetooth.BluetoothError:
+            self.disconnect()
 
 
     def setmode(self, mode):
