@@ -905,7 +905,7 @@ class DiskManager(plugin.DaemonPlugin):
                     # those files.
                     for itemfile in rpitem.files.files + [rpitem.files.fxd_file, rpitem.files.edl_file, rpitem.files.image]:
                         if itemfile in files:
-                            added_files.append(itemfile)
+                            added_files.add(itemfile)
                     deleted = True
                     break
             if not deleted:
