@@ -26,6 +26,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Fixed imdb helper to currectly handle dates when available (B#2075291)
  * Fixed joy plug-in to remove any pending events when enabled (B#1916407)
  * Fixed mplayer crash when auto cropping is enabled (B#2089592)
+ * Fixed record server generic record module to allow a group_type to be given (B#2017200)
  * Fixed tv recordings_manager crashing when deleting a recording (B#2138835)
  * Fixed wiimote not detecting when the remote has been switched off (B#2037944)
 

@@ -72,6 +72,8 @@ class Recorder:
 
 
     def Record(self, rec_prog):
+        vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
+
         frequency = self.fc.chanSet(str(rec_prog.tunerid), False, 'record plugin')
 
         rec_prog.filename = tv_util.getProgFilename(rec_prog)
@@ -86,6 +88,7 @@ class Recorder:
                        'seconds'  : rec_prog.rec_duration,
                        'start'  : rec_prog.start,
                        'pdc-start'  : rec_prog.pdc_start,
+                       'group-type' : vg.group_type
         }
 
         if isinstance(config.VCR_CMD, str) or isinstance(config.VCR_CMD, unicode):

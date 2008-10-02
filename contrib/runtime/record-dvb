@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#arguments :
+# channel_name_or_number frequency_in_MHz seconds_to_record output_filename
+
+exec mencoder dvb://"$1" -quiet -ovc copy -oac copy -endpos "$3" -of mpeg  -o "$4"
+
