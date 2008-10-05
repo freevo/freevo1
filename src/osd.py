@@ -487,7 +487,7 @@ class OSD:
                 return
 
             _debug_('pygame event=%s' % (event), 2)
-            print 'pygame event=%s' % (event)
+            #print 'pygame event=%s' % (event)
 
             if config.SYS_USE_MOUSE:
                 if event.type == MOUSEMOTION:
@@ -751,6 +751,9 @@ class OSD:
                     except IOError, why:
                         _debug_('imlib2 image load problem: %s' % (why), DERROR)
                         return None
+
+        except SystemExit:
+            raise
 
         except Exception, why:
             _debug_('Problem while loading image %r: %r' % (url, why), DWARNING)
