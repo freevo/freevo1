@@ -119,6 +119,7 @@ class Trailers:
             try:
                 false = False
                 true = True
+                null = None
                 data = eval(data)
             except:
                 continue
