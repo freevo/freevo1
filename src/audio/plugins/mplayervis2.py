@@ -82,12 +82,12 @@ class MpvGoom(BaseAnimation):
             pygoom.set_fps(config.MPLAYERVIS_FPS)
 
         self.vis_sizes = {
-            '4:3': {
+            '4x3': {
                 'small' : { 'w': 320, 'h': 240 },
                 'medium': { 'w': 640, 'h': 480 },
                 'large' : { 'w': 800, 'h': 600 }
             },
-            '16:9': {
+            '16x9': {
                 'small' : { 'w': 320, 'h': 180 },
                 'medium': { 'w': 640, 'h': 360 },
                 'large' : { 'w': 800, 'h': 450 }
@@ -577,7 +577,7 @@ class PluginInterface(plugin.Plugin):
     |   MPLAYERVIS_FULL_SOFTWARE_GEOMETRY is a string (WIDTH x HEIGHT) to scale the visualization area to
     |   MPLAYER_FULL_SOFTWARE_SCALING_DIVISOR is a number to divide the screen size and calculate the visualization area size
     |   MPLAYERVIS_FULL_MPLAYER_SIZE is a string with the size of the visualization area. Must be one of 'small' or 'medium'
-    |   'MPLAYERVIS_FULL_MPLAYER_ASPECT is a string with the aspect ratio of the screen. Must be one of '4:3' or '16:9
+    |   'MPLAYERVIS_FULL_MPLAYER_ASPECT is a string with the aspect ratio of the screen. Must be one of '4x3' or '16x9
 
     When activated the following events can be used:
         - DISPLAY changes the view mode
@@ -642,12 +642,16 @@ class PluginInterface(plugin.Plugin):
             ('MPLAYERVIS_FADE_STEP', int(0.15 * fps), 'Number of steps per timer loop'),
             ('MPLAYERVIS_MESSAGE_FMT', u'Artist: %(a)s\nAlbum: %(l)s\nTitle: %(t)s\nTrack: %(n)s\nLength: %(s)s', \
                 'Message format for the message'),
-            ('MPLAYERVIS_FULL_SCALING_MODE', 'mplayer', "Fullscreen mode for scaling visualization area. Must be one of 'mplayer' or 'software'"),
-
-            ('MPLAYERVIS_FULL_SOFTWARE_GEOMETRY', '%dx%d' % (config.CONF.width, config.CONF.height), 'Full screen geometry in soft mode. If smaller than real screen size it centers the visualization area'),
-            ('MPLAYER_FULL_SOFTWARE_SCALING_DIVISOR', 2, "Used to set the size of the visualization area. 2 means to use half the size of the full screen"),
-            ('MPLAYERVIS_FULL_MPLAYER_SIZE', 'medium', "Resolution of the visualization area in fullscreen mode. Must be 'small' or 'medium'"),
-            ('MPLAYERVIS_FULL_MPLAYER_ASPECT', '4:3', "Aspect ratio of the visualization widget in fullscreen mode.. Must be one of '4:3' or '16:9'")
+            ('MPLAYERVIS_FULL_SCALING_MODE', 'mplayer',
+                "Fullscreen mode for scaling visualization area. Must be one of 'mplayer' or 'software'"),
+            ('MPLAYERVIS_FULL_SOFTWARE_GEOMETRY', '%dx%d' % (config.CONF.width, config.CONF.height),
+                'Full screen geometry in soft mode. If smaller than real screen center it on the visualization area'),
+            ('MPLAYER_FULL_SOFTWARE_SCALING_DIVISOR', 2,
+                "Used to set the size of the visualization area. 2 means to use half the size of the full screen"),
+            ('MPLAYERVIS_FULL_MPLAYER_SIZE', 'medium',
+                "Resolution of the visualization area in fullscreen mode. Must be 'small' or 'medium'"),
+            ('MPLAYERVIS_FULL_MPLAYER_ASPECT', '4x3',
+                "Aspect ratio of the visualization widget in fullscreen mode.. Must be one of '4x3' or '16x9'")
         ]
 
 
