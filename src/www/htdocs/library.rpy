@@ -162,6 +162,11 @@ class LibraryResource(FreevoResource):
 
         action_mediatype = fv.formValue(form, 'media')
         action_script = os.path.basename(request.path)
+        # this is a way to set the rss feed, for use with mkimagemrss XXX doesn't work
+        rss = None
+        if action_mediatype == 'images':
+            if os.path.exists(os.path.join(action_dir, 'photos.rss')):
+                rss = os.path.join(action_dir, 'photos.rss')
         #use request.postpath array to set action to download
         if not action and len(request.postpath) > 0:
             action = "download"

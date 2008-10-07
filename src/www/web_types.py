@@ -141,7 +141,7 @@ class HTMLResource:
         self.res += 'Content-type: %s\n\n' % content_type
 
 
-    def printHeader(self, title='unknown page', style=None, script=None, selected='Help', prefix=0):
+    def printHeader(self, title='unknown page', style=None, script=None, rss=None, selected='Help', prefix=0):
         """ Header
 
         This produces the header of a freevo page with the navigation bar.
@@ -183,6 +183,9 @@ class HTMLResource:
         # java script
         if script != None:
             self.res += '\t<script language="JavaScript" type="text/JavaScript" src="'+script+'"></script>\n'
+        # rss
+        if rss is not None:
+            self.res += '\t<link rel="alternate" href="'+rss+'" type="application/rss+xml" title="" id="gallery" />\n'
         # end of <head>
         self.res += '</head>\n'
         # here starts the body

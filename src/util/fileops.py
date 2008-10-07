@@ -645,8 +645,11 @@ def www_thumbnail_path(filename):
     # the filename extension needs to be lowercase for imlib2 but we need to
     # keep the original filename for cache to be able to clean the files
     imagepath = filename + file_ext
-    thumb_path = vfs.getwwwoverlay(imagepath)
+    filename = os.path.basename(imagepath)
+    dirname = os.path.dirname(imagepath)
+    thumb_path = os.path.join(dirname, '.thumbs', filename)
     return thumb_path
+    thumb_path = vfs.getwwwoverlay(imagepath)
 
 
 @benchmark(benchmarking)
