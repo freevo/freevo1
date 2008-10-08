@@ -20,12 +20,16 @@ from item import Item
 from menu import MenuItem
 from gui import AlertBox
 import skin
+from util import feedparser
+
 
 """
 Last FM player
-"""
 
+see U{http://code.google.com/p/thelastripper/wiki/LastFM12UnofficialDocumentation}
+"""
 _player_ = None
+
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -68,6 +72,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         return [
             ('LASTFM_USER', None, 'User name for www.last.fm'),
             ('LASTFM_PASS', None, 'Password for www.last.fm'),
+            ('LASTFM_LANG', 'en', 'Language of last fm metadata (cn,de,en,es,fr,it,jp,pl,ru,sv,tr)'),
             ('LASTFM_LOCATIONS', [], 'LastFM locations')
         ]
 
@@ -159,6 +164,12 @@ class LastFMItem(Item):
             rc.post_event(rc.PLAY_END)
 
 
+    def eventhandler(self, event, menuw=None):
+        """Event handler"""
+        if event == 'PLAY_START':
+            self.player.now_playing()
+
+
 
 class LastFMPlayerGUI(PlayerGUI):
     """
@@ -200,7 +211,7 @@ class LastFMPlayerGUI(PlayerGUI):
             self.albumcover_medium = ''
             self.albumcover_large = ''
             self.trackduration = 0
-            self.tracknumber = 0
+            self.tracknumber = None
             self.radiomode = 0
             self.recordtoprofile = ''
 
@@ -210,7 +221,7 @@ class LastFMPlayerGUI(PlayerGUI):
         _debug_('LastFMPlayerGUI.__init__(item=%r, menuw=%r)' % (item, menu), 2)
         PlayerGUI.__init__(self, item, menuw)
         self.webservices = webservices
-        self.webservices.tune_lastfm(item.station_url)
+        self.webservices.adjust_station(item.station_url)
         self.visible = menuw is not None
         self.menuw = menuw
         self.wsitem = LastFMPlayerGUI.WSItem()
@@ -222,19 +233,19 @@ class LastFMPlayerGUI(PlayerGUI):
         self.pic_url = None
         self.track_url = None
         self.start_time = time.time()
-        self.check_pts = ( 32, 16, 8, 4, 2, 0, -2, -4, -8, -16, -32 )
+        #self.check_pts = ( 32, 16, 8, 4, 2, 0, -2, -4, -8, -16, -32 )
+        self.check_pts = ( 32, 16, 8, 4, 0, -4, -8, -16, -32 )
         config.EVENTS['audio']['RIGHT'] = Event(FUNCTION_CALL, arg=self.skip)
         config.EVENTS['audio']['1'] = Event(FUNCTION_CALL, arg=self.love)
         config.EVENTS['audio']['9'] = Event(FUNCTION_CALL, arg=self.ban)
-        config.EVENTS['audio']['SELECT'] = Event(FUNCTION_CALL, arg=self.song_info)
+        config.EVENTS['audio']['SELECT'] = Event(FUNCTION_CALL, arg=self.now_playing)
 
 
     def skip(self):
         """Skip song"""
         _debug_('skip()', 2)
         self.webservices.skip()
-        self.info_index += 1
-        self.song_info()
+        self.now_playing()
 
 
     def love(self):
@@ -264,15 +275,16 @@ class LastFMPlayerGUI(PlayerGUI):
             info_time = self.start_time + (self.info_index + 1 - len(self.info_times)) * 64
         else:
             info_time = self.info_times[self.info_index]
+
         if time.time() > info_time:
-            self.song_info()
+            self.now_playing()
 
         skin.draw('player', self.item)
 
 
-    def song_info(self):
+    def now_playing(self):
         """Song Information"""
-        lines = self.webservices.song_info()
+        lines = self.webservices.now_playing()
         try:
             for line in lines:
                 exec('self.wsitem.%s = "%s"' % tuple(line.split('=', 1)))
@@ -280,7 +292,7 @@ class LastFMPlayerGUI(PlayerGUI):
             self.item.title = self.wsitem.track
             self.item.artist = self.wsitem.artist
             self.item.album = self.wsitem.album
-            self.item.trackno = int(self.wsitem.tracknumber)
+            self.item.trackno = self.wsitem.tracknumber
             self.item.length = int(self.wsitem.trackduration)
 
             if self.track_url != self.wsitem.track_url:
@@ -312,21 +324,8 @@ class LastFMPlayerGUI(PlayerGUI):
                 self.info_times = []
                 for i in check_at:
                     self.info_times.append(self.start_time + i)
-                #DJW#
-                print 'DJW:', time.strftime('%H:%M:%S', time.localtime(self.start_time))
-                for i in self.info_times:
-                    print 'DJW:', time.strftime('%H:%M:%S', time.localtime(i))
-                import pprint
-                pprint.pprint(self.wsitem.__dict__)
-                #DJW#
             else:
                 self.info_index += 1
-            #DJW#
-            if self.info_index >= len(self.info_times):
-                print 'DJW:index:', self.info_index, 'check:', time.strftime('%H:%M:%S', time.localtime(self.start_time + (self.info_index - len(self.info_times) + 1) * 64))
-            else:
-                print 'DJW:index:', self.info_index, 'check:', time.strftime('%H:%M:%S', time.localtime(self.info_times[self.info_index]))
-            #DJW#
 
             if self.item.image is None:
                 pic_url = None
@@ -350,6 +349,8 @@ class LastFMWebServices:
     """
     Interface to LastFM web-services
     """
+    _version = '1.1.2'
+
     def __init__(self):
         _debug_('LastFMWebServices.__init__()', 2)
         self.logincachefilename = os.path.join(config.FREEVO_CACHEDIR, 'lastfm.session')
@@ -357,6 +358,8 @@ class LastFMWebServices:
             self.cachefd = open(self.logincachefilename, 'r')
             self.session = self.cachefd.readline().strip('\n')
             self.stream_url = self.cachefd.readline().strip('\n')
+            self.base_url = self.cachefd.readline().strip('\n')
+            self.base_path = self.cachefd.readline().strip('\n')
         except IOError, why:
             self._login()
 
@@ -373,7 +376,6 @@ class LastFMWebServices:
         @returns: reply from request
         """
         _debug_('url=%r, data=%r' % (url, data), 1)
-        print 'DJW:url=%r, data=%r' % (url, data)
         if lines:
             reply = []
             try:
@@ -404,8 +406,10 @@ class LastFMWebServices:
         username = config.LASTFM_USER
         password_txt = config.LASTFM_PASS
         password = md5.new(config.LASTFM_PASS)
-        login_url='http://ws.audioscrobbler.com/radio/handshake.php?version=1.1.1&platform=linux' + \
-            '&username=%s&passwordmd5=%s&debug=0&partner=' % (config.LASTFM_USER, password.hexdigest())
+        login_url='http://ws.audioscrobbler.com/radio/handshake.php' + \
+            '?version=%s&platform=linux' % (LastFMWebServices._version) + \
+            '&username=%s&passwordmd5=%s' % (config.LASTFM_USER, password.hexdigest()) + \
+            '&debug=0&language=%s' % (config.LASTFM_LANG)
         stream_url = ''
 
         try:
@@ -418,15 +422,19 @@ class LastFMWebServices:
             fd = open(self.logincachefilename, 'w')
             print >>fd, self.session
             print >>fd, self.stream_url
+            print >>fd, self.base_url
+            print >>fd, self.base_path
             fd.close()
         except IOError, why:
             self.session = ''
             self.stream_url = ''
+            self.base_url = ''
+            self.base_path = ''
 
 
-    def tune_lastfm(self, station_url):
+    def adjust_station(self, station_url):
         """Change Last FM Station"""
-        _debug_('tune_lastfm(station_url=%r)' % (station_url,), 2)
+        _debug_('adjust_station(station_url=%r)' % (station_url,), 2)
         if not self.session:
             self._login()
         tune_url = 'http://ws.audioscrobbler.com/radio/adjust.php?session=%s&url=%s&debug=0' % \
@@ -440,11 +448,11 @@ class LastFMWebServices:
             return None
 
 
-    def song_info(self):
+    def now_playing(self):
         """
         Return Song Info and album Cover
         """
-        _debug_('song_info()', 2)
+        _debug_('now_playing()', 2)
         if not self.session:
             self._login()
         info_url = 'http://ws.audioscrobbler.com/radio/np.php?session=%s&debug=0' % (self.session,)
