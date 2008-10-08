@@ -331,8 +331,6 @@ class GUIObject:
             print '******************************************************************'
             print 'Error, surface is a subsurface (%s)' % self
             print 'Please report the following lines to the freevo mailing list'
-            print 'or with the subject \'[Freevo-Bugreport\] GUI\' to'
-            print 'developer@freevo.org.'
             print
             print 'Error, surface is a subsurface (%s)' % self
             print traceback.print_exc()
@@ -375,8 +373,6 @@ class GUIObject:
             print '******************************************************************'
             print 'Exception: %s' % e
             print 'Please report the following lines to the freevo mailing list'
-            print 'or with the subject \'[Freevo-Bugreport] GUI\' to'
-            print 'developer@freevo.org.'
             print
             if not self.parent:
                 print 'object has no parent:'
