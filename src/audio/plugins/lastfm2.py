@@ -30,12 +30,14 @@
 
 
 import sys, os, time
-import md5, urllib, urllib2
+import md5, urllib, urllib2, re
 
-from kaa import Timer
+import kaa
+from kaa import Timer, OneShotTimer
 
 import config
 import plugin
+import rc
 from menu import MenuItem, Menu
 from audio.audioitem import AudioItem
 from audio.player import PlayerGUI
@@ -47,6 +49,7 @@ else:
         from cElementTree import XML
     except ImportError:
         from elementtree.ElementTree import XML
+import pprint
 
 
 class PluginInterface(plugin.MainMenuPlugin):
@@ -149,39 +152,79 @@ class LastFMItem(AudioItem):
     and for displaying stdout and stderr of last command run.
     """
     def __init__(self, parent, name, station, webservices):
-        print 'LastFMItem.__init__(parent=%r, name=%r, station=%r, webservices=%r)' % \
-            (parent, name, station, webservices)
-        #self.image = None
-        #AudioItem.__init__(self, 'http://', parent, name)
+        _debug_('LastFMItem.__init__(parent=%r, name=%r, station=%r, webservices=%r)' % \
+            (parent, name, station, webservices), 1)
         AudioItem.__init__(self, station, parent, name)
-        self.station = station
+        self.station_url = urllib.quote_plus(station)
+        self.station_name = name
         self.webservices = webservices
-        self.xspf = LastFMXSPF()
+        self.xspf = None
         self.feed = None
         self.entry = None
+        self.timer = None
+        self.player = None
 
 
     def actions(self):
         """
         return a list of actions for this item
         """
-        print 'LastFMItem.actions()'
-        self.feed = self.xspf.parse(self.webservices.request_xspf())
+        _debug_('LastFMItem.actions()', 1)
+        #self.genre = self.station_name
+        self.stream_name = self.station_name
+        self.webservices.adjust_station(self.station_url)
+        self.xspf = LastFMXSPF()
+        self.feed = None
         self.entry = 0
         items = [ (self.play, _('Listen to LastFM Station')) ]
         return items
+
+
+    def eventhandler(self, event, menuw=None):
+        _debug_('LastFMItem.eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
+        print 'LastFMItem.eventhandler(event=%s, menuw=%r)' % (event, menuw)
+        if event == 'STOP':
+            #print 'timer', self.timer
+            #if self.timer is not None:
+            #    #XXX doesn't return
+            #    #self.timer.stop()
+            #    self.timer = None
+            #print 'stop'
+            self.stop()
+            print 'STOPPED'
+            return
+        if event == 'PLAYLIST_NEXT':
+            self.skip()
+            return True
+        elif event == 'LANG': # Love
+            self.ban()
+            return True
+        elif event == 'SUBTITLE': # bAn
+            self.love()
+            return True
+        return False
 
 
     def play(self, arg=None, menuw=None):
         """
         Play the current playing
         """
-        import pprint
-        print 'LastFMItem.play(arg=%r, menuw=%r)' % (arg, menuw)
-        self.menuw = menuw
-        pprint.pprint(self.__dict__)
+        _debug_('LastFMItem.play(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        self.arg = arg
+        if not self.menuw:
+            self.menuw = menuw
+
+        if self.feed is None or self.entry > len(self.feed.entries):
+            try:
+                self.feed = self.xspf.parse(self.webservices.request_xspf())
+            except LastFMError, why:
+                _debug_('why=%r' % (why,), DWARNING)
+                if menuw:
+                    AlertBox(text=why).show()
+                rc.post_event(rc.PLAY_END)
+            self.entry = 0
+
         entry = self.feed.entries[self.entry]
-        print entry
         self.album = entry.album
         self.artist = entry.artist
         self.title = entry.title
@@ -189,18 +232,68 @@ class LastFMItem(AudioItem):
         self.image = self.webservices.download_cover(entry.image_url)
         self.url = entry.location_url
         self.player = PlayerGUI(self, menuw)
+        self.timer = kaa.OneShotTimer(self.timerhandler)
+        self.timer.start(entry.duration)
         error = self.player.play()
-        if error and menuw:
-            AlertBox(text=error).show()
+        if error:
+            _debug_('error=%r' % (error,), DWARNING)
+            if menuw:
+                AlertBox(text=error).show()
             rc.post_event(rc.PLAY_END)
+
+
+    def timerhandler(self):
+        """
+        Handle the timer event when at the end of a track
+        """
+        poll_interval = 3
+        polling_itme = 600
+        now_playing = self.webservices.now_playing()
+        if now_playing is None:
+            self.entry += 1
+            print self.entry, len(self.feed.entries)
+            self.play(self.arg, self.menuw)
+        else:
+            _debug_('now_playing: still playing=%r' % (now_playing,))
+            #self.timer = kaa.OneShotTimer(self.timerhandler)
+            self.timer.start(poll_interval)
 
 
     def stop(self, arg=None, menuw=None):
         """
         Stop the current playing
         """
+        _debug_('LastFMItem.stop(arg=%r, menuw=%r)' % (arg, menuw), 1)
         print 'LastFMItem.stop(arg=%r, menuw=%r)' % (arg, menuw)
-        self.player.stop()
+        if self.timer is not None:
+            #self.timer.stop()
+            print 'timer removed'
+            self.timer = None
+        #super(PlayerGUI, stop)
+        #self.player.stop()
+        print 'stopped'
+
+
+    def skip(self):
+        """Skip song"""
+        _debug_('skip()', 2)
+        self.entry += 1
+        if self.timer is not None:
+            self.timer.stop()
+            self.timer = None
+        self.play(self.arg, self.menuw)
+
+
+    def love(self):
+        """Send "Love" information to audioscrobbler"""
+        _debug_('love()', 2)
+        self.webservices.love()
+
+
+    def ban(self):
+        """Send "Ban" information to audioscrobbler"""
+        _debug_('ban()', 2)
+        self.webservices.ban()
 
 
 
@@ -250,7 +343,11 @@ class LastFMWebServices:
             _debug_('reply=%r' % (reply,), 1)
             #DJW#
             import pprint
-            pprint.pprint(lines)
+            if len(reply) == 1:
+                print 'DJW:reply', reply
+            else:
+                print 'DJW:reply:', len(reply), 'lines'
+                pprint.pprint(lines)
             #DJW#
             return reply
         else:
@@ -279,7 +376,6 @@ class LastFMWebServices:
         try:
             lines = self._urlopen(login_url)
             for line in lines:
-                print line
                 # this is a bit dangerous if a variable clashes
                 exec('self.%s = "%s"' % tuple(line.split('=', 1)))
             # Save the lastfm session information
@@ -298,8 +394,7 @@ class LastFMWebServices:
 
     def request_xspf(self):
         """Request a XSPF (XML Shareable Playlist File)"""
-        _debug_('LastFMWebServices.request_xspf()', 2)
-        print 'request_xspf()'
+        _debug_('LastFMWebServices.request_xspf()', 1)
         if not self.session:
             self._login()
         request_url = 'http://%s%s/xspf.php?sk=%s&discovery=0&desktop=%s' % \
@@ -312,13 +407,15 @@ class LastFMWebServices:
         _debug_('adjust_station(station_url=%r)' % (station_url,), 2)
         if not self.session:
             self._login()
-        tune_url = 'http://ws.audioscrobbler.com/radio/adjust.php?session=%s&url=%s&debug=0' % \
-            (self.session, station_url)
+        tune_url = 'http://ws.audioscrobbler.com/radio/adjust.php?session=%s&url=%s&lang=%s&debug=0' % \
+            (self.session, station_url, config.LASTFM_LANG)
         try:
-            for x in self._urlopen(tune_url):
-                if re.search('response=OK', x):
+            for line in self._urlopen(tune_url):
+                if re.search('response=OK', line):
                     return True
             return False
+        except AttributeError, why:
+            return None
         except IOError, why:
             return None
 
@@ -331,23 +428,29 @@ class LastFMWebServices:
         if not self.session:
             self._login()
         info_url = 'http://ws.audioscrobbler.com/radio/np.php?session=%s&debug=0' % (self.session,)
-        return self._urlopen(info_url)
+        reply = self._urlopen(info_url)
+        if not reply or reply[0] == 'streaming=false':
+            return None
+        return reply
 
 
-    def download_cover(self, pic_url):
-        """Download album Cover to freevo cache directory"""
-        _debug_('download_cover(pic_url=%r)' % (pic_url,), 2)
+    def download_cover(self, image_url):
+        """
+        Download album cover to freevo cache directory
+        XXX don't need to save a file, can use the image directly using imlib2
+        """
+        _debug_('download_cover(image_url=%r)' % (image_url,), 2)
 
-        os.system('rm -f %s/lfmcover_*.jpg' % config.FREEVO_CACHEDIR)
+        os.system('rm -f %s' % os.path.join(config.FREEVO_CACHEDIR, 'lfmcover_*.jpg'))
         if not self.session:
             self._login()
-        pic_file = self._urlopen(pic_url, lines=False)
         try:
-            savefile = os.path.join(config.FREEVO_CACHEDIR, 'lfmcover_'+str(time.time())+'.jpg')
-            save = open(savefile, 'w')
+            pic_file = self._urlopen(image_url, lines=False)
+            filename = os.path.join(config.FREEVO_CACHEDIR, 'lfmcover_'+str(time.time())+'.jpg')
+            save = open(filename, 'w')
             try:
                 print >>save, pic_file
-                return savefile
+                return filename
             finally:
                 save.close()
         except IOError:
