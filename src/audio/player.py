@@ -36,6 +36,10 @@ import rc
 import plugin
 import event
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 _player_ = None
 
 def get():
@@ -43,6 +47,7 @@ def get():
     return _player_
 
 class PlayerGUI(GUIObject):
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, item, menuw):
         GUIObject.__init__(self)
         self.visible = menuw and True or False
@@ -53,10 +58,10 @@ class PlayerGUI(GUIObject):
         self.pbox    = None
         self.progressbox = None
         self.last_progress = 0
-
         self.first_drawing = True
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def play(self, player=None):
         global _player_
         if _player_ and _player_.player and _player_.player.is_playing():
@@ -69,7 +74,6 @@ class PlayerGUI(GUIObject):
 
         if player:
             self.player = player
-
         else:
             self.possible_players = []
             for p in plugin.getbyname(plugin.AUDIO_PLAYER, True):
@@ -82,6 +86,7 @@ class PlayerGUI(GUIObject):
 
                 if (rating, p) not in self.possible_players:
                     self.possible_players += [(rating, p)]
+
             self.possible_players = filter(lambda l: l[0] > 0, self.possible_players)
             self.possible_players.sort(lambda l, o: -cmp(l[0], o[0]))
             if len(self.possible_players) > 0:
@@ -98,13 +103,13 @@ class PlayerGUI(GUIObject):
             if self.visible:
                 rc.app(None)
             self.item.eventhandler(event.PLAY_END)
-
         else:
             if self.visible:
                 rc.app(self.player)
             self.refresh()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def try_next_player(self):
         self.stop()
         _debug_('error, try next player')
@@ -124,6 +129,7 @@ class PlayerGUI(GUIObject):
         return 0
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def stop(self):
         global _player_
         _player_ = None
@@ -134,6 +140,7 @@ class PlayerGUI(GUIObject):
             rc.app(None)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def show(self):
         if not self.visible:
             self.visible = 1
@@ -141,6 +148,7 @@ class PlayerGUI(GUIObject):
             rc.app(self.player)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def hide(self):
         if self.visible:
             self.visible = 0
@@ -148,6 +156,7 @@ class PlayerGUI(GUIObject):
             rc.app(None)
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def refresh(self):
         """
         Give information to the skin..
