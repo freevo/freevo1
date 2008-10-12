@@ -49,7 +49,10 @@ else:
         from cElementTree import XML
     except ImportError:
         from elementtree.ElementTree import XML
-import pprint
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+import pprint, traceback
 
 
 class PluginInterface(plugin.MainMenuPlugin):
@@ -77,12 +80,14 @@ class PluginInterface(plugin.MainMenuPlugin):
     | 1     - send to lastfm LOVE song
     | 9     - send to lastfm BAN song
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         _debug_('PluginInterface.__init__()', 2)
         if not config.LASTFM_USER or not config.LASTFM_PASS:
             self.reason = 'LASTFM_USER or LASTFM_PASS not set'
             return
         plugin.MainMenuPlugin.__init__(self)
+    @benchmark(benchmarking, benchmarkcall)
     def config(self):
         """
         freevo plugins -i audio.freevo returns the info
@@ -97,6 +102,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         ]
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def items(self, parent):
         _debug_('items(parent=%r)' % (parent,), 2)
         return [ LastFMMainMenuItem(parent) ]
@@ -104,6 +110,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
 class LastFMError(Exception):
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, why):
         Exception.__init__(self)
         self.why = why
@@ -115,6 +122,7 @@ class LastFMMainMenuItem(MenuItem):
     this is the item for the main menu and creates the list
     of commands in a submenu.
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, parent):
         _debug_('LastFMMainMenuItem.__init__(parent=%r)' % (parent,), 2)
         MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
@@ -122,12 +130,14 @@ class LastFMMainMenuItem(MenuItem):
         self.webservices = LastFMWebServices()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """return a list of actions for this item"""
         _debug_('actions()', 2)
         return [ (self.create_stations_menu, 'stations') ]
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def create_stations_menu(self, arg=None, menuw=None):
         _debug_('create_stations_menu(arg=%r, menuw=%r)' % (arg, menuw), 2)
         lfm_items = []
@@ -151,6 +161,7 @@ class LastFMItem(AudioItem):
     hope to add actions for different ways of running commands
     and for displaying stdout and stderr of last command run.
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, parent, name, station, webservices):
         _debug_('LastFMItem.__init__(parent=%r, name=%r, station=%r, webservices=%r)' % \
             (parent, name, station, webservices), 1)
@@ -163,8 +174,11 @@ class LastFMItem(AudioItem):
         self.entry = None
         self.timer = None
         self.player = None
+        self.arg = None
+        self.menuw = None
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """
         return a list of actions for this item
@@ -180,18 +194,11 @@ class LastFMItem(AudioItem):
         return items
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         _debug_('LastFMItem.eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
-        print 'LastFMItem.eventhandler(event=%s, menuw=%r)' % (event, menuw)
         if event == 'STOP':
-            #print 'timer', self.timer
-            #if self.timer is not None:
-            #    #XXX doesn't return
-            #    #self.timer.stop()
-            #    self.timer = None
-            #print 'stop'
-            self.stop()
-            print 'STOPPED'
+            self.stop(self.arg, self.menuw)
             return
         if event == 'PLAYLIST_NEXT':
             self.skip()
@@ -205,13 +212,14 @@ class LastFMItem(AudioItem):
         return False
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def play(self, arg=None, menuw=None):
         """
         Play the current playing
         """
         _debug_('LastFMItem.play(arg=%r, menuw=%r)' % (arg, menuw), 1)
         self.arg = arg
-        if not self.menuw:
+        if self.menuw is None:
             self.menuw = menuw
 
         if self.feed is None or self.entry > len(self.feed.entries):
@@ -242,16 +250,20 @@ class LastFMItem(AudioItem):
             rc.post_event(rc.PLAY_END)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def timerhandler(self):
         """
         Handle the timer event when at the end of a track
         """
+        if self.timer is None:
+            print 'DJW:timer is None'
+            return
         poll_interval = 3
         polling_itme = 600
         now_playing = self.webservices.now_playing()
         if now_playing is None:
             self.entry += 1
-            print self.entry, len(self.feed.entries)
+            print 'DJW:', self.entry, len(self.feed.entries)
             self.play(self.arg, self.menuw)
         else:
             _debug_('now_playing: still playing=%r' % (now_playing,))
@@ -259,21 +271,18 @@ class LastFMItem(AudioItem):
             self.timer.start(poll_interval)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def stop(self, arg=None, menuw=None):
         """
         Stop the current playing
         """
         _debug_('LastFMItem.stop(arg=%r, menuw=%r)' % (arg, menuw), 1)
-        print 'LastFMItem.stop(arg=%r, menuw=%r)' % (arg, menuw)
         if self.timer is not None:
-            #self.timer.stop()
-            print 'timer removed'
+            self.timer.stop()
             self.timer = None
-        #super(PlayerGUI, stop)
-        #self.player.stop()
-        print 'stopped'
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def skip(self):
         """Skip song"""
         _debug_('skip()', 2)
@@ -284,12 +293,14 @@ class LastFMItem(AudioItem):
         self.play(self.arg, self.menuw)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def love(self):
         """Send "Love" information to audioscrobbler"""
         _debug_('love()', 2)
         self.webservices.love()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def ban(self):
         """Send "Ban" information to audioscrobbler"""
         _debug_('ban()', 2)
@@ -303,6 +314,7 @@ class LastFMWebServices:
     """
     _version = '1.1.2'
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         _debug_('LastFMWebServices.__init__()', 2)
         self.logincachefilename = os.path.join(config.FREEVO_CACHEDIR, 'lastfm.session')
@@ -316,6 +328,7 @@ class LastFMWebServices:
             self._login()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def _urlopen(self, url, data=None, lines=True):
         """
         Wrapper to see what is sent and received
@@ -361,6 +374,7 @@ class LastFMWebServices:
             return reply
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def _login(self, arg=None):
         """Read session and stream url from ws.audioscrobbler.com"""
         _debug_('login(arg=%r)' % (arg,), 2)
@@ -392,6 +406,7 @@ class LastFMWebServices:
             self.base_path = ''
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def request_xspf(self):
         """Request a XSPF (XML Shareable Playlist File)"""
         _debug_('LastFMWebServices.request_xspf()', 1)
@@ -402,6 +417,7 @@ class LastFMWebServices:
         return self._urlopen(request_url, lines=False)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def adjust_station(self, station_url):
         """Change Last FM Station"""
         _debug_('adjust_station(station_url=%r)' % (station_url,), 2)
@@ -420,6 +436,7 @@ class LastFMWebServices:
             return None
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def now_playing(self):
         """
         Return Song Info and album Cover
@@ -434,6 +451,7 @@ class LastFMWebServices:
         return reply
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def download_cover(self, image_url):
         """
         Download album cover to freevo cache directory
@@ -457,6 +475,7 @@ class LastFMWebServices:
             return None
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def skip(self):
         """Skip song"""
         _debug_('skip()', 2)
@@ -467,6 +486,7 @@ class LastFMWebServices:
         return self._urlopen(skip_url)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def love(self):
         """Send "Love" information to audioscrobbler"""
         _debug_('love()', 2)
@@ -477,6 +497,7 @@ class LastFMWebServices:
         return self._urlopen(love_url)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def ban(self):
         """Send "Ban" information to audioscrobbler"""
         _debug_('ban()', 2)
@@ -487,6 +508,7 @@ class LastFMWebServices:
         return self._urlopen(ban_url)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def test_user_pass(self):
         """
         Test User/Pass
@@ -516,11 +538,13 @@ class LastFMXSPF:
     """
     _LASTFM_NS = 'http://www.audioscrobbler.net/dtd/xspf-lastfm/'
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         self.entries = []
         self.feed = feedparser.FeedParserDict()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def parse(self, xml):
         """
         Parse the XML feed
