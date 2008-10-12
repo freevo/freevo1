@@ -139,6 +139,9 @@ class PlayerGUI(GUIObject):
         if self.visible:
             rc.app(None)
 
+        if self.menuw and not self.menuw.visible:
+            self.menuw.show()
+
 
     @benchmark(benchmarking, benchmarkcall)
     def show(self):
