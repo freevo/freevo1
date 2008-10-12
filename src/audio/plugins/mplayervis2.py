@@ -399,7 +399,7 @@ class MpvGoom(BaseAnimation):
             osd.putsurface(self.gooms, self.rect.left, self.rect.top)
             osd.update(self.rect)
 
-            self.clock.tick(config.MPLAYERVIS_FPS) 
+            self.clock.tick(config.MPLAYERVIS_FPS)
 
 #            _debug_('config FPS: %d, Current FPS: %d' % (config.MPLAYERVIS_FPS, self.clock.get_fps()), 2)
 
@@ -419,7 +419,7 @@ class MpvGoom(BaseAnimation):
                 osd.putsurface(gooms, self.rect.left, self.rect.top)
                 osd.update(self.rect)
 
-                self.clock.tick(config.MPLAYERVIS_FPS) 
+                self.clock.tick(config.MPLAYERVIS_FPS)
 
 
 
@@ -505,7 +505,8 @@ class MpvGoom(BaseAnimation):
             'url': '%s/mplayervis/freevo-%s-%s.avi' % (config.IMAGE_DIR, config.MPLAYERVIS_FULL_MPLAYER_SIZE, config.MPLAYERVIS_FULL_MPLAYER_ASPECT)
         }
 
-        args['geometry'] = '-geometry %s:%s' % (config.CONF.width, config.CONF.height)
+        args['geometry'] = '-geometry %s:%s+%s+%s' % \
+            (config.CONF.width, config.CONF.height, config.CONF.x, config.CONF.y)
 
         if config.DEBUG_CHILDAPP:
             args['verbose'] = '-v'
@@ -729,7 +730,7 @@ class PluginInterface(plugin.Plugin):
 
         if event == STOP:
             if self.view == FULL and config.MPLAYERVIS_FULL_SCALING_MODE == 'software':
-                rc.post_event(STOP) 
+                rc.post_event(STOP)
 
             self.stop_all()
 
