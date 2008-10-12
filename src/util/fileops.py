@@ -48,7 +48,6 @@ import kaa.imlib2
 from kaa.metadata.image import EXIF as exif
 
 from util.benchmark import benchmark
-benchmarking = False
 
 if float(sys.version[0:3]) < 2.3:
     PICKLE_PROTOCOL = 1
@@ -63,6 +62,7 @@ if traceback.extract_stack()[0][0].find('install.py') == -1:
     import misc
 
     benchmarking = config.DEBUG_BENCHMARKING
+    benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 #
 #
@@ -70,7 +70,7 @@ if traceback.extract_stack()[0][0].find('install.py') == -1:
 #
 #
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def getdirnames(dirname, softlinks=True, sort=True):
     """
     Get all subdirectories in the given directory.
@@ -91,7 +91,7 @@ def getdirnames(dirname, softlinks=True, sort=True):
 
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def gzopen(file):
     """
     open a gzip file and return the fd. If it's not a gzip file, try
@@ -108,7 +108,7 @@ def gzopen(file):
     return f
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def readfile(filename):
     """
     return the complete file as list
@@ -119,7 +119,7 @@ def readfile(filename):
     return ret
 
 
-#@benchmark(benchmarking)
+#@benchmark(benchmarking, benchmarkcall)
 def freespace(path):
     """
     freespace(path) -> integer
@@ -129,12 +129,12 @@ def freespace(path):
     try:
         s = os.statvfs(path)
         return s[statvfs.F_BAVAIL] * long(s[statvfs.F_BSIZE])
-    except OSError, e:
-        print '\"%s\": %s' % (path, e)
+    except OSError, why:
+        _debug_('"%r: %s' % (path, why), DWARNING)
     return 0
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def totalspace(path):
     """
     totalspace(path) -> integer
@@ -144,12 +144,12 @@ def totalspace(path):
     try:
         s = os.statvfs(path)
         return s[statvfs.F_BLOCKS] * long(s[statvfs.F_BSIZE])
-    except OSError, e:
-        print '\"%s\": %s' % (path, e)
+    except OSError, why:
+        _debug_('"%r: %s' % (path, why), DWARNING)
     return 0
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def touch(file):
     """
     touch a file (maybe create it)
@@ -162,7 +162,7 @@ def touch(file):
     return 0
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def rmrf_helper(result, dirname, names):
     """
     help function for rm -rf
@@ -175,7 +175,7 @@ def rmrf_helper(result, dirname, names):
     return result
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def rmrf(top=None):
     """
     Pure python version of 'rm -rf'
@@ -191,8 +191,8 @@ def rmrf(top=None):
         for d in files[1]:
             try:
                 os.rmdir(d)
-            except (IOError, OSError), e:
-                print 'rmrf:', e
+            except (IOError, OSError), why:
+                _debug_('rmrf: %s' % why, DWARNING)
 
 
 #
@@ -201,7 +201,7 @@ def rmrf(top=None):
 #
 #
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def match_suffix(filename, suffixlist):
     """
     Check if a filename ends in a given suffix, case is ignored.
@@ -216,7 +216,7 @@ def match_suffix(filename, suffixlist):
     return 0
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def match_files(dirname, suffix_list):
     """
     Find all files in a directory that has matches a list of suffixes.
@@ -226,7 +226,7 @@ def match_files(dirname, suffix_list):
     try:
         files = [ vfs.join(dirname, fname) for fname in os.listdir(dirname) if vfs.isfile(vfs.join(dirname, fname)) ]
     except OSError, why:
-        print 'Cannot match files in "%s": %s' % (dirname, why)
+        _debug_('Cannot match files in "%s": %s' % (dirname, why), DWARNING)
         return []
 
     matches = [ fname for fname in files if match_suffix(fname, suffix_list) ]
@@ -236,7 +236,7 @@ def match_files(dirname, suffix_list):
     return matches
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def find_matches(files, suffix_list):
     """
     return all files in 'files' that match one of the suffixes in 'suffix_list'
@@ -248,7 +248,7 @@ def find_matches(files, suffix_list):
     return filter(lambda x: x[x.rfind('.')+1:].lower() in suffix_list, files)
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def match_files_recursively_helper(result, dirname, names):
     """
     help function for match_files_recursively
@@ -266,7 +266,7 @@ def match_files_recursively_helper(result, dirname, names):
     return result
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def match_files_recursively_skip_protected(result, dirname, names):
     """
     help function for match_files_recursively_skip_protected, skipping directories with a .password file
@@ -285,7 +285,7 @@ def match_files_recursively_skip_protected(result, dirname, names):
     return result
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def match_files_recursively(dir, suffix_list, skip_password=False):
     """
     get all files matching suffix_list in the dir and in it's subdirectories
@@ -303,7 +303,7 @@ def match_files_recursively(dir, suffix_list, skip_password=False):
     return matches
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def get_subdirs_recursively(dir):
     """
     get all subdirectories recursively in the given directory
@@ -318,7 +318,7 @@ def get_subdirs_recursively(dir):
     return matches
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def recursefolders(root, recurse=0, pattern='*', return_folders=0):
     """
     Before anyone asks why I didn't use os.path.walk; it's simple,
@@ -374,7 +374,7 @@ def recursefolders(root, recurse=0, pattern='*', return_folders=0):
 
 mounted_dirs = []
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def is_mounted(dir):
     """
     return if the dir is mounted
@@ -386,7 +386,7 @@ def is_mounted(dir):
 
 mount_count = 0
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def mount(dir, force=False):
     """
     mount a directory
@@ -415,7 +415,7 @@ def mount(dir, force=False):
         mounted_dirs.append(dir)
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def umount(dir):
     """
     umount a directory
@@ -440,7 +440,7 @@ def umount(dir):
             mounted_dirs.remove(dir)
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def umount_all():
     """
     umount all mounted directories
@@ -451,7 +451,7 @@ def umount_all():
         umount(d)
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def resolve_media_mountdir(*arg):
     """
     get the mount point of the media with media_id
@@ -478,7 +478,7 @@ def resolve_media_mountdir(*arg):
     return mountdir, file
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def check_media(media_id):
     """
     check if media_id is a valid media in one of the drives
@@ -497,7 +497,7 @@ def check_media(media_id):
 #
 #
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def read_pickle(file):
     """
     read a file with pickle
@@ -511,7 +511,7 @@ def read_pickle(file):
         return None
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def save_pickle(data, file):
     """
     save the data with pickle to the given file
@@ -523,14 +523,14 @@ def save_pickle(data, file):
         pickle.dump(data, f, PICKLE_PROTOCOL)
         f.close()
     except IOError:
-        print 'unable to save to cachefile %s' % file
+        _debug_('unable to save to cachefile %r' % (file,), DWARNING)
 
 
 #
 # cache utils
 #
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def read_thumbnail(filename):
     """
     return image cached inside filename
@@ -544,7 +544,7 @@ def read_thumbnail(filename):
     return data
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def create_thumbnail(filename, thumbnail=None):
     """
     cache image for faster access
@@ -596,7 +596,7 @@ def create_thumbnail(filename, thumbnail=None):
         return None
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def cache_image(filename, thumbnail=None, use_exif=False):
     """
     cache image for faster access, return cached image
@@ -613,7 +613,7 @@ def cache_image(filename, thumbnail=None, use_exif=False):
     return create_thumbnail(filename, thumbnail)
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def scale_rectangle_to_max(size, max_size):
     """
     returns a scaled rectangle size fitting the size to max_size
@@ -633,7 +633,7 @@ def scale_rectangle_to_max(size, max_size):
     return (scaled_width, scaled_height)
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def www_thumbnail_path(filename):
     """
     returns the path to the thumbnail image for a given filename
@@ -652,7 +652,7 @@ def www_thumbnail_path(filename):
     thumb_path = vfs.getwwwoverlay(imagepath)
 
 
-@benchmark(benchmarking)
+@benchmark(benchmarking, benchmarkcall)
 def create_www_thumbnail(filename):
     """
     creates a webserver thumbnail image and returns its size.
@@ -663,12 +663,12 @@ def create_www_thumbnail(filename):
             if not os.path.isdir(os.path.dirname(thumb_path)):
                 os.makedirs(os.path.dirname(thumb_path), mode=04775)
         except IOError:
-            print 'error creating dir %s' % os.path.dirname(thumb_path)
+            _debug_('error creating dir %s' % os.path.dirname(thumb_path), DWARNING)
             raise IOError
         image = kaa.imlib2.open(filename)
         thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
         thumb.save(thumb_path)
-    except IOError, e:
-        print e
+    except IOError, why:
+        _debug_(why, DWARNING)
         return (0, 0)
     return image.size
