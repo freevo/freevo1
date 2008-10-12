@@ -70,14 +70,15 @@ class benchmark:
                 resstr = ''
                 if self.dumpcall:
                     argstr = '('+', '.join('%s=%r' % entry for entry in zip(argnames,args) + kwargs.items())+')'
-                print '%s-> %s%s' % (indentation, func.__name__, argstr)
+                print '%s-> %s.%s%s' % (indentation, func.__module__, func.__name__, argstr)
                 self.start = time.time()
                 try:
                     result = func(*args, **kwargs)
                     if self.dumpcall:
                         resstr = ' => '+'%r' % (result,)
                 finally:
-                    print '%s<- %s%s: %.4f' % (indentation, func.__name__, resstr, time.time() - self.start)
+                    duration = time.time() - self.start
+                    print '%s<- %s.%s%s: %.4f' % (indentation, func.__module__, func.__name__, resstr, duration)
                     benchmark._indentation -= 1
                 return result
             newfunc.__name__ = func.__name__
