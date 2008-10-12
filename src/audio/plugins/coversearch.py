@@ -52,13 +52,17 @@ import urllib2
 import time
 import traceback
 import config
-import kaa.imlib2 as Image
+import kaa.imlib2 as imlib2
 from xml.dom import minidom # ParseError used by amazon module
 
 from gui.PopupBox import PopupBox
 from gui.AlertBox import AlertBox
 
+import util
 from util import amazon
+from util.benchmark import benchmark
+benchmarking = 1 #config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 try:
     amazon.setLocale(config.AMAZON_LOCALE)
@@ -88,6 +92,7 @@ class PluginInterface(plugin.ItemPlugin):
     | plugin.activate('audio.coversearch', args=('YOUR_KEY',))
     """
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, license=None):
         if not config.SYS_USE_NETWORK:
             self.reason = 'SYS_USE_NETWORK not enabled'
@@ -108,6 +113,7 @@ class PluginInterface(plugin.ItemPlugin):
         plugin.ItemPlugin.__init__(self)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def config(self):
         return [
             ('AMAZON_LOCALE', 'us', 'The location is one of: de, jp, uk, us'),
@@ -115,6 +121,7 @@ class PluginInterface(plugin.ItemPlugin):
         ]
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def actions(self, item):
         self.item = item
 
@@ -202,6 +209,7 @@ class PluginInterface(plugin.ItemPlugin):
         return []
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def cover_search_file(self, arg=None, menuw=None):
         """
         search Amazon for this item
@@ -274,7 +282,7 @@ class PluginInterface(plugin.ItemPlugin):
                         # Amazon returned a 404
                         _debug_('HTTPError: %s' % (e), DINFO)
                     if imageFound and (m.info()['Content-Length'] != '807'):
-                        image = Image.open_from_memory(m.read())
+                        image = imlib2.open_from_memory(m.read())
                         items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url,
                             image=image) ]
                     else:
@@ -289,7 +297,7 @@ class PluginInterface(plugin.ItemPlugin):
                             # Amazon returned a 404
                             _debug_('HTTPError: %s' % (e), DINFO)
                         if imageFound and (m.info()['Content-Length'] != '807'):
-                            image = Image.open_from_memory(m.read())
+                            image = imlib2.open_from_memory(m.read())
                             items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url,
                                 image=image) ]
                     if m is not None:
@@ -313,6 +321,7 @@ class PluginInterface(plugin.ItemPlugin):
         return
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def cover_create(self, arg=None, menuw=None):
         """
         create cover file for the item
@@ -338,11 +347,12 @@ class PluginInterface(plugin.ItemPlugin):
 
         # try to crop the image to avoid ugly borders
         try:
-            image = Image.open(filename)
+            image = imlib2.open(filename)
             width, height = image.size
-            image.crop((2,2,width-4, height-4)).save(filename)
-        except:
-            pass
+            image.crop((2, 2), (width-4, height-4)).save(filename)
+            util.cache_image(filename)
+        except Exception, why:
+            _debug_(why, DWARNING)
 
         if self.item.type in ('audiocd', 'dir'):
             self.item.image = filename
