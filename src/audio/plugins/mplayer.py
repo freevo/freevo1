@@ -245,6 +245,7 @@ class MPlayerApp(childapp.ChildApp2):
         self.stop_reason = 0 # 0 = ok, 1 = error
         self.RE_TIME     = re.compile("^A: *([0-9]+)").match
         self.RE_TIME_NEW = re.compile("^A: *([0-9]+):([0-9]+)").match
+        self.RE_NEW_TRK  = re.compile("\[track\] quiet for").match
 
         # [0] -> start of line to check with mplayer output
         # [1] -> keyword to store info in self.item.info
@@ -278,6 +279,7 @@ class MPlayerApp(childapp.ChildApp2):
 
     def stdout_cb(self, line):
         if line.startswith("A:"):         # get current time
+
             m = self.RE_TIME_NEW(line)
             if m:
                 self.stop_reason = 0
@@ -314,6 +316,14 @@ class MPlayerApp(childapp.ChildApp2):
         elif not self.item.elapsed:
             for p in self.stdout_plugins:
                 p.stdout(line)
+
+        if line.startswith('[track]'):
+            m = self.RE_NEW_TRK(line)
+            if m:
+                #DJW#
+                rc.post_event(Event(OSD_MESSAGE, arg=_('track gap detected')))
+                #DJW#
+                rc.post_event(Event('TRACK'))
 
         if line.startswith("ICY Info"):
             titleKey = "StreamTitle='"
