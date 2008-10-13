@@ -30,17 +30,18 @@
 
 
 import os, sys
+import urllib, urllib2
 
 if sys.hexversion >= 0x2050000:
     import xml.etree.ElementTree as ET
-    from xml.etree.cElementTree import ElementTree, Element, SubElement, iterparse, dump
+    from xml.etree.cElementTree import ElementTree, Element, SubElement, iterparse, dump, tostring
 else:
     import elementtree.ElementTree as ET
     try:
         import cElementTree
-        from cElementTree import ElementTree, Element, SubElement, iterparse, dump
+        from cElementTree import ElementTree, Element, SubElement, iterparse, dump, tostring
     except ImportError:
-        from elementtree.ElementTree import ElementTree, Element, SubElement, iterparse, dump
+        from elementtree.ElementTree import ElementTree, Element, SubElement, iterparse, dump, tostring
 
 
 import config
@@ -76,27 +77,47 @@ def indent(elem, level=0):
             elem.tail = i
 
 
+def convert_entities(contents):
+    s = contents.strip()
+    s = s.replace('\n', ' ')
+    s = s.replace('  ', ' ')
+    s = s.replace('&', '&amp;')
+    s = s.replace('&amp;#', '&#')
+    s = s.replace('<', '&lt;')
+    s = s.replace('>', '&gt;')
+    s = s.replace('"', '&quot;')
+    return s
+
+
 def makerss(d, files):
-    root = Element('xml', version='1.0', encoding='utf-8', standalone='yes')
-    rss = SubElement(root, 'rss')
-    rss.attrib['xmlns:atom'] = NS_ATOM
-    rss.attrib['xmlns:media'] = NS_MEDIA
-    channel = SubElement(rss, 'channel')
+    root = Element('rss', version='2.0')
+    root.attrib['xmlns:atom'] = NS_ATOM
+    root.attrib['xmlns:media'] = NS_MEDIA
+    channel = SubElement(root, 'channel')
+    title = SubElement(channel, 'title')
+    title.text = os.path.basename(d)
+    link = SubElement(channel, 'link')
+    link.text = 'http://localhost/'
     dirlen = len(d)+len(os.path.sep)
     for image in files:
         thumb = util.www_thumbnail_path(image)
         item = SubElement(channel, 'item')
         title = SubElement(item, 'title')
-        title.text = os.path.basename(image[dirlen:])
+        title.text = convert_entities(os.path.basename(image[dirlen:]))
         link = SubElement(item, 'link')
         link.text = image[dirlen:]
         description = SubElement(item, 'media:description')
-        description.text = os.path.basename(image)
-        thumbnail = SubElement(item, 'media:thumbnail', url=thumb[dirlen:])
+        description.text = convert_entities(os.path.basename(image))
+        thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote_plus(thumb[dirlen:]))
+        #thumbnail = SubElement(item, 'media:thumbnail', url=thumb[dirlen:])
+        #content = SubElement(item, 'media:content', url=urllib.quote(image[dirlen:]))
         content = SubElement(item, 'media:content', url=image[dirlen:])
 
     indent(root)
-    ElementTree(root).write(os.path.join(d, 'photos.rss'))
+    file = open(os.path.join(d, 'photos.rss'), 'w')
+    print >>file, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    print >>file, tostring(root)
+    file.close()
 
 
 def imagefiles():

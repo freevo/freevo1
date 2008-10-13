@@ -30,7 +30,7 @@
 #
 # -----------------------------------------------------------------------
 
-import sys, os, stat, string, urllib, re, types
+import sys, os, stat, string, urllib, re, types, socket
 
 
 # needed to put these here to suppress its output
@@ -44,6 +44,9 @@ import kaa.metadata as metadata
 
 from www.web_types import HTMLResource, FreevoResource
 from twisted.web import static
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 TRUE = 1
 FALSE = 0
@@ -52,6 +55,7 @@ FALSE = 0
 class LibraryResource(FreevoResource):
     isLeaf=1
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         #print '__init__(self)'
         self.allowed_dirs = []
@@ -62,6 +66,7 @@ class LibraryResource(FreevoResource):
         self.recordclient = RecordClient()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def is_access_allowed(self, dir_str):
         #print 'is_access_allowed(self, dir_str=%r)' % (dir_str)
         for i in range(len(self.allowed_dirs)):
@@ -70,6 +75,7 @@ class LibraryResource(FreevoResource):
                 return TRUE
         return FALSE
 
+    @benchmark(benchmarking, benchmarkcall)
     def convert_dir(self, dir_str):
         '''
         Converts a direct file location to a link that twisted can display.
@@ -93,8 +99,9 @@ class LibraryResource(FreevoResource):
         location = dir_str[len(child_res):]
         if not location[0] == "/":
             child_res += "/"
-        return child_res + location
+        return child_res+location
 
+    @benchmark(benchmarking, benchmarkcall)
     def get_suffixes (self, media):
         #print 'get_suffixes (self, media=\"%s\")' % (media)
         suffixes = []
@@ -109,6 +116,7 @@ class LibraryResource(FreevoResource):
             suffixes.extend(config.VIDEO_SUFFIX)
         return suffixes
 
+    @benchmark(benchmarking, benchmarkcall)
     def get_dirlist(self, media):
         #print 'get_dirlist(self, media=\"%s\")' % (media)
         dirs = []
@@ -135,6 +143,7 @@ class LibraryResource(FreevoResource):
                     dirs.append(d)
         return dirs
 
+    @benchmark(benchmarking, benchmarkcall)
     def check_dir(self, media, dir):
         #print 'check_dir(self, media=\"%s\", dir=%r)' % (media, dir)
         dirs2 = []
@@ -145,6 +154,7 @@ class LibraryResource(FreevoResource):
                 return TRUE
         return FALSE
 
+    @benchmark(benchmarking, benchmarkcall)
     def _render(self, request):
         #print '_render(self, request=\"%s\")' % (request)
         fv = HTMLResource()
@@ -162,16 +172,26 @@ class LibraryResource(FreevoResource):
 
         action_mediatype = fv.formValue(form, 'media')
         action_script = os.path.basename(request.path)
+        print action_dir
         # this is a way to set the rss feed, for use with mkimagemrss XXX doesn't work
         rss = None
         if action_mediatype == 'images':
             if os.path.exists(os.path.join(action_dir, 'photos.rss')):
-                rss = os.path.join(action_dir, 'photos.rss')
+                baseurl = 'http://%s:%s/' % (socket.gethostname(), request.host.port)
+                #rss = baseurl+action_script+'?media=rss&dir='+os.path.join(action_dir, 'photos.rss')
+                rss = baseurl+action_script+'?media=rss&dir='+os.path.join(action_dir, 'photos.rss')
+                #rss = 'http://localhost/'+action_script+'?media=rss&dir='+os.path.join(action_dir, 'photos.rss')
+                #rss = action_script+'?media=rss&dir='+os.path.join(action_dir, 'photos.rss')
+                #rss = request.received_headers['referer']+os.path.join(action_dir, 'photos.rss')
         #use request.postpath array to set action to download
+        if action_mediatype == 'rss':
+            res = open(action_dir, 'r').read()
+            return String(res)
+
         if not action and len(request.postpath) > 0:
             action = "download"
             action_file = request.postpath[-1]
-            action_dir = os.sep + string.join(request.postpath[0:-1], os.sep)
+            action_dir = os.sep+string.join(request.postpath[0:-1], os.sep)
             action_mediatype = "download"
         elif not action:
             action = "view"
@@ -202,7 +222,7 @@ class LibraryResource(FreevoResource):
                                 messages += [ _( 'Rename %s to %s, failed.' ) % \
                                     ('<b>'+file_loc+'</b>', '<b>'+newfile_loc+'</b>') ]
                     else:
-                        messages += [ '<b>'+_('ERROR') + '</b>: ' +_('No new file specified.') ]
+                        messages += [ '<b>'+_('ERROR')+'</b>: '+_('No new file specified.') ]
 
                 elif action == 'delete':
                     try:
@@ -235,11 +255,11 @@ class LibraryResource(FreevoResource):
             directories = self.get_dirlist(action_mediatype)
 
         if action and action != "download":
-            fv.printHeader(_('Media Library'), 'styles/main.css', script='scripts/display_info-head.js',
+            fv.printHeader(_('Media Library'), 'styles/main.css', rss=rss, script='scripts/display_info-head.js',
                 selected=_("Media Library"))
-            fv.res += '<script language="JavaScript"><!--' + "\n"
+            fv.res += '<script language="JavaScript"><!--'+"\n"
 
-            fv.res += 'function deleteFile(basedir, file, mediatype) {' + "\n"
+            fv.res += 'function deleteFile(basedir, file, mediatype) {'+"\n"
             fv.res += '   okdelete=window.confirm("Do you wish to delete "+file+" and its fxd?");' + "\n"
             fv.res += '   if(!okdelete) return;' + "\n"
             fv.res += '   document.location="' + action_script +'?action=delete&file=" + escape(file) + "&dir="'\
@@ -617,6 +637,7 @@ class LibraryResource(FreevoResource):
         return String(fv.res)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def cover_filter(self, x):
         #print 'cover_filter(self, x=%r)' % (x)
         for i in os.listdir(x):
@@ -635,6 +656,7 @@ class LibraryResource(FreevoResource):
                         return jpg_file
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def get_fxd_cover(self, fxd_file):
         #print 'get_fxd_cover(self, fxd_file=\"%s\")' % (fxd_file)
         cover = ''
@@ -647,6 +669,7 @@ class LibraryResource(FreevoResource):
                 break
         return cover
 
+    @benchmark(benchmarking, benchmarkcall)
     def resize_image(self, image, size):
         #print 'resize_image(self, image=%r, size=%s)' % (image, size)
         (width, height) = size
@@ -657,6 +680,7 @@ class LibraryResource(FreevoResource):
             new_height = 200
         return (int(new_width), int(new_height + 0.5))
 
+    @benchmark(benchmarking, benchmarkcall)
     def get_fxd_title(self, fxd_file):
         #print 'get_fxd_title(self, fxd_file=%r)', (fxd_file)
         fxd_info = ""
