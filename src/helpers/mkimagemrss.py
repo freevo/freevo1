@@ -34,14 +34,14 @@ import urllib, urllib2
 
 if sys.hexversion >= 0x2050000:
     import xml.etree.ElementTree as ET
-    from xml.etree.cElementTree import ElementTree, Element, SubElement, iterparse, dump, tostring
+    from xml.etree.cElementTree import ElementTree, Element, SubElement, Comment, iterparse, dump, tostring
 else:
     import elementtree.ElementTree as ET
     try:
         import cElementTree
-        from cElementTree import ElementTree, Element, SubElement, iterparse, dump, tostring
+        from cElementTree import ElementTree, Element, SubElement, Comment, iterparse, dump, tostring
     except ImportError:
-        from elementtree.ElementTree import ElementTree, Element, SubElement, iterparse, dump, tostring
+        from elementtree.ElementTree import ElementTree, Element, SubElement, Comment, iterparse, dump, tostring
 
 
 import config
@@ -89,51 +89,71 @@ def convert_entities(contents):
     return s
 
 
-def makerss(d, files):
-    root = Element('rss', version='2.0')
-    root.attrib['xmlns:atom'] = NS_ATOM
-    root.attrib['xmlns:media'] = NS_MEDIA
-    channel = SubElement(root, 'channel')
+def makerss(top, root, files):
+    print 'Building %s' % os.path.join(root, 'photos.rss')
+    dirlen = len(top)+len(os.path.sep)
+    rootpath = root[dirlen:]
+    rootlen = len(rootpath)+len(os.path.sep)
+    rss = Element('rss', version='2.0')
+    rss.attrib['xmlns:atom'] = NS_ATOM
+    rss.attrib['xmlns:media'] = NS_MEDIA
+    channel = SubElement(rss, 'channel')
     title = SubElement(channel, 'title')
-    title.text = os.path.basename(d)
+    title.text = os.path.basename(root)
+    channel.append(Comment('must have a link for rss'))
     link = SubElement(channel, 'link')
     link.text = 'http://localhost/'
-    dirlen = len(d)+len(os.path.sep)
+    result = []
     for image in files:
+        print rootpath, rootlen, image[rootlen:]
+        result.append(os.path.join(rootpath, image))
+        image = image[rootlen:]
         thumb = util.www_thumbnail_path(image)
         item = SubElement(channel, 'item')
         title = SubElement(item, 'title')
-        title.text = convert_entities(os.path.basename(image[dirlen:]))
+        title.text = convert_entities(image)
         link = SubElement(item, 'link')
-        link.text = image[dirlen:]
+        link.text = urllib.quote(image)
         description = SubElement(item, 'media:description')
-        description.text = convert_entities(os.path.basename(image))
-        thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote_plus(thumb[dirlen:]))
-        #thumbnail = SubElement(item, 'media:thumbnail', url=thumb[dirlen:])
-        #content = SubElement(item, 'media:content', url=urllib.quote(image[dirlen:]))
-        content = SubElement(item, 'media:content', url=image[dirlen:])
+        description.text = convert_entities(os.path.splitext(os.path.basename(image))[0])
+        if os.path.exists(os.path.join(top, thumb)):
+            #thumbnail = SubElement(item, 'media:thumbnail', url=thumb)
+            #thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote_plus(thumb))
+            thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote(thumb))
+        else:
+            print 'thumbnail %s is missing' % (os.path.join(top, thumb),)
+            thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote(image))
+        #content = SubElement(item, 'media:content', url=image)
+        #content = SubElement(item, 'media:content', url=urllib.quote_plus(image))
+        content = SubElement(item, 'media:content', url=urllib.quote(image))
 
-    indent(root)
-    file = open(os.path.join(d, 'photos.rss'), 'w')
+    indent(rss)
+    file = open(os.path.join(root, 'photos.rss'), 'w')
     print >>file, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    print >>file, tostring(root)
+    print >>file, tostring(rss)
     file.close()
+    return result
 
 
-def imagefiles():
-    files = []
-    for d in config.IMAGE_ITEMS:
-        try:
-            d = d[1]
-        except:
-            pass
-        if not os.path.isdir(d):
+def imagefiles(top, subdir):
+    images = []
+    image_root = subdir[len(top)+1:]
+    for name in os.listdir(subdir):
+        if name.startswith('.'):
             continue
-        print 'Building photos.rss for %s' % d
-        files = util.match_files_recursively(d, config.IMAGE_SUFFIX)
-        makerss(d, files)
-    return files
+        path = os.path.join(subdir, name)
+        if os.path.isdir(path):
+            images += imagefiles(top, path)
+        else:
+            extn = os.path.splitext(path)[1][1:].lower()
+            if extn in config.IMAGE_SUFFIX:
+                images.append(os.path.join(image_root, name))
+    #print top, subdir, images
+    makerss(top, subdir, images)
+    return images
 
 
 if __name__ == '__main__':
-    imagefiles()
+    for d in config.IMAGE_ITEMS:
+        top = d[1]
+        imagefiles(top, top)

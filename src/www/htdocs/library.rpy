@@ -77,13 +77,13 @@ class LibraryResource(FreevoResource):
 
     @benchmark(benchmarking, benchmarkcall)
     def convert_dir(self, dir_str):
-        '''
+        """
         Converts a direct file location to a link that twisted can display.
         If the file exists in one of the child resources of twisted, then
         this method converts the file to a proper child resource link that
         twiseted knows about.
         If above case fails, the original file link will be returned.
-        '''
+        """
         #print 'convert_dir(self, dir_str=%r)' % (dir_str)
         child_res = ""
         ### if the file starts with WEBSERVER_CACHEDIR return converted file
@@ -172,16 +172,14 @@ class LibraryResource(FreevoResource):
 
         action_mediatype = fv.formValue(form, 'media')
         action_script = os.path.basename(request.path)
-        print action_dir
-        # this is a way to set the rss feed, for use with mkimagemrss XXX doesn't work
+        print 'action_dir:', action_dir
+        # this is a way to set the rss feed, for use with mkimagemrss
+        # XXX doesn't work with special characters
         rss = None
         if action_mediatype == 'images':
             if os.path.exists(os.path.join(action_dir, 'photos.rss')):
                 baseurl = 'http://%s:%s/' % (socket.gethostname(), request.host.port)
-                #rss = baseurl+action_script+'?media=rss&dir='+os.path.join(action_dir, 'photos.rss')
                 rss = baseurl+action_script+'?media=rss&dir='+os.path.join(action_dir, 'photos.rss')
-                #rss = 'http://localhost/'+action_script+'?media=rss&dir='+os.path.join(action_dir, 'photos.rss')
-                #rss = action_script+'?media=rss&dir='+os.path.join(action_dir, 'photos.rss')
                 #rss = request.received_headers['referer']+os.path.join(action_dir, 'photos.rss')
         #use request.postpath array to set action to download
         if action_mediatype == 'rss':
