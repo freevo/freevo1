@@ -103,7 +103,7 @@ def makerss(titletext, top, root, files):
     print 'Building %s' % os.path.join(root, 'photos.rss')
     dirlen = len(top)+len(os.path.sep)
     rootpath = root[dirlen:]
-    rootlen = len(rootpath)+len(os.path.sep)
+    rootlen = len(rootpath) > 0 and len(rootpath)+len(os.path.sep) or 0
     rss = Element('rss', version='2.0')
     rss.attrib['xmlns:atom'] = NS_ATOM
     rss.attrib['xmlns:media'] = NS_MEDIA
@@ -135,12 +135,12 @@ def makerss(titletext, top, root, files):
         link.text = urllib.quote(imagepath)
         description = SubElement(item, 'media:description')
         description.text = convert_entities(os.path.splitext(os.path.basename(image))[0])
-        #thumbnail = SubElement(item, 'media:thumbnail', url=imagepath[rootlen:])
-        #thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote_plus(os.path.join('.thumbs', image)))
-        thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote(thumbpath[rootlen:]))
-        #content = SubElement(item, 'media:content', url=os.path.join('.images', image))
-        #content = SubElement(item, 'media:content', url=urllib.quote_plus(os.path.join('.images', image)))
-        content = SubElement(item, 'media:content', url=urllib.quote(imagepath[rootlen:]))
+        thumbnail = SubElement(item, 'media:thumbnail', url=thumbpath[rootlen:])
+        #thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote_plus(thumbpath[rootlen:]))
+        #thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote(thumbpath[rootlen:]))
+        content = SubElement(item, 'media:content', url=imagepath[rootlen:])
+        #content = SubElement(item, 'media:content', url=urllib.quote_plus(imagepath[rootlen:]))
+        #content = SubElement(item, 'media:content', url=urllib.quote(imagepath[rootlen:]))
 
     indent(rss)
     file = open(os.path.join(root, 'photos.rss'), 'w')
