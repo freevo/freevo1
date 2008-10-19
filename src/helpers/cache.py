@@ -228,7 +228,7 @@ def cache_www_thumbnails():
 
     files = util.misc.unique(files)
     for filename in copy.copy(files):
-        thumb = util.www_thumbnail_path(filename)
+        thumb = util.www_image_path(filename, '.thumbs')
         try:
             sinfo = os.stat(filename)
             if os.stat(thumb)[stat.ST_MTIME] > sinfo[stat.ST_MTIME]:
@@ -250,8 +250,7 @@ def cache_www_thumbnails():
         if len(fname) > 65:
             fname = fname[:20] + ' [...] ' + fname[-40:]
         print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), fname)
-
-        util.create_www_thumbnail(filename)
+        util.www_thumb_create(filename)
 
     if files:
         print

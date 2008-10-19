@@ -2105,8 +2105,10 @@ WWW_PAGES = [
 
 #
 # Some sizes for the images in the web library
+# Can be a tuple of sizes or a size
 #
-WWW_IMAGE_THUMBNAIL_SIZE = (200, 200)
+WWW_IMAGE_SIZE = (1024, 768)
+WWW_IMAGE_THUMBNAIL_SIZE = 256
 
 #
 # Username / Password combinations to login to the web interface.

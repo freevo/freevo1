@@ -30,8 +30,8 @@ Some File Operation Utilities
 
 import os
 import sys
-import stat
-import statvfs
+from stat import *
+from statvfs import *
 import string
 import copy
 import subprocess
@@ -128,7 +128,7 @@ def freespace(path):
     """
     try:
         s = os.statvfs(path)
-        return s[statvfs.F_BAVAIL] * long(s[statvfs.F_BSIZE])
+        return s[F_BAVAIL] * long(s[F_BSIZE])
     except OSError, why:
         _debug_('"%r: %s' % (path, why), DWARNING)
     return 0
@@ -143,7 +143,7 @@ def totalspace(path):
     """
     try:
         s = os.statvfs(path)
-        return s[statvfs.F_BLOCKS] * long(s[statvfs.F_BSIZE])
+        return s[F_BLOCKS] * long(s[F_BSIZE])
     except OSError, why:
         _debug_('"%r: %s' % (path, why), DWARNING)
     return 0
@@ -566,13 +566,13 @@ def create_thumbnail(filename, thumbnail=None):
                 if tags.has_key('JPEGThumbnail'):
                     image = kaa.imlib2.open_from_memory(tags['JPEGThumbnail'])
             except Exception, why:
-                _debug_('Error loading thumbnail %r: %s' % (filename, why), DINFO)
+                _debug_('Error loading thumbnail %r: %s' % (filename, why), DWARNING)
 
         if not image or image.width < 100 or image.height < 100:
             try:
                 image = kaa.imlib2.open(filename)
             except Exception, why:
-                _debug_('Cannot cache image %r: %s' % (filename, why), DINFO)
+                _debug_('Cannot cache image %r: %s' % (filename, why), DWARNING)
                 return None
 
     try:
@@ -603,7 +603,7 @@ def cache_image(filename, thumbnail=None, use_exif=False):
     """
     thumb = vfs.getoverlay(filename + '.raw')
     try:
-        if os.stat(thumb)[stat.ST_MTIME] > os.stat(filename)[stat.ST_MTIME]:
+        if os.stat(thumb)[ST_MTIME] > os.stat(filename)[ST_MTIME]:
             data = read_thumbnail(thumb)
             if data:
                 return data
@@ -634,41 +634,107 @@ def scale_rectangle_to_max(size, max_size):
 
 
 @benchmark(benchmarking, benchmarkcall)
-def www_thumbnail_path(filename):
+def www_image_path(filename, subdir='.thumbs'):
     """
     returns the path to the thumbnail image for a given filename
     """
-    file_ext_index = filename.rindex(".")
-    file_ext = filename[file_ext_index:].lower()
-    if file_ext == ".gif":
-        file_ext = ".jpg"
+    dirname = os.path.dirname(filename)
+    file_base, file_extn = os.path.splitext(filename)
+    file_extn = file_extn.lower()
+    if file_extn == ".gif":
+        file_extn = ".jpg"
     # the filename extension needs to be lowercase for imlib2 but we need to
     # keep the original filename for cache to be able to clean the files
-    imagepath = filename + file_ext
-    filename = os.path.basename(imagepath)
-    dirname = os.path.dirname(imagepath)
-    thumb_path = os.path.join(dirname, '.thumbs', filename)
-    return thumb_path
-    thumb_path = vfs.getwwwoverlay(imagepath)
+    imagename = os.path.basename(file_base).lower() + file_extn
+    #imagepath = vfs.getwwwoverlay(imagename)
+    imagepath = os.path.join(dirname, subdir, imagename)
+    return imagepath
 
 
 @benchmark(benchmarking, benchmarkcall)
-def create_www_thumbnail(filename):
+def www_image(filename, subdir, force=False, getsize=False, size=128, verbose=0):
     """
-    creates a webserver thumbnail image and returns its size.
+    creates a webserver image image and returns its size.
     """
-    thumb_path = www_thumbnail_path(filename)
+    orientation_map = {
+        #   vflip  hflip  orientate
+        1: (False, False, 0, 'Horizontal (normal)'),
+        2: (False, True,  0, 'Mirrored horizontal'),
+        3: (False, False, 2, 'Rotated 180'),
+        4: (True,  False, 0, 'Mirrored vertical'),
+        5: (False, True,  3, 'Mirrored horizontal then rotated 90 CCW'),
+        6: (False, False, 1, 'Rotated 90 CW'),
+        7: (False, True,  1, 'Mirrored horizontal then rotated 90 CW'),
+        8: (False, False, 3, 'Rotated 90 CCW'),
+    }
+
+    imagename = www_image_path(filename, subdir)
+    if verbose >= 2:
+        print 'Checking image %r, force=%r getsize=%r' % (imagename, force, getsize)
+    if os.path.exists(imagename):
+        if not force:
+            if getsize:
+                image = kaa.imlib2.open(imagename)
+                return image.size
+            return (0, 0)
+    else:
+        force = True
     try:
         try:
-            if not os.path.isdir(os.path.dirname(thumb_path)):
-                os.makedirs(os.path.dirname(thumb_path), mode=04775)
+            if not os.path.isdir(os.path.dirname(imagename)):
+                if verbose >= 1:
+                    print 'Make directory %r' % os.path.dirname(imagename)
+                os.makedirs(os.path.dirname(imagename), mode=04775)
         except IOError:
-            _debug_('error creating dir %s' % os.path.dirname(thumb_path), DWARNING)
+            _debug_('error creating dir %s' % os.path.dirname(imagename), DWARNING)
             raise IOError
-        image = kaa.imlib2.open(filename)
-        thumb = image.scale_preserve_aspect(config.WWW_IMAGE_THUMBNAIL_SIZE)
-        thumb.save(thumb_path)
+        if force or os.stat(filename)[ST_MTIME] > os.stat(imagename)[ST_MTIME]:
+            orientation_str = ''
+            image = kaa.imlib2.open(filename)
+            try:
+                tags = exif.process_file(open(filename, 'rb'))
+                orientation = tags.get('Image Orientation').values[0]
+                flip_vert, flip_hori, orientate, orientate_str = orientation_map[orientation]
+                if orientation != 1:
+                    if flip_vert:
+                        image.flip_vertical()
+                        if verbose >= 2:
+                            print 'flipped vertically'
+                    if flip_hori:
+                        image.flip_horizontal()
+                        if verbose >= 2:
+                            print 'flipped horizontally'
+                    if orientate:
+                        if verbose >= 2:
+                            print orientate_str
+                        image.orientate(orientate)
+            except AttributeError, why:
+                pass
+            except Exception, why:
+                print why
+            if isinstance(size, tuple):
+                image = image.scale_preserve_aspect(size)
+            else:
+                image = image.scale_preserve_aspect((size, size))
+            image.save(imagename)
+            print 'Made image %r @ %s -> %r%s' % (imagename, size, image.size, orientation_str)
     except IOError, why:
         _debug_(why, DWARNING)
         return (0, 0)
     return image.size
+
+
+@benchmark(benchmarking, benchmarkcall)
+def www_thumb_create(filename, force=False, getsize=False, size=config.WWW_IMAGE_THUMBNAIL_SIZE, verbose=0):
+    """
+    creates a webserver image image and returns its size.
+    """
+    return www_image(filename, '.thumbs', force, getsize, size, verbose)
+
+
+@benchmark(benchmarking, benchmarkcall)
+def www_image_create(filename, force=False, getsize=False, size=config.WWW_IMAGE_SIZE, verbose=0):
+    """
+    creates a webserver image image and returns its size.
+    """
+    return www_image(filename, '.images', force, getsize, size, verbose)

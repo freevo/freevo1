@@ -1648,6 +1648,13 @@ CACHE_IMAGES = 1
 # ]
 
 #
+# Some sizes for the images in the web library
+# Can be a tuple of sizes or a size
+#
+# WWW_IMAGE_SIZE = (1024, 768)
+# WWW_IMAGE_THUMBNAIL_SIZE = 256
+
+#
 # Divide the TV guide into intervals of this length (in minutes)
 #
 # WWW_GUIDE_INTERVAL = 30

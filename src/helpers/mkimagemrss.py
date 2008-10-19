@@ -31,6 +31,7 @@
 
 import os, sys
 import urllib, urllib2
+from optparse import Option, OptionValueError, OptionParser, IndentedHelpFormatter
 
 if sys.hexversion >= 0x2050000:
     import xml.etree.ElementTree as ET
@@ -47,18 +48,27 @@ else:
 import config
 import util
 
+options = None
+
 NS_MEDIA='http://search.yahoo.com/mrss'
 NS_ATOM='http://www.w3.org/2005/Atom'
-
-
 try:
     register_namespace = ET.register_namespace
 except AttributeError:
     def register_namespace(prefix, uri):
         ET._namespace_map[uri] = prefix
-
 register_namespace('media', NS_MEDIA)
 register_namespace('atom', NS_ATOM)
+
+
+def maketitle(pathname):
+    title = os.path.basename(pathname)
+    title = title.replace('_', ' ')
+    titlewords = title.split()
+    for i in range(len(titlewords)):
+        titlewords[i] = titlewords[i].capitalize()
+    title = ' '.join(titlewords)
+    return title
 
 
 def indent(elem, level=0):
@@ -89,7 +99,7 @@ def convert_entities(contents):
     return s
 
 
-def makerss(top, root, files):
+def makerss(titletext, top, root, files):
     print 'Building %s' % os.path.join(root, 'photos.rss')
     dirlen = len(top)+len(os.path.sep)
     rootpath = root[dirlen:]
@@ -99,33 +109,38 @@ def makerss(top, root, files):
     rss.attrib['xmlns:media'] = NS_MEDIA
     channel = SubElement(rss, 'channel')
     title = SubElement(channel, 'title')
-    title.text = os.path.basename(root)
+    title.text = titletext
+    description = SubElement(channel, 'description')
+    description.text = _('This feed enables cooliris http://www.cooliris.com/ in your web browser')
     channel.append(Comment('must have a link for rss'))
     link = SubElement(channel, 'link')
     link.text = 'http://localhost/'
     result = []
     for image in files:
-        print rootpath, rootlen, image[rootlen:]
+        imagepath = util.www_image_path(image, '.images')
+        if not options.noimages:
+            util.www_image_create(os.path.join(top, image), force=options.force, verbose=options.verbose)
+        thumbpath = util.www_image_path(image, '.thumbs')
+        if not options.nothumbs:
+            util.www_thumb_create(os.path.join(top, image), force=options.force, verbose=options.verbose)
+        if options.verbose >= 3:
+            print 'rootpath:', rootpath, 'image:', image, 'imagepath:', imagepath, 'thumbpath:', thumbpath
+            print 'imagepath[rootlen:]:', imagepath[rootlen:], 'thumbpath[rootlen:]:', thumbpath[rootlen:]
         result.append(os.path.join(rootpath, image))
         image = image[rootlen:]
-        thumb = util.www_thumbnail_path(image)
         item = SubElement(channel, 'item')
         title = SubElement(item, 'title')
         title.text = convert_entities(image)
         link = SubElement(item, 'link')
-        link.text = urllib.quote(image)
+        link.text = urllib.quote(imagepath)
         description = SubElement(item, 'media:description')
         description.text = convert_entities(os.path.splitext(os.path.basename(image))[0])
-        if os.path.exists(os.path.join(top, thumb)):
-            #thumbnail = SubElement(item, 'media:thumbnail', url=thumb)
-            #thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote_plus(thumb))
-            thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote(thumb))
-        else:
-            print 'thumbnail %s is missing' % (os.path.join(top, thumb),)
-            thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote(image))
-        #content = SubElement(item, 'media:content', url=image)
-        #content = SubElement(item, 'media:content', url=urllib.quote_plus(image))
-        content = SubElement(item, 'media:content', url=urllib.quote(image))
+        #thumbnail = SubElement(item, 'media:thumbnail', url=imagepath[rootlen:])
+        #thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote_plus(os.path.join('.thumbs', image)))
+        thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote(thumbpath[rootlen:]))
+        #content = SubElement(item, 'media:content', url=os.path.join('.images', image))
+        #content = SubElement(item, 'media:content', url=urllib.quote_plus(os.path.join('.images', image)))
+        content = SubElement(item, 'media:content', url=urllib.quote(imagepath[rootlen:]))
 
     indent(rss)
     file = open(os.path.join(root, 'photos.rss'), 'w')
@@ -135,25 +150,56 @@ def makerss(top, root, files):
     return result
 
 
-def imagefiles(top, subdir):
+def imagefiles(title, top, subdir):
     images = []
     image_root = subdir[len(top)+1:]
-    for name in os.listdir(subdir):
-        if name.startswith('.'):
+    for pathname in os.listdir(subdir):
+        if pathname.startswith('.'):
             continue
-        path = os.path.join(subdir, name)
+        path = os.path.join(subdir, pathname)
         if os.path.isdir(path):
-            images += imagefiles(top, path)
+            images += imagefiles(maketitle(path), top, path)
         else:
             extn = os.path.splitext(path)[1][1:].lower()
             if extn in config.IMAGE_SUFFIX:
-                images.append(os.path.join(image_root, name))
-    #print top, subdir, images
-    makerss(top, subdir, images)
+                images.append(os.path.join(image_root, pathname))
+    if options.verbose >= 3:
+        print 'title:', title, 'top:', top, 'subdir:', subdir, 'images:', images
+    makerss(title, top, subdir, images)
     return images
 
 
+def parse_options():
+    """
+    Parse command line options
+    """
+    import version, revision
+    _version = version.__version__
+    if _version.endswith('-svn'):
+        _version = _version.split('-svn')[0] + ' r%s' % revision.__revision__
+    thumbsize = config.WWW_IMAGE_THUMBNAIL_SIZE
+    imagesize = config.WWW_IMAGE_SIZE
+    formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=36, width=100, short_first=0)
+    parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="""
+Make image MRSS feed for CoolIris (http://www.cooliris.com/site/support/download-all-products.php)
+
+Usage: %prog [options]""", version='%prog ' + _version)
+    parser.add_option('-v', '--verbose', action='count', default=0,
+        help='set the level of verbosity')
+    parser.add_option('-r', '--rebuild', action='store_true', dest='force', default=False,
+        help='rebuild the thumbnails and images [default:%default]')
+    parser.add_option('-t', '--thumb-size', action='store', dest='thumbsize', default=thumbsize, metavar='SIZE',
+        help='size of thumbnail images [default:%default]')
+    parser.add_option('-i', '--image-size', action='store', dest='imagesize', default=imagesize, metavar='SIZE',
+        help='size of images [default:%default]')
+    parser.add_option('-T', '--no-thumbs', action='store_true', dest='nothumbs', default=False,
+        help='do not build thumbnail images [default:%default]')
+    parser.add_option('-I', '--no-images', action='store_true', dest='noimages', default=False,
+        help='Do not build images [default:%default]')
+    return parser.parse_args()
+
 if __name__ == '__main__':
+    (options, args) = parse_options()
     for d in config.IMAGE_ITEMS:
-        top = d[1]
-        imagefiles(top, top)
+        title, top = d
+        imagefiles(title, top, top)

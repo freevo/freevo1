@@ -482,7 +482,11 @@ class LibraryResource(FreevoResource):
                     (basedir, file) = os.path.split(item)
                     filepath = urllib.quote(item)
                     #find info and size
-                    info = metadata.parse(item)
+                    try:
+                        info = metadata.parse(item)
+                    except Exception, why:
+                        _debug_(why, DWARNING)
+                        continue
                     len_file = os.stat(item)[6]
                     #check for fxd file and other info
                     fxd_file = item[:item.rindex('.')] + ".fxd"
@@ -505,11 +509,8 @@ class LibraryResource(FreevoResource):
                         status = 'favorite'
                     ### show image
                     if action_mediatype == "images":
-                        scaled_image_path = util.www_thumbnail_path(item)
-                        if not os.path.exists(scaled_image_path):
-                            size = util.create_www_thumbnail(item)
-                        else:
-                            size = (info['width'], info['height'])
+                        scaled_image_path = util.www_image_path(item, '.thumbs')
+                        size = util.www_thumb_create(item, getsize=True)
                         image_link = self.convert_dir(filepath)
                         scaled_image_link = self.convert_dir(scaled_image_path)
                         fv.tableCell('<div class="image"><a href="javascript:openfoto(\''+\
