@@ -505,7 +505,7 @@ class MpvGoom(BaseAnimation):
             'url': '%s/mplayervis/freevo-%s-%s.avi' % (config.IMAGE_DIR, config.MPLAYERVIS_FULL_MPLAYER_SIZE, config.MPLAYERVIS_FULL_MPLAYER_ASPECT)
         }
 
-        args['geometry'] = '-geometry %s:%s+%s+%s' % \
+        args['geometry'] = '-geometry %sx%s+%s+%s' % \
             (config.CONF.width, config.CONF.height, config.CONF.x, config.CONF.y)
 
         if config.DEBUG_CHILDAPP:
