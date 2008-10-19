@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: iso-8859-1 -*-
+# vi:et:sw=4
 # -----------------------------------------------------------------------
 # applelib.py - Module for parsing apple's trailer site
 # -----------------------------------------------------------------------
@@ -8,7 +9,7 @@
 # Todo:
 #
 # -----------------------------------------------------------------------
-# Copyright (C) 2006 Pierre Ossman
+# Copyright (C) 2006-2008 Pierre Ossman
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,21 +45,6 @@ _FEEDS = (
         ( 'home/feeds/genres.json', None ),
         ( 'home/feeds/studios.json', None),
         )
-
-# Date of trailer addition. Comes on a separate line.
-_date_re = re.compile(r'''<dt>(?P<month>[0-9]+)\.(?P<day>[0-9]+)</dt>''', re.IGNORECASE)
-
-# Trailer link
-_trailer_link_re = re.compile(r'''<dd><a[^>]*href="(?P<url>[^"]+)"[^>]*>(?P<title>[^<]+).*</a>.*</dd>''', re.IGNORECASE)
-
-# Start of a studio section
-_studio_name_re = re.compile(r'''<h4><a[^>]*>(?P<name>[^<]*).*</a>.*</h4>''', re.IGNORECASE)
-
-# Start of a genre section
-_genre_name_re = re.compile(r'''<h4>(?P<name>[^<]*).*</h4>''', re.IGNORECASE)
-
-# Trailer link when in studio/genre list
-_trailer_list_link_re = re.compile(r'''<li><a[^>]*href="(?P<url>[^"]+)"[^>]*>(?P<title>[^<]+).*</a>.*</li>''', re.IGNORECASE)
 
 # Trailer subpages
 _subpage_link_res = (
@@ -204,58 +190,9 @@ class Trailers:
         lines = self._dl(url).split("\n")
 
         streams = []
+
+        # Start by looking from streams directly in the page...
         for line in lines:
-            for expr in _subpage_link_res:
-                iterator = expr.finditer(line)
-                for m in iterator:
-                    try:
-                        page_size, page_key = self._map_size(m.group("size"))
-                    except (IndexError):
-                        page_size = None
-                        page_key = None
-
-                    suburl = urlparse.urljoin(url, m.group("url"))
-                    substreams = self._parse_stream_page(suburl)
-
-                    for ss in substreams:
-                        for s in streams:
-                            if s["url"] == ss["url"]:
-                                break
-                        else:
-                            if ss["size"] is None:
-                                size = page_size
-                                key = page_key
-                            else:
-                                size, key = self._map_size(ss["size"])
-                            self._add_stream(streams,
-                                             {"url":ss["url"],
-                                              "size":size,
-                                              "sort_key":key})
-
-            iterator = _frontpage_link_re.finditer(line)
-            for m in iterator:
-                page_size, page_key = self._map_size(m.group("type"))
-
-                suburl = urlparse.urljoin(url, m.group("url"))
-                substreams = self._parse_stream_page(suburl)
-                if substreams:
-                    for ss in substreams:
-                        for s in streams:
-                            if s["url"] == ss["url"]:
-                                break
-                        else:
-                            if ss["size"] is None:
-                                size = page_size
-                                key = page_key
-                            else:
-                                size, key = self._map_size(ss["size"])
-                            self._add_stream(streams,
-                                             {"url":ss["url"],
-                                              "size":size,
-                                              "sort_key":key})
-                else:
-                    self._parse_trailer_page(title, suburl, date, category)
-
             substreams = self._extract_streams(url, line)
             if substreams:
                 for ss in substreams:
@@ -268,6 +205,60 @@ class Trailers:
                                          {"url":ss["url"],
                                           "size":size,
                                           "sort_key":key})
+
+        # ...then if none are found, look for subpages...
+        if not streams:
+            for line in lines:
+                for expr in _subpage_link_res:
+                    iterator = expr.finditer(line)
+                    for m in iterator:
+                        try:
+                            page_size, page_key = self._map_size(m.group("size"))
+                        except (IndexError):
+                            page_size = None
+                            page_key = None
+
+                        suburl = urlparse.urljoin(url, m.group("url"))
+                        substreams = self._parse_stream_page(suburl)
+
+                        for ss in substreams:
+                            for s in streams:
+                                if s["url"] == ss["url"]:
+                                    break
+                            else:
+                                if ss["size"] is None:
+                                    size = page_size
+                                    key = page_key
+                                else:
+                                    size, key = self._map_size(ss["size"])
+                                self._add_stream(streams,
+                                                 {"url":ss["url"],
+                                                  "size":size,
+                                                  "sort_key":key})
+
+                iterator = _frontpage_link_re.finditer(line)
+                for m in iterator:
+                    page_size, page_key = self._map_size(m.group("type"))
+
+                    suburl = urlparse.urljoin(url, m.group("url"))
+                    substreams = self._parse_stream_page(suburl)
+                    if substreams:
+                        for ss in substreams:
+                            for s in streams:
+                                if s["url"] == ss["url"]:
+                                    break
+                            else:
+                                if ss["size"] is None:
+                                    size = page_size
+                                    key = page_key
+                                else:
+                                    size, key = self._map_size(ss["size"])
+                                self._add_stream(streams,
+                                                 {"url":ss["url"],
+                                                  "size":size,
+                                                  "sort_key":key})
+                    else:
+                        self._parse_trailer_page(title, suburl, date, category)
 
         t["streams"] = streams
 
