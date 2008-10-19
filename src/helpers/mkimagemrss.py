@@ -130,17 +130,14 @@ def makerss(titletext, top, root, files):
         image = image[rootlen:]
         item = SubElement(channel, 'item')
         title = SubElement(item, 'title')
-        title.text = convert_entities(image)
+        title.text = image
         link = SubElement(item, 'link')
         link.text = urllib.quote(imagepath)
         description = SubElement(item, 'media:description')
         description.text = convert_entities(os.path.splitext(os.path.basename(image))[0])
-        thumbnail = SubElement(item, 'media:thumbnail', url=thumbpath[rootlen:])
-        #thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote_plus(thumbpath[rootlen:]))
-        #thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote(thumbpath[rootlen:]))
-        content = SubElement(item, 'media:content', url=imagepath[rootlen:])
-        #content = SubElement(item, 'media:content', url=urllib.quote_plus(imagepath[rootlen:]))
-        #content = SubElement(item, 'media:content', url=urllib.quote(imagepath[rootlen:]))
+        # need to double quote special characters
+        thumbnail = SubElement(item, 'media:thumbnail', url=urllib.quote(urllib.quote(thumbpath[rootlen:])))
+        content = SubElement(item, 'media:content', url=urllib.quote(urllib.quote(imagepath[rootlen:])))
 
     indent(rss)
     file = open(os.path.join(root, 'photos.rss'), 'w')

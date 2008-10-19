@@ -172,7 +172,6 @@ class LibraryResource(FreevoResource):
 
         action_mediatype = fv.formValue(form, 'media')
         action_script = os.path.basename(request.path)
-        print 'action_dir:', action_dir
         # this is a way to set the rss feed, for use with mkimagemrss
         # XXX doesn't work with special characters
         rss = None
