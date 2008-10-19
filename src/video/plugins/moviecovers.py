@@ -168,8 +168,8 @@ class PluginInterface(plugin.ItemPlugin):
                 year = 'unknown'
                 self.moviecovers_id_list += [ (link, name, year, 'Movies', 'forum') ]
 
-
         return self.moviecovers_id_list
+
 
     def guessMoviecovers(self, filename, label=False):
         """Guess possible Moviecovers movies from filename. Same return as searchMoviecovers"""
@@ -195,6 +195,7 @@ class PluginInterface(plugin.ItemPlugin):
                 name += '%s ' % p
 
         return self.searchMoviecovers(name)
+
 
     def getMoviecoversPage(self, url, origin):
         """url
@@ -237,8 +238,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         else:
             if self.isdiscset == True:
-                self.fxdfile = vfs.join(config.OVERLAY_DIR, 'disc-set',
-                                        self.getmedia_id(self.device))
+                self.fxdfile = vfs.join(config.OVERLAY_DIR, 'disc-set', self.getmedia_id(self.device))
             else:
                 self.fxdfile = vfs.splitext(file)[0]
 
@@ -259,6 +259,7 @@ class PluginInterface(plugin.ItemPlugin):
         if not vfs.isdir(vfs.dirname(self.fxdfile)):
             if vfs.dirname(self.fxdfile):
                 os.makedirs(vfs.dirname(self.fxdfile))
+
 
     def moviecovers_get_disc_searchstring(self, item):
         name = item.media.label
@@ -433,6 +434,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         self.writeFxd()
         self.moviecovers_menu_back(menuw)
+
 
     def writeFxd(self):
         """Write fxd file"""
