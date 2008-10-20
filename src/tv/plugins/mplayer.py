@@ -101,7 +101,7 @@ class MPlayer:
             'ao_opts': config.MPLAYER_AO_DEV_OPTS,
             'default_args': config.MPLAYER_ARGS_DEF.split(),
             'mode_args': config.MPLAYER_ARGS.has_key(mode) and config.MPLAYER_ARGS[mode].split() or [],
-            'geometry': (config.CONF.x or config.CONF.y) and '-geometry %dx%d' % (config.CONF.x, config.CONF.y) or '',
+            'geometry': (config.CONF.x or config.CONF.y) and '-geometry %d:%d' % (config.CONF.x, config.CONF.y) or '',
             'verbose': '',
             'dvd-device': '',
             'cdrom-device': '',
