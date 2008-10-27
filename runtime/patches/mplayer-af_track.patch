@@ -277,7 +277,7 @@ Index: libaf/af_track.c
 +			s->qcounter++;
 +			if (s->qcounter > s->ctimeout) {
 +				long t = (s->qcounter * 1000) / c->rate;
-+				mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] quiet after %ld msecs\n", t);
++				mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] quiet for %ld msecs\n", t);
 +				fprintf(s->log, "[track] quiet for %ld msecs\n", t);
 +				s->state = SQUIET2;
 +			} else if (power > s->threshold) {
