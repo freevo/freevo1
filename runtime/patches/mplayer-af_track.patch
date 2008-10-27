@@ -14,27 +14,46 @@ Index: libaf/control.h
 ===================================================================
 --- libaf/control.h	(revision 27667)
 +++ libaf/control.h	(working copy)
-@@ -236,4 +236,9 @@
- #define AF_CONTROL_PLAYBACK_SPEED	0x00002500 | AF_CONTROL_FILTER_SPECIFIC
- #define AF_CONTROL_SCALETEMPO_AMOUNT	0x00002600 | AF_CONTROL_FILTER_SPECIFIC
+@@ -233,7 +233,18 @@
+ #define AF_CONTROL_SS_FREQ		0x00002300 | AF_CONTROL_FILTER_SPECIFIC
+ #define AF_CONTROL_SS_DECAY		0x00002400 | AF_CONTROL_FILTER_SPECIFIC
+ 
+-#define AF_CONTROL_PLAYBACK_SPEED	0x00002500 | AF_CONTROL_FILTER_SPECIFIC
+-#define AF_CONTROL_SCALETEMPO_AMOUNT	0x00002600 | AF_CONTROL_FILTER_SPECIFIC
++#define AF_CONTROL_PLAYBACK_SPEED	0x00002600 | AF_CONTROL_FILTER_SPECIFIC
++#define AF_CONTROL_SCALETEMPO_AMOUNT	0x00002700 | AF_CONTROL_FILTER_SPECIFIC
  
 +// Track
-+#define AF_CONTROL_TRACK_ON_OFF		0x00002700 | AF_CONTROL_FILTER_SPECIFIC
++
++// Threshold power level for a audio packet
 +#define AF_CONTROL_TRACK_THRESHOLD	0x00002800 | AF_CONTROL_FILTER_SPECIFIC
++
++// a quiet message is written after timeout seconds when power is below threshold
 +#define AF_CONTROL_TRACK_TIMEOUT	0x00002900 | AF_CONTROL_FILTER_SPECIFIC
++
++// Not used
++#define AF_CONTROL_TRACK_ON_OFF		0x00002A00 | AF_CONTROL_FILTER_SPECIFIC
 +
  #endif /* MPLAYER_CONTROL_H */
 Index: libaf/af_track.c
 ===================================================================
 --- libaf/af_track.c	(revision 0)
 +++ libaf/af_track.c	(revision 0)
-@@ -0,0 +1,206 @@
+@@ -0,0 +1,290 @@
 +/*=============================================================================
 +   //
 +   //  This software has been released under the terms of the GNU General Public
 +   //  license. See http://www.gnu.org/copyleft/gpl.html for details.
 +   //
 +   //  Copyright 2008 Duncan Webb duncan@freevo.org
++   //
++   //  The purpase of this audio filter is to detect the end of a track. This is
++   //  achieved by measuring the power level across all channels and when it drops
++   //  below the threshold and remains below this threshold for more than timeout
++   //  msecs. When the quiet period has been detected then write a message to
++   //  stdout. The message can be picked up and an action can be taken. The reason
++   //  for doing this is to detect the end of a track for network streams when the
++   //  length of the audio is unknown.
 +   //
 +   //=============================================================================
 + */
@@ -51,22 +70,19 @@ Index: libaf/af_track.c
 +#include "af.h"
 +#include "mp_msg.h"
 +
-+#define MS(n) ((n) * 1000 * 1000)
 +
-+enum states { SLOUD, SQUIET };
++enum states { SINITIAL, SLOUD, SQUIET, SQUIET2 };
 +
 +// Data for specific instances of this filter
 +typedef struct af_track_s {
-+	float time[AF_NCH];             // Forgetting factor for power estimate
-+	float pow[AF_NCH];              // Estimated power level [dB]
-+	float tresh[AF_NCH];            // Threshold [dB]
-+	int attack[AF_NCH];             // Attack time [ms]
-+	int release[AF_NCH];            // Release time [ms]
-+	float range[AF_NCH];            // Range level [dB]
-+	struct timespec start;          // Start time of detected quiet
 +	enum states state;              // state of audio
-+	float threshold;                // power level for quiet audio
-+	long timeout;                   // number of seconds of quite audio
++	enum states laststate;          // previous state of audio
++	float threshold;                // power level for quiet audio across all channels
++	long timeout;                   // number of msecs seconds of quite audio
++	unsigned long ctimeout;         // number of timeout samples
++	unsigned long qcounter;         // number of quiet samples
++	unsigned long lcounter;         // number of loud samples
++	FILE *log;
 +} af_track_t;
 +
 +// Initialization and runtime control
@@ -74,77 +90,120 @@ Index: libaf/af_track.c
 +{
 +	af_track_t *s = (af_track_t *)af->setup;
 +
++	mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] control(.., 0x%08x, ..)\n", cmd);
 +	switch (cmd) {
++	case AF_CONTROL_POST_CREATE:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_POST_CREATE\n");
++		s->log = fopen("/tmp/power", "w");
++		fprintf(s->log, "[track] AF_CONTROL_POST_CREATE\n");
++		{
++			af_data_t *data = (af_data_t *)arg;
++			//void       *audio = data->audio;        // data buffer
++			//int        len = data->len;             // buffer length
++			int        rate = data->rate;           // sample rate (e.g. 44100)
++			int        nch = data->nch;             // number of channels (e.g. 2)
++			int        format = data->format;       // format
++			int        bps = data->bps;             // bytes per sample (4)
++			mp_msg(MSGT_AFILTER, MSGL_INFO, "rate=%d, nch=%d, format=%d, bps=%d\n", rate, nch, format, bps);
++		}
++		s->state = SINITIAL;
++		s->laststate = SINITIAL;
++		s->threshold = 0.0; //10 / 1,000,000.0;
++		s->timeout = 1500;
++		s->ctimeout = s->timeout * ((af_data_t *)arg)->rate / 1000;
++		s->lcounter = 0;
++		s->qcounter = 0;
++		return AF_UNKNOWN;
++
++	case AF_CONTROL_PRE_DESTROY:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_PRE_DESTROY\n");
++		fprintf(s->log, "[track] AF_CONTROL_PRE_DESTROY\n");
++		fclose(s->log);
++		return AF_UNKNOWN;
++
++	case AF_CONTROL_PLAYBACK_SPEED:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_PLAYBACK_SPEED\n");
++		fprintf(s->log, "[track] AF_CONTROL_PLAYBACK_SPEED\n");
++		return AF_UNKNOWN;
++
 +	case AF_CONTROL_REINIT:
 +		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_REINIT\n");
++		fprintf(s->log, "[track] AF_CONTROL_REINIT\n");
 +		// Sanity check
 +		if (!arg) return AF_ERROR;
 +		{
 +			af_data_t *data = (af_data_t *)arg;
-+			//void *audio = data->audio;      // data buffer
-+			int        len = data->len;             // buffer length
-+			int        rate = data->rate;           // sample rate
-+			int        nch = data->nch;             // number of channels
++			//void       *audio = data->audio;        // data buffer
++			//int        len = data->len;             // buffer length
++			int        rate = data->rate;           // sample rate (e.g. 44100)
++			int        nch = data->nch;             // number of channels (e.g. 2)
 +			int        format = data->format;       // format
-+			int        bps = data->bps;             // bytes per sample
-+			mp_msg(MSGT_AFILTER, MSGL_INFO, "len=%d, rate=%d, nch=%d, format=%d, bps=%d\n", len, rate, nch, format, bps);
++			int        bps = data->bps;             // bytes per sample (4)
++			mp_msg(MSGT_AFILTER, MSGL_INFO, "rate=%d, nch=%d, format=%d, bps=%d\n", rate, nch, format, bps);
++			fprintf(s->log, "[track] rate=%d, nch=%d, format=%d, bps=%d\n", rate, nch, format, bps);
 +		}
 +
 +		af->data->rate   = ((af_data_t *)arg)->rate;
 +		af->data->nch    = ((af_data_t *)arg)->nch;
 +		af->data->format = AF_FORMAT_FLOAT_NE;
 +		af->data->bps    = 4;
++		s->ctimeout = s->timeout * ((af_data_t *)arg)->rate / 1000;
 +
-+		clock_gettime(CLOCK_REALTIME, &s->start);
-+		s->start.tv_sec  = 0;
-+		s->start.tv_nsec = 0;
-+		s->state = SLOUD;
-+		s->threshold = 0.01;
-+		s->timeout = 2;
-+		// Time constant set to 0.1s
-+		//    s->alpha = (1.0/0.2)/(2.0*M_PI*(float)((af_data_t*)arg)->rate);
++		fprintf(s->log, "rate = %d\n", af->data->rate);
++		fprintf(s->log, "threshold = %.8f\n", s->threshold);
++		fprintf(s->log, "timeout = %ld\n", s->timeout);
++		fprintf(s->log, "ctimeout = %ld\n", s->ctimeout);
++
 +		return af_test_output(af, (af_data_t *)arg);
 +
-+	case AF_CONTROL_COMMAND_LINE: {
-+		float thr = -10.0;
-+		int   tim = 2;
-+		int   n;
++	case AF_CONTROL_INFO:
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_INFO\n");
++		fprintf(s->log, "[track] AF_CONTROL_INFO\n");
++		return AF_UNKNOWN;
++
++	case AF_CONTROL_COMMAND_LINE:
 +		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_COMMAND_LINE '%s'\n", (char *)arg);
-+		n = sscanf((char *)arg, "%f:%d", &thr, &tim);
-+        s->threshold = thr;
-+        s->timeout = tim;
-+		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] %d threshold %.8f, timeout %ld\n", n, s->threshold, s->timeout);
-+		return AF_OK;
-+	}
-+
-+	case AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_SET:
-+		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_SET %d\n", *(int *)arg);
-+		//memcpy(s->enable, (int *)arg, AF_NCH * sizeof(int));
-+		return AF_OK;
-+
-+	case AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_GET:
-+		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_GET %d\n", *(int *)arg);
-+		//memcpy((int *)arg, s->enable, AF_NCH * sizeof(int));
-+		return AF_OK;
++		fprintf(s->log, "[track] AF_CONTROL_COMMAND_LINE\n");
++		{
++			float thr = s->threshold;
++			long  tim = s->timeout;
++			int   n;
++			n = sscanf((char *)arg, "%f:%li", &thr, &tim);
++			if (control(af, AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_SET, &thr) != AF_OK)
++				return AF_ERROR;
++			return control(af, AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_SET, &tim);
++		}
 +
 +	case AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_SET:
 +		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_SET %f\n", *(float *)arg);
-+		//return af_from_dB(AF_NCH, (float *)arg, s->threshold, 0.0, 60.0, -1.0);
++		fprintf(s->log, "[track] AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_SET %f\n", *(float *)arg);
++		s->threshold = *(float *)arg / 1000000.0;
 +		return AF_OK;
 +
 +	case AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_GET:
 +		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_GET %f\n", *(float *)arg);
-+		//return af_to_dB(AF_NCH, s->threshold, (float *)arg, 10.0);
++		fprintf(s->log, "[track] AF_CONTROL_TRACK_THRESHOLD | AF_CONTROL_GET %f\n", *(float *)arg);
 +		return AF_OK;
 +
 +	case AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_SET:
 +		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_SET %ld\n", *(long *)arg);
-+		//return af_from_ms(AF_NCH, (int *)arg, s->timeout, af->data->rate, 500.0, 0.1);
++		fprintf(s->log, "[track] AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_SET %ld\n", *(long *)arg);
++		s->timeout = *(long *)arg;
 +		return AF_OK;
 +
 +	case AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_GET:
 +		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_GET %ld\n", *(long *)arg);
-+		//return af_to_ms(AF_NCH, s->timeout, (int *)arg, af->data->rate);
++		fprintf(s->log, "[track] AF_CONTROL_TRACK_TIMEOUT | AF_CONTROL_GET %ld\n", *(long *)arg);
++		return AF_OK;
++
++	case AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_SET: // Not used
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_SET %d\n", *(int *)arg);
++		fprintf(s->log, "[track] AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_SET %d\n", *(int *)arg);
++		return AF_OK;
++
++	case AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_GET: // Not used
++		mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_GET %d\n", *(int *)arg);
++		fprintf(s->log, "[track] AF_CONTROL_TRACK_ON_OFF | AF_CONTROL_GET %d\n", *(int *)arg);
 +		return AF_OK;
 +	}
 +	return AF_UNKNOWN;
@@ -159,56 +218,92 @@ Index: libaf/af_track.c
 +		free(af->setup);
 +}
 +
++static const char *statestr(enum states state)
++{
++	switch (state) {
++	case SINITIAL:
++		return "SINITIAL";
++	case SLOUD:
++		return "SLOUD";
++	case SQUIET:
++		return "SQUIET";
++	case SQUIET2:
++		return "SQUIET2";
++	}
++
++	return "SUNKNONW";
++}
++
 +// Filter data through filter
 +static af_data_t *play(struct af_instance_s *af, af_data_t *data)
 +{
-+	af_data_t      *c   = data;                             // Current working data
-+	af_track_t     *s   = (af_track_t *)af->setup;          // Setup for this instance
-+	float          *a   = (float *)c->audio;                // Audio data
-+	int             len = c->len / 4;                       // Number of samples
-+	int             ch  = 0;                                // Channel counter
-+	register int    nch = c->nch;                           // Number of channels
-+	register int    i   = 0;
-+	float           totpow = 0;
-+	struct timespec now;
-+	long            sc, ms;
-+
-+	clock_gettime(CLOCK_REALTIME, &now);
++	af_data_t   *c   = data;                                // Current working data
++	af_track_t  *s   = (af_track_t *)af->setup;             // Setup for this instance
++	float       *a   = (float *)c->audio;                   // Audio data
++	int          len = c->len / 4;                          // Number of samples
++	int          ch  = 0;                                   // Channel counter
++	register int nch = c->nch;                              // Number of channels
++	register int i   = 0;
 +
 +	// Noise track
-+	for (ch = 0; ch < nch ; ch++) {
-+		//float t   = 1.0 - s->time[ch];
-+		for (i = ch; i < len; i += nch) {
-+			register float x        = a[i];
-+			register float pow      = x * x;
-+			totpow += pow;
-+			//s->pow[ch] = t * s->pow[ch] + pow * s->time[ch]; // LP filter
-+			//if (pow < s->pow[ch])
-+			//	;
-+			//else
-+			//	;
-+			//a[i] = x;
++	for (i = 0; i < len; i += nch) {
++        unsigned long lcounter = s->lcounter;
++        unsigned long qcounter = s->qcounter;
++
++		// Calculate the power for all channels
++		register float power = 0;
++		for (ch = 0; ch < nch ; ch++) {
++			register float x   = a[i];
++			register float pow = x * x;
++			power += pow;
 +		}
-+	}
-+	if (s->state == SLOUD) {
-+		if (totpow < s->threshold) {
-+			s->state = SQUIET;
-+			clock_gettime(CLOCK_REALTIME, &s->start);
-+		}
-+	} else {
-+		if (totpow >= s->threshold) {
-+			s->state = SLOUD;
-+			clock_gettime(CLOCK_REALTIME, &now);
-+			sc = now.tv_sec - s->start.tv_sec;
-+			ms = (now.tv_nsec - s->start.tv_nsec) / MS(1);
-+			if (ms < 0) {
-+				sc -= 1;
-+				ms += 1000;
++
++		switch (s->state) {
++		case SINITIAL:
++			if (power > s->threshold) {
++				s->state = SLOUD;
 +			}
-+			if (sc > s->timeout)
-+				mp_msg(MSGT_AFILTER, MSGL_INFO, "\r[track] quiet for %ld,%03ld secs\n", sc, ms);
++			break;
++
++		case SLOUD:
++			s->lcounter++;
++			if (power <= s->threshold) {
++				s->lcounter = 0;
++				s->state = SQUIET;
++			}
++			break;
++
++		case SQUIET:
++			s->qcounter++;
++			if (s->qcounter > s->ctimeout) {
++				long t = (s->qcounter * 1000) / c->rate;
++				mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] quiet after %ld msecs\n", t);
++				fprintf(s->log, "[track] quiet for %ld msecs\n", t);
++				s->state = SQUIET2;
++			} else if (power > s->threshold) {
++				s->qcounter = 0;
++				s->state = SLOUD;
++			}
++			break;
++
++		case SQUIET2:
++			s->qcounter++;
++			if (power > s->threshold) {
++				long t = (s->qcounter * 1000) / c->rate;
++				mp_msg(MSGT_AFILTER, MSGL_INFO, "[track] quiet after %ld msecs\n", t);
++				fprintf(s->log, "[track] quiet after %ld msecs\n", t);
++				s->qcounter = 0;
++				s->state = SLOUD;
++			}
++			break;
++		}
++		if (s->laststate != s->state) {
++			fprintf(s->log, "state %s->%s: ", statestr(s->laststate), statestr(s->state));
++			fprintf(s->log, "%.8f %.8f %5lu %5lu %5lu\n", power, s->threshold, lcounter, qcounter, s->ctimeout);
++			s->laststate = s->state;
 +		}
 +	}
++
 +	return c;
 +}
 +
