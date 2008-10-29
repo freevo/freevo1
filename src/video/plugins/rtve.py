@@ -200,6 +200,8 @@ class BrowseByTitle(RtveItem):
 
     def make_menu(self, arg=None, menuw=None):
         entries = []
+        pop = PopupBox("Creando menu de programas")
+        pop.show()
         for name in self.programacion.sort_by_title():
             programa = self.programacion.programas[name]
 
@@ -209,6 +211,7 @@ class BrowseByTitle(RtveItem):
             #plays directly
             #entries.append(ProgramaVideoItem(programa['nombre'],programa,self))
 
+        pop.destroy()
         menuw.pushmenu(menu.Menu(self.programa, entries))
 
 class Canal(BrowseByTitle):

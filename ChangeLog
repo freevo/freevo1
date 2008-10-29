@@ -23,11 +23,13 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Updated youtube plug-in to allow standard and locale specific feeds (F#2099147)
  * Updated youtube plug-in to feed more than 25 videos (F#2115012)
  * Updated RTVE video plug-in to allow videos from the archive to be played (F#2104431)
+ * Updated Italian translation (F#2153010)
  * Fixed automatic CD-ROM drive detection to ignore comments (B#2085387)
  * Fixed imdb helper to currectly handle dates when available (B#2075291)
  * Fixed joy plug-in to remove any pending events when enabled (B#1916407)
  * Fixed mplayer crash when auto cropping is enabled (B#2089592)
  * Fixed record server generic record module to allow a group_type to be given (B#2017200)
+ * Fixed RTVE video plug-in for changes to the web page (B#2196882)
  * Fixed tv recordings_manager crashing when deleting a recording (B#2138835)
  * Fixed wiimote not detecting when the remote has been switched off (B#2037944)
 

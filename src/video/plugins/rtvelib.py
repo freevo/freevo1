@@ -177,12 +177,14 @@ class ParseLetra(Thread):
             contador = pagina.find('<span id="contador">')
             if contador>0:
                 contador = pagina[contador+20:]
+                contador = contador.replace("\n", " ", 1000)
+                contador = contador.replace("\t", " ", 1000)
                 contador = contador[:contador.find("<")]
-                actual = int(contador[:contador.find(" ")])
-                total = int(contador[len(contador)-2:])
+                actual   = int(contador[:contador.find(" ")])
+                total    = int(contador[contador.rfind(" ")+1:])
             else:
-                #print "la url %s no tiene contenidos" % url
-                break
+                actual = 1
+                total  = 1
 
             while pagina.find('<li id="video-')>=0:
 
