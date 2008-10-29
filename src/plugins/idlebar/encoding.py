@@ -92,11 +92,14 @@ class PluginInterface(plugin.DaemonPlugin):
         self.polltime  = 0
         self.state     = 'noserver'
         self.laststate = None
-        self.font      = self.skin.get_font(config.OSD_IDLEBAR_FONT)
+        self.font      = self.skin.get_font(config.ENCODING_IDLEBAR_FONT)
 
 
     def config(self):
-        return [ ('ENCODING_IDLEBAR', True, 'Use the idlebar'), ]
+        return [
+            ('ENCODING_IDLEBAR', True, 'Use the idlebar'),
+            ('ENCODING_IDLEBAR_FONT', 'small0', 'Font to use in the idlebar, tiny0 is another good choice'),
+        ]
 
 
     def getprogress(self):
