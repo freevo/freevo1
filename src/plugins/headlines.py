@@ -142,13 +142,16 @@ class HeadlinesSiteItem(Item):
             doc = util.feedparser.parse(self.url)
             if doc.status < 400:
                 for entry in doc['entries']:
-                    title = Unicode(entry.title)
-                    link  = Unicode(entry.link)
-                    if entry.has_key('content') and len(entry['content']) >= 1:
-                        description = Unicode(entry['content'][0].value)
-                    else:
-                        description = Unicode(entry['summary_detail'].value)
-                    headlines.append((title, link, description))
+                    try:
+                        title = Unicode(entry.title)
+                        link  = Unicode(entry.link)
+                        if entry.has_key('content') and len(entry['content']) >= 1:
+                            description = Unicode(entry['content'][0].value)
+                        else:
+                            description = Unicode(entry['summary_detail'].value)
+                        headlines.append((title, link, description))
+                    except AttributeError:
+                        pass
             else:
                 _debug_('Error %s, getting %r' % (doc.status, self.url))
 

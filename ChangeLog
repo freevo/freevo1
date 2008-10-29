@@ -26,6 +26,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Updated youtube plug-in to feed more than 25 videos (F#2115012)
  * Fixed automatic CD-ROM drive detection to ignore comments (B#2085387)
  * Fixed encoding idlebar to be able to select a font (B#2187603)
+ * Fixed headlines plug-in to ignore items without a title, etc. (B#2183225)
  * Fixed imdb helper to correctly handle dates when available (B#2075291)
  * Fixed joy plug-in to remove any pending events when enabled (B#1916407)
  * Fixed mplayer crash when auto cropping is enabled (B#2089592)
