@@ -41,6 +41,9 @@ import kaa.metadata
 from copy import copy
 from string import split, join
 
+#precompiled regular expression to obtain mencoder progress
+re_progress = re.compile('(\d+)\%\) .*Trem:\s*(\d+\w+)\s+')
+
 #some temporary hardcoded programs
 
 mencoder = config.CONF.mencoder
@@ -751,11 +754,11 @@ class EncodingJob:
         seek to remove data
         """
         #(passtype, title) = data
-
-        re_progress = re.compile('(\d+)\%\) .*Trem:\s*(\d+\w+)\s+')
-        if re_progress.search(line):
-            self.percentage = re_progress.search(line).group(1)
-            self.trem = re_progress.search(line).group(2)
+        # re_progress is precompiled at the beginning of this file, to speed up
+        s=re_progress.search(line)
+        if s:
+            self.percentage = s.group(1)
+            self.trem = s.group(2)
             #self.ui_updateProgress(perc, trem, passtype)
 
 
