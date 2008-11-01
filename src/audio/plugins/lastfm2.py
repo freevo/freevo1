@@ -431,7 +431,6 @@ class LastFMDownloader(Thread):
                 _debug_('%s aborted' % self.filename)
             fd.close()
             f.close()
-            break
         except ValueError, why:
             _debug_('%s: %s' % (self.filename, why), DWARNING)
         except urllib2.HTTPError, why:
