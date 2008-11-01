@@ -124,6 +124,8 @@ class MPlayer:
 
 
 
+        if config.DEBUG_CHILDAPP:
+            mpl += ' -v'
         #if not item.network_play:
         #    demux = ' %s ' % self.get_demuxer(filename)
         #else:
@@ -174,6 +176,7 @@ class MPlayer:
 
         self.item = item
 
+        #print 'DJW:command:', ' '.join(command)
         self.app = MPlayerApp(command, self)
         return None
 
@@ -245,7 +248,7 @@ class MPlayerApp(childapp.ChildApp2):
         self.stop_reason = 0 # 0 = ok, 1 = error
         self.RE_TIME     = re.compile("^A: *([0-9]+)").match
         self.RE_TIME_NEW = re.compile("^A: *([0-9]+):([0-9]+)").match
-        self.RE_NEW_TRK  = re.compile("\[track\] quiet for").match
+        self.RE_NEW_TRK  = re.compile("\[track\] quiet after").match
 
         # [0] -> start of line to check with mplayer output
         # [1] -> keyword to store info in self.item.info
