@@ -61,7 +61,7 @@ from gui.AlertBox import AlertBox
 import util
 from util import amazon
 from util.benchmark import benchmark
-benchmarking = 1 #config.DEBUG_BENCHMARKING
+benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 try:
