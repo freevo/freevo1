@@ -202,7 +202,6 @@ class LastFMItem(AudioItem):
         self.webservices = webservices
         self.xspf = None
         self.feed = None
-        self.entry = None
         self.timer = None
         self.player = None
         self.arg = None
@@ -220,7 +219,6 @@ class LastFMItem(AudioItem):
         self.webservices.adjust_station(self.station_url)
         self.xspf = LastFMXSPF()
         self.feed = None
-        self.entry = 0
         items = [ (self.play, _('Listen to LastFM Station')) ]
         return items
 
@@ -253,7 +251,9 @@ class LastFMItem(AudioItem):
         if self.menuw is None:
             self.menuw = menuw
 
-        if self.feed is None or self.entry >= len(self.feed.entries):
+        if self.feed is not None:
+            print 'DJW:len(self.feed.entries):', len(self.feed.entries)
+        if self.feed is None or len(self.feed.entries) <= 0:
             try:
                 for i in range(3):
                     xspf = self.webservices.request_xspf()
@@ -277,9 +277,8 @@ class LastFMItem(AudioItem):
                 if menuw:
                     AlertBox(text=str(why)).show()
                 rc.post_event(PLAY_END)
-            self.entry = 0
 
-        entry = self.feed.entries[self.entry]
+        entry = self.feed.entries[0]
         self.stream_name = urllib.unquote_plus(self.feed.feed.title)
         self.album = entry.album
         self.artist = entry.artist
@@ -333,7 +332,7 @@ class LastFMItem(AudioItem):
             _debug_('still playing', DINFO)
             self.timer.start(LastFMItem.poll_interval)
         else:
-            self.entry += 1
+            self.feed.entries.pop(0)
             self.play(self.arg, self.menuw)
 
 
@@ -352,7 +351,7 @@ class LastFMItem(AudioItem):
     def skip(self):
         """Skip song"""
         _debug_('skip()', 1)
-        self.entry += 1
+        self.feed.entries.pop(0)
         if self.timer is not None and self.timer.active():
             self.timer.stop()
         self.timer = None
@@ -377,13 +376,13 @@ class LastFMItem(AudioItem):
 
 class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
     def http_error_301(self, req, fp, code, msg, headers):
-        #print 'DJW:http_error_301'
+        print 'DJW:http_error_301'
         result = urllib2.HTTPRedirectHandler.http_error_301(self, req, fp, code, msg, headers)
         result.status = code
         return result
 
     def http_error_302(self, req, fp, code, msg, headers):
-        #print 'DJW:http_error_302'
+        print 'DJW:http_error_302'
         result = urllib2.HTTPRedirectHandler.http_error_302(self, req, fp, code, msg, headers)
         result.status = code
         return result
@@ -411,7 +410,6 @@ class LastFMDownloader(Thread):
         Execute a download operation. Stop when finished downloading or
         requested to stop.
         """
-        #print 'DJW:self.url:', self.url, 'self.headers:', self.headers
         request = urllib2.Request(self.url, headers=self.headers)
         opener = urllib2.build_opener(SmartRedirectHandler())
         try:
@@ -423,7 +421,7 @@ class LastFMDownloader(Thread):
                 if len(reply) == 0:
                     self.running = False
                     _debug_('%s downloaded' % self.filename)
-                    #print 'DJW:downloaded %s' % self.filename
+                    print 'DJW:downloaded %s' % self.filename
                     # what we could do now is to add tags to track
                     break
                 self.size += len(reply)
