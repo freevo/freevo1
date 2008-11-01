@@ -39,6 +39,7 @@ from kaa import Timer, OneShotTimer
 import config
 import plugin
 import rc
+import version, revision
 from event import PLAY_END
 from menu import MenuItem, Menu
 from gui import AlertBox
@@ -279,25 +280,30 @@ class LastFMItem(AudioItem):
             self.entry = 0
 
         entry = self.feed.entries[self.entry]
+        self.stream_name = urllib.unquote_plus(self.feed.feed.title)
         self.album = entry.album
         self.artist = entry.artist
         self.title = entry.title
+        self.location_url = entry.location_url
         self.length = entry.duration
         basename = entry.artist + '-' + entry.album + '-' + entry.title
         self.basename = basename.lower().replace(' ', '_').replace('.', '').replace('\'', '').replace(':', '')
         self.url = os.path.join(config.LASTFM_DIR, self.basename + os.path.splitext(entry.location_url)[1])
         self.trackpath = os.path.join(config.LASTFM_DIR, self.basename + os.path.splitext(entry.location_url)[1])
-        self.location_url = entry.location_url
-        self.track_downloader = self.webservices.download(self.location_url, self.trackpath)
-        self.stream_name = urllib.unquote_plus(self.feed.feed.title)
-        self.imagepath = os.path.join(config.LASTFM_DIR, self.basename + os.path.splitext(entry.image_url)[1])
-        self.image_downloader = self.webservices.download(entry.image_url, self.imagepath)
+        self.image = os.path.join(config.LASTFM_DIR, self.basename + os.path.splitext(entry.image_url)[1])
+        self.image_downloader = self.webservices.download(entry.image_url, self.image)
+        self.track_downloader = self.webservices.download(self.location_url, self.trackpath, istrack=True)
         #self.is_playlist = True
         # Wait for a bit of the file to be downloaded
         while self.track_downloader.filesize() < 1024 * 20:
             if not self.track_downloader.isrunning():
                 rc.post_event(PLAY_END)
                 return
+            time.sleep(0.1)
+        # Wait for the image to be downloaded
+        for i in range(30):
+            if not self.image_downloader.isrunning():
+                break
             time.sleep(0.1)
         self.player = PlayerGUI(self, menuw)
         if self.timer is not None and self.timer.active():
@@ -306,7 +312,7 @@ class LastFMItem(AudioItem):
         self.timer.start(entry.duration)
         error = self.player.play()
         if error:
-            _debug_('error=%r' % (error,), DWARNING)
+            _debug_('player play error=%r' % (error,), DWARNING)
             if menuw:
                 AlertBox(text=error).show()
             rc.post_event(PLAY_END)
@@ -371,11 +377,13 @@ class LastFMItem(AudioItem):
 
 class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
     def http_error_301(self, req, fp, code, msg, headers):
+        #print 'DJW:http_error_301'
         result = urllib2.HTTPRedirectHandler.http_error_301(self, req, fp, code, msg, headers)
         result.status = code
         return result
 
     def http_error_302(self, req, fp, code, msg, headers):
+        #print 'DJW:http_error_302'
         result = urllib2.HTTPRedirectHandler.http_error_302(self, req, fp, code, msg, headers)
         result.status = code
         return result
@@ -403,11 +411,10 @@ class LastFMDownloader(Thread):
         Execute a download operation. Stop when finished downloading or
         requested to stop.
         """
-        httplib.HTTPConnection.debuglevel = 1
+        #print 'DJW:self.url:', self.url, 'self.headers:', self.headers
         request = urllib2.Request(self.url, headers=self.headers)
         opener = urllib2.build_opener(SmartRedirectHandler())
         try:
-            httplib.HTTPConnection.debuglevel = 1
             f = opener.open(request)
             fd = open(self.filename, 'wb')
             while self.running:
@@ -416,6 +423,7 @@ class LastFMDownloader(Thread):
                 if len(reply) == 0:
                     self.running = False
                     _debug_('%s downloaded' % self.filename)
+                    #print 'DJW:downloaded %s' % self.filename
                     # what we could do now is to add tags to track
                     break
                 self.size += len(reply)
@@ -423,9 +431,11 @@ class LastFMDownloader(Thread):
                 _debug_('%s aborted' % self.filename)
             fd.close()
             f.close()
+            break
+        except ValueError, why:
+            _debug_('%s: %s' % (self.filename, why), DWARNING)
         except urllib2.HTTPError, why:
             _debug_('%s: %s' % (self.filename, why), DWARNING)
-        httplib.HTTPConnection.debuglevel = 0
 
 
     def stop(self):
@@ -456,6 +466,9 @@ class LastFMWebServices:
     Interface to LastFM web-services
     """
     _version = '1.1.2'
+    headers = {
+        'User-agent': 'Freevo-%s (r%s)' % (version.__version__, revision.__revision__)
+    }
 
     @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
@@ -494,42 +507,38 @@ class LastFMWebServices:
         @param lines: return a list of lines, otherwise data block.
         @returns: reply from request
         """
-        httplib.HTTPConnection.debuglevel = 1
-        try:
-            _debug_('url=%r, data=%r' % (url, data), 1)
-            request = urllib2.Request(url)
-            opener = urllib2.build_opener(SmartRedirectHandler())
-            if lines:
-                reply = []
-                try:
-                    f = opener.open(request)
-                    lines = f.readlines()
-                    if lines is None:
-                        return []
-                    for line in lines:
-                        reply.append(line.strip('\n'))
-                except httplib.BadStatusLine, why:
-                    print 'BadStatusLine:', why
-                    reply = None
-                except AttributeError, why:
-                    reply = None
-                except Exception, why:
-                    _debug_('%s: %s' % (url, why), DWARNING)
-                    raise
-                _debug_('reply=%r' % (reply,), 1)
-                return reply
-            else:
-                reply = ''
-                try:
-                    f = opener.open(request)
-                    reply = f.read()
-                except Exception, why:
-                    _debug_('%s: %s' % (url, why), DWARNING)
-                    raise
-                _debug_('len(reply)=%r' % (len(reply),), 1)
-                return reply
-        finally:
-            httplib.HTTPConnection.debuglevel = 0
+        _debug_('url=%r, data=%r' % (url, data), 1)
+        request = urllib2.Request(url, headers=LastFMWebServices.headers)
+        opener = urllib2.build_opener(SmartRedirectHandler())
+        if lines:
+            reply = []
+            try:
+                f = opener.open(request)
+                lines = f.readlines()
+                if lines is None:
+                    return []
+                for line in lines:
+                    reply.append(line.strip('\n'))
+            except httplib.BadStatusLine, why:
+                print 'BadStatusLine:', why
+                reply = None
+            except AttributeError, why:
+                reply = None
+            except Exception, why:
+                _debug_('%s: %s' % (url, why), DWARNING)
+                raise
+            _debug_('reply=%r' % (reply,), 1)
+            return reply
+        else:
+            reply = ''
+            try:
+                f = opener.open(request)
+                reply = f.read()
+            except Exception, why:
+                _debug_('%s: %s' % (url, why), DWARNING)
+                raise
+            _debug_('len(reply)=%r' % (len(reply),), 1)
+            return reply
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -611,7 +620,7 @@ class LastFMWebServices:
 
 
     @benchmark(benchmarking, benchmarkcall)
-    def download(self, url, filename):
+    def download(self, url, filename, istrack=False):
         """
         Download album cover or track to last.fm directory.
 
@@ -624,8 +633,11 @@ class LastFMWebServices:
         if not self.session:
             self._login()
         headers = {
-            'Session': self.session,
+            'Cookie': 'Session=%s' % self.session,
+            'User-agent': 'Freevo-%s (r%s)' % (version.__version__, revision.__revision__)
         }
+        if istrack:
+            headers.update({'Host': 'play.last.fm'})
         self.downloader = LastFMDownloader(url, filename, headers)
         self.downloader.start()
         return self.downloader
