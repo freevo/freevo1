@@ -33,9 +33,7 @@ import sys, os, time
 import md5, urllib, urllib2, httplib, re
 from threading import Thread
 
-import kaa
-from kaa import Timer, OneShotTimer
-
+# Freevo modules
 import config
 import plugin
 import rc
@@ -56,7 +54,10 @@ else:
 from util.benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
+
+# Debugging modules
 import pprint, traceback
+
 
 
 class LastFMError(Exception):
@@ -66,7 +67,6 @@ class LastFMError(Exception):
     @benchmark(benchmarking, benchmarkcall)
     def __init__(self, why):
         Exception.__init__(self)
-        print 'DJW:why:', why, type(why), dir(why)
         self.why = str(why)
 
     def __str__(self):
@@ -132,7 +132,6 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     @benchmark(benchmarking, benchmarkcall)
     def shutdown(self):
-        print 'PluginInterface.shutdown'
         if self.menuitem is not None:
             self.menuitem.shutdown()
 
@@ -177,7 +176,6 @@ class LastFMMainMenuItem(MenuItem):
 
     @benchmark(benchmarking, benchmarkcall)
     def shutdown(self):
-        print 'LastFMMainMenuItem.shutdown'
         if self.webservices is not None:
             self.webservices.shutdown()
 
@@ -201,7 +199,6 @@ class LastFMItem(AudioItem):
         self.webservices = webservices
         self.xspf = None
         self.feed = None
-        self.timer = None
         self.player = None
         self.arg = None
         self.menuw = None
@@ -229,7 +226,12 @@ class LastFMItem(AudioItem):
         if event == 'STOP':
             self.stop(self.arg, self.menuw)
             return
-        if event == 'PLAYLIST_NEXT':
+        if event == 'PLAY_END':
+            if self.feed is not None and len(self.feed.entries) > 0:
+                self.feed.entries.pop(0)
+            self.play()
+            return False
+        elif event == 'PLAYLIST_NEXT':
             self.skip()
             return True
         elif event == 'LANG': # Love
@@ -251,8 +253,6 @@ class LastFMItem(AudioItem):
         if self.menuw is None:
             self.menuw = menuw
 
-        if self.feed is not None:
-            print 'DJW:len(self.feed.entries):', len(self.feed.entries)
         if self.feed is None or len(self.feed.entries) <= 0:
             try:
                 for i in range(3):
@@ -277,14 +277,12 @@ class LastFMItem(AudioItem):
             except LastFMError, why:
                 _debug_(why, DWARNING)
                 if menuw:
-                    print 'DJW:why:', why, type(why), '%r' % str(why)
                     AlertBox(text=str(why)).show()
-                traceback.print_stack()
                 rc.post_event(PLAY_END)
                 return
 
         entry = self.feed.entries[0]
-        print 'DJW:entry:', entry.artist, '/', entry.album, '/', entry.title
+        _debug_('entry "%s / %s / %s" of %s' % (entry.artist, entry.album, entry.title, len(self.feed.entries)))
         self.stream_name = urllib.unquote_plus(self.feed.title)
         self.album = entry.album
         self.artist = entry.artist
@@ -319,10 +317,6 @@ class LastFMItem(AudioItem):
                 return
             time.sleep(0.1)
         self.player = PlayerGUI(self, menuw)
-        if self.timer is not None and self.timer.active():
-            self.timer.stop()
-        self.timer = kaa.OneShotTimer(self.timerhandler)
-        self.timer.start(entry.duration)
         error = self.player.play()
         if error:
             _debug_('player play error=%r' % (error,), DWARNING)
@@ -333,33 +327,11 @@ class LastFMItem(AudioItem):
 
 
     @benchmark(benchmarking, benchmarkcall)
-    def timerhandler(self):
-        """
-        Handle the timer event when at the end of a track
-        """
-        if self.timer is None:
-            _debug_('timer is not running', DINFO)
-            return
-        if self.track_downloader is None:
-            _debug_('downloader is not running', DERROR)
-            return
-        if self.track_downloader.isrunning():
-            _debug_('still playing', DINFO)
-            self.timer.start(LastFMItem.poll_interval)
-        else:
-            self.feed.entries.pop(0)
-            self.play(self.arg, self.menuw)
-
-
-    @benchmark(benchmarking, benchmarkcall)
     def stop(self, arg=None, menuw=None):
         """
         Stop the current playing
         """
         _debug_('LastFMItem.stop(arg=%r, menuw=%r)' % (arg, menuw), 1)
-        if self.timer is not None and self.timer.active():
-            self.timer.stop()
-        self.timer = None
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -367,9 +339,6 @@ class LastFMItem(AudioItem):
         """Skip song"""
         _debug_('skip()', 1)
         self.feed.entries.pop(0)
-        if self.timer is not None and self.timer.active():
-            self.timer.stop()
-        self.timer = None
         self.play(self.arg, self.menuw)
 
 
@@ -411,6 +380,7 @@ class LastFMDownloader(Thread):
     There is a bad bug im mplayer that corrupts the url passed, so we have to
     download it to a file and then play it
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, url, filename, headers=None):
         Thread.__init__(self)
         self.url = url
@@ -420,6 +390,7 @@ class LastFMDownloader(Thread):
         self.size = 0
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def run(self):
         """
         Execute a download operation. Stop when finished downloading or
@@ -435,15 +406,16 @@ class LastFMDownloader(Thread):
                 fd.write(reply)
                 if len(reply) == 0:
                     self.running = False
-                    print 'DJW:downloaded %s' % self.filename
-                    _debug_('%s downloaded' % self.filename)
+                    print '%s downloaded' % self.filename
+                    # debugs fail during shutdown
+                    #_debug_('%s downloaded' % self.filename)
                     # what we could do now is to add tags to track
                     break
                 self.size += len(reply)
             else:
-                print 'DJW:aborted %s' % self.filename
+                print '%s download aborted' % self.filename
+                #_debug_('%s download aborted' % self.filename)
                 os.remove(self.filename)
-                #_debug_('%s aborted' % self.filename)
             fd.close()
             f.close()
         except ValueError, why:
@@ -452,6 +424,15 @@ class LastFMDownloader(Thread):
             _debug_('%s: %s' % (self.url, why), DWARNING)
 
 
+    @benchmark(benchmarking, benchmarkcall)
+    def filesize(self):
+        """
+        Get the downloaded file size
+        """
+        return self.size
+
+
+    @benchmark(benchmarking, benchmarkcall)
     def stop(self):
         """
         Stop the download thead running
@@ -460,13 +441,7 @@ class LastFMDownloader(Thread):
         self.running = False
 
 
-    def filesize(self):
-        """
-        Get the downloaded file size
-        """
-        return self.size
-
-
+    @benchmark(benchmarking, benchmarkcall)
     def isrunning(self):
         """
         See if the thread running
@@ -504,13 +479,12 @@ class LastFMWebServices:
         """
         Shutdown the lasf.fm webservices
         """
-        print 'LastFMWebServices.shutdown'
         if self.downloader is not None:
             self.downloader.stop()
 
 
     @benchmark(benchmarking, benchmarkcall)
-    def _urlopen(self, url, data=None, lines=True):
+    def _urlopen(self, url, lines=True):
         """
         Wrapper to see what is sent and received
         When lines is true then the reply is returned as a list of lines,
@@ -521,41 +495,31 @@ class LastFMWebServices:
         @param lines: return a list of lines, otherwise data block.
         @returns: reply from request
         """
-        _debug_('url=%r, data=%r' % (url, data), 1)
+        _debug_('url=%r, lines=%r' % (url, lines), 1)
         request = urllib2.Request(url, headers=LastFMWebServices.headers)
         opener = urllib2.build_opener(SmartRedirectHandler())
-        if lines:
-            reply = []
-            try:
+        try:
+            if lines:
+                reply = []
                 f = opener.open(request)
                 lines = f.readlines()
                 if lines is None:
                     return []
                 for line in lines:
                     reply.append(line.strip('\n'))
-            except httplib.BadStatusLine, why:
-                print 'BadStatusLine:', why
-                reply = None
-            except AttributeError, why:
-                reply = None
-            except Exception, why:
-                _debug_('%s: %s' % (url, why), DWARNING)
-                raise
-            _debug_('reply=%r' % (reply,), 1)
-            return reply
-        else:
-            reply = ''
-            try:
+                _debug_('reply=%r' % (reply,), 1)
+            else:
+                reply = ''
                 f = opener.open(request)
                 reply = f.read()
-            except urllib2.HTTPError, why:
-                _debug_('%s: %s' % (url, why), DWARNING)
-                raise LastFMError(why)
-            except Exception, why:
-                _debug_('%s: %s' % (url, why), DWARNING)
-                raise LastFMError(why)
-            _debug_('len(reply)=%r' % (len(reply),), 1)
+                _debug_('len(reply)=%r' % (len(reply),), 1)
             return reply
+        except urllib2.HTTPError, why:
+            _debug_('%s: %s' % (url, why))
+            raise LastFMError(why)
+        except Exception, why:
+            _debug_('%s: %s' % (url, why))
+            raise LastFMError(why)
 
 
     @benchmark(benchmarking, benchmarkcall)
