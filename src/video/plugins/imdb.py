@@ -145,24 +145,24 @@ class PluginInterface(plugin.ItemPlugin):
                         self.imdb_create_fxd, (id, year)))
                 except UnicodeError, e:
                     print e
-              # if filename had a season/episode lets´ grab it
-            self.season = fxd.season
-            self.episode = fxd.episode
+            # if filename had a season/episode lets' grab it
+            self.season = hasattr(fxd, 'season') and fxd.season or ''
+            self.episode = hasattr(fxd, 'episode') and fxd.episode or ''
 
-        except Exception, e:
-            print 'imdb_search:', e
+        except urllib2.HTTPError, why:
+            _debug_('%s', (why,), DWARNING)
             box.destroy()
-            box = PopupBox(text=_('Unknown error while connecting to IMDB'))
+            box = PopupBox(text=_('Connecting to IMDB failed:') + str(why))
             box.show()
             time.sleep(2)
             box.destroy()
             return
 
         # for d in duplicates:
-        #     items = [ menu.MenuItem('Add to "%s"' % d.name,
-        #                             self.imdb_add_to_fxd, (d, 'add')),
-        #               menu.MenuItem('Variant to "%s"' % d.name,
-        #                             self.imdb_add_to_fxd, (d, 'variant')) ] + items
+        #     items = [
+        #         menu.MenuItem('Add to "%s"' % d.name, self.imdb_add_to_fxd, (d, 'add')),
+        #         menu.MenuItem('Variant to "%s"' % d.name, self.imdb_add_to_fxd, (d, 'variant'))
+        #     ] + items
 
         box.destroy()
         if config.IMDB_AUTOACCEPT_SINGLE_HIT and len(items) == 1:

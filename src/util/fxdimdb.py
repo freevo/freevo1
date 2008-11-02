@@ -140,6 +140,8 @@ class FxdImdb:
         # if so we will remember season and episode but will take it off from name
 
         # find <season>X<episode>
+        season = ''
+        episode = ''
         m = re.compile('([0-9]+)[xX]([0-9]+)')
         res = m.search(name)
         if res:
@@ -255,27 +257,29 @@ class FxdImdb:
 
         self.id = id
 
-        if season and episode:
+        if season is None or episode is None:
+            episodeid = None
+        else:
             # This is a TV series, lets use a special search
-            url = 'http://us.imdb.com/title/tt%s/episodes' % id
+            url = 'http://www.imdb.com/title/tt%s/episodes' % id
             req = urllib2.Request(url, txdata, txheaders)
 
             try:
                 idpage = urllib2.urlopen(req)
-            except urllib2.HTTPError, error:
-                raise FxdImdb_Net_Error("IMDB unreachable" + error)
+            except urllib2.HTTPError, why:
+                raise FxdImdb_Net_Error('IMDB unreachable' + str(why))
 
             episodeid = self.find_episode(idpage, id, season, episode)
             idpage.close()
 
         # do the standard search
-        url = 'http://us.imdb.com/title/tt%s' % episodeid
+        url = 'http://www.imdb.com/title/tt%s' % id
         req = urllib2.Request(url, txdata, txheaders)
 
         try:
             idpage = urllib2.urlopen(req)
-        except urllib2.HTTPError, error:
-            raise FxdImdb_Net_Error("IMDB unreachable" + error)
+        except urllib2.HTTPError, why:
+            raise FxdImdb_Net_Error('IMDB unreachable' + str(why))
 
         self.parse_data(idpage, id, episodeid, season, episode)
         idpage.close()
