@@ -66,7 +66,8 @@ class LastFMError(Exception):
     @benchmark(benchmarking, benchmarkcall)
     def __init__(self, why):
         Exception.__init__(self)
-        self.why = why
+        print 'DJW:why:', why, type(why), dir(why)
+        self.why = str(why)
 
     def __str__(self):
         return self.why
@@ -105,8 +106,6 @@ class PluginInterface(plugin.MainMenuPlugin):
             return
         plugin.MainMenuPlugin.__init__(self)
         self.menuitem = None
-        if not os.path.isdir(config.LASTFM_DIR):
-            os.makedirs(config.LASTFM_DIR, 0777)
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -223,9 +222,10 @@ class LastFMItem(AudioItem):
         return items
 
 
-    @benchmark(benchmarking, True) #benchmarkcall)
+    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         _debug_('LastFMItem.eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
+        print 'LastFMItem.eventhandler(event=%r, arg=%r)' % (event.name, event.arg)
         if event == 'STOP':
             self.stop(self.arg, self.menuw)
             return
@@ -263,6 +263,7 @@ class LastFMItem(AudioItem):
                 else:
                     if menuw:
                         AlertBox(text='No recs :(').show()
+                    traceback.print_stack()
                     rc.post_event(PLAY_END)
                     return
 
@@ -270,39 +271,52 @@ class LastFMItem(AudioItem):
                 if self.feed is None:
                     if menuw:
                         AlertBox(text=_('Cannot get XSFP')).show()
+                    traceback.print_stack()
                     rc.post_event(PLAY_END)
                     return
             except LastFMError, why:
                 _debug_(why, DWARNING)
                 if menuw:
+                    print 'DJW:why:', why, type(why), '%r' % str(why)
                     AlertBox(text=str(why)).show()
+                traceback.print_stack()
                 rc.post_event(PLAY_END)
+                return
 
         entry = self.feed.entries[0]
-        self.stream_name = urllib.unquote_plus(self.feed.feed.title)
+        print 'DJW:entry:', entry.artist, '/', entry.album, '/', entry.title
+        self.stream_name = urllib.unquote_plus(self.feed.title)
         self.album = entry.album
         self.artist = entry.artist
         self.title = entry.title
         self.location_url = entry.location_url
         self.length = entry.duration
-        basename = entry.artist + '-' + entry.album + '-' + entry.title
-        self.basename = basename.lower().replace(' ', '_').replace('.', '').replace('\'', '').replace(':', '')
-        self.url = os.path.join(config.LASTFM_DIR, self.basename + os.path.splitext(entry.location_url)[1])
-        self.trackpath = os.path.join(config.LASTFM_DIR, self.basename + os.path.splitext(entry.location_url)[1])
-        self.image = os.path.join(config.LASTFM_DIR, self.basename + os.path.splitext(entry.image_url)[1])
-        self.image_downloader = self.webservices.download(entry.image_url, self.image)
-        self.track_downloader = self.webservices.download(self.location_url, self.trackpath, istrack=True)
+        basename = os.path.join(config.LASTFM_DIR, self.stream_name, entry.artist, entry.album, entry.title).lower()
+        self.basename = basename.replace(' ', '_').replace('.', '').replace('\'', '').replace(':', '').replace(',', '')
+        if not os.path.exists(os.path.dirname(self.basename)):
+            _debug_('make directory %r' % (os.path.dirname(self.basename),), DINFO)
+            os.makedirs(os.path.dirname(self.basename), 0777)
+        # url is changed, to include file://
+        self.url = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
+        self.trackpath = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
+        self.track_downloader = self.webservices.download(self.location_url, self.trackpath)
+        if entry.image_url:
+            self.image = os.path.join(self.basename + os.path.splitext(entry.image_url)[1])
+            self.image_downloader = self.webservices.download(entry.image_url, self.image)
+            # Wait three seconds for the image to be downloaded
+            for i in range(30):
+                if not self.image_downloader.isrunning():
+                    break
+                time.sleep(0.1)
+        else:
+            self.image = None
         #self.is_playlist = True
         # Wait for a bit of the file to be downloaded
         while self.track_downloader.filesize() < 1024 * 20:
             if not self.track_downloader.isrunning():
+                traceback.print_stack()
                 rc.post_event(PLAY_END)
                 return
-            time.sleep(0.1)
-        # Wait for the image to be downloaded
-        for i in range(30):
-            if not self.image_downloader.isrunning():
-                break
             time.sleep(0.1)
         self.player = PlayerGUI(self, menuw)
         if self.timer is not None and self.timer.active():
@@ -314,6 +328,7 @@ class LastFMItem(AudioItem):
             _debug_('player play error=%r' % (error,), DWARNING)
             if menuw:
                 AlertBox(text=error).show()
+            traceback.print_stack()
             rc.post_event(PLAY_END)
 
 
@@ -420,19 +435,21 @@ class LastFMDownloader(Thread):
                 fd.write(reply)
                 if len(reply) == 0:
                     self.running = False
-                    _debug_('%s downloaded' % self.filename)
                     print 'DJW:downloaded %s' % self.filename
+                    _debug_('%s downloaded' % self.filename)
                     # what we could do now is to add tags to track
                     break
                 self.size += len(reply)
             else:
-                _debug_('%s aborted' % self.filename)
+                print 'DJW:aborted %s' % self.filename
+                os.remove(self.filename)
+                #_debug_('%s aborted' % self.filename)
             fd.close()
             f.close()
         except ValueError, why:
-            _debug_('%s: %s' % (self.filename, why), DWARNING)
+            _debug_('%s: %s' % (self.url, why), DWARNING)
         except urllib2.HTTPError, why:
-            _debug_('%s: %s' % (self.filename, why), DWARNING)
+            _debug_('%s: %s' % (self.url, why), DWARNING)
 
 
     def stop(self):
@@ -531,9 +548,12 @@ class LastFMWebServices:
             try:
                 f = opener.open(request)
                 reply = f.read()
+            except urllib2.HTTPError, why:
+                _debug_('%s: %s' % (url, why), DWARNING)
+                raise LastFMError(why)
             except Exception, why:
                 _debug_('%s: %s' % (url, why), DWARNING)
-                raise
+                raise LastFMError(why)
             _debug_('len(reply)=%r' % (len(reply),), 1)
             return reply
 
@@ -576,8 +596,7 @@ class LastFMWebServices:
         _debug_('LastFMWebServices.request_xspf()', 1)
         if not self.session:
             self._login()
-        #request_url = 'http://%s%s/xspf.php?sk=%s&discovery=0&desktop=%s' % \
-        request_url = 'http://%s%s/xspf.php?sk=%s&discovery=1&desktop=%s' % \
+        request_url = 'http://%s%s/xspf.php?sk=%s&discovery=0&desktop=%s' % \
             (self.base_url, self.base_path, self.session, LastFMWebServices._version)
         return self._urlopen(request_url, lines=False)
 
@@ -617,7 +636,7 @@ class LastFMWebServices:
 
 
     @benchmark(benchmarking, benchmarkcall)
-    def download(self, url, filename, istrack=False):
+    def download(self, url, filename):
         """
         Download album cover or track to last.fm directory.
 
@@ -633,8 +652,6 @@ class LastFMWebServices:
             'Cookie': 'Session=%s' % self.session,
             'User-agent': 'Freevo-%s (r%s)' % (version.__version__, revision.__revision__)
         }
-        if istrack:
-            headers.update({'Host': 'play.last.fm'})
         self.downloader = LastFMDownloader(url, filename, headers)
         self.downloader.start()
         return self.downloader
@@ -716,8 +733,8 @@ class LastFMXSPF:
 
     @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
-        self.entries = []
         self.feed = feedparser.FeedParserDict()
+        self.feed.entries = []
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -754,8 +771,8 @@ class LastFMXSPF:
                 track.duration = duration_ms is not None and int(float(duration_ms.text)/1000.0+0.5) or 0
                 trackauth = track_elem.find('{%s}trackauth' % LastFMXSPF._LASTFM_NS)
                 track.trackauth = trackauth is not None and trackauth.text or u''
-                self.entries.append(track)
-        return self
+                self.feed.entries.append(track)
+        return self.feed
 
 
 
