@@ -84,7 +84,7 @@ class ChildApp:
                 self.binary = app.lstrip()
 
             command = ('%s %s' % (config.RUNAPP, app)).strip()
-            debug_name = app[:app.find(' ')]
+            app_name = app[:app.find(' ')]
 
         else:
             app = filter(len, app)
@@ -103,36 +103,18 @@ class ChildApp:
             else:
                 command = app
 
-            debug_name = app[0]
+            app_name = app[0]
 
-        if debug_name.rfind('/') > 0:
-            debug_name = debug_name[debug_name.rfind('/')+1:]
+        if app_name.rfind('/') > 0:
+            app_name = app_name[app_name.rfind('/')+1:]
         else:
-            debug_name = debug_name
+            app_name = app_name
 
         if debugname:
-            debug_name = debugname
+            app_name = debugname
 
         if doeslogging or config.DEBUG_CHILDAPP:
             doeslogging = 1
-
-        if doeslogging:
-            stdout_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stdout-%s.log' % (debug_name, os.getuid()))
-            try:
-                self.stdout_log = open(stdout_logger, 'w')
-            except OSError, why:
-                _debug_('Cannot open "%s": %s' % (stdout_logger, why), DWARNING)
-                self.stdout_log = None
-
-            stderr_logger = os.path.join(config.FREEVO_LOGDIR, '%s-stderr-%s.log' % (debug_name, os.getuid()))
-            try:
-                self.stderr_log = open(stderr_logger, 'w')
-            except OSError, why:
-                _debug_('Cannot open "%s": %s' % (stderr_logger, why), DWARNING)
-                self.stderr_log = None
-        else:
-            self.stdout_log = None
-            self.stderr_log = None
 
         command_isstr = isinstance(command, str)
         if command_isstr:
@@ -156,11 +138,11 @@ class ChildApp:
             self.ready = False
             return
 
-        self.so = Read_Thread('stdout', self.child.stdout, self.stdout_cb, debug_name, doeslogging, callback_use_rc)
+        self.so = Read_Thread('stdout', self.child.stdout, self.stdout_cb, app_name, doeslogging, callback_use_rc)
         self.so.setDaemon(1)
         self.so.start()
 
-        self.se = Read_Thread('stderr', self.child.stderr, self.stderr_cb, debug_name, doeslogging, callback_use_rc)
+        self.se = Read_Thread('stderr', self.child.stderr, self.stderr_cb, app_name, doeslogging, callback_use_rc)
         self.se.setDaemon(1)
         self.se.start()
 
@@ -237,8 +219,6 @@ class ChildApp:
             if self.status is not None:
                 _debug_('killed %s the easy way, status %s' % (self.child.pid, self.status))
                 if not self.child.stdin.closed: self.child.stdin.close()
-                if self.stdout_log: self.stdout_log.close()
-                if self.stderr_log: self.stderr_log.close()
                 self.child = None
                 return
 
@@ -300,8 +280,6 @@ class ChildApp:
         finally:
             self.lock.release()
         if not self.child.stdin.closed: self.child.stdin.close()
-        if self.stdout_log: self.stdout_log.close()
-        if self.stderr_log: self.stderr_log.close()
         self.child = None
 
 
@@ -390,20 +368,21 @@ class Read_Thread(threading.Thread):
     """
     Thread for reading stdout or stderr from the child
     """
-    def __init__(self, name, fh, callback, logger=None, doeslogging=0, callback_use_rc=True):
+    def __init__(self, name, fh, callback, appname=None, doeslogging=0, callback_use_rc=True):
         """
         Constructor of Read_Thread
         """
-        _debug_('Read_Thread.__init__(name=%r, fh=%r, callback=%r, logger=%r, doeslogging=%r' % \
-            (name, fh, callback, logger, doeslogging), 2)
+        _debug_('Read_Thread.__init__(name=%r, fh=%r, callback=%r, appname=%r, doeslogging=%r, callback_use_rc=%r)' % \
+            (name, fh, callback, appname, doeslogging, callback_use_rc), 2)
         threading.Thread.__init__(self)
         self.name = name
         self.fh = fh
         self.callback = callback
         self.callback_use_rc = callback_use_rc
         self.logger = None
-        if logger and doeslogging:
-            logfile = os.path.join(config.FREEVO_LOGDIR, '%s-%s-%s.log' % (logger, name, os.getuid()))
+        if appname and doeslogging:
+            t = time.strftime('%s')
+            logfile = os.path.join(config.FREEVO_LOGDIR, '%s-%s-%s-%s.log' % (appname, name, os.getuid(), t))
             try:
                 try:
                     os.unlink(logfile)
