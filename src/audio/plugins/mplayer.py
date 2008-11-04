@@ -176,7 +176,6 @@ class MPlayer:
 
         self.item = item
 
-        #print 'DJW:command:', ' '.join(command)
         self.app = MPlayerApp(command, self)
         return None
 
@@ -209,14 +208,14 @@ class MPlayer:
             if p.eventhandler(event):
                 return True
 
+        if event == AUDIO_SEND_MPLAYER_CMD:
+            self.app.write('%s\n' % event.arg)
+            return True
+
         if event == PLAY_END and event.arg:
             self.stop()
             if self.playerGUI.try_next_player():
                 return True
-
-        if event == AUDIO_SEND_MPLAYER_CMD:
-            self.app.write('%s\n' % event.arg)
-            return True
 
         if event in (STOP, PLAY_END, USER_END):
             self.playerGUI.stop()

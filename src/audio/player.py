@@ -130,7 +130,7 @@ class PlayerGUI(GUIObject):
 
 
     @benchmark(benchmarking, benchmarkcall)
-    def stop(self):
+    def stop(self, restore_menu=False):
         global _player_
         _player_ = None
 
@@ -139,7 +139,7 @@ class PlayerGUI(GUIObject):
         if self.visible:
             rc.app(None)
 
-        if self.menuw and not self.menuw.visible:
+        if self.menuw and not self.menuw.visible and restore_menu:
             self.menuw.show()
 
 
