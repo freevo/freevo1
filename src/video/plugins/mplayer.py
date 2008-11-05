@@ -351,6 +351,7 @@ class MPlayer:
 
         command = filter(len, command)
 
+        command += str('%(playlist)s' % args).split()
         command += ['%(url)s' % args]
 
         _debug_(' '.join(command[1:]))
