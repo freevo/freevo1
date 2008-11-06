@@ -30,6 +30,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Fixed imdb helper to correctly handle dates when available (B#2075291)
  * Fixed imdb search when a season is specified but no episode (B#2214605)
  * Fixed joy plug-in to remove any pending events when enabled (B#1916407)
+ * Fixed menu selecting methods using ENTER instead of SELECT (B#2214605)
  * Fixed mplayer crash when auto cropping is enabled (B#2089592)
  * Fixed mplayer when playlist is enabled (B#2219657)
  * Fixed record server auto re-encode show title (B#2193796)

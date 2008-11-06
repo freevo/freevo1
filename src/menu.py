@@ -685,9 +685,12 @@ class MenuWidget(GUIObject):
 
     @benchmark(benchmarking, benchmarkcall)
     def _handle_submenu(self, menu, event):
-        #if hasattr(menu, 'is_submenu'):
-        #    self._handle_play_item(menu, event)
-        #    return
+        action = None
+        arg    = None
+        #try:
+        #    action = menu.selected.action
+        #except AttributeError:
+        #    pass
 
         actions = menu.selected.actions()
         force   = False
@@ -695,22 +698,23 @@ class MenuWidget(GUIObject):
             actions = []
             force   = True
 
-        plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
+        if not hasattr(menu, 'is_submenu'):
+            plugins = plugin.get('item') + plugin.get('item_%s' % menu.selected.type)
 
-        if hasattr(menu.selected, 'display_type'):
-            plugins += plugin.get('item_%s' % menu.selected.display_type)
+            if hasattr(menu.selected, 'display_type'):
+                plugins += plugin.get('item_%s' % menu.selected.display_type)
 
-        plugins.sort(lambda l, o: cmp(l._level, o._level))
+            plugins.sort(lambda l, o: cmp(l._level, o._level))
 
-        for p in plugins:
-            for a in p.actions(menu.selected):
-                if isinstance(a, MenuItem):
-                    actions.append(a)
-                else:
-                    actions.append(a[:2])
-                    if len(a) == 3 and a[2] == 'MENU_SUBMENU':
-                        a[0](menuw=self)
-                        return
+            for p in plugins:
+                for a in p.actions(menu.selected):
+                    if isinstance(a, MenuItem):
+                        actions.append(a)
+                    else:
+                        actions.append(a[:2])
+                        if len(a) == 3 and a[2] == 'MENU_SUBMENU':
+                            a[0](menuw=self)
+                            return
 
         if actions:
             if len(actions) > 1 or force:
@@ -718,14 +722,12 @@ class MenuWidget(GUIObject):
             elif len(actions) == 1:
                 # if there is only one action, call it!
                 action = actions[0]
-                arg = None
                 if isinstance(action, MenuItem):
                     action = action.function
                     arg    = action.arg
                 else:
                     action = action[0]
                 action(arg=arg, menuw=self)
-        return
 
 
     @benchmark(benchmarking, benchmarkcall)
