@@ -596,7 +596,6 @@ class BGDownload(threading.Thread):
             _debug_('youtube download "%s": %s' % (self.url, retcode), retcode and DWARNING or DINFO)
         except youtube.DownloadError, why:
             _debug_('Cannot download "%s": %s' % (self.url, why), DWARNING)
-            raise
 
 
 def _name_to_filename(name):
