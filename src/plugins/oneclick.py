@@ -977,18 +977,18 @@ class WeatherBaseScreen(skin.Area):
 
         lines = []
         try:
-            lines.append('%s %s' % (_('As of:'), weather.getLastUpdated()))
-            lines.append('%s %s' % (_('at'), weather.getObservationStation()))
+            lines.append('%s: %s' % (_('As of'), weather.getLastUpdated()))
+            lines.append('%s: %s' % (_('at'), weather.getObservationStation()))
             lines.append('  %s' % (weather.getCurrentCondition()))
-            lines.append('  %s %s' % (_('Temperature:'), weather.getTemperature()))
-            lines.append('  %s %s' % (_('Dew Point:'), weather.getDewPoint()))
-            lines.append('  %s %s' % (_('Humidity:'), weather.getHumidity()))
-            lines.append('  %s %s' % (_('Visibility:'), weather.getVisibility()))
-            lines.append('  %s %s' % (_('Pressure:'), weather.getPressure()))
-            lines.append('  %s %s' % (_('Winds:'), weather.getWind()))
-            lines.append('%s' % (_('Tonight:')))
-            lines.append('  %s %s' % (_('Sunset:'), weather.getSunset()))
-            lines.append('  %s %s' % (_('Moon Phase:'), weather.getMoonPhase()))
+            lines.append('  %s: %s' % (_('Temperature'), weather.getTemperature()))
+            lines.append('  %s: %s' % (_('Dew Point'), weather.getDewPoint()))
+            lines.append('  %s: %s' % (_('Humidity'), weather.getHumidity()))
+            lines.append('  %s: %s' % (_('Visibility'), weather.getVisibility()))
+            lines.append('  %s: %s' % (_('Pressure'), weather.getPressure()))
+            lines.append('  %s: %s' % (_('Winds'), weather.getWind()))
+            lines.append('%s:' % (_('Tonight')))
+            lines.append('  %s: %s' % (_('Sunset'), weather.getSunset()))
+            lines.append('  %s: %s' % (_('Moon Phase'), weather.getMoonPhase()))
         except Exception, error:
             print error
             import traceback, sys
