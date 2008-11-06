@@ -42,8 +42,9 @@ import config
 import plugin
 import re
 import time
-from util.fxdimdb import FxdImdb, makeVideo, makePart, point_maker
+import urllib2
 
+from util.fxdimdb import FxdImdb, makeVideo, makePart, point_maker
 from gui.PopupBox import PopupBox
 from util import htmlenties2txt
 
