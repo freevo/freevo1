@@ -35,6 +35,7 @@ import sys
 import time
 import popen2
 
+from stat import *
 from signal import *
 
 
@@ -48,7 +49,7 @@ def _debug_(message, level=1):
 def _gdb_script_(message):
     global debug
     global cmdfile
-    if debug < 2:
+    if debug < 1:
         return
     print >>cmdfile, message
 
@@ -240,14 +241,19 @@ def start(name, arg, bg, store=1):
     """
     start a process
     """
-    global cmdfile
+    global cmdfile, debug
     _debug_('start(name=%r, arg=%r, bg=%r, store=%r)' % (name, arg, bg, store))
-    _gdb_script_('cat > /tmp/freevo-gdb << _END_')
-    _gdb_script_('b main')
-    _gdb_script_('r %s' % ' '.join(arg[1:]))
-    _gdb_script_('_END_')
-    _gdb_script_('gdb -x /tmp/freevo-gdb %s' % (arg[0]))
-    if cmdfile: cmdfile.close()
+    if debug >= 2:
+        _gdb_script_('cat > freevo-gdb << _END_')
+        _gdb_script_('b main')
+        _gdb_script_('r %s' % ' '.join(arg[1:]))
+        _gdb_script_('_END_')
+        _gdb_script_('gdb -x freevo-gdb %s' % (arg[0]))
+    elif debug >= 1:
+        _gdb_script_('%s -m pdb src/main.py' % (arg[0]))
+    if cmdfile:
+        cmdfile.close()
+        os.chmod(cmdfile.name, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)
 
     pid = os.fork()
     if pid:
@@ -285,7 +291,10 @@ while '--debug' in sys.argv or '-d' in sys.argv:
     else:
         sys.argv.remove('-d')
 if debug >= 2:
-    cmdfile = open('/tmp/freevo-gdb.sh', 'w')
+    cmdfile = open('freevo-gdb.sh', 'w')
+    print >>cmdfile,'#!/bin/bash'
+elif debug >= 1:
+    cmdfile = open('freevo-pdb.sh', 'w')
     print >>cmdfile,'#!/bin/bash'
 
 freevo_script = os.path.abspath(sys.argv[0])
@@ -351,7 +360,7 @@ else:
     python = [ python ]
 
 # add the variables from above into environ so Freevo can use them, too
-for var in ('freevo_script', 'runapp', 'freevo_python', 'freevo_locale',
+for var in ('runapp', 'freevo_script', 'freevo_python', 'freevo_locale',
             'freevo_share', 'freevo_contrib', 'freevo_config', 'freevo_helpers'):
     os.environ[var.upper()] = eval(var)
     _debug_('%s=%r' % (var.upper(), os.environ[var.upper()]))
