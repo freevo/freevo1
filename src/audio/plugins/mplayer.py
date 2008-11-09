@@ -118,11 +118,7 @@ class MPlayer:
             filename = item.url
 
         # Build the MPlayer command
-        mpl = '--prio=%s %s -slave %s' % (config.MPLAYER_NICE,
-                                          config.MPLAYER_CMD,
-                                          config.MPLAYER_ARGS_DEF)
-
-
+        mpl = '--prio=%s %s -slave %s' % (config.MPLAYER_NICE, config.MPLAYER_CMD, config.MPLAYER_ARGS_DEF)
 
         if config.DEBUG_CHILDAPP:
             mpl += ' -v'
@@ -217,7 +213,11 @@ class MPlayer:
             if self.playerGUI.try_next_player():
                 return True
 
-        if event in (STOP, PLAY_END, USER_END):
+        if event == STOP:
+            self.playerGUI.stop(restore_menu=True)
+            return self.item.eventhandler(event)
+
+        if event in (PLAY_END, USER_END):
             self.playerGUI.stop()
             return self.item.eventhandler(event)
 
@@ -322,9 +322,6 @@ class MPlayerApp(childapp.ChildApp2):
         if line.startswith('[track]'):
             m = self.RE_NEW_TRK(line)
             if m:
-                #DJW#
-                rc.post_event(Event(OSD_MESSAGE, arg=_('track gap detected')))
-                #DJW#
                 rc.post_event(Event('TRACK'))
 
         if line.startswith("ICY Info"):
