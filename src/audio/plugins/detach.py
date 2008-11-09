@@ -41,8 +41,6 @@ from event import *
 from util.benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
-benchmarking = 0
-benchmarkcall = False
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -114,7 +112,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             elif event == VIDEO_START:
                 PluginInterface.detached = False
                 p.eventhandler(Event('STOP'))
-            elif event == MENU_PLAY_ITEM:
+            elif event == PLAY_START and gui.visible:
                 rc.post_event(plugin.event('ATTACH'))
 
 

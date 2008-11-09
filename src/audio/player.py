@@ -34,7 +34,7 @@ import config
 import skin
 import rc
 import plugin
-import event
+from event import *
 
 from util.benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
@@ -102,7 +102,7 @@ class PlayerGUI(GUIObject):
             self.running = False
             if self.visible:
                 rc.app(None)
-            self.item.eventhandler(event.PLAY_END)
+            self.item.eventhandler(PLAY_END)
         else:
             if self.visible:
                 rc.app(self.player)
@@ -146,7 +146,7 @@ class PlayerGUI(GUIObject):
     @benchmark(benchmarking, benchmarkcall)
     def show(self):
         if not self.visible:
-            self.visible = 1
+            self.visible = True
             self.refresh()
             rc.app(self.player)
 
@@ -154,7 +154,7 @@ class PlayerGUI(GUIObject):
     @benchmark(benchmarking, benchmarkcall)
     def hide(self):
         if self.visible:
-            self.visible = 0
+            self.visible = False
             skin.clear()
             rc.app(None)
 
