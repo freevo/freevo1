@@ -222,7 +222,6 @@ class LastFMItem(AudioItem):
     @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         _debug_('LastFMItem.eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
-        _debug_('LastFMItem.eventhandler(event=%r, arg=%r)' % (event.name, event.arg), DWARNING)
         if event == 'STOP':
             self.stop(self.arg, self.menuw)
             return
