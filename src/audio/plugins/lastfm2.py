@@ -38,9 +38,9 @@ import config
 import plugin
 import rc
 import version, revision
-from event import PLAY_END
+from event import STOP, PLAY_END
 from menu import MenuItem, Menu
-from gui import AlertBox
+from gui import AlertBox, PopupBox
 from audio.audioitem import AudioItem
 from audio.player import PlayerGUI
 from util import feedparser
@@ -65,9 +65,9 @@ class LastFMError(Exception):
     An exception class for last.fm
     """
     @benchmark(benchmarking, benchmarkcall)
-    def __init__(self, why):
+    def __init__(self, why, url=''):
         Exception.__init__(self)
-        self.why = str(why)
+        self.why = str(why) + ': ' + url
 
     def __str__(self):
         return self.why
@@ -222,13 +222,16 @@ class LastFMItem(AudioItem):
     @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         _debug_('LastFMItem.eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
-        print 'LastFMItem.eventhandler(event=%r, arg=%r)' % (event.name, event.arg)
+        _debug_('LastFMItem.eventhandler(event=%r, arg=%r)' % (event.name, event.arg), DWARNING)
         if event == 'STOP':
             self.stop(self.arg, self.menuw)
             return
-        if event == 'PLAY_END':
+        if event == 'PLAY_START':
+            pass
+        elif event == 'PLAY_END':
             if self.feed is not None and len(self.feed.entries) > 0:
                 self.feed.entries.pop(0)
+            self.stop()
             self.play()
             return False
         elif event == 'PLAYLIST_NEXT':
@@ -253,77 +256,87 @@ class LastFMItem(AudioItem):
         if self.menuw is None:
             self.menuw = menuw
 
-        if self.feed is None or len(self.feed.entries) <= 0:
-            try:
-                for i in range(3):
-                    xspf = self.webservices.request_xspf()
-                    if xspf != 'No recs :(':
+        pop = None
+        if self.feed is None:
+            pop = PopupBox(text=_('Downloading, please wait...'))
+            pop.show()
+
+        try:
+            if self.feed is None or len(self.feed.entries) <= 1:
+                try:
+                    for i in range(3):
+                        xspf = self.webservices.request_xspf()
+                        if xspf != 'No recs :(':
+                            break
+                        time.sleep(2)
+                    else:
+                        if menuw:
+                            AlertBox(text='No recs :(').show()
+                        traceback.print_stack()
+                        rc.post_event(STOP)
+                        return
+
+                    self.feed = self.xspf.parse(xspf)
+                    if self.feed is None:
+                        if menuw:
+                            AlertBox(text=_('Cannot get XSFP')).show()
+                        traceback.print_stack()
+                        rc.post_event(STOP)
+                        return
+                except LastFMError, why:
+                    _debug_(why, DWARNING)
+                    if menuw:
+                        AlertBox(text=str(why)).show()
+                    rc.post_event(STOP)
+                    return
+
+            entry = self.feed.entries[0]
+            _debug_('entry "%s / %s / %s" of %s' % (entry.artist, entry.album, entry.title, len(self.feed.entries)))
+            self.stream_name = urllib.unquote_plus(self.feed.title)
+            self.album = entry.album
+            self.artist = entry.artist
+            self.title = entry.title
+            self.location_url = entry.location_url
+            self.length = entry.duration
+            basename = os.path.join(config.LASTFM_DIR, self.stream_name, entry.artist, entry.album, entry.title)
+            self.basename = basename.lower().replace(' ', '_').\
+                replace('.', '').replace('\'', '').replace(':', '').replace(',', '')
+            if not os.path.exists(os.path.dirname(self.basename)):
+                _debug_('make directory %r' % (os.path.dirname(self.basename),), DINFO)
+                os.makedirs(os.path.dirname(self.basename), 0777)
+            # url is changed, to include file://
+            self.url = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
+            self.trackpath = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
+            self.track_downloader = self.webservices.download(self.location_url, self.trackpath)
+            if entry.image_url:
+                self.image = os.path.join(self.basename + os.path.splitext(entry.image_url)[1])
+                self.image_downloader = self.webservices.download(entry.image_url, self.image)
+                # Wait three seconds for the image to be downloaded
+                for i in range(30):
+                    if not self.image_downloader.isrunning():
                         break
-                    time.sleep(2)
-                else:
-                    if menuw:
-                        AlertBox(text='No recs :(').show()
+                    time.sleep(0.1)
+            else:
+                self.image = None
+            #self.is_playlist = True
+            # Wait for a bit of the file to be downloaded
+            while self.track_downloader.filesize() < 1024 * 20:
+                if not self.track_downloader.isrunning():
                     traceback.print_stack()
-                    rc.post_event(PLAY_END)
+                    rc.post_event(STOP)
                     return
-
-                self.feed = self.xspf.parse(xspf)
-                if self.feed is None:
-                    if menuw:
-                        AlertBox(text=_('Cannot get XSFP')).show()
-                    traceback.print_stack()
-                    rc.post_event(PLAY_END)
-                    return
-            except LastFMError, why:
-                _debug_(why, DWARNING)
-                if menuw:
-                    AlertBox(text=str(why)).show()
-                rc.post_event(PLAY_END)
-                return
-
-        entry = self.feed.entries[0]
-        _debug_('entry "%s / %s / %s" of %s' % (entry.artist, entry.album, entry.title, len(self.feed.entries)))
-        self.stream_name = urllib.unquote_plus(self.feed.title)
-        self.album = entry.album
-        self.artist = entry.artist
-        self.title = entry.title
-        self.location_url = entry.location_url
-        self.length = entry.duration
-        basename = os.path.join(config.LASTFM_DIR, self.stream_name, entry.artist, entry.album, entry.title).lower()
-        self.basename = basename.replace(' ', '_').replace('.', '').replace('\'', '').replace(':', '').replace(',', '')
-        if not os.path.exists(os.path.dirname(self.basename)):
-            _debug_('make directory %r' % (os.path.dirname(self.basename),), DINFO)
-            os.makedirs(os.path.dirname(self.basename), 0777)
-        # url is changed, to include file://
-        self.url = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
-        self.trackpath = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
-        self.track_downloader = self.webservices.download(self.location_url, self.trackpath)
-        if entry.image_url:
-            self.image = os.path.join(self.basename + os.path.splitext(entry.image_url)[1])
-            self.image_downloader = self.webservices.download(entry.image_url, self.image)
-            # Wait three seconds for the image to be downloaded
-            for i in range(30):
-                if not self.image_downloader.isrunning():
-                    break
                 time.sleep(0.1)
-        else:
-            self.image = None
-        #self.is_playlist = True
-        # Wait for a bit of the file to be downloaded
-        while self.track_downloader.filesize() < 1024 * 20:
-            if not self.track_downloader.isrunning():
+            self.player = PlayerGUI(self, menuw)
+            error = self.player.play()
+            if error:
+                _debug_('player play error=%r' % (error,), DWARNING)
+                if menuw:
+                    AlertBox(text=error).show()
                 traceback.print_stack()
-                rc.post_event(PLAY_END)
-                return
-            time.sleep(0.1)
-        self.player = PlayerGUI(self, menuw)
-        error = self.player.play()
-        if error:
-            _debug_('player play error=%r' % (error,), DWARNING)
-            if menuw:
-                AlertBox(text=error).show()
-            traceback.print_stack()
-            rc.post_event(PLAY_END)
+                rc.post_event(STOP)
+        finally:
+            if pop is not None:
+                pop.destroy()
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -332,6 +345,8 @@ class LastFMItem(AudioItem):
         Stop the current playing
         """
         _debug_('LastFMItem.stop(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        if self.player:
+            self.player.stop()
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -357,96 +372,56 @@ class LastFMItem(AudioItem):
 
 
 
-
-class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
-    def http_error_301(self, req, fp, code, msg, headers):
-        print 'DJW:http_error_301'
-        result = urllib2.HTTPRedirectHandler.http_error_301(self, req, fp, code, msg, headers)
-        result.status = code
-        return result
-
-    def http_error_302(self, req, fp, code, msg, headers):
-        print 'DJW:http_error_302'
-        result = urllib2.HTTPRedirectHandler.http_error_302(self, req, fp, code, msg, headers)
-        result.status = code
-        return result
-
-
-
-class LastFMDownloader(Thread):
+class LastFMXSPF:
     """
-    Download the stream to a file
+    Analyse the XSPF (spiff) XML Sharable Playlist File feed using ElementTree
 
-    There is a bad bug im mplayer that corrupts the url passed, so we have to
-    download it to a file and then play it
+    XSPF is documented at U{http://www.xspf.org/quickstart/}
     """
+    _LASTFM_NS = 'http://www.audioscrobbler.net/dtd/xspf-lastfm'
+
     @benchmark(benchmarking, benchmarkcall)
-    def __init__(self, url, filename, headers=None):
-        Thread.__init__(self)
-        self.url = url
-        self.filename = filename
-        self.headers = headers
-        self.running = True
-        self.size = 0
+    def __init__(self):
+        self.feed = feedparser.FeedParserDict()
+        self.feed.entries = []
 
 
     @benchmark(benchmarking, benchmarkcall)
-    def run(self):
+    def parse(self, xml):
         """
-        Execute a download operation. Stop when finished downloading or
-        requested to stop.
+        Parse the XML feed
         """
-        request = urllib2.Request(self.url, headers=self.headers)
-        opener = urllib2.build_opener(SmartRedirectHandler())
         try:
-            f = opener.open(request)
-            fd = open(self.filename, 'wb')
-            while self.running:
-                reply = f.read(1024 * 100)
-                fd.write(reply)
-                if len(reply) == 0:
-                    self.running = False
-                    print '%s downloaded' % self.filename
-                    # debugs fail during shutdown
-                    #_debug_('%s downloaded' % self.filename)
-                    # what we could do now is to add tags to track
-                    break
-                self.size += len(reply)
-            else:
-                print '%s download aborted' % self.filename
-                #_debug_('%s download aborted' % self.filename)
-                os.remove(self.filename)
-            fd.close()
-            f.close()
-        except ValueError, why:
-            _debug_('%s: %s' % (self.url, why), DWARNING)
-        except urllib2.HTTPError, why:
-            _debug_('%s: %s' % (self.url, why), DWARNING)
-
-
-    @benchmark(benchmarking, benchmarkcall)
-    def filesize(self):
-        """
-        Get the downloaded file size
-        """
-        return self.size
-
-
-    @benchmark(benchmarking, benchmarkcall)
-    def stop(self):
-        """
-        Stop the download thead running
-        """
-        # this does not stop the download thread
-        self.running = False
-
-
-    @benchmark(benchmarking, benchmarkcall)
-    def isrunning(self):
-        """
-        See if the thread running
-        """
-        return self.running
+            tree = XML(xml)
+        except SyntaxError:
+            raise LastFMError(xml)
+        title = tree.find('title')
+        self.feed.title = title is not None and title.text or u''
+        for link_elem in tree.findall('link'):
+            for k, v in link_elem.items():
+                if k == 'rel' and v == 'http://www.last.fm/skipsLeft':
+                    self.feed.skips_left = int(link_elem.text)
+        tracklist = tree.find('trackList')
+        if tracklist:
+            for track_elem in tracklist.findall('track'):
+                track = feedparser.FeedParserDict()
+                track_map = dict((c, p) for p in track_elem.getiterator() for c in p)
+                title = track_elem.find('title')
+                track.title = title is not None and title.text or u''
+                album = track_elem.find('album')
+                track.album = album is not None and album.text or u''
+                artist = track_elem.find('creator')
+                track.artist = artist is not None and artist.text or u''
+                location_url = track_elem.find('location')
+                track.location_url = location_url is not None and location_url.text or u''
+                image_url = track_elem.find('image')
+                track.image_url = image_url is not None and image_url.text or u''
+                duration_ms = track_elem.find('duration')
+                track.duration = duration_ms is not None and int(float(duration_ms.text)/1000.0+0.5) or 0
+                trackauth = track_elem.find('{%s}trackauth' % LastFMXSPF._LASTFM_NS)
+                track.trackauth = trackauth is not None and trackauth.text or u''
+                self.feed.entries.append(track)
+        return self.feed
 
 
 
@@ -516,10 +491,10 @@ class LastFMWebServices:
             return reply
         except urllib2.HTTPError, why:
             _debug_('%s: %s' % (url, why))
-            raise LastFMError(why)
+            raise LastFMError(why, url)
         except Exception, why:
             _debug_('%s: %s' % (url, why))
-            raise LastFMError(why)
+            raise LastFMError(why, url)
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -687,56 +662,93 @@ class LastFMWebServices:
 
 
 
-class LastFMXSPF:
+class LastFMDownloader(Thread):
     """
-    Analyse the XSPF (spiff) XML Sharable Playlist File feed using ElementTree
+    Download the stream to a file
 
-    XSPF is documented at U{http://www.xspf.org/quickstart/}
+    There is a bad bug im mplayer that corrupts the url passed, so we have to
+    download it to a file and then play it
     """
-    _LASTFM_NS = 'http://www.audioscrobbler.net/dtd/xspf-lastfm'
+    @benchmark(benchmarking, benchmarkcall)
+    def __init__(self, url, filename, headers=None):
+        Thread.__init__(self)
+        self.url = url
+        self.filename = filename
+        self.headers = headers
+        self.size = 0
+        self.running = True
+
 
     @benchmark(benchmarking, benchmarkcall)
-    def __init__(self):
-        self.feed = feedparser.FeedParserDict()
-        self.feed.entries = []
-
-
-    @benchmark(benchmarking, benchmarkcall)
-    def parse(self, xml):
+    def run(self):
         """
-        Parse the XML feed
+        Execute a download operation. Stop when finished downloading or
+        requested to stop.
         """
+        request = urllib2.Request(self.url, headers=self.headers)
+        opener = urllib2.build_opener(SmartRedirectHandler())
         try:
-            tree = XML(xml)
-        except SyntaxError:
-            raise LastFMError(xml)
-        title = tree.find('title')
-        self.feed.title = title is not None and title.text or u''
-        for link_elem in tree.findall('link'):
-            for k, v in link_elem.items():
-                if k == 'rel' and v == 'http://www.last.fm/skipsLeft':
-                    self.feed.skips_left = int(link_elem.text)
-        tracklist = tree.find('trackList')
-        if tracklist:
-            for track_elem in tracklist.findall('track'):
-                track = feedparser.FeedParserDict()
-                track_map = dict((c, p) for p in track_elem.getiterator() for c in p)
-                title = track_elem.find('title')
-                track.title = title is not None and title.text or u''
-                album = track_elem.find('album')
-                track.album = album is not None and album.text or u''
-                artist = track_elem.find('creator')
-                track.artist = artist is not None and artist.text or u''
-                location_url = track_elem.find('location')
-                track.location_url = location_url is not None and location_url.text or u''
-                image_url = track_elem.find('image')
-                track.image_url = image_url is not None and image_url.text or u''
-                duration_ms = track_elem.find('duration')
-                track.duration = duration_ms is not None and int(float(duration_ms.text)/1000.0+0.5) or 0
-                trackauth = track_elem.find('{%s}trackauth' % LastFMXSPF._LASTFM_NS)
-                track.trackauth = trackauth is not None and trackauth.text or u''
-                self.feed.entries.append(track)
-        return self.feed
+            f = opener.open(request)
+            fd = open(self.filename, 'wb')
+            while self.running:
+                reply = f.read(1024 * 100)
+                fd.write(reply)
+                if len(reply) == 0:
+                    self.running = False
+                    print '%s downloaded' % self.filename
+                    # debugs fail during shutdown
+                    #_debug_('%s downloaded' % self.filename)
+                    # what we could do now is to add tags to track
+                    break
+                self.size += len(reply)
+            else:
+                print '%s download aborted' % self.filename
+                #_debug_('%s download aborted' % self.filename)
+                os.remove(self.filename)
+            fd.close()
+            f.close()
+        except ValueError, why:
+            _debug_('%s: %s' % (self.url, why), DWARNING)
+        except urllib2.HTTPError, why:
+            _debug_('%s: %s' % (self.url, why), DWARNING)
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def filesize(self):
+        """
+        Get the downloaded file size
+        """
+        return self.size
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def stop(self):
+        """
+        Stop the download thead running
+        """
+        # this does not stop the download thread
+        self.running = False
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def isrunning(self):
+        """
+        See if the thread running
+        """
+        return self.running
+
+
+
+class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
+    def http_error_301(self, req, fp, code, msg, headers):
+        result = urllib2.HTTPRedirectHandler.http_error_301(self, req, fp, code, msg, headers)
+        result.status = code
+        return result
+
+    def http_error_302(self, req, fp, code, msg, headers):
+        result = urllib2.HTTPRedirectHandler.http_error_302(self, req, fp, code, msg, headers)
+        result.status = code
+        return result
 
 
 
