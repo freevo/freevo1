@@ -199,10 +199,6 @@ class AudioItem(Item):
 
         if error and menuw:
             AlertBox(text=error).show()
-            #DJW#
-            import pprint, traceback
-            traceback.print_stack()
-            #DJW#
             rc.post_event(rc.PLAY_END)
 
 
