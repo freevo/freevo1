@@ -382,6 +382,10 @@ class OSD:
 
         self.depth     = self.screen.get_bitsize()
         self.must_lock = self.screen.mustlock()
+        self.main_layer = pygame.Surface((self.width, self.height))
+        self.dialog_layer_enabled = False
+        self.dialog_layer = self.screen.convert_alpha()
+        self.dialog_layer.fill((0,0,0,128))
 
         if config.CONF.display == 'x11' and config.START_FULLSCREEN_X == 1:
             self.toggle_fullscreen()
@@ -680,7 +684,7 @@ class OSD:
             color = self.default_bg_color
         self.mutex.acquire()
         try:
-            self.screen.fill(self._sdlcol(color))
+            self.main_layer.fill(self._sdlcol(color))
         finally:
             self.mutex.release()
 
@@ -841,7 +845,7 @@ class OSD:
             if layer:
                 layer.blit(image, (x, y))
             else:
-                self.screen.blit(image, (x, y))
+                self.main_layer.blit(image, (x, y))
         finally:
             self.mutex.release()
 
@@ -909,11 +913,11 @@ class OSD:
                 if layer:
                     layer.blit(box, (x0, y0))
                 else:
-                    self.screen.blit(box, (x0, y0))
+                    self.main_layer.blit(box, (x0, y0))
             else:
                 c = self._sdlcol(color)
                 if not layer:
-                    layer = self.screen
+                    layer = self.main_layer
                 for i in range(0, width):
                     # looks strange, but sometimes thinkness doesn't work
                     pygame.draw.rect(layer, c, (x0+i, y0+i, x1-x0-2*i, y1-y0-2*i), 1)
@@ -928,9 +932,9 @@ class OSD:
         self.mutex.acquire()
         try:
             if rect != None:
-                return self.screen.subsurface(rect).convert()
+                return self.main_layer.subsurface(rect).convert()
             else:
-                return self.screen.subsurface( (x, y, width, height) ).convert()
+                return self.main_layer.subsurface( (x, y, width, height) ).convert()
         finally:
             self.mutex.release()
 
@@ -941,7 +945,7 @@ class OSD:
         """
         self.mutex.acquire()
         try:
-            self.screen.blit(surface, (x, y))
+            self.main_layer.blit(surface, (x, y))
         finally:
             self.mutex.release()
 
@@ -955,10 +959,10 @@ class OSD:
             if sourcerect:
                 w = sourcerect[2]
                 h = sourcerect[3]
-                ret = self.screen.blit(source, destpos, sourcerect)
+                ret = self.main_layer.blit(source, destpos, sourcerect)
             else:
                 w, h = source.get_size()
-                ret = self.screen.blit(source, destpos)
+                ret = self.main_layer.blit(source, destpos)
 
             if self.render:
                 self.render.damage( [(destpos[0], destpos[1], w, h)] )
@@ -1221,7 +1225,7 @@ class OSD:
         max_x = 0
 
         if not layer and layer != '':
-            layer = self.screen
+            layer = self.main_layer
 
         fgcolor  = self._sdlcol(fgcolor)
         if border_color != None:
@@ -1470,7 +1474,7 @@ class OSD:
             pygame.draw.rect(box, c, (x, y+radius, w, h-2*radius))
 
             if not layer:
-                self.screen.blit(box, (x0, y0))
+                self.main_layer.blit(box, (x0, y0))
         finally:
             self.mutex.release()
 
@@ -1491,12 +1495,28 @@ class OSD:
                 rect = None
 
             if rect and not (stop_busyicon and self.busyicon.rect):
+                if isinstance(rect[0], list) or isinstance(rect[0], tuple) or isinstance(rect[0], pygame.Rect):
+                    for sub_rect in rect:
+                        self.screen.blit(self.main_layer, (sub_rect[0], sub_rect[1]), sub_rect)
+                    if self.dialog_layer_enabled:
+                        for sub_rect in rect:
+                            self.screen.blit(self.dialog_layer, (sub_rect[0], sub_rect[1]), sub_rect)
+                else:
+                    try:
+                        self.screen.blit(self.main_layer, (rect[0], rect[1]), rect)
+                    except:
+                        traceback.print_exc()
+                    if self.dialog_layer_enabled:
+                        self.screen.blit(self.dialog_layer, (rect[0], rect[1]), rect)
                 try:
                     pygame.display.update(rect)
                 except:
                     _debug_('osd.update(rect=%r) failed, bad rect?' % (rect,), DERROR)
                     pygame.display.flip()
             else:
+                self.screen.blit(self.main_layer, (0,0))
+                if self.dialog_layer_enabled:
+                    self.screen.blit(self.dialog_layer, (0,0))
                 pygame.display.flip()
 
             if stop_busyicon:

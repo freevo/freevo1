@@ -76,6 +76,17 @@ class Window(GUIObject):
 
         self.refresh_abs_position()
 
+    def show(self):
+        self.visible = 1
+        self.osd.dialog_layer.fill((0,0,0,96))
+        self.draw()
+        self.osd.update()
+
+    def hide(self):
+        self.visible = 0
+        self.osd.dialog_layer_enabled = False
+        self.osd.update()
+
     def add_child(self, child):
         if self.content:
             self.content.add_child(child)

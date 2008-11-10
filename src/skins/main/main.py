@@ -560,11 +560,11 @@ class Skin:
 
     @benchmark(benchmarking)
     def do_blending(self):
-        screen = osd.screen.convert()
+        screen = osd.main_layer.convert()
 
         self.screen.show(True)
-        
-        blend = Transition(screen, osd.screen, 0, speed=4)
+
+        blend = Transition(screen, osd.main_layer, 0, speed=4)
 
         clock = pygame.time.Clock()
         blend.start()

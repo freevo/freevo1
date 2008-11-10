@@ -230,7 +230,7 @@ class GUIObject:
         """
         self.visible = 0
         if self.parent and self.parent.visible and self.bg_surface:
-            self.osd.screenblit(self.bg_surface, self.get_position())
+            self.osd.dialog_layer.blit(self.bg_surface, self.get_position())
             self.osd.update(self.get_rect())
 
 
@@ -349,17 +349,19 @@ class GUIObject:
             if p:
                 self.bg_surface.blit(self.parent.surface, (0,0), self.get_rect())
             else:
-                self.bg_surface.blit(self.osd.screen, (0,0), self.get_rect())
+                self.bg_surface.blit(self.osd.dialog_layer, (0,0), self.get_rect())
         elif restore:
             if p:
                 self.parent.surface.blit(self.bg_surface, (self.left, self.top))
             else:
-                self.osd.screenblit(self.bg_surface, (self.left, self.top))
+                self.osd.dialog_layer.blit(self.bg_surface, (self.left, self.top))
+
 
         if p:
             self.parent.surface.blit(self.surface, self.get_position())
         else:
-            self.osd.screenblit(self.surface, self.get_position())
+            self.osd.dialog_layer.blit(self.surface, self.get_position())
+            self.osd.dialog_layer_enabled = True
             self.osd.update(self.get_rect())
 
 
