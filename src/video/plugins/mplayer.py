@@ -214,13 +214,13 @@ class MPlayer:
 
         if mode == 'dvd':
             # dvd on harddisc
-            args['dvd-device'] = '-dvd-device %s' % item.filename
+            args['dvd-device'] = '%s' % item.filename
             args['url'] = url[:6] + url[url.rfind('/')+1:]
         elif mode != 'file' and hasattr(item.media, 'devicename'):
-            args['dvd-device'] = '-dvd-device %s' % item.media.devicename
+            args['dvd-device'] = '%s' % item.media.devicename
 
         if item.media and hasattr(item.media, 'devicename'):
-            args['cdrom-device'] = '-cdrom-device %s' % item.media.devicename
+            args['cdrom-device'] = '%s' % item.media.devicename
 
         if item.selected_subtitle == -1:
             args['sid'] = '-noautosub'
@@ -322,8 +322,8 @@ class MPlayer:
         command += vo.split()
         command += str('%(vc)s' % args).split()
         command += ao.split()
-        command += str('%(dvd-device)s' % args).split()
-        command += str('%(cdrom-device)s' % args).split()
+        command += args['dvd-device'] and ['-dvd-device', '%(dvd-device)s' % args] or []
+        command += args['cdrom-device'] and ['-cdrom-device', '%(cdrom-device)s' % args] or []
         command += str('%(alang)s' % args).split()
         command += str('%(aid)s' % args).split()
         command += str('%(audiofile)s' % args).split()
@@ -337,10 +337,8 @@ class MPlayer:
         command += args['default_args'].split()
         command += args['mode_args'].split()
         command += args['fxd_args'].split()
-        if args['af']:
-            command += ['-af', '%s' % ','.join(args['af'])]
-        if args['vf']:
-            command += ['-vf', '%s' % ','.join(args['vf'])]
+        command += args['af'] and ['-af', '%s' % ','.join(args['af'])] or []
+        command += args['vf'] and ['-vf', '%s' % ','.join(args['vf'])] or []
 
         # use software scaler?
         #XXX these need to be in the arg list as the scaler will add vf args
