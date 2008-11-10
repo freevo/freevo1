@@ -65,9 +65,13 @@ class LastFMError(Exception):
     An exception class for last.fm
     """
     @benchmark(benchmarking, benchmarkcall)
-    def __init__(self, why, url=''):
+    def __init__(self, why, url=None):
         Exception.__init__(self)
-        self.why = str(why) + ': ' + url
+        if url:
+            self.why = str(why) + ': ' + url
+        else:
+            self.why = str(why)
+
 
     def __str__(self):
         return self.why
@@ -176,6 +180,7 @@ class LastFMMainMenuItem(MenuItem):
 
     @benchmark(benchmarking, benchmarkcall)
     def shutdown(self):
+        pprint.pprint(self.__dict__)
         if self.webservices is not None:
             self.webservices.shutdown()
 
@@ -255,87 +260,72 @@ class LastFMItem(AudioItem):
         if self.menuw is None:
             self.menuw = menuw
 
-        pop = None
-        if self.feed is None:
-            pop = PopupBox(text=_('Downloading, please wait...'))
-            pop.show()
-
         try:
-            if self.feed is None or len(self.feed.entries) <= 1:
-                try:
+            pop = None
+            if self.feed is None:
+                pop = PopupBox(text=_('Downloading, please wait...'))
+                pop.show()
+
+            try:
+                if self.feed is None or len(self.feed.entries) <= 1:
                     for i in range(3):
                         xspf = self.webservices.request_xspf()
                         if xspf != 'No recs :(':
                             break
                         time.sleep(2)
                     else:
-                        if menuw:
-                            AlertBox(text='No recs :(').show()
-                        traceback.print_stack()
-                        rc.post_event(STOP)
-                        return
+                        raise LastFMError('No recs :(')
 
                     self.feed = self.xspf.parse(xspf)
                     if self.feed is None:
-                        if menuw:
-                            AlertBox(text=_('Cannot get XSFP')).show()
-                        traceback.print_stack()
-                        rc.post_event(STOP)
-                        return
-                except LastFMError, why:
-                    _debug_(why, DWARNING)
-                    if menuw:
-                        AlertBox(text=str(why)).show()
-                    rc.post_event(STOP)
-                    return
+                        raise LastFMError('Cannot get XSFP')
 
-            entry = self.feed.entries[0]
-            _debug_('entry "%s / %s / %s" of %s' % (entry.artist, entry.album, entry.title, len(self.feed.entries)))
-            self.stream_name = urllib.unquote_plus(self.feed.title)
-            self.album = entry.album
-            self.artist = entry.artist
-            self.title = entry.title
-            self.location_url = entry.location_url
-            self.length = entry.duration
-            basename = os.path.join(config.LASTFM_DIR, self.stream_name, entry.artist, entry.album, entry.title)
-            self.basename = basename.lower().replace(' ', '_').\
-                replace('.', '').replace('\'', '').replace(':', '').replace(',', '')
-            if not os.path.exists(os.path.dirname(self.basename)):
-                _debug_('make directory %r' % (os.path.dirname(self.basename),), DINFO)
-                os.makedirs(os.path.dirname(self.basename), 0777)
-            # url is changed, to include file://
-            self.url = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
-            self.trackpath = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
-            self.track_downloader = self.webservices.download(self.location_url, self.trackpath)
-            if entry.image_url:
-                self.image = os.path.join(self.basename + os.path.splitext(entry.image_url)[1])
-                self.image_downloader = self.webservices.download(entry.image_url, self.image)
-                # Wait three seconds for the image to be downloaded
-                for i in range(30):
-                    if not self.image_downloader.isrunning():
-                        break
+                entry = self.feed.entries[0]
+                _debug_('entry "%s / %s / %s" of %s' % (entry.artist, entry.album, entry.title, len(self.feed.entries)))
+                self.stream_name = urllib.unquote_plus(self.feed.title)
+                self.album = entry.album
+                self.artist = entry.artist
+                self.title = entry.title
+                self.location_url = entry.location_url
+                self.length = entry.duration
+                basename = os.path.join(config.LASTFM_DIR, self.stream_name, entry.artist, entry.album, entry.title)
+                self.basename = basename.lower().replace(' ', '_').\
+                    replace('.', '').replace('\'', '').replace(':', '').replace(',', '')
+                if not os.path.exists(os.path.dirname(self.basename)):
+                    _debug_('make directory %r' % (os.path.dirname(self.basename),), DINFO)
+                    os.makedirs(os.path.dirname(self.basename), 0777)
+                # url is changed, to include file://
+                self.url = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
+                self.trackpath = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
+                if entry.image_url:
+                    self.image = os.path.join(self.basename + os.path.splitext(entry.image_url)[1])
+                    self.image_downloader = self.webservices.download(entry.image_url, self.image)
+                    # Wait three seconds for the image to be downloaded
+                    for i in range(30):
+                        if not self.image_downloader.isrunning():
+                            break
+                        time.sleep(0.1)
+                else:
+                    self.image = None
+                self.track_downloader = self.webservices.download(self.location_url, self.trackpath, self)
+                # Wait for a bit of the file to be downloaded
+                while self.track_downloader.filesize() < 1024 * 20:
+                    if not self.track_downloader.isrunning():
+                        raise LastFMError('Failed to download track', entry.location_url)
                     time.sleep(0.1)
-            else:
-                self.image = None
-            #self.is_playlist = True
-            # Wait for a bit of the file to be downloaded
-            while self.track_downloader.filesize() < 1024 * 20:
-                if not self.track_downloader.isrunning():
-                    traceback.print_stack()
-                    rc.post_event(STOP)
-                    return
-                time.sleep(0.1)
-            self.player = PlayerGUI(self, menuw)
-            error = self.player.play()
-            if error:
-                _debug_('player play error=%r' % (error,), DWARNING)
-                if menuw:
-                    AlertBox(text=error).show()
-                traceback.print_stack()
-                rc.post_event(STOP)
-        finally:
-            if pop is not None:
-                pop.destroy()
+                self.player = PlayerGUI(self, menuw)
+                error = self.player.play()
+                if error:
+                    raise LastFMError('Play error=%r' % (error,))
+            finally:
+                if pop is not None:
+                    pop.destroy()
+        except LastFMError, why:
+            _debug_('player play error=%r' % (error,), DWARNING)
+            if menuw:
+                AlertBox(text=str(why)).show()
+            rc.post_event(STOP)
+            return
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -574,7 +564,7 @@ class LastFMWebServices:
 
 
     @benchmark(benchmarking, benchmarkcall)
-    def download(self, url, filename):
+    def download(self, url, filename, entry=None):
         """
         Download album cover or track to last.fm directory.
 
@@ -582,6 +572,7 @@ class LastFMWebServices:
 
         @param url: location of item to download
         @param filename: path to downloaded file
+        @param entry: metadata for the entry
         """
         _debug_('download(url=%r, filename=%r)' % (url, filename), 1)
         if not self.session:
@@ -590,7 +581,7 @@ class LastFMWebServices:
             'Cookie': 'Session=%s' % self.session,
             'User-agent': 'Freevo-%s (r%s)' % (version.__version__, revision.__revision__)
         }
-        self.downloader = LastFMDownloader(url, filename, headers)
+        self.downloader = LastFMDownloader(url, filename, headers, entry)
         self.downloader.start()
         return self.downloader
 
@@ -669,11 +660,12 @@ class LastFMDownloader(Thread):
     download it to a file and then play it
     """
     @benchmark(benchmarking, benchmarkcall)
-    def __init__(self, url, filename, headers=None):
+    def __init__(self, url, filename, headers=None, entry=None):
         Thread.__init__(self)
         self.url = url
         self.filename = filename
         self.headers = headers
+        self.entry = entry
         self.size = 0
         self.running = True
 
@@ -698,6 +690,20 @@ class LastFMDownloader(Thread):
                     # debugs fail during shutdown
                     #_debug_('%s downloaded' % self.filename)
                     # what we could do now is to add tags to track
+                    if self.entry:
+                        from kaa.metadata.audio import eyeD3
+                        try:
+                            tag = eyeD3.Tag()
+                            tag.link(self.filename)
+                            tag.header.setVersion(eyeD3.ID3_V2_3)
+                            tag.setArtist(self.entry.artist)
+                            tag.setAlbum(self.entry.album)
+                            tag.setTitle(self.entry.title)
+                            #tag.setGenre(self.entry.genre)
+                            tag.addImage(eyeD3.ImageFrame.FRONT_COVER, self.entry.image)
+                            tag.update()
+                        except Exception, why:
+                            print why
                     break
                 self.size += len(reply)
             else:
