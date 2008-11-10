@@ -60,13 +60,20 @@ mappings = {
     'lists' : {
         'containers'  : [ 'avi', 'mp4', 'mpeg' ], # add mkv back later
         'videocodecs' : [ 'MPEG 4 (lavc)','MPEG 2 (lavc)', 'XviD', 'H.264' ],
-        'audiocodecs' : [ 'MPEG 1 Layer 3 (mp3)', 'MPEG 1 Layer 2 (mp2)', 'AAC (iPod)', 'AC3', 'Vorbis', 'WMAv1',' WMAv2', 'copy' ]
+        'audiocodecs' : [ 'MPEG 1 Layer 3 (mp3)', 'MPEG 1 Layer 2 (mp2)', 'AAC (iPod)', 'AC3', 'Vorbis',
+            'WMAv1',' WMAv2', 'copy' ]
     },
     'vcodec' : {
-        'MPEG 4 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg4:mbd=2:trell:v4mv:last_pred=2:dia=-1:vmax_b_frames=2:vb_strategy=1:cmp=3:subcmp=3:precmp=0:vqcomp=0.6:vbitrate=%s:threads=%s%s%s'],
-        'MPEG 2 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg2video:vhq:vqmin=2:trell:vrc_buf_size=1835:vrc_maxrate=9800:keyint=18:vstrict=0:vbitrate=%s:threads=%s%s%s'],
+        'MPEG 4 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg4:mbd=2:trell:v4mv:last_pred=2:dia=-1:vmax_b_frames=2:'+
+            'vb_strategy=1:cmp=3:subcmp=3:precmp=0:vqcomp=0.6:vbitrate=%s:threads=%s%s%s'],
+        'MPEG 2 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg2video:vhq:vqmin=2:trell:vrc_buf_size=1835:'+
+            'vrc_maxrate=9800:keyint=18:vstrict=0:vbitrate=%s:threads=%s%s%s'],
         'XviD'          : [ 'xvid', '-xvidencopts', 'chroma_opt:vhq=4:bvhq=1:bitrate=%s:threads=%s%s%s'],
-        'H.264'         : [ 'x264', '-x264encopts', 'subq=5:8x8dct:frameref=2:bframes=3:b_pyramid:weight_b:bitrate=%s:threads=%s%s%s']
+        #'H.264'         : [ 'x264', '-x264encopts', 'subq=5:8x8dct:frameref=2:bframes=3:b_pyramid:weight_b:'+
+        #    'bitrate=%s:threads=%s%s%s']
+        'H.264'         : [ 'x264', '-x264encopts', 'subq=7:global_header:trellis=2:partitions=all:no-fast-pskip:'+
+            'me=umh:deblock:direct_pred=auto:level_idc=30:frameref=6:no8x8dct:me_range=32:bframes=0:nob_pyramid:'+
+            'nobrdo:cabac:bitrate=%s:threads=%s%s%s']
     },
     'container' : {
         'mpeg' : [ 'mpeg', '-mpegopts', 'format=dvd:tsaf'],
@@ -467,7 +474,7 @@ class EncodingJob:
         #deinterlacer test vf += ['pp=lb']
         #set appropriate videopass, codec independant (lavc is vpass, xvid is pass)
         if passnr > 0:
-            if self.vcodec == 'XviD':
+            if self.vcodec == 'XviD' or self.vcodec == 'H.264':
                 passname = ':pass=%s'
             else:
                 passname = ':vpass=%s'
@@ -552,7 +559,7 @@ class EncodingJob:
         if self.acodec != 'copy':
             args += [ mappings['acodec'][self.acodec][1],
                       mappings['acodec'][self.acodec][2] % self.abrate ]
-        args += [ '-o', output]
+        args += [ '-o', output + '~incomplete~' ]
 
         # don't pass video filter in we have none
         if len(vfilter) != 0:
@@ -923,7 +930,15 @@ class EncodingQueue:
             _debug_('Job %s finished' % self.currentjob.idnr, DINFO)
             if self.currentjob.rmsource is True:
                 _debug_('Removing source: %s' % self.currentjob.source)
-                os.remove(self.currentjob.source)
+                try:
+                    os.remove(self.currentjob.source)
+                except OSError :
+                    _debug_(' cannot remove file '+self.currentjob.source, DWARNING)
+            #
+            try:
+                os.rename(self.currentjob.output + '~incomplete~', self.currentjob.output)
+            except OSError :
+                _debug_(' cannot rename file to remove ~incomplete~ suffix '+self.currentjob.output, DWARNING)
             #we are done with this job, remove it
             del self.qlist[0]
             del self.qdict[self.currentjob.idnr]

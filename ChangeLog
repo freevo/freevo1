@@ -19,6 +19,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 
  * New wikisubtitles video plug-in to get subtitles for videos (F#2147641)
  * Updated apple trailers (F#2089598)
+ * Updated encoding server to name incomplete encodings with incomplete (F#2190016)
  * Updated Italian translation (F#2153010)
  * Updated mouse support so that it is optional (F#2089306)
  * Updated OSD with alpha-blending dialog (F#2255527)
