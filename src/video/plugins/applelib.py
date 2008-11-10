@@ -40,7 +40,6 @@ _FEEDS = (
         ( 'home/feeds/just_added.json', 'Just Added' ),
         ( 'home/feeds/exclusive.json', 'Exclusive' ),
         ( 'home/feeds/just_hd.json', 'HD' ),
-        ( 'home/feeds/upcoming.json', 'Featured' ),
         ( 'home/feeds/most_pop.json', 'Most Popular' ),
         ( 'home/feeds/genres.json', None ),
         ( 'home/feeds/studios.json', None),
@@ -61,16 +60,14 @@ _stream_link_res = (
         re.compile(r'''<param[^>]+name="href"[^>]+value="(?P<url>[^"]+)"[^>]*>''', re.IGNORECASE),
         re.compile(r'''<param[^>]*name="src"[^>]*value="(?P<url>[^"]*)"[^>]*>''', re.IGNORECASE),
         re.compile(r'''XHTML[(]([^)]*\'href\',)?\'(?P<url>[^\']*)\'''', re.IGNORECASE),
-        re.compile(r'''\'(?P<url>http[^\']*mov)\'''', re.IGNORECASE),
-        re.compile(r'''<a[^>]+href="(?P<url>http[^\"]*.mov)\?width=[0-9]+&amp;height=[0-9]+"[^>]*>''', re.IGNORECASE)
+        re.compile(r'''\'(?P<url>http[^\']*.mov)\'''', re.IGNORECASE),
+        re.compile(r'''"(?P<url>http[^"]*.mov)"''', re.IGNORECASE),
+        re.compile(r'''<a[^>]+href="(?P<url>http[^"]*.mov)\?width=[0-9]+&amp;height=[0-9]+"[^>]*>''', re.IGNORECASE)
         )
 # Stream exclude regexps
 _stream_excl_res = (
         re.compile(r'''trailers/images.*btn''', re.IGNORECASE),
         )
-
-# Old regexps
-#       re.compile(r'''XHTML[(]\'(?P<url>[^\']*)\'''', re.IGNORECASE)
 
 # Stream URLs in script based pages
 _scriptpage_stream_link_re = re.compile(r'''movieAddress[^=]*=[^"]*"(?P<url>[^"]*(?P<size>240|320|480|640)[^"]*\.mov[^"]*)"''', re.IGNORECASE)
