@@ -697,8 +697,6 @@ class WeatherItem(Item):
         self.sunset = current.loc.suns
         self.zone = int(current.loc.zone)
 
-        import pprint, pdb
-        pdb.set_trace()
         self.updated = current.cc.lsup
         self.observation_station = current.cc.obst
         self.temperature = current.cc.tmp
