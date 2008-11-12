@@ -280,7 +280,7 @@ class WeatherItem(Item):
         self.temperature = None
         self.feeling = None
         self.current_conditions = None
-        self.icon = None
+        self.day_icon = None
         self.pressure = None
         self.pressure_change = None
         self.wind_speed = None
@@ -579,7 +579,7 @@ class WeatherItem(Item):
     def getIcon(self):
         """ gets the current conditions icon """
         _debug_('getIcon()', 2)
-        return "%s" % (self.icon)
+        return "%s" % (self.day_icon)
 
     def getPressure(self):
         _debug_('getPressure()', 2)
@@ -697,12 +697,14 @@ class WeatherItem(Item):
         self.sunset = current.loc.suns
         self.zone = int(current.loc.zone)
 
+        import pprint, pdb
+        pdb.set_trace()
         self.updated = current.cc.lsup
         self.observation_station = current.cc.obst
         self.temperature = current.cc.tmp
         self.feeling = current.cc.flik
         self.current_conditions = current.cc.t
-        self.icon = current.cc.icon
+        self.day_icon = current.cc.icon
         self.pressure = current.cc.bar.r
         self.pressure_change = current.cc.bar.d
         self.wind_speed = current.cc.wind.s
@@ -716,7 +718,7 @@ class WeatherItem(Item):
         self.moon_phase = current.cc.moon.t
 
         self.description = '%s %s %s' % (self.current_conditions, _("at"), self.getTemperature())
-        self.image = self.getDayImage(self.icon)
+        self.image = self.getDayImage(self.day_icon)
 
         # skip today in the days
         for day in forecast.dayf.days[1:]:
