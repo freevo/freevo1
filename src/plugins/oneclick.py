@@ -574,7 +574,7 @@ class WeatherItem(Item):
     def getCurrentCondition(self):
         """ gets the current conditions """
         _debug_('getCurrentCondition()', 2)
-        return "%s" % (self.current_conditions)
+        return "%s" % (_(self.current_conditions))
 
     def getIcon(self):
         """ gets the current conditions icon """
@@ -593,7 +593,7 @@ class WeatherItem(Item):
 
     def getPressureChange(self):
         _debug_('getPressureChange()', 2)
-        return "%s" % (self.pressure_change)
+        return "%s" % (_(self.pressure_change))
 
     def getWind(self):
         _debug_('getWind()', 2)
@@ -601,7 +601,7 @@ class WeatherItem(Item):
             return "%s" % (self.wind_speed)
         elif self.wind_direction == 'VAR':
             return "%s %s %s %s" % (_('Variable'), _('at a rate of'), self.wind_speed, self.unit_s)
-        return "%s %s %s %s" % (self.wind_direction, _('at a rate of'), self.wind_speed, self.unit_s)
+        return "%s %s %s %s" % (_(self.wind_direction), _('at a rate of'), self.wind_speed, self.unit_s)
 
     def getWindDir(self):
         _debug_('getWindDir()', 2)
@@ -621,11 +621,11 @@ class WeatherItem(Item):
 
     def getUvIndex(self):
         _debug_('getUvIndex()', 2)
-        return "%s" % (self.uv_index)
+        return "%s" % (_(self.uv_index))
 
     def getUvType(self):
         _debug_('getUvType()', 2)
-        return "%s" % (self.uv_type)
+        return "%s" % (_(self.uv_type))
 
     def getDewPoint(self):
         _debug_('getDewPoint()', 2)
@@ -637,7 +637,7 @@ class WeatherItem(Item):
 
     def getMoonPhase(self):
         _debug_('getMoonPhase()', 2)
-        return "%s" % (self.moon_phase)
+        return "%s" % (_(self.moon_phase))
 
     def getSunrise(self):
         _debug_('getSunrise()', 2)
@@ -1031,13 +1031,13 @@ class WeatherBaseScreen(skin.Area):
             x = x_start + self.xscale(pos)
             y = y_start
 
-            self.week_item(x, y, Unicode(self.parent.weather.date[day]), self.key_font, 160)
+            self.week_item(x, y, _(Unicode(self.parent.weather.date[day])), self.key_font, 160)
 
             self.draw_image(self.parent.weather.weatherIcon[day],
                 (x, y + self.yscale(50), self.xscale(160), self.yscale(120)))
 
             y = y_start + self.yscale(200)
-            self.week_item(x, y, Unicode(self.parent.weather.weatherType[day]), self.small_font, 160)
+            self.week_item(x, y, _(Unicode(self.parent.weather.weatherType[day])), self.small_font, 160)
 
             y = y_start + self.yscale(240)
             self.week_item(x, y, _("LO"), self.val_font)
