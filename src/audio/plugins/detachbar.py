@@ -175,7 +175,8 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         _debug_('show()', 2)
         self.player = audio.player.get()
-        self.getinfo()
+        if self.palyer:
+            self.getinfo()
 
 
     @benchmark(benchmarking, benchmarkcall)

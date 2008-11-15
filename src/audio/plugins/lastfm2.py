@@ -321,7 +321,7 @@ class LastFMItem(AudioItem):
                 if pop is not None:
                     pop.destroy()
         except LastFMError, why:
-            _debug_('player play error=%r' % (error,), DWARNING)
+            _debug_('play error: %s' % (why,), DWARNING)
             if menuw:
                 AlertBox(text=str(why)).show()
             rc.post_event(STOP)
