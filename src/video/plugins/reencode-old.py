@@ -36,7 +36,7 @@ import plugin
 import menu
 import os
 import config
-from video.encodingclient import *
+from video.encodingclient import EncodingClientActions
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
@@ -52,6 +52,7 @@ class PluginInterface(plugin.ItemPlugin):
     def __init__(self):
         _debug_('reencode-old.PluginInterface.__init__(self)')
         plugin.ItemPlugin.__init__(self)
+        self.server = EncodingClientActions()
 
 
     def actions(self, item):
@@ -99,7 +100,7 @@ class PluginInterface(plugin.ItemPlugin):
         box = PopupBox(text=_('Please wait, analyzing video...'))
         box.show()
 
-        (status, resp) = initEncodeJob(self.source, self.filename, self.title)
+        (status, resp) = self.server.initEncodeJob(self.source, self.filename, self.title)
         print 'initEncodeJob:status:', status, ' resp:', resp
 
         box.destroy()
@@ -111,7 +112,7 @@ class PluginInterface(plugin.ItemPlugin):
         idnr = resp
 
         #ask for possible containers and set the first one (should be avi), we will get a list
-        (status, resp) = getContainerCAP(idnr)
+        (status, resp) = self.server.getContainerCAP(idnr)
         print 'getContainerCAP:status:', status, ' resp:', resp
 
         if not status:
@@ -120,7 +121,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         container = resp[contnr]
 
-        (status, resp) = setContainer(idnr, container)
+        (status, resp) = self.server.setContainer(idnr, container)
         print 'setContainer:status:', status, ' resp:', resp
 
         if not status:
@@ -128,7 +129,7 @@ class PluginInterface(plugin.ItemPlugin):
             return
 
         #ask for possible videocodec and set the first one (should be mpeg4), we will get a list
-        (status, resp) = getVideoCodecCAP(idnr)
+        (status, resp) = self.server.getVideoCodecCAP(idnr)
         print 'getVideoCodecCAP:status:', status, ' resp:', resp
 
         if not status:
@@ -137,7 +138,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         vcodec = resp[vcodecnr]
 
-        (status, resp) = setVideoCodec(idnr, vcodec, tgtsize, mpass, vbitrate)
+        (status, resp) = self.server.setVideoCodec(idnr, vcodec, tgtsize, mpass, vbitrate)
         print 'setVideoCodec:status:', status, ' resp:', resp
 
         if not status:
@@ -147,7 +148,7 @@ class PluginInterface(plugin.ItemPlugin):
         #ask for possible audiocodec and set the first one (should be mp3), we will get a list
         #Audiocodec call isn't necessary atm, it defaults to 128 kbit mp3, but this might change in the future
         #so we play safe
-        (status, resp) = getAudioCodecCAP(idnr)
+        (status, resp) = self.server.getAudioCodecCAP(idnr)
         print 'getAudioCodecCAP:status:', status, ' resp:', resp
 
         if not status:
@@ -156,14 +157,14 @@ class PluginInterface(plugin.ItemPlugin):
 
         acodec = resp[audionr]
 
-        (status, resp) = setAudioCodec(idnr, acodec, 128)
+        (status, resp) = self.server.setAudioCodec(idnr, acodec, 128)
         print 'setAudioCodec:status:', status, ' resp:', resp
 
         if not status:
             self.error(resp)
             return
 
-        (status, resp) = getVideoFiltersCAP(idnr)
+        (status, resp) = self.server.getVideoFiltersCAP(idnr)
         print 'getVideoFiltersCAP:status:', status, ' resp:', resp
 
         if not status:
@@ -171,11 +172,11 @@ class PluginInterface(plugin.ItemPlugin):
             return
 
         #vfilters=resp[vfilter]
-        #(status, resp) = setVideoFilters(idnr, vfilters)
+        #(status, resp) = self.server.setVideoFilters(idnr, vfilters)
         #print 'setVideoFilter:status:', status, ' resp:', resp
 
         #And finally, qeue and start the job
-        (status, resp) = queueIt(idnr, True)
+        (status, resp) = self.server.queueIt(idnr, True)
         print 'queueIt:status:', status, ' resp:', resp
 
         if not status:
