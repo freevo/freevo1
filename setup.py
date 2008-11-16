@@ -26,6 +26,7 @@ libs_to_check = [
     ('Image', 'http://www.pythonware.com/products/pil/'),
     ('twisted', 'http://www.twistedmatrix.com/'),
     ('twisted.web.microdom', 'http://www.twistedmatrix.com/'),
+    ('Numeric', 'http://numeric.scipy.org/'),
 ]
 
 if sys.hexversion < 0x2050000:

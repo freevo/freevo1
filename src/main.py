@@ -108,11 +108,14 @@ except ImportError:
     print
     sys.exit(0)
 
+import rc      # The RemoteControl class.
 import util    # Various utilities
 import osd     # The OSD class, used to communicate with the OSD daemon
 import menu    # The menu widget class
-import skin    # The skin class
-import rc      # The RemoteControl class.
+try:
+    import skin    # The skin class
+except pygame.error, why:
+    sys.exit(why)
 
 from item import Item
 from event import *

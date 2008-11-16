@@ -1631,19 +1631,19 @@ CACHE_IMAGES = 1
 # items to include on the web pages
 # WWW_PAGES = [
 #     #   Label                      Title                                  Page
-#     (_('Home'),                 _('Home'),                               'index.rpy'), 
-#     (_('TV Guide'),             _('View TV Listings'),                   'guide.rpy'), 
-#     (_('Scheduled Recordings'), _('View Scheduled Recordings'),          'record.rpy'), 
-#     (_('Favorites'),            _('View Favorites'),                     'favorites.rpy'), 
-#     (_('Media Library'),        _('View Media Library'),                 'library.rpy'), 
-#     (_('Manual Recording'),     _('Schedule a Manual Recording'),        'manualrecord.rpy'), 
+#     (_('Home'),                 _('Home'),                               'index.rpy'),
+#     (_('TV Guide'),             _('View TV Listings'),                   'guide.rpy'),
+#     (_('Scheduled Recordings'), _('View Scheduled Recordings'),          'record.rpy'),
+#     (_('Favorites'),            _('View Favorites'),                     'favorites.rpy'),
+#     (_('Media Library'),        _('View Media Library'),                 'library.rpy'),
+#     (_('Manual Recording'),     _('Schedule a Manual Recording'),        'manualrecord.rpy'),
 #     ('Config',                    'Configuration Information',           'config.rpy'),
 #     ('Plugins',                   'Plug-in Configuration Information',   'pluginconfig.rpy'),
 #     ('YouTube',                   'YouTube',                             'youtube.rpy'),
 #     ('Logs',                      'Logs',                                'viewlogfile.rpy'),
 #     ('My Page',                   'My Page Title'                        'mypage.html'),
 #     ('My Site',                   'My Site Title'                        'mysite/'),
-#     (_('Search'),               _('Advanced Search Page'),               'search.rpy'), 
+#     (_('Search'),               _('Advanced Search Page'),               'search.rpy'),
 #     (_('Help'),                 _('View Online Help and Documentation'), 'help/')
 # ]
 
@@ -1690,6 +1690,14 @@ CACHE_IMAGES = 1
 # the regexp has to be with ([0-9]|[0-9][0-9]) so we can get the numbers
 #
 # VIDEO_SHOW_REGEXP = "s?([0-9]|[0-9][0-9])[xe]([0-9]|[0-9][0-9])[^0-9]"
+
+#
+# Directory containing images for TV shows. A TV show matches the regular
+# expression VIDEO_SHOW_REGEXP, e.g. "Name 3x10 - Title". If an image
+# name.(png|jpg) (lower-case) is in this directory, it will be taken as cover
+# image
+#
+# VIDEO_SHOW_DATA_DIR = None
 
 
 #
