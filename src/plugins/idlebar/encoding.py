@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# encoding.py - IdleBarplugin for showing encoding status
+# IdleBarplugin for showing encoding status
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -29,7 +29,7 @@
 
 
 # python modules
-import os, sys, pygame, xmlrpclib
+import os, sys, pygame
 import time
 
 # freevo modules
@@ -67,9 +67,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.lastdraw  = 0
         self.lastpoll  = 0
         self.plugin_name = 'video.encodingstatus'
-        server_string  = 'http://%s:%s/' % \
-                        (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
-        self.server    = xmlrpclib.Server(server_string, allow_none=1)
+        self.server    = EncodingClientActions()
 
         self.skin      = skin.get_singleton()
         self.barimg    = os.path.join(config.ICON_DIR, 'status/encoding_bar.png')
@@ -102,53 +100,6 @@ class PluginInterface(plugin.DaemonPlugin):
         ]
 
 
-    def getprogress(self):
-        _debug_('getprogress(self)', 2)
-        """Get the progress & pass information of the job currently encoding.
-
-        This call returns False if no job is currently encoding (fx the queue is not active).
-        When the queue is active, this call returns a tuple of 4 values:
-            (friendlyname, status, perc, timerem)
-
-        friendlyname is the friendlyname you assigned to the encoding job
-        status is the current status of the encoding job, represented by an integer
-            0 - Not set (this job hasn't started encoding). Never used in this context
-            1 - Audio pass in progress
-            2 - First (analyzing) video pass (only used in multipass encoding)
-            3 - Final video pass
-            4 - Postmerge (not used atm). Final merging or similar processing in progress
-        perc is the percentage completed of the current pass
-        timerem is the estimated time remaining of the current pass, formatted as a
-            human-readable string.
-        """
-
-        try:
-            (status, response) = self.server.getProgress()
-        except:
-            return (False, 'EncodingClient: connection error')
-
-        return returnFromJelly(status, response)
-
-
-    def listjobs(self):
-        _debug_('listjobs(self)', 2)
-        """Get a list with all jobs in the encoding queue and their current state
-
-        Returns a list of tuples containing all the current queued jobs. When the queue is
-        empty, an empty list is returned.
-        Each job in the list is a tuple containing 3 values
-            (idnr, friendlyname, status)
-        These values have the same meaning as the corresponding values returned by the
-            getProgress call"""
-
-        try:
-            (status, response) = self.server.listJobs()
-        except:
-            return (False, 'EncodingClient: connection error')
-
-        return returnFromJelly(status, response)
-
-
     def getimage(self, image, osd, cache=False):
         _debug_('getimage(self, image, osd, cache=False)', 2)
         if image.find(config.ICON_DIR) == 0 and image.find(osd.settings.icon_dir) == -1:
@@ -168,7 +119,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         set the text
         """
-        (status, jobs) = self.listjobs()
+        (status, jobs) = self.server.listJobs()
         if not status:
             self.state = 'noserver'
             self.jobs = _('encoding server not running')
@@ -191,7 +142,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.running = True
 
         self.text = []
-        (status, progress) = self.getprogress();
+        (status, progress) = self.server.getProgress();
         if status:
             if progress[1] == 0:
                 self.mode = 'Not started'

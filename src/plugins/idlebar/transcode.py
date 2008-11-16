@@ -32,22 +32,20 @@
 import os, sys, pygame, xmlrpclib
 import time, re
 
+# kaa modules
+import kaa
+
 # freevo modules
+import config
 import skin
+import plugin
 from plugins.idlebar import IdleBarPlugin
-import plugin, config
-from util.marmalade import jellyToXML, unjellyFromXML
-from gui import Progressbar
 import rc
-
-
-def returnFromJelly(status, response):
-    """Un-serialize EncodingServer responses"""
-    _debug_('returnFromJelly(status, response)', 2)
-    if status:
-        return (status, unjellyFromXML(response))
-    else:
-        return (status, response)
+from gui import Progressbar
+from video.encodingclient import EncodingClientActions
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
 class PluginInterface(IdleBarPlugin):
@@ -59,6 +57,7 @@ class PluginInterface(IdleBarPlugin):
         | plugin.activate('idlebar.transcode')
     """
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         """ Initialise the transcode idlebar plug-in """
         _debug_('transcode.PluginInterface.__init__()', 2)
@@ -88,14 +87,13 @@ class PluginInterface(IdleBarPlugin):
         self.leftclamp_x = 0
         self.rightclamp_x = 0
 
-        self.poll_interval = 82 # 82*1/120th seconds (~1sec)
-        self.draw_interval = self.poll_interval
+        self.poll_interval = 0.1 # 1 sec should be same as most frequent
+        self.draw_interval = 5.0 # 5 secs
         self.last_interval = self.poll_interval
         self.lastdraw  = 0
         self.lastpoll  = 0
         self.drawtime  = 0
-        server_string  = 'http://%s:%s/' % (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
-        self.server    = xmlrpclib.Server(server_string, allow_none=1)
+        self.server    = EncodingClientActions()
 
         self.skin      = skin.get_singleton()
         self.calculate = True
@@ -106,71 +104,19 @@ class PluginInterface(IdleBarPlugin):
         self.percent   = 0.0
         self.running   = False
         self.font      = self.skin.get_font(config.OSD_IDLEBAR_FONT)
+        self.timer     = kaa.Timer(self._timerhandler)
+        self.timer.start(self.poll_interval)
         _debug_('transcode.PluginInterface.__init__() done.')
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def config(self):
         _debug_('config()', 2)
         return [
-            ('ENCODINGSERVER_IP', 'localhost', 'The host name or IP address of the encoding server'),
-            ('ENCODINGSERVER_PORT', 6666, 'The port of the encoding server'),
         ]
 
 
-    def getprogress(self):
-        """
-        Get the progress & pass information of the job currently encoding.
-
-        friendlyname is the friendlyname you assigned to the encoding job
-
-        status is the current status of the encoding job, represented by an integer:
-            - 0 Not set (this job hasn't started encoding). Never used in this context
-            - 1 Audio pass in progress
-            - 2 First (analyzing) video pass (only used in multipass encoding)
-            - 3 Final video pass
-            - 4 Postmerge (not used atm). Final merging or similar processing in progress
-
-        perc is the percentage completed of the current pass
-
-        timerem is the estimated time remaining of the current pass, formatted as a human-readable string.
-
-        @returns:
-            False if no job is currently encoding (fx the queue is not active).
-            When the queue is active, this call returns a tuple of 4 values::
-
-                (friendlyname, status, perc, timerem)
-        """
-        _debug_('getprogress()', 2)
-
-        try:
-            (status, response) = self.server.getProgress()
-        except:
-            return (False, 'EncodingClient: connection error')
-
-        return returnFromJelly(status, response)
-
-
-    def listjobs(self):
-        """
-        Get a list with all jobs in the encoding queue and their current state
-
-        Returns a list of tuples containing all the current queued jobs. When the queue
-        is empty, an empty list is returned.  Each job in the list is a tuple
-        containing 3 values (idnr, friendlyname, status) These values have the same
-        meaning as the corresponding values returned by the getProgress call
-        """
-        _debug_('listjobs() server=%r' % self.server, 2)
-        result = (FALSE, [])
-
-        try:
-            (status, response) = self.server.listJobs()
-        except:
-            return (False, 'EncodingClient: connection error')
-        result = returnFromJelly(status, response)
-        _debug_('listjobs() result=%r' % (result, ), 2)
-        return result
-
-
+    #@benchmark(benchmarking, benchmarkcall)
     def getimage(self, image, osd, cache=False):
         """
         Load the image from the cache when available otherwise load the image and save
@@ -189,22 +135,23 @@ class PluginInterface(IdleBarPlugin):
         return pygame.image.load(image)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_sprite(self):
         """ set the sprite image name and the drawing interval """
         _debug_('set_sprite()', 2)
-        (status, jobs) = self.listjobs()
+        (status, jobs) = self.server.listJobs()
         if not status:
             self.sprite = self.notrunning
             self.state = 'noserver'
             self.jobs = _('encoding server not running')
-            self.draw_interval = 5000
+            self.draw_interval = 5.0
             self.running = False
             return (self.background_w, self.background_h);
         if not jobs:
             self.sprite = self.nojobs
             self.state = 'nojobs'
             self.jobs = _('encoding server has no jobs')
-            self.draw_interval = 5000
+            self.draw_interval = 5.0
             self.running = False
             return (self.background_w, self.background_h);
         self.state = 'active'
@@ -216,33 +163,33 @@ class PluginInterface(IdleBarPlugin):
         self.jobs = joblist
         self.running = True
 
-        (status, progress) = self.getprogress();
+        (status, progress) = self.server.getProgress();
         if status:
             if progress[1] == 0:
                 self.sprite = self.nojobs
                 self.mode = 'Not started'
                 self.state = 'active'
-                self.draw_interval = 5000
+                self.draw_interval = 5.0
             elif progress[1] == 1:
                 self.sprite = self.audio
                 self.mode = 'Audio'
                 self.state = 'audio'
-                self.draw_interval = 200
+                self.draw_interval = 0.2
             elif progress[1] == 2:
                 self.sprite = self.video1
                 self.mode = 'Video-1'
                 self.state = 'video'
-                self.draw_interval = 1000
+                self.draw_interval = 1.0
             elif progress[1] == 3:
                 self.sprite = self.video2
                 self.mode = 'Video-2'
                 self.state = 'video'
-                self.draw_interval = 1000
+                self.draw_interval = 1.0
             elif progress[1] == 4:
                 self.sprite = self.multiplex
                 self.mode = 'Multiplexing'
                 self.state = 'multiplexing'
-                self.draw_interval = 1000
+                self.draw_interval = 1.0
             remaining = self.remaining_min.search(progress[3])
             self.remaining = remaining and remaining.group() or ''
             self.progress = progress[2]
@@ -250,6 +197,7 @@ class PluginInterface(IdleBarPlugin):
             return (self.background_w, self.background_h);
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def calculatesizes(self, osd, font):
         """size calcs is not necessery on every pass
         There are some shortcuts here, the left and right clamps are the same with
@@ -282,6 +230,7 @@ class PluginInterface(IdleBarPlugin):
         return False
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def draw(self, (type, object), x, osd):
         """ Build the image by blitting sub images on the background and draw the background """
         _debug_('draw((type=%r, object=), x=%r, osd=)' % (type, x), 3)
@@ -315,27 +264,24 @@ class PluginInterface(IdleBarPlugin):
         return self.background_w
 
 
-    def poll(self):
+    #@benchmark(benchmarking, benchmarkcall)
+    def _timerhandler(self):
         """poll function"""
         now = time.time()
         pollduration = now - self.lastpoll
         drawduration = now - self.lastdraw
         self.lastpoll = now
+        #print "poll(): poll=%.2f, draw=%.2f, interval=%s, state=%s" % (pollduration, drawduration, self.draw_interval, self.state)
         _debug_("poll(): poll=%.2f, draw=%.2f, interval=%s, state=%s" % \
             (pollduration, drawduration, self.draw_interval, self.state), 2)
-        if drawduration >= self.draw_interval / 100:
+        if drawduration >= self.draw_interval:
             if skin.active():
                 skin.redraw()
 
-        # this is how to change the poll interval on the fly
-        #if self.last_interval <> self.poll_interval:
-        #    self.last_interval = self.poll_interval
-        #    rc.unregister(self.poll)
-        #    rc.register(self.poll, True, self.poll_interval)
-        #    #print self.__dict__
 
-
+    @benchmark(benchmarking, benchmarkcall)
     def update(self):
         _debug_('update()', 2)
         bar = plugin.getbyname('idlebar')
-        if bar: bar.poll()
+        if bar:
+            bar.poll()

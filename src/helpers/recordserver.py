@@ -68,11 +68,7 @@ from video.commdetectclient import queueIt as queueCommdetectJob
 from video.commdetectclient import listJobs as listCommdetectJobs
 from video.commdetectclient import connectionTest as commdetectConnectionTest
 
-from video.encodingclient import initEncodeJob
-from video.encodingclient import queueIt as queueEncodeJob
-from video.encodingclient import listJobs as listEncodeJobs
-from video.encodingclient import connectionTest as encodeConnectionTest
-from video.encodingclient import setContainer, setVideoCodec, setAudioCodec, setVideoRes, setNumThreads, setVideoFilters
+from video.encodingclient import EncodingClientActions
 
 import tv.record_types
 from tv.record_types import TYPES_VERSION
@@ -142,6 +138,7 @@ class RecordServer:
         self.delay_recording = None
         self.schedule = ScheduledRecordings()
         self.updateFavoritesSchedule()
+        self.es = EncodingClientActions()
 
 
     @kaa.rpc.expose('ping')
@@ -1359,38 +1356,40 @@ class RecordServer:
                     else:
                         _debug_('commdetect server not running', DINFO)
                 if config.TV_REENCODE:
-                    (result, response) = encodeConnectionTest('connection test')
+                    (result, response) = self.es.ping('connection test')
                     if result:
                         source = prog.filename
                         output = prog.filename
                         multipass = config.REENCODE_NUMPASSES > 1
-                        
-                        (status, resp) = initEncodeJob(source, output, prog.title, None, config.TV_REENCODE_REMOVE_SOURCE)
+
+                        (status, resp) = self.es.initEncodeJob(source, output, prog.title, None,
+                            config.TV_REENCODE_REMOVE_SOURCE)
                         _debug_('initEncodeJob:status:%s resp:%s' % (status, resp))
 
                         idnr = resp
 
-                        (status, resp) = setContainer(idnr, config.REENCODE_CONTAINER)
+                        (status, resp) = self.es.setContainer(idnr, config.REENCODE_CONTAINER)
                         _debug_('setContainer:status:%s resp:%s' % (status, resp))
 
-                        (status, resp) = setVideoCodec(idnr, config.REENCODE_VIDEOCODEC, 0, multipass,
+                        (status, resp) = self.es.setVideoCodec(idnr, config.REENCODE_VIDEOCODEC, 0, multipass,
                             config.REENCODE_VIDEOBITRATE, config.REENCODE_ALTPROFILE)
                         _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
 
-                        (status, resp) = setAudioCodec(idnr, config.REENCODE_AUDIOCODEC, config.REENCODE_AUDIOBITRATE)
+                        (status, resp) = self.es.setAudioCodec(idnr, config.REENCODE_AUDIOCODEC,
+                            config.REENCODE_AUDIOBITRATE)
                         _debug_('setAudioCodec:status:%s resp:%s' % (status, resp))
 
-                        (status, resp) = setNumThreads(idnr, config.REENCODE_NUMTHREADS)
+                        (status, resp) = self.es.setNumThreads(idnr, config.REENCODE_NUMTHREADS)
                         _debug_('setNumThreads:status:%s resp:%s' % (status, resp))
 
-                        (status, resp) = setVideoRes(idnr, config.REENCODE_RESOLUTION)
+                        (status, resp) = self.es.setVideoRes(idnr, config.REENCODE_RESOLUTION)
                         _debug_('setVideoRes:status:%s resp:%s' % (status, resp))
 
-                        (status, resp) = listEncodeJobs()
-                        _debug_('listEncodeJobs:status:%s resp:%s' % (status, resp))
+                        (status, resp) = self.es.listJobs()
+                        _debug_('listJobs:status:%s resp:%s' % (status, resp))
 
-                        (status, resp) = queueEncodeJob(idnr, True)
-                        _debug_('queueEncodeJob:status:%s resp:%s' % (status, resp))
+                        (status, resp) = self.es.queueIt(idnr, True)
+                        _debug_('queueIt:status:%s resp:%s' % (status, resp))
                     else:
                         _debug_('encoding server not running', DINFO)
 

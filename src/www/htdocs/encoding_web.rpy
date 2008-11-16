@@ -28,8 +28,6 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-#
-# Edit Date - Oct 2, 2007 6:31am
 
 import sys
 import time
@@ -43,11 +41,7 @@ import string
 import math
 from freevo.www.configlib import *
 
-from util.marmalade import jellyToXML, unjellyFromXML
-import pygame, xmlrpclib
-
-from video.encodingclient import *
-from video.encodingclient import *
+from video.encodingclient import EncodingClientActions
 
 from www.web_types import HTMLResource, FreevoResource
 from freevo.plugins.cd_burn import *
@@ -56,8 +50,8 @@ from getopt import getopt
 from stat import *
 
 def addPageRefresh(display_timer = True):
-    '''
-    '''
+    """
+    """
     display_style = 'display:none'
     if display_timer:
         display_style = 'display:""'
@@ -67,11 +61,10 @@ def addPageRefresh(display_timer = True):
     return prhtml
 
 
-def GetFileList(browse_dir,  display_hidden = False):
-    '''
-    '''
-    _debug_('GetFileList(browse_dir=%r, dispay_hidden=%r)' % \
-        ( browse_dir, display_hidden ) , 2)
+def GetFileList(browse_dir, display_hidden = False):
+    """
+    """
+    _debug_('GetFileList(browse_dir=%r, dispay_hidden=%r)' % ( browse_dir, display_hidden ) , 2)
 
     file_list_ctrl = ''
     if not browse_dir:
@@ -91,7 +84,7 @@ def GetFileList(browse_dir,  display_hidden = False):
     dir_list = os.listdir(browse_dir)
     dir_list.sort()
 
-    file_list_ctrl = '%s : %s' % ('Browsing Directory',browse_dir)
+    file_list_ctrl = '%s : %s' % ('Browsing Directory', browse_dir)
     file_list_ctrl += '<div class="filelist">\n<ul>\n'
 
     parent_dir = os.path.split(browse_dir)[0]
@@ -105,8 +98,7 @@ def GetFileList(browse_dir,  display_hidden = False):
             if not display_hidden:
                 show_file = False
 
-
-        full_file = os.path.join(browse_dir,display_file)
+        full_file = os.path.join(browse_dir, display_file)
         if show_file:
             if  os.path.isdir(full_file):
                 file_list_ctrl += '<li class="directory">\n'
@@ -118,7 +110,7 @@ def GetFileList(browse_dir,  display_hidden = False):
 
     for display_file in dir_list:
         show_file = True
-        full_file = os.path.join(browse_dir,display_file)
+        full_file = os.path.join(browse_dir, display_file)
 
         js_encode = "EncodeFile('%s')" % (full_file)
         if display_file.startswith('.'):
@@ -137,6 +129,8 @@ def GetFileList(browse_dir,  display_hidden = False):
     file_list_ctrl += '</div>\n</ul>\n'
     return file_list_ctrl
 
+
+
 class CDBurn_WebResource(FreevoResource):
 
     def __init__(self):
@@ -153,14 +147,12 @@ class CDBurn_WebResource(FreevoResource):
         self.profile['numthreads'] = config.REENCODE_NUMTHREADS
         self.profile['altprofile'] = config.REENCODE_ALTPROFILE
 
-        self.ContainerCapList = getContainerCAP()[1]
-        self.VideoCodecList   = getVideoCodecCAP()[1]
-        self.AudioCodecList   = getAudioCodecCAP()[1]
-        self.VideoFilters     = getVideoFiltersCAP()[1]
-        self.ProfileList = ['xvid_low','xvid_high','iPod','Nokia770','DVD']
-        server_string  = 'http://%s:%s/' % \
-            (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
-        self.server    = xmlrpclib.Server(server_string, allow_none=1)
+        self.server = EncodingClientActions()
+        self.ContainerCapList = self.server.getContainerCAP()[1]
+        self.VideoCodecList   = self.server.getVideoCodecCAP()[1]
+        self.AudioCodecList   = self.server.getAudioCodecCAP()[1]
+        self.VideoFilters     = self.server.getVideoFiltersCAP()[1]
+        self.ProfileList = ['xvid_low', 'xvid_high', 'iPod', 'Nokia770', 'DVD']
 
     def select_encoding_profile(self, arg=None, menuw=None):
         _debug_('select_encoding_profile(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
@@ -222,42 +214,43 @@ class CDBurn_WebResource(FreevoResource):
     def EncodingParameters(self):
         coding_parameters = '<div id="AdvancedOptions"><ul>'
         coding_parameters += '<li>Encoding Profile :'
-        coding_parameters += CreateSelectBoxControl('profile',self.ProfileList,'XviD')
+        coding_parameters += CreateSelectBoxControl('profile', self.ProfileList, 'XviD')
         coding_parameters += '</li>'
 
         coding_parameters += '<li>'
         coding_parameters += '<a onclick=DisplayAdvancedOptions()>Advanced Encoding Parameters </a>'
         coding_parameters += '<ul id="AdvancedOptionsList" style=display:none>'
 
-        container_box = CreateSelectBoxControl('container',self.ContainerCapList, self.profile['container'] )
+        container_box = CreateSelectBoxControl('container', self.ContainerCapList, self.profile['container'] )
         coding_parameters += '<li> Container : %s </li>' % container_box
 
-        resolution_box =  CreateHTMLinput('textbox', 'resolution',self.profile['resolution'] )
+        resolution_box =  CreateHTMLinput('textbox', 'resolution', self.profile['resolution'] )
         coding_parameters += '<li> Resolution : %s </li>' % resolution_box
 
-        videocodec_box = CreateSelectBoxControl('videocodec',self.VideoCodecList,self.profile['videocodec'])
+        videocodec_box = CreateSelectBoxControl('videocodec', self.VideoCodecList, self.profile['videocodec'])
         coding_parameters += '<li> Video Codec : %s </li>' % videocodec_box
 
-        audiocodec_box = CreateSelectBoxControl('audiocodec',self.AudioCodecList,self.profile['audiocodec'])
+        audiocodec_box = CreateSelectBoxControl('audiocodec', self.AudioCodecList, self.profile['audiocodec'])
         coding_parameters += '<li> Audio Codec : %s </li>' % audiocodec_box
 
-        numpasses_box = CreateHTMLinput('textbox','numpasses',self.profile['numpasses'])
+        numpasses_box = CreateHTMLinput('textbox', 'numpasses', self.profile['numpasses'])
         coding_parameters += '<li> Number of Passes : %s </li>' % numpasses_box
 
-        videobitrate_box = CreateHTMLinput('textbox','videobitrate',self.profile['videobitrate'])
+        videobitrate_box = CreateHTMLinput('textbox', 'videobitrate', self.profile['videobitrate'])
         coding_parameters += '<li> Video Bit Rate : %s </li>' % videobitrate_box
 
-        audiobitrate_box = CreateHTMLinput('textbox','audiobitrate',self.profile['audiobitrate'])
+        audiobitrate_box = CreateHTMLinput('textbox', 'audiobitrate', self.profile['audiobitrate'])
         coding_parameters += '<li> Audio Bit Rate : %s </li>' % audiobitrate_box
 
-        videofilter_box = CreateSelectBoxControl('videofilter',self.VideoFilters,self.profile['videofilter'])
+        videofilter_box = CreateSelectBoxControl('videofilter', self.VideoFilters, self.profile['videofilter'])
         coding_parameters += '<li> Video Filter : %s </li>' % videofilter_box
 
-        numthreads_box = CreateHTMLinput('textbox','numthreads',self.profile['numthreads'])
+        numthreads_box = CreateHTMLinput('textbox', 'numthreads', self.profile['numthreads'])
         coding_parameters += '<li> Number of Threads : %s </li>' % numthreads_box
 
         coding_parameters += '</ul></li></ul></div>'
         return coding_parameters
+
 
     def create_job(self, menuw=None, arg=None):
         _debug_('create_job(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
@@ -266,45 +259,45 @@ class CDBurn_WebResource(FreevoResource):
         job_status = 'Job Status'
 
         #we are going to create a job and send it to the encoding server, this can take some time while analyzing
-        (status, resp) = initEncodeJob(self.source, self.output, self.title)
+        (status, resp) = self.server.initEncodeJob(self.source, self.output, self.title)
         _debug_('initEncodeJob:status:%s resp:%s' % (status, resp))
 
         if not status:
-#            self.error(resp)
             return 'initEncodeJob:status:%s resp:%s' % (status, resp)
 
         idnr = resp
 
-        (status, resp) = setContainer(idnr, self.profile['container'])
+        (status, resp) = self.server.setContainer(idnr, self.profile['container'])
         _debug_('setContainer:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
         multipass = self.profile['numpasses'] > 1
-        (status, resp) = setVideoCodec(idnr, self.profile['videocodec'], 0, multipass, self.profile['videobitrate'], self.profile['altprofile'])
+        (status, resp) = self.server.setVideoCodec(idnr, self.profile['videocodec'], 0, multipass,
+            self.profile['videobitrate'], self.profile['altprofile'])
         _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
-        (status, resp) = setAudioCodec(idnr, self.profile['audiocodec'], self.profile['audiobitrate'])
+        (status, resp) = self.server.setAudioCodec(idnr, self.profile['audiocodec'], self.profile['audiobitrate'])
         _debug_('setAudioCodec:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
-        (status, resp) = setNumThreads(idnr, self.profile['numthreads'])
+        (status, resp) = self.server.setNumThreads(idnr, self.profile['numthreads'])
         _debug_('setNumThreads:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
-        #(status, resp) = setVideoFilters(idnr, self.vfilters)
+        #(status, resp) = self.server.setVideoFilters(idnr, self.vfilters)
         #_debug_('setVideoFilters:status:%s resp:%s' % (status, resp))
 
         #And finally, qeue and start the job
-        (status, resp) = queueIt(idnr, True)
+        (status, resp) = self.server.queueIt(idnr, True)
         _debug_('queueIt:status:%s resp:%s' % (status, resp))
 
         if not status:
@@ -316,8 +309,9 @@ class CDBurn_WebResource(FreevoResource):
         #menuw.delete_menu()
         return job_status
 
+
     def encodingstatus(self):
-        (estatus, eresponse) = self.getprogress()
+        (estatus, eresponse) = self.server.getProgress()
         encodingstatus = '<div id="EncodingStatus">'
         encodingstatus += 'Encoding Status :<ul>'
 
@@ -345,45 +339,18 @@ class CDBurn_WebResource(FreevoResource):
         encodingstatus += '</ul></div>'
         return encodingstatus
 
-    def getprogress(self):
-        _debug_('getprogress(self)', 2)
-        """Get the progress & pass information of the job currently encoding.
-
-        This call returns False if no job is currently encoding (fx the queue is not active).
-        When the queue is active, this call returns a tuple of 4 values:
-            (friendlyname, status, perc, timerem)
-
-        friendlyname is the friendlyname you assigned to the encoding job
-        status is the current status of the encoding job, represented by an integer
-            0 - Not set (this job hasn't started encoding). Never used in this context
-            1 - Audio pass in progress
-            2 - First (analyzing) video pass (only used in multipass encoding)
-            3 - Final video pass
-            4 - Postmerge (not used atm). Final merging or similar processing in progress
-        perc is the percentage completed of the current pass
-        timerem is the estimated time remaining of the current pass, formatted as a
-            human-readable string.
-        """
-
-        try:
-            (status, response) = self.server.getProgress()
-        except:
-            return (False, 'EncodingClient: connection error')
-
-        return returnFromJelly(status, response)
-
 
     def _render(self, request):
-        '''
-        '''
+        """
+        """
         _debug_('_render(request)', 2)
         fv = HTMLResource()
         form = request.args
 
         cmd = fv.formValue(form, 'cmd')
-        self.browsedir = fv.formValue(form,'browsedir')
+        self.browsedir = fv.formValue(form, 'browsedir')
 
-        browsefolder = fv.formValue(form,'browsefolder')
+        browsefolder = fv.formValue(form, 'browsefolder')
         if browsefolder:
             return GetFileList(browsefolder)
 
@@ -392,52 +359,52 @@ class CDBurn_WebResource(FreevoResource):
         fv.res += '<br><br><br>'
 
         self.profile = {}
-        self.profile['container'] = fv.formValue(form,'container')
+        self.profile['container'] = fv.formValue(form, 'container')
         if not self.profile['container']:
             self.profile['container'] = config.REENCODE_CONTAINER
 
-        self.profile['resolution'] = fv.formValue(form,'resolution')
+        self.profile['resolution'] = fv.formValue(form, 'resolution')
         if not self.profile:
             self.profile['resolution'] = config.REENCODE_RESOLUTION
 
-        self.profile['videocodec'] = fv.formValue(form,'videocodec')
+        self.profile['videocodec'] = fv.formValue(form, 'videocodec')
         if not self.profile['videocodec']:
             self.profile['videocodec'] = config.REENCODE_VIDEOCODEC
 
-        self.profile['audiocodec'] = fv.formValue(form,'audiocodec')
+        self.profile['audiocodec'] = fv.formValue(form, 'audiocodec')
         if not self.profile['audiocodec']:
             self.profile['audiocodec'] = config.REENCODE_AUDIOCODEC
 
-        self.profile['numpasses'] = fv.formValue(form,'numpasses')
+        self.profile['numpasses'] = fv.formValue(form, 'numpasses')
         if not self.profile['numpasses']:
             self.profile['numpasses'] = config.REENCODE_NUMPASSES
 
-        self.profile['videobitrate'] = fv.formValue(form,'videobitrate')
+        self.profile['videobitrate'] = fv.formValue(form, 'videobitrate')
         if not self.profile['videobitrate']:
             self.profile['videobitrate'] = config.REENCODE_VIDEOBITRATE
 
-        self.profile['audiobitrate'] = fv.formValue(form,'audiobitrate')
+        self.profile['audiobitrate'] = fv.formValue(form, 'audiobitrate')
         if not self.profile['audiobitrate']:
             self.profile['audiobitrate'] = config.REENCODE_AUDIOBITRATE
 
-        self.profile['videofilter'] = fv.formValue(form,'videofilter')
+        self.profile['videofilter'] = fv.formValue(form, 'videofilter')
         if not self.profile['videofilter']:
             self.profile['videofilter'] = config.REENCODE_VIDEOFILTER
 
-        self.profile['numthreads'] = fv.formValue(form,'numthreads')
+        self.profile['numthreads'] = fv.formValue(form, 'numthreads')
         if not self.profile['numthreads']:
             self.profile['numthreads'] = config.REENCODE_NUMTHREADS
 
         self.select_encoding_profile('Nokia770')
-        preset = fv.formValue(form,"preset")
+        preset = fv.formValue(form, "preset")
         if preset:
             self.select_encoding_profile(preset)
 
-        cmd = fv.formValue(form,'cmd')
+        cmd = fv.formValue(form, 'cmd')
         if cmd == 'encodingstatus':
             return str( self.encodingstatus() )
 
-        encodefile = fv.formValue(form,  'encodefile')
+        encodefile = fv.formValue(form, 'encodefile')
         if encodefile:
             fv.res = 'Starting Encode Job for %s' % encodefile
             self.source = encodefile

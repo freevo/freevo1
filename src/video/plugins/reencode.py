@@ -35,7 +35,7 @@ import config
 import plugin
 import menu
 import util
-from video.encodingclient import *
+from video.encodingclient import EncodingClientActions
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
@@ -54,6 +54,7 @@ class PluginInterface(plugin.ItemPlugin):
     def __init__(self):
         _debug_('reencode.PluginInterface.__init__(self)')
         plugin.ItemPlugin.__init__(self)
+        self.server = EncodingClientActions()
         self.title = ''
         self.source = ''
         self.output = ''
@@ -418,7 +419,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         box = PopupBox(text=_('Please wait, analyzing video...'))
         box.show()
-        (status, resp) = initEncodeJob(self.source, self.output, self.title)
+        (status, resp) = self.server.initEncodeJob(self.source, self.output, self.title)
         _debug_('initEncodeJob:status:%s resp:%s' % (status, resp))
         box.destroy()
         if not status:
@@ -427,49 +428,49 @@ class PluginInterface(plugin.ItemPlugin):
 
         idnr = resp
 
-        (status, resp) = setTimeslice(idnr, self.timeslice)
+        (status, resp) = self.server.setTimeslice(idnr, self.timeslice)
         _debug_('setTimeslice:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
-        (status, resp) = setContainer(idnr, profile['container'])
+        (status, resp) = self.server.setContainer(idnr, profile['container'])
         _debug_('setContainer:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
         multipass = profile['numpasses'] > 1
-        (status, resp) = setVideoCodec(idnr, profile['videocodec'], 0, multipass,
+        (status, resp) = self.server.setVideoCodec(idnr, profile['videocodec'], 0, multipass,
             profile['videobitrate'], profile['altprofile'])
         _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
-        (status, resp) = setAudioCodec(idnr, profile['audiocodec'], profile['audiobitrate'])
+        (status, resp) = self.server.setAudioCodec(idnr, profile['audiocodec'], profile['audiobitrate'])
         _debug_('setAudioCodec:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
-        (status, resp) = setNumThreads(idnr, profile['numthreads'])
+        (status, resp) = self.server.setNumThreads(idnr, profile['numthreads'])
         _debug_('setNumThreads:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
-        (status, resp) = setVideoRes(idnr, profile['resolution'])
+        (status, resp) = self.server.setVideoRes(idnr, profile['resolution'])
         _debug_('setVideoRes:status:%s resp:%s' % (status, resp))
         if not status:
             self.error(resp)
             return
 
-        #(status, resp) = setVideoFilters(idnr, vfilters)
+        #(status, resp) = self.server.setVideoFilters(idnr, vfilters)
         #_debug_('setVideoFilters:status:%s resp:%s' % (status, resp))
 
         #And finally, qeue and start the job
-        (status, resp) = queueIt(idnr, True)
+        (status, resp) = self.server.queueIt(idnr, True)
         _debug_('queueIt:status:%s resp:%s' % (status, resp))
 
         if not status:

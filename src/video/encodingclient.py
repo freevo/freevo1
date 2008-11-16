@@ -5,7 +5,7 @@
 # $Id$
 #
 # Author: den_RDC
-# Notes: parts taken from recordclient
+# Notes: parts taken from encodingclient
 # Todo:
 #
 # -----------------------------------------------------------------------
@@ -29,19 +29,12 @@
 A client interface to the Freevo encoding server.
 """
 
-import xmlrpclib, sys
-from util.marmalade import jellyToXML, unjellyFromXML
+import sys
+
+import kaa
+import kaa.rpc
+
 import config
-
-
-server_string = 'http://%s:%s/' % \
-                (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
-
-server = xmlrpclib.Server(server_string, allow_none=1)
-#server = object() - uncomment this and comment the previous line to enable pychecker testing
-
-jam = jellyToXML
-unjam = unjellyFromXML
 
 #some data
 __author__ = "den_RDC (rdc@kokosnoot.com)"
@@ -84,302 +77,273 @@ __doc__="""EncodingClient, an interface to EncodingServer
 
 """
 
-def returnFromJelly(status, response):
-    """Un-serialize EncodingServer responses"""
-    if status:
-        return (status, unjam(response))
-    else:
+class EncodingClientActions:
+    """
+    encodingserver access class using kaa.rpc
+    """
+    encodingserverdown = _('Encoding server is not available')
+
+    def __init__(self):
+        """ """
+        _debug_('%s.__init__()' % (self.__class__,), 2)
+        self.socket = (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
+        self.secret = config.ENCODINGSERVER_SECRET
+        self.server = None
+
+    #--------------------------------------------------------------------------------
+    # encoding server calls using a coroutine and the wait method
+    #--------------------------------------------------------------------------------
+
+    def _encodingserver_rpc(self, cmd, *args, **kwargs):
+        """ call the encoding server command using kaa rpc """
+        def closed_handler():
+            _debug_('%r has closed' % (self.socket,), DINFO)
+            self.server = None
+
+        _debug_('_encodingserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 2)
+        try:
+            if self.server is None:
+                try:
+                    self.server = kaa.rpc.Client(self.socket, self.secret)
+                    self.server.signals['closed'].connect(closed_handler)
+                    _debug_('%r is up' % (self.socket,), DINFO)
+                except kaa.rpc.ConnectError:
+                    _debug_('%r is down' % (self.socket,), DINFO)
+                    self.server = None
+                    return None
+            return self.server.rpc(cmd, *args, **kwargs)
+        except kaa.rpc.ConnectError, e:
+            _debug_('%r is down' % (self.socket,), DINFO)
+            self.server = None
+            return None
+        except IOError, e:
+            _debug_('%r is down' % (self.socket,), DINFO)
+            self.server = None
+            return None
+
+
+    def _encodingserver_call(self, cmd, *args, **kwargs):
+        _debug_('_encodingserver_call(cmd=%s)' % (cmd,), 1)
+        inprogress = self._encodingserver_rpc(cmd, *args, **kwargs)
+        if inprogress is None:
+            return (None, EncodingClientActions.encodingserverdown)
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('%s.result=%r' % (cmd, result), 1)
+        return result
+
+
+    def ping(self):
+        """ Ping the recordserver to see if it is running """
+        _debug_('ping', 2)
+        inprogress = self._encodingserver_rpc('ping')
+        if inprogress is None:
+            return False
+        inprogress.wait()
+        result = inprogress.get_result()
+        _debug_('ping.result=%r' % (result,), 1)
+        return result
+
+
+    def getContainerCAP(self):
+        """
+        Get the container capabilities
+        """
+        return self._encodingserver_call('getContainerCAP')
+
+
+    def getVideoCodecCAP(self):
+        """
+        Get a list of possible video codecs (depending on the input and container format)
+
+        This returns a list with plain strings, each identifiyng a video codec, like
+        MPEG4(divx), Xvid etc. Currently only MPEG4 is available. The strings are user-readable.
+        """
+        return self._encodingserver_call('getVideoCodecCAP')
+
+
+    def getAudioCodecCAP(self):
+        """
+        Get a list of possible audio codecs (depending on the input and container format)
+
+        This returns a list with plain strings, each identifiyng a audio codec, like
+        MP3, Ogg, etc. Currently only MP3 is available. The strings are user-readable.
+        """
+        return self._encodingserver_call('getAudioCodecCAP')
+
+
+    def getVideoFiltersCAP(self):
+        """
+        Get a dict of possible video filters & processing operations
+
+        This returns a dictionary, with the filter (human-readable string) as
+        keyword, and a list of options (also human-readable strings) as
+        possible settings for each filter.  The first option in the list is the
+        default.
+        """
+        return self._encodingserver_call('getVideoFiltersCAP')
+
+
+    def initEncodingJob(self, source, output, friendlyname="", title=None, rmsource=False):
+        """Initialize the encodingjob.
+
+        This function returns an idnr (integer) if successful
+
+        This call can take some time (10 seconds on average) before returning, because the
+        encodingserver analyzes the video during this call.
+
+        @param source: is the source video you want to have encoded
+        @param output: is the name of the resulting encoded file you want
+        @param friendlyname: is a "friendly name" to assign to this encoding job
+        @param title: is obligatory if you have a dvd/dvd-on-disc, in wich case you need
+            to specify a title (integer)
+        @param rmsource: sets whether to remove the source video on completion (boolean)
+        """
+        return self._encodingserver_call('initEncodingJob', source, output, friendlyname, title, rmsource)
+
+
+    def setContainer(self, idnr, container):
+        """Set a container format
+
+        container is one of the possible container formats. It should be one of the strings
+        returned by getContainerCAP.
+        """
+        if not (idnr or container):
+            return (False, "EncodingClient: no idnr or container")
+        return self._encodingserver_call('setContainer', idnr, container)
+
+
+    def setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
+        """Set a video codec
+
+        @param vcodec: is one of the possible video codecs. It should be one of the strings
+            returned by getVideoCodecCAP.
+        @param tgtsize: is the target size of the encoded file, in megabytes (this includes
+            audio data and container format overhead)
+        @param multipass: is a boolean. Set this to True if you want multipass encoding
+            (1 pass, 2 video passes). The default is no multipass (1 video)
+        @param vbitrate: is the video bitrate, if it is not 0 then this value is used instead
+            of using the tgtsize.
+        """
+        if not (idnr or vcodec or tgtsize or vbitrate):
+            return (False, "EncodingClient: no idnr and/or videocodec and/or targetsize")
+        return self._encodingserver_call('setVideoCodec', idnr, vcodec, tgtsize, multipass, vbitrate, altprofile)
+
+
+    def setAudioCodec(self, idnr, acodec, abrate):
+        """Set a audio codec
+
+        @param acodec: is one of the possible audio codecs. It should be one of the strings
+            returned byt getAudioCodecCAP.
+
+        @param abrate: is the audio bitrate to be set, in kbit/s. Although any integer
+            between 0 and 320 is valid, it is advisable to take standard encoding bitrates
+            like 32, 64, 128, 160, 192, 256 and 320.
+        """
+        if not (idnr or acodec or abrate):
+            return (False, "EncodingClient: no idnr or audiocodec or audiobitrate")
+        return self._encodingserver_call('setAudioCodec', idnr, acodec, abrate)
+
+
+    def setVideoRes(self, idnr, videores):
+        """Set the video resolution
+
+        @param vidoeres: is a string in the form of x:y
+        """
+        if not (idnr or videores):
+            return (False, "EncodingClient: no idnr or videores")
+        return self._encodingserver_call('setVideoRes', idnr, videores)
+
+
+    def setVideoFilters(idnr, filters):
+        """Set a number of possible video filters & processing operations
+
+        filters - a dictionary with filters you want to have enabled and there settings.
+        The structure of this dict is almost identical to the dict getVideoFiltersCAP returns,
+        except you should replace the list of options with the options you need. The value assigned
+        to each keyword is thus a string (wich means you cannot choose more then 1 option/setting) per
+        video filter.
+        """
+        if not (idnr or filters):
+            return (False, "EncodingClient: no idnr or filter dictionary")
+
+        try:
+            (status, response) = server.setVideoFilters(idnr, filters)
+        except:
+            return (False, 'EncodingClient: connection error')
+
         return (status, response)
 
 
-def connectionTest(teststr='testing'):
-    """Test connectivity
-
-    Returns false if the EncodingServer cannot be reached"""
-    try:
-        (status, response) = server.echotest(teststr)
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def initEncodeJob(source, output, friendlyname="", title=None, rmsource=False):
-    """Initialize the encodingjob.
-
-    This function returns an idnr (integer) if successful
-
-    This call can take some time (10 seconds on average) before returning, because the
-    encodingserver analyzes the video during this call.
-
-    @param source: is the source video you want to have encoded
-    @param output: is the name of the resulting encoded file you want
-    @param friendlyname: is a "friendly name" to assign to this encoding job
-    @param title: is obligatory if you have a dvd/dvd-on-disc, in wich case you need
-        to specify a title (integer)
-    @param rmsource: sets whether to remove the source video on completion (boolean)
-    """
-    _debug_('initEncodeJob(%s, %s, %s, %s, %s)' % (source, output, friendlyname, title, rmsource), DINFO)
-    if not (source or output):
-        return (False, "EncodingClient: no source and/or output")
-
-    try:
-        (status, response) = server.initEncodeJob(source, output, friendlyname, title, rmsource)
-    except:
-        print "Unexpected error:", sys.exc_info()[0]
-        raise
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def getContainerCAP():
-    """Get a list of possible container formats
-
-    This returns a list with plain strings, each identifiyng a container format, like
-    Avi, MPEG or OGG. Currently only Avi is available. The strings are user-readable.
-    """
-    try:
-        response = server.getContainerCAP()
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (True, response )
-
-
-def setTimeslice(idnr, timeslice):
-    """Set """
-    try:
-        (status, response) = server.setTimeslice(idnr, timeslice)
-    except:
-        return (False, 'EncodingClient: connection error')
-    return (status, response)
-
-
-def setContainer(idnr, container):
-    """Set a container format
-
-    container is one of the possible container formats. It should be one of the strings
-    returned by getContainerCAP.
-    """
-    if not (idnr or container):
-        return (False, "EncodingClient: no idnr and/or container")
-
-    try:
-        (status, response) = server.setContainer(idnr, container)
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def getVideoCodecCAP():
-    """Get a list of possible video codecs (depending on the input and container format)
-
-    This returns a list with plain strings, each identifiyng a video codec, like
-    MPEG4(divx), Xvid etc. Currently only MPEG4 is available. The strings are user-readable.
-    """
-    try:
-        response = server.getVideoCodecCAP()
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (True, response)
-
-
-def setVideoCodec(idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
-    """Set a video codec
-
-    @param vcodec: is one of the possible video codecs. It should be one of the strings
-        returned by getVideoCodecCAP.
-    @param tgtsize: is the target size of the encoded file, in megabytes (this includes
-        audio data and container format overhead)
-    @param multipass: is a boolean. Set this to True if you want multipass encoding
-        ( 1 pass, 2 video passes). The default is no multipass ( 1 video)
-    @param vbitrate: is the video bitrate, if it is not 0 then this value is used instead
-        of using the tgtsize.
-    """
-    if not (idnr or vcodec or tgtsize or vbitrate):
-        return (False, "EncodingClient: no idnr and/or videocodec and/or targetsize")
-
-    try:
-        (status, response) = server.setVideoCodec(idnr, vcodec, tgtsize, multipass, vbitrate, altprofile)
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def getAudioCodecCAP():
-    """Get a list of possible audio codecs (depending on the input and container format)
-
-    This returns a list with plain strings, each identifiyng a audio codec, like
-    MP3, Ogg, etc. Currently only MP3 is available. The strings are user-readable.
-    """
-    try:
-        response = server.getAudioCodecCAP()
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (True, response )
-
-
-def setAudioCodec(idnr, acodec, abrate):
-    """Set a audio codec
-
-    @param acodec: is one of the possible audio codecs. It should be one of the strings
-        returned byt getAudioCodecCAP.
-
-    @param abrate: is the audio bitrate to be set, in kbit/s. Although any integer
-        between 0 and 320 is valid, it is advisable to take standard encoding bitrates
-        like 32, 64, 128, 160, 192, 256 and 320.
-    """
-    if not (idnr or acodec or abrate):
-        return (False, "EncodingClient: no idnr and/or audiocodec and/or audiobitrate")
-
-    try:
-        (status, response) = server.setAudioCodec(idnr, acodec, abrate)
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def setVideoRes(idnr, videores):
-    """Set the video resolution
-
-    @param vidoeres: is a string in the form of x:y
-
-    """
-    if not (idnr or videores):
-        return (False, "EncodingClient: no idnr or no videores")
-
-    try:
-        (status, response) = server.setVideoRes(idnr, videores)
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def setNumThreads(idnr, numthreads):
-    """Set the number of encoder threads
-
-    @param numthreads: is a string value from 1-8
-
-    """
-    if not (idnr or numthreads):
-        return (False, "EncodingClient: no idnr or no numthreads")
-
-    try:
-        (status, response) = server.setNumThreads(idnr, numthreads)
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def getVideoFiltersCAP():
-    """Get a dict of possible video filters & processing operations
-
-    This returns a dictionary, with the filter (human-readable string) as keyword, and
-    a list of options (also human-readable strings) as possible settings for each filter.
-    The first option in the list is the default.
-    """
-    try:
-        response = server.getVideoFiltersCAP()
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (True, response)
-
-
-def setVideoFilters(idnr, filters):
-    """Set a number of possible video filters & processing operations
-
-    filters - a dictionary with filters you want to have enabled and there settings.
-    The structure of this dict is almost identical to the dict getVideoFiltersCAP returns,
-    except you should replace the list of options with the options you need. The value assigned
-    to each keyword is thus a string (wich means you cannot choose more then 1 option/setting) per
-    video filter.
-    """
-    if not (idnr or filters):
-        return (False, "EncodingClient: no idnr or filter dictionary")
-
-    try:
-        (status, response) = server.setVideoFilters(idnr, jam(filters))
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def queueIt(idnr, now=False):
-    """Insert the current job in the encodingqueue
-        If now is true, the encoding queue is automatically started
-    """
-    if not idnr:
-        return (False, "EncodingClient: no idnr")
-
-    try:
-        (status, response) = server.queueIt(idnr, now)
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def getProgress():
-    """Get the progress & pass information of the job currently encoding.
-
-    This call returns False if no job is currently encoding (fx the queue is not active).
-
-    friendlyname is the friendlyname you assigned to the encoding job
-    status is the current status of the encoding job, represented by an integer
-        - 0 Not set (this job hasn't started encoding). Never used in this context
-        - 1 Audio pass in progress
-        - 2 First (analyzing) video pass (only used in multipass encoding)
-        - 3 Final video pass
-        - 4 Postmerge (not used atm). Final merging or similar processing in progress
-
-    perc is the percentage completed of the current pass, timerem is the estimated
-    time remaining of the current pass, formatted as a human-readable string.
-
-    @returns: When the queue is active, this call returns a tuple of 4 values:
-        (friendlyname, status, perc, timerem)
-    """
-    try:
-        (status, response) = server.getProgress()
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return returnFromJelly(status, response)
-
-
-def startQueue():
-    """Start the encoding queue"""
-    try:
-        (status, response) = server.startQueue()
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return (status, response)
-
-
-def listJobs():
-    """Get a list with all jobs in the encoding queue and their current state
-
-    @returns: a list of tuples containing all the current queued jobs. When the
-        queue is empty, an empty list is returned.  Each job in the list is a tuple
-        containing 3 values (idnr, friendlyname, status) These values have the same
-        meaning as the corresponding values returned by the getProgress call
-    """
-    try:
-        (status, response) = server.listJobs()
-    except:
-        return (False, 'EncodingClient: connection error')
-
-    return returnFromJelly(status, response)
+    def setNumThreads(self, idnr, numthreads):
+        """Set the number of encoder threads
+
+        @param idnr: job number
+        @param numthreads: is a string value from 1-8
+        """
+        if not (idnr or numthreads):
+            return (False, "EncodingClient: no idnr or no numthreads")
+        return self._encodingserver_call('setNumThreads', idnr, numthreads)
+
+
+    def setTimeslice(self, idnr, timeslice):
+        """
+        Set the start and end position of the encoding
+
+        @param idnr: job number
+        @param timeslice: tuple of the start and the end position
+        """
+        return self._encodingserver_call('setTimeslice', idnr, timeslice)
+
+
+    def queueIt(self, idnr, now=False):
+        """Insert the current job in the encodingqueue
+            If now is true, the encoding queue is automatically started
+        """
+        if not idnr:
+            return (False, "EncodingClient: no idnr")
+        return self._encodingserver_call('queueIt', idnr, now)
+
+
+    def getProgress(self):
+        """Get the progress & pass information of the job currently encoding.
+
+        This call returns False if no job is currently encoding (fx the queue is not active).
+
+        friendlyname is the friendlyname you assigned to the encoding job
+        status is the current status of the encoding job, represented by an integer
+            - 0 Not set (this job hasn't started encoding). Never used in this context
+            - 1 Audio pass in progress
+            - 2 First (analyzing) video pass (only used in multipass encoding)
+            - 3 Final video pass
+            - 4 Postmerge (not used atm). Final merging or similar processing in progress
+
+        perc is the percentage completed of the current pass, timerem is the estimated
+        time remaining of the current pass, formatted as a human-readable string.
+
+        @returns: When the queue is active, this call returns a tuple of 4 values:
+            (friendlyname, status, perc, timerem)
+        """
+        return self._encodingserver_call('getProgress')
+
+
+    def startQueue(self):
+        """
+        Start the encoding queue
+        """
+        return self._encodingserver_call('startQueue')
+
+
+    def listJobs(self):
+        """
+        Get a list with all jobs in the encoding queue and their current state
+
+        @returns: a list of tuples containing all the current queued jobs. When the
+            queue is empty, an empty list is returned.  Each job in the list is a tuple
+            containing 3 values (idnr, friendlyname, status) These values have the same
+            meaning as the corresponding values returned by the getProgress call
+        """
+        return self._encodingserver_call('listJobs')
 
 
 
@@ -391,13 +355,53 @@ if __name__ == '__main__':
 
     from time import sleep
 
-    if function == "test":
+    idnr = None
+    es = EncodingClientActions()
+    if function == 'test2':
+        result = es.ping()
+        print 'ping:', result
+        if not result:
+            raise EncodingClientActions.encodingserverdown
+        result = es.getContainerCAP()
+        print 'getContainerCAP:', result
+        container = result[1][1]
+        result = es.getVideoCodecCAP()
+        print 'getVideoCodecCAP:', result
+        video_codec = result[1][3]
+        result = es.getAudioCodecCAP()
+        print 'getAudioCodecCAP:', result
+        audio_codec = result[1][3]
+        result = es.getVideoFiltersCAP()
+        print 'getVideoFiltersCAP:', result
+        source = '/freevo/video/movies/04_S\'_Häsli_goht_velore.mpg'
+        result = es.initEncodingJob(source, 'movie.avi', 'MyMovie')
+        print 'initEncodingJob:', result
+        if not result[0]:
+            raise result[1]
+        idnr = result[1]
+        print 'video_codec:', video_codec, 'audio_codec:', audio_codec
+        result = es.setVideoCodec(idnr, video_codec, 1400, True, 0)
+        print 'setVideoCodec:', result
+        result = es.queueIt(idnr, True)
+        print 'queueIt:', result
+        sleep(5)
+        print es.getProgress()
+
+    elif function == "jobs":
+        print es.listJobs()
+
+    elif function == "progress":
+        print es.getProgress()
+
+    elif function == "start":
+        print es.startQueue()
+
+    elif function == "test":
         (result, response) = connectionTest('connection test')
         print 'result: %s, response: %s ' % (result, response)
-        print listJobs()
         print getProgress()
 
-    if function == "runtest":
+    elif function == "runtest":
         #(status, idnr) = initEncodeJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'bam.avi', 'lala', 17)
         (status, idnr) = initEncodeJob('/dev/cdrom', '/home/rdc/fogu.avi', 'lala', 1)
         print "Job has idnr num: %s" % idnr
@@ -417,7 +421,10 @@ if __name__ == '__main__':
         sleep(5)
         print getProgress()
 
-'''
+    else:
+        print 'function %s not defined' % (function,)
+
+"""
 To run this as standalone use the following before running python v4l2.py
 pythonversion=$(python -V 2>&1 | cut -d" " -f2 | cut -d"." -f1-2)
 export PYTHONPATH=/usr/lib/python${pythonversion}/site-packages/freevo
@@ -427,4 +434,4 @@ export FREEVO_CONTRIB=/usr/share/freevo/contrib
 export RUNAPP=""
 
 python encodingclient.py test
-'''
+"""

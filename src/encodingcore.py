@@ -278,7 +278,7 @@ class EncodingJob:
         self.timeslice_mencoder = []
         start=0
         if timeslice[0]:
-            self.timeslice_mencoder += [ '-ss', str(timeslice[0])]
+            self.timeslice_mencoder += ['-ss', str(timeslice[0])]
             start = timeslice[0]
         if timeslice[1]:
             self.timeslice_mencoder += ['-endpos', str(timeslice[1]-start)]
@@ -308,9 +308,8 @@ class EncodingJob:
         """Set video codec and target filesize (in MB) or bit rate (in kbits/sec)"""
         _debug_('setVideoCodec(self, vcodec=%s, tgtsize=%s, multipass=%s, vbitrate=%s)' % \
             (vcodec, tgtsize, multipass, vbitrate))
-        #safety checks first
         if vcodec not in self.encodingopts.getVideoCodecList():
-            return 'Unknown video codec'
+            return 'Unknown video codec %r' % vcodec
 
         self.vcodec = vcodec
         if vbitrate:
@@ -324,9 +323,8 @@ class EncodingJob:
 
     def setAudioCodec(self, acodec, abrate=128):
         """Set audio codec & bitrate"""
-        #safety first
         if acodec not in self.encodingopts.getAudioCodecList():
-            return 'Unknown audio codec'
+            return 'Unknown audio codec %r' % acodec
 
         self.acodec = acodec
         self.abrate = abrate

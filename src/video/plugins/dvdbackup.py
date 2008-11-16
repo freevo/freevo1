@@ -28,7 +28,7 @@
 #Import statements
 from os.path import join, split
 import plugin, config, menu
-from video.encodingclient import *
+from video.encodingclient import EncodingClientActions
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 import config
@@ -43,6 +43,10 @@ class PluginInterface(plugin.ItemPlugin):
     Don't forget that you need some free diskspace in order to use this plugin,
     and don't forget a dvdrip eats quite a bit of space :)
     """
+    def __init__(self):
+        plugin.ItemPlugin.__init__(self)
+        self.server = EncodingClientActions()
+
 
     def config(self):
         return [
@@ -92,31 +96,31 @@ class PluginInterface(plugin.ItemPlugin):
         else:
             #create a menu with a few encoding options (1cd, 2cd, xvid, mpeg4)
             #args : tuple, (videocodec, size, multipass
-            menu_items = [ menu.MenuItem("XviD, 700mb", self.create_job, (2,700,False,0)) ]
-            menu_items.append( menu.MenuItem("XviD, 700mb, High Quality", self.create_job, (2,700,True,0)) )
-            menu_items.append( menu.MenuItem("XviD, 1400mb", self.create_job, (2,1400,False,0)) )
-            menu_items.append( menu.MenuItem("XviD, 1400mb, High Quality", self.create_job, (2,1400,True,0)) )
-            menu_items.append( menu.MenuItem("MPEG4, 700mb", self.create_job, (0,700,False,0)) )
-            menu_items.append( menu.MenuItem("MPEG4, 700mb, High Quality", self.create_job, (0,700,True,0)) )
-            menu_items.append( menu.MenuItem("MPEG4, 1400mb", self.create_job, (0,1400,False,0)) )
-            menu_items.append( menu.MenuItem("MPEG4, 1400mb, High Quality", self.create_job, (0,1400,True,0)) )
-            menu_items.append( menu.MenuItem("h.264, 700mb", self.create_job, (3,700,False,0)) )
-            menu_items.append( menu.MenuItem("h.264, 700mb, High Quality", self.create_job, (3,700,True,0)) )
-            menu_items.append( menu.MenuItem("h.264, 1400mb", self.create_job, (3,1400,False,0)) )
-            menu_items.append( menu.MenuItem("h.264, 1400mb, High Quality", self.create_job, (3,1400,True,0)) )
+            menu_items = [ menu.MenuItem("XviD, 700mb", self.create_job, (2, 700, False, 0)) ]
+            menu_items.append( menu.MenuItem("XviD, 700mb, High Quality", self.create_job, (2, 700, True, 0)) )
+            menu_items.append( menu.MenuItem("XviD, 1400mb", self.create_job, (2, 1400, False, 0)) )
+            menu_items.append( menu.MenuItem("XviD, 1400mb, High Quality", self.create_job, (2, 1400, True, 0)) )
+            menu_items.append( menu.MenuItem("MPEG4, 700mb", self.create_job, (0, 700, False, 0)) )
+            menu_items.append( menu.MenuItem("MPEG4, 700mb, High Quality", self.create_job, (0, 700, True, 0)) )
+            menu_items.append( menu.MenuItem("MPEG4, 1400mb", self.create_job, (0, 1400, False, 0)) )
+            menu_items.append( menu.MenuItem("MPEG4, 1400mb, High Quality", self.create_job, (0, 1400, True, 0)) )
+            menu_items.append( menu.MenuItem("h.264, 700mb", self.create_job, (3, 700, False, 0)) )
+            menu_items.append( menu.MenuItem("h.264, 700mb, High Quality", self.create_job, (3, 700, True, 0)) )
+            menu_items.append( menu.MenuItem("h.264, 1400mb", self.create_job, (3, 1400, False, 0)) )
+            menu_items.append( menu.MenuItem("h.264, 1400mb, High Quality", self.create_job, (3, 1400, True, 0)) )
 
         encoding_menu = menu.Menu(_('Choose your encoding profile'), menu_items)
         menuw.pushmenu(encoding_menu)
 
 
     def create_job(self, menuw=None, arg=None):
-        '''
-        '''
+        """
+        """
         #create a filename for the to-be-encoded dvd title
         #title = int(self.item.url[6:])
         fname = join(config.VIDEO_ITEMS[0][1], "%s_%s.avi" % (self.item.parent.name, self.title))
         #_debug_('title=%s, fname=%s' % (title, fname))
-        _debug_('arg=%r' % (arg,))
+        _debug_('arg=%r' % (arg, ))
         #unwrap settings tupple
         vcodecnr, tgtsize, mpass, vbitrate = arg
 
@@ -124,44 +128,38 @@ class PluginInterface(plugin.ItemPlugin):
 
         box = PopupBox(text=_('Please wait, analyzing video...'))
         box.show()
-
-        (status, resp) = initEncodeJob(self.dvdsource, fname,
-                self.item.parent.name, self.title)
-
-        box.destroy()
-
-        if not status:
-            self.error(resp)
-            return
+        try:
+            (status, resp) = self.server.initEncodeJob(self.dvdsource, fname, self.item.parent.name, self.title)
+            if not status:
+                self.error(resp)
+                return
+        finally:
+            box.destroy()
 
         idnr = resp
 
         #ask for possible containers and set the first one (should be avi), we will get a list
-        (status, resp) = getContainerCAP()
-
+        (status, resp) = self.server.getContainerCAP()
         if not status:
             self.error(resp)
             return
 
         container = resp[0]
 
-        (status, resp) = setContainer(idnr, container)
-
+        (status, resp) = self.server.setContainer(idnr, container)
         if not status:
             self.error(resp)
             return
 
         #ask for possible videocodec and set the first one (should be mpeg4), we will get a list
-        (status, resp) = getVideoCodecCAP()
-
+        (status, resp) = self.server.getVideoCodecCAP()
         if not status:
             self.error(resp)
             return
 
         vcodec = resp[vcodecnr]
 
-        (status, resp) = setVideoCodec(idnr, vcodec, tgtsize, mpass, vbitrate)
-
+        (status, resp) = self.server.setVideoCodec(idnr, vcodec, tgtsize, mpass, vbitrate)
         if not status:
             self.error(resp)
             return
@@ -169,7 +167,7 @@ class PluginInterface(plugin.ItemPlugin):
         #ask for possible audiocodec and set the first one (should be mp3), we will get a list
         #Audiocodec call isn't necessary atm, it defaults to 128 kbit mp3, but this might change in the future
         #so we play safe
-        (status, resp) = getAudioCodecCAP()
+        (status, resp) = self.server.getAudioCodecCAP()
 
         if not status:
             self.error(resp)
@@ -177,15 +175,14 @@ class PluginInterface(plugin.ItemPlugin):
 
         acodec = resp[0]
 
-        (status, resp) = setAudioCodec(idnr, acodec, 128)
+        (status, resp) = self.server.setAudioCodec(idnr, acodec, 128)
 
         if not status:
             self.error(resp)
             return
 
         #And finally, qeue and start the job
-        (status, resp) = queueIt(idnr, True)
-
+        (status, resp) = self.server.queueIt(idnr, True)
         if not status:
             self.error(resp)
             return

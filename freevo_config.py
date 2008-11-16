@@ -380,12 +380,12 @@ LOCAL_CONF_CHANGES = [
      """),
     (5.26,
      """ Added VIDEO_AUTOJOIN_REGEX to allow joining video files based on a regular expression
-     Renamed USE_NETWORK to SYS_USE_NETWORK 
+     Renamed USE_NETWORK to SYS_USE_NETWORK
      Renamed USE_SDL_KEYBOARD to SYS_USE_KEYBOARD
      Added SYS_USE_JOYSTICK to allow a joystick device to be used
      Added DEBUG_BENCHMARKING can be used to time and trace function calls
      Added DEBUG_BENCHMARKCALL can be used to print the arguments and results of function calls
-     Removed MPLAYER_AUDIO_CACHE_KB, MPLAYER_AUDIO_CACHE_MIN_PERCENT and MPLAYER_AUDIO_NETWORK_OPTS, it broke detach 
+     Removed MPLAYER_AUDIO_CACHE_KB, MPLAYER_AUDIO_CACHE_MIN_PERCENT and MPLAYER_AUDIO_NETWORK_OPTS, it broke detach
      """),
 ]
 
@@ -2093,13 +2093,13 @@ WEBSERVER_CACHEDIR = FREEVO_CACHEDIR
 # items to include on the web pages
 WWW_PAGES = [
     #   Label                      Title                                  Page
-    (_('Home'),                 _('Home'),                               'index.rpy'), 
-    (_('TV Guide'),             _('View TV Listings'),                   'guide.rpy'), 
-    (_('Scheduled Recordings'), _('View Scheduled Recordings'),          'record.rpy'), 
-    (_('Favorites'),            _('View Favorites'),                     'favorites.rpy'), 
-    (_('Media Library'),        _('View Media Library'),                 'library.rpy'), 
-    (_('Manual Recording'),     _('Schedule a Manual Recording'),        'manualrecord.rpy'), 
-    (_('Search'),               _('Advanced Search Page'),               'search.rpy'), 
+    (_('Home'),                 _('Home'),                               'index.rpy'),
+    (_('TV Guide'),             _('View TV Listings'),                   'guide.rpy'),
+    (_('Scheduled Recordings'), _('View Scheduled Recordings'),          'record.rpy'),
+    (_('Favorites'),            _('View Favorites'),                     'favorites.rpy'),
+    (_('Media Library'),        _('View Media Library'),                 'library.rpy'),
+    (_('Manual Recording'),     _('Schedule a Manual Recording'),        'manualrecord.rpy'),
+    (_('Search'),               _('Advanced Search Page'),               'search.rpy'),
     (_('Help'),                 _('View Online Help and Documentation'), 'help/')
 ]
 
@@ -2147,8 +2147,10 @@ WWW_JAVASCRIPT = 'scripts/display_prog-head.js'
 ENCODINGSERVER_UID = 0
 ENCODINGSERVER_GID = 0
 
+
 ENCODINGSERVER_IP   = 'localhost'
-ENCODINGSERVER_PORT = 6666
+ENCODINGSERVER_PORT = 18002
+ENCODINGSERVER_SECRET = 'secret2'
 
 # ======================================================================
 # Freevo builtin commdetect server settings:
