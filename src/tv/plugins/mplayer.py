@@ -411,4 +411,8 @@ class MPlayer:
             self.app.write('osd_show_text "%s"\n' % event.arg);
             return True
 
+        elif event == em.TV_SEND_MPLAYER_CMD:
+            self.app.write('%s\n' % event.arg);
+            return True
+
         return False
