@@ -82,18 +82,18 @@ class PluginInterface(plugin.DaemonPlugin):
     dot -Tpng -odetach.png detach.dot
 
     | digraph finite_state_machine {
-    | 	rankdir=TB;
-    | 	size="8,5"
-    | 	node [shape = doublecircle]; Hide;
-    | 	node [shape = circle];
-    | 	{ rank = same; "Wait"; "Show"; }
-    | 	Hide -> Show [ label = "detach(start timer)" ];
-    | 	Show -> Wait [ label = "play_end" ];
-    | 	Show -> Hide [ label = "stop(stop timer)" ];
-    | 	Wait -> Hide [ label = "stop(stop timer)" ];
-    | 	Show -> Show [ label = "play_start" ];
-    | 	Wait -> Show [ label = "play_start" ];
-    | 	Wait -> Hide [ label = "timeout(stop timer)" ];
+    |   rankdir=TB;
+    |   size="8,5"
+    |   node [shape = doublecircle]; Hide;
+    |   node [shape = circle];
+    |   { rank = same; "Wait"; "Show"; }
+    |   Hide -> Show [ label = "detach(start timer)" ];
+    |   Show -> Wait [ label = "play_end" ];
+    |   Show -> Hide [ label = "stop(stop timer)" ];
+    |   Wait -> Hide [ label = "stop(stop timer)" ];
+    |   Show -> Show [ label = "play_start" ];
+    |   Wait -> Show [ label = "play_start" ];
+    |   Wait -> Hide [ label = "timeout(stop timer)" ];
     | }
     """
     detached = False

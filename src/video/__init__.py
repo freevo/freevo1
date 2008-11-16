@@ -127,7 +127,7 @@ class PluginInterface(plugin.MimetypePlugin):
                             x.files.append(filename)
                             x.subitems.append(VideoItem(filename, x))
                             hidden_files.append(filename)
-                        
+
             if parent.media:
                 file_id = String(parent.media.id) + file[len(os.path.join(parent.media.mountdir, "")):]
                 try:

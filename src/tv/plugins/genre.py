@@ -105,10 +105,10 @@ class CategoryListItem(Item):
 
     def actions(self):
         return [ (self.browse, _('Browse list'))]
-        
-   
+
+
     def browse(self, arg=None, menuw=None):
-        """ 
+        """
         Find all genres/categories
         """
         guide = tv.epg_xmltv.get_guide()
@@ -131,12 +131,12 @@ class CategoryListItem(Item):
                         if genre not in categories:
                             categories.append(genre)
                             items.append(GenreItem(self.parent, genre))
-         
+
         # create menu
         menu = Menu(self.name, items, item_types='tv listing')
         menuw.pushmenu(menu)
         menuw.refresh()
-    
+
 
 
 #

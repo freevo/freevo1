@@ -642,7 +642,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         # Check if audio is detached
         # When in detached mode, do not draw the player screen
-        if type == 'player': 
+        if type == 'player':
             if plugin.getbyname('audio.detachbar'):
                 if plugin.getbyname('audio.detachbar').state != 1: #BAR_HIDE
                     return

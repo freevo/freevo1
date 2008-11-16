@@ -67,7 +67,7 @@ except:
         CDROM_CLEAR_OPTIONS  = 0x5321  # Clear behavior options
         CDROM_SELECT_SPEED   = 0x5322  # Set the CD-ROM speed
         CDROM_SELECT_DISC    = 0x5323  # Select disc (for juke-boxes)
-        CDROM_MEDIA_CHANGED  = 0x5325  # Check is media changed 
+        CDROM_MEDIA_CHANGED  = 0x5325  # Check is media changed
         CDROM_DRIVE_STATUS   = 0x5326  # Get tray position, etc.
         CDROM_DISC_STATUS    = 0x5327  # Get disc type, etc.
         CDROM_CHANGER_NSLOTS = 0x5328  # Get number of slots
@@ -82,7 +82,7 @@ except:
         CDS_DISC_OK = 4
         # capability flags
         CDC_CLOSE_TRAY       = 0x1     # caddy systems _can't_ close
-        CDC_OPEN_TRAY        = 0x2     # but _can_ eject. 
+        CDC_OPEN_TRAY        = 0x2     # but _can_ eject.
         CDC_LOCK             = 0x4     # disable manual eject
         CDC_SELECT_SPEED     = 0x8     # programmable speed
         CDC_SELECT_DISC      = 0x10    # select disc from juke-box

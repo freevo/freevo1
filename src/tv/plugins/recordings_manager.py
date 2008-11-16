@@ -900,8 +900,8 @@ class DiskManager(plugin.DaemonPlugin):
                     filename == rpitem.files.fxd_file or \
                     filename == rpitem.files.edl_file or \
                     filename == rpitem.files.image:
-                    # just in case only some of the item files have been deleted, add the 
-                    # existing ones back into the added files so a new item is created for 
+                    # just in case only some of the item files have been deleted, add the
+                    # existing ones back into the added files so a new item is created for
                     # those files.
                     for itemfile in rpitem.files.files + [rpitem.files.fxd_file, rpitem.files.edl_file, rpitem.files.image]:
                         if itemfile in files:
@@ -917,7 +917,7 @@ class DiskManager(plugin.DaemonPlugin):
         parse_time = time.time() - parse_time
 
         rpitem_time = time.time()
-        
+
         # Add the new recordings
         for recorded_item in added_recordings:
             rpitem = RecordedProgramItem(recorded_item.name, recorded_item)

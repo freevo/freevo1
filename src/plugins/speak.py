@@ -55,7 +55,7 @@ class PluginInterface(DaemonPlugin):
     To activate this plugin, just put the following line into your local_conf.py:
 
     | plugin.activate('speak')
-    
+
     Additionally you can customize the messages spoken upon startup and shutdown of Freevo by setting
 
     | SPEAK_WELCOME = 'Your welcome message'

@@ -83,7 +83,7 @@ all_variables = [
     ('DIRECTORY_REVERSE_SORT', _('Directory Reverse Sort'),
         _('Show the items in the list in reverse order.'), False),
 
-    ('DIRECTORY_AUDIO_FORMAT_STRING', '', '', False), 
+    ('DIRECTORY_AUDIO_FORMAT_STRING', '', '', False),
 
     ('DIRECTORY_CREATE_PLAYLIST', _('Directory Create Playlist'),
         _('Handle the directory as playlist. After one file is played, the next one will be started.'), True),

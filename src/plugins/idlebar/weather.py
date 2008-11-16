@@ -194,7 +194,7 @@ class PluginInterface(IdleBarPlugin):
             text_x = ((image_w - text_w) / 2)
         else:
             image_x = ((text_w - image_w) / 2)
-            text_x = 0 
+            text_x = 0
         image_y = osd.y + 7
         text_y = osd.y + 55 - text_h
         width = image_w > text_w and image_w or text_w

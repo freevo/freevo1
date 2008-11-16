@@ -62,4 +62,3 @@ class PluginInterface(plugin.DaemonPlugin):
         """ The event handler """
         print '%s event_handler(%s) %s' % (time.strftime('%H:%M:%S'), event, event.__dict__)
         return True
-
