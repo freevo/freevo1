@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# bilingual.py - A plugin to add options to play bilingual recordings.
+# A plugin to add options to play bilingual recordings.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -29,12 +29,12 @@
 # -----------------------------------------------------------------------
 
 
+import os
 from os.path import join, split
+
+import config
 import plugin
 import menu
-import os
-import config
-from video.encodingclient import *
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
 
@@ -54,22 +54,24 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def config(self):
-        '''config is called automatically,
+        """
+        config is called automatically,
         freevo plugins -i video.bilingual returns the info
-        '''
+        """
         _debug_('config(self)', 2)
         return [
         ]
 
 
     def actions(self, item):
-        '''Determines if an action applies to the menu
+        """
+        Determines if an action applies to the menu
 
         Normally, the only way to record bilingual audio is with a recent
         version of the ivtv driver (>=0.8.2) the ideas is that you can select the
         left, right or both channels and this information is passed to the player
         as part of the item, i.e. item.language_selection.
-        '''
+        """
         _debug_('actions(self, item)', 2)
         if item.type == 'video' and item.mode == 'file':
             if hasattr(item, 'audio'):
