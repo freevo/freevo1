@@ -83,7 +83,7 @@ mappings = {
     },
     'acodec' : {
         'MPEG 1 Layer 3 (mp3)' : ['lavc', '-lavcopts', 'acodec=libmp3lame:abitrate=%s:aglobal=1'],
-        'AAC (iPod)'           : ['lavc', '-lavcopts', 'acodec=libfaac:abitrate=%s:aic=2:aglobal=1'],
+        'AAC (iPod)'           : ['lavc', '-lavcopts', 'acodec=libfaac:abitrate=%s:aglobal=1'],
         'AC3'                  : ['lavc', '-lavcopts', 'acodec=ac3:abitrate=%s:aglobal=1'],
         'MPEG 1 Layer 2 (mp2)' : ['lavc', '-lavcopts', 'acodec=mp2:abitrate=%s:aglobal=1'],
         'Vorbis'               : ['lavc', '-lavcopts', 'acodec=vorbis:abitrate=%s:aglobal=1'],
