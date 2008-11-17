@@ -40,6 +40,9 @@ from util.benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
+if config.DEBUG_DEBUGGER:
+    import pdb, pprint, traceback
+
 _player_ = None
 
 def get():
@@ -133,7 +136,6 @@ class PlayerGUI(GUIObject):
     def stop(self, restore_menu=False):
         global _player_
         _player_ = None
-
         self.player.stop()
         self.running = False
         if self.visible:
