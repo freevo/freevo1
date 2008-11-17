@@ -129,7 +129,7 @@ class PluginInterface(plugin.ItemPlugin):
         box = PopupBox(text=_('Please wait, analyzing video...'))
         box.show()
         try:
-            (status, resp) = self.server.initEncodeJob(self.dvdsource, fname, self.item.parent.name, self.title)
+            (status, resp) = self.server.initEncodingJob(self.dvdsource, fname, self.item.parent.name, self.title)
             if not status:
                 self.error(resp)
                 return

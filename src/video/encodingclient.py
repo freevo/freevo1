@@ -402,8 +402,8 @@ if __name__ == '__main__':
         print getProgress()
 
     elif function == "runtest":
-        #(status, idnr) = initEncodeJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'bam.avi', 'lala', 17)
-        (status, idnr) = initEncodeJob('/dev/cdrom', '/home/rdc/fogu.avi', 'lala', 1)
+        #(status, idnr) = initEncodingJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'bam.avi', 'lala', 17)
+        (status, idnr) = initEncodingJob('/dev/cdrom', '/home/rdc/fogu.avi', 'lala', 1)
         print "Job has idnr num: %s" % idnr
         print idnr
         #sleep(5)

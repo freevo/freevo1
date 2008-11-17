@@ -419,8 +419,8 @@ class PluginInterface(plugin.ItemPlugin):
 
         box = PopupBox(text=_('Please wait, analyzing video...'))
         box.show()
-        (status, resp) = self.server.initEncodeJob(self.source, self.output, self.title)
-        _debug_('initEncodeJob:status:%s resp:%s' % (status, resp))
+        (status, resp) = self.server.initEncodingJob(self.source, self.output, self.title)
+        _debug_('initEncodingJob:status:%s resp:%s' % (status, resp))
         box.destroy()
         if not status:
             self.error(resp)

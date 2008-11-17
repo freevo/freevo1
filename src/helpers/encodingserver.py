@@ -116,7 +116,7 @@ class EncodingServer:
         """
         #safety checks
         if not (source or output):
-            return (False, '%s.initEncodeJob: no source or output given' % (self.__class__,))
+            return (False, '%s.initEncodingJob: no source or output given' % (self.__class__,))
 
         # generate a 'random' idnr based on the time in p2.3, int() can return long
         # int's, which is fine, except it makes XMLRPC fail somewhere along the way so we

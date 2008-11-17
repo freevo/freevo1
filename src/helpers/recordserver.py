@@ -1362,9 +1362,9 @@ class RecordServer:
                         output = prog.filename
                         multipass = config.REENCODE_NUMPASSES > 1
 
-                        (status, resp) = self.es.initEncodeJob(source, output, prog.title, None,
+                        (status, resp) = self.es.initEncodingJob(source, output, prog.title, None,
                             config.TV_REENCODE_REMOVE_SOURCE)
-                        _debug_('initEncodeJob:status:%s resp:%s' % (status, resp))
+                        _debug_('initEncodingJob:status:%s resp:%s' % (status, resp))
 
                         idnr = resp
 

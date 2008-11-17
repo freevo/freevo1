@@ -259,11 +259,11 @@ class CDBurn_WebResource(FreevoResource):
         job_status = 'Job Status'
 
         #we are going to create a job and send it to the encoding server, this can take some time while analyzing
-        (status, resp) = self.server.initEncodeJob(self.source, self.output, self.title)
-        _debug_('initEncodeJob:status:%s resp:%s' % (status, resp))
+        (status, resp) = self.server.initEncodingJob(self.source, self.output, self.title)
+        _debug_('initEncodingJob:status:%s resp:%s' % (status, resp))
 
         if not status:
-            return 'initEncodeJob:status:%s resp:%s' % (status, resp)
+            return 'initEncodingJob:status:%s resp:%s' % (status, resp)
 
         idnr = resp
 
