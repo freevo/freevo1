@@ -190,7 +190,10 @@ class PluginInterface(IdleBarPlugin):
                 self.mode = 'Multiplexing'
                 self.state = 'multiplexing'
                 self.draw_interval = 1.0
-            remaining = self.remaining_min.search(progress[3])
+            if isinstance(progress[3], basestring):
+                remaining = self.remaining_min.search(progress[3])
+            else:
+                remaining = 0
             self.remaining = remaining and remaining.group() or ''
             self.progress = progress[2]
             self.percent = progress[2] / 100.0
