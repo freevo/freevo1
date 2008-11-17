@@ -29,7 +29,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, os, time
+import sys, os, time, traceback
 import md5, urllib, urllib2, httplib, re
 from threading import Thread
 
@@ -56,7 +56,8 @@ benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 # Debugging modules
-import pprint, traceback
+if config.DEBUG_DEBUGGER:
+    import pdb, pprint
 
 
 
@@ -180,7 +181,6 @@ class LastFMMainMenuItem(MenuItem):
 
     @benchmark(benchmarking, benchmarkcall)
     def shutdown(self):
-        pprint.pprint(self.__dict__)
         if self.webservices is not None:
             self.webservices.shutdown()
 
@@ -229,13 +229,12 @@ class LastFMItem(AudioItem):
         _debug_('LastFMItem.eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
         if event == 'STOP':
             self.stop(self.arg, self.menuw)
-            return
+            return True
         if event == 'PLAY_START':
             pass
         elif event == 'PLAY_END':
             if self.feed is not None and len(self.feed.entries) > 0:
                 self.feed.entries.pop(0)
-            self.stop()
             self.play()
             return False
         elif event == 'PLAYLIST_NEXT':
@@ -313,7 +312,8 @@ class LastFMItem(AudioItem):
                     if not self.track_downloader.isrunning():
                         raise LastFMError('Failed to download track', entry.location_url)
                     time.sleep(0.1)
-                self.player = PlayerGUI(self, menuw)
+                if not self.player:
+                    self.player = PlayerGUI(self, menuw)
                 error = self.player.play()
                 if error:
                     raise LastFMError('Play error=%r' % (error,))
@@ -321,6 +321,7 @@ class LastFMItem(AudioItem):
                 if pop is not None:
                     pop.destroy()
         except LastFMError, why:
+            traceback.print_exc()
             _debug_('play error: %s' % (why,), DWARNING)
             if menuw:
                 AlertBox(text=str(why)).show()
@@ -479,11 +480,11 @@ class LastFMWebServices:
                 _debug_('len(reply)=%r' % (len(reply),), 1)
             return reply
         except urllib2.HTTPError, why:
-            _debug_('%s: %s' % (url, why))
+            _debug_('%s: %s' % (url, why), DWARNING)
             raise LastFMError(why, url)
         except Exception, why:
-            _debug_('%s: %s' % (url, why))
-            raise LastFMError(why, url)
+            _debug_('%s' % (why,), DWARNING)
+            raise LastFMError(why)
 
 
     @benchmark(benchmarking, benchmarkcall)
