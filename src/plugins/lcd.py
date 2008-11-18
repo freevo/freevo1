@@ -568,8 +568,8 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lcd = pylcd.client()
             cm = self.lcd.connect()
         except:
-            log.error(String(_('LCD plugin will not load! Maybe you don"t have LCDd (lcdproc daemon) running?')))
             self.disable = 1
+            self.reason = 'LCD plugin will not load! Maybe you don"t have LCDd (lcdproc daemon) running?'
             return
 
         if config.DEBUG > 0:
@@ -603,7 +603,8 @@ class PluginInterface(plugin.DaemonPlugin):
             self.animation_audioplayer_chars = ['-', '\\', '|', '/']
         else:
             self.disable = 1
-            log.warning('Unsupported LCDd version: %s' % (self.version,))
+            self.reason = 'Unsupported LCDd version: %s' % (self.version,)
+            return
 
         plugin.register(self, 'lcd')
 
@@ -617,10 +618,8 @@ class PluginInterface(plugin.DaemonPlugin):
             except UnicodeError:
                 self.lcd.widget_set('welcome', w, param)
 
-        self.lcd.screen_set('welcome', '-priority %s -duration 2 -heartbeat off' % \
-                             (self.prio_map['low']))
+        self.lcd.screen_set('welcome', '-priority %s -duration 2 -heartbeat off' % (self.prio_map['low']))
         self.last_screen = 'welcome'
-
         self.lsv = { } # will hold last screen value (lsv)
 
 
