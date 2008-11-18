@@ -444,6 +444,8 @@ class LastFMWebServices:
         """
         Shutdown the lasf.fm webservices
         """
+        # XXX this does not always work if there are multiple instance of the
+        # thread running, need to get the item to shutdown the thread
         if self.downloader is not None:
             self.downloader.stop()
 
@@ -687,7 +689,8 @@ class LastFMDownloader(Thread):
                 fd.write(reply)
                 if len(reply) == 0:
                     self.running = False
-                    print '%s downloaded' % self.filename
+                    if config.DEBUG:
+                        print '%s downloaded' % self.filename
                     # debugs fail during shutdown
                     #_debug_('%s downloaded' % self.filename)
                     # what we could do now is to add tags to track
