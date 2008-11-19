@@ -37,6 +37,8 @@ import skin
 import osd
 import event
 import rc
+import dialog.dialogs as dialogs
+import dialog.widgets as widgets
 
 from tv.tvguide import TVGuide
 from tv.programitem import ProgramItem
@@ -119,6 +121,12 @@ class PluginInterface(plugin.DaemonPlugin):
                         self.tvguide_actions[index] = MenuItem(_('Record'),
                                                       action=self.send_event_to_menu,
                                                       arg= event.TV_START_RECORDING)
+                    elif actionstr == 'enter':
+                        self.tvguide_actions[index] = MenuItem(_('More options'),
+                                                      action=self.show_options,
+                                                      arg=None)
+                                                      #action=self.send_event_to_menu,
+                                                      #arg= event.MENU_SUBMENU)
                     elif actionstr == 'info':
                         self.tvguide_actions[index] = MenuItem(_('Full Description'),
                                                       action=self.show_program_info)
@@ -166,6 +174,17 @@ class PluginInterface(plugin.DaemonPlugin):
         send the event specified in arg to menuw's eventhandler.
         """
         menuw.eventhandler(arg)
+
+    def show_options(self, arg=None, menuw=None):
+        """
+        show the available options as a overlay menu.
+        """
+        if arg is None:
+            tvguide = menuw.menustack[-1]
+            pi = ProgramItem(tvguide, prog=tvguide.selected, context='guide')
+            arg = pi.actions()
+
+        menuw.pushmenu(DialogMenu(arg, menuw))
 
 
     def show_program_info(self, arg=None, menuw=None):
@@ -365,5 +384,41 @@ class PluginInterface(plugin.DaemonPlugin):
 
         # Special case for when there are more than 5 possible actions the last button will 'Enter' the submenu
         if len(actions) > 5:
-            result[3] = MenuItem(_("More Options"), action=self.send_event_to_menu, arg= event.MENU_SUBMENU)
+            result[3] = MenuItem(_("More Options"), action=self.show_options, arg=actions)
         return result
+
+class DialogMenu:
+    def __init__(self, actions, menuw):
+        items = []
+        for action in actions:
+            if isinstance(action, MenuItem):
+                string = action.name
+            else:
+                string = action[1]
+            items.append((string, self.handler, (menuw, action)))
+        self.dialog = dialogs.MenuDialog('', items, skin='bboptionsmenu')
+        self.dialog.signals['hidden'].connect(self.__hidden)
+        self.menuw = menuw
+        self.__do_show = True
+
+    def eventhandler(self, event):
+        return True
+
+    def __hidden(self, dialog):
+        if self.__do_show:
+            self.menuw.back_one_menu()
+
+    def handler(self, dialog, arg):
+        self.__do_show = False
+        self.dialog.hide()
+        menuw, action = arg
+        if isinstance(action, MenuItem):
+            action.select(menuw=menuw)
+        else:
+            action[0](menuw=menuw)
+
+    def refresh(self):
+        if self.__do_show:
+            self.dialog.show()
+        else:
+            self.menuw.back_one_menu()

@@ -1,35 +1,252 @@
 <freevo>
-	<osds geometry="800x600">
-		<osd name="volume" x="137" y="420" width="525" height="80">
-			<percent x="0" y="0" width="370" height="80" src="base/volume_bar.png" expression="float(volume)/100.0"/>
-			<text x="0" y="0" width="370" height="80" expression="volume_text" font="Vera/20" fgcolor="white"/>
-			<text x="370" y="0" width="155" height="80" expression="'%d%%' % int(volume)" font="Vera/40" fgcolor="white" align="right" valign="bottom"/>
-		</osd>
+	<!--
+     OSDS
+     ====
+	 Collection of dialogs,	common dialogs are:
+	  - volume
+	  - message
+	  - 1button
+	  - 2button
+	  - 3button
+	  - menu
+	  - play_state
 
+	 Properties
+	  geometry : (Mandatory) Dimension of freevo display
+	  icontheme: (Optional)  Directory inside images and icon dirs to look for theme specific images.
+	  include  : (Optional)  osd skin to load before starting to parse this one, allows inheritance of dialogs, font, colors.
+	-->
+	<osds geometry="800x600" icontheme="base">
+		<!--
+		  Volume dialog
+		  =============
+		  Used to display audio volume status.
+
+		  Available information:
+		   muted   : (boolean) whether the output is muted
+		   level   : (int) current level used for output 0-100.
+		   channel : (string) The channel being displayed, one of
+		   	           - main
+           	           - center
+           	           - surround
+           	           - lfe
+           channel_name : (unicode string) Translated version of channel
+        -->
+        <!--
+		<osd name="volume" x="137" y="420" width="525" height="80">
+			<percent x="0" y="0" width="370" height="80" src="volume_bar.png" expression="float(volume)/100.0"/>
+			<text x="0" y="0" width="370" height="80" expression="channel" font="Vera/20" fgcolor="white"/>
+			<text x="370" y="0" width="155" height="80" expression="'%d%%' % int(volume)" font="Vera/40" fgcolor="white" align="right" valign="bottom"/>
+		</osd>-->
+		<osd name="volume" x="90" y="460" width="675" height="90" >
+            <percent  x="130" y="10" width="370" height="80" src="volume_bar.png" expression="float(volume)/100.0"/>
+            <image expression="muted" x="130" y="0" width="370" height="87" src="muted.png"/>
+            <text expression="channel_name" x="0" y="0" width="130" height="85" font="Vera/20" fgcolor="white"/>
+            <text expression="'%d%%' % volume" x="500" y="0" width="155" height="90" font="Vera/40" fgcolor="white" align="right" valign="bottom"/>
+		</osd>
+        <!--
+          Message dialog
+          ==============
+          Used to display generic messages.
+
+          Available information:
+           message : (unicode string) translated message to display.
+        -->
 		<osd name="message" x="50" y="50" width="700" height="110">
-			<image x="0" y="0" width="700" height="110" src="base/details_bg.png" />
+			<image x="0" y="0" width="700" height="110" src="details_bg.png" />
 			<text x="5" y="5" width="690" height="100" expression="message" font="Vera/25" fgcolor="white" />
 		</osd>
 
-		<osd name="info" x="50" y="400" width="700" height="150">
-			<!-- Percent through buffer bar -->
-			<percent x="100" y="0" width="500" height="25" src="base/bar.png" expression="percent_buffer_full"/>
-			<percent x="100" y="0" width="500" height="25" src="base/percent_bar.png" expression="percent_through_buffer * percent_buffer_full"/>
-			<text x="0" y="0" width="95" height="25" expression="strftime('%H:%M',start_time)" font="info" align="right" />
-			<text x="605" y="0" width="95" height="25" expression="strftime('%H:%M',end_time)" font="info" />
-			<text x="300" y="0" width="100" height="25" expression="strftime('%H:%M',current_time)" font="info" align="center" />
-			<!-- Details panel -->
-			<image x="0" y="40" width="700" height="110" src="base/details_bg.png" />
-			<text x="5" y="40" width="290" height="25" font="info" expression="guide_channel" />
-			<text x="300" y="40" width="100" height="25" font="info" expression="guide_status" />
-			<text x="550" y="40" width="145" height="25" font="info" expression="guide_program_start + '-' + guide_program_stop" />
-			<text x="5" y="70" width="690" height="25" font="info" expression="guide_program_title" />
-			<text x="5" y="100" width="690" height="50" font="description" expression="guide_program_desc" />
-		</osd>
+		<!--
+		  1 button dialog
+		  ===============
+          Single button message dialog, that doesn't use type info.
 
-		<font label="info" name="Vera" size="16" color="white" />
-		<font label="description" name="Vera" size="14" color="white" />
+          Available information:
+           message : (unicode string) translated message to display.
+           button  : (unicode string) translated button text to display.
+           dialog_type: Dialog type (error, warning, question) (UNUSED)
+        -->
+        <osd name="1button" x="150" y="200" width="500" height="250">
+            <image x="0" y="0" width="500" height="250" src="dialog_bg.png" />
+            <text x="5" y="5" width="490" height="180" font="message" expression="message" align="center" valign="center" />
+
+            <button x="160" y="160" width="180" height="45" name="button" style="button" />
+        </osd>
+
+		<!--
+		  2 button dialog
+		  ===============
+          Two button message dialog, that doesn't use type info.
+
+          Available information:
+           message : (unicode string) translated message to display.
+           button1 : (unicode string) translated button text to display.
+           button2 : (unicode string) translated button text to display.
+           dialog_type: Dialog type (error, warning, question) (UNUSED)
+        -->
+
+        <osd name="2button" x="150" y="200" width="500" height="250">
+            <image x="0" y="0" width="500" height="250" src="dialog_bg.png" />
+            <text x="5" y="5" width="490" height="180" font="message" expression="message" align="center" valign="center" />
+
+            <button x="30" y="160" width="180" height="45" name="button1" style="button" />
+            <button x="290" y="160" width="180" height="45" name="button2" style="button" />
+
+            <navigationmap>
+                <navigation from="button1" right="button2" left="button2"/>
+                <navigation from="button2" right="button1" left="button1"/>
+            </navigationmap>
+        </osd>
+
+        <!--
+		  3 button dialog
+		  ===============
+          Three button message dialog, that doesn't use type info.
+
+          Available information:
+           message : (unicode string) translated message to display.
+           button1 : (unicode string) translated button text to display.
+           button2 : (unicode string) translated button text to display.
+           button3 : (unicode string) translated button text to display.
+           dialog_type: Dialog type (error, warning, question) (UNUSED)
+        -->
+		<osd name="3button" x="150" y="200" width="500" height="250">
+            <image x="0" y="0" width="500" height="250" src="dialog_bg.png" />
+            <text x="5" y="5" width="490" height="180" font="message" expression="message" align="center" valign="center" />
+
+            <button x="30" y="160" width="140" height="45" name="button1" style="button" />
+            <button x="180" y="160" width="140" height="45" name="button2" style="button" />
+            <button x="330" y="160" width="140" height="45" name="button2" style="button" />
+
+            <navigationmap>
+                <navigation from="button1" right="button2" left="button3"/>
+                <navigation from="button2" right="button3" left="button1"/>
+                <navigation from="button3" right="button1" left="button2"/>
+            </navigationmap>
+        </osd>
+
+		<!-- Centered Menu -->
+        <osd name="menu" x="275" y="135" width="250" height="345" >
+            <image  x="0" y="0" width="250" height="345" src="menu_bg.png" />
+			<text expression="title" font="Vera/14" x="10" y="15" width="230" height="40"/>
+            <menu name="menu" style="menu" itemsperpage="6" x="10" y="65" width="230" height="260"/>
+        </osd>
+
+        <!-- Button Bar More Options menu -->
+        <osd name="bboptionsmenu" x="584" y="264" width="216" height="275" >
+            <image src="bboptionsmenubg.png" x="0" y="0" width="216" height="275"/>
+            <image expression="menu.more_down" src="menu_down.png" x="168" y="246" width="22" height="25"/>
+            <image expression="menu.more_up" src="menu_up.png" x="191" y="246" width="22" height="25"/>
+            <menu name="menu" style="menu" itemsperpage="6" x="4" y="20" width="204" height="222"/>
+        </osd>
+
+		<!-- Play state dialog -->
+        <osd name="play_state" x="10" y="10" width="440" height="80" >
+            <image  x="0" y="0" width="120" height="80" srcexpr="'%s.png' % state" />
+            <text expression="current_time_str and (current_time_str + ' / '+ total_time_str) or ''" font="message" x="140" y="9" width="300" height="40"/>
+        </osd>
+
+        <!--
+          Widget Style Information
+          ========================
+          Determines how to draw widgets in different states.
+        -->
+        <widgetstyles>
+            <widgetstyle name="button">
+                <widgetstate state="normal">
+                    <image x="0" y="0" width="width" height="height" src="button_normal_bg.png" scale="both" />
+                    <image x="5" y="((height - 30) / 2)" width="20" height="20" expression="model.icon" srcexpr="model.icon" scale="aspect"/>
+                    <text x="model.icon and 30 or 5" y="5" width="model.icon and (width - 30) or (width-10)" height="height-10"
+                          font="button" align="center" valign="center" expression="model.text"/>
+                </widgetstate>
+                <widgetstate state="active">
+                    <image x="0" y="0" width="width" height="height" src="button_active_bg.png" scale="both" />
+                    <image x="5" y="((height - 30) / 2)" width="20" height="20" expression="model.icon" srcexpr="model.icon" scale="aspect"/>
+                    <text x="model.icon and 30 or 5" y="5" width="model.icon and (width - 30) or (width-10)" height="height-10"
+                          font="button_selected" align="center" valign="center" expression="model.text"/>
+                </widgetstate>
+                <widgetstate state="pressed">
+                    <image x="0" y="0" width="width" height="height" src="button_pressed_bg.png" scale="both" />
+                    <image x="5" y="((height - 30) / 2)" width="20" height="20" expression="model.icon" srcexpr="model.icon" scale="aspect"/>
+                    <text x="model.icon and 30 or 5" y="5" width="model.icon and (width - 30) or (width-10)" height="height-10"
+                          font="button_pressed" align="center" valign="center" expression="model.text"/>
+                </widgetstate>
+            </widgetstyle>
+
+            <widgetstyle name="radiobutton">
+                <widgetstate state="normal_unselected">
+                    <image x="5" y="((height - 22) / 2)" width="22" height="22" src="radio_unselected.png" scale="aspect"/>
+                    <text x="33" y="5" width="width - 33" height="height-10"
+                          font="button" align="left" valign="center" expression="model.text"/>
+                </widgetstate>
+                <widgetstate state="normal_selected">
+                    <image x="5" y="((height - 22) / 2)" width="22" height="22" src="radio_selected.png" scale="aspect"/>
+                    <text x="33" y="5" width="width - 33" height="height-10"
+                          font="button" align="left" valign="center" expression="model.text"/>
+                </widgetstate>
+                <widgetstate state="active_selected">
+                    <image x="0" y="0" width="width" height="height" src="radio_active_bg.png" scale="both" />
+                    <image x="5" y="((height - 22) / 2)" width="22" height="22" src="radio_selected.png" scale="aspect"/>
+                    <text x="33" y="5" width="width - 33" height="height-10"
+                          font="button" align="left" valign="center" expression="model.text"/>
+                </widgetstate>
+                <widgetstate state="active_unselected">
+                    <image x="0" y="0" width="width" height="height" src="radio_active_bg.png" scale="both" />
+                    <image x="5" y="((height - 22) / 2)" width="22" height="22" src="radio_unselected.png" scale="aspect"/>
+                    <text x="33" y="5" width="width - 33" height="height-10"
+                          font="button" align="left" valign="center" expression="model.text"/>
+                </widgetstate>
+
+            </widgetstyle>
+
+            <widgetstyle name="menu">
+                <widgetstate state="normal">
+                </widgetstate>
+                <widgetstate state="active">
+                </widgetstate>
+            </widgetstyle>
+
+            <widgetstyle name="menu_item">
+                <widgetstate state="normal">
+                    <text x="2" y="2" width="width - 4" height="height-4"
+                          font="menu" align="left" valign="center" expression="model.text"/>
+                </widgetstate>
+                <widgetstate state="active">
+                    <image x="0" y="0" width="width" height="height" src="menu_active.png" scale="both" />
+                    <text x="2" y="2" width="width - 4" height="height-4"
+                          font="menu_selected" fgcolor="white" align="left" valign="center" expression="model.text"/>
+                </widgetstate>
+                <widgetstate state="highlighted">
+                    <image x="0" y="0" width="width" height="height" src="menu_active.png" scale="both" />
+                    <text x="2" y="2" width="width - 4" height="height-4"
+                          font="menu_selected" fgcolor="white" align="left" valign="center" expression="model.text"/>
+                </widgetstate>
+                <widgetstate state="pressed">
+                    <image x="0" y="0" width="width" height="height" src="menu_pressed.png" scale="both" />
+                    <text x="2" y="2" width="width - 4" height="height-4"
+                          font="menu_pressed" align="left" valign="center" expression="model.text"/>
+                </widgetstate>
+            </widgetstyle>
+        </widgetstyles>
+
+		<!-- Font section -->
+		<!-- Font used in message text. -->
+        <font label="message" name="Vera" size="14" color="white" />
+
+        <!-- Fonts used by buttons -->
+        <font label="button" name="Vera" size="12" color="black" />
+        <font label="button_selected" name="VeraBd" size="14" color="white" />
+        <font label="button_pressed" name="VeraBd" size="14" color="black" />
+
+        <!-- Fonts used by menu items -->
+        <font label="menu" name="Vera" size="12" color="gray" />
+        <font label="menu_selected" name="VeraBd" size="12" color="white"/>
+        <font label="menu_pressed" name="VeraBd" size="12" color="black"/>
+
+        <!-- Commonly used colors -->
 		<color label="white" value="255,255,255,255" />
+		<color label="gray" value="96,96,96,255" />
 		<color label="black" value="0,0,0,255" />
 		<color label="transparent" value="0,0,0,0" />
 

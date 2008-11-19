@@ -925,6 +925,13 @@ plugin.activate('tv.manual_record')
 # Enable this for joystick support:
 # plugin.activate('joy')
 
+# ======================================================================
+# Dialog Display Plugins
+# ======================================================================
+plugin.activate('dialog.osd_display')
+if CONF.display in ('x11', 'xv'):
+    plugin.activate('dialog.x11_overlay_display')
+
 # Speak plugin to output menu items via festival
 # plugin.activate('speak')
 SPEAK_WELCOME = ''
@@ -1363,6 +1370,11 @@ SKIN_MODULE = 'main'
 #
 SKIN_XML_FILE         = ''
 SKIN_DEFAULT_XML_FILE = 'blurr'
+
+#
+# XML file used for the dialog skins.
+#
+DIALOG_SKIN_XML_FILE = 'base'
 
 #
 # Select a way when to switch to text view even if a image menu is there

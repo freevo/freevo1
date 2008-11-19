@@ -31,6 +31,7 @@ import config
 import plugin
 import rc
 from event import *
+import dialog
 
 import alsaaudio
 
@@ -191,24 +192,25 @@ class PluginInterface(plugin.DaemonPlugin):
         Event handler to handle VOLUME and MUTE events
         """
         if event == MIXER_VOLUP:
-            rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.incVolume()))
+            self.incVolume()
+            dialog.show_volume(self.getVolume(), False)
             rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             return True
 
         elif event == MIXER_VOLDOWN:
-            rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.decVolume()))
+            self.decVolume()
+            dialog.show_volume(self.getVolume(), False)
             rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             return True
 
         elif event == MIXER_MUTE:
             if self.getMute() == 1:
-                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
                 rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
                 self.setMute(0)
             else:
-                rc.post_event(Event(OSD_MESSAGE, arg=_('Mute')))
                 rc.post_event(Event('MIXER_MUTE_INFO'))
                 self.setMute(1)
+            dialog.show_volume(self.getVolume(), self.getMute())
             return True
 
         return False

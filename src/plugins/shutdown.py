@@ -39,6 +39,7 @@ from gui import ConfirmBox
 from item import Item
 from plugin import MainMenuPlugin
 
+from dialog.dialogs import ButtonDialog
 
 def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     """
@@ -161,8 +162,9 @@ class ShutdownItem(Item):
         _debug_('confirm_freevo(arg=%r, menuw=%r)' % (arg, menuw), 2)
         self.menuw = menuw
         what = _('Do you really want to shut down Freevo?')
-        ConfirmBox(text=what, handler=self.shutdown_freevo,
-                   default_choice=config.SYS_SHUTDOWN_CONFIRM-1).show()
+        dialog = ButtonDialog(((_('Shutdown'), self.shutdown_freevo), (_('Cancel'), None, True)),
+                               what, ButtonDialog.QUESTION_TYPE)
+        dialog.show()
 
 
     def confirm_system(self, arg=None, menuw=None):
@@ -172,8 +174,9 @@ class ShutdownItem(Item):
         _debug_('confirm_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
         self.menuw = menuw
         what = _('Do you really want to shut down the system?')
-        ConfirmBox(text=what, handler=self.shutdown_system,
-                   default_choice=config.SYS_SHUTDOWN_CONFIRM-1).show()
+        dialog = ButtonDialog(((_('Shutdown'), self.shutdown_system), (_('Cancel'), None, True)),
+                               what, ButtonDialog.QUESTION_TYPE)
+        dialog.show()
 
 
     def confirm_system_restart(self, arg=None, menuw=None):
@@ -183,8 +186,9 @@ class ShutdownItem(Item):
         _debug_('confirm_system_restart(arg=%r, menuw=%r)' % (arg, menuw), 2)
         self.menuw = menuw
         what = _('Do you really want to restart the system?')
-        ConfirmBox(text=what, handler=self.shutdown_system_restart,
-                   default_choice=config.SYS_SHUTDOWN_CONFIRM-1).show()
+        dialog = ButtonDialog(((_('Restart'), self.shutdown_system_restart), (_('Cancel'), None, True)),
+                               what, ButtonDialog.QUESTION_TYPE)
+        dialog.show()
 
 
     def shutdown_freevo(self, arg=None, menuw=None):

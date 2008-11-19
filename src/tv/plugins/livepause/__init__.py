@@ -41,6 +41,7 @@ import osd
 import plugin
 import rc         # The RemoteControl class.
 import util
+import dialog
 
 
 from tv.channels import FreevoChannels
@@ -53,7 +54,7 @@ from tv.plugins.livepause.chunk_buffer import ChunkBuffer
 from tv.plugins.livepause import display
 from tv.plugins.livepause import players
 from tv.plugins.livepause import controllers
-from tv.plugins.livepause.display.dialogs import xml
+
 WAIT_FOR_DATA_COUNT   = 3
 WAIT_FOR_DATA_TIMEOUT = 20 # Seconds
 
@@ -64,6 +65,7 @@ class State:
     TUNING    = 'Tuning'
     BUFFERING = 'Buffering'
     PLAYING   = 'Playing'
+    NUMBER    = 'ChannelNumber'
 
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -204,7 +206,6 @@ class LivePauseController:
 
         self.state = State.IDLE
         self.player = player
-        self.osd = display.get_osd(player)
 
         self.slave_server = SlaveServer(self.reader, self)
         self.slave_server.start()
@@ -253,7 +254,6 @@ class LivePauseController:
             'RECORD_START'        : self.__playing_tv_record_start,
             'RECORD_STOP'         : self.__playing_tv_record_stop,
             'BUTTON'              : self.__playing_button_pressed,
-            'OSD_MESSAGE'         : self.__playing_osd_message,
             'TOGGLE_OSD'          : self.__playing_display_info,
             'SEEK'                : self.__playing_seek,
             'READER_OVERTAKEN'    : self.__playing_reader_overtaken,
@@ -275,6 +275,19 @@ class LivePauseController:
             'VIDEO_NEXT_SUBTITLE' : self.__playing_toggle_subtitles,
             }
 
+        self.event_maps[State.PLAYING] = {
+            'STOP'                : self.__handle_stop,
+            'INPUT_1'             : self.__playing_handle_number,
+            'INPUT_2'             : self.__playing_handle_number,
+            'INPUT_3'             : self.__playing_handle_number,
+            'INPUT_4'             : self.__playing_handle_number,
+            'INPUT_5'             : self.__playing_handle_number,
+            'INPUT_6'             : self.__playing_handle_number,
+            'INPUT_7'             : self.__playing_handle_number,
+            'INPUT_8'             : self.__playing_handle_number,
+            'INPUT_9'             : self.__playing_handle_number,
+            'INPUT_0'             : self.__playing_handle_number,
+            }
         self.current_event_map = self.event_maps[self.state]
 
 
@@ -320,6 +333,7 @@ class LivePauseController:
         Stop playback and go into idle.
         """
         _debug_('Stopping play back.')
+        dialog.disable_overlay_display()
         self.player.stop()
         self.stop_time = time.time()
         self.controller.enable_events(False)
@@ -394,9 +408,8 @@ class LivePauseController:
         function it will be passed over to the items eventhandler
         """
         _debug_('Event %s' % event)
-        event_consumed = self.osd.handle_event(event)
-
-        if not event_consumed and event.name in self.current_event_map:
+        event_consumed = False
+        if event.name in self.current_event_map:
             handler = self.current_event_map[event.name]
             if handler:
                 event_consumed = handler(event, menuw)
@@ -465,6 +478,7 @@ class LivePauseController:
         return True
 
     def __playing_tv_channel_number(self, event, menuw):
+        self.__change_state(State.PLAYING)
         next_channel = self.fc.getManChannel(int(self.channel_number))
         self.channel_number = ''
 
@@ -482,27 +496,22 @@ class LivePauseController:
             self.recording = Recorder(self.reader.copy(), self.last_channel)
 
     def __playing_tv_record_start(self, event, menuw):
-        self.osd.display_message(_('Recording started'))
+        dialog.show_message(_('Recording started'))
 
     def __playing_tv_record_stop(self, event, menuw):
-        self.osd.display_message(_('Recording stopped'))
+        dialog.show_message(_('Recording stopped'))
 
     def __playing_reader_overtaken(self, event, menuw):
         if self.player.paused:
             self.player.resume()
-        self.osd.display_message(_('Out of buffer space'))
+        dialog.show_message(_('Out of buffer space'))
         return True
 
     def __playing_button_pressed(self, event, menuw):
         consumed = False
-
+        _debug_('Button %s' % event.arg)
         if event.arg == 'SUBTITLE':
             self.__playing_toggle_subtitles(event, menuw)
-            consumed = True
-
-        elif event.arg == 'ENTER' and self.channel_number:
-            self.channel_number_timer.cancel()
-            rc.post_event(TV_CHANNEL_NUMBER)
             consumed = True
 
         return consumed
@@ -525,9 +534,9 @@ class LivePauseController:
                 subtitle_text = _('Disabled')
             else:
                 subtitle_text = self.subtitles[self.subtitle_index]
-            self.osd.display_message(_('Subtitles: %s') % subtitle_text)
+            dialog.show_message(_('Subtitles: %s') % subtitle_text)
         else:
-            self.osd.display_message(_('Subtitles not supported'))
+            dialog.show_message(_('Subtitles not supported'))
 
         return True
 
@@ -548,24 +557,11 @@ class LivePauseController:
                 audio_lang_text = _('Default')
             else:
                 audio_lang_text = self.subtitles[self.subtitle_index]
-            self.osd.display_message(_('Audio language: %s') % audio_lang_text)
+
+            dialog.show_message(_('Audio language: %s') % audio_lang_text)
         else:
-            self.osd.display_message(_('Audio language selection not supported'))
+            dialog.show_message(_('Audio language selection not supported'))
 
-        return True
-
-    def __playing_osd_message(self, event, menuw):
-        # Filter out the volume messages so the osd can do something nice with the level
-        volume_string = _('Volume: %d%%') % 0
-        colon_index = volume_string.find(':')
-        volume_prefix = volume_string[:colon_index]
-
-        if event.arg.startswith(volume_prefix):
-            level = int(event.arg[colon_index + 1: -1])
-            self.osd.display_volume(level)
-
-        else:
-            self.osd.display_message(event.arg)
         return True
 
     def __playing_display_info(self, event, menuw):
@@ -606,11 +602,26 @@ class LivePauseController:
             self.player.restart()
         return True
 
+    def __number_handle_button(self, event, menuw):
+        consumed = False
+        if event.arg == 'ENTER' and self.channel_number:
+            self.channel_number_timer.cancel()
+            rc.post_event(TV_CHANNEL_NUMBER)
+            consumed = True
+        return consumed
+
+    def __number_handle_stop(self, event, menuw):
+        self.__change_state(State.PLAYING)
+        return True
+
     def __playing_handle_number(self, event, menuw):
+        if self.state == State.PLAYING:
+            self.__change_state(State.NUMBER)
+
         self.channel_number += str(event.arg)
         if len(self.channel_number) > 3:
             self.channel_number = self.channel_number[1:]
-        self.osd.display_message(self.channel_number)
+        self.osd.display_channel_number(int(self.channel_number))
 
         if self.channel_number_timer:
             self.channel_number_timer.cancel()
@@ -634,6 +645,7 @@ class LivePauseController:
             return
 
         _debug_('Changing state from %s to %s' % (self.state, new_state))
+        old_state = self.state
         self.state = new_state
         self.current_event_map = self.event_maps[new_state]
 
@@ -652,7 +664,14 @@ class LivePauseController:
             self.wait_for_data_count = WAIT_FOR_DATA_COUNT
 
         elif self.state == State.PLAYING:
+            if old_state == State.NUMBER:
+                return
             self.player.start(self.slave_server.port)
+            dialog.enable_overlay_display(self.player.get_display())
+            self.osd = display.get_osd()
+
+        elif self.state == State.NUMBER:
+            return
 
         # Display the current state on the OSD
         self.__draw_state_screen()

@@ -112,6 +112,7 @@ import rc      # The RemoteControl class.
 import util    # Various utilities
 import osd     # The OSD class, used to communicate with the OSD daemon
 import menu    # The menu widget class
+import dialog  # Message/Volume/Dialog display function (must be imported after config)
 try:
     import skin    # The skin class
 except pygame.error, why:
@@ -212,6 +213,7 @@ class Splashscreen(skin.Area):
         self.bar_border   = skin.Rectange(bgcolor=0xff000000L, size=2)
         self.bar_position = skin.Rectange(bgcolor=0xa0000000L)
         self.text         = text
+        self.first_draw   = True
 
 
     def update_content(self):
@@ -238,7 +240,9 @@ class Splashscreen(skin.Area):
         set the progress position and refresh the screen
         """
         self.pos = pos
-        skin.draw('splashscreen', None)
+        blend = config.FREEVO_USE_ALPHABLENDING and self.first_draw
+        skin.draw('splashscreen', None, blend=blend)
+        self.first_draw = False
 
 
 
@@ -280,6 +284,10 @@ class MainTread:
 
         elif event.handler:
             event.handler(event=event)
+
+        # Pass the event to the dialog subsystem first incase a dialog is being displayed.
+        elif dialog.handle_event(event):
+            return
 
         # Send events to either the current app or the menu handler
         elif rc.app():
@@ -345,6 +353,7 @@ def signal_handler():
     the signal handler to shut down freevo
     """
     _debug_('signal_handler()', 2)
+    raise Exception
     global _shutting_down
     if _shutting_down:
         return
@@ -459,6 +468,7 @@ try:
     splash = Splashscreen(_('Starting Freevo-%s, please wait ...') % _version)
     skin.register('splashscreen', ('screen', splash))
     plugin.init(splash.progress)
+    dialog.init()
     skin.delete('splashscreen')
 
     # Fire up splashscreen and load the cache

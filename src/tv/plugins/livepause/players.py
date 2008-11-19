@@ -46,6 +46,8 @@ import config
 import childapp
 import rc
 
+import dialog.display
+
 def get_player():
     """
     Find the best Player object available.
@@ -177,6 +179,12 @@ class Player(object):
         """
         pass
 
+    def get_display(self):
+        """
+        Returns a Display subclass to be passed to the dialog subsystem
+        when the player is active.
+        """
+        return None
 
     def display_message(self, message):
         """
@@ -327,6 +335,12 @@ class Xine(Player):
             self.app.write('pause\n')
             self.paused = False
 
+    def get_display(self):
+        """
+        Returns a Display subclass to be passed to the dialog subsystem
+        when the player is active.
+        """
+        return dialog.display.AppTextDisplay(self.display_message)
 
     def display_message(self, message):
         """
@@ -429,6 +443,12 @@ class Mplayer(Player):
             self.app.write('pause\n')
             self.paused = False
 
+    def get_display(self):
+        """
+        Returns a Display subclass to be passed to the dialog subsystem
+        when the player is active.
+        """
+        return dialog.display.AppTextDisplay(self.display_message)
 
     def display_message(self, message):
         """
@@ -615,6 +635,12 @@ class Vlc(Player):
             self.app.send_command('pause 0')
             self.paused = False
 
+    def get_display(self):
+        """
+        Returns a Display subclass to be passed to the dialog subsystem
+        when the player is active.
+        """
+        return dialog.display.AppTextDisplay(self.display_message)
 
     def display_message(self, message):
         """

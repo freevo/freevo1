@@ -129,7 +129,10 @@ class PluginInterface(plugin.DaemonPlugin):
         if self.plugins is None:
             self.plugins = plugin.get('screensaver')
             _debug_('plugins=%r' % (self.plugins))
+
+        osd.screensaver_running = True
         skin.clear()
+
         # Start Screensaver thread
         self.stop_screensaver = False
         self.thread = threading.Thread(target=self.__run__)
@@ -173,6 +176,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.screensaver_showing = False
         skin.force_redraw = True
         skin.redraw()
+        osd.screensaver_running = False
         osd.update()
         _debug_('Screensaver thread stopped')
 

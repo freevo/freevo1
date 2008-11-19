@@ -32,23 +32,11 @@
 # ----------------------------------------------------------------------- */
 import time
 
+import dialog
+
 from tv.plugins.livepause.display.base import OSD
 
 class TextOSD(OSD):
-    def display_volume(self, level):
-        volume_str = _('Volume') + ' 0'
-        while len(volume_str) < (level/5):
-            volume_str += '-'
-        volume_str += '|'
-        while len(volume_str) < 21:
-            volume_str += ' '
-        volume_str += '100'
-        #self.player.display_message(_('Volume: %d') % level)
-        self.player.display_message(volume_str)
-
-    def display_message(self, message):
-        self.player.display_message(message)
-
     def display_info(self, info_function):
         info_dict = info_function()
 
@@ -58,4 +46,7 @@ class TextOSD(OSD):
         info_message += time.strftime('%H:%M', time.localtime(info_dict['current_time']))
         info_message += '->'
         info_message += time.strftime('%H:%M', time.localtime(info_dict['end_time']))
-        self.player.display_message(info_message)
+        dialog.show_message(info_message)
+
+    def display_channel_number(self, channel):
+        dialog.show_message(_('Channel #: %s') % channel)

@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# base.py - base osd module for livepause osd
+# OSD skin
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -31,36 +31,4 @@
 #
 # ----------------------------------------------------------------------- */
 
-class OSD(object):
-    """
-    Base class for OSD display.
-    """
-
-    def __init__(self):
-        """
-        Creates an OSD object linked to a Player.
-        """
-
-    def display_info(self, info_func):
-        """
-        Display an OSD for live pause/EPG information.
-        The live pause information is return by calling the supplied function,
-        this should return a dictionary containing the follow keys:
-            - channel      : Channel being viewed.
-            - current_time : Current time being viewed.
-            - start_time   : Time at the start of the buffer.
-            - end_time     : Time at the end of the buffer.
-            - percent_through_buffer : Percentage through the buffer contents.
-            - percent_buffer_full    : Percentage of the buffer that has been filled.
-
-        @param info_func: Function used to retrieve a dictionary of
-        live pause status information.
-        """
-        pass
-
-    def display_channel_number(self, number):
-        """
-        Display a channel number as it is being entered by the user.
-        @param number: The number entered so far.
-        """
-        pass
+from skin import get_definition
