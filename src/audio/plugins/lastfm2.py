@@ -1,10 +1,11 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-#
+# LastFM radio player plug-in (http://www.last.fm/listen)
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Notes:
+# Notes: For the API 1.2
+# http://code.google.com/p/thelastripper/wiki/LastFM12UnofficialDocumentation
 # Todo:
 #
 # -----------------------------------------------------------------------
@@ -27,7 +28,6 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-
 
 import sys, os, time, traceback
 import md5, urllib, urllib2, httplib, re
@@ -60,7 +60,6 @@ if config.DEBUG_DEBUGGER:
     import pdb, pprint
 
 
-
 class LastFMError(Exception):
     """
     An exception class for last.fm
@@ -72,7 +71,6 @@ class LastFMError(Exception):
             self.why = str(why) + ': ' + url
         else:
             self.why = str(why)
-
 
     def __str__(self):
         return self.why
@@ -260,66 +258,58 @@ class LastFMItem(AudioItem):
             self.menuw = menuw
 
         try:
-            pop = None
-            if self.feed is None:
-                pop = PopupBox(text=_('Downloading, please wait...'))
-                pop.show()
-
-            try:
-                if self.feed is None or len(self.feed.entries) <= 1:
-                    for i in range(3):
-                        xspf = self.webservices.request_xspf()
-                        if xspf != 'No recs :(':
-                            break
-                        time.sleep(2)
-                    else:
-                        raise LastFMError('No recs :(')
-
-                    self.feed = self.xspf.parse(xspf)
-                    if self.feed is None:
-                        raise LastFMError('Cannot get XSFP')
-
-                entry = self.feed.entries[0]
-                _debug_('entry "%s / %s / %s" of %s' % (entry.artist, entry.album, entry.title, len(self.feed.entries)))
-                self.stream_name = urllib.unquote_plus(self.feed.title)
-                self.album = entry.album
-                self.artist = entry.artist
-                self.title = entry.title
-                self.location_url = entry.location_url
-                self.length = entry.duration
-                basename = os.path.join(config.LASTFM_DIR, self.stream_name, entry.artist, entry.album, entry.title)
-                self.basename = basename.lower().replace(' ', '_').\
-                    replace('.', '').replace('\'', '').replace(':', '').replace(',', '')
-                if not os.path.exists(os.path.dirname(self.basename)):
-                    _debug_('make directory %r' % (os.path.dirname(self.basename),), DINFO)
-                    os.makedirs(os.path.dirname(self.basename), 0777)
-                # url is changed, to include file://
-                self.url = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
-                self.trackpath = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
-                if entry.image_url:
-                    self.image = os.path.join(self.basename + os.path.splitext(entry.image_url)[1])
-                    self.image_downloader = self.webservices.download(entry.image_url, self.image)
-                    # Wait three seconds for the image to be downloaded
-                    for i in range(30):
-                        if not self.image_downloader.isrunning():
-                            break
-                        time.sleep(0.1)
+            if self.feed is None or len(self.feed.entries) <= 1:
+                for i in range(3):
+                    xspf = self.webservices.request_xspf()
+                    if xspf != 'No recs :(':
+                        break
+                    time.sleep(2)
                 else:
-                    self.image = None
-                self.track_downloader = self.webservices.download(self.location_url, self.trackpath, self)
-                # Wait for a bit of the file to be downloaded
-                while self.track_downloader.filesize() < 1024 * 20:
-                    if not self.track_downloader.isrunning():
-                        raise LastFMError('Failed to download track', entry.location_url)
+                    raise LastFMError('No recs :(')
+
+                self.feed = self.xspf.parse(xspf)
+                if self.feed is None:
+                    raise LastFMError('Cannot get XSFP')
+
+            entry = self.feed.entries[0]
+            _debug_('entry "%s / %s / %s" of %s' % (entry.artist, entry.album, entry.title, len(self.feed.entries)))
+            self.stream_name = urllib.unquote_plus(self.feed.title)
+            self.album = entry.album
+            self.artist = entry.artist
+            self.title = entry.title
+            self.location_url = entry.location_url
+            self.length = entry.duration
+            basename = os.path.join(config.LASTFM_DIR, self.stream_name, entry.artist, entry.album, entry.title)
+            self.basename = basename.lower().replace(' ', '_').\
+                replace('.', '').replace('\'', '').replace(':', '').replace(',', '')
+            if not os.path.exists(os.path.dirname(self.basename)):
+                _debug_('make directory %r' % (os.path.dirname(self.basename),), DINFO)
+                os.makedirs(os.path.dirname(self.basename), 0777)
+            # url is changed, to include file://
+            self.url = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
+            self.trackpath = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
+            if entry.image_url:
+                self.image = os.path.join(self.basename + os.path.splitext(entry.image_url)[1])
+                self.image_downloader = self.webservices.download(entry.image_url, self.image)
+                # Wait three seconds for the image to be downloaded
+                for i in range(30):
+                    if not self.image_downloader.isrunning():
+                        break
                     time.sleep(0.1)
-                if not self.player:
-                    self.player = PlayerGUI(self, menuw)
-                error = self.player.play()
-                if error:
-                    raise LastFMError('Play error=%r' % (error,))
-            finally:
-                if pop is not None:
-                    pop.destroy()
+            else:
+                self.image = None
+            self.track_downloader = self.webservices.download(self.location_url, self.trackpath, self)
+            # Wait for a bit of the file to be downloaded
+            while self.track_downloader.filesize() < 1024 * 20:
+                if not self.track_downloader.isrunning():
+                    raise LastFMError('Failed to download track', entry.location_url)
+                time.sleep(0.1)
+            if not self.player:
+                self.player = PlayerGUI(self, menuw)
+            error = self.player.play()
+            if error:
+                raise LastFMError('Play error=%r' % (error,))
+
         except LastFMError, why:
             traceback.print_exc()
             _debug_('play error: %s' % (why,), DWARNING)
@@ -536,19 +526,24 @@ class LastFMWebServices:
     def adjust_station(self, station_url):
         """Change Last FM Station"""
         _debug_('adjust_station(station_url=%r)' % (station_url,), 2)
-        if not self.session:
-            self._login()
-        tune_url = 'http://ws.audioscrobbler.com/radio/adjust.php?session=%s&url=%s&lang=%s&debug=0' % \
-            (self.session, station_url, config.LASTFM_LANG)
+        pop = PopupBox(text=_('Tuning radio station, please wait...'))
+        pop.show()
         try:
-            for line in self._urlopen(tune_url):
-                if re.search('response=OK', line):
-                    return True
-            return False
-        except AttributeError, why:
-            return None
-        except IOError, why:
-            return None
+            if not self.session:
+                self._login()
+            tune_url = 'http://ws.audioscrobbler.com/radio/adjust.php?session=%s&url=%s&lang=%s&debug=0' % \
+                (self.session, station_url, config.LASTFM_LANG)
+            try:
+                for line in self._urlopen(tune_url):
+                    if re.search('response=OK', line):
+                        return True
+                return False
+            except AttributeError, why:
+                return None
+            except IOError, why:
+                return None
+        finally:
+            pop.destroy()
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -689,12 +684,13 @@ class LastFMDownloader(Thread):
                 fd.write(reply)
                 if len(reply) == 0:
                     self.running = False
-                    if config.DEBUG:
+                    if config.DEBUG >= 2:
                         print '%s downloaded' % self.filename
                     # debugs fail during shutdown
                     #_debug_('%s downloaded' % self.filename)
-                    # what we could do now is to add tags to track
+                    # XXX this may upset mplayer, stopping playback before the end of the track
                     if self.entry:
+                        time.sleep(3)
                         from kaa.metadata.audio import eyeD3
                         try:
                             tag = eyeD3.Tag()
@@ -722,7 +718,7 @@ class LastFMDownloader(Thread):
             _debug_('%s: %s' % (self.url, why), DWARNING)
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    #@benchmark(benchmarking, benchmarkcall)
     def filesize(self):
         """
         Get the downloaded file size
@@ -739,7 +735,7 @@ class LastFMDownloader(Thread):
         self.running = False
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    #@benchmark(benchmarking, benchmarkcall)
     def isrunning(self):
         """
         See if the thread running
