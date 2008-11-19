@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# players.py - the Freevo DVBStreamer module for tv
+# Freevo DVBStreamer module for tv
 # -----------------------------------------------------------------------
 # $Id$
 #

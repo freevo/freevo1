@@ -1,14 +1,12 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# display.py - the Freevo livepause osd module for tv
+# the Freevo livepause osd module for tv
 # -----------------------------------------------------------------------
 # $Id$
 #
 # Notes:
 #
-#
 # Todo:
-#
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
