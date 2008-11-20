@@ -34,22 +34,31 @@ Native Freevo MPlayer Audio Visualization Plugin
 
 __author__ = 'Viggo Fredriksen <viggo@katatonic.org>'
 
+import os, time
 try:
     import pygoom
 except:
     raise Exception('[audio.mplayervis]: Pygoom not available, please install '+
                     'or remove this plugin (http://freevo.sf.net/pygoom).')
 
-
 # pygame  modules
 from pygame import Rect, image, transform, Surface
 
+# kaa modules
+from kaa import Timer
+
 # freevo modules
-import plugin, config, rc, skin, osd, time
+import plugin, config, rc, skin, osd
 
 from event import *
 from animation import render, BaseAnimation
-from kaa import Timer
+
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
+if config.DEBUG_DEBUGGER:
+    import pdb, pprint, traceback
 
 mmap_file = '/tmp/mpav'
 skin = skin.get_singleton()
@@ -63,11 +72,20 @@ class MpvGoom(BaseAnimation):
     message    = None
     coversurf  = None
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, x, y, width, height, coverfile=None):
-        """ Initialise the MPlayer Visualization Goom """
+        """
+        Initialise the MPlayer Visualization Goom
+        """
         _debug_('MpvGoom.__init__(x=%r y=%r width=%r height=%r coverfile=%r)' % (x, y, width, height, coverfile), 1)
         self.mode = config.MPLAYERVIS_MODE
         self.coverfile = coverfile
+
+        if not os.path.exists(mmap_file):
+            f = open(mmap_file, 'w')
+            s = str(chr(0)) * 2064
+            f.write(s)
+            f.close()
 
         BaseAnimation.__init__(self, (x, y, width, height), fps=100, bg_update=False, bg_redraw=False)
         _debug_('pygoom.set_exportfile(mmap_file=%r)' % (mmap_file), 1)
@@ -95,11 +113,12 @@ class MpvGoom(BaseAnimation):
         self.fader = lambda n, m: int(float(n-m)/float(2))
         self.alpha = self.set_alpha(self.counter, 0)
 
-        self.running = True
+        self.running = False
         Timer(self.timerhandler).start(0.1)
         self.last_time = 0
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_cover(self, coverfile):
         """
         Set a blend image to toggle between visual and cover
@@ -109,24 +128,28 @@ class MpvGoom(BaseAnimation):
         self.coverfile = coverfile
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_visual(self, visual):
         """ pass the visualisation effect to pygoom """
         _debug_('set_visual(visual=%r)' % (visual,), 1)
         pygoom.set_visual(visual)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_title(self, title):
         """ pass the song title to pygoom """
         _debug_('set_title(title)=%r' % (title,), 1)
         pygoom.set_title(title)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_message(self, message):
         """ pass the song message to pygoom """
         _debug_('set_message(message=%r)' % (message,), 1)
         pygoom.set_message(message)
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def set_alpha(self, high, low):
         """ Get the alpha level for a count """
         _debug_('set_alpha(high=%r low=%r)' % (high, low,), 2)
@@ -136,6 +159,7 @@ class MpvGoom(BaseAnimation):
         return alpha
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_resolution(self, x, y, width, height, cinemascope=0, clear=False):
         """ Set the resolution of the pygoom window """
         _debug_('set_resolution(x=%r, y=%r, width=%r, height=%r, cinemascope=%r, clear=%r)' % \
@@ -179,6 +203,7 @@ class MpvGoom(BaseAnimation):
             self.c_timer   = time.time()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_fullscreen(self):
         """ Set the mode to full screen """
         _debug_('set_fullscreen()', 1)
@@ -206,6 +231,7 @@ class MpvGoom(BaseAnimation):
             self.set_resolution(x, y, w, h, 0)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def set_info(self, info, timeout=5):
         """
         Pass a info message on to the screen.
@@ -230,6 +256,7 @@ class MpvGoom(BaseAnimation):
         self.info      = (s, x, y, w, h)
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def init_state(self):
         if self.counter > 0:
             # Initial fade out is twice as fast as normal
@@ -242,6 +269,7 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_in_wait']
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def fade_in_wait_state(self):
         if self.counter > 0:
             self.counter -= self.fade_step
@@ -252,6 +280,7 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_in']
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def fade_in_state(self):
         if self.counter > 0:
             self.counter -= self.fade_step
@@ -263,6 +292,7 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_out_wait']
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def fade_out_wait_state(self):
         if self.counter > 0:
             self.counter -= self.fade_step
@@ -273,6 +303,7 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_out']
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def fade_out_state(self):
         if self.counter > 0:
             self.counter -= self.fade_step
@@ -284,6 +315,7 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_in_wait']
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def timerhandler(self):
         """
         The timer handler
@@ -292,7 +324,8 @@ class MpvGoom(BaseAnimation):
         #_debug_('timerhandler()', 1)
         # draw the cover
         if not self.running:
-            return self.running
+            return False
+
         gooms = pygoom.get_surface()
         if self.coversurf:
             self.state()
@@ -303,9 +336,10 @@ class MpvGoom(BaseAnimation):
                 _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
                 gooms.blit(s, (x, y))
 
+        #if not self.running:
+        #    return False
+
         # draw the info
-        if not self.running:
-            return self.running
         if self.info:
             s, x, y, w, h = self.info
 
@@ -333,9 +367,10 @@ class MpvGoom(BaseAnimation):
             #print '-1', '->', self.mode, gooms.get_rect(), self.rect
             self.lastmode = self.mode
 
-        return self.running
+        return True
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def poll(self, current_time):
         """
         override to get extra performance
@@ -388,6 +423,7 @@ class PluginInterface(plugin.Plugin):
     passed_event = False
     detached = False
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         """ Initialist the PluginInterface """
         _debug_('PluginInterface.__init__()', 1)
@@ -421,10 +457,13 @@ class PluginInterface(plugin.Plugin):
 
         self.view = config.MPLAYERVIS_MODE
         self.view_func = [self.dock, self.fullscreen, self.noview]
+        self.initialised = False
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def config(self):
-        """ """
+        """
+        """
         return [
             ('MPLAYERVIS_MODE', 0, 'Set the initial mode of the display, 0)DOCK, 1)FULL or 2)NOVI'),
             ('MPLAYERVIS_INIT_COUNTER', 255, 'Counter before the image fades, should be >= 255'),
@@ -436,21 +475,12 @@ class PluginInterface(plugin.Plugin):
                 'Message format for the message'),
             ('MPLAYERVIS_FULL_GEOMETRY', '%dx%d' % (config.CONF.width, config.CONF.height), 'Full screen geometry'),
             ('MPLAYERVIS_FAST_FULLSCREEN', True, 'Fullscreen surface is doubled'),
-            ('MPLAYERVIS_FPS', 25, 'Max FPS of visualization')
+            ('MPLAYERVIS_FPS', 25, 'Max FPS of visualization'),
+            ('MPLAYERVIS_HAS_TRACK', False, 'Set to True if mplayer has -af track patch'),
         ]
 
 
-    def play(self, command, player):
-        """
-        Play it
-        """
-        _debug_('play(command, player)', 1)
-        self.player = player
-        self.item   = player.playerGUI.item
-
-        return command + [ "-af", "export=" + mmap_file ]
-
-
+    @benchmark(benchmarking, benchmarkcall)
     def toggle_view(self):
         """
         Toggle between view modes
@@ -466,6 +496,7 @@ class PluginInterface(plugin.Plugin):
             self.view_func[self.view]()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event=None, arg=None):
         """
         eventhandler to simulate hide/show of mpav
@@ -478,8 +509,13 @@ class PluginInterface(plugin.Plugin):
         elif plugin.isevent(event) == 'ATTACH':
             PluginInterface.detached = False
             self.start_visual()
+        elif event == PLAY_START:
+            self.start_visual()
+        elif event == PLAY_END:
+            self.pause_visual()
         elif event == STOP:
             PluginInterface.detached = False
+            self.stop_visual()
 
         if event == 'CHANGE_MODE':
             self.toggle_view()
@@ -518,11 +554,9 @@ class PluginInterface(plugin.Plugin):
             if event == OSD_MESSAGE:
                 self.visual.set_info(event.arg)
                 return True
-
             if self.passed_event:
                 self.passed_event = False
                 return False
-
             self.passed_event = True
 
             if event != PLAY_END:
@@ -531,9 +565,10 @@ class PluginInterface(plugin.Plugin):
         return False
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def item_info(self, fmt=None):
         """
-        Returns info about the current running song
+        Returns info about the current playing song
         """
         _debug_('item_info(fmt=%r)' % (fmt,), 1)
 
@@ -572,6 +607,7 @@ class PluginInterface(plugin.Plugin):
         return result
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def dock(self):
         _debug_('dock()', 1)
         self.visual.mode = DOCK
@@ -602,6 +638,7 @@ class PluginInterface(plugin.Plugin):
         self.visual.set_resolution(x, y, w, h, 0, False)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def fullscreen(self):
         _debug_('fullscreen()', 1)
         self.visual.mode = FULL
@@ -615,6 +652,7 @@ class PluginInterface(plugin.Plugin):
         rc.app(self)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def noview(self):
         _debug_('noview()', 1)
 
@@ -630,22 +668,37 @@ class PluginInterface(plugin.Plugin):
             self.player.playerGUI.show()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def start_visual(self):
         _debug_('start_visual()', 1)
-        if self.visual or self.view == NOVI:
+        if self.view == NOVI:
             return
 
-        if rc.app() == self.player.eventhandler:
+        if self.visual:
+            if self.visual.running:
+                return
 
+        if rc.app() == self.player.eventhandler:
+            #if self.visual is None:
+            #    self.visual = MpvGoom(300, 300, 150, 150, self.item.image)
             self.visual = MpvGoom(300, 300, 150, 150, self.item.image)
 
             if self.view == FULL:
                 self.visual.set_info(self.item.name, 10)
 
             self.view_func[self.view]()
+            self.visual.running = True
             self.visual.start()
 
 
+    @benchmark(benchmarking, benchmarkcall)
+    def pause_visual(self):
+        _debug_('pause_visual()', 1)
+        if self.visual:
+            self.visual.running = False
+
+
+    @benchmark(benchmarking, benchmarkcall)
     def stop_visual(self):
         _debug_('stop_visual()', 1)
         if self.visual:
@@ -656,11 +709,30 @@ class PluginInterface(plugin.Plugin):
             pygoom.quit()
 
 
+    @benchmark(benchmarking, benchmarkcall)
+    def play(self, command, player):
+        """
+        Play the track
+        @param command: mplayer command
+        @param player: the player object
+        """
+        _debug_('play(command=%r, player=%r)' % (command, player), 1)
+        self.player = player
+        self.item   = player.playerGUI.item
+
+        if config.MPLAYERVIS_HAS_TRACK:
+            return command + [ '-af', 'export=%s' % mmap_file + ',track=5:1500' ]
+        return command + [ '-af', 'export=%s' % mmap_file ]
+
+
+    @benchmark(benchmarking, benchmarkcall)
     def stop(self):
         _debug_('stop()', 1)
-        self.stop_visual()
+        if self.visual:
+            self.visual.running = False
 
 
+    #@benchmark(benchmarking, benchmarkcall)
     def stdout(self, line):
         """
         get information from mplayer stdout
@@ -669,12 +741,15 @@ class PluginInterface(plugin.Plugin):
         since this is now a callback from main.
         """
         #_debug_('stdout(line=%r)' % (line), 1)
-        if self.visual:
-            return
+        memory_mapped = False
+        if line.find('[export] Memory mapped to file: ' + mmap_file) == 0:
+            memory_mapped = True
+            _debug_("Detected MPlayer 'export' audio filter! Using MPAV.")
 
         if PluginInterface.detached:
             return
 
-        if line.find("[export] Memory mapped to file: " + mmap_file) == 0:
-            _debug_("Detected MPlayer 'export' audio filter! Using MPAV.")
+        if memory_mapped:
             self.start_visual()
+            if self.visual:
+                self.visual.running = True

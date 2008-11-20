@@ -232,7 +232,23 @@ class LastFMItem(AudioItem):
             pass
         elif event == 'PLAY_END':
             if self.feed is not None and len(self.feed.entries) > 0:
-                self.feed.entries.pop(0)
+                entry = self.feed.entries.pop(0)
+                if entry:
+                    time.sleep(3)
+                    from kaa.metadata.audio import eyeD3
+                    try:
+                        tag = eyeD3.Tag()
+                        tag.link(entry.trackpath)
+                        tag.header.setVersion(eyeD3.ID3_V2_3)
+                        tag.setArtist(entry.artist)
+                        tag.setAlbum(entry.album)
+                        tag.setTitle(entry.title)
+                        #tag.setGenre(entry.genre)
+                        if entry.image:
+                            tag.addImage(eyeD3.ImageFrame.FRONT_COVER, entry.image)
+                        tag.update()
+                    except Exception, why:
+                        print why
             self.play()
             return False
         elif event == 'PLAYLIST_NEXT':
@@ -279,7 +295,7 @@ class LastFMItem(AudioItem):
             self.title = entry.title
             self.location_url = entry.location_url
             self.length = entry.duration
-            basename = os.path.join(config.LASTFM_DIR, self.stream_name, entry.artist, entry.album, entry.title)
+            basename = os.path.join(config.LASTFM_DIR, entry.artist, entry.album, entry.title)
             self.basename = basename.lower().replace(' ', '_').\
                 replace('.', '').replace('\'', '').replace(':', '').replace(',', '')
             if not os.path.exists(os.path.dirname(self.basename)):
@@ -287,7 +303,7 @@ class LastFMItem(AudioItem):
                 os.makedirs(os.path.dirname(self.basename), 0777)
             # url is changed, to include file://
             self.url = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
-            self.trackpath = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
+            entry.trackpath = os.path.join(self.basename + os.path.splitext(entry.location_url)[1])
             if entry.image_url:
                 self.image = os.path.join(self.basename + os.path.splitext(entry.image_url)[1])
                 self.image_downloader = self.webservices.download(entry.image_url, self.image)
@@ -298,22 +314,22 @@ class LastFMItem(AudioItem):
                     time.sleep(0.1)
             else:
                 self.image = None
-            self.track_downloader = self.webservices.download(self.location_url, self.trackpath, self)
+            entry.image = self.image
+            track_downloader = self.webservices.download(self.location_url, entry.trackpath, self)
             # Wait for a bit of the file to be downloaded
-            while self.track_downloader.filesize() < 1024 * 20:
-                if not self.track_downloader.isrunning():
+            while track_downloader.filesize() < 1024 * 20:
+                if not track_downloader.isrunning():
                     raise LastFMError('Failed to download track', entry.location_url)
                 time.sleep(0.1)
             if not self.player:
-                self.player = PlayerGUI(self, menuw)
+                self.player = PlayerGUI(self, self.menuw)
             error = self.player.play()
             if error:
                 raise LastFMError('Play error=%r' % (error,))
 
         except LastFMError, why:
-            traceback.print_exc()
             _debug_('play error: %s' % (why,), DWARNING)
-            if menuw:
+            if self.menuw:
                 AlertBox(text=str(why)).show()
             rc.post_event(STOP)
             return
@@ -472,7 +488,6 @@ class LastFMWebServices:
                 _debug_('len(reply)=%r' % (len(reply),), 1)
             return reply
         except urllib2.HTTPError, why:
-            _debug_('%s: %s' % (url, why), DWARNING)
             raise LastFMError(why, url)
         except Exception, why:
             _debug_('%s' % (why,), DWARNING)
@@ -689,21 +704,6 @@ class LastFMDownloader(Thread):
                     # debugs fail during shutdown
                     #_debug_('%s downloaded' % self.filename)
                     # XXX this may upset mplayer, stopping playback before the end of the track
-                    if self.entry:
-                        time.sleep(3)
-                        from kaa.metadata.audio import eyeD3
-                        try:
-                            tag = eyeD3.Tag()
-                            tag.link(self.filename)
-                            tag.header.setVersion(eyeD3.ID3_V2_3)
-                            tag.setArtist(self.entry.artist)
-                            tag.setAlbum(self.entry.album)
-                            tag.setTitle(self.entry.title)
-                            #tag.setGenre(self.entry.genre)
-                            tag.addImage(eyeD3.ImageFrame.FRONT_COVER, self.entry.image)
-                            tag.update()
-                        except Exception, why:
-                            print why
                     break
                 self.size += len(reply)
             else:
