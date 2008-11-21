@@ -275,7 +275,7 @@ class LivePauseController:
             'VIDEO_NEXT_SUBTITLE' : self.__playing_toggle_subtitles,
             }
 
-        self.event_maps[State.PLAYING] = {
+        self.event_maps[State.NUMBER] = {
             'STOP'                : self.__handle_stop,
             'INPUT_1'             : self.__playing_handle_number,
             'INPUT_2'             : self.__playing_handle_number,
@@ -457,6 +457,7 @@ class LivePauseController:
             self.player.resume()
         else:
             self.player.pause()
+        self.osd.display_info(self.__get_display_info)        
         return True
 
     def __playing_tv_channel_up(self, event, menuw):

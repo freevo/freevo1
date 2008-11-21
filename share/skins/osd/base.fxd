@@ -117,7 +117,7 @@
 
             <button x="30" y="160" width="140" height="45" name="button1" style="button" />
             <button x="180" y="160" width="140" height="45" name="button2" style="button" />
-            <button x="330" y="160" width="140" height="45" name="button2" style="button" />
+            <button x="330" y="160" width="140" height="45" name="button3" style="button" />
 
             <navigationmap>
                 <navigation from="button1" right="button2" left="button3"/>

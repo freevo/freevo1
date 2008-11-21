@@ -35,7 +35,8 @@ import config
 import os.path
 
 import kaa
-
+import time
+import tv.epg_xmltv
 from tv.plugins.livepause.display.base import OSD
 import dialog
 from dialog.dialogs import Dialog, InputDialog
@@ -49,7 +50,7 @@ class GraphicsOSD(OSD):
         self.channel_banner = ChannelBanner()
 
     def display_info(self, info_function):
-        dialog = dialogs.InfoDialog(info_function)
+        dialog = InfoDialog(info_function)
         dialog.show()
 
     def display_channel_number(self, channel):
