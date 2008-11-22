@@ -49,6 +49,10 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     import gui.PopupBox
     import osd
 
+    # skip broken symlinks
+    if os.path.islink(videofile) and not os.path.exists(videofile):
+        return
+
     if not imagefile:
         imagefile = vfs.getoverlay(videofile + '.raw')
 
