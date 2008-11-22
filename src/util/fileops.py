@@ -428,7 +428,7 @@ def umount(dir):
         return
     global mounted_dirs
     if os.path.ismount(dir):
-        p = subprocess.Popen(['mount', dir], stdout=PIPE, stderr=PIPE)
+        p = subprocess.Popen(['umount', dir], stdout=PIPE, stderr=PIPE)
         rc = p.wait()
         so, se = p.communicate()
         if rc:

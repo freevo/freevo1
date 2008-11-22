@@ -514,6 +514,8 @@ class RemovableMedia:
         if direction == 'open' and self.can_eject:
             pop = PopupBox(text=_('Ejecting disc in drive %s') % self.drivename)
             pop.show()
+            if util.is_mounted(self.mountdir):
+                self.umount()
             self.open_tray()
             pop.destroy()
         elif direction == 'close' and self.can_close:

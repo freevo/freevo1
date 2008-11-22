@@ -42,6 +42,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Fixed mplayer when playing a DVD ISO (B#2249030)
  * Fixed record server auto re-encode show title (B#2193796)
  * Fixed record server generic record module to allow a group_type to be given (B#2017200)
+ * Fixed ROM drives mounting instead of umounting a disk, also umounts before an eject (B#2323270)
  * Fixed RTVE video plug-in for changes to the web page (B#2196882)
  * Fixed tv recordings_manager crashing when deleting a recording (B#2138835)
  * Fixed video item having broken synlinks (B#2323234)
