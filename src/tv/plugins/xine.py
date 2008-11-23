@@ -41,7 +41,8 @@ import childapp   # Handle child applications
 import rc         # The RemoteControl class.
 import util
 import osd
-
+import dialog
+from dialog.display import AppTextDisplay
 from tv.channels import FreevoChannels
 
 from event import *
@@ -143,6 +144,7 @@ class Xine:
         rc.app(self)
 
         self.app = childapp.ChildApp2(command)
+        dialog.enable_overlay_display(AppTextDisplay(self.ShowMessage))
         return None
 
 
@@ -153,6 +155,7 @@ class Xine:
         if self.app:
             self.app.stop('quit\n')
             rc.app(None)
+            dialog.disable_overlay_display()
 
             if not channel_change:
                 pass

@@ -98,6 +98,18 @@ class OSDDialog(object):
     def add(self, obj):
         self.objects.append(obj)
 
+    def get_widget_at(self, pos):
+        if pos[0] > self.position[0] and pos[0] < self.position[0] + self.size[0] and \
+            pos[1] > self.position[1] and pos[1] < self.position[1] + self.size[1]:
+            x = pos[0] - self.position[0]
+            y = pos[1] - self.position[1]
+            for obj in self.objects:
+                if isinstance(obj, OSDWidget):
+                    if x > obj.pos[0] and x < obj.pos[0] + obj.size[0] and \
+                        y > obj.pos[1] and y < obj.pos[1] + obj.size[1]:
+                        return obj.name
+        return None
+
 
     def prepare(self):
         self.first_render = True
@@ -515,7 +527,7 @@ class OSDMenu(OSDWidget):
 
     def render_widget(self, image, model):
         if self.first_render:
-            model.layout(self.items_per_page)
+            model.layout(self.items_per_page, self.pos, self.size)
 
 
         super(OSDMenu, self).render_widget(image, model)

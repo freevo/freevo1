@@ -53,6 +53,8 @@ import plugin
 
 import dialogs
 
+from pygame.locals import *
+
 class Display(object):
     """
     Base class for all display classes.
@@ -217,6 +219,11 @@ class GraphicsDisplay(Display):
 
         return super(GraphicsDisplay,self).handle_event(evt)
 
+    def handle_mouse_event(self, evt):
+        if self.current_dialog and hasattr(self.current_dialog, 'handle_mouse_event'):
+            self.current_dialog.handle_mouse_event(evt)
+
+
     def show_volume(self, level, muted, channel=None):
         if self.volume_dialog is None:
             self.volume_dialog = dialogs.VolumeDialog()
@@ -247,11 +254,16 @@ class GraphicsDisplay(Display):
                self.current_dialog.priority == 'low' and dialog.priority == 'normal':
 
                 now = time.time()
+
                 left = self.current_time_details[1] - (now - self.current_time_details[0])
-                _debug_('Queuing current dialog, time left %f' % left)
-                self.waiting[self.current_dialog.priority] = (self.current_dialog, left, True)
-                # We don't finish the dialog as we will be displaying it again when
-                # the higher priority dialog closes.
+                if left > 0.0:
+                    _debug_('Queuing current dialog, time left %f' % left)
+                    self.waiting[self.current_dialog.priority] = (self.current_dialog, left, True)
+                    # We don't finish the dialog as we will be displaying it again when
+                    # the higher priority dialog closes.
+                else:
+                    # No time left on the clock for this dialog so finish it.
+                    self.current_dialog.finish()
                 self.hide_dialog_timer.stop()
                 self.current_dialog = None
             elif dialog.priority == 'normal' and self.current_dialog.priority == 'high' or \
@@ -303,7 +315,7 @@ class GraphicsDisplay(Display):
             self.current_dialog = None
             self.hide_image()
             _debug_('Closing dialog priority %s' % priority)
-            # Now check lower priority waiting queue for
+            # Now check lower priority waiting queue for any dialogs waiting to be displayed
             if priority == dialogs.Dialog.HIGH_PRIORITY:
                 priority = dialogs.Dialog.NORMAL_PRIORITY
             elif priority == dialogs.Dialog.NORMAL_PRIORITY:

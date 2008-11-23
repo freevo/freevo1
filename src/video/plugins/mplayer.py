@@ -38,6 +38,8 @@ import util       # Various utilities
 import childapp   # Handle child applications
 import rc         # The RemoteControl class.
 import plugin
+import dialog
+from dialog.display import AppTextDisplay
 
 from event import *
 
@@ -359,6 +361,7 @@ class MPlayer:
 
         rc.app(self)
         self.app = MPlayerApp(command, self)
+        dialog.enable_overlay_display(AppTextDisplay(self.show_message))
         return None
 
 
@@ -374,6 +377,7 @@ class MPlayer:
 
         self.app.stop('quit\n')
         rc.app(None)
+        dialog.disable_overlay_display()
         self.app = None
 
 
@@ -486,12 +490,14 @@ class MPlayer:
             return True
 
         if event == OSD_MESSAGE:
-            self.app.write('osd_show_text "%s"\n' % event.arg);
+            self.show_message(event.arg)
             return True
 
         # nothing found? Try the eventhandler of the object who called us
         return self.item.eventhandler(event)
 
+    def show_message(self, message):
+        self.app.write('osd_show_text "%s"\n' % message);
 
     def reset_seek(self):
         _debug_('seek timeout')

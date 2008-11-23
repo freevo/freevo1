@@ -123,6 +123,26 @@ def get_display():
     """
     return _display
 
+def is_dialog_supported():
+    """
+    Retrieve whether the current display supports graphics dialogs or not.
+    @return: True if the display supports graphics dialogs, False if not.
+    """
+    if _display:
+        return _display.supports_dialogs
+
+    return False
+
+def is_dialog_showing():
+    """
+    Retrieve whether a dialog is currently being displayed.
+
+    @return: True if a dialog is being displayed, False if not.
+    """
+    if _display and _display.supports_dialogs:
+        return _display.current_dialog != None
+
+    return False
 
 def show_volume(level, muted, channel=None):
     """
@@ -182,3 +202,7 @@ def handle_event(event):
     if _display:
         return _display.handle_event(event)
     return False
+
+def handle_mouse_event(event):
+    if _display and hasattr(_display, 'handle_mouse_event'):
+        _display.handle_mouse_event(event)

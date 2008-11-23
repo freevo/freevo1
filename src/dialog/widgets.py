@@ -36,6 +36,7 @@ A widget is something that the user can navigate to and can have one of the foll
  - invisible = The widget is not drawn.
 """
 import kaa
+from pygame.locals import *
 
 class WidgetModel(object):
     """
@@ -140,13 +141,22 @@ class ButtonModel(WidgetModel):
             return True
         return super(ButtonModel, self).handle_event(event)
 
-    def press(self):
+    def handle_mouse_event(self, event):
+        if event.type == MOUSEBUTTONDOWN:
+            self.press(False)
+
+        elif event.type == MOUSEBUTTONUP:
+            self.__unpress()
+
+
+    def press(self, keyboard=True):
         """
         Press the button.
         """
         self.pressed = True
         self.redraw()
-        self.pressed_timer.start(0.2)
+        if keyboard:
+            self.pressed_timer.start(0.2)
 
     def __unpress(self):
         """
@@ -308,6 +318,29 @@ class MenuModel(WidgetModel):
 
         return super(MenuModel, self).handle_event(event)
 
+    def handle_mouse_event(self, event):
+        if event.type == MOUSEMOTION:
+            y = event.pos[1] - self.position[1]
+            size_per_item = self.size[1] / self.items_per_page
+            scroll_height = size_per_item / 4
+            if y <= scroll_height  and self.offset >= 1:
+                self.offset -= 1
+                self.__update_page()
+                self.redraw()
+            if y >= (self.size[1] - scroll_height) and (self.offset + self.items_per_page) < len(self.items):
+                self.offset += 1
+                self.__update_page()
+                self.redraw()
+
+            idx = (y / size_per_item) + self.offset
+            self.items[self.active_item].active = False
+            self.active_item = idx
+            self.items[self.active_item].active = True
+            self.redraw()
+        if event.type == MOUSEBUTTONDOWN or event.type == MOUSEBUTTONUP:
+            self.items[self.active_item].handle_mouse_event(event)
+
+
     def activate_item(self, item):
         """
         Activate the specified menu item and redraw the dialog.
@@ -359,11 +392,13 @@ class MenuModel(WidgetModel):
         self.__update_page()
         self.redraw()
 
-    def layout(self, items_per_page):
+    def layout(self, items_per_page, position, size):
         """
         Called by the skin to layout this menu.
         @param items_per_page: The number of items that are to be displayed on a page.
         """
+        self.position = position
+        self.size = size
         self.offset = 0
         self.active_item = 0
         self.items_per_page = items_per_page
@@ -447,7 +482,7 @@ class ToggleMenuItemModel(MenuItemModel):
             self.signals['toggled'].emit(self, selected)
             self.redraw()
 
-    def press(self):
+    def press(self, keyboard=True):
         self.set_selected(not self.selected)
 
     def get_state(self):

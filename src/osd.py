@@ -46,7 +46,7 @@ import cStringIO
 import config
 import rc
 import util
-
+import dialog
 
 if __freevo_app__ == 'main':
     # The PyGame Python SDL interface.
@@ -496,6 +496,10 @@ class OSD:
 
             if config.SYS_USE_MOUSE:
                 if event.type == MOUSEMOTION:
+                    if dialog.is_dialog_showing():
+                        dialog.handle_mouse_event(event)
+                        # Swallow all mouse events if a dialog is showing even if not over a widget.
+                        continue
                     app = self.focused_app()
                     # Menu
                     if app and hasattr(app, 'menustack'):
@@ -519,6 +523,10 @@ class OSD:
 
 
                 if event.type == MOUSEBUTTONDOWN:
+                    if dialog.is_dialog_showing():
+                        dialog.handle_mouse_event(event)
+                        # Swallow all mouse events if a dialog is showing even if not over a widget.
+                        continue
                     app = self.focused_app()
                     # Menu
                     if app and hasattr(app, 'back_one_menu'):
@@ -564,6 +572,12 @@ class OSD:
                         # Right click = Esc
                         elif event.button == 3:
                             app.destroy()
+
+            if event.type == MOUSEBUTTONUP:
+                if dialog.is_dialog_showing():
+                    dialog.handle_mouse_event(event)
+                    # Swallow all mouse events if a dialog is showing even if not over a widget.
+                    continue
 
             if event.type == KEYDOWN:
                 if not map and event.key > 30:
