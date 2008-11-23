@@ -1,7 +1,18 @@
 diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
 --- pyusb-0.4.1.orig/pyusb.c	2007-09-28 23:46:58.000000000 +0200
-+++ pyusb-0.4.1/pyusb.c	2008-08-23 17:39:34.000000000 +0200
-@@ -126,7 +126,7 @@
++++ pyusb-0.4.1/pyusb.c	2008-11-23 14:13:10.000000000 +0100
+@@ -13,6 +13,10 @@
+ #include <stdio.h>
+ #define DEFAULT_TIMEOUT 100
+ 
++#ifndef Py_ssize_t
++typedef int Py_ssize_t;
++#endif
++
+ /*
+  * Necessary to compile successfully in python 2.3
+  * Thanks to Mark Rages for the patch
+@@ -126,7 +130,7 @@
   */
  PYUSB_STATIC char *getBuffer(
  	PyObject *obj,
@@ -10,7 +21,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
  	)
  {
  	char *p = NULL;
-@@ -342,7 +342,7 @@
+@@ -342,7 +346,7 @@
  PYUSB_STATIC PyTypeObject Py_usb_Endpoint_Type = {
      PyObject_HEAD_INIT(NULL)
      0,                         /*ob_size*/
@@ -19,7 +30,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
      sizeof(Py_usb_Endpoint), /*tp_basicsize*/
      0,                         /*tp_itemsize*/
      0,                         /*tp_dealloc*/
-@@ -475,7 +475,7 @@
+@@ -475,7 +479,7 @@
  PYUSB_STATIC PyTypeObject Py_usb_Interface_Type = {
      PyObject_HEAD_INIT(NULL)
      0,                         /*ob_size*/
@@ -28,7 +39,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
      sizeof(Py_usb_Interface),   /*tp_basicsize*/
      0,                         /*tp_itemsize*/
      Py_usb_Interface_del,     /*tp_dealloc*/
-@@ -634,7 +634,7 @@
+@@ -634,7 +638,7 @@
  PYUSB_STATIC PyTypeObject Py_usb_Configuration_Type = {
      PyObject_HEAD_INIT(NULL)
      0,                         /*ob_size*/
@@ -37,7 +48,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
      sizeof(Py_usb_Configuration),   /*tp_basicsize*/
      0,                         /*tp_itemsize*/
      Py_usb_Configuration_del,  /*tp_dealloc*/
-@@ -853,7 +853,7 @@
+@@ -853,7 +857,7 @@
  PYUSB_STATIC PyTypeObject Py_usb_Device_Type = {
      PyObject_HEAD_INIT(NULL)
      0,                         /*ob_size*/
@@ -46,7 +57,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
      sizeof(Py_usb_Device),     /*tp_basicsize*/
      0,                         /*tp_itemsize*/
      Py_usb_Device_del,         /*tp_dealloc*/
-@@ -1004,7 +1004,7 @@
+@@ -1004,7 +1008,7 @@
  PYUSB_STATIC PyTypeObject Py_usb_Bus_Type = {
      PyObject_HEAD_INIT(NULL)
      0,                         /*ob_size*/
@@ -55,7 +66,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
      sizeof(Py_usb_Bus),        /*tp_basicsize*/
      0,                         /*tp_itemsize*/
      Py_usb_Bus_del,            /*tp_dealloc*/
-@@ -1104,7 +1104,7 @@
+@@ -1104,7 +1108,7 @@
  	int index = 0;
  	char *bytes;
  	PyObject *data;
@@ -64,7 +75,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
  	int timeout = DEFAULT_TIMEOUT;
  	int ret;
  	int as_read = 0;
-@@ -1386,7 +1386,7 @@
+@@ -1386,7 +1390,7 @@
  	int endpoint;
  	int timeout = DEFAULT_TIMEOUT;
  	char *data;
@@ -73,7 +84,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
  	PyObject *bytes;
  	int ret;
  	PyObject *retObj;
-@@ -1493,7 +1493,7 @@
+@@ -1493,7 +1497,7 @@
  	int endpoint;
  	int timeout = DEFAULT_TIMEOUT;
  	char *data;
@@ -82,7 +93,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
  	PyObject *bytes;
  	int ret;
  	PyObject *retObj;
-@@ -1974,7 +1974,7 @@
+@@ -1974,7 +1978,7 @@
  PYUSB_STATIC PyTypeObject Py_usb_DeviceHandle_Type = {
      PyObject_HEAD_INIT(NULL)
      0,                         /*ob_size*/
@@ -91,7 +102,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
      sizeof(Py_usb_DeviceHandle), /*tp_basicsize*/
      0,                         /*tp_itemsize*/
      Py_usb_DeviceHandle_del,   /*tp_dealloc*/
-@@ -2103,14 +2103,14 @@
+@@ -2103,14 +2107,14 @@
  /*
   * Entry point for the module
   */
@@ -111,7 +122,7 @@ diff -Naur pyusb-0.4.1.orig/pyusb.c pyusb-0.4.1/pyusb.c
  	Py_INCREF(PyExc_USBError);
 diff -Naur pyusb-0.4.1.orig/setup.py pyusb-0.4.1/setup.py
 --- pyusb-0.4.1.orig/setup.py	2007-09-29 00:05:00.000000000 +0200
-+++ pyusb-0.4.1/setup.py	2008-08-23 17:36:14.000000000 +0200
++++ pyusb-0.4.1/setup.py	2008-11-23 14:08:03.000000000 +0100
 @@ -39,7 +39,7 @@
  	extra_compile_args = ['-I/usr/local/include']
  																											
