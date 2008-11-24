@@ -67,30 +67,33 @@ class Feed:
 
     def parseFeed(self, feed):
         root = ET.parse(feed)
-        channel = root.find('.//channel')
-        if channel:
-            title = channel.find('title')
-            self.title = ET.iselement(title) and title.text or 'None'
-            description = channel.find('description')
-            self.description = ET.iselement(description) and description.text or 'None'
-            pubDate = channel.find('pubDate')
-            self.pubDate = ET.iselement(pubDate) and pubDate.text or 'None'
-            items = channel.findall('item')
-            for item in items:
-                newItem = self.Item()
-                element = item.find('title')
-                newItem.title = element.text or 'None'
-                element = item.find('description')
-                newItem.description = element.text or 'None'
-                element = item.find('pubDate')
-                if element is not None:
-                    newItem.date = element.text or 'None'
-                enclosure = item.find('enclosure')
-                if enclosure is not None:
-                    newItem.url = 'url' in enclosure.attrib and enclosure.attrib['url'] or 'None'
-                    newItem.type = 'type' in enclosure.attrib and enclosure.attrib['type'] or 'None'
-                    newItem.length = 'length' in enclosure.attrib and enclosure.attrib['length'] or 'None'
-                self.items.append(newItem)
+        try:
+            channel = root.find('.//channel')
+            if channel:
+                title = channel.find('title')
+                self.title = ET.iselement(title) and title.text or 'None'
+                description = channel.find('description')
+                self.description = ET.iselement(description) and description.text or 'None'
+                pubDate = channel.find('pubDate')
+                self.pubDate = ET.iselement(pubDate) and pubDate.text or 'None'
+                items = channel.findall('item')
+                for item in items:
+                    newItem = self.Item()
+                    element = item.find('title')
+                    newItem.title = element.text or 'None'
+                    element = item.find('description')
+                    newItem.description = element.text or 'None'
+                    element = item.find('pubDate')
+                    if element is not None:
+                        newItem.date = element.text or 'None'
+                    enclosure = item.find('enclosure')
+                    if enclosure is not None:
+                        newItem.url = 'url' in enclosure.attrib and enclosure.attrib['url'] or 'None'
+                        newItem.type = 'type' in enclosure.attrib and enclosure.attrib['type'] or 'None'
+                        newItem.length = 'length' in enclosure.attrib and enclosure.attrib['length'] or 'None'
+                    self.items.append(newItem)
+        except AttributeError:
+            pass
 
 
 if __name__ == '__main__':
