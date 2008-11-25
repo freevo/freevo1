@@ -149,12 +149,12 @@ def open(name, mode='r'):
             if not os.path.isdir(os.path.dirname(overlay)):
                 os.makedirs(os.path.dirname(overlay), mode=04775)
         except IOError:
-            print 'error creating dir %s' % os.path.dirname(overlay)
+            _debug_('error creating dir %s' % os.path.dirname(overlay), DWARNING)
             raise IOError
         try:
             return file(overlay, mode)
         except IOError:
-            print 'error opening file %s' % overlay
+            _debug_('error opening file %s' % overlay, DWARNING)
             raise IOError
 
 
@@ -172,12 +172,12 @@ def codecs_open(name, mode, encoding):
             if not os.path.isdir(os.path.dirname(overlay)):
                 os.makedirs(os.path.dirname(overlay))
         except IOError:
-            print 'error creating dir %s' % os.path.dirname(overlay)
+            _debug_('error creating dir %s' % os.path.dirname(overlay), DWARNING)
             raise IOError
         try:
             return codecs.open(overlay, mode, encoding=encoding)
         except IOError, e:
-            print 'error opening file %s' % overlay
+            _debug_('error opening file %s' % overlay, DWARNING)
             raise IOError, e
 
 

@@ -137,7 +137,8 @@ def wget(url):
     _debug_('wget(%s)' % (url), 2)
     txdata = None
     txheaders = {
-        'User-Agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'
+        'User-Agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.4) Gecko/2008102920 Firefox/3.0.4'
+
     }
     print 'getting url %r...' % (url)
     req = urllib2.Request(url, txdata, txheaders)
