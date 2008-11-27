@@ -13,9 +13,8 @@
 
         <!-- Redefine of the type default -->
         <menuset label="normal text style">
-            <view x="20" y="100" width="300" height="300"/>
-            
-            <listing layout="listing" x="330" y="150" width="420" height="430">
+            <view x="20" y="100" width="300" height="300"/> 
+            <listing layout="listing" x="330" y="115" width="420" height="430">
                 <image filename="up.png" label="uparrow" x="760" y="110"/>
                 <image filename="down.png" label="downarrow" x="760" y="max-32"/>
             </listing>
@@ -57,7 +56,23 @@
 
         <!-- default listing area -->
         <layout label="listing">
-            <background/>
+            <background>
+                <rectangle size="0" bgcolor="0x950e1427" radius="5"/>
+            </background>
+            <content type="text" spacing="0.2">
+                <item type="default" font="grey"/>
+                <item type="selected" font="white">
+                    <rectangle bgcolor="0x3d95d3" size="0" x="-10" y="-3" width="max+20" height="max+6" radius="15"/>
+                </item>
+            </content>
+        </layout>
+
+        <!-- default listing area with alpha blended background -->
+        <layout label="listing with background">
+            <background>
+                <rectangle size="0" bgcolor="0x950e1427" radius="5" width="300" height="420"/>
+            </background>
+
             <content type="text" spacing="2">
                 <item type="default" font="grey"/>
                 <item type="selected" font="white">
@@ -65,11 +80,11 @@
                 </item>
             </content>
         </layout>
-        
+ 
         <!-- default info area -->
         <layout label="description">
             <background>
-                <rectangle size="0" radius="10" bgcolor="0xaa000000"/>
+                <rectangle size="0" radius="10" bgcolor="0x950e1427"/>
             </background>
             <content x="10" y="10" type="text" height="max-20" width="max-20" spacing="20" font="default">
                 <item type="default">
@@ -86,8 +101,8 @@
         <image label="background_music" filename="geexbox/back_music.png"/>
         <image label="background_tv" filename="geexbox/back_tv.png"/>
         <image label="background_weather" filename="geexbox/back_weather.png"/>
-        <image label="main_logo" filename="geexbox/logo.png"/>
-        <image label="logo" filename="geexbox/logo.png"/>
+        <image label="main_logo" filename="geexbox/freevo-logo2.png"/>
+        <image label="logo" filename="geexbox/freevo-logo2.png"/>
         <image label="panel" filename="geexbox/panel.png"/>
         <image label="panel2" filename="geexbox/panel2.png"/>
         <image label="shutdown" filename="geexbox/shutdown.jpg"/>
@@ -99,6 +114,8 @@
 
         <menu type="video">
             <style text="text with info style"/>
+            <style image="video menu with info" text="default description"/>
+            <style text="default description"/>
         </menu>
         
         <menuset label="video" inherits="normal text style">
@@ -109,12 +126,12 @@
         <menuset label="text with info style" inherits="normal text style">
             <!-- 4. listing area: the list of all items -->
             <screen layout="video screen" visible="yes"/>
-            <view layout="view no border" x="45" y="125" width="260" height="230" align="left"/>
-            <listing x="30" y="350" width="710" height="200">
+            <view layout="view no border" x="40" y="130" width="260" height="225" align="left"/>
+            <listing x="30" y="360" width="710" height="190">
                 <image filename="up.png" label="uparrow" x="750" y="350"/>
                 <image filename="down.png" label="downarrow" x="750" y="max-32"/>
             </listing>
-            <info layout="video info" x="320" y="105" width="430" height="240"/>
+            <info layout="video info" x="310" y="130" width="460" height="225"/>
             <title visible="no"/>
         </menuset>
         
@@ -124,8 +141,22 @@
                 <image image="panel" label="panel_movie" x="10" y="125" width="770" height="250"/>
             </background>
         </layout>
-        
+
+        <!-- listing area for video with images -->
+        <layout label="video list">
+          <content type="image" spacing="-2">
+            <item type="default" width="80" height="112" align="center" valign="center"/>
+            <item type="selected" width="87" height="122" align="center" valign="center">
+              <rectangle bgcolor="0x3d95d3" size="0" x="-5" y="-5" width="max+10"
+            height="max+10"/>
+            </item>
+          </content>
+        </layout>
+ 
         <layout label="video info">
+            <background>
+                <rectangle size="0" radius="10" bgcolor="0x950e1427"/>
+            </background>
             <content x="0" y="0" type="text" spacing="20" font="default">
                 <item type="video">
                     <if expression="tv_show_name">
@@ -260,24 +291,40 @@
         ******************************************************* -->
 
         <menu type="audio">
+            <style image="audio menu with info" text="text with info style"/>
             <style text="audio"/>
         </menu>
         
         <menuset label="audio" inherits="normal text style">
             <screen layout="audio screen"/>
-            <view layout="view no border" x="39" y="145" width="260" height="250"/>
-            <info layout="audio info" x="40" y="415" width="260" height="180"/>
+            <view layout="view no border" x="40" y="130" width="250" height="250"/>
+            <info layout="audio info" x="40" y="390" width="250" height="150"/>
             <title visible="no"/>
         </menuset>
         
         <layout label="audio screen">
             <background>
                 <image image="background_music" x="0" y="0" label="background_music"/>
-                <image image="panel2" label="panel_audio" x="12" y="125" width="290" height="475"/>
+                <image image="panel2" label="panel_audio" x="12" y="115" width="290" height="475"/>
             </background>
         </layout>
-        
+      
+        <!-- listing area for audio with images -->
+        <layout label="audio list">
+          <content type="image" spacing="-2">
+            <item type="default" width="100" height="100" align="center" valign="center"/>
+            <item type="selected" width="110" height="110" align="center" valign="center">
+             <rectangle bgcolor="0x3d95d3" size="0" x="-5" y="-5" width="max+10"
+                height="max+10"/>
+            </item>
+         </content>
+       </layout>
+
+  
         <layout label="audio info">
+            <background>
+                <rectangle size="0" radius="5"/>
+            </background>
             <content x="0" y="0" type="text" spacing="20" font="default">
                 <!-- audio dir -->
                 <item type="default">
@@ -382,29 +429,45 @@
             <style text="normal text style (image)"/>
         </menu>
         
+        <!-- listing area for image with images (preview) -->
+        <layout label="image list">
+          <content type="image" spacing="-2">
+            <item type="default" width="140" height="115" align="center"
+              valign="center"/>
+            <item type="selected" width="154" height="131"
+              align="center" valign="center">
+              <rectangle bgcolor="selection" size="0" x="-5" y="-5" width="max+10"
+                height="max+10"/>
+            </item>
+          </content>
+        </layout>
+ 
         <menuset label="image" inherits="normal text style">
             <screen layout="image screen"/>
-            <listing y="110" x="60" height="430" width="700" layout="image list"/>
-            <info layout="image info" x="20" y="540" width="700" height="60"/>
+            <listing y="160" x="40" height="420" width="710" layout="image list"/>
+            <info layout="image info" x="15" y="100" width="750" height="80"/>
             <view visible="no"/>
             <title visible="no"/>
         </menuset>
         
         <menuset label="normal text style (image)" inherits="normal text style">
             <screen layout="image screen" visible="yes"/>
+            <view x="20" y="115" width="300" height="300"/>
         </menuset>
 
         <layout label="image screen">
             <background>
                 <image image="background_image" label="background_image" x="0" y="0"/>
-                <image filename="frame.png" label="frame_image" x="10" y="520" width="790" height="70"/>
+<!--Turn off that little background image
+                <image filename="frame.png" label="frame_image" x="10" y="115" width="790" height="80"/>
+-->
             </background>
         </layout>
         
         <!-- listing area for image with images (preview) -->
         <layout label="image list">
             <content type="image" spacing="0">
-                <item type="default" width="140" height="115" align="center" valign="center">
+                <item type="default" width="105" height="80" align="center" valign="center">
                     <shadow x="5" y="5" color="0xaa000000" visible="yes"/>
                 </item>
                 <item type="selected" width="140" height="115" align="center" valign="center">
@@ -488,7 +551,7 @@
             <screen layout="screen watermark" visible="yes">
                 <area x="0" y="0" width="800" height="600"/>
             </screen>
-            <listing layout="list_main" x="20" y="160" width="380" height="420"/>
+            <listing layout="list_main" x="20" y="160" width="300" height="420"/>
             <view visible="no"/>
         </menuset>
         
@@ -496,13 +559,16 @@
             <background>
                 <image image="background_main" x="0" y="0" label="background_main"/>
                 <image x="362" y="112" width="438" height="372" label="watermark"/>
-                <image image="main_logo" x="70" y="25" width="285" height="167" label="main_logo"/>
+                <image image="main_logo" x="130" y="55" width="162" height="103" label="main_logo"/>
             </background>
         </layout>
         
         <!-- main menu listing area -->
         <layout label="list_main">
-            <content align="left" type="text" spacing="5">
+            <background>
+                <rectangle size="0" bgcolor="0x950e1427" radius="5" width="300" height="420"/>
+            </background>
+            <content align="left" type="text" spacing="2">
                 <item type="default" font="main"/>
                 <item type="selected" font="main selected">
                     <rectangle bgcolor="0x3d95d3" size="0" y="-5" x="-10" width="240" height="max+10" radius="15"/>
@@ -527,8 +593,8 @@
         <menuset label="tv menu">
             <screen layout="screen" x="0" y="0" width="800" height="600"/>
             <title visible="no" x="40" y="40"/>
-            <info visible="no" layout="tv info" x="10" y="90" width="780" height="30"/>
-            <listing layout="tv listing" x="10" y="120" width="750" height="440">
+	    <info visible="yes" layout="tv info" x="10" y="50" width="770" height="50"/>
+            <listing layout="tv listing" x="10" y="100" width="760" height="500-(buttonbar*(buttonbar_height-30))">
                 <rectangle size="490" x="0" y="110" bgcolor="0x80000000" radius="10" width="max"/>
                 <image x="765" y="150" width="32" height="32" label="uparrow" filename="up.png"/>
                 <image x="765" y="max-32" width="32" height="32" label="downarrow" filename="down.png"/>
@@ -571,13 +637,16 @@
         
         <menuset label="tv main menu" inherits="text with info style">
             <screen layout="tv screen" visible="yes"/>
-            <info layout="tv main menu info" x="10" y="90" width="780" height="250"/>
+            <info layout="tv main menu info" x="220" y="70" width="580" height="500"/>
+            <listing label="listing with background" x="2" y="80" width="220" height="500"/>
+
             <view visible="no"/>
         </menuset>
         
         <layout label="tv main menu info">
+            <!-- if we want a background for the comingup listings define it here -->
             <background>
-                <rectangle size="0" bgcolor="0x80000000" radius="10" x="0" y="0" width="max" height="max"/>
+                <rectangle size="0" bgcolor="0x950e1427" alpha="80" radius="5" x="0" y="0" width="max" height="max"/>
             </background>
             <content x="10" y="10" type="text" height="max-20" width="max-20" spacing="20" font="default">
                 <item type="default">

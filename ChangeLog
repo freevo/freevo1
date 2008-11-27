@@ -24,6 +24,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Updated encoding server to name incomplete encodings with incomplete (F#2190016)
  * Updated French translation (F#2318587)
  * Updated Italian translation (F#2153010)
+ * Updated geexbox skin with a new layout (F#1917603)
  * Updated livepause for IVTV devices (F#2343240)
  * Updated mouse support so that it is optional (F#2089306)
  * Updated mplayer tv plug-in to have the event TV_SEND_MPLAYER_CMD (F#2298515)
