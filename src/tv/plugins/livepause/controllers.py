@@ -42,12 +42,14 @@ import os
 import traceback
 
 import config
+import tv.ivtv
+import tv.v4l2 as V4L2
 
 from tv.plugins.dvbstreamer.manager import DVBStreamerManager
 
-from tv.plugins.livepause.fillers import UDPTSReceiver
+from tv.plugins.livepause.fillers import UDPTSReceiver, MPEGProgamStreamReceiver
 
-__all__ = ['get_controller', 'Controller', 'DVBStreamerController', 'HDHomeRunController']
+__all__ = ['get_controller', 'Controller', 'DVBStreamerController', 'HDHomeRunController', 'IVTVController']
 
 # Hashtable of video group types to controller object
 cached_controllers = {}
@@ -67,6 +69,9 @@ def get_controller(vg_type):
 
     elif vg_type == 'hdhomerun':
         result = HDHomeRunController()
+
+    elif vg_type == 'ivtv':
+        result = IVTVController()
 
     # Cache controller for next time.
     cached_controllers[vg_type] = result
@@ -224,4 +229,60 @@ class HDHomeRunController(Controller):
         Enable/Disable sending of Data Received/Timeout events.
         """
         if self.receiver:
+            self.receiver.send_events = enable
+
+class IVTVController(Controller):
+    """
+    Class to control an IVTV based card.
+    """
+    def __init__(self):
+        COntroller.__init__(self)
+        self.receiver = MPEGProgamStreamReceiver()
+        self.settings = None
+
+    def start_filling(self, buffer, videogroup, channel, timeout):
+        """
+        Start filling the supplied buffer using the device supplied (VideoGroup)
+        after tuning to the channel specified.
+        If no data is received after timeout seconds send a Data Timed out event.
+        """
+        _debug_('Opening device %r' % (videogroup.vdev))
+        v = tv.ivtv.IVTV(videogroup.vdev)
+
+        v.init_settings()
+
+        _debug_('Setting input to %r' % (videogroup.input_type))
+        v.setinputbyname(videogroup.input_type)
+
+        cur_std = v.getstd()
+        try:
+            new_std = V4L2.NORMS.get(videogroup.tuner_norm)
+            if cur_std != new_std:
+                _debug_('Setting standard to %s' % (new_std))
+                v.setstd(new_std)
+        except:
+            _debug_("Videogroup norm value '%s' not from NORMS: %s" % \
+                (videogroup.tuner_norm, V4L2.NORMS.keys()), DERROR)
+
+        if videogroup.cmd != None:
+            _debug_("Running command %r" % videogroup.cmd)
+            retcode = os.system(videogroup.cmd)
+            _debug_("exit code: %g" % retcode)
+        self.settings = v
+        self.receiver.start(device, buffer)
+
+    def stop_filling(self):
+        """
+        Stop filling the buffer supplied in the previous start_filling call.
+        """
+        if self.settings:
+            self.receiver.stop()
+            self.settings.close()
+            self.settings = None
+
+    def enable_events(self, enable):
+        """
+        Enable/Disable sending of Data Received/Timeout events.
+        """
+        if self.settings:
             self.receiver.send_events = enable
