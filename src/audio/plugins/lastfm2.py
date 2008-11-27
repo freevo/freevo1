@@ -452,7 +452,7 @@ class LastFMWebServices:
         """
         # XXX this does not always work if there are multiple instance of the
         # thread running, need to get the item to shutdown the thread
-        if self.downloader is not None:
+        if hasattr(self, 'downloader') and self.downloader is not None:
             self.downloader.stop()
 
 
