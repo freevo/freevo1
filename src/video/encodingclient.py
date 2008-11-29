@@ -123,13 +123,13 @@ class EncodingClientActions:
 
 
     def _encodingserver_call(self, cmd, *args, **kwargs):
-        _debug_('_encodingserver_call(cmd=%s)' % (cmd,), 1)
+        _debug_('_encodingserver_call(cmd=%s)' % (cmd,), 2)
         inprogress = self._encodingserver_rpc(cmd, *args, **kwargs)
         if inprogress is None:
             return (None, EncodingClientActions.encodingserverdown)
         inprogress.wait()
         result = inprogress.get_result()
-        _debug_('%s.result=%r' % (cmd, result), 1)
+        _debug_('%s.result=%r' % (cmd, result), 3)
         return result
 
 
@@ -141,7 +141,7 @@ class EncodingClientActions:
             return False
         inprogress.wait()
         result = inprogress.get_result()
-        _debug_('ping.result=%r' % (result,), 1)
+        _debug_('ping.result=%r' % (result,), 3)
         return result
 
 
