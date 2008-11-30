@@ -90,22 +90,29 @@ static PyTypeObject PyGoomType;
 
 /* PyGoom methods */
 
-PyDoc_STRVAR(pygoom_resolution_doc, "resolution(width, height)\n"
+PyDoc_STRVAR(pygoom_resolution_doc, "resolution(width, height) -> None\n"
 			 "set the resolution to width and height");
 
 static PyObject *
 PyGoom_resolution(PyGoomObject *self, PyObject *args)
 {
-	int width, height;
-
-	if (!PyArg_ParseTuple(args, "ii:resolution", &width, &height)) {
+	if (!PyArg_ParseTuple(args, "ii:resolution", &self->width, &self->height)) {
 		return NULL;
 	}
+    if (self->surface) {
+		SDL_FreeSurface(self->surface);
+    }
+    goom_set_resolution(self->goominfo, self->width, self->height);
+    self->surface = SDL_CreateRGBSurface(0, self->width, self->height, 32, 0, 0, 0, 0);
+    if (! self->surface) {
+        return RAISE(PyExc_ValueError, "Cannot create surface");
+    }
+
 	Py_INCREF(Py_None);
 	return Py_None;
 }
 
-PyDoc_STRVAR(pygoom_process_doc, "process()\n"
+PyDoc_STRVAR(pygoom_process_doc, "process() -> None\n"
 			 "process a frame");
 
 static PyObject *
@@ -196,6 +203,15 @@ PyGoom_getexport(PyGoomObject *self, void *closure)
 }
 
 static PyObject *
+PyGoom_getsurface(PyGoomObject *self, void *closure)
+{
+    if (debug >= 3) {
+        printf("PyGoom_getsurface()\n"); fflush(stdout);
+    }
+    return Py_BuildValue("O", PySurface_New(self->surface));
+}
+
+static PyObject *
 PyGoom_getsongtitle(PyGoomObject *self, void *closure)
 {
     if (debug >= 3) {
@@ -204,6 +220,9 @@ PyGoom_getsongtitle(PyGoomObject *self, void *closure)
 	Py_INCREF(self->songtitle);
 	return self->songtitle;
 }
+
+PyDoc_STRVAR(PyGoom_songtitle_doc, "Set the song title\n"
+			 "The song title is displayed in the middle of the surface");
 
 static int
 PyGoom_setsongtitle(PyGoomObject *self, PyObject *value, void *closure)
@@ -236,6 +255,9 @@ PyGoom_getmessage(PyGoomObject *self, void *closure)
 	return self->message;
 }
 
+PyDoc_STRVAR(PyGoom_message_doc, "Set the message text\n"
+			 "The message scrolls up from the bottom for about 370 frames");
+
 static int
 PyGoom_setmessage(PyGoomObject *self, PyObject *value, void *closure)
 {
@@ -262,6 +284,9 @@ PyGoom_setmessage(PyGoomObject *self, PyObject *value, void *closure)
 	return 0;
 }
 
+PyDoc_STRVAR(PyGoom_fxmode_doc, "Set the effects mode\n"
+			 "An integer in the range -1 to 9");
+
 static PyObject *
 PyGoom_getfxmode(PyGoomObject *self, void *closure)
 {
@@ -287,6 +312,9 @@ PyGoom_setfxmode(PyGoomObject *self, PyObject *value, void *closure)
 	return 0;
 }
 
+PyDoc_STRVAR(PyGoom_fps_doc, "display frames per second\n"
+			 "This is called once per process loop");
+
 static PyObject *
 PyGoom_getfps(PyGoomObject *self, void *closure)
 {
@@ -308,10 +336,11 @@ PyGoom_setfps(PyGoomObject *self, PyObject *value, void *closure)
 
 static PyGetSetDef PyGoom_getseters[] = {
 	{ "exportfile",(getter)PyGoom_getexport,    NULL,                        "export file name",   NULL },
-	{ "songtitle", (getter)PyGoom_getsongtitle, (setter)PyGoom_setsongtitle, "song title",         NULL },
-	{ "message",   (getter)PyGoom_getmessage,   (setter)PyGoom_setmessage,   "message text",       NULL },
-	{ "fxmode",    (getter)PyGoom_getfxmode,    (setter)PyGoom_setfxmode,    "set effects mode",   NULL },
-	{ "fps",       (getter)PyGoom_getfps,       (setter)PyGoom_setfps,       "show frames/second", NULL },
+	{ "surface",   (getter)PyGoom_getsurface,   NULL,                        "surface",            NULL },
+	{ "songtitle", (getter)PyGoom_getsongtitle, (setter)PyGoom_setsongtitle, PyGoom_songtitle_doc, NULL },
+	{ "message",   (getter)PyGoom_getmessage,   (setter)PyGoom_setmessage,   PyGoom_message_doc,   NULL },
+	{ "fxmode",    (getter)PyGoom_getfxmode,    (setter)PyGoom_setfxmode,    PyGoom_fxmode_doc,    NULL },
+	{ "fps",       (getter)PyGoom_getfps,       (setter)PyGoom_setfps,       PyGoom_fps_doc,       NULL },
 	{ NULL }  /* Sentinel */
 };
 
@@ -374,6 +403,10 @@ PyGoom_init(PyGoomObject *self, PyObject *args, PyObject *kwds)
 
 	self->goominfo = goom_init(self->width, self->height);
     self->surface = SDL_CreateRGBSurface(0, self->width, self->height, 32, 0, 0, 0, 0);
+    if (! self->surface) {
+        PyErr_SetString(PyExc_ValueError, "Cannot create surface");
+        return -1;
+    }
     mmapfile = PyString_AsString(self->exportfile);
     if (strcmp(mmapfile, "") != 0) {
         self->mmap_fd = open(mmapfile, O_RDONLY);

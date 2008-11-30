@@ -41,6 +41,9 @@ except:
     raise Exception('[audio.mplayervis]: Pygoom not available, please install '+
                     'or remove this plugin (http://freevo.sf.net/pygoom).')
 
+if not hasattr(pygoom, 'HEXVERSION') and pygoom.HEXVERSION < 0x000200f0:
+    raise Exception('pygoom too old, you need version 0.2.0 or higher')
+
 # pygame  modules
 from pygame import Rect, image, transform, Surface
 
@@ -73,7 +76,7 @@ class MpvGoom(BaseAnimation):
     coversurf  = None
 
     @benchmark(benchmarking, benchmarkcall)
-    def __init__(self, x, y, width, height, coverfile=None):
+    def __init__(self, x, y, width, height, title='', coverfile=None):
         """
         Initialise the MPlayer Visualization Goom
         """
@@ -88,13 +91,7 @@ class MpvGoom(BaseAnimation):
             f.close()
 
         BaseAnimation.__init__(self, (x, y, width, height), fps=100, bg_update=False, bg_redraw=False)
-        _debug_('pygoom.set_exportfile(mmap_file=%r)' % (mmap_file), 1)
-        pygoom.set_exportfile(mmap_file)
-        _debug_('pygoom.set_resolution(width=%r, height=%r, 0)' % (width, height), 1)
-        pygoom.set_resolution(width, height, 0)
-        if config.MPLAYERVIS_FPS != 25:
-            _debug_('pygoom.set_fps(fps=%r)' % (config.MPLAYERVIS_FPS), 1)
-            pygoom.set_fps(config.MPLAYERVIS_FPS)
+        self.goom = pygoom.PyGoom(width, height, mmap_file, songtitle=title)
 
         self.fade_step = config.MPLAYERVIS_FADE_STEP
         self.init_counter = self.fade_step * config.MPLAYERVIS_INIT_COUNTER
@@ -114,7 +111,7 @@ class MpvGoom(BaseAnimation):
         self.alpha = self.set_alpha(self.counter, 0)
 
         self.running = False
-        Timer(self.timerhandler).start(0.1)
+        Timer(self.timerhandler).start(1.0 / config.MPLAYERVIS_FPS)
         self.last_time = 0
 
 
@@ -130,23 +127,16 @@ class MpvGoom(BaseAnimation):
 
     @benchmark(benchmarking, benchmarkcall)
     def set_visual(self, visual):
-        """ pass the visualisation effect to pygoom """
+        """ pass the visualisation effect to goom """
         _debug_('set_visual(visual=%r)' % (visual,), 1)
-        pygoom.set_visual(visual)
-
-
-    @benchmark(benchmarking, benchmarkcall)
-    def set_title(self, title):
-        """ pass the song title to pygoom """
-        _debug_('set_title(title)=%r' % (title,), 1)
-        pygoom.set_title(title)
+        self.goom.fxmode = visual
 
 
     @benchmark(benchmarking, benchmarkcall)
     def set_message(self, message):
-        """ pass the song message to pygoom """
+        """ pass the song message to goom """
         _debug_('set_message(message=%r)' % (message,), 1)
-        pygoom.set_message(message)
+        self.goom.message = message
 
 
     #@benchmark(benchmarking, benchmarkcall)
@@ -160,10 +150,9 @@ class MpvGoom(BaseAnimation):
 
 
     @benchmark(benchmarking, benchmarkcall)
-    def set_resolution(self, x, y, width, height, cinemascope=0, clear=False):
-        """ Set the resolution of the pygoom window """
-        _debug_('set_resolution(x=%r, y=%r, width=%r, height=%r, cinemascope=%r, clear=%r)' % \
-            (x, y, width, height, cinemascope, clear), 1)
+    def set_resolution(self, x, y, width, height, clear=False):
+        """ Set the resolution of the goom window """
+        _debug_('set_resolution(x=%r, y=%r, width=%r, height=%r, clear=%r)' % (x, y, width, height, clear), 1)
         r = Rect (x, y, width, height)
         if r == self.rect:
             return
@@ -172,8 +161,9 @@ class MpvGoom(BaseAnimation):
         self.info = None
 
         self.rect = r
-        _debug_('pygoom.set_resolution(width=%r, height=%r, cinemascope=%r)' % (width, height, cinemascope), 1)
-        pygoom.set_resolution(width, height, cinemascope)
+        _debug_('self.goom.resolution(width=%r, height=%r)' % (width, height), 1)
+        self.goom.resolution(width, height)
+
 
         # change the cover if neceserry
         s = None
@@ -226,9 +216,9 @@ class MpvGoom(BaseAnimation):
         _debug_('x=%r y=%r w=%r h=%r' % (x, y, w, h), 1)
 
         if config.MPLAYERVIS_FAST_FULLSCREEN:
-            self.set_resolution(x, y, w/2, h/2, 0)
+            self.set_resolution(x, y, w/2, h/2)
         else:
-            self.set_resolution(x, y, w, h, 0)
+            self.set_resolution(x, y, w, h)
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -326,7 +316,7 @@ class MpvGoom(BaseAnimation):
         if not self.running:
             return False
 
-        gooms = pygoom.get_surface()
+        gooms = self.goom.process()
         if self.coversurf:
             self.state()
             if self.alpha > 0:
@@ -387,7 +377,7 @@ NOVI = 2 # no view
 class PluginInterface(plugin.Plugin):
     """
     Native mplayer audiovisualization for Freevo.
-    Dependant on the pygoom-2k4 module and goom-2k4
+    Dependant on the pygoom-2k4-0.2.0 module and goom-2k4
 
     Activate with:
     | plugin.activate('audio.mplayervis')
@@ -635,7 +625,7 @@ class PluginInterface(plugin.Plugin):
         except:
             pass
 
-        self.visual.set_resolution(x, y, w, h, 0, False)
+        self.visual.set_resolution(x, y, w, h, False)
 
 
     @benchmark(benchmarking, benchmarkcall)
@@ -681,7 +671,7 @@ class PluginInterface(plugin.Plugin):
         if rc.app() == self.player.eventhandler:
             #if self.visual is None:
             #    self.visual = MpvGoom(300, 300, 150, 150, self.item.image)
-            self.visual = MpvGoom(300, 300, 150, 150, self.item.image)
+            self.visual = MpvGoom(300, 300, 150, 150, self.item.title, self.item.image)
 
             if self.view == FULL:
                 self.visual.set_info(self.item.name, 10)
@@ -705,8 +695,7 @@ class PluginInterface(plugin.Plugin):
             self.visual.running = False
             self.visual.remove()
             self.visual = None
-            _debug_('pygoom.quit()', 1)
-            pygoom.quit()
+            self.goom = None
 
 
     @benchmark(benchmarking, benchmarkcall)

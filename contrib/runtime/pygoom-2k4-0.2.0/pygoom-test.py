@@ -40,7 +40,10 @@ exportfile = '/tmp/mpav'
 if not os.path.exists(exportfile):
     open(exportfile, 'w').write('\0' * 2048)
 
-goom = pygoom.PyGoom(width, height, exportfile, songtitle='song title')
+goom = pygoom.PyGoom(200, 200, exportfile, songtitle='song title')
+print 'goom.surface=%r' % goom.surface
+goom.resolution(width, height)
+print 'goom.surface=%r' % goom.surface
 
 def main():
     songtitles = [ 'First Song', 'Second Song', 'newling\ndoes not work' ]
@@ -49,11 +52,14 @@ def main():
     framerate_idx = 0
     messages = [ 'This is pygoom %s' % pygoom.VERSION, 'written by Duncan Webb' ]
     message_idx = 0
+    message_counter = 0
     while True:
         fps = clock.get_fps()
         msecs = clock.tick(framerates[framerate_idx])
         #print 'fps=%.1f mescs=%s' % (fps, msecs)
         goom.fps = fps
+        message_counter += 1
+        # message stay for about 370 frames
 
         #Handle Input Events
         for event in pygame.event.get():
@@ -100,6 +106,8 @@ def main():
                     goom.message = messages[message_idx]
                     print 'goom.message=%r' % goom.message
                     message_idx = (message_idx + 1) % len(messages)
+                    print 'message_counter=%s' % message_counter
+                    message_counter = 0
 
         #Draw Everything
         screen.blit(background, (0, 0))
