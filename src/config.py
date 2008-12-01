@@ -147,13 +147,14 @@ class VideoGroup:
                  input_num=0, tuner_norm=None, tuner_chanlist=None,
                  tuner_type='internal', tuner_chan=None, irsend_trans=None,
                  record_group=None, desc='Freevo Default Video Group',
-                 group_type='normal', cmd=None):
+                 group_type='normal', cmd=None, avol=0):
         """
         Initialise an instance of a VideoGroup
 
         @ivar vdev: The video recording device, such as /dev/video0.
         @ivar vvbi: The video vbi device, such as /dev/vbi0.
         @ivar adev: The audio device, such as: None, /dev/dsp.
+        @ivar avol: Default sound level for this videogroup (v4l2 value, 0 if not set)
         @ivar input_type: tuner, webcam
         @ivar input_num: The number of this input according to V4L
         @ivar tuner_type: internal (on a v4l device), or external (cable or sat box)
@@ -184,6 +185,7 @@ class VideoGroup:
         self.vdev = vdev
         self.vvbi = vvbi
         self.adev = adev
+        self.avol = avol
         self.input_type = string.lower(input_type)
         self.input_num  = int(input_num)
         self.tuner_type = tuner_type

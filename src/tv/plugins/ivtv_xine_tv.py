@@ -64,8 +64,9 @@ class PluginInterface(plugin.Plugin):
         - Live TV: pause & continue, seek forward & backward
         - Multiple digit channel selection: '1', '12, '123'
         - Channel stack: jump to previously viewed channel
+        - Channel swap: swap between the current and the previous channel
         - Automatic jump: undo time shift on channel change
-        - OSD messges: volume and channel info
+        - OSD messages: volume and channel info
         - Progressive seek: automatically increase seek speed
         - Video groups: enable svideo and composite inputs
         - Stop confirmation: press STOP twice to return to menu
@@ -116,6 +117,9 @@ class PluginInterface(plugin.Plugin):
 
     | # go back to the previous viewed channel
     | EVENTS['tv']['SOME_LIRC_CMD'] = Event('POPCHANNEL')
+    |
+    | # shift the current and the previous viewed channel
+    | EVENTS['tv']['SOME_LIRC_CMD'] = Event('TOGGLECHANNEL')
     |
     | # show program info
     | EVENTS['tv']['SOME_LIRC_CMD'] = Event('TOGGLE_OSD')
@@ -371,7 +375,7 @@ class XineIvtv:
         """ Event handler """
         _debug_('XineIvtv.eventhandler(event=%r)' % (event.name,), 1)
 
-        s_event = '%r' % event
+        s_event = '%s' % (event.name,)
 
         if event == STOP or event == PLAY_END:
             self.Stop()
@@ -394,6 +398,10 @@ class XineIvtv:
 
         if s_event == 'POPCHANNEL':
             self.tuner.PopChannel()
+            return True
+
+        if s_event == 'TOGGLECHANNEL':
+            self.tuner.SwapChannel()
             return True
 
         if event == TV_CHANNEL_UP:
@@ -433,7 +441,7 @@ class XineIvtv:
                 if config.XINE_TV_INPUT_REAL_CHANNELS:
                     self.tuner.SetChannelByNumber(newinput_value)
                 else:
-                    self.tuner.SetChannelByIndex(newinput_value)
+                    self.tuner.SetChannelByIndex(newinput_value, 1)
 
                 if newinput_value > 9:
                     # cancel intermediate channels
@@ -570,7 +578,7 @@ class TunerControl:
 
 
     def UnpushChannel(self):
-        """ remove the top channel fromthe channel stack """
+        """ remove the top channel from the channel stack """
         if len(self.stack) == 0:
             _debug_('TunerControl: Channel stack is empty')
         else:
@@ -587,6 +595,21 @@ class TunerControl:
             channel = self.stack.pop()
             _debug_('TunerControl: Popped channel %s' % channel)
             self.SetVideoGroup(channel)
+        _debug_('TunerControl: Channel stack = %s' % self.stack)
+
+
+    def SwapChannel(self):
+        """swap the current display channel and the top of the stack channel """
+        if self.curr_channel is not None:
+            toswap = self.curr_channel
+            if len(self.stack) == 0:
+                _debug_('TunerControl: Channel stack is empty')
+            else:
+                channel = self.stack.pop()
+                _debug_('TunerControl: Popped channel %s' % channel)
+                self.SetVideoGroup(channel)
+                self.stack.append(toswap)
+                _debug_('TunerControl: Pushed channel %s' % toswap)
         _debug_('TunerControl: Channel stack = %s' % self.stack)
 
 
@@ -621,10 +644,10 @@ class TunerControl:
             self.SetChannelByIndex(channel_index + 1)
 
 
-    def SetChannelByIndex(self, channel):
+    def SetChannelByIndex(self, channel, tvlike=0):
         """ tune to a channel by index from the TV_CHANNELS list """
         # tune channel by index
-        next_channel = self.fc.getManChannel(channel)
+        next_channel = self.fc.getManChannel(channel, tvlike)
         _debug_('TunerControl: Explicit channel selection by index = %r' % next_channel)
         self.PushChannel()
         self.SetVideoGroup(next_channel)
@@ -722,6 +745,64 @@ class TunerControl:
                 self.xine.SeekEnd()
                 self.ShowInfo()
 
+        self.SetAudioByChannel(channel)
+
+
+    def SetAudioByChannel(self, channel=-1):
+        """
+        Set the PVR sound level
+        This is a mix : The base volume is set by the avol
+        option in each TV_VIDEO_GROUP. The value is hardware dependant.
+        seems bo be between 0 and 65535.
+        If this value is missing in the tv_video_group, that sub does nothing
+        If the value is present, the actual audio value is this value
+        time the 6th field in TV_CHANNELS (expressed in % )
+        """
+        try:
+            # lookup the channel name in TV_CHANNELS
+            for pos in range(len(config.TV_CHANNELS)):
+                entry = config.TV_CHANNELS[pos]
+                if str(channel) == str(entry[2]):
+                    channel_index = pos
+                    break
+        except ValueError:
+            pass
+
+        _debug_('SetAudioByChannel: Channel: %r TV_CHANNEL pos(%d)' % (channel, channel_index))
+        vg = self.fc.getVideoGroup(channel, True)
+        try:
+            ivtv_avol = vg.avol
+        except AttributeError:
+            ivtv_avol = 0
+        if ivtv_avol <= 0:
+            _debug_('SetAudioByChannel: The tv_video group for %r doesn\'t set the volume' % channel)
+        else:
+            # Is there a specific volume level in TV_CHANNELS_VOLUME
+            ivtv_dev = ivtv.IVTV(vg.vdev)
+            avol_percent = 100
+            try:
+                # lookup the channel name in TV_CHANNELS
+                for pos in range(len(config.TV_CHANNELS_VOLUME)):
+                    if config.TV_CHANNELS_VOLUME[pos][0] == config.TV_CHANNELS[channel_index][0]:
+                        avol_percent = config.TV_CHANNELS_VOLUME[pos][1]
+                        break
+            except:
+                pass
+
+            try:
+                avol_percent = int(avol_percent)
+            except ValueError:
+                avol_percent = 100
+
+            avol = int(ivtv_avol * avol_percent / 100)
+            if avol > 65535:
+                avol = 65535
+            if avol < 0:
+                avol = 0
+            _debug_('SetAudioByChannel: Current PVR Sound level is : %s' % ivtv_dev.getctrl(0x00980905))
+            _debug_('SetAudioByChannel: Set the PVR Sound Level to : %s (%s * %s)' % (avol, ivtv_avol, avol_percent))
+            ivtv_dev.setctrl(0x00980905, avol)
+            _debug_('SetAudioByChannel: New PVR Sound level is : %s' % ivtv_dev.getctrl(0x00980905))
 
 
 class MixerControl:

@@ -29,11 +29,13 @@
 # -----------------------------------------------------------------------
 
 
+import threading
+import time
+import os
+
 import config, plugin
 import tv.freq, tv.v4l2
 import epg_xmltv
-import threading
-import time
 
 CHANNEL_ID = 0
 DISPLAY_NAME = 1
@@ -95,11 +97,14 @@ class FreevoChannels:
                 for i in range(len(config.TV_CHANNELS)):
                     chan_info = config.TV_CHANNELS[i]
                     if chan_info[chan_index] == chan:
+                        if len(chan_info) > 4:
+                            group = chan_info[4]
                         try:
-                            group = int(chan_info[4])
-                        except IndexError:
+                            group = int(group)
+                        except ValueError:
                             group = 0
                         break
+
                 else: # Channel not found
                     #DJW this should be noticed
                     import traceback
@@ -140,9 +145,11 @@ class FreevoChannels:
         _debug_('chanSet(char=%r, isplayer=%r, app=%r, app_cmd=%r)' % (chan, isplayer, app, app_cmd), 2)
         new_chan = None
 
+        dup_dict = dict()
         for pos in range(len(config.TV_CHANNELS)):
             chan_cfg = config.TV_CHANNELS[pos]
             if str(chan_cfg[2]) == str(chan):
+                dup_dict[str(pos)] = chan_cfg
                 new_chan = chan
                 self.chan_index = pos
 
@@ -150,8 +157,41 @@ class FreevoChannels:
             _debug_('Cannot find tuner channel "%s" in the TV channel listing' % chan, DWARNING)
             return
 
-        vg = self.getVideoGroup(new_chan, isplayer)
+        # Trying to choose the correct TV_CHANNELS if the channel is in more than one line
+        if len(dup_dict) > 1 and new_chan >= 0:
+            # Normally, negative channels are for external tuners, don't care ... yet !
+            cwday = time.localtime()[6] + 1
+            ctime = str(time.localtime()[3]) + str(time.localtime()[4])
+            # check if some lines can be removed from dup_dict
+            for key in dup_dict.keys():
+                swday  = '1234567'
+                sstime = '0000'
+                setime = '2359'
+                if len(dup_dict[key]) > 3:
+                    cal = dup_dict[key][3]
+                    if len(cal) > 0:
+                        swday = cal[0]
+                    if len(cal) > 1:
+                        sstime = cal[1]
+                    if len(cal) > 2:
+                        setime = cal[2]
 
+                if swday.count(str(cwday)) == 0: # current day is not in the schedule
+                    del dup_dict[key]
+                else:
+                    if (sstime > setime and (ctime > setime and ctime < sstime)) \
+                    or (sstime < setime and (ctime < sstime or ctime > setime)):
+                        # current time not in this schedule
+                        del dup_dict[key]
+
+            if len(dup_dict) > 1:
+                _debug_('At current day/time (%s, %s),still %s active TV_Channels for channel %s' % \
+                    (cwday, ctime, len(dup_dict), chan), DWARNING)
+
+            for key in dup_dict.keys():
+                self.chan_index = int(key)
+
+        vg = self.getVideoGroup(new_chan, isplayer)
         if vg.tuner_type == 'external':
             tuner = plugin.getbyname('EXTERNAL_TUNER')
             if tuner:
@@ -162,11 +202,7 @@ class FreevoChannels:
                 return freq
 
             return 0
-
-        else:
-            return self.tunerSetFreq(chan, isplayer, app, app_cmd)
-
-        return 0
+        return self.tunerSetFreq(chan, isplayer, app, app_cmd)
 
 
     def tunerSetFreq(self, chan, isplayer, app=None, app_cmd=None):
@@ -233,8 +269,7 @@ class FreevoChannels:
 
             if vg.cmd:
                 _debug_('run cmd: %s' % vg.cmd)
-                import os
-                retcode=os.system(vg.cmd)
+                retcode = os.system(vg.cmd)
                 _debug_('exit code: %g' % retcode)
 
         return 0
@@ -250,34 +285,54 @@ class FreevoChannels:
         return (self.chan_index) % len(config.TV_CHANNELS)
 
 
-    def getManChannelNum(self, channel=0):
+    def getManChannelNum(self, channel=0, tvlike=0):
         _debug_('getManChannelNum(channel=%r)' % (channel,), 2)
-        return (channel-1) % len(config.TV_CHANNELS)
-
+        if tvlike:
+            physchan = '9999'
+            key = channel
+            for pos in range(len(config.TV_CHANNELS)):
+                if pos == channel -1:
+                    key = channel
+                if config.TV_CHANNELS[pos][2] == physchan:
+                    channel = channel + 1
+                physchan = config.TV_CHANNELS[pos][2]
+            if key > len(config.TV_CHANNELS) + 1:
+                key = len(config.TV_CHANNELS) + 1
+            return key-1
+        else:
+            return (channel-1) % len(config.TV_CHANNELS)
 
     def getNextChannelNum(self):
         _debug_('getNextChannelNum()', 2)
-        return (self.chan_index+1) % len(config.TV_CHANNELS)
+        curnum=self.chan_index
+        curchan=config.TV_CHANNELS[curnum][2]
+        while config.TV_CHANNELS[curnum][2] == curchan:
+            curnum = (curnum + 1) % len(config.TV_CHANNELS)
+        return curnum
 
 
     def getPrevChannelNum(self):
         _debug_('getPrevChannelNum()', 2)
-        return (self.chan_index-1) % len(config.TV_CHANNELS)
+        curnum=self.chan_index
+        curchan=config.TV_CHANNELS[curnum][2]
+        while config.TV_CHANNELS[curnum][2] == curchan:
+            curnum = (curnum - 1) % len(config.TV_CHANNELS)
+        return curnum
 
 
-    def getManChannel(self, channel=0):
+    def getManChannel(self, channel=0, tvlike=0):
         _debug_('getManChannel(channel=%r)' % (channel,), 2)
-        return config.TV_CHANNELS[(channel-1) % len(config.TV_CHANNELS)][2]
+        return config.TV_CHANNELS[self.getManChannelNum(channel, tvlike)][2]
 
 
     def getNextChannel(self):
         _debug_('getNextChannel()', 2)
-        return config.TV_CHANNELS[(self.chan_index+1) % len(config.TV_CHANNELS)][2]
+        return config.TV_CHANNELS[self.getNextChannelNum()][2]
 
 
     def getPrevChannel(self):
         _debug_('getPrevChannel()', 2)
-        return config.TV_CHANNELS[(self.chan_index-1) % len(config.TV_CHANNELS)][2]
+        return config.TV_CHANNELS[self.getPrevChannelNum()][2]
 
 
     def setChanlist(self, chanlist):

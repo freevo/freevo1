@@ -444,7 +444,7 @@ if __name__ == '__main__':
 
     config.DEBUG = 2
 
-    ivtv_dev = IVTV('/dev/video2')
+    ivtv_dev = IVTV('/dev/video0')
     if not ivtv_dev.init_settings():
         import sys
         sys.exit(1)
@@ -454,6 +454,11 @@ if __name__ == '__main__':
     ivtv_dev.setcontrol('Spatial Luma Filter Type', x+1)
     print ivtv_dev.getcontrol('Spatial Luma Filter Type')
     print ivtv_dev.getextctrl(0x00991002)
+    #print "PS tests begins"
+    #print ivtv_dev.getextctrl(0x00980905)
+    #ivtv_dev.setextctrl(0x00980905, 50000)
+    #print ivtv_dev.getextctrl(0x00980905)
+    #print "PS tests ends"
     #ivtv_dev.print_settings()
 
     #print 'driver="%s"' % ivtv_dev.driver

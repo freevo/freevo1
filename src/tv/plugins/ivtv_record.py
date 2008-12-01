@@ -145,6 +145,52 @@ class Record_Thread(threading.Thread):
                     _debug_('Setting channel to %r' % self.prog.tunerid)
                     fc.chanSet(str(self.prog.tunerid), False)
 
+                    # Setting the input sound level on the PVR card
+                    channel = self.prog.tunerid
+                    try:
+                        # lookup the channel name in TV_CHANNELS
+                        for pos in range(len(config.TV_CHANNELS)):
+                            entry = config.TV_CHANNELS[pos]
+                            if str(channel) == str(entry[2]):
+                                channel_index = pos
+                                break
+                    except ValueError:
+                        pass
+
+                    _debug_('SetAudioByChannel: Channel: %r TV_CHANNEL pos(%d)' % (channel, channel_index))
+                    try:
+                        ivtv_avol = vg.avol
+                    except AttributeError:
+                        ivtv_avol = 0
+                    if ivtv_avol <= 0:
+                        _debug_('SetAudioByChannel: The tv_video group for %r doesn\'t set the volume' % channel)
+                    else:
+                        # Is there a specific volume level in TV_CHANNELS_VOLUME
+                        avol_percent = 100
+                        try:
+                            # lookup the channel name in TV_CHANNELS
+                            for pos in range(len(config.TV_CHANNELS_VOLUME)):
+                                if config.TV_CHANNELS_VOLUME[pos][0] == config.TV_CHANNELS[channel_index][0]:
+                                    avol_percent = config.TV_CHANNELS_VOLUME[pos][1]
+                                    break
+                        except:
+                            pass
+
+                        try:
+                            avol_percent = int(avol_percent)
+                        except ValueError:
+                            avol_percent = 100
+
+                        avol = int(ivtv_avol * avol_percent / 100)
+                        if avol > 65535:
+                            avol = 65535
+                        if avol < 0:
+                            avol = 0
+                        _debug_('SetAudioByChannel: Current PVR Sound level is : %s' % v.getctrl(0x00980905))
+                        _debug_('SetAudioByChannel: Set the PVR Sound Level to : %s (%s * %s)' % (avol, ivtv_avol, avol_percent))
+                        v.setctrl(0x00980905, avol)
+                        _debug_('SetAudioByChannel: New PVR Sound level is : %s' % v.getctrl(0x00980905))
+
                     if vg.cmd != None:
                         _debug_("Running command %r" % vg.cmd)
                         retcode = os.system(vg.cmd)

@@ -941,7 +941,7 @@ if __name__ == '__main__':
     standards = viddev.enumstds()
     print 'standards = %r' % (standards.keys())
     try:
-        viddev.setinputbyname('Composite1')
+        viddev.setinputbyname('composite 1')
         print viddev.getinput()
     except KeyError:
         pass
@@ -951,7 +951,7 @@ if __name__ == '__main__':
     except (KeyError, IOError):
         pass
     try:
-        viddev.setinputbyname('Television')
+        viddev.setinputbyname('tuner 1')
         print viddev.getinput()
     except KeyError:
         pass
