@@ -386,6 +386,8 @@ LOCAL_CONF_CHANGES = [
      Added DEBUG_BENCHMARKING can be used to time and trace function calls
      Added DEBUG_BENCHMARKCALL can be used to print the arguments and results of function calls
      Removed MPLAYER_AUDIO_CACHE_KB, MPLAYER_AUDIO_CACHE_MIN_PERCENT and MPLAYER_AUDIO_NETWORK_OPTS, it broke detach
+     Added WWW_IMAGE_SIZE and WWW_IMAGE_THUMBNAIL_SIZE for Cooliris support
+     Added VIDEO_AUTOJOIN_REGEX to allow more control when joining video files
      """),
 ]
 
@@ -925,13 +927,6 @@ plugin.activate('tv.manual_record')
 # Enable this for joystick support:
 # plugin.activate('joy')
 
-# ======================================================================
-# Dialog Display Plugins
-# ======================================================================
-plugin.activate('dialog.osd_display')
-if CONF.display in ('x11', 'xv'):
-    plugin.activate('dialog.x11_overlay_display')
-
 # Speak plugin to output menu items via festival
 # plugin.activate('speak')
 SPEAK_WELCOME = ''
@@ -1370,11 +1365,6 @@ SKIN_MODULE = 'main'
 #
 SKIN_XML_FILE         = ''
 SKIN_DEFAULT_XML_FILE = 'blurr'
-
-#
-# XML file used for the dialog skins.
-#
-DIALOG_SKIN_XML_FILE = 'base'
 
 #
 # Select a way when to switch to text view even if a image menu is there
@@ -2256,6 +2246,7 @@ DEBUG_SKIN = 0
 # Debug the idlebar, display boxes around each area.
 #
 DEBUG_IDLEBAR = 0
+DEBUG_IDLEBAR_FONT = 'tiny0'
 
 #
 # store output of started processes for debug
