@@ -671,7 +671,8 @@ class PluginInterface(plugin.Plugin):
         if rc.app() == self.player.eventhandler:
             #if self.visual is None:
             #    self.visual = MpvGoom(300, 300, 150, 150, self.item.image)
-            self.visual = MpvGoom(300, 300, 150, 150, self.item.title, self.item.image)
+            title = hasattr(self.item, 'title') and self.item.title or self.item.name
+            self.visual = MpvGoom(300, 300, 150, 150, title, self.item.image)
 
             if self.view == FULL:
                 self.visual.set_info(self.item.name, 10)
