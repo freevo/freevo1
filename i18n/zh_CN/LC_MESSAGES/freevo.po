@@ -1913,7 +1913,7 @@ msgstr "没有头条发现"
 #: share/skins/main/crystal.fxd:15 share/skins/main/dark.fxd:22
 #: share/skins/main/atlantice.fxd:723 share/skins/main/Tux'n Tosh TV.fxd:22
 #: share/skins/main/bluestar.fxd:15 share/skins/main/rain.fxd:15
-#: share/skins/main/geexbox.fxd:481
+#: share/skins/main/geexbox.fxd:481 share/skins/main/geexbox.fxd:544
 msgid "Headlines"
 msgstr "头条"
 
@@ -1969,7 +1969,7 @@ msgstr ""
 #: share/skins/main/Tux'n Tosh TV.fxd:714 TV.fxd:934
 #: share/skins/main/basic.fxd:420 share/skins/main/blurr.fxd:724
 #: share/skins/main/info.fxd:219 share/skins/main/geexbox.fxd:708
-#: share/skins/main/mediaportal.fxd:716
+#: share/skins/main/mediaportal.fxd:716 share/skins/main/geexbox.fxd:777
 msgid "Length"
 msgstr ""
 
@@ -1988,6 +1988,7 @@ msgstr "艺术家"
 #: share/skins/main/basic.fxd:378 share/skins/main/blurr.fxd:680
 #: share/skins/main/info.fxd:208 share/skins/main/info.fxd:362
 #: share/skins/main/geexbox.fxd:685 share/skins/main/mediaportal.fxd:674
+#: share/skins/main/geexbox.fxd:754
 msgid "Album"
 msgstr "专辑"
 
@@ -1996,14 +1997,14 @@ msgstr "专辑"
 #: share/skins/main/atlantice.fxd:305 share/skins/main/atlantice.fxd:925
 #: share/skins/main/Tux'n Tosh TV.fxd:624 share/skins/main/blurr.fxd:686
 #: share/skins/main/info.fxd:459 share/skins/main/geexbox.fxd:691
-#: share/skins/main/mediaportal.fxd:680
+#: share/skins/main/mediaportal.fxd:680 share/skins/main/geexbox.fxd:760
 msgid "Year"
 msgstr "年"
 
 #: plugins/lcd.py:79 plugins/vfd.py:95 share/skins/main/atlantice.fxd:611
 #: share/skins/main/Panorama.fxd:360 share/skins/main/blurr.fxd:339
 #: share/skins/main/info.fxd:402 share/skins/main/geexbox.fxd:366
-#: share/skins/main/mediaportal.fxd:331
+#: share/skins/main/mediaportal.fxd:331 share/skins/main/geexbox.fxd:413
 msgid "Tracks"
 msgstr ""
 
@@ -2327,6 +2328,8 @@ msgstr "名称"
 #: share/skins/main/blurr.fxd:692 share/skins/main/geexbox.fxd:210
 #: share/skins/main/geexbox.fxd:336 share/skins/main/geexbox.fxd:697
 #: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
+#: share/skins/main/geexbox.fxd:241 share/skins/main/geexbox.fxd:383
+#: share/skins/main/geexbox.fxd:766
 msgid "Track"
 msgstr ""
 
@@ -4296,7 +4299,7 @@ msgstr "播放列表中只有一首歌曲"
 #: share/skins/main/dark.fxd:779 share/skins/main/atlantice.fxd:951
 #: share/skins/main/Tux'n Tosh TV.fxd:939 share/skins/main/basic.fxd:426
 #: share/skins/main/blurr.fxd:730 share/skins/main/geexbox.fxd:714
-#: share/skins/main/mediaportal.fxd:722
+#: share/skins/main/mediaportal.fxd:722 share/skins/main/geexbox.fxd:783
 msgid "Elapsed"
 msgstr ""
 
@@ -4311,6 +4314,7 @@ msgstr ""
 #: share/skins/main/atlantice.fxd:376 share/skins/main/Panorama.fxd:221
 #: share/skins/main/blurr.fxd:218 share/skins/main/info.fxd:314
 #: share/skins/main/geexbox.fxd:226 share/skins/main/mediaportal.fxd:220
+#: share/skins/main/geexbox.fxd:257
 msgid "Subtitles"
 msgstr "字幕"
 
@@ -4322,7 +4326,7 @@ msgstr "文件名"
 #: share/skins/main/Tux'n Tosh TV.fxd:678 share/skins/main/Panorama.fxd:198
 #: share/skins/main/blurr.fxd:195 share/skins/main/info.fxd:428
 #: share/skins/main/info.fxd:551 share/skins/main/geexbox.fxd:203
-#: share/skins/main/mediaportal.fxd:197
+#: share/skins/main/mediaportal.fxd:197 share/skins/main/geexbox.fxd:234
 msgid "This playlist is empty!"
 msgstr "播放列表是空!"
 
@@ -4332,13 +4336,14 @@ msgstr ""
 
 #: share/skins/main/Panorama.fxd:471 share/skins/main/blurr.fxd:451
 #: share/skins/main/info.fxd:16 share/skins/main/geexbox.fxd:480
-#: share/skins/main/mediaportal.fxd:444
+#: share/skins/main/mediaportal.fxd:444 share/skins/main/geexbox.fxd:543
 msgid "Look at Pictures"
 msgstr "查看图片"
 
 #: share/skins/main/atlantice.fxd:381 share/skins/main/Panorama.fxd:226
 #: share/skins/main/blurr.fxd:223 share/skins/main/info.fxd:318
 #: share/skins/main/geexbox.fxd:231 share/skins/main/mediaportal.fxd:225
+#: share/skins/main/geexbox.fxd:262
 msgid "Chapters"
 msgstr "章节"
 
@@ -4358,6 +4363,7 @@ msgstr "主题"
 #: share/skins/main/atlantice.fxd:345 share/skins/main/Panorama.fxd:190
 #: share/skins/main/blurr.fxd:187 share/skins/main/info.fxd:543
 #: share/skins/main/geexbox.fxd:195 share/skins/main/mediaportal.fxd:189
+#: share/skins/main/geexbox.fxd:226
 msgid "Playlist"
 msgstr "播放列表"
 
@@ -4378,7 +4384,7 @@ msgstr "消息还没有被读"
 
 #: share/skins/main/atlantice.fxd:699 share/skins/main/Panorama.fxd:448
 #: share/skins/main/blurr.fxd:428 share/skins/main/geexbox.fxd:457
-#: share/skins/main/mediaportal.fxd:420
+#: share/skins/main/mediaportal.fxd:420 share/skins/main/geexbox.fxd:520
 msgid "Location"
 msgstr "位置"
 
@@ -4423,6 +4429,8 @@ msgstr "slide show 是空!"
 #: share/skins/main/geexbox.fxd:431 share/skins/main/geexbox.fxd:439
 #: share/skins/main/mediaportal.fxd:183 share/skins/main/mediaportal.fxd:287
 #: share/skins/main/mediaportal.fxd:394 share/skins/main/mediaportal.fxd:402
+#: share/skins/main/geexbox.fxd:220 share/skins/main/geexbox.fxd:355
+#: share/skins/main/geexbox.fxd:494 share/skins/main/geexbox.fxd:502
 msgid "Items"
 msgstr ""
 
@@ -4436,13 +4444,14 @@ msgstr "MB 空余"
 
 #: share/skins/main/Panorama.fxd:468 share/skins/main/blurr.fxd:448
 #: share/skins/main/info.fxd:13 share/skins/main/geexbox.fxd:477
-#: share/skins/main/mediaportal.fxd:441
+#: share/skins/main/mediaportal.fxd:441 share/skins/main/geexbox.fxd:540
 msgid "Watch TV"
 msgstr "看电视"
 
 #: share/skins/main/atlantice.fxd:584 share/skins/main/Panorama.fxd:333
 #: share/skins/main/blurr.fxd:312 share/skins/main/info.fxd:348
 #: share/skins/main/info.fxd:535 share/skins/main/geexbox.fxd:339
+#: share/skins/main/geexbox.fxd:386
 msgid "of"
 msgstr ""
 
@@ -4465,7 +4474,7 @@ msgstr "图片"
 #: share/skins/main/crystal.fxd:13 share/skins/main/atlantice.fxd:724
 #: share/skins/main/Panorama.fxd:473 share/skins/main/rain.fxd:13
 #: share/skins/main/blurr.fxd:453 share/skins/main/geexbox.fxd:482
-#: share/skins/main/mediaportal.fxd:446
+#: share/skins/main/mediaportal.fxd:446 share/skins/main/geexbox.fxd:545
 msgid "Weather Forecast"
 msgstr "天气预报"
 
@@ -4477,6 +4486,7 @@ msgstr "新邮件"
 #: share/skins/main/blurr.fxd:191 share/skins/main/info.fxd:419
 #: share/skins/main/info.fxd:424 share/skins/main/info.fxd:547
 #: share/skins/main/geexbox.fxd:199 share/skins/main/mediaportal.fxd:193
+#: share/skins/main/geexbox.fxd:230
 msgid "items in this playlist"
 msgstr "播放列表中的项目"
 
@@ -4507,6 +4517,7 @@ msgstr "大小"
 #: share/skins/main/atlantice.fxd:371 share/skins/main/Panorama.fxd:216
 #: share/skins/main/blurr.fxd:213 share/skins/main/info.fxd:310
 #: share/skins/main/geexbox.fxd:221 share/skins/main/mediaportal.fxd:215
+#: share/skins/main/geexbox.fxd:252
 msgid "Audio tracks"
 msgstr "音轨"
 
@@ -4529,7 +4540,7 @@ msgstr "玩游戏"
 
 #: share/skins/main/Panorama.fxd:470 share/skins/main/blurr.fxd:450
 #: share/skins/main/info.fxd:15 share/skins/main/geexbox.fxd:479
-#: share/skins/main/mediaportal.fxd:443
+#: share/skins/main/mediaportal.fxd:443 share/skins/main/geexbox.fxd:542
 msgid "Listen to Music"
 msgstr "听音乐"
 
@@ -4540,7 +4551,7 @@ msgstr "所有消息"
 
 #: share/skins/main/Panorama.fxd:469 share/skins/main/blurr.fxd:449
 #: share/skins/main/info.fxd:14 share/skins/main/geexbox.fxd:478
-#: share/skins/main/mediaportal.fxd:442
+#: share/skins/main/mediaportal.fxd:442 share/skins/main/geexbox.fxd:541
 msgid "Watch a Movie"
 msgstr "看电影"
 
