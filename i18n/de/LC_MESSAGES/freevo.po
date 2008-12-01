@@ -1908,7 +1908,7 @@ msgstr "Keine Schlagzeilen gefunden"
 #: share/skins/main/crystal.fxd:15 share/skins/main/dark.fxd:22
 #: share/skins/main/atlantice.fxd:723 share/skins/main/Tux'n Tosh TV.fxd:22
 #: share/skins/main/bluestar.fxd:15 share/skins/main/rain.fxd:15
-#: share/skins/main/geexbox.fxd:481
+#: share/skins/main/geexbox.fxd:481 share/skins/main/geexbox.fxd:544
 msgid "Headlines"
 msgstr "Schlagzeilen"
 
@@ -1964,7 +1964,7 @@ msgstr "Sie benötigen pylcd für das LCD plugin"
 #: share/skins/main/Tux'n Tosh TV.fxd:714 TV.fxd:934
 #: share/skins/main/basic.fxd:420 share/skins/main/blurr.fxd:724
 #: share/skins/main/info.fxd:219 share/skins/main/geexbox.fxd:708
-#: share/skins/main/mediaportal.fxd:716
+#: share/skins/main/mediaportal.fxd:716 share/skins/main/geexbox.fxd:777
 msgid "Length"
 msgstr "Länge"
 
@@ -1983,6 +1983,7 @@ msgstr "Interpret"
 #: share/skins/main/basic.fxd:378 share/skins/main/blurr.fxd:680
 #: share/skins/main/info.fxd:208 share/skins/main/info.fxd:362
 #: share/skins/main/geexbox.fxd:685 share/skins/main/mediaportal.fxd:674
+#: share/skins/main/geexbox.fxd:754
 msgid "Album"
 msgstr "Album"
 
@@ -1991,14 +1992,14 @@ msgstr "Album"
 #: share/skins/main/atlantice.fxd:305 share/skins/main/atlantice.fxd:925
 #: share/skins/main/Tux'n Tosh TV.fxd:624 share/skins/main/blurr.fxd:686
 #: share/skins/main/info.fxd:459 share/skins/main/geexbox.fxd:691
-#: share/skins/main/mediaportal.fxd:680
+#: share/skins/main/mediaportal.fxd:680 share/skins/main/geexbox.fxd:760
 msgid "Year"
 msgstr "Jahr"
 
 #: plugins/lcd.py:79 plugins/vfd.py:95 share/skins/main/atlantice.fxd:611
 #: share/skins/main/Panorama.fxd:360 share/skins/main/blurr.fxd:339
 #: share/skins/main/info.fxd:402 share/skins/main/geexbox.fxd:366
-#: share/skins/main/mediaportal.fxd:331
+#: share/skins/main/mediaportal.fxd:331 share/skins/main/geexbox.fxd:413
 msgid "Tracks"
 msgstr "Titelnr."
 
@@ -2233,31 +2234,53 @@ msgid "UV Index"
 msgstr ""
 
 #: plugins/oneclick.py:980
-msgid "As of"
+#, fuzzy
+msgid "As of:"
 msgstr "Am"
 
 #: plugins/oneclick.py:983
-msgid "Temperature"
+#, fuzzy
+msgid "Temperature:"
 msgstr "Temperatur"
 
 #: plugins/oneclick.py:984
-msgid "Dew Point"
+#, fuzzy
+msgid "Dew Point:"
 msgstr "Taupunkt"
 
+#: plugins/oneclick.py:985
+#, fuzzy
+msgid "Humidity:"
+msgstr "Luftfeuchtigkt."
+
+#: plugins/oneclick.py:986
+#, fuzzy
+msgid "Visibility:"
+msgstr "Sichtweite"
+
+#: plugins/oneclick.py:987
+#, fuzzy
+msgid "Pressure:"
+msgstr "Luftdruck"
+
 #: plugins/oneclick.py:988
-msgid "Winds"
+#, fuzzy
+msgid "Winds:"
 msgstr "Wind"
 
 #: plugins/oneclick.py:989
-msgid "Tonight"
+#, fuzzy
+msgid "Tonight:"
 msgstr "Heute Nacht"
 
 #: plugins/oneclick.py:990
-msgid "Sunset"
+#, fuzzy
+msgid "Sunset:"
 msgstr "Sonnenuntergang"
 
 #: plugins/oneclick.py:991
-msgid "Moon Phase"
+#, fuzzy
+msgid "Moon Phase:"
 msgstr "Mondphase"
 
 #: plugins/oneclick.py:1043
@@ -2305,6 +2328,8 @@ msgstr "Name"
 #: share/skins/main/blurr.fxd:692 share/skins/main/geexbox.fxd:210
 #: share/skins/main/geexbox.fxd:336 share/skins/main/geexbox.fxd:697
 #: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
+#: share/skins/main/geexbox.fxd:241 share/skins/main/geexbox.fxd:383
+#: share/skins/main/geexbox.fxd:766
 msgid "Track"
 msgstr "Titelnr."
 
@@ -4270,7 +4295,7 @@ msgstr "Ein Eintrag in dieser Wiedergabeliste"
 #: share/skins/main/dark.fxd:779 share/skins/main/atlantice.fxd:951
 #: share/skins/main/Tux'n Tosh TV.fxd:939 share/skins/main/basic.fxd:426
 #: share/skins/main/blurr.fxd:730 share/skins/main/geexbox.fxd:714
-#: share/skins/main/mediaportal.fxd:722
+#: share/skins/main/mediaportal.fxd:722 share/skins/main/geexbox.fxd:783
 msgid "Elapsed"
 msgstr "Verstrichen"
 
@@ -4285,6 +4310,7 @@ msgstr ""
 #: share/skins/main/atlantice.fxd:376 share/skins/main/Panorama.fxd:221
 #: share/skins/main/blurr.fxd:218 share/skins/main/info.fxd:314
 #: share/skins/main/geexbox.fxd:226 share/skins/main/mediaportal.fxd:220
+#: share/skins/main/geexbox.fxd:257
 msgid "Subtitles"
 msgstr "Untertitel"
 
@@ -4296,7 +4322,7 @@ msgstr "Dateiname"
 #: share/skins/main/Tux'n Tosh TV.fxd:678 share/skins/main/Panorama.fxd:198
 #: share/skins/main/blurr.fxd:195 share/skins/main/info.fxd:428
 #: share/skins/main/info.fxd:551 share/skins/main/geexbox.fxd:203
-#: share/skins/main/mediaportal.fxd:197
+#: share/skins/main/mediaportal.fxd:197 share/skins/main/geexbox.fxd:234
 msgid "This playlist is empty!"
 msgstr "Diese Playliste ist leer!"
 
@@ -4306,13 +4332,14 @@ msgstr "Bilder in dieser Diashow"
 
 #: share/skins/main/Panorama.fxd:471 share/skins/main/blurr.fxd:451
 #: share/skins/main/info.fxd:16 share/skins/main/geexbox.fxd:480
-#: share/skins/main/mediaportal.fxd:444
+#: share/skins/main/mediaportal.fxd:444 share/skins/main/geexbox.fxd:543
 msgid "Look at Pictures"
 msgstr "Bilder betrachten"
 
 #: share/skins/main/atlantice.fxd:381 share/skins/main/Panorama.fxd:226
 #: share/skins/main/blurr.fxd:223 share/skins/main/info.fxd:318
 #: share/skins/main/geexbox.fxd:231 share/skins/main/mediaportal.fxd:225
+#: share/skins/main/geexbox.fxd:262
 msgid "Chapters"
 msgstr "Kapitel"
 
@@ -4332,6 +4359,7 @@ msgstr ""
 #: share/skins/main/atlantice.fxd:345 share/skins/main/Panorama.fxd:190
 #: share/skins/main/blurr.fxd:187 share/skins/main/info.fxd:543
 #: share/skins/main/geexbox.fxd:195 share/skins/main/mediaportal.fxd:189
+#: share/skins/main/geexbox.fxd:226
 msgid "Playlist"
 msgstr "Playliste"
 
@@ -4352,7 +4380,7 @@ msgstr "Ungelesene Nachricht"
 
 #: share/skins/main/atlantice.fxd:699 share/skins/main/Panorama.fxd:448
 #: share/skins/main/blurr.fxd:428 share/skins/main/geexbox.fxd:457
-#: share/skins/main/mediaportal.fxd:420
+#: share/skins/main/mediaportal.fxd:420 share/skins/main/geexbox.fxd:520
 msgid "Location"
 msgstr "Ort"
 
@@ -4397,6 +4425,8 @@ msgstr "Diese Diashow ist leer!"
 #: share/skins/main/geexbox.fxd:431 share/skins/main/geexbox.fxd:439
 #: share/skins/main/mediaportal.fxd:183 share/skins/main/mediaportal.fxd:287
 #: share/skins/main/mediaportal.fxd:394 share/skins/main/mediaportal.fxd:402
+#: share/skins/main/geexbox.fxd:220 share/skins/main/geexbox.fxd:355
+#: share/skins/main/geexbox.fxd:494 share/skins/main/geexbox.fxd:502
 msgid "Items"
 msgstr "Einträge"
 
@@ -4410,13 +4440,14 @@ msgstr "MB frei"
 
 #: share/skins/main/Panorama.fxd:468 share/skins/main/blurr.fxd:448
 #: share/skins/main/info.fxd:13 share/skins/main/geexbox.fxd:477
-#: share/skins/main/mediaportal.fxd:441
+#: share/skins/main/mediaportal.fxd:441 share/skins/main/geexbox.fxd:540
 msgid "Watch TV"
 msgstr "Fernsehen"
 
 #: share/skins/main/atlantice.fxd:584 share/skins/main/Panorama.fxd:333
 #: share/skins/main/blurr.fxd:312 share/skins/main/info.fxd:348
 #: share/skins/main/info.fxd:535 share/skins/main/geexbox.fxd:339
+#: share/skins/main/geexbox.fxd:386
 msgid "of"
 msgstr "von"
 
@@ -4439,7 +4470,7 @@ msgstr "Bilder"
 #: share/skins/main/crystal.fxd:13 share/skins/main/atlantice.fxd:724
 #: share/skins/main/Panorama.fxd:473 share/skins/main/rain.fxd:13
 #: share/skins/main/blurr.fxd:453 share/skins/main/geexbox.fxd:482
-#: share/skins/main/mediaportal.fxd:446
+#: share/skins/main/mediaportal.fxd:446 share/skins/main/geexbox.fxd:545
 msgid "Weather Forecast"
 msgstr "Wettervorhersage"
 
@@ -4451,6 +4482,7 @@ msgstr "Neue Nachricht"
 #: share/skins/main/blurr.fxd:191 share/skins/main/info.fxd:419
 #: share/skins/main/info.fxd:424 share/skins/main/info.fxd:547
 #: share/skins/main/geexbox.fxd:199 share/skins/main/mediaportal.fxd:193
+#: share/skins/main/geexbox.fxd:230
 msgid "items in this playlist"
 msgstr "Einträge in dieser Playliste"
 
@@ -4481,6 +4513,7 @@ msgstr "Größe"
 #: share/skins/main/atlantice.fxd:371 share/skins/main/Panorama.fxd:216
 #: share/skins/main/blurr.fxd:213 share/skins/main/info.fxd:310
 #: share/skins/main/geexbox.fxd:221 share/skins/main/mediaportal.fxd:215
+#: share/skins/main/geexbox.fxd:252
 msgid "Audio tracks"
 msgstr "Audiotitel"
 
@@ -4503,7 +4536,7 @@ msgstr "Videospiele"
 
 #: share/skins/main/Panorama.fxd:470 share/skins/main/blurr.fxd:450
 #: share/skins/main/info.fxd:15 share/skins/main/geexbox.fxd:479
-#: share/skins/main/mediaportal.fxd:443
+#: share/skins/main/mediaportal.fxd:443 share/skins/main/geexbox.fxd:542
 msgid "Listen to Music"
 msgstr "Musik hören"
 
@@ -4514,7 +4547,7 @@ msgstr "Nachrichten insgesamt"
 
 #: share/skins/main/Panorama.fxd:469 share/skins/main/blurr.fxd:449
 #: share/skins/main/info.fxd:14 share/skins/main/geexbox.fxd:478
-#: share/skins/main/mediaportal.fxd:442
+#: share/skins/main/mediaportal.fxd:442 share/skins/main/geexbox.fxd:541
 msgid "Watch a Movie"
 msgstr "Film ansehen"
 
@@ -4550,674 +4583,674 @@ msgid "Weather"
 msgstr "Wetter"
 
 #, fuzzy
-msgid "Downloading video"
-msgstr "Herunterladen"
+#~ msgid "Downloading video"
+#~ msgstr "Herunterladen"
 
-msgid "No matches for %(artist)s - %(album)s"
-msgstr "Es wurde kein Eintrag für %(artist)s - %(album)s gefunden"
+#~ msgid "No matches for %(artist)s - %(album)s"
+#~ msgstr "Es wurde kein Eintrag für %(artist)s - %(album)s gefunden"
 
-msgid "small"
-msgstr "klein"
+#~ msgid "small"
+#~ msgstr "klein"
 
-msgid "recording server is unavailable"
-msgstr "Aufnahmeserver ist nicht verfügbar"
+#~ msgid "recording server is unavailable"
+#~ msgstr "Aufnahmeserver ist nicht verfügbar"
 
-msgid "Remove Failed"
-msgstr "Entfernen fehlgeschlagen"
+#~ msgid "Remove Failed"
+#~ msgstr "Entfernen fehlgeschlagen"
 
-msgid "Failed: %s"
-msgstr "Fehlgeschlagen: %s"
+#~ msgid "Failed: %s"
+#~ msgstr "Fehlgeschlagen: %s"
 
-msgid "findMatches failed"
-msgstr "findMatches fehlgeschlagen: %s"
+#~ msgid "findMatches failed"
+#~ msgstr "findMatches fehlgeschlagen: %s"
 
-msgid "Recording server is unavailable."
-msgstr "Aufnahmeserver ist nicht verfügbar"
+#~ msgid "Recording server is unavailable."
+#~ msgstr "Aufnahmeserver ist nicht verfügbar"
 
-msgid "The recording server is down."
-msgstr "Der Aufnahmeserver ist nicht aktiv."
+#~ msgid "The recording server is down."
+#~ msgstr "Der Aufnahmeserver ist nicht aktiv."
 
-msgid "findMatches failed: %s"
-msgstr "findMatches fehlgeschlagen: %s"
+#~ msgid "findMatches failed: %s"
+#~ msgstr "findMatches fehlgeschlagen: %s"
 
-msgid "Sorry, you cannot watch this program now. "
-msgstr "Diese Sendung kann jetzt nicht angesehen werden."
+#~ msgid "Sorry, you cannot watch this program now. "
+#~ msgstr "Diese Sendung kann jetzt nicht angesehen werden."
 
-msgid "It starts in the future."
-msgstr "Es beginnt in der Zukunft"
+#~ msgid "It starts in the future."
+#~ msgstr "Es beginnt in der Zukunft"
 
-msgid "Sorry, you cannot watch this progam now. "
-msgstr "Diese Sendung kann jetzt nicht angesehen werden."
+#~ msgid "Sorry, you cannot watch this progam now. "
+#~ msgstr "Diese Sendung kann jetzt nicht angesehen werden."
 
-msgid "This program is already over."
-msgstr "Diese Sendung ist bereits vorbei"
+#~ msgid "This program is already over."
+#~ msgstr "Diese Sendung ist bereits vorbei"
 
-msgid "getFavorites failed"
-msgstr "Favoriten nicht verfügbar"
+#~ msgid "getFavorites failed"
+#~ msgstr "Favoriten nicht verfügbar"
 
-msgid "The recordserver is down"
-msgstr "Der Aufnahmeserver ist inaktiv"
+#~ msgid "The recordserver is down"
+#~ msgstr "Der Aufnahmeserver ist inaktiv"
 
-msgid "Get CDs available for ripping"
-msgstr "Verfügbare CDs suchen"
+#~ msgid "Get CDs available for ripping"
+#~ msgstr "Verfügbare CDs suchen"
 
-msgid "Mostly Cloudy"
-msgstr "Meist bewölkt"
+#~ msgid "Mostly Cloudy"
+#~ msgstr "Meist bewölkt"
 
-msgid "Partly Cloudy"
-msgstr "Teilweise bewölkt"
+#~ msgid "Partly Cloudy"
+#~ msgstr "Teilweise bewölkt"
 
-msgid "Light Rain"
-msgstr "Leichter Regen"
+#~ msgid "Light Rain"
+#~ msgstr "Leichter Regen"
 
-msgid "Showers"
-msgstr "Schauer"
+#~ msgid "Showers"
+#~ msgstr "Schauer"
 
-msgid "Rain"
-msgstr "Regen"
+#~ msgid "Rain"
+#~ msgstr "Regen"
 
-msgid "Fog"
-msgstr "Nebel"
+#~ msgid "Fog"
+#~ msgstr "Nebel"
 
-msgid "Few Showers"
-msgstr "Wenige Schauer"
+#~ msgid "Few Showers"
+#~ msgstr "Wenige Schauer"
 
-msgid "Mostly Sunny"
-msgstr "Meist sonnig"
+#~ msgid "Mostly Sunny"
+#~ msgstr "Meist sonnig"
 
-msgid "Sunny"
-msgstr "Sonnig"
+#~ msgid "Sunny"
+#~ msgstr "Sonnig"
 
-msgid "Scattered Flurries"
-msgstr "Böen aus wechselnder Richtung"
+#~ msgid "Scattered Flurries"
+#~ msgstr "Böen aus wechselnder Richtung"
 
-msgid "Isolated T-Storms"
-msgstr "Gewitter"
+#~ msgid "Isolated T-Storms"
+#~ msgstr "Gewitter"
 
-msgid "Scattered Thunderstorms"
-msgstr "Vereinzelt Gewitter"
+#~ msgid "Scattered Thunderstorms"
+#~ msgstr "Vereinzelt Gewitter"
 
-msgid "Snow Showers"
-msgstr "Schneeschauer"
+#~ msgid "Snow Showers"
+#~ msgstr "Schneeschauer"
 
-msgid "Few Snow Showers"
-msgstr "Wenige Schneeschauer"
+#~ msgid "Few Snow Showers"
+#~ msgstr "Wenige Schneeschauer"
 
-msgid "Flurries"
-msgstr "Böen"
+#~ msgid "Flurries"
+#~ msgstr "Böen"
 
-msgid "Thunder"
-msgstr "Gewitter"
+#~ msgid "Thunder"
+#~ msgstr "Gewitter"
 
-msgid "Heavy Snow"
-msgstr "Starker Schneefall"
+#~ msgid "Heavy Snow"
+#~ msgstr "Starker Schneefall"
 
-msgid "Drizzle"
-msgstr "Nieselregen"
+#~ msgid "Drizzle"
+#~ msgstr "Nieselregen"
 
-msgid "Sct Flurries"
-msgstr "Vereinzelt böiger Wind"
+#~ msgid "Sct Flurries"
+#~ msgstr "Vereinzelt böiger Wind"
 
-msgid "Sct Strong Storms"
-msgstr "Vereinzelt starker Sturm"
+#~ msgid "Sct Strong Storms"
+#~ msgstr "Vereinzelt starker Sturm"
 
-msgid "Thunderstorms"
-msgstr "Gewitter"
+#~ msgid "Thunderstorms"
+#~ msgstr "Gewitter"
 
-msgid "Iso T-Storms"
-msgstr "Gewitter"
+#~ msgid "Iso T-Storms"
+#~ msgstr "Gewitter"
 
-msgid "Sct T-Storms"
-msgstr "Vereinzelt Gewitter"
+#~ msgid "Sct T-Storms"
+#~ msgstr "Vereinzelt Gewitter"
 
-msgid "Sct Snow Showers"
-msgstr "Vereinzelt Schneeschauer"
+#~ msgid "Sct Snow Showers"
+#~ msgstr "Vereinzelt Schneeschauer"
 
-msgid "to"
-msgstr "bis"
+#~ msgid "to"
+#~ msgstr "bis"
 
-msgid "Ice"
-msgstr "Eis"
+#~ msgid "Ice"
+#~ msgstr "Eis"
 
-msgid "Light Snow"
-msgstr "Wenig Schnee"
+#~ msgid "Light Snow"
+#~ msgstr "Wenig Schnee"
 
-msgid "Wintry Mix"
-msgstr "Winterwetter"
+#~ msgid "Wintry Mix"
+#~ msgstr "Winterwetter"
 
-msgid "Hvy Rain"
-msgstr "Starker Regen"
+#~ msgid "Hvy Rain"
+#~ msgstr "Starker Regen"
 
-msgid "Freezing Rain"
-msgstr "Überfrierende Nässe"
+#~ msgid "Freezing Rain"
+#~ msgstr "Überfrierende Nässe"
 
-msgid "T-Storms"
-msgstr "Gewitter"
+#~ msgid "T-Storms"
+#~ msgstr "Gewitter"
 
-msgid "Heavy Rain"
-msgstr "Starker Regen"
+#~ msgid "Heavy Rain"
+#~ msgstr "Starker Regen"
 
-msgid "Light Wintry Mix"
-msgstr "Leichtes Winterwetter"
+#~ msgid "Light Wintry Mix"
+#~ msgstr "Leichtes Winterwetter"
 
-msgid "Snow Shower"
-msgstr "Schneeschauer"
+#~ msgid "Snow Shower"
+#~ msgstr "Schneeschauer"
 
-msgid "Strong Storms"
-msgstr "Starker Sturm"
+#~ msgid "Strong Storms"
+#~ msgstr "Starker Sturm"
 
-msgid "Light Rain Shower"
-msgstr "Leichte Regenschauer"
+#~ msgid "Light Rain Shower"
+#~ msgstr "Leichte Regenschauer"
 
-msgid "Light Rain with Thunder"
-msgstr "Leichter Regen mit Gewitter"
+#~ msgid "Light Rain with Thunder"
+#~ msgstr "Leichter Regen mit Gewitter"
 
-msgid "Light Drizzle"
-msgstr "Nieselregen"
+#~ msgid "Light Drizzle"
+#~ msgstr "Nieselregen"
 
-msgid "Mist"
-msgstr "Nebel"
+#~ msgid "Mist"
+#~ msgstr "Nebel"
 
-msgid "Smoke"
-msgstr "Dunstig"
+#~ msgid "Smoke"
+#~ msgstr "Dunstig"
 
-msgid "Haze"
-msgstr "Hagel"
+#~ msgid "Haze"
+#~ msgstr "Hagel"
 
-msgid "Light Snow Shower"
-msgstr "Leichte Schneeschauer"
+#~ msgid "Light Snow Shower"
+#~ msgstr "Leichte Schneeschauer"
 
-msgid "Clear"
-msgstr "Klar"
+#~ msgid "Clear"
+#~ msgstr "Klar"
 
-msgid "A Few Clouds"
-msgstr "Wenige Wolken"
+#~ msgid "A Few Clouds"
+#~ msgstr "Wenige Wolken"
 
-msgid "Fair"
-msgstr "Heiter"
+#~ msgid "Fair"
+#~ msgstr "Heiter"
 
-msgid "Last updated: %s"
-msgstr "Aktualisiert: %s"
+#~ msgid "Last updated: %s"
+#~ msgstr "Aktualisiert: %s"
 
-msgid "Unlimited"
-msgstr "Unbegrenzt"
+#~ msgid "Unlimited"
+#~ msgstr "Unbegrenzt"
 
-msgid "%s (day: %s)"
-msgstr "%s (Tag: %s)"
+#~ msgid "%s (day: %s)"
+#~ msgstr "%s (Tag: %s)"
 
-msgid "%s (type: %s)"
-msgstr "%s (Type: %s)"
+#~ msgid "%s (type: %s)"
+#~ msgstr "%s (Type: %s)"
 
-msgid "Today, a high of %s degrees"
-msgstr "Heute, Hochtemperaturen von %s Grad"
+#~ msgid "Today, a high of %s degrees"
+#~ msgstr "Heute, Hochtemperaturen von %s Grad"
 
-msgid "and a low of %s degrees."
-msgstr "und Tiefsttemperaturen von %s Grad."
+#~ msgid "and a low of %s degrees."
+#~ msgstr "und Tiefsttemperaturen von %s Grad."
 
-msgid "Currently, there is a humidity of"
-msgstr "Aktuelle die Luftfeuchtigkeit beträgt"
+#~ msgid "Currently, there is a humidity of"
+#~ msgstr "Aktuelle die Luftfeuchtigkeit beträgt"
 
-msgid "the winds are calm"
-msgstr "es ist windstill"
+#~ msgid "the winds are calm"
+#~ msgstr "es ist windstill"
 
-msgid "Visibility will be unlimited today"
-msgstr "Unbegrenzte Sichtweite"
+#~ msgid "Visibility will be unlimited today"
+#~ msgstr "Unbegrenzte Sichtweite"
 
-msgid "There will be a visibility of"
-msgstr "Sichtweite von"
+#~ msgid "There will be a visibility of"
+#~ msgstr "Sichtweite von"
 
-msgid "Error encountered while trying to download Radar map"
-msgstr "Fehler beim laden der Radarkarte"
+#~ msgid "Error encountered while trying to download Radar map"
+#~ msgstr "Fehler beim laden der Radarkarte"
 
-msgid "Display program"
-msgstr "Programm zeigen"
+#~ msgid "Display program"
+#~ msgstr "Programm zeigen"
 
-msgid "Scheduling Failed"
-msgstr "Planung fehlgeschlagen"
+#~ msgid "Scheduling Failed"
+#~ msgstr "Planung fehlgeschlagen"
 
-msgid "getFavorites failed: %s"
-msgstr "Favoriten nicht verfügbar"
+#~ msgid "getFavorites failed: %s"
+#~ msgstr "Favoriten nicht verfügbar"
 
-msgid "Display favorite"
-msgstr "Favorit zeigen"
+#~ msgid "Display favorite"
+#~ msgstr "Favorit zeigen"
 
-msgid "Modify duplicate flag"
-msgstr "Kanal wählen"
+#~ msgid "Modify duplicate flag"
+#~ msgstr "Kanal wählen"
 
-msgid "Modify episodes flag"
-msgstr "Episoden Flag ändern"
+#~ msgid "Modify episodes flag"
+#~ msgstr "Episoden Flag ändern"
 
-msgid "Modify Duplicate Flag"
-msgstr "Kanal wählen"
+#~ msgid "Modify Duplicate Flag"
+#~ msgstr "Kanal wählen"
 
-msgid "Save Failed, favorite was lost"
-msgstr "Sichern fehlgeschlagen"
+#~ msgid "Save Failed, favorite was lost"
+#~ msgstr "Sichern fehlgeschlagen"
 
-msgid "Save Failed"
-msgstr "Speichern fehlgeschlagen"
+#~ msgid "Save Failed"
+#~ msgstr "Speichern fehlgeschlagen"
 
-msgid "Currently recording"
-msgstr "Aktuelle Aufnahme"
+#~ msgid "Currently recording"
+#~ msgstr "Aktuelle Aufnahme"
 
-msgid "Next recordings"
-msgstr "Nächsten Aufnahmen"
+#~ msgid "Next recordings"
+#~ msgstr "Nächsten Aufnahmen"
 
-msgid "Recordserver not found"
-msgstr "Aufnahmeserver nicht gefunden"
+#~ msgid "Recordserver not found"
+#~ msgstr "Aufnahmeserver nicht gefunden"
 
-msgid "Clear / Wind"
-msgstr "Klar / Wind"
+#~ msgid "Clear / Wind"
+#~ msgstr "Klar / Wind"
 
-msgid "Clouds Early / Clearing Late"
-msgstr "Bewölkt früh / Aufklarend spät"
+#~ msgid "Clouds Early / Clearing Late"
+#~ msgstr "Bewölkt früh / Aufklarend spät"
 
-msgid "Cloudy"
-msgstr "Bewölkt"
+#~ msgid "Cloudy"
+#~ msgstr "Bewölkt"
 
-msgid "Cloudy / Wind"
-msgstr "Bewölkt und windig"
+#~ msgid "Cloudy / Wind"
+#~ msgstr "Bewölkt und windig"
 
-msgid "Cloudy and Windy"
-msgstr "Bewölkt und windig"
+#~ msgid "Cloudy and Windy"
+#~ msgstr "Bewölkt und windig"
 
-msgid "Drifting Snow"
-msgstr "Schneetreiben"
+#~ msgid "Drifting Snow"
+#~ msgstr "Schneetreiben"
 
-msgid "Drizzle / Fog"
-msgstr "Nieselregen / Nebel"
+#~ msgid "Drizzle / Fog"
+#~ msgstr "Nieselregen / Nebel"
 
-msgid "Drizzle Late"
-msgstr "Nieselregen spät"
+#~ msgid "Drizzle Late"
+#~ msgstr "Nieselregen spät"
 
-msgid "E"
-msgstr "O"
+#~ msgid "E"
+#~ msgstr "O"
 
-msgid "ENE"
-msgstr "ONO"
+#~ msgid "ENE"
+#~ msgstr "ONO"
 
-msgid "ENE_short"
-msgstr "ONO"
+#~ msgid "ENE_short"
+#~ msgstr "ONO"
 
-msgid "ESE"
-msgstr "OSO"
+#~ msgid "ESE"
+#~ msgstr "OSO"
 
-msgid "ESE_short"
-msgstr "OSO"
+#~ msgid "ESE_short"
+#~ msgstr "OSO"
 
-msgid "E_short"
-msgstr "O"
+#~ msgid "E_short"
+#~ msgstr "O"
 
-msgid "Extreme"
-msgstr "Extrem"
+#~ msgid "Extreme"
+#~ msgstr "Extrem"
 
-msgid "Few Showers / Wind"
-msgstr "Leichte Schauer / Wind"
+#~ msgid "Few Showers / Wind"
+#~ msgstr "Leichte Schauer / Wind"
 
-msgid "Few Snow"
-msgstr "Leichter Schneefall"
+#~ msgid "Few Snow"
+#~ msgstr "Leichter Schneefall"
 
-msgid "Few Snow Showers / Wind"
-msgstr "Leichte Schneeschauer / Wind"
+#~ msgid "Few Snow Showers / Wind"
+#~ msgstr "Leichte Schneeschauer / Wind"
 
-msgid "First Quarter"
-msgstr "Erstes Viertel"
+#~ msgid "First Quarter"
+#~ msgstr "Erstes Viertel"
 
-msgid "Fog Early / Clouds Late"
-msgstr "Nebel spät / Wolken spät"
+#~ msgid "Fog Early / Clouds Late"
+#~ msgstr "Nebel spät / Wolken spät"
 
-msgid "Fog Late"
-msgstr "Nebel spät"
+#~ msgid "Fog Late"
+#~ msgstr "Nebel spät"
 
-msgid "Foggy"
-msgstr "Neblig"
+#~ msgid "Foggy"
+#~ msgstr "Neblig"
 
-msgid "Freezing Drizzle"
-msgstr "Überfrierender Nieselregen"
+#~ msgid "Freezing Drizzle"
+#~ msgstr "Überfrierender Nieselregen"
 
-msgid "Full"
-msgstr "Vollmond"
+#~ msgid "Full"
+#~ msgstr "Vollmond"
 
-msgid "Heavy Rain / Wind"
-msgstr "Starkregen / Wind"
+#~ msgid "Heavy Rain / Wind"
+#~ msgstr "Starkregen / Wind"
 
-msgid "High"
-msgstr "Hoch"
+#~ msgid "High"
+#~ msgstr "Hoch"
 
-msgid "Isolated T-Storms / Wind"
-msgstr "Vereinzelt Gewitter / Wind"
+#~ msgid "Isolated T-Storms / Wind"
+#~ msgstr "Vereinzelt Gewitter / Wind"
 
-msgid "Last Quarter"
-msgstr "Letztes Viertel"
+#~ msgid "Last Quarter"
+#~ msgstr "Letztes Viertel"
 
-msgid "Lawn and Garden Weather"
-msgstr "Gartenwetter"
+#~ msgid "Lawn and Garden Weather"
+#~ msgstr "Gartenwetter"
 
-msgid "Light Freezing Rain"
-msgstr "Leichter überfrierender Regen"
+#~ msgid "Light Freezing Rain"
+#~ msgstr "Leichter überfrierender Regen"
 
-msgid "Light Rain / Fog"
-msgstr "Leichter Regen / Nebel"
+#~ msgid "Light Rain / Fog"
+#~ msgstr "Leichter Regen / Nebel"
 
-msgid "Light Rain / Wind"
-msgstr "Leichter Regen / Wind"
+#~ msgid "Light Rain / Wind"
+#~ msgstr "Leichter Regen / Wind"
 
-msgid "Light Rain / Wind Late"
-msgstr "Leichter Regen / Wind spät"
+#~ msgid "Light Rain / Wind Late"
+#~ msgstr "Leichter Regen / Wind spät"
 
-msgid "Light Rain Early"
-msgstr "Leichter Regen früh"
+#~ msgid "Light Rain Early"
+#~ msgstr "Leichter Regen früh"
 
-msgid "Light Rain Late"
-msgstr "Leichter Regen spät"
+#~ msgid "Light Rain Late"
+#~ msgstr "Leichter Regen spät"
 
-msgid "Light Rain and Freezing Rain"
-msgstr "Leichter und überfrierender Regen"
+#~ msgid "Light Rain and Freezing Rain"
+#~ msgstr "Leichter und überfrierender Regen"
 
-msgid "Light Rain and Shower"
-msgstr "Leichter Regen und Schauer"
+#~ msgid "Light Rain and Shower"
+#~ msgstr "Leichter Regen und Schauer"
 
-msgid "Light Rain and Windy"
-msgstr "Leichter Regen und windig"
+#~ msgid "Light Rain and Windy"
+#~ msgstr "Leichter Regen und windig"
 
-msgid "Light Snow / Fog"
-msgstr "Leichter Schnee / Nebel"
+#~ msgid "Light Snow / Fog"
+#~ msgstr "Leichter Schnee / Nebel"
 
-msgid "Light Snow / Wind"
-msgstr "Leichter Schnee / Wind"
+#~ msgid "Light Snow / Wind"
+#~ msgstr "Leichter Schnee / Wind"
 
-msgid "Light Snow Early"
-msgstr "Leichter Schneefall früh"
+#~ msgid "Light Snow Early"
+#~ msgstr "Leichter Schneefall früh"
 
-msgid "Light Snow Late"
-msgstr "Leichter Schneefall spät"
+#~ msgid "Light Snow Late"
+#~ msgstr "Leichter Schneefall spät"
 
-msgid "Low"
-msgstr "Niedrig"
+#~ msgid "Low"
+#~ msgstr "Niedrig"
 
-msgid "Mostly Clear"
-msgstr "Überwiegend klar"
+#~ msgid "Mostly Clear"
+#~ msgstr "Überwiegend klar"
 
-msgid "Mostly Cloudy / Wind"
-msgstr "Überwiegend bewölkt / Wind"
+#~ msgid "Mostly Cloudy / Wind"
+#~ msgstr "Überwiegend bewölkt / Wind"
 
-msgid "Mostly Cloudy and Windy"
-msgstr "Überwiegend bewölkt und windig"
+#~ msgid "Mostly Cloudy and Windy"
+#~ msgstr "Überwiegend bewölkt und windig"
 
-msgid "N"
-msgstr "N"
+#~ msgid "N"
+#~ msgstr "N"
 
-msgid "N/A"
-msgstr "n.v."
+#~ msgid "N/A"
+#~ msgstr "n.v."
 
-msgid "NE"
-msgstr "NO"
+#~ msgid "NE"
+#~ msgstr "NO"
 
-msgid "NE_short"
-msgstr "NO"
+#~ msgid "NE_short"
+#~ msgstr "NO"
 
-msgid "NNE"
-msgstr "NNO"
+#~ msgid "NNE"
+#~ msgstr "NNO"
 
-msgid "NNE_short"
-msgstr "NNO"
+#~ msgid "NNE_short"
+#~ msgstr "NNO"
 
-msgid "NNW"
-msgstr "NNW"
+#~ msgid "NNW"
+#~ msgstr "NNW"
 
-msgid "NNW_short"
-msgstr "NNW"
+#~ msgid "NNW_short"
+#~ msgstr "NNW"
 
-msgid "NW"
-msgstr "NW"
+#~ msgid "NW"
+#~ msgstr "NW"
 
-msgid "NW_short"
-msgstr "NW"
+#~ msgid "NW_short"
+#~ msgstr "NW"
 
-msgid "N_short"
-msgstr "N"
+#~ msgid "N_short"
+#~ msgstr "N"
 
-msgid "New"
-msgstr "Neumond"
+#~ msgid "New"
+#~ msgstr "Neumond"
 
-msgid "Overcast"
-msgstr "Bedeckt"
+#~ msgid "Overcast"
+#~ msgstr "Bedeckt"
 
-msgid "PM Fog"
-msgstr "Nachmittags Nebel"
+#~ msgid "PM Fog"
+#~ msgstr "Nachmittags Nebel"
 
-msgid "PM Light Rain"
-msgstr "Nachmittags leichter Regen"
+#~ msgid "PM Light Rain"
+#~ msgstr "Nachmittags leichter Regen"
 
-msgid "PM Light Rain / Wind"
-msgstr "Nachmittags leichter Regen / Wind"
+#~ msgid "PM Light Rain / Wind"
+#~ msgstr "Nachmittags leichter Regen / Wind"
 
-msgid "PM Light Snow"
-msgstr "Nachmittags Leichter Schneefall"
+#~ msgid "PM Light Snow"
+#~ msgstr "Nachmittags Leichter Schneefall"
 
-msgid "PM Rain"
-msgstr "Nachmittags Regen"
+#~ msgid "PM Rain"
+#~ msgstr "Nachmittags Regen"
 
-msgid "PM Rain / Snow"
-msgstr "Nachmittags Regen / Schnee"
+#~ msgid "PM Rain / Snow"
+#~ msgstr "Nachmittags Regen / Schnee"
 
-msgid "PM Rain / Wind"
-msgstr "Nachmittags Regen / Wind"
+#~ msgid "PM Rain / Wind"
+#~ msgstr "Nachmittags Regen / Wind"
 
-msgid "PM Showers"
-msgstr "Nachmittags Schauer"
+#~ msgid "PM Showers"
+#~ msgstr "Nachmittags Schauer"
 
-msgid "PM Showers / Wind"
-msgstr "Nachmittags Schauer / Wind"
+#~ msgid "PM Showers / Wind"
+#~ msgstr "Nachmittags Schauer / Wind"
 
-msgid "PM Snow Showers"
-msgstr "Nachmittags Schneeschauer"
+#~ msgid "PM Snow Showers"
+#~ msgstr "Nachmittags Schneeschauer"
 
-msgid "PM T-Storms"
-msgstr "Nachmittags Gewitter"
+#~ msgid "PM T-Storms"
+#~ msgstr "Nachmittags Gewitter"
 
-msgid "Partly Cloudy / Wind"
-msgstr "Teilweise bewölkt / Wind"
+#~ msgid "Partly Cloudy / Wind"
+#~ msgstr "Teilweise bewölkt / Wind"
 
-msgid "Partly Cloudy and Windy"
-msgstr "Teilweise bewölkt und windig"
+#~ msgid "Partly Cloudy and Windy"
+#~ msgstr "Teilweise bewölkt und windig"
 
-msgid "Rain / Freezing Rain"
-msgstr "Regen / überfrierender Regen"
+#~ msgid "Rain / Freezing Rain"
+#~ msgstr "Regen / überfrierender Regen"
 
-msgid "Rain / Snow"
-msgstr "Regen / Snow"
+#~ msgid "Rain / Snow"
+#~ msgstr "Regen / Snow"
 
-msgid "Rain / Snow / Wind"
-msgstr "Regen / Schnee / Wind"
+#~ msgid "Rain / Snow / Wind"
+#~ msgstr "Regen / Schnee / Wind"
 
-msgid "Rain / Snow Early"
-msgstr "Regen / Schnee früh"
+#~ msgid "Rain / Snow Early"
+#~ msgstr "Regen / Schnee früh"
 
-msgid "Rain / Snow Late"
-msgstr "Regen / Schnee spät"
+#~ msgid "Rain / Snow Late"
+#~ msgstr "Regen / Schnee spät"
 
-msgid "Rain / Snow Showers"
-msgstr "Regen / Schneeschauer"
+#~ msgid "Rain / Snow Showers"
+#~ msgstr "Regen / Schneeschauer"
 
-msgid "Rain / Snow Showers / Wind"
-msgstr "Regen / Schneeschauer / Wind"
+#~ msgid "Rain / Snow Showers / Wind"
+#~ msgstr "Regen / Schneeschauer / Wind"
 
-msgid "Rain / Snow Showers Late"
-msgstr "Regen / Schneeschauer spät"
+#~ msgid "Rain / Snow Showers Late"
+#~ msgstr "Regen / Schneeschauer spät"
 
-msgid "Rain / Thunder"
-msgstr "Regen / Donner"
+#~ msgid "Rain / Thunder"
+#~ msgstr "Regen / Donner"
 
-msgid "Rain / Wind"
-msgstr "Regen / Wind"
+#~ msgid "Rain / Wind"
+#~ msgstr "Regen / Wind"
 
-msgid "Rain / Wind Early"
-msgstr "Regen / Wind früh"
+#~ msgid "Rain / Wind Early"
+#~ msgstr "Regen / Wind früh"
 
-msgid "Rain Early"
-msgstr "Regen früh"
+#~ msgid "Rain Early"
+#~ msgstr "Regen früh"
 
-msgid "Rain Late"
-msgstr "Regen spät"
+#~ msgid "Rain Late"
+#~ msgstr "Regen spät"
 
-msgid "Rain Shower"
-msgstr "Regenschauer"
+#~ msgid "Rain Shower"
+#~ msgstr "Regenschauer"
 
-msgid "Rain Shower and Windy"
-msgstr "Regenschauer und windig"
+#~ msgid "Rain Shower and Windy"
+#~ msgstr "Regenschauer und windig"
 
-msgid "Rain and Snow"
-msgstr "Regen und Schnee"
+#~ msgid "Rain and Snow"
+#~ msgstr "Regen und Schnee"
 
-msgid "Rain to Wintry Mix"
-msgstr "Regen bis winterlich"
+#~ msgid "Rain to Wintry Mix"
+#~ msgstr "Regen bis winterlich"
 
-msgid "Rain to Wintry Mix / Wind"
-msgstr "Regen bis winterlich / Wind"
+#~ msgid "Rain to Wintry Mix / Wind"
+#~ msgstr "Regen bis winterlich / Wind"
 
-msgid "S"
-msgstr "S"
+#~ msgid "S"
+#~ msgstr "S"
 
-msgid "SE"
-msgstr "SO"
+#~ msgid "SE"
+#~ msgstr "SO"
 
-msgid "SE_short"
-msgstr "SO"
+#~ msgid "SE_short"
+#~ msgstr "SO"
 
-msgid "SSE"
-msgstr "SSO"
+#~ msgid "SSE"
+#~ msgstr "SSO"
 
-msgid "SSE_short"
-msgstr "SSO"
+#~ msgid "SSE_short"
+#~ msgstr "SSO"
 
-msgid "SSW"
-msgstr "SSW"
+#~ msgid "SSW"
+#~ msgstr "SSW"
 
-msgid "SSW_short"
-msgstr "SSW"
+#~ msgid "SSW_short"
+#~ msgstr "SSW"
 
-msgid "SW"
-msgstr "SW"
+#~ msgid "SW"
+#~ msgstr "SW"
 
-msgid "SW_short"
-msgstr "SW"
+#~ msgid "SW_short"
+#~ msgstr "SW"
 
-msgid "S_short"
-msgstr "S"
+#~ msgid "S_short"
+#~ msgstr "S"
 
-msgid "Scattered Showers"
-msgstr "Vereinzelte Schauer"
+#~ msgid "Scattered Showers"
+#~ msgstr "Vereinzelte Schauer"
 
-msgid "Scattered Snow"
-msgstr "Vereinzelt Schneefall"
+#~ msgid "Scattered Snow"
+#~ msgstr "Vereinzelt Schneefall"
 
-msgid "Scattered Snow Showers"
-msgstr "Vereinzelte Schneeschauer"
+#~ msgid "Scattered Snow Showers"
+#~ msgstr "Vereinzelte Schneeschauer"
 
-msgid "Scattered T-Storms"
-msgstr "Vereinzelt Gewitter"
+#~ msgid "Scattered T-Storms"
+#~ msgstr "Vereinzelt Gewitter"
 
-msgid "Showers / Wind"
-msgstr "Schauer / Wind"
+#~ msgid "Showers / Wind"
+#~ msgstr "Schauer / Wind"
 
-msgid "Showers / Wind Early"
-msgstr "Schauer / Wind früh"
+#~ msgid "Showers / Wind Early"
+#~ msgstr "Schauer / Wind früh"
 
-msgid "Showers Early"
-msgstr "Schauer früh"
+#~ msgid "Showers Early"
+#~ msgstr "Schauer früh"
 
-msgid "Showers Late"
-msgstr "Schauer spät"
+#~ msgid "Showers Late"
+#~ msgstr "Schauer spät"
 
-msgid "Showers in the Vicinity"
-msgstr "Schauer in der Nähe"
+#~ msgid "Showers in the Vicinity"
+#~ msgstr "Schauer in der Nähe"
 
-msgid "Snow"
-msgstr "Schnee"
+#~ msgid "Snow"
+#~ msgstr "Schnee"
 
-msgid "Snow / Wind"
-msgstr "Schnee / Wind"
+#~ msgid "Snow / Wind"
+#~ msgstr "Schnee / Wind"
 
-msgid "Snow Shower / Wind"
-msgstr "Schneeschauer / Wind"
+#~ msgid "Snow Shower / Wind"
+#~ msgstr "Schneeschauer / Wind"
 
-msgid "Snow Showers / Wind Early"
-msgstr "Schneeschauer / Wind früh"
+#~ msgid "Snow Showers / Wind Early"
+#~ msgstr "Schneeschauer / Wind früh"
 
-msgid "Snow Showers Early"
-msgstr "Schneeschauer früh"
+#~ msgid "Snow Showers Early"
+#~ msgstr "Schneeschauer früh"
 
-msgid "Snow Showers Late"
-msgstr "Schneeschauer spät"
+#~ msgid "Snow Showers Late"
+#~ msgstr "Schneeschauer spät"
 
-msgid "Snow and Freezing Rain"
-msgstr "Schnee und überfrierender Regen"
+#~ msgid "Snow and Freezing Rain"
+#~ msgstr "Schnee und überfrierender Regen"
 
-msgid "Snow to Rain"
-msgstr "Schneeregen"
+#~ msgid "Snow to Rain"
+#~ msgstr "Schneeregen"
 
-msgid "Snow to Wintry Mix"
-msgstr "Schneefall bis winterlich"
+#~ msgid "Snow to Wintry Mix"
+#~ msgstr "Schneefall bis winterlich"
 
-msgid "Snow to Wintry Mix / Wind"
-msgstr "Schneefall bis winterlich / Wind"
+#~ msgid "Snow to Wintry Mix / Wind"
+#~ msgstr "Schneefall bis winterlich / Wind"
 
-msgid "Storm"
-msgstr "Sturm"
+#~ msgid "Storm"
+#~ msgstr "Sturm"
 
-msgid "Sunny / Wind"
-msgstr "Sonnig / Wind"
+#~ msgid "Sunny / Wind"
+#~ msgstr "Sonnig / Wind"
 
-msgid "T-Showers"
-msgstr "Gewitterschauer"
+#~ msgid "T-Showers"
+#~ msgstr "Gewitterschauer"
 
-msgid "T-Storms Early"
-msgstr "baldige Gewitter"
+#~ msgid "T-Storms Early"
+#~ msgstr "baldige Gewitter"
 
-msgid "Very High"
-msgstr "Sehr hoch"
+#~ msgid "Very High"
+#~ msgstr "Sehr hoch"
 
-msgid "W"
-msgstr "W"
+#~ msgid "W"
+#~ msgstr "W"
 
-msgid "WNW"
-msgstr "WNW"
+#~ msgid "WNW"
+#~ msgstr "WNW"
 
-msgid "WNW_short"
-msgstr "WNW"
+#~ msgid "WNW_short"
+#~ msgstr "WNW"
 
-msgid "WSW"
-msgstr "WSW"
+#~ msgid "WSW"
+#~ msgstr "WSW"
 
-msgid "WSW_short"
-msgstr "WSW"
+#~ msgid "WSW_short"
+#~ msgstr "WSW"
 
-msgid "W_short"
-msgstr "W"
+#~ msgid "W_short"
+#~ msgstr "W"
 
-msgid "Waning Crescent"
-msgstr "Abnehmender Halbmond"
+#~ msgid "Waning Crescent"
+#~ msgstr "Abnehmender Halbmond"
 
-msgid "Waning Gibbous"
-msgstr "Abnehmender Vollmond"
+#~ msgid "Waning Gibbous"
+#~ msgstr "Abnehmender Vollmond"
 
-msgid "Waxing Crescent"
-msgstr "Zunehmender Halbmond"
+#~ msgid "Waxing Crescent"
+#~ msgstr "Zunehmender Halbmond"
 
-msgid "Waxing Gibbous"
-msgstr "Zunehmender Vollmond"
+#~ msgid "Waxing Gibbous"
+#~ msgstr "Zunehmender Vollmond"
 
-msgid "Wintry Mix / Wind"
-msgstr "Winterlich / Wind"
+#~ msgid "Wintry Mix / Wind"
+#~ msgstr "Winterlich / Wind"
 
-msgid "Wintry Mix / Wind Early"
-msgstr "Winterlich / Wind früh"
+#~ msgid "Wintry Mix / Wind Early"
+#~ msgstr "Winterlich / Wind früh"
 
-msgid "Wintry Mix to Snow"
-msgstr "Winterlich bis Schneefall"
+#~ msgid "Wintry Mix to Snow"
+#~ msgstr "Winterlich bis Schneefall"
 
-msgid "rising"
-msgstr "steigend"
+#~ msgid "rising"
+#~ msgstr "steigend"
 
-msgid "steady"
-msgstr "beständig"
+#~ msgid "steady"
+#~ msgstr "beständig"
