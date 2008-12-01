@@ -1,0 +1,8 @@
+#!/bin/sh
+
+#arguments :
+# channel_name_or_number frequency_in_MHz seconds_to_record output_filename
+
+ivtv-tune -f "$2"
+
+exec mencoder /dev/video0  -quiet -ovc copy -oac copy -endpos "$3" -of mpeg -o "$4"

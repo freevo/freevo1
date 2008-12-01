@@ -1,0 +1,420 @@
+<html><head>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=iso-8859-1">
+<title>RecordingInfo - Freevo Wiki</title>
+<meta name="KEYWORDS" content="Recording, Info">
+<link rel="stylesheet" type="text/css" href="/wiki/css/freevowiki.css">
+<link rel="Start" href="FrontPage">
+<link rel="Alternate" media="print" title="Print" href="RecordingInfo?action=print">
+<link rel="Index" href="TitleIndex">
+<link rel="Glossary" href="WordIndex">
+<link rel="Help" href="HelpOnFormatting">
+</head>
+<body onload="window.defaultStatus='Freevo Wiki'"><a name="top"></a>
+<table width="100%"><tr><td>
+<a href="/cgi-bin/moin.cgi/FrontPage"></td></tr></table></a> <div id="titlebar"></div> <table><tr><td></a>
+</td><td width="99%" valign="middle" class="headline"><font size="+3">&nbsp;<b>
+<a title="Click here to do a full-text search for this title" href="/cgi-bin/moin.cgi/RecordingInfo?action=fullsearch&value=RecordingInfo&literal=1&case=1">RecordingInfo</a>
+</b></font></td>
+<td valign="bottom" align="left" nowrap>
+<font face="Verdana" size="1"><a href="/cgi-bin/moin.cgi/UserPreferences">UserPreferences</a><br>&nbsp;</font>
+</td></tr></table>
+
+<a href="/cgi-bin/moin.cgi/HelpContents"><img src="/wiki/img/moin-help.gif" width="12" height="11" border="0" hspace="2" align="right" alt="HelpContents"></a>
+<a href="/cgi-bin/moin.cgi/FindPage?value=RecordingInfo"><img src="/wiki/img/moin-search.gif" width="12" height="12" border="0" hspace="2" align="right" alt="Search"></a>
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=diff"><img src="/wiki/img/moin-diff.gif" width="15" height="11" border="0" hspace="2" align="right" alt="Diffs"></a>
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=info"><img src="/wiki/img/moin-info.gif" width="12" height="11" border="0" hspace="2" align="right" alt="Info"></a>
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=edit"><img src="/wiki/img/moin-edit.gif" width="12" height="12" border="0" hspace="2" align="right" alt="Edit"></a>
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=subscribe"><img src="/wiki/img/moin-email-x.gif" width="14" height="10" border="0" hspace="2" vspace="1" align="right" alt="Subscribe"></a>
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=format&mimetype=text/xml"><img src="/wiki/img/moin-xml.gif" width="20" height="13" border="0" hspace="2" align="right" alt="XML"></a>
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=print"><img src="/wiki/img/moin-print.gif" width="16" height="14" border="0" hspace="2" align="right" alt="Print"></a>
+<a href="/cgi-bin/moin.cgi/RecordingInfo"><img src="/wiki/img/moin-show.gif" width="12" height="13" border="0" hspace="2" align="right" alt="View"></a>
+
+<table class="navibar" cellpadding=0 cellspacing=3 border=0><tr><td class="navibar" valign=top align=center bgcolor="#E8E8E8"><font class="navibar" face="Arial,Helvetica" size="-1">&nbsp;<b>Freevo Wiki</b>&nbsp;</font></td>
+<td class="navibar" valign=top align=center bgcolor="#E8E8E8"><font class="navibar" face="Arial,Helvetica" size="-1">&nbsp;<a class="navibar" href="/cgi-bin/moin.cgi/FrontPage">FrontPage</a>&nbsp;</font></td>
+<td class="navibar" valign=top align=center bgcolor="#E8E8E8"><font class="navibar" face="Arial,Helvetica" size="-1">&nbsp;<a class="navibar" href="/cgi-bin/moin.cgi/RecentChanges">RecentChanges</a>&nbsp;</font></td>
+<td class="navibar" valign=top align=center bgcolor="#E8E8E8"><font class="navibar" face="Arial,Helvetica" size="-1">&nbsp;<a class="navibar" href="/cgi-bin/moin.cgi/TitleIndex">TitleIndex</a>&nbsp;</font></td>
+<td class="navibar" valign=top align=center bgcolor="#E8E8E8"><font class="navibar" face="Arial,Helvetica" size="-1">&nbsp;<a class="navibar" href="/cgi-bin/moin.cgi/WordIndex">WordIndex</a>&nbsp;</font></td>
+<td class="navibar" valign=top align=center bgcolor="#E8E8E8"><font class="navibar" face="Arial,Helvetica" size="-1">&nbsp;<a class="navibar" href="/cgi-bin/moin.cgi/SiteNavigation">SiteNavigation</a>&nbsp;</font></td>
+<td class="navibar" valign=top align=center bgcolor="#E8E8E8"><font class="navibar" face="Arial,Helvetica" size="-1">&nbsp;<a class="navibar" href="/cgi-bin/moin.cgi/HelpContents">HelpContents</a>&nbsp;</font></td>
+</tr></table>
+<hr>
+
+<p><a name="head-59bb185292b37be3920e5f2ce17710b90bfb2b2c"></a><H1>1 Below Here is for 1.4.x Series</H1>
+
+<p><a name="head-b4e6a310890f62289340d7802703b8c2586c6d86"></a><H2>1.1 Intro</H2>
+
+<p>There are three different types of Freevo Recording. Tv Line In, Btaudio and ivtv. The first two depend on using the bttv module for your tv card. The third is for use only with the ivtv module for the wintv PVR type cards. 
+<p><a name="head-37b061ee92fe5a0b06b1265053dddc992f041f83"></a><H2>1.2 Btaudio</H2>
+
+<p>This process using the sound from btaudio kernel module and the pictures from your bttv module. This is the preffered freevo setup for recording and the default settings in VCR_CMD reflect this. 
+<p>This setup is problematic though since not all cards support btaudio and some cards only thought to work in certain configurations. Btaudio setup is its own topic and help can be found <a class="external" href="http://freevo.sourceforge.net/cgi-bin/moin.cgi/FrequentlyAskedQuestions#head-3fb8a33780b7fb2bef3edff84757d03e96461031"><img src="/wiki/img/moin-www.gif" width="11" border="0" alt="[WWW]" hspace="4" height="11">here</a>. 
+<p>Once you have that setup you can change the default VCR_CMD's adevice to point to it. 
+<p>This is also the best setup for doing timeshifting, thus it is reccomended to really try hard to get this setup to work for you. 
+<p><a name="head-0d43655debb406649541dc468fa2b398afa56ebf"></a><H2>1.3 TV Line In</H2>
+
+<p><a name="head-cb329146a0dd0d566b0628744d67936558741ffa"></a><H3>1.3.1 description</H3>
+
+<p>This process using the line out sound from your tv card into the line in of your sound card for the sound and bttv for your pictures. This is a common bttv setup. 
+<p>It has a couple inherit problems. First you will hear the program in the background when you are recording. And Second, You cannot run any apps that use the soundcard while recording(which pretty rules out everything except images and maybe running some scripts in commands plugin). 
+<p>Another problem is that depending on your sound system you have to do different things to setup the recording. 
+<p>VIA USERS: Note that if you have a VIA-based on-board sound card, you should uninstall the current drivers in your system and install the appropriate drivers found at <a href="http://www.viaarena.com">http://www.viaarena.com</a> . Then increase your IGain setting on your audio mixer to something greater than zero (ie: # aumix -l 0 -l R -i 35). 
+<p><a name="head-c3afdb16d5c7850cfcfd6ed7e8ce2b00e6464826"></a><H3>1.3.2 OSS instructions</H3>
+
+<p>Typically you need to use something like the following to mute and unmute the audio: 
+<p><pre class="code">
+# to unmute the audio 
+aumix -l 80 -l R 
+ 
+# to mute the audio 
+aumix -l 0 
+</pre> 
+<p>Unfortuneately some Sound Blaster cards also need another variable tweaked when used with OSS. The soundblasters cards need and extra parameter (IGAIN) added to the aumix calls. for example: 
+<p><pre class="code">
+# to unmute the audio 
+aumix -l 80 -l R -i 1 
+ 
+# to mute the audio 
+aumix -l 0 -i 0 
+</pre> 
+<p>Another variable that needs to change in the VCR_CMD is the adevice to /dev/dsp. You can do this by changing your VCR_CMD to a script setup similar to one <a class="external" href="http://cvs.sourceforge.net/viewcvs.py/freevo/freevo/contrib/record_without_btaudio/"><img src="/wiki/img/moin-www.gif" width="11" border="0" alt="[WWW]" hspace="4" height="11">here</a>. (One good thing about controling recording from a script is that it makes it easy to experiment from the command line.) Or to change the VCR_CMD to include a 'soundonscript ;' + at thefront of the command and a '; soundoffscript' at the end. 
+<p><pre class="code">
+#example for an older pre tv:// syntax mencoder 
+VCR_CMD = ( 'aumix -l 80 -l R; '+ 
+            CONF.mencoder + ' ' + 
+            '-tv on:driver=v4l:input=0' +   # Input 0 = TV, Input 1 = Comp. V. in 
+            ':norm=%s' % CONF.tv + 
+            ':channel=%(channel)s' +         # Filled in by Freevo 
+            ':chanlist=us-cable' +          # Change 
+            ':width=%d:height=%d' % (TV_REC_SIZE[0], TV_REC_SIZE[1]) + 
+            ':outfmt=%s' % TV_REC_OUTFMT + 
+            ':device=%s' % TV_DEVICE + 
+            ':adevice=/dev/dsp' +            
+            ':audiorate=32000' +            # 44100 for better sound 
+            ':forceaudio:forcechan=1:' +    # Forced mono for bug in my driver 
+            'buffersize=64' +               # 64 Megabyte capture buffer, change? 
+            ' -ovc lavc -lavcopts ' +       # Mencoder lavcodec video codec 
+            'vcodec=mpeg4' +                # lavcodec mpeg-4 
+            ':vbitrate=1200:' +             # Change lower/higher, bitrate 
+            'keyint=30 ' +                  # Keyframe every 10 secs, change? 
+            '-oac mp3lame -lameopts ' +     # Use Lame for MP3 encoding 
+            'br=128:cbr:mode=3 ' +          # MP3 const. bitrate, 128 kbit/s 
+            '-ffourcc divx ' +              # Force 'divx' ident, better compat. 
+            '-endpos %(seconds)s ' +        # only mencoder uses this so do it here. 
+            '-o %(filename)s.avi ' +        # Filled in by Freevo 
+            '; aumix -l 0;') 
+ 
+# example of newer tv:// syntax mencoder 
+VCR_CMD = ( 'aumix -l 80 -l R; '+ 
+            CONF.mencoder + ' ' + 
+            'tv:// ' +                      # New mplayer requires this. 
+            '-tv driver=v4l:input=0' +      # Input 0 = TV, Input 1 = Comp. V. in 
+            ':norm=%s' % CONF.tv + 
+            ':channel=%(channel)s' +        # Filled in by Freevo 
+            ':chanlist=us-cable' +          # Change 
+            ':width=%d:height=%d' % (TV_REC_SIZE[0], TV_REC_SIZE[1]) + 
+            ':outfmt=%s' % TV_REC_OUTFMT + 
+            ':device=%s' % TV_DEVICE + 
+            ':adevice=/dev/dsp' +            
+            ':audiorate=32000' +            # 44100 for better sound 
+            ':forceaudio:forcechan=1:' +    # Forced mono for bug in my driver 
+            'buffersize=64' +               # 64 Megabyte capture buffer, change? 
+            ' -ovc lavc -lavcopts ' +       # Mencoder lavcodec video codec 
+            'vcodec=mpeg4' +                # lavcodec mpeg-4 
+            ':vbitrate=1200:' +             # Change lower/higher, bitrate 
+            'keyint=30 ' +                  # Keyframe every 10 secs, change? 
+            '-oac mp3lame -lameopts ' +     # Use Lame for MP3 encoding 
+            'br=128:cbr:mode=3 ' +          # MP3 const. bitrate, 128 kbit/s 
+            '-ffourcc divx ' +              # Force 'divx' ident, better compat. 
+            '-endpos %(seconds)s ' +        # only mencoder uses this so do it here. 
+            '-o %(filename)s.avi ' +        # Filled in by Freevo 
+            '; aumix -l 0;') 
+</pre> 
+<p><a name="head-8f216ba94758334c0e7a7389c58e41e54718d3f7"></a><H3>1.3.3 ALSA</H3>
+
+<p>This Alsa example is from the freevo users list. you may need to use this script in place of the VCR_CMD. The script itself has the line to change for VCR_CMD in it: 
+<p><pre class="code">
+#!/bin/bash 
+  
+# use with this VCR_CMD: 
+# VCR_CMD = ('/usr/local/freevo_data/tvrecord/tvrecord %(channel)s %(seconds)s "%(filename)s"') 
+  
+CHAN=$1 
+TIME=$2 
+NAME=$3 
+  
+WIDTH=360 
+HEIGHT=288 
+  
+MENCODER=/usr/bin/mencoder 
+AMIXER=/usr/bin/amixer 
+  
+NICE="nice -n -20" 
+  
+AUDIO="-oac mp3lame -lameopts cbr:br=256:mode=0" 
+VIDEO="-ovc lavc -lavcopts vcodec=mpeg4:vbitrate=1600" 
+DSP="adevice=/dev/sound/dsp" 
+TV=" -tv driver=v4l:width=$WIDTH:height=$HEIGHT:outfmt=yuy2:input=0:device=/dev/v4l/video0:norm=PAL:chanlist=europe-west:channel=$CHAN:$DSP" 
+  
+$AMIXER -q sset CD 87% mute 
+$AMIXER -q sset Capture 87% 
+$AMIXER -q cset numid=30 1      # select capture source, 30 is capture source control, 1 = CD and 4 = line 
+$AMIXER -q cset numid=31 1      # set capture source switch to 1 (= on) 
+$NICE $MENCODER tv:// $TV $VIDEO $AUDIO -endpos $TIME -ffourcc divx -o  "$NAME.avi" 
+$AMIXER -q sset CD 87% unmute   # unmute cd again to hear sound when using watching tv after recording 
+</pre> 
+<p>Some things to note: <ul>
+<li> The source provided here is CD IN. 
+</li><li> The norm is PAL. 
+</li><li> chanlist is europe-west 
+</li><li> the numid used are specific to the author's card </li></ul>
+<p>You will most likely need to change these variables. A note from the scripts author on how to get the numbers used by numid: 
+<p><pre class="code">
+You have to change the script for your card. 
+ 
+numid=30 is the mixersource for my soundcard, 'ceset numdid=30 1 ' is to 
+select the cd as capture source (0 = mic, 1 = cd, 4 = line)  
+and numid=31 is the capture switch 
+ 
+run "amixer controls" to get the numid's 
+run "amixer cset numid=30" to get the capture source items (change 
+numid=30 with yor capture source), I think you will take 4, the line in 
+so 'amixer cset numid=30 4' to select line in as capture 
+</pre> 
+<p>See <a class="external" href="http://freevo.sourceforge.net/cgi-bin/moin.cgi/FrequentlyAskedQuestions#head-3fb8a33780b7fb2bef3edff84757d03e96461031"><img src="/wiki/img/moin-www.gif" width="11" border="0" alt="[WWW]" hspace="4" height="11">btaudio page</a> for using alsa with snd-bt87x module (the alsa btaudio equivalent) 
+Not using OSS has the advantage for me that I can record from line-in with volume control muted, hence ENABLING timeshift recording. My record script, this is for a creative labs Soundblaster Live 5.1, using Alsa.  
+<p><pre class="code">
+#!/bin/bash  
+  
+# use with this VCR_CMD:  
+# VCR_CMD = ('/usr/local/freevo_data/tvrecord/tvrecord %(channel)s %(seconds)s "%(filename)s"')  
+  
+CHAN=$1  
+TIME=$2  
+NAME=$3  
+  
+WIDTH=320  
+HEIGHT=240  
+  
+MENCODER=/usr/local/bin/mencoder  
+AMIXER=/usr/bin/amixer  
+  
+NICE="nice -n -20"  
+  
+AUDIO="-oac mp3lame -lameopts cbr:br=128:mode=3"  
+VIDEO="-ovc lavc -lavcopts vcodec=mpeg4:vbitrate=1200:keyint=30"  
+DSP="alsa:adevice=emu10k1"  
+TV=" -tv driver=v4l:width=$WIDTH:height=$HEIGHT:outfmt=yuy2:input=0:device=/dev/video0:norm=PAL:chanlist=europe-west:channel=$CHAN:$DSP:forceaudio:forcechan=1:buffersize=64"  
+  
+$AMIXER -q sset Line 87% mute  
+$AMIXER -q sset Capture 87%  
+$AMIXER -q cset numid=63 4      # select capture source, 63 is capture source control, 1 = CD and 4 = line  
+$AMIXER -q cset numid=64 1      # set capture source switch to 1 (= on)  
+$NICE $MENCODER tv:// $TV $VIDEO $AUDIO -endpos $TIME -ffourcc divx -o  "$NAME.avi"  
+$AMIXER -q sset Line 87% unmute   # unmute cd again to hear sound when using watching tv after recording  
+</pre> 
+<p><hr size="3">
+ 
+<p>i've found that the recording server doesn't kill the mencoder process  
+when you cancel a currently recording show when run 
+in this way.   
+<p>the recording server sends a kill -15 to the parent shell script, which kills it off,  
+but mencoder lives on now owned by pid '1' 
+<p>the trap in the following script helps with this: 
+<p><pre class="code">
+#!/usr/bin/ksh 
+ 
+handler() { 
+    kill -15 `ps -eaf | grep mencoder | grep -v grep | awk '{print $2}'` 
+} 
+ 
+trap handler TERM 
+ 
+NAME=$1 
+TIME=$2 
+ 
+WIDTH=512 
+HEIGHT=384 
+ 
+MENCODER=/usr/bin/mencoder 
+AUMIX=/usr/bin/amixer 
+ 
+AUDIO_OPTIONS="alsa:adevice=hw.0,0:audiorate=44100:forceaudio" 
+VIDEO_OPTIONS="driver=v4l:input=0:norm=pal:freq=0.000:width=$WIDTH:height=$HEIGHT:device=/dev/video0" 
+ 
+TV="$VIDEO_OPTIONS:$AUDIO_OPTIONS" 
+ 
+AUDIO="-oac mp3lame -lameopts br=128:cbr" 
+VIDEO="-ovc lavc -lavcopts vcodec=mpeg4:vbitrate=1400:keyint=30 -vf lavcdeint" 
+ 
+$AUMIX -q set Line mute 
+$AUMIX -q set Line 87% 
+$AUMIX -q cset numid=12 0     # select input 
+$AUMIX -q cset numid=14 87%   # capture volume 
+$AUMIX -q cset numid=13 1     # turn on capture 
+ 
+$MENCODER tv:// -tv $TV $VIDEO $AUDIO -endpos $TIME -ffourcc divx -o $NAME &amp; 
+wait 
+ 
+$AUMIX -q cset numid=13 0 
+$AUMIX -q set Line 0% 
+$AUMIX -q set Line unmute 
+</pre> 
+<p><hr size="3">
+ 
+<p><a name="head-f571bf41d3a98246d1b63980cb8389fcca4daf2a"></a><H2>1.4 IVTV setup</H2>
+
+<p>In order to use the ivtv recording plugin have the following in your local_conf.py: 
+<p><pre class="code">
+plugin.remove('tv.generic_record') 
+plugin_record = plugin.activate('tv.ivtv_record') 
+</pre> 
+<p>Also for ivtv_record you may set some recording options: 
+<p><pre class="code">
+IVTV_OPTIONS = { 
+    'input'         : 4, 
+    'resolution'    : '720x480', 
+    'aspect'        : 2, 
+    'audio_bitmask' : 233, 
+    'bframes'       : 3, 
+    'bitrate_mode'  : 1, 
+    'bitrate'       : 4000000, 
+    'bitrate_peak'  : 4000000, 
+    'dnr_mode'      : 0, 
+    'dnr_spatial'   : 0, 
+    'dnr_temporal'  : 0, 
+    'dnr_type'      : 0, 
+    'framerate'     : 0, 
+    'framespergop'  : 15, 
+    'gop_closure'   : 1, 
+    'pulldown'      : 0, 
+    'stream_type'   : 10, 
+} 
+ 
+# Please see freevo_config.py for details. 
+</pre> 
+<p><a name="head-464383f25feea047b5da09912d2b7396f7af1403"></a><H1>2 1.5.x freevo</H1>
+
+<p>Things have changed a little.. 
+<p>You can no longer use command sequences like: 
+<pre class="code">
+VCR_CMD = ( 'aumix -l 80 -l R; '+ 
+            CONF.mencoder + ' ' + 
+            blah 
+</pre> 
+In your VCR_CMD. 
+<p>Instead, we now have  
+VCR_CMD_PRE = 'command opts' 
+and 
+VCR_CMD_POST = 'commands opts' 
+<p>If you were using the sugegsted config for alsa, then you will not need to make changes.  However, if you are using something as above, you need to use VCR_PRE and VCR_POST. 
+<p><a name="head-8a607baf82186860bb1b16e9f37dd727f3889f8a"></a><H2>2.1 bttv (bt8x8 cards) info</H2>
+<ul>
+<p>   Someone needs to explain the mutlicard stuff.. </ul>
+<p><a name="head-b964681896bcd53735f57d54a58fb66fde27b068"></a><H2>2.2 ivtv info</H2>
+<ul>
+<p>   Someone needs to explain the mutlicard stuff.. </ul>
+<p><a name="head-68b7f65be5fbeb6decb02c85eb7115bb3057ae03"></a><H2>2.3 Use frequencies in mencoder instead of channels</H2>
+
+<p>The channel list is a convention on which frequencies are allowed to be broadcasted in  
+some countries.  
+Cable operators need more channels and have the possibilitie to use  
+frequencies which are not allowed for Antenna transmission. (Frequencies, used by  
+the military, is such a exemple).  
+So first you need to add the non-standard frequencies to you're local_conf.py file. 
+This is a illustrated example of my TV_CHANNELS settings 
+<p><pre class="code">
+TV_CHANNELS = [ 
+    ( 'bbcworld', 'BBC World', 'bbcworld' ), 
+    ( 'bbc1', 'BBC1', 'bbc1' ), 
+    ( 'bbc2', 'BBC2', 'bbc2' ), 
+    ...  
+</pre> 
+<p>The last parameter of every item in the list will be mapped to a frequency 
+<p>So this is a part of my FREQUENCY_TABLE  
+The frequencies are in Khz 
+<p><pre class="code">
+FREQUENCY_TABLE = { 
+     'bbcworld' : 294250, 
+     'bbc1': 266250, 
+     'bbc2': 273250, 
+     ... 
+</pre> 
+<p>Check with you're local cable tv supplier (website?) to find out. 
+<p>This would work correctly with Tvtime, but not with mencoder. 
+As you see in this example, it will try to pass a channel  
+parameter I have defined in freevo to mencoder 
+<p><pre class="code">
+2004/07/28 22:40 CEST [*RecordServer*] popen   
+/usr/bin/mencoder tv:// -tv driver=v4l2:input=0:norm=pal:channel=bbcworld... 
+</pre> 
+<p>A channel setting mencoder doesn't understand. 
+<p>Bassicly a tvtuner will tune in with a specific frequency and is not  
+aware of channels. Channel descriptions are different, regarding the  
+standard (pal,secam,ntsc) or the country you're living in. As I descibed  
+above, Cable operators don't have to follow these conventions, cause they  
+where designed with antenna broadcast in mind. 
+<p>I've modified the VCR_CMD to use a frequency instead of channels.  
+The mencoder recording program supports the use of freq instead of channels. 
+<p><pre class="code">
+#           ':channel=%(channel)s' +        # Filled in by Freevo 
+#           ':freq=%(frequency)s' +        # Filled in by Freevo 
+           ':freq=%(frequencyMhz)s' + 
+</pre> 
+<p>The frequency in Khz defined in FREQUENCY_TABLE needs to be divided by 1000, since mencoder uses  
+the frequency in Mhz 
+<p>To be able to introduce the parameter frequencyMhz, wich is identical to default parameter frequency, except it's using Mhz instead of Khz as required by mencoder I modified the file ....freevo/tv/plugins/generic_record.py 
+<p>These are my modifications 
+<p><pre class="code">
+ def Record(self, rec_prog): 
+        frequency = self.fc.chanSet(str(rec_prog.tunerid), 'record plugin') 
+       # modif gedeco 
+        frequencyT = str(frequency) 
+        frequencyT1 = len(frequencyT) 
+        frequencyleftpointer = frequencyT1-3 
+        frequencyA = frequencyT[0:frequencyleftpointer] 
+        frequencyB = frequencyT[frequencyleftpointer:frequencyT1] 
+        frequencyMh = frequencyA + '.' + frequencyB 
+        frequencyMhz = str(frequencyMh) 
+       # end modif gedeco 
+        rec_prog.filename = tv_util.getProgFilename(rec_prog) 
+ 
+        cl_options = { 'channel'  : rec_prog.tunerid, 
+                       # modif gedeco 
+                       'frequencyMhz' : frequencyMhz, 
+                       # modif gedeco 
+                       'frequency' : frequency, 
+ 
+</pre> 
+<p>A python programmer will find this probably a kludge --- wich it is. 
+I'm not a programmer. So somebody capable of streamlining this, go ahead. 
+But using the frequency would be a much better way to drive mencoder, cause both are 
+depending on different channel lists. Made to confuse. 
+<p>Thnx to Mick, who put me on the right track <a name="bottom"></a>
+<hr><a href="http://www.python.org/"><img align="right" vspace="10"
+src="/wiki/img/PythonPowered.gif" width="55" height="22" border="0"
+alt="PythonPowered"></a>
+
+<table border="0" cellspacing="0" cellpadding="0">
+<form method="POST" action="/cgi-bin/moin.cgi/RecordingInfo">
+<tr><td>
+<input type="hidden" name="action" value="inlinesearch">
+<input type="hidden" name="context" value="40">
+
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=edit">EditText</a>
+of this page
+(last modified 2004-10-31 06:43:47)
+<br>
+<a href="/cgi-bin/moin.cgi/FindPage?value=RecordingInfo">FindPage</a>
+ by browsing, title search <input style="font-family:Verdana; font-size:9pt;" type="text" name="text_title" value="" size="15" maxlength="50"><input type="image" src="/wiki/img/moin-search.gif" name="button_title"  alt="[?]" hspace="3" width="12" height="12" border="0">, text search <input style="font-family:Verdana; font-size:9pt;" type="text" name="text_full" value="" size="15" maxlength="50"><input type="image" src="/wiki/img/moin-search.gif" name="button_full"  alt="[?]" hspace="3" width="12" height="12" border="0"> or an index<br>
+Or try one of these actions: 
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=AttachFile">AttachFile</a>, 
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=LikePages">LikePages</a>, 
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=LocalSiteMap">LocalSiteMap</a>, 
+<a href="/cgi-bin/moin.cgi/RecordingInfo?action=SpellCheck">SpellCheck</a><br>
+
+</td></tr>
+</form>
+</table>
+
+<!-- MoinMoin 1.159 on sc8-pr-web10.sourceforge.net served this page in 0.500 secs -->
+</body></html>

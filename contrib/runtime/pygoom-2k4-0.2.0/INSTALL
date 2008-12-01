@@ -1,0 +1,43 @@
+A little bit of work to do:
+
+Download goom-2k4 from http://www.ios-software.com/?page=projet&quoi=1
+
+Optional:
+copy the motif_goom1.h and motif_goom2.h to the goom-2k4/src directory
+
+build and install the goom-2k4 lib, I use:
+
+AMD64 C flags
+CFLAGS="-O9 -march=k8 -mtune=k8 -mmmx -msse -msse2 -m3dnow -fPIC -pipe" \
+Pentium III C flags
+CFLAGS="-O9 -march=pentium3 -mtune=pentium3 -fPIC -pipe" \
+./configure \
+  --prefix=/usr \
+  --sysconfdir=/etc \
+  --enable-static \
+  --enable-shared
+make
+make install
+
+
+build and install the pygoom-2k4 lib.
+
+Either modify the config.h for you machine
+Or copy from mplayer source directory the config.h
+
+Fix the CFLAGS in setup.py
+
+To build the module
+python setup.py build
+
+To install the module
+python setup.py install
+
+
+motif_goom
+----------
+
+This is a little program to convert a gimp RGB 8 bit image must be 128x128 to goom motif format
+
+compile with:
+gcc -o motif_goom -trigraphs motif_goom.c
