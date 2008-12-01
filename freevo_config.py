@@ -386,6 +386,8 @@ LOCAL_CONF_CHANGES = [
      Added DEBUG_BENCHMARKING can be used to time and trace function calls
      Added DEBUG_BENCHMARKCALL can be used to print the arguments and results of function calls
      Removed MPLAYER_AUDIO_CACHE_KB, MPLAYER_AUDIO_CACHE_MIN_PERCENT and MPLAYER_AUDIO_NETWORK_OPTS, it broke detach
+     Added WWW_IMAGE_SIZE and WWW_IMAGE_THUMBNAIL_SIZE for Cooliris support
+     Added VIDEO_AUTOJOIN_REGEX to allow more control when joining video files
      """),
 ]
 
