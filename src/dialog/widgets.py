@@ -316,6 +316,24 @@ class MenuModel(WidgetModel):
                 self.redraw()
             return True
 
+        elif event == 'INPUT_LEFT':
+            if self.active_item != self.offset:
+                self.items[self.active_item].active = False
+                self.active_item = self.offset
+                self.items[self.active_item].active = True
+                self.redraw()
+            return True
+
+        elif event == 'INPUT_RIGHT':
+            if self.active_item != self.offset + self.items_per_page:
+                self.items[self.active_item].active = False
+                self.active_item = self.offset + self.items_per_page
+                if self.active_item >= len(self.items):
+                    self.active_item =  len(self.items) - 1
+                self.items[self.active_item].active = True
+                self.redraw()
+            return True
+
         return super(MenuModel, self).handle_event(event)
 
     def handle_mouse_event(self, event):
@@ -335,6 +353,8 @@ class MenuModel(WidgetModel):
             idx = (y / size_per_item) + self.offset
             self.items[self.active_item].active = False
             self.active_item = idx
+            if self.active_item >= len(self.items):
+                self.active_item =  len(self.items) - 1
             self.items[self.active_item].active = True
             self.redraw()
         if event.type == MOUSEBUTTONDOWN or event.type == MOUSEBUTTONUP:

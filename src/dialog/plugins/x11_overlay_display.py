@@ -68,6 +68,7 @@ if config.CONF.display in ('x11', 'xv'):
                 self.window.set_decorated(False)
                 self.window.signals['expose_event'].connect(self.__redraw)
                 self.image = None
+
             def show_volume(self, level, muted, channel=None):
                 if self.volume_dialog is None:
                     self.volume_dialog = VolumeDialog()
@@ -98,7 +99,7 @@ if config.CONF.display in ('x11', 'xv'):
                 self.window.set_shape_mask_from_imlib2_image(self.image, (0, 0))
 
                 self.window.show()
-                self.window.raise_window()
+                self.window.raise_()
                 self.window.render_imlib2_image(self.image)
 
 
