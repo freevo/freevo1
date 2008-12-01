@@ -2246,6 +2246,7 @@ DEBUG_SKIN = 0
 # Debug the idlebar, display boxes around each area.
 #
 DEBUG_IDLEBAR = 0
+DEBUG_IDLEBAR_FONT = 'tiny0'
 
 #
 # store output of started processes for debug

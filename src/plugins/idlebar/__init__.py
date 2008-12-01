@@ -117,7 +117,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 import skins.main.xml_skin
                 r = skins.main.xml_skin.Rectangle(0xffffff, bgcolor=None, size=1, radius=1)
                 osd.drawroundbox(x, osd.y, add_x, 15, r)
-                font  = osd.get_font(config.OSD_IDLEBAR_FONT)
+                font  = osd.get_font(config.DEBUG_IDLEBAR_FONT)
                 name = p.plugin_name.split('.')[-1]
                 w = font.stringsize(name)
                 h = font.font.height

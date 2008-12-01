@@ -553,6 +553,8 @@ class LastFMWebServices:
                     if re.search('response=OK', line):
                         return True
                 return False
+            except LastFMError, why:
+                return None
             except AttributeError, why:
                 return None
             except IOError, why:
