@@ -30,20 +30,28 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # ----------------------------------------------------------------------- */
-import dialog
+import os.path
+import time
 
+import config
+import osd
+import pygame.image
+
+from tv.plugins.livepause.display.base import OSD
 from tv.plugins.livepause.display.text import TextOSD
 from tv.plugins.livepause.display.graphics import GraphicsOSD
+from tv.plugins.livepause.display import x11graphics
 
-
-def get_osd():
+def get_osd(player):
     """
     Get the best supported OSD available.
     @return: An OSD object
     """
-    display = dialog.get_display()
-
-    if display.supports_dialogs:
-        return GraphicsOSD()
+    if player.supports_graphics:
+        return GraphicsOSD(player)
+    elif x11graphics.available:
+        return x11graphics.X11GraphicsOSD(player)
+    if player.supports_text:
+        return TextOSD(player)
     else:
-        return TextOSD()
+        return OSD(player) # Dummy OSD does nothing

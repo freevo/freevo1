@@ -18,7 +18,6 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 == Release 1.8.3 (2008-12-01) ==
 --------------------------------
 
- * New skinable dialogues for the OSD (F#2308911)
  * New wikisubtitles video plug-in to get subtitles for videos (F#2147641)
  * Updated apple trailers (F#2089598)
  * Updated encoding server to name incomplete encodings with incomplete (F#2190016)

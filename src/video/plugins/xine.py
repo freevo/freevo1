@@ -49,8 +49,6 @@ import util
 from event import *
 import plugin
 
-import dialog
-from dialog.display import AppTextDisplay
 
 class PluginInterface(plugin.Plugin):
     """
@@ -99,7 +97,6 @@ class Xine:
         self.xine_type = type
         self.app       = None
         self.plugins   = []
-        self.paused    = False
 
         self.command = [ '--prio=%s' % config.MPLAYER_NICE ] + \
             config.XINE_COMMAND.split(' ') +  \
@@ -217,7 +214,6 @@ class Xine:
         rc.app(self)
 
         self.app = XineApp(command, self)
-        dialog.enable_overlay_display(AppTextDisplay(self.ShowMessage))
         return None
 
 
@@ -246,7 +242,6 @@ class Xine:
 
         self.app.stop('quit\n')
         rc.app(None)
-        dialog.disable_overlay_display()
         self.app = None
 
 
@@ -264,8 +259,6 @@ class Xine:
             return self.item.eventhandler(event)
 
         if event == PAUSE or event == PLAY:
-            self.paused = not self.paused
-            dialog.show_play_state(self.paused and dialog.PLAY_STATE_PAUSE or dialog.PLAY_STATE_PLAY, None)
             self.app.write('pause\n')
             return True
 
@@ -278,10 +271,8 @@ class Xine:
             if pos < 0:
                 action='SeekRelative-'
                 pos = 0 - pos
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, None)
             else:
                 action='SeekRelative+'
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, None)
             if pos <= 15:
                 pos = 15
             elif pos <= 30:
@@ -390,6 +381,10 @@ class Xine:
         if event == VIDEO_NEXT_ANGLE:
             self.app.write('EventAngleNext\n')
             time.sleep(0.1)
+            return True
+
+        if event == OSD_MESSAGE:
+            self.ShowMessage(event.arg)
             return True
 
         # nothing found? Try the eventhandler of the object who called us

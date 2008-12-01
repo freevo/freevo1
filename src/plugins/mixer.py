@@ -41,7 +41,6 @@ import config
 import rc
 import plugin
 from event import *
-import dialog
 
 def i32(x): return (x&0x80000000L and -2*0x40000000 or 0) + int(x&0x7fffffff)
 
@@ -129,32 +128,34 @@ class PluginInterface(plugin.DaemonPlugin):
         if event == MIXER_VOLUP:
             if config.MIXER_MAJOR_CTRL == 'VOL':
                 self.incMainVolume(step)
-
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.incPcmVolume(step)
-            dialog.show_volume(self.getVolume(), False)
-            rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             return True
 
         elif event == MIXER_VOLDOWN:
             if config.MIXER_MAJOR_CTRL == 'VOL':
                 self.decMainVolume(step)
-
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.decPcmVolume(step)
-
-            dialog.show_volume(self.getVolume(), False)
-            rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
+                rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
             return True
 
         elif event == MIXER_MUTE:
             if self.getMuted() == 1:
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
                 rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
                 self.setMuted(0)
             else:
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Mute')))
                 rc.post_event(Event('MIXER_MUTE_INFO'))
                 self.setMuted(1)
-            dialog.show_volume(self.getVolume(), self.getMuted())
             return True
 
         return False

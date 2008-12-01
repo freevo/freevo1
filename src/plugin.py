@@ -147,8 +147,7 @@ class DaemonPlugin(Plugin):
 
 
     def poll_wrapper(self):
-        import skin
-        if self.poll_menu_only and not skin.active():
+        if self.poll_menu_only and rc.app():
             return
         self.real_poll()
 

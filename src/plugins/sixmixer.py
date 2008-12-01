@@ -58,7 +58,6 @@ import rc
 import plugin
 from event import *
 
-import dialog
 
 class PluginInterface(plugin.DaemonPlugin):
 
@@ -102,7 +101,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.incLfeVolume(event.arg)
                 if self.NoAdjust > 0:
                     self.NoAdjust = 0
-                dialog.show_volume(self.getVolume(), False)
+                self.ShowVolume(event.arg)
             return True
 
         elif event == MIXER_VOLDOWN:
@@ -113,45 +112,46 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.decLfeVolume(event.arg)
                 if self.NoAdjust < 0:
                     self.NoAdjust = 0
-                dialog.show_volume(self.getVolume(), False)
+                self.ShowVolume(event.arg)
             return True
 
         elif event == MIXER_SUR_VOLUP:
             self.incSurVolume(event.arg)
-            dialog.show_volume(self.getSurVolume(), False, 'surround')
+            rc.post_event(Event(OSD_MESSAGE, arg=_('Surround: %s%%') % self.getSurVolume()))
             return True
 
         elif event == MIXER_SUR_VOLDOWN:
             self.decSurVolume(event.arg)
-            dialog.show_volume(self.getSurVolume(), False, 'surround')
+            rc.post_event(Event(OSD_MESSAGE, arg=_('Surround: %s%%') % self.getSurVolume()))
             return True
 
         elif event == MIXER_CTR_VOLUP:
             self.incCtrVolume(event.arg)
-            dialog.show_volume(self.getCtrVolume(), False, 'center')
+            rc.post_event(Event(OSD_MESSAGE, arg=_('Center: %s%%') % self.getCtrVolume()))
             return True
 
         elif event == MIXER_CTR_VOLDOWN:
             self.decCtrVolume(event.arg)
-            dialog.show_volume(self.getCtrVolume(), False, 'center')
+            rc.post_event(Event(OSD_MESSAGE, arg=_('Center: %s%%') % self.getCtrVolume()))
             return True
 
         elif event == MIXER_LFE_VOLUP:
             self.incLfeVolume(event.arg)
-            dialog.show_volume(self.getLfeVolume(), False, 'lfe')
+            rc.post_event(Event(OSD_MESSAGE, arg=_('LFE: %s%%') % self.getLfeVolume()))
             return True
 
         elif event == MIXER_LFE_VOLDOWN:
             self.decLfeVolume(event.arg)
-            dialog.show_volume(self.getLfeVolume(), False, 'lfe')
+            rc.post_event(Event(OSD_MESSAGE, arg=_('LFE: %s%%') % self.getLfeVolume()))
             return True
 
         elif event == MIXER_MUTE:
             if self.getMuted() == 1:
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
                 self.setMuted(0)
             else:
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Mute')))
                 self.setMuted(1)
-            dialog.show_volume(self.getVolume(), self.getMuted())
             return True
 
         return False
@@ -315,3 +315,7 @@ class PluginInterface(plugin.DaemonPlugin):
         # on the mean.
         self.CalcVol = int(self.StepFactor*self.CalcVolList[0])
         return self.CalcVol
+
+    def ShowVolume(self, step=5):
+        ShowVol = self.CalcVolume()
+        rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % ShowVol))

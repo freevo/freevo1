@@ -48,9 +48,6 @@ import tv.ivtv as ivtv
 import tv.epg_xmltv as epg
 import util.tv_util as tvutil
 
-import dialog
-from dialog.display import AppTextDisplay
-
 from event import *
 from config import *
 from gui.AlertBox import AlertBox
@@ -344,7 +341,6 @@ class XineIvtv:
         self.mixer.UnMute()
 
         self.tuner.SetChannelByName(channel, True)
-        dialog.enable_overlay_display(AppTextDisplay(self.xine.ShowMessage))
 
         _debug_('Started %r app' % self.mode)
 
@@ -352,7 +348,6 @@ class XineIvtv:
     def Stop(self):
         """ Stop the xine player """
         _debug_('XineIvtv.Stop()', 1)
-        dialog.disable_overlay_display()
         confirmstop_time = int(time.time())
         # note: the OSD msg is displayed for 5 seconds
         if config.XINE_TV_CONFIRM_STOP and (confirmstop_time - self.confirmstop_time) > 4:

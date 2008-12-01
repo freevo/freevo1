@@ -39,8 +39,7 @@ The priority levels in ascending order are:
  - high
 """
 import time
-import pygame.event
-from pygame.locals import *
+
 import config
 import rc
 import event

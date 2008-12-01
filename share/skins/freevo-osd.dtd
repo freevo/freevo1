@@ -3,13 +3,11 @@
 
 <!ELEMENT freevo (osds)>
 
-<!ELEMENT osds (widgetstyles?, (font|color|osd)*)>
-<!ATTLIST osds 
-    geometry CDATA #REQUIRED
-    icontheme CDATA #IMPLIED
-    include CDATA #IMPLIED>
+<!ELEMENT osds ( font*, color*, osd*)>
+<!ATTLIST osds geometry CDATA #REQUIRED>
+<!ATTLIST osds include CDATA #IMPLIED>
 
-<!ELEMENT osd (navigationmap?, (text|image|percent|button|togglebutton|menu)*)>
+<!ELEMENT osd ((text|image|percent)*)>
 <!ATTLIST osd
 	name ID #REQUIRED
 	width CDATA #REQUIRED
@@ -54,9 +52,7 @@
     width CDATA #IMPLIED
     height CDATA #IMPLIED
     src CDATA #REQUIRED
-    srcexpr CDATA #IMPLIED
 	expression CDATA #REQUIRED
-    scale (noscale | horizontal | vertical | both | aspect) "noscale"
 >
 
 <!ELEMENT percent EMPTY>
@@ -69,78 +65,3 @@
     src CDATA #REQUIRED
 	expression CDATA #REQUIRED
 >
-
-<!ELEMENT button EMPTY>
-<!ATTLIST button
-    name CDATA #REQUIRED
-    style CDATA #REQUIRED
-    x CDATA #REQUIRED
-    y CDATA #REQUIRED
-    width CDATA #REQUIRED
-    height CDATA #REQUIRED    
-    >
-    
-<!ELEMENT togglebutton EMPTY>
-<!ATTLIST togglebutton
-    name CDATA #REQUIRED
-    style CDATA #REQUIRED
-    x CDATA #REQUIRED
-    y CDATA #REQUIRED
-    width CDATA #REQUIRED
-    height CDATA #REQUIRED    
-    >
-    
-<!ELEMENT menu EMPTY>
-<!ATTLIST menu
-    name CDATA #REQUIRED
-    style CDATA #REQUIRED
-    x CDATA #REQUIRED
-    y CDATA #REQUIRED
-    width CDATA #REQUIRED
-    height CDATA #REQUIRED    
-    itemsperpage cDATA #REQUIRED
-    >
-    
-<!ELEMENT navigationmap (navigation*)>
-
-<!ELEMENT navigation EMPTY>
-<!ATTLIST navigation
-    from CDATA #REQUIRED
-    left CDATA #REQUIRED
-    right CDATA #REQUIRED
-    up CDATA #REQUIRED
-    down CDATA #REQUIRED>
-
-<!ELEMENT widgetstyles (widgetstyle*)>
-
-<!ELEMENT widgetstyle (widgetstate*)>
-<!ATTLIST widgetstyle name CDATA #REQUIRED>
-
-<!ELEMENT widgetstate ((text|image|percent)*)>
-<!-- 
-    Standard states are:
-    
-    normal   - Enabled but doesn't have input focus
-    active   - Enabled and has input focus
-    disabled - Disabled
-    
-    pressed  - Buttons and MenuItems only, after the user has 'pressed' (selected) the item.
-    
-    highlighted - MenuItems only, when the menu doesn't have input focus, but the currently selected item still shows.
-    
-    ToggleButton/ToggleMenuItem only, standard starts but with the state of the toggle appended:
-    
-    normal_selected
-    normal_unselected
-    active_selected
-    active_unselected
-    disabled_selected
-    disabled_unselected
-    
-    ToggleMenuItem only:
-    
-    highlighted_selected
-    highlighted_unselected
-
--->
-<!ATTLIST widgetstate state CDATA "normal">

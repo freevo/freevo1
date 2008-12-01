@@ -510,8 +510,7 @@ class Skin:
 
         old_screen = None
         if type == 'menu':
-            if menu is None:
-                menu = object.menustack[-1]
+            menu = object.menustack[-1]
             if menu.skin_settings:
                 settings = menu.skin_settings
             # XXX FIXME

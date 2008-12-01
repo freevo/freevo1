@@ -46,7 +46,7 @@ import cStringIO
 import config
 import rc
 import util
-import dialog
+
 
 if __freevo_app__ == 'main':
     # The PyGame Python SDL interface.
@@ -384,7 +384,6 @@ class OSD:
         self.must_lock = self.screen.mustlock()
         self.main_layer = pygame.Surface((self.width, self.height))
         self.dialog_layer_enabled = False
-        self.screensaver_running = False
         self.dialog_layer = self.screen.convert_alpha()
         self.dialog_layer.fill((0,0,0,128))
 
@@ -496,10 +495,6 @@ class OSD:
 
             if config.SYS_USE_MOUSE:
                 if event.type == MOUSEMOTION:
-                    if dialog.is_dialog_showing():
-                        dialog.handle_mouse_event(event)
-                        # Swallow all mouse events if a dialog is showing even if not over a widget.
-                        continue
                     app = self.focused_app()
                     # Menu
                     if app and hasattr(app, 'menustack'):
@@ -523,10 +518,6 @@ class OSD:
 
 
                 if event.type == MOUSEBUTTONDOWN:
-                    if dialog.is_dialog_showing():
-                        dialog.handle_mouse_event(event)
-                        # Swallow all mouse events if a dialog is showing even if not over a widget.
-                        continue
                     app = self.focused_app()
                     # Menu
                     if app and hasattr(app, 'back_one_menu'):
@@ -572,12 +563,6 @@ class OSD:
                         # Right click = Esc
                         elif event.button == 3:
                             app.destroy()
-
-            if event.type == MOUSEBUTTONUP:
-                if dialog.is_dialog_showing():
-                    dialog.handle_mouse_event(event)
-                    # Swallow all mouse events if a dialog is showing even if not over a widget.
-                    continue
 
             if event.type == KEYDOWN:
                 if not map and event.key > 30:
@@ -1513,7 +1498,7 @@ class OSD:
                 if isinstance(rect[0], list) or isinstance(rect[0], tuple) or isinstance(rect[0], pygame.Rect):
                     for sub_rect in rect:
                         self.screen.blit(self.main_layer, (sub_rect[0], sub_rect[1]), sub_rect)
-                    if self.dialog_layer_enabled and not self.screensaver_running:
+                    if self.dialog_layer_enabled:
                         for sub_rect in rect:
                             self.screen.blit(self.dialog_layer, (sub_rect[0], sub_rect[1]), sub_rect)
                 else:
@@ -1521,7 +1506,7 @@ class OSD:
                         self.screen.blit(self.main_layer, (rect[0], rect[1]), rect)
                     except:
                         traceback.print_exc()
-                    if self.dialog_layer_enabled and not self.screensaver_running:
+                    if self.dialog_layer_enabled:
                         self.screen.blit(self.dialog_layer, (rect[0], rect[1]), rect)
                 try:
                     pygame.display.update(rect)
@@ -1530,7 +1515,7 @@ class OSD:
                     pygame.display.flip()
             else:
                 self.screen.blit(self.main_layer, (0,0))
-                if self.dialog_layer_enabled and not self.screensaver_running:
+                if self.dialog_layer_enabled:
                     self.screen.blit(self.dialog_layer, (0,0))
                 pygame.display.flip()
 

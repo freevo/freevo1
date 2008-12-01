@@ -51,7 +51,6 @@ import config
 import plugin
 import rc
 from event import *
-import dialog
 
 import ossaudiodev
 
@@ -130,30 +129,28 @@ class PluginInterface(plugin.DaemonPlugin):
         if event == MIXER_VOLUP:
             if config.MIXER_MAJOR_CTRL == 'VOL':
                 self.incMainVolume(step)
-
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.incPcmVolume(step)
-
-            dialog.show_volume(self.getVolume(), False)
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             return True
 
         elif event == MIXER_VOLDOWN:
             if config.MIXER_MAJOR_CTRL == 'VOL':
                 self.decMainVolume(step)
-
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.decPcmVolume(step)
-
-            dialog.show_volume(self.getVolume(), False)
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
             return True
 
         elif event == MIXER_MUTE:
             if self.getMuted() == 1:
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Volume: %s%%') % self.getVolume()))
                 self.setMuted(0)
             else:
+                rc.post_event(Event(OSD_MESSAGE, arg=_('Mute')))
                 self.setMuted(1)
-
-            dialog.show_volume(self.getVolume(), self.getMuted())
             return True
 
         return False

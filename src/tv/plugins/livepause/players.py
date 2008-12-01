@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Freevo DVBStreamer module for tv
+# players.py - the Freevo DVBStreamer module for tv
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -45,8 +45,6 @@ import threading
 import config
 import childapp
 import rc
-
-import dialog.display
 
 def get_player():
     """
@@ -179,12 +177,6 @@ class Player(object):
         """
         pass
 
-    def get_display(self):
-        """
-        Returns a Display subclass to be passed to the dialog subsystem
-        when the player is active.
-        """
-        return None
 
     def display_message(self, message):
         """
@@ -335,12 +327,6 @@ class Xine(Player):
             self.app.write('pause\n')
             self.paused = False
 
-    def get_display(self):
-        """
-        Returns a Display subclass to be passed to the dialog subsystem
-        when the player is active.
-        """
-        return dialog.display.AppTextDisplay(self.display_message)
 
     def display_message(self, message):
         """
@@ -443,12 +429,6 @@ class Mplayer(Player):
             self.app.write('pause\n')
             self.paused = False
 
-    def get_display(self):
-        """
-        Returns a Display subclass to be passed to the dialog subsystem
-        when the player is active.
-        """
-        return dialog.display.AppTextDisplay(self.display_message)
 
     def display_message(self, message):
         """
@@ -635,12 +615,6 @@ class Vlc(Player):
             self.app.send_command('pause 0')
             self.paused = False
 
-    def get_display(self):
-        """
-        Returns a Display subclass to be passed to the dialog subsystem
-        when the player is active.
-        """
-        return dialog.display.AppTextDisplay(self.display_message)
 
     def display_message(self, message):
         """

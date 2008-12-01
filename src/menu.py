@@ -830,7 +830,7 @@ class MenuWidget(GUIObject):
                 self.back_one_menu()
                 return
             menu = self.menustack[-2]
-            if hasattr(menu, 'selected') and hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
+            if hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
                 if menu.selected.eventhandler(event=event, menuw=self):
                     return
             for p in self.eventhandler_plugins:

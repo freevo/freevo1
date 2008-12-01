@@ -41,9 +41,6 @@ import tv.epg_xmltv as epg # The Electronic Program Guide
 from tv.channels import FreevoChannels
 import tv.ivtv as ivtv
 import plugin
-import dialog
-from dialog.display import AppTextDisplay
-
 
 
 # Create the OSD object
@@ -285,7 +282,6 @@ class MPlayer:
         elif mixer and config.MIXER_MAJOR_CTRL == 'PCM':
             mixer.setPcmVolume(mixer_vol)
 
-        dialog.enable_overlay_display(AppTextDisplay(self.show_message))
         _debug_('%s: started %s app' % (time.time(), self.mode))
 
 
@@ -420,6 +416,3 @@ class MPlayer:
             return True
 
         return False
-
-    def show_message(self, message):
-        self.app.write('osd_show_text "%s"\n' % message)

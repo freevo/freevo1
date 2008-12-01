@@ -36,7 +36,6 @@ A widget is something that the user can navigate to and can have one of the foll
  - invisible = The widget is not drawn.
 """
 import kaa
-from pygame.locals import *
 
 class WidgetModel(object):
     """
@@ -392,13 +391,11 @@ class MenuModel(WidgetModel):
         self.__update_page()
         self.redraw()
 
-    def layout(self, items_per_page, position, size):
+    def layout(self, items_per_page):
         """
         Called by the skin to layout this menu.
         @param items_per_page: The number of items that are to be displayed on a page.
         """
-        self.position = position
-        self.size = size
         self.offset = 0
         self.active_item = 0
         self.items_per_page = items_per_page
@@ -482,7 +479,7 @@ class ToggleMenuItemModel(MenuItemModel):
             self.signals['toggled'].emit(self, selected)
             self.redraw()
 
-    def press(self, keyboard=True):
+    def press(self):
         self.set_selected(not self.selected)
 
     def get_state(self):
