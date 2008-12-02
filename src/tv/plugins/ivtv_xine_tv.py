@@ -136,7 +136,9 @@ class PluginInterface(plugin.Plugin):
 
     | # This specifies the path and filemask that xine uses for
     | # timeshifting. File can get quite big (several gigabytes)
-    | XINE_TV_TIMESHIFT_FILEMASK = '/local/tmp/xine-buf-!/local/saved/!20'
+    | # Examples:
+    | XINE_TV_TIMESHIFT_FILEMASK = '/tmp/xine-buf-!!5'
+    | XINE_TV_TIMESHIFT_FILEMASK = '/local/tmp/!/local/saved/!20'
 
     Note: the format is 'a!b!c', where:
     a = prefix (with path) for temporary file buffers
@@ -304,8 +306,7 @@ class PluginInterface(plugin.Plugin):
             ('XINE_TV_INDENT_OSD', False, 'indent OSD text'),
         ]
 
-
-
+        
 class XineIvtv:
     """
     Main class of the plugin
@@ -315,6 +316,7 @@ class XineIvtv:
         self.xine = XineControl()
         self.tuner = TunerControl(self.xine)
         self.mixer = MixerControl(self.xine)
+        self.timer = OneShotTimer(self.TimerHandler)
 
         self.app = None
         self.prev_app = None
@@ -330,97 +332,207 @@ class XineIvtv:
 
         self.confirmstop_time = 0
 
+        self.recordmenu = False
+        self.recordmode = -1
+
+
+    def ConfirmStop(self, msg):
+        """ confirm stop event """
+        confirmstop_time = int(time.time())
+        # note: the OSD msg is displayed for 5 seconds
+        if config.XINE_TV_CONFIRM_STOP and (confirmstop_time - self.confirmstop_time) > 4:
+            self.xine.ShowMessage(msg)
+            self.confirmstop_time = confirmstop_time
+            return False
+        else:
+            return True
+
+    def InitLiveRecording(self):
+        """ start timer to mark show changes """
+        self.StartTimer()
+
+    def StartLiveRecording(self, event):
+        """ start live recording """
+        if event == INPUT_1:
+            # record from this point on
+            self.recordmode = 0
+            name = self.tuner.GetChannelName()
+            start = time.localtime()
+            self.StopTimer()
+            _debug_('XineIvtv.StartLiveRecording: Record from now on')
+        elif event == INPUT_2:
+            # record from start of show
+            self.recordmode = 1
+            start_t, stop_t, name = self.tuner.GetInfo()
+            start = time.localtime(start_t)
+            self.StartTimer()
+            _debug_('XineIvtv.StartLiveRecording: Record from show start')
+        elif event == INPUT_3:
+            # record from start of stream
+            self.recordmode = 2
+            name = self.tuner.GetChannelName()
+            start = time.localtime()
+            self.StopTimer()
+            _debug_('XineIvtv.StartLiveRecording: Record from stream start')
+
+        if self.recordmode in [ 0, 1, 2 ]:
+            # create fil ename and kick xine
+            filename_array = { 'progname': String(name), 'title': String('') }
+            filemask = config.TV_RECORD_FILE_MASK % filename_array
+            filemask = time.strftime(filemask, start)
+            filename = tvutil.progname2filename(filemask).rstrip(' -_:')
+            self.xine.Record(self.recordmode, filename)
+            self.xine.ShowMessage(_('Recording: %s' % String(name)))
+            _debug_('XineIvtv.StartLiveRecording: filename=%s' % String(filename))
+
+
+    def StopLiveRecording(self):
+        """ stop the current live recording """
+        self.xine.SetMark()
+        self.xine.ShowMessage(_('Recording ended'))
+        self.recordmode = -1
+
+    def StartTimer(self):
+        """ program the timer to start of next show on the current channel """
+        _debug_('XineIvtv.StartTimer: Start timer')
+
+        # set timer to mark the next program
+        start_t, stop_t, prog_s = self.tuner.GetInfo()
+        if stop_t > 0:
+            stop_t = stop_t - time.time()
+            if self.recordmode in [ 1 ]:
+                # add some padding in show record mode
+                stop_t = stop_t + config.TV_RECORD_PADDING_POST
+            self.timer.start(stop_t)
+            _debug_('XineIvtv.StartTimer: Timer set to mark next program in: %s seconds' % stop_t)
+        else:
+            self.timer.stop()
+            _debug_('XineIvtv.StartTimer: Timer not set, stop_t not available')
+        self.tuner.ShowInfo()
+
+    def StopTimer(self):
+        """ stop timer """
+        _debug_('XineIvtv.StopTimer: Stop timer')
+        self.timer.stop()
+
+    def TimerHandler(self):
+        """ handle timer event """
+        _debug_('XineIvtv.TimerHandler: Timer event, mark new show')
+        if self.recordmode in [ 1 ]:
+            # stop recording when recording in show mode
+            self.StopLiveRecording()
+        else:
+            self.xine.SetMark()
+        self.StartTimer()
 
     def Play(self, mode, channel=None, channel_change=0):
         """ Start the xine player """
         _debug_('XineIvtv.Play(mode=%r, channel=%r, channel_change=%r)' % (mode, channel, channel_change), 1)
 
-        self.mode = mode
-
+        self.mode = mode	
         self.prev_app = rc.app()
         rc.app(self)
-
         self.mixer.Mute()
         self.xine.Start()
+        self.tuner.SetChannelByName(channel, True)
 
         # Suppress annoying audio clicks
         time.sleep(0.6)
         self.mixer.UnMute()
 
-        self.tuner.SetChannelByName(channel, True)
+        if config.XINE_TV_LIVE_RECORD:
+            self.InitLiveRecording()
+        else:
+            self.tuner.ShowInfo()
+
         dialog.enable_overlay_display(AppTextDisplay(self.xine.ShowMessage))
 
         _debug_('Started %r app' % self.mode)
-
 
     def Stop(self):
         """ Stop the xine player """
         _debug_('XineIvtv.Stop()', 1)
         dialog.disable_overlay_display()
-        confirmstop_time = int(time.time())
-        # note: the OSD msg is displayed for 5 seconds
-        if config.XINE_TV_CONFIRM_STOP and (confirmstop_time - self.confirmstop_time) > 4:
-            self.xine.ShowMessage(_('Please repeat to stop\n'))
-            self.confirmstop_time = confirmstop_time
-        else:
-            self.mixer.Stop()
-            self.tuner.Stop()
-            self.xine.Stop()
-            rc.app(self.prev_app)
-            rc.post_event(PLAY_END)
-            _debug_('Stopped %r app' % self.mode)
-
+        self.mixer.Stop()
+        self.tuner.Stop()
+        self.xine.Stop()
+        rc.app(self.prev_app)
+        rc.post_event(PLAY_END)
+        _debug_('Stopped %r app' % self.mode)
 
     def eventhandler(self, event, menuw=None):
         """ Event handler """
-        _debug_('XineIvtv.eventhandler(event=%r)' % (event.name,), 1)
+        _debug_('XineIvtv.eventhandler(event=%r)' % (event.name,), )
 
-        s_event = '%s' % (event.name,)
+        if self.recordmode in [ 0, 1, 2 ]:
+            # handle event while live recording is active 
+            if event in [ TV_START_RECORDING, STOP ]:
+                if self.ConfirmStop(_('Live Recording active, please repeat to stop')):
+                    self.StopLiveRecording()
+                    self.StartTimer()
+                return True
+            elif event in [ 'POPCHANNEL', TV_CHANNEL_UP, TV_CHANNEL_DOWN,
+                            INPUT_0, INPUT_1, INPUT_2, INPUT_3, INPUT_4,
+                            INPUT_5, INPUT_6, INPUT_7, INPUT_8, INPUT_9 ]:
+                self.xine.ShowMessage(_('Recording in progress!'))
+                return True
+ 
+        if self.recordmenu:
+            # handle event while menu mode is displayed
+            if event in [ INPUT_1, INPUT_2, INPUT_3 ]:
+                self.StartLiveRecording(event)
+                self.xine.HideMenu()
+                self.recordmenu = False
+                return True
+            elif event in [ TV_START_RECORDING, STOP ]:
+                self.xine.HideMenu()
+                self.recordmenu = False
+                return True
+            elif event in [ 'POPCHANNEL', TV_CHANNEL_UP, TV_CHANNEL_DOWN,
+                            INPUT_0, INPUT_4, INPUT_5, INPUT_6,
+                            INPUT_7, INPUT_8, INPUT_9 ]:
+                # ignore these commands in record menu mode
+                return True
 
-        if event == STOP or event == PLAY_END:
-            self.Stop()
+        if event in [ TV_START_RECORDING ]:
+            if config.XINE_TV_LIVE_RECORD:
+                self.xine.ShowMenu("Start Recording~From now on~Current show~Everything")
+                self.recordmenu = True
+            else:
+                self.xine.ShowMessage(_('Live Recording is not enabled'))
             return True
 
-        if event == PAUSE or event == PLAY:
+        if event in [ STOP, PLAY_END ]:
+            if self.ConfirmStop(_('Please repeat to stop')):
+                self.Stop()
+
+        if event in [ PAUSE, PLAY ]:
             self.xine.Pause()
-            return True
 
-        if event == TV_START_RECORDING:
-            start_t, stop_t, prog_s = self.tuner.GetInfo()
-            filename_array = { 'progname': String(prog_s), 'title': String('') }
-            filemask = config.TV_RECORD_FILE_MASK % filename_array
-            filemask = time.strftime(filemask, time.localtime(start_t))
-            filename = tvutil.progname2filename(filemask).rstrip(' -_:')
-
-            self.xine.Record(filename)
-            self.xine.ShowMessage(_('Recording started\n'))
-            return True
-
-        if s_event == 'POPCHANNEL':
+        if event in [ 'POPCHANNEL' ]:
             self.tuner.PopChannel()
-            return True
 
-        if s_event == 'TOGGLECHANNEL':
+        if event in [ 'TOGGLECHANNEL' ]:
             self.tuner.SwapChannel()
             return True
 
-        if event == TV_CHANNEL_UP:
+        if event in [ TV_CHANNEL_UP ]:
             # tune next channel
             self.tuner.NextChannel()
-            return True
 
-        if event == TV_CHANNEL_DOWN:
+        if event in [ TV_CHANNEL_DOWN ]:
             # tune previous channel
             self.tuner.PrevChannel()
-            return True
 
-        if s_event.startswith('INPUT_'):
+        if event in [ INPUT_0, INPUT_1, INPUT_2, INPUT_3, INPUT_4,
+                      INPUT_5, INPUT_6, INPUT_7, INPUT_8, INPUT_9 ]:
+            s_event = '%r' % event
             eventInput=s_event[6]
             isNumeric=TRUE
             try:
                 newinput_value = int(eventInput)
             except:
-                #Protected against INPUT_UP, INPUT_DOWN, etc
+                # Protected against INPUT_UP, INPUT_DOWN, etc
                 isNumeric=FALSE
 
             if isNumeric:
@@ -447,58 +559,63 @@ class XineIvtv:
                     # cancel intermediate channels
                     self.tuner.UnpushChannel()
 
-            return True
-
-        if event == SEEK:
+        if event in [ SEEK ]:
             seeksteps = int(event.arg)
             direction = 0
 
             if seeksteps == 0:
                 _debug_('Ignoring seek 0')
-                return True
-
-            if seeksteps < 0:
-                direction = -1
-                seeksteps = 0 - seeksteps
             else:
-                direction = +1
-
-            if config.XINE_TV_PROGRESSIVE_SEEK:
-                seekevent_current = event.arg
-                seeksteps_current = seeksteps
-                seektime_current = int(time.time())
-                seektime_delta = seektime_current - self.seektime_previous
-
-                if seektime_delta > 2 or seekevent_current != self.seekevent_previous:
-                    # init/reset progressive seek mode
-                    self.seeksteps = seeksteps
-                    self.seektime_start = seektime_current
-                    self.seektime_previous = seektime_current
+                if seeksteps < 0:
+                    direction = -1
+                    seeksteps = 0 - seeksteps
                 else:
-                    # continue progressive seek mode
-                    if seektime_delta > 0 and (seektime_delta % config.XINE_TV_PROGRESSIVE_SEEK_THRESHOLD) == 0:
-                        self.seeksteps += config.XINE_TV_PROGRESSIVE_SEEK_INCREMENT
+                    direction = +1
+
+                if config.XINE_TV_PROGRESSIVE_SEEK:
+                    seekevent_current = event.arg
+                    seeksteps_current = seeksteps
+                    seektime_current = int(time.time())
+                    seektime_delta = seektime_current - self.seektime_previous
+
+                    if seektime_delta > 2 or seekevent_current != self.seekevent_previous:
+                        # init/reset progressive seek mode
+                        self.seeksteps = seeksteps
+                        self.seektime_start = seektime_current
                         self.seektime_previous = seektime_current
+                    else:
+                        # continue progressive seek mode
+                        if seektime_delta > 0:
+                            if (seektime_delta % config.XINE_TV_PROGRESSIVE_SEEK_THRESHOLD) == 0:
+                                self.seeksteps += config.XINE_TV_PROGRESSIVE_SEEK_INCREMENT
+                                self.seektime_previous = seektime_current
 
-                self.seekevent_previous = seekevent_current
-                seeksteps = self.seeksteps
+                    self.seekevent_previous = seekevent_current
+                    seeksteps = self.seeksteps
 
-            # Note: Xine 2007 versions support
-            # arbitrary SeekRelative+/- steps
-            # limit seeksteps to [1 ; 120] seconds
-            seeksteps = min( max(1, seeksteps), 120 )
+                # Note: Xine 2007 versions supports
+                # arbitrary SeekRelative+/- steps
+                # limit seeksteps to [1 ; 120] seconds
+                seeksteps = min( max(1, seeksteps), 120 )
 
-            self.xine.Seek(direction, seeksteps)
-            return True
+                self.xine.Seek(direction, seeksteps)
 
-        if event == TOGGLE_OSD:
+        if event in [ TOGGLE_OSD ]:
             self.tuner.ShowInfo()
-            return True
 
-        if event == OSD_MESSAGE:
+        if event in [ OSD_MESSAGE ]:
             self.xine.ShowMessage(event.arg)
-            return True
 
+        if config.XINE_TV_LIVE_RECORD:
+            if event in [ 'POPCHANNEL', TV_CHANNEL_UP, TV_CHANNEL_DOWN,
+                          INPUT_0, INPUT_1, INPUT_2, INPUT_3, INPUT_4,
+                          INPUT_5, INPUT_6, INPUT_7, INPUT_8, INPUT_9 ]:
+                # explicitly mark video stream
+                self.xine.SetMark()
+                # start timer to mark next show
+                self.StartTimer()
+
+        return True
 
 
 class TunerControl:
@@ -513,61 +630,36 @@ class TunerControl:
         self.curr_channel = None
         self.embed = None
         self.stack = [ ]
-        self.timer = OneShotTimer(self.timer_handler)
-
 
     def _kill_(self):
         """ TunerControl destructor """
         if self.embed:
             ivtv_dev.setvbiembed(self.embed)
 
-
-    def program_timer(self):
-        """ program the timer to start of next show on the current channel """
-        _debug_('TunerControl: Program timer')
-        # set timer to mark the next program
-        start_t, stop_t, prog_s = self.GetInfo()
-        if stop_t > 0:
-            stop_t = stop_t - time.time()
-            self.timer.start(stop_t)
-            _debug_('TunerControl: Timer set to mark next program in: %s seconds' % stop_t)
-        else:
-            _debug_('TunerControl: Timer not set, stop_t not available')
-        self.ShowInfo()
-
-
-    def timer_handler(self):
-        """ handle timer event """
-        _debug_('TunerControl: Timer event, mark new show')
-        self.xine.SetMark()
-        self.program_timer()
-
-
     def Stop(self):
         """ stop """
         self.ivtv_init = False
 
+    def GetChannelName(self):
+        """ get channel info """
+        tuner_id, chan_name, prog_info = self.fc.getChannelInfo(showtime=False)
+        return (chan_name)
 
-    def GetName(self):
+    def GetProgramName(self):
         """ get channel name """
         tuner_id, chan_name, prog_info = self.fc.getChannelInfo(showtime=True)
         return prog_info
-
 
     def GetInfo(self):
         """ get channel info """
         tuner_id, chan_id, chan_name, start_t, stop_t, prog_s = self.fc.getChannelInfoRaw()
         return (start_t, stop_t, prog_s)
 
-
     def ShowInfo(self):
         """ show channel info """
         if self.curr_channel is not None:
-            # show channel info
-            #vg = self.fc.getVideoGroup(self.curr_channel, True)
             tuner_id, chan_name, prog_info = self.fc.getChannelInfo(showtime=False)
             self.xine.ShowMessage(msg = '%s: %s' % (chan_name, prog_info))
-
 
     def PushChannel(self):
         """ push the current channel on the channel stack """
@@ -575,7 +667,6 @@ class TunerControl:
             self.stack.append(self.curr_channel)
             _debug_('TunerControl: Pushed channel %s' % self.curr_channel)
         _debug_('TunerControl: Channel stack = %s' % self.stack)
-
 
     def UnpushChannel(self):
         """ remove the top channel from the channel stack """
@@ -586,7 +677,6 @@ class TunerControl:
             _debug_('TunerControl: Unpushed channel %s' % channel)
         _debug_('TunerControl: Channel stack = %s' % self.stack)
 
-
     def PopChannel(self):
         """ pop the top channel from the channel stack and switch channel """
         if len(self.stack) == 0:
@@ -596,7 +686,6 @@ class TunerControl:
             _debug_('TunerControl: Popped channel %s' % channel)
             self.SetVideoGroup(channel)
         _debug_('TunerControl: Channel stack = %s' % self.stack)
-
 
     def SwapChannel(self):
         """swap the current display channel and the top of the stack channel """
@@ -643,23 +732,18 @@ class TunerControl:
         else:
             self.SetChannelByIndex(channel_index + 1)
 
-
     def SetChannelByIndex(self, channel, tvlike=0):
         """ tune to a channel by index from the TV_CHANNELS list """
-        # tune channel by index
         next_channel = self.fc.getManChannel(channel, tvlike)
         _debug_('TunerControl: Explicit channel selection by index = %r' % next_channel)
         self.PushChannel()
         self.SetVideoGroup(next_channel)
 
-
     def SetChannelByNumber(self, channel):
         """ tune to a channel by actual channel number """
-        # tune channel by number
         _debug_('TunerControl: Explicit channel selection by number = %r' % channel)
         self.PushChannel()
         self.SetVideoGroup(channel)
-
 
     def NextChannel(self):
         """ jump to the next channel in the TV_CHANNELS list """
@@ -668,14 +752,12 @@ class TunerControl:
         self.PushChannel()
         self.SetVideoGroup(next_channel)
 
-
     def PrevChannel(self):
         """ jump to the previous channel in the TV_CHANNELS list """
         prev_channel = self.fc.getPrevChannel()
         _debug_('TunerControl: Previous channel selection = %r' % prev_channel)
         self.PushChannel()
         self.SetVideoGroup(prev_channel)
-
 
     def SetVideoGroup(self, channel):
         """ select a channel's video group and tune to that channel """
@@ -709,21 +791,13 @@ class TunerControl:
             ivtv_dev.setvbiembed(0)
 
         if not self.ivtv_init:
-            self.ivtv_init = True
             # set channel directly on v4l device, if channel is not negative
             if channel_num >= 0:
                 self.fc.chanSet(channel, True)
             self.curr_channel = channel
-
-            if config.XINE_TV_LIVE_RECORD:
-                # video stream is marked implicitly
-                # start timer to mark next show
-                self.program_timer()
-            else:
-                self.ShowInfo()
+            self.ivtv_init = True
         else:
             # set channel through xine process
-            # get channel frequency
             freq = self.fc.chanSet(channel, True, 'ivtv_xine_tv', None)
 
             if freq != 0:
@@ -735,18 +809,10 @@ class TunerControl:
                 _debug_('TunerControl: Channel has no frequency')
 
             self.curr_channel = channel
-
-            if config.XINE_TV_LIVE_RECORD:
-                # explicitly mark video stream
-                self.xine.SetMark()
-                # start timer to mark next show
-                self.program_timer()
-            else:
-                self.xine.SeekEnd()
-                self.ShowInfo()
+            self.xine.SeekEnd()
+            self.ShowInfo()
 
         self.SetAudioByChannel(channel)
-
 
     def SetAudioByChannel(self, channel=-1):
         """
@@ -815,7 +881,6 @@ class MixerControl:
         self.mixer = plugin.getbyname('MIXER')
         self.volume = 0
 
-
     def Mute(self):
         """ turn down volume """
         if self.mixer is not None:
@@ -826,7 +891,6 @@ class MixerControl:
             elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.volume = self.mixer.getPcmVolume()
                 self.mixer.setPcmVolume(0)
-
 
     def UnMute(self):
         """ turn up volume """
@@ -840,14 +904,12 @@ class MixerControl:
             elif config.MIXER_MAJOR_CTRL == 'PCM':
                 self.mixer.setPcmVolume(self.volume)
 
-
     def Stop(self):
         """ turn down volume """
         if self.mixer is not None:
             self.mixer.setLineinVolume(0)
             self.mixer.setMicVolume(0)
             self.mixer.setIgainVolume(0)
-
 
 
 class XineApp(childapp.ChildApp2):
@@ -859,15 +921,13 @@ class XineApp(childapp.ChildApp2):
         _debug_('XineApp.__init__(app=%r)' % (app,), 1)
         childapp.ChildApp2.__init__(self, app)
         self.exit_type = None
-        self.done = not self.isAlive()
 
+    def stdout_cb(self, line):
+        _debug_('XineApp.stdout_cb() = %r' % (line,), 1)
 
-    def _kill_(self):
-        """ XineApp destructor """
-        _debug_('XineApp._kill_()')
-        childapp.ChildApp2.kill(self, signal.SIGTERM)
-        self.done = True
-
+    def write(self, line):
+        _debug_('XineApp.write = %r' % (line,), 1)
+        childapp.ChildApp2.write(self, line)
 
 
 class XineControl:
@@ -907,26 +967,32 @@ class XineControl:
                 (config.XINE_COMMAND, config.XINE_ARGS_DEF, config.XINE_TV_VO_DEV, \
                 config.XINE_TV_AO_DEV, config.XINE_TV_TIMESHIFT_FILEMASK)
 
-
     def ShowMessage(self, msg):
-        """ display a message to the xine player """
+        """ display a message in the xine player """
         _debug_('XineControl.ShowMessage=%r' % (msg,), 1)
         if config.XINE_TV_INDENT_OSD:
             msg = '    %s' % msg
         self.app.write('OSDWriteText$%s\n' % String(msg))
 
+    def ShowMenu(self, menu):
+        """ display a menu in the xine player """
+        _debug_('XineControl.ShowMenu=%r' % (menu,), 1)
+        self.app.write("OSDShowCustomMenu$%s\n" % menu)
+
+    def HideMenu(self):
+        """ hide menu in the xine player """
+        _debug_('XineControl.HideMenu', 1)
+        self.app.write("OSDHideCustomMenu\n")
 
     def SetInput(self, input):
         """ set a different input """
         _debug_('XineControl.SetInput=%r' % (input,), 1)
         self.app.write('PVRSetInput#%s\n' % input)
 
-
     def SetFrequency(self, freq):
         """ set a different frequency """
         _debug_('XineControl.SetFrequency=%r' % (freq,), 1)
         self.app.write('PVRSetFrequency#%s\n' % freq)
-
 
     def SetMark(self):
         """ set a mark in the video stream """
@@ -937,7 +1003,6 @@ class XineControl:
         self.session_id = self.session_id + 1
         self.app.write('PVRSetMark#%s\n' % self.session_id)
 
-
     def Seek(self, direction, steps):
         """ Skip in stream """
         _debug_('XineControl.Seek(direction=%r, steps=%r)' % (direction, steps))
@@ -945,7 +1010,6 @@ class XineControl:
             self.app.write('%s#%s\n' % ('SeekRelative-', steps))
         if direction > 0:
             self.app.write('%s#%s\n' % ('SeekRelative+', steps))
-
 
     def SeekEnd(self):
         """ Skip to end of stream
@@ -959,50 +1023,27 @@ class XineControl:
             self.app.write('SetPosition100%\n')
             self.notahead = False
 
-
     def Start(self):
         """ start playing """
         _debug_('XineControl.Start()')
         self.app = XineApp(self.command)
         self.ispaused = False
 
-        while not self.app.isAlive():
-            pass
-
-
     def Pause(self):
         """ pause playing """
         _debug_('XineControl.Pause() / Unpause')
         self.app.write('pause\n')
-
         self.ispaused = not self.ispaused
         self.notahead = True
 
-
-    def Record(self, name):
+    def Record(self, mode, name):
         """ record stream """
-        _debug_('XineControl.Record(name=%r)' % (name,))
-        self.app.write('PVRSave#1\n')
+        _debug_('XineControl.Record(mode=%r, name=%r)' % (mode, name,))
+        self.app.write('PVRSave#%s\n' % mode)
         self.app.write('PVRSetName$%s\n' % name)
-
 
     def Stop(self):
         """ stop playing """
         _debug_('XineControl.Stop()')
         self.app.stop('quit\n')
-
-        if self.fbxine:
-
-            # directfb needs xine to be killed else the display is messed up
-            # and freevo crashes (AFAICS this no longer applies)
-
-            time.sleep(1.0)
-            _debug_('XineControl: Killing xine')
-            self.app._kill_()
-
-            while not self.app.done:
-
-                _debug_('XineControl: Waiting for xine to end...')
-                time.sleep(0.1)
-
         _debug_('XineControl: Xine ended')
