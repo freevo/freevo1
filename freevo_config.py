@@ -1367,6 +1367,11 @@ SKIN_XML_FILE         = ''
 SKIN_DEFAULT_XML_FILE = 'blurr'
 
 #
+# XML file used for the dialog skins.
+#
+DIALOG_SKIN_XML_FILE = 'base'
+
+#
 # Select a way when to switch to text view even if a image menu is there
 #
 # 1 = Force text view when all items have the same image and there are no
