@@ -20,6 +20,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 
  * New skinable dialogs (F#2308911)
  * New screen-saver module, "life" (F#2371097)
+ * New screen-saver module, "flames" (F#2376752)
 
 == Release 1.8.3 (2008-12-01) ==
 --------------------------------
