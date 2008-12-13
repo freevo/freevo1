@@ -68,6 +68,10 @@ o Maintainer of the stable branch 1.x
 Occasional contributors:
 ------------------------
 
+Helmut Auer <helmut at helmutauer.de>
+o Updates to German translation
+o Various fixes
+
 Juan Pablo Soto <juanpablosoto at yahoo.es>
 o YouTube plug-in patches
 
@@ -178,6 +182,7 @@ o Greek translation
 
 Pascal Schirrmann <schirrms at schirrms.net>
 o French translation
+o IVTV audio levels
 
 Christian Lyra <lyra at pop-pr.rnp.br>
 o Reminder plug-ins
