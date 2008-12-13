@@ -575,7 +575,7 @@ class WeatherItem(Item):
     def getCurrentCondition(self):
         """ gets the current conditions """
         _debug_('getCurrentCondition()', 2)
-        return "%s" % (_(self.current_conditions))
+        return "%s" % (self.current_conditions)
 
     def getIcon(self):
         """ gets the current conditions icon """
@@ -702,7 +702,7 @@ class WeatherItem(Item):
         self.observation_station = current.cc.obst
         self.temperature = current.cc.tmp
         self.feeling = current.cc.flik
-        self.current_conditions = current.cc.t
+        self.current_conditions = _(current.cc.t)
         self.day_icon = current.cc.icon
         self.pressure = current.cc.bar.r
         self.pressure_change = current.cc.bar.d
