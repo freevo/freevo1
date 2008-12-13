@@ -44,7 +44,6 @@ try:
     # now load other modules to check if all requirements are installed
     import pygame
     import twisted
-    import Numeric
 
     import kaa
     import kaa.metadata as metadata
