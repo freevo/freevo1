@@ -97,9 +97,9 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     Events sent to lastfm:
 
-    | RIGHT - skip song
-    | 1     - send to lastfm LOVE song
-    | 9     - send to lastfm BAN song
+    | PLAYLIST_NEXT - skip song (Key v or DOWN)
+    | SUBTITLE      - send to lastfm LOVE song (Key l)
+    | LANG          - send to lastfm BAN song (Key a)
     """
     @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
@@ -254,10 +254,10 @@ class LastFMItem(AudioItem):
         elif event == 'PLAYLIST_NEXT':
             self.skip()
             return True
-        elif event == 'LANG': # Love
+        elif event == 'LANG': # bAn
             self.ban()
             return True
-        elif event == 'SUBTITLE': # bAn
+        elif event == 'SUBTITLE': # Love
             self.love()
             return True
         return False
