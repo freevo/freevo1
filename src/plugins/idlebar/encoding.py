@@ -36,18 +36,9 @@ import time
 import skin
 from plugins.idlebar import IdleBarPlugin
 import plugin, config
-from util.marmalade import jellyToXML, unjellyFromXML
+from video.encodingclient import EncodingClientActions
 from gui import Progressbar
 import rc
-
-
-def returnFromJelly(status, response):
-    """Un-serialize EncodingServer responses"""
-    _debug_('returnFromJelly(status, response)', 2)
-    if status:
-        return (status, unjellyFromXML(response))
-    else:
-        return (status, response)
 
 
 class PluginInterface(plugin.DaemonPlugin):
