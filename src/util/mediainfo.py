@@ -616,7 +616,7 @@ def disc_info(media, force=False):
     return kaa metadata disc information for the media
     """
     discinfo = mmpython.parse(media.devicename)
-    if not discinfo.id:
+    if not discinfo or not discinfo.id:
         # bad disc, e.g. blank disc
         return {}
 
