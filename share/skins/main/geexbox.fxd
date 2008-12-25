@@ -258,8 +258,8 @@
                         <text font="info value"> Subtitles</text>
                         <newline/>
                     </if>
-                    <if expression="chapters">
-                        <text font="info value" expression="chapters"/>
+                    <if expression="len(chapters)">
+                        <text font="info value" expression="len(chapters)"/>
                         <text font="info value"> Chapters</text>
                         <newline/>
                     </if>

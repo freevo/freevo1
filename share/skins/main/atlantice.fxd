@@ -377,8 +377,8 @@
                         <text font="video value"> Subtitles</text>
                         <newline/>
                     </if>
-                    <if expression="chapters">
-                        <text font="video value" expression="chapters"/>
+                    <if expression="len(chapters)">
+                        <text font="video value" expression="len(chapters)"/>
                         <text font="video value"> Chapters</text>
                         <newline/>
                     </if>
