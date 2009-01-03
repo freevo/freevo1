@@ -223,7 +223,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_container(self, arg=None, menuw=None):
         _debug_('mod_container(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
-        for container in getContainerCAP()[1]:
+        for container in self.server.getContainerCAP()[1]:
             items.append(menu.MenuItem(container, action=self.alter_prop, arg=('container', container)))
         container_menu = menu.Menu(_('Modify Container'), items, item_types = 'video encoding menu')
         container_menu.infoitem = self
@@ -245,7 +245,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_videocodec(self, arg=None, menuw=None):
         _debug_('mod_videocodec(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
-        for videocodec in getVideoCodecCAP()[1]:
+        for videocodec in self.server.getVideoCodecCAP()[1]:
             items.append(menu.MenuItem(videocodec, action=self.alter_prop, arg=('videocodec', videocodec)))
         videocodec_menu = menu.Menu(_('Modify Video Codec'), items, item_types = 'video encoding menu')
         videocodec_menu.infoitem = self
@@ -267,7 +267,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_audiocodec(self, arg=None, menuw=None):
         _debug_('mod_audiocodec(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
-        for audiocodec in getAudioCodecCAP()[1]:
+        for audiocodec in self.server.getAudioCodecCAP()[1]:
             items.append(menu.MenuItem(audiocodec, action=self.alter_prop, arg=('audiocodec', audiocodec)))
         audiocodec_menu = menu.Menu(_('Modify Video Codec'), items, item_types = 'video encoding menu')
         audiocodec_menu.infoitem = self
@@ -311,7 +311,7 @@ class PluginInterface(plugin.ItemPlugin):
     def mod_videofilter(self, arg=None, menuw=None):
         _debug_('mod_videofilter(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
         items = []
-        for videofilter in getVideoFiltersCAP()[1]:
+        for videofilter in self.server.getVideoFiltersCAP()[1]:
             items.append(menu.MenuItem(videofilter, action=self.alter_prop, arg=('videofilter', videofilter)))
         videofilter_menu = menu.Menu(_('Modify Video Filter'), items, item_types = 'video encoding menu')
         videofilter_menu.infoitem = self
