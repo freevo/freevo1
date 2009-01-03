@@ -1356,7 +1356,7 @@ class RecordServer:
                     else:
                         _debug_('commdetect server not running', DINFO)
                 if config.TV_REENCODE:
-                    (result, response) = self.es.ping('connection test')
+                    result = self.es.ping()
                     if result:
                         source = prog.filename
                         output = prog.filename
