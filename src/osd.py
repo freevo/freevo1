@@ -1092,13 +1092,15 @@ class OSD:
 
             # transform all the alpha values in x, y range
             # any speedup could help alot
-            for x in range(max(w-pixels, 1), w):
-                for y in range(1, h):
-                    if alpha[x, y][0] != 0:
-                        alpha[x, y] = int(alpha[x, y][0]*opaque_mod)
+            for x in range(max(w-pixels, 0), w):
+                for y in range(0, h):
+                    if alpha[x, y] != 0:
+                        alpha[x, y] = int(alpha[x, y] * opaque_mod)
                 opaque_mod -= opaque_stp
         except Exception, e:
             _debug_('__draw_transparent_text__: %s' % e, DERROR)
+            if config.DEBUG:
+                traceback.print_stack()
 
 
     def drawstringframed(self, string, x, y, width, height, font, fgcolor=None, bgcolor=None,
