@@ -53,7 +53,12 @@ from gui.ListBox import ListBox
 from gui.RegionScroller import RegionScroller
 from gui.PopupBox import PopupBox
 
+from util.benchmark import benchmark
+benchmarking = 1 #config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
 
+
+@benchmark(benchmarking, benchmarkcall)
 def islog(name):
     f = open(os.path.join(config.FREEVO_LOGDIR, 'command-std%s-%s.log' % (name, os.getuid())))
     data = f.readline()
@@ -63,12 +68,13 @@ def islog(name):
     return data
 
 
+
 class LogScroll(PopupBox):
     """
     Display the log in a scrollable pop-up box
     """
 
-    def __init__(self, file, parent='osd', text=' ', left=None, top=None, width=500,
+    def __init__(self, lines, file=None, parent='osd', text=' ', left=None, top=None, width=500,
                  height=350, bg_color=None, fg_color=None, icon=None,
                  border=None, bd_color=None, bd_width=None):
         """
@@ -88,15 +94,16 @@ class LogScroll(PopupBox):
         """
 
         handler = None
-        self.file = file
-        self.filetext = open(self.file, 'rb').read()
+        self.lines = file is not None and open(file, 'rb').read() or lines
 
         PopupBox.__init__(self, text, handler, top, left, width, height, icon, None, None, parent)
 
         myfont = self.osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE)
+        import pprint
+        pprint.pprint(myfont.__dict__)
         surf_w = myfont.stringsize('AAAAAAAAAA'*8)
-        data = self.osd.drawstringframed(self.filetext, 0, 0, surf_w, 1000000, myfont, align_h='left', align_v='top',
-            fgcolor=self.osd.COL_BLACK, mode='hard', layer='')[1]
+        data = self.osd.drawstringframed('\n'.join(self.lines), 0, 0, surf_w, 1000000, myfont,
+            align_h='left', align_v='top', fgcolor=self.osd.COL_BLACK, mode='hard', layer='')[1]
         (ret_x0,ret_y0, ret_x1, ret_y1) = data
         surf_h = ret_y1 - ret_y0
         if height>surf_h:
@@ -104,12 +111,23 @@ class LogScroll(PopupBox):
         surf = pygame.Surface((surf_w, surf_h), 0, 32)
         bg_c = self.bg_color.get_color_sdl()
         surf.fill(bg_c)
-        self.osd.drawstringframed(self.filetext, 0, 0, surf_w, surf_h, myfont, align_h='left', align_v='top',
-            fgcolor=self.osd.COL_BLACK, mode='hard', layer=surf)
-        self.pb = RegionScroller(surf, 50,50, width=width, height=height)
+        y = 0
+        for line in self.lines:
+            colour = self.osd.COL_BLACK
+            if line.startswith('<so> '):
+                colour = self.osd.COL_WHITE
+            elif line.startswith('<se> '):
+                colour = self.osd.COL_ORANGE
+            line = line[4:]
+            self.osd.drawstringframed(line, 0, y, surf_w, surf_h, myfont, align_h='left', align_v='top',
+            fgcolor=colour, mode='hard', layer=surf)
+            #y += myfont.ptsize + 1
+            y += myfont.height
+        self.pb = RegionScroller(surf, 50, 50, width=width, height=height)
         self.add_child(self.pb)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
 
         if event in (INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT):
@@ -125,35 +143,32 @@ class CommandOptions(PopupBox):
     """
     Show the command results
     """
-    def __init__(self, parent='osd', text=None, handler=None,
-                 left=None, top=None, width=600, height=300, bg_color=None,
-                 fg_color=None, icon=None, border=None, bd_color=None,
-                 bd_width=None, vertical_expansion=1):
+    def __init__(self, loglines, logfilename, parent='osd', text=None, handler=None, left=None,
+        top=None, width=600, height=300, bg_color=None, fg_color=None,
+        icon=None, border=None, bd_color=None, bd_width=None,
+        vertical_expansion=1):
 
         if not text:
             text = _('Command finished')
 
-        #PopupBox.__init__(self, text, handler=handler, x=top, y=left, width=width, height=height)
-        PopupBox.__init__(self, text, handler, top, left, width, height,
-                          icon, vertical_expansion, None, parent)
+        PopupBox.__init__(self, text, handler, top, left, width, height, icon, vertical_expansion, None, parent)
 
         items_height = 40
-        self.num_shown_items = 3
-        self.results = ListBox(width=(self.width-2*self.h_margin),
-                               height=self.num_shown_items*items_height,
-                               show_v_scrollbar=0)
+        self.loglines = loglines
+        self.logfilename = logfilename
+        self.num_shown_items = 2
+        self.results = ListBox(width=(self.width-2*self.h_margin), height=self.num_shown_items*items_height,
+            show_v_scrollbar=0)
         self.results.y_scroll_interval = self.results.items_height = items_height
 
         self.add_child(self.results)
         self.results.add_item(text=_('OK'), value='ok')
-        if islog('err'):
-            self.results.add_item(text=_('Show Stderr'), value='err')
-        if islog('out'):
-            self.results.add_item(text=_('Show Stdout'), value='out')
+        if loglines or logfilename:
+            self.results.add_item(text=_('Show output'), value='out')
         self.results.toggle_selected_index(0)
 
 
-
+    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         """
         eventhandler to browse the result popup
@@ -166,12 +181,7 @@ class CommandOptions(PopupBox):
             if selection == 'ok':
                 self.destroy()
             elif selection == 'out':
-                LogScroll(os.path.join(config.FREEVO_LOGDIR,'command-stdout.log'),
-                          text=_('Stdout File')).show()
-                return
-            elif selection == 'err':
-                LogScroll(os.path.join(config.FREEVO_LOGDIR, 'command-stderr-%s.log' % os.getuid()),
-                          text=_('Stderr File')).show()
+                LogScroll(self.loglines, self.logfilename, text=_('Output')).show()
                 return
         elif event == INPUT_EXIT:
             self.destroy()
@@ -179,9 +189,47 @@ class CommandOptions(PopupBox):
             return self.parent.eventhandler(event)
 
 
+
 class CommandChild(childapp.ChildApp2):
+
+    @benchmark(benchmarking, benchmarkcall)
+    def __init__(self, app, debugname=None, doeslogging=0, callback_use_rc=True, logfilename=None):
+        childapp.ChildApp2.__init__(self, app, debugname, doeslogging, callback_use_rc)
+        self.logbuffer = []
+        self.logfilename = logfilename
+        self.outfd = logfilename is not None and open(logfilename, 'w') or None
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def stdout_cb(self, line):
+        """
+        Save the stdout line to a file or buffer
+        """
+        _debug_('CommandChild.stdout_cb(line=%r)' % (line,), 1)
+        if self.outfd:
+            self.outfd.write('<so> ' + line)
+        else:
+            self.logbuffer.append('<so> ' + line)
+
+
+    @benchmark(benchmarking, benchmarkcall)
+    def stderr_cb(self, line):
+        """
+        Override this method to receive stderr from the child app
+        The function receives complete lines
+        """
+        print 'DJW:CommandChild.stderr_cb(line=%r)' % (line,)
+        _debug_('CommandChild.stderr_cb(line=%r)' % (line,), 1)
+        if self.outfd:
+            self.outfd.write('<se> ' + line)
+        else:
+            self.logbuffer.append('<se> ' + line)
+
+
+    @benchmark(benchmarking, benchmarkcall)
     def poll(self):
         pass
+
 
 
 class CommandItem(Item):
@@ -198,6 +246,7 @@ class CommandItem(Item):
     @ivar stdout: log to stdout
     @ivar rc: remote control singleton
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, command=None, directory=None):
         Item.__init__(self, skin_type='commands')
         self.display_type = 'commands'
@@ -213,6 +262,7 @@ class CommandItem(Item):
             self.image = util.getimage(self.cmd)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """
         return a list of actions for this item
@@ -220,6 +270,7 @@ class CommandItem(Item):
         return [ (self.flashpopup , _('Run Command')) ]
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def flashpopup(self, arg=None, menuw=None):
         """
         start popup and execute command
@@ -242,6 +293,8 @@ class CommandItem(Item):
                 self.rc.poll()
             # wait some time
             time.sleep(0.5)
+        if workapp.outfd:
+            workapp.outfd.close()
 
         if self.stoposd:
             if self.use_wm:
@@ -261,17 +314,20 @@ class CommandItem(Item):
             message = _('Command Completed')
 
         if not self.stoposd and self.stdout:
-            CommandOptions(text=message).show()
+            CommandOptions(workapp.logbuffer, workapp.logfilename, text=message).show()
 
 
+@benchmark(benchmarking, benchmarkcall)
 def fxdparser(fxd, node):
     """
     parse commands out of a fxd file
     """
+    print 'DJW:fxdparser(fxd=%r, node=%r)' % (fxd, node)
     item = CommandItem()
     item.name    = fxd.getattr(node, 'title')
     item.cmd     = fxd.childcontent(node, 'cmd')
     item.image   = util.getimage(item.cmd)
+    item.log     = fxd.getattr(node, 'log')
     if fxd.get_children(node, 'stoposd'):
         item.stoposd = True
     if fxd.get_children(node, 'spawnwm'):
@@ -282,6 +338,10 @@ def fxdparser(fxd, node):
     # parse <info> tag
     fxd.parse_info(fxd.get_children(node, 'info', 1), item)
     fxd.getattr(None, 'items', []).append(item)
+    import pprint
+    pprint.pprint(item.__dict__)
+    print 'DJW:'
+
 
 
 class CommandMenuItem(Item):
@@ -289,11 +349,13 @@ class CommandMenuItem(Item):
     this is the item for the main menu and creates the list
     of commands in a submenu.
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, parent):
         Item.__init__(self, parent, skin_type='commands')
         self.name = _('Commands')
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """
         return a list of actions for this item
@@ -302,6 +364,7 @@ class CommandMenuItem(Item):
         return items
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def create_commands_menu(self, arg=None, menuw=None):
         """
         create a list with commands
@@ -312,16 +375,12 @@ class CommandMenuItem(Item):
                 continue
             if os.path.splitext(command)[1] in ('.fxd', '.xml'):
                 fxd_file=os.path.join(config.COMMANDS_DIR, command)
-
                 # create a basic fxd parser
                 parser = util.fxdparser.FXD(fxd_file)
-
                 # create items to add
                 parser.setattr(None, 'items', command_items)
-
                 # set handler
                 parser.set_handler('command', fxdparser)
-
                 # start the parsing
                 parser.parse()
             else:
@@ -354,22 +413,25 @@ class PluginInterface(plugin.MainMenuPlugin):
     This plugin also activates <command> tag support in all menus, see information
     from command.fxdhandler for details.
     """
-
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         # register command to normal fxd item parser
         # to enable <command> tags in fxd files in every menu
         plugin.register_callback('fxditem', [], 'command', fxdparser)
         plugin.MainMenuPlugin.__init__(self)
 
+    @benchmark(benchmarking, benchmarkcall)
     def items(self, parent):
         return [ CommandMenuItem(parent) ]
 
+    @benchmark(benchmarking, benchmarkcall)
     def config(self):
         return [
             ('COMMANDS_DIR', '/usr/local/bin', 'The directory to show commands from.'),
             ('COMMAND_SPAWN_WM', '', 'command to start window manager.'),
             ('COMMAND_KILL_WM', '', 'command to stop window manager.'),
         ]
+
 
 
 class fxdhandler(plugin.Plugin):
@@ -386,6 +448,7 @@ class fxdhandler(plugin.Plugin):
         <freevo>
           <command title="Mozilla">
             <cmd>/usr/local/bin/mozilla</cmd>
+            <log>/tmp/mozilla.log</log>
             <stoposd />  <!-- stop osd before starting -->
             <spawnwm />  <!-- start windowmanager -->
             <nostdout /> <!-- do not show stdout on exit -->
@@ -398,9 +461,12 @@ class fxdhandler(plugin.Plugin):
     Putting a <command> in a folder.fxd will add this command to the list of
     item actions for that directory.
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
-        # register command to normal fxd item parser
-        # to enable <command> tags in fxd files in every menu
+        """
+        Register command to normal fxd item parser to enable <command> tags in
+        fxd files in every menu
+        """
         plugin.register_callback('fxditem', [], 'command', fxdparser)
         plugin.Plugin.__init__(self)
 
@@ -419,16 +485,19 @@ class CommandMainMenuItem(plugin.MainMenuPlugin):
     consult freevo_config.py for the level of the other Menu Items if you
     wish to place it in a particular location.
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, commandxmlfile):
         plugin.MainMenuPlugin.__init__(self)
         self.cmd_xml = commandxmlfile
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def config(self):
         return [ ('COMMAND_SPAWN_WM', '', 'command to start window manager.'),
                  ('COMMAND_KILL_WM', '', 'command to stop window manager.') ]
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def items(self, parent):
         command_items = []
         parser = util.fxdparser.FXD(self.cmd_xml)
