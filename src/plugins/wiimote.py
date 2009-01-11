@@ -100,7 +100,8 @@ class PluginInterface(plugin.DaemonPlugin):
     Use the wiimote as an input plugin:
 
     | # The Bluetooth device address of the wiimote. Use "hcitool scan"
-    | # to find out.
+    | # after pressing the buttons named 1 and 2 on the wiimote to find out.
+    | #
     | # Default: 00:00:00:00:00:00
     | WII_ADDRESS = "00:00:00:00:00:00"
     |
@@ -217,15 +218,16 @@ class PluginInterface(plugin.DaemonPlugin):
         return [
             ('WII_ADDRESS', '00:00:00:00:00:00', 'The Bluetooth device address of the wiimote. Use "hcitool scan"'),
             ('WII_CMDS',
-                '{ "UP" : "UP", "DOWN" : "DOWN", "B" : "SELECT", "A" : "EXIT", "LEFT" : "LEFT", "RIGHT": "RIGHT",'+
-                ' "PLUS" : "VOL+", "MINUS": "VOL-", "1" : "DISPLAY", "2" : "MENU", "HOME" : "PLAY" }',
-                'wiimote button mappings'),
+                { "UP" : "UP", "DOWN" : "DOWN", "B" : "SELECT", "A" : "EXIT",
+                   "LEFT" : "LEFT", "RIGHT": "RIGHT","PLUS" : "VOL+", "MINUS": "VOL-",
+                   "1" : "DISPLAY", "2" : "MENU", "HOME" : "PLAY" }, 'wiimote button mappings'),
             ('WII_ADDRESS', '00:00:00:00:00:00', 'The Bluetooth device address of the wiimote. Use "hcitool scan"'),
-            ('WII_ACC_ACTIVATE', 'True', 'This option activates the acceleration mode'),
+            ('WII_ACC_ACTIVATE', True, 'This option activates the acceleration mode'),
             ('WII_ACC_BUTTON', 'A', 'This button enables the acceleration mode'),
-            ('WII_ACC_BUTTON_TIME', '0.3', 'This is the time in seconds after that the acceleration mode'),
-            ('WII_ACC_RL_REPEAT', '0.4', 'This is the time in seconds after that the RIGHT and LEFT event is repeated'),
-            ('WII_PING_INTERVAL', '600.0', 'This is the time in seconds between "pinging" the wiimote.')
+            ('WII_ACC_BUTTON_TIME', 0.3, 'This is the time in seconds after that the acceleration mode'),
+            ('WII_ACC_RL_REPEAT', 0.4, 'This is the time in seconds after that the RIGHT and LEFT event is repeated'),
+            ('WII_ACC_UD_REPEAT', 0.2, 'This is the time in seconds after that the UP and DOWN event is fired again.'),
+            ('WII_PING_INTERVAL', 600.0, 'This is the time in seconds between "pinging" the wiimote.')
         ]
 
 
