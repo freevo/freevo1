@@ -218,12 +218,12 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def setMuted(self, mute):
         self.muted = mute
-        if config.MIXER_MAJOR_CTRL_MUTE == 'VOL':
+        if config.MIXER_MAJOR_MUTE_CTRL == 'VOL':
             if mute == 1:
                 self.main_mixer.setmute(1)
             else:
                 self.main_mixer.setmute(0)
-        elif config.MIXER_MAJOR_CTRL_MUTE == 'PCM':
+        elif config.MIXER_MAJOR_MUTE_CTRL == 'PCM':
             if mute == 1:
                 self.pcm_mixer.setmute(1)
             else:
