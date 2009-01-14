@@ -664,31 +664,35 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lsv = { } # reset last changed values
 
         if type == 'menu':
-            menu  = object.menustack[-1]
-            title = menu.selected.name
-            if isinstance(menu.selected, MenuItem):
-                title = _(title)
-            typeinfo = menu.selected.type
-            info = ''
+            try:
+                menu  = object.menustack[-1]
+                title = menu.selected.name
+                if isinstance(menu.selected, MenuItem):
+                    title = _(title)
 
-            if menu.selected.getattr('type'):
-                typeinfo = menu.selected.getattr('type')
+                typeinfo = menu.selected.type
+                info = ''
 
-            # get info:
-            if menu.selected.type and menu_info.has_key(menu.selected.type):
-                info = get_info(menu.selected, menu_info[menu.selected.type])
-                if menu_strinfo.has_key(menu.selected.type) and menu_strinfo[menu.selected.type]:
-                    if info:
-                        info += sep_str
-                    info += time.strftime(menu_strinfo[menu.selected.type])
+                if menu.selected.getattr('type'):
+                    typeinfo = menu.selected.getattr('type')
 
-            # specific things related with item type
-            if menu.selected.type == 'audio':
-                title = String(menu.selected.getattr('title'))
-                if not title:
-                    title = String(menu.selected.getattr('name'))
-                if menu.selected.getattr('trackno'):
-                    title = '%s - %s' % (String(menu.selected.getattr('trackno')), title)
+                # get info:
+                if menu.selected.type and menu_info.has_key(menu.selected.type):
+                    info = get_info(menu.selected, menu_info[menu.selected.type])
+                    if menu_strinfo.has_key(menu.selected.type) and menu_strinfo[menu.selected.type]:
+                        if info:
+                            info += sep_str
+                        info += time.strftime(menu_strinfo[menu.selected.type])
+
+                # specific things related with item type
+                if menu.selected.type == 'audio':
+                    title = String(menu.selected.getattr('title'))
+                    if not title:
+                        title = String(menu.selected.getattr('name'))
+                    if menu.selected.getattr('trackno'):
+                        title = '%s - %s' % (String(menu.selected.getattr('trackno')), title)
+            except:
+                title = ''
 
         elif type == 'player':
             player = object
