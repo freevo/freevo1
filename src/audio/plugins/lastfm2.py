@@ -52,7 +52,7 @@ else:
     except ImportError:
         from elementtree.ElementTree import XML
 from util.benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
+benchmarking = config.DEBUG_BENCHMARKING & 0x01
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 # Debugging modules
@@ -156,7 +156,7 @@ class LastFMMainMenuItem(MenuItem):
     @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """return a list of actions for this item"""
-        _debug_('actions()', 2)
+        _debug_('LastFMMainMenuItem.actions()', 2)
         return [ (self.create_stations_menu, 'stations') ]
 
 
@@ -215,7 +215,6 @@ class LastFMItem(AudioItem):
         _debug_('LastFMItem.actions()', 1)
         #self.genre = self.station_name
         self.stream_name = self.station_name
-        self.webservices.adjust_station(self.station_url)
         self.xspf = LastFMXSPF()
         self.feed = None
         items = [ (self.play, _('Listen to LastFM Station')) ]
@@ -273,6 +272,8 @@ class LastFMItem(AudioItem):
         if self.menuw is None:
             self.menuw = menuw
 
+        if not self.webservices.adjust_station(self.station_url):
+            return []
         try:
             if self.feed is None or len(self.feed.entries) <= 1:
                 for i in range(3):
@@ -690,7 +691,7 @@ class LastFMDownloader(Thread):
         self.running = True
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x01, benchmarkcall)
     def run(self):
         """
         Execute a download operation. Stop when finished downloading or
