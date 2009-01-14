@@ -48,6 +48,10 @@ import rc
 import util
 import dialog
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 if __freevo_app__ == 'main':
     # The PyGame Python SDL interface.
     import pygame
@@ -261,8 +265,9 @@ class BusyIcon(threading.Thread):
         self.lock.release()
 
 
+    @benchmark(benchmarking & 0x01, benchmarkcall)
     def run(self):
-        while (1):
+        while True:
             self.mode_flag.clear()
             self.mode_flag.wait()
             while self.active and self.timer > 0.01:
@@ -485,7 +490,7 @@ class OSD:
 
         # Return the next key event, or None if the queue is empty.
         # Everything else (mouse etc) is discarded.
-        while 1:
+        while True:
             event = pygame.event.poll()
 
             if event.type == NOEVENT:
@@ -1036,7 +1041,7 @@ class OSD:
             ellipses = ''
 
         data = None
-        while(True):
+        while True:
             if width > max_width - ellipses_size and not data:
                 # save this, we will need it when we have not enough space
                 # but first try to fit the text without ellipses
