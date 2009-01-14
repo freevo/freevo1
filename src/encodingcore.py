@@ -41,6 +41,10 @@ import kaa.metadata
 from copy import copy
 from string import split, join
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 #precompiled regular expression to obtain mencoder progress
 re_progress = re.compile('(\d+)\%\) .*Trem:\s*(\d+\w+)\s+')
 
@@ -795,6 +799,7 @@ class CommandThread(threading.Thread): # seek to remove data andor crop (not rea
         _debug_('command=\"%s\"' % ' '.join(command))
 
 
+    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         #self.lock.acquire()
         self.pipe = popen2.Popen4(self.command)

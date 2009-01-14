@@ -80,7 +80,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     |     ('Magic 106', '106.7')
     | ]
     """
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self):
         _debug_('PluginInterface.__init__()', 2)
         if not config.RADIO_CMD or not config.RADIO_STATIONS:
@@ -90,7 +90,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         self.plugin_name = 'radio'
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def config(self):
         return [
             ('RADIO_CMD', None, 'Command to play the radio'),
@@ -98,7 +98,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def items(self, parent):
         return [ RadioMainMenuItem(parent) ]
 
@@ -109,14 +109,14 @@ class RadioMainMenuItem(MenuItem):
     this is the item for the main menu and creates the list
     of commands in a submenu.
     """
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self, parent):
         _debug_('RadioMainMenuItem.__init__(parent=%r)' % (parent,), 2)
         MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
         self.name = _('Radio')
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def actions(self):
         """
         Get a list of actions for this menu item
@@ -124,7 +124,7 @@ class RadioMainMenuItem(MenuItem):
         return [ (self.create_stations_menu, 'stations') ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def create_stations_menu(self, arg=None, menuw=None):
         station_items = []
         for rstation in config.RADIO_STATIONS:
@@ -154,7 +154,7 @@ class RadioItem(Item):
     actions for different ways of running commands and for displaying stdout
     and stderr of last command run.
     """
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self):
         Item.__init__(self)
         self.title = None
@@ -164,21 +164,21 @@ class RadioItem(Item):
         self.length = 0
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def actions(self):
         """ Get a list of actions for this item """
         items = [ (self.play, _('Listen to Radio Station')) ]
         return items
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def checktv(self):
         """ Check if something is recording """
         self.tvlockfile = config.FREEVO_CACHEDIR + '/record.*'
         return len(glob.glob(self.tvlockfile)) > 0
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def play(self, arg=None, menuw=None):
         _debug_('station=%r station_index=%r name=%r' % (self.station, self.station_index, self.name))
         # self.parent.current_item = self
@@ -199,7 +199,7 @@ class RadioItem(Item):
             rc.post_event(rc.PLAY_END)
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def confirm (self, arg=None, menuw=None):
         """ Confirm that the player should be stopped """
         _debug_('confirm (self, arg=%r, menuw=%r)' % (arg, menuw))
@@ -208,7 +208,7 @@ class RadioItem(Item):
             #menuw.refresh()
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def stop(self, arg=None, menuw=None):
         """ Stop the current playing """
         _debug_('stop')
@@ -220,7 +220,7 @@ class RadioPlayerGUI(PlayerGUI):
     """
     Radio Player user interface
     """
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self, item, menuw=None):
         """ Create an instance of a RadioPlayerGUI """
         _debug_('RadioPlayerGUI.__init__(item=%r, menuw=%r)' % (item, menu), 2)
@@ -232,7 +232,7 @@ class RadioPlayerGUI(PlayerGUI):
         self.item.image = self.image
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def refresh(self):
         """ Give information to the skin """
         _debug_('refresh()', 2)

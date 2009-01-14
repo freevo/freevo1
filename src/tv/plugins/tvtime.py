@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# tvtime.py - implementation of a TV function using tvtime
+# Implementation of a TV function using tvtime
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -34,7 +34,6 @@ import config
 
 import time, os
 import string
-import threading
 import signal
 import cgi
 import re

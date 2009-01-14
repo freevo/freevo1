@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# view_area.py - A view area for the Freevo skin
+# A view area for the Freevo skin
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -33,20 +33,22 @@ from area import Skin_Area
 from skin_utils import *
 
 from util.benchmark import benchmark
-benchmarking = False
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 
 class View_Area(Skin_Area):
     """
     this call defines the view area
     """
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x08, benchmarkcall)
     def __init__(self):
         Skin_Area.__init__(self, 'view')
         self.image = None
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x08, benchmarkcall)
     def update_content_needed(self):
         """
         check if the content needs an update
@@ -60,7 +62,7 @@ class View_Area(Skin_Area):
         return Unicode(image) != Unicode(self.image)
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x08, benchmarkcall)
     def update_content(self):
         """
         update the view area

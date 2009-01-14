@@ -43,6 +43,10 @@ from dialog.display import AppTextDisplay
 
 from event import *
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 
 class PluginInterface(plugin.Plugin):
     """

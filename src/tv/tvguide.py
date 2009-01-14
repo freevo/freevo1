@@ -43,6 +43,7 @@ from programitem import ProgramItem
 
 from util.benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 import tv.epg_xmltv
 from tv.epg_types import TvProgram
@@ -123,7 +124,7 @@ class TVGuide(Item):
                 self.favorite_programs.append(prog.str2utf())
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x400, benchmarkcall)
     def update_schedules(self, force=False):
         """
         update schedule
@@ -142,7 +143,7 @@ class TVGuide(Item):
         self.recordclient.getScheduledRecordings(self.update_schedules_cb)
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x400, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         """
         Handles events in the tv guide
@@ -299,7 +300,7 @@ class TVGuide(Item):
             skin.clear()
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x400, benchmarkcall)
     def refresh(self, force_update=True):
         """refresh the guide
 
@@ -315,7 +316,7 @@ class TVGuide(Item):
         skin.draw(self.type, self)
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x400, benchmarkcall)
     def update(self, force=False):
         """ update the guide
 
@@ -395,7 +396,7 @@ class TVGuide(Item):
         self.rebuild(new_start_time, new_end_time, start_channel, selected)
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x400, benchmarkcall)
     def rebuild(self, start_time, stop_time, start_channel, selected):
         """ rebuild the guide
 
@@ -473,7 +474,7 @@ class TVGuide(Item):
         self.refresh(force_update=False)
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x400, benchmarkcall)
     def change_program(self, value, full_scan=False):
         """
         Move to the next program
@@ -543,7 +544,7 @@ class TVGuide(Item):
         self.rebuild(start_time, stop_time, start_channel, prg)
 
 
-    @benchmark(benchmarking)
+    @benchmark(benchmarking & 0x400, benchmarkcall)
     def change_channel(self, value):
         """
         Move to the next channel

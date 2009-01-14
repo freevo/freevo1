@@ -29,7 +29,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, time, os, string, threading
+import sys, time, os, string
 try:
     import cPickle as pickle
 except ImportError:
@@ -42,7 +42,6 @@ import util.tv_util as tv_util
 # changes are made to the file format.
 TYPES_VERSION = 3
 
-critical_section = threading.Lock()
 schedule_locked = False
 
 

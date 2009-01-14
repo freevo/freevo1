@@ -36,6 +36,10 @@ import kaa.metadata as mmpython
 from copy import copy
 from string import split, join
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 
 class CommDetectJob:
     """Class for creation & configuration of CommDetectJobs. This generates the mencoder commands"""
@@ -167,6 +171,7 @@ class CommandThread(threading.Thread):
         self.finalfunc = finalfunc
         _debug_('command=\"%s\"' % command)
 
+    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         self.pipe = popen2.Popen4(self.command)
         pid = self.pipe.pid

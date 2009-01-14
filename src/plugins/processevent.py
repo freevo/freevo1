@@ -26,7 +26,6 @@
 
 
 import time
-from threading import Thread
 import config
 import plugin
 from kaa import Timer

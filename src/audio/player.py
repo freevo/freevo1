@@ -37,7 +37,7 @@ import plugin
 from event import *
 
 from util.benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
+benchmarking = config.DEBUG_BENCHMARKING & 0x01
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 if config.DEBUG_DEBUGGER:
@@ -50,7 +50,7 @@ def get():
     return _player_
 
 class PlayerGUI(GUIObject):
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self, item, menuw):
         GUIObject.__init__(self)
         self.visible = menuw and True or False
@@ -64,7 +64,7 @@ class PlayerGUI(GUIObject):
         self.first_drawing = True
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def play(self, player=None):
         global _player_
         if _player_ and _player_.player and _player_.player.is_playing():
@@ -112,7 +112,7 @@ class PlayerGUI(GUIObject):
             self.refresh()
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def try_next_player(self):
         self.stop()
         _debug_('error, try next player')
@@ -132,7 +132,7 @@ class PlayerGUI(GUIObject):
         return 0
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def stop(self, restore_menu=False):
         global _player_
         _player_ = None
@@ -145,7 +145,7 @@ class PlayerGUI(GUIObject):
             self.menuw.show()
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def show(self):
         if not self.visible:
             self.visible = True
@@ -153,7 +153,7 @@ class PlayerGUI(GUIObject):
             rc.app(self.player)
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def hide(self):
         if self.visible:
             self.visible = False
@@ -161,7 +161,7 @@ class PlayerGUI(GUIObject):
             rc.app(None)
 
 
-    #@benchmark(benchmarking, benchmarkcall)
+    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def refresh(self):
         """
         Give information to the skin..

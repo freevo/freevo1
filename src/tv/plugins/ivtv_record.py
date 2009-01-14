@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# ivtv_record.py - A plugin to record tv using an ivtv based card.
+# A plugin to record tv using an ivtv based card.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -33,7 +33,6 @@ import sys, string
 import random
 import time, os
 import threading
-import signal
 
 import config
 import tv.ivtv

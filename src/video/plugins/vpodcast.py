@@ -41,6 +41,7 @@ import util.youtube_dl as youtube
 from util.benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 if sys.hexversion >= 0x2050000:
     from xml.etree.cElementTree import ElementTree, Element
 else:
@@ -87,7 +88,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     other options type: "freevo plugins -i video.vpodcast"
     """
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def __init__(self):
         """ Initialise the Video postcast plug-in interface """
         plugin.MainMenuPlugin.__init__(self)
@@ -95,7 +96,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         self.check_dir()
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def config(self):
         """ freevo plugins -i video.vpodcast returns the info """
         return [
@@ -113,7 +114,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         return [ VPodcastMainMenuItem(parent) ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def check_dir(self):
         """ Check that the VPODCAST_DIR directories exist, if not create them """
         if not os.path.isdir(config.VPODCAST_DIR):
@@ -141,19 +142,19 @@ class VPodcastMainMenuItem(MenuItem):
     this is the item for the main menu and creates the list
     of commands in a submenu.
     """
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def __init__(self, parent):
         MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
         self.name = _('Video Podcast')
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def actions(self):
         """ return a list of actions for this item """
         return [ (self.create_podcast_menu, 'stations') ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def create_podcast_menu(self, arg=None, menuw=None):
         """ Create the main menu item for the video podcasts """
         podcast_menu_items = []
@@ -179,7 +180,7 @@ class VPodcastMainMenuItem(MenuItem):
         menuw.refresh()
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def create_podcast_submenu(self, arg=None, menuw=None, image=None):
         """ create the sub-menu for the podcast """
         name, rss_url, feed_type = arg
@@ -263,7 +264,7 @@ class VPodcastMainMenuItem(MenuItem):
         rc.app(None)
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def download(self, url, filename):
         """ Download the url and save it """
         if url is not None:
@@ -284,15 +285,16 @@ class Podcast:
     """
     Extract information from the rss item
     """
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def __init__(self, rss_url, feed_type):
         self.rss = None
         self.rss_url = rss_url
         self.feed_type = feed_type
         self.encoding = 'utf-8'
+        self.link = None
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def feed(self):
         try:
             request = urllib2.Request(self.rss_url, None, youtube.std_headers)
@@ -318,28 +320,28 @@ class Podcast:
             return self.rss
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def rss_title(self):
         if self.rss.feed.has_key('title'):
             return self.rss.feed.title.encode(self.encoding)
         return None
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def rss_description(self):
         if self.rss.feed.has_key('description'):
             return self.rss.feed.description.encode(self.encoding)
         return None
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def rss_image(self):
         if self.rss.feed.has_key('image') and self.rss.feed.image.has_key('url'):
             return self.rss.feed.image.url
         return None
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def rss_item_title(self, item):
         """ get the item's title """
         title = item.title.encode(self.encoding)
@@ -347,14 +349,20 @@ class Podcast:
         return self.title
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def rss_item_link(self, item):
         """ get the item's link """
-        self.link = item.link.encode(self.encoding)
+        if 'links' in item:
+            for link in item.links:
+                if link.type.startswith('video'):
+                    self.link = link.href.encode(self.encoding)
+                    break
+        if self.link is None:
+            self.link = item.link.encode(self.encoding)
         return self.link
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def rss_item_image(self, item):
         """ get the item's image """
         if item.has_key('image') and item.image.has_key('url'):
@@ -367,7 +375,7 @@ class Podcast:
         return self.image
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def rss_item_mimetype(self, item):
         """ get the item's mime type """
         if item.has_key('mimetype'):
@@ -379,9 +387,9 @@ class Podcast:
         return self.type
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def rss_item_updated(self, item):
-        """ get the item's mime type """
+        """ get the item's updated time """
         try:
             self.updated = time.mktime(item.updated_parsed)
         except Exception, why:
@@ -481,7 +489,7 @@ class VPVideoItem(VideoItem):
     """
     Video podcast video item
     """
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def __init__(self, filename, parent, item_url, results):
         """ Initialise the VPVideoItem class """
         _debug_('VPVideoItem.__init__(filename=%r, parent=%r, item_url=%r, results=%r)' % \
@@ -491,7 +499,7 @@ class VPVideoItem(VideoItem):
         self.results = results
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def play(self, arg=None, menuw=None):
         """
         Play this Podcast
@@ -560,7 +568,7 @@ class BGDownload(threading.Thread):
     """
     Download file in background
     """
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(True, benchmarkcall)
     def __init__(self, url, filename, results):
         threading.Thread.__init__(self)
         self.url = url
@@ -571,7 +579,7 @@ class BGDownload(threading.Thread):
         self.other_ie = OtherIE(self.youtube_ie, results)
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         try:
             fd = youtube.FileDownloader({
@@ -623,3 +631,7 @@ def _name_to_filename(name):
     #newname = name.translate(translation_table).strip().replace(' ', '_').lower()
     newname = name.replace(':', '').strip().replace(' ', '_').lower()
     return re.sub('__+', '_', newname)
+
+
+if __name__ == '__main__':
+    pass

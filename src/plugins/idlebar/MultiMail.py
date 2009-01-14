@@ -38,14 +38,22 @@ import time
 
 from plugins.idlebar import IdleBarPlugin
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 
 class MultiMail(IdleBarPlugin):
     """
-    Displays an icon in the idlebar representing the number of emails for a specified account. In the case of IMAP, it only lists unread messages
+
+    Displays an icon in the idlebar representing the number of emails for a
+    specified account. In the case of IMAP, it only lists unread messages
 
     Activate with:
-    plugin.activate('idlebar.MultiMail.Imap',    level=10, args=('username', 'password', 'host', 'port', 'folder')) (port and folder are optional)
-    plugin.activate('idlebar.MultiMail.Pop3',    level=10, args=('username', 'password', 'host', 'port')) (port is optional)
+    plugin.activate('idlebar.MultiMail.Imap',    level=10, args=(
+        'username', 'password', 'host', 'port', 'folder')) (port and folder are optional)
+    plugin.activate('idlebar.MultiMail.Pop3',    level=10, args=(
+        'username', 'password', 'host', 'port')) (port is optional)
     plugin.activate('idlebar.MultiMail.Mbox',    level=10, args=('path to mailbox file')
     plugin.activate('idlebar.MultiMail.Maildir', level=10, args=('path to maildir')
 
@@ -60,13 +68,17 @@ class MultiMail(IdleBarPlugin):
         self.bg_thread.setDaemon(1)
         self.bg_thread.start() # Run self._bg_function() in a separate thread
 
+
+    @benchmark(benchmarking & 0x1, benchmarkcall)
     def _bg_function(self):
         while 1:
             self.unread = self.checkmail()
             time.sleep(self.FREQUENCY)
 
+
     def checkmail(self):
         return 0
+
 
     def draw(self, (type, object), x, osd):
         if self.unread > 0:
@@ -80,6 +92,8 @@ class MultiMail(IdleBarPlugin):
             display_width = osd.draw_image(self.NO_MAILIMAGE, (x, osd.y + 10, -1, -1))[0]
         return display_width
 
+
+
 class Imap(MultiMail):
     def __init__(self, username, password, host, port=143, folder="INBOX"):
         self.USERNAME = username
@@ -88,6 +102,7 @@ class Imap(MultiMail):
         self.PORT = port
         self.FOLDER = folder
         MultiMail.__init__(self)
+
 
     def checkmail(self):
         try:
@@ -101,6 +116,8 @@ class Imap(MultiMail):
             _debug_('IMAP exception')
             return 0
 
+
+
 class Pop3(MultiMail):
     def __init__(self, username, password, host, port=110):
         self.USERNAME = username
@@ -108,6 +125,7 @@ class Pop3(MultiMail):
         self.HOST = host
         self.PORT = port
         MultiMail.__init__(self)
+
 
     def checkmail(self):
         try:
@@ -121,10 +139,13 @@ class Pop3(MultiMail):
             _debug_('Error loading POP account')
             return 0
 
+
+
 class Mbox(MultiMail):
     def __init__(self, mailbox):
         self.MAILBOX = mailbox
         MultiMail.__init__(self)
+
 
     def checkmail(self):
         if os.path.isfile(self.MAILBOX):
@@ -139,10 +160,12 @@ class Mbox(MultiMail):
             return 0
 
 
+
 class Maildir(MultiMail):
     def __init__(self, mailbox):
         self.MAILBOX = mailbox
         MultiMail.__init__(self)
+
 
     def checkmail(self):
         if os.path.isdir(self.MAILBOX):

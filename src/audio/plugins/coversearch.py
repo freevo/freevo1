@@ -92,7 +92,7 @@ class PluginInterface(plugin.ItemPlugin):
     | plugin.activate('audio.coversearch', args=('YOUR_KEY',))
     """
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self, license=None):
         if not config.SYS_USE_NETWORK:
             self.reason = 'SYS_USE_NETWORK not enabled'
@@ -113,7 +113,7 @@ class PluginInterface(plugin.ItemPlugin):
         plugin.ItemPlugin.__init__(self)
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def config(self):
         return [
             ('AMAZON_LOCALE', 'us', 'The location is one of: de, jp, uk, us'),
@@ -121,7 +121,7 @@ class PluginInterface(plugin.ItemPlugin):
         ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def actions(self, item):
         self.item = item
 
@@ -209,7 +209,7 @@ class PluginInterface(plugin.ItemPlugin):
         return []
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def cover_search_file(self, arg=None, menuw=None):
         """
         search Amazon for this item
@@ -321,7 +321,7 @@ class PluginInterface(plugin.ItemPlugin):
         return
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x100, benchmarkcall)
     def cover_create(self, arg=None, menuw=None):
         """
         create cover file for the item

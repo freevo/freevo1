@@ -16,6 +16,11 @@ from gui.GUIObject import GUIObject
 from gui.PopupBox import PopupBox
 import skin
 import util.feedparser
+
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 MAX_AGE = 3600 * 10
 
 _player_ = None
@@ -287,6 +292,7 @@ class BGDownload(threading.Thread):
         self.savefile = savefile
 
 
+    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         try:
             file = urllib2.urlopen(self.url)

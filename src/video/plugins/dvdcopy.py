@@ -39,6 +39,10 @@ import threading
 import time
 import os.path
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 drive_jobs = {}
 for media in config.REMOVABLE_MEDIA:
     drive_jobs[media] = None
@@ -138,6 +142,7 @@ class DVDCopyJob:
         self.thread = threading.Thread(target=self.__copy)
         self.thread.start()
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __copy(self):
         global drive_jobs
         args = [config.CONF.dvdbackup, '-i', self.source, '-o', config.DVDCOPY_DIR]
@@ -159,6 +164,8 @@ class DVDCopyJob:
 
     def cancel(self):
         self.childapp.kill()
+
+
 
 class DVDCopyIdleBar(IdleBarPlugin):
     def __init__(self):

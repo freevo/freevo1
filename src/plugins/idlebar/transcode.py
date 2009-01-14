@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# transcode.py - Idlebar plugin for showing encoding status
+# Idlebar plugin for showing encoding status
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -57,7 +57,7 @@ class PluginInterface(IdleBarPlugin):
         | plugin.activate('idlebar.transcode')
     """
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x1000, benchmarkcall)
     def __init__(self):
         """ Initialise the transcode idlebar plug-in """
         _debug_('transcode.PluginInterface.__init__()', 2)
@@ -109,14 +109,14 @@ class PluginInterface(IdleBarPlugin):
         _debug_('transcode.PluginInterface.__init__() done.')
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x1000, benchmarkcall)
     def config(self):
         _debug_('config()', 2)
         return [
         ]
 
 
-    #@benchmark(benchmarking, benchmarkcall)
+    #@benchmark(benchmarking & 0x1000, benchmarkcall)
     def getimage(self, image, osd, cache=False):
         """
         Load the image from the cache when available otherwise load the image and save
@@ -135,7 +135,7 @@ class PluginInterface(IdleBarPlugin):
         return pygame.image.load(image)
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x1000, benchmarkcall)
     def set_sprite(self):
         """ set the sprite image name and the drawing interval """
         _debug_('set_sprite()', 2)
@@ -200,7 +200,7 @@ class PluginInterface(IdleBarPlugin):
             return (self.background_w, self.background_h);
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x1000, benchmarkcall)
     def calculatesizes(self, osd, font):
         """size calcs is not necessery on every pass
         There are some shortcuts here, the left and right clamps are the same with
@@ -233,7 +233,7 @@ class PluginInterface(IdleBarPlugin):
         return False
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x1000, benchmarkcall)
     def draw(self, (type, object), x, osd):
         """ Build the image by blitting sub images on the background and draw the background """
         _debug_('draw((type=%r, object=), x=%r, osd=)' % (type, x), 3)
@@ -267,7 +267,7 @@ class PluginInterface(IdleBarPlugin):
         return self.background_w
 
 
-    #@benchmark(benchmarking, benchmarkcall)
+    #@benchmark(benchmarking & 0x1000, benchmarkcall)
     def _timerhandler(self):
         """poll function"""
         now = time.time()
@@ -282,7 +282,7 @@ class PluginInterface(IdleBarPlugin):
                 skin.redraw()
 
 
-    @benchmark(benchmarking, benchmarkcall)
+    @benchmark(benchmarking & 0x1000, benchmarkcall)
     def update(self):
         _debug_('update()', 2)
         bar = plugin.getbyname('idlebar')

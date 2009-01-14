@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# game.py - Freevo module to run games.
+# Freevo module to run games.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -33,7 +33,6 @@ import sys
 import random
 import time, os, glob
 import string, popen2, fcntl, select, struct
-import threading, signal
 
 import config     # Configuration handler. reads config file.
 import util       # Various utilities

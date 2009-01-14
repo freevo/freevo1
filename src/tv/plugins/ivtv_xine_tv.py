@@ -36,8 +36,6 @@
 import config
 
 import time, os
-import threading
-import signal
 import skin
 
 import rc

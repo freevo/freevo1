@@ -37,10 +37,16 @@ import thread
 import string
 import copy
 import traceback
-import util.mediainfo
 from struct import *
 import array
+
+import config
+import util.mediainfo
 import rc
+
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
 try:
@@ -867,6 +873,7 @@ class Identify_Thread(threading.Thread):
         self.lock = thread.allocate_lock()
 
 
+    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         """
         thread main function

@@ -753,7 +753,7 @@ def __syscall(cmd, pretend=False):
     @param pretend: pretend to run the command
     @returns: result from the system command
     """
-    _debug_('__syscall(cmd=%r, pretend=%r)' % (cmd, pretend), 2)
+    _debug_('__syscall(cmd=%r, pretend=%r)' % (cmd, pretend), 1)
     result = 0
     if pretend:
         _debug_('Pretending syscall: %s' % cmd)

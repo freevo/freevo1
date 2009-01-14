@@ -47,6 +47,10 @@ import util
 
 from event import *
 
+from util.benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 
 class ChildApp:
     """
@@ -394,6 +398,7 @@ class Read_Thread(threading.Thread):
                 _debug_('cannot open "%s" for logging: %s' % (logfile, e))
 
 
+    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         _debug_('Read_Thread.run()', 2)
         try:
