@@ -519,6 +519,11 @@ class LastFMWebServices:
             print >>fd, self.base_url
             print >>fd, self.base_path
             fd.close()
+        except LastFMError, why:
+            self.session = ''
+            self.stream_url = ''
+            self.base_url = ''
+            self.base_path = ''
         except IOError, why:
             self.session = ''
             self.stream_url = ''
