@@ -44,61 +44,67 @@ class WeatherFetcher(Thread):
     """
     Class to fetch the weather in a thread
     """
-    def __init__(self, condition, metarcode, tempunits, cachefile):
+    def __init__(self, refreshinterval, metarcode, tempunits, cachefile):
         """ Initialise the thread """
         Thread.__init__(self)
-        _debug_('WeatherFetcher.__init__(condition=%r, metarcode=%r, tempunits=%r, cachefile=%r)' % (condition, metarcode, tempunits, cachefile), 2)
-        self.condition = condition
+        _debug_('WeatherFetcher.__init__(refreshinterval=%r, metarcode=%r, tempunits=%r, cachefile=%r)' % (
+            refreshinterval, metarcode, tempunits, cachefile), 2)
+        self.refreshinterval = refreshinterval
         self.metarcode = metarcode
         self.tempunits = tempunits
         self.cachefile = cachefile
         self.stopping = False
+        self.temperature = '?'
+        self.icon = 'na.png'
 
     def run(self):
-        _debug_('WeatherFetcher.run()', 2)
-        self.condition.acquire()
-        _debug_('WeatherFetcher condition.acquired', 2)
-        try:
-            while not self.stopping:
-                _debug_('WeatherFetcher condition.waiting', 2)
-                self.condition.wait()
-                _debug_('WeatherFetcher condition.waited', 2)
+        """
+        Thread to fetch the weather and write the results to a cache file
+        """
+        _debug_('WeatherFetcher(%r) thread started' % (self.metarcode,), 1)
+        while not self.stopping:
+            refreshtime = time.time() + self.refreshinterval
+            _debug_('WeatherFetcher(%r).run' % (self.metarcode,), 1)
+            try:
+                rf = pymetar.WeatherFetcher(self.metarcode)
+                rp = pymetar.ReportParser()
+                rep = rf.FetchReport()
+                pr = rp.ParseReport(rep)
+
+                if pr.getTemperatureCelsius():
+                    if self.tempunits == 'F':
+                        self.temperature = '%2d' % pr.getTemperatureFahrenheit()
+                    elif self.tempunits == 'K':
+                        self.temperature = '%3d' % pr.getTemperatureCelsius() + 273
+                    else:
+                        self.temperature = '%2d' % pr.getTemperatureCelsius()
+                else:
+                    self.temperature = '?'
+
+                if pr.getPixmap():
+                    self.icon = pr.getPixmap() + '.png'
+                else:
+                    self.icon = 'na.png'
+
+                try:
+                    cachefile = open(self.cachefile, 'w+')
+                    cachefile.write(self.temperature + '\n')
+                    cachefile.write(self.icon + '\n')
+                    cachefile.close()
+                    _debug_('WeatherFetcher cache (%s %s)' % (self.temperature, self.icon), 1)
+                except IOError, why:
+                    _debug_('Failed to create %r: %s' % (self.cachefile, why), DWARNING)
+
+            except Exception, why:
+                _debug_(why, DERROR)
+
+            _debug_('WeatherFetcher(%r).ran' % (self.metarcode,), 1)
+
+            while time.time() < refreshtime:
                 if self.stopping:
                     break
-                #_debug_('ReportFetcher(%r)' % (self.metarcode,), 2)
-                try:
-                    rf = pymetar.ReportFetcher(self.metarcode)
-                    rep = rf.FetchReport()
-                    rp=pymetar.ReportParser()
-                    pr=rp.ParseReport(rep)
-                    if (pr.getTemperatureCelsius()):
-                        if self.tempunits == 'F':
-                            temperature = '%2d' % pr.getTemperatureFahrenheit()
-                        elif self.tempunits == 'K':
-                            ktemp = pr.getTemperatureCelsius() + 273
-                            temperature = '%3d' % ktemp
-                        else:
-                            temperature = '%2d' % pr.getTemperatureCelsius()
-                    else:
-                        temperature = '?'  # Make it a string to match above.
-                    if pr.getPixmap():
-                        icon = pr.getPixmap() + '.png'
-                    else:
-                        icon = 'na.png'
-                    try:
-                        cachefile = open(self.cachefile, 'w+')
-                        cachefile.write(temperature + '\n')
-                        cachefile.write(icon + '\n')
-                        cachefile.close()
-                        _debug_('WeatherFetcher cache written', 2)
-                    except IOError, why:
-                        _debug_('Failed to create %r: %s' % (self.cachefile, why), 2)
-
-                except Exception, why:
-                    _debug_(why, 2)
-        finally:
-            self.condition.release()
-            _debug_('WeatherFetcher condition.released', 2)
+                time.sleep(1)
+        _debug_('WeatherFetcher(%r) thread finished' % (self.metarcode,), 1)
 
 
 
@@ -115,6 +121,7 @@ class PluginInterface(IdleBarPlugin):
 
     def __init__(self, zone='CYYZ', units='C'):
         """
+        Initialise an instance of the PluginInterface
         """
         _debug_('PluginInterface.__init__(zone=%r, units=%r)' % (zone, units), 2)
         if not config.SYS_USE_NETWORK:
@@ -122,12 +129,11 @@ class PluginInterface(IdleBarPlugin):
             return
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.weather'
-        self.TEMPUNITS = units
-        self.METARCODE = zone
-        self.WEATHERCACHE = config.FREEVO_CACHEDIR + '/weather'
+        self.tempunits = units
+        self.metarcode = zone
+        self.cachefile = config.FREEVO_CACHEDIR + '/weather'
         self.cachetime = 0
-        self.condition = Condition()
-        self.fetcher = WeatherFetcher(self.condition, self.METARCODE, self.TEMPUNITS, self.WEATHERCACHE)
+        self.fetcher = WeatherFetcher(config.IDLEBAR_WEATHER_REFRESH, self.metarcode, self.tempunits, self.cachefile)
         self.fetcher.start()
 
 
@@ -138,13 +144,10 @@ class PluginInterface(IdleBarPlugin):
 
 
     def shutdown(self):
+        """
+        System Shutdown; stop the fetcher thread and wait for it to finish
+        """
         _debug_('shutdown()', 2)
-        self.condition.acquire()
-        _debug_('checkweather condition.acquired', 2)
-        try:
-            self.condition.notifyAll()
-        finally:
-            self.condition.release()
         self.fetcher.stopping = True
         self.fetcher.join()
 
@@ -155,40 +158,23 @@ class PluginInterface(IdleBarPlugin):
         to cache the date somewhere.
         """
         _debug_('checkweather()', 2)
-        self.condition.acquire()
-        _debug_('checkweather condition.acquired', 2)
         try:
-            try:
-                if os.path.isfile(self.WEATHERCACHE):
-                    cachetime = os.path.getmtime(self.WEATHERCACHE)
-                else:
-                    cachetime = 0
-                # Tell the thread to run once
-                if time.time() - cachetime > config.IDLEBAR_WEATHER_REFRESH:
-                    self.condition.notify()
-                    _debug_('checkweather condition.notified', 2)
-
-                # First time around or when there is no network there may be no weather cache file
-                _debug_('cachetime=%r diff=%s' % (cachetime, cachetime - self.cachetime), 2)
-                if cachetime:
-                    cachefile = open(self.WEATHERCACHE, 'r')
-                    newlist = map(string.rstrip, cachefile.readlines())
-                    temperature, icon = newlist
-                    cachefile.close()
-                    self.cachetime = cachetime
-                    _debug_('checkweather returning %r' % ((temperature, icon),), 2)
-                    return temperature, icon
-                else:
-                    _debug_('checkweather returning %r' % (('?', 'na.png'),), 2)
-                return '?', 'na.png'
-            except Exception, why:
-                _debug_(why, 2)
-        finally:
-            self.condition.release()
-            _debug_('checkweather condition.released', 2)
+            temperature, icon = '?', 'na.png'
+            if os.path.isfile(self.cachefile):
+                cachefd = open(self.cachefile, 'r')
+                newlist = map(string.rstrip, cachefd.readlines())
+                temperature, icon = newlist
+                cachefd.close()
+            return temperature, icon
+        except Exception, why:
+            _debug_(why, DERROR)
 
 
     def calc_positions(self, osd, image_w, image_h, text_w, text_h):
+        """
+        Calculate the position of the image and text
+        @returns: tuple of positions and width
+        """
         if image_w >= text_w:
             image_x = 0
             text_x = ((image_w - text_w) / 2)
@@ -202,6 +188,10 @@ class PluginInterface(IdleBarPlugin):
 
 
     def draw(self, (type, object), x, osd):
+        """
+        Draw the icon and temperature on the idlebar
+        @returns: width of the icon
+        """
         _debug_('draw((type=%r, object=%r), x=%r, osd=%r)' % (type, object, x, osd), 2)
         temp, icon = self.checkweather()
         image_file = os.path.join(config.ICON_DIR, 'weather', icon)
