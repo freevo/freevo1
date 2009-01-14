@@ -327,7 +327,7 @@ def fxdparser(fxd, node):
     item.name    = fxd.getattr(node, 'title')
     item.cmd     = fxd.childcontent(node, 'cmd')
     item.image   = util.getimage(item.cmd)
-    item.log     = fxd.getattr(node, 'log')
+    item.log     = fxd.childcontent(node, 'log')
     if fxd.get_children(node, 'stoposd'):
         item.stoposd = True
     if fxd.get_children(node, 'spawnwm'):
