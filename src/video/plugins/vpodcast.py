@@ -359,6 +359,11 @@ class Podcast:
                     break
         if self.link is None:
             self.link = item.link.encode(self.encoding)
+        if 'links' in item:
+            for link in item['links']:
+                if link['type'].startswith('video'):
+                    self.link = link['href']
+                    break
         return self.link
 
 
