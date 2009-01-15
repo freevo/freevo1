@@ -53,7 +53,7 @@ from event import *
 from config import *
 from gui.AlertBox import AlertBox
 from tv.channels import FreevoChannels
-from kaa.notifier import OneShotTimer
+from kaa import OneShotTimer
 
 class PluginInterface(plugin.Plugin):
     """

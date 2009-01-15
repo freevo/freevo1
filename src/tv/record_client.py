@@ -682,5 +682,5 @@ if __name__ == '__main__':
         print '%r not found' % (function)
         raise SystemExit
 
-    kaa.notifier.OneShotTimer(shutdown, 'bye', time.time()).start(20)
+    kaa.OneShotTimer(shutdown, 'bye', time.time()).start(20)
     kaa.main.run()
