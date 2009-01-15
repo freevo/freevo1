@@ -777,6 +777,7 @@ class OSD:
                         return None
 
         except SystemExit:
+            _debug_('SystemExit re-raised')
             raise
 
         except Exception, why:

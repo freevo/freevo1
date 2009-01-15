@@ -308,7 +308,8 @@ class MainTread:
                         print time.clock() - t1
 
                 except SystemExit:
-                    raise SystemExit
+                    _debug_('SystemExit re-raised')
+                    raise
 
                 except:
                     if config.FREEVO_EVENTHANDLER_SANDBOX:
@@ -340,10 +341,11 @@ def unix_signal_handler(sig, frame):
     """
     Unix signal handler to shut down freevo
     """
-    _debug_('unix_signal_handler(sig=%r, frame=%r)' % (sig, frame), 2)
+    _debug_('unix_signal_handler(sig=%r, frame=%r)' % (sig, frame), 1)
     global _shutting_down
     if _shutting_down:
         return
+    _debug_('SystemExit raised')
     raise SystemExit
 
 
@@ -351,7 +353,7 @@ def signal_handler():
     """
     the signal handler to shut down freevo
     """
-    _debug_('signal_handler()', 2)
+    _debug_('signal_handler()', 1)
     raise Exception
     global _shutting_down
     if _shutting_down:
