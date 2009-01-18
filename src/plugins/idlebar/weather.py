@@ -72,7 +72,7 @@ class WeatherFetcher(Thread):
             refreshtime = time.time() + self.refreshinterval
             _debug_('WeatherFetcher(%r).run' % (self.metarcode,), 1)
             try:
-                rf = pymetar.WeatherFetcher(self.metarcode)
+                rf = pymetar.ReportFetcher(self.metarcode)
                 rp = pymetar.ReportParser()
                 rep = rf.FetchReport()
                 pr = rp.ParseReport(rep)
