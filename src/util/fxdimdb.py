@@ -313,12 +313,12 @@ class FxdImdb:
         self.title = title.next.strip()
 
         #is this a series? series pages a little different
-        if id != episodeid and episodeid is not None:
+        try:
             self.title = "%s - S%sE%02d - %s" % (self.title, season, int(episode), title.find('em').string.strip())
             self.info['title'] = self.title
             y = title.find('em').next.next.string.strip()
             self.info['year'] = y[1:-1]
-        else:
+        except (AttributeError, TypeError):
             self.info['title'] = self.title
             self.info['year'] = title.find('a').string.strip()
 
