@@ -275,6 +275,8 @@ class ToggleButtonGroup(object):
 class MenuModel(WidgetModel):
     """
     Widget that displays a vertical list of selectable options.
+    This class emits the selection_changed signal when the selected button
+    changes.
     @ivar items: List of menu items managed by this menu.
     """
     def __init__(self):
@@ -286,6 +288,7 @@ class MenuModel(WidgetModel):
         self.items_per_page = 0
         self.more_up = False
         self.more_down = False
+        self.signals['selection_changed'] = kaa.Signal()
 
     def handle_event(self, event):
         if event == 'INPUT_ENTER':
@@ -300,6 +303,7 @@ class MenuModel(WidgetModel):
                     self.offset = self.active_item
                     self.__update_page()
                 self.items[self.active_item].active = True
+                self.signals['selection_changed'].emit(self, self.items[self.active_item])
                 self.redraw()
             return True
 
@@ -313,6 +317,7 @@ class MenuModel(WidgetModel):
                     self.__update_page()
 
                 self.items[self.active_item].active = True
+                self.signals['selection_changed'].emit(self, self.items[self.active_item])
                 self.redraw()
             return True
 
@@ -321,16 +326,18 @@ class MenuModel(WidgetModel):
                 self.items[self.active_item].active = False
                 self.active_item = self.offset
                 self.items[self.active_item].active = True
+                self.signals['selection_changed'].emit(self, self.items[self.active_item])
                 self.redraw()
             return True
 
         elif event == 'INPUT_RIGHT':
             if self.active_item != self.offset + self.items_per_page:
                 self.items[self.active_item].active = False
-                self.active_item = self.offset + self.items_per_page
+                self.active_item = self.offset + self.items_per_page - 1
                 if self.active_item >= len(self.items):
                     self.active_item =  len(self.items) - 1
                 self.items[self.active_item].active = True
+                self.signals['selection_changed'].emit(self, self.items[self.active_item])
                 self.redraw()
             return True
 

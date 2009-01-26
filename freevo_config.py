@@ -1509,6 +1509,10 @@ OSD_IDLEBAR_PADDING = 20
 OSD_IDLEBAR_FONT = 'small0'
 OSD_IDLEBAR_CLOCK_FONT = 'clock'
 
+#
+# Amount to dim background when showing a dialog. 0 (None) - 255 (blacked out)
+#
+OSD_DIALOG_BACKGROUND_DIM = 96
 
 # ======================================================================
 # Freevo remote control settings:

@@ -36,6 +36,7 @@ import osd
 import plugin
 import dialog
 from dialog.display import GraphicsDisplay
+import config
 
 class PluginInterface(plugin.Plugin):
     """
@@ -71,7 +72,7 @@ class OSDGraphicsDisplay(GraphicsDisplay):
         # If the dialog handles events then dim the background to show the
         # dialog now has focus.
         if hasattr(self.current_dialog, 'handle_event'):
-            fill_color = (0,0,0,96)
+            fill_color = (0,0,0,config.OSD_DIALOG_BACKGROUND_DIM)
         else:
             fill_color = (0,0,0,0)
         # Only clear the screen if the dialog is different to last time.

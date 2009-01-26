@@ -78,7 +78,7 @@ class Window(GUIObject):
 
     def show(self):
         self.visible = 1
-        self.osd.dialog_layer.fill((0,0,0,96))
+        self.osd.dialog_layer.fill((0,0,0,config.OSD_DIALOG_BACKGROUND_DIM))
         self.draw()
         self.osd.update()
 

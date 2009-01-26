@@ -185,6 +185,7 @@ class PluginInterface(plugin.DaemonPlugin):
             arg = pi.actions()
 
         menuw.pushmenu(DialogMenu(arg, menuw))
+        skin_object.redraw()
 
 
     def show_program_info(self, arg=None, menuw=None):
@@ -398,8 +399,10 @@ class DialogMenu:
             items.append((string, self.handler, (menuw, action)))
         self.dialog = dialogs.MenuDialog('', items, skin='bboptionsmenu')
         self.dialog.signals['hidden'].connect(self.__hidden)
+        self.dialog.menu.signals['selection_changed'].connect(self.__redraw_skin)
         self.menuw = menuw
         self.__do_show = True
+        self.selected = DialogMenuSelectedItem(self)
 
     def eventhandler(self, event):
         return True
@@ -407,6 +410,9 @@ class DialogMenu:
     def __hidden(self, dialog):
         if self.__do_show:
             self.menuw.back_one_menu()
+
+    def __redraw_skin(self, menu, menuitem):
+        skin_object.redraw()
 
     def handler(self, dialog, arg):
         self.__do_show = False
@@ -422,3 +428,20 @@ class DialogMenu:
             self.dialog.show()
         else:
             self.menuw.back_one_menu()
+
+class DialogMenuSelectedItem:
+    def __init__(self, menu):
+        self.menu = menu
+        self.type = None
+
+    def getattr(self, name):
+        if name == 'name':
+            return self.name
+        return None
+
+    @property
+    def name(self):
+        item = self.menu.dialog.menu.get_active_item()
+        if item:
+            return item.text
+        return None

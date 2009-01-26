@@ -559,6 +559,7 @@ class MenuDialog(WidgetDialog):
                 menu.add(menu_item)
         super(MenuDialog, self).__init__(skin, {'menu':menu}, {'title':title})
         menu.set_active(True)
+        self.menu = menu
         self.exit_hides_dialog = True
 
     def update(self, title=None, items=None):
