@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-13 16:50+0100\n"
+"POT-Creation-Date: 2009-01-26 17:54+0100\n"
 "PO-Revision-Date: 2008-10-13 10:21+0100\n"
 "Last-Translator: Andrea Carpani <online@carpani.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,76 +48,76 @@ msgstr "Modello"
 msgid "Software"
 msgstr "Software"
 
-#: ../freevo_config.py:2110 www/htdocs/index.rpy:48
+#: ../freevo_config.py:2114 www/htdocs/index.rpy:48
 msgid "Home"
 msgstr "Home"
 
-#: ../freevo_config.py:2111 www/htdocs/guide.rpy:148
+#: ../freevo_config.py:2115 www/htdocs/guide.rpy:148
 #: www/htdocs/guidechannel.rpy:201 tv/tvmenu.py:99
 msgid "TV Guide"
 msgstr "Guida TV"
 
-#: ../freevo_config.py:2111
+#: ../freevo_config.py:2115
 msgid "View TV Listings"
 msgstr "Vedi guida TV"
 
-#: ../freevo_config.py:2112 www/htdocs/record.rpy:60 www/htdocs/record.rpy:95
+#: ../freevo_config.py:2116 www/htdocs/record.rpy:60 www/htdocs/record.rpy:95
 #: tv/plugins/scheduled_recordings.py:44 tv/plugins/scheduled_recordings.py:63
 msgid "Scheduled Recordings"
 msgstr "Registrazioni Programmate"
 
-#: ../freevo_config.py:2112
+#: ../freevo_config.py:2116
 msgid "View Scheduled Recordings"
 msgstr "Visualizza le Registrazioni Programmate"
 
-#: ../freevo_config.py:2113 www/htdocs/favorites.rpy:56
+#: ../freevo_config.py:2117 www/htdocs/favorites.rpy:56
 #: www/htdocs/favorites.rpy:101
 msgid "Favorites"
 msgstr "Preferiti"
 
-#: ../freevo_config.py:2113 tv/plugins/view_favorites.py:45
+#: ../freevo_config.py:2117 tv/plugins/view_favorites.py:45
 #: tv/plugins/view_favorites.py:52 tv/plugins/view_favorites.py:66
 msgid "View Favorites"
 msgstr "Visualizza i preferiti"
 
-#: ../freevo_config.py:2114 www/htdocs/library.rpy:255
+#: ../freevo_config.py:2118 www/htdocs/library.rpy:255
 #: www/htdocs/library.rpy:256
 msgid "Media Library"
 msgstr "Libreria di Media"
 
-#: ../freevo_config.py:2114
+#: ../freevo_config.py:2118
 msgid "View Media Library"
 msgstr "Vedi catalogo media"
 
-#: ../freevo_config.py:2115 www/htdocs/manualrecord.rpy:215
+#: ../freevo_config.py:2119 www/htdocs/manualrecord.rpy:215
 #: tv/plugins/livepause/record.py:160
 msgid "Manual Recording"
 msgstr "Registrazione Manuale"
 
-#: ../freevo_config.py:2115
+#: ../freevo_config.py:2119
 msgid "Schedule a Manual Recording"
 msgstr "Aggiungi una Registrazione Programmata"
 
-#: ../freevo_config.py:2116 www/htdocs/search.rpy:54 www/htdocs/search.rpy:72
+#: ../freevo_config.py:2120 www/htdocs/search.rpy:54 www/htdocs/search.rpy:72
 #: www/web_types.py:369 www/web_types.py:383 video/plugins/youtube.py:205
 #: tv/plugins/search_programs.py:86
 msgid "Search"
 msgstr "Cerca"
 
-#: ../freevo_config.py:2116
+#: ../freevo_config.py:2120
 msgid "Advanced Search Page"
 msgstr "Pagina di ricerca avanzata"
 
-#: ../freevo_config.py:2117
+#: ../freevo_config.py:2121
 msgid "Help"
 msgstr "Aiuto"
 
-#: ../freevo_config.py:2117
+#: ../freevo_config.py:2121
 msgid "View Online Help and Documentation"
 msgstr "Vislualizza l'Help Online e la Documentatione"
 
-#: gui/ConfirmBox.py:75 gui/AlertBox.py:65 plugins/cd_burn.py:91
-#: plugins/command.py:148
+#: gui/ConfirmBox.py:75 gui/AlertBox.py:65 plugins/cd_burn.py:95
+#: plugins/command.py:165
 msgid "OK"
 msgstr "OK"
 
@@ -169,7 +169,7 @@ msgstr "Modifica i preferiti"
 #: www/htdocs/guide.rpy:152 www/htdocs/wap_rec.rpy:103
 #: www/htdocs/favorites.rpy:57 www/htdocs/guidechannel.rpy:207
 #: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
-#: www/htdocs/search.rpy:55 skins/main/info_area.py:133 config.py:460
+#: www/htdocs/search.rpy:55 skins/main/info_area.py:133 config.py:466
 #: audio/plugins/xine.py:55 plugins/lcd.py:52 plugins/vfd.py:52
 #: plugins/freevused.py:141 plugins/speak.py:34
 #: tv/plugins/dvbstreamer/live_pause.py:88
@@ -235,47 +235,47 @@ msgid "ANY CHANNEL"
 msgstr "OGNI CANALE"
 
 #: www/htdocs/edit_favorite.rpy:160 tv/edit_favorite.py:140
-#: tv/favoriteitem.py:76 tv/favoriteitem.py:200
+#: tv/favoriteitem.py:76 tv/favoriteitem.py:199
 msgid "ANY DAY"
 msgstr "OGNI GIORNO"
 
 #: www/htdocs/edit_favorite.rpy:161 tv/edit_favorite.py:144
-#: tv/favoriteitem.py:69 tv/record_types.py:342
+#: tv/favoriteitem.py:69 tv/record_types.py:341
 msgid "Mon"
 msgstr "Lun"
 
 #: www/htdocs/edit_favorite.rpy:162 tv/edit_favorite.py:144
-#: tv/favoriteitem.py:69 tv/record_types.py:342
+#: tv/favoriteitem.py:69 tv/record_types.py:341
 msgid "Tue"
 msgstr "Mar"
 
 #: www/htdocs/edit_favorite.rpy:163 tv/edit_favorite.py:144
-#: tv/favoriteitem.py:69 tv/record_types.py:342
+#: tv/favoriteitem.py:69 tv/record_types.py:341
 msgid "Wed"
 msgstr "Mer"
 
 #: www/htdocs/edit_favorite.rpy:164 tv/edit_favorite.py:144
-#: tv/favoriteitem.py:69 tv/record_types.py:342
+#: tv/favoriteitem.py:69 tv/record_types.py:341
 msgid "Thu"
 msgstr "Gio"
 
 #: www/htdocs/edit_favorite.rpy:165 tv/edit_favorite.py:144
-#: tv/favoriteitem.py:69 tv/record_types.py:342
+#: tv/favoriteitem.py:69 tv/record_types.py:341
 msgid "Fri"
 msgstr "Ven"
 
 #: www/htdocs/edit_favorite.rpy:166 tv/edit_favorite.py:144
-#: tv/favoriteitem.py:69 tv/record_types.py:342
+#: tv/favoriteitem.py:69 tv/record_types.py:341
 msgid "Sat"
 msgstr "Sab"
 
 #: www/htdocs/edit_favorite.rpy:167 tv/edit_favorite.py:144
-#: tv/favoriteitem.py:69 tv/record_types.py:342
+#: tv/favoriteitem.py:69 tv/record_types.py:341
 msgid "Sun"
 msgstr "Dom"
 
 #: www/htdocs/edit_favorite.rpy:173 tv/edit_favorite.py:159
-#: tv/favoriteitem.py:80 tv/favoriteitem.py:219
+#: tv/favoriteitem.py:80 tv/favoriteitem.py:218
 msgid "ANY TIME"
 msgstr "OGNI ORA"
 
@@ -620,7 +620,7 @@ msgstr "Ora"
 msgid "View"
 msgstr "Visualizza"
 
-#: www/htdocs/guide.rpy:204 skins/main/tvlisting_area.py:337 tv/tvguide.py:54
+#: www/htdocs/guide.rpy:204 skins/main/tvlisting_area.py:337 tv/tvguide.py:55
 msgid "This channel has no data loaded"
 msgstr "Questo canale non ha dati"
 
@@ -934,7 +934,6 @@ msgid "%s: Muted"
 msgstr "Silenzioso"
 
 #: dialog/plugins/tiny_xosd_display.py:85 dialog/dialogs.py:228
-#: tv/plugins/livepause/display/dialogs/__init__.py:107
 msgid "Volume"
 msgstr "Volume"
 
@@ -957,19 +956,19 @@ msgstr "Surround: %s%%"
 msgid "LFE"
 msgstr ""
 
-#: config.py:457
+#: config.py:463
 msgid "CRITICAL"
 msgstr "CRITICAL"
 
-#: config.py:463
+#: config.py:469
 msgid "WARNING"
 msgstr "ATTENZIONE"
 
-#: config.py:466
+#: config.py:472
 msgid "INFO"
 msgstr "INFO"
 
-#: config.py:469
+#: config.py:475
 msgid "DEBUG"
 msgstr "DEBUG"
 
@@ -1018,35 +1017,35 @@ msgstr ""
 "%s\n"
 "non trovato!"
 
-#: audio/plugins/apodcast.py:96
+#: audio/plugins/apodcast.py:101
 msgid "Buffering podcast..."
 msgstr "Precaricamento del podcast in corso..."
 
-#: audio/plugins/apodcast.py:110
+#: audio/plugins/apodcast.py:115
 msgid "Listen Audio Podcast"
 msgstr "Ascolta un Podcast Audio"
 
-#: audio/plugins/apodcast.py:149
+#: audio/plugins/apodcast.py:154
 msgid "Audio Podcast"
 msgstr "Audio Podcast"
 
-#: audio/plugins/apodcast.py:160
+#: audio/plugins/apodcast.py:165
 msgid "Fetching podcast..."
 msgstr "Scaricamento podcast in corso..."
 
-#: audio/plugins/apodcast.py:189 video/plugins/vpodcast.py:256
+#: audio/plugins/apodcast.py:194 video/plugins/vpodcast.py:257
 msgid "No Podcast locations found"
 msgstr "Nessun indirizzo podcast trovato"
 
-#: audio/plugins/apodcast.py:190 audio/plugins/apodcast.py:218
+#: audio/plugins/apodcast.py:195 audio/plugins/apodcast.py:223
 msgid "AUDIO PODCAST"
 msgstr "AUDIO PODCAST"
 
-#: audio/plugins/apodcast.py:197
+#: audio/plugins/apodcast.py:202
 msgid "Fetching podcasts..."
 msgstr "Scaricamento podcast in corso..."
 
-#: audio/plugins/apodcast.py:213
+#: audio/plugins/apodcast.py:218
 msgid "Set APODCAST_DIR in local_conf.py"
 msgstr "Per favore aggiorna APODCAST_DIR in local_conf.py"
 
@@ -1070,23 +1069,23 @@ msgstr "canali XmM"
 msgid "'fbxine' not found, 'xine' audio plugin deactivated"
 msgstr "'fbxine' non trovato, plugin 'xine' disattivato"
 
-#: audio/plugins/cdbackup.py:186
+#: audio/plugins/cdbackup.py:190
 msgid "Show CD ripping status"
 msgstr "Mostra lo stato dell'estrazione CD"
 
-#: audio/plugins/cdbackup.py:187
+#: audio/plugins/cdbackup.py:191
 msgid "Stop CD ripping"
 msgstr "Ferma l'estrazione CD"
 
-#: audio/plugins/cdbackup.py:191
+#: audio/plugins/cdbackup.py:195
 msgid "Rip the CD to the hard drive"
 msgstr "Estrai il CD sul disco fisso"
 
-#: audio/plugins/cdbackup.py:193
+#: audio/plugins/cdbackup.py:197
 msgid "Item is not an Audio CD"
 msgstr "L'elemento non e' un CD audio"
 
-#: audio/plugins/cdbackup.py:207
+#: audio/plugins/cdbackup.py:211
 #, python-format
 msgid ""
 "Ripping in progress\n"
@@ -1095,78 +1094,78 @@ msgstr ""
 "Estrazione in corso\n"
 "Traccia %d di %d"
 
-#: audio/plugins/cdbackup.py:227
+#: audio/plugins/cdbackup.py:231
 msgid "Backup CD to hard drive in mp3 format"
 msgstr "Archivia il CD sul disco fisso in formato mp3"
 
-#: audio/plugins/cdbackup.py:229
+#: audio/plugins/cdbackup.py:233
 msgid "Backup CD to hard drive in Ogg format"
 msgstr "Archivia il CD sul disco fisso in formato Ogg"
 
-#: audio/plugins/cdbackup.py:231
+#: audio/plugins/cdbackup.py:235
 msgid "Backup CD to hard drive in FLAC format"
 msgstr "Archivia il CD sul disco fisso in formato FLAC"
 
-#: audio/plugins/cdbackup.py:232
+#: audio/plugins/cdbackup.py:236
 msgid "Backup CD to hard drive in wav format"
 msgstr "Archivia il CD sul disco fisso in formato wav"
 
-#: audio/plugins/cdbackup.py:234
+#: audio/plugins/cdbackup.py:238
 msgid "CD Backup"
 msgstr "Archiviazione CD"
 
-#: audio/plugins/cdbackup.py:247
+#: audio/plugins/cdbackup.py:251
 msgid "Ripping started"
 msgstr "Estrazione iniziata"
 
-#: audio/plugins/cdbackup.py:336
+#: audio/plugins/cdbackup.py:342
 #, python-format
 msgid "Directory %s already exists"
 msgstr "La cartella sul disco %s esiste già!"
 
-#: audio/plugins/cdbackup.py:339
+#: audio/plugins/cdbackup.py:345
 #, python-format
 msgid "Cannot rip to \"%s\"! (%s)"
 msgstr "Non posso estrarre verso \"%s\"! (%s)"
 
-#: audio/plugins/cdbackup.py:355 audio/plugins/cdbackup.py:420
-#: audio/plugins/cdbackup.py:479
+#: audio/plugins/cdbackup.py:361 audio/plugins/cdbackup.py:426
+#: audio/plugins/cdbackup.py:485
 msgid "Ripping aborted"
 msgstr "Estrazione interrotta"
 
-#: audio/plugins/cdbackup.py:492
+#: audio/plugins/cdbackup.py:498
 msgid "Ripping complete"
 msgstr "Estrazione conclusa"
 
-#: audio/plugins/cdbackup.py:500
+#: audio/plugins/cdbackup.py:506
 msgid "No CD medadata available"
 msgstr "Nessun metadato CD disponibile"
 
-#: audio/plugins/cdbackup.py:501
+#: audio/plugins/cdbackup.py:507
 msgid "CD info not found!"
 msgstr "Nessuna informazione CD trovata!"
 
-#: audio/plugins/cdbackup.py:506
+#: audio/plugins/cdbackup.py:512
 msgid "Unknown Artist"
 msgstr "Artista sconosciuto"
 
-#: audio/plugins/cdbackup.py:506 audio/plugins/cdbackup.py:507
+#: audio/plugins/cdbackup.py:512 audio/plugins/cdbackup.py:513
 msgid "RENAME"
 msgstr "RINOMINA"
 
-#: audio/plugins/cdbackup.py:507 audio/audiodiskitem.py:54
+#: audio/plugins/cdbackup.py:513 audio/audiodiskitem.py:54
 msgid "Unknown CD Album"
 msgstr "CD Sconosciuto"
 
-#: audio/plugins/cdbackup.py:508
+#: audio/plugins/cdbackup.py:514
 msgid "Other"
 msgstr "Altro"
 
-#: audio/plugins/cdbackup.py:515
+#: audio/plugins/cdbackup.py:521
 msgid "No CDDB data available to mmpython"
 msgstr "Nessuna informazione CDDB disponibile per mmpython"
 
-#: audio/plugins/cdbackup.py:516
+#: audio/plugins/cdbackup.py:522
 msgid ""
 "CD info not found!\n"
 "Must manually rename files\n"
@@ -1176,7 +1175,7 @@ msgstr ""
 "Devi rinominare i files a mano\n"
 "quando l'estrazione sara' completata"
 
-#: audio/plugins/cdbackup.py:579
+#: audio/plugins/cdbackup.py:585
 msgid "Problem trying to call:"
 msgstr "Problema sulla chiamata a:"
 
@@ -1329,12 +1328,12 @@ msgstr "Non posso riprodurre - registrazione in corso."
 msgid "Show player"
 msgstr "Mostra lettore"
 
-#: audio/plugins/lastfm2.py:221
+#: audio/plugins/lastfm2.py:220
 #, fuzzy
 msgid "Listen to LastFM Station"
 msgstr "Ascolta una stazione radio XM"
 
-#: audio/plugins/lastfm2.py:544
+#: audio/plugins/lastfm2.py:550
 #, fuzzy
 msgid "Tuning radio station, please wait..."
 msgstr "Avvio di Freevo-%s in corso..."
@@ -1375,7 +1374,7 @@ msgstr "Opzioni"
 msgid "Browse disc"
 msgstr "Sfoglia disco"
 
-#: audio/audiodiskitem.py:112 directory.py:744
+#: audio/audiodiskitem.py:112 directory.py:745
 msgid "Random playlist"
 msgstr "Playlist casuale"
 
@@ -1432,7 +1431,7 @@ msgstr "Scaricamento miniatura in corso per l'immagine \""
 msgid "View Image"
 msgstr "Vedi Immagine"
 
-#: image/plugins/gphoto.py:129 directory.py:465
+#: image/plugins/gphoto.py:129 directory.py:466
 #: tv/plugins/recordings_manager.py:176
 msgid "Browse directory"
 msgstr "Sfoglia cartella"
@@ -1479,27 +1478,27 @@ msgstr ""
 "La directory %s deve avere i permessi di scrittura, lettura ed esecuzione "
 "per l'utente che esegue freevo."
 
-#: osd.py:395
+#: osd.py:417
 msgid "z = Toggle Fullscreen"
 msgstr "z = Passa a schermo intero"
 
-#: osd.py:396
+#: osd.py:418
 msgid "Arrow Keys = Move"
 msgstr "Frecce cursore = Sposta"
 
-#: osd.py:397
+#: osd.py:419
 msgid "Spacebar = Select"
 msgstr "Spazio = Seleziona"
 
-#: osd.py:398
+#: osd.py:420
 msgid "Escape = Stop/Prev. Menu"
 msgstr "Esc = Stop/Menu prec."
 
-#: osd.py:399
+#: osd.py:421
 msgid "h = Help"
 msgstr "h = Aiuto"
 
-#: games/game.py:84
+#: games/game.py:83
 #, python-format
 msgid "File \"%s\" not found!"
 msgstr "File \"%s\" non trovato!"
@@ -1580,17 +1579,17 @@ msgstr "Album - "
 msgid "Status - "
 msgstr "Stato -"
 
-#: plugins/rom_drives.py:266
+#: plugins/rom_drives.py:272
 #, python-format
 msgid "Drive %s (no disc)"
 msgstr "Lettore %s (nessun disco)"
 
-#: plugins/rom_drives.py:515
+#: plugins/rom_drives.py:521
 #, python-format
 msgid "Ejecting disc in drive %s"
 msgstr "Espulsione disco nel lettore %s"
 
-#: plugins/rom_drives.py:522
+#: plugins/rom_drives.py:528
 #, python-format
 msgid "Reading disc in drive %s"
 msgstr "Lettura disco nel lettore %s"
@@ -1604,9 +1603,7 @@ msgstr "Altre opzioni"
 msgid "Full Description"
 msgstr "Descrizione completa"
 
-#: plugins/buttonbar.py:134
-#: tv/plugins/livepause/display/dialogs/__init__.py:174
-#: tv/plugins/livepause/display/graphics.py:122
+#: plugins/buttonbar.py:134 tv/plugins/livepause/display/graphics.py:122
 msgid "Now"
 msgstr "Adesso"
 
@@ -1619,15 +1616,15 @@ msgstr "ATTENZIONE:"
 msgid "\"%s\" is not a valid argument for the button bar. "
 msgstr "\"%s\" non  è un argomento valido per la barra dei pulsanti. "
 
-#: plugins/buttonbar.py:387
+#: plugins/buttonbar.py:388
 msgid "More Options"
 msgstr "Altre opzioni"
 
-#: plugins/idlebar/transcode.py:146 plugins/idlebar/encoding.py:125
+#: plugins/idlebar/transcode.py:146 plugins/idlebar/encoding.py:116
 msgid "encoding server not running"
 msgstr "Il Server di Registrazione non è raggiungible"
 
-#: plugins/idlebar/transcode.py:153 plugins/idlebar/encoding.py:131
+#: plugins/idlebar/transcode.py:153 plugins/idlebar/encoding.py:122
 msgid "encoding server has no jobs"
 msgstr "Il Server di Registrazione non ha lavoro"
 
@@ -1735,7 +1732,7 @@ msgstr ""
 msgid "Device Options"
 msgstr "Opzioni del device"
 
-#: plugins/home_automation.py:113 plugins/command.py:220
+#: plugins/home_automation.py:113 plugins/command.py:270
 msgid "Run Command"
 msgstr "Esegui comando"
 
@@ -1815,108 +1812,103 @@ msgstr ""
 "Cancellare l'immagine di\n"
 " '%s'?"
 
-#: plugins/cd_burn.py:152
+#: plugins/cd_burn.py:171
 msgid "Not Yet implemented :)"
 msgstr "Questa featuture non è stata ancora implementata :)"
 
-#: plugins/cd_burn.py:161
+#: plugins/cd_burn.py:182
 #, python-format
 msgid "Cannot find %s (%s). "
 msgstr "Impossibile trovare %s (%s)."
 
-#: plugins/cd_burn.py:179
+#: plugins/cd_burn.py:200
 #, python-format
 msgid "Start burning %s audio files?"
 msgstr "Avvio masterizzazione di %s file audio?"
 
-#: plugins/cd_burn.py:209
+#: plugins/cd_burn.py:232
 msgid "Insert media then click OK"
 msgstr "Inserisci un supporto e premi 'OK'"
 
-#: plugins/cd_burn.py:234
+#: plugins/cd_burn.py:259
 #, python-format
 msgid "Start burning %s ?"
 msgstr "Avvio la masterizzazione di %s ?"
 
-#: plugins/cd_burn.py:244
+#: plugins/cd_burn.py:269
 #, python-format
 msgid "Start burning %s entries? ( %d Mb )"
 msgstr "Avvio la masterizzazione di %s elementi? (%d Mb)"
 
-#: plugins/cd_burn.py:510
+#: plugins/cd_burn.py:543
 #, python-format
 msgid "Burning status: %s"
 msgstr "Stato della masterizzazione. %s"
 
-#: plugins/cd_burn.py:656
+#: plugins/cd_burn.py:687
 #, python-format
 msgid "Error : Could not convert %s"
 msgstr "Errore: non è stato possibile convertire %s"
 
-#: plugins/cd_burn.py:661
-#, python-format
-msgid "/tmp/burnlist/%s"
-msgstr ""
-
-#: plugins/cd_burn.py:763
+#: plugins/cd_burn.py:796
 msgid "Interrupting burning process..."
 msgstr "Interruzione delle operazioni di masterizzazione in corso..."
 
-#: plugins/cd_burn.py:773
+#: plugins/cd_burn.py:806
 msgid "Backup interrupted"
 msgstr "Backup interrotto"
 
-#: plugins/cd_burn.py:780
+#: plugins/cd_burn.py:813
 #, python-format
 msgid "Item type is %s"
 msgstr "L'oggetto è di tipo %s"
 
-#: plugins/cd_burn.py:788
+#: plugins/cd_burn.py:821
 #, python-format
 msgid "Should show the menu? %i"
 msgstr "Visualizzazione del menu? %i"
 
-#: plugins/cd_burn.py:791
+#: plugins/cd_burn.py:824
 msgid "Burn CD"
 msgstr "Masterizza CD"
 
-#: plugins/cd_burn.py:802
+#: plugins/cd_burn.py:837
 msgid "CD Burn Menu"
 msgstr "Menu masterizzazione CD"
 
-#: plugins/cd_burn.py:827
+#: plugins/cd_burn.py:864
 msgid "Copy dir to CD"
 msgstr "Copia la cartella su CD"
 
-#: plugins/cd_burn.py:829
+#: plugins/cd_burn.py:866
 msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
 msgstr "Masterizza i file audio (mp3, wav e ogg) come CD audio"
 
-#: plugins/cd_burn.py:841
+#: plugins/cd_burn.py:878
 #, python-format
 msgid "Burn audio playlist to CD, %d files"
 msgstr "Masterizza la playlist audio CD, %d file"
 
-#: plugins/cd_burn.py:853
+#: plugins/cd_burn.py:890
 msgid "Copy this file to CD"
 msgstr "Copia questo file su CD"
 
-#: plugins/cd_burn.py:861
+#: plugins/cd_burn.py:898
 #, python-format
 msgid "Copy %s to CD"
 msgstr "Copia %s su CD"
 
-#: plugins/cd_burn.py:875
+#: plugins/cd_burn.py:912
 #, python-format
 msgid "Copy %s, and related, to CD"
 msgstr "Copia %s e i files asscociati su CD"
 
-#: plugins/cd_burn.py:889
+#: plugins/cd_burn.py:926
 #, python-format
 msgid "Copy %s, and related, file to CD"
 msgstr "Copia %s e i files asscociati su CD"
 
-#: plugins/cd_burn.py:903
+#: plugins/cd_burn.py:940
 msgid "Burn as DVD-VIDEO disc"
 msgstr "Masterizza come disco DVD-VIDEO"
 
@@ -1953,7 +1945,7 @@ msgstr "Siti con notizie"
 msgid "No Headlines Sites found"
 msgstr "Nessun sito con notizie trovato"
 
-#: plugins/shutdown.py:65 plugins/autoshutdown.py:609 main.py:327
+#: plugins/shutdown.py:65 plugins/autoshutdown.py:609 main.py:342
 msgid "shutting down..."
 msgstr "chiusura in corso..."
 
@@ -1973,10 +1965,10 @@ msgstr "Riavvia il sistema"
 msgid "Do you really want to shut down Freevo?"
 msgstr "Vuoi veramente spegnere freevo?"
 
-#: plugins/shutdown.py:165 plugins/shutdown.py:177 main.py:328
+#: plugins/shutdown.py:165 plugins/shutdown.py:177 main.py:343
 #: share/skins/main/crystal.fxd:17 share/skins/main/dark.fxd:25
 #: share/skins/main/atlantice.fxd:725 share/skins/main/Tux'n Tosh TV.fxd:25
-#: share/skins/main/bluestar.fxd:16 share/skins/main/Panorama.fxd:474
+#: share/skins/main/bluestar.fxd:16 share/skins/main/Panorama.fxd:430
 #: share/skins/main/rain.fxd:17 share/skins/main/basic.fxd:25
 #: share/skins/main/mediaportal.fxd:447
 msgid "Shutdown"
@@ -2043,7 +2035,7 @@ msgid "Year"
 msgstr "Anno"
 
 #: plugins/lcd.py:79 plugins/vfd.py:95 share/skins/main/atlantice.fxd:611
-#: share/skins/main/Panorama.fxd:360 share/skins/main/blurr.fxd:339
+#: share/skins/main/Panorama.fxd:330 share/skins/main/blurr.fxd:339
 #: share/skins/main/info.fxd:402 share/skins/main/geexbox.fxd:413
 #: share/skins/main/mediaportal.fxd:331
 msgid "Tracks"
@@ -2319,6 +2311,983 @@ msgstr "Max"
 msgid "Error encountered while trying to download weather map"
 msgstr "Errore durante lo scaricamento della mappa delle previsioni"
 
+#: plugins/oneclick.py:1087
+msgid "Mostly Cloudy"
+msgstr "Molto nuvoloso"
+
+#: plugins/oneclick.py:1088
+msgid "Partly Cloudy"
+msgstr "Parzialmente nuvoloso"
+
+#: plugins/oneclick.py:1089
+msgid "Light Rain"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1090
+msgid "Showers"
+msgstr "Mostra"
+
+#: plugins/oneclick.py:1091
+msgid "Rain"
+msgstr "Pioggia"
+
+#: plugins/oneclick.py:1092
+msgid "Fog"
+msgstr "Nebbia"
+
+#: plugins/oneclick.py:1093
+msgid "Few Showers"
+msgstr "Alcuni temporali"
+
+#: plugins/oneclick.py:1094
+msgid "Mostly Sunny"
+msgstr "Soleggiato"
+
+#: plugins/oneclick.py:1095
+msgid "Sunny"
+msgstr "Sole"
+
+#: plugins/oneclick.py:1096
+msgid "Scattered Flurries"
+msgstr "Nevicate isolate"
+
+#: plugins/oneclick.py:1097
+msgid "Isolated T-Storms"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1098
+msgid "Scattered Thunderstorms"
+msgstr "Temporali diffusi"
+
+#: plugins/oneclick.py:1099
+msgid "Snow Showers"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1100
+#, fuzzy
+msgid "Few Snow Showers"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1101
+#, fuzzy
+msgid "Flurries"
+msgstr "Nevicate isolate"
+
+#: plugins/oneclick.py:1102
+#, fuzzy
+msgid "Thunder"
+msgstr "Mar"
+
+#: plugins/oneclick.py:1103
+#, fuzzy
+msgid "Heavy Snow"
+msgstr "Pioggia"
+
+#: plugins/oneclick.py:1104
+#, fuzzy
+msgid "Drizzle"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1105
+#, fuzzy
+msgid "Sct Flurries"
+msgstr "Nevicate isolate"
+
+#: plugins/oneclick.py:1106
+#, fuzzy
+msgid "Sct Strong Storms"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1107
+#, fuzzy
+msgid "Thunderstorms"
+msgstr "Temporali diffusi"
+
+#: plugins/oneclick.py:1108
+#, fuzzy
+msgid "Iso T-Storms"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1109
+#, fuzzy
+msgid "Sct T-Storms"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1110
+#, fuzzy
+msgid "Sct Snow Showers"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1111
+#, fuzzy
+msgid "to"
+msgstr "top"
+
+#: plugins/oneclick.py:1112
+msgid "Ice"
+msgstr ""
+
+#: plugins/oneclick.py:1113
+#, fuzzy
+msgid "Light Snow"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1114
+#, fuzzy
+msgid "Wintry Mix"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1115
+#, fuzzy
+msgid "Hvy Rain"
+msgstr "Pioggia"
+
+#: plugins/oneclick.py:1116
+#, fuzzy
+msgid "Freezing Rain"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1117
+#, fuzzy
+msgid "T-Storms"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1118
+#, fuzzy
+msgid "Heavy Rain"
+msgstr "Pioggia"
+
+#: plugins/oneclick.py:1119
+#, fuzzy
+msgid "Light Wintry Mix"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1120
+#, fuzzy
+msgid "Snow Shower"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1121
+#, fuzzy
+msgid "Strong Storms"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1122
+#, fuzzy
+msgid "Light Rain Shower"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1123
+#, fuzzy
+msgid "Light Rain with Thunder"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1124
+#, fuzzy
+msgid "Light Drizzle"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1125
+msgid "Mist"
+msgstr "Artista"
+
+#: plugins/oneclick.py:1126
+msgid "Smoke"
+msgstr ""
+
+#: plugins/oneclick.py:1127
+#, fuzzy
+msgid "Haze"
+msgstr "Hz"
+
+#: plugins/oneclick.py:1128
+#, fuzzy
+msgid "Light Snow Shower"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1129
+msgid "Clear"
+msgstr "Anno"
+
+#: plugins/oneclick.py:1130
+msgid "A Few Clouds"
+msgstr ""
+
+#: plugins/oneclick.py:1131
+#, fuzzy
+msgid "Fair"
+msgstr "Filtri"
+
+#: plugins/oneclick.py:1132
+#, python-format
+msgid "Last updated: %s"
+msgstr ""
+
+#: plugins/oneclick.py:1133
+msgid "Unlimited"
+msgstr ""
+
+#: plugins/oneclick.py:1134
+#, python-format
+msgid "%s (day: %s)"
+msgstr ""
+
+#: plugins/oneclick.py:1135
+#, python-format
+msgid "%s (type: %s)"
+msgstr ""
+
+#: plugins/oneclick.py:1136
+#, python-format
+msgid "Today, a high of %s degrees"
+msgstr ""
+
+#: plugins/oneclick.py:1137
+#, python-format
+msgid "and a low of %s degrees."
+msgstr ""
+
+#: plugins/oneclick.py:1138
+msgid "Currently, there is a humidity of"
+msgstr ""
+
+#: plugins/oneclick.py:1139
+msgid "the winds are calm"
+msgstr ""
+
+#: plugins/oneclick.py:1140
+msgid "Visibility will be unlimited today"
+msgstr ""
+
+#: plugins/oneclick.py:1141
+msgid "There will be a visibility of"
+msgstr ""
+
+#: plugins/oneclick.py:1142
+#, fuzzy
+msgid "Error encountered while trying to download Radar map"
+msgstr "Errore durante lo scaricamento della mappa delle previsioni"
+
+#: plugins/oneclick.py:1143
+msgid "Display program"
+msgstr "Visualizza i programmi"
+
+#: plugins/oneclick.py:1144
+msgid "Scheduling Failed"
+msgstr "Programmazione Fallita"
+
+#: plugins/oneclick.py:1145
+#, python-format
+msgid "getFavorites failed: %s"
+msgstr "getFavorites fallisce: %s"
+
+#: plugins/oneclick.py:1146
+msgid "Display favorite"
+msgstr "Visualizza i favoriti"
+
+#: plugins/oneclick.py:1147
+msgid "Modify duplicate flag"
+msgstr "Modifica il flag \"duplicati\""
+
+#: plugins/oneclick.py:1148
+msgid "Modify episodes flag"
+msgstr "Modifica flag \"episodi\""
+
+#: plugins/oneclick.py:1149
+msgid "Modify Duplicate Flag"
+msgstr "Modifica il flag \"duplicati\""
+
+#: plugins/oneclick.py:1150
+msgid "Save Failed, favorite was lost"
+msgstr "Salvataggio fallito, è stato perso il favorito"
+
+#: plugins/oneclick.py:1151
+msgid "Save Failed"
+msgstr "Salvataggio Fallito"
+
+#: plugins/oneclick.py:1152
+#, fuzzy
+msgid "Currently recording"
+msgstr "Immagine corrente"
+
+#: plugins/oneclick.py:1153
+#, fuzzy
+msgid "Next recordings"
+msgstr "Non sono riuscito a prendere le registrazioni"
+
+#: plugins/oneclick.py:1154
+#, fuzzy
+msgid "Recordserver not found"
+msgstr "Il Server di Registrazione non è raggiungible"
+
+#: plugins/oneclick.py:1155
+#, fuzzy
+msgid "Clear / Wind"
+msgstr "Chiudi la Finestra"
+
+#: plugins/oneclick.py:1156
+msgid "Clouds Early / Clearing Late"
+msgstr ""
+
+#: plugins/oneclick.py:1157
+msgid "Cloudy"
+msgstr "Nuovoloso"
+
+#: plugins/oneclick.py:1158
+#, fuzzy
+msgid "Cloudy / Wind"
+msgstr "Nuvoloso/ventoso"
+
+#: plugins/oneclick.py:1159
+#, fuzzy
+msgid "Cloudy and Windy"
+msgstr "Nuvoloso/ventoso"
+
+#: plugins/oneclick.py:1160
+#, fuzzy
+msgid "Drifting Snow"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1161
+msgid "Drizzle / Fog"
+msgstr ""
+
+#: plugins/oneclick.py:1162
+msgid "Drizzle Late"
+msgstr ""
+
+#: plugins/oneclick.py:1163
+msgid "E"
+msgstr ""
+
+#: plugins/oneclick.py:1164
+#, fuzzy
+msgid "ENE"
+msgstr "RINOMINA"
+
+#: plugins/oneclick.py:1165
+#, fuzzy
+msgid "ENE_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1166
+#, fuzzy
+msgid "ESE"
+msgstr "RINOMINA"
+
+#: plugins/oneclick.py:1167
+#, fuzzy
+msgid "ESE_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1168
+#, fuzzy
+msgid "E_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1169
+msgid "Extreme"
+msgstr ""
+
+#: plugins/oneclick.py:1170
+#, fuzzy
+msgid "Few Showers / Wind"
+msgstr "Alcuni temporali"
+
+#: plugins/oneclick.py:1171
+#, fuzzy
+msgid "Few Snow"
+msgstr "Alcuni temporali"
+
+#: plugins/oneclick.py:1172
+#, fuzzy
+msgid "Few Snow Showers / Wind"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1173
+msgid "First Quarter"
+msgstr ""
+
+#: plugins/oneclick.py:1174
+msgid "Fog Early / Clouds Late"
+msgstr ""
+
+#: plugins/oneclick.py:1175
+#, fuzzy
+msgid "Fog Late"
+msgstr "Mostra"
+
+#: plugins/oneclick.py:1176
+#, fuzzy
+msgid "Foggy"
+msgstr "Nebbia"
+
+#: plugins/oneclick.py:1177
+#, fuzzy
+msgid "Freezing Drizzle"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1178
+msgid "Full"
+msgstr ""
+
+#: plugins/oneclick.py:1179
+#, fuzzy
+msgid "Heavy Rain / Wind"
+msgstr "Pioggia"
+
+#: plugins/oneclick.py:1180
+#, fuzzy
+msgid "High"
+msgstr "Maggiore"
+
+#: plugins/oneclick.py:1181
+#, fuzzy
+msgid "Isolated T-Storms / Wind"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1182
+msgid "Last Quarter"
+msgstr ""
+
+#: plugins/oneclick.py:1183
+msgid "Lawn and Garden Weather"
+msgstr ""
+
+#: plugins/oneclick.py:1184
+#, fuzzy
+msgid "Light Freezing Rain"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1185
+#, fuzzy
+msgid "Light Rain / Fog"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1186
+#, fuzzy
+msgid "Light Rain / Wind"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1187
+#, fuzzy
+msgid "Light Rain / Wind Late"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1188
+#, fuzzy
+msgid "Light Rain Early"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1189
+#, fuzzy
+msgid "Light Rain Late"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1190
+#, fuzzy
+msgid "Light Rain and Freezing Rain"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1191
+#, fuzzy
+msgid "Light Rain and Shower"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1192
+#, fuzzy
+msgid "Light Rain and Windy"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1193
+#, fuzzy
+msgid "Light Snow / Fog"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1194
+#, fuzzy
+msgid "Light Snow / Wind"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1195
+#, fuzzy
+msgid "Light Snow Early"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1196
+#, fuzzy
+msgid "Light Snow Late"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1197
+#, fuzzy
+msgid "Low"
+msgstr "Minore"
+
+#: plugins/oneclick.py:1198
+#, fuzzy
+msgid "Mostly Clear"
+msgstr "Molto nuvoloso"
+
+#: plugins/oneclick.py:1199
+#, fuzzy
+msgid "Mostly Cloudy / Wind"
+msgstr "Molto nuvoloso"
+
+#: plugins/oneclick.py:1200
+#, fuzzy
+msgid "Mostly Cloudy and Windy"
+msgstr "Molto nuvoloso"
+
+#: plugins/oneclick.py:1201
+#, fuzzy
+msgid "N"
+msgstr "No"
+
+#: plugins/oneclick.py:1202
+msgid "N/A"
+msgstr ""
+
+#: plugins/oneclick.py:1203
+#, fuzzy
+msgid "NE"
+msgstr "RINOMINA"
+
+#: plugins/oneclick.py:1204
+#, fuzzy
+msgid "NE_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1205
+#, fuzzy
+msgid "NNE"
+msgstr "RINOMINA"
+
+#: plugins/oneclick.py:1206
+#, fuzzy
+msgid "NNE_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1207
+#, fuzzy
+msgid "NNW"
+msgstr "SCONOSCIUTO"
+
+#: plugins/oneclick.py:1208
+#, fuzzy
+msgid "NNW_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1209
+#, fuzzy
+msgid "NW"
+msgstr "SCONOSCIUTO"
+
+#: plugins/oneclick.py:1210
+#, fuzzy
+msgid "NW_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1211
+#, fuzzy
+msgid "N_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1212
+#, fuzzy
+msgid "New"
+msgstr "Adesso"
+
+#: plugins/oneclick.py:1213
+msgid "Overcast"
+msgstr ""
+
+#: plugins/oneclick.py:1214
+#, fuzzy
+msgid "PM Fog"
+msgstr "Nebbia"
+
+#: plugins/oneclick.py:1215
+#, fuzzy
+msgid "PM Light Rain"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1216
+#, fuzzy
+msgid "PM Light Rain / Wind"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1217
+#, fuzzy
+msgid "PM Light Snow"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1218
+#, fuzzy
+msgid "PM Rain"
+msgstr "Pioggia"
+
+#: plugins/oneclick.py:1219
+#, fuzzy
+msgid "PM Rain / Snow"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1220
+#, fuzzy
+msgid "PM Rain / Wind"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1221
+#, fuzzy
+msgid "PM Showers"
+msgstr "Temporali"
+
+#: plugins/oneclick.py:1222
+#, fuzzy
+msgid "PM Showers / Wind"
+msgstr "Temporali"
+
+#: plugins/oneclick.py:1223
+#, fuzzy
+msgid "PM Snow Showers"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1224
+#, fuzzy
+msgid "PM T-Storms"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1225
+#, fuzzy
+msgid "Partly Cloudy / Wind"
+msgstr "Parzialmente nuvoloso"
+
+#: plugins/oneclick.py:1226
+#, fuzzy
+msgid "Partly Cloudy and Windy"
+msgstr "Parzialmente nuvoloso"
+
+#: plugins/oneclick.py:1227
+#, fuzzy
+msgid "Rain / Freezing Rain"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1228
+#, fuzzy
+msgid "Rain / Snow"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1229
+#, fuzzy
+msgid "Rain / Snow / Wind"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1230
+#, fuzzy
+msgid "Rain / Snow Early"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1231
+#, fuzzy
+msgid "Rain / Snow Late"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1232
+#, fuzzy
+msgid "Rain / Snow Showers"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1233
+#, fuzzy
+msgid "Rain / Snow Showers / Wind"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1234
+#, fuzzy
+msgid "Rain / Snow Showers Late"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1235
+#, fuzzy
+msgid "Rain / Thunder"
+msgstr "Mar"
+
+#: plugins/oneclick.py:1236
+#, fuzzy
+msgid "Rain / Wind"
+msgstr "Pioggia"
+
+#: plugins/oneclick.py:1237
+#, fuzzy
+msgid "Rain / Wind Early"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1238
+#, fuzzy
+msgid "Rain Early"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1239
+#, fuzzy
+msgid "Rain Late"
+msgstr "Pioggia"
+
+#: plugins/oneclick.py:1240
+#, fuzzy
+msgid "Rain Shower"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1241
+#, fuzzy
+msgid "Rain Shower and Windy"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1242
+#, fuzzy
+msgid "Rain and Snow"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1243
+#, fuzzy
+msgid "Rain to Wintry Mix"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1244
+#, fuzzy
+msgid "Rain to Wintry Mix / Wind"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1245
+msgid "S"
+msgstr ""
+
+#: plugins/oneclick.py:1246
+msgid "SE"
+msgstr ""
+
+#: plugins/oneclick.py:1247
+#, fuzzy
+msgid "SE_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1248
+msgid "SSE"
+msgstr ""
+
+#: plugins/oneclick.py:1249
+#, fuzzy
+msgid "SSE_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1250
+msgid "SSW"
+msgstr ""
+
+#: plugins/oneclick.py:1251
+#, fuzzy
+msgid "SSW_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1252
+msgid "SW"
+msgstr ""
+
+#: plugins/oneclick.py:1253
+#, fuzzy
+msgid "SW_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1254
+#, fuzzy
+msgid "S_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1255
+#, fuzzy
+msgid "Scattered Showers"
+msgstr "Temporali diffusi"
+
+#: plugins/oneclick.py:1256
+#, fuzzy
+msgid "Scattered Snow"
+msgstr "Temporali diffusi"
+
+#: plugins/oneclick.py:1257
+#, fuzzy
+msgid "Scattered Snow Showers"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1258
+#, fuzzy
+msgid "Scattered T-Storms"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1259
+#, fuzzy
+msgid "Showers / Wind"
+msgstr "Mostra"
+
+#: plugins/oneclick.py:1260
+#, fuzzy
+msgid "Showers / Wind Early"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1261
+#, fuzzy
+msgid "Showers Early"
+msgstr "Mostra"
+
+#: plugins/oneclick.py:1262
+#, fuzzy
+msgid "Showers Late"
+msgstr "Mostra"
+
+#: plugins/oneclick.py:1263
+msgid "Showers in the Vicinity"
+msgstr ""
+
+#: plugins/oneclick.py:1264
+#, fuzzy
+msgid "Snow"
+msgstr "Mostra"
+
+#: plugins/oneclick.py:1265
+#, fuzzy
+msgid "Snow / Wind"
+msgstr "Mostra"
+
+#: plugins/oneclick.py:1266
+#, fuzzy
+msgid "Snow Shower / Wind"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1267
+#, fuzzy
+msgid "Snow Showers / Wind Early"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1268
+#, fuzzy
+msgid "Snow Showers Early"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1269
+#, fuzzy
+msgid "Snow Showers Late"
+msgstr "Mostra Stderr"
+
+#: plugins/oneclick.py:1270
+#, fuzzy
+msgid "Snow and Freezing Rain"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1271
+#, fuzzy
+msgid "Snow to Rain"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1272
+#, fuzzy
+msgid "Snow to Wintry Mix"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1273
+#, fuzzy
+msgid "Snow to Wintry Mix / Wind"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1274
+#, fuzzy
+msgid "Storm"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1275
+#, fuzzy
+msgid "Sunny / Wind"
+msgstr "Nuvoloso/ventoso"
+
+#: plugins/oneclick.py:1276
+#, fuzzy
+msgid "T-Showers"
+msgstr "Mostra"
+
+#: plugins/oneclick.py:1277
+#, fuzzy
+msgid "T-Storms Early"
+msgstr "Temporali isolati"
+
+#: plugins/oneclick.py:1278
+#, fuzzy
+msgid "Very High"
+msgstr "Maggiore"
+
+#: plugins/oneclick.py:1279
+msgid "W"
+msgstr ""
+
+#: plugins/oneclick.py:1280
+#, fuzzy
+msgid "WNW"
+msgstr "SCONOSCIUTO"
+
+#: plugins/oneclick.py:1281
+#, fuzzy
+msgid "WNW_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1282
+msgid "WSW"
+msgstr ""
+
+#: plugins/oneclick.py:1283
+#, fuzzy
+msgid "WSW_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1284
+#, fuzzy
+msgid "W_short"
+msgstr "Sensore"
+
+#: plugins/oneclick.py:1285
+msgid "Waning Crescent"
+msgstr ""
+
+#: plugins/oneclick.py:1286
+msgid "Waning Gibbous"
+msgstr ""
+
+#: plugins/oneclick.py:1287
+msgid "Waxing Crescent"
+msgstr ""
+
+#: plugins/oneclick.py:1288
+msgid "Waxing Gibbous"
+msgstr ""
+
+#: plugins/oneclick.py:1289
+#, fuzzy
+msgid "Wintry Mix / Wind"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1290
+#, fuzzy
+msgid "Wintry Mix / Wind Early"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1291
+#, fuzzy
+msgid "Wintry Mix to Snow"
+msgstr "Pioggia leggera"
+
+#: plugins/oneclick.py:1292
+msgid "rising"
+msgstr ""
+
+#: plugins/oneclick.py:1293
+msgid "steady"
+msgstr ""
+
 #: plugins/freevused.py:141
 msgid ""
 "You need pybluetooth (http://org.csail.mit.edu/pybluetooth/) to run "
@@ -2343,8 +3312,8 @@ msgstr "Nome"
 #: plugins/freevused.py:480 share/skins/main/dark.fxd:759
 #: share/skins/main/atlantice.fxd:360 share/skins/main/atlantice.fxd:581
 #: share/skins/main/atlantice.fxd:932 share/skins/main/Tux'n Tosh TV.fxd:929
-#: share/skins/main/Panorama.fxd:205 share/skins/main/Panorama.fxd:330
-#: share/skins/main/Panorama.fxd:755 share/skins/main/basic.fxd:401
+#: share/skins/main/Panorama.fxd:185 share/skins/main/Panorama.fxd:302
+#: share/skins/main/Panorama.fxd:672 share/skins/main/basic.fxd:401
 #: share/skins/main/blurr.fxd:202 share/skins/main/blurr.fxd:309
 #: share/skins/main/blurr.fxd:692 share/skins/main/geexbox.fxd:241
 #: share/skins/main/geexbox.fxd:383 share/skins/main/geexbox.fxd:766
@@ -2418,39 +3387,32 @@ msgstr "%i liberi in %i Gb totali (%i%% liberi)"
 msgid "%i free of %i MB total (%i%% free)"
 msgstr "%i di %i Mb liberi (%i%% liberi)"
 
-#: plugins/command.py:134
+#: plugins/command.py:152
 msgid "Command finished"
 msgstr "Comando terminato"
 
-#: plugins/command.py:150
-msgid "Show Stderr"
-msgstr "Mostra Stderr"
-
-#: plugins/command.py:152
-msgid "Show Stdout"
+#: plugins/command.py:167
+#, fuzzy
+msgid "Show output"
 msgstr "Mostra Stdout"
 
-#: plugins/command.py:170
-msgid "Stdout File"
-msgstr "File Stdout"
+#: plugins/command.py:184
+msgid "Output"
+msgstr ""
 
-#: plugins/command.py:174
-msgid "Stderr File"
-msgstr "File Stderr"
-
-#: plugins/command.py:231
+#: plugins/command.py:282
 msgid "Running Command..."
 msgstr "Esecuzione comando..."
 
-#: plugins/command.py:259
+#: plugins/command.py:312
 msgid "Command Failed"
 msgstr "Comando Fallito"
 
-#: plugins/command.py:261
+#: plugins/command.py:314
 msgid "Command Completed"
 msgstr "Comando Completato"
 
-#: plugins/command.py:294 plugins/command.py:332
+#: plugins/command.py:355 plugins/command.py:391
 #: share/skins/main/crystal.fxd:16 share/skins/main/dark.fxd:23
 #: share/skins/main/Tux'n Tosh TV.fxd:23 share/skins/main/rain.fxd:16
 msgid "Commands"
@@ -2778,23 +3740,23 @@ msgstr "Riproduci"
 msgid "Config Menu"
 msgstr "Menu configurazione"
 
-#: video/plugins/dvdcopy.py:87
+#: video/plugins/dvdcopy.py:91
 msgid "Cancel DVD copy"
 msgstr "Interrompi la copia del DVD"
 
-#: video/plugins/dvdcopy.py:93
+#: video/plugins/dvdcopy.py:97
 msgid "Copy this title to HDD"
 msgstr "Copia questo titolo sul disco rigido"
 
-#: video/plugins/dvdcopy.py:96
+#: video/plugins/dvdcopy.py:100
 msgid "Copy the entire disc to HDD"
 msgstr "Copia il contenuto del disco sul disco rigido"
 
-#: video/plugins/dvdcopy.py:97
+#: video/plugins/dvdcopy.py:101
 msgid "Copy the feature to HDD"
 msgstr "Copia l'oggetto sul disco rigido"
 
-#: video/plugins/dvdcopy.py:123
+#: video/plugins/dvdcopy.py:127
 msgid "Copy started"
 msgstr "Copia iniziata"
 
@@ -2903,32 +3865,32 @@ msgstr "Nessuna informazione disponibile"
 msgid "Fetching movie information"
 msgstr "Recupero informazioni sul film in corso"
 
-#: video/plugins/vpodcast.py:147
+#: video/plugins/vpodcast.py:148
 msgid "Video Podcast"
 msgstr "Video Podcast"
 
-#: video/plugins/vpodcast.py:176 video/plugins/vpodcast.py:260
+#: video/plugins/vpodcast.py:177 video/plugins/vpodcast.py:261
 msgid "Video Podcasts"
 msgstr "Video Podcast"
 
-#: video/plugins/vpodcast.py:188
+#: video/plugins/vpodcast.py:189
 #, fuzzy
 msgid "Fetching podcast items..."
 msgstr "Scaricamento podcast in corso..."
 
-#: video/plugins/vpodcast.py:505
+#: video/plugins/vpodcast.py:518
 #, fuzzy, python-format
 msgid "Fetching \"%s\"..."
 msgstr "Scaricamento podcast in corso..."
 
-#: video/plugins/vpodcast.py:521
+#: video/plugins/vpodcast.py:534
 #, python-format
 msgid ""
 "Fetching \"%s\" failed\n"
 "No data"
 msgstr ""
 
-#: video/plugins/vpodcast.py:524
+#: video/plugins/vpodcast.py:537
 #, fuzzy, python-format
 msgid ""
 "Fetching \"%s\" failed:\n"
@@ -3415,7 +4377,7 @@ msgstr "Mostra informazioni per questo file"
 msgid "Details"
 msgstr "Dettagli"
 
-#: video/plugins/mplayer.py:474
+#: video/plugins/mplayer.py:478
 msgid "Seeking not possible"
 msgstr "Ricerca impossibile"
 
@@ -3500,29 +4462,29 @@ msgstr "Voto"
 msgid "No action defined for this choice!"
 msgstr "Nessuna operazione definita per questa opzione"
 
-#: directory.py:64
+#: directory.py:65
 msgid "Directory Sort By Date"
 msgstr "Directory ordinata per data"
 
-#: directory.py:65
+#: directory.py:66
 msgid "Sort directory by date and not by name."
 msgstr "Ordina la directory per data e non per nome."
 
-#: directory.py:67
+#: directory.py:68
 msgid "Directory Autoplay Single Item"
 msgstr "Directory auto-esecuzione singolo elemento"
 
-#: directory.py:68
+#: directory.py:69
 msgid "Don't show directory if only one item exists and auto-select the item."
 msgstr ""
 "Non mostrare la directory se contiene un solo elemento e selezionalo "
 "automaticamente."
 
-#: directory.py:70
+#: directory.py:71
 msgid "Force Skin Layout"
 msgstr "Forza la disposizione secondo la skin"
 
-#: directory.py:71
+#: directory.py:72
 msgid ""
 "Force skin to a specific layout. This option doesn't work with all skins and "
 "the result may differ based on the skin."
@@ -3530,43 +4492,43 @@ msgstr ""
 "Forza l'apparenza della skin. Questa opzione non funziona con tutte le skin "
 "e il risultato potrebbe essere differente a seconda della skin."
 
-#: directory.py:74
+#: directory.py:75
 msgid "Directory Smart Sort"
 msgstr "Ordinamento Intelligente Cartelle"
 
-#: directory.py:75
+#: directory.py:76
 msgid "Use a smarter way to sort the items."
 msgstr "Usa una maniera più intelligente per ordinare gli elementi."
 
-#: directory.py:77
+#: directory.py:78
 msgid "Directory Smart Names"
 msgstr "Ordinamento Intelligente Cartelle"
 
-#: directory.py:78
+#: directory.py:79
 msgid "Use a smarter way to abbreviate the name of the items."
 msgstr "Usa una maniera più intelligente per abbreviare i nomi."
 
-#: directory.py:80
+#: directory.py:81
 msgid "Use MediaID Tag Names"
 msgstr "Usa il campo MediaID"
 
-#: directory.py:81
+#: directory.py:82
 msgid "Use the names from the media files tags as display name."
 msgstr "Usa i nome dal tag MediaID letto dai files."
 
-#: directory.py:83
+#: directory.py:84
 msgid "Directory Reverse Sort"
 msgstr "Ordina inversa directory"
 
-#: directory.py:84
+#: directory.py:85
 msgid "Show the items in the list in reverse order."
 msgstr "Mostra gli elementi in ordine inverso."
 
-#: directory.py:88
+#: directory.py:89
 msgid "Directory Create Playlist"
 msgstr "Creazione Playlist per Cartella"
 
-#: directory.py:89
+#: directory.py:90
 msgid ""
 "Handle the directory as playlist. After one file is played, the next one "
 "will be started."
@@ -3574,27 +4536,27 @@ msgstr ""
 "Considera la directory come una playlist. Dopo che un file è stato "
 "riprodotto, sarà iniziato il successivo"
 
-#: directory.py:91
+#: directory.py:92
 msgid "Directory Add Playlist Files"
 msgstr "Aggiungi tutti i file alla playlist"
 
-#: directory.py:92
+#: directory.py:93
 msgid "Add playlist files to the list of items"
 msgstr "Aggiungi tutti i file della playlist alla lista degli elementi"
 
-#: directory.py:94
+#: directory.py:95
 msgid "Directory Add Random Playlist"
 msgstr "Aggiungi playlist casuale alla cartella"
 
-#: directory.py:95
+#: directory.py:96
 msgid "Add an item for a random playlist"
 msgstr "Aggiungi un elemento per una playlist casuale"
 
-#: directory.py:97
+#: directory.py:98
 msgid "Directory Autoplay Items"
 msgstr "Riproduci automaticamente elementi della directory"
 
-#: directory.py:98
+#: directory.py:99
 msgid ""
 "Autoplay the whole directory (as playlist) when it contains only files and "
 "no directories"
@@ -3602,79 +4564,79 @@ msgstr ""
 "Riproduci automaticamente l'intera directory (come una playlist) "
 "quandocontiene solo files e non cartelle"
 
-#: directory.py:329
+#: directory.py:330
 #, python-format
 msgid "Directory on disc [%s]"
 msgstr "Cartella sul disco [%s]"
 
-#: directory.py:330
+#: directory.py:331
 msgid "Directory"
 msgstr "Directory"
 
-#: directory.py:468
+#: directory.py:469
 msgid "Play all files in directory"
 msgstr "Riproduci tutti i file in una cartella"
 
-#: directory.py:474 playlist.py:314
+#: directory.py:475 playlist.py:314
 msgid "Random play all items"
 msgstr "Riproduzione casuale di tutti gli elementi"
 
-#: directory.py:477
+#: directory.py:478
 msgid "Recursive random play all items"
 msgstr "Riproduzione casuale ricorsiva di tutti i file"
 
-#: directory.py:478
+#: directory.py:479
 msgid "Recursive play all items"
 msgstr "Riproduzione ricorsiva di tutti gli elementi"
 
-#: directory.py:480 tv/plugins/recordings_manager.py:166
+#: directory.py:481 tv/plugins/recordings_manager.py:166
 msgid "Configure directory"
 msgstr "Configura la directory"
 
-#: directory.py:559
+#: directory.py:560
 msgid "Enter Password"
 msgstr "Inserisci Password"
 
-#: directory.py:584
+#: directory.py:585
 msgid "Password incorrect"
 msgstr "Password errata"
 
-#: directory.py:621
+#: directory.py:622
 #, python-format
 msgid "Directory %r does not exist"
 msgstr "La directory %r non esiste"
 
-#: directory.py:651
+#: directory.py:652
 msgid "Scanning disc, be patient..."
 msgstr "Analisi disco, attendere prego..."
 
-#: directory.py:653
+#: directory.py:654
 msgid "Scanning directory, be patient..."
 msgstr "Analisi cartella, attendere prego..."
 
-#: directory.py:842 directory.py:935 directory.py:970
+#: directory.py:843 directory.py:936 directory.py:971
 #: tv/plugins/recordings_manager.py:278
 msgid "on"
 msgstr "attiva"
 
-#: directory.py:844 directory.py:847 directory.py:939 directory.py:968
+#: directory.py:845 directory.py:848 directory.py:940 directory.py:969
 #: tv/plugins/recordings_manager.py:280
 msgid "off"
 msgstr "disattiva"
 
-#: directory.py:849
+#: directory.py:850
 msgid "auto"
 msgstr "auto"
 
-#: directory.py:972
+#: directory.py:973
 msgid "Show all kinds of items"
 msgstr "Mostra elementi di qualunque tipo"
 
-#: directory.py:973
+#: directory.py:974
 msgid "Show video, audio and image items in this directory"
 msgstr "Mostra video, audio e immagini in questa cartella"
 
-#: directory.py:976 tv/plugins/recordings_manager.py:300
+#: directory.py:977 tv/plugins/recordings_manager.py:300
 msgid "Configure"
 msgstr "Configura"
 
@@ -3783,7 +4745,7 @@ msgstr "Programmazione fallita"
 msgid "\"%s\" has been removed from schedule"
 msgstr "\"%s\" è stato rimosso dalle registrazioni programmate"
 
-#: tv/programitem.py:228 tv/favoriteitem.py:369
+#: tv/programitem.py:228 tv/favoriteitem.py:368
 msgid "Remove failed"
 msgstr "Rimozione fallita"
 
@@ -3841,7 +4803,7 @@ msgstr "Modifica il giorno della settimana"
 msgid "Modify time of day"
 msgstr "Modifica l'ora del giorno"
 
-#: tv/favoriteitem.py:117 tv/favoriteitem.py:276
+#: tv/favoriteitem.py:117 tv/favoriteitem.py:275
 msgid "Prevent Recording of Duplicates"
 msgstr "Impedisci la registrazione di duplicati"
 
@@ -3849,11 +4811,11 @@ msgstr "Impedisci la registrazione di duplicati"
 msgid "Allow Recording of Duplicates"
 msgstr "Permetti l'esistenza di duplicati"
 
-#: tv/favoriteitem.py:126 tv/favoriteitem.py:298
+#: tv/favoriteitem.py:126 tv/favoriteitem.py:297
 msgid "Record All Episodes"
 msgstr "Registra tutti episodi"
 
-#: tv/favoriteitem.py:128 tv/favoriteitem.py:303
+#: tv/favoriteitem.py:128 tv/favoriteitem.py:302
 msgid "Record Only New Episodes"
 msgstr "Registra solo nuovi episodi"
 
@@ -3873,73 +4835,73 @@ msgstr "Menu Preferiti"
 msgid "Alter Name"
 msgstr "Cambio Nome"
 
-#: tv/favoriteitem.py:186 tv/plugins/manual_record.py:163
+#: tv/favoriteitem.py:185 tv/plugins/manual_record.py:163
 msgid "Modify Channel"
 msgstr "Modifica Canale"
 
-#: tv/favoriteitem.py:205 tv/plugins/manual_record.py:181
+#: tv/favoriteitem.py:204 tv/plugins/manual_record.py:181
 #: tv/plugins/manual_record.py:204 tv/plugins/manual_record.py:244
 #: tv/plugins/manual_record.py:267
 msgid "Modify Day"
 msgstr "Modifica Giorno"
 
-#: tv/favoriteitem.py:226 tv/plugins/manual_record.py:226
+#: tv/favoriteitem.py:225 tv/plugins/manual_record.py:226
 #: tv/plugins/manual_record.py:289
 msgid "Modify Time"
 msgstr "Modifica Ora"
 
-#: tv/favoriteitem.py:282
+#: tv/favoriteitem.py:281
 msgid "Allow Recordings of Duplicates"
 msgstr "Consenti la registrazione di duplicati"
 
-#: tv/favoriteitem.py:321
+#: tv/favoriteitem.py:320
 msgid "Saving the changes to this favorite."
 msgstr "Sto salvando i cambi a questo preferito"
 
-#: tv/favoriteitem.py:321
+#: tv/favoriteitem.py:320
 msgid "This may take some time."
 msgstr "Potrebbe richiedere qualche minuto."
 
-#: tv/favoriteitem.py:348
+#: tv/favoriteitem.py:347
 msgid "Save failed, favorite was lost"
 msgstr "Salvataggio fallito, è stato perso il preferito"
 
-#: tv/favoriteitem.py:365
+#: tv/favoriteitem.py:364
 #, python-format
 msgid "\"%s\" has been removed from favorites"
 msgstr "\"%s\" è stato rimosso dai preferiti"
 
-#: tv/plugins/ivtv_xine_tv.py:385
+#: tv/plugins/ivtv_xine_tv.py:383
 #, fuzzy, python-format
 msgid "Recording: %s"
 msgstr "Adesso sto registrando %s."
 
-#: tv/plugins/ivtv_xine_tv.py:392
+#: tv/plugins/ivtv_xine_tv.py:390
 #, fuzzy
 msgid "Recording ended"
 msgstr "Registrazione iniziata"
 
-#: tv/plugins/ivtv_xine_tv.py:470
+#: tv/plugins/ivtv_xine_tv.py:468
 #, fuzzy
 msgid "Live Recording active, please repeat to stop"
 msgstr "Per favore ripetere fino allo spegnimanto\n"
 
-#: tv/plugins/ivtv_xine_tv.py:477
+#: tv/plugins/ivtv_xine_tv.py:475
 #, fuzzy
 msgid "Recording in progress!"
 msgstr "Registrazione in corso"
 
-#: tv/plugins/ivtv_xine_tv.py:502
+#: tv/plugins/ivtv_xine_tv.py:500
 #, fuzzy
 msgid "Live Recording is not enabled"
 msgstr "Il Server di registrazione non è disponibile"
 
-#: tv/plugins/ivtv_xine_tv.py:506
+#: tv/plugins/ivtv_xine_tv.py:504
 #, fuzzy
 msgid "Please repeat to stop"
 msgstr "Per favore ripetere fino allo spegnimanto\n"
 
-#: tv/plugins/ivtv_xine_tv.py:775
+#: tv/plugins/ivtv_xine_tv.py:773
 msgid "This plugin only supports the ivtv video group!"
 msgstr "Questo plugin gestisce solo gruppi TV di tipo IVTV"
 
@@ -4114,12 +5076,10 @@ msgstr "Programmi Registrati"
 msgid "Enabled"
 msgstr "Abilitato"
 
-#: tv/plugins/livepause/display/dialogs/__init__.py:167
 #: tv/plugins/livepause/display/graphics.py:115
 msgid "Current"
 msgstr "Attuale"
 
-#: tv/plugins/livepause/display/dialogs/__init__.py:181
 #: tv/plugins/livepause/display/graphics.py:129
 msgid "Next"
 msgstr "Successivo"
@@ -4272,11 +5232,11 @@ msgstr "La lista dei canali TV non e' valida!\n"
 msgid "Please check the config file."
 msgstr "Controlla il file di configurazione."
 
-#: tv/tvguide.py:70
+#: tv/tvguide.py:71
 msgid "Preparing the program guide"
 msgstr "Preparazione della guida programmi"
 
-#: tv/tvguide.py:75
+#: tv/tvguide.py:76
 msgid "TV Guide is corrupt!"
 msgstr "Guida TV corrotta!"
 
@@ -4289,15 +5249,15 @@ msgstr "Non ho potuto caricare la Guida Tv (ricevuta un'eccezione)"
 msgid "REPLACE WITH TUNERID FOR %s"
 msgstr "RIMPIAZZARE CON TUNERID PER %s"
 
-#: main.py:181
+#: main.py:188
 msgid "Freevo Main Menu"
 msgstr "Menu principale Freevo"
 
-#: main.py:197
+#: main.py:205
 msgid "Skin Selector"
 msgstr "Selezionatore di skin"
 
-#: main.py:318
+#: main.py:333
 #, python-format
 msgid ""
 "Event '%s' crashed\n"
@@ -4318,48 +5278,48 @@ msgstr ""
 "File di log: %s\n"
 "\n"
 
-#: main.py:330
+#: main.py:345
 msgid "Continue"
 msgstr "Continua"
 
-#: main.py:468
+#: main.py:515
 #, python-format
 msgid "Starting Freevo-%s, please wait ..."
 msgstr "Avvio di Freevo-%s in corso..."
 
-#: main.py:478
+#: main.py:525
 msgid "Reading cache, please wait ..."
 msgstr "Lettura della cache in corso, attendere prego..."
 
-#: main.py:531
+#: main.py:578
 msgid "Freevo crashed!"
 msgstr "Freevo è andato in Crash!"
 
-#: main.py:532
+#: main.py:579
 #, python-format
 msgid "Filename: %s"
 msgstr "Nome del file: %s"
 
-#: main.py:533
+#: main.py:580
 #, python-format
 msgid "Lineno: %s"
 msgstr "N. linea: %s"
 
-#: main.py:534
+#: main.py:581
 #, python-format
 msgid "Function: %s"
 msgstr "Funzione: %s"
 
-#: main.py:535
+#: main.py:582
 #, python-format
 msgid "Text: %s"
 msgstr "Testo: %s"
 
-#: main.py:537
+#: main.py:584
 msgid "Please see the logfiles for more info"
 msgstr "Guarda i file di log per maggiori informazioni"
 
-#: main.py:538
+#: main.py:585
 #, python-format
 msgid "Exit in %s seconds"
 msgstr "Uscita in %s secondi"
@@ -4393,7 +5353,7 @@ msgstr "Rate video"
 msgid "By"
 msgstr "By"
 
-#: share/skins/main/atlantice.fxd:376 share/skins/main/Panorama.fxd:221
+#: share/skins/main/atlantice.fxd:376 share/skins/main/Panorama.fxd:201
 #: share/skins/main/blurr.fxd:218 share/skins/main/info.fxd:314
 #: share/skins/main/geexbox.fxd:257 share/skins/main/mediaportal.fxd:220
 msgid "Subtitles"
@@ -4404,7 +5364,7 @@ msgid "File name"
 msgstr "Nome del file"
 
 #: share/skins/main/dark.fxd:501 share/skins/main/atlantice.fxd:353
-#: share/skins/main/Tux'n Tosh TV.fxd:678 share/skins/main/Panorama.fxd:198
+#: share/skins/main/Tux'n Tosh TV.fxd:678 share/skins/main/Panorama.fxd:179
 #: share/skins/main/blurr.fxd:195 share/skins/main/info.fxd:428
 #: share/skins/main/info.fxd:551 share/skins/main/geexbox.fxd:234
 #: share/skins/main/mediaportal.fxd:197
@@ -4415,13 +5375,13 @@ msgstr "Questa lista e' vuota!"
 msgid "pictures in this slideshow."
 msgstr "elementi in questa lista"
 
-#: share/skins/main/Panorama.fxd:471 share/skins/main/blurr.fxd:451
+#: share/skins/main/Panorama.fxd:427 share/skins/main/blurr.fxd:451
 #: share/skins/main/info.fxd:16 share/skins/main/geexbox.fxd:543
 #: share/skins/main/mediaportal.fxd:444
 msgid "Look at Pictures"
 msgstr "Guarda immagini"
 
-#: share/skins/main/atlantice.fxd:381 share/skins/main/Panorama.fxd:226
+#: share/skins/main/atlantice.fxd:381 share/skins/main/Panorama.fxd:206
 #: share/skins/main/blurr.fxd:223 share/skins/main/info.fxd:318
 #: share/skins/main/geexbox.fxd:262 share/skins/main/mediaportal.fxd:225
 msgid "Chapters"
@@ -4440,7 +5400,7 @@ msgstr "Codec audio"
 msgid "Subject"
 msgstr "Soggetto"
 
-#: share/skins/main/atlantice.fxd:345 share/skins/main/Panorama.fxd:190
+#: share/skins/main/atlantice.fxd:345 share/skins/main/Panorama.fxd:171
 #: share/skins/main/blurr.fxd:187 share/skins/main/info.fxd:543
 #: share/skins/main/geexbox.fxd:226 share/skins/main/mediaportal.fxd:189
 msgid "Playlist"
@@ -4461,7 +5421,7 @@ msgstr "Messaggi non letti"
 msgid "Message has not been read"
 msgstr "Il messaggio non  è stato letto"
 
-#: share/skins/main/atlantice.fxd:699 share/skins/main/Panorama.fxd:448
+#: share/skins/main/atlantice.fxd:699 share/skins/main/Panorama.fxd:406
 #: share/skins/main/blurr.fxd:428 share/skins/main/geexbox.fxd:520
 #: share/skins/main/mediaportal.fxd:420
 msgid "Location"
@@ -4473,7 +5433,7 @@ msgstr "Luogo"
 msgid "Email"
 msgstr "Email"
 
-#: share/skins/main/Panorama.fxd:787
+#: share/skins/main/Panorama.fxd:704
 msgid "Hz"
 msgstr "Hz"
 
@@ -4500,8 +5460,8 @@ msgstr "Questa lista e' vuota!"
 #: share/skins/main/atlantice.fxd:242 share/skins/main/atlantice.fxd:339
 #: share/skins/main/atlantice.fxd:506 share/skins/main/atlantice.fxd:553
 #: share/skins/main/atlantice.fxd:673 share/skins/main/atlantice.fxd:681
-#: share/skins/main/Panorama.fxd:184 share/skins/main/Panorama.fxd:306
-#: share/skins/main/Panorama.fxd:422 share/skins/main/Panorama.fxd:430
+#: share/skins/main/Panorama.fxd:165 share/skins/main/Panorama.fxd:279
+#: share/skins/main/Panorama.fxd:383 share/skins/main/Panorama.fxd:390
 #: share/skins/main/blurr.fxd:181 share/skins/main/blurr.fxd:285
 #: share/skins/main/blurr.fxd:402 share/skins/main/blurr.fxd:410
 #: share/skins/main/geexbox.fxd:220 share/skins/main/geexbox.fxd:355
@@ -4519,13 +5479,13 @@ msgstr "Identificativo disco"
 msgid "MB free"
 msgstr "MB liberi"
 
-#: share/skins/main/Panorama.fxd:468 share/skins/main/blurr.fxd:448
+#: share/skins/main/Panorama.fxd:424 share/skins/main/blurr.fxd:448
 #: share/skins/main/info.fxd:13 share/skins/main/geexbox.fxd:540
 #: share/skins/main/mediaportal.fxd:441
 msgid "Watch TV"
 msgstr "Guarda TV"
 
-#: share/skins/main/atlantice.fxd:584 share/skins/main/Panorama.fxd:333
+#: share/skins/main/atlantice.fxd:584 share/skins/main/Panorama.fxd:305
 #: share/skins/main/blurr.fxd:312 share/skins/main/info.fxd:348
 #: share/skins/main/info.fxd:535 share/skins/main/geexbox.fxd:386
 msgid "of"
@@ -4535,7 +5495,7 @@ msgstr "di"
 msgid "Now playing"
 msgstr "Mostra lettore"
 
-#: share/skins/main/Panorama.fxd:777
+#: share/skins/main/Panorama.fxd:694
 msgid "kbps"
 msgstr "kbps"
 
@@ -4548,7 +5508,7 @@ msgid "Pictures"
 msgstr "Immagini"
 
 #: share/skins/main/crystal.fxd:13 share/skins/main/atlantice.fxd:724
-#: share/skins/main/Panorama.fxd:473 share/skins/main/rain.fxd:13
+#: share/skins/main/Panorama.fxd:429 share/skins/main/rain.fxd:13
 #: share/skins/main/blurr.fxd:453 share/skins/main/geexbox.fxd:545
 #: share/skins/main/mediaportal.fxd:446
 msgid "Weather Forecast"
@@ -4558,7 +5518,7 @@ msgstr "Previsioni del tempo"
 msgid "New mail"
 msgstr "Nuova mail"
 
-#: share/skins/main/atlantice.fxd:349 share/skins/main/Panorama.fxd:194
+#: share/skins/main/atlantice.fxd:349 share/skins/main/Panorama.fxd:175
 #: share/skins/main/blurr.fxd:191 share/skins/main/info.fxd:419
 #: share/skins/main/info.fxd:424 share/skins/main/info.fxd:547
 #: share/skins/main/geexbox.fxd:230 share/skins/main/mediaportal.fxd:193
@@ -4589,7 +5549,7 @@ msgstr "Notizie"
 msgid "Size"
 msgstr "Dimensione"
 
-#: share/skins/main/atlantice.fxd:371 share/skins/main/Panorama.fxd:216
+#: share/skins/main/atlantice.fxd:371 share/skins/main/Panorama.fxd:196
 #: share/skins/main/blurr.fxd:213 share/skins/main/info.fxd:310
 #: share/skins/main/geexbox.fxd:252 share/skins/main/mediaportal.fxd:215
 msgid "Audio tracks"
@@ -4607,12 +5567,16 @@ msgstr "Contenitore"
 msgid "Audio Rate"
 msgstr "Rate audio"
 
-#: share/skins/main/Panorama.fxd:472 share/skins/main/blurr.fxd:452
+#: share/skins/main/Panorama.fxd:124 share/skins/main/Panorama.fxd:126
+msgid "&quot;"
+msgstr ""
+
+#: share/skins/main/Panorama.fxd:428 share/skins/main/blurr.fxd:452
 #: share/skins/main/mediaportal.fxd:445
 msgid "Play a Game"
 msgstr "Esegui un gioco"
 
-#: share/skins/main/Panorama.fxd:470 share/skins/main/blurr.fxd:450
+#: share/skins/main/Panorama.fxd:426 share/skins/main/blurr.fxd:450
 #: share/skins/main/info.fxd:15 share/skins/main/geexbox.fxd:542
 #: share/skins/main/mediaportal.fxd:443
 msgid "Listen to Music"
@@ -4623,7 +5587,7 @@ msgstr "Ascolta musica"
 msgid "Total messages"
 msgstr "Totale Messaggi"
 
-#: share/skins/main/Panorama.fxd:469 share/skins/main/blurr.fxd:449
+#: share/skins/main/Panorama.fxd:425 share/skins/main/blurr.fxd:449
 #: share/skins/main/info.fxd:14 share/skins/main/geexbox.fxd:541
 #: share/skins/main/mediaportal.fxd:442
 msgid "Watch a Movie"
@@ -4659,6 +5623,15 @@ msgstr "Nessun elemento successivo nella playlist"
 msgid "Weather"
 msgstr "Tempo"
 
+#~ msgid "Show Stderr"
+#~ msgstr "Mostra Stderr"
+
+#~ msgid "Stdout File"
+#~ msgstr "File Stdout"
+
+#~ msgid "Stderr File"
+#~ msgstr "File Stderr"
+
 #~ msgid "Cache fill"
 #~ msgstr "Riempimento cache"
 
@@ -4692,469 +5665,6 @@ msgstr "Tempo"
 
 #~ msgid "Volume: %d%%"
 #~ msgstr "Volume: %d%%"
-
-#~ msgid "Mostly Cloudy"
-#~ msgstr "Molto nuvoloso"
-
-#~ msgid "Partly Cloudy"
-#~ msgstr "Parzialmente nuvoloso"
-
-#~ msgid "Light Rain"
-#~ msgstr "Pioggia leggera"
-
-#~ msgid "Showers"
-#~ msgstr "Mostra"
-
-#~ msgid "Rain"
-#~ msgstr "Pioggia"
-
-#~ msgid "Fog"
-#~ msgstr "Nebbia"
-
-#~ msgid "Few Showers"
-#~ msgstr "Alcuni temporali"
-
-#~ msgid "Mostly Sunny"
-#~ msgstr "Soleggiato"
-
-#~ msgid "Sunny"
-#~ msgstr "Sole"
-
-#~ msgid "Scattered Flurries"
-#~ msgstr "Nevicate isolate"
-
-#~ msgid "Isolated T-Storms"
-#~ msgstr "Temporali isolati"
-
-#~ msgid "Scattered Thunderstorms"
-#~ msgstr "Temporali diffusi"
-
-#~ msgid "Snow Showers"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Few Snow Showers"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Flurries"
-#~ msgstr "Nevicate isolate"
-
-#, fuzzy
-#~ msgid "Thunder"
-#~ msgstr "Mar"
-
-#, fuzzy
-#~ msgid "Sct Flurries"
-#~ msgstr "Nevicate isolate"
-
-#, fuzzy
-#~ msgid "Sct Strong Storms"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Thunderstorms"
-#~ msgstr "Temporali diffusi"
-
-#, fuzzy
-#~ msgid "Iso T-Storms"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Sct T-Storms"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Sct Snow Showers"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "to"
-#~ msgstr "top"
-
-#, fuzzy
-#~ msgid "Light Snow"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Wintry Mix"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Hvy Rain"
-#~ msgstr "Pioggia"
-
-#, fuzzy
-#~ msgid "Freezing Rain"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "T-Storms"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Heavy Rain"
-#~ msgstr "Pioggia"
-
-#, fuzzy
-#~ msgid "Light Wintry Mix"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Snow Shower"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Strong Storms"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Light Rain Shower"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Rain with Thunder"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Drizzle"
-#~ msgstr "Pioggia leggera"
-
-#~ msgid "Mist"
-#~ msgstr "Artista"
-
-#, fuzzy
-#~ msgid "Haze"
-#~ msgstr "Hz"
-
-#, fuzzy
-#~ msgid "Light Snow Shower"
-#~ msgstr "Mostra Stderr"
-
-#~ msgid "Clear"
-#~ msgstr "Anno"
-
-#, fuzzy
-#~ msgid "Fair"
-#~ msgstr "Filtri"
-
-#, fuzzy
-#~ msgid "Error encountered while trying to download Radar map"
-#~ msgstr "Errore durante lo scaricamento della mappa delle previsioni"
-
-#~ msgid "Display program"
-#~ msgstr "Visualizza i programmi"
-
-#~ msgid "Scheduling Failed"
-#~ msgstr "Programmazione Fallita"
-
-#~ msgid "getFavorites failed: %s"
-#~ msgstr "getFavorites fallisce: %s"
-
-#~ msgid "Display favorite"
-#~ msgstr "Visualizza i favoriti"
-
-#~ msgid "Modify duplicate flag"
-#~ msgstr "Modifica il flag \"duplicati\""
-
-#~ msgid "Modify episodes flag"
-#~ msgstr "Modifica flag \"episodi\""
-
-#~ msgid "Modify Duplicate Flag"
-#~ msgstr "Modifica il flag \"duplicati\""
-
-#~ msgid "Save Failed, favorite was lost"
-#~ msgstr "Salvataggio fallito, è stato perso il favorito"
-
-#~ msgid "Save Failed"
-#~ msgstr "Salvataggio Fallito"
-
-#, fuzzy
-#~ msgid "Currently recording"
-#~ msgstr "Immagine corrente"
-
-#, fuzzy
-#~ msgid "Next recordings"
-#~ msgstr "Non sono riuscito a prendere le registrazioni"
-
-#, fuzzy
-#~ msgid "Recordserver not found"
-#~ msgstr "Il Server di Registrazione non è raggiungible"
-
-#, fuzzy
-#~ msgid "Clear / Wind"
-#~ msgstr "Chiudi la Finestra"
-
-#~ msgid "Cloudy"
-#~ msgstr "Nuovoloso"
-
-#, fuzzy
-#~ msgid "Cloudy / Wind"
-#~ msgstr "Nuvoloso/ventoso"
-
-#, fuzzy
-#~ msgid "Cloudy and Windy"
-#~ msgstr "Nuvoloso/ventoso"
-
-#, fuzzy
-#~ msgid "ENE"
-#~ msgstr "RINOMINA"
-
-#, fuzzy
-#~ msgid "Few Showers / Wind"
-#~ msgstr "Alcuni temporali"
-
-#, fuzzy
-#~ msgid "Few Snow"
-#~ msgstr "Alcuni temporali"
-
-#, fuzzy
-#~ msgid "Few Snow Showers / Wind"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Foggy"
-#~ msgstr "Nebbia"
-
-#, fuzzy
-#~ msgid "Freezing Drizzle"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Heavy Rain / Wind"
-#~ msgstr "Pioggia"
-
-#, fuzzy
-#~ msgid "High"
-#~ msgstr "Maggiore"
-
-#, fuzzy
-#~ msgid "Isolated T-Storms / Wind"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Light Freezing Rain"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Rain / Fog"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Rain / Wind"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Rain / Wind Late"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Rain Early"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Rain Late"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Rain and Freezing Rain"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Rain and Shower"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Light Rain and Windy"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Low"
-#~ msgstr "Minore"
-
-#, fuzzy
-#~ msgid "Mostly Clear"
-#~ msgstr "Molto nuvoloso"
-
-#, fuzzy
-#~ msgid "Mostly Cloudy / Wind"
-#~ msgstr "Molto nuvoloso"
-
-#, fuzzy
-#~ msgid "Mostly Cloudy and Windy"
-#~ msgstr "Molto nuvoloso"
-
-#, fuzzy
-#~ msgid "N"
-#~ msgstr "No"
-
-#, fuzzy
-#~ msgid "NNW"
-#~ msgstr "SCONOSCIUTO"
-
-#, fuzzy
-#~ msgid "New"
-#~ msgstr "Adesso"
-
-#, fuzzy
-#~ msgid "PM Fog"
-#~ msgstr "Nebbia"
-
-#, fuzzy
-#~ msgid "PM Light Rain"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "PM Light Rain / Wind"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "PM Light Snow"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "PM Rain"
-#~ msgstr "Pioggia"
-
-#, fuzzy
-#~ msgid "PM Showers"
-#~ msgstr "Temporali"
-
-#, fuzzy
-#~ msgid "PM Showers / Wind"
-#~ msgstr "Temporali"
-
-#, fuzzy
-#~ msgid "PM Snow Showers"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "PM T-Storms"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Partly Cloudy / Wind"
-#~ msgstr "Parzialmente nuvoloso"
-
-#, fuzzy
-#~ msgid "Partly Cloudy and Windy"
-#~ msgstr "Parzialmente nuvoloso"
-
-#, fuzzy
-#~ msgid "Rain / Freezing Rain"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Rain / Snow Showers"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Rain / Snow Showers / Wind"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Rain / Snow Showers Late"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Rain / Thunder"
-#~ msgstr "Mar"
-
-#, fuzzy
-#~ msgid "Rain Late"
-#~ msgstr "Pioggia"
-
-#, fuzzy
-#~ msgid "Rain Shower"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Rain to Wintry Mix"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Rain to Wintry Mix / Wind"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "S_short"
-#~ msgstr "Sensore"
-
-#, fuzzy
-#~ msgid "Scattered Showers"
-#~ msgstr "Temporali diffusi"
-
-#, fuzzy
-#~ msgid "Scattered Snow"
-#~ msgstr "Temporali diffusi"
-
-#, fuzzy
-#~ msgid "Scattered Snow Showers"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Scattered T-Storms"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Showers / Wind"
-#~ msgstr "Mostra"
-
-#, fuzzy
-#~ msgid "Showers Early"
-#~ msgstr "Mostra"
-
-#, fuzzy
-#~ msgid "Showers Late"
-#~ msgstr "Mostra"
-
-#, fuzzy
-#~ msgid "Snow"
-#~ msgstr "Mostra"
-
-#, fuzzy
-#~ msgid "Snow Shower / Wind"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Snow Showers / Wind Early"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Snow Showers Early"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Snow Showers Late"
-#~ msgstr "Mostra Stderr"
-
-#, fuzzy
-#~ msgid "Snow and Freezing Rain"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Snow to Wintry Mix"
-#~ msgstr "Pioggia leggera"
-
-#, fuzzy
-#~ msgid "Storm"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Sunny / Wind"
-#~ msgstr "Nuvoloso/ventoso"
-
-#, fuzzy
-#~ msgid "T-Showers"
-#~ msgstr "Mostra"
-
-#, fuzzy
-#~ msgid "T-Storms Early"
-#~ msgstr "Temporali isolati"
-
-#, fuzzy
-#~ msgid "Wintry Mix / Wind"
-#~ msgstr "Pioggia leggera"
 
 #, fuzzy
 #~ msgid "Downloading video"
