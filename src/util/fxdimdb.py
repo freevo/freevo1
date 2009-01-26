@@ -47,7 +47,9 @@ import urllib, urllib2, urlparse
 import sys
 import codecs
 import os
+import traceback
 from BeautifulSoup import BeautifulSoup, NavigableString
+import HTMLParser
 
 import config
 import util
@@ -212,10 +214,11 @@ class FxdImdb:
         except urllib2.HTTPError, error:
             raise FxdImdb_Net_Error("IMDB unreachable : " + error)
 
-        _debug_('response.url="%s"' % (response.geturl()))
+        response_url = response.geturl()
+        _debug_('response.url="%s"' % (response_url,))
 
         m = re.compile('/title/tt([0-9]*)/')
-        idm = m.search(response.geturl())
+        idm = m.search(response_url)
         if idm: # Direct Hit
             id = idm.group(1)
             if season and episode:
@@ -223,7 +226,15 @@ class FxdImdb:
             response.close()
             return [(id, name.title(), u'', '' )]
 
-        data = self.parsesearchdata(response)
+        if config.DEBUG >= 2:
+            tmpfilename = '/tmp/%s.html' % name.replace(' ', '_').lower()
+            tmp = open(tmpfilename, 'w')
+            tmp.write(response.read())
+            tmp.close()
+            response.close()
+            response = open(tmpfilename, 'r')
+
+        data = self.parsesearchdata(response, url=response_url)
         response.close()
 
         _debug_('id_list has %s items' % (len(self.id_list)))
@@ -281,6 +292,14 @@ class FxdImdb:
             idpage = urllib2.urlopen(req)
         except urllib2.HTTPError, why:
             raise FxdImdb_Net_Error('IMDB unreachable' + str(why))
+
+        if config.DEBUG:
+            tmpfilename = '/tmp/%s.html' % id
+            tmp = open(tmpfilename, 'w')
+            tmp.write(idpage.read())
+            tmp.close()
+            idpage.close()
+            idpage = open(tmpfilename, 'r')
 
         self.parse_data(idpage, id, episodeid, season, episode)
         idpage.close()
@@ -386,7 +405,7 @@ class FxdImdb:
         for (k,v) in self.info.items():
             self.info[k] = self.convert_entities(v)
 
-        if config.DEBUG:
+        if config.DEBUG >= 2:
             for (k,v) in self.info.items():
                 _debug_('items=%s:%s' % (k, v))
             _debug_('id="%s", dvd="%s"' % (id, dvd))
@@ -781,16 +800,22 @@ class FxdImdb:
 
 
     @benchmark(benchmarking & 0x40, benchmarkcall)
-    def parsesearchdata(self, results, id=0):
-        """results (imdb html page), imdb_id
+    def parsesearchdata(self, results, url=None, id=0):
+        """
+        results (imdb html page), imdb_id
+
         @returns: tuple of (title, info(dict), image_urls)
         """
-        _debug_('parsesearchdata(results=%r, id=%r)' % (results, id))
+        _debug_('parsesearchdata(results=%r, url=%r, id=%r)' % (results, url, id))
 
         self.id_list = []
         m = re.compile('/title/tt([0-9]*)/')
         y = re.compile('\(([^)]+)\)')
-        soup = BeautifulSoup(results.read(), convertEntities='xml')
+        try:
+            soup = BeautifulSoup(results.read(), convertEntities='xml')
+        except HTMLParser.HTMLParseError, why:
+            _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
+            return self.id_list
         items = soup.findAll('a', href=re.compile('/title/tt'))
         ids = set([])
         for item in items:
