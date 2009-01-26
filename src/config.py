@@ -353,12 +353,14 @@ def make_freevodir(envvar, linux_dir, bsd_dir, private_dir):
         try:
             print 'trying "%s"...' % (freevo_dirname)
             os.makedirs(freevo_dirname)
+            os.chmod(freevo_dirname, 01777)
         except OSError:
             freevo_dirname = os.path.join(os.environ['HOME'], '.freevo', private_dir)
             if not os.path.isdir(freevo_dirname):
                 try:
                     print 'trying "%s"...' % (freevo_dirname)
                     os.makedirs(freevo_dirname)
+                    os.chmod(freevo_dirname, 0755)
                 except OSError, e:
                     print 'Warning: %s does not exists and can\'t be created' % freevo_dirname
                     print 'Please create this directory as root and set permissions for the'
@@ -404,6 +406,8 @@ OS_CACHEDIR, FREEVO_CACHEDIR = make_freevodir('CACHEDIR', '/var/cache', '/var/db
 #
 lock = RLock()
 #if not HELPER:
+old_stdout = sys.stdout
+old_stderr = sys.stderr
 sys.stdout = Logger(sys.argv[0] + ':stdout')
 sys.stderr = Logger(sys.argv[0] + ':stderr')
 ts = time.asctime(time.localtime(time.time()))
@@ -417,6 +421,8 @@ def shutdown():
     sys.stdout.log('=' * 80)
     sys.stdout.close()
     sys.stderr.close()
+    sys.stdout = old_stdout
+    sys.stderr = old_stderr
     return
 
 def _stack_function_(message='', limit=None):
