@@ -25,8 +25,9 @@ libs_to_check = [
     ('pygame', 'http://www.pygame.org'),
     ('Image', 'http://www.pythonware.com/products/pil/'),
     ('twisted', 'http://www.twistedmatrix.com/'),
+    ('zope.interface', 'http://www.zope.org/Products/ZopeInterface'),
     ('twisted.web.microdom', 'http://www.twistedmatrix.com/'),
-    ('Numeric', 'http://numeric.scipy.org/'),
+    #('Numeric', 'http://numeric.scipy.org/'),
 ]
 
 if sys.hexversion < 0x2050000:
