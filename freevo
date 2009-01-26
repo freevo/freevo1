@@ -33,7 +33,8 @@
 import os
 import sys
 import time
-import popen2
+import pprint
+from subprocess import Popen, PIPE
 
 from stat import *
 from signal import *
@@ -99,7 +100,7 @@ def get_python(check_freevo):
     """
     get the newest version of python [ with freevo installed ]
     """
-    _debug_('version=%r' % (sys.version)) 
+    _debug_('version=%r' % (sys.version))
     if sys.hexversion >= 0x02040000:
         # python seems to be ok
         search = ('python', 'python2')
@@ -117,25 +118,23 @@ def get_python(check_freevo):
                 if not check_freevo:
                     # return if we don't check for an installed version
                     # of freevo
-                    _debug_('python=%r' % (python)) 
+                    _debug_('python=%r' % (python))
                     return python
 
                 # try to import freevo with this python and get
                 # the path
                 cmd = '%s -c "import freevo; print freevo.__path__[0]"' % python
-                child = popen2.Popen4(cmd)
-                while 1:
-                    data = child.fromchild.readline()
+                child = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE)
+                while True:
+                    data = child.stdout.readline()
                     if not data:
                         break
                     if os.path.isdir(data[:-1]):
                         # ok, found it, close child and return
+                        child.stdout.close()
+                        child.stdin.close()
                         child.wait()
-                        child.fromchild.close()
-                        if child.childerr:
-                            child.childerr.close()
-                        child.tochild.close()
-                        _debug_('python=%r data=%r' % (python, data[:-1])) 
+                        _debug_('python=%r data=%r' % (python, data[:-1]))
                         return python, data[:-1]
 
                 child.wait()
@@ -164,7 +163,7 @@ def getpid(name, arg):
                 pid = int(f.readline()[:-1])
             except ValueError:
                 # file does not contain a number
-                _debug_('fname=%r pid=%r' % (fname, 0)) 
+                _debug_('fname=%r pid=%r' % (fname, 0))
                 return fname, 0
             f.close()
 
@@ -177,12 +176,12 @@ def getpid(name, arg):
                     f.close()
                 else:
                     # process not running
-                    _debug_('fname=%r pid=%r' % (fname, 0)) 
+                    _debug_('fname=%r pid=%r' % (fname, 0))
                     return fname, 0
 
             except (OSError, IOError):
                 # running, but not freevo (because not mine)
-                _debug_('fname=%r pid=%r' % (fname, 0)) 
+                _debug_('fname=%r pid=%r' % (fname, 0))
                 return fname, 0
 
             if '-OO' in proc_arg:
@@ -196,11 +195,11 @@ def getpid(name, arg):
                     os.unlink(fname)
                 except OSError:
                     pass
-                _debug_('fname=%r pid=%r' % (fname, 0)) 
+                _debug_('fname=%r pid=%r' % (fname, 0))
                 return fname, 0
-            _debug_('fname=%r pid=%r' % (fname, pid)) 
+            _debug_('fname=%r pid=%r' % (fname, pid))
             return fname, pid
-    _debug_('fname=%r pid=%r' % (fname, 0)) 
+    _debug_('fname=%r pid=%r' % (fname, 0))
     return fname, 0
 
 
@@ -250,7 +249,7 @@ def start(name, arg, bg, store=1):
         _gdb_script_('_END_')
         _gdb_script_('gdb -x freevo-gdb %s' % (arg[0]))
     elif debug >= 1:
-        _gdb_script_('%s -m pdb src/main.py' % (arg[0]))
+        _gdb_script_('%s -m pdb %s' % (arg[0], ' '.join(arg[1:])))
     if cmdfile:
         cmdfile.close()
         os.chmod(cmdfile.name, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)
@@ -508,5 +507,5 @@ if profile:
         python += ['-m', 'cProfile', '-o', '/tmp/%s.stats' % name]
     else:
         python += ['-m', 'profile', '-o', '/tmp/%s.stats' % name]
-    
+
 start(name, python+proc, bg, check)
