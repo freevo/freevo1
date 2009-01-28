@@ -43,9 +43,10 @@ import array
 import config
 import util.mediainfo
 import rc
+#from util.misc import print_upper_execution_stack
 
 from util.benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
+benchmarking = 1 #config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
@@ -126,6 +127,7 @@ LABEL_REGEXP = re.compile("^(.*[^ ]) *$").match
 im_thread = None
 
 
+@benchmark(benchmarking, benchmarkcall)
 def init():
     """
     create a list of media objects and start the Identify_Thread
@@ -155,16 +157,20 @@ def init():
     im_thread.start()
 
 
+@benchmark(benchmarking, benchmarkcall)
 def shutdown():
     """
     shut down the Identify_Thread
     """
+    print 'shutdown()'
     global im_thread
     if im_thread.isAlive():
         _debug_('stopping Identify_Thread', 2)
+        print 'stopping Identify_Thread'
         im_thread.stop = True
         while im_thread.isAlive():
             time.sleep(0.1)
+        print 'stopped Identify_Thread'
 
 
 class autostart(plugin.DaemonPlugin):
@@ -172,6 +178,7 @@ class autostart(plugin.DaemonPlugin):
     Plugin to autostart if a new medium is inserted while Freevo shows
     the main menu
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         """
         load the plugin and start the thread
@@ -182,6 +189,7 @@ class autostart(plugin.DaemonPlugin):
             init()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event=None, menuw=None, arg=None):
         """
         eventhandler to handle the IDENTIFY_MEDIA plugin event and the
@@ -231,6 +239,7 @@ class autostart(plugin.DaemonPlugin):
                 media.move_tray(direction='toggle')
                 return True
 
+    @benchmark(benchmarking, benchmarkcall)
     def shutdown(self):
         shutdown()
 
@@ -240,6 +249,7 @@ class rom_items(plugin.MainMenuPlugin):
     Plugin to add the rom drives to a main menu. This can be the global main menu
     or most likely the video/audio/image/games main menu
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         """
         load the plugin and start the thread
@@ -249,6 +259,7 @@ class rom_items(plugin.MainMenuPlugin):
         if not im_thread:
             init()
 
+    @benchmark(benchmarking, benchmarkcall)
     def items(self, parent):
         """
         return the list of rom drives
@@ -281,6 +292,7 @@ class rom_items(plugin.MainMenuPlugin):
         return items
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def items_eventhandler(self, event, item, menuw):
         """
         handle EJECT for the rom drives
@@ -296,6 +308,7 @@ class RemovableMedia:
     """
     Object about one drive
     """
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, mountdir='', devicename='', drivename=''):
         # This is read-only stuff for the drive itself
         _debug_('RemovableMedia.__init__(mountdir=%r, devicename=%r, drivename=%r)' % \
@@ -303,6 +316,7 @@ class RemovableMedia:
         self.mountdir = mountdir
         self.devicename = devicename
         self.drivename = drivename
+        self.mount_ref_count = 0
 
         # Dynamic stuff
         self.cdc       = 0
@@ -326,6 +340,7 @@ class RemovableMedia:
         self.can_select_speed = False
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def is_tray_open(self):
         """
         return tray status
@@ -333,6 +348,7 @@ class RemovableMedia:
         return self.get_drive_status() == CDS_TRAY_OPEN
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def capabilities_text(self, cdc):
         """ the drive capabilities as text"""
         result = []
@@ -360,12 +376,14 @@ class RemovableMedia:
         return result
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def log_capabilities(self, cdc):
         """ Write the drive capabilities to the debug log """
         for capability in self.capabilities_text(cdc):
             _debug_('%r %s' % (self.devicename, capability), DINFO)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def get_capabilities(self):
         """ Open the CD/DVD drive and read its capabilities """
         _debug_('Getting capabilities for %s (%s)' % (self.drivename, self.devicename), DINFO)
@@ -399,6 +417,7 @@ class RemovableMedia:
         return cdc
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def drive_status_text(self, cds):
         """ the drive status as text"""
         if   cds == CDS_NO_INFO:         return 'CDS_NO_INFO'
@@ -409,6 +428,7 @@ class RemovableMedia:
         return 'CDS_UNKNOWN %r' % (cds)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def disc_status_text(self, cds):
         """ the disc status as text"""
         if   cds == CDS_NO_INFO:         return 'CDS_NO_INFO'
@@ -421,16 +441,19 @@ class RemovableMedia:
         return 'CDS_UNKNOWN %r' % (cds)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def log_disc_status(self, status):
         """ Log the disc status """
         _debug_('%r %s' % (self.devicename, self.disc_status_text(status)), DINFO)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def log_drive_status(self, status):
         """ Log the drive status """
         _debug_('%r %s' % (self.devicename, self.drive_status_text(status)), DINFO)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def get_drive_status(self):
         """ Open the CD/DVD drive and read its drive status """
         cds = CDS_NO_INFO
@@ -467,11 +490,13 @@ class RemovableMedia:
         return cds
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def get_drive_status_changed(self):
         """ has the drive status changed """
         return self.cds_changed
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def open_tray(self):
         """ Open the drive tray """
         _debug_('Ejecting disc in drive %s' % self.drivename)
@@ -490,6 +515,7 @@ class RemovableMedia:
             _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def close_tray(self):
         """ Close the drive tray """
         _debug_('Inserting disc in drive %s' % self.drivename)
@@ -508,6 +534,7 @@ class RemovableMedia:
             _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def move_tray(self, direction='toggle'):
         """ Move the tray. direction can be toggle/open/close """
         global im_thread
@@ -522,6 +549,7 @@ class RemovableMedia:
             pop.show()
             if util.is_mounted(self.mountdir):
                 self.umount()
+                self.mount_ref_count = 0
             self.open_tray()
             pop.destroy()
         elif direction == 'close' and self.can_close:
@@ -533,23 +561,45 @@ class RemovableMedia:
             pop.destroy()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def mount(self):
         """ Mount the media """
         _debug_('Mounting disc in drive %s' % self.drivename, 2)
-        util.mount(self.mountdir, force=True)
+        if self.mount_ref_count == 0:
+            util.mount(self.mountdir, force=True)
+        self.mount_ref_count += 1
+        #print '-----------mount ', self.mountdir, ' ref count ', self.mount_ref_count
+        #print_upper_execution_stack()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def umount(self):
         """ Mount the media """
         _debug_('Unmounting disc in drive %s' % self.drivename, 2)
-        util.umount(self.mountdir)
+        self.mount_ref_count -= 1
+        if self.mount_ref_count == 0:
+            util.umount(self.mountdir)
+        #print '-----------umount ',self.mountdir,' ref count ',self.mount_ref_count
+        #print_upper_execution_stack()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def is_mounted(self):
-        """ Check if the media is mounted """
-        return util.is_mounted(self.mountdir)
+        """ Check if the media is mounted (and the consistency of internal data) """        
+        r = util.is_mounted(self.mountdir)
+        o = os.path.ismount(self.mountdir)
+        if not o and self.mount_ref_count > 0:
+            _debug_('Drive was unmounted out of rom_drives.py: ' + self.mountdir, DWARNING)
+            self.mount_ref_count = 0
+        if o and self.mount_ref_count == 0:
+            _debug_('Drive was mounted out of rom_drives.py: ' + self.mountdir, DWARNING)
+            self.mount_ref_count = 1
+        if (o and not r) or (not o and r):
+            _debug_('Inconsistency regarding the mount status of: ' + self.mountdir, DWARNING)
+        return r
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def shutdown(self):
         shutdown()
 
@@ -558,6 +608,7 @@ class Identify_Thread(threading.Thread):
     """
     Thread to watch the rom drives for changes
     """
+    @benchmark(benchmarking, benchmarkcall)
     def identify(self, media, force_rebuild=False):
         """
         Try to find out as much as possible about the disc in the rom drive: title,
@@ -850,6 +901,7 @@ class Identify_Thread(threading.Thread):
         return
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def check_all(self):
         """ Check all drives """
         if rc.app():
@@ -867,6 +919,7 @@ class Identify_Thread(threading.Thread):
             self.lock.release()
 
 
+    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         """ Initialize the identify thread """
         threading.Thread.__init__(self)

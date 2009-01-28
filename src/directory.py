@@ -419,9 +419,7 @@ class DirItem(Playlist):
 
         if not num_timestamp or num_timestamp < timestamp:
             _debug_('create metainfo for %s', self.dir)
-            need_umount = False
             if self.media:
-                need_umount = not self.media.is_mounted()
                 self.media.mount()
 
             num_dir_items  = 0
@@ -442,7 +440,7 @@ class DirItem(Playlist):
             self['num_%s_items' % name] = num_play_items
             self['num_%s_timestamp' % name] = timestamp
 
-            if need_umount:
+            if self.media:
                 self.media.umount()
 
 
@@ -547,19 +545,33 @@ class DirItem(Playlist):
         if not self.menuw:
             self.menuw = menuw
 
-        # are we on a ROM_DRIVE and have to mount it first?
-        for media in config.REMOVABLE_MEDIA:
-            if self.dir.find(media.mountdir) == 0:
-                util.mount(self.dir)
-                self.media = media
+        if self.media:
+            self.media.mount()
 
         if vfs.isfile(self.dir + '/.password'):
             _debug_('password protected dir', DINFO)
-            self.arg   = arg
+            try:
+                pwfile = vfs.open(self.dir + '/.password')
+                line = pwfile.readline()
+                pwfile.close()
+            except IOError, e:
+                _debug_( 'error reading password file for %s : %s' % (self.dir,str(e)), DWARNING )
+                pb = AlertBox(text=(_('Error reading password file:') + str(e)))
+                pb.show()
+                if self.media:
+                    self.media.umount()
+                return
+
+            if self.media:
+                self.media.umount()
+
+            self.arg   = (arg, line.strip())
             self.menuw = menuw
             pb = InputBox(text=_('Enter Password'), handler=self.pass_cmp_cb, type='password')
             pb.show()
         else:
+            if self.media:
+                self.media.umount()
             self.build(arg=arg, menuw=menuw)
 
 
@@ -570,17 +582,9 @@ class DirItem(Playlist):
         callback for check_password_and_build
         """
         _debug_('pass_cmp_cb(word=%r)' % (word,), 2)
-        try:
-            pwfile = vfs.open(self.dir + '/.password')
-            line = pwfile.readline()
-        except IOError, e:
-            print 'error %d (%s) reading password file for %s' % (e.errno, e.strerror, self.dir)
-            return
-
-        pwfile.close()
-        password = line.strip()
+        (arg,password) = self.arg
         if word == password:
-            self.build(self.arg, self.menuw)
+            self.build(arg, self.menuw)
         else:
             pb = AlertBox(text=_('Password incorrect'))
             pb.show()
@@ -589,6 +593,14 @@ class DirItem(Playlist):
 
     @benchmark(benchmarking & 0x02, benchmarkcall)
     def build(self, arg=None, menuw=None):
+        if self.media:
+            self.media.mount()
+        self.__build(arg,menuw)
+        if self.media:
+            self.media.umount()
+
+
+    def __build(self, arg=None, menuw=None):
         """
         build the items for the directory
         """
@@ -598,9 +610,6 @@ class DirItem(Playlist):
         self.play_items = []
         self.dir_items  = []
         self.pl_items   = []
-
-        if self.media:
-            self.media.mount()
 
         if hasattr(self, '__dirwatcher_last_time__'):
             del self.__dirwatcher_last_time__
@@ -748,10 +757,6 @@ class DirItem(Playlist):
 
         if pop:
             pop.destroy()
-            # closing the poup will rebuild the menu which may umount
-            # the drive
-            if self.media:
-                self.media.mount()
 
         if config.OSD_BUSYICON_TIMER:
             # stop the timer. If the icons is drawn, it will stay there
@@ -807,7 +812,7 @@ class DirItem(Playlist):
 
             menuw.pushmenu(item_menu)
 
-            dirwatcher.cwd(menuw, self, item_menu, self.dir)
+            dirwatcher.cwd(menuw, self, item_menu, self.dir, self.media)
             self.menu  = item_menu
             self.menuw = menuw
 
@@ -817,7 +822,7 @@ class DirItem(Playlist):
         """
         called when we return to this menu
         """
-        dirwatcher.cwd(self.menuw, self, self.menu, self.dir)
+        dirwatcher.cwd(self.menuw, self, self.menu, self.dir, self.media)
         dirwatcher.scan()
 
         # we changed the menu, don't build a new one
@@ -998,6 +1003,7 @@ class Dirwatcher(plugin.DaemonPlugin):
         self.item_menu     = None
         self.dir           = None
         self.files         = None
+        self.media         = None
         self.poll_interval = 100 # 1 sec
 
         plugin.register(self, 'Dirwatcher')
@@ -1026,12 +1032,14 @@ class Dirwatcher(plugin.DaemonPlugin):
 
 
     @benchmark(benchmarking & 0x02, benchmarkcall)
-    def cwd(self, menuw, item, item_menu, dir):
-        _debug_('cwd(menuw=%r, item=%r, item_menu=%r, dir=%r)' % (menuw, item, item_menu, dir), 2)
+    def cwd(self, menuw, item, item_menu, dir, media=None):
+        _debug_('cwd(menuw=%r, item=%r, item_menu=%r, dir=%r, media=%r)' % (menuw, item, item_menu, dir, media), 2)
         self.menuw     = menuw
         self.item      = item
         self.item_menu = item_menu
         self.dir       = dir
+        if self.media and self.media != media:
+            self.media.umount()
         try:
             self.last_time = item.__dirwatcher_last_time__
             self.files     = item.__dirwatcher_last_files__
@@ -1040,6 +1048,9 @@ class Dirwatcher(plugin.DaemonPlugin):
             self.files     = self.listoverlay()
             self.item.__dirwatcher_last_time__  = self.last_time
             self.item.__dirwatcher_last_files__ = self.files
+        if media and self.media != media:
+                media.mount()
+        self.media = media
 
 
     @benchmark(benchmarking & 0x02, benchmarkcall)

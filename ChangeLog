@@ -27,6 +27,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
  * Fixed cd_burn plug-in for spaces in directory names and location of temp files (B#2473568)
  * Fixed OSD drawing of transparent text (B#2482964)
  * Fixed record server automatic re-encoding (B#2482703,B#2458849)
+ * Fixed rom_drives mounting problem for non-root users (B#2502039)
  * Fixed reencode video plug-in; incorrect calls to the encoding server (B#2483017)
  * Fixed wiimote plug-in config errors (B#2494315)
 

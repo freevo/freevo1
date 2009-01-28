@@ -380,20 +380,18 @@ mounted_dirs = []
 def is_mounted(dir):
     """
     return if the dir is mounted
+    (according to the internal list "mounted_dirs" that this module keeps)
     """
     _debug_('is_mounted(dir=%r)' % (dir,), 2)
     global mounted_dirs
     return dir in mounted_dirs
 
 
-mount_count = 0
-
 @benchmark(benchmarking & 0x40, benchmarkcall)
 def mount(dir, force=False):
     """
     mount a directory
     """
-    global mount_count
     if config.ROM_DRIVES_AUTOFS:
         return
     _debug_('mount(dir=%r, force=%r)' % (dir, force), 2)
@@ -404,13 +402,10 @@ def mount(dir, force=False):
         p = subprocess.Popen(['mount', dir], stdout=PIPE, stderr=PIPE)
         rc = p.wait()
         so, se = p.communicate()
-        if rc:
-            if rc in (1,):
-                _debug_('mounting %r: %s' % (dir, se), DWARNING)
-            elif rc == (32,):
-                _debug_('mounting %r: %s' % (dir, se), DWARNING)
-        else:
-            mount_count += 1
+        if rc in (1,32,):
+            _debug_('mounting %r: %s' % (dir, se), DWARNING)
+            from util.misc import print_upper_execution_stack
+            print_upper_execution_stack()
         if os.path.ismount(dir) and not dir in mounted_dirs:
             mounted_dirs.append(dir)
     if force and not dir in mounted_dirs:
@@ -422,7 +417,6 @@ def umount(dir):
     """
     umount a directory
     """
-    global mount_count
     if config.ROM_DRIVES_AUTOFS:
         return
     _debug_('umount(dir=%r)' % (dir,), 2)
@@ -433,11 +427,8 @@ def umount(dir):
         p = subprocess.Popen(['umount', dir], stdout=PIPE, stderr=PIPE)
         rc = p.wait()
         so, se = p.communicate()
-        if rc:
-            if rc in (1,):
-                _debug_('unmounting %r: %s' % (dir, se), DWARNING)
-        else:
-            mount_count -= 1
+        if rc in (1,):
+            _debug_('unmounting %r: %s' % (dir, se), DWARNING)
         if not os.path.ismount(dir) and dir in mounted_dirs:
             mounted_dirs.remove(dir)
 
@@ -446,11 +437,16 @@ def umount(dir):
 def umount_all():
     """
     umount all mounted directories
+
+    note that this function should be used only in emergency situations,
+    e.g. when freevo crashes and exits; since it does not take care
+    of mount reference counting (see rom_drives.py)
     """
     _debug_('umount_all()', 2)
     global mounted_dirs
     for d in copy.copy(mounted_dirs):
         umount(d)
+    mounted_dirs = []
 
 
 @benchmark(benchmarking & 0x40, benchmarkcall)
