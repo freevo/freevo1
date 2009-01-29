@@ -362,7 +362,7 @@ def make_freevodir(envvar, linux_dir, bsd_dir, private_dir):
                     os.makedirs(freevo_dirname)
                     os.chmod(freevo_dirname, 0755)
                 except OSError, e:
-                    print 'Warning: %s does not exists and can\'t be created' % freevo_dirname
+                    print 'Warning: %s does not exist and can\'t be created' % freevo_dirname
                     print 'Please create this directory as root and set permissions for the'
                     print 'Freevo user to write to it.'
                     os_dirname = '/tmp'

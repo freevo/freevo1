@@ -248,7 +248,7 @@ CONFIG_VERSION = 5.26
 # Grub needs to write to /boot/grub/grub.conf. Set
 # the command and options to remount the /boot
 # partition writeable. Set to None if this is not
-# needed.
+# needed (default).
 # AUTOSHUTDOWN_REMOUNT_BOOT_CMD = "/bin/mount"
 # AUTOSHUTDOWN_REMOUNT_BOOT_OPT = "/boot -o remount,rw"
 

@@ -67,7 +67,7 @@ class FXDtree(qp_xml.Parser):
     """
     def __init__(self, filename):
         """
-        Load the file and parse it. If the file does not exists, create
+        Load the file and parse it. If the file does not exist, create
         an empty <freevo> node.
         """
         qp_xml.Parser.__init__(self)
