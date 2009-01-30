@@ -26,7 +26,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, string, random, time, os, re, pwd, stat, threading, md5, datetime, copy
+import sys, string, random, time, os, re, pwd, stat, threading, hashlib, datetime, copy
 try:
     import cPickle as pickle
 except ImportError:
@@ -381,7 +381,7 @@ class RecordServer:
         lower case and then returning the MD5 digest of it. """
         _debug_('shrink(text=%r)' % (text,), 2)
         if text:
-            text = md5.new(text.lower().replace(' ', '')).hexdigest()
+            text = hashlib.md5(text.lower().replace(' ', '')).hexdigest()
         else:
             text = ''
         return text
