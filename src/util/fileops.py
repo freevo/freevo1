@@ -379,7 +379,8 @@ mounted_dirs = []
 @benchmark(benchmarking & 0x40, benchmarkcall)
 def is_mounted(dir):
     """
-    return if the dir is mounted
+    return if the dir is mounted (according to the internal list "mounted_dirs"
+    that this module keeps)
     (according to the internal list "mounted_dirs" that this module keeps)
     """
     _debug_('is_mounted(dir=%r)' % (dir,), 2)

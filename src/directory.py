@@ -1049,7 +1049,7 @@ class Dirwatcher(plugin.DaemonPlugin):
             self.item.__dirwatcher_last_time__  = self.last_time
             self.item.__dirwatcher_last_files__ = self.files
         if media and self.media != media:
-                media.mount()
+            media.mount()
         self.media = media
 
 

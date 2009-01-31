@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# web_types.py - Classes useful for the web interface.
+# Classes useful for the web interface.
 # -----------------------------------------------------------------------
 # $Id$
 #

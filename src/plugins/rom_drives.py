@@ -585,7 +585,7 @@ class RemovableMedia:
 
     @benchmark(benchmarking, benchmarkcall)
     def is_mounted(self):
-        """ Check if the media is mounted (and the consistency of internal data) """        
+        """ Check if the media is mounted (and the consistency of internal data) """
         r = util.is_mounted(self.mountdir)
         o = os.path.ismount(self.mountdir)
         if not o and self.mount_ref_count > 0:

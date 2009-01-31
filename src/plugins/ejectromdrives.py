@@ -62,9 +62,6 @@ class PluginInterface(plugin.ItemPlugin):
         myactions = []
 
         if item.media and hasattr(item.media, 'id'):
-            if item.media.is_mounted():
-                item.media.umount()
-
             if item.media.is_tray_open():
                 str = _('Close drive')
             else:
@@ -81,9 +78,11 @@ class PluginInterface(plugin.ItemPlugin):
         """
         if self.item and self.item.media and hasattr(self.item.media, 'id'):
             _debug_('Item is a CD-ROM drive')
-
-                        # Stop the running video or music in detached mode
+            # Stop the running video or music in detached mode
             rc.post_event(em.Event(em.BUTTON, arg=em.STOP))
+
+            if self.item.media.is_mounted():
+                self.item.media.umount()
 
             self.item.media.move_tray(direction='toggle')
 
