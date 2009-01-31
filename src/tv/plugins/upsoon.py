@@ -93,40 +93,9 @@ class PluginInterface(plugin.DaemonPlugin):
         self.pending_lockfile = config.FREEVO_CACHEDIR + '/record.soon'
         self.tv_lockfile = None # lockfile of recordserver
         self.stopped = None     # flag that tells upsoon what stopped
-
-
-    def findNextProgramHandler(self, result):
-        """ Handles the result from the findNextProgram call """
-        _debug_('findNextProgramHandler(result=%r)' % (result,), 2)
-        (status, self.next_program) = result
-
-        if not status:
-            return
-
-        now = time.time()
-        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), 2)
-
-        self.vdev = self.getVideoForChannel(self.next_program.channel_id)
-
-        self.tv_lockfile = os.path.join(config.FREEVO_CACHEDIR, 'record.'+self.vdev.split('/')[-1])
-
-        self.seconds_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
-        _debug_('next recording in %s secs' % (self.seconds_to_next), 2)
-
-        # announce 120 seconds before recording is due to start
-        # stop the player 60 seconds before recording is due to start
-
-        if (self.seconds_to_next > self.seconds_before_announce):
-            return
-        if (self.seconds_to_next <= self.seconds_before_start):
-            if not os.path.exists(self.pending_lockfile):
-                open(self.pending_lockfile, 'w').close()
-                _debug_('%r lockfile created' % (self.pending_lockfile))
-
-        _debug_('stopping video or radio player')
-        self.stopVideoInUse(self.vdev)
-        self.stopRadioInUse(self.rdev)
-        return
+        if os.path.exists(self.pending_lockfile):
+            os.remove(self.pending_lockfile)
+            _debug_('%r lockfile removed' % (self.pending_lockfile))
 
 
     def getVideoForChannel(self, channel_id):
@@ -191,6 +160,46 @@ class PluginInterface(plugin.DaemonPlugin):
         self.running = False
 
 
+    def findNextProgramHandler(self, result):
+        """ Handles the result from the findNextProgram call """
+        _debug_('findNextProgramHandler(result=%r)' % (result,), 2)
+        (status, self.next_program) = result
+
+        if not status:
+            return
+
+        now = time.time()
+        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), 2)
+
+        self.seconds_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
+        _debug_('next recording in %s secs' % (self.seconds_to_next), 2)
+
+        self.vdev = self.getVideoForChannel(self.next_program.channel_id)
+        self.tv_lockfile = os.path.join(config.FREEVO_CACHEDIR, 'record.'+self.vdev.split('/')[-1])
+
+        if os.path.exists(self.pending_lockfile):
+            if os.path.exists(self.tv_lockfile):
+                os.remove(self.pending_lockfile)
+                _debug_('%r lockfile removed' % (self.pending_lockfile))
+            if self.seconds_to_next > self.seconds_before_start:
+                open(self.pending_lockfile, 'w').close()
+                _debug_('%r lockfile created' % (self.pending_lockfile))
+        else:
+            if os.path.exists(self.tv_lockfile):
+                return
+            if (self.seconds_to_next > self.seconds_before_announce):
+                return
+            # announce 120 seconds before recording is due to start
+            # stop the player 60 seconds before recording is due to start
+            if self.seconds_to_next <= self.seconds_before_start:
+                open(self.pending_lockfile, 'w').close()
+                _debug_('%r lockfile created' % (self.pending_lockfile))
+
+                self.stopVideoInUse(self.vdev)
+                self.stopRadioInUse(self.rdev)
+                _debug_('stopped video or radio player')
+
+
     def timer_handler(self):
         """
         Sends a poll message to the record server
@@ -198,25 +207,11 @@ class PluginInterface(plugin.DaemonPlugin):
         if not self.running:
             return self.running
         _debug_('timer_handler()', 2)
-
-        # Remove the pending record lock file when a record lock file is written
-        if self.tv_lockfile:
-            if os.path.exists(self.tv_lockfile):
-                if os.path.exists(self.pending_lockfile):
-                    os.remove(self.pending_lockfile)
-                    _debug_('%r lockfile removed' % (self.pending_lockfile))
-                return self.running
-            else:
-                self.tv_lockfile = None
-
-        # Check if a recording is about to start
-        if os.path.exists(self.pending_lockfile):
-            return self.running
-
         try:
-            self.recordclient.findNextProgram(self.findNextProgramHandler)
+            self.recordclient.findNextProgram(self.findNextProgramHandler, isrecording=True)
         except Exception, why:
             _debug_('findNextProgram: %s' % (why), DERROR)
+
         return self.running
 
 
