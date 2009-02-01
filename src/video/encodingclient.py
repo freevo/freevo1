@@ -32,7 +32,7 @@ A client interface to the Freevo encoding server.
 import sys
 
 import kaa
-import kaa.rpc
+import kaa.rpc, kaa.rpc2
 
 import config
 
@@ -86,9 +86,7 @@ class EncodingClientActions:
     def __init__(self):
         """ """
         _debug_('%s.__init__()' % (self.__class__,), 2)
-        self.socket = (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
-        self.secret = config.ENCODINGSERVER_SECRET
-        self.server = None
+        self.channel = kaa.rpc2.connect((config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT), config.ENCODINGSERVER_SECRET, retry=1)
 
     #--------------------------------------------------------------------------------
     # encoding server calls using a coroutine and the wait method
@@ -96,30 +94,11 @@ class EncodingClientActions:
 
     def _encodingserver_rpc(self, cmd, *args, **kwargs):
         """ call the encoding server command using kaa rpc """
-        def closed_handler():
-            _debug_('%r has closed' % (self.socket,), DINFO)
-            self.server = None
-
         _debug_('_encodingserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 2)
-        try:
-            if self.server is None:
-                try:
-                    self.server = kaa.rpc.Client(self.socket, self.secret)
-                    self.server.signals['closed'].connect(closed_handler)
-                    _debug_('%r is up' % (self.socket,), DINFO)
-                except kaa.rpc.ConnectError:
-                    _debug_('%r is down' % (self.socket,), DINFO)
-                    self.server = None
-                    return None
-            return self.server.rpc(cmd, *args, **kwargs)
-        except kaa.rpc.ConnectError, e:
-            _debug_('%r is down' % (self.socket,), DINFO)
-            self.server = None
+        if self.channel.status != kaa.rpc2.CONNECTED:
+            _debug_('encoding server is down', DINFO)
             return None
-        except IOError, e:
-            _debug_('%r is down' % (self.socket,), DINFO)
-            self.server = None
-            return None
+        return self.channel.rpc(cmd, *args, **kwargs)
 
 
     def _encodingserver_call(self, cmd, *args, **kwargs):
