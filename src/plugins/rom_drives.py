@@ -45,8 +45,8 @@ import util.mediainfo
 import rc
 #from util.misc import print_upper_execution_stack
 
-from util.benchmark import benchmark
-benchmarking = 1 #config.DEBUG_BENCHMARKING
+from benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
@@ -935,27 +935,30 @@ class Identify_Thread(threading.Thread):
         # Make sure the movie database is rebuilt at startup
         util.touch(rebuild_file)
         while 1:
-            # Check if we need to update the database
-            # This is a simple way for external apps to signal changes
-            if os.path.exists(rebuild_file):
-                if video.hash_fxd_movie_database() == 0:
-                    # something is wrong, deactivate this feature
-                    rebuild_file = '/this/file/should/not/exist'
+            try:
+                # Check if we need to update the database
+                # This is a simple way for external apps to signal changes
+                if os.path.exists(rebuild_file):
+                    if video.hash_fxd_movie_database() == 0:
+                        # something is wrong, deactivate this feature
+                        rebuild_file = '/this/file/should/not/exist'
 
-                for media in config.REMOVABLE_MEDIA:
-                    media.drive_status = CDS_NO_INFO #media.get_drive_status()
+                    for media in config.REMOVABLE_MEDIA:
+                        media.drive_status = CDS_NO_INFO #media.get_drive_status()
 
-            if not rc.app():
-                # check only in the menu
-                self.check_all()
+                if not rc.app():
+                    # check only in the menu
+                    self.check_all()
 
-            for i in range(4):
-                # wait some time
-                time.sleep(0.5)
+                for i in range(4):
+                    # wait some time
+                    time.sleep(0.5)
 
-                # check if we need to stop
-                if hasattr(self, 'stop'):
-                    return
+                    # check if we need to stop
+                    if hasattr(self, 'stop'):
+                        return
+            except SystemExit:
+                break
 
 
 if __name__ == '__main__':

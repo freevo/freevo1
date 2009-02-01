@@ -48,7 +48,7 @@ import rc
 import util
 import dialog
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
@@ -112,6 +112,7 @@ L       Subtitle
 # Module variable that contains an initialized OSD() object
 _singleton = None
 
+@benchmark(benchmarking & 0x2, benchmarkcall)
 def get_singleton():
     global _singleton
 
@@ -126,6 +127,7 @@ def get_singleton():
     return _singleton
 
 
+@benchmark(benchmarking & 0x2, benchmarkcall)
 def stop():
     """
     stop the osd because only one program can use the
@@ -134,6 +136,7 @@ def stop():
     get_singleton().stopdisplay()
 
 
+@benchmark(benchmarking & 0x2, benchmarkcall)
 def restart():
     """
     restart a stopped osd
@@ -143,6 +146,7 @@ def restart():
 
 
 class Font:
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self, filename='', ptsize=0, font=None):
         _debug_('deprecated font object use', DWARNING)
         self.filename = filename
@@ -153,6 +157,7 @@ class Font:
 font_warning = []
 
 class OSDFont:
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self, name, ptsize):
         self.font   = self.__getfont__(name, ptsize)
         self.height = max(self.font.size('A')[1], self.font.size('j')[1])
@@ -160,6 +165,7 @@ class OSDFont:
         self.name   = name
         self.ptsize = ptsize
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def charsize(self, c):
         try:
             return self.chars[c]
@@ -168,6 +174,7 @@ class OSDFont:
             self.chars[c] = w
             return w
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def stringsize(self, s):
         if not s:
             return 0
@@ -176,6 +183,7 @@ class OSDFont:
             w += self.charsize(c)
         return w
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __loadfont__(self, filename, ptsize):
         if os.path.isfile(filename):
             try:
@@ -185,6 +193,7 @@ class OSDFont:
         return None
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __getfont__(self, filename, ptsize):
         ptsize = int(ptsize / 0.7)  # XXX pygame multiplies by 0.7 for some reason
 
@@ -238,6 +247,7 @@ class OSDFont:
 
 
 class BusyIcon(threading.Thread):
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         threading.Thread.__init__(self)
         self.setDaemon(1)
@@ -249,6 +259,7 @@ class BusyIcon(threading.Thread):
         threading.Thread.start(self)
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def wait(self, timer):
         self.lock.acquire()
         try:
@@ -259,6 +270,7 @@ class BusyIcon(threading.Thread):
             self.lock.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def stop(self):
         self.lock.acquire()
         self.active = False
@@ -320,6 +332,7 @@ class OSD:
     COL_MEDIUM_GREEN = 0x54D35D
     COL_DARK_GREEN = 0x038D11
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         """
         Initialize an instance of OSD
@@ -391,7 +404,7 @@ class OSD:
         self.dialog_layer_enabled = False
         self.screensaver_running = False
         self.dialog_layer = self.screen.convert_alpha()
-        self.dialog_layer.fill((0,0,0,128))
+        self.dialog_layer.fill((0, 0, 0, 128))
 
         if config.CONF.display == 'x11' and config.START_FULLSCREEN_X == 1:
             self.toggle_fullscreen()
@@ -443,6 +456,7 @@ class OSD:
         pygame.time.delay(10)   # pygame.time.get_ticks don't seem to work otherwise
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def focused_app(self):
         if len(self.app_list):
             return self.app_list[-1]
@@ -450,10 +464,12 @@ class OSD:
             return None
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def add_app(self, app):
         self.app_list.append(app)
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def remove_app(self, app):
         _times = self.app_list.count(app)
         for _time in range(_times):
@@ -463,6 +479,7 @@ class OSD:
             _debug_('osd: Setting context to %s' % self.focused_app().get_event_context(), 2)
             rc.set_context(self.focused_app().get_event_context())
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __find_current_widget__(self, widget):
         if not widget:
             return None
@@ -470,6 +487,7 @@ class OSD:
             return self.__find_current_widget__(widget.parent)
         return widget
 
+    #@benchmark(benchmarking & 0x2, benchmarkcall)
     def _cb(self, map=True):
         """
         callback for SDL event (not Freevo events)
@@ -618,6 +636,7 @@ class OSD:
                         return None
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def shutdown(self):
         """
         shutdown the display
@@ -628,6 +647,7 @@ class OSD:
         self.active = False
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def stopdisplay(self):
         """
         stop the display to give other apps the right to use it
@@ -648,6 +668,7 @@ class OSD:
             self.mutex.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def restartdisplay(self):
         """
         restores a stopped display
@@ -676,6 +697,7 @@ class OSD:
             self.mutex.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def toggle_fullscreen(self):
         """
         toggle between window and fullscreen mode
@@ -686,6 +708,7 @@ class OSD:
         _debug_('Setting fullscreen mode to %s' % self.fullscreen)
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def get_fullscreen(self):
         """
         return 1 is fullscreen is running
@@ -693,6 +716,7 @@ class OSD:
         return self.fullscreen
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def clearscreen(self, color=None):
         """
         clean the complete screen
@@ -709,12 +733,14 @@ class OSD:
             self.mutex.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def printdata(self, data):
         print 'image=%s %d %r' % (type(data[0]), len(data[0]), data[0][:10])
         print 'size=%s %s' % (type(data[1]), data[1])
         print 'mode=%s %s' % (type(data[2]), data[2])
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def _load_image_imlib2(self, data):
         """
         Load an image from an imlib2 image object
@@ -726,6 +752,7 @@ class OSD:
         return image
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def _load_image_filename(self, url):
         """
         Load an image from a file name
@@ -789,6 +816,7 @@ class OSD:
         return image
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def loadbitmap(self, url, cache=False):
         """
         Load a bitmap and return the pygame image object.
@@ -832,6 +860,7 @@ class OSD:
         return image
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def drawbitmap(self, image, x=0, y=0, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation=0, layer=None):
         """
         Draw a bitmap on the OSD. It is automatically loaded into the cache
@@ -844,6 +873,7 @@ class OSD:
         self.drawsurface(image, x, y, scaling, bbx, bby, bbw, bbh, rotation, layer)
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def drawsurface(self, image, x=0, y=0, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation=0, layer=None):
         """
         scales and rotates a surface and then draws it to the screen.
@@ -871,6 +901,7 @@ class OSD:
             self.mutex.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def zoomsurface(self, image, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation=0):
         """
         Zooms a Surface. It gets a Pygame Surface which is rotated and scaled according
@@ -906,6 +937,7 @@ class OSD:
         return image
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def drawbox(self, x0, y0, x1, y1, width=None, color=None, fill=0, layer=None):
         """
         draw a normal box
@@ -946,6 +978,7 @@ class OSD:
             self.mutex.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def getsurface(self, x=0, y=0, width=0, height=0, rect=None):
         """
         returns a copy of the given area of the current screen
@@ -960,6 +993,7 @@ class OSD:
             self.mutex.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def putsurface(self, surface, x, y):
         """
         copy a surface to the screen
@@ -971,6 +1005,7 @@ class OSD:
             self.mutex.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def screenblit(self, source, destpos, sourcerect=None):
         """
         blit the source to the screen
@@ -993,6 +1028,7 @@ class OSD:
         return ret
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def getfont(self, font, ptsize):
         """
         return cached font
@@ -1006,6 +1042,7 @@ class OSD:
             return fi
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __drawstringframed_line__(self, string, max_width, font, hard, ellipses, word_splitter):
         """
         calculate _one_ line for drawstringframed.
@@ -1085,6 +1122,7 @@ class OSD:
         return (width+ellipses_size, string[:c]+ellipses, string[c:], False)
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __draw_transparent_text__(self, surface, pixels=30):
         """
         Helper for drawing a transparency gradient end for strings
@@ -1385,6 +1423,7 @@ class OSD:
             align_h=align, layer=layer, ellipses='')
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def _savepixel(self, x, y, s):
         """
         help functions to save and restore a pixel
@@ -1396,6 +1435,7 @@ class OSD:
             return None
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def _restorepixel(self, save, s):
         """
         restore the saved pixel
@@ -1404,6 +1444,7 @@ class OSD:
             s.set_at((save[0], save[1]), save[2])
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def drawcircle(self, s, color, x, y, radius):
         """
         draws a circle to the surface s and fixes the borders
@@ -1429,6 +1470,7 @@ class OSD:
         self._restorepixel(p6, s)
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def drawroundbox(self, x0, y0, x1, y1, color=None, border_size=0, border_color=None, radius=0, layer=None):
         """
         draw a round box
@@ -1502,6 +1544,7 @@ class OSD:
             self.mutex.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def update(self, rect=None, blend_surface=None, blend_speed=0, blend_steps=0, blend_time=None, stop_busyicon=True):
         """
         update the screen
@@ -1524,22 +1567,25 @@ class OSD:
                     if self.dialog_layer_enabled and not self.screensaver_running:
                         for sub_rect in rect:
                             self.screen.blit(self.dialog_layer, (sub_rect[0], sub_rect[1]), sub_rect)
-                else:
+                elif len(rect) == 2:
                     try:
                         self.screen.blit(self.main_layer, (rect[0], rect[1]), rect)
                     except:
                         traceback.print_exc()
                     if self.dialog_layer_enabled and not self.screensaver_running:
                         self.screen.blit(self.dialog_layer, (rect[0], rect[1]), rect)
+                else:
+                    #traceback.print_stack()
+                    pass
                 try:
                     pygame.display.update(rect)
                 except:
                     _debug_('osd.update(rect=%r) failed, bad rect?' % (rect,), DERROR)
                     pygame.display.flip()
             else:
-                self.screen.blit(self.main_layer, (0,0))
+                self.screen.blit(self.main_layer, (0, 0))
                 if self.dialog_layer_enabled and not self.screensaver_running:
-                    self.screen.blit(self.dialog_layer, (0,0))
+                    self.screen.blit(self.dialog_layer, (0, 0))
                 pygame.display.flip()
 
             if stop_busyicon:
@@ -1548,6 +1594,7 @@ class OSD:
             self.mutex.release()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def _helpscreen(self):
         if not pygame.display.get_init():
             return
@@ -1584,6 +1631,7 @@ class OSD:
             self.update()
 
 
+    @benchmark(benchmarking & 0x2, benchmarkcall)
     def _sdlcol(self, col):
         """ Convert a 32-bit TRGB color to a 4 element tuple for SDL """
         if col==None:
