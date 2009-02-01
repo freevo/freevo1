@@ -31,7 +31,6 @@
 
 import os, time
 
-
 import config, skin, util, rc
 
 from gui.PopupBox import PopupBox
@@ -41,7 +40,7 @@ from event import *
 from item import Item
 from programitem import ProgramItem
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 

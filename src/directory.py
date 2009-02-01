@@ -57,7 +57,7 @@ from playlist import Playlist
 from event import *
 from gui import InputBox, AlertBox, ProgressBox
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 

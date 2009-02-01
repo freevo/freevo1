@@ -39,7 +39,7 @@ import plugin
 from plugins.idlebar import IdleBarPlugin
 import util.pymetar as pymetar
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 

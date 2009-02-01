@@ -62,7 +62,7 @@ from skin import eval_attr
 import xml_skin
 import screen
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 

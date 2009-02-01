@@ -36,7 +36,7 @@ import rc
 import plugin
 from event import *
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING & 0x01
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 

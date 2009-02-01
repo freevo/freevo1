@@ -47,7 +47,7 @@ import traceback
 import kaa.imlib2
 from kaa.metadata.image import EXIF as exif
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = 0
 benchmarkcall = 0
 

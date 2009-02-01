@@ -51,7 +51,7 @@ else:
         from cElementTree import XML
     except ImportError:
         from elementtree.ElementTree import XML
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING & 0x01
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 

@@ -38,7 +38,7 @@ from menu import MenuItem
 from gui import AlertBox, PopupBox, GUIObject
 from event import *
 import util.youtube_dl as youtube
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 

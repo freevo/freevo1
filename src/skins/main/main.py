@@ -45,7 +45,7 @@ import screen
 from animation import render, Transition
 import pygame
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
@@ -456,7 +456,6 @@ class Skin:
         info = self.areas['listing']
         rows, cols = info.get_items_geometry(settings, object, self.get_display_style(menu))[:2]
         return (cols, rows)
-
 
 
     def clear(self, osd_update=True):

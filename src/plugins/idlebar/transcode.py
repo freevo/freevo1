@@ -43,7 +43,7 @@ from plugins.idlebar import IdleBarPlugin
 import rc
 from gui import Progressbar
 from video.encodingclient import EncodingClientActions
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 

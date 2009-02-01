@@ -53,7 +53,7 @@ import HTMLParser
 
 import config
 import util
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
@@ -814,6 +814,7 @@ class FxdImdb:
         try:
             soup = BeautifulSoup(results.read(), convertEntities='xml')
         except HTMLParser.HTMLParseError, why:
+            traceback.print_exc()
             _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
             return self.id_list
         items = soup.findAll('a', href=re.compile('/title/tt'))

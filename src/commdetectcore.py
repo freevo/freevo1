@@ -36,7 +36,7 @@ import kaa.metadata as mmpython
 from copy import copy
 from string import split, join
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 

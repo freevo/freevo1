@@ -53,7 +53,7 @@ from gui.ListBox import ListBox
 from gui.RegionScroller import RegionScroller
 from gui.PopupBox import PopupBox
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = 1 #config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
@@ -218,7 +218,6 @@ class CommandChild(childapp.ChildApp2):
         Override this method to receive stderr from the child app
         The function receives complete lines
         """
-        print 'DJW:CommandChild.stderr_cb(line=%r)' % (line,)
         _debug_('CommandChild.stderr_cb(line=%r)' % (line,), 1)
         if self.outfd:
             self.outfd.write('<se> ' + line)
@@ -322,7 +321,6 @@ def fxdparser(fxd, node):
     """
     parse commands out of a fxd file
     """
-    print 'DJW:fxdparser(fxd=%r, node=%r)' % (fxd, node)
     item = CommandItem()
     item.name    = fxd.getattr(node, 'title')
     item.cmd     = fxd.childcontent(node, 'cmd')
@@ -338,9 +336,6 @@ def fxdparser(fxd, node):
     # parse <info> tag
     fxd.parse_info(fxd.get_children(node, 'info', 1), item)
     fxd.getattr(None, 'items', []).append(item)
-    import pprint
-    pprint.pprint(item.__dict__)
-    print 'DJW:'
 
 
 

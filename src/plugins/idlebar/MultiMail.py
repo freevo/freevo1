@@ -38,7 +38,7 @@ import time
 
 from plugins.idlebar import IdleBarPlugin
 
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
