@@ -345,6 +345,7 @@ def unix_signal_handler(sig, frame):
     global _shutting_down
     if _shutting_down:
         return
+    _shutting_down = True
     _debug_('SystemExit raised')
     raise SystemExit
 
@@ -354,11 +355,12 @@ def signal_handler():
     the signal handler to shut down freevo
     """
     _debug_('signal_handler()', 1)
-    raise Exception
     global _shutting_down
     if _shutting_down:
         return
     _shutting_down = True
+    _debug_('SystemExit raised')
+    raise SystemExit
     shutdown(exit=True)
 
 
@@ -516,6 +518,9 @@ try:
 #    print 'Shutdown by keyboard interrupt'
 #    # Shutdown the application
 #    shutdown()
+
+except SystemExit, why:
+    print 'Freevo %s exited' % (_version,)
 
 except Exception, why:
     _debug_('Crash!: %s' % (why), config.DCRITICAL)
