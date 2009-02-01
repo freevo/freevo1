@@ -56,12 +56,12 @@ class FavoriteItem(Item):
         self.title = fav.title
         self.fav_action = fav_action
         # twisted needs FALSE and TRUE, it does not know False and True
-        if hasattr(fav,'allowDuplicates') and not fav.allowDuplicates:
+        if hasattr(fav, 'allowDuplicates') and not fav.allowDuplicates:
             self.allowDuplicates = fav.allowDuplicates = FALSE
         else:
             self.allowDuplicates = fav.allowDuplicates = TRUE
         # twisted needs FALSE and TRUE, it does not know False and True
-        if hasattr(fav,'onlyNew') and fav.onlyNew:
+        if hasattr(fav, 'onlyNew') and fav.onlyNew:
             self.onlyNew = fav.onlyNew = TRUE
         else:
             self.onlyNew = fav.onlyNew = FALSE
@@ -87,13 +87,13 @@ class FavoriteItem(Item):
         # needed by the inputbox handler
         self.menuw = None
 
-        self.red_action = (self.display_submenu,_('Edit favorite'))
+        self.red_action = (self.display_submenu, _('Edit favorite'))
         self.green_action = (self.rem_favorite, _('Remove favorite'))
 
 
     def actions(self):
         _debug_('actions()', 2)
-        return [( self.display_submenu , _('Edit favorite'))]
+        return [( self.display_submenu, _('Edit favorite'))]
 
 
     def display_submenu(self, arg=None, menuw=None):
@@ -169,7 +169,6 @@ class FavoriteItem(Item):
         _debug_('alter_name(name=%r)' % (name,), 2)
         if name:
             self.name = self.fav.name = name.strip()
-
         self.menuw.refresh()
 
 
@@ -229,7 +228,7 @@ class FavoriteItem(Item):
         menuw.refresh()
 
 
-    def alter_prop(self, arg=(None,None), menuw=None):
+    def alter_prop(self, arg=(None, None), menuw=None):
         """ Alter a favorites property
 
         This function is where the properties of a favorite really are changed.
