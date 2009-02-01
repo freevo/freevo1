@@ -44,7 +44,7 @@ import kaa.metadata as metadata
 
 from www.web_types import HTMLResource, FreevoResource
 from twisted.web import static
-from util.benchmark import benchmark
+from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
