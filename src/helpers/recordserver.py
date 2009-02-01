@@ -132,7 +132,7 @@ class RecordServer:
         self.schedule_lock = threading.Lock()
         self.fc = FreevoChannels()
         # XXX: In the future we should have one lock per VideoGroup.
-        self.tv_lock_file = None
+        self.tv_lockfile = None
         self.vg = None
         self.previouslyRecordedShows = None
         self.delay_recording = None
@@ -970,7 +970,7 @@ class RecordServer:
 
             self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False, CHANNEL_ID)
             suffix = self.vg.vdev.split('/')[-1]
-            self.tv_lock_file = config.FREEVO_CACHEDIR + '/record.'+suffix
+            self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.'+suffix
             self.record_app.Record(rec_prog)
 
             # Cleanup old recordings (if enabled)
@@ -1327,7 +1327,7 @@ class RecordServer:
             elif event == RECORD_START:
                 prog = event.arg
                 _debug_('RECORD_START %s' % (prog), DINFO)
-                open(self.tv_lock_file, 'w').close()
+                open(self.tv_lockfile, 'w').close()
                 self.create_fxd(prog)
                 if config.VCR_PRE_REC:
                     util.popen3.Popen3(config.VCR_PRE_REC)
@@ -1343,8 +1343,10 @@ class RecordServer:
                     os.rename(vfs.getoverlay(prog.filename + '.raw.tmp'),
                               vfs.getoverlay(os.path.splitext(prog.filename)[0] + '.png'))
                     pass
+
                 if config.VCR_POST_REC:
                     util.popen3.Popen3(config.VCR_POST_REC)
+
                 if config.TV_RECORD_REMOVE_COMMERCIALS:
                     (result, response) = commdetectConnectionTest('connection test')
                     if result:
@@ -1355,6 +1357,7 @@ class RecordServer:
                         _debug_(output, DINFO)
                     else:
                         _debug_('commdetect server not running', DINFO)
+
                 if config.TV_REENCODE:
                     result = self.es.ping()
                     if result:
@@ -1410,7 +1413,7 @@ class RecordServer:
                     self.record_app.Record(rec_prog)
                     self.delay_recording = None
                 else:
-                    os.remove(self.tv_lock_file)
+                    os.remove(self.tv_lockfile)
             else:
                 _debug_('%s not handled' % (event), DINFO)
         else:
