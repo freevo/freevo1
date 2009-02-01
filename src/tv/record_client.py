@@ -603,6 +603,13 @@ if __name__ == '__main__':
         print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
+    elif function == "findnextprogramhandler":
+        def findNextProgramHandler(result):
+            print 'findNextProgramHandler: %r' % (result,)
+            raise SystemExit
+        result = rc.findNextProgram(findNextProgramHandler, isrecording=True)
+        print '%s: result=%r' % (rc.timeit(start), result)
+
     elif function == "findprognow":
         result = rc.findProgNow(*args)
         print '%s: result=%r' % (rc.timeit(start), result)
