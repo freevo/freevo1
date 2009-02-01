@@ -43,12 +43,12 @@ Available plugins:
 import time
 import os
 import locale
+from pygame import image, transform
 
 # freevo modules
 import config
 import plugin
 import skin
-from pygame import image, transform
 
 
 class PluginInterface(plugin.DaemonPlugin):
@@ -66,7 +66,8 @@ class PluginInterface(plugin.DaemonPlugin):
         self.plugins = None
         plugin.register(self, 'idlebar')
         self.visible = True
-        self.bar     = None
+        self.bar = None
+        self.rect = None
         self.barfile = ''
         self.free_space = -1
         self.used_space = 0
@@ -100,8 +101,10 @@ class PluginInterface(plugin.DaemonPlugin):
             self.barfile = f
             try:
                 self.bar = transform.scale(image.load(f).convert_alpha(), (w, h))
+                self.rect = self.bar.get_rect()
             except:
                 self.bar = None
+                self.rect = None
 
         # draw the cached barimage
         if self.bar:
