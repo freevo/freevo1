@@ -73,10 +73,10 @@ class PluginInterface(IdleBarPlugin):
 
     @benchmark(benchmarking & 0x4, benchmarkcall)
     def checktv(self):
-        if len(glob.glob(self.pending_lockfile)) > 0:
-            return 2
         if len(glob.glob(self.tv_lockfile)) > 0:
             return 1
+        if len(glob.glob(self.pending_lockfile)) > 0:
+            return 2
         return 0
 
 
