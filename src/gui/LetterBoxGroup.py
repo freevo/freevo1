@@ -1,7 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# LetterBoxGroup.py - a class that combines LetterBox's so the user
-#                     can input words.
+# a class that combines LetterBox's so the user can input words.
 # -----------------------------------------------------------------------
 # $Id$
 #
