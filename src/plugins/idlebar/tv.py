@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# tv.py - IdleBarplugin for monitoring the xmltv-listings
+# IdleBar plug-in for monitoring the xmltv-listings and record status
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -32,9 +32,13 @@ import glob
 import time
 
 # freevo modules
+import config, plugin
 from plugins.idlebar import IdleBarPlugin
-import plugin, config
 import util.tv_util as tv_util
+
+from benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
 class PluginInterface(IdleBarPlugin):
@@ -50,28 +54,38 @@ class PluginInterface(IdleBarPlugin):
     a more severe warning.  If no args are given then no warnings will be
     given.
     """
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __init__(self, listings_threshold=-1):
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.tv'
         self.listings_threshold = listings_threshold
         self.next_guide_check = 0
         self.listings_expire = 0
-        self.tvlockfile = config.FREEVO_CACHEDIR + '/record.*'
+        self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.*'
+        self.pending_lockfile = config.FREEVO_CACHEDIR + '/record.soon'
         icondir = os.path.join(config.ICON_DIR, 'status')
+        self.TVPENDING    = os.path.join(icondir, 'television_soon.png')
         self.TVLOCKED     = os.path.join(icondir, 'television_active.png')
         self.TVFREE       = os.path.join(icondir, 'television_inactive.png')
         self.NEAR_EXPIRED = os.path.join(icondir, 'television_near_expired.png')
         self.EXPIRED      = os.path.join(icondir, 'television_expired.png')
 
+
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def checktv(self):
-        if len(glob.glob(self.tvlockfile)) > 0:
+        if len(glob.glob(self.pending_lockfile)) > 0:
+            return 2
+        if len(glob.glob(self.tv_lockfile)) > 0:
             return 1
         return 0
 
-    def draw(self, (type, object), x, osd):
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
+    def draw(self, (type, object), x, osd):
         if self.checktv() == 1:
             return osd.draw_image(self.TVLOCKED, (x, osd.y + 10, -1, -1))[0]
+        elif self.checktv() == 2:
+            return osd.draw_image(self.TVPENDING, (x, osd.y + 10, -1, -1))[0]
 
         if self.listings_threshold != -1:
             now = time.time()

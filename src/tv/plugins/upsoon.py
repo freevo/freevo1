@@ -88,14 +88,22 @@ class PluginInterface(plugin.DaemonPlugin):
         self.rdev = config.RADIO_DEVICE
 
         self.next_program = None
-        self.seconds_before_announce = 120
-        self.seconds_before_start = 60
+        self.announced = False
+        self.seconds_before_announce = config.TV_UPSOON_ANNOUNCE
+        self.seconds_before_start = config.TV_UPSOON_BEFORE_START
         self.pending_lockfile = config.FREEVO_CACHEDIR + '/record.soon'
         self.tv_lockfile = None # lockfile of recordserver
         self.stopped = None     # flag that tells upsoon what stopped
         if os.path.exists(self.pending_lockfile):
             os.remove(self.pending_lockfile)
             _debug_('%r lockfile removed' % (self.pending_lockfile))
+
+
+    def config(self):
+        return [
+            ('TV_UPSOON_BEFORE_START', 1*60, 'Number of seconds before start of recording to stop player'),
+            ('TV_UPSOON_ANNOUNCE', 1*60+60, 'Number of seconds before start of recording to announce starting'),
+        ]
 
 
     def getVideoForChannel(self, channel_id):
@@ -121,9 +129,8 @@ class PluginInterface(plugin.DaemonPlugin):
                         rc.post_event(STOP)
                         self.stopped = _('TV')
                 os.close(dev_fh)
-            except Exception, e:
-                print '%r: %s' % (vdev, e)
-                _debug_('cannot check video device \"%s\"' % (vdev), DINFO)
+            except Exception, why:
+                _debug_('cannot check video device %r: %s' % (vdev, why), DWARNING)
 
 
     def stopRadioInUse(self, rdev):
@@ -177,27 +184,38 @@ class PluginInterface(plugin.DaemonPlugin):
         self.vdev = self.getVideoForChannel(self.next_program.channel_id)
         self.tv_lockfile = os.path.join(config.FREEVO_CACHEDIR, 'record.'+self.vdev.split('/')[-1])
 
+        #print 'now=%s next=%s secs=%s file=%s' % (time.strftime('%T', time.localtime(now)),
+        #    self.next_program, self.seconds_to_next, os.path.basename(self.tv_lockfile))
+
         if os.path.exists(self.pending_lockfile):
+            self.announced = False
             if os.path.exists(self.tv_lockfile):
                 os.remove(self.pending_lockfile)
-                _debug_('%r lockfile removed' % (self.pending_lockfile))
-            if self.seconds_to_next > self.seconds_before_start:
-                open(self.pending_lockfile, 'w').close()
-                _debug_('%r lockfile created' % (self.pending_lockfile))
+                _debug_('%r lockfile removed tv lock detected' % (self.pending_lockfile), 1)
+            elif self.seconds_to_next < -self.seconds_before_start:
+                os.remove(self.pending_lockfile)
+                _debug_('%r lockfile removed recording in-progress' % (self.pending_lockfile), 1)
         else:
             if os.path.exists(self.tv_lockfile):
+                _debug_('%r not creating tv lock detected' % (self.pending_lockfile,), 1)
                 return
-            if (self.seconds_to_next > self.seconds_before_announce):
+            if self.seconds_to_next < 0:
+                _debug_('%r not creating recording in-progress' % (self.pending_lockfile,), 1)
                 return
             # announce 120 seconds before recording is due to start
             # stop the player 60 seconds before recording is due to start
             if self.seconds_to_next <= self.seconds_before_start:
                 open(self.pending_lockfile, 'w').close()
-                _debug_('%r lockfile created' % (self.pending_lockfile))
+                _debug_('%r lockfile created' % (self.pending_lockfile), 1)
 
                 self.stopVideoInUse(self.vdev)
                 self.stopRadioInUse(self.rdev)
                 _debug_('stopped video or radio player')
+            elif self.seconds_to_next <= self.seconds_before_announce:
+                if not self.announced:
+                    rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in a few minutes')))
+                    _debug_('announced', 1)
+                    self.announced = True
 
 
     def timer_handler(self):
