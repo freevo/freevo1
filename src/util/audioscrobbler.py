@@ -107,10 +107,8 @@ class AudioscrobblerWorker(Thread):
         """
         try:
             if self.action == 'nowplaying':
-                print 'nowplaying'
                 self.nowplaying(self.artist, self.track, self.album, self.secs, self.tracknumber, self.mbtrackid)
             elif self.action == 'submit':
-                print 'submit'
                 self.submit(self.artist, self.track, self.starttime, self.source, self.rating, self.secs,
                     self.album, self.tracknumber, self.mbtrackid)
             else:

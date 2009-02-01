@@ -167,22 +167,21 @@ class PluginInterface(plugin.DaemonPlugin):
         Get events from Freevo
         """
         _debug_('eventhandler(event=%r:%r, menuw=%r)' % (event.name, event.arg, menuw), 2)
-        print event
         if event == PLAY_START:
             self.playitem = event.arg
             self.starttime = time.time()
             self.nowplaying = True
 
-        if event == PLAY_END:
+        elif event == PLAY_END:
             self.playitem = None
 
-        if event == STOP:
+        elif event == STOP:
             self.playitem = None
 
-        if event == PLAYLIST_NEXT:
+        elif event == PLAYLIST_NEXT:
             self.starttime = time.time()
 
-        if event == SEEK:
+        elif event == SEEK:
             self.starttime = time.time()
 
         return 0
