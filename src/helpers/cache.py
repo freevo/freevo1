@@ -362,15 +362,18 @@ def create_metadata():
             fxd.append(dir[1])
 
 
-    items = playlist.mimetype.get(None, util.misc.unique(pl))
+    try:
+        items = playlist.mimetype.get(None, util.misc.unique(pl))
 
-    # ignore fxd files for now, they can't store metainfo
-    # for f in fxditem.mimetype.get(None, util.misc.unique(fxd)):
-    #     if f.type == 'playlist':
-    #         items.append(f)
+        # ignore fxd files for now, they can't store metainfo
+        # for f in fxditem.mimetype.get(None, util.misc.unique(fxd)):
+        #     if f.type == 'playlist':
+        #         items.append(f)
 
-    for i in items:
-        util.extendedmeta.PlaylistParser(i)
+        for i in items:
+            util.extendedmeta.PlaylistParser(i)
+    except:
+        pass
     print 'done'
 
     print 'checking database.....................................',
