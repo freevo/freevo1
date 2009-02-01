@@ -37,7 +37,7 @@ import urllib
 from threading import Thread, RLock
 
 from benchmark import benchmark
-benchmarking = 0xffff #0
+benchmarking = 0
 benchmarkcall = False
 
 DEBUG = False
@@ -46,10 +46,12 @@ DEBUG = True
 
 class AudioscrobblerException(Exception):
     """ AudioscrobblerException class """
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __init__(self, why, url=None):
         self.why = why
         self.url = url
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __str__(self):
         if self.url:
             return repr(self.url+': '+self.why)
@@ -62,7 +64,22 @@ class AudioscrobblerWorker(Thread):
     """
     Audioscrobbler Realtime Submission Protocol worker class
     """
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __init__(self, user, password, cachefilename):
+        """
+        Initialise an instance of AudioscrobblerWorker
+
+        @ivar username: Is the name of the user.
+        @ivar password: Is the password for the user.
+        @ivar cachefilename: Is the cache file name of the Audioscrobbler handshake.
+        @ivar handshake: Indicates that a handshake is requested. Hits to
+          post.audioscrobbler.com without this variable set will return a
+          human-readable informational message, default true
+        @ivar clientid: Is an identifier for the client, default tst
+        @ivar clientver: Is the version of the client being used, default 1.0
+        @ivar timestamp: Is the current UNIX Timestamp, in seconds.
+        @ivar auth: md5(md5(password) + timestamp)
+        """
         Thread.__init__(self)
         self.user = user
         self.password = password
@@ -85,6 +102,9 @@ class AudioscrobblerWorker(Thread):
 
     @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
+        """
+        Execute the Audioscrobbler action
+        """
         try:
             if self.action == 'nowplaying':
                 print 'nowplaying'
@@ -92,13 +112,14 @@ class AudioscrobblerWorker(Thread):
             elif self.action == 'submit':
                 print 'submit'
                 self.submit(self.artist, self.track, self.starttime, self.source, self.rating, self.secs,
-                    self.album, self.tracknumber, self.mbtrackid):
+                    self.album, self.tracknumber, self.mbtrackid)
             else:
                 print 'unknown action!'
         except AudioscrobblerException, why:
             print 'AudioscrobblerException: %s' % (why,)
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def _urlopen(self, url, data=None, lines=True):
         """
         Wrapper to see what is sent and received
@@ -143,20 +164,20 @@ class AudioscrobblerWorker(Thread):
             return reply
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def _login(self):
         """
         Login to audioscrobbler.com, this is called when needed.
 
         @raise AudioscrobblerException: when a problem has been detected.
         """
-        #self.timestamp = time.strftime('%s')
         now = time.time()
         if DEBUG:
-            print 'login: lt=%r gm=%s' % (
-                time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(now)),
-                time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(now)))
-        self.timestamp = time.strftime('%s', time.gmtime(now))
-        #self.timestamp = time.strftime('%s', time.localtime(now))
+            print 'login: gm=%s lt=%r' % (
+                time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(now)),
+                time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(now)))
+        #self.timestamp = time.strftime('%s', time.gmtime(now))
+        self.timestamp = time.strftime('%s')
         self.auth = hashlib.md5(hashlib.md5(self.password).hexdigest()+self.timestamp).hexdigest()
         url = 'http://post.audioscrobbler.com/?hs=true&p=1.2&c=%(clientid)s&v=%(clientver)s' % self.__dict__ + \
             '&u=%(user)s&t=%(timestamp)s&a=%(auth)s' % self.__dict__
@@ -174,6 +195,7 @@ class AudioscrobblerWorker(Thread):
         fd.close()
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def nowplaying(self, artist, track, album, secs, tracknumber, mbtrackid):
         """
         Send what is now playing to audioscrobbler.com
@@ -230,7 +252,8 @@ class AudioscrobblerWorker(Thread):
         data = {}
         data['a[%d]' % num] = artist
         data['t[%d]' % num] = track
-        data['i[%d]' % num] = time.strftime('%s', time.gmtime(starttime))
+        #data['i[%d]' % num] = time.strftime('%s', time.gmtime(starttime))
+        data['i[%d]' % num] = time.strftime('%s')
         data['o[%d]' % num] = source
         data['r[%d]' % num] = rating or 'L'
         data['l[%d]' % num] = int(secs) or ''
@@ -238,12 +261,13 @@ class AudioscrobblerWorker(Thread):
         data['n[%d]' % num] = tracknumber or ''
         data['m[%d]' % num] = mbtrackid or ''
         if DEBUG:
-            print '%s: lt=%r gm=%s' % (track,
-                time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(float(starttime))),
-                time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(float(starttime))))
+            print '%s: gm=%s lt=%r' % (track,
+                time.strftime('%d.%m.%Y %H:%M:%S', time.gmtime(float(starttime))),
+                time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(float(starttime))))
         return data
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def submit(self, artist, track, starttime, source, rating, secs, album, tracknumber, mbtrackid):
         """
         Submit one or more tracks to Audioscrobbler Realtime.
@@ -290,26 +314,24 @@ class Audioscrobbler(object):
     nowplayingurl = None
     submissionurl = None
 
-    def __init__(self, user, password, cachefilename):
+    @benchmark(benchmarking & 0x4, benchmarkcall)
+    def __init__(self, username, password, cachefilename):
         """
         Initialise an instance of Audioscrobbler
 
-        @ivar handshake: Indicates that a handshake is requested. Hits to
-          post.audioscrobbler.com without this variable set will return a
-          human-readable informational message, default true
-        @ivar clientid: Is an identifier for the client, default tst
-        @ivar clientver: Is the version of the client being used, default 1.0
-        @ivar user: Is the name of the user.
-        @ivar timestamp: Is the current UNIX Timestamp, in seconds.
-        @ivar auth: md5(md5(password) + timestamp)
+        @ivar username: Is the name of the user.
+        @ivar password: Is the password for the user.
+        @ivar cachefilename: Is the cache file name of the Audioscrobbler handshake.
         """
         if DEBUG:
-            print 'Audioscrobbler.__init__(user=%r, password=%r, cachefilename=%r' % \
-                (user, '*' * len(password), cachefilename)
+            print 'Audioscrobbler.__init__(username=%r, password=%r, cachefilename=%r' % \
+                (username, '*' * len(password), cachefilename)
+        self.username = username
+        self.password = password
+        self.cachefilename = cachefilename
 
-        self.worker = AudioscrobblerWorker(user, password, cachefilename)
 
-
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def nowplaying(self, artist, track, album=None, secs=None, tracknumber=None, mbtrackid=None):
         """
         Send what is now playing to audioscrobbler.com
@@ -323,14 +345,17 @@ class Audioscrobbler(object):
         @param tracknumber: The position of the track on the album, or None if not known.
         @param mbtrackid: The MusicBrainz Track ID, or None if not known.
         """
-        self.worker.action = 'nowplaying'
-        self.worker.artist = artist
-        self.worker.track = track
-        self.worker.album = album
-        self.worker.secs = secs
-        self.worker.tracknumber = tracknumber
-        self.worker.mbtrackid = mbtrackid
-        self.worker.start()
+        if DEBUG:
+            print 'Audioscrobbler.nowplaying'
+        self.np_worker = AudioscrobblerWorker(self.username, self.password, self.cachefilename)
+        self.np_worker.action = 'nowplaying'
+        self.np_worker.artist = artist
+        self.np_worker.track = track
+        self.np_worker.album = album
+        self.np_worker.secs = secs
+        self.np_worker.tracknumber = tracknumber
+        self.np_worker.mbtrackid = mbtrackid
+        self.np_worker.start()
 
 
     def submit(self, artist, track, starttime, source, rating, secs=None,
@@ -398,16 +423,20 @@ class Audioscrobbler(object):
 
         @param mbtrackid: The MusicBrainz Track ID, or None if not known.
         """
-        self.worker.action = 'submit'
-        self.worker.artist = artist
-        self.worker.starttime = starttime
-        self.worker.source = source
-        self.worker.rating = rating
-        self.worker.secs = secs
-        self.worker.album = album
-        self.worker.tracknumber = tracknumber
-        self.worker.mbtrackid = mbtrackid
-        self.worker.start()
+        if DEBUG:
+            print 'Audioscrobbler.submit'
+        self.sm_worker = AudioscrobblerWorker(self.username, self.password, self.cachefilename)
+        self.sm_worker.action = 'submit'
+        self.sm_worker.artist = artist
+        self.sm_worker.track = track
+        self.sm_worker.starttime = starttime
+        self.sm_worker.source = source
+        self.sm_worker.rating = rating
+        self.sm_worker.secs = secs
+        self.sm_worker.album = album
+        self.sm_worker.tracknumber = tracknumber
+        self.sm_worker.mbtrackid = mbtrackid
+        self.sm_worker.start()
 
 
 

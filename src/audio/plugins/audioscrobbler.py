@@ -42,6 +42,10 @@ from event import *
 from util.audioscrobbler import Audioscrobbler, AudioscrobblerException
 import util.audioscrobbler
 
+from benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
 
 #
 # Some parts here are from the LCD plugin.
@@ -70,6 +74,7 @@ class PluginInterface(plugin.DaemonPlugin):
         LASTFM_PASS = 'password'
     """
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __init__(self):
         """
         Set up the basics, register with Freevo and connect
@@ -108,6 +113,7 @@ class PluginInterface(plugin.DaemonPlugin):
             pass
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def shutdown(self):
         _debug_('shutdown()', 2)
         try:
@@ -118,6 +124,7 @@ class PluginInterface(plugin.DaemonPlugin):
             pass
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def config(self):
         _debug_('config()', 2)
         return [
@@ -127,6 +134,7 @@ class PluginInterface(plugin.DaemonPlugin):
         ]
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def poll(self):
         """
         Run this code every self.poll_interval seconds
@@ -136,12 +144,11 @@ class PluginInterface(plugin.DaemonPlugin):
             self.draw(('player', self.playitem), None)
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def draw(self, (ttype, object), osd):
         """
-        This is from the LCD plugin. With some modification.
-        I don't know what this does, or how it does it so I'll just let it be for now.
-        Original docstring:
-        'Draw' the information on the LCD display.
+        'draw' is called about once a second when playing audio
+        call submit a song if the track has a track number
         """
         _debug_('draw((ttype=%r, object=%r), osd=%r)' % (ttype, object, osd), 2)
         if ttype != 'player':
@@ -154,11 +161,13 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.submit_song(player)
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         """
         Get events from Freevo
         """
         _debug_('eventhandler(event=%r:%r, menuw=%r)' % (event.name, event.arg, menuw), 2)
+        print event
         if event == PLAY_START:
             self.playitem = event.arg
             self.starttime = time.time()
@@ -179,6 +188,7 @@ class PluginInterface(plugin.DaemonPlugin):
         return 0
 
 
+    @benchmark(benchmarking & 0x4, benchmarkcall)
     def submit_song(self, player):
         artist    = player.getattr('artist')
         track     = player.getattr('title') or player.getattr('name')
