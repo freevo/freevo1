@@ -467,6 +467,7 @@ if __name__ == '__main__':
         raise SystemExit
 
     rc = RecordClient()
+    kaa.inprogress(rc.channel).wait()
 
     if len(sys.argv) >= 2:
         function = sys.argv[1].lower()

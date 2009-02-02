@@ -336,6 +336,7 @@ if __name__ == '__main__':
 
     idnr = None
     es = EncodingClientActions()
+    kaa.inprogress(es.channel).wait()
     if function == 'test2':
         result = es.ping()
         print 'ping:', result
