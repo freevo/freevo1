@@ -337,7 +337,7 @@ class ShowProgramDetails(ScrollableTextScreen):
             self.program = prg
             name = prg.name
             sub_title = prg.sub_title
-            # gather the infos and construct the description text
+            # gather the info and construct the description text
             if sub_title:
             # subtitle + newline + description
                 description = u'"' + Unicode(sub_title) + u'"\n' + Unicode(prg.description)
@@ -345,7 +345,7 @@ class ShowProgramDetails(ScrollableTextScreen):
                 # or just the description, if there is no subtitle
                 description = Unicode(prg.description)
 
-            # maybe there is more infos to add (categories, advisories, ratings)
+            # maybe there is more info to add (categories, advisories, ratings)
             if prg.categories:
                 description += u'\n'
                 for category in prg.categories:

@@ -671,7 +671,7 @@ class MPlayerApp(childapp.ChildApp2):
                 self.exit_type = m.group(1)
 
 
-        # this is the first start of the movie, parse infos
+        # this is the first start of the movie, parse info
         elif not self.item.elapsed:
             for p in self.stdout_plugins:
                 p.stdout(line)

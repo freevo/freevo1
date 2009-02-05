@@ -383,7 +383,7 @@ class MetaCache(Cache):
                 del self.current_objects[key]
                 self.cache_modified = True
         if not self.current_objects:
-            # delete cache file is no object has any infos
+            # delete cache file is no object has any info
             if self.current_cachefile and os.path.isfile(self.current_cachefile):
                 os.unlink(self.current_cachefile)
             self.cache_modified = False

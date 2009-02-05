@@ -463,7 +463,7 @@ if __name__ == '__main__':
     elif len(sys.argv)>2 and sys.argv[1] == '-i':
         print_info(sys.argv[2], parse_plugins(sys.argv[2]))
 
-    # show infos about all plugins (long list)
+    # show info about all plugins (long list)
     elif len(sys.argv)>1 and sys.argv[1] == '-a':
         all_plugins = parse_plugins()
         for p in all_plugins:

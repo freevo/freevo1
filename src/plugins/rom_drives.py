@@ -352,27 +352,27 @@ class RemovableMedia:
     def capabilities_text(self, cdc):
         """ the drive capabilities as text"""
         result = []
-        result.append('%s CDC_CLOSE_TRAY'     % (cdc & CDC_CLOSE_TRAY     and 'can' or 'can\'t'))
-        result.append('%s CDC_OPEN_TRAY'      % (cdc & CDC_OPEN_TRAY      and 'can' or 'can\'t'))
-        result.append('%s CDC_LOCK'           % (cdc & CDC_LOCK           and 'can' or 'can\'t'))
-        result.append('%s CDC_SELECT_SPEED'   % (cdc & CDC_SELECT_SPEED   and 'can' or 'can\'t'))
-        result.append('%s CDC_SELECT_DISC'    % (cdc & CDC_SELECT_DISC    and 'can' or 'can\'t'))
-        result.append('%s CDC_MULTI_SESSION'  % (cdc & CDC_MULTI_SESSION  and 'can' or 'can\'t'))
-        result.append('%s CDC_MCN'            % (cdc & CDC_MCN            and 'can' or 'can\'t'))
-        result.append('%s CDC_MEDIA_CHANGED'  % (cdc & CDC_MEDIA_CHANGED  and 'can' or 'can\'t'))
-        result.append('%s CDC_PLAY_AUDIO'     % (cdc & CDC_PLAY_AUDIO     and 'can' or 'can\'t'))
-        result.append('%s CDC_RESET'          % (cdc & CDC_RESET          and 'can' or 'can\'t'))
-        result.append('%s CDC_DRIVE_STATUS'   % (cdc & CDC_DRIVE_STATUS   and 'can' or 'can\'t'))
-        result.append('%s CDC_GENERIC_PACKET' % (cdc & CDC_GENERIC_PACKET and 'can' or 'can\'t'))
-        result.append('%s CDC_CD_R'           % (cdc & CDC_CD_R           and 'can' or 'can\'t'))
-        result.append('%s CDC_CD_RW'          % (cdc & CDC_CD_RW          and 'can' or 'can\'t'))
-        result.append('%s CDC_DVD'            % (cdc & CDC_DVD            and 'can' or 'can\'t'))
-        result.append('%s CDC_DVD_R'          % (cdc & CDC_DVD_R          and 'can' or 'can\'t'))
-        result.append('%s CDC_DVD_RAM'        % (cdc & CDC_DVD_RAM        and 'can' or 'can\'t'))
-        result.append('%s CDC_MO_DRIVE'       % (cdc & CDC_MO_DRIVE       and 'can' or 'can\'t'))
-        result.append('%s CDC_MRW'            % (cdc & CDC_MRW            and 'can' or 'can\'t'))
-        result.append('%s CDC_MRW_W'          % (cdc & CDC_MRW_W          and 'can' or 'can\'t'))
-        result.append('%s CDC_RAM'            % (cdc & CDC_RAM            and 'can' or 'can\'t'))
+        result.append('%s CDC_CLOSE_TRAY'     % (cdc & CDC_CLOSE_TRAY     and "can" or "can't"))
+        result.append('%s CDC_OPEN_TRAY'      % (cdc & CDC_OPEN_TRAY      and "can" or "can't"))
+        result.append('%s CDC_LOCK'           % (cdc & CDC_LOCK           and "can" or "can't"))
+        result.append('%s CDC_SELECT_SPEED'   % (cdc & CDC_SELECT_SPEED   and "can" or "can't"))
+        result.append('%s CDC_SELECT_DISC'    % (cdc & CDC_SELECT_DISC    and "can" or "can't"))
+        result.append('%s CDC_MULTI_SESSION'  % (cdc & CDC_MULTI_SESSION  and "can" or "can't"))
+        result.append('%s CDC_MCN'            % (cdc & CDC_MCN            and "can" or "can't"))
+        result.append('%s CDC_MEDIA_CHANGED'  % (cdc & CDC_MEDIA_CHANGED  and "can" or "can't"))
+        result.append('%s CDC_PLAY_AUDIO'     % (cdc & CDC_PLAY_AUDIO     and "can" or "can't"))
+        result.append('%s CDC_RESET'          % (cdc & CDC_RESET          and "can" or "can't"))
+        result.append('%s CDC_DRIVE_STATUS'   % (cdc & CDC_DRIVE_STATUS   and "can" or "can't"))
+        result.append('%s CDC_GENERIC_PACKET' % (cdc & CDC_GENERIC_PACKET and "can" or "can't"))
+        result.append('%s CDC_CD_R'           % (cdc & CDC_CD_R           and "can" or "can't"))
+        result.append('%s CDC_CD_RW'          % (cdc & CDC_CD_RW          and "can" or "can't"))
+        result.append('%s CDC_DVD'            % (cdc & CDC_DVD            and "can" or "can't"))
+        result.append('%s CDC_DVD_R'          % (cdc & CDC_DVD_R          and "can" or "can't"))
+        result.append('%s CDC_DVD_RAM'        % (cdc & CDC_DVD_RAM        and "can" or "can't"))
+        result.append('%s CDC_MO_DRIVE'       % (cdc & CDC_MO_DRIVE       and "can" or "can't"))
+        result.append('%s CDC_MRW'            % (cdc & CDC_MRW            and "can" or "can't"))
+        result.append('%s CDC_MRW_W'          % (cdc & CDC_MRW_W          and "can" or "can't"))
+        result.append('%s CDC_RAM'            % (cdc & CDC_RAM            and "can" or "can't"))
         return result
 
 
@@ -884,7 +884,7 @@ class Identify_Thread(threading.Thread):
             media.videoitem.media    = media
             media.videoitem.media_id = media.id
 
-            # set the infos we have
+            # set the info we have
             if title:
                 media.videoitem.name = title
 

@@ -165,7 +165,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         if type == 'menu':
             # prepare menu header, try to find out types in menustack
-            # (this could be improved with more general infos in the player items)
+            # (this could be improved with more general info in the player items)
             level = len(object.menustack)-1
             if level == 0:
                 head = 'Freevo'
@@ -231,7 +231,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
             player = object
             if player.type == 'audio':
-                # prepare player infos
+                # prepare player info
                 title = player.name
                 trackno = player.getattr('trackno')
                 time = player.elapsed
@@ -270,7 +270,7 @@ class PluginInterface(plugin.DaemonPlugin):
         called from plugin.py if an event occur
         TODO define events in event.py
         """
-        # show player infos while playing
+        # show player info while playing
         if event == VIDEO_START:
             self.menu_clear()
             self.lcd_head.draw('DVD/SVCD')

@@ -136,18 +136,14 @@ class VideoItem(Item):
         self['field-dominance'] = video_field_dominance
 
         # find image for tv show and build new title
-        if config.VIDEO_SHOW_REGEXP_MATCH(self.name) and not self.network_play and \
-               config.VIDEO_SHOW_DATA_DIR:
+        if config.VIDEO_SHOW_REGEXP_MATCH(self.name) and not self.network_play and config.VIDEO_SHOW_DATA_DIR:
 
             show_name = config.VIDEO_SHOW_REGEXP_SPLIT(self.name)
             if show_name[0] and show_name[1] and show_name[2] and show_name[3]:
-                self.name = show_name[0] + u' ' + show_name[1] + u'x' + show_name[2] +\
-                            u' - ' + show_name[3]
-                image = util.getimage((config.VIDEO_SHOW_DATA_DIR + \
-                                       show_name[0].lower()))
+                self.name = show_name[0] + u' ' + show_name[1] + u'x' + show_name[2] + u' - ' + show_name[3]
+                image = util.getimage((config.VIDEO_SHOW_DATA_DIR + show_name[0].lower()))
                 if self.filename and not image:
-                    image = util.getimage(os.path.dirname(self.filename) + '/' + \
-                                          show_name[0].lower())
+                    image = util.getimage(os.path.join(os.path.dirname(self.filename), show_name[0].lower()))
 
                 if image:
                     self.image = image
@@ -166,11 +162,9 @@ class VideoItem(Item):
                 self.tv_show_name  = show_name[0]
                 self.tv_show_ep    = show_name[3]
 
-
-        # extra infos in discset_information
+        # extra info in discset_information
         if parent and parent.media:
-            fid = String(parent.media.id) + \
-                  self.filename[len(os.path.join(parent.media.mountdir,'')):]
+            fid = String(parent.media.id) + self.filename[len(os.path.join(parent.media.mountdir,'')):]
             from video import discset_information
             if discset_information.has_key(fid):
                 self.mplayer_options = discset_information[fid]
@@ -862,14 +856,14 @@ class ShowDetails(ScrollableTextScreen):
             name = movie.name
             sub_title = movie['tagline']
             desc = movie['plot']
-            # gather the infos and construct the description text
+            # gather the info and construct the description text
             if sub_title:
                 # subtitle + newline + description
                 description = u'"' + sub_title + u'"\n' + desc + u'\n\n'
             else:
                 # or just the description, if there is no subtitle
                 description = desc + u'\n\n'
-            # add some additional infos if they are available
+            # add some additional info if they are available
             if movie['genre']:
                 description += _('Genre') + u' : '+movie['genre'] + u'\n'
             if movie['length']:
