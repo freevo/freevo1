@@ -33,6 +33,7 @@ import os
 import stat
 import time
 import copy
+import traceback
 
 import config
 import util
@@ -263,7 +264,49 @@ def cache_cropdetect():
     import encodingcore
     import kaa.metadata
     # load the fxd part of video
-    import fxdhandler
+    import fxditem
+    import video.fxdhandler as fxdhandler
+    from util import fxdparser
+    from video import VideoItem
+    import pprint
+
+    global encjob
+
+    def fxd_movie_read(fxd, node):
+        global encjob
+        _debug_('fxd_movie_read=%r' % (info.files.fxd_file,), 2)
+        for filename in info.files.files:
+            encjob = encodingcore.EncodingJob(None, None, None, None)
+            encjob.source = filename
+            encjob._identify()
+            encjob._wait(5)
+            if 'ID_LENGTH' not in encjob.id_info:
+                raise encodingcore.EncodingError('no length')
+            encjob.length = float(encjob.id_info['ID_LENGTH'])
+            if encjob.length < 5 or encjob.length > 5 * 60 * 60:
+                raise encodingcore.EncodingError('invalid length of %s' % (encjob.length))
+            encjob._cropdetect()
+            encjob._wait(10)
+            print '%r: crop=%s' % (info.files.fxd_file, encjob.crop)
+
+
+    def fxd_movie_write(fxd, node):
+        global encjob
+        _debug_('fxd_movie_write', 2)
+        if encjob is None:
+            #print 'encjob failed'
+            return
+        if encjob.crop is None:
+            #print 'no crop result'
+            return
+        videos = fxd.get_children(node, 'video', 0)
+        for video in videos:
+            #print video.__dict__
+            files = fxd.get_children(video, 'file', 0)
+            for file in files:
+                #print file.__dict__
+                fxd.setattr(file, 'mplayer-options', '-vf crop=%s' % encjob.crop)
+
 
     plugin.register_callback('fxditem', ['video'], 'movie', fxdhandler.parse_movie)
     plugin.register_callback('fxditem', ['video'], 'disc-set', fxdhandler.parse_disc_set)
@@ -281,7 +324,7 @@ def cache_cropdetect():
         if not os.path.isdir(d[1]):
             continue
         try:
-            files += util.match_files_recursively(d[1], suffixes)
+            #files += util.match_files_recursively(d[1], suffixes)
             fxd += util.match_files_recursively(d[1], fxditem.mimetype.suffix())
         except:
             pass
@@ -292,40 +335,21 @@ def cache_cropdetect():
 
     fxd.sort(lowercaseSort)
 
-    files = util.misc.unique(files)
-    files.sort(lowercaseSort)
-    for filename in copy.copy(files):
-        try:
-            info = kaa.metadata.parse(filename)
-            if not info:
-                print 'ERROR: "%s" has no metadata' % (filename)
-                continue
-            if info.length < 5 or info.length > 5 * 60 * 60:
-                print 'ERROR: "%s" has invalid length of %s' % (filename, info.length)
-                continue
-            encjob = encodingcore.EncodingJob(None, None, None, None)
-            encjob.source = filename
-            encjob.info = info
-            encjob.length = info.length
-            encjob._CropDetect()
-            encjob.thread.join(10.0)
-            if encjob.thread.isAlive():
-                encjob.thread.kill_pipe()
-                encjob.thread.join(10.0)
-                if encjob.thread.isAlive():
-                    print 'CRITICAL: "%s" thread is still alive (pid %s)' % (filename, encjob.pipe.pid)
-                    print
-                    print dir(encjob.thread)
-                    print
-                    print encjob.thread.__dict__
-                    print
-                    continue
-                else:
-                    print 'ERROR: "%s" cropdetect thread was killed' % (filename)
-                    continue
-            print filename, info.mime, info.length, encjob.crop, encjob.cropres
-        except Exception, e:
-            print 'ERROR: "%s" failed: %s' % (filename, e)
+    for info in fxditem.mimetype.parse(None, fxd, display_type='video'):
+        #print info.name, info.files.fxd_file, info.mplayer_options
+        if not info.mplayer_options:
+            #print info.filename
+            try:
+                parser = fxdparser.FXD(info.files.fxd_file)
+                parser.set_handler('movie', fxd_movie_read)
+                parser.set_handler('movie', fxd_movie_write, 'w', True)
+                parser.parse()
+                parser.save()
+            except encodingcore.EncodingError, why:
+                print 'ERROR: "%s" failed: %s' % (info.files.fxd_file, why)
+            except Exception, why:
+                print 'ERROR: "%s" failed: %s' % (info.files.fxd_file, why)
+                #traceback.print_exc()
 
 
 def create_metadata():
@@ -478,9 +502,13 @@ if __name__ == "__main__":
         print_help()
         sys.exit(0)
 
+    if len(sys.argv)>1 and sys.argv[1] == '--cropdetect':
+        cache_cropdetect()
+        sys.exit(0)
+
     if len(sys.argv)>1 and sys.argv[1] == '--thumbnail':
         import util.videothumb
-        if len(sys.argv)>2:
+        if len(sys.argv) > 2:
             if sys.argv[2] == '--recursive':
                 if len(sys.argv)>3:
                     dirname = os.path.abspath(sys.argv[3])
@@ -581,8 +609,6 @@ if __name__ == "__main__":
     if config.CACHE_IMAGES:
         cache_thumbnails()
         cache_www_thumbnails()
-    if config.CACHE_CROPDETECT:
-        cache_cropdetect()
     create_metadata()
     create_tv_pickle()
 
@@ -592,8 +618,7 @@ util.mediainfo.sync()
 # save cache info
 try:
     import kaa.metadata.version
-    util.save_pickle((kaa.metadata.version.VERSION, VERSION,
-                      int(time.time()), complete_update), cachefile)
+    util.save_pickle((kaa.metadata.version.VERSION, VERSION, int(time.time()), complete_update), cachefile)
 except ImportError:
     print 'WARNING: please update kaa.metadata'
 

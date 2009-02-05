@@ -33,9 +33,12 @@ Interface to the encoding server, to re-encode video to a different format.
 """
 
 #Import statements
-import threading
+from threading import Thread
 from time import sleep
-import sys, os, re, popen2 #, ConfigParser, copy
+import sys, os, re #, ConfigParser, copy
+from subprocess import Popen, PIPE
+import pprint
+
 import config
 import kaa.metadata
 from copy import copy
@@ -44,6 +47,8 @@ from string import split, join
 from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
+
+print 'config.DEBUG:', config.DEBUG
 
 #precompiled regular expression to obtain mencoder progress
 re_progress = re.compile('(\d+)\%\) .*Trem:\s*(\d+\w+)\s+')
@@ -119,14 +124,29 @@ class Enum(dict):
     from pytvgrab enum.py, see http://pytvgrab.sourceforge.net
 
     Enum(names, x=0)"""
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def __init__(self, names, x=0):
         """ Initialize an Enum """
         for i in range(x, x+len(names)):
-            self.__dict__[names[i-x]]=i
-            self[i]=names[i-x]
+            self.__dict__[names[i-x]] = i
+            self[i] = names[i-x]
     # __init__()
 
 status = Enum(['notset', 'apass', 'vpass1', 'vpassfinal', 'postmerge'])
+
+
+
+class EncodingError(Exception):
+    """
+    An exception class for last.fm
+    """
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def __init__(self, why):
+        Exception.__init__(self)
+        self.why = str(why)
+
+    def __str__(self):
+        return self.why
 
 
 
@@ -134,21 +154,25 @@ class EncodingOptions:
     """
     Encoding options
     """
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getContainerList(self):
         """Return a list of possible containers"""
         return mappings['lists']['containers']
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getVideoCodecList(self):
         """Return a list of possible video codecs"""
         return mappings['lists']['videocodecs']
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getAudioCodecList(self):
         """Return a possible audio codec list"""
         return mappings['lists']['audiocodecs']
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getVideoFiltersList(self):
         """Return a list of possible video filters"""
         return mappings['filtertype']
@@ -165,7 +189,7 @@ class EncodingJob:
     @ivar output: output file after encoding
     @ivar name: friendly name of the job
     @ivar idnr: job id number
-    @ivar chapter: chapter number to re-encode
+    @ivar titlenum: titlenum number to re-encode
     @ivar rmsource: remove the source when done
     @type rmsource: boolean
     @ivar container: type of video container
@@ -197,18 +221,19 @@ class EncodingJob:
     @ivar threads: number of threads
     @ivar failed: has the job failed?
     """
-    def __init__(self, source, output, friendlyname, idnr, chapter=None, rmsource=False):
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def __init__(self, source, output, friendlyname, idnr, titlenum=None, rmsource=False):
         """
         Initialize an instance of an EncodingJob
         @param source: input source name
         @param output: output file name
         @param friendlyname: name of the job
         @param idnr: job id number
-        @param chapter: chapter number to reencode
+        @param titlenum: titlenum number to reencode
         @param rmsource: remove the source
         """
         _debug_('encodingcore.EncodingJob.__init__(%s, %s, %s, %s, %s, %s)' % \
-            (source, output, friendlyname, idnr, chapter, rmsource), 2)
+            (source, output, friendlyname, idnr, titlenum, rmsource), 2)
         #currently only MEncoder can be used, but who knows what will happen in the future :)
         self._generateCL = self._GenerateCLMencoder
         self.encodingopts = EncodingOptions()
@@ -216,7 +241,7 @@ class EncodingJob:
         self.output = output
         self.name = friendlyname
         self.idnr = idnr
-        self.chapter = chapter
+        self.titlenum = titlenum
         self.rmsource = rmsource
 
         self.container = 'avi'
@@ -230,6 +255,7 @@ class EncodingJob:
         self.vfilters = []
         self.crop = None
         self.cropres = None
+        self.id_info = None
 
         # list of initial and end point of slice to encode
         self.timeslice = [ None , None ]
@@ -263,24 +289,25 @@ class EncodingJob:
             try:
                 self.info = kaa.metadata.parse(self.source)
                 if self.info:
-                    self._AnalyzeSource()
+                    self._analyze_source()
                 else:
                     print 'Failed to analyse "%s" kaa.metadata.parse()'  % self.source
-                    self.failed=True
+                    self.failed = True
                     self.finishedanalyze = True
             except Exception, e:
                 print 'Failed to analyse "%s": %s' % (self.source, e)
-                self.failed=True
+                self.failed = True
                 self.finishedanalyze = True
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setTimeslice(self, timeslice):
         "Set the encoding timeslice"
         self.timeslice = timeslice
         assert(type(timeslice) == type([]))
         assert(len(timeslice) == 2)
         self.timeslice_mencoder = []
-        start=0
+        start = 0
         if timeslice[0]:
             self.timeslice_mencoder += ['-ss', str(timeslice[0])]
             start = timeslice[0]
@@ -292,6 +319,7 @@ class EncodingJob:
                 return 'Invalid slice of times: end is before start ??'
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setContainer(self, container):
         """Set a container to hold the audio & video streams"""
         #safety checks
@@ -308,6 +336,7 @@ class EncodingJob:
             self.output = ('%s.%s' % (self.output, self.container))
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setVideoCodec(self, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """Set video codec and target filesize (in MB) or bit rate (in kbits/sec)"""
         _debug_('setVideoCodec(self, vcodec=%s, tgtsize=%s, multipass=%s, vbitrate=%s)' % \
@@ -325,6 +354,7 @@ class EncodingJob:
         self.altprofile = altprofile
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setAudioCodec(self, acodec, abrate=128):
         """Set audio codec & bitrate"""
         if acodec not in self.encodingopts.getAudioCodecList():
@@ -334,6 +364,7 @@ class EncodingJob:
         self.abrate = abrate
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setVideoFilters(self, videofilters):
         """Set video filters"""
         for vfilter, option in videofilters:
@@ -341,6 +372,7 @@ class EncodingJob:
                 self.vfilters += [ mappings['filter'][option]]
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setVideoRes(self, videores):
         """Set video resolution"""
         if videores == 'Optimal':
@@ -349,11 +381,13 @@ class EncodingJob:
             (self.resx, self.resy) = videores.split(':')
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setNumThreads(self, numthreads):
         """Set the number of threads to use"""
         self.threads = numthreads
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _CalcVideoBR(self):
         """Calculates the video bitrate"""
 
@@ -368,24 +402,25 @@ class EncodingJob:
         _debug_('_CalcVideoBR: vbrate=%s' % (self.vbrate), 2)
 
 
-    def _AnalyzeSource(self):
+    #@benchmark(benchmarking & 0x8, benchmarkcall)
+    def _analyze_source(self):
         """Find out some basic information about the source
 
         ATM we will blindly assume it's a dvdrom device or a disk dvd image,
-        if a title (chapter) number is given.
+        if a title (titlenum) number is given.
         """
-        _debug_('_AnalyzeSource(self)', 2)
+        _debug_('_analyze_source(self)', 2)
 
-        if self.chapter:
+        if self.titlenum:
             #check some things, like length
-            _debug_('source=%r" chapter=%s' % (self.source, self.chapter))
+            _debug_('source=%r" titlenum=%s' % (self.source, self.titlenum))
             dvddata = self.info
-            dvdtitle = dvddata.tracks[self.chapter - 1]
+            dvdtitle = dvddata.tracks[self.titlenum - 1]
             self.length = dvdtitle['length']
             _debug_('Video length is %s' % self.length)
         else:
             data = self.info
-            _debug_('source=\"%s\"' % (self.source))
+            _debug_('source=%r' % (self.source))
             if config.DEBUG >= 2:
                 for f in dir(data):
                     _debug_('%s: %s' % (f, eval('data["%s"]' % f)), 2)
@@ -395,212 +430,82 @@ class EncodingJob:
             else:
                 self.length = 600
                 _debug_('Video length not found, using %s' % (self.length))
-        self._CropDetect()
+        self._cropdetect()
 
 
-    def _CropDetect(self):
-        """Detect cropping, contains pieces of QuickRip
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _identify(self):
+        """Identify the media file
 
-        Function is always called because cropping is a good thing, and we can pass our ideal values
-        back to the client wich can verify them visually if needed.""" #not true atm
-        #build mplayer parameters
-        start = 0
-        if self.timeslice[0]:
-            start = self.timeslice[0]
-        if self.timeslice[1]:
-            sstep = int( (self.timeslice[1] - start) / 27)
-        elif hasattr(self, "length"):
-            sstep = int( (self.length - start) / 27)
-        else:
-            sstep = 60
-
-        arguments = self.timeslice_mencoder + [ "-vf", "cropdetect=30", "-nosound", "-vo", "null", "-fps", "540"]
-        if sstep > 0:
-            arguments +=  [ "-sstep", str(sstep)]
-
-        if self.info.mime == 'video/dvd':
-            arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.chapter ]
+        returns a dictionary of items
+        """
+        arguments = [ "-vo", "null", "-ao", "null", "-frames", "0", "-identify" ]
+        if self.titlenum:
+            arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.titlenum ]
         else:
             arguments += [ self.source ]
 
-        _debug_('_run(mplayer, arguments, self._CropDetectParse, None, 0, None)', 2)
+        _debug_('_run(mplayer, arguments, self._identify_parse, None, 0, None)', 2)
         _debug_(' '.join([mplayer]+arguments))
-        #print (' '.join([mplayer]+arguments))
-        self._run(mplayer, arguments, self._CropDetectParse, None, 0, None)
+        self._run(mplayer, arguments, self._identify_parse, None, 0, None)
 
 
-    def _GenerateCLMencoder(self):
-        """Generate the command line(s) to be executed, using MEncoder for encoding"""
-        #calculate the videobitrate
-        self._CalcVideoBR()
-
-        #for single passes
-        if not self.multipass:
-            videopass = []
-            videopass += self._GCLMVideopass(0)
-            videopass += self._GCLMSource()
-
-            self.cls = [ videopass ]
-
-        else:
-            videopass1 = []
-            videopass2 = []
-
-            videopass1 += self._GCLMVideopass(1)
-            videopass1 += self._GCLMSource()
-
-            videopass2 += self._GCLMVideopass(2)
-            videopass2 += self._GCLMSource()
-
-            self.cls = [ videopass1, videopass2 ]
-
-
-    def _GCLMSource(self):
-        """Returns source part of mencoder"""
-        if self.info.mime == 'video/dvd':
-            if hasattr(config, 'DVD_LANG_PREF') and config.DVD_LANG_PREF:
-                audio = ['-alang', config.DVD_LANG_PREF]
-            else:
-                audio = []
-            return audio+[ '-dvd-device', self.source, 'dvd://%s' % self.chapter]
-        else:
-            return [ self.source ]
-
-
-    def _GCLMVideopass(self, passnr):
-        """Returns video pass specefic part of mencoder cl"""
-        vf = copy(self.vfilters)
-        vfilter = ''
-        vpass = ''
-        yscaled = None
-        #deinterlacer test vf += ['pp=lb']
-        #set appropriate videopass, codec independant (lavc is vpass, xvid is pass)
-        if passnr > 0:
-            if self.vcodec == 'XviD' or self.vcodec == 'H.264':
-                passname = ':pass=%s'
-            else:
-                passname = ':vpass=%s'
-
-            vpass = passname % passnr
-
-            if self.vcodec == 'MPEG 4 (lavc)' and passnr == 1:
-                vpass = vpass + ':turbo'
-
-        #generate videofilters first, NI completly yet
-        if self.crop != None:
-            vf += [ 'crop=%s' % self.crop ]
-
-        #in case of xvid and anamorphic dvd, add scaling to compensate AR..
-        #if we didn't find cropping we have no res, so no tricks
-        if self.vcodec == 'XviD' and self.crop:
-            if self.ana:
-                #calculate a decent resized picturesize, res must still be a multiple of 16
-                yscaled = (self.cropres[1] * 0.703125)
-                rounded = yscaled % 16
-                yscaled -= rounded
-                if rounded > 7.5:
-                    yscaled += 16
-                _debug_('Rescaled, corrected for AR res is %sx%s' % (self.cropres[0], int(yscaled)))
-            else: # no scaling, we have a 4/3
-                yscaled = self.cropres[1]
-            #new, calculate ideal res based on BPP
-            idealres = self._OptimalRes(self.cropres[0], int(yscaled))
-            _debug_('Rescaled, rounded yres is %sx%s' % (idealres[0], idealres[1]))
-            (self.resx, self.resy) = (idealres[0], idealres[1])
-        # Check to see if generating a dvd complient mpeg
-        elif self.vcodec == 'MPEG 2 (lavc)' and self.resx == '720':
-            if self.fps == 25.000 or self.fps == 50:
-                self.resx=720
-                self.resy=576
-            else:
-                self.resx=720
-                self.resy=480
-
-        if self.resx==0 and self.crop:
-            (self.resx, self.resy) = self._OptimalRes(self.cropres[0], self.cropres[1])
-        elif self.resx==0:
-            (self.resx, self.resy) = self._OptimalRes(self.info.video[0].width, self.info.video[0].height )
-
-        if self.resx != None:
-            vf += [ 'scale=%s:-3'  % self.resx ]
-            vf += [ 'expand=%s:%s'  % (self.resx, self.resy) ]
-
-
-        _debug_('Video filters: %s' % vf)
-
-        #join vf options
-        if len(vf) > 1:
-            for vfopt in vf[0:-1]:
-                vfilter += vfopt + ','
-        if len(vf) >= 1:
-            vfilter += vf[-1]
-
-        output=self.output
-
-        aspect= ''
-        if self.vcodec=='MPEG 2 (lavc)' and self.cropres[0] != '720':
-            if self.ana:
-                aspect=':aspect=16/9'
-            else:
-                aspect=':aspect=4/3'
-        elif self.vcodec!='H.264':
-            aspect =  ':autoaspect'
-
-        # set video encoder options
-        if self.altprofile is None:
-            args = [
-                '-ovc', mappings['vcodec'][self.vcodec][0], mappings['vcodec'][self.vcodec][1],
-                        mappings['vcodec'][self.vcodec][2] % (self.vbrate, self.threads, vpass, aspect ) ]
-        else:  # Allow encoder options from client
-            aprofile = '%s:vbitrate=%s:threads=%s%s%s' % (self.altprofile, self.vbrate, self.threads, vpass, aspect)
-            args = ['-ovc', mappings['vcodec'][self.vcodec][0],mappings['vcodec'][self.vcodec][1], aprofile ]
-
-
-        # set audio encoder options
-        args += ['-oac' , mappings['acodec'][self.acodec][0] ]
-        if self.acodec != 'copy':
-            args += [ mappings['acodec'][self.acodec][1],
-                      mappings['acodec'][self.acodec][2] % self.abrate ]
-        args += [ '-o', output + '~incomplete~' ]
-
-        # don't pass video filter in we have none
-        if len(vfilter) != 0:
-            args += ['-vf', vfilter ]
-
-        if passnr > 0:  # Remove when/if mencoder uses the same file name for all codecs
-            args += [ '-passlogfile', 'x264_2pass.log' ]
-
-        #if we have a progressive ntsc file, lock the output fps (do this with ivtc too)
-        if 'ivtc=1' in vf or self.fps == 23.976:
-            args = ['-ofps', '24000/1001'].append(args) # mencoder don't like 23.976
-
-        if hasattr(config, 'DVD_LANG_PREF') and config.DVD_LANG_PREF:
-            args += ['-alang', config.DVD_LANG_PREF ]
-
-        if self.vcodec=='MPEG 2 (lavc)':
-            if self.fps == 25.000 or self.fps == 50.000:
-                args += ['-ofps', '25.000']
-            else:
-                args += ['-ofps', '30000/1001'] # mencoder don't like 29.97
-
-        # Set output file container
-        args += ['-of'] + mappings['container'][self.container]
-
-        #if we scale, use the bilinear algorithm
-        if yscaled:
-            args += ['-sws', '1']
-
-        args = self.timeslice_mencoder + args
-
-        return args
-
-
-    def _CropDetectParse(self, lines, data): #seek to remove data
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _identify_parse(self, lines, data):
         """Parses Mplayer output to obtain ideal cropping parameters, and do PAL/NTSC detection
         from QuickRip, heavily adapted, new algo
         TODO give this another name, it does more then crop detection only
         """
-        #print '_CropDetectParse(self, lines=%r, data=%r)' % (lines, data)
+        id_pattern = re.compile('^(ID_.*)=(.*)')
+        id_info = {}
+
+        for line in lines:
+            id_match = id_pattern.match(line)
+            if id_match:
+                id_info[id_match.groups()[0]] = id_match.groups()[1]
+
+        if config.DEBUG >= 2:
+            print 'id_info:',; pprint.pprint(id_info)
+
+        self.id_info = id_info
+
+
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _cropdetect(self):
+        """Detect cropping, contains pieces of QuickRip
+
+        Function is always called because cropping is a good thing, and we can pass our ideal values
+        back to the client wich can verify them visually if needed.
+        """
+        start = 0
+        if self.timeslice[0]:
+            start = self.timeslice[0]
+        if self.timeslice[1]:
+            sstep = int((self.timeslice[1] - start) / 27)
+        elif hasattr(self, 'length'):
+            sstep = int((self.length - start) / 27)
+        else:
+            sstep = 60
+
+        arguments = self.timeslice_mencoder + [ '-vf', 'cropdetect=30', '-nosound', '-vo', 'null', '-fps', '540']
+        if sstep > 0:
+            arguments +=  [ '-demuxer', 'lavf', '-sstep', str(sstep)]
+
+        if self.titlenum:
+            arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.titlenum ]
+        else:
+            arguments += [ self.source ]
+
+        self._run(mplayer, arguments, self._cropdetect_parse, None, 0, None)
+
+
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _cropdetect_parse(self, lines, data): #seek to remove data
+        """Parses Mplayer output to obtain ideal cropping parameters, and do PAL/NTSC detection
+        from QuickRip, heavily adapted, new algo
+        TODO give this another name, it does more then crop detection only
+        """
+        #print '_cropdetect_parse(self, lines=%r, data=%r)' % (lines, data)
 
         re_crop = re.compile('.*-vf crop=(\d*:\d*:\d*:\d*).*')
         re_ntscprog = re.compile('24fps progressive NTSC content detected')
@@ -625,7 +530,7 @@ class EncodingJob:
                 return
             crop = str(self.info.video[0].width)+':'+str(self.info.video[0].height)+':0:0'
             crop_options[crop] = 1
-        except Exception, e:
+        except Exception, why:
             pass
         for line in lines:
             line = line.strip('\n')
@@ -639,7 +544,7 @@ class EncodingJob:
                     crop_options[crop] = 1
 
             #try to see if this is a PAL DVD, an NTSC Progressive DVD, ar an NTSC DVD
-            if not foundrate and self.info.mime == 'video/dvd':
+            if not foundrate: # and self.info.mime == 'video/dvd':
                 if re_fps_23.search(line):
                     self.fps = 23.976
                     foundrate = True
@@ -686,7 +591,7 @@ class EncodingJob:
 
         _debug_('All collected cropopts: %s' % crop_options)
 
-        #if we didn't find cropping options (seems to happen sometimes on VERY short dvd chapters)
+        #if we didn't find cropping options (seems to happen sometimes on VERY short dvd titlenums)
         if crop_options == {}:
             #end analyzing
             self.finishedanalyze = True
@@ -714,7 +619,7 @@ class EncodingJob:
         crop = split(self.crop, ':')
         adjustedcrop = []
         for res in crop[0:2]:
-            if res:
+            if res != 'None':
                 over = int(res) % 16
                 adjustedcrop.append(str(int(res) - over))
         adjustedcrop += crop[2:]
@@ -729,6 +634,176 @@ class EncodingJob:
         self.finishedanalyze = True
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _GenerateCLMencoder(self):
+        """Generate the command line(s) to be executed, using MEncoder for encoding"""
+        #calculate the videobitrate
+        self._CalcVideoBR()
+
+        #for single passes
+        if not self.multipass:
+            videopass = []
+            videopass += self._GCLMVideopass(0)
+            videopass += self._GCLMSource()
+
+            self.cls = [ videopass ]
+
+        else:
+            videopass1 = []
+            videopass2 = []
+
+            videopass1 += self._GCLMVideopass(1)
+            videopass1 += self._GCLMSource()
+
+            videopass2 += self._GCLMVideopass(2)
+            videopass2 += self._GCLMSource()
+
+            self.cls = [ videopass1, videopass2 ]
+
+
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _GCLMSource(self):
+        """Returns source part of mencoder"""
+        if self.titlenum:
+            if hasattr(config, 'DVD_LANG_PREF') and config.DVD_LANG_PREF:
+                audio = ['-alang', config.DVD_LANG_PREF]
+            else:
+                audio = []
+            return audio+[ '-dvd-device', self.source, 'dvd://%s' % self.titlenum]
+        else:
+            return [ self.source ]
+
+
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _GCLMVideopass(self, passnr):
+        """Returns video pass specefic part of mencoder cl"""
+        vf = copy(self.vfilters)
+        vfilter = ''
+        vpass = ''
+        yscaled = None
+        #deinterlacer test vf += ['pp=lb']
+        #set appropriate videopass, codec independant (lavc is vpass, xvid is pass)
+        if passnr > 0:
+            if self.vcodec == 'XviD' or self.vcodec == 'H.264':
+                passname = ':pass=%s'
+            else:
+                passname = ':vpass=%s'
+
+            vpass = passname % passnr
+
+            if self.vcodec == 'MPEG 4 (lavc)' and passnr == 1:
+                vpass = vpass + ':turbo'
+
+        #generate videofilters first, NI completly yet
+        if self.crop != None:
+            vf += [ 'crop=%s' % self.crop ]
+
+        #in case of xvid and anamorphic dvd, add scaling to compensate AR..
+        #if we didn't find cropping we have no res, so no tricks
+        if self.vcodec == 'XviD' and self.crop:
+            if self.ana:
+                #calculate a decent resized picturesize, res must still be a multiple of 16
+                yscaled = (self.cropres[1] * 0.703125)
+                rounded = yscaled % 16
+                yscaled -= rounded
+                if rounded > 7.5:
+                    yscaled += 16
+                _debug_('Rescaled, corrected for AR res is %sx%s' % (self.cropres[0], int(yscaled)))
+            else: # no scaling, we have a 4/3
+                yscaled = self.cropres[1]
+            #new, calculate ideal res based on BPP
+            idealres = self._OptimalRes(self.cropres[0], int(yscaled))
+            _debug_('Rescaled, rounded yres is %sx%s' % (idealres[0], idealres[1]))
+            (self.resx, self.resy) = (idealres[0], idealres[1])
+        # Check to see if generating a dvd complient mpeg
+        elif self.vcodec == 'MPEG 2 (lavc)' and self.resx == '720':
+            if self.fps == 25.000 or self.fps == 50:
+                self.resx = 720
+                self.resy = 576
+            else:
+                self.resx = 720
+                self.resy = 480
+
+        if self.resx == 0 and self.crop:
+            (self.resx, self.resy) = self._OptimalRes(self.cropres[0], self.cropres[1])
+        elif self.resx == 0:
+            (self.resx, self.resy) = self._OptimalRes(self.info.video[0].width, self.info.video[0].height )
+
+        if self.resx != None:
+            vf += [ 'scale=%s:-3'  % self.resx ]
+            vf += [ 'expand=%s:%s'  % (self.resx, self.resy) ]
+
+
+        _debug_('Video filters: %s' % vf)
+
+        #join vf options
+        if len(vf) > 1:
+            for vfopt in vf[0:-1]:
+                vfilter += vfopt + ','
+        if len(vf) >= 1:
+            vfilter += vf[-1]
+
+        output = self.output
+
+        aspect = ''
+        if self.vcodec == 'MPEG 2 (lavc)' and self.cropres[0] != '720':
+            if self.ana:
+                aspect = ':aspect=16/9'
+            else:
+                aspect = ':aspect=4/3'
+        elif self.vcodec != 'H.264':
+            aspect =  ':autoaspect'
+
+        # set video encoder options
+        if self.altprofile is None:
+            args = [
+                '-ovc', mappings['vcodec'][self.vcodec][0], mappings['vcodec'][self.vcodec][1],
+                        mappings['vcodec'][self.vcodec][2] % (self.vbrate, self.threads, vpass, aspect ) ]
+        else:  # Allow encoder options from client
+            aprofile = '%s:vbitrate=%s:threads=%s%s%s' % (self.altprofile, self.vbrate, self.threads, vpass, aspect)
+            args = ['-ovc', mappings['vcodec'][self.vcodec][0],mappings['vcodec'][self.vcodec][1], aprofile ]
+
+
+        # set audio encoder options
+        args += ['-oac' , mappings['acodec'][self.acodec][0] ]
+        if self.acodec != 'copy':
+            args += [ mappings['acodec'][self.acodec][1],
+                      mappings['acodec'][self.acodec][2] % self.abrate ]
+        args += [ '-o', output + '~incomplete~' ]
+
+        # don't pass video filter in we have none
+        if len(vfilter) != 0:
+            args += ['-vf', vfilter ]
+
+        if passnr > 0:  # Remove when/if mencoder uses the same file name for all codecs
+            args += [ '-passlogfile', 'x264_2pass.log' ]
+
+        #if we have a progressive ntsc file, lock the output fps (do this with ivtc too)
+        if 'ivtc=1' in vf or self.fps == 23.976:
+            args = ['-ofps', '24000/1001'].append(args) # mencoder don't like 23.976
+
+        if hasattr(config, 'DVD_LANG_PREF') and config.DVD_LANG_PREF:
+            args += ['-alang', config.DVD_LANG_PREF ]
+
+        if self.vcodec == 'MPEG 2 (lavc)':
+            if self.fps == 25.000 or self.fps == 50.000:
+                args += ['-ofps', '25.000']
+            else:
+                args += ['-ofps', '30000/1001'] # mencoder don't like 29.97
+
+        # Set output file container
+        args += ['-of'] + mappings['container'][self.container]
+
+        #if we scale, use the bilinear algorithm
+        if yscaled:
+            args += ['-sws', '1']
+
+        args = self.timeslice_mencoder + args
+
+        return args
+
+
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _CalcBPP(self, x, y):
         """Perform a BPP (Bits per Pixel calculation)"""
         bpp = (self.vbrate * 1000) / (x * y * self.fps)
@@ -736,6 +811,7 @@ class EncodingJob:
         return bpp
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _OptimalRes(self, x, y):
         """Using BPP calculations, try to find out the ideal resolution for this movie"""
         nonoptimal = True
@@ -757,6 +833,7 @@ class EncodingJob:
         return ( int(optx), int (opty) )
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _MencoderParse(self, line, data):
         """Parses mencoder stdout to get progress and them
         from Quickrip, adapted
@@ -764,13 +841,14 @@ class EncodingJob:
         """
         #(passtype, title) = data
         # re_progress is precompiled at the beginning of this file, to speed up
-        s=re_progress.search(line)
+        s = re_progress.search(line)
         if s:
             self.percentage = s.group(1)
             self.trem = s.group(2)
             #self.ui_updateProgress(perc, trem, passtype)
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _run(self, program, arguments, finalfunc, updatefunc=None, flushbuffer=0, data=None, lock=None):
         """Runs a program; supply program name (string) and arguments (list)
         seek to remove data and/or crop (not really used)
@@ -782,76 +860,67 @@ class EncodingJob:
         self.thread.start()
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _wait(self, timeout=10):
+        """
+        Wait for the thread to finish in timeout seconds
+        If the thread has not finished the kill it
+        """
+        self.thread.join(timeout)
+        if self.thread.isAlive():
+            self.thread.kill_process()
+            self.thread.join(timeout)
+            if self.thread.isAlive():
+                raise EncodingError('thread still running')
 
-class CommandThread(threading.Thread): # seek to remove data andor crop (not really used)
+
+
+class CommandThread(Thread): # seek to remove data andor crop (not really used)
     """Handle threading of external commands
     command executing class - Taken from Quickrip & adapted.
     """
+    #@benchmark(benchmarking & 0x8, benchmarkcall)
     def __init__(self, parent, command, updatefunc, finalfunc, flushbuffer, data, lock):
-        threading.Thread.__init__(self)
+        #print 'CommandThread.__init__(parent=%r, command=%r, updatefunc=%r, finalfunc=%r, flushbuffer=%r, data=%r, lock=%r)' % (parent, command, updatefunc, finalfunc, flushbuffer, data, lock)
+        Thread.__init__(self)
         self.parent = parent
+        self.command = command
         self.updateFunc = updatefunc
         self.finalFunc = finalfunc
         self.flushbuffer = flushbuffer
-        self.command = command
         self.data = data
         self.lock = lock
-        _debug_('command=\"%s\"' % ' '.join(command))
 
 
     @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
-        #self.lock.acquire()
-        self.pipe = popen2.Popen4(self.command)
-        pid = self.pipe.pid
-        self.parent.pid = copy(pid)
+        _debug_(' '.join(self.command))
+        self.process = Popen(self.command, stdout=PIPE, stderr=PIPE, close_fds=True)
+        output = self.process.stdout
+
+        _debug_('%s thread running with PID %s' % (self.command[0], self.process.pid))
+
         totallines = []
+        while self.process.poll() is None:
+            line = output.readline().strip()
+            _debug_('line=%r' % (line,), 2)
+            totallines.append(line)
+            if self.updateFunc is not None:
+                self.updateFunc(line, self.data)
+        _debug_('%s thread finished with %s, %s lines' % (self.command[0], self.process.returncode, len(totallines)))
 
-        _debug_('Mencoder running at PID %s' % self.pipe.pid)
-
-        while 1:
-            if self.flushbuffer:
-                line = self.pipe.fromchild.read(1000)
-            else:
-                line = self.pipe.fromchild.readline()
-
-            _debug_(line)
-            if not line:
-                break
-            else:
-                #don't save up the output if flushbuffer is enabled
-                if self.flushbuffer != 1:
-                    totallines.append(line)
-                if self.updateFunc != None:
-                    self.updateFunc(line, self.data)
-
-
-        # Clean up process table--you already handle exceptions in the function
-        #self.kill_pipe()
-
-        #give mplayer/mencoder some time to die before we try & kill it, or zombies will raise from their grave :)
-        sleep(0.5)
-
-        try:
-            os.waitpid(pid, os.WNOHANG)
-        except:
-            pass
-
-        self.kill_pipe()
-
-        if self.finalFunc != None:
+        if self.finalFunc is not None:
             self.finalFunc(totallines, self.data)
 
-        #self.lock.release()
 
-        sys.exit(2)
-
-
-    def kill_pipe(self):
-        """Kills current process (pipe)"""
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def kill_process(self):
+        """
+        Kills current process
+        """
         try:
-            os.kill(self.pipe.pid, 9)
-            os.waitpid(self.pipe.pid, os.WNOHANG)
+            os.kill(self.process.pid, 9)
+            os.waitpid(self.process.pid, os.WNOHANG)
         except:
             pass
 
@@ -859,6 +928,7 @@ class CommandThread(threading.Thread): # seek to remove data andor crop (not rea
 
 class EncodingQueue:
     """Class for generating an encoding queue"""
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def __init__(self):
         #we keep a list and a dict because a dict doesn't store an order
         self.qlist = []
@@ -869,6 +939,7 @@ class EncodingQueue:
         self._removeTmp()
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def addEncodingJob(self, encjob):
         """Adds an encodingjob to the queue"""
 
@@ -876,6 +947,7 @@ class EncodingQueue:
         self.qdict[encjob.idnr] = encjob
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getProgress(self):
         """Gets progress on the current job"""
         if hasattr(self, 'currentjob'):
@@ -885,6 +957,7 @@ class EncodingQueue:
             return 'No job currently running'
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def startQueue(self):
         """Start the queue"""
         if not self.running:
@@ -893,6 +966,7 @@ class EncodingQueue:
             self._runQueue()
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def listJobs(self):
         """Returns a list of queue'ed jobs"""
         if self.qdict == {}:
@@ -904,6 +978,7 @@ class EncodingQueue:
             return jlist
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _removeTmp(self):
         """Removes possible temporary files created during encoding"""
         tmpfiles = ['frameno.avi', 'divx2pass.log', 'xvid-twopass.stats', 'x264_2pass.log' ]
@@ -913,6 +988,7 @@ class EncodingQueue:
                 os.remove(tmpfile)
 
 
+    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _runQueue(self, line='', data=''):
         """Executes the jobs in the queue, and gets called after every mencoder run is completed"""
         if self.qlist == []:
@@ -954,8 +1030,8 @@ class EncodingQueue:
             self.currentjob.cls.pop(0)
             self.currentjob.status = status.vpassfinal
             #start video encoding
-            self.currentjob._run(mencoder, self.currentjob.cls[0], self._runQueue,
-                            self.currentjob._MencoderParse, 1, None)
+            self.currentjob._run(mencoder, self.currentjob.cls[0], self._runQueue, self.currentjob._MencoderParse,
+                1, None)
 
         if self.currentjob.status == status.apass:
             #in case audio encoding started before auto-crop detection returned, we are gonna
@@ -968,8 +1044,8 @@ class EncodingQueue:
                 self.currentjob.status = status.vpassfinal
             else:
                 self.currentjob.status = status.vpass1
-            self.currentjob._run(mencoder, self.currentjob.cls[0], self._runQueue,
-                            self.currentjob._MencoderParse, 1, None)
+            self.currentjob._run(mencoder, self.currentjob.cls[0], self._runQueue, self.currentjob._MencoderParse,
+                1, None)
 
         if self.currentjob.status == status.notset:
             #generate cli's
@@ -983,8 +1059,8 @@ class EncodingQueue:
                 self.currentjob.status = status.vpassfinal
             else:
                 self.currentjob.status = status.vpass1
-            self.currentjob._run(mencoder, self.currentjob.cls[0], self._runQueue,
-                            self.currentjob._MencoderParse, 1, None)
+            self.currentjob._run(mencoder, self.currentjob.cls[0], self._runQueue, self.currentjob._MencoderParse,
+                1, None)
 
         _debug_('Started job %s, %s on PID %s' % (self.currentjob.idnr, \
             status[self.currentjob.status], self.currentjob.pid), DINFO)
@@ -992,33 +1068,44 @@ class EncodingQueue:
 
 
 
-# -----DEBUGGING STUFF BELOW---USE ONLY WHEN WEARING A BULLETPROOF VEST ;)
-
-
-#def conc(list):
-#str = ''
-#for el in list:
-#    str = str + el + ' '
-#return str
-
-#FOR TESTING ONLY
 if __name__ == '__main__':
-    encjob = EncodingJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'test.avi', 'lala', 456789, 17)
-    #encjob._CropDetect()
-    print 'THE KING RETURNED FROM INSPECTING THE CROPPING !'
-    sleep(5)
-    print encjob.crop
-    encjob.setVideoCodec('MPEG 4 (lavc)', '700', False, 0)
-    encjob.setAudioCodec('MPEG 1 Layer 3 (mp3)', '160')
-    encjob.setVideoFilters({'Deinterlacing': 'Linear blend'})
-    encjob._CalcVideoBR()
-    print encjob.vbrate
-    #encjob._generateCL()
-    #cl = encjob.cls
-    #print cl
-    #print conc(cl[0])
-    #print conc(cl[1])
+    benchmarking = 0xffff
+    benchmarkcall = 1
+    command = None
+    source = '/freevo/video/dvd/BRUCE_ALMIGHTY/'
+    titlenum = 0
+    if len(sys.argv) >= 2:
+        command = sys.argv[1]
+        if len(sys.argv) >= 3:
+            source = sys.argv[2]
+            if len(sys.argv) >= 4:
+                title = sys.argv[3]
 
-    queue = encodingqueue()
-    queue.addEncodingJob(encjob)
-    queue.startqueue()
+    encjob = EncodingJob(None, 'test.avi', 'lala', 456789)
+    encjob.source = source
+    encjob.titlenum = titlenum
+    if command == '--identify':
+        encjob._identify()
+        encjob._wait()
+        print encjob.id_info
+    elif command == '--cropdetect':
+        encjob.info = kaa.metadata.parse(encjob.source)
+        encjob._analyze_source()
+        encjob._wait()
+        print 'THE KING RETURNED FROM INSPECTING THE CROPPING !'
+        print encjob.crop
+    else:
+        encjob.setVideoCodec('MPEG 4 (lavc)', '700', False, 0)
+        encjob.setAudioCodec('MPEG 1 Layer 3 (mp3)', '160')
+        encjob.setVideoFilters({'Deinterlacing': 'Linear blend'})
+        encjob._CalcVideoBR()
+        print encjob.vbrate
+        #encjob._generateCL()
+        #cl = encjob.cls
+        #print cl
+        #print conc(cl[0])
+        #print conc(cl[1])
+
+        queue = encodingqueue()
+        queue.addEncodingJob(encjob)
+        queue.startqueue()
