@@ -48,8 +48,6 @@ from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
 
-print 'config.DEBUG:', config.DEBUG
-
 #precompiled regular expression to obtain mencoder progress
 re_progress = re.compile('(\d+)\%\) .*Trem:\s*(\d+\w+)\s+')
 
@@ -895,7 +893,7 @@ class CommandThread(Thread): # seek to remove data andor crop (not really used)
     @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         _debug_(' '.join(self.command))
-        self.process = Popen(self.command, stdout=PIPE, stderr=PIPE, close_fds=True)
+        self.process = Popen(self.command, stdout=PIPE, stderr=PIPE, close_fds=True, universal_newlines=True)
         output = self.process.stdout
 
         _debug_('%s thread running with PID %s' % (self.command[0], self.process.pid))
@@ -907,10 +905,14 @@ class CommandThread(Thread): # seek to remove data andor crop (not really used)
             totallines.append(line)
             if self.updateFunc is not None:
                 self.updateFunc(line, self.data)
+
         _debug_('%s thread finished with %s, %s lines' % (self.command[0], self.process.returncode, len(totallines)))
 
         if self.finalFunc is not None:
             self.finalFunc(totallines, self.data)
+        self.process.stdout.close()
+        self.process.stderr.close()
+        self.process = None
 
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
