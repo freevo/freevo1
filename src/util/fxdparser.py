@@ -133,6 +133,7 @@ class FXDtree(qp_xml.Parser):
             return
         f.write('<' + elem.name)
         for (ns, name), value in elem.attrs.items():
+            value = value.replace(u'&', u'&amp;')
             f.write(u' ' + Unicode(name) + u'="' + Unicode(value) + '"')
         if elem.children or elem.first_cdata:
             if elem.first_cdata == None:

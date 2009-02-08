@@ -276,10 +276,22 @@ def cache_cropdetect():
         global encjob
         _debug_('fxd_movie_read=%r' % (info.files.fxd_file,), 2)
         for filename in info.files.files:
-            if os.path.splitext(filename)[1] == '.iso':
-                raise encodingcore.EncodingError('cannot handle iso files')
+            if not os.path.exists(filename):
+                raise encodingcore.EncodingError('file %r does not exist' % filename)
             encjob = encodingcore.EncodingJob(None, None, None, None)
             encjob.source = filename
+            fileext = os.path.splitext(filename)[1]
+            if not fileext or fileext == '.iso':
+                data = kaa.metadata.parse(filename)
+                titlenum = 0
+                longest = 0
+                for track in data.tracks:
+                    if track.length > longest:
+                        longest = track.length
+                        titlenum = track.trackno
+                if titlenum == 0:
+                    raise encodingcore.EncodingError('longest track not found')
+                encjob.titlenum = titlenum
             encjob._identify()
             encjob._wait(5)
             if 'ID_LENGTH' not in encjob.id_info:
