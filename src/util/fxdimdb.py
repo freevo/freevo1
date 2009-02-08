@@ -293,7 +293,7 @@ class FxdImdb:
         except urllib2.HTTPError, why:
             raise FxdImdb_Net_Error('IMDB unreachable' + str(why))
 
-        if config.DEBUG:
+        if config.DEBUG >= 2:
             tmpfilename = '/tmp/%s.html' % id
             tmp = open(tmpfilename, 'w')
             tmp.write(idpage.read())
@@ -317,7 +317,8 @@ class FxdImdb:
         try:
             soup = BeautifulSoup(results.read(), convertEntities='xml')
         except UnicodeDecodeError:
-            print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
+            print "Unicode error: check that /usr/lib/python2.x/site.py has the correct default encoding"
+            traceback.print_exc()
             return (None, None, None)
 
         # The parse tree can be now reduced by, everything outside this is not required:
@@ -337,7 +338,7 @@ class FxdImdb:
             self.info['title'] = self.title
             y = title.find('em').next.next.string.strip()
             self.info['year'] = y[1:-1]
-        except (AttributeError, TypeError):
+        except (AttributeError, TypeError, ValueError):
             self.info['title'] = self.title
             self.info['year'] = title.find('a').string.strip()
 
