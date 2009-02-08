@@ -30,7 +30,7 @@ Delete old cache files and update the cache
 
 import sys
 import os
-import stat
+from stat import *
 import time
 import copy
 import traceback
@@ -121,7 +121,7 @@ def delete_old_files_2():
         if filename.startswith(config.OVERLAY_DIR + '/disc'):
             continue
         sinfo = os.stat(filename)
-        if not sinfo[stat.ST_SIZE]:
+        if not sinfo[ST_SIZE]:
             #print '%s is empty' % filename
             continue
         dirname = os.path.dirname(filename)[len(config.OVERLAY_DIR):]
@@ -181,7 +181,7 @@ def cache_thumbnails():
         thumb = vfs.getoverlay(filename + '.raw')
         try:
             sinfo = os.stat(filename)
-            if os.stat(thumb)[stat.ST_MTIME] > sinfo[stat.ST_MTIME]:
+            if os.stat(thumb)[ST_MTIME] > sinfo[ST_MTIME]:
                 files.remove(filename)
         except OSError:
             pass
@@ -232,7 +232,7 @@ def cache_www_thumbnails():
         thumb = util.www_image_path(filename, '.thumbs')
         try:
             sinfo = os.stat(filename)
-            if os.stat(thumb)[stat.ST_MTIME] > sinfo[stat.ST_MTIME]:
+            if os.stat(thumb)[ST_MTIME] > sinfo[ST_MTIME]:
                 files.remove(filename)
         except OSError:
             pass
@@ -276,6 +276,8 @@ def cache_cropdetect():
         global encjob
         _debug_('fxd_movie_read=%r' % (info.files.fxd_file,), 2)
         for filename in info.files.files:
+            if os.path.splitext(filename)[1] == '.iso':
+                raise encodingcore.EncodingError('cannot handle iso files')
             encjob = encodingcore.EncodingJob(None, None, None, None)
             encjob.source = filename
             encjob._identify()
@@ -318,7 +320,7 @@ def cache_cropdetect():
     suffixes = set(config.VIDEO_MPLAYER_SUFFIX).union(config.VIDEO_XINE_SUFFIX)
     files = []
     fxd = []
-    for d in config.VIDEO_ITEMS:
+    for d in [('TV Recordings', config.TV_RECORD_DIR)] + config.VIDEO_ITEMS:
         if d.__class__ != tuple:
             continue
         if not os.path.isdir(d[1]):
@@ -337,14 +339,19 @@ def cache_cropdetect():
 
     for info in fxditem.mimetype.parse(None, fxd, display_type='video'):
         #print info.name, info.files.fxd_file, info.mplayer_options
-        if not info.mplayer_options:
+        if hasattr(info, 'mplayer_options') and not info.mplayer_options:
             #print info.filename
             try:
+                ctime = os.stat(info.files.fxd_file)[ST_CTIME]
+                mtime = os.stat(info.files.fxd_file)[ST_MTIME]
+                atime = os.stat(info.files.fxd_file)[ST_ATIME]
                 parser = fxdparser.FXD(info.files.fxd_file)
                 parser.set_handler('movie', fxd_movie_read)
                 parser.set_handler('movie', fxd_movie_write, 'w', True)
                 parser.parse()
                 parser.save()
+                parser = None
+                sinfo = os.utime(info.files.fxd_file, (atime, mtime)) 
             except encodingcore.EncodingError, why:
                 print 'ERROR: "%s" failed: %s' % (info.files.fxd_file, why)
             except Exception, why:
