@@ -304,52 +304,45 @@ def timestr2secs_utc(timestr):
     # correct timezone and DO NOT provide a timestamp offset (as it would be zero).
     # An example of this strange behaviour is the OzTivo feed
 
-    if config.XMLTV_TIMEZONE is not None:
+
+    tz = None
+    adj_secs = time.timezone
+    # This is either something like 'EDT', or '+1'
+    try:
+        tval, tz = timestr.split()
+    except ValueError:
         tval = timestr
-        tz = config.XMLTV_TIMEZONE
-    else:
-        # This is either something like 'EDT', or '+1'
-        try:
-            tval, tz = timestr.split()
-        except ValueError:
-            tval = timestr
-            tz   = str(-time.timezone/3600)
+        if config.XMLTV_TIMEZONE is not None:
+            tz = config.XMLTV_TIMEZONE
 
     if tz == 'CET':
         tz='+1'
 
-    # Is it the '+1' format?
-    if tz[0] == '+' or tz[0] == '-':
-        tmTuple = ( int(tval[0:4]), int(tval[4:6]), int(tval[6:8]),
-                    int(tval[8:10]), int(tval[10:12]), 0, -1, -1, -1 )
-        secs = calendar.timegm( tmTuple )
+    tmTuple = ( int(tval[0:4]), int(tval[4:6]), int(tval[6:8]),
+                int(tval[8:10]), int(tval[10:12]), 0, -1, -1, -1 )
+    secs = calendar.timegm( tmTuple )
 
-        adj_neg = int(tz) >= 0
+    # Is it the '+1' format?
+    if tz and (tz[0] == '+' or tz[0] == '-'):
         try:
             min = int(tz[3:5])
         except ValueError:
             # sometimes the mins are missing :-(
             min = 0
         adj_secs = int(tz[1:3])*3600+ min*60
-
-        if adj_neg:
-            secs -= adj_secs
-        else:
-            secs += adj_secs
+        if tz[0] == '+':
+            adj_secs = - adj_secs
     else:
-        # No, use the regular conversion
-
+        _debug_('Time spec %r has a timezone that cannot be parsed.' % timestr)
         ## WARNING! BUG HERE!
         # The line below is incorrect; the strptime.strptime function doesn't
         # handle time zones. There is no obvious function that does. Therefore
         # this bug is left in for someone else to solve.
-
-        try:
-            secs = time.mktime(strptime.strptime(timestr, xmltv.date_format))
-        except ValueError:
-            timestr = timestr.replace('EST', '')
-            secs    = time.mktime(strptime.strptime(timestr, xmltv.date_format))
-    return secs
+        #try:
+        #    secs = time.mktime(strptime.strptime(timestr, xmltv.date_format))
+        #except ValueError:
+        #    secs = time.mktime(strptime.strptime(timestr[:12], '%Y%m%d%H%M'))
+    return adj_secs + secs
 
 
 if __name__ == '__main__':
@@ -365,4 +358,4 @@ if __name__ == '__main__':
     for channel in guide.chan_list:
         print '  %r' % channel
         for program in channel.programs:
-            print '    %r' % program
+            print '    %s' % program
