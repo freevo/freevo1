@@ -401,9 +401,11 @@ def mimetype(display_type):
     return all MimetypePlugins for the given display_type. If display_type is
     None, return all MimetypePlugins.
     """
+    ret = []
+    if not __plugin_type_list__:
+        return ret
     if not display_type:
         return __plugin_type_list__['mimetype']
-    ret = []
     for p in __plugin_type_list__['mimetype']:
         if not p.display_type or display_type in p.display_type:
             ret.append(p)
