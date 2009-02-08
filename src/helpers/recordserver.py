@@ -517,7 +517,7 @@ class RecordServer:
             occurances = exactMatch(self, prog)
             if not occurances:
                 #program no longer exists
-                return (False, None, None)
+                return (False, None, [])
             #Search through all occurances of looking for a non-conflicted occurance
             for oneOccurance in occurances:
                 (rating, conflictedProgs) = getConflicts(self, oneOccurance, myScheduledRecordings)
@@ -528,7 +528,7 @@ class RecordServer:
                     return(True, ratedConflicts, programsToChange)
                 _debug_('Conflict Found', DINFO)
                 ratedConflicts.append((rating, conflictedProgs, oneOccurance))
-            return (False, ratedConflicts, None)
+            return (False, ratedConflicts, [])
 
         if config.TV_RECORD_CONFLICT_RESOLUTION:
             _debug_('Conflict resolution enabled', DINFO)
