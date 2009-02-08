@@ -366,8 +366,9 @@ def signal_handler():
 
 def tracefunc(frame, event, arg, _indent=[0]):
     """
-    function to trace everything inside freevo for debugging
+    function to trace and time everything inside freevo for debugging
     """
+    spacer = '  '
     if event == 'call':
         filename = frame.f_code.co_filename
         funcname = frame.f_code.co_name
@@ -375,19 +376,30 @@ def tracefunc(frame, event, arg, _indent=[0]):
         if 'self' in frame.f_locals:
             try:
                 classinst = frame.f_locals['self']
-                classname = repr(classinst).split()[0].split('(')[0][1:]
-                funcname = '%s.%s' % (classname, funcname)
-            except:
+                funcname = '%s.%s' % (classinst.__class__.__name__, funcname)
+            except (AssertionError, AttributeError):
                 pass
-        here = '%s:%s:%s()' % (filename, lineno, funcname)
-        _indent[0] += 1
-        tracefd.write('%4s %s%s\n' % (_indent[0], ' ' * _indent[0], here))
+        here = '%s:%s %s()' % (filename, lineno, funcname)
+        tracefd.write('%s-> %s\n' % (spacer * _indent[0], here))
         tracefd.flush()
+        frames[frame] = (time.clock(), here)
+        _indent[0] += 1
     elif event == 'return':
-        _indent[0] -= 1
+        try:
+            startclock, here = frames[frame]
+            _indent[0] -= 1
+            tracefd.write('%s<- %s %.6f\n' % (spacer * _indent[0], here, (time.clock() - startclock)))
+            tracefd.flush()
+            del(frames[frame])
+        except KeyError:
+            filename = frame.f_code.co_filename
+            funcname = frame.f_code.co_name
+            lineno = frame.f_code.co_firstlineno
+            here = '%s:%s %s()' % (filename, lineno, funcname)
+            tracefd.write('%s** %s\n' % (spacer * _indent[0], here))
+            tracefd.flush()
 
     return tracefunc
-
 
 
 #
