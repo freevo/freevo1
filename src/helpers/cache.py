@@ -34,6 +34,8 @@ from stat import *
 import time
 import copy
 import traceback
+import pprint
+from optparse import Option, OptionValueError, OptionParser, IndentedHelpFormatter
 
 import config
 import util
@@ -47,13 +49,20 @@ import fxditem
 # this helper. Check this against util/mediainfo
 VERSION = 3
 
+def checking(msg):
+    str = '.' * 60
+    str = msg + str[len(msg):]
+    return str
+
+
 def delete_old_files_1():
     """
     delete old files from previous versions of freevo which are not
     needed anymore
     """
     #TODO Add WWW_LINK_CACHE and WWW_IMAGE_CACNE
-    print 'deleting old cache files from older freevo version....',
+
+    print checking('deleting old cache files from older freevo version'),
     sys.__stdout__.flush()
     del_list = []
 
@@ -81,7 +90,7 @@ def delete_old_files_2():
     """
     delete cachfiles/entries for files which don't exists anymore
     """
-    print 'deleting old webserver thumbnails.....................',
+    print checking('deleting old web-server thumbnails'),
     sys.__stdout__.flush()
     num = 0
     for file in util.match_files_recursively(vfs.www_image_cachedir(), config.IMAGE_SUFFIX):
@@ -90,7 +99,7 @@ def delete_old_files_2():
             num += 1
     print 'deleted %s file%s' % (num, num != 1 and 's' or '')
 
-    print 'deleting old cachefiles...............................',
+    print checking('deleting old cache files'),
     sys.__stdout__.flush()
     num = 0
     for file in util.match_files_recursively(config.OVERLAY_DIR, ['raw']):
@@ -101,7 +110,7 @@ def delete_old_files_2():
             num += 1
     print 'deleted %s file%s' % (num, num != 1 and 's' or '')
 
-    print 'deleting cache for directories not existing anymore...',
+    print checking('deleting cache for directories not existing anymore'),
     subdirs = util.get_subdirs_recursively(config.OVERLAY_DIR)
     subdirs.reverse()
     for file in subdirs:
@@ -115,7 +124,7 @@ def delete_old_files_2():
                 os.rmdir(file)
     print 'done'
 
-    print 'deleting old entries in metainfo......................',
+    print checking('deleting old entries in meta-info'),
     sys.__stdout__.flush()
     for filename in util.recursefolders(config.OVERLAY_DIR, 1, 'freevo.cache', 1):
         if filename.startswith(config.OVERLAY_DIR + '/disc'):
@@ -139,16 +148,16 @@ def cache_directories(rebuild):
     rebuild:
     0   no rebuild
     1   rebuild all files on disc
-    2   like 1, but also delete discinfo data
+    2   like 1, but also delete disc info data
     """
     if rebuild:
-        print 'deleting cache files..................................',
+        print checking('deleting cache files'),
         sys.__stdout__.flush()
         util.mediainfo.del_cache()
         print 'done'
 
     all_dirs = []
-    print 'checking mmpython cache files.........................',
+    print checking('checking mmpython cache files'),
     sys.__stdout__.flush()
     for d in config.VIDEO_ITEMS + config.AUDIO_ITEMS + config.IMAGE_ITEMS:
         if os.path.isdir(d[1]):
@@ -162,7 +171,7 @@ def cache_thumbnails():
     """
     import cStringIO
 
-    print 'checking thumbnails...................................',
+    print checking('checking thumbnails'),
     sys.__stdout__.flush()
 
     files = []
@@ -199,7 +208,7 @@ def cache_thumbnails():
         fname = filename
         if len(fname) > 65:
             fname = fname[:20] + ' [...] ' + fname[-40:]
-        print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), fname)
+        print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), Unicode(fname))
 
         util.cache_image(filename)
 
@@ -207,28 +216,31 @@ def cache_thumbnails():
         print
 
 
-def cache_www_thumbnails():
+def cache_www_thumbnails(defaults):
     """
     cache all image files for web server by creating thumbnails
     """
     import cStringIO
     import stat
 
-    print 'checking webserver thumbnails.........................',
+    print checking('checking web-server thumbnails'),
+    print
     sys.__stdout__.flush()
 
     files = []
-    for d in config.IMAGE_ITEMS:
-        try:
-            d = d[1]
-        except:
-            pass
-        if not os.path.isdir(d):
-            continue
-        files += util.match_files_recursively(d, config.IMAGE_SUFFIX)
+    for dirname in defaults['directory']:
+        if defaults['dry_run']:
+            print dirname
+        if os.path.isdir(dirname):
+            if defaults['recursive']:
+                files += util.match_files_recursively(dirname, config.IMAGE_SUFFIX)
+            else:
+                files += util.match_files(dirname, config.IMAGE_SUFFIX)
+        else:
+            files += [ os.path.abspath(dirname) ]
 
     files = util.misc.unique(files)
-    for filename in copy.copy(files):
+    for filename in files[:]:
         thumb = util.www_image_path(filename, '.thumbs')
         try:
             sinfo = os.stat(filename)
@@ -250,14 +262,17 @@ def cache_www_thumbnails():
         fname = filename
         if len(fname) > 65:
             fname = fname[:20] + ' [...] ' + fname[-40:]
-        print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), fname)
+        print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), Unicode(fname))
+        if defaults['dry_run']:
+            continue
+
         util.www_thumb_create(filename)
 
     if files:
         print
 
 
-def cache_cropdetect():
+def cache_cropdetect(defaults):
     """
     cache all video files for crop detection
     """
@@ -273,8 +288,7 @@ def cache_cropdetect():
     global encjob
 
     def fxd_movie_read(fxd, node):
-        global encjob
-        _debug_('fxd_movie_read=%r' % (info.files.fxd_file,), 2)
+        _debug_('fxd_movie_read=%r' % (fxd.user_data['filename'],), 2)
         for filename in info.files.files:
             if not os.path.exists(filename):
                 raise encodingcore.EncodingError('file %r does not exist' % filename)
@@ -301,12 +315,14 @@ def cache_cropdetect():
                 raise encodingcore.EncodingError('invalid length of %s' % (encjob.length))
             encjob._cropdetect()
             encjob._wait(10)
-            print '%r: crop=%s' % (info.files.fxd_file, encjob.crop)
+            fxd.user_data['encjob'] = encjob
+            fxd.user_data['crop'] = encjob.crop
+            #print '%r: crop=%s' % (info.files.fxd_file, encjob.crop)
 
 
     def fxd_movie_write(fxd, node):
-        global encjob
         _debug_('fxd_movie_write', 2)
+        encjob = fxd.user_data['encjob']
         if encjob is None:
             #print 'encjob failed'
             return
@@ -325,50 +341,62 @@ def cache_cropdetect():
     plugin.register_callback('fxditem', ['video'], 'movie', fxdhandler.parse_movie)
     plugin.register_callback('fxditem', ['video'], 'disc-set', fxdhandler.parse_disc_set)
 
-    print 'checking cropdetect...................................',
-    print
+    print checking('checking cropdetect'),
     sys.__stdout__.flush()
 
-    suffixes = set(config.VIDEO_MPLAYER_SUFFIX).union(config.VIDEO_XINE_SUFFIX)
-    files = []
-    fxd = []
-    for d in [('TV Recordings', config.TV_RECORD_DIR)] + config.VIDEO_ITEMS:
-        if d.__class__ != tuple:
-            continue
-        if not os.path.isdir(d[1]):
-            continue
-        try:
-            #files += util.match_files_recursively(d[1], suffixes)
-            fxd += util.match_files_recursively(d[1], fxditem.mimetype.suffix())
-        except:
-            pass
+    fxdfiles = []
+    for dirname in defaults['directory']:
+        if os.path.isdir(dirname):
+            if defaults['recursive']:
+                fxdfiles += util.match_files_recursively(dirname, fxditem.mimetype.suffix())
+            else:
+                fxdfiles += util.match_files(dirname, fxditem.mimetype.suffix())
+        else:
+            fxdfiles += [ os.path.abspath(dirname) ]
 
     def lowercaseSort(lhs, rhs):
         lhs, rhs = lhs.lower(), rhs.lower()
         return cmp(lhs, rhs)
 
-    fxd.sort(lowercaseSort)
+    fxdfiles.sort(lowercaseSort)
 
-    for info in fxditem.mimetype.parse(None, fxd, display_type='video'):
-        #print info.name, info.files.fxd_file, info.mplayer_options
+    fxdfiles = util.misc.unique(fxdfiles)
+    files = []
+    for info in fxditem.mimetype.parse(None, fxdfiles, display_type='video'):
         if hasattr(info, 'mplayer_options') and not info.mplayer_options:
-            #print info.filename
-            try:
-                ctime = os.stat(info.files.fxd_file)[ST_CTIME]
-                mtime = os.stat(info.files.fxd_file)[ST_MTIME]
-                atime = os.stat(info.files.fxd_file)[ST_ATIME]
-                parser = fxdparser.FXD(info.files.fxd_file)
-                parser.set_handler('movie', fxd_movie_read)
-                parser.set_handler('movie', fxd_movie_write, 'w', True)
-                parser.parse()
-                parser.save()
-                parser = None
-                sinfo = os.utime(info.files.fxd_file, (atime, mtime)) 
-            except encodingcore.EncodingError, why:
-                print 'ERROR: "%s" failed: %s' % (info.files.fxd_file, why)
-            except Exception, why:
-                print 'ERROR: "%s" failed: %s' % (info.files.fxd_file, why)
-                #traceback.print_exc()
+            files.append(info.files.fxd_file)
+
+    for filename in files[:]:
+        print
+        print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), Unicode(os.path.basename(filename))),
+        sys.__stdout__.flush()
+        if defaults['dry_run']:
+            continue
+        try:
+            ctime = os.stat(filename)[ST_CTIME]
+            mtime = os.stat(filename)[ST_MTIME]
+            atime = os.stat(filename)[ST_ATIME]
+            parser = fxdparser.FXD(filename)
+            parser.set_handler('movie', fxd_movie_read)
+            parser.set_handler('movie', fxd_movie_write, 'w', True)
+            parser.user_data = {
+                'filename': filename,
+                'encjob': None,
+                'crop': None,
+            }
+            parser.parse()
+            parser.save()
+            print parser.user_data['crop'],
+            parser = None
+            sinfo = os.utime(filename, (atime, mtime))
+        except encodingcore.EncodingError, why:
+            print 'ERROR: "%s" failed: %s' % (filename, why)
+        except Exception, why:
+            print 'ERROR: "%s" failed: %s' % (filename, why)
+            #traceback.print_exc()
+    if len(files) > 0:
+        print
+    print 'done'
 
 
 def create_metadata():
@@ -376,14 +404,14 @@ def create_metadata():
     scan files and create metadata
     """
     import util.extendedmeta
-    print 'creating audio metadata...............................',
+    print checking('creating audio metadata'),
     sys.__stdout__.flush()
     for dir in config.AUDIO_ITEMS:
         if os.path.isdir(dir[1]):
             util.extendedmeta.AudioParser(dir[1], rescan=True)
     print 'done'
 
-    print 'creating playlist metadata............................',
+    print checking('creating playlist metadata'),
     sys.__stdout__.flush()
     pl  = []
     fxd = []
@@ -408,7 +436,7 @@ def create_metadata():
     try:
         items = playlist.mimetype.get(None, util.misc.unique(pl))
 
-        # ignore fxd files for now, they can't store metainfo
+        # ignore fxd files for now, they can't store meta-info
         # for f in fxditem.mimetype.get(None, util.misc.unique(fxd)):
         #     if f.type == 'playlist':
         #         items.append(f)
@@ -419,7 +447,7 @@ def create_metadata():
         pass
     print 'done'
 
-    print 'checking database.....................................',
+    print checking('checking database'),
     sys.__stdout__.flush()
     try:
         # The DB stuff
@@ -434,7 +462,7 @@ def create_metadata():
         pass
 
 
-    print 'creating directory metadata...........................',
+    print checking('creating directory metadata'),
     sys.__stdout__.flush()
 
     subdirs = { 'all': [] }
@@ -468,7 +496,7 @@ def create_metadata():
         # create the DirItems
         d = directory.DirItem(s, None)
 
-        # rebuild metainfo
+        # rebuild meta-info
         d.create_metainfo()
         for type in activate_plugins:
             if subdirs.has_key(type) and s in subdirs[type]:
@@ -479,79 +507,129 @@ def create_metadata():
     print 'done'
 
 
-
 def create_tv_pickle():
-    print 'caching xmltv database................................',
+    print checking('caching xmltv database'),
     sys.__stdout__.flush()
 
     import tv.epg_xmltv
     tv.epg_xmltv.get_guide()
     print 'done'
 
-def print_help():
-    print 'freevo cache helper to delete unused cache entries and to'
-    print 'cache all files in your data directories.'
+
+def parse_options(defaults):
+    """
+    Parse command line options
+    """
+    formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+    parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="""
+
+Freevo Cache helper to delete unused cache entries and to cache all files in
+your data directories.
+
+If the --rebuild option is given, Freevo will delete the cache first to rebuild
+the cache from start. Caches from discs won't be affected
+
+--www-thumbs [ --recursive ] [ --directory=DIR ] will generate image thumbnails
+
+--video-thumbs [ --recursive ] [ --directory=DIR ] will generate video thumbnails
+
+--cropdetect [ --recursive ] [ --directory=DIR ] will generate mplayer crop options
+
+The directory option can be specified more than once, one per directory of file.
+
+WARNING:
+
+Caching needs a lot free space in OVERLAY_DIR. The space is also needed when
+Freevo generates the files during run time. Image caching is the worst. So make
+sure you have several hundred MB free!
+""" + 'OVERLAY_DIR is set to %s' % config.OVERLAY_DIR, version='%prog 1.0')
+    parser.add_option('-v', '--verbose', action='count', default=0,
+        help='set the level of verbosity [default:%default]')
+    parser.add_option('-n', '--dry-run', action='store_true', default=False,
+        help='run through the actions but don\'t perform them [default:%default]')
+    parser.add_option('--rebuild', action='store_true', default=False,
+        help='rebuild the cache [default:%default]')
+    parser.add_option('-w', '--www-thumbs', action='store_true', default=False,
+        help='generate missing www thumbnails for this directory [default:%default]')
+    parser.add_option('-t', '--video-thumbs', action='store_true', default=False,
+        help='generate missing video thumbnails [default:%default]')
+    parser.add_option('-c', '--cropdetect', action='store_true', default=False,
+        help='generate missing mplayer crop options [default:%default]')
+    parser.add_option('-r', '--recursive', action='store_true', default=False,
+        help='generate recursively the cache [default:%default]')
+    parser.add_option('-f', '--directory', action='append', default=None, metavar='DIR', 
+        help='path name, one per directory or file [default:%default]')
+    return parser.parse_args()
+
+
+def cache_video_thumbs(defaults):
+    import util.videothumb
+    print checking('creating video thumbnails'),
     print
-    print 'usage "freevo cache [--rebuild]"'
-    print 'If the --rebuild option is given, Freevo will delete the cache first'
-    print 'to rebuild the cache from start. Caches from discs won\'t be affected'
-    print
-    print 'or "freevo cache --thumbnail [ --recursive ] dir"'
-    print 'This will create thumbnails of your _video_ files'
-    print
-    print 'WARNING:'
-    print 'Caching needs a lot free space in OVERLAY_DIR. The space is also'
-    print 'needed when Freevo generates the files during runtime. Image'
-    print 'caching is the worst. So make sure you have several hundred MB'
-    print 'free! OVERLAY_DIR is set to %s' % config.OVERLAY_DIR
-    print
-    print 'It may be possible to turn off image caching in future versions'
-    print 'of Freevo (but this will slow things down).'
+    sys.__stdout__.flush()
+
+    files = []
+    for dirname in defaults['directory']:
+        if defaults['dry_run']:
+            print dirname
+        if os.path.isdir(dirname):
+            if defaults['recursive']:
+                files += util.match_files_recursively(dirname, config.VIDEO_MPLAYER_SUFFIX)
+            else:
+                files += util.match_files(dirname, config.VIDEO_MPLAYER_SUFFIX)
+        else:
+            files += [ os.path.abspath(dirname) ]
+
+    files = util.misc.unique(files)
+    for filename in files[:]:
+        print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), Unicode(os.path.basename(filename)))
+        if defaults['dry_run']:
+            continue
+        util.videothumb.snapshot(filename, update=False)
     print
 
-def print_error_and_exit():
-    print 'ERROR: A directory name is mandatory if --thumbnail switch is specified'
-    print
-    print_help()
-    sys.exit(1)
+
 
 if __name__ == "__main__":
     os.umask(config.UMASK)
-    if len(sys.argv)>1 and sys.argv[1] == '--help':
-        print_help()
+    defaults = { }
+    (opts, args) = parse_options(defaults)
+    defaults.update(opts.__dict__)
+
+    if opts.verbose:
+        pprint.pprint(defaults)
+
+    if (opts.cropdetect and opts.video_thumbs) or \
+       (opts.cropdetect and opts.www_thumbs) or \
+       (opts.video_thumbs and opts.www_thumbs):
+        sys.exit('--video-thumbs, --www-thumbs and --cropdetect are mutually exclusive')
+
+    if opts.cropdetect:
+        if opts.directory is None:
+            defaults['directory'] = []
+            for item in [('TV Recordings', config.TV_RECORD_DIR)] + config.VIDEO_ITEMS:
+                if isinstance(item, tuple):
+                    name, dir = item
+                    defaults['directory'].append(dir)
+        cache_cropdetect(defaults)
         sys.exit(0)
 
-    if len(sys.argv)>1 and sys.argv[1] == '--cropdetect':
-        cache_cropdetect()
+    if opts.video_thumbs:
+        if opts.directory is None:
+            defaults['directory'] = []
+            defaults['directory'].append(config.TV_RECORD_DIR)
+        cache_video_thumbs(defaults)
         sys.exit(0)
 
-    if len(sys.argv)>1 and sys.argv[1] == '--thumbnail':
-        import util.videothumb
-        if len(sys.argv) > 2:
-            if sys.argv[2] == '--recursive':
-                if len(sys.argv)>3:
-                    dirname = os.path.abspath(sys.argv[3])
-                    files = util.match_files_recursively(dirname, config.VIDEO_SUFFIX)
-                else:
-                    print_error_and_exit()
-
-            elif os.path.isdir(sys.argv[2]):
-                dirname = os.path.abspath(sys.argv[2])
-                files = util.match_files(dirname, config.VIDEO_SUFFIX)
-            else:
-                files = [ os.path.abspath(sys.argv[2]) ]
-
-            print 'creating video thumbnails....'
-            for filename in files:
-                print '  %4d/%-4d %s' % (files.index(filename)+1, len(files),
-                                       os.path.basename(filename))
-                util.videothumb.snapshot(filename, update=False)
-            print
-        else:
-            print_error_and_exit()
-
+    if opts.www_thumbs:
+        if opts.directory is None:
+            defaults['directory'] = []
+            for item in config.IMAGE_ITEMS:
+                if isinstance(item, tuple):
+                    name, dir = item
+                    defaults['directory'].append(dir)
+        cache_www_thumbnails(defaults)
         sys.exit(0)
-
 
     print 'Freevo cache'
     print
@@ -560,10 +638,11 @@ if __name__ == "__main__":
     print
 
     # check for current cache information
-    if (len(sys.argv)>1 and sys.argv[1] == '--rebuild'):
+    if opts.rebuild:
         rebuild = 1
     else:
         rebuild = 0
+
     try:
         import kaa.metadata.version
 
@@ -604,7 +683,7 @@ if __name__ == "__main__":
     activate_plugins = []
     for type in ('video', 'audio', 'image', 'games'):
         if plugin.is_active(type):
-            # activate all mimetype plugins
+            # activate all mime-type plugins
             plugin.init_special_plugin(type)
             activate_plugins.append(type)
 
@@ -627,7 +706,6 @@ if __name__ == "__main__":
     cache_directories(rebuild)
     if config.CACHE_IMAGES:
         cache_thumbnails()
-        cache_www_thumbnails()
     create_metadata()
     create_tv_pickle()
 

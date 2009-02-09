@@ -684,9 +684,9 @@ def www_image(filename, subdir, force=False, getsize=False, size=128, verbose=0)
                 if verbose >= 1:
                     print 'Make directory %r' % os.path.dirname(imagename)
                 os.makedirs(os.path.dirname(imagename), mode=04775)
-        except IOError:
-            _debug_('error creating dir %s' % os.path.dirname(imagename), DWARNING)
-            raise IOError
+        except (OSError, IOError), why:
+            _debug_('error creating dir %s: %s' % (os.path.dirname(imagename), why), DWARNING)
+            raise
         if force or os.stat(filename)[ST_MTIME] > os.stat(imagename)[ST_MTIME]:
             orientation_str = ''
             image = kaa.imlib2.open(filename)
@@ -728,7 +728,10 @@ def www_thumb_create(filename, force=False, getsize=False, size=config.WWW_IMAGE
     """
     creates a webserver image image and returns its size.
     """
-    return www_image(filename, '.thumbs', force, getsize, size, verbose)
+    try:
+        return www_image(filename, '.thumbs', force, getsize, size, verbose)
+    except OSError:
+        return (0, 0)
 
 
 @benchmark(benchmarking & 0x40, benchmarkcall)
@@ -736,4 +739,7 @@ def www_image_create(filename, force=False, getsize=False, size=config.WWW_IMAGE
     """
     creates a webserver image image and returns its size.
     """
-    return www_image(filename, '.images', force, getsize, size, verbose)
+    try:
+        return www_image(filename, '.images', force, getsize, size, verbose)
+    except OSError:
+        return (0, 0)
