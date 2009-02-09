@@ -80,7 +80,6 @@ class Window(GUIObject):
         self.visible = 1
         self.osd.dialog_layer.fill((0,0,0,config.OSD_DIALOG_BACKGROUND_DIM))
         self.draw()
-        self.osd.update()
 
     def hide(self):
         self.visible = 0
@@ -184,3 +183,4 @@ class Window(GUIObject):
         self.content.surface = self.content.get_surface()
         self.content.draw()
         self.blit_parent()
+        self.osd.update()
