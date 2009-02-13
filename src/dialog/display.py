@@ -169,6 +169,18 @@ class Display(object):
         """
         pass
 
+    def enabled(self):
+        """
+        Called to inform the display that it is now the active display.
+        """
+        pass
+
+    def disabled(self):
+        """
+        Called to inform the display it is no longer the active display.
+        """
+        pass
+
 class AppTextDisplay(Display):
     """
     Class to be used to allow messages and volume to be displayed on by an
@@ -351,6 +363,9 @@ class GraphicsDisplay(Display):
         Called when the hide_dialog_timer fires to close the current dialog.
         """
         self.hide_dialog(self.current_dialog)
+
+    def disabled(self):
+        self.hide_all_dialogs()
 
     #===============================================================================
     #  Methods that should be overridden by subclasses

@@ -4,17 +4,18 @@
 <!ELEMENT freevo (osds)>
 
 <!ELEMENT osds (widgetstyles?, (font|color|osd)*)>
-<!ATTLIST osds 
+<!ATTLIST osds
     geometry CDATA #REQUIRED
     icontheme CDATA #IMPLIED
     include CDATA #IMPLIED>
 
-<!ELEMENT osd (navigationmap?, (text|image|percent|button|togglebutton|menu)*)>
+<!ELEMENT osd ((text|image|percent|widget|menu)*)>
 <!ATTLIST osd
-	name ID #REQUIRED
-	width CDATA #REQUIRED
-	height CDATA #REQUIRED
-	location (center|top|bottom|left|right|topright|topleft|bottomright|bottomleft) #REQUIRED
+    name ID #REQUIRED
+    x CDATA #REQUIRED
+    y  CDATA #REQUIRED
+    width CDATA #REQUIRED
+    height CDATA #REQUIRED
 >
 
 
@@ -39,12 +40,12 @@
     y CDATA #REQUIRED
     width CDATA #IMPLIED
     height CDATA #IMPLIED
-	font CDATA #REQUIRED
-	align %align; "left"
-	valign %valign; "top"
-	fgcolor CDATA #IMPLIED
-	bgcolor CDATA #IMPLIED
-	expression CDATA #REQUIRED
+        font CDATA #REQUIRED
+        align %align; "left"
+        valign %valign; "top"
+        fgcolor CDATA #IMPLIED
+        bgcolor CDATA #IMPLIED
+        expression CDATA #REQUIRED
 >
 
 <!ELEMENT image EMPTY>
@@ -55,7 +56,7 @@
     height CDATA #IMPLIED
     src CDATA #REQUIRED
     srcexpr CDATA #IMPLIED
-	expression CDATA #REQUIRED
+        expression CDATA #REQUIRED
     scale (noscale | horizontal | vertical | both | aspect) "noscale"
 >
 
@@ -65,31 +66,26 @@
     y CDATA #REQUIRED
     width CDATA #IMPLIED
     height CDATA #IMPLIED
-	vertical CDATA #IMPLIED
+        vertical CDATA #IMPLIED
     src CDATA #REQUIRED
-	expression CDATA #REQUIRED
+        expression CDATA #REQUIRED
 >
 
-<!ELEMENT button EMPTY>
-<!ATTLIST button
+<!ELEMENT widget EMPTY>
+<!ATTLIST widget
     name CDATA #REQUIRED
     style CDATA #REQUIRED
     x CDATA #REQUIRED
     y CDATA #REQUIRED
     width CDATA #REQUIRED
-    height CDATA #REQUIRED    
+    height CDATA #REQUIRED
+    from CDATA #REQUIRED
+    left CDATA #REQUIRED
+    right CDATA #REQUIRED
+    up CDATA #REQUIRED
+    down CDATA #REQUIRED
     >
-    
-<!ELEMENT togglebutton EMPTY>
-<!ATTLIST togglebutton
-    name CDATA #REQUIRED
-    style CDATA #REQUIRED
-    x CDATA #REQUIRED
-    y CDATA #REQUIRED
-    width CDATA #REQUIRED
-    height CDATA #REQUIRED    
-    >
-    
+
 <!ELEMENT menu EMPTY>
 <!ATTLIST menu
     name CDATA #REQUIRED
@@ -97,19 +93,10 @@
     x CDATA #REQUIRED
     y CDATA #REQUIRED
     width CDATA #REQUIRED
-    height CDATA #REQUIRED    
+    height CDATA #REQUIRED
     itemsperpage cDATA #REQUIRED
     >
-    
-<!ELEMENT navigationmap (navigation*)>
 
-<!ELEMENT navigation EMPTY>
-<!ATTLIST navigation
-    from CDATA #REQUIRED
-    left CDATA #REQUIRED
-    right CDATA #REQUIRED
-    up CDATA #REQUIRED
-    down CDATA #REQUIRED>
 
 <!ELEMENT widgetstyles (widgetstyle*)>
 
@@ -117,28 +104,28 @@
 <!ATTLIST widgetstyle name CDATA #REQUIRED>
 
 <!ELEMENT widgetstate ((text|image|percent)*)>
-<!-- 
+<!--
     Standard states are:
-    
+
     normal   - Enabled but doesn't have input focus
     active   - Enabled and has input focus
     disabled - Disabled
-    
+
     pressed  - Buttons and MenuItems only, after the user has 'pressed' (selected) the item.
-    
+
     highlighted - MenuItems only, when the menu doesn't have input focus, but the currently selected item still shows.
-    
+
     ToggleButton/ToggleMenuItem only, standard starts but with the state of the toggle appended:
-    
+
     normal_selected
     normal_unselected
     active_selected
     active_unselected
     disabled_selected
     disabled_unselected
-    
+
     ToggleMenuItem only:
-    
+
     highlighted_selected
     highlighted_unselected
 

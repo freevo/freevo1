@@ -50,7 +50,9 @@ from event import *
 import plugin
 
 import dialog
+import dialog.utils
 from dialog.display import AppTextDisplay
+import telnetlib
 
 class PluginInterface(plugin.Plugin):
     """
@@ -101,10 +103,29 @@ class Xine:
         self.plugins   = []
         self.paused    = False
 
+        config_file_opt = []
+        config_file = dialog.utils.get_xine_config_file()
+        if config_file:
+            config_file_opt = ['--config', config_file]
+
+        network_opt = []
+        if dialog.overlay_display_supports_dialogs:
+            xine_cmd_line = config.XINE_COMMAND + config.XINE_ARGS_DEF
+            if xine_cmd_line.find('--network') == -1 or xine_cmd_line.find(' -n') == -1:
+                network_opt = ['--network']
+
+            passwd_file = '%s/.xine/passwd' % os.environ['HOME']
+            if not os.path.exists(passwd_file):
+                out = open(passwd_file, 'w')
+                out.write('ALL:ALLOW\n')
+                out.close()
+                print _('!WARNING! created a xine passwd file with ALL:ALLOW')
+
         self.command = [ '--prio=%s' % config.MPLAYER_NICE ] + \
             config.XINE_COMMAND.split(' ') +  \
+            network_opt + \
             [ '--stdctl', '-V', config.XINE_VO_DEV, '-A', config.XINE_AO_DEV ] + \
-            config.XINE_ARGS_DEF.split(' ')
+            config.XINE_ARGS_DEF.split(' ') + config_file_opt
 
 
     def ShowMessage(self, msg):
@@ -213,7 +234,7 @@ class Xine:
                 command.append(item.url)
 
         self.stdout_plugins = []
-
+        self.paused    = False
         rc.app(self)
 
         self.app = XineApp(command, self)
@@ -265,7 +286,7 @@ class Xine:
 
         if event == PAUSE or event == PLAY:
             self.paused = not self.paused
-            dialog.show_play_state(self.paused and dialog.PLAY_STATE_PAUSE or dialog.PLAY_STATE_PLAY, None)
+            dialog.show_play_state(self.paused and dialog.PLAY_STATE_PAUSE or dialog.PLAY_STATE_PLAY, self.get_time_info)
             self.app.write('pause\n')
             return True
 
@@ -278,10 +299,10 @@ class Xine:
             if pos < 0:
                 action='SeekRelative-'
                 pos = 0 - pos
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, None)
+                dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.get_time_info)
             else:
                 action='SeekRelative+'
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, None)
+                dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.get_time_info)
             if pos <= 15:
                 pos = 15
             elif pos <= 30:
@@ -292,10 +313,14 @@ class Xine:
             return True
 
         if event == TOGGLE_OSD:
-            self.app.write('OSDStreamInfos\n')
+            if dialog.is_dialog_supported():
+                dialog.show_play_state(self.paused and dialog.PLAY_STATE_PAUSE or dialog.PLAY_STATE_PLAY, self.get_time_info)
+            else:
+                self.app.write('OSDStreamInfos\n')
             return True
 
         if event == VIDEO_TOGGLE_INTERLACE:
+
             self.app.write('ToggleInterleave\n')
             self.item['deinterlace'] = not self.item['deinterlace']
             return True
@@ -395,6 +420,39 @@ class Xine:
         # nothing found? Try the eventhandler of the object who called us
         return self.item.eventhandler(event)
 
+    def get_time_info(self):
+        handle = None
+        result = None
+        try:
+            handle = telnetlib.Telnet('127.0.0.1', 6789)
+            out = handle.read_until('\n', 0.1)
+            if out[-1] == '\n':
+                position = self.item.elapsed
+                if position == -1:
+                    position = self._get_time(handle, 'position')
+                length = self._get_time(handle, 'length')
+                result = (position, length)
+        except:
+            _debug_('Failed to retrieve time info from xine')
+
+        if handle:
+            handle.close()
+
+        return result
+
+    def _get_time(self, handle, arg):
+        """
+        get time info from running xine
+        """
+        try:
+            handle.write('get %s\n' % arg)
+            out = handle.read_until('\n', 0.05).split()
+            if out[1] == ('%s:'%arg):
+                time = int(int(out[2])/1000)
+                return time
+        except:
+            pass
+        return 0
 
 
 class XineApp(childapp.ChildApp2):
@@ -413,9 +471,12 @@ class XineApp(childapp.ChildApp2):
         parse the stdout of the xine process
         """
         _debug_('stdout_cb(line=%r)' % (line,), 2)
+        if line.startswith('time: '):
+            self.item.elapsed = int(line[6:])
         # show connection status for network play
         if self.item.network_play:
             pass
+
 
 
     def stderr_cb(self, line):

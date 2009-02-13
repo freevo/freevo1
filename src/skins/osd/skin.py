@@ -84,7 +84,6 @@ class OSDDialog(object):
         self.size = size
         self.objects = []
         self.image = None
-        self.navigation_map = None
 
     def add_text(self, pos, size, expr, font, fgcolor, bgcolor, valign, halign):
         self.objects.append(OSDText(pos, size, expr, font, fgcolor, bgcolor, valign, halign))
@@ -112,7 +111,6 @@ class OSDDialog(object):
 
 
     def prepare(self):
-        self.first_render = True
         # Load background image
         self.image = imlib2.new(self.size)
         for obj in self.objects:
@@ -125,7 +123,6 @@ class OSDDialog(object):
                 obj.render(self.image, value_dict)
             except:
                 _debug_('Caught exception while processing OSD element!' + traceback.format_exc())
-
         return self.image
 
     def finish(self):
@@ -165,7 +162,9 @@ class OSDText(OSDObject):
 
     def render(self, image, value_dict):
         to_render = eval(self.expr, globals(), value_dict)
-        self.__drawstring(image, to_render, self.pos, self.size,
+        x = eval_or_int(self.pos[0], value_dict)
+        y = eval_or_int(self.pos[1], value_dict)
+        self.__drawstring(image, to_render, (x,y), self.size,
                           self.font, self.fgcolor, self.bgcolor,
                           self.halign, self.valign)
 
@@ -398,7 +397,9 @@ class OSDImage(OSDObject):
             else:
                 to_draw = self.image
             if to_draw:
-                image.blend(to_draw, dst_pos=self.pos)
+                x = eval_or_int(self.pos[0], value_dict)
+                y = eval_or_int(self.pos[1], value_dict)
+                image.blend(to_draw, dst_pos=(x,y))
 
     def finish(self):
         self.image = None
@@ -431,12 +432,13 @@ class OSDPercent(OSDImage):
         image.blend(self.image,src_pos=(im_x,im_y), src_size=(w,h), dst_pos=(x,y))
 
 class OSDWidget(OSDObject):
-    def __init__(self, pos, size, unscaled_size, name, style):
+    def __init__(self, pos, size, unscaled_size, name, style, navigation=None):
         OSDObject.__init__(self, pos, size)
         _debug_('OSDWidget (%s,%s) %sx%s "%s" "%s"' % (pos[0], pos[1], size[0], size[1], name, style))
         self.name = name
         self.style = style
         self.unscaled_size = unscaled_size
+        self.navigation = navigation
         self.image = None
         self.last_state = None
         self.cached_objects = None

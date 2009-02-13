@@ -49,6 +49,7 @@ import dialog
 import kaa
 
 import skins.osd
+from skins.osd.skin import OSDWidget
 
 from widgets import ButtonModel, MenuModel, MenuItemModel
 
@@ -83,7 +84,7 @@ class Dialog(object):
         @param duration: Time in seconds the dialog should be shown for by default.
         """
         self.name = name
-        self.skin = skins.osd.get_definition(self.name)
+        self._skin = None
         self.display = None
         self.duration = duration
         self.priority = Dialog.NORMAL_PRIORITY
@@ -91,6 +92,11 @@ class Dialog(object):
         self.signals['shown'] = kaa.Signal()
         self.signals['hidden'] = kaa.Signal()
 
+    @property
+    def skin(self):
+        if self._skin is None:
+            self._skin = skins.osd.get_definition(self.name)
+        return self._skin
 
     def show(self, duration=None):
         """
@@ -253,38 +259,56 @@ class PlayStateDialog(Dialog):
          - fast
         @param get_time_info: A function to call to retrieve information about the
         current position and total play time, or None if not available. The function
-        will return a tuple of total time and elapsed time.
+        will return a tuple of elapsed time, total time and percent through the file.
+        Both total time and percent position are optional.
         """
-        super(PlayStateDialog, self).__init__('play_state', 3.0)
+        super(PlayStateDialog, self).__init__('play_state', 1.0)
         self.priority = Dialog.LOW_PRIORITY
         self.state = state
         self.get_time_info = get_time_info
 
     def get_info_dict(self):
-        if self.get_time_info:
-            current_time, total_time = self.get_time_info()
+        time_info = None
 
+        current_time = 0
+        current_time_str = ''
+        total_time = 0
+        total_time_str = ''
+        percent_pos = 0.0
+        percent_str = ''
+
+        if self.get_time_info:
+            time_info = self.get_time_info()
+
+        if time_info:
+            current_time = time_info[0]
             current_time_hours = current_time / (60 *60)
             current_time_minutes = (current_time/60) - (current_time_hours * 60)
             current_time_seconds = current_time - (((current_time_hours * 60 ) + current_time_minutes) * 60)
-
-            total_time_hours = total_time / (60 *60)
-            total_time_minutes = (total_time/60) - (total_time_hours * 60)
-            total_time_seconds = total_time - (((total_time_hours * 60 ) + total_time_minutes) * 60)
-
             current_time_str = '%02d:%02d:%02d' % (current_time_hours,current_time_minutes,current_time_seconds)
-            total_time_str   = '%02d:%02d:%02d' % (total_time_hours,total_time_minutes,total_time_seconds)
-        else:
-            total_time = 0
-            current_time = 0
-            current_time_str = ''
-            total_time_str = ''
+
+            if len(time_info) > 1:
+                total_time = time_info[1]
+                total_time_hours = total_time / (60 *60)
+                total_time_minutes = (total_time/60) - (total_time_hours * 60)
+                total_time_seconds = total_time - (((total_time_hours * 60 ) + total_time_minutes) * 60)
+
+                total_time_str   = '%02d:%02d:%02d' % (total_time_hours,total_time_minutes,total_time_seconds)
+
+                if len(time_info) > 2:
+                    percent_pos = time_info[2]
+                else:
+                    percent_pos = float(current_time) / float(total_time)
+                percent_str = '%d%%' % percent_pos
+
 
         return {'state'            : self.state,
                 'current_time'     : current_time,
                 'total_time'       : total_time,
                 'current_time_str' : current_time_str,
                 'total_time_str'   : total_time_str,
+                'percent'          : percent_pos,
+                'percent_str'      : percent_str,
                 }
 
 class WidgetDialog(InputDialog):
@@ -307,7 +331,7 @@ class WidgetDialog(InputDialog):
             widget.signals['activated'].connect(self.__widget_activate)
 
         self.navigation_map = {}
-        self.set_navigation_map(self.skin.navigation_map)
+        self.set_navigation_map()
 
         self.selected_widget = None
         self.processing_event = False
@@ -423,22 +447,21 @@ class WidgetDialog(InputDialog):
 
         return info_dict
 
-    def set_navigation_map(self, navigation_map):
+    def set_navigation_map(self):
         """
-        Sets the navigation map used by the dialog.
-        @param navigation_map: A dictionary of widget name =>
-        (left widget name, right widget name, up widget name , down widget name)
+        Sets the navigation map used by the dialog from the skin.
         """
-        for widget_name, navigation in navigation_map.items():
-            if widget_name in self.widgets:
+        for obj in self.skin.objects:
+            if isinstance(obj, OSDWidget) and obj.name in self.widgets:
                 navigation_widgets = []
-                for name in navigation:
-                    if name in self.widgets:
-                        navigation_widgets.append(self.widgets[name])
-                    else:
-                        navigation_widgets.append(None)
+                if obj.navigation is not None:
+                    for name in obj.navigation:
+                        if name in self.widgets:
+                            navigation_widgets.append(self.widgets[name])
+                        else:
+                            navigation_widgets.append(None)
 
-                self.navigation_map[self.widgets[widget_name]] = tuple(navigation_widgets)
+                self.navigation_map[self.widgets[obj.name]] = tuple(navigation_widgets)
 
     def get_navigation_for(self, widget):
         """

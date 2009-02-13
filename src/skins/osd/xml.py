@@ -207,9 +207,14 @@ class Widget(XMLOSDObject):
         self.original_size = (width, height)
         self.name = attr_str(node, 'name', '')
         self.style = attr_str(node, 'style', '')
+        left  = attr_str(node, 'left', None)
+        right = attr_str(node, 'right', None)
+        up    = attr_str(node, 'up', None)
+        down  = attr_str(node, 'down', None)
+        self.navigation = (left,right,up,down)
 
     def instantiate(self):
-        return skin.OSDWidget(self.pos, self.size, self.original_size, self.name, self.style)
+        return skin.OSDWidget(self.pos, self.size, self.original_size, self.name, self.style, self.navigation)
 
 
 class Menu(Widget):
@@ -230,7 +235,6 @@ class Dialog(object):
         x = attr_int(node, 'x', 0, scale[0]) + config.OSD_OVERSCAN_LEFT
         y = attr_int(node, 'y', 0, scale[1]) + config.OSD_OVERSCAN_TOP
         self.position = (x,y)
-        self.navigation_map = {}
 
         self.osd_objects = []
         for node in node.children:
@@ -240,19 +244,13 @@ class Dialog(object):
                 self.osd_objects.append(Image(node, scale))
             elif node.name == 'percent':
                 self.osd_objects.append(Percent(node, scale))
-            elif node.name == 'button':
-                self.osd_objects.append(Widget(node, scale))
-            elif node.name == 'togglebutton':
+            elif node.name == 'widget':
                 self.osd_objects.append(Widget(node, scale))
             elif node.name == 'menu':
                 self.osd_objects.append(Menu(node, scale))
-            elif node.name == 'navigationmap':
-                parse_navigationmap(node, self.navigation_map)
 
     def instantiate(self):
         dialog = skin.register_definition(self.name, self.position, self.size)
-
-        dialog.navigation_map = self.navigation_map
 
         for osd_object in self.osd_objects:
             dialog.add(osd_object.instantiate())
@@ -272,20 +270,6 @@ class XMLFont(object):
 
             if self.font:
                 self.font.set_color(color)
-
-def parse_navigationmap(node, navigation_map):
-    for node in node.children:
-        if node.name == 'navigation':
-            widget = attr_str(node, 'from', '')
-
-            if widget:
-                left  = attr_str(node, 'left', None)
-                right = attr_str(node, 'right', None)
-                up    = attr_str(node, 'up', None)
-                down  = attr_str(node, 'down', None)
-
-                navigation_map[widget] = (left, right, up, down)
-
 
 def parse_style_state(snode, scale):
     objects = []

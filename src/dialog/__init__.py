@@ -43,6 +43,9 @@ There are 2 types of display,
 @var PLAY_STATE_SEEK_FORWARD: Play state constant for seeking forward.
 @var PLAY_STATE_PLAY_SLOW: Play state constant for playing slow.
 @var PLAY_STATE_PLAY_FAST: Play state constant for playing fast.
+
+@var overlay_display_support_dialogs Whether the display to use if none is
+provided by the application, supports dialogs.
 """
 import skins.osd.xml
 import config
@@ -51,6 +54,8 @@ import config
 _osd_display = None
 _overlay_display = None
 _display = None
+
+overlay_display_supports_dialogs = False
 
 # Play state constants
 PLAY_STATE_PLAY         = 'play'
@@ -76,6 +81,7 @@ def set_osd_display(display):
     _osd_display = display
     if _display is None:
         _display = display
+        display.enabled()
 
 def set_overlay_display(display):
     """
@@ -85,6 +91,9 @@ def set_overlay_display(display):
     """
     global _overlay_display
     _overlay_display = display
+    if display:
+        global overlay_display_supports_dialogs
+        overlay_display_supports_dialogs = display.supports_dialogs
 
 def enable_overlay_display(app_display):
     """
@@ -96,6 +105,10 @@ def enable_overlay_display(app_display):
     @rtype: dialog.display.Display
     """
     global _display
+
+    if _display:
+        _display.disabled()
+
     if app_display and (app_display.supports_dialogs or not _overlay_display):
         _display = app_display
     elif _overlay_display:
@@ -103,7 +116,9 @@ def enable_overlay_display(app_display):
     else:
         import display
         _display = display.Display(False) # Create a dummy display
-    print 'Overlay display enabled (%s)' % _display.__class__.__name__
+
+    if _display:
+        _display.enabled()
     return _display
 
 
@@ -112,7 +127,13 @@ def disable_overlay_display():
     Set the display back to the OSD display.
     """
     global _display
+    if _display:
+        _display.disabled()
+
     _display = _osd_display
+
+    if _display:
+        _display.enabled()
 
 
 def get_display():
@@ -186,7 +207,8 @@ def show_play_state(state, get_time_info=None):
                     fast
     @param get_time_info: A function to call to retrieve information about the
     current position and total play time, or None if not available. The function
-    will return a tuple of total time and elapsed time.
+    will return a tuple of elapsed time, total time and percent through the file.
+    Both total time and percent position are optional.
     """
     if _display:
         _display.show_play_state(state, get_time_info)

@@ -71,7 +71,7 @@
             <image x="0" y="0" width="500" height="250" src="dialog_bg.png" />
             <text x="5" y="5" width="490" height="180" font="message" expression="message" align="center" valign="center" />
 
-            <button x="160" y="160" width="180" height="45" name="button" style="button" />
+            <widget x="160" y="160" width="180" height="45" name="button" style="button" />
         </osd>
 
 		<!--
@@ -90,13 +90,9 @@
             <image x="0" y="0" width="500" height="250" src="dialog_bg.png" />
             <text x="5" y="5" width="490" height="180" font="message" expression="message" align="center" valign="center" />
 
-            <button x="30" y="160" width="180" height="45" name="button1" style="button" />
-            <button x="290" y="160" width="180" height="45" name="button2" style="button" />
+            <widget x="30" y="160" width="180" height="45" name="button1" style="button" right="button2" left="button2"/>
+            <widget x="290" y="160" width="180" height="45" name="button2" style="button" right="button1" left="button1"/>
 
-            <navigationmap>
-                <navigation from="button1" right="button2" left="button2"/>
-                <navigation from="button2" right="button1" left="button1"/>
-            </navigationmap>
         </osd>
 
         <!--
@@ -115,15 +111,9 @@
             <image x="0" y="0" width="500" height="250" src="dialog_bg.png" />
             <text x="5" y="5" width="490" height="180" font="message" expression="message" align="center" valign="center" />
 
-            <button x="30" y="160" width="140" height="45" name="button1" style="button" />
-            <button x="180" y="160" width="140" height="45" name="button2" style="button" />
-            <button x="330" y="160" width="140" height="45" name="button3" style="button" />
-
-            <navigationmap>
-                <navigation from="button1" right="button2" left="button3"/>
-                <navigation from="button2" right="button3" left="button1"/>
-                <navigation from="button3" right="button1" left="button2"/>
-            </navigationmap>
+            <widget x="30" y="160" width="140" height="45" name="button1" style="button" right="button2" left="button3"/>
+            <widget x="180" y="160" width="140" height="45" name="button2" style="button" right="button3" left="button1"/>
+            <widget x="330" y="160" width="140" height="45" name="button3" style="button" right="button1" left="button2"/>
         </osd>
 
 		<!-- Centered Menu -->
@@ -134,7 +124,7 @@
         </osd>
 
         <!-- Button Bar More Options menu -->
-        <osd name="bboptionsmenu" x="584" y="264" width="216" height="275" >
+        <osd name="bboptionsmenu" x="584" y="265" width="216" height="275" >
             <image src="bboptionsmenubg.png" x="0" y="0" width="216" height="275"/>
             <image expression="menu.more_down" src="menu_down.png" x="168" y="246" width="22" height="25"/>
             <image expression="menu.more_up" src="menu_up.png" x="191" y="246" width="22" height="25"/>
@@ -240,7 +230,7 @@
         <font label="button_pressed" name="VeraBd" size="14" color="black" />
 
         <!-- Fonts used by menu items -->
-        <font label="menu" name="Vera" size="12" color="gray" />
+        <font label="menu" name="VeraBd" size="12" color="white" />
         <font label="menu_selected" name="VeraBd" size="12" color="white"/>
         <font label="menu_pressed" name="VeraBd" size="12" color="black"/>
 

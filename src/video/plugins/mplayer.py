@@ -78,6 +78,8 @@ class MPlayer:
         self.seek_timer = threading.Timer(0, self.reset_seek)
         self.app        = None
         self.plugins    = []
+        self.paused     = False
+        self.stored_time_info = None
 
 
     def rate(self, item):
@@ -353,6 +355,9 @@ class MPlayer:
         elif '-framedrop' not in command:
             command += config.MPLAYER_SOFTWARE_SCALER.split()
 
+        if dialog.overlay_display_supports_dialogs:
+            command += ['-osdlevel' , '0']
+
         command = filter(len, command)
 
         command += str('%(playlist)s' % args).split()
@@ -362,6 +367,8 @@ class MPlayer:
 
         #if plugin.getbyname('MIXER'):
             #plugin.getbyname('MIXER').reset()
+
+        self.paused = False
 
         rc.app(self)
         self.app = MPlayerApp(command, self)
@@ -400,7 +407,7 @@ class MPlayer:
         if event == VIDEO_MANUAL_SEEK:
             self.seek = 0
             rc.set_context('input')
-            self.app.write('osd_show_text "input"\n')
+            dialog.show_message("input")
             return True
 
         if event.context == 'input':
@@ -444,11 +451,27 @@ class MPlayer:
             return True
 
         if event == TOGGLE_OSD:
-            self.app.write('osd\n')
+            if dialog.is_dialog_supported():
+                if self.paused:
+                    dialog.show_play_state(dialog.PLAY_STATE_PAUSE , self.get_stored_time_info)
+                else:
+                    dialog.show_play_state(dialog.PLAY_STATE_PLAY, self.get_time_info)
+            else:
+                self.app.write('osd\n')
             return True
 
         if event == PAUSE or event == PLAY:
-            self.app.write('pause\n')
+            self.paused = not self.paused
+            # We have to store the current time before displaying the dialog
+            # otherwise the act of requesting the current position resumes playback!
+            if self.paused:
+                self.stored_time_info = self.get_time_info()
+                dialog.show_play_state(dialog.PLAY_STATE_PAUSE, self.get_time_info)
+                self.app.write('pause\n')
+            else:
+                self.app.write('pause\n')
+                dialog.show_play_state(dialog.PLAY_STATE_PLAY, self.get_time_info)
+
             return True
 
         if event == SEEK:
@@ -475,8 +498,14 @@ class MPlayer:
                 if self.item_length <= self.item.elapsed + event.arg + seek_safety_time:
                     _debug_('unable to seek %s secs at time %s, length %s' % \
                             (event.arg, self.item.elapsed, self.item_length))
-                    self.app.write('osd_show_text "%s"\n' % _('Seeking not possible'))
+
+                    dialog.show_message(_('Seeking not possible'))
                     return False
+
+            if event.arg > 0:
+                dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.get_time_info)
+            else:
+                dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.get_time_info)
 
             self.app.write('seek %s\n' % event.arg)
             return True
@@ -577,7 +606,14 @@ class MPlayer:
         child.wait()
         return (x1, y1, x2, y2)
 
+    def get_stored_time_info(self):
+        return self.stored_time_info
 
+    def get_time_info(self):
+        time_pos = self.app.get_property('time_pos')
+        length = self.app.get_property('length')
+        percent_pos = self.app.get_property('percent_pos')
+        return (int(float(time_pos)), int(float(length)), int(percent_pos) / 100.0)
 
 
 # ======================================================================
@@ -589,7 +625,7 @@ class MPlayerApp(childapp.ChildApp2):
     """
 
     def __init__(self, command, mplayer):
-        self.RE_TIME   = re.compile("^A: *([0-9]+)").match
+        self.RE_TIME   = re.compile("^[AV]: *([0-9]+)").match
         self.RE_START  = re.compile("^Starting playback\.\.\.").match
         self.RE_EXIT   = re.compile("^Exiting\.\.\. \((.*)\)$").match
         self.item      = mplayer.item
@@ -616,9 +652,17 @@ class MPlayerApp(childapp.ChildApp2):
             if hasattr(p, 'elapsed'):
                 self.elapsed_plugins.append(p)
 
+        self.output_event = threading.Event()
+        self.get_property_ans = None
         # init the child (== start the threads)
-        childapp.ChildApp2.__init__(self, command)
+        childapp.ChildApp2.__init__(self, command, callback_use_rc=False)
 
+    def get_property(self, property):
+        self.get_property_ans = None
+        self.output_event.clear()
+        self.write('get_property %s\n' % property)
+        self.output_event.wait()
+        return self.get_property_ans
 
     def stop_event(self):
         """
@@ -656,7 +700,7 @@ class MPlayerApp(childapp.ChildApp2):
 
 
         # current elapsed time
-        if line.find("A:") == 0:
+        if line.startswith("A:") or line.startswith("V:"):
             m = self.RE_TIME(line)
             if hasattr(m, 'group') and self.item.elapsed != int(m.group(1))+1:
                 self.item.elapsed = int(m.group(1))+1
@@ -669,7 +713,13 @@ class MPlayerApp(childapp.ChildApp2):
             m = self.RE_EXIT(line)
             if m:
                 self.exit_type = m.group(1)
+            if self.output_event.isSet():
+                self.output_event.set()
 
+        elif line.startswith('ANS_'):
+            prop,ans = line.split('=')
+            self.get_property_ans = ans.strip()
+            self.output_event.set()
 
         # this is the first start of the movie, parse info
         elif not self.item.elapsed:
@@ -695,5 +745,8 @@ class MPlayerApp(childapp.ChildApp2):
         """
         parse the stderr of the mplayer process
         """
+        if line.startswith('Failed to get value of property '):
+            self.output_event.set()
+
         for p in self.stdout_plugins:
             p.stdout(line)
