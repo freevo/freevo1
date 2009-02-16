@@ -38,7 +38,7 @@ import config
 from util import vfs
 
 import kaa
-import kaa.rpc, kaa.rpc2
+import kaa.rpc
 from kaa import EventHandler
 from kaa import AtTimer
 
@@ -1434,7 +1434,7 @@ def main():
     recordserver = RecordServer()
 
     try:
-        rpc = kaa.rpc2.Server(socket, secret)
+        rpc = kaa.rpc.Server(socket, secret)
     except Exception:
         raise
 

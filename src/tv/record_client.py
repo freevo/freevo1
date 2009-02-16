@@ -36,7 +36,7 @@ import socket, traceback, string
 import xmlrpclib
 
 import kaa
-import kaa.rpc, kaa.rpc2
+import kaa.rpc
 import tv.epg_types
 
 # Module variable that contains an initialized RecordClientActions() object
@@ -68,7 +68,7 @@ class RecordClientActions:
     def __init__(self):
         """ """
         _debug_('RecordClient.__init__()', 2)
-        self.channel = kaa.rpc2.connect((config.RECORDSERVER_IP, config.RECORDSERVER_PORT), config.RECORDSERVER_SECRET, retry=1)
+        self.channel = kaa.rpc.connect((config.RECORDSERVER_IP, config.RECORDSERVER_PORT), config.RECORDSERVER_SECRET, retry=1)
         self.server = None
 
 
@@ -85,7 +85,7 @@ class RecordClientActions:
     def _recordserver_rpc(self, cmd, *args, **kwargs):
         """ call the record server command using kaa rpc """
         _debug_('_recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 2)
-        if self.channel.status != kaa.rpc2.CONNECTED:
+        if self.channel.status != kaa.rpc.CONNECTED:
             _debug_('record server is down', DINFO)
             return None
         return self.channel.rpc(cmd, *args, **kwargs)
@@ -398,7 +398,7 @@ class RecordClientActions:
         Try to reconnect if the connection is down
         """
         _debug_('_recordserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 2)
-        if self.channel.status != kaa.rpc2.CONNECTED:
+        if self.channel.status != kaa.rpc.CONNECTED:
             _debug_('record server is down', DINFO)
             return False
         self.channel.rpc(cmd, *args, **kwargs).connect(callback)

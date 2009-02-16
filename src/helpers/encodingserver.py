@@ -29,7 +29,7 @@
 import sys, string, random, time, os, re, pwd, stat, tempfile
 
 import kaa
-import kaa.rpc, kaa.rpc2
+import kaa.rpc
 import config
 from util import vfs
 
@@ -283,7 +283,7 @@ def main():
 
     encodingserver = EncodingServer(debug=debug, allowNone=True)
     try:
-        rpc = kaa.rpc2.Server(socket, secret)
+        rpc = kaa.rpc.Server(socket, secret)
     except Exception:
         raise
 

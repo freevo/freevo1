@@ -32,7 +32,7 @@ A client interface to the Freevo encoding server.
 import sys
 
 import kaa
-import kaa.rpc, kaa.rpc2
+import kaa.rpc
 
 import config
 
@@ -86,7 +86,7 @@ class EncodingClientActions:
         """ """
         _debug_('%s.__init__()' % (self.__class__,), 2)
         socket = (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
-        self.channel = kaa.rpc2.connect(socket, config.ENCODINGSERVER_SECRET, retry=1)
+        self.channel = kaa.rpc.connect(socket, config.ENCODINGSERVER_SECRET, retry=1)
         #kaa.inprogress(self.channel).wait()
 
     #--------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ class EncodingClientActions:
     def _encodingserver_rpc(self, cmd, *args, **kwargs):
         """ call the encoding server command using kaa rpc """
         _debug_('_encodingserver_rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 2)
-        if self.channel.status != kaa.rpc2.CONNECTED:
+        if self.channel.status != kaa.rpc.CONNECTED:
             _debug_('encoding server is down', DINFO)
             return None
         return self.channel.rpc(cmd, *args, **kwargs)
